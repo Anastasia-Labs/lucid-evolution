@@ -1,0 +1,26 @@
+{
+  "name": "lucid-effect",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "type": "module",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "tsup-node src/mod.ts --format esm,cjs --dts --clean",
+    "node-run": "node dist/test.js"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "@dcspark/cardano-multiplatform-lib-nodejs": "^5.1.0",
+    "@effect/schema": "^0.62.7",
+    "@emurgo/cardano-message-signing-nodejs": "^1.0.1",
+    "@sinclair/typebox": "^0.32.14",
+    "@types/node": "^20.11.19",
+    "effect": "^2.3.6",
+    "tsup": "^8.0.2",
+    "tsx": "^4.7.1",
+    "typescript": "^5.3.3"
+  }
+}

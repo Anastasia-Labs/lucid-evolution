@@ -1,0 +1,64 @@
+import * as CML from "@dcspark/cardano-multiplatform-lib-nodejs";
+import { CBORHex, OutputDatum } from "./types.js";
+import { Effect } from "effect";
+import { Address, Lucid, RewardAddress, networkToId } from "../mod.js";
+import { TxRunTimeError, NetworkError } from "./Errors.js";
+
+export const toDatumOption = (outputDatum: OutputDatum): CML.DatumOption => {
+  switch (outputDatum.kind) {
+    case "hash":
+      return CML.DatumOption.new_hash(
+        CML.DatumHash.from_hex(outputDatum.value)
+      );
+    case "asHash": {
+      const plutusData = CML.PlutusData.from_cbor_hex(outputDatum.value);
+      return CML.DatumOption.new_hash(CML.hash_plutus_data(plutusData));
+    }
+    case "inline": {
+      const plutusData = CML.PlutusData.from_cbor_hex(outputDatum.value);
+      return CML.DatumOption.new_datum(plutusData);
+    }
+  }
+};
+
+export const addressFromWithNetworkCheck = (
+  address: Address | RewardAddress,
+  lucid: Lucid
+): Effect.Effect<CML.Address, TxRunTimeError | NetworkError, never> => {
+  const program = Effect.gen(function* ($) {
+    const { type, networkId } = yield* $(
+      Effect.try({
+        try: () => lucid.utils.getAddressDetails(address),
+        catch: (e) =>
+          new TxRunTimeError({
+            message: `${addressFromWithNetworkCheck.name} , ${String(e)}`,
+          }),
+      })
+    );
+    const actualNetworkId = networkToId(lucid.network);
+    if (networkId !== actualNetworkId) {
+      yield* $(
+        Effect.fail(
+          new NetworkError({
+            message: `Invalid address: ${address}, Expected address with network id ${actualNetworkId}, current network ${lucid.network}`,
+          })
+        )
+      );
+    }
+    return type === "Byron"
+      ? CML.ByronAddress.from_base58(address).to_address()
+      : CML.Address.from_bech32(address);
+  });
+  return program;
+};
+
+export const toV1 = (script: string) =>
+  CML.PlutusScript.from_v1(CML.PlutusV1Script.from_cbor_hex(script));
+export const toV2 = (script: string) =>
+  CML.PlutusScript.from_v2(CML.PlutusV1Script.from_cbor_hex(script));
+
+export const toPartial = (script: CML.PlutusScript, redeemer: CBORHex) =>
+  CML.PartialPlutusWitness.new(
+    CML.PlutusScriptWitness.new_script(script),
+    CML.PlutusData.from_cbor_hex(redeemer)
+  );
