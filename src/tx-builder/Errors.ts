@@ -21,10 +21,14 @@ export class WalletAddressError {
   readonly _tag = "WalletAddressError";
 }
 
+export class MintError extends Data.TaggedError(
+  "Only one policy id allowed. You can chain multiple mintAssets functions together if you need to mint assets with different policy ids. "
+)<{}> {}
+
 export class RunTimeError extends Data.TaggedError("RunTimeError")<{
   message: {
     cause: string;
-    stack: string;
+    // stack: string; TODO: Enable when verbose log is enabled in config
   };
 }> {}
 
@@ -44,6 +48,7 @@ export type TransactionErrors =
   | WalletAddressError
   | TxRunTimeError
   | NetworkError
+  | MintError
   | NoSuchElementException;
 
 export const makeRunTimeError = (
@@ -53,7 +58,7 @@ export const makeRunTimeError = (
   return new RunTimeError({
     message: {
       cause: isError ? `${error.message}` : String(error),
-      stack: isError ? `${error.stack}` : "",
+      // stack: isError ? `${error.stack}` : "", TODO: Enable when verbose log is enabled in config
     },
   });
 };
