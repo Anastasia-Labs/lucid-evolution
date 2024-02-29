@@ -688,7 +688,7 @@ export function toHex(bytes: Uint8Array): string {
 
 /** Convert a Hex encoded string to a Utf-8 encoded string. */
 export function toText(hex: string): string {
-  return Buffer.from(hex).toString("utf8");
+  return Buffer.from(hex, "hex").toString();
 }
 
 /** Convert a Utf-8 encoded string to a Hex encoded string. */
