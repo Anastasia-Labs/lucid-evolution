@@ -37,6 +37,7 @@ import type {
   Validator,
   WithdrawalValidator,
 } from "../types/mod.js";
+import { Native } from "../tx-builder/Native.js";
 
 export class Utils {
   private lucid: Lucid;
