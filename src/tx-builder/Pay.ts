@@ -40,3 +40,20 @@ export const payToAddressWithData =
     config.programs.push(program);
     return makeTx(config);
   };
+
+/** Pay to a plutus script address with datum or scriptRef. */
+export const payToContract =
+  (config: Config) =>
+  (
+    address: Address,
+    outputDatum: OutputDatum,
+    assets: Assets,
+    scriptRef?: Script
+  ) => {
+    return payToAddressWithData(config)(
+      address,
+      outputDatum,
+      assets,
+      scriptRef
+    );
+  };
