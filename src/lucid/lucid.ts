@@ -1,4 +1,4 @@
-import * as CML from "@dcspark/cardano-multiplatform-lib-nodejs"
+import * as CML from "@dcspark/cardano-multiplatform-lib-nodejs";
 import { signData, verifyData } from "../misc/sign_data.js";
 import { discoverOwnUsedTxKeyHashes, walletFromSeed } from "../misc/wallet.js";
 import { Constr, Data } from "../plutus/data.js";
@@ -459,7 +459,6 @@ export class Lucid {
         network: this.network,
       }
     );
-    console.log(address)
 
     const paymentKeyHash = CML.PrivateKey.from_bech32(paymentKey)
       .to_public()
