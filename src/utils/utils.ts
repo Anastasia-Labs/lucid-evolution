@@ -218,6 +218,9 @@ export class Utils {
   nativeScriptFromJson(nativeScript: NativeScript): Script {
     return nativeScriptFromJson(nativeScript);
   }
+  nativeFromJson(nativeScript: Native): Script {
+    return nativeFromJson(nativeScript);
+  }
 
   paymentCredentialOf(address: Address): Credential {
     return paymentCredentialOf(address);
@@ -765,6 +768,14 @@ export function fromUnit(unit: Unit): {
  * It follows this Json format: https://github.com/input-output-hk/cardano-node/blob/master/doc/reference/simple-scripts.md
  */
 export function nativeScriptFromJson(nativeScript: NativeScript): Script {
+  return {
+    type: "Native",
+    script: CML.NativeScript.from_json(
+      JSON.stringify(nativeScript)
+    ).to_cbor_hex(),
+  };
+}
+export function nativeFromJson(nativeScript: Native): Script {
   return {
     type: "Native",
     script: CML.NativeScript.from_json(
