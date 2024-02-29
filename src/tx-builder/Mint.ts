@@ -1,5 +1,5 @@
 import { Effect } from "effect";
-import { Assets, Redeemer } from "../mod.js";
+import { Assets, Redeemer, toText } from "../mod.js";
 import { Config } from "./types.js";
 import * as CML from "@dcspark/cardano-multiplatform-lib-nodejs";
 import { toPartial, toV1, toV2 } from "./utils.js";
@@ -24,7 +24,8 @@ export const mintAssets =
             yield* $(new MintError());
           }
           mintAssets.insert(
-            CML.AssetName.from_str(unit.slice(56)),
+            //NOTE: toText is used to maintain API compatibility
+            CML.AssetName.from_str(toText(unit.slice(56))),
             assets[unit]
           );
         }
