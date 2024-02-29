@@ -5,7 +5,7 @@ import { makeTx } from "./MakeTx.js";
 import { DatumOfError } from "./Errors.js";
 
 export const readFrom = (config: Config) => (utxos: UTxO[]) => {
-  const program = Effect.gen(function* ($) {
+  const program: Effect.Effect<void, DatumOfError> = Effect.gen(function* ($) {
     for (const utxo of utxos) {
       if (utxo.datumHash) {
         const data = yield* $(
