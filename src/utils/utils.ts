@@ -490,18 +490,13 @@ export function assetsToValue(assets: Assets): CML.Value {
     const assetsValue = CML.MapAssetNameToCoin.new();
     policyUnits.forEach((unit) => {
       assetsValue.insert(
-        CML.AssetName.from_str(unit.slice(56)),
+        CML.AssetName.from_str(toText(unit.slice(56))),
         BigInt(assets[unit])
       );
     });
     multiAsset.insert_assets(CML.ScriptHash.from_hex(policy), assetsValue);
   });
-  const value = CML.Value.from_coin(BigInt(lovelace ? lovelace : "0"));
-  if (units.length > 1 || !lovelace) {
-    return CML.Value.new(0n, multiAsset);
-  } else {
-    return value;
-  }
+  return CML.Value.new(lovelace, multiAsset);
 }
 
 export function fromScriptRef(scriptRef: CML.Script): Script {
