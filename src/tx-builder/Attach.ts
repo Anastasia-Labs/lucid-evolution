@@ -57,16 +57,12 @@ export const attachMintingPolicy =
     return attachScript(config)(mintingPolicy);
   };
 
-// attachCertificateValidator(certValidator: CertificateValidator): Tx {
-//   this.tasks.push((that) => {
-//     attachScript(that, certValidator);
-//   });
-//   return this;
-// }
+export const attachCertificateValidator =
+  (config: Config) => (certValidator: CertificateValidator) => {
+    return attachScript(config)(certValidator);
+  };
 
-// attachWithdrawalValidator(withdrawalValidator: WithdrawalValidator): Tx {
-//   this.tasks.push((that) => {
-//     attachScript(that, withdrawalValidator);
-//   });
-//   return this;
-// }
+export const attachWithdrawalValidator =
+  (config: Config) => (withdrawalValidator: WithdrawalValidator) => {
+    return attachScript(config)(withdrawalValidator);
+  };
