@@ -43,6 +43,7 @@
             wasm-pack
             bun
             corepack_21
+            nodejs_21
           ];
         };
       });

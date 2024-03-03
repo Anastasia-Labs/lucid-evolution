@@ -14,11 +14,12 @@
   "license": "ISC",
   "devDependencies": {
     "@dcspark/cardano-multiplatform-lib-nodejs": "^5.1.0",
-    "@effect/schema": "^0.62.7",
+    "@effect/schema": "^0.62.9",
     "@emurgo/cardano-message-signing-nodejs": "^1.0.1",
-    "@sinclair/typebox": "^0.32.14",
-    "@types/node": "^20.11.19",
-    "effect": "^2.3.6",
+    "@sinclair/typebox": "^0.32.15",
+    "@types/node": "^20.11.24",
+    "effect": "^2.4.1",
+    "lucid-cardano": "^0.10.7",
     "tsup": "^8.0.2",
     "tsx": "^4.7.1",
     "typescript": "^5.3.3"
