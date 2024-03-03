@@ -35,6 +35,7 @@ import type {
   Validator,
   WithdrawalValidator,
 } from "../types/mod.js";
+import { Native, nativeJSFromJson } from "../tx-builder/Native.js";
 
 export class Utils {
   private lucid: Lucid;
@@ -217,7 +218,7 @@ export class Utils {
     return nativeScriptFromJson(nativeScript);
   }
   nativeFromJson(nativeScript: Native): Script {
-    return nativeFromJson(nativeScript);
+    return nativeJSFromJson(nativeScript);
   }
 
   paymentCredentialOf(address: Address): Credential {

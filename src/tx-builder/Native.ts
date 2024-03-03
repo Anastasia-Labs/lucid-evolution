@@ -70,7 +70,7 @@ export const parseNativeScript= S.decodeUnknownEither(NativeScriptSchema);
 // TODO: Add Native Schema
 
 // https://github.com/IntersectMBO/cardano-node/blob/1.26.1-with-cardano-cli/doc/reference/simple-scripts.md#time-locking
-type Native =
+export type Native =
   | { type: "sig"; keyHash: string }
   | { type: "before"; slot: number }
   | { type: "after"; slot: number }
