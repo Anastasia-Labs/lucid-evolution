@@ -1,7 +1,8 @@
 import * as CML from "@dcspark/cardano-multiplatform-lib-nodejs";
+import { C } from "lucid-cardano";
 import { CBORHex, OutputDatum } from "./types.js";
 import { Effect } from "effect";
-import { Address, Lucid, RewardAddress, networkToId } from "../mod.js";
+import { Address, Lucid, RewardAddress, fromHex, networkToId } from "../mod.js";
 import { TxRunTimeError, NetworkError } from "./Errors.js";
 
 export const toDatumOption = (outputDatum: OutputDatum): CML.DatumOption => {
@@ -62,3 +63,10 @@ export const toPartial = (script: CML.PlutusScript, redeemer: CBORHex) =>
     CML.PlutusScriptWitness.new_script(script),
     CML.PlutusData.from_cbor_hex(redeemer)
   );
+
+export function toCMLTransactionHash(body: CML.TransactionBody) {
+  const TransactionHash = C.hash_transaction(
+    C.TransactionBody.from_bytes(fromHex(body.to_cbor_hex()))
+  );
+  return CML.TransactionHash.from_hex(TransactionHash.to_hex());
+}
