@@ -2,7 +2,6 @@ import * as CML from "@dcspark/cardano-multiplatform-lib-nodejs";
 import { Lucid, TxComplete } from "../lucid/mod.js";
 import { generateMnemonic } from "../misc/bip39.js";
 import { crc8 } from "../misc/crc8.js";
-import { Data } from "../plutus/data.js";
 import {
   SLOT_CONFIG_NETWORK,
   slotToBeginUnixTime,
@@ -16,7 +15,6 @@ import type {
   Credential,
   Datum,
   DatumHash,
-  Exact,
   KeyHash,
   MintingPolicy,
   NativeScript,
@@ -37,7 +35,6 @@ import type {
   Validator,
   WithdrawalValidator,
 } from "../types/mod.js";
-import { Native } from "../tx-builder/Native.js";
 
 export class Utils {
   private lucid: Lucid;
@@ -569,6 +566,7 @@ export function utxoToCore(utxo: UTxO): CML.TransactionUnspentOutput {
       return toScriptRef(utxo.scriptRef);
     }
   })();
+
   const output = CML.TransactionOutput.new(
     address,
     assetsToValue(utxo.assets),
@@ -679,7 +677,7 @@ export function networkToId(network: Network): number {
 }
 
 export function fromHex(hex: string): Uint8Array {
-  return Buffer.from(hex, "hex");
+  return new Uint8Array(Buffer.from(hex, "hex"));
 }
 
 export function toHex(bytes: Uint8Array): string {
@@ -769,14 +767,6 @@ export function fromUnit(unit: Unit): {
  * It follows this Json format: https://github.com/input-output-hk/cardano-node/blob/master/doc/reference/simple-scripts.md
  */
 export function nativeScriptFromJson(nativeScript: NativeScript): Script {
-  return {
-    type: "Native",
-    script: CML.NativeScript.from_json(
-      JSON.stringify(nativeScript)
-    ).to_cbor_hex(),
-  };
-}
-export function nativeFromJson(nativeScript: Native): Script {
   return {
     type: "Native",
     script: CML.NativeScript.from_json(
