@@ -2,13 +2,12 @@ import { expect, test } from "vitest";
 import { Blockfrost, Lucid } from "../src/mod";
 
 test("test txHash", async () => {
-  const projectId = "preprodOr3zZOkFc8Sqa5sp3aa9oGTb1wxulzhy";
+  const projectId = process.env.VITE_BLOCKFROST_KEY;
   const lucid = await Lucid.new(
-    new Blockfrost("https://cardano-preprod.blockfrost.io/api/v0", projectId),
+    new Blockfrost(process.env.VITE_API_URL!, projectId),
     "Preprod",
   );
-  const seedPhrase =
-    "truck typical feature program section horn quote dial retreat lecture force cattle space tonight toss sketch hamster science oyster dream head square upper prize";
+  const seedPhrase = process.env.VITE_SEED!;
   lucid.selectWalletFromSeed(seedPhrase);
   const signed2 = await lucid
     .fromTx(
@@ -16,6 +15,7 @@ test("test txHash", async () => {
     )
     .sign()
     .complete();
+
   expect(
     signed2.toHash() ===
       "ca41dbd2f3d485def8fe92454cc98d0163aa21abfc7287fc9766d4ce74a2ee04",
