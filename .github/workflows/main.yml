@@ -35,6 +35,6 @@ jobs:
       - run: pnpm run format-check
       - run: pnpm test
         env:
-          VITE_BLOCKFROST_KEY: ${{ secrets.VITE_BLOCKFROST_KEY}}
-          VITE_SEED: ${{secrets.VITE_SEED}}
-          VITE_API_URL: ${{secrets.VITE_API_URL}}
+          VITE_BLOCKFROST_KEY: ${{ secrets.VITE_BLOCKFROST_KEY }}
+          VITE_SEED: ${{ secrets.VITE_SEED }}
+          VITE_API_URL: ${{ secrets.VITE_API_URL }}
