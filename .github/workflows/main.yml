@@ -32,4 +32,5 @@ jobs:
 
       - run: pnpm i
       - run: pnpm run lint && pnpm run build
+      - run: pnpm run format-check
       - run: pnpm test
