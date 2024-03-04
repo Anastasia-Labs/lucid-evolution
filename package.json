@@ -1,27 +1,22 @@
 {
-  "name": "lucid-effect",
-  "version": "1.0.0",
-  "description": "",
-  "main": "index.js",
-  "type": "module",
+  "name": "lucid-evolution",
+  "private": true,
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "build": "tsup-node src/mod.ts --format esm,cjs --dts --clean",
-    "node-run": "node dist/test.js"
+    "build": "turbo build --cache-dir=.turbo",
+    "dev": "turbo dev",
+    "lint": "turbo lint",
+    "format": "prettier --write \"**/*.{ts,tsx,md}\"",
+    "format-check": "prettier --check \"**/*.{ts,tsx,md}\"",
+    "test" : "turbo test"
   },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
   "devDependencies": {
-    "@dcspark/cardano-multiplatform-lib-nodejs": "^5.1.0",
-    "@effect/schema": "^0.62.9",
-    "@emurgo/cardano-message-signing-nodejs": "^1.0.1",
-    "@sinclair/typebox": "^0.32.15",
-    "@types/node": "^20.11.24",
-    "effect": "^2.4.1",
-    "lucid-cardano": "^0.10.7",
-    "tsup": "^8.0.2",
-    "tsx": "^4.7.1",
-    "typescript": "^5.3.3"
+    "@repo/eslint-config": "workspace:*",
+    "@repo/typescript-config": "workspace:*",
+    "prettier": "^3.1.1",
+    "turbo": "latest"
+  },
+  "packageManager": "pnpm@8.9.0",
+  "engines": {
+    "node": ">=18"
   }
 }
