@@ -9,7 +9,7 @@ test("test tx submit", async () => {
   const projectId = process.env.VITE_BLOCKFROST_KEY;
   const lucid = await Lucid.new(
     new Blockfrost(process.env.VITE_API_URL!, projectId),
-    "Preprod"
+    "Preprod",
   );
   const seedPhrase = process.env.VITE_SEED!;
   lucid.selectWalletFromSeed(seedPhrase);
@@ -41,7 +41,7 @@ test("test tx submit", async () => {
     .readFrom(utxo)
     .payToAddress(
       "addr_test1qp4cgm42esrud5njskhsr6uc28s6ljah0phsdqe7qmh3rfuyjgq5wwsca5camufxavmtnm8f6ywga3de3jkgmkwzma4sqv284l",
-      { lovelace: 2_000_000n }
+      { lovelace: 2_000_000n },
     )
     .payToAddressWithData(
       "addr_test1qp4cgm42esrud5njskhsr6uc28s6ljah0phsdqe7qmh3rfuyjgq5wwsca5camufxavmtnm8f6ywga3de3jkgmkwzma4sqv284l",
@@ -49,7 +49,7 @@ test("test tx submit", async () => {
         kind: "inline",
         value: "d87980",
       },
-      { lovelace: 2_000_000n }
+      { lovelace: 2_000_000n },
     )
     .mintAssets({ [policy + fromText("MyMintedToken")]: 1n })
     .validTo(Date.now() + 900000)
@@ -63,7 +63,7 @@ test("test tx submit", async () => {
     // Effect.flatMap((signedTx) => Effect.promise(() => signedTx.submit())),
     // Effect.flatMap((txHash) => Effect.log(txHash)),
     Effect.either,
-    Effect.runPromise
+    Effect.runPromise,
   );
 
   assert.deepStrictEqual(isRight(signed), true);
