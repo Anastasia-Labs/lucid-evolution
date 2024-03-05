@@ -3,13 +3,12 @@
   "version": "1.0.0",
   "private": true,
   "scripts": {
-    "dev": "next dev --port 3001",
+    "dev": "next dev",
     "build": "next build",
     "start": "next start",
     "lint": "eslint . --max-warnings 0"
   },
   "dependencies": {
-    "@repo/ui": "workspace:*",
     "next": "^14.0.4",
     "nextra": "^2.13.4",
     "nextra-theme-docs": "^2.13.4",
