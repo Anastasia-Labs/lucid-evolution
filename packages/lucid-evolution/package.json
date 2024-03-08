@@ -1,5 +1,5 @@
 {
-  "name": "lucid-evolution",
+  "name": "@anastasia-labs/lucid-evolution",
   "version": "0.0.1",
   "description": "",
   "main": "./dist/mod.js",
