@@ -5,6 +5,7 @@
 Lucid evolution includes the following packages
 
 ### Packages
+
 Lucid Evolution consists of the following packages:
 
 - `docs`: Documentation resources for Lucid Evolution.
@@ -66,7 +67,9 @@ Lucid Evolution leverages the remote caching functionality provided by GitHub to
 By default, local caching is employed. Although there are no immediate plans for remote caching, the repository remains adaptable to future enhancements.
 
 ### Contribution
+
 Contributions to Lucid Evolution are welcome! Feel free to submit issues, feature requests, or pull requests to help improve the project.
 
 ### License
+
 Lucid Evolution is licensed under the MIT License, permitting unrestricted use, distribution, and modification.
