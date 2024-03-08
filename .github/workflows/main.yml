@@ -34,7 +34,7 @@ jobs:
           node-version: 20
           cache: "pnpm"
 
-      - run: pnpm i --force
+      - run: pnpm i
       - run: pnpm run lint && pnpm run build
       - run: pnpm run format-check
       - run: pnpm test

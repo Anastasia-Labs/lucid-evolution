@@ -10,8 +10,8 @@
     "test" : "turbo test"
   },
   "devDependencies": {
-    "@repo/eslint-config": "workspace:*",
-    "@repo/typescript-config": "workspace:*",
+    "@lucid-evolution/eslint-config": "workspace:*",
+    "@lucid-evolution/typescript-config": "workspace:*",
     "prettier": "^3.1.1",
     "turbo": "latest"
   },
