@@ -1,81 +1,79 @@
-# Turborepo starter
-
-This is an official starter Turborepo.
-
-## Using this example
-
-Run the following command:
-
-```sh
-npx create-turbo@latest
-```
+# Lucid Evolution
 
 ## What's inside?
 
-This Turborepo includes the following packages/apps:
+Lucid evolution includes the following packages
 
 ### Apps and Packages
 
-- `docs`: a [Next.js](https://nextjs.org/) app
-- `web`: another [Next.js](https://nextjs.org/) app
-- `@repo/ui`: a stub React component library shared by both `web` and `docs` applications
+- `docs`: a [Lucid Evolution](https://) doc
+- `@lucid-evolution/lucid-evolution`: temporary package soon to become a monorepo with multiple packages
 - `@repo/eslint-config`: `eslint` configurations (includes `eslint-config-next` and `eslint-config-prettier`)
 - `@repo/typescript-config`: `tsconfig.json`s used throughout the monorepo
 
-Each package/app is 100% [TypeScript](https://www.typescriptlang.org/).
+### Packages
+Lucid Evolution consists of the following packages:
+
+- `docs`: Documentation resources for Lucid Evolution.
+- `@lucid-evolution/lucid-evolution`: A foundational package set to evolve into multiple packages.
+- `@lucid-evolution/eslint-config`: Contains ESLint configurations, including `eslint-config-next` and `eslint-config-prettier`.
+- `@lucid-evolution/typescript-config`: Houses `tsconfig.json` files utilized across the `monorepo`.
+
+All packages in Lucid Evolution are built using [TypeScript](https://www.typescriptlang.org/) and [ Effect ](https://effect.website/docs/why-effect). This combination enables us to manage side effects effectively, scale faster, and enhance type safety and developer experience.
 
 ### Utilities
 
-This Turborepo has some additional tools already setup for you:
+The monorepo is equipped with essential tools to facilitate development workflows:
 
 - [TypeScript](https://www.typescriptlang.org/) for static type checking
+- [Effect](https://effect.website/docs/why-effect) Manages side effects, facilitating the creation of effectful functions that track errors, handle synchronous and asynchronous operations, and provide error short-circuiting capabilities.
 - [ESLint](https://eslint.org/) for code linting
 - [Prettier](https://prettier.io) for code formatting
 
 ### Build
 
-To build all apps and packages, run the following command:
+To build packages, run the following command:
 
 ```
-cd my-turborepo
+cd lucid-evolution
 pnpm build
 ```
 
 ### Develop
 
-To develop all apps and packages, run the following command:
+To develop docs, run the following command:
 
 ```
-cd my-turborepo
+cd lucid-evolution
 pnpm dev
+```
+
+To test packages, run the following command:
+
+```
+pnpm test
+```
+
+To format files with prettier, run the following command:
+
+```
+pnpm format
+```
+
+To check formatting, run the following command:
+
+```
+pnpm format-check
 ```
 
 ### Remote Caching
 
-Turborepo can use a technique known as [Remote Caching](https://turbo.build/repo/docs/core-concepts/remote-caching) to share cache artifacts across machines, enabling you to share build caches with your team and CI/CD pipelines.
+Lucid Evolution leverages the remote caching functionality provided by GitHub to optimize continuous integration (CI) pipelines.
 
-By default, Turborepo will cache locally. To enable Remote Caching you will need an account with Vercel. If you don't have an account you can [create one](https://vercel.com/signup), then enter the following commands:
+By default, local caching is employed. Although there are no immediate plans for remote caching, the repository remains adaptable to future enhancements.
 
-```
-cd my-turborepo
-npx turbo login
-```
+### Contribution
+Contributions to Lucid Evolution are welcome! Feel free to submit issues, feature requests, or pull requests to help improve the project.
 
-This will authenticate the Turborepo CLI with your [Vercel account](https://vercel.com/docs/concepts/personal-accounts/overview).
-
-Next, you can link your Turborepo to your Remote Cache by running the following command from the root of your Turborepo:
-
-```
-npx turbo link
-```
-
-## Useful Links
-
-Learn more about the power of Turborepo:
-
-- [Tasks](https://turbo.build/repo/docs/core-concepts/monorepos/running-tasks)
-- [Caching](https://turbo.build/repo/docs/core-concepts/caching)
-- [Remote Caching](https://turbo.build/repo/docs/core-concepts/remote-caching)
-- [Filtering](https://turbo.build/repo/docs/core-concepts/monorepos/filtering)
-- [Configuration Options](https://turbo.build/repo/docs/reference/configuration)
-- [CLI Usage](https://turbo.build/repo/docs/reference/command-line-reference)
+### License
+Lucid Evolution is licensed under the MIT License, permitting unrestricted use, distribution, and modification.
