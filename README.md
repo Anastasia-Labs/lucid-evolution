@@ -4,13 +4,6 @@
 
 Lucid evolution includes the following packages
 
-### Apps and Packages
-
-- `docs`: a [Lucid Evolution](https://) doc
-- `@lucid-evolution/lucid-evolution`: temporary package soon to become a monorepo with multiple packages
-- `@repo/eslint-config`: `eslint` configurations (includes `eslint-config-next` and `eslint-config-prettier`)
-- `@repo/typescript-config`: `tsconfig.json`s used throughout the monorepo
-
 ### Packages
 Lucid Evolution consists of the following packages:
 
