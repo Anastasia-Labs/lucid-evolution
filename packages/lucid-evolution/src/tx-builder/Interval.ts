@@ -1,5 +1,5 @@
 import { Effect } from "effect";
-import { UnixTime } from "../mod.js";
+import { UnixTime } from "@anastasia-labs/core-types";
 import { Config } from "./types.js";
 import { makeTx } from "./MakeTx.js";
 

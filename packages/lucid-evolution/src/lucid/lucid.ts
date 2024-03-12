@@ -5,7 +5,7 @@ import { Constr, Data } from "../plutus/data.js";
 import { SLOT_CONFIG_NETWORK } from "../plutus/time.js";
 import { Emulator } from "../provider/emulator.js";
 
-import type {
+import {
   Address,
   Credential,
   Delegation,
@@ -26,7 +26,7 @@ import type {
   UTxO,
   Wallet,
   WalletApi,
-} from "../types/mod.js";
+} from "@anastasia-labs/core-types";
 import {
   coreToUtxo,
   createCostModels,

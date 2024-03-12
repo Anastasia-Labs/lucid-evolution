@@ -8,7 +8,7 @@ import {
   Type,
 } from "@sinclair/typebox";
 export * from "@sinclair/typebox";
-import type { Datum, Exact, Json, Redeemer } from "../types/mod.js";
+import { Datum, Exact, Json, Redeemer } from "@anastasia-labs/core-types";
 import { fromHex, fromText, toHex } from "../utils/utils.js";
 import * as CML from "@dcspark/cardano-multiplatform-lib-nodejs";
 

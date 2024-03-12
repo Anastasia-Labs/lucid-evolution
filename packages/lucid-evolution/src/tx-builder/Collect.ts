@@ -1,5 +1,6 @@
 import { Effect } from "effect";
-import { Data, Redeemer, ScriptType, UTxO, utxoToCore } from "../mod.js";
+import { Data, utxoToCore } from "../mod.js";
+import { Redeemer, ScriptType, UTxO } from "@anastasia-labs/core-types";
 import { Config } from "./types.js";
 import { DatumOfError } from "./Errors.js";
 import * as CML from "@dcspark/cardano-multiplatform-lib-nodejs";

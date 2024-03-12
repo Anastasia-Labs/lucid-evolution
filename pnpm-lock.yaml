@@ -70,6 +70,21 @@ importers:
         specifier: ^5.3.3
         version: 5.3.3
 
+  packages/core-types:
+    devDependencies:
+      '@dcspark/cardano-multiplatform-lib-nodejs':
+        specifier: ^5.1.0
+        version: 5.1.0
+      '@types/node':
+        specifier: ^20.11.24
+        version: 20.11.24
+      tsup:
+        specifier: ^8.0.2
+        version: 8.0.2(typescript@5.3.3)
+      typescript:
+        specifier: ^5.3.3
+        version: 5.3.3
+
   packages/eslint-config:
     devDependencies:
       '@typescript-eslint/eslint-plugin':
@@ -96,6 +111,9 @@ importers:
 
   packages/lucid-evolution:
     devDependencies:
+      '@anastasia-labs/core-types':
+        specifier: workspace:*
+        version: link:../core-types
       '@dcspark/cardano-multiplatform-lib-nodejs':
         specifier: ^5.1.0
         version: 5.1.0

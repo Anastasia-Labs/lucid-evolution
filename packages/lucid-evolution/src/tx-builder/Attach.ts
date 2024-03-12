@@ -1,10 +1,10 @@
+import { applyDoubleCborEncoding } from "../mod.js";
 import {
   CertificateValidator,
   MintingPolicy,
   SpendingValidator,
   WithdrawalValidator,
-  applyDoubleCborEncoding,
-} from "../mod.js";
+} from "@anastasia-labs/core-types";
 import { makeTx } from "./MakeTx.js";
 import { Config } from "./types.js";
 import * as CML from "@dcspark/cardano-multiplatform-lib-nodejs";

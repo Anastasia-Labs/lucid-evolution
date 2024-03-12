@@ -1,13 +1,12 @@
+import { fromHex, getAddressDetails } from "../mod.js";
 import {
   Address,
-  fromHex,
-  getAddressDetails,
   KeyHash,
   Network,
   PrivateKey,
   RewardAddress,
   UTxO,
-} from "../mod.js";
+} from "@anastasia-labs/core-types";
 import * as CML from "@dcspark/cardano-multiplatform-lib-nodejs";
 import { mnemonicToEntropy } from "./bip39.js";
 

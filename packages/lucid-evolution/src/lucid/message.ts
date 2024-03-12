@@ -5,7 +5,7 @@ import type {
   PrivateKey,
   RewardAddress,
   SignedMessage,
-} from "../types/mod.js";
+} from "@anastasia-labs/core-types";
 import { signData } from "../misc/sign_data.js";
 import * as CML from "@dcspark/cardano-multiplatform-lib-nodejs";
 

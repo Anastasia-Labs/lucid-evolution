@@ -1,5 +1,6 @@
 import { Effect, pipe } from "effect";
-import { Address, Assets, Script, assetsToValue, toScriptRef } from "../mod.js";
+import { assetsToValue, toScriptRef } from "../mod.js";
+import { Address, Assets, Script } from "@anastasia-labs/core-types";
 import { Config, OutputDatum } from "./types.js";
 import * as CML from "@dcspark/cardano-multiplatform-lib-nodejs";
 import { addressFromWithNetworkCheck, toDatumOption } from "./utils.js";

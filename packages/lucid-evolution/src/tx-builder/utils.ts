@@ -2,7 +2,8 @@ import * as CML from "@dcspark/cardano-multiplatform-lib-nodejs";
 import { C } from "lucid-cardano";
 import { CBORHex, OutputDatum } from "./types.js";
 import { Effect } from "effect";
-import { Address, Lucid, RewardAddress, fromHex, networkToId } from "../mod.js";
+import { Lucid, fromHex, networkToId } from "../mod.js";
+import { Address, RewardAddress } from "@anastasia-labs/core-types";
 import { TxRunTimeError, NetworkError } from "./Errors.js";
 
 export const toDatumOption = (outputDatum: OutputDatum): CML.DatumOption => {

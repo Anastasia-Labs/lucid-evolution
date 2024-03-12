@@ -19,7 +19,7 @@ import {
   Unit,
   UnixTime,
   UTxO,
-} from "../types/types.js";
+} from "@anastasia-labs/core-types";
 import { PROTOCOL_PARAMETERS_DEFAULT } from "../utils/mod.js";
 import {
   coreToUtxo,

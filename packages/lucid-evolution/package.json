@@ -19,6 +19,7 @@
   "author": "",
   "license": "MIT",
   "devDependencies": {
+    "@anastasia-labs/core-types": "workspace:*",
     "@dcspark/cardano-multiplatform-lib-nodejs": "^5.1.0",
     "@effect/schema": "^0.62.9",
     "@emurgo/cardano-message-signing-nodejs": "^1.0.1",

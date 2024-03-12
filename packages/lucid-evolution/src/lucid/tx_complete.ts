@@ -4,7 +4,7 @@ import {
   Transaction,
   TransactionWitnesses,
   TxHash,
-} from "../types/mod.js";
+} from "@anastasia-labs/core-types";
 import { Lucid } from "./lucid.js";
 import { TxSigned } from "./tx_signed.js";
 import { toCMLTransactionHash } from "../tx-builder/utils.js";
