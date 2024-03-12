@@ -1,0 +1,26 @@
+{
+  "name": "@anastasia-labs/core-types",
+  "version": "0.0.1",
+  "description": "",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "type": "module",
+  "files": [
+    "dist"
+  ],
+  "publishConfig": {
+    "access": "public"
+  },
+  "scripts": {
+    "build": "tsup-node src/index.ts --format esm,cjs --dts --clean"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "MIT",
+  "devDependencies": {
+    "@dcspark/cardano-multiplatform-lib-nodejs": "^5.1.0",
+    "@types/node": "^20.11.24",
+    "tsup": "^8.0.2",
+    "typescript": "^5.3.3"
+  }
+}

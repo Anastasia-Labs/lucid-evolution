@@ -1,6 +1,6 @@
 import * as CML from "@dcspark/cardano-multiplatform-lib-nodejs";
 import { Data } from "../mod.js";
-import type {
+import {
   Address,
   Assets,
   CertificateValidator,
@@ -20,7 +20,7 @@ import type {
   UnixTime,
   UTxO,
   WithdrawalValidator,
-} from "../types/mod.js";
+} from "@anastasia-labs/core-types";
 import {
   assetsToValue,
   fromHex,

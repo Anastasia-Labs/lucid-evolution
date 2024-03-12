@@ -1,5 +1,6 @@
 import { Effect } from "effect";
-import { Data, UTxO, utxoToCore } from "../mod.js";
+import { Data, utxoToCore } from "../mod.js";
+import { UTxO } from "@anastasia-labs/core-types";
 import { Config } from "./types.js";
 import { makeTx } from "./MakeTx.js";
 import { DatumOfError } from "./Errors.js";

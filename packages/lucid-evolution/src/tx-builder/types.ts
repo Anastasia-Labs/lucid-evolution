@@ -1,5 +1,6 @@
 import { Effect } from "effect";
-import { Lucid, ScriptType, UTxO } from "../mod.js";
+import { Lucid } from "../mod.js";
+import { ScriptType, UTxO } from "@anastasia-labs/core-types";
 import * as CML from "@dcspark/cardano-multiplatform-lib-nodejs";
 import { RunTimeError, TransactionErrors } from "./Errors.js";
 

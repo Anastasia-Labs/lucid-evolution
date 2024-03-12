@@ -1,5 +1,6 @@
 import { Effect } from "effect";
-import { Address, OutputData, TxComplete } from "../mod.js";
+import { TxComplete } from "../mod.js";
+import { Address, OutputData } from "@anastasia-labs/core-types";
 import { Config } from "./types.js";
 import {
   GetUTxosCoreError,

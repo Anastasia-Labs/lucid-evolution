@@ -7,7 +7,7 @@ import {
   slotToBeginUnixTime,
   unixTimeToEnclosingSlot,
 } from "../plutus/time.js";
-import type {
+import {
   Address,
   AddressDetails,
   Assets,
@@ -34,7 +34,7 @@ import type {
   UTxO,
   Validator,
   WithdrawalValidator,
-} from "../types/mod.js";
+} from "@anastasia-labs/core-types";
 import { Native, nativeJSFromJson } from "../tx-builder/Native.js";
 
 export class Utils {

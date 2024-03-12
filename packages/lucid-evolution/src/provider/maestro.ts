@@ -16,7 +16,7 @@ import {
   TxHash,
   Unit,
   UTxO,
-} from "../types/mod.js";
+} from "@anastasia-labs/core-types";
 import packageJson from "../../package.json";
 
 export type MaestroSupportedNetworks = "Mainnet" | "Preprod" | "Preview";

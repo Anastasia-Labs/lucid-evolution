@@ -1,5 +1,6 @@
 import { Effect } from "effect";
-import { Assets, Redeemer, toText } from "../mod.js";
+import { toText } from "../mod.js";
+import { Assets, Redeemer } from "@anastasia-labs/core-types";
 import { Config } from "./types.js";
 import * as CML from "@dcspark/cardano-multiplatform-lib-nodejs";
 import { toPartial, toV1, toV2 } from "./utils.js";

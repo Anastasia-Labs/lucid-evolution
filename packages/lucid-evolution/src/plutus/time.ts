@@ -1,4 +1,9 @@
-import { Network, Slot, SlotConfig, UnixTime } from "../types/mod.js";
+import {
+  Network,
+  Slot,
+  SlotConfig,
+  UnixTime,
+} from "@anastasia-labs/core-types";
 
 export const SLOT_CONFIG_NETWORK: Record<Network, SlotConfig> = {
   Mainnet: { zeroTime: 1596059091000, zeroSlot: 4492800, slotLength: 1000 }, // Starting at Shelley era

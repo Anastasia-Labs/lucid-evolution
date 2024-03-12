@@ -1,11 +1,10 @@
+import { fromHex, toHex } from "../mod.js";
 import {
-  fromHex,
   KeyHash,
   Payload,
   PrivateKey,
   SignedMessage,
-  toHex,
-} from "../mod.js";
+} from "@anastasia-labs/core-types";
 import * as CML from "@dcspark/cardano-multiplatform-lib-nodejs";
 import * as M from "@emurgo/cardano-message-signing-nodejs";
 

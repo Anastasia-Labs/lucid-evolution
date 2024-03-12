@@ -13,7 +13,7 @@ import {
   TxHash,
   Unit,
   UTxO,
-} from "../types/mod.js";
+} from "@anastasia-labs/core-types";
 import { fromHex, fromUnit, toHex } from "../utils/mod.js";
 import * as CML from "@dcspark/cardano-multiplatform-lib-nodejs";
 
