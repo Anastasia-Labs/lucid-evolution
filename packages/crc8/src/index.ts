@@ -1,1 +1,1 @@
-export * from "./crc8.js"
+export * from "./crc8.js";

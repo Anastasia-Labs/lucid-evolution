@@ -34,7 +34,7 @@ import {
   UTxO,
   Validator,
   WithdrawalValidator,
-  Native
+  Native,
 } from "@anastasia-labs/core-types";
 import { nativeJSFromJson } from "./native.js";
 

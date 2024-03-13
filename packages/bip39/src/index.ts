@@ -1,1 +1,1 @@
-export * from "./bip39.js"
+export * from "./bip39.js";
