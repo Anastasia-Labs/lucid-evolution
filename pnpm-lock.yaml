@@ -70,7 +70,55 @@ importers:
         specifier: ^5.3.3
         version: 5.3.3
 
+  packages/bip39:
+    devDependencies:
+      '@anastasia-labs/core-utils':
+        specifier: workspace:*
+        version: link:../core-utils
+      '@dcspark/cardano-multiplatform-lib-nodejs':
+        specifier: ^5.1.0
+        version: 5.1.0
+      '@types/node':
+        specifier: ^20.11.24
+        version: 20.11.24
+      tsup:
+        specifier: ^8.0.2
+        version: 8.0.2(typescript@5.3.3)
+      typescript:
+        specifier: ^5.3.3
+        version: 5.3.3
+
   packages/core-types:
+    devDependencies:
+      '@dcspark/cardano-multiplatform-lib-nodejs':
+        specifier: ^5.1.0
+        version: 5.1.0
+      '@types/node':
+        specifier: ^20.11.24
+        version: 20.11.24
+      tsup:
+        specifier: ^8.0.2
+        version: 8.0.2(typescript@5.3.3)
+      typescript:
+        specifier: ^5.3.3
+        version: 5.3.3
+
+  packages/core-utils:
+    devDependencies:
+      '@dcspark/cardano-multiplatform-lib-nodejs':
+        specifier: ^5.1.0
+        version: 5.1.0
+      '@types/node':
+        specifier: ^20.11.24
+        version: 20.11.24
+      tsup:
+        specifier: ^8.0.2
+        version: 8.0.2(typescript@5.3.3)
+      typescript:
+        specifier: ^5.3.3
+        version: 5.3.3
+
+  packages/crc8:
     devDependencies:
       '@dcspark/cardano-multiplatform-lib-nodejs':
         specifier: ^5.1.0
@@ -173,9 +221,15 @@ importers:
 
   packages/utils:
     devDependencies:
+      '@anastasia-labs/bip39':
+        specifier: workspace:*
+        version: link:../bip39
       '@anastasia-labs/core-types':
         specifier: workspace:*
         version: link:../core-types
+      '@anastasia-labs/crc8':
+        specifier: workspace:*
+        version: link:../crc8
       '@anastasia-labs/plutus':
         specifier: workspace:*
         version: link:../plutus

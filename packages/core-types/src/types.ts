@@ -217,6 +217,14 @@ export type NativeScript = {
   scripts?: NativeScript[];
 };
 
+export type Native =
+  | { type: "sig"; keyHash: string }
+  | { type: "before"; slot: number }
+  | { type: "after"; slot: number }
+  | { type: "all"; scripts: ReadonlyArray<Native> }
+  | { type: "any"; scripts: ReadonlyArray<Native> }
+  | { type: "atLeast"; required: number; scripts: ReadonlyArray<Native> };
+
 export type SlotConfig = {
   zeroTime: UnixTime;
   zeroSlot: Slot;

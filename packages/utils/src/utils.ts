@@ -1,7 +1,7 @@
 import * as CML from "@dcspark/cardano-multiplatform-lib-nodejs";
 import { Lucid, TxComplete } from "../lucid/mod.js";
-import { generateMnemonic } from "../misc/bip39.js";
-import { crc8 } from "../misc/crc8.js";
+import { generateMnemonic } from "@anastasia-labs/bip39";
+import { crc8 } from "@anastasia-labs/crc8";
 import {
   SLOT_CONFIG_NETWORK,
   slotToBeginUnixTime,
@@ -34,8 +34,9 @@ import {
   UTxO,
   Validator,
   WithdrawalValidator,
+  Native
 } from "@anastasia-labs/core-types";
-import { Native, nativeJSFromJson } from "../tx-builder/Native.js";
+import { nativeJSFromJson } from "./native.js";
 
 export class Utils {
   private lucid: Lucid;
