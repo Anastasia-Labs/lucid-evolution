@@ -1,5 +1,5 @@
 {
-  "name": "@anastasia-labs/core-types",
+  "name": "@anastasia-labs/utils",
   "version": "0.0.1",
   "description": "",
   "main": "./dist/index.js",
@@ -20,6 +20,8 @@
   "license": "MIT",
   "devDependencies": {
     "@dcspark/cardano-multiplatform-lib-nodejs": "^5.1.0",
+    "@anastasia-labs/plutus": "workspace:*",
+    "@anastasia-labs/core-types": "workspace:*",
     "@types/node": "^20.11.24",
     "tsup": "^8.0.2",
     "typescript": "^5.3.3"

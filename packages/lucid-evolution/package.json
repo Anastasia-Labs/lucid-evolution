@@ -13,7 +13,9 @@
   },
   "scripts": {
     "test": "vitest run",
-    "build": "tsup-node src/mod.ts --format esm,cjs --dts --clean"
+    "build": "tsup-node src/mod.ts --format esm,cjs --dts --clean",
+    "clean": "rm -rf .turbo && rm -rf node_modules && rm -rf dist"
+
   },
   "keywords": [],
   "author": "",

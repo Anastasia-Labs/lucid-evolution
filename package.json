@@ -2,12 +2,14 @@
   "name": "lucid-evolution",
   "private": true,
   "scripts": {
-    "build": "turbo build --cache-dir=.turbo",
+    "build-cache": "turbo build --cache-dir=.turbo",
+    "build": "turbo build",
     "dev": "turbo dev",
     "lint": "turbo lint",
     "format": "prettier --write \"**/*.{ts,tsx,md}\"",
     "format-check": "prettier --check \"**/*.{ts,tsx,md}\"",
     "test": "turbo test",
+    "clean": "turbo clean && rm -rf node_modules",
     "publish-packages": "turbo run build lint test && changeset version && changeset publish"
   },
   "devDependencies": {
