@@ -1,5 +1,5 @@
 import { fromHex } from "@anastasia-labs/core-utils";
-import { getAddressDetails } from "@anastasia-labs/utils"
+import { getAddressDetails } from "@anastasia-labs/utils";
 import {
   Address,
   KeyHash,

@@ -36,7 +36,7 @@ import {
   toUnit,
   utxoToCore,
 } from "@anastasia-labs/utils";
-import * as Utils from "@anastasia-labs/utils"
+import * as Utils from "@anastasia-labs/utils";
 import { Message } from "./message.js";
 import { Tx } from "./tx.js";
 import { TxComplete } from "./tx_complete.js";
@@ -70,8 +70,8 @@ export class Lucid {
         .fee_algo(
           CML.LinearFee.new(
             BigInt(protocolParameters.minFeeA),
-            BigInt(protocolParameters.minFeeB)
-          )
+            BigInt(protocolParameters.minFeeB),
+          ),
         )
         .coins_per_utxo_byte(protocolParameters.coinsPerUtxoByte)
         .pool_deposit(protocolParameters.poolDeposit)
@@ -82,13 +82,13 @@ export class Lucid {
           CML.ExUnitPrices.new(
             CML.Rational.new(
               BigInt(protocolParameters.priceMem * 100_000_000),
-              100_000_000n
+              100_000_000n,
             ),
             CML.Rational.new(
               BigInt(protocolParameters.priceStep * 100_000_000),
-              100_000_000n
-            )
-          )
+              100_000_000n,
+            ),
+          ),
         )
         .collateral_percentage(protocolParameters.collateralPercentage)
         .max_collateral_inputs(protocolParameters.maxCollateralInputs)
@@ -117,7 +117,7 @@ export class Lucid {
         .max_collateral_inputs(protocolParameters.maxCollateralInputs)
         .build();
     }
-    lucid.utils = Utils
+    lucid.utils = Utils;
     return lucid;
   }
 
@@ -154,7 +154,7 @@ export class Lucid {
   verifyMessage(
     address: Address | RewardAddress,
     payload: Payload,
-    signedMessage: SignedMessage
+    signedMessage: SignedMessage,
   ): boolean {
     const {
       paymentCredential,
@@ -177,7 +177,7 @@ export class Lucid {
 
   utxosAtWithUnit(
     addressOrCredential: Address | Credential,
-    unit: Unit
+    unit: Unit,
   ): Promise<UTxO[]> {
     return this.provider.getUtxosWithUnit(addressOrCredential, unit);
   }
@@ -238,7 +238,7 @@ export class Lucid {
       address: async (): Promise<Address> =>
         CML.EnterpriseAddress.new(
           this.network === "Mainnet" ? 1 : 0,
-          CML.Credential.new_pub_key(pubKeyHash)
+          CML.Credential.new_pub_key(pubKeyHash),
         )
           .to_address()
           .to_bech32(undefined),
@@ -246,12 +246,12 @@ export class Lucid {
       rewardAddress: async (): Promise<RewardAddress | null> => null,
       getUtxos: async (): Promise<UTxO[]> => {
         return await this.utxosAt(
-          paymentCredentialOf(await this.wallet.address())
+          paymentCredentialOf(await this.wallet.address()),
         );
       },
       getUtxosCore: async (): Promise<Array<CML.TransactionUnspentOutput>> => {
         const utxos = await this.utxosAt(
-          paymentCredentialOf(await this.wallet.address())
+          paymentCredentialOf(await this.wallet.address()),
         );
         const coreUtxos: Array<CML.TransactionUnspentOutput> = [];
         utxos.forEach((utxo) => {
@@ -265,7 +265,7 @@ export class Lucid {
       },
       // deno-lint-ignore require-await
       signTx: async (
-        tx: CML.Transaction
+        tx: CML.Transaction,
       ): Promise<CML.TransactionWitnessSet> => {
         const signed = priv.sign(tx.to_cbor_bytes());
         const witness = CML.Vkeywitness.new(priv.to_public(), signed);
@@ -276,7 +276,7 @@ export class Lucid {
       // deno-lint-ignore require-await
       signMessage: async (
         address: Address | RewardAddress,
-        payload: Payload
+        payload: Payload,
       ): Promise<SignedMessage> => {
         const {
           paymentCredential,
@@ -315,7 +315,7 @@ export class Lucid {
         const [rewardAddressHex] = await api.getRewardAddresses();
         const rewardAddress = rewardAddressHex
           ? CML.RewardAddress.from_address(
-              CML.Address.from_hex(rewardAddressHex)
+              CML.Address.from_hex(rewardAddressHex),
             )!
               .to_address()
               .to_bech32(undefined)
@@ -325,7 +325,7 @@ export class Lucid {
       getUtxos: async (): Promise<UTxO[]> => {
         const utxos = ((await api.getUtxos()) || []).map((utxo) => {
           const parsedUtxo = CML.TransactionUnspentOutput.from_cbor_bytes(
-            fromHex(utxo)
+            fromHex(utxo),
           );
           return coreToUtxo(parsedUtxo);
         });
@@ -346,17 +346,17 @@ export class Lucid {
           : { poolId: null, rewards: 0n };
       },
       signTx: async (
-        tx: CML.Transaction
+        tx: CML.Transaction,
       ): Promise<CML.TransactionWitnessSet> => {
         const witnessSet = await api.signTx(toHex(tx.to_cbor_bytes()), true);
         return CML.TransactionWitnessSet.from_cbor_hex(witnessSet);
       },
       signMessage: async (
         address: Address | RewardAddress,
-        payload: Payload
+        payload: Payload,
       ): Promise<SignedMessage> => {
         const hexAddress = toHex(
-          CML.Address.from_bech32(address).to_raw_bytes()
+          CML.Address.from_bech32(address).to_raw_bytes(),
         );
         return await api.signData(hexAddress, payload);
       },
@@ -387,9 +387,9 @@ export class Lucid {
                     this.network === "Mainnet" ? 1 : 0,
                     CML.Credential.new_pub_key(
                       CML.Ed25519KeyHash.from_hex(
-                        addressDetails.stakeCredential.hash
-                      )
-                    )
+                        addressDetails.stakeCredential.hash,
+                      ),
+                    ),
                   )
                     .to_address()
                     .to_bech32(undefined);
@@ -397,8 +397,10 @@ export class Lucid {
                 return CML.RewardAddress.new(
                   this.network === "Mainnet" ? 1 : 0,
                   CML.Credential.new_script(
-                    CML.ScriptHash.from_hex(addressDetails.stakeCredential.hash)
-                  )
+                    CML.ScriptHash.from_hex(
+                      addressDetails.stakeCredential.hash,
+                    ),
+                  ),
                 )
                   .to_address()
                   .to_bech32(undefined);
@@ -449,7 +451,7 @@ export class Lucid {
       addressType?: "Base" | "Enterprise";
       accountIndex?: number;
       password?: string;
-    }
+    },
   ): Lucid {
     const { address, rewardAddress, paymentKey, stakeKey } = walletFromSeed(
       seed,
@@ -458,7 +460,7 @@ export class Lucid {
         accountIndex: options?.accountIndex || 0,
         password: options?.password,
         network: this.network,
-      }
+      },
     );
 
     const paymentKeyHash = CML.PrivateKey.from_bech32(paymentKey)
@@ -485,7 +487,7 @@ export class Lucid {
         this.utxosAt(paymentCredentialOf(address)),
       getUtxosCore: async (): Promise<Array<CML.TransactionUnspentOutput>> => {
         const utxos = await this.utxosAt(
-          paymentCredentialOf(await this.wallet.address())
+          paymentCredentialOf(await this.wallet.address()),
         );
         const coreUtxos: Array<CML.TransactionUnspentOutput> = [];
         utxos.forEach((utxo: UTxO) => coreUtxos.push(utxoToCore(utxo)));
@@ -499,7 +501,7 @@ export class Lucid {
           : { poolId: null, rewards: 0n };
       },
       signTx: async (
-        tx: CML.Transaction
+        tx: CML.Transaction,
       ): Promise<CML.TransactionWitnessSet> => {
         const utxos = await this.utxosAt(address);
 
@@ -508,7 +510,7 @@ export class Lucid {
         const usedKeyHashes = discoverOwnUsedTxKeyHashes(
           tx,
           ownKeyHashes,
-          utxos
+          utxos,
         );
 
         const txWitnessSetBuilder = CML.TransactionWitnessSetBuilder.new();
@@ -526,7 +528,7 @@ export class Lucid {
           const witness = CML.make_vkey_witness(
             // CML.hash_transaction(tx.body()),
             toCMLTransactionHash(tx.body()),
-            priv
+            priv,
           );
           txWitnessSetBuilder.add_vkey(witness);
         });
@@ -536,7 +538,7 @@ export class Lucid {
       // deno-lint-ignore require-await
       signMessage: async (
         address: Address | RewardAddress,
-        payload: Payload
+        payload: Payload,
       ): Promise<SignedMessage> => {
         const {
           paymentCredential,

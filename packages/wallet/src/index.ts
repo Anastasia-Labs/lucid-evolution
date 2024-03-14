@@ -1,1 +1,1 @@
-export * from './wallet.js'
+export * from "./wallet.js";
