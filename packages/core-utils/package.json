@@ -1,5 +1,5 @@
 {
-  "name": "@anastasia-labs/core-types",
+  "name": "@anastasia-labs/core-utils",
   "version": "0.0.1",
   "description": "",
   "main": "./dist/index.js",

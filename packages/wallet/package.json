@@ -1,5 +1,5 @@
 {
-  "name": "@anastasia-labs/core-types",
+  "name": "@anastasia-labs/wallet",
   "version": "0.0.1",
   "description": "",
   "main": "./dist/index.js",
@@ -19,6 +19,8 @@
   "author": "",
   "license": "MIT",
   "devDependencies": {
+    "@anastasia-labs/core-types": "workspace:*",
+    "@anastasia-labs/bip39": "workspace:*",
     "@dcspark/cardano-multiplatform-lib-nodejs": "^5.1.0",
     "@types/node": "^20.11.24",
     "tsup": "^8.0.2",

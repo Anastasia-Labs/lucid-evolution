@@ -17,8 +17,8 @@
   },
   "devDependencies": {
     "@next/eslint-plugin-next": "^14.0.4",
-    "@lucid-evolution/eslint-config": "workspace:*",
-    "@lucid-evolution/typescript-config": "workspace:*",
+    "@anastasia-labs/eslint-config": "workspace:*",
+    "@anastasia-labs/typescript-config": "workspace:*",
     "@types/eslint": "^8.56.1",
     "@types/node": "^20.10.6",
     "@types/react": "^18.2.46",

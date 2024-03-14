@@ -1,5 +1,5 @@
 {
-  "extends": "@lucid-evolution/typescript-config/nextjs.json",
+  "extends": "@anastasia-labs/typescript-config/nextjs.json",
   "compilerOptions": {
     "plugins": [
       {
