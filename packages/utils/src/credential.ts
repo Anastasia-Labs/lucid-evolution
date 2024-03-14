@@ -1,30 +1,37 @@
-import { Address, Network , Credential, ScriptHash, KeyHash, RewardAddress} from "@anastasia-labs/core-types";
+import {
+  Address,
+  Network,
+  Credential,
+  ScriptHash,
+  KeyHash,
+  RewardAddress,
+} from "@anastasia-labs/core-types";
 import { networkToId } from "./network.js";
-import * as CML from "@dcspark/cardano-multiplatform-lib-nodejs"
+import * as CML from "@dcspark/cardano-multiplatform-lib-nodejs";
 import { getAddressDetails } from "./address.js";
 
 export function credentialToAddress(
   network: Network,
   paymentCredential: Credential,
-  stakeCredential?: Credential
+  stakeCredential?: Credential,
 ): Address {
   if (stakeCredential) {
     return CML.BaseAddress.new(
       networkToId(network),
       paymentCredential.type === "Key"
         ? CML.Credential.new_pub_key(
-            CML.Ed25519KeyHash.from_hex(paymentCredential.hash)
+            CML.Ed25519KeyHash.from_hex(paymentCredential.hash),
           )
         : CML.Credential.new_script(
-            CML.ScriptHash.from_hex(paymentCredential.hash)
+            CML.ScriptHash.from_hex(paymentCredential.hash),
           ),
       stakeCredential.type === "Key"
         ? CML.Credential.new_pub_key(
-            CML.Ed25519KeyHash.from_hex(stakeCredential.hash)
+            CML.Ed25519KeyHash.from_hex(stakeCredential.hash),
           )
         : CML.Credential.new_script(
-            CML.ScriptHash.from_hex(stakeCredential.hash)
-          )
+            CML.ScriptHash.from_hex(stakeCredential.hash),
+          ),
     )
       .to_address()
       .to_bech32(undefined);
@@ -33,11 +40,11 @@ export function credentialToAddress(
       networkToId(network),
       paymentCredential.type === "Key"
         ? CML.Credential.new_pub_key(
-            CML.Ed25519KeyHash.from_hex(paymentCredential.hash)
+            CML.Ed25519KeyHash.from_hex(paymentCredential.hash),
           )
         : CML.Credential.new_script(
-            CML.ScriptHash.from_hex(paymentCredential.hash)
-          )
+            CML.ScriptHash.from_hex(paymentCredential.hash),
+          ),
     )
       .to_address()
       .to_bech32(undefined);

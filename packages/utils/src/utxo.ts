@@ -1,5 +1,5 @@
 import { OutRef, TxOutput, UTxO } from "@anastasia-labs/core-types";
-import * as CML from "@dcspark/cardano-multiplatform-lib-nodejs"
+import * as CML from "@dcspark/cardano-multiplatform-lib-nodejs";
 import { fromScriptRef, toScriptRef } from "./scripts.js";
 import { assetsToValue, valueToAssets } from "./value.js";
 
@@ -105,19 +105,20 @@ export function coresToTxOutputs(
   return result;
 }
 
-export function producedUtxosFrom(unsignedTx: TxComplete): UTxO[] {
-  const result: UTxO[] = [];
-  const hash = unsignedTx.toHash();
-  const outputs = unsignedTx.txComplete.body().outputs();
-  const outputsArray = new Array<CML.TransactionOutput>(outputs.len()).map(
-    (_, index) => outputs.get(index),
-  );
-  coresToTxOutputs(outputsArray).forEach((output, index) => {
-    result.push({
-      outputIndex: index,
-      txHash: hash,
-      ...output,
-    });
-  });
-  return result;
-}
+//TODO: disable for now
+// export function producedUtxosFrom(unsignedTx: TxComplete): UTxO[] {
+//   const result: UTxO[] = [];
+//   const hash = unsignedTx.toHash();
+//   const outputs = unsignedTx.txComplete.body().outputs();
+//   const outputsArray = new Array<CML.TransactionOutput>(outputs.len()).map(
+//     (_, index) => outputs.get(index),
+//   );
+//   coresToTxOutputs(outputsArray).forEach((output, index) => {
+//     result.push({
+//       outputIndex: index,
+//       txHash: hash,
+//       ...output,
+//     });
+//   });
+//   return result;
+// }

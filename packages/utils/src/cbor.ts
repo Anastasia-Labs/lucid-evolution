@@ -1,4 +1,4 @@
-import * as CML from "@dcspark/cardano-multiplatform-lib-nodejs"
+import * as CML from "@dcspark/cardano-multiplatform-lib-nodejs";
 
 /** Returns double cbor encoded script. If script is already double cbor encoded it's returned as it is. */
 export function applyDoubleCborEncoding(script: string): string {
