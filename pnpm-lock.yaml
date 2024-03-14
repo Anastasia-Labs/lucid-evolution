@@ -8,15 +8,15 @@ importers:
 
   .:
     devDependencies:
+      '@anastasia-labs/eslint-config':
+        specifier: workspace:*
+        version: link:packages/eslint-config
+      '@anastasia-labs/typescript-config':
+        specifier: workspace:*
+        version: link:packages/typescript-config
       '@changesets/cli':
         specifier: ^2.27.1
         version: 2.27.1
-      '@lucid-evolution/eslint-config':
-        specifier: workspace:*
-        version: link:packages/eslint-config
-      '@lucid-evolution/typescript-config':
-        specifier: workspace:*
-        version: link:packages/typescript-config
       prettier:
         specifier: ^3.1.1
         version: 3.1.1
@@ -42,10 +42,10 @@ importers:
         specifier: ^18.2.0
         version: 18.2.0(react@18.2.0)
     devDependencies:
-      '@lucid-evolution/eslint-config':
+      '@anastasia-labs/eslint-config':
         specifier: workspace:*
         version: link:../packages/eslint-config
-      '@lucid-evolution/typescript-config':
+      '@anastasia-labs/typescript-config':
         specifier: workspace:*
         version: link:../packages/typescript-config
       '@next/eslint-plugin-next':
@@ -196,11 +196,38 @@ importers:
         specifier: ^1.3.1
         version: 1.3.1(@types/node@20.11.24)
 
+  packages/message:
+    devDependencies:
+      '@anastasia-labs/core-types':
+        specifier: workspace:*
+        version: link:../core-types
+      '@anastasia-labs/core-utils':
+        specifier: workspace:*
+        version: link:../core-utils
+      '@dcspark/cardano-multiplatform-lib-nodejs':
+        specifier: ^5.1.0
+        version: 5.1.0
+      '@emurgo/cardano-message-signing-nodejs':
+        specifier: ^1.0.1
+        version: 1.0.1
+      '@types/node':
+        specifier: ^20.11.24
+        version: 20.11.24
+      tsup:
+        specifier: ^8.0.2
+        version: 8.0.2(typescript@5.3.3)
+      typescript:
+        specifier: ^5.3.3
+        version: 5.3.3
+
   packages/plutus:
     devDependencies:
       '@anastasia-labs/core-types':
         specifier: workspace:*
         version: link:../core-types
+      '@anastasia-labs/core-utils':
+        specifier: workspace:*
+        version: link:../core-utils
       '@dcspark/cardano-multiplatform-lib-nodejs':
         specifier: ^5.1.0
         version: 5.1.0
@@ -227,12 +254,36 @@ importers:
       '@anastasia-labs/core-types':
         specifier: workspace:*
         version: link:../core-types
+      '@anastasia-labs/core-utils':
+        specifier: workspace:*
+        version: link:../core-utils
       '@anastasia-labs/crc8':
         specifier: workspace:*
         version: link:../crc8
       '@anastasia-labs/plutus':
         specifier: workspace:*
         version: link:../plutus
+      '@dcspark/cardano-multiplatform-lib-nodejs':
+        specifier: ^5.1.0
+        version: 5.1.0
+      '@types/node':
+        specifier: ^20.11.24
+        version: 20.11.24
+      tsup:
+        specifier: ^8.0.2
+        version: 8.0.2(typescript@5.3.3)
+      typescript:
+        specifier: ^5.3.3
+        version: 5.3.3
+
+  packages/wallet:
+    devDependencies:
+      '@anastasia-labs/bip39':
+        specifier: workspace:*
+        version: link:../bip39
+      '@anastasia-labs/core-types':
+        specifier: workspace:*
+        version: link:../core-types
       '@dcspark/cardano-multiplatform-lib-nodejs':
         specifier: ^5.1.0
         version: 5.1.0

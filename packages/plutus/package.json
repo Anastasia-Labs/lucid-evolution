@@ -20,6 +20,7 @@
   "license": "MIT",
   "devDependencies": {
     "@anastasia-labs/core-types": "workspace:*",
+    "@anastasia-labs/core-utils": "workspace:*",
     "@dcspark/cardano-multiplatform-lib-nodejs": "^5.1.0",
     "@sinclair/typebox": "^0.32.15",
     "@types/node": "^20.11.24",
