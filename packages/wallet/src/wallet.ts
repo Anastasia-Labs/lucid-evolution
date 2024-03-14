@@ -1,4 +1,5 @@
-import { fromHex, getAddressDetails } from "../mod.js";
+import { getAddressDetails } from "@anastasia-labs/utils"
+import {fromHex} from "@anastasia-labs/core-utils"
 import {
   Address,
   KeyHash,

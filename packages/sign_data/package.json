@@ -1,5 +1,5 @@
 {
-  "name": "@anastasia-labs/message",
+  "name": "@anastasia-labs/sign_data",
   "version": "0.0.1",
   "description": "",
   "main": "./dist/index.js",
@@ -21,6 +21,7 @@
   "devDependencies": {
     "@anastasia-labs/core-types": "workspace:*",
     "@anastasia-labs/core-utils": "workspace:*",
+    "@anastasia-labs/wallet": "workspace:*",
     "@dcspark/cardano-multiplatform-lib-nodejs": "^5.1.0",
     "@emurgo/cardano-message-signing-nodejs": "^1.0.1",
     "@types/node": "^20.11.24",

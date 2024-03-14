@@ -1,4 +1,5 @@
-import { fromHex, getAddressDetails } from "../mod.js";
+import { fromHex } from "@anastasia-labs/core-utils";
+import { getAddressDetails } from "@anastasia-labs/utils"
 import {
   Address,
   KeyHash,
@@ -8,7 +9,7 @@ import {
   UTxO,
 } from "@anastasia-labs/core-types";
 import * as CML from "@dcspark/cardano-multiplatform-lib-nodejs";
-import { mnemonicToEntropy } from "./bip39.js";
+import { mnemonicToEntropy } from "@anastasia-labs/bip39";
 
 type FromSeed = {
   address: Address;
