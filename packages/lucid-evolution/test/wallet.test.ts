@@ -1,4 +1,4 @@
-import { makeLucid } from "../src/lucid-evolution/lucid_evolution_function";
+import { makeLucid } from "../src/lucid-evolution/MakeLucid";
 import { Blockfrost } from "../src/provider/blockfrost";
 import { Maestro } from "../src/provider/maestro";
 import { assert, test } from "vitest";

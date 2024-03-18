@@ -1,5 +1,5 @@
 import * as CML from "@dcspark/cardano-multiplatform-lib-nodejs";
-import { LucidConfig } from "../lucid-evolution/lucid_evolution_function.js";
+import { LucidConfig } from "../lucid-evolution/MakeLucid.js";
 import { Config, OutputDatum } from "./types.js";
 import { readFrom } from "./Read.js";
 import { Assets, Script, UTxO } from "@anastasia-labs/core-types";
@@ -15,7 +15,7 @@ import { payToAddress, payToAddressWithData } from "./Pay.js";
 import { mintAssets } from "./Mint.js";
 import { validFrom, validTo } from "./Interval.js";
 import { complete } from "./Complete.js";
-import { MkTxComplete } from "../lucid-evolution/lucid_evolution_tx_complete.js";
+import { MkTxComplete } from "../lucid-evolution/MakeTxComplete.js";
 import { RunTimeError, TransactionErrors } from "./Errors.js";
 import { Either } from "effect/Either";
 import { Effect } from "effect/Effect";

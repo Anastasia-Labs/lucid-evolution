@@ -1,5 +1,5 @@
 import * as CML from "@dcspark/cardano-multiplatform-lib-nodejs";
-import { LucidConfig } from "./lucid_evolution_function.js";
+import { LucidConfig } from "./MakeLucid.js";
 import { toCMLTransactionHash } from "../tx-builder/utils.js";
 
 export type MakeTxSigned = {

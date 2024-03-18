@@ -2,7 +2,7 @@ import { Effect } from "effect";
 import { ScriptType, UTxO } from "@anastasia-labs/core-types";
 import * as CML from "@dcspark/cardano-multiplatform-lib-nodejs";
 import { RunTimeError, TransactionErrors } from "./Errors.js";
-import { LucidConfig } from "../lucid-evolution/lucid_evolution_function.js";
+import { LucidConfig } from "../lucid-evolution/MakeLucid.js";
 
 export type Config = {
   readonly lucidConfig: LucidConfig;
