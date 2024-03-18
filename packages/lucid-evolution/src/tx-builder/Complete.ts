@@ -8,7 +8,7 @@ import {
   makeRunTimeError,
 } from "./Errors.js";
 import * as CML from "@dcspark/cardano-multiplatform-lib-nodejs";
-import { makeTxComplete } from "../lucid-evolution/lucid_evolution_tx_complete.js";
+import { makeTxComplete } from "../lucid-evolution/MakeTxComplete.js";
 
 export const complete = (
   config: Config,

@@ -3,7 +3,7 @@ import { Blockfrost, Lucid, fromText } from "../src/mod.js";
 import { nativeJSFromJson } from "../src/tx-builder/Native.js";
 import { assert, expect, test } from "vitest";
 import { Effect } from "effect";
-import { makeLucid } from "../src/lucid-evolution/lucid_evolution_function.js";
+import { makeLucid } from "../src/lucid-evolution/MakeLucid.js";
 import {
   mintingPolicyToId,
   paymentCredentialOf,
