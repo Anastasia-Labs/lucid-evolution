@@ -22,6 +22,12 @@
   "license": "MIT",
   "devDependencies": {
     "@anastasia-labs/core-types": "workspace:*",
+    "@anastasia-labs/core-utils": "workspace:*",
+    "@anastasia-labs/plutus": "workspace:*",
+    "@anastasia-labs/utils": "workspace:*",
+    "@anastasia-labs/bip39": "workspace:*",
+    "@anastasia-labs/sign_data": "workspace:*",
+    "@anastasia-labs/wallet": "workspace:*",
     "@dcspark/cardano-multiplatform-lib-nodejs": "^5.1.0",
     "@effect/schema": "^0.62.9",
     "@emurgo/cardano-message-signing-nodejs": "^1.0.1",

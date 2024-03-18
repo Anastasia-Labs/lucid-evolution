@@ -1,8 +1,11 @@
 import * as CML from "@dcspark/cardano-multiplatform-lib-nodejs";
-import { signData, verifyData } from "../misc/sign_data.js";
-import { discoverOwnUsedTxKeyHashes, walletFromSeed } from "../misc/wallet.js";
-import { Constr, Data } from "../plutus/data.js";
-import { SLOT_CONFIG_NETWORK } from "../plutus/time.js";
+import { signData, verifyData } from "@anastasia-labs/sign_data";
+import {
+  discoverOwnUsedTxKeyHashes,
+  walletFromSeed,
+} from "@anastasia-labs/wallet";
+import { Constr, Data } from "@anastasia-labs/plutus";
+import { SLOT_CONFIG_NETWORK } from "@anastasia-labs/plutus";
 import { Emulator } from "../provider/emulator.js";
 
 import {
@@ -27,17 +30,16 @@ import {
   Wallet,
   WalletApi,
 } from "@anastasia-labs/core-types";
+import { fromHex, toHex } from "@anastasia-labs/core-utils";
 import {
   coreToUtxo,
   createCostModels,
-  fromHex,
   fromUnit,
   paymentCredentialOf,
-  toHex,
   toUnit,
-  Utils,
   utxoToCore,
-} from "../utils/mod.js";
+} from "@anastasia-labs/utils";
+import * as Utils from "@anastasia-labs/utils";
 import { Message } from "./message.js";
 import { Tx } from "./tx.js";
 import { TxComplete } from "./tx_complete.js";
@@ -48,7 +50,7 @@ export class Lucid {
   wallet!: Wallet;
   provider!: Provider;
   network: Network = "Mainnet";
-  utils!: Utils;
+  utils!: typeof Utils;
 
   static async new(provider?: Provider, network?: Network): Promise<Lucid> {
     const lucid = new this();
@@ -118,7 +120,7 @@ export class Lucid {
         .max_collateral_inputs(protocolParameters.maxCollateralInputs)
         .build();
     }
-    lucid.utils = new Utils(lucid);
+    lucid.utils = Utils;
     return lucid;
   }
 
@@ -169,7 +171,7 @@ export class Lucid {
   }
 
   currentSlot(): Slot {
-    return this.utils.unixTimeToSlot(Date.now());
+    return this.utils.unixTimeToSlot(this.network, Date.now());
   }
 
   utxosAt(addressOrCredential: Address | Credential): Promise<UTxO[]> {

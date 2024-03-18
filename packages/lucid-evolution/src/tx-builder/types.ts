@@ -1,11 +1,11 @@
 import { Effect } from "effect";
-import { Lucid } from "../mod.js";
 import { ScriptType, UTxO } from "@anastasia-labs/core-types";
 import * as CML from "@dcspark/cardano-multiplatform-lib-nodejs";
 import { RunTimeError, TransactionErrors } from "./Errors.js";
+import { LucidConfig } from "../lucid-evolution/lucid_evolution_function.js";
 
 export type Config = {
-  readonly lucid: Lucid;
+  readonly lucidConfig: LucidConfig;
   readonly txBuilder: CML.TransactionBuilder;
   inputUTxOs?: UTxO[];
   scripts: Map<string, { type: ScriptType; script: string }>;
