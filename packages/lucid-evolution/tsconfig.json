@@ -23,6 +23,7 @@
     // "noLib": true,                                    /* Disable including any library files, including the default lib.d.ts. */
     // "useDefineForClassFields": true,                  /* Emit ECMAScript-standard-compliant class fields. */
     // "moduleDetection": "auto",                        /* Control what method is used to detect module-format JS files. */
+    "noErrorTruncation" :true,
 
     /* Modules */
     "module": "nodenext",                                /* Specify what module code is generated. */

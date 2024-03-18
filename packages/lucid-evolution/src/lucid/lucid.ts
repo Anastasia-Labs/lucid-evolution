@@ -1,6 +1,9 @@
 import * as CML from "@dcspark/cardano-multiplatform-lib-nodejs";
 import { signData, verifyData } from "@anastasia-labs/sign_data";
-import { discoverOwnUsedTxKeyHashes, walletFromSeed } from "../misc/wallet.js";
+import {
+  discoverOwnUsedTxKeyHashes,
+  walletFromSeed,
+} from "@anastasia-labs/wallet";
 import { Constr, Data } from "@anastasia-labs/plutus";
 import { SLOT_CONFIG_NETWORK } from "@anastasia-labs/plutus";
 import { Emulator } from "../provider/emulator.js";

@@ -5,6 +5,8 @@ import { Effect } from "effect";
 import { Lucid, fromHex, networkToId } from "../mod.js";
 import { Address, RewardAddress } from "@anastasia-labs/core-types";
 import { TxRunTimeError, NetworkError } from "./Errors.js";
+import { LucidConfig } from "../lucid-evolution/lucid_evolution_function.js";
+import { getAddressDetails } from "@anastasia-labs/utils";
 
 export const toDatumOption = (outputDatum: OutputDatum): CML.DatumOption => {
   switch (outputDatum.kind) {
@@ -25,24 +27,24 @@ export const toDatumOption = (outputDatum: OutputDatum): CML.DatumOption => {
 
 export const addressFromWithNetworkCheck = (
   address: Address | RewardAddress,
-  lucid: Lucid,
+  lucidConfig: LucidConfig,
 ): Effect.Effect<CML.Address, TxRunTimeError | NetworkError, never> => {
   const program = Effect.gen(function* ($) {
     const { type, networkId } = yield* $(
       Effect.try({
-        try: () => lucid.utils.getAddressDetails(address),
+        try: () => getAddressDetails(address),
         catch: (e) =>
           new TxRunTimeError({
             message: `${addressFromWithNetworkCheck.name} , ${String(e)}`,
           }),
       }),
     );
-    const actualNetworkId = networkToId(lucid.network);
+    const actualNetworkId = networkToId(lucidConfig.network);
     if (networkId !== actualNetworkId) {
       yield* $(
         Effect.fail(
           new NetworkError({
-            message: `Invalid address: ${address}, Expected address with network id ${actualNetworkId}, current network ${lucid.network}`,
+            message: `Invalid address: ${address}, Expected address with network id ${actualNetworkId}, current network ${lucidConfig.network}`,
           }),
         ),
       );

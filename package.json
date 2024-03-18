@@ -13,9 +13,9 @@
     "publish-packages": "turbo run build lint test && changeset version && changeset publish"
   },
   "devDependencies": {
-    "@changesets/cli": "^2.27.1",
     "@anastasia-labs/eslint-config": "workspace:*",
     "@anastasia-labs/typescript-config": "workspace:*",
+    "@changesets/cli": "^2.27.1",
     "prettier": "^3.1.1",
     "turbo": "latest"
   },

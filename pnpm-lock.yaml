@@ -177,6 +177,9 @@ importers:
       '@anastasia-labs/utils':
         specifier: workspace:*
         version: link:../utils
+      '@anastasia-labs/wallet':
+        specifier: workspace:*
+        version: link:../wallet
       '@dcspark/cardano-multiplatform-lib-nodejs':
         specifier: ^5.1.0
         version: 5.1.0

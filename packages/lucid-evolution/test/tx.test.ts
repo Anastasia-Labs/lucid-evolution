@@ -1,21 +1,23 @@
 import { isRight } from "effect/Either";
 import { Blockfrost, Lucid, fromText } from "../src/mod.js";
-import { TxBuilder } from "../src/tx-builder/mod.js";
 import { nativeJSFromJson } from "../src/tx-builder/Native.js";
 import { assert, expect, test } from "vitest";
 import { Effect } from "effect";
+import { makeLucid } from "../src/lucid-evolution/lucid_evolution_function.js";
+import {
+  mintingPolicyToId,
+  paymentCredentialOf,
+  unixTimeToSlot,
+} from "@anastasia-labs/utils";
 
 test("test tx submit", async () => {
-  const projectId = process.env.VITE_BLOCKFROST_KEY;
-  const lucid = await Lucid.new(
-    new Blockfrost(process.env.VITE_API_URL!, projectId),
+  const user = await makeLucid(
+    new Blockfrost(process.env.VITE_API_URL!, process.env.VITE_BLOCKFROST_KEY),
     "Preprod",
   );
-  const seedPhrase = process.env.VITE_SEED!;
-  lucid.selectWalletFromSeed(seedPhrase);
-  const utxo = await lucid.wallet.getUtxos();
+  user.selectWallet.fromSeed(process.env.VITE_SEED!);
 
-  const txBuilder = TxBuilder(lucid);
+  const utxo = await user.wallet().getUtxos();
 
   const mkMintinPolicy = async (time: number) => {
     return nativeJSFromJson({
@@ -23,21 +25,21 @@ test("test tx submit", async () => {
       scripts: [
         {
           type: "sig",
-          keyHash: lucid.utils.paymentCredentialOf(await lucid.wallet.address())
-            .hash,
+          keyHash: paymentCredentialOf(await user.wallet().address()).hash,
         },
         {
           type: "before",
-          slot: lucid.utils.unixTimeToSlot(time + Date.now()),
+          slot: unixTimeToSlot("Preprod", time + Date.now()),
         },
       ],
     });
   };
 
   const mint = await mkMintinPolicy(9_000_000);
-  const policy = lucid.utils.mintingPolicyToId(mint);
+  const policy = mintingPolicyToId(mint);
 
-  const tx = txBuilder
+  const tx = user
+    .newTx()
     .readFrom(utxo)
     .payToAddress(
       "addr_test1qp4cgm42esrud5njskhsr6uc28s6ljah0phsdqe7qmh3rfuyjgq5wwsca5camufxavmtnm8f6ywga3de3jkgmkwzma4sqv284l",
@@ -58,9 +60,9 @@ test("test tx submit", async () => {
     .program();
 
   const signed = await tx.pipe(
-    Effect.flatMap((tx) => Effect.promise(() => tx.sign().complete())),
+    Effect.flatMap((tx) => Effect.promise(() => tx.sign().complete().unSafe())),
     //NOTE: enable if you want to submit signed tx on preprod
-    // Effect.flatMap((signedTx) => Effect.promise(() => signedTx.submit())),
+    // Effect.flatMap((signedTx) => Effect.promise(() => signedTx.submit()!)),
     // Effect.flatMap((txHash) => Effect.log(txHash)),
     Effect.either,
     Effect.runPromise,
