@@ -3,14 +3,16 @@ import * as CML from "@dcspark/cardano-multiplatform-lib-nodejs";
 import { createCostModels, fromUnit, toUnit } from "@anastasia-labs/utils";
 import { Constr, Data } from "@anastasia-labs/plutus";
 
-export async function makeConfigBuilder(provider: Provider) {
+export async function makeConfigBuilder(
+  provider: Provider
+): Promise<CML.TransactionBuilderConfig> {
   const protocolParameters = await provider.getProtocolParameters();
   const txBuilderConfig = CML.TransactionBuilderConfigBuilder.new()
     .fee_algo(
       CML.LinearFee.new(
         BigInt(protocolParameters.minFeeA),
-        BigInt(protocolParameters.minFeeB),
-      ),
+        BigInt(protocolParameters.minFeeB)
+      )
     )
     .coins_per_utxo_byte(protocolParameters.coinsPerUtxoByte)
     .pool_deposit(protocolParameters.poolDeposit)
@@ -21,13 +23,13 @@ export async function makeConfigBuilder(provider: Provider) {
       CML.ExUnitPrices.new(
         CML.Rational.new(
           BigInt(protocolParameters.priceMem * 100_000_000),
-          100_000_000n,
+          100_000_000n
         ),
         CML.Rational.new(
           BigInt(protocolParameters.priceStep * 100_000_000),
-          100_000_000n,
-        ),
-      ),
+          100_000_000n
+        )
+      )
     )
     .collateral_percentage(protocolParameters.collateralPercentage)
     .max_collateral_inputs(protocolParameters.maxCollateralInputs)

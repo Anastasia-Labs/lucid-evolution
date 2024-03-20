@@ -1,5 +1,4 @@
 import { Effect } from "effect";
-import { TxComplete } from "../mod.js";
 import { Address, OutputData } from "@anastasia-labs/core-types";
 import { TxBuilderConfig } from "./types.js";
 import {

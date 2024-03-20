@@ -1,5 +1,5 @@
 import { Effect } from "effect";
-import { assetsToValue, toScriptRef } from "../mod.js";
+import { assetsToValue, toScriptRef } from "@anastasia-labs/utils";
 import { Address, Assets, Script } from "@anastasia-labs/core-types";
 import { OutputDatum, TxBuilderConfig } from "./types.js";
 import * as CML from "@dcspark/cardano-multiplatform-lib-nodejs";

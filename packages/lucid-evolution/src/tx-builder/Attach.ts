@@ -1,4 +1,4 @@
-import { applyDoubleCborEncoding } from "../mod.js";
+import { applyDoubleCborEncoding } from "@anastasia-labs/utils";
 import {
   CertificateValidator,
   MintingPolicy,

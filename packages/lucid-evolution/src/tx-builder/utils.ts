@@ -2,7 +2,8 @@ import * as CML from "@dcspark/cardano-multiplatform-lib-nodejs";
 import { C } from "lucid-cardano";
 import { CBORHex, OutputDatum } from "./types.js";
 import { Effect } from "effect";
-import { Lucid, fromHex, networkToId } from "../mod.js";
+import { fromHex } from "@anastasia-labs/core-utils";
+import { networkToId } from "@anastasia-labs/utils";
 import { Address, RewardAddress } from "@anastasia-labs/core-types";
 import { TxRunTimeError, NetworkError } from "./Errors.js";
 import { LucidConfig } from "../lucid-evolution/MakeLucid.js";
@@ -12,7 +13,7 @@ export const toDatumOption = (outputDatum: OutputDatum): CML.DatumOption => {
   switch (outputDatum.kind) {
     case "hash":
       return CML.DatumOption.new_hash(
-        CML.DatumHash.from_hex(outputDatum.value),
+        CML.DatumHash.from_hex(outputDatum.value)
       );
     case "asHash": {
       const plutusData = CML.PlutusData.from_cbor_hex(outputDatum.value);
@@ -27,7 +28,7 @@ export const toDatumOption = (outputDatum: OutputDatum): CML.DatumOption => {
 
 export const addressFromWithNetworkCheck = (
   address: Address | RewardAddress,
-  lucidConfig: LucidConfig,
+  lucidConfig: LucidConfig
 ): Effect.Effect<CML.Address, TxRunTimeError | NetworkError, never> => {
   const program = Effect.gen(function* ($) {
     const { type, networkId } = yield* $(
@@ -37,7 +38,7 @@ export const addressFromWithNetworkCheck = (
           new TxRunTimeError({
             message: `${addressFromWithNetworkCheck.name} , ${String(e)}`,
           }),
-      }),
+      })
     );
     const actualNetworkId = networkToId(lucidConfig.network);
     if (networkId !== actualNetworkId) {
@@ -45,8 +46,8 @@ export const addressFromWithNetworkCheck = (
         Effect.fail(
           new NetworkError({
             message: `Invalid address: ${address}, Expected address with network id ${actualNetworkId}, current network ${lucidConfig.network}`,
-          }),
-        ),
+          })
+        )
       );
     }
     return type === "Byron"
@@ -64,12 +65,12 @@ export const toV2 = (script: string) =>
 export const toPartial = (script: CML.PlutusScript, redeemer: CBORHex) =>
   CML.PartialPlutusWitness.new(
     CML.PlutusScriptWitness.new_script(script),
-    CML.PlutusData.from_cbor_hex(redeemer),
+    CML.PlutusData.from_cbor_hex(redeemer)
   );
 
 export function toCMLTransactionHash(body: CML.TransactionBody) {
   const TransactionHash = C.hash_transaction(
-    C.TransactionBody.from_bytes(fromHex(body.to_cbor_hex())),
+    C.TransactionBody.from_bytes(fromHex(body.to_cbor_hex()))
   );
   return CML.TransactionHash.from_hex(TransactionHash.to_hex());
 }

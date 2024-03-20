@@ -25,14 +25,14 @@ export type TxBuilder = {
   collectFrom: (
     config: TxBuilderConfig,
     utxos: UTxO[],
-    redeemer?: string | undefined,
+    redeemer?: string | undefined
   ) => TxBuilder;
   payToAddress: (address: string, assets: Assets) => TxBuilder;
   payToAddressWithData: (
     address: string,
     outputDatum: OutputDatum,
     assets: Assets,
-    scriptRef?: Script | undefined,
+    scriptRef?: Script | undefined
   ) => TxBuilder;
   mintAssets: (assets: Assets, redeemer?: string | undefined) => TxBuilder;
   validFrom: (unixTime: number) => TxBuilder;
@@ -52,7 +52,7 @@ export type TxBuilder = {
   config: () => TxBuilderConfig;
 };
 
-export function makeTxBuilder(lucidConfig: LucidConfig) {
+export function makeTxBuilder(lucidConfig: LucidConfig): TxBuilder {
   const config: TxBuilderConfig = {
     lucidConfig: lucidConfig,
     txBuilder: CML.TransactionBuilder.new(lucidConfig.txbuilderconfig),
@@ -69,7 +69,7 @@ export function makeTxBuilder(lucidConfig: LucidConfig) {
     collectFrom: (
       config: TxBuilderConfig,
       utxos: UTxO[],
-      redeemer?: string | undefined,
+      redeemer?: string | undefined
     ) => {
       const program = collectFromUTxO(config, utxos, redeemer);
       config.programs.push(program);
@@ -84,14 +84,14 @@ export function makeTxBuilder(lucidConfig: LucidConfig) {
       address: string,
       outputDatum: OutputDatum,
       assets: Assets,
-      scriptRef?: Script | undefined,
+      scriptRef?: Script | undefined
     ) => {
       const program = payToAddressWithData(
         config,
         address,
         outputDatum,
         assets,
-        scriptRef,
+        scriptRef
       );
       config.programs.push(program);
       return makeTx;
@@ -134,7 +134,7 @@ export function makeTxBuilder(lucidConfig: LucidConfig) {
     attachWithdrawalValidator: (withdrawalValidator: Script) => {
       const scriptKeyValue = attachWithdrawalValidator(
         config,
-        withdrawalValidator,
+        withdrawalValidator
       );
       config.scripts.set(scriptKeyValue.key, scriptKeyValue.value);
       return makeTx;
