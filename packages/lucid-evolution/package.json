@@ -16,23 +16,22 @@
     "lint": "tsc --noEmit",
     "build": "tsup-node src/index.ts --format esm,cjs --dts --clean",
     "clean": "rm -rf .turbo && rm -rf node_modules && rm -rf dist"
-
   },
   "keywords": [],
   "author": "",
   "license": "MIT",
   "devDependencies": {
-    "@lucid-evolution/core-types": "workspace:*",
-    "@lucid-evolution/core-utils": "workspace:*",
-    "@lucid-evolution/plutus": "workspace:*",
-    "@lucid-evolution/utils": "workspace:*",
-    "@lucid-evolution/bip39": "workspace:*",
-    "@lucid-evolution/sign_data": "workspace:*",
-    "@lucid-evolution/wallet": "workspace:*",
-    "@lucid-evolution/provider": "workspace:*",
     "@dcspark/cardano-multiplatform-lib-nodejs": "^5.1.0",
     "@effect/schema": "^0.62.9",
     "@emurgo/cardano-message-signing-nodejs": "^1.0.1",
+    "@lucid-evolution/bip39": "workspace:*",
+    "@lucid-evolution/core-types": "workspace:*",
+    "@lucid-evolution/core-utils": "workspace:*",
+    "@lucid-evolution/plutus": "workspace:*",
+    "@lucid-evolution/provider": "workspace:*",
+    "@lucid-evolution/sign_data": "workspace:*",
+    "@lucid-evolution/utils": "workspace:*",
+    "@lucid-evolution/wallet": "workspace:*",
     "@sinclair/typebox": "^0.32.15",
     "@types/node": "^20.11.24",
     "effect": "^2.4.1",
@@ -40,6 +39,6 @@
     "tsup": "^8.0.2",
     "tsx": "^4.7.1",
     "typescript": "^5.3.3",
-    "vitest": "0.34.6"
+    "vitest": "^1.4.0"
   }
 }
