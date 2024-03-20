@@ -3,9 +3,9 @@ import * as CML from "@dcspark/cardano-multiplatform-lib-nodejs";
 import { createCostModels, fromUnit, toUnit } from "@lucid-evolution/utils";
 import { Constr, Data } from "@lucid-evolution/plutus";
 
-export async function makeConfigBuilder(
+export const makeConfigBuilder = async (
   provider: Provider,
-): Promise<CML.TransactionBuilderConfig> {
+): Promise<CML.TransactionBuilderConfig> => {
   const protocolParameters = await provider.getProtocolParameters();
   const txBuilderConfig = CML.TransactionBuilderConfigBuilder.new()
     .fee_algo(
@@ -38,7 +38,7 @@ export async function makeConfigBuilder(
     .max_collateral_inputs(protocolParameters.maxCollateralInputs)
     .build();
   return txBuilderConfig;
-}
+};
 
 export const datumOf =
   (provider: Provider) =>
