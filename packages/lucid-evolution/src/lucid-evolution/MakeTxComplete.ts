@@ -2,7 +2,7 @@ import * as CML from "@dcspark/cardano-multiplatform-lib-nodejs";
 import { LucidConfig } from "./MakeLucid.js";
 import { Brand, Effect } from "effect";
 import { toCMLTransactionHash } from "../tx-builder/utils.js";
-import { PrivateKey } from "@anastasia-labs/core-types";
+import { PrivateKey } from "@lucid-evolution/core-types";
 import { RunTimeError, makeRunTimeError } from "../tx-builder/Errors.js";
 import { MakeTxSigned, makeTxSigned } from "./MakeTxSigned.js";
 import { Either } from "effect/Either";

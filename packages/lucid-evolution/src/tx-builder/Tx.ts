@@ -2,7 +2,7 @@ import * as CML from "@dcspark/cardano-multiplatform-lib-nodejs";
 import { LucidConfig } from "../lucid-evolution/MakeLucid.js";
 import { TxBuilderConfig, OutputDatum } from "./types.js";
 import { readFrom } from "./Read.js";
-import { Assets, Script, UTxO } from "@anastasia-labs/core-types";
+import { Assets, Script, UTxO } from "@lucid-evolution/core-types";
 import { collectFromUTxO } from "./Collect.js";
 import {
   attachCertificateValidator,

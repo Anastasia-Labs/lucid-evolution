@@ -1,10 +1,10 @@
-import { applyDoubleCborEncoding } from "@anastasia-labs/utils";
+import { applyDoubleCborEncoding } from "@lucid-evolution/utils";
 import {
   CertificateValidator,
   MintingPolicy,
   SpendingValidator,
   WithdrawalValidator,
-} from "@anastasia-labs/core-types";
+} from "@lucid-evolution/core-types";
 import { TxBuilderConfig } from "./types.js";
 import * as CML from "@dcspark/cardano-multiplatform-lib-nodejs";
 

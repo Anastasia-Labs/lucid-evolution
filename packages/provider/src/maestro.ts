@@ -15,10 +15,10 @@ import {
   TxHash,
   Unit,
   UTxO,
-} from "@anastasia-labs/core-types";
+} from "@lucid-evolution/core-types";
 import packageJson from "../package.json";
-import { applyDoubleCborEncoding } from "@anastasia-labs/utils";
-import { fromHex } from "@anastasia-labs/core-utils";
+import { applyDoubleCborEncoding } from "@lucid-evolution/utils";
+import { fromHex } from "@lucid-evolution/core-utils";
 
 export type MaestroSupportedNetworks = "Mainnet" | "Preprod" | "Preview";
 

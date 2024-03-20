@@ -1,5 +1,5 @@
 import { Effect } from "effect";
-import { Address, OutputData } from "@anastasia-labs/core-types";
+import { Address, OutputData } from "@lucid-evolution/core-types";
 import { TxBuilderConfig } from "./types.js";
 import {
   GetUTxosCoreError,

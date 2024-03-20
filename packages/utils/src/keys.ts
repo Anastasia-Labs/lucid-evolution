@@ -1,5 +1,5 @@
-import { PrivateKey, PublicKey } from "@anastasia-labs/core-types";
-import { generateMnemonic } from "@anastasia-labs/bip39";
+import { PrivateKey, PublicKey } from "@lucid-evolution/core-types";
+import { generateMnemonic } from "@lucid-evolution/bip39";
 import * as CML from "@dcspark/cardano-multiplatform-lib-nodejs";
 
 export function generatePrivateKey(): PrivateKey {

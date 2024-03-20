@@ -1,6 +1,6 @@
 import { Effect } from "effect";
-import { assetsToValue, toScriptRef } from "@anastasia-labs/utils";
-import { Address, Assets, Script } from "@anastasia-labs/core-types";
+import { assetsToValue, toScriptRef } from "@lucid-evolution/utils";
+import { Address, Assets, Script } from "@lucid-evolution/core-types";
 import { OutputDatum, TxBuilderConfig } from "./types.js";
 import * as CML from "@dcspark/cardano-multiplatform-lib-nodejs";
 import { addressFromWithNetworkCheck, toDatumOption } from "./utils.js";

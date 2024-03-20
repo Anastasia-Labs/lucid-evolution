@@ -5,7 +5,7 @@ import {
   ScriptHash,
   KeyHash,
   RewardAddress,
-} from "@anastasia-labs/core-types";
+} from "@lucid-evolution/core-types";
 import { networkToId } from "./network.js";
 import * as CML from "@dcspark/cardano-multiplatform-lib-nodejs";
 import { getAddressDetails } from "./address.js";

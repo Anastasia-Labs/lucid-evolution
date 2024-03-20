@@ -5,10 +5,10 @@ import {
   Provider,
   Wallet,
   WalletApi,
-} from "@anastasia-labs/core-types";
+} from "@lucid-evolution/core-types";
 import * as CML from "@dcspark/cardano-multiplatform-lib-nodejs";
 import { datumOf, makeConfigBuilder, metadataOf } from "./utils.js";
-import { unixTimeToSlot } from "@anastasia-labs/utils";
+import { unixTimeToSlot } from "@lucid-evolution/utils";
 import {
   makeWalletFromAPI,
   makeWalletFromPrivateKey,

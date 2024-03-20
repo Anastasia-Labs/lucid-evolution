@@ -8,8 +8,8 @@ import {
   Type,
 } from "@sinclair/typebox";
 export * from "@sinclair/typebox";
-import { Datum, Exact, Json, Redeemer } from "@anastasia-labs/core-types";
-import { fromHex, fromText, toHex } from "@anastasia-labs/core-utils";
+import { Datum, Exact, Json, Redeemer } from "@lucid-evolution/core-types";
+import { fromHex, fromText, toHex } from "@lucid-evolution/core-utils";
 import * as CML from "@dcspark/cardano-multiplatform-lib-nodejs";
 
 export class Constr<T> {

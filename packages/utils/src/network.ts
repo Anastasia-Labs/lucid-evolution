@@ -1,4 +1,4 @@
-import { Network } from "@anastasia-labs/core-types";
+import { Network } from "@lucid-evolution/core-types";
 
 export function networkToId(network: Network): number {
   switch (network) {

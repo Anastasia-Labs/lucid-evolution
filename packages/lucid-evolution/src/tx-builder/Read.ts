@@ -1,7 +1,7 @@
 import { Effect } from "effect";
-import { Data } from "@anastasia-labs/plutus";
-import { utxoToCore } from "@anastasia-labs/utils";
-import { UTxO } from "@anastasia-labs/core-types";
+import { Data } from "@lucid-evolution/plutus";
+import { utxoToCore } from "@lucid-evolution/utils";
+import { UTxO } from "@lucid-evolution/core-types";
 import { TxBuilderConfig } from "./types.js";
 import { DatumOfError } from "./Errors.js";
 import { datumOf } from "../lucid-evolution/utils.js";

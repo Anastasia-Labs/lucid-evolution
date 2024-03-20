@@ -1,12 +1,12 @@
 import { Effect } from "effect";
-import { Data } from "@anastasia-labs/plutus";
-import { utxoToCore } from "@anastasia-labs/utils";
-import { Redeemer, ScriptType, UTxO } from "@anastasia-labs/core-types";
+import { Data } from "@lucid-evolution/plutus";
+import { utxoToCore } from "@lucid-evolution/utils";
+import { Redeemer, ScriptType, UTxO } from "@lucid-evolution/core-types";
 import { TxBuilderConfig } from "./types.js";
 import { DatumOfError } from "./Errors.js";
 import * as CML from "@dcspark/cardano-multiplatform-lib-nodejs";
 import { toPartial, toV1, toV2 } from "./utils.js";
-import { paymentCredentialOf } from "@anastasia-labs/utils";
+import { paymentCredentialOf } from "@lucid-evolution/utils";
 import { datumOf } from "../lucid-evolution/utils.js";
 
 export const collectFromUTxO = (

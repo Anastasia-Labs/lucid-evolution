@@ -1,6 +1,6 @@
 import * as CML from "@dcspark/cardano-multiplatform-lib-nodejs";
-import { fromHex } from "@anastasia-labs/core-utils";
-import { applyDoubleCborEncoding } from "@anastasia-labs/utils";
+import { fromHex } from "@lucid-evolution/core-utils";
+import { applyDoubleCborEncoding } from "@lucid-evolution/utils";
 import {
   Address,
   Credential,
@@ -15,7 +15,7 @@ import {
   TxHash,
   Unit,
   UTxO,
-} from "@anastasia-labs/core-types";
+} from "@lucid-evolution/core-types";
 import packageJson from "../package.json";
 
 export class Blockfrost implements Provider {

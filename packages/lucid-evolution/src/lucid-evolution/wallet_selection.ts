@@ -13,21 +13,21 @@ import {
   UTxO,
   Wallet,
   WalletApi,
-} from "@anastasia-labs/core-types";
-import { fromHex, toHex } from "@anastasia-labs/core-utils";
+} from "@lucid-evolution/core-types";
+import { fromHex, toHex } from "@lucid-evolution/core-utils";
 import {
   coreToUtxo,
   getAddressDetails,
   paymentCredentialOf,
   utxoToCore,
-} from "@anastasia-labs/utils";
+} from "@lucid-evolution/utils";
 import {
   discoverOwnUsedTxKeyHashes,
   walletFromSeed,
-} from "@anastasia-labs/wallet";
+} from "@lucid-evolution/wallet";
 import * as CML from "@dcspark/cardano-multiplatform-lib-nodejs";
 import { toCMLTransactionHash } from "../tx-builder/utils.js";
-import { signData } from "@anastasia-labs/sign_data";
+import { signData } from "@lucid-evolution/sign_data";
 
 export const makeWalletFromSeed = (
   provider: Provider,

@@ -1,5 +1,5 @@
 import { isRight } from "effect/Either";
-import { Blockfrost } from "@anastasia-labs/provider";
+import { Blockfrost } from "@lucid-evolution/provider";
 import { nativeJSFromJson } from "../src/tx-builder/Native.js";
 import { assert, expect, test } from "vitest";
 import { Effect } from "effect";
@@ -8,8 +8,8 @@ import {
   mintingPolicyToId,
   paymentCredentialOf,
   unixTimeToSlot,
-} from "@anastasia-labs/utils";
-import { fromText } from "@anastasia-labs/core-utils";
+} from "@lucid-evolution/utils";
+import { fromText } from "@lucid-evolution/core-utils";
 
 test("test tx submit", async () => {
   const user = await makeLucid(

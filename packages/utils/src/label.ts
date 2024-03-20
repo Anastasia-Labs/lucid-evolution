@@ -1,5 +1,5 @@
-import { fromHex } from "@anastasia-labs/core-utils";
-import { crc8 } from "@anastasia-labs/crc8";
+import { fromHex } from "@lucid-evolution/core-utils";
+import { crc8 } from "@lucid-evolution/crc8";
 
 export function toLabel(num: number): string {
   if (num < 0 || num > 65535) {

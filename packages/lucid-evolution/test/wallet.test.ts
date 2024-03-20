@@ -1,6 +1,6 @@
 import { makeLucid } from "../src/lucid-evolution/MakeLucid";
 import { assert, test } from "vitest";
-import { Blockfrost, Maestro } from "@anastasia-labs/provider";
+import { Blockfrost, Maestro } from "@lucid-evolution/provider";
 
 test("test wallet-provider", async () => {
   const user = await makeLucid(
