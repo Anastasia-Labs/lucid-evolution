@@ -17,7 +17,7 @@ try {
 test.skipIf(setupFail)("test wallet-provider", async () => {
   const user = await makeLucid(
     new Blockfrost(process.env.VITE_API_URL!, process.env.VITE_BLOCKFROST_KEY),
-    "Preprod"
+    "Preprod",
   );
   user.selectWallet.fromSeed(process.env.VITE_SEED!);
 
