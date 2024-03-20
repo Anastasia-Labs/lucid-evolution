@@ -38,7 +38,7 @@ export const makeConfigBuilder = async (
     .max_collateral_inputs(protocolParameters.maxCollateralInputs)
     .build();
   return txBuilderConfig;
-}
+};
 
 export const datumOf =
   (provider: Provider) =>
