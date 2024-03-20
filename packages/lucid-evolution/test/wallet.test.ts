@@ -12,7 +12,7 @@ test("test wallet-provider", async () => {
 
   const blockfrostUTXO = await user.wallet().getUtxos();
 
-  user.switchProvider(
+  await user.switchProvider(
     new Maestro({
       apiKey: process.env.VITE_MAESTRO_KEY!,
       network: "Preprod",
