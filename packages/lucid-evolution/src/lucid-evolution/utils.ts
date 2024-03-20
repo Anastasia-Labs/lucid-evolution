@@ -1,9 +1,11 @@
-import { Json, Provider, UTxO, Unit } from "@anastasia-labs/core-types";
+import { Json, Provider, UTxO, Unit } from "@lucid-evolution/core-types";
 import * as CML from "@dcspark/cardano-multiplatform-lib-nodejs";
-import { createCostModels, fromUnit, toUnit } from "@anastasia-labs/utils";
-import { Constr, Data } from "@anastasia-labs/plutus";
+import { createCostModels, fromUnit, toUnit } from "@lucid-evolution/utils";
+import { Constr, Data } from "@lucid-evolution/plutus";
 
-export async function makeConfigBuilder(provider: Provider) {
+export async function makeConfigBuilder(
+  provider: Provider,
+): Promise<CML.TransactionBuilderConfig> {
   const protocolParameters = await provider.getProtocolParameters();
   const txBuilderConfig = CML.TransactionBuilderConfigBuilder.new()
     .fee_algo(

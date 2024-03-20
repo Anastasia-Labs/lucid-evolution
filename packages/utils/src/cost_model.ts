@@ -1,5 +1,5 @@
 import * as CML from "@dcspark/cardano-multiplatform-lib-nodejs";
-import { CostModels, ProtocolParameters } from "@anastasia-labs/core-types";
+import { CostModels, ProtocolParameters } from "@lucid-evolution/core-types";
 
 export function createCostModels(costModels: CostModels): CML.CostModels {
   const costmdls = CML.CostModels.new();

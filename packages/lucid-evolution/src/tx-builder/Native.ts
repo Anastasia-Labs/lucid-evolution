@@ -1,6 +1,6 @@
 import * as S from "@effect/schema/Schema";
 import * as CML from "@dcspark/cardano-multiplatform-lib-nodejs";
-import { Script } from "@anastasia-labs/core-types";
+import { Script } from "@lucid-evolution/core-types";
 
 export type NativeScriptType =
   | {

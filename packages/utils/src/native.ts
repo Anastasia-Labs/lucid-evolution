@@ -1,4 +1,4 @@
-import { Native, Script } from "@anastasia-labs/core-types";
+import { Native, Script } from "@lucid-evolution/core-types";
 import * as CML from "@dcspark/cardano-multiplatform-lib-nodejs";
 
 export const toNativeScript = (native: Native) => {

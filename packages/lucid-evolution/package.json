@@ -1,9 +1,9 @@
 {
-  "name": "@anastasia-labs/lucid-evolution",
+  "name": "@lucid-evolution/lucid-evolution",
   "version": "0.0.1",
   "description": "",
-  "main": "./dist/mod.js",
-  "types": "./dist/mod.d.ts",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
   "type": "module",
   "files": [
     "dist"
@@ -13,7 +13,8 @@
   },
   "scripts": {
     "test": "vitest run",
-    "build": "tsup-node src/mod.ts --format esm,cjs --dts --clean",
+    "lint": "tsc --noEmit",
+    "build": "tsup-node src/index.ts --format esm,cjs --dts --clean",
     "clean": "rm -rf .turbo && rm -rf node_modules && rm -rf dist"
 
   },
@@ -21,13 +22,14 @@
   "author": "",
   "license": "MIT",
   "devDependencies": {
-    "@anastasia-labs/core-types": "workspace:*",
-    "@anastasia-labs/core-utils": "workspace:*",
-    "@anastasia-labs/plutus": "workspace:*",
-    "@anastasia-labs/utils": "workspace:*",
-    "@anastasia-labs/bip39": "workspace:*",
-    "@anastasia-labs/sign_data": "workspace:*",
-    "@anastasia-labs/wallet": "workspace:*",
+    "@lucid-evolution/core-types": "workspace:*",
+    "@lucid-evolution/core-utils": "workspace:*",
+    "@lucid-evolution/plutus": "workspace:*",
+    "@lucid-evolution/utils": "workspace:*",
+    "@lucid-evolution/bip39": "workspace:*",
+    "@lucid-evolution/sign_data": "workspace:*",
+    "@lucid-evolution/wallet": "workspace:*",
+    "@lucid-evolution/provider": "workspace:*",
     "@dcspark/cardano-multiplatform-lib-nodejs": "^5.1.0",
     "@effect/schema": "^0.62.9",
     "@emurgo/cardano-message-signing-nodejs": "^1.0.1",

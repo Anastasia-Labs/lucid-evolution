@@ -1,5 +1,5 @@
-import { getAddressDetails } from "@anastasia-labs/utils";
-import { fromHex } from "@anastasia-labs/core-utils";
+import { getAddressDetails } from "@lucid-evolution/utils";
+import { fromHex } from "@lucid-evolution/core-utils";
 import {
   Address,
   KeyHash,
@@ -7,9 +7,9 @@ import {
   PrivateKey,
   RewardAddress,
   UTxO,
-} from "@anastasia-labs/core-types";
+} from "@lucid-evolution/core-types";
 import * as CML from "@dcspark/cardano-multiplatform-lib-nodejs";
-import { mnemonicToEntropy } from "@anastasia-labs/bip39";
+import { mnemonicToEntropy } from "@lucid-evolution/bip39";
 
 type FromSeed = {
   address: Address;

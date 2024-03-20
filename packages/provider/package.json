@@ -1,5 +1,5 @@
 {
-  "name": "@lucid-evolution/bip39",
+  "name": "@lucid-evolution/provider",
   "version": "0.0.1",
   "description": "",
   "main": "./dist/index.js",
@@ -19,7 +19,9 @@
   "author": "",
   "license": "MIT",
   "devDependencies": {
+    "@lucid-evolution/core-types": "workspace:*",
     "@lucid-evolution/core-utils": "workspace:*",
+    "@lucid-evolution/utils": "workspace:*",
     "@dcspark/cardano-multiplatform-lib-nodejs": "^5.1.0",
     "@types/node": "^20.11.24",
     "tsup": "^8.0.2",

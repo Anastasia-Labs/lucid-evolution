@@ -1,9 +1,9 @@
-import { Network, Slot, UnixTime } from "@anastasia-labs/core-types";
+import { Network, Slot, UnixTime } from "@lucid-evolution/core-types";
 import {
   SLOT_CONFIG_NETWORK,
   slotToBeginUnixTime,
   unixTimeToEnclosingSlot,
-} from "@anastasia-labs/plutus";
+} from "@lucid-evolution/plutus";
 
 export function unixTimeToSlot(network: Network, unixTime: UnixTime): Slot {
   return unixTimeToEnclosingSlot(unixTime, SLOT_CONFIG_NETWORK[network]);

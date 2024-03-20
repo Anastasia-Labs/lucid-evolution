@@ -1,5 +1,5 @@
 {
-  "name": "@anastasia-labs/plutus",
+  "name": "@lucid-evolution/plutus",
   "version": "0.0.1",
   "description": "",
   "main": "./dist/index.js",
@@ -19,8 +19,8 @@
   "author": "",
   "license": "MIT",
   "devDependencies": {
-    "@anastasia-labs/core-types": "workspace:*",
-    "@anastasia-labs/core-utils": "workspace:*",
+    "@lucid-evolution/core-types": "workspace:*",
+    "@lucid-evolution/core-utils": "workspace:*",
     "@dcspark/cardano-multiplatform-lib-nodejs": "^5.1.0",
     "@sinclair/typebox": "^0.32.15",
     "@types/node": "^20.11.24",

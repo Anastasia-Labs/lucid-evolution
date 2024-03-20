@@ -2,7 +2,7 @@ import * as CML from "@dcspark/cardano-multiplatform-lib-nodejs";
 import { LucidConfig } from "./MakeLucid.js";
 import { Brand, Effect } from "effect";
 import { toCMLTransactionHash } from "../tx-builder/utils.js";
-import { PrivateKey } from "@anastasia-labs/core-types";
+import { PrivateKey } from "@lucid-evolution/core-types";
 import { RunTimeError, makeRunTimeError } from "../tx-builder/Errors.js";
 import { MakeTxSigned, makeTxSigned } from "./MakeTxSigned.js";
 import { Either } from "effect/Either";
@@ -23,9 +23,11 @@ export type TxCompleteEffect = {
 };
 
 export type MkTxComplete = {
-  sign: () => MkTxComplete;
+  sign: {
+    withWallet: () => MkTxComplete;
+    withPrivateKey: (privateKey: PrivateKey) => MkTxComplete;
+  };
   complete: () => TxCompleteEffect;
-  signWithPrivateKey: (privateKey: PrivateKey) => MkTxComplete;
 };
 
 export const makeTxComplete = (
@@ -51,19 +53,32 @@ export const makeTxComplete = (
   };
 
   const mkConfig: MkTxComplete = {
-    sign: () => {
-      const program = Effect.gen(function* ($) {
-        const wallet = yield* $(Effect.fromNullable(config.lucidConfig.wallet));
-        const witnesses = yield* $(
-          Effect.tryPromise({
-            try: () => wallet.signTx(config.txComplete),
-            catch: (_e) => new Error(),
-          }),
+    sign: {
+      withWallet: () => {
+        const program = Effect.gen(function* ($) {
+          const wallet = yield* $(
+            Effect.fromNullable(config.lucidConfig.wallet),
+          );
+          const witnesses = yield* $(
+            Effect.tryPromise({
+              try: () => wallet.signTx(config.txComplete),
+              catch: (_e) => new Error(),
+            }),
+          );
+          config.witnessSetBuilder.add_existing(witnesses);
+        });
+        config.programs.push(program);
+        return mkConfig;
+      },
+      withPrivateKey: (privateKey: PrivateKey) => {
+        const priv = CML.PrivateKey.from_bech32(privateKey);
+        const witness = CML.make_vkey_witness(
+          toCMLTransactionHash(config.txComplete.body()),
+          priv,
         );
-        config.witnessSetBuilder.add_existing(witnesses);
-      });
-      config.programs.push(program);
-      return mkConfig;
+        config.witnessSetBuilder.add_vkey(witness);
+        return mkConfig;
+      },
     },
     complete: () => {
       const program = Effect.gen(function* ($) {
@@ -82,15 +97,6 @@ export const makeTxComplete = (
         unSafe: () => Effect.runPromise(program),
         program: () => program,
       } as TxCompleteEffect;
-    },
-    signWithPrivateKey: (privateKey: PrivateKey) => {
-      const priv = CML.PrivateKey.from_bech32(privateKey);
-      const witness = CML.make_vkey_witness(
-        toCMLTransactionHash(config.txComplete.body()),
-        priv,
-      );
-      config.witnessSetBuilder.add_vkey(witness);
-      return mkConfig;
     },
   };
   return mkConfig;

@@ -1,7 +1,7 @@
 // This is a partial reimplementation of BIP39 in Deno: https://github.com/bitcoinjs/bip39
 // We only use the default Wordlist (english)
 // import { Sha256 } from "https://deno.land/std@0.153.0/hash/sha256.ts";
-import { toHex } from "@anastasia-labs/core-utils";
+import { toHex } from "@lucid-evolution/core-utils";
 import { createHash } from "node:crypto";
 
 const Sha256 = createHash("sha256");

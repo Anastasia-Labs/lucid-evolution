@@ -1,5 +1,5 @@
-import { Assets, PolicyId, Unit } from "@anastasia-labs/core-types";
-import { toText } from "@anastasia-labs/core-utils";
+import { Assets, PolicyId, Unit } from "@lucid-evolution/core-types";
+import { toText } from "@lucid-evolution/core-utils";
 import * as CML from "@dcspark/cardano-multiplatform-lib-nodejs";
 import { fromLabel, toLabel } from "./label.js";
 

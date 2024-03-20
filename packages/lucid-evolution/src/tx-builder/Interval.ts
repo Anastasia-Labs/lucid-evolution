@@ -1,10 +1,9 @@
 import { Effect } from "effect";
-import { UnixTime } from "@anastasia-labs/core-types";
-import { Config } from "./types.js";
-import { makeTx } from "./MakeTx.js";
-import { unixTimeToSlot } from "@anastasia-labs/utils";
+import { UnixTime } from "@lucid-evolution/core-types";
+import { TxBuilderConfig } from "./types.js";
+import { unixTimeToSlot } from "@lucid-evolution/utils";
 
-export const validFrom = (config: Config, unixTime: UnixTime) => {
+export const validFrom = (config: TxBuilderConfig, unixTime: UnixTime) => {
   const program = Effect.gen(function* ($) {
     const slot = unixTimeToSlot(config.lucidConfig.network, unixTime);
     config.txBuilder.set_validity_start_interval(BigInt(slot));
@@ -12,7 +11,7 @@ export const validFrom = (config: Config, unixTime: UnixTime) => {
   return program;
 };
 
-export const validTo = (config: Config, unixTime: UnixTime) => {
+export const validTo = (config: TxBuilderConfig, unixTime: UnixTime) => {
   const program = Effect.gen(function* ($) {
     const slot = unixTimeToSlot(config.lucidConfig.network, unixTime);
     config.txBuilder.set_ttl(BigInt(slot));

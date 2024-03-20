@@ -2,11 +2,12 @@ import * as CML from "@dcspark/cardano-multiplatform-lib-nodejs";
 import { C } from "lucid-cardano";
 import { CBORHex, OutputDatum } from "./types.js";
 import { Effect } from "effect";
-import { Lucid, fromHex, networkToId } from "../mod.js";
-import { Address, RewardAddress } from "@anastasia-labs/core-types";
+import { fromHex } from "@lucid-evolution/core-utils";
+import { networkToId } from "@lucid-evolution/utils";
+import { Address, RewardAddress } from "@lucid-evolution/core-types";
 import { TxRunTimeError, NetworkError } from "./Errors.js";
 import { LucidConfig } from "../lucid-evolution/MakeLucid.js";
-import { getAddressDetails } from "@anastasia-labs/utils";
+import { getAddressDetails } from "@lucid-evolution/utils";
 
 export const toDatumOption = (outputDatum: OutputDatum): CML.DatumOption => {
   switch (outputDatum.kind) {

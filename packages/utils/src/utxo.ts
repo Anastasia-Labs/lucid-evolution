@@ -1,4 +1,4 @@
-import { OutRef, TxOutput, UTxO } from "@anastasia-labs/core-types";
+import { OutRef, TxOutput, UTxO } from "@lucid-evolution/core-types";
 import * as CML from "@dcspark/cardano-multiplatform-lib-nodejs";
 import { fromScriptRef, toScriptRef } from "./scripts.js";
 import { assetsToValue, valueToAssets } from "./value.js";

@@ -1,5 +1,5 @@
 import { isRight } from "effect/Either";
-import { Blockfrost, Lucid, fromText } from "../src/mod.js";
+import { Blockfrost } from "@lucid-evolution/provider";
 import { nativeJSFromJson } from "../src/tx-builder/Native.js";
 import { assert, expect, test } from "vitest";
 import { Effect } from "effect";
@@ -8,7 +8,8 @@ import {
   mintingPolicyToId,
   paymentCredentialOf,
   unixTimeToSlot,
-} from "@anastasia-labs/utils";
+} from "@lucid-evolution/utils";
+import { fromText } from "@lucid-evolution/core-utils";
 
 test("test tx submit", async () => {
   const user = await makeLucid(
@@ -60,7 +61,9 @@ test("test tx submit", async () => {
     .program();
 
   const signed = await tx.pipe(
-    Effect.flatMap((tx) => Effect.promise(() => tx.sign().complete().unSafe())),
+    Effect.flatMap((tx) =>
+      Effect.promise(() => tx.sign.withWallet().complete().unSafe()),
+    ),
     //NOTE: enable if you want to submit signed tx on preprod
     // Effect.flatMap((signedTx) => Effect.promise(() => signedTx.submit()!)),
     // Effect.flatMap((txHash) => Effect.log(txHash)),

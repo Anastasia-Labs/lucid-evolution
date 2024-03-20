@@ -19,14 +19,10 @@ import {
   Unit,
   UnixTime,
   UTxO,
-} from "@anastasia-labs/core-types";
-import { PROTOCOL_PARAMETERS_DEFAULT } from "../utils/mod.js";
-import {
-  coreToUtxo,
-  fromHex,
-  getAddressDetails,
-  toHex,
-} from "../utils/utils.js";
+} from "@lucid-evolution/core-types";
+import { PROTOCOL_PARAMETERS_DEFAULT } from "@lucid-evolution/utils";
+import { coreToUtxo, getAddressDetails } from "@lucid-evolution/utils";
+import { fromHex } from "@lucid-evolution/core-utils";
 
 /** Concatentation of txHash + outputIndex */
 type FlatOutRef = string;

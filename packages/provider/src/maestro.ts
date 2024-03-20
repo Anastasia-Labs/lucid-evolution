@@ -1,5 +1,4 @@
 import * as CML from "@dcspark/cardano-multiplatform-lib-nodejs";
-import { applyDoubleCborEncoding, fromHex } from "../utils/mod.js";
 import {
   Address,
   Assets,
@@ -16,8 +15,10 @@ import {
   TxHash,
   Unit,
   UTxO,
-} from "@anastasia-labs/core-types";
-import packageJson from "../../package.json";
+} from "@lucid-evolution/core-types";
+import packageJson from "../package.json";
+import { applyDoubleCborEncoding } from "@lucid-evolution/utils";
+import { fromHex } from "@lucid-evolution/core-utils";
 
 export type MaestroSupportedNetworks = "Mainnet" | "Preprod" | "Preview";
 

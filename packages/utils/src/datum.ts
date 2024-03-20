@@ -1,4 +1,4 @@
-import { Datum, DatumHash } from "@anastasia-labs/core-types";
+import { Datum, DatumHash } from "@lucid-evolution/core-types";
 import * as CML from "@dcspark/cardano-multiplatform-lib-nodejs";
 
 export function datumToHash(datum: Datum): DatumHash {

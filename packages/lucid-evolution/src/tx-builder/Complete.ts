@@ -1,7 +1,6 @@
 import { Effect } from "effect";
-import { TxComplete } from "../mod.js";
-import { Address, OutputData } from "@anastasia-labs/core-types";
-import { Config } from "./types.js";
+import { Address, OutputData } from "@lucid-evolution/core-types";
+import { TxBuilderConfig } from "./types.js";
 import {
   GetUTxosCoreError,
   WalletAddressError,
@@ -11,7 +10,7 @@ import * as CML from "@dcspark/cardano-multiplatform-lib-nodejs";
 import { makeTxComplete } from "../lucid-evolution/MakeTxComplete.js";
 
 export const complete = (
-  config: Config,
+  config: TxBuilderConfig,
   options?: {
     change?: { address?: Address; outputData?: OutputData };
     coinSelection?: boolean;
@@ -138,7 +137,7 @@ export const complete = (
   }).pipe(Effect.catchAllDefect(makeRunTimeError));
   return {
     unsafeRun: () => Effect.runPromise(program),
-    run: () => Effect.runPromise(Effect.either(program)),
+    safeRun: () => Effect.runPromise(Effect.either(program)),
     program: () => program,
   };
 };

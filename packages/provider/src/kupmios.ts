@@ -13,8 +13,8 @@ import {
   TxHash,
   Unit,
   UTxO,
-} from "@anastasia-labs/core-types";
-import { fromHex, fromUnit, toHex } from "../utils/mod.js";
+} from "@lucid-evolution/core-types";
+import { fromUnit } from "@lucid-evolution/utils";
 import * as CML from "@dcspark/cardano-multiplatform-lib-nodejs";
 
 export class Kupmios implements Provider {

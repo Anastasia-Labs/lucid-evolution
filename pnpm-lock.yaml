@@ -8,15 +8,15 @@ importers:
 
   .:
     devDependencies:
-      '@anastasia-labs/eslint-config':
-        specifier: workspace:*
-        version: link:packages/eslint-config
-      '@anastasia-labs/typescript-config':
-        specifier: workspace:*
-        version: link:packages/typescript-config
       '@changesets/cli':
         specifier: ^2.27.1
         version: 2.27.1
+      '@lucid-evolution/eslint-config':
+        specifier: workspace:*
+        version: link:packages/eslint-config
+      '@lucid-evolution/typescript-config':
+        specifier: workspace:*
+        version: link:packages/typescript-config
       prettier:
         specifier: ^3.1.1
         version: 3.1.1
@@ -42,10 +42,10 @@ importers:
         specifier: ^18.2.0
         version: 18.2.0(react@18.2.0)
     devDependencies:
-      '@anastasia-labs/eslint-config':
+      '@lucid-evolution/eslint-config':
         specifier: workspace:*
         version: link:../packages/eslint-config
-      '@anastasia-labs/typescript-config':
+      '@lucid-evolution/typescript-config':
         specifier: workspace:*
         version: link:../packages/typescript-config
       '@next/eslint-plugin-next':
@@ -72,12 +72,12 @@ importers:
 
   packages/bip39:
     devDependencies:
-      '@anastasia-labs/core-utils':
-        specifier: workspace:*
-        version: link:../core-utils
       '@dcspark/cardano-multiplatform-lib-nodejs':
         specifier: ^5.1.0
         version: 5.1.0
+      '@lucid-evolution/core-utils':
+        specifier: workspace:*
+        version: link:../core-utils
       '@types/node':
         specifier: ^20.11.24
         version: 20.11.24
@@ -159,27 +159,6 @@ importers:
 
   packages/lucid-evolution:
     devDependencies:
-      '@anastasia-labs/bip39':
-        specifier: workspace:*
-        version: link:../bip39
-      '@anastasia-labs/core-types':
-        specifier: workspace:*
-        version: link:../core-types
-      '@anastasia-labs/core-utils':
-        specifier: workspace:*
-        version: link:../core-utils
-      '@anastasia-labs/plutus':
-        specifier: workspace:*
-        version: link:../plutus
-      '@anastasia-labs/sign_data':
-        specifier: workspace:*
-        version: link:../sign_data
-      '@anastasia-labs/utils':
-        specifier: workspace:*
-        version: link:../utils
-      '@anastasia-labs/wallet':
-        specifier: workspace:*
-        version: link:../wallet
       '@dcspark/cardano-multiplatform-lib-nodejs':
         specifier: ^5.1.0
         version: 5.1.0
@@ -189,6 +168,30 @@ importers:
       '@emurgo/cardano-message-signing-nodejs':
         specifier: ^1.0.1
         version: 1.0.1
+      '@lucid-evolution/bip39':
+        specifier: workspace:*
+        version: link:../bip39
+      '@lucid-evolution/core-types':
+        specifier: workspace:*
+        version: link:../core-types
+      '@lucid-evolution/core-utils':
+        specifier: workspace:*
+        version: link:../core-utils
+      '@lucid-evolution/plutus':
+        specifier: workspace:*
+        version: link:../plutus
+      '@lucid-evolution/provider':
+        specifier: workspace:*
+        version: link:../provider
+      '@lucid-evolution/sign_data':
+        specifier: workspace:*
+        version: link:../sign_data
+      '@lucid-evolution/utils':
+        specifier: workspace:*
+        version: link:../utils
+      '@lucid-evolution/wallet':
+        specifier: workspace:*
+        version: link:../wallet
       '@sinclair/typebox':
         specifier: ^0.32.15
         version: 0.32.15
@@ -216,15 +219,15 @@ importers:
 
   packages/plutus:
     devDependencies:
-      '@anastasia-labs/core-types':
-        specifier: workspace:*
-        version: link:../core-types
-      '@anastasia-labs/core-utils':
-        specifier: workspace:*
-        version: link:../core-utils
       '@dcspark/cardano-multiplatform-lib-nodejs':
         specifier: ^5.1.0
         version: 5.1.0
+      '@lucid-evolution/core-types':
+        specifier: workspace:*
+        version: link:../core-types
+      '@lucid-evolution/core-utils':
+        specifier: workspace:*
+        version: link:../core-utils
       '@sinclair/typebox':
         specifier: ^0.32.15
         version: 0.32.15
@@ -238,23 +241,47 @@ importers:
         specifier: ^5.3.3
         version: 5.3.3
 
-  packages/sign_data:
+  packages/provider:
     devDependencies:
-      '@anastasia-labs/core-types':
+      '@dcspark/cardano-multiplatform-lib-nodejs':
+        specifier: ^5.1.0
+        version: 5.1.0
+      '@lucid-evolution/core-types':
         specifier: workspace:*
         version: link:../core-types
-      '@anastasia-labs/core-utils':
+      '@lucid-evolution/core-utils':
         specifier: workspace:*
         version: link:../core-utils
-      '@anastasia-labs/wallet':
+      '@lucid-evolution/utils':
         specifier: workspace:*
-        version: link:../wallet
+        version: link:../utils
+      '@types/node':
+        specifier: ^20.11.24
+        version: 20.11.24
+      tsup:
+        specifier: ^8.0.2
+        version: 8.0.2(typescript@5.3.3)
+      typescript:
+        specifier: ^5.3.3
+        version: 5.3.3
+
+  packages/sign_data:
+    devDependencies:
       '@dcspark/cardano-multiplatform-lib-nodejs':
         specifier: ^5.1.0
         version: 5.1.0
       '@emurgo/cardano-message-signing-nodejs':
         specifier: ^1.0.1
         version: 1.0.1
+      '@lucid-evolution/core-types':
+        specifier: workspace:*
+        version: link:../core-types
+      '@lucid-evolution/core-utils':
+        specifier: workspace:*
+        version: link:../core-utils
+      '@lucid-evolution/wallet':
+        specifier: workspace:*
+        version: link:../wallet
       '@types/node':
         specifier: ^20.11.24
         version: 20.11.24
@@ -269,24 +296,24 @@ importers:
 
   packages/utils:
     devDependencies:
-      '@anastasia-labs/bip39':
-        specifier: workspace:*
-        version: link:../bip39
-      '@anastasia-labs/core-types':
-        specifier: workspace:*
-        version: link:../core-types
-      '@anastasia-labs/core-utils':
-        specifier: workspace:*
-        version: link:../core-utils
-      '@anastasia-labs/crc8':
-        specifier: workspace:*
-        version: link:../crc8
-      '@anastasia-labs/plutus':
-        specifier: workspace:*
-        version: link:../plutus
       '@dcspark/cardano-multiplatform-lib-nodejs':
         specifier: ^5.1.0
         version: 5.1.0
+      '@lucid-evolution/bip39':
+        specifier: workspace:*
+        version: link:../bip39
+      '@lucid-evolution/core-types':
+        specifier: workspace:*
+        version: link:../core-types
+      '@lucid-evolution/core-utils':
+        specifier: workspace:*
+        version: link:../core-utils
+      '@lucid-evolution/crc8':
+        specifier: workspace:*
+        version: link:../crc8
+      '@lucid-evolution/plutus':
+        specifier: workspace:*
+        version: link:../plutus
       '@types/node':
         specifier: ^20.11.24
         version: 20.11.24
@@ -299,21 +326,21 @@ importers:
 
   packages/wallet:
     devDependencies:
-      '@anastasia-labs/bip39':
-        specifier: workspace:*
-        version: link:../bip39
-      '@anastasia-labs/core-types':
-        specifier: workspace:*
-        version: link:../core-types
-      '@anastasia-labs/core-utils':
-        specifier: workspace:*
-        version: link:../core-utils
-      '@anastasia-labs/utils':
-        specifier: workspace:*
-        version: link:../utils
       '@dcspark/cardano-multiplatform-lib-nodejs':
         specifier: ^5.1.0
         version: 5.1.0
+      '@lucid-evolution/bip39':
+        specifier: workspace:*
+        version: link:../bip39
+      '@lucid-evolution/core-types':
+        specifier: workspace:*
+        version: link:../core-types
+      '@lucid-evolution/core-utils':
+        specifier: workspace:*
+        version: link:../core-utils
+      '@lucid-evolution/utils':
+        specifier: workspace:*
+        version: link:../utils
       '@types/node':
         specifier: ^20.11.24
         version: 20.11.24

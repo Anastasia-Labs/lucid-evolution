@@ -9,9 +9,18 @@ Lucid evolution includes the following packages
 Lucid Evolution consists of the following packages:
 
 - `docs`: Documentation resources for Lucid Evolution.
-- `@lucid-evolution/lucid-evolution`: A foundational package set to evolve into multiple packages.
-- `@lucid-evolution/eslint-config`: Contains ESLint configurations, including `eslint-config-next` and `eslint-config-prettier`.
+- `@lucid-evolution/lucid-evolution`: Main package for Lucid Evolution.
+- `@lucid-evolution/bip39`: Package for BIP-39 mnemonic code.
+- `@lucid-evolution/core-types`: Core types used across Lucid Evolution packages.
+- `@lucid-evolution/core-utils`: Core utilities used across Lucid Evolution packages.
+- `@lucid-evolution/crc8`: Package for CRC8 calculation.
+- `@lucid-evolution/plutus`: Package for Plutus integration.
+- `@lucid-evolution/provider`: Package for providing data.
+- `@lucid-evolution/sign_data`: Package for signing data.
+- `@lucid-evolution/utils`: Utility functions for Lucid Evolution.
+- `@lucid-evolution/wallet`: Wallet package for Lucid Evolution.
 - `@lucid-evolution/typescript-config`: Houses `tsconfig.json` files utilized across the `monorepo`.
+- `@lucid-evolution/eslint-config`: Contains ESLint configurations, including `eslint-config-next` and `eslint-config-prettier`.
 
 All packages in Lucid Evolution are built using [TypeScript](https://www.typescriptlang.org/) and [ Effect ](https://effect.website/docs/why-effect). This combination enables us to manage side effects effectively, scale faster, and enhance type safety and developer experience.
 
@@ -58,6 +67,12 @@ To check formatting, run the following command:
 
 ```
 pnpm format-check
+```
+
+To check linting, run the following command:
+
+```
+pnpm lint
 ```
 
 ### Remote Caching
