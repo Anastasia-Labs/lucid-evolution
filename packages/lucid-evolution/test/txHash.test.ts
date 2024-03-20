@@ -1,5 +1,5 @@
 import { expect, test } from "vitest";
-import { Blockfrost  } from "@anastasia-labs/provider";
+import { Blockfrost } from "@anastasia-labs/provider";
 import { makeLucid } from "../src/lucid-evolution/MakeLucid";
 
 test.skip("test txHash", async () => {

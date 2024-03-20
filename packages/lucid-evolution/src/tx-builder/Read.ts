@@ -1,6 +1,6 @@
 import { Effect } from "effect";
-import { Data,  } from "@anastasia-labs/plutus";
-import {utxoToCore} from "@anastasia-labs/utils"
+import { Data } from "@anastasia-labs/plutus";
+import { utxoToCore } from "@anastasia-labs/utils";
 import { UTxO } from "@anastasia-labs/core-types";
 import { TxBuilderConfig } from "./types.js";
 import { DatumOfError } from "./Errors.js";

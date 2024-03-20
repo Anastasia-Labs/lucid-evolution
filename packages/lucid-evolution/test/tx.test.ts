@@ -1,5 +1,5 @@
 import { isRight } from "effect/Either";
-import { Blockfrost} from "@anastasia-labs/provider"
+import { Blockfrost } from "@anastasia-labs/provider";
 import { nativeJSFromJson } from "../src/tx-builder/Native.js";
 import { assert, expect, test } from "vitest";
 import { Effect } from "effect";

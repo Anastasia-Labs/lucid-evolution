@@ -12,7 +12,7 @@ import { datumOf } from "../lucid-evolution/utils.js";
 export const collectFromUTxO = (
   config: TxBuilderConfig,
   utxos: UTxO[],
-  redeemer?: Redeemer
+  redeemer?: Redeemer,
 ) => {
   const program = Effect.gen(function* ($) {
     for (const utxo of utxos) {
@@ -21,7 +21,7 @@ export const collectFromUTxO = (
           Effect.tryPromise({
             try: () => datumOf(config.lucidConfig.provider)(utxo),
             catch: (_e) => new DatumOfError(),
-          })
+          }),
         );
         utxo.datum = Data.to(data);
       }
@@ -32,26 +32,26 @@ export const collectFromUTxO = (
 
       if (redeemer && credential.type == "Script") {
         const script = yield* $(
-          Effect.fromNullable(config.scripts.get(credential.hash))
+          Effect.fromNullable(config.scripts.get(credential.hash)),
         );
         const inputResult = (script: { type: ScriptType; script: string }) => {
           switch (script.type) {
             case "Native":
               return input.native_script(
                 CML.NativeScript.from_cbor_hex(script.script),
-                CML.NativeScriptWitnessInfo.assume_signature_count()
+                CML.NativeScriptWitnessInfo.assume_signature_count(),
               );
             case "PlutusV1":
               return input.plutus_script(
                 toPartial(toV1(script.script), redeemer),
                 CML.RequiredSigners.new(),
-                CML.PlutusData.from_cbor_hex(utxo.datum!)
+                CML.PlutusData.from_cbor_hex(utxo.datum!),
               );
             case "PlutusV2":
               return input.plutus_script(
                 toPartial(toV2(script.script), redeemer),
                 CML.RequiredSigners.new(),
-                CML.PlutusData.from_cbor_hex(utxo.datum!)
+                CML.PlutusData.from_cbor_hex(utxo.datum!),
               );
           }
         };
