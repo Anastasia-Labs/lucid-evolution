@@ -35,6 +35,7 @@ jobs:
           cache: "pnpm"
 
       - run: pnpm i
-      - run: pnpm run lint && pnpm run build
+      - run: pnmm run build
+      - run: pnpm run lint
       - run: pnpm run format-check
       - run: pnpm test
