@@ -171,6 +171,9 @@ importers:
       '@anastasia-labs/plutus':
         specifier: workspace:*
         version: link:../plutus
+      '@anastasia-labs/provider':
+        specifier: workspace:*
+        version: link:../provider
       '@anastasia-labs/sign_data':
         specifier: workspace:*
         version: link:../sign_data
@@ -228,6 +231,30 @@ importers:
       '@sinclair/typebox':
         specifier: ^0.32.15
         version: 0.32.15
+      '@types/node':
+        specifier: ^20.11.24
+        version: 20.11.24
+      tsup:
+        specifier: ^8.0.2
+        version: 8.0.2(typescript@5.3.3)
+      typescript:
+        specifier: ^5.3.3
+        version: 5.3.3
+
+  packages/provider:
+    devDependencies:
+      '@anastasia-labs/core-types':
+        specifier: workspace:*
+        version: link:../core-types
+      '@anastasia-labs/core-utils':
+        specifier: workspace:*
+        version: link:../core-utils
+      '@anastasia-labs/utils':
+        specifier: workspace:*
+        version: link:../utils
+      '@dcspark/cardano-multiplatform-lib-nodejs':
+        specifier: ^5.1.0
+        version: 5.1.0
       '@types/node':
         specifier: ^20.11.24
         version: 20.11.24
