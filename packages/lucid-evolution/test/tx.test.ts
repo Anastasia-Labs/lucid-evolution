@@ -60,7 +60,9 @@ test("test tx submit", async () => {
     .program();
 
   const signed = await tx.pipe(
-    Effect.flatMap((tx) => Effect.promise(() => tx.sign().complete().unSafe())),
+    Effect.flatMap((tx) =>
+      Effect.promise(() => tx.sign.withWallet().complete().unSafe()),
+    ),
     //NOTE: enable if you want to submit signed tx on preprod
     // Effect.flatMap((signedTx) => Effect.promise(() => signedTx.submit()!)),
     // Effect.flatMap((txHash) => Effect.log(txHash)),

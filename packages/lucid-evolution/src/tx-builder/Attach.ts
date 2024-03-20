@@ -5,11 +5,11 @@ import {
   SpendingValidator,
   WithdrawalValidator,
 } from "@anastasia-labs/core-types";
-import { Config } from "./types.js";
+import { TxBuilderConfig } from "./types.js";
 import * as CML from "@dcspark/cardano-multiplatform-lib-nodejs";
 
 export const attachScript = (
-  config: Config,
+  config: TxBuilderConfig,
   {
     type,
     script,
@@ -43,28 +43,28 @@ export const attachScript = (
   }
 };
 export const attachSpendingValidator = (
-  config: Config,
+  config: TxBuilderConfig,
   spendingValidator: SpendingValidator,
 ) => {
   return attachScript(config, spendingValidator);
 };
 
 export const attachMintingPolicy = (
-  config: Config,
+  config: TxBuilderConfig,
   mintingPolicy: MintingPolicy,
 ) => {
   return attachScript(config, mintingPolicy);
 };
 
 export const attachCertificateValidator = (
-  config: Config,
+  config: TxBuilderConfig,
   certValidator: CertificateValidator,
 ) => {
   return attachScript(config, certValidator);
 };
 
 export const attachWithdrawalValidator = (
-  config: Config,
+  config: TxBuilderConfig,
   withdrawalValidator: WithdrawalValidator,
 ) => {
   return attachScript(config, withdrawalValidator);

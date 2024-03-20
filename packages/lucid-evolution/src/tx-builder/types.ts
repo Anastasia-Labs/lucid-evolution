@@ -4,7 +4,7 @@ import * as CML from "@dcspark/cardano-multiplatform-lib-nodejs";
 import { RunTimeError, TransactionErrors } from "./Errors.js";
 import { LucidConfig } from "../lucid-evolution/MakeLucid.js";
 
-export type Config = {
+export type TxBuilderConfig = {
   readonly lucidConfig: LucidConfig;
   readonly txBuilder: CML.TransactionBuilder;
   inputUTxOs?: UTxO[];

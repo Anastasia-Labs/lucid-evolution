@@ -1,14 +1,13 @@
-import { Effect, pipe } from "effect";
+import { Effect } from "effect";
 import { assetsToValue, toScriptRef } from "../mod.js";
 import { Address, Assets, Script } from "@anastasia-labs/core-types";
-import { Config, OutputDatum } from "./types.js";
+import { OutputDatum, TxBuilderConfig } from "./types.js";
 import * as CML from "@dcspark/cardano-multiplatform-lib-nodejs";
 import { addressFromWithNetworkCheck, toDatumOption } from "./utils.js";
-import { makeTx } from "./MakeTx.js";
 
 /** Pay to a public key or native script address. */
 export const payToAddress = (
-  config: Config,
+  config: TxBuilderConfig,
   address: Address,
   assets: Assets,
 ) => {
@@ -24,7 +23,7 @@ export const payToAddress = (
 
 /** Pay to a public key or native script address with datum or scriptRef. */
 export const payToAddressWithData = (
-  config: Config,
+  config: TxBuilderConfig,
   address: Address,
   outputDatum: OutputDatum,
   assets: Assets,
@@ -44,7 +43,7 @@ export const payToAddressWithData = (
 
 /** Pay to a plutus script address with datum or scriptRef. */
 export const payToContract = (
-  config: Config,
+  config: TxBuilderConfig,
   address: Address,
   outputDatum: OutputDatum,
   assets: Assets,

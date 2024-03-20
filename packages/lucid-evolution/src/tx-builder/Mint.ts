@@ -1,12 +1,11 @@
 import { Effect } from "effect";
 import { toText } from "../mod.js";
 import { Assets, Redeemer } from "@anastasia-labs/core-types";
-import { Config } from "./types.js";
 import * as CML from "@dcspark/cardano-multiplatform-lib-nodejs";
 import { toPartial, toV1, toV2 } from "./utils.js";
 import { MintError } from "./Errors.js";
-import { makeTx } from "./MakeTx.js";
 import { NoSuchElementException } from "effect/Cause";
+import { TxBuilderConfig } from "./types.js";
 
 /**
  * All assets should be of the same policy id.
@@ -14,7 +13,7 @@ import { NoSuchElementException } from "effect/Cause";
  * If the plutus script doesn't need a redeemer, you still need to specifiy the void redeemer.
  */
 export const mintAssets = (
-  config: Config,
+  config: TxBuilderConfig,
   assets: Assets,
   redeemer?: Redeemer,
 ) => {

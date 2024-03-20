@@ -1,16 +1,15 @@
 import { Effect } from "effect";
 import { Data, utxoToCore } from "../mod.js";
 import { Redeemer, ScriptType, UTxO } from "@anastasia-labs/core-types";
-import { Config } from "./types.js";
+import { TxBuilderConfig } from "./types.js";
 import { DatumOfError } from "./Errors.js";
 import * as CML from "@dcspark/cardano-multiplatform-lib-nodejs";
-import { makeTx } from "./MakeTx.js";
 import { toPartial, toV1, toV2 } from "./utils.js";
 import { paymentCredentialOf } from "@anastasia-labs/utils";
 import { datumOf } from "../lucid-evolution/utils.js";
 
 export const collectFromUTxO = (
-  config: Config,
+  config: TxBuilderConfig,
   utxos: UTxO[],
   redeemer?: Redeemer,
 ) => {

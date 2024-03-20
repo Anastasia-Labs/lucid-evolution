@@ -13,6 +13,7 @@
   },
   "scripts": {
     "test": "vitest run",
+    "lint": "tsc --noEmit",
     "build": "tsup-node src/mod.ts --format esm,cjs --dts --clean",
     "clean": "rm -rf .turbo && rm -rf node_modules && rm -rf dist"
 

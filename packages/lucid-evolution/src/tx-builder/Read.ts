@@ -1,12 +1,11 @@
 import { Effect } from "effect";
 import { Data, utxoToCore } from "../mod.js";
 import { UTxO } from "@anastasia-labs/core-types";
-import { Config } from "./types.js";
-import { makeTx } from "./MakeTx.js";
+import { TxBuilderConfig } from "./types.js";
 import { DatumOfError } from "./Errors.js";
 import { datumOf } from "../lucid-evolution/utils.js";
 
-export const readFrom = (config: Config, utxos: UTxO[]) => {
+export const readFrom = (config: TxBuilderConfig, utxos: UTxO[]) => {
   const program: Effect.Effect<void, DatumOfError> = Effect.gen(function* ($) {
     for (const utxo of utxos) {
       if (utxo.datumHash) {

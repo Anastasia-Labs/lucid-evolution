@@ -1,6 +1,6 @@
 import * as CML from "@dcspark/cardano-multiplatform-lib-nodejs";
 import { LucidConfig } from "../lucid-evolution/MakeLucid.js";
-import { Config, OutputDatum } from "./types.js";
+import { TxBuilderConfig, OutputDatum } from "./types.js";
 import { readFrom } from "./Read.js";
 import { Assets, Script, UTxO } from "@anastasia-labs/core-types";
 import { collectFromUTxO } from "./Collect.js";
@@ -23,7 +23,7 @@ import { Effect } from "effect/Effect";
 export type TxBuilder = {
   readFrom: (utxos: UTxO[]) => TxBuilder;
   collectFrom: (
-    config: Config,
+    config: TxBuilderConfig,
     utxos: UTxO[],
     redeemer?: string | undefined,
   ) => TxBuilder;
@@ -44,18 +44,16 @@ export type TxBuilder = {
   attachWithdrawalValidator: (withdrawalValidator: Script) => TxBuilder;
   complete: () => {
     unsafeRun: () => Promise<MkTxComplete>;
-    run: () => Promise<Either<MkTxComplete, TransactionErrors | RunTimeError>>;
-    program: () => Effect<
-      MkTxComplete,
-      TransactionErrors | RunTimeError,
-      never
+    safeRun: () => Promise<
+      Either<MkTxComplete, TransactionErrors | RunTimeError>
     >;
+    program: () => Effect<MkTxComplete, TransactionErrors | RunTimeError>;
   };
-  config: () => Config;
+  config: () => TxBuilderConfig;
 };
 
 export function makeTxBuilder(lucidConfig: LucidConfig) {
-  const config: Config = {
+  const config: TxBuilderConfig = {
     lucidConfig: lucidConfig,
     txBuilder: CML.TransactionBuilder.new(lucidConfig.txbuilderconfig),
     inputUTxOs: [],
@@ -69,7 +67,7 @@ export function makeTxBuilder(lucidConfig: LucidConfig) {
       return makeTx;
     },
     collectFrom: (
-      config: Config,
+      config: TxBuilderConfig,
       utxos: UTxO[],
       redeemer?: string | undefined,
     ) => {
