@@ -1,15 +1,15 @@
 import { isRight } from "effect/Either";
-import { Blockfrost } from "@lucid-evolution/provider";
-import { nativeJSFromJson } from "../src/tx-builder/Native.js";
-import { assert, expect, test } from "vitest";
-import { Effect } from "effect";
-import { makeLucid } from "../src/lucid-evolution/MakeLucid.js";
 import {
+  Blockfrost,
+  fromText,
+  makeLucid,
   mintingPolicyToId,
+  nativeJSFromJson,
   paymentCredentialOf,
   unixTimeToSlot,
-} from "@lucid-evolution/utils";
-import { fromText } from "@lucid-evolution/core-utils";
+} from "../src/index.js";
+import { assert, test } from "vitest";
+import { Effect } from "effect";
 
 test("test tx submit", async () => {
   const user = await makeLucid(
@@ -42,11 +42,11 @@ test("test tx submit", async () => {
   const tx = user
     .newTx()
     .readFrom(utxo)
-    .payToAddress(
+    .pay.ToAddress(
       "addr_test1qp4cgm42esrud5njskhsr6uc28s6ljah0phsdqe7qmh3rfuyjgq5wwsca5camufxavmtnm8f6ywga3de3jkgmkwzma4sqv284l",
       { lovelace: 2_000_000n },
     )
-    .payToAddressWithData(
+    .pay.ToAddressWithData(
       "addr_test1qp4cgm42esrud5njskhsr6uc28s6ljah0phsdqe7qmh3rfuyjgq5wwsca5camufxavmtnm8f6ywga3de3jkgmkwzma4sqv284l",
       {
         kind: "inline",
@@ -56,13 +56,13 @@ test("test tx submit", async () => {
     )
     .mintAssets({ [policy + fromText("MyMintedToken")]: 1n })
     .validTo(Date.now() + 900000)
-    .attachMintingPolicy(mint)
+    .attach.MintingPolicy(mint)
     .complete()
     .program();
 
   const signed = await tx.pipe(
     Effect.flatMap((tx) =>
-      Effect.promise(() => tx.sign.withWallet().complete().unSafe()),
+      Effect.promise(() => tx.sign.withWallet().complete().unSafeRun()),
     ),
     //NOTE: enable if you want to submit signed tx on preprod
     // Effect.flatMap((signedTx) => Effect.promise(() => signedTx.submit()!)),

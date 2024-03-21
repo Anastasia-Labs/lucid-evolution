@@ -20,10 +20,7 @@
   "keywords": [],
   "author": "",
   "license": "MIT",
-  "devDependencies": {
-    "@dcspark/cardano-multiplatform-lib-nodejs": "^5.1.0",
-    "@effect/schema": "^0.62.9",
-    "@emurgo/cardano-message-signing-nodejs": "^1.0.1",
+  "dependencies": {
     "@lucid-evolution/bip39": "workspace:*",
     "@lucid-evolution/core-types": "workspace:*",
     "@lucid-evolution/core-utils": "workspace:*",
@@ -31,8 +28,12 @@
     "@lucid-evolution/provider": "workspace:*",
     "@lucid-evolution/sign_data": "workspace:*",
     "@lucid-evolution/utils": "workspace:*",
-    "@lucid-evolution/wallet": "workspace:*",
-    "@sinclair/typebox": "^0.32.15",
+    "@lucid-evolution/wallet": "workspace:*"
+  },
+  "devDependencies": {
+    "@dcspark/cardano-multiplatform-lib-nodejs": "^5.1.0",
+    "@emurgo/cardano-message-signing-nodejs": "^1.0.1",
+    "@effect/schema": "^0.62.9",
     "@types/node": "^20.11.24",
     "effect": "^2.4.1",
     "lucid-cardano": "^0.10.7",

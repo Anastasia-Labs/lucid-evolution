@@ -1,12 +1,8 @@
-import {
-  NativeScriptType,
-  parseNativeScript,
-} from "../src/tx-builder/Native.js";
-import * as CML from "@dcspark/cardano-multiplatform-lib-nodejs";
+import { parseNativeScript } from "../src/tx-builder/Native.js";
 import { expect, test } from "vitest";
 
 test("test native parsing", () => {
-  const script: NativeScriptType = {
+  const script: unknown = {
     ScriptAny: {
       native_scripts: [
         {

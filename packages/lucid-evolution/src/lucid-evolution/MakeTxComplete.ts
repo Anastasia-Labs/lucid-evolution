@@ -17,9 +17,9 @@ export type TxCompleteConfig = {
 };
 
 export type TxCompleteEffect = {
+  safeRun: () => Promise<Either<MakeTxSigned, Error | RunTimeError>>;
+  unSafeRun: () => Promise<MakeTxSigned>;
   program: () => Effect.Effect<MakeTxSigned, Error | RunTimeError, never>;
-  unSafe: () => Promise<MakeTxSigned>;
-  safe: () => Promise<Either<MakeTxSigned, Error | RunTimeError>>;
 };
 
 export type MkTxComplete = {
@@ -80,7 +80,7 @@ export const makeTxComplete = (
         return mkConfig;
       },
     },
-    complete: () => {
+    complete: (): TxCompleteEffect => {
       const program = Effect.gen(function* ($) {
         yield* $(Effect.all(config.programs, { concurrency: "unbounded" }));
         config.witnessSetBuilder.add_existing(config.txComplete.witness_set());
@@ -93,10 +93,10 @@ export const makeTxComplete = (
         return makeTxSigned(config.lucidConfig, signedTx);
       }).pipe(Effect.catchAllDefect(makeRunTimeError));
       return {
-        safe: () => Effect.runPromise(Effect.either(program)),
-        unSafe: () => Effect.runPromise(program),
+        safeRun: () => Effect.runPromise(Effect.either(program)),
+        unSafeRun: () => Effect.runPromise(program),
         program: () => program,
-      } as TxCompleteEffect;
+      };
     },
   };
   return mkConfig;
