@@ -5,7 +5,7 @@ export default defineConfig({
     poolOptions: {
       threads: {
         isolate: true,
-        useAtomics: true
+        useAtomics: true,
         // Threads related options here
       },
     },
