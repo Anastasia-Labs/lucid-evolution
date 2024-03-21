@@ -1,6 +1,5 @@
-import { makeLucid } from "../src/lucid-evolution/MakeLucid";
 import { assert, test } from "vitest";
-import { Blockfrost, Maestro } from "@lucid-evolution/provider";
+import { Blockfrost, Maestro, makeLucid } from "../src/index.js";
 
 let setupFail = false;
 const maestro = new Maestro({
@@ -8,9 +7,9 @@ const maestro = new Maestro({
   network: "Preprod",
 });
 try {
-  await maestro.getProtocolParameters();
-  console.log("true");
+  console.log(await maestro.getProtocolParameters())
 } catch (error) {
+  console.log()
   setupFail = true;
 }
 

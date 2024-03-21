@@ -3,6 +3,7 @@ import {
   Network,
   PrivateKey,
   Provider,
+  Transaction,
   Wallet,
   WalletApi,
 } from "@lucid-evolution/core-types";
@@ -15,6 +16,7 @@ import {
   makeWalletFromSeed,
 } from "./wallet_selection.js";
 import { TxBuilder, makeTxBuilder } from "../tx-builder/Tx.js";
+import { makeTxComplete } from "./MakeTxComplete.js";
 
 export type LucidConfig = {
   provider: Provider;
@@ -38,6 +40,8 @@ export const makeLucid = async (provider: Provider, network: Network) => {
       config.txbuilderconfig = await makeConfigBuilder(provider);
     },
     newTx: (): TxBuilder => makeTxBuilder(config),
+    fromTx: (tx: Transaction) =>
+      makeTxComplete(config, CML.Transaction.from_cbor_hex(tx)),
     selectWallet: {
       fromSeed: (seed: string) => {
         config.wallet = makeWalletFromSeed(config.provider, network, seed);
