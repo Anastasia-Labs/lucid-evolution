@@ -1,3 +1,5 @@
+[![CI](https://github.com/Anastasia-Labs/lucid-evolution/actions/workflows/main.yml/badge.svg)](https://github.com/Anastasia-Labs/lucid-evolution/actions/workflows/main.yml)
+
 # Lucid Evolution
 
 ## What's inside?
