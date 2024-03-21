@@ -7,9 +7,9 @@ const maestro = new Maestro({
   network: "Preprod",
 });
 try {
-  console.log(await maestro.getProtocolParameters())
+  console.log(await maestro.getProtocolParameters());
 } catch (error) {
-  console.log()
+  console.log();
   setupFail = true;
 }
 
