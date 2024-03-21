@@ -12,7 +12,7 @@
     "access": "public"
   },
   "scripts": {
-    "test": "vitest run --retry 3",
+    "test": "vitest run",
     "lint": "tsc --noEmit",
     "build": "tsup-node src/index.ts --format esm,cjs --dts --clean",
     "clean": "rm -rf .turbo && rm -rf node_modules && rm -rf dist"
@@ -40,6 +40,6 @@
     "tsup": "^8.0.2",
     "tsx": "^4.7.1",
     "typescript": "^5.3.3",
-    "vitest": "^1.4.0"
+    "vitest": "0.34.6"
   }
 }
