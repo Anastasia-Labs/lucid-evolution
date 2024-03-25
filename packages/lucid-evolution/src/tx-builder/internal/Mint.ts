@@ -2,10 +2,10 @@ import { Effect } from "effect";
 import { toText } from "@lucid-evolution/core-utils";
 import { Assets, Redeemer } from "@lucid-evolution/core-types";
 import * as CML from "@dcspark/cardano-multiplatform-lib-nodejs";
-import { toPartial, toV1, toV2 } from "./utils.js";
-import { MintError } from "./Errors.js";
+import { toPartial, toV1, toV2 } from "../utils.js";
+import { MintError } from "../../Errors.js";
 import { NoSuchElementException } from "effect/Cause";
-import { TxBuilderConfig } from "./types.js";
+import { TxBuilderConfig } from "../types.js";
 
 /**
  * All assets should be of the same policy id.

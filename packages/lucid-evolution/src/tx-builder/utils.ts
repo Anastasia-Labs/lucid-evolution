@@ -5,8 +5,8 @@ import { Effect } from "effect";
 import { fromHex } from "@lucid-evolution/core-utils";
 import { networkToId } from "@lucid-evolution/utils";
 import { Address, RewardAddress } from "@lucid-evolution/core-types";
-import { TxRunTimeError, NetworkError } from "./Errors.js";
-import { LucidConfig } from "../lucid-evolution/MakeLucid.js";
+import { TxRunTimeError, NetworkError } from "../Errors.js";
+import { LucidConfig } from "../lucid-evolution/LucidEvolution.js";
 import { getAddressDetails } from "@lucid-evolution/utils";
 
 export const toDatumOption = (outputDatum: OutputDatum): CML.DatumOption => {

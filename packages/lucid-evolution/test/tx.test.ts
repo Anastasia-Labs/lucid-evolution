@@ -1,8 +1,8 @@
 import { isRight } from "effect/Either";
 import {
   Blockfrost,
+  Lucid,
   fromText,
-  makeLucid,
   mintingPolicyToId,
   nativeJSFromJson,
   paymentCredentialOf,
@@ -12,7 +12,7 @@ import { assert, test } from "vitest";
 import { Effect } from "effect";
 
 test("test tx submit", async () => {
-  const user = await makeLucid(
+  const user = await Lucid(
     new Blockfrost(process.env.VITE_API_URL!, process.env.VITE_BLOCKFROST_KEY),
     "Preprod",
   );
@@ -62,9 +62,6 @@ test("test tx submit", async () => {
 
   const signed = await tx.pipe(
     Effect.flatMap((tx) => tx.sign.withWallet().complete().program()),
-    // Effect.flatMap((tx) =>
-    //   Effect.promise(() => tx.sign.withWallet().complete().unSafeRun()),
-    // ),
     //NOTE: enable if you want to submit signed tx on preprod
     // Effect.flatMap((signedTx) => Effect.promise(() => signedTx.submit()!)),
     // Effect.flatMap((txHash) => Effect.log(txHash)),

@@ -1,22 +1,16 @@
 import * as CML from "@dcspark/cardano-multiplatform-lib-nodejs";
-import { LucidConfig } from "../lucid-evolution/MakeLucid.js";
+import { LucidConfig } from "../lucid-evolution/LucidEvolution.js";
 import { TxBuilderConfig, OutputDatum } from "./types.js";
-import { readFrom } from "./Read.js";
+import * as Read from "./internal/Read.js";
 import { Assets, Script, UTxO } from "@lucid-evolution/core-types";
-import { collectFromUTxO } from "./Collect.js";
-import {
-  attachCertificateValidator,
-  attachMintingPolicy,
-  attachScript,
-  attachSpendingValidator,
-  attachWithdrawalValidator,
-} from "./Attach.js";
-import { payToAddress, payToAddressWithData } from "./Pay.js";
-import { mintAssets } from "./Mint.js";
-import { validFrom, validTo } from "./Interval.js";
-import { complete } from "./Complete.js";
-import { MkTxComplete } from "../lucid-evolution/MakeTxComplete.js";
-import { RunTimeError, TransactionErrors } from "./Errors.js";
+import * as Collect from "./internal/Collect.js";
+import * as Attach from "./internal/Attach.js";
+import * as Pay from "./internal/Pay.js";
+import * as Mint from "./internal/Mint.js";
+import * as Interval from "./internal/Interval.js";
+import { completeTxBuilder } from "./CompleteTxBuilder.js";
+import { TxSignBuilder } from "../tx-sign-builder/MakeTxSign.js";
+import { RunTimeError, TransactionErrors } from "../Errors.js";
 import { Either } from "effect/Either";
 import { Effect } from "effect/Effect";
 
@@ -47,11 +41,11 @@ export type TxBuilder = {
     WithdrawalValidator: (withdrawalValidator: Script) => TxBuilder;
   };
   complete: () => {
-    unsafeRun: () => Promise<MkTxComplete>;
+    unsafeRun: () => Promise<TxSignBuilder>;
     safeRun: () => Promise<
-      Either<MkTxComplete, TransactionErrors | RunTimeError>
+      Either<TxSignBuilder, TransactionErrors | RunTimeError>
     >;
-    program: () => Effect<MkTxComplete, TransactionErrors | RunTimeError>;
+    program: () => Effect<TxSignBuilder, TransactionErrors | RunTimeError>;
   };
   config: () => TxBuilderConfig;
 };
@@ -64,26 +58,26 @@ export function makeTxBuilder(lucidConfig: LucidConfig): TxBuilder {
     scripts: new Map(),
     programs: [],
   };
-  const makeTx: TxBuilder = {
+  const txBuilder: TxBuilder = {
     readFrom: (utxos: UTxO[]) => {
-      const program = readFrom(config, utxos);
+      const program = Read.readFrom(config, utxos);
       config.programs.push(program);
-      return makeTx;
+      return txBuilder;
     },
     collectFrom: (
       config: TxBuilderConfig,
       utxos: UTxO[],
       redeemer?: string | undefined,
     ) => {
-      const program = collectFromUTxO(config, utxos, redeemer);
+      const program = Collect.collectFromUTxO(config, utxos, redeemer);
       config.programs.push(program);
-      return makeTx;
+      return txBuilder;
     },
     pay: {
       ToAddress: (address: string, assets: Assets) => {
-        const program = payToAddress(config, address, assets);
+        const program = Pay.payToAddress(config, address, assets);
         config.programs.push(program);
-        return makeTx;
+        return txBuilder;
       },
       ToAddressWithData: (
         address: string,
@@ -91,7 +85,7 @@ export function makeTxBuilder(lucidConfig: LucidConfig): TxBuilder {
         assets: Assets,
         scriptRef?: Script | undefined,
       ) => {
-        const program = payToAddressWithData(
+        const program = Pay.payToAddressWithData(
           config,
           address,
           outputDatum,
@@ -99,62 +93,65 @@ export function makeTxBuilder(lucidConfig: LucidConfig): TxBuilder {
           scriptRef,
         );
         config.programs.push(program);
-        return makeTx;
+        return txBuilder;
       },
     },
     mintAssets: (assets: Assets, redeemer?: string | undefined) => {
-      const program = mintAssets(config, assets, redeemer);
+      const program = Mint.mintAssets(config, assets, redeemer);
       config.programs.push(program);
-      return makeTx;
+      return txBuilder;
     },
     validFrom: (unixTime: number) => {
-      const program = validFrom(config, unixTime);
+      const program = Interval.validFrom(config, unixTime);
       config.programs.push(program);
-      return makeTx;
+      return txBuilder;
     },
     validTo: (unixTime: number) => {
-      const program = validTo(config, unixTime);
+      const program = Interval.validTo(config, unixTime);
       config.programs.push(program);
-      return makeTx;
+      return txBuilder;
     },
     attach: {
       Script: (script: Script) => {
-        const scriptKeyValue = attachScript(config, script);
+        const scriptKeyValue = Attach.attachScript(config, script);
         config.scripts.set(scriptKeyValue.key, scriptKeyValue.value);
-        return makeTx;
+        return txBuilder;
       },
       SpendingValidator: (spendingValidator: Script) => {
-        const scriptKeyValue = attachSpendingValidator(
+        const scriptKeyValue = Attach.attachSpendingValidator(
           config,
           spendingValidator,
         );
         config.scripts.set(scriptKeyValue.key, scriptKeyValue.value);
-        return makeTx;
+        return txBuilder;
       },
       MintingPolicy: (mintingPolicy: Script) => {
-        const scriptKeyValue = attachMintingPolicy(config, mintingPolicy);
+        const scriptKeyValue = Attach.attachMintingPolicy(
+          config,
+          mintingPolicy,
+        );
         config.scripts.set(scriptKeyValue.key, scriptKeyValue.value);
-        return makeTx;
+        return txBuilder;
       },
       CertificateValidator: (certValidator: Script) => {
-        const scriptKeyValue = attachCertificateValidator(
+        const scriptKeyValue = Attach.attachCertificateValidator(
           config,
           certValidator,
         );
         config.scripts.set(scriptKeyValue.key, scriptKeyValue.value);
-        return makeTx;
+        return txBuilder;
       },
       WithdrawalValidator: (withdrawalValidator: Script) => {
-        const scriptKeyValue = attachWithdrawalValidator(
+        const scriptKeyValue = Attach.attachWithdrawalValidator(
           config,
           withdrawalValidator,
         );
         config.scripts.set(scriptKeyValue.key, scriptKeyValue.value);
-        return makeTx;
+        return txBuilder;
       },
     },
-    complete: () => complete(config),
+    complete: () => completeTxBuilder(config),
     config: () => config,
   };
-  return makeTx;
+  return txBuilder;
 }

@@ -5,11 +5,11 @@ import {
   GetUTxosCoreError,
   WalletAddressError,
   makeRunTimeError,
-} from "./Errors.js";
+} from "../Errors.js";
 import * as CML from "@dcspark/cardano-multiplatform-lib-nodejs";
-import { makeTxComplete } from "../lucid-evolution/MakeTxComplete.js";
+import { makeTxSignBuilder } from "../tx-sign-builder/MakeTxSign.js";
 
-export const complete = (
+export const completeTxBuilder = (
   config: TxBuilderConfig,
   options?: {
     change?: { address?: Address; outputData?: OutputData };
@@ -125,7 +125,7 @@ export const complete = (
     //   utxoSet
     // );
 
-    return makeTxComplete(
+    return makeTxSignBuilder(
       config.lucidConfig,
       config.txBuilder
         .build(
