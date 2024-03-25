@@ -2,9 +2,9 @@ import { Effect } from "effect";
 import { Data } from "@lucid-evolution/plutus";
 import { utxoToCore } from "@lucid-evolution/utils";
 import { UTxO } from "@lucid-evolution/core-types";
-import { TxBuilderConfig } from "./types.js";
-import { DatumOfError } from "./Errors.js";
-import { datumOf } from "../lucid-evolution/utils.js";
+import { TxBuilderConfig } from "../types.js";
+import { DatumOfError } from "../../Errors.js";
+import { datumOf } from "../../lucid-evolution/utils.js";
 
 export const readFrom = (config: TxBuilderConfig, utxos: UTxO[]) => {
   const program: Effect.Effect<void, DatumOfError> = Effect.gen(function* ($) {

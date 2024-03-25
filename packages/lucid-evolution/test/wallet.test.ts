@@ -1,5 +1,5 @@
 import { assert, test } from "vitest";
-import { Blockfrost, Maestro, makeLucid } from "../src/index.js";
+import { Blockfrost, Lucid, Maestro } from "../src/index.js";
 
 let setupFail = false;
 const maestro = new Maestro({
@@ -14,7 +14,7 @@ try {
 }
 
 test.skipIf(setupFail)("test wallet-provider", async () => {
-  const user = await makeLucid(
+  const user = await Lucid(
     new Blockfrost(process.env.VITE_API_URL!, process.env.VITE_BLOCKFROST_KEY),
     "Preprod",
   );

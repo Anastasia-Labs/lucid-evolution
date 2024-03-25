@@ -1,8 +1,8 @@
 import { Effect } from "effect";
 import { ScriptType, UTxO } from "@lucid-evolution/core-types";
 import * as CML from "@dcspark/cardano-multiplatform-lib-nodejs";
-import { RunTimeError, TransactionErrors } from "./Errors.js";
-import { LucidConfig } from "../lucid-evolution/MakeLucid.js";
+import { RunTimeError, TransactionErrors } from "../Errors.js";
+import { LucidConfig } from "../lucid-evolution/LucidEvolution.js";
 
 export type TxBuilderConfig = {
   readonly lucidConfig: LucidConfig;

@@ -1,13 +1,13 @@
 import * as CML from "@dcspark/cardano-multiplatform-lib-nodejs";
-import { LucidConfig } from "./MakeLucid.js";
-import { Brand, Effect } from "effect";
+import { LucidConfig } from "../lucid-evolution/LucidEvolution.js";
+import { Effect } from "effect";
 import { toCMLTransactionHash } from "../tx-builder/utils.js";
 import { PrivateKey } from "@lucid-evolution/core-types";
-import { RunTimeError, makeRunTimeError } from "../tx-builder/Errors.js";
-import { MakeTxSigned, makeTxSigned } from "./MakeTxSigned.js";
+import { RunTimeError, makeRunTimeError } from "../Errors.js";
+import { TxSigned, completeTxSign } from "./CompleteTxSign.js";
 import { Either } from "effect/Either";
 
-export type TxCompleteConfig = {
+export type TxSignBuilderConfig = {
   txComplete: CML.Transaction;
   witnessSetBuilder: CML.TransactionWitnessSetBuilder;
   programs: Effect.Effect<void, Error, never>[];
@@ -16,21 +16,19 @@ export type TxCompleteConfig = {
   exUnits: { cpu: number; mem: number } | null;
 };
 
-export type TxCompleteEffect = {
-  safeRun: () => Promise<Either<MakeTxSigned, Error | RunTimeError>>;
-  unSafeRun: () => Promise<MakeTxSigned>;
-  program: () => Effect.Effect<MakeTxSigned, Error | RunTimeError, never>;
-};
-
-export type MkTxComplete = {
+export type TxSignBuilder = {
   sign: {
-    withWallet: () => MkTxComplete;
-    withPrivateKey: (privateKey: PrivateKey) => MkTxComplete;
+    withWallet: () => TxSignBuilder;
+    withPrivateKey: (privateKey: PrivateKey) => TxSignBuilder;
   };
-  complete: () => TxCompleteEffect;
+  complete: () => {
+    safeRun: () => Promise<Either<TxSigned, Error | RunTimeError>>;
+    unSafeRun: () => Promise<TxSigned>;
+    program: () => Effect.Effect<TxSigned, Error | RunTimeError, never>;
+  };
 };
 
-export const makeTxComplete = (
+export const makeTxSignBuilder = (
   lucidConfig: LucidConfig,
   tx: CML.Transaction,
 ) => {
@@ -43,7 +41,7 @@ export const makeTxComplete = (
       exUnits.mem += parseInt(redeemer.ex_units().mem().toString());
     }
   }
-  const config: TxCompleteConfig = {
+  const config: TxSignBuilderConfig = {
     txComplete: tx,
     witnessSetBuilder: CML.TransactionWitnessSetBuilder.new(),
     programs: [],
@@ -52,7 +50,7 @@ export const makeTxComplete = (
     exUnits: exUnits,
   };
 
-  const mkConfig: MkTxComplete = {
+  const txSignBuilder: TxSignBuilder = {
     sign: {
       withWallet: () => {
         const program = Effect.gen(function* ($) {
@@ -68,7 +66,7 @@ export const makeTxComplete = (
           config.witnessSetBuilder.add_existing(witnesses);
         });
         config.programs.push(program);
-        return mkConfig;
+        return txSignBuilder;
       },
       withPrivateKey: (privateKey: PrivateKey) => {
         const priv = CML.PrivateKey.from_bech32(privateKey);
@@ -77,10 +75,10 @@ export const makeTxComplete = (
           priv,
         );
         config.witnessSetBuilder.add_vkey(witness);
-        return mkConfig;
+        return txSignBuilder;
       },
     },
-    complete: (): TxCompleteEffect => {
+    complete: () => {
       const program = Effect.gen(function* ($) {
         yield* $(Effect.all(config.programs, { concurrency: "unbounded" }));
         config.witnessSetBuilder.add_existing(config.txComplete.witness_set());
@@ -90,7 +88,7 @@ export const makeTxComplete = (
           true,
           config.txComplete.auxiliary_data(),
         );
-        return makeTxSigned(config.lucidConfig, signedTx);
+        return completeTxSign(config.lucidConfig, signedTx);
       }).pipe(Effect.catchAllDefect(makeRunTimeError));
       return {
         safeRun: () => Effect.runPromise(Effect.either(program)),
@@ -99,7 +97,7 @@ export const makeTxComplete = (
       };
     },
   };
-  return mkConfig;
+  return txSignBuilder;
 };
 
 // /** Add an extra signature from a private key. */
@@ -145,12 +143,3 @@ export const makeTxComplete = (
 // toHash(): TxHash {
 //   return toCMLTransactionHash(this.txComplete.body()).to_hex();
 // }
-
-interface Calculator {
-  value: number;
-  add(value: number): Calculator;
-  subtract(value: number): Calculator;
-  multiply(value: number): Calculator;
-  divide(value: number): Calculator;
-  getResult(): number;
-}

@@ -1,9 +1,12 @@
 import {
   Credential,
+  Delegation,
   Network,
+  OutRef,
   PrivateKey,
   Provider,
   Transaction,
+  UTxO,
   Wallet,
   WalletApi,
 } from "@lucid-evolution/core-types";
@@ -15,8 +18,40 @@ import {
   makeWalletFromPrivateKey,
   makeWalletFromSeed,
 } from "./wallet_selection.js";
-import { TxBuilder, makeTxBuilder } from "../tx-builder/Tx.js";
-import { makeTxComplete } from "./MakeTxComplete.js";
+import { TxBuilder, makeTxBuilder } from "../tx-builder/MakeTxBuilder.js";
+import {
+  TxSignBuilder,
+  makeTxSignBuilder,
+} from "../tx-sign-builder/MakeTxSign.js";
+import { Data } from "@lucid-evolution/plutus";
+
+export type LucidEvolution = {
+  txbuilderconfig: () => CML.TransactionBuilderConfig;
+  wallet: () => Wallet;
+  switchProvider: (provider: Provider) => Promise<void>;
+  newTx: () => TxBuilder;
+  fromTx: (tx: Transaction) => TxSignBuilder;
+  selectWallet: {
+    fromSeed: (seed: string) => void;
+    fromPrivateKey: (privateKey: PrivateKey) => void;
+    fromAPI: (walletAPI: WalletApi) => void;
+  };
+  currentSlot: () => number;
+  utxosAt: (addressOrCredential: string | Credential) => Promise<UTxO[]>;
+  utxosAtWithUnit: (
+    addressOrCredential: string | Credential,
+    unit: string,
+  ) => Promise<UTxO[]>;
+  utxoByUnit: (unit: string) => Promise<UTxO>;
+  utxosByOutRef: (outRefs: OutRef[]) => Promise<UTxO[]>;
+  delegationAt: (rewardAddress: string) => Promise<Delegation>;
+  awaitTx: (
+    txHash: string,
+    checkInterval?: number | undefined,
+  ) => Promise<boolean>;
+  datumOf: <T = Data>(utxo: UTxO, type?: T | undefined) => Promise<T>;
+  metadataOf: <T = any>(unit: string) => Promise<T>;
+};
 
 export type LucidConfig = {
   provider: Provider;
@@ -25,7 +60,11 @@ export type LucidConfig = {
   txbuilderconfig: CML.TransactionBuilderConfig;
 };
 
-export const makeLucid = async (provider: Provider, network: Network) => {
+//TODO: turn this to Effect
+export const Lucid = async (
+  provider: Provider,
+  network: Network,
+): Promise<LucidEvolution> => {
   const config: LucidConfig = {
     provider: provider,
     network: network,
@@ -41,7 +80,7 @@ export const makeLucid = async (provider: Provider, network: Network) => {
     },
     newTx: (): TxBuilder => makeTxBuilder(config),
     fromTx: (tx: Transaction) =>
-      makeTxComplete(config, CML.Transaction.from_cbor_hex(tx)),
+      makeTxSignBuilder(config, CML.Transaction.from_cbor_hex(tx)),
     selectWallet: {
       fromSeed: (seed: string) => {
         config.wallet = makeWalletFromSeed(config.provider, network, seed);

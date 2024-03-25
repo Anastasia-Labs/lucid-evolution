@@ -1,13 +1,13 @@
 import * as CML from "@dcspark/cardano-multiplatform-lib-nodejs";
-import { LucidConfig } from "./MakeLucid.js";
+import { LucidConfig } from "../lucid-evolution/LucidEvolution.js";
 import { toCMLTransactionHash } from "../tx-builder/utils.js";
 
-export type MakeTxSigned = {
+export type TxSigned = {
   submit: () => Promise<string> | undefined;
   toCBOR: () => string;
   toHash: () => string;
 };
-export const makeTxSigned = (
+export const completeTxSign = (
   lucidConfig: LucidConfig,
   txSigned: CML.Transaction,
 ) => {
