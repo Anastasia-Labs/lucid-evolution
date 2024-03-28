@@ -14,7 +14,7 @@
   "scripts": {
     "test": "vitest run",
     "lint": "tsc --noEmit",
-    "build": "tsup-node src/index.ts --format esm,cjs --dts --clean",
+    "build": "tsup-node src/index.ts",
     "clean": "rm -rf .turbo && rm -rf node_modules && rm -rf dist"
   },
   "keywords": [],
@@ -32,14 +32,18 @@
   },
   "devDependencies": {
     "@dcspark/cardano-multiplatform-lib-nodejs": "^5.1.0",
-    "@emurgo/cardano-message-signing-nodejs": "^1.0.1",
     "@effect/schema": "^0.62.9",
+    "@emurgo/cardano-message-signing-nodejs": "^1.0.1",
     "@types/node": "^20.11.24",
+    "cborg": "^4.1.4",
     "effect": "^2.4.1",
+    "esbuild-plugin-wasm": "^1.1.0",
     "lucid-cardano": "^0.10.7",
     "tsup": "^8.0.2",
     "tsx": "^4.7.1",
     "typescript": "^5.3.3",
-    "vitest": "0.34.6"
+    "uplc-node": "^0.0.3",
+    "vite-plugin-wasm": "^3.3.0",
+    "vitest": "latest"
   }
 }

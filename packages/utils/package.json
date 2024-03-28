@@ -20,12 +20,14 @@
   "license": "MIT",
   "devDependencies": {
     "@dcspark/cardano-multiplatform-lib-nodejs": "^5.1.0",
-    "@lucid-evolution/plutus": "workspace:*",
-    "@lucid-evolution/core-utils": "workspace:*",
-    "@lucid-evolution/core-types": "workspace:*",
     "@lucid-evolution/bip39": "workspace:*",
+    "@lucid-evolution/core-types": "workspace:*",
+    "@lucid-evolution/core-utils": "workspace:*",
     "@lucid-evolution/crc8": "workspace:*",
+    "@lucid-evolution/plutus": "workspace:*",
     "@types/node": "^20.11.24",
+    "cborg": "^4.1.4",
+    "lucid-cardano": "^0.10.7",
     "tsup": "^8.0.2",
     "typescript": "^5.3.3"
   }
