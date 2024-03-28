@@ -3,9 +3,18 @@ import { LucidConfig } from "../lucid-evolution/LucidEvolution.js";
 import { Effect } from "effect";
 import { toCMLTransactionHash } from "../tx-builder/utils.js";
 import { PrivateKey } from "@lucid-evolution/core-types";
-import { RunTimeError, makeRunTimeError } from "../Errors.js";
+import { RunTimeError, SignerError, makeRunTimeError } from "../Errors.js";
 import { TxSigned, completeTxSign } from "./CompleteTxSign.js";
 import { Either } from "effect/Either";
+import { createCostModels } from "@lucid-evolution/utils";
+import { TxComplete } from "lucid-cardano";
+import {
+  inputToArray,
+  outputToArray,
+  setRedeemertoZero,
+} from "../tx-builder/CompleteTxBuilder.js";
+import * as UPLC from "../tx-builder/pkg/uplc_tx.js";
+import { SLOT_CONFIG_NETWORK } from "@lucid-evolution/plutus";
 
 export type TxSignBuilderConfig = {
   txComplete: CML.Transaction;
@@ -30,7 +39,7 @@ export type TxSignBuilder = {
 
 export const makeTxSignBuilder = (
   lucidConfig: LucidConfig,
-  tx: CML.Transaction,
+  tx: CML.Transaction
 ) => {
   const redeemers = tx.witness_set().redeemers();
   const exUnits = { cpu: 0, mem: 0 };
@@ -55,14 +64,15 @@ export const makeTxSignBuilder = (
       withWallet: () => {
         const program = Effect.gen(function* ($) {
           const wallet = yield* $(
-            Effect.fromNullable(config.lucidConfig.wallet),
+            Effect.fromNullable(config.lucidConfig.wallet)
           );
           const witnesses = yield* $(
             Effect.tryPromise({
               try: () => wallet.signTx(config.txComplete),
               catch: (_e) => new Error(),
-            }),
+            })
           );
+          console.log("witness", witnesses.to_json());
           config.witnessSetBuilder.add_existing(witnesses);
         });
         config.programs.push(program);
@@ -72,7 +82,7 @@ export const makeTxSignBuilder = (
         const priv = CML.PrivateKey.from_bech32(privateKey);
         const witness = CML.make_vkey_witness(
           toCMLTransactionHash(config.txComplete.body()),
-          priv,
+          priv
         );
         config.witnessSetBuilder.add_vkey(witness);
         return txSignBuilder;
@@ -82,12 +92,54 @@ export const makeTxSignBuilder = (
       const program = Effect.gen(function* ($) {
         yield* $(Effect.all(config.programs, { concurrency: "unbounded" }));
         config.witnessSetBuilder.add_existing(config.txComplete.witness_set());
+        const txWitnessSet = config.witnessSetBuilder.build();
+        const protocolParam = yield* $(
+          Effect.promise(() =>
+            config.lucidConfig.provider.getProtocolParameters()
+          )
+        );
+        const slotConfig = SLOT_CONFIG_NETWORK[config.lucidConfig.network];
+        // console.log("protocolParam", protocolParam);
+        const costmodel = createCostModels(protocolParam.costModels);
+        // const tx_evaluation = config.txBuilder.build_for_evaluation(
+        //   0,
+        //   CML.Address.from_bech32(changeAddress)
+        // );
+        // console.log(txWitnessSet.to_json())
+        // const scriptDataHash = CML.calc_script_data_hash_from_witness(txWitnessSet, costmodel)
+        // console.log("scriptDataHash",scriptDataHash)
+        // config.txComplete
+        //   .body()
+        //   .set_script_data_hash(
+        //     CML.calc_script_data_hash_from_witness(txWitnessSet, costmodel)!
+        //   );
         const signedTx = CML.Transaction.new(
           config.txComplete.body(),
-          config.witnessSetBuilder.build(),
+          txWitnessSet,
           true,
-          config.txComplete.auxiliary_data(),
+          config.txComplete.auxiliary_data()
         );
+        // if (txWitnessSet.redeemers()) {
+        //   const t = setRedeemertoZero(signedTx);
+        //   // console.log(t?.to_json());
+        //   console.log(t!.body().inputs().get(0).to_json())
+        //   console.log(t!.body().inputs().get(1).to_json())
+        //   console.log(t!.body().inputs().get(2).to_json())
+        //   // console.log("inputToArray",inputToArray(t!.body().inputs()));
+        //   // console.log("outputToArray",outputToArray(t!.body().outputs()));
+        //   const uplc_eval = UPLC.eval_phase_two_raw(
+        //     t!.to_cbor_bytes(),
+        //     inputToArray(t!.body().inputs()),
+        //     outputToArray(t!.body().outputs()),
+        //     costmodel.to_cbor_bytes(),
+        //     protocolParam.maxTxExSteps,
+        //     protocolParam.maxTxExMem,
+        //     BigInt(slotConfig.zeroTime),
+        //     BigInt(slotConfig.zeroSlot),
+        //     slotConfig.slotLength
+        //   );
+        //   console.log(uplc_eval);
+        // }
         return completeTxSign(config.lucidConfig, signedTx);
       }).pipe(Effect.catchAllDefect(makeRunTimeError));
       return {

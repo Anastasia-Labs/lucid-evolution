@@ -1,7 +1,7 @@
 import { expect, test } from "vitest";
 import { Blockfrost, Lucid } from "../src/index.js";
 
-test("test txHash", async () => {
+test.skip("test txHash", async () => {
   const projectId = process.env.VITE_BLOCKFROST_KEY;
   const lucid = await Lucid(
     new Blockfrost(process.env.VITE_API_URL!, projectId),

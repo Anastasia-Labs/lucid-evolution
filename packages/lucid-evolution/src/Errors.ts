@@ -32,7 +32,7 @@ export class MintError extends Data.TaggedError(
 export class RunTimeError extends Data.TaggedError("RunTimeError")<{
   message: {
     cause: string;
-    // stack: string; TODO: Enable when verbose log is enabled in config
+    stack: string;// TODO: Enable when verbose log is enabled in config
   };
 }> {}
 
@@ -63,7 +63,7 @@ export const makeRunTimeError = (
   return new RunTimeError({
     message: {
       cause: isError ? `${error.message}` : String(error),
-      // stack: isError ? `${error.stack}` : "", TODO: Enable when verbose log is enabled in config
+      stack: isError ? `${error.stack}` : "", //TODO: Enable when verbose log is enabled in config
     },
   });
 };

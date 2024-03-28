@@ -30,6 +30,7 @@ export const addSigner = (
         new SignerError({ message: "Only key hashes are allowed as signers." }),
       );
     }
+    console.log("credential.hash", credential.hash)
     return credential.hash;
   });
   return pipe(
