@@ -2,12 +2,13 @@ import * as CML from "@dcspark/cardano-multiplatform-lib-nodejs";
 import { LucidConfig } from "../lucid-evolution/LucidEvolution.js";
 import { TxBuilderConfig, OutputDatum } from "./types.js";
 import * as Read from "./internal/Read.js";
-import { Assets, Script, UTxO } from "@lucid-evolution/core-types";
+import { Address, Assets, Script, UTxO } from "@lucid-evolution/core-types";
 import * as Collect from "./internal/Collect.js";
 import * as Attach from "./internal/Attach.js";
 import * as Pay from "./internal/Pay.js";
 import * as Mint from "./internal/Mint.js";
 import * as Interval from "./internal/Interval.js";
+import * as Signer from "./internal/Signer.js";
 import { completeTxBuilder } from "./CompleteTxBuilder.js";
 import { TxSignBuilder } from "../tx-sign-builder/MakeTxSign.js";
 import { RunTimeError, TransactionErrors } from "../Errors.js";
@@ -16,11 +17,7 @@ import { Effect } from "effect/Effect";
 
 export type TxBuilder = {
   readFrom: (utxos: UTxO[]) => TxBuilder;
-  collectFrom: (
-    config: TxBuilderConfig,
-    utxos: UTxO[],
-    redeemer?: string | undefined,
-  ) => TxBuilder;
+  collectFrom: (utxos: UTxO[], redeemer?: string | undefined) => TxBuilder;
   pay: {
     ToAddress: (address: string, assets: Assets) => TxBuilder;
     ToAddressWithData: (
@@ -30,6 +27,7 @@ export type TxBuilder = {
       scriptRef?: Script | undefined,
     ) => TxBuilder;
   };
+  addSigner: (address: Address) => TxBuilder;
   mintAssets: (assets: Assets, redeemer?: string | undefined) => TxBuilder;
   validFrom: (unixTime: number) => TxBuilder;
   validTo: (unixTime: number) => TxBuilder;
@@ -64,11 +62,7 @@ export function makeTxBuilder(lucidConfig: LucidConfig): TxBuilder {
       config.programs.push(program);
       return txBuilder;
     },
-    collectFrom: (
-      config: TxBuilderConfig,
-      utxos: UTxO[],
-      redeemer?: string | undefined,
-    ) => {
+    collectFrom: (utxos: UTxO[], redeemer?: string | undefined) => {
       const program = Collect.collectFromUTxO(config, utxos, redeemer);
       config.programs.push(program);
       return txBuilder;
@@ -95,6 +89,11 @@ export function makeTxBuilder(lucidConfig: LucidConfig): TxBuilder {
         config.programs.push(program);
         return txBuilder;
       },
+    },
+    addSigner: (address: Address) => {
+      const program = Signer.addSigner(config, address);
+      config.programs.push(program);
+      return txBuilder;
     },
     mintAssets: (assets: Assets, redeemer?: string | undefined) => {
       const program = Mint.mintAssets(config, assets, redeemer);

@@ -21,6 +21,10 @@ export class WalletAddressError {
   readonly _tag = "WalletAddressError";
 }
 
+export class SignerError extends Data.TaggedError("SignerError")<{
+  message: string;
+}> {}
+
 export class MintError extends Data.TaggedError(
   "Only one policy id allowed. You can chain multiple mintAssets functions together if you need to mint assets with different policy ids. ",
 )<{}> {}
@@ -49,6 +53,7 @@ export type TransactionErrors =
   | TxRunTimeError
   | NetworkError
   | MintError
+  | SignerError
   | NoSuchElementException;
 
 export const makeRunTimeError = (
