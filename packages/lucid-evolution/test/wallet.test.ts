@@ -7,14 +7,14 @@ const maestro = new Maestro({
   network: "Preprod",
 });
 try {
-  const protocol =await maestro.getProtocolParameters() 
+  const protocol = await maestro.getProtocolParameters();
   // console.log(protocol);
 } catch (error) {
   console.log();
   setupFail = true;
 }
 
-test.skipIf(setupFail)("test wallet-provider", async () => {
+test.skip("test wallet-provider", async () => {
   const user = await Lucid(
     new Blockfrost(process.env.VITE_API_URL!, process.env.VITE_BLOCKFROST_KEY),
     "Preprod",

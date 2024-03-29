@@ -18,7 +18,7 @@ export const utxoToTransactionOutput = (utxo: UTxO) => {
     // inline datum
     if (!utxo.datumHash && utxo.datum) {
       return CML.DatumOption.new_datum(
-        CML.PlutusData.from_cbor_hex(utxo.datum)
+        CML.PlutusData.from_cbor_hex(utxo.datum),
       );
     }
   })();
@@ -31,14 +31,14 @@ export const utxoToTransactionOutput = (utxo: UTxO) => {
     address,
     assetsToValue(utxo.assets),
     datumOption,
-    scriptRef
+    scriptRef,
   );
 };
 
 export const utxoToTransactionInput = (utxo: UTxO) => {
   return CML.TransactionInput.new(
     CML.TransactionHash.from_hex(utxo.txHash),
-    BigInt(utxo.outputIndex)
+    BigInt(utxo.outputIndex),
   );
 };
 
@@ -57,7 +57,7 @@ export function utxoToCore(utxo: UTxO): CML.TransactionUnspentOutput {
     // inline datum
     if (!utxo.datumHash && utxo.datum) {
       return CML.DatumOption.new_datum(
-        CML.PlutusData.from_cbor_hex(utxo.datum)
+        CML.PlutusData.from_cbor_hex(utxo.datum),
       );
     }
   })();
@@ -71,15 +71,15 @@ export function utxoToCore(utxo: UTxO): CML.TransactionUnspentOutput {
     address,
     assetsToValue(utxo.assets),
     datumOption,
-    scriptRef
+    scriptRef,
   );
 
   return CML.TransactionUnspentOutput.new(
     CML.TransactionInput.new(
       CML.TransactionHash.from_hex(utxo.txHash),
-      BigInt(utxo.outputIndex)
+      BigInt(utxo.outputIndex),
     ),
-    output
+    output,
   );
 }
 export function utxosToCores(utxos: UTxO[]): CML.TransactionUnspentOutput[] {
@@ -92,13 +92,13 @@ export function coreToUtxo(coreUtxo: CML.TransactionUnspentOutput): UTxO {
   return {
     ...coreToOutRef(CML.TransactionInput.from_cbor_hex(coreUtxo.to_cbor_hex())),
     ...coreToTxOutput(
-      CML.TransactionOutput.from_cbor_hex(coreUtxo.to_cbor_hex())
+      CML.TransactionOutput.from_cbor_hex(coreUtxo.to_cbor_hex()),
     ),
   };
 }
 
 export function coresToUtxos(
-  utxos: Array<CML.TransactionUnspentOutput>
+  utxos: Array<CML.TransactionUnspentOutput>,
 ): UTxO[] {
   const result: UTxO[] = [];
   for (let i = 0; i < utxos.length; i++) {
@@ -133,7 +133,7 @@ export function coreToTxOutput(output: CML.TransactionOutput): TxOutput {
 }
 
 export function coresToTxOutputs(
-  outputs: Array<CML.TransactionOutput>
+  outputs: Array<CML.TransactionOutput>,
 ): TxOutput[] {
   const result: TxOutput[] = [];
   for (let i = 0; i < outputs.length; i++) {

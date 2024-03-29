@@ -30,7 +30,7 @@ const hello2: SpendingValidator = {
 };
 const user = await Lucid(
   new Blockfrost(process.env.VITE_API_URL!, process.env.VITE_BLOCKFROST_KEY),
-  "Preprod"
+  "Preprod",
 );
 user.selectWallet.fromSeed(process.env.VITE_SEED!);
 const contractAddress = validatorToAddress("Preprod", hello);
@@ -48,22 +48,31 @@ test.skip("", async () => {
         kind: "inline",
         value: datum,
       },
-      { lovelace: 10_000_000n }
+      { lovelace: 10_000_000n },
     )
     .complete()
-    .unsafeRun();
-  const signed = await tx.sign.withWallet().complete().unSafeRun();
-  const txHash = await signed.submit();
-  console.log(txHash);
+    .program();
+
+  const txhash = await tx.pipe(
+    Effect.flatMap((tx) => tx.sign.withWallet().complete().program()),
+    //NOTE: enable if you want to submit signed tx on preprod
+    Effect.flatMap((signedTx) => Effect.promise(() => signedTx.submit()!)),
+    Effect.flatMap((txHash) => Effect.log(txHash)),
+    Effect.either,
+    Effect.runPromise,
+  );
+  // console.log(signed)
+  // const txHash = await signed.submit();
+  console.log(txhash);
 });
 
 test.skip("collect", async () => {
   console.log(
-    getAddressDetails(await user.wallet().address()).paymentCredential?.hash
+    getAddressDetails(await user.wallet().address()).paymentCredential?.hash,
   );
   const utxos = await user.utxosAt(contractAddress);
   console.log("contract utxos", utxos);
-  console.log("user utxos",await user.wallet().getUtxos())
+  console.log("user utxos", await user.wallet().getUtxos());
   const redeemer = Data.to(new Constr(0, [fromText("Hello, World!")]));
   const tx = user
     .newTx()
@@ -80,9 +89,9 @@ test.skip("collect", async () => {
     Effect.flatMap((signedTx) => Effect.promise(() => signedTx.submit()!)),
     Effect.flatMap((txHash) => Effect.log(txHash)),
     Effect.either,
-    Effect.runPromise
+    Effect.runPromise,
   );
   // console.log(signed)
   // const txHash = await signed.submit();
-  // console.log(txHash);
+  console.log(txhash);
 });

@@ -39,7 +39,7 @@ export type TxSignBuilder = {
 
 export const makeTxSignBuilder = (
   lucidConfig: LucidConfig,
-  tx: CML.Transaction
+  tx: CML.Transaction,
 ) => {
   const redeemers = tx.witness_set().redeemers();
   const exUnits = { cpu: 0, mem: 0 };
@@ -64,13 +64,13 @@ export const makeTxSignBuilder = (
       withWallet: () => {
         const program = Effect.gen(function* ($) {
           const wallet = yield* $(
-            Effect.fromNullable(config.lucidConfig.wallet)
+            Effect.fromNullable(config.lucidConfig.wallet),
           );
           const witnesses = yield* $(
             Effect.tryPromise({
               try: () => wallet.signTx(config.txComplete),
               catch: (_e) => new Error(),
-            })
+            }),
           );
           console.log("witness", witnesses.to_json());
           config.witnessSetBuilder.add_existing(witnesses);
@@ -82,7 +82,7 @@ export const makeTxSignBuilder = (
         const priv = CML.PrivateKey.from_bech32(privateKey);
         const witness = CML.make_vkey_witness(
           toCMLTransactionHash(config.txComplete.body()),
-          priv
+          priv,
         );
         config.witnessSetBuilder.add_vkey(witness);
         return txSignBuilder;
@@ -95,8 +95,8 @@ export const makeTxSignBuilder = (
         const txWitnessSet = config.witnessSetBuilder.build();
         const protocolParam = yield* $(
           Effect.promise(() =>
-            config.lucidConfig.provider.getProtocolParameters()
-          )
+            config.lucidConfig.provider.getProtocolParameters(),
+          ),
         );
         const slotConfig = SLOT_CONFIG_NETWORK[config.lucidConfig.network];
         // console.log("protocolParam", protocolParam);
@@ -117,7 +117,7 @@ export const makeTxSignBuilder = (
           config.txComplete.body(),
           txWitnessSet,
           true,
-          config.txComplete.auxiliary_data()
+          config.txComplete.auxiliary_data(),
         );
         // if (txWitnessSet.redeemers()) {
         //   const t = setRedeemertoZero(signedTx);

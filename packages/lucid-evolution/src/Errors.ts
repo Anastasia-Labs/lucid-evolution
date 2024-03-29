@@ -21,6 +21,14 @@ export class WalletAddressError {
   readonly _tag = "WalletAddressError";
 }
 
+export class CollateralInputNotFound {
+  readonly _tag = "CollateralInputNotFound";
+}
+
+export class EmptyList extends Data.TaggedError("EmptyList")<{
+  message: string;
+}> {}
+
 export class SignerError extends Data.TaggedError("SignerError")<{
   message: string;
 }> {}
@@ -32,7 +40,7 @@ export class MintError extends Data.TaggedError(
 export class RunTimeError extends Data.TaggedError("RunTimeError")<{
   message: {
     cause: string;
-    stack: string;// TODO: Enable when verbose log is enabled in config
+    stack: string; // TODO: Enable when verbose log is enabled in config
   };
 }> {}
 
@@ -54,6 +62,8 @@ export type TransactionErrors =
   | NetworkError
   | MintError
   | SignerError
+  | CollateralInputNotFound
+  | EmptyList
   | NoSuchElementException;
 
 export const makeRunTimeError = (

@@ -1,7 +1,8 @@
-import { Console, Effect } from "effect";
-import { Address, OutputData } from "@lucid-evolution/core-types";
+import { Effect } from "effect";
+import { Address, OutputData, UTxO } from "@lucid-evolution/core-types";
 import { TxBuilderConfig } from "./types.js";
 import {
+  CollateralInputNotFound,
   GetUTxosCoreError,
   WalletAddressError,
   makeRunTimeError,
@@ -10,16 +11,12 @@ import * as CML from "@dcspark/cardano-multiplatform-lib-nodejs";
 import { makeTxSignBuilder } from "../tx-sign-builder/MakeTxSign.js";
 import * as UPLC from "./pkg/uplc_tx.js";
 import {
-  coresToUtxos,
   createCostModels,
   utxoToCore,
   utxoToTransactionInput,
   utxoToTransactionOutput,
-  utxosToCores,
 } from "@lucid-evolution/utils";
 import { SLOT_CONFIG_NETWORK } from "@lucid-evolution/plutus";
-import { promise } from "effect/Effect";
-import { M } from "lucid-cardano";
 
 export const completeTxBuilder = (
   config: TxBuilderConfig,
@@ -27,7 +24,7 @@ export const completeTxBuilder = (
     change?: { address?: Address; outputData?: OutputData };
     coinSelection?: boolean;
     nativeUplc?: boolean;
-  }
+  },
 ) => {
   const program = Effect.gen(function* ($) {
     const wallet = yield* $(Effect.fromNullable(config.lucidConfig.wallet));
@@ -44,36 +41,66 @@ export const completeTxBuilder = (
     //   );
     // }
 
-    // let task = this.tasks.shift();
-    // while (task) {
-    //   await task(this);
-    //   task = this.tasks.shift();
-    // }
     yield* $(Effect.all(config.programs, { concurrency: "unbounded" }));
 
     const utxos = yield* $(
       Effect.tryPromise({
         try: () => wallet.getUtxosCore(),
         catch: (_e) => new GetUTxosCoreError(),
-      })
+      }),
     );
     const walletUtxos = yield* $(
       Effect.tryPromise({
         try: () => wallet.getUtxos(),
         catch: (_e) => new GetUTxosCoreError(),
-      })
+      }),
     );
-    //NOTE: this may fail add error message
-    const collateral = walletUtxos.find(
-      (value) =>
-        value.assets["lovelace"] > 5_000_000n &&
-        Object.keys(value.assets).length === 1
-    );
-    config.txBuilder.add_collateral(
-      CML.SingleInputBuilder.from_transaction_unspent_output(
-        utxoToCore(collateral!)
-      ).payment_key()
-    );
+    if (config.inputUTxOs?.find((value) => value.datum)) {
+      const collateral: UTxO = yield* $(
+        Effect.fromNullable(
+          walletUtxos.find(
+            (value) =>
+              value.assets["lovelace"] > 5_000_000n &&
+              Object.keys(value.assets).length === 1,
+          ),
+        ).pipe(Effect.mapError(() => new CollateralInputNotFound())),
+      );
+      const collateralCore = utxoToCore(collateral);
+
+      config.txBuilder.add_collateral(
+        CML.SingleInputBuilder.from_transaction_unspent_output(
+          collateralCore,
+        ).payment_key(),
+      );
+      if (options?.coinSelection || options?.coinSelection === undefined) {
+        const filteredUtxo = utxos.filter(
+          (value) => value.to_cbor_hex() !== collateralCore.to_cbor_hex(),
+        );
+        for (const utxo of filteredUtxo) {
+          const input =
+            CML.SingleInputBuilder.from_transaction_unspent_output(
+              utxo,
+            ).payment_key();
+          config.txBuilder.add_input(input);
+        }
+        config.txBuilder.select_utxos(
+          CML.CoinSelectionStrategyCIP2.LargestFirst,
+        );
+      }
+    } else {
+      if (options?.coinSelection || options?.coinSelection === undefined) {
+        for (const utxo of utxos) {
+          const input =
+            CML.SingleInputBuilder.from_transaction_unspent_output(
+              utxo,
+            ).payment_key();
+          config.txBuilder.add_input(input);
+        }
+        config.txBuilder.select_utxos(
+          CML.CoinSelectionStrategyCIP2.LargestFirst,
+        );
+      }
+    }
     // const collateral_builder = CML.TransactionOutputBuilder.new();
     // collateral_builder.with_address(
     //   CML.Address.from_bech32(collateral!.address)
@@ -96,96 +123,11 @@ export const completeTxBuilder = (
       Effect.tryPromise({
         try: () => wallet.address(),
         catch: (_e) => new WalletAddressError(),
-      })
+      }),
     );
 
-    if (options?.coinSelection || options?.coinSelection === undefined) {
-      for (const utxo of utxos) {
-        const input =
-          CML.SingleInputBuilder.from_transaction_unspent_output(
-            utxo
-          ).payment_key();
-        config.txBuilder.add_input(input);
-      }
-      config.txBuilder.select_utxos(CML.CoinSelectionStrategyCIP2.LargestFirst);
-      // config.txBuilder.add_inputs_from(
-      //   utxos,
-      //   changeAddress,
-      //   Uint32Array.from([
-      //     200, // weight ideal > 100 inputs
-      //     1000, // weight ideal < 100 inputs
-      //     1500, // weight assets if plutus
-      //     800, // weight assets if not plutus
-      //     800, // weight distance if not plutus
-      //     5000, // weight utxos
-      //   ])
-      // );
-    }
-    // yield* $(
-    //   Console.log(
-    //     "gettting total output",
-    //     config.txBuilder.get_total_output().to_json()
-    //   )
-    // );
-
-    // this.txBuilder.balance(
-    //   changeAddress,
-    //   (() => {
-    //     if (options?.change?.outputData?.hash) {
-    //       return C.Datum.new_data_hash(
-    //         C.DataHash.from_hex(
-    //           options.change.outputData.hash,
-    //         ),
-    //       );
-    //     } else if (options?.change?.outputData?.asHash) {
-    //       this.txBuilder.add_plutus_data(
-    //         C.PlutusData.from_bytes(fromHex(options.change.outputData.asHash)),
-    //       );
-    //       return C.Datum.new_data_hash(
-    //         C.hash_plutus_data(
-    //           C.PlutusData.from_bytes(
-    //             fromHex(options.change.outputData.asHash),
-    //           ),
-    //         ),
-    //       );
-    //     } else if (options?.change?.outputData?.inline) {
-    //       return C.Datum.new_data(
-    //         C.Data.new(
-    //           C.PlutusData.from_bytes(
-    //             fromHex(options.change.outputData.inline),
-    //           ),
-    //         ),
-    //       );
-    //     } else {
-    //       return undefined;
-    //     }
-    //   })(),
-    // );
-
-    // const utxoSet = this.inputUTxOs ??
-    //   coresToUtxos(await this.lucid.wallet.getUtxosCore());
-    // return new TxComplete(
-    //   this.lucid,
-    //   await this.txBuilder.construct(
-    //     utxos,
-    //     changeAddress,
-    //     options?.nativeUplc === undefined ? true : options?.nativeUplc
-    //   ),
-    //   utxoSet
-    // );
-    // config.txBuilder.set_exunits()
-    // config.txBuilder.set_exunits(,CML.ExUnitPrices.from_json(JSON.stringify({
-    //   mem_price: {
-    //     denominator: '721',
-    //     numerator: '10000000',
-    //   },
-    //   step_price: {
-    //     denominator: '577',
-    //     numerator: '10000',
-    //   },
-    // })),
     const protocolParam = yield* $(
-      Effect.promise(() => config.lucidConfig.provider.getProtocolParameters())
+      Effect.promise(() => config.lucidConfig.provider.getProtocolParameters()),
     );
     const slotConfig = SLOT_CONFIG_NETWORK[config.lucidConfig.network];
     // console.log("protocolParam", protocolParam);
@@ -197,7 +139,7 @@ export const completeTxBuilder = (
     // config.txBuilder.set_fee(config.txBuilder.min_fee(true));
     const tx_evaluation = config.txBuilder.build_for_evaluation(
       0,
-      CML.Address.from_bech32(changeAddress)
+      CML.Address.from_bech32(changeAddress),
     );
     if (tx_evaluation.draft_tx().witness_set().redeemers()) {
       const t = setRedeemertoZero(tx_evaluation.draft_tx());
@@ -214,19 +156,22 @@ export const completeTxBuilder = (
         protocolParam.maxTxExMem,
         BigInt(slotConfig.zeroTime),
         BigInt(slotConfig.zeroSlot),
-        slotConfig.slotLength
+        slotConfig.slotLength,
       );
       console.log(uplc_eval);
       applyUPLCEval(uplc_eval, config.txBuilder);
     }
     // console.log("min_fee",config.txBuilder.min_fee(true))
     // config.txBuilder.set_fee(config.txBuilder.min_fee(true))
-    config.txBuilder.add_change_if_needed(CML.Address.from_bech32(changeAddress),true)
+    config.txBuilder.add_change_if_needed(
+      CML.Address.from_bech32(changeAddress),
+      true,
+    );
 
     const tx = config.txBuilder
       .build(
         CML.ChangeSelectionAlgo.Default,
-        CML.Address.from_bech32(changeAddress)
+        CML.Address.from_bech32(changeAddress),
       )
       .build_unchecked();
     // const tx = config.txBuilder
@@ -248,17 +193,17 @@ export const completeTxBuilder = (
 
 export const applyUPLCEval = (
   uplcEval: Uint8Array[],
-  txbuilder: CML.TransactionBuilder
+  txbuilder: CML.TransactionBuilder,
 ) => {
   for (const uplcByte of uplcEval) {
     const redeemer = CML.Redeemer.from_cbor_bytes(uplcByte);
     const exUnits = CML.ExUnits.new(
       redeemer.ex_units().mem(),
-      redeemer.ex_units().steps()
+      redeemer.ex_units().steps(),
     );
     txbuilder.set_exunits(
       CML.RedeemerWitnessKey.new(redeemer.tag(), redeemer.index()),
-      exUnits
+      exUnits,
     );
   }
 };
@@ -275,7 +220,7 @@ export const setRedeemertoZero = (tx: CML.Transaction) => {
         redeemer.tag(),
         redeemer.index(),
         redeemer.data(),
-        CML.ExUnits.new(0n, 0n)
+        CML.ExUnits.new(0n, 0n),
       );
       redeemerList.add(dummyRedeemer);
     }
@@ -285,7 +230,7 @@ export const setRedeemertoZero = (tx: CML.Transaction) => {
       tx.body(),
       dummyWitnessSet,
       true,
-      tx.auxiliary_data()
+      tx.auxiliary_data(),
     );
   }
 };

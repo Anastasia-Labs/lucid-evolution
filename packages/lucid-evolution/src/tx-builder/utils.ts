@@ -8,7 +8,7 @@ import { Address, RewardAddress } from "@lucid-evolution/core-types";
 import { TxRunTimeError, NetworkError } from "../Errors.js";
 import { LucidConfig } from "../lucid-evolution/LucidEvolution.js";
 import { getAddressDetails } from "@lucid-evolution/utils";
-import {encode } from "cborg"
+import { encode } from "cborg";
 
 export const toDatumOption = (outputDatum: OutputDatum): CML.DatumOption => {
   switch (outputDatum.kind) {
@@ -60,14 +60,12 @@ export const addressFromWithNetworkCheck = (
 
 export const toV1 = (script: string) =>
   CML.PlutusScript.from_v1(CML.PlutusV1Script.from_cbor_hex(script));
-export const toV2 = (script: string) =>
-{
-  console.log("before")
-  const v2 = CML.PlutusV2Script.from_cbor_hex(script)
-  console.log("v2", v2.hash().to_hex())
+export const toV2 = (script: string) => {
+  console.log("before");
+  const v2 = CML.PlutusV2Script.from_cbor_hex(script);
+  console.log("v2", v2.hash().to_hex());
   return CML.PlutusScript.from_v2(v2);
-
-}
+};
 
 export const toPartial = (script: CML.PlutusScript, redeemer: CBORHex) =>
   CML.PartialPlutusWitness.new(
