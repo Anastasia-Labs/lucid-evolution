@@ -1,7 +1,7 @@
 import { Effect } from "effect";
 import { ScriptType, UTxO } from "@lucid-evolution/core-types";
 import * as CML from "@dcspark/cardano-multiplatform-lib-nodejs";
-import { RunTimeError, TransactionErrors } from "../Errors.js";
+import { TransactionError } from "../Errors.js";
 import { LucidConfig } from "../lucid-evolution/LucidEvolution.js";
 
 export type TxBuilderConfig = {
@@ -9,7 +9,7 @@ export type TxBuilderConfig = {
   readonly txBuilder: CML.TransactionBuilder;
   inputUTxOs?: UTxO[];
   scripts: Map<string, { type: ScriptType; script: string }>;
-  programs: Effect.Effect<void, TransactionErrors | RunTimeError, never>[];
+  programs: Effect.Effect<void, TransactionError, never>[];
 };
 
 export type Hash = string;
