@@ -157,7 +157,7 @@ importers:
         specifier: ^5.3.3
         version: 5.3.3
 
-  packages/lucid-evolution:
+  packages/lucid:
     dependencies:
       '@lucid-evolution/bip39':
         specifier: workspace:*
