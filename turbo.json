@@ -6,7 +6,9 @@
       "dependsOn": ["^build"]
     },
     "clean": {},
-    "test": {},
+    "test": {
+      "cache": false
+    },
     "lint": {
       "dependsOn": ["^lint"]
     },

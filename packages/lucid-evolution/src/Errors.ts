@@ -21,14 +21,27 @@ export class WalletAddressError {
   readonly _tag = "WalletAddressError";
 }
 
+export class CollateralInputNotFound {
+  readonly _tag = "CollateralInputNotFound";
+}
+
+export class EmptyList extends Data.TaggedError("EmptyList")<{
+  message: string;
+}> {}
+
+export class SignerError extends Data.TaggedError("SignerError")<{
+  message: string;
+}> {}
+
 export class MintError extends Data.TaggedError(
   "Only one policy id allowed. You can chain multiple mintAssets functions together if you need to mint assets with different policy ids. ",
 )<{}> {}
 
+//NOTE: RunTimeError is used to catch all unexpected errors primarly from CML library
 export class RunTimeError extends Data.TaggedError("RunTimeError")<{
   message: {
     cause: string;
-    // stack: string; TODO: Enable when verbose log is enabled in config
+    stack: string | undefined;
   };
 }> {}
 
@@ -40,7 +53,7 @@ export class NetworkError extends Data.TaggedError("NetworkError")<{
   message: string;
 }> {}
 
-export type TransactionErrors =
+export type TransactionError =
   | MissingDatumError
   | InvalidDatumError
   | DatumOfError
@@ -49,7 +62,11 @@ export type TransactionErrors =
   | TxRunTimeError
   | NetworkError
   | MintError
-  | NoSuchElementException;
+  | SignerError
+  | CollateralInputNotFound
+  | EmptyList
+  | NoSuchElementException
+  | RunTimeError;
 
 export const makeRunTimeError = (
   error: unknown,
@@ -58,7 +75,7 @@ export const makeRunTimeError = (
   return new RunTimeError({
     message: {
       cause: isError ? `${error.message}` : String(error),
-      // stack: isError ? `${error.stack}` : "", TODO: Enable when verbose log is enabled in config
+      stack: isError ? `${error.stack}` : undefined,
     },
   });
 };

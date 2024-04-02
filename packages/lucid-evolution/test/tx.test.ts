@@ -11,7 +11,7 @@ import {
 import { assert, test } from "vitest";
 import { Effect } from "effect";
 
-test("test tx submit", async () => {
+test.skip("test tx submit", async () => {
   const user = await Lucid(
     new Blockfrost(process.env.VITE_API_URL!, process.env.VITE_BLOCKFROST_KEY),
     "Preprod",

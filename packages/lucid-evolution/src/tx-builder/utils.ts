@@ -8,6 +8,8 @@ import { Address, RewardAddress } from "@lucid-evolution/core-types";
 import { TxRunTimeError, NetworkError } from "../Errors.js";
 import { LucidConfig } from "../lucid-evolution/LucidEvolution.js";
 import { getAddressDetails } from "@lucid-evolution/utils";
+import { encode } from "cborg";
+import { kMaxLength } from "buffer";
 
 export const toDatumOption = (outputDatum: OutputDatum): CML.DatumOption => {
   switch (outputDatum.kind) {
@@ -59,8 +61,12 @@ export const addressFromWithNetworkCheck = (
 
 export const toV1 = (script: string) =>
   CML.PlutusScript.from_v1(CML.PlutusV1Script.from_cbor_hex(script));
-export const toV2 = (script: string) =>
-  CML.PlutusScript.from_v2(CML.PlutusV1Script.from_cbor_hex(script));
+export const toV2 = (script: string) => {
+  console.log("before");
+  const v2 = CML.PlutusV2Script.from_cbor_hex(script);
+  console.log("v2", v2.hash().to_hex());
+  return CML.PlutusScript.from_v2(v2);
+};
 
 export const toPartial = (script: CML.PlutusScript, redeemer: CBORHex) =>
   CML.PartialPlutusWitness.new(
@@ -81,3 +87,11 @@ export function isEqual(arr1: Uint8Array, arr2: Uint8Array): boolean {
   }
   return arr1.every((value, index) => value === arr2[index]);
 }
+
+export const makeReturn = <A, E>(program: Effect.Effect<A, E>) => {
+  return {
+    unsafeRun: () => Effect.runPromise(program),
+    safeRun: () => Effect.runPromise(Effect.either(program)),
+    program: () => program,
+  };
+};

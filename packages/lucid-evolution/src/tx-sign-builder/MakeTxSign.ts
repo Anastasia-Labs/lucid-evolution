@@ -1,7 +1,7 @@
 import * as CML from "@dcspark/cardano-multiplatform-lib-nodejs";
 import { LucidConfig } from "../lucid-evolution/LucidEvolution.js";
 import { Effect } from "effect";
-import { toCMLTransactionHash } from "../tx-builder/utils.js";
+import { makeReturn, toCMLTransactionHash } from "../tx-builder/utils.js";
 import { PrivateKey } from "@lucid-evolution/core-types";
 import { RunTimeError, makeRunTimeError } from "../Errors.js";
 import { TxSigned, completeTxSign } from "./CompleteTxSign.js";
@@ -23,7 +23,7 @@ export type TxSignBuilder = {
   };
   complete: () => {
     safeRun: () => Promise<Either<TxSigned, Error | RunTimeError>>;
-    unSafeRun: () => Promise<TxSigned>;
+    unsafeRun: () => Promise<TxSigned>;
     program: () => Effect.Effect<TxSigned, Error | RunTimeError, never>;
   };
 };
@@ -63,6 +63,7 @@ export const makeTxSignBuilder = (
               catch: (_e) => new Error(),
             }),
           );
+          console.log("witness", witnesses.to_json());
           config.witnessSetBuilder.add_existing(witnesses);
         });
         config.programs.push(program);
@@ -82,19 +83,16 @@ export const makeTxSignBuilder = (
       const program = Effect.gen(function* ($) {
         yield* $(Effect.all(config.programs, { concurrency: "unbounded" }));
         config.witnessSetBuilder.add_existing(config.txComplete.witness_set());
+        const txWitnessSet = config.witnessSetBuilder.build();
         const signedTx = CML.Transaction.new(
           config.txComplete.body(),
-          config.witnessSetBuilder.build(),
+          txWitnessSet,
           true,
           config.txComplete.auxiliary_data(),
         );
         return completeTxSign(config.lucidConfig, signedTx);
       }).pipe(Effect.catchAllDefect(makeRunTimeError));
-      return {
-        safeRun: () => Effect.runPromise(Effect.either(program)),
-        unSafeRun: () => Effect.runPromise(program),
-        program: () => program,
-      };
+      return makeReturn(program);
     },
   };
   return txSignBuilder;
