@@ -7,6 +7,9 @@
   "files": [
     "dist"
   ],
+  "publishConfig": {
+    "access": "public"
+  },
   "sideEffects": [
     "./uplc_tx.js",
     "./snippets/*"
