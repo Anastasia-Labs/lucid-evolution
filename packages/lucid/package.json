@@ -1,5 +1,5 @@
 {
-  "name": "@lucid-evolution/lucid-evolution",
+  "name": "@lucid-evolution/lucid",
   "version": "0.0.1",
   "description": "",
   "main": "./dist/index.js",
