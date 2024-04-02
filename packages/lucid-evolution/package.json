@@ -28,7 +28,8 @@
     "@lucid-evolution/provider": "workspace:*",
     "@lucid-evolution/sign_data": "workspace:*",
     "@lucid-evolution/utils": "workspace:*",
-    "@lucid-evolution/wallet": "workspace:*"
+    "@lucid-evolution/wallet": "workspace:*",
+    "@lucid-evolution/uplc": "workspace:*"
   },
   "devDependencies": {
     "@dcspark/cardano-multiplatform-lib-nodejs": "^5.1.0",
@@ -42,7 +43,6 @@
     "tsup": "^8.0.2",
     "tsx": "^4.7.1",
     "typescript": "^5.3.3",
-    "uplc-node": "^0.0.3",
     "vite-plugin-wasm": "^3.3.0",
     "vitest": "latest"
   }

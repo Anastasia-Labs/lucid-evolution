@@ -1,0 +1,21 @@
+{
+  "name": "@lucid-evolution/uplc",
+  "version": "0.1.0",
+  "main": "./dist/uplc_tx.js",
+  "types": "./dist/uplc_tx.d.ts",
+  "type": "module",
+  "files": [
+    "dist"
+  ],
+  "sideEffects": [
+    "./uplc_tx.js",
+    "./snippets/*"
+  ],
+  "scripts": {
+    "build": "tsup-node src/uplc_tx.js"
+  },
+  "devDependencies": {
+    "esbuild-plugin-wasm": "^1.1.0",
+    "tsup": "^8.0.2"
+  }
+}

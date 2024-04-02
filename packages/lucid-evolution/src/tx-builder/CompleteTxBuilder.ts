@@ -9,7 +9,7 @@ import {
 } from "../Errors.js";
 import * as CML from "@dcspark/cardano-multiplatform-lib-nodejs";
 import { makeTxSignBuilder } from "../tx-sign-builder/MakeTxSign.js";
-import * as UPLC from "./pkg/uplc_tx.js";
+import * as UPLC from "@lucid-evolution/uplc"
 import {
   createCostModels,
   utxoToCore,

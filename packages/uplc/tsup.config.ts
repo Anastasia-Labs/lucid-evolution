@@ -3,7 +3,7 @@ import { wasmLoader } from "esbuild-plugin-wasm";
 
 export default defineConfig({
   esbuildPlugins: [wasmLoader()],
-  format: ["esm","cjs"],
+  format: ["esm"],
   dts: true,
   clean: true,
 });

@@ -1,6 +1,8 @@
-"use strict";
 let wasm;
-const { TextDecoder } = require(`util`);
+export function __wbg_set_wasm(val) {
+    wasm = val;
+}
+
 
 const heap = new Array(128).fill(undefined);
 
@@ -22,7 +24,9 @@ function takeObject(idx) {
     return ret;
 }
 
-let cachedTextDecoder = new TextDecoder('utf-8', { ignoreBOM: true, fatal: true });
+const lTextDecoder = typeof TextDecoder === 'undefined' ? (0, module.require)('util').TextDecoder : TextDecoder;
+
+let cachedTextDecoder = new lTextDecoder('utf-8', { ignoreBOM: true, fatal: true });
 
 cachedTextDecoder.decode();
 
@@ -108,7 +112,7 @@ function getArrayJsValueFromWasm0(ptr, len) {
 * @param {number} slot_config_z
 * @returns {(Uint8Array)[]}
 */
-module.exports.eval_phase_two_raw = function(tx_bytes, utxos_bytes_x, utxos_bytes_y, cost_mdls_bytes, initial_budget_n, initial_budget_d, slot_config_x, slot_config_y, slot_config_z) {
+export function eval_phase_two_raw(tx_bytes, utxos_bytes_x, utxos_bytes_y, cost_mdls_bytes, initial_budget_n, initial_budget_d, slot_config_x, slot_config_y, slot_config_z) {
     try {
         const retptr = wasm.__wbindgen_add_to_stack_pointer(-16);
         const ptr0 = passArray8ToWasm0(tx_bytes, wasm.__wbindgen_malloc);
@@ -133,7 +137,7 @@ module.exports.eval_phase_two_raw = function(tx_bytes, utxos_bytes_x, utxos_byte
     } finally {
         wasm.__wbindgen_add_to_stack_pointer(16);
     }
-};
+}
 
 function getArrayU8FromWasm0(ptr, len) {
     ptr = ptr >>> 0;
@@ -144,7 +148,7 @@ function getArrayU8FromWasm0(ptr, len) {
 * @param {Uint8Array} plutus_script_bytes
 * @returns {Uint8Array}
 */
-module.exports.apply_params_to_script = function(params_bytes, plutus_script_bytes) {
+export function apply_params_to_script(params_bytes, plutus_script_bytes) {
     try {
         const retptr = wasm.__wbindgen_add_to_stack_pointer(-16);
         const ptr0 = passArray8ToWasm0(params_bytes, wasm.__wbindgen_malloc);
@@ -165,55 +169,47 @@ module.exports.apply_params_to_script = function(params_bytes, plutus_script_byt
     } finally {
         wasm.__wbindgen_add_to_stack_pointer(16);
     }
-};
+}
 
-module.exports.__wbindgen_object_drop_ref = function(arg0) {
+export function __wbindgen_object_drop_ref(arg0) {
     takeObject(arg0);
 };
 
-module.exports.__wbindgen_string_new = function(arg0, arg1) {
+export function __wbindgen_string_new(arg0, arg1) {
     const ret = getStringFromWasm0(arg0, arg1);
     return addHeapObject(ret);
 };
 
-module.exports.__wbg_buffer_a448f833075b71ba = function(arg0) {
+export function __wbg_buffer_a448f833075b71ba(arg0) {
     const ret = getObject(arg0).buffer;
     return addHeapObject(ret);
 };
 
-module.exports.__wbg_newwithbyteoffsetandlength_d0482f893617af71 = function(arg0, arg1, arg2) {
+export function __wbg_newwithbyteoffsetandlength_d0482f893617af71(arg0, arg1, arg2) {
     const ret = new Uint8Array(getObject(arg0), arg1 >>> 0, arg2 >>> 0);
     return addHeapObject(ret);
 };
 
-module.exports.__wbg_new_8f67e318f15d7254 = function(arg0) {
+export function __wbg_new_8f67e318f15d7254(arg0) {
     const ret = new Uint8Array(getObject(arg0));
     return addHeapObject(ret);
 };
 
-module.exports.__wbg_set_2357bf09366ee480 = function(arg0, arg1, arg2) {
+export function __wbg_set_2357bf09366ee480(arg0, arg1, arg2) {
     getObject(arg0).set(getObject(arg1), arg2 >>> 0);
 };
 
-module.exports.__wbg_length_1d25fa9e4ac21ce7 = function(arg0) {
+export function __wbg_length_1d25fa9e4ac21ce7(arg0) {
     const ret = getObject(arg0).length;
     return ret;
 };
 
-module.exports.__wbindgen_throw = function(arg0, arg1) {
+export function __wbindgen_throw(arg0, arg1) {
     throw new Error(getStringFromWasm0(arg0, arg1));
 };
 
-module.exports.__wbindgen_memory = function() {
+export function __wbindgen_memory() {
     const ret = wasm.memory;
     return addHeapObject(ret);
 };
-
-const path = require('path').join(__dirname, 'uplc_tx_bg.wasm');
-const bytes = require('fs').readFileSync(path);
-
-const wasmModule = new WebAssembly.Module(bytes);
-const wasmInstance = new WebAssembly.Instance(wasmModule, imports);
-wasm = wasmInstance.exports;
-module.exports.__wasm = wasm;
 

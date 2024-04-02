@@ -15,7 +15,7 @@ test.skip("test txHash", async () => {
     )
     .sign.withWallet()
     .complete()
-    .unSafeRun();
+    .unsafeRun();
 
   expect(
     signed2.toHash() ===
