@@ -1,20 +1,11 @@
 import * as CML from "@dcspark/cardano-multiplatform-lib-nodejs";
 import { LucidConfig } from "../lucid-evolution/LucidEvolution.js";
 import { Effect } from "effect";
-import { toCMLTransactionHash } from "../tx-builder/utils.js";
+import { makeReturn, toCMLTransactionHash } from "../tx-builder/utils.js";
 import { PrivateKey } from "@lucid-evolution/core-types";
-import { RunTimeError, SignerError, makeRunTimeError } from "../Errors.js";
+import { RunTimeError, makeRunTimeError } from "../Errors.js";
 import { TxSigned, completeTxSign } from "./CompleteTxSign.js";
 import { Either } from "effect/Either";
-import { createCostModels } from "@lucid-evolution/utils";
-import { TxComplete } from "lucid-cardano";
-import {
-  inputToArray,
-  outputToArray,
-  setRedeemertoZero,
-} from "../tx-builder/CompleteTxBuilder.js";
-import * as UPLC from "../tx-builder/pkg/uplc_tx.js";
-import { SLOT_CONFIG_NETWORK } from "@lucid-evolution/plutus";
 
 export type TxSignBuilderConfig = {
   txComplete: CML.Transaction;
@@ -32,7 +23,7 @@ export type TxSignBuilder = {
   };
   complete: () => {
     safeRun: () => Promise<Either<TxSigned, Error | RunTimeError>>;
-    unSafeRun: () => Promise<TxSigned>;
+    unsafeRun: () => Promise<TxSigned>;
     program: () => Effect.Effect<TxSigned, Error | RunTimeError, never>;
   };
 };
@@ -93,60 +84,15 @@ export const makeTxSignBuilder = (
         yield* $(Effect.all(config.programs, { concurrency: "unbounded" }));
         config.witnessSetBuilder.add_existing(config.txComplete.witness_set());
         const txWitnessSet = config.witnessSetBuilder.build();
-        const protocolParam = yield* $(
-          Effect.promise(() =>
-            config.lucidConfig.provider.getProtocolParameters(),
-          ),
-        );
-        const slotConfig = SLOT_CONFIG_NETWORK[config.lucidConfig.network];
-        // console.log("protocolParam", protocolParam);
-        const costmodel = createCostModels(protocolParam.costModels);
-        // const tx_evaluation = config.txBuilder.build_for_evaluation(
-        //   0,
-        //   CML.Address.from_bech32(changeAddress)
-        // );
-        // console.log(txWitnessSet.to_json())
-        // const scriptDataHash = CML.calc_script_data_hash_from_witness(txWitnessSet, costmodel)
-        // console.log("scriptDataHash",scriptDataHash)
-        // config.txComplete
-        //   .body()
-        //   .set_script_data_hash(
-        //     CML.calc_script_data_hash_from_witness(txWitnessSet, costmodel)!
-        //   );
         const signedTx = CML.Transaction.new(
           config.txComplete.body(),
           txWitnessSet,
           true,
           config.txComplete.auxiliary_data(),
         );
-        // if (txWitnessSet.redeemers()) {
-        //   const t = setRedeemertoZero(signedTx);
-        //   // console.log(t?.to_json());
-        //   console.log(t!.body().inputs().get(0).to_json())
-        //   console.log(t!.body().inputs().get(1).to_json())
-        //   console.log(t!.body().inputs().get(2).to_json())
-        //   // console.log("inputToArray",inputToArray(t!.body().inputs()));
-        //   // console.log("outputToArray",outputToArray(t!.body().outputs()));
-        //   const uplc_eval = UPLC.eval_phase_two_raw(
-        //     t!.to_cbor_bytes(),
-        //     inputToArray(t!.body().inputs()),
-        //     outputToArray(t!.body().outputs()),
-        //     costmodel.to_cbor_bytes(),
-        //     protocolParam.maxTxExSteps,
-        //     protocolParam.maxTxExMem,
-        //     BigInt(slotConfig.zeroTime),
-        //     BigInt(slotConfig.zeroSlot),
-        //     slotConfig.slotLength
-        //   );
-        //   console.log(uplc_eval);
-        // }
         return completeTxSign(config.lucidConfig, signedTx);
       }).pipe(Effect.catchAllDefect(makeRunTimeError));
-      return {
-        safeRun: () => Effect.runPromise(Effect.either(program)),
-        unSafeRun: () => Effect.runPromise(program),
-        program: () => program,
-      };
+      return makeReturn(program);
     },
   };
   return txSignBuilder;

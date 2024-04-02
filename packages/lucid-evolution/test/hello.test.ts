@@ -36,11 +36,12 @@ user.selectWallet.fromSeed(process.env.VITE_SEED!);
 const contractAddress = validatorToAddress("Preprod", hello);
 
 test.skip("", async () => {
+  console.log("user utxos", await user.wallet().getUtxos());
   const publicKeyHash = getAddressDetails(await user.wallet().address())
     .paymentCredential?.hash;
   const datum = Data.to(new Constr(0, [publicKeyHash!]));
 
-  const tx = await user
+  const tx = user
     .newTx()
     .pay.ToAddressWithData(
       contractAddress,

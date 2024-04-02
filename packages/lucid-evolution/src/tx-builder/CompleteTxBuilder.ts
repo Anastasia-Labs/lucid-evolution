@@ -17,6 +17,7 @@ import {
   utxoToTransactionOutput,
 } from "@lucid-evolution/utils";
 import { SLOT_CONFIG_NETWORK } from "@lucid-evolution/plutus";
+import { makeReturn } from "./utils.js";
 
 export const completeTxBuilder = (
   config: TxBuilderConfig,
@@ -28,22 +29,10 @@ export const completeTxBuilder = (
 ) => {
   const program = Effect.gen(function* ($) {
     const wallet = yield* $(Effect.fromNullable(config.lucidConfig.wallet));
-    // if (
-    //   [
-    //     options?.change?.outputData?.hash,
-    //     options?.change?.outputData?.asHash,
-    //     options?.change?.outputData?.inline,
-    //   ].filter((b) => b)
-    //     .length > 1
-    // ) {
-    //   throw new Error(
-    //     "Not allowed to set hash, asHash and inline at the same time.",
-    //   );
-    // }
 
     yield* $(Effect.all(config.programs, { concurrency: "unbounded" }));
 
-    const utxos = yield* $(
+    const walletCoreUtxos = yield* $(
       Effect.tryPromise({
         try: () => wallet.getUtxosCore(),
         catch: (_e) => new GetUTxosCoreError(),
@@ -56,25 +45,40 @@ export const completeTxBuilder = (
       }),
     );
     if (config.inputUTxOs?.find((value) => value.datum)) {
-      const collateral: UTxO = yield* $(
+      const collateralInput: UTxO = yield* $(
         Effect.fromNullable(
           walletUtxos.find(
-            (value) =>
-              value.assets["lovelace"] > 5_000_000n &&
-              Object.keys(value.assets).length === 1,
+            (value) => value.assets["lovelace"] >= 5_000_000n,
+            // &&
+            // Object.keys(value.assets).length === 1,
           ),
         ).pipe(Effect.mapError(() => new CollateralInputNotFound())),
       );
-      const collateralCore = utxoToCore(collateral);
+      const collateralInputCore = utxoToCore(collateralInput);
+      const collateralOut = utxoToTransactionOutput(collateralInput);
 
       config.txBuilder.add_collateral(
         CML.SingleInputBuilder.from_transaction_unspent_output(
-          collateralCore,
+          collateralInputCore,
         ).payment_key(),
       );
+      const collateralOutputBuilder =
+        CML.TransactionOutputBuilder.new().with_address(
+          CML.Address.from_bech32(collateralInput.address),
+        );
+      config.txBuilder.set_collateral_return(
+        collateralOutputBuilder
+          .next()
+          .with_asset_and_min_required_coin(
+            collateralOut.amount().multi_asset(),
+            config.lucidConfig.protocolParameters.coinsPerUtxoByte,
+          )
+          .build()
+          .output(),
+      );
       if (options?.coinSelection || options?.coinSelection === undefined) {
-        const filteredUtxo = utxos.filter(
-          (value) => value.to_cbor_hex() !== collateralCore.to_cbor_hex(),
+        const filteredUtxo = walletCoreUtxos.filter(
+          (value) => value.to_cbor_hex() !== collateralInputCore.to_cbor_hex(),
         );
         for (const utxo of filteredUtxo) {
           const input =
@@ -89,7 +93,7 @@ export const completeTxBuilder = (
       }
     } else {
       if (options?.coinSelection || options?.coinSelection === undefined) {
-        for (const utxo of utxos) {
+        for (const utxo of walletCoreUtxos) {
           const input =
             CML.SingleInputBuilder.from_transaction_unspent_output(
               utxo,
@@ -101,24 +105,6 @@ export const completeTxBuilder = (
         );
       }
     }
-    // const collateral_builder = CML.TransactionOutputBuilder.new();
-    // collateral_builder.with_address(
-    //   CML.Address.from_bech32(collateral!.address)
-    // );
-    // collateral_builder
-    //   .next()
-    //   .with_value(
-    //     CML.Value.new(collateral!.assets["lovelace"], CML.MultiAsset.new())
-    //   );
-    // config.txBuilder.set_collateral_return(
-    //   utxoToTransactionOutput(collateral!)
-    // );
-    // lucidUtxo.map((value)=> config.inputUTxOs?.push(value))
-
-    // const changeAddress: C.Address = addressFromWithNetworkCheck(
-    //   options?.change?.address || (await this.lucid.wallet.address()),
-    //   this.lucid,
-    // );
     const changeAddress = yield* $(
       Effect.tryPromise({
         try: () => wallet.address(),
@@ -126,43 +112,39 @@ export const completeTxBuilder = (
       }),
     );
 
-    const protocolParam = yield* $(
-      Effect.promise(() => config.lucidConfig.provider.getProtocolParameters()),
-    );
     const slotConfig = SLOT_CONFIG_NETWORK[config.lucidConfig.network];
-    // console.log("protocolParam", protocolParam);
-    const costmodel = createCostModels(protocolParam.costModels);
+    const costmodel = createCostModels(
+      config.lucidConfig.protocolParameters.costModels,
+    );
     // config.txBuilder.add_change_if_needed(
     //   CML.Address.from_bech32(changeAddress),
     //   false
     // );
-    // config.txBuilder.set_fee(config.txBuilder.min_fee(true));
     const tx_evaluation = config.txBuilder.build_for_evaluation(
       0,
       CML.Address.from_bech32(changeAddress),
     );
     if (tx_evaluation.draft_tx().witness_set().redeemers()) {
-      const t = setRedeemertoZero(tx_evaluation.draft_tx());
-      console.log(t?.to_json());
+      //FIX: this returns undefined
+      const txEvaluation = setRedeemerstoZero(tx_evaluation.draft_tx());
+      console.log(txEvaluation?.to_json());
       const txUtxos = [...walletUtxos, ...config.inputUTxOs!];
       const ins = txUtxos.map((utxo) => utxoToTransactionInput(utxo));
       const outs = txUtxos.map((utxo) => utxoToTransactionOutput(utxo));
+      //FIX:  this can fail
       const uplc_eval = UPLC.eval_phase_two_raw(
-        t!.to_cbor_bytes(),
+        txEvaluation!.to_cbor_bytes(),
         ins.map((value) => value.to_cbor_bytes()),
         outs.map((value) => value.to_cbor_bytes()),
         costmodel.to_cbor_bytes(),
-        protocolParam.maxTxExSteps,
-        protocolParam.maxTxExMem,
+        config.lucidConfig.protocolParameters.maxTxExSteps,
+        config.lucidConfig.protocolParameters.maxTxExMem,
         BigInt(slotConfig.zeroTime),
         BigInt(slotConfig.zeroSlot),
         slotConfig.slotLength,
       );
-      console.log(uplc_eval);
       applyUPLCEval(uplc_eval, config.txBuilder);
     }
-    // console.log("min_fee",config.txBuilder.min_fee(true))
-    // config.txBuilder.set_fee(config.txBuilder.min_fee(true))
     config.txBuilder.add_change_if_needed(
       CML.Address.from_bech32(changeAddress),
       true,
@@ -174,21 +156,11 @@ export const completeTxBuilder = (
         CML.Address.from_bech32(changeAddress),
       )
       .build_unchecked();
-    // const tx = config.txBuilder
-    //   .build(
-    //     CML.ChangeSelectionAlgo.Default,
-    //     CML.Address.from_bech32(changeAddress)
-    //   )
-    //   .build_unchecked();
     console.log(tx.to_json());
 
     return makeTxSignBuilder(config.lucidConfig, tx);
   }).pipe(Effect.catchAllDefect(makeRunTimeError));
-  return {
-    unsafeRun: () => Effect.runPromise(program),
-    safeRun: () => Effect.runPromise(Effect.either(program)),
-    program: () => program,
-  };
+  return makeReturn(program);
 };
 
 export const applyUPLCEval = (
@@ -208,13 +180,11 @@ export const applyUPLCEval = (
   }
 };
 
-export const setRedeemertoZero = (tx: CML.Transaction) => {
+export const setRedeemerstoZero = (tx: CML.Transaction) => {
   const redeemers = tx.witness_set().redeemers();
   if (redeemers) {
     const redeemerList = CML.RedeemerList.new();
-    console.log("redeemers.len()", redeemers.len());
     for (let i = 0; i < redeemers.len(); i++) {
-      console.log("redeemer", i);
       const redeemer = redeemers.get(i);
       const dummyRedeemer = CML.Redeemer.new(
         redeemer.tag(),
@@ -252,71 +222,3 @@ export const outputToArray = (outputList: CML.TransactionOutputList) => {
   }
   return array;
 };
-// {
-//   let redeemers = draftTx.witness_set().redeemers();
-
-//   if (redeemers) {
-//     let newRedeemers = C.Redeemers.new();
-//     for (let i = 0; i < redeemers!.len(); i++) {
-//       let redeemer = redeemers.get(i);
-//       let new_redeemer = C.Redeemer.new(
-//         redeemer.tag(),
-//         redeemer.index(),
-//         redeemer.data(),
-//         C.ExUnits.new(C.BigNum.zero(), C.BigNum.zero()),
-//       );
-//       newRedeemers.add(new_redeemer);
-//     }
-//     let new_witnesses = draftTx.witness_set();
-//     new_witnesses.set_redeemers(newRedeemers);
-//     draftTx = C.Transaction.new(
-//       draftTx.body(),
-//       new_witnesses,
-//       draftTx.auxiliary_data(),
-//     );
-//   }
-
-// tx CML.TransactionBuilderConfigBuilder
-// tx_builder
-// draft_tx_evaluation
-// get redeemers -> redeemer
-// apply redeemer -> draft_tx set exunit zero -> new draft_tx -> UPLC.eval_phase_two_raw(new_draftx)
-
-// let mut program: Program<Name> = if cbor {
-//   let cbor_hex = std::fs::read_to_string(&script).into_diagnostic()?;
-
-//   let raw_cbor = hex::decode(cbor_hex.trim()).into_diagnostic()?;
-
-//   let program = Program::<FakeNamedDeBruijn>::from_cbor(&raw_cbor, &mut Vec::new())
-//       .into_diagnostic()?;
-
-//   let program: Program<NamedDeBruijn> = program.into();
-
-//   Program::<Name>::try_from(program).into_diagnostic()?
-// } else if flat {
-//   let bytes = std::fs::read(&script).into_diagnostic()?;
-
-//   let program = Program::<FakeNamedDeBruijn>::from_flat(&bytes).into_diagnostic()?;
-
-//   let program: Program<NamedDeBruijn> = program.into();
-
-//   Program::<Name>::try_from(program).into_diagnostic()?
-// } else {
-//   let code = std::fs::read_to_string(&script).into_diagnostic()?;
-
-//   parser::program(&code).into_diagnostic()?
-// };
-
-// for arg in args {
-//   let term = parser::term(&arg).into_diagnostic()?;
-
-//   program = program.apply_term(&term)
-// }
-
-// let budget = ExBudget::default();
-
-// let program = Program::<NamedDeBruijn>::try_from(program).into_diagnostic()?;
-
-// let mut eval_result = program.eval(budget);
-
-// let cost = eval_result.cost();

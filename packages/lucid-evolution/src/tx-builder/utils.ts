@@ -9,6 +9,7 @@ import { TxRunTimeError, NetworkError } from "../Errors.js";
 import { LucidConfig } from "../lucid-evolution/LucidEvolution.js";
 import { getAddressDetails } from "@lucid-evolution/utils";
 import { encode } from "cborg";
+import { kMaxLength } from "buffer";
 
 export const toDatumOption = (outputDatum: OutputDatum): CML.DatumOption => {
   switch (outputDatum.kind) {
@@ -86,3 +87,11 @@ export function isEqual(arr1: Uint8Array, arr2: Uint8Array): boolean {
   }
   return arr1.every((value, index) => value === arr2[index]);
 }
+
+export const makeReturn = <A, E>(program: Effect.Effect<A, E>) => {
+  return {
+    unsafeRun: () => Effect.runPromise(program),
+    safeRun: () => Effect.runPromise(Effect.either(program)),
+    program: () => program,
+  };
+};

@@ -4,6 +4,7 @@ import {
   Network,
   OutRef,
   PrivateKey,
+  ProtocolParameters,
   Provider,
   Transaction,
   UTxO,
@@ -58,6 +59,7 @@ export type LucidConfig = {
   network: Network;
   wallet: Wallet | undefined;
   txbuilderconfig: CML.TransactionBuilderConfig;
+  protocolParameters: ProtocolParameters;
 };
 
 //TODO: turn this to Effect
@@ -70,6 +72,7 @@ export const Lucid = async (
     network: network,
     wallet: undefined,
     txbuilderconfig: await makeConfigBuilder(provider),
+    protocolParameters: await provider.getProtocolParameters(),
   };
   return {
     txbuilderconfig: () => config.txbuilderconfig,
@@ -77,6 +80,7 @@ export const Lucid = async (
     switchProvider: async (provider: Provider) => {
       config.provider = provider;
       config.txbuilderconfig = await makeConfigBuilder(provider);
+      config.protocolParameters = await provider.getProtocolParameters();
     },
     newTx: (): TxBuilder => makeTxBuilder(config),
     fromTx: (tx: Transaction) =>

@@ -11,7 +11,7 @@ import * as Interval from "./internal/Interval.js";
 import * as Signer from "./internal/Signer.js";
 import { completeTxBuilder } from "./CompleteTxBuilder.js";
 import { TxSignBuilder } from "../tx-sign-builder/MakeTxSign.js";
-import { RunTimeError, TransactionErrors } from "../Errors.js";
+import { TransactionError } from "../Errors.js";
 import { Either } from "effect/Either";
 import { Effect } from "effect/Effect";
 
@@ -40,10 +40,8 @@ export type TxBuilder = {
   };
   complete: () => {
     unsafeRun: () => Promise<TxSignBuilder>;
-    safeRun: () => Promise<
-      Either<TxSignBuilder, TransactionErrors | RunTimeError>
-    >;
-    program: () => Effect<TxSignBuilder, TransactionErrors | RunTimeError>;
+    safeRun: () => Promise<Either<TxSignBuilder, TransactionError>>;
+    program: () => Effect<TxSignBuilder, TransactionError>;
   };
   config: () => TxBuilderConfig;
 };
