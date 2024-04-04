@@ -9,7 +9,7 @@ export default {
   logo: () => (
     <>
       <Image
-        src="/al-logo.png"
+        src="https://anastasialabs.com/assets/img/logo/logo.png"
         height="200"
         width="200"
         style={{ marginRight: "1em" }}
