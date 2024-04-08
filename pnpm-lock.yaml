@@ -159,6 +159,12 @@ importers:
 
   packages/lucid:
     dependencies:
+      '@dcspark/cardano-multiplatform-lib-nodejs':
+        specifier: ^5.1.0
+        version: 5.1.0
+      '@emurgo/cardano-message-signing-nodejs':
+        specifier: ^1.0.1
+        version: 1.0.1
       '@lucid-evolution/bip39':
         specifier: workspace:*
         version: link:../bip39
@@ -187,15 +193,9 @@ importers:
         specifier: workspace:*
         version: link:../wallet
     devDependencies:
-      '@dcspark/cardano-multiplatform-lib-nodejs':
-        specifier: ^5.1.0
-        version: 5.1.0
       '@effect/schema':
         specifier: ^0.62.9
         version: 0.62.9(effect@2.4.1)(fast-check@3.16.0)
-      '@emurgo/cardano-message-signing-nodejs':
-        specifier: ^1.0.1
-        version: 1.0.1
       '@types/node':
         specifier: ^20.11.24
         version: 20.11.24
@@ -813,7 +813,6 @@ packages:
 
   /@dcspark/cardano-multiplatform-lib-nodejs@5.1.0:
     resolution: {integrity: sha512-SWf9O7Rnd/a3vNndc8UYApv3lu/qki3vxDYWX3MeDDiE5MjntJiG6JDEe30JOvZphvTt53MAdwJNvAeHiDj8AA==}
-    dev: true
 
   /@effect/schema@0.62.9(effect@2.4.1)(fast-check@3.16.0):
     resolution: {integrity: sha512-u5LJqk3MClXr8DxiN/AGUBUxVnsl8o6glOTfToFECn3I+slVW/vbzLMRyUqbNNp2uBpdP6UGwmp9VVYxd72bBg==}
@@ -827,7 +826,6 @@ packages:
 
   /@emurgo/cardano-message-signing-nodejs@1.0.1:
     resolution: {integrity: sha512-PoKh1tQnJX18f8iEr8Jk1KXxKCn9eqaSslMI1pyOJvYRJhQVDLCh0+9YReufjp0oFJIY1ShcrR+4/WnECVZUKQ==}
-    dev: true
 
   /@esbuild/aix-ppc64@0.19.12:
     resolution: {integrity: sha512-bmoCYyWdEL3wDQIVbcyzRyeKLgk2WtWLTWz1ZIAZF/EGbNOwSA6ew3PftJ1PqMiOOGu0OyFMzG53L0zqIpPeNA==}

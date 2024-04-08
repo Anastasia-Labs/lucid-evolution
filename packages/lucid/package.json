@@ -29,12 +29,12 @@
     "@lucid-evolution/sign_data": "workspace:*",
     "@lucid-evolution/utils": "workspace:*",
     "@lucid-evolution/wallet": "workspace:*",
-    "@lucid-evolution/uplc": "workspace:*"
+    "@lucid-evolution/uplc": "workspace:*",
+    "@dcspark/cardano-multiplatform-lib-nodejs": "^5.1.0",
+    "@emurgo/cardano-message-signing-nodejs": "^1.0.1"
   },
   "devDependencies": {
-    "@dcspark/cardano-multiplatform-lib-nodejs": "^5.1.0",
     "@effect/schema": "^0.62.9",
-    "@emurgo/cardano-message-signing-nodejs": "^1.0.1",
     "@types/node": "^20.11.24",
     "cborg": "^4.1.4",
     "effect": "^2.4.1",
