@@ -1,6 +1,6 @@
 {
   "name": "@lucid-evolution/sign_data",
-  "version": "0.0.1",
+  "version": "0.1.0-alpha.0",
   "description": "",
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
@@ -21,7 +21,6 @@
   "devDependencies": {
     "@lucid-evolution/core-types": "workspace:*",
     "@lucid-evolution/core-utils": "workspace:*",
-    "@lucid-evolution/wallet": "workspace:*",
     "@dcspark/cardano-multiplatform-lib-nodejs": "^5.1.0",
     "@emurgo/cardano-message-signing-nodejs": "^1.0.1",
     "@types/node": "^20.11.24",
