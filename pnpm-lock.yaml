@@ -289,9 +289,6 @@ importers:
       '@lucid-evolution/core-utils':
         specifier: workspace:*
         version: link:../core-utils
-      '@lucid-evolution/wallet':
-        specifier: workspace:*
-        version: link:../wallet
       '@types/node':
         specifier: ^20.11.24
         version: 20.11.24
@@ -363,6 +360,9 @@ importers:
       '@lucid-evolution/core-utils':
         specifier: workspace:*
         version: link:../core-utils
+      '@lucid-evolution/sign_data':
+        specifier: workspace:*
+        version: link:../sign_data
       '@lucid-evolution/utils':
         specifier: workspace:*
         version: link:../utils
