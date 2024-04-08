@@ -75,9 +75,6 @@ importers:
 
   packages/bip39:
     devDependencies:
-      '@dcspark/cardano-multiplatform-lib-nodejs':
-        specifier: ^5.1.0
-        version: 5.1.0
       '@lucid-evolution/core-utils':
         specifier: workspace:*
         version: link:../core-utils
