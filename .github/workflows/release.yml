@@ -12,6 +12,12 @@ jobs:
   release:
     name: Release
     runs-on: ubuntu-latest
+    permissions:
+      deployments: write
+      contents: write
+      statuses: write
+      actions: write
+      checks: read
     env:
       VITE_BLOCKFROST_KEY: ${{ secrets.VITE_BLOCKFROST_KEY }}
       VITE_MAESTRO_KEY: ${{ secrets.VITE_BLOCKFROST_KEY }}
