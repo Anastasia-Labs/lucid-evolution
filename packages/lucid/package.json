@@ -1,25 +1,47 @@
 {
   "name": "@lucid-evolution/lucid",
   "version": "0.1.0",
-  "description": "",
+  "license": "MIT",
+  "author": "",
+  "description": "Next-generation transaction builder for highly scalable dApps on Cardano",
+  "homepage": "https://anastasia-labs.github.io/lucid-evolution",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Anastasia-Labs/lucid-evolution.git",
+    "directory": "packages/lucid"
+  },
+  "bugs": {
+    "url": "https://github.com/Anastasia-Labs/lucid-evolution/issues"
+  },
+  "tags": [
+    "typescript",
+    "cardano",
+    "offchain",
+    "transaction",
+    "plutus"
+  ],
+  "keywords": [
+    "typescript",
+    "cardano",
+    "offchain",
+    "transaction",
+    "plutus"
+  ],
+  "publishConfig": {
+    "access": "public"
+  },
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
   "type": "module",
   "files": [
     "dist"
   ],
-  "publishConfig": {
-    "access": "public"
-  },
   "scripts": {
     "test": "vitest run",
     "lint": "tsc --noEmit",
     "build": "tsup-node src/index.ts",
     "clean": "rm -rf .turbo && rm -rf node_modules && rm -rf dist"
   },
-  "keywords": [],
-  "author": "",
-  "license": "MIT",
   "dependencies": {
     "@lucid-evolution/bip39": "workspace:*",
     "@lucid-evolution/core-types": "workspace:*",
