@@ -1,15 +1,17 @@
-import {
-  Static as _Static,
-  TEnum,
-  TLiteral,
-  TLiteralValue,
-  TProperties,
-  TSchema,
-  Type,
-} from "@sinclair/typebox";
+import * as TypeBox from "@sinclair/typebox";
+// import {
+//   Static as _Static,
+//   TEnum,
+//   TLiteral,
+//   TLiteralValue,
+//   TProperties,
+//   TSchema,
+//   Type,
+// } from "@sinclair/typebox";
 import { Datum, Exact, Json, Redeemer } from "@lucid-evolution/core-types";
 import { fromHex, fromText, toHex } from "@lucid-evolution/core-utils";
 import * as CML from "@dcspark/cardano-multiplatform-lib-nodejs";
+export * from "@sinclair/typebox";
 
 export class Constr<T> {
   index: number;
@@ -22,10 +24,10 @@ export class Constr<T> {
 }
 
 export declare namespace Data {
-  export type Static<T extends TSchema, P extends unknown[] = []> = _Static<
-    T,
-    P
-  >;
+  export type Static<
+    T extends TypeBox.TSchema,
+    P extends unknown[] = [],
+  > = TypeBox.Static<T, P>;
 }
 
 export type Data =
@@ -44,7 +46,7 @@ export const Data = {
     exclusiveMinimum?: number;
     exclusiveMaximum?: number;
   }) {
-    const integer = Type.Unsafe<bigint>({ dataType: "integer" });
+    const integer = TypeBox.Type.Unsafe<bigint>({ dataType: "integer" });
     if (options) {
       Object.entries(options).forEach(([key, value]) => {
         integer[key] = value;
@@ -57,7 +59,7 @@ export const Data = {
     maxLength?: number;
     enum?: string[];
   }) {
-    const bytes = Type.Unsafe<string>({ dataType: "bytes" });
+    const bytes = TypeBox.Type.Unsafe<string>({ dataType: "bytes" });
     if (options) {
       Object.entries(options).forEach(([key, value]) => {
         bytes[key] = value;
@@ -66,7 +68,7 @@ export const Data = {
     return bytes;
   },
   Boolean: function () {
-    return Type.Unsafe<boolean>({
+    return TypeBox.Type.Unsafe<boolean>({
       anyOf: [
         {
           title: "False",
@@ -84,13 +86,13 @@ export const Data = {
     });
   },
   Any: function () {
-    return Type.Unsafe<Data>({ description: "Any Data." });
+    return TypeBox.Type.Unsafe<Data>({ description: "Any Data." });
   },
-  Array: function <T extends TSchema>(
+  Array: function <T extends TypeBox.TSchema>(
     items: T,
     options?: { minItems?: number; maxItems?: number; uniqueItems?: boolean },
   ) {
-    const array = Type.Array(items);
+    const array = TypeBox.Type.Array(items);
     replaceProperties(array, { dataType: "list", items });
     if (options) {
       Object.entries(options).forEach(([key, value]) => {
@@ -99,12 +101,12 @@ export const Data = {
     }
     return array;
   },
-  Map: function <T extends TSchema, U extends TSchema>(
+  Map: function <T extends TypeBox.TSchema, U extends TypeBox.TSchema>(
     keys: T,
     values: U,
     options?: { minItems?: number; maxItems?: number },
   ) {
-    const map = Type.Unsafe<Map<Data.Static<T>, Data.Static<U>>>({
+    const map = TypeBox.Type.Unsafe<Map<Data.Static<T>, Data.Static<U>>>({
       dataType: "map",
       keys,
       values,
@@ -120,11 +122,11 @@ export const Data = {
    * Object applies by default a PlutusData Constr with index 0.\
    * Set 'hasConstr' to false to serialize Object as PlutusData List.
    */
-  Object: function <T extends TProperties>(
+  Object: function <T extends TypeBox.TProperties>(
     properties: T,
     options?: { hasConstr?: boolean },
   ) {
-    const object = Type.Object(properties);
+    const object = TypeBox.Type.Object(properties);
     replaceProperties(object, {
       anyOf: [
         {
@@ -141,8 +143,8 @@ export const Data = {
       typeof options?.hasConstr === "undefined" || options.hasConstr;
     return object;
   },
-  Enum: function <T extends TSchema>(items: T[]) {
-    const union = Type.Union(items);
+  Enum: function <T extends TypeBox.TSchema>(items: T[]) {
+    const union = TypeBox.Type.Union(items);
     replaceProperties(union, {
       anyOf: items.map((item, index) =>
         item.anyOf[0].fields.length === 0
@@ -177,11 +179,11 @@ export const Data = {
    * Tuple is by default a PlutusData List.\
    * Set 'hasConstr' to true to apply a PlutusData Constr with index 0.
    */
-  Tuple: function <T extends TSchema[]>(
+  Tuple: function <T extends TypeBox.TSchema[]>(
     items: [...T],
     options?: { hasConstr?: boolean },
   ) {
-    const tuple = Type.Tuple(items);
+    const tuple = TypeBox.Type.Tuple(items);
     replaceProperties(tuple, {
       dataType: "list",
       items,
@@ -193,7 +195,9 @@ export const Data = {
     }
     return tuple;
   },
-  Literal: function <T extends TLiteralValue>(title: T): TLiteral<T> {
+  Literal: function <T extends TypeBox.TLiteralValue>(
+    title: T,
+  ): TypeBox.TLiteral<T> {
     if (
       (title as string).charAt(0) !== (title as string).charAt(0).toUpperCase()
     ) {
@@ -201,7 +205,7 @@ export const Data = {
         `Enum '${title}' needs to start with an uppercase letter.`,
       );
     }
-    const literal = Type.Literal(title);
+    const literal = TypeBox.Type.Literal(title);
     replaceProperties(literal, {
       anyOf: [
         {
@@ -214,8 +218,8 @@ export const Data = {
     });
     return literal;
   },
-  Nullable: function <T extends TSchema>(item: T) {
-    return Type.Unsafe<Data.Static<T> | null>({
+  Nullable: function <T extends TypeBox.TSchema>(item: T) {
+    return TypeBox.Type.Unsafe<Data.Static<T> | null>({
       anyOf: [
         {
           title: "Some",
@@ -691,8 +695,8 @@ function castTo<T>(struct: Exact<T>, type: T): Data {
               "Could not type cast to enum. Enum needs to start with an uppercase letter.",
             );
           }
-          const enumIndex = (shape as TEnum).anyOf.findIndex(
-            (s: TLiteral) =>
+          const enumIndex = (shape as TypeBox.TEnum).anyOf.findIndex(
+            (s: TypeBox.TLiteral) =>
               s.dataType === "constructor" &&
               s.fields.length === 0 &&
               s.title === struct,
@@ -772,7 +776,7 @@ function castTo<T>(struct: Exact<T>, type: T): Data {
   throw new Error("Could not type cast struct.");
 }
 
-function integerConstraints(integer: bigint, shape: TSchema) {
+function integerConstraints(integer: bigint, shape: TypeBox.TSchema) {
   if (shape.minimum && integer < BigInt(shape.minimum)) {
     throw new Error(
       `Integer ${integer} is below the minimum ${shape.minimum}.`,
@@ -795,7 +799,7 @@ function integerConstraints(integer: bigint, shape: TSchema) {
   }
 }
 
-function bytesConstraints(bytes: string, shape: TSchema) {
+function bytesConstraints(bytes: string, shape: TypeBox.TSchema) {
   if (shape.enum && !shape.enum.some((keyword: string) => keyword === bytes))
     throw new Error(`None of the keywords match with '${bytes}'.`);
   if (shape.minLength && bytes.length / 2 < shape.minLength) {
@@ -811,7 +815,7 @@ function bytesConstraints(bytes: string, shape: TSchema) {
   }
 }
 
-function listConstraints(list: Array<unknown>, shape: TSchema) {
+function listConstraints(list: Array<unknown>, shape: TypeBox.TSchema) {
   if (shape.minItems && list.length < shape.minItems) {
     throw new Error(`Array needs to contain at least ${shape.minItems} items.`);
   }
@@ -824,7 +828,7 @@ function listConstraints(list: Array<unknown>, shape: TSchema) {
   }
 }
 
-function mapConstraints(map: Map<unknown, unknown>, shape: TSchema) {
+function mapConstraints(map: Map<unknown, unknown>, shape: TypeBox.TSchema) {
   if (shape.minItems && map.size < shape.minItems) {
     throw new Error(`Map needs to contain at least ${shape.minItems} items.`);
   }
@@ -834,7 +838,7 @@ function mapConstraints(map: Map<unknown, unknown>, shape: TSchema) {
   }
 }
 
-function isBoolean(shape: TSchema): boolean {
+function isBoolean(shape: TypeBox.TSchema): boolean {
   return (
     shape.anyOf &&
     shape.anyOf[0]?.title === "False" &&
@@ -842,11 +846,11 @@ function isBoolean(shape: TSchema): boolean {
   );
 }
 
-function isVoid(shape: TSchema): boolean {
+function isVoid(shape: TypeBox.TSchema): boolean {
   return shape.index === 0 && shape.fields.length === 0;
 }
 
-function isNullable(shape: TSchema): boolean {
+function isNullable(shape: TypeBox.TSchema): boolean {
   return (
     shape.anyOf &&
     shape.anyOf[0]?.title === "Some" &&
