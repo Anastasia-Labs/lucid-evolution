@@ -10,7 +10,7 @@
     "format-check": "prettier --check \"**/*.{ts,tsx,md}\"",
     "test": "turbo test",
     "clean": "turbo clean && rm -rf node_modules",
-    "publish-packages": "changeset version && changeset publish"
+    "publish-packages": "turbo run build && changeset version && changeset publish"
   },
   "devDependencies": {
     "@changesets/changelog-github": "^0.5.0",
