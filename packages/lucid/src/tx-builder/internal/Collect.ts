@@ -43,7 +43,7 @@ export const collectFromUTxO = (
         const script = yield* $(
           Effect.fromNullable(config.scripts.get(credential.hash)),
         );
-        console.log("script", script);
+        // console.log("script", script);
         const inputResult = (script: { type: ScriptType; script: string }) => {
           switch (script.type) {
             case "Native":
@@ -59,7 +59,7 @@ export const collectFromUTxO = (
               );
             case "PlutusV2": {
               const v2 = toV2(script.script);
-              console.log("after v2");
+              // console.log("after v2");
               const partial = toPartial(v2, redeemer);
 
               return input.plutus_script_inline_datum(
@@ -75,7 +75,7 @@ export const collectFromUTxO = (
           }
         };
         const r = inputResult(script);
-        console.log("test fail");
+        // console.log("test fail");
         config.txBuilder.add_input(r);
       } else {
         config.txBuilder.add_input(input.payment_key());

@@ -26,7 +26,6 @@ import {
   walletFromSeed,
 } from "@lucid-evolution/wallet";
 import * as CML from "@dcspark/cardano-multiplatform-lib-nodejs";
-import { toCMLTransactionHash } from "../tx-builder/utils.js";
 import { signData } from "@lucid-evolution/sign_data";
 
 export const makeWalletFromSeed = (
@@ -97,8 +96,8 @@ export const makeWalletFromSeed = (
         // console.log("lucidTxHash", lucidTxHash.to_hex())
 
         const witness = CML.make_vkey_witness(
-          // CML.hash_transaction(tx.body()),
-          toCMLTransactionHash(tx.body()),
+          CML.hash_transaction(tx.body()),
+          // toCMLTransactionHash(tx.body()),
           priv,
         );
         txWitnessSetBuilder.add_vkey(witness);
