@@ -1,5 +1,12 @@
 # @lucid-evolution/core-utils
 
+## 0.1.3
+
+### Patch Changes
+
+- [#49](https://github.com/Anastasia-Labs/lucid-evolution/pull/49) [`484a3c6`](https://github.com/Anastasia-Labs/lucid-evolution/commit/484a3c6bf273cedc0aa914eccebb4d78d633bdf4) Thanks [@solidsnakedev](https://github.com/solidsnakedev)! - - bump CMl version 5.2
+  - remove toCMLTransactionHash , use CML.hash_transaction which is the fixed function from CML 5.2
+
 ## 0.1.2
 
 ### Patch Changes
