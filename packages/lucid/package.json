@@ -54,13 +54,13 @@
     "@lucid-evolution/uplc": "workspace:*",
     "@dcspark/cardano-multiplatform-lib-nodejs": "^5.1.0",
     "@emurgo/cardano-message-signing-nodejs": "^1.0.1",
-    "lucid-cardano": "^0.10.7"
+    "lucid-cardano": "^0.10.7",
+    "effect": "^2.4.1",
+    "@effect/schema": "^0.62.9"
   },
   "devDependencies": {
-    "@effect/schema": "^0.62.9",
     "@types/node": "^20.11.24",
     "cborg": "^4.1.4",
-    "effect": "^2.4.1",
     "esbuild-plugin-wasm": "^1.1.0",
     "tsup": "^8.0.2",
     "tsx": "^4.7.1",
