@@ -1,5 +1,11 @@
 # @lucid-evolution/plutus
 
+## 0.1.1
+
+### Patch Changes
+
+- [#39](https://github.com/Anastasia-Labs/lucid-evolution/pull/39) [`fd57517`](https://github.com/Anastasia-Labs/lucid-evolution/commit/fd57517a5baac5fcd8c4bd86bd06b5a03311a890) Thanks [@solidsnakedev](https://github.com/solidsnakedev)! - add proper dependencies
+
 ## 0.1.0
 
 ### Minor Changes
