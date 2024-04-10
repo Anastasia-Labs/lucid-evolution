@@ -1,5 +1,21 @@
 # @lucid-evolution/lucid
 
+## 0.2.5
+
+### Patch Changes
+
+- [#45](https://github.com/Anastasia-Labs/lucid-evolution/pull/45) [`0f2e140`](https://github.com/Anastasia-Labs/lucid-evolution/commit/0f2e1404e4a476b5003f2937c01943ffd536fbd4) Thanks [@solidsnakedev](https://github.com/solidsnakedev)! - add dual export
+
+- Updated dependencies [[`0f2e140`](https://github.com/Anastasia-Labs/lucid-evolution/commit/0f2e1404e4a476b5003f2937c01943ffd536fbd4)]:
+  - @lucid-evolution/core-types@0.1.1
+  - @lucid-evolution/core-utils@0.1.1
+  - @lucid-evolution/sign_data@0.1.1
+  - @lucid-evolution/provider@0.1.1
+  - @lucid-evolution/plutus@0.1.4
+  - @lucid-evolution/wallet@0.1.1
+  - @lucid-evolution/bip39@0.2.1
+  - @lucid-evolution/utils@0.1.1
+
 ## 0.2.4
 
 ### Patch Changes
