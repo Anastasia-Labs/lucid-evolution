@@ -50,20 +50,20 @@
     "clean": "rm -rf .turbo && rm -rf node_modules && rm -rf dist"
   },
   "dependencies": {
+    "@dcspark/cardano-multiplatform-lib-nodejs": "^5.2.0",
+    "@effect/schema": "^0.62.9",
+    "@emurgo/cardano-message-signing-nodejs": "^1.0.1",
     "@lucid-evolution/bip39": "workspace:*",
     "@lucid-evolution/core-types": "workspace:*",
     "@lucid-evolution/core-utils": "workspace:*",
     "@lucid-evolution/plutus": "workspace:*",
     "@lucid-evolution/provider": "workspace:*",
     "@lucid-evolution/sign_data": "workspace:*",
+    "@lucid-evolution/uplc": "workspace:*",
     "@lucid-evolution/utils": "workspace:*",
     "@lucid-evolution/wallet": "workspace:*",
-    "@lucid-evolution/uplc": "workspace:*",
-    "@dcspark/cardano-multiplatform-lib-nodejs": "^5.1.0",
-    "@emurgo/cardano-message-signing-nodejs": "^1.0.1",
-    "lucid-cardano": "^0.10.7",
     "effect": "^2.4.1",
-    "@effect/schema": "^0.62.9"
+    "lucid-cardano": "^0.10.7"
   },
   "devDependencies": {
     "@types/node": "^20.11.24",

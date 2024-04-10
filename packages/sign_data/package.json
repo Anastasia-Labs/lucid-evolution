@@ -26,10 +26,10 @@
   "author": "",
   "license": "MIT",
   "dependencies": {
+    "@dcspark/cardano-multiplatform-lib-nodejs": "^5.2.0",
+    "@emurgo/cardano-message-signing-nodejs": "^1.0.1",
     "@lucid-evolution/core-types": "workspace:*",
-    "@lucid-evolution/core-utils": "workspace:*",
-    "@dcspark/cardano-multiplatform-lib-nodejs": "^5.1.0",
-    "@emurgo/cardano-message-signing-nodejs": "^1.0.1"
+    "@lucid-evolution/core-utils": "workspace:*"
   },
   "devDependencies": {
     "@types/node": "^20.11.24",
