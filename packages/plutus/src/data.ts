@@ -7,7 +7,6 @@ import {
   TSchema,
   Type,
 } from "@sinclair/typebox";
-export * from "@sinclair/typebox";
 import { Datum, Exact, Json, Redeemer } from "@lucid-evolution/core-types";
 import { fromHex, fromText, toHex } from "@lucid-evolution/core-utils";
 import * as CML from "@dcspark/cardano-multiplatform-lib-nodejs";
