@@ -19,7 +19,6 @@ import {
   coreToUtxo,
   getAddressDetails,
   paymentCredentialOf,
-  toCMLTransactionHash,
   utxoToCore,
 } from "@lucid-evolution/utils";
 import * as CML from "@dcspark/cardano-multiplatform-lib-nodejs";
@@ -94,8 +93,8 @@ export const makeWalletFromSeed = (
         // console.log("lucidTxHash", lucidTxHash.to_hex())
 
         const witness = CML.make_vkey_witness(
-          // CML.hash_transaction(tx.body()),
-          toCMLTransactionHash(tx.body()),
+          CML.hash_transaction(tx.body()),
+          // toCMLTransactionHash(tx.body()),
           priv,
         );
         txWitnessSetBuilder.add_vkey(witness);

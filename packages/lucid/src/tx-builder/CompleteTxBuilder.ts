@@ -127,7 +127,7 @@ export const completeTxBuilder = (
     if (tx_evaluation.draft_tx().witness_set().redeemers()) {
       //FIX: this returns undefined
       const txEvaluation = setRedeemerstoZero(tx_evaluation.draft_tx());
-      console.log(txEvaluation?.to_json());
+      // console.log(txEvaluation?.to_json());
       const txUtxos = [...walletUtxos, ...config.inputUTxOs!];
       const ins = txUtxos.map((utxo) => utxoToTransactionInput(utxo));
       const outs = txUtxos.map((utxo) => utxoToTransactionOutput(utxo));
@@ -156,7 +156,7 @@ export const completeTxBuilder = (
         CML.Address.from_bech32(changeAddress),
       )
       .build_unchecked();
-    console.log(tx.to_json());
+    // console.log(tx.to_json());
 
     return makeTxSignBuilder(config.lucidConfig, tx);
   }).pipe(Effect.catchAllDefect(makeRunTimeError));

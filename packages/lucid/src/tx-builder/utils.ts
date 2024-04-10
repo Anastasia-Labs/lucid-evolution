@@ -1,15 +1,11 @@
 import * as CML from "@dcspark/cardano-multiplatform-lib-nodejs";
-import { C } from "lucid-cardano";
 import { CBORHex, OutputDatum } from "./types.js";
 import { Effect } from "effect";
-import { fromHex } from "@lucid-evolution/core-utils";
 import { networkToId } from "@lucid-evolution/utils";
 import { Address, RewardAddress } from "@lucid-evolution/core-types";
 import { TxRunTimeError, NetworkError } from "../Errors.js";
 import { LucidConfig } from "../lucid-evolution/LucidEvolution.js";
 import { getAddressDetails } from "@lucid-evolution/utils";
-import { encode } from "cborg";
-import { kMaxLength } from "buffer";
 
 export const toDatumOption = (outputDatum: OutputDatum): CML.DatumOption => {
   switch (outputDatum.kind) {
@@ -62,9 +58,9 @@ export const addressFromWithNetworkCheck = (
 export const toV1 = (script: string) =>
   CML.PlutusScript.from_v1(CML.PlutusV1Script.from_cbor_hex(script));
 export const toV2 = (script: string) => {
-  console.log("before");
+  // console.log("before");
   const v2 = CML.PlutusV2Script.from_cbor_hex(script);
-  console.log("v2", v2.hash().to_hex());
+  // console.log("v2", v2.hash().to_hex());
   return CML.PlutusScript.from_v2(v2);
 };
 
@@ -74,12 +70,13 @@ export const toPartial = (script: CML.PlutusScript, redeemer: CBORHex) =>
     CML.PlutusData.from_cbor_hex(redeemer),
   );
 
-export function toCMLTransactionHash(body: CML.TransactionBody) {
-  const TransactionHash = C.hash_transaction(
-    C.TransactionBody.from_bytes(fromHex(body.to_cbor_hex())),
-  );
-  return CML.TransactionHash.from_hex(TransactionHash.to_hex());
-}
+//NOTE: deprecated
+// export function toCMLTransactionHash(body: CML.TransactionBody) {
+//   const TransactionHash = C.hash_transaction(
+//     C.TransactionBody.from_bytes(fromHex(body.to_cbor_hex())),
+//   );
+//   return CML.TransactionHash.from_hex(TransactionHash.to_hex());
+// }
 
 export function isEqual(arr1: Uint8Array, arr2: Uint8Array): boolean {
   if (arr1.length !== arr2.length) {

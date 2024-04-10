@@ -1,6 +1,5 @@
 import * as CML from "@dcspark/cardano-multiplatform-lib-nodejs";
 import { LucidConfig } from "../lucid-evolution/LucidEvolution.js";
-import { toCMLTransactionHash } from "../tx-builder/utils.js";
 
 export type TxSigned = {
   submit: () => Promise<string> | undefined;
@@ -19,7 +18,7 @@ export const completeTxSign = (
       return txSigned.to_cbor_hex();
     },
     toHash: () => {
-      return toCMLTransactionHash(txSigned.body()).to_hex();
+      return CML.hash_transaction(txSigned.body()).to_hex();
     },
   };
 };

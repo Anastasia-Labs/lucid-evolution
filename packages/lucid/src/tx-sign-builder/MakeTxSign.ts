@@ -1,7 +1,7 @@
 import * as CML from "@dcspark/cardano-multiplatform-lib-nodejs";
 import { LucidConfig } from "../lucid-evolution/LucidEvolution.js";
 import { Effect } from "effect";
-import { makeReturn, toCMLTransactionHash } from "../tx-builder/utils.js";
+import { makeReturn } from "../tx-builder/utils.js";
 import { PrivateKey } from "@lucid-evolution/core-types";
 import { RunTimeError, makeRunTimeError } from "../Errors.js";
 import { TxSigned, completeTxSign } from "./CompleteTxSign.js";
@@ -63,7 +63,7 @@ export const makeTxSignBuilder = (
               catch: (_e) => new Error(),
             }),
           );
-          console.log("witness", witnesses.to_json());
+          // console.log("witness", witnesses.to_json());
           config.witnessSetBuilder.add_existing(witnesses);
         });
         config.programs.push(program);
@@ -72,7 +72,7 @@ export const makeTxSignBuilder = (
       withPrivateKey: (privateKey: PrivateKey) => {
         const priv = CML.PrivateKey.from_bech32(privateKey);
         const witness = CML.make_vkey_witness(
-          toCMLTransactionHash(config.txComplete.body()),
+          CML.hash_transaction(config.txComplete.body()),
           priv,
         );
         config.witnessSetBuilder.add_vkey(witness);

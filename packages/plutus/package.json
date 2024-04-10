@@ -26,9 +26,9 @@
   "author": "",
   "license": "MIT",
   "dependencies": {
+    "@dcspark/cardano-multiplatform-lib-nodejs": "^5.2.0",
     "@lucid-evolution/core-types": "workspace:*",
     "@lucid-evolution/core-utils": "workspace:*",
-    "@dcspark/cardano-multiplatform-lib-nodejs": "^5.1.0",
     "@sinclair/typebox": "^0.32.15"
   },
   "devDependencies": {
