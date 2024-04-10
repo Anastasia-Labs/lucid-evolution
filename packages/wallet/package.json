@@ -25,12 +25,14 @@
   "keywords": [],
   "author": "",
   "license": "MIT",
-  "devDependencies": {
+  "dependencies": {
     "@lucid-evolution/core-types": "workspace:*",
     "@lucid-evolution/core-utils": "workspace:*",
     "@lucid-evolution/bip39": "workspace:*",
     "@lucid-evolution/utils": "workspace:*",
-    "@dcspark/cardano-multiplatform-lib-nodejs": "^5.1.0",
+    "@dcspark/cardano-multiplatform-lib-nodejs": "^5.1.0"
+  },
+  "devDependencies": {
     "@types/node": "^20.11.24",
     "tsup": "^8.0.2",
     "typescript": "^5.3.3"
