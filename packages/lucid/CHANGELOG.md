@@ -1,5 +1,15 @@
 # @lucid-evolution/lucid
 
+## 0.2.4
+
+### Patch Changes
+
+- [#43](https://github.com/Anastasia-Labs/lucid-evolution/pull/43) [`5c1b342`](https://github.com/Anastasia-Labs/lucid-evolution/commit/5c1b3420e5eab81fea7500671587e5a19bb083d9) Thanks [@solidsnakedev](https://github.com/solidsnakedev)! - improve typebox import
+
+- Updated dependencies [[`5c1b342`](https://github.com/Anastasia-Labs/lucid-evolution/commit/5c1b3420e5eab81fea7500671587e5a19bb083d9)]:
+  - @lucid-evolution/plutus@0.1.3
+  - @lucid-evolution/utils@0.1.0
+
 ## 0.2.3
 
 ### Patch Changes
