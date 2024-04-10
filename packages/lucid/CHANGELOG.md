@@ -1,5 +1,11 @@
 # @lucid-evolution/lucid
 
+## 0.2.1
+
+### Patch Changes
+
+- [#37](https://github.com/Anastasia-Labs/lucid-evolution/pull/37) [`958725c`](https://github.com/Anastasia-Labs/lucid-evolution/commit/958725ce9e8854503f6d88b686d02ffb2506b0ae) Thanks [@solidsnakedev](https://github.com/solidsnakedev)! - add lucid-cardano as temp dependency
+
 ## 0.2.0
 
 ### Minor Changes
