@@ -1,5 +1,19 @@
 # @lucid-evolution/lucid
 
+## 0.2.6
+
+### Patch Changes
+
+- Updated dependencies [[`67b178b`](https://github.com/Anastasia-Labs/lucid-evolution/commit/67b178be520f53fe6901cac2c8573170408f861a)]:
+  - @lucid-evolution/core-types@0.1.2
+  - @lucid-evolution/core-utils@0.1.2
+  - @lucid-evolution/sign_data@0.1.2
+  - @lucid-evolution/provider@0.1.2
+  - @lucid-evolution/plutus@0.1.5
+  - @lucid-evolution/wallet@0.1.2
+  - @lucid-evolution/bip39@0.2.2
+  - @lucid-evolution/utils@0.1.2
+
 ## 0.2.5
 
 ### Patch Changes
