@@ -62,8 +62,7 @@
     "@lucid-evolution/uplc": "workspace:*",
     "@lucid-evolution/utils": "workspace:*",
     "@lucid-evolution/wallet": "workspace:*",
-    "effect": "^2.4.1",
-    "lucid-cardano": "^0.10.7"
+    "effect": "^2.4.1"
   },
   "devDependencies": {
     "@types/node": "^20.11.24",

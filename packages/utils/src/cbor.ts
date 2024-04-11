@@ -1,26 +1,16 @@
-import * as CML from "@dcspark/cardano-multiplatform-lib-nodejs";
 import { fromHex, toHex } from "@lucid-evolution/core-utils";
+import { decode, encode } from "cborg";
 
-import { encode } from "cborg";
-export { applyDoubleCborEncoding } from "lucid-cardano";
-// TODO: use the below instead
-// toHex(cbor.encode(fromHex(helloCBOR)))
-/** Returns double cbor encoded script. If script is already double cbor encoded it's returned as it is. */
-// export function applyDoubleCborEncoding(script: string): string {
-//   // return toHex(encode(fromHex(script)));
-//   try {
-//     CML.PlutusScript.from_v2(
-//       CML.PlutusV2Script.from_cbor_bytes(
-//         CML.PlutusV2Script.from_cbor_bytes(fromHex(script)).to_cbor_bytes()
-//       )
-//     );
-//     return script;
-//   } catch (_e) {
-//   console.log(_e)
-//     return CML.PlutusScript.from_v2(
-//       CML.PlutusV2Script.from_cbor_bytes(fromHex(script))
-//     )
-//       .as_v2()!
-//       .to_cbor_hex();
-//   }
-// }
+// 1st byte (58) 0101(major type 2) , 1000 (additional info)
+// 2n byte byte represents the lenght of the content
+// 3rd byte represents bytestring content
+// https://www.rfc-editor.org/rfc/rfc7049#section-2.1
+// Apply double bytestring enconding of type `major type 2`
+export const applyDoubleCborEncoding = (script: string) => {
+  try {
+    decode(decode(fromHex(script)));
+    return script;
+  } catch (error) {
+    return toHex(encode(fromHex(script)));
+  }
+};
