@@ -164,7 +164,7 @@ importers:
         version: 5.2.0
       '@effect/schema':
         specifier: ^0.62.9
-        version: 0.62.9(effect@2.4.1)(fast-check@3.17.1)
+        version: 0.62.9(effect@2.4.18)(fast-check@3.17.1)
       '@emurgo/cardano-message-signing-nodejs':
         specifier: ^1.0.1
         version: 1.0.1
@@ -196,8 +196,8 @@ importers:
         specifier: workspace:*
         version: link:../wallet
       effect:
-        specifier: ^2.4.1
-        version: 2.4.1
+        specifier: ^2.4.18
+        version: 2.4.18
     devDependencies:
       '@types/node':
         specifier: ^20.11.24
@@ -820,13 +820,13 @@ packages:
     resolution: {integrity: sha512-EwXyOF0MrHGBDFyqjGqxhvpYqq0I4x1RtDW8eubQoePFpHnysiYUf6qYdnP7FRLpuiyubQC96P0lurYkISCBeA==}
     dev: false
 
-  /@effect/schema@0.62.9(effect@2.4.1)(fast-check@3.17.1):
+  /@effect/schema@0.62.9(effect@2.4.18)(fast-check@3.17.1):
     resolution: {integrity: sha512-u5LJqk3MClXr8DxiN/AGUBUxVnsl8o6glOTfToFECn3I+slVW/vbzLMRyUqbNNp2uBpdP6UGwmp9VVYxd72bBg==}
     peerDependencies:
       effect: ^2.3.8
       fast-check: ^3.13.2
     dependencies:
-      effect: 2.4.1
+      effect: 2.4.18
       fast-check: 3.17.1
     dev: false
 
@@ -3601,8 +3601,8 @@ packages:
     resolution: {integrity: sha512-I88TYZWc9XiYHRQ4/3c5rjjfgkjhLyW2luGIheGERbNQ6OY7yTybanSpDXZa8y7VUP9YmDcYa+eyq4ca7iLqWA==}
     dev: true
 
-  /effect@2.4.1:
-    resolution: {integrity: sha512-YsoMB/EGCohGKFyTPYqaFe2B7UCU2MM303dkoowF8DNOdks/4q/00cyhTbBUmM/0FMDoUPmUi/AJ0Aj3E7vO1A==}
+  /effect@2.4.18:
+    resolution: {integrity: sha512-8nNzkhSzFLhG9YxowXKawlk4+b3zwwOsbZwaaYhy1OjZGcEgcE6i0ywMFieXNSfOtsQ8swV1+5hvF+VBEtwwqg==}
     dev: false
 
   /electron-to-chromium@1.4.583:

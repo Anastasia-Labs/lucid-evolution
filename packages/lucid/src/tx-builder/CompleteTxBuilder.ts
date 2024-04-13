@@ -2,9 +2,9 @@ import { Effect } from "effect";
 import { Address, OutputData, UTxO } from "@lucid-evolution/core-types";
 import { TxBuilderConfig } from "./types.js";
 import {
-  CollateralInputNotFound,
-  GetUTxosCoreError,
-  WalletAddressError,
+  NotFoundError,
+  ProviderError,
+  UPLCEvalError,
   makeRunTimeError,
 } from "../Errors.js";
 import * as CML from "@dcspark/cardano-multiplatform-lib-nodejs";
@@ -28,31 +28,37 @@ export const completeTxBuilder = (
   },
 ) => {
   const program = Effect.gen(function* ($) {
-    const wallet = yield* $(Effect.fromNullable(config.lucidConfig.wallet));
+    const wallet = yield* $(
+      Effect.fromNullable(config.lucidConfig.wallet),
+      Effect.orElseFail(
+        () => new NotFoundError({ message: "Wallet must be set" }),
+      ),
+    );
 
     yield* $(Effect.all(config.programs, { concurrency: "unbounded" }));
 
     const walletCoreUtxos = yield* $(
       Effect.tryPromise({
         try: () => wallet.getUtxosCore(),
-        catch: (_e) => new GetUTxosCoreError(),
+        catch: (e) => new ProviderError({ message: String(e) }),
       }),
     );
     const walletUtxos = yield* $(
       Effect.tryPromise({
         try: () => wallet.getUtxos(),
-        catch: (_e) => new GetUTxosCoreError(),
+        catch: (e) => new ProviderError({ message: String(e) }),
       }),
     );
     if (config.inputUTxOs?.find((value) => value.datum)) {
       const collateralInput: UTxO = yield* $(
         Effect.fromNullable(
           walletUtxos.find(
-            (value) => value.assets["lovelace"] >= 5_000_000n,
-            // &&
-            // Object.keys(value.assets).length === 1,
+            (value) => value.assets["lovelace"] >= 5_000_000n, // && Object.keys(value.assets).length === 1,
           ),
-        ).pipe(Effect.mapError(() => new CollateralInputNotFound())),
+        ),
+        Effect.orElseFail(
+          () => new NotFoundError({ message: "No collateralInput found" }),
+        ),
       );
       const collateralInputCore = utxoToCore(collateralInput);
       const collateralOut = utxoToTransactionOutput(collateralInput);
@@ -105,12 +111,7 @@ export const completeTxBuilder = (
         );
       }
     }
-    const changeAddress = yield* $(
-      Effect.tryPromise({
-        try: () => wallet.address(),
-        catch: (_e) => new WalletAddressError(),
-      }),
-    );
+    const changeAddress = yield* $(Effect.promise(() => wallet.address()));
 
     const slotConfig = SLOT_CONFIG_NETWORK[config.lucidConfig.network];
     const costmodel = createCostModels(
@@ -131,17 +132,22 @@ export const completeTxBuilder = (
       const txUtxos = [...walletUtxos, ...config.inputUTxOs!];
       const ins = txUtxos.map((utxo) => utxoToTransactionInput(utxo));
       const outs = txUtxos.map((utxo) => utxoToTransactionOutput(utxo));
-      //FIX:  this can fail
-      const uplc_eval = UPLC.eval_phase_two_raw(
-        txEvaluation!.to_cbor_bytes(),
-        ins.map((value) => value.to_cbor_bytes()),
-        outs.map((value) => value.to_cbor_bytes()),
-        costmodel.to_cbor_bytes(),
-        config.lucidConfig.protocolParameters.maxTxExSteps,
-        config.lucidConfig.protocolParameters.maxTxExMem,
-        BigInt(slotConfig.zeroTime),
-        BigInt(slotConfig.zeroSlot),
-        slotConfig.slotLength,
+      const uplc_eval = yield* $(
+        Effect.try({
+          try: () =>
+            UPLC.eval_phase_two_raw(
+              txEvaluation!.to_cbor_bytes(),
+              ins.map((value) => value.to_cbor_bytes()),
+              outs.map((value) => value.to_cbor_bytes()),
+              costmodel.to_cbor_bytes(),
+              config.lucidConfig.protocolParameters.maxTxExSteps,
+              config.lucidConfig.protocolParameters.maxTxExMem,
+              BigInt(slotConfig.zeroTime),
+              BigInt(slotConfig.zeroSlot),
+              slotConfig.slotLength,
+            ),
+          catch: (error) => new UPLCEvalError({ message: String(error) }),
+        }),
       );
       applyUPLCEval(uplc_eval, config.txBuilder);
     }

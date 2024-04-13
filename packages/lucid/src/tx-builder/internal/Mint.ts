@@ -3,8 +3,7 @@ import { toText } from "@lucid-evolution/core-utils";
 import { Assets, Redeemer } from "@lucid-evolution/core-types";
 import * as CML from "@dcspark/cardano-multiplatform-lib-nodejs";
 import { toPartial, toV1, toV2 } from "../utils.js";
-import { MintError } from "../../Errors.js";
-import { NoSuchElementException } from "effect/Cause";
+import { MintError, NotFoundError, makeMintError } from "../../Errors.js";
 import { TxBuilderConfig } from "../types.js";
 
 /**
@@ -16,57 +15,78 @@ export const mintAssets = (
   config: TxBuilderConfig,
   assets: Assets,
   redeemer?: Redeemer,
-) => {
-  const program: Effect.Effect<void, MintError | NoSuchElementException> =
-    Effect.gen(function* ($) {
-      const units = Object.keys(assets);
-      const policyId = units[0].slice(0, 56);
-      const mintAssets = CML.MapAssetNameToNonZeroInt64.new();
-      for (const unit of units) {
-        if (unit.slice(0, 56) !== policyId) {
-          yield* $(new MintError());
-        }
-        mintAssets.insert(
-          //NOTE: toText is used to maintain API compatibility
-          CML.AssetName.from_str(toText(unit.slice(56))),
-          assets[unit],
-        );
+): Effect.Effect<void, MintError | NotFoundError> => {
+  const program = Effect.gen(function* ($) {
+    const units = Object.keys(assets);
+    const policyId = units[0].slice(0, 56);
+    const mintAssets = CML.MapAssetNameToNonZeroInt64.new();
+    for (const unit of units) {
+      if (unit.slice(0, 56) !== policyId) {
+        yield* $(makeMintError());
       }
-      const mintBuilder = CML.SingleMintBuilder.new(mintAssets);
-      const policy = yield* $(
-        Effect.fromNullable(config.scripts.get(policyId)),
+      mintAssets.insert(
+        //NOTE: toText is used to maintain API compatibility
+        CML.AssetName.from_str(toText(unit.slice(56))),
+        assets[unit],
       );
-      switch (policy.type) {
-        case "Native":
-          config.txBuilder.add_mint(
-            mintBuilder.native_script(
-              CML.NativeScript.from_cbor_hex(policy.script),
-              CML.NativeScriptWitnessInfo.assume_signature_count(),
-            ),
-          );
-          break;
+    }
+    const mintBuilder = CML.SingleMintBuilder.new(mintAssets);
+    const policy = yield* $(
+      Effect.fromNullable(config.scripts.get(policyId)),
+      Effect.orElseFail(
+        () =>
+          new NotFoundError({
+            message: `No policy found, policy id: ${policyId}`,
+          }),
+      ),
+    );
+    switch (policy.type) {
+      case "Native":
+        config.txBuilder.add_mint(
+          mintBuilder.native_script(
+            CML.NativeScript.from_cbor_hex(policy.script),
+            CML.NativeScriptWitnessInfo.assume_signature_count(),
+          ),
+        );
+        break;
 
-        case "PlutusV1": {
-          const red = yield* $(Effect.fromNullable(redeemer));
-          config.txBuilder.add_mint(
-            mintBuilder.plutus_script(
-              toPartial(toV1(policy.script), red),
-              CML.RequiredSigners.new(),
-            ),
-          );
-          break;
-        }
-        case "PlutusV2": {
-          const red = yield* $(Effect.fromNullable(redeemer));
-          config.txBuilder.add_mint(
-            mintBuilder.plutus_script(
-              toPartial(toV2(policy.script), red),
-              CML.RequiredSigners.new(),
-            ),
-          );
-          break;
-        }
+      case "PlutusV1": {
+        const red = yield* $(
+          Effect.fromNullable(redeemer),
+          Effect.orElseFail(
+            () =>
+              new NotFoundError({
+                message: `redeemer can not be undefined`,
+              }),
+          ),
+        );
+        config.txBuilder.add_mint(
+          mintBuilder.plutus_script(
+            toPartial(toV1(policy.script), red),
+            CML.RequiredSigners.new(),
+          ),
+        );
+        break;
       }
-    });
+      case "PlutusV2": {
+        const red = yield* $(
+          Effect.fromNullable(redeemer),
+          Effect.orElseFail(
+            () =>
+              new NotFoundError({
+                message: `redeemer can not be undefined`,
+              }),
+          ),
+        );
+        config.txBuilder.add_mint(
+          mintBuilder.plutus_script(
+            toPartial(toV2(policy.script), red),
+            CML.RequiredSigners.new(),
+          ),
+        );
+        break;
+      }
+    }
+  });
   return program;
 };
