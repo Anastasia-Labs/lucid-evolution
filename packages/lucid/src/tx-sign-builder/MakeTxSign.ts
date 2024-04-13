@@ -3,14 +3,19 @@ import { LucidConfig } from "../lucid-evolution/LucidEvolution.js";
 import { Effect } from "effect";
 import { makeReturn } from "../tx-builder/utils.js";
 import { PrivateKey } from "@lucid-evolution/core-types";
-import { RunTimeError, makeRunTimeError } from "../Errors.js";
+import {
+  NotFoundError,
+  TransactionSignError,
+  WalletError,
+  makeRunTimeError,
+} from "../Errors.js";
 import { TxSigned, completeTxSign } from "./CompleteTxSign.js";
 import { Either } from "effect/Either";
 
 export type TxSignBuilderConfig = {
   txComplete: CML.Transaction;
   witnessSetBuilder: CML.TransactionWitnessSetBuilder;
-  programs: Effect.Effect<void, Error, never>[];
+  programs: Effect.Effect<void, TransactionSignError, never>[];
   lucidConfig: LucidConfig;
   fee: number;
   exUnits: { cpu: number; mem: number } | null;
@@ -22,9 +27,9 @@ export type TxSignBuilder = {
     withPrivateKey: (privateKey: PrivateKey) => TxSignBuilder;
   };
   complete: () => {
-    safeRun: () => Promise<Either<TxSigned, Error | RunTimeError>>;
+    safeRun: () => Promise<Either<TxSigned, TransactionSignError>>;
     unsafeRun: () => Promise<TxSigned>;
-    program: () => Effect.Effect<TxSigned, Error | RunTimeError, never>;
+    program: () => Effect.Effect<TxSigned, TransactionSignError, never>;
   };
 };
 
@@ -56,11 +61,14 @@ export const makeTxSignBuilder = (
         const program = Effect.gen(function* ($) {
           const wallet = yield* $(
             Effect.fromNullable(config.lucidConfig.wallet),
+            Effect.orElseFail(
+              () => new NotFoundError({ message: "wallet must be set" }),
+            ),
           );
           const witnesses = yield* $(
             Effect.tryPromise({
               try: () => wallet.signTx(config.txComplete),
-              catch: (_e) => new Error(),
+              catch: (e) => new WalletError({ message: String(e) }),
             }),
           );
           // console.log("witness", witnesses.to_json());
@@ -90,7 +98,13 @@ export const makeTxSignBuilder = (
           true,
           config.txComplete.auxiliary_data(),
         );
-        return completeTxSign(config.lucidConfig, signedTx);
+        const wallet = yield* $(
+          Effect.fromNullable(config.lucidConfig.wallet),
+          Effect.orElseFail(
+            () => new NotFoundError({ message: "wallet must be set" }),
+          ),
+        );
+        return completeTxSign(wallet, signedTx);
       }).pipe(Effect.catchAllDefect(makeRunTimeError));
       return makeReturn(program);
     },

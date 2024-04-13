@@ -10,7 +10,7 @@ import {
   validatorToAddress,
 } from "../src";
 import { test } from "vitest";
-import { Effect } from "effect";
+import { Cause, Console, Effect, Either, Match } from "effect";
 import { encode } from "cborg";
 import { isRight } from "effect/Either";
 const helloCBOR =
@@ -66,8 +66,6 @@ test.skip("collect", async () => {
     getAddressDetails(await user.wallet().address()).paymentCredential?.hash,
   );
   const utxos = await user.utxosAt(contractAddress);
-  console.log("contract utxos", utxos);
-  console.log("user utxos", await user.wallet().getUtxos());
   const redeemer = Data.to(new Constr(0, [fromText("Hello, World!")]));
   const tx = user
     .newTx()
@@ -81,12 +79,32 @@ test.skip("collect", async () => {
   const txhash = await tx.pipe(
     Effect.flatMap((tx) => tx.sign.withWallet().complete().program()),
     //NOTE: enable if you want to submit signed tx on preprod
-    Effect.flatMap((signedTx) => Effect.promise(() => signedTx.submit()!)),
+    Effect.flatMap((signedTx) => Effect.promise(() => signedTx.submit())),
     Effect.flatMap((txHash) => Effect.log(txHash)),
+    Effect.tapErrorCause((cause) => Console.log(Cause.pretty(cause))),
     Effect.either,
     Effect.runPromise,
   );
+  console.log(txhash);
   // console.log(signed)
   // const txHash = await signed.submit();
-  console.log(txhash);
+  // Either.match(txhash, {
+  //   onLeft(left) {
+  //     console.log(Cause.pretty(left));
+  //   },
+  //   onRight(right) {},
+  // });
+
+  // try {
+  //   const txhash = await tx.pipe(
+  //     Effect.flatMap((tx) => tx.sign.withWallet().complete().program()),
+  //     //NOTE: enable if you want to submit signed tx on preprod
+  //     Effect.flatMap((signedTx) => Effect.promise(() => signedTx.submit()!)),
+  //     Effect.flatMap((txHash) => Effect.log(txHash)),
+  //     Effect.tapErrorCause((cause) => Console.log(Cause.pretty(cause))),
+  //     Effect.runPromise
+  //   );
+  // } catch (error) {
+  //   console.log(error.stack);
+  // }
 });

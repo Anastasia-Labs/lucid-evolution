@@ -1,5 +1,8 @@
 import { expect, test } from "vitest";
 import { Blockfrost, Lucid } from "../src/index.js";
+import { Cause, Console, Data, Effect } from "effect";
+import { pretty } from "effect/Cause";
+import { catchTag, matchCause, matchCauseEffect } from "effect/Effect";
 
 test("test txHash", async () => {
   const projectId = process.env.VITE_BLOCKFROST_KEY;

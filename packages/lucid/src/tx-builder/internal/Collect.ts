@@ -3,7 +3,12 @@ import { Data } from "@lucid-evolution/plutus";
 import { utxoToCore } from "@lucid-evolution/utils";
 import { Redeemer, ScriptType, UTxO } from "@lucid-evolution/core-types";
 import { TxBuilderConfig } from "../types.js";
-import { DatumOfError, EmptyList } from "../../Errors.js";
+import {
+  DatumError,
+  EmptyUTXOArrayError,
+  NotFoundError,
+  makeEmptyUTXOArrayError,
+} from "../../Errors.js";
 import * as CML from "@dcspark/cardano-multiplatform-lib-nodejs";
 import { toPartial, toV1, toV2 } from "../utils.js";
 import { paymentCredentialOf } from "@lucid-evolution/utils";
@@ -13,22 +18,15 @@ export const collectFromUTxO = (
   config: TxBuilderConfig,
   utxos: UTxO[],
   redeemer?: Redeemer,
-) => {
+): Effect.Effect<void, EmptyUTXOArrayError | DatumError | NotFoundError> => {
   const program = Effect.gen(function* ($) {
-    if (utxos.length == 0)
-      yield* $(
-        new EmptyList({
-          message:
-            "You're trying to consume an empty list of utxos -> " +
-            collectFromUTxO.name,
-        }),
-      );
+    if (utxos.length === 0) yield* $(makeEmptyUTXOArrayError());
     for (const utxo of utxos) {
       if (utxo.datumHash && !utxo.datum) {
         const data = yield* $(
           Effect.tryPromise({
             try: () => datumOf(config.lucidConfig.provider)(utxo),
-            catch: (_e) => new DatumOfError(),
+            catch: (e) => new DatumError({ message: String(e) }),
           }),
         );
         utxo.datum = Data.to(data);
@@ -42,8 +40,13 @@ export const collectFromUTxO = (
       if (redeemer && credential.type == "Script") {
         const script = yield* $(
           Effect.fromNullable(config.scripts.get(credential.hash)),
+          Effect.orElseFail(
+            () =>
+              new NotFoundError({
+                message: `No script found, credential.hash: ${credential.hash}`,
+              }),
+          ),
         );
-        // console.log("script", script);
         const inputResult = (script: { type: ScriptType; script: string }) => {
           switch (script.type) {
             case "Native":
@@ -59,9 +62,7 @@ export const collectFromUTxO = (
               );
             case "PlutusV2": {
               const v2 = toV2(script.script);
-              // console.log("after v2");
               const partial = toPartial(v2, redeemer);
-
               return input.plutus_script_inline_datum(
                 partial,
                 CML.RequiredSigners.new(),
@@ -75,7 +76,6 @@ export const collectFromUTxO = (
           }
         };
         const r = inputResult(script);
-        // console.log("test fail");
         config.txBuilder.add_input(r);
       } else {
         config.txBuilder.add_input(input.payment_key());
