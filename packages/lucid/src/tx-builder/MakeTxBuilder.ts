@@ -9,7 +9,7 @@ import * as Pay from "./internal/Pay.js";
 import * as Mint from "./internal/Mint.js";
 import * as Interval from "./internal/Interval.js";
 import * as Signer from "./internal/Signer.js";
-import { completeTxBuilder } from "./CompleteTxBuilder.js";
+import { completeTxBuilder } from "./internal/CompleteTxBuilder.js";
 import { TxSignBuilder } from "../tx-sign-builder/MakeTxSign.js";
 import { TransactionError } from "../Errors.js";
 import { Either } from "effect/Either";

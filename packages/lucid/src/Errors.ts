@@ -1,57 +1,61 @@
 import { Data, Effect } from "effect";
 
-export class MissingDatumError {
-  readonly _tag = "NoUTXOsInScriptError";
-}
+export type TxBuilderErrorCause =
+  | "UPLCEval"
+  | "Datum"
+  | "NotFound"
+  | "Provider"
+  | "EmptyUTXO"
+  | "MissingCollateralInput"
+  | "MultiplePolicies"
+  | "InvalidNetwork"
+  | "MissingWallet"
+  | "MissingScript"
+  | "MissingPolicy"
+  | "MissingRedeemer"
+  | "Address"
+  | "InvalidCredential";
 
-export class InvalidDatumError {
-  readonly _tag = "InvalidDatumError";
-}
+export type TxBuilderErrorModule =
+  | "Attach"
+  | "Collect"
+  | "Governance"
+  | "Interval"
+  | "Mint"
+  | "Pay"
+  | "Read"
+  | "Signer"
+  | "Complete";
 
-export class UPLCEvalError extends Data.TaggedError("UPLCPhase2Error")<{
-  readonly message: string;
+export const ERROR_MESSAGE = {
+  MULTIPLE_POLICIES:
+    "Only one policy id allowed. You can chain multiple mintAssets functions together if you need to mint assets with different policy ids. ",
+  EMPTY_UTXO:
+    "UTxO array is empty. If a Tx has been recently submitted, consider waiting for chain sync",
+  MISSING_WALLET:
+    "Please ensure that it has been properly configured and initialized",
+  MISSIG_REDEEMER: "redeemer can not be undefined",
+};
+
+export class TxBuilderError extends Data.TaggedError("TxBuilderError")<{
+  readonly cause: TxBuilderErrorCause;
+  readonly module: TxBuilderErrorModule;
+  readonly message?: string;
 }> {}
 
-export class DatumError extends Data.TaggedError("DatumError")<{
-  readonly message: string;
+export type TxSignerErrorCause = "MissingWallet" | "Signature";
+
+export type TxSignerErrorModule = "Sign" | "Complete";
+
+export class TxSignerError extends Data.TaggedError("TxBuilderError")<{
+  readonly cause: TxSignerErrorCause;
+  readonly module: TxSignerErrorModule;
+  readonly message?: string;
 }> {}
 
-export class NotFoundError extends Data.TaggedError("NotFoundError")<{
-  readonly message: string;
-}> {}
+export type TransactionError = RunTimeError | TxBuilderError;
 
-export class ProviderError extends Data.TaggedError("ProviderError")<{
-  readonly message: string;
-}> {}
-
-export class EmptyArrayError extends Data.TaggedError("EmptyArrayError")<{
-  message?: string;
-}> {}
-export class EmptyUTXOArrayError extends Data.TaggedError(
-  "EmptyUTXOArrayError",
-)<{
-  message: string;
-}> {}
-
-export const makeEmptyUTXOArrayError = () =>
-  new EmptyUTXOArrayError({
-    message:
-      "UTxO array is empty. If a Tx has been recently submitted, consider waiting for chain sync",
-  });
-
-export class SignerError extends Data.TaggedError("SignerError")<{
-  message: string;
-}> {}
-
-export class MintError extends Data.TaggedError("MintError")<{
-  message: string;
-}> {}
-
-export const makeMintError = () =>
-  new MintError({
-    message:
-      "Only one policy id allowed. You can chain multiple mintAssets functions together if you need to mint assets with different policy ids. ",
-  });
+export type TransactionSignError = RunTimeError | TxSignerError;
 
 //NOTE: RunTimeError is used to catch all unexpected errors primarly from CML library
 export class RunTimeError extends Data.TaggedError("RunTimeError")<{
@@ -60,35 +64,6 @@ export class RunTimeError extends Data.TaggedError("RunTimeError")<{
     stack: string | undefined;
   };
 }> {}
-
-export class TxRunTimeError extends Data.TaggedError("TxRunTimeError")<{
-  message: string;
-}> {}
-
-export class NetworkError extends Data.TaggedError("NetworkError")<{
-  message: string;
-}> {}
-
-export class WalletError extends Data.TaggedError("WalletError")<{
-  message: string;
-}> {}
-
-export type TransactionError =
-  | MissingDatumError
-  | InvalidDatumError
-  | DatumError
-  | ProviderError
-  | TxRunTimeError
-  | NetworkError
-  | MintError
-  | SignerError
-  | EmptyArrayError
-  | EmptyUTXOArrayError
-  | UPLCEvalError
-  | NotFoundError
-  | RunTimeError;
-
-export type TransactionSignError = RunTimeError | NotFoundError | WalletError;
 
 export const makeRunTimeError = (
   error: unknown,

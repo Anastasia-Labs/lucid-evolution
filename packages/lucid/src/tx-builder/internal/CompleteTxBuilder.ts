@@ -1,14 +1,14 @@
 import { Effect } from "effect";
 import { Address, OutputData, UTxO } from "@lucid-evolution/core-types";
-import { TxBuilderConfig } from "./types.js";
+import { TxBuilderConfig } from "../types.js";
 import {
-  NotFoundError,
-  ProviderError,
-  UPLCEvalError,
+  ERROR_MESSAGE,
+  TxBuilderError,
+  TxBuilderErrorCause,
   makeRunTimeError,
-} from "../Errors.js";
+} from "../../Errors.js";
 import * as CML from "@dcspark/cardano-multiplatform-lib-nodejs";
-import { makeTxSignBuilder } from "../tx-sign-builder/MakeTxSign.js";
+import { makeTxSignBuilder } from "../../tx-sign-builder/MakeTxSign.js";
 import * as UPLC from "@lucid-evolution/uplc";
 import {
   createCostModels,
@@ -17,7 +17,10 @@ import {
   utxoToTransactionOutput,
 } from "@lucid-evolution/utils";
 import { SLOT_CONFIG_NETWORK } from "@lucid-evolution/plutus";
-import { makeReturn } from "./utils.js";
+import { makeReturn } from "./Utils.js";
+
+export const completeTxError = (cause: TxBuilderErrorCause, message?: string) =>
+  new TxBuilderError({ cause, module: "Complete", message });
 
 export const completeTxBuilder = (
   config: TxBuilderConfig,
@@ -30,8 +33,8 @@ export const completeTxBuilder = (
   const program = Effect.gen(function* ($) {
     const wallet = yield* $(
       Effect.fromNullable(config.lucidConfig.wallet),
-      Effect.orElseFail(
-        () => new NotFoundError({ message: "Wallet must be set" }),
+      Effect.orElseFail(() =>
+        completeTxError("MissingWallet", ERROR_MESSAGE.MISSING_WALLET),
       ),
     );
 
@@ -40,13 +43,13 @@ export const completeTxBuilder = (
     const walletCoreUtxos = yield* $(
       Effect.tryPromise({
         try: () => wallet.getUtxosCore(),
-        catch: (e) => new ProviderError({ message: String(e) }),
+        catch: (error) => completeTxError("Provider", String(error)),
       }),
     );
     const walletUtxos = yield* $(
       Effect.tryPromise({
         try: () => wallet.getUtxos(),
-        catch: (e) => new ProviderError({ message: String(e) }),
+        catch: (error) => completeTxError("Provider", String(error)),
       }),
     );
     if (config.inputUTxOs?.find((value) => value.datum)) {
@@ -56,8 +59,8 @@ export const completeTxBuilder = (
             (value) => value.assets["lovelace"] >= 5_000_000n, // && Object.keys(value.assets).length === 1,
           ),
         ),
-        Effect.orElseFail(
-          () => new NotFoundError({ message: "No collateralInput found" }),
+        Effect.orElseFail(() =>
+          completeTxError("MissingCollateralInput", "No collateralInput found"),
         ),
       );
       const collateralInputCore = utxoToCore(collateralInput);
@@ -127,7 +130,7 @@ export const completeTxBuilder = (
     );
     if (tx_evaluation.draft_tx().witness_set().redeemers()) {
       //FIX: this returns undefined
-      const txEvaluation = setRedeemerstoZero(tx_evaluation.draft_tx());
+      const txEvaluation = setRedeemerstoZero(tx_evaluation.draft_tx())!;
       // console.log(txEvaluation?.to_json());
       const txUtxos = [...walletUtxos, ...config.inputUTxOs!];
       const ins = txUtxos.map((utxo) => utxoToTransactionInput(utxo));
@@ -136,7 +139,7 @@ export const completeTxBuilder = (
         Effect.try({
           try: () =>
             UPLC.eval_phase_two_raw(
-              txEvaluation!.to_cbor_bytes(),
+              txEvaluation.to_cbor_bytes(),
               ins.map((value) => value.to_cbor_bytes()),
               outs.map((value) => value.to_cbor_bytes()),
               costmodel.to_cbor_bytes(),
@@ -146,7 +149,12 @@ export const completeTxBuilder = (
               BigInt(slotConfig.zeroSlot),
               slotConfig.slotLength,
             ),
-          catch: (error) => new UPLCEvalError({ message: String(error) }),
+          catch: (error) =>
+            //TODO: improve format
+            completeTxError(
+              "UPLCEval",
+              JSON.stringify(error).replace(/\\n/g, ""),
+            ),
         }),
       );
       applyUPLCEval(uplc_eval, config.txBuilder);
@@ -162,7 +170,6 @@ export const completeTxBuilder = (
         CML.Address.from_bech32(changeAddress),
       )
       .build_unchecked();
-    // console.log(tx.to_json());
 
     return makeTxSignBuilder(config.lucidConfig, tx);
   }).pipe(Effect.catchAllDefect(makeRunTimeError));
