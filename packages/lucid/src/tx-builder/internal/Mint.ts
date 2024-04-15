@@ -2,7 +2,7 @@ import { Effect } from "effect";
 import { toText } from "@lucid-evolution/core-utils";
 import { Assets, Redeemer } from "@lucid-evolution/core-types";
 import * as CML from "@dcspark/cardano-multiplatform-lib-nodejs";
-import { toPartial, toV1, toV2 } from "./Utils.js";
+import { toPartial, toV1, toV2 } from "./TxUtils.js";
 import {
   ERROR_MESSAGE,
   TxBuilderError,

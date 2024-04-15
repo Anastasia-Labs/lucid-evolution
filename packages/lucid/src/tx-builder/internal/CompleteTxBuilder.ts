@@ -17,7 +17,7 @@ import {
   utxoToTransactionOutput,
 } from "@lucid-evolution/utils";
 import { SLOT_CONFIG_NETWORK } from "@lucid-evolution/plutus";
-import { makeReturn } from "./Utils.js";
+import { makeReturn } from "./TxUtils.js";
 
 export const completeTxError = (cause: TxBuilderErrorCause, message?: string) =>
   new TxBuilderError({ cause, module: "Complete", message });

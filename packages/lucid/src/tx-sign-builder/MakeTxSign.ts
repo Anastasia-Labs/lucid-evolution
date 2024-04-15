@@ -2,7 +2,7 @@ import * as CML from "@dcspark/cardano-multiplatform-lib-nodejs";
 import { LucidConfig } from "../lucid-evolution/LucidEvolution.js";
 import { Effect } from "effect";
 //TODO: move to commont utils
-import { makeReturn } from "../tx-builder/internal/Utils.js";
+import { makeReturn } from "../tx-builder/internal/TxUtils.js";
 import { PrivateKey } from "@lucid-evolution/core-types";
 import {
   ERROR_MESSAGE,
