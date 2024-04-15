@@ -5,23 +5,27 @@ import { UTxO } from "@lucid-evolution/core-types";
 import { TxBuilderConfig } from "../types.js";
 import { datumOf } from "../../lucid-evolution/utils.js";
 import {
-  DatumError,
-  EmptyUTXOArrayError,
-  makeEmptyUTXOArrayError,
+  ERROR_MESSAGE,
+  TxBuilderError,
+  TxBuilderErrorCause,
 } from "../../Errors.js";
+
+export const readError = (cause: TxBuilderErrorCause, message?: string) =>
+  new TxBuilderError({ cause, module: "Read", message });
 
 export const readFrom = (
   config: TxBuilderConfig,
   utxos: UTxO[],
-): Effect.Effect<void, DatumError | EmptyUTXOArrayError> => {
+): Effect.Effect<void, TxBuilderError> => {
   const program = Effect.gen(function* ($) {
-    if (utxos.length === 0) yield* $(makeEmptyUTXOArrayError());
+    if (utxos.length === 0)
+      yield* $(readError("EmptyUTXO", ERROR_MESSAGE.EMPTY_UTXO));
     for (const utxo of utxos) {
       if (utxo.datumHash) {
         const data = yield* $(
           Effect.tryPromise({
             try: () => datumOf(config.lucidConfig.provider)(utxo),
-            catch: (e) => new DatumError({ message: String(e) }),
+            catch: (error) => readError("Datum", String(error)),
           }),
         );
         utxo.datum = Data.to(data);

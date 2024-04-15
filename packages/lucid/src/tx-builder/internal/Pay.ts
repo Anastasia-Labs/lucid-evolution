@@ -3,7 +3,7 @@ import { assetsToValue, toScriptRef } from "@lucid-evolution/utils";
 import { Address, Assets, Script } from "@lucid-evolution/core-types";
 import { OutputDatum, TxBuilderConfig } from "../types.js";
 import * as CML from "@dcspark/cardano-multiplatform-lib-nodejs";
-import { addressFromWithNetworkCheck, toDatumOption } from "../utils.js";
+import { addressFromWithNetworkCheck, toDatumOption } from "./TxUtils.js";
 
 /** Pay to a public key or native script address. */
 export const payToAddress = (

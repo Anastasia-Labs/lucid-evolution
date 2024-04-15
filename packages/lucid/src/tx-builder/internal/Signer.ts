@@ -8,7 +8,10 @@ import { TxBuilderConfig } from "../types.js";
 import { getAddressDetails } from "@lucid-evolution/utils";
 import { Effect, pipe } from "effect";
 import * as CML from "@dcspark/cardano-multiplatform-lib-nodejs";
-import { SignerError } from "../../Errors.js";
+import { TxBuilderError, TxBuilderErrorCause } from "../../Errors.js";
+
+export const addSignerError = (cause: TxBuilderErrorCause, message?: string) =>
+  new TxBuilderError({ cause, module: "Signer", message });
 
 export const addSigner = (
   config: TxBuilderConfig,
@@ -16,21 +19,27 @@ export const addSigner = (
 ) => {
   const program = Effect.gen(function* ($) {
     const addressDetails = getAddressDetails(address);
-    if (!addressDetails.paymentCredential && !addressDetails.stakeCredential) {
-      yield* $(new SignerError({ message: "Not a valid address." }));
-    }
+    if (!addressDetails.paymentCredential && !addressDetails.stakeCredential)
+      yield* $(
+        addSignerError(
+          "NotFound",
+          "undefined paymentCredential and stakeCredential",
+        ),
+      );
 
     const credential =
       addressDetails.type === "Reward"
         ? addressDetails.stakeCredential!
         : addressDetails.paymentCredential!;
 
-    if (credential.type === "Script") {
+    if (credential.type === "Script")
       yield* $(
-        new SignerError({ message: "Only key hashes are allowed as signers." }),
+        addSignerError(
+          "InvalidCredential",
+          "Only key hashes are allowed as signers.",
+        ),
       );
-    }
-    // console.log("credential.hash", credential.hash);
+
     return credential.hash;
   });
   return pipe(

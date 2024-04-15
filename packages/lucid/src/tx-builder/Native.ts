@@ -2,6 +2,7 @@ import * as S from "@effect/schema/Schema";
 import * as CML from "@dcspark/cardano-multiplatform-lib-nodejs";
 import { Script } from "@lucid-evolution/core-types";
 
+//TODO: move to another package
 export type NativeScriptType =
   | {
       ScriptPubkey: {

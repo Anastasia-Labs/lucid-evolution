@@ -2,9 +2,16 @@ import { Effect } from "effect";
 import { toText } from "@lucid-evolution/core-utils";
 import { Assets, Redeemer } from "@lucid-evolution/core-types";
 import * as CML from "@dcspark/cardano-multiplatform-lib-nodejs";
-import { toPartial, toV1, toV2 } from "../utils.js";
-import { MintError, NotFoundError, makeMintError } from "../../Errors.js";
+import { toPartial, toV1, toV2 } from "./TxUtils.js";
+import {
+  ERROR_MESSAGE,
+  TxBuilderError,
+  TxBuilderErrorCause,
+} from "../../Errors.js";
 import { TxBuilderConfig } from "../types.js";
+
+export const mintError = (cause: TxBuilderErrorCause, message?: string) =>
+  new TxBuilderError({ cause, module: "Mint", message });
 
 /**
  * All assets should be of the same policy id.
@@ -15,14 +22,16 @@ export const mintAssets = (
   config: TxBuilderConfig,
   assets: Assets,
   redeemer?: Redeemer,
-): Effect.Effect<void, MintError | NotFoundError> => {
+): Effect.Effect<void, TxBuilderError> => {
   const program = Effect.gen(function* ($) {
     const units = Object.keys(assets);
     const policyId = units[0].slice(0, 56);
     const mintAssets = CML.MapAssetNameToNonZeroInt64.new();
     for (const unit of units) {
       if (unit.slice(0, 56) !== policyId) {
-        yield* $(makeMintError());
+        yield* $(
+          mintError("MultiplePolicies", ERROR_MESSAGE.MULTIPLE_POLICIES),
+        );
       }
       mintAssets.insert(
         //NOTE: toText is used to maintain API compatibility
@@ -33,11 +42,8 @@ export const mintAssets = (
     const mintBuilder = CML.SingleMintBuilder.new(mintAssets);
     const policy = yield* $(
       Effect.fromNullable(config.scripts.get(policyId)),
-      Effect.orElseFail(
-        () =>
-          new NotFoundError({
-            message: `No policy found, policy id: ${policyId}`,
-          }),
+      Effect.orElseFail(() =>
+        mintError("MissingPolicy", `No policy found, policy id: ${policyId}`),
       ),
     );
     switch (policy.type) {
@@ -53,11 +59,8 @@ export const mintAssets = (
       case "PlutusV1": {
         const red = yield* $(
           Effect.fromNullable(redeemer),
-          Effect.orElseFail(
-            () =>
-              new NotFoundError({
-                message: `redeemer can not be undefined`,
-              }),
+          Effect.orElseFail(() =>
+            mintError("MissingRedeemer", ERROR_MESSAGE.MISSIG_REDEEMER),
           ),
         );
         config.txBuilder.add_mint(
@@ -71,11 +74,8 @@ export const mintAssets = (
       case "PlutusV2": {
         const red = yield* $(
           Effect.fromNullable(redeemer),
-          Effect.orElseFail(
-            () =>
-              new NotFoundError({
-                message: `redeemer can not be undefined`,
-              }),
+          Effect.orElseFail(() =>
+            mintError("MissingRedeemer", ERROR_MESSAGE.MISSIG_REDEEMER),
           ),
         );
         config.txBuilder.add_mint(

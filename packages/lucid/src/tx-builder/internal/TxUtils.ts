@@ -1,10 +1,10 @@
 import * as CML from "@dcspark/cardano-multiplatform-lib-nodejs";
-import { CBORHex, OutputDatum } from "./types.js";
+import { CBORHex, OutputDatum } from "../types.js";
 import { Effect } from "effect";
 import { networkToId } from "@lucid-evolution/utils";
 import { Address, RewardAddress } from "@lucid-evolution/core-types";
-import { TxRunTimeError, NetworkError } from "../Errors.js";
-import { LucidConfig } from "../lucid-evolution/LucidEvolution.js";
+import { TxBuilderError } from "../../Errors.js";
+import { LucidConfig } from "../../lucid-evolution/LucidEvolution.js";
 import { getAddressDetails } from "@lucid-evolution/utils";
 
 export const toDatumOption = (outputDatum: OutputDatum): CML.DatumOption => {
@@ -27,25 +27,27 @@ export const toDatumOption = (outputDatum: OutputDatum): CML.DatumOption => {
 export const addressFromWithNetworkCheck = (
   address: Address | RewardAddress,
   lucidConfig: LucidConfig,
-): Effect.Effect<CML.Address, TxRunTimeError | NetworkError, never> => {
+): Effect.Effect<CML.Address, TxBuilderError, never> => {
   const program = Effect.gen(function* ($) {
     const { type, networkId } = yield* $(
       Effect.try({
         try: () => getAddressDetails(address),
-        catch: (e) =>
-          new TxRunTimeError({
-            message: `${addressFromWithNetworkCheck.name} , ${String(e)}`,
+        catch: (error) =>
+          new TxBuilderError({
+            cause: "Address",
+            module: "Pay",
+            message: String(error),
           }),
       }),
     );
     const actualNetworkId = networkToId(lucidConfig.network);
     if (networkId !== actualNetworkId) {
       yield* $(
-        Effect.fail(
-          new NetworkError({
-            message: `Invalid address: ${address}, Expected address with network id ${actualNetworkId}, current network ${lucidConfig.network}`,
-          }),
-        ),
+        new TxBuilderError({
+          cause: "InvalidNetwork",
+          module: "Pay",
+          message: `Invalid address: ${address}, Expected address with network id ${actualNetworkId}, current network ${lucidConfig.network}`,
+        }),
       );
     }
     return type === "Byron"

@@ -1,16 +1,21 @@
 import * as CML from "@dcspark/cardano-multiplatform-lib-nodejs";
 import { LucidConfig } from "../lucid-evolution/LucidEvolution.js";
 import { Effect } from "effect";
-import { makeReturn } from "../tx-builder/utils.js";
+//TODO: move to commont utils
+import { makeReturn } from "../tx-builder/internal/TxUtils.js";
 import { PrivateKey } from "@lucid-evolution/core-types";
 import {
-  NotFoundError,
+  ERROR_MESSAGE,
   TransactionSignError,
-  WalletError,
+  TxSignerError,
+  TxSignerErrorCause,
   makeRunTimeError,
 } from "../Errors.js";
-import { TxSigned, completeTxSign } from "./CompleteTxSign.js";
+import { TxSigned, completeTxSign } from "./internal/CompleteTxSign.js";
 import { Either } from "effect/Either";
+
+export const signError = (cause: TxSignerErrorCause, message?: string) =>
+  new TxSignerError({ cause, module: "Sign", message });
 
 export type TxSignBuilderConfig = {
   txComplete: CML.Transaction;
@@ -57,26 +62,27 @@ export const makeTxSignBuilder = (
 
   const txSignBuilder: TxSignBuilder = {
     sign: {
+      //TODO: move to internal
       withWallet: () => {
         const program = Effect.gen(function* ($) {
           const wallet = yield* $(
             Effect.fromNullable(config.lucidConfig.wallet),
-            Effect.orElseFail(
-              () => new NotFoundError({ message: "wallet must be set" }),
+            Effect.orElseFail(() =>
+              signError("MissingWallet", ERROR_MESSAGE.MISSING_WALLET),
             ),
           );
           const witnesses = yield* $(
             Effect.tryPromise({
               try: () => wallet.signTx(config.txComplete),
-              catch: (e) => new WalletError({ message: String(e) }),
+              catch: (error) => signError("Signature", String(error)),
             }),
           );
-          // console.log("witness", witnesses.to_json());
           config.witnessSetBuilder.add_existing(witnesses);
         });
         config.programs.push(program);
         return txSignBuilder;
       },
+      //TODO: move to internal
       withPrivateKey: (privateKey: PrivateKey) => {
         const priv = CML.PrivateKey.from_bech32(privateKey);
         const witness = CML.make_vkey_witness(
@@ -100,8 +106,8 @@ export const makeTxSignBuilder = (
         );
         const wallet = yield* $(
           Effect.fromNullable(config.lucidConfig.wallet),
-          Effect.orElseFail(
-            () => new NotFoundError({ message: "wallet must be set" }),
+          Effect.orElseFail(() =>
+            signError("MissingWallet", ERROR_MESSAGE.MISSING_WALLET),
           ),
         );
         return completeTxSign(wallet, signedTx);
