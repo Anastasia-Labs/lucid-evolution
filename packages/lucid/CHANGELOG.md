@@ -1,5 +1,23 @@
 # @lucid-evolution/lucid
 
+## 0.2.8
+
+### Patch Changes
+
+- [#51](https://github.com/Anastasia-Labs/lucid-evolution/pull/51) [`bcda3fc`](https://github.com/Anastasia-Labs/lucid-evolution/commit/bcda3fc3ca9dc13e93ef95929af2fe6fd0937e60) Thanks [@solidsnakedev](https://github.com/solidsnakedev)! - Introduced a new function, applyDoubleCborEncoding, which offers double bytestring encoding capability to scripts.
+  Notably, this function was previously dependent on `lucid-cardano`, but now our package is completely detached from it.
+
+- [#54](https://github.com/Anastasia-Labs/lucid-evolution/pull/54) [`327bed5`](https://github.com/Anastasia-Labs/lucid-evolution/commit/327bed54586d65675003bfcfb15f364aee4dec14) Thanks [@solidsnakedev](https://github.com/solidsnakedev)! - update transaction builder utils
+
+- [#53](https://github.com/Anastasia-Labs/lucid-evolution/pull/53) [`bedcbd0`](https://github.com/Anastasia-Labs/lucid-evolution/commit/bedcbd0d5405b05a651ef228dce5aaf24ead96ae) Thanks [@solidsnakedev](https://github.com/solidsnakedev)! - improve errors
+
+- [#54](https://github.com/Anastasia-Labs/lucid-evolution/pull/54) [`4c6470b`](https://github.com/Anastasia-Labs/lucid-evolution/commit/4c6470bc9f7387f7a5060ce6b6d4c595ed18af37) Thanks [@solidsnakedev](https://github.com/solidsnakedev)! - update error structure
+
+- Updated dependencies [[`bcda3fc`](https://github.com/Anastasia-Labs/lucid-evolution/commit/bcda3fc3ca9dc13e93ef95929af2fe6fd0937e60)]:
+  - @lucid-evolution/utils@0.1.4
+  - @lucid-evolution/provider@0.1.4
+  - @lucid-evolution/wallet@0.1.4
+
 ## 0.2.7
 
 ### Patch Changes
