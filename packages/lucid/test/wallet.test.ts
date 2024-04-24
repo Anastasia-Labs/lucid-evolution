@@ -1,5 +1,6 @@
 import { assert, test } from "vitest";
 import { Blockfrost, Lucid, Maestro } from "../src/index.js";
+import { generateSeedPhrase } from "../src/index.js";
 
 let setupFail = false;
 const maestro = new Maestro({
@@ -28,4 +29,11 @@ test.skip("test wallet-provider", async () => {
   const maestroUTXO = await user.wallet().getUtxos();
 
   assert.deepStrictEqual(blockfrostUTXO, maestroUTXO);
+});
+
+test("generateSeedPhrase", async () => {
+  const seed = generateSeedPhrase();
+  assert(seed);
+  assert.equal(seed.split(" ").length, 24);
+  assert.notEqual(generateSeedPhrase(), seed);
 });
