@@ -19,8 +19,8 @@ const loadUser: Effect.Effect<LucidEvolution, UnknownException | ConfigError> =
     return user;
   });
 
-describe.concurrent("stake test", () => {
-  test.sequential("test stake registration", async () => {
+describe("Stake", () => {
+  test.sequential("registerStake", async () => {
     const program: Effect.Effect<
       void,
       | NoSuchElementException
@@ -58,7 +58,7 @@ describe.concurrent("stake test", () => {
     expect(exit._tag).toBe("Success");
   });
 
-  test.sequential("test stake de-registration", async () => {
+  test.sequential("deRegisterStake", async () => {
     const program: Effect.Effect<
       void,
       | NoSuchElementException
@@ -92,7 +92,7 @@ describe.concurrent("stake test", () => {
     expect(exit._tag).toBe("Success");
   });
 
-  test.sequential("test stake registration/de-registration", async () => {
+  test.sequential("registerStake/deRegisterStake", async () => {
     const program: Effect.Effect<
       void,
       | NoSuchElementException
