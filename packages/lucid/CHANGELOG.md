@@ -1,5 +1,11 @@
 # @lucid-evolution/lucid
 
+## 0.2.10
+
+### Patch Changes
+
+- [#65](https://github.com/Anastasia-Labs/lucid-evolution/pull/65) [`4e86d3b`](https://github.com/Anastasia-Labs/lucid-evolution/commit/4e86d3b43398654dc67e6bcafe13502908511870) Thanks [@solidsnakedev](https://github.com/solidsnakedev)! - refactor to use one async call when fetching protocol parameters
+
 ## 0.2.9
 
 ### Patch Changes
