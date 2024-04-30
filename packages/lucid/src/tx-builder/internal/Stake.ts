@@ -93,17 +93,21 @@ export const deRegisterStake = (
         );
         switch (script.type) {
           case "PlutusV1": {
-            certBuilder.plutus_script(
-              toPartial(toV1(script.script), red),
-              CML.RequiredSigners.new(),
+            config.txBuilder.add_cert(
+              certBuilder.plutus_script(
+                toPartial(toV1(script.script), red),
+                CML.RequiredSigners.new(),
+              ),
             );
             break;
           }
 
           case "PlutusV2": {
-            certBuilder.plutus_script(
-              toPartial(toV2(script.script), red),
-              CML.RequiredSigners.new(),
+            config.txBuilder.add_cert(
+              certBuilder.plutus_script(
+                toPartial(toV2(script.script), red),
+                CML.RequiredSigners.new(),
+              ),
             );
             break;
           }
