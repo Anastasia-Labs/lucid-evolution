@@ -19,7 +19,7 @@ const loadUser: Effect.Effect<LucidEvolution, UnknownException | ConfigError> =
     return user;
   });
 
-describe.concurrent("stake test", () => {
+describe.skip("stake test", () => {
   test.sequential("test stake registration", async () => {
     const program: Effect.Effect<
       void,

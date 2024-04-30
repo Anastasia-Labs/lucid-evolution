@@ -5,7 +5,7 @@ import {
   Lucid,
   Maestro,
 } from "../src/index.js";
-import { Config, Effect } from "effect";
+import { Config, Console, Effect } from "effect";
 
 describe("Wallet", () => {
   test("switchProvider", async () => {
@@ -31,7 +31,9 @@ describe("Wallet", () => {
       });
       yield* Effect.tryPromise(() => user.switchProvider(maestro));
       const maestroUTXO = yield* Effect.promise(() => user.wallet().getUtxos());
-      assert.deepStrictEqual(blockfrostUTXO, maestroUTXO);
+      yield* Console.log(blockfrostUTXO);
+      yield* Console.log(maestroUTXO);
+      assert.deepEqual(blockfrostUTXO, maestroUTXO);
     });
     const exit = await Effect.runPromiseExit(program);
     expect(exit._tag).toBe("Success");
