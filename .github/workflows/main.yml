@@ -9,7 +9,7 @@ jobs:
     runs-on: ubuntu-latest
     env:
       VITE_BLOCKFROST_KEY: ${{ secrets.VITE_BLOCKFROST_KEY }}
-      VITE_MAESTRO_KEY: ${{ secrets.VITE_BLOCKFROST_KEY }}
+      VITE_MAESTRO_KEY: ${{ secrets.VITE_MAESTRO_KEY }}
       VITE_SEED: ${{ secrets.VITE_SEED }}
       VITE_API_URL: ${{ secrets.VITE_API_URL }}
     steps:
