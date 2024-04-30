@@ -52,12 +52,12 @@ export const completeTxBuilder = (
         catch: (error) => completeTxError("Provider", String(error)),
       }),
     );
+    //TODO: add multiple input collateral based one:
+    // max_collateral_inputs	3	The maximum number of collateral inputs allowed in a transaction.
     if (config.inputUTxOs?.find((value) => value.datum)) {
       const collateralInput: UTxO = yield* $(
         Effect.fromNullable(
-          walletUtxos.find(
-            (value) => value.assets["lovelace"] >= 5_000_000n, // && Object.keys(value.assets).length === 1,
-          ),
+          walletUtxos.find((value) => value.assets["lovelace"] >= 5_000_000n),
         ),
         Effect.orElseFail(() =>
           completeTxError("MissingCollateralInput", "No collateralInput found"),
@@ -75,6 +75,8 @@ export const completeTxBuilder = (
         CML.TransactionOutputBuilder.new().with_address(
           CML.Address.from_bech32(collateralInput.address),
         );
+      //TODO: calculate percentage
+      //collateral_percent	150	The percentage of the txfee which must be provided as collateral when including non-native scripts.
       config.txBuilder.set_collateral_return(
         collateralOutputBuilder
           .next()

@@ -52,9 +52,11 @@ export const collectFromUTxO = (
         );
         switch (script.type) {
           case "Native":
-            return input.native_script(
-              CML.NativeScript.from_cbor_hex(script.script),
-              CML.NativeScriptWitnessInfo.assume_signature_count(),
+            config.txBuilder.add_input(
+              input.native_script(
+                CML.NativeScript.from_cbor_hex(script.script),
+                CML.NativeScriptWitnessInfo.assume_signature_count(),
+              ),
             );
           case "PlutusV1": {
             const red = yield* $(

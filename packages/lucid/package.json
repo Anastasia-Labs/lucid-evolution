@@ -51,7 +51,7 @@
   },
   "dependencies": {
     "@dcspark/cardano-multiplatform-lib-nodejs": "^5.2.0",
-    "@effect/schema": "^0.62.9",
+    "@effect/schema": "^0.66.10",
     "@emurgo/cardano-message-signing-nodejs": "^1.0.1",
     "@lucid-evolution/bip39": "workspace:*",
     "@lucid-evolution/core-types": "workspace:*",
@@ -62,7 +62,7 @@
     "@lucid-evolution/uplc": "workspace:*",
     "@lucid-evolution/utils": "workspace:*",
     "@lucid-evolution/wallet": "workspace:*",
-    "effect": "^2.4.18"
+    "effect": "^3.0.7"
   },
   "devDependencies": {
     "@types/node": "^20.11.24",
@@ -70,8 +70,8 @@
     "esbuild-plugin-wasm": "^1.1.0",
     "tsup": "^8.0.2",
     "tsx": "^4.7.1",
-    "typescript": "^5.3.3",
+    "typescript": "5.5.0-dev.20240430",
     "vite-plugin-wasm": "^3.3.0",
-    "vitest": "latest"
+    "vitest": "^1.4.0"
   }
 }

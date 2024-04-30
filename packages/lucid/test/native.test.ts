@@ -1,7 +1,7 @@
 import { parseNativeScript } from "../src/tx-builder/Native.js";
 import { expect, test } from "vitest";
 
-test.skip("test native parsing", () => {
+test("test native parsing", () => {
   const script: unknown = {
     ScriptAny: {
       native_scripts: [
