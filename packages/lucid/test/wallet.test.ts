@@ -33,7 +33,7 @@ describe("Wallet", () => {
       const maestroUTXO = yield* Effect.promise(() => user.wallet().getUtxos());
       yield* Console.log(blockfrostUTXO);
       yield* Console.log(maestroUTXO);
-    });
+    }).pipe(Effect.tapErrorCause(Effect.logError));
     const exit = await Effect.runPromiseExit(program);
     expect(exit._tag).toBe("Success");
   });
