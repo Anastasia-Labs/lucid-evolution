@@ -32,36 +32,36 @@ export type NativeScriptType =
       };
     };
 
-const NativeScriptSchema: S.Schema<NativeScriptType> = S.union(
-  S.struct({
-    ScriptPubkey: S.struct({
-      ed25519_key_hash: S.string,
+const NativeScriptSchema: S.Schema<NativeScriptType> = S.Union(
+  S.Struct({
+    ScriptPubkey: S.Struct({
+      ed25519_key_hash: S.String,
     }),
   }),
-  S.struct({
-    ScriptInvalidBefore: S.struct({
-      before: S.number,
+  S.Struct({
+    ScriptInvalidBefore: S.Struct({
+      before: S.Number,
     }),
   }),
-  S.struct({
-    ScriptInvalidHereafter: S.struct({
-      after: S.number,
+  S.Struct({
+    ScriptInvalidHereafter: S.Struct({
+      after: S.Number,
     }),
   }),
-  S.struct({
-    ScriptAll: S.struct({
-      native_scripts: S.array(S.suspend(() => NativeScriptSchema)),
+  S.Struct({
+    ScriptAll: S.Struct({
+      native_scripts: S.Array(S.suspend(() => NativeScriptSchema)),
     }),
   }),
-  S.struct({
-    ScriptAny: S.struct({
-      native_scripts: S.array(S.suspend(() => NativeScriptSchema)),
+  S.Struct({
+    ScriptAny: S.Struct({
+      native_scripts: S.Array(S.suspend(() => NativeScriptSchema)),
     }),
   }),
-  S.struct({
-    ScriptNOfK: S.struct({
-      n: S.number,
-      native_scripts: S.array(S.suspend(() => NativeScriptSchema)),
+  S.Struct({
+    ScriptNOfK: S.Struct({
+      n: S.Number,
+      native_scripts: S.Array(S.suspend(() => NativeScriptSchema)),
     }),
   }),
 );

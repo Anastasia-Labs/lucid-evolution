@@ -4,7 +4,7 @@
 import { toHex } from "@lucid-evolution/core-utils";
 import { createHash } from "node:crypto";
 
-const Sha256 = createHash("sha256");
+const Sha256 = () => createHash("sha256");
 
 const INVALID_MNEMONIC = "Invalid mnemonic";
 const INVALID_ENTROPY = "Invalid entropy";
@@ -134,7 +134,7 @@ function entropyToMnemonic(
 function deriveChecksumBits(entropyBuffer: Uint8Array): string {
   const ENT = entropyBuffer.length * 8;
   const CS = ENT / 32;
-  const hash = Sha256.update(entropyBuffer).digest();
+  const hash = Sha256().update(entropyBuffer).digest();
   return bytesToBinary(Array.from(hash)).slice(0, CS);
 }
 

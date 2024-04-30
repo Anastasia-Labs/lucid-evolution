@@ -13,6 +13,7 @@ export type TxBuilderErrorCause =
   | "MissingScript"
   | "MissingPolicy"
   | "MissingRedeemer"
+  | "MissingStakeCredential"
   | "Address"
   | "InvalidCredential";
 
@@ -25,6 +26,7 @@ export type TxBuilderErrorModule =
   | "Pay"
   | "Read"
   | "Signer"
+  | "Stake"
   | "Complete";
 
 export const ERROR_MESSAGE = {

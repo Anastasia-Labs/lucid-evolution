@@ -14,17 +14,17 @@ import {
 import * as CML from "@dcspark/cardano-multiplatform-lib-nodejs";
 import { datumOf, makeConfigBuilder, metadataOf } from "./utils.js";
 import { unixTimeToSlot } from "@lucid-evolution/utils";
-import {
-  makeWalletFromAPI,
-  makeWalletFromPrivateKey,
-  makeWalletFromSeed,
-} from "./wallet_selection.js";
 import { TxBuilder, makeTxBuilder } from "../tx-builder/MakeTxBuilder.js";
 import {
   TxSignBuilder,
   makeTxSignBuilder,
 } from "../tx-sign-builder/MakeTxSign.js";
 import { Data } from "@lucid-evolution/plutus";
+import {
+  makeWalletFromAPI,
+  makeWalletFromPrivateKey,
+  makeWalletFromSeed,
+} from "@lucid-evolution/wallet";
 
 export type LucidEvolution = {
   txbuilderconfig: () => CML.TransactionBuilderConfig;

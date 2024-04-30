@@ -117,41 +117,68 @@ export function discoverOwnUsedTxKeyHashes(
     if (!certs) return;
     for (let i = 0; i < certs.len(); i++) {
       const cert = certs.get(i);
-      if (cert.kind() === 0) {
-        const credential = cert.as_stake_registration()?.stake_credential();
-        if (credential?.kind() === 0) {
+      switch (cert.kind()) {
+        case 0:
           // Key hash not needed for registration
+          break;
+
+        case 1: {
+          const credential = cert.as_stake_deregistration()?.stake_credential();
+          switch (credential?.kind()) {
+            case 0:
+              usedKeyHashes.push(credential.as_pub_key()?.to_hex());
+              break;
+            case 1:
+              usedKeyHashes.push(credential.as_script()?.to_hex());
+              break;
+          }
+          break;
         }
-      } else if (cert.kind() === 1) {
-        const credential = cert.as_stake_deregistration()?.stake_credential();
-        if (credential?.kind() === 0) {
-          const keyHash = credential.to_cbor_hex();
-          usedKeyHashes.push(keyHash);
+        case 2: {
+          //TODO: Missing test
+          const credential = cert.as_stake_delegation()?.stake_credential();
+          if (credential?.kind() === 0) {
+            const keyHash = credential.to_cbor_hex();
+            usedKeyHashes.push(keyHash);
+          }
+
+          break;
         }
-      } else if (cert.kind() === 2) {
-        const credential = cert.as_stake_delegation()?.stake_credential();
-        if (credential?.kind() === 0) {
-          const keyHash = credential.to_cbor_hex();
-          usedKeyHashes.push(keyHash);
+        case 3: {
+          //TODO: Missing test
+          const poolParams = cert.as_pool_registration()?.pool_params()!;
+          const owners = poolParams?.pool_owners();
+          if (!owners) break;
+          for (let i = 0; i < owners.len(); i++) {
+            const keyHash = owners.get(i).to_hex();
+            usedKeyHashes.push(keyHash);
+          }
+          const operator = poolParams.operator().to_hex();
+          usedKeyHashes.push(operator);
+
+          break;
         }
-      } else if (cert.kind() === 3) {
-        const poolParams = cert.as_pool_registration()?.pool_params()!;
-        const owners = poolParams?.pool_owners();
-        if (!owners) break;
-        for (let i = 0; i < owners.len(); i++) {
-          const keyHash = owners.get(i).to_hex();
-          usedKeyHashes.push(keyHash);
+
+        case 4: {
+          //TODO: Missing test
+          const operator = cert.as_pool_retirement()?.pool().to_hex();
+          usedKeyHashes.push(operator);
+
+          break;
         }
-        const operator = poolParams.operator().to_hex();
-        usedKeyHashes.push(operator);
-      } else if (cert.kind() === 4) {
-        const operator = cert.as_pool_retirement()?.pool().to_hex();
-        usedKeyHashes.push(operator);
-      } else if (cert.kind() === 6) {
-        const credential = cert.as_unreg_cert()?.stake_credential();
-        if (credential) {
-          usedKeyHashes.push(credential.to_cbor_hex());
+
+        case 6: {
+          //TODO: Missing test
+          const credential = cert.as_unreg_cert()?.stake_credential();
+          if (credential) {
+            usedKeyHashes.push(credential.to_cbor_hex());
+          }
+          break;
         }
+
+        default:
+          //TODO: Missing certificates
+          break;
       }
     }
   }

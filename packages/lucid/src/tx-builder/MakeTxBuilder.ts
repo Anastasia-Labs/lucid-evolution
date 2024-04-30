@@ -2,13 +2,20 @@ import * as CML from "@dcspark/cardano-multiplatform-lib-nodejs";
 import { LucidConfig } from "../lucid-evolution/LucidEvolution.js";
 import { TxBuilderConfig, OutputDatum } from "./types.js";
 import * as Read from "./internal/Read.js";
-import { Address, Assets, Script, UTxO } from "@lucid-evolution/core-types";
+import {
+  Address,
+  Assets,
+  RewardAddress,
+  Script,
+  UTxO,
+} from "@lucid-evolution/core-types";
 import * as Collect from "./internal/Collect.js";
 import * as Attach from "./internal/Attach.js";
 import * as Pay from "./internal/Pay.js";
 import * as Mint from "./internal/Mint.js";
 import * as Interval from "./internal/Interval.js";
 import * as Signer from "./internal/Signer.js";
+import * as Stake from "./internal/Stake.js";
 import { completeTxBuilder } from "./internal/CompleteTxBuilder.js";
 import { TxSignBuilder } from "../tx-sign-builder/MakeTxSign.js";
 import { TransactionError } from "../Errors.js";
@@ -28,6 +35,11 @@ export type TxBuilder = {
     ) => TxBuilder;
   };
   addSigner: (address: Address) => TxBuilder;
+  registerStake: (rewardAddress: RewardAddress) => TxBuilder;
+  deRegisterStake: (
+    rewardAddress: RewardAddress,
+    redeemer?: string,
+  ) => TxBuilder;
   mintAssets: (assets: Assets, redeemer?: string | undefined) => TxBuilder;
   validFrom: (unixTime: number) => TxBuilder;
   validTo: (unixTime: number) => TxBuilder;
@@ -87,9 +99,20 @@ export function makeTxBuilder(lucidConfig: LucidConfig): TxBuilder {
         config.programs.push(program);
         return txBuilder;
       },
+      //TODO: add payToContract
     },
     addSigner: (address: Address) => {
       const program = Signer.addSigner(config, address);
+      config.programs.push(program);
+      return txBuilder;
+    },
+    registerStake: (rewardAddress: RewardAddress) => {
+      const program = Stake.registerStake(config, rewardAddress);
+      config.programs.push(program);
+      return txBuilder;
+    },
+    deRegisterStake: (rewardAddress: RewardAddress, redeemer?: string) => {
+      const program = Stake.deRegisterStake(config, rewardAddress, redeemer);
       config.programs.push(program);
       return txBuilder;
     },
