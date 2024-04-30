@@ -1,5 +1,11 @@
 # @lucid-evolution/bip39
 
+## 0.2.4
+
+### Patch Changes
+
+- [#63](https://github.com/Anastasia-Labs/lucid-evolution/pull/63) [`70a5b80`](https://github.com/Anastasia-Labs/lucid-evolution/commit/70a5b809903f1e0dbef96ff6e5d32d8507ed442d) Thanks [@solidsnakedev](https://github.com/solidsnakedev)! - fix Sha256 bip39 package
+
 ## 0.2.3
 
 ### Patch Changes

@@ -1,5 +1,12 @@
 # @lucid-evolution/provider
 
+## 0.1.5
+
+### Patch Changes
+
+- Updated dependencies []:
+  - @lucid-evolution/utils@0.1.5
+
 ## 0.1.4
 
 ### Patch Changes
