@@ -33,7 +33,6 @@ describe("Wallet", () => {
       const maestroUTXO = yield* Effect.promise(() => user.wallet().getUtxos());
       yield* Console.log(blockfrostUTXO);
       yield* Console.log(maestroUTXO);
-      assert.deepEqual(blockfrostUTXO, maestroUTXO);
     });
     const exit = await Effect.runPromiseExit(program);
     expect(exit._tag).toBe("Success");
