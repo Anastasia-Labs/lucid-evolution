@@ -18,12 +18,12 @@ describe("Wallet", () => {
           Config.string("VITE_MAESTRO_KEY"),
         ]);
       const user = yield* Effect.tryPromise(() =>
-        Lucid(new Blockfrost(VITE_API_URL, VITE_BLOCKFROST_KEY), "Preprod")
+        Lucid(new Blockfrost(VITE_API_URL, VITE_BLOCKFROST_KEY), "Preprod"),
       );
       user.selectWallet.fromSeed(VITE_SEED);
 
       const blockfrostUTXO = yield* Effect.promise(() =>
-        user.wallet().getUtxos()
+        user.wallet().getUtxos(),
       );
       const maestro = new Maestro({
         apiKey: VITE_MAESTRO_KEY,
@@ -33,7 +33,7 @@ describe("Wallet", () => {
       const maestroUTXO = yield* Effect.promise(() => user.wallet().getUtxos());
       yield* pipe(
         Effect.tryPromise(() => maestro.getProtocolParameters()),
-        Effect.tap(Console.log)
+        Effect.tap(Console.log),
       );
       yield* Console.log(blockfrostUTXO);
       yield* Console.log(maestroUTXO);
