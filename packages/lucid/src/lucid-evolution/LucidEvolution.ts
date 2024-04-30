@@ -72,8 +72,8 @@ export const Lucid = async (
     provider: provider,
     network: network,
     wallet: undefined,
-    txbuilderconfig:  makeConfigBuilder(protocolParam),
-    protocolParameters: protocolParam
+    txbuilderconfig: makeConfigBuilder(protocolParam),
+    protocolParameters: protocolParam,
   };
   return {
     txbuilderconfig: () => config.txbuilderconfig,
@@ -82,7 +82,7 @@ export const Lucid = async (
       const protocolParam = await provider.getProtocolParameters();
       config.provider = provider;
       config.txbuilderconfig = makeConfigBuilder(protocolParam);
-      config.protocolParameters = protocolParam
+      config.protocolParameters = protocolParam;
     },
     newTx: (): TxBuilder => makeTxBuilder(config),
     fromTx: (tx: Transaction) =>
