@@ -67,20 +67,22 @@ export const Lucid = async (
   provider: Provider,
   network: Network,
 ): Promise<LucidEvolution> => {
+  const protocolParam = await provider.getProtocolParameters();
   const config: LucidConfig = {
     provider: provider,
     network: network,
     wallet: undefined,
-    txbuilderconfig: await makeConfigBuilder(provider),
-    protocolParameters: await provider.getProtocolParameters(),
+    txbuilderconfig:  makeConfigBuilder(protocolParam),
+    protocolParameters: protocolParam
   };
   return {
     txbuilderconfig: () => config.txbuilderconfig,
     wallet: () => config.wallet as Wallet,
     switchProvider: async (provider: Provider) => {
+      const protocolParam = await provider.getProtocolParameters();
       config.provider = provider;
-      config.txbuilderconfig = await makeConfigBuilder(provider);
-      config.protocolParameters = await provider.getProtocolParameters();
+      config.txbuilderconfig = makeConfigBuilder(protocolParam);
+      config.protocolParameters = protocolParam
     },
     newTx: (): TxBuilder => makeTxBuilder(config),
     fromTx: (tx: Transaction) =>
