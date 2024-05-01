@@ -191,8 +191,13 @@ export function discoverOwnUsedTxKeyHashes(
     const rewardAddresses = withdrawals.keys();
     for (let i = 0; i < rewardAddresses.len(); i++) {
       const credential = rewardAddresses.get(i).payment();
-      if (credential.kind() === 0) {
-        usedKeyHashes.push(credential.to_cbor_hex());
+      switch (credential.kind()) {
+        case 0:
+          usedKeyHashes.push(credential.as_pub_key()?.to_hex());
+          break;
+        case 1:
+          usedKeyHashes.push(credential.as_script()?.to_hex());
+          break;
       }
     }
   }
