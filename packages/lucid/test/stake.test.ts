@@ -131,3 +131,76 @@ describe("Stake", () => {
     expect(exit._tag).toBe("Success");
   });
 });
+
+describe("Withdraw", () => {
+  test.sequential("registerStake", async () => {
+    const program: Effect.Effect<
+      void,
+      | NoSuchElementException
+      | UnknownException
+      | TransactionError
+      | TxSignerError
+      | ConfigError
+    > = Effect.gen(function* ($) {
+      const user = yield* loadUser;
+      const rewardAddress = yield* pipe(
+        Effect.promise(() => user.wallet().rewardAddress()),
+        Effect.andThen(Effect.fromNullable),
+      );
+      const signBuilder = yield* user
+        .newTx()
+        .registerStake(rewardAddress)
+        .complete()
+        .program();
+      const signed = yield* signBuilder.sign.withWallet().complete().program();
+      const txHash = yield* Effect.tryPromise(() => signed.submit());
+      yield* Effect.log(txHash);
+    }).pipe(
+      Effect.tapErrorCause(Effect.logError),
+      Effect.catchTag("UnknownException", (error) =>
+        error.message.includes("StakeKeyAlreadyRegisteredDELEG")
+          ? Effect.succeed(Effect.void)
+          : Effect.fail(error),
+      ),
+      Effect.retry(
+        Schedule.compose(Schedule.exponential(20_000), Schedule.recurs(4)),
+      ),
+    );
+
+    const exit = await Effect.runPromiseExit(program);
+    expect(exit._tag).toBe("Success");
+  });
+
+  test.sequential("withdrawZero", async () => {
+    const program: Effect.Effect<
+      void,
+      | NoSuchElementException
+      | UnknownException
+      | TransactionError
+      | TxSignerError
+      | ConfigError
+    > = Effect.gen(function* ($) {
+      const user = yield* loadUser;
+      const rewardAddress = yield* pipe(
+        Effect.promise(() => user.wallet().rewardAddress()),
+        Effect.andThen(Effect.fromNullable),
+      );
+      const signBuilder = yield* user
+        .newTx()
+        .withdraw(rewardAddress, 0n)
+        .complete()
+        .program();
+      const signed = yield* signBuilder.sign.withWallet().complete().program();
+      const txHash = yield* Effect.tryPromise(() => signed.submit());
+      yield* Effect.log(txHash);
+    }).pipe(
+      Effect.tapErrorCause(Effect.logError),
+      Effect.retry(
+        Schedule.compose(Schedule.exponential(20_000), Schedule.recurs(4)),
+      ),
+    );
+
+    const exit = await Effect.runPromiseExit(program);
+    expect(exit._tag).toBe("Success");
+  });
+});
