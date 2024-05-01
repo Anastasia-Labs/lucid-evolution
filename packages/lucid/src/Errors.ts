@@ -41,7 +41,7 @@ export const ERROR_MESSAGE = {
 
 export class TxBuilderError extends Data.TaggedError("TxBuilderError")<{
   readonly cause: TxBuilderErrorCause;
-  readonly module: TxBuilderErrorModule;
+  readonly module?: TxBuilderErrorModule;
   readonly message?: string;
 }> {}
 
