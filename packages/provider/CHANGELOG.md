@@ -1,5 +1,14 @@
 # @lucid-evolution/provider
 
+## 0.1.6
+
+### Patch Changes
+
+- [#76](https://github.com/Anastasia-Labs/lucid-evolution/pull/76) [`ed27a6f`](https://github.com/Anastasia-Labs/lucid-evolution/commit/ed27a6fe707767dfc9332e242a8af939fc286db2) Thanks [@solidsnakedev](https://github.com/solidsnakedev)! - bump versions
+
+- Updated dependencies [[`ed27a6f`](https://github.com/Anastasia-Labs/lucid-evolution/commit/ed27a6fe707767dfc9332e242a8af939fc286db2)]:
+  - @lucid-evolution/utils@0.1.6
+
 ## 0.1.5
 
 ### Patch Changes
