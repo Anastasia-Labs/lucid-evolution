@@ -1,5 +1,16 @@
 # @lucid-evolution/provider
 
+## 0.1.5
+
+### Patch Changes
+
+- [#72](https://github.com/Anastasia-Labs/lucid-evolution/pull/72) [`459df3e`](https://github.com/Anastasia-Labs/lucid-evolution/commit/459df3e95fd55ccdf48fc9cd63e850c053d2f470) Thanks [@solidsnakedev](https://github.com/solidsnakedev)! - bump all packages
+
+- Updated dependencies [[`459df3e`](https://github.com/Anastasia-Labs/lucid-evolution/commit/459df3e95fd55ccdf48fc9cd63e850c053d2f470)]:
+  - @lucid-evolution/core-types@0.1.4
+  - @lucid-evolution/core-utils@0.1.4
+  - @lucid-evolution/utils@0.1.5
+
 ## 0.1.4
 
 ### Patch Changes
