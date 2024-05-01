@@ -1,5 +1,11 @@
 # @lucid-evolution/typescript-config
 
+## 0.2.1
+
+### Patch Changes
+
+- [#72](https://github.com/Anastasia-Labs/lucid-evolution/pull/72) [`459df3e`](https://github.com/Anastasia-Labs/lucid-evolution/commit/459df3e95fd55ccdf48fc9cd63e850c053d2f470) Thanks [@solidsnakedev](https://github.com/solidsnakedev)! - bump all packages
+
 ## 0.2.0
 
 ### Minor Changes
