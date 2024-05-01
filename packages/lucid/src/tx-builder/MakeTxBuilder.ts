@@ -5,6 +5,7 @@ import * as Read from "./internal/Read.js";
 import {
   Address,
   Assets,
+  Lovelace,
   RewardAddress,
   Script,
   UTxO,
@@ -38,6 +39,11 @@ export type TxBuilder = {
   registerStake: (rewardAddress: RewardAddress) => TxBuilder;
   deRegisterStake: (
     rewardAddress: RewardAddress,
+    redeemer?: string,
+  ) => TxBuilder;
+  withdraw: (
+    rewardAddress: RewardAddress,
+    amount: Lovelace,
     redeemer?: string,
   ) => TxBuilder;
   mintAssets: (assets: Assets, redeemer?: string | undefined) => TxBuilder;
@@ -113,6 +119,15 @@ export function makeTxBuilder(lucidConfig: LucidConfig): TxBuilder {
     },
     deRegisterStake: (rewardAddress: RewardAddress, redeemer?: string) => {
       const program = Stake.deRegisterStake(config, rewardAddress, redeemer);
+      config.programs.push(program);
+      return txBuilder;
+    },
+    withdraw: (
+      rewardAddress: RewardAddress,
+      amount: Lovelace,
+      redeemer?: string,
+    ) => {
+      const program = Stake.withdraw(config, rewardAddress, amount, redeemer);
       config.programs.push(program);
       return txBuilder;
     },

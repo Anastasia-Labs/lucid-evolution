@@ -2,7 +2,11 @@ import * as CML from "@dcspark/cardano-multiplatform-lib-nodejs";
 import { CBORHex, OutputDatum } from "../types.js";
 import { Effect } from "effect";
 import { networkToId } from "@lucid-evolution/utils";
-import { Address, RewardAddress } from "@lucid-evolution/core-types";
+import {
+  Address,
+  AddressDetails,
+  RewardAddress,
+} from "@lucid-evolution/core-types";
 import { TxBuilderError } from "../../Errors.js";
 import { LucidConfig } from "../../lucid-evolution/LucidEvolution.js";
 import { getAddressDetails } from "@lucid-evolution/utils";
@@ -24,6 +28,7 @@ export const toDatumOption = (outputDatum: OutputDatum): CML.DatumOption => {
   }
 };
 
+//TODO: improve error message, utils is used in different modules
 export const addressFromWithNetworkCheck = (
   address: Address | RewardAddress,
   lucidConfig: LucidConfig,
@@ -94,3 +99,28 @@ export const makeReturn = <A, E>(program: Effect.Effect<A, E>) => {
     program: () => program,
   };
 };
+
+export const validateAddressDetails = (
+  address: Address | RewardAddress,
+  lucidConfig: LucidConfig,
+): Effect.Effect<AddressDetails, TxBuilderError, never> =>
+  Effect.gen(function* ($) {
+    const addressDetails = yield* $(
+      Effect.try({
+        try: () => getAddressDetails(address),
+        catch: (error) =>
+          new TxBuilderError({
+            cause: "Address",
+            message: String(error),
+          }),
+      }),
+    );
+    const actualNetworkId = networkToId(lucidConfig.network);
+    if (addressDetails.networkId !== actualNetworkId)
+      yield* new TxBuilderError({
+        cause: "InvalidNetwork",
+        message: `Invalid address: ${address}, Expected address with network id ${actualNetworkId}, current network ${lucidConfig.network}`,
+      });
+
+    return addressDetails;
+  });
