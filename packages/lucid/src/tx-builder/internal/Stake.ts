@@ -216,28 +216,3 @@ export const withdraw = (
   });
   return program;
 };
-
-// withdraw(
-//   rewardAddress: RewardAddress,
-//   amount: Lovelace,
-//   redeemer?: Redeemer,
-// ): Tx {
-//   this.tasks.push((that) => {
-//     that.txBuilder.add_withdrawal(
-//       C.RewardAddress.from_address(
-//         addressFromWithNetworkCheck(rewardAddress, that.lucid),
-//       )!,
-//       C.BigNum.from_str(amount.toString()),
-//       redeemer
-//         ? C.ScriptWitness.new_plutus_witness(
-//           C.PlutusWitness.new(
-//             C.PlutusData.from_bytes(fromHex(redeemer!)),
-//             undefined,
-//             undefined,
-//           ),
-//         )
-//         : undefined,
-//     );
-//   });
-//   return this;
-// }
