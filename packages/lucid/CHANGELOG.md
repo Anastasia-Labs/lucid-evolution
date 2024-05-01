@@ -1,5 +1,11 @@
 # @lucid-evolution/lucid
 
+## 0.2.11
+
+### Patch Changes
+
+- [#74](https://github.com/Anastasia-Labs/lucid-evolution/pull/74) [`c97d83d`](https://github.com/Anastasia-Labs/lucid-evolution/commit/c97d83de7c43477aeb3a0cc2ef5de71697a1262c) Thanks [@solidsnakedev](https://github.com/solidsnakedev)! - bump lucid
+
 ## 0.2.9
 
 ### Patch Changes
