@@ -31,9 +31,7 @@ export class Kupmios implements Provider {
   }
 
   async getProtocolParameters(): Promise<ProtocolParameters> {
-    const client = await this.ogmiosWsp("Query", {
-      query: "currentProtocolParameters",
-    });
+    const client = await this.ogmiosWsp("queryLedgerState/protocolParameters");
 
     return new Promise((res, rej) => {
       client.addEventListener(
@@ -41,31 +39,35 @@ export class Kupmios implements Provider {
         (msg: MessageEvent<string>) => {
           try {
             const { result } = JSON.parse(msg.data);
-
             // deno-lint-ignore no-explicit-any
             const costModels: any = {};
-            Object.keys(result.costModels).forEach((v) => {
+            Object.keys(result.plutusCostModels).forEach((v) => {
               const version = v.split(":")[1].toUpperCase();
               const plutusVersion = "Plutus" + version;
-              costModels[plutusVersion] = result.costModels[v];
+              costModels[plutusVersion] = result.plutusCostModels[v];
             });
-            const [memNum, memDenom] = result.prices.memory.split("/");
-            const [stepsNum, stepsDenom] = result.prices.steps.split("/");
+            const [memNum, memDenom] =
+              result.scriptExecutionPrices.memory.split("/");
+            const [stepsNum, stepsDenom] =
+              result.scriptExecutionPrices.cpu.split("/");
 
             res({
               minFeeA: parseInt(result.minFeeCoefficient),
-              minFeeB: parseInt(result.minFeeConstant),
+              minFeeB: parseInt(result.minFeeConstant.ada.lovelace),
               maxTxSize: parseInt(result.maxTxSize),
               maxValSize: parseInt(result.maxValueSize),
-              keyDeposit: BigInt(result.stakeKeyDeposit),
-              poolDeposit: BigInt(result.poolDeposit),
+              keyDeposit: BigInt(result.stakeCredentialDeposit.ada.lovelace),
+              poolDeposit: BigInt(result.stakePoolDeposit.ada.lovelace),
               priceMem: parseInt(memNum) / parseInt(memDenom),
               priceStep: parseInt(stepsNum) / parseInt(stepsDenom),
               maxTxExMem: BigInt(result.maxExecutionUnitsPerTransaction.memory),
-              maxTxExSteps: BigInt(
-                result.maxExecutionUnitsPerTransaction.steps,
-              ),
-              coinsPerUtxoByte: BigInt(result.coinsPerUtxoByte),
+              maxTxExSteps: BigInt(result.maxExecutionUnitsPerTransaction.cpu),
+              // NOTE: coinsPerUtxoByte is now called utxoCostPerByte:
+              // https://github.com/IntersectMBO/cardano-node/pull/4141
+              // Ogmios v6.x calls it minUtxoDepositCoefficient according to the following
+              // documentation from its protocol parameters data model:
+              // https://github.com/CardanoSolutions/ogmios/blob/master/architectural-decisions/accepted/017-api-version-6-major-rewrite.md#protocol-parameters
+              coinsPerUtxoByte: BigInt(result.minUtxoDepositCoefficient),
               collateralPercentage: parseInt(result.collateralPercentage),
               maxCollateralInputs: parseInt(result.maxCollateralInputs),
               costModels,
@@ -279,8 +281,9 @@ export class Kupmios implements Provider {
   }
 
   private async ogmiosWsp(
-    methodname: string,
-    args: unknown,
+    method: string,
+    params: object = {},
+    id?: string,
   ): Promise<WebSocket> {
     const client = new WebSocket(this.ogmiosUrl);
     await new Promise((res) => {
@@ -288,11 +291,10 @@ export class Kupmios implements Provider {
     });
     client.send(
       JSON.stringify({
-        type: "jsonwsp/request",
-        version: "1.0",
-        servicename: "ogmios",
-        methodname,
-        args,
+        jsonrpc: "2.0",
+        method,
+        params,
+        id,
       }),
     );
     return client;
