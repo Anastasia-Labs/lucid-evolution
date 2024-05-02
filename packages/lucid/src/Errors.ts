@@ -49,7 +49,7 @@ export type TxSignerErrorCause = "MissingWallet" | "Signature";
 
 export type TxSignerErrorModule = "Sign" | "Complete";
 
-export class TxSignerError extends Data.TaggedError("TxBuilderError")<{
+export class TxSignerError extends Data.TaggedError("TxSignerError")<{
   readonly cause: TxSignerErrorCause;
   readonly module: TxSignerErrorModule;
   readonly message?: string;
@@ -67,6 +67,7 @@ export class RunTimeError extends Data.TaggedError("RunTimeError")<{
   };
 }> {}
 
+//TODO: maybe use UnknownException instead of RunTimeError
 export const makeRunTimeError = (
   error: unknown,
 ): Effect.Effect<never, RunTimeError> => {
