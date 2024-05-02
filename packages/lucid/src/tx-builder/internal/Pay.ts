@@ -55,7 +55,7 @@ export const payToContract = (
         "Datum",
         "No datum set. Script output becomes unspendable without datum.",
       );
-    return payToAddressWithData(
+    return yield* payToAddressWithData(
       config,
       address,
       outputDatum,
