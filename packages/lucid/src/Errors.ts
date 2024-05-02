@@ -9,6 +9,7 @@ export type TxBuilderErrorCause =
   | "MissingCollateralInput"
   | "MultiplePolicies"
   | "InvalidNetwork"
+  | "InvalidMetadata"
   | "MissingWallet"
   | "MissingScript"
   | "MissingPolicy"
@@ -27,6 +28,7 @@ export type TxBuilderErrorModule =
   | "Read"
   | "Signer"
   | "Stake"
+  | "Pool"
   | "Complete";
 
 export const ERROR_MESSAGE = {

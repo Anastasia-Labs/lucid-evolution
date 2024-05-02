@@ -6,6 +6,8 @@ import {
   Address,
   Assets,
   Lovelace,
+  PoolId,
+  Redeemer,
   RewardAddress,
   Script,
   UTxO,
@@ -17,6 +19,7 @@ import * as Mint from "./internal/Mint.js";
 import * as Interval from "./internal/Interval.js";
 import * as Signer from "./internal/Signer.js";
 import * as Stake from "./internal/Stake.js";
+import * as Pool from "./internal/Pool.js";
 import { completeTxBuilder } from "./internal/CompleteTxBuilder.js";
 import { TxSignBuilder } from "../tx-sign-builder/MakeTxSign.js";
 import { TransactionError } from "../Errors.js";
@@ -29,6 +32,12 @@ export type TxBuilder = {
   pay: {
     ToAddress: (address: string, assets: Assets) => TxBuilder;
     ToAddressWithData: (
+      address: string,
+      outputDatum: OutputDatum,
+      assets: Assets,
+      scriptRef?: Script | undefined,
+    ) => TxBuilder;
+    ToContract: (
       address: string,
       outputDatum: OutputDatum,
       assets: Assets,
@@ -49,6 +58,11 @@ export type TxBuilder = {
   mintAssets: (assets: Assets, redeemer?: string | undefined) => TxBuilder;
   validFrom: (unixTime: number) => TxBuilder;
   validTo: (unixTime: number) => TxBuilder;
+  delegateTo: (
+    rewardAddress: RewardAddress,
+    poolId: PoolId,
+    redeemer?: Redeemer,
+  ) => TxBuilder;
   attach: {
     Script: (script: Script) => TxBuilder;
     SpendingValidator: (spendingValidator: Script) => TxBuilder;
@@ -105,7 +119,22 @@ export function makeTxBuilder(lucidConfig: LucidConfig): TxBuilder {
         config.programs.push(program);
         return txBuilder;
       },
-      //TODO: add payToContract
+      ToContract: (
+        address: string,
+        outputDatum: OutputDatum,
+        assets: Assets,
+        scriptRef?: Script | undefined,
+      ) => {
+        const program = Pay.payToContract(
+          config,
+          address,
+          outputDatum,
+          assets,
+          scriptRef,
+        );
+        config.programs.push(program);
+        return txBuilder;
+      },
     },
     addSigner: (address: Address) => {
       const program = Signer.addSigner(config, address);
@@ -143,6 +172,15 @@ export function makeTxBuilder(lucidConfig: LucidConfig): TxBuilder {
     },
     validTo: (unixTime: number) => {
       const program = Interval.validTo(config, unixTime);
+      config.programs.push(program);
+      return txBuilder;
+    },
+    delegateTo: (
+      rewardAddress: RewardAddress,
+      poolId: PoolId,
+      redeemer?: Redeemer,
+    ) => {
+      const program = Pool.delegateTo(config, rewardAddress, poolId, redeemer);
       config.programs.push(program);
       return txBuilder;
     },

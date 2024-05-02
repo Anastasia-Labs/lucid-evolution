@@ -15,7 +15,7 @@ export const readError = (cause: TxBuilderErrorCause, message?: string) =>
 
 export const readFrom = (
   config: TxBuilderConfig,
-  utxos: UTxO[]
+  utxos: UTxO[],
 ): Effect.Effect<void, TxBuilderError> =>
   Effect.gen(function* () {
     if (utxos.length === 0)
@@ -26,7 +26,7 @@ export const readFrom = (
           Effect.tryPromise({
             try: () => datumOf(config.lucidConfig.provider)(utxo),
             catch: (error) => readError("Datum", String(error)),
-          })
+          }),
         );
         utxo.datum = Data.to(data);
       }
