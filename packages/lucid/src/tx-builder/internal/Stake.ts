@@ -16,7 +16,7 @@ export const registerStake = (
   config: TxBuilderConfig,
   rewardAddress: RewardAddress,
 ): Effect.Effect<void, TxBuilderError> =>
-  Effect.gen(function* ($) {
+  Effect.gen(function* () {
     const addressDetails = yield* pipe(
       validateAddressDetails(rewardAddress, config.lucidConfig),
       Effect.andThen((address) =>
@@ -26,7 +26,7 @@ export const registerStake = (
       ),
     );
 
-    const stakeCredential = yield* $(
+    const stakeCredential = yield* pipe(
       Effect.fromNullable(addressDetails.stakeCredential),
       Effect.orElseFail(() => stakeError("MissingStakeCredential")),
     );
@@ -50,7 +50,7 @@ export const deRegisterStake = (
   rewardAddress: RewardAddress,
   redeemer?: Redeemer,
 ): Effect.Effect<void, TxBuilderError> =>
-  Effect.gen(function* ($) {
+  Effect.gen(function* () {
     const addressDetails = yield* pipe(
       validateAddressDetails(rewardAddress, config.lucidConfig),
       Effect.andThen((address) =>
@@ -60,7 +60,7 @@ export const deRegisterStake = (
       ),
     );
 
-    const stakeCredential = yield* $(
+    const stakeCredential = yield* pipe(
       Effect.fromNullable(addressDetails.stakeCredential),
       Effect.orElseFail(() => stakeError("MissingStakeCredential")),
     );
@@ -84,7 +84,7 @@ export const deRegisterStake = (
         const certBuilder = CML.SingleCertificateBuilder.new(
           CML.Certificate.new_stake_deregistration(credential),
         );
-        const script = yield* $(
+        const script = yield* pipe(
           Effect.fromNullable(config.scripts.get(stakeCredential.hash)),
           Effect.orElseFail(() =>
             stakeError(
@@ -93,7 +93,7 @@ export const deRegisterStake = (
             ),
           ),
         );
-        const red = yield* $(
+        const red = yield* pipe(
           Effect.fromNullable(redeemer),
           Effect.orElseFail(() =>
             stakeError("MissingRedeemer", ERROR_MESSAGE.MISSIG_REDEEMER),
@@ -175,7 +175,7 @@ export const withdraw = (
             ),
           ),
         );
-        const red = yield* $(
+        const red = yield* pipe(
           Effect.fromNullable(redeemer),
           Effect.orElseFail(() =>
             stakeError("MissingRedeemer", ERROR_MESSAGE.MISSIG_REDEEMER),

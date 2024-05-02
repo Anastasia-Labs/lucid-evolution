@@ -1,4 +1,4 @@
-import { Effect } from "effect";
+import { Effect, pipe } from "effect";
 import { Data } from "@lucid-evolution/plutus";
 import { utxoToCore } from "@lucid-evolution/utils";
 import { UTxO } from "@lucid-evolution/core-types";
@@ -15,18 +15,18 @@ export const readError = (cause: TxBuilderErrorCause, message?: string) =>
 
 export const readFrom = (
   config: TxBuilderConfig,
-  utxos: UTxO[],
-): Effect.Effect<void, TxBuilderError> => {
-  const program = Effect.gen(function* ($) {
+  utxos: UTxO[]
+): Effect.Effect<void, TxBuilderError> =>
+  Effect.gen(function* () {
     if (utxos.length === 0)
-      yield* $(readError("EmptyUTXO", ERROR_MESSAGE.EMPTY_UTXO));
+      yield* readError("EmptyUTXO", ERROR_MESSAGE.EMPTY_UTXO);
     for (const utxo of utxos) {
       if (utxo.datumHash) {
-        const data = yield* $(
+        const data = yield* pipe(
           Effect.tryPromise({
             try: () => datumOf(config.lucidConfig.provider)(utxo),
             catch: (error) => readError("Datum", String(error)),
-          }),
+          })
         );
         utxo.datum = Data.to(data);
       }
@@ -34,5 +34,3 @@ export const readFrom = (
       config.txBuilder.add_reference_input(coreUtxo);
     }
   });
-  return program;
-};
