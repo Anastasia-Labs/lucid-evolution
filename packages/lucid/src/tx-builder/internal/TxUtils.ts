@@ -29,38 +29,16 @@ export const toDatumOption = (outputDatum: OutputDatum): CML.DatumOption => {
 };
 
 //TODO: improve error message, utils is used in different modules
-export const addressFromWithNetworkCheck = (
+export const toCMLAddress = (
   address: Address | RewardAddress,
   lucidConfig: LucidConfig,
-): Effect.Effect<CML.Address, TxBuilderError, never> => {
-  const program = Effect.gen(function* ($) {
-    const { type, networkId } = yield* $(
-      Effect.try({
-        try: () => getAddressDetails(address),
-        catch: (error) =>
-          new TxBuilderError({
-            cause: "Address",
-            module: "Pay",
-            message: String(error),
-          }),
-      }),
-    );
-    const actualNetworkId = networkToId(lucidConfig.network);
-    if (networkId !== actualNetworkId) {
-      yield* $(
-        new TxBuilderError({
-          cause: "InvalidNetwork",
-          module: "Pay",
-          message: `Invalid address: ${address}, Expected address with network id ${actualNetworkId}, current network ${lucidConfig.network}`,
-        }),
-      );
-    }
+): Effect.Effect<CML.Address, TxBuilderError, never> =>
+  Effect.gen(function* ($) {
+    const { type } = yield* validateAddressDetails(address, lucidConfig);
     return type === "Byron"
       ? CML.ByronAddress.from_base58(address).to_address()
       : CML.Address.from_bech32(address);
   });
-  return program;
-};
 
 export const toV1 = (script: string) =>
   CML.PlutusScript.from_v1(CML.PlutusV1Script.from_cbor_hex(script));

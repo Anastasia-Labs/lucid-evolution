@@ -3,23 +3,25 @@ import { assetsToValue, toScriptRef } from "@lucid-evolution/utils";
 import { Address, Assets, Script } from "@lucid-evolution/core-types";
 import { OutputDatum, TxBuilderConfig } from "../types.js";
 import * as CML from "@dcspark/cardano-multiplatform-lib-nodejs";
-import { addressFromWithNetworkCheck, toDatumOption } from "./TxUtils.js";
+import { toCMLAddress, toDatumOption } from "./TxUtils.js";
+import { TxBuilderError, TxBuilderErrorCause } from "../../Errors.js";
+
+export const payError = (cause: TxBuilderErrorCause, message?: string) =>
+  new TxBuilderError({ cause, module: "Pay", message });
 
 /** Pay to a public key or native script address. */
 export const payToAddress = (
   config: TxBuilderConfig,
   address: Address,
   assets: Assets,
-) => {
-  const program = Effect.gen(function* ($) {
+) =>
+  Effect.gen(function* () {
     const output = CML.TransactionOutput.new(
-      yield* $(addressFromWithNetworkCheck(address, config.lucidConfig)),
+      yield* toCMLAddress(address, config.lucidConfig),
       assetsToValue(assets),
     );
     config.txBuilder.add_output(CML.SingleOutputBuilderResult.new(output));
   });
-  return program;
-};
 
 /** Pay to a public key or native script address with datum or scriptRef. */
 export const payToAddressWithData = (
@@ -28,18 +30,16 @@ export const payToAddressWithData = (
   outputDatum: OutputDatum,
   assets: Assets,
   scriptRef?: Script,
-) => {
-  const program = Effect.gen(function* ($) {
+) =>
+  Effect.gen(function* () {
     const output = CML.TransactionOutput.new(
-      yield* $(addressFromWithNetworkCheck(address, config.lucidConfig)),
+      yield* toCMLAddress(address, config.lucidConfig),
       assetsToValue(assets),
       toDatumOption(outputDatum),
       scriptRef ? toScriptRef(scriptRef) : undefined,
     );
     config.txBuilder.add_output(CML.SingleOutputBuilderResult.new(output));
   });
-  return program;
-};
 
 /** Pay to a plutus script address with datum or scriptRef. */
 export const payToContract = (
@@ -48,6 +48,18 @@ export const payToContract = (
   outputDatum: OutputDatum,
   assets: Assets,
   scriptRef?: Script,
-) => {
-  return payToAddressWithData(config, address, outputDatum, assets, scriptRef);
-};
+) =>
+  Effect.gen(function* () {
+    if (outputDatum.value)
+      yield* payError(
+        "Datum",
+        "No datum set. Script output becomes unspendable without datum.",
+      );
+    return yield* payToAddressWithData(
+      config,
+      address,
+      outputDatum,
+      assets,
+      scriptRef,
+    );
+  });

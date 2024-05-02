@@ -20,8 +20,8 @@ export const collectFromUTxO = (
   config: TxBuilderConfig,
   utxos: UTxO[],
   redeemer?: Redeemer,
-): Effect.Effect<void, TxBuilderError> => {
-  const program = Effect.gen(function* ($) {
+): Effect.Effect<void, TxBuilderError> =>
+  Effect.gen(function* ($) {
     if (utxos.length === 0)
       yield* $(collectError("EmptyUTXO", ERROR_MESSAGE.EMPTY_UTXO));
     for (const utxo of utxos) {
@@ -96,5 +96,3 @@ export const collectFromUTxO = (
       }
     }
   });
-  return program;
-};

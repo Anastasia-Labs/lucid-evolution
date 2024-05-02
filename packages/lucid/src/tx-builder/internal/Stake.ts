@@ -1,9 +1,4 @@
-import {
-  Lovelace,
-  Redeemer,
-  RewardAddress,
-  UTxO,
-} from "@lucid-evolution/core-types";
+import { Lovelace, Redeemer, RewardAddress } from "@lucid-evolution/core-types";
 import { TxBuilderConfig } from "../types.js";
 import { Effect, pipe } from "effect";
 import {
@@ -11,16 +6,8 @@ import {
   TxBuilderError,
   TxBuilderErrorCause,
 } from "../../Errors.js";
-import { getAddressDetails } from "@lucid-evolution/utils";
 import * as CML from "@dcspark/cardano-multiplatform-lib-nodejs";
-import {
-  addressFromWithNetworkCheck,
-  toPartial,
-  toV1,
-  toV2,
-  validateAddressDetails,
-} from "./TxUtils.js";
-import { promise } from "effect/Effect";
+import { toPartial, toV1, toV2, validateAddressDetails } from "./TxUtils.js";
 
 export const stakeError = (cause: TxBuilderErrorCause, message?: string) =>
   new TxBuilderError({ cause, module: "Stake", message });
@@ -28,12 +15,18 @@ export const stakeError = (cause: TxBuilderErrorCause, message?: string) =>
 export const registerStake = (
   config: TxBuilderConfig,
   rewardAddress: RewardAddress,
-): Effect.Effect<void, TxBuilderError> => {
-  const program = Effect.gen(function* ($) {
-    const addressDetails = getAddressDetails(rewardAddress);
-    if (addressDetails.type !== "Reward")
-      yield* $(stakeError("InvalidCredential", "Invalid stake credential"));
-    const stakeCredential = yield* $(
+): Effect.Effect<void, TxBuilderError> =>
+  Effect.gen(function* () {
+    const addressDetails = yield* pipe(
+      validateAddressDetails(rewardAddress, config.lucidConfig),
+      Effect.andThen((address) =>
+        address.type !== "Reward"
+          ? stakeError("InvalidCredential", "Address type must be Reward type.")
+          : Effect.succeed(address),
+      ),
+    );
+
+    const stakeCredential = yield* pipe(
       Effect.fromNullable(addressDetails.stakeCredential),
       Effect.orElseFail(() => stakeError("MissingStakeCredential")),
     );
@@ -52,19 +45,22 @@ export const registerStake = (
     config.txBuilder.add_cert(certBuilder.skip_witness());
   });
 
-  return program;
-};
-
 export const deRegisterStake = (
   config: TxBuilderConfig,
   rewardAddress: RewardAddress,
   redeemer?: Redeemer,
-): Effect.Effect<void, TxBuilderError> => {
-  const program = Effect.gen(function* ($) {
-    const addressDetails = getAddressDetails(rewardAddress);
-    if (addressDetails.type !== "Reward")
-      yield* $(stakeError("InvalidCredential", "Invalid stake credential"));
-    const stakeCredential = yield* $(
+): Effect.Effect<void, TxBuilderError> =>
+  Effect.gen(function* () {
+    const addressDetails = yield* pipe(
+      validateAddressDetails(rewardAddress, config.lucidConfig),
+      Effect.andThen((address) =>
+        address.type !== "Reward"
+          ? stakeError("InvalidCredential", "Address type must be Reward type.")
+          : Effect.succeed(address),
+      ),
+    );
+
+    const stakeCredential = yield* pipe(
       Effect.fromNullable(addressDetails.stakeCredential),
       Effect.orElseFail(() => stakeError("MissingStakeCredential")),
     );
@@ -88,7 +84,7 @@ export const deRegisterStake = (
         const certBuilder = CML.SingleCertificateBuilder.new(
           CML.Certificate.new_stake_deregistration(credential),
         );
-        const script = yield* $(
+        const script = yield* pipe(
           Effect.fromNullable(config.scripts.get(stakeCredential.hash)),
           Effect.orElseFail(() =>
             stakeError(
@@ -97,7 +93,7 @@ export const deRegisterStake = (
             ),
           ),
         );
-        const red = yield* $(
+        const red = yield* pipe(
           Effect.fromNullable(redeemer),
           Effect.orElseFail(() =>
             stakeError("MissingRedeemer", ERROR_MESSAGE.MISSIG_REDEEMER),
@@ -132,22 +128,21 @@ export const deRegisterStake = (
     }
   });
 
-  return program;
-};
-
 export const withdraw = (
   config: TxBuilderConfig,
   rewardAddress: RewardAddress,
   amount: Lovelace,
   redeemer?: Redeemer,
-): Effect.Effect<void, TxBuilderError> => {
-  const program = Effect.gen(function* ($) {
-    const addressDetails = yield* validateAddressDetails(
-      rewardAddress,
-      config.lucidConfig,
+): Effect.Effect<void, TxBuilderError> =>
+  Effect.gen(function* ($) {
+    const addressDetails = yield* pipe(
+      validateAddressDetails(rewardAddress, config.lucidConfig),
+      Effect.andThen((address) =>
+        address.type !== "Reward"
+          ? stakeError("InvalidCredential", "Address type must be Reward type.")
+          : Effect.succeed(address),
+      ),
     );
-    if (addressDetails.type !== "Reward")
-      yield* $(stakeError("InvalidCredential", "Invalid stake credential"));
 
     const withdrawBuilder = yield* pipe(
       Effect.fromNullable(
@@ -180,7 +175,7 @@ export const withdraw = (
             ),
           ),
         );
-        const red = yield* $(
+        const red = yield* pipe(
           Effect.fromNullable(redeemer),
           Effect.orElseFail(() =>
             stakeError("MissingRedeemer", ERROR_MESSAGE.MISSIG_REDEEMER),
@@ -214,5 +209,3 @@ export const withdraw = (
       }
     }
   });
-  return program;
-};
