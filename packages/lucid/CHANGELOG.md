@@ -1,5 +1,12 @@
 # @lucid-evolution/lucid
 
+## 0.2.13
+
+### Patch Changes
+
+- Updated dependencies [[`73f7090`](https://github.com/Anastasia-Labs/lucid-evolution/commit/73f7090bf7571f595ce202d11552b62dac0c3028)]:
+  - @lucid-evolution/provider@0.1.7
+
 ## 0.2.12
 
 ### Patch Changes

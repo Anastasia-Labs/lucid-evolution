@@ -1,5 +1,11 @@
 # @lucid-evolution/provider
 
+## 0.1.7
+
+### Patch Changes
+
+- [#78](https://github.com/Anastasia-Labs/lucid-evolution/pull/78) [`73f7090`](https://github.com/Anastasia-Labs/lucid-evolution/commit/73f7090bf7571f595ce202d11552b62dac0c3028) Thanks [@caike](https://github.com/caike)! - Fix Kupmios provider errors on protocol params
+
 ## 0.1.6
 
 ### Patch Changes
