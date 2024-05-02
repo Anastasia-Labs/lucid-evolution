@@ -62,6 +62,11 @@ export class Kupmios implements Provider {
               priceStep: parseInt(stepsNum) / parseInt(stepsDenom),
               maxTxExMem: BigInt(result.maxExecutionUnitsPerTransaction.memory),
               maxTxExSteps: BigInt(result.maxExecutionUnitsPerTransaction.cpu),
+              // NOTE: coinsPerUtxoByte is now called utxoCostPerByte:
+              // https://github.com/IntersectMBO/cardano-node/pull/4141
+              // Ogmios v6.x calls it minUtxoDepositCoefficient according to the following
+              // documentation from its protocol parameters data model:
+              // https://github.com/CardanoSolutions/ogmios/blob/master/architectural-decisions/accepted/017-api-version-6-major-rewrite.md#protocol-parameters
               coinsPerUtxoByte: BigInt(result.minUtxoDepositCoefficient),
               collateralPercentage: parseInt(result.collateralPercentage),
               maxCollateralInputs: parseInt(result.maxCollateralInputs),
