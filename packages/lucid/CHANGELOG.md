@@ -1,5 +1,18 @@
 # @lucid-evolution/lucid
 
+## 0.2.14
+
+### Patch Changes
+
+- [`5cd6e9c`](https://github.com/Anastasia-Labs/lucid-evolution/commit/5cd6e9c673789499585c321e3d7569bbfae8b8e9) Thanks [@solidsnakedev](https://github.com/solidsnakedev)! - - fix: interval now returns effect, payToContract yield the effect
+  - feat: add pool module
+  - refactor: cleanup use new syntax
+  - fix: payToContract checks for empty datum
+  - refactor: rename addressFromWithNetworkCheck to toCMLAddress, and reuse validateAddressDetails
+  - refactor: cleanup stake module
+  - fix: export Errors
+  - fix: add proper tag name to TxSignerError
+
 ## 0.2.13
 
 ### Patch Changes
