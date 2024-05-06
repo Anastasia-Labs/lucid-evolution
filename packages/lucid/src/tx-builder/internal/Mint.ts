@@ -64,7 +64,7 @@ export const mintAssets = (
         config.txBuilder.add_mint(
           mintBuilder.plutus_script(
             toPartial(toV1(policy.script), red),
-            CML.RequiredSigners.new(),
+            CML.Ed25519KeyHashList.new(),
           ),
         );
         break;
@@ -79,7 +79,7 @@ export const mintAssets = (
         config.txBuilder.add_mint(
           mintBuilder.plutus_script(
             toPartial(toV2(policy.script), red),
-            CML.RequiredSigners.new(),
+            CML.Ed25519KeyHashList.new(),
           ),
         );
         break;

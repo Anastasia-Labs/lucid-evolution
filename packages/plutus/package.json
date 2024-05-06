@@ -26,14 +26,14 @@
   "author": "",
   "license": "MIT",
   "dependencies": {
-    "@dcspark/cardano-multiplatform-lib-nodejs": "^5.2.0",
+    "@dcspark/cardano-multiplatform-lib-nodejs": "^5.3.0",
     "@lucid-evolution/core-types": "workspace:*",
     "@lucid-evolution/core-utils": "workspace:*",
-    "@sinclair/typebox": "^0.32.15"
+    "@sinclair/typebox": "^0.32.28"
   },
   "devDependencies": {
-    "@types/node": "^20.11.24",
+    "@types/node": "^20.12.8",
     "tsup": "^8.0.2",
-    "typescript": "^5.3.3"
+    "typescript": "^5.4.5"
   }
 }

@@ -91,7 +91,7 @@ export const delegateTo = (
             config.txBuilder.add_cert(
               certBuilder.plutus_script(
                 toPartial(toV1(script.script), red),
-                CML.RequiredSigners.new(),
+                CML.Ed25519KeyHashList.new(),
               ),
             );
             break;
@@ -101,7 +101,7 @@ export const delegateTo = (
             config.txBuilder.add_cert(
               certBuilder.plutus_script(
                 toPartial(toV2(script.script), red),
-                CML.RequiredSigners.new(),
+                CML.Ed25519KeyHashList.new(),
               ),
             );
             break;

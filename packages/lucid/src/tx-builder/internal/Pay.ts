@@ -13,12 +13,12 @@ export const payError = (cause: TxBuilderErrorCause, message?: string) =>
 export const payToAddress = (
   config: TxBuilderConfig,
   address: Address,
-  assets: Assets,
+  assets: Assets
 ) =>
   Effect.gen(function* () {
     const output = CML.TransactionOutput.new(
       yield* toCMLAddress(address, config.lucidConfig),
-      assetsToValue(assets),
+      assetsToValue(assets)
     );
     config.txBuilder.add_output(CML.SingleOutputBuilderResult.new(output));
   });
@@ -29,14 +29,15 @@ export const payToAddressWithData = (
   address: Address,
   outputDatum: OutputDatum,
   assets: Assets,
-  scriptRef?: Script,
+  scriptRef?: Script
 ) =>
   Effect.gen(function* () {
+    const datumOption = toDatumOption(outputDatum);
     const output = CML.TransactionOutput.new(
       yield* toCMLAddress(address, config.lucidConfig),
       assetsToValue(assets),
-      toDatumOption(outputDatum),
-      scriptRef ? toScriptRef(scriptRef) : undefined,
+      datumOption,
+      scriptRef ? toScriptRef(scriptRef) : undefined
     );
     config.txBuilder.add_output(CML.SingleOutputBuilderResult.new(output));
   });
@@ -47,19 +48,19 @@ export const payToContract = (
   address: Address,
   outputDatum: OutputDatum,
   assets: Assets,
-  scriptRef?: Script,
+  scriptRef?: Script
 ) =>
   Effect.gen(function* () {
     if (outputDatum.value)
       yield* payError(
         "Datum",
-        "No datum set. Script output becomes unspendable without datum.",
+        "No datum set. Script output becomes unspendable without datum."
       );
     return yield* payToAddressWithData(
       config,
       address,
       outputDatum,
       assets,
-      scriptRef,
+      scriptRef
     );
   });

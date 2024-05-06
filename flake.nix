@@ -42,8 +42,8 @@
             rust-analyzer
             wasm-pack
             bun
-            corepack_21
-            nodejs_21
+            corepack_22
+            nodejs_22
           ];
         };
       });
