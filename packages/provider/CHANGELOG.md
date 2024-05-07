@@ -1,5 +1,11 @@
 # @lucid-evolution/provider
 
+## 0.1.8
+
+### Patch Changes
+
+- [#82](https://github.com/Anastasia-Labs/lucid-evolution/pull/82) [`30cec9b`](https://github.com/Anastasia-Labs/lucid-evolution/commit/30cec9b9f07ef8fbe478d67ef8d42b2aa841efb3) Thanks [@caike](https://github.com/caike)! - Fix Kupmios getDelegation call to Ogmios
+
 ## 0.1.7
 
 ### Patch Changes
