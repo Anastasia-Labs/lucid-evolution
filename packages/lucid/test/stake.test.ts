@@ -15,7 +15,7 @@ const loadUser = Effect.gen(function* ($) {
   return user;
 });
 
-describe.skip("Stake", () => {
+describe("Stake", () => {
   test.sequential("registerStake", async () => {
     const program = Effect.gen(function* ($) {
       const user = yield* loadUser;
@@ -104,7 +104,7 @@ describe.skip("Stake", () => {
   });
 });
 
-describe.skip("Withdraw", () => {
+describe("Withdraw", () => {
   test.sequential("registerStake", async () => {
     const program = Effect.gen(function* () {
       const user = yield* loadUser;
