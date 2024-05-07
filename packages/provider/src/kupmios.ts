@@ -155,9 +155,10 @@ export class Kupmios implements Provider {
   }
 
   async getDelegation(rewardAddress: RewardAddress): Promise<Delegation> {
-    const client = await this.ogmiosWsp("Query", {
-      query: { delegationsAndRewards: [rewardAddress] },
-    });
+    const client = await this.ogmiosWsp(
+      "queryLedgerState/rewardAccountSummaries",
+      { keys: [rewardAddress] },
+    );
 
     return new Promise((res, rej) => {
       client.addEventListener(
@@ -166,12 +167,13 @@ export class Kupmios implements Provider {
           try {
             const { result } = JSON.parse(msg.data);
             const delegation = (result ? Object.values(result)[0] : {}) as {
-              delegate: string;
-              rewards: number;
+              delegate: { id: string };
+              rewards: { ada: { lovelace: number } };
             };
+
             res({
-              poolId: delegation?.delegate || null,
-              rewards: BigInt(delegation?.rewards || 0),
+              poolId: delegation?.delegate?.id || null,
+              rewards: BigInt(delegation?.rewards?.ada?.lovelace || 0),
             });
             client.close();
           } catch (e) {
