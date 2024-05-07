@@ -47,7 +47,7 @@ export const completeTxBuilder = (
         catch: (error) => completeTxError("Provider", String(error)),
       }),
     );
-    const walletCoreUtxos = utxosToCores(walletUtxos)
+    const walletCoreUtxos = utxosToCores(walletUtxos);
     //TODO: add multiple input collateral based one:
     // max_collateral_inputs	3	The maximum number of collateral inputs allowed in a transaction.
     if (config.inputUTxOs?.find((value) => value.datum)) {
