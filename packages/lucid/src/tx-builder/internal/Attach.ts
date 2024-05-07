@@ -6,7 +6,7 @@ import {
   WithdrawalValidator,
 } from "@lucid-evolution/core-types";
 import { TxBuilderConfig } from "../types.js";
-import * as CML from "@dcspark/cardano-multiplatform-lib-nodejs";
+import { CML } from "../../core.js";
 
 export const attachScript = (
   config: TxBuilderConfig,

@@ -2,7 +2,7 @@ import { Effect } from "effect";
 import { assetsToValue, toScriptRef } from "@lucid-evolution/utils";
 import { Address, Assets, Script } from "@lucid-evolution/core-types";
 import { OutputDatum, TxBuilderConfig } from "../types.js";
-import * as CML from "@dcspark/cardano-multiplatform-lib-nodejs";
+import { CML } from "../../core.js";
 import { toCMLAddress, toDatumOption } from "./TxUtils.js";
 import { TxBuilderError, TxBuilderErrorCause } from "../../Errors.js";
 
@@ -32,10 +32,11 @@ export const payToAddressWithData = (
   scriptRef?: Script,
 ) =>
   Effect.gen(function* () {
+    const datumOption = toDatumOption(outputDatum);
     const output = CML.TransactionOutput.new(
       yield* toCMLAddress(address, config.lucidConfig),
       assetsToValue(assets),
-      toDatumOption(outputDatum),
+      datumOption,
       scriptRef ? toScriptRef(scriptRef) : undefined,
     );
     config.txBuilder.add_output(CML.SingleOutputBuilderResult.new(output));

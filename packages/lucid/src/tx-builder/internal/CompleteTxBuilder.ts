@@ -1,4 +1,4 @@
-import { Effect } from "effect";
+import { Effect, pipe } from "effect";
 import { Address, OutputData, UTxO } from "@lucid-evolution/core-types";
 import { TxBuilderConfig } from "../types.js";
 import {
@@ -7,11 +7,12 @@ import {
   TxBuilderErrorCause,
   makeRunTimeError,
 } from "../../Errors.js";
-import * as CML from "@dcspark/cardano-multiplatform-lib-nodejs";
+import { CML } from "../../core.js";
 import { makeTxSignBuilder } from "../../tx-sign-builder/MakeTxSign.js";
 import * as UPLC from "@lucid-evolution/uplc";
 import {
   createCostModels,
+  utxosToCores,
   utxoToCore,
   utxoToTransactionInput,
   utxoToTransactionOutput,
@@ -40,18 +41,13 @@ export const completeTxBuilder = (
 
     yield* $(Effect.all(config.programs, { concurrency: "unbounded" }));
 
-    const walletCoreUtxos = yield* $(
-      Effect.tryPromise({
-        try: () => wallet.getUtxosCore(),
-        catch: (error) => completeTxError("Provider", String(error)),
-      }),
-    );
     const walletUtxos = yield* $(
       Effect.tryPromise({
         try: () => wallet.getUtxos(),
         catch: (error) => completeTxError("Provider", String(error)),
       }),
     );
+    const walletCoreUtxos = utxosToCores(walletUtxos);
     //TODO: add multiple input collateral based one:
     // max_collateral_inputs	3	The maximum number of collateral inputs allowed in a transaction.
     if (config.inputUTxOs?.find((value) => value.datum)) {
@@ -183,7 +179,7 @@ export const applyUPLCEval = (
   txbuilder: CML.TransactionBuilder,
 ) => {
   for (const uplcByte of uplcEval) {
-    const redeemer = CML.Redeemer.from_cbor_bytes(uplcByte);
+    const redeemer = CML.LegacyRedeemer.from_cbor_bytes(uplcByte);
     const exUnits = CML.ExUnits.new(
       redeemer.ex_units().mem(),
       redeemer.ex_units().steps(),
@@ -198,10 +194,10 @@ export const applyUPLCEval = (
 export const setRedeemerstoZero = (tx: CML.Transaction) => {
   const redeemers = tx.witness_set().redeemers();
   if (redeemers) {
-    const redeemerList = CML.RedeemerList.new();
-    for (let i = 0; i < redeemers.len(); i++) {
-      const redeemer = redeemers.get(i);
-      const dummyRedeemer = CML.Redeemer.new(
+    const redeemerList = CML.LegacyRedeemerList.new();
+    for (let i = 0; i < redeemers.as_arr_legacy_redeemer()!.len(); i++) {
+      const redeemer = redeemers.as_arr_legacy_redeemer()!.get(i);
+      const dummyRedeemer = CML.LegacyRedeemer.new(
         redeemer.tag(),
         redeemer.index(),
         redeemer.data(),
@@ -210,7 +206,9 @@ export const setRedeemerstoZero = (tx: CML.Transaction) => {
       redeemerList.add(dummyRedeemer);
     }
     const dummyWitnessSet = tx.witness_set();
-    dummyWitnessSet.set_redeemers(redeemerList);
+    dummyWitnessSet.set_redeemers(
+      CML.Redeemers.new_arr_legacy_redeemer(redeemerList),
+    );
     return CML.Transaction.new(
       tx.body(),
       dummyWitnessSet,

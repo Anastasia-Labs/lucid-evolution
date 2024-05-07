@@ -1,6 +1,6 @@
 import { Assets, PolicyId, Unit } from "@lucid-evolution/core-types";
 import { toText } from "@lucid-evolution/core-utils";
-import * as CML from "@dcspark/cardano-multiplatform-lib-nodejs";
+import { CML } from "./core.js";
 import { fromLabel, toLabel } from "./label.js";
 
 export function valueToAssets(value: CML.Value): Assets {
@@ -35,17 +35,17 @@ export function assetsToValue(assets: Assets): CML.Value {
         .map((unit) => unit.slice(0, 56)),
     ),
   );
-  policies.forEach((policy) => {
+  for (const policy of policies) {
     const policyUnits = units.filter((unit) => unit.slice(0, 56) === policy);
     const assetsValue = CML.MapAssetNameToCoin.new();
-    policyUnits.forEach((unit) => {
+    for (const unit of policyUnits) {
       assetsValue.insert(
         CML.AssetName.from_str(toText(unit.slice(56))),
         BigInt(assets[unit]),
       );
-    });
+    }
     multiAsset.insert_assets(CML.ScriptHash.from_hex(policy), assetsValue);
-  });
+  }
   return CML.Value.new(lovelace, multiAsset);
 }
 

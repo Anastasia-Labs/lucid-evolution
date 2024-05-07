@@ -68,7 +68,7 @@ export const collectFromUTxO = (
             config.txBuilder.add_input(
               input.plutus_script(
                 toPartial(toV1(script.script), red),
-                CML.RequiredSigners.new(),
+                CML.Ed25519KeyHashList.new(),
                 CML.PlutusData.from_cbor_hex(utxo.datum!),
               ),
             );
@@ -86,7 +86,7 @@ export const collectFromUTxO = (
               //TODO: Test with DatumHash
               input.plutus_script_inline_datum(
                 partial,
-                CML.RequiredSigners.new(),
+                CML.Ed25519KeyHashList.new(),
               ),
             );
           }

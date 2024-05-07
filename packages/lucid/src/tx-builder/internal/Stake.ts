@@ -104,7 +104,7 @@ export const deRegisterStake = (
             config.txBuilder.add_cert(
               certBuilder.plutus_script(
                 toPartial(toV1(script.script), red),
-                CML.RequiredSigners.new(),
+                CML.Ed25519KeyHashList.new(),
               ),
             );
             break;
@@ -114,7 +114,7 @@ export const deRegisterStake = (
             config.txBuilder.add_cert(
               certBuilder.plutus_script(
                 toPartial(toV2(script.script), red),
-                CML.RequiredSigners.new(),
+                CML.Ed25519KeyHashList.new(),
               ),
             );
             break;
@@ -186,7 +186,7 @@ export const withdraw = (
             config.txBuilder.add_withdrawal(
               withdrawBuilder.plutus_script(
                 toPartial(toV1(script.script), red),
-                CML.RequiredSigners.new(),
+                CML.Ed25519KeyHashList.new(),
               ),
             );
             break;
@@ -196,7 +196,7 @@ export const withdraw = (
             config.txBuilder.add_withdrawal(
               withdrawBuilder.plutus_script(
                 toPartial(toV2(script.script), red),
-                CML.RequiredSigners.new(),
+                CML.Ed25519KeyHashList.new(),
               ),
             );
             break;

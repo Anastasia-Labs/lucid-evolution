@@ -1,4 +1,4 @@
-import * as CML from "@dcspark/cardano-multiplatform-lib-nodejs";
+import { CML } from "./core.js";
 import { CostModels, ProtocolParameters } from "@lucid-evolution/core-types";
 
 export function createCostModels(costModels: CostModels): CML.CostModels {
@@ -6,7 +6,7 @@ export function createCostModels(costModels: CostModels): CML.CostModels {
 
   // add plutus v1
   const costmdlV1 = CML.IntList.new();
-  Object.values(costModels.PlutusV2).forEach((cost) => {
+  Object.values(costModels.PlutusV1).forEach((cost) => {
     costmdlV1.add(CML.Int.new(BigInt(cost)));
   });
   costmdls.set_plutus_v1(costmdlV1);

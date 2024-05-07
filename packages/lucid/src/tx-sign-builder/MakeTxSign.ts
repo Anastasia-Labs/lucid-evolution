@@ -1,4 +1,4 @@
-import * as CML from "@dcspark/cardano-multiplatform-lib-nodejs";
+import { CML } from "../core.js";
 import { LucidConfig } from "../lucid-evolution/LucidEvolution.js";
 import { Effect } from "effect";
 //TODO: move to commont utils
@@ -45,8 +45,8 @@ export const makeTxSignBuilder = (
   const redeemers = tx.witness_set().redeemers();
   const exUnits = { cpu: 0, mem: 0 };
   if (redeemers) {
-    for (let i = 0; i < redeemers.len(); i++) {
-      const redeemer = redeemers.get(i);
+    for (let i = 0; i < redeemers.as_arr_legacy_redeemer()!.len(); i++) {
+      const redeemer = redeemers.as_arr_legacy_redeemer()!.get(i);
       exUnits.cpu += parseInt(redeemer.ex_units().steps().toString());
       exUnits.mem += parseInt(redeemer.ex_units().mem().toString());
     }

@@ -15,7 +15,7 @@ import {
   UTxO,
 } from "@lucid-evolution/core-types";
 import { fromUnit } from "@lucid-evolution/utils";
-import * as CML from "@dcspark/cardano-multiplatform-lib-nodejs";
+import { CML } from "./core.js";
 
 export class Kupmios implements Provider {
   kupoUrl: string;

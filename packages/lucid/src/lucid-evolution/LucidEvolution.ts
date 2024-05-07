@@ -7,11 +7,12 @@ import {
   ProtocolParameters,
   Provider,
   Transaction,
+  TxHash,
   UTxO,
   Wallet,
   WalletApi,
 } from "@lucid-evolution/core-types";
-import * as CML from "@dcspark/cardano-multiplatform-lib-nodejs";
+import { CML } from "../core.js";
 import { datumOf, makeConfigBuilder, metadataOf } from "./utils.js";
 import { unixTimeToSlot } from "@lucid-evolution/utils";
 import { TxBuilder, makeTxBuilder } from "../tx-builder/MakeTxBuilder.js";
@@ -111,7 +112,8 @@ export const Lucid = async (
     utxoByUnit: config.provider.getUtxoByUnit,
     utxosByOutRef: config.provider.getUtxosByOutRef,
     delegationAt: config.provider.getDelegation,
-    awaitTx: config.provider.awaitTx,
+    awaitTx: (txHash: TxHash, checkInterval?: number) =>
+      config.provider.awaitTx(txHash, checkInterval),
     datumOf: datumOf(config.provider),
     metadataOf: metadataOf(config.provider),
   };
