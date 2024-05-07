@@ -12,6 +12,7 @@ import { makeTxSignBuilder } from "../../tx-sign-builder/MakeTxSign.js";
 import * as UPLC from "@lucid-evolution/uplc";
 import {
   createCostModels,
+  utxosToCores,
   utxoToCore,
   utxoToTransactionInput,
   utxoToTransactionOutput,
@@ -40,18 +41,13 @@ export const completeTxBuilder = (
 
     yield* $(Effect.all(config.programs, { concurrency: "unbounded" }));
 
-    const walletCoreUtxos = yield* $(
-      Effect.tryPromise({
-        try: () => wallet.getUtxosCore(),
-        catch: (error) => completeTxError("Provider", String(error)),
-      }),
-    );
     const walletUtxos = yield* $(
       Effect.tryPromise({
         try: () => wallet.getUtxos(),
         catch: (error) => completeTxError("Provider", String(error)),
       }),
     );
+    const walletCoreUtxos = utxosToCores(walletUtxos)
     //TODO: add multiple input collateral based one:
     // max_collateral_inputs	3	The maximum number of collateral inputs allowed in a transaction.
     if (config.inputUTxOs?.find((value) => value.datum)) {
