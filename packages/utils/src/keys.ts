@@ -1,6 +1,6 @@
 import { PrivateKey, PublicKey } from "@lucid-evolution/core-types";
 import { generateMnemonic } from "@lucid-evolution/bip39";
-import * as CML from "@dcspark/cardano-multiplatform-lib-nodejs";
+import { CML } from "./core.js";
 
 export function generatePrivateKey(): PrivateKey {
   return CML.PrivateKey.generate_ed25519().to_bech32();

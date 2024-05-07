@@ -2,7 +2,7 @@ import { Effect } from "effect";
 import { assetsToValue, toScriptRef } from "@lucid-evolution/utils";
 import { Address, Assets, Script } from "@lucid-evolution/core-types";
 import { OutputDatum, TxBuilderConfig } from "../types.js";
-import * as CML from "@dcspark/cardano-multiplatform-lib-nodejs";
+import { CML } from "../../core.js";
 import { toCMLAddress, toDatumOption } from "./TxUtils.js";
 import { TxBuilderError, TxBuilderErrorCause } from "../../Errors.js";
 

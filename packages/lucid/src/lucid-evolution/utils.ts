@@ -5,7 +5,7 @@ import {
   UTxO,
   Unit,
 } from "@lucid-evolution/core-types";
-import * as CML from "@dcspark/cardano-multiplatform-lib-nodejs";
+import { CML } from "../core.js";
 import { createCostModels, fromUnit, toUnit } from "@lucid-evolution/utils";
 import { Constr, Data } from "@lucid-evolution/plutus";
 

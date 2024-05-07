@@ -12,7 +12,7 @@ import {
   Wallet,
   WalletApi,
 } from "@lucid-evolution/core-types";
-import * as CML from "@dcspark/cardano-multiplatform-lib-nodejs";
+import { CML } from "../core.js";
 import { datumOf, makeConfigBuilder, metadataOf } from "./utils.js";
 import { unixTimeToSlot } from "@lucid-evolution/utils";
 import { TxBuilder, makeTxBuilder } from "../tx-builder/MakeTxBuilder.js";

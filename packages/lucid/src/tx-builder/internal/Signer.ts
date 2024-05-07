@@ -9,6 +9,7 @@ import { getAddressDetails } from "@lucid-evolution/utils";
 import { Effect, pipe } from "effect";
 import * as CML from "@dcspark/cardano-multiplatform-lib-nodejs";
 import { TxBuilderError, TxBuilderErrorCause } from "../../Errors.js";
+import { validateAddressDetails } from "./TxUtils.js";
 
 export const addSignerError = (cause: TxBuilderErrorCause, message?: string) =>
   new TxBuilderError({ cause, module: "Signer", message });
@@ -18,7 +19,7 @@ export const addSigner = (
   address: Address | RewardAddress,
 ) =>
   Effect.gen(function* () {
-    const addressDetails = getAddressDetails(address);
+    const addressDetails = yield* validateAddressDetails(address, config.lucidConfig);
     if (!addressDetails.paymentCredential && !addressDetails.stakeCredential)
       yield* addSignerError(
         "NotFound",

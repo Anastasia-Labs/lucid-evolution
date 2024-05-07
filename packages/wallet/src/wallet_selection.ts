@@ -33,7 +33,7 @@ export const makeWalletFromSeed = (
     addressType?: "Base" | "Enterprise";
     accountIndex?: number;
     password?: string;
-  },
+  }
 ): Wallet => {
   const { address, rewardAddress, paymentKey, stakeKey } = walletFromSeed(
     seed,
@@ -42,7 +42,7 @@ export const makeWalletFromSeed = (
       accountIndex: options?.accountIndex || 0,
       password: options?.password,
       network: network,
-    },
+    }
   );
   const paymentKeyHash = CML.PrivateKey.from_bech32(paymentKey)
     .to_public()
@@ -62,10 +62,12 @@ export const makeWalletFromSeed = (
       rewardAddress || null,
     getUtxos: async (): Promise<UTxO[]> =>
       provider.getUtxos(paymentCredentialOf(address)),
-    getUtxosCore: async (): Promise<Array<CML.TransactionUnspentOutput>> => {
+    getUtxosCore: async (): Promise<CML.TransactionUnspentOutput[]> => {
       const utxos = await provider.getUtxos(paymentCredentialOf(address));
-      const coreUtxos: Array<CML.TransactionUnspentOutput> = [];
-      utxos.forEach((utxo: UTxO) => coreUtxos.push(utxoToCore(utxo)));
+      const coreUtxos: CML.TransactionUnspentOutput[] = [];
+      for (const utxo of utxos) {
+        coreUtxos.push(utxoToCore(utxo));
+      }
       return coreUtxos;
     },
     getDelegation: async (): Promise<Delegation> => {
@@ -81,30 +83,20 @@ export const makeWalletFromSeed = (
       const usedKeyHashes = discoverOwnUsedTxKeyHashes(tx, ownKeyHashes, utxos);
 
       const txWitnessSetBuilder = CML.TransactionWitnessSetBuilder.new();
-      usedKeyHashes.forEach((keyHash) => {
+      for (const keyHash of usedKeyHashes) {
         const priv = CML.PrivateKey.from_bech32(privKeyHashMap[keyHash]!);
-        //FIX: CML outputs a different txHash, returning the below error when using a time lock policy
-        // Error: "transaction submit error ShelleyTxValidationError ShelleyBasedEraBabbage (ApplyTxError [UtxowFailure (FromAlonzoUtxowFail (WrappedShelleyEraFailure (InvalidWitnessesUTXOW [VKey (VerKeyEd25519DSIGN \"4f26d9d8185481167e5647039d4f390c8c74a5fbca1f115709a2998e93180f39\")])))])"
-        // const txhashCML = CML.hash_transaction(CML.TransactionBody.from_cbor_hex(("a500838258200d31e3060edc0422bab792b414b6920534fb61f72a24cb76c911fea670601518008258205a4a961c2ff22b870f06f5303dcfffaaf3afdb819b12f5f0e60f0540e0e7490700825820f9178e7551be72eb512f8b1b739346c84e9cda4ef8be4feada9bfff6fe47e80000018182583900bc83d1474fafc0669e360c6ef389d3874f5eff99c31f343ff2cdab0bcb68eb5507f1a2a0cb4ddb095125f0f9878568cfe2466f2969db1ed3821a02050c95a9581c748a7026de606c27c06e4b90cb2e1844b566b89fba0d282debe4b40aa14d4d794d696e746564546f6b656e01581ca11c0e63717ac9d8d7bd50c6b29111003e765d199915a02613069641a14d4d794d696e746564546f6b656e181e581ca49d85bfbd193446051e644e7ad448682a1bc1b02d5a15f78429a1f0a14d4d794d696e746564546f6b656e0a581cc7e5e285a6ca1fdd6b8b0293b4d825a9c92ae69f8fc35ae2252a697da14d4d794d696e746564546f6b656e0a581cfed7a8ee8af612b08a05304ba434ef18f37be06f144fbc190d377942a14d4d794d696e746564546f6b656e0a581c92db8682a9e00473968130a7d3ee6d1bd331812543a8584ba739c74ca14d4d794d696e746564546f6b656e01581cd3c9b677c3e599ac2eb0a455e4d5d027d5ef860caf72b5dc27ba0e16a14d4d794d696e746564546f6b656e01581ce2085cebe2ce09d4ec0cbfe965f332941686c9288199440d45e95ff0a14d4d794d696e746564546f6b656e01581c2fce0a65bac1267022f94296e3d55fb862979b13bed38521a31cd200a14d4d794d696e746564546f6b656e01021a0002fb89031a0333a0f509a1581c2fce0a65bac1267022f94296e3d55fb862979b13bed38521a31cd200a14d4d794d696e746564546f6b656e01")))
-        // console.log("txhash CML", txhashCML.to_hex())
-        // const txhash = CSL.hash_transaction(CSL.TransactionBody.from_bytes(fromHex("a500838258200d31e3060edc0422bab792b414b6920534fb61f72a24cb76c911fea670601518008258205a4a961c2ff22b870f06f5303dcfffaaf3afdb819b12f5f0e60f0540e0e7490700825820f9178e7551be72eb512f8b1b739346c84e9cda4ef8be4feada9bfff6fe47e80000018182583900bc83d1474fafc0669e360c6ef389d3874f5eff99c31f343ff2cdab0bcb68eb5507f1a2a0cb4ddb095125f0f9878568cfe2466f2969db1ed3821a02050c95a9581c748a7026de606c27c06e4b90cb2e1844b566b89fba0d282debe4b40aa14d4d794d696e746564546f6b656e01581ca11c0e63717ac9d8d7bd50c6b29111003e765d199915a02613069641a14d4d794d696e746564546f6b656e181e581ca49d85bfbd193446051e644e7ad448682a1bc1b02d5a15f78429a1f0a14d4d794d696e746564546f6b656e0a581cc7e5e285a6ca1fdd6b8b0293b4d825a9c92ae69f8fc35ae2252a697da14d4d794d696e746564546f6b656e0a581cfed7a8ee8af612b08a05304ba434ef18f37be06f144fbc190d377942a14d4d794d696e746564546f6b656e0a581c92db8682a9e00473968130a7d3ee6d1bd331812543a8584ba739c74ca14d4d794d696e746564546f6b656e01581cd3c9b677c3e599ac2eb0a455e4d5d027d5ef860caf72b5dc27ba0e16a14d4d794d696e746564546f6b656e01581ce2085cebe2ce09d4ec0cbfe965f332941686c9288199440d45e95ff0a14d4d794d696e746564546f6b656e01581c2fce0a65bac1267022f94296e3d55fb862979b13bed38521a31cd200a14d4d794d696e746564546f6b656e01021a0002fb89031a0333a0f509a1581c2fce0a65bac1267022f94296e3d55fb862979b13bed38521a31cd200a14d4d794d696e746564546f6b656e01")))
-        // console.log("txHash CSL", txhash.to_hex())
-        // const lucidTxHash = C.hash_transaction(C.TransactionBody.from_bytes(fromHex("a500838258200d31e3060edc0422bab792b414b6920534fb61f72a24cb76c911fea670601518008258205a4a961c2ff22b870f06f5303dcfffaaf3afdb819b12f5f0e60f0540e0e7490700825820f9178e7551be72eb512f8b1b739346c84e9cda4ef8be4feada9bfff6fe47e80000018182583900bc83d1474fafc0669e360c6ef389d3874f5eff99c31f343ff2cdab0bcb68eb5507f1a2a0cb4ddb095125f0f9878568cfe2466f2969db1ed3821a02050c95a9581c748a7026de606c27c06e4b90cb2e1844b566b89fba0d282debe4b40aa14d4d794d696e746564546f6b656e01581ca11c0e63717ac9d8d7bd50c6b29111003e765d199915a02613069641a14d4d794d696e746564546f6b656e181e581ca49d85bfbd193446051e644e7ad448682a1bc1b02d5a15f78429a1f0a14d4d794d696e746564546f6b656e0a581cc7e5e285a6ca1fdd6b8b0293b4d825a9c92ae69f8fc35ae2252a697da14d4d794d696e746564546f6b656e0a581cfed7a8ee8af612b08a05304ba434ef18f37be06f144fbc190d377942a14d4d794d696e746564546f6b656e0a581c92db8682a9e00473968130a7d3ee6d1bd331812543a8584ba739c74ca14d4d794d696e746564546f6b656e01581cd3c9b677c3e599ac2eb0a455e4d5d027d5ef860caf72b5dc27ba0e16a14d4d794d696e746564546f6b656e01581ce2085cebe2ce09d4ec0cbfe965f332941686c9288199440d45e95ff0a14d4d794d696e746564546f6b656e01581c2fce0a65bac1267022f94296e3d55fb862979b13bed38521a31cd200a14d4d794d696e746564546f6b656e01021a0002fb89031a0333a0f509a1581c2fce0a65bac1267022f94296e3d55fb862979b13bed38521a31cd200a14d4d794d696e746564546f6b656e01")))
-        // console.log("lucidTxHash", lucidTxHash.to_hex())
-
         const witness = CML.make_vkey_witness(
           CML.hash_transaction(tx.body()),
-          // toCMLTransactionHash(tx.body()),
-          priv,
+          priv
         );
         txWitnessSetBuilder.add_vkey(witness);
-      });
+      }
 
       return txWitnessSetBuilder.build();
     },
     signMessage: async (
       address: Address | RewardAddress,
-      payload: Payload,
+      payload: Payload
     ): Promise<SignedMessage> => {
       const {
         paymentCredential,
@@ -135,13 +127,13 @@ export const makeWalletFromSeed = (
 export const makeWalletFromPrivateKey = (
   provider: Provider,
   network: Network,
-  privateKey: PrivateKey,
+  privateKey: PrivateKey
 ): Wallet => {
   const priv = CML.PrivateKey.from_bech32(privateKey);
   const pubKeyHash = priv.to_public().hash();
   const address = CML.EnterpriseAddress.new(
     network === "Mainnet" ? 1 : 0,
-    CML.Credential.new_pub_key(pubKeyHash),
+    CML.Credential.new_pub_key(pubKeyHash)
   )
     .to_address()
     .to_bech32(undefined);
@@ -172,7 +164,7 @@ export const makeWalletFromPrivateKey = (
     },
     signMessage: async (
       address: Address | RewardAddress,
-      payload: Payload,
+      payload: Payload
     ): Promise<SignedMessage> => {
       const {
         paymentCredential,
@@ -196,7 +188,7 @@ export const makeWalletFromPrivateKey = (
 
 export const makeWalletFromAPI = (
   provider: Provider,
-  api: WalletApi,
+  api: WalletApi
 ): Wallet => {
   const getAddressHex = async () => {
     const [addressHex] = await api.getUsedAddresses();
@@ -224,7 +216,7 @@ export const makeWalletFromAPI = (
     getUtxos: async (): Promise<UTxO[]> => {
       const utxos = ((await api.getUtxos()) || []).map((utxo) => {
         const parsedUtxo = CML.TransactionUnspentOutput.from_cbor_bytes(
-          fromHex(utxo),
+          fromHex(utxo)
         );
         return coreToUtxo(parsedUtxo);
       });
@@ -249,7 +241,7 @@ export const makeWalletFromAPI = (
     },
     signMessage: async (
       address: Address | RewardAddress,
-      payload: Payload,
+      payload: Payload
     ): Promise<SignedMessage> => {
       const hexAddress = toHex(CML.Address.from_bech32(address).to_raw_bytes());
       return await api.signData(hexAddress, payload);

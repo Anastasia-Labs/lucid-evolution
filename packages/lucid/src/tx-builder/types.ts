@@ -1,6 +1,6 @@
 import { Effect } from "effect";
 import { ScriptType, UTxO } from "@lucid-evolution/core-types";
-import * as CML from "@dcspark/cardano-multiplatform-lib-nodejs";
+import { CML } from "../core.js";
 import { TransactionError } from "../Errors.js";
 import { LucidConfig } from "../lucid-evolution/LucidEvolution.js";
 

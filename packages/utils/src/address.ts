@@ -6,7 +6,7 @@ import {
   CertificateValidator,
   WithdrawalValidator,
 } from "@lucid-evolution/core-types";
-import * as CML from "@dcspark/cardano-multiplatform-lib-nodejs";
+import { CML } from "./core.js";
 import { networkToId } from "./network.js";
 import { validatorToScriptHash } from "./scripts.js";
 

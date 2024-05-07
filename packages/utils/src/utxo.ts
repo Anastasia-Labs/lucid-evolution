@@ -1,90 +1,45 @@
 import { OutRef, TxOutput, UTxO } from "@lucid-evolution/core-types";
-import * as CML from "@dcspark/cardano-multiplatform-lib-nodejs";
+import { CML } from "./core.js";
 import { fromScriptRef, toScriptRef } from "./scripts.js";
 import { assetsToValue, valueToAssets } from "./value.js";
 
 export const utxoToTransactionOutput = (utxo: UTxO) => {
-  const address: CML.Address = (() => {
-    try {
-      return CML.Address.from_bech32(utxo.address);
-    } catch (_e) {
-      return CML.ByronAddress.from_base58(utxo.address).to_address();
-    }
-  })();
-  const datumOption = (() => {
-    if (utxo.datumHash) {
+  const datumOption = (utxo: UTxO) => {
+    if (utxo.datumHash)
       return CML.DatumOption.new_hash(CML.DatumHash.from_hex(utxo.datumHash));
-    }
     // inline datum
-    if (!utxo.datumHash && utxo.datum) {
+    if (utxo.datum)
       return CML.DatumOption.new_datum(
-        CML.PlutusData.from_cbor_hex(utxo.datum),
+        CML.PlutusData.from_cbor_hex(utxo.datum)
       );
-    }
-  })();
-  const scriptRef = (() => {
-    if (utxo.scriptRef) {
-      return toScriptRef(utxo.scriptRef);
-    }
-  })();
+    return undefined;
+  };
   return CML.TransactionOutput.new(
-    address,
+    CML.Address.from_bech32(utxo.address),
     assetsToValue(utxo.assets),
-    datumOption,
-    scriptRef,
+    datumOption(utxo),
+    utxo.scriptRef ? toScriptRef(utxo.scriptRef) : undefined
   );
 };
 
 export const utxoToTransactionInput = (utxo: UTxO) => {
   return CML.TransactionInput.new(
     CML.TransactionHash.from_hex(utxo.txHash),
-    BigInt(utxo.outputIndex),
+    BigInt(utxo.outputIndex)
   );
 };
 
 export function utxoToCore(utxo: UTxO): CML.TransactionUnspentOutput {
-  const address: CML.Address = (() => {
-    try {
-      return CML.Address.from_bech32(utxo.address);
-    } catch (_e) {
-      return CML.ByronAddress.from_base58(utxo.address).to_address();
-    }
-  })();
-  const datumOption = (() => {
-    if (utxo.datumHash) {
-      return CML.DatumOption.new_hash(CML.DatumHash.from_hex(utxo.datumHash));
-    }
-    // inline datum
-    if (!utxo.datumHash && utxo.datum) {
-      return CML.DatumOption.new_datum(
-        CML.PlutusData.from_cbor_hex(utxo.datum),
-      );
-    }
-  })();
-  const scriptRef = (() => {
-    if (utxo.scriptRef) {
-      return toScriptRef(utxo.scriptRef);
-    }
-  })();
-
-  const output = CML.TransactionOutput.new(
-    address,
-    assetsToValue(utxo.assets),
-    datumOption,
-    scriptRef,
-  );
-
   return CML.TransactionUnspentOutput.new(
-    CML.TransactionInput.new(
-      CML.TransactionHash.from_hex(utxo.txHash),
-      BigInt(utxo.outputIndex),
-    ),
-    output,
+    utxoToTransactionInput(utxo),
+    utxoToTransactionOutput(utxo)
   );
 }
 export function utxosToCores(utxos: UTxO[]): CML.TransactionUnspentOutput[] {
-  const result: Array<CML.TransactionUnspentOutput> = [];
-  utxos.map(utxoToCore).forEach((utxo) => result.push(utxo));
+  const result: CML.TransactionUnspentOutput[] = [];
+  for (const utxo of utxos) {
+    result.push(utxoToCore(utxo));
+  }
   return result;
 }
 
@@ -92,14 +47,12 @@ export function coreToUtxo(coreUtxo: CML.TransactionUnspentOutput): UTxO {
   return {
     ...coreToOutRef(CML.TransactionInput.from_cbor_hex(coreUtxo.to_cbor_hex())),
     ...coreToTxOutput(
-      CML.TransactionOutput.from_cbor_hex(coreUtxo.to_cbor_hex()),
+      CML.TransactionOutput.from_cbor_hex(coreUtxo.to_cbor_hex())
     ),
   };
 }
 
-export function coresToUtxos(
-  utxos: Array<CML.TransactionUnspentOutput>,
-): UTxO[] {
+export function coresToUtxos(utxos: CML.TransactionUnspentOutput[]): UTxO[] {
   const result: UTxO[] = [];
   for (let i = 0; i < utxos.length; i++) {
     result.push(coreToUtxo(utxos[i]));
@@ -132,10 +85,8 @@ export function coreToTxOutput(output: CML.TransactionOutput): TxOutput {
   };
 }
 
-export function coresToTxOutputs(
-  outputs: Array<CML.TransactionOutput>,
-): TxOutput[] {
-  const result: TxOutput[] = [];
+export function coresToTxOutputs(outputs: CML.TransactionOutput[]): TxOutput[] {
+  let result: TxOutput[] = [];
   for (let i = 0; i < outputs.length; i++) {
     result.push(coreToTxOutput(outputs[i]));
   }
