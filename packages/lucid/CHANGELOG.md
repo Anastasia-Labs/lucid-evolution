@@ -1,5 +1,24 @@
 # @lucid-evolution/lucid
 
+## 0.2.16
+
+### Patch Changes
+
+- [#84](https://github.com/Anastasia-Labs/lucid-evolution/pull/84) [`2fb5635`](https://github.com/Anastasia-Labs/lucid-evolution/commit/2fb56356fbdfc41c5dc7328456559c8aaf8dbf15) Thanks [@solidsnakedev](https://github.com/solidsnakedev)! - - refactor: fetch wallet utxos only once
+  - refactor: change code structure
+  - refactor: move CML to core file
+  - refactor: set core file for CML lib
+  - build(upgrade): bump packages version
+- Updated dependencies [[`2fb5635`](https://github.com/Anastasia-Labs/lucid-evolution/commit/2fb56356fbdfc41c5dc7328456559c8aaf8dbf15)]:
+  - @lucid-evolution/core-types@0.1.5
+  - @lucid-evolution/core-utils@0.1.5
+  - @lucid-evolution/sign_data@0.1.5
+  - @lucid-evolution/provider@0.1.9
+  - @lucid-evolution/plutus@0.1.8
+  - @lucid-evolution/wallet@0.1.7
+  - @lucid-evolution/bip39@0.2.6
+  - @lucid-evolution/utils@0.1.7
+
 ## 0.2.15
 
 ### Patch Changes

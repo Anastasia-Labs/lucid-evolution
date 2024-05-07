@@ -1,5 +1,15 @@
 # @lucid-evolution/core-utils
 
+## 0.1.5
+
+### Patch Changes
+
+- [#84](https://github.com/Anastasia-Labs/lucid-evolution/pull/84) [`2fb5635`](https://github.com/Anastasia-Labs/lucid-evolution/commit/2fb56356fbdfc41c5dc7328456559c8aaf8dbf15) Thanks [@solidsnakedev](https://github.com/solidsnakedev)! - - refactor: fetch wallet utxos only once
+  - refactor: change code structure
+  - refactor: move CML to core file
+  - refactor: set core file for CML lib
+  - build(upgrade): bump packages version
+
 ## 0.1.4
 
 ### Patch Changes
