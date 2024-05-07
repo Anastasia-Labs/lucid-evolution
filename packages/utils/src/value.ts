@@ -32,8 +32,8 @@ export function assetsToValue(assets: Assets): CML.Value {
     new Set(
       units
         .filter((unit) => unit !== "lovelace")
-        .map((unit) => unit.slice(0, 56))
-    )
+        .map((unit) => unit.slice(0, 56)),
+    ),
   );
   for (const policy of policies) {
     const policyUnits = units.filter((unit) => unit.slice(0, 56) === policy);
@@ -41,7 +41,7 @@ export function assetsToValue(assets: Assets): CML.Value {
     for (const unit of policyUnits) {
       assetsValue.insert(
         CML.AssetName.from_str(toText(unit.slice(56))),
-        BigInt(assets[unit])
+        BigInt(assets[unit]),
       );
     }
     multiAsset.insert_assets(CML.ScriptHash.from_hex(policy), assetsValue);
@@ -75,7 +75,7 @@ export function fromUnit(unit: Unit): {
 export function toUnit(
   policyId: PolicyId,
   name?: string | null,
-  label?: number | null
+  label?: number | null,
 ): Unit {
   const hexLabel = Number.isInteger(label) ? toLabel(label!) : "";
   const n = name ? name : "";

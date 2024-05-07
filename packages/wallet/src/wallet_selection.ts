@@ -33,7 +33,7 @@ export const makeWalletFromSeed = (
     addressType?: "Base" | "Enterprise";
     accountIndex?: number;
     password?: string;
-  }
+  },
 ): Wallet => {
   const { address, rewardAddress, paymentKey, stakeKey } = walletFromSeed(
     seed,
@@ -42,7 +42,7 @@ export const makeWalletFromSeed = (
       accountIndex: options?.accountIndex || 0,
       password: options?.password,
       network: network,
-    }
+    },
   );
   const paymentKeyHash = CML.PrivateKey.from_bech32(paymentKey)
     .to_public()
@@ -87,7 +87,7 @@ export const makeWalletFromSeed = (
         const priv = CML.PrivateKey.from_bech32(privKeyHashMap[keyHash]!);
         const witness = CML.make_vkey_witness(
           CML.hash_transaction(tx.body()),
-          priv
+          priv,
         );
         txWitnessSetBuilder.add_vkey(witness);
       }
@@ -96,7 +96,7 @@ export const makeWalletFromSeed = (
     },
     signMessage: async (
       address: Address | RewardAddress,
-      payload: Payload
+      payload: Payload,
     ): Promise<SignedMessage> => {
       const {
         paymentCredential,
@@ -127,13 +127,13 @@ export const makeWalletFromSeed = (
 export const makeWalletFromPrivateKey = (
   provider: Provider,
   network: Network,
-  privateKey: PrivateKey
+  privateKey: PrivateKey,
 ): Wallet => {
   const priv = CML.PrivateKey.from_bech32(privateKey);
   const pubKeyHash = priv.to_public().hash();
   const address = CML.EnterpriseAddress.new(
     network === "Mainnet" ? 1 : 0,
-    CML.Credential.new_pub_key(pubKeyHash)
+    CML.Credential.new_pub_key(pubKeyHash),
   )
     .to_address()
     .to_bech32(undefined);
@@ -164,7 +164,7 @@ export const makeWalletFromPrivateKey = (
     },
     signMessage: async (
       address: Address | RewardAddress,
-      payload: Payload
+      payload: Payload,
     ): Promise<SignedMessage> => {
       const {
         paymentCredential,
@@ -188,7 +188,7 @@ export const makeWalletFromPrivateKey = (
 
 export const makeWalletFromAPI = (
   provider: Provider,
-  api: WalletApi
+  api: WalletApi,
 ): Wallet => {
   const getAddressHex = async () => {
     const [addressHex] = await api.getUsedAddresses();
@@ -216,7 +216,7 @@ export const makeWalletFromAPI = (
     getUtxos: async (): Promise<UTxO[]> => {
       const utxos = ((await api.getUtxos()) || []).map((utxo) => {
         const parsedUtxo = CML.TransactionUnspentOutput.from_cbor_bytes(
-          fromHex(utxo)
+          fromHex(utxo),
         );
         return coreToUtxo(parsedUtxo);
       });
@@ -241,7 +241,7 @@ export const makeWalletFromAPI = (
     },
     signMessage: async (
       address: Address | RewardAddress,
-      payload: Payload
+      payload: Payload,
     ): Promise<SignedMessage> => {
       const hexAddress = toHex(CML.Address.from_bech32(address).to_raw_bytes());
       return await api.signData(hexAddress, payload);

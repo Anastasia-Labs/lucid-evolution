@@ -10,7 +10,7 @@ export const utxoToTransactionOutput = (utxo: UTxO) => {
     // inline datum
     if (utxo.datum)
       return CML.DatumOption.new_datum(
-        CML.PlutusData.from_cbor_hex(utxo.datum)
+        CML.PlutusData.from_cbor_hex(utxo.datum),
       );
     return undefined;
   };
@@ -18,21 +18,21 @@ export const utxoToTransactionOutput = (utxo: UTxO) => {
     CML.Address.from_bech32(utxo.address),
     assetsToValue(utxo.assets),
     datumOption(utxo),
-    utxo.scriptRef ? toScriptRef(utxo.scriptRef) : undefined
+    utxo.scriptRef ? toScriptRef(utxo.scriptRef) : undefined,
   );
 };
 
 export const utxoToTransactionInput = (utxo: UTxO) => {
   return CML.TransactionInput.new(
     CML.TransactionHash.from_hex(utxo.txHash),
-    BigInt(utxo.outputIndex)
+    BigInt(utxo.outputIndex),
   );
 };
 
 export function utxoToCore(utxo: UTxO): CML.TransactionUnspentOutput {
   return CML.TransactionUnspentOutput.new(
     utxoToTransactionInput(utxo),
-    utxoToTransactionOutput(utxo)
+    utxoToTransactionOutput(utxo),
   );
 }
 export function utxosToCores(utxos: UTxO[]): CML.TransactionUnspentOutput[] {
@@ -47,7 +47,7 @@ export function coreToUtxo(coreUtxo: CML.TransactionUnspentOutput): UTxO {
   return {
     ...coreToOutRef(CML.TransactionInput.from_cbor_hex(coreUtxo.to_cbor_hex())),
     ...coreToTxOutput(
-      CML.TransactionOutput.from_cbor_hex(coreUtxo.to_cbor_hex())
+      CML.TransactionOutput.from_cbor_hex(coreUtxo.to_cbor_hex()),
     ),
   };
 }

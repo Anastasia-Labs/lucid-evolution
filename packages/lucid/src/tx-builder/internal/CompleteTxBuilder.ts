@@ -1,4 +1,4 @@
-import { Effect } from "effect";
+import { Effect, pipe } from "effect";
 import { Address, OutputData, UTxO } from "@lucid-evolution/core-types";
 import { TxBuilderConfig } from "../types.js";
 import {
@@ -7,7 +7,7 @@ import {
   TxBuilderErrorCause,
   makeRunTimeError,
 } from "../../Errors.js";
-import * as CML from "@dcspark/cardano-multiplatform-lib-nodejs";
+import { CML } from "../../core.js";
 import { makeTxSignBuilder } from "../../tx-sign-builder/MakeTxSign.js";
 import * as UPLC from "@lucid-evolution/uplc";
 import {

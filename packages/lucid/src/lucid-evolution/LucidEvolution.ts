@@ -42,14 +42,14 @@ export type LucidEvolution = {
   utxosAt: (addressOrCredential: string | Credential) => Promise<UTxO[]>;
   utxosAtWithUnit: (
     addressOrCredential: string | Credential,
-    unit: string
+    unit: string,
   ) => Promise<UTxO[]>;
   utxoByUnit: (unit: string) => Promise<UTxO>;
   utxosByOutRef: (outRefs: OutRef[]) => Promise<UTxO[]>;
   delegationAt: (rewardAddress: string) => Promise<Delegation>;
   awaitTx: (
     txHash: string,
-    checkInterval?: number | undefined
+    checkInterval?: number | undefined,
   ) => Promise<boolean>;
   datumOf: <T = Data>(utxo: UTxO, type?: T | undefined) => Promise<T>;
   metadataOf: <T = any>(unit: string) => Promise<T>;
@@ -66,7 +66,7 @@ export type LucidConfig = {
 //TODO: turn this to Effect
 export const Lucid = async (
   provider: Provider,
-  network: Network
+  network: Network,
 ): Promise<LucidEvolution> => {
   const protocolParam = await provider.getProtocolParameters();
   const config: LucidConfig = {
@@ -96,7 +96,7 @@ export const Lucid = async (
         config.wallet = makeWalletFromPrivateKey(
           config.provider,
           network,
-          privateKey
+          privateKey,
         );
       },
       fromAPI: (walletAPI: WalletApi) => {

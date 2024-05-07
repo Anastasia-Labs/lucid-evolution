@@ -19,7 +19,10 @@ export const addSigner = (
   address: Address | RewardAddress,
 ) =>
   Effect.gen(function* () {
-    const addressDetails = yield* validateAddressDetails(address, config.lucidConfig);
+    const addressDetails = yield* validateAddressDetails(
+      address,
+      config.lucidConfig,
+    );
     if (!addressDetails.paymentCredential && !addressDetails.stakeCredential)
       yield* addSignerError(
         "NotFound",

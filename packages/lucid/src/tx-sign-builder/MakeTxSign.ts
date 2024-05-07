@@ -1,4 +1,4 @@
-import * as CML from "@dcspark/cardano-multiplatform-lib-nodejs";
+import { CML } from "../core.js";
 import { LucidConfig } from "../lucid-evolution/LucidEvolution.js";
 import { Effect } from "effect";
 //TODO: move to commont utils
