@@ -7,7 +7,7 @@ import { LucidConfig } from "../lucid-evolution/LucidEvolution.js";
 export type TxBuilderConfig = {
   readonly lucidConfig: LucidConfig;
   readonly txBuilder: CML.TransactionBuilder;
-  inputUTxOs?: UTxO[];
+  inputUTxOs: UTxO[];
   scripts: Map<string, { type: ScriptType; script: string }>;
   programs: Effect.Effect<void, TransactionError, never>[];
 };

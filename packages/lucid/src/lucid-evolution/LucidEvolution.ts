@@ -14,7 +14,7 @@ import {
 } from "@lucid-evolution/core-types";
 import { CML } from "../core.js";
 import { datumOf, makeConfigBuilder, metadataOf } from "./utils.js";
-import { unixTimeToSlot } from "@lucid-evolution/utils";
+import { createCostModels, unixTimeToSlot } from "@lucid-evolution/utils";
 import { TxBuilder, makeTxBuilder } from "../tx-builder/MakeTxBuilder.js";
 import {
   TxSignBuilder,
@@ -60,6 +60,7 @@ export type LucidConfig = {
   network: Network;
   wallet: Wallet | undefined;
   txbuilderconfig: CML.TransactionBuilderConfig;
+  costModels: CML.CostModels;
   protocolParameters: ProtocolParameters;
 };
 
@@ -69,11 +70,13 @@ export const Lucid = async (
   network: Network,
 ): Promise<LucidEvolution> => {
   const protocolParam = await provider.getProtocolParameters();
+  const costModels = createCostModels(protocolParam.costModels);
   const config: LucidConfig = {
     provider: provider,
     network: network,
     wallet: undefined,
-    txbuilderconfig: makeConfigBuilder(protocolParam),
+    costModels: costModels,
+    txbuilderconfig: makeConfigBuilder(protocolParam, costModels),
     protocolParameters: protocolParam,
   };
   return {
@@ -81,8 +84,10 @@ export const Lucid = async (
     wallet: () => config.wallet as Wallet,
     switchProvider: async (provider: Provider) => {
       const protocolParam = await provider.getProtocolParameters();
+      const costModels = createCostModels(protocolParam.costModels);
       config.provider = provider;
-      config.txbuilderconfig = makeConfigBuilder(protocolParam);
+      config.costModels = costModels;
+      config.txbuilderconfig = makeConfigBuilder(protocolParam, costModels);
       config.protocolParameters = protocolParam;
     },
     newTx: (): TxBuilder => makeTxBuilder(config),

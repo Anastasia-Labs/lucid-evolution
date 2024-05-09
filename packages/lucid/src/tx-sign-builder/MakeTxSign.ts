@@ -2,7 +2,7 @@ import { CML } from "../core.js";
 import { LucidConfig } from "../lucid-evolution/LucidEvolution.js";
 import { Effect } from "effect";
 //TODO: move to commont utils
-import { makeReturn } from "../tx-builder/internal/TxUtils.js";
+import { makeReturn } from "../core.js";
 import { PrivateKey } from "@lucid-evolution/core-types";
 import {
   ERROR_MESSAGE,

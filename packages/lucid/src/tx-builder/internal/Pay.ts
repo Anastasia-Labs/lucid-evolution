@@ -32,14 +32,16 @@ export const payToAddressWithData = (
   scriptRef?: Script,
 ) =>
   Effect.gen(function* () {
-    const datumOption = toDatumOption(outputDatum);
-    const output = CML.TransactionOutput.new(
-      yield* toCMLAddress(address, config.lucidConfig),
-      assetsToValue(assets),
-      datumOption,
-      scriptRef ? toScriptRef(scriptRef) : undefined,
+    config.txBuilder.add_output(
+      CML.SingleOutputBuilderResult.new(
+        CML.TransactionOutput.new(
+          yield* toCMLAddress(address, config.lucidConfig),
+          assetsToValue(assets),
+          toDatumOption(outputDatum),
+          scriptRef ? toScriptRef(scriptRef) : undefined,
+        ),
+      ),
     );
-    config.txBuilder.add_output(CML.SingleOutputBuilderResult.new(output));
   });
 
 /** Pay to a plutus script address with datum or scriptRef. */

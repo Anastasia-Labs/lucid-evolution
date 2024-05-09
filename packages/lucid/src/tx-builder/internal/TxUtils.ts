@@ -70,14 +70,6 @@ export function isEqual(arr1: Uint8Array, arr2: Uint8Array): boolean {
   return arr1.every((value, index) => value === arr2[index]);
 }
 
-export const makeReturn = <A, E>(program: Effect.Effect<A, E>) => {
-  return {
-    unsafeRun: () => Effect.runPromise(program),
-    safeRun: () => Effect.runPromise(Effect.either(program)),
-    program: () => program,
-  };
-};
-
 export const validateAddressDetails = (
   address: Address | RewardAddress,
   lucidConfig: LucidConfig,
