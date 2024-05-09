@@ -29,12 +29,16 @@ export const utxoToTransactionInput = (utxo: UTxO) => {
   );
 };
 
-export function utxoToCore(utxo: UTxO): CML.TransactionUnspentOutput {
-  return CML.TransactionUnspentOutput.new(
+export const utxoToCore = (utxo: UTxO): CML.TransactionUnspentOutput => {
+  const out = utxoToTransactionOutput(utxo);
+  const utxoCore = CML.TransactionUnspentOutput.new(
     utxoToTransactionInput(utxo),
-    utxoToTransactionOutput(utxo),
+    out,
   );
-}
+  out.free();
+  return utxoCore;
+};
+
 export function utxosToCores(utxos: UTxO[]): CML.TransactionUnspentOutput[] {
   const result: CML.TransactionUnspentOutput[] = [];
   for (const utxo of utxos) {
@@ -44,12 +48,14 @@ export function utxosToCores(utxos: UTxO[]): CML.TransactionUnspentOutput[] {
 }
 
 export function coreToUtxo(coreUtxo: CML.TransactionUnspentOutput): UTxO {
-  return {
+  const out = CML.TransactionOutput.from_cbor_hex(coreUtxo.to_cbor_hex());
+  const utxo = {
     ...coreToOutRef(CML.TransactionInput.from_cbor_hex(coreUtxo.to_cbor_hex())),
-    ...coreToTxOutput(
-      CML.TransactionOutput.from_cbor_hex(coreUtxo.to_cbor_hex()),
-    ),
+    ...coreToTxOutput(out),
   };
+  out.free();
+
+  return utxo;
 }
 
 export function coresToUtxos(utxos: CML.TransactionUnspentOutput[]): UTxO[] {

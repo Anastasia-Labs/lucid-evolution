@@ -6,17 +6,23 @@ export function createCostModels(costModels: CostModels): CML.CostModels {
 
   // add plutus v1
   const costmdlV1 = CML.IntList.new();
-  Object.values(costModels.PlutusV1).forEach((cost) => {
-    costmdlV1.add(CML.Int.new(BigInt(cost)));
-  });
+  for (const cost of Object.values(costModels.PlutusV1)) {
+    const int = CML.Int.from_str(cost.toString());
+    costmdlV1.add(int);
+    int.free();
+  }
   costmdls.set_plutus_v1(costmdlV1);
+  costmdlV1.free();
 
   // add plutus v2
   const costmdlV2 = CML.IntList.new();
-  Object.values(costModels.PlutusV2).forEach((cost) => {
-    costmdlV2.add(CML.Int.new(BigInt(cost)));
-  });
+  for (const cost of Object.values(costModels.PlutusV2)) {
+    const int = CML.Int.from_str(cost.toString());
+    costmdlV2.add(int);
+    int.free();
+  }
   costmdls.set_plutus_v2(costmdlV2);
+  costmdlV2.free();
 
   // add plutus v3
   // const costmdlV3 = C.IntList.new()
