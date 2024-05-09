@@ -56,7 +56,7 @@ describe.concurrent("Hello", () => {
         .complete()
         .program();
       const signed = yield* signBuilder.sign.withWallet().complete().program();
-      const txHash = yield* Effect.tryPromise(() => signed.submit());
+      const txHash = yield* signed.submit().program()
       yield* Effect.promise(() => user.awaitTx(txHash, 60_000));
       yield* Effect.sleep("10 seconds");
       yield* Effect.logInfo(txHash);
@@ -105,7 +105,7 @@ describe.concurrent("Hello", () => {
         .complete()
         .program();
       const signed = yield* signBuilder.sign.withWallet().complete().program();
-      const txHash = yield* Effect.tryPromise(() => signed.submit());
+      const txHash = yield* signed.submit().program()
       yield* Effect.sleep("10 seconds");
       yield* Effect.logInfo(txHash);
     }).pipe(
