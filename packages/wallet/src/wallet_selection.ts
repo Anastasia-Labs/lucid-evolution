@@ -21,7 +21,7 @@ import {
   paymentCredentialOf,
   utxoToCore,
 } from "@lucid-evolution/utils";
-import * as CML from "@dcspark/cardano-multiplatform-lib-nodejs";
+import { CML } from "./core.js";
 import { signData } from "@lucid-evolution/sign_data";
 import { discoverOwnUsedTxKeyHashes, walletFromSeed } from "./wallet.js";
 
