@@ -45,7 +45,7 @@ export function walletFromSeed(
     .derive(harden(1815))
     .derive(harden(options.accountIndex!));
 
-  rootKey.free()
+  rootKey.free();
 
   const paymentKey = accountKey.derive(0).derive(0).to_raw_key();
   const stakeKey = accountKey.derive(2).derive(0).to_raw_key();

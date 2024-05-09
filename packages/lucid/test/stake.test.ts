@@ -29,7 +29,7 @@ describe("Stake", () => {
         .complete()
         .program();
       const signed = yield* signBuilder.sign.withWallet().complete().program();
-      const txHash = yield* signed.submit().program()
+      const txHash = yield* signed.submit().program();
       yield* Effect.logInfo(txHash);
     }).pipe(
       // Effect.tapError(Effect.logError),
@@ -60,7 +60,7 @@ describe("Stake", () => {
         .complete()
         .program();
       const signed = yield* signBuilder.sign.withWallet().complete().program();
-      const txHash = yield* signed.submit().program()
+      const txHash = yield* signed.submit().program();
       yield* Effect.logInfo(txHash);
     }).pipe(
       Effect.retry(
@@ -86,7 +86,7 @@ describe("Stake", () => {
         .complete()
         .program();
       const signed = yield* signBuilder.sign.withWallet().complete().program();
-      const txHash = yield* signed.submit().program()
+      const txHash = yield* signed.submit().program();
       yield* Effect.logInfo(txHash);
     }).pipe(
       Effect.catchTag("UnknownException", (error) =>
@@ -118,7 +118,7 @@ describe("Withdraw", () => {
         .complete()
         .program();
       const signed = yield* signBuilder.sign.withWallet().complete().program();
-      const txHash = yield* signed.submit().program()
+      const txHash = yield* signed.submit().program();
       yield* Effect.logInfo(txHash);
     }).pipe(
       Effect.catchTag("UnknownException", (error) =>
@@ -148,7 +148,7 @@ describe("Withdraw", () => {
         .complete()
         .program();
       const signed = yield* signBuilder.sign.withWallet().complete().program();
-      const txHash = yield* signed.submit().program()
+      const txHash = yield* signed.submit().program();
       yield* Effect.logInfo(txHash);
     }).pipe(
       Effect.retry(
