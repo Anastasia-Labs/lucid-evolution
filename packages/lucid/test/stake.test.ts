@@ -15,7 +15,7 @@ const loadUser = Effect.gen(function* ($) {
   return user;
 });
 
-describe("Stake", () => {
+describe.concurrent("Stake", () => {
   test.sequential("registerStake", async () => {
     const program = Effect.gen(function* ($) {
       const user = yield* loadUser;
@@ -104,7 +104,7 @@ describe("Stake", () => {
   });
 });
 
-describe("Withdraw", () => {
+describe.concurrent("Withdraw", () => {
   test.sequential("registerStake", async () => {
     const program = Effect.gen(function* () {
       const user = yield* loadUser;

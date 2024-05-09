@@ -42,8 +42,8 @@ export const payToAddressWithData = (
     );
     const outputBuilder = CML.SingleOutputBuilderResult.new(output);
     config.txBuilder.add_output(outputBuilder);
-    addr.free();
-    output.free();
+    // addr.free();
+    // output.free();
   });
 
 /** Pay to a plutus script address with datum or scriptRef. */
@@ -55,7 +55,7 @@ export const payToContract = (
   scriptRef?: Script,
 ) =>
   Effect.gen(function* () {
-    if (outputDatum.value)
+    if (!outputDatum.value)
       yield* payError(
         "Datum",
         "No datum set. Script output becomes unspendable without datum.",

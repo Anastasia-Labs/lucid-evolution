@@ -34,7 +34,7 @@ const loadUser = Effect.gen(function* ($) {
 });
 const contractAddress = validatorToAddress("Preprod", hello);
 
-describe.skip("Hello", () => {
+describe.concurrent("Hello", () => {
   test.sequential("DespositFunds", async () => {
     const program = Effect.gen(function* () {
       const user = yield* loadUser;
@@ -57,7 +57,7 @@ describe.skip("Hello", () => {
         .program();
       const signed = yield* signBuilder.sign.withWallet().complete().program();
       const txHash = yield* signed.submit().program();
-      yield* Effect.promise(() => user.awaitTx(txHash, 60_000));
+      yield* Effect.promise(() => user.awaitTx(txHash, 20_000));
       yield* Effect.sleep("10 seconds");
       yield* Effect.logInfo(txHash);
     }).pipe(
