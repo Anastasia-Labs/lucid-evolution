@@ -11,7 +11,18 @@ import { Constr, Data } from "@lucid-evolution/plutus";
 
 export const makeConfigBuilder = (
   protocolParameters: ProtocolParameters,
+  costModels: CML.CostModels,
 ): CML.TransactionBuilderConfig => {
+  const exUnitsPrices = CML.ExUnitPrices.new(
+    CML.Rational.new(
+      BigInt(protocolParameters.priceMem * 100_000_000),
+      100_000_000n,
+    ),
+    CML.Rational.new(
+      BigInt(protocolParameters.priceStep * 100_000_000),
+      100_000_000n,
+    ),
+  );
   const txBuilderConfig = CML.TransactionBuilderConfigBuilder.new()
     .fee_algo(
       CML.LinearFee.new(
@@ -24,24 +35,16 @@ export const makeConfigBuilder = (
     .key_deposit(protocolParameters.keyDeposit)
     .max_value_size(protocolParameters.maxValSize)
     .max_tx_size(protocolParameters.maxTxSize)
-    .ex_unit_prices(
-      CML.ExUnitPrices.new(
-        CML.Rational.new(
-          BigInt(protocolParameters.priceMem * 100_000_000),
-          100_000_000n,
-        ),
-        CML.Rational.new(
-          BigInt(protocolParameters.priceStep * 100_000_000),
-          100_000_000n,
-        ),
-      ),
-    )
+    .ex_unit_prices(exUnitsPrices)
     .collateral_percentage(protocolParameters.collateralPercentage)
     .max_collateral_inputs(protocolParameters.maxCollateralInputs)
-    .cost_models(createCostModels(protocolParameters.costModels))
+    .cost_models(costModels)
     .collateral_percentage(protocolParameters.collateralPercentage)
     .max_collateral_inputs(protocolParameters.maxCollateralInputs)
     .build();
+
+  exUnitsPrices.free();
+
   return txBuilderConfig;
 };
 

@@ -8,7 +8,7 @@ import {
   RewardAddress,
   UTxO,
 } from "@lucid-evolution/core-types";
-import * as CML from "@dcspark/cardano-multiplatform-lib-nodejs";
+import { CML } from "./core.js";
 import { mnemonicToEntropy } from "@lucid-evolution/bip39";
 
 type FromSeed = {
@@ -44,6 +44,8 @@ export function walletFromSeed(
     .derive(harden(1852))
     .derive(harden(1815))
     .derive(harden(options.accountIndex!));
+
+  rootKey.free();
 
   const paymentKey = accountKey.derive(0).derive(0).to_raw_key();
   const stakeKey = accountKey.derive(2).derive(0).to_raw_key();

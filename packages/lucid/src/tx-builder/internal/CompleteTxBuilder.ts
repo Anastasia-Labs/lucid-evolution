@@ -7,7 +7,7 @@ import {
   TxBuilderErrorCause,
   makeRunTimeError,
 } from "../../Errors.js";
-import { CML } from "../../core.js";
+import { CML, makeReturn } from "../../core.js";
 import { makeTxSignBuilder } from "../../tx-sign-builder/MakeTxSign.js";
 import * as UPLC from "@lucid-evolution/uplc";
 import {
@@ -18,7 +18,6 @@ import {
   utxoToTransactionOutput,
 } from "@lucid-evolution/utils";
 import { SLOT_CONFIG_NETWORK } from "@lucid-evolution/plutus";
-import { makeReturn } from "./TxUtils.js";
 
 export const completeTxError = (cause: TxBuilderErrorCause, message?: string) =>
   new TxBuilderError({ cause, module: "Complete", message });
@@ -50,7 +49,7 @@ export const completeTxBuilder = (
     const walletCoreUtxos = utxosToCores(walletUtxos);
     //TODO: add multiple input collateral based one:
     // max_collateral_inputs	3	The maximum number of collateral inputs allowed in a transaction.
-    if (config.inputUTxOs?.find((value) => value.datum)) {
+    if (config.inputUTxOs?.find((value) => value.datum !== undefined)) {
       const collateralInput: UTxO = yield* $(
         Effect.fromNullable(
           walletUtxos.find((value) => value.assets["lovelace"] >= 5_000_000n),
@@ -115,9 +114,6 @@ export const completeTxBuilder = (
     const changeAddress = yield* $(Effect.promise(() => wallet.address()));
 
     const slotConfig = SLOT_CONFIG_NETWORK[config.lucidConfig.network];
-    const costmodel = createCostModels(
-      config.lucidConfig.protocolParameters.costModels,
-    );
     // config.txBuilder.add_change_if_needed(
     //   CML.Address.from_bech32(changeAddress),
     //   false
@@ -140,7 +136,7 @@ export const completeTxBuilder = (
               txEvaluation.to_cbor_bytes(),
               ins.map((value) => value.to_cbor_bytes()),
               outs.map((value) => value.to_cbor_bytes()),
-              costmodel.to_cbor_bytes(),
+              config.lucidConfig.costModels.to_cbor_bytes(),
               config.lucidConfig.protocolParameters.maxTxExSteps,
               config.lucidConfig.protocolParameters.maxTxExMem,
               BigInt(slotConfig.zeroTime),
@@ -168,6 +164,7 @@ export const completeTxBuilder = (
         CML.Address.from_bech32(changeAddress),
       )
       .build_unchecked();
+    config.txBuilder.free();
 
     return makeTxSignBuilder(config.lucidConfig, tx);
   }).pipe(Effect.catchAllDefect(makeRunTimeError));

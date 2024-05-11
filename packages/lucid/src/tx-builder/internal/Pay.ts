@@ -1,4 +1,4 @@
-import { Effect } from "effect";
+import { Effect, Scope } from "effect";
 import { assetsToValue, toScriptRef } from "@lucid-evolution/utils";
 import { Address, Assets, Script } from "@lucid-evolution/core-types";
 import { OutputDatum, TxBuilderConfig } from "../types.js";
@@ -32,14 +32,19 @@ export const payToAddressWithData = (
   scriptRef?: Script,
 ) =>
   Effect.gen(function* () {
-    const datumOption = toDatumOption(outputDatum);
-    const output = CML.TransactionOutput.new(
-      yield* toCMLAddress(address, config.lucidConfig),
-      assetsToValue(assets),
-      datumOption,
-      scriptRef ? toScriptRef(scriptRef) : undefined,
+    //TODO: Test with datumhash
+    const outputBuilder = CML.TransactionOutputBuilder.new()
+      .with_address(CML.Address.from_bech32(address))
+      .with_data(toDatumOption(outputDatum));
+    config.txBuilder.add_output(
+      scriptRef
+        ? outputBuilder
+            .with_reference_script(toScriptRef(scriptRef))
+            .next()
+            .with_value(assetsToValue(assets))
+            .build()
+        : outputBuilder.next().with_value(assetsToValue(assets)).build(),
     );
-    config.txBuilder.add_output(CML.SingleOutputBuilderResult.new(output));
   });
 
 /** Pay to a plutus script address with datum or scriptRef. */
@@ -51,7 +56,7 @@ export const payToContract = (
   scriptRef?: Script,
 ) =>
   Effect.gen(function* () {
-    if (outputDatum.value)
+    if (!outputDatum.value)
       yield* payError(
         "Datum",
         "No datum set. Script output becomes unspendable without datum.",
