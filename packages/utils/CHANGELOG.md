@@ -1,5 +1,18 @@
 # @lucid-evolution/utils
 
+## 0.1.8
+
+### Patch Changes
+
+- [#86](https://github.com/Anastasia-Labs/lucid-evolution/pull/86) [`6eacab5`](https://github.com/Anastasia-Labs/lucid-evolution/commit/6eacab5c108485877879a2deffd2f8a1369ac172) Thanks [@solidsnakedev](https://github.com/solidsnakedev)! - - fix: use TransactionOutputBuilder.() instead of TransactionOutput.new()
+
+  - test: enable all preprod tests
+  - test: update test
+  - refactor: code structure
+  - test: add hello contract test using retry implementation
+
+- [#86](https://github.com/Anastasia-Labs/lucid-evolution/pull/86) [`a8abb5d`](https://github.com/Anastasia-Labs/lucid-evolution/commit/a8abb5df4b6d233e314a36f0948c95ab15f784bb) Thanks [@solidsnakedev](https://github.com/solidsnakedev)! - refactor code
+
 ## 0.1.7
 
 ### Patch Changes
