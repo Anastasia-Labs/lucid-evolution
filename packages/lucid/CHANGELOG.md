@@ -1,5 +1,23 @@
 # @lucid-evolution/lucid
 
+## 0.2.17
+
+### Patch Changes
+
+- [#86](https://github.com/Anastasia-Labs/lucid-evolution/pull/86) [`6eacab5`](https://github.com/Anastasia-Labs/lucid-evolution/commit/6eacab5c108485877879a2deffd2f8a1369ac172) Thanks [@solidsnakedev](https://github.com/solidsnakedev)! - - fix: use TransactionOutputBuilder.() instead of TransactionOutput.new()
+
+  - test: enable all preprod tests
+  - test: update test
+  - refactor: code structure
+  - test: add hello contract test using retry implementation
+
+- [#86](https://github.com/Anastasia-Labs/lucid-evolution/pull/86) [`23220d3`](https://github.com/Anastasia-Labs/lucid-evolution/commit/23220d3da741d0e413dc89d8380129bee5fa79f6) Thanks [@solidsnakedev](https://github.com/solidsnakedev)! - refactor code
+
+- Updated dependencies [[`6eacab5`](https://github.com/Anastasia-Labs/lucid-evolution/commit/6eacab5c108485877879a2deffd2f8a1369ac172), [`9799ffd`](https://github.com/Anastasia-Labs/lucid-evolution/commit/9799ffd90bbbf393bcf91c95733a1486367650e2), [`a8abb5d`](https://github.com/Anastasia-Labs/lucid-evolution/commit/a8abb5df4b6d233e314a36f0948c95ab15f784bb)]:
+  - @lucid-evolution/provider@0.1.10
+  - @lucid-evolution/wallet@0.1.8
+  - @lucid-evolution/utils@0.1.8
+
 ## 0.2.16
 
 ### Patch Changes
