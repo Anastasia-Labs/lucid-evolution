@@ -1,4 +1,4 @@
-import { Effect } from "effect";
+import { Effect, Scope } from "effect";
 import { assetsToValue, toScriptRef } from "@lucid-evolution/utils";
 import { Address, Assets, Script } from "@lucid-evolution/core-types";
 import { OutputDatum, TxBuilderConfig } from "../types.js";
@@ -32,18 +32,19 @@ export const payToAddressWithData = (
   scriptRef?: Script,
 ) =>
   Effect.gen(function* () {
-    const datum = toDatumOption(outputDatum);
-    const addr = yield* toCMLAddress(address, config.lucidConfig);
-    const output = CML.TransactionOutput.new(
-      addr,
-      assetsToValue(assets),
-      datum,
-      scriptRef ? toScriptRef(scriptRef) : undefined,
+    //TODO: Test with datumhash
+    const outputBuilder = CML.TransactionOutputBuilder.new()
+      .with_address(CML.Address.from_bech32(address))
+      .with_data(toDatumOption(outputDatum));
+    config.txBuilder.add_output(
+      scriptRef
+        ? outputBuilder
+            .with_reference_script(toScriptRef(scriptRef))
+            .next()
+            .with_value(assetsToValue(assets))
+            .build()
+        : outputBuilder.next().with_value(assetsToValue(assets)).build(),
     );
-    const outputBuilder = CML.SingleOutputBuilderResult.new(output);
-    config.txBuilder.add_output(outputBuilder);
-    // addr.free();
-    // output.free();
   });
 
 /** Pay to a plutus script address with datum or scriptRef. */

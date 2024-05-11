@@ -4,22 +4,35 @@ import { fromScriptRef, toScriptRef } from "./scripts.js";
 import { assetsToValue, valueToAssets } from "./value.js";
 
 export const utxoToTransactionOutput = (utxo: UTxO) => {
-  const datumOption = (utxo: UTxO) => {
+  const buildDatum = (utxo: UTxO, builder: CML.TransactionOutputBuilder) => {
+    //TODO: test with DatumHash
     if (utxo.datumHash)
-      return CML.DatumOption.new_hash(CML.DatumHash.from_hex(utxo.datumHash));
+      return builder.with_data(
+        CML.DatumOption.new_hash(CML.DatumHash.from_hex(utxo.datumHash)),
+      );
     // inline datum
     if (utxo.datum)
-      return CML.DatumOption.new_datum(
-        CML.PlutusData.from_cbor_hex(utxo.datum),
+      return builder.with_data(
+        CML.DatumOption.new_datum(CML.PlutusData.from_cbor_hex(utxo.datum)),
       );
-    return undefined;
+    return builder;
   };
-  return CML.TransactionOutput.new(
-    CML.Address.from_bech32(utxo.address),
-    assetsToValue(utxo.assets),
-    datumOption(utxo),
-    utxo.scriptRef ? toScriptRef(utxo.scriptRef) : undefined,
-  );
+
+  const buildOutput = (utxo: UTxO) => {
+    const builder = CML.TransactionOutputBuilder.new().with_address(
+      CML.Address.from_bech32(utxo.address),
+    );
+    return utxo.scriptRef
+      ? buildDatum(utxo, builder)
+          .with_reference_script(toScriptRef(utxo.scriptRef))
+          .next()
+      : buildDatum(utxo, builder).next();
+  };
+
+  return buildOutput(utxo)
+    .with_value(assetsToValue(utxo.assets))
+    .build()
+    .output();
 };
 
 export const utxoToTransactionInput = (utxo: UTxO) => {
@@ -35,7 +48,7 @@ export const utxoToCore = (utxo: UTxO): CML.TransactionUnspentOutput => {
     utxoToTransactionInput(utxo),
     out,
   );
-  out.free();
+  // out.free();
   return utxoCore;
 };
 

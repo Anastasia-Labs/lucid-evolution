@@ -28,7 +28,7 @@ import {
 } from "@lucid-evolution/wallet";
 
 export type LucidEvolution = {
-  txbuilderconfig: () => CML.TransactionBuilderConfig;
+  config: () => LucidConfig;
   wallet: () => Wallet;
   switchProvider: (provider: Provider) => Promise<void>;
   newTx: () => TxBuilder;
@@ -80,7 +80,7 @@ export const Lucid = async (
     protocolParameters: protocolParam,
   };
   return {
-    txbuilderconfig: () => config.txbuilderconfig,
+    config: () => config,
     wallet: () => config.wallet as Wallet,
     switchProvider: async (provider: Provider) => {
       const protocolParam = await provider.getProtocolParameters();
