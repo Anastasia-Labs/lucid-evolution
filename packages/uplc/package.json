@@ -15,7 +15,8 @@
     "./snippets/*"
   ],
   "scripts": {
-    "build": "tsup-node src/uplc_tx.js"
+    "build": "tsup src/uplc_tx.js",
+    "clean": "rm -rf .turbo && rm -rf node_modules && rm -rf dist"
   },
   "devDependencies": {
     "esbuild-plugin-wasm": "^1.1.0",
