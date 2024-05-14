@@ -1,9 +1,10 @@
 {
   "name": "@lucid-evolution/uplc",
   "version": "0.2.1",
-  "main": "./dist/uplc_tx.js",
+  "main": "./dist/node/uplc_tx.js",
+  "module": "./dist/node/uplc_tx.mjs",
+  "browser": "./dist/browser/uplc_tx.mjs",
   "types": "./dist/uplc_tx.d.ts",
-  "type": "module",
   "files": [
     "dist"
   ],
@@ -15,10 +16,14 @@
     "./snippets/*"
   ],
   "scripts": {
-    "build": "tsup-node src/uplc_tx.js"
+    "build": "tsup"
   },
   "devDependencies": {
+    "@geut/esbuild-plugin-brode": "^2.0.14",
     "esbuild-plugin-wasm": "^1.1.0",
+    "esbuild-copy-files-plugin": "^1.2.0",
     "tsup": "^8.0.2"
+  },
+  "dependencies": {
   }
 }

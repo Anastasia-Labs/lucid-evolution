@@ -1,8 +1,7 @@
-
 ```
 cd rust
 ```
 
 ```
-wasm-pack build
+wasm-pack build --target nodejs
 ```
