@@ -1,5 +1,11 @@
 # @lucid-evolution/uplc
 
+## 0.2.2
+
+### Patch Changes
+
+- [#89](https://github.com/Anastasia-Labs/lucid-evolution/pull/89) [`4c8c0d4`](https://github.com/Anastasia-Labs/lucid-evolution/commit/4c8c0d406d66770b1c6104f590b92cf0849b5ad5) Thanks [@solidsnakedev](https://github.com/solidsnakedev)! - uplc package supports node/browser
+
 ## 0.2.1
 
 ### Patch Changes
