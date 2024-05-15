@@ -303,6 +303,12 @@ importers:
 
   packages/uplc:
     devDependencies:
+      '@geut/esbuild-plugin-brode':
+        specifier: ^2.0.14
+        version: 2.0.14(esbuild@0.12.29)
+      esbuild-copy-files-plugin:
+        specifier: ^1.2.0
+        version: 1.2.0
       esbuild-plugin-wasm:
         specifier: ^1.1.0
         version: 1.1.0
@@ -1273,6 +1279,19 @@ packages:
   /@eslint/js@8.57.0:
     resolution: {integrity: sha512-Ys+3g2TaW7gADOJzPt83SJtCDhMjndcDMFVQ/Tj9iA1BfJzFKD9mAUXT3OenpuPHbI6P/myECxRJrofUsDx/5g==}
     engines: {node: ^12.22.0 || ^14.17.0 || >=16.0.0}
+    dev: true
+
+  /@geut/browser-node-core@2.0.13:
+    resolution: {integrity: sha512-xzvcI7Ppew8sEQEvomkROEgIi6xOnDrjrrx+vePF49ESvmTYDsHmfkz/dsnIpX4W3RU821eUBmN/aIA7Kifxhg==}
+    dev: true
+
+  /@geut/esbuild-plugin-brode@2.0.14(esbuild@0.12.29):
+    resolution: {integrity: sha512-PvHBrXamHG5Lq7PfaEOJGxClks51ozwoDyd35k0DfUBNUzzPy68ElBfLHL97uYYr00xFq7ecAieG4s6m3Ckmsw==}
+    peerDependencies:
+      esbuild: ^0.12.5
+    dependencies:
+      '@geut/browser-node-core': 2.0.13
+      esbuild: 0.12.29
     dev: true
 
   /@headlessui/react@1.7.19(react-dom@18.3.1)(react@18.3.1):
@@ -3523,9 +3542,19 @@ packages:
       is-symbol: 1.0.4
     dev: true
 
+  /esbuild-copy-files-plugin@1.2.0:
+    resolution: {integrity: sha512-ObXGBHJ0GclwF8due7YN/4Tle8tShuv7MFZm7PMMIOQ92mjgZhBdFhEFbD4NWrguNO1l2eb3f1dgMSjhLzAOOQ==}
+    dev: true
+
   /esbuild-plugin-wasm@1.1.0:
     resolution: {integrity: sha512-0bQ6+1tUbySSnxzn5jnXHMDvYnT0cN/Wd4Syk8g/sqAIJUg7buTIi22svS3Qz6ssx895NT+TgLPb33xi1OkZig==}
     engines: {node: '>=0.10.0'}
+    dev: true
+
+  /esbuild@0.12.29:
+    resolution: {integrity: sha512-w/XuoBCSwepyiZtIRsKsetiLDUVGPVw1E/R3VTFSecIy8UR7Cq3SOtwKHJMFoVqqVG36aGkzh4e8BvpO1Fdc7g==}
+    hasBin: true
+    requiresBuild: true
     dev: true
 
   /esbuild@0.19.12:
