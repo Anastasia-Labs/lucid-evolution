@@ -1,5 +1,16 @@
 # @lucid-evolution/provider
 
+## 0.1.11
+
+### Patch Changes
+
+- [#91](https://github.com/Anastasia-Labs/lucid-evolution/pull/91) [`05a492f`](https://github.com/Anastasia-Labs/lucid-evolution/commit/05a492ff90199758088bcc6536cc62f5f85040a8) Thanks [@solidsnakedev](https://github.com/solidsnakedev)! - add browser support
+
+- Updated dependencies [[`05a492f`](https://github.com/Anastasia-Labs/lucid-evolution/commit/05a492ff90199758088bcc6536cc62f5f85040a8)]:
+  - @lucid-evolution/core-types@0.1.6
+  - @lucid-evolution/core-utils@0.1.6
+  - @lucid-evolution/utils@0.1.9
+
 ## 0.1.10
 
 ### Patch Changes
