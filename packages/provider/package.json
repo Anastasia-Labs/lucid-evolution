@@ -19,14 +19,18 @@
     "access": "public"
   },
   "scripts": {
-    "build": "tsup-node src/index.ts --format esm,cjs --dts --clean",
+    "build": "tsup src/index.ts --format esm,cjs --dts --clean",
     "clean": "rm -rf .turbo && rm -rf node_modules && rm -rf dist"
   },
   "keywords": [],
   "author": "",
   "license": "MIT",
+  "browser": {
+    "@dcspark/cardano-multiplatform-lib-nodejs": "@dcspark/cardano-multiplatform-lib-browser"
+  },
   "dependencies": {
     "@dcspark/cardano-multiplatform-lib-nodejs": "^5.3.0",
+    "@dcspark/cardano-multiplatform-lib-browser": "^5.3.0",
     "@lucid-evolution/core-types": "workspace:*",
     "@lucid-evolution/core-utils": "workspace:*",
     "@lucid-evolution/utils": "workspace:*"
