@@ -1,6 +1,6 @@
 {
   "name": "@lucid-evolution/uplc",
-  "version": "0.2.1",
+  "version": "0.2.2",
   "main": "./dist/node/uplc_tx.js",
   "module": "./dist/node/uplc_tx.mjs",
   "browser": "./dist/browser/uplc_tx.mjs",
@@ -24,6 +24,5 @@
     "esbuild-copy-files-plugin": "^1.2.0",
     "tsup": "^8.0.2"
   },
-  "dependencies": {
-  }
+  "dependencies": {}
 }
