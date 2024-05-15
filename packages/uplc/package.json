@@ -4,7 +4,7 @@
   "main": "./dist/node/uplc_tx.js",
   "module": "./dist/node/uplc_tx.mjs",
   "browser": "./dist/browser/uplc_tx.mjs",
-  "types": "./dist/uplc_tx.d.ts",
+  "types": "./dist/node/uplc_tx.d.ts",
   "files": [
     "dist"
   ],
