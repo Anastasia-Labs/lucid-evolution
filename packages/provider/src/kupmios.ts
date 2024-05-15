@@ -54,8 +54,8 @@ export class Kupmios implements Provider {
             res({
               minFeeA: parseInt(result.minFeeCoefficient),
               minFeeB: parseInt(result.minFeeConstant.ada.lovelace),
-              maxTxSize: parseInt(result.maxTxSize),
-              maxValSize: parseInt(result.maxValueSize),
+              maxTxSize: parseInt(result.maxTransactionSize.bytes),
+              maxValSize: parseInt(result.maxValueSize.bytes),
               keyDeposit: BigInt(result.stakeCredentialDeposit.ada.lovelace),
               poolDeposit: BigInt(result.stakePoolDeposit.ada.lovelace),
               priceMem: parseInt(memNum) / parseInt(memDenom),
