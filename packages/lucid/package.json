@@ -46,11 +46,15 @@
   "scripts": {
     "test": "vitest run",
     "lint": "tsc --noEmit",
-    "build": "tsup-node src/index.ts",
+    "build": "tsup src/index.ts",
     "clean": "rm -rf .turbo && rm -rf node_modules && rm -rf dist"
+  },
+  "browser": {
+    "@dcspark/cardano-multiplatform-lib-nodejs": "@dcspark/cardano-multiplatform-lib-browser"
   },
   "dependencies": {
     "@dcspark/cardano-multiplatform-lib-nodejs": "^5.3.0",
+    "@dcspark/cardano-multiplatform-lib-browser": "^5.3.0",
     "@effect/schema": "^0.66.14",
     "@emurgo/cardano-message-signing-nodejs": "^1.0.1",
     "@lucid-evolution/bip39": "workspace:*",

@@ -91,6 +91,9 @@ importers:
 
   packages/core-types:
     dependencies:
+      '@dcspark/cardano-multiplatform-lib-browser':
+        specifier: ^5.3.0
+        version: 5.3.1
       '@dcspark/cardano-multiplatform-lib-nodejs':
         specifier: ^5.3.0
         version: 5.3.0
@@ -107,6 +110,9 @@ importers:
 
   packages/core-utils:
     dependencies:
+      '@dcspark/cardano-multiplatform-lib-browser':
+        specifier: ^5.3.0
+        version: 5.3.1
       '@dcspark/cardano-multiplatform-lib-nodejs':
         specifier: ^5.3.0
         version: 5.3.0
@@ -159,6 +165,9 @@ importers:
 
   packages/lucid:
     dependencies:
+      '@dcspark/cardano-multiplatform-lib-browser':
+        specifier: ^5.3.0
+        version: 5.3.1
       '@dcspark/cardano-multiplatform-lib-nodejs':
         specifier: ^5.3.0
         version: 5.3.0
@@ -226,6 +235,9 @@ importers:
 
   packages/plutus:
     dependencies:
+      '@dcspark/cardano-multiplatform-lib-browser':
+        specifier: ^5.3.0
+        version: 5.3.1
       '@dcspark/cardano-multiplatform-lib-nodejs':
         specifier: ^5.3.0
         version: 5.3.0
@@ -251,6 +263,9 @@ importers:
 
   packages/provider:
     dependencies:
+      '@dcspark/cardano-multiplatform-lib-browser':
+        specifier: ^5.3.0
+        version: 5.3.1
       '@dcspark/cardano-multiplatform-lib-nodejs':
         specifier: ^5.3.0
         version: 5.3.0
@@ -276,9 +291,15 @@ importers:
 
   packages/sign_data:
     dependencies:
+      '@dcspark/cardano-multiplatform-lib-browser':
+        specifier: ^5.3.0
+        version: 5.3.1
       '@dcspark/cardano-multiplatform-lib-nodejs':
         specifier: ^5.3.0
         version: 5.3.0
+      '@emurgo/cardano-message-signing-browser':
+        specifier: ^1.0.1
+        version: 1.0.1
       '@emurgo/cardano-message-signing-nodejs':
         specifier: ^1.0.1
         version: 1.0.1
@@ -318,6 +339,9 @@ importers:
 
   packages/utils:
     dependencies:
+      '@dcspark/cardano-multiplatform-lib-browser':
+        specifier: ^5.3.0
+        version: 5.3.1
       '@dcspark/cardano-multiplatform-lib-nodejs':
         specifier: ^5.3.0
         version: 5.3.0
@@ -812,6 +836,10 @@ packages:
       prettier: 2.8.8
     dev: true
 
+  /@dcspark/cardano-multiplatform-lib-browser@5.3.1:
+    resolution: {integrity: sha512-iPLYATq7nCy26kAVBUKa4mOxFuTinDv4pFdZXYnkjN6+MFNjumM0/tKvb2eCxNrPFxSFZvgSlLEDL0Rq0HBaVg==}
+    dev: false
+
   /@dcspark/cardano-multiplatform-lib-nodejs@5.3.0:
     resolution: {integrity: sha512-mfUo/E/k5rWONBAT2Ay5BPmyOvihq9KgU82qAo8/HXWfSBDrQNx7hKQckdPYnF2Ntn78w1ShzRoFhCdg6+oI5Q==}
     dev: false
@@ -824,6 +852,10 @@ packages:
     dependencies:
       effect: 3.1.2
       fast-check: 3.18.0
+    dev: false
+
+  /@emurgo/cardano-message-signing-browser@1.0.1:
+    resolution: {integrity: sha512-yC4Ymq44WR0bXO1wzxCoyc2W/RD1KSAla0oYhin7IYoVkp2raGp8wt7QNF4pDdNnTcejn5fyPyYY9dL4666H1w==}
     dev: false
 
   /@emurgo/cardano-message-signing-nodejs@1.0.1:
