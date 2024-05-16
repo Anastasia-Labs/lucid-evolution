@@ -5,23 +5,23 @@ import brode from "@geut/esbuild-plugin-brode";
 
 export default defineConfig([
   {
-    entry: ["src/uplc_tx.js"],
+    entry: ["src/index.ts"],
     format: ["cjs", "esm"],
     dts: true,
     clean: true,
     platform: "node",
     outDir: "dist/node",
     esbuildPlugins: [
-      wasmLoader(),
       copy({
         source: "./src/uplc_tx_bg.wasm",
         target: "./dist/node",
         copyWithFolder: true,
       }),
+      wasmLoader(),
     ],
   },
   {
-    entry: ["src/uplc_tx.js"],
+    entry: ["src/index.ts"],
     format: ["esm"],
     dts: true,
     clean: true,

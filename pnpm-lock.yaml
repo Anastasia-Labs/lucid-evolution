@@ -330,6 +330,9 @@ importers:
       esbuild-copy-files-plugin:
         specifier: ^1.2.0
         version: 1.2.0
+      esbuild-plugin-polyfill-node:
+        specifier: ^0.3.0
+        version: 0.3.0(esbuild@0.12.29)
       esbuild-plugin-wasm:
         specifier: ^1.1.0
         version: 1.1.0
@@ -1406,6 +1409,10 @@ packages:
     dependencies:
       '@jridgewell/resolve-uri': 3.1.2
       '@jridgewell/sourcemap-codec': 1.4.15
+    dev: true
+
+  /@jspm/core@2.0.1:
+    resolution: {integrity: sha512-Lg3PnLp0QXpxwLIAuuJboLeRaIhrgJjeuh797QADg3xz8wGLugQOS5DpsE8A6i6Adgzf+bacllkKZG3J0tGfDw==}
     dev: true
 
   /@manypkg/find-root@1.1.0:
@@ -3578,6 +3585,16 @@ packages:
     resolution: {integrity: sha512-ObXGBHJ0GclwF8due7YN/4Tle8tShuv7MFZm7PMMIOQ92mjgZhBdFhEFbD4NWrguNO1l2eb3f1dgMSjhLzAOOQ==}
     dev: true
 
+  /esbuild-plugin-polyfill-node@0.3.0(esbuild@0.12.29):
+    resolution: {integrity: sha512-SHG6CKUfWfYyYXGpW143NEZtcVVn8S/WHcEOxk62LuDXnY4Zpmc+WmxJKN6GMTgTClXJXhEM5KQlxKY6YjbucQ==}
+    peerDependencies:
+      esbuild: '*'
+    dependencies:
+      '@jspm/core': 2.0.1
+      esbuild: 0.12.29
+      import-meta-resolve: 3.1.1
+    dev: true
+
   /esbuild-plugin-wasm@1.1.0:
     resolution: {integrity: sha512-0bQ6+1tUbySSnxzn5jnXHMDvYnT0cN/Wd4Syk8g/sqAIJUg7buTIi22svS3Qz6ssx895NT+TgLPb33xi1OkZig==}
     engines: {node: '>=0.10.0'}
@@ -4781,6 +4798,10 @@ packages:
     dependencies:
       parent-module: 1.0.1
       resolve-from: 4.0.0
+    dev: true
+
+  /import-meta-resolve@3.1.1:
+    resolution: {integrity: sha512-qeywsE/KC3w9Fd2ORrRDUw6nS/nLwZpXgfrOc2IILvZYnCaEMd+D56Vfg9k4G29gIeVi3XKql1RQatME8iYsiw==}
     dev: true
 
   /imurmurhash@0.1.4:
