@@ -1,5 +1,11 @@
 # @lucid-evolution/uplc
 
+## 0.2.3
+
+### Patch Changes
+
+- [#95](https://github.com/Anastasia-Labs/lucid-evolution/pull/95) [`53e5c64`](https://github.com/Anastasia-Labs/lucid-evolution/commit/53e5c64ce67a8345d949bdad93065b5750615c36) Thanks [@solidsnakedev](https://github.com/solidsnakedev)! - add browser support
+
 ## 0.2.2
 
 ### Patch Changes

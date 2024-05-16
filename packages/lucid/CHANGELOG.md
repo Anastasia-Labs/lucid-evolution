@@ -1,5 +1,12 @@
 # @lucid-evolution/lucid
 
+## 0.2.20
+
+### Patch Changes
+
+- Updated dependencies [[`53e5c64`](https://github.com/Anastasia-Labs/lucid-evolution/commit/53e5c64ce67a8345d949bdad93065b5750615c36)]:
+  - @lucid-evolution/uplc@0.2.3
+
 ## 0.2.19
 
 ### Patch Changes
