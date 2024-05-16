@@ -1,6 +1,6 @@
 {
   "name": "@lucid-evolution/uplc",
-  "version": "0.2.2",
+  "version": "0.2.3",
   "main": "./dist/node/index.js",
   "module": "./dist/node/index.mjs",
   "browser": "./dist/browser/index.mjs",
