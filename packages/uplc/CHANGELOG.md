@@ -4,6 +4,12 @@
 
 ### Patch Changes
 
+- [#100](https://github.com/Anastasia-Labs/lucid-evolution/pull/100) [`4aa0a2f`](https://github.com/Anastasia-Labs/lucid-evolution/commit/4aa0a2f87c35998348c5313ebb562ff262365653) Thanks [@solidsnakedev](https://github.com/solidsnakedev)! - load wasm-build package into dist
+
+## 0.2.4
+
+### Patch Changes
+
 - [#97](https://github.com/Anastasia-Labs/lucid-evolution/pull/97) [`9066018`](https://github.com/Anastasia-Labs/lucid-evolution/commit/90660185c2ce1ddd30b63c2e126e8e689b419deb) Thanks [@solidsnakedev](https://github.com/solidsnakedev)! - use polyfillNode
 
 ## 0.2.3
