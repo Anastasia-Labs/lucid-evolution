@@ -1,5 +1,11 @@
 # @lucid-evolution/uplc
 
+## 0.2.5
+
+### Patch Changes
+
+- [#102](https://github.com/Anastasia-Labs/lucid-evolution/pull/102) [`3a8121c`](https://github.com/Anastasia-Labs/lucid-evolution/commit/3a8121cdd768970a68447019701520c2b2ab2b1e) Thanks [@solidsnakedev](https://github.com/solidsnakedev)! - bump version
+
 ## 0.2.4
 
 ### Patch Changes
