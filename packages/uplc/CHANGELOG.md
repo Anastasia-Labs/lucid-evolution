@@ -1,5 +1,11 @@
 # @lucid-evolution/uplc
 
+## 0.2.4
+
+### Patch Changes
+
+- [#97](https://github.com/Anastasia-Labs/lucid-evolution/pull/97) [`9066018`](https://github.com/Anastasia-Labs/lucid-evolution/commit/90660185c2ce1ddd30b63c2e126e8e689b419deb) Thanks [@solidsnakedev](https://github.com/solidsnakedev)! - use polyfillNode
+
 ## 0.2.3
 
 ### Patch Changes

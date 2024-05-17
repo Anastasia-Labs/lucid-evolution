@@ -1,5 +1,11 @@
 # @lucid-evolution/provider
 
+## 0.1.12
+
+### Patch Changes
+
+- [#94](https://github.com/Anastasia-Labs/lucid-evolution/pull/94) [`1f4f989`](https://github.com/Anastasia-Labs/lucid-evolution/commit/1f4f9896b0d27520ea8892b2e9925bd7b0311425) Thanks [@caike](https://github.com/caike)! - Fix Ogmios protocol params
+
 ## 0.1.11
 
 ### Patch Changes
