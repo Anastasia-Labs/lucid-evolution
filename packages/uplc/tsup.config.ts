@@ -3,18 +3,19 @@ import { wasmLoader } from "esbuild-plugin-wasm";
 import copy from "esbuild-copy-files-plugin";
 import brode from "@geut/esbuild-plugin-brode";
 import { polyfillNode } from "esbuild-plugin-polyfill-node";
+import realpath from "esbuild-plugin-realpath";
 
 export default defineConfig([
   {
-    entry: ["src/index.ts"],
-    format: ["cjs", "esm"],
+    entry: ["src/node/uplc_tx.js"],
+    format: ["cjs"],
     dts: true,
     clean: true,
     platform: "node",
     outDir: "dist/node",
     esbuildPlugins: [
       copy({
-        source: "./src/uplc_tx_bg.wasm",
+        source: "./src/node/uplc_tx_bg.wasm",
         target: "./dist/node",
         copyWithFolder: true,
       }),
@@ -22,7 +23,7 @@ export default defineConfig([
     ],
   },
   {
-    entry: ["src/index.ts"],
+    entry: ["src/browser/uplc_tx.js"],
     format: ["esm"],
     dts: true,
     clean: true,
@@ -30,12 +31,16 @@ export default defineConfig([
     outDir: "dist/browser",
     esbuildPlugins: [
       wasmLoader(),
-      polyfillNode(),
-      copy({
-        source: "./src/uplc_tx_bg.wasm",
-        target: "./dist/browser",
-        copyWithFolder: true,
+      polyfillNode({
+        polyfills: {
+          fs: true,
+        },
       }),
+      // copy({
+      //   source: "./src/browser/uplc_tx_bg.wasm",
+      //   target: "./dist/browser",
+      //   copyWithFolder: true,
+      // }),
     ],
   },
 ]);
