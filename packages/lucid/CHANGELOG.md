@@ -1,5 +1,11 @@
 # @lucid-evolution/lucid
 
+## 0.2.25
+
+### Patch Changes
+
+- [#107](https://github.com/Anastasia-Labs/lucid-evolution/pull/107) [`e883791`](https://github.com/Anastasia-Labs/lucid-evolution/commit/e883791d6262cce816f6831a725391f2c922c934) Thanks [@solidsnakedev](https://github.com/solidsnakedev)! - The readFrom module now works with reference scripts. This module now attaches the script from the UTXO.
+
 ## 0.2.24
 
 ### Patch Changes
