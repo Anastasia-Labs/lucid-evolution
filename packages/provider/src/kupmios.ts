@@ -210,9 +210,9 @@ export class Kupmios implements Provider {
     });
   }
 
-  async submitTx(tx: Transaction): Promise<TxHash> {
-    const client = await this.ogmiosWsp("SubmitTx", {
-      submit: tx,
+  async submitTx(cbor: Transaction): Promise<TxHash> {
+    const client = await this.ogmiosWsp("submitTransaction", {
+      transaction: { cbor },
     });
 
     return new Promise((res, rej) => {
@@ -222,8 +222,8 @@ export class Kupmios implements Provider {
           try {
             const { result } = JSON.parse(msg.data);
 
-            if (result.SubmitSuccess) res(result.SubmitSuccess.txId);
-            else rej(result.SubmitFail);
+            if (result.transaction) res(result.transaction.id);
+            else rej(result.error);
             client.close();
           } catch (e) {
             rej(e);
