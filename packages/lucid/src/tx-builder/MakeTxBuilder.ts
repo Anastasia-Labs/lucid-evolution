@@ -88,6 +88,12 @@ export function makeTxBuilder(lucidConfig: LucidConfig): TxBuilder {
   };
   const txBuilder: TxBuilder = {
     readFrom: (utxos: UTxO[]) => {
+      utxos.map((utxo) => {
+        if (utxo.scriptRef) {
+          const scriptKeyValue = Attach.attachScript(utxo.scriptRef);
+          config.scripts.set(scriptKeyValue.key, scriptKeyValue.value);
+        }
+      });
       const program = Read.readFrom(config, utxos);
       config.programs.push(program);
       return txBuilder;
@@ -186,39 +192,29 @@ export function makeTxBuilder(lucidConfig: LucidConfig): TxBuilder {
     },
     attach: {
       Script: (script: Script) => {
-        const scriptKeyValue = Attach.attachScript(config, script);
+        const scriptKeyValue = Attach.attachScript(script);
         config.scripts.set(scriptKeyValue.key, scriptKeyValue.value);
         return txBuilder;
       },
       SpendingValidator: (spendingValidator: Script) => {
-        const scriptKeyValue = Attach.attachSpendingValidator(
-          config,
-          spendingValidator,
-        );
+        const scriptKeyValue =
+          Attach.attachSpendingValidator(spendingValidator);
         config.scripts.set(scriptKeyValue.key, scriptKeyValue.value);
         return txBuilder;
       },
       MintingPolicy: (mintingPolicy: Script) => {
-        const scriptKeyValue = Attach.attachMintingPolicy(
-          config,
-          mintingPolicy,
-        );
+        const scriptKeyValue = Attach.attachMintingPolicy(mintingPolicy);
         config.scripts.set(scriptKeyValue.key, scriptKeyValue.value);
         return txBuilder;
       },
       CertificateValidator: (certValidator: Script) => {
-        const scriptKeyValue = Attach.attachCertificateValidator(
-          config,
-          certValidator,
-        );
+        const scriptKeyValue = Attach.attachCertificateValidator(certValidator);
         config.scripts.set(scriptKeyValue.key, scriptKeyValue.value);
         return txBuilder;
       },
       WithdrawalValidator: (withdrawalValidator: Script) => {
-        const scriptKeyValue = Attach.attachWithdrawalValidator(
-          config,
-          withdrawalValidator,
-        );
+        const scriptKeyValue =
+          Attach.attachWithdrawalValidator(withdrawalValidator);
         config.scripts.set(scriptKeyValue.key, scriptKeyValue.value);
         return txBuilder;
       },
