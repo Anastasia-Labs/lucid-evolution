@@ -5,20 +5,16 @@ import {
   SpendingValidator,
   WithdrawalValidator,
 } from "@lucid-evolution/core-types";
-import { TxBuilderConfig } from "../types.js";
 import { CML } from "../../core.js";
 
-export const attachScript = (
-  config: TxBuilderConfig,
-  {
-    type,
-    script,
-  }:
-    | SpendingValidator
-    | MintingPolicy
-    | CertificateValidator
-    | WithdrawalValidator,
-) => {
+export const attachScript = ({
+  type,
+  script,
+}:
+  | SpendingValidator
+  | MintingPolicy
+  | CertificateValidator
+  | WithdrawalValidator) => {
   //TODO: script should be a branded type
   switch (type) {
     case "Native":
@@ -42,30 +38,16 @@ export const attachScript = (
       };
   }
 };
-export const attachSpendingValidator = (
-  config: TxBuilderConfig,
-  spendingValidator: SpendingValidator,
-) => {
-  return attachScript(config, spendingValidator);
-};
+export const attachSpendingValidator = (spendingValidator: SpendingValidator) =>
+  attachScript(spendingValidator);
 
-export const attachMintingPolicy = (
-  config: TxBuilderConfig,
-  mintingPolicy: MintingPolicy,
-) => {
-  return attachScript(config, mintingPolicy);
-};
+export const attachMintingPolicy = (mintingPolicy: MintingPolicy) =>
+  attachScript(mintingPolicy);
 
 export const attachCertificateValidator = (
-  config: TxBuilderConfig,
   certValidator: CertificateValidator,
-) => {
-  return attachScript(config, certValidator);
-};
+) => attachScript(certValidator);
 
 export const attachWithdrawalValidator = (
-  config: TxBuilderConfig,
   withdrawalValidator: WithdrawalValidator,
-) => {
-  return attachScript(config, withdrawalValidator);
-};
+) => attachScript(withdrawalValidator);

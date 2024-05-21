@@ -22,12 +22,11 @@ export const readFrom = (
       yield* readError("EmptyUTXO", ERROR_MESSAGE.EMPTY_UTXO);
     for (const utxo of utxos) {
       if (utxo.datumHash) {
-        const data = yield* pipe(
-          Effect.tryPromise({
-            try: () => datumOf(config.lucidConfig.provider)(utxo),
-            catch: (error) => readError("Datum", String(error)),
-          }),
-        );
+        const data = yield* Effect.tryPromise({
+          try: () => datumOf(config.lucidConfig.provider)(utxo),
+          catch: (error) => readError("Datum", String(error)),
+        });
+
         utxo.datum = Data.to(data);
       }
       const coreUtxo = utxoToCore(utxo);
