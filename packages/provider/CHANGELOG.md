@@ -1,5 +1,11 @@
 # @lucid-evolution/provider
 
+## 0.1.13
+
+### Patch Changes
+
+- [#105](https://github.com/Anastasia-Labs/lucid-evolution/pull/105) [`042a0c0`](https://github.com/Anastasia-Labs/lucid-evolution/commit/042a0c0fa1cbea24b3410b2bd319d6e54cfb449f) Thanks [@caike](https://github.com/caike)! - Fix submitTx call to Ogmios
+
 ## 0.1.12
 
 ### Patch Changes
