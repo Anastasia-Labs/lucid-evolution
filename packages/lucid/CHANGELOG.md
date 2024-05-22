@@ -1,5 +1,11 @@
 # @lucid-evolution/lucid
 
+## 0.2.28
+
+### Patch Changes
+
+- [#112](https://github.com/Anastasia-Labs/lucid-evolution/pull/112) [`f5e1aa4`](https://github.com/Anastasia-Labs/lucid-evolution/commit/f5e1aa43b00e6969b5a4ea23a07c4743c17e074e) Thanks [@solidsnakedev](https://github.com/solidsnakedev)! - bring back `complete` endpoint
+
 ## 0.2.27
 
 ### Patch Changes
