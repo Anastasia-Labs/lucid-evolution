@@ -1,5 +1,16 @@
 # @lucid-evolution/lucid
 
+## 0.2.27
+
+### Patch Changes
+
+- [#110](https://github.com/Anastasia-Labs/lucid-evolution/pull/110) [`d3268d5`](https://github.com/Anastasia-Labs/lucid-evolution/commit/d3268d5886cae2c5619ed409ec53458b1fbd426f) Thanks [@solidsnakedev](https://github.com/solidsnakedev)! - improve pay module when dealing with Assets
+
+- Updated dependencies [[`d3268d5`](https://github.com/Anastasia-Labs/lucid-evolution/commit/d3268d5886cae2c5619ed409ec53458b1fbd426f)]:
+  - @lucid-evolution/utils@0.1.10
+  - @lucid-evolution/provider@0.1.14
+  - @lucid-evolution/wallet@0.1.10
+
 ## 0.2.26
 
 ### Patch Changes

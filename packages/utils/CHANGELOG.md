@@ -1,5 +1,11 @@
 # @lucid-evolution/utils
 
+## 0.1.10
+
+### Patch Changes
+
+- [#110](https://github.com/Anastasia-Labs/lucid-evolution/pull/110) [`d3268d5`](https://github.com/Anastasia-Labs/lucid-evolution/commit/d3268d5886cae2c5619ed409ec53458b1fbd426f) Thanks [@solidsnakedev](https://github.com/solidsnakedev)! - improve pay module when dealing with Assets
+
 ## 0.1.9
 
 ### Patch Changes
