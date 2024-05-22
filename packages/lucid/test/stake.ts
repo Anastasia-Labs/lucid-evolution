@@ -10,10 +10,9 @@ export const registerStake = Effect.gen(function* ($) {
   const signBuilder = yield* user
     .newTx()
     .registerStake(rewardAddress)
-    .complete()
-    .program();
-  const signed = yield* signBuilder.sign.withWallet().complete().program();
-  const txHash = yield* signed.submit().program();
+    .completeProgram();
+  const signed = yield* signBuilder.sign.withWallet().completeProgram();
+  const txHash = yield* signed.submitProgram();
   yield* Effect.logInfo(txHash);
 }).pipe(
   // Effect.tapError(Effect.logError),
@@ -36,10 +35,9 @@ export const deRegisterStake = Effect.gen(function* ($) {
   const signBuilder = yield* user
     .newTx()
     .deRegisterStake(rewardAddress)
-    .complete()
-    .program();
-  const signed = yield* signBuilder.sign.withWallet().complete().program();
-  const txHash = yield* signed.submit().program();
+    .completeProgram();
+  const signed = yield* signBuilder.sign.withWallet().completeProgram();
+  const txHash = yield* signed.submitProgram();
   yield* Effect.logInfo(txHash);
 }).pipe(
   Effect.retry(
@@ -56,10 +54,9 @@ export const registerDeregisterStake = Effect.gen(function* ($) {
     .newTx()
     .registerStake(rewardAddress)
     .deRegisterStake(rewardAddress)
-    .complete()
-    .program();
-  const signed = yield* signBuilder.sign.withWallet().complete().program();
-  const txHash = yield* signed.submit().program();
+    .completeProgram();
+  const signed = yield* signBuilder.sign.withWallet().completeProgram();
+  const txHash = yield* signed.submitProgram();
   yield* Effect.logInfo(txHash);
 }).pipe(
   Effect.catchTag("UnknownException", (error) =>
@@ -81,10 +78,9 @@ export const withdrawZero = Effect.gen(function* ($) {
   const signBuilder = yield* user
     .newTx()
     .withdraw(rewardAddress, 0n)
-    .complete()
-    .program();
-  const signed = yield* signBuilder.sign.withWallet().complete().program();
-  const txHash = yield* signed.submit().program();
+    .completeProgram();
+  const signed = yield* signBuilder.sign.withWallet().completeProgram();
+  const txHash = yield* signed.submitProgram();
   yield* Effect.logInfo(txHash);
 }).pipe(
   Effect.retry(

@@ -70,11 +70,8 @@ export type TxBuilder = {
     CertificateValidator: (certValidator: Script) => TxBuilder;
     WithdrawalValidator: (withdrawalValidator: Script) => TxBuilder;
   };
-  complete: () => {
-    unsafeRun: () => Promise<TxSignBuilder>;
-    safeRun: () => Promise<Either<TxSignBuilder, TransactionError>>;
-    program: () => Effect<TxSignBuilder, TransactionError>;
-  };
+  complete: () => Promise<TxSignBuilder>;
+  completeProgram: () => Effect<TxSignBuilder, TransactionError>;
   config: () => TxBuilderConfig;
 };
 
@@ -219,7 +216,8 @@ export function makeTxBuilder(lucidConfig: LucidConfig): TxBuilder {
         return txBuilder;
       },
     },
-    complete: () => completeTxBuilder(config),
+    complete: () => completeTxBuilder(config).unsafeRun(),
+    completeProgram: () => completeTxBuilder(config).program(),
     config: () => config,
   };
   return txBuilder;
