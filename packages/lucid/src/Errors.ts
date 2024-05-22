@@ -6,6 +6,7 @@ export type TxBuilderErrorCause =
   | "NotFound"
   | "Provider"
   | "EmptyUTXO"
+  | "EmptyAssets"
   | "MissingCollateralInput"
   | "MultiplePolicies"
   | "InvalidNetwork"

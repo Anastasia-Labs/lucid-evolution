@@ -34,13 +34,13 @@ export type TxBuilder = {
     ToAddressWithData: (
       address: string,
       outputDatum: OutputDatum,
-      assets: Assets,
+      assets?: Assets | undefined,
       scriptRef?: Script | undefined,
     ) => TxBuilder;
     ToContract: (
       address: string,
       outputDatum: OutputDatum,
-      assets: Assets,
+      assets?: Assets | undefined,
       scriptRef?: Script | undefined,
     ) => TxBuilder;
   };
@@ -112,7 +112,7 @@ export function makeTxBuilder(lucidConfig: LucidConfig): TxBuilder {
       ToAddressWithData: (
         address: string,
         outputDatum: OutputDatum,
-        assets: Assets,
+        assets?: Assets,
         scriptRef?: Script | undefined,
       ) => {
         const program = Pay.payToAddressWithData(
@@ -128,7 +128,7 @@ export function makeTxBuilder(lucidConfig: LucidConfig): TxBuilder {
       ToContract: (
         address: string,
         outputDatum: OutputDatum,
-        assets: Assets,
+        assets?: Assets,
         scriptRef?: Script | undefined,
       ) => {
         const program = Pay.payToContract(
