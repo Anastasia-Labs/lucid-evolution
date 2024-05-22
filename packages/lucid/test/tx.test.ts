@@ -50,10 +50,9 @@ export const txSubmit = Effect.gen(function* ($) {
     .mintAssets({ [policy + fromText("MyMintedToken")]: 1n })
     .validTo(Date.now() + 900000)
     .attach.MintingPolicy(mint)
-    .complete()
-    .program();
-  const signed = yield* signBuilder.sign.withWallet().complete().program();
-  const txHash = yield* signed.submit().program();
+    .completeProgram();
+  const signed = yield* signBuilder.sign.withWallet().completeProgram();
+  const txHash = yield* signed.submitProgram();
   yield* Effect.sleep("10 seconds");
   yield* Effect.logDebug(txHash);
 }).pipe(

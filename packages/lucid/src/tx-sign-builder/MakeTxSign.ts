@@ -2,17 +2,15 @@ import { CML } from "../core.js";
 import { LucidConfig } from "../lucid-evolution/LucidEvolution.js";
 import { Effect } from "effect";
 //TODO: move to commont utils
-import { makeReturn } from "../core.js";
 import { PrivateKey } from "@lucid-evolution/core-types";
 import {
   ERROR_MESSAGE,
   TransactionSignError,
   TxSignerError,
   TxSignerErrorCause,
-  makeRunTimeError,
 } from "../Errors.js";
-import { TxSigned, completeTxSign } from "./internal/CompleteTxSign.js";
-import { Either } from "effect/Either";
+import { TxSigned } from "./internal/CompleteTxSign.js";
+import { completeTxSignBuilder } from "../tx-builder/internal/CompleteTxSigner.js";
 
 export const signError = (cause: TxSignerErrorCause, message?: string) =>
   new TxSignerError({ cause, module: "Sign", message });
@@ -31,11 +29,8 @@ export type TxSignBuilder = {
     withWallet: () => TxSignBuilder;
     withPrivateKey: (privateKey: PrivateKey) => TxSignBuilder;
   };
-  complete: () => {
-    safeRun: () => Promise<Either<TxSigned, TransactionSignError>>;
-    unsafeRun: () => Promise<TxSigned>;
-    program: () => Effect.Effect<TxSigned, TransactionSignError, never>;
-  };
+  complete: () => Promise<TxSigned>;
+  completeProgram: () => Effect.Effect<TxSigned, TransactionSignError, never>;
 };
 
 export const makeTxSignBuilder = (
@@ -93,27 +88,8 @@ export const makeTxSignBuilder = (
         return txSignBuilder;
       },
     },
-    complete: () => {
-      const program = Effect.gen(function* ($) {
-        yield* $(Effect.all(config.programs, { concurrency: "unbounded" }));
-        config.witnessSetBuilder.add_existing(config.txComplete.witness_set());
-        const txWitnessSet = config.witnessSetBuilder.build();
-        const signedTx = CML.Transaction.new(
-          config.txComplete.body(),
-          txWitnessSet,
-          true,
-          config.txComplete.auxiliary_data(),
-        );
-        const wallet = yield* $(
-          Effect.fromNullable(config.lucidConfig.wallet),
-          Effect.orElseFail(() =>
-            signError("MissingWallet", ERROR_MESSAGE.MISSING_WALLET),
-          ),
-        );
-        return completeTxSign(wallet, signedTx);
-      }).pipe(Effect.catchAllDefect(makeRunTimeError));
-      return makeReturn(program);
-    },
+    complete: () => completeTxSignBuilder(config).unsafeRun(),
+    completeProgram: () => completeTxSignBuilder(config).program(),
   };
   return txSignBuilder;
 };

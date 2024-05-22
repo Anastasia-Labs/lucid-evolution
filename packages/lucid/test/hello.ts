@@ -27,10 +27,9 @@ export const depositFunds = Effect.gen(function* () {
       },
       { lovelace: 10_000_000n },
     )
-    .complete()
-    .program();
-  const signed = yield* signBuilder.sign.withWallet().complete().program();
-  const txHash = yield* signed.submit().program();
+    .completeProgram();
+  const signed = yield* signBuilder.sign.withWallet().completeProgram();
+  const txHash = yield* signed.submitProgram();
   yield* Effect.promise(() => user.awaitTx(txHash, 20_000));
   yield* Effect.sleep("10 seconds");
   yield* Effect.logDebug(txHash);
@@ -75,10 +74,9 @@ export const collectFunds = Effect.gen(function* ($) {
     .collectFrom(utxos, redeemer)
     .attach.SpendingValidator(hello)
     .addSigner(addr)
-    .complete()
-    .program();
-  const signed = yield* signBuilder.sign.withWallet().complete().program();
-  const txHash = yield* signed.submit().program();
+    .completeProgram();
+  const signed = yield* signBuilder.sign.withWallet().completeProgram();
+  const txHash = yield* signed.submitProgram();
   yield* Effect.sleep("10 seconds");
   yield* Effect.logDebug(txHash);
 }).pipe(
@@ -113,10 +111,9 @@ export const depositFundsLockRefScript = Effect.gen(function* () {
       { lovelace: 10_000_000n },
       hello,
     )
-    .complete()
-    .program();
-  const signed = yield* signBuilder.sign.withWallet().complete().program();
-  const txHash = yield* signed.submit().program();
+    .completeProgram();
+  const signed = yield* signBuilder.sign.withWallet().completeProgram();
+  const txHash = yield* signed.submitProgram();
   yield* Effect.promise(() => user.awaitTx(txHash, 20_000));
   yield* Effect.sleep("10 seconds");
   yield* Effect.logDebug(txHash);
@@ -163,10 +160,9 @@ export const collectFundsReadFrom = Effect.gen(function* ($) {
     .collectFrom(utxos, redeemer)
     .readFrom(readUtxo)
     .addSigner(addr)
-    .complete()
-    .program();
-  const signed = yield* signBuilder.sign.withWallet().complete().program();
-  const txHash = yield* signed.submit().program();
+    .completeProgram();
+  const signed = yield* signBuilder.sign.withWallet().completeProgram();
+  const txHash = yield* signed.submitProgram();
   yield* Effect.sleep("10 seconds");
   yield* Effect.logDebug(txHash);
 }).pipe(
