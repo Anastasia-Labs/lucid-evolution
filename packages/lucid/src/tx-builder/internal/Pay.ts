@@ -16,11 +16,31 @@ export const payToAddress = (
   assets: Assets,
 ) =>
   Effect.gen(function* () {
-    const output = CML.TransactionOutput.new(
-      yield* toCMLAddress(address, config.lucidConfig),
-      assetsToValue(assets),
-    );
-    config.txBuilder.add_output(CML.SingleOutputBuilderResult.new(output));
+    const outputBuilder = CML.TransactionOutputBuilder.new()
+      .with_address(yield* toCMLAddress(address, config.lucidConfig))
+      .next();
+
+    if (Object.keys(assets).length == 0)
+      yield* payError(
+        "EmptyAssets",
+        "Attempting to pay to an address with an empty assets object",
+      );
+
+    if (assets["lovelace"]) {
+      config.txBuilder.add_output(
+        outputBuilder.with_value(assetsToValue(assets)).build(),
+      );
+    } else {
+      // If no lovelace, add output with asset and minimum required coin
+      config.txBuilder.add_output(
+        outputBuilder
+          .with_asset_and_min_required_coin(
+            assetsToValue(assets).multi_asset(),
+            config.lucidConfig.protocolParameters.coinsPerUtxoByte,
+          )
+          .build(),
+      );
+    }
   });
 
 /** Pay to a public key or native script address with datum or scriptRef. */
@@ -28,23 +48,44 @@ export const payToAddressWithData = (
   config: TxBuilderConfig,
   address: Address,
   outputDatum: OutputDatum,
-  assets: Assets,
+  assets?: Assets,
   scriptRef?: Script,
 ) =>
   Effect.gen(function* () {
     //TODO: Test with datumhash
-    const outputBuilder = CML.TransactionOutputBuilder.new()
-      .with_address(CML.Address.from_bech32(address))
-      .with_data(toDatumOption(outputDatum));
-    config.txBuilder.add_output(
-      scriptRef
-        ? outputBuilder
-            .with_reference_script(toScriptRef(scriptRef))
-            .next()
-            .with_value(assetsToValue(assets))
-            .build()
-        : outputBuilder.next().with_value(assetsToValue(assets)).build(),
-    );
+    const outputBuilder = buildBaseOutput(address, outputDatum, scriptRef);
+    if (assets) {
+      if (Object.keys(assets).length == 0)
+        yield* payError(
+          "EmptyAssets",
+          "Attempting to pay to an address with an empty assets object",
+        );
+      if (assets["lovelace"]) {
+        config.txBuilder.add_output(
+          outputBuilder.with_value(assetsToValue(assets)).build(),
+        );
+      } else {
+        // If no lovelace, add output with asset and minimum required coin
+        config.txBuilder.add_output(
+          outputBuilder
+            .with_asset_and_min_required_coin(
+              assetsToValue(assets).multi_asset(),
+              config.lucidConfig.protocolParameters.coinsPerUtxoByte,
+            )
+            .build(),
+        );
+      }
+    } else {
+      // No assets provided, add output with empty multi-asset and minimum required coin
+      config.txBuilder.add_output(
+        outputBuilder
+          .with_asset_and_min_required_coin(
+            CML.MultiAsset.new(),
+            config.lucidConfig.protocolParameters.coinsPerUtxoByte,
+          )
+          .build(),
+      );
+    }
   });
 
 /** Pay to a plutus script address with datum or scriptRef. */
@@ -52,7 +93,7 @@ export const payToContract = (
   config: TxBuilderConfig,
   address: Address,
   outputDatum: OutputDatum,
-  assets: Assets,
+  assets?: Assets,
   scriptRef?: Script,
 ) =>
   Effect.gen(function* () {
@@ -69,3 +110,17 @@ export const payToContract = (
       scriptRef,
     );
   });
+
+const buildBaseOutput = (
+  address: Address,
+  outputDatum: OutputDatum,
+  scriptRef: Script | undefined,
+) => {
+  const baseBuilder = CML.TransactionOutputBuilder.new()
+    .with_address(CML.Address.from_bech32(address))
+    .with_data(toDatumOption(outputDatum));
+
+  return scriptRef
+    ? baseBuilder.with_reference_script(toScriptRef(scriptRef)).next()
+    : baseBuilder.next();
+};

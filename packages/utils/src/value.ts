@@ -26,7 +26,7 @@ export function valueToAssets(value: CML.Value): Assets {
 
 export function assetsToValue(assets: Assets): CML.Value {
   const multiAsset = CML.MultiAsset.new();
-  const lovelace = assets["lovelace"];
+  const lovelace = assets["lovelace"] ? assets["lovelace"] : 0n;
   const units = Object.keys(assets);
   const policies = Array.from(
     new Set(

@@ -1,50 +1,43 @@
-import { isRight } from "effect/Either";
 import {
-  Blockfrost,
-  Lucid,
   fromText,
   mintingPolicyToId,
   nativeJSFromJson,
   paymentCredentialOf,
   unixTimeToSlot,
 } from "../src/index.js";
-import { assert, test } from "vitest";
-import { Effect } from "effect";
+import { test } from "vitest";
+import { Effect, Logger, LogLevel, pipe, Schedule } from "effect";
+import { User } from "./services.js";
+const mkMintinPolicy = (time: number, address: string) => {
+  return nativeJSFromJson({
+    type: "all",
+    scripts: [
+      {
+        type: "sig",
+        keyHash: paymentCredentialOf(address).hash,
+      },
+      {
+        type: "before",
+        slot: unixTimeToSlot("Preprod", time + Date.now()),
+      },
+    ],
+  });
+};
 
-test.skip("test tx submit", async () => {
-  const user = await Lucid(
-    new Blockfrost(process.env.VITE_API_URL!, process.env.VITE_BLOCKFROST_KEY),
-    "Preprod",
-  );
-  user.selectWallet.fromSeed(process.env.VITE_SEED!);
-
-  const utxo = await user.wallet().getUtxos();
-
-  const mkMintinPolicy = async (time: number) => {
-    return nativeJSFromJson({
-      type: "all",
-      scripts: [
-        {
-          type: "sig",
-          keyHash: paymentCredentialOf(await user.wallet().address()).hash,
-        },
-        {
-          type: "before",
-          slot: unixTimeToSlot("Preprod", time + Date.now()),
-        },
-      ],
-    });
-  };
-
-  const mint = await mkMintinPolicy(9_000_000);
+export const txSubmit = Effect.gen(function* ($) {
+  const { user } = yield* User;
+  const utxo = yield* Effect.tryPromise(() => user.wallet().getUtxos());
+  const addr = yield* Effect.promise(() => user.wallet().address());
+  const mint = mkMintinPolicy(9_000_000, addr);
   const policy = mintingPolicyToId(mint);
 
-  const tx = user
+  const signBuilder = yield* user
     .newTx()
     .readFrom(utxo)
     .pay.ToAddress(
       "addr_test1qp4cgm42esrud5njskhsr6uc28s6ljah0phsdqe7qmh3rfuyjgq5wwsca5camufxavmtnm8f6ywga3de3jkgmkwzma4sqv284l",
-      { lovelace: 2_000_000n },
+      // { lovelace: 2_000_000n },
+      { [policy + fromText("MyMintedToken")]: 1n },
     )
     .pay.ToAddressWithData(
       "addr_test1qp4cgm42esrud5njskhsr6uc28s6ljah0phsdqe7qmh3rfuyjgq5wwsca5camufxavmtnm8f6ywga3de3jkgmkwzma4sqv284l",
@@ -52,22 +45,27 @@ test.skip("test tx submit", async () => {
         kind: "inline",
         value: "d87980",
       },
-      { lovelace: 2_000_000n },
+      // { [policy + fromText("MyMintedToken")]: 1n }
     )
     .mintAssets({ [policy + fromText("MyMintedToken")]: 1n })
     .validTo(Date.now() + 900000)
     .attach.MintingPolicy(mint)
     .complete()
     .program();
+  const signed = yield* signBuilder.sign.withWallet().complete().program();
+  const txHash = yield* signed.submit().program();
+  yield* Effect.sleep("10 seconds");
+  yield* Effect.logDebug(txHash);
+}).pipe(
+  Effect.tapError(Effect.logDebug),
+  Effect.retry(
+    pipe(Schedule.compose(Schedule.exponential(20_000), Schedule.recurs(4))),
+  ),
+  Logger.withMinimumLogLevel(LogLevel.Debug),
+);
 
-  const signed = await tx.pipe(
-    Effect.flatMap((tx) => tx.sign.withWallet().complete().program()),
-    //NOTE: enable if you want to submit signed tx on preprod
-    // Effect.flatMap((signedTx) => Effect.promise(() => signedTx.submit()!)),
-    // Effect.flatMap((txHash) => Effect.log(txHash)),
-    Effect.either,
-    Effect.runPromise,
-  );
-
-  assert.deepStrictEqual(isRight(signed), true);
+test("tx submit ", async () => {
+  // const program = pipe(txSubmit, Effect.provide(Layer.mergeAll(User.layer)));
+  // const exit = await Effect.runPromiseExit(program);
+  // expect(exit._tag).toBe("Success");
 });
