@@ -72,6 +72,7 @@ export type TxBuilder = {
   };
   complete: () => Promise<TxSignBuilder>;
   completeProgram: () => Effect<TxSignBuilder, TransactionError>;
+  completeSafe: () => Promise<Either<TxSignBuilder, TransactionError>>;
   config: () => TxBuilderConfig;
 };
 
@@ -218,6 +219,7 @@ export function makeTxBuilder(lucidConfig: LucidConfig): TxBuilder {
     },
     complete: () => completeTxBuilder(config).unsafeRun(),
     completeProgram: () => completeTxBuilder(config).program(),
+    completeSafe: () => completeTxBuilder(config).safeRun(),
     config: () => config,
   };
   return txBuilder;

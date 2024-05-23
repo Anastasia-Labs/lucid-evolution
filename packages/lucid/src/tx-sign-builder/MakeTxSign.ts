@@ -11,6 +11,7 @@ import {
 } from "../Errors.js";
 import { TxSigned } from "./internal/CompleteTxSign.js";
 import { completeTxSignBuilder } from "../tx-builder/internal/CompleteTxSigner.js";
+import { Either } from "effect/Either";
 
 export const signError = (cause: TxSignerErrorCause, message?: string) =>
   new TxSignerError({ cause, module: "Sign", message });
@@ -31,6 +32,7 @@ export type TxSignBuilder = {
   };
   complete: () => Promise<TxSigned>;
   completeProgram: () => Effect.Effect<TxSigned, TransactionSignError, never>;
+  completeSafe: () => Promise<Either<TxSigned, TransactionSignError>>;
 };
 
 export const makeTxSignBuilder = (
@@ -90,6 +92,7 @@ export const makeTxSignBuilder = (
     },
     complete: () => completeTxSignBuilder(config).unsafeRun(),
     completeProgram: () => completeTxSignBuilder(config).program(),
+    completeSafe: () => completeTxSignBuilder(config).safeRun(),
   };
   return txSignBuilder;
 };
