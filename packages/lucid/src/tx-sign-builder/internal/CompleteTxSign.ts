@@ -7,6 +7,7 @@ import { Either } from "effect/Either";
 export type TxSigned = {
   submit: () => Promise<string>;
   submitProgram: () => Effect.Effect<string, UnknownException, never>;
+  submitSafe: () => Promise<Either<string, UnknownException>>;
   toCBOR: () => string;
   toHash: () => string;
 };
@@ -18,20 +19,16 @@ export const completeTxSign = (
     //FIX: this can fail
     submit: () =>
       makeReturn(
-        Effect.gen(function* () {
-          return yield* Effect.tryPromise(() =>
-            wallet.submitTx(txSigned.to_cbor_hex()),
-          );
-        }),
+        Effect.tryPromise(() => wallet.submitTx(txSigned.to_cbor_hex())),
       ).unsafeRun(),
     submitProgram: () =>
       makeReturn(
-        Effect.gen(function* () {
-          return yield* Effect.tryPromise(() =>
-            wallet.submitTx(txSigned.to_cbor_hex()),
-          );
-        }),
+        Effect.tryPromise(() => wallet.submitTx(txSigned.to_cbor_hex())),
       ).program(),
+    submitSafe: () =>
+      makeReturn(
+        Effect.tryPromise(() => wallet.submitTx(txSigned.to_cbor_hex())),
+      ).safeRun(),
     toCBOR: () => {
       return txSigned.to_cbor_hex();
     },
