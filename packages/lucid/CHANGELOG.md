@@ -1,5 +1,13 @@
 # @lucid-evolution/lucid
 
+## 0.2.29
+
+### Patch Changes
+
+- [#114](https://github.com/Anastasia-Labs/lucid-evolution/pull/114) [`5c6afe7`](https://github.com/Anastasia-Labs/lucid-evolution/commit/5c6afe70f514727a58cc45799500e0c4666c2f62) Thanks [@solidsnakedev](https://github.com/solidsnakedev)! - fix readFrom
+
+- [#116](https://github.com/Anastasia-Labs/lucid-evolution/pull/116) [`ffedcfe`](https://github.com/Anastasia-Labs/lucid-evolution/commit/ffedcfe03e5b88271ed056f8ecdf75e64f8ed1f6) Thanks [@solidsnakedev](https://github.com/solidsnakedev)! - enable completeSafe()
+
 ## 0.2.28
 
 ### Patch Changes
