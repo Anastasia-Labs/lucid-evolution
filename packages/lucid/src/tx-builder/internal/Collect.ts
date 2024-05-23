@@ -35,6 +35,8 @@ export const collectFromUTxO = (
         utxo.datum = Data.to(data);
       }
       const coreUtxo = utxoToCore(utxo);
+
+      // An array of unspent transaction outputs to be used as inputs when running uplc eval.
       config.inputUTxOs?.push(utxo);
       const input =
         CML.SingleInputBuilder.from_transaction_unspent_output(coreUtxo);

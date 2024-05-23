@@ -30,6 +30,8 @@ export const readFrom = (
         utxo.datum = Data.to(data);
       }
       const coreUtxo = utxoToCore(utxo);
+      // An array of unspent transaction outputs to be used as inputs when running uplc eval.
+      config.inputUTxOs?.push(utxo);
       config.txBuilder.add_reference_input(coreUtxo);
     }
   });
