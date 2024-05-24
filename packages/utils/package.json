@@ -37,6 +37,7 @@
     "@lucid-evolution/core-utils": "workspace:*",
     "@lucid-evolution/crc8": "workspace:*",
     "@lucid-evolution/plutus": "workspace:*",
+    "@lucid-evolution/uplc": "workspace:*",
     "cborg": "^4.2.0"
   },
   "devDependencies": {

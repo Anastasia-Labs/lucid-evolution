@@ -7,7 +7,7 @@ import {
 } from "../src/index.js";
 import { test } from "vitest";
 import { Effect, Logger, LogLevel, pipe, Schedule } from "effect";
-import { User } from "./services.js";
+import { User } from "./specs/services.js";
 const mkMintinPolicy = (time: number, address: string) => {
   return nativeJSFromJson({
     type: "all",

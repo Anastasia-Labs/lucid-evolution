@@ -347,6 +347,9 @@ importers:
       '@lucid-evolution/plutus':
         specifier: workspace:*
         version: link:../plutus
+      '@lucid-evolution/uplc':
+        specifier: workspace:*
+        version: link:../uplc
       cborg:
         specifier: ^4.2.0
         version: 4.2.0
