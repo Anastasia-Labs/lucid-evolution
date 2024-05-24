@@ -1,5 +1,11 @@
 # @lucid-evolution/utils
 
+## 0.1.11
+
+### Patch Changes
+
+- [#117](https://github.com/Anastasia-Labs/lucid-evolution/pull/117) [`a5cfe27`](https://github.com/Anastasia-Labs/lucid-evolution/commit/a5cfe27dce663f84d07cd0e18ff7f011612e0d59) Thanks [@solidsnakedev](https://github.com/solidsnakedev)! - add applyParamsToScript; add contract specs using aiken
+
 ## 0.1.10
 
 ### Patch Changes
