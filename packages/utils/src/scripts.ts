@@ -13,11 +13,15 @@ import {
   RewardAddress,
   NativeScript,
   Native,
+  Exact,
 } from "@lucid-evolution/core-types";
 import { CML } from "./core.js";
 import { networkToId } from "./network.js";
 import { applyDoubleCborEncoding } from "./cbor.js";
 import { nativeJSFromJson } from "./native.js";
+import { Data } from "@lucid-evolution/plutus";
+import * as UPLC from "@lucid-evolution/uplc";
+import { fromHex, toHex } from "@lucid-evolution/core-utils";
 
 export function validatorToAddress(
   network: Network,
@@ -141,19 +145,13 @@ export function nativeScriptFromJson(nativeScript: NativeScript): Script {
   };
 }
 
-//TODO: Add aiken lib or plut-ts lib
-// export function applyParamsToScript<T extends unknown[] = Data[]>(
-//   plutusScript: string,
-//   params: Exact<[...T]>,
-//   type?: T
-// ): string {
-//   const p = (type ? Data.castTo<T>(params, type) : params) as Data[];
-//   return toHex(
-//     CML.apply_params_to_plutus_script(
-//       CML.PlutusList.from_bytes(fromHex(Data.to<Data[]>(p))),
-//       CML.PlutusScript.from_bytes(
-//         fromHex(applyDoubleCborEncoding(plutusScript))
-//       )
-//     ).to_bytes()
-//   );
-// }
+export function applyParamsToScript<T extends unknown[] = Data[]>(
+  plutusScript: string,
+  params: Exact<[...T]>,
+  type?: T,
+): string {
+  const p = (type ? Data.castTo<T>(params, type) : params) as Data[];
+  return toHex(
+    UPLC.apply_params_to_script(fromHex(Data.to(p)), fromHex(plutusScript)),
+  );
+}

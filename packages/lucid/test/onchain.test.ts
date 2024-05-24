@@ -1,23 +1,14 @@
 import { describe, expect, test } from "vitest";
 import { Effect, Layer, pipe } from "effect";
-import { HelloContract, User } from "./services.js";
-import {
-  collectFunds,
-  collectFundsReadFrom,
-  depositFunds,
-  depositFundsLockRefScript,
-} from "./hello.js";
-import {
-  registerStake,
-  deRegisterStake,
-  registerDeregisterStake,
-  withdrawZero,
-} from "./stake.js";
+import { HelloContract, User } from "./specs/services.js";
+import * as HelloEndpoints from "./specs/hello.js";
+import * as StakeEndpoints from "./specs/stake.js";
+import * as ParametrizedEndpoints from "./specs/hello-params.js";
 
 describe.sequential("Hello", () => {
   test("DespositFunds", async () => {
     const program = pipe(
-      depositFunds,
+      HelloEndpoints.depositFunds,
       Effect.provide(Layer.mergeAll(User.layer, HelloContract.layer)),
     );
     const exit = await Effect.runPromiseExit(program);
@@ -26,7 +17,7 @@ describe.sequential("Hello", () => {
 
   test("CollectFunds", async () => {
     const program = pipe(
-      collectFunds,
+      HelloEndpoints.collectFunds,
       Effect.provide(Layer.mergeAll(User.layer, HelloContract.layer)),
     );
     const exit = await Effect.runPromiseExit(program);
@@ -35,7 +26,7 @@ describe.sequential("Hello", () => {
 
   test("DespositFunds, lock reference script", async () => {
     const program = pipe(
-      depositFundsLockRefScript,
+      HelloEndpoints.depositFundsLockRefScript,
       Effect.provide(Layer.mergeAll(User.layer, HelloContract.layer)),
     );
     const exit = await Effect.runPromiseExit(program);
@@ -44,7 +35,7 @@ describe.sequential("Hello", () => {
 
   test("CollectFunds , reading from reference script", async () => {
     const program = pipe(
-      collectFundsReadFrom,
+      HelloEndpoints.collectFundsReadFrom,
       Effect.provide(Layer.mergeAll(User.layer, HelloContract.layer)),
     );
     const exit = await Effect.runPromiseExit(program);
@@ -54,19 +45,28 @@ describe.sequential("Hello", () => {
 
 describe.sequential("Stake", () => {
   test("registerStake", async () => {
-    const program = pipe(registerStake, Effect.provide(User.layer));
+    const program = pipe(
+      StakeEndpoints.registerStake,
+      Effect.provide(User.layer),
+    );
     const exit = await Effect.runPromiseExit(program);
     expect(exit._tag).toBe("Success");
   });
 
   test("deRegisterStake", async () => {
-    const program = pipe(deRegisterStake, Effect.provide(User.layer));
+    const program = pipe(
+      StakeEndpoints.deRegisterStake,
+      Effect.provide(User.layer),
+    );
     const exit = await Effect.runPromiseExit(program);
     expect(exit._tag).toBe("Success");
   });
 
   test("registerStake/deRegisterStake", async () => {
-    const program = pipe(registerDeregisterStake, Effect.provide(User.layer));
+    const program = pipe(
+      StakeEndpoints.registerDeregisterStake,
+      Effect.provide(User.layer),
+    );
     const exit = await Effect.runPromiseExit(program);
     expect(exit._tag).toBe("Success");
   });
@@ -74,13 +74,39 @@ describe.sequential("Stake", () => {
 
 describe.sequential("Withdraw", () => {
   test("registerStake", async () => {
-    const program = pipe(registerStake, Effect.provide(User.layer));
+    const program = pipe(
+      StakeEndpoints.registerStake,
+      Effect.provide(User.layer),
+    );
     const exit = await Effect.runPromiseExit(program);
     expect(exit._tag).toBe("Success");
   });
 
   test("withdrawZero", async () => {
-    const program = pipe(withdrawZero, Effect.provide(User.layer));
+    const program = pipe(
+      StakeEndpoints.withdrawZero,
+      Effect.provide(User.layer),
+    );
+    const exit = await Effect.runPromiseExit(program);
+    expect(exit._tag).toBe("Success");
+  });
+});
+
+describe.sequential("Parametrized Contract", () => {
+  test("Deposit Funds", async () => {
+    const program = pipe(
+      ParametrizedEndpoints.depositFunds,
+      Effect.provide(Layer.mergeAll(User.layer)),
+    );
+    const exit = await Effect.runPromiseExit(program);
+    expect(exit._tag).toBe("Success");
+  });
+
+  test("Collect Funds", async () => {
+    const program = pipe(
+      ParametrizedEndpoints.collectFunds,
+      Effect.provide(Layer.mergeAll(User.layer)),
+    );
     const exit = await Effect.runPromiseExit(program);
     expect(exit._tag).toBe("Success");
   });

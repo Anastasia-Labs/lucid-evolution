@@ -1,0 +1,14 @@
+name = "lucid-evolution/spec"
+version = "0.0.0"
+license = "Apache-2.0"
+description = "Aiken contracts for project 'lucid-evolution/spec'"
+
+[repository]
+user = "lucid-evolution"
+project = "spec"
+platform = "github"
+
+[[dependencies]]
+name = "aiken-lang/stdlib"
+version = "1.9.0"
+source = "github"

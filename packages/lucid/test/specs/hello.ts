@@ -3,6 +3,23 @@ import { HelloContract, User } from "./services";
 import { Constr, Data } from "@lucid-evolution/plutus";
 import { getAddressDetails } from "@lucid-evolution/utils";
 import { fromText } from "@lucid-evolution/core-utils";
+import { TxSignBuilder } from "../../src";
+
+const DatumSchema = Data.Object({
+  owner: Data.Bytes(),
+});
+type DatumType = Data.Static<typeof DatumSchema>;
+const DatumType = DatumSchema as unknown as DatumType;
+
+const handleSignSubmit = (signBuilder: TxSignBuilder) =>
+  Effect.gen(function* () {
+    const { user } = yield* User;
+    const signed = yield* signBuilder.sign.withWallet().completeProgram();
+    const txHash = yield* signed.submitProgram();
+    yield* Effect.promise(() => user.awaitTx(txHash, 20_000));
+    yield* Effect.sleep("10 seconds");
+    yield* Effect.logDebug(txHash);
+  });
 
 export const depositFunds = Effect.gen(function* () {
   const { user } = yield* User;
@@ -28,11 +45,8 @@ export const depositFunds = Effect.gen(function* () {
       { lovelace: 10_000_000n },
     )
     .completeProgram();
-  const signed = yield* signBuilder.sign.withWallet().completeProgram();
-  const txHash = yield* signed.submitProgram();
-  yield* Effect.promise(() => user.awaitTx(txHash, 20_000));
-  yield* Effect.sleep("10 seconds");
-  yield* Effect.logDebug(txHash);
+
+  yield* handleSignSubmit(signBuilder);
 }).pipe(
   Effect.tapErrorCause(Console.log),
   Effect.retry(
@@ -43,11 +57,6 @@ export const depositFunds = Effect.gen(function* () {
 
 export const collectFunds = Effect.gen(function* ($) {
   const { user } = yield* User;
-  const DatumSchema = Data.Object({
-    owner: Data.Bytes(),
-  });
-  type DatumType = Data.Static<typeof DatumSchema>;
-  const DatumType = DatumSchema as unknown as DatumType;
   const { contractAddress, hello } = yield* HelloContract;
 
   const allUtxos = yield* Effect.tryPromise(() =>
@@ -75,10 +84,8 @@ export const collectFunds = Effect.gen(function* ($) {
     .attach.SpendingValidator(hello)
     .addSigner(addr)
     .completeProgram();
-  const signed = yield* signBuilder.sign.withWallet().completeProgram();
-  const txHash = yield* signed.submitProgram();
-  yield* Effect.sleep("10 seconds");
-  yield* Effect.logDebug(txHash);
+
+  yield* handleSignSubmit(signBuilder);
 }).pipe(
   Effect.tapErrorCause(Effect.logDebug),
   Effect.retry(
@@ -112,11 +119,8 @@ export const depositFundsLockRefScript = Effect.gen(function* () {
       hello,
     )
     .completeProgram();
-  const signed = yield* signBuilder.sign.withWallet().completeProgram();
-  const txHash = yield* signed.submitProgram();
-  yield* Effect.promise(() => user.awaitTx(txHash, 20_000));
-  yield* Effect.sleep("10 seconds");
-  yield* Effect.logDebug(txHash);
+
+  yield* handleSignSubmit(signBuilder);
 }).pipe(
   Effect.tapErrorCause(Console.log),
   Effect.retry(
@@ -127,11 +131,6 @@ export const depositFundsLockRefScript = Effect.gen(function* () {
 
 export const collectFundsReadFrom = Effect.gen(function* ($) {
   const { user } = yield* User;
-  const DatumSchema = Data.Object({
-    owner: Data.Bytes(),
-  });
-  type DatumType = Data.Static<typeof DatumSchema>;
-  const DatumType = DatumSchema as unknown as DatumType;
 
   const { contractAddress } = yield* HelloContract;
 
@@ -161,10 +160,8 @@ export const collectFundsReadFrom = Effect.gen(function* ($) {
     .readFrom(readUtxo)
     .addSigner(addr)
     .completeProgram();
-  const signed = yield* signBuilder.sign.withWallet().completeProgram();
-  const txHash = yield* signed.submitProgram();
-  yield* Effect.sleep("10 seconds");
-  yield* Effect.logDebug(txHash);
+
+  yield* handleSignSubmit(signBuilder);
 }).pipe(
   Effect.tapErrorCause(Effect.logDebug),
   Effect.retry(
