@@ -87,7 +87,7 @@ export const collectFunds = Effect.gen(function* ($) {
 
   yield* handleSignSubmit(signBuilder);
 }).pipe(
-  Effect.tapErrorCause(Effect.logDebug),
+  Effect.tapErrorCause(Console.log),
   Effect.retry(
     pipe(Schedule.compose(Schedule.exponential(20_000), Schedule.recurs(4))),
   ),

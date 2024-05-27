@@ -1,5 +1,5 @@
 import { Effect } from "effect";
-import { ScriptType, UTxO } from "@lucid-evolution/core-types";
+import { Assets, ScriptType, UTxO } from "@lucid-evolution/core-types";
 import { CML } from "../core.js";
 import { TransactionError } from "../Errors.js";
 import { LucidConfig } from "../lucid-evolution/LucidEvolution.js";
@@ -7,7 +7,10 @@ import { LucidConfig } from "../lucid-evolution/LucidEvolution.js";
 export type TxBuilderConfig = {
   readonly lucidConfig: LucidConfig;
   readonly txBuilder: CML.TransactionBuilder;
-  inputUTxOs: UTxO[];
+  collectedInputs: UTxO[];
+  readInputs: UTxO[];
+  totalOutputAssets: Assets;
+  mintedAssets: Assets;
   scripts: Map<string, { type: ScriptType; script: string }>;
   programs: Effect.Effect<void, TransactionError, never>[];
 };

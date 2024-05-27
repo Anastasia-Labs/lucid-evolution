@@ -3,6 +3,7 @@ import { Effect, Layer, pipe } from "effect";
 import { HelloContract, User } from "./specs/services.js";
 import * as HelloEndpoints from "./specs/hello.js";
 import * as StakeEndpoints from "./specs/stake.js";
+import * as MintBurnEndpoints from "./specs/mint-burn.js";
 import * as ParametrizedEndpoints from "./specs/hello-params.js";
 
 describe.sequential("Hello", () => {
@@ -106,6 +107,77 @@ describe.sequential("Parametrized Contract", () => {
     const program = pipe(
       ParametrizedEndpoints.collectFunds,
       Effect.provide(Layer.mergeAll(User.layer)),
+    );
+    const exit = await Effect.runPromiseExit(program);
+    expect(exit._tag).toBe("Success");
+  });
+});
+
+describe.sequential("Mint Test", () => {
+  test("Mint Token", async () => {
+    const program = pipe(
+      MintBurnEndpoints.mint,
+      Effect.provide(Layer.mergeAll(User.layer)),
+    );
+    const exit = await Effect.runPromiseExit(program);
+    expect(exit._tag).toBe("Success");
+  });
+
+  test("Burn Token", async () => {
+    const program = pipe(
+      MintBurnEndpoints.burn,
+      Effect.provide(Layer.mergeAll(User.layer)),
+    );
+    const exit = await Effect.runPromiseExit(program);
+    expect(exit._tag).toBe("Success");
+  });
+
+  test("Mint/Burn Token", async () => {
+    const program = pipe(
+      MintBurnEndpoints.mintburn,
+      Effect.provide(Layer.mergeAll(User.layer)),
+    );
+    const exit = await Effect.runPromiseExit(program);
+    expect(exit._tag).toBe("Success");
+  });
+
+  test("Mint Token, Second Test", async () => {
+    const program = pipe(
+      MintBurnEndpoints.mint2,
+      Effect.provide(Layer.mergeAll(User.layer)),
+    );
+    const exit = await Effect.runPromiseExit(program);
+    expect(exit._tag).toBe("Success");
+  });
+
+  test("Burn Token, Second Test", async () => {
+    const program = pipe(
+      MintBurnEndpoints.burn2,
+      Effect.provide(Layer.mergeAll(User.layer)),
+    );
+    const exit = await Effect.runPromiseExit(program);
+    expect(exit._tag).toBe("Success");
+  });
+  test("Pay ADA", async () => {
+    const program = pipe(
+      MintBurnEndpoints.pay,
+      Effect.provide(Layer.mergeAll(User.layer)),
+    );
+    const exit = await Effect.runPromiseExit(program);
+    expect(exit._tag).toBe("Success");
+  });
+  test("Pay Asset", async () => {
+    const program = pipe(
+      MintBurnEndpoints.pay2,
+      Effect.provide(Layer.mergeAll(User.layer)),
+    );
+    const exit = await Effect.runPromiseExit(program);
+    expect(exit._tag).toBe("Success");
+  });
+  test("CollectFunds", async () => {
+    const program = pipe(
+      MintBurnEndpoints.pay3,
+      Effect.provide(Layer.mergeAll(User.layer, HelloContract.layer)),
     );
     const exit = await Effect.runPromiseExit(program);
     expect(exit._tag).toBe("Success");

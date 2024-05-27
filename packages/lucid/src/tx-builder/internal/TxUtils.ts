@@ -5,7 +5,9 @@ import { networkToId } from "@lucid-evolution/utils";
 import {
   Address,
   AddressDetails,
+  Assets,
   RewardAddress,
+  UTxO,
 } from "@lucid-evolution/core-types";
 import { TxBuilderError } from "../../Errors.js";
 import { LucidConfig } from "../../lucid-evolution/LucidEvolution.js";

@@ -1,13 +1,13 @@
 import { Assets, PolicyId, Unit } from "@lucid-evolution/core-types";
-import { toText } from "@lucid-evolution/core-utils";
+import { fromText, toText } from "@lucid-evolution/core-utils";
 import { CML } from "./core.js";
 import { fromLabel, toLabel } from "./label.js";
 
 export function valueToAssets(value: CML.Value): Assets {
   const assets: Assets = {};
   assets["lovelace"] = value.coin();
-  const ma = value.multi_asset();
-  if (ma) {
+  if (value.has_multiassets()) {
+    const ma = value.multi_asset();
     const multiAssets = ma.keys();
     for (let j = 0; j < multiAssets.len(); j++) {
       const policy = multiAssets.get(j);
@@ -16,7 +16,8 @@ export function valueToAssets(value: CML.Value): Assets {
       for (let k = 0; k < assetNames.len(); k++) {
         const policyAsset = assetNames.get(k);
         const quantity = policyAssets.get(policyAsset)!;
-        const unit = policy.to_hex() + policyAsset.to_cbor_hex();
+        //FIX: report to dcspark policyAsset.to_cbor_hex() adds the head byte twice eg. MyMintedToken -> (to Hex) -> 4d4d794d696e746564546f6b656e (This is wrong) | expected Token Name -> 4d794d696e746564546f6b656e
+        const unit = policy.to_hex() + fromText(policyAsset.to_str());
         assets[unit] = quantity;
       }
     }
