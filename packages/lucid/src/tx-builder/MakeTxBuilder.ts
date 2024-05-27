@@ -80,7 +80,10 @@ export function makeTxBuilder(lucidConfig: LucidConfig): TxBuilder {
   const config: TxBuilderConfig = {
     lucidConfig: lucidConfig,
     txBuilder: CML.TransactionBuilder.new(lucidConfig.txbuilderconfig),
-    inputUTxOs: [],
+    collectedInputs: [],
+    readInputs: [],
+    totalOutputAssets: {},
+    mintedAssets: {},
     scripts: new Map(),
     programs: [],
   };

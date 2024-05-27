@@ -1,5 +1,5 @@
 import { Effect, Scope } from "effect";
-import { assetsToValue, toScriptRef } from "@lucid-evolution/utils";
+import { addAssets, assetsToValue, toScriptRef } from "@lucid-evolution/utils";
 import { Address, Assets, Script } from "@lucid-evolution/core-types";
 import { OutputDatum, TxBuilderConfig } from "../types.js";
 import { CML } from "../../core.js";
@@ -16,6 +16,7 @@ export const payToAddress = (
   assets: Assets,
 ) =>
   Effect.gen(function* () {
+    config.totalOutputAssets = addAssets(config.totalOutputAssets, assets);
     const outputBuilder = CML.TransactionOutputBuilder.new()
       .with_address(yield* toCMLAddress(address, config.lucidConfig))
       .next();
@@ -55,6 +56,7 @@ export const payToAddressWithData = (
     //TODO: Test with datumhash
     const outputBuilder = buildBaseOutput(address, outputDatum, scriptRef);
     if (assets) {
+      config.totalOutputAssets = addAssets(config.totalOutputAssets, assets);
       if (Object.keys(assets).length == 0)
         yield* payError(
           "EmptyAssets",

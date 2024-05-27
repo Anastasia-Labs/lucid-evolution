@@ -37,7 +37,8 @@ export const collectFromUTxO = (
       const coreUtxo = utxoToCore(utxo);
 
       // An array of unspent transaction outputs to be used as inputs when running uplc eval.
-      config.inputUTxOs?.push(utxo);
+      config.collectedInputs.push(utxo);
+      //TODO: Add config.collectedAssets
       const input =
         CML.SingleInputBuilder.from_transaction_unspent_output(coreUtxo);
       const credential = paymentCredentialOf(utxo.address);

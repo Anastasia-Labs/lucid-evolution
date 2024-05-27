@@ -9,6 +9,7 @@ import {
   TxBuilderErrorCause,
 } from "../../Errors.js";
 import { TxBuilderConfig } from "../types.js";
+import { addAssets } from "@lucid-evolution/utils";
 
 export const mintError = (cause: TxBuilderErrorCause, message?: string) =>
   new TxBuilderError({ cause, module: "Mint", message });
@@ -24,6 +25,7 @@ export const mintAssets = (
   redeemer?: Redeemer,
 ): Effect.Effect<void, TxBuilderError> =>
   Effect.gen(function* () {
+    config.mintedAssets = addAssets(config.mintedAssets, assets);
     const units = Object.keys(assets);
     const policyId = units[0].slice(0, 56);
     const mintAssets = CML.MapAssetNameToNonZeroInt64.new();

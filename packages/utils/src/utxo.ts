@@ -1,4 +1,4 @@
-import { OutRef, TxOutput, UTxO } from "@lucid-evolution/core-types";
+import { Assets, OutRef, TxOutput, UTxO } from "@lucid-evolution/core-types";
 import { CML } from "./core.js";
 import { fromScriptRef, toScriptRef } from "./scripts.js";
 import { assetsToValue, valueToAssets } from "./value.js";
@@ -60,14 +60,13 @@ export function utxosToCores(utxos: UTxO[]): CML.TransactionUnspentOutput[] {
   return result;
 }
 
+//TODO: test coreToUtxo -> utxoToCore strict equality
 export function coreToUtxo(coreUtxo: CML.TransactionUnspentOutput): UTxO {
   const out = CML.TransactionOutput.from_cbor_hex(coreUtxo.to_cbor_hex());
   const utxo = {
     ...coreToOutRef(CML.TransactionInput.from_cbor_hex(coreUtxo.to_cbor_hex())),
     ...coreToTxOutput(out),
   };
-  out.free();
-
   return utxo;
 }
 
@@ -86,7 +85,7 @@ export function coreToOutRef(input: CML.TransactionInput): OutRef {
   };
 }
 
-export function coresToOutRefs(inputs: Array<CML.TransactionInput>): OutRef[] {
+export function coresToOutRefs(inputs: CML.TransactionInput[]): OutRef[] {
   const result: OutRef[] = [];
   for (let i = 0; i < inputs.length; i++) {
     result.push(coreToOutRef(inputs[i]));
@@ -129,3 +128,68 @@ export function coresToTxOutputs(outputs: CML.TransactionOutput[]): TxOutput[] {
 //   });
 //   return result;
 // }
+
+export const selectUTxOs = (utxos: UTxO[], totalAssets: Assets) => {
+  const selectedUtxos: UTxO[] = [];
+  let isSelected = false;
+  const assetsRequired = new Map<string, bigint>(Object.entries(totalAssets));
+
+  //LargestFirstMultiAsset
+  const sortedUtxos = sortUTxOs(utxos);
+
+  for (const utxo of sortedUtxos) {
+    isSelected = false;
+
+    for (const [unit, amount] of assetsRequired) {
+      if (Object.hasOwn(utxo.assets, unit)) {
+        const utxoAmount = utxo.assets[unit];
+
+        if (utxoAmount >= amount) {
+          assetsRequired.delete(unit);
+        } else {
+          assetsRequired.set(unit, amount - utxoAmount);
+        }
+
+        isSelected = true;
+      }
+    }
+
+    if (isSelected) {
+      selectedUtxos.push(utxo);
+    }
+    if (assetsRequired.size == 0) {
+      break;
+    }
+  }
+
+  if (assetsRequired.size > 0) return [];
+
+  return selectedUtxos;
+};
+
+/**
+ * Sorts an array of UTXOs by the amount of "lovelace" in ascending or descending order.
+ *
+ * @param {UTxO[]} utxos - The array of UTXO objects to be sorted.
+ * @param {"ascending" | "descending"} [order="descending"] - The order in which to sort the UTXOs.
+ *      Use "ascending" for ascending order and "descending" for descending order.
+ * @returns {UTxO[]} - The sorted array of UTXOs.
+ *
+ */
+export const sortUTxOs = (
+  utxos: UTxO[],
+  order: "ascending" | "descending" = "descending",
+): UTxO[] => {
+  return utxos.toSorted((a, b) => {
+    if (a.assets["lovelace"] > b.assets["lovelace"]) {
+      return order === "ascending" ? 1 : -1;
+    }
+    if (a.assets["lovelace"] < b.assets["lovelace"]) {
+      return order === "ascending" ? -1 : 1;
+    }
+    return 0;
+  });
+};
+
+export const isEqualUTxO = (self: UTxO, that: UTxO) =>
+  self.txHash === that.txHash && self.outputIndex === that.outputIndex;

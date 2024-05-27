@@ -7,7 +7,7 @@ export type TxBuilderErrorCause =
   | "Provider"
   | "EmptyUTXO"
   | "EmptyAssets"
-  | "MissingCollateralInput"
+  | "MissingCollateral"
   | "MultiplePolicies"
   | "InvalidNetwork"
   | "InvalidMetadata"
