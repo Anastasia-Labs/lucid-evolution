@@ -4,11 +4,20 @@ import {
   TxSignBuilderConfig,
 } from "../../tx-sign-builder/MakeTxSign.js";
 import { CML, makeReturn } from "../../core.js";
-import { ERROR_MESSAGE, makeRunTimeError } from "../../Errors.js";
-import { completeTxSign } from "../../tx-sign-builder/internal/CompleteTxSign.js";
+import {
+  ERROR_MESSAGE,
+  makeRunTimeError,
+  TransactionSignError,
+} from "../../Errors.js";
+import {
+  completeTxSign,
+  TxSigned,
+} from "../../tx-sign-builder/internal/CompleteTxSign.js";
 
-export const completeTxSignBuilder = (config: TxSignBuilderConfig) => {
-  const program = Effect.gen(function* ($) {
+export const completeTxSignBuilder = (
+  config: TxSignBuilderConfig,
+): Effect.Effect<TxSigned, TransactionSignError> =>
+  Effect.gen(function* ($) {
     yield* $(Effect.all(config.programs, { concurrency: "unbounded" }));
     config.witnessSetBuilder.add_existing(config.txComplete.witness_set());
     const txWitnessSet = config.witnessSetBuilder.build();
@@ -26,5 +35,3 @@ export const completeTxSignBuilder = (config: TxSignBuilderConfig) => {
     );
     return completeTxSign(wallet, signedTx);
   }).pipe(Effect.catchAllDefect(makeRunTimeError));
-  return makeReturn(program);
-};

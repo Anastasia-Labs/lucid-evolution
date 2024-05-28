@@ -1,6 +1,6 @@
-import { CML } from "../core.js";
+import { CML, makeReturn } from "../core.js";
 import { LucidConfig } from "../lucid-evolution/LucidEvolution.js";
-import { TxBuilderConfig, OutputDatum } from "./types.js";
+import { TxBuilderConfig, OutputDatum, CompleteOptions } from "./types.js";
 import * as Read from "./internal/Read.js";
 import {
   Address,
@@ -70,9 +70,13 @@ export type TxBuilder = {
     CertificateValidator: (certValidator: Script) => TxBuilder;
     WithdrawalValidator: (withdrawalValidator: Script) => TxBuilder;
   };
-  complete: () => Promise<TxSignBuilder>;
-  completeProgram: () => Effect<TxSignBuilder, TransactionError>;
-  completeSafe: () => Promise<Either<TxSignBuilder, TransactionError>>;
+  complete: (options?: CompleteOptions) => Promise<TxSignBuilder>;
+  completeProgram: (
+    options?: CompleteOptions,
+  ) => Effect<TxSignBuilder, TransactionError>;
+  completeSafe: (
+    options?: CompleteOptions,
+  ) => Promise<Either<TxSignBuilder, TransactionError>>;
   config: () => TxBuilderConfig;
 };
 
@@ -220,9 +224,12 @@ export function makeTxBuilder(lucidConfig: LucidConfig): TxBuilder {
         return txBuilder;
       },
     },
-    complete: () => completeTxBuilder(config).unsafeRun(),
-    completeProgram: () => completeTxBuilder(config).program(),
-    completeSafe: () => completeTxBuilder(config).safeRun(),
+    complete: (options?: CompleteOptions) =>
+      makeReturn(completeTxBuilder(config, options)).unsafeRun(),
+    completeProgram: (options?: CompleteOptions) =>
+      makeReturn(completeTxBuilder(config, options)).program(),
+    completeSafe: (options?: CompleteOptions) =>
+      makeReturn(completeTxBuilder(config, options)).safeRun(),
     config: () => config,
   };
   return txBuilder;

@@ -1,5 +1,5 @@
 import { Effect } from "effect";
-import { Assets, ScriptType, UTxO } from "@lucid-evolution/core-types";
+import { Address, Assets, ScriptType, UTxO } from "@lucid-evolution/core-types";
 import { CML } from "../core.js";
 import { TransactionError } from "../Errors.js";
 import { LucidConfig } from "../lucid-evolution/LucidEvolution.js";
@@ -13,6 +13,12 @@ export type TxBuilderConfig = {
   mintedAssets: Assets;
   scripts: Map<string, { type: ScriptType; script: string }>;
   programs: Effect.Effect<void, TransactionError, never>[];
+};
+
+export type CompleteOptions = {
+  coinSelection?: boolean;
+  changeAddress?: Address;
+  localUPLCEval?: boolean; // replaces nativeUPLC
 };
 
 export type Hash = string;
