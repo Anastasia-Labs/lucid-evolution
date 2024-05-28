@@ -281,7 +281,7 @@ const coinSelection = (config: TxBuilderConfig, availableInputs: UTxO[]) =>
 
     // yield* Console.log("requiredAssets", requiredAssets);
 
-    const selected = selectUTxOs(availableInputs, requiredAssets);
+    const selected = selectUTxOs(sortUTxOs(availableInputs), requiredAssets);
     if (selected.length == 0)
       yield* completeTxError(
         "NotFound",

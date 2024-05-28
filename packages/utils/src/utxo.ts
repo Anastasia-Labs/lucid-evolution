@@ -133,27 +133,19 @@ export const selectUTxOs = (utxos: UTxO[], totalAssets: Assets) => {
   const selectedUtxos: UTxO[] = [];
   let isSelected = false;
   const assetsRequired = new Map<string, bigint>(Object.entries(totalAssets));
-
-  //LargestFirstMultiAsset
-  const sortedUtxos = sortUTxOs(utxos);
-
-  for (const utxo of sortedUtxos) {
+  for (const utxo of utxos) {
     isSelected = false;
-
     for (const [unit, amount] of assetsRequired) {
       if (Object.hasOwn(utxo.assets, unit)) {
         const utxoAmount = utxo.assets[unit];
-
         if (utxoAmount >= amount) {
           assetsRequired.delete(unit);
         } else {
           assetsRequired.set(unit, amount - utxoAmount);
         }
-
         isSelected = true;
       }
     }
-
     if (isSelected) {
       selectedUtxos.push(utxo);
     }
@@ -161,9 +153,7 @@ export const selectUTxOs = (utxos: UTxO[], totalAssets: Assets) => {
       break;
     }
   }
-
   if (assetsRequired.size > 0) return [];
-
   return selectedUtxos;
 };
 
