@@ -1,5 +1,11 @@
 # @lucid-evolution/utils
 
+## 0.1.12
+
+### Patch Changes
+
+- [#119](https://github.com/Anastasia-Labs/lucid-evolution/pull/119) [`d0446f2`](https://github.com/Anastasia-Labs/lucid-evolution/commit/d0446f2e2ce9d91e6e514cba97c9ba101c83b66b) Thanks [@solidsnakedev](https://github.com/solidsnakedev)! - add coin selection algorithm, input selection is done in descending order
+
 ## 0.1.11
 
 ### Patch Changes
