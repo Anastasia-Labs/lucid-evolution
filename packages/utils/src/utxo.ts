@@ -170,7 +170,7 @@ export const sortUTxOs = (
   utxos: UTxO[],
   order: "ascending" | "descending" = "descending",
 ): UTxO[] => {
-  return utxos.toSorted((a, b) => {
+  return [...utxos].sort((a, b) => {
     if (a.assets["lovelace"] > b.assets["lovelace"]) {
       return order === "ascending" ? 1 : -1;
     }
