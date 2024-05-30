@@ -1,5 +1,22 @@
 # @lucid-evolution/lucid
 
+## 0.2.32
+
+### Patch Changes
+
+- [#121](https://github.com/Anastasia-Labs/lucid-evolution/pull/121) [`0973c38`](https://github.com/Anastasia-Labs/lucid-evolution/commit/0973c381b00b83679110848cebef7f47a45c5c5b) Thanks [@solidsnakedev](https://github.com/solidsnakedev)! - improve code structure
+
+- [#121](https://github.com/Anastasia-Labs/lucid-evolution/pull/121) [`0069b6b`](https://github.com/Anastasia-Labs/lucid-evolution/commit/0069b6be467f86c480b39e30ccd14722a66055e6) Thanks [@solidsnakedev](https://github.com/solidsnakedev)! - refactor tx signer
+
+- [#121](https://github.com/Anastasia-Labs/lucid-evolution/pull/121) [`57b281f`](https://github.com/Anastasia-Labs/lucid-evolution/commit/57b281f4cf0fd17b3f2ce5326bad2168659d8f5c) Thanks [@solidsnakedev](https://github.com/solidsnakedev)! - implement CompleteOptions
+
+- [#121](https://github.com/Anastasia-Labs/lucid-evolution/pull/121) [`a84ac5f`](https://github.com/Anastasia-Labs/lucid-evolution/commit/a84ac5f8dcaf699fa5e19ec55b9716a881d649bd) Thanks [@solidsnakedev](https://github.com/solidsnakedev)! - selecting utxos can be done to ordered/unordered list
+
+- Updated dependencies [[`a84ac5f`](https://github.com/Anastasia-Labs/lucid-evolution/commit/a84ac5f8dcaf699fa5e19ec55b9716a881d649bd)]:
+  - @lucid-evolution/utils@0.1.13
+  - @lucid-evolution/provider@0.1.17
+  - @lucid-evolution/wallet@0.1.13
+
 ## 0.2.31
 
 ### Patch Changes

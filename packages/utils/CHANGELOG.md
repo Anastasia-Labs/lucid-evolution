@@ -1,5 +1,11 @@
 # @lucid-evolution/utils
 
+## 0.1.13
+
+### Patch Changes
+
+- [#121](https://github.com/Anastasia-Labs/lucid-evolution/pull/121) [`a84ac5f`](https://github.com/Anastasia-Labs/lucid-evolution/commit/a84ac5f8dcaf699fa5e19ec55b9716a881d649bd) Thanks [@solidsnakedev](https://github.com/solidsnakedev)! - selecting utxos can be done to ordered/unordered list
+
 ## 0.1.12
 
 ### Patch Changes
