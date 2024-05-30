@@ -8,18 +8,17 @@ import {
   Provider,
   Transaction,
   TxHash,
+  Unit,
   UTxO,
   Wallet,
   WalletApi,
 } from "@lucid-evolution/core-types";
 import { CML } from "../core.js";
-import { datumOf, makeConfigBuilder, metadataOf } from "./utils.js";
+import { datumOf, metadataOf } from "./utils.js";
 import { createCostModels, unixTimeToSlot } from "@lucid-evolution/utils";
-import { TxBuilder, makeTxBuilder } from "../tx-builder/MakeTxBuilder.js";
-import {
-  TxSignBuilder,
-  makeTxSignBuilder,
-} from "../tx-sign-builder/MakeTxSign.js";
+import * as TxBuilder from "../tx-builder/TxBuilder.js";
+import * as TxConfig from "../tx-builder/TxConfig.js";
+import * as TxSignBuilder from "../tx-sign-builder/TxSignBuilder.js";
 import { Data } from "@lucid-evolution/plutus";
 import {
   makeWalletFromAPI,
@@ -31,8 +30,8 @@ export type LucidEvolution = {
   config: () => LucidConfig;
   wallet: () => Wallet;
   switchProvider: (provider: Provider) => Promise<void>;
-  newTx: () => TxBuilder;
-  fromTx: (tx: Transaction) => TxSignBuilder;
+  newTx: () => TxBuilder.TxBuilder;
+  fromTx: (tx: Transaction) => TxSignBuilder.TxSignBuilder;
   selectWallet: {
     fromSeed: (seed: string) => void;
     fromPrivateKey: (privateKey: PrivateKey) => void;
@@ -51,7 +50,7 @@ export type LucidEvolution = {
     txHash: string,
     checkInterval?: number | undefined,
   ) => Promise<boolean>;
-  datumOf: <T = Data>(utxo: UTxO, type?: T | undefined) => Promise<T>;
+  datumOf: <T extends Data>(utxo: UTxO, type?: T | undefined) => Promise<T>;
   metadataOf: <T = any>(unit: string) => Promise<T>;
 };
 
@@ -76,7 +75,7 @@ export const Lucid = async (
     network: network,
     wallet: undefined,
     costModels: costModels,
-    txbuilderconfig: makeConfigBuilder(protocolParam, costModels),
+    txbuilderconfig: TxConfig.makeTxConfig(protocolParam, costModels),
     protocolParameters: protocolParam,
   };
   return {
@@ -87,12 +86,15 @@ export const Lucid = async (
       const costModels = createCostModels(protocolParam.costModels);
       config.provider = provider;
       config.costModels = costModels;
-      config.txbuilderconfig = makeConfigBuilder(protocolParam, costModels);
+      config.txbuilderconfig = TxConfig.makeTxConfig(protocolParam, costModels);
       config.protocolParameters = protocolParam;
     },
-    newTx: (): TxBuilder => makeTxBuilder(config),
+    newTx: (): TxBuilder.TxBuilder => TxBuilder.makeTxBuilder(config),
     fromTx: (tx: Transaction) =>
-      makeTxSignBuilder(config, CML.Transaction.from_cbor_hex(tx)),
+      TxSignBuilder.makeTxSignBuilder(
+        config,
+        CML.Transaction.from_cbor_hex(tx),
+      ),
     selectWallet: {
       fromSeed: (seed: string) => {
         config.wallet = makeWalletFromSeed(config.provider, network, seed);
@@ -113,13 +115,16 @@ export const Lucid = async (
     },
     utxosAt: (addressOrCredential: string | Credential) =>
       config.provider.getUtxos(addressOrCredential),
-    utxosAtWithUnit: config.provider.getUtxosWithUnit,
-    utxoByUnit: config.provider.getUtxoByUnit,
-    utxosByOutRef: config.provider.getUtxosByOutRef,
+    utxosAtWithUnit: (addressOrCredential: string | Credential, unit: Unit) =>
+      config.provider.getUtxosWithUnit(addressOrCredential, unit),
+    utxoByUnit: (unit: Unit) => config.provider.getUtxoByUnit(unit),
+    utxosByOutRef: (outRefs: OutRef[]) =>
+      config.provider.getUtxosByOutRef(outRefs),
     delegationAt: config.provider.getDelegation,
     awaitTx: (txHash: TxHash, checkInterval?: number) =>
       config.provider.awaitTx(txHash, checkInterval),
-    datumOf: datumOf(config.provider),
-    metadataOf: metadataOf(config.provider),
+    datumOf: <T extends Data>(utxo: UTxO, type?: T | undefined) =>
+      datumOf(config.provider, utxo, type),
+    metadataOf: (unit: string) => metadataOf(config.provider, unit),
   };
 };

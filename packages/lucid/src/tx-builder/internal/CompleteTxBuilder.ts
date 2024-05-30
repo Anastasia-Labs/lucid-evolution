@@ -1,15 +1,16 @@
 import { Effect, pipe, Record, Array as _Array } from "effect";
-import { Address, Assets, OutputData, UTxO } from "@lucid-evolution/core-types";
-import { TxBuilderConfig } from "../types.js";
+import { Address, Assets, UTxO } from "@lucid-evolution/core-types";
 import {
   ERROR_MESSAGE,
+  TransactionError,
   TxBuilderError,
   TxBuilderErrorCause,
   makeRunTimeError,
 } from "../../Errors.js";
-import { CML, makeReturn } from "../../core.js";
-import { makeTxSignBuilder } from "../../tx-sign-builder/MakeTxSign.js";
+import { CML } from "../../core.js";
 import * as UPLC from "@lucid-evolution/uplc";
+import * as TxBuilder from "../TxBuilder.js";
+import * as TxSignBuilder from "../../tx-sign-builder/TxSignBuilder.js";
 import {
   isEqualUTxO,
   selectUTxOs,
@@ -20,18 +21,21 @@ import {
 } from "@lucid-evolution/utils";
 import { SLOT_CONFIG_NETWORK } from "@lucid-evolution/plutus";
 
+export type CompleteOptions = {
+  coinSelection?: boolean;
+  changeAddress?: Address;
+  localUPLCEval?: boolean; // replaces nativeUPLC
+};
+
 export const completeTxError = (cause: TxBuilderErrorCause, message?: string) =>
   new TxBuilderError({ cause, module: "Complete", message });
 
-export const completeTxBuilder = (
-  config: TxBuilderConfig,
-  options: {
-    change?: { address?: Address; outputData?: OutputData };
-    coinSelection?: boolean;
-    nativeUplc?: boolean;
-  } = { coinSelection: true },
-) => {
-  const program = Effect.gen(function* () {
+export const complete = (
+  config: TxBuilder.TxBuilderConfig,
+  options: CompleteOptions = { coinSelection: true },
+): Effect.Effect<TxSignBuilder.TxSignBuilder, TransactionError> =>
+  Effect.gen(function* () {
+    yield* Effect.all(config.programs, { concurrency: "unbounded" });
     //NOTE: this should not be here, validation shuold be when making the tx builder
     const wallet = yield* pipe(
       Effect.fromNullable(config.lucidConfig.wallet),
@@ -41,11 +45,8 @@ export const completeTxBuilder = (
     );
     //NOTE: this should not be here, validation shuold be when making the tx builderj
     const changeAddress = yield* Effect.promise(() => wallet.address());
-
-    yield* Effect.all(config.programs, { concurrency: "unbounded" });
-
     //NOTE: this should not be here, validation shuold be when making the tx builderj
-    const walletUtxos = yield* pipe(
+    const walletInputs = yield* pipe(
       Effect.tryPromise({
         try: () => wallet.getUtxos(),
         catch: (error) => completeTxError("Provider", String(error)),
@@ -56,7 +57,7 @@ export const completeTxBuilder = (
     if (config.collectedInputs.find((value) => value.datum !== undefined)) {
       //Remove collected inputs from utxos at wallet and utxo selected for collateral
       const remainingInputs = _Array.differenceWith(isEqualUTxO)(
-        walletUtxos,
+        walletInputs,
         config.collectedInputs,
       );
       const collateralInput = yield* findCollateral(remainingInputs);
@@ -78,13 +79,12 @@ export const completeTxBuilder = (
     } else {
       //Remove collected inputs from utxos at wallet
       const availableInputs = _Array.differenceWith(isEqualUTxO)(
-        walletUtxos,
+        walletInputs,
         config.collectedInputs,
       );
       const inputsToAdd = options.coinSelection
         ? yield* coinSelection(config, availableInputs)
         : availableInputs;
-
       for (const utxo of inputsToAdd) {
         const input = CML.SingleInputBuilder.from_transaction_unspent_output(
           utxoToCore(utxo),
@@ -92,54 +92,20 @@ export const completeTxBuilder = (
         config.txBuilder.add_input(input);
       }
     }
-
-    const slotConfig = SLOT_CONFIG_NETWORK[config.lucidConfig.network];
-    // config.txBuilder.add_change_if_needed(
-    //   CML.Address.from_bech32(changeAddress),
-    //   false
-    // );
-    const tx_evaluation = config.txBuilder.build_for_evaluation(
+    const txRedeemerBuilder = config.txBuilder.build_for_evaluation(
       0,
       CML.Address.from_bech32(changeAddress),
     );
-    if (tx_evaluation.draft_tx().witness_set().redeemers()) {
-      //FIX: this returns undefined
-      const txEvaluation = setRedeemerstoZero(tx_evaluation.draft_tx())!;
-      // console.log(txEvaluation?.to_json());
-      const txUtxos = [
-        ...walletUtxos,
-        ...config.collectedInputs,
-        ...config.readInputs,
-      ];
-      const ins = txUtxos.map((utxo) => utxoToTransactionInput(utxo));
-      const outs = txUtxos.map((utxo) => utxoToTransactionOutput(utxo));
-      const uplc_eval = yield* Effect.try({
-        try: () =>
-          UPLC.eval_phase_two_raw(
-            txEvaluation.to_cbor_bytes(),
-            ins.map((value) => value.to_cbor_bytes()),
-            outs.map((value) => value.to_cbor_bytes()),
-            config.lucidConfig.costModels.to_cbor_bytes(),
-            config.lucidConfig.protocolParameters.maxTxExSteps,
-            config.lucidConfig.protocolParameters.maxTxExMem,
-            BigInt(slotConfig.zeroTime),
-            BigInt(slotConfig.zeroSlot),
-            slotConfig.slotLength,
-          ),
-        catch: (error) =>
-          //TODO: improve format
-          completeTxError(
-            "UPLCEval",
-            JSON.stringify(error).replace(/\\n/g, ""),
-          ),
-      });
-      applyUPLCEval(uplc_eval, config.txBuilder);
+    if (txRedeemerBuilder.draft_tx().witness_set().redeemers()) {
+      applyUPLCEval(
+        yield* evalTransaction(config, txRedeemerBuilder, walletInputs),
+        config.txBuilder,
+      );
     }
     config.txBuilder.add_change_if_needed(
       CML.Address.from_bech32(changeAddress),
       true,
     );
-
     const tx = config.txBuilder
       .build(
         CML.ChangeSelectionAlgo.Default,
@@ -147,17 +113,15 @@ export const completeTxBuilder = (
       )
       .build_unchecked();
 
-    return makeTxSignBuilder(config.lucidConfig, tx);
+    return TxSignBuilder.makeTxSignBuilder(config.lucidConfig, tx);
   }).pipe(Effect.catchAllDefect(makeRunTimeError));
-  return makeReturn(program);
-};
 
 export const applyUPLCEval = (
   uplcEval: Uint8Array[],
   txbuilder: CML.TransactionBuilder,
 ) => {
-  for (const uplcByte of uplcEval) {
-    const redeemer = CML.LegacyRedeemer.from_cbor_bytes(uplcByte);
+  for (const bytes of uplcEval) {
+    const redeemer = CML.LegacyRedeemer.from_cbor_bytes(bytes);
     const exUnits = CML.ExUnits.new(
       redeemer.ex_units().mem(),
       redeemer.ex_units().steps(),
@@ -196,25 +160,7 @@ export const setRedeemerstoZero = (tx: CML.Transaction) => {
   }
 };
 
-export const inputToArray = (inputLust: CML.TransactionInputList) => {
-  const array = [];
-  for (let i = 0; i < inputLust.len(); i++) {
-    console.log("input", i);
-    const input = inputLust.get(i);
-    array.push(input.to_cbor_bytes());
-  }
-  return array;
-};
-export const outputToArray = (outputList: CML.TransactionOutputList) => {
-  const array = [];
-  for (let i = 0; i < outputList.len(); i++) {
-    const output = outputList.get(i);
-    array.push(output.to_cbor_bytes());
-  }
-  return array;
-};
-
-const setCollateral = (config: TxBuilderConfig, input: UTxO) => {
+const setCollateral = (config: TxBuilder.TxBuilderConfig, input: UTxO) => {
   config.txBuilder.add_collateral(
     CML.SingleInputBuilder.from_transaction_unspent_output(
       utxoToCore(input),
@@ -238,7 +184,9 @@ const setCollateral = (config: TxBuilderConfig, input: UTxO) => {
   );
 };
 
-const findCollateral = (inputs: UTxO[]) =>
+const findCollateral = (
+  inputs: UTxO[],
+): Effect.Effect<UTxO, TxBuilderError, never> =>
   pipe(
     Effect.fromNullable(
       sortUTxOs(inputs, "ascending").find(
@@ -254,7 +202,10 @@ const findCollateral = (inputs: UTxO[]) =>
   );
 
 //coinSelection is seach inputs by largest first
-const coinSelection = (config: TxBuilderConfig, availableInputs: UTxO[]) =>
+const coinSelection = (
+  config: TxBuilder.TxBuilderConfig,
+  availableInputs: UTxO[],
+): Effect.Effect<UTxO[], TxBuilderError> =>
   Effect.gen(function* () {
     // NOTE: This is a fee estimation. If the amount is not enough, it may require increasing the fee.
     const fee: Assets = { lovelace: config.txBuilder.min_fee(false) };
@@ -281,11 +232,48 @@ const coinSelection = (config: TxBuilderConfig, availableInputs: UTxO[]) =>
 
     // yield* Console.log("requiredAssets", requiredAssets);
 
-    const selected = selectUTxOs(availableInputs, requiredAssets);
-    if (selected.length == 0)
+    const selected = selectUTxOs(sortUTxOs(availableInputs), requiredAssets);
+    if (_Array.isEmptyArray(selected))
       yield* completeTxError(
         "NotFound",
-        "Your wallet does not have enough funds to cover the required assets.",
+        `Your wallet does not have enough funds to cover the required assets. ${requiredAssets}`,
       );
     return selected;
+  });
+
+const evalTransaction = (
+  config: TxBuilder.TxBuilderConfig,
+  txRedeemerBuilder: CML.TxRedeemerBuilder,
+  walletInputs: UTxO[],
+): Effect.Effect<Uint8Array[], TxBuilderError> =>
+  Effect.gen(function* () {
+    //FIX: this returns undefined
+    const txEvaluation = setRedeemerstoZero(txRedeemerBuilder.draft_tx())!;
+    // console.log(txEvaluation?.to_json());
+    const txUtxos = [
+      ...walletInputs,
+      ...config.collectedInputs,
+      ...config.readInputs,
+    ];
+    const ins = txUtxos.map((utxo) => utxoToTransactionInput(utxo));
+    const outs = txUtxos.map((utxo) => utxoToTransactionOutput(utxo));
+    const slotConfig = SLOT_CONFIG_NETWORK[config.lucidConfig.network];
+    const uplc_eval = yield* Effect.try({
+      try: () =>
+        UPLC.eval_phase_two_raw(
+          txEvaluation.to_cbor_bytes(),
+          ins.map((value) => value.to_cbor_bytes()),
+          outs.map((value) => value.to_cbor_bytes()),
+          config.lucidConfig.costModels.to_cbor_bytes(),
+          config.lucidConfig.protocolParameters.maxTxExSteps,
+          config.lucidConfig.protocolParameters.maxTxExMem,
+          BigInt(slotConfig.zeroTime),
+          BigInt(slotConfig.zeroSlot),
+          slotConfig.slotLength,
+        ),
+      catch: (error) =>
+        //TODO: improve format
+        completeTxError("UPLCEval", JSON.stringify(error).replace(/\\n/g, "")),
+    });
+    return uplc_eval;
   });

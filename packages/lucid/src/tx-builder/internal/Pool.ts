@@ -9,7 +9,7 @@ import {
   TxBuilderError,
   TxBuilderErrorCause,
 } from "../../Errors.js";
-import { TxBuilderConfig } from "../types.js";
+import * as TxBuilder from "../TxBuilder.js";
 import { Effect, pipe } from "effect";
 import {
   toCMLAddress,
@@ -26,7 +26,7 @@ export const poolError = (cause: TxBuilderErrorCause, message?: string) =>
   new TxBuilderError({ cause, module: "Pool", message });
 
 export const delegateTo = (
-  config: TxBuilderConfig,
+  config: TxBuilder.TxBuilderConfig,
   rewardAddress: RewardAddress,
   poolId: PoolId,
   redeemer?: Redeemer,
@@ -116,7 +116,10 @@ export const delegateTo = (
   });
 
 /** Register a stake pool. A pool deposit is required. The metadataUrl needs to be hosted already before making the registration. */
-export const registerPool = (config: TxBuilderConfig, poolParams: PoolParams) =>
+export const registerPool = (
+  config: TxBuilder.TxBuilderConfig,
+  poolParams: PoolParams,
+) =>
   Effect.gen(function* () {
     const poolRegistration = yield* createPoolRegistration(
       poolParams,

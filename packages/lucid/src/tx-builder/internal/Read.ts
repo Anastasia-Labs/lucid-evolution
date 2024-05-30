@@ -2,7 +2,7 @@ import { Effect, pipe } from "effect";
 import { Data } from "@lucid-evolution/plutus";
 import { utxoToCore } from "@lucid-evolution/utils";
 import { UTxO } from "@lucid-evolution/core-types";
-import { TxBuilderConfig } from "../types.js";
+import * as TxBuilder from "../TxBuilder.js";
 import { datumOf } from "../../lucid-evolution/utils.js";
 import {
   ERROR_MESSAGE,
@@ -14,7 +14,7 @@ export const readError = (cause: TxBuilderErrorCause, message?: string) =>
   new TxBuilderError({ cause, module: "Read", message });
 
 export const readFrom = (
-  config: TxBuilderConfig,
+  config: TxBuilder.TxBuilderConfig,
   utxos: UTxO[],
 ): Effect.Effect<void, TxBuilderError> =>
   Effect.gen(function* () {
@@ -23,7 +23,7 @@ export const readFrom = (
     for (const utxo of utxos) {
       if (utxo.datumHash) {
         const data = yield* Effect.tryPromise({
-          try: () => datumOf(config.lucidConfig.provider)(utxo),
+          try: () => datumOf(config.lucidConfig.provider, utxo),
           catch: (error) => readError("Datum", String(error)),
         });
 

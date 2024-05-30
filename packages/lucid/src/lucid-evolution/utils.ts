@@ -1,79 +1,36 @@
-import {
-  Json,
-  ProtocolParameters,
-  Provider,
-  UTxO,
-  Unit,
-} from "@lucid-evolution/core-types";
-import { CML } from "../core.js";
-import { createCostModels, fromUnit, toUnit } from "@lucid-evolution/utils";
+import { Json, Provider, UTxO, Unit } from "@lucid-evolution/core-types";
+import { fromUnit, toUnit } from "@lucid-evolution/utils";
 import { Constr, Data } from "@lucid-evolution/plutus";
 
-export const makeConfigBuilder = (
-  protocolParameters: ProtocolParameters,
-  costModels: CML.CostModels,
-): CML.TransactionBuilderConfig => {
-  const exUnitsPrices = CML.ExUnitPrices.new(
-    CML.Rational.new(
-      BigInt(protocolParameters.priceMem * 100_000_000),
-      100_000_000n,
-    ),
-    CML.Rational.new(
-      BigInt(protocolParameters.priceStep * 100_000_000),
-      100_000_000n,
-    ),
-  );
-  const txBuilderConfig = CML.TransactionBuilderConfigBuilder.new()
-    .fee_algo(
-      CML.LinearFee.new(
-        BigInt(protocolParameters.minFeeA),
-        BigInt(protocolParameters.minFeeB),
-      ),
-    )
-    .coins_per_utxo_byte(protocolParameters.coinsPerUtxoByte)
-    .pool_deposit(protocolParameters.poolDeposit)
-    .key_deposit(protocolParameters.keyDeposit)
-    .max_value_size(protocolParameters.maxValSize)
-    .max_tx_size(protocolParameters.maxTxSize)
-    .ex_unit_prices(exUnitsPrices)
-    .collateral_percentage(protocolParameters.collateralPercentage)
-    .max_collateral_inputs(protocolParameters.maxCollateralInputs)
-    .cost_models(costModels)
-    .collateral_percentage(protocolParameters.collateralPercentage)
-    .max_collateral_inputs(protocolParameters.maxCollateralInputs)
-    .build();
-
-  exUnitsPrices.free();
-
-  return txBuilderConfig;
+export const datumOf = async <T = Data>(
+  provider: Provider,
+  utxo: UTxO,
+  type?: T,
+): Promise<T> => {
+  if (!utxo.datum) {
+    if (!utxo.datumHash) {
+      throw new Error("This UTxO does not have a datum hash.");
+    }
+    utxo.datum = await provider.getDatum(utxo.datumHash);
+  }
+  return Data.from<T>(utxo.datum, type);
 };
 
-export const datumOf =
-  (provider: Provider) =>
-  async <T = Data>(utxo: UTxO, type?: T): Promise<T> => {
-    if (!utxo.datum) {
-      if (!utxo.datumHash) {
-        throw new Error("This UTxO does not have a datum hash.");
-      }
-      utxo.datum = await provider.getDatum(utxo.datumHash);
-    }
-    return Data.from<T>(utxo.datum, type);
-  };
-
 /** Query CIP-0068 metadata for a specifc asset. */
-export const metadataOf =
-  (provider: Provider) =>
-  async <T = Json>(unit: Unit): Promise<T> => {
-    const { policyId, name, label } = fromUnit(unit);
-    switch (label) {
-      case 222:
-      case 333:
-      case 444: {
-        const utxo = await provider.getUtxoByUnit(toUnit(policyId, name, 100));
-        const metadata = (await datumOf(provider)(utxo)) as Constr<Data>;
-        return Data.toJson(metadata.fields[0]);
-      }
-      default:
-        throw new Error("No variant matched.");
+export const metadataOf = async <T = Json>(
+  provider: Provider,
+  unit: Unit,
+): Promise<T> => {
+  const { policyId, name, label } = fromUnit(unit);
+  switch (label) {
+    case 222:
+    case 333:
+    case 444: {
+      const utxo = await provider.getUtxoByUnit(toUnit(policyId, name, 100));
+      const metadata = (await datumOf(provider, utxo)) as Constr<Data>;
+      return Data.toJson(metadata.fields[0]);
     }
-  };
+    default:
+      throw new Error("No variant matched.");
+  }
+};

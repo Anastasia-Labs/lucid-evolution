@@ -1,2 +1,2 @@
-export * from "./MakeTxBuilder.js";
+export * from "./TxBuilder.js";
 export * from "./types.js";

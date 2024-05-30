@@ -2,7 +2,7 @@ import { Effect } from "effect";
 import { Data } from "@lucid-evolution/plutus";
 import { utxoToCore } from "@lucid-evolution/utils";
 import { Redeemer, UTxO } from "@lucid-evolution/core-types";
-import { TxBuilderConfig } from "../types.js";
+import * as TxBuilder from "../TxBuilder.js";
 import {
   ERROR_MESSAGE,
   TxBuilderError,
@@ -17,7 +17,7 @@ export const collectError = (cause: TxBuilderErrorCause, message?: string) =>
   new TxBuilderError({ cause, module: "Collect", message });
 
 export const collectFromUTxO = (
-  config: TxBuilderConfig,
+  config: TxBuilder.TxBuilderConfig,
   utxos: UTxO[],
   redeemer?: Redeemer,
 ): Effect.Effect<void, TxBuilderError> =>
@@ -28,7 +28,7 @@ export const collectFromUTxO = (
       if (utxo.datumHash && !utxo.datum) {
         const data = yield* $(
           Effect.tryPromise({
-            try: () => datumOf(config.lucidConfig.provider)(utxo),
+            try: () => datumOf(config.lucidConfig.provider, utxo),
             catch: (error) => collectError("Datum", String(error)),
           }),
         );

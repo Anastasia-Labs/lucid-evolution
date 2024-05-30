@@ -1,17 +1,17 @@
-import { CML } from "../core.js";
+import { CML, makeReturn } from "../core.js";
 import { LucidConfig } from "../lucid-evolution/LucidEvolution.js";
 import { Effect } from "effect";
 //TODO: move to commont utils
 import { PrivateKey } from "@lucid-evolution/core-types";
 import {
-  ERROR_MESSAGE,
   TransactionSignError,
   TxSignerError,
   TxSignerErrorCause,
 } from "../Errors.js";
-import { TxSigned } from "./internal/CompleteTxSign.js";
-import { completeTxSignBuilder } from "../tx-builder/internal/CompleteTxSigner.js";
+import { TxSigned } from "../tx-submit/TxSubmit.js";
+import * as CompleteTxSigner from "./internal/CompleteTxSigner.js";
 import { Either } from "effect/Either";
+import * as Sign from "./internal/Sign.js";
 
 export const signError = (cause: TxSignerErrorCause, message?: string) =>
   new TxSignerError({ cause, module: "Sign", message });
@@ -38,7 +38,7 @@ export type TxSignBuilder = {
 export const makeTxSignBuilder = (
   lucidConfig: LucidConfig,
   tx: CML.Transaction,
-) => {
+): TxSignBuilder => {
   const redeemers = tx.witness_set().redeemers();
   const exUnits = { cpu: 0, mem: 0 };
   if (redeemers) {
@@ -59,40 +59,23 @@ export const makeTxSignBuilder = (
 
   const txSignBuilder: TxSignBuilder = {
     sign: {
-      //TODO: move to internal
       withWallet: () => {
-        const program = Effect.gen(function* ($) {
-          const wallet = yield* $(
-            Effect.fromNullable(config.lucidConfig.wallet),
-            Effect.orElseFail(() =>
-              signError("MissingWallet", ERROR_MESSAGE.MISSING_WALLET),
-            ),
-          );
-          const witnesses = yield* $(
-            Effect.tryPromise({
-              try: () => wallet.signTx(config.txComplete),
-              catch: (error) => signError("Signature", String(error)),
-            }),
-          );
-          config.witnessSetBuilder.add_existing(witnesses);
-        });
+        const program = Sign.withWallet(config);
         config.programs.push(program);
         return txSignBuilder;
       },
-      //TODO: move to internal
       withPrivateKey: (privateKey: PrivateKey) => {
-        const priv = CML.PrivateKey.from_bech32(privateKey);
-        const witness = CML.make_vkey_witness(
-          CML.hash_transaction(config.txComplete.body()),
-          priv,
-        );
-        config.witnessSetBuilder.add_vkey(witness);
+        const program = Sign.withPrivateKey(config, privateKey);
+        config.programs.push(program);
         return txSignBuilder;
       },
     },
-    complete: () => completeTxSignBuilder(config).unsafeRun(),
-    completeProgram: () => completeTxSignBuilder(config).program(),
-    completeSafe: () => completeTxSignBuilder(config).safeRun(),
+    complete: () =>
+      makeReturn(CompleteTxSigner.completeTxSigner(config)).unsafeRun(),
+    completeProgram: () =>
+      makeReturn(CompleteTxSigner.completeTxSigner(config)).program(),
+    completeSafe: () =>
+      makeReturn(CompleteTxSigner.completeTxSigner(config)).safeRun(),
   };
   return txSignBuilder;
 };
