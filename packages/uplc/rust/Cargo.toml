@@ -9,8 +9,21 @@ crate-type = ["cdylib"]
 
 [dependencies]
 error = "0.1.9"
-uplc = "1.0.20-alpha"
+uplc = { git = "https://github.com/aiken-lang/aiken.git" }
 wasm-bindgen = "0.2.89"
 k256 = { version = "0.13.0" }
 js-sys = "0.3.61"
 getrandom = { version = "0.2", features = ["js"] }
+csv = "=1.1.6"
+byteorder = "=1.4.3"
+regex = "=1.7.3"
+rayon = "=1.6.1"
+rayon-core = "=1.10.1"
+
+[build]
+target = "wasm32-unknown-emscripten"
+
+[target.wasm32-unknown-emscripten]
+linker = "emcc"
+ar = "emar"
+rustflags = ["-C", "link-arg=-Tlinker.ld"]
