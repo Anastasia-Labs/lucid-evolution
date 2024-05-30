@@ -48,6 +48,7 @@ export const depositFunds = Effect.gen(function* () {
 
   yield* handleSignSubmit(signBuilder);
 }).pipe(
+  Effect.tapErrorCause(Effect.logError),
   Effect.tapErrorCause(Console.log),
   Effect.retry(
     Schedule.compose(Schedule.exponential(20_000), Schedule.recurs(4)),
@@ -87,6 +88,7 @@ export const collectFunds = Effect.gen(function* ($) {
 
   yield* handleSignSubmit(signBuilder);
 }).pipe(
+  Effect.tapErrorCause(Effect.logError),
   Effect.tapErrorCause(Console.log),
   Effect.retry(
     pipe(Schedule.compose(Schedule.exponential(20_000), Schedule.recurs(4))),
@@ -122,6 +124,7 @@ export const depositFundsLockRefScript = Effect.gen(function* () {
 
   yield* handleSignSubmit(signBuilder);
 }).pipe(
+  Effect.tapErrorCause(Effect.logError),
   Effect.tapErrorCause(Console.log),
   Effect.retry(
     Schedule.compose(Schedule.exponential(20_000), Schedule.recurs(4)),
@@ -163,7 +166,8 @@ export const collectFundsReadFrom = Effect.gen(function* ($) {
 
   yield* handleSignSubmit(signBuilder);
 }).pipe(
-  Effect.tapErrorCause(Effect.logDebug),
+  Effect.tapErrorCause(Effect.logError),
+  Effect.tapErrorCause(Console.log),
   Effect.retry(
     pipe(Schedule.compose(Schedule.exponential(20_000), Schedule.recurs(4))),
   ),

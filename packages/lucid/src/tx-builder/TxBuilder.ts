@@ -1,7 +1,6 @@
 import { CML, makeReturn } from "../core.js";
 import { LucidConfig } from "../lucid-evolution/LucidEvolution.js";
-import { TxBuilderConfig, OutputDatum, CompleteOptions } from "./types.js";
-import * as Read from "./internal/Read.js";
+import { OutputDatum } from "./types.js";
 import {
   Address,
   Assets,
@@ -10,9 +9,11 @@ import {
   Redeemer,
   RewardAddress,
   Script,
+  ScriptType,
   UTxO,
 } from "@lucid-evolution/core-types";
 import * as Collect from "./internal/Collect.js";
+import * as Read from "./internal/Read.js";
 import * as Attach from "./internal/Attach.js";
 import * as Pay from "./internal/Pay.js";
 import * as Mint from "./internal/Mint.js";
@@ -20,11 +21,22 @@ import * as Interval from "./internal/Interval.js";
 import * as Signer from "./internal/Signer.js";
 import * as Stake from "./internal/Stake.js";
 import * as Pool from "./internal/Pool.js";
-import { completeTxBuilder } from "./internal/CompleteTxBuilder.js";
-import { TxSignBuilder } from "../tx-sign-builder/MakeTxSign.js";
+import * as CompleteTxBuilder from "./internal/CompleteTxBuilder.js";
+import * as TxSignBuilder from "../tx-sign-builder/TxSignBuilder.js";
 import { TransactionError } from "../Errors.js";
 import { Either } from "effect/Either";
-import { Effect } from "effect/Effect";
+import { Effect } from "effect";
+
+export type TxBuilderConfig = {
+  readonly lucidConfig: LucidConfig;
+  readonly txBuilder: CML.TransactionBuilder;
+  collectedInputs: UTxO[];
+  readInputs: UTxO[];
+  totalOutputAssets: Assets;
+  mintedAssets: Assets;
+  scripts: Map<string, { type: ScriptType; script: string }>;
+  programs: Effect.Effect<void, TransactionError, never>[];
+};
 
 export type TxBuilder = {
   readFrom: (utxos: UTxO[]) => TxBuilder;
@@ -70,13 +82,15 @@ export type TxBuilder = {
     CertificateValidator: (certValidator: Script) => TxBuilder;
     WithdrawalValidator: (withdrawalValidator: Script) => TxBuilder;
   };
-  complete: (options?: CompleteOptions) => Promise<TxSignBuilder>;
+  complete: (
+    options?: CompleteTxBuilder.CompleteOptions,
+  ) => Promise<TxSignBuilder.TxSignBuilder>;
   completeProgram: (
-    options?: CompleteOptions,
-  ) => Effect<TxSignBuilder, TransactionError>;
+    options?: CompleteTxBuilder.CompleteOptions,
+  ) => Effect.Effect<TxSignBuilder.TxSignBuilder, TransactionError>;
   completeSafe: (
-    options?: CompleteOptions,
-  ) => Promise<Either<TxSignBuilder, TransactionError>>;
+    options?: CompleteTxBuilder.CompleteOptions,
+  ) => Promise<Either<TxSignBuilder.TxSignBuilder, TransactionError>>;
   config: () => TxBuilderConfig;
 };
 
@@ -224,12 +238,12 @@ export function makeTxBuilder(lucidConfig: LucidConfig): TxBuilder {
         return txBuilder;
       },
     },
-    complete: (options?: CompleteOptions) =>
-      makeReturn(completeTxBuilder(config, options)).unsafeRun(),
-    completeProgram: (options?: CompleteOptions) =>
-      makeReturn(completeTxBuilder(config, options)).program(),
-    completeSafe: (options?: CompleteOptions) =>
-      makeReturn(completeTxBuilder(config, options)).safeRun(),
+    complete: (options?: CompleteTxBuilder.CompleteOptions) =>
+      makeReturn(CompleteTxBuilder.complete(config, options)).unsafeRun(),
+    completeProgram: (options?: CompleteTxBuilder.CompleteOptions) =>
+      makeReturn(CompleteTxBuilder.complete(config, options)).program(),
+    completeSafe: (options?: CompleteTxBuilder.CompleteOptions) =>
+      makeReturn(CompleteTxBuilder.complete(config, options)).safeRun(),
     config: () => config,
   };
   return txBuilder;

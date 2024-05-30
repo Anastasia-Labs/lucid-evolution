@@ -8,8 +8,8 @@ import {
   TxSignerError,
   TxSignerErrorCause,
 } from "../Errors.js";
-import { TxSigned } from "./internal/CompleteTxSign.js";
-import { completeTxSignBuilder } from "../tx-builder/internal/CompleteTxSigner.js";
+import { TxSigned } from "../tx-submit/TxSubmit.js";
+import * as CompleteTxSigner from "./internal/CompleteTxSigner.js";
 import { Either } from "effect/Either";
 import * as Sign from "./internal/Sign.js";
 
@@ -38,7 +38,7 @@ export type TxSignBuilder = {
 export const makeTxSignBuilder = (
   lucidConfig: LucidConfig,
   tx: CML.Transaction,
-) => {
+): TxSignBuilder => {
   const redeemers = tx.witness_set().redeemers();
   const exUnits = { cpu: 0, mem: 0 };
   if (redeemers) {
@@ -70,9 +70,12 @@ export const makeTxSignBuilder = (
         return txSignBuilder;
       },
     },
-    complete: () => makeReturn(completeTxSignBuilder(config)).unsafeRun(),
-    completeProgram: () => makeReturn(completeTxSignBuilder(config)).program(),
-    completeSafe: () => makeReturn(completeTxSignBuilder(config)).safeRun(),
+    complete: () =>
+      makeReturn(CompleteTxSigner.completeTxSigner(config)).unsafeRun(),
+    completeProgram: () =>
+      makeReturn(CompleteTxSigner.completeTxSigner(config)).program(),
+    completeSafe: () =>
+      makeReturn(CompleteTxSigner.completeTxSigner(config)).safeRun(),
   };
   return txSignBuilder;
 };

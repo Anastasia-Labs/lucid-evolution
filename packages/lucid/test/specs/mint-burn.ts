@@ -5,7 +5,7 @@ import {
   paymentCredentialOf,
   selectUTxOs,
 } from "../../src/index.js";
-import { Effect, Logger, LogLevel, pipe, Schedule } from "effect";
+import { Console, Effect, Logger, LogLevel, pipe, Schedule } from "effect";
 import { User } from "./services.js";
 
 const mkMintinPolicy = (time: number, address: string) => {
@@ -44,7 +44,8 @@ export const mint = Effect.gen(function* () {
   yield* Effect.sleep("10 seconds");
   yield* Effect.logDebug(txHash);
 }).pipe(
-  Effect.tapError(Effect.logDebug),
+  Effect.tapErrorCause(Effect.logError),
+  Effect.tapErrorCause(Console.log),
   Effect.retry(
     pipe(Schedule.compose(Schedule.exponential(20_000), Schedule.recurs(4))),
   ),
@@ -73,7 +74,8 @@ export const burn = Effect.gen(function* () {
   yield* Effect.sleep("10 seconds");
   yield* Effect.logDebug(txHash);
 }).pipe(
-  Effect.tapError(Effect.logDebug),
+  Effect.tapErrorCause(Effect.logError),
+  Effect.tapErrorCause(Console.log),
   Effect.retry(
     pipe(Schedule.compose(Schedule.exponential(20_000), Schedule.recurs(4))),
   ),
@@ -105,7 +107,8 @@ export const mintburn = Effect.gen(function* () {
   yield* Effect.sleep("10 seconds");
   yield* Effect.logDebug(txHash);
 }).pipe(
-  Effect.tapError(Effect.logDebug),
+  Effect.tapErrorCause(Effect.logError),
+  Effect.tapErrorCause(Console.log),
   Effect.retry(
     pipe(Schedule.compose(Schedule.exponential(20_000), Schedule.recurs(4))),
   ),
@@ -133,7 +136,8 @@ export const mint2 = Effect.gen(function* () {
   yield* Effect.sleep("10 seconds");
   yield* Effect.logDebug(txHash);
 }).pipe(
-  Effect.tapError(Effect.logDebug),
+  Effect.tapErrorCause(Effect.logError),
+  Effect.tapErrorCause(Console.log),
   Effect.retry(
     pipe(Schedule.compose(Schedule.exponential(20_000), Schedule.recurs(4))),
   ),
@@ -161,7 +165,8 @@ export const burn2 = Effect.gen(function* () {
   yield* Effect.sleep("10 seconds");
   yield* Effect.logDebug(txHash);
 }).pipe(
-  Effect.tapError(Effect.logDebug),
+  Effect.tapErrorCause(Effect.logError),
+  Effect.tapErrorCause(Console.log),
   Effect.retry(
     pipe(Schedule.compose(Schedule.exponential(20_000), Schedule.recurs(4))),
   ),
@@ -189,7 +194,8 @@ export const pay = Effect.gen(function* () {
   yield* Effect.sleep("10 seconds");
   yield* Effect.logDebug(txHash);
 }).pipe(
-  Effect.tapError(Effect.logDebug),
+  Effect.tapErrorCause(Effect.logError),
+  Effect.tapErrorCause(Console.log),
   Effect.retry(
     pipe(Schedule.compose(Schedule.exponential(20_000), Schedule.recurs(4))),
   ),
@@ -217,7 +223,8 @@ export const pay2 = Effect.gen(function* () {
   yield* Effect.sleep("10 seconds");
   yield* Effect.logDebug(txHash);
 }).pipe(
-  Effect.tapError(Effect.logDebug),
+  Effect.tapErrorCause(Effect.logError),
+  Effect.tapErrorCause(Console.log),
   Effect.retry(
     pipe(Schedule.compose(Schedule.exponential(20_000), Schedule.recurs(4))),
   ),
@@ -263,6 +270,7 @@ export const pay3 = Effect.gen(function* () {
   yield* Effect.logDebug(txHash);
 }).pipe(
   Effect.tapErrorCause(Effect.logError),
+  Effect.tapErrorCause(Console.log),
   Effect.retry(
     pipe(Schedule.compose(Schedule.exponential(20_000), Schedule.recurs(4))),
   ),

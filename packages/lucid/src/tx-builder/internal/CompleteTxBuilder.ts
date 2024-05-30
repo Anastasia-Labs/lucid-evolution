@@ -1,6 +1,5 @@
 import { Effect, pipe, Record, Array as _Array } from "effect";
-import { Assets, UTxO } from "@lucid-evolution/core-types";
-import { CompleteOptions, TxBuilderConfig } from "../types.js";
+import { Address, Assets, UTxO } from "@lucid-evolution/core-types";
 import {
   ERROR_MESSAGE,
   TransactionError,
@@ -9,11 +8,9 @@ import {
   makeRunTimeError,
 } from "../../Errors.js";
 import { CML } from "../../core.js";
-import {
-  makeTxSignBuilder,
-  TxSignBuilder,
-} from "../../tx-sign-builder/MakeTxSign.js";
 import * as UPLC from "@lucid-evolution/uplc";
+import * as TxBuilder from "../TxBuilder.js";
+import * as TxSignBuilder from "../../tx-sign-builder/TxSignBuilder.js";
 import {
   isEqualUTxO,
   selectUTxOs,
@@ -24,13 +21,19 @@ import {
 } from "@lucid-evolution/utils";
 import { SLOT_CONFIG_NETWORK } from "@lucid-evolution/plutus";
 
+export type CompleteOptions = {
+  coinSelection?: boolean;
+  changeAddress?: Address;
+  localUPLCEval?: boolean; // replaces nativeUPLC
+};
+
 export const completeTxError = (cause: TxBuilderErrorCause, message?: string) =>
   new TxBuilderError({ cause, module: "Complete", message });
 
-export const completeTxBuilder = (
-  config: TxBuilderConfig,
+export const complete = (
+  config: TxBuilder.TxBuilderConfig,
   options: CompleteOptions = { coinSelection: true },
-): Effect.Effect<TxSignBuilder, TransactionError> =>
+): Effect.Effect<TxSignBuilder.TxSignBuilder, TransactionError> =>
   Effect.gen(function* () {
     yield* Effect.all(config.programs, { concurrency: "unbounded" });
     //NOTE: this should not be here, validation shuold be when making the tx builder
@@ -110,7 +113,7 @@ export const completeTxBuilder = (
       )
       .build_unchecked();
 
-    return makeTxSignBuilder(config.lucidConfig, tx);
+    return TxSignBuilder.makeTxSignBuilder(config.lucidConfig, tx);
   }).pipe(Effect.catchAllDefect(makeRunTimeError));
 
 export const applyUPLCEval = (
@@ -157,7 +160,7 @@ export const setRedeemerstoZero = (tx: CML.Transaction) => {
   }
 };
 
-const setCollateral = (config: TxBuilderConfig, input: UTxO) => {
+const setCollateral = (config: TxBuilder.TxBuilderConfig, input: UTxO) => {
   config.txBuilder.add_collateral(
     CML.SingleInputBuilder.from_transaction_unspent_output(
       utxoToCore(input),
@@ -200,7 +203,7 @@ const findCollateral = (
 
 //coinSelection is seach inputs by largest first
 const coinSelection = (
-  config: TxBuilderConfig,
+  config: TxBuilder.TxBuilderConfig,
   availableInputs: UTxO[],
 ): Effect.Effect<UTxO[], TxBuilderError> =>
   Effect.gen(function* () {
@@ -239,7 +242,7 @@ const coinSelection = (
   });
 
 const evalTransaction = (
-  config: TxBuilderConfig,
+  config: TxBuilder.TxBuilderConfig,
   txRedeemerBuilder: CML.TxRedeemerBuilder,
   walletInputs: UTxO[],
 ): Effect.Effect<Uint8Array[], TxBuilderError> =>

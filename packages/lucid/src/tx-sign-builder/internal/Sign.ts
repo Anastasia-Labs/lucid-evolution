@@ -1,17 +1,17 @@
 import { Effect, pipe } from "effect";
-import { TxSignBuilderConfig } from "../MakeTxSign.js";
 import {
   ERROR_MESSAGE,
   TxSignerError,
   TxSignerErrorCause,
 } from "../../Errors.js";
+import * as TxSignBuilder from "../TxSignBuilder.js";
 import { PrivateKey } from "@lucid-evolution/core-types";
 import { CML } from "../../core.js";
 
 const signError = (cause: TxSignerErrorCause, message?: string) =>
   new TxSignerError({ cause, module: "Sign", message });
 
-export const withWallet = (config: TxSignBuilderConfig) =>
+export const withWallet = (config: TxSignBuilder.TxSignBuilderConfig) =>
   Effect.gen(function* () {
     const wallet = yield* pipe(
       Effect.fromNullable(config.lucidConfig.wallet),
@@ -27,7 +27,7 @@ export const withWallet = (config: TxSignBuilderConfig) =>
   });
 
 export const withPrivateKey = (
-  config: TxSignBuilderConfig,
+  config: TxSignBuilder.TxSignBuilderConfig,
   privateKey: PrivateKey,
 ) =>
   Effect.gen(function* () {

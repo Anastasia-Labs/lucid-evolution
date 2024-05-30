@@ -54,7 +54,8 @@ export const depositFunds = Effect.gen(function* () {
   yield* Effect.sleep("10 seconds");
   yield* Effect.logDebug(txHash);
 }).pipe(
-  Effect.tapError(Console.log),
+  Effect.tapErrorCause(Effect.logError),
+  Effect.tapErrorCause(Console.log),
   Effect.retry(
     Schedule.compose(Schedule.exponential(20_000), Schedule.recurs(4)),
   ),
@@ -106,7 +107,8 @@ export const collectFunds = Effect.gen(function* ($) {
   yield* Effect.sleep("10 seconds");
   yield* Effect.logDebug(txHash);
 }).pipe(
-  Effect.tapErrorCause(Effect.logDebug),
+  Effect.tapErrorCause(Effect.logError),
+  Effect.tapErrorCause(Console.log),
   Effect.retry(
     pipe(Schedule.compose(Schedule.exponential(20_000), Schedule.recurs(4))),
   ),

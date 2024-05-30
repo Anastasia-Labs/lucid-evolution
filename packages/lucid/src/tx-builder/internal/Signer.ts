@@ -4,9 +4,8 @@ import {
   RewardAddress,
   StakeKeyHash,
 } from "@lucid-evolution/core-types";
-import { TxBuilderConfig } from "../types.js";
-import { getAddressDetails } from "@lucid-evolution/utils";
-import { Effect, pipe } from "effect";
+import * as TxBuilder from "../TxBuilder.js";
+import { Effect } from "effect";
 import * as CML from "@dcspark/cardano-multiplatform-lib-nodejs";
 import { TxBuilderError, TxBuilderErrorCause } from "../../Errors.js";
 import { validateAddressDetails } from "./TxUtils.js";
@@ -15,7 +14,7 @@ export const addSignerError = (cause: TxBuilderErrorCause, message?: string) =>
   new TxBuilderError({ cause, module: "Signer", message });
 
 export const addSigner = (
-  config: TxBuilderConfig,
+  config: TxBuilder.TxBuilderConfig,
   address: Address | RewardAddress,
 ) =>
   Effect.gen(function* () {
@@ -45,7 +44,7 @@ export const addSigner = (
 
 /** Add a payment or stake key hash as a required signer of the transaction. */
 export const addSignerKey = (
-  config: TxBuilderConfig,
+  config: TxBuilder.TxBuilderConfig,
   keyHash: PaymentKeyHash | StakeKeyHash,
 ) =>
   Effect.gen(function* () {

@@ -1,5 +1,5 @@
 import { Lovelace, Redeemer, RewardAddress } from "@lucid-evolution/core-types";
-import { TxBuilderConfig } from "../types.js";
+import * as TxBuilder from "../TxBuilder.js";
 import { Effect, pipe } from "effect";
 import {
   ERROR_MESSAGE,
@@ -13,7 +13,7 @@ export const stakeError = (cause: TxBuilderErrorCause, message?: string) =>
   new TxBuilderError({ cause, module: "Stake", message });
 
 export const registerStake = (
-  config: TxBuilderConfig,
+  config: TxBuilder.TxBuilderConfig,
   rewardAddress: RewardAddress,
 ): Effect.Effect<void, TxBuilderError> =>
   Effect.gen(function* () {
@@ -46,7 +46,7 @@ export const registerStake = (
   });
 
 export const deRegisterStake = (
-  config: TxBuilderConfig,
+  config: TxBuilder.TxBuilderConfig,
   rewardAddress: RewardAddress,
   redeemer?: Redeemer,
 ): Effect.Effect<void, TxBuilderError> =>
@@ -129,7 +129,7 @@ export const deRegisterStake = (
   });
 
 export const withdraw = (
-  config: TxBuilderConfig,
+  config: TxBuilder.TxBuilderConfig,
   rewardAddress: RewardAddress,
   amount: Lovelace,
   redeemer?: Redeemer,

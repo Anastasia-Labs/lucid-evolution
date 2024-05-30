@@ -1,7 +1,8 @@
 import { Effect, Scope } from "effect";
 import { addAssets, assetsToValue, toScriptRef } from "@lucid-evolution/utils";
 import { Address, Assets, Script } from "@lucid-evolution/core-types";
-import { OutputDatum, TxBuilderConfig } from "../types.js";
+import { OutputDatum } from "../types.js";
+import * as TxBuilder from "../TxBuilder.js";
 import { CML } from "../../core.js";
 import { toCMLAddress, toDatumOption } from "./TxUtils.js";
 import { TxBuilderError, TxBuilderErrorCause } from "../../Errors.js";
@@ -11,7 +12,7 @@ export const payError = (cause: TxBuilderErrorCause, message?: string) =>
 
 /** Pay to a public key or native script address. */
 export const payToAddress = (
-  config: TxBuilderConfig,
+  config: TxBuilder.TxBuilderConfig,
   address: Address,
   assets: Assets,
 ) =>
@@ -46,7 +47,7 @@ export const payToAddress = (
 
 /** Pay to a public key or native script address with datum or scriptRef. */
 export const payToAddressWithData = (
-  config: TxBuilderConfig,
+  config: TxBuilder.TxBuilderConfig,
   address: Address,
   outputDatum: OutputDatum,
   assets?: Assets,
@@ -92,7 +93,7 @@ export const payToAddressWithData = (
 
 /** Pay to a plutus script address with datum or scriptRef. */
 export const payToContract = (
-  config: TxBuilderConfig,
+  config: TxBuilder.TxBuilderConfig,
   address: Address,
   outputDatum: OutputDatum,
   assets?: Assets,

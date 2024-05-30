@@ -8,7 +8,7 @@ import {
   TxBuilderError,
   TxBuilderErrorCause,
 } from "../../Errors.js";
-import { TxBuilderConfig } from "../types.js";
+import * as TxBuilder from "../TxBuilder.js";
 import { addAssets } from "@lucid-evolution/utils";
 
 export const mintError = (cause: TxBuilderErrorCause, message?: string) =>
@@ -20,7 +20,7 @@ export const mintError = (cause: TxBuilderErrorCause, message?: string) =>
  * If the plutus script doesn't need a redeemer, you still need to specifiy the void redeemer.
  */
 export const mintAssets = (
-  config: TxBuilderConfig,
+  config: TxBuilder.TxBuilderConfig,
   assets: Assets,
   redeemer?: Redeemer,
 ): Effect.Effect<void, TxBuilderError> =>
