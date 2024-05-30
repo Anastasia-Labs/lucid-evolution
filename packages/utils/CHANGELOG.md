@@ -1,5 +1,11 @@
 # @lucid-evolution/utils
 
+## 0.1.14
+
+### Patch Changes
+
+- [#124](https://github.com/Anastasia-Labs/lucid-evolution/pull/124) [`25b0416`](https://github.com/Anastasia-Labs/lucid-evolution/commit/25b0416e597edb44bf160c1d3086041b7b4117ff) Thanks [@solidsnakedev](https://github.com/solidsnakedev)! - remove toSorted function, use normal sort
+
 ## 0.1.13
 
 ### Patch Changes
