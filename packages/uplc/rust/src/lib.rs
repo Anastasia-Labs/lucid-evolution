@@ -2,7 +2,7 @@ use js_sys;
 use uplc::tx;
 use wasm_bindgen::prelude::*;
 
-#[wasm_bindgen]
+#[no_mangle]
 pub fn eval_phase_two_raw(
     tx_bytes: &[u8],
     utxos_bytes_x: Vec<js_sys::Uint8Array>,
@@ -32,7 +32,7 @@ pub fn eval_phase_two_raw(
     .map_err(|e| e.to_string().into());
 }
 
-#[wasm_bindgen]
+#[no_mangle]
 pub fn apply_params_to_script(
     params_bytes: &[u8],
     plutus_script_bytes: &[u8],

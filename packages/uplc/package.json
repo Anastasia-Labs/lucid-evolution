@@ -15,9 +15,8 @@
     "./snippets/*"
   ],
   "scripts": {
-    "build-local": "rm -rf dist && cd rust ; wasm-pack build --target web --out-dir ../src/browser && wasm-pack build --target nodejs --out-dir ../src/node && pnpm clean-garbage",
+    "build-local": "rm -rf dist && cd rust ;export CC=emcc; export AR=emar; EMCC_CFLAGS='-s ERROR_ON_UNDEFINED_SYMBOLS=0 -s STANDALONE_WASM=1 -s EXPORTED_FUNCTIONS=['_apply_params_to_script','_eval_phase_two_raw'] --no-entry -fvisibility=default' cargo build --target wasm32-unknown-emscripten --release;wasm-bindgen --target web --out-dir ../src/browser target/wasm32-unknown-emscripten/release/uplc_tx.wasm && wasm-bindgen --target nodejs --out-dir ../src/node target/wasm32-unknown-emscripten/release/uplc_tx.wasm",
     "build": "cp -r src dist",
-    "clean-garbage": "rm src/browser/.gitignore src/browser/package.json src/node/.gitignore src/node/package.json",
     "clean": "rm -rf .turbo && rm -rf node_modules && rm -rf dist"
   }
 }
