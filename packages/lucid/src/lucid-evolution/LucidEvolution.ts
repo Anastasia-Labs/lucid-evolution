@@ -21,6 +21,7 @@ import * as TxConfig from "../tx-builder/TxConfig.js";
 import * as TxSignBuilder from "../tx-sign-builder/TxSignBuilder.js";
 import { Data } from "@lucid-evolution/plutus";
 import {
+  makeWalletFromAddress,
   makeWalletFromAPI,
   makeWalletFromPrivateKey,
   makeWalletFromSeed,
@@ -36,6 +37,7 @@ export type LucidEvolution = {
     fromSeed: (seed: string) => void;
     fromPrivateKey: (privateKey: PrivateKey) => void;
     fromAPI: (walletAPI: WalletApi) => void;
+    fromAddress: (address: string, utxos: UTxO[]) => void;
   };
   currentSlot: () => number;
   utxosAt: (addressOrCredential: string | Credential) => Promise<UTxO[]>;
@@ -108,6 +110,14 @@ export const Lucid = async (
       },
       fromAPI: (walletAPI: WalletApi) => {
         config.wallet = makeWalletFromAPI(config.provider, walletAPI);
+      },
+      fromAddress: (address: string, utxos: UTxO[]) => {
+        config.wallet = makeWalletFromAddress(
+          config.provider,
+          network,
+          address,
+          utxos,
+        );
       },
     },
     currentSlot: () => {
