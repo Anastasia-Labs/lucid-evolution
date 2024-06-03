@@ -1,5 +1,16 @@
 # @lucid-evolution/lucid
 
+## 0.2.34
+
+### Patch Changes
+
+- [#126](https://github.com/Anastasia-Labs/lucid-evolution/pull/126) [`11eb043`](https://github.com/Anastasia-Labs/lucid-evolution/commit/11eb043bb7ecf2b0913c6edc1642c7b50808cab5) Thanks [@nikhils9](https://github.com/nikhils9)! - Fix assetsToValue to support non UTF-8 Asset Names
+
+- Updated dependencies [[`11eb043`](https://github.com/Anastasia-Labs/lucid-evolution/commit/11eb043bb7ecf2b0913c6edc1642c7b50808cab5)]:
+  - @lucid-evolution/utils@0.1.15
+  - @lucid-evolution/provider@0.1.19
+  - @lucid-evolution/wallet@0.1.15
+
 ## 0.2.33
 
 ### Patch Changes

@@ -1,5 +1,11 @@
 # @lucid-evolution/utils
 
+## 0.1.15
+
+### Patch Changes
+
+- [#126](https://github.com/Anastasia-Labs/lucid-evolution/pull/126) [`11eb043`](https://github.com/Anastasia-Labs/lucid-evolution/commit/11eb043bb7ecf2b0913c6edc1642c7b50808cab5) Thanks [@nikhils9](https://github.com/nikhils9)! - Fix assetsToValue to support non UTF-8 Asset Names
+
 ## 0.1.14
 
 ### Patch Changes

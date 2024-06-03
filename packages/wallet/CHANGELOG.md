@@ -1,5 +1,12 @@
 # @lucid-evolution/wallet
 
+## 0.1.15
+
+### Patch Changes
+
+- Updated dependencies [[`11eb043`](https://github.com/Anastasia-Labs/lucid-evolution/commit/11eb043bb7ecf2b0913c6edc1642c7b50808cab5)]:
+  - @lucid-evolution/utils@0.1.15
+
 ## 0.1.14
 
 ### Patch Changes
