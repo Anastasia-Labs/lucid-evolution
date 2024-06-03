@@ -269,6 +269,9 @@ importers:
       '@dcspark/cardano-multiplatform-lib-nodejs':
         specifier: ^5.3.0
         version: 5.3.0
+      '@effect/schema':
+        specifier: ^0.67.16
+        version: 0.67.16(effect@3.2.7)
       '@lucid-evolution/core-types':
         specifier: workspace:*
         version: link:../core-types
@@ -288,6 +291,9 @@ importers:
       typescript:
         specifier: ^5.4.5
         version: 5.4.5
+      vitest:
+        specifier: ^1.6.0
+        version: 1.6.0(@types/node@20.12.8)
 
   packages/sign_data:
     dependencies:
@@ -841,6 +847,15 @@ packages:
       fast-check: ^3.13.2
     dependencies:
       effect: 3.1.2
+      fast-check: 3.18.0
+    dev: false
+
+  /@effect/schema@0.67.16(effect@3.2.7):
+    resolution: {integrity: sha512-fUHo1t6k2w9UcJF/JlppRVD+KXXKtAN8fZRB48NMocLJfQnJC117c9Zio0SQWN+xP9byLl4Y/MbtFeuxcublxg==}
+    peerDependencies:
+      effect: ^3.2.7
+    dependencies:
+      effect: 3.2.7
       fast-check: 3.18.0
     dev: false
 
@@ -3391,6 +3406,10 @@ packages:
 
   /effect@3.1.2:
     resolution: {integrity: sha512-XakSWck6w6ROqKyEys0tKE9K6Gx2p8W/09u2ZTEZZrneO5Z3QEdPhXzWTyC73kD5zUvfJinZLVIas8I1xoHaTg==}
+    dev: false
+
+  /effect@3.2.7:
+    resolution: {integrity: sha512-8YXJVBVs1zBQCPjwsTUgqE91c6woa6sxo0wni0H3mMM4qpO4vsixEVx+IZLYnh1BnRinJqC7/mJazIfYxLj2Rg==}
     dev: false
 
   /electron-to-chromium@1.4.756:

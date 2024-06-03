@@ -60,8 +60,7 @@ export const makeWalletFromSeed = (
     address: async (): Promise<Address> => address,
     rewardAddress: async (): Promise<RewardAddress | null> =>
       rewardAddress || null,
-    getUtxos: async (): Promise<UTxO[]> =>
-      provider.getUtxos(paymentCredentialOf(address)),
+    getUtxos: async (): Promise<UTxO[]> => provider.getUtxos(address),
     getUtxosCore: async (): Promise<CML.TransactionUnspentOutput[]> => {
       const utxos = await provider.getUtxos(paymentCredentialOf(address));
       const coreUtxos: CML.TransactionUnspentOutput[] = [];
