@@ -1,5 +1,11 @@
 # @lucid-evolution/wallet
 
+## 0.1.17
+
+### Patch Changes
+
+- [#131](https://github.com/Anastasia-Labs/lucid-evolution/pull/131) [`ac31f57`](https://github.com/Anastasia-Labs/lucid-evolution/commit/ac31f579721b1b26b01ad863e03f90032fc2cb6a) Thanks [@solidsnakedev](https://github.com/solidsnakedev)! - add selectWallet.fromAddress
+
 ## 0.1.16
 
 ### Patch Changes
