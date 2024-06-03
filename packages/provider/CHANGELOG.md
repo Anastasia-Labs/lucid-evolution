@@ -1,5 +1,11 @@
 # @lucid-evolution/provider
 
+## 0.1.21
+
+### Patch Changes
+
+- [#131](https://github.com/Anastasia-Labs/lucid-evolution/pull/131) [`47ca9e2`](https://github.com/Anastasia-Labs/lucid-evolution/commit/47ca9e2227d33b572a011917a3178c8b520a8f98) Thanks [@solidsnakedev](https://github.com/solidsnakedev)! - fix provider schema
+
 ## 0.1.20
 
 ### Patch Changes
