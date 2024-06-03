@@ -1,5 +1,15 @@
 # @lucid-evolution/lucid
 
+## 0.2.35
+
+### Patch Changes
+
+- [#128](https://github.com/Anastasia-Labs/lucid-evolution/pull/128) [`1e73c40`](https://github.com/Anastasia-Labs/lucid-evolution/commit/1e73c4098eb0b38f597c9b772f1470333e9dc011) Thanks [@solidsnakedev](https://github.com/solidsnakedev)! - add Koios provider
+
+- Updated dependencies [[`1e73c40`](https://github.com/Anastasia-Labs/lucid-evolution/commit/1e73c4098eb0b38f597c9b772f1470333e9dc011)]:
+  - @lucid-evolution/provider@0.1.20
+  - @lucid-evolution/wallet@0.1.16
+
 ## 0.2.34
 
 ### Patch Changes

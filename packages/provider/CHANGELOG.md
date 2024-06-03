@@ -1,5 +1,11 @@
 # @lucid-evolution/provider
 
+## 0.1.20
+
+### Patch Changes
+
+- [#128](https://github.com/Anastasia-Labs/lucid-evolution/pull/128) [`1e73c40`](https://github.com/Anastasia-Labs/lucid-evolution/commit/1e73c4098eb0b38f597c9b772f1470333e9dc011) Thanks [@solidsnakedev](https://github.com/solidsnakedev)! - add Koios provider
+
 ## 0.1.19
 
 ### Patch Changes
