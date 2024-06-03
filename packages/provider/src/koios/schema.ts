@@ -21,7 +21,7 @@ export const ProtocolParametersSchema = S.Struct({
   min_utxo_value: S.String,
   min_pool_cost: S.String,
   nonce: S.String,
-  block_hash: S.String,
+  block_hash: S.NullOr(S.String),
   cost_models: S.Struct({
     PlutusV1: S.Array(S.Number),
     PlutusV2: S.Array(S.Number),
