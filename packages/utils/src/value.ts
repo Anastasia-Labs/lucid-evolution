@@ -1,5 +1,5 @@
 import { Assets, PolicyId, Unit } from "@lucid-evolution/core-types";
-import { fromText, toText } from "@lucid-evolution/core-utils";
+import { fromHex, fromText, toText } from "@lucid-evolution/core-utils";
 import { CML } from "./core.js";
 import { fromLabel, toLabel } from "./label.js";
 
@@ -41,7 +41,7 @@ export function assetsToValue(assets: Assets): CML.Value {
     const assetsValue = CML.MapAssetNameToCoin.new();
     for (const unit of policyUnits) {
       assetsValue.insert(
-        CML.AssetName.from_str(toText(unit.slice(56))),
+        CML.AssetName.from_bytes(fromHex(unit.slice(56))),
         BigInt(assets[unit]),
       );
     }
