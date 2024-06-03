@@ -17,6 +17,7 @@ import {
 import { fromHex, toHex } from "@lucid-evolution/core-utils";
 import {
   coreToUtxo,
+  credentialToRewardAddress,
   getAddressDetails,
   paymentCredentialOf,
   utxoToCore,
@@ -248,6 +249,44 @@ export const makeWalletFromAPI = (
     submitTx: async (tx: Transaction): Promise<TxHash> => {
       const txHash = await api.submitTx(tx);
       return txHash;
+    },
+  };
+};
+
+export const makeWalletFromAddress = (
+  provider: Provider,
+  network: Network,
+  address: string,
+  utxos: UTxO[],
+): Wallet => {
+  const { stakeCredential } = getAddressDetails(address);
+  const rewardAddress = stakeCredential
+    ? credentialToRewardAddress(network, stakeCredential)
+    : null;
+
+  return {
+    address: async (): Promise<Address> => address,
+    rewardAddress: async (): Promise<RewardAddress | null> => rewardAddress,
+    getUtxos: async (): Promise<UTxO[]> => utxos,
+    getUtxosCore: async (): Promise<CML.TransactionUnspentOutput[]> =>
+      utxos.map(utxoToCore),
+    getDelegation: async (): Promise<Delegation> =>
+      rewardAddress
+        ? provider.getDelegation(rewardAddress)
+        : { poolId: null, rewards: 0n },
+    signTx: async (
+      _tx: CML.Transaction,
+    ): Promise<CML.TransactionWitnessSet> => {
+      throw new Error("Not implemented");
+    },
+    signMessage: async (
+      _address: Address | RewardAddress,
+      _payload: Payload,
+    ): Promise<SignedMessage> => {
+      throw new Error("Not implemented");
+    },
+    submitTx: async (_tx: Transaction): Promise<TxHash> => {
+      throw new Error("Not implemented");
     },
   };
 };
