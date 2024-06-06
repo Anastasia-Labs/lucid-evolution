@@ -22,8 +22,12 @@ import {
   KoiosAsset,
   KoiosTxInfoSchema,
   KoiosUTxO,
+  KoiosTxInfo,
   ProtocolParametersSchema,
 } from "./schema.js";
+import { Console, Effect, pipe, Schedule } from "effect";
+import { promise } from "effect/Effect";
+import { ArrayFormatter } from "@effect/schema";
 
 /**
  * @description This class supports Koios API v1.1.2.
@@ -172,7 +176,11 @@ export class Koios implements Provider {
             datum_hash: koiosInputOutput.datum_hash,
             inline_datum: koiosInputOutput.inline_datum,
             reference_script: koiosInputOutput.reference_script,
-            asset_list: koiosInputOutput.asset_list,
+            //NOTE: Koios api returns collateral_output like  asset_list: "[]", instead of asset_list: []
+            asset_list:
+              typeof koiosInputOutput.asset_list === "string"
+                ? []
+                : koiosInputOutput.asset_list,
           },
           koiosInputOutput.payment_addr.bech32,
         ),
@@ -223,27 +231,71 @@ export class Koios implements Provider {
     }
   }
 
-  awaitTx(txHash: TxHash, checkInterval = 3000): Promise<boolean> {
-    return new Promise((res) => {
-      const confirmation = setInterval(async () => {
-        const body = {
-          _tx_hashes: [txHash],
-        };
-        const result = await fetch(`${this.baseUrl}/tx_info`, {
-          headers: {
-            Accept: "application/json",
-            "Content-Type": "application/json",
-          },
-          method: "POST",
-          body: JSON.stringify(body),
-        }).then((res: Response) => res.json());
-        if (Array.isArray(result) && result.length > 0) {
-          clearInterval(confirmation);
-          await new Promise((res) => setTimeout(() => res(1), 1000));
-          return res(true);
-        }
-      }, checkInterval);
-    });
+  awaitTx(txHash: TxHash, checkInterval = 20000) {
+    const body = {
+      _tx_hashes: [txHash],
+    };
+    const request = {
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json",
+      },
+      method: "POST",
+      body: JSON.stringify(body),
+    };
+    const program = pipe(
+      Effect.tryPromise({
+        //TODO: use tx_status api
+        try: () => fetch(`${this.baseUrl}/tx_info`, request),
+        catch: (error) => new Error(String(error)),
+      }),
+      Effect.flatMap((response) =>
+        !response.ok
+          ? Effect.fail(new Error(`${response.status} ${response.statusText}`))
+          : Effect.succeed(response),
+      ),
+      Effect.flatMap((response) =>
+        Effect.tryPromise({
+          try: () => response.json(),
+          catch: (error) => new Error(String(error)),
+        }),
+      ),
+      Effect.flatMap((json) =>
+        S.decodeUnknown(S.Array(KoiosTxInfoSchema), { errors: "first" })(json),
+      ),
+      Effect.catchTag("ParseError", (e) =>
+        Effect.fail(ArrayFormatter.formatErrorSync(e)),
+      ),
+      Effect.repeat({
+        schedule: Schedule.exponential(checkInterval),
+        until: (result) => result.length > 0,
+      }),
+      Effect.orDie,
+      Effect.as(true),
+    );
+    //TODO: add Effect.timeout test with 10 mins
+
+    return Effect.runPromise(program);
+    // return new Promise((res) => {
+    //   const confirmation = setInterval(async () => {
+    //     const body = {
+    //       _tx_hashes: [txHash],
+    //     };
+    //     const result = await fetch(`${this.baseUrl}/tx_info`, {
+    //       headers: {
+    //         Accept: "application/json",
+    //         "Content-Type": "application/json",
+    //       },
+    //       method: "POST",
+    //       body: JSON.stringify(body),
+    //     }).then((res: Response) => res.json());
+    //     if (Array.isArray(result) && result.length > 0) {
+    //       clearInterval(confirmation);
+    //       await new Promise((res) => setTimeout(() => res(1), 1000));
+    //       return res(true);
+    //     }
+    //   }, checkInterval);
+    // });
   }
 
   async submitTx(tx: Transaction): Promise<TxHash> {
@@ -255,9 +307,10 @@ export class Koios implements Provider {
       method: "POST",
       body: fromHex(tx),
     }).then((res: Response) => res.json());
-    if (!result || result.error) {
-      if (result?.status_code === 400) throw new Error(result.message);
-      else throw new Error("Could not submit transaction.");
+    const TxHashSchema = S.String;
+    const isTxHash = S.is(TxHashSchema);
+    if (!isTxHash(result)) {
+      throw new Error(JSON.stringify(result));
     }
     return result;
   }
@@ -268,9 +321,11 @@ const toUTxO = (koiosUTxO: KoiosUTxO, address: string): UTxO => ({
   outputIndex: koiosUTxO.tx_index,
   assets: (() => {
     const a: Assets = {};
-    koiosUTxO.asset_list.forEach((am: KoiosAsset) => {
-      a[am.policy_id + am.asset_name] = BigInt(am.quantity);
-    });
+    if (koiosUTxO.asset_list) {
+      koiosUTxO.asset_list.forEach((am: KoiosAsset) => {
+        a[am.policy_id + am.asset_name] = BigInt(am.quantity);
+      });
+    }
     a["lovelace"] = BigInt(koiosUTxO.value);
     return a;
   })(),

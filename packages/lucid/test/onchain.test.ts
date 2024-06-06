@@ -42,9 +42,7 @@ describe.sequential("Hello", () => {
     const exit = await Effect.runPromiseExit(program);
     expect(exit._tag).toBe("Success");
   });
-});
 
-describe.sequential("Stake", () => {
   test("registerStake", async () => {
     const program = pipe(
       StakeEndpoints.registerStake,
@@ -71,9 +69,7 @@ describe.sequential("Stake", () => {
     const exit = await Effect.runPromiseExit(program);
     expect(exit._tag).toBe("Success");
   });
-});
 
-describe.sequential("Withdraw", () => {
   test("registerStake", async () => {
     const program = pipe(
       StakeEndpoints.registerStake,
@@ -91,10 +87,8 @@ describe.sequential("Withdraw", () => {
     const exit = await Effect.runPromiseExit(program);
     expect(exit._tag).toBe("Success");
   });
-});
 
-describe.sequential("Parametrized Contract", () => {
-  test("Deposit Funds", async () => {
+  test("Parametrized Contract - Deposit Funds", async () => {
     const program = pipe(
       ParametrizedEndpoints.depositFunds,
       Effect.provide(Layer.mergeAll(User.layer)),
@@ -103,7 +97,7 @@ describe.sequential("Parametrized Contract", () => {
     expect(exit._tag).toBe("Success");
   });
 
-  test("Collect Funds", async () => {
+  test("Parametrized Contract - Collect Funds", async () => {
     const program = pipe(
       ParametrizedEndpoints.collectFunds,
       Effect.provide(Layer.mergeAll(User.layer)),
@@ -111,10 +105,8 @@ describe.sequential("Parametrized Contract", () => {
     const exit = await Effect.runPromiseExit(program);
     expect(exit._tag).toBe("Success");
   });
-});
 
-describe.sequential("Mint Test", () => {
-  test("Mint Token", async () => {
+  test("Mint Test - Mint Token", async () => {
     const program = pipe(
       MintBurnEndpoints.mint,
       Effect.provide(Layer.mergeAll(User.layer)),
@@ -123,7 +115,7 @@ describe.sequential("Mint Test", () => {
     expect(exit._tag).toBe("Success");
   });
 
-  test("Burn Token", async () => {
+  test("Mint Test - Burn Token", async () => {
     const program = pipe(
       MintBurnEndpoints.burn,
       Effect.provide(Layer.mergeAll(User.layer)),
@@ -132,7 +124,7 @@ describe.sequential("Mint Test", () => {
     expect(exit._tag).toBe("Success");
   });
 
-  test("Mint/Burn Token", async () => {
+  test("Mint Test - Mint/Burn Token", async () => {
     const program = pipe(
       MintBurnEndpoints.mintburn,
       Effect.provide(Layer.mergeAll(User.layer)),
@@ -141,7 +133,7 @@ describe.sequential("Mint Test", () => {
     expect(exit._tag).toBe("Success");
   });
 
-  test("Mint Token, Second Test", async () => {
+  test("Mint Test - Mint Token, Second Test", async () => {
     const program = pipe(
       MintBurnEndpoints.mint2,
       Effect.provide(Layer.mergeAll(User.layer)),
@@ -150,7 +142,7 @@ describe.sequential("Mint Test", () => {
     expect(exit._tag).toBe("Success");
   });
 
-  test("Burn Token, Second Test", async () => {
+  test("Mint Test - Burn Token, Second Test", async () => {
     const program = pipe(
       MintBurnEndpoints.burn2,
       Effect.provide(Layer.mergeAll(User.layer)),
@@ -158,7 +150,7 @@ describe.sequential("Mint Test", () => {
     const exit = await Effect.runPromiseExit(program);
     expect(exit._tag).toBe("Success");
   });
-  test("Pay ADA", async () => {
+  test("Mint Test - Pay ADA", async () => {
     const program = pipe(
       MintBurnEndpoints.pay,
       Effect.provide(Layer.mergeAll(User.layer)),
@@ -166,7 +158,7 @@ describe.sequential("Mint Test", () => {
     const exit = await Effect.runPromiseExit(program);
     expect(exit._tag).toBe("Success");
   });
-  test("Pay Asset", async () => {
+  test("Mint Test - Pay Asset", async () => {
     const program = pipe(
       MintBurnEndpoints.pay2,
       Effect.provide(Layer.mergeAll(User.layer)),
@@ -174,7 +166,7 @@ describe.sequential("Mint Test", () => {
     const exit = await Effect.runPromiseExit(program);
     expect(exit._tag).toBe("Success");
   });
-  test("CollectFunds", async () => {
+  test("Mint Test - CollectFunds", async () => {
     const program = pipe(
       MintBurnEndpoints.pay3,
       Effect.provide(Layer.mergeAll(User.layer, HelloContract.layer)),

@@ -70,7 +70,7 @@ export const KoiosUTxOSchema = S.Struct({
       value: S.NullOr(S.Object),
     }),
   ),
-  asset_list: S.Array(KoiosAssetSchema),
+  asset_list: S.NullOr(S.Array(KoiosAssetSchema)),
 });
 
 export type KoiosUTxO = S.Schema.Type<typeof KoiosUTxOSchema>;
@@ -114,7 +114,7 @@ export const KoiosInputOutputSchema = S.Struct({
       value: S.NullOr(S.Object),
     }),
   ),
-  asset_list: S.Array(KoiosAssetSchema),
+  asset_list: S.Union(S.Array(KoiosAssetSchema), S.String),
 });
 
 export type KoiosInputOutput = S.Schema.Type<typeof KoiosInputOutputSchema>;
@@ -170,7 +170,7 @@ export const KoiosTxInfoSchema = S.Struct({
     S.Array(
       S.Struct({
         address: S.String,
-        spends_inputs: S.NullOr(
+        spends_input: S.NullOr(
           S.Struct({
             tx_hash: S.String,
             tx_index: S.Number,
@@ -183,16 +183,20 @@ export const KoiosTxInfoSchema = S.Struct({
         input: S.Struct({
           redeemer: S.Struct({
             purpose: S.Literal("spend", "mint", "cert", "reward"),
+            fee: S.String,
+            unit: S.Struct({
+              steps: S.String,
+              mem: S.String,
+            }),
+            datum: S.Struct({
+              hash: S.NullOr(S.String),
+              value: S.NullOr(S.Object),
+            }),
           }),
-        }),
-        fee: S.String,
-        unit: S.Struct({
-          steps: S.String,
-          mem: S.String,
-        }),
-        datum: S.Struct({
-          hash: S.NullOr(S.String),
-          value: S.NullOr(S.Object),
+          datum: S.Struct({
+            hash: S.NullOr(S.String),
+            value: S.NullOr(S.Object),
+          }),
         }),
       }),
     ),

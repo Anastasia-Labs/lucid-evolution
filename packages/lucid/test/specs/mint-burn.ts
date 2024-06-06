@@ -5,8 +5,9 @@ import {
   paymentCredentialOf,
   selectUTxOs,
 } from "../../src/index.js";
-import { Console, Effect, Logger, LogLevel, pipe, Schedule } from "effect";
+import { Effect } from "effect";
 import { User } from "./services.js";
+import { handleSignSubmit, withLogRetry } from "./utils.js";
 
 const mkMintinPolicy = (time: number, address: string) => {
   return nativeJSFromJson({
@@ -39,18 +40,8 @@ export const mint = Effect.gen(function* () {
     .validTo(Date.now() + 900000)
     .attach.MintingPolicy(mint)
     .completeProgram();
-  const signed = yield* signBuilder.sign.withWallet().completeProgram();
-  const txHash = yield* signed.submitProgram();
-  yield* Effect.sleep("10 seconds");
-  yield* Effect.logDebug(txHash);
-}).pipe(
-  Effect.tapErrorCause(Effect.logError),
-  Effect.tapErrorCause(Console.log),
-  Effect.retry(
-    pipe(Schedule.compose(Schedule.exponential(20_000), Schedule.recurs(4))),
-  ),
-  Logger.withMinimumLogLevel(LogLevel.Debug),
-);
+  return signBuilder;
+}).pipe(Effect.flatMap(handleSignSubmit), withLogRetry);
 
 export const burn = Effect.gen(function* () {
   const { user } = yield* User;
@@ -69,18 +60,8 @@ export const burn = Effect.gen(function* () {
     .validTo(Date.now() + 900000)
     .attach.MintingPolicy(mint)
     .completeProgram();
-  const signed = yield* signBuilder.sign.withWallet().completeProgram();
-  const txHash = yield* signed.submitProgram();
-  yield* Effect.sleep("10 seconds");
-  yield* Effect.logDebug(txHash);
-}).pipe(
-  Effect.tapErrorCause(Effect.logError),
-  Effect.tapErrorCause(Console.log),
-  Effect.retry(
-    pipe(Schedule.compose(Schedule.exponential(20_000), Schedule.recurs(4))),
-  ),
-  Logger.withMinimumLogLevel(LogLevel.Debug),
-);
+  return signBuilder;
+}).pipe(Effect.flatMap(handleSignSubmit), withLogRetry);
 
 export const mintburn = Effect.gen(function* () {
   const { user } = yield* User;
@@ -102,18 +83,8 @@ export const mintburn = Effect.gen(function* () {
     .validTo(Date.now() + 900000)
     .attach.MintingPolicy(mint)
     .completeProgram();
-  const signed = yield* signBuilder.sign.withWallet().completeProgram();
-  const txHash = yield* signed.submitProgram();
-  yield* Effect.sleep("10 seconds");
-  yield* Effect.logDebug(txHash);
-}).pipe(
-  Effect.tapErrorCause(Effect.logError),
-  Effect.tapErrorCause(Console.log),
-  Effect.retry(
-    pipe(Schedule.compose(Schedule.exponential(20_000), Schedule.recurs(4))),
-  ),
-  Logger.withMinimumLogLevel(LogLevel.Debug),
-);
+  return signBuilder;
+}).pipe(Effect.flatMap(handleSignSubmit), withLogRetry);
 
 export const mint2 = Effect.gen(function* () {
   const { user } = yield* User;
@@ -131,18 +102,8 @@ export const mint2 = Effect.gen(function* () {
     .validTo(Date.now() + 900000)
     .attach.MintingPolicy(mint)
     .completeProgram();
-  const signed = yield* signBuilder.sign.withWallet().completeProgram();
-  const txHash = yield* signed.submitProgram();
-  yield* Effect.sleep("10 seconds");
-  yield* Effect.logDebug(txHash);
-}).pipe(
-  Effect.tapErrorCause(Effect.logError),
-  Effect.tapErrorCause(Console.log),
-  Effect.retry(
-    pipe(Schedule.compose(Schedule.exponential(20_000), Schedule.recurs(4))),
-  ),
-  Logger.withMinimumLogLevel(LogLevel.Debug),
-);
+  return signBuilder;
+}).pipe(Effect.flatMap(handleSignSubmit), withLogRetry);
 
 export const burn2 = Effect.gen(function* () {
   const { user } = yield* User;
@@ -160,18 +121,8 @@ export const burn2 = Effect.gen(function* () {
     .validTo(Date.now() + 900000)
     .attach.MintingPolicy(mint)
     .completeProgram();
-  const signed = yield* signBuilder.sign.withWallet().completeProgram();
-  const txHash = yield* signed.submitProgram();
-  yield* Effect.sleep("10 seconds");
-  yield* Effect.logDebug(txHash);
-}).pipe(
-  Effect.tapErrorCause(Effect.logError),
-  Effect.tapErrorCause(Console.log),
-  Effect.retry(
-    pipe(Schedule.compose(Schedule.exponential(20_000), Schedule.recurs(4))),
-  ),
-  Logger.withMinimumLogLevel(LogLevel.Debug),
-);
+  return signBuilder;
+}).pipe(Effect.flatMap(handleSignSubmit), withLogRetry);
 
 export const pay = Effect.gen(function* () {
   const { user } = yield* User;
@@ -189,18 +140,8 @@ export const pay = Effect.gen(function* () {
     .validTo(Date.now() + 900000)
     .attach.MintingPolicy(mint)
     .completeProgram();
-  const signed = yield* signBuilder.sign.withWallet().completeProgram();
-  const txHash = yield* signed.submitProgram();
-  yield* Effect.sleep("10 seconds");
-  yield* Effect.logDebug(txHash);
-}).pipe(
-  Effect.tapErrorCause(Effect.logError),
-  Effect.tapErrorCause(Console.log),
-  Effect.retry(
-    pipe(Schedule.compose(Schedule.exponential(20_000), Schedule.recurs(4))),
-  ),
-  Logger.withMinimumLogLevel(LogLevel.Debug),
-);
+  return signBuilder;
+}).pipe(Effect.flatMap(handleSignSubmit), withLogRetry);
 
 export const pay2 = Effect.gen(function* () {
   const { user } = yield* User;
@@ -218,18 +159,8 @@ export const pay2 = Effect.gen(function* () {
     .validTo(Date.now() + 900000)
     .attach.MintingPolicy(mint)
     .completeProgram();
-  const signed = yield* signBuilder.sign.withWallet().completeProgram();
-  const txHash = yield* signed.submitProgram();
-  yield* Effect.sleep("10 seconds");
-  yield* Effect.logDebug(txHash);
-}).pipe(
-  Effect.tapErrorCause(Effect.logError),
-  Effect.tapErrorCause(Console.log),
-  Effect.retry(
-    pipe(Schedule.compose(Schedule.exponential(20_000), Schedule.recurs(4))),
-  ),
-  Logger.withMinimumLogLevel(LogLevel.Debug),
-);
+  return signBuilder;
+}).pipe(Effect.flatMap(handleSignSubmit), withLogRetry);
 
 export const pay3 = Effect.gen(function* () {
   const { user } = yield* User;
@@ -264,15 +195,5 @@ export const pay3 = Effect.gen(function* () {
     .validTo(Date.now() + 900000)
     .attach.MintingPolicy(mint)
     .completeProgram();
-  const signed = yield* signBuilder.sign.withWallet().completeProgram();
-  const txHash = yield* signed.submitProgram();
-  yield* Effect.sleep("10 seconds");
-  yield* Effect.logDebug(txHash);
-}).pipe(
-  Effect.tapErrorCause(Effect.logError),
-  Effect.tapErrorCause(Console.log),
-  Effect.retry(
-    pipe(Schedule.compose(Schedule.exponential(20_000), Schedule.recurs(4))),
-  ),
-  Logger.withMinimumLogLevel(LogLevel.Debug),
-);
+  return signBuilder;
+}).pipe(Effect.flatMap(handleSignSubmit), withLogRetry);
