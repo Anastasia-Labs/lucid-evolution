@@ -5,7 +5,7 @@ import {
   ProtocolParameters,
   UTxO,
 } from "@lucid-evolution/core-types";
-import { assert, describe, test } from "vitest";
+import { assert, describe, expect, test } from "vitest";
 import { expectedProtocolParameters } from "./protocolParameters";
 
 //TODO: improve test assetion
@@ -71,7 +71,6 @@ describe.sequential("Koios", () => {
   });
 
   test("submitTxBadRequest", async () => {
-    const txId: string = await koios.submitTx("80");
-    assert(txId);
+    await expect(() => koios.submitTx("80")).rejects.toThrowError();
   });
 });
