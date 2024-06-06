@@ -6,13 +6,14 @@ import {
   UTxO,
 } from "@lucid-evolution/core-types";
 import { assert, describe, test } from "vitest";
+import { expectedProtocolParameters } from "./protocolParameters";
 
 //TODO: improve test assetion
 describe.sequential("Koios", () => {
   const koios = new Koios("https://api.koios.rest/api/v1");
   test("getProtocolParameters", async () => {
     const pp: ProtocolParameters = await koios.getProtocolParameters();
-    assert(pp);
+    assert.deepEqual(pp, expectedProtocolParameters);
   });
 
   test("getUtxos", async () => {
