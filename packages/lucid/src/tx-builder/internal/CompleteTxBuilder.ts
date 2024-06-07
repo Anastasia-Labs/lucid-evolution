@@ -59,29 +59,17 @@ export const complete = (
       // max_collateral_inputs	3	The maximum number of collateral inputs allowed in a transaction.
       const collateralInput = yield* findCollateral(walletInputs);
       setCollateral(config, collateralInput);
-      const availableInputs = _Array.differenceWith(isEqualUTxO)(
-        remainingInputs,
-        [collateralInput],
-      );
-      const inputsToAdd = options.coinSelection
-        ? yield* coinSelection(config, availableInputs)
-        : availableInputs;
+    }
 
-      for (const utxo of inputsToAdd) {
-        const input = CML.SingleInputBuilder.from_transaction_unspent_output(
-          utxoToCore(utxo),
-        ).payment_key();
-        config.txBuilder.add_input(input);
-      }
-    } else {
-      //Remove collected inputs from utxos at wallet
-      const availableInputs = _Array.differenceWith(isEqualUTxO)(
-        walletInputs,
-        config.collectedInputs,
-      );
-      const inputsToAdd = options.coinSelection
-        ? yield* coinSelection(config, availableInputs)
-        : availableInputs;
+    //Remove collected inputs from utxos at wallet
+    const availableInputs = _Array.differenceWith(isEqualUTxO)(
+      walletInputs,
+      config.collectedInputs,
+    );
+
+    if (options.coinSelection !== false) {
+      const inputsToAdd = yield* coinSelection(config, availableInputs);
+
       for (const utxo of inputsToAdd) {
         const input = CML.SingleInputBuilder.from_transaction_unspent_output(
           utxoToCore(utxo),
