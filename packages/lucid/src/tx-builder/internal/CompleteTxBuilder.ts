@@ -224,11 +224,14 @@ const coinSelection = (
 
     const requiredAssets = pipe(
       config.totalOutputAssets,
+      Record.union(fee, (self, that) => self + that),
       Record.union(collected, (self, that) => self + that),
       Record.union(requiredMinted, (self, that) => self + that),
       Record.filter((amount) => amount > 0n),
-      Record.union(fee, (self, that) => self + that), //NOTE:  fee  be at the end so the wallet can pay for the tx
     );
+
+    // No UTxOs need to be selected if collected inputs are sufficient
+    if (Record.isEmptyRecord(requiredAssets)) return [];
 
     // yield* Console.log("requiredAssets", requiredAssets);
 
