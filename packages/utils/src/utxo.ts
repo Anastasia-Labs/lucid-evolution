@@ -158,7 +158,8 @@ export const selectUTxOs = (utxos: UTxO[], totalAssets: Assets) => {
 };
 
 /**
- * Sorts an array of UTXOs by the amount of "lovelace" in ascending or descending order.
+ * Sorts an array of UTXOs, first by the amount of "lovelace"
+ * and then by size of "assets", in ascending or descending order.
  *
  * @param {UTxO[]} utxos - The array of UTXO objects to be sorted.
  * @param {"ascending" | "descending"} [order="descending"] - The order in which to sort the UTXOs.
@@ -175,6 +176,9 @@ export const sortUTxOs = (
       return order === "ascending" ? 1 : -1;
     }
     if (a.assets["lovelace"] < b.assets["lovelace"]) {
+      return order === "ascending" ? -1 : 1;
+    }
+    if (a.assets.size < b.assets.size) {
       return order === "ascending" ? -1 : 1;
     }
     return 0;
