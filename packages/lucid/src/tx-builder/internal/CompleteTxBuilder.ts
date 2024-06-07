@@ -1,20 +1,22 @@
 import { Effect, pipe, Record, Array as _Array } from "effect";
-import { Address, Assets, UTxO } from "@lucid-evolution/core-types";
+import { Address, Assets, UTxO, Wallet } from "@lucid-evolution/core-types";
 import {
   ERROR_MESSAGE,
+  RunTimeError,
   TransactionError,
   TxBuilderError,
   TxBuilderErrorCause,
-  makeRunTimeError,
 } from "../../Errors.js";
 import { CML } from "../../core.js";
 import * as UPLC from "@lucid-evolution/uplc";
 import * as TxBuilder from "../TxBuilder.js";
 import * as TxSignBuilder from "../../tx-sign-builder/TxSignBuilder.js";
 import {
+  assetsToValue,
   isEqualUTxO,
   selectUTxOs,
   sortUTxOs,
+  stringify,
   utxoToCore,
   utxoToTransactionInput,
   utxoToTransactionOutput,
@@ -30,46 +32,54 @@ export type CompleteOptions = {
 export const completeTxError = (cause: TxBuilderErrorCause, message?: string) =>
   new TxBuilderError({ cause, module: "Complete", message });
 
+type WalletInfo = {
+  wallet: Wallet;
+  address: string;
+  inputs: UTxO[];
+};
+
+const getWalletInfo = (
+  maybeWallet: Wallet | undefined,
+): Effect.Effect<WalletInfo, TxBuilderError, never> =>
+  Effect.gen(function* () {
+    const wallet = yield* pipe(
+      Effect.fromNullable(maybeWallet),
+      Effect.orElseFail(() =>
+        completeTxError("MissingWallet", ERROR_MESSAGE.MISSING_WALLET),
+      ),
+    );
+    const address = yield* Effect.promise(() => wallet.address());
+    const inputs = yield* pipe(
+      Effect.tryPromise({
+        try: () => wallet.getUtxos(),
+        catch: (error) => completeTxError("Provider", String(error)),
+      }),
+    );
+    return {
+      wallet,
+      address,
+      inputs,
+    };
+  });
+
 export const complete = (
   config: TxBuilder.TxBuilderConfig,
   options: CompleteOptions = { coinSelection: true },
 ): Effect.Effect<TxSignBuilder.TxSignBuilder, TransactionError> =>
   Effect.gen(function* () {
     yield* Effect.all(config.programs, { concurrency: "unbounded" });
-    //NOTE: this should not be here, validation shuold be when making the tx builder
-    const wallet = yield* pipe(
-      Effect.fromNullable(config.lucidConfig.wallet),
-      Effect.orElseFail(() =>
-        completeTxError("MissingWallet", ERROR_MESSAGE.MISSING_WALLET),
-      ),
-    );
-    //NOTE: this should not be here, validation shuold be when making the tx builderj
-    const changeAddress = yield* Effect.promise(() => wallet.address());
-    //NOTE: this should not be here, validation shuold be when making the tx builderj
-    const walletInputs = yield* pipe(
-      Effect.tryPromise({
-        try: () => wallet.getUtxos(),
-        catch: (error) => completeTxError("Provider", String(error)),
-      }),
-    );
-    //TODO: add multiple input collateral based one:
-    // max_collateral_inputs	3	The maximum number of collateral inputs allowed in a transaction.
+    const walletInfo = yield* getWalletInfo(config.lucidConfig.wallet);
+
     if (config.collectedInputs.find((value) => value.datum !== undefined)) {
-      //Remove collected inputs from utxos at wallet and utxo selected for collateral
-      const remainingInputs = _Array.differenceWith(isEqualUTxO)(
-        walletInputs,
+      const availableInputs = _Array.differenceWith(isEqualUTxO)(
+        walletInfo.inputs,
         config.collectedInputs,
       );
-      const collateralInput = yield* findCollateral(remainingInputs);
-      setCollateral(config, collateralInput);
-      const availableInputs = _Array.differenceWith(isEqualUTxO)(
-        remainingInputs,
-        [collateralInput],
-      );
+      const collateralInput = yield* findCollateral(availableInputs);
+      setCollateral(config, collateralInput, walletInfo.address);
       const inputsToAdd = options.coinSelection
         ? yield* coinSelection(config, availableInputs)
         : availableInputs;
-
       for (const utxo of inputsToAdd) {
         const input = CML.SingleInputBuilder.from_transaction_unspent_output(
           utxoToCore(utxo),
@@ -77,9 +87,8 @@ export const complete = (
         config.txBuilder.add_input(input);
       }
     } else {
-      //Remove collected inputs from utxos at wallet
       const availableInputs = _Array.differenceWith(isEqualUTxO)(
-        walletInputs,
+        walletInfo.inputs,
         config.collectedInputs,
       );
       const inputsToAdd = options.coinSelection
@@ -94,27 +103,31 @@ export const complete = (
     }
     const txRedeemerBuilder = config.txBuilder.build_for_evaluation(
       0,
-      CML.Address.from_bech32(changeAddress),
+      CML.Address.from_bech32(walletInfo.address),
     );
     if (txRedeemerBuilder.draft_tx().witness_set().redeemers()) {
       applyUPLCEval(
-        yield* evalTransaction(config, txRedeemerBuilder, walletInputs),
+        yield* evalTransaction(config, txRedeemerBuilder, walletInfo.inputs),
         config.txBuilder,
       );
     }
     config.txBuilder.add_change_if_needed(
-      CML.Address.from_bech32(changeAddress),
+      CML.Address.from_bech32(walletInfo.address),
       true,
     );
     const tx = config.txBuilder
       .build(
         CML.ChangeSelectionAlgo.Default,
-        CML.Address.from_bech32(changeAddress),
+        CML.Address.from_bech32(walletInfo.address),
       )
       .build_unchecked();
 
     return TxSignBuilder.makeTxSignBuilder(config.lucidConfig, tx);
-  }).pipe(Effect.catchAllDefect(makeRunTimeError));
+  }).pipe(
+    Effect.catchAllDefect(
+      (e) => new RunTimeError({ message: stringify(String(e)) }),
+    ),
+  );
 
 export const applyUPLCEval = (
   uplcEval: Uint8Array[],
@@ -160,25 +173,35 @@ export const setRedeemerstoZero = (tx: CML.Transaction) => {
   }
 };
 
-const setCollateral = (config: TxBuilder.TxBuilderConfig, input: UTxO) => {
-  config.txBuilder.add_collateral(
-    CML.SingleInputBuilder.from_transaction_unspent_output(
-      utxoToCore(input),
-    ).payment_key(),
+const setCollateral = (
+  config: TxBuilder.TxBuilderConfig,
+  collateralInputs: UTxO[],
+  changeAddress: string,
+) => {
+  for (const utxo of collateralInputs) {
+    const collateralInput =
+      CML.SingleInputBuilder.from_transaction_unspent_output(
+        utxoToCore(utxo),
+      ).payment_key();
+    config.txBuilder.add_collateral(collateralInput);
+  }
+  const returnassets = pipe(
+    collateralInputs
+      .map((utxo) => utxo.assets)
+      .reduce((acc, cur) =>
+        Record.union(acc, cur, (self, that) => self + that),
+      ),
+    Record.union({ lovelace: -5_000_000n }, (self, that) => self + that),
   );
+
   const collateralOutputBuilder =
     CML.TransactionOutputBuilder.new().with_address(
-      CML.Address.from_bech32(input.address),
+      CML.Address.from_bech32(changeAddress),
     );
-  //TODO: calculate percentage
-  //collateral_percent	150	The percentage of the txfee which must be provided as collateral when including non-native scripts.
   config.txBuilder.set_collateral_return(
     collateralOutputBuilder
       .next()
-      .with_asset_and_min_required_coin(
-        utxoToTransactionOutput(input).amount().multi_asset(),
-        config.lucidConfig.protocolParameters.coinsPerUtxoByte,
-      )
+      .with_value(assetsToValue(returnassets))
       .build()
       .output(),
   );
@@ -186,22 +209,24 @@ const setCollateral = (config: TxBuilder.TxBuilderConfig, input: UTxO) => {
 
 const findCollateral = (
   inputs: UTxO[],
-): Effect.Effect<UTxO, TxBuilderError, never> =>
-  pipe(
-    Effect.fromNullable(
-      sortUTxOs(inputs, "ascending").find(
-        (value) => value.assets["lovelace"] >= 5_000_000n,
-      ),
-    ),
-    Effect.orElseFail(() =>
-      completeTxError(
+): Effect.Effect<UTxO[], TxBuilderError, never> =>
+  Effect.gen(function* () {
+    const selected = selectUTxOs(sortUTxOs(inputs), {
+      lovelace: 5_000_000n,
+    });
+    if (_Array.isEmptyArray(selected))
+      yield* completeTxError(
         "MissingCollateral",
-        "Your wallet does not have enough funds to cover the required collateral.",
-      ),
-    ),
-  );
+        `Your wallet does not have enough funds to cover the required 5 ADA collateral.`,
+      );
+    if (selected.length > 3)
+      yield* completeTxError(
+        "MissingCollateral",
+        `Selected ${selected.length} inputs as collateral, but max collateral inputs is 3 to cover the 5 ADA collateral`,
+      );
+    return selected;
+  });
 
-//coinSelection is seach inputs by largest first
 const coinSelection = (
   config: TxBuilder.TxBuilderConfig,
   availableInputs: UTxO[],
@@ -209,9 +234,15 @@ const coinSelection = (
   Effect.gen(function* () {
     // NOTE: This is a fee estimation. If the amount is not enough, it may require increasing the fee.
     const fee: Assets = { lovelace: config.txBuilder.min_fee(false) };
-    // yield* Console.log("totalOutputAssets", config.totalOutputAssets);
-    const requiredMinted = Record.map(config.mintedAssets, (amount) => -amount);
-    // yield* Console.log("requiredMinted", requiredMinted);
+    const minAdaChangeAddress = {
+      lovelace: calculateMinLovelace(
+        config.lucidConfig.protocolParameters.coinsPerUtxoByte,
+      ),
+    };
+    const negatedMintedAssets = Record.map(
+      config.mintedAssets,
+      (amount) => -amount,
+    );
     const collectedAssets = _Array.isEmptyArray(config.collectedInputs)
       ? {}
       : config.collectedInputs
@@ -219,24 +250,23 @@ const coinSelection = (
           .reduce((acc, cur) =>
             Record.union(acc, cur, (self, that) => self + that),
           );
-    const collected = Record.map(collectedAssets, (amount) => -amount);
-    // yield* Console.log("collected", collected);
-
+    const negatedCollectedAssets = Record.map(
+      collectedAssets,
+      (amount) => -amount,
+    );
     const requiredAssets = pipe(
       config.totalOutputAssets,
-      Record.union(collected, (self, that) => self + that),
-      Record.union(requiredMinted, (self, that) => self + that),
+      Record.union(negatedCollectedAssets, (self, that) => self + that),
+      Record.union(negatedMintedAssets, (self, that) => self + that),
       Record.filter((amount) => amount > 0n),
+      Record.union(minAdaChangeAddress, (self, that) => self + that),
       Record.union(fee, (self, that) => self + that), //NOTE:  fee  be at the end so the wallet can pay for the tx
     );
-
-    // yield* Console.log("requiredAssets", requiredAssets);
-
     const selected = selectUTxOs(sortUTxOs(availableInputs), requiredAssets);
     if (_Array.isEmptyArray(selected))
       yield* completeTxError(
         "NotFound",
-        `Your wallet does not have enough funds to cover the required assets. ${requiredAssets}`,
+        `Your wallet does not have enough funds to cover the required assets. ${stringify(requiredAssets)}`,
       );
     return selected;
   });
@@ -277,3 +307,21 @@ const evalTransaction = (
     });
     return uplc_eval;
   });
+
+const calculateMinLovelace = (
+  coinsPerUtxoByte: bigint,
+  changeAddress?: string,
+) => {
+  const dummyAddress =
+    "addr_test1qrngfyc452vy4twdrepdjc50d4kvqutgt0hs9w6j2qhcdjfx0gpv7rsrjtxv97rplyz3ymyaqdwqa635zrcdena94ljs0xy950";
+  return CML.TransactionOutputBuilder.new()
+    .with_address(
+      CML.Address.from_bech32(changeAddress ? changeAddress : dummyAddress),
+    )
+    .next()
+    .with_asset_and_min_required_coin(CML.MultiAsset.new(), coinsPerUtxoByte)
+    .build()
+    .output()
+    .amount()
+    .coin();
+};
