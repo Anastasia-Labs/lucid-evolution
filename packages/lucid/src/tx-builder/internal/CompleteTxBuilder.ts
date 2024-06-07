@@ -32,20 +32,20 @@ export const completeTxError = (cause: TxBuilderErrorCause, message?: string) =>
 
 export const complete = (
   config: TxBuilder.TxBuilderConfig,
-  options: CompleteOptions = { coinSelection: true },
+  options: CompleteOptions = { coinSelection: true, localUPLCEval: true },
 ): Effect.Effect<TxSignBuilder.TxSignBuilder, TransactionError> =>
   Effect.gen(function* () {
     yield* Effect.all(config.programs, { concurrency: "unbounded" });
-    //NOTE: this should not be here, validation shuold be when making the tx builder
+    //NOTE: this should not be here, validation should be when making the tx builder
     const wallet = yield* pipe(
       Effect.fromNullable(config.lucidConfig.wallet),
       Effect.orElseFail(() =>
         completeTxError("MissingWallet", ERROR_MESSAGE.MISSING_WALLET),
       ),
     );
-    //NOTE: this should not be here, validation shuold be when making the tx builderj
+    //NOTE: this should not be here, validation should be when making the tx builder
     const changeAddress = yield* Effect.promise(() => wallet.address());
-    //NOTE: this should not be here, validation shuold be when making the tx builderj
+    //NOTE: this should not be here, validation should be when making the tx builder
     const walletInputs = yield* pipe(
       Effect.tryPromise({
         try: () => wallet.getUtxos(),
@@ -77,11 +77,15 @@ export const complete = (
         config.txBuilder.add_input(input);
       }
     }
+
     const txRedeemerBuilder = config.txBuilder.build_for_evaluation(
       0,
       CML.Address.from_bech32(changeAddress),
     );
-    if (txRedeemerBuilder.draft_tx().witness_set().redeemers()) {
+    if (
+      options.localUPLCEval !== false &&
+      txRedeemerBuilder.draft_tx().witness_set().redeemers()
+    ) {
       applyUPLCEval(
         yield* evalTransaction(config, txRedeemerBuilder, walletInputs),
         config.txBuilder,
