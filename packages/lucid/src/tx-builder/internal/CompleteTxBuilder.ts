@@ -52,15 +52,12 @@ export const complete = (
         catch: (error) => completeTxError("Provider", String(error)),
       }),
     );
-    //TODO: add multiple input collateral based one:
-    // max_collateral_inputs	3	The maximum number of collateral inputs allowed in a transaction.
-    if (config.collectedInputs.find((value) => value.datum !== undefined)) {
-      //Remove collected inputs from utxos at wallet and utxo selected for collateral
-      const remainingInputs = _Array.differenceWith(isEqualUTxO)(
-        walletInputs,
-        config.collectedInputs,
-      );
-      const collateralInput = yield* findCollateral(remainingInputs);
+
+    // Set collateral input if there are script executions
+    if (config.scripts.size > 0) {
+      // TODO: add multiple input collateral based on:
+      // max_collateral_inputs	3	The maximum number of collateral inputs allowed in a transaction.
+      const collateralInput = yield* findCollateral(walletInputs);
       setCollateral(config, collateralInput);
       const availableInputs = _Array.differenceWith(isEqualUTxO)(
         remainingInputs,
