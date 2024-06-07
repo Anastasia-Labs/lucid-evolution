@@ -13,3 +13,4 @@ export * from "./scripts.js";
 export * from "./time.js";
 export * from "./utxo.js";
 export * from "./value.js";
+export * from "./objects.js";

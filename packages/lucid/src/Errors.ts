@@ -65,21 +65,14 @@ export class TxSubmitError extends Data.TaggedError("TxSubmitError")<{
 
 //NOTE: RunTimeError is used to catch all unexpected errors primarly from CML library
 export class RunTimeError extends Data.TaggedError("RunTimeError")<{
-  message: {
-    cause: string;
-    stack: string | undefined;
-  };
+  message: string;
 }> {}
 
 //TODO: maybe use UnknownException instead of RunTimeError
 export const makeRunTimeError = (
   error: unknown,
 ): Effect.Effect<never, RunTimeError> => {
-  const isError = error instanceof Error;
   return new RunTimeError({
-    message: {
-      cause: isError ? `${error.message}` : String(error),
-      stack: isError ? `${error.stack}` : undefined,
-    },
+    message: JSON.stringify(String(error)),
   });
 };

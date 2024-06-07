@@ -3,10 +3,12 @@ import { CML } from "../../core.js";
 import {
   ERROR_MESSAGE,
   makeRunTimeError,
+  RunTimeError,
   TransactionSignError,
 } from "../../Errors.js";
 import * as TxSignBuilder from "../TxSignBuilder.js";
 import * as TxSubmitBuilder from "../../tx-submit/TxSubmit.js";
+import { stringify } from "@lucid-evolution/utils";
 
 export const completeTxSigner = (
   config: TxSignBuilder.TxSignBuilderConfig,
@@ -28,4 +30,8 @@ export const completeTxSigner = (
       ),
     );
     return TxSubmitBuilder.makeSubmit(wallet, signedTx);
-  }).pipe(Effect.catchAllDefect(makeRunTimeError));
+  }).pipe(
+    Effect.catchAllDefect(
+      (e) => new RunTimeError({ message: stringify(String(e)) }),
+    ),
+  );
