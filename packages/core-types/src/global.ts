@@ -17,7 +17,7 @@ export type WalletApi = {
   cip106? : {
     submitUnsignedTx(tx : string) : Promise<string>;
     getCollateralAddress() : Promise<string>;
-    getScriptRequirements() : Promise<string>,
+    getScriptRequirements() : Promise<any[]>,
     getScript: () => Promise<string>,
     getCompletedTx: (txId : string) =>  Promise<string>
   }
