@@ -254,19 +254,19 @@ export const makeWalletFromCip106API = (
       return txHash;
     },
     submitUnsignedTx: async (tx: CML.Transaction): Promise< string> => {
-      const txId = await api.cip106?.submitUnsignedTx(toHex(tx.to_cbor_bytes()));
+      const txId = await api.cip106?.submitUnsignedTx(toHex(tx.to_cbor_bytes())) || "";
       return txId;
     },
     getCollateralAddress: async (): Promise<Address> => {
-      const collateralAddress = await api.cip106?.getCollateralAddress();
+      const collateralAddress = await api.cip106?.getCollateralAddress() || "";
       return collateralAddress;
     },
     getScriptRequirements: async (): Promise<any[]> => {
-      const scriptRequirements = await api.cip106?.getScriptRequirements();
+      const scriptRequirements = await api.cip106?.getScriptRequirements() || [];
       return scriptRequirements;
     },
     getScript: async () : Promise<string> => {
-      const script = await api.cip106?.getScript();
+      const script = await api.cip106?.getScript() || "";
       return script;
     },
   };
