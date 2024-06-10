@@ -269,8 +269,8 @@ export const makeWalletFromCip106API = (
       const script = await api.cip106.getScript();
       return script;
     },
+  };
 };
-
 
 
 export const makeWalletFromAPI = (
