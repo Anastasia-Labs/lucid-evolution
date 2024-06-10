@@ -187,7 +187,7 @@ export interface Wallet {
 export interface MultisigWallet extends Wallet {
   submitUnsignedTx(tx: CML.Transaction): Promise< string>;
   getCollateralAddress(): Promise<Address>;
-  getScriptRequirements(): Promise<Script[]>;
+  getScriptRequirements(): Promise<any[]>;
   getScript(): Promise<Script>;
 }
 

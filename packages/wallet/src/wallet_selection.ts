@@ -14,6 +14,7 @@ import {
   Wallet,
   WalletApi,
   MultisigWallet,
+  Script,
 } from "@lucid-evolution/core-types";
 import { fromHex, toHex } from "@lucid-evolution/core-utils";
 import {
@@ -265,8 +266,8 @@ export const makeWalletFromCip106API = (
       const scriptRequirements = await api.cip106?.getScriptRequirements() || [];
       return scriptRequirements;
     },
-    getScript: async () : Promise<string> => {
-      const script = await api.cip106?.getScript() || "";
+    getScript: async () : Promise<Script> => {
+      const script = { type: "Native", script: await api.cip106?.getScript()  || "" }; 
       return script;
     },
   };
