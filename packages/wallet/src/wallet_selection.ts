@@ -186,6 +186,79 @@ export const makeWalletFromPrivateKey = (
   };
 };
 
+
+export const makeWalletFromCip106API = (
+  provider: Provider,
+  api: WalletApi,
+): Wallet => {
+  const getAddressHex = async () => {
+    const [addressHex] = await api.getUsedAddresses();
+    if (addressHex) return addressHex;
+
+    const [unusedAddressHex] = await api.getUnusedAddresses();
+    return unusedAddressHex;
+  };
+
+  const getRewardAddress = async () => {
+    const [rewardAddressHex] = await api.getRewardAddresses();
+    const rewardAddress = rewardAddressHex
+      ? CML.RewardAddress.from_address(CML.Address.from_hex(rewardAddressHex))!
+          .to_address()
+          .to_bech32(undefined)
+      : null;
+    return rewardAddress;
+  };
+
+  return {
+    address: async (): Promise<Address> =>
+      CML.Address.from_hex(await getAddressHex()).to_bech32(undefined),
+    rewardAddress: async (): Promise<RewardAddress | null> =>
+      getRewardAddress(),
+    getUtxos: async (): Promise<UTxO[]> => {
+      const utxos = ((await api.getUtxos()) || []).map((utxo) => {
+        const parsedUtxo = CML.TransactionUnspentOutput.from_cbor_bytes(
+          fromHex(utxo),
+        );
+        return coreToUtxo(parsedUtxo);
+      });
+      return utxos;
+    },
+    getUtxosCore: async (): Promise<Array<CML.TransactionUnspentOutput>> => {
+      const utxos: Array<CML.TransactionUnspentOutput> = [];
+      ((await api.getUtxos()) || []).forEach((utxo: string) => {
+        utxos.push(CML.TransactionUnspentOutput.from_cbor_hex(utxo));
+      });
+      return utxos;
+    },
+    getDelegation: async (): Promise<Delegation> => {
+      const rewardAddr = await getRewardAddress();
+      return rewardAddr
+        ? await provider.getDelegation(rewardAddr)
+        : { poolId: null, rewards: 0n };
+    },
+    submitUnsignedTx: async (tx: CML.Transaction): Promise< string> => {
+      const txId = await api.cip106.submitUnsignedTx(toHex(tx.to_cbor_bytes()));
+      return txId;
+    },
+    signTx: async (tx: CML.Transaction): Promise< string> => {
+      const txId = await api.cip106.submitUnsignedTx(toHex(tx.to_cbor_bytes()));
+      return txId;
+    },
+    signMessage: async (
+      _address: Address | RewardAddress,
+      _payload: Payload,
+    ): Promise<SignedMessage> => {
+      throw new Error("Not supported for CIP-106 wallets.");
+    },
+    submitTx: async (tx: Transaction): Promise<TxHash> => {
+      const txHash = await api.submitTx(tx);
+      return txHash;
+    },
+  };
+};
+
+
+
 export const makeWalletFromAPI = (
   provider: Provider,
   api: WalletApi,

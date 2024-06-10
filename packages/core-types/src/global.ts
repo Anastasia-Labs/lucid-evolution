@@ -14,6 +14,13 @@ export type WalletApi = {
   ): Promise<{ signature: string; key: string }>;
   submitTx(tx: string): Promise<string>;
   getCollateral(): Promise<string[]>;
+  cip106? : {
+    submitUnsignedTx(tx : string) : Promise<string>;
+    getCollateralAddress() : Promise<string>;
+    getScriptRequirements() : Promise<string>,
+    getScript: () => Promise<string>,
+    getCompletedTx: (txId : string) =>  Promise<string>
+  }
   experimental: {
     getCollateral(): Promise<string[]>;
     on(eventName: string, callback: (...args: unknown[]) => void): void;
