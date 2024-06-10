@@ -267,7 +267,7 @@ export const makeWalletFromCip106API = (
       return scriptRequirements;
     },
     getScript: async () : Promise<Script> => {
-      const script = { type: "Native", script: await api.cip106?.getScript()  || "" }; 
+      const script = { type: "Native", script: await api.cip106?.getScript()  || "" } as Script; 
       return script;
     },
   };
