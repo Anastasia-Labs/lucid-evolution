@@ -13,6 +13,7 @@ import {
   UTxO,
   Wallet,
   WalletApi,
+  MultisigWallet,
 } from "@lucid-evolution/core-types";
 import { fromHex, toHex } from "@lucid-evolution/core-utils";
 import {
@@ -25,6 +26,7 @@ import {
 import { CML } from "./core.js";
 import { signData } from "@lucid-evolution/sign_data";
 import { discoverOwnUsedTxKeyHashes, walletFromSeed } from "./wallet.js";
+import { get } from "http";
 
 export const makeWalletFromSeed = (
   provider: Provider,
@@ -190,7 +192,7 @@ export const makeWalletFromPrivateKey = (
 export const makeWalletFromCip106API = (
   provider: Provider,
   api: WalletApi,
-): Wallet => {
+): MultisigWallet => {
   const getAddressHex = async () => {
     const [addressHex] = await api.getUsedAddresses();
     if (addressHex) return addressHex;
@@ -236,25 +238,37 @@ export const makeWalletFromCip106API = (
         ? await provider.getDelegation(rewardAddr)
         : { poolId: null, rewards: 0n };
     },
-    submitUnsignedTx: async (tx: CML.Transaction): Promise< string> => {
+    signTx: async (tx: CML.Transaction): Promise<CML.TransactionWitnessSet> => {
       const txId = await api.cip106.submitUnsignedTx(toHex(tx.to_cbor_bytes()));
-      return txId;
-    },
-    signTx: async (tx: CML.Transaction): Promise< string> => {
-      const txId = await api.cip106.submitUnsignedTx(toHex(tx.to_cbor_bytes()));
-      return txId;
+      
+      throw new Error("Not supported for CIP-106 wallets.");
     },
     signMessage: async (
       _address: Address | RewardAddress,
       _payload: Payload,
-    ): Promise<SignedMessage> => {
-      throw new Error("Not supported for CIP-106 wallets.");
+      ): Promise<SignedMessage> => {
+        throw new Error("Not supported for CIP-106 wallets.");
     },
     submitTx: async (tx: Transaction): Promise<TxHash> => {
       const txHash = await api.submitTx(tx);
       return txHash;
     },
-  };
+    submitUnsignedTx: async (tx: CML.Transaction): Promise< string> => {
+      const txId = await api.cip106.submitUnsignedTx(toHex(tx.to_cbor_bytes()));
+      return txId;
+    },
+    getCollateralAddress: async (): Promise<Address> => {
+      const collateralAddress = await api.cip106.getCollateralAddress();
+      return collateralAddress;
+    },
+    getScriptRequirements: async (): Promise<any[]> => {
+      const scriptRequirements = await api.cip106.getScriptRequirements();
+      return scriptRequirements;
+    },
+    getScript: async () : Promise<string> => {
+      const script = await api.cip106.getScript();
+      return script;
+    },
 };
 
 

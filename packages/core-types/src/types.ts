@@ -1,4 +1,5 @@
 import * as CML from "@dcspark/cardano-multiplatform-lib-nodejs";
+
 type CostModel = Record<string, number>;
 
 export type CostModels = Record<PlutusVersion, CostModel>;
@@ -168,6 +169,7 @@ export interface ExternalWallet {
 
 export type SignedMessage = { signature: string; key: string };
 
+
 export interface Wallet {
   address(): Promise<Address>;
   rewardAddress(): Promise<RewardAddress | null>;
@@ -180,6 +182,13 @@ export interface Wallet {
     payload: Payload,
   ): Promise<SignedMessage>;
   submitTx(signedTx: Transaction): Promise<TxHash>;
+}
+
+export interface MultisigWallet extends Wallet {
+  submitUnsignedTx(tx: CML.Transaction): Promise< string>;
+  getCollateralAddress(): Promise<Address>;
+  getScriptRequirements(): Promise<Script[]>;
+  getScript(): Promise<Script>;
 }
 
 /** JSON object */
