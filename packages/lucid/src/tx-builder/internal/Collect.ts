@@ -61,6 +61,7 @@ export const collectFromUTxO = (
                 CML.NativeScriptWitnessInfo.assume_signature_count(),
               ),
             );
+            break;
           case "PlutusV1": {
             const red = yield* $(
               Effect.fromNullable(redeemer),
@@ -75,6 +76,7 @@ export const collectFromUTxO = (
                 CML.PlutusData.from_cbor_hex(utxo.datum!),
               ),
             );
+            break;
           }
           case "PlutusV2": {
             const v2 = toV2(script.script);
@@ -92,6 +94,7 @@ export const collectFromUTxO = (
                 CML.Ed25519KeyHashList.new(),
               ),
             );
+            break;
           }
         }
       } else {
