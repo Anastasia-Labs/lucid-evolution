@@ -12,6 +12,7 @@ import * as UPLC from "@lucid-evolution/uplc";
 import * as TxBuilder from "../TxBuilder.js";
 import * as TxSignBuilder from "../../tx-sign-builder/TxSignBuilder.js";
 import {
+  SortOrder,
   isEqualUTxO,
   selectUTxOs,
   sortUTxOs,
@@ -178,7 +179,7 @@ const findCollateral = (
 ): Effect.Effect<UTxO, TxBuilderError, never> =>
   pipe(
     Effect.fromNullable(
-      sortUTxOs(inputs, "ascending").find(
+      sortUTxOs(inputs, SortOrder.SmallestFirst).find(
         (value) => value.assets["lovelace"] >= 5_000_000n,
       ),
     ),

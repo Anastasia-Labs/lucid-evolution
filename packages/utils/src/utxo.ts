@@ -158,32 +158,58 @@ export const selectUTxOs = (utxos: UTxO[], totalAssets: Assets) => {
 };
 
 /**
- * Sorts an array of UTXOs, first by the amount of "lovelace"
- * and then by size of "assets", in ascending or descending order.
+ * Enum for specifying sorting order in function "sortUTxOs"
+ */
+export enum SortOrder {
+  /**
+   * Largest amount of "lovelace" with least number of unique assets first
+   */
+  LargestFirst = 'LargestFirst',
+  /**
+   * Smallest amount of "lovelace" with least number of unique assets first
+   */
+  SmallestFirst = 'SmallestFirst',
+}
+
+/**
+ * Sorts an array of UTXOs according to specified sort order ("LargestFirst" by default).
  *
  * @param {UTxO[]} utxos - The array of UTXO objects to be sorted.
- * @param {"ascending" | "descending"} [order="descending"] - The order in which to sort the UTXOs.
- *      Use "ascending" for ascending order and "descending" for descending order.
+ * @param {SortOrder} [order=SortOrder.LargestFirst] - The order in which to sort the UTXOs.
  * @returns {UTxO[]} - The sorted array of UTXOs.
  *
  */
 export const sortUTxOs = (
   utxos: UTxO[],
-  order: "ascending" | "descending" = "descending",
+  order: SortOrder = SortOrder.LargestFirst,
 ): UTxO[] => {
-  return [...utxos].sort((a, b) => {
-    if (a.assets["lovelace"] > b.assets["lovelace"]) {
-      return order === "ascending" ? 1 : -1;
-    }
-    if (a.assets["lovelace"] < b.assets["lovelace"]) {
-      return order === "ascending" ? -1 : 1;
-    }
-    if (a.assets.size < b.assets.size) {
-      return order === "ascending" ? -1 : 1;
-    }
-    return 0;
-  });
+  switch (order) {
+    case SortOrder.LargestFirst: 
+      return [...utxos].sort(largestFirst);
+    case SortOrder.SmallestFirst:
+      return [...utxos].sort(smallestFirst);
+  }  
 };
+
+const largestFirst = (a: UTxO, b: UTxO) => {
+  const lovelaceA = Number(a.assets["lovelace"]);
+  const lovelaceB = Number(b.assets["lovelace"]);
+
+  if(lovelaceA === lovelaceB){
+    return Object.keys(a.assets).length - Object.keys(b.assets).length
+  }
+  return -1*(lovelaceA - lovelaceB)
+}
+
+const smallestFirst = (a: UTxO, b: UTxO) => {
+  const lovelaceA = Number(a.assets["lovelace"]);
+  const lovelaceB = Number(b.assets["lovelace"]);
+
+  if(lovelaceA == lovelaceB){
+    return Object.keys(a.assets).length - Object.keys(b.assets).length
+  }
+  return lovelaceA - lovelaceB
+}
 
 export const isEqualUTxO = (self: UTxO, that: UTxO) =>
   self.txHash === that.txHash && self.outputIndex === that.outputIndex;

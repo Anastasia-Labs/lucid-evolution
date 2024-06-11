@@ -34,6 +34,7 @@ export const deRegisterStake = Effect.gen(function* ($) {
     Effect.promise(() => user.wallet().rewardAddress()),
     Effect.andThen(Effect.fromNullable),
   );
+  // TODO: Withdraw rewards if any, while de-registering stake address
   const signBuilder = yield* user
     .newTx()
     .deRegisterStake(rewardAddress)
