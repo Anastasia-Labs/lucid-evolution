@@ -1,5 +1,18 @@
 # @lucid-evolution/provider
 
+## 0.1.23
+
+### Patch Changes
+
+- Updated dependencies [[`aeb4bba`](https://github.com/Anastasia-Labs/lucid-evolution/commit/aeb4bba266fdeab1e47d3911413f30e749bfe564)]:
+  - @lucid-evolution/utils@0.1.16
+
+## 0.1.22
+
+### Patch Changes
+
+- [#134](https://github.com/Anastasia-Labs/lucid-evolution/pull/134) [`e1d5aca`](https://github.com/Anastasia-Labs/lucid-evolution/commit/e1d5aca2c92d6da0bc5bb11776eec7677a56d03a) Thanks [@solidsnakedev](https://github.com/solidsnakedev)! - fix koios schema, improve code structure
+
 ## 0.1.21
 
 ### Patch Changes

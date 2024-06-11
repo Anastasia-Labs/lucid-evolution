@@ -213,3 +213,7 @@ const smallestFirst = (a: UTxO, b: UTxO) => {
 
 export const isEqualUTxO = (self: UTxO, that: UTxO) =>
   self.txHash === that.txHash && self.outputIndex === that.outputIndex;
+
+//TODO: add
+// sortCanonical -> sorting following ledger rules
+// sortBy -> sort by amount of specific unit

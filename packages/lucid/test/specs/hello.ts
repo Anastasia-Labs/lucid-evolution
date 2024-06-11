@@ -4,22 +4,13 @@ import { Constr, Data } from "@lucid-evolution/plutus";
 import { getAddressDetails } from "@lucid-evolution/utils";
 import { fromText } from "@lucid-evolution/core-utils";
 import { TxSignBuilder } from "../../src";
+import { handleSignSubmit, withLogRetry } from "./utils";
 
 const DatumSchema = Data.Object({
   owner: Data.Bytes(),
 });
 type DatumType = Data.Static<typeof DatumSchema>;
 const DatumType = DatumSchema as unknown as DatumType;
-
-const handleSignSubmit = (signBuilder: TxSignBuilder) =>
-  Effect.gen(function* () {
-    const { user } = yield* User;
-    const signed = yield* signBuilder.sign.withWallet().completeProgram();
-    const txHash = yield* signed.submitProgram();
-    yield* Effect.promise(() => user.awaitTx(txHash, 20_000));
-    yield* Effect.sleep("10 seconds");
-    yield* Effect.logDebug(txHash);
-  });
 
 export const depositFunds = Effect.gen(function* () {
   const { user } = yield* User;
@@ -45,16 +36,8 @@ export const depositFunds = Effect.gen(function* () {
       { lovelace: 10_000_000n },
     )
     .completeProgram();
-
-  yield* handleSignSubmit(signBuilder);
-}).pipe(
-  Effect.tapErrorCause(Effect.logError),
-  Effect.tapErrorCause(Console.log),
-  Effect.retry(
-    Schedule.compose(Schedule.exponential(20_000), Schedule.recurs(4)),
-  ),
-  Logger.withMinimumLogLevel(LogLevel.Debug),
-);
+  return signBuilder;
+}).pipe(Effect.flatMap(handleSignSubmit), withLogRetry);
 
 export const collectFunds = Effect.gen(function* ($) {
   const { user } = yield* User;
@@ -85,16 +68,8 @@ export const collectFunds = Effect.gen(function* ($) {
     .attach.SpendingValidator(hello)
     .addSigner(addr)
     .completeProgram();
-
-  yield* handleSignSubmit(signBuilder);
-}).pipe(
-  Effect.tapErrorCause(Effect.logError),
-  Effect.tapErrorCause(Console.log),
-  Effect.retry(
-    pipe(Schedule.compose(Schedule.exponential(20_000), Schedule.recurs(4))),
-  ),
-  Logger.withMinimumLogLevel(LogLevel.Debug),
-);
+  return signBuilder;
+}).pipe(Effect.flatMap(handleSignSubmit), withLogRetry);
 
 export const depositFundsLockRefScript = Effect.gen(function* () {
   const { user } = yield* User;
@@ -121,16 +96,8 @@ export const depositFundsLockRefScript = Effect.gen(function* () {
       hello,
     )
     .completeProgram();
-
-  yield* handleSignSubmit(signBuilder);
-}).pipe(
-  Effect.tapErrorCause(Effect.logError),
-  Effect.tapErrorCause(Console.log),
-  Effect.retry(
-    Schedule.compose(Schedule.exponential(20_000), Schedule.recurs(4)),
-  ),
-  Logger.withMinimumLogLevel(LogLevel.Debug),
-);
+  return signBuilder;
+}).pipe(Effect.flatMap(handleSignSubmit), withLogRetry);
 
 export const collectFundsReadFrom = Effect.gen(function* ($) {
   const { user } = yield* User;
@@ -163,13 +130,5 @@ export const collectFundsReadFrom = Effect.gen(function* ($) {
     .readFrom(readUtxo)
     .addSigner(addr)
     .completeProgram();
-
-  yield* handleSignSubmit(signBuilder);
-}).pipe(
-  Effect.tapErrorCause(Effect.logError),
-  Effect.tapErrorCause(Console.log),
-  Effect.retry(
-    pipe(Schedule.compose(Schedule.exponential(20_000), Schedule.recurs(4))),
-  ),
-  Logger.withMinimumLogLevel(LogLevel.Debug),
-);
+  return signBuilder;
+}).pipe(Effect.flatMap(handleSignSubmit), withLogRetry);

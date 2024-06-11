@@ -1,5 +1,11 @@
 # @lucid-evolution/utils
 
+## 0.1.16
+
+### Patch Changes
+
+- [#137](https://github.com/Anastasia-Labs/lucid-evolution/pull/137) [`aeb4bba`](https://github.com/Anastasia-Labs/lucid-evolution/commit/aeb4bba266fdeab1e47d3911413f30e749bfe564) Thanks [@solidsnakedev](https://github.com/solidsnakedev)! - add collateral coin selection
+
 ## 0.1.15
 
 ### Patch Changes

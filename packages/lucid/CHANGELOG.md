@@ -1,5 +1,25 @@
 # @lucid-evolution/lucid
 
+## 0.2.38
+
+### Patch Changes
+
+- [#137](https://github.com/Anastasia-Labs/lucid-evolution/pull/137) [`aeb4bba`](https://github.com/Anastasia-Labs/lucid-evolution/commit/aeb4bba266fdeab1e47d3911413f30e749bfe564) Thanks [@solidsnakedev](https://github.com/solidsnakedev)! - add collateral coin selection
+
+- Updated dependencies [[`aeb4bba`](https://github.com/Anastasia-Labs/lucid-evolution/commit/aeb4bba266fdeab1e47d3911413f30e749bfe564)]:
+  - @lucid-evolution/utils@0.1.16
+  - @lucid-evolution/provider@0.1.23
+  - @lucid-evolution/wallet@0.1.18
+
+## 0.2.37
+
+### Patch Changes
+
+- [#134](https://github.com/Anastasia-Labs/lucid-evolution/pull/134) [`e1d5aca`](https://github.com/Anastasia-Labs/lucid-evolution/commit/e1d5aca2c92d6da0bc5bb11776eec7677a56d03a) Thanks [@solidsnakedev](https://github.com/solidsnakedev)! - fix koios schema, improve code structure
+
+- Updated dependencies [[`e1d5aca`](https://github.com/Anastasia-Labs/lucid-evolution/commit/e1d5aca2c92d6da0bc5bb11776eec7677a56d03a)]:
+  - @lucid-evolution/provider@0.1.22
+
 ## 0.2.36
 
 ### Patch Changes

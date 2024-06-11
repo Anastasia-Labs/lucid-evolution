@@ -1,6 +1,6 @@
 {
   "name": "@lucid-evolution/provider",
-  "version": "0.1.21",
+  "version": "0.1.23",
   "description": "",
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
@@ -35,7 +35,8 @@
     "@effect/schema": "^0.67.16",
     "@lucid-evolution/core-types": "workspace:*",
     "@lucid-evolution/core-utils": "workspace:*",
-    "@lucid-evolution/utils": "workspace:*"
+    "@lucid-evolution/utils": "workspace:*",
+    "effect": "^3.1.2"
   },
   "devDependencies": {
     "@types/node": "^20.12.8",
