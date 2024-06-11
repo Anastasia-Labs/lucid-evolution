@@ -164,11 +164,11 @@ export enum SortOrder {
   /**
    * Largest amount of "lovelace" with least number of unique assets first
    */
-  LargestFirst = 'LargestFirst',
+  LargestFirst = "LargestFirst",
   /**
    * Smallest amount of "lovelace" with least number of unique assets first
    */
-  SmallestFirst = 'SmallestFirst',
+  SmallestFirst = "SmallestFirst",
 }
 
 /**
@@ -184,32 +184,32 @@ export const sortUTxOs = (
   order: SortOrder = SortOrder.LargestFirst,
 ): UTxO[] => {
   switch (order) {
-    case SortOrder.LargestFirst: 
+    case SortOrder.LargestFirst:
       return [...utxos].sort(largestFirst);
     case SortOrder.SmallestFirst:
       return [...utxos].sort(smallestFirst);
-  }  
+  }
 };
 
 const largestFirst = (a: UTxO, b: UTxO) => {
   const lovelaceA = Number(a.assets["lovelace"]);
   const lovelaceB = Number(b.assets["lovelace"]);
 
-  if(lovelaceA === lovelaceB){
-    return Object.keys(a.assets).length - Object.keys(b.assets).length
+  if (lovelaceA === lovelaceB) {
+    return Object.keys(a.assets).length - Object.keys(b.assets).length;
   }
-  return -1*(lovelaceA - lovelaceB)
-}
+  return -1 * (lovelaceA - lovelaceB);
+};
 
 const smallestFirst = (a: UTxO, b: UTxO) => {
   const lovelaceA = Number(a.assets["lovelace"]);
   const lovelaceB = Number(b.assets["lovelace"]);
 
-  if(lovelaceA == lovelaceB){
-    return Object.keys(a.assets).length - Object.keys(b.assets).length
+  if (lovelaceA == lovelaceB) {
+    return Object.keys(a.assets).length - Object.keys(b.assets).length;
   }
-  return lovelaceA - lovelaceB
-}
+  return lovelaceA - lovelaceB;
+};
 
 export const isEqualUTxO = (self: UTxO, that: UTxO) =>
   self.txHash === that.txHash && self.outputIndex === that.outputIndex;
