@@ -7,7 +7,7 @@ export const ERROR_MESSAGE = {
     "UTxO array is empty. If a Tx has been recently submitted, consider waiting for chain sync",
   MISSING_WALLET:
     "Please ensure that it has been properly configured and initialized",
-  MISSIG_REDEEMER: "redeemer can not be undefined",
+  MISSING_REDEEMER: "redeemer can not be undefined",
 };
 
 export type TxBuilderErrorCause =

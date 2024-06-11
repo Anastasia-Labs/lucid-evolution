@@ -66,7 +66,7 @@ export const collectFromUTxO = (
             const red = yield* $(
               Effect.fromNullable(redeemer),
               Effect.orElseFail(() =>
-                collectError("MissingRedeemer", ERROR_MESSAGE.MISSIG_REDEEMER),
+                collectError("MissingRedeemer", ERROR_MESSAGE.MISSING_REDEEMER),
               ),
             );
             config.txBuilder.add_input(
@@ -83,7 +83,7 @@ export const collectFromUTxO = (
             const red = yield* $(
               Effect.fromNullable(redeemer),
               Effect.orElseFail(() =>
-                collectError("MissingRedeemer", ERROR_MESSAGE.MISSIG_REDEEMER),
+                collectError("MissingRedeemer", ERROR_MESSAGE.MISSING_REDEEMER),
               ),
             );
             const partial = toPartial(v2, red);

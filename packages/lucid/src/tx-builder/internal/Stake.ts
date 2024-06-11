@@ -96,7 +96,7 @@ export const deRegisterStake = (
         const red = yield* pipe(
           Effect.fromNullable(redeemer),
           Effect.orElseFail(() =>
-            stakeError("MissingRedeemer", ERROR_MESSAGE.MISSIG_REDEEMER),
+            stakeError("MissingRedeemer", ERROR_MESSAGE.MISSING_REDEEMER),
           ),
         );
         switch (script.type) {
@@ -178,7 +178,7 @@ export const withdraw = (
         const red = yield* pipe(
           Effect.fromNullable(redeemer),
           Effect.orElseFail(() =>
-            stakeError("MissingRedeemer", ERROR_MESSAGE.MISSIG_REDEEMER),
+            stakeError("MissingRedeemer", ERROR_MESSAGE.MISSING_REDEEMER),
           ),
         );
         switch (script.type) {

@@ -83,7 +83,7 @@ export const delegateTo = (
         const red = yield* pipe(
           Effect.fromNullable(redeemer),
           Effect.orElseFail(() =>
-            poolError("MissingRedeemer", ERROR_MESSAGE.MISSIG_REDEEMER),
+            poolError("MissingRedeemer", ERROR_MESSAGE.MISSING_REDEEMER),
           ),
         );
         switch (script.type) {

@@ -60,7 +60,7 @@ export const mintAssets = (
         const red = yield* pipe(
           Effect.fromNullable(redeemer),
           Effect.orElseFail(() =>
-            mintError("MissingRedeemer", ERROR_MESSAGE.MISSIG_REDEEMER),
+            mintError("MissingRedeemer", ERROR_MESSAGE.MISSING_REDEEMER),
           ),
         );
         config.txBuilder.add_mint(
@@ -75,7 +75,7 @@ export const mintAssets = (
         const red = yield* pipe(
           Effect.fromNullable(redeemer),
           Effect.orElseFail(() =>
-            mintError("MissingRedeemer", ERROR_MESSAGE.MISSIG_REDEEMER),
+            mintError("MissingRedeemer", ERROR_MESSAGE.MISSING_REDEEMER),
           ),
         );
         config.txBuilder.add_mint(
