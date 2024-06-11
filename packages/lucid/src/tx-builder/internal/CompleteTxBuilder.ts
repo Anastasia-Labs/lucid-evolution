@@ -77,13 +77,12 @@ export const complete = (
       setCollateral(config, collateralInput, walletInfo.address);
     }
 
-    //Remove collected inputs from utxos at wallet
-    const availableInputs = _Array.differenceWith(isEqualUTxO)(
-      walletInfo.inputs,
-      config.collectedInputs,
-    );
-
     if (options.coinSelection !== false) {
+      const availableInputs = _Array.differenceWith(isEqualUTxO)(
+        walletInfo.inputs,
+        config.collectedInputs,
+      );
+
       const inputsToAdd = yield* coinSelection(config, availableInputs);
 
       for (const utxo of inputsToAdd) {
