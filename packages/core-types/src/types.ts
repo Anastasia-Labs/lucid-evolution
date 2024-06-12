@@ -169,6 +169,7 @@ export interface ExternalWallet {
 export type SignedMessage = { signature: string; key: string };
 
 export interface Wallet {
+  overrideUTxOs(utxos: UTxO[]): void;
   address(): Promise<Address>;
   rewardAddress(): Promise<RewardAddress | null>;
   getUtxos(): Promise<UTxO[]>;

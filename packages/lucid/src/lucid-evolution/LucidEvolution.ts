@@ -30,6 +30,7 @@ import {
 export type LucidEvolution = {
   config: () => LucidConfig;
   wallet: () => Wallet;
+  overrideUTxOs: (utxos: UTxO[]) => void;
   switchProvider: (provider: Provider) => Promise<void>;
   newTx: () => TxBuilder.TxBuilder;
   fromTx: (tx: Transaction) => TxSignBuilder.TxSignBuilder;
@@ -83,6 +84,7 @@ export const Lucid = async (
   return {
     config: () => config,
     wallet: () => config.wallet as Wallet,
+    overrideUTxOs: (utxos: UTxO[]) => config.wallet?.overrideUTxOs(utxos),
     switchProvider: async (provider: Provider) => {
       const protocolParam = await provider.getProtocolParameters();
       const costModels = createCostModels(protocolParam.costModels);

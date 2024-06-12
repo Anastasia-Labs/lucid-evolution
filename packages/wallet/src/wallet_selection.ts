@@ -36,6 +36,13 @@ export const makeWalletFromSeed = (
     password?: string;
   },
 ): Wallet => {
+  type Config = {
+    overriddenUTxOs: UTxO[];
+  };
+  const config: Config = {
+    overriddenUTxOs: [],
+  };
+
   const { address, rewardAddress, paymentKey, stakeKey } = walletFromSeed(
     seed,
     {
@@ -58,12 +65,19 @@ export const makeWalletFromSeed = (
     [stakeKeyHash]: stakeKey,
   };
   return {
+    overrideUTxOs: (utxos: UTxO[]) => (config.overriddenUTxOs = utxos),
     address: async (): Promise<Address> => address,
     rewardAddress: async (): Promise<RewardAddress | null> =>
       rewardAddress || null,
-    getUtxos: async (): Promise<UTxO[]> => provider.getUtxos(address),
+    getUtxos: async (): Promise<UTxO[]> =>
+      config.overriddenUTxOs.length > 0
+        ? config.overriddenUTxOs
+        : provider.getUtxos(address),
     getUtxosCore: async (): Promise<CML.TransactionUnspentOutput[]> => {
-      const utxos = await provider.getUtxos(paymentCredentialOf(address));
+      const utxos =
+        config.overriddenUTxOs.length > 0
+          ? config.overriddenUTxOs
+          : await provider.getUtxos(paymentCredentialOf(address));
       const coreUtxos: CML.TransactionUnspentOutput[] = [];
       for (const utxo of utxos) {
         coreUtxos.push(utxoToCore(utxo));
@@ -76,7 +90,10 @@ export const makeWalletFromSeed = (
         : { poolId: null, rewards: 0n };
     },
     signTx: async (tx: CML.Transaction): Promise<CML.TransactionWitnessSet> => {
-      const utxos = await provider.getUtxos(address);
+      const utxos =
+        config.overriddenUTxOs.length > 0
+          ? config.overriddenUTxOs
+          : await provider.getUtxos(address);
 
       const ownKeyHashes: Array<KeyHash> = [paymentKeyHash, stakeKeyHash];
 
@@ -139,6 +156,8 @@ export const makeWalletFromPrivateKey = (
     .to_bech32(undefined);
 
   return {
+    //TODO: implement utxos
+    overrideUTxOs: (utxos) => undefined,
     address: async (): Promise<Address> => address,
     rewardAddress: async (): Promise<RewardAddress | null> => null,
     getUtxos: async (): Promise<UTxO[]> => {
@@ -209,6 +228,8 @@ export const makeWalletFromAPI = (
   };
 
   return {
+    //TODO: implement utxos
+    overrideUTxOs: (utxos) => undefined,
     address: async (): Promise<Address> =>
       CML.Address.from_hex(await getAddressHex()).to_bech32(undefined),
     rewardAddress: async (): Promise<RewardAddress | null> =>
@@ -265,6 +286,8 @@ export const makeWalletFromAddress = (
     : null;
 
   return {
+    //TODO: implement utxos
+    overrideUTxOs: (utxos: UTxO[]) => undefined,
     address: async (): Promise<Address> => address,
     rewardAddress: async (): Promise<RewardAddress | null> => rewardAddress,
     getUtxos: async (): Promise<UTxO[]> => utxos,
