@@ -1,5 +1,40 @@
 # @lucid-evolution/core-types
 
+## 0.1.7
+
+### Patch Changes
+
+- [#141](https://github.com/Anastasia-Labs/lucid-evolution/pull/141) [`eef3d42`](https://github.com/Anastasia-Labs/lucid-evolution/commit/eef3d421b4cdf12638169ece49e4c00fce6e3356) Thanks [@solidsnakedev](https://github.com/solidsnakedev)! - Transaction chaining is a feature that allows to chain multiple transactions in one block , the endpoint chain() allows to accomplish this by returning a tuple with three elements:
+
+  1. **newWalletInputs**: This includes all UTXOs that were not spent in the transaction and the new wallet UTXOs derived from the output transaction.
+  2. **derivedOutputs**: The derived outputs extracted from the completed transaction.
+  3. **tx**: The new transaction that is ready to be submitted.
+
+  ```
+    const [newWalletInputs, derivedOutputs, tx] = await user
+      .newTx()
+      .pay.ToAddressWithData(
+        contractAddress,
+        {
+          kind: "inline",
+          value: datum,
+        },
+        { lovelace: 10_000_000n }
+      )
+      .chain();
+
+      const signed = await tx.sign.withWallet().complete();
+      const txHash = await signed.submit();
+  ```
+
+  To construct a new transaction using tx chaining, the UTXOs belonging to the wallet must be overridden. This is necessary because these UTXOs are not yet recorded on the blockchain.
+
+  ```
+  user.overrideUTxOs(newWalletInputs);
+  ```
+
+  This function updates the wallet's UTXOs to set the new ones, ensuring the next transaction chaining can be constructed correctly.
+
 ## 0.1.6
 
 ### Patch Changes
