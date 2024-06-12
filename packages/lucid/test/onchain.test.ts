@@ -5,8 +5,19 @@ import * as HelloEndpoints from "./specs/hello.js";
 import * as StakeEndpoints from "./specs/stake.js";
 import * as MintBurnEndpoints from "./specs/mint-burn.js";
 import * as ParametrizedEndpoints from "./specs/hello-params.js";
+import * as TxChain from "./specs/tx-chaining.js";
 
-describe.sequential("Hello", () => {
+describe.sequential("Onchain testing", () => {
+  test("TxChain", async () => {
+    const program = pipe(
+      TxChain.depositFundsCollect,
+      Effect.provide(Layer.mergeAll(User.layer, HelloContract.layer)),
+    );
+    const exit = await Effect.runPromiseExit(program);
+    console.log(exit);
+    expect(exit._tag).toBe("Success");
+  });
+
   test("DespositFunds", async () => {
     const program = pipe(
       HelloEndpoints.depositFunds,

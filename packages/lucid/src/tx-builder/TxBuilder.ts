@@ -25,13 +25,15 @@ import * as CompleteTxBuilder from "./internal/CompleteTxBuilder.js";
 import * as TxSignBuilder from "../tx-sign-builder/TxSignBuilder.js";
 import { TransactionError } from "../Errors.js";
 import { Either } from "effect/Either";
-import { Effect } from "effect";
+import { Effect, pipe } from "effect";
 
 export type TxBuilderConfig = {
   readonly lucidConfig: LucidConfig;
   readonly txBuilder: CML.TransactionBuilder;
+  walletInputs: UTxO[];
   collectedInputs: UTxO[];
   readInputs: UTxO[];
+  consumedInputs: UTxO[];
   totalOutputAssets: Assets;
   mintedAssets: Assets;
   scripts: Map<string, { type: ScriptType; script: string }>;
@@ -91,6 +93,15 @@ export type TxBuilder = {
   completeSafe: (
     options?: CompleteTxBuilder.CompleteOptions,
   ) => Promise<Either<TxSignBuilder.TxSignBuilder, TransactionError>>;
+  chainProgram: () => Effect.Effect<
+    [UTxO[], UTxO[], TxSignBuilder.TxSignBuilder],
+    TransactionError,
+    never
+  >;
+  chain: () => Promise<[UTxO[], UTxO[], TxSignBuilder.TxSignBuilder]>;
+  chainSafe: () => Promise<
+    Either<[UTxO[], UTxO[], TxSignBuilder.TxSignBuilder], TransactionError>
+  >;
   config: () => TxBuilderConfig;
 };
 
@@ -98,8 +109,10 @@ export function makeTxBuilder(lucidConfig: LucidConfig): TxBuilder {
   const config: TxBuilderConfig = {
     lucidConfig: lucidConfig,
     txBuilder: CML.TransactionBuilder.new(lucidConfig.txbuilderconfig),
+    walletInputs: [],
     collectedInputs: [],
     readInputs: [],
+    consumedInputs: [],
     totalOutputAssets: {},
     mintedAssets: {},
     scripts: new Map(),
@@ -239,10 +252,26 @@ export function makeTxBuilder(lucidConfig: LucidConfig): TxBuilder {
       },
     },
     complete: (options?: CompleteTxBuilder.CompleteOptions) =>
-      makeReturn(CompleteTxBuilder.complete(config, options)).unsafeRun(),
+      makeReturn(
+        CompleteTxBuilder.complete(config, options).pipe(
+          Effect.map((result) => result[2]),
+        ),
+      ).unsafeRun(),
     completeProgram: (options?: CompleteTxBuilder.CompleteOptions) =>
-      makeReturn(CompleteTxBuilder.complete(config, options)).program(),
+      CompleteTxBuilder.complete(config, options).pipe(
+        Effect.map((result) => result[2]),
+      ),
     completeSafe: (options?: CompleteTxBuilder.CompleteOptions) =>
+      makeReturn(
+        CompleteTxBuilder.complete(config, options).pipe(
+          Effect.map((result) => result[2]),
+        ),
+      ).safeRun(),
+    chainProgram: (options?: CompleteTxBuilder.CompleteOptions) =>
+      CompleteTxBuilder.complete(config, options),
+    chain: (options?: CompleteTxBuilder.CompleteOptions) =>
+      makeReturn(CompleteTxBuilder.complete(config, options)).unsafeRun(),
+    chainSafe: (options?: CompleteTxBuilder.CompleteOptions) =>
       makeReturn(CompleteTxBuilder.complete(config, options)).safeRun(),
     config: () => config,
   };

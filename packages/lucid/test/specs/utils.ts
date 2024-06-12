@@ -20,8 +20,6 @@ export const handleSignSubmitWithoutValidation = (signBuilder: TxSignBuilder) =>
     const signed = yield* signBuilder.sign.withWallet().completeProgram();
     const txHash = yield* signed.submitProgram();
     yield* Effect.logDebug(`🚀 Transaction submitted: ${txHash}`);
-    yield* Effect.logDebug("Pausing for 5 seconds...");
-    yield* Effect.sleep("5 seconds");
   });
 
 export const withLogRetry = <A, E, R>(effect: Effect.Effect<A, E, R>) =>
