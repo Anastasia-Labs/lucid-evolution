@@ -1,4 +1,4 @@
-import { Effect, pipe, Record, Array as _Array } from "effect";
+import { Effect, pipe, Record, Array as _Array, Tuple } from "effect";
 import { Address, Assets, UTxO, Wallet } from "@lucid-evolution/core-types";
 import {
   ERROR_MESSAGE,
@@ -13,6 +13,9 @@ import * as TxBuilder from "../TxBuilder.js";
 import * as TxSignBuilder from "../../tx-sign-builder/TxSignBuilder.js";
 import {
   assetsToValue,
+  coresToTxOutputs,
+  coreToTxOutput,
+  coreToUtxo,
   isEqualUTxO,
   selectUTxOs,
   sortUTxOs,
@@ -39,11 +42,11 @@ type WalletInfo = {
 };
 
 const getWalletInfo = (
-  maybeWallet: Wallet | undefined,
+  config: TxBuilder.TxBuilderConfig,
 ): Effect.Effect<WalletInfo, TxBuilderError, never> =>
   Effect.gen(function* () {
     const wallet = yield* pipe(
-      Effect.fromNullable(maybeWallet),
+      Effect.fromNullable(config.lucidConfig.wallet),
       Effect.orElseFail(() =>
         completeTxError("MissingWallet", ERROR_MESSAGE.MISSING_WALLET),
       ),
@@ -55,20 +58,24 @@ const getWalletInfo = (
         catch: (error) => completeTxError("Provider", String(error)),
       }),
     );
+    const walletInputs = _Array.isEmptyArray(config.walletInputs)
+      ? inputs
+      : config.walletInputs;
+
     return {
       wallet,
       address,
-      inputs,
+      inputs: walletInputs,
     };
   });
 
 export const complete = (
   config: TxBuilder.TxBuilderConfig,
   options: CompleteOptions = { coinSelection: true },
-): Effect.Effect<TxSignBuilder.TxSignBuilder, TransactionError> =>
+) =>
   Effect.gen(function* () {
     yield* Effect.all(config.programs, { concurrency: "unbounded" });
-    const walletInfo = yield* getWalletInfo(config.lucidConfig.wallet);
+    const walletInfo = yield* getWalletInfo(config);
 
     if (config.collectedInputs.find((value) => value.datum !== undefined)) {
       const availableInputs = _Array.differenceWith(isEqualUTxO)(
@@ -86,6 +93,9 @@ export const complete = (
         ).payment_key();
         config.txBuilder.add_input(input);
       }
+      //NOTE: We need to keep track of all consumed inputs
+      // this is just a patch we shuold find a better way to do this
+      config.consumedInputs = [...config.collectedInputs, ...inputsToAdd];
     } else {
       const availableInputs = _Array.differenceWith(isEqualUTxO)(
         walletInfo.inputs,
@@ -100,6 +110,9 @@ export const complete = (
         ).payment_key();
         config.txBuilder.add_input(input);
       }
+      //NOTE: We need to keep track of all consumed inputs
+      // this is just a patch we shuold find a better way to do this
+      config.consumedInputs = [...config.collectedInputs, ...inputsToAdd];
     }
     const txRedeemerBuilder = config.txBuilder.build_for_evaluation(
       0,
@@ -122,7 +135,24 @@ export const complete = (
       )
       .build_unchecked();
 
-    return TxSignBuilder.makeTxSignBuilder(config.lucidConfig, tx);
+    const derivedUTxOs = deriveUTxOsFromTransaction(tx);
+
+    const derivedWalletUTxOs = derivedUTxOs.filter(
+      (utxo) => utxo.address === walletInfo.address,
+    );
+    const newWalletInputs = pipe(
+      _Array.differenceWith(isEqualUTxO)(
+        walletInfo.inputs,
+        config.consumedInputs,
+      ),
+      (utxos) => [...derivedWalletUTxOs, ...utxos],
+    );
+
+    return Tuple.make(
+      newWalletInputs,
+      derivedUTxOs,
+      TxSignBuilder.makeTxSignBuilder(config.lucidConfig, tx),
+    );
   }).pipe(
     Effect.catchAllDefect(
       (e) => new RunTimeError({ message: stringify(String(e)) }),
@@ -324,4 +354,24 @@ const calculateMinLovelace = (
     .output()
     .amount()
     .coin();
+};
+
+const deriveUTxOsFromTransaction = (tx: CML.Transaction) => {
+  const outputs = tx.body().outputs();
+  const txHash = CML.hash_transaction(tx.body()).to_hex();
+  const utxos: UTxO[] = [];
+  for (let index = 0; index < outputs.len(); index++) {
+    const output = outputs.get(index);
+    const utxo: UTxO = {
+      txHash: txHash,
+      outputIndex: index,
+      ...coreToTxOutput(output),
+    };
+    utxos.push(utxo);
+  }
+  return utxos;
+};
+
+const getConsumedInputs = (tx: CML.Transaction) => {
+  const inputs = tx.body().inputs();
 };

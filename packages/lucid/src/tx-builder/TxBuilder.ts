@@ -22,11 +22,10 @@ import * as Signer from "./internal/Signer.js";
 import * as Stake from "./internal/Stake.js";
 import * as Pool from "./internal/Pool.js";
 import * as CompleteTxBuilder from "./internal/CompleteTxBuilder.js";
-import * as ChainTxBuilder from "./internal/ChainTxBuilder.js";
 import * as TxSignBuilder from "../tx-sign-builder/TxSignBuilder.js";
 import { TransactionError } from "../Errors.js";
 import { Either } from "effect/Either";
-import { Effect } from "effect";
+import { Effect, pipe } from "effect";
 
 export type TxBuilderConfig = {
   readonly lucidConfig: LucidConfig;
@@ -253,14 +252,27 @@ export function makeTxBuilder(lucidConfig: LucidConfig): TxBuilder {
       },
     },
     complete: (options?: CompleteTxBuilder.CompleteOptions) =>
-      makeReturn(CompleteTxBuilder.complete(config, options)).unsafeRun(),
+      makeReturn(
+        CompleteTxBuilder.complete(config, options).pipe(
+          Effect.map((result) => result[2]),
+        ),
+      ).unsafeRun(),
     completeProgram: (options?: CompleteTxBuilder.CompleteOptions) =>
-      makeReturn(CompleteTxBuilder.complete(config, options)).program(),
+      CompleteTxBuilder.complete(config, options).pipe(
+        Effect.map((result) => result[2]),
+      ),
     completeSafe: (options?: CompleteTxBuilder.CompleteOptions) =>
+      makeReturn(
+        CompleteTxBuilder.complete(config, options).pipe(
+          Effect.map((result) => result[2]),
+        ),
+      ).safeRun(),
+    chainProgram: (options?: CompleteTxBuilder.CompleteOptions) =>
+      CompleteTxBuilder.complete(config, options),
+    chain: (options?: CompleteTxBuilder.CompleteOptions) =>
+      makeReturn(CompleteTxBuilder.complete(config, options)).unsafeRun(),
+    chainSafe: (options?: CompleteTxBuilder.CompleteOptions) =>
       makeReturn(CompleteTxBuilder.complete(config, options)).safeRun(),
-    chainProgram: () => ChainTxBuilder.complete(config),
-    chain: () => makeReturn(ChainTxBuilder.complete(config)).unsafeRun(),
-    chainSafe: () => makeReturn(ChainTxBuilder.complete(config)).safeRun(),
     config: () => config,
   };
   return txBuilder;
