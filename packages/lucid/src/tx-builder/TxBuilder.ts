@@ -50,25 +50,25 @@ export type TxBuilder = {
       address: string,
       outputDatum: OutputDatum,
       assets?: Assets | undefined,
-      scriptRef?: Script | undefined
+      scriptRef?: Script | undefined,
     ) => TxBuilder;
     ToContract: (
       address: string,
       outputDatum: OutputDatum,
       assets?: Assets | undefined,
-      scriptRef?: Script | undefined
+      scriptRef?: Script | undefined,
     ) => TxBuilder;
   };
   addSigner: (address: Address) => TxBuilder;
   registerStake: (rewardAddress: RewardAddress) => TxBuilder;
   deRegisterStake: (
     rewardAddress: RewardAddress,
-    redeemer?: string
+    redeemer?: string,
   ) => TxBuilder;
   withdraw: (
     rewardAddress: RewardAddress,
     amount: Lovelace,
-    redeemer?: string
+    redeemer?: string,
   ) => TxBuilder;
   mintAssets: (assets: Assets, redeemer?: string | undefined) => TxBuilder;
   validFrom: (unixTime: number) => TxBuilder;
@@ -76,7 +76,7 @@ export type TxBuilder = {
   delegateTo: (
     rewardAddress: RewardAddress,
     poolId: PoolId,
-    redeemer?: Redeemer
+    redeemer?: Redeemer,
   ) => TxBuilder;
   attach: {
     Script: (script: Script) => TxBuilder;
@@ -86,13 +86,13 @@ export type TxBuilder = {
     WithdrawalValidator: (withdrawalValidator: Script) => TxBuilder;
   };
   complete: (
-    options?: CompleteTxBuilder.CompleteOptions
+    options?: CompleteTxBuilder.CompleteOptions,
   ) => Promise<TxSignBuilder.TxSignBuilder>;
   completeProgram: (
-    options?: CompleteTxBuilder.CompleteOptions
+    options?: CompleteTxBuilder.CompleteOptions,
   ) => Effect.Effect<TxSignBuilder.TxSignBuilder, TransactionError>;
   completeSafe: (
-    options?: CompleteTxBuilder.CompleteOptions
+    options?: CompleteTxBuilder.CompleteOptions,
   ) => Promise<Either<TxSignBuilder.TxSignBuilder, TransactionError>>;
   chainProgram: () => Effect.Effect<
     [UTxO[], UTxO[], TxSignBuilder.TxSignBuilder],
@@ -146,14 +146,14 @@ export function makeTxBuilder(lucidConfig: LucidConfig): TxBuilder {
         address: string,
         outputDatum: OutputDatum,
         assets?: Assets,
-        scriptRef?: Script | undefined
+        scriptRef?: Script | undefined,
       ) => {
         const program = Pay.payToAddressWithData(
           config,
           address,
           outputDatum,
           assets,
-          scriptRef
+          scriptRef,
         );
         config.programs.push(program);
         return txBuilder;
@@ -162,14 +162,14 @@ export function makeTxBuilder(lucidConfig: LucidConfig): TxBuilder {
         address: string,
         outputDatum: OutputDatum,
         assets?: Assets,
-        scriptRef?: Script | undefined
+        scriptRef?: Script | undefined,
       ) => {
         const program = Pay.payToContract(
           config,
           address,
           outputDatum,
           assets,
-          scriptRef
+          scriptRef,
         );
         config.programs.push(program);
         return txBuilder;
@@ -193,7 +193,7 @@ export function makeTxBuilder(lucidConfig: LucidConfig): TxBuilder {
     withdraw: (
       rewardAddress: RewardAddress,
       amount: Lovelace,
-      redeemer?: string
+      redeemer?: string,
     ) => {
       const program = Stake.withdraw(config, rewardAddress, amount, redeemer);
       config.programs.push(program);
@@ -217,7 +217,7 @@ export function makeTxBuilder(lucidConfig: LucidConfig): TxBuilder {
     delegateTo: (
       rewardAddress: RewardAddress,
       poolId: PoolId,
-      redeemer?: Redeemer
+      redeemer?: Redeemer,
     ) => {
       const program = Pool.delegateTo(config, rewardAddress, poolId, redeemer);
       config.programs.push(program);
