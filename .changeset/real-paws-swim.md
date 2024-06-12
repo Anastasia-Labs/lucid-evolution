@@ -32,8 +32,7 @@ Transaction chaining is a feature that allows to chain multiple transactions in 
 To construct a new transaction using tx chaining, the UTXOs belonging to the wallet must be overridden. This is necessary because these UTXOs are not yet recorded on the blockchain.
 
 ```
-user.overrideUTxOs(newWalletUTxOs);
-
+user.overrideUTxOs(newWalletInputs);
 ```
 
 This function updates the wallet's UTXOs to set the new ones, ensuring the next transaction chaining can be constructed correctly.

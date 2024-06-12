@@ -71,11 +71,11 @@ const getWalletInfo = (
 
 export const complete = (
   config: TxBuilder.TxBuilderConfig,
-  options: CompleteOptions = { coinSelection: true },
+  options: CompleteOptions = { coinSelection: true, localUPLCEval: true },
 ) =>
   Effect.gen(function* () {
     yield* Effect.all(config.programs, { concurrency: "unbounded" });
-    const walletInfo = yield* getWalletInfo(config.lucidConfig.wallet);
+    const walletInfo = yield* getWalletInfo(config);
 
     // Set collateral input if there are script executions
     if (config.scripts.size > 0) {
@@ -83,24 +83,25 @@ export const complete = (
       setCollateral(config, collateralInput, walletInfo.address);
     }
 
-    if (options.coinSelection !== false) {
-      const availableInputs = _Array.differenceWith(isEqualUTxO)(
-        walletInfo.inputs,
-        config.collectedInputs,
-      );
+    const availableInputs = _Array.differenceWith(isEqualUTxO)(
+      walletInfo.inputs,
+      config.collectedInputs,
+    );
 
-      const inputsToAdd = yield* coinSelection(config, availableInputs);
+    const inputsToAdd =
+      options.coinSelection !== false
+        ? yield* coinSelection(config, availableInputs)
+        : [];
 
-      for (const utxo of inputsToAdd) {
-        const input = CML.SingleInputBuilder.from_transaction_unspent_output(
-          utxoToCore(utxo),
-        ).payment_key();
-        config.txBuilder.add_input(input);
-      }
-      //NOTE: We need to keep track of all consumed inputs
-      // this is just a patch we shuold find a better way to do this
-      config.consumedInputs = [...config.collectedInputs, ...inputsToAdd];
+    for (const utxo of inputsToAdd) {
+      const input = CML.SingleInputBuilder.from_transaction_unspent_output(
+        utxoToCore(utxo),
+      ).payment_key();
+      config.txBuilder.add_input(input);
     }
+    //NOTE: We need to keep track of all consumed inputs
+    // this is just a patch, and we should find a better way to do this
+    config.consumedInputs = [...config.collectedInputs, ...inputsToAdd];
 
     const txRedeemerBuilder = config.txBuilder.build_for_evaluation(
       0,
@@ -126,22 +127,25 @@ export const complete = (
       )
       .build_unchecked();
 
-    const derivedUTxOs = deriveUTxOsFromTransaction(tx);
+    const derivedInputs = deriveInputsFromTransaction(tx);
 
-    const derivedWalletUTxOs = derivedUTxOs.filter(
+    const derivedWalletInputs = derivedInputs.filter(
       (utxo) => utxo.address === walletInfo.address,
     );
-    const newWalletInputs = pipe(
+    const updatedWalletInputs = pipe(
       _Array.differenceWith(isEqualUTxO)(
         walletInfo.inputs,
         config.consumedInputs,
       ),
-      (utxos) => [...derivedWalletUTxOs, ...utxos],
+      (availableWalletInputs) => [
+        ...derivedWalletInputs,
+        ...availableWalletInputs,
+      ],
     );
 
     return Tuple.make(
-      newWalletInputs,
-      derivedUTxOs,
+      updatedWalletInputs,
+      derivedInputs,
       TxSignBuilder.makeTxSignBuilder(config.lucidConfig, tx),
     );
   }).pipe(
@@ -351,7 +355,7 @@ const calculateMinLovelace = (
     .coin();
 };
 
-const deriveUTxOsFromTransaction = (tx: CML.Transaction) => {
+const deriveInputsFromTransaction = (tx: CML.Transaction) => {
   const outputs = tx.body().outputs();
   const txHash = CML.hash_transaction(tx.body()).to_hex();
   const utxos: UTxO[] = [];
@@ -365,8 +369,4 @@ const deriveUTxOsFromTransaction = (tx: CML.Transaction) => {
     utxos.push(utxo);
   }
   return utxos;
-};
-
-const getConsumedInputs = (tx: CML.Transaction) => {
-  const inputs = tx.body().inputs();
 };
