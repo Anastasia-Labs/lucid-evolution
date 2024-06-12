@@ -1,5 +1,14 @@
 # @lucid-evolution/utils
 
+## 0.1.18
+
+### Patch Changes
+
+- Updated dependencies [[`eef3d42`](https://github.com/Anastasia-Labs/lucid-evolution/commit/eef3d421b4cdf12638169ece49e4c00fce6e3356)]:
+  - @lucid-evolution/core-types@0.1.7
+  - @lucid-evolution/uplc@0.2.6
+  - @lucid-evolution/plutus@0.1.10
+
 ## 0.1.17
 
 ### Patch Changes
