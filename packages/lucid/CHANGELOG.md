@@ -1,5 +1,16 @@
 # @lucid-evolution/lucid
 
+## 0.2.39
+
+### Patch Changes
+
+- [#136](https://github.com/Anastasia-Labs/lucid-evolution/pull/136) [`c35f159`](https://github.com/Anastasia-Labs/lucid-evolution/commit/c35f159e0446b53fb6f91494b4c0da6587dcf32b) Thanks [@nikhils9](https://github.com/nikhils9)! - Coin selection fixes and few updates
+
+- Updated dependencies [[`c35f159`](https://github.com/Anastasia-Labs/lucid-evolution/commit/c35f159e0446b53fb6f91494b4c0da6587dcf32b)]:
+  - @lucid-evolution/provider@0.1.24
+  - @lucid-evolution/wallet@0.1.19
+  - @lucid-evolution/utils@0.1.17
+
 ## 0.2.38
 
 ### Patch Changes

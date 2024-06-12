@@ -75,35 +75,22 @@ export const complete = (
 ) =>
   Effect.gen(function* () {
     yield* Effect.all(config.programs, { concurrency: "unbounded" });
-    const walletInfo = yield* getWalletInfo(config);
+    const walletInfo = yield* getWalletInfo(config.lucidConfig.wallet);
 
-    if (config.collectedInputs.find((value) => value.datum !== undefined)) {
-      const availableInputs = _Array.differenceWith(isEqualUTxO)(
-        walletInfo.inputs,
-        config.collectedInputs,
-      );
-      const collateralInput = yield* findCollateral(availableInputs);
+    // Set collateral input if there are script executions
+    if (config.scripts.size > 0) {
+      const collateralInput = yield* findCollateral(walletInfo.inputs);
       setCollateral(config, collateralInput, walletInfo.address);
-      const inputsToAdd = options.coinSelection
-        ? yield* coinSelection(config, availableInputs)
-        : availableInputs;
-      for (const utxo of inputsToAdd) {
-        const input = CML.SingleInputBuilder.from_transaction_unspent_output(
-          utxoToCore(utxo),
-        ).payment_key();
-        config.txBuilder.add_input(input);
-      }
-      //NOTE: We need to keep track of all consumed inputs
-      // this is just a patch we shuold find a better way to do this
-      config.consumedInputs = [...config.collectedInputs, ...inputsToAdd];
-    } else {
+    }
+
+    if (options.coinSelection !== false) {
       const availableInputs = _Array.differenceWith(isEqualUTxO)(
         walletInfo.inputs,
         config.collectedInputs,
       );
-      const inputsToAdd = options.coinSelection
-        ? yield* coinSelection(config, availableInputs)
-        : availableInputs;
+
+      const inputsToAdd = yield* coinSelection(config, availableInputs);
+
       for (const utxo of inputsToAdd) {
         const input = CML.SingleInputBuilder.from_transaction_unspent_output(
           utxoToCore(utxo),
@@ -114,11 +101,15 @@ export const complete = (
       // this is just a patch we shuold find a better way to do this
       config.consumedInputs = [...config.collectedInputs, ...inputsToAdd];
     }
+
     const txRedeemerBuilder = config.txBuilder.build_for_evaluation(
       0,
       CML.Address.from_bech32(walletInfo.address),
     );
-    if (txRedeemerBuilder.draft_tx().witness_set().redeemers()) {
+    if (
+      options.localUPLCEval !== false &&
+      txRedeemerBuilder.draft_tx().witness_set().redeemers()
+    ) {
       applyUPLCEval(
         yield* evalTransaction(config, txRedeemerBuilder, walletInfo.inputs),
         config.txBuilder,
@@ -286,12 +277,16 @@ const coinSelection = (
     );
     const requiredAssets = pipe(
       config.totalOutputAssets,
+      Record.union(minAdaChangeAddress, (self, that) => self + that),
+      Record.union(fee, (self, that) => self + that),
       Record.union(negatedCollectedAssets, (self, that) => self + that),
       Record.union(negatedMintedAssets, (self, that) => self + that),
       Record.filter((amount) => amount > 0n),
-      Record.union(minAdaChangeAddress, (self, that) => self + that),
-      Record.union(fee, (self, that) => self + that), //NOTE:  fee  be at the end so the wallet can pay for the tx
     );
+
+    // No UTxOs need to be selected if collected inputs are sufficient
+    if (Record.isEmptyRecord(requiredAssets)) return [];
+
     const selected = selectUTxOs(sortUTxOs(availableInputs), requiredAssets);
     if (_Array.isEmptyArray(selected))
       yield* completeTxError(
