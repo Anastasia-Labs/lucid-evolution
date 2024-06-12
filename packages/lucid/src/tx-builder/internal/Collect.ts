@@ -61,11 +61,12 @@ export const collectFromUTxO = (
                 CML.NativeScriptWitnessInfo.assume_signature_count(),
               ),
             );
+            break;
           case "PlutusV1": {
             const red = yield* $(
               Effect.fromNullable(redeemer),
               Effect.orElseFail(() =>
-                collectError("MissingRedeemer", ERROR_MESSAGE.MISSIG_REDEEMER),
+                collectError("MissingRedeemer", ERROR_MESSAGE.MISSING_REDEEMER),
               ),
             );
             config.txBuilder.add_input(
@@ -75,13 +76,14 @@ export const collectFromUTxO = (
                 CML.PlutusData.from_cbor_hex(utxo.datum!),
               ),
             );
+            break;
           }
           case "PlutusV2": {
             const v2 = toV2(script.script);
             const red = yield* $(
               Effect.fromNullable(redeemer),
               Effect.orElseFail(() =>
-                collectError("MissingRedeemer", ERROR_MESSAGE.MISSIG_REDEEMER),
+                collectError("MissingRedeemer", ERROR_MESSAGE.MISSING_REDEEMER),
               ),
             );
             const partial = toPartial(v2, red);
@@ -92,6 +94,7 @@ export const collectFromUTxO = (
                 CML.Ed25519KeyHashList.new(),
               ),
             );
+            break;
           }
         }
       } else {
