@@ -12,7 +12,6 @@ import * as UPLC from "@lucid-evolution/uplc";
 import * as TxBuilder from "../TxBuilder.js";
 import * as TxSignBuilder from "../../tx-sign-builder/TxSignBuilder.js";
 import {
-  SortOrder,
   assetsToValue,
   isEqualUTxO,
   selectUTxOs,

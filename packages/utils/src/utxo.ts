@@ -158,35 +158,34 @@ export const selectUTxOs = (utxos: UTxO[], totalAssets: Assets) => {
 };
 
 /**
- * Enum for specifying sorting order in function "sortUTxOs"
+ * Union type for specifying sorting order in function "sortUTxOs"
  */
-export enum SortOrder {
+export type SortOrder =
   /**
    * Largest amount of "lovelace" with least number of unique assets first
    */
-  LargestFirst = "LargestFirst",
+  | "LargestFirst"
   /**
    * Smallest amount of "lovelace" with least number of unique assets first
    */
-  SmallestFirst = "SmallestFirst",
-}
+  | "SmallestFirst";
 
 /**
  * Sorts an array of UTXOs according to specified sort order ("LargestFirst" by default).
  *
  * @param {UTxO[]} utxos - The array of UTXO objects to be sorted.
- * @param {SortOrder} [order=SortOrder.LargestFirst] - The order in which to sort the UTXOs.
+ * @param {SortOrder} [order="LargestFirst"] - The order in which to sort the UTXOs.
  * @returns {UTxO[]} - The sorted array of UTXOs.
  *
  */
 export const sortUTxOs = (
   utxos: UTxO[],
-  order: SortOrder = SortOrder.LargestFirst,
+  order: SortOrder = "LargestFirst",
 ): UTxO[] => {
   switch (order) {
-    case SortOrder.LargestFirst:
+    case "LargestFirst":
       return [...utxos].sort(largestFirst);
-    case SortOrder.SmallestFirst:
+    case "SmallestFirst":
       return [...utxos].sort(smallestFirst);
   }
 };
