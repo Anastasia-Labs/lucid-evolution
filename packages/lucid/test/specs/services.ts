@@ -2,6 +2,8 @@ import { Config, Context, Effect, Layer, pipe } from "effect";
 import {
   applyDoubleCborEncoding,
   Blockfrost,
+  Koios,
+  Kupmios,
   Lucid,
   SpendingValidator,
   validatorToAddress,
@@ -14,11 +16,14 @@ const makeUser = Effect.gen(function* ($) {
     Config.string("VITE_BLOCKFROST_KEY"),
     Config.string("VITE_SEED"),
   ]);
-  const user = yield* Effect.tryPromise(() =>
-    // Lucid(new Kupmios("http://localhost:1442", "ws://localhost:1337"), "Preview")
-    Lucid(new Blockfrost(apiURL, apiKey), "Preprod"),
+  const user = yield* Effect.tryPromise(
+    () =>
+      // Lucid(new Kupmios("http://localhost:1442", "http://localhost:1337"), "Preview")
+      Lucid(new Blockfrost(apiURL, apiKey), "Preprod"),
+    // Lucid(new Koios("https://preprod.koios.rest/api/v1"), "Preprod")
   );
   user.selectWallet.fromSeed(seed);
+  console.log(yield* Effect.promise(() => user.wallet().address()));
   return {
     user,
   };

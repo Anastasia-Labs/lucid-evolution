@@ -15,7 +15,12 @@ import {
   UTxO,
 } from "@lucid-evolution/core-types";
 import { fromUnit } from "@lucid-evolution/utils";
-import { CML } from "./core.js";
+import { CML } from "../core.js";
+import { fetchEffect } from "../fetch.js";
+import * as S from "@effect/schema/Schema";
+import { Effect, pipe } from "effect";
+import { JSONRPCSchema, ProtocolParametersSchema } from "./schema.js";
+import { ArrayFormatter } from "@effect/schema";
 
 export class Kupmios implements Provider {
   kupoUrl: string;
@@ -31,55 +36,69 @@ export class Kupmios implements Provider {
   }
 
   async getProtocolParameters(): Promise<ProtocolParameters> {
-    const client = await this.ogmiosWsp("queryLedgerState/protocolParameters");
-
-    return new Promise((res, rej) => {
-      client.addEventListener(
-        "message",
-        (msg: MessageEvent<string>) => {
-          try {
-            const { result } = JSON.parse(msg.data);
-            // deno-lint-ignore no-explicit-any
-            const costModels: any = {};
-            Object.keys(result.plutusCostModels).forEach((v) => {
-              const version = v.split(":")[1].toUpperCase();
-              const plutusVersion = "Plutus" + version;
-              costModels[plutusVersion] = result.plutusCostModels[v];
-            });
-            const [memNum, memDenom] =
-              result.scriptExecutionPrices.memory.split("/");
-            const [stepsNum, stepsDenom] =
-              result.scriptExecutionPrices.cpu.split("/");
-
-            res({
-              minFeeA: parseInt(result.minFeeCoefficient),
-              minFeeB: parseInt(result.minFeeConstant.ada.lovelace),
-              maxTxSize: parseInt(result.maxTransactionSize.bytes),
-              maxValSize: parseInt(result.maxValueSize.bytes),
-              keyDeposit: BigInt(result.stakeCredentialDeposit.ada.lovelace),
-              poolDeposit: BigInt(result.stakePoolDeposit.ada.lovelace),
-              priceMem: parseInt(memNum) / parseInt(memDenom),
-              priceStep: parseInt(stepsNum) / parseInt(stepsDenom),
-              maxTxExMem: BigInt(result.maxExecutionUnitsPerTransaction.memory),
-              maxTxExSteps: BigInt(result.maxExecutionUnitsPerTransaction.cpu),
-              // NOTE: coinsPerUtxoByte is now called utxoCostPerByte:
-              // https://github.com/IntersectMBO/cardano-node/pull/4141
-              // Ogmios v6.x calls it minUtxoDepositCoefficient according to the following
-              // documentation from its protocol parameters data model:
-              // https://github.com/CardanoSolutions/ogmios/blob/master/architectural-decisions/accepted/017-api-version-6-major-rewrite.md#protocol-parameters
-              coinsPerUtxoByte: BigInt(result.minUtxoDepositCoefficient),
-              collateralPercentage: parseInt(result.collateralPercentage),
-              maxCollateralInputs: parseInt(result.maxCollateralInputs),
-              costModels,
-            });
-            client.close();
-          } catch (e) {
-            rej(e);
-          }
-        },
-        { once: true },
-      );
-    });
+    const data = {
+      jsonrpc: "2.0",
+      method: "queryLedgerState/protocolParameters",
+      params: {},
+      id: null,
+    };
+    const request = {
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json",
+      },
+      method: "POST",
+      body: JSON.stringify(data),
+    };
+    const program = fetchEffect("http://localhost:1337", request).pipe(
+      Effect.flatMap((json) =>
+        S.decodeUnknown(JSONRPCSchema(ProtocolParametersSchema))(json),
+      ),
+      Effect.catchTag("ParseError", (e) =>
+        Effect.fail(ArrayFormatter.formatErrorSync(e)),
+      ),
+      Effect.timeout(10_000),
+      Effect.orDie,
+    );
+    const { result } = await Effect.runPromise(program);
+    return {
+      minFeeA: result.minFeeCoefficient,
+      minFeeB: result.minFeeConstant.ada.lovelace,
+      maxTxSize: result.maxTransactionSize.bytes,
+      maxValSize: result.maxValueSize.bytes,
+      keyDeposit: BigInt(result.stakeCredentialDeposit.ada.lovelace),
+      poolDeposit: BigInt(result.stakePoolDeposit.ada.lovelace),
+      priceMem:
+        result.scriptExecutionPrices.memory[0] /
+        result.scriptExecutionPrices.memory[1],
+      priceStep:
+        result.scriptExecutionPrices.cpu[0] /
+        result.scriptExecutionPrices.cpu[1],
+      maxTxExMem: BigInt(result.maxExecutionUnitsPerTransaction.memory),
+      maxTxExSteps: BigInt(result.maxExecutionUnitsPerTransaction.cpu),
+      // NOTE: coinsPerUtxoByte is now called utxoCostPerByte:
+      // https://github.com/IntersectMBO/cardano-node/pull/4141
+      // Ogmios v6.x calls it minUtxoDepositCoefficient according to the following
+      // documentation from its protocol parameters data model:
+      // https://github.com/CardanoSolutions/ogmios/blob/master/architectural-decisions/accepted/017-api-version-6-major-rewrite.md#protocol-parameters
+      coinsPerUtxoByte: BigInt(result.minUtxoDepositCoefficient),
+      collateralPercentage: result.collateralPercentage,
+      maxCollateralInputs: result.maxCollateralInputs,
+      costModels: {
+        PlutusV1: Object.fromEntries(
+          result.plutusCostModels["plutus:v1"].map((value, index) => [
+            index.toString(),
+            value,
+          ]),
+        ),
+        PlutusV2: Object.fromEntries(
+          result.plutusCostModels["plutus:v2"].map((value, index) => [
+            index.toString(),
+            value,
+          ]),
+        ),
+      },
+    };
   }
 
   async getUtxos(addressOrCredential: Address | Credential): Promise<UTxO[]> {
@@ -87,11 +106,26 @@ export class Kupmios implements Provider {
     const queryPredicate = isAddress
       ? addressOrCredential
       : addressOrCredential.hash;
-    const result = await fetch(
-      `${this.kupoUrl}/matches/${queryPredicate}${
-        isAddress ? "" : "/*"
-      }?unspent`,
-    ).then((res) => res.json());
+    // console.log(
+    //   `${this.kupoUrl}/matches/${queryPredicate}${
+    //     isAddress ? "" : "/*"
+    //   }?unspent`
+    // );
+    const program = pipe(
+      fetchEffect(
+        `${this.kupoUrl}/matches/${queryPredicate}${
+          isAddress ? "" : "/*"
+        }?unspent`,
+      ),
+      Effect.timeout(10_000),
+    );
+    const result = await Effect.runPromise(program);
+    // const result = await fetch(
+    //   `${this.kupoUrl}/matches/${queryPredicate}${
+    //     isAddress ? "" : "/*"
+    //   }?unspent`
+    // ).then((res) => res.json());
+    // console.log(result);
     return this.kupmiosUtxosToUtxos(result);
   }
 
@@ -163,9 +197,9 @@ export class Kupmios implements Provider {
     return new Promise((res, rej) => {
       client.addEventListener(
         "message",
-        (msg: MessageEvent<string>) => {
+        (msg) => {
           try {
-            const { result } = JSON.parse(msg.data);
+            const { result } = JSON.parse(msg.data.toString());
             const delegation = (result ? Object.values(result)[0] : {}) as {
               delegate: { id: string };
               rewards: { ada: { lovelace: number } };
@@ -211,27 +245,42 @@ export class Kupmios implements Provider {
   }
 
   async submitTx(cbor: Transaction): Promise<TxHash> {
-    const client = await this.ogmiosWsp("submitTransaction", {
-      transaction: { cbor },
-    });
+    const data = {
+      jsonrpc: "2.0",
+      method: "submitTransaction",
+      params: {
+        transaction: { cbor: cbor },
+      },
+      id: null,
+    };
+    const request = {
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json",
+      },
+      method: "POST",
+      body: JSON.stringify(data),
+    };
+    const program = fetchEffect("http://localhost:1337", request).pipe(
+      Effect.timeout(10_000),
+      Effect.flatMap((json) =>
+        S.decodeUnknown(
+          JSONRPCSchema(
+            S.Struct({
+              transaction: S.Struct({
+                id: S.String,
+              }),
+            }),
+          ),
+        )(json),
+      ),
+      Effect.catchTag("ParseError", (e) =>
+        Effect.fail(ArrayFormatter.formatErrorSync(e)),
+      ),
+    );
 
-    return new Promise((res, rej) => {
-      client.addEventListener(
-        "message",
-        (msg: MessageEvent<string>) => {
-          try {
-            const { result } = JSON.parse(msg.data);
-
-            if (result.transaction) res(result.transaction.id);
-            else rej(result.error);
-            client.close();
-          } catch (e) {
-            rej(e);
-          }
-        },
-        { once: true },
-      );
-    });
+    const { result } = await Effect.runPromise(program);
+    return result.transaction.id;
   }
 
   private kupmiosUtxosToUtxos(utxos: unknown): Promise<UTxO[]> {

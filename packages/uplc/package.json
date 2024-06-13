@@ -11,8 +11,7 @@
     "access": "public"
   },
   "sideEffects": [
-    "./uplc_tx.js",
-    "./snippets/*"
+    "./uplc_tx.js"
   ],
   "scripts": {
     "build-local": "rm -rf dist && cd rust ; wasm-pack build --target web --out-dir ../src/browser && wasm-pack build --target nodejs --out-dir ../src/node && pnpm clean-garbage",
