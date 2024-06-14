@@ -1,5 +1,11 @@
 # @lucid-evolution/lucid
 
+## 0.2.41
+
+### Patch Changes
+
+- [#145](https://github.com/Anastasia-Labs/lucid-evolution/pull/145) [`df9a386`](https://github.com/Anastasia-Labs/lucid-evolution/commit/df9a3868b7091dc0f3636f0f1561b61e1ec1468b) Thanks [@solidsnakedev](https://github.com/solidsnakedev)! - fix recording of config.totalOutputAssets , pay module was not recording lovelace asset
+
 ## 0.2.40
 
 ### Patch Changes
