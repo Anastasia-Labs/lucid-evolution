@@ -6,7 +6,7 @@ import * as StakeEndpoints from "./specs/stake.js";
 import * as MintBurnEndpoints from "./specs/mint-burn.js";
 import * as ParametrizedEndpoints from "./specs/hello-params.js";
 import * as TxChain from "./specs/tx-chaining.js";
-import * as MetadataEndpoint from "./specs/metadata.js"
+import * as MetadataEndpoint from "./specs/metadata.js";
 
 test("Metadata", async () => {
   const program = pipe(

@@ -8,7 +8,7 @@ import { toHex } from "@lucid-evolution/core-utils";
 export const attachMetadata = (
   config: TxBuilder.TxBuilderConfig,
   label: Label,
-  metadata: TransactionMetadata
+  metadata: TransactionMetadata,
 ) =>
   Effect.gen(function* () {
     const auxiliaryData = CML.AuxiliaryData.new();
@@ -16,13 +16,13 @@ export const attachMetadata = (
     meta.set(
       BigInt(label),
       CML.TransactionMetadatum.from_json(
-        JSON.stringify(toCardanoMetadata(metadata))
-      )
+        JSON.stringify(toCardanoMetadata(metadata)),
+      ),
     );
     auxiliaryData.add_metadata(meta);
     config.txBuilder.add_auxiliary_data(auxiliaryData);
-    auxiliaryData.free()
-    meta.free()
+    auxiliaryData.free();
+    meta.free();
   });
 
 //CDDL conformance
@@ -69,12 +69,12 @@ const TransactionMetadataSchema: S.Schema<TransactionMetadata> = S.Union(
   S.Array(S.suspend(() => TransactionMetadataSchema)),
   S.Record(
     S.String,
-    S.suspend(() => TransactionMetadataSchema)
-  )
+    S.suspend(() => TransactionMetadataSchema),
+  ),
 );
 
 export const toCardanoMetadata = (
-  json: TransactionMetadata
+  json: TransactionMetadata,
 ): CardanoMetadata => {
   const d = S.asserts(TransactionMetadataSchema)(json);
   if (S.is(TextSchema)(json)) {

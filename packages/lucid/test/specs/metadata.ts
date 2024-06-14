@@ -9,9 +9,9 @@ export const payWithMetadata = Effect.gen(function* () {
     .newTx()
     .pay.ToAddress(
       "addr_test1qrngfyc452vy4twdrepdjc50d4kvqutgt0hs9w6j2qhcdjfx0gpv7rsrjtxv97rplyz3ymyaqdwqa635zrcdena94ljs0xy950",
-      { lovelace: 2_000_000n }
+      { lovelace: 2_000_000n },
     )
-    .attachMetadata(1337, new Uint8Array([1,2]))
+    .attachMetadata(1337, new Uint8Array([1, 2]))
     .completeProgram();
   return signBuilder;
 }).pipe(Effect.flatMap(handleSignSubmit), withLogRetry);
