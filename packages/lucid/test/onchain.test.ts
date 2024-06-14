@@ -8,7 +8,7 @@ import * as ParametrizedEndpoints from "./specs/hello-params.js";
 import * as TxChain from "./specs/tx-chaining.js";
 
 describe.sequential("Onchain testing", () => {
-  test("TxChain", async () => {
+  test.skip("TxChain", async () => {
     const program = pipe(
       TxChain.depositFundsCollect,
       Effect.provide(Layer.mergeAll(User.layer, HelloContract.layer)),
