@@ -1,4 +1,4 @@
-import { Effect, pipe, Record, Array as _Array, Tuple } from "effect";
+import { Effect, pipe, Record, Array as _Array, Tuple, Console } from "effect";
 import { Address, Assets, UTxO, Wallet } from "@lucid-evolution/core-types";
 import {
   ERROR_MESSAGE,
@@ -287,7 +287,6 @@ const coinSelection = (
       Record.union(negatedMintedAssets, (self, that) => self + that),
       Record.filter((amount) => amount > 0n),
     );
-
     // No UTxOs need to be selected if collected inputs are sufficient
     if (Record.isEmptyRecord(requiredAssets)) return [];
 
