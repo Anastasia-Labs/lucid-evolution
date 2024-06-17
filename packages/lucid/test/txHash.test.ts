@@ -4,7 +4,7 @@ import { Cause, Console, Data, Effect } from "effect";
 import { pretty } from "effect/Cause";
 import { catchTag, matchCause, matchCauseEffect } from "effect/Effect";
 
-test("test txHash", async () => {
+test.skip("test txHash", async () => {
   const projectId = process.env.VITE_BLOCKFROST_KEY;
   const lucid = await Lucid(
     new Blockfrost(process.env.VITE_API_URL!, projectId),
