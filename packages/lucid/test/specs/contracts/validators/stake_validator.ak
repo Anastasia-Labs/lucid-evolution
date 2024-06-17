@@ -1,7 +1,7 @@
-use aiken/pairs
-use aiken/transaction.{ScriptContext, Spend, find_input, WithdrawFrom}
-use aiken/transaction/credential.{Inline}
 use aiken/list
+use aiken/pairs
+use aiken/transaction.{ScriptContext, Spend, WithdrawFrom, find_input}
+use aiken/transaction/credential.{Inline}
 
 validator {
   fn spend(_datum: Data, _redeemer: Data, ctx: ScriptContext) -> Bool {
