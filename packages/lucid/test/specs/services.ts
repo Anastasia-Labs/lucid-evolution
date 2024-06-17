@@ -3,8 +3,10 @@ import {
   applyDoubleCborEncoding,
   Blockfrost,
   Lucid,
+  Script,
   SpendingValidator,
   validatorToAddress,
+  validatorToRewardAddress,
 } from "../../src";
 import scripts from "./contracts/plutus.json";
 
@@ -55,4 +57,32 @@ export class HelloContract extends Context.Tag("HelloContract")<
   Effect.Effect.Success<typeof makeHelloService>
 >() {
   static readonly layer = Layer.effect(HelloContract, makeHelloService);
+}
+
+const makeStakeService = Effect.gen(function* () {
+  const stakeCBOR = yield* pipe(
+    Effect.fromNullable(
+      scripts.validators.find((v) => v.title === "stake_validator.spend"),
+    ),
+    Effect.andThen((script) => script.compiledCode),
+  );
+  const stake: Script = {
+    type: "PlutusV2",
+    script: applyDoubleCborEncoding(stakeCBOR),
+  };
+  const contractAddress = validatorToAddress("Preprod", stake);
+  const rewardAddress = validatorToRewardAddress("Preprod", stake);
+  return {
+    stakeCBOR,
+    stake,
+    contractAddress,
+    rewardAddress,
+  };
+});
+
+export class StakeContract extends Context.Tag("StakeContract")<
+  StakeContract,
+  Effect.Effect.Success<typeof makeStakeService>
+>() {
+  static readonly layer = Layer.effect(StakeContract, makeStakeService);
 }

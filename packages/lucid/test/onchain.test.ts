@@ -1,13 +1,41 @@
 import { describe, expect, test } from "vitest";
 import { Effect, Layer, pipe } from "effect";
-import { HelloContract, User } from "./specs/services.js";
+import { HelloContract, StakeContract, User } from "./specs/services.js";
 import * as HelloEndpoints from "./specs/hello.js";
 import * as StakeEndpoints from "./specs/stake.js";
+import * as StakeContractEndpoints from "./specs/stakeContract.js";
 import * as MintBurnEndpoints from "./specs/mint-burn.js";
 import * as ParametrizedEndpoints from "./specs/hello-params.js";
 import * as TxChain from "./specs/tx-chaining.js";
 
 describe.sequential("Onchain testing", () => {
+  test("registerStakeValidator", async () => {
+    const program = pipe(
+      StakeContractEndpoints.registerStake,
+      Effect.provide(Layer.mergeAll(User.layer, StakeContract.layer)),
+    );
+    const exit = await Effect.runPromiseExit(program);
+    expect(exit._tag).toBe("Success");
+  });
+
+  test("DespositStakeFunds", async () => {
+    const program = pipe(
+      StakeContractEndpoints.depositFunds,
+      Effect.provide(Layer.mergeAll(User.layer, StakeContract.layer)),
+    );
+    const exit = await Effect.runPromiseExit(program);
+    expect(exit._tag).toBe("Success");
+  });
+
+  test.only("CollectStakeFunds", async () => {
+    const program = pipe(
+      StakeContractEndpoints.collectFunds,
+      Effect.provide(Layer.mergeAll(User.layer, StakeContract.layer)),
+    );
+    const exit = await Effect.runPromiseExit(program);
+    expect(exit._tag).toBe("Success");
+  });
+
   test("TxChain", async () => {
     const program = pipe(
       TxChain.depositFundsCollect,
@@ -161,6 +189,7 @@ describe.sequential("Onchain testing", () => {
     const exit = await Effect.runPromiseExit(program);
     expect(exit._tag).toBe("Success");
   });
+
   test("Mint Test - Pay ADA", async () => {
     const program = pipe(
       MintBurnEndpoints.pay,
@@ -169,6 +198,7 @@ describe.sequential("Onchain testing", () => {
     const exit = await Effect.runPromiseExit(program);
     expect(exit._tag).toBe("Success");
   });
+
   test("Mint Test - Pay Asset", async () => {
     const program = pipe(
       MintBurnEndpoints.pay2,
@@ -177,6 +207,7 @@ describe.sequential("Onchain testing", () => {
     const exit = await Effect.runPromiseExit(program);
     expect(exit._tag).toBe("Success");
   });
+
   test("Mint Test - CollectFunds", async () => {
     const program = pipe(
       MintBurnEndpoints.pay3,
