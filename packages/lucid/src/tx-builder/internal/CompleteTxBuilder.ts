@@ -134,7 +134,6 @@ export const complete = (
       .build_unchecked();
 
     const derivedInputs = deriveInputsFromTransaction(tx);
-    yield* Console.log("derivedInputs", derivedInputs);
 
     const derivedWalletInputs = derivedInputs.filter(
       (utxo) => utxo.address === walletInfo.address,
