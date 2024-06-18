@@ -1,5 +1,5 @@
 import { Assets, PolicyId, Unit } from "@lucid-evolution/core-types";
-import { fromHex, fromText, toText } from "@lucid-evolution/core-utils";
+import { fromHex, fromText, toHex, toText } from "@lucid-evolution/core-utils";
 import { CML } from "./core.js";
 import { fromLabel, toLabel } from "./label.js";
 
@@ -16,8 +16,9 @@ export function valueToAssets(value: CML.Value): Assets {
       for (let k = 0; k < assetNames.len(); k++) {
         const policyAsset = assetNames.get(k);
         const quantity = policyAssets.get(policyAsset)!;
-        //FIX: report to dcspark policyAsset.to_cbor_hex() adds the head byte twice eg. MyMintedToken -> (to Hex) -> 4d4d794d696e746564546f6b656e (This is wrong) | expected Token Name -> 4d794d696e746564546f6b656e
-        const unit = policy.to_hex() + fromText(policyAsset.to_str());
+        // Note: Using policyAsset.to_js_value() as a work around till AssetName provides to_hex() method
+        // https://github.com/dcSpark/cardano-multiplatform-lib/issues/334
+        const unit = policy.to_hex() + policyAsset.to_js_value();
         assets[unit] = quantity;
       }
     }
