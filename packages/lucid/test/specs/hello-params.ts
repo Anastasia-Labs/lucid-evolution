@@ -12,6 +12,12 @@ import { SpendingValidator } from "../../src";
 import scripts from "./contracts/plutus.json";
 import { handleSignSubmit, withLogRetry } from "./utils";
 
+const DatumSchema = Data.Object({
+  owner: Data.Bytes(),
+});
+type DatumType = Data.Static<typeof DatumSchema>;
+const DatumType = DatumSchema as unknown as DatumType;
+
 export const depositFunds = Effect.gen(function* () {
   const { user } = yield* User;
   const publicKeyHash = getAddressDetails(
@@ -74,11 +80,20 @@ export const collectFunds = Effect.gen(function* ($) {
   const allUtxos = yield* Effect.tryPromise(() =>
     user.utxosAt(contractAddress),
   );
+  const ownerUTxO = yield* Effect.fromNullable(
+    allUtxos.find((utxo) => {
+      if (utxo.datum) {
+        const datum = Data.from(utxo.datum, DatumType);
+        return datum.owner === publicKeyHash;
+      }
+    }),
+  );
+
   const addr = yield* Effect.promise(() => user.wallet().address());
   const redeemer = Data.to(new Constr(0, [fromText("Hello, World!")]));
   const signBuilder = yield* user
     .newTx()
-    .collectFrom(allUtxos, redeemer)
+    .collectFrom([ownerUTxO], redeemer)
     .attach.SpendingValidator(hello)
     .addSigner(addr)
     .completeProgram();
