@@ -38,6 +38,7 @@ export type LucidEvolution = {
     fromSeed: (seed: string) => void;
     fromPrivateKey: (privateKey: PrivateKey) => void;
     fromAPI: (walletAPI: WalletApi) => void;
+    fromCip106Api: (walletAPI: WalletApi) => void;
     fromAddress: (address: string, utxos: UTxO[]) => void;
   };
   currentSlot: () => number;
@@ -111,6 +112,9 @@ export const Lucid = async (
         );
       },
       fromAPI: (walletAPI: WalletApi) => {
+        config.wallet = makeWalletFromAPI(config.provider, walletAPI);
+      },
+      fromCip106Api: (walletAPI: WalletApi) => {
         config.wallet = makeWalletFromAPI(config.provider, walletAPI);
       },
       fromAddress: (address: string, utxos: UTxO[]) => {
