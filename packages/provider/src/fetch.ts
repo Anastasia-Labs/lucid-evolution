@@ -14,26 +14,29 @@ export class JsonError extends Data.TaggedError("JsonError")<{
 
 export const fetchEffect = (
   input: string | URL | globalThis.Request,
-  requestInit?: RequestInit,
+  requestInit?: RequestInit
 ): Effect.Effect<any, FetchError | ResponseError | JsonError, never> =>
   pipe(
     Effect.tryPromise({
       try: () => fetch(input, requestInit),
-      catch: (error) => new FetchError({ message: String(error) }),
+      catch: (error) =>
+        new FetchError({
+          message: `${String(error)}. Please ensure the server is operational or check the validity of the input:${input}.`,
+        }),
     }),
     Effect.flatMap((response) =>
       !response.ok
         ? new ResponseError({
             message: `${response.status} ${response.statusText}`,
           })
-        : Effect.succeed(response),
+        : Effect.succeed(response)
     ),
     Effect.flatMap((response) =>
       Effect.tryPromise({
         try: () => response.json(),
         catch: (error) => new JsonError({ message: String(error) }),
-      }),
-    ),
+      })
+    )
   );
 
 // Effect.flatMap((response) =>

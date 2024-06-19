@@ -8,7 +8,8 @@ export const JSONRPCSchema = <A, I, R>(schema: S.Schema<A, I, R>) =>
     id: S.NullOr(S.Number),
   });
 
-export type ProtocolParameters = S.Schema.Type<typeof ProtocolParametersSchema>;
+// export type ProtocolParameters = S.Schema.Type<typeof ProtocolParametersSchema>;
+export interface ProtocolParameters extends S.Schema.Type<typeof ProtocolParametersSchema> {}
 
 const LovelaceAsset = S.Struct({
   lovelace: S.Number,

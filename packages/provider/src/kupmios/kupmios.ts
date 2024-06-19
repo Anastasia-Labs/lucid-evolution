@@ -19,7 +19,7 @@ import { CML } from "../core.js";
 import { fetchEffect } from "../fetch.js";
 import * as S from "@effect/schema/Schema";
 import { Effect, pipe } from "effect";
-import { JSONRPCSchema, ProtocolParametersSchema } from "./schema.js";
+import * as KupmiosSchema from "./schema.js";
 import { ArrayFormatter } from "@effect/schema";
 
 export class Kupmios implements Provider {
@@ -28,7 +28,7 @@ export class Kupmios implements Provider {
 
   /**
    * @param kupoUrl: http(s)://localhost:1442
-   * @param ogmiosUrl: ws(s)://localhost:1337
+   * @param ogmiosUrl: http(s)://localhost:1337
    */
   constructor(kupoUrl: string, ogmiosUrl: string) {
     this.kupoUrl = kupoUrl;
@@ -50,17 +50,21 @@ export class Kupmios implements Provider {
       method: "POST",
       body: JSON.stringify(data),
     };
-    const program = fetchEffect("http://localhost:1337", request).pipe(
+    const program = fetchEffect(this.ogmiosUrl, request).pipe(
       Effect.flatMap((json) =>
-        S.decodeUnknown(JSONRPCSchema(ProtocolParametersSchema))(json),
+        S.decodeUnknown(
+          KupmiosSchema.JSONRPCSchema(KupmiosSchema.ProtocolParametersSchema)
+        )(json)
       ),
       Effect.catchTag("ParseError", (e) =>
-        Effect.fail(ArrayFormatter.formatErrorSync(e)),
+        Effect.fail(ArrayFormatter.formatErrorSync(e))
       ),
       Effect.timeout(10_000),
-      Effect.orDie,
+      Effect.map((response) => response.result),
+      Effect.orDie
     );
-    const { result } = await Effect.runPromise(program);
+    const result: KupmiosSchema.ProtocolParameters =
+      await Effect.runPromise(program);
     return {
       minFeeA: result.minFeeCoefficient,
       minFeeB: result.minFeeConstant.ada.lovelace,
@@ -89,13 +93,13 @@ export class Kupmios implements Provider {
           result.plutusCostModels["plutus:v1"].map((value, index) => [
             index.toString(),
             value,
-          ]),
+          ])
         ),
         PlutusV2: Object.fromEntries(
           result.plutusCostModels["plutus:v2"].map((value, index) => [
             index.toString(),
             value,
-          ]),
+          ])
         ),
       },
     };
@@ -106,55 +110,46 @@ export class Kupmios implements Provider {
     const queryPredicate = isAddress
       ? addressOrCredential
       : addressOrCredential.hash;
-    // console.log(
-    //   `${this.kupoUrl}/matches/${queryPredicate}${
-    //     isAddress ? "" : "/*"
-    //   }?unspent`
-    // );
-    const program = pipe(
-      fetchEffect(
-        `${this.kupoUrl}/matches/${queryPredicate}${
-          isAddress ? "" : "/*"
-        }?unspent`,
-      ),
-      Effect.timeout(10_000),
+    //TODO: add schema validation
+    const program = fetchEffect(
+      `${this.kupoUrl}/matches/${queryPredicate}${
+        isAddress ? "" : "/*"
+      }?unspent`
     );
     const result = await Effect.runPromise(program);
-    // const result = await fetch(
-    //   `${this.kupoUrl}/matches/${queryPredicate}${
-    //     isAddress ? "" : "/*"
-    //   }?unspent`
-    // ).then((res) => res.json());
-    // console.log(result);
     return this.kupmiosUtxosToUtxos(result);
   }
 
   async getUtxosWithUnit(
     addressOrCredential: Address | Credential,
-    unit: Unit,
+    unit: Unit
   ): Promise<UTxO[]> {
     const isAddress = typeof addressOrCredential === "string";
     const queryPredicate = isAddress
       ? addressOrCredential
       : addressOrCredential.hash;
     const { policyId, assetName } = fromUnit(unit);
-    const result = await fetch(
+    //TODO: add schema validation
+    const program = fetchEffect(
       `${this.kupoUrl}/matches/${queryPredicate}${
         isAddress ? "" : "/*"
       }?unspent&policy_id=${policyId}${
         assetName ? `&asset_name=${assetName}` : ""
-      }`,
-    ).then((res) => res.json());
+      }`
+    );
+    const result = await Effect.runPromise(program);
     return this.kupmiosUtxosToUtxos(result);
   }
 
   async getUtxoByUnit(unit: Unit): Promise<UTxO> {
     const { policyId, assetName } = fromUnit(unit);
-    const result = await fetch(
+    //TODO: add schema validation
+    const program = fetchEffect(
       `${this.kupoUrl}/matches/${policyId}.${
         assetName ? `${assetName}` : "*"
-      }?unspent`,
-    ).then((res) => res.json());
+      }?unspent`
+    );
+    const result = await Effect.runPromise(program);
 
     const utxos = await this.kupmiosUtxosToUtxos(result);
 
@@ -170,11 +165,13 @@ export class Kupmios implements Provider {
 
     const utxos = await Promise.all(
       queryHashes.map(async (txHash) => {
-        const result = await fetch(
-          `${this.kupoUrl}/matches/*@${txHash}?unspent`,
-        ).then((res) => res.json());
+        //TODO: add schema validation
+        const program = fetchEffect(
+          `${this.kupoUrl}/matches/*@${txHash}?unspent`
+        );
+        const result = await Effect.runPromise(program);
         return this.kupmiosUtxosToUtxos(result);
-      }),
+      })
     );
 
     return utxos
@@ -183,15 +180,15 @@ export class Kupmios implements Provider {
         outRefs.some(
           (outRef) =>
             utxo.txHash === outRef.txHash &&
-            utxo.outputIndex === outRef.outputIndex,
-        ),
+            utxo.outputIndex === outRef.outputIndex
+        )
       );
   }
 
   async getDelegation(rewardAddress: RewardAddress): Promise<Delegation> {
     const client = await this.ogmiosWsp(
       "queryLedgerState/rewardAccountSummaries",
-      { keys: [rewardAddress] },
+      { keys: [rewardAddress] }
     );
 
     return new Promise((res, rej) => {
@@ -214,15 +211,14 @@ export class Kupmios implements Provider {
             rej(e);
           }
         },
-        { once: true },
+        { once: true }
       );
     });
   }
 
   async getDatum(datumHash: DatumHash): Promise<Datum> {
-    const result = await fetch(`${this.kupoUrl}/datums/${datumHash}`).then(
-      (res) => res.json(),
-    );
+    const program = fetchEffect(`${this.kupoUrl}/datums/${datumHash}`);
+    const result = await Effect.runPromise(program);
     if (!result || !result.datum) {
       throw new Error(`No datum found for datum hash: ${datumHash}`);
     }
@@ -232,9 +228,11 @@ export class Kupmios implements Provider {
   awaitTx(txHash: TxHash, checkInterval = 3000): Promise<boolean> {
     return new Promise((res) => {
       const confirmation = setInterval(async () => {
-        const isConfirmed = await fetch(
-          `${this.kupoUrl}/matches/*@${txHash}?unspent`,
-        ).then((res) => res.json());
+        //TODO: add schema validation
+        const program = fetchEffect(
+          `${this.kupoUrl}/matches/*@${txHash}?unspent`
+        );
+        const isConfirmed = await Effect.runPromise(program);
         if (isConfirmed && isConfirmed.length > 0) {
           clearInterval(confirmation);
           await new Promise((res) => setTimeout(() => res(1), 1000));
@@ -261,22 +259,22 @@ export class Kupmios implements Provider {
       method: "POST",
       body: JSON.stringify(data),
     };
-    const program = fetchEffect("http://localhost:1337", request).pipe(
-      Effect.timeout(10_000),
+    const program = fetchEffect(this.ogmiosUrl, request).pipe(
+      Effect.timeout(60_000),
       Effect.flatMap((json) =>
         S.decodeUnknown(
-          JSONRPCSchema(
+          KupmiosSchema.JSONRPCSchema(
             S.Struct({
               transaction: S.Struct({
                 id: S.String,
               }),
-            }),
-          ),
-        )(json),
+            })
+          )
+        )(json)
       ),
       Effect.catchTag("ParseError", (e) =>
-        Effect.fail(ArrayFormatter.formatErrorSync(e)),
-      ),
+        Effect.fail(ArrayFormatter.formatErrorSync(e))
+      )
     );
 
     const { result } = await Effect.runPromise(program);
@@ -307,7 +305,7 @@ export class Kupmios implements Provider {
             utxo.script_hash &&
             (await (async () => {
               const { script, language } = await fetch(
-                `${this.kupoUrl}/scripts/${utxo.script_hash}`,
+                `${this.kupoUrl}/scripts/${utxo.script_hash}`
               ).then((res) => res.json());
 
               if (language === "native") {
@@ -327,14 +325,14 @@ export class Kupmios implements Provider {
               }
             })()),
         } as UTxO;
-      }),
+      })
     );
   }
 
   private async ogmiosWsp(
     method: string,
     params: object = {},
-    id?: string,
+    id?: string
   ): Promise<WebSocket> {
     const client = new WebSocket(this.ogmiosUrl);
     await new Promise((res) => {
@@ -346,7 +344,7 @@ export class Kupmios implements Provider {
         method,
         params,
         id,
-      }),
+      })
     );
     return client;
   }

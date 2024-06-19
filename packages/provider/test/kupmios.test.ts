@@ -1,6 +1,6 @@
 import { assert, describe, test } from "vitest";
-import { Kupmios, FetchProvider } from "../src/index";
-import { JSONRPCSchema, ProtocolParametersSchema } from "../src/kupmios/schema";
+import { Kupmios, FetchProvider } from "../src/index.js";
+import { JSONRPCSchema, ProtocolParametersSchema } from "../src/kupmios/schema.js";
 import { Effect, Console } from "effect";
 import * as S from "@effect/schema/Schema";
 import { ProtocolParameters } from "@lucid-evolution/core-types";
