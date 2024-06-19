@@ -5,7 +5,7 @@ import {
   Lucid,
   SpendingValidator,
   validatorToAddress,
-} from "../../src";
+} from "../../src/index.js";
 import scripts from "./contracts/plutus.json";
 
 const makeUser = Effect.gen(function* ($) {

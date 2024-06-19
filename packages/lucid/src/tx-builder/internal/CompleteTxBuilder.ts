@@ -265,42 +265,49 @@ const coinSelection = (
     const negatedCollectedAssets = negateAssets(
       sumAssetsFromInputs(config.collectedInputs),
     );
-
-    const requiredAssets: Option.Option<Assets> = pipe(
+    // Calculate the net change in assets (delta)
+    const assetsDelta: Assets = pipe(
       config.totalOutputAssets,
       Record.union(estimatedFee, _BigInt.sum),
       Record.union(negatedCollectedAssets, _BigInt.sum),
       Record.union(negatedMintedAssets, _BigInt.sum),
+    );
+    // Filter and obtain only the required assets (those with a positive amount)
+    const requiredAssets: Option.Option<Assets> = pipe(
+      assetsDelta,
       Record.filter((amount) => amount > 0n),
       (d) => (Record.isEmptyRecord(d) ? Option.none() : Option.some(d)),
     );
-    const preSelectedInputs: Option.Option<UTxO[]> = pipe(
+    // Filter and obtain assets that are present in the inputs and mints but are not required by the outputs
+    // Negate these assets to get their positive amounts
+    const notRequiredAssets: Option.Option<Assets> = pipe(
+      assetsDelta,
+      Record.filter((amount) => amount < 0n),
+      negateAssets,
+      (d) => (Record.isEmptyRecord(d) ? Option.none() : Option.some(d)),
+    );
+    const selectedInputs: Option.Option<UTxO[]> = pipe(
       requiredAssets,
       Option.map((a) => selectUTxOs(sortUTxOs(availableInputs), a)),
       Option.flatMap((utxos) =>
         _Array.isEmptyArray(utxos) ? Option.none() : Option.some(utxos),
       ),
     );
-
-    const preSelectedAssets: Option.Option<Assets> = pipe(
-      preSelectedInputs,
+    const selectedAssets: Option.Option<Assets> = pipe(
+      selectedInputs,
       Option.map(sumAssetsFromInputs),
     );
     //Calculate the leftover assets, so we can calculate the real min ada going back to the change address
     const leftoverAssets: Option.Option<Assets> = pipe(
-      Option.all([preSelectedAssets, requiredAssets]),
-      Option.map(([preSelectedAssets, requiredAssets]) =>
+      Option.all([selectedAssets, requiredAssets, notRequiredAssets]),
+      Option.map(([selectedAssets, requiredAssets, notRequiredAssets]) =>
         pipe(
-          Record.union(
-            preSelectedAssets,
-            requiredAssets,
-            (self, that) => self - that,
-          ),
-          Record.filter((amount) => amount > 0n),
+          selectedAssets,
+          Record.union(requiredAssets, (self, that) => self - that),
+          Record.union(notRequiredAssets, (self, that) => self + that),
         ),
       ),
     );
-
     // Ensure the leftover ADA (Lovelace) sent back to the change address meets the minimum required ADA.
     // In some cases, the leftover Lovelace may be insufficient because the minimum required ADA can be greater than the available leftover Lovelace.
     const extraLovelace: Option.Option<Assets> = pipe(
@@ -319,17 +326,16 @@ const coinSelection = (
         }
       }),
     );
-
+    // Combine all required assets into a single record
     const allRequiredAssets: Assets = Record.union(
       Option.getOrElse(requiredAssets, () => Record.empty()),
       Option.getOrElse(extraLovelace, () => Record.empty()),
       _BigInt.sum,
     );
-
+    // If no assets are required, return an empty array
     if (Record.isEmptyRecord(allRequiredAssets)) return [];
-
+    // Select UTxOs that match the total required assets
     const selected = selectUTxOs(sortUTxOs(availableInputs), allRequiredAssets);
-
     if (_Array.isEmptyArray(selected))
       yield* completeTxError(
         "NotFound",

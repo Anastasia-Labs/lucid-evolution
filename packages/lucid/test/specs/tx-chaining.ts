@@ -1,11 +1,11 @@
 import { Console, Effect, pipe, Array as _Array } from "effect";
-import { handleSignSubmitWithoutValidation, withLogNoRetry } from "./utils";
-import { HelloContract, User } from "./services";
+import { handleSignSubmitWithoutValidation, withLogNoRetry } from "./utils.js";
+import { HelloContract, User } from "./services.js";
 import { getAddressDetails } from "@lucid-evolution/utils";
 import { Constr, Data } from "@lucid-evolution/plutus";
 import { fromText } from "@lucid-evolution/core-utils";
 import { UTxO } from "@lucid-evolution/core-types";
-import { LucidEvolution } from "../../src";
+import { LucidEvolution } from "../../src/lucid-evolution/index.js";
 
 const DatumSchema = Data.Object({
   owner: Data.Bytes(),
