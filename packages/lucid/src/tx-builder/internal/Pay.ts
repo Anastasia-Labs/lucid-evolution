@@ -1,5 +1,10 @@
 import { Effect, Scope } from "effect";
-import { addAssets, assetsToValue, toScriptRef } from "@lucid-evolution/utils";
+import {
+  addAssets,
+  assetsToValue,
+  toScriptRef,
+  valueToAssets,
+} from "@lucid-evolution/utils";
 import { Address, Assets, Script } from "@lucid-evolution/core-types";
 import { OutputDatum } from "../types.js";
 import * as TxBuilder from "../TxBuilder.js";
@@ -17,7 +22,6 @@ export const payToAddress = (
   assets: Assets,
 ) =>
   Effect.gen(function* () {
-    config.totalOutputAssets = addAssets(config.totalOutputAssets, assets);
     const outputBuilder = CML.TransactionOutputBuilder.new()
       .with_address(yield* toCMLAddress(address, config.lucidConfig))
       .next();
@@ -29,19 +33,29 @@ export const payToAddress = (
       );
 
     if (assets["lovelace"]) {
-      config.txBuilder.add_output(
-        outputBuilder.with_value(assetsToValue(assets)).build(),
+      const outputResult = outputBuilder
+        .with_value(assetsToValue(assets))
+        .build();
+      //Record real output value
+      config.totalOutputAssets = addAssets(
+        config.totalOutputAssets,
+        valueToAssets(outputResult.output().amount()),
       );
+      config.txBuilder.add_output(outputResult);
     } else {
       // If no lovelace, add output with asset and minimum required coin
-      config.txBuilder.add_output(
-        outputBuilder
-          .with_asset_and_min_required_coin(
-            assetsToValue(assets).multi_asset(),
-            config.lucidConfig.protocolParameters.coinsPerUtxoByte,
-          )
-          .build(),
+      const outputResult = outputBuilder
+        .with_asset_and_min_required_coin(
+          assetsToValue(assets).multi_asset(),
+          config.lucidConfig.protocolParameters.coinsPerUtxoByte,
+        )
+        .build();
+      //Record real output value
+      config.totalOutputAssets = addAssets(
+        config.totalOutputAssets,
+        valueToAssets(outputResult.output().amount()),
       );
+      config.txBuilder.add_output(outputResult);
     }
   });
 
@@ -57,37 +71,51 @@ export const payToAddressWithData = (
     //TODO: Test with datumhash
     const outputBuilder = buildBaseOutput(address, outputDatum, scriptRef);
     if (assets) {
-      config.totalOutputAssets = addAssets(config.totalOutputAssets, assets);
       if (Object.keys(assets).length == 0)
         yield* payError(
           "EmptyAssets",
           "Attempting to pay to an address with an empty assets object",
         );
       if (assets["lovelace"]) {
-        config.txBuilder.add_output(
-          outputBuilder.with_value(assetsToValue(assets)).build(),
+        const outputResult = outputBuilder
+          .with_value(assetsToValue(assets))
+          .build();
+        //Record real output value
+        config.totalOutputAssets = addAssets(
+          config.totalOutputAssets,
+          valueToAssets(outputResult.output().amount()),
         );
+        config.txBuilder.add_output(outputResult);
       } else {
         // If no lovelace, add output with asset and minimum required coin
-        config.txBuilder.add_output(
-          outputBuilder
-            .with_asset_and_min_required_coin(
-              assetsToValue(assets).multi_asset(),
-              config.lucidConfig.protocolParameters.coinsPerUtxoByte,
-            )
-            .build(),
+        const outputResult = outputBuilder
+          .with_asset_and_min_required_coin(
+            assetsToValue(assets).multi_asset(),
+            config.lucidConfig.protocolParameters.coinsPerUtxoByte,
+          )
+          .build();
+        //Record real output value
+        config.totalOutputAssets = addAssets(
+          config.totalOutputAssets,
+          valueToAssets(outputResult.output().amount()),
         );
+        config.txBuilder.add_output(outputResult);
       }
     } else {
       // No assets provided, add output with empty multi-asset and minimum required coin
-      config.txBuilder.add_output(
-        outputBuilder
-          .with_asset_and_min_required_coin(
-            CML.MultiAsset.new(),
-            config.lucidConfig.protocolParameters.coinsPerUtxoByte,
-          )
-          .build(),
+      const outputResult = outputBuilder
+        .with_asset_and_min_required_coin(
+          CML.MultiAsset.new(),
+          config.lucidConfig.protocolParameters.coinsPerUtxoByte,
+        )
+        .build();
+      //Record real output value
+      config.totalOutputAssets = addAssets(
+        config.totalOutputAssets,
+        valueToAssets(outputResult.output().amount()),
       );
+
+      config.txBuilder.add_output(outputResult);
     }
   });
 

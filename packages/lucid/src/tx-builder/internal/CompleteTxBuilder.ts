@@ -3,7 +3,6 @@ import { Address, Assets, UTxO, Wallet } from "@lucid-evolution/core-types";
 import {
   ERROR_MESSAGE,
   RunTimeError,
-  TransactionError,
   TxBuilderError,
   TxBuilderErrorCause,
 } from "../../Errors.js";
@@ -13,9 +12,7 @@ import * as TxBuilder from "../TxBuilder.js";
 import * as TxSignBuilder from "../../tx-sign-builder/TxSignBuilder.js";
 import {
   assetsToValue,
-  coresToTxOutputs,
   coreToTxOutput,
-  coreToUtxo,
   isEqualUTxO,
   selectUTxOs,
   sortUTxOs,
@@ -45,14 +42,14 @@ const getWalletInfo = (
   config: TxBuilder.TxBuilderConfig,
 ): Effect.Effect<WalletInfo, TxBuilderError, never> =>
   Effect.gen(function* () {
-    const wallet = yield* pipe(
+    const wallet: Wallet = yield* pipe(
       Effect.fromNullable(config.lucidConfig.wallet),
       Effect.orElseFail(() =>
         completeTxError("MissingWallet", ERROR_MESSAGE.MISSING_WALLET),
       ),
     );
-    const address = yield* Effect.promise(() => wallet.address());
-    const inputs = yield* pipe(
+    const address: Address = yield* Effect.promise(() => wallet.address());
+    const inputs: UTxO[] = yield* pipe(
       Effect.tryPromise({
         try: () => wallet.getUtxos(),
         catch: (error) => completeTxError("Provider", String(error)),
@@ -287,7 +284,6 @@ const coinSelection = (
       Record.union(negatedMintedAssets, (self, that) => self + that),
       Record.filter((amount) => amount > 0n),
     );
-
     // No UTxOs need to be selected if collected inputs are sufficient
     if (Record.isEmptyRecord(requiredAssets)) return [];
 

@@ -1,5 +1,22 @@
 # @lucid-evolution/lucid
 
+## 0.2.42
+
+### Patch Changes
+
+- [#151](https://github.com/Anastasia-Labs/lucid-evolution/pull/151) [`5760851`](https://github.com/Anastasia-Labs/lucid-evolution/commit/57608517cd86e8e72b577fc34f5ae0d3d37f9a74) Thanks [@nikhils9](https://github.com/nikhils9)! - Fixes to support UTF-8 incompatible asset names
+
+- Updated dependencies [[`5760851`](https://github.com/Anastasia-Labs/lucid-evolution/commit/57608517cd86e8e72b577fc34f5ae0d3d37f9a74)]:
+  - @lucid-evolution/utils@0.1.19
+  - @lucid-evolution/provider@0.1.26
+  - @lucid-evolution/wallet@0.1.21
+
+## 0.2.41
+
+### Patch Changes
+
+- [#145](https://github.com/Anastasia-Labs/lucid-evolution/pull/145) [`df9a386`](https://github.com/Anastasia-Labs/lucid-evolution/commit/df9a3868b7091dc0f3636f0f1561b61e1ec1468b) Thanks [@solidsnakedev](https://github.com/solidsnakedev)! - fix recording of config.totalOutputAssets , pay module was not recording lovelace asset
+
 ## 0.2.40
 
 ### Patch Changes
