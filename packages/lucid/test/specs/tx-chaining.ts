@@ -1,12 +1,19 @@
 import { Console, Effect, pipe, Array as _Array } from "effect";
-import { handleSignSubmitWithoutValidation, withLogNoRetry } from "./utils";
-import { HelloContract, User } from "./services";
+import { handleSignSubmitWithoutValidation, withLogNoRetry } from "./utils.js";
+import { HelloContract, User } from "./services.js";
 import { getAddressDetails } from "@lucid-evolution/utils";
 import { Constr, Data } from "@lucid-evolution/plutus";
 import { fromText } from "@lucid-evolution/core-utils";
 import { UTxO } from "@lucid-evolution/core-types";
-import { LucidEvolution } from "../../src";
+import { LucidEvolution } from "../../src/lucid-evolution/index.js";
+import {
+  RunTimeError,
+  TxBuilderError,
+  TxSignerError,
+  TxSubmitError,
+} from "../../src/index.js";
 
+//TODO: everything here is quite messy, it needs some clean up
 const DatumSchema = Data.Object({
   owner: Data.Bytes(),
 });
@@ -50,6 +57,7 @@ export const depositFundsCollect = Effect.gen(function* () {
         },
         { lovelace: 10_000_000n },
       )
+      .pay.ToAddress(addr, { lovelace: 5_000_000n })
       .chainProgram();
 
   const collect = (user: LucidEvolution, derivedUTxOs: UTxO[]) =>
@@ -60,72 +68,31 @@ export const depositFundsCollect = Effect.gen(function* () {
       .addSigner(addr)
       .chainProgram();
 
-  yield* pipe(
-    deposit(user),
-    Effect.tap((result) => handleSignSubmitWithoutValidation(result[2])),
-  ).pipe(
-    Effect.flatMap(([newWalletUTxOs, derivedUTxOs, tx]) => {
-      user.overrideUTxOs(newWalletUTxOs);
-      return collect(user, derivedUTxOs);
-    }),
-    Effect.tap((result) => handleSignSubmitWithoutValidation(result[2])),
-    Effect.flatMap(([newWalletUTxOs, derivedUTxOs, tx]) => {
-      user.overrideUTxOs(newWalletUTxOs);
-      return deposit(user);
-    }),
-    Effect.tap((result) => handleSignSubmitWithoutValidation(result[2])),
-    Effect.flatMap(([newWalletUTxOs, derivedUTxOs, tx]) => {
-      user.overrideUTxOs(newWalletUTxOs);
-      return collect(user, derivedUTxOs);
-    }),
-    Effect.tap((result) => handleSignSubmitWithoutValidation(result[2])),
-    Effect.flatMap(([newWalletUTxOs, derivedUTxOs, tx]) => {
-      user.overrideUTxOs(newWalletUTxOs);
-      return deposit(user);
-    }),
-    Effect.tap((result) => handleSignSubmitWithoutValidation(result[2])),
-    Effect.flatMap(([newWalletUTxOs, derivedUTxOs, tx]) => {
-      user.overrideUTxOs(newWalletUTxOs);
-      return collect(user, derivedUTxOs);
-    }),
-    Effect.tap((result) => handleSignSubmitWithoutValidation(result[2])),
-    Effect.flatMap(([newWalletUTxOs, derivedUTxOs, tx]) => {
-      user.overrideUTxOs(newWalletUTxOs);
-      return deposit(user);
-    }),
-    Effect.tap((result) => handleSignSubmitWithoutValidation(result[2])),
-    Effect.flatMap(([newWalletUTxOs, derivedUTxOs, tx]) => {
-      user.overrideUTxOs(newWalletUTxOs);
-      return collect(user, derivedUTxOs);
-    }),
-    Effect.tap((result) => handleSignSubmitWithoutValidation(result[2])),
-    Effect.flatMap(([newWalletUTxOs, derivedUTxOs, tx]) => {
-      user.overrideUTxOs(newWalletUTxOs);
-      return deposit(user);
-    }),
-    Effect.tap((result) => handleSignSubmitWithoutValidation(result[2])),
-    Effect.flatMap(([newWalletUTxOs, derivedUTxOs, tx]) => {
-      user.overrideUTxOs(newWalletUTxOs);
-      return collect(user, derivedUTxOs);
-    }),
-    Effect.tap((result) => handleSignSubmitWithoutValidation(result[2])),
-  );
+  const programs: Effect.Effect<
+    void,
+    RunTimeError | TxBuilderError | TxSignerError | TxSubmitError,
+    never
+  >[] = [];
 
-  // const [newWalletUTxOs, deriveUTxOs, tx1] = yield* user
-  //   .newTx()
-  //   .pay.ToAddressWithData(
-  //     contractAddress,
-  //     {
-  //       kind: "inline",
-  //       value: datum,
-  //     },
-  //     { lovelace: 10_000_000n }
-  //   )
-  //   .chainProgram();
-  // yield* handleSignSubmitWithoutValidation(tx1);
-  // // yield* Effect.log("deriveUTxOs", stringify(deriveUTxOs));
+  const repeat = (user: LucidEvolution, counter: number) => {
+    const newCounter = counter - 1;
+    if (newCounter <= 0) return undefined;
+    const program = Effect.gen(function* () {
+      const depositResult = yield* deposit(user);
+      yield* handleSignSubmitWithoutValidation(depositResult[2]);
 
-  // user.overrideUTxOs(newWalletUTxOs);
+      user.overrideUTxOs(depositResult[0]);
+      const collectResult = yield* collect(user, depositResult[1]);
+      yield* handleSignSubmitWithoutValidation(collectResult[2]);
+      user.overrideUTxOs(collectResult[0]);
+    });
+    programs.push(program);
+
+    repeat(user, newCounter);
+  };
+  repeat(user, 4);
+
+  yield* Effect.all(programs);
 }).pipe(withLogNoRetry);
 
 const fetchOwner = (utxos: UTxO[]) =>
