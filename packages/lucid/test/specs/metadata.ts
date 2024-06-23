@@ -1,6 +1,6 @@
 import { Effect } from "effect";
-import { User } from "./services";
-import { handleSignSubmit, withLogRetry } from "./utils";
+import { User } from "./services.js";
+import { handleSignSubmit, withLogRetry } from "./utils.js";
 
 export const payWithMetadata = Effect.gen(function* () {
   const { user } = yield* User;
