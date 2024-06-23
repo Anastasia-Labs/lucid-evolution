@@ -6,7 +6,7 @@ import {
   TxBuilderError,
   TxBuilderErrorCause,
 } from "../../Errors.js";
-import * as CML from "@dcspark/cardano-multiplatform-lib-nodejs";
+import * as CML from "@anastasia-labs/cardano-multiplatform-lib-nodejs";
 import { toPartial, toV1, toV2, validateAddressDetails } from "./TxUtils.js";
 
 export const stakeError = (cause: TxBuilderErrorCause, message?: string) =>
