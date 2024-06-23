@@ -1,9 +1,17 @@
-import { Effect, pipe, Record, Array as _Array, Tuple, Console } from "effect";
+import {
+  Effect,
+  pipe,
+  Record,
+  Array as _Array,
+  BigInt as _BigInt,
+  Tuple,
+  Console,
+  Option,
+} from "effect";
 import { Address, Assets, UTxO, Wallet } from "@lucid-evolution/core-types";
 import {
   ERROR_MESSAGE,
   RunTimeError,
-  TransactionError,
   TxBuilderError,
   TxBuilderErrorCause,
 } from "../../Errors.js";
@@ -13,9 +21,7 @@ import * as TxBuilder from "../TxBuilder.js";
 import * as TxSignBuilder from "../../tx-sign-builder/TxSignBuilder.js";
 import {
   assetsToValue,
-  coresToTxOutputs,
   coreToTxOutput,
-  coreToUtxo,
   isEqualUTxO,
   selectUTxOs,
   sortUTxOs,
@@ -45,14 +51,14 @@ const getWalletInfo = (
   config: TxBuilder.TxBuilderConfig,
 ): Effect.Effect<WalletInfo, TxBuilderError, never> =>
   Effect.gen(function* () {
-    const wallet = yield* pipe(
+    const wallet: Wallet = yield* pipe(
       Effect.fromNullable(config.lucidConfig.wallet),
       Effect.orElseFail(() =>
         completeTxError("MissingWallet", ERROR_MESSAGE.MISSING_WALLET),
       ),
     );
-    const address = yield* Effect.promise(() => wallet.address());
-    const inputs = yield* pipe(
+    const address: Address = yield* Effect.promise(() => wallet.address());
+    const inputs: UTxO[] = yield* pipe(
       Effect.tryPromise({
         try: () => wallet.getUtxos(),
         catch: (error) => completeTxError("Provider", String(error)),
@@ -79,7 +85,10 @@ export const complete = (
 
     // Set collateral input if there are script executions
     if (config.scripts.size > 0) {
-      const collateralInput = yield* findCollateral(walletInfo.inputs);
+      const collateralInput = yield* findCollateral(
+        config.lucidConfig.protocolParameters.coinsPerUtxoByte,
+        walletInfo.inputs,
+      );
       setCollateral(config, collateralInput, walletInfo.address);
     }
 
@@ -126,6 +135,8 @@ export const complete = (
         CML.Address.from_bech32(walletInfo.address),
       )
       .build_unchecked();
+
+    // yield* Console.log("Transaction: ", tx.body().to_json());
 
     const derivedInputs = deriveInputsFromTransaction(tx);
 
@@ -211,12 +222,8 @@ const setCollateral = (
     config.txBuilder.add_collateral(collateralInput);
   }
   const returnassets = pipe(
-    collateralInputs
-      .map((utxo) => utxo.assets)
-      .reduce((acc, cur) =>
-        Record.union(acc, cur, (self, that) => self + that),
-      ),
-    Record.union({ lovelace: -5_000_000n }, (self, that) => self + that),
+    sumAssetsFromInputs(collateralInputs),
+    Record.union({ lovelace: -5_000_000n }, _BigInt.sum),
   );
 
   const collateralOutputBuilder =
@@ -233,12 +240,29 @@ const setCollateral = (
 };
 
 const findCollateral = (
+  coinsPerUtxoByte: bigint,
   inputs: UTxO[],
 ): Effect.Effect<UTxO[], TxBuilderError, never> =>
   Effect.gen(function* () {
-    const selected = selectUTxOs(sortUTxOs(inputs), {
-      lovelace: 5_000_000n,
-    });
+    // NOTE: While the required collateral is 5 ADA, there may be instances where the UTXOs encountered do not contain enough ADA to be returned to the collateral return address.
+    // For example:
+    // A UTXO with 5.5 ADA will result in an error message such as `BabbageOutputTooSmallUTxO`, since only 0.5 ADA would be returned to the collateral return address.
+    const minLovelaceChangeAddress: Assets = {
+      lovelace: calculateMinLovelace(coinsPerUtxoByte),
+    };
+    const collateralLovelace: Assets = { lovelace: 5_000_000n };
+    const requiredAssets = Record.union(
+      minLovelaceChangeAddress,
+      collateralLovelace,
+      _BigInt.sum,
+    );
+    // const selected = selectUTxOs(sortUTxOs(inputs), requiredAssets);
+    const selected = recursive(
+      sortUTxOs(inputs),
+      collateralLovelace,
+      coinsPerUtxoByte,
+    );
+
     if (_Array.isEmptyArray(selected))
       yield* completeTxError(
         "MissingCollateral",
@@ -247,7 +271,7 @@ const findCollateral = (
     if (selected.length > 3)
       yield* completeTxError(
         "MissingCollateral",
-        `Selected ${selected.length} inputs as collateral, but max collateral inputs is 3 to cover the 5 ADA collateral`,
+        `Selected ${selected.length} inputs as collateral, but max collateral inputs is 3 to cover the 5 ADA collateral ${stringify(selected)}`,
       );
     return selected;
   });
@@ -257,40 +281,43 @@ const coinSelection = (
   availableInputs: UTxO[],
 ): Effect.Effect<UTxO[], TxBuilderError> =>
   Effect.gen(function* () {
+    // yield* Console.log("config.collectedInputs: ", config.collectedInputs);
     // NOTE: This is a fee estimation. If the amount is not enough, it may require increasing the fee.
-    const fee: Assets = { lovelace: config.txBuilder.min_fee(false) };
-    const minAdaChangeAddress = {
-      lovelace: calculateMinLovelace(
-        config.lucidConfig.protocolParameters.coinsPerUtxoByte,
-      ),
-    };
-    const negatedMintedAssets = Record.map(
-      config.mintedAssets,
-      (amount) => -amount,
+    const estimatedFee: Assets = { lovelace: config.txBuilder.min_fee(false) };
+    const estimatedLovelaceChangeAddress: Assets = { lovelace: 3_000_000n };
+    const negatedMintedAssets = negateAssets(config.mintedAssets);
+    const negatedCollectedAssets = negateAssets(
+      sumAssetsFromInputs(config.collectedInputs),
     );
-    const collectedAssets = _Array.isEmptyArray(config.collectedInputs)
-      ? {}
-      : config.collectedInputs
-          .map((utxo) => utxo.assets)
-          .reduce((acc, cur) =>
-            Record.union(acc, cur, (self, that) => self + that),
-          );
-    const negatedCollectedAssets = Record.map(
-      collectedAssets,
-      (amount) => -amount,
-    );
-    const requiredAssets = pipe(
+    // Calculate the net change in assets (delta)
+    const assetsDelta: Assets = pipe(
       config.totalOutputAssets,
-      Record.union(minAdaChangeAddress, (self, that) => self + that),
-      Record.union(fee, (self, that) => self + that),
-      Record.union(negatedCollectedAssets, (self, that) => self + that),
-      Record.union(negatedMintedAssets, (self, that) => self + that),
+      Record.union(estimatedFee, _BigInt.sum),
+      Record.union(negatedCollectedAssets, _BigInt.sum),
+      Record.union(negatedMintedAssets, _BigInt.sum),
+    );
+    // Filter and obtain only the required assets (those with a positive amount)
+    const requiredAssets = pipe(
+      assetsDelta,
       Record.filter((amount) => amount > 0n),
     );
     // No UTxOs need to be selected if collected inputs are sufficient
     if (Record.isEmptyRecord(requiredAssets)) return [];
-
-    const selected = selectUTxOs(sortUTxOs(availableInputs), requiredAssets);
+    // yield* Console.log("requiredAssets: ", requiredAssets);
+    // Filter and obtain assets that are present in the inputs and mints but are not required by the outputs
+    // Negate these assets to get their positive amounts
+    const notRequiredAssets = pipe(
+      assetsDelta,
+      Record.filter((amount) => amount < 0n),
+      negateAssets,
+    );
+    const selected = recursive(
+      sortUTxOs(availableInputs),
+      requiredAssets,
+      config.lucidConfig.protocolParameters.coinsPerUtxoByte,
+      notRequiredAssets,
+    );
+    // yield* Console.log("selected: ", stringify(selected));
     if (_Array.isEmptyArray(selected))
       yield* completeTxError(
         "NotFound",
@@ -298,6 +325,96 @@ const coinSelection = (
       );
     return selected;
   });
+
+// const coinSelection = (
+//   config: TxBuilder.TxBuilderConfig,
+//   availableInputs: UTxO[],
+// ): Effect.Effect<UTxO[], TxBuilderError> =>
+//   Effect.gen(function* () {
+//     // NOTE: This is a fee estimation. If the amount is not enough, it may require increasing the fee.
+//     const estimatedFee: Assets = { lovelace: config.txBuilder.min_fee(false) };
+//     const negatedMintedAssets = negateAssets(config.mintedAssets);
+//     const negatedCollectedAssets = negateAssets(
+//       sumAssetsFromInputs(config.collectedInputs),
+//     );
+//     // Calculate the net change in assets (delta)
+//     const assetsDelta: Assets = pipe(
+//       config.totalOutputAssets,
+//       Record.union(estimatedFee, _BigInt.sum),
+//       Record.union(negatedCollectedAssets, _BigInt.sum),
+//       Record.union(negatedMintedAssets, _BigInt.sum),
+//     );
+//     // Filter and obtain only the required assets (those with a positive amount)
+//     const requiredAssets: Option.Option<Assets> = pipe(
+//       assetsDelta,
+//       Record.filter((amount) => amount > 0n),
+//       (d) => (Record.isEmptyRecord(d) ? Option.none() : Option.some(d)),
+//     );
+//     // Filter and obtain assets that are present in the inputs and mints but are not required by the outputs
+//     // Negate these assets to get their positive amounts
+//     const notRequiredAssets: Option.Option<Assets> = pipe(
+//       assetsDelta,
+//       Record.filter((amount) => amount < 0n),
+//       negateAssets,
+//       (d) => (Record.isEmptyRecord(d) ? Option.none() : Option.some(d)),
+//     );
+//     const selectedInputs: Option.Option<UTxO[]> = pipe(
+//       requiredAssets,
+//       Option.map((a) => selectUTxOs(sortUTxOs(availableInputs), a)),
+//       Option.flatMap((utxos) =>
+//         _Array.isEmptyArray(utxos) ? Option.none() : Option.some(utxos),
+//       ),
+//     );
+//     const selectedAssets: Option.Option<Assets> = pipe(
+//       selectedInputs,
+//       Option.map(sumAssetsFromInputs),
+//     );
+//     //Calculate the leftover assets, so we can calculate the real min ada going back to the change address
+//     const leftoverAssets: Option.Option<Assets> = pipe(
+//       Option.all([selectedAssets, requiredAssets, notRequiredAssets]),
+//       Option.map(([selectedAssets, requiredAssets, notRequiredAssets]) =>
+//         pipe(
+//           selectedAssets,
+//           Record.union(requiredAssets, (self, that) => self - that),
+//           Record.union(notRequiredAssets, (self, that) => self + that),
+//         ),
+//       ),
+//     );
+//     // Ensure the leftover ADA (Lovelace) sent back to the change address meets the minimum required ADA.
+//     // In some cases, the leftover Lovelace may be insufficient because the minimum required ADA can be greater than the available leftover Lovelace.
+//     const extraLovelace: Option.Option<Assets> = pipe(
+//       leftoverAssets,
+//       Option.flatMap((leftoverAssets) => {
+//         const minLovelace = calculateMinLovelace(
+//           config.lucidConfig.protocolParameters.coinsPerUtxoByte,
+//           leftoverAssets,
+//         );
+//         if (leftoverAssets["lovelace"] > minLovelace) {
+//           return Option.none();
+//         } else {
+//           return Option.some({
+//             lovelace: minLovelace - leftoverAssets["lovelace"],
+//           });
+//         }
+//       }),
+//     );
+//     // Combine all required assets into a single record
+//     const allRequiredAssets: Assets = Record.union(
+//       Option.getOrElse(requiredAssets, () => Record.empty()),
+//       Option.getOrElse(extraLovelace, () => Record.empty()),
+//       _BigInt.sum,
+//     );
+//     // If no assets are required, return an empty array
+//     if (Record.isEmptyRecord(allRequiredAssets)) return [];
+//     // Select UTxOs that match the total required assets
+//     const selected = selectUTxOs(sortUTxOs(availableInputs), allRequiredAssets);
+//     if (_Array.isEmptyArray(selected))
+//       yield* completeTxError(
+//         "NotFound",
+//         `Your wallet does not have enough funds to cover the required assets. ${stringify(allRequiredAssets)}`,
+//       );
+//     return selected;
+//   });
 
 const evalTransaction = (
   config: TxBuilder.TxBuilderConfig,
@@ -338,6 +455,7 @@ const evalTransaction = (
 
 const calculateMinLovelace = (
   coinsPerUtxoByte: bigint,
+  multiAssets?: Assets,
   changeAddress?: string,
 ) => {
   const dummyAddress =
@@ -347,7 +465,12 @@ const calculateMinLovelace = (
       CML.Address.from_bech32(changeAddress ? changeAddress : dummyAddress),
     )
     .next()
-    .with_asset_and_min_required_coin(CML.MultiAsset.new(), coinsPerUtxoByte)
+    .with_asset_and_min_required_coin(
+      multiAssets
+        ? assetsToValue(multiAssets).multi_asset()
+        : CML.MultiAsset.new(),
+      coinsPerUtxoByte,
+    )
     .build()
     .output()
     .amount()
@@ -368,4 +491,85 @@ const deriveInputsFromTransaction = (tx: CML.Transaction) => {
     utxos.push(utxo);
   }
   return utxos;
+};
+
+/**
+ * Returns a new `Assets`
+ *
+ * Negates the amounts of all assets in the given record.
+ */
+const negateAssets = (assets: Assets): Assets =>
+  Record.map(assets, (amount) => -amount);
+
+/**
+ * Returns a new Assets
+ *
+ * Sums the assets from an array of UTxO inputs.
+ */
+const sumAssetsFromInputs = (inputs: UTxO[]) =>
+  _Array.isEmptyArray(inputs)
+    ? {}
+    : inputs
+        .map((utxo) => utxo.assets)
+        .reduce((acc, cur) => Record.union(acc, cur, _BigInt.sum));
+
+const calculateExtraLovelace = (
+  leftoverAssets: Assets,
+  coinsPerUtxoByte: bigint,
+): Option.Option<Assets> => {
+  return pipe(leftoverAssets, (assets) => {
+    const minLovelace = calculateMinLovelace(coinsPerUtxoByte, assets);
+    const currentLovelace = assets["lovelace"] || 0n;
+    return currentLovelace > minLovelace
+      ? Option.none()
+      : Option.some({ lovelace: minLovelace - currentLovelace });
+  });
+};
+
+export const recursive = (
+  inputs: UTxO[],
+  requiredAssets: Assets,
+  coinsPerUtxoByte: bigint,
+  externalAssets: Assets = {},
+): UTxO[] => {
+  let selected = selectUTxOs(inputs, requiredAssets);
+  if (_Array.isEmptyArray(selected)) return [];
+  const selectedAssets: Assets = sumAssetsFromInputs(selected);
+  let availableAssets: Assets = pipe(
+    selectedAssets,
+    Record.union(requiredAssets, (self, that) => self - that),
+    Record.union(externalAssets, _BigInt.sum),
+  );
+
+  let extraLovelace: Assets | undefined = pipe(
+    calculateExtraLovelace(availableAssets, coinsPerUtxoByte),
+    Option.getOrUndefined,
+  );
+  let remainingInputs: UTxO[] = _Array.differenceWith(isEqualUTxO)(
+    inputs,
+    selected,
+  );
+  while (extraLovelace) {
+    const extraSelected = selectUTxOs(remainingInputs, extraLovelace);
+    if (_Array.isEmptyArray(extraSelected)) {
+      return [];
+    }
+    const extraSelectedAssets: Assets = sumAssetsFromInputs(extraSelected);
+    selected = [...selected, ...extraSelected];
+    availableAssets = Record.union(
+      availableAssets,
+      extraSelectedAssets,
+      _BigInt.sum,
+    );
+
+    extraLovelace = pipe(
+      calculateExtraLovelace(availableAssets, coinsPerUtxoByte),
+      Option.getOrUndefined,
+    );
+    remainingInputs = _Array.differenceWith(isEqualUTxO)(
+      remainingInputs,
+      selected,
+    );
+  }
+  return selected;
 };
