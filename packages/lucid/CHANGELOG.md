@@ -1,5 +1,24 @@
 # @lucid-evolution/lucid
 
+## 0.2.43
+
+### Patch Changes
+
+- [#153](https://github.com/Anastasia-Labs/lucid-evolution/pull/153) [`050bfdc`](https://github.com/Anastasia-Labs/lucid-evolution/commit/050bfdc3a85a04c1cc338faa419aa4ac39b1cf49) Thanks [@solidsnakedev](https://github.com/solidsnakedev)! - Ensure change address receives minimum required ADA
+
+- [#144](https://github.com/Anastasia-Labs/lucid-evolution/pull/144) [`ed554c4`](https://github.com/Anastasia-Labs/lucid-evolution/commit/ed554c45ed4664568af31a6c1cecb2eb5464cab5) Thanks [@solidsnakedev](https://github.com/solidsnakedev)! - add metadata endpoint
+
+- Updated dependencies [[`ed554c4`](https://github.com/Anastasia-Labs/lucid-evolution/commit/ed554c45ed4664568af31a6c1cecb2eb5464cab5)]:
+  - @lucid-evolution/core-types@0.1.8
+  - @lucid-evolution/core-utils@0.1.7
+  - @lucid-evolution/sign_data@0.1.8
+  - @lucid-evolution/provider@0.1.27
+  - @lucid-evolution/plutus@0.1.11
+  - @lucid-evolution/wallet@0.1.22
+  - @lucid-evolution/utils@0.1.20
+  - @lucid-evolution/bip39@0.2.8
+  - @lucid-evolution/uplc@0.2.7
+
 ## 0.2.42
 
 ### Patch Changes
