@@ -8,7 +8,7 @@ import {
   TxBuilderError,
   TxBuilderErrorCause,
 } from "../../Errors.js";
-import * as CML from "@dcspark/cardano-multiplatform-lib-nodejs";
+import * as CML from "@anastasia-labs/cardano-multiplatform-lib-nodejs";
 import { toPartial, toV1, toV2 } from "./TxUtils.js";
 import { paymentCredentialOf } from "@lucid-evolution/utils";
 import { datumOf } from "../../lucid-evolution/utils.js";

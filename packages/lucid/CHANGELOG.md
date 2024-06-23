@@ -486,7 +486,7 @@
 
 - [#32](https://github.com/Anastasia-Labs/lucid-evolution/pull/32) [`bb295f2`](https://github.com/Anastasia-Labs/lucid-evolution/commit/bb295f204f91c4beec9a284bb7abff15e0e675b3) Thanks [@solidsnakedev](https://github.com/solidsnakedev)! - set the following packages to dependencies
 
-  - @dcspark/cardano-multiplatform-lib-nodejs
+  - @anastasia-labs/cardano-multiplatform-lib-nodejs
   - @emurgo/cardano-message-signing-nodejs
 
 ## 0.0.2
