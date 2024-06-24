@@ -1,1 +1,1 @@
-export * as CML from "@dcspark/cardano-multiplatform-lib-nodejs";
+export * as CML from "@anastasia-labs/cardano-multiplatform-lib-nodejs";

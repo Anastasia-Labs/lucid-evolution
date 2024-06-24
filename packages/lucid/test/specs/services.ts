@@ -2,12 +2,12 @@ import { Config, Context, Effect, Layer, pipe } from "effect";
 import {
   applyDoubleCborEncoding,
   Blockfrost,
+  Koios,
   Lucid,
   Script,
   SpendingValidator,
   validatorToAddress,
-  validatorToRewardAddress,
-} from "../../src";
+} from "../../src/index.js";
 import scripts from "./contracts/plutus.json";
 
 const makeUser = Effect.gen(function* ($) {
@@ -16,9 +16,11 @@ const makeUser = Effect.gen(function* ($) {
     Config.string("VITE_BLOCKFROST_KEY"),
     Config.string("VITE_SEED"),
   ]);
-  const user = yield* Effect.tryPromise(() =>
-    // Lucid(new Kupmios("http://localhost:1442", "ws://localhost:1337"), "Preview")
-    Lucid(new Blockfrost(apiURL, apiKey), "Preprod"),
+  const user = yield* Effect.tryPromise(
+    () =>
+      // Lucid(new Kupmios("http://localhost:1442", "ws://localhost:1337"), "Preview")
+      Lucid(new Blockfrost(apiURL, apiKey), "Preprod"),
+    // Lucid(new Koios("https://preprod.koios.rest/api/v1"),"Preprod")
   );
   user.selectWallet.fromSeed(seed);
   return {
