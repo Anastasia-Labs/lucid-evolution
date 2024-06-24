@@ -341,6 +341,12 @@ importers:
       '@anastasia-labs/cardano-multiplatform-lib-nodejs':
         specifier: ^5.3.1-2
         version: 5.3.1-2
+      '@emurgo/cardano-serialization-lib-browser':
+        specifier: ^11.5.0
+        version: 11.5.0
+      '@emurgo/cardano-serialization-lib-nodejs':
+        specifier: ^11.5.0
+        version: 11.5.0
       '@lucid-evolution/bip39':
         specifier: workspace:*
         version: link:../bip39
@@ -886,6 +892,14 @@ packages:
 
   /@emurgo/cardano-message-signing-nodejs@1.0.1:
     resolution: {integrity: sha512-PoKh1tQnJX18f8iEr8Jk1KXxKCn9eqaSslMI1pyOJvYRJhQVDLCh0+9YReufjp0oFJIY1ShcrR+4/WnECVZUKQ==}
+    dev: false
+
+  /@emurgo/cardano-serialization-lib-browser@11.5.0:
+    resolution: {integrity: sha512-qchOJ9NYDUz10tzs5r5QhP9hK0p+ZOlRiBwPdTAxqAYLw/8emYBkQQLaS8T1DF6EkeudyrgS00ym5Trw1fo4iA==}
+    dev: false
+
+  /@emurgo/cardano-serialization-lib-nodejs@11.5.0:
+    resolution: {integrity: sha512-IlVABlRgo9XaTR1NunwZpWcxnfEv04ba2l1vkUz4S1W7Jt36F4CtffP+jPeqBZGnAe+fnUwo0XjIJC3ZTNToNQ==}
     dev: false
 
   /@esbuild/aix-ppc64@0.21.5:
