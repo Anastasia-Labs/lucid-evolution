@@ -520,7 +520,7 @@ const calculateExtraLovelace = (
   return pipe(leftoverAssets, (assets) => {
     const minLovelace = calculateMinLovelace(coinsPerUtxoByte, assets);
     const currentLovelace = assets["lovelace"] || 0n;
-    return currentLovelace > minLovelace
+    return currentLovelace >= minLovelace
       ? Option.none()
       : Option.some({ lovelace: minLovelace - currentLovelace });
   });
