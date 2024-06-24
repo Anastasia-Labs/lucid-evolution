@@ -1,5 +1,11 @@
 # @lucid-evolution/lucid
 
+## 0.2.44
+
+### Patch Changes
+
+- [#156](https://github.com/Anastasia-Labs/lucid-evolution/pull/156) [`8b65e91`](https://github.com/Anastasia-Labs/lucid-evolution/commit/8b65e91d8b2f18d0b2e3a9914b424fbc22b96cbc) Thanks [@solidsnakedev](https://github.com/solidsnakedev)! - increase fee estimation
+
 ## 0.2.43
 
 ### Patch Changes
