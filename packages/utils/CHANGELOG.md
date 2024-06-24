@@ -1,5 +1,11 @@
 # @lucid-evolution/utils
 
+## 0.1.21
+
+### Patch Changes
+
+- [#158](https://github.com/Anastasia-Labs/lucid-evolution/pull/158) [`e63c233`](https://github.com/Anastasia-Labs/lucid-evolution/commit/e63c2334a86a50c3ff9e95a142a9299ed76059a3) Thanks [@solidsnakedev](https://github.com/solidsnakedev)! - fix coreToUtxo
+
 ## 0.1.20
 
 ### Patch Changes
