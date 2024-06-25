@@ -122,11 +122,10 @@ export const collectFunds = Effect.gen(function* ($) {
   const { user } = yield* User;
   const { contractAddress, stake, rewardAddress } = yield* StakeContract;
 
-  // TODO: set an upper limit on UTxOs spent from script
   const allUtxos = yield* Effect.tryPromise(() =>
     user.utxosAt(contractAddress),
   );
-  const selectedUTxOs = allUtxos.slice(50);
+  const selectedUTxOs = allUtxos.slice(0, 50);
 
   const redeemer = Data.to(new Constr(1, [Data.void()]));
   let signBuilder = user
@@ -134,7 +133,7 @@ export const collectFunds = Effect.gen(function* ($) {
     .collectFrom(selectedUTxOs, redeemer)
     .attach.SpendingValidator(stake);
 
-    selectedUTxOs.forEach((utxo, index) => {
+  selectedUTxOs.forEach((utxo, index) => {
     signBuilder = signBuilder.pay.ToAddressWithData(
       contractAddress,
       {
