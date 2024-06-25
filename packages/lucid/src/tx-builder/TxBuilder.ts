@@ -8,6 +8,7 @@ import {
   Lovelace,
   PoolId,
   Redeemer,
+  RedeemerBuilder,
   RewardAddress,
   Script,
   ScriptType,
@@ -40,6 +41,7 @@ export type TxBuilderConfig = {
   mintedAssets: Assets;
   scripts: Map<string, { type: ScriptType; script: string }>;
   programs: Effect.Effect<void, TransactionError, never>[];
+  partialPrograms: Map<RedeemerBuilder, (redeemer?: string) => Effect.Effect<void, TransactionError, never>>;
 };
 
 export type TxBuilder = {
@@ -123,6 +125,7 @@ export function makeTxBuilder(lucidConfig: LucidConfig): TxBuilder {
     mintedAssets: {},
     scripts: new Map(),
     programs: [],
+    partialPrograms: new Map(),
   };
   const txBuilder: TxBuilder = {
     readFrom: (utxos: UTxO[]) => {
@@ -198,10 +201,16 @@ export function makeTxBuilder(lucidConfig: LucidConfig): TxBuilder {
     withdraw: (
       rewardAddress: RewardAddress,
       amount: Lovelace,
-      redeemer?: string,
+      redeemer?: string | RedeemerBuilder,
     ) => {
-      const program = Stake.withdraw(config, rewardAddress, amount, redeemer);
-      config.programs.push(program);
+      const partialProgram = Stake.withdraw(config, rewardAddress, amount);
+      if(typeof redeemer === "object"){        
+        config.partialPrograms.set(redeemer, partialProgram);
+      }
+      else {
+        const program = partialProgram(redeemer);
+        config.programs.push(program);
+      }
       return txBuilder;
     },
     mintAssets: (assets: Assets, redeemer?: string | undefined) => {

@@ -131,9 +131,10 @@ export const deRegisterStake = (
 export const withdraw = (
   config: TxBuilder.TxBuilderConfig,
   rewardAddress: RewardAddress,
-  amount: Lovelace,
-  redeemer?: Redeemer,
-): Effect.Effect<void, TxBuilderError> =>
+  amount: Lovelace
+) =>
+  (redeemer?: Redeemer)
+  : Effect.Effect<void, TxBuilderError> =>
   Effect.gen(function* ($) {
     const addressDetails = yield* pipe(
       validateAddressDetails(rewardAddress, config.lucidConfig),
