@@ -1,5 +1,39 @@
 # @lucid-evolution/lucid
 
+## 0.2.45
+
+### Patch Changes
+
+- Updated dependencies [[`e63c233`](https://github.com/Anastasia-Labs/lucid-evolution/commit/e63c2334a86a50c3ff9e95a142a9299ed76059a3)]:
+  - @lucid-evolution/utils@0.1.21
+  - @lucid-evolution/provider@0.1.28
+  - @lucid-evolution/wallet@0.1.23
+
+## 0.2.44
+
+### Patch Changes
+
+- [#156](https://github.com/Anastasia-Labs/lucid-evolution/pull/156) [`8b65e91`](https://github.com/Anastasia-Labs/lucid-evolution/commit/8b65e91d8b2f18d0b2e3a9914b424fbc22b96cbc) Thanks [@solidsnakedev](https://github.com/solidsnakedev)! - increase fee estimation
+
+## 0.2.43
+
+### Patch Changes
+
+- [#153](https://github.com/Anastasia-Labs/lucid-evolution/pull/153) [`050bfdc`](https://github.com/Anastasia-Labs/lucid-evolution/commit/050bfdc3a85a04c1cc338faa419aa4ac39b1cf49) Thanks [@solidsnakedev](https://github.com/solidsnakedev)! - Ensure change address receives minimum required ADA
+
+- [#144](https://github.com/Anastasia-Labs/lucid-evolution/pull/144) [`ed554c4`](https://github.com/Anastasia-Labs/lucid-evolution/commit/ed554c45ed4664568af31a6c1cecb2eb5464cab5) Thanks [@solidsnakedev](https://github.com/solidsnakedev)! - add metadata endpoint
+
+- Updated dependencies [[`ed554c4`](https://github.com/Anastasia-Labs/lucid-evolution/commit/ed554c45ed4664568af31a6c1cecb2eb5464cab5)]:
+  - @lucid-evolution/core-types@0.1.8
+  - @lucid-evolution/core-utils@0.1.7
+  - @lucid-evolution/sign_data@0.1.8
+  - @lucid-evolution/provider@0.1.27
+  - @lucid-evolution/plutus@0.1.11
+  - @lucid-evolution/wallet@0.1.22
+  - @lucid-evolution/utils@0.1.20
+  - @lucid-evolution/bip39@0.2.8
+  - @lucid-evolution/uplc@0.2.7
+
 ## 0.2.42
 
 ### Patch Changes
@@ -497,7 +531,7 @@
 
 - [#32](https://github.com/Anastasia-Labs/lucid-evolution/pull/32) [`bb295f2`](https://github.com/Anastasia-Labs/lucid-evolution/commit/bb295f204f91c4beec9a284bb7abff15e0e675b3) Thanks [@solidsnakedev](https://github.com/solidsnakedev)! - set the following packages to dependencies
 
-  - @dcspark/cardano-multiplatform-lib-nodejs
+  - @anastasia-labs/cardano-multiplatform-lib-nodejs
   - @emurgo/cardano-message-signing-nodejs
 
 ## 0.0.2

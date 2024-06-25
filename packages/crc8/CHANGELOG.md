@@ -1,5 +1,11 @@
 # @lucid-evolution/crc8
 
+## 0.1.7
+
+### Patch Changes
+
+- [#144](https://github.com/Anastasia-Labs/lucid-evolution/pull/144) [`ed554c4`](https://github.com/Anastasia-Labs/lucid-evolution/commit/ed554c45ed4664568af31a6c1cecb2eb5464cab5) Thanks [@solidsnakedev](https://github.com/solidsnakedev)! - add metadata endpoint
+
 ## 0.1.6
 
 ### Patch Changes

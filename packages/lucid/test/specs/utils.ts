@@ -1,6 +1,6 @@
 import { Console, Effect, Logger, LogLevel, pipe, Schedule } from "effect";
-import { TxSignBuilder } from "../../src";
-import { User } from "./services";
+import { TxSignBuilder } from "../../src/index.js";
+import { User } from "./services.js";
 
 export const handleSignSubmit = (signBuilder: TxSignBuilder) =>
   Effect.gen(function* () {
