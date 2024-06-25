@@ -126,14 +126,15 @@ export const collectFunds = Effect.gen(function* ($) {
   const allUtxos = yield* Effect.tryPromise(() =>
     user.utxosAt(contractAddress),
   );
+  const selectedUTxOs = allUtxos.slice(50);
 
   const redeemer = Data.to(new Constr(1, [Data.void()]));
   let signBuilder = user
     .newTx()
-    .collectFrom(allUtxos, redeemer)
+    .collectFrom(selectedUTxOs, redeemer)
     .attach.SpendingValidator(stake);
 
-  allUtxos.forEach((utxo, index) => {
+    selectedUTxOs.forEach((utxo, index) => {
     signBuilder = signBuilder.pay.ToAddressWithData(
       contractAddress,
       {

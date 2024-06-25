@@ -9,7 +9,7 @@ import * as ParametrizedEndpoints from "./specs/hello-params.js";
 import * as TxChain from "./specs/tx-chaining.js";
 import * as MetadataEndpoint from "./specs/metadata.js";
 
-describe.("Onchain testing", () => {
+describe("Onchain testing", () => {
   test.skip("registerStakeValidator", async () => {
     const program = pipe(
       StakeContractEndpoints.registerStake,
@@ -19,7 +19,7 @@ describe.("Onchain testing", () => {
     expect(exit._tag).toBe("Success");
   });
 
-  test.skip("DespositStakeFunds", async () => {
+  test("DespositStakeFunds", async () => {
     const program = pipe(
       StakeContractEndpoints.depositFunds,
       Effect.provide(Layer.mergeAll(User.layer, StakeContract.layer)),
