@@ -500,6 +500,8 @@ export class Emulator implements Provider {
     ) {
       switch (credential.type) {
         case "Key": {
+          console.log("keyHashes :>> ", keyHashes);
+          console.log("credential.hash :>> ", credential.hash);
           if (!keyHashes.includes(credential.hash)) {
             throw new Error(
               `Missing vkey witness. Key hash: ${credential.hash}`,
