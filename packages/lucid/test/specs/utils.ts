@@ -18,8 +18,8 @@ export const handleSignSubmit = (signBuilder: TxSignBuilder) =>
 export const handleSignSubmitWithoutValidation = (signBuilder: TxSignBuilder) =>
   Effect.gen(function* () {
     const signed = yield* signBuilder.sign.withWallet().completeProgram();
-    const txHash = yield* signed.submitProgram();
-    yield* Effect.logDebug(`🚀 Transaction submitted: ${txHash}`);
+    // const txHash = yield* signed.submitProgram();
+    // yield* Effect.logDebug(`🚀 Transaction submitted: ${txHash}`);
   });
 
 export const withLogRetry = <A, E, R>(effect: Effect.Effect<A, E, R>) =>

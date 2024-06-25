@@ -4,7 +4,11 @@ import { Constr, Data } from "@lucid-evolution/plutus";
 import { getAddressDetails } from "@lucid-evolution/utils";
 import { fromText } from "@lucid-evolution/core-utils";
 import { TxSignBuilder } from "../../src";
-import { handleSignSubmit, withLogRetry } from "./utils";
+import {
+  handleSignSubmit,
+  handleSignSubmitWithoutValidation,
+  withLogRetry,
+} from "./utils";
 
 export const depositFunds = Effect.gen(function* () {
   const { user } = yield* User;
@@ -149,7 +153,7 @@ export const collectFunds = Effect.gen(function* ($) {
     .attach.WithdrawalValidator(stake)
     .completeProgram();
   return signBuilder2;
-}).pipe(Effect.flatMap(handleSignSubmit), withLogRetry);
+}).pipe(Effect.flatMap(handleSignSubmitWithoutValidation), withLogRetry);
 
 export const registerStake = Effect.gen(function* ($) {
   const { user } = yield* User;
