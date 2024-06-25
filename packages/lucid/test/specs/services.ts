@@ -7,6 +7,7 @@ import {
   Script,
   SpendingValidator,
   validatorToAddress,
+  validatorToRewardAddress,
 } from "../../src/index.js";
 import scripts from "./contracts/plutus.json";
 

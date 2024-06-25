@@ -92,39 +92,45 @@ export const complete = (
       setCollateral(config, collateralInput, walletInfo.address);
     }
 
-    const availableInputs = _Array.differenceWith(isEqualUTxO)(
-      walletInfo.inputs,
-      config.collectedInputs,
-    );
+    console.log("Phase 1");
+    yield* selectionAndEvaluation(config, options, walletInfo, false);
 
-    const inputsToAdd =
-      options.coinSelection !== false
-        ? yield* coinSelection(config, availableInputs)
-        : [];
+    console.log("Phase 2");
+    yield* selectionAndEvaluation(config, options, walletInfo, true);
 
-    for (const utxo of inputsToAdd) {
-      const input = CML.SingleInputBuilder.from_transaction_unspent_output(
-        utxoToCore(utxo),
-      ).payment_key();
-      config.txBuilder.add_input(input);
-    }
-    //NOTE: We need to keep track of all consumed inputs
-    // this is just a patch, and we should find a better way to do this
-    config.consumedInputs = [...config.collectedInputs, ...inputsToAdd];
+    // const availableInputs = _Array.differenceWith(isEqualUTxO)(
+    //   walletInfo.inputs,
+    //   config.collectedInputs,
+    // );
 
-    const txRedeemerBuilder = config.txBuilder.build_for_evaluation(
-      0,
-      CML.Address.from_bech32(walletInfo.address),
-    );
-    if (
-      options.localUPLCEval !== false &&
-      txRedeemerBuilder.draft_tx().witness_set().redeemers()
-    ) {
-      applyUPLCEval(
-        yield* evalTransaction(config, txRedeemerBuilder, walletInfo.inputs),
-        config.txBuilder,
-      );
-    }
+    // const inputsToAdd =
+    //   options.coinSelection !== false
+    //     ? yield* coinSelection(config, availableInputs)
+    //     : [];
+
+    // for (const utxo of inputsToAdd) {
+    //   const input = CML.SingleInputBuilder.from_transaction_unspent_output(
+    //     utxoToCore(utxo),
+    //   ).payment_key();
+    //   config.txBuilder.add_input(input);
+    // }
+    // //NOTE: We need to keep track of all consumed inputs
+    // // this is just a patch, and we should find a better way to do this
+    // config.consumedInputs = [...config.collectedInputs, ...inputsToAdd];
+
+    // const txRedeemerBuilder = config.txBuilder.build_for_evaluation(
+    //   0,
+    //   CML.Address.from_bech32(walletInfo.address),
+    // );
+    // if (
+    //   options.localUPLCEval !== false &&
+    //   txRedeemerBuilder.draft_tx().witness_set().redeemers()
+    // ) {
+    //   applyUPLCEval(
+    //     yield* evalTransaction(config, txRedeemerBuilder, walletInfo.inputs),
+    //     config.txBuilder,
+    //   );
+    // }
     config.txBuilder.add_change_if_needed(
       CML.Address.from_bech32(walletInfo.address),
       true,
@@ -165,16 +171,65 @@ export const complete = (
     ),
   );
 
+export const selectionAndEvaluation = (
+  config: TxBuilder.TxBuilderConfig,
+  options: CompleteOptions,
+  walletInfo: WalletInfo,
+  script_calculation: Boolean
+) =>
+  Effect.gen(function* () {
+    const availableInputs = _Array.differenceWith(isEqualUTxO)(
+      walletInfo.inputs,
+      config.collectedInputs,
+    );
+
+    const inputsToAdd =
+      options.coinSelection !== false
+        ? yield* coinSelection(config, availableInputs, script_calculation)
+        : [];
+    config.collectedInputs = [...config.collectedInputs, ...inputsToAdd];
+
+    for (const utxo of inputsToAdd) {
+      const input = CML.SingleInputBuilder.from_transaction_unspent_output(
+        utxoToCore(utxo),
+      ).payment_key();
+      config.txBuilder.add_input(input);
+    }
+    //NOTE: We need to keep track of all consumed inputs
+    // this is just a patch, and we should find a better way to do this
+    config.consumedInputs = [...config.collectedInputs, ...inputsToAdd];
+
+    const txRedeemerBuilder = config.txBuilder.build_for_evaluation(
+      0,
+      CML.Address.from_bech32(walletInfo.address),
+    );
+    if (
+      options.localUPLCEval !== false &&
+      txRedeemerBuilder.draft_tx().witness_set().redeemers()
+    ) {
+      applyUPLCEval(
+        yield* evalTransaction(config, txRedeemerBuilder, walletInfo.inputs),
+        config.txBuilder,
+      );
+    }
+  }).pipe(
+    Effect.catchAllDefect(
+      (e) => new RunTimeError({ message: stringify(String(e)) }),
+    ),
+  );
+
 export const applyUPLCEval = (
   uplcEval: Uint8Array[],
   txbuilder: CML.TransactionBuilder,
 ) => {
+  console.log("In applyUPLCEval");
   for (const bytes of uplcEval) {
     const redeemer = CML.LegacyRedeemer.from_cbor_bytes(bytes);
     const exUnits = CML.ExUnits.new(
       redeemer.ex_units().mem(),
       redeemer.ex_units().steps(),
     );
+    // console.log(redeemer.to_json());
     txbuilder.set_exunits(
       CML.RedeemerWitnessKey.new(redeemer.tag(), redeemer.index()),
       exUnits,
@@ -279,16 +334,23 @@ const findCollateral = (
 const coinSelection = (
   config: TxBuilder.TxBuilderConfig,
   availableInputs: UTxO[],
+  script_calculation: Boolean
 ): Effect.Effect<UTxO[], TxBuilderError> =>
   Effect.gen(function* () {
     // yield* Console.log("config.collectedInputs: ", config.collectedInputs);
     // NOTE: This is a fee estimation. If the amount is not enough, it may require increasing the fee.
-    const estimatedFee: Assets = { lovelace: config.txBuilder.min_fee(false) };
+    const estimatedFee1: Assets = { lovelace: config.txBuilder.min_fee(false) };
     const estimatedLovelaceChangeAddress: Assets = { lovelace: 3_000_000n };
     const negatedMintedAssets = negateAssets(config.mintedAssets);
     const negatedCollectedAssets = negateAssets(
-      sumAssetsFromInputs(config.collectedInputs),
-    );
+      sumAssetsFromInputs(config.collectedInputs));
+
+    console.log(stringify(estimatedFee1));
+    
+    const estimatedFee: Assets = script_calculation ? { lovelace: config.txBuilder.min_fee(true)} : estimatedFee1
+    console.log("Fee with exUnits " + script_calculation);
+    console.log(stringify(estimatedFee));
+
     // Calculate the net change in assets (delta)
     const assetsDelta: Assets = pipe(
       config.totalOutputAssets,
@@ -301,6 +363,7 @@ const coinSelection = (
       assetsDelta,
       Record.filter((amount) => amount > 0n),
     );
+    // TODO: add missing check on leftover assets containing minAda when collected inputs are sufficient.
     // No UTxOs need to be selected if collected inputs are sufficient
     if (Record.isEmptyRecord(requiredAssets)) return [];
     // yield* Console.log("requiredAssets: ", requiredAssets);
