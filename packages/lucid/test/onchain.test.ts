@@ -56,7 +56,7 @@ describe("Onchain testing", () => {
     expect(exit._tag).toBe("Success");
   });
 
-  test.skip("DespositFunds", async () => {
+  test("DespositFunds", async () => {
     const program = pipe(
       HelloEndpoints.depositFunds,
       Effect.provide(Layer.mergeAll(User.layer, HelloContract.layer)),
@@ -65,7 +65,7 @@ describe("Onchain testing", () => {
     expect(exit._tag).toBe("Success");
   });
 
-  test.skip("CollectFunds", async () => {
+  test("CollectFunds", async () => {
     const program = pipe(
       HelloEndpoints.collectFunds,
       Effect.provide(Layer.mergeAll(User.layer, HelloContract.layer)),
@@ -74,7 +74,7 @@ describe("Onchain testing", () => {
     expect(exit._tag).toBe("Success");
   });
 
-  test.skip("DespositFunds, lock reference script", async () => {
+  test("DespositFunds, lock reference script", async () => {
     const program = pipe(
       HelloEndpoints.depositFundsLockRefScript,
       Effect.provide(Layer.mergeAll(User.layer, HelloContract.layer)),
@@ -83,7 +83,7 @@ describe("Onchain testing", () => {
     expect(exit._tag).toBe("Success");
   });
 
-  test.skip("CollectFunds , reading from reference script", async () => {
+  test("CollectFunds , reading from reference script", async () => {
     const program = pipe(
       HelloEndpoints.collectFundsReadFrom,
       Effect.provide(Layer.mergeAll(User.layer, HelloContract.layer)),
@@ -92,7 +92,7 @@ describe("Onchain testing", () => {
     expect(exit._tag).toBe("Success");
   });
 
-  test.skip("registerStake", async () => {
+  test("registerStake", async () => {
     const program = pipe(
       StakeEndpoints.registerStake,
       Effect.provide(User.layer),
@@ -101,7 +101,7 @@ describe("Onchain testing", () => {
     expect(exit._tag).toBe("Success");
   });
 
-  test.skip("deRegisterStake", async () => {
+  test("deRegisterStake", async () => {
     const program = pipe(
       StakeEndpoints.deRegisterStake,
       Effect.provide(User.layer),
@@ -110,7 +110,7 @@ describe("Onchain testing", () => {
     expect(exit._tag).toBe("Success");
   });
 
-  test.skip("registerStake/deRegisterStake", async () => {
+  test("registerStake/deRegisterStake", async () => {
     const program = pipe(
       StakeEndpoints.registerDeregisterStake,
       Effect.provide(User.layer),
@@ -119,7 +119,7 @@ describe("Onchain testing", () => {
     expect(exit._tag).toBe("Success");
   });
 
-  test.skip("registerStake", async () => {
+  test("registerStake", async () => {
     const program = pipe(
       StakeEndpoints.registerStake,
       Effect.provide(User.layer),
@@ -128,7 +128,7 @@ describe("Onchain testing", () => {
     expect(exit._tag).toBe("Success");
   });
 
-  test.skip("withdrawZero", async () => {
+  test("withdrawZero", async () => {
     const program = pipe(
       StakeEndpoints.withdrawZero,
       Effect.provide(User.layer),
@@ -137,7 +137,7 @@ describe("Onchain testing", () => {
     expect(exit._tag).toBe("Success");
   });
 
-  test.skip("Parametrized Contract - Deposit Funds", async () => {
+  test("Parametrized Contract - Deposit Funds", async () => {
     const program = pipe(
       ParametrizedEndpoints.depositFunds,
       Effect.provide(Layer.mergeAll(User.layer)),
@@ -146,7 +146,7 @@ describe("Onchain testing", () => {
     expect(exit._tag).toBe("Success");
   });
 
-  test.skip("Parametrized Contract - Collect Funds", async () => {
+  test("Parametrized Contract - Collect Funds", async () => {
     const program = pipe(
       ParametrizedEndpoints.collectFunds,
       Effect.provide(Layer.mergeAll(User.layer)),
@@ -155,7 +155,7 @@ describe("Onchain testing", () => {
     expect(exit._tag).toBe("Success");
   });
 
-  test.skip("Mint Test - Mint Token", async () => {
+  test("Mint Test - Mint Token", async () => {
     const program = pipe(
       MintBurnEndpoints.mint,
       Effect.provide(Layer.mergeAll(User.layer)),
@@ -164,7 +164,7 @@ describe("Onchain testing", () => {
     expect(exit._tag).toBe("Success");
   });
 
-  test.skip("Mint Test - Burn Token", async () => {
+  test("Mint Test - Burn Token", async () => {
     const program = pipe(
       MintBurnEndpoints.burn,
       Effect.provide(Layer.mergeAll(User.layer)),
@@ -173,7 +173,7 @@ describe("Onchain testing", () => {
     expect(exit._tag).toBe("Success");
   });
 
-  test.skip("Mint Test - Mint/Burn Token", async () => {
+  test("Mint Test - Mint/Burn Token", async () => {
     const program = pipe(
       MintBurnEndpoints.mintburn,
       Effect.provide(Layer.mergeAll(User.layer)),
@@ -182,7 +182,7 @@ describe("Onchain testing", () => {
     expect(exit._tag).toBe("Success");
   });
 
-  test.skip("Mint Test - Mint Token, Second Test", async () => {
+  test("Mint Test - Mint Token, Second Test", async () => {
     const program = pipe(
       MintBurnEndpoints.mint2,
       Effect.provide(Layer.mergeAll(User.layer)),
@@ -191,7 +191,7 @@ describe("Onchain testing", () => {
     expect(exit._tag).toBe("Success");
   });
 
-  test.skip("Mint Test - Burn Token, Second Test", async () => {
+  test("Mint Test - Burn Token, Second Test", async () => {
     const program = pipe(
       MintBurnEndpoints.burn2,
       Effect.provide(Layer.mergeAll(User.layer)),
@@ -200,7 +200,7 @@ describe("Onchain testing", () => {
     expect(exit._tag).toBe("Success");
   });
 
-  test.skip("Mint Test - Pay ADA", async () => {
+  test("Mint Test - Pay ADA", async () => {
     const program = pipe(
       MintBurnEndpoints.pay,
       Effect.provide(Layer.mergeAll(User.layer)),
@@ -209,7 +209,7 @@ describe("Onchain testing", () => {
     expect(exit._tag).toBe("Success");
   });
 
-  test.skip("Mint Test - Pay Asset", async () => {
+  test("Mint Test - Pay Asset", async () => {
     const program = pipe(
       MintBurnEndpoints.pay2,
       Effect.provide(Layer.mergeAll(User.layer)),
@@ -218,7 +218,7 @@ describe("Onchain testing", () => {
     expect(exit._tag).toBe("Success");
   });
 
-  test.skip("Mint Test - CollectFunds", async () => {
+  test("Mint Test - CollectFunds", async () => {
     const program = pipe(
       MintBurnEndpoints.pay3,
       Effect.provide(Layer.mergeAll(User.layer, HelloContract.layer)),
