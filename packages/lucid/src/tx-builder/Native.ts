@@ -85,9 +85,9 @@ export const toNativeScript = (native: Native) => {
       return CML.NativeScript.new_script_pubkey(
         CML.Ed25519KeyHash.from_hex(native.keyHash),
       );
-    case "ScriptInvalidBefore":
-      return CML.NativeScript.new_script_invalid_hereafter(BigInt(native.slot));
     case "ScriptInvalidHereafter":
+      return CML.NativeScript.new_script_invalid_hereafter(BigInt(native.slot));
+    case "ScriptInvalidBefore":
       return CML.NativeScript.new_script_invalid_before(BigInt(native.slot));
     case "ScriptAll": {
       const nativeList = CML.NativeScriptList.new();
