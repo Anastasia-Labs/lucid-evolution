@@ -72,34 +72,34 @@ export const parseNativeScript = S.decodeUnknownEither(NativeScriptSchema);
 
 // https://github.com/IntersectMBO/cardano-node/blob/1.26.1-with-cardano-cli/doc/reference/simple-scripts.md#time-locking
 export type Native =
-  | { type: "sig"; keyHash: string }
-  | { type: "before"; slot: number }
-  | { type: "after"; slot: number }
-  | { type: "all"; scripts: ReadonlyArray<Native> }
-  | { type: "any"; scripts: ReadonlyArray<Native> }
-  | { type: "atLeast"; required: number; scripts: ReadonlyArray<Native> };
+  | { type: "ScriptPubKey"; keyHash: string }
+  | { type: "ScriptInvalidBefore"; slot: number }
+  | { type: "ScriptInvalidHereafter"; slot: number }
+  | { type: "ScriptAll"; scripts: ReadonlyArray<Native> }
+  | { type: "ScriptAny"; scripts: ReadonlyArray<Native> }
+  | { type: "ScriptNOfK"; required: number; scripts: ReadonlyArray<Native> };
 
 export const toNativeScript = (native: Native) => {
   switch (native.type) {
-    case "sig":
+    case "ScriptPubKey":
       return CML.NativeScript.new_script_pubkey(
         CML.Ed25519KeyHash.from_hex(native.keyHash),
       );
-    case "before":
+    case "ScriptInvalidHereafter":
       return CML.NativeScript.new_script_invalid_hereafter(BigInt(native.slot));
-    case "after":
+    case "ScriptInvalidBefore":
       return CML.NativeScript.new_script_invalid_before(BigInt(native.slot));
-    case "all": {
+    case "ScriptAll": {
       const nativeList = CML.NativeScriptList.new();
       native.scripts.map((script) => nativeList.add(toNativeScript(script)));
       return CML.NativeScript.new_script_all(nativeList);
     }
-    case "any": {
+    case "ScriptAny": {
       const nativeList = CML.NativeScriptList.new();
       native.scripts.map((script) => nativeList.add(toNativeScript(script)));
       return CML.NativeScript.new_script_any(nativeList);
     }
-    case "atLeast": {
+    case "ScriptNOfK": {
       const nativeList = CML.NativeScriptList.new();
       native.scripts.map((script) => nativeList.add(toNativeScript(script)));
       return CML.NativeScript.new_script_n_of_k(

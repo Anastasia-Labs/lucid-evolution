@@ -211,7 +211,7 @@ export type Relay = {
 };
 
 export type NativeScript = {
-  type: "sig" | "all" | "any" | "before" | "atLeast" | "after";
+  type: "ScriptPubKey" | "ScriptAll" | "ScriptAny" | "ScriptInvalidBefore" | "ScriptNOfK" | "ScriptInvalidHereafter";
   keyHash?: KeyHash;
   required?: number;
   slot?: Slot;
@@ -219,12 +219,12 @@ export type NativeScript = {
 };
 
 export type Native =
-  | { type: "sig"; keyHash: string }
-  | { type: "before"; slot: number }
-  | { type: "after"; slot: number }
-  | { type: "all"; scripts: ReadonlyArray<Native> }
-  | { type: "any"; scripts: ReadonlyArray<Native> }
-  | { type: "atLeast"; required: number; scripts: ReadonlyArray<Native> };
+  | { type: "ScriptPubKey"; keyHash: string }
+  | { type: "ScriptInvalidBefore"; slot: number }
+  | { type: "ScriptInvalidHereafter"; slot: number }
+  | { type: "ScriptAll"; scripts: ReadonlyArray<Native> }
+  | { type: "ScriptAny"; scripts: ReadonlyArray<Native> }
+  | { type: "ScriptNOfK"; required: number; scripts: ReadonlyArray<Native> };
 
 export type SlotConfig = {
   zeroTime: UnixTime;
