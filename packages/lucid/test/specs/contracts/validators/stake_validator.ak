@@ -1,16 +1,19 @@
 use aiken/list
 use aiken/pairs
-use aiken/transaction.{ScriptContext, Spend, WithdrawFrom, find_input}
+use aiken/transaction.{ScriptContext, Spend, WithdrawFrom}
 use aiken/transaction/credential.{Inline}
 
 validator {
-  fn spend(_datum: Data, _redeemer: Data, ctx: ScriptContext) -> Bool {
+  fn spend(_datum: Data, redeemer: Int, ctx: ScriptContext) -> Bool {
     expect ScriptContext { transaction, purpose: Spend(out_ref) } = ctx
-    expect Some(input) = find_input(transaction.inputs, out_ref)
-    pairs.has_key(
-      transaction.withdrawals,
-      Inline(input.output.address.payment_credential),
-    )
+    expect Some(input) = list.at(transaction.inputs, redeemer)
+    and {
+      input.output_reference == out_ref,
+      pairs.has_key(
+        transaction.withdrawals,
+        Inline(input.output.address.payment_credential),
+      ),
+    }
   }
 
   fn stake(_redeemer: Data, ctx: ScriptContext) -> Bool {

@@ -1,17 +1,18 @@
 import { CML } from "../../core.js";
 import { CBORHex, OutputDatum } from "../types.js";
 import { Effect } from "effect";
-import { networkToId } from "@lucid-evolution/utils";
+import { networkToId, getAddressDetails } from "@lucid-evolution/utils";
 import {
   Address,
   AddressDetails,
   Assets,
+  RedeemerBuilder,
   RewardAddress,
   UTxO,
 } from "@lucid-evolution/core-types";
 import { TxBuilderError } from "../../Errors.js";
 import { LucidConfig } from "../../lucid-evolution/LucidEvolution.js";
-import { getAddressDetails } from "@lucid-evolution/utils";
+import { TxBuilderConfig } from "../TxBuilder.js";
 
 export const toDatumOption = (outputDatum: OutputDatum): CML.DatumOption => {
   switch (outputDatum.kind) {
@@ -56,6 +57,21 @@ export const toPartial = (script: CML.PlutusScript, redeemer: CBORHex) =>
     CML.PlutusScriptWitness.new_script(script),
     CML.PlutusData.from_cbor_hex(redeemer),
   );
+
+export const handleRedeemerBuilder = (
+  config: TxBuilderConfig,
+  partialProgram: (
+    redeemer?: string | undefined,
+  ) => Effect.Effect<void, TxBuilderError, never>,
+  redeemer?: string | RedeemerBuilder,
+) => {
+  if (typeof redeemer === "object") {
+    config.partialPrograms.set(redeemer, partialProgram);
+  } else {
+    const program = partialProgram(redeemer);
+    config.programs.push(program);
+  }
+};
 
 //NOTE: deprecated
 // export function toCMLTransactionHash(body: CML.TransactionBody) {

@@ -1,12 +1,9 @@
-import { Console, Effect, Logger, LogLevel, pipe, Schedule } from "effect";
-import { HelloContract, StakeContract, User } from "./services";
+import { Effect, pipe } from "effect";
+import { StakeContract, User } from "./services";
 import { Constr, Data } from "@lucid-evolution/plutus";
-import { getAddressDetails } from "@lucid-evolution/utils";
-import { fromText } from "@lucid-evolution/core-utils";
-import { TxSignBuilder } from "../../src";
+import { RedeemerBuilder } from "../../src";
 import {
   handleSignSubmit,
-  handleSignSubmitWithoutValidation,
   withLogRetry,
 } from "./utils";
 
@@ -20,105 +17,21 @@ export const depositFunds = Effect.gen(function* () {
     // Effect.andThen((utxos) => Console.log(utxos)),
   );
 
-  const signBuilder = yield* user
-    .newTx()
-    .pay.ToAddressWithData(
+  let txBuilder = user.newTx();
+
+  for (let i = 0; i < 50; i++) {
+    txBuilder = txBuilder.pay.ToAddressWithData(
       contractAddress,
       {
         kind: "inline",
         value: datum,
       },
-      { lovelace: 10_000_000n },
-    )
-    .pay.ToAddressWithData(
-      contractAddress,
-      {
-        kind: "inline",
-        value: datum,
-      },
-      { lovelace: 10_000_000n },
-    )
-    .pay.ToAddressWithData(
-      contractAddress,
-      {
-        kind: "inline",
-        value: datum,
-      },
-      { lovelace: 10_000_000n },
-    )
-    .pay.ToAddressWithData(
-      contractAddress,
-      {
-        kind: "inline",
-        value: datum,
-      },
-      { lovelace: 10_000_000n },
-    )
-    .pay.ToAddressWithData(
-      contractAddress,
-      {
-        kind: "inline",
-        value: datum,
-      },
-      { lovelace: 10_000_000n },
-    )
-    .pay.ToAddressWithData(
-      contractAddress,
-      {
-        kind: "inline",
-        value: datum,
-      },
-      { lovelace: 10_000_000n },
-    )
-    .pay.ToAddressWithData(
-      contractAddress,
-      {
-        kind: "inline",
-        value: datum,
-      },
-      { lovelace: 10_000_000n },
-    )
-    .pay.ToAddressWithData(
-      contractAddress,
-      {
-        kind: "inline",
-        value: datum,
-      },
-      { lovelace: 10_000_000n },
-    )
-    .pay.ToAddressWithData(
-      contractAddress,
-      {
-        kind: "inline",
-        value: datum,
-      },
-      { lovelace: 10_000_000n },
-    )
-    .pay.ToAddressWithData(
-      contractAddress,
-      {
-        kind: "inline",
-        value: datum,
-      },
-      { lovelace: 10_000_000n },
-    )
-    .pay.ToAddressWithData(
-      contractAddress,
-      {
-        kind: "inline",
-        value: datum,
-      },
-      { lovelace: 10_000_000n },
-    )
-    .pay.ToAddressWithData(
-      contractAddress,
-      {
-        kind: "inline",
-        value: datum,
-      },
-      { lovelace: 10_000_000n },
-    )
-    .completeProgram();
+      { lovelace: 2_000_000n },
+    );
+  }
+
+  const signBuilder = yield* txBuilder.completeProgram();
+
   return signBuilder;
 }).pipe(Effect.flatMap(handleSignSubmit), withLogRetry);
 
@@ -126,18 +39,33 @@ export const collectFunds = Effect.gen(function* ($) {
   const { user } = yield* User;
   const { contractAddress, stake, rewardAddress } = yield* StakeContract;
 
-  // TODO: set an upper limit on UTxOs spent from script
   const allUtxos = yield* Effect.tryPromise(() =>
     user.utxosAt(contractAddress),
   );
+  const selectedUTxOs = allUtxos.slice(0, 50);
 
-  const redeemer = Data.to(new Constr(1, [Data.void()]));
+  const rdmrBuilderSelf: RedeemerBuilder = {
+    kind: "self",
+    makeRedeemer: (inputIndex: bigint) => {
+      return Data.to(new Constr(1, [inputIndex]));
+    },
+  };
+
+  const outIndices = [0n, 1n, 2n];
+  const rdmrBuilder1: RedeemerBuilder = {
+    kind: "selected",
+    makeRedeemer: (inputIndices: bigint[]) => {
+      return Data.to(new Constr(1, [inputIndices, outIndices]));
+    },
+    inputs: selectedUTxOs,
+  };
+
   let signBuilder = user
     .newTx()
-    .collectFrom(allUtxos, redeemer)
+    .collectFrom(selectedUTxOs, rdmrBuilderSelf)
     .attach.SpendingValidator(stake);
 
-  allUtxos.forEach((utxo, index) => {
+  selectedUTxOs.forEach((utxo, index) => {
     signBuilder = signBuilder.pay.ToAddressWithData(
       contractAddress,
       {
@@ -148,12 +76,20 @@ export const collectFunds = Effect.gen(function* ($) {
     );
   });
 
+  const rdmrBuilder2: RedeemerBuilder = {
+    kind: "selected",
+    makeRedeemer: (inputIndices: bigint[]) => {
+      return Data.to(new Constr(0, [inputIndices, [0n, 0n, 0n]]));
+    },
+    inputs: selectedUTxOs,
+  };
+
   const signBuilder2 = yield* signBuilder
-    .withdraw(rewardAddress, 0n, Data.void())
+    .withdraw(rewardAddress, 0n, rdmrBuilder2)
     .attach.WithdrawalValidator(stake)
     .completeProgram();
   return signBuilder2;
-}).pipe(Effect.flatMap(handleSignSubmitWithoutValidation), withLogRetry);
+}).pipe(Effect.flatMap(handleSignSubmit), withLogRetry);
 
 export const registerStake = Effect.gen(function* ($) {
   const { user } = yield* User;
