@@ -11,10 +11,10 @@ import { handleSignSubmit, withLogRetry } from "./utils.js";
 
 const mkMintinPolicy = (time: number, address: string) => {
   return nativeJSFromJson({
-    type: "all",
+    type: "ScriptAll",
     scripts: [
       {
-        type: "sig",
+        type: "ScriptPubKey",
         keyHash: paymentCredentialOf(address).hash,
       },
     ],
