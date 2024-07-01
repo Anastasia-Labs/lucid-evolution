@@ -211,7 +211,13 @@ export type Relay = {
 };
 
 export type NativeScript = {
-  type: "ScriptPubKey" | "ScriptAll" | "ScriptAny" | "ScriptInvalidBefore" | "ScriptNOfK" | "ScriptInvalidHereafter";
+  type:
+    | "ScriptPubKey"
+    | "ScriptAll"
+    | "ScriptAny"
+    | "ScriptInvalidBefore"
+    | "ScriptNOfK"
+    | "ScriptInvalidHereafter";
   keyHash?: KeyHash;
   required?: number;
   slot?: Slot;
