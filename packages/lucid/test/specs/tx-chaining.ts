@@ -43,7 +43,7 @@ export const depositFundsCollect = Effect.gen(function* () {
   const datum = Data.to(new Constr(0, [publicKeyHash!]));
   const { contractAddress, hello } = yield* HelloContract;
   const walletUTxOs = yield* Effect.promise(() => user.wallet().getUtxos());
-  // yield* Console.log(walletUTxOs);
+  // yield* Console.log(walletUTxOs)
   const addr = yield* Effect.promise(() => user.wallet().address());
   const redeemer = Data.to(new Constr(0, [fromText("Hello, World!")]));
   const deposit = (user: LucidEvolution) =>
@@ -102,6 +102,6 @@ const fetchOwner = (utxos: UTxO[]) =>
     }
     const datum = Data.from(value.datum, DatumType);
     return (
-      datum.owner === "9b619deb6e46ed004e49cb9a158462189cf093bab8eef2765d9b8bf7"
+      datum.owner === "e6849315a2984aadcd1e42d9628f6d6cc071685bef02bb52502f86c9"
     );
   });
