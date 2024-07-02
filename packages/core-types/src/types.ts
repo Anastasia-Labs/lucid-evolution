@@ -211,7 +211,13 @@ export type Relay = {
 };
 
 export type NativeScript = {
-  type: "ScriptPubKey" | "ScriptAll" | "ScriptAny" | "ScriptInvalidBefore" | "ScriptNOfK" | "ScriptInvalidHereafter";
+  type:
+    | "ScriptPubKey"
+    | "ScriptAll"
+    | "ScriptAny"
+    | "ScriptInvalidBefore"
+    | "ScriptNOfK"
+    | "ScriptInvalidHereafter";
   keyHash?: KeyHash;
   required?: number;
   slot?: Slot;
@@ -225,6 +231,27 @@ export type Native =
   | { type: "ScriptAll"; scripts: ReadonlyArray<Native> }
   | { type: "ScriptAny"; scripts: ReadonlyArray<Native> }
   | { type: "ScriptNOfK"; required: number; scripts: ReadonlyArray<Native> };
+
+// https://github.com/IntersectMBO/cardano-node/blob/1.26.1-with-cardano-cli/doc/reference/simple-scripts.md#time-locking
+export type CardanoCLINativeScript = {
+  type: "sig" | "all" | "any" | "before" | "atLeast" | "after";
+  keyHash?: KeyHash;
+  required?: number;
+  slot?: Slot;
+  scripts?: CardanoCLINativeScript[];
+};
+
+export type CardanoCLINative =
+  | { type: "sig"; keyHash: string }
+  | { type: "before"; slot: number }
+  | { type: "after"; slot: number }
+  | { type: "all"; scripts: ReadonlyArray<CardanoCLINative> }
+  | { type: "any"; scripts: ReadonlyArray<CardanoCLINative> }
+  | {
+      type: "atLeast";
+      required: number;
+      scripts: ReadonlyArray<CardanoCLINative>;
+    };
 
 export type SlotConfig = {
   zeroTime: UnixTime;
