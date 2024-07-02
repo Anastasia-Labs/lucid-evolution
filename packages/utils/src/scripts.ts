@@ -11,7 +11,6 @@ import {
   CertificateValidator,
   WithdrawalValidator,
   RewardAddress,
-  NativeScript,
   Native,
   Exact,
 } from "@lucid-evolution/core-types";
@@ -132,18 +131,20 @@ export function nativeFromJson(nativeScript: Native): Script {
   return nativeJSFromJson(nativeScript);
 }
 
+
+/// OBSOLETE - Use Native and nativeFromJson or toNativeScript instead
 /**
  * Convert a native script from Json to the Hex representation.
  * It follows this Json format: https://github.com/input-output-hk/cardano-node/blob/master/doc/reference/simple-scripts.md
  */
-export function nativeScriptFromJson(nativeScript: NativeScript): Script {
-  return {
-    type: "Native",
-    script: CML.NativeScript.from_json(
-      JSON.stringify(nativeScript),
-    ).to_cbor_hex(),
-  };
-}
+// export function nativeScriptFromJson(nativeScript: NativeScript): Script {
+//   return {
+//     type: "Native",
+//     script: CML.NativeScript.from_json(
+//       JSON.stringify(nativeScript),
+//     ).to_cbor_hex(),
+//   };
+// }
 
 export function applyParamsToScript<T extends unknown[] = Data[]>(
   plutusScript: string,
