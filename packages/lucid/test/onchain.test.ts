@@ -1,6 +1,6 @@
 import { describe, expect, test } from "vitest";
 import { Effect, Layer, pipe } from "effect";
-import { HelloContract, User } from "./specs/services.js";
+import { HelloContract, MintContract, User } from "./specs/services.js";
 import * as HelloEndpoints from "./specs/hello.js";
 import * as StakeEndpoints from "./specs/stake.js";
 import * as MintBurnEndpoints from "./specs/mint-burn.js";
@@ -127,19 +127,19 @@ describe("Onchain testing", () => {
     expect(exit._tag).toBe("Success");
   });
 
-  test("Mint Test - Mint Token", async () => {
+  test.only("Mint Test - Mint Token", async () => {
     const program = pipe(
       MintBurnEndpoints.mint,
-      Effect.provide(Layer.mergeAll(User.layer)),
+      Effect.provide(Layer.mergeAll(User.layer, MintContract.layer)),
     );
     const exit = await Effect.runPromiseExit(program);
     expect(exit._tag).toBe("Success");
   });
 
-  test("Mint Test - Burn Token", async () => {
+  test.only("Mint Test - Burn Token", async () => {
     const program = pipe(
       MintBurnEndpoints.burn,
-      Effect.provide(Layer.mergeAll(User.layer)),
+      Effect.provide(Layer.mergeAll(User.layer, MintContract.layer)),
     );
     const exit = await Effect.runPromiseExit(program);
     expect(exit._tag).toBe("Success");

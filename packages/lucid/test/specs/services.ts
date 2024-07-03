@@ -4,6 +4,8 @@ import {
   Blockfrost,
   Koios,
   Lucid,
+  MintingPolicy,
+  mintingPolicyToId,
   SpendingValidator,
   validatorToAddress,
 } from "../../src/index.js";
@@ -58,4 +60,30 @@ export class HelloContract extends Context.Tag("HelloContract")<
   Effect.Effect.Success<typeof makeHelloService>
 >() {
   static readonly layer = Layer.effect(HelloContract, makeHelloService);
+}
+
+const makeMintService = Effect.gen(function* () {
+  const mintCBOR = yield* pipe(
+    Effect.fromNullable(
+      scripts.validators.find((v) => v.title === "mint.mint"),
+    ),
+    Effect.andThen((script) => script.compiledCode),
+  );
+  const mint: MintingPolicy = {
+    type: "PlutusV2",
+    script: applyDoubleCborEncoding(mintCBOR),
+  };
+  const policyId = mintingPolicyToId(mint);
+  return {
+    mintCBOR,
+    mint,
+    policyId,
+  };
+});
+
+export class MintContract extends Context.Tag("MintContract")<
+  MintContract,
+  Effect.Effect.Success<typeof makeMintService>
+>() {
+  static readonly layer = Layer.effect(MintContract, makeMintService);
 }
