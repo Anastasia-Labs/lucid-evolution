@@ -210,16 +210,12 @@ export type Relay = {
   domainName?: string;
 };
 
-
-// OBSOLETE - Native does the same thing
-// export type NativeScript = {
-//   type: "ScriptPubKey" | "ScriptAll" | "ScriptAny" | "ScriptInvalidBefore" | "ScriptNOfK" | "ScriptInvalidHereafter";
-//   keyHash?: KeyHash;
-//   required?: number;
-//   slot?: Slot;
-//   scripts?: NativeScript[];
-// };
-
+/**
+ * Represents a cardano-cli JSON script syntax
+ *
+ * Native type follows the standard described in the
+ * {@link https://github.com/IntersectMBO/cardano-node/blob/1.26.1-with-cardano-cli/doc/reference/simple-scripts.md#json-script-syntax JSON script syntax documentation}.
+ */
 export type Native =
   | { type: "sig"; keyHash: string }
   | { type: "before"; slot: number }

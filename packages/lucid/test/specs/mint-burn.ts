@@ -1,8 +1,8 @@
 import {
   fromText,
   mintingPolicyToId,
-  nativeJSFromJson,
   paymentCredentialOf,
+  scriptFromNative,
   selectUTxOs,
 } from "../../src/index.js";
 import { Effect } from "effect";
@@ -10,7 +10,7 @@ import { User } from "./services.js";
 import { handleSignSubmit, withLogRetry } from "./utils.js";
 
 const mkMintinPolicy = (time: number, address: string) => {
-  return nativeJSFromJson({
+  return scriptFromNative({
     type: "all",
     scripts: [
       {
