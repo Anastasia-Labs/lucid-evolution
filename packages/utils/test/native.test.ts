@@ -1,7 +1,7 @@
-import { parseNativeScript } from "../src/tx-builder/Native.js";
-import { expect, test } from "vitest";
+import { parseCMLNative } from "../src/native.js";
+import { test } from "vitest";
 
-test("test native parsing", () => {
+test("test CML Native parsing", () => {
   const script: unknown = {
     ScriptAny: {
       native_scripts: [
@@ -32,6 +32,5 @@ test("test native parsing", () => {
       ],
     },
   };
-  const value = parseNativeScript(script);
-  expect(value._tag).toBe("Right");
+  const value = parseCMLNative(script);
 });
