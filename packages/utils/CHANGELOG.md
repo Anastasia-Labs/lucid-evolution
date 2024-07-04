@@ -1,5 +1,19 @@
 # @lucid-evolution/utils
 
+## 0.1.22
+
+### Patch Changes
+
+- [#164](https://github.com/Anastasia-Labs/lucid-evolution/pull/164) [`7a8956f`](https://github.com/Anastasia-Labs/lucid-evolution/commit/7a8956f95a4ae08e520a8a5f0b0ea4a3eabe869a) Thanks [@itsmestale](https://github.com/itsmestale)! - -
+  - remove nativeFromJson and nativeJSFromJSon, use scriptFromNative instead
+  - add scriptFromCMLNative for CML Native type
+  - add parseCMLNative
+  - remove native.ts from lucid package
+  - reallocate native.test.ts file to utils package
+- Updated dependencies [[`7a8956f`](https://github.com/Anastasia-Labs/lucid-evolution/commit/7a8956f95a4ae08e520a8a5f0b0ea4a3eabe869a)]:
+  - @lucid-evolution/core-types@0.1.9
+  - @lucid-evolution/plutus@0.1.12
+
 ## 0.1.21
 
 ### Patch Changes
