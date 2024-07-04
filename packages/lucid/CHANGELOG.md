@@ -1,5 +1,78 @@
 # @lucid-evolution/lucid
 
+## 0.2.46
+
+### Patch Changes
+
+- [#164](https://github.com/Anastasia-Labs/lucid-evolution/pull/164) [`7a8956f`](https://github.com/Anastasia-Labs/lucid-evolution/commit/7a8956f95a4ae08e520a8a5f0b0ea4a3eabe869a) Thanks [@itsmestale](https://github.com/itsmestale)! - -
+
+  - remove nativeFromJson and nativeJSFromJSon, use scriptFromNative instead
+  - add scriptFromCMLNative for CML Native type
+  - add parseCMLNative
+  - remove native.ts from lucid package
+  - reallocate native.test.ts file to utils package
+
+- [#165](https://github.com/Anastasia-Labs/lucid-evolution/pull/165) [`193dd6e`](https://github.com/Anastasia-Labs/lucid-evolution/commit/193dd6ec5f9f8b75bec3fa1318779b6822f34112) Thanks [@solidsnakedev](https://github.com/solidsnakedev)! - apply applyDoubleCborEncoding to attached scripts
+
+- Updated dependencies [[`7a8956f`](https://github.com/Anastasia-Labs/lucid-evolution/commit/7a8956f95a4ae08e520a8a5f0b0ea4a3eabe869a)]:
+  - @lucid-evolution/core-types@0.1.9
+  - @lucid-evolution/utils@0.1.22
+  - @lucid-evolution/plutus@0.1.12
+  - @lucid-evolution/provider@0.1.29
+  - @lucid-evolution/sign_data@0.1.9
+  - @lucid-evolution/wallet@0.1.24
+
+## 0.2.45
+
+### Patch Changes
+
+- Updated dependencies [[`e63c233`](https://github.com/Anastasia-Labs/lucid-evolution/commit/e63c2334a86a50c3ff9e95a142a9299ed76059a3)]:
+  - @lucid-evolution/utils@0.1.21
+  - @lucid-evolution/provider@0.1.28
+  - @lucid-evolution/wallet@0.1.23
+
+## 0.2.44
+
+### Patch Changes
+
+- [#156](https://github.com/Anastasia-Labs/lucid-evolution/pull/156) [`8b65e91`](https://github.com/Anastasia-Labs/lucid-evolution/commit/8b65e91d8b2f18d0b2e3a9914b424fbc22b96cbc) Thanks [@solidsnakedev](https://github.com/solidsnakedev)! - increase fee estimation
+
+## 0.2.43
+
+### Patch Changes
+
+- [#153](https://github.com/Anastasia-Labs/lucid-evolution/pull/153) [`050bfdc`](https://github.com/Anastasia-Labs/lucid-evolution/commit/050bfdc3a85a04c1cc338faa419aa4ac39b1cf49) Thanks [@solidsnakedev](https://github.com/solidsnakedev)! - Ensure change address receives minimum required ADA
+
+- [#144](https://github.com/Anastasia-Labs/lucid-evolution/pull/144) [`ed554c4`](https://github.com/Anastasia-Labs/lucid-evolution/commit/ed554c45ed4664568af31a6c1cecb2eb5464cab5) Thanks [@solidsnakedev](https://github.com/solidsnakedev)! - add metadata endpoint
+
+- Updated dependencies [[`ed554c4`](https://github.com/Anastasia-Labs/lucid-evolution/commit/ed554c45ed4664568af31a6c1cecb2eb5464cab5)]:
+  - @lucid-evolution/core-types@0.1.8
+  - @lucid-evolution/core-utils@0.1.7
+  - @lucid-evolution/sign_data@0.1.8
+  - @lucid-evolution/provider@0.1.27
+  - @lucid-evolution/plutus@0.1.11
+  - @lucid-evolution/wallet@0.1.22
+  - @lucid-evolution/utils@0.1.20
+  - @lucid-evolution/bip39@0.2.8
+  - @lucid-evolution/uplc@0.2.7
+
+## 0.2.42
+
+### Patch Changes
+
+- [#151](https://github.com/Anastasia-Labs/lucid-evolution/pull/151) [`5760851`](https://github.com/Anastasia-Labs/lucid-evolution/commit/57608517cd86e8e72b577fc34f5ae0d3d37f9a74) Thanks [@nikhils9](https://github.com/nikhils9)! - Fixes to support UTF-8 incompatible asset names
+
+- Updated dependencies [[`5760851`](https://github.com/Anastasia-Labs/lucid-evolution/commit/57608517cd86e8e72b577fc34f5ae0d3d37f9a74)]:
+  - @lucid-evolution/utils@0.1.19
+  - @lucid-evolution/provider@0.1.26
+  - @lucid-evolution/wallet@0.1.21
+
+## 0.2.41
+
+### Patch Changes
+
+- [#145](https://github.com/Anastasia-Labs/lucid-evolution/pull/145) [`df9a386`](https://github.com/Anastasia-Labs/lucid-evolution/commit/df9a3868b7091dc0f3636f0f1561b61e1ec1468b) Thanks [@solidsnakedev](https://github.com/solidsnakedev)! - fix recording of config.totalOutputAssets , pay module was not recording lovelace asset
+
 ## 0.2.40
 
 ### Patch Changes
@@ -480,7 +553,7 @@
 
 - [#32](https://github.com/Anastasia-Labs/lucid-evolution/pull/32) [`bb295f2`](https://github.com/Anastasia-Labs/lucid-evolution/commit/bb295f204f91c4beec9a284bb7abff15e0e675b3) Thanks [@solidsnakedev](https://github.com/solidsnakedev)! - set the following packages to dependencies
 
-  - @dcspark/cardano-multiplatform-lib-nodejs
+  - @anastasia-labs/cardano-multiplatform-lib-nodejs
   - @emurgo/cardano-message-signing-nodejs
 
 ## 0.0.2

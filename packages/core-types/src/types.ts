@@ -1,4 +1,4 @@
-import * as CML from "@dcspark/cardano-multiplatform-lib-nodejs";
+import * as CML from "@anastasia-labs/cardano-multiplatform-lib-nodejs";
 type CostModel = Record<string, number>;
 
 export type CostModels = Record<PlutusVersion, CostModel>;
@@ -210,14 +210,12 @@ export type Relay = {
   domainName?: string;
 };
 
-export type NativeScript = {
-  type: "sig" | "all" | "any" | "before" | "atLeast" | "after";
-  keyHash?: KeyHash;
-  required?: number;
-  slot?: Slot;
-  scripts?: NativeScript[];
-};
-
+/**
+ * Represents a cardano-cli JSON script syntax
+ *
+ * Native type follows the standard described in the
+ * {@link https://github.com/IntersectMBO/cardano-node/blob/1.26.1-with-cardano-cli/doc/reference/simple-scripts.md#json-script-syntax JSON script syntax documentation}.
+ */
 export type Native =
   | { type: "sig"; keyHash: string }
   | { type: "before"; slot: number }

@@ -1,5 +1,5 @@
 import { Console, Effect, Logger, LogLevel, pipe, Schedule } from "effect";
-import { User } from "../specs/services";
+import { User } from "../specs/services.js";
 import {
   applyDoubleCborEncoding,
   applyParamsToScript,
@@ -8,9 +8,15 @@ import {
 } from "@lucid-evolution/utils";
 import { Constr, Data } from "@lucid-evolution/plutus";
 import { fromText } from "@lucid-evolution/core-utils";
-import { SpendingValidator } from "../../src";
+import { SpendingValidator } from "../../src/index.js";
 import scripts from "./contracts/plutus.json";
-import { handleSignSubmit, withLogRetry } from "./utils";
+import { handleSignSubmit, withLogRetry } from "./utils.js";
+
+const DatumSchema = Data.Object({
+  owner: Data.Bytes(),
+});
+type DatumType = Data.Static<typeof DatumSchema>;
+const DatumType = DatumSchema as unknown as DatumType;
 
 export const depositFunds = Effect.gen(function* () {
   const { user } = yield* User;
@@ -74,11 +80,20 @@ export const collectFunds = Effect.gen(function* ($) {
   const allUtxos = yield* Effect.tryPromise(() =>
     user.utxosAt(contractAddress),
   );
+  const ownerUTxO = yield* Effect.fromNullable(
+    allUtxos.find((utxo) => {
+      if (utxo.datum) {
+        const datum = Data.from(utxo.datum, DatumType);
+        return datum.owner === publicKeyHash;
+      }
+    }),
+  );
+
   const addr = yield* Effect.promise(() => user.wallet().address());
   const redeemer = Data.to(new Constr(0, [fromText("Hello, World!")]));
   const signBuilder = yield* user
     .newTx()
-    .collectFrom(allUtxos, redeemer)
+    .collectFrom([ownerUTxO], redeemer)
     .attach.SpendingValidator(hello)
     .addSigner(addr)
     .completeProgram();

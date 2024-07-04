@@ -1,5 +1,45 @@
 # @lucid-evolution/utils
 
+## 0.1.22
+
+### Patch Changes
+
+- [#164](https://github.com/Anastasia-Labs/lucid-evolution/pull/164) [`7a8956f`](https://github.com/Anastasia-Labs/lucid-evolution/commit/7a8956f95a4ae08e520a8a5f0b0ea4a3eabe869a) Thanks [@itsmestale](https://github.com/itsmestale)! - -
+  - remove nativeFromJson and nativeJSFromJSon, use scriptFromNative instead
+  - add scriptFromCMLNative for CML Native type
+  - add parseCMLNative
+  - remove native.ts from lucid package
+  - reallocate native.test.ts file to utils package
+- Updated dependencies [[`7a8956f`](https://github.com/Anastasia-Labs/lucid-evolution/commit/7a8956f95a4ae08e520a8a5f0b0ea4a3eabe869a)]:
+  - @lucid-evolution/core-types@0.1.9
+  - @lucid-evolution/plutus@0.1.12
+
+## 0.1.21
+
+### Patch Changes
+
+- [#158](https://github.com/Anastasia-Labs/lucid-evolution/pull/158) [`e63c233`](https://github.com/Anastasia-Labs/lucid-evolution/commit/e63c2334a86a50c3ff9e95a142a9299ed76059a3) Thanks [@solidsnakedev](https://github.com/solidsnakedev)! - fix coreToUtxo
+
+## 0.1.20
+
+### Patch Changes
+
+- [#144](https://github.com/Anastasia-Labs/lucid-evolution/pull/144) [`ed554c4`](https://github.com/Anastasia-Labs/lucid-evolution/commit/ed554c45ed4664568af31a6c1cecb2eb5464cab5) Thanks [@solidsnakedev](https://github.com/solidsnakedev)! - add metadata endpoint
+
+- Updated dependencies [[`ed554c4`](https://github.com/Anastasia-Labs/lucid-evolution/commit/ed554c45ed4664568af31a6c1cecb2eb5464cab5)]:
+  - @lucid-evolution/core-types@0.1.8
+  - @lucid-evolution/core-utils@0.1.7
+  - @lucid-evolution/plutus@0.1.11
+  - @lucid-evolution/bip39@0.2.8
+  - @lucid-evolution/crc8@0.1.7
+  - @lucid-evolution/uplc@0.2.7
+
+## 0.1.19
+
+### Patch Changes
+
+- [#151](https://github.com/Anastasia-Labs/lucid-evolution/pull/151) [`5760851`](https://github.com/Anastasia-Labs/lucid-evolution/commit/57608517cd86e8e72b577fc34f5ae0d3d37f9a74) Thanks [@nikhils9](https://github.com/nikhils9)! - Fixes to support UTF-8 incompatible asset names
+
 ## 0.1.18
 
 ### Patch Changes

@@ -1,7 +1,7 @@
 import { Effect, pipe } from "effect";
-import { toText } from "@lucid-evolution/core-utils";
+import { fromHex } from "@lucid-evolution/core-utils";
 import { Assets, Redeemer } from "@lucid-evolution/core-types";
-import * as CML from "@dcspark/cardano-multiplatform-lib-nodejs";
+import * as CML from "@anastasia-labs/cardano-multiplatform-lib-nodejs";
 import { toPartial, toV1, toV2 } from "./TxUtils.js";
 import {
   ERROR_MESSAGE,
@@ -34,8 +34,7 @@ export const mintAssets = (
         yield* mintError("MultiplePolicies", ERROR_MESSAGE.MULTIPLE_POLICIES);
       }
       mintAssets.insert(
-        //NOTE: toText is used to maintain API compatibility
-        CML.AssetName.from_str(toText(unit.slice(56))),
+        CML.AssetName.from_bytes(fromHex(unit.slice(56))),
         assets[unit],
       );
     }

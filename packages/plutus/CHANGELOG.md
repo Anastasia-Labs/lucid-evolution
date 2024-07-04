@@ -1,5 +1,22 @@
 # @lucid-evolution/plutus
 
+## 0.1.12
+
+### Patch Changes
+
+- Updated dependencies [[`7a8956f`](https://github.com/Anastasia-Labs/lucid-evolution/commit/7a8956f95a4ae08e520a8a5f0b0ea4a3eabe869a)]:
+  - @lucid-evolution/core-types@0.1.9
+
+## 0.1.11
+
+### Patch Changes
+
+- [#144](https://github.com/Anastasia-Labs/lucid-evolution/pull/144) [`ed554c4`](https://github.com/Anastasia-Labs/lucid-evolution/commit/ed554c45ed4664568af31a6c1cecb2eb5464cab5) Thanks [@solidsnakedev](https://github.com/solidsnakedev)! - add metadata endpoint
+
+- Updated dependencies [[`ed554c4`](https://github.com/Anastasia-Labs/lucid-evolution/commit/ed554c45ed4664568af31a6c1cecb2eb5464cab5)]:
+  - @lucid-evolution/core-types@0.1.8
+  - @lucid-evolution/core-utils@0.1.7
+
 ## 0.1.10
 
 ### Patch Changes

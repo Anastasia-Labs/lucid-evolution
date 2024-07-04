@@ -1,6 +1,6 @@
 import { Console, Effect, pipe, Schedule } from "effect";
-import { User } from "./services";
-import { handleSignSubmit, withLogRetry } from "./utils";
+import { User } from "./services.js";
+import { handleSignSubmit, withLogRetry } from "./utils.js";
 
 export const registerStake = Effect.gen(function* ($) {
   const { user } = yield* User;

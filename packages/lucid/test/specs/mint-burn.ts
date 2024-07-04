@@ -1,8 +1,8 @@
 import {
   fromText,
   mintingPolicyToId,
-  nativeJSFromJson,
   paymentCredentialOf,
+  scriptFromNative,
   selectUTxOs,
 } from "../../src/index.js";
 import { Effect } from "effect";
@@ -10,7 +10,7 @@ import { User } from "./services.js";
 import { handleSignSubmit, withLogRetry } from "./utils.js";
 
 const mkMintinPolicy = (time: number, address: string) => {
-  return nativeJSFromJson({
+  return scriptFromNative({
     type: "all",
     scripts: [
       {
@@ -26,16 +26,19 @@ export const mint = Effect.gen(function* () {
   const addr = yield* Effect.promise(() => user.wallet().address());
   const mint = mkMintinPolicy(9_000_000, addr);
   const policy = mintingPolicyToId(mint);
+  const maxHexToken =
+    "accbfb633f637e3bb1abee40c9539d1effd742cd2716b3b1db9de3aaf3f37794";
 
   const signBuilder = yield* user
     .newTx()
-    .pay.ToAddress(
-      "addr_test1qrngfyc452vy4twdrepdjc50d4kvqutgt0hs9w6j2qhcdjfx0gpv7rsrjtxv97rplyz3ymyaqdwqa635zrcdena94ljs0xy950",
-      { [policy + fromText("BurnableToken")]: 1n },
-    )
+    .pay.ToAddress(addr, {
+      [policy + fromText("BurnableToken")]: 1n,
+      [policy + maxHexToken]: 1n,
+    })
     .mintAssets({
       [policy + fromText("BurnableToken")]: 1n,
       [policy + fromText("BurnableToken2")]: 1n,
+      [policy + maxHexToken]: 1n,
     })
     .validTo(Date.now() + 900000)
     .attach.MintingPolicy(mint)
@@ -49,14 +52,16 @@ export const burn = Effect.gen(function* () {
   const addr = yield* Effect.promise(() => user.wallet().address());
   const mint = mkMintinPolicy(9_000_000, addr);
   const policy = mintingPolicyToId(mint);
+  const maxHexToken =
+    "accbfb633f637e3bb1abee40c9539d1effd742cd2716b3b1db9de3aaf3f37794";
 
   const signBuilder = yield* user
     .newTx()
-    .pay.ToAddress(
-      "addr_test1qrngfyc452vy4twdrepdjc50d4kvqutgt0hs9w6j2qhcdjfx0gpv7rsrjtxv97rplyz3ymyaqdwqa635zrcdena94ljs0xy950",
-      { lovelace: 2_000_000n },
-    )
-    .mintAssets({ [policy + fromText("BurnableToken")]: -1n })
+    .pay.ToAddress(addr, { lovelace: 2_000_000n })
+    .mintAssets({
+      [policy + fromText("BurnableToken")]: -1n,
+      [policy + maxHexToken]: -1n,
+    })
     .validTo(Date.now() + 900000)
     .attach.MintingPolicy(mint)
     .completeProgram();
@@ -72,10 +77,7 @@ export const mintburn = Effect.gen(function* () {
 
   const signBuilder = yield* user
     .newTx()
-    .pay.ToAddress(
-      "addr_test1qrngfyc452vy4twdrepdjc50d4kvqutgt0hs9w6j2qhcdjfx0gpv7rsrjtxv97rplyz3ymyaqdwqa635zrcdena94ljs0xy950",
-      { [policy + fromText("BurnableToken")]: 1n },
-    )
+    .pay.ToAddress(addr, { [policy + fromText("BurnableToken")]: 1n })
     .mintAssets({
       [policy + fromText("BurnableToken")]: 1n,
       [policy + fromText("BurnableToken2")]: -1n,
@@ -133,10 +135,7 @@ export const pay = Effect.gen(function* () {
 
   const signBuilder = yield* user
     .newTx()
-    .pay.ToAddress(
-      "addr_test1qrngfyc452vy4twdrepdjc50d4kvqutgt0hs9w6j2qhcdjfx0gpv7rsrjtxv97rplyz3ymyaqdwqa635zrcdena94ljs0xy950",
-      { lovelace: 2_000_000n },
-    )
+    .pay.ToAddress(addr, { lovelace: 2_000_000n })
     .validTo(Date.now() + 900000)
     .attach.MintingPolicy(mint)
     .completeProgram();
@@ -152,10 +151,7 @@ export const pay2 = Effect.gen(function* () {
 
   const signBuilder = yield* user
     .newTx()
-    .pay.ToAddress(
-      "addr_test1qrngfyc452vy4twdrepdjc50d4kvqutgt0hs9w6j2qhcdjfx0gpv7rsrjtxv97rplyz3ymyaqdwqa635zrcdena94ljs0xy950",
-      { [policy + fromText("BurnableToken2")]: 1n },
-    )
+    .pay.ToAddress(addr, { [policy + fromText("BurnableToken2")]: 1n })
     .validTo(Date.now() + 900000)
     .attach.MintingPolicy(mint)
     .completeProgram();
@@ -181,17 +177,11 @@ export const pay3 = Effect.gen(function* () {
   const signBuilder = yield* user
     .newTx()
     .collectFrom(selectUTxOs(utxos, collecAssets))
-    .pay.ToAddress(
-      "addr_test1qrngfyc452vy4twdrepdjc50d4kvqutgt0hs9w6j2qhcdjfx0gpv7rsrjtxv97rplyz3ymyaqdwqa635zrcdena94ljs0xy950",
-      { [policy + fromText("BurnableToken2")]: 1n },
-    )
-    .pay.ToAddress(
-      "addr_test1qrngfyc452vy4twdrepdjc50d4kvqutgt0hs9w6j2qhcdjfx0gpv7rsrjtxv97rplyz3ymyaqdwqa635zrcdena94ljs0xy950",
-      {
-        ["665d4dbea856001b880d5749e94384cc486d8c4ee99540d2f65d15704d794d696e746564546f6b656e"]:
-          1n,
-      },
-    )
+    .pay.ToAddress(addr, { [policy + fromText("BurnableToken2")]: 1n })
+    .pay.ToAddress(addr, {
+      ["665d4dbea856001b880d5749e94384cc486d8c4ee99540d2f65d15704d794d696e746564546f6b656e"]:
+        1n,
+    })
     .validTo(Date.now() + 900000)
     .attach.MintingPolicy(mint)
     .completeProgram();

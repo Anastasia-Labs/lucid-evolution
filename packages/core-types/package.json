@@ -1,6 +1,6 @@
 {
   "name": "@lucid-evolution/core-types",
-  "version": "0.1.7",
+  "version": "0.1.9",
   "description": "",
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
@@ -26,11 +26,11 @@
   "author": "",
   "license": "MIT",
   "browser": {
-    "@dcspark/cardano-multiplatform-lib-nodejs": "@dcspark/cardano-multiplatform-lib-browser"
+    "@anastasia-labs/cardano-multiplatform-lib-nodejs": "@anastasia-labs/cardano-multiplatform-lib-browser"
   },
   "dependencies": {
-    "@dcspark/cardano-multiplatform-lib-nodejs": "^5.3.0",
-    "@dcspark/cardano-multiplatform-lib-browser": "^5.3.0"
+    "@anastasia-labs/cardano-multiplatform-lib-nodejs": "^5.3.1-2",
+    "@anastasia-labs/cardano-multiplatform-lib-browser": "^5.3.1-2"
   },
   "devDependencies": {
     "@types/node": "^20.12.8",

@@ -6,7 +6,7 @@ import {
 } from "@lucid-evolution/core-types";
 import * as TxBuilder from "../TxBuilder.js";
 import { Effect } from "effect";
-import * as CML from "@dcspark/cardano-multiplatform-lib-nodejs";
+import * as CML from "@anastasia-labs/cardano-multiplatform-lib-nodejs";
 import { TxBuilderError, TxBuilderErrorCause } from "../../Errors.js";
 import { validateAddressDetails } from "./TxUtils.js";
 

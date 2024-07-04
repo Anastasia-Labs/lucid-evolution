@@ -1,6 +1,6 @@
 {
   "name": "@lucid-evolution/sign_data",
-  "version": "0.1.7",
+  "version": "0.1.9",
   "description": "",
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
@@ -26,12 +26,12 @@
   "author": "",
   "license": "MIT",
   "browser": {
-    "@dcspark/cardano-multiplatform-lib-nodejs": "@dcspark/cardano-multiplatform-lib-browser",
+    "@anastasia-labs/cardano-multiplatform-lib-nodejs": "@anastasia-labs/cardano-multiplatform-lib-browser",
     "@emurgo/cardano-message-signing-nodejs": "@emurgo/cardano-message-signing-browser"
   },
   "dependencies": {
-    "@dcspark/cardano-multiplatform-lib-nodejs": "^5.3.0",
-    "@dcspark/cardano-multiplatform-lib-browser": "^5.3.0",
+    "@anastasia-labs/cardano-multiplatform-lib-nodejs": "^5.3.1-2",
+    "@anastasia-labs/cardano-multiplatform-lib-browser": "^5.3.1-2",
     "@emurgo/cardano-message-signing-nodejs": "^1.0.1",
     "@emurgo/cardano-message-signing-browser": "^1.0.1",
     "@lucid-evolution/core-types": "workspace:*",

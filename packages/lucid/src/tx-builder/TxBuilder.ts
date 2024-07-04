@@ -4,6 +4,7 @@ import { OutputDatum } from "./types.js";
 import {
   Address,
   Assets,
+  Label,
   Lovelace,
   PoolId,
   Redeemer,
@@ -21,11 +22,12 @@ import * as Interval from "./internal/Interval.js";
 import * as Signer from "./internal/Signer.js";
 import * as Stake from "./internal/Stake.js";
 import * as Pool from "./internal/Pool.js";
+import * as Metadata from "./internal/Metadata.js";
 import * as CompleteTxBuilder from "./internal/CompleteTxBuilder.js";
 import * as TxSignBuilder from "../tx-sign-builder/TxSignBuilder.js";
 import { TransactionError } from "../Errors.js";
 import { Either } from "effect/Either";
-import { Effect, pipe } from "effect";
+import { Effect } from "effect";
 
 export type TxBuilderConfig = {
   readonly lucidConfig: LucidConfig;
@@ -76,6 +78,10 @@ export type TxBuilder = {
     rewardAddress: RewardAddress,
     poolId: PoolId,
     redeemer?: Redeemer,
+  ) => TxBuilder;
+  attachMetadata: (
+    label: Label,
+    metadata: Metadata.TransactionMetadata,
   ) => TxBuilder;
   attach: {
     Script: (script: Script) => TxBuilder;
@@ -219,6 +225,11 @@ export function makeTxBuilder(lucidConfig: LucidConfig): TxBuilder {
       redeemer?: Redeemer,
     ) => {
       const program = Pool.delegateTo(config, rewardAddress, poolId, redeemer);
+      config.programs.push(program);
+      return txBuilder;
+    },
+    attachMetadata: (label: Label, metadata: Metadata.TransactionMetadata) => {
+      const program = Metadata.attachMetadata(config, label, metadata);
       config.programs.push(program);
       return txBuilder;
     },

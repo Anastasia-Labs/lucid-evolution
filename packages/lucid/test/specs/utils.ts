@@ -1,6 +1,6 @@
 import { Console, Effect, Logger, LogLevel, pipe, Schedule } from "effect";
-import { TxSignBuilder } from "../../src";
-import { User } from "./services";
+import { TxSignBuilder } from "../../src/index.js";
+import { User } from "./services.js";
 
 export const handleSignSubmit = (signBuilder: TxSignBuilder) =>
   Effect.gen(function* () {
@@ -29,7 +29,7 @@ export const withLogRetry = <A, E, R>(effect: Effect.Effect<A, E, R>) =>
     Effect.tapError((_) => Effect.log("💥️ Recovering from error")),
     Logger.withMinimumLogLevel(LogLevel.Debug),
     Effect.retry(
-      Schedule.compose(Schedule.exponential(20_000), Schedule.recurs(4)),
+      Schedule.compose(Schedule.exponential(10_000), Schedule.recurs(5)),
     ),
   );
 

@@ -27,14 +27,14 @@ export const attachScript = ({
         key: CML.PlutusV1Script.from_cbor_hex(applyDoubleCborEncoding(script))
           .hash()
           .to_hex(),
-        value: { type, script },
+        value: { type, script: applyDoubleCborEncoding(script) },
       };
     case "PlutusV2":
       return {
         key: CML.PlutusV2Script.from_cbor_hex(applyDoubleCborEncoding(script))
           .hash()
           .to_hex(),
-        value: { script, type },
+        value: { type, script: applyDoubleCborEncoding(script) },
       };
   }
 };

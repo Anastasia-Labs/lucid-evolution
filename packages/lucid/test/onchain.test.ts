@@ -6,11 +6,21 @@ import * as StakeEndpoints from "./specs/stake.js";
 import * as MintBurnEndpoints from "./specs/mint-burn.js";
 import * as ParametrizedEndpoints from "./specs/hello-params.js";
 import * as TxChain from "./specs/tx-chaining.js";
+import * as MetadataEndpoint from "./specs/metadata.js";
 
-describe.sequential("Onchain testing", () => {
+describe("Onchain testing", () => {
   test("TxChain", async () => {
     const program = pipe(
       TxChain.depositFundsCollect,
+      Effect.provide(Layer.mergeAll(User.layer, HelloContract.layer)),
+    );
+    const exit = await Effect.runPromiseExit(program);
+    console.log(exit);
+    expect(exit._tag).toBe("Success");
+  });
+  test("Metadata", async () => {
+    const program = pipe(
+      MetadataEndpoint.payWithMetadata,
       Effect.provide(Layer.mergeAll(User.layer, HelloContract.layer)),
     );
     const exit = await Effect.runPromiseExit(program);
