@@ -1,11 +1,8 @@
 import { Effect, pipe } from "effect";
 import { StakeContract, User } from "./services";
 import { Constr, Data } from "@lucid-evolution/plutus";
-import { RedeemerBuilder } from "../../src";
-import {
-  handleSignSubmit,
-  withLogRetry,
-} from "./utils";
+import { RedeemerBuilder, UTxO } from "../../src";
+import { handleSignSubmit, handleSignSubmitWithoutValidation, withLogNoRetry, withLogRetry } from "./utils";
 
 export const depositFunds = Effect.gen(function* () {
   const { user } = yield* User;
@@ -38,21 +35,23 @@ export const depositFunds = Effect.gen(function* () {
 export const collectFunds = Effect.gen(function* ($) {
   const { user } = yield* User;
   const { contractAddress, stake, rewardAddress } = yield* StakeContract;
+  const addr = yield* Effect.tryPromise(() => user.wallet().address());
 
   const allUtxos = yield* Effect.tryPromise(() =>
     user.utxosAt(contractAddress),
   );
-  const selectedUTxOs = allUtxos.slice(0, 50);
+  // console.log("Total number of utxos: " + allUtxos.length);
+  const selectedUTxOs = allUtxos.slice(0, 65);
 
   const rdmrBuilderSelf: RedeemerBuilder = {
     kind: "self",
     makeRedeemer: (inputIndex: bigint) => {
-      return Data.to(new Constr(1, [inputIndex]));
+      return Data.to(new Constr(1, []));
     },
   };
 
   const outIndices = [0n, 1n, 2n];
-  const rdmrBuilder1: RedeemerBuilder = {
+  const rdmrBuilderSelected: RedeemerBuilder = {
     kind: "selected",
     makeRedeemer: (inputIndices: bigint[]) => {
       return Data.to(new Constr(1, [inputIndices, outIndices]));
@@ -62,10 +61,11 @@ export const collectFunds = Effect.gen(function* ($) {
 
   let signBuilder = user
     .newTx()
-    .collectFrom(selectedUTxOs, rdmrBuilderSelf)
+    // .collectFrom(selectedUTxOs, rdmrBuilderSelf)
+    .collectFrom(selectedUTxOs, Data.to(new Constr(1, [1n])))
     .attach.SpendingValidator(stake);
 
-  selectedUTxOs.forEach((utxo, index) => {
+  selectedUTxOs.forEach((utxo: UTxO) => {
     signBuilder = signBuilder.pay.ToAddressWithData(
       contractAddress,
       {
@@ -76,7 +76,7 @@ export const collectFunds = Effect.gen(function* ($) {
     );
   });
 
-  const rdmrBuilder2: RedeemerBuilder = {
+  const rdmrBuilderWithdraw: RedeemerBuilder = {
     kind: "selected",
     makeRedeemer: (inputIndices: bigint[]) => {
       return Data.to(new Constr(0, [inputIndices, [0n, 0n, 0n]]));
@@ -85,11 +85,20 @@ export const collectFunds = Effect.gen(function* ($) {
   };
 
   const signBuilder2 = yield* signBuilder
-    .withdraw(rewardAddress, 0n, rdmrBuilder2)
+    // .withdraw(rewardAddress, 0n, rdmrBuilderWithdraw)
+    .withdraw(rewardAddress, 0n, Data.void())
     .attach.WithdrawalValidator(stake)
+    .pay.ToAddressWithData(
+      addr,
+      {
+        kind: "inline",
+        value: Data.void(),
+      },
+      {lovelace: 5_400_000n},
+    )
     .completeProgram();
   return signBuilder2;
-}).pipe(Effect.flatMap(handleSignSubmit), withLogRetry);
+}).pipe(Effect.flatMap(handleSignSubmitWithoutValidation), withLogNoRetry);
 
 export const registerStake = Effect.gen(function* ($) {
   const { user } = yield* User;

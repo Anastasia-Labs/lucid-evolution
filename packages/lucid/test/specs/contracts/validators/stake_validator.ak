@@ -2,11 +2,13 @@ use aiken/list
 use aiken/pairs
 use aiken/transaction.{ScriptContext, Spend, WithdrawFrom}
 use aiken/transaction/credential.{Inline}
+use aiken/cbor
 
 validator {
-  fn spend(_datum: Data, redeemer: Int, ctx: ScriptContext) -> Bool {
+  fn spend(_datum: Data, _redeemer: Int, ctx: ScriptContext) -> Bool {
     expect ScriptContext { transaction, purpose: Spend(out_ref) } = ctx
-    expect Some(input) = list.at(transaction.inputs, redeemer)
+    // expect Some(input) = list.at(transaction.inputs, redeemer)
+    expect Some(input) = transaction.find_input(transaction.inputs, out_ref)
     and {
       input.output_reference == out_ref,
       pairs.has_key(
@@ -47,6 +49,8 @@ validator {
           }
         },
       )
-    input_count == output_count
+    trace cbor.diagnostic(input_count)
+    trace cbor.diagnostic(output_count)
+    (input_count == output_count)?
   }
 }

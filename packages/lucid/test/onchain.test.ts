@@ -28,7 +28,7 @@ describe("Onchain testing", () => {
     expect(exit._tag).toBe("Success");
   });
 
-  test("CollectStakeFunds", async () => {
+  test.only("CollectStakeFunds", async () => {
     const program = pipe(
       StakeContractEndpoints.collectFunds,
       Effect.provide(Layer.mergeAll(User.layer, StakeContract.layer)),

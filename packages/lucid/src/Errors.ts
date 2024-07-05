@@ -27,7 +27,8 @@ export type TxBuilderErrorCause =
   | "MissingRedeemer"
   | "MissingStakeCredential"
   | "Address"
-  | "InvalidCredential";
+  | "InvalidCredential"
+  | "RedeemerBuilder";
 export type TxBuilderErrorModule =
   | "Attach"
   | "Collect"
