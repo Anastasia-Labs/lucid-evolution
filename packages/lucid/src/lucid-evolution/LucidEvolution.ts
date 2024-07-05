@@ -19,13 +19,14 @@ import { createCostModels, unixTimeToSlot } from "@lucid-evolution/utils";
 import * as TxBuilder from "../tx-builder/TxBuilder.js";
 import * as TxConfig from "../tx-builder/TxConfig.js";
 import * as TxSignBuilder from "../tx-sign-builder/TxSignBuilder.js";
-import { Data } from "@lucid-evolution/plutus";
+import { Data, SLOT_CONFIG_NETWORK } from "@lucid-evolution/plutus";
 import {
   makeWalletFromAddress,
   makeWalletFromAPI,
   makeWalletFromPrivateKey,
   makeWalletFromSeed,
 } from "@lucid-evolution/wallet";
+import { Emulator } from "@lucid-evolution/provider";
 
 export type LucidEvolution = {
   config: () => LucidConfig;
@@ -81,6 +82,14 @@ export const Lucid = async (
     txbuilderconfig: TxConfig.makeTxConfig(protocolParam, costModels),
     protocolParameters: protocolParam,
   };
+  if (config.provider as Emulator) {
+    const emulator: Emulator = config.provider as Emulator;
+    SLOT_CONFIG_NETWORK[network] = {
+      zeroTime: emulator.now(),
+      zeroSlot: 0,
+      slotLength: 1000,
+    };
+  }
   return {
     config: () => config,
     wallet: () => config.wallet as Wallet,
