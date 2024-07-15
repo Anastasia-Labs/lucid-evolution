@@ -48,9 +48,8 @@ describe("coinSelection", () => {
     );
     const exit = await Effect.runPromiseExit(program);
     // TODO: try using only one exepect
-    expect(exit._tag).toBe("Success")
-    if(exit._tag == "Success")
-      expect(exit.value).toStrictEqual([inputs[1]]);
+    expect(exit._tag).toBe("Success");
+    if (exit._tag == "Success") expect(exit.value).toStrictEqual([inputs[1]]);
   });
   it("should select largest first, and input index_1(5_000_000n), index_2(3_662_726n)", async () => {
     // console.log(selected);
@@ -66,8 +65,8 @@ describe("coinSelection", () => {
     );
     const exit = await Effect.runPromiseExit(program);
     // TODO: try using only one expect
-    expect(exit._tag).toBe("Success")
-    if(exit._tag == "Success")
+    expect(exit._tag).toBe("Success");
+    if (exit._tag == "Success")
       expect(exit.value).toStrictEqual([inputs[1], inputs[2]]);
   });
 
@@ -85,9 +84,8 @@ describe("coinSelection", () => {
     const exit = await Effect.runPromiseExit(program);
     // TODO: try using only one expect
     expect(exit._tag).toStrictEqual("Success");
-    if(exit._tag == "Success")
+    if (exit._tag == "Success")
       expect(exit.value).toStrictEqual([inputs[1], inputs[0], inputs[2]]);
-    
   });
   it("should select none", async () => {
     const inputs: UTxO[] = [
@@ -136,8 +134,8 @@ describe("coinSelection", () => {
 
     const exit = await Effect.runPromiseExit(program);
     // TODO: try using only one exepect
-    expect(exit._tag).toBe("Success")
-    if(exit._tag == "Success")
+    expect(exit._tag).toBe("Success");
+    if (exit._tag == "Success")
       expect(exit.value).toStrictEqual(expectedSelection);
   });
   it("should select largest first, and input index 0, 2", async () => {
@@ -146,16 +144,13 @@ describe("coinSelection", () => {
       createDummyUTxO(1, 100_000n, 0),
       createDummyUTxO(2, 466_272n, 0),
     ];
-    const program = recursive(
-      sortUTxOs(inputs),
-      {},
-      4310n,
-      { lovelace: 5_000n }
-    );
+    const program = recursive(sortUTxOs(inputs), {}, 4310n, {
+      lovelace: 5_000n,
+    });
     const exit = await Effect.runPromiseExit(program);
     // TODO: try using only one expect
     expect(exit._tag).toStrictEqual("Success");
-    if(exit._tag == "Success")
+    if (exit._tag == "Success")
       expect(exit.value).toStrictEqual([inputs[0], inputs[2]]);
   });
 });

@@ -101,7 +101,7 @@ export const complete = (
     // Second round of coin selection by including script execution costs in fee estimation.
     // UPLC evaluation need to be performed again if new inputs are selected during coin selection.
     // Because increasing the inputs can increase the script execution budgets.
-    if(hasScriptExecutions)
+    if (hasScriptExecutions)
       yield* selectionAndEvaluation(config, options, walletInfo, true);
 
     config.txBuilder.add_change_if_needed(
@@ -185,10 +185,12 @@ export const selectionAndEvaluation = (
       // NOTE: Cannot build the redeemers twice as it would lead to duplicate addition of
       // inputs for "SPEND" redeemers. As CML currently does not allow just updating redeemer of
       // an existing input.
-      if(script_calculation)
-        yield* completeTxError("RedeemerBuilder", "Coin selection had to be updated after building redeemers, possibly leading to incorrect indices.");
-      else
-        yield* completePartialPrograms(config);
+      if (script_calculation)
+        yield* completeTxError(
+          "RedeemerBuilder",
+          "Coin selection had to be updated after building redeemers, possibly leading to incorrect indices.",
+        );
+      else yield* completePartialPrograms(config);
     }
 
     console.log("completed redeemer building");
@@ -198,20 +200,31 @@ export const selectionAndEvaluation = (
 
     // Build transaction to begin with UPLC evaluation
     const txRedeemerBuilder: CML.TxRedeemerBuilder = yield* Effect.try({
-      try: () => config.txBuilder.build_for_evaluation(
-      0,
-      CML.Address.from_bech32(walletInfo.address),
-    ),
-    catch: (error) =>  {
-      // In case the "build_for_evaluation" fails due to addition of new redeemers, due to increase fees
-      // and the selected utxo inputs not being sufficient, we would need to perform coin selection again
-      // before moving on to UPLC evaluation.
-      if(error instanceof Error && error.message == "UTxO Balance Insufficient") {
-        Effect.runPromiseExit(selectionAndEvaluation(config, options, walletInfo, script_calculation));
-        return;
-      }        
-    }
-  });
+      try: () =>
+        config.txBuilder.build_for_evaluation(
+          0,
+          CML.Address.from_bech32(walletInfo.address),
+        ),
+      catch: (error) => {
+        // In case the "build_for_evaluation" fails due to addition of new redeemers, due to increase fees
+        // and the selected utxo inputs not being sufficient, we would need to perform coin selection again
+        // before moving on to UPLC evaluation.
+        if (
+          error instanceof Error &&
+          error.message == "UTxO Balance Insufficient"
+        ) {
+          Effect.runPromiseExit(
+            selectionAndEvaluation(
+              config,
+              options,
+              walletInfo,
+              script_calculation,
+            ),
+          );
+          return;
+        }
+      },
+    });
     console.log("complete redeemer builder");
     if (
       options.localUPLCEval !== false &&
@@ -306,7 +319,7 @@ export const applyUPLCEval = (
   txbuilder: CML.TransactionBuilder,
 ) => {
   console.log("In applyUPLCEval");
-  const totalExUnits = {mem: 0n, steps: 0n}
+  const totalExUnits = { mem: 0n, steps: 0n };
   for (const bytes of uplcEval) {
     const redeemer = CML.LegacyRedeemer.from_cbor_bytes(bytes);
     const exUnits = CML.ExUnits.new(

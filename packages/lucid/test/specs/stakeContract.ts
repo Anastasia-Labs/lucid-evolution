@@ -2,7 +2,12 @@ import { Effect, pipe } from "effect";
 import { StakeContract, User } from "./services";
 import { Constr, Data } from "@lucid-evolution/plutus";
 import { RedeemerBuilder, UTxO } from "../../src";
-import { handleSignSubmit, handleSignSubmitWithoutValidation, withLogNoRetry, withLogRetry } from "./utils";
+import {
+  handleSignSubmit,
+  handleSignSubmitWithoutValidation,
+  withLogNoRetry,
+  withLogRetry,
+} from "./utils";
 
 export const depositFunds = Effect.gen(function* () {
   const { user } = yield* User;
@@ -94,7 +99,7 @@ export const collectFunds = Effect.gen(function* ($) {
         kind: "inline",
         value: Data.void(),
       },
-      {lovelace: 5_400_000n},
+      { lovelace: 5_400_000n },
     )
     .completeProgram();
   return signBuilder2;
