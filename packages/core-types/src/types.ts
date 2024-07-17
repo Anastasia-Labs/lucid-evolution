@@ -210,27 +210,19 @@ export type Relay = {
   domainName?: string;
 };
 
-export type NativeScript = {
-  type:
-    | "ScriptPubKey"
-    | "ScriptAll"
-    | "ScriptAny"
-    | "ScriptInvalidBefore"
-    | "ScriptNOfK"
-    | "ScriptInvalidHereafter";
-  keyHash?: KeyHash;
-  required?: number;
-  slot?: Slot;
-  scripts?: NativeScript[];
-};
-
+/**
+ * Represents a cardano-cli JSON script syntax
+ *
+ * Native type follows the standard described in the
+ * {@link https://github.com/IntersectMBO/cardano-node/blob/1.26.1-with-cardano-cli/doc/reference/simple-scripts.md#json-script-syntax JSON script syntax documentation}.
+ */
 export type Native =
-  | { type: "ScriptPubKey"; keyHash: string }
-  | { type: "ScriptInvalidBefore"; slot: number }
-  | { type: "ScriptInvalidHereafter"; slot: number }
-  | { type: "ScriptAll"; scripts: ReadonlyArray<Native> }
-  | { type: "ScriptAny"; scripts: ReadonlyArray<Native> }
-  | { type: "ScriptNOfK"; required: number; scripts: ReadonlyArray<Native> };
+  | { type: "sig"; keyHash: string }
+  | { type: "before"; slot: number }
+  | { type: "after"; slot: number }
+  | { type: "all"; scripts: ReadonlyArray<Native> }
+  | { type: "any"; scripts: ReadonlyArray<Native> }
+  | { type: "atLeast"; required: number; scripts: ReadonlyArray<Native> };
 
 export type SlotConfig = {
   zeroTime: UnixTime;

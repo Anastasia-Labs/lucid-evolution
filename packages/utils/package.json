@@ -1,6 +1,6 @@
 {
   "name": "@lucid-evolution/utils",
-  "version": "0.1.21",
+  "version": "0.1.22",
   "description": "",
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
@@ -33,6 +33,7 @@
   "dependencies": {
     "@anastasia-labs/cardano-multiplatform-lib-browser": "^5.3.1-2",
     "@anastasia-labs/cardano-multiplatform-lib-nodejs": "^5.3.1-2",
+    "@effect/schema": "^0.68.16",
     "@emurgo/cardano-serialization-lib-browser": "^11.5.0",
     "@emurgo/cardano-serialization-lib-nodejs": "^11.5.0",
     "@lucid-evolution/bip39": "workspace:*",
@@ -41,7 +42,8 @@
     "@lucid-evolution/crc8": "workspace:*",
     "@lucid-evolution/plutus": "workspace:*",
     "@lucid-evolution/uplc": "workspace:*",
-    "cborg": "^4.2.0"
+    "cborg": "^4.2.0",
+    "effect": "^3.1.2"
   },
   "devDependencies": {
     "@types/node": "^20.12.8",

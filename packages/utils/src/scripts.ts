@@ -8,17 +8,11 @@ import {
   Script,
   MintingPolicy,
   PolicyId,
-  CertificateValidator,
-  WithdrawalValidator,
-  RewardAddress,
-  NativeScript,
-  Native,
   Exact,
 } from "@lucid-evolution/core-types";
 import { CML } from "./core.js";
 import { networkToId } from "./network.js";
 import { applyDoubleCborEncoding } from "./cbor.js";
-import { nativeJSFromJson } from "./native.js";
 import { Data } from "@lucid-evolution/plutus";
 import * as UPLC from "@lucid-evolution/uplc";
 import { fromHex, toHex } from "@lucid-evolution/core-utils";
@@ -126,23 +120,6 @@ export function fromScriptRef(scriptRef: CML.Script): Script {
 
 export function mintingPolicyToId(mintingPolicy: MintingPolicy): PolicyId {
   return validatorToScriptHash(mintingPolicy);
-}
-
-export function nativeFromJson(nativeScript: Native): Script {
-  return nativeJSFromJson(nativeScript);
-}
-
-/**
- * Convert a native script from Json to the Hex representation.
- * It follows this Json format: https://github.com/input-output-hk/cardano-node/blob/master/doc/reference/simple-scripts.md
- */
-export function nativeScriptFromJson(nativeScript: NativeScript): Script {
-  return {
-    type: "Native",
-    script: CML.NativeScript.from_json(
-      JSON.stringify(nativeScript),
-    ).to_cbor_hex(),
-  };
 }
 
 export function applyParamsToScript<T extends unknown[] = Data[]>(

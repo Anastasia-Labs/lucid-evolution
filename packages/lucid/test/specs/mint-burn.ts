@@ -2,8 +2,8 @@ import {
   Data,
   fromText,
   mintingPolicyToId,
-  nativeJSFromJson,
   paymentCredentialOf,
+  scriptFromNative,
   selectUTxOs,
 } from "../../src/index.js";
 import { Effect } from "effect";
@@ -13,8 +13,8 @@ import { handleSignSubmit, withLogRetry } from "./utils.js";
 const maxHexToken =
   "accbfb633f637e3bb1abee40c9539d1effd742cd2716b3b1db9de3aaf3f37794";
 const mkMintinPolicy = (time: number, address: string) => {
-  return nativeJSFromJson({
-    type: "ScriptAll",
+  return scriptFromNative({
+    type: "all",
     scripts: [
       {
         type: "ScriptPubKey",
