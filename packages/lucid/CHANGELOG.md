@@ -1,5 +1,42 @@
 # @lucid-evolution/lucid
 
+## 0.2.46
+
+### Patch Changes
+
+- [#164](https://github.com/Anastasia-Labs/lucid-evolution/pull/164) [`7a8956f`](https://github.com/Anastasia-Labs/lucid-evolution/commit/7a8956f95a4ae08e520a8a5f0b0ea4a3eabe869a) Thanks [@itsmestale](https://github.com/itsmestale)! - -
+
+  - remove nativeFromJson and nativeJSFromJSon, use scriptFromNative instead
+  - add scriptFromCMLNative for CML Native type
+  - add parseCMLNative
+  - remove native.ts from lucid package
+  - reallocate native.test.ts file to utils package
+
+- [#165](https://github.com/Anastasia-Labs/lucid-evolution/pull/165) [`193dd6e`](https://github.com/Anastasia-Labs/lucid-evolution/commit/193dd6ec5f9f8b75bec3fa1318779b6822f34112) Thanks [@solidsnakedev](https://github.com/solidsnakedev)! - apply applyDoubleCborEncoding to attached scripts
+
+- Updated dependencies [[`7a8956f`](https://github.com/Anastasia-Labs/lucid-evolution/commit/7a8956f95a4ae08e520a8a5f0b0ea4a3eabe869a)]:
+  - @lucid-evolution/core-types@0.1.9
+  - @lucid-evolution/utils@0.1.22
+  - @lucid-evolution/plutus@0.1.12
+  - @lucid-evolution/provider@0.1.29
+  - @lucid-evolution/sign_data@0.1.9
+  - @lucid-evolution/wallet@0.1.24
+
+## 0.2.45
+
+### Patch Changes
+
+- Updated dependencies [[`e63c233`](https://github.com/Anastasia-Labs/lucid-evolution/commit/e63c2334a86a50c3ff9e95a142a9299ed76059a3)]:
+  - @lucid-evolution/utils@0.1.21
+  - @lucid-evolution/provider@0.1.28
+  - @lucid-evolution/wallet@0.1.23
+
+## 0.2.44
+
+### Patch Changes
+
+- [#156](https://github.com/Anastasia-Labs/lucid-evolution/pull/156) [`8b65e91`](https://github.com/Anastasia-Labs/lucid-evolution/commit/8b65e91d8b2f18d0b2e3a9914b424fbc22b96cbc) Thanks [@solidsnakedev](https://github.com/solidsnakedev)! - increase fee estimation
+
 ## 0.2.43
 
 ### Patch Changes

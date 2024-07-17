@@ -1,20 +1,23 @@
 import {
+  Data,
   fromText,
   mintingPolicyToId,
-  nativeJSFromJson,
   paymentCredentialOf,
+  scriptFromNative,
   selectUTxOs,
 } from "../../src/index.js";
 import { Effect } from "effect";
-import { User } from "./services.js";
+import { MintContract, User } from "./services.js";
 import { handleSignSubmit, withLogRetry } from "./utils.js";
 
+const maxHexToken =
+  "accbfb633f637e3bb1abee40c9539d1effd742cd2716b3b1db9de3aaf3f37794";
 const mkMintinPolicy = (time: number, address: string) => {
-  return nativeJSFromJson({
+  return scriptFromNative({
     type: "all",
     scripts: [
       {
-        type: "sig",
+        type: "ScriptPubKey",
         keyHash: paymentCredentialOf(address).hash,
       },
     ],
@@ -22,26 +25,32 @@ const mkMintinPolicy = (time: number, address: string) => {
 };
 export const mint = Effect.gen(function* () {
   const { user } = yield* User;
-  const utxo = yield* Effect.tryPromise(() => user.wallet().getUtxos());
   const addr = yield* Effect.promise(() => user.wallet().address());
-  const mint = mkMintinPolicy(9_000_000, addr);
-  const policy = mintingPolicyToId(mint);
-  const maxHexToken =
-    "accbfb633f637e3bb1abee40c9539d1effd742cd2716b3b1db9de3aaf3f37794";
+  const nativeMint = mkMintinPolicy(9_000_000, addr);
+  const nativePolicyId = mintingPolicyToId(nativeMint);
+  const plutusMint = yield* MintContract;
 
   const signBuilder = yield* user
     .newTx()
     .pay.ToAddress(addr, {
-      [policy + fromText("BurnableToken")]: 1n,
-      [policy + maxHexToken]: 1n,
+      [nativePolicyId + fromText("BurnableToken")]: 1n,
+      [nativePolicyId + maxHexToken]: 1n,
     })
     .mintAssets({
-      [policy + fromText("BurnableToken")]: 1n,
-      [policy + fromText("BurnableToken2")]: 1n,
-      [policy + maxHexToken]: 1n,
+      [nativePolicyId + fromText("BurnableToken")]: 1n,
+      [nativePolicyId + fromText("BurnableToken2")]: 1n,
+      [nativePolicyId + maxHexToken]: 1n,
     })
+    .mintAssets(
+      {
+        [plutusMint.policyId + fromText("BurnableTokenPlutus")]: 1n,
+        [plutusMint.policyId + maxHexToken]: 1n,
+      },
+      Data.void(),
+    )
     .validTo(Date.now() + 900000)
-    .attach.MintingPolicy(mint)
+    .attach.MintingPolicy(nativeMint)
+    .attach.MintingPolicy(plutusMint.mint)
     .completeProgram();
   return signBuilder;
 }).pipe(Effect.flatMap(handleSignSubmit), withLogRetry);
@@ -50,20 +59,27 @@ export const burn = Effect.gen(function* () {
   const { user } = yield* User;
   const utxo = yield* Effect.tryPromise(() => user.wallet().getUtxos());
   const addr = yield* Effect.promise(() => user.wallet().address());
-  const mint = mkMintinPolicy(9_000_000, addr);
-  const policy = mintingPolicyToId(mint);
-  const maxHexToken =
-    "accbfb633f637e3bb1abee40c9539d1effd742cd2716b3b1db9de3aaf3f37794";
+  const nativeMint = mkMintinPolicy(9_000_000, addr);
+  const nativePolicyId = mintingPolicyToId(nativeMint);
+  const plutusMint = yield* MintContract;
 
   const signBuilder = yield* user
     .newTx()
     .pay.ToAddress(addr, { lovelace: 2_000_000n })
     .mintAssets({
-      [policy + fromText("BurnableToken")]: -1n,
-      [policy + maxHexToken]: -1n,
+      [nativePolicyId + fromText("BurnableToken")]: -1n,
+      [nativePolicyId + maxHexToken]: -1n,
     })
+    .mintAssets(
+      {
+        [plutusMint.policyId + fromText("BurnableTokenPlutus")]: -1n,
+        [plutusMint.policyId + maxHexToken]: -1n,
+      },
+      Data.void(),
+    )
     .validTo(Date.now() + 900000)
-    .attach.MintingPolicy(mint)
+    .attach.MintingPolicy(nativeMint)
+    .attach.MintingPolicy(plutusMint.mint)
     .completeProgram();
   return signBuilder;
 }).pipe(Effect.flatMap(handleSignSubmit), withLogRetry);

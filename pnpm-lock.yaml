@@ -341,6 +341,15 @@ importers:
       '@anastasia-labs/cardano-multiplatform-lib-nodejs':
         specifier: ^5.3.1-2
         version: 5.3.1-2
+      '@effect/schema':
+        specifier: ^0.68.16
+        version: 0.68.16(effect@3.4.6)
+      '@emurgo/cardano-serialization-lib-browser':
+        specifier: ^11.5.0
+        version: 11.5.0
+      '@emurgo/cardano-serialization-lib-nodejs':
+        specifier: ^11.5.0
+        version: 11.5.0
       '@lucid-evolution/bip39':
         specifier: workspace:*
         version: link:../bip39
@@ -362,6 +371,9 @@ importers:
       cborg:
         specifier: ^4.2.0
         version: 4.2.1
+      effect:
+        specifier: ^3.1.2
+        version: 3.4.6
     devDependencies:
       '@types/node':
         specifier: ^20.12.8
@@ -880,12 +892,29 @@ packages:
       fast-check: 3.19.0
     dev: false
 
+  /@effect/schema@0.68.16(effect@3.4.6):
+    resolution: {integrity: sha512-IvvGbl/bb6aIFRe7809M7bAHDodxJN0FcOItbjp/xrZ5GlcfShABCC25R5lIYD2HlUbtVwOEiCdiCay39ezhLA==}
+    peerDependencies:
+      effect: ^3.4.6
+    dependencies:
+      effect: 3.4.6
+      fast-check: 3.19.0
+    dev: false
+
   /@emurgo/cardano-message-signing-browser@1.0.1:
     resolution: {integrity: sha512-yC4Ymq44WR0bXO1wzxCoyc2W/RD1KSAla0oYhin7IYoVkp2raGp8wt7QNF4pDdNnTcejn5fyPyYY9dL4666H1w==}
     dev: false
 
   /@emurgo/cardano-message-signing-nodejs@1.0.1:
     resolution: {integrity: sha512-PoKh1tQnJX18f8iEr8Jk1KXxKCn9eqaSslMI1pyOJvYRJhQVDLCh0+9YReufjp0oFJIY1ShcrR+4/WnECVZUKQ==}
+    dev: false
+
+  /@emurgo/cardano-serialization-lib-browser@11.5.0:
+    resolution: {integrity: sha512-qchOJ9NYDUz10tzs5r5QhP9hK0p+ZOlRiBwPdTAxqAYLw/8emYBkQQLaS8T1DF6EkeudyrgS00ym5Trw1fo4iA==}
+    dev: false
+
+  /@emurgo/cardano-serialization-lib-nodejs@11.5.0:
+    resolution: {integrity: sha512-IlVABlRgo9XaTR1NunwZpWcxnfEv04ba2l1vkUz4S1W7Jt36F4CtffP+jPeqBZGnAe+fnUwo0XjIJC3ZTNToNQ==}
     dev: false
 
   /@esbuild/aix-ppc64@0.21.5:
@@ -3250,6 +3279,10 @@ packages:
 
   /effect@3.4.0:
     resolution: {integrity: sha512-dBufbmIyeOi8Wog8kJUrpCIvVs/GcGMimtd6JIXhRIKdRLrVho9og/28sJmKjxHM+PG9Bn3t9XehcM3YfCB8og==}
+    dev: false
+
+  /effect@3.4.6:
+    resolution: {integrity: sha512-xmtAJVMBDPzuYWmOPHHYhT9OHUNvKTq9eMjvKKQQLdsNym+/Zarlh+39Y9bMSZ8c+yMrP8YCdLNl7B3cpzRrnA==}
     dev: false
 
   /electron-to-chromium@1.4.810:

@@ -109,12 +109,16 @@ export const complete = (
       CML.Address.from_bech32(walletInfo.address),
       true,
     );
-    const tx = config.txBuilder
-      .build(
-        CML.ChangeSelectionAlgo.Default,
-        CML.Address.from_bech32(walletInfo.address),
-      )
-      .build_unchecked();
+    const tx = yield* Effect.try({
+      try: () =>
+        config.txBuilder
+          .build(
+            CML.ChangeSelectionAlgo.Default,
+            CML.Address.from_bech32(walletInfo.address),
+          )
+          .build_unchecked(),
+      catch: (error) => completeTxError("Build", String(error)),
+    });
 
     const derivedInputs = deriveInputsFromTransaction(tx);
 
@@ -200,11 +204,14 @@ export const selectionAndEvaluation = (
     console.log(config.txBuilder.min_fee(false));
 
     // Build transaction to begin with UPLC evaluation
-    const txRedeemerBuilder: CML.TxRedeemerBuilder =
-      config.txBuilder.build_for_evaluation(
-        0,
-        CML.Address.from_bech32(walletInfo.address),
-      );
+    const txRedeemerBuilder = yield* Effect.try({
+      try: () =>
+        config.txBuilder.build_for_evaluation(
+          0,
+          CML.Address.from_bech32(walletInfo.address),
+        ),
+      catch: (error) => completeTxError("BuildEvaluation", String(error)),
+    });
 
     // TODO: fix the catch block to retain type of selectionAndEvaluation as Effect<void, TransactionError, never>
     // instead of Effect<void, TransactionError | undefined, never>
@@ -476,106 +483,14 @@ const coinSelection = (
     // Note: We are not done with coin selection even if "requiredAssets" is empty.
     // Because "notRequiredAssets" may not contain enough ADA to cover for minimum Ada requirement
     // when they need to be sent as change output. Hence, we allow for "recursive" to be invoked.
-
     const selected = yield* recursive(
       sortUTxOs(availableInputs),
       requiredAssets,
       config.lucidConfig.protocolParameters.coinsPerUtxoByte,
       notRequiredAssets,
     );
-    // yield* Console.log("selected: ", stringify(selected));
     return selected;
   });
-
-// const coinSelection = (
-//   config: TxBuilder.TxBuilderConfig,
-//   availableInputs: UTxO[],
-// ): Effect.Effect<UTxO[], TxBuilderError> =>
-//   Effect.gen(function* () {
-//     // NOTE: This is a fee estimation. If the amount is not enough, it may require increasing the fee.
-//     const estimatedFee: Assets = { lovelace: config.txBuilder.min_fee(false) };
-//     const negatedMintedAssets = negateAssets(config.mintedAssets);
-//     const negatedCollectedAssets = negateAssets(
-//       sumAssetsFromInputs(config.collectedInputs),
-//     );
-//     // Calculate the net change in assets (delta)
-//     const assetsDelta: Assets = pipe(
-//       config.totalOutputAssets,
-//       Record.union(estimatedFee, _BigInt.sum),
-//       Record.union(negatedCollectedAssets, _BigInt.sum),
-//       Record.union(negatedMintedAssets, _BigInt.sum),
-//     );
-//     // Filter and obtain only the required assets (those with a positive amount)
-//     const requiredAssets: Option.Option<Assets> = pipe(
-//       assetsDelta,
-//       Record.filter((amount) => amount > 0n),
-//       (d) => (Record.isEmptyRecord(d) ? Option.none() : Option.some(d)),
-//     );
-//     // Filter and obtain assets that are present in the inputs and mints but are not required by the outputs
-//     // Negate these assets to get their positive amounts
-//     const notRequiredAssets: Option.Option<Assets> = pipe(
-//       assetsDelta,
-//       Record.filter((amount) => amount < 0n),
-//       negateAssets,
-//       (d) => (Record.isEmptyRecord(d) ? Option.none() : Option.some(d)),
-//     );
-//     const selectedInputs: Option.Option<UTxO[]> = pipe(
-//       requiredAssets,
-//       Option.map((a) => selectUTxOs(sortUTxOs(availableInputs), a)),
-//       Option.flatMap((utxos) =>
-//         _Array.isEmptyArray(utxos) ? Option.none() : Option.some(utxos),
-//       ),
-//     );
-//     const selectedAssets: Option.Option<Assets> = pipe(
-//       selectedInputs,
-//       Option.map(sumAssetsFromInputs),
-//     );
-//     //Calculate the leftover assets, so we can calculate the real min ada going back to the change address
-//     const leftoverAssets: Option.Option<Assets> = pipe(
-//       Option.all([selectedAssets, requiredAssets, notRequiredAssets]),
-//       Option.map(([selectedAssets, requiredAssets, notRequiredAssets]) =>
-//         pipe(
-//           selectedAssets,
-//           Record.union(requiredAssets, (self, that) => self - that),
-//           Record.union(notRequiredAssets, (self, that) => self + that),
-//         ),
-//       ),
-//     );
-//     // Ensure the leftover ADA (Lovelace) sent back to the change address meets the minimum required ADA.
-//     // In some cases, the leftover Lovelace may be insufficient because the minimum required ADA can be greater than the available leftover Lovelace.
-//     const extraLovelace: Option.Option<Assets> = pipe(
-//       leftoverAssets,
-//       Option.flatMap((leftoverAssets) => {
-//         const minLovelace = calculateMinLovelace(
-//           config.lucidConfig.protocolParameters.coinsPerUtxoByte,
-//           leftoverAssets,
-//         );
-//         if (leftoverAssets["lovelace"] > minLovelace) {
-//           return Option.none();
-//         } else {
-//           return Option.some({
-//             lovelace: minLovelace - leftoverAssets["lovelace"],
-//           });
-//         }
-//       }),
-//     );
-//     // Combine all required assets into a single record
-//     const allRequiredAssets: Assets = Record.union(
-//       Option.getOrElse(requiredAssets, () => Record.empty()),
-//       Option.getOrElse(extraLovelace, () => Record.empty()),
-//       _BigInt.sum,
-//     );
-//     // If no assets are required, return an empty array
-//     if (Record.isEmptyRecord(allRequiredAssets)) return [];
-//     // Select UTxOs that match the total required assets
-//     const selected = selectUTxOs(sortUTxOs(availableInputs), allRequiredAssets);
-//     if (_Array.isEmptyArray(selected))
-//       yield* completeTxError(
-//         "NotFound",
-//         `Your wallet does not have enough funds to cover the required assets. ${stringify(allRequiredAssets)}`,
-//       );
-//     return selected;
-//   });
 
 const evalTransaction = (
   config: TxBuilder.TxBuilderConfig,
@@ -585,7 +500,6 @@ const evalTransaction = (
   Effect.gen(function* () {
     //FIX: this returns undefined
     const txEvaluation = setRedeemerstoZero(txRedeemerBuilder.draft_tx())!;
-    // console.log(txEvaluation?.to_json());
     const txUtxos = [
       ...walletInputs,
       ...config.collectedInputs,

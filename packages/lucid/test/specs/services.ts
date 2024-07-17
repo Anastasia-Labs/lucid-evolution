@@ -5,6 +5,8 @@ import {
   Koios,
   Lucid,
   Script,
+  MintingPolicy,
+  mintingPolicyToId,
   SpendingValidator,
   validatorToAddress,
   validatorToRewardAddress,
@@ -88,4 +90,30 @@ export class StakeContract extends Context.Tag("StakeContract")<
   Effect.Effect.Success<typeof makeStakeService>
 >() {
   static readonly layer = Layer.effect(StakeContract, makeStakeService);
+}
+
+const makeMintService = Effect.gen(function* () {
+  const mintCBOR = yield* pipe(
+    Effect.fromNullable(
+      scripts.validators.find((v) => v.title === "mint.mint"),
+    ),
+    Effect.andThen((script) => script.compiledCode),
+  );
+  const mint: MintingPolicy = {
+    type: "PlutusV2",
+    script: applyDoubleCborEncoding(mintCBOR),
+  };
+  const policyId = mintingPolicyToId(mint);
+  return {
+    mintCBOR,
+    mint,
+    policyId,
+  };
+});
+
+export class MintContract extends Context.Tag("MintContract")<
+  MintContract,
+  Effect.Effect.Success<typeof makeMintService>
+>() {
+  static readonly layer = Layer.effect(MintContract, makeMintService);
 }

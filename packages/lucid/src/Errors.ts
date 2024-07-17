@@ -12,6 +12,8 @@ export const ERROR_MESSAGE = {
 
 export type TxBuilderErrorCause =
   | "UPLCEval"
+  | "BuildEvaluation"
+  | "Build"
   | "Datum"
   | "NotFound"
   | "Provider"

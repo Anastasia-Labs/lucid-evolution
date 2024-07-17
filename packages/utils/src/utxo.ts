@@ -1,5 +1,6 @@
 import { Assets, OutRef, TxOutput, UTxO } from "@lucid-evolution/core-types";
 import { CML } from "./core.js";
+import * as CSL from "@emurgo/cardano-serialization-lib-nodejs";
 import { fromScriptRef, toScriptRef } from "./scripts.js";
 import { assetsToValue, valueToAssets } from "./value.js";
 
@@ -62,10 +63,16 @@ export function utxosToCores(utxos: UTxO[]): CML.TransactionUnspentOutput[] {
 
 //TODO: test coreToUtxo -> utxoToCore strict equality
 export function coreToUtxo(coreUtxo: CML.TransactionUnspentOutput): UTxO {
-  const out = CML.TransactionOutput.from_cbor_hex(coreUtxo.to_cbor_hex());
+  const utxoCore = CSL.TransactionUnspentOutput.from_bytes(
+    coreUtxo.to_cbor_bytes(),
+  );
   const utxo = {
-    ...coreToOutRef(CML.TransactionInput.from_cbor_hex(coreUtxo.to_cbor_hex())),
-    ...coreToTxOutput(out),
+    ...coreToOutRef(
+      CML.TransactionInput.from_cbor_bytes(utxoCore.input().to_bytes()),
+    ),
+    ...coreToTxOutput(
+      CML.TransactionOutput.from_cbor_bytes(utxoCore.output().to_bytes()),
+    ),
   };
   return utxo;
 }
