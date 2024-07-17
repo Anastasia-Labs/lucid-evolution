@@ -11,6 +11,7 @@ import { Address, Assets, UTxO, Wallet } from "@lucid-evolution/core-types";
 import {
   ERROR_MESSAGE,
   RunTimeError,
+  TransactionError,
   TxBuilderError,
   TxBuilderErrorCause,
 } from "../../Errors.js";
@@ -148,7 +149,7 @@ export const selectionAndEvaluation = (
   options: CompleteOptions,
   walletInfo: WalletInfo,
   script_calculation: boolean,
-) =>
+): Effect.Effect<void, TransactionError, never> =>
   Effect.gen(function* () {
     const availableInputs = _Array.differenceWith(isEqualUTxO)(
       walletInfo.inputs,
@@ -199,33 +200,46 @@ export const selectionAndEvaluation = (
     console.log(config.txBuilder.min_fee(false));
 
     // Build transaction to begin with UPLC evaluation
-    const txRedeemerBuilder: CML.TxRedeemerBuilder = yield* Effect.try({
-      try: () =>
-        config.txBuilder.build_for_evaluation(
-          0,
-          CML.Address.from_bech32(walletInfo.address),
-        ),
-      catch: (error) => {
-        // In case the "build_for_evaluation" fails due to addition of new redeemers, due to increase fees
-        // and the selected utxo inputs not being sufficient, we would need to perform coin selection again
-        // before moving on to UPLC evaluation.
-        if (
-          error instanceof Error &&
-          error.message == "UTxO Balance Insufficient"
-        ) {
-          Effect.runPromiseExit(
-            selectionAndEvaluation(
-              config,
-              options,
-              walletInfo,
-              script_calculation,
-            ),
-          );
-          return;
-        }
-      },
-    });
-    console.log("complete redeemer builder");
+    const txRedeemerBuilder: CML.TxRedeemerBuilder =
+      config.txBuilder.build_for_evaluation(
+        0,
+        CML.Address.from_bech32(walletInfo.address),
+      );
+
+    // TODO: fix the catch block to retain type of selectionAndEvaluation as Effect<void, TransactionError, never>
+    // instead of Effect<void, TransactionError | undefined, never>
+    //
+    // const txRedeemerBuilder: CML.TxRedeemerBuilder = yield* Effect.try({
+    //   try: () =>
+    //     config.txBuilder.build_for_evaluation(
+    //       0,
+    //       CML.Address.from_bech32(walletInfo.address),
+    //     ),
+    //   catch: (error) => {
+    //     // In case the "build_for_evaluation" fails due to addition of new redeemers, due to increased fees
+    //     // and the selected utxo inputs being insufficient, we would need to perform coin selection again
+    //     // before moving on to UPLC evaluation.
+    //     if (
+    //       error instanceof Error &&
+    //       error.message == "UTxO Balance Insufficient"
+    //     ) {
+    //       Effect.runPromiseExit(
+    //         selectionAndEvaluation(
+    //           config,
+    //           options,
+    //           walletInfo,
+    //           script_calculation,
+    //         ),
+    //       );
+    //     }
+    //     else
+    //       return completeTxError(
+    //       "NotFound",
+    //       `CML Tx Redeemer Builder`,
+    //     )
+    //   }
+    // });
+
     if (
       options.localUPLCEval !== false &&
       txRedeemerBuilder.draft_tx().witness_set().redeemers()

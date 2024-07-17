@@ -109,6 +109,7 @@ export type OutputData = {
 export type DatumHash = string;
 /** Hex (Redeemer is only PlutusData, same as Datum) */
 export type Redeemer = string; // Plutus Data (same as Datum)
+/** TODO docs  */
 export type RedeemerBuilder =
   | {
       kind: "selected";
