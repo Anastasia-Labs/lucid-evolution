@@ -2,7 +2,6 @@ import { Effect, pipe } from "effect";
 import { CML } from "../../core.js";
 import {
   ERROR_MESSAGE,
-  makeRunTimeError,
   RunTimeError,
   TransactionSignError,
 } from "../../Errors.js";
@@ -30,8 +29,4 @@ export const completeTxSigner = (
       ),
     );
     return TxSubmitBuilder.makeSubmit(wallet, signedTx);
-  }).pipe(
-    Effect.catchAllDefect(
-      (e) => new RunTimeError({ message: stringify(String(e)) }),
-    ),
-  );
+  }).pipe(Effect.catchAllDefect((cause) => new RunTimeError({ cause })));

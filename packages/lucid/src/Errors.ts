@@ -60,21 +60,12 @@ export type TransactionSignError = RunTimeError | TxSignerError;
 
 export type TxSubmitErrorModule = "Submit";
 export class TxSubmitError extends Data.TaggedError("TxSubmitError")<{
-  readonly cause: string;
+  readonly cause: unknown;
   readonly module: TxSubmitErrorModule;
   readonly message?: string;
 }> {}
 
 //NOTE: RunTimeError is used to catch all unexpected errors primarly from CML library
 export class RunTimeError extends Data.TaggedError("RunTimeError")<{
-  message: string;
+  cause: unknown;
 }> {}
-
-//TODO: maybe use UnknownException instead of RunTimeError
-export const makeRunTimeError = (
-  error: unknown,
-): Effect.Effect<never, RunTimeError> => {
-  return new RunTimeError({
-    message: JSON.stringify(String(error)),
-  });
-};

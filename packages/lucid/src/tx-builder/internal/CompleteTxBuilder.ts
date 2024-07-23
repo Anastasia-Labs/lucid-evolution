@@ -165,11 +165,7 @@ export const complete = (
       derivedInputs,
       TxSignBuilder.makeTxSignBuilder(config.lucidConfig, tx),
     );
-  }).pipe(
-    Effect.catchAllDefect(
-      (e) => new RunTimeError({ message: stringify(String(e)) }),
-    ),
-  );
+  }).pipe(Effect.catchAllDefect((cause) => new RunTimeError({ cause })));
 
 export const applyUPLCEval = (
   uplcEval: Uint8Array[],
