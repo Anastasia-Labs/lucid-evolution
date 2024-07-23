@@ -36,9 +36,9 @@ describe("Kupmios", async () => {
   // await new Promise((resolve) => setTimeout(resolve, 30000)); // 30 seconds delay
 
   const kupmios = await Effect.gen(function* () {
-    const kupo = yield* Config.redacted("VITE_KUPO_KEY");
-    const ogmios = yield* Config.redacted("VITE_OGMIOS_KEY");
-    return new Kupmios(Redacted.value(kupo), Redacted.value(ogmios));
+    const kupo = yield* Config.string("VITE_KUPO_KEY");
+    const ogmios = yield* Config.string("VITE_OGMIOS_KEY");
+    return new Kupmios(kupo, ogmios);
   }).pipe(Effect.runPromise);
 
   test("getProtocolParameters", async () => {
