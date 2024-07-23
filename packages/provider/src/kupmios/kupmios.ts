@@ -186,11 +186,14 @@ export class Kupmios implements Provider {
 
   //TODO: add data validation
   async getDatum(datumHash: DatumHash): Promise<Datum> {
-    const program = fetchEffect(`${this.kupoUrl}/datums/${datumHash}`);
+    const pattern = `${this.kupoUrl}/datums/${datumHash}`;
+    const schema = KupmiosSchema.KupoDatumSchema;
+    const program = fetchKupoParse(pattern, schema).pipe(
+      Effect.timeout(10_000),
+      Effect.flatMap(Effect.fromNullable),
+      Effect.catchAll(kupmiosError),
+    );
     const result = await Effect.runPromise(program);
-    if (!result || !result.datum) {
-      throw new Error(`No datum found for datum hash: ${datumHash}`);
-    }
     return result.datum;
   }
 
