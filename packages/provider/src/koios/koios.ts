@@ -28,6 +28,7 @@ import {
 import { Console, Effect, pipe, Schedule } from "effect";
 import { promise } from "effect/Effect";
 import { ArrayFormatter } from "@effect/schema";
+import { fetchEffect } from "../fetch.js";
 
 /**
  * @description This class supports Koios API v1.1.2.
@@ -231,7 +232,7 @@ export class Koios implements Provider {
     }
   }
 
-  awaitTx(txHash: TxHash, checkInterval = 20000) {
+  async awaitTx(txHash: TxHash, checkInterval = 20000) {
     const body = {
       _tx_hashes: [txHash],
     };
@@ -244,24 +245,9 @@ export class Koios implements Provider {
       body: JSON.stringify(body),
     };
     const program = pipe(
-      Effect.tryPromise({
-        //TODO: use tx_status api
-        try: () => fetch(`${this.baseUrl}/tx_info`, request),
-        catch: (error) => new Error(String(error)),
-      }),
-      Effect.flatMap((response) =>
-        !response.ok
-          ? Effect.fail(new Error(`${response.status} ${response.statusText}`))
-          : Effect.succeed(response),
-      ),
-      Effect.flatMap((response) =>
-        Effect.tryPromise({
-          try: () => response.json(),
-          catch: (error) => new Error(String(error)),
-        }),
-      ),
+      fetchEffect(`${this.baseUrl}/tx_info`, request),
       Effect.flatMap((json) =>
-        S.decodeUnknown(S.Array(KoiosTxInfoSchema), { errors: "first" })(json),
+        S.decodeUnknown(S.Array(KoiosTxInfoSchema))(json),
       ),
       Effect.catchTag("ParseError", (e) =>
         Effect.fail(ArrayFormatter.formatErrorSync(e)),
@@ -270,32 +256,13 @@ export class Koios implements Provider {
         schedule: Schedule.exponential(checkInterval),
         until: (result) => result.length > 0,
       }),
+      Effect.timeout(160_000),
       Effect.orDie,
       Effect.as(true),
     );
     //TODO: add Effect.timeout test with 10 mins
 
     return Effect.runPromise(program);
-    // return new Promise((res) => {
-    //   const confirmation = setInterval(async () => {
-    //     const body = {
-    //       _tx_hashes: [txHash],
-    //     };
-    //     const result = await fetch(`${this.baseUrl}/tx_info`, {
-    //       headers: {
-    //         Accept: "application/json",
-    //         "Content-Type": "application/json",
-    //       },
-    //       method: "POST",
-    //       body: JSON.stringify(body),
-    //     }).then((res: Response) => res.json());
-    //     if (Array.isArray(result) && result.length > 0) {
-    //       clearInterval(confirmation);
-    //       await new Promise((res) => setTimeout(() => res(1), 1000));
-    //       return res(true);
-    //     }
-    //   }, checkInterval);
-    // });
   }
 
   async submitTx(tx: Transaction): Promise<TxHash> {
