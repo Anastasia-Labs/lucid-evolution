@@ -3,6 +3,12 @@ import { Kupmios } from "../src/index.js";
 import { ProtocolParameters, UTxO } from "@lucid-evolution/core-types";
 import { Config, Effect, Redacted } from "effect";
 
+const kupmios = await Effect.gen(function* () {
+  const kupo = yield* Config.string("VITE_KUPO_KEY");
+  const ogmios = yield* Config.string("VITE_OGMIOS_KEY");
+  return new Kupmios(kupo, ogmios);
+}).pipe(Effect.runPromise);
+
 const discoveryUTxO: UTxO = {
   txHash: "b50e73e74a3073bc44f555928702c0ae0f555a43f1afdce34b3294247dce022d",
   outputIndex: 0,
@@ -35,11 +41,6 @@ describe("Kupmios", async () => {
   // console.log("waiting 30 seconds");
   // await new Promise((resolve) => setTimeout(resolve, 30000)); // 30 seconds delay
 
-  const kupmios = await Effect.gen(function* () {
-    const kupo = yield* Config.string("VITE_KUPO_KEY");
-    const ogmios = yield* Config.string("VITE_OGMIOS_KEY");
-    return new Kupmios(kupo, ogmios);
-  }).pipe(Effect.runPromise);
 
   test("getProtocolParameters", async () => {
     const pp: ProtocolParameters = await kupmios.getProtocolParameters();
