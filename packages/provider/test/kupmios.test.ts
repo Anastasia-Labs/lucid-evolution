@@ -1,13 +1,6 @@
 import { assert, describe, expect, test } from "vitest";
-import { Kupmios } from "../src/index.js";
 import { ProtocolParameters, UTxO } from "@lucid-evolution/core-types";
-import { Config, Effect, Redacted } from "effect";
-
-const kupmios = await Effect.gen(function* () {
-  const kupo = yield* Config.string("VITE_KUPO_KEY");
-  const ogmios = yield* Config.string("VITE_OGMIOS_KEY");
-  return new Kupmios(kupo, ogmios);
-}).pipe(Effect.runPromise);
+import { kupmios } from "./service.js";
 
 const discoveryUTxO: UTxO = {
   txHash: "b50e73e74a3073bc44f555928702c0ae0f555a43f1afdce34b3294247dce022d",
