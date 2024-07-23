@@ -232,7 +232,7 @@ export class Koios implements Provider {
     }
   }
 
-  awaitTx(txHash: TxHash, checkInterval = 20000) {
+  async awaitTx(txHash: TxHash, checkInterval = 20000) {
     const body = {
       _tx_hashes: [txHash],
     };
@@ -247,7 +247,7 @@ export class Koios implements Provider {
     const program = pipe(
       fetchEffect(`${this.baseUrl}/tx_info`, request),
       Effect.flatMap((json) =>
-        S.decodeUnknown(S.Array(KoiosTxInfoSchema), { errors: "first" })(json),
+        S.decodeUnknown(S.Array(KoiosTxInfoSchema))(json),
       ),
       Effect.catchTag("ParseError", (e) =>
         Effect.fail(ArrayFormatter.formatErrorSync(e)),
@@ -256,7 +256,7 @@ export class Koios implements Provider {
         schedule: Schedule.exponential(checkInterval),
         until: (result) => result.length > 0,
       }),
-      Effect.timeout("160 seconds"),
+      Effect.timeout(160_000),
       Effect.orDie,
       Effect.as(true),
     );

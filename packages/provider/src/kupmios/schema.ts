@@ -1,15 +1,18 @@
 import * as S from "@effect/schema/Schema";
 
 export const JSONRPCSchema = <A, I, R>(schema: S.Schema<A, I, R>) =>
-  S.Struct({
-    jsonrpc: S.Literal("2.0"),
-    method: S.String,
-    result: schema,
-    id: S.NullOr(S.Number),
-  });
+  S.extend(
+    S.Struct({
+      jsonrpc: S.Literal("2.0"),
+      method: S.String,
+      id: S.NullOr(S.Number),
+    }),
+    S.Union(S.Struct({ result: schema }), S.Struct({ error: S.Object })),
+  );
 
 // export type ProtocolParameters = S.Schema.Type<typeof ProtocolParametersSchema>;
-export interface ProtocolParameters extends S.Schema.Type<typeof ProtocolParametersSchema> {}
+export interface ProtocolParameters
+  extends S.Schema.Type<typeof ProtocolParametersSchema> {}
 
 const LovelaceAsset = S.Struct({
   lovelace: S.Number,
@@ -54,3 +57,50 @@ export const ProtocolParametersSchema = S.Struct({
   maxCollateralInputs: S.Number,
   version: S.Struct({ major: S.Number, minor: S.Number }),
 });
+
+export const KupoValueSchema = S.Struct({
+  coins: S.Number,
+  assets: S.Record(S.String, S.Number),
+});
+export interface KupoValue extends S.Schema.Type<typeof KupoValueSchema> {}
+
+export const KupoUTxO = S.Struct({
+  transaction_index: S.Number,
+  transaction_id: S.String,
+  output_index: S.Number,
+  address: S.String,
+  value: KupoValueSchema,
+  datum_hash: S.NullOr(S.String),
+  datum_type: S.optional(S.Literal("hash", "inline")),
+  script_hash: S.NullOr(S.String),
+  created_at: S.Struct({
+    slot_no: S.Number,
+    header_hash: S.String,
+  }),
+  spent_at: S.NullOr(S.Number),
+});
+
+export interface KupoUTxO extends S.Schema.Type<typeof KupoUTxO> {}
+
+export const KupoScriptSchema = S.NullOr(
+  S.Struct({
+    language: S.Literal("native", "plutus:v1", "plutus:v2"),
+    script: S.String,
+  }),
+);
+export type KupoScript = S.Schema.Type<typeof KupoScriptSchema>;
+
+export const KupoDatumSchema = S.NullOr(S.Struct({ datum: S.String }));
+
+export type KupoDatum = S.Schema.Type<typeof KupoDatumSchema>;
+
+export const KupoDelegation = S.NullOr(
+  S.Record(
+    S.String,
+    S.Struct({
+      delegate: S.Struct({ id: S.String }),
+      rewards: S.Struct({ ada: S.Struct({ lovelace: S.Number }) }),
+      deposit: S.Struct({ ada: S.Struct({ lovelace: S.Number }) }),
+    }),
+  ),
+);

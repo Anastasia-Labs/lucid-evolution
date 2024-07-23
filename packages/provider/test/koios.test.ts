@@ -1,4 +1,4 @@
-import { Koios } from "../src/koios/koios";
+import { Koios } from "../src/koios/koios.js";
 import {
   Datum,
   Delegation,
@@ -6,7 +6,7 @@ import {
   UTxO,
 } from "@lucid-evolution/core-types";
 import { assert, describe, expect, test } from "vitest";
-import { expectedProtocolParameters } from "./protocolParameters";
+import { expectedProtocolParameters } from "./protocolParameters.js";
 
 //TODO: improve test assetion
 describe.sequential("Koios", () => {
