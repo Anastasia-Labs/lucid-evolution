@@ -1,6 +1,11 @@
 import { describe, expect, test } from "vitest";
 import { Effect, Layer, pipe } from "effect";
-import { HelloContract, StakeContract, MintContract, User } from "./specs/services.js";
+import {
+  HelloContract,
+  StakeContract,
+  MintContract,
+  User,
+} from "./specs/services.js";
 import * as HelloEndpoints from "./specs/hello.js";
 import * as StakeEndpoints from "./specs/stake.js";
 import * as MultiValidatorEndpoints from "./specs/multi-validators.js";
@@ -22,7 +27,9 @@ describe("Onchain testing", () => {
   test("MultiValidator - DespositFunds", async () => {
     const program = pipe(
       MultiValidatorEndpoints.depositFunds,
-      Effect.provide(Layer.mergeAll(User.layer, StakeContract.layer, MintContract.layer)),
+      Effect.provide(
+        Layer.mergeAll(User.layer, StakeContract.layer, MintContract.layer),
+      ),
     );
     const exit = await Effect.runPromiseExit(program);
     expect(exit._tag).toBe("Success");
@@ -31,7 +38,9 @@ describe("Onchain testing", () => {
   test("MultiValidator - CollectFunds", async () => {
     const program = pipe(
       MultiValidatorEndpoints.collectFunds,
-      Effect.provide(Layer.mergeAll(User.layer, StakeContract.layer, MintContract.layer)),
+      Effect.provide(
+        Layer.mergeAll(User.layer, StakeContract.layer, MintContract.layer),
+      ),
     );
     const exit = await Effect.runPromiseExit(program);
     expect(exit._tag).toBe("Success");
