@@ -17,7 +17,7 @@ const mkMintinPolicy = (time: number, address: string) => {
     type: "all",
     scripts: [
       {
-        type: "ScriptPubKey",
+        type: "sig",
         keyHash: paymentCredentialOf(address).hash,
       },
     ],

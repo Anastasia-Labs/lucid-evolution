@@ -67,7 +67,7 @@ export class HelloContract extends Context.Tag("HelloContract")<
 const makeStakeService = Effect.gen(function* () {
   const stakeCBOR = yield* pipe(
     Effect.fromNullable(
-      scripts.validators.find((v) => v.title === "stake_validator.spend"),
+      scripts.validators.find((v) => v.title === "stake.stake"),
     ),
     Effect.andThen((script) => script.compiledCode),
   );
@@ -109,7 +109,7 @@ const makeMintService = Effect.gen(function* () {
     mintCBOR,
     mint,
     policyId,
-    contractAddress
+    contractAddress,
   };
 });
 
