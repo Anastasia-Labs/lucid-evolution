@@ -3,6 +3,7 @@ import {
   applyDoubleCborEncoding,
   Blockfrost,
   Koios,
+  Kupmios,
   Lucid,
   Script,
   MintingPolicy,
@@ -21,11 +22,12 @@ const makeUser = Effect.gen(function* ($) {
   ]);
   const user = yield* Effect.tryPromise(
     () =>
-      // Lucid(new Kupmios("http://localhost:1442", "ws://localhost:1337"), "Preview")
+      // Lucid(new Kupmios("http://localhost:1442", "http://localhost:1337"), "Preview")
       Lucid(new Blockfrost(apiURL, apiKey), "Preprod"),
-    // Lucid(new Koios("https://preprod.koios.rest/api/v1"),"Preprod")
+    // Lucid(new Koios("https://preprod.koios.rest/api/v1"), "Preprod")
   );
   user.selectWallet.fromSeed(seed);
+  console.log(yield* Effect.promise(() => user.wallet().address()));
   return {
     user,
   };
