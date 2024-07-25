@@ -3,35 +3,36 @@ import { Effect, Layer, pipe } from "effect";
 import { HelloContract, StakeContract, MintContract, User } from "./specs/services.js";
 import * as HelloEndpoints from "./specs/hello.js";
 import * as StakeEndpoints from "./specs/stake.js";
-import * as StakeContractEndpoints from "./specs/stakeContract.js";
+import * as MultiValidatorEndpoints from "./specs/multi-validators.js";
 import * as MintBurnEndpoints from "./specs/mint-burn.js";
 import * as ParametrizedEndpoints from "./specs/hello-params.js";
 import * as TxChain from "./specs/tx-chaining.js";
 import * as MetadataEndpoint from "./specs/metadata.js";
 
-describe("Onchain testing", () => {
-  test("registerStakeValidator", async () => {
+describe.sequential("Onchain testing", () => {
+  test.only("MultiValidator - registerStake", async () => {
     const program = pipe(
-      StakeContractEndpoints.registerStake,
+      MultiValidatorEndpoints.registerStake,
       Effect.provide(Layer.mergeAll(User.layer, StakeContract.layer)),
+    );
+    const exit = await Effect.runPromiseExit(program);
+    console.log(JSON.stringify(exit));
+    expect(exit._tag).toBe("Success");
+  });
+
+  test.only("MultiValidator - DespositFunds", async () => {
+    const program = pipe(
+      MultiValidatorEndpoints.depositFunds,
+      Effect.provide(Layer.mergeAll(User.layer, StakeContract.layer, MintContract.layer)),
     );
     const exit = await Effect.runPromiseExit(program);
     expect(exit._tag).toBe("Success");
   });
 
-  test("DespositStakeFunds", async () => {
+  test.only("MultiValidator - CollectFunds", async () => {
     const program = pipe(
-      StakeContractEndpoints.depositFunds,
-      Effect.provide(Layer.mergeAll(User.layer, StakeContract.layer)),
-    );
-    const exit = await Effect.runPromiseExit(program);
-    expect(exit._tag).toBe("Success");
-  });
-
-  test.only("CollectStakeFunds", async () => {
-    const program = pipe(
-      StakeContractEndpoints.collectFunds,
-      Effect.provide(Layer.mergeAll(User.layer, StakeContract.layer)),
+      MultiValidatorEndpoints.collectFunds,
+      Effect.provide(Layer.mergeAll(User.layer, StakeContract.layer, MintContract.layer)),
     );
     const exit = await Effect.runPromiseExit(program);
     expect(exit._tag).toBe("Success");

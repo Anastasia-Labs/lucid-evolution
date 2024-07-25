@@ -104,10 +104,12 @@ const makeMintService = Effect.gen(function* () {
     script: applyDoubleCborEncoding(mintCBOR),
   };
   const policyId = mintingPolicyToId(mint);
+  const contractAddress = validatorToAddress("Preprod", mint);
   return {
     mintCBOR,
     mint,
     policyId,
+    contractAddress
   };
 });
 
