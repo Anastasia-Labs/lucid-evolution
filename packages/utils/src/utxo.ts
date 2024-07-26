@@ -5,31 +5,6 @@ import { fromScriptRef, toScriptRef } from "./scripts.js";
 import { assetsToValue, valueToAssets } from "./value.js";
 
 export const utxoToTransactionOutput = (utxo: UTxO) => {
-  const buildDatum = (utxo: UTxO, builder: CML.TransactionOutputBuilder) => {
-    //TODO: test with DatumHash
-    if (utxo.datumHash)
-      return builder.with_data(
-        CML.DatumOption.new_hash(CML.DatumHash.from_hex(utxo.datumHash)),
-      );
-    // inline datum
-    if (utxo.datum)
-      return builder.with_data(
-        CML.DatumOption.new_datum(CML.PlutusData.from_cbor_hex(utxo.datum)),
-      );
-    return builder;
-  };
-
-  const buildOutput = (utxo: UTxO) => {
-    const builder = CML.TransactionOutputBuilder.new().with_address(
-      CML.Address.from_bech32(utxo.address),
-    );
-    return utxo.scriptRef
-      ? buildDatum(utxo, builder)
-          .with_reference_script(toScriptRef(utxo.scriptRef))
-          .next()
-      : buildDatum(utxo, builder).next();
-  };
-
   return buildOutput(utxo)
     .with_value(assetsToValue(utxo.assets))
     .build()
@@ -39,7 +14,7 @@ export const utxoToTransactionOutput = (utxo: UTxO) => {
 export const utxoToTransactionInput = (utxo: UTxO) => {
   return CML.TransactionInput.new(
     CML.TransactionHash.from_hex(utxo.txHash),
-    BigInt(utxo.outputIndex),
+    BigInt(utxo.outputIndex)
   );
 };
 
@@ -47,7 +22,7 @@ export const utxoToCore = (utxo: UTxO): CML.TransactionUnspentOutput => {
   const out = utxoToTransactionOutput(utxo);
   const utxoCore = CML.TransactionUnspentOutput.new(
     utxoToTransactionInput(utxo),
-    out,
+    out
   );
   // out.free();
   return utxoCore;
@@ -64,14 +39,14 @@ export function utxosToCores(utxos: UTxO[]): CML.TransactionUnspentOutput[] {
 //TODO: test coreToUtxo -> utxoToCore strict equality
 export function coreToUtxo(coreUtxo: CML.TransactionUnspentOutput): UTxO {
   const utxoCore = CSL.TransactionUnspentOutput.from_bytes(
-    coreUtxo.to_cbor_bytes(),
+    coreUtxo.to_cbor_bytes()
   );
   const utxo = {
     ...coreToOutRef(
-      CML.TransactionInput.from_cbor_bytes(utxoCore.input().to_bytes()),
+      CML.TransactionInput.from_cbor_bytes(utxoCore.input().to_bytes())
     ),
     ...coreToTxOutput(
-      CML.TransactionOutput.from_cbor_bytes(utxoCore.output().to_bytes()),
+      CML.TransactionOutput.from_cbor_bytes(utxoCore.output().to_bytes())
     ),
   };
   return utxo;
@@ -187,7 +162,7 @@ export type SortOrder =
  */
 export const sortUTxOs = (
   utxos: UTxO[],
-  order: SortOrder = "LargestFirst",
+  order: SortOrder = "LargestFirst"
 ): UTxO[] => {
   switch (order) {
     case "LargestFirst":
@@ -223,3 +198,45 @@ export const isEqualUTxO = (self: UTxO, that: UTxO) =>
 //TODO: add
 // sortCanonical -> sorting following ledger rules
 // sortBy -> sort by amount of specific unit
+
+export const calculateMinLovelaceFromUTxO = (
+  coinsPerUtxoByte: bigint,
+  utxo: UTxO
+): bigint =>
+  buildOutput(utxo)
+    .with_asset_and_min_required_coin(
+      assetsToValue(utxo.assets).multi_asset(),
+      coinsPerUtxoByte
+    )
+    .build()
+    .output()
+    .amount()
+    .coin();
+
+const buildOutput = (utxo: UTxO): CML.TransactionOutputAmountBuilder => {
+  const builder = CML.TransactionOutputBuilder.new().with_address(
+    CML.Address.from_bech32(utxo.address)
+  );
+  return utxo.scriptRef
+    ? buildDatum(utxo, builder)
+        .with_reference_script(toScriptRef(utxo.scriptRef))
+        .next()
+    : buildDatum(utxo, builder).next();
+};
+
+const buildDatum = (
+  utxo: UTxO,
+  builder: CML.TransactionOutputBuilder
+): CML.TransactionOutputBuilder => {
+  //TODO: test with DatumHash
+  if (utxo.datumHash)
+    return builder.with_data(
+      CML.DatumOption.new_hash(CML.DatumHash.from_hex(utxo.datumHash))
+    );
+  // inline datum
+  if (utxo.datum)
+    return builder.with_data(
+      CML.DatumOption.new_datum(CML.PlutusData.from_cbor_hex(utxo.datum))
+    );
+  return builder;
+};
