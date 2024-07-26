@@ -1,5 +1,11 @@
 # @lucid-evolution/bip39
 
+## 0.2.9
+
+### Patch Changes
+
+- [#179](https://github.com/Anastasia-Labs/lucid-evolution/pull/179) [`def34e8`](https://github.com/Anastasia-Labs/lucid-evolution/commit/def34e800af761abcd7b85ba4c6b7c65219d1891) Thanks [@solidsnakedev](https://github.com/solidsnakedev)! - make bip39 node 18 compatible
+
 ## 0.2.8
 
 ### Patch Changes

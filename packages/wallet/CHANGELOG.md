@@ -1,5 +1,15 @@
 # @lucid-evolution/wallet
 
+## 0.1.27
+
+### Patch Changes
+
+- [#178](https://github.com/Anastasia-Labs/lucid-evolution/pull/178) [`fcd0de0`](https://github.com/Anastasia-Labs/lucid-evolution/commit/fcd0de09e037e5dc92676b219a0ca0c0ae83fd00) Thanks [@solidsnakedev](https://github.com/solidsnakedev)! - add overrideUTxOs to wallet implementations
+
+- Updated dependencies [[`def34e8`](https://github.com/Anastasia-Labs/lucid-evolution/commit/def34e800af761abcd7b85ba4c6b7c65219d1891)]:
+  - @lucid-evolution/bip39@0.2.9
+  - @lucid-evolution/utils@0.1.25
+
 ## 0.1.26
 
 ### Patch Changes
