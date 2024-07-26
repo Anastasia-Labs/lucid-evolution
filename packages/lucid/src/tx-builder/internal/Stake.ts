@@ -1,16 +1,12 @@
 import { Lovelace, Redeemer, RewardAddress } from "@lucid-evolution/core-types";
 import * as TxBuilder from "../TxBuilder.js";
 import { Effect, pipe } from "effect";
-import {
-  ERROR_MESSAGE,
-  TxBuilderError,
-  TxBuilderErrorCause,
-} from "../../Errors.js";
+import { ERROR_MESSAGE, TxBuilderError } from "../../Errors.js";
 import * as CML from "@anastasia-labs/cardano-multiplatform-lib-nodejs";
 import { toPartial, toV1, toV2, validateAddressDetails } from "./TxUtils.js";
 
-export const stakeError = (cause: TxBuilderErrorCause, message?: string) =>
-  new TxBuilderError({ cause, module: "Stake", message });
+export const stakeError = (cause: unknown) =>
+  new TxBuilderError({ cause: `{ Stake: ${cause} }` });
 
 export const registerStake = (
   config: TxBuilder.TxBuilderConfig,
@@ -21,14 +17,16 @@ export const registerStake = (
       validateAddressDetails(rewardAddress, config.lucidConfig),
       Effect.andThen((address) =>
         address.type !== "Reward"
-          ? stakeError("InvalidCredential", "Address type must be Reward type.")
+          ? stakeError(ERROR_MESSAGE.MISSING_REWARD_TYPE)
           : Effect.succeed(address),
       ),
     );
 
     const stakeCredential = yield* pipe(
       Effect.fromNullable(addressDetails.stakeCredential),
-      Effect.orElseFail(() => stakeError("MissingStakeCredential")),
+      Effect.orElseFail(() =>
+        stakeError(ERROR_MESSAGE.MISSING_STAKE_CREDENTIAL),
+      ),
     );
 
     const credential =
@@ -55,14 +53,16 @@ export const deRegisterStake = (
       validateAddressDetails(rewardAddress, config.lucidConfig),
       Effect.andThen((address) =>
         address.type !== "Reward"
-          ? stakeError("InvalidCredential", "Address type must be Reward type.")
+          ? stakeError(ERROR_MESSAGE.MISSING_REWARD_TYPE)
           : Effect.succeed(address),
       ),
     );
 
     const stakeCredential = yield* pipe(
       Effect.fromNullable(addressDetails.stakeCredential),
-      Effect.orElseFail(() => stakeError("MissingStakeCredential")),
+      Effect.orElseFail(() =>
+        stakeError(ERROR_MESSAGE.MISSING_STAKE_CREDENTIAL),
+      ),
     );
 
     switch (stakeCredential.type) {
@@ -87,17 +87,12 @@ export const deRegisterStake = (
         const script = yield* pipe(
           Effect.fromNullable(config.scripts.get(stakeCredential.hash)),
           Effect.orElseFail(() =>
-            stakeError(
-              "MissingScript",
-              `No script found, script hash: ${stakeCredential.hash}, consider using attach modules`,
-            ),
+            stakeError(ERROR_MESSAGE.MISSING_SCRIPT(stakeCredential.hash)),
           ),
         );
         const red = yield* pipe(
           Effect.fromNullable(redeemer),
-          Effect.orElseFail(() =>
-            stakeError("MissingRedeemer", ERROR_MESSAGE.MISSING_REDEEMER),
-          ),
+          Effect.orElseFail(() => stakeError(ERROR_MESSAGE.MISSING_REDEEMER)),
         );
         switch (script.type) {
           case "PlutusV1": {
@@ -120,7 +115,7 @@ export const deRegisterStake = (
             break;
           }
           case "Native": {
-            yield* stakeError("NotFound");
+            yield* stakeError(ERROR_MESSAGE.INVALID_SCRIPT);
             break;
           }
         }
@@ -139,7 +134,7 @@ export const withdraw = (
       validateAddressDetails(rewardAddress, config.lucidConfig),
       Effect.andThen((address) =>
         address.type !== "Reward"
-          ? stakeError("InvalidCredential", "Address type must be Reward type.")
+          ? stakeError(ERROR_MESSAGE.MISSING_REWARD_TYPE)
           : Effect.succeed(address),
       ),
     );
@@ -148,7 +143,9 @@ export const withdraw = (
       Effect.fromNullable(
         CML.RewardAddress.from_address(CML.Address.from_bech32(rewardAddress)),
       ),
-      Effect.orElseFail(() => stakeError("MissingStakeCredential")),
+      Effect.orElseFail(() =>
+        stakeError(ERROR_MESSAGE.MISSING_STAKE_CREDENTIAL),
+      ),
       Effect.andThen((address) =>
         CML.SingleWithdrawalBuilder.new(address, amount),
       ),
@@ -156,7 +153,9 @@ export const withdraw = (
 
     const stakeCredential = yield* pipe(
       Effect.fromNullable(addressDetails.stakeCredential),
-      Effect.orElseFail(() => stakeError("MissingStakeCredential")),
+      Effect.orElseFail(() =>
+        stakeError(ERROR_MESSAGE.MISSING_STAKE_CREDENTIAL),
+      ),
     );
 
     switch (stakeCredential.type) {
@@ -169,17 +168,12 @@ export const withdraw = (
         const script = yield* pipe(
           Effect.fromNullable(config.scripts.get(stakeCredential.hash)),
           Effect.orElseFail(() =>
-            stakeError(
-              "MissingScript",
-              `No script found, script hash: ${stakeCredential.hash}, consider using attach modules`,
-            ),
+            stakeError(ERROR_MESSAGE.MISSING_SCRIPT(stakeCredential.hash)),
           ),
         );
         const red = yield* pipe(
           Effect.fromNullable(redeemer),
-          Effect.orElseFail(() =>
-            stakeError("MissingRedeemer", ERROR_MESSAGE.MISSING_REDEEMER),
-          ),
+          Effect.orElseFail(() => stakeError(ERROR_MESSAGE.MISSING_REDEEMER)),
         );
         switch (script.type) {
           case "PlutusV1": {
@@ -202,7 +196,7 @@ export const withdraw = (
             break;
           }
           case "Native": {
-            yield* stakeError("NotFound");
+            yield* stakeError(ERROR_MESSAGE.INVALID_SCRIPT);
             break;
           }
         }

@@ -4,9 +4,6 @@ import { Wallet } from "@lucid-evolution/core-types";
 import { Either } from "effect/Either";
 import { TxSubmitError } from "../Errors.js";
 
-const submitError = (cause: string, message?: string) =>
-  new TxSubmitError({ cause, module: "Submit", message });
-
 export type TxSigned = {
   submit: () => Promise<string>;
   submitProgram: () => Effect.Effect<string, TxSubmitError, never>;
@@ -20,7 +17,7 @@ export const makeSubmit = (
 ): TxSigned => {
   const submit = Effect.tryPromise({
     try: () => wallet.submitTx(txSigned.to_cbor_hex()),
-    catch: (error) => submitError("SubmitError", String(error)),
+    catch: (cause) => new TxSubmitError({ cause }),
   });
   return {
     submit: () => makeReturn(submit).unsafeRun(),

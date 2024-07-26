@@ -10,10 +10,10 @@ import { OutputDatum } from "../types.js";
 import * as TxBuilder from "../TxBuilder.js";
 import { CML } from "../../core.js";
 import { toCMLAddress, toDatumOption } from "./TxUtils.js";
-import { TxBuilderError, TxBuilderErrorCause } from "../../Errors.js";
+import { ERROR_MESSAGE, TxBuilderError } from "../../Errors.js";
 
-export const payError = (cause: TxBuilderErrorCause, message?: string) =>
-  new TxBuilderError({ cause, module: "Pay", message });
+export const payError = (cause: unknown) =>
+  new TxBuilderError({ cause: `{ Pay: ${cause} }` });
 
 /** Pay to a public key or native script address. */
 export const payToAddress = (
@@ -27,10 +27,7 @@ export const payToAddress = (
       .next();
 
     if (Object.keys(assets).length == 0)
-      yield* payError(
-        "EmptyAssets",
-        "Attempting to pay to an address with an empty assets object",
-      );
+      yield* payError(ERROR_MESSAGE.EMPTY_ASSETS);
 
     if (assets["lovelace"]) {
       const outputResult = outputBuilder
@@ -72,10 +69,7 @@ export const payToAddressWithData = (
     const outputBuilder = buildBaseOutput(address, outputDatum, scriptRef);
     if (assets) {
       if (Object.keys(assets).length == 0)
-        yield* payError(
-          "EmptyAssets",
-          "Attempting to pay to an address with an empty assets object",
-        );
+        yield* payError(ERROR_MESSAGE.EMPTY_ASSETS);
       if (assets["lovelace"]) {
         const outputResult = outputBuilder
           .with_value(assetsToValue(assets))
@@ -128,11 +122,7 @@ export const payToContract = (
   scriptRef?: Script,
 ) =>
   Effect.gen(function* () {
-    if (!outputDatum.value)
-      yield* payError(
-        "Datum",
-        "No datum set. Script output becomes unspendable without datum.",
-      );
+    if (!outputDatum.value) yield* payError(ERROR_MESSAGE.DATUM_NOT_SET);
     return yield* payToAddressWithData(
       config,
       address,

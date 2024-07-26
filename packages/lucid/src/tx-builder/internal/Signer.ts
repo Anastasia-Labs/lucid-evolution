@@ -5,13 +5,13 @@ import {
   StakeKeyHash,
 } from "@lucid-evolution/core-types";
 import * as TxBuilder from "../TxBuilder.js";
-import { Effect } from "effect";
+import { Effect, pipe } from "effect";
 import * as CML from "@anastasia-labs/cardano-multiplatform-lib-nodejs";
-import { TxBuilderError, TxBuilderErrorCause } from "../../Errors.js";
+import { ERROR_MESSAGE, TxBuilderError } from "../../Errors.js";
 import { validateAddressDetails } from "./TxUtils.js";
 
-export const addSignerError = (cause: TxBuilderErrorCause, message?: string) =>
-  new TxBuilderError({ cause, module: "Signer", message });
+export const addSignerError = (cause: unknown) =>
+  new TxBuilderError({ cause: `{ Signer: ${cause} }` });
 
 export const addSigner = (
   config: TxBuilder.TxBuilderConfig,
@@ -22,22 +22,24 @@ export const addSigner = (
       address,
       config.lucidConfig,
     );
-    if (!addressDetails.paymentCredential && !addressDetails.stakeCredential)
-      yield* addSignerError(
-        "NotFound",
-        "undefined paymentCredential and stakeCredential",
-      );
 
     const credential =
       addressDetails.type === "Reward"
-        ? addressDetails.stakeCredential!
-        : addressDetails.paymentCredential!;
+        ? yield* pipe(
+            Effect.fromNullable(addressDetails.stakeCredential),
+            Effect.orElseFail(() =>
+              addSignerError(ERROR_MESSAGE.MISSING_STAKE_CREDENTIAL),
+            ),
+          )
+        : yield* pipe(
+            Effect.fromNullable(addressDetails.paymentCredential),
+            Effect.orElseFail(() =>
+              addSignerError(ERROR_MESSAGE.MISSING_PAYMENT_CREDENTIAL),
+            ),
+          );
 
     if (credential.type === "Script")
-      yield* addSignerError(
-        "InvalidCredential",
-        "Only key hashes are allowed as signers.",
-      );
+      yield* addSignerError(ERROR_MESSAGE.SCRIPT_CREDENTIAL_NOT_ALLOWED);
 
     return credential.hash;
   }).pipe(Effect.flatMap((keyHash) => addSignerKey(config, keyHash)));

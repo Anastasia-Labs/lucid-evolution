@@ -16,7 +16,6 @@ import {
   UTxO,
 } from "@lucid-evolution/core-types";
 import { fromUnit } from "@lucid-evolution/utils";
-import { fetchEffect } from "../fetch.js";
 import * as S from "@effect/schema/Schema";
 import { Effect, pipe, Array as _Array, Schedule, Data } from "effect";
 import * as KupmiosSchema from "./schema.js";
@@ -32,13 +31,15 @@ import { HttpBodyError } from "@effect/platform/HttpBody";
 
 export class KupmiosError extends Data.TaggedError("KupmiosError")<{
   cause?: unknown;
-  message?: string;
-}> {}
+}> {
+  get message() {
+    return `${this.cause}`;
+  }
+}
 
-const kupmiosError = (cause?: unknown, method?: string) =>
+const kupmiosError = (cause?: unknown) =>
   new KupmiosError({
-    cause,
-    message: `${method} failed: ${JSON.stringify(cause)}`,
+    cause: JSON.stringify(cause),
   });
 
 export class Kupmios implements Provider {
@@ -184,7 +185,6 @@ export class Kupmios implements Provider {
     };
   }
 
-  //TODO: add data validation
   async getDatum(datumHash: DatumHash): Promise<Datum> {
     const pattern = `${this.kupoUrl}/datums/${datumHash}`;
     const schema = KupmiosSchema.KupoDatumSchema;
@@ -238,7 +238,7 @@ export class Kupmios implements Provider {
           : Effect.succeed(response),
       ),
       Effect.timeout(10_000),
-      Effect.catchAll((cause) => kupmiosError(cause, "submitTx")),
+      Effect.catchAll(kupmiosError),
     );
     const { result } = await Effect.runPromise(program);
     return result.transaction.id;
@@ -349,7 +349,7 @@ const fetchOgmiosParse = <A, I, R>(
   pipe(
     HttpClientRequest.post(url),
     HttpClientRequest.jsonBody(data),
-    Effect.flatMap(HttpClient.fetchOk),
+    Effect.flatMap(HttpClient.fetch),
     HttpClientResponse.json,
     Effect.flatMap(S.decodeUnknown(schema)),
     // Effect.catchTag("ParseError", (e) =>
