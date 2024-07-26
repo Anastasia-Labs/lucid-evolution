@@ -308,8 +308,8 @@ export const makeWalletFromAddress = (
     ): Promise<SignedMessage> => {
       throw new Error("Not implemented");
     },
-    submitTx: async (_tx: Transaction): Promise<TxHash> => {
-      throw new Error("Not implemented");
+    submitTx: async (tx: Transaction): Promise<TxHash> => {
+      return await provider.submitTx(tx);
     },
   };
 };
