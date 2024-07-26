@@ -9,7 +9,7 @@ import {
   RewardAddress,
   UTxO,
 } from "@lucid-evolution/core-types";
-import { TxBuilderError } from "../../Errors.js";
+import { ERROR_MESSAGE, TxBuilderError } from "../../Errors.js";
 import { LucidConfig } from "../../lucid-evolution/LucidEvolution.js";
 import { getAddressDetails } from "@lucid-evolution/utils";
 
@@ -80,18 +80,20 @@ export const validateAddressDetails = (
     const addressDetails = yield* $(
       Effect.try({
         try: () => getAddressDetails(address),
-        catch: (error) =>
+        catch: (cause) =>
           new TxBuilderError({
-            cause: "Address",
-            message: String(error),
+            cause,
           }),
       }),
     );
     const actualNetworkId = networkToId(lucidConfig.network);
     if (addressDetails.networkId !== actualNetworkId)
       yield* new TxBuilderError({
-        cause: "InvalidNetwork",
-        message: `Invalid address: ${address}, Expected address with network id ${actualNetworkId}, current network ${lucidConfig.network}`,
+        cause: ERROR_MESSAGE.INVALID_NETWORK(
+          address,
+          actualNetworkId,
+          lucidConfig.network,
+        ),
       });
 
     return addressDetails;

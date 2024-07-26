@@ -3,18 +3,11 @@ import { LucidConfig } from "../lucid-evolution/LucidEvolution.js";
 import { Effect } from "effect";
 //TODO: move to commont utils
 import { PrivateKey } from "@lucid-evolution/core-types";
-import {
-  TransactionSignError,
-  TxSignerError,
-  TxSignerErrorCause,
-} from "../Errors.js";
+import { TransactionSignError } from "../Errors.js";
 import { TxSigned } from "../tx-submit/TxSubmit.js";
 import * as CompleteTxSigner from "./internal/CompleteTxSigner.js";
 import { Either } from "effect/Either";
 import * as Sign from "./internal/Sign.js";
-
-export const signError = (cause: TxSignerErrorCause, message?: string) =>
-  new TxSignerError({ cause, module: "Sign", message });
 
 export type TxSignBuilderConfig = {
   txComplete: CML.Transaction;

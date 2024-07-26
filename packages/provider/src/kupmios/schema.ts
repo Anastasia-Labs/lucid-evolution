@@ -3,7 +3,7 @@ import * as S from "@effect/schema/Schema";
 export const JSONRPCSchema = <A, I, R>(schema: S.Schema<A, I, R>) =>
   S.extend(
     S.Struct({
-      jsonrpc: S.Literal("2.0"),
+      jsonrpc: S.String,
       method: S.String,
       id: S.NullOr(S.Number),
     }),

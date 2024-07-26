@@ -8,12 +8,7 @@ import {
   Option,
 } from "effect";
 import { Address, Assets, UTxO, Wallet } from "@lucid-evolution/core-types";
-import {
-  ERROR_MESSAGE,
-  RunTimeError,
-  TxBuilderError,
-  TxBuilderErrorCause,
-} from "../../Errors.js";
+import { ERROR_MESSAGE, RunTimeError, TxBuilderError } from "../../Errors.js";
 import { CML } from "../../core.js";
 import * as UPLC from "@lucid-evolution/uplc";
 import * as TxBuilder from "../TxBuilder.js";
@@ -37,8 +32,8 @@ export type CompleteOptions = {
   localUPLCEval?: boolean; // replaces nativeUPLC
 };
 
-export const completeTxError = (cause: TxBuilderErrorCause, message?: string) =>
-  new TxBuilderError({ cause, module: "Complete", message });
+export const completeTxError = (cause: unknown) =>
+  new TxBuilderError({ cause: `{ Complete: ${cause} }` });
 
 type WalletInfo = {
   wallet: Wallet;
@@ -52,15 +47,13 @@ const getWalletInfo = (
   Effect.gen(function* () {
     const wallet: Wallet = yield* pipe(
       Effect.fromNullable(config.lucidConfig.wallet),
-      Effect.orElseFail(() =>
-        completeTxError("MissingWallet", ERROR_MESSAGE.MISSING_WALLET),
-      ),
+      Effect.orElseFail(() => completeTxError(ERROR_MESSAGE.MISSING_WALLET)),
     );
     const address: Address = yield* Effect.promise(() => wallet.address());
     const inputs: UTxO[] = yield* pipe(
       Effect.tryPromise({
         try: () => wallet.getUtxos(),
-        catch: (error) => completeTxError("Provider", String(error)),
+        catch: (error) => completeTxError(error),
       }),
     );
     const walletInputs = _Array.isEmptyArray(config.walletInputs)
@@ -117,7 +110,7 @@ export const complete = (
           0,
           CML.Address.from_bech32(walletInfo.address),
         ),
-      catch: (error) => completeTxError("BuildEvaluation", String(error)),
+      catch: (error) => completeTxError(error),
     });
 
     if (
@@ -141,7 +134,7 @@ export const complete = (
             CML.Address.from_bech32(walletInfo.address),
           )
           .build_unchecked(),
-      catch: (error) => completeTxError("Build", String(error)),
+      catch: (error) => completeTxError(error),
     });
 
     const derivedInputs = deriveInputsFromTransaction(tx);
@@ -159,7 +152,6 @@ export const complete = (
         ...availableWalletInputs,
       ],
     );
-
     return Tuple.make(
       updatedWalletInputs,
       derivedInputs,
@@ -267,12 +259,10 @@ const findCollateral = (
 
     if (_Array.isEmptyArray(selected))
       yield* completeTxError(
-        "MissingCollateral",
         `Your wallet does not have enough funds to cover the required 5 ADA collateral.`,
       );
     if (selected.length > 3)
       yield* completeTxError(
-        "MissingCollateral",
         `Selected ${selected.length} inputs as collateral, but max collateral inputs is 3 to cover the 5 ADA collateral ${stringify(selected)}`,
       );
     return selected;
@@ -320,7 +310,6 @@ const coinSelection = (
     );
     if (_Array.isEmptyArray(selected))
       yield* completeTxError(
-        "NotFound",
         `Your wallet does not have enough funds to cover the required assets. ${stringify(requiredAssets)}`,
       );
     return selected;
@@ -357,7 +346,7 @@ const evalTransaction = (
         ),
       catch: (error) =>
         //TODO: improve format
-        completeTxError("UPLCEval", JSON.stringify(error).replace(/\\n/g, "")),
+        completeTxError(JSON.stringify(error).replace(/\\n/g, "")),
     });
     return uplc_eval;
   });

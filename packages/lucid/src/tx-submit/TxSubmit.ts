@@ -17,7 +17,7 @@ export const makeSubmit = (
 ): TxSigned => {
   const submit = Effect.tryPromise({
     try: () => wallet.submitTx(txSigned.to_cbor_hex()),
-    catch: (cause) => new TxSubmitError({ cause, module: "Submit" }),
+    catch: (cause) => new TxSubmitError({ cause }),
   });
   return {
     submit: () => makeReturn(submit).unsafeRun(),
