@@ -1,5 +1,11 @@
 # @lucid-evolution/utils
 
+## 0.1.24
+
+### Patch Changes
+
+- [#177](https://github.com/Anastasia-Labs/lucid-evolution/pull/177) [`f794a5b`](https://github.com/Anastasia-Labs/lucid-evolution/commit/f794a5bbec7d1ae39135495827ccca91e9ac9da6) Thanks [@solidsnakedev](https://github.com/solidsnakedev)! - add calculateMinLovelaceFromUTxO
+
 ## 0.1.23
 
 ### Patch Changes

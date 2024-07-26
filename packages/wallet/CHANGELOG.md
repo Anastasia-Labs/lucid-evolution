@@ -1,5 +1,14 @@
 # @lucid-evolution/wallet
 
+## 0.1.26
+
+### Patch Changes
+
+- [#176](https://github.com/Anastasia-Labs/lucid-evolution/pull/176) [`61613f5`](https://github.com/Anastasia-Labs/lucid-evolution/commit/61613f5178045bfe6ba53f1cd4c7b8900431013b) Thanks [@solidsnakedev](https://github.com/solidsnakedev)! - enable submitTx when making a wallet from address
+
+- Updated dependencies [[`f794a5b`](https://github.com/Anastasia-Labs/lucid-evolution/commit/f794a5bbec7d1ae39135495827ccca91e9ac9da6)]:
+  - @lucid-evolution/utils@0.1.24
+
 ## 0.1.25
 
 ### Patch Changes
