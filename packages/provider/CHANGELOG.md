@@ -1,5 +1,21 @@
 # @lucid-evolution/provider
 
+## 0.1.32
+
+### Patch Changes
+
+- Updated dependencies []:
+  - @lucid-evolution/utils@0.1.25
+
+## 0.1.31
+
+### Patch Changes
+
+- [#174](https://github.com/Anastasia-Labs/lucid-evolution/pull/174) [`f86b74a`](https://github.com/Anastasia-Labs/lucid-evolution/commit/f86b74a7a5489012e717b1247771b527f21be424) Thanks [@solidsnakedev](https://github.com/solidsnakedev)! - refactor error messages and constructor
+
+- Updated dependencies [[`f794a5b`](https://github.com/Anastasia-Labs/lucid-evolution/commit/f794a5bbec7d1ae39135495827ccca91e9ac9da6)]:
+  - @lucid-evolution/utils@0.1.24
+
 ## 0.1.30
 
 ### Patch Changes

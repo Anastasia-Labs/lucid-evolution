@@ -25,7 +25,7 @@ export const handleSignSubmitWithoutValidation = (signBuilder: TxSignBuilder) =>
 export const withLogRetry = <A, E, R>(effect: Effect.Effect<A, E, R>) =>
   pipe(
     effect,
-    Effect.tapError(Console.log),
+    Effect.tapErrorCause(Effect.log),
     Effect.tapError((_) => Effect.log("💥️ Recovering from error")),
     Logger.withMinimumLogLevel(LogLevel.Debug),
     Effect.retry(

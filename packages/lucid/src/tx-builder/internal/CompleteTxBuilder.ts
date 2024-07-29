@@ -13,7 +13,6 @@ import {
   RunTimeError,
   TransactionError,
   TxBuilderError,
-  TxBuilderErrorCause,
 } from "../../Errors.js";
 import { CML } from "../../core.js";
 import * as UPLC from "@lucid-evolution/uplc";
@@ -39,8 +38,8 @@ export type CompleteOptions = {
   localUPLCEval?: boolean; // replaces nativeUPLC
 };
 
-export const completeTxError = (cause: TxBuilderErrorCause, message?: string) =>
-  new TxBuilderError({ cause, module: "Complete", message });
+export const completeTxError = (cause: unknown) =>
+  new TxBuilderError({ cause: `{ Complete: ${cause} }` });
 
 type WalletInfo = {
   wallet: Wallet;
@@ -54,15 +53,13 @@ const getWalletInfo = (
   Effect.gen(function* () {
     const wallet: Wallet = yield* pipe(
       Effect.fromNullable(config.lucidConfig.wallet),
-      Effect.orElseFail(() =>
-        completeTxError("MissingWallet", ERROR_MESSAGE.MISSING_WALLET),
-      ),
+      Effect.orElseFail(() => completeTxError(ERROR_MESSAGE.MISSING_WALLET)),
     );
     const address: Address = yield* Effect.promise(() => wallet.address());
     const inputs: UTxO[] = yield* pipe(
       Effect.tryPromise({
         try: () => wallet.getUtxos(),
-        catch: (error) => completeTxError("Provider", String(error)),
+        catch: (error) => completeTxError(error),
       }),
     );
     const walletInputs = _Array.isEmptyArray(config.walletInputs)
@@ -113,7 +110,7 @@ export const complete = (
             CML.Address.from_bech32(walletInfo.address),
           )
           .build_unchecked(),
-      catch: (error) => completeTxError("Build", String(error)),
+      catch: (error) => completeTxError(error),
     });
 
     const derivedInputs = deriveInputsFromTransaction(tx);
@@ -131,17 +128,12 @@ export const complete = (
         ...availableWalletInputs,
       ],
     );
-
     return Tuple.make(
       updatedWalletInputs,
       derivedInputs,
       TxSignBuilder.makeTxSignBuilder(config.lucidConfig, tx),
     );
-  }).pipe(
-    Effect.catchAllDefect(
-      (e) => new RunTimeError({ message: stringify(String(e)) }),
-    ),
-  );
+  }).pipe(Effect.catchAllDefect((cause) => new RunTimeError({ cause })));
 
 export const selectionAndEvaluation = (
   config: TxBuilder.TxBuilderConfig,
@@ -185,8 +177,7 @@ export const selectionAndEvaluation = (
       // an existing input.
       if (script_calculation)
         yield* completeTxError(
-          "RedeemerBuilder",
-          "Coin selection had to be updated after building redeemers, possibly leading to incorrect indices.",
+          "RedeemerBuilder: Coin selection had to be updated after building redeemers, possibly leading to incorrect indices.",
         );
       else yield* completePartialPrograms(config);
     }
@@ -198,7 +189,7 @@ export const selectionAndEvaluation = (
           0,
           CML.Address.from_bech32(walletInfo.address),
         ),
-      catch: (error) => completeTxError("BuildEvaluation", String(error)),
+        catch: (error) => completeTxError(error),
     });
 
     // TODO: fix the catch block to retain type of selectionAndEvaluation as Effect<void, TransactionError, never>
@@ -246,7 +237,7 @@ export const selectionAndEvaluation = (
     }
   }).pipe(
     Effect.catchAllDefect(
-      (e) => new RunTimeError({ message: stringify(String(e)) }),
+      (cause) => new RunTimeError({ cause })
     ),
   );
 
@@ -277,8 +268,7 @@ export const completePartialPrograms = (config: TxBuilder.TxBuilderConfig) =>
           inputIndices.length !== redeemerBuilder.inputs.length
         )
           yield* completeTxError(
-            "NotFound",
-            `Missing indices for inputs: ${stringify(redeemerBuilder.inputs)}`,
+            `RedeemerBuilder: Missing indices for inputs: ${stringify(redeemerBuilder.inputs)}`,
           );
 
         const redeemer = redeemerBuilder.makeRedeemer(inputIndices);
@@ -291,8 +281,7 @@ export const completePartialPrograms = (config: TxBuilder.TxBuilderConfig) =>
           Effect.fromNullable(redeemerBuilder.inputs),
           Effect.orElseFail(() =>
             completeTxError(
-              "NotFound",
-              `Inputs for redeemer builder not founds: ${stringify(redeemerBuilder)}`,
+              `RedeemerBuilder: Inputs for redeemer builder not founds: ${stringify(redeemerBuilder)}`,
             ),
           ),
         );
@@ -304,7 +293,6 @@ export const completePartialPrograms = (config: TxBuilder.TxBuilderConfig) =>
             ),
             Effect.orElseFail(() =>
               completeTxError(
-                "NotFound",
                 `Index not found for input: ${input}`,
               ),
             ),
@@ -406,7 +394,6 @@ const findCollateral = (
     // A UTXO with 5.5 ADA will result in an error message such as `BabbageOutputTooSmallUTxO`, since only 0.5 ADA would be returned to the collateral return address.
     const collateralLovelace: Assets = { lovelace: 5_000_000n };
     const error = completeTxError(
-      "MissingCollateral",
       `Your wallet does not have enough funds to cover the required 5 ADA collateral.`,
     );
     const selected = yield* recursive(
@@ -419,7 +406,6 @@ const findCollateral = (
 
     if (selected.length > 3)
       yield* completeTxError(
-        "MissingCollateral",
         `Selected ${selected.length} inputs as collateral, but max collateral inputs is 3 to cover the 5 ADA collateral ${stringify(selected)}`,
       );
     return selected;
@@ -503,7 +489,7 @@ const evalTransaction = (
         ),
       catch: (error) =>
         //TODO: improve format
-        completeTxError("UPLCEval", JSON.stringify(error).replace(/\\n/g, "")),
+        completeTxError(JSON.stringify(error).replace(/\\n/g, "")),
     });
     return uplc_eval;
   });
@@ -604,7 +590,6 @@ export const recursive = (
   Effect.gen(function* () {
     let selected: UTxO[] = [];
     error ??= completeTxError(
-      "NotFound",
       `Your wallet does not have enough funds to cover the required assets: ${stringify(requiredAssets)}`,
     );
     if (!Record.isEmptyRecord(requiredAssets)) {
@@ -634,7 +619,6 @@ export const recursive = (
       const extraSelected = selectUTxOs(remainingInputs, extraLovelace);
       if (_Array.isEmptyArray(extraSelected)) {
         yield* completeTxError(
-          "NotFound",
           `Your wallet does not have enough funds to cover required minimum ADA for change output: ${stringify(extraLovelace)}`,
         );
       }

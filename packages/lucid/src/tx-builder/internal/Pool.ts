@@ -4,11 +4,7 @@ import {
   Redeemer,
   RewardAddress,
 } from "@lucid-evolution/core-types";
-import {
-  ERROR_MESSAGE,
-  TxBuilderError,
-  TxBuilderErrorCause,
-} from "../../Errors.js";
+import { ERROR_MESSAGE, TxBuilderError } from "../../Errors.js";
 import * as TxBuilder from "../TxBuilder.js";
 import { Effect, pipe } from "effect";
 import {
@@ -22,8 +18,8 @@ import * as CML from "@anastasia-labs/cardano-multiplatform-lib-nodejs";
 import { LucidConfig } from "../../lucid-evolution/LucidEvolution.js";
 import { fromText } from "@lucid-evolution/core-utils";
 
-export const poolError = (cause: TxBuilderErrorCause, message?: string) =>
-  new TxBuilderError({ cause, module: "Pool", message });
+export const poolError = (cause: unknown) =>
+  new TxBuilderError({ cause: `{ Pool : ${cause} }` });
 
 export const delegateTo = (
   config: TxBuilder.TxBuilderConfig,
@@ -36,14 +32,16 @@ export const delegateTo = (
       validateAddressDetails(rewardAddress, config.lucidConfig),
       Effect.andThen((address) =>
         address.type !== "Reward"
-          ? poolError("InvalidCredential", "Address type must be Reward type.")
+          ? poolError(ERROR_MESSAGE.MISSING_REWARD_TYPE)
           : Effect.succeed(address),
       ),
     );
 
     const stakeCredential = yield* pipe(
       Effect.fromNullable(addressDetails.stakeCredential),
-      Effect.orElseFail(() => poolError("MissingStakeCredential")),
+      Effect.orElseFail(() =>
+        poolError(ERROR_MESSAGE.MISSING_STAKE_CREDENTIAL),
+      ),
     );
 
     switch (stakeCredential.type) {
@@ -74,17 +72,12 @@ export const delegateTo = (
         const script = yield* pipe(
           Effect.fromNullable(config.scripts.get(stakeCredential.hash)),
           Effect.orElseFail(() =>
-            poolError(
-              "MissingScript",
-              `No script found, script hash: ${stakeCredential.hash}, consider using attach modules`,
-            ),
+            poolError(ERROR_MESSAGE.MISSING_SCRIPT(stakeCredential.hash)),
           ),
         );
         const red = yield* pipe(
           Effect.fromNullable(redeemer),
-          Effect.orElseFail(() =>
-            poolError("MissingRedeemer", ERROR_MESSAGE.MISSING_REDEEMER),
-          ),
+          Effect.orElseFail(() => poolError(ERROR_MESSAGE.MISSING_REDEEMER)),
         );
         switch (script.type) {
           case "PlutusV1": {
@@ -139,14 +132,13 @@ const createPoolRegistration = (poolParams: PoolParams, lucid: LucidConfig) =>
       const addressDetails = yield* validateAddressDetails(owner, lucid);
       const stakeCredential = yield* pipe(
         Effect.fromNullable(addressDetails.stakeCredential),
-        Effect.orElseFail(() => poolError("MissingStakeCredential")),
+        Effect.orElseFail(() =>
+          poolError(ERROR_MESSAGE.MISSING_STAKE_CREDENTIAL),
+        ),
       );
       stakeCredential.type === "Key"
         ? poolOwners.add(CML.Ed25519KeyHash.from_hex(stakeCredential.hash))
-        : poolError(
-            "InvalidCredential",
-            "Only key hashes allowed for pool owners.",
-          );
+        : poolError(ERROR_MESSAGE.SCRIPT_CREDENTIAL_NOT_ALLOWED);
     }
     const metadataHash = yield* getMetadataHash(poolParams.metadataUrl);
     const relays = CML.RelayList.new();
@@ -217,7 +209,7 @@ const getMetadataHash = (metadataUrl?: string) =>
       const metadata = yield* pipe(
         Effect.tryPromise({
           try: () => fetch(metadataUrl),
-          catch: (error) => poolError("InvalidMetadata", String(error)),
+          catch: (cause) => poolError(cause),
         }),
         Effect.andThen((resp) => Effect.promise(() => resp.arrayBuffer())),
       );

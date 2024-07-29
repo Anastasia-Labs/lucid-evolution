@@ -26,6 +26,10 @@ import { CML } from "./core.js";
 import { signData } from "@lucid-evolution/sign_data";
 import { discoverOwnUsedTxKeyHashes, walletFromSeed } from "./wallet.js";
 
+type Config = {
+  overriddenUTxOs: UTxO[];
+};
+
 export const makeWalletFromSeed = (
   provider: Provider,
   network: Network,
@@ -36,9 +40,6 @@ export const makeWalletFromSeed = (
     password?: string;
   },
 ): Wallet => {
-  type Config = {
-    overriddenUTxOs: UTxO[];
-  };
   const config: Config = {
     overriddenUTxOs: [],
   };
@@ -131,9 +132,7 @@ export const makeWalletFromSeed = (
 
       return signData(hexAddress, payload, privateKey);
     },
-    submitTx: async (tx: Transaction): Promise<TxHash> => {
-      return await provider.submitTx(tx);
-    },
+    submitTx: async (tx: Transaction): Promise<TxHash> => provider.submitTx(tx),
   };
 };
 
@@ -154,21 +153,27 @@ export const makeWalletFromPrivateKey = (
   )
     .to_address()
     .to_bech32(undefined);
+  const config: Config = {
+    overriddenUTxOs: [],
+  };
 
   return {
-    //TODO: implement utxos
-    overrideUTxOs: (utxos) => undefined,
+    overrideUTxOs: (utxos: UTxO[]) => (config.overriddenUTxOs = utxos),
     address: async (): Promise<Address> => address,
     rewardAddress: async (): Promise<RewardAddress | null> => null,
-    getUtxos: async (): Promise<UTxO[]> => {
-      return await provider.getUtxos(paymentCredentialOf(address));
-    },
-    getUtxosCore: async (): Promise<Array<CML.TransactionUnspentOutput>> => {
-      const utxos = await provider.getUtxos(paymentCredentialOf(address));
-      const coreUtxos: Array<CML.TransactionUnspentOutput> = [];
-      utxos.forEach((utxo) => {
+    getUtxos: async (): Promise<UTxO[]> =>
+      config.overriddenUTxOs.length > 0
+        ? config.overriddenUTxOs
+        : provider.getUtxos(paymentCredentialOf(address)),
+    getUtxosCore: async (): Promise<CML.TransactionUnspentOutput[]> => {
+      const utxos =
+        config.overriddenUTxOs.length > 0
+          ? config.overriddenUTxOs
+          : await provider.getUtxos(paymentCredentialOf(address));
+      const coreUtxos: CML.TransactionUnspentOutput[] = [];
+      for (const utxo of utxos) {
         coreUtxos.push(utxoToCore(utxo));
-      });
+      }
       return coreUtxos;
     },
     getDelegation: async (): Promise<Delegation> => {
@@ -209,6 +214,9 @@ export const makeWalletFromAPI = (
   provider: Provider,
   api: WalletApi,
 ): Wallet => {
+  const config: Config = {
+    overriddenUTxOs: [],
+  };
   const getAddressHex = async () => {
     const [addressHex] = await api.getUsedAddresses();
     if (addressHex) return addressHex;
@@ -228,26 +236,29 @@ export const makeWalletFromAPI = (
   };
 
   return {
-    //TODO: implement utxos
-    overrideUTxOs: (utxos) => undefined,
+    overrideUTxOs: (utxos: UTxO[]) => (config.overriddenUTxOs = utxos),
     address: async (): Promise<Address> =>
       CML.Address.from_hex(await getAddressHex()).to_bech32(undefined),
     rewardAddress: async (): Promise<RewardAddress | null> =>
       getRewardAddress(),
     getUtxos: async (): Promise<UTxO[]> => {
-      const utxos = ((await api.getUtxos()) || []).map((utxo) => {
-        const parsedUtxo = CML.TransactionUnspentOutput.from_cbor_bytes(
-          fromHex(utxo),
-        );
-        return coreToUtxo(parsedUtxo);
-      });
+      const utxos =
+        config.overriddenUTxOs.length > 0
+          ? config.overriddenUTxOs
+          : ((await api.getUtxos()) || []).map((utxo) =>
+              coreToUtxo(
+                CML.TransactionUnspentOutput.from_cbor_bytes(fromHex(utxo)),
+              ),
+            );
       return utxos;
     },
-    getUtxosCore: async (): Promise<Array<CML.TransactionUnspentOutput>> => {
-      const utxos: Array<CML.TransactionUnspentOutput> = [];
-      ((await api.getUtxos()) || []).forEach((utxo: string) => {
-        utxos.push(CML.TransactionUnspentOutput.from_cbor_hex(utxo));
-      });
+    getUtxosCore: async (): Promise<CML.TransactionUnspentOutput[]> => {
+      const utxos =
+        config.overriddenUTxOs.length > 0
+          ? config.overriddenUTxOs.map(utxoToCore)
+          : ((await api.getUtxos()) || []).map((utxo: string) =>
+              CML.TransactionUnspentOutput.from_cbor_hex(utxo),
+            );
       return utxos;
     },
     getDelegation: async (): Promise<Delegation> => {
@@ -267,10 +278,7 @@ export const makeWalletFromAPI = (
       const hexAddress = toHex(CML.Address.from_bech32(address).to_raw_bytes());
       return await api.signData(hexAddress, payload);
     },
-    submitTx: async (tx: Transaction): Promise<TxHash> => {
-      const txHash = await api.submitTx(tx);
-      return txHash;
-    },
+    submitTx: async (tx: Transaction): Promise<TxHash> => api.submitTx(tx),
   };
 };
 
@@ -284,15 +292,16 @@ export const makeWalletFromAddress = (
   const rewardAddress = stakeCredential
     ? credentialToRewardAddress(network, stakeCredential)
     : null;
-
+  const config: Config = {
+    overriddenUTxOs: utxos,
+  };
   return {
-    //TODO: implement utxos
-    overrideUTxOs: (utxos: UTxO[]) => undefined,
+    overrideUTxOs: (utxos: UTxO[]) => (config.overriddenUTxOs = utxos),
     address: async (): Promise<Address> => address,
     rewardAddress: async (): Promise<RewardAddress | null> => rewardAddress,
-    getUtxos: async (): Promise<UTxO[]> => utxos,
+    getUtxos: async (): Promise<UTxO[]> => config.overriddenUTxOs,
     getUtxosCore: async (): Promise<CML.TransactionUnspentOutput[]> =>
-      utxos.map(utxoToCore),
+      config.overriddenUTxOs.map(utxoToCore),
     getDelegation: async (): Promise<Delegation> =>
       rewardAddress
         ? provider.getDelegation(rewardAddress)
@@ -308,8 +317,6 @@ export const makeWalletFromAddress = (
     ): Promise<SignedMessage> => {
       throw new Error("Not implemented");
     },
-    submitTx: async (_tx: Transaction): Promise<TxHash> => {
-      throw new Error("Not implemented");
-    },
+    submitTx: async (tx: Transaction): Promise<TxHash> => provider.submitTx(tx),
   };
 };

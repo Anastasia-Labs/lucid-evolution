@@ -1,5 +1,24 @@
 # @lucid-evolution/wallet
 
+## 0.1.27
+
+### Patch Changes
+
+- [#178](https://github.com/Anastasia-Labs/lucid-evolution/pull/178) [`fcd0de0`](https://github.com/Anastasia-Labs/lucid-evolution/commit/fcd0de09e037e5dc92676b219a0ca0c0ae83fd00) Thanks [@solidsnakedev](https://github.com/solidsnakedev)! - add overrideUTxOs to wallet implementations
+
+- Updated dependencies [[`def34e8`](https://github.com/Anastasia-Labs/lucid-evolution/commit/def34e800af761abcd7b85ba4c6b7c65219d1891)]:
+  - @lucid-evolution/bip39@0.2.9
+  - @lucid-evolution/utils@0.1.25
+
+## 0.1.26
+
+### Patch Changes
+
+- [#176](https://github.com/Anastasia-Labs/lucid-evolution/pull/176) [`61613f5`](https://github.com/Anastasia-Labs/lucid-evolution/commit/61613f5178045bfe6ba53f1cd4c7b8900431013b) Thanks [@solidsnakedev](https://github.com/solidsnakedev)! - enable submitTx when making a wallet from address
+
+- Updated dependencies [[`f794a5b`](https://github.com/Anastasia-Labs/lucid-evolution/commit/f794a5bbec7d1ae39135495827ccca91e9ac9da6)]:
+  - @lucid-evolution/utils@0.1.24
+
 ## 0.1.25
 
 ### Patch Changes

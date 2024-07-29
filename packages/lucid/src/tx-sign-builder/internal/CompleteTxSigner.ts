@@ -2,13 +2,12 @@ import { Effect, pipe } from "effect";
 import { CML } from "../../core.js";
 import {
   ERROR_MESSAGE,
-  makeRunTimeError,
   RunTimeError,
   TransactionSignError,
 } from "../../Errors.js";
 import * as TxSignBuilder from "../TxSignBuilder.js";
 import * as TxSubmitBuilder from "../../tx-submit/TxSubmit.js";
-import { stringify } from "@lucid-evolution/utils";
+import { signError } from "./Sign.js";
 
 export const completeTxSigner = (
   config: TxSignBuilder.TxSignBuilderConfig,
@@ -25,13 +24,7 @@ export const completeTxSigner = (
     );
     const wallet = yield* pipe(
       Effect.fromNullable(config.lucidConfig.wallet),
-      Effect.orElseFail(() =>
-        TxSignBuilder.signError("MissingWallet", ERROR_MESSAGE.MISSING_WALLET),
-      ),
+      Effect.orElseFail(() => signError(ERROR_MESSAGE.MISSING_WALLET)),
     );
     return TxSubmitBuilder.makeSubmit(wallet, signedTx);
-  }).pipe(
-    Effect.catchAllDefect(
-      (e) => new RunTimeError({ message: stringify(String(e)) }),
-    ),
-  );
+  }).pipe(Effect.catchAllDefect((cause) => new RunTimeError({ cause })));

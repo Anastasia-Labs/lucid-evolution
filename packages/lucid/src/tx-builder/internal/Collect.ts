@@ -3,18 +3,14 @@ import { Data } from "@lucid-evolution/plutus";
 import { utxoToCore } from "@lucid-evolution/utils";
 import { Redeemer, RedeemerBuilder, UTxO } from "@lucid-evolution/core-types";
 import * as TxBuilder from "../TxBuilder.js";
-import {
-  ERROR_MESSAGE,
-  TxBuilderError,
-  TxBuilderErrorCause,
-} from "../../Errors.js";
+import { ERROR_MESSAGE, TxBuilderError } from "../../Errors.js";
 import * as CML from "@anastasia-labs/cardano-multiplatform-lib-nodejs";
 import { toPartial, toV1, toV2 } from "./TxUtils.js";
 import { paymentCredentialOf } from "@lucid-evolution/utils";
 import { datumOf } from "../../lucid-evolution/utils.js";
 
-export const collectError = (cause: TxBuilderErrorCause, message?: string) =>
-  new TxBuilderError({ cause, module: "Collect", message });
+export const collectError = (cause: unknown) =>
+  new TxBuilderError({ cause: `{ Collect: ${cause} }` });
 
 export const collectFromUTxO =
   (
@@ -25,13 +21,13 @@ export const collectFromUTxO =
   (redeemer?: Redeemer): Effect.Effect<void, TxBuilderError> =>
     Effect.gen(function* ($) {
       if (utxos.length === 0)
-        yield* $(collectError("EmptyUTXO", ERROR_MESSAGE.EMPTY_UTXO));
+        yield* $(collectError(ERROR_MESSAGE.EMPTY_UTXO));
       for (const utxo of utxos) {
         if (utxo.datumHash && !utxo.datum) {
           const data = yield* $(
             Effect.tryPromise({
               try: () => datumOf(config.lucidConfig.provider, utxo),
-              catch: (error) => collectError("Datum", String(error)),
+              catch: (cause) => collectError({ cause }),
             }),
           );
           utxo.datum = Data.to(data);
@@ -51,8 +47,7 @@ export const collectFromUTxO =
             Effect.fromNullable(config.scripts.get(credential.hash)),
             Effect.orElseFail(() =>
               collectError(
-                "MissingScript",
-                `No script found, script hash: ${credential.hash}, consider using attach modules`,
+                collectError(ERROR_MESSAGE.MISSING_SCRIPT(credential.hash)),
               ),
             ),
           );
@@ -70,7 +65,6 @@ export const collectFromUTxO =
                 Effect.fromNullable(redeemer),
                 Effect.orElseFail(() =>
                   collectError(
-                    "MissingRedeemer",
                     ERROR_MESSAGE.MISSING_REDEEMER,
                   ),
                 ),
@@ -90,7 +84,6 @@ export const collectFromUTxO =
                 Effect.fromNullable(redeemer),
                 Effect.orElseFail(() =>
                   collectError(
-                    "MissingRedeemer",
                     ERROR_MESSAGE.MISSING_REDEEMER,
                   ),
                 ),
@@ -123,14 +116,14 @@ export const collectFromUTxOPartial = (
 ): Effect.Effect<void, TxBuilderError> =>
   Effect.gen(function* ($) {
     if (utxos.length === 0)
-      yield* $(collectError("EmptyUTXO", ERROR_MESSAGE.EMPTY_UTXO));
+      yield* collectError(ERROR_MESSAGE.EMPTY_UTXO);
     if (redeemerBuilder.kind === "self") redeemerBuilder.inputs = utxos;
     for (const utxo of utxos) {
       if (utxo.datumHash && !utxo.datum) {
         const data = yield* $(
           Effect.tryPromise({
             try: () => datumOf(config.lucidConfig.provider, utxo),
-            catch: (error) => collectError("Datum", String(error)),
+            catch: (cause) => collectError({ cause }),
           }),
         );
         utxo.datum = Data.to(data);

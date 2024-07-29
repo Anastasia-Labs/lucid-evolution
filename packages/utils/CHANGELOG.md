@@ -1,5 +1,18 @@
 # @lucid-evolution/utils
 
+## 0.1.25
+
+### Patch Changes
+
+- Updated dependencies [[`def34e8`](https://github.com/Anastasia-Labs/lucid-evolution/commit/def34e800af761abcd7b85ba4c6b7c65219d1891)]:
+  - @lucid-evolution/bip39@0.2.9
+
+## 0.1.24
+
+### Patch Changes
+
+- [#177](https://github.com/Anastasia-Labs/lucid-evolution/pull/177) [`f794a5b`](https://github.com/Anastasia-Labs/lucid-evolution/commit/f794a5bbec7d1ae39135495827ccca91e9ac9da6) Thanks [@solidsnakedev](https://github.com/solidsnakedev)! - add calculateMinLovelaceFromUTxO
+
 ## 0.1.23
 
 ### Patch Changes

@@ -1,5 +1,28 @@
 # @lucid-evolution/lucid
 
+## 0.2.49
+
+### Patch Changes
+
+- Updated dependencies [[`fcd0de0`](https://github.com/Anastasia-Labs/lucid-evolution/commit/fcd0de09e037e5dc92676b219a0ca0c0ae83fd00), [`def34e8`](https://github.com/Anastasia-Labs/lucid-evolution/commit/def34e800af761abcd7b85ba4c6b7c65219d1891)]:
+  - @lucid-evolution/wallet@0.1.27
+  - @lucid-evolution/bip39@0.2.9
+  - @lucid-evolution/utils@0.1.25
+  - @lucid-evolution/provider@0.1.32
+
+## 0.2.48
+
+### Patch Changes
+
+- [#174](https://github.com/Anastasia-Labs/lucid-evolution/pull/174) [`f86b74a`](https://github.com/Anastasia-Labs/lucid-evolution/commit/f86b74a7a5489012e717b1247771b527f21be424) Thanks [@solidsnakedev](https://github.com/solidsnakedev)! - refactor error messages and constructor
+
+- [#174](https://github.com/Anastasia-Labs/lucid-evolution/pull/174) [`e05e805`](https://github.com/Anastasia-Labs/lucid-evolution/commit/e05e8057f2561040fe733bcb895c567ff7d2f0d5) Thanks [@solidsnakedev](https://github.com/solidsnakedev)! - improve RunTimeError, refactor TxSubmitError
+
+- Updated dependencies [[`61613f5`](https://github.com/Anastasia-Labs/lucid-evolution/commit/61613f5178045bfe6ba53f1cd4c7b8900431013b), [`f794a5b`](https://github.com/Anastasia-Labs/lucid-evolution/commit/f794a5bbec7d1ae39135495827ccca91e9ac9da6), [`f86b74a`](https://github.com/Anastasia-Labs/lucid-evolution/commit/f86b74a7a5489012e717b1247771b527f21be424)]:
+  - @lucid-evolution/wallet@0.1.26
+  - @lucid-evolution/utils@0.1.24
+  - @lucid-evolution/provider@0.1.31
+
 ## 0.2.47
 
 ### Patch Changes

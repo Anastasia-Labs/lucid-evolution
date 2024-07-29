@@ -3,16 +3,12 @@ import { fromHex } from "@lucid-evolution/core-utils";
 import { Assets, Redeemer } from "@lucid-evolution/core-types";
 import * as CML from "@anastasia-labs/cardano-multiplatform-lib-nodejs";
 import { toPartial, toV1, toV2 } from "./TxUtils.js";
-import {
-  ERROR_MESSAGE,
-  TxBuilderError,
-  TxBuilderErrorCause,
-} from "../../Errors.js";
+import { ERROR_MESSAGE, TxBuilderError } from "../../Errors.js";
 import * as TxBuilder from "../TxBuilder.js";
 import { addAssets } from "@lucid-evolution/utils";
 
-export const mintError = (cause: TxBuilderErrorCause, message?: string) =>
-  new TxBuilderError({ cause, module: "Mint", message });
+export const mintError = (cause: unknown) =>
+  new TxBuilderError({ cause: `{ Mint: ${cause} }` });
 
 /**
  * All assets should be of the same policy id.
@@ -29,7 +25,7 @@ export const mintAssets =
       const mintAssets = CML.MapAssetNameToNonZeroInt64.new();
       for (const unit of units) {
         if (unit.slice(0, 56) !== policyId) {
-          yield* mintError("MultiplePolicies", ERROR_MESSAGE.MULTIPLE_POLICIES);
+          yield* mintError(ERROR_MESSAGE.MULTIPLE_POLICIES);
         }
         mintAssets.insert(
           CML.AssetName.from_bytes(fromHex(unit.slice(56))),
@@ -40,7 +36,7 @@ export const mintAssets =
       const policy = yield* pipe(
         Effect.fromNullable(config.scripts.get(policyId)),
         Effect.orElseFail(() =>
-          mintError("MissingPolicy", `No policy found, policy id: ${policyId}`),
+          mintError(ERROR_MESSAGE.MISSING_POLICY(policyId)),
         ),
       );
       switch (policy.type) {
@@ -57,7 +53,7 @@ export const mintAssets =
           const red = yield* pipe(
             Effect.fromNullable(redeemer),
             Effect.orElseFail(() =>
-              mintError("MissingRedeemer", ERROR_MESSAGE.MISSING_REDEEMER),
+              mintError(ERROR_MESSAGE.MISSING_REDEEMER),
             ),
           );
           config.txBuilder.add_mint(
@@ -72,7 +68,7 @@ export const mintAssets =
           const red = yield* pipe(
             Effect.fromNullable(redeemer),
             Effect.orElseFail(() =>
-              mintError("MissingRedeemer", ERROR_MESSAGE.MISSING_REDEEMER),
+              mintError(ERROR_MESSAGE.MISSING_REDEEMER),
             ),
           );
           config.txBuilder.add_mint(
