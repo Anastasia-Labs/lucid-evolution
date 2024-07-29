@@ -10,10 +10,10 @@ import { Effect, Layer, Logger, LogLevel, pipe, Schedule } from "effect";
 import { User } from "./specs/services.js";
 const mkMintinPolicy = (time: number, address: string) => {
   return nativeJSFromJson({
-    type: "ScriptAll",
+    type: "all",
     scripts: [
       {
-        type: "ScriptPubKey",
+        type: "sig",
         keyHash: paymentCredentialOf(address).hash,
       },
       // {

@@ -16,7 +16,7 @@ const loadConfig = Effect.gen(function* () {
   ]);
 });
 
-describe.skip("Wallet", () => {
+describe("Wallet", () => {
   test("switchProvider", async () => {
     const program = Effect.gen(function* () {
       const [VITE_API_URL, VITE_BLOCKFROST_KEY, VITE_SEED, VITE_MAESTRO_KEY] =
