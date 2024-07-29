@@ -1,5 +1,15 @@
 # @lucid-evolution/utils
 
+## 0.1.26
+
+### Patch Changes
+
+- [#169](https://github.com/Anastasia-Labs/lucid-evolution/pull/169) [`6282481`](https://github.com/Anastasia-Labs/lucid-evolution/commit/6282481a2183cfa1a3deec025552d7432cb35869) Thanks [@nikhils9](https://github.com/nikhils9)! - Auto populate input indices
+
+- Updated dependencies [[`6282481`](https://github.com/Anastasia-Labs/lucid-evolution/commit/6282481a2183cfa1a3deec025552d7432cb35869)]:
+  - @lucid-evolution/core-types@0.1.10
+  - @lucid-evolution/plutus@0.1.13
+
 ## 0.1.25
 
 ### Patch Changes

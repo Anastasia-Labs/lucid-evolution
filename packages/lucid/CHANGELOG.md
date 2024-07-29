@@ -1,5 +1,21 @@
 # @lucid-evolution/lucid
 
+## 0.3.0
+
+### Minor Changes
+
+- [#169](https://github.com/Anastasia-Labs/lucid-evolution/pull/169) [`6282481`](https://github.com/Anastasia-Labs/lucid-evolution/commit/6282481a2183cfa1a3deec025552d7432cb35869) Thanks [@nikhils9](https://github.com/nikhils9)! - Auto populate input indices
+
+### Patch Changes
+
+- Updated dependencies [[`6282481`](https://github.com/Anastasia-Labs/lucid-evolution/commit/6282481a2183cfa1a3deec025552d7432cb35869)]:
+  - @lucid-evolution/core-types@0.1.10
+  - @lucid-evolution/utils@0.1.26
+  - @lucid-evolution/plutus@0.1.13
+  - @lucid-evolution/provider@0.1.33
+  - @lucid-evolution/sign_data@0.1.10
+  - @lucid-evolution/wallet@0.1.28
+
 ## 0.2.49
 
 ### Patch Changes
