@@ -1,15 +1,14 @@
 import {
   fromText,
   mintingPolicyToId,
-  nativeJSFromJson,
   paymentCredentialOf,
-  unixTimeToSlot,
+  scriptFromNative,
 } from "../src/index.js";
 import { expect, test } from "vitest";
 import { Effect, Layer, Logger, LogLevel, pipe, Schedule } from "effect";
 import { User } from "./specs/services.js";
 const mkMintinPolicy = (time: number, address: string) => {
-  return nativeJSFromJson({
+  return scriptFromNative({
     type: "all",
     scripts: [
       {
