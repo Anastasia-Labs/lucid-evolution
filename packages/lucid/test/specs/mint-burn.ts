@@ -1,4 +1,5 @@
 import {
+  Constr,
   Data,
   fromText,
   mintingPolicyToId,
@@ -29,6 +30,7 @@ export const mint = Effect.gen(function* () {
   const nativeMint = mkMintinPolicy(9_000_000, addr);
   const nativePolicyId = mintingPolicyToId(nativeMint);
   const plutusMint = yield* MintContract;
+  const mintRedeemer = Data.to(new Constr(0, [[]]));
 
   const signBuilder = yield* user
     .newTx()
@@ -46,7 +48,7 @@ export const mint = Effect.gen(function* () {
         [plutusMint.policyId + fromText("BurnableTokenPlutus")]: 1n,
         [plutusMint.policyId + maxHexToken]: 1n,
       },
-      Data.void(),
+      mintRedeemer,
     )
     .validTo(Date.now() + 900000)
     .attach.MintingPolicy(nativeMint)
@@ -62,6 +64,7 @@ export const burn = Effect.gen(function* () {
   const nativeMint = mkMintinPolicy(9_000_000, addr);
   const nativePolicyId = mintingPolicyToId(nativeMint);
   const plutusMint = yield* MintContract;
+  const mintRedeemer = Data.to(new Constr(0, [[]]));
 
   const signBuilder = yield* user
     .newTx()
@@ -75,7 +78,7 @@ export const burn = Effect.gen(function* () {
         [plutusMint.policyId + fromText("BurnableTokenPlutus")]: -1n,
         [plutusMint.policyId + maxHexToken]: -1n,
       },
-      Data.void(),
+      mintRedeemer,
     )
     .validTo(Date.now() + 900000)
     .attach.MintingPolicy(nativeMint)
