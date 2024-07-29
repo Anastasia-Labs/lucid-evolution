@@ -1,0 +1,67 @@
+---
+title: "3 - Your first transaction"
+---
+
+# Your first transaction
+
+## Build
+
+Let's create a simple transaction where we send `5 ADA` to two recipients each:
+
+```typescript
+const tx = await lucid.newTx()
+  .pay.ToAddress("addr_testa...", { lovelace: 5000000n })
+  .pay.ToAddress("addr_testb...", { lovelace: 5000000n })
+  .complete();
+```
+
+NOTE the change from `payToAddress` to `pay.ToAddress` in Lucid Evolution.
+
+Transactions always need to end with `.complete()` in order to balance the transaction and do coin selection.
+
+## Sign
+Next, we sign the transaction:
+
+```typescript
+const signedTx = await tx.sign.withWallet().complete();
+```
+
+NOTE the change from `sign()` to `sign.withWallet()` in Lucid Evolution.
+
+Here we also need to call `.complete()` when we are ready with signing.
+
+## Submit
+
+Lastly we submit the transaction:
+
+```typescript
+const txHash = await signedTx.submit();
+console.log(txHash);
+```
+
+Remember to select a wallet before attempting to build and submit transactions. The wallet selection methods we discussed in the previous section should be used before building the transaction.
+
+## Putting everything together
+
+```typescript
+import { Lucid, Blockfrost } from "@lucid-evolution/lucid";
+
+const lucid = await Lucid(
+  new Blockfrost("https://cardano-preprod.blockfrost.io/api/v0", "<projectId>"),
+  "Preprod"
+);
+
+// Assuming you've already selected a wallet using one of the methods we discussed earlier
+// For example:
+// lucid.selectWallet.fromPrivateKey(privateKey);
+
+const tx = await lucid.newTx()
+  .pay.ToAddress("addr_testa...", { lovelace: 5000000n })
+  .pay.ToAddress("addr_testb...", { lovelace: 5000000n })
+  .complete();
+
+const signedTx = await tx.sign.withWallet().complete();
+
+const txHash = await signedTx.submit();
+console.log(txHash);
+```

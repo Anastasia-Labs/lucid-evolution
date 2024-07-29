@@ -46,7 +46,7 @@ pnpm build
 
 ### Develop
 
-To develop docs, run the following command:
+To develop docs, run the following command and visit the custom `basePath` http://localhost:3000/lucid-evolution:
 
 ```
 cd lucid-evolution

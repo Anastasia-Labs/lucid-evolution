@@ -1,0 +1,74 @@
+## Register stake pool
+
+Cold key and vrf key were imported from the cardano-cli. The cold key is necessary to add a required witness to the transaction and the vrf key needs to be added to the pool parameters.
+
+```typescript
+import { Lucid, CML } from "@lucid-evolution/lucid";
+import { fromHex } from "@lucid-evolution/core-utils";
+
+/** StakePoolSigningKey_ed25519 cborHex from the cardano-cli */
+const coldKey = CML.PrivateKey.from_bytes(
+  fromHex(
+    "58204de30f983ed860524d00059c7f2b1d63240fba805bee043604aa7ccb13d387e9"
+  )
+);
+
+/** VrfVerificationKey_PraosVRF cborHex from the cardano-cli */
+const vrfKeyHash = CML.VRFVKey.from_bytes(
+  fromHex(
+    "5820c9cf07d863c8a2351662c9759ca1d9858b536bab50ad575b5de161e1af18f887"
+  )
+).hash().to_hex();
+
+const poolId = coldKey.to_public().hash().to_bech32("pool");
+const rewardOwnerAddress = await lucid.wallet().rewardAddress();
+
+const poolParams: PoolParams = {
+  poolId,
+  vrfKeyHash,
+  pledge: 100000000n,
+  cost: 340000000n,
+  margin: 0.025, // 2.5%
+  rewardAddress: rewardOwnerAddress,
+  owners: [rewardOwnerAddress],
+  relays: [{ type: "SingleHostIp", ipV4: "123.456.789.0", port: 3000 }],
+  metadataUrl: "https://...", // metadata needs to be hosted already before registering the pool
+};
+
+const tx = await lucid.newTx()
+  .registerPool(poolParams)
+  .complete();
+
+const signedTx = await tx.sign.withWallet()
+  .sign.withPrivateKey(coldKey.to_bech32())
+  .complete();
+
+const txHash = await signedTx.submit();
+```
+
+NOTE Transition changes:
+
+- We're now importing from `@lucid-evolution/lucid` and `@lucid-evolution/core-utils`
+- `lucid.wallet.rewardAddress()` has become `lucid.wallet().rewardAddress()`
+- `tx.sign()` has become `tx.sign.withWallet()`
+- `signWithPrivateKey()` has become `sign.withPrivateKey()`
+- The registerPool function requires a pool deposit. It internally creates a pool registration certificate and adds it to the transaction.
+
+## Retire stake pool
+
+UNDER DEVELOPMENT - NOT YET AVAILABLE
+
+```typescript
+// const retirementEpoch = 100;
+
+// const tx = await lucid.newTx()
+//  .retirePool(poolId, retirementEpoch)
+//  .complete();
+
+// const signedTx = await tx.sign.withWallet()
+//  .sign.withPrivateKey(coldKey.to_bech32())
+//  .complete();
+
+// const txHash = await signedTx.submit();
+```
+

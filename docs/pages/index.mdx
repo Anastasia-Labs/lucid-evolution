@@ -1,4 +1,4 @@
-# Welcome to Lucid Evolution
+# Welcome
  
 import { Callout } from 'nextra/components'
 
@@ -6,3 +6,26 @@ import { Callout } from 'nextra/components'
   Please note that the documentation is currently under construction and some sections may be incomplete or subject to changes. 
   We are working hard to provide you with comprehensive and accurate information.
 </Callout>
+
+Hello fellow developers, welcome to Lucid Evolution! This is the next iteration of the Lucid library, after evaluations of the legacy Lucid library we identified areas needing enhancements. In this effort, a big portion of the legacy library has been rewritten or created from scratch.
+
+Lucid Evolution is like the legacy Lucid library but with improved APIs, better error handling, more structure, and the latest version of CML.
+
+## Transition
+
+Although the Evolution library shares the Lucid name, it is built with a different approach. You will need to install new packages.
+While the endpoints remain mostly the same, the main difference you will encounter is that the Lucid instance is now a factory function instead of a class. We have worked hard to ensure the transition is as smooth as possible.
+
+In legacy Lucid, you would typically do:
+
+```typescript
+const lucid = await Lucid.new(...)
+```
+
+In Lucid Evolution:
+
+```typescript
+const lucid = await Lucid(...)
+```
+
+This change affects how you initialize Lucid, but does not significantly change how you use its methods once initialized.

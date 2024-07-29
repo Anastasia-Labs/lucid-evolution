@@ -1,0 +1,103 @@
+---
+title: "1 - Instantiate Lucid Evolution"
+---
+
+# Instantiate Lucid
+
+Lucid Evolution can be used with or without a blockchain provider, which allows you to query data and submit transactions.
+We are working on our Emulator, which will allow you to test your operations locally without the need for a blockchain provider.
+
+We support the `Mainnet`, `Preprod`, and `Preview` networks, with Mainnet being the default selection if no network is specified. 
+
+## Provider selection
+
+There are multiple builtin providers you can choose from in Lucid Evolution
+
+### Blockfrost
+
+```typescript
+import { Lucid } from '@lucid-evolution/lucid';
+import { Blockfrost } from '@lucid-evolution/provider';
+
+const lucid = await Lucid(
+  new Blockfrost("https://cardano-preprod.blockfrost.io/api/v0", "<projectId>"),
+  "Preprod"
+);
+```
+
+*Reminder*: In Lucid Evolution, `Lucid.new()` has been replaced with `Lucid()`, as it's now a factory function instead of a class.
+
+### Kupmios
+
+Kupmios is a mix of [Ogmios](https://ogmios.dev/) and
+[Kupo](https://cardanosolutions.github.io/kupo/).
+
+```typescript
+import { Lucid } from '@lucid-evolution/lucid';
+import { Kupmios } from '@lucid-evolution/provider';
+
+const lucid = await Lucid(
+  new Kupmios(
+    "http://localhost:1442", // Kupo endpoint
+    "http://localhost:1337"  // Ogmios endpoint (Note: changed from ws:// to http:// in a release 1 month ago)
+  ),
+  "Preview"
+);
+```
+
+
+### Maestro
+
+```typescript
+import { Lucid } from '@lucid-evolution/lucid';
+import { Maestro } from '@lucid-evolution/provider';
+
+const lucid = await Lucid(
+  new Maestro({
+    network: "Preprod", // For MAINNET: "Mainnet"
+    apiKey: "<Your-API-Key>", // Get yours by visiting https://docs.gomaestro.org/docs/Getting-started/Sign-up-login
+    turboSubmit: false // Read about paid turbo transaction submission feature at https://docs.gomaestro.org/docs/Dapp%20Platform/Turbo%20Transaction
+  }),
+  "Preprod" // For MAINNET: "Mainnet"
+);
+```
+
+## Query provider
+
+### Query UTxOs
+
+```typescript
+const utxos = await lucid.provider.getUtxos("addr_test...");
+```
+
+For convenience you can also query utxos like this:
+
+```typescript
+const utxos = await lucid.utxosAt("addr_test...");
+```
+
+### Query datums
+
+```typescript
+const datum = await lucid.provider.getDatum("<datum_hash>");
+```
+
+For convenience you can also query datums directly from utxos. When you query
+the datum for a UTxO, Lucid automatically adds the datum to the UTxO. This means
+that subsequent queries for the same UTxO will return the result instantly,
+without the need for an additional network request.
+
+```typescript
+const [scriptUtxo] = await lucid.utxosAt("addr_test...");
+const datum = await lucid.datumOf(scriptUtxo);
+```
+
+### Query protocol parameters
+
+```typescript
+const protocolParameters = await lucid.provider.getProtocolParameters();
+```
+
+### Provider Switching
+
+The `switchProvider` method is present
