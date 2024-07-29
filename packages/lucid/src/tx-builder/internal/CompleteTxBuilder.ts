@@ -92,13 +92,9 @@ export const complete = (
       );
       setCollateral(config, collateralInput, walletInfo.address);
     }
-
-    console.log("Phase 1");
     // First round of coin selection and UPLC evaluation. The fee estimation is lacking
     // the script execution costs as they aren't available yet.
     yield* selectionAndEvaluation(config, options, walletInfo, false);
-
-    console.log("Phase 2");
     // Second round of coin selection by including script execution costs in fee estimation.
     // UPLC evaluation need to be performed again if new inputs are selected during coin selection.
     // Because increasing the inputs can increase the script execution budgets.
@@ -135,7 +131,6 @@ export const complete = (
         ...availableWalletInputs,
       ],
     );
-    console.log(config.txBuilder.get_fee_if_set());
 
     return Tuple.make(
       updatedWalletInputs,
@@ -164,8 +159,6 @@ export const selectionAndEvaluation = (
       options.coinSelection !== false
         ? yield* coinSelection(config, availableInputs, script_calculation)
         : [];
-    console.log(inputsToAdd);
-    console.log("completed coin selection");
 
     // Skip UPLC evaluation for the second time if no new inputs are added
     if (_Array.isEmptyArray(inputsToAdd) && script_calculation) return;
@@ -197,11 +190,6 @@ export const selectionAndEvaluation = (
         );
       else yield* completePartialPrograms(config);
     }
-
-    console.log("completed redeemer building");
-    console.log(config.collectedInputs.length);
-
-    console.log(config.txBuilder.min_fee(false));
 
     // Build transaction to begin with UPLC evaluation
     const txRedeemerBuilder = yield* Effect.try({
@@ -294,13 +282,11 @@ export const completePartialPrograms = (config: TxBuilder.TxBuilderConfig) =>
           );
 
         const redeemer = redeemerBuilder.makeRedeemer(inputIndices);
-        // console.log(stringify(redeemer));
         const program = partialProgram(redeemer);
         newPrograms.push(program);
       } else {
         // For RedeemerBuilder of kind "self", construct a unique redeemer
         // for every UTxO and collect it's program
-        // TODO: check for empty inputs
         const inputs: UTxO[] = yield* pipe(
           Effect.fromNullable(redeemerBuilder.inputs),
           Effect.orElseFail(() =>
@@ -325,9 +311,7 @@ export const completePartialPrograms = (config: TxBuilder.TxBuilderConfig) =>
           );
 
           const redeemer = redeemerBuilder.makeRedeemer(index);
-          // console.log(stringify(redeemer));
           const program = collectFromUTxO(config, [input], false)(redeemer);
-          // config.txBuilder.get
           newPrograms.push(program);
         }
       }
@@ -339,7 +323,6 @@ export const applyUPLCEval = (
   uplcEval: Uint8Array[],
   txbuilder: CML.TransactionBuilder,
 ) => {
-  console.log("In applyUPLCEval");
   const totalExUnits = { mem: 0n, steps: 0n };
   for (const bytes of uplcEval) {
     const redeemer = CML.LegacyRedeemer.from_cbor_bytes(bytes);
@@ -354,7 +337,6 @@ export const applyUPLCEval = (
     totalExUnits.mem = totalExUnits.mem + redeemer.ex_units().mem();
     totalExUnits.steps = totalExUnits.steps + redeemer.ex_units().steps();
   }
-  console.log(totalExUnits);
 };
 
 export const setRedeemerstoZero = (tx: CML.Transaction) => {
@@ -458,8 +440,6 @@ const coinSelection = (
       sumAssetsFromInputs(config.collectedInputs),
     );
 
-    console.log(stringify(estimatedFee));
-
     // Calculate the net change in assets (delta)
     const assetsDelta: Assets = pipe(
       config.totalOutputAssets,
@@ -508,7 +488,6 @@ const evalTransaction = (
     const ins = txUtxos.map((utxo) => utxoToTransactionInput(utxo));
     const outs = txUtxos.map((utxo) => utxoToTransactionOutput(utxo));
     const slotConfig = SLOT_CONFIG_NETWORK[config.lucidConfig.network];
-    console.log("before uplc eval");
     const uplc_eval: Uint8Array[] = yield* Effect.try({
       try: () =>
         UPLC.eval_phase_two_raw(
