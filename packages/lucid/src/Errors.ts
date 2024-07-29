@@ -34,39 +34,6 @@ export const ERROR_MESSAGE = {
     `MISSING_POLICY: No policy found, policy_id: ${policyId}`,
 } as const;
 
-export type TxBuilderErrorCause =
-  | "UPLCEval"
-  | "BuildEvaluation"
-  | "Build"
-  | "Datum"
-  | "NotFound"
-  | "Provider"
-  | "EmptyUTXO"
-  | "EmptyAssets"
-  | "MissingCollateral"
-  | "MultiplePolicies"
-  | "InvalidNetwork"
-  | "InvalidMetadata"
-  | "MissingWallet"
-  | "MissingScript"
-  | "MissingPolicy"
-  | "MissingRedeemer"
-  | "MissingStakeCredential"
-  | "Address"
-  | "InvalidCredential"
-  | "RedeemerBuilder";
-export type TxBuilderErrorModule =
-  | "Attach"
-  | "Collect"
-  | "Governance"
-  | "Interval"
-  | "Mint"
-  | "Pay"
-  | "Read"
-  | "Signer"
-  | "Stake"
-  | "Pool"
-  | "Complete";
 export class TxBuilderError extends Data.TaggedError("TxBuilderError")<{
   readonly cause: unknown;
 }> {
