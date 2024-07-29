@@ -109,6 +109,18 @@ export type OutputData = {
 export type DatumHash = string;
 /** Hex (Redeemer is only PlutusData, same as Datum) */
 export type Redeemer = string; // Plutus Data (same as Datum)
+/** TODO docs  */
+export type RedeemerBuilder =
+  | {
+      kind: "selected";
+      makeRedeemer: (inputIndices: bigint[]) => Redeemer;
+      inputs: UTxO[];
+    }
+  | {
+      kind: "self";
+      makeRedeemer: (inputIndex: bigint) => Redeemer;
+      inputs?: UTxO[];
+    };
 export type Lovelace = bigint;
 export type Label = number;
 /** Hex */

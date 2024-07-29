@@ -3,6 +3,7 @@ import { assert, describe, expect, it, test } from "vitest";
 import { recursive } from "../src/tx-builder/internal/CompleteTxBuilder.js";
 import { sortUTxOs } from "@lucid-evolution/utils";
 import { createHash } from "node:crypto";
+import { Effect } from "effect";
 
 const sha256 = (input: string) =>
   createHash("sha256").update(input).digest("hex");
@@ -34,61 +35,73 @@ const createDummyAssets = (lovelaceAmount: bigint, numAssets: number) => {
 };
 
 describe("coinSelection", () => {
-  it("should select largest first , input index_1(9_798_383n) ", () => {
+  it("should select largest first , input index_1(9_798_383n) ", async () => {
     const inputs: UTxO[] = [
       createDummyUTxO(0, 5_000_000n, 0),
       createDummyUTxO(1, 9_798_383n, 0),
       createDummyUTxO(2, 3_662_726n, 7),
     ];
-    const selected = recursive(
+    const program = recursive(
       sortUTxOs(inputs),
       { lovelace: 5_000_000n },
       4310n,
     );
-    expect(selected).toStrictEqual([inputs[1]]);
+    const exit = await Effect.runPromiseExit(program);
+    // TODO: try using only one exepect
+    expect(exit._tag).toBe("Success");
+    if (exit._tag == "Success") expect(exit.value).toStrictEqual([inputs[1]]);
   });
-  it("should select largest first, and input index_1(5_000_000n), index_2(3_662_726n)", () => {
+  it("should select largest first, and input index_1(5_000_000n), index_2(3_662_726n)", async () => {
     // console.log(selected);
     const inputs: UTxO[] = [
       createDummyUTxO(0, 798_383n, 0),
       createDummyUTxO(1, 5_000_000n, 1),
       createDummyUTxO(2, 3_662_726n, 7),
     ];
-    const selected = recursive(
+    const program = recursive(
       sortUTxOs(inputs),
       { lovelace: 5_900_000n },
       4310n,
     );
-    expect(selected).toStrictEqual([inputs[1], inputs[2]]);
+    const exit = await Effect.runPromiseExit(program);
+    // TODO: try using only one expect
+    expect(exit._tag).toBe("Success");
+    if (exit._tag == "Success")
+      expect(exit.value).toStrictEqual([inputs[1], inputs[2]]);
   });
 
-  it("should select largest first, and input index 1, 0", () => {
+  it("should select largest first, and input index 1, 0, 2", async () => {
     const inputs: UTxO[] = [
       createDummyUTxO(0, 798_383n, 0),
-      createDummyUTxO(1, 5_000_000n, 1),
-      createDummyUTxO(2, 466_272n, 7),
+      createDummyUTxO(1, 5_000_000n, 0),
+      createDummyUTxO(2, 466_272n, 0),
     ];
-    const selected = recursive(
+    const program = recursive(
       sortUTxOs(inputs),
       { lovelace: 5_200_000n },
       4310n,
     );
-    expect(selected).toStrictEqual([]);
+    const exit = await Effect.runPromiseExit(program);
+    // TODO: try using only one expect
+    expect(exit._tag).toStrictEqual("Success");
+    if (exit._tag == "Success")
+      expect(exit.value).toStrictEqual([inputs[1], inputs[0], inputs[2]]);
   });
-  it("should select none [] ", () => {
+  it("should select none", async () => {
     const inputs: UTxO[] = [
       createDummyUTxO(0, 798_383n, 5),
       createDummyUTxO(1, 5_000_000n, 40),
       createDummyUTxO(2, 466_272n, 7),
     ];
-    const selected = recursive(
+    const program = recursive(
       sortUTxOs(inputs),
       { lovelace: 5_200_000n },
       4310n,
     );
-    expect(selected).toStrictEqual([]);
+    const exit = await Effect.runPromiseExit(program);
+    expect(exit._tag).toStrictEqual("Failure");
   });
-  it("should select all [] ", () => {
+  it("should select all", async () => {
     const inputs: UTxO[] = [
       createDummyUTxO(0, 798_383n, 5),
       createDummyUTxO(1, 5_000_000n, 40),
@@ -102,12 +115,12 @@ describe("coinSelection", () => {
       createDummyUTxO(9, 905327n, 0),
       createDummyUTxO(10, 781143n, 0),
     ];
-    const selected = recursive(
+    const program = recursive(
       sortUTxOs(inputs),
       { lovelace: 5_200_000n },
       4310n,
     );
-    expect(selected).toStrictEqual([
+    const expectedSelection = [
       inputs[1],
       inputs[3],
       inputs[4],
@@ -117,7 +130,28 @@ describe("coinSelection", () => {
       inputs[8],
       inputs[9],
       inputs[0],
-    ]);
+    ];
+
+    const exit = await Effect.runPromiseExit(program);
+    // TODO: try using only one exepect
+    expect(exit._tag).toBe("Success");
+    if (exit._tag == "Success")
+      expect(exit.value).toStrictEqual(expectedSelection);
+  });
+  it("should select largest first, and input index 0, 2", async () => {
+    const inputs: UTxO[] = [
+      createDummyUTxO(0, 798_383n, 0),
+      createDummyUTxO(1, 100_000n, 0),
+      createDummyUTxO(2, 466_272n, 0),
+    ];
+    const program = recursive(sortUTxOs(inputs), {}, 4310n, {
+      lovelace: 5_000n,
+    });
+    const exit = await Effect.runPromiseExit(program);
+    // TODO: try using only one expect
+    expect(exit._tag).toStrictEqual("Success");
+    if (exit._tag == "Success")
+      expect(exit.value).toStrictEqual([inputs[0], inputs[2]]);
   });
 });
 

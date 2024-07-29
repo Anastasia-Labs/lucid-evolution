@@ -8,6 +8,7 @@ import {
   Lovelace,
   PoolId,
   Redeemer,
+  RedeemerBuilder,
   RewardAddress,
   Script,
   ScriptType,
@@ -28,6 +29,7 @@ import * as TxSignBuilder from "../tx-sign-builder/TxSignBuilder.js";
 import { TransactionError } from "../Errors.js";
 import { Either } from "effect/Either";
 import { Effect } from "effect";
+import { handleRedeemerBuilder } from "./internal/TxUtils.js";
 
 export type TxBuilderConfig = {
   readonly lucidConfig: LucidConfig;
@@ -40,11 +42,18 @@ export type TxBuilderConfig = {
   mintedAssets: Assets;
   scripts: Map<string, { type: ScriptType; script: string }>;
   programs: Effect.Effect<void, TransactionError, never>[];
+  partialPrograms: Map<
+    RedeemerBuilder,
+    (redeemer?: string) => Effect.Effect<void, TransactionError, never>
+  >;
 };
 
 export type TxBuilder = {
   readFrom: (utxos: UTxO[]) => TxBuilder;
-  collectFrom: (utxos: UTxO[], redeemer?: string | undefined) => TxBuilder;
+  collectFrom: (
+    utxos: UTxO[],
+    redeemer?: string | RedeemerBuilder,
+  ) => TxBuilder;
   pay: {
     ToAddress: (address: string, assets: Assets) => TxBuilder;
     ToAddressWithData: (
@@ -69,9 +78,12 @@ export type TxBuilder = {
   withdraw: (
     rewardAddress: RewardAddress,
     amount: Lovelace,
-    redeemer?: string,
+    redeemer?: string | RedeemerBuilder,
   ) => TxBuilder;
-  mintAssets: (assets: Assets, redeemer?: string | undefined) => TxBuilder;
+  mintAssets: (
+    assets: Assets,
+    redeemer?: string | RedeemerBuilder,
+  ) => TxBuilder;
   validFrom: (unixTime: number) => TxBuilder;
   validTo: (unixTime: number) => TxBuilder;
   delegateTo: (
@@ -123,6 +135,7 @@ export function makeTxBuilder(lucidConfig: LucidConfig): TxBuilder {
     mintedAssets: {},
     scripts: new Map(),
     programs: [],
+    partialPrograms: new Map(),
   };
   const txBuilder: TxBuilder = {
     readFrom: (utxos: UTxO[]) => {
@@ -136,8 +149,11 @@ export function makeTxBuilder(lucidConfig: LucidConfig): TxBuilder {
       config.programs.push(program);
       return txBuilder;
     },
-    collectFrom: (utxos: UTxO[], redeemer?: string | undefined) => {
-      const program = Collect.collectFromUTxO(config, utxos, redeemer);
+    collectFrom: (utxos: UTxO[], redeemer?: string | RedeemerBuilder) => {
+      const program =
+        typeof redeemer === "object"
+          ? Collect.collectFromUTxOPartial(config, utxos, redeemer)
+          : Collect.collectFromUTxO(config, utxos)(redeemer);
       config.programs.push(program);
       return txBuilder;
     },
@@ -198,15 +214,15 @@ export function makeTxBuilder(lucidConfig: LucidConfig): TxBuilder {
     withdraw: (
       rewardAddress: RewardAddress,
       amount: Lovelace,
-      redeemer?: string,
+      redeemer?: string | RedeemerBuilder,
     ) => {
-      const program = Stake.withdraw(config, rewardAddress, amount, redeemer);
-      config.programs.push(program);
+      const partialProgram = Stake.withdraw(config, rewardAddress, amount);
+      handleRedeemerBuilder(config, partialProgram, redeemer);
       return txBuilder;
     },
-    mintAssets: (assets: Assets, redeemer?: string | undefined) => {
-      const program = Mint.mintAssets(config, assets, redeemer);
-      config.programs.push(program);
+    mintAssets: (assets: Assets, redeemer?: string | RedeemerBuilder) => {
+      const partialProgram = Mint.mintAssets(config, assets);
+      handleRedeemerBuilder(config, partialProgram, redeemer);
       return txBuilder;
     },
     validFrom: (unixTime: number) => {

@@ -150,10 +150,15 @@ export type SortOrder =
   /**
    * Smallest amount of "lovelace" with least number of unique assets first
    */
-  | "SmallestFirst";
+  | "SmallestFirst"
+  /**
+   * Lexicographically sorted as per ledger rules
+   */
+  | "Canonical";
 
 /**
  * Sorts an array of UTXOs according to specified sort order ("LargestFirst" by default).
+ * The provided array is cloned and reference to the new sorted array is returned.
  *
  * @param {UTxO[]} utxos - The array of UTXO objects to be sorted.
  * @param {SortOrder} [order="LargestFirst"] - The order in which to sort the UTXOs.
@@ -169,6 +174,8 @@ export const sortUTxOs = (
       return [...utxos].sort(largestFirst);
     case "SmallestFirst":
       return [...utxos].sort(smallestFirst);
+    case "Canonical":
+      return [...utxos].sort(canonical);
   }
 };
 
@@ -192,9 +199,50 @@ const smallestFirst = (a: UTxO, b: UTxO) => {
   return lovelaceA - lovelaceB;
 };
 
+const canonical = (a: UTxO, b: UTxO) => {
+  if (a.txHash < b.txHash) {
+    return -1;
+  } else if (a.txHash > b.txHash) {
+    return 1;
+  } else {
+    return a.outputIndex - b.outputIndex;
+  }
+};
+
+//TODO: add
+// sortBy -> sort by amount of specific unit
+
 export const isEqualUTxO = (self: UTxO, that: UTxO) =>
   self.txHash === that.txHash && self.outputIndex === that.outputIndex;
 
+/**
+ * Provides an array of input indices for given "indexInputs" UTxOs.
+ * Indices obtained from the list of transaction inputs which are
+ * ordered as per ledger rules.
+ *
+ * @param indexInputs Input utxos whose indices need to be returned
+ * @param allInputs All the inputs utxos being spent by the transaction
+ * @param sorted Whether the provided "allInputs" are sorted canonically or not
+ * @returns Input indices of utxos as they appear in "indexInputs"
+ */
+export function getInputIndices(
+  indexInputs: UTxO[],
+  allInputs: UTxO[],
+  sorted: Boolean = false,
+): bigint[] {
+  const sortedInputs = sorted ? allInputs : sortUTxOs(allInputs, "Canonical");
+  const indicesMap = new Map<string, bigint>();
+
+  sortedInputs.forEach((value, index) => {
+    indicesMap.set(value.txHash + value.outputIndex, BigInt(index));
+  });
+
+  return indexInputs.flatMap((value) => {
+    const index = indicesMap.get(value.txHash + value.outputIndex);
+    if (index !== undefined) return index;
+    else return [];
+  });
+}
 //TODO: add
 // sortCanonical -> sorting following ledger rules
 // sortBy -> sort by amount of specific unit

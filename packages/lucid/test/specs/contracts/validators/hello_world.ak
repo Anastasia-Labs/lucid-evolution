@@ -12,11 +12,7 @@ type Redeemer {
 }
 
 validator {
-  fn spend(
-    datum: Datum,
-    redeemer: Redeemer,
-    context: ScriptContext,
-  ) -> Bool {
+  fn spend(datum: Datum, redeemer: Redeemer, context: ScriptContext) -> Bool {
     let must_say_hello = redeemer.msg == "Hello, World!"
     let must_be_signed =
       list.has(context.transaction.extra_signatories, datum.owner)
