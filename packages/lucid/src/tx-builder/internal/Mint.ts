@@ -52,9 +52,7 @@ export const mintAssets =
         case "PlutusV1": {
           const red = yield* pipe(
             Effect.fromNullable(redeemer),
-            Effect.orElseFail(() =>
-              mintError(ERROR_MESSAGE.MISSING_REDEEMER),
-            ),
+            Effect.orElseFail(() => mintError(ERROR_MESSAGE.MISSING_REDEEMER)),
           );
           config.txBuilder.add_mint(
             mintBuilder.plutus_script(
@@ -67,9 +65,7 @@ export const mintAssets =
         case "PlutusV2": {
           const red = yield* pipe(
             Effect.fromNullable(redeemer),
-            Effect.orElseFail(() =>
-              mintError(ERROR_MESSAGE.MISSING_REDEEMER),
-            ),
+            Effect.orElseFail(() => mintError(ERROR_MESSAGE.MISSING_REDEEMER)),
           );
           config.txBuilder.add_mint(
             mintBuilder.plutus_script(

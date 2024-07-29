@@ -189,7 +189,7 @@ export const selectionAndEvaluation = (
           0,
           CML.Address.from_bech32(walletInfo.address),
         ),
-        catch: (error) => completeTxError(error),
+      catch: (error) => completeTxError(error),
     });
 
     // TODO: fix the catch block to retain type of selectionAndEvaluation as Effect<void, TransactionError, never>
@@ -235,11 +235,7 @@ export const selectionAndEvaluation = (
         config.txBuilder,
       );
     }
-  }).pipe(
-    Effect.catchAllDefect(
-      (cause) => new RunTimeError({ cause })
-    ),
-  );
+  }).pipe(Effect.catchAllDefect((cause) => new RunTimeError({ cause })));
 
 export const completePartialPrograms = (config: TxBuilder.TxBuilderConfig) =>
   Effect.gen(function* () {
@@ -292,9 +288,7 @@ export const completePartialPrograms = (config: TxBuilder.TxBuilderConfig) =>
               indicesMap.get(input.txHash + input.outputIndex),
             ),
             Effect.orElseFail(() =>
-              completeTxError(
-                `Index not found for input: ${input}`,
-              ),
+              completeTxError(`Index not found for input: ${input}`),
             ),
           );
 

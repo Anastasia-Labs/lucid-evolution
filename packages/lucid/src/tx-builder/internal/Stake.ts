@@ -146,7 +146,9 @@ export const withdraw =
             CML.Address.from_bech32(rewardAddress),
           ),
         ),
-        Effect.orElseFail(() => stakeError(ERROR_MESSAGE.MISSING_STAKE_CREDENTIAL),),
+        Effect.orElseFail(() =>
+          stakeError(ERROR_MESSAGE.MISSING_STAKE_CREDENTIAL),
+        ),
         Effect.andThen((address) =>
           CML.SingleWithdrawalBuilder.new(address, amount),
         ),
@@ -154,7 +156,9 @@ export const withdraw =
 
       const stakeCredential = yield* pipe(
         Effect.fromNullable(addressDetails.stakeCredential),
-        Effect.orElseFail(() => stakeError(ERROR_MESSAGE.MISSING_STAKE_CREDENTIAL),),
+        Effect.orElseFail(() =>
+          stakeError(ERROR_MESSAGE.MISSING_STAKE_CREDENTIAL),
+        ),
       );
 
       switch (stakeCredential.type) {
@@ -163,41 +167,42 @@ export const withdraw =
           break;
         }
 
-      case "Script": {
-        const script = yield* pipe(
-          Effect.fromNullable(config.scripts.get(stakeCredential.hash)),
-          Effect.orElseFail(() =>
-            stakeError(ERROR_MESSAGE.MISSING_SCRIPT(stakeCredential.hash)),
-          ),
-        );
-        const red = yield* pipe(
-          Effect.fromNullable(redeemer),
-          Effect.orElseFail(() => stakeError(ERROR_MESSAGE.MISSING_REDEEMER)),
-        );
-        switch (script.type) {
-          case "PlutusV1": {
-            config.txBuilder.add_withdrawal(
-              withdrawBuilder.plutus_script(
-                toPartial(toV1(script.script), red),
-                CML.Ed25519KeyHashList.new(),
-              ),
-            );
-            break;
-          }
+        case "Script": {
+          const script = yield* pipe(
+            Effect.fromNullable(config.scripts.get(stakeCredential.hash)),
+            Effect.orElseFail(() =>
+              stakeError(ERROR_MESSAGE.MISSING_SCRIPT(stakeCredential.hash)),
+            ),
+          );
+          const red = yield* pipe(
+            Effect.fromNullable(redeemer),
+            Effect.orElseFail(() => stakeError(ERROR_MESSAGE.MISSING_REDEEMER)),
+          );
+          switch (script.type) {
+            case "PlutusV1": {
+              config.txBuilder.add_withdrawal(
+                withdrawBuilder.plutus_script(
+                  toPartial(toV1(script.script), red),
+                  CML.Ed25519KeyHashList.new(),
+                ),
+              );
+              break;
+            }
 
-          case "PlutusV2": {
-            config.txBuilder.add_withdrawal(
-              withdrawBuilder.plutus_script(
-                toPartial(toV2(script.script), red),
-                CML.Ed25519KeyHashList.new(),
-              ),
-            );
-            break;
-          }
-          case "Native": {
-            yield* stakeError(ERROR_MESSAGE.INVALID_SCRIPT);
-            break;
+            case "PlutusV2": {
+              config.txBuilder.add_withdrawal(
+                withdrawBuilder.plutus_script(
+                  toPartial(toV2(script.script), red),
+                  CML.Ed25519KeyHashList.new(),
+                ),
+              );
+              break;
+            }
+            case "Native": {
+              yield* stakeError(ERROR_MESSAGE.INVALID_SCRIPT);
+              break;
+            }
           }
         }
       }
-    }});
+    });

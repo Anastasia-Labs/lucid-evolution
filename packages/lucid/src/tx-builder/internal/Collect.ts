@@ -20,8 +20,7 @@ export const collectFromUTxO =
   ) =>
   (redeemer?: Redeemer): Effect.Effect<void, TxBuilderError> =>
     Effect.gen(function* ($) {
-      if (utxos.length === 0)
-        yield* $(collectError(ERROR_MESSAGE.EMPTY_UTXO));
+      if (utxos.length === 0) yield* $(collectError(ERROR_MESSAGE.EMPTY_UTXO));
       for (const utxo of utxos) {
         if (utxo.datumHash && !utxo.datum) {
           const data = yield* $(
@@ -64,9 +63,7 @@ export const collectFromUTxO =
               const red = yield* $(
                 Effect.fromNullable(redeemer),
                 Effect.orElseFail(() =>
-                  collectError(
-                    ERROR_MESSAGE.MISSING_REDEEMER,
-                  ),
+                  collectError(ERROR_MESSAGE.MISSING_REDEEMER),
                 ),
               );
               config.txBuilder.add_input(
@@ -83,9 +80,7 @@ export const collectFromUTxO =
               const red = yield* $(
                 Effect.fromNullable(redeemer),
                 Effect.orElseFail(() =>
-                  collectError(
-                    ERROR_MESSAGE.MISSING_REDEEMER,
-                  ),
+                  collectError(ERROR_MESSAGE.MISSING_REDEEMER),
                 ),
               );
               const partial = toPartial(v2, red);
@@ -115,8 +110,7 @@ export const collectFromUTxOPartial = (
   redeemerBuilder: RedeemerBuilder,
 ): Effect.Effect<void, TxBuilderError> =>
   Effect.gen(function* ($) {
-    if (utxos.length === 0)
-      yield* collectError(ERROR_MESSAGE.EMPTY_UTXO);
+    if (utxos.length === 0) yield* collectError(ERROR_MESSAGE.EMPTY_UTXO);
     if (redeemerBuilder.kind === "self") redeemerBuilder.inputs = utxos;
     for (const utxo of utxos) {
       if (utxo.datumHash && !utxo.datum) {
