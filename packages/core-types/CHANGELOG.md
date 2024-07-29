@@ -1,5 +1,11 @@
 # @lucid-evolution/core-types
 
+## 0.1.10
+
+### Patch Changes
+
+- [#169](https://github.com/Anastasia-Labs/lucid-evolution/pull/169) [`6282481`](https://github.com/Anastasia-Labs/lucid-evolution/commit/6282481a2183cfa1a3deec025552d7432cb35869) Thanks [@nikhils9](https://github.com/nikhils9)! - Auto populate input indices
+
 ## 0.1.9
 
 ### Patch Changes
