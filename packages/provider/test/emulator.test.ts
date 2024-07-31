@@ -215,33 +215,33 @@ describe.sequential("Emulator", () => {
       poolId,
       rewards: REWARD_AMOUNT,
     });
-    // // Deregistration
-    // await lucid.awaitTx(
-    //   await (
-    //     await (
-    //       await lucid.newTx().deRegisterStake(rewardAddress!).complete()
-    //     ).sign
-    //       .withWallet()
-    //       .complete()
-    //   ).submit()
-    // );
-    // assert.deepEqual(await lucid.wallet().getDelegation(), {
-    //   poolId: null,
-    //   rewards: REWARD_AMOUNT,
-    // });
-    // // Withdrawal
-    // await lucid.awaitTx(
-    //   await (
-    //     await (
-    //       await lucid.newTx().withdraw(rewardAddress!, REWARD_AMOUNT).complete()
-    //     ).sign
-    //       .withWallet()
-    //       .complete()
-    //   ).submit()
-    // );
-    // assert.deepEqual(await lucid.wallet().getDelegation(), {
-    //   poolId: null,
-    //   rewards: 0n,
-    // });
+    // Deregistration
+    await lucid.awaitTx(
+      await (
+        await (
+          await lucid.newTx().deRegisterStake(rewardAddress!).complete()
+        ).sign
+          .withWallet()
+          .complete()
+      ).submit(),
+    );
+    assert.deepEqual(await lucid.wallet().getDelegation(), {
+      poolId: null,
+      rewards: REWARD_AMOUNT,
+    });
+    // Withdrawal
+    await lucid.awaitTx(
+      await (
+        await (
+          await lucid.newTx().withdraw(rewardAddress!, REWARD_AMOUNT).complete()
+        ).sign
+          .withWallet()
+          .complete()
+      ).submit(),
+    );
+    assert.deepEqual(await lucid.wallet().getDelegation(), {
+      poolId: null,
+      rewards: 0n,
+    });
   });
 });
