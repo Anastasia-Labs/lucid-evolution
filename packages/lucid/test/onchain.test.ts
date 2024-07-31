@@ -55,7 +55,6 @@ describe("Onchain testing", () => {
     expect(exit._tag).toBe("Success");
   });
 
-
   test("Metadata", async () => {
     const program = pipe(
       MetadataEndpoint.payWithMetadata,
