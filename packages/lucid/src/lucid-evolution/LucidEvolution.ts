@@ -82,7 +82,7 @@ export const Lucid = async (
     txbuilderconfig: TxConfig.makeTxConfig(protocolParam, costModels),
     protocolParameters: protocolParam,
   };
-  if (config.provider as Emulator) {
+  if ("slot" in config.provider) {
     const emulator: Emulator = config.provider as Emulator;
     SLOT_CONFIG_NETWORK[network] = {
       zeroTime: emulator.now(),
