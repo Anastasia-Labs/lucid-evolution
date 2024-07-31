@@ -121,14 +121,6 @@ describe.sequential("Emulator", () => {
   test("Mint asset in slot range", async () => {
     const { paymentCredential } = getAddressDetails(ACCOUNT_0.address);
 
-    console.log(
-      'unixTimeToSlot("Custom", emulator.now() + 60000) :>> ',
-      unixTimeToSlot("Custom", emulator.now() + 60000),
-    );
-    console.log(
-      'SLOT_CONFIG_NETWORK["Custom"] :>> ',
-      SLOT_CONFIG_NETWORK["Custom"],
-    );
     const mintingPolicy = scriptFromNative({
       type: "all",
       scripts: [
