@@ -18,13 +18,13 @@ const DatumType = DatumSchema as unknown as DatumType;
 export const depositFunds = Effect.gen(function* () {
   const { user } = yield* User;
   const publicKeyHash = getAddressDetails(
-    yield* Effect.promise(() => user.wallet().address())
+    yield* Effect.promise(() => user.wallet().address()),
   ).paymentCredential?.hash;
   const datum = Data.to(new Constr(0, [publicKeyHash!]));
   const { contractAddress } = yield* HelloContract;
 
   yield* pipe(
-    Effect.tryPromise(() => user.utxosAt(contractAddress))
+    Effect.tryPromise(() => user.utxosAt(contractAddress)),
     // Effect.andThen((utxos) => Console.log(utxos)),
   );
 
@@ -36,7 +36,7 @@ export const depositFunds = Effect.gen(function* () {
         kind: "inline",
         value: datum,
       },
-      { lovelace: 10_000_000n }
+      { lovelace: 10_000_000n },
     )
     .completeProgram();
   return signBuilder;
@@ -49,7 +49,7 @@ export const collectFunds = Effect.gen(function* ($) {
   const publicKeyHash = getAddressDetails(addr).paymentCredential?.hash;
 
   const allUtxos = yield* Effect.tryPromise(() =>
-    user.utxosAt(contractAddress)
+    user.utxosAt(contractAddress),
   );
 
   const utxos = allUtxos.filter((value) => {
@@ -78,13 +78,13 @@ export const collectFunds = Effect.gen(function* ($) {
 export const depositFundsLockRefScript = Effect.gen(function* () {
   const { user } = yield* User;
   const publicKeyHash = getAddressDetails(
-    yield* Effect.promise(() => user.wallet().address())
+    yield* Effect.promise(() => user.wallet().address()),
   ).paymentCredential?.hash;
   const datum = Data.to(new Constr(0, [publicKeyHash!]));
 
   const { contractAddress, hello } = yield* HelloContract;
   yield* pipe(
-    Effect.tryPromise(() => user.utxosAt(contractAddress))
+    Effect.tryPromise(() => user.utxosAt(contractAddress)),
     // Effect.andThen((utxos) => Console.log(utxos)),
   );
 
@@ -97,7 +97,7 @@ export const depositFundsLockRefScript = Effect.gen(function* () {
         value: datum,
       },
       { lovelace: 10_000_000n },
-      hello
+      hello,
     )
     .completeProgram();
   return signBuilder;
@@ -109,10 +109,10 @@ export const collectFundsReadFrom = Effect.gen(function* ($) {
   const { contractAddress, hello } = yield* HelloContract;
 
   const allUtxos = yield* Effect.tryPromise(() =>
-    user.utxosAt(contractAddress)
+    user.utxosAt(contractAddress),
   );
   const publicKeyHash = getAddressDetails(
-    yield* Effect.promise(() => user.wallet().address())
+    yield* Effect.promise(() => user.wallet().address()),
   ).paymentCredential?.hash;
 
   const utxos = allUtxos.filter((value) => {
