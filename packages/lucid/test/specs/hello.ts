@@ -54,8 +54,12 @@ export const collectFunds = Effect.gen(function* ($) {
 
   const utxos = allUtxos.filter((value) => {
     if (value.datum) {
-      const datum = Data.from(value.datum, DatumType);
-      return datum.owner === publicKeyHash;
+      try {
+        const datum = Data.from(value.datum, DatumType);
+        return datum.owner === publicKeyHash;
+      } catch (_) {
+        return false;
+      }
     } else {
       return false;
     }
@@ -113,8 +117,12 @@ export const collectFundsReadFrom = Effect.gen(function* ($) {
 
   const utxos = allUtxos.filter((value) => {
     if (value.datum) {
-      const datum = Data.from(value.datum, DatumType);
-      return datum.owner === publicKeyHash;
+      try {
+        const datum = Data.from(value.datum, DatumType);
+        return datum.owner === publicKeyHash;
+      } catch (_) {
+        return false;
+      }
     } else {
       return false;
     }

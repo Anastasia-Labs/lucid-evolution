@@ -13,6 +13,7 @@ export default {
         height="200"
         width="200"
         style={{ marginRight: "1em" }}
+        alt=''
       />
     </>
   ),
