@@ -1,5 +1,15 @@
 # @lucid-evolution/sign_data
 
+## 0.1.11
+
+### Patch Changes
+
+- [#183](https://github.com/Anastasia-Labs/lucid-evolution/pull/183) [`8ab1875`](https://github.com/Anastasia-Labs/lucid-evolution/commit/8ab187531e496bd764651328088e99fc09304ca3) Thanks [@solidsnakedev](https://github.com/solidsnakedev)! - cleanup tsconfig.json files, use base.json from typescript-config package as extends property
+
+- Updated dependencies [[`8ab1875`](https://github.com/Anastasia-Labs/lucid-evolution/commit/8ab187531e496bd764651328088e99fc09304ca3)]:
+  - @lucid-evolution/core-types@0.1.11
+  - @lucid-evolution/core-utils@0.1.8
+
 ## 0.1.10
 
 ### Patch Changes

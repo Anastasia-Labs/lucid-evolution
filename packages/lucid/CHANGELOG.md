@@ -1,5 +1,24 @@
 # @lucid-evolution/lucid
 
+## 0.3.1
+
+### Patch Changes
+
+- [#185](https://github.com/Anastasia-Labs/lucid-evolution/pull/185) [`f0bf16d`](https://github.com/Anastasia-Labs/lucid-evolution/commit/f0bf16db7d043696e31eb1196fc9cf2076fb7ae2) Thanks [@solidsnakedev](https://github.com/solidsnakedev)! - add assemble tx ; partial sign; toJSON; toCBOR; toHash
+
+- [#183](https://github.com/Anastasia-Labs/lucid-evolution/pull/183) [`8ab1875`](https://github.com/Anastasia-Labs/lucid-evolution/commit/8ab187531e496bd764651328088e99fc09304ca3) Thanks [@solidsnakedev](https://github.com/solidsnakedev)! - cleanup tsconfig.json files, use base.json from typescript-config package as extends property
+
+- Updated dependencies [[`8ab1875`](https://github.com/Anastasia-Labs/lucid-evolution/commit/8ab187531e496bd764651328088e99fc09304ca3)]:
+  - @lucid-evolution/core-types@0.1.11
+  - @lucid-evolution/core-utils@0.1.8
+  - @lucid-evolution/sign_data@0.1.11
+  - @lucid-evolution/provider@0.1.34
+  - @lucid-evolution/plutus@0.1.14
+  - @lucid-evolution/wallet@0.1.29
+  - @lucid-evolution/bip39@0.2.10
+  - @lucid-evolution/utils@0.1.27
+  - @lucid-evolution/uplc@0.2.9
+
 ## 0.3.0
 
 ### Minor Changes
