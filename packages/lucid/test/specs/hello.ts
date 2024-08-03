@@ -1,12 +1,8 @@
-import { Console, Effect, Logger, LogLevel, pipe, Schedule } from "effect";
+import { Effect, pipe } from "effect";
 import { HelloContract, User } from "./services.js";
 import { Constr, Data } from "@lucid-evolution/plutus";
-import {
-  getAddressDetails,
-  validatorToScriptHash,
-} from "@lucid-evolution/utils";
+import { getAddressDetails } from "@lucid-evolution/utils";
 import { fromText } from "@lucid-evolution/core-utils";
-import { TxSignBuilder } from "../../src/index.js";
 import { handleSignSubmit, withLogRetry } from "./utils.js";
 
 const DatumSchema = Data.Object({

@@ -26,7 +26,7 @@ import {
 } from "@lucid-evolution/utils";
 import { coreToUtxo, getAddressDetails } from "@lucid-evolution/utils";
 import { fromHex } from "@lucid-evolution/core-utils";
-import { walletFromSeed } from "../../lucid/src/index.js";
+import { walletFromSeed } from "@lucid-evolution/wallet";
 
 /** Concatentation of txHash + outputIndex */
 type FlatOutRef = string;

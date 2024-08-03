@@ -1,4 +1,4 @@
-import { Console, Effect, pipe, Schedule } from "effect";
+import { Effect, pipe } from "effect";
 import { User } from "./services.js";
 import { handleSignSubmit, withLogRetry } from "./utils.js";
 

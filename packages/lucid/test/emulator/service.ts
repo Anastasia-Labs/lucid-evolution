@@ -1,4 +1,3 @@
-import { Emulator } from "@lucid-evolution/provider";
 import {
   getAddressDetails,
   mintingPolicyToId,
@@ -13,7 +12,7 @@ import {
   handleSignSubmitWithoutValidation,
   withLogRetry,
 } from "../specs/utils";
-import { generateEmulatorAccount } from "../../../provider/src";
+import { Emulator, generateEmulatorAccount } from "@lucid-evolution/provider";
 
 export const EMULATOR_ACCOUNT = generateEmulatorAccount({
   lovelace: 75000000000n,

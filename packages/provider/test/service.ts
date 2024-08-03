@@ -1,5 +1,5 @@
 import { Config, Effect } from "effect";
-import { Emulator, generateEmulatorAccount, Kupmios } from "../src/index.js";
+import { Kupmios, Emulator, generateEmulatorAccount } from "../src/index.js";
 
 export const kupmios = await Effect.gen(function* () {
   const kupo = yield* Config.string("VITE_KUPO_KEY");

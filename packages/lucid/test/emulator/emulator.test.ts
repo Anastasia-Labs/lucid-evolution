@@ -25,7 +25,7 @@ const distributeRewards = Effect.gen(function* ($) {
 });
 
 describe.sequential("Emulator", () => {
-  test("Wait block", async () => {
+  test("waitBlock", async () => {
     const program = pipe(
       mintInSlotRange,
       Effect.provide(Layer.mergeAll(EmulatorUser.layer)),

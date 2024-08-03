@@ -2,7 +2,6 @@ import {
   Constr,
   Data,
   fromText,
-  getAddressDetails,
   mintingPolicyToId,
   paymentCredentialOf,
   scriptFromNative,
