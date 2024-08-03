@@ -15,6 +15,13 @@ export const handleSignSubmit = (signBuilder: TxSignBuilder) =>
     yield* Effect.sleep("10 seconds");
   });
 
+export const handleSubmit = (signBuilder: TxSignBuilder) =>
+  Effect.gen(function* () {
+    const signed = yield* signBuilder.completeProgram();
+    const txHash = yield* signed.submitProgram();
+    yield* Effect.logDebug(`🚀 Transaction submitted: ${txHash}`);
+  });
+
 export const handleSignSubmitWithoutValidation = (signBuilder: TxSignBuilder) =>
   Effect.gen(function* () {
     const signed = yield* signBuilder.sign.withWallet().completeProgram();

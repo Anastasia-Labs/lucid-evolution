@@ -23,6 +23,20 @@ export const registerStake = Effect.gen(function* ($) {
   withLogRetry,
 );
 
+export const delegateTo = Effect.gen(function* ($) {
+  const { user } = yield* User;
+  const poolId = "pool1nmfr5j5rnqndprtazre802glpc3h865sy50mxdny65kfgf3e5eh";
+  const rewardAddress = yield* pipe(
+    Effect.promise(() => user.wallet().rewardAddress()),
+    Effect.andThen(Effect.fromNullable),
+  );
+  const signBuilder = yield* user
+    .newTx()
+    .delegateTo(rewardAddress, poolId)
+    .completeProgram();
+  return signBuilder;
+}).pipe(Effect.flatMap(handleSignSubmit), withLogRetry);
+
 export const deRegisterStake = Effect.gen(function* ($) {
   const { user } = yield* User;
   const rewardAddress = yield* pipe(

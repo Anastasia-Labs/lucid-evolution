@@ -27,6 +27,13 @@ import { fromHex } from "@lucid-evolution/core-utils";
 /** Concatentation of txHash + outputIndex */
 type FlatOutRef = string;
 
+export type EmulatorAccount = {
+  seedPhrase: string;
+  address: Address;
+  assets: Assets;
+  outputData?: OutputData;
+};
+
 export class Emulator implements Provider {
   ledger: Record<FlatOutRef, { utxo: UTxO; spent: boolean }>;
   mempool: Record<FlatOutRef, { utxo: UTxO; spent: boolean }> = {};
@@ -45,11 +52,7 @@ export class Emulator implements Provider {
   datumTable: Record<DatumHash, Datum> = {};
 
   constructor(
-    accounts: {
-      address: Address;
-      assets: Assets;
-      outputData?: OutputData;
-    }[],
+    accounts: EmulatorAccount[],
     protocolParameters: ProtocolParameters = PROTOCOL_PARAMETERS_DEFAULT,
   ) {
     const GENESIS_HASH = "00".repeat(32);
