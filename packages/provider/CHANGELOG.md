@@ -1,5 +1,14 @@
 # @lucid-evolution/provider
 
+## 0.1.35
+
+### Patch Changes
+
+- [#155](https://github.com/Anastasia-Labs/lucid-evolution/pull/155) [`5933bce`](https://github.com/Anastasia-Labs/lucid-evolution/commit/5933bced0cc75cb4330439d8a4f8f46ae7a04a50) Thanks [@hadelive](https://github.com/hadelive)! - Add emulator provider
+
+- Updated dependencies [[`5933bce`](https://github.com/Anastasia-Labs/lucid-evolution/commit/5933bced0cc75cb4330439d8a4f8f46ae7a04a50)]:
+  - @lucid-evolution/wallet@0.1.30
+
 ## 0.1.34
 
 ### Patch Changes
