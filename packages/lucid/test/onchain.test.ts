@@ -137,6 +137,12 @@ describe("Onchain testing", () => {
     expect(exit._tag).toBe("Success");
   });
 
+  test("delegateTo", async () => {
+    const program = pipe(StakeEndpoints.delegateTo, Effect.provide(User.layer));
+    const exit = await Effect.runPromiseExit(program);
+    expect(exit._tag).toBe("Success");
+  });
+
   test("withdrawZero", async () => {
     const program = pipe(
       StakeEndpoints.withdrawZero,
@@ -234,5 +240,23 @@ describe("Onchain testing", () => {
     );
     const exit = await Effect.runPromiseExit(program);
     expect(exit._tag).toBe("Success");
+  });
+
+  test("Mint Test - PayWithData", async () => {
+    const program = pipe(
+      MintBurnEndpoints.payWithData,
+      Effect.provide(Layer.mergeAll(User.layer, HelloContract.layer)),
+    );
+    const exit = await Effect.runPromiseExit(program);
+    expect(exit._tag).toBe("Success");
+  });
+
+  test("Mint Test - MissVkeyWitness", async () => {
+    const program = pipe(
+      MintBurnEndpoints.payWithoutVkeyWitness,
+      Effect.provide(Layer.mergeAll(User.layer, HelloContract.layer)),
+    );
+    const exit = await Effect.runPromiseExit(program);
+    expect(exit._tag).toBe("Failure");
   });
 });

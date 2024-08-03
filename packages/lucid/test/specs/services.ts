@@ -2,8 +2,6 @@ import { Config, Context, Effect, Layer, pipe } from "effect";
 import {
   applyDoubleCborEncoding,
   Blockfrost,
-  Koios,
-  Kupmios,
   Lucid,
   Script,
   MintingPolicy,

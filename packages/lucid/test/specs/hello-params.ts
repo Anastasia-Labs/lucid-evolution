@@ -1,4 +1,4 @@
-import { Console, Effect, Logger, LogLevel, pipe, Schedule } from "effect";
+import { Effect, pipe } from "effect";
 import { User } from "../specs/services.js";
 import {
   applyDoubleCborEncoding,

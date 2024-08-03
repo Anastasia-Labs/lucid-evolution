@@ -2,12 +2,7 @@ import { Effect, pipe } from "effect";
 import { StakeContract, User, MintContract } from "./services";
 import { Constr, Data } from "@lucid-evolution/plutus";
 import { fromText, RedeemerBuilder, UTxO } from "../../src";
-import {
-  handleSignSubmit,
-  handleSignSubmitWithoutValidation,
-  withLogNoRetry,
-  withLogRetry,
-} from "./utils";
+import { handleSignSubmit, withLogRetry } from "./utils";
 
 export const depositFunds = Effect.gen(function* () {
   const { user } = yield* User;

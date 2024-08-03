@@ -140,7 +140,7 @@ export function discoverOwnUsedTxKeyHashes(
           //TODO: Missing test
           const credential = cert.as_stake_delegation()?.stake_credential();
           if (credential?.kind() === 0) {
-            const keyHash = credential.to_cbor_hex();
+            const keyHash = credential.as_pub_key()?.to_hex();
             usedKeyHashes.push(keyHash);
           }
 

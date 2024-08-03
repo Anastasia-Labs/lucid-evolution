@@ -37,6 +37,7 @@
     "@lucid-evolution/core-types": "workspace:*",
     "@lucid-evolution/core-utils": "workspace:*",
     "@lucid-evolution/utils": "workspace:*",
+    "@lucid-evolution/wallet": "workspace:*",
     "effect": "^3.5.6"
   },
   "devDependencies": {

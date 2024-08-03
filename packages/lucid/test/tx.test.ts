@@ -3,6 +3,7 @@ import {
   mintingPolicyToId,
   paymentCredentialOf,
   scriptFromNative,
+  unixTimeToSlot,
 } from "../src/index.js";
 import { expect, test } from "vitest";
 import { Effect, Layer, Logger, LogLevel, pipe, Schedule } from "effect";

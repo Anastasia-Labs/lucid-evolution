@@ -20,12 +20,36 @@ import {
   UnixTime,
   UTxO,
 } from "@lucid-evolution/core-types";
-import { PROTOCOL_PARAMETERS_DEFAULT } from "@lucid-evolution/utils";
+import {
+  generateSeedPhrase,
+  PROTOCOL_PARAMETERS_DEFAULT,
+} from "@lucid-evolution/utils";
 import { coreToUtxo, getAddressDetails } from "@lucid-evolution/utils";
 import { fromHex } from "@lucid-evolution/core-utils";
+import { walletFromSeed } from "@lucid-evolution/wallet";
 
 /** Concatentation of txHash + outputIndex */
 type FlatOutRef = string;
+
+export type EmulatorAccount = {
+  seedPhrase: string;
+  address: Address;
+  assets: Assets;
+  outputData?: OutputData;
+};
+
+export function generateEmulatorAccount(assets: Assets): EmulatorAccount {
+  const seedPhrase = generateSeedPhrase();
+  return {
+    seedPhrase,
+    address: walletFromSeed(seedPhrase, {
+      addressType: "Base",
+      accountIndex: 0,
+      network: "Custom",
+    }).address,
+    assets,
+  };
+}
 
 export class Emulator implements Provider {
   ledger: Record<FlatOutRef, { utxo: UTxO; spent: boolean }>;
@@ -45,11 +69,7 @@ export class Emulator implements Provider {
   datumTable: Record<DatumHash, Datum> = {};
 
   constructor(
-    accounts: {
-      address: Address;
-      assets: Assets;
-      outputData?: OutputData;
-    }[],
+    accounts: EmulatorAccount[],
     protocolParameters: ProtocolParameters = PROTOCOL_PARAMETERS_DEFAULT,
   ) {
     const GENESIS_HASH = "00".repeat(32);
@@ -318,10 +338,10 @@ export class Emulator implements Provider {
         if (
           !witness.verify(
             Number.isInteger(lowerBound)
-              ? CML.BigNum.from_str(lowerBound!.toString())
+              ? CML.BigInteger.from_str(lowerBound!.toString()).to_js_value()
               : undefined,
             Number.isInteger(upperBound)
-              ? CML.BigNum.from_str(upperBound!.toString())
+              ? CML.BigInteger.from_str(upperBound!.toString()).to_js_value()
               : undefined,
             edKeyHashes,
           )
@@ -344,19 +364,15 @@ export class Emulator implements Provider {
 
     const plutusHashes = (() => {
       const scriptHashes = [];
-      for (let i = 0; i < (witnesses.plutus_scripts()?.len() || 0); i++) {
-        const script = witnesses.plutus_scripts()!.get(i);
-        const scriptHash = script
-          .hash(CML.ScriptHashNamespace.PlutusV1)
-          .to_hex();
+      for (let i = 0; i < (witnesses.plutus_v1_scripts()?.len() || 0); i++) {
+        const script = witnesses.plutus_v1_scripts()!.get(i);
+        const scriptHash = script.hash().to_hex();
 
         scriptHashes.push(scriptHash);
       }
       for (let i = 0; i < (witnesses.plutus_v2_scripts()?.len() || 0); i++) {
         const script = witnesses.plutus_v2_scripts()!.get(i);
-        const scriptHash = script
-          .hash(CML.ScriptHashNamespace.PlutusV2)
-          .to_hex();
+        const scriptHash = script.hash().to_hex();
 
         scriptHashes.push(scriptHash);
       }
@@ -364,7 +380,7 @@ export class Emulator implements Provider {
     })();
 
     const inputs = body.inputs();
-    inputs.sort();
+    // inputs.sort();
 
     type ResolvedInput = {
       entry: { utxo: UTxO; spent: boolean };
@@ -377,7 +393,7 @@ export class Emulator implements Provider {
     for (let i = 0; i < inputs.len(); i++) {
       const input = inputs.get(i);
 
-      const outRef = input.transaction_id().to_hex() + input.index().to_str();
+      const outRef = input.transaction_id().to_hex() + input.index().toString();
 
       const entryLedger = this.ledger[outRef];
 
@@ -398,30 +414,24 @@ export class Emulator implements Provider {
       if (scriptRef) {
         switch (scriptRef.type) {
           case "Native": {
-            const script = CML.NativeScript.from_bytes(
+            const script = CML.NativeScript.from_cbor_bytes(
               fromHex(scriptRef.script),
             );
-            nativeHashesOptional[
-              script.hash(CML.ScriptHashNamespace.NativeScript).to_hex()
-            ] = script;
+            nativeHashesOptional[script.hash().to_hex()] = script;
             break;
           }
           case "PlutusV1": {
-            const script = CML.PlutusScript.from_bytes(
-              fromHex(scriptRef.script),
+            const script = CML.PlutusScript.from_v1(
+              CML.PlutusV1Script.from_cbor_bytes(fromHex(scriptRef.script)),
             );
-            plutusHashesOptional.push(
-              script.hash(CML.ScriptHashNamespace.PlutusV1).to_hex(),
-            );
+            plutusHashesOptional.push(script.hash().to_hex());
             break;
           }
           case "PlutusV2": {
-            const script = CML.PlutusScript.from_bytes(
-              fromHex(scriptRef.script),
+            const script = CML.PlutusScript.from_v2(
+              CML.PlutusV2Script.from_cbor_bytes(fromHex(scriptRef.script)),
             );
-            plutusHashesOptional.push(
-              script.hash(CML.ScriptHashNamespace.PlutusV2).to_hex(),
-            );
+            plutusHashesOptional.push(script.hash().to_hex());
             break;
           }
         }
@@ -436,7 +446,7 @@ export class Emulator implements Provider {
     for (let i = 0; i < (body.reference_inputs()?.len() || 0); i++) {
       const input = body.reference_inputs()!.get(i);
 
-      const outRef = input.transaction_id().to_hex() + input.index().to_str();
+      const outRef = input.transaction_id().to_hex() + input.index().toString();
 
       const entry = this.ledger[outRef] || this.mempool[outRef];
 
@@ -453,30 +463,24 @@ export class Emulator implements Provider {
       if (scriptRef) {
         switch (scriptRef.type) {
           case "Native": {
-            const script = CML.NativeScript.from_bytes(
+            const script = CML.NativeScript.from_cbor_bytes(
               fromHex(scriptRef.script),
             );
-            nativeHashesOptional[
-              script.hash(CML.ScriptHashNamespace.NativeScript).to_hex()
-            ] = script;
+            nativeHashesOptional[script.hash().to_hex()] = script;
             break;
           }
           case "PlutusV1": {
-            const script = CML.PlutusScript.from_bytes(
-              fromHex(scriptRef.script),
+            const script = CML.PlutusScript.from_v1(
+              CML.PlutusV1Script.from_cbor_bytes(fromHex(scriptRef.script)),
             );
-            plutusHashesOptional.push(
-              script.hash(CML.ScriptHashNamespace.PlutusV1).to_hex(),
-            );
+            plutusHashesOptional.push(script.hash().to_hex());
             break;
           }
           case "PlutusV2": {
-            const script = CML.PlutusScript.from_bytes(
-              fromHex(scriptRef.script),
+            const script = CML.PlutusScript.from_v2(
+              CML.PlutusV2Script.from_cbor_bytes(fromHex(scriptRef.script)),
             );
-            plutusHashesOptional.push(
-              script.hash(CML.ScriptHashNamespace.PlutusV2).to_hex(),
-            );
+            plutusHashesOptional.push(script.hash().to_hex());
             break;
           }
         }
@@ -495,8 +499,12 @@ export class Emulator implements Provider {
         3: "Reward",
       };
       const collected = [];
-      for (let i = 0; i < (witnesses.redeemers()?.len() || 0); i++) {
-        const redeemer = witnesses.redeemers()!.get(i);
+      for (
+        let i = 0;
+        i < (witnesses.redeemers()?.to_js_value().len() || 0);
+        i++
+      ) {
+        const redeemer = witnesses.redeemers()!.to_js_value().get(i);
         collected.push({
           tag: tagMap[redeemer.tag().kind()],
           index: parseInt(redeemer.index().to_str()),
@@ -528,10 +536,14 @@ export class Emulator implements Provider {
             if (
               !nativeHashesOptional[credential.hash].verify(
                 Number.isInteger(lowerBound)
-                  ? CML.BigNum.from_str(lowerBound!.toString())
+                  ? CML.BigInteger.from_str(
+                      lowerBound!.toString(),
+                    ).to_js_value()
                   : undefined,
                 Number.isInteger(upperBound)
-                  ? CML.BigNum.from_str(upperBound!.toString())
+                  ? CML.BigInteger.from_str(
+                      upperBound!.toString(),
+                    ).to_js_value()
                   : undefined,
                 edKeyHashes,
               )
@@ -563,10 +575,10 @@ export class Emulator implements Provider {
 
     // Check collateral inputs
 
-    for (let i = 0; i < (body.collateral()?.len() || 0); i++) {
-      const input = body.collateral()!.get(i);
+    for (let i = 0; i < (body.collateral_inputs()?.len() || 0); i++) {
+      const input = body.collateral_inputs()!.get(i);
 
-      const outRef = input.transaction_id().to_hex() + input.index().to_str();
+      const outRef = input.transaction_id().to_hex() + input.index().toString();
 
       const entry = this.ledger[outRef] || this.mempool[outRef];
 
@@ -614,7 +626,7 @@ export class Emulator implements Provider {
     ) {
       const rawAddress = body.withdrawals()!.keys().get(index);
       const withdrawal: Lovelace = BigInt(
-        body.withdrawals()!.get(rawAddress)!.to_str(),
+        body.withdrawals()!.get(rawAddress)!.toString(),
       );
       const rewardAddress = rawAddress.to_address().to_bech32(undefined);
       const { stakeCredential } = getAddressDetails(rewardAddress);
@@ -690,7 +702,7 @@ export class Emulator implements Provider {
           )
             .to_address()
             .to_bech32(undefined);
-          const poolId = delegation.pool_keyhash().to_bech32("pool");
+          const poolId = delegation.pool().to_bech32("pool");
 
           const { stakeCredential } = getAddressDetails(rewardAddress);
           checkAndConsumeHash(stakeCredential!, "Cert", index);
@@ -728,7 +740,7 @@ export class Emulator implements Provider {
         const unspentOutput = CML.TransactionUnspentOutput.new(
           CML.TransactionInput.new(
             CML.TransactionHash.from_hex(txHash),
-            CML.BigNum.from_str(i.toString()),
+            CML.BigInteger.from_str(i.toString()).to_js_value(),
           ),
           output,
         );
