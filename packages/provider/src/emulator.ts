@@ -20,9 +20,13 @@ import {
   UnixTime,
   UTxO,
 } from "@lucid-evolution/core-types";
-import { PROTOCOL_PARAMETERS_DEFAULT } from "@lucid-evolution/utils";
+import {
+  generateSeedPhrase,
+  PROTOCOL_PARAMETERS_DEFAULT,
+} from "@lucid-evolution/utils";
 import { coreToUtxo, getAddressDetails } from "@lucid-evolution/utils";
 import { fromHex } from "@lucid-evolution/core-utils";
+import { walletFromSeed } from "../../lucid/src/index.js";
 
 /** Concatentation of txHash + outputIndex */
 type FlatOutRef = string;
@@ -33,6 +37,19 @@ export type EmulatorAccount = {
   assets: Assets;
   outputData?: OutputData;
 };
+
+export function generateEmulatorAccount(assets: Assets): EmulatorAccount {
+  const seedPhrase = generateSeedPhrase();
+  return {
+    seedPhrase,
+    address: walletFromSeed(seedPhrase, {
+      addressType: "Base",
+      accountIndex: 0,
+      network: "Custom",
+    }).address,
+    assets,
+  };
+}
 
 export class Emulator implements Provider {
   ledger: Record<FlatOutRef, { utxo: UTxO; spent: boolean }>;
