@@ -1,0 +1,58 @@
+## Register stake key
+
+When registering a stake key with the Cardano network, a deposit of `2 ADA` is required. This deposit acts as a pledge and is temporarily deducted from the wallet balance
+
+```typescript
+const rewardAddress = await lucid.wallet().rewardAddress();
+const tx = await lucid.newTx()
+  .registerStake(rewardAddress)
+  .complete();
+
+const signedTx = await tx.sign.withWallet().complete();
+const txHash = await signedTx.submit();
+```
+
+## Delegate to a stake pool
+
+Delegating to a stake pool involves associating your stake key with a pool identified by its unique ID
+
+```typescript
+const rewardAddress = await lucid.wallet().rewardAddress();
+const tx = await lucid.newTx()
+  .delegateTo(rewardAddress, "poolabc...")
+  .complete();
+
+const signedTx = await tx.sign.withWallet().complete();
+const txHash = await signedTx.submit();
+```
+
+## Withdraw rewards
+
+llows the wallet holder to claim any rewards accumulated through staking. The rewards are withdrawn to the wallet’s balance
+
+```typescript
+const rewardAddress = await lucid.wallet().rewardAddress();
+const delegation = await lucid.wallet().getDelegation();
+const tx = await lucid.newTx()
+  .withdraw(rewardAddress, delegation.rewards)
+  .complete();
+
+const signedTx = await tx.sign.withWallet().complete();
+const txHash = await signedTx.submit();
+```
+
+## Deregister stake key
+
+Deregistering a stake key will reclaim the `2 ADA` deposit initially taken during registration.
+
+```typescript
+const rewardAddress = await lucid.wallet.rewardAddress();
+
+const tx = await lucid.newTx()
+  .deregisterStake(rewardAddress)
+  .complete();
+
+const signedTx = await tx.sign().complete();
+
+const txHash = await signedTx.submit();
+```

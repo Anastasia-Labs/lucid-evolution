@@ -1,0 +1,89 @@
+---
+title: "2 - Create and choose wallet"
+---
+
+# Create a wallet
+
+Lucid Evolution provides multiple options to create and import a wallet.
+
+In this section, we'll cover a few methods, including using a private key and a new method introduced in Lucid Evolution.
+
+## Using a Private Key
+
+If you don't have a private key yet, you can generate one with Lucid Evolution:
+
+```typescript
+import { generatePrivateKey } from "@lucid-evolution/utils";
+
+const privateKey = generatePrivateKey(); // Bech32 encoded private key
+console.log(privateKey);
+```
+
+Now we can select a wallet using the private key with our Lucid Evolution instance:
+
+```typescript
+lucid.selectWallet.fromPrivateKey(privateKey);
+```
+
+Note the change in syntax from `selectWalletFromPrivateKey` -> `selectWallet.fromPrivateKey`
+
+# Choosing Wallet
+
+Use different methods to select a wallet and query balances, UTxOs.
+
+## Using an Address and UTXOs Array
+
+Lucid Evolution introduces a new method to select a wallet from an address and its UTXOs:
+
+```typescript
+const address = "addr_test..."; // Your wallet address
+const utxos = await lucid.utxosAt(address);
+lucid.selectWallet.fromAddress(address, utxos);
+```
+This method is useful when you have the address and UTXOs of a wallet but not necessarily the private key.
+
+## Using a Seed Phrase
+
+If you have a seed phrase (mnemonic), you can use it to select a wallet:
+
+```typescript
+const seedPhrase = "your seed phrase here...";
+lucid.selectWallet.fromSeed(seedPhrase);
+```
+
+## Using a Wallet API
+
+If you're integrating with a wallet provider that exposes an API conforming to the WalletApi interface, you can use it like this:
+
+```typescript
+import { WalletApi } from "@lucid-evolution/core-types";
+
+// `externalWalletApi` is your wallet provider's API
+const walletApi: WalletApi = externalWalletApi;
+lucid.selectWallet.fromAPI(walletApi);
+```
+
+### Note
+
+Selecting a wallet is necessary for building and submitting transactions. Make sure to select a wallet using one of these methods before attempting to create or submit transactions.
+Remember that the exact method you use will depend on your use case and the type of wallet integration you're working with
+
+## Query wallet
+
+### Get address
+
+```typescript
+const address = await lucid.wallet.address(); // Bech32 address
+```
+
+### Query UTxOs
+
+```typescript
+const utxos = await lucid.wallet.getUtxos();
+```
+
+### Query delegation
+
+```typescript
+const delegation = await lucid.wallet.getDelegation();
+```

@@ -2,7 +2,7 @@ import { Callout } from 'nextra/components'
 import { Tabs } from 'nextra/components'
 
 # Install
-Lucid works with yarn, npm, and pnpm on the following operating systems:
+Lucid Evolution works with yarn, npm, and pnpm on the following operating systems:
 
 - macOS darwin 64-bit (Intel), ARM 64-bit (Apple Silicon)
 - Linux 64-bit, ARM 64-bit
@@ -12,9 +12,84 @@ Lucid works with yarn, npm, and pnpm on the following operating systems:
   Use with caution, this library is currently in beta testing phase. Your feedback is greatly appreciated.
 </Callout>
 
- 
-<Tabs items={['pnpm', 'npm', 'yarn']}>
-  <Tabs.Tab>**pnpm**: Fast, disk space efficient package manager.  </Tabs.Tab>
-  <Tabs.Tab>**npm** is a package manager for the JavaScript programming language.</Tabs.Tab>
-  <Tabs.Tab>**Yarn** is a software packaging system.</Tabs.Tab>
+<Tabs items={['Node.js', 'Bun']}>
+  <Tabs.Tab>
+    ### Node.js
+
+    <Tabs items={['pnpm', 'npm', 'yarn']}>
+      <Tabs.Tab>
+        **pnpm**: Fast, disk space efficient package manager
+        ```bash
+        # Step 1: Install pnpm
+        npm install -g pnpm
+
+        # Step 2: Clone the repository
+        git clone https://github.com/Anastasia-Labs/lucid-evolution.git
+        cd lucid-evolution
+
+        # Step 3: Install dependencies
+        pnpm install
+
+        # Step 4: Build the packages
+        pnpm build
+        ```
+      </Tabs.Tab>
+      <Tabs.Tab>
+        **npm** is a package manager for JavaScript
+        ```bash
+        # Step 1: Install npm
+        npm install -g npm
+
+        # Step 2: Clone the repository
+        git clone https://github.com/Anastasia-Labs/lucid-evolution.git
+        cd lucid-evolution
+
+        # Step 3: Install dependencies
+        npm install
+
+        # Step 4: Build the packages
+        npm run build
+        ```
+      </Tabs.Tab>
+      <Tabs.Tab>
+        **Yarn** is a software packaging system
+        ```bash
+        # Step 1: Install Yarn
+        npm install -g yarn
+
+        # Step 2: Clone the repository
+        git clone https://github.com/Anastasia-Labs/lucid-evolution.git
+        cd lucid-evolution
+
+        # Step 3: Install dependencies
+        yarn install
+
+        # Step 4: Build the packages
+        yarn build
+        ```
+      </Tabs.Tab>
+    </Tabs>
+  </Tabs.Tab>
+  <Tabs.Tab>
+    ### Bun
+
+    **Bun**: An all-in-one JavaScript runtime, bundler, and package manager
+    ```bash
+    # Step 1: Install Bun
+    curl -fsSL https://bun.sh/install | bash
+
+    # Step 2: Clone the repository
+    git clone https://github.com/Anastasia-Labs/lucid-evolution.git
+    cd lucid-evolution
+
+    # Step 3: Install dependencies
+    bun install
+
+    # Step 4: Build the packages
+    bun run build
+
+    # Step 5: Develop the documentation
+    bun run dev
+    ```
+  </Tabs.Tab>
 </Tabs>

@@ -20,8 +20,8 @@ export default {
   banner: {
     key: '1.0-release',
     text: (
-      <a href="https://nextra.site" target="_blank">
-        🎉 Lucid Evolution 1.0 is released. Read more →
+      <a href="https://github.com/Anastasia-Labs/lucid-evolution/releases" target="_blank">
+        🎉 Discover our latest updates for Lucid Evolution! Learn more →
       </a>
     )
   }

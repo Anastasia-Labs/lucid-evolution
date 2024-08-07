@@ -1,6 +1,8 @@
 {
   "index": "Quickstart",
-  "install": "Installing Lucid",
-  "getting-started": "Getting Started",
-  "contact": "Contact Us"
+  "install": "Install",
+  "core-concepts": "Core Concepts",
+  "deep-dives": "Deep Dives",
+  "keeping-pace-with-cardano": "Keeping pace with Cardano",
+  "general-information": "General Information"
 }
