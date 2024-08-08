@@ -6,6 +6,7 @@ import {
   Datum,
   DatumHash,
   Delegation,
+  EvalRedeemer,
   Lovelace,
   OutputData,
   OutRef,
@@ -841,6 +842,13 @@ export class Emulator implements Provider {
     }
 
     return Promise.resolve(txHash);
+  }
+
+  async evaluateTx(
+    tx: Transaction,
+    additionalUTxOs?: UTxO[],
+  ): Promise<EvalRedeemer[]> {
+    throw new Error("unimplemented");
   }
 
   log() {

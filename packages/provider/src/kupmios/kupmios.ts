@@ -5,6 +5,7 @@ import {
   Datum,
   DatumHash,
   Delegation,
+  EvalRedeemer,
   OutRef,
   ProtocolParameters,
   Provider,
@@ -242,6 +243,84 @@ export class Kupmios implements Provider {
     );
     const { result } = await Effect.runPromise(program);
     return result.transaction.id;
+  }
+
+  async evaluateTx(
+    tx: Transaction,
+    additionalUTxOs?: UTxO[],
+  ): Promise<EvalRedeemer[]> {
+    // Transform additional UTxOs to the required format
+    const utxos = (additionalUTxOs || []).map((utxo) => {
+      const script = utxo.scriptRef
+        ? {
+            language: utxo.scriptRef.type,
+            cbor: utxo.scriptRef.script,
+          }
+        : undefined;
+
+      return [
+        {
+          transaction: { id: utxo.txHash, output: { index: utxo.outputIndex } },
+        },
+        {
+          address: utxo.address,
+          value: {
+            coins: utxo.assets.lovelace,
+            assets: utxo.assets.restAssets,
+          },
+          datumHash: utxo.datumHash,
+          datum: utxo.datum,
+          script: script,
+        },
+      ];
+    });
+
+    // Prepare request data
+    const data = {
+      jsonrpc: "2.0",
+      method: "evaluateTransaction",
+      params: { transaction: { cbor: tx }, additionalUTxO: utxos },
+      id: null,
+    };
+
+    // Define the schema
+    const schema = KupmiosSchema.JSONRPCSchema(
+      S.Array(
+        S.Struct({
+          validator: S.Struct({
+            purpose: S.String,
+            index: S.Int,
+          }),
+          budget: S.Struct({
+            memory: S.Int,
+            cpu: S.Int,
+          }),
+        }),
+      ),
+    );
+
+    // Perform the request and handle the response
+    const program = fetchOgmiosParse(this.ogmiosUrl, data, schema).pipe(
+      Effect.flatMap((response) =>
+        "error" in response
+          ? kupmiosError(response.error)
+          : Effect.succeed(response.result),
+      ),
+      Effect.timeout(10_000),
+      Effect.catchAll(kupmiosError),
+    );
+    const result = await Effect.runPromise(program);
+
+    const evalRedeemers: EvalRedeemer[] = result.map((item: any) => ({
+      ex_units: {
+        mem: item.budget.memory,
+        steps: item.budget.cpu,
+      },
+      redeemer_index: item.validator.index,
+      redeemer_tag: item.validator.purpose,
+    }));
+
+    return evalRedeemers;
   }
 }
 
