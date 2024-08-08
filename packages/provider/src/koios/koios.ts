@@ -6,6 +6,7 @@ import {
   Datum,
   DatumHash,
   Delegation,
+  EvalRedeemer,
   OutRef,
   ProtocolParameters,
   Provider,
@@ -25,8 +26,7 @@ import {
   KoiosTxInfo,
   ProtocolParametersSchema,
 } from "./schema.js";
-import { Console, Effect, pipe, Schedule } from "effect";
-import { promise } from "effect/Effect";
+import { Effect, pipe, Schedule } from "effect";
 import { ArrayFormatter } from "@effect/schema";
 import { fetchEffect } from "../fetch.js";
 
@@ -281,6 +281,77 @@ export class Koios implements Provider {
     }
     return result;
   }
+
+  async evaluateTx(
+    tx: Transaction,
+    additionalUTxOs?: UTxO[],
+  ): Promise<EvalRedeemer[]> {
+    // Transform UTxOs to the required format
+    const utxos = (additionalUTxOs || []).map((utxo) => {
+      const script = utxo.scriptRef
+        ? {
+            language: utxo.scriptRef.type,
+            cbor: utxo.scriptRef.script,
+          }
+        : undefined;
+
+      return [
+        {
+          transaction: { id: utxo.txHash, output: { index: utxo.outputIndex } },
+        },
+        {
+          address: utxo.address,
+          value: {
+            coins: utxo.assets.lovelace,
+            assets: utxo.assets.restAssets,
+          },
+          datumHash: utxo.datumHash,
+          datum: utxo.datum,
+          script: script,
+        },
+      ];
+    });
+
+    // Prepare request data
+    const data = {
+      jsonrpc: "2.0",
+      method: "evaluateTransaction",
+      params: { transaction: { cbor: tx }, additionalUTxO: utxos },
+      id: null,
+    };
+
+    // Fetch the response
+    const response = await fetch(`${this.baseUrl}/ogmios`, {
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json",
+      },
+      method: "POST",
+      body: JSON.stringify(data, (_, value) =>
+        typeof value === "bigint" ? value.toString() : value,
+      ),
+    });
+
+    if (!response.ok) {
+      const errorBody = await response.text();
+      throw new Error(
+        `Request failed with status ${response.status}: ${errorBody}`,
+      );
+    }
+
+    const result: EvaluateTransactionResponse = await response.json();
+
+    const evalRedeemers = result.result.map((item) => ({
+      ex_units: {
+        mem: item.budget.memory,
+        steps: item.budget.cpu,
+      },
+      redeemer_index: item.validator.index,
+      redeemer_tag: item.validator.purpose,
+    }));
+
+    return evalRedeemers;
+  }
 }
 
 const toUTxO = (koiosUTxO: KoiosUTxO, address: string): UTxO => ({
@@ -311,3 +382,25 @@ const toUTxO = (koiosUTxO: KoiosUTxO, address: string): UTxO => ({
         }
     : undefined,
 });
+
+interface Budget {
+  memory: number;
+  cpu: number;
+}
+
+interface Validator {
+  index: number;
+  purpose: string;
+}
+
+interface ValidatorResult {
+  validator: Validator;
+  budget: Budget;
+}
+
+interface EvaluateTransactionResponse {
+  jsonrpc: "2.0";
+  method: string;
+  result: ValidatorResult[];
+  id: null;
+}
