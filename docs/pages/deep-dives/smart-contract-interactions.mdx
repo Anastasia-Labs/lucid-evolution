@@ -1,18 +1,15 @@
-# Smart Contract interactions
+# Smart Contract Interactions
 
-It's important to understand that on the Cardano blockchain, you don't directly interact with "smart contracts" in the traditional sense. 
-Instead, you work with validators. These validators are responsible for verifying the actions taken in a given transaction, rather than executing or calling any actions themselves. 
+It's important to understand that on the Cardano blockchain, you don't directly interact with "smart contracts" in the traditional sense. Instead, you work with validators. These validators are responsible for verifying the actions taken in a given transaction, rather than executing or calling any actions themselves. 
 
 A validator checks whether the transaction meets its requirements, and if it does, the transaction is processed successfully. If the requirements are not met, the transaction fails.
 
 ## Matching numbers example
 We'll demonstrate the concept of Plutus validators in Lucid Evolution using a validator that requires the number in the datum to match the number in the redeemer.
 
-### Create and instantiate validator
+### Instantiate validator
 
-Lucid Evolution consumes compiled validators. 
-On-chain scripts can be written in PlutusTx, Aiken, Helios, and many other languages available in the Cardano ecosystem.
-We then derive the address from the compiled script with Lucid Evolution.
+Lucid Evolution consumes compiled validators. On-chain scripts can be written in `PlutusTx`, `Aiken`, `Plutarch`, and many other languages available in the Cardano ecosystem. We then derive the address from the compiled script with Lucid Evolution.
 
 ```typescript
 import { validatorToAddress } from "@lucid-evolution/utils";
@@ -27,7 +24,7 @@ const matchingNumberAddress = lucid.utils.validatorToAddress(
 );
 ```
 
-### Lock funds at plutus script
+### Lock funds at a plutus script
 
 ```typescript
 import { Data } from "@lucid-evolution/plutus";
@@ -44,7 +41,7 @@ const signedTx = await tx.sign.withWallet().complete();
 const txHash = await signedTx.submit();
 ```
 
-### Redeem from plutus script
+### Redeem from a plutus script
 
 ```typescript
 const [scriptUtxo] = await lucid.utxosAt(matchingNumberAddress);
@@ -69,15 +66,14 @@ const mintingPolicy = {
   type: "PlutusV2",
   script: applyParamsToScript(
     "5907945907910100...",
-    [10n],
+    [10n], // Parameters
   ),
 };
 ```
 
 ## Plutus script purposes
 
-Like native scripts, Plutus scripts can be used not only for checking the spending conditions of UTxOs but also for verifying conditions related to minting, delegations, and withdrawals.
-In Lucid Evolution, the following specified transaction constraints take the redeemer as the last parameter. The redeemer is necessary to execute the script successfully. When omitting the redeemer, Lucid Evolution assumes you're utilizing public keys or native scripts.
+Like native scripts, Plutus scripts can be used not only for checking the spending conditions of UTxOs but also for verifying conditions related to minting, delegations, and withdrawals. In Lucid Evolution, the following specified transaction constraints take the redeemer as the last parameter. The redeemer is necessary to execute the script successfully. When omitting the redeemer, Lucid Evolution assumes you're utilizing public keys or native scripts.
 
 ```typescript
 .collectFrom(utxos, redeemer)
@@ -91,7 +87,6 @@ In Lucid Evolution, the following specified transaction constraints take the red
 
 You can run and execute multiple validators in a single transaction with Lucid Evolution. The only limitation is the execution units limit:
 
-
 ```typescript
 const tx = await lucid.newTx()
   .collectFrom([scriptUtxoA, scriptUtxoB], Data.void())
@@ -103,7 +98,6 @@ const tx = await lucid.newTx()
   .attach.MintingPolicy(mintingPolicy)
   .complete();
 ```
-
 ## Read UTxOs and plutus scripts
 
 Lucid Evolution allows you to conveniently read/reference UTxOs. If a Plutus script is already stored in the UTxO, there's no need to attach the same script explicitly in the transaction, resulting in cost savings.

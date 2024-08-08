@@ -1,14 +1,12 @@
----
-title: "2 - Create and choose wallet"
----
+import { Callout} from 'nextra/components'
 
-# Create a wallet
+## Create a wallet
 
 Lucid Evolution provides multiple options to create and import a wallet.
 
 In this section, we'll cover a few methods, including using a private key and a new method introduced in Lucid Evolution.
 
-## Using a Private Key
+### Using a Private Key
 
 If you don't have a private key yet, you can generate one with Lucid Evolution:
 
@@ -19,6 +17,23 @@ const privateKey = generatePrivateKey(); // Bech32 encoded private key
 console.log(privateKey);
 ```
 
+### Using a Seed Phrase
+
+You can also generate a wallet from a seed phrase (mnemonic):
+
+```typescript
+import { generateSeedphrase } from "@lucid-evolution/utils";
+
+const seedPhrase = lucid.utils.generateSeedphrase(); // BIP-39 
+console.log(seedPhrase);
+```
+
+## Choosing Wallet
+
+Use different methods to select a wallet and query balances, UTxOs.
+
+### Using a Private Key
+
 Now we can select a wallet using the private key with our Lucid Evolution instance:
 
 ```typescript
@@ -27,11 +42,7 @@ lucid.selectWallet.fromPrivateKey(privateKey);
 
 Note the change in syntax from `selectWalletFromPrivateKey` -> `selectWallet.fromPrivateKey`
 
-# Choosing Wallet
-
-Use different methods to select a wallet and query balances, UTxOs.
-
-## Using an Address and UTXOs Array
+### Using an Address and UTXOs Array
 
 Lucid Evolution introduces a new method to select a wallet from an address and its UTXOs:
 
@@ -42,7 +53,7 @@ lucid.selectWallet.fromAddress(address, utxos);
 ```
 This method is useful when you have the address and UTXOs of a wallet but not necessarily the private key.
 
-## Using a Seed Phrase
+### Using a Seed Phrase
 
 If you have a seed phrase (mnemonic), you can use it to select a wallet:
 
@@ -51,7 +62,7 @@ const seedPhrase = "your seed phrase here...";
 lucid.selectWallet.fromSeed(seedPhrase);
 ```
 
-## Using a Wallet API
+### Using a Wallet API
 
 If you're integrating with a wallet provider that exposes an API conforming to the WalletApi interface, you can use it like this:
 
@@ -63,10 +74,10 @@ const walletApi: WalletApi = externalWalletApi;
 lucid.selectWallet.fromAPI(walletApi);
 ```
 
-### Note
-
+<Callout>
 Selecting a wallet is necessary for building and submitting transactions. Make sure to select a wallet using one of these methods before attempting to create or submit transactions.
 Remember that the exact method you use will depend on your use case and the type of wallet integration you're working with
+</Callout>
 
 ## Query wallet
 

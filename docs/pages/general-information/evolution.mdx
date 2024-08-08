@@ -1,0 +1,21 @@
+# Transition
+
+-UNDER CONSTRUCTION-
+
+Although the Evolution library shares the Lucid name, it is built with a different approach. You will need to install new packages.
+While the endpoints remain mostly the same, the main difference you will encounter is that the Lucid instance is now a factory function instead of a class. We have worked hard to ensure the transition is as smooth as possible.
+As a result there are only minor changes to the API, but the core concepts remain the same.
+
+For example in legacy Lucid, you would typically do:
+
+```typescript
+const lucid = await Lucid.new(...)
+```
+
+In Lucid Evolution:
+
+```typescript
+const lucid = await Lucid(...)
+```
+
+This change affects how you initialize Lucid, but does not significantly change how you use its methods once initialized. Along the way you through the documentation, you will find more examples and explanations of the changes.

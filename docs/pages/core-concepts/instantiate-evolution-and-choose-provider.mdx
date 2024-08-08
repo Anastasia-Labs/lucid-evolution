@@ -1,12 +1,9 @@
----
-title: "1 - Instantiate Lucid Evolution"
----
+import { Callout } from 'nextra/components'
 
 # Instantiate Lucid
 
 Lucid Evolution can be used with or without a blockchain provider, which allows you to query data and submit transactions.
 We are working on our Emulator, which will allow you to test your operations locally without the need for a blockchain provider.
-
 We support the `Mainnet`, `Preprod`, and `Preview` networks, with Mainnet being the default selection if no network is specified. 
 
 ## Provider selection
@@ -24,8 +21,10 @@ const lucid = await Lucid(
   "Preprod"
 );
 ```
+<Callout type="info" emoji="ℹ️">
+Evolution-Notes: In Lucid Evolution, `Lucid.new()` has been replaced with `Lucid()`, as it's now a factory function instead of a class.
+</Callout>
 
-*Reminder*: In Lucid Evolution, `Lucid.new()` has been replaced with `Lucid()`, as it's now a factory function instead of a class.
 
 ### Kupmios
 
