@@ -16,36 +16,42 @@ import scripts from "./contracts/plutus.json";
 
 export const NETWORK: Network = "Preview";
 
-const makeUser = Effect.gen(function* ($) {
-  const [
-    BLOCKFROST_API_URL_PREPROD,
-    BLOCKFROST_KEY_PREPROD,
-    BLOCKFROST_API_URL_PREVIEW,
-    BLOCKFROST_KEY_PREVIEW,
-    WALLET_SEED,
-  ] = yield* Config.all([
+const preprod = Effect.gen(function* ($) {
+  return yield* Config.all([
     Config.string("VITE_BLOCKFROST_API_URL_PREPROD"),
     Config.string("VITE_BLOCKFROST_KEY_PREPROD"),
+    Config.string("VITE_WALLET_SEED"),
+  ]);
+});
+
+const preview = Effect.gen(function* ($) {
+  return yield* Config.all([
     Config.string("VITE_BLOCKFROST_API_URL_PREVIEW"),
     Config.string("VITE_BLOCKFROST_KEY_PREVIEW"),
     Config.string("VITE_WALLET_SEED"),
   ]);
-  const user = yield* Effect.tryPromise(
-    () =>
-      // Lucid(new Kupmios("http://localhost:1442", "http://localhost:1337"), NETWORK)
-      Lucid(
-        new Blockfrost(BLOCKFROST_API_URL_PREVIEW, BLOCKFROST_KEY_PREVIEW),
-        NETWORK,
-      ),
-    // Lucid(new Koios("https://preview.koios.rest/api/v1"), NETWORK)
-  );
+});
 
+export class NetworkConfig extends Context.Tag("NetworkConfig")<
+  NetworkConfig,
+  [string, string, string]
+>() {
+  static readonly layer = Layer.effect(NetworkConfig, preprod);
+  static readonly layerPreview = Layer.effect(NetworkConfig, preview);
+}
+
+const makeUser = Effect.gen(function* ($) {
+  const [BLOCKFROST_API_URL, BLOCKFROST_KEY, WALLET_SEED] =
+    yield* NetworkConfig;
+  const user = yield* Effect.tryPromise(() =>
+    Lucid(new Blockfrost(BLOCKFROST_API_URL, BLOCKFROST_KEY), NETWORK),
+  );
   user.selectWallet.fromSeed(WALLET_SEED);
   console.log(yield* Effect.promise(() => user.wallet().address()));
   return {
     user,
   };
-});
+}).pipe(Effect.provide(NetworkConfig.layerPreview));
 
 export class User extends Context.Tag("User")<
   User,
