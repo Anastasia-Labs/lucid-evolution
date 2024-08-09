@@ -1,6 +1,8 @@
+import { Callout } from 'nextra/components'
+
 # Make Payment
 
-Lucid Evolution provides several methods for making payments, each with specific use cases. Here's an overview of the available payment methods:
+Lucid Evolution provides several methods for making payments, each with specific use cases
 
 ## Simple ADA payment
 
@@ -15,9 +17,9 @@ const signedTx = await tx.sign.withWallet().complete();
 const txHash = await signedTx.submit();
 ```
 
-Transition note:
-
-Note the change from `payToAddress` to `pay.ToAddress`, and `sign()` to `sign.withWallet()`
+<Callout type="info" emoji="ℹ️">
+Note the endpoint change from `payToAddress` to `pay.ToAddress`, and `sign()` to `sign.withWallet()`
+</Callout>
 
 ## Multiple recipients
 
@@ -57,9 +59,7 @@ const txHash = await signedTx.submit();
 
 ## Payment with datum or script reference
 
-Use `pay.ToAddressWithData` to make a payment that includes a datum or script reference.
-
-The datum will be attached to the witness set and the datum hash is stored in the UTxO. 
+Use `pay.ToAddressWithData` to make a payment that includes a datum or script reference. The datum will be attached to the witness set and the datum hash is stored in the UTxO. 
 
 To inline the datum directly in the UTxO use `{ kind: "inline", value: Data.to("31313131") }`
 Like with native tokens, Lucid Evolution implicitly adds the minimum ADA requirement for datums.
@@ -79,14 +79,15 @@ const signedTx = await tx.sign.withWallet().complete();
 const txHash = await signedTx.submit();
 ```
 
-The `pay.ToAddressWithData` method accepts the following parameters:
+<Callout type="info" emoji="ℹ️">
+Transition note: `payToAddressWithData`-> `pay.ToAddressWithData`
 
+The `pay.ToAddressWithData` method accepts the following parameters:
 - Address
 - OutputDatum (can be of type "hash", "inline", or "asHash")
 - Assets (optional)
 - Script reference (optional)
-
-Transition note: `payToAddressWithData`-> `pay.ToAddressWithData`
+</Callout>
 
 ## Payment to a Plutus script address
 

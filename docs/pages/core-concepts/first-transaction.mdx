@@ -1,6 +1,4 @@
----
-title: "3 - Your first transaction"
----
+import { Callout } from 'nextra/components'
 
 # Your first transaction
 
@@ -14,22 +12,22 @@ const tx = await lucid.newTx()
   .pay.ToAddress("addr_testb...", { lovelace: 5000000n })
   .complete();
 ```
+To balance the transaction and initiate coin selection, transactions always need to end with `.complete()`
 
-NOTE the change from `payToAddress` to `pay.ToAddress` in Lucid Evolution.
-
-Transactions always need to end with `.complete()` in order to balance the transaction and do coin selection.
-
+<Callout type="info" emoji="ℹ️">
+`payToAddress` endpoint has been changed to `pay.ToAddress` in Lucid Evolution.
+</Callout>
 ## Sign
 Next, we sign the transaction:
 
 ```typescript
 const signedTx = await tx.sign.withWallet().complete();
 ```
-
-NOTE the change from `sign()` to `sign.withWallet()` in Lucid Evolution.
-
 Here we also need to call `.complete()` when we are ready with signing.
 
+<Callout type="info" emoji="ℹ️">
+`sign()` endpoint has been changed to `sign.withWallet()` in Lucid Evolution
+</Callout>
 ## Submit
 
 Lastly we submit the transaction:
@@ -52,6 +50,7 @@ const lucid = await Lucid(
 );
 
 // Assuming you've already selected a wallet using one of the methods we discussed earlier
+
 // For example:
 // lucid.selectWallet.fromPrivateKey(privateKey);
 

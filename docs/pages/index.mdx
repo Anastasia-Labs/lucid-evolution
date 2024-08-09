@@ -1,31 +1,70 @@
 # Welcome
  
-import { Callout } from 'nextra/components'
+import { Callout, Steps, Cards } from 'nextra/components'
 
 <Callout type="warning" emoji="⚠️">
   Please note that the documentation is currently under construction and some sections may be incomplete or subject to changes. 
   We are working hard to provide you with comprehensive and accurate information.
 </Callout>
 
-Hello fellow developers, welcome to Lucid Evolution! This is the next iteration of the Lucid library, after evaluations of the legacy Lucid library we identified areas needing enhancements. In this effort, a big portion of the legacy library has been rewritten or created from scratch.
+Hello fellow developers, welcome to Lucid Evolution! 
 
-Lucid Evolution is like the legacy Lucid library but with improved APIs, better error handling, more structure, and the latest version of CML.
+This is the next iteration of the Lucid library which is being maintained by Anastasia Labs, after evaluations of the legacy Lucid library we identified areas needing enhancements. In this effort, a big portion of the legacy library has been rewritten or created from scratch. Lucid Evolution is like the legacy Lucid library but with improved APIs, better error handling, more structure, and the latest version of CML.
 
-## Transition
+# Quickstart
 
-Although the Evolution library shares the Lucid name, it is built with a different approach. You will need to install new packages.
-While the endpoints remain mostly the same, the main difference you will encounter is that the Lucid instance is now a factory function instead of a class. We have worked hard to ensure the transition is as smooth as possible.
+<Steps>
+### Set Up Your Project
+Initialize a new TypeScript (.ts) project
 
-In legacy Lucid, you would typically do:
+### Install the package
+<Cards>
+  <Cards.Card
+    title = "Lucid Evolution"
+    href = "/install"
+  />
+</Cards>
 
-```typescript
-const lucid = await Lucid.new(...)
-```
+### Build and Submit a Transaction
+<Steps>
 
-In Lucid Evolution:
+- Instantiate Lucid Evolution and choose a provider
+<Cards>
+  <Cards.Card
+    icon = "🔭"
+    title = "Core Concept 1: Instantiation"
+    href = "/core-concepts/instantiate-evolution-and-choose-provider"
+  />
+</Cards>
 
-```typescript
-const lucid = await Lucid(...)
-```
+- Choose a wallet and select it
+<Cards>
+  <Cards.Card
+    icon = "🔭"
+    title = "Core Concept 2: Choose Wallet"
+    href = "/core-concepts/create-choose-wallet"
+  />
+</Cards>
 
-This change affects how you initialize Lucid, but does not significantly change how you use its methods once initialized.
+- Build your first transaction and submit it
+<Cards>
+  <Cards.Card
+    icon = "🔭"
+    title = "Core Concept 3: Your First Transaction"
+    href = "/core-concepts/first-transaction"
+  />
+</Cards>
+
+- Learn more about advanced concepts and start building
+<Cards>
+  <Cards.Card
+    icon = "🔭"
+    title = "Deep Dive Series"
+    href = "/deep-dives/make-payments"
+  />
+</Cards>
+</Steps>
+</Steps>
+
+### Have questions?
+Follow the documentation to learn more about everything you can do with Lucid Evolution. If you have any questions, feel free to ask in the official [Anastasia Labs Discord channel]("https://discord.gg/gdU4DAcS").
