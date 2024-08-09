@@ -1,28 +1,41 @@
 import { CML } from "./core.js";
 import { CostModels, ProtocolParameters } from "@lucid-evolution/core-types";
 
+type CostModelsCML = {
+  inner: CML.MapU64ToArrI64
+}
+
 export function createCostModels(costModels: CostModels): CML.CostModels {
-  const costmdls = CML.CostModels.new();
+  // const costmdls = CML.CostModels.new();
+  const map = CML.MapU64ToArrI64.new();
+  const model: CostModelsCML = {
+    inner: map
+  };
+  const mapc = new Map<number, number[]>();
 
   // add plutus v1
-  const costmdlV1 = CML.IntList.new();
+  const costmdlV1: bigint[] = [];
+  const costmdlV11: number[] = [];
   for (const cost of Object.values(costModels.PlutusV1)) {
-    const int = CML.Int.from_str(cost.toString());
-    costmdlV1.add(int);
-    int.free();
+    // const int = CML.Int.from_str(cost.toString());
+    costmdlV1.push(BigInt(cost));
+    costmdlV11.push(cost);
   }
-  costmdls.set_plutus_v1(costmdlV1);
-  costmdlV1.free();
+  // costmdls.set_plutus_v1(costmdlV1);
+  map.insert(BigInt(CML.Language.PlutusV1), new BigInt64Array(costmdlV1));
+  mapc.set(CML.Language.PlutusV1, costmdlV11);
 
   // add plutus v2
-  const costmdlV2 = CML.IntList.new();
+  // const costmdlV2 = CML.IntList.new();
+  const costmdlV2: bigint[] = [];
+  const costmdlV22: number[] = [];
   for (const cost of Object.values(costModels.PlutusV2)) {
-    const int = CML.Int.from_str(cost.toString());
-    costmdlV2.add(int);
-    int.free();
+    costmdlV2.push(BigInt(cost));
+    costmdlV22.push(cost);
   }
-  costmdls.set_plutus_v2(costmdlV2);
-  costmdlV2.free();
+  // costmdls.set_plutus_v2(costmdlV2);
+  map.insert(BigInt(CML.Language.PlutusV2), new BigInt64Array(costmdlV2));
+  mapc.set(CML.Language.PlutusV2, costmdlV22);
 
   // add plutus v3
   // const costmdlV3 = C.IntList.new()
@@ -30,8 +43,9 @@ export function createCostModels(costModels: CostModels): CML.CostModels {
   //   costmdlV3.add(C.Int.new(BigInt(cost)))
   // });
   // costmdls.set_plutus_v3(costmdlV3)
-
-  return costmdls;
+  console.log(JSON.stringify(map));
+  console.log(JSON.stringify(mapc));
+  return CML.CostModels.from_json(JSON.stringify(mapc));
 }
 
 export const PROTOCOL_PARAMETERS_DEFAULT: ProtocolParameters = {
