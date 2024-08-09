@@ -1,6 +1,8 @@
+import { Callout } from 'nextra/components'
+
 ## Register stake pool
 
-Cold key and vrf key were imported from the cardano-cli. The cold key is necessary to add a required witness to the transaction and the vrf key needs to be added to the pool parameters.
+`coldKey` and `vrfKey` were imported from the `cardano-cli`. The cold key is necessary to add a required witness to the transaction and the vrf key needs to be added to the pool parameters.
 
 ```typescript
 import { Lucid, CML } from "@lucid-evolution/lucid";
@@ -46,17 +48,17 @@ const signedTx = await tx.sign.withWallet()
 const txHash = await signedTx.submit();
 ```
 
-NOTE Transition changes:
-
+<Callout type="info" emoji="ℹ️">
 - We're now importing from `@lucid-evolution/lucid` and `@lucid-evolution/core-utils`
 - `lucid.wallet.rewardAddress()` has become `lucid.wallet().rewardAddress()`
 - `tx.sign()` has become `tx.sign.withWallet()`
 - `signWithPrivateKey()` has become `sign.withPrivateKey()`
 - The registerPool function requires a pool deposit. It internally creates a pool registration certificate and adds it to the transaction.
+</Callout>
 
 ## Retire stake pool
 
-UNDER DEVELOPMENT - NOT YET AVAILABLE
+-UNDER DEVELOPMENT-
 
 ```typescript
 // const retirementEpoch = 100;

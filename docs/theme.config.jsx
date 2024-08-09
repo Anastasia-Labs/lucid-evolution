@@ -24,6 +24,13 @@ export default {
         🎉 Discover our latest updates for Lucid Evolution! Learn more →
       </a>
     )
-  }
+  },
+
+  feedback: {
+    content: null // This removes the feedback link
+  },
+  editLink: {
+    component: null // This removes the "Edit this page" link
+  },
   // ... other theme options
 }
