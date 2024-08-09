@@ -130,8 +130,8 @@ export const collectFundsReadFrom = Effect.gen(function* ($) {
   const redeemer = Data.to(new Constr(0, [fromText("Hello, World!")]));
   const signBuilder = yield* user
     .newTx()
-    .collectFrom(utxos, redeemer)
-    .readFrom(readUtxo)
+    .collectFrom([utxos[0]], redeemer)
+    .readFrom([readUtxo[0]])
     .addSigner(addr)
     .completeProgram();
   return signBuilder;

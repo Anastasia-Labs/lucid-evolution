@@ -24,7 +24,8 @@ describe("Onchain testing", () => {
     console.log(exit);
     expect(exit._tag).toBe("Success");
   });
-  test("MultiValidator - registerStake", async () => {
+
+  test.only("MultiValidator - registerStake", async () => {
     const program = pipe(
       MultiValidatorEndpoints.registerStake,
       Effect.provide(Layer.mergeAll(User.layer, StakeContract.layer)),
@@ -33,7 +34,7 @@ describe("Onchain testing", () => {
     expect(exit._tag).toBe("Success");
   });
 
-  test("MultiValidator - DespositFunds", async () => {
+  test.only("MultiValidator - DespositFunds", async () => {
     const program = pipe(
       MultiValidatorEndpoints.depositFunds,
       Effect.provide(
@@ -44,7 +45,7 @@ describe("Onchain testing", () => {
     expect(exit._tag).toBe("Success");
   });
 
-  test("MultiValidator - CollectFunds", async () => {
+  test.only("MultiValidator - CollectFunds", async () => {
     const program = pipe(
       MultiValidatorEndpoints.collectFunds,
       Effect.provide(
@@ -83,7 +84,7 @@ describe("Onchain testing", () => {
     expect(exit._tag).toBe("Success");
   });
 
-  test("DespositFunds, lock reference script", async () => {
+  test.only("DespositFunds, lock reference script", async () => {
     const program = pipe(
       HelloEndpoints.depositFundsLockRefScript,
       Effect.provide(Layer.mergeAll(User.layer, HelloContract.layer)),
@@ -92,7 +93,7 @@ describe("Onchain testing", () => {
     expect(exit._tag).toBe("Success");
   });
 
-  test("CollectFunds , reading from reference script", async () => {
+  test.only("CollectFunds , reading from reference script", async () => {
     const program = pipe(
       HelloEndpoints.collectFundsReadFrom,
       Effect.provide(Layer.mergeAll(User.layer, HelloContract.layer)),

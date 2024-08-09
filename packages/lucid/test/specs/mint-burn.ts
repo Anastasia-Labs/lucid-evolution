@@ -9,7 +9,7 @@ import {
   unixTimeToSlot,
 } from "../../src/index.js";
 import { Effect } from "effect";
-import { MintContract, User } from "./services.js";
+import { MintContract, NETWORK, User } from "./services.js";
 import { handleSignSubmit, handleSubmit, withLogRetry } from "./utils.js";
 
 const maxHexToken =
@@ -31,7 +31,7 @@ const mkSlotRangeMintinPolicy = (duration, address: string) => {
     scripts: [
       {
         type: "before",
-        slot: unixTimeToSlot("Preprod", Date.now() + duration),
+        slot: unixTimeToSlot(NETWORK, Date.now() + duration),
       },
       {
         type: "sig",

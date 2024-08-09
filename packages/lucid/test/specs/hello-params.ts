@@ -1,5 +1,5 @@
 import { Effect, pipe } from "effect";
-import { User } from "../specs/services.js";
+import { NETWORK, User } from "../specs/services.js";
 import {
   applyDoubleCborEncoding,
   applyParamsToScript,
@@ -41,7 +41,7 @@ export const depositFunds = Effect.gen(function* () {
     script: applyDoubleCborEncoding(applied),
   };
 
-  const contractAddress = validatorToAddress("Preprod", hello);
+  const contractAddress = validatorToAddress(NETWORK, hello);
 
   const signBuilder = yield* user
     .newTx()
@@ -76,7 +76,7 @@ export const collectFunds = Effect.gen(function* ($) {
     type: "PlutusV2",
     script: applyDoubleCborEncoding(applied),
   };
-  const contractAddress = validatorToAddress("Preprod", hello);
+  const contractAddress = validatorToAddress(NETWORK, hello);
   const allUtxos = yield* Effect.tryPromise(() =>
     user.utxosAt(contractAddress),
   );

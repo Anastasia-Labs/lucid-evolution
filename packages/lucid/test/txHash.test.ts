@@ -3,12 +3,13 @@ import { Blockfrost, Lucid } from "../src/index.js";
 import { Cause, Console, Data, Effect } from "effect";
 import { pretty } from "effect/Cause";
 import { catchTag, matchCause, matchCauseEffect } from "effect/Effect";
+import { NETWORK } from "./specs/services.js";
 
 test("test txHash", async () => {
   const projectId = process.env.VITE_BLOCKFROST_KEY;
   const lucid = await Lucid(
     new Blockfrost(process.env.VITE_API_URL!, projectId),
-    "Preprod",
+    NETWORK,
   );
   const seedPhrase = process.env.VITE_SEED!;
   lucid.selectWallet.fromSeed(seedPhrase);

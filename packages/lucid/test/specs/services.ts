@@ -9,8 +9,11 @@ import {
   SpendingValidator,
   validatorToAddress,
   validatorToRewardAddress,
+  Network,
 } from "../../src/index.js";
 import scripts from "./contracts/plutus.json";
+
+export const NETWORK: Network = "Preview";
 
 const makeUser = Effect.gen(function* ($) {
   const [apiURL, apiKey, seed] = yield* Config.all([
@@ -20,9 +23,9 @@ const makeUser = Effect.gen(function* ($) {
   ]);
   const user = yield* Effect.tryPromise(
     () =>
-      // Lucid(new Kupmios("http://localhost:1442", "http://localhost:1337"), "Preview")
-      Lucid(new Blockfrost(apiURL, apiKey), "Preprod"),
-    // Lucid(new Koios("https://preprod.koios.rest/api/v1"), "Preprod")
+      // Lucid(new Kupmios("http://localhost:1442", "http://localhost:1337"), NETWORK)
+      Lucid(new Blockfrost(apiURL, apiKey), NETWORK),
+    // Lucid(new Koios("https://preprod.koios.rest/api/v1"), NETWORK)
   );
   user.selectWallet.fromSeed(seed);
   console.log(yield* Effect.promise(() => user.wallet().address()));
@@ -49,7 +52,7 @@ const makeHelloService = Effect.gen(function* () {
     type: "PlutusV2",
     script: applyDoubleCborEncoding(helloCBOR),
   };
-  const contractAddress = validatorToAddress("Preprod", hello);
+  const contractAddress = validatorToAddress(NETWORK, hello);
   return {
     helloCBOR,
     hello,
@@ -75,8 +78,8 @@ const makeStakeService = Effect.gen(function* () {
     type: "PlutusV2",
     script: applyDoubleCborEncoding(stakeCBOR),
   };
-  const contractAddress = validatorToAddress("Preprod", stake);
-  const rewardAddress = validatorToRewardAddress("Preprod", stake);
+  const contractAddress = validatorToAddress(NETWORK, stake);
+  const rewardAddress = validatorToRewardAddress(NETWORK, stake);
   return {
     stakeCBOR,
     stake,
@@ -104,7 +107,7 @@ const makeMintService = Effect.gen(function* () {
     script: applyDoubleCborEncoding(mintCBOR),
   };
   const policyId = mintingPolicyToId(mint);
-  const contractAddress = validatorToAddress("Preprod", mint);
+  const contractAddress = validatorToAddress(NETWORK, mint);
   return {
     mintCBOR,
     mint,
