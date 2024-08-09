@@ -6,6 +6,7 @@ import {
   Datum,
   DatumHash,
   Delegation,
+  EvalRedeemer,
   Json,
   OutRef,
   ProtocolParameters,
@@ -17,7 +18,7 @@ import {
   UTxO,
 } from "@lucid-evolution/core-types";
 import packageJson from "../package.json";
-import { applyDoubleCborEncoding } from "@lucid-evolution/utils";
+import { applyDoubleCborEncoding, utxoToCore } from "@lucid-evolution/utils";
 import { fromHex } from "@lucid-evolution/core-utils";
 
 export type MaestroSupportedNetworks = "Mainnet" | "Preprod" | "Preview";
@@ -28,6 +29,7 @@ export interface MaestroConfig {
   turboSubmit?: boolean; // Read about paid turbo transaction submission feature at https://docs-v1.gomaestro.org/docs/Dapp%20Platform/Turbo%20Transaction.
 }
 
+// FY8uMdjKfGwdZJcCj0y4I0j0OJTx0xfD
 export class Maestro implements Provider {
   url: string;
   apiKey: string;
@@ -340,6 +342,46 @@ export class Maestro implements Provider {
       if (nextCursor == null) break;
     }
     return result;
+  }
+
+  async evaluateTx(
+    tx: Transaction,
+    additionalUTxOs?: UTxO[], // for tx chaining
+  ): Promise<EvalRedeemer[]> {
+    // Transform UTxOs to the Maestro format
+    const additionalMaestroUTxOs = (additionalUTxOs || []).map((utxo) => ({
+      index: utxo.outputIndex,
+      tx_hash: utxo.txHash,
+      tx_cbor: utxoToCore(utxo).to_cbor_hex,
+    }));
+
+    // Prepare payload
+    const payload = {
+      cbor: tx,
+      additionalMaestroUTxOs,
+    };
+
+    // Perform fetch request
+    const res = await fetch(`${this.url}/transactions/evaluate`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Accept: "application/json",
+        "api-key": this.apiKey,
+      },
+      body: JSON.stringify(payload),
+    });
+
+    // Handle non-ok responses
+    if (!res.ok) {
+      const body = await res.text();
+      console.error("Response error:", JSON.stringify(res));
+      throw new Error(`Evaluate transaction failed: ${body}`);
+    }
+
+    // Parse and return result
+    const result = await res.json();
+    return result as EvalRedeemer[];
   }
 }
 
