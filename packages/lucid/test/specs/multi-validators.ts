@@ -29,7 +29,7 @@ export const depositFunds = Effect.gen(function* () {
         value: datum,
       },
       { lovelace: 1_000_000n },
-      stakeContract.stake
+      stakeContract.stake,
     );
   }
 
@@ -43,7 +43,7 @@ export const depositFunds = Effect.gen(function* () {
         value: datum,
       },
       { lovelace: 1_000_000n },
-      mintContract.mint
+      mintContract.mint,
     );
   }
 
@@ -68,8 +68,12 @@ export const collectFunds = Effect.gen(function* ($) {
   const mintUtxos = yield* Effect.tryPromise(() =>
     user.utxosAt(mintContract.contractAddress),
   );
-  const stakeUtxoScriptRef = yield* Effect.fromNullable(stakeUtxos.find((utxo) => utxo.scriptRef)); 
-  const mintUtxoScriptRef = yield* Effect.fromNullable(mintUtxos.find((utxo) => utxo.scriptRef));
+  const stakeUtxoScriptRef = yield* Effect.fromNullable(
+    stakeUtxos.find((utxo) => utxo.scriptRef),
+  );
+  const mintUtxoScriptRef = yield* Effect.fromNullable(
+    mintUtxos.find((utxo) => utxo.scriptRef),
+  );
 
   // console.log("Total number of utxos: " + allUtxos.length);
   const selectedStakeUTxOs = stakeUtxos.slice(0, 10);
@@ -103,7 +107,7 @@ export const collectFunds = Effect.gen(function* ($) {
         value: Data.void(),
       },
       utxo.assets,
-      stakeUtxoScriptRef.scriptRef!
+      stakeUtxoScriptRef.scriptRef!,
     );
   });
 
@@ -115,7 +119,7 @@ export const collectFunds = Effect.gen(function* ($) {
         value: Data.void(),
       },
       utxo.assets,
-      mintUtxoScriptRef.scriptRef!
+      mintUtxoScriptRef.scriptRef!,
     );
   });
 
@@ -157,12 +161,14 @@ export const registerStake = Effect.gen(function* ($) {
     .newTx()
     .registerStake(rewardAddress)
     .completeProgram();
+  console.log(signBuilder.toJSON());
   return signBuilder;
 }).pipe(
   Effect.flatMap(handleSignSubmit),
   Effect.catchTag("TxSubmitError", (error) =>
-    error.message.includes("StakeKeyAlreadyRegisteredDELEG")
-      ? Effect.void
+    error.message.includes("StakeKeyAlreadyRegisteredDELEG") ||
+    error.message.includes("StakeKeyRegisteredDELEG")
+      ? Effect.log("Stake Already registered")
       : Effect.fail(error),
   ),
   withLogRetry,

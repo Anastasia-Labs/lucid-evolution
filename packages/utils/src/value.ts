@@ -42,7 +42,7 @@ export function assetsToValue(assets: Assets): CML.Value {
     const assetsValue = CML.MapAssetNameToCoin.new();
     for (const unit of policyUnits) {
       assetsValue.insert(
-        CML.AssetName.from_bytes(fromHex(unit.slice(56))),
+        CML.AssetName.from_hex(unit.slice(56)),
         BigInt(assets[unit]),
       );
     }
