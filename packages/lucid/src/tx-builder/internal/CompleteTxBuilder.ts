@@ -31,6 +31,7 @@ import {
 } from "@lucid-evolution/utils";
 import { SLOT_CONFIG_NETWORK } from "@lucid-evolution/plutus";
 import { collectFromUTxO } from "./Collect.js";
+import { fromHex } from "@lucid-evolution/core-utils";
 
 export type CompleteOptions = {
   coinSelection?: boolean;
@@ -412,9 +413,18 @@ const coinSelection = (
 ): Effect.Effect<UTxO[], TxBuilderError> =>
   Effect.gen(function* () {
     // NOTE: This is a fee estimation. If the amount is not enough, it may require increasing the fee.
+    const minFee = config.txBuilder.min_fee(script_calculation);
+    const refScriptFee = calculateMinRefScriptFee(config);
+    const totalFee = minFee + refScriptFee;
+    console.log("minFee " + minFee);
+    console.log("refScriptFee " + refScriptFee);
+    console.log("totalFee " + totalFee);
+
     const estimatedFee: Assets = {
-      lovelace: config.txBuilder.min_fee(script_calculation),
+      lovelace: totalFee,
     };
+    if (refScriptFee > 0n) config.txBuilder.set_fee(totalFee);
+
     const negatedMintedAssets = negateAssets(config.mintedAssets);
     const negatedCollectedAssets = negateAssets(
       sumAssetsFromInputs(config.collectedInputs),
@@ -510,6 +520,40 @@ const calculateMinLovelace = (
     .output()
     .amount()
     .coin();
+};
+
+const calculateMinRefScriptFee = (
+  config: TxBuilder.TxBuilderConfig,
+): bigint => {
+  let fee = 0n;
+  if (config.lucidConfig.network === "Preview") {
+    let totalScriptSize = 0;
+    
+    config.readInputs.forEach((utxo) => {
+      if (utxo.scriptRef) {
+        totalScriptSize = totalScriptSize + utxo.scriptRef.script.length;
+      }
+    });
+    if(totalScriptSize === 0)
+      return fee;
+    console.log("totalScriptSize " + totalScriptSize);
+
+    const fees = [15.0, 18.0, 21.6, 25.92, 31.1, 37.32, 44.79, 53.75];
+
+    let counter = 0;
+    while (totalScriptSize > 0) {
+      if (counter > fees.length - 1) {
+        // TODO: throw error as maximum total ref script size is 200,000 bytes
+      }
+
+      if (totalScriptSize > 25000) fee = fee + BigInt(25000 * fees[counter]);
+      else fee = fee + BigInt(totalScriptSize * fees[counter]);
+      totalScriptSize = totalScriptSize - 25000;
+      counter++;
+    }
+  }
+  console.log("fee " + fee);
+  return fee;
 };
 
 const deriveInputsFromTransaction = (tx: CML.Transaction) => {
