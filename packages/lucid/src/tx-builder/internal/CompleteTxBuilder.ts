@@ -414,16 +414,24 @@ const coinSelection = (
   Effect.gen(function* () {
     // NOTE: This is a fee estimation. If the amount is not enough, it may require increasing the fee.
     const minFee = config.txBuilder.min_fee(script_calculation);
-    const refScriptFee = calculateMinRefScriptFee(config);
+    const refScriptFee = yield* calculateMinRefScriptFee(config);
     const totalFee = minFee + refScriptFee;
+    const customMinFee = config.minFee;
     console.log("minFee " + minFee);
     console.log("refScriptFee " + refScriptFee);
+    console.log("customMinFee " + customMinFee);
     console.log("totalFee " + totalFee);
 
     const estimatedFee: Assets = {
       lovelace: totalFee,
     };
-    if (refScriptFee > 0n) config.txBuilder.set_fee(totalFee);
+
+    if ((customMinFee !== undefined && customMinFee > minFee) || refScriptFee > 0n){
+      const setFee = customMinFee ? (customMinFee > totalFee ? customMinFee : totalFee) : totalFee;
+      console.log("setFee " + setFee);
+      config.txBuilder.set_fee(setFee);
+      estimatedFee.lovelace = setFee;
+    }
 
     const negatedMintedAssets = negateAssets(config.mintedAssets);
     const negatedCollectedAssets = negateAssets(
@@ -524,36 +532,42 @@ const calculateMinLovelace = (
 
 const calculateMinRefScriptFee = (
   config: TxBuilder.TxBuilderConfig,
-): bigint => {
-  let fee = 0n;
-  if (config.lucidConfig.network === "Preview") {
-    let totalScriptSize = 0;
+): Effect.Effect<bigint, TxBuilderError, never> =>
+  Effect.gen(function* () {
+    let fee = 0n;
+    if (config.lucidConfig.network === "Preview") {
+      let totalScriptSize = 0;
 
-    config.readInputs.forEach((utxo) => {
-      if (utxo.scriptRef) {
-        totalScriptSize = totalScriptSize + utxo.scriptRef.script.length;
+      config.readInputs.forEach((utxo) => {
+        if (utxo.scriptRef) {
+          totalScriptSize = totalScriptSize + utxo.scriptRef.script.length / 2;
+        }
+      });
+      config.collectedInputs.forEach((utxo) => {
+        if (utxo.scriptRef) {
+          totalScriptSize = totalScriptSize + utxo.scriptRef.script.length / 2;
+        }
+      });
+      if (totalScriptSize === 0) return fee;
+      console.log("totalScriptSize " + totalScriptSize);
+
+      const fees = [15.0, 18.0, 21.6, 25.92, 31.1, 37.32, 44.79, 53.75];
+
+      let counter = 0;
+      while (totalScriptSize > 0) {
+        if (counter > fees.length - 1) {
+          yield* completeTxError("Total reference script size in a transaction cannot exceed 200,000 bytes.");
+        }
+
+        if (totalScriptSize > 25000) fee = fee + BigInt(25000 * fees[counter]);
+        else fee = fee + BigInt(totalScriptSize * fees[counter]);
+        totalScriptSize = totalScriptSize - 25000;
+        counter++;
       }
-    });
-    if (totalScriptSize === 0) return fee;
-    console.log("totalScriptSize " + totalScriptSize);
-
-    const fees = [15.0, 18.0, 21.6, 25.92, 31.1, 37.32, 44.79, 53.75];
-
-    let counter = 0;
-    while (totalScriptSize > 0) {
-      if (counter > fees.length - 1) {
-        // TODO: throw error as maximum total ref script size is 200,000 bytes
-      }
-
-      if (totalScriptSize > 25000) fee = fee + BigInt(25000 * fees[counter]);
-      else fee = fee + BigInt(totalScriptSize * fees[counter]);
-      totalScriptSize = totalScriptSize - 25000;
-      counter++;
     }
-  }
-  console.log("fee " + fee);
-  return fee;
-};
+    console.log("fee " + fee);
+    return fee;
+  });
 
 const deriveInputsFromTransaction = (tx: CML.Transaction) => {
   const outputs = tx.body().outputs();

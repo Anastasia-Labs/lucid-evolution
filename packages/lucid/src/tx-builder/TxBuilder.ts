@@ -46,6 +46,7 @@ export type TxBuilderConfig = {
     RedeemerBuilder,
     (redeemer?: string) => Effect.Effect<void, TransactionError, never>
   >;
+  minFee: bigint | undefined;
 };
 
 export type TxBuilder = {
@@ -102,6 +103,7 @@ export type TxBuilder = {
     CertificateValidator: (certValidator: Script) => TxBuilder;
     WithdrawalValidator: (withdrawalValidator: Script) => TxBuilder;
   };
+  setMinFee: (fee: bigint) => TxBuilder;
   complete: (
     options?: CompleteTxBuilder.CompleteOptions,
   ) => Promise<TxSignBuilder.TxSignBuilder>;
@@ -136,6 +138,7 @@ export function makeTxBuilder(lucidConfig: LucidConfig): TxBuilder {
     scripts: new Map(),
     programs: [],
     partialPrograms: new Map(),
+    minFee: undefined,
   };
   const txBuilder: TxBuilder = {
     readFrom: (utxos: UTxO[]) => {
@@ -277,6 +280,10 @@ export function makeTxBuilder(lucidConfig: LucidConfig): TxBuilder {
         config.scripts.set(scriptKeyValue.key, scriptKeyValue.value);
         return txBuilder;
       },
+    },
+    setMinFee: (fee: bigint) => {
+      config.minFee = fee;
+      return txBuilder;
     },
     complete: (options?: CompleteTxBuilder.CompleteOptions) =>
       makeReturn(
