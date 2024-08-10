@@ -24,7 +24,7 @@ const distributeRewards = Effect.gen(function* ($) {
   assert.deepEqual(rewardInfo.rewards, REWARD_AMOUNT);
 });
 
-describe.sequential.skip("Emulator", () => {
+describe.sequential("Emulator", () => {
   test("waitBlock", async () => {
     const program = pipe(
       mintInSlotRange,

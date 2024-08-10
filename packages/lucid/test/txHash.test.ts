@@ -6,12 +6,12 @@ import { catchTag, matchCause, matchCauseEffect } from "effect/Effect";
 import { NETWORK } from "./specs/services.js";
 
 test("test txHash", async () => {
-  const projectId = process.env.VITE_BLOCKFROST_KEY;
+  const projectId = process.env.VITE_BLOCKFROST_KEY_PREPROD;
   const lucid = await Lucid(
-    new Blockfrost(process.env.VITE_API_URL!, projectId),
+    new Blockfrost(process.env.VITE_BLOCKFROST_API_URL_PREPROD!, projectId),
     NETWORK,
   );
-  const seedPhrase = process.env.VITE_SEED!;
+  const seedPhrase = process.env.VITE_WALLET_SEED!;
   lucid.selectWallet.fromSeed(seedPhrase);
   const signed2 = await lucid
     .fromTx(

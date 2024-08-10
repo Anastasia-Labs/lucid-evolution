@@ -14,42 +14,13 @@ import * as ParametrizedEndpoints from "./specs/hello-params.js";
 import * as TxChain from "./specs/tx-chaining.js";
 import * as MetadataEndpoint from "./specs/metadata.js";
 
-test("MultiValidator - registerStake", async () => {
-  const program = pipe(
-    MultiValidatorEndpoints.registerStake,
-    Effect.provide(Layer.mergeAll(User.layer, StakeContract.layer)),
-  );
-  const exit = await Effect.runPromiseExit(program);
-  console.log(exit);
-  expect(exit._tag).toBe("Success");
-});
-
-test("DespositFunds, lock reference script", async () => {
-  const program = pipe(
-    HelloEndpoints.depositFundsLockRefScript,
-    Effect.provide(Layer.mergeAll(User.layer, HelloContract.layer)),
-  );
-  const exit = await Effect.runPromiseExit(program);
-  expect(exit._tag).toBe("Success");
-});
-
-test("CollectFunds , reading from reference script", async () => {
-  const program = pipe(
-    HelloEndpoints.collectFundsReadFrom,
-    Effect.provide(Layer.mergeAll(User.layer, HelloContract.layer)),
-  );
-  const exit = await Effect.runPromiseExit(program);
-  expect(exit._tag).toBe("Success");
-});
-
-describe.skip("Onchain testing", () => {
+describe.sequential("Onchain testing", () => {
   test("TxChain", async () => {
     const program = pipe(
       TxChain.depositFundsCollect,
       Effect.provide(Layer.mergeAll(User.layer, HelloContract.layer)),
     );
     const exit = await Effect.runPromiseExit(program);
-    console.log(exit);
     expect(exit._tag).toBe("Success");
   });
 

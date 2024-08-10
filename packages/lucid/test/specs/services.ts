@@ -47,7 +47,6 @@ const makeUser = Effect.gen(function* ($) {
     Lucid(new Blockfrost(BLOCKFROST_API_URL, BLOCKFROST_KEY), NETWORK),
   );
   user.selectWallet.fromSeed(WALLET_SEED);
-  console.log(yield* Effect.promise(() => user.wallet().address()));
   return {
     user,
   };
