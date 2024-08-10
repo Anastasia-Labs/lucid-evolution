@@ -417,10 +417,6 @@ const coinSelection = (
     const refScriptFee = yield* calculateMinRefScriptFee(config);
     const totalFee = minFee + refScriptFee;
     const customMinFee = config.minFee;
-    console.log("minFee " + minFee);
-    console.log("refScriptFee " + refScriptFee);
-    console.log("customMinFee " + customMinFee);
-    console.log("totalFee " + totalFee);
 
     const estimatedFee: Assets = {
       lovelace: totalFee,
