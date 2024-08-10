@@ -50,7 +50,7 @@ const makeUser = Effect.gen(function* ($) {
   return {
     user,
   };
-}).pipe(Effect.provide(NetworkConfig.layerPreview));
+}).pipe(Effect.provide(NetworkConfig.layer));
 
 export class User extends Context.Tag("User")<
   User,
