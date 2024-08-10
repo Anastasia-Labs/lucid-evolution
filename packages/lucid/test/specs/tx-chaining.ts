@@ -93,7 +93,7 @@ export const depositFundsCollect = Effect.gen(function* () {
   repeat(user, 4);
 
   yield* Effect.all(programs);
-}).pipe(withLogNoRetry);
+}).pipe(withLogNoRetry, Effect.orDie);
 
 const fetchOwner = (utxos: UTxO[]) =>
   utxos.filter((value) => {

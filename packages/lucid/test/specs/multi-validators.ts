@@ -166,7 +166,7 @@ export const collectFunds = Effect.gen(function* ($) {
     .setMinFee(200_000n)
     .completeProgram();
   return signBuilder;
-}).pipe(Effect.flatMap(handleSignSubmit), withLogRetry);
+}).pipe(Effect.flatMap(handleSignSubmit), withLogRetry, Effect.orDie);
 
 export const registerStake = Effect.gen(function* ($) {
   const { user } = yield* User;
@@ -186,4 +186,5 @@ export const registerStake = Effect.gen(function* ($) {
       : Effect.fail(error),
   ),
   withLogRetry,
+  Effect.orDie,
 );

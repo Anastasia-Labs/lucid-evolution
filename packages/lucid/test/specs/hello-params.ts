@@ -55,7 +55,7 @@ export const depositFunds = Effect.gen(function* () {
     )
     .completeProgram();
   return signBuilder;
-}).pipe(Effect.flatMap(handleSignSubmit), withLogRetry);
+}).pipe(Effect.flatMap(handleSignSubmit), withLogRetry, Effect.orDie);
 
 export const collectFunds = Effect.gen(function* ($) {
   const { user } = yield* User;
@@ -98,4 +98,4 @@ export const collectFunds = Effect.gen(function* ($) {
     .addSigner(addr)
     .completeProgram();
   return signBuilder;
-}).pipe(Effect.flatMap(handleSignSubmit), withLogRetry);
+}).pipe(Effect.flatMap(handleSignSubmit), withLogRetry, Effect.orDie);

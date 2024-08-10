@@ -98,7 +98,7 @@ const makeHelloService = Effect.gen(function* () {
     hello,
     contractAddress,
   };
-});
+}).pipe(Effect.orDie);
 
 export class HelloContract extends Context.Tag("HelloContract")<
   HelloContract,

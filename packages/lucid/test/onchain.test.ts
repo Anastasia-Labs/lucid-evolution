@@ -274,7 +274,6 @@ describe.sequential("Onchain testing", () => {
     const program = pipe(
       MintBurnEndpoints.pay3,
       Effect.provide(User.layer),
-      Effect.provide(HelloContract.layer),
       Effect.provide(NetworkConfig.layerPreprod),
     );
     const exit = await Effect.runPromiseExit(program);
@@ -285,7 +284,6 @@ describe.sequential("Onchain testing", () => {
     const program = pipe(
       MintBurnEndpoints.payWithData,
       Effect.provide(User.layer),
-      Effect.provide(HelloContract.layer),
       Effect.provide(NetworkConfig.layerPreprod),
     );
     const exit = await Effect.runPromiseExit(program);
@@ -296,7 +294,6 @@ describe.sequential("Onchain testing", () => {
     const program = pipe(
       MintBurnEndpoints.payWithoutVkeyWitness,
       Effect.provide(User.layer),
-      Effect.provide(HelloContract.layer),
       Effect.provide(NetworkConfig.layerPreprod),
     );
     const exit = await Effect.runPromiseExit(program);

@@ -71,7 +71,7 @@ export const mint = Effect.gen(function* () {
     .attach.MintingPolicy(plutusMint.mint)
     .completeProgram();
   return signBuilder;
-}).pipe(Effect.flatMap(handleSignSubmit), withLogRetry);
+}).pipe(Effect.flatMap(handleSignSubmit), withLogRetry, Effect.orDie);
 
 export const burn = Effect.gen(function* () {
   const { user } = yield* User;
@@ -100,7 +100,7 @@ export const burn = Effect.gen(function* () {
     .attach.MintingPolicy(plutusMint.mint)
     .completeProgram();
   return signBuilder;
-}).pipe(Effect.flatMap(handleSignSubmit), withLogRetry);
+}).pipe(Effect.flatMap(handleSignSubmit), withLogRetry, Effect.orDie);
 
 export const mintburn = Effect.gen(function* () {
   const { user } = yield* User;
@@ -119,7 +119,7 @@ export const mintburn = Effect.gen(function* () {
     .attach.MintingPolicy(mint)
     .completeProgram();
   return signBuilder;
-}).pipe(Effect.flatMap(handleSignSubmit), withLogRetry);
+}).pipe(Effect.flatMap(handleSignSubmit), withLogRetry, Effect.orDie);
 
 export const mint2 = Effect.gen(function* () {
   const { user } = yield* User;
@@ -137,7 +137,7 @@ export const mint2 = Effect.gen(function* () {
     .attach.MintingPolicy(mint)
     .completeProgram();
   return signBuilder;
-}).pipe(Effect.flatMap(handleSignSubmit), withLogRetry);
+}).pipe(Effect.flatMap(handleSignSubmit), withLogRetry, Effect.orDie);
 
 export const burn2 = Effect.gen(function* () {
   const { user } = yield* User;
@@ -155,7 +155,7 @@ export const burn2 = Effect.gen(function* () {
     .attach.MintingPolicy(mint)
     .completeProgram();
   return signBuilder;
-}).pipe(Effect.flatMap(handleSignSubmit), withLogRetry);
+}).pipe(Effect.flatMap(handleSignSubmit), withLogRetry, Effect.orDie);
 
 export const pay = Effect.gen(function* () {
   const { user } = yield* User;
@@ -169,7 +169,7 @@ export const pay = Effect.gen(function* () {
     .attach.MintingPolicy(mint)
     .completeProgram();
   return signBuilder;
-}).pipe(Effect.flatMap(handleSignSubmit), withLogRetry);
+}).pipe(Effect.flatMap(handleSignSubmit), withLogRetry, Effect.orDie);
 
 export const pay2 = Effect.gen(function* () {
   const { user } = yield* User;
@@ -184,7 +184,7 @@ export const pay2 = Effect.gen(function* () {
     .attach.MintingPolicy(mint)
     .completeProgram();
   return signBuilder;
-}).pipe(Effect.flatMap(handleSignSubmit), withLogRetry);
+}).pipe(Effect.flatMap(handleSignSubmit), withLogRetry, Effect.orDie);
 
 export const pay3 = Effect.gen(function* () {
   const { user } = yield* User;
@@ -214,7 +214,7 @@ export const pay3 = Effect.gen(function* () {
     .attach.MintingPolicy(mint)
     .completeProgram();
   return signBuilder;
-}).pipe(Effect.flatMap(handleSignSubmit), withLogRetry);
+}).pipe(Effect.flatMap(handleSignSubmit), withLogRetry, Effect.orDie);
 
 export const payWithData = Effect.gen(function* () {
   const { user } = yield* User;
@@ -236,7 +236,7 @@ export const payWithData = Effect.gen(function* () {
     .attach.MintingPolicy(mint)
     .completeProgram();
   return signBuilder;
-}).pipe(Effect.flatMap(handleSignSubmit), withLogRetry);
+}).pipe(Effect.flatMap(handleSignSubmit), withLogRetry, Effect.orDie);
 
 export const payWithoutVkeyWitness = Effect.gen(function* () {
   const { user } = yield* User;
@@ -259,7 +259,7 @@ export const payWithoutVkeyWitness = Effect.gen(function* () {
     .attach.MintingPolicy(mint)
     .completeProgram();
   return signBuilder;
-}).pipe(Effect.flatMap(handleSubmit));
+}).pipe(Effect.flatMap(handleSubmit), Effect.orDie);
 
 export const mintInSlotRange = Effect.gen(function* () {
   const { user } = yield* User;
