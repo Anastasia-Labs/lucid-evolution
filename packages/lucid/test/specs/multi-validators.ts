@@ -75,16 +75,15 @@ export const collectFunds = Effect.gen(function* ($) {
     mintUtxos.find((utxo) => utxo.scriptRef),
   );
 
-  // console.log("Total number of utxos: " + allUtxos.length);
   const selectedStakeUTxOs = stakeUtxos
-    .slice(0, 20)
+    .slice(0, 10)
     .filter(
       (utxo) =>
         utxo.txHash !== stakeUtxoScriptRef.txHash ||
         utxo.outputIndex !== stakeUtxoScriptRef.outputIndex,
     );
   const selectedMintUTxOs = mintUtxos
-    .slice(0, 10)
+    .slice(0, 3)
     .filter(
       (utxo) =>
         utxo.txHash !== mintUtxoScriptRef.txHash ||
@@ -119,7 +118,7 @@ export const collectFunds = Effect.gen(function* ($) {
         value: Data.void(),
       },
       utxo.assets,
-      stakeUtxoScriptRef.scriptRef!,
+      utxo.scriptRef ? utxo.scriptRef : undefined,
     );
   });
 
@@ -131,7 +130,7 @@ export const collectFunds = Effect.gen(function* ($) {
         value: Data.void(),
       },
       utxo.assets,
-      mintUtxoScriptRef.scriptRef!,
+      utxo.scriptRef ? utxo.scriptRef : undefined,
     );
   });
 
@@ -154,14 +153,12 @@ export const collectFunds = Effect.gen(function* ($) {
   const signBuilder = yield* txBuilder
     .withdraw(stakeContract.rewardAddress, 0n, rdmrBuilderWithdraw)
     .readFrom([stakeUtxoScriptRef, mintUtxoScriptRef])
-    // .attach.WithdrawalValidator(stakeContract.stake)
     .mintAssets(
       {
         [mintContract.policyId + fromText("Test")]: 1n,
       },
       rdmrBuilderMint,
     )
-    // .attach.MintingPolicy(mintContract.mint)
     .setMinFee(200_000n)
     .completeProgram();
   return signBuilder;
@@ -174,7 +171,7 @@ export const registerStake = Effect.gen(function* ($) {
     .newTx()
     .registerStake(rewardAddress)
     .completeProgram();
-  // console.log(signBuilder.toJSON());
+    
   return signBuilder;
 }).pipe(
   Effect.flatMap(handleSignSubmit),
