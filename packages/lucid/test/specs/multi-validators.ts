@@ -49,12 +49,7 @@ export const depositFunds = Effect.gen(function* () {
   const signBuilder = yield* txBuilder.completeProgram();
 
   return signBuilder;
-}).pipe(
-  Effect.flatMap((tx) =>
-    tx ? pipe(tx, handleSignSubmit, withLogRetry) : Effect.void,
-  ),
-  Effect.orDie,
-);
+}).pipe(Effect.flatMap(handleSignSubmit), withLogRetry, Effect.orDie);
 
 export const collectFunds = Effect.gen(function* ($) {
   const { user } = yield* User;
@@ -79,20 +74,16 @@ export const collectFunds = Effect.gen(function* ($) {
     .slice(0, 10)
     .filter(
       (utxo) =>
-        (utxo.txHash !== stakeUtxoScriptRef.txHash ||
-          utxo.outputIndex !== stakeUtxoScriptRef.outputIndex) &&
-        utxo.scriptRef,
-    )
-    .slice(0, 10);
+        utxo.txHash !== stakeUtxoScriptRef.txHash ||
+        utxo.outputIndex !== stakeUtxoScriptRef.outputIndex,
+    );
   const selectedMintUTxOs = mintUtxos
     .slice(0, 3)
     .filter(
       (utxo) =>
-        (utxo.txHash !== mintUtxoScriptRef.txHash ||
-          utxo.outputIndex !== mintUtxoScriptRef.outputIndex) &&
-        utxo.scriptRef,
-    )
-    .slice(0, 3);
+        utxo.txHash !== mintUtxoScriptRef.txHash ||
+        utxo.outputIndex !== mintUtxoScriptRef.outputIndex,
+    );
 
   const rdmrBuilderSelfSpend: RedeemerBuilder = {
     kind: "self",
