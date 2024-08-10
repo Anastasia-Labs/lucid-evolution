@@ -14,6 +14,11 @@ jobs:
       VITE_API_URL: ${{ secrets.VITE_API_URL }}
       VITE_KUPO_KEY: ${{secrets.VITE_KUPO_KEY}}
       VITE_OGMIOS_KEY: ${{secrets.VITE_OGMIOS_KEY}}
+      VITE_BLOCKFROST_API_URL_PREPROD: ${{secrets.VITE_BLOCKFROST_API_URL_PREPROD}}
+      VITE_BLOCKFROST_API_URL_PREVIEW: ${{secrets.VITE_BLOCKFROST_API_URL_PREVIEW}}
+      VITE_BLOCKFROST_KEY_PREPROD: ${{secrets.VITE_BLOCKFROST_KEY_PREPROD}}
+      VITE_BLOCKFROST_KEY_PREVIEW: ${{secrets.VITE_BLOCKFROST_KEY_PREVIEW}}
+      VITE_WALLET_SEED: ${{secrets.VITE_WALLET_SEED}}
     steps:
       - name: Check out code
         uses: actions/checkout@v4

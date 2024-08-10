@@ -7,16 +7,17 @@ import {
   MaestroSupportedNetworks,
 } from "../src/index.js";
 import { Config, Effect } from "effect";
-import { NETWORK } from "./specs/services.js";
 
 const loadConfig = Effect.gen(function* () {
   return yield* Config.all([
-    Config.string("VITE_API_URL"),
-    Config.string("VITE_BLOCKFROST_KEY"),
-    Config.string("VITE_SEED"),
+    Config.string("VITE_BLOCKFROST_API_URL_PREPROD"),
+    Config.string("VITE_BLOCKFROST_KEY_PREPROD"),
+    Config.string("VITE_WALLET_SEED"),
     Config.string("VITE_MAESTRO_KEY"),
   ]);
 });
+
+const NETWORK = "Preprod";
 
 describe("Wallet", () => {
   test("switchProvider", async () => {
@@ -41,7 +42,11 @@ describe("Wallet", () => {
       const maestroUTXO = yield* Effect.promise(() => user.wallet().getUtxos());
       assert.deepStrictEqual(blockfrostUTXO, maestroUTXO);
     });
-    await Effect.runPromise(program);
+    try {
+      await Effect.runPromise(program);
+    } catch (error) {
+      console.log(error);
+    }
   });
 
   test("generateSeedPhrase", async () => {

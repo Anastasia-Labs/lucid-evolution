@@ -1,51 +1,30 @@
 import { CML } from "./core.js";
 import { CostModels, ProtocolParameters } from "@lucid-evolution/core-types";
 
-type CostModelsCML = {
-  inner: CML.MapU64ToArrI64
-}
+type Cost = Record<number, number[] | null>;
 
 export function createCostModels(costModels: CostModels): CML.CostModels {
-  // const costmdls = CML.CostModels.new();
-  const map = CML.MapU64ToArrI64.new();
-  const model: CostModelsCML = {
-    inner: map
+  const costmodel: Cost = {
+    0: [],
+    1: [],
+    2: [],
   };
-  const mapc = new Map<number, number[]>();
-
   // add plutus v1
-  const costmdlV1: bigint[] = [];
-  const costmdlV11: number[] = [];
   for (const cost of Object.values(costModels.PlutusV1)) {
-    // const int = CML.Int.from_str(cost.toString());
-    costmdlV1.push(BigInt(cost));
-    costmdlV11.push(cost);
+    costmodel[0]?.push(cost);
   }
-  // costmdls.set_plutus_v1(costmdlV1);
-  map.insert(BigInt(CML.Language.PlutusV1), new BigInt64Array(costmdlV1));
-  mapc.set(CML.Language.PlutusV1, costmdlV11);
 
   // add plutus v2
-  // const costmdlV2 = CML.IntList.new();
-  const costmdlV2: bigint[] = [];
-  const costmdlV22: number[] = [];
   for (const cost of Object.values(costModels.PlutusV2)) {
-    costmdlV2.push(BigInt(cost));
-    costmdlV22.push(cost);
+    costmodel[1]?.push(cost);
   }
-  // costmdls.set_plutus_v2(costmdlV2);
-  map.insert(BigInt(CML.Language.PlutusV2), new BigInt64Array(costmdlV2));
-  mapc.set(CML.Language.PlutusV2, costmdlV22);
 
   // add plutus v3
-  // const costmdlV3 = C.IntList.new()
-  // Object.values(costModels.PlutusV3).forEach((cost) => {
-  //   costmdlV3.add(C.Int.new(BigInt(cost)))
-  // });
-  // costmdls.set_plutus_v3(costmdlV3)
-  console.log(JSON.stringify(map));
-  console.log(JSON.stringify(mapc));
-  return CML.CostModels.from_json(JSON.stringify(mapc));
+  // for (const cost of Object.values(costModels.PlutusV3)) {
+  //   costmodel[2]?.push(cost);
+  // }
+
+  return CML.CostModels.from_json(JSON.stringify(costmodel));
 }
 
 export const PROTOCOL_PARAMETERS_DEFAULT: ProtocolParameters = {

@@ -528,14 +528,13 @@ const calculateMinRefScriptFee = (
   let fee = 0n;
   if (config.lucidConfig.network === "Preview") {
     let totalScriptSize = 0;
-    
+
     config.readInputs.forEach((utxo) => {
       if (utxo.scriptRef) {
         totalScriptSize = totalScriptSize + utxo.scriptRef.script.length;
       }
     });
-    if(totalScriptSize === 0)
-      return fee;
+    if (totalScriptSize === 0) return fee;
     console.log("totalScriptSize " + totalScriptSize);
 
     const fees = [15.0, 18.0, 21.6, 25.92, 31.1, 37.32, 44.79, 53.75];
