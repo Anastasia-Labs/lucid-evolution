@@ -27,7 +27,7 @@
     "title": "General Information",
     "type": "menu",
     "items": {
-      "acknowledgements": {
+      "acknowledgement": {
         "title": "Acknowledgements",
         "href": "/general-information/acknowledgements"
       },
