@@ -54,6 +54,7 @@ export const depositFunds = Effect.gen(function* () {
   Effect.flatMap((tx) =>
     tx ? pipe(tx, handleSignSubmit, withLogRetry) : Effect.void,
   ),
+  Effect.orDie,
 );
 
 export const collectFunds = Effect.gen(function* ($) {

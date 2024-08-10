@@ -5,6 +5,7 @@ import {
   StakeContract,
   MintContract,
   User,
+  NetworkConfig,
 } from "./specs/services.js";
 import * as HelloEndpoints from "./specs/hello.js";
 import * as StakeEndpoints from "./specs/stake.js";
@@ -18,7 +19,9 @@ describe.sequential("Onchain testing", () => {
   test("TxChain", async () => {
     const program = pipe(
       TxChain.depositFundsCollect,
-      Effect.provide(Layer.mergeAll(User.layer, HelloContract.layer)),
+      Effect.provide(User.layer),
+      Effect.provide(HelloContract.layer),
+      Effect.provide(NetworkConfig.layerPreprod),
     );
     const exit = await Effect.runPromiseExit(program);
     expect(exit._tag).toBe("Success");
@@ -27,7 +30,9 @@ describe.sequential("Onchain testing", () => {
   test("MultiValidator - registerStake", async () => {
     const program = pipe(
       MultiValidatorEndpoints.registerStake,
-      Effect.provide(Layer.mergeAll(User.layer, StakeContract.layer)),
+      Effect.provide(User.layer),
+      Effect.provide(StakeContract.layer),
+      Effect.provide(NetworkConfig.layerPreprod),
     );
     const exit = await Effect.runPromiseExit(program);
     expect(exit._tag).toBe("Success");
@@ -36,9 +41,10 @@ describe.sequential("Onchain testing", () => {
   test("MultiValidator - DespositFunds", async () => {
     const program = pipe(
       MultiValidatorEndpoints.depositFunds,
-      Effect.provide(
-        Layer.mergeAll(User.layer, StakeContract.layer, MintContract.layer),
-      ),
+      Effect.provide(User.layer),
+      Effect.provide(StakeContract.layer),
+      Effect.provide(MintContract.layer),
+      Effect.provide(NetworkConfig.layerPreprod),
     );
     const exit = await Effect.runPromiseExit(program);
     expect(exit._tag).toBe("Success");
@@ -47,9 +53,10 @@ describe.sequential("Onchain testing", () => {
   test("MultiValidator - CollectFunds", async () => {
     const program = pipe(
       MultiValidatorEndpoints.collectFunds,
-      Effect.provide(
-        Layer.mergeAll(User.layer, StakeContract.layer, MintContract.layer),
-      ),
+      Effect.provide(User.layer),
+      Effect.provide(StakeContract.layer),
+      Effect.provide(MintContract.layer),
+      Effect.provide(NetworkConfig.layerPreprod),
     );
     const exit = await Effect.runPromiseExit(program);
     expect(exit._tag).toBe("Success");
@@ -58,7 +65,9 @@ describe.sequential("Onchain testing", () => {
   test("Metadata", async () => {
     const program = pipe(
       MetadataEndpoint.payWithMetadata,
-      Effect.provide(Layer.mergeAll(User.layer, HelloContract.layer)),
+      Effect.provide(User.layer),
+      Effect.provide(HelloContract.layer),
+      Effect.provide(NetworkConfig.layerPreprod),
     );
     const exit = await Effect.runPromiseExit(program);
     console.log(exit);
@@ -68,7 +77,9 @@ describe.sequential("Onchain testing", () => {
   test("DespositFunds", async () => {
     const program = pipe(
       HelloEndpoints.depositFunds,
-      Effect.provide(Layer.mergeAll(User.layer, HelloContract.layer)),
+      Effect.provide(User.layer),
+      Effect.provide(HelloContract.layer),
+      Effect.provide(NetworkConfig.layerPreprod),
     );
     const exit = await Effect.runPromiseExit(program);
     expect(exit._tag).toBe("Success");
@@ -77,7 +88,9 @@ describe.sequential("Onchain testing", () => {
   test("CollectFunds", async () => {
     const program = pipe(
       HelloEndpoints.collectFunds,
-      Effect.provide(Layer.mergeAll(User.layer, HelloContract.layer)),
+      Effect.provide(User.layer),
+      Effect.provide(HelloContract.layer),
+      Effect.provide(NetworkConfig.layerPreprod),
     );
     const exit = await Effect.runPromiseExit(program);
     expect(exit._tag).toBe("Success");
@@ -86,7 +99,9 @@ describe.sequential("Onchain testing", () => {
   test("DespositFunds, lock reference script", async () => {
     const program = pipe(
       HelloEndpoints.depositFundsLockRefScript,
-      Effect.provide(Layer.mergeAll(User.layer, HelloContract.layer)),
+      Effect.provide(User.layer),
+      Effect.provide(HelloContract.layer),
+      Effect.provide(NetworkConfig.layerPreprod),
     );
     const exit = await Effect.runPromiseExit(program);
     expect(exit._tag).toBe("Success");
@@ -95,7 +110,9 @@ describe.sequential("Onchain testing", () => {
   test("CollectFunds , reading from reference script", async () => {
     const program = pipe(
       HelloEndpoints.collectFundsReadFrom,
-      Effect.provide(Layer.mergeAll(User.layer, HelloContract.layer)),
+      Effect.provide(User.layer),
+      Effect.provide(HelloContract.layer),
+      Effect.provide(NetworkConfig.layerPreprod),
     );
     const exit = await Effect.runPromiseExit(program);
     expect(exit._tag).toBe("Success");
@@ -105,6 +122,7 @@ describe.sequential("Onchain testing", () => {
     const program = pipe(
       StakeEndpoints.registerStake,
       Effect.provide(User.layer),
+      Effect.provide(NetworkConfig.layerPreprod),
     );
     const exit = await Effect.runPromiseExit(program);
     expect(exit._tag).toBe("Success");
@@ -114,6 +132,7 @@ describe.sequential("Onchain testing", () => {
     const program = pipe(
       StakeEndpoints.deRegisterStake,
       Effect.provide(User.layer),
+      Effect.provide(NetworkConfig.layerPreprod),
     );
     const exit = await Effect.runPromiseExit(program);
     expect(exit._tag).toBe("Success");
@@ -123,6 +142,7 @@ describe.sequential("Onchain testing", () => {
     const program = pipe(
       StakeEndpoints.registerDeregisterStake,
       Effect.provide(User.layer),
+      Effect.provide(NetworkConfig.layerPreprod),
     );
     const exit = await Effect.runPromiseExit(program);
     expect(exit._tag).toBe("Success");
@@ -132,13 +152,18 @@ describe.sequential("Onchain testing", () => {
     const program = pipe(
       StakeEndpoints.registerStake,
       Effect.provide(User.layer),
+      Effect.provide(NetworkConfig.layerPreprod),
     );
     const exit = await Effect.runPromiseExit(program);
     expect(exit._tag).toBe("Success");
   });
 
   test("delegateTo", async () => {
-    const program = pipe(StakeEndpoints.delegateTo, Effect.provide(User.layer));
+    const program = pipe(
+      StakeEndpoints.delegateTo,
+      Effect.provide(User.layer),
+      Effect.provide(NetworkConfig.layerPreprod),
+    );
     const exit = await Effect.runPromiseExit(program);
     expect(exit._tag).toBe("Success");
   });
@@ -147,6 +172,7 @@ describe.sequential("Onchain testing", () => {
     const program = pipe(
       StakeEndpoints.withdrawZero,
       Effect.provide(User.layer),
+      Effect.provide(NetworkConfig.layerPreprod),
     );
     const exit = await Effect.runPromiseExit(program);
     expect(exit._tag).toBe("Success");
@@ -155,7 +181,8 @@ describe.sequential("Onchain testing", () => {
   test("Parametrized Contract - Deposit Funds", async () => {
     const program = pipe(
       ParametrizedEndpoints.depositFunds,
-      Effect.provide(Layer.mergeAll(User.layer)),
+      Effect.provide(User.layer),
+      Effect.provide(NetworkConfig.layerPreprod),
     );
     const exit = await Effect.runPromiseExit(program);
     expect(exit._tag).toBe("Success");
@@ -164,7 +191,8 @@ describe.sequential("Onchain testing", () => {
   test("Parametrized Contract - Collect Funds", async () => {
     const program = pipe(
       ParametrizedEndpoints.collectFunds,
-      Effect.provide(Layer.mergeAll(User.layer)),
+      Effect.provide(User.layer),
+      Effect.provide(NetworkConfig.layerPreprod),
     );
     const exit = await Effect.runPromiseExit(program);
     expect(exit._tag).toBe("Success");
@@ -173,7 +201,9 @@ describe.sequential("Onchain testing", () => {
   test("Mint Test - Mint Token", async () => {
     const program = pipe(
       MintBurnEndpoints.mint,
-      Effect.provide(Layer.mergeAll(User.layer, MintContract.layer)),
+      Effect.provide(User.layer),
+      Effect.provide(MintContract.layer),
+      Effect.provide(NetworkConfig.layerPreprod),
     );
     const exit = await Effect.runPromiseExit(program);
     expect(exit._tag).toBe("Success");
@@ -182,7 +212,9 @@ describe.sequential("Onchain testing", () => {
   test("Mint Test - Burn Token", async () => {
     const program = pipe(
       MintBurnEndpoints.burn,
-      Effect.provide(Layer.mergeAll(User.layer, MintContract.layer)),
+      Effect.provide(User.layer),
+      Effect.provide(MintContract.layer),
+      Effect.provide(NetworkConfig.layerPreprod),
     );
     const exit = await Effect.runPromiseExit(program);
     expect(exit._tag).toBe("Success");
@@ -191,7 +223,8 @@ describe.sequential("Onchain testing", () => {
   test("Mint Test - Mint/Burn Token", async () => {
     const program = pipe(
       MintBurnEndpoints.mintburn,
-      Effect.provide(Layer.mergeAll(User.layer)),
+      Effect.provide(User.layer),
+      Effect.provide(NetworkConfig.layerPreprod),
     );
     const exit = await Effect.runPromiseExit(program);
     expect(exit._tag).toBe("Success");
@@ -200,7 +233,8 @@ describe.sequential("Onchain testing", () => {
   test("Mint Test - Mint Token, Second Test", async () => {
     const program = pipe(
       MintBurnEndpoints.mint2,
-      Effect.provide(Layer.mergeAll(User.layer)),
+      Effect.provide(User.layer),
+      Effect.provide(NetworkConfig.layerPreprod),
     );
     const exit = await Effect.runPromiseExit(program);
     expect(exit._tag).toBe("Success");
@@ -209,7 +243,8 @@ describe.sequential("Onchain testing", () => {
   test("Mint Test - Burn Token, Second Test", async () => {
     const program = pipe(
       MintBurnEndpoints.burn2,
-      Effect.provide(Layer.mergeAll(User.layer)),
+      Effect.provide(User.layer),
+      Effect.provide(NetworkConfig.layerPreprod),
     );
     const exit = await Effect.runPromiseExit(program);
     expect(exit._tag).toBe("Success");
@@ -218,7 +253,8 @@ describe.sequential("Onchain testing", () => {
   test("Mint Test - Pay ADA", async () => {
     const program = pipe(
       MintBurnEndpoints.pay,
-      Effect.provide(Layer.mergeAll(User.layer)),
+      Effect.provide(User.layer),
+      Effect.provide(NetworkConfig.layerPreprod),
     );
     const exit = await Effect.runPromiseExit(program);
     expect(exit._tag).toBe("Success");
@@ -227,7 +263,8 @@ describe.sequential("Onchain testing", () => {
   test("Mint Test - Pay Asset", async () => {
     const program = pipe(
       MintBurnEndpoints.pay2,
-      Effect.provide(Layer.mergeAll(User.layer)),
+      Effect.provide(User.layer),
+      Effect.provide(NetworkConfig.layerPreprod),
     );
     const exit = await Effect.runPromiseExit(program);
     expect(exit._tag).toBe("Success");
@@ -236,7 +273,9 @@ describe.sequential("Onchain testing", () => {
   test("Mint Test - CollectFunds", async () => {
     const program = pipe(
       MintBurnEndpoints.pay3,
-      Effect.provide(Layer.mergeAll(User.layer, HelloContract.layer)),
+      Effect.provide(User.layer),
+      Effect.provide(HelloContract.layer),
+      Effect.provide(NetworkConfig.layerPreprod),
     );
     const exit = await Effect.runPromiseExit(program);
     expect(exit._tag).toBe("Success");
@@ -245,7 +284,9 @@ describe.sequential("Onchain testing", () => {
   test("Mint Test - PayWithData", async () => {
     const program = pipe(
       MintBurnEndpoints.payWithData,
-      Effect.provide(Layer.mergeAll(User.layer, HelloContract.layer)),
+      Effect.provide(User.layer),
+      Effect.provide(HelloContract.layer),
+      Effect.provide(NetworkConfig.layerPreprod),
     );
     const exit = await Effect.runPromiseExit(program);
     expect(exit._tag).toBe("Success");
@@ -254,7 +295,9 @@ describe.sequential("Onchain testing", () => {
   test("Mint Test - MissVkeyWitness", async () => {
     const program = pipe(
       MintBurnEndpoints.payWithoutVkeyWitness,
-      Effect.provide(Layer.mergeAll(User.layer, HelloContract.layer)),
+      Effect.provide(User.layer),
+      Effect.provide(HelloContract.layer),
+      Effect.provide(NetworkConfig.layerPreprod),
     );
     const exit = await Effect.runPromiseExit(program);
     expect(exit._tag).toBe("Failure");
