@@ -426,8 +426,15 @@ const coinSelection = (
       lovelace: totalFee,
     };
 
-    if ((customMinFee !== undefined && customMinFee > minFee) || refScriptFee > 0n){
-      const setFee = customMinFee ? (customMinFee > totalFee ? customMinFee : totalFee) : totalFee;
+    if (
+      (customMinFee !== undefined && customMinFee > minFee) ||
+      refScriptFee > 0n
+    ) {
+      const setFee = customMinFee
+        ? customMinFee > totalFee
+          ? customMinFee
+          : totalFee
+        : totalFee;
       console.log("setFee " + setFee);
       config.txBuilder.set_fee(setFee);
       estimatedFee.lovelace = setFee;
@@ -556,7 +563,9 @@ const calculateMinRefScriptFee = (
       let counter = 0;
       while (totalScriptSize > 0) {
         if (counter > fees.length - 1) {
-          yield* completeTxError("Total reference script size in a transaction cannot exceed 200,000 bytes.");
+          yield* completeTxError(
+            "Total reference script size in a transaction cannot exceed 200,000 bytes.",
+          );
         }
 
         if (totalScriptSize > 25000) fee = fee + BigInt(25000 * fees[counter]);
