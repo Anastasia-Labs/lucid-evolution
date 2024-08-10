@@ -417,10 +417,6 @@ const coinSelection = (
     const refScriptFee = yield* calculateMinRefScriptFee(config);
     const totalFee = minFee + refScriptFee;
     const customMinFee = config.minFee;
-    console.log("minFee " + minFee);
-    console.log("refScriptFee " + refScriptFee);
-    console.log("customMinFee " + customMinFee);
-    console.log("totalFee " + totalFee);
 
     const estimatedFee: Assets = {
       lovelace: totalFee,
@@ -435,7 +431,6 @@ const coinSelection = (
           ? customMinFee
           : totalFee
         : totalFee;
-      console.log("setFee " + setFee);
       config.txBuilder.set_fee(setFee);
       estimatedFee.lovelace = setFee;
     }
@@ -556,7 +551,6 @@ const calculateMinRefScriptFee = (
         }
       });
       if (totalScriptSize === 0) return fee;
-      console.log("totalScriptSize " + totalScriptSize);
 
       const fees = [15.0, 18.0, 21.6, 25.92, 31.1, 37.32, 44.79, 53.75];
 
@@ -574,7 +568,6 @@ const calculateMinRefScriptFee = (
         counter++;
       }
     }
-    console.log("fee " + fee);
     return fee;
   });
 
