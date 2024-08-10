@@ -163,7 +163,7 @@ const createPoolRegistration = (poolParams: PoolParams, lucid: LucidConfig) =>
           relays.add(
             CML.Relay.new_single_host_name(
               relay.port,
-              CML.DnsName.from_cbor_hex(fromText(relay.domainName!)),
+              CML.DNSName.from_cbor_hex(fromText(relay.domainName!)),
             ),
           );
           break;
@@ -171,7 +171,7 @@ const createPoolRegistration = (poolParams: PoolParams, lucid: LucidConfig) =>
         case "MultiHost": {
           relays.add(
             CML.Relay.new_multi_host_name(
-              CML.DnsName.from_cbor_hex(fromText(relay.domainName!)),
+              CML.DNSName.from_cbor_hex(fromText(relay.domainName!)),
             ),
           );
           break;

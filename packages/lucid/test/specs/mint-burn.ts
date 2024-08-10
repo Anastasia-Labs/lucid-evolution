@@ -9,7 +9,7 @@ import {
   unixTimeToSlot,
 } from "../../src/index.js";
 import { Effect } from "effect";
-import { MintContract, User } from "./services.js";
+import { MintContract, NETWORK, User } from "./services.js";
 import { handleSignSubmit, handleSubmit, withLogRetry } from "./utils.js";
 
 const maxHexToken =
@@ -31,7 +31,7 @@ const mkSlotRangeMintinPolicy = (duration, address: string) => {
     scripts: [
       {
         type: "before",
-        slot: unixTimeToSlot("Preprod", Date.now() + duration),
+        slot: unixTimeToSlot(NETWORK, Date.now() + duration),
       },
       {
         type: "sig",
@@ -66,12 +66,11 @@ export const mint = Effect.gen(function* () {
       },
       mintRedeemer,
     )
-    .validTo(Date.now() + 900000)
     .attach.MintingPolicy(nativeMint)
     .attach.MintingPolicy(plutusMint.mint)
     .completeProgram();
   return signBuilder;
-}).pipe(Effect.flatMap(handleSignSubmit), withLogRetry);
+}).pipe(Effect.flatMap(handleSignSubmit), withLogRetry, Effect.orDie);
 
 export const burn = Effect.gen(function* () {
   const { user } = yield* User;
@@ -95,12 +94,11 @@ export const burn = Effect.gen(function* () {
       },
       mintRedeemer,
     )
-    .validTo(Date.now() + 900000)
     .attach.MintingPolicy(nativeMint)
     .attach.MintingPolicy(plutusMint.mint)
     .completeProgram();
   return signBuilder;
-}).pipe(Effect.flatMap(handleSignSubmit), withLogRetry);
+}).pipe(Effect.flatMap(handleSignSubmit), withLogRetry, Effect.orDie);
 
 export const mintburn = Effect.gen(function* () {
   const { user } = yield* User;
@@ -115,11 +113,10 @@ export const mintburn = Effect.gen(function* () {
       [policy + fromText("BurnableToken")]: 1n,
       [policy + fromText("BurnableToken2")]: -1n,
     })
-    .validTo(Date.now() + 900000)
     .attach.MintingPolicy(mint)
     .completeProgram();
   return signBuilder;
-}).pipe(Effect.flatMap(handleSignSubmit), withLogRetry);
+}).pipe(Effect.flatMap(handleSignSubmit), withLogRetry, Effect.orDie);
 
 export const mint2 = Effect.gen(function* () {
   const { user } = yield* User;
@@ -133,11 +130,10 @@ export const mint2 = Effect.gen(function* () {
       [policy + fromText("BurnableToken")]: 1n,
       [policy + fromText("BurnableToken2")]: 1n,
     })
-    .validTo(Date.now() + 900000)
     .attach.MintingPolicy(mint)
     .completeProgram();
   return signBuilder;
-}).pipe(Effect.flatMap(handleSignSubmit), withLogRetry);
+}).pipe(Effect.flatMap(handleSignSubmit), withLogRetry, Effect.orDie);
 
 export const burn2 = Effect.gen(function* () {
   const { user } = yield* User;
@@ -151,11 +147,10 @@ export const burn2 = Effect.gen(function* () {
       [policy + fromText("BurnableToken")]: -1n,
       [policy + fromText("BurnableToken2")]: -1n,
     })
-    .validTo(Date.now() + 900000)
     .attach.MintingPolicy(mint)
     .completeProgram();
   return signBuilder;
-}).pipe(Effect.flatMap(handleSignSubmit), withLogRetry);
+}).pipe(Effect.flatMap(handleSignSubmit), withLogRetry, Effect.orDie);
 
 export const pay = Effect.gen(function* () {
   const { user } = yield* User;
@@ -165,11 +160,10 @@ export const pay = Effect.gen(function* () {
   const signBuilder = yield* user
     .newTx()
     .pay.ToAddress(addr, { lovelace: 2_000_000n })
-    .validTo(Date.now() + 900000)
     .attach.MintingPolicy(mint)
     .completeProgram();
   return signBuilder;
-}).pipe(Effect.flatMap(handleSignSubmit), withLogRetry);
+}).pipe(Effect.flatMap(handleSignSubmit), withLogRetry, Effect.orDie);
 
 export const pay2 = Effect.gen(function* () {
   const { user } = yield* User;
@@ -180,11 +174,11 @@ export const pay2 = Effect.gen(function* () {
   const signBuilder = yield* user
     .newTx()
     .pay.ToAddress(addr, { [policy + fromText("BurnableToken2")]: 1n })
-    .validTo(Date.now() + 900000)
+    .mintAssets({ [policy + fromText("BurnableToken2")]: 1n })
     .attach.MintingPolicy(mint)
     .completeProgram();
   return signBuilder;
-}).pipe(Effect.flatMap(handleSignSubmit), withLogRetry);
+}).pipe(Effect.flatMap(handleSignSubmit), withLogRetry, Effect.orDie);
 
 export const pay3 = Effect.gen(function* () {
   const { user } = yield* User;
@@ -193,28 +187,17 @@ export const pay3 = Effect.gen(function* () {
   const mint = mkMintinPolicy(9_000_000, addr);
   const policy = mintingPolicyToId(mint);
 
-  const collecAssets = {
-    ["1c05caed08ddd5c9f233f4cb497eeb6e5f685e8e7b842b08897d1dfe4d794d696e746564546f6b656e"]:
-      1n,
-    ["501b8b9dce8d7c1247a14bb69d416c621267daa72ebd6c81942931924d794d696e746564546f6b656e"]:
-      1n,
-    ["665d4dbea856001b880d5749e94384cc486d8c4ee99540d2f65d15704d794d696e746564546f6b656e"]:
-      1n,
+  const collectAssets = {
+    [policy + fromText("BurnableToken2")]: 1n,
   };
 
   const signBuilder = yield* user
     .newTx()
-    .collectFrom(selectUTxOs(utxos, collecAssets))
+    .collectFrom(selectUTxOs(utxos, collectAssets))
     .pay.ToAddress(addr, { [policy + fromText("BurnableToken2")]: 1n })
-    .pay.ToAddress(addr, {
-      ["665d4dbea856001b880d5749e94384cc486d8c4ee99540d2f65d15704d794d696e746564546f6b656e"]:
-        1n,
-    })
-    .validTo(Date.now() + 900000)
-    .attach.MintingPolicy(mint)
     .completeProgram();
   return signBuilder;
-}).pipe(Effect.flatMap(handleSignSubmit), withLogRetry);
+}).pipe(Effect.flatMap(handleSignSubmit), withLogRetry, Effect.orDie);
 
 export const payWithData = Effect.gen(function* () {
   const { user } = yield* User;
@@ -236,7 +219,7 @@ export const payWithData = Effect.gen(function* () {
     .attach.MintingPolicy(mint)
     .completeProgram();
   return signBuilder;
-}).pipe(Effect.flatMap(handleSignSubmit), withLogRetry);
+}).pipe(Effect.flatMap(handleSignSubmit), withLogRetry, Effect.orDie);
 
 export const payWithoutVkeyWitness = Effect.gen(function* () {
   const { user } = yield* User;
@@ -259,7 +242,7 @@ export const payWithoutVkeyWitness = Effect.gen(function* () {
     .attach.MintingPolicy(mint)
     .completeProgram();
   return signBuilder;
-}).pipe(Effect.flatMap(handleSubmit));
+}).pipe(Effect.flatMap(handleSubmit), Effect.orDie);
 
 export const mintInSlotRange = Effect.gen(function* () {
   const { user } = yield* User;

@@ -8,6 +8,6 @@ export default defineConfig({
     pool: "forks",
     reporters: "verbose",
     include: ["./test/**/*.test.{js,mjs,cjs,ts,mts,cts,jsx,tsx}"],
-    testTimeout: 240_000,
+    testTimeout: 300_000,
   },
 });

@@ -34,9 +34,10 @@ export const depositFunds = Effect.gen(function* () {
       },
       { lovelace: 10_000_000n },
     )
+    .setMinFee(1_000_000n)
     .completeProgram();
   return signBuilder;
-}).pipe(Effect.flatMap(handleSignSubmit), withLogRetry);
+}).pipe(Effect.flatMap(handleSignSubmit), withLogRetry, Effect.orDie);
 
 export const collectFunds = Effect.gen(function* ($) {
   const { user } = yield* User;
@@ -69,7 +70,7 @@ export const collectFunds = Effect.gen(function* ($) {
     .addSigner(addr)
     .completeProgram();
   return signBuilder;
-}).pipe(Effect.flatMap(handleSignSubmit), withLogRetry);
+}).pipe(Effect.flatMap(handleSignSubmit), withLogRetry, Effect.orDie);
 
 export const depositFundsLockRefScript = Effect.gen(function* () {
   const { user } = yield* User;
@@ -97,7 +98,7 @@ export const depositFundsLockRefScript = Effect.gen(function* () {
     )
     .completeProgram();
   return signBuilder;
-}).pipe(Effect.flatMap(handleSignSubmit), withLogRetry);
+}).pipe(Effect.flatMap(handleSignSubmit), withLogRetry, Effect.orDie);
 
 export const collectFundsReadFrom = Effect.gen(function* ($) {
   const { user } = yield* User;
@@ -130,9 +131,9 @@ export const collectFundsReadFrom = Effect.gen(function* ($) {
   const redeemer = Data.to(new Constr(0, [fromText("Hello, World!")]));
   const signBuilder = yield* user
     .newTx()
-    .collectFrom(utxos, redeemer)
-    .readFrom(readUtxo)
+    .collectFrom([utxos[0]], redeemer)
+    .readFrom([readUtxo[0]])
     .addSigner(addr)
     .completeProgram();
   return signBuilder;
-}).pipe(Effect.flatMap(handleSignSubmit), withLogRetry);
+}).pipe(Effect.flatMap(handleSignSubmit), withLogRetry, Effect.orDie);

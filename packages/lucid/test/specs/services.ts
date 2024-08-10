@@ -9,27 +9,70 @@ import {
   SpendingValidator,
   validatorToAddress,
   validatorToRewardAddress,
+  Network,
+  Koios,
 } from "../../src/index.js";
 import scripts from "./contracts/plutus.json";
 
-const makeUser = Effect.gen(function* ($) {
-  const [apiURL, apiKey, seed] = yield* Config.all([
-    Config.string("VITE_API_URL"),
-    Config.string("VITE_BLOCKFROST_KEY"),
-    Config.string("VITE_SEED"),
+export const NETWORK: Network = "Preprod";
+
+const preprod = Effect.gen(function* ($) {
+  const config = yield* Config.all([
+    Config.string("VITE_BLOCKFROST_API_URL_PREPROD"),
+    Config.string("VITE_BLOCKFROST_KEY_PREPROD"),
+    Config.string("VITE_WALLET_SEED"),
   ]);
-  const user = yield* Effect.tryPromise(
-    () =>
-      // Lucid(new Kupmios("http://localhost:1442", "http://localhost:1337"), "Preview")
-      Lucid(new Blockfrost(apiURL, apiKey), "Preprod"),
-    // Lucid(new Koios("https://preprod.koios.rest/api/v1"), "Preprod")
+  return {
+    BLOCKFROST_API_URL: config[0],
+    BLOCKFROST_KEY: config[1],
+    WALLET_SEED: config[2],
+    NETWORK: "Preprod" as Network,
+  };
+}).pipe(Effect.orDie);
+
+const preview = Effect.gen(function* ($) {
+  const config = yield* Config.all([
+    Config.string("VITE_BLOCKFROST_API_URL_PREVIEW"),
+    Config.string("VITE_BLOCKFROST_KEY_PREVIEW"),
+    Config.string("VITE_WALLET_SEED"),
+  ]);
+  return {
+    BLOCKFROST_API_URL: config[0],
+    BLOCKFROST_KEY: config[1],
+    WALLET_SEED: config[2],
+    NETWORK: "Preview" as Network,
+  };
+}).pipe(Effect.orDie);
+
+export class NetworkConfig extends Context.Tag("NetworkConfig")<
+  NetworkConfig,
+  {
+    BLOCKFROST_API_URL: string;
+    BLOCKFROST_KEY: string;
+    WALLET_SEED: string;
+    NETWORK: Network;
+  }
+>() {
+  static readonly layerPreprod = Layer.effect(NetworkConfig, preprod);
+  static readonly layerPreview = Layer.effect(NetworkConfig, preview);
+}
+
+const makeUser = Effect.gen(function* ($) {
+  const networkConfig = yield* NetworkConfig;
+  const user = yield* Effect.tryPromise(() =>
+    Lucid(
+      new Blockfrost(
+        networkConfig.BLOCKFROST_API_URL,
+        networkConfig.BLOCKFROST_KEY,
+      ),
+      networkConfig.NETWORK,
+    ),
   );
-  user.selectWallet.fromSeed(seed);
-  console.log(yield* Effect.promise(() => user.wallet().address()));
+  user.selectWallet.fromSeed(networkConfig.WALLET_SEED);
   return {
     user,
   };
-});
+}).pipe(Effect.orDie);
 
 export class User extends Context.Tag("User")<
   User,
@@ -49,13 +92,13 @@ const makeHelloService = Effect.gen(function* () {
     type: "PlutusV2",
     script: applyDoubleCborEncoding(helloCBOR),
   };
-  const contractAddress = validatorToAddress("Preprod", hello);
+  const contractAddress = validatorToAddress(NETWORK, hello);
   return {
     helloCBOR,
     hello,
     contractAddress,
   };
-});
+}).pipe(Effect.orDie);
 
 export class HelloContract extends Context.Tag("HelloContract")<
   HelloContract,
@@ -65,6 +108,7 @@ export class HelloContract extends Context.Tag("HelloContract")<
 }
 
 const makeStakeService = Effect.gen(function* () {
+  const networkConfig = yield* NetworkConfig;
   const stakeCBOR = yield* pipe(
     Effect.fromNullable(
       scripts.validators.find((v) => v.title === "stake.stake"),
@@ -75,15 +119,15 @@ const makeStakeService = Effect.gen(function* () {
     type: "PlutusV2",
     script: applyDoubleCborEncoding(stakeCBOR),
   };
-  const contractAddress = validatorToAddress("Preprod", stake);
-  const rewardAddress = validatorToRewardAddress("Preprod", stake);
+  const contractAddress = validatorToAddress(networkConfig.NETWORK, stake);
+  const rewardAddress = validatorToRewardAddress(networkConfig.NETWORK, stake);
   return {
     stakeCBOR,
     stake,
     contractAddress,
     rewardAddress,
   };
-});
+}).pipe(Effect.orDie);
 
 export class StakeContract extends Context.Tag("StakeContract")<
   StakeContract,
@@ -93,6 +137,7 @@ export class StakeContract extends Context.Tag("StakeContract")<
 }
 
 const makeMintService = Effect.gen(function* () {
+  const networkConfig = yield* NetworkConfig;
   const mintCBOR = yield* pipe(
     Effect.fromNullable(
       scripts.validators.find((v) => v.title === "mint.mint"),
@@ -104,14 +149,14 @@ const makeMintService = Effect.gen(function* () {
     script: applyDoubleCborEncoding(mintCBOR),
   };
   const policyId = mintingPolicyToId(mint);
-  const contractAddress = validatorToAddress("Preprod", mint);
+  const contractAddress = validatorToAddress(networkConfig.NETWORK, mint);
   return {
     mintCBOR,
     mint,
     policyId,
     contractAddress,
   };
-});
+}).pipe(Effect.orDie);
 
 export class MintContract extends Context.Tag("MintContract")<
   MintContract,

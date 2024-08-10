@@ -27,10 +27,7 @@ export const mintAssets =
         if (unit.slice(0, 56) !== policyId) {
           yield* mintError(ERROR_MESSAGE.MULTIPLE_POLICIES);
         }
-        mintAssets.insert(
-          CML.AssetName.from_bytes(fromHex(unit.slice(56))),
-          assets[unit],
-        );
+        mintAssets.insert(CML.AssetName.from_hex(unit.slice(56)), assets[unit]);
       }
       const mintBuilder = CML.SingleMintBuilder.new(mintAssets);
       const policy = yield* pipe(

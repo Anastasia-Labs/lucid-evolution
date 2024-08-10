@@ -1,5 +1,5 @@
 import { Effect, pipe } from "effect";
-import { User } from "./services.js";
+import { NETWORK, User } from "./services.js";
 import { handleSignSubmit, withLogRetry } from "./utils.js";
 
 export const registerStake = Effect.gen(function* ($) {
@@ -16,16 +16,22 @@ export const registerStake = Effect.gen(function* ($) {
 }).pipe(
   Effect.flatMap(handleSignSubmit),
   Effect.catchTag("TxSubmitError", (error) =>
-    error.message.includes("StakeKeyAlreadyRegisteredDELEG")
+    error.message.includes("StakeKeyAlreadyRegisteredDELEG") ||
+    error.message.includes("StakeKeyRegisteredDELEG")
       ? Effect.void
       : Effect.fail(error),
   ),
   withLogRetry,
+  Effect.orDie,
 );
 
 export const delegateTo = Effect.gen(function* ($) {
   const { user } = yield* User;
-  const poolId = "pool1nmfr5j5rnqndprtazre802glpc3h865sy50mxdny65kfgf3e5eh";
+  const poolId =
+    NETWORK == "Preprod"
+      ? "pool1nmfr5j5rnqndprtazre802glpc3h865sy50mxdny65kfgf3e5eh"
+      : "pool1ynfnjspgckgxjf2zeye8s33jz3e3ndk9pcwp0qzaupzvvd8ukwt";
+
   const rewardAddress = yield* pipe(
     Effect.promise(() => user.wallet().rewardAddress()),
     Effect.andThen(Effect.fromNullable),
@@ -35,7 +41,7 @@ export const delegateTo = Effect.gen(function* ($) {
     .delegateTo(rewardAddress, poolId)
     .completeProgram();
   return signBuilder;
-}).pipe(Effect.flatMap(handleSignSubmit), withLogRetry);
+}).pipe(Effect.flatMap(handleSignSubmit), withLogRetry, Effect.orDie);
 
 export const deRegisterStake = Effect.gen(function* ($) {
   const { user } = yield* User;
@@ -49,7 +55,7 @@ export const deRegisterStake = Effect.gen(function* ($) {
     .deRegisterStake(rewardAddress)
     .completeProgram();
   return signBuilder;
-}).pipe(Effect.flatMap(handleSignSubmit), withLogRetry);
+}).pipe(Effect.flatMap(handleSignSubmit), withLogRetry, Effect.orDie);
 
 export const registerDeregisterStake = Effect.gen(function* ($) {
   const { user } = yield* User;
@@ -71,6 +77,7 @@ export const registerDeregisterStake = Effect.gen(function* ($) {
       : Effect.fail(error),
   ),
   withLogRetry,
+  Effect.orDie,
 );
 
 export const withdrawZero = Effect.gen(function* ($) {
@@ -84,4 +91,4 @@ export const withdrawZero = Effect.gen(function* ($) {
     .withdraw(rewardAddress, 0n)
     .completeProgram();
   return signBuilder;
-}).pipe(Effect.flatMap(handleSignSubmit), withLogRetry);
+}).pipe(Effect.flatMap(handleSignSubmit), withLogRetry, Effect.orDie);

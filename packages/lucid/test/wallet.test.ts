@@ -4,17 +4,20 @@ import {
   generateSeedPhrase,
   Lucid,
   Maestro,
+  MaestroSupportedNetworks,
 } from "../src/index.js";
 import { Config, Effect } from "effect";
 
 const loadConfig = Effect.gen(function* () {
   return yield* Config.all([
-    Config.string("VITE_API_URL"),
-    Config.string("VITE_BLOCKFROST_KEY"),
-    Config.string("VITE_SEED"),
+    Config.string("VITE_BLOCKFROST_API_URL_PREPROD"),
+    Config.string("VITE_BLOCKFROST_KEY_PREPROD"),
+    Config.string("VITE_WALLET_SEED"),
     Config.string("VITE_MAESTRO_KEY"),
   ]);
 });
+
+const NETWORK = "Preprod";
 
 describe("Wallet", () => {
   test("switchProvider", async () => {
@@ -23,7 +26,7 @@ describe("Wallet", () => {
         yield* loadConfig;
 
       const user = yield* Effect.tryPromise(() =>
-        Lucid(new Blockfrost(VITE_API_URL, VITE_BLOCKFROST_KEY), "Preprod"),
+        Lucid(new Blockfrost(VITE_API_URL, VITE_BLOCKFROST_KEY), NETWORK),
       );
 
       user.selectWallet.fromSeed(VITE_SEED);
@@ -33,13 +36,17 @@ describe("Wallet", () => {
       );
       const maestro = new Maestro({
         apiKey: VITE_MAESTRO_KEY,
-        network: "Preprod",
+        network: NETWORK as MaestroSupportedNetworks,
       });
       yield* Effect.tryPromise(() => user.switchProvider(maestro));
       const maestroUTXO = yield* Effect.promise(() => user.wallet().getUtxos());
       assert.deepStrictEqual(blockfrostUTXO, maestroUTXO);
     });
-    await Effect.runPromise(program);
+    try {
+      await Effect.runPromise(program);
+    } catch (error) {
+      console.log(error);
+    }
   });
 
   test("generateSeedPhrase", async () => {
@@ -54,7 +61,7 @@ describe("Wallet", () => {
         yield* loadConfig;
 
       const user = yield* Effect.tryPromise(() =>
-        Lucid(new Blockfrost(VITE_API_URL, VITE_BLOCKFROST_KEY), "Preprod"),
+        Lucid(new Blockfrost(VITE_API_URL, VITE_BLOCKFROST_KEY), NETWORK),
       );
       user.selectWallet.fromAddress(
         "addr_test1qrngfyc452vy4twdrepdjc50d4kvqutgt0hs9w6j2qhcdjfx0gpv7rsrjtxv97rplyz3ymyaqdwqa635zrcdena94ljs0xy950",

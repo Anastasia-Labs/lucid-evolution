@@ -1,37 +1,30 @@
 import { CML } from "./core.js";
 import { CostModels, ProtocolParameters } from "@lucid-evolution/core-types";
 
-export function createCostModels(costModels: CostModels): CML.CostModels {
-  const costmdls = CML.CostModels.new();
+type Cost = Record<number, number[] | null>;
 
+export function createCostModels(costModels: CostModels): CML.CostModels {
+  const costmodel: Cost = {
+    0: [],
+    1: [],
+    2: [],
+  };
   // add plutus v1
-  const costmdlV1 = CML.IntList.new();
   for (const cost of Object.values(costModels.PlutusV1)) {
-    const int = CML.Int.from_str(cost.toString());
-    costmdlV1.add(int);
-    int.free();
+    costmodel[0]?.push(cost);
   }
-  costmdls.set_plutus_v1(costmdlV1);
-  costmdlV1.free();
 
   // add plutus v2
-  const costmdlV2 = CML.IntList.new();
   for (const cost of Object.values(costModels.PlutusV2)) {
-    const int = CML.Int.from_str(cost.toString());
-    costmdlV2.add(int);
-    int.free();
+    costmodel[1]?.push(cost);
   }
-  costmdls.set_plutus_v2(costmdlV2);
-  costmdlV2.free();
 
   // add plutus v3
-  // const costmdlV3 = C.IntList.new()
-  // Object.values(costModels.PlutusV3).forEach((cost) => {
-  //   costmdlV3.add(C.Int.new(BigInt(cost)))
-  // });
-  // costmdls.set_plutus_v3(costmdlV3)
+  // for (const cost of Object.values(costModels.PlutusV3)) {
+  //   costmodel[2]?.push(cost);
+  // }
 
-  return costmdls;
+  return CML.CostModels.from_json(JSON.stringify(costmodel));
 }
 
 export const PROTOCOL_PARAMETERS_DEFAULT: ProtocolParameters = {
