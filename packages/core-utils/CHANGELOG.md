@@ -1,5 +1,11 @@
 # @lucid-evolution/core-utils
 
+## 0.1.9
+
+### Patch Changes
+
+- [#195](https://github.com/Anastasia-Labs/lucid-evolution/pull/195) [`e281b5b`](https://github.com/Anastasia-Labs/lucid-evolution/commit/e281b5bfe5da9a02e3cda35668c3a3eb18f20092) Thanks [@solidsnakedev](https://github.com/solidsnakedev)! - add refscript fee to preview
+
 ## 0.1.8
 
 ### Patch Changes

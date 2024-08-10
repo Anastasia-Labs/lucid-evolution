@@ -1,5 +1,12 @@
 # @lucid-evolution/bip39
 
+## 0.2.11
+
+### Patch Changes
+
+- Updated dependencies [[`e281b5b`](https://github.com/Anastasia-Labs/lucid-evolution/commit/e281b5bfe5da9a02e3cda35668c3a3eb18f20092)]:
+  - @lucid-evolution/core-utils@0.1.9
+
 ## 0.2.10
 
 ### Patch Changes
