@@ -188,7 +188,7 @@ export const pay3 = Effect.gen(function* () {
   const policy = mintingPolicyToId(mint);
 
   const collectAssets = {
-      [policy + fromText("BurnableToken2")]: 1n,
+    [policy + fromText("BurnableToken2")]: 1n,
   };
 
   const signBuilder = yield* user

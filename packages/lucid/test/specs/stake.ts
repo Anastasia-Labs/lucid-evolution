@@ -16,7 +16,7 @@ export const registerStake = Effect.gen(function* ($) {
 }).pipe(
   Effect.flatMap(handleSignSubmit),
   Effect.catchTag("TxSubmitError", (error) =>
-    error.message.includes("StakeKeyAlreadyRegisteredDELEG")  ||
+    error.message.includes("StakeKeyAlreadyRegisteredDELEG") ||
     error.message.includes("StakeKeyRegisteredDELEG")
       ? Effect.void
       : Effect.fail(error),
@@ -27,7 +27,10 @@ export const registerStake = Effect.gen(function* ($) {
 
 export const delegateTo = Effect.gen(function* ($) {
   const { user } = yield* User;
-  const poolId = NETWORK == "Preprod" ? "pool1nmfr5j5rnqndprtazre802glpc3h865sy50mxdny65kfgf3e5eh" : "24d3394028c590692542c932784632147319b6c50e1c17805de044c6"
+  const poolId =
+    NETWORK == "Preprod"
+      ? "pool1nmfr5j5rnqndprtazre802glpc3h865sy50mxdny65kfgf3e5eh"
+      : "pool1ynfnjspgckgxjf2zeye8s33jz3e3ndk9pcwp0qzaupzvvd8ukwt";
 
   const rewardAddress = yield* pipe(
     Effect.promise(() => user.wallet().rewardAddress()),
