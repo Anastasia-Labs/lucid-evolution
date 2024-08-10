@@ -14,4 +14,4 @@ export const payWithMetadata = Effect.gen(function* () {
     .attachMetadata(1337, new Uint8Array([1, 2]))
     .completeProgram();
   return signBuilder;
-}).pipe(Effect.flatMap(handleSignSubmit), withLogRetry);
+}).pipe(Effect.flatMap(handleSignSubmit), withLogRetry, Effect.orDie);

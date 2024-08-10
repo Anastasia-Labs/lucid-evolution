@@ -22,6 +22,7 @@ export const registerStake = Effect.gen(function* ($) {
       : Effect.fail(error),
   ),
   withLogRetry,
+  Effect.orDie,
 );
 
 export const delegateTo = Effect.gen(function* ($) {
@@ -37,7 +38,7 @@ export const delegateTo = Effect.gen(function* ($) {
     .delegateTo(rewardAddress, poolId)
     .completeProgram();
   return signBuilder;
-}).pipe(Effect.flatMap(handleSignSubmit), withLogRetry);
+}).pipe(Effect.flatMap(handleSignSubmit), withLogRetry, Effect.orDie);
 
 export const deRegisterStake = Effect.gen(function* ($) {
   const { user } = yield* User;
@@ -51,7 +52,7 @@ export const deRegisterStake = Effect.gen(function* ($) {
     .deRegisterStake(rewardAddress)
     .completeProgram();
   return signBuilder;
-}).pipe(Effect.flatMap(handleSignSubmit), withLogRetry);
+}).pipe(Effect.flatMap(handleSignSubmit), withLogRetry, Effect.orDie);
 
 export const registerDeregisterStake = Effect.gen(function* ($) {
   const { user } = yield* User;
@@ -73,6 +74,7 @@ export const registerDeregisterStake = Effect.gen(function* ($) {
       : Effect.fail(error),
   ),
   withLogRetry,
+  Effect.orDie,
 );
 
 export const withdrawZero = Effect.gen(function* ($) {
@@ -86,4 +88,4 @@ export const withdrawZero = Effect.gen(function* ($) {
     .withdraw(rewardAddress, 0n)
     .completeProgram();
   return signBuilder;
-}).pipe(Effect.flatMap(handleSignSubmit), withLogRetry);
+}).pipe(Effect.flatMap(handleSignSubmit), withLogRetry, Effect.orDie);
