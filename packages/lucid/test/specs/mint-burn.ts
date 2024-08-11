@@ -3,18 +3,20 @@ import {
   Data,
   fromText,
   mintingPolicyToId,
+  Network,
+  networkToId,
   paymentCredentialOf,
   scriptFromNative,
   selectUTxOs,
   unixTimeToSlot,
 } from "../../src/index.js";
 import { Effect } from "effect";
-import { MintContract, NETWORK, User } from "./services.js";
+import { MintContract, NETWORK, NetworkConfig, User } from "./services.js";
 import { handleSignSubmit, handleSubmit, withLogRetry } from "./utils.js";
 
 const maxHexToken =
   "accbfb633f637e3bb1abee40c9539d1effd742cd2716b3b1db9de3aaf3f37794";
-const mkMintinPolicy = (time: number, address: string) => {
+const mkMintinPolicy = (address: string) => {
   return scriptFromNative({
     type: "all",
     scripts: [
@@ -25,13 +27,17 @@ const mkMintinPolicy = (time: number, address: string) => {
     ],
   });
 };
-const mkSlotRangeMintinPolicy = (duration, address: string) => {
+const mkSlotRangeMintinPolicy = (
+  duration: number,
+  address: string,
+  network: Network,
+) => {
   return scriptFromNative({
     type: "all",
     scripts: [
       {
         type: "before",
-        slot: unixTimeToSlot(NETWORK, Date.now() + duration),
+        slot: unixTimeToSlot(network, Date.now() + duration),
       },
       {
         type: "sig",
@@ -43,7 +49,7 @@ const mkSlotRangeMintinPolicy = (duration, address: string) => {
 export const mint = Effect.gen(function* () {
   const { user } = yield* User;
   const addr = yield* Effect.promise(() => user.wallet().address());
-  const nativeMint = mkMintinPolicy(9_000_000, addr);
+  const nativeMint = mkMintinPolicy(addr);
   const nativePolicyId = mintingPolicyToId(nativeMint);
   const plutusMint = yield* MintContract;
   const mintRedeemer = Data.to(new Constr(0, [[]]));
@@ -75,7 +81,7 @@ export const mint = Effect.gen(function* () {
 export const burn = Effect.gen(function* () {
   const { user } = yield* User;
   const addr = yield* Effect.promise(() => user.wallet().address());
-  const nativeMint = mkMintinPolicy(9_000_000, addr);
+  const nativeMint = mkMintinPolicy(addr);
   const nativePolicyId = mintingPolicyToId(nativeMint);
   const plutusMint = yield* MintContract;
   const mintRedeemer = Data.to(new Constr(0, [[]]));
@@ -103,7 +109,7 @@ export const burn = Effect.gen(function* () {
 export const mintburn = Effect.gen(function* () {
   const { user } = yield* User;
   const addr = yield* Effect.promise(() => user.wallet().address());
-  const mint = mkMintinPolicy(9_000_000, addr);
+  const mint = mkMintinPolicy(addr);
   const policy = mintingPolicyToId(mint);
 
   const signBuilder = yield* user
@@ -121,7 +127,7 @@ export const mintburn = Effect.gen(function* () {
 export const mint2 = Effect.gen(function* () {
   const { user } = yield* User;
   const addr = yield* Effect.promise(() => user.wallet().address());
-  const mint = mkMintinPolicy(9_000_000, addr);
+  const mint = mkMintinPolicy(addr);
   const policy = mintingPolicyToId(mint);
 
   const signBuilder = yield* user
@@ -138,7 +144,7 @@ export const mint2 = Effect.gen(function* () {
 export const burn2 = Effect.gen(function* () {
   const { user } = yield* User;
   const addr = yield* Effect.promise(() => user.wallet().address());
-  const mint = mkMintinPolicy(9_000_000, addr);
+  const mint = mkMintinPolicy(addr);
   const policy = mintingPolicyToId(mint);
 
   const signBuilder = yield* user
@@ -155,7 +161,7 @@ export const burn2 = Effect.gen(function* () {
 export const pay = Effect.gen(function* () {
   const { user } = yield* User;
   const addr = yield* Effect.promise(() => user.wallet().address());
-  const mint = mkMintinPolicy(9_000_000, addr);
+  const mint = mkMintinPolicy(addr);
 
   const signBuilder = yield* user
     .newTx()
@@ -168,7 +174,7 @@ export const pay = Effect.gen(function* () {
 export const pay2 = Effect.gen(function* () {
   const { user } = yield* User;
   const addr = yield* Effect.promise(() => user.wallet().address());
-  const mint = mkMintinPolicy(9_000_000, addr);
+  const mint = mkMintinPolicy(addr);
   const policy = mintingPolicyToId(mint);
 
   const signBuilder = yield* user
@@ -184,7 +190,7 @@ export const pay3 = Effect.gen(function* () {
   const { user } = yield* User;
   const utxos = yield* Effect.tryPromise(() => user.wallet().getUtxos());
   const addr = yield* Effect.promise(() => user.wallet().address());
-  const mint = mkMintinPolicy(9_000_000, addr);
+  const mint = mkMintinPolicy(addr);
   const policy = mintingPolicyToId(mint);
 
   const collectAssets = {
@@ -202,7 +208,7 @@ export const pay3 = Effect.gen(function* () {
 export const payWithData = Effect.gen(function* () {
   const { user } = yield* User;
   const addr = yield* Effect.promise(() => user.wallet().address());
-  const mint = mkMintinPolicy(9_000_000, addr);
+  const mint = mkMintinPolicy(addr);
   const policy = mintingPolicyToId(mint);
   const datum = Data.to(123n);
 
@@ -225,7 +231,7 @@ export const payWithoutVkeyWitness = Effect.gen(function* () {
   const { user } = yield* User;
   const addr = yield* Effect.promise(() => user.wallet().address());
   const utxo = yield* Effect.tryPromise(() => user.wallet().getUtxos());
-  const mint = mkMintinPolicy(9_000_000, addr);
+  const mint = mkMintinPolicy(addr);
   const policy = mintingPolicyToId(mint);
   const datum = Data.to(123n);
 
@@ -246,8 +252,9 @@ export const payWithoutVkeyWitness = Effect.gen(function* () {
 
 export const mintInSlotRange = Effect.gen(function* () {
   const { user } = yield* User;
+  const networkConfig = yield* NetworkConfig;
   const addr = yield* Effect.promise(() => user.wallet().address());
-  const mint = mkSlotRangeMintinPolicy(60_000, addr);
+  const mint = mkSlotRangeMintinPolicy(60_000, addr, networkConfig.NETWORK);
   const policy = mintingPolicyToId(mint);
   const datum = Data.to(123n);
 

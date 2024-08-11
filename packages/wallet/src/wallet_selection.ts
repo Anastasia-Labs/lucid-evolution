@@ -299,9 +299,21 @@ export const makeWalletFromAddress = (
     overrideUTxOs: (utxos: UTxO[]) => (config.overriddenUTxOs = utxos),
     address: async (): Promise<Address> => address,
     rewardAddress: async (): Promise<RewardAddress | null> => rewardAddress,
-    getUtxos: async (): Promise<UTxO[]> => config.overriddenUTxOs,
-    getUtxosCore: async (): Promise<CML.TransactionUnspentOutput[]> =>
-      config.overriddenUTxOs.map(utxoToCore),
+    getUtxos: async (): Promise<UTxO[]> =>
+      config.overriddenUTxOs.length > 0
+        ? config.overriddenUTxOs
+        : provider.getUtxos(paymentCredentialOf(address)),
+    getUtxosCore: async (): Promise<CML.TransactionUnspentOutput[]> => {
+      const utxos =
+        config.overriddenUTxOs.length > 0
+          ? config.overriddenUTxOs
+          : await provider.getUtxos(paymentCredentialOf(address));
+      const coreUtxos: CML.TransactionUnspentOutput[] = [];
+      for (const utxo of utxos) {
+        coreUtxos.push(utxoToCore(utxo));
+      }
+      return coreUtxos;
+    },
     getDelegation: async (): Promise<Delegation> =>
       rewardAddress
         ? provider.getDelegation(rewardAddress)
