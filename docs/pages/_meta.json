@@ -27,9 +27,9 @@
     "title": "General Information",
     "type": "menu",
     "items": {
-      "acknowledgements": {
+      "acknowledgement": {
         "title": "Acknowledgements",
-        "href": "/general-information/acknowledgements"
+        "href": "/general-information/acknowledgement"
       },
       "license": {
         "title": "License",
