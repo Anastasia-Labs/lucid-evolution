@@ -35,7 +35,7 @@ const makeEmulatorUser = Effect.gen(function* ($) {
   };
 });
 
-export class EmulatorUser extends Context.Tag("User")<
+export class EmulatorUser extends Context.Tag("EmulatorUser")<
   EmulatorUser,
   Effect.Effect.Success<typeof makeEmulatorUser>
 >() {
@@ -69,8 +69,8 @@ export const mintInSlotRange = Effect.gen(function* () {
   return signBuilder;
 }).pipe(Effect.flatMap(handleSignSubmitWithoutValidation));
 
-export const registerStake = Effect.gen(function* ($) {
-  const { user } = yield* EmulatorUser;
+export const registerStake = Effect.gen(function* () {
+  const { user, emulator } = yield* EmulatorUser;
   const rewardAddress = yield* pipe(
     Effect.promise(() => user.wallet().rewardAddress()),
     Effect.andThen(Effect.fromNullable),
@@ -81,13 +81,15 @@ export const registerStake = Effect.gen(function* ($) {
     .completeProgram();
   return signBuilder;
 }).pipe(
-  Effect.flatMap(handleSignSubmit),
+  Effect.flatMap(handleSignSubmitWithoutValidation),
   Effect.catchTag("TxSubmitError", (error) =>
     error.message.includes("StakeKeyAlreadyRegisteredDELEG")
       ? Effect.void
       : Effect.fail(error),
   ),
   withLogRetry,
+  Effect.map(() => emulator.awaitBlock()),
+  Effect.orDie,
 );
 
 export const delegateTo = Effect.gen(function* ($) {
@@ -101,7 +103,7 @@ export const delegateTo = Effect.gen(function* ($) {
     .delegateTo(rewardAddress, EMULATOR_POOL_ID)
     .completeProgram();
   return signBuilder;
-}).pipe(Effect.flatMap(handleSignSubmit), withLogRetry);
+}).pipe(Effect.flatMap(handleSignSubmitWithoutValidation), withLogRetry);
 
 export const deRegisterStake = Effect.gen(function* ($) {
   const { user } = yield* EmulatorUser;
@@ -115,7 +117,7 @@ export const deRegisterStake = Effect.gen(function* ($) {
     .deRegisterStake(rewardAddress)
     .completeProgram();
   return signBuilder;
-}).pipe(Effect.flatMap(handleSignSubmit), withLogRetry);
+}).pipe(Effect.flatMap(handleSignSubmitWithoutValidation), withLogRetry);
 
 export const registerDeregisterStake = Effect.gen(function* ($) {
   const { user } = yield* EmulatorUser;
@@ -151,7 +153,7 @@ export const withdrawZero = (amount) =>
       .withdraw(rewardAddress, amount)
       .completeProgram();
     return signBuilder;
-  }).pipe(Effect.flatMap(handleSignSubmit), withLogRetry);
+  }).pipe(Effect.flatMap(handleSignSubmitWithoutValidation), withLogRetry);
 
 export const evaluateAContract = Effect.gen(function* ($) {
   const { user } = yield* EmulatorUser;
@@ -169,4 +171,4 @@ export const evaluateAContract = Effect.gen(function* ($) {
     )
     .completeProgram();
   return signBuilder;
-}).pipe(Effect.flatMap(handleSignSubmit), withLogRetry);
+}).pipe(Effect.flatMap(handleSignSubmitWithoutValidation), withLogRetry);

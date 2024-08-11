@@ -1,5 +1,5 @@
 import { Effect, pipe } from "effect";
-import { NETWORK, User } from "./services.js";
+import { NetworkConfig, User } from "./services.js";
 import { handleSignSubmit, withLogRetry } from "./utils.js";
 
 export const registerStake = Effect.gen(function* ($) {
@@ -27,8 +27,9 @@ export const registerStake = Effect.gen(function* ($) {
 
 export const delegateTo = Effect.gen(function* ($) {
   const { user } = yield* User;
+  const networkConfig = yield* NetworkConfig;
   const poolId =
-    NETWORK == "Preprod"
+    networkConfig.NETWORK == "Preprod"
       ? "pool1nmfr5j5rnqndprtazre802glpc3h865sy50mxdny65kfgf3e5eh"
       : "pool1ynfnjspgckgxjf2zeye8s33jz3e3ndk9pcwp0qzaupzvvd8ukwt";
 
@@ -72,7 +73,8 @@ export const registerDeregisterStake = Effect.gen(function* ($) {
 }).pipe(
   Effect.flatMap(handleSignSubmit),
   Effect.catchTag("TxSubmitError", (error) =>
-    error.message.includes("StakeKeyAlreadyRegisteredDELEG")
+    error.message.includes("StakeKeyAlreadyRegisteredDELEG") ||
+    error.message.includes("StakeKeyRegisteredDELEG")
       ? Effect.void
       : Effect.fail(error),
   ),

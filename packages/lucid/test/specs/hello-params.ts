@@ -1,5 +1,5 @@
 import { Effect, pipe } from "effect";
-import { NETWORK, User } from "../specs/services.js";
+import { NetworkConfig, User } from "../specs/services.js";
 import {
   applyDoubleCborEncoding,
   applyParamsToScript,
@@ -20,6 +20,7 @@ const DatumType = DatumSchema as unknown as DatumType;
 
 export const depositFunds = Effect.gen(function* () {
   const { user } = yield* User;
+  const networkConfig = yield* NetworkConfig;
   const publicKeyHash = getAddressDetails(
     yield* Effect.promise(() => user.wallet().address()),
   ).paymentCredential?.hash;
@@ -41,7 +42,7 @@ export const depositFunds = Effect.gen(function* () {
     script: applyDoubleCborEncoding(applied),
   };
 
-  const contractAddress = validatorToAddress(NETWORK, hello);
+  const contractAddress = validatorToAddress(networkConfig.NETWORK, hello);
 
   const signBuilder = yield* user
     .newTx()
@@ -59,6 +60,7 @@ export const depositFunds = Effect.gen(function* () {
 
 export const collectFunds = Effect.gen(function* ($) {
   const { user } = yield* User;
+  const networkConfig = yield* NetworkConfig;
   const helloCBOR = yield* pipe(
     Effect.fromNullable(
       scripts.validators.find((v) => v.title === "hello_world_params.spend"),
@@ -76,7 +78,7 @@ export const collectFunds = Effect.gen(function* ($) {
     type: "PlutusV2",
     script: applyDoubleCborEncoding(applied),
   };
-  const contractAddress = validatorToAddress(NETWORK, hello);
+  const contractAddress = validatorToAddress(networkConfig.NETWORK, hello);
   const allUtxos = yield* Effect.tryPromise(() =>
     user.utxosAt(contractAddress),
   );

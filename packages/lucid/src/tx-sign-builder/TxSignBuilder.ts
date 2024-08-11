@@ -117,11 +117,9 @@ export const makeTxSignBuilder = (
       config.programs.push(program);
       return txSignBuilder;
     },
-    toCBOR: () => config.txComplete.body().to_cbor_hex(),
+    toCBOR: () => config.txComplete.to_cbor_hex(),
     toJSON: () =>
-      S.decodeUnknownSync(S.parseJson(S.Object))(
-        config.txComplete.body().to_json(),
-      ),
+      S.decodeUnknownSync(S.parseJson(S.Object))(config.txComplete.to_json()),
     toHash: () => CML.hash_transaction(config.txComplete.body()).to_hex(),
     complete: () =>
       makeReturn(CompleteTxSigner.completeTxSigner(config)).unsafeRun(),
