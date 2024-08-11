@@ -1,5 +1,15 @@
 # @lucid-evolution/lucid
 
+## 0.3.4
+
+### Patch Changes
+
+- [#200](https://github.com/Anastasia-Labs/lucid-evolution/pull/200) [`b4d379c`](https://github.com/Anastasia-Labs/lucid-evolution/commit/b4d379c3429c85468c5137b0d828da0b16fe331f) Thanks [@solidsnakedev](https://github.com/solidsnakedev)! - fix toCBOR now return the transaction instead of tx body, fix wallet from address, cleanup tests
+
+- Updated dependencies [[`b4d379c`](https://github.com/Anastasia-Labs/lucid-evolution/commit/b4d379c3429c85468c5137b0d828da0b16fe331f)]:
+  - @lucid-evolution/wallet@0.1.32
+  - @lucid-evolution/provider@0.1.37
+
 ## 0.3.3
 
 ### Patch Changes
