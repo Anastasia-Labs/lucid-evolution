@@ -25,9 +25,7 @@ export default {
   },
 
   search: {
-    loading: "Loading...",
-    error: "An error occurred while fetching search results",
-    placeholder: "Search the Evolution...",
+    placeholder: "🔎 Search the Evolution library",
   },
 
   toc: {
@@ -61,7 +59,7 @@ export default {
   },
 
   editLink: {
-    component: null,
+    link: null,
   },
   
   footer: {
