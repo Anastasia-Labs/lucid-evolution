@@ -29,7 +29,7 @@ export default {
   },
 
   toc: {
-    backToTop: "Back to top",
+    backToTop: true,
     
   },
 
