@@ -30,7 +30,6 @@ export default {
 
   toc: {
     backToTop: true,
-    
   },
 
   banner: {
@@ -55,13 +54,13 @@ export default {
   },
 
   feedback: {
-    content: null
+    content: null,
   },
 
   editLink: {
-    link: null,
+    component: null,
   },
-  
+
   footer: {
     text: (
       <span>
