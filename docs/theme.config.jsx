@@ -1,8 +1,8 @@
-import Image from 'next/image'
+import Image from "next/image";
 
 export default {
   project: {
-    link: 'https://github.com/Anastasia-Labs/lucid-evolution'
+    link: "https://github.com/Anastasia-Labs/lucid-evolution",
   },
   primaryHue: 0,
   primarySaturation: 90,
@@ -13,24 +13,66 @@ export default {
         height="200"
         width="200"
         style={{ marginRight: "1em" }}
-        alt=''
+        alt=""
       />
     </>
   ),
+
+  sidebar: {
+    defaultMenuCollapseLevel: 1,
+    toggleButton: true,
+    autoCollapse: true,
+  },
+
+  search: {
+    loading: "Loading...",
+    error: "An error occurred while fetching search results",
+    placeholder: "Search the Evolution...",
+  },
+
+  toc: {
+    backToTop: "Back to top",
+    
+  },
+
   banner: {
-    key: '1.0-release',
+    key: "latest-release",
     text: (
-      <a href="https://github.com/Anastasia-Labs/lucid-evolution/releases" target="_blank">
+      <a
+        href="https://github.com/Anastasia-Labs/lucid-evolution/releases"
+        target="_blank"
+      >
         🎉 Discover our latest updates for Lucid Evolution! Learn more →
       </a>
-    )
+    ),
+  },
+
+  chat: {
+    link: "https://discord.gg/gRt4ppqh",
+  },
+
+  navigation: {
+    prev: true,
+    next: true,
   },
 
   feedback: {
-    content: null // This removes the feedback link
+    content: null
   },
+
   editLink: {
-    component: null // This removes the "Edit this page" link
+    component: null,
   },
-  // ... other theme options
-}
+  
+  footer: {
+    text: (
+      <span>
+        MIT {new Date().getFullYear()} ©{" "}
+        <a href="https://anastasialabs.com" target="_blank">
+          Anastasia Labs
+        </a>
+        .
+      </span>
+    ),
+  },
+};
