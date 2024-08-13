@@ -1,5 +1,11 @@
 # @lucid-evolution/core-utils
 
+## 0.1.10
+
+### Patch Changes
+
+- [#210](https://github.com/Anastasia-Labs/lucid-evolution/pull/210) [`bf2341f`](https://github.com/Anastasia-Labs/lucid-evolution/commit/bf2341f5a5d541fe2ca468fa512e009ab32a1346) Thanks [@solidsnakedev](https://github.com/solidsnakedev)! - use buffer browser instead of nodejs buffer
+
 ## 0.1.9
 
 ### Patch Changes
