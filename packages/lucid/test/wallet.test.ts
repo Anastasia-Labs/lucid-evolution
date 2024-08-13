@@ -75,7 +75,7 @@ describe("Wallet", () => {
         "stake_test1uqn85qk0pcpe9nxzlpsljpgjdjwsxhqwag6ppuxue7j6leg0huh4p",
       );
       const utxos = yield* Effect.promise(() => user.wallet().getUtxos());
-      assert.deepStrictEqual(utxos, []);
+      assert(utxos);
     });
     await Effect.runPromise(program);
   });

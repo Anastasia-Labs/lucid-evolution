@@ -9,7 +9,7 @@ import {
   UTxO,
 } from "@lucid-evolution/core-types";
 import { CML } from "./core.js";
-import { mnemonicToEntropy } from "@lucid-evolution/bip39";
+import { mnemonicToEntropy } from "bip39";
 
 type FromSeed = {
   address: Address;

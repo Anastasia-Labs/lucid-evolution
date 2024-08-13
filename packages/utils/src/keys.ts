@@ -1,5 +1,5 @@
 import { PrivateKey, PublicKey } from "@lucid-evolution/core-types";
-import { generateMnemonic } from "@lucid-evolution/bip39";
+import { generateMnemonic } from "bip39";
 import { CML } from "./core.js";
 
 export function generatePrivateKey(): PrivateKey {

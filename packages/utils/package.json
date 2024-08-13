@@ -37,12 +37,12 @@
     "@effect/schema": "^0.68.16",
     "@emurgo/cardano-serialization-lib-browser": "^11.5.0",
     "@emurgo/cardano-serialization-lib-nodejs": "^11.5.0",
-    "@lucid-evolution/bip39": "workspace:*",
     "@lucid-evolution/core-types": "workspace:*",
     "@lucid-evolution/core-utils": "workspace:*",
     "@lucid-evolution/crc8": "workspace:*",
     "@lucid-evolution/plutus": "workspace:*",
     "@lucid-evolution/uplc": "workspace:*",
+    "bip39": "^3.1.0",
     "cborg": "^4.2.0",
     "effect": "^3.1.2"
   },
