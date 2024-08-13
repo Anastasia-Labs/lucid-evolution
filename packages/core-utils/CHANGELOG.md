@@ -1,5 +1,11 @@
 # @lucid-evolution/core-utils
 
+## 0.1.11
+
+### Patch Changes
+
+- [#212](https://github.com/Anastasia-Labs/lucid-evolution/pull/212) [`f99d031`](https://github.com/Anastasia-Labs/lucid-evolution/commit/f99d031bd6ccbeffddd01e3ebf869a04978ba4e6) Thanks [@solidsnakedev](https://github.com/solidsnakedev)! - use native buffer
+
 ## 0.1.10
 
 ### Patch Changes
