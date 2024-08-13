@@ -10,6 +10,9 @@
   "publishConfig": {
     "access": "public"
   },
+  "sideEffects": [
+    "./uplc_tx.js"
+  ],
   "scripts": {
     "build-local": "rm -rf dist && cd rust ; wasm-pack build --target bundler --out-dir ../src/browser && wasm-pack build --target nodejs --out-dir ../src/node && pnpm clean-garbage",
     "build": "cp -r src dist",
