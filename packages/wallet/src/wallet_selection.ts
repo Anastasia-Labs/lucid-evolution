@@ -19,7 +19,6 @@ import {
   coreToUtxo,
   credentialToRewardAddress,
   getAddressDetails,
-  paymentCredentialOf,
   utxoToCore,
 } from "@lucid-evolution/utils";
 import { CML } from "./core.js";
@@ -78,7 +77,7 @@ export const makeWalletFromSeed = (
       const utxos =
         config.overriddenUTxOs.length > 0
           ? config.overriddenUTxOs
-          : await provider.getUtxos(paymentCredentialOf(address));
+          : await provider.getUtxos(address);
       const coreUtxos: CML.TransactionUnspentOutput[] = [];
       for (const utxo of utxos) {
         coreUtxos.push(utxoToCore(utxo));
@@ -164,12 +163,12 @@ export const makeWalletFromPrivateKey = (
     getUtxos: async (): Promise<UTxO[]> =>
       config.overriddenUTxOs.length > 0
         ? config.overriddenUTxOs
-        : provider.getUtxos(paymentCredentialOf(address)),
+        : provider.getUtxos(address),
     getUtxosCore: async (): Promise<CML.TransactionUnspentOutput[]> => {
       const utxos =
         config.overriddenUTxOs.length > 0
           ? config.overriddenUTxOs
-          : await provider.getUtxos(paymentCredentialOf(address));
+          : await provider.getUtxos(address);
       const coreUtxos: CML.TransactionUnspentOutput[] = [];
       for (const utxo of utxos) {
         coreUtxos.push(utxoToCore(utxo));
@@ -302,12 +301,12 @@ export const makeWalletFromAddress = (
     getUtxos: async (): Promise<UTxO[]> =>
       config.overriddenUTxOs.length > 0
         ? config.overriddenUTxOs
-        : provider.getUtxos(paymentCredentialOf(address)),
+        : provider.getUtxos(address),
     getUtxosCore: async (): Promise<CML.TransactionUnspentOutput[]> => {
       const utxos =
         config.overriddenUTxOs.length > 0
           ? config.overriddenUTxOs
-          : await provider.getUtxos(paymentCredentialOf(address));
+          : await provider.getUtxos(address);
       const coreUtxos: CML.TransactionUnspentOutput[] = [];
       for (const utxo of utxos) {
         coreUtxos.push(utxoToCore(utxo));
