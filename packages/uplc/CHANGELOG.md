@@ -1,5 +1,11 @@
 # @lucid-evolution/uplc
 
+## 0.2.11
+
+### Patch Changes
+
+- [#216](https://github.com/Anastasia-Labs/lucid-evolution/pull/216) [`c96eda2`](https://github.com/Anastasia-Labs/lucid-evolution/commit/c96eda240092a640f0884a8e3071fc5a31b89fcf) Thanks [@solidsnakedev](https://github.com/solidsnakedev)! - remove sideEffects from package.json
+
 ## 0.2.10
 
 ### Patch Changes
