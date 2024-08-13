@@ -1,5 +1,16 @@
 # @lucid-evolution/utils
 
+## 0.1.29
+
+### Patch Changes
+
+- [#208](https://github.com/Anastasia-Labs/lucid-evolution/pull/208) [`10d9f80`](https://github.com/Anastasia-Labs/lucid-evolution/commit/10d9f80695928675061fc15b9b18b1c93fb9bb4f) Thanks [@solidsnakedev](https://github.com/solidsnakedev)! - deprecate @lucid-evolution/bip39, use bip39 package instead (browser/node compatible)
+
+- Updated dependencies [[`bf2341f`](https://github.com/Anastasia-Labs/lucid-evolution/commit/bf2341f5a5d541fe2ca468fa512e009ab32a1346), [`dc8dc0c`](https://github.com/Anastasia-Labs/lucid-evolution/commit/dc8dc0c76cf2f9666f7e4c6a2452911f4ea6b007)]:
+  - @lucid-evolution/core-utils@0.1.10
+  - @lucid-evolution/uplc@0.2.10
+  - @lucid-evolution/plutus@0.1.16
+
 ## 0.1.28
 
 ### Patch Changes

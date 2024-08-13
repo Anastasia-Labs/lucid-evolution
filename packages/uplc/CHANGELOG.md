@@ -1,5 +1,11 @@
 # @lucid-evolution/uplc
 
+## 0.2.10
+
+### Patch Changes
+
+- [#211](https://github.com/Anastasia-Labs/lucid-evolution/pull/211) [`dc8dc0c`](https://github.com/Anastasia-Labs/lucid-evolution/commit/dc8dc0c76cf2f9666f7e4c6a2452911f4ea6b007) Thanks [@solidsnakedev](https://github.com/solidsnakedev)! - make uplc browser bundler compatible
+
 ## 0.2.9
 
 ### Patch Changes
