@@ -1,5 +1,11 @@
 # @lucid-evolution/core-types
 
+## 0.1.13
+
+### Patch Changes
+
+- [#190](https://github.com/Anastasia-Labs/lucid-evolution/pull/190) [`aec1ccd`](https://github.com/Anastasia-Labs/lucid-evolution/commit/aec1ccd7659e17c07b677f1649977590b830c6bc) Thanks [@hadelive](https://github.com/hadelive)! - add evaludateTx function
+
 ## 0.1.12
 
 ### Patch Changes

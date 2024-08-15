@@ -1,5 +1,17 @@
 # @lucid-evolution/provider
 
+## 0.1.41
+
+### Patch Changes
+
+- [#190](https://github.com/Anastasia-Labs/lucid-evolution/pull/190) [`aec1ccd`](https://github.com/Anastasia-Labs/lucid-evolution/commit/aec1ccd7659e17c07b677f1649977590b830c6bc) Thanks [@hadelive](https://github.com/hadelive)! - add evaludateTx function
+
+- Updated dependencies [[`aec1ccd`](https://github.com/Anastasia-Labs/lucid-evolution/commit/aec1ccd7659e17c07b677f1649977590b830c6bc), [`3fa5522`](https://github.com/Anastasia-Labs/lucid-evolution/commit/3fa55226d7dc182a1515cb034744a3b4343c3c33), [`18dea56`](https://github.com/Anastasia-Labs/lucid-evolution/commit/18dea561759ad569e02af252a89c774e53b74dd7)]:
+  - @lucid-evolution/core-types@0.1.13
+  - @lucid-evolution/wallet@0.1.36
+  - @lucid-evolution/core-utils@0.1.12
+  - @lucid-evolution/utils@0.1.32
+
 ## 0.1.40
 
 ### Patch Changes
