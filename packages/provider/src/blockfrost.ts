@@ -7,6 +7,7 @@ import {
   Datum,
   DatumHash,
   Delegation,
+  EvalRedeemer,
   OutRef,
   ProtocolParameters,
   Provider,
@@ -279,6 +280,64 @@ export class Blockfrost implements Provider {
       })),
     )) as UTxO[];
   }
+
+  async evaluateTx(
+    tx: Transaction,
+    additionalUTxOs?: UTxO[], // for tx chaining
+  ): Promise<EvalRedeemer[]> {
+    const additionalUTxOSet = (additionalUTxOs || []).map((utxo) => [
+      { txId: utxo.txHash, index: utxo.outputIndex },
+      {
+        address: utxo.address,
+        value: { coins: utxo.assets.lovelace, assets: utxo.assets.restAssets },
+        datum_hash: utxo.datumHash,
+        datum: utxo.datum,
+        script: utxo.scriptRef,
+      },
+    ]);
+    const payload = {
+      cbor: tx,
+      additionalUTxOSet,
+    };
+
+    const res = await fetch(`${this.url}/utils/txs/evaluate/utxos`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        project_id: this.projectId,
+        lucid,
+      },
+      body: JSON.stringify(payload, (_, value) =>
+        typeof value === "bigint" ? value.toString() : value,
+      ),
+    }).then((res) => res.json());
+    if (!res || res.error) {
+      const message =
+        res?.status_code === 400
+          ? res.message
+          : `Could not evaluate the transaction: ${JSON.stringify(res)}`;
+      throw new Error(message);
+    }
+    const blockfrostRedeemer = res as BlockfrostRedeemer;
+    if (!("EvaluationResult" in blockfrostRedeemer.result)) {
+      throw new Error(
+        `EvaluateTransaction fails: ${JSON.stringify(blockfrostRedeemer.result)}`,
+      );
+    }
+    const evalRedeemers: EvalRedeemer[] = [];
+    Object.entries(blockfrostRedeemer.result.EvaluationResult).forEach(
+      ([redeemerPointer, data]) => {
+        const [pTag, pIndex] = redeemerPointer.split(":");
+        evalRedeemers.push({
+          redeemer_tag: pTag,
+          redeemer_index: Number(pIndex),
+          ex_units: { mem: Number(data.memory), steps: Number(data.steps) },
+        });
+      },
+    );
+
+    return evalRedeemers;
+  }
 }
 
 /**
@@ -345,6 +404,21 @@ type BlockfrostUtxoResult = Array<{
 type BlockfrostUtxoError = {
   status_code: number;
   error: unknown;
+};
+
+type BlockfrostRedeemer = {
+  result:
+    | {
+        EvaluationResult: {
+          [key: string]: {
+            memory: number;
+            steps: number;
+          };
+        };
+      }
+    | {
+        CannotCreateEvaluationContext: any;
+      };
 };
 
 const lucid = packageJson.version; // Lucid version

@@ -6,6 +6,7 @@ import {
   Datum,
   DatumHash,
   Delegation,
+  EvalRedeemer,
   Lovelace,
   OutputData,
   OutRef,
@@ -27,6 +28,7 @@ import {
 import { coreToUtxo, getAddressDetails } from "@lucid-evolution/utils";
 import { fromHex } from "@lucid-evolution/core-utils";
 import { walletFromSeed } from "@lucid-evolution/wallet";
+import { RedeemerTag } from "@anastasia-labs/cardano-multiplatform-lib-nodejs";
 
 /** Concatentation of txHash + outputIndex */
 type FlatOutRef = string;
@@ -843,6 +845,55 @@ export class Emulator implements Provider {
     return Promise.resolve(txHash);
   }
 
+  async evaluateTx(
+    tx: Transaction,
+    additionalUTxOs?: UTxO[],
+  ): Promise<EvalRedeemer[]> {
+    const desTx = CML.Transaction.from_cbor_hex(tx);
+    const redeemers = desTx.witness_set().redeemers();
+    if (!redeemers) {
+      return [];
+    }
+    let evalRedeemers: EvalRedeemer[] = [];
+    const arrLegacyRedeemer = redeemers.as_arr_legacy_redeemer();
+    if (arrLegacyRedeemer) {
+      for (let i = 0; i < arrLegacyRedeemer.len(); i++) {
+        const legacyRedeemer = arrLegacyRedeemer.get(i);
+        evalRedeemers.push({
+          ex_units: {
+            mem: Number(legacyRedeemer.ex_units().mem()),
+            steps: Number(legacyRedeemer.ex_units().steps()),
+          },
+          redeemer_index: Number(legacyRedeemer.index()),
+          redeemer_tag: redeemerTagToString(legacyRedeemer.tag()),
+        });
+      }
+      return evalRedeemers;
+    }
+    const mapRedeemerKeyToRedeemerVal =
+      redeemers.as_map_redeemer_key_to_redeemer_val();
+    if (mapRedeemerKeyToRedeemerVal) {
+      const keys = mapRedeemerKeyToRedeemerVal.keys();
+
+      for (let i = 0; i < keys.len(); i++) {
+        const key = keys.get(i);
+        const redeemerVal = mapRedeemerKeyToRedeemerVal.get(key);
+        if (redeemerVal) {
+          evalRedeemers.push({
+            ex_units: {
+              mem: Number(redeemerVal.ex_units().mem()),
+              steps: Number(redeemerVal.ex_units().steps()),
+            },
+            redeemer_index: Number(key.index),
+            redeemer_tag: redeemerTagToString(key.tag()),
+          });
+        }
+      }
+      return evalRedeemers;
+    }
+    return evalRedeemers;
+  }
+
   log() {
     function getRandomColor(unit: Unit) {
       const seed = unit === "lovelace" ? "1" : unit;
@@ -914,5 +965,24 @@ export class Emulator implements Provider {
       }
       console.log(`\n${"\u2581".repeat(60)}\n`);
     }
+  }
+}
+
+function redeemerTagToString(tag: RedeemerTag): string {
+  switch (tag) {
+    case RedeemerTag.Spend:
+      return "spend";
+    case RedeemerTag.Mint:
+      return "mint";
+    case RedeemerTag.Cert:
+      return "cert";
+    case RedeemerTag.Reward:
+      return "reward";
+    case RedeemerTag.Voting:
+      return "voting";
+    case RedeemerTag.Proposing:
+      return "proposing";
+    default:
+      return "unknown";
   }
 }

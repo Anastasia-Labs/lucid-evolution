@@ -39,7 +39,20 @@ export interface Provider {
   getDatum(datumHash: DatumHash): Promise<Datum>;
   awaitTx(txHash: TxHash, checkInterval?: number): Promise<boolean>;
   submitTx(tx: Transaction): Promise<TxHash>;
+  evaluateTx(
+    tx: Transaction,
+    additionalUTxOs?: UTxO[],
+  ): Promise<EvalRedeemer[]>;
 }
+
+export type EvalRedeemer = {
+  ex_units: {
+    mem: number;
+    steps: number;
+  };
+  redeemer_index: number;
+  redeemer_tag: string;
+};
 
 export type Credential = {
   type: "Key" | "Script";
