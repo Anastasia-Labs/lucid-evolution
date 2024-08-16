@@ -11,7 +11,7 @@ Lucid evolution includes the following packages
 Lucid Evolution consists of the following packages:
 
 - `docs`: Documentation resources for Lucid Evolution.
-- `@lucid-evolution/lucid-evolution`: Main package for Lucid Evolution.
+- `@lucid-evolution/lucid`: Main package for Lucid Evolution.
 - `@lucid-evolution/bip39`: Package for BIP-39 mnemonic code.
 - `@lucid-evolution/core-types`: Core types used across Lucid Evolution packages.
 - `@lucid-evolution/core-utils`: Core utilities used across Lucid Evolution packages.
