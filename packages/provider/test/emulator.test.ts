@@ -1,7 +1,16 @@
 import { ProtocolParameters } from "@lucid-evolution/core-types";
 import { assert, describe, test } from "vitest";
 import { PROTOCOL_PARAMETERS_DEFAULT } from "@lucid-evolution/utils";
-import { emulator, EMULATOR_ACCOUNT } from "./service";
+import { Emulator, generateEmulatorAccount } from "../src";
+import { Effect } from "effect";
+
+export const EMULATOR_ACCOUNT = generateEmulatorAccount({
+  lovelace: 80000000000n,
+});
+
+export const emulator = await Effect.gen(function* () {
+  return new Emulator([EMULATOR_ACCOUNT]);
+}).pipe(Effect.runPromise);
 
 describe.sequential("Emulator", () => {
   test("Get Protocol Parameters", async () => {

@@ -15,7 +15,7 @@ import {
   Unit,
   UTxO,
 } from "@lucid-evolution/core-types";
-import { fromUnit } from "@lucid-evolution/utils";
+import { applyDoubleCborEncoding, fromUnit } from "@lucid-evolution/utils";
 import * as S from "@effect/schema/Schema";
 import { Effect, pipe, Array as _Array, Schedule, Data } from "effect";
 import * as KupmiosSchema from "./schema.js";
@@ -250,7 +250,7 @@ const getDatumEffect = (
   datum_type: KupmiosSchema.KupoUTxO["datum_type"],
   datum_hash: KupmiosSchema.KupoUTxO["datum_hash"],
 ): Effect.Effect<
-  string | null,
+  string | undefined,
   HttpClientError | ParseError | TimeoutException | NoSuchElementException
 > =>
   Effect.gen(function* () {
@@ -262,7 +262,7 @@ const getDatumEffect = (
         Effect.map((result) => result.datum),
         Effect.timeout(10_000),
       );
-    } else return null;
+    } else return undefined;
   });
 
 const getScriptEffect = (
@@ -280,15 +280,24 @@ const getScriptEffect = (
         Effect.map(({ language, script }) => {
           switch (language) {
             case "native":
-              return { type: "Native", script } satisfies Script;
+              return {
+                type: "Native",
+                script: applyDoubleCborEncoding(script),
+              } satisfies Script;
             case "plutus:v1":
-              return { type: "PlutusV1", script } satisfies Script;
+              return {
+                type: "PlutusV1",
+                script: applyDoubleCborEncoding(script),
+              } satisfies Script;
             case "plutus:v2":
-              return { type: "PlutusV2", script } satisfies Script;
+              return {
+                type: "PlutusV2",
+                script: applyDoubleCborEncoding(script),
+              } satisfies Script;
           }
         }),
       );
-    } else return null;
+    } else return undefined;
   });
 
 const toAssets = (value: KupmiosSchema.KupoUTxO["value"]): Assets => {
@@ -394,7 +403,7 @@ const kupmiosUtxosToUtxos = (
             outputIndex: utxo.output_index,
             address: utxo.address,
             assets: toAssets(utxo.value),
-            datumHash: utxo.datum_type === "hash" ? utxo.datum_hash : null,
+            datumHash: utxo.datum_type === "hash" ? utxo.datum_hash : undefined,
             datum: datum,
             scriptRef: script,
           }),

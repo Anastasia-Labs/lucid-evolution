@@ -1,43 +1,32 @@
 import { assert, describe, expect, test } from "vitest";
 import { ProtocolParameters, UTxO } from "@lucid-evolution/core-types";
-import { discoveryUTxO } from "./constants.js";
 import { Config, Effect } from "effect";
-import { Kupmios } from "../src/index.js";
+import { Blockfrost } from "../src/blockfrost.js";
+import { discoveryUTxO } from "./constants.js";
 
-export const kupmios = await Effect.gen(function* () {
-  const kupo = yield* Config.string("VITE_KUPO_KEY");
-  const ogmios = yield* Config.string("VITE_OGMIOS_KEY");
-  return new Kupmios(kupo, ogmios);
+export const blockfrost = await Effect.gen(function* () {
+  const BLOCKFROST_API_URL = yield* Config.string(
+    "VITE_BLOCKFROST_API_URL_PREPROD",
+  );
+  const BLOCKFROST_KEY = yield* Config.string("VITE_BLOCKFROST_KEY_PREPROD");
+  return new Blockfrost(BLOCKFROST_API_URL, BLOCKFROST_KEY);
 }).pipe(Effect.runPromise);
 
-describe("Kupmios", async () => {
-  // // Stop devkit
-  // exec("~/.yaci-devkit/bin/devkit.sh stop &");
-  // console.log("Stopped devkit");
-  // // Wait for a delay before starting again (if necessary)
-  // console.log("waiting 10 seconds");
-  // await new Promise((resolve) => setTimeout(resolve, 10000)); // 10 seconds delay
-  // // Start devkit
-  // exec("~/.yaci-devkit/bin/devkit.sh start create-node -o --start &");
-  // console.log("Started devkit");
-  // // Wait for a delay before starting again (if necessary)
-  // console.log("waiting 30 seconds");
-  // await new Promise((resolve) => setTimeout(resolve, 30000)); // 30 seconds delay
-
+describe("Blockfrost", async () => {
   test("getProtocolParameters", async () => {
-    const pp: ProtocolParameters = await kupmios.getProtocolParameters();
+    const pp: ProtocolParameters = await blockfrost.getProtocolParameters();
     assert(pp);
   });
 
   test("getUtxos", async () => {
-    const utxos = await kupmios.getUtxos(
+    const utxos = await blockfrost.getUtxos(
       "addr_test1qrngfyc452vy4twdrepdjc50d4kvqutgt0hs9w6j2qhcdjfx0gpv7rsrjtxv97rplyz3ymyaqdwqa635zrcdena94ljs0xy950",
     );
     assert(utxos);
   });
 
   test("getUtxosWithUnit", async () => {
-    const utxos = await kupmios.getUtxosWithUnit(
+    const utxos = await blockfrost.getUtxosWithUnit(
       "addr_test1wpgexmeunzsykesf42d4eqet5yvzeap6trjnflxqtkcf66g0kpnxt",
       "4a83e031d4c37fc7ca6177a2f3581a8eec2ce155da91f59cfdb3bb28446973636f7665727956616c696461746f72",
     );
@@ -45,14 +34,14 @@ describe("Kupmios", async () => {
   });
 
   test("getUtxoByUnit", async () => {
-    const utxo = await kupmios.getUtxoByUnit(
+    const utxo = await blockfrost.getUtxoByUnit(
       "4a83e031d4c37fc7ca6177a2f3581a8eec2ce155da91f59cfdb3bb28446973636f7665727956616c696461746f72",
     );
     expect(utxo).toStrictEqual(discoveryUTxO);
   });
 
   test("getUtxosByOutRef", async () => {
-    const utxos: UTxO[] = await kupmios.getUtxosByOutRef([
+    const utxos: UTxO[] = await blockfrost.getUtxosByOutRef([
       {
         txHash:
           "b50e73e74a3073bc44f555928702c0ae0f555a43f1afdce34b3294247dce022d",
@@ -63,14 +52,14 @@ describe("Kupmios", async () => {
   });
 
   test("getDelegation", async () => {
-    const delegation = await kupmios.getDelegation(
+    const delegation = await blockfrost.getDelegation(
       "stake_test17zt3vxfjx9pjnpnapa65lx375p2utwxmpc8afj053h0l3vgc8a3g3",
     );
     assert(delegation);
   });
 
   test("getDatum", async () => {
-    const datum = await kupmios.getDatum(
+    const datum = await blockfrost.getDatum(
       "95472c2f46b89500703ec778304baf1079c58124c254bf4bf8c96e5d73869293",
     );
     expect(datum).toStrictEqual(
@@ -79,13 +68,13 @@ describe("Kupmios", async () => {
   });
 
   test("awaitTx", async () => {
-    const isConfirmed: boolean = await kupmios.awaitTx(
+    const isConfirmed: boolean = await blockfrost.awaitTx(
       "2a1f95a9d85bf556a3dc889831593ee963ba491ca7164d930b3af0802a9796d0",
     );
     expect(isConfirmed).toBe(true);
   });
 
   test("submitTxBadRequest", async () => {
-    await expect(() => kupmios.submitTx("80")).rejects.toThrowError();
+    await expect(() => blockfrost.submitTx("80")).rejects.toThrowError();
   });
 });
