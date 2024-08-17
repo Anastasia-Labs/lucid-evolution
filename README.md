@@ -1,3 +1,4 @@
+# Lucid Evolution
 <p align="center">
   <a href="https://github.com/Anastasia-Labs/lucid-evolution/actions/workflows/main.yml">
     <img src="https://github.com/Anastasia-Labs/lucid-evolution/actions/workflows/main.yml/badge.svg" alt="Build Status"/>
@@ -7,7 +8,6 @@
   <img src="https://img.shields.io/discord/947985069111377951)" alt="Discord"/>
 </p>
 
-# Lucid Evolution
 
 ## What's inside?
 
