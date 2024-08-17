@@ -1,49 +1,72 @@
-import { Callout } from 'nextra/components'
-import { Tabs } from 'nextra/components'
+import { Callout, Steps, Cards, Tabs } from 'nextra/components'
 
-# Install
+# Install Lucid Evolution
 
-<Callout type="warning" emoji="⚠️">
-  Use with caution, this library is currently in beta testing phase. Your feedback is greatly appreciated.
-</Callout>
-
+## Compatibility
 Lucid Evolution works with yarn, npm, and pnpm on the following operating systems:
 
 - macOS darwin 64-bit (Intel), ARM 64-bit (Apple Silicon)
 - Linux 64-bit, ARM 64-bit
 - Windows 64-bit, ARM 64-bit
 
+## Package Managers
 <Tabs items={['Node.js', 'Bun']}>
   <Tabs.Tab>
     ### Node.js
-
     <Tabs items={['pnpm', 'npm', 'yarn']}>
       <Tabs.Tab>
         **pnpm**: Fast, disk space efficient package manager
         ```bash
-        pnpm i @lucid-evolution/lucid
+        # Only installing the lucid package, each individual package can be installed separately
+        pnpm i @lucid-evolution/lucid 
         ```
       </Tabs.Tab>
       <Tabs.Tab>
         **npm** is a package manager for JavaScript
         ```bash
-        npm i @lucid-evolution/lucid
+        # Only installing the provider package, each individual package can be installed separately
+        npm i @lucid-evolution/provider 
         ```
       </Tabs.Tab>
       <Tabs.Tab>
         **Yarn** is a software packaging system
         ```bash
-        yarn add @lucid-evolution/lucid
+        # Only installing the utils package, each individual package can be installed separately
+        yarn add @lucid-evolution/utils 
         ```
       </Tabs.Tab>
     </Tabs>
   </Tabs.Tab>
   <Tabs.Tab>
     ### Bun
-
     **Bun**: An all-in-one JavaScript runtime, bundler, and package manager
     ```bash
-    bun i @lucid-evolution/lucid
+    # Only installing the plutus package, each individual package can be installed separately
+    bun i @lucid-evolution/plutus 
     ```
   </Tabs.Tab>
 </Tabs>
+
+---
+
+### Why Compartmentalize Packages?
+
+Lucid Evolution separates packages to allow users to import only what they need, which gives us a chance for better performance and flexibility. For instance, as demonstrated in `Core-Concept 1`, you can import just the `lucid` and `provider` packages without needing the entire library:
+
+```typescript
+import { Lucid } from "@lucid-evolution/lucid";
+import { Blockfrost } from "@lucid-evolution/provider"; 
+
+const lucid = await Lucid(
+  new Blockfrost("https://cardano-mainnet.blockfrost.io/api/v0", "<projectId>"),
+  "Mainnet"
+);
+```
+
+<Cards>
+  <Cards.Card
+    icon = "🔙"
+    title = " Return to Quickstart"
+    href = "/"
+  />
+</Cards>

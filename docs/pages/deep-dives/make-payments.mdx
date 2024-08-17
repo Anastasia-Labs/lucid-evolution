@@ -1,15 +1,18 @@
-import { Callout } from 'nextra/components'
+import { Callout } from "nextra/components";
 
 # Make Payment
 
 Lucid Evolution provides several methods for making payments, each with specific use cases
+
+---
 
 ## Simple ADA payment
 
 Use `pay.ToAddress` for simple payments to a public key or native script address
 
 ```typescript
-const tx = await lucid.newTx()
+const tx = await lucid
+  .newTx()
   .pay.ToAddress("addr_test...", { lovelace: 5000000n })
   .complete();
 
@@ -18,8 +21,11 @@ const txHash = await signedTx.submit();
 ```
 
 <Callout type="info" emoji="ℹ️">
-Note the endpoint change from `payToAddress` to `pay.ToAddress`, and `sign()` to `sign.withWallet()`
+  Note the endpoint change from `payToAddress` to `pay.ToAddress`, and `sign()`
+  to `sign.withWallet()`
 </Callout>
+
+---
 
 ## Multiple recipients
 
@@ -28,7 +34,8 @@ Each `pay.ToAddress` call creates a new UTxO, also for the same addresses.
 Lucid Evolution takes the order of outputs into account
 
 ```typescript
-const tx = await lucid.newTx()
+const tx = await lucid
+  .newTx()
   .pay.ToAddress("addr_testa...", { lovelace: 5000000n })
   .pay.ToAddress("addr_testb...", { lovelace: 5000000n })
   .pay.ToAddress("addr_testc...", { lovelace: 5000000n })
@@ -38,28 +45,26 @@ const signedTx = await tx.sign.withWallet().complete();
 const txHash = await signedTx.submit();
 ```
 
-## Send native tokens
+---
 
-Lucid Evolution implicitly adds the minimum ADA requirement when sending native tokens.
+## Send ADA with metadata
 
 ```typescript
-import { fromText } from "@lucid-evolution/utils";
-
-const policyId = "00...";
-const assetName = "MyToken";
-
-const tx = await lucid.newTx()
-  .pay.ToAddress("addr_test...", { [policyId + fromText(assetName)]: 10n })
+const tx = await lucid
+  .newTx()
+  .pay.ToAddress("addr_test...", { lovelace: 5000000n })
+  .attachMetadata(1, { msg: "Hello from Anastasia Labs" })
   .complete();
 
 const signedTx = await tx.sign.withWallet().complete();
 const txHash = await signedTx.submit();
 ```
 
+---
 
 ## Payment with datum or script reference
 
-Use `pay.ToAddressWithData` to make a payment that includes a datum or script reference. The datum will be attached to the witness set and the datum hash is stored in the UTxO. 
+Use `pay.ToAddressWithData` to make a payment that includes a datum or script reference. The datum will be attached to the witness set and the datum hash is stored in the UTxO.
 
 To inline the datum directly in the UTxO use `{ kind: "inline", value: Data.to("31313131") }`
 Like with native tokens, Lucid Evolution implicitly adds the minimum ADA requirement for datums.
@@ -67,9 +72,10 @@ Like with native tokens, Lucid Evolution implicitly adds the minimum ADA require
 ```typescript
 import { Data } from "@lucid-evolution/plutus";
 
-const tx = await lucid.newTx()
+const tx = await lucid
+  .newTx()
   .pay.ToAddressWithData(
-    "addr_test...", 
+    "addr_test...",
     { kind: "hash", value: Data.to("31313131") },
     { lovelace: 5000000n }
   )
@@ -83,35 +89,48 @@ const txHash = await signedTx.submit();
 Transition note: `payToAddressWithData`-> `pay.ToAddressWithData`
 
 The `pay.ToAddressWithData` method accepts the following parameters:
+
 - Address
 - OutputDatum (can be of type "hash", "inline", or "asHash")
 - Assets (optional)
 - Script reference (optional)
 </Callout>
 
-## Payment to a Plutus script address
+---
 
-Use `pay.ToContract` for payments to a Plutus script address. This method ensures that a datum is provided.
+## Send native tokens
+
+Lucid Evolution implicitly adds the minimum ADA requirement when sending native tokens.
 
 ```typescript
-const tx = await lucid.newTx()
-  .pay.ToContract(
-    "addr_test...", 
-    { kind: "inline", value: Data.to("31313131") },
-    { lovelace: 5000000n }
-  )
+import { fromText } from "@lucid-evolution/utils";
+
+const policyId = "00...";
+const assetName = "MyToken";
+
+const tx = await lucid
+  .newTx()
+  .pay.ToAddress("addr_test...", { [policyId + fromText(assetName)]: 10n })
   .complete();
 
 const signedTx = await tx.sign.withWallet().complete();
 const txHash = await signedTx.submit();
 ```
 
-## Send ADA with metadata
+---
+
+## Payment to a Plutus script address
+
+Use `pay.ToContract` for payments to a Plutus script address. This method ensures that a datum is provided.
 
 ```typescript
-const tx = await lucid.newTx()
-  .pay.ToAddress("addr_test...", { lovelace: 5000000n })
-  .attachMetadata(1, { msg: "Hello from Anastasia Labs" })
+const tx = await lucid
+  .newTx()
+  .pay.ToContract(
+    "addr_test...",
+    { kind: "inline", value: Data.to("31313131") },
+    { lovelace: 5000000n }
+  )
   .complete();
 
 const signedTx = await tx.sign.withWallet().complete();

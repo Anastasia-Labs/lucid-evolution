@@ -1,4 +1,4 @@
-import { Callout } from 'nextra/components'
+import { Callout } from "nextra/components";
 
 ## Register stake pool
 
@@ -20,7 +20,9 @@ const vrfKeyHash = CML.VRFVKey.from_bytes(
   fromHex(
     "5820c9cf07d863c8a2351662c9759ca1d9858b536bab50ad575b5de161e1af18f887"
   )
-).hash().to_hex();
+)
+  .hash()
+  .to_hex();
 
 const poolId = coldKey.to_public().hash().to_bech32("pool");
 const rewardOwnerAddress = await lucid.wallet().rewardAddress();
@@ -37,11 +39,10 @@ const poolParams: PoolParams = {
   metadataUrl: "https://...", // metadata needs to be hosted already before registering the pool
 };
 
-const tx = await lucid.newTx()
-  .registerPool(poolParams)
-  .complete();
+const tx = await lucid.newTx().registerPool(poolParams).complete();
 
-const signedTx = await tx.sign.withWallet()
+const signedTx = await tx.sign
+  .withWallet()
   .sign.withPrivateKey(coldKey.to_bech32())
   .complete();
 
@@ -49,12 +50,16 @@ const txHash = await signedTx.submit();
 ```
 
 <Callout type="info" emoji="ℹ️">
-- We're now importing from `@lucid-evolution/lucid` and `@lucid-evolution/core-utils`
-- `lucid.wallet.rewardAddress()` has become `lucid.wallet().rewardAddress()`
-- `tx.sign()` has become `tx.sign.withWallet()`
-- `signWithPrivateKey()` has become `sign.withPrivateKey()`
-- The registerPool function requires a pool deposit. It internally creates a pool registration certificate and adds it to the transaction.
+  - We're now importing from `@lucid-evolution/lucid` and
+  `@lucid-evolution/core-utils` - `lucid.wallet.rewardAddress()` has become
+  `lucid.wallet().rewardAddress()` - `tx.sign()` has become
+  `tx.sign.withWallet()` - `signWithPrivateKey()` has become
+  `sign.withPrivateKey()` - The registerPool function requires a pool deposit.
+  It internally creates a pool registration certificate and adds it to the
+  transaction.
 </Callout>
+
+---
 
 ## Retire stake pool
 
@@ -73,4 +78,3 @@ const txHash = await signedTx.submit();
 
 // const txHash = await signedTx.submit();
 ```
-
