@@ -48,7 +48,7 @@ export default {
   },
 
   chat: {
-    link: "https://discord.gg/gRt4ppqh",
+    link: "https://discord.gg/s89P9gpEff",
   },
 
   navigation: {
