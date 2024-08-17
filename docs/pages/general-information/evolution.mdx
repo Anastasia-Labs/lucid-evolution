@@ -1,27 +1,22 @@
 # Transition
 
--UNDER CONSTRUCTION-
+## Why Maintain the Lucid Library?
+
+It is indispensable as it serves as a core library in Cardano, underpinning numerous protocols. This critical role emphasizes the urgency of consistent updates to ensure compatibility with evolving Cardano protocols, hard forks, and the dynamic technological landscape. Neglecting Lucid's maintenance not only jeopardizes the functionality of smart contracts but also impacts a multitude of protocols relying on it. Upholding Lucid's reliability is integral to sustaining the seamless operation of diverse applications across the Cardano blockchain.
+
+By prioritizing consistent and proactive maintenance efforts, we aim to ensure the longevity and reliability of the core library, contributing to the overall stability of the Cardano ecosystem.
+
+Inadequate support for the upcoming hard fork is a critical issue that could lead to compatibility issues and disruptions. Our strategy involves a meticulous upgrade process, aligning the library with the latest Cardano Multiplatform Library (CML) versions.
+
+our proposed solution is a holistic approach that addresses maintenance, hard fork compatibility, GitHub issues, pull request management, and community development. The benefits are manifold – increased stability, seamless adaptation to protocol upgrades, faster issue resolution, enhanced features, and a resilient ecosystem that thrives on collaborative innovation. By implementing these measures, we envision a Cardano ecosystem that is not only robust and reliable but also adaptable to the evolving needs of its developer user base.
 
 Although the Evolution library shares the Lucid name, it is built with a different approach. You will need to install new packages.
 While the endpoints remain mostly the same, the main difference you will encounter is that the Lucid instance is now a factory function instead of a class. We have worked hard to ensure the transition is as smooth as possible.
 As a result there are only minor changes to the API, but the core concepts remain the same.
 
-For example in legacy Lucid, you would typically do:
-
-```typescript
-const lucid = await Lucid.new(...)
-```
-
-In Lucid Evolution:
-
-```typescript
-const lucid = await Lucid(...)
-```
-
-This change affects how you initialize Lucid, but does not significantly change how you use its methods once initialized.
-
 ## Effect Library
 
-Lucid Evolution uses the Effect library to handle complex operations in TypeScript. This helps manage errors better, makes async code easier to work with, and improves performance. It also catches more errors at compile-time. Advanced users can create custom effects, manage dependencies, run tasks in parallel, and write better tests. 
+Lucid Evolution uses the Effect library to handle complex operations in TypeScript. This helps manage errors better, makes async code easier to work with, and improves performance. It also catches more errors at compile-time. Advanced users can create custom effects, manage dependencies, run tasks in parallel, and write better tests.
 
 The library makes it easier to write and understand code that deals with many async operations at once. This is especially useful in blockchain development, where many operations happen in sequence.
+

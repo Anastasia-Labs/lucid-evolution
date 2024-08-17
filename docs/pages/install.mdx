@@ -1,4 +1,4 @@
-import { Callout, Steps, Cards, Tabs } from "nextra/components";
+import { Callout, Steps, Cards, Tabs, FileTree } from "nextra/components";
 
 # Install Lucid Evolution
 
@@ -18,21 +18,21 @@ Lucid Evolution works with yarn, npm, and pnpm on the following operating system
       <Tabs.Tab>
         **pnpm**: Fast, disk space efficient package manager
         ```bash
-        # Only installing the lucid package, each individual package can be installed separately
+        # Installing the lucid package will export all other packages as well
         pnpm i @lucid-evolution/lucid 
         ```
       </Tabs.Tab>
       <Tabs.Tab>
         **npm** is a package manager for JavaScript
         ```bash
-        # Only installing the provider package, each individual package can be installed separately
+        # For example, if you only want to query utxos and don't need the rest of the library
         npm i @lucid-evolution/provider 
         ```
       </Tabs.Tab>
       <Tabs.Tab>
         **Yarn** is a software packaging system
         ```bash
-        # Only installing the utils package, each individual package can be installed separately
+        # Only installing the utils package, each individual package can be installed on its own
         yarn add @lucid-evolution/utils 
         ```
       </Tabs.Tab>
@@ -42,7 +42,7 @@ Lucid Evolution works with yarn, npm, and pnpm on the following operating system
 
     **Bun**: An all-in-one JavaScript runtime, bundler, and package manager
     ```bash
-    # Only installing the plutus package, each individual package can be installed separately
+    # Only installing the plutus package
     bun i @lucid-evolution/plutus
     ```
 
@@ -53,18 +53,30 @@ Lucid Evolution works with yarn, npm, and pnpm on the following operating system
 
 ### Why Compartmentalize Packages?
 
-Lucid Evolution separates packages to allow users to import only what they need, which gives us a chance for better performance and flexibility. For instance, as demonstrated in `Core-Concept 1`, you can import just the `lucid` and `provider` packages without needing the entire library:
+<FileTree>
+  <FileTree.Folder name="lucid-evolution" defaultOpen>
+    <FileTree.Folder name="packages" defaultOpen>
+      <FileTree.File name="lucid-evolution/lucid ⇀      Main package for Lucid Evolution" />
+      <FileTree.File name="lucid-evolution/bip39 ⇀      Package for BIP-39 mnemonic code" />
+      <FileTree.File name="lucid-evolution/core-types ⇀ Core types used across Lucid Evolution packages" />
+      <FileTree.File name="lucid-evolution/core-utils ⇀ Core utilities used across Lucid Evolution packages" />
+      <FileTree.File name="lucid-evolution/crc8 ⇀       Package for CRC8 calculation" />
+      <FileTree.File name="lucid-evolution/plutus ⇀     Package for Plutus integration" />
+      <FileTree.File name="lucid-evolution/provider ⇀   Package for providing data " />
+      <FileTree.File name="lucid-evolution/sign_data ⇀  Package for signing data" />
+      <FileTree.File name="lucid-evolution/utils ⇀      Utility functions for Lucid Evolution" />
+      <FileTree.File name="lucid-evolution/wallet ⇀     Wallet package for Lucid Evolution" />
+    </FileTree.Folder>
+  </FileTree.Folder>
+</FileTree>
 
-```typescript
-import { Lucid } from "@lucid-evolution/lucid";
-import { Blockfrost } from "@lucid-evolution/provider";
-
-const lucid = await Lucid(
-  new Blockfrost("https://cardano-mainnet.blockfrost.io/api/v0", "<projectId>"),
-  "Mainnet"
-);
-```
+Lucid Evolution separates packages to allow users to import only what they need, which gives us a chance for better performance and flexibility.
 
 <Cards>
-  <Cards.Card icon="🔙" title=" Return to Quickstart" href="/" />
+  <Cards.Card icon="🔙" title=" Quickstart" href="/" />
+ 
+  <Cards.Card icon="ℹ️" title=" Evolution Library" href="/general-information/evolution" />
+
+   <Cards.Card icon="📡" title=" Contact Anastasia Labs" href="/general-information/contact" />
 </Cards>
+
