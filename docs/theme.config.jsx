@@ -81,6 +81,11 @@ export default {
   head: (
     <>
       <style>{`
+              
+        .nextra-nav-container nav a:hover {
+          color: #a04040; 
+        }
+          
         .nextra-nav-container > nav > a:nth-child(2) > span {
           background-image: linear-gradient(90deg, #ffffff 0%, #ffffff 90%, #ff4d4d 86%, #e60000 92%, #ff4d4d 96%);
           background-repeat: repeat;
@@ -137,7 +142,7 @@ export default {
                       </a>
                     </li>
                     <li>
-                      <a href="/api-reference">API Reference</a> 
+                      <a href="/api-reference">API Reference</a>
                     </li>
                   </ul>
                 </div>
