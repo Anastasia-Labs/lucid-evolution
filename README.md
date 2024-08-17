@@ -1,4 +1,11 @@
-[![CI](https://github.com/Anastasia-Labs/lucid-evolution/actions/workflows/main.yml/badge.svg)](https://github.com/Anastasia-Labs/lucid-evolution/actions/workflows/main.yml)
+<p align="center">
+  <a href="https://github.com/Anastasia-Labs/lucid-evolution/actions/workflows/main.yml">
+    <img src="https://github.com/Anastasia-Labs/lucid-evolution/actions/workflows/main.yml/badge.svg" alt="Build Status"/>
+  </a>
+  <img src="https://img.shields.io/npm/v/%40lucid-evolution%2Flucid" alt="NPM Version"/>
+  <img src="https://img.shields.io/npm/d18m/%40lucid-evolution%2Flucid" alt="NPM Downloads"/>
+  <img src="https://img.shields.io/discord/947985069111377951)" alt="Discord"/>
+</p>
 
 # Lucid Evolution
 
