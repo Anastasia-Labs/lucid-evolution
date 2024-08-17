@@ -1,14 +1,17 @@
 {
-    "acknowledgement": {
-        "title": "Acknowledgements"
-    },
-    "license": {
-        "title": "License"
-    },
-    "evolution": {
-        "title": "Evolution"
-    },
-    "contact": {
-        "title": "Contact"
-    }
+  "evolution": {
+    "title": "Evolution"
+  },
+
+  "contact": {
+    "title": "Contact"
+  },
+
+  "acknowledgement": {
+    "title": "Acknowledgements"
+  },
+
+  "license": {
+    "title": "License"
+  }
 }
