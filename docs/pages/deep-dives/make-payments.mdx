@@ -1,10 +1,12 @@
-import { Callout } from "nextra/components";
+import { Callout, Steps } from "nextra/components";
 
 # Make Payment
 
 Lucid Evolution provides several methods for making payments, each with specific use cases
 
 ---
+
+<Steps>
 
 ## Simple ADA payment
 
@@ -21,7 +23,7 @@ const txHash = await signedTx.submit();
 ```
 
 <Callout type="info" emoji="ℹ️">
-  Note the endpoint change from `payToAddress` to `pay.ToAddress`, and `sign()`
+  __Evolution-Notes:__ Change from `payToAddress` to `pay.ToAddress`, and `sign()`
   to `sign.withWallet()`
 </Callout>
 
@@ -86,7 +88,7 @@ const txHash = await signedTx.submit();
 ```
 
 <Callout type="info" emoji="ℹ️">
-Transition note: `payToAddressWithData`-> `pay.ToAddressWithData`
+__Evolution-Notes:__ `payToAddressWithData`-> `pay.ToAddressWithData`
 
 The `pay.ToAddressWithData` method accepts the following parameters:
 
@@ -136,6 +138,6 @@ const tx = await lucid
 const signedTx = await tx.sign.withWallet().complete();
 const txHash = await signedTx.submit();
 ```
-
+</Steps>
 
 

@@ -50,11 +50,20 @@ const txHash = await signedTx.submit();
 ```
 
 <Callout type="info" emoji="ℹ️">
+  __Evolution-Notes:__ 
   - We're now importing from `@lucid-evolution/lucid` and
-  `@lucid-evolution/core-utils` - `lucid.wallet.rewardAddress()` has become
-  `lucid.wallet().rewardAddress()` - `tx.sign()` has become
-  `tx.sign.withWallet()` - `signWithPrivateKey()` has become
-  `sign.withPrivateKey()` - The registerPool function requires a pool deposit.
+  `@lucid-evolution/core-utils` 
+  
+  - `lucid.wallet.rewardAddress()` ->
+  `lucid.wallet().rewardAddress()` 
+  
+  - `tx.sign()` ->
+  `tx.sign.withWallet()` 
+  
+  - `signWithPrivateKey()` ->
+  `sign.withPrivateKey()` 
+  
+  - The `registerPool` function requires a pool deposit.
   It internally creates a pool registration certificate and adds it to the
   transaction.
 </Callout>
@@ -63,7 +72,7 @@ const txHash = await signedTx.submit();
 
 ## Retire stake pool
 
--UNDER DEVELOPMENT-
+__-UNDER DEVELOPMENT-__
 
 ```typescript
 // const retirementEpoch = 100;

@@ -12,10 +12,26 @@
   "deep-dives": "Deep Dives",
   
   "keeping-pace-with-cardano": "Keeping Pace with Cardano",
-  
+    
   "install":{
     "title": "Install",
     "type": "page"
+  },
+
+
+  "examples": {
+    "title": "Examples",
+    "type": "menu",
+    "items": {
+      "hello-world": {
+        "title": "Hello world",
+        "href": "/example-suite/hello-world"
+      },
+      "design-patterns": {
+        "title": "Anastasia Labs - Design Patterns",
+        "href": "/example-suite/design-patterns"
+      }
+    }
   },
 
   "general-information": {
@@ -36,7 +52,7 @@
       },
       "contact": {
         "title": "Contact",
-        "type": "page"
+        "type": "/general-information/contact"
       }
     }
   }

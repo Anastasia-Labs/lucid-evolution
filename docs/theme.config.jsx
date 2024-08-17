@@ -94,7 +94,7 @@ export default {
           background-size: 200% auto;
           color: transparent;
           animation: textclip 5s linear infinite;
-          font-weight: bold; /* Bold text */
+          font-weight: bold; 
         }
         html[class~="dark"] .nextra-nav-container > nav > a:nth-child(2) > span {
           background-image: linear-gradient(90deg, #ffffff 0%, #ffffff 90%, #ff4d4d 86%, #e60000 92%, #ff4d4d 96%);

@@ -1,4 +1,4 @@
-import { Callout } from 'nextra/components'
+import { Callout, Steps } from 'nextra/components'
 
 # Instantiate Lucid
 
@@ -7,15 +7,17 @@ We are working on our Emulator, which will allow you to test your operations loc
 
 We support the `Mainnet`, `Preprod`, and `Preview` networks. 
 
+
 ## Provider selection
 
 There are multiple builtin providers you can choose from in Lucid Evolution
 
 <Callout type="info" emoji="ℹ️">
-Evolution-Notes: In Lucid Evolution, `Lucid.new()` has been replaced with `Lucid()`, as it's now a factory function instead of a class.
+__Evolution-Notes:__`Lucid.new()` has been replaced with `Lucid()`, as it's now a factory function instead of a class
 </Callout>
 
-### Blockfrost
+<Steps>
+#### Blockfrost
 
 ```typescript
 import { Lucid } from '@lucid-evolution/lucid';
@@ -26,8 +28,9 @@ const lucid = await Lucid(
   "Preprod"
 );
 ```
+---
 
-### Kupmios
+#### Kupmios
 
 Kupmios is a mix of [Ogmios](https://ogmios.dev/) and
 [Kupo](https://cardanosolutions.github.io/kupo/).
@@ -45,8 +48,9 @@ const lucid = await Lucid(
 );
 ```
 
+---
 
-### Maestro
+#### Maestro
 
 ```typescript
 import { Lucid } from '@lucid-evolution/lucid';
@@ -62,7 +66,9 @@ const lucid = await Lucid(
 );
 ```
 
-### Koios
+---
+
+#### Koios
 
 ```typescript
 import { Lucid } from '@lucid-evolution/lucid';
@@ -73,7 +79,11 @@ const lucid = await Lucid(
   "Preprod"
 );
 ```
+</Steps>
 
+---
+
+<Steps>
 ## Query provider
 
 ### Query UTxOs
@@ -88,21 +98,26 @@ For convenience you can also query utxos like this:
 const utxos = await lucid.utxosAt("addr_test...");
 ```
 
+---
+
 ### Query datums
 
 ```typescript
 const datum = await lucid.provider.getDatum("<datum_hash>");
 ```
-
+<Callout>
 For convenience you can also query datums directly from utxos. When you query
 the datum for a UTxO, Lucid automatically adds the datum to the UTxO. This means
 that subsequent queries for the same UTxO will return the result instantly,
 without the need for an additional network request.
+</Callout>
 
 ```typescript
 const [scriptUtxo] = await lucid.utxosAt("addr_test...");
 const datum = await lucid.datumOf(scriptUtxo);
 ```
+
+---
 
 ### Query protocol parameters
 
@@ -110,6 +125,7 @@ const datum = await lucid.datumOf(scriptUtxo);
 const protocolParameters = await lucid.provider.getProtocolParameters();
 ```
 
-### Provider Switching
+</Steps>
+#### Provider Switching
 
 The `switchProvider` method is present

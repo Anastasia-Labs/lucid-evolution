@@ -1,3 +1,5 @@
+import { Callout, Steps } from "nextra/components";
+
 # Smart Contract Interactions
 
 It's important to understand that on the Cardano blockchain, you don't directly interact with "smart contracts" in the traditional sense. Instead, you work with validators. These validators are responsible for verifying the actions taken in a given transaction, rather than executing or calling any actions themselves.
@@ -10,6 +12,7 @@ A validator checks whether the transaction meets its requirements, and if it doe
 
 We'll demonstrate the concept of Plutus validators in Lucid Evolution using a validator that requires the number in the datum to match the number in the redeemer.
 
+<Steps>
 ### Instantiate validator
 
 Lucid Evolution consumes compiled validators. On-chain scripts can be written in `PlutusTx`, `Aiken`, `Plutarch`, and many other languages available in the Cardano ecosystem. We then derive the address from the compiled script with Lucid Evolution.
@@ -58,7 +61,7 @@ const tx = await lucid
 const signedTx = await tx.sign.withWallet().complete();
 const txHash = await signedTx.submit();
 ```
-
+</Steps>
 ---
 
 ## Apply parameters

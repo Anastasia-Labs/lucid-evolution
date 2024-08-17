@@ -14,23 +14,23 @@ const tx = await lucid
   .pay.ToAddress("addr_testb...", { lovelace: 5000000n })
   .complete();
 ```
-
+<Callout>
 To balance the transaction and initiate coin selection, transactions always need to end with `.complete()`
+</Callout>
 
 <Callout type="info" emoji="ℹ️">
-  `payToAddress` endpoint has been changed to `pay.ToAddress` in Lucid
+ __Evolution-Notes:__ `payToAddress` -> `pay.ToAddress`
   Evolution.
 </Callout>
-### Sign Next, we sign the transaction:
+### Sign 
 
 ```typescript
 const signedTx = await tx.sign.withWallet().complete();
 ```
 
-Here we also need to call `.complete()` when we are ready with signing.
 
 <Callout type="info" emoji="ℹ️">
-  `sign()` endpoint has been changed to `sign.withWallet()` in Lucid Evolution
+ __Evolution-Notes:__ `sign()` -> `sign.withWallet()` 
 </Callout>
 ### Submit
 
@@ -59,10 +59,7 @@ const lucid = await Lucid(
   "Preprod"
 );
 
-// Assuming you've already selected a wallet using one of the methods we discussed earlier
-
-// For example:
-// lucid.selectWallet.fromPrivateKey(privateKey);
+lucid.selectWallet.fromPrivateKey(privateKey);
 
 const tx = await lucid
   .newTx()
