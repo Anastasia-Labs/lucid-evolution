@@ -18,18 +18,17 @@
     "type": "page"
   },
 
-
   "examples": {
     "title": "Examples",
     "type": "menu",
     "items": {
       "hello-world": {
-        "title": "Hello world",
-        "href": "/example-suite/hello-world"
+        "title": "Hello World",
+        "href": "/examples/hello-world"
       },
       "design-patterns": {
-        "title": "Anastasia Labs - Design Patterns",
-        "href": "/example-suite/design-patterns"
+        "title": "Design Patterns",
+        "href": "/examples/design-patterns"
       }
     }
   },
