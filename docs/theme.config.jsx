@@ -39,6 +39,8 @@ export default {
     toggleButton: true,
     autoCollapse: true,
   },
+  
+  darkMode: false,
 
   search: {
     placeholder: "🔎 Search the Evolution library",
@@ -100,16 +102,11 @@ export default {
           background-image: linear-gradient(90deg, #ffffff 0%, #ffffff 90%, #ff4d4d 86%, #e60000 92%, #ff4d4d 96%);
         }
         .nextra-nav-container > nav > a:nth-child(2) > span:hover {
-          text-shadow: 0px 0px 10px rgba(255, 0, 0, 0.5); /* Glow on hover */
+          text-shadow: 0px 0px 10px rgba(255, 0, 0, 0.2); /* Glow on hover */
           transform: scale(1.05); /* Enlarge on hover */
           transition: transform 0.3s, text-shadow 0.3s; /* Smooth transition */
         }
-        .nextra-nav-container > nav > a > span {
-          color: #cccccc; /* Default color for other links */
-        }
-        .nextra-nav-container > nav > a:hover > span {
-          color: #ffffff; /* Color change on hover */
-        }
+    
         @keyframes textclip {
           0% { background-position: 0% center; }
           30% { background-position: 200% center; }

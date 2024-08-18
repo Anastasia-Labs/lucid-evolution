@@ -3,17 +3,17 @@
     "title": "Quickstart"
   },
 
+  "core-concepts": "Core Concepts",
+
+  "deep-dives": "Deep Dives",
+
+  "keeping-pace-with-cardano": "Keeping Pace with Cardano",
+
   "---": {
     "type": "separator"
   },
-  
-  "core-concepts": "Core Concepts",
-  
-  "deep-dives": "Deep Dives",
-  
-  "keeping-pace-with-cardano": "Keeping Pace with Cardano",
-    
-  "install":{
+
+  "install": {
     "title": "Install",
     "type": "page"
   },
@@ -37,24 +37,20 @@
     "title": "General Information",
     "type": "menu",
     "items": {
-      "acknowledgement": {
-        "title": "Acknowledgements",
-        "href": "/general-information/acknowledgement"
+      "evolution": {
+        "title": "Evolution",
+        "href": "/general-information/evolution"
       },
+
       "license": {
         "title": "License",
         "href": "/general-information/license"
       },
-      "evolution":{
-        "title": "Evolution",
-        "href": "/general-information/evolution"
-      },
+
       "contact": {
         "title": "Contact",
-        "type": "/general-information/contact"
+        "href": "/general-information/contact"
       }
     }
   }
 }
-
-
