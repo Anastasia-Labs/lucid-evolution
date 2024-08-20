@@ -21,6 +21,11 @@ export const REWARD_AMOUNT = 100000000n;
 export const EMULATOR_POOL_ID =
   "pool1nmfr5j5rnqndprtazre802glpc3h865sy50mxdny65kfgf3e5eh";
 
+const alwaysSucceedScript: SpendingValidator = {
+  type: "PlutusV2",
+  script: "49480100002221200101",
+};
+
 export const emulator = await Effect.gen(function* () {
   return new Emulator([EMULATOR_ACCOUNT]);
 }).pipe(Effect.runPromise);
@@ -156,16 +161,31 @@ export const withdrawReward = (amount: bigint) =>
 
 export const evaluateAContract = Effect.gen(function* ($) {
   const { user } = yield* EmulatorUser;
-  const alwaysSucceedScript: SpendingValidator = {
-    type: "PlutusV2",
-    script: "49480100002221200101",
-  };
   const scriptAddress = validatorToAddress("Custom", alwaysSucceedScript);
   const signBuilder = yield* user
     .newTx()
     .pay.ToContract(
       scriptAddress,
       { kind: "inline", value: Data.void() },
+      { lovelace: 5000000n },
+    )
+    .completeProgram();
+  return signBuilder;
+}).pipe(Effect.flatMap(handleSignSubmitWithoutValidation), withLogRetry);
+
+export const evaluateAContractWithDatum = Effect.gen(function* ($) {
+  const { user } = yield* EmulatorUser;
+  const scriptAddress = validatorToAddress("Custom", alwaysSucceedScript);
+  const signBuilder = yield* user
+    .newTx()
+    .pay.ToContract(
+      scriptAddress,
+      { kind: "asHash", value: Data.to("31313131") },
+      { lovelace: 5000000n },
+    )
+    .pay.ToContract(
+      scriptAddress,
+      { kind: "inline", value: Data.to("313131") },
       { lovelace: 5000000n },
     )
     .completeProgram();
