@@ -6,11 +6,11 @@ import {
   EmulatorUser,
   registerStake,
   delegateTo,
-  withdrawZero,
   EMULATOR_POOL_ID,
   REWARD_AMOUNT,
   deRegisterStake,
   evaluateAContract,
+  withdrawReward,
 } from "./service.js";
 
 const distributeRewards = Effect.gen(function* ($) {
@@ -24,7 +24,7 @@ const distributeRewards = Effect.gen(function* ($) {
   assert.deepEqual(rewardInfo.rewards, REWARD_AMOUNT);
 });
 
-describe.skip("Emulator", () => {
+describe.sequential("Emulator", () => {
   test("waitBlock", async () => {
     const program = pipe(
       mintInSlotRange,
@@ -40,45 +40,58 @@ describe.skip("Emulator", () => {
   test("registerStake", async () => {
     const program = pipe(registerStake, Effect.provide(EmulatorUser.layer));
     const exit = await Effect.runPromiseExit(program);
+    emulator.awaitBlock(4);
     expect(exit._tag).toBe("Success");
   });
 
   test("delegateTo", async () => {
     const program = pipe(delegateTo, Effect.provide(EmulatorUser.layer));
     const exit = await Effect.runPromiseExit(program);
+    emulator.awaitBlock(4);
     expect(exit._tag).toBe("Success");
   });
 
   test("withdrawAmount", async () => {
-    const program = pipe(withdrawZero(0n), Effect.provide(EmulatorUser.layer));
+    const program = pipe(
+      withdrawReward(0n),
+      Effect.provide(EmulatorUser.layer),
+    );
     const exit = await Effect.runPromiseExit(program);
+    emulator.awaitBlock(4);
     expect(exit._tag).toBe("Success");
   });
 
   test("distributeRewards", async () => {
     const program = pipe(distributeRewards, Effect.provide(EmulatorUser.layer));
     const exit = await Effect.runPromiseExit(program);
+    emulator.awaitBlock(4);
     expect(exit._tag).toBe("Success");
   });
 
   test("withdrawRewards", async () => {
     const program = pipe(
-      withdrawZero(REWARD_AMOUNT),
+      withdrawReward(REWARD_AMOUNT),
       Effect.provide(EmulatorUser.layer),
     );
     const exit = await Effect.runPromiseExit(program);
+    emulator.awaitBlock(4);
     expect(exit._tag).toBe("Success");
   });
 
   test("withdrawZeroAgain", async () => {
-    const program = pipe(withdrawZero(0n), Effect.provide(EmulatorUser.layer));
+    const program = pipe(
+      withdrawReward(0n),
+      Effect.provide(EmulatorUser.layer),
+    );
     const exit = await Effect.runPromiseExit(program);
+    emulator.awaitBlock(4);
     expect(exit._tag).toBe("Success");
   });
 
   test("deRegisterStake", async () => {
     const program = pipe(deRegisterStake, Effect.provide(EmulatorUser.layer));
     const exit = await Effect.runPromiseExit(program);
+    emulator.awaitBlock(4);
     expect(exit._tag).toBe("Success");
   });
 
