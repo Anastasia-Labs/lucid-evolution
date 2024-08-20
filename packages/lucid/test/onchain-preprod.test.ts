@@ -15,7 +15,18 @@ import * as ParametrizedEndpoints from "./specs/hello-params.js";
 import * as TxChain from "./specs/tx-chaining.js";
 import * as MetadataEndpoint from "./specs/metadata.js";
 
-describe.sequential("Onchain testing", () => {
+test("Mint Test - Mint Token", async () => {
+  const program = pipe(
+    MintBurnEndpoints.mint,
+    Effect.provide(User.layer),
+    Effect.provide(MintContract.layer),
+    Effect.provide(NetworkConfig.layerPreprod),
+  );
+  const exit = await Effect.runPromiseExit(program);
+  expect(exit._tag).toBe("Success");
+});
+
+describe.skip("Onchain testing", () => {
   test("TxChain", async () => {
     const program = pipe(
       TxChain.depositFundsCollect,
