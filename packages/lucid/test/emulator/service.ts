@@ -5,7 +5,7 @@ import {
   unixTimeToSlot,
   validatorToAddress,
 } from "@lucid-evolution/utils";
-import { Effect, Context, Layer, pipe } from "effect";
+import { Effect, Context, Layer, pipe, Console } from "effect";
 import { Data, fromText, Lucid, SpendingValidator } from "../../src";
 import {
   handleSignSubmit,
@@ -28,7 +28,6 @@ export const emulator = await Effect.gen(function* () {
 const makeEmulatorUser = Effect.gen(function* ($) {
   const user = yield* Effect.tryPromise(() => Lucid(emulator, "Custom"));
   user.selectWallet.fromSeed(EMULATOR_ACCOUNT.seedPhrase);
-  console.log(yield* Effect.promise(() => user.wallet().address()));
   return {
     user,
     emulator,
@@ -141,7 +140,7 @@ export const registerDeregisterStake = Effect.gen(function* ($) {
   withLogRetry,
 );
 
-export const withdrawZero = (amount) =>
+export const withdrawReward = (amount: bigint) =>
   Effect.gen(function* ($) {
     const { user } = yield* EmulatorUser;
     const rewardAddress = yield* pipe(
