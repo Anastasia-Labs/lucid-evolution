@@ -3,44 +3,54 @@
     "title": "Quickstart"
   },
 
+  "core-concepts": "Core Concepts",
+
+  "deep-dives": "Deep Dives",
+
+  "keeping-pace-with-cardano": "Keeping Pace with Cardano",
+
   "---": {
     "type": "separator"
   },
-  
-  "core-concepts": "Core Concepts",
-  
-  "deep-dives": "Deep Dives",
-  
-  "keeping-pace-with-cardano": "Keeping Pace with Cardano",
-  
-  "contact": {
-    "title": "Contact",
+
+  "install": {
+    "title": "Install",
     "type": "page"
   },
 
-  "install":{
-    "title": "Install",
-    "type": "page"
+  "examples": {
+    "title": "Examples",
+    "type": "menu",
+    "items": {
+      "hello-world": {
+        "title": "Hello World",
+        "href": "/examples/hello-world"
+      },
+      "design-patterns": {
+        "title": "Design Patterns",
+        "href": "/examples/design-patterns"
+      }
+    }
   },
 
   "general-information": {
     "title": "General Information",
     "type": "menu",
     "items": {
-      "acknowledgement": {
-        "title": "Acknowledgements",
-        "href": "/general-information/acknowledgement"
+      "evolution": {
+        "title": "Evolution",
+        "href": "/general-information/evolution"
       },
+
       "license": {
         "title": "License",
         "href": "/general-information/license"
       },
-      "evolution":{
-        "title": "Evolution",
-        "href": "/general-information/evolution"
+
+      "contact": {
+        "title": "Contact",
+        "href": "/general-information/contact"
       }
     }
   }
 }
-
-

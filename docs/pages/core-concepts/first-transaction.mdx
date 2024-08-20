@@ -1,34 +1,37 @@
-import { Callout } from 'nextra/components'
+import { Callout, Steps } from "nextra/components";
 
-# Your first transaction
+## Your first transaction
 
-## Build
+<Steps>
+### Build
 
 Let's create a simple transaction where we send `5 ADA` to two recipients each:
 
 ```typescript
-const tx = await lucid.newTx()
+const tx = await lucid
+  .newTx()
   .pay.ToAddress("addr_testa...", { lovelace: 5000000n })
   .pay.ToAddress("addr_testb...", { lovelace: 5000000n })
   .complete();
 ```
+<Callout>
 To balance the transaction and initiate coin selection, transactions always need to end with `.complete()`
+</Callout>
 
 <Callout type="info" emoji="ℹ️">
-`payToAddress` endpoint has been changed to `pay.ToAddress` in Lucid Evolution.
+ __Evolution-Notes:__ `payToAddress` -> `pay.ToAddress`
 </Callout>
-## Sign
-Next, we sign the transaction:
+### Sign 
 
 ```typescript
 const signedTx = await tx.sign.withWallet().complete();
 ```
-Here we also need to call `.complete()` when we are ready with signing.
+
 
 <Callout type="info" emoji="ℹ️">
-`sign()` endpoint has been changed to `sign.withWallet()` in Lucid Evolution
+ __Evolution-Notes:__ `sign()` -> `sign.withWallet()` 
 </Callout>
-## Submit
+### Submit
 
 Lastly we submit the transaction:
 
@@ -37,8 +40,14 @@ const txHash = await signedTx.submit();
 console.log(txHash);
 ```
 
-Remember to select a wallet before attempting to build and submit transactions. The wallet selection methods we discussed in the previous section should be used before building the transaction.
+</Steps>
 
+<Callout>
+  Remember to select a wallet before attempting to build and submit
+  transactions. The wallet selection methods we discussed in previous section
+  **Core Concept 2: Choose Wallet** should be implemented before building the
+  transaction.
+</Callout>
 ## Putting everything together
 
 ```typescript
@@ -49,12 +58,10 @@ const lucid = await Lucid(
   "Preprod"
 );
 
-// Assuming you've already selected a wallet using one of the methods we discussed earlier
+lucid.selectWallet.fromPrivateKey(privateKey);
 
-// For example:
-// lucid.selectWallet.fromPrivateKey(privateKey);
-
-const tx = await lucid.newTx()
+const tx = await lucid
+  .newTx()
   .pay.ToAddress("addr_testa...", { lovelace: 5000000n })
   .pay.ToAddress("addr_testb...", { lovelace: 5000000n })
   .complete();
