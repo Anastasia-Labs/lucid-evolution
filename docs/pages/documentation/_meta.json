@@ -1,0 +1,27 @@
+{
+  "core-concepts":{
+    "title": "Core Concepts",
+    "theme": {
+      "breadcrumb": false
+    }},
+
+  "deep-dives": {
+    "title": "Deep Dives",
+    "theme": {
+      "breadcrumb": false
+    }
+  },
+
+  "keeping-pace-with-cardano": {
+    "title": "Keeping Pace with Cardano",
+    "theme": {
+      "breadcrumb": false
+    }
+  },
+
+  "---": {
+    "type": "separator"
+  },
+
+  "examples": "Examples"
+}

@@ -2,6 +2,7 @@ import Image from "next/image";
 import { useRouter } from "next/router";
 
 export default {
+  
   project: {
     link: "https://github.com/Anastasia-Labs/lucid-evolution",
   },
@@ -43,7 +44,7 @@ export default {
   darkMode: false,
 
   search: {
-    placeholder: "🔎 Search the Evolution library",
+    placeholder: "🔎 Explore the Evolution",
   },
 
   toc: {

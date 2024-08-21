@@ -2,8 +2,6 @@ import { Callout, Steps } from "nextra/components";
 
 # Mint Assets
 
-## Mint
-
 <Steps>
 ### Create a Minting Policy
 First, we need to create a minting policy for the assets we want to mint. In this example, we'll use a native script time-locking policy with our wallet as the required signer:
@@ -30,6 +28,7 @@ const mintingPolicy = nativeScriptFromJson({
   ],
 });
 ```
+
 ---
 
 Next we derive the policy id from the minting policy script:
@@ -37,7 +36,9 @@ Next we derive the policy id from the minting policy script:
 ```typescript
 const policyId = lucid.utils.mintingPolicyToId(mintingPolicy);
 ```
+
 ---
+
 ### Mint Assets
 
 Now we can mint our desired tokens:
@@ -84,15 +85,11 @@ const txHash = await signedTx.submit();
 <Callout>
   - All assets minted in a single `mintAssets` call should be of the same policy
   id. You can chain multiple `mintAssets` calls if you need to mint assets with
-  different policy ids. 
-  - The minting policy must be attached to the transaction
-  using `attach.MintingPolicy` 
-  - Lucid Evolution supports Native, PlutusV1, and
+  different policy ids. - The minting policy must be attached to the transaction
+  using `attach.MintingPolicy` - Lucid Evolution supports Native, PlutusV1, and
   PlutusV2 minting policies. The appropriate script type will be used based on
-  the policy you attach. 
-  - When using Plutus scripts (V1 or V2), make sure to
-  provide an appropriate redeemer. 
-  - The `validTo` field is important for
+  the policy you attach. - When using Plutus scripts (V1 or V2), make sure to
+  provide an appropriate redeemer. - The `validTo` field is important for
   time-locked minting policies to ensure the transaction is submitted within the
   valid time range
 </Callout>
