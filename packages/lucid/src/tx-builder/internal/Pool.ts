@@ -8,11 +8,13 @@ import { ERROR_MESSAGE, TxBuilderError } from "../../Errors.js";
 import * as TxBuilder from "../TxBuilder.js";
 import { Effect, pipe } from "effect";
 import {
+  processStakeCredential,
   toCMLAddress,
   toPartial,
   toV1,
   toV2,
   validateAddressDetails,
+  validateAndFetchStakeCredential,
 } from "./TxUtils.js";
 import * as CML from "@anastasia-labs/cardano-multiplatform-lib-nodejs";
 import { LucidConfig } from "../../lucid-evolution/LucidEvolution.js";
@@ -28,84 +30,20 @@ export const delegateTo = (
   redeemer?: Redeemer,
 ): Effect.Effect<void, TxBuilderError> =>
   Effect.gen(function* () {
-    const addressDetails = yield* pipe(
-      validateAddressDetails(rewardAddress, config.lucidConfig),
-      Effect.andThen((address) =>
-        address.type !== "Reward"
-          ? poolError(ERROR_MESSAGE.MISSING_REWARD_TYPE)
-          : Effect.succeed(address),
-      ),
+    const stakeCredential = yield* validateAndFetchStakeCredential(
+      rewardAddress,
+      config,
     );
 
-    const stakeCredential = yield* pipe(
-      Effect.fromNullable(addressDetails.stakeCredential),
-      Effect.orElseFail(() =>
-        poolError(ERROR_MESSAGE.MISSING_STAKE_CREDENTIAL),
-      ),
-    );
+    const buildCert = (credential: CML.Credential) =>
+      CML.SingleCertificateBuilder.new(
+        CML.Certificate.new_stake_delegation(
+          credential,
+          CML.Ed25519KeyHash.from_bech32(poolId),
+        ),
+      );
 
-    switch (stakeCredential.type) {
-      case "Key": {
-        const credential = CML.Credential.new_pub_key(
-          CML.Ed25519KeyHash.from_hex(stakeCredential.hash),
-        );
-        const certBuilder = CML.SingleCertificateBuilder.new(
-          CML.Certificate.new_stake_delegation(
-            credential,
-            CML.Ed25519KeyHash.from_bech32(poolId),
-          ),
-        );
-        config.txBuilder.add_cert(certBuilder.payment_key());
-        break;
-      }
-
-      case "Script": {
-        const credential = CML.Credential.new_script(
-          CML.ScriptHash.from_hex(stakeCredential.hash),
-        );
-        const certBuilder = CML.SingleCertificateBuilder.new(
-          CML.Certificate.new_stake_delegation(
-            credential,
-            CML.Ed25519KeyHash.from_bech32(poolId),
-          ),
-        );
-        const script = yield* pipe(
-          Effect.fromNullable(config.scripts.get(stakeCredential.hash)),
-          Effect.orElseFail(() =>
-            poolError(ERROR_MESSAGE.MISSING_SCRIPT(stakeCredential.hash)),
-          ),
-        );
-        const red = yield* pipe(
-          Effect.fromNullable(redeemer),
-          Effect.orElseFail(() => poolError(ERROR_MESSAGE.MISSING_REDEEMER)),
-        );
-        switch (script.type) {
-          case "PlutusV1": {
-            config.txBuilder.add_cert(
-              certBuilder.plutus_script(
-                toPartial(toV1(script.script), red),
-                CML.Ed25519KeyHashList.new(),
-              ),
-            );
-            break;
-          }
-
-          case "PlutusV2": {
-            config.txBuilder.add_cert(
-              certBuilder.plutus_script(
-                toPartial(toV2(script.script), red),
-                CML.Ed25519KeyHashList.new(),
-              ),
-            );
-            break;
-          }
-          case "Native": {
-            yield* poolError("NotFound");
-            break;
-          }
-        }
-      }
-    }
+    yield* processStakeCredential(stakeCredential, config, buildCert, redeemer);
   });
 
 /** Register a stake pool. A pool deposit is required. The metadataUrl needs to be hosted already before making the registration. */
