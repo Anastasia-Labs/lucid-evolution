@@ -111,11 +111,22 @@ export function coresToTxOutputs(outputs: CML.TransactionOutput[]): TxOutput[] {
 //   return result;
 // }
 
-export const selectUTxOs = (utxos: UTxO[], totalAssets: Assets) => {
+/**
+ * Returns a list of UTxOs whose total assets are equal to or greater than the asset value provided
+ * @param utxos list of available utxos
+ * @param totalAssets minimum total assets required
+ * @param includeUTxOsWithScriptRef Whether to include UTxOs with scriptRef or not. default = false
+ */
+export const selectUTxOs = (
+  utxos: UTxO[],
+  totalAssets: Assets,
+  includeUTxOsWithScriptRef: boolean = false,
+) => {
   const selectedUtxos: UTxO[] = [];
   let isSelected = false;
   const assetsRequired = new Map<string, bigint>(Object.entries(totalAssets));
   for (const utxo of utxos) {
+    if (!includeUTxOsWithScriptRef && utxo.scriptRef) continue;
     isSelected = false;
     for (const [unit, amount] of assetsRequired) {
       if (Object.hasOwn(utxo.assets, unit)) {

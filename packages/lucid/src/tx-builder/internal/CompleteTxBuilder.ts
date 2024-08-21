@@ -155,7 +155,7 @@ export const selectionAndEvaluation = (
 
     // Skip UPLC evaluation for the second time if no new inputs are added
     if (_Array.isEmptyArray(inputsToAdd) && script_calculation) return;
-    let estimatedFee = 0n
+    let estimatedFee = 0n;
     if (_Array.isNonEmptyArray(inputsToAdd)) {
       for (const utxo of inputsToAdd) {
         const input = CML.SingleInputBuilder.from_transaction_unspent_output(
@@ -389,7 +389,8 @@ const findCollateral = (
     // A UTXO with 5.5 ADA will result in an error message such as `BabbageOutputTooSmallUTxO`, since only 0.5 ADA would be returned to the collateral return address.
     const collateralLovelace: Assets = { lovelace: 5_000_000n };
     const error = completeTxError(
-      `Your wallet does not have enough funds to cover the required 5 ADA collateral.`,
+      `Your wallet does not have enough funds to cover the required 5 ADA collateral. Or it contains UTxOs with reference scripts; which
+      are excluded from collateral selection.`,
     );
     const selected = yield* recursive(
       sortUTxOs(inputs),
@@ -457,9 +458,9 @@ const coinSelection = (
 
 /**
  * Estimate total transaction fee and set it in CML.TransactionBuilder if required
- * @param config 
- * @param script_calculation 
- * @returns 
+ * @param config
+ * @param script_calculation
+ * @returns estimated fee
  */
 const estimateFee = (
   config: TxBuilder.TxBuilderConfig,
@@ -661,7 +662,8 @@ export const recursive = (
   Effect.gen(function* () {
     let selected: UTxO[] = [];
     error ??= completeTxError(
-      `Your wallet does not have enough funds to cover the required assets: ${stringify(requiredAssets)}`,
+      `Your wallet does not have enough funds to cover the required assets: ${stringify(requiredAssets)}
+      Or it contains UTxOs with reference scripts; which are excluded from coin selection.`,
     );
     if (!Record.isEmptyRecord(requiredAssets)) {
       selected = selectUTxOs(inputs, requiredAssets);
@@ -690,7 +692,8 @@ export const recursive = (
       const extraSelected = selectUTxOs(remainingInputs, extraLovelace);
       if (_Array.isEmptyArray(extraSelected)) {
         yield* completeTxError(
-          `Your wallet does not have enough funds to cover required minimum ADA for change output: ${stringify(extraLovelace)}`,
+          `Your wallet does not have enough funds to cover required minimum ADA for change output: ${stringify(extraLovelace)}
+          Or it contains UTxOs with reference scripts; which are excluded from coin selection.`,
         );
       }
       const extraSelectedAssets: Assets = sumAssetsFromInputs(extraSelected);
