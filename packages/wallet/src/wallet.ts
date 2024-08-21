@@ -170,7 +170,7 @@ export function discoverOwnUsedTxKeyHashes(
         }
 
         case 5:
-          // Key hash not needed for registration
+          // Key hash not needed for reg cert
           break;
 
         case 6: {
@@ -182,8 +182,105 @@ export function discoverOwnUsedTxKeyHashes(
           break;
         }
 
+        case 7: {
+          //TODO: Missing test
+          const credential = cert.as_vote_deleg_cert()?.stake_credential();
+          if (credential) {
+            usedKeyHashes.push(credential.as_pub_key()?.to_hex());
+          }
+          break;
+        }
+
+        case 8: {
+          //TODO: Missing test
+          const credential = cert
+            .as_stake_vote_deleg_cert()
+            ?.stake_credential();
+          if (credential) {
+            usedKeyHashes.push(credential.as_pub_key()?.to_hex());
+          }
+          break;
+        }
+
+        case 9: {
+          //TODO: Missing test
+          const credential = cert.as_stake_reg_deleg_cert()?.stake_credential();
+          if (credential) {
+            usedKeyHashes.push(credential.as_pub_key()?.to_hex());
+          }
+          break;
+        }
+
+        case 10: {
+          //TODO: Missing test
+          const credential = cert.as_vote_reg_deleg_cert()?.stake_credential();
+          if (credential) {
+            usedKeyHashes.push(credential.as_pub_key()?.to_hex());
+          }
+          break;
+        }
+
+        case 11: {
+          //TODO: Missing test
+          const credential = cert
+            .as_stake_vote_reg_deleg_cert()
+            ?.stake_credential();
+          if (credential) {
+            usedKeyHashes.push(credential.as_pub_key()?.to_hex());
+          }
+          break;
+        }
+
+        case 12: {
+          //TODO: Missing test
+          const credential = cert
+            .as_auth_committee_hot_cert()
+            ?.committee_hot_credential();
+          if (credential) {
+            usedKeyHashes.push(credential.as_pub_key()?.to_hex());
+          }
+          break;
+        }
+
+        case 13: {
+          //TODO: Missing test
+          const credential = cert
+            .as_resign_committee_cold_cert()
+            ?.committee_cold_credential();
+          if (credential) {
+            usedKeyHashes.push(credential.as_pub_key()?.to_hex());
+          }
+          break;
+        }
+
+        case 14: {
+          //TODO: Missing test
+          const credential = cert.as_reg_drep_cert()?.drep_credential();
+          if (credential) {
+            usedKeyHashes.push(credential.as_pub_key()?.to_hex());
+          }
+          break;
+        }
+
+        case 15: {
+          //TODO: Missing test
+          const credential = cert.as_unreg_drep_cert()?.drep_credential();
+          if (credential) {
+            usedKeyHashes.push(credential.as_pub_key()?.to_hex());
+          }
+          break;
+        }
+
+        case 16: {
+          //TODO: Missing test
+          const credential = cert.as_update_drep_cert()?.drep_credential();
+          if (credential) {
+            usedKeyHashes.push(credential.as_pub_key()?.to_hex());
+          }
+          break;
+        }
+
         default:
-          //TODO: Missing certificates
           break;
       }
     }
