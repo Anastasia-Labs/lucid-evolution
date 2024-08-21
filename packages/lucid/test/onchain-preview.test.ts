@@ -16,6 +16,18 @@ import * as TxChain from "./specs/tx-chaining.js";
 import * as MetadataEndpoint from "./specs/metadata.js";
 
 describe.sequential("Onchain testing", () => {
+  test.only("MultiValidator - simpleSpend", async () => {
+    const program = pipe(
+      MultiValidatorEndpoints.simpleSpend,
+      Effect.provide(User.layer),
+      Effect.provide(StakeContract.layer),
+      Effect.provide(MintContract.layer),
+      Effect.provide(NetworkConfig.layerPreview),
+    );
+    const exit = await Effect.runPromiseExit(program);
+    expect(exit._tag).toBe("Success");
+  });
+
   test("TxChain", async () => {
     const program = pipe(
       TxChain.depositFundsCollect,

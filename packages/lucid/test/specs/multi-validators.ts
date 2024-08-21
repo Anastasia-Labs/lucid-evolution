@@ -4,6 +4,33 @@ import { Constr, Data } from "@lucid-evolution/plutus";
 import { fromText, RedeemerBuilder, UTxO } from "../../src";
 import { handleSignSubmit, withLogRetry } from "./utils";
 
+export const simpleSpend = Effect.gen(function* () {
+  const { user } = yield* User;
+  const address = yield* Effect.tryPromise(() => user.wallet().address());
+  const utxos = yield* Effect.tryPromise(() => user.wallet().getUtxos());
+  const [utxo] = utxos.filter(
+    (utxo) =>
+      utxo.txHash ==
+        "e2a6890668d211386e5a353cf47a3f35947c343bd4f39ebdee4bfb9b8da7c83e" &&
+      utxo.outputIndex == 0,
+  );
+  console.log(utxo);
+
+  const tx = yield* user
+    .newTx()
+    .collectFrom([utxo])
+    .pay.ToAddressWithData(
+      address,
+      { kind: "inline", value: utxo.datum! },
+      utxo.assets,
+      utxo.scriptRef!,
+    )
+    .completeProgram();
+  console.log(tx.toJSON());
+
+  return tx;
+}).pipe(Effect.flatMap(handleSignSubmit), withLogRetry, Effect.orDie);
+
 export const depositFunds = Effect.gen(function* () {
   const { user } = yield* User;
   const datum = Data.void();
