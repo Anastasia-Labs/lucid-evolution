@@ -1,5 +1,21 @@
 # @lucid-evolution/lucid
 
+## 0.3.9
+
+### Patch Changes
+
+- [#228](https://github.com/Anastasia-Labs/lucid-evolution/pull/228) [`d4b03aa`](https://github.com/Anastasia-Labs/lucid-evolution/commit/d4b03aa121f42d8e27e1062ddf38b09ad9f8a5d9) Thanks [@hadelive](https://github.com/hadelive)! - datum inclusion for asHash kind in payToContract
+
+- [#225](https://github.com/Anastasia-Labs/lucid-evolution/pull/225) [`7c25501`](https://github.com/Anastasia-Labs/lucid-evolution/commit/7c25501e5f11af8d4a1b2e36d3430bf638cb1eed) Thanks [@hadelive](https://github.com/hadelive)! - support conway un_reg cert
+
+- Updated dependencies [[`7c25501`](https://github.com/Anastasia-Labs/lucid-evolution/commit/7c25501e5f11af8d4a1b2e36d3430bf638cb1eed)]:
+  - @lucid-evolution/core-utils@0.1.13
+  - @lucid-evolution/provider@0.1.42
+  - @lucid-evolution/wallet@0.1.37
+  - @lucid-evolution/plutus@0.1.19
+  - @lucid-evolution/sign_data@0.1.16
+  - @lucid-evolution/utils@0.1.33
+
 ## 0.3.8
 
 ### Patch Changes
