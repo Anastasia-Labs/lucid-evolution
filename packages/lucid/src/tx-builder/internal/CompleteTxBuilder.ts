@@ -7,7 +7,13 @@ import {
   Tuple,
   Option,
 } from "effect";
-import { Address, Assets, UTxO, Wallet } from "@lucid-evolution/core-types";
+import {
+  Address,
+  Assets,
+  EvalRedeemer,
+  UTxO,
+  Wallet,
+} from "@lucid-evolution/core-types";
 import {
   ERROR_MESSAGE,
   RunTimeError,
@@ -226,15 +232,22 @@ export const selectionAndEvaluation = (
     //     )
     //   }
     // });
-
-    if (
-      options.localUPLCEval !== false &&
-      txRedeemerBuilder.draft_tx().witness_set().redeemers()
-    ) {
-      applyUPLCEval(
-        yield* evalTransaction(config, txRedeemerBuilder, walletInfo.inputs),
-        config.txBuilder,
-      );
+    const txUtxos = [
+      ...walletInfo.inputs,
+      ...config.collectedInputs,
+      ...config.readInputs,
+    ];
+    let draftTx = txRedeemerBuilder.draft_tx();
+    if (draftTx.witness_set().redeemers()) {
+      draftTx = setRedeemerstoZero(draftTx);
+      if (options.localUPLCEval !== false) {
+        applyNativeUPLCEval(
+          yield* evalTransaction(config, draftTx, txUtxos),
+          config.txBuilder,
+        );
+      } else {
+        config.lucidConfig.provider.evaluateTx(draftTx.to_cbor_hex(), txUtxos);
+      }
     }
   }).pipe(Effect.catchAllDefect((cause) => new RunTimeError({ cause })));
 
@@ -302,7 +315,7 @@ export const completePartialPrograms = (config: TxBuilder.TxBuilderConfig) =>
     yield* Effect.all(newPrograms);
   });
 
-export const applyUPLCEval = (
+export const applyNativeUPLCEval = (
   uplcEval: Uint8Array[],
   txbuilder: CML.TransactionBuilder,
 ) => {
@@ -322,31 +335,51 @@ export const applyUPLCEval = (
   }
 };
 
+export const applyUPLCEval = (
+  uplcEvals: EvalRedeemer[],
+  txbuilder: CML.TransactionBuilder,
+) => {
+  const totalExUnits = { mem: 0n, steps: 0n };
+  for (const uplcEval of uplcEvals) {
+    const exUnits = CML.ExUnits.new(
+      BigInt(uplcEval.ex_units.mem),
+      BigInt(uplcEval.ex_units.steps),
+    );
+    const redeemerTag = CML.RedeemerTag.
+      CML.RedeemerWitnessKey.new(
+        redeemer.tag(),
+        BigInt(uplcEval.redeemer_index),
+      ),
+      exUnits,
+    );
+    totalExUnits.mem = totalExUnits.mem + redeemer.ex_units().mem();
+    totalExUnits.steps = totalExUnits.steps + redeemer.ex_units().steps();
+  }
+};
+
 export const setRedeemerstoZero = (tx: CML.Transaction) => {
   const redeemers = tx.witness_set().redeemers();
-  if (redeemers) {
-    const redeemerList = CML.LegacyRedeemerList.new();
-    for (let i = 0; i < redeemers.as_arr_legacy_redeemer()!.len(); i++) {
-      const redeemer = redeemers.as_arr_legacy_redeemer()!.get(i);
-      const dummyRedeemer = CML.LegacyRedeemer.new(
-        redeemer.tag(),
-        redeemer.index(),
-        redeemer.data(),
-        CML.ExUnits.new(0n, 0n),
-      );
-      redeemerList.add(dummyRedeemer);
-    }
-    const dummyWitnessSet = tx.witness_set();
-    dummyWitnessSet.set_redeemers(
-      CML.Redeemers.new_arr_legacy_redeemer(redeemerList),
+  const redeemerList = CML.LegacyRedeemerList.new();
+  for (let i = 0; i < redeemers.as_arr_legacy_redeemer()!.len(); i++) {
+    const redeemer = redeemers.as_arr_legacy_redeemer()!.get(i);
+    const dummyRedeemer = CML.LegacyRedeemer.new(
+      redeemer.tag(),
+      redeemer.index(),
+      redeemer.data(),
+      CML.ExUnits.new(0n, 0n),
     );
-    return CML.Transaction.new(
-      tx.body(),
-      dummyWitnessSet,
-      true,
-      tx.auxiliary_data(),
-    );
+    redeemerList.add(dummyRedeemer);
   }
+  const dummyWitnessSet = tx.witness_set();
+  dummyWitnessSet.set_redeemers(
+    CML.Redeemers.new_arr_legacy_redeemer(redeemerList),
+  );
+  return CML.Transaction.new(
+    tx.body(),
+    dummyWitnessSet,
+    true,
+    tx.auxiliary_data(),
+  );
 };
 
 const setCollateral = (
@@ -492,17 +525,11 @@ const estimateFee = (
 
 const evalTransaction = (
   config: TxBuilder.TxBuilderConfig,
-  txRedeemerBuilder: CML.TxRedeemerBuilder,
-  walletInputs: UTxO[],
+  draftTx: CML.Transaction,
+  txUtxos: UTxO[],
 ): Effect.Effect<Uint8Array[], TxBuilderError> =>
   Effect.gen(function* () {
-    //FIX: this returns undefined
-    const txEvaluation = setRedeemerstoZero(txRedeemerBuilder.draft_tx())!;
-    const txUtxos = [
-      ...walletInputs,
-      ...config.collectedInputs,
-      ...config.readInputs,
-    ];
+    const txEvaluation = setRedeemerstoZero(draftTx);
     const ins = txUtxos.map((utxo) => utxoToTransactionInput(utxo));
     const outs = txUtxos.map((utxo) => utxoToTransactionOutput(utxo));
     const slotConfig = SLOT_CONFIG_NETWORK[config.lucidConfig.network];
