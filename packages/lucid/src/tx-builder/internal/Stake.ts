@@ -29,6 +29,22 @@ export const registerStake = (
       ),
     );
 
+    const createCertBuilder = (
+      credential: CML.Credential,
+      config: any,
+    ): CML.SingleCertificateBuilder => {
+      return config.lucidConfig.network == "Preview"
+        ? CML.SingleCertificateBuilder.new(
+            CML.Certificate.new_reg_cert(
+              credential,
+              config.lucidConfig.protocolParameters.keyDeposit,
+            ),
+          )
+        : CML.SingleCertificateBuilder.new(
+            CML.Certificate.new_stake_registration(credential),
+          );
+    };
+
     const credential =
       stakeCredential.type === "Key"
         ? CML.Credential.new_pub_key(
@@ -37,9 +53,7 @@ export const registerStake = (
         : CML.Credential.new_script(
             CML.ScriptHash.from_hex(stakeCredential.hash),
           );
-    const certBuilder = CML.SingleCertificateBuilder.new(
-      CML.Certificate.new_stake_registration(credential),
-    );
+    const certBuilder = createCertBuilder(credential, config);
     config.txBuilder.add_cert(certBuilder.skip_witness());
   });
 

@@ -169,6 +169,10 @@ export function discoverOwnUsedTxKeyHashes(
           break;
         }
 
+        case 5:
+          // Key hash not needed for registration
+          break;
+
         case 6: {
           //TODO: Missing test
           const credential = cert.as_unreg_cert()?.stake_credential();
