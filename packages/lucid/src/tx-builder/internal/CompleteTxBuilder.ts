@@ -414,7 +414,6 @@ const coinSelection = (
 ): Effect.Effect<UTxO[], TxBuilderError> =>
   Effect.gen(function* () {
     // NOTE: This is a fee estimation. If the amount is not enough, it may require increasing the fee.
-    console.log("coinSelection");
     const estimatedFee: Assets = {
       lovelace: yield* estimateFee(config, script_calculation),
     };
@@ -484,10 +483,6 @@ const estimateFee = (
 
       config.txBuilder.set_fee(estimatedFee);
     }
-
-    console.log("refScriptFee " + refScriptFee);
-    console.log("minFee " + minFee);
-    console.log("estimatedFee " + estimatedFee);
     return estimatedFee;
   });
 
