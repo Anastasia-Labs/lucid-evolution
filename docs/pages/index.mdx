@@ -1,72 +1,224 @@
-import { Callout, Steps, Cards } from 'nextra/components'
-import { useData } from 'nextra/data'
+import { Callout, Steps, Cards } from "nextra/components";
+import { useData } from "nextra/data";
+import Image from "next/image";
+import { Tabs } from "nextra/components";
+import { useState, useEffect } from "react";
 
-# Lucid Evolution
+![](/al-icon-a-monochrome.png)
 
-**Hello fellow developers, welcome to Lucid Evolution!** 
+export function Hero({
+  title,
+  subtitle,
+  ctaText,
+  ctaLink,
+  ctaText2,
+  ctaLink2,
+}) {
+  const [isHovered1, setIsHovered1] = useState(false);
+  const [isHovered2, setIsHovered2] = useState(false);
 
-Lucid Evolution, maintained by Anastasia Labs, is an upgraded version of the legacy Lucid library. It features improved APIs, enhanced error handling, better structure, and the latest CML version. The entirety of the library has been created from scratch to address identified areas for improvement
+const buttonStyle = (isHovered) => ({
+padding: "0.5rem 1rem",
+backgroundColor: isHovered ? "#a52a2a" : "#8b0000",
+color: "white",
+textDecoration: "none",
+borderRadius: "8px",
+transition: "background-color 0.3s ease",
+});
 
-<Callout type="warning" emoji="⚠️">
-  Please note that the documentation is currently under construction and some sections may be incomplete or subject to changes. 
-  We are working hard to provide you with comprehensive and accurate information.
-</Callout>
+return (
+
+<div style={{ textAlign: "center" }}>
+  <h1 style={{ fontSize: "2.5rem", marginBottom: "1rem" }}>{title}</h1>
+  <p style={{ fontSize: "1rem", marginBottom: "2rem" }}>{subtitle}</p>
+  <div style={{ display: "flex", justifyContent: "center", gap: "1rem" }}>
+    <a
+      href={ctaLink}
+      style={buttonStyle(isHovered1)}
+      onMouseEnter={() => setIsHovered1(true)}
+      onMouseLeave={() => setIsHovered1(false)}
+    >
+      {ctaText}
+    </a>
+    <a
+      href={ctaLink2}
+      style={buttonStyle(isHovered2)}
+      onMouseEnter={() => setIsHovered2(true)}
+      onMouseLeave={() => setIsHovered2(false)}
+    >
+      {ctaText2}
+    </a>
+  </div>
+</div>
+); }
+
+<Hero
+  title="Lucid Evolution"
+  subtitle="An advanced off-chain framework for Cardano and an upgraded version of the legacy Lucid library"
+  ctaText="Get Started"
+  ctaLink="/install"
+  ctaText2="Documentation"
+  ctaLink2="/documentation/core-concepts/instantiate-evolution"
+/>
 
 ---
 
-# Quickstart
+export function AnimatedCode({ code }) {
+  const [displayedCode, setDisplayedCode] = useState('');
+
+useEffect(() => {
+let i = 0;
+const animateCode = () => {
+const intervalId = setInterval(() => {
+setDisplayedCode(code.slice(0, i));
+i++;
+
+        if (i > code.length) {
+          clearInterval(intervalId);
+
+
+          setTimeout(() => {
+            i = 0;
+            animateCode();
+          }, 6000); // 6-second pause
+        }
+      }, 60); // 60ms per character
+
+      return () => clearInterval(intervalId);
+    };
+
+    animateCode();
+
+    return () => clearInterval();
+
+}, [code]);
+
+const lineCount = code.split('\n').length;
+
+const preHeight = `${lineCount * 1.5}em`;
+
+return (
+
+<pre
+  style={{
+    backgroundColor: "#1a1515", // 420D08 is also nice
+    padding: "1rem",
+    borderRadius: "8px",
+    height: preHeight,
+    overflow: "hidden",
+    whiteSpace: "pre-wrap",
+    wordWrap: "break-word",
+  }}
+>
+  <code>{displayedCode}</code>
+</pre>
+
+);
+}
+
+<AnimatedCode code={
+  `import { Lucid } from "@lucid-evolution/lucid";
+import { Blockfrost } from "@lucid-evolution/provider";
+
+const lucid = await Lucid(
+new Blockfrost("https://cardano-testnet.blockfrost.io/api/v0", "YOUR_PROJECT_ID"),
+"Testnet"
+);
+`} />
+
+---
+
+# Why Evolution?
+
+<Tabs
+  items={[
+    "Improved APIs",
+    "Enhanced Error Handling",
+    "Refined Structure",
+    "Latest CML",
+    "Developer-Centric",
+  ]}
+>
+  <Tabs.Tab>
+    Enhanced interfaces for better developer experience, streamlined function
+    calls for common operations. Take advantage of built-in support for popular
+    Cardano features, reducing the need for external dependencies
+  </Tabs.Tab>
+  <Tabs.Tab>
+    Error management just got better and a lot smoother with our integration of
+    the Effect library. Debug quicker with detailed, context-rich error
+    messages. Handle exceptions easily with our structured error types.
+  </Tabs.Tab>
+  <Tabs.Tab>
+    Lucid Evolution uses a modular code architecture. The codebase separates
+    functionality into distinct packages. Many components are designed for
+    reusability across different parts of the library. We will be able to add
+    new features as separate modules within the existing architecture
+  </Tabs.Tab>
+  <Tabs.Tab>
+    Keeping up with the latest version of the Cardano Multi-platform Library
+    (CML)
+  </Tabs.Tab>
+  <Tabs.Tab>
+    Documentation for Lucid Evolution includes code examples for various use
+    cases. The project maintains a public GitHub repository for issue tracking
+    and discussions. Regular updates are published to address bugs and add
+    features and support is provided through GitHub issues and our dedicated
+    Discord channel.
+  </Tabs.Tab>
+</Tabs>
+---
+
+## Quickstart
 
 <Steps>
 ### Set up your project
 Initialize a new TypeScript project
 
-
-
 ### Install the packages you need
 
 <Cards>
-  <Cards.Card
-    title = "Lucid Evolution Packages"
-    href = "/install"
-  />
+  <Cards.Card title="Lucid Evolution packages" href="/install" />
 </Cards>
 
-
-
 ### Build and submit a transaction
+
 ---
 
 <Steps>
-**Instantiate Lucid Evolution** and choose a provider
+→ **Instantiate Lucid Evolution** and choose a provider
 <Cards>
   <Cards.Card
     title = "Core Concept 1: Instantiation"
-    href = "/core-concepts/instantiate-evolution-and-choose-provider"
+    href = "/documentation/core-concepts/instantiate-evolution"
   />
 </Cards>
 
-**Choose a wallet** and select it
+→ **Choose a wallet** and select it
+
 <Cards>
   <Cards.Card
-    title = "Core Concept 2: Choose Wallet"
-    href = "/core-concepts/create-choose-wallet"
+    title="Core Concept 2: Choose wallet"
+    href="/documentation/core-concepts/create-choose-wallet"
   />
 </Cards>
 
-**Build your first transaction** and submit it
+→ **Build your first transaction** and submit it
+
 <Cards>
   <Cards.Card
-    title = "Core Concept 3: Your First Transaction"
-    href = "/core-concepts/first-transaction"
+    title="Core Concept 3: Your first transaction"
+    href="/documentation/core-concepts/first-transaction"
   />
 </Cards>
 
-**Learn more** about advanced concepts and start building
+→ **Learn more** about advanced concepts and start building
+
 <Cards>
   <Cards.Card
     icon = "🥽"
     title = " Deep Dive Series"
-    href = "/deep-dives/make-payments"
+    href = "/documentation/deep-dives/make-payments"
   />
 </Cards>
 </Steps>
@@ -74,3 +226,40 @@ Initialize a new TypeScript project
 
 ---
 
+# F.A.Q.
+
+export function FAQBox({ title, children }) {
+  return (
+    <details
+      open
+      className="last-of-type:mb-0 rounded-lg bg-neutral-50 dark:bg-neutral-800 p-2 mt-4"
+    >
+      <summary>
+        <strong className="text-lg">{title}</strong>
+      </summary>
+      <div className="nx-p-2">{children}</div>
+    </details>
+  );
+}
+
+<FAQBox title="What is Lucid Evolution?">
+  Lucid Evolution is an off-chain framework library for Cardano, designed to
+  facilitate the development of decentralized applications (dApps). It includes
+  various packages such as utilities for signing data, Plutus integration, and
+  wallet management, all built using TypeScript to enhance type safety and
+  developer experience
+</FAQBox>
+
+<FAQBox title="How does Lucid Evolution ensure compatibility with Cardano's evolving scene?">
+  Lucid Evolution is actively maintained to ensure compatibility with Cardano's
+  protocols and upcoming hard forks like Chang. We are actively involved in
+  updating our fee models, and functionalities to support upcoming changes. We
+  like to emphasize regular updates and community contributions to address any
+  compatibility issues and enhance functionality
+</FAQBox>
+
+<FAQBox title="Can I contribute to the development of Lucid Evolution?">
+  Yes, contributions to Lucid Evolution are welcome. You can submit issues,
+  feature requests, or pull requests on the project's GitHub repository to help
+  improve the library and its documentation
+</FAQBox>
