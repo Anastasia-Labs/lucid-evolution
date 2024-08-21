@@ -9,7 +9,7 @@ import { Address, Assets, Script } from "@lucid-evolution/core-types";
 import { OutputDatum } from "../types.js";
 import * as TxBuilder from "../TxBuilder.js";
 import { CML } from "../../core.js";
-import { toCMLAddress, toDatumOption } from "./TxUtils.js";
+import { toCMLAddress } from "./TxUtils.js";
 import { ERROR_MESSAGE, TxBuilderError } from "../../Errors.js";
 
 export const payError = (cause: unknown) =>
@@ -137,9 +137,33 @@ const buildBaseOutput = (
   outputDatum: OutputDatum,
   scriptRef: Script | undefined,
 ) => {
-  const baseBuilder = CML.TransactionOutputBuilder.new()
-    .with_address(CML.Address.from_bech32(address))
-    .with_data(toDatumOption(outputDatum));
+  let baseBuilder: CML.TransactionOutputBuilder;
+  const addressBuilder = CML.TransactionOutputBuilder.new().with_address(
+    CML.Address.from_bech32(address),
+  );
+
+  switch (outputDatum.kind) {
+    case "hash": {
+      const datumOption = CML.DatumOption.new_hash(
+        CML.DatumHash.from_hex(outputDatum.value),
+      );
+      baseBuilder = addressBuilder.with_data(datumOption);
+      break;
+    }
+    case "asHash": {
+      const plutusData = CML.PlutusData.from_cbor_hex(outputDatum.value);
+      baseBuilder = addressBuilder.with_communication_data(plutusData);
+      break;
+    }
+    case "inline": {
+      const plutusData = CML.PlutusData.from_cbor_hex(outputDatum.value);
+      const datumOption = CML.DatumOption.new_datum(plutusData);
+      baseBuilder = addressBuilder.with_data(datumOption);
+      break;
+    }
+    default:
+      throw new Error(`Unknown outputDatum: ${outputDatum}`);
+  }
 
   return scriptRef
     ? baseBuilder.with_reference_script(toScriptRef(scriptRef)).next()

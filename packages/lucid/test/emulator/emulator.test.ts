@@ -11,6 +11,7 @@ import {
   deRegisterStake,
   evaluateAContract,
   withdrawReward,
+  evaluateAContractWithDatum,
 } from "./service.js";
 
 const distributeRewards = Effect.gen(function* ($) {
@@ -97,6 +98,16 @@ describe.sequential("Emulator", () => {
 
   test("evaluateAContract", async () => {
     const program = pipe(evaluateAContract, Effect.provide(EmulatorUser.layer));
+    const exit = await Effect.runPromiseExit(program);
+    emulator.awaitBlock(4);
+    expect(exit._tag).toBe("Success");
+  });
+
+  test("evaluateAContractWithDatum", async () => {
+    const program = pipe(
+      evaluateAContractWithDatum,
+      Effect.provide(EmulatorUser.layer),
+    );
     const exit = await Effect.runPromiseExit(program);
     expect(exit._tag).toBe("Success");
   });
