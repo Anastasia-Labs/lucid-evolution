@@ -1,5 +1,16 @@
 # @lucid-evolution/provider
 
+## 0.1.42
+
+### Patch Changes
+
+- [#225](https://github.com/Anastasia-Labs/lucid-evolution/pull/225) [`7c25501`](https://github.com/Anastasia-Labs/lucid-evolution/commit/7c25501e5f11af8d4a1b2e36d3430bf638cb1eed) Thanks [@hadelive](https://github.com/hadelive)! - support conway un_reg cert
+
+- Updated dependencies [[`7c25501`](https://github.com/Anastasia-Labs/lucid-evolution/commit/7c25501e5f11af8d4a1b2e36d3430bf638cb1eed)]:
+  - @lucid-evolution/core-utils@0.1.13
+  - @lucid-evolution/wallet@0.1.37
+  - @lucid-evolution/utils@0.1.33
+
 ## 0.1.41
 
 ### Patch Changes

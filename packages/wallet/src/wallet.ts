@@ -173,7 +173,7 @@ export function discoverOwnUsedTxKeyHashes(
           //TODO: Missing test
           const credential = cert.as_unreg_cert()?.stake_credential();
           if (credential) {
-            usedKeyHashes.push(credential.to_cbor_hex());
+            usedKeyHashes.push(credential.as_pub_key()?.to_hex());
           }
           break;
         }

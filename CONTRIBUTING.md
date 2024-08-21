@@ -96,6 +96,6 @@ By contributing to Lucid Evolution, you agree that your contributions will be li
 
 ## Questions?
 
-Don't hesitate to ask. You can open an issue or reach out to the maintainers directly. Anastasia Labs team and community actively discuss our opinions in our [discord](https://discord.gg/gRt4ppqh)
+Don't hesitate to ask. You can open an issue or reach out to the maintainers directly. Anastasia Labs team and community actively discuss our opinions in our [discord](https://discord.gg/s89P9gpEff)
 
 Thank you for contributing to Lucid Evolution!

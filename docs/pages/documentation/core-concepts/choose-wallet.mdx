@@ -1,12 +1,11 @@
-import { Callout} from 'nextra/components'
+import { Callout, Steps } from "nextra/components";
 
-## Create a wallet
+# Create a wallet
 
-Lucid Evolution provides multiple options to create and import a wallet.
+Lucid Evolution provides multiple options to create and import a wallet. In this section, we'll cover a few methods, including using a private key and a new method introduced in Lucid Evolution.
 
-In this section, we'll cover a few methods, including using a private key and a new method introduced in Lucid Evolution.
-
-### Using a Private Key
+<Steps>
+#### Using a Private Key
 
 If you don't have a private key yet, you can generate one with Lucid Evolution:
 
@@ -16,35 +15,40 @@ import { generatePrivateKey } from "@lucid-evolution/utils";
 const privateKey = generatePrivateKey(); // Bech32 encoded private key
 console.log(privateKey);
 ```
-
-### Using a Seed Phrase
+---
+#### Using a Seed Phrase
 
 You can also generate a wallet from a seed phrase (mnemonic):
 
 ```typescript
 import { generateSeedphrase } from "@lucid-evolution/utils";
 
-const seedPhrase = lucid.utils.generateSeedphrase(); // BIP-39 
+const seedPhrase = lucid.utils.generateSeedphrase(); // BIP-39
 console.log(seedPhrase);
 ```
+
+</Steps>
+---
 
 ## Choosing Wallet
 
 Use different methods to select a wallet and query balances, UTxOs.
 
-### Using a Private Key
+<Callout type="info" emoji="ℹ️">
+__Evolution-Notes:__ Change in syntax from `selectWalletFromPrivateKey`
+  -> `selectWallet.fromPrivateKey`
+</Callout>
+
+<Steps>
+#### Using a Private Key
 
 Now we can select a wallet using the private key with our Lucid Evolution instance:
 
 ```typescript
 lucid.selectWallet.fromPrivateKey(privateKey);
 ```
-<Callout type="info" emoji="ℹ️">
-Evolution-Notes: Note the change in syntax from `selectWalletFromPrivateKey` -> `selectWallet.fromPrivateKey`
-</Callout>
-
-
-### Using an Address and UTXOs Array
+---
+#### Using an Address and UTXOs Array
 
 Lucid Evolution introduces a new method to select a wallet from an address and its UTXOs:
 
@@ -53,9 +57,11 @@ const address = "addr_test..."; // Your wallet address
 const utxos = await lucid.utxosAt(address);
 lucid.selectWallet.fromAddress(address, utxos);
 ```
+<Callout>
 This method is useful when you have the address and UTXOs of a wallet but not necessarily the private key.
-
-### Using a Seed Phrase
+</Callout>
+---
+#### Using a Seed Phrase
 
 If you have a seed phrase (mnemonic), you can use it to select a wallet:
 
@@ -63,8 +69,8 @@ If you have a seed phrase (mnemonic), you can use it to select a wallet:
 const seedPhrase = "your seed phrase here...";
 lucid.selectWallet.fromSeed(seedPhrase);
 ```
-
-### Using a Wallet API
+---
+#### Using a Wallet API
 
 If you're integrating with a wallet provider that exposes an API conforming to the WalletApi interface, you can use it like this:
 
@@ -77,26 +83,34 @@ lucid.selectWallet.fromAPI(walletApi);
 ```
 
 <Callout>
-Selecting a wallet is necessary for building and submitting transactions. Make sure to select a wallet using one of these methods before attempting to create or submit transactions.
-Remember that the exact method you use will depend on your use case and the type of wallet integration you're working with
+  Selecting a wallet is necessary for building and submitting transactions. Make
+  sure to select a wallet using one of these methods before attempting to create
+  or submit transactions. Remember that the exact method you use will depend on
+  your use case and the type of wallet integration you're working with
 </Callout>
+
+</Steps>
+
+---
 
 ## Query wallet
 
-### Get address
+<Steps>
+#### Get address
 
 ```typescript
 const address = await lucid.wallet.address(); // Bech32 address
 ```
-
-### Query UTxOs
+---
+#### Query UTxOs
 
 ```typescript
 const utxos = await lucid.wallet.getUtxos();
 ```
-
-### Query delegation
+---
+#### Query delegation
 
 ```typescript
 const delegation = await lucid.wallet.getDelegation();
 ```
+</Steps>

@@ -180,6 +180,16 @@ describe.sequential("Onchain testing", () => {
     expect(exit._tag).toBe("Success");
   });
 
+  test("withdrawAllReward", async () => {
+    const program = pipe(
+      StakeEndpoints.withdrawAllReward,
+      Effect.provide(User.layer),
+      Effect.provide(NetworkConfig.layerPreview),
+    );
+    const exit = await Effect.runPromiseExit(program);
+    expect(exit._tag).toBe("Success");
+  });
+
   test("withdrawZero", async () => {
     const program = pipe(
       StakeEndpoints.withdrawZero,

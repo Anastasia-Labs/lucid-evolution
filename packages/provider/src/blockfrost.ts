@@ -1,5 +1,5 @@
 import { CML } from "./core.js";
-import { fromHex } from "@lucid-evolution/core-utils";
+import { fromHex, sleep } from "@lucid-evolution/core-utils";
 import { applyDoubleCborEncoding } from "@lucid-evolution/utils";
 import {
   Address,
@@ -245,40 +245,58 @@ export class Blockfrost implements Provider {
   private async blockfrostUtxosToUtxos(
     result: BlockfrostUtxoResult,
   ): Promise<UTxO[]> {
-    return (await Promise.all(
-      result.map(async (r) => ({
-        txHash: r.tx_hash,
-        outputIndex: r.output_index,
-        assets: Object.fromEntries(
-          r.amount.map(({ unit, quantity }) => [unit, BigInt(quantity)]),
-        ),
-        address: r.address,
-        datumHash: (!r.inline_datum && r.data_hash) || undefined,
-        datum: r.inline_datum || undefined,
-        scriptRef: r.reference_script_hash
-          ? await (async () => {
-              const { type } = await fetch(
-                `${this.url}/scripts/${r.reference_script_hash}`,
-                {
-                  headers: { project_id: this.projectId, lucid },
-                },
-              ).then((res) => res.json());
-              // TODO: support native scripts
-              if (type === "Native" || type === "native") {
-                throw new Error("Native script ref not implemented!");
-              }
-              const { cbor: script } = await fetch(
-                `${this.url}/scripts/${r.reference_script_hash}/cbor`,
-                { headers: { project_id: this.projectId, lucid } },
-              ).then((res) => res.json());
-              return {
-                type: type === "plutusV1" ? "PlutusV1" : "PlutusV2",
-                script: applyDoubleCborEncoding(script),
-              };
-            })()
-          : undefined,
-      })),
-    )) as UTxO[];
+    const utxos: UTxO[] = [];
+    const batchSize = 10;
+    let count = 0;
+
+    for (let i = 0; i < result.length; i += batchSize) {
+      const batch = result.slice(i, i + batchSize);
+      count += batchSize;
+      await handleRateLimit(count);
+      const batchResults: UTxO[] = await Promise.all(
+        batch.map(async (r) => {
+          return {
+            txHash: r.tx_hash,
+            outputIndex: r.output_index,
+            assets: Object.fromEntries(
+              r.amount.map(({ unit, quantity }) => [unit, BigInt(quantity)]),
+            ),
+            address: r.address,
+            datumHash: (!r.inline_datum && r.data_hash) || undefined,
+            datum: r.inline_datum || undefined,
+            scriptRef: r.reference_script_hash
+              ? await (async () => {
+                  const { type } = await fetch(
+                    `${this.url}/scripts/${r.reference_script_hash}`,
+                    {
+                      headers: { project_id: this.projectId, lucid },
+                    },
+                  ).then((res) => res.json());
+
+                  // TODO: support native scripts
+                  if (type.toLowerCase() === "native") {
+                    throw new Error("Native script ref not implemented!");
+                  }
+
+                  const { cbor: script } = await fetch(
+                    `${this.url}/scripts/${r.reference_script_hash}/cbor`,
+                    { headers: { project_id: this.projectId, lucid } },
+                  ).then((res) => res.json());
+
+                  return {
+                    type: type === "plutusV1" ? "PlutusV1" : "PlutusV2",
+                    script: applyDoubleCborEncoding(script),
+                  };
+                })()
+              : undefined,
+          };
+        }),
+      );
+
+      utxos.push(...batchResults);
+    }
+
+    return utxos;
   }
 
   async evaluateTx(
@@ -381,6 +399,14 @@ export function datumJsonToCbor(json: DatumJson): Datum {
 
   return convert(json).to_cbor_hex();
 }
+
+const handleRateLimit = async (count: number): Promise<void> => {
+  if (count % 100 === 0) {
+    await sleep(2_000); // 2 seconds for every 100 requests
+  } else if (count % 10 === 0) {
+    await sleep(200); // 200 milliseconds for every 10 requests
+  }
+};
 
 type DatumJson = {
   int?: number;
