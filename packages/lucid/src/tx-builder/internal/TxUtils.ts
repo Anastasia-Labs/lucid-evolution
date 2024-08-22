@@ -15,7 +15,9 @@ import { LucidConfig } from "../../lucid-evolution/LucidEvolution.js";
 import { TxBuilderConfig } from "../TxBuilder.js";
 
 import * as TxBuilder from "../TxBuilder.js";
-import { governanceError } from "./Governance.js";
+
+export const txBuilderError = (cause: unknown) =>
+  new TxBuilderError({ cause: `{ TxBuilderError : ${cause} }` });
 
 //TODO: improve error message, utils is used in different modules
 export const toCMLAddress = (
@@ -127,14 +129,14 @@ export const processStakeCredential = (
         const script = yield* pipe(
           Effect.fromNullable(config.scripts.get(stakeCredential.hash)),
           Effect.orElseFail(() =>
-            governanceError(ERROR_MESSAGE.MISSING_SCRIPT(stakeCredential.hash)),
+            txBuilderError(ERROR_MESSAGE.MISSING_SCRIPT(stakeCredential.hash)),
           ),
         );
 
         const red = yield* pipe(
           Effect.fromNullable(redeemer),
           Effect.orElseFail(() =>
-            governanceError(ERROR_MESSAGE.MISSING_REDEEMER),
+            txBuilderError(ERROR_MESSAGE.MISSING_REDEEMER),
           ),
         );
 
@@ -157,7 +159,7 @@ export const processStakeCredential = (
             break;
 
           case "Native":
-            yield* governanceError("NotFound");
+            yield* txBuilderError("NotFound");
             break;
         }
         break;
@@ -174,7 +176,7 @@ export const validateAndFetchStakeCredential = (
       validateAddressDetails(rewardAddress, config.lucidConfig),
       Effect.andThen((address) =>
         address.type !== "Reward"
-          ? governanceError(ERROR_MESSAGE.MISSING_REWARD_TYPE)
+          ? txBuilderError(ERROR_MESSAGE.MISSING_REWARD_TYPE)
           : Effect.succeed(address),
       ),
     );
@@ -182,7 +184,7 @@ export const validateAndFetchStakeCredential = (
     const stakeCredential = yield* pipe(
       Effect.fromNullable(addressDetails.stakeCredential),
       Effect.orElseFail(() =>
-        governanceError(ERROR_MESSAGE.MISSING_STAKE_CREDENTIAL),
+        txBuilderError(ERROR_MESSAGE.MISSING_STAKE_CREDENTIAL),
       ),
     );
 

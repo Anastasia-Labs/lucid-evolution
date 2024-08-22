@@ -53,6 +53,8 @@ export class Koios implements Provider {
       maxValSize: param.max_val_size,
       keyDeposit: param.key_deposit,
       poolDeposit: param.pool_deposit,
+      drepDeposit: param.drep_deposit,
+      govActionDeposit: param.gov_action_deposit,
       priceMem: param.price_mem,
       priceStep: param.price_step,
       maxTxExMem: param.max_tx_ex_mem,
@@ -69,6 +71,12 @@ export class Koios implements Provider {
         ),
         PlutusV2: Object.fromEntries(
           param.cost_models.PlutusV2.map((value, index) => [
+            index.toString(),
+            value,
+          ]),
+        ),
+        PlutusV3: Object.fromEntries(
+          param.cost_models.PlutusV3.map((value, index) => [
             index.toString(),
             value,
           ]),

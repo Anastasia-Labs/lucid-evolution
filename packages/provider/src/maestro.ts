@@ -78,6 +78,8 @@ export class Maestro implements Provider {
       maxValSize: parseInt(result.max_value_size),
       keyDeposit: BigInt(result.stake_key_deposit),
       poolDeposit: BigInt(result.pool_deposit),
+      drepDeposit: BigInt(result.delegate_representative_eposit),
+      govActionDeposit: BigInt(result.governance_action_deposit),
       priceMem: decimalFromRationalString(result.prices.memory),
       priceStep: decimalFromRationalString(result.prices.steps),
       maxTxExMem: BigInt(result.max_execution_units_per_transaction.memory),

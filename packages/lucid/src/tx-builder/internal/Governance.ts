@@ -8,9 +8,6 @@ import {
   processStakeCredential,
 } from "./TxUtils.js";
 
-export const governanceError = (cause: unknown) =>
-  new TxBuilderError({ cause: `{ Governance : ${cause} }` });
-
 export const delegateVoteToDrep = (
   config: TxBuilder.TxBuilderConfig,
   rewardAddress: RewardAddress,
@@ -97,7 +94,7 @@ export const registerAndDelegateToDrep = (
         CML.Certificate.new_vote_reg_deleg_cert(
           credential,
           drep,
-          config.lucidConfig.protocolParameters.keyDeposit,
+          config.lucidConfig.protocolParameters.drepDeposit,
         ),
       );
 
@@ -119,7 +116,7 @@ export const deregisterDrep = (
       CML.SingleCertificateBuilder.new(
         CML.Certificate.new_unreg_drep_cert(
           credential,
-          config.lucidConfig.protocolParameters.keyDeposit,
+          config.lucidConfig.protocolParameters.drepDeposit,
         ),
       );
 

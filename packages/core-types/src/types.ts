@@ -10,6 +10,8 @@ export type ProtocolParameters = {
   maxValSize: number;
   keyDeposit: bigint;
   poolDeposit: bigint;
+  drepDeposit: bigint;
+  govActionDeposit: bigint;
   priceMem: number;
   priceStep: number;
   maxTxExMem: bigint;
@@ -63,7 +65,7 @@ export type Credential = {
 export type Unit = string;
 export type Assets = Record<Unit | "lovelace", bigint>;
 export type ScriptType = "Native" | PlutusVersion;
-export type PlutusVersion = "PlutusV1" | "PlutusV2";
+export type PlutusVersion = "PlutusV1" | "PlutusV2" | "PlutusV3";
 
 /** Hex */
 export type PolicyId = string;
@@ -74,12 +76,16 @@ export type Validator =
   | MintingPolicy
   | SpendingValidator
   | CertificateValidator
-  | WithdrawalValidator;
+  | WithdrawalValidator
+  | VoteValidator
+  | ProposeValidator;
 
 export type MintingPolicy = Script;
 export type SpendingValidator = Script;
 export type CertificateValidator = Script;
 export type WithdrawalValidator = Script;
+type VoteValidator = Script;
+type ProposeValidator = Script;
 
 /** Bech32 */
 export type Address = string;

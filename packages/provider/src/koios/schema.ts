@@ -9,6 +9,8 @@ export const ProtocolParametersSchema = S.Struct({
   max_bh_size: S.Number,
   key_deposit: S.BigInt,
   pool_deposit: S.BigInt,
+  drep_deposit: S.BigInt,
+  gov_action_deposit: S.BigInt,
   max_epoch: S.Number,
   optimal_pool_count: S.Number,
   influence: S.Number,
@@ -25,6 +27,7 @@ export const ProtocolParametersSchema = S.Struct({
   cost_models: S.Struct({
     PlutusV1: S.Array(S.Number),
     PlutusV2: S.Array(S.Number),
+    PlutusV3: S.Array(S.Number),
   }),
   price_mem: S.Number,
   price_step: S.Number,

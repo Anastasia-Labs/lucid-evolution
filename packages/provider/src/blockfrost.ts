@@ -41,6 +41,8 @@ export class Blockfrost implements Provider {
       maxValSize: parseInt(result.max_val_size),
       keyDeposit: BigInt(result.key_deposit),
       poolDeposit: BigInt(result.pool_deposit),
+      drepDeposit: BigInt(result.drep_deposit),
+      govActionDeposit: BigInt(result.gov_action_deposit),
       priceMem: parseFloat(result.price_mem),
       priceStep: parseFloat(result.price_step),
       maxTxExMem: BigInt(result.max_tx_ex_mem),

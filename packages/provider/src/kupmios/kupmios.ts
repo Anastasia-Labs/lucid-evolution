@@ -388,6 +388,8 @@ const toProtocolParameters = (
     maxValSize: result.maxValueSize.bytes,
     keyDeposit: BigInt(result.stakeCredentialDeposit.ada.lovelace),
     poolDeposit: BigInt(result.stakePoolDeposit.ada.lovelace),
+    drepDeposit: BigInt(result.delegateRepresentativeDeposit.ada.lovelace),
+    govActionDeposit: BigInt(result.governanceActionDeposit.ada.lovelace),
     priceMem:
       result.scriptExecutionPrices.memory[0] /
       result.scriptExecutionPrices.memory[1],
@@ -412,6 +414,12 @@ const toProtocolParameters = (
       ),
       PlutusV2: Object.fromEntries(
         result.plutusCostModels["plutus:v2"].map((value, index) => [
+          index.toString(),
+          value,
+        ]),
+      ),
+      PlutusV3: Object.fromEntries(
+        result.plutusCostModels["plutus:v3"].map((value, index) => [
           index.toString(),
           value,
         ]),

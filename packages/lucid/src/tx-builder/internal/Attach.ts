@@ -3,18 +3,14 @@ import {
   CertificateValidator,
   MintingPolicy,
   SpendingValidator,
+  Validator,
   WithdrawalValidator,
+  VoteValidator,
+  ProposeValidator,
 } from "@lucid-evolution/core-types";
 import { CML } from "../../core.js";
 
-export const attachScript = ({
-  type,
-  script,
-}:
-  | SpendingValidator
-  | MintingPolicy
-  | CertificateValidator
-  | WithdrawalValidator) => {
+export const attachScript = ({ type, script }: Validator) => {
   //TODO: script should be a branded type
   switch (type) {
     case "Native":
@@ -36,6 +32,13 @@ export const attachScript = ({
           .to_hex(),
         value: { type, script: applyDoubleCborEncoding(script) },
       };
+    case "PlutusV3":
+      return {
+        key: CML.PlutusV3Script.from_cbor_hex(applyDoubleCborEncoding(script))
+          .hash()
+          .to_hex(),
+        value: { type, script: applyDoubleCborEncoding(script) },
+      };
   }
 };
 export const attachSpendingValidator = (spendingValidator: SpendingValidator) =>
@@ -51,3 +54,9 @@ export const attachCertificateValidator = (
 export const attachWithdrawalValidator = (
   withdrawalValidator: WithdrawalValidator,
 ) => attachScript(withdrawalValidator);
+
+export const attachVoteValidator = (voteValidator: VoteValidator) =>
+  attachScript(voteValidator);
+
+export const attachProposeValidator = (proposeValidator: ProposeValidator) =>
+  attachScript(proposeValidator);

@@ -31,6 +31,8 @@ export const ProtocolParametersSchema = S.Struct({
   maxTransactionSize: S.Struct({ bytes: S.Number }),
   stakeCredentialDeposit: S.Struct({ ada: LovelaceAsset }),
   stakePoolDeposit: S.Struct({ ada: LovelaceAsset }),
+  delegateRepresentativeDeposit: S.Struct({ ada: LovelaceAsset }),
+  governanceActionDeposit: S.Struct({ ada: LovelaceAsset }),
   stakePoolRetirementEpochBound: S.Number,
   desiredNumberOfStakePools: S.Number,
   stakePoolPledgeInfluence: TupleNumberFromString,
@@ -42,6 +44,7 @@ export const ProtocolParametersSchema = S.Struct({
   plutusCostModels: S.Struct({
     "plutus:v1": S.Array(S.Number),
     "plutus:v2": S.Array(S.Number),
+    "plutus:v3": S.Array(S.Number),
   }),
   scriptExecutionPrices: S.Struct({
     memory: TupleNumberFromString,
