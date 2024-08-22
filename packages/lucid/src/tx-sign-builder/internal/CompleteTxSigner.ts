@@ -14,7 +14,15 @@ export const completeTxSigner = (
 ): Effect.Effect<TxSubmitBuilder.TxSigned, TransactionSignError> =>
   Effect.gen(function* () {
     yield* Effect.all(config.programs, { concurrency: "unbounded" });
+    const plutus_datums = config.txComplete.witness_set().plutus_datums();
+    // TODO: currently add_existing does not support add_plutus_datums
+    // https://github.com/dcSpark/cardano-multiplatform-lib/pull/350/files
     config.witnessSetBuilder.add_existing(config.txComplete.witness_set());
+    if (plutus_datums) {
+      for (let i = 0; i < plutus_datums.len(); i++) {
+        config.witnessSetBuilder.add_plutus_datum(plutus_datums.get(i));
+      }
+    }
     const txWitnessSet = config.witnessSetBuilder.build();
     const signedTx = CML.Transaction.new(
       config.txComplete.body(),
