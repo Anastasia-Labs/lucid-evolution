@@ -1,5 +1,47 @@
 # @lucid-evolution/lucid
 
+## 0.3.10
+
+### Patch Changes
+
+- [#233](https://github.com/Anastasia-Labs/lucid-evolution/pull/233) [`803086b`](https://github.com/Anastasia-Labs/lucid-evolution/commit/803086be99793f334b8c82eb2edd739b3e57ba37) Thanks [@nikhils9](https://github.com/nikhils9)! - Fix reference script fee issues with coin selection
+
+- [#236](https://github.com/Anastasia-Labs/lucid-evolution/pull/236) [`96aaabd`](https://github.com/Anastasia-Labs/lucid-evolution/commit/96aaabd87142e02f814fce141a5fc9de2a6b5b31) Thanks [@hadelive](https://github.com/hadelive)! - add existing plutus datums witness
+
+- Updated dependencies [[`803086b`](https://github.com/Anastasia-Labs/lucid-evolution/commit/803086be99793f334b8c82eb2edd739b3e57ba37)]:
+  - @lucid-evolution/utils@0.1.34
+  - @lucid-evolution/provider@0.1.43
+  - @lucid-evolution/wallet@0.1.38
+
+## 0.3.9
+
+### Patch Changes
+
+- [#228](https://github.com/Anastasia-Labs/lucid-evolution/pull/228) [`d4b03aa`](https://github.com/Anastasia-Labs/lucid-evolution/commit/d4b03aa121f42d8e27e1062ddf38b09ad9f8a5d9) Thanks [@hadelive](https://github.com/hadelive)! - datum inclusion for asHash kind in payToContract
+
+- [#225](https://github.com/Anastasia-Labs/lucid-evolution/pull/225) [`7c25501`](https://github.com/Anastasia-Labs/lucid-evolution/commit/7c25501e5f11af8d4a1b2e36d3430bf638cb1eed) Thanks [@hadelive](https://github.com/hadelive)! - support conway un_reg cert
+
+- Updated dependencies [[`7c25501`](https://github.com/Anastasia-Labs/lucid-evolution/commit/7c25501e5f11af8d4a1b2e36d3430bf638cb1eed)]:
+  - @lucid-evolution/core-utils@0.1.13
+  - @lucid-evolution/provider@0.1.42
+  - @lucid-evolution/wallet@0.1.37
+  - @lucid-evolution/plutus@0.1.19
+  - @lucid-evolution/sign_data@0.1.16
+  - @lucid-evolution/utils@0.1.33
+
+## 0.3.8
+
+### Patch Changes
+
+- Updated dependencies [[`aec1ccd`](https://github.com/Anastasia-Labs/lucid-evolution/commit/aec1ccd7659e17c07b677f1649977590b830c6bc), [`3fa5522`](https://github.com/Anastasia-Labs/lucid-evolution/commit/3fa55226d7dc182a1515cb034744a3b4343c3c33), [`18dea56`](https://github.com/Anastasia-Labs/lucid-evolution/commit/18dea561759ad569e02af252a89c774e53b74dd7)]:
+  - @lucid-evolution/core-types@0.1.13
+  - @lucid-evolution/provider@0.1.41
+  - @lucid-evolution/wallet@0.1.36
+  - @lucid-evolution/core-utils@0.1.12
+  - @lucid-evolution/plutus@0.1.18
+  - @lucid-evolution/sign_data@0.1.15
+  - @lucid-evolution/utils@0.1.32
+
 ## 0.3.7
 
 ### Patch Changes

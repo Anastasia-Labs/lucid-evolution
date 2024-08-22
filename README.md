@@ -1,6 +1,13 @@
-[![CI](https://github.com/Anastasia-Labs/lucid-evolution/actions/workflows/main.yml/badge.svg)](https://github.com/Anastasia-Labs/lucid-evolution/actions/workflows/main.yml)
-
 # Lucid Evolution
+
+<p align="center">
+  <a href="https://github.com/Anastasia-Labs/lucid-evolution/actions/workflows/main.yml">
+    <img src="https://github.com/Anastasia-Labs/lucid-evolution/actions/workflows/main.yml/badge.svg" alt="Build Status"/>
+  </a>
+  <img src="https://img.shields.io/npm/v/%40lucid-evolution%2Flucid" alt="NPM Version"/>
+  <img src="https://img.shields.io/npm/d18m/%40lucid-evolution%2Flucid" alt="NPM Downloads"/>
+ <img alt="Discord" src="https://img.shields.io/discord/947985069111377951?logo=discord">
+</p>
 
 ## What's inside?
 
@@ -11,7 +18,7 @@ Lucid evolution includes the following packages
 Lucid Evolution consists of the following packages:
 
 - `docs`: Documentation resources for Lucid Evolution.
-- `@lucid-evolution/lucid-evolution`: Main package for Lucid Evolution.
+- `@lucid-evolution/lucid`: Main package for Lucid Evolution.
 - `@lucid-evolution/bip39`: Package for BIP-39 mnemonic code.
 - `@lucid-evolution/core-types`: Core types used across Lucid Evolution packages.
 - `@lucid-evolution/core-utils`: Core utilities used across Lucid Evolution packages.

@@ -1,5 +1,17 @@
 # @lucid-evolution/core-utils
 
+## 0.1.13
+
+### Patch Changes
+
+- [#225](https://github.com/Anastasia-Labs/lucid-evolution/pull/225) [`7c25501`](https://github.com/Anastasia-Labs/lucid-evolution/commit/7c25501e5f11af8d4a1b2e36d3430bf638cb1eed) Thanks [@hadelive](https://github.com/hadelive)! - support conway un_reg cert
+
+## 0.1.12
+
+### Patch Changes
+
+- [#220](https://github.com/Anastasia-Labs/lucid-evolution/pull/220) [`18dea56`](https://github.com/Anastasia-Labs/lucid-evolution/commit/18dea561759ad569e02af252a89c774e53b74dd7) Thanks [@solidsnakedev](https://github.com/solidsnakedev)! - add browser-compatible utility functions to core-utils
+
 ## 0.1.11
 
 ### Patch Changes

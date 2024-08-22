@@ -1,5 +1,28 @@
 # @lucid-evolution/utils
 
+## 0.1.34
+
+### Patch Changes
+
+- [#233](https://github.com/Anastasia-Labs/lucid-evolution/pull/233) [`803086b`](https://github.com/Anastasia-Labs/lucid-evolution/commit/803086be99793f334b8c82eb2edd739b3e57ba37) Thanks [@nikhils9](https://github.com/nikhils9)! - Fix reference script fee issues with coin selection
+
+## 0.1.33
+
+### Patch Changes
+
+- Updated dependencies [[`7c25501`](https://github.com/Anastasia-Labs/lucid-evolution/commit/7c25501e5f11af8d4a1b2e36d3430bf638cb1eed)]:
+  - @lucid-evolution/core-utils@0.1.13
+  - @lucid-evolution/plutus@0.1.19
+
+## 0.1.32
+
+### Patch Changes
+
+- Updated dependencies [[`aec1ccd`](https://github.com/Anastasia-Labs/lucid-evolution/commit/aec1ccd7659e17c07b677f1649977590b830c6bc), [`18dea56`](https://github.com/Anastasia-Labs/lucid-evolution/commit/18dea561759ad569e02af252a89c774e53b74dd7)]:
+  - @lucid-evolution/core-types@0.1.13
+  - @lucid-evolution/core-utils@0.1.12
+  - @lucid-evolution/plutus@0.1.18
+
 ## 0.1.31
 
 ### Patch Changes

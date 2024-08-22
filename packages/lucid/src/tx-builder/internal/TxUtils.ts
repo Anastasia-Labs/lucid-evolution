@@ -14,23 +14,6 @@ import { ERROR_MESSAGE, TxBuilderError } from "../../Errors.js";
 import { LucidConfig } from "../../lucid-evolution/LucidEvolution.js";
 import { TxBuilderConfig } from "../TxBuilder.js";
 
-export const toDatumOption = (outputDatum: OutputDatum): CML.DatumOption => {
-  switch (outputDatum.kind) {
-    case "hash":
-      return CML.DatumOption.new_hash(
-        CML.DatumHash.from_hex(outputDatum.value),
-      );
-    case "asHash": {
-      const plutusData = CML.PlutusData.from_cbor_hex(outputDatum.value);
-      return CML.DatumOption.new_hash(CML.hash_plutus_data(plutusData));
-    }
-    case "inline": {
-      const plutusData = CML.PlutusData.from_cbor_hex(outputDatum.value);
-      return CML.DatumOption.new_datum(plutusData);
-    }
-  }
-};
-
 //TODO: improve error message, utils is used in different modules
 export const toCMLAddress = (
   address: Address | RewardAddress,

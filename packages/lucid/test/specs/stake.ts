@@ -94,3 +94,19 @@ export const withdrawZero = Effect.gen(function* ($) {
     .completeProgram();
   return signBuilder;
 }).pipe(Effect.flatMap(handleSignSubmit), withLogRetry, Effect.orDie);
+
+export const withdrawAllReward = Effect.gen(function* ($) {
+  const { user } = yield* User;
+  const rewardAddress = yield* pipe(
+    Effect.promise(() => user.wallet().rewardAddress()),
+    Effect.andThen(Effect.fromNullable),
+  );
+  const { rewards } = yield* Effect.promise(() =>
+    user.wallet().getDelegation(),
+  );
+  const signBuilder = yield* user
+    .newTx()
+    .withdraw(rewardAddress, rewards)
+    .completeProgram();
+  return signBuilder;
+}).pipe(Effect.flatMap(handleSignSubmit), withLogRetry, Effect.orDie);

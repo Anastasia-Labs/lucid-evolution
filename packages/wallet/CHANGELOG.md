@@ -1,5 +1,35 @@
 # @lucid-evolution/wallet
 
+## 0.1.38
+
+### Patch Changes
+
+- Updated dependencies [[`803086b`](https://github.com/Anastasia-Labs/lucid-evolution/commit/803086be99793f334b8c82eb2edd739b3e57ba37)]:
+  - @lucid-evolution/utils@0.1.34
+
+## 0.1.37
+
+### Patch Changes
+
+- [#225](https://github.com/Anastasia-Labs/lucid-evolution/pull/225) [`7c25501`](https://github.com/Anastasia-Labs/lucid-evolution/commit/7c25501e5f11af8d4a1b2e36d3430bf638cb1eed) Thanks [@hadelive](https://github.com/hadelive)! - support conway un_reg cert
+
+- Updated dependencies [[`7c25501`](https://github.com/Anastasia-Labs/lucid-evolution/commit/7c25501e5f11af8d4a1b2e36d3430bf638cb1eed)]:
+  - @lucid-evolution/core-utils@0.1.13
+  - @lucid-evolution/sign_data@0.1.16
+  - @lucid-evolution/utils@0.1.33
+
+## 0.1.36
+
+### Patch Changes
+
+- [#207](https://github.com/Anastasia-Labs/lucid-evolution/pull/207) [`3fa5522`](https://github.com/Anastasia-Labs/lucid-evolution/commit/3fa55226d7dc182a1515cb034744a3b4343c3c33) Thanks [@hadelive](https://github.com/hadelive)! - remove paymentCredentialOf when querying utxos from providers
+
+- Updated dependencies [[`aec1ccd`](https://github.com/Anastasia-Labs/lucid-evolution/commit/aec1ccd7659e17c07b677f1649977590b830c6bc), [`18dea56`](https://github.com/Anastasia-Labs/lucid-evolution/commit/18dea561759ad569e02af252a89c774e53b74dd7)]:
+  - @lucid-evolution/core-types@0.1.13
+  - @lucid-evolution/core-utils@0.1.12
+  - @lucid-evolution/sign_data@0.1.15
+  - @lucid-evolution/utils@0.1.32
+
 ## 0.1.35
 
 ### Patch Changes

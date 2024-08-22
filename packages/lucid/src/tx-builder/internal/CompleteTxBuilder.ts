@@ -155,7 +155,7 @@ export const selectionAndEvaluation = (
 
     // Skip UPLC evaluation for the second time if no new inputs are added
     if (_Array.isEmptyArray(inputsToAdd) && script_calculation) return;
-
+    let estimatedFee = 0n;
     if (_Array.isNonEmptyArray(inputsToAdd)) {
       for (const utxo of inputsToAdd) {
         const input = CML.SingleInputBuilder.from_transaction_unspent_output(
@@ -164,23 +164,23 @@ export const selectionAndEvaluation = (
         config.txBuilder.add_input(input);
       }
       config.collectedInputs = [...config.collectedInputs, ...inputsToAdd];
+      estimatedFee = yield* estimateFee(config, script_calculation);
     }
 
     //NOTE: We need to keep track of all consumed inputs
     //this is just a patch, and we should find a better way to do this
     config.consumedInputs = [...config.collectedInputs];
 
-    // Complete partial programs if present by building their redeemers
-    // and running them
+    // Complete partial programs if present by building their redeemers and running them
     if (config.partialPrograms.size > 0) {
       // NOTE: Cannot build the redeemers twice as it would lead to duplicate addition of
-      // inputs for "SPEND" redeemers. As CML currently does not allow just updating redeemer of
+      // inputs for "SPEND" redeemers. As CML currently does not allow updating redeemer of
       // an existing input.
-      if (script_calculation)
+      if (script_calculation) {
         yield* completeTxError(
-          "RedeemerBuilder: Coin selection had to be updated after building redeemers, possibly leading to incorrect indices.",
+          `RedeemerBuilder: Coin selection had to be updated after building redeemers, possibly leading to incorrect indices. Try setting a minimum fee of ${estimatedFee} lovelaces.`,
         );
-      else yield* completePartialPrograms(config);
+      } else yield* completePartialPrograms(config);
     }
 
     // Build transaction to begin with UPLC evaluation
@@ -203,7 +203,7 @@ export const selectionAndEvaluation = (
     //       CML.Address.from_bech32(walletInfo.address),
     //     ),
     //   catch: (error) => {
-    //     // In case the "build_for_evaluation" fails due to addition of new redeemers, due to increased fees
+    //     // In case the "build_for_evaluation" fails due to addition of new redeemers leading to increased fees
     //     // and the selected utxo inputs being insufficient, we would need to perform coin selection again
     //     // before moving on to UPLC evaluation.
     //     if (
@@ -389,7 +389,8 @@ const findCollateral = (
     // A UTXO with 5.5 ADA will result in an error message such as `BabbageOutputTooSmallUTxO`, since only 0.5 ADA would be returned to the collateral return address.
     const collateralLovelace: Assets = { lovelace: 5_000_000n };
     const error = completeTxError(
-      `Your wallet does not have enough funds to cover the required 5 ADA collateral.`,
+      `Your wallet does not have enough funds to cover the required 5 ADA collateral. Or it contains UTxOs with reference scripts; which
+      are excluded from collateral selection.`,
     );
     const selected = yield* recursive(
       sortUTxOs(inputs),
@@ -413,27 +414,9 @@ const coinSelection = (
 ): Effect.Effect<UTxO[], TxBuilderError> =>
   Effect.gen(function* () {
     // NOTE: This is a fee estimation. If the amount is not enough, it may require increasing the fee.
-    const minFee = config.txBuilder.min_fee(script_calculation);
-    const refScriptFee = yield* calculateMinRefScriptFee(config);
-    const totalFee = minFee + refScriptFee;
-    const customMinFee = config.minFee;
-
     const estimatedFee: Assets = {
-      lovelace: totalFee,
+      lovelace: yield* estimateFee(config, script_calculation),
     };
-
-    if (
-      (customMinFee !== undefined && customMinFee > minFee) ||
-      refScriptFee > 0n
-    ) {
-      const setFee = customMinFee
-        ? customMinFee > totalFee
-          ? customMinFee
-          : totalFee
-        : totalFee;
-      config.txBuilder.set_fee(setFee);
-      estimatedFee.lovelace = setFee;
-    }
 
     const negatedMintedAssets = negateAssets(config.mintedAssets);
     const negatedCollectedAssets = negateAssets(
@@ -470,6 +453,37 @@ const coinSelection = (
       notRequiredAssets,
     );
     return selected;
+  });
+
+/**
+ * Estimate total transaction fee and set it in CML.TransactionBuilder if required
+ * @param config
+ * @param script_calculation
+ * @returns estimated fee
+ */
+const estimateFee = (
+  config: TxBuilder.TxBuilderConfig,
+  script_calculation: boolean,
+): Effect.Effect<bigint, TxBuilderError, never> =>
+  Effect.gen(function* () {
+    const minFee = config.txBuilder.min_fee(script_calculation);
+    const refScriptFee = yield* calculateMinRefScriptFee(config);
+    let estimatedFee = minFee + refScriptFee;
+    const customMinFee = config.minFee;
+
+    if (
+      (customMinFee !== undefined && customMinFee > minFee) ||
+      refScriptFee > 0n
+    ) {
+      estimatedFee = customMinFee
+        ? customMinFee > estimatedFee
+          ? customMinFee
+          : estimatedFee
+        : estimatedFee;
+
+      config.txBuilder.set_fee(estimatedFee);
+    }
+    return estimatedFee;
   });
 
 const evalTransaction = (
@@ -643,7 +657,8 @@ export const recursive = (
   Effect.gen(function* () {
     let selected: UTxO[] = [];
     error ??= completeTxError(
-      `Your wallet does not have enough funds to cover the required assets: ${stringify(requiredAssets)}`,
+      `Your wallet does not have enough funds to cover the required assets: ${stringify(requiredAssets)}
+      Or it contains UTxOs with reference scripts; which are excluded from coin selection.`,
     );
     if (!Record.isEmptyRecord(requiredAssets)) {
       selected = selectUTxOs(inputs, requiredAssets);
@@ -672,7 +687,8 @@ export const recursive = (
       const extraSelected = selectUTxOs(remainingInputs, extraLovelace);
       if (_Array.isEmptyArray(extraSelected)) {
         yield* completeTxError(
-          `Your wallet does not have enough funds to cover required minimum ADA for change output: ${stringify(extraLovelace)}`,
+          `Your wallet does not have enough funds to cover required minimum ADA for change output: ${stringify(extraLovelace)}
+          Or it contains UTxOs with reference scripts; which are excluded from coin selection.`,
         );
       }
       const extraSelectedAssets: Assets = sumAssetsFromInputs(extraSelected);
