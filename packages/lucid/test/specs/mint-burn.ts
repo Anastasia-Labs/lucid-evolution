@@ -56,10 +56,15 @@ export const mint = Effect.gen(function* () {
 
   const signBuilder = yield* user
     .newTx()
-    .pay.ToAddress(addr, {
-      [nativePolicyId + fromText("BurnableToken")]: 1n,
-      [nativePolicyId + maxHexToken]: 1n,
-    })
+    .pay.ToAddressWithData(
+      addr,
+      { kind: "inline", value: Data.void() },
+      {
+        [nativePolicyId + fromText("BurnableToken")]: 1n,
+        [nativePolicyId + maxHexToken]: 1n,
+      },
+      plutusMint.mint,
+    )
     .mintAssets({
       [nativePolicyId + fromText("BurnableToken")]: 1n,
       [nativePolicyId + fromText("BurnableToken2")]: 1n,
@@ -76,21 +81,28 @@ export const mint = Effect.gen(function* () {
     .attach.MintingPolicy(plutusMint.mint)
     .completeProgram();
   return signBuilder;
-}).pipe(Effect.flatMap(handleSignSubmit), withLogRetry, Effect.orDie);
+}).pipe(Effect.flatMap(handleSignSubmit), withLogRetry);
 
 export const burn = Effect.gen(function* () {
   const { user } = yield* User;
   const addr = yield* Effect.promise(() => user.wallet().address());
+  const walletUTxOs = yield* Effect.promise(() => user.wallet().getUtxos());
   const nativeMint = mkMintinPolicy(addr);
   const nativePolicyId = mintingPolicyToId(nativeMint);
+  const burnableToken = nativePolicyId + fromText("BurnableToken");
+  const utxoWithRefScript = walletUTxOs.filter(
+    (utxo) => utxo.assets[burnableToken] == 1n,
+  );
+
   const plutusMint = yield* MintContract;
   const mintRedeemer = Data.to(new Constr(0, [[]]));
 
   const signBuilder = yield* user
     .newTx()
+    .collectFrom(utxoWithRefScript)
     .pay.ToAddress(addr, { lovelace: 2_000_000n })
     .mintAssets({
-      [nativePolicyId + fromText("BurnableToken")]: -1n,
+      [burnableToken]: -1n,
       [nativePolicyId + maxHexToken]: -1n,
     })
     .mintAssets(
@@ -104,7 +116,7 @@ export const burn = Effect.gen(function* () {
     .attach.MintingPolicy(plutusMint.mint)
     .completeProgram();
   return signBuilder;
-}).pipe(Effect.flatMap(handleSignSubmit), withLogRetry, Effect.orDie);
+}).pipe(Effect.flatMap(handleSignSubmit), withLogRetry);
 
 export const mintburn = Effect.gen(function* () {
   const { user } = yield* User;

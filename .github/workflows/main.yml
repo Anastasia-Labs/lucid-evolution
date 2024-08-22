@@ -19,6 +19,7 @@ jobs:
       VITE_BLOCKFROST_KEY_PREPROD: ${{secrets.VITE_BLOCKFROST_KEY_PREPROD}}
       VITE_BLOCKFROST_KEY_PREVIEW: ${{secrets.VITE_BLOCKFROST_KEY_PREVIEW}}
       VITE_WALLET_SEED: ${{secrets.VITE_WALLET_SEED}}
+      VITE_WALLET_SEED_2: ${{secrets.VITE_WALLET_SEED_2}}
     steps:
       - name: Check out code
         uses: actions/checkout@v4
