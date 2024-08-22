@@ -21,7 +21,6 @@ const preprod = Effect.gen(function* ($) {
     Config.string("VITE_BLOCKFROST_API_URL_PREPROD"),
     Config.string("VITE_BLOCKFROST_KEY_PREPROD"),
     Config.string("VITE_WALLET_SEED"),
-    // Config.string("VITE_WALLET_SEED_2"),
   ]);
   return {
     BLOCKFROST_API_URL: config[0],
@@ -35,7 +34,7 @@ const preview = Effect.gen(function* ($) {
   const config = yield* Config.all([
     Config.string("VITE_BLOCKFROST_API_URL_PREVIEW"),
     Config.string("VITE_BLOCKFROST_KEY_PREVIEW"),
-    Config.string("VITE_WALLET_SEED_2"),
+    Config.string("VITE_WALLET_SEED"),
   ]);
   return {
     BLOCKFROST_API_URL: config[0],
