@@ -172,7 +172,7 @@ describe.sequential("Onchain testing", () => {
     const program = pipe(
       StakeEndpoints.withdrawAllReward,
       Effect.provide(User.layer),
-      Effect.provide(NetworkConfig.layerPreview),
+      Effect.provide(NetworkConfig.layerPreprod),
     );
     const exit = await Effect.runPromiseExit(program);
     expect(exit._tag).toBe("Success");
