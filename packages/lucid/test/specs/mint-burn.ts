@@ -90,11 +90,12 @@ export const burn = Effect.gen(function* () {
   const nativePolicyId = mintingPolicyToId(nativeMint);
   const burnableToken = nativePolicyId + fromText("BurnableToken");
   const plutusMint = yield* MintContract;
-  const utxoWithRefScript = walletUTxOs.filter(
-    (utxo) => {
-        return utxo.assets[burnableToken] == 1n && utxo.scriptRef?.script == plutusMint.mint.script
-    } 
-  );
+  const utxoWithRefScript = walletUTxOs.filter((utxo) => {
+    return (
+      utxo.assets[burnableToken] == 1n &&
+      utxo.scriptRef?.script == plutusMint.mint.script
+    );
+  });
 
   const mintRedeemer = Data.to(new Constr(0, [[]]));
   const signBuilder = yield* user
