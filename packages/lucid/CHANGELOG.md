@@ -1,5 +1,18 @@
 # @lucid-evolution/lucid
 
+## 0.3.10
+
+### Patch Changes
+
+- [#233](https://github.com/Anastasia-Labs/lucid-evolution/pull/233) [`803086b`](https://github.com/Anastasia-Labs/lucid-evolution/commit/803086be99793f334b8c82eb2edd739b3e57ba37) Thanks [@nikhils9](https://github.com/nikhils9)! - Fix reference script fee issues with coin selection
+
+- [#236](https://github.com/Anastasia-Labs/lucid-evolution/pull/236) [`96aaabd`](https://github.com/Anastasia-Labs/lucid-evolution/commit/96aaabd87142e02f814fce141a5fc9de2a6b5b31) Thanks [@hadelive](https://github.com/hadelive)! - add existing plutus datums witness
+
+- Updated dependencies [[`803086b`](https://github.com/Anastasia-Labs/lucid-evolution/commit/803086be99793f334b8c82eb2edd739b3e57ba37)]:
+  - @lucid-evolution/utils@0.1.34
+  - @lucid-evolution/provider@0.1.43
+  - @lucid-evolution/wallet@0.1.38
+
 ## 0.3.9
 
 ### Patch Changes
