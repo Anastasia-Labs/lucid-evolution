@@ -4,5 +4,6 @@ export default defineConfig({
   test: {
     reporters: "verbose",
     include: ["./test/**/*.test.{js,mjs,cjs,ts,mts,cts,jsx,tsx}"],
+    bail: 1,
   },
 });
