@@ -63,7 +63,7 @@ export const mint = Effect.gen(function* () {
         [nativePolicyId + fromText("BurnableToken")]: 1n,
         [nativePolicyId + maxHexToken]: 1n,
       },
-      nativeMint,
+      plutusMint.mint,
     )
     .mintAssets({
       [nativePolicyId + fromText("BurnableToken")]: 1n,

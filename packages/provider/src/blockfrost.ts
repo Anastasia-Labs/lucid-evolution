@@ -12,6 +12,7 @@ import {
   ProtocolParameters,
   Provider,
   RewardAddress,
+  Script,
   Transaction,
   TxHash,
   Unit,
@@ -273,20 +274,24 @@ export class Blockfrost implements Provider {
                     },
                   ).then((res) => res.json());
 
-                  // TODO: support native scripts
-                  if (type.toLowerCase() === "native") {
-                    throw new Error("Native script ref not implemented!");
-                  }
-
                   const { cbor: script } = await fetch(
                     `${this.url}/scripts/${r.reference_script_hash}/cbor`,
                     { headers: { project_id: this.projectId, lucid } },
                   ).then((res) => res.json());
-
-                  return {
-                    type: type === "plutusV1" ? "PlutusV1" : "PlutusV2",
-                    script: applyDoubleCborEncoding(script),
-                  };
+                  switch (type) {
+                    case "timelock":
+                      return undefined;
+                    case "plutusV1":
+                      return {
+                        type: "PlutusV1",
+                        script: applyDoubleCborEncoding(script),
+                      } satisfies Script;
+                    case "plutusV2":
+                      return {
+                        type: "PlutusV2",
+                        script: applyDoubleCborEncoding(script),
+                      } satisfies Script;
+                  }
                 })()
               : undefined,
           };
