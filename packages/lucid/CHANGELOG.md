@@ -1,5 +1,11 @@
 # @lucid-evolution/lucid
 
+## 0.3.11
+
+### Patch Changes
+
+- [#241](https://github.com/Anastasia-Labs/lucid-evolution/pull/241) [`f38f34d`](https://github.com/Anastasia-Labs/lucid-evolution/commit/f38f34d3333cd096fa02f94ebdcbfd344a418240) Thanks [@hadelive](https://github.com/hadelive)! - fix collect ashash-datum utxo
+
 ## 0.3.10
 
 ### Patch Changes
