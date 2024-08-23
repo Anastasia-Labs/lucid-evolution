@@ -53,7 +53,6 @@ export const mint = Effect.gen(function* () {
   const nativePolicyId = mintingPolicyToId(nativeMint);
   const plutusMint = yield* MintContract;
   const mintRedeemer = Data.to(new Constr(0, [[]]));
-
   const signBuilder = yield* user
     .newTx()
     .pay.ToAddressWithData(
@@ -90,13 +89,15 @@ export const burn = Effect.gen(function* () {
   const nativeMint = mkMintinPolicy(addr);
   const nativePolicyId = mintingPolicyToId(nativeMint);
   const burnableToken = nativePolicyId + fromText("BurnableToken");
-  const utxoWithRefScript = walletUTxOs.filter(
-    (utxo) => utxo.assets[burnableToken] == 1n,
-  );
-
   const plutusMint = yield* MintContract;
-  const mintRedeemer = Data.to(new Constr(0, [[]]));
+  const utxoWithRefScript = walletUTxOs.filter((utxo) => {
+    return (
+      utxo.assets[burnableToken] == 1n &&
+      utxo.scriptRef?.script == plutusMint.mint.script
+    );
+  });
 
+  const mintRedeemer = Data.to(new Constr(0, [[]]));
   const signBuilder = yield* user
     .newTx()
     .collectFrom(utxoWithRefScript)

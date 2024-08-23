@@ -126,7 +126,7 @@ export const collectFundsReadFrom = Effect.gen(function* ($) {
   });
   const addr = yield* Effect.promise(() => user.wallet().address());
   // yield* Console.log(addr);
-  const readUtxo = allUtxos.filter((value) => value.scriptRef);
+  const readUtxo = allUtxos.filter((value) => value.scriptRef ?? null);
 
   const redeemer = Data.to(new Constr(0, [fromText("Hello, World!")]));
   const signBuilder = yield* user

@@ -398,9 +398,9 @@ export function datumJsonToCbor(json: DatumJson): Datum {
 
 const handleRateLimit = async (count: number): Promise<void> => {
   if (count % 100 === 0) {
-    await sleep(3_000); // 1 seconds for every 100 requests
+    await sleep(5_000); // 1 seconds for every 100 requests
   } else if (count % 10 === 0) {
-    await sleep(300); // 100 milliseconds for every 10 requests
+    await sleep(500); // 100 milliseconds for every 10 requests
   }
 };
 
