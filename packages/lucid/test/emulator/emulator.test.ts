@@ -12,6 +12,7 @@ import {
   evaluateAContract,
   withdrawReward,
   evaluateAContractWithDatum,
+  compose,
 } from "./service.js";
 
 const distributeRewards = Effect.gen(function* ($) {
@@ -109,6 +110,14 @@ describe.sequential("Emulator", () => {
       Effect.provide(EmulatorUser.layer),
     );
     const exit = await Effect.runPromiseExit(program);
+    emulator.awaitBlock(4);
+    expect(exit._tag).toBe("Success");
+  });
+
+  test("compose", async () => {
+    const program = pipe(compose, Effect.provide(EmulatorUser.layer));
+    const exit = await Effect.runPromiseExit(program);
+    emulator.awaitBlock(4);
     expect(exit._tag).toBe("Success");
   });
 });
