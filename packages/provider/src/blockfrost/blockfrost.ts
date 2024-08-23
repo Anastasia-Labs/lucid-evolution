@@ -1,8 +1,9 @@
-import { CML } from "./core.js";
+import { CML } from "../core.js";
 import { fromHex, sleep } from "@lucid-evolution/core-utils";
 import { applyDoubleCborEncoding } from "@lucid-evolution/utils";
 import {
   Address,
+  Assets,
   Credential,
   Datum,
   DatumHash,
@@ -18,7 +19,9 @@ import {
   Unit,
   UTxO,
 } from "@lucid-evolution/core-types";
-import packageJson from "../package.json";
+import packageJson from "../../package.json";
+import * as BlockFrostSchema from "./schema.js";
+import { pipe, Record } from "effect";
 
 export class Blockfrost implements Provider {
   url: string;
@@ -308,19 +311,9 @@ export class Blockfrost implements Provider {
     tx: Transaction,
     additionalUTxOs?: UTxO[], // for tx chaining
   ): Promise<EvalRedeemer[]> {
-    const additionalUTxOSet = (additionalUTxOs || []).map((utxo) => [
-      { txId: utxo.txHash, index: utxo.outputIndex },
-      {
-        address: utxo.address,
-        value: { coins: utxo.assets.lovelace, assets: utxo.assets.restAssets },
-        datum_hash: utxo.datumHash,
-        datum: utxo.datum,
-        script: utxo.scriptRef,
-      },
-    ]);
     const payload = {
       cbor: tx,
-      additionalUTxOSet,
+      additionalUtxoSet: toAditionalUTXOs(additionalUTxOs),
     };
 
     const res = await fetch(`${this.url}/utils/txs/evaluate/utxos`, {
@@ -330,9 +323,7 @@ export class Blockfrost implements Provider {
         project_id: this.projectId,
         lucid,
       },
-      body: JSON.stringify(payload, (_, value) =>
-        typeof value === "bigint" ? value.toString() : value,
-      ),
+      body: JSON.stringify(payload),
     }).then((res) => res.json());
     if (!res || res.error) {
       const message =
@@ -407,9 +398,9 @@ export function datumJsonToCbor(json: DatumJson): Datum {
 
 const handleRateLimit = async (count: number): Promise<void> => {
   if (count % 100 === 0) {
-    await sleep(1_000); // 1 seconds for every 100 requests
+    await sleep(5_000); // 1 seconds for every 100 requests
   } else if (count % 10 === 0) {
-    await sleep(100); // 100 milliseconds for every 10 requests
+    await sleep(500); // 100 milliseconds for every 10 requests
   }
 };
 
@@ -453,3 +444,39 @@ type BlockfrostRedeemer = {
 };
 
 const lucid = packageJson.version; // Lucid version
+
+const toAditionalUTXOs = (
+  utxos: UTxO[] | undefined,
+): [BlockFrostSchema.TxIn, BlockFrostSchema.TxOut][] =>
+  (utxos || []).map((utxo) => [
+    {
+      txId: utxo.txHash,
+      index: utxo.outputIndex,
+    } satisfies BlockFrostSchema.TxIn,
+    {
+      address: utxo.address,
+      value: {
+        coins: Number(utxo.assets["lovelace"]),
+        assets: fromAssets(utxo.assets),
+      },
+      datumHash: utxo.datumHash,
+      datum: utxo.datum,
+      script: utxo.scriptRef
+        ? utxo.scriptRef.type === "PlutusV1"
+          ? { "plutus:v1": utxo.scriptRef.script }
+          : { "plutus:v2": utxo.scriptRef.script }
+        : undefined,
+    } satisfies BlockFrostSchema.TxOut,
+  ]);
+
+const fromAssets = (assets: Assets) =>
+  pipe(
+    Record.remove(assets, "lovelace"),
+    Record.mapEntries((amount, unit) => [
+      unit.length === 56
+        ? unit.slice(0, 56)
+        : unit.slice(0, 56) + "." + unit.slice(56),
+      Number(amount),
+    ]),
+    (r) => (Record.isEmptyRecord(r) ? undefined : r),
+  );

@@ -1,6 +1,6 @@
 {
   "name": "@lucid-evolution/utils",
-  "version": "0.1.33",
+  "version": "0.1.35",
   "description": "",
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
@@ -37,6 +37,8 @@
     "@effect/schema": "^0.68.16",
     "@emurgo/cardano-serialization-lib-browser": "^11.5.0",
     "@emurgo/cardano-serialization-lib-nodejs": "^11.5.0",
+    "@harmoniclabs/plutus-data": "^1.2.4",
+    "@harmoniclabs/uplc": "^1.2.4",
     "@lucid-evolution/core-types": "workspace:*",
     "@lucid-evolution/core-utils": "workspace:*",
     "@lucid-evolution/crc8": "workspace:*",

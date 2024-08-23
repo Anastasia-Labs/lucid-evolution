@@ -1,5 +1,41 @@
 # @lucid-evolution/lucid
 
+## 0.3.13
+
+### Patch Changes
+
+- [#226](https://github.com/Anastasia-Labs/lucid-evolution/pull/226) [`344b8cb`](https://github.com/Anastasia-Labs/lucid-evolution/commit/344b8cbf376d59fd1b6fbf9a17ab892559bf325f) Thanks [@solidsnakedev](https://github.com/solidsnakedev)! - fix applyParamsToScript; normalize providers test; fix evaluateTx for spent transacions; fix kupmios awaitTx
+
+- Updated dependencies [[`344b8cb`](https://github.com/Anastasia-Labs/lucid-evolution/commit/344b8cbf376d59fd1b6fbf9a17ab892559bf325f)]:
+  - @lucid-evolution/provider@0.1.44
+  - @lucid-evolution/utils@0.1.35
+  - @lucid-evolution/wallet@0.1.39
+
+## 0.3.12
+
+### Patch Changes
+
+- [#243](https://github.com/Anastasia-Labs/lucid-evolution/pull/243) [`4114e3a`](https://github.com/Anastasia-Labs/lucid-evolution/commit/4114e3a21a2d6a0f48e6f7016e3705306e77f11e) Thanks [@hadelive](https://github.com/hadelive)! - add compose tx
+
+## 0.3.11
+
+### Patch Changes
+
+- [#241](https://github.com/Anastasia-Labs/lucid-evolution/pull/241) [`f38f34d`](https://github.com/Anastasia-Labs/lucid-evolution/commit/f38f34d3333cd096fa02f94ebdcbfd344a418240) Thanks [@hadelive](https://github.com/hadelive)! - fix collect ashash-datum utxo
+
+## 0.3.10
+
+### Patch Changes
+
+- [#233](https://github.com/Anastasia-Labs/lucid-evolution/pull/233) [`803086b`](https://github.com/Anastasia-Labs/lucid-evolution/commit/803086be99793f334b8c82eb2edd739b3e57ba37) Thanks [@nikhils9](https://github.com/nikhils9)! - Fix reference script fee issues with coin selection
+
+- [#236](https://github.com/Anastasia-Labs/lucid-evolution/pull/236) [`96aaabd`](https://github.com/Anastasia-Labs/lucid-evolution/commit/96aaabd87142e02f814fce141a5fc9de2a6b5b31) Thanks [@hadelive](https://github.com/hadelive)! - add existing plutus datums witness
+
+- Updated dependencies [[`803086b`](https://github.com/Anastasia-Labs/lucid-evolution/commit/803086be99793f334b8c82eb2edd739b3e57ba37)]:
+  - @lucid-evolution/utils@0.1.34
+  - @lucid-evolution/provider@0.1.43
+  - @lucid-evolution/wallet@0.1.38
+
 ## 0.3.9
 
 ### Patch Changes
