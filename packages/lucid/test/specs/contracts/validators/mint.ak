@@ -62,11 +62,12 @@ validator {
     trace cbor.diagnostic(input_count)
     trace cbor.diagnostic(output_count)
     and {
+      1 == 1, // to change script hash,
       or {
         list.all(quantities, fn(quantity) { quantity > 0 })?,
         list.all(quantities, fn(quantity) { quantity < 0 })?,
       },
-      (input_count == output_count)?,
+      input_count == output_count,
       (input_count == list.length(redeemer.input_indices))?,
     }
   }
