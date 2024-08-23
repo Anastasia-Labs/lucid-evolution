@@ -1,7 +1,9 @@
 import { assert, test } from "vitest";
 import { Blockfrost } from "../src/blockfrost";
 
-test("Blockfrost evaluate tx", async () => {
+// Similar test implement in txEval.test.ts. Kept here for conformity with other providers till those tests aren't 
+// migrated to txEval.test.ts
+test.skip("Blockfrost evaluate tx", async () => {
   const client = new Blockfrost(
     "https://cardano-preprod.blockfrost.io/api/v0",
     "preprodMMFt7Qlw8JTt67t05BfuNb8h9bgLaSvw",

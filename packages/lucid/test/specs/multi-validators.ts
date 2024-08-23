@@ -17,7 +17,7 @@ export const depositFunds = Effect.gen(function* () {
     user.utxosAt(mintContract.contractAddress),
   );
   // To avoid increasing the number of utxos at contract
-  if (stakeUtxos.length > 10 && mintUtxos.length > 3) return undefined;
+  if (stakeUtxos.length >= 10 && mintUtxos.length >= 3) return undefined;
 
   let txBuilder = user.newTx();
 
@@ -60,7 +60,7 @@ export const depositFunds = Effect.gen(function* () {
   Effect.orDie,
 );
 
-export const collectFunds = Effect.gen(function* ($) {
+export const collectFundsInternal = Effect.gen(function* ($) {
   const { user } = yield* User;
   const stakeContract = yield* StakeContract;
   const mintContract = yield* MintContract;
@@ -169,7 +169,14 @@ export const collectFunds = Effect.gen(function* ($) {
     .setMinFee(200_000n)
     .completeProgram();
   return signBuilder;
-}).pipe(Effect.flatMap(handleSignSubmit), withLogRetry, Effect.orDie);
+});
+
+export const collectFunds = pipe(
+    collectFundsInternal,
+    Effect.flatMap(handleSignSubmit),
+    withLogRetry,
+    Effect.orDie,
+  );
 
 export const registerStake = Effect.gen(function* ($) {
   const { user } = yield* User;
