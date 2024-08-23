@@ -67,9 +67,10 @@ export const deRegisterStake = (
 
     const createCertBuilder = (
       credential: CML.Credential,
-      config: any,
+      config: TxBuilder.TxBuilderConfig,
     ): CML.SingleCertificateBuilder => {
-      return config.lucidConfig.network == "Preview"
+      const network = config.lucidConfig.network;
+      return network === "Preview" || network === "Preprod"
         ? CML.SingleCertificateBuilder.new(
             CML.Certificate.new_unreg_cert(
               credential,
