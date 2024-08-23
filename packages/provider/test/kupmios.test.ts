@@ -90,7 +90,7 @@ describe("Kupmios", async () => {
 
   test("awaitTx", async () => {
     const isConfirmed: boolean = await kupmios.awaitTx(
-      "2a1f95a9d85bf556a3dc889831593ee963ba491ca7164d930b3af0802a9796d0",
+      "e84eb47208757db8ed101c2114ca8953527b4a6aae51bacf17e991e5c734fec6",
     );
     expect(isConfirmed).toBe(true);
   });

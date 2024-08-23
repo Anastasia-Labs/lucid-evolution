@@ -57,10 +57,10 @@ export const collectFunds = Effect.gen(function* ($) {
     user.utxosAt(mintContract.contractAddress),
   );
   const stakeUtxoScriptRef = yield* Effect.fromNullable(
-    stakeUtxos.find((utxo) => utxo.scriptRef),
+    stakeUtxos.find((utxo) => utxo.scriptRef ?? null),
   );
   const mintUtxoScriptRef = yield* Effect.fromNullable(
-    mintUtxos.find((utxo) => utxo.scriptRef),
+    mintUtxos.find((utxo) => utxo.scriptRef ?? null),
   );
 
   const selectedStakeUTxOs = stakeUtxos
