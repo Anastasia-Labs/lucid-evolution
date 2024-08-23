@@ -103,6 +103,7 @@ export type TxBuilder = {
     CertificateValidator: (certValidator: Script) => TxBuilder;
     WithdrawalValidator: (withdrawalValidator: Script) => TxBuilder;
   };
+  compose: (tx: TxBuilder | null) => TxBuilder;
   setMinFee: (fee: bigint) => TxBuilder;
   complete: (
     options?: CompleteTxBuilder.CompleteOptions,
@@ -280,6 +281,10 @@ export function makeTxBuilder(lucidConfig: LucidConfig): TxBuilder {
         config.scripts.set(scriptKeyValue.key, scriptKeyValue.value);
         return txBuilder;
       },
+    },
+    compose: (tx: TxBuilder | null) => {
+      config.programs.concat(tx?.config().programs ?? []);
+      return txBuilder;
     },
     setMinFee: (fee: bigint) => {
       config.minFee = fee;

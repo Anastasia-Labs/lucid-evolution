@@ -1,5 +1,17 @@
 # @lucid-evolution/lucid
 
+## 0.3.12
+
+### Patch Changes
+
+- [#243](https://github.com/Anastasia-Labs/lucid-evolution/pull/243) [`4114e3a`](https://github.com/Anastasia-Labs/lucid-evolution/commit/4114e3a21a2d6a0f48e6f7016e3705306e77f11e) Thanks [@hadelive](https://github.com/hadelive)! - add compose tx
+
+## 0.3.11
+
+### Patch Changes
+
+- [#241](https://github.com/Anastasia-Labs/lucid-evolution/pull/241) [`f38f34d`](https://github.com/Anastasia-Labs/lucid-evolution/commit/f38f34d3333cd096fa02f94ebdcbfd344a418240) Thanks [@hadelive](https://github.com/hadelive)! - fix collect ashash-datum utxo
+
 ## 0.3.10
 
 ### Patch Changes

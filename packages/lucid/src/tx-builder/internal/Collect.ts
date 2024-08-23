@@ -85,11 +85,16 @@ export const collectFromUTxO =
               );
               const partial = toPartial(v2, red);
               config.txBuilder.add_input(
-                //TODO: Test with DatumHash
-                input.plutus_script_inline_datum(
-                  partial,
-                  CML.Ed25519KeyHashList.new(),
-                ),
+                utxo.datum && utxo.datumHash
+                  ? input.plutus_script(
+                      partial,
+                      CML.Ed25519KeyHashList.new(),
+                      CML.PlutusData.from_cbor_hex(utxo.datum),
+                    )
+                  : input.plutus_script_inline_datum(
+                      partial,
+                      CML.Ed25519KeyHashList.new(),
+                    ),
               );
               break;
             }
