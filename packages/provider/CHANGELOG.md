@@ -1,5 +1,15 @@
 # @lucid-evolution/provider
 
+## 0.1.44
+
+### Patch Changes
+
+- [#226](https://github.com/Anastasia-Labs/lucid-evolution/pull/226) [`344b8cb`](https://github.com/Anastasia-Labs/lucid-evolution/commit/344b8cbf376d59fd1b6fbf9a17ab892559bf325f) Thanks [@solidsnakedev](https://github.com/solidsnakedev)! - fix applyParamsToScript; normalize providers test; fix evaluateTx for spent transacions; fix kupmios awaitTx
+
+- Updated dependencies [[`344b8cb`](https://github.com/Anastasia-Labs/lucid-evolution/commit/344b8cbf376d59fd1b6fbf9a17ab892559bf325f)]:
+  - @lucid-evolution/utils@0.1.35
+  - @lucid-evolution/wallet@0.1.39
+
 ## 0.1.43
 
 ### Patch Changes
