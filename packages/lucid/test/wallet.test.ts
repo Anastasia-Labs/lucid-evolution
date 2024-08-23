@@ -12,7 +12,7 @@ const loadConfig = Effect.gen(function* () {
   return yield* Config.all([
     Config.string("VITE_BLOCKFROST_API_URL_PREPROD"),
     Config.string("VITE_BLOCKFROST_KEY_PREPROD"),
-    Config.string("VITE_WALLET_SEED"),
+    Config.string("VITE_WALLET_SEED_2"),
     Config.string("VITE_MAESTRO_KEY"),
   ]);
 });

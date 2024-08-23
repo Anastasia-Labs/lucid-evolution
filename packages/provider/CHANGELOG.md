@@ -1,5 +1,13 @@
 # @lucid-evolution/provider
 
+## 0.1.43
+
+### Patch Changes
+
+- Updated dependencies [[`803086b`](https://github.com/Anastasia-Labs/lucid-evolution/commit/803086be99793f334b8c82eb2edd739b3e57ba37)]:
+  - @lucid-evolution/utils@0.1.34
+  - @lucid-evolution/wallet@0.1.38
+
 ## 0.1.42
 
 ### Patch Changes
