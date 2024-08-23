@@ -15,7 +15,16 @@ import { networkToId } from "./network.js";
 import { applyDoubleCborEncoding } from "./cbor.js";
 import { Data } from "@lucid-evolution/plutus";
 import * as UPLC from "@lucid-evolution/uplc";
+import {
+  Application,
+  encodeUPLC,
+  parseUPLC,
+  UPLCConst,
+  UPLCProgram,
+} from "@harmoniclabs/uplc";
 import { fromHex, toHex } from "@lucid-evolution/core-utils";
+import { decode, encode } from "cborg";
+import { dataFromCbor } from "@harmoniclabs/plutus-data";
 
 export function validatorToAddress(
   network: Network,
@@ -122,13 +131,30 @@ export function mintingPolicyToId(mintingPolicy: MintingPolicy): PolicyId {
   return validatorToScriptHash(mintingPolicy);
 }
 
+/**
+ * Applies a list of parameters, in the form of the `Data` type, to a CBOR encoded script.
+ *
+ * The `plutusScript` must be double CBOR encoded(bytes). Ensure to use the `applyDoubleCborEncoding` function.
+ */
 export function applyParamsToScript<T extends unknown[] = Data[]>(
   plutusScript: string,
   params: Exact<[...T]>,
   type?: T,
 ): string {
-  const p = (type ? Data.castTo<T>(params, type) : params) as Data[];
+  const program = parseUPLC(decode(decode(fromHex(plutusScript))), "flat");
+  const parameters = (type ? Data.castTo<T>(params, type) : params) as Data[];
+  const appliedProgram = parameters.reduce((body, currentParameter) => {
+    const data = UPLCConst.data(dataFromCbor(Data.to(currentParameter)));
+    const appliedParameter = new Application(body, data);
+    return appliedParameter;
+  }, program.body);
+
   return toHex(
-    UPLC.apply_params_to_script(fromHex(Data.to(p)), fromHex(plutusScript)),
+    encode(
+      encode(
+        encodeUPLC(new UPLCProgram(program.version, appliedProgram)).toBuffer()
+          .buffer,
+      ),
+    ),
   );
 }
