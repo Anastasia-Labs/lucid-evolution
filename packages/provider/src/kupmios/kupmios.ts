@@ -359,10 +359,7 @@ const getScriptEffect = (
         Effect.map(({ language, script }) => {
           switch (language) {
             case "native":
-              return {
-                type: "Native",
-                script: applyDoubleCborEncoding(script),
-              } satisfies Script;
+              return undefined;
             case "plutus:v1":
               return {
                 type: "PlutusV1",

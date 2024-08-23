@@ -17,7 +17,7 @@ import * as MetadataEndpoint from "./specs/metadata.js";
 import * as WalletEndpoint from "./specs/wallet.js";
 
 describe.sequential("Onchain testing", () => {
-  test.skip("TxChain", async () => {
+  test("TxChain", async () => {
     const program = pipe(
       TxChain.depositFundsCollect,
       Effect.provide(User.layer),
@@ -28,7 +28,7 @@ describe.sequential("Onchain testing", () => {
     expect(exit._tag).toBe("Success");
   });
 
-  test.skip("MultiValidator - registerStake", async () => {
+  test("MultiValidator - registerStake", async () => {
     const program = pipe(
       MultiValidatorEndpoints.registerStake,
       Effect.provide(User.layer),
@@ -39,7 +39,7 @@ describe.sequential("Onchain testing", () => {
     expect(exit._tag).toBe("Success");
   });
 
-  test.skip("MultiValidator - DespositFunds", async () => {
+  test("MultiValidator - DespositFunds", async () => {
     const program = pipe(
       MultiValidatorEndpoints.depositFunds,
       Effect.provide(User.layer),
@@ -51,7 +51,7 @@ describe.sequential("Onchain testing", () => {
     expect(exit._tag).toBe("Success");
   });
 
-  test.skip("MultiValidator - CollectFunds", async () => {
+  test("MultiValidator - CollectFunds", async () => {
     const program = pipe(
       MultiValidatorEndpoints.collectFunds,
       Effect.provide(User.layer),
