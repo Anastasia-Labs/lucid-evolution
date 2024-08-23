@@ -551,7 +551,8 @@ const calculateMinRefScriptFee = (
 ): Effect.Effect<bigint, TxBuilderError, never> =>
   Effect.gen(function* () {
     let fee = 0n;
-    if (config.lucidConfig.network === "Preview") {
+    const network = config.lucidConfig.network;
+    if (network === "Preview" || network === "Preprod") {
       let totalScriptSize = 0;
 
       config.readInputs.forEach((utxo) => {
