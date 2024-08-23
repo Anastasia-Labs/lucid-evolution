@@ -1,5 +1,11 @@
 # @lucid-evolution/lucid
 
+## 0.3.14
+
+### Patch Changes
+
+- [#239](https://github.com/Anastasia-Labs/lucid-evolution/pull/239) [`eeab0c2`](https://github.com/Anastasia-Labs/lucid-evolution/commit/eeab0c2bf8b594e47d665f9daa76a3acd5af0acc) Thanks [@nikhils9](https://github.com/nikhils9)! - Enable Conway Era for Preprod
+
 ## 0.3.13
 
 ### Patch Changes
