@@ -10,7 +10,7 @@ import * as MultiValidatorEndpoints from "./specs/multi-validators.js";
 import { Blockfrost } from "../src/index.js";
 
 describe.sequential("Tx Eval Test", () => {
-  test("Blockfrost", async () => {
+  test.skip("Blockfrost", async () => {
     const program = pipe(
       MultiValidatorEndpoints.collectFundsInternal,
       Effect.provide(User.layer),
