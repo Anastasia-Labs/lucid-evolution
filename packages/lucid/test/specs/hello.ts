@@ -112,11 +112,19 @@ export const collectFundsReadFrom = Effect.gen(function* ($) {
     yield* Effect.promise(() => user.wallet().address()),
   ).paymentCredential?.hash;
 
-  const utxos = allUtxos.filter((value) => {
-    if (value.datum) {
+  const readUtxo = allUtxos.filter((utxo) => utxo.scriptRef ?? null)[0];
+
+  const utxos = allUtxos.filter((utxo) => {
+    if (utxo.datum) {
       try {
-        const datum = Data.from(value.datum, DatumType);
-        return datum.owner === publicKeyHash;
+        const datum = Data.from(utxo.datum, DatumType);
+        return (
+          datum.owner === publicKeyHash &&
+          !(
+            readUtxo.txHash == utxo.txHash &&
+            readUtxo.outputIndex == utxo.outputIndex
+          )
+        );
       } catch (_) {
         return false;
       }
@@ -125,14 +133,12 @@ export const collectFundsReadFrom = Effect.gen(function* ($) {
     }
   });
   const addr = yield* Effect.promise(() => user.wallet().address());
-  // yield* Console.log(addr);
-  const readUtxo = allUtxos.filter((value) => value.scriptRef ?? null);
 
   const redeemer = Data.to(new Constr(0, [fromText("Hello, World!")]));
   const signBuilder = yield* user
     .newTx()
     .collectFrom([utxos[0]], redeemer)
-    .readFrom([readUtxo[0]])
+    .readFrom([readUtxo])
     .addSigner(addr)
     .completeProgram();
   return signBuilder;
