@@ -32,7 +32,7 @@ export const depositFunds = Effect.gen(function* () {
     ),
     Effect.andThen((script) => script.compiledCode),
   );
-  const applied = applyParamsToScript(helloCBOR, [
+  const applied = applyParamsToScript(applyDoubleCborEncoding(helloCBOR), [
     publicKeyHash!,
     fromText("Hello, World!"),
   ]);
@@ -70,7 +70,7 @@ export const collectFunds = Effect.gen(function* ($) {
   const publicKeyHash = getAddressDetails(
     yield* Effect.promise(() => user.wallet().address()),
   ).paymentCredential?.hash;
-  const applied = applyParamsToScript(helloCBOR, [
+  const applied = applyParamsToScript(applyDoubleCborEncoding(helloCBOR), [
     publicKeyHash!,
     fromText("Hello, World!"),
   ]);
