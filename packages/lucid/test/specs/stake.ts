@@ -18,7 +18,7 @@ export const registerStake = Effect.gen(function* ($) {
   Effect.catchTag("TxSubmitError", (error) =>
     error.message.includes("StakeKeyAlreadyRegisteredDELEG") ||
     error.message.includes("StakeKeyRegisteredDELEG")
-      ? Effect.void
+      ? Effect.log("Stake Already registered")
       : Effect.fail(error),
   ),
   withLogRetry,

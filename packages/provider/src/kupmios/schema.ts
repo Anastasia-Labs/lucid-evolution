@@ -1,4 +1,5 @@
 import * as S from "@effect/schema/Schema";
+import { Record } from "effect";
 
 export const JSONRPCSchema = <A, I, R>(schema: S.Schema<A, I, R>) =>
   S.extend(
@@ -77,7 +78,12 @@ export const KupoUTxO = S.Struct({
     slot_no: S.Number,
     header_hash: S.String,
   }),
-  spent_at: S.NullOr(S.Number),
+  spent_at: S.NullOr(
+    S.Struct({
+      slot_no: S.Number,
+      header_hash: S.String,
+    }),
+  ),
 });
 
 export interface KupoUTxO extends S.Schema.Type<typeof KupoUTxO> {}
@@ -104,3 +110,24 @@ export const KupoDelegation = S.NullOr(
     }),
   ),
 );
+
+type Script = {
+  language: "plutus:V1" | "plutus:v2" | "plutus:v3";
+  cbor: string;
+};
+
+export type Value = {
+  ada: { lovelace: number };
+} & Asset;
+
+export type Asset = Record<string, Record<string, number>>;
+
+export type AdditionalUTxOs = ReadonlyArray<{
+  transaction: { id: string };
+  index: number;
+  address: string;
+  value: Value;
+  datumHash?: string | null;
+  datum?: string | null;
+  script: Script;
+}>;

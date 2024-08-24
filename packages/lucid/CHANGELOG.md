@@ -1,5 +1,22 @@
 # @lucid-evolution/lucid
 
+## 0.3.14
+
+### Patch Changes
+
+- [#239](https://github.com/Anastasia-Labs/lucid-evolution/pull/239) [`eeab0c2`](https://github.com/Anastasia-Labs/lucid-evolution/commit/eeab0c2bf8b594e47d665f9daa76a3acd5af0acc) Thanks [@nikhils9](https://github.com/nikhils9)! - Enable Conway Era for Preprod
+
+## 0.3.13
+
+### Patch Changes
+
+- [#226](https://github.com/Anastasia-Labs/lucid-evolution/pull/226) [`344b8cb`](https://github.com/Anastasia-Labs/lucid-evolution/commit/344b8cbf376d59fd1b6fbf9a17ab892559bf325f) Thanks [@solidsnakedev](https://github.com/solidsnakedev)! - fix applyParamsToScript; normalize providers test; fix evaluateTx for spent transacions; fix kupmios awaitTx
+
+- Updated dependencies [[`344b8cb`](https://github.com/Anastasia-Labs/lucid-evolution/commit/344b8cbf376d59fd1b6fbf9a17ab892559bf325f)]:
+  - @lucid-evolution/provider@0.1.44
+  - @lucid-evolution/utils@0.1.35
+  - @lucid-evolution/wallet@0.1.39
+
 ## 0.3.12
 
 ### Patch Changes

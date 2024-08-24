@@ -13,6 +13,7 @@ jobs:
     env:
       VITE_BLOCKFROST_KEY: ${{ secrets.VITE_BLOCKFROST_KEY }}
       VITE_MAESTRO_KEY: ${{ secrets.VITE_MAESTRO_KEY }}
+      VITE_MAESTRO_KEY_PREPROD: ${{ secrets.VITE_MAESTRO_KEY_PREPROD }}
       VITE_SEED: ${{ secrets.VITE_SEED }}
       VITE_API_URL: ${{ secrets.VITE_API_URL }}
       VITE_KUPO_KEY: ${{secrets.VITE_KUPO_KEY}}
