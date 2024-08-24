@@ -118,25 +118,25 @@ export const collectFundsInternal = Effect.gen(function* ($) {
     .collectFrom(selectedMintUTxOs, rdmrBuilderSelectedSpend);
 
   selectedStakeUTxOs.forEach((utxo: UTxO) => {
-    txBuilder = txBuilder.pay.ToAddressWithData(
+    txBuilder = txBuilder.pay.ToContract(
       stakeContract.contractAddress,
       {
         kind: "inline",
         value: Data.void(),
       },
-      utxo.assets,
+      {"lovelace": 500_000n},
       utxo.scriptRef ? utxo.scriptRef : undefined,
     );
   });
 
   selectedMintUTxOs.forEach((utxo: UTxO) => {
-    txBuilder = txBuilder.pay.ToAddressWithData(
+    txBuilder = txBuilder.pay.ToContract(
       mintContract.contractAddress,
       {
         kind: "inline",
         value: Data.void(),
       },
-      utxo.assets,
+      {"lovelace": 7_000_000n},
       utxo.scriptRef ? utxo.scriptRef : undefined,
     );
   });
