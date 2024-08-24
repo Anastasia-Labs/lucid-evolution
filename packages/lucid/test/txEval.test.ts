@@ -21,11 +21,14 @@ describe.sequential("Tx Eval Test", () => {
 
     const exit = await Effect.runPromiseExit(program);
     expect(exit._tag).toBe("Success");
-    if(exit._tag == "Success"){
+    if (exit._tag == "Success") {
       const projectId = process.env.VITE_BLOCKFROST_KEY_PREPROD;
-      const client = new Blockfrost(process.env.VITE_BLOCKFROST_API_URL_PREPROD!, projectId);
+      const client = new Blockfrost(
+        process.env.VITE_BLOCKFROST_API_URL_PREPROD!,
+        projectId,
+      );
       const redeemers = await client.evaluateTx(exit.value.toCBOR());
-      expect(Array.from(redeemers).length).greaterThan(0)
+      expect(Array.from(redeemers).length).greaterThan(0);
     }
   });
 });

@@ -172,11 +172,11 @@ export const collectFundsInternal = Effect.gen(function* ($) {
 });
 
 export const collectFunds = pipe(
-    collectFundsInternal,
-    Effect.flatMap(handleSignSubmit),
-    withLogRetry,
-    Effect.orDie,
-  );
+  collectFundsInternal,
+  Effect.flatMap(handleSignSubmit),
+  withLogRetry,
+  Effect.orDie,
+);
 
 export const registerStake = Effect.gen(function* ($) {
   const { user } = yield* User;

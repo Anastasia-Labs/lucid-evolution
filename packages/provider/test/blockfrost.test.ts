@@ -1,7 +1,7 @@
 import { assert, test } from "vitest";
 import { Blockfrost } from "../src/blockfrost";
 
-// Similar test implement in txEval.test.ts. Kept here for conformity with other providers till those tests aren't 
+// Similar test implement in txEval.test.ts. Kept here for conformity with other providers till those tests aren't
 // migrated to txEval.test.ts
 test.skip("Blockfrost evaluate tx", async () => {
   const client = new Blockfrost(
