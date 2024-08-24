@@ -111,10 +111,7 @@ export const burn = Effect.gen(function* () {
       [burnableToken]: -1n,
       [nativePolicyId + maxHexToken]: -1n,
     })
-    .mintAssets(
-      burnAssets,
-      mintRedeemer,
-    )
+    .mintAssets(burnAssets, mintRedeemer)
     .attach.MintingPolicy(nativeMint)
     .attach.MintingPolicy(plutusMint.mint)
     .completeProgram();
@@ -200,16 +197,8 @@ export const pay = Effect.gen(function* () {
       { kind: "inline", value: datum },
       { [policy + fromText("BurnableToken2")]: 1n },
     )
-    .pay.ToAddressWithData(
-      addr,
-      { kind: "inline", value: datum },
-      {},
-    )
-    .pay.ToAddressWithData(
-      addr,
-      { kind: "inline", value: datum },
-      undefined,
-    )
+    .pay.ToAddressWithData(addr, { kind: "inline", value: datum }, {})
+    .pay.ToAddressWithData(addr, { kind: "inline", value: datum }, undefined)
     .mintAssets({ [policy + fromText("BurnableToken2")]: 3n })
     .attach.MintingPolicy(mint)
     .completeProgram();

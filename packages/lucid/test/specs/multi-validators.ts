@@ -124,7 +124,7 @@ export const collectFundsInternal = Effect.gen(function* ($) {
         kind: "inline",
         value: Data.void(),
       },
-      {"lovelace": 500_000n},
+      { lovelace: 500_000n },
       utxo.scriptRef ? utxo.scriptRef : undefined,
     );
   });
@@ -136,7 +136,7 @@ export const collectFundsInternal = Effect.gen(function* ($) {
         kind: "inline",
         value: Data.void(),
       },
-      {"lovelace": 7_000_000n},
+      { lovelace: 7_000_000n },
       utxo.scriptRef ? utxo.scriptRef : undefined,
     );
   });
