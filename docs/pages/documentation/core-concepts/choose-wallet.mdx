@@ -21,9 +21,9 @@ console.log(privateKey);
 You can also generate a wallet from a seed phrase (mnemonic):
 
 ```typescript
-import { generateSeedphrase } from "@lucid-evolution/utils";
+import { generateSeedPhrase } from "@lucid-evolution/utils";
 
-const seedPhrase = lucid.utils.generateSeedphrase(); // BIP-39
+const seedPhrase = lucid.utils.generateSeedPhrase(); // BIP-39
 console.log(seedPhrase);
 ```
 
@@ -99,18 +99,18 @@ lucid.selectWallet.fromAPI(walletApi);
 #### Get address
 
 ```typescript
-const address = await lucid.wallet.address(); // Bech32 address
+const address = await lucid.wallet().address(); // Bech32 address
 ```
 ---
 #### Query UTxOs
 
 ```typescript
-const utxos = await lucid.wallet.getUtxos();
+const utxos = await lucid.wallet().getUtxos();
 ```
 ---
 #### Query delegation
 
 ```typescript
-const delegation = await lucid.wallet.getDelegation();
+const delegation = await lucid.wallet().getDelegation();
 ```
 </Steps>
