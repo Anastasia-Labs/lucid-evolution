@@ -24,7 +24,7 @@ describe("Kupmios", async () => {
   // console.log("waiting 30 seconds");
   // await new Promise((resolve) => setTimeout(resolve, 30000)); // 30 seconds delay
 
-  test.only("getProtocolParameters", async () => {
+  test("getProtocolParameters", async () => {
     const pp: ProtocolParameters = await kupmios.getProtocolParameters();
     assert(pp);
   });
