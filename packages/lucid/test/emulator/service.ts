@@ -2,6 +2,7 @@ import {
   getAddressDetails,
   mintingPolicyToId,
   scriptFromNative,
+  toUnit,
   unixTimeToSlot,
   validatorToAddress,
 } from "@lucid-evolution/utils";
@@ -218,15 +219,30 @@ export const compose = Effect.gen(function* ($) {
 }).pipe(Effect.flatMap(handleSignSubmitWithoutValidation), withLogRetry);
 
 export const multiSigner = Effect.gen(function* ($) {
-  const { user } = yield* EmulatorUser;
-  const scriptAddress = validatorToAddress("Custom", alwaysSucceedScript);
+  const { user, emulator } = yield* EmulatorUser;
+  const { paymentCredential } = getAddressDetails(EMULATOR_ACCOUNT.address);
+  const { paymentCredential: paymentCredential1 } = getAddressDetails(
+    EMULATOR_ACCOUNT_1.address,
+  );
+  const mintingPolicy = scriptFromNative({
+    type: "all",
+    scripts: [
+      {
+        type: "before",
+        slot: unixTimeToSlot("Custom", emulator.now() + 9000000),
+      },
+      { type: "sig", keyHash: paymentCredential?.hash! },
+      { type: "sig", keyHash: paymentCredential1?.hash! },
+    ],
+  });
+  const policyId = mintingPolicyToId(mintingPolicy);
   const tx = yield* user
     .newTx()
-    .pay.ToContract(
-      scriptAddress,
-      { kind: "inline", value: Data.to("313131") },
-      { lovelace: 5000000n },
-    )
+    .mintAssets({
+      [toUnit(policyId, fromText("Wow"))]: 123n,
+    })
+    .validTo(emulator.now() + 1200000)
+    .attach.MintingPolicy(mintingPolicy)
     .completeProgram();
   const firstSign = yield* Effect.promise(() => tx.partialSign.withWallet());
   user.selectWallet.fromSeed(EMULATOR_ACCOUNT_1.seedPhrase);
