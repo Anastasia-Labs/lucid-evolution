@@ -42,7 +42,7 @@ export class Maestro implements Provider {
   }
 
   async getProtocolParameters(): Promise<ProtocolParameters> {
-    const timestampedResult = await fetch(`${this.url}/protocol-params`, {
+    const timestampedResult = await fetch(`${this.url}/protocol-parameters`, {
       headers: this.commonHeaders(),
     }).then((res) => res.json());
     const result = timestampedResult.data;
@@ -54,41 +54,34 @@ export class Maestro implements Provider {
         parseInt(str.slice(forwardSlashIndex + 1))
       );
     };
-    // To rename keys in an object by the given key-map.
-    // deno-lint-ignore no-explicit-any
-    const renameKeysAndSort = (obj: any, newKeys: any) => {
-      const entries = Object.keys(obj)
-        .sort()
-        .map((key) => {
-          const newKey = newKeys[key] || key;
-          return {
-            [newKey]: Object.fromEntries(
-              Object.entries(obj[key]).sort(([k, _v], [k2, _v2]) =>
-                k.localeCompare(k2),
-              ),
-            ),
-          };
-        });
-      return Object.assign({}, ...entries);
-    };
     return {
       minFeeA: parseInt(result.min_fee_coefficient),
-      minFeeB: parseInt(result.min_fee_constant),
-      maxTxSize: parseInt(result.max_tx_size),
-      maxValSize: parseInt(result.max_value_size),
-      keyDeposit: BigInt(result.stake_key_deposit),
-      poolDeposit: BigInt(result.pool_deposit),
-      priceMem: decimalFromRationalString(result.prices.memory),
-      priceStep: decimalFromRationalString(result.prices.steps),
+      minFeeB: parseInt(result.min_fee_constant.ada.lovelace),
+      maxTxSize: parseInt(result.max_transaction_size.bytes),
+      maxValSize: parseInt(result.max_value_size.bytes),
+      keyDeposit: BigInt(result.stake_credential_deposit.ada.lovelace),
+      poolDeposit: BigInt(result.stake_pool_deposit.ada.lovelace),
+      priceMem: decimalFromRationalString(result.script_execution_prices.memory),
+      priceStep: decimalFromRationalString(result.script_execution_prices.cpu),
       maxTxExMem: BigInt(result.max_execution_units_per_transaction.memory),
-      maxTxExSteps: BigInt(result.max_execution_units_per_transaction.steps),
-      coinsPerUtxoByte: BigInt(result.coins_per_utxo_byte),
+      maxTxExSteps: BigInt(result.max_execution_units_per_transaction.cpu),
+      coinsPerUtxoByte: BigInt(result.min_utxo_deposit_coefficient),
       collateralPercentage: parseInt(result.collateral_percentage),
       maxCollateralInputs: parseInt(result.max_collateral_inputs),
-      costModels: renameKeysAndSort(result.cost_models, {
-        "plutus:v1": "PlutusV1",
-        "plutus:v2": "PlutusV2",
-      }),
+      costModels: {
+        PlutusV1: Object.fromEntries(
+          result.plutus_cost_models.plutus_v1.map((value: number, index: number) => [
+            index.toString(),
+            value,
+          ]),
+        ),
+        PlutusV2: Object.fromEntries(
+          result.plutus_cost_models.plutus_v2.map((value: number, index: number) => [
+            index.toString(),
+            value,
+          ]),
+        ),
+      }
     };
   }
 
@@ -104,11 +97,11 @@ export class Maestro implements Provider {
       credentialBech32Query +=
         addressOrCredential.type === "Key"
           ? CML.Ed25519KeyHash.from_hex(addressOrCredential.hash).to_bech32(
-              "addr_vkh",
-            )
+            "addr_vkh",
+          )
           : CML.ScriptHash.from_hex(addressOrCredential.hash).to_bech32(
-              "addr_shared_vkh",
-            );
+            "addr_shared_vkh",
+          );
       return credentialBech32Query;
     })();
     const qparams = new URLSearchParams({
@@ -150,7 +143,7 @@ export class Maestro implements Provider {
       }
       throw new Error(
         "Location: getUtxoByUnit. Error: Couldn't perform query. Received status code: " +
-          timestampedAddressesResponse.status,
+        timestampedAddressesResponse.status,
       );
     }
     const addressesWithAmount = timestampedAddresses.data;
@@ -227,7 +220,7 @@ export class Maestro implements Provider {
       } else {
         throw new Error(
           "Location: getDatum. Error: Couldn't successfully perform query. Received status code: " +
-            timestampedResultResponse.status,
+          timestampedResultResponse.status,
         );
       }
     }
@@ -272,7 +265,7 @@ export class Maestro implements Provider {
       else {
         throw new Error(
           "Could not submit transaction. Received status code: " +
-            response.status,
+          response.status,
         );
       }
     }
@@ -309,12 +302,12 @@ export class Maestro implements Provider {
         ? result.reference_script.type == "native"
           ? undefined
           : {
-              type:
-                result.reference_script.type == "plutusv1"
-                  ? "PlutusV1"
-                  : "PlutusV2",
-              script: applyDoubleCborEncoding(result.reference_script.bytes!),
-            }
+            type:
+              result.reference_script.type == "plutusv1"
+                ? "PlutusV1"
+                : "PlutusV2",
+            script: applyDoubleCborEncoding(result.reference_script.bytes!),
+          }
         : undefined,
     };
   }
