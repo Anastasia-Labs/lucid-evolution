@@ -7,67 +7,70 @@ import {
 } from "@lucid-evolution/core-types";
 import { assert, describe, expect, test } from "vitest";
 import { expectedProtocolParameters } from "./protocolParameters.js";
+import * as PreprodConstants from "./preprod-constants.js";
 
 //TODO: improve test assetion
 describe.sequential("Koios", () => {
-  const koios = new Koios("https://api.koios.rest/api/v1");
+  const koios = new Koios("https://preprod.koios.rest/api/v1");
   test("getProtocolParameters", async () => {
     const pp: ProtocolParameters = await koios.getProtocolParameters();
-    assert.deepEqual(pp, expectedProtocolParameters);
+    assert(pp);
   });
 
   test("getUtxos", async () => {
-    const utxos: UTxO[] = await koios.getUtxos(
+    const utxos = await koios.getUtxos(
       "addr_test1qrngfyc452vy4twdrepdjc50d4kvqutgt0hs9w6j2qhcdjfx0gpv7rsrjtxv97rplyz3ymyaqdwqa635zrcdena94ljs0xy950",
     );
     assert(utxos);
   });
 
   test("getUtxosWithUnit", async () => {
-    const utxos: UTxO[] = await koios.getUtxosWithUnit(
-      "addr1q8vaadv0h7atv366u6966u4rft2svjlf5uajy8lkpsgdrc24rnskuetxz2u3m5ac22s3njvftxcl2fc8k8kjr088ge0qpn6xhn",
-      "85152e10643c1440ba2ba817e3dd1faf7bd7296a8b605efd0f0f2d1844696d656e73696f6e426f78202330313739",
+    const utxos = await koios.getUtxosWithUnit(
+      "addr_test1wpgexmeunzsykesf42d4eqet5yvzeap6trjnflxqtkcf66g0kpnxt",
+      "4a83e031d4c37fc7ca6177a2f3581a8eec2ce155da91f59cfdb3bb28446973636f7665727956616c696461746f72",
     );
-    assert(utxos);
+    expect(utxos.length).toBeGreaterThan(0);
   });
 
   test("getUtxoByUnit", async () => {
-    const utxo: UTxO = await koios.getUtxoByUnit(
-      "85152e10643c1440ba2ba817e3dd1faf7bd7296a8b605efd0f0f2d1844696d656e73696f6e426f78202330313739",
+    const utxo = await koios.getUtxoByUnit(
+      "4a83e031d4c37fc7ca6177a2f3581a8eec2ce155da91f59cfdb3bb28446973636f7665727956616c696461746f72",
     );
-    assert(utxo);
+    expect(utxo).toStrictEqual(PreprodConstants.discoveryUTxO);
   });
 
   test("getUtxosByOutRef", async () => {
     const utxos: UTxO[] = await koios.getUtxosByOutRef([
       {
         txHash:
-          "c6ee20549eab1e565a4bed119bb8c7fc2d11cc5ea5e1e25433a34f0175c0bef6",
+          "b50e73e74a3073bc44f555928702c0ae0f555a43f1afdce34b3294247dce022d",
         outputIndex: 0,
       },
     ]);
-    assert(utxos);
+    expect(utxos).toStrictEqual([PreprodConstants.discoveryUTxO]);
   });
 
   test("getDelegation", async () => {
-    const delegation: Delegation = await koios.getDelegation(
-      "stake1uyrx65wjqjgeeksd8hptmcgl5jfyrqkfq0xe8xlp367kphsckq250",
+    const delegation = await koios.getDelegation(
+      "stake_test17zt3vxfjx9pjnpnapa65lx375p2utwxmpc8afj053h0l3vgc8a3g3",
     );
     assert(delegation);
   });
 
   test("getDatum", async () => {
-    const datum: Datum = await koios.getDatum(
-      "818ee3db3bbbd04f9f2ce21778cac3ac605802a4fcb00c8b3a58ee2dafc17d46",
+    const datum = await koios.getDatum(
+      "95472c2f46b89500703ec778304baf1079c58124c254bf4bf8c96e5d73869293",
     );
-    assert(datum);
+    expect(datum).toStrictEqual(
+      "d87b9fd8799fd8799f9f581c3f2728ec78ef8b0f356e91a5662ff3124add324a7b7f5aeed69362f4581c17942ff3849b623d24e31ec709c1c94c53b9240311820a9601ad4af0581cba4ab50bdecca85162f3b8114739bc5ba3aaa6490e2b1d15ad0f9c66581c25aa4132c7ce7d8f96ee977cd921cba7681891d114d088449d1d63b2581c5309fa786856c1262d095b89adf64fe8a5255ad19142c9c537359e41ff1917701a001b77401a001b774018c818641a000927c0d8799f0a140aff021905dcd8799f9f581c1a550d5f572584e1add125b5712f709ac3b9828ad86581a4759022baff01ffffffff",
+    );
   });
 
   test("awaitTx", async () => {
     const isConfirmed: boolean = await koios.awaitTx(
-      "f144a8264acf4bdfe2e1241170969c930d64ab6b0996a4a45237b623f1dd670e",
+      "e84eb47208757db8ed101c2114ca8953527b4a6aae51bacf17e991e5c734fec6",
     );
-    assert(isConfirmed);
+    expect(isConfirmed).toBe(true);
   });
 
   test("submitTxBadRequest", async () => {

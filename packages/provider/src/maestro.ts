@@ -61,7 +61,9 @@ export class Maestro implements Provider {
       maxValSize: parseInt(result.max_value_size.bytes),
       keyDeposit: BigInt(result.stake_credential_deposit.ada.lovelace),
       poolDeposit: BigInt(result.stake_pool_deposit.ada.lovelace),
-      priceMem: decimalFromRationalString(result.script_execution_prices.memory),
+      priceMem: decimalFromRationalString(
+        result.script_execution_prices.memory,
+      ),
       priceStep: decimalFromRationalString(result.script_execution_prices.cpu),
       maxTxExMem: BigInt(result.max_execution_units_per_transaction.memory),
       maxTxExSteps: BigInt(result.max_execution_units_per_transaction.cpu),
@@ -70,18 +72,21 @@ export class Maestro implements Provider {
       maxCollateralInputs: parseInt(result.max_collateral_inputs),
       costModels: {
         PlutusV1: Object.fromEntries(
-          result.plutus_cost_models.plutus_v1.map((value: number, index: number) => [
-            index.toString(),
-            value,
-          ]),
+          result.plutus_cost_models.plutus_v1.map(
+            (value: number, index: number) => [index.toString(), value],
+          ),
         ),
         PlutusV2: Object.fromEntries(
-          result.plutus_cost_models.plutus_v2.map((value: number, index: number) => [
-            index.toString(),
-            value,
-          ]),
+          result.plutus_cost_models.plutus_v2.map(
+            (value: number, index: number) => [index.toString(), value],
+          ),
         ),
-      }
+        PlutusV3: Object.fromEntries(
+          result.plutus_cost_models.plutus_v2.map(
+            (value: number, index: number) => [index.toString(), value],
+          ),
+        ),
+      },
     };
   }
 
@@ -97,11 +102,11 @@ export class Maestro implements Provider {
       credentialBech32Query +=
         addressOrCredential.type === "Key"
           ? CML.Ed25519KeyHash.from_hex(addressOrCredential.hash).to_bech32(
-            "addr_vkh",
-          )
+              "addr_vkh",
+            )
           : CML.ScriptHash.from_hex(addressOrCredential.hash).to_bech32(
-            "addr_shared_vkh",
-          );
+              "addr_shared_vkh",
+            );
       return credentialBech32Query;
     })();
     const qparams = new URLSearchParams({
@@ -143,7 +148,7 @@ export class Maestro implements Provider {
       }
       throw new Error(
         "Location: getUtxoByUnit. Error: Couldn't perform query. Received status code: " +
-        timestampedAddressesResponse.status,
+          timestampedAddressesResponse.status,
       );
     }
     const addressesWithAmount = timestampedAddresses.data;
@@ -220,7 +225,7 @@ export class Maestro implements Provider {
       } else {
         throw new Error(
           "Location: getDatum. Error: Couldn't successfully perform query. Received status code: " +
-          timestampedResultResponse.status,
+            timestampedResultResponse.status,
         );
       }
     }
@@ -265,7 +270,7 @@ export class Maestro implements Provider {
       else {
         throw new Error(
           "Could not submit transaction. Received status code: " +
-          response.status,
+            response.status,
         );
       }
     }
@@ -298,17 +303,7 @@ export class Maestro implements Provider {
           : result.datum.hash
         : undefined,
       datum: result.datum?.bytes,
-      scriptRef: result.reference_script
-        ? result.reference_script.type == "native"
-          ? undefined
-          : {
-            type:
-              result.reference_script.type == "plutusv1"
-                ? "PlutusV1"
-                : "PlutusV2",
-            script: applyDoubleCborEncoding(result.reference_script.bytes!),
-          }
-        : undefined,
+      scriptRef: toScriptRef(result.reference_script),
     };
   }
   private async getAllPagesData<T>(
@@ -378,6 +373,30 @@ export class Maestro implements Provider {
   }
 }
 
+const toScriptRef = (reference_script: MaestroScript | undefined) => {
+  if (reference_script && reference_script.bytes) {
+    switch (reference_script.type) {
+      case "plutusv1":
+        return {
+          type: "PlutusV1" as const,
+          script: applyDoubleCborEncoding(reference_script.bytes),
+        };
+      case "plutusv2":
+        return {
+          type: "PlutusV2" as const,
+          script: applyDoubleCborEncoding(reference_script.bytes),
+        };
+      case "plutusv3":
+        return {
+          type: "PlutusV3" as const,
+          script: applyDoubleCborEncoding(reference_script.bytes),
+        };
+      default:
+        return undefined;
+    }
+  }
+};
+
 type MaestroDatumOptionType = "hash" | "inline";
 
 type MaestroDatumOption = {
@@ -387,7 +406,7 @@ type MaestroDatumOption = {
   json?: Json;
 };
 
-type MaestroScriptType = "native" | "plutusv1" | "plutusv2";
+type MaestroScriptType = "native" | "plutusv1" | "plutusv2" | "plutusv3";
 
 type MaestroScript = {
   hash: string;

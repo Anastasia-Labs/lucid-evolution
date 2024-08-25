@@ -294,6 +294,11 @@ export class Blockfrost implements Provider {
                         type: "PlutusV2",
                         script: applyDoubleCborEncoding(script),
                       } satisfies Script;
+                    case "plutusV3":
+                      return {
+                        type: "PlutusV3",
+                        script: applyDoubleCborEncoding(script),
+                      } satisfies Script;
                   }
                 })()
               : undefined,
@@ -461,13 +466,26 @@ const toAditionalUTXOs = (
       },
       datumHash: utxo.datumHash,
       datum: utxo.datum,
-      script: utxo.scriptRef
-        ? utxo.scriptRef.type === "PlutusV1"
-          ? { "plutus:v1": utxo.scriptRef.script }
-          : { "plutus:v2": utxo.scriptRef.script }
-        : undefined,
+      script: toTxOutScript(utxo.scriptRef),
     } satisfies BlockFrostSchema.TxOut,
   ]);
+
+const toTxOutScript = (
+  scriptRef: UTxO["scriptRef"],
+): BlockFrostSchema.TxOut["script"] => {
+  if (scriptRef) {
+    switch (scriptRef.type) {
+      case "PlutusV1":
+        return { "plutus:v1": scriptRef.script };
+      case "PlutusV2":
+        return { "plutus:v2": scriptRef.script };
+      case "PlutusV3":
+        return { "plutus:v3": scriptRef.script };
+      default:
+        return undefined;
+    }
+  }
+};
 
 const fromAssets = (assets: Assets) =>
   pipe(

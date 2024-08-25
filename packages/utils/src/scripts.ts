@@ -122,6 +122,11 @@ export function fromScriptRef(scriptRef: CML.Script): Script {
         type: "PlutusV2",
         script: scriptRef.as_plutus_v2()!.to_cbor_hex(),
       };
+    case 3:
+      return {
+        type: "PlutusV3",
+        script: scriptRef.as_plutus_v3()!.to_cbor_hex(),
+      };
     default:
       throw new Error("No variant matched.");
   }

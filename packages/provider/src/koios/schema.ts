@@ -1,6 +1,28 @@
 import * as S from "@effect/schema/Schema";
 
 export const ProtocolParametersSchema = S.Struct({
+  pvt_motion_no_confidence: S.Number,
+  pvt_committee_normal: S.Number,
+  pvt_committee_no_confidence: S.Number,
+  pvt_hard_fork_initiation: S.Number,
+  pvtpp_security_group: S.Number,
+  dvt_motion_no_confidence: S.Number,
+  dvt_committee_normal: S.Number,
+  dvt_committee_no_confidence: S.Number,
+  dvt_update_to_constitution: S.Number,
+  dvt_hard_fork_initiation: S.Number,
+  dvt_p_p_network_group: S.Number,
+  dvt_p_p_economic_group: S.Number,
+  dvt_p_p_technical_group: S.Number,
+  dvt_p_p_gov_group: S.Number,
+  dvt_treasury_withdrawal: S.Number,
+  committee_min_size: S.Number,
+  committee_max_term_length: S.Number,
+  gov_action_lifetime: S.Number,
+  gov_action_deposit: S.NumberFromString,
+  drep_deposit: S.NumberFromString,
+  drep_activity: S.Number,
+  min_fee_ref_script_cost_per_byte: S.Number,
   epoch_no: S.Number,
   min_fee_a: S.Number,
   min_fee_b: S.Number,
@@ -25,6 +47,7 @@ export const ProtocolParametersSchema = S.Struct({
   cost_models: S.Struct({
     PlutusV1: S.Array(S.Number),
     PlutusV2: S.Array(S.Number),
+    PlutusV3: S.Array(S.Number),
   }),
   price_mem: S.Number,
   price_step: S.Number,
@@ -37,7 +60,8 @@ export const ProtocolParametersSchema = S.Struct({
   max_collateral_inputs: S.Number,
   coins_per_utxo_size: S.BigInt,
 });
-export type ProtocolParameters = S.Schema.Type<typeof ProtocolParametersSchema>;
+export interface ProtocolParameters
+  extends S.Schema.Type<typeof ProtocolParametersSchema> {}
 
 export const KoiosAssetSchema = S.Struct({
   policy_id: S.String,
@@ -47,11 +71,23 @@ export const KoiosAssetSchema = S.Struct({
   quantity: S.String,
 });
 
-export type KoiosAsset = S.Schema.Type<typeof KoiosAssetSchema>;
+export interface KoiosAsset extends S.Schema.Type<typeof KoiosAssetSchema> {}
+
+const ReferenceScriptSchema = S.Struct({
+  hash: S.NullOr(S.String),
+  size: S.NullOr(S.Number),
+  type: S.NullOr(S.String),
+  bytes: S.NullOr(S.String),
+  value: S.NullOr(S.Object),
+});
+
+export interface ReferenceScript
+  extends S.Schema.Type<typeof ReferenceScriptSchema> {}
 
 export const KoiosUTxOSchema = S.Struct({
   tx_hash: S.String,
   tx_index: S.Number,
+  block_time: S.Number,
   block_height: S.NullOr(S.Number),
   value: S.String,
   datum_hash: S.NullOr(S.String),
@@ -61,19 +97,11 @@ export const KoiosUTxOSchema = S.Struct({
       value: S.Object,
     }),
   ),
-  reference_script: S.NullOr(
-    S.Struct({
-      hash: S.String,
-      size: S.Number,
-      type: S.String,
-      bytes: S.String,
-      value: S.NullOr(S.Object),
-    }),
-  ),
+  reference_script: S.NullOr(ReferenceScriptSchema),
   asset_list: S.NullOr(S.Array(KoiosAssetSchema)),
 });
 
-export type KoiosUTxO = S.Schema.Type<typeof KoiosUTxOSchema>;
+export interface KoiosUTxO extends S.Schema.Type<typeof KoiosUTxOSchema> {}
 
 export const KoiosAddressInfoSchema = S.Array(
   S.NullishOr(
@@ -87,7 +115,8 @@ export const KoiosAddressInfoSchema = S.Array(
   ),
 );
 
-export type KoiosAddressInfo = S.Schema.Type<typeof KoiosAddressInfoSchema>;
+export interface KoiosAddressInfo
+  extends S.Schema.Type<typeof KoiosAddressInfoSchema> {}
 
 export const KoiosInputOutputSchema = S.Struct({
   payment_addr: S.Struct({
@@ -105,19 +134,12 @@ export const KoiosInputOutputSchema = S.Struct({
       value: S.Object,
     }),
   ),
-  reference_script: S.NullOr(
-    S.Struct({
-      hash: S.String,
-      size: S.Number,
-      type: S.String,
-      bytes: S.String,
-      value: S.NullOr(S.Object),
-    }),
-  ),
-  asset_list: S.Union(S.Array(KoiosAssetSchema), S.String),
+  reference_script: S.NullOr(ReferenceScriptSchema),
+  asset_list: S.Array(KoiosAssetSchema),
 });
 
-export type KoiosInputOutput = S.Schema.Type<typeof KoiosInputOutputSchema>;
+export interface KoiosInputOutput
+  extends S.Schema.Type<typeof KoiosInputOutputSchema> {}
 
 export const KoiosTxInfoSchema = S.Struct({
   tx_hash: S.String,
@@ -131,6 +153,7 @@ export const KoiosTxInfoSchema = S.Struct({
   tx_size: S.Number,
   total_output: S.String,
   fee: S.String,
+  treasury_donation: S.String,
   deposit: S.String,
   invalid_before: S.NullOr(S.String),
   invalid_after: S.NullOr(S.String),
@@ -201,6 +224,12 @@ export const KoiosTxInfoSchema = S.Struct({
       }),
     ),
   ),
+  //TODO: add S.Struct
+  // https://preprod.koios.rest/#post-/tx_info
+  voting_procedures: S.Array(S.Object),
+  //TODO: add S.Struct
+  // https://preprod.koios.rest/#post-/tx_info
+  proposal_procedures: S.Object,
 });
 
-export type KoiosTxInfo = S.Schema.Type<typeof KoiosTxInfoSchema>;
+export interface KoiosTxInfo extends S.Schema.Type<typeof KoiosTxInfoSchema> {}
