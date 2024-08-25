@@ -10,12 +10,16 @@ import { Data, fromText, Lucid, SpendingValidator } from "../../src";
 import {
   handleSignSubmit,
   handleSignSubmitWithoutValidation,
+  handleSubmit,
   withLogRetry,
 } from "../specs/utils";
 import { Emulator, generateEmulatorAccount } from "@lucid-evolution/provider";
 
 export const EMULATOR_ACCOUNT = generateEmulatorAccount({
   lovelace: 75000000000n,
+});
+export const EMULATOR_ACCOUNT_1 = generateEmulatorAccount({
+  lovelace: 80000000000n,
 });
 export const REWARD_AMOUNT = 100000000n;
 export const EMULATOR_POOL_ID =
@@ -212,3 +216,21 @@ export const compose = Effect.gen(function* ($) {
   const signBuilder = yield* txCompA.compose(txCompB).completeProgram();
   return signBuilder;
 }).pipe(Effect.flatMap(handleSignSubmitWithoutValidation), withLogRetry);
+
+export const multiSigner = Effect.gen(function* ($) {
+  const { user } = yield* EmulatorUser;
+  const scriptAddress = validatorToAddress("Custom", alwaysSucceedScript);
+  const tx = yield* user
+    .newTx()
+    .pay.ToContract(
+      scriptAddress,
+      { kind: "inline", value: Data.to("313131") },
+      { lovelace: 5000000n },
+    )
+    .completeProgram();
+  const firstSign = yield* Effect.promise(() => tx.partialSign.withWallet());
+  user.selectWallet.fromSeed(EMULATOR_ACCOUNT_1.seedPhrase);
+  const secondSign = yield* Effect.promise(() => tx.partialSign.withWallet());
+  const assembleTx = tx.assemble([firstSign, secondSign]);
+  return assembleTx;
+}).pipe(Effect.flatMap(handleSubmit), withLogRetry);
