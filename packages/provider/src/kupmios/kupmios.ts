@@ -29,6 +29,7 @@ import { NoSuchElementException, TimeoutException } from "effect/Cause";
 import { ParseError } from "@effect/schema/ParseResult";
 import { HttpClientError } from "@effect/platform/HttpClientError";
 import { HttpBodyError } from "@effect/platform/HttpBody";
+import { ArrayFormatter } from "@effect/schema";
 
 export class KupmiosError extends Data.TaggedError("KupmiosError")<{
   cause?: unknown;
@@ -330,7 +331,10 @@ const getDatumEffect = (
   datum_hash: KupmiosSchema.KupoUTxO["datum_hash"],
 ): Effect.Effect<
   string | undefined,
-  HttpClientError | ParseError | TimeoutException | NoSuchElementException
+  | HttpClientError
+  | ArrayFormatter.Issue[]
+  | TimeoutException
+  | NoSuchElementException
 > =>
   Effect.gen(function* () {
     if (datum_type === "inline" && datum_hash) {
@@ -422,6 +426,12 @@ const toProtocolParameters = (
           value,
         ]),
       ),
+      PlutusV3: Object.fromEntries(
+        result.plutusCostModels["plutus:v3"].map((value, index) => [
+          index.toString(),
+          value,
+        ]),
+      ),
     },
   };
 };
@@ -430,31 +440,37 @@ const fetchOgmiosParse = <A, I, R>(
   url: string | URL,
   data: unknown,
   schema: S.Schema<A, I, R>,
-): Effect.Effect<A, HttpClientError | ParseError | HttpBodyError, R> =>
+): Effect.Effect<
+  A,
+  HttpClientError | HttpBodyError | ArrayFormatter.Issue[],
+  R
+> =>
   pipe(
     HttpClientRequest.post(url),
     HttpClientRequest.jsonBody(data),
     Effect.flatMap(HttpClient.fetch),
     HttpClientResponse.json,
-    Effect.flatMap(S.decodeUnknown(schema)),
-    // Effect.catchTag("ParseError", (e) =>
-    //   Effect.fail(ArrayFormatter.formatIssueSync(e.issue)),
-    // ),
+    Effect.flatMap(
+      S.decodeUnknown(schema, { onExcessProperty: "error", errors: "first" }),
+    ),
+    Effect.catchTag("ParseError", (e) =>
+      Effect.fail(ArrayFormatter.formatErrorSync(e)),
+    ),
     // Effect.scoped
   );
 
 const fetchKupoParse = <A, I, R>(
   url: string | URL,
   schema: S.Schema<A, I, R>,
-): Effect.Effect<A, HttpClientError | ParseError, R> =>
+): Effect.Effect<A, HttpClientError | ArrayFormatter.Issue[], R> =>
   pipe(
     HttpClientRequest.get(url),
     HttpClient.fetchOk,
     HttpClientResponse.json,
-    Effect.flatMap(S.decodeUnknown(schema)),
-    // Effect.catchTag("ParseError", (e) =>
-    //   Effect.fail(ArrayFormatter.formatIssueSync(e.issue)),
-    // ),
+    Effect.flatMap(S.decodeUnknown(schema, { onExcessProperty: "error" })),
+    Effect.catchTag("ParseError", (e) =>
+      Effect.fail(ArrayFormatter.formatErrorSync(e)),
+    ),
     // Effect.scoped
   );
 
@@ -463,7 +479,10 @@ const kupmiosUtxosToUtxos = (
   utxos: ReadonlyArray<KupmiosSchema.KupoUTxO>,
 ): Effect.Effect<
   UTxO[],
-  HttpClientError | ParseError | TimeoutException | NoSuchElementException
+  | HttpClientError
+  | ArrayFormatter.Issue[]
+  | TimeoutException
+  | NoSuchElementException
 > =>
   Effect.forEach(
     utxos,

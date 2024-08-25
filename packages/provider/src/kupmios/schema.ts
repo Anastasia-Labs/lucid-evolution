@@ -26,6 +26,51 @@ const TupleNumberFromString = S.compose(
 
 export const ProtocolParametersSchema = S.Struct({
   minFeeCoefficient: S.Number,
+  minFeeReferenceScripts: S.Struct({
+    base: S.Number,
+    range: S.Number,
+    multiplier: S.Number,
+  }),
+  maxReferenceScriptsSize: S.Struct({
+    bytes: S.Number,
+  }),
+  stakePoolVotingThresholds: S.Struct({
+    noConfidence: TupleNumberFromString,
+    constitutionalCommittee: S.Struct({
+      default: TupleNumberFromString,
+      stateOfNoConfidence: TupleNumberFromString,
+    }),
+    hardForkInitiation: TupleNumberFromString,
+    protocolParametersUpdate: S.Struct({
+      security: TupleNumberFromString,
+    }),
+  }),
+  delegateRepresentativeVotingThresholds: S.Struct({
+    noConfidence: TupleNumberFromString,
+    constitutionalCommittee: S.Struct({
+      default: TupleNumberFromString,
+      stateOfNoConfidence: TupleNumberFromString,
+    }),
+    constitution: TupleNumberFromString,
+    hardForkInitiation: TupleNumberFromString,
+    protocolParametersUpdate: S.Struct({
+      network: TupleNumberFromString,
+      economic: TupleNumberFromString,
+      technical: TupleNumberFromString,
+      governance: TupleNumberFromString,
+    }),
+    treasuryWithdrawals: TupleNumberFromString,
+  }),
+  constitutionalCommitteeMinSize: S.Number,
+  constitutionalCommitteeMaxTermLength: S.Number,
+  governanceActionLifetime: S.Number,
+  governanceActionDeposit: S.Struct({
+    ada: LovelaceAsset,
+  }),
+  delegateRepresentativeDeposit: S.Struct({
+    ada: LovelaceAsset,
+  }),
+  delegateRepresentativeMaxIdleTime: S.Number,
   minFeeConstant: S.Struct({ ada: LovelaceAsset }),
   maxBlockBodySize: S.Struct({ bytes: S.Number }),
   maxBlockHeaderSize: S.Struct({ bytes: S.Number }),
@@ -43,6 +88,7 @@ export const ProtocolParametersSchema = S.Struct({
   plutusCostModels: S.Struct({
     "plutus:v1": S.Array(S.Number),
     "plutus:v2": S.Array(S.Number),
+    "plutus:v3": S.Array(S.Number),
   }),
   scriptExecutionPrices: S.Struct({
     memory: TupleNumberFromString,
@@ -90,7 +136,7 @@ export interface KupoUTxO extends S.Schema.Type<typeof KupoUTxO> {}
 
 export const KupoScriptSchema = S.NullOr(
   S.Struct({
-    language: S.Literal("native", "plutus:v1", "plutus:v2"),
+    language: S.Literal("native", "plutus:v1", "plutus:v2", "plutus:v3"),
     script: S.String,
   }),
 );

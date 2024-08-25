@@ -36,6 +36,15 @@ export const attachScript = ({
           .to_hex(),
         value: { type, script: applyDoubleCborEncoding(script) },
       };
+    case "PlutusV3":
+      return {
+        key: CML.PlutusV3Script.from_cbor_hex(applyDoubleCborEncoding(script))
+          .hash()
+          .to_hex(),
+        value: { type, script: applyDoubleCborEncoding(script) },
+      };
+    default:
+      throw new Error(`Exhaustive check failed: Unhandled case ${type}`);
   }
 };
 export const attachSpendingValidator = (spendingValidator: SpendingValidator) =>
