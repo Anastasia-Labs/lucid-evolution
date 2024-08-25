@@ -59,7 +59,7 @@ export default {
         href="https://github.com/Anastasia-Labs/lucid-evolution/releases"
         target="_blank"
       >
-        🎉 Discover our latest updates for Lucid Evolution! Learn more →
+        🎉 We are Chang Hardfork READY! Learn more →
       </a>
     ),
   },
@@ -67,6 +67,8 @@ export default {
   chat: {
     link: "https://discord.gg/s89P9gpEff",
   },
+
+  gitTimestamp: () => null,
 
   navigation: {
     prev: true,

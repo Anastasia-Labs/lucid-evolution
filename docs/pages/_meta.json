@@ -14,7 +14,15 @@
 
   "install": {
     "title": "Install",
-    "type": "page"
+    "type": "page",
+    "theme": {
+      "breadcrumb": false,
+      "sidebar": false,
+      "toc": false,
+      "layout": "default",
+      "typesetting": "article",
+      "pagination": false
+    }
   },
 
   "documentation": {

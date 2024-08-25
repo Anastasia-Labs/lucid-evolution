@@ -1,175 +1,149 @@
-import { Callout, Steps, Cards } from "nextra/components";
-import { useData } from "nextra/data";
-import Image from "next/image";
-import { Tabs } from "nextra/components";
+import { Steps, Cards } from "nextra/components";
+import { Bleed } from "nextra-theme-docs";
 import { useState, useEffect } from "react";
+import { Hero } from "../components/hero";
+import { AnimatedCode } from "../components/animated-code";
+import { FeatureList } from "../components/feature-list";
 
-![](/al-icon-a-monochrome.png)
+<style jsx global>{`
+  .fade-in {
+    animation: fadeIn 0.85s ease-in;
+  }
+  .fade-in-delayed {
+    animation: fadeIn 0.85s ease-in 1s;
+    opacity: 0;
+    animation-fill-mode: forwards;
+  }
+  @keyframes fadeIn {
+    from {
+      opacity: 0;
+    }
+    to {
+      opacity: 1;
+    }
+  }
+  @keyframes blink {
+    0%,
+    100% {
+      opacity: 1;
+    }
+    50% {
+      opacity: 0;
+    }
+  }
+`}</style>
 
-export function Hero({
-  title,
-  subtitle,
-  ctaText,
-  ctaLink,
-  ctaText2,
-  ctaLink2,
-}) {
-  const [isHovered1, setIsHovered1] = useState(false);
-  const [isHovered2, setIsHovered2] = useState(false);
-
-const buttonStyle = (isHovered) => ({
-padding: "0.5rem 1rem",
-backgroundColor: isHovered ? "#a52a2a" : "#8b0000",
-color: "white",
-textDecoration: "none",
-borderRadius: "8px",
-transition: "background-color 0.3s ease",
-});
-
-return (
-
-<div style={{ textAlign: "center" }}>
-  <h1 style={{ fontSize: "2.5rem", marginBottom: "1rem" }}>{title}</h1>
-  <p style={{ fontSize: "1rem", marginBottom: "2rem" }}>{subtitle}</p>
-  <div style={{ display: "flex", justifyContent: "center", gap: "1rem" }}>
-    <a
-      href={ctaLink}
-      style={buttonStyle(isHovered1)}
-      onMouseEnter={() => setIsHovered1(true)}
-      onMouseLeave={() => setIsHovered1(false)}
-    >
-      {ctaText}
-    </a>
-    <a
-      href={ctaLink2}
-      style={buttonStyle(isHovered2)}
-      onMouseEnter={() => setIsHovered2(true)}
-      onMouseLeave={() => setIsHovered2(false)}
-    >
-      {ctaText2}
-    </a>
-  </div>
-</div>
-); }
-
-<Hero
-  title="Lucid Evolution"
-  subtitle="An advanced off-chain framework for Cardano and an upgraded version of the legacy Lucid library"
-  ctaText="Get Started"
-  ctaLink="/install"
-  ctaText2="Documentation"
-  ctaLink2="/documentation/core-concepts/instantiate-evolution"
-/>
-
----
-
-export function AnimatedCode({ code }) {
-  const [displayedCode, setDisplayedCode] = useState('');
-
-useEffect(() => {
-let i = 0;
-const animateCode = () => {
-const intervalId = setInterval(() => {
-setDisplayedCode(code.slice(0, i));
-i++;
-
-        if (i > code.length) {
-          clearInterval(intervalId);
-
-
-          setTimeout(() => {
-            i = 0;
-            animateCode();
-          }, 6000); // 6-second pause
-        }
-      }, 60); // 60ms per character
-
-      return () => clearInterval(intervalId);
-    };
-
-    animateCode();
-
-    return () => clearInterval();
-
-}, [code]);
-
-const lineCount = code.split('\n').length;
-
-const preHeight = `${lineCount * 1.5}em`;
-
-return (
-
-<pre
-  style={{
-    backgroundColor: "#1a1515", // 420D08 is also nice
-    padding: "1rem",
-    borderRadius: "8px",
-    height: preHeight,
-    overflow: "hidden",
-    whiteSpace: "pre-wrap",
-    wordWrap: "break-word",
-  }}
->
-  <code>{displayedCode}</code>
-</pre>
-
-);
+export function FAQBox({ title, children }) {
+  return (
+    <details className="last-of-type:mb-0 rounded-lg bg-neutral-50 dark:bg-neutral-800 p-2 mt-4">
+      <summary>
+        <strong className="text-lg">{title}</strong>
+      </summary>
+      <div className="nx-p-2">{children}</div>
+    </details>
+  );
 }
 
-<AnimatedCode code={
-  `import { Lucid } from "@lucid-evolution/lucid";
-import { Blockfrost } from "@lucid-evolution/provider";
+<div style={{ marginBottom: "8rem" }}></div>
+
+![](/lucid-evolution-red-icon.png)
+
+<div className="fade-in">
+  <Hero
+    title="Lucid Evolution"
+    subtitle="Next-generation transaction builder for highly scalable dApps on Cardano"
+    ctaText="Start here"
+    ctaLink="/lucid-evolution/install"
+    ctaText2="Learn more"
+    ctaLink2="/lucid-evolution/documentation/core-concepts/instantiate-evolution"
+  />
+</div>
+
+<Bleed full>
+
+<div style={{ 
+  marginTop: "14rem", 
+  display: 'flex', 
+  justifyContent: 'space-between', 
+  alignItems: 'flex-start', 
+  gap: '2rem', 
+  padding: '0 2rem', 
+  flexWrap: 'wrap'  
+}}>
+  <div style={{ flex: '0 0 65%', maxWidth: '65%' }}> 
+    <AnimatedCode 
+      style={{ 
+        maxWidth: '100%', 
+        overflowX: 'auto', 
+        border: '1px solid #8b0000',
+        borderRadius: '8px',
+        boxShadow: '0 20px 40px rgba(0,0,0,0.1)',
+        marginBottom: '2rem'  
+      }} 
+      code={`import { Lucid, Blockfrost } from "@lucid-evolution/lucid";
 
 const lucid = await Lucid(
-new Blockfrost("https://cardano-testnet.blockfrost.io/api/v0", "YOUR_PROJECT_ID"),
-"Testnet"
+  new Blockfrost("https://cardano-preprod.blockfrost.io/api/v0", "<projectId>"),
+  "Preprod"
 );
-`} />
+
+lucid.selectWallet.fromPrivateKey(privateKey);
+
+const paymentTx = await lucid
+  .newTx()
+  .pay.ToAddress("addr_testa...", { lovelace: 5000000n })
+  .pay.ToAddress("addr_testb...", { lovelace: 5000000n })
+  .complete();
+
+const signedPaymentTx = await paymentTx.sign.withWallet().complete();
+
+const paymentTxHash = await signedPaymentTx.submit();
+console.log("(Wen Midgard?) Tx Hash:", paymentTxHash);`}
+    />
+  </div>
+  <div style={{ flex: '0 0 30%', maxWidth: '30%', marginTop: '5rem' }}> 
+    <h2 style={{ fontSize: '1.8rem', marginBottom: '1rem', color: 'white' }}>
+      Why <span style={{ color: '#8b0000' }}>Evolution</span>?
+    </h2>
+    <FAQBox title="Improved APIs">
+      Our interfaces are enhanced for better developer experience and function
+      calls streamlined for common operations. Through the Evolution library, you take advantage of built-in support for popular
+      features, reducing the need for external dependencies
+    </FAQBox>
+
+    <FAQBox title="Enhanced Error Handling">
+      Error management just got better and a lot smoother with our integration of
+      the Effect library. Debug quicker with detailed, context-rich error messages.
+      Handle exceptions easily with our structured error types
+    </FAQBox>
+
+    <FAQBox title="Refined Structure">
+      We use a modular architecture, separating functionality into distinct packages. We will be able to add new
+      features as independent modules within the existing architecture
+    </FAQBox>
+
+    <FAQBox title="Latest CML">
+      We are keeping up with the latest version of the [Cardano Multi-platform Library
+      (CML)]("https://dcspark.github.io/cardano-multiplatform-lib/")
+    </FAQBox>
+
+    <FAQBox title="Developer-Centric">
+      Our goal is to enrich the developer experience via code examples for various use
+      cases. We publish regular updates to add features and improve the library
+      We provide support through our dedicated [Discord
+      channel]("https://discord.gg/s89P9gpEff") and GitHub issues
+    </FAQBox>
+
+  </div>
+</div>
+
+</Bleed>
+
+<div style={{ marginBottom: "6rem" }}></div>
+
+# Quickstart
 
 ---
-
-# Why Evolution?
-
-<Tabs
-  items={[
-    "Improved APIs",
-    "Enhanced Error Handling",
-    "Refined Structure",
-    "Latest CML",
-    "Developer-Centric",
-  ]}
->
-  <Tabs.Tab>
-    Enhanced interfaces for better developer experience, streamlined function
-    calls for common operations. Take advantage of built-in support for popular
-    Cardano features, reducing the need for external dependencies
-  </Tabs.Tab>
-  <Tabs.Tab>
-    Error management just got better and a lot smoother with our integration of
-    the Effect library. Debug quicker with detailed, context-rich error
-    messages. Handle exceptions easily with our structured error types.
-  </Tabs.Tab>
-  <Tabs.Tab>
-    Lucid Evolution uses a modular code architecture. The codebase separates
-    functionality into distinct packages. Many components are designed for
-    reusability across different parts of the library. We will be able to add
-    new features as separate modules within the existing architecture
-  </Tabs.Tab>
-  <Tabs.Tab>
-    Keeping up with the latest version of the Cardano Multi-platform Library
-    (CML)
-  </Tabs.Tab>
-  <Tabs.Tab>
-    Documentation for Lucid Evolution includes code examples for various use
-    cases. The project maintains a public GitHub repository for issue tracking
-    and discussions. Regular updates are published to address bugs and add
-    features and support is provided through GitHub issues and our dedicated
-    Discord channel.
-  </Tabs.Tab>
-</Tabs>
----
-
-## Quickstart
 
 <Steps>
 ### Set up your project
@@ -224,42 +198,30 @@ Initialize a new TypeScript project
 </Steps>
 </Steps>
 
----
+<div style={{ marginBottom: "6rem" }}></div>
 
 # F.A.Q.
 
-export function FAQBox({ title, children }) {
-  return (
-    <details
-      open
-      className="last-of-type:mb-0 rounded-lg bg-neutral-50 dark:bg-neutral-800 p-2 mt-4"
-    >
-      <summary>
-        <strong className="text-lg">{title}</strong>
-      </summary>
-      <div className="nx-p-2">{children}</div>
-    </details>
-  );
-}
+---
+
+<div style={{ marginBottom: "2.5rem" }}></div>
 
 <FAQBox title="What is Lucid Evolution?">
   Lucid Evolution is an off-chain framework library for Cardano, designed to
-  facilitate the development of decentralized applications (dApps). It includes
-  various packages such as utilities for signing data, Plutus integration, and
-  wallet management, all built using TypeScript to enhance type safety and
-  developer experience
+  facilitate developers needs and the development of decentralized applications.
+  It includes various packages such as utilities for signing data, Plutus
+  integration, and wallet management, all built using TypeScript to ensure type
+  safety and a better developer experience
 </FAQBox>
 
 <FAQBox title="How does Lucid Evolution ensure compatibility with Cardano's evolving scene?">
-  Lucid Evolution is actively maintained to ensure compatibility with Cardano's
-  protocols and upcoming hard forks like Chang. We are actively involved in
-  updating our fee models, and functionalities to support upcoming changes. We
-  like to emphasize regular updates and community contributions to address any
-  compatibility issues and enhance functionality
+  The library is actively maintained to ensure compatibility in all areas, just
+  like with Chang Hardfork. We have been involved in updating our fee models,
+  and functionalities to support upcoming changes.
 </FAQBox>
 
 <FAQBox title="Can I contribute to the development of Lucid Evolution?">
-  Yes, contributions to Lucid Evolution are welcome. You can submit issues,
-  feature requests, or pull requests on the project's GitHub repository to help
-  improve the library and its documentation
+  Yes, of course! Contributions to Lucid Evolution are welcome. You have an
+  idea? You can submit issues, feature requests, or pull requests on our GitHub
+  repository to help improve the library and its documentation
 </FAQBox>

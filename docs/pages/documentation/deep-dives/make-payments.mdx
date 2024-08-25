@@ -23,8 +23,7 @@ const txHash = await signedTx.submit();
 ```
 
 <Callout type="info" emoji="ℹ️">
-  __Evolution-Notes:__ Change from `payToAddress` to `pay.ToAddress`, and `sign()`
-  to `sign.withWallet()`
+  __Evolution-Notes:__ Change from `payToAddress` -> `pay.ToAddress`
 </Callout>
 
 ---
@@ -105,7 +104,7 @@ The `pay.ToAddressWithData` method accepts the following parameters:
 Lucid Evolution implicitly adds the minimum ADA requirement when sending native tokens.
 
 ```typescript
-import { fromText } from "@lucid-evolution/utils";
+import { fromText } from "@lucid-evolution/core-utils";
 
 const policyId = "00...";
 const assetName = "MyToken";
@@ -138,6 +137,5 @@ const tx = await lucid
 const signedTx = await tx.sign.withWallet().complete();
 const txHash = await signedTx.submit();
 ```
+
 </Steps>
-
-

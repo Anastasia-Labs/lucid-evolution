@@ -1,32 +1,34 @@
 import { Callout, Steps } from "nextra/components";
 
-# Mint Assets
+## Mint Assets
 
 <Steps>
 ### Create a Minting Policy
 First, we need to create a minting policy for the assets we want to mint. In this example, we'll use a native script time-locking policy with our wallet as the required signer:
 
 ```typescript
-import { Lucid } from "@lucid-evolution/lucid";
+import { Lucid, Blockfrost } from "@lucid-evolution/lucid";
 import {
-  fromText,
-  nativeScriptFromJson,
+  paymentCredentialOf,
+  scriptFromNative,
   mintingPolicyToId,
   unixTimeToSlot,
 } from "@lucid-evolution/utils";
+import { fromText } from "@lucid-evolution/core-utils";
 
-const { paymentCredential } = await lucid.wallet().getAddressDetails();
+const address = await lucid.wallet().address();
 
-const mintingPolicy = nativeScriptFromJson({
+const mintingPolicy = scriptFromNative({
   type: "all",
   scripts: [
-    { type: "sig", keyHash: paymentCredential.hash },
+    { type: "sig", keyHash: paymentCredentialOf(address).hash },
     {
       type: "before",
       slot: unixTimeToSlot(lucid.config().network, Date.now() + 1000000),
     },
   ],
 });
+
 ```
 
 ---
@@ -34,7 +36,7 @@ const mintingPolicy = nativeScriptFromJson({
 Next we derive the policy id from the minting policy script:
 
 ```typescript
-const policyId = lucid.utils.mintingPolicyToId(mintingPolicy);
+const policyID = mintingPolicyToId(mintingPolicy);
 ```
 
 ---
@@ -44,21 +46,27 @@ const policyId = lucid.utils.mintingPolicyToId(mintingPolicy);
 Now we can mint our desired tokens:
 
 ```typescript
-const unit = policyId + fromText("MyMintedToken");
-
 const tx = await lucid
   .newTx()
-  .mintAssets({ [unit]: 1n })
-  .validTo(Date.now() + 200000)
+  .mintAssets({
+    [policyId + fromText("MyToken")]: 1n,
+    [policyId + fromText("MyOtherToken")]: 1n,
+  })
+  .pay.ToAddress(address, { [policyId + fromText("MyToken")]: 1n })
+  .validTo(Date.now() + 900000)
   .attach.MintingPolicy(mintingPolicy)
   .complete();
 
-const signedTx = await tx.sign.withWallet().complete();
-const txHash = await signedTx.submit();
+const signed = await tx.sign.withWallet().complete();
+const txHash = await signed.submit();
 ```
 
 <Callout type="info" emoji="ℹ️">
 __Evolution-Notes:__ `attach.MintingPolicy` -> `attachMintingPolicy`
+</Callout>
+<Callout>
+Minting tokens creates them, but it doesn't automatically assign them to any address. After minting, the tokens are technically owned by the transaction itself. 
+- Purpose of `pay.ToAddress()` is to send the newly minted tokens to a specific address
 </Callout>
 </Steps>
 
@@ -66,30 +74,32 @@ __Evolution-Notes:__ `attach.MintingPolicy` -> `attachMintingPolicy`
 
 ## Burn
 
-To burn tokens, we use a similar process but with a negative value:
+To burn tokens, we use a similar process to minting, but with negative values for the assets we want to burn:
 
 ```typescript
-const unit = policyId + fromText("MyMintedToken");
-
 const tx = await lucid
   .newTx()
-  .mintAssets({ [unit]: -1n })
-  .validTo(Date.now() + 200000)
+  .mintAssets({
+    [policyId + fromText("MyToken")]: -1n,
+    [policyId + fromText("MyOtherToken")]: -1n,
+  })
+  .validTo(Date.now() + 900000)
   .attach.MintingPolicy(mintingPolicy)
   .complete();
 
-const signedTx = await tx.sign.withWallet().complete();
-const txHash = await signedTx.submit();
+const signed = await tx.sign.withWallet().complete();
+const txHash = await signed.submit();
 ```
 
 <Callout>
   - All assets minted in a single `mintAssets` call should be of the same policy
   id. You can chain multiple `mintAssets` calls if you need to mint assets with
-  different policy ids. - The minting policy must be attached to the transaction
-  using `attach.MintingPolicy` - Lucid Evolution supports Native, PlutusV1, and
-  PlutusV2 minting policies. The appropriate script type will be used based on
-  the policy you attach. - When using Plutus scripts (V1 or V2), make sure to
-  provide an appropriate redeemer. - The `validTo` field is important for
+  different policy ids
+  - The minting policy must be attached to the transaction using `attach.MintingPolicy`
+  - Lucid Evolution supports Native, PlutusV1, and PlutusV2 minting policies. The appropriate script type will be used based on
+  the policy you attach. 
+  - When using Plutus scripts (V1 or V2), make sure to provide an appropriate redeemer. 
+  - The `validTo` field is important for
   time-locked minting policies to ensure the transaction is submitted within the
   valid time range
 </Callout>

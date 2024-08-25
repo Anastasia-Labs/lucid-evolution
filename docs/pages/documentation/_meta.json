@@ -1,9 +1,10 @@
 {
-  "core-concepts":{
+  "core-concepts": {
     "title": "Core Concepts",
     "theme": {
       "breadcrumb": false
-    }},
+    }
+  },
 
   "deep-dives": {
     "title": "Deep Dives",
@@ -23,5 +24,10 @@
     "type": "separator"
   },
 
-  "examples": "Examples"
+  "examples": {
+    "title": "Examples",
+    "theme": {
+      "breadcrumb": false
+    }
+  }
 }
