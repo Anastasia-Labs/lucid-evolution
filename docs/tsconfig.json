@@ -20,7 +20,9 @@
     "theme.config.jsx",
     "**/docs/*.ts",
     "**/docs/*.tsx",
-    ".next/types/**/*.ts"
+    ".next/types/**/*.ts",
+    "components/**/*.ts",
+    "components/**/*.tsx",
   ],
   "exclude": [
     "node_modules"

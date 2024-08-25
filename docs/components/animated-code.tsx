@@ -48,7 +48,7 @@ export function AnimatedCode({ code, style }) {
           await new Promise((resolve) => setTimeout(resolve, 500));
         } else {
           await new Promise((resolve) =>
-            setTimeout(resolve, getRandomTypingDelay())
+            setTimeout(resolve, getRandomTypingDelay()),
           );
         }
       }
