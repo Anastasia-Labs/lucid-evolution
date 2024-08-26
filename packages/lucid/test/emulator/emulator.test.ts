@@ -13,6 +13,7 @@ import {
   withdrawReward,
   evaluateAContractWithDatum,
   compose,
+  multiSigner,
 } from "./service.js";
 
 const distributeRewards = Effect.gen(function* ($) {
@@ -116,6 +117,13 @@ describe.sequential("Emulator", () => {
 
   test("compose", async () => {
     const program = pipe(compose, Effect.provide(EmulatorUser.layer));
+    const exit = await Effect.runPromiseExit(program);
+    emulator.awaitBlock(4);
+    expect(exit._tag).toBe("Success");
+  });
+
+  test("multiSigner", async () => {
+    const program = pipe(multiSigner, Effect.provide(EmulatorUser.layer));
     const exit = await Effect.runPromiseExit(program);
     emulator.awaitBlock(4);
     expect(exit._tag).toBe("Success");

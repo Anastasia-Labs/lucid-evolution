@@ -2,6 +2,7 @@ import {
   getAddressDetails,
   mintingPolicyToId,
   scriptFromNative,
+  toUnit,
   unixTimeToSlot,
   validatorToAddress,
 } from "@lucid-evolution/utils";
@@ -10,12 +11,16 @@ import { Data, fromText, Lucid, SpendingValidator } from "../../src";
 import {
   handleSignSubmit,
   handleSignSubmitWithoutValidation,
+  handleSubmit,
   withLogRetry,
 } from "../specs/utils";
 import { Emulator, generateEmulatorAccount } from "@lucid-evolution/provider";
 
 export const EMULATOR_ACCOUNT = generateEmulatorAccount({
   lovelace: 75000000000n,
+});
+export const EMULATOR_ACCOUNT_1 = generateEmulatorAccount({
+  lovelace: 80000000000n,
 });
 export const REWARD_AMOUNT = 100000000n;
 export const EMULATOR_POOL_ID =
@@ -212,3 +217,36 @@ export const compose = Effect.gen(function* ($) {
   const signBuilder = yield* txCompA.compose(txCompB).completeProgram();
   return signBuilder;
 }).pipe(Effect.flatMap(handleSignSubmitWithoutValidation), withLogRetry);
+
+export const multiSigner = Effect.gen(function* ($) {
+  const { user, emulator } = yield* EmulatorUser;
+  const { paymentCredential } = getAddressDetails(EMULATOR_ACCOUNT.address);
+  const { paymentCredential: paymentCredential1 } = getAddressDetails(
+    EMULATOR_ACCOUNT_1.address,
+  );
+  const mintingPolicy = scriptFromNative({
+    type: "all",
+    scripts: [
+      {
+        type: "before",
+        slot: unixTimeToSlot("Custom", emulator.now() + 9000000),
+      },
+      { type: "sig", keyHash: paymentCredential?.hash! },
+      { type: "sig", keyHash: paymentCredential1?.hash! },
+    ],
+  });
+  const policyId = mintingPolicyToId(mintingPolicy);
+  const tx = yield* user
+    .newTx()
+    .mintAssets({
+      [toUnit(policyId, fromText("Wow"))]: 123n,
+    })
+    .validTo(emulator.now() + 1200000)
+    .attach.MintingPolicy(mintingPolicy)
+    .completeProgram();
+  const firstSign = yield* Effect.promise(() => tx.partialSign.withWallet());
+  user.selectWallet.fromSeed(EMULATOR_ACCOUNT_1.seedPhrase);
+  const secondSign = yield* Effect.promise(() => tx.partialSign.withWallet());
+  const assembleTx = tx.assemble([firstSign, secondSign]);
+  return assembleTx;
+}).pipe(Effect.flatMap(handleSubmit), withLogRetry);

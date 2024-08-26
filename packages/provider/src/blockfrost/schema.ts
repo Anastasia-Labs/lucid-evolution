@@ -12,7 +12,11 @@ interface PlutusV2 {
   "plutus:v2": string;
 }
 
-type Script = PlutusV1 | PlutusV2;
+interface PlutusV3 {
+  "plutus:v3": string;
+}
+
+type Script = PlutusV1 | PlutusV2 | PlutusV3;
 
 /**
  *

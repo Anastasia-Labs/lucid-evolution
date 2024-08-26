@@ -1,3 +1,4 @@
+//TODO: update expected paramerets and separate them based on network
 export const expectedProtocolParameters = {
   minFeeA: 44,
   minFeeB: 155381,

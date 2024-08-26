@@ -501,16 +501,28 @@ export class Emulator implements Provider {
         3: "Reward",
       };
       const collected = [];
-      for (
-        let i = 0;
-        i < (witnesses.redeemers()?.to_js_value().len() || 0);
-        i++
-      ) {
-        const redeemer = witnesses.redeemers()!.to_js_value().get(i);
-        collected.push({
-          tag: tagMap[redeemer.tag().kind()],
-          index: parseInt(redeemer.index().to_str()),
-        });
+      const redeemers = witnesses.redeemers();
+      const arrLegacyRedeemer = redeemers?.as_arr_legacy_redeemer();
+      if (arrLegacyRedeemer) {
+        for (let i = 0; i < (arrLegacyRedeemer.len() || 0); i++) {
+          const redeemer = arrLegacyRedeemer.get(i);
+          collected.push({
+            tag: tagMap[redeemer.tag()],
+            index: Number(redeemer.index()),
+          });
+        }
+      }
+      const mapRedeemerKeyToRedeemerVal =
+        redeemers?.as_map_redeemer_key_to_redeemer_val();
+      if (mapRedeemerKeyToRedeemerVal) {
+        const keys = mapRedeemerKeyToRedeemerVal.keys();
+        for (let i = 0; i < (keys.len() || 0); i++) {
+          const key = keys.get(i);
+          collected.push({
+            tag: tagMap[key.tag()],
+            index: Number(key.index()),
+          });
+        }
       }
       return collected;
     })();
