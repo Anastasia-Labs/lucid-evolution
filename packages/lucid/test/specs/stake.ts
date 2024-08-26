@@ -18,7 +18,7 @@ export const registerStake = Effect.gen(function* ($) {
   Effect.catchTag("TxSubmitError", (error) =>
     error.message.includes("StakeKeyAlreadyRegisteredDELEG") ||
     error.message.includes("StakeKeyRegisteredDELEG")
-      ? Effect.void
+      ? Effect.log("Stake Already registered")
       : Effect.fail(error),
   ),
   withLogRetry,
@@ -91,6 +91,22 @@ export const withdrawZero = Effect.gen(function* ($) {
   const signBuilder = yield* user
     .newTx()
     .withdraw(rewardAddress, 0n)
+    .completeProgram();
+  return signBuilder;
+}).pipe(Effect.flatMap(handleSignSubmit), withLogRetry, Effect.orDie);
+
+export const withdrawAllReward = Effect.gen(function* ($) {
+  const { user } = yield* User;
+  const rewardAddress = yield* pipe(
+    Effect.promise(() => user.wallet().rewardAddress()),
+    Effect.andThen(Effect.fromNullable),
+  );
+  const { rewards } = yield* Effect.promise(() =>
+    user.wallet().getDelegation(),
+  );
+  const signBuilder = yield* user
+    .newTx()
+    .withdraw(rewardAddress, rewards)
     .completeProgram();
   return signBuilder;
 }).pipe(Effect.flatMap(handleSignSubmit), withLogRetry, Effect.orDie);

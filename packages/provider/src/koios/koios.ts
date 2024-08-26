@@ -25,6 +25,8 @@ import {
   KoiosUTxO,
   KoiosTxInfo,
   ProtocolParametersSchema,
+  KoiosInputOutput,
+  ReferenceScript,
 } from "./schema.js";
 import { Effect, pipe, Schedule } from "effect";
 import { ArrayFormatter } from "@effect/schema";
@@ -44,7 +46,17 @@ export class Koios implements Provider {
     const result = await fetch(`${this.baseUrl}/epoch_params?limit=1`).then(
       (res) => res.json(),
     );
-    const param = S.decodeUnknownSync(ProtocolParametersSchema)(result[0]);
+    // const param = S.decodeUnknownSync(ProtocolParametersSchema, {onExcessProperty: "error"})(result[0]);
+    const param = await pipe(
+      S.decodeUnknown(ProtocolParametersSchema, {
+        onExcessProperty: "error",
+        errors: "first",
+      })(result[0]),
+      Effect.catchTag("ParseError", (e) =>
+        Effect.fail(ArrayFormatter.formatErrorSync(e)),
+      ),
+      Effect.runPromise,
+    );
 
     return {
       minFeeA: param.min_fee_a,
@@ -73,6 +85,12 @@ export class Koios implements Provider {
             value,
           ]),
         ),
+        PlutusV3: Object.fromEntries(
+          param.cost_models.PlutusV3.map((value, index) => [
+            index.toString(),
+            value,
+          ]),
+        ),
       },
     };
   }
@@ -90,9 +108,17 @@ export class Koios implements Provider {
         method: "POST",
         body: JSON.stringify(body),
       }).then((res: Response) => res.json());
-      const parsedResult = S.decodeUnknownSync(KoiosAddressInfoSchema)(
-        result,
-      )[0];
+
+      const [parsedResult] = await pipe(
+        S.decodeUnknown(KoiosAddressInfoSchema, {
+          onExcessProperty: "error",
+          errors: "first",
+        })(result),
+        Effect.catchTag("ParseError", (e) =>
+          Effect.fail(ArrayFormatter.formatErrorSync(e)),
+        ),
+        Effect.runPromise,
+      );
       return parsedResult
         ? parsedResult.utxo_set.map((koiosUTXO) =>
             toUTxO(koiosUTXO, parsedResult.address),
@@ -149,9 +175,10 @@ export class Koios implements Provider {
   }
 
   async getUtxosByOutRef(outRefs: OutRef[]): Promise<UTxO[]> {
-    const utxos = [];
     const body = {
       _tx_hashes: [...new Set(outRefs.map((outRef) => outRef.txHash))],
+      _assets: true,
+      _scripts: true,
     };
     const result = await fetch(`${this.baseUrl}/tx_info`, {
       headers: {
@@ -162,28 +189,40 @@ export class Koios implements Provider {
       body: JSON.stringify(body),
     }).then((res: Response) => res.json());
 
-    const parsedResult = S.decodeUnknownSync(S.Array(KoiosTxInfoSchema))(
-      result,
-    )[0];
+    const [parsedResult] = await pipe(
+      S.decodeUnknown(S.Array(KoiosTxInfoSchema), {
+        onExcessProperty: "error",
+        errors: "first",
+      })(result),
+      Effect.catchTag("ParseError", (e) =>
+        Effect.fail(ArrayFormatter.formatErrorSync(e)),
+      ),
+      Effect.runPromise,
+    );
 
     if (parsedResult) {
-      return parsedResult.outputs.map((koiosInputOutput) =>
-        toUTxO(
-          {
-            tx_hash: koiosInputOutput.tx_hash,
-            tx_index: koiosInputOutput.tx_index,
-            block_height: null,
-            value: koiosInputOutput.value,
-            datum_hash: koiosInputOutput.datum_hash,
-            inline_datum: koiosInputOutput.inline_datum,
-            reference_script: koiosInputOutput.reference_script,
-            //NOTE: Koios api returns collateral_output like  asset_list: "[]", instead of asset_list: []
-            asset_list:
-              typeof koiosInputOutput.asset_list === "string"
-                ? []
-                : koiosInputOutput.asset_list,
-          },
-          koiosInputOutput.payment_addr.bech32,
+      const utxos: UTxO[] = parsedResult.outputs.map(
+        (koiosInputOutput: KoiosInputOutput) =>
+          toUTxO(
+            {
+              tx_hash: koiosInputOutput.tx_hash,
+              tx_index: koiosInputOutput.tx_index,
+              block_time: 0,
+              block_height: parsedResult.block_height,
+              value: koiosInputOutput.value,
+              datum_hash: koiosInputOutput.datum_hash,
+              inline_datum: koiosInputOutput.inline_datum,
+              reference_script: koiosInputOutput.reference_script,
+              asset_list: koiosInputOutput.asset_list,
+            } satisfies KoiosUTxO,
+            koiosInputOutput.payment_addr.bech32,
+          ),
+      );
+      return utxos.filter((utxo) =>
+        outRefs.some(
+          (outRef) =>
+            utxo.txHash === outRef.txHash &&
+            utxo.outputIndex === outRef.outputIndex,
         ),
       );
     } else {
@@ -368,20 +407,36 @@ const toUTxO = (koiosUTxO: KoiosUTxO, address: string): UTxO => ({
     return a;
   })(),
   address: address,
-  datumHash: koiosUTxO.inline_datum ? undefined : koiosUTxO.datum_hash,
+  datumHash: koiosUTxO.inline_datum
+    ? undefined
+    : koiosUTxO.datum_hash || undefined,
   datum: koiosUTxO.inline_datum ? koiosUTxO.inline_datum.bytes : undefined,
-  scriptRef: koiosUTxO.reference_script
-    ? koiosUTxO.reference_script.type == "plutusV1"
-      ? {
-          type: "PlutusV1",
-          script: applyDoubleCborEncoding(koiosUTxO.reference_script.bytes),
-        }
-      : {
-          type: "PlutusV2",
-          script: applyDoubleCborEncoding(koiosUTxO.reference_script.bytes),
-        }
-    : undefined,
+  scriptRef: toScriptRef(koiosUTxO.reference_script),
 });
+
+const toScriptRef = (reference_script: ReferenceScript | null) => {
+  if (reference_script && reference_script.bytes && reference_script.type) {
+    switch (reference_script.type) {
+      case "plutusV1":
+        return {
+          type: "PlutusV1" as const,
+          script: applyDoubleCborEncoding(reference_script.bytes),
+        };
+      case "plutusV2":
+        return {
+          type: "PlutusV2" as const,
+          script: applyDoubleCborEncoding(reference_script.bytes),
+        };
+      case "plutusV3":
+        return {
+          type: "PlutusV3" as const,
+          script: applyDoubleCborEncoding(reference_script.bytes),
+        };
+      default:
+        return undefined;
+    }
+  }
+};
 
 interface Budget {
   memory: number;

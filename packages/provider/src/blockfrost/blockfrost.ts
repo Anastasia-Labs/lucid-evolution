@@ -1,8 +1,9 @@
-import { CML } from "./core.js";
-import { fromHex } from "@lucid-evolution/core-utils";
+import { CML } from "../core.js";
+import { fromHex, sleep } from "@lucid-evolution/core-utils";
 import { applyDoubleCborEncoding } from "@lucid-evolution/utils";
 import {
   Address,
+  Assets,
   Credential,
   Datum,
   DatumHash,
@@ -12,12 +13,15 @@ import {
   ProtocolParameters,
   Provider,
   RewardAddress,
+  Script,
   Transaction,
   TxHash,
   Unit,
   UTxO,
 } from "@lucid-evolution/core-types";
-import packageJson from "../package.json";
+import packageJson from "../../package.json";
+import * as BlockFrostSchema from "./schema.js";
+import { pipe, Record } from "effect";
 
 export class Blockfrost implements Provider {
   url: string;
@@ -245,59 +249,76 @@ export class Blockfrost implements Provider {
   private async blockfrostUtxosToUtxos(
     result: BlockfrostUtxoResult,
   ): Promise<UTxO[]> {
-    return (await Promise.all(
-      result.map(async (r) => ({
-        txHash: r.tx_hash,
-        outputIndex: r.output_index,
-        assets: Object.fromEntries(
-          r.amount.map(({ unit, quantity }) => [unit, BigInt(quantity)]),
-        ),
-        address: r.address,
-        datumHash: (!r.inline_datum && r.data_hash) || undefined,
-        datum: r.inline_datum || undefined,
-        scriptRef: r.reference_script_hash
-          ? await (async () => {
-              const { type } = await fetch(
-                `${this.url}/scripts/${r.reference_script_hash}`,
-                {
-                  headers: { project_id: this.projectId, lucid },
-                },
-              ).then((res) => res.json());
-              // TODO: support native scripts
-              if (type === "Native" || type === "native") {
-                throw new Error("Native script ref not implemented!");
-              }
-              const { cbor: script } = await fetch(
-                `${this.url}/scripts/${r.reference_script_hash}/cbor`,
-                { headers: { project_id: this.projectId, lucid } },
-              ).then((res) => res.json());
-              return {
-                type: type === "plutusV1" ? "PlutusV1" : "PlutusV2",
-                script: applyDoubleCborEncoding(script),
-              };
-            })()
-          : undefined,
-      })),
-    )) as UTxO[];
+    const utxos: UTxO[] = [];
+    const batchSize = 10;
+    let count = 0;
+
+    for (let i = 0; i < result.length; i += batchSize) {
+      const batch = result.slice(i, i + batchSize);
+      count += batchSize;
+      await handleRateLimit(count);
+      const batchResults: UTxO[] = await Promise.all(
+        batch.map(async (r) => {
+          return {
+            txHash: r.tx_hash,
+            outputIndex: r.output_index,
+            assets: Object.fromEntries(
+              r.amount.map(({ unit, quantity }) => [unit, BigInt(quantity)]),
+            ),
+            address: r.address,
+            datumHash: (!r.inline_datum && r.data_hash) || undefined,
+            datum: r.inline_datum || undefined,
+            scriptRef: r.reference_script_hash
+              ? await (async () => {
+                  const { type } = await fetch(
+                    `${this.url}/scripts/${r.reference_script_hash}`,
+                    {
+                      headers: { project_id: this.projectId, lucid },
+                    },
+                  ).then((res) => res.json());
+
+                  const { cbor: script } = await fetch(
+                    `${this.url}/scripts/${r.reference_script_hash}/cbor`,
+                    { headers: { project_id: this.projectId, lucid } },
+                  ).then((res) => res.json());
+                  switch (type) {
+                    case "timelock":
+                      return undefined;
+                    case "plutusV1":
+                      return {
+                        type: "PlutusV1",
+                        script: applyDoubleCborEncoding(script),
+                      } satisfies Script;
+                    case "plutusV2":
+                      return {
+                        type: "PlutusV2",
+                        script: applyDoubleCborEncoding(script),
+                      } satisfies Script;
+                    case "plutusV3":
+                      return {
+                        type: "PlutusV3",
+                        script: applyDoubleCborEncoding(script),
+                      } satisfies Script;
+                  }
+                })()
+              : undefined,
+          };
+        }),
+      );
+
+      utxos.push(...batchResults);
+    }
+
+    return utxos;
   }
 
   async evaluateTx(
     tx: Transaction,
     additionalUTxOs?: UTxO[], // for tx chaining
   ): Promise<EvalRedeemer[]> {
-    const additionalUTxOSet = (additionalUTxOs || []).map((utxo) => [
-      { txId: utxo.txHash, index: utxo.outputIndex },
-      {
-        address: utxo.address,
-        value: { coins: utxo.assets.lovelace, assets: utxo.assets.restAssets },
-        datum_hash: utxo.datumHash,
-        datum: utxo.datum,
-        script: utxo.scriptRef,
-      },
-    ]);
     const payload = {
       cbor: tx,
-      additionalUTxOSet,
+      additionalUtxoSet: toAditionalUTXOs(additionalUTxOs),
     };
 
     const res = await fetch(`${this.url}/utils/txs/evaluate/utxos`, {
@@ -307,9 +328,7 @@ export class Blockfrost implements Provider {
         project_id: this.projectId,
         lucid,
       },
-      body: JSON.stringify(payload, (_, value) =>
-        typeof value === "bigint" ? value.toString() : value,
-      ),
+      body: JSON.stringify(payload),
     }).then((res) => res.json());
     if (!res || res.error) {
       const message =
@@ -382,6 +401,14 @@ export function datumJsonToCbor(json: DatumJson): Datum {
   return convert(json).to_cbor_hex();
 }
 
+const handleRateLimit = async (count: number): Promise<void> => {
+  if (count % 100 === 0) {
+    await sleep(5_000); // 1 seconds for every 100 requests
+  } else if (count % 10 === 0) {
+    await sleep(500); // 100 milliseconds for every 10 requests
+  }
+};
+
 type DatumJson = {
   int?: number;
   bytes?: string;
@@ -422,3 +449,52 @@ type BlockfrostRedeemer = {
 };
 
 const lucid = packageJson.version; // Lucid version
+
+const toAditionalUTXOs = (
+  utxos: UTxO[] | undefined,
+): [BlockFrostSchema.TxIn, BlockFrostSchema.TxOut][] =>
+  (utxos || []).map((utxo) => [
+    {
+      txId: utxo.txHash,
+      index: utxo.outputIndex,
+    } satisfies BlockFrostSchema.TxIn,
+    {
+      address: utxo.address,
+      value: {
+        coins: Number(utxo.assets["lovelace"]),
+        assets: fromAssets(utxo.assets),
+      },
+      datumHash: utxo.datumHash,
+      datum: utxo.datum,
+      script: toTxOutScript(utxo.scriptRef),
+    } satisfies BlockFrostSchema.TxOut,
+  ]);
+
+const toTxOutScript = (
+  scriptRef: UTxO["scriptRef"],
+): BlockFrostSchema.TxOut["script"] => {
+  if (scriptRef) {
+    switch (scriptRef.type) {
+      case "PlutusV1":
+        return { "plutus:v1": scriptRef.script };
+      case "PlutusV2":
+        return { "plutus:v2": scriptRef.script };
+      case "PlutusV3":
+        return { "plutus:v3": scriptRef.script };
+      default:
+        return undefined;
+    }
+  }
+};
+
+const fromAssets = (assets: Assets) =>
+  pipe(
+    Record.remove(assets, "lovelace"),
+    Record.mapEntries((amount, unit) => [
+      unit.length === 56
+        ? unit.slice(0, 56)
+        : unit.slice(0, 56) + "." + unit.slice(56),
+      Number(amount),
+    ]),
+    (r) => (Record.isEmptyRecord(r) ? undefined : r),
+  );

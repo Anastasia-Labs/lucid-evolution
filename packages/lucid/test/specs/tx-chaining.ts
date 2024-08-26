@@ -1,10 +1,14 @@
 import { Console, Effect, pipe, Array as _Array } from "effect";
-import { handleSignSubmitWithoutValidation, withLogNoRetry } from "./utils.js";
+import {
+  handleSignSubmitWithoutValidation,
+  withLogNoRetry,
+  withLogRetry,
+} from "./utils.js";
 import { HelloContract, User } from "./services.js";
 import { getAddressDetails } from "@lucid-evolution/utils";
 import { Constr, Data } from "@lucid-evolution/plutus";
 import { fromText } from "@lucid-evolution/core-utils";
-import { UTxO } from "@lucid-evolution/core-types";
+import { PaymentKeyHash, UTxO } from "@lucid-evolution/core-types";
 import { LucidEvolution } from "../../src/lucid-evolution/index.js";
 import {
   RunTimeError,
@@ -39,12 +43,11 @@ export const query = Effect.gen(function* () {
 export const depositFundsCollect = Effect.gen(function* () {
   const { user } = yield* User;
   const address = yield* Effect.promise(() => user.wallet().address());
-  const publicKeyHash = getAddressDetails(address).paymentCredential?.hash;
-  const datum = Data.to(new Constr(0, [publicKeyHash!]));
+  const publicKeyHash = yield* Effect.fromNullable(
+    getAddressDetails(address).paymentCredential?.hash,
+  );
+  const datum = Data.to(new Constr(0, [publicKeyHash]));
   const { contractAddress, hello } = yield* HelloContract;
-  const walletUTxOs = yield* Effect.promise(() => user.wallet().getUtxos());
-  // yield* Console.log(walletUTxOs)
-  const addr = yield* Effect.promise(() => user.wallet().address());
   const redeemer = Data.to(new Constr(0, [fromText("Hello, World!")]));
   const deposit = (user: LucidEvolution) =>
     user
@@ -57,15 +60,15 @@ export const depositFundsCollect = Effect.gen(function* () {
         },
         { lovelace: 10_000_000n },
       )
-      .pay.ToAddress(addr, { lovelace: 5_000_000n })
+      .pay.ToAddress(address, { lovelace: 5_000_000n })
       .chainProgram();
 
   const collect = (user: LucidEvolution, derivedUTxOs: UTxO[]) =>
     user
       .newTx()
-      .collectFrom(fetchOwner(derivedUTxOs), redeemer)
+      .collectFrom(fetchForOwner(derivedUTxOs, publicKeyHash), redeemer)
       .attach.SpendingValidator(hello)
-      .addSigner(addr)
+      .addSigner(address)
       .chainProgram();
 
   const programs: Effect.Effect<
@@ -93,15 +96,12 @@ export const depositFundsCollect = Effect.gen(function* () {
   repeat(user, 4);
 
   yield* Effect.all(programs);
-}).pipe(withLogNoRetry, Effect.orDie);
+}).pipe(withLogRetry, Effect.orDie);
 
-const fetchOwner = (utxos: UTxO[]) =>
+const fetchForOwner = (utxos: UTxO[], ownerKeyHash: PaymentKeyHash) =>
   utxos.filter((value) => {
-    if (!value.datum) {
-      return false;
+    if (value.datum) {
+      const datum = Data.from(value.datum, DatumType);
+      return datum.owner === ownerKeyHash;
     }
-    const datum = Data.from(value.datum, DatumType);
-    return (
-      datum.owner === "e6849315a2984aadcd1e42d9628f6d6cc071685bef02bb52502f86c9"
-    );
   });

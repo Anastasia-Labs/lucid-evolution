@@ -1,7 +1,17 @@
 import { ProtocolParameters } from "@lucid-evolution/core-types";
 import { assert, describe, test } from "vitest";
 import { PROTOCOL_PARAMETERS_DEFAULT } from "@lucid-evolution/utils";
-import { emulator, EMULATOR_ACCOUNT } from "./service";
+import { Emulator, generateEmulatorAccount } from "../src";
+import { Effect } from "effect";
+import * as PreprodConstants from "./preprod-constants.js";
+
+export const EMULATOR_ACCOUNT = generateEmulatorAccount({
+  lovelace: 80000000000n,
+});
+
+export const emulator = await Effect.gen(function* () {
+  return new Emulator([EMULATOR_ACCOUNT]);
+}).pipe(Effect.runPromise);
 
 describe.sequential("Emulator", () => {
   test("Get Protocol Parameters", async () => {
@@ -19,9 +29,50 @@ describe.sequential("Emulator", () => {
   });
 
   test("evaluate tx", async () => {
-    const cbor =
-      "84a800818258202c936b78b683abf90423fd8169d13f36021158be8d76119f530d7f3214f6a8a8000181825839009b619deb6e46ed004e49cb9a158462189cf093bab8eef2765d9b8bf75da571c9ab6fc02a347d0443bb80566c3408b4ee2a1b3a6a5019a2811a0095b6bc021a0002dfc40b58206a2e5bc41ec5f1431d4208c538c04f6666257a060241390b8bd659482ad99fbf0d81825820bd98d572fab0ba5d583d0066a82a63353631253df1d1c7a811b892d28dafee1e010e81581c9b619deb6e46ed004e49cb9a158462189cf093bab8eef2765d9b8bf710825839009b619deb6e46ed004e49cb9a158462189cf093bab8eef2765d9b8bf75da571c9ab6fc02a347d0443bb80566c3408b4ee2a1b3a6a5019a281821b000000024dc50707a1581c22691d3d969ecf5802226290c2fb98e2bc08522d5b726c1f5f400105a1445465737402111a004c4b40a300818258205ee4155d0886da3ff31d482b40e7e0701029018cb0307f658b9458043c7894d458407692903a266d3d7e0775f55485b6608a78a0843b412d8a5dba758e98496ff539ad03b54ce2c3020c734723a2871fb79840715a09180583fdd4b3b2d62b43890b0581840000d879814d48656c6c6f2c20576f726c64218219543b1a007118df068158e758e5010000333232323232322322322232253330093232533300b3371e6eb8c008c034dd500280388008a5032330010013758601e60206020602060206020602060206020601a6ea8c008c034dd50019129998078008a50132533300d3371e6eb8c04400802c5288998018018009808800918070008a4c26caca66600e66e1d20003008375400226464a666018601c0042930b1bae300c001300937540022c6eb8004dd7000ab9a5573aaae7955cfaba157449811e581c9b619deb6e46ed004e49cb9a158462189cf093bab8eef2765d9b8bf7004c010e4d48656c6c6f2c20576f726c64210001f5f6";
-    const redeemers = await emulator.evaluateTx(cbor);
-    assert.equal(Array.from(redeemers).length, 1);
+    const redeemers = await emulator.evaluateTx(
+      PreprodConstants.cbor,
+      PreprodConstants.utxos,
+    );
+    assert.deepStrictEqual(redeemers, PreprodConstants.redeemersExUnits);
+  });
+
+  test("submit tx", async () => {
+    emulator.ledger = {
+      ...emulator.ledger,
+      "442575f1e4becbcaef8b20e61ee8b130cb02d1959a4dbe43dccd327a62d9eb180": {
+        utxo: {
+          txHash:
+            "442575f1e4becbcaef8b20e61ee8b130cb02d1959a4dbe43dccd327a62d9eb18",
+          outputIndex: 0,
+          assets: { lovelace: 55000000n },
+          address:
+            "addr_test1wza9ek9k6fqddswte7ytf6r7uayyka9rat3rkm0mgdw8wysgv773j",
+          datumHash: undefined,
+          datum:
+            "d87a84d87981d87982d87981581c983ed9af5d9f13d0cb5e64ab3a1c00140f663518e78aa8c8ca09e042d87981d87981d87981581c6d2a842a4ded1909f71835598d7d34dd55201d62dc2a88078a7a8f441a000f424000d87984581ce16c2dc8ae937e8d3790c7fd7168d7b994621ba14ca11415f39fed72434d494ed87a801a002625a0",
+          scriptRef: undefined,
+        },
+        spent: false,
+      },
+      "442575f1e4becbcaef8b20e61ee8b130cb02d1959a4dbe43dccd327a62d9eb181": {
+        utxo: {
+          txHash:
+            "442575f1e4becbcaef8b20e61ee8b130cb02d1959a4dbe43dccd327a62d9eb18",
+          outputIndex: 1,
+          assets: { lovelace: 144826975n },
+          address:
+            "addr_test1qzvrakd0tk0385xttej2kwsuqq2q7e34rrnc42xgegy7qsnd92zz5n0dryylwxp4txxh6dxa25sp6cku92yq0zn63azqya0vgs",
+          datumHash: undefined,
+          datum: undefined,
+          scriptRef: undefined,
+        },
+        spent: false,
+      },
+    };
+    const txHash = await emulator.submitTx(PreprodConstants.submitCbor);
+    assert.equal(
+      txHash,
+      "edfc1d75074d741f5b7c97e8ddb81de956a43b6fca8664dff5722bb1d136ff3f",
+    );
   });
 });

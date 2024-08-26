@@ -1,14 +1,88 @@
-import { assert, test } from "vitest";
-import { Blockfrost } from "../src/blockfrost";
+import { assert, describe, expect, test } from "vitest";
+import { ProtocolParameters, UTxO } from "@lucid-evolution/core-types";
+import { Config, Effect } from "effect";
+import { Blockfrost } from "../src/blockfrost/blockfrost.js";
+import * as PreprodConstants from "./preprod-constants.js";
 
-test("Blockfrost evaluate tx", async () => {
-  const client = new Blockfrost(
-    "https://cardano-preprod.blockfrost.io/api/v0",
-    "preprodMMFt7Qlw8JTt67t05BfuNb8h9bgLaSvw",
+export const blockfrost = await Effect.gen(function* () {
+  const BLOCKFROST_API_URL = yield* Config.string(
+    "VITE_BLOCKFROST_API_URL_PREPROD",
   );
+  const BLOCKFROST_KEY = yield* Config.string("VITE_BLOCKFROST_KEY_PREPROD");
+  return new Blockfrost(BLOCKFROST_API_URL, BLOCKFROST_KEY);
+}).pipe(Effect.runPromise);
 
-  const cbor =
-    "84a800818258202c936b78b683abf90423fd8169d13f36021158be8d76119f530d7f3214f6a8a8000181825839009b619deb6e46ed004e49cb9a158462189cf093bab8eef2765d9b8bf75da571c9ab6fc02a347d0443bb80566c3408b4ee2a1b3a6a5019a2811a0095b6bc021a0002dfc40b58206a2e5bc41ec5f1431d4208c538c04f6666257a060241390b8bd659482ad99fbf0d81825820bd98d572fab0ba5d583d0066a82a63353631253df1d1c7a811b892d28dafee1e010e81581c9b619deb6e46ed004e49cb9a158462189cf093bab8eef2765d9b8bf710825839009b619deb6e46ed004e49cb9a158462189cf093bab8eef2765d9b8bf75da571c9ab6fc02a347d0443bb80566c3408b4ee2a1b3a6a5019a281821b000000024dc50707a1581c22691d3d969ecf5802226290c2fb98e2bc08522d5b726c1f5f400105a1445465737402111a004c4b40a300818258205ee4155d0886da3ff31d482b40e7e0701029018cb0307f658b9458043c7894d458407692903a266d3d7e0775f55485b6608a78a0843b412d8a5dba758e98496ff539ad03b54ce2c3020c734723a2871fb79840715a09180583fdd4b3b2d62b43890b0581840000d879814d48656c6c6f2c20576f726c64218219543b1a007118df068158e758e5010000333232323232322322322232253330093232533300b3371e6eb8c008c034dd500280388008a5032330010013758601e60206020602060206020602060206020601a6ea8c008c034dd50019129998078008a50132533300d3371e6eb8c04400802c5288998018018009808800918070008a4c26caca66600e66e1d20003008375400226464a666018601c0042930b1bae300c001300937540022c6eb8004dd7000ab9a5573aaae7955cfaba157449811e581c9b619deb6e46ed004e49cb9a158462189cf093bab8eef2765d9b8bf7004c010e4d48656c6c6f2c20576f726c64210001f5f6";
-  const redeemers = await client.evaluateTx(cbor);
-  assert.equal(Array.from(redeemers).length, 1);
+describe("Blockfrost", async () => {
+  test("getProtocolParameters", async () => {
+    const pp: ProtocolParameters = await blockfrost.getProtocolParameters();
+    assert(pp);
+  });
+
+  test("getUtxos", async () => {
+    const utxos = await blockfrost.getUtxos(
+      "addr_test1wpgexmeunzsykesf42d4eqet5yvzeap6trjnflxqtkcf66g0kpnxt",
+    );
+    assert(utxos);
+  });
+
+  test("getUtxosWithUnit", async () => {
+    const utxos = await blockfrost.getUtxosWithUnit(
+      "addr_test1wpgexmeunzsykesf42d4eqet5yvzeap6trjnflxqtkcf66g0kpnxt",
+      "4a83e031d4c37fc7ca6177a2f3581a8eec2ce155da91f59cfdb3bb28446973636f7665727956616c696461746f72",
+    );
+    expect(utxos.length).toBeGreaterThan(0);
+  });
+
+  test("getUtxoByUnit", async () => {
+    const utxo = await blockfrost.getUtxoByUnit(
+      "4a83e031d4c37fc7ca6177a2f3581a8eec2ce155da91f59cfdb3bb28446973636f7665727956616c696461746f72",
+    );
+    expect(utxo).toStrictEqual(PreprodConstants.discoveryUTxO);
+  });
+
+  test("getUtxosByOutRef", async () => {
+    const utxos: UTxO[] = await blockfrost.getUtxosByOutRef([
+      {
+        txHash:
+          "b50e73e74a3073bc44f555928702c0ae0f555a43f1afdce34b3294247dce022d",
+        outputIndex: 0,
+      },
+    ]);
+    expect(utxos).toStrictEqual([PreprodConstants.discoveryUTxO]);
+  });
+
+  test("getDelegation", async () => {
+    const delegation = await blockfrost.getDelegation(
+      "stake_test17zt3vxfjx9pjnpnapa65lx375p2utwxmpc8afj053h0l3vgc8a3g3",
+    );
+    assert(delegation);
+  });
+
+  test("getDatum", async () => {
+    const datum = await blockfrost.getDatum(
+      "95472c2f46b89500703ec778304baf1079c58124c254bf4bf8c96e5d73869293",
+    );
+    expect(datum).toStrictEqual(
+      "d87b9fd8799fd8799f9f581c3f2728ec78ef8b0f356e91a5662ff3124add324a7b7f5aeed69362f4581c17942ff3849b623d24e31ec709c1c94c53b9240311820a9601ad4af0581cba4ab50bdecca85162f3b8114739bc5ba3aaa6490e2b1d15ad0f9c66581c25aa4132c7ce7d8f96ee977cd921cba7681891d114d088449d1d63b2581c5309fa786856c1262d095b89adf64fe8a5255ad19142c9c537359e41ff1917701a001b77401a001b774018c818641a000927c0d8799f0a140aff021905dcd8799f9f581c1a550d5f572584e1add125b5712f709ac3b9828ad86581a4759022baff01ffffffff",
+    );
+  });
+
+  test("awaitTx", async () => {
+    const isConfirmed: boolean = await blockfrost.awaitTx(
+      "2a1f95a9d85bf556a3dc889831593ee963ba491ca7164d930b3af0802a9796d0",
+    );
+    expect(isConfirmed).toBe(true);
+  });
+
+  test("submitTxBadRequest", async () => {
+    await expect(() => blockfrost.submitTx("80")).rejects.toThrowError();
+  });
+
+  test("Blockfrost evaluate tx", async () => {
+    const redeemers = await blockfrost.evaluateTx(
+      PreprodConstants.cbor,
+      PreprodConstants.utxos,
+    );
+    assert.deepStrictEqual(redeemers, PreprodConstants.redeemersExUnits);
+  });
 });

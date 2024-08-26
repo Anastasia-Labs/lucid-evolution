@@ -90,3 +90,6 @@ export function toText(hex: string): string {
 export function fromText(text: string): string {
   return toHex(new TextEncoder().encode(text));
 }
+
+export const sleep = (ms: number = 1000) =>
+  new Promise((r) => setTimeout(r, ms));

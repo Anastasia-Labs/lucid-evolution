@@ -1,15 +1,19 @@
 name: CI
 
 on:
+  pull_request:
+    branches:
+      - main
   push:
     branches:
-      - "**"
+      - main
 jobs:
   build:
     runs-on: ubuntu-latest
     env:
       VITE_BLOCKFROST_KEY: ${{ secrets.VITE_BLOCKFROST_KEY }}
       VITE_MAESTRO_KEY: ${{ secrets.VITE_MAESTRO_KEY }}
+      VITE_MAESTRO_KEY_PREPROD: ${{ secrets.VITE_MAESTRO_KEY_PREPROD }}
       VITE_SEED: ${{ secrets.VITE_SEED }}
       VITE_API_URL: ${{ secrets.VITE_API_URL }}
       VITE_KUPO_KEY: ${{secrets.VITE_KUPO_KEY}}
@@ -19,6 +23,7 @@ jobs:
       VITE_BLOCKFROST_KEY_PREPROD: ${{secrets.VITE_BLOCKFROST_KEY_PREPROD}}
       VITE_BLOCKFROST_KEY_PREVIEW: ${{secrets.VITE_BLOCKFROST_KEY_PREVIEW}}
       VITE_WALLET_SEED: ${{secrets.VITE_WALLET_SEED}}
+      VITE_WALLET_SEED_2: ${{secrets.VITE_WALLET_SEED_2}}
     steps:
       - name: Check out code
         uses: actions/checkout@v4

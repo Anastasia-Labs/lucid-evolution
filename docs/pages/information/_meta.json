@@ -1,0 +1,21 @@
+{
+  "evolution": {
+    "title": "Evolution",
+    "theme": {
+      "breadcrumb": false,
+      "sidebar": false,
+      "toc": false,
+      "layout": "default",
+      "typesetting": "article",
+      "pagination": false
+    }
+  },
+
+  "contact": {
+    "title": "Contact"
+  },
+
+  "license": {
+    "title": "License"
+  }
+}

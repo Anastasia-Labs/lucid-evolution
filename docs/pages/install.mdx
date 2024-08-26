@@ -1,49 +1,83 @@
-import { Callout } from 'nextra/components'
-import { Tabs } from 'nextra/components'
+import { Callout, Steps, Cards, Tabs, FileTree } from "nextra/components";
 
-# Install
+# Install Lucid Evolution
 
-<Callout type="warning" emoji="⚠️">
-  Use with caution, this library is currently in beta testing phase. Your feedback is greatly appreciated.
-</Callout>
+## Package Managers
+
+<Tabs items={['Node.js', 'Bun']}>
+  <Tabs.Tab>
+    <Tabs items={['pnpm', 'npm', 'yarn']}>
+      <Tabs.Tab>
+        **pnpm** Fast, disk space efficient package manager
+        ```bash
+        # Installing the lucid package will export all other packages as well
+        pnpm i @lucid-evolution/lucid 
+        ```
+      </Tabs.Tab>
+      <Tabs.Tab>
+        **npm** is a package manager for JavaScript
+        ```bash
+        # For example, if you only want to query utxos and don't need the rest of the library
+        npm i @lucid-evolution/provider 
+        ```
+      </Tabs.Tab>
+      <Tabs.Tab>
+        **Yarn** is a software packaging system
+        ```bash
+        # Only installing the utils package, each individual package can be installed on its own
+        yarn add @lucid-evolution/utils 
+        ```
+      </Tabs.Tab>
+    </Tabs>
+  </Tabs.Tab>
+  <Tabs.Tab>
+
+    **Bun**: An all-in-one JavaScript runtime, bundler, and package manager
+    ```bash
+    # Only installing the plutus package
+    bun i @lucid-evolution/plutus
+    ```
+
+  </Tabs.Tab>
+</Tabs>
+
+---
+
+### Why Compartmentalize Packages?
+
+<FileTree>
+  <FileTree.Folder name="lucid-evolution" defaultOpen>
+    <FileTree.Folder name="packages" defaultOpen>
+      <FileTree.File name="lucid-evolution/lucid ⇀      Main package for Lucid Evolution" />
+      <FileTree.File name="lucid-evolution/bip39 ⇀      Package for BIP-39 mnemonic code" />
+      <FileTree.File name="lucid-evolution/core-types ⇀ Core types used across Lucid Evolution packages" />
+      <FileTree.File name="lucid-evolution/core-utils ⇀ Core utilities used across Lucid Evolution packages" />
+      <FileTree.File name="lucid-evolution/crc8 ⇀       Package for CRC8 calculation" />
+      <FileTree.File name="lucid-evolution/plutus ⇀     Package for Plutus integration" />
+      <FileTree.File name="lucid-evolution/provider ⇀   Package for providing data " />
+      <FileTree.File name="lucid-evolution/sign_data ⇀  Package for signing data" />
+      <FileTree.File name="lucid-evolution/utils ⇀      Utility functions for Lucid Evolution" />
+      <FileTree.File name="lucid-evolution/wallet ⇀     Wallet package for Lucid Evolution" />
+    </FileTree.Folder>
+  </FileTree.Folder>
+</FileTree>
+
+Lucid Evolution separates packages to allow users to import only what they need, which gives us a chance for better performance and flexibility.
+
+<Cards>
+  <Cards.Card icon="" title=" Quickstart" href="/" />
+ 
+  <Cards.Card icon="📖" title=" Evolution Library" href="/information/evolution" />
+
+   <Cards.Card icon="📞" title=" Contact Anastasia Labs" href="/information/contact" />
+</Cards>
+
+---
+
+## Compatibility
 
 Lucid Evolution works with yarn, npm, and pnpm on the following operating systems:
 
 - macOS darwin 64-bit (Intel), ARM 64-bit (Apple Silicon)
 - Linux 64-bit, ARM 64-bit
 - Windows 64-bit, ARM 64-bit
-
-<Tabs items={['Node.js', 'Bun']}>
-  <Tabs.Tab>
-    ### Node.js
-
-    <Tabs items={['pnpm', 'npm', 'yarn']}>
-      <Tabs.Tab>
-        **pnpm**: Fast, disk space efficient package manager
-        ```bash
-        pnpm i @lucid-evolution/lucid
-        ```
-      </Tabs.Tab>
-      <Tabs.Tab>
-        **npm** is a package manager for JavaScript
-        ```bash
-        npm i @lucid-evolution/lucid
-        ```
-      </Tabs.Tab>
-      <Tabs.Tab>
-        **Yarn** is a software packaging system
-        ```bash
-        yarn add @lucid-evolution/lucid
-        ```
-      </Tabs.Tab>
-    </Tabs>
-  </Tabs.Tab>
-  <Tabs.Tab>
-    ### Bun
-
-    **Bun**: An all-in-one JavaScript runtime, bundler, and package manager
-    ```bash
-    bun i @lucid-evolution/lucid
-    ```
-  </Tabs.Tab>
-</Tabs>

@@ -1,4 +1,5 @@
 import * as S from "@effect/schema/Schema";
+import { Record } from "effect";
 
 export const JSONRPCSchema = <A, I, R>(schema: S.Schema<A, I, R>) =>
   S.extend(
@@ -25,6 +26,51 @@ const TupleNumberFromString = S.compose(
 
 export const ProtocolParametersSchema = S.Struct({
   minFeeCoefficient: S.Number,
+  minFeeReferenceScripts: S.Struct({
+    base: S.Number,
+    range: S.Number,
+    multiplier: S.Number,
+  }),
+  maxReferenceScriptsSize: S.Struct({
+    bytes: S.Number,
+  }),
+  stakePoolVotingThresholds: S.Struct({
+    noConfidence: TupleNumberFromString,
+    constitutionalCommittee: S.Struct({
+      default: TupleNumberFromString,
+      stateOfNoConfidence: TupleNumberFromString,
+    }),
+    hardForkInitiation: TupleNumberFromString,
+    protocolParametersUpdate: S.Struct({
+      security: TupleNumberFromString,
+    }),
+  }),
+  delegateRepresentativeVotingThresholds: S.Struct({
+    noConfidence: TupleNumberFromString,
+    constitutionalCommittee: S.Struct({
+      default: TupleNumberFromString,
+      stateOfNoConfidence: TupleNumberFromString,
+    }),
+    constitution: TupleNumberFromString,
+    hardForkInitiation: TupleNumberFromString,
+    protocolParametersUpdate: S.Struct({
+      network: TupleNumberFromString,
+      economic: TupleNumberFromString,
+      technical: TupleNumberFromString,
+      governance: TupleNumberFromString,
+    }),
+    treasuryWithdrawals: TupleNumberFromString,
+  }),
+  constitutionalCommitteeMinSize: S.Number,
+  constitutionalCommitteeMaxTermLength: S.Number,
+  governanceActionLifetime: S.Number,
+  governanceActionDeposit: S.Struct({
+    ada: LovelaceAsset,
+  }),
+  delegateRepresentativeDeposit: S.Struct({
+    ada: LovelaceAsset,
+  }),
+  delegateRepresentativeMaxIdleTime: S.Number,
   minFeeConstant: S.Struct({ ada: LovelaceAsset }),
   maxBlockBodySize: S.Struct({ bytes: S.Number }),
   maxBlockHeaderSize: S.Struct({ bytes: S.Number }),
@@ -42,6 +88,7 @@ export const ProtocolParametersSchema = S.Struct({
   plutusCostModels: S.Struct({
     "plutus:v1": S.Array(S.Number),
     "plutus:v2": S.Array(S.Number),
+    "plutus:v3": S.Array(S.Number),
   }),
   scriptExecutionPrices: S.Struct({
     memory: TupleNumberFromString,
@@ -77,14 +124,19 @@ export const KupoUTxO = S.Struct({
     slot_no: S.Number,
     header_hash: S.String,
   }),
-  spent_at: S.NullOr(S.Number),
+  spent_at: S.NullOr(
+    S.Struct({
+      slot_no: S.Number,
+      header_hash: S.String,
+    }),
+  ),
 });
 
 export interface KupoUTxO extends S.Schema.Type<typeof KupoUTxO> {}
 
 export const KupoScriptSchema = S.NullOr(
   S.Struct({
-    language: S.Literal("native", "plutus:v1", "plutus:v2"),
+    language: S.Literal("native", "plutus:v1", "plutus:v2", "plutus:v3"),
     script: S.String,
   }),
 );
@@ -104,3 +156,24 @@ export const KupoDelegation = S.NullOr(
     }),
   ),
 );
+
+type Script = {
+  language: "plutus:V1" | "plutus:v2" | "plutus:v3";
+  cbor: string;
+};
+
+export type Value = {
+  ada: { lovelace: number };
+} & Asset;
+
+export type Asset = Record<string, Record<string, number>>;
+
+export type AdditionalUTxOs = ReadonlyArray<{
+  transaction: { id: string };
+  index: number;
+  address: string;
+  value: Value;
+  datumHash?: string | null;
+  datum?: string | null;
+  script: Script;
+}>;

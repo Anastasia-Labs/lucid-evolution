@@ -65,14 +65,29 @@ export const deRegisterStake = (
       ),
     );
 
+    const createCertBuilder = (
+      credential: CML.Credential,
+      config: TxBuilder.TxBuilderConfig,
+    ): CML.SingleCertificateBuilder => {
+      const network = config.lucidConfig.network;
+      return network === "Preview" || network === "Preprod"
+        ? CML.SingleCertificateBuilder.new(
+            CML.Certificate.new_unreg_cert(
+              credential,
+              config.lucidConfig.protocolParameters.keyDeposit,
+            ),
+          )
+        : CML.SingleCertificateBuilder.new(
+            CML.Certificate.new_stake_deregistration(credential),
+          );
+    };
+
     switch (stakeCredential.type) {
       case "Key": {
         const credential = CML.Credential.new_pub_key(
           CML.Ed25519KeyHash.from_hex(stakeCredential.hash),
         );
-        const certBuilder = CML.SingleCertificateBuilder.new(
-          CML.Certificate.new_stake_deregistration(credential),
-        );
+        const certBuilder = createCertBuilder(credential, config);
         config.txBuilder.add_cert(certBuilder.payment_key());
         break;
       }
@@ -81,9 +96,7 @@ export const deRegisterStake = (
         const credential = CML.Credential.new_script(
           CML.ScriptHash.from_hex(stakeCredential.hash),
         );
-        const certBuilder = CML.SingleCertificateBuilder.new(
-          CML.Certificate.new_stake_deregistration(credential),
-        );
+        const certBuilder = createCertBuilder(credential, config);
         const script = yield* pipe(
           Effect.fromNullable(config.scripts.get(stakeCredential.hash)),
           Effect.orElseFail(() =>

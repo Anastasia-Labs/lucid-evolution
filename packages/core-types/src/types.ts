@@ -63,7 +63,7 @@ export type Credential = {
 export type Unit = string;
 export type Assets = Record<Unit | "lovelace", bigint>;
 export type ScriptType = "Native" | PlutusVersion;
-export type PlutusVersion = "PlutusV1" | "PlutusV2";
+export type PlutusVersion = "PlutusV1" | "PlutusV2" | "PlutusV3";
 
 /** Hex */
 export type PolicyId = string;
