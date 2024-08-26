@@ -1,5 +1,19 @@
 # @lucid-evolution/lucid
 
+## 0.3.15
+
+### Patch Changes
+
+- [#258](https://github.com/Anastasia-Labs/lucid-evolution/pull/258) [`8372b50`](https://github.com/Anastasia-Labs/lucid-evolution/commit/8372b50972bd99d5cfe122ebb0bfb98908484e0d) Thanks [@hadelive](https://github.com/hadelive)! - fix emulator submitTx function
+
+- Updated dependencies [[`8372b50`](https://github.com/Anastasia-Labs/lucid-evolution/commit/8372b50972bd99d5cfe122ebb0bfb98908484e0d)]:
+  - @lucid-evolution/core-types@0.1.14
+  - @lucid-evolution/provider@0.1.45
+  - @lucid-evolution/utils@0.1.36
+  - @lucid-evolution/plutus@0.1.20
+  - @lucid-evolution/sign_data@0.1.17
+  - @lucid-evolution/wallet@0.1.40
+
 ## 0.3.14
 
 ### Patch Changes
