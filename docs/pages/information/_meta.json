@@ -12,10 +12,26 @@
   },
 
   "contact": {
-    "title": "Contact"
+    "title": "Contact",
+    "theme": {
+      "breadcrumb": false,
+      "sidebar": false,
+      "toc": false,
+      "layout": "default",
+      "typesetting": "article",
+      "pagination": false
+    }
   },
 
   "license": {
-    "title": "License"
+    "title": "License",
+    "theme": {
+      "breadcrumb": false,
+      "sidebar": false,
+      "toc": false,
+      "layout": "default",
+      "typesetting": "article",
+      "pagination": false
+    }
   }
 }
