@@ -13,6 +13,7 @@ import {
 import { ERROR_MESSAGE, TxBuilderError } from "../../Errors.js";
 import { LucidConfig } from "../../lucid-evolution/LucidEvolution.js";
 import { TxBuilderConfig } from "../TxBuilder.js";
+import { completeTxError } from "./CompleteTxBuilder.js";
 
 //TODO: improve error message, utils is used in different modules
 export const toCMLAddress = (
@@ -97,3 +98,30 @@ export const validateAddressDetails = (
 
     return addressDetails;
   });
+
+export const toCMLRedeemerTag = (tag: string): Effect.Effect<CML.RedeemerTag, TxBuilderError, never> =>
+Effect.gen(function* () {
+  let redeemerTag = CML.RedeemerTag.Spend;
+  switch (tag) {
+    case "spend":
+      break;
+    case "mint":
+      redeemerTag = CML.RedeemerTag.Mint;
+      break;
+    case "cert":
+      redeemerTag = CML.RedeemerTag.Cert;
+      break;
+    case "reward":
+      redeemerTag = CML.RedeemerTag.Reward;
+      break;
+    case "voting":
+      redeemerTag = CML.RedeemerTag.Voting;
+      break;
+    case "proposing":
+      redeemerTag = CML.RedeemerTag.Proposing;
+      break;
+    default:
+      yield* completeTxError(`RedeemerEvaluation: unknow redeemer tag ${tag}`);
+  }
+  return redeemerTag;
+});

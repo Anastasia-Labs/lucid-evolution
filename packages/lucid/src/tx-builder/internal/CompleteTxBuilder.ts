@@ -38,6 +38,7 @@ import {
 import { SLOT_CONFIG_NETWORK } from "@lucid-evolution/plutus";
 import { collectFromUTxO } from "./Collect.js";
 import { fromHex } from "@lucid-evolution/core-utils";
+import { toCMLRedeemerTag } from "./TxUtils.js";
 
 export type CompleteOptions = {
   coinSelection?: boolean;
@@ -238,15 +239,20 @@ export const selectionAndEvaluation = (
       ...config.readInputs,
     ];
     let draftTx = txRedeemerBuilder.draft_tx();
-    if (draftTx.witness_set().redeemers()) {
-      draftTx = setRedeemerstoZero(draftTx);
-      if (options.localUPLCEval !== false) {
+    const redeemers = draftTx.witness_set().redeemers();
+    if (redeemers) {
+      draftTx = setRedeemerstoZero(draftTx, redeemers);
+      // TODO: Check if always relying on localUPLCEval for Custom networks is alright
+      if (options.localUPLCEval !== false || config.lucidConfig.network == "Custom") {
         applyNativeUPLCEval(
           yield* evalTransaction(config, draftTx, txUtxos),
           config.txBuilder,
         );
       } else {
-        config.lucidConfig.provider.evaluateTx(draftTx.to_cbor_hex(), txUtxos);
+        applyUPLCEval(
+        yield* Effect.promise(() => config.lucidConfig.provider.evaluateTx(draftTx.to_cbor_hex(), txUtxos)),
+        config.txBuilder
+        )
       }
     }
   }).pipe(Effect.catchAllDefect((cause) => new RunTimeError({ cause })));
@@ -338,27 +344,24 @@ export const applyNativeUPLCEval = (
 export const applyUPLCEval = (
   uplcEvals: EvalRedeemer[],
   txbuilder: CML.TransactionBuilder,
-) => {
-  const totalExUnits = { mem: 0n, steps: 0n };
+): Effect.Effect<void, TxBuilderError, never> => Effect.gen(function* () {
   for (const uplcEval of uplcEvals) {
     const exUnits = CML.ExUnits.new(
       BigInt(uplcEval.ex_units.mem),
       BigInt(uplcEval.ex_units.steps),
     );
-    const redeemerTag = CML.RedeemerTag.
+    txbuilder.set_exunits(
       CML.RedeemerWitnessKey.new(
-        redeemer.tag(),
+        yield* toCMLRedeemerTag(uplcEval.redeemer_tag),
         BigInt(uplcEval.redeemer_index),
       ),
       exUnits,
     );
-    totalExUnits.mem = totalExUnits.mem + redeemer.ex_units().mem();
-    totalExUnits.steps = totalExUnits.steps + redeemer.ex_units().steps();
+    console.log(uplcEval);
   }
-};
+});
 
-export const setRedeemerstoZero = (tx: CML.Transaction) => {
-  const redeemers = tx.witness_set().redeemers();
+export const setRedeemerstoZero = (tx: CML.Transaction, redeemers: CML.Redeemers) => {
   const redeemerList = CML.LegacyRedeemerList.new();
   for (let i = 0; i < redeemers.as_arr_legacy_redeemer()!.len(); i++) {
     const redeemer = redeemers.as_arr_legacy_redeemer()!.get(i);
@@ -525,14 +528,13 @@ const evalTransaction = (
   txUtxos: UTxO[],
 ): Effect.Effect<Uint8Array[], TxBuilderError> =>
   Effect.gen(function* () {
-    const txEvaluation = setRedeemerstoZero(draftTx);
     const ins = txUtxos.map((utxo) => utxoToTransactionInput(utxo));
     const outs = txUtxos.map((utxo) => utxoToTransactionOutput(utxo));
     const slotConfig = SLOT_CONFIG_NETWORK[config.lucidConfig.network];
     const uplc_eval: Uint8Array[] = yield* Effect.try({
       try: () =>
         UPLC.eval_phase_two_raw(
-          txEvaluation.to_cbor_bytes(),
+          draftTx.to_cbor_bytes(),
           ins.map((value) => value.to_cbor_bytes()),
           outs.map((value) => value.to_cbor_bytes()),
           config.lucidConfig.costModels.to_cbor_bytes(),
