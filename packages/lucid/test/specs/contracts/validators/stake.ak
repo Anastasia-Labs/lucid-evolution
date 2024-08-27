@@ -1,7 +1,7 @@
 use aiken/cbor
 use aiken/list
 use aiken/pairs
-use aiken/transaction.{ScriptContext, Spend, WithdrawFrom, Output}
+use aiken/transaction.{Output, ScriptContext, Spend, WithdrawFrom}
 use aiken/transaction/credential.{Inline}
 
 type Redeemer {
@@ -13,7 +13,7 @@ validator {
     expect ScriptContext { transaction, purpose: Spend(out_ref) } = ctx
     expect Some(input) = list.at(transaction.inputs, redeemer)
     and {
-      input.output_reference == out_ref,
+      (input.output_reference == out_ref)?,
       pairs.has_key(
         transaction.withdrawals,
         Inline(input.output.address.payment_credential),
@@ -48,6 +48,7 @@ validator {
     trace cbor.diagnostic(input_count)
     trace cbor.diagnostic(output_count)
     and {
+      1 == 1, // to change script hash
       (input_count == output_count)?,
       (input_count == list.length(redeemer.input_indices))?,
     }

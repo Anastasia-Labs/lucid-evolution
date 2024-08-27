@@ -1,0 +1,67 @@
+import { Callout, Steps } from "nextra/components";
+
+# Test and emulate
+
+<Callout>This section is under construction 🛠️</Callout>
+
+Emulator allows developers to test and validate their transactions in a controlled environment without interacting with a real blockchain. This is important for debugging, rapid prototyping, and ensuring transaction logic is correct before deploying to a `testnet` or `mainnet`
+
+---
+
+<Steps>
+### Initialize emulator
+
+This setup allows you to create a mock blockchain state with predefined addresses and asset distributions
+
+```typescript
+const emulator = new Emulator([
+  {
+    address: "addr_test...",
+    assets: { lovelace: 3000000000n },
+  },
+  // You can add multiple addresses with different asset distributions
+]);
+
+const lucid = await Lucid(emulator);
+```
+
+### Working with time ranges
+
+```typescript
+const tx = await lucid
+  .newTx()
+  .validTo(emulator.now())
+  .complete();
+```
+
+### Distribute staking rewards
+
+The emulator allows you to conveniently distribute rewards to all delegated stake addresses.
+
+```typescript
+emulator.distributeRewards(100000000n);
+```
+
+<Callout>
+At any point in the emulation you can call the following code to get the current state of the emulated blockchain. It gives you insights into the distribution of funds across addresses and shows you the current block height and slot.
+
+```typescript
+emulator.log();
+```
+
+</Callout>
+</Steps>
+
+## Example - Simulated transaction
+
+```typescript
+const tx = await lucid
+  .newTx()
+  .pay.ToAddress("addr_test...", { lovelace: 1000000n })
+  .complete();
+const signedTx = await tx.sign().complete();
+const txHash = await signedTx.submit();
+
+// Simulate the passage of time and block confirmations in the emulator
+await emulator.awaitBlock(10);
+```

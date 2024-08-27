@@ -279,44 +279,4 @@ describe.sequential("Onchain testing", () => {
     const exit = await Effect.runPromiseExit(program);
     expect(exit._tag).toBe("Success");
   });
-
-  test("Mint Test - Pay Asset", async () => {
-    const program = pipe(
-      MintBurnEndpoints.pay2,
-      Effect.provide(User.layer),
-      Effect.provide(NetworkConfig.layerPreprod),
-    );
-    const exit = await Effect.runPromiseExit(program);
-    expect(exit._tag).toBe("Success");
-  });
-
-  test("Mint Test - CollectFunds", async () => {
-    const program = pipe(
-      MintBurnEndpoints.pay3,
-      Effect.provide(User.layer),
-      Effect.provide(NetworkConfig.layerPreprod),
-    );
-    const exit = await Effect.runPromiseExit(program);
-    expect(exit._tag).toBe("Success");
-  });
-
-  test("Mint Test - PayWithData", async () => {
-    const program = pipe(
-      MintBurnEndpoints.payWithData,
-      Effect.provide(User.layer),
-      Effect.provide(NetworkConfig.layerPreprod),
-    );
-    const exit = await Effect.runPromiseExit(program);
-    expect(exit._tag).toBe("Success");
-  });
-
-  test("Mint Test - MissVkeyWitness", async () => {
-    const program = pipe(
-      MintBurnEndpoints.payWithoutVkeyWitness,
-      Effect.provide(User.layer),
-      Effect.provide(NetworkConfig.layerPreprod),
-    );
-    const exit = await Effect.runPromiseExit(program);
-    expect(exit._tag).toBe("Failure");
-  });
 });

@@ -14,23 +14,27 @@ const tx = await lucid
   .pay.ToAddress("addr_testb...", { lovelace: 5000000n })
   .complete();
 ```
+
 <Callout>
-To balance the transaction and initiate coin selection, transactions always need to end with `.complete()`
+  To balance the transaction and initiate coin selection, transactions always
+  need to end with `.complete()`
 </Callout>
 
 <Callout type="info" emoji="ℹ️">
- __Evolution-Notes:__ `payToAddress` -> `pay.ToAddress`
+  __Evolution-Notes:__ `payToAddress` -> `pay.ToAddress`
 </Callout>
-### Sign 
+### Sign{" "}
 
 ```typescript
 const signedTx = await tx.sign.withWallet().complete();
 ```
 
+You could also choose to sign the transaction with a private key:
 
-<Callout type="info" emoji="ℹ️">
- __Evolution-Notes:__ `sign()` -> `sign.withWallet()` 
-</Callout>
+```typescript
+const signedTx = await tx.sign.withPrivateKey(privateKey).complete();
+```
+
 ### Submit
 
 Lastly we submit the transaction:

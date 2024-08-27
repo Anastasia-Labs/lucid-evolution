@@ -2,10 +2,21 @@ import { Callout, Steps, Cards, Tabs, FileTree } from "nextra/components";
 
 # Install Lucid Evolution
 
-## Package Managers
+---
+
+Lucid Evolution is an advanced off-chain framework for Cardano. This guide will help you install the necessary packages to start building with Lucid Evolution
+
+<div style={{ marginBottom: "6rem" }}></div>
+
+# Package Managers
+
+---
 
 <Tabs items={['Node.js', 'Bun']}>
   <Tabs.Tab>
+  <Callout type="info">
+  Ensure you have Node.js version 14 or higher installed on your system before proceeding.
+  </Callout>
     <Tabs items={['pnpm', 'npm', 'yarn']}>
       <Tabs.Tab>
         **pnpm** Fast, disk space efficient package manager
@@ -41,9 +52,18 @@ import { Callout, Steps, Cards, Tabs, FileTree } from "nextra/components";
   </Tabs.Tab>
 </Tabs>
 
+<div style={{ marginBottom: "6rem" }}></div>
+
+# Why Compartmentalize?
+
 ---
 
-### Why Compartmentalize Packages?
+Lucid Evolution separates packages to allow users to import only what they need, providing several benefits to you:
+
+- Reduced bundle size
+- Faster installation, smaller packages install quicker
+- Modular structure allows for easier updates and bug fixes
+- Mix and match packages as needed for your project
 
 <FileTree>
   <FileTree.Folder name="lucid-evolution" defaultOpen>
@@ -62,21 +82,33 @@ import { Callout, Steps, Cards, Tabs, FileTree } from "nextra/components";
   </FileTree.Folder>
 </FileTree>
 
-Lucid Evolution separates packages to allow users to import only what they need, which gives us a chance for better performance and flexibility.
+<div style={{ marginBottom: "6rem" }}></div>
+
+# Next Steps
+
+---
+
+Now that you've installed Lucid Evolution, you're ready to start building! Check out these resources to get started:
 
 <Cards>
-  <Cards.Card icon="" title=" Quickstart" href="/" />
- 
-  <Cards.Card icon="📖" title=" Evolution Library" href="/information/evolution" />
-
-   <Cards.Card icon="📞" title=" Contact Anastasia Labs" href="/information/contact" />
+  <Cards.Card icon="🚀" title=" Quickstart Guide" href="/" />
+  <Cards.Card
+    icon="📘"
+    title=" API Documentation"
+    href="/documentation/core-concepts/instantiate-evolution"
+  />
+  <Cards.Card
+    icon="💡"
+    title=" Example Projects"
+    href="/documentation/examples/hello-world"
+  />
 </Cards>
 
 ---
 
 ## Compatibility
 
-Lucid Evolution works with yarn, npm, and pnpm on the following operating systems:
+Lucid Evolution works with `yarn`, `npm`, and `pnpm` on the following operating systems:
 
 - macOS darwin 64-bit (Intel), ARM 64-bit (Apple Silicon)
 - Linux 64-bit, ARM 64-bit
