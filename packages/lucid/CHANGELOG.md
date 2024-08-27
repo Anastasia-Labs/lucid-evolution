@@ -1,5 +1,11 @@
 # @lucid-evolution/lucid
 
+## 0.3.16
+
+### Patch Changes
+
+- [#250](https://github.com/Anastasia-Labs/lucid-evolution/pull/250) [`c45c5d2`](https://github.com/Anastasia-Labs/lucid-evolution/commit/c45c5d27f59622a70383871fbc058e817fc94155) Thanks [@nikhils9](https://github.com/nikhils9)! - Fix min ada issue for outputs
+
 ## 0.3.15
 
 ### Patch Changes
