@@ -96,23 +96,22 @@ export const burn = Effect.gen(function* () {
       utxo.scriptRef?.script == plutusMint.mint.script
     );
   });
+  const burnAssets = {
+    [plutusMint.policyId + fromText("BurnableTokenPlutus")]: -1n,
+    [plutusMint.policyId + maxHexToken]: -1n,
+  };
 
   const mintRedeemer = Data.to(new Constr(0, [[]]));
   const signBuilder = yield* user
     .newTx()
     .collectFrom(utxoWithRefScript)
+    .collectFrom(selectUTxOs(walletUTxOs, burnAssets))
     .pay.ToAddress(addr, { lovelace: 2_000_000n })
     .mintAssets({
       [burnableToken]: -1n,
       [nativePolicyId + maxHexToken]: -1n,
     })
-    .mintAssets(
-      {
-        [plutusMint.policyId + fromText("BurnableTokenPlutus")]: -1n,
-        [plutusMint.policyId + maxHexToken]: -1n,
-      },
-      mintRedeemer,
-    )
+    .mintAssets(burnAssets, mintRedeemer)
     .attach.MintingPolicy(nativeMint)
     .attach.MintingPolicy(plutusMint.mint)
     .completeProgram();
@@ -175,93 +174,36 @@ export const pay = Effect.gen(function* () {
   const { user } = yield* User;
   const addr = yield* Effect.promise(() => user.wallet().address());
   const mint = mkMintinPolicy(addr);
+  const policy = mintingPolicyToId(mint);
+  const datum = Data.to(123n);
 
   const signBuilder = yield* user
     .newTx()
+    .pay.ToAddress(addr, { lovelace: 500_000n })
     .pay.ToAddress(addr, { lovelace: 2_000_000n })
-    .attach.MintingPolicy(mint)
-    .completeProgram();
-  return signBuilder;
-}).pipe(Effect.flatMap(handleSignSubmit), withLogRetry, Effect.orDie);
-
-export const pay2 = Effect.gen(function* () {
-  const { user } = yield* User;
-  const addr = yield* Effect.promise(() => user.wallet().address());
-  const mint = mkMintinPolicy(addr);
-  const policy = mintingPolicyToId(mint);
-
-  const signBuilder = yield* user
-    .newTx()
     .pay.ToAddress(addr, { [policy + fromText("BurnableToken2")]: 1n })
-    .mintAssets({ [policy + fromText("BurnableToken2")]: 1n })
-    .attach.MintingPolicy(mint)
-    .completeProgram();
-  return signBuilder;
-}).pipe(Effect.flatMap(handleSignSubmit), withLogRetry, Effect.orDie);
-
-export const pay3 = Effect.gen(function* () {
-  const { user } = yield* User;
-  const utxos = yield* Effect.tryPromise(() => user.wallet().getUtxos());
-  const addr = yield* Effect.promise(() => user.wallet().address());
-  const mint = mkMintinPolicy(addr);
-  const policy = mintingPolicyToId(mint);
-
-  const collectAssets = {
-    [policy + fromText("BurnableToken2")]: 1n,
-  };
-
-  const signBuilder = yield* user
-    .newTx()
-    .collectFrom(selectUTxOs(utxos, collectAssets))
-    .pay.ToAddress(addr, { [policy + fromText("BurnableToken2")]: 1n })
-    .completeProgram();
-  return signBuilder;
-}).pipe(Effect.flatMap(handleSignSubmit), withLogRetry, Effect.orDie);
-
-export const payWithData = Effect.gen(function* () {
-  const { user } = yield* User;
-  const addr = yield* Effect.promise(() => user.wallet().address());
-  const mint = mkMintinPolicy(addr);
-  const policy = mintingPolicyToId(mint);
-  const datum = Data.to(123n);
-
-  const signBuilder = yield* user
-    .newTx()
-    .mintAssets({
-      [policy + fromText("BurnableToken2")]: 1n,
-    })
+    .pay.ToAddressWithData(
+      addr,
+      { kind: "inline", value: datum },
+      { lovelace: 500_000n, [policy + fromText("BurnableToken2")]: 1n },
+    )
+    .pay.ToAddressWithData(
+      addr,
+      { kind: "inline", value: datum },
+      { lovelace: 3_000_000n, [policy + fromText("BurnableToken2")]: 1n },
+    )
     .pay.ToAddressWithData(
       addr,
       { kind: "inline", value: datum },
       { [policy + fromText("BurnableToken2")]: 1n },
     )
+    .pay.ToAddressWithData(addr, { kind: "inline", value: datum }, {})
+    .pay.ToAddressWithData(addr, { kind: "inline", value: datum }, undefined)
+    .mintAssets({ [policy + fromText("BurnableToken2")]: 3n })
     .attach.MintingPolicy(mint)
     .completeProgram();
   return signBuilder;
 }).pipe(Effect.flatMap(handleSignSubmit), withLogRetry, Effect.orDie);
-
-export const payWithoutVkeyWitness = Effect.gen(function* () {
-  const { user } = yield* User;
-  const addr = yield* Effect.promise(() => user.wallet().address());
-  const utxo = yield* Effect.tryPromise(() => user.wallet().getUtxos());
-  const mint = mkMintinPolicy(addr);
-  const policy = mintingPolicyToId(mint);
-  const datum = Data.to(123n);
-
-  const signBuilder = yield* user
-    .newTx()
-    .mintAssets({
-      [policy + fromText("BurnableToken2")]: 1n,
-    })
-    .pay.ToAddressWithData(
-      addr,
-      { kind: "inline", value: datum },
-      { [policy + fromText("BurnableToken2")]: 1n },
-    )
-    .attach.MintingPolicy(mint)
-    .completeProgram();
-  return signBuilder;
-}).pipe(Effect.flatMap(handleSubmit), Effect.orDie);
 
 export const mintInSlotRange = Effect.gen(function* () {
   const { user } = yield* User;

@@ -29,31 +29,27 @@ export const payToAddress = (
     if (Object.keys(assets).length == 0)
       yield* payError(ERROR_MESSAGE.EMPTY_ASSETS);
 
-    if (assets["lovelace"]) {
-      const outputResult = outputBuilder
-        .with_value(assetsToValue(assets))
-        .build();
-      //Record real output value
-      config.totalOutputAssets = addAssets(
-        config.totalOutputAssets,
-        valueToAssets(outputResult.output().amount()),
-      );
-      config.txBuilder.add_output(outputResult);
-    } else {
-      // If no lovelace, add output with asset and minimum required coin
-      const outputResult = outputBuilder
-        .with_asset_and_min_required_coin(
-          assetsToValue(assets).multi_asset(),
-          config.lucidConfig.protocolParameters.coinsPerUtxoByte,
-        )
-        .build();
-      //Record real output value
-      config.totalOutputAssets = addAssets(
-        config.totalOutputAssets,
-        valueToAssets(outputResult.output().amount()),
-      );
-      config.txBuilder.add_output(outputResult);
+    const value = assetsToValue(assets);
+    let outputResult = outputBuilder
+      .with_asset_and_min_required_coin(
+        value.multi_asset(),
+        config.lucidConfig.protocolParameters.coinsPerUtxoByte,
+      )
+      .build();
+
+    const setLovelaces = assets["lovelace"];
+    if (setLovelaces) {
+      const minLovelace = outputResult.output().amount().coin();
+      if (setLovelaces > minLovelace) {
+        outputResult = outputBuilder.with_value(value).build();
+      }
     }
+    // Keep track of actual total output value
+    config.totalOutputAssets = addAssets(
+      config.totalOutputAssets,
+      valueToAssets(outputResult.output().amount()),
+    );
+    config.txBuilder.add_output(outputResult);
   });
 
 /** Pay to a public key or native script address with datum or scriptRef. */
@@ -67,50 +63,29 @@ export const payToAddressWithData = (
   Effect.gen(function* () {
     //TODO: Test with datumhash
     const outputBuilder = buildBaseOutput(address, outputDatum, scriptRef);
-    if (assets) {
-      if (Object.keys(assets).length == 0)
-        yield* payError(ERROR_MESSAGE.EMPTY_ASSETS);
-      if (assets["lovelace"]) {
-        const outputResult = outputBuilder
-          .with_value(assetsToValue(assets))
-          .build();
-        //Record real output value
-        config.totalOutputAssets = addAssets(
-          config.totalOutputAssets,
-          valueToAssets(outputResult.output().amount()),
-        );
-        config.txBuilder.add_output(outputResult);
-      } else {
-        // If no lovelace, add output with asset and minimum required coin
-        const outputResult = outputBuilder
-          .with_asset_and_min_required_coin(
-            assetsToValue(assets).multi_asset(),
-            config.lucidConfig.protocolParameters.coinsPerUtxoByte,
-          )
-          .build();
-        //Record real output value
-        config.totalOutputAssets = addAssets(
-          config.totalOutputAssets,
-          valueToAssets(outputResult.output().amount()),
-        );
-        config.txBuilder.add_output(outputResult);
-      }
-    } else {
-      // No assets provided, add output with empty multi-asset and minimum required coin
-      const outputResult = outputBuilder
-        .with_asset_and_min_required_coin(
-          CML.MultiAsset.new(),
-          config.lucidConfig.protocolParameters.coinsPerUtxoByte,
-        )
-        .build();
-      //Record real output value
-      config.totalOutputAssets = addAssets(
-        config.totalOutputAssets,
-        valueToAssets(outputResult.output().amount()),
-      );
 
-      config.txBuilder.add_output(outputResult);
+    assets ??= {};
+    const value = assetsToValue(assets);
+    let outputResult = outputBuilder
+      .with_asset_and_min_required_coin(
+        value.multi_asset(),
+        config.lucidConfig.protocolParameters.coinsPerUtxoByte,
+      )
+      .build();
+
+    const setLovelaces = assets["lovelace"];
+    if (setLovelaces) {
+      const minLovelace = outputResult.output().amount().coin();
+      if (setLovelaces > minLovelace) {
+        outputResult = outputBuilder.with_value(value).build();
+      }
     }
+    // Keep track of actual total output value
+    config.totalOutputAssets = addAssets(
+      config.totalOutputAssets,
+      valueToAssets(outputResult.output().amount()),
+    );
+    config.txBuilder.add_output(outputResult);
   });
 
 /** Pay to a plutus script address with datum or scriptRef. */
