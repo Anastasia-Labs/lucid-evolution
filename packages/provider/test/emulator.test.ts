@@ -3,7 +3,7 @@ import { assert, describe, test } from "vitest";
 import { PROTOCOL_PARAMETERS_DEFAULT } from "@lucid-evolution/utils";
 import { Emulator, generateEmulatorAccount } from "../src";
 import { Effect } from "effect";
-import * as PreprodConstants from "./preprod-constants.js";
+import * as PreprodConstants from "./preprod-constants";
 
 export const EMULATOR_ACCOUNT = generateEmulatorAccount({
   lovelace: 80000000000n,
@@ -30,9 +30,12 @@ describe.sequential("Emulator", () => {
 
   test("evaluate tx", async () => {
     const redeemers = await emulator.evaluateTx(
-      PreprodConstants.cbor,
-      PreprodConstants.utxos,
+      PreprodConstants.evalSample1.transaction,
+      PreprodConstants.evalSample1.utxos,
     );
-    assert.deepStrictEqual(redeemers, PreprodConstants.redeemersExUnits);
+    assert.deepStrictEqual(
+      redeemers,
+      PreprodConstants.evalSample1.redeemersExUnits,
+    );
   });
 });

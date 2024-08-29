@@ -1,7 +1,7 @@
 import { assert, describe, expect, test } from "vitest";
 import { ProtocolParameters, UTxO } from "@lucid-evolution/core-types";
 import { Config, Effect } from "effect";
-import { Blockfrost } from "../src/blockfrost/blockfrost.js";
+import { Blockfrost } from "../src/blockfrost.js";
 import * as PreprodConstants from "./preprod-constants.js";
 
 export const blockfrost = await Effect.gen(function* () {
@@ -20,7 +20,8 @@ describe("Blockfrost", async () => {
 
   test("getUtxos", async () => {
     const utxos = await blockfrost.getUtxos(
-      "addr_test1wpgexmeunzsykesf42d4eqet5yvzeap6trjnflxqtkcf66g0kpnxt",
+      // "addr_test1wpgexmeunzsykesf42d4eqet5yvzeap6trjnflxqtkcf66g0kpnxt", // this contract has too many utxos
+      "addr_test1qrngfyc452vy4twdrepdjc50d4kvqutgt0hs9w6j2qhcdjfx0gpv7rsrjtxv97rplyz3ymyaqdwqa635zrcdena94ljs0xy950",
     );
     assert(utxos);
   });
@@ -78,11 +79,25 @@ describe("Blockfrost", async () => {
     await expect(() => blockfrost.submitTx("80")).rejects.toThrowError();
   });
 
-  test("Blockfrost evaluate tx", async () => {
+  test("evaluates additonal utxos - sample 1", async () => {
     const redeemers = await blockfrost.evaluateTx(
-      PreprodConstants.cbor,
-      PreprodConstants.utxos,
+      PreprodConstants.evalSample1.transaction,
+      PreprodConstants.evalSample1.utxos,
     );
-    assert.deepStrictEqual(redeemers, PreprodConstants.redeemersExUnits);
+    assert.deepStrictEqual(
+      redeemers,
+      PreprodConstants.evalSample1.redeemersExUnits,
+    );
+  });
+
+  test("evaluates additinal utxos - sample 2", async () => {
+    const redeemers = await blockfrost.evaluateTx(
+      PreprodConstants.evalSample2.transaction,
+      PreprodConstants.evalSample2.utxos,
+    );
+    assert.deepStrictEqual(
+      redeemers,
+      PreprodConstants.evalSample2.redeemersExUnits,
+    );
   });
 });

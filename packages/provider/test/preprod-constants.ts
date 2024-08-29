@@ -20,66 +20,108 @@ export const discoveryUTxO: UTxO = {
   },
 };
 
-export const utxos = [
-  {
-    txHash: "35509191d07f018849fa7d32217b70ae33b49983aea21339850d6fcda31b030b",
-    outputIndex: 0,
-    assets: { lovelace: 10000000n },
-    address: "addr_test1wrqlusc0rxkzfz5206j8mvgxqqkyxfl9gtplm3s26eypzqcxsnfs3",
-    datumHash: undefined,
-    datum: "d87981581c9fc430ea1f3adc20eebb813b2649e85c934ea5bc13d7b7fbe2b24e50",
-    scriptRef: undefined,
-  },
-  {
-    txHash: "75af72128f59d7cae87965399a01fd775fb8f69095cecb5ce45f55b8e3f5052c",
-    outputIndex: 0,
-    assets: { lovelace: 10000000n },
-    address: "addr_test1wrqlusc0rxkzfz5206j8mvgxqqkyxfl9gtplm3s26eypzqcxsnfs3",
-    datumHash: undefined,
-    datum: "d87981581c9fc430ea1f3adc20eebb813b2649e85c934ea5bc13d7b7fbe2b24e50",
-    scriptRef: undefined,
-  },
-  {
-    txHash: "4f070d5ffaa972c554bdbbad5d01ddd032fddf91f8f3262136b8cce0ba3b790a",
-    outputIndex: 0,
-    assets: { lovelace: 10000000n },
-    address: "addr_test1wrqlusc0rxkzfz5206j8mvgxqqkyxfl9gtplm3s26eypzqcxsnfs3",
-    datumHash: undefined,
-    datum: "d87981581c9fc430ea1f3adc20eebb813b2649e85c934ea5bc13d7b7fbe2b24e50",
-    scriptRef: undefined,
-  },
-  {
-    txHash: "f4918fe2de471b137901d6809e849ee920ed9013f7454fd073bd5b632b9596f0",
-    outputIndex: 0,
-    assets: { lovelace: 10000000n },
-    address: "addr_test1wrqlusc0rxkzfz5206j8mvgxqqkyxfl9gtplm3s26eypzqcxsnfs3",
-    datumHash: undefined,
-    datum: "d87981581c9fc430ea1f3adc20eebb813b2649e85c934ea5bc13d7b7fbe2b24e50",
-    scriptRef: undefined,
-  },
-];
-export const cbor =
-  "84a8008482582035509191d07f018849fa7d32217b70ae33b49983aea21339850d6fcda31b030b008258204f070d5ffaa972c554bdbbad5d01ddd032fddf91f8f3262136b8cce0ba3b790a0082582075af72128f59d7cae87965399a01fd775fb8f69095cecb5ce45f55b8e3f5052c00825820f4918fe2de471b137901d6809e849ee920ed9013f7454fd073bd5b632b9596f0000181825839009fc430ea1f3adc20eebb813b2649e85c934ea5bc13d7b7fbe2b24e505064b671634d14cb8d543e71dd8eb437a47efb47b0b22882866c420d1a025f365c021a000323a40b58203f42956d83a3940b571b4cf51c6098535b9c7e0b240bf4daaa0fb1c917e8a4370d81825820f4918fe2de471b137901d6809e849ee920ed9013f7454fd073bd5b632b9596f0010e81581c9fc430ea1f3adc20eebb813b2649e85c934ea5bc13d7b7fbe2b24e5010825839009fc430ea1f3adc20eebb813b2649e85c934ea5bc13d7b7fbe2b24e505064b671634d14cb8d543e71dd8eb437a47efb47b0b22882866c420d821b000000022ca6f211a2581c22691d3d969ecf5802226290c2fb98e2bc08522d5b726c1f5f400105a1445465737403581cef6ed47a6917a3cbbeb46561e8853da969343794d66128598a34af2ca14e4275726e61626c65546f6b656e3201111a004c4b40a20584840000d879814d48656c6c6f2c20576f726c6421821966ad1a0077ca99840001d879814d48656c6c6f2c20576f726c6421821966ad1a0077ca99840002d879814d48656c6c6f2c20576f726c6421821966ad1a0077ca99840003d879814d48656c6c6f2c20576f726c6421821966ad1a0077ca99068158eb58e901000032323232323223223225333006323253330083371e6eb8c008c028dd5002a4410d48656c6c6f2c20576f726c642100100114a06644646600200200644a66601c00229404c94ccc030cdc79bae301000200414a226600600600260200026eb0c02cc030c030c030c030c030c030c030c030c024dd5180098049baa002375c600260126ea80188c02c0045261365653330043370e900018029baa001132325333009300b002149858dd7180480098031baa0011653330023370e900018019baa0011323253330073009002149858dd7180380098021baa001165734aae7555cf2ab9f5742ae881f5f6";
+export const evalSample1 = {
+  utxos: [
+    {
+      txHash:
+        "35509191d07f018849fa7d32217b70ae33b49983aea21339850d6fcda31b030b",
+      outputIndex: 0,
+      assets: { lovelace: 10000000n },
+      address:
+        "addr_test1wrqlusc0rxkzfz5206j8mvgxqqkyxfl9gtplm3s26eypzqcxsnfs3",
+      datumHash: undefined,
+      datum:
+        "d87981581c9fc430ea1f3adc20eebb813b2649e85c934ea5bc13d7b7fbe2b24e50",
+      scriptRef: undefined,
+    },
+    {
+      txHash:
+        "75af72128f59d7cae87965399a01fd775fb8f69095cecb5ce45f55b8e3f5052c",
+      outputIndex: 0,
+      assets: { lovelace: 10000000n },
+      address:
+        "addr_test1wrqlusc0rxkzfz5206j8mvgxqqkyxfl9gtplm3s26eypzqcxsnfs3",
+      datumHash: undefined,
+      datum:
+        "d87981581c9fc430ea1f3adc20eebb813b2649e85c934ea5bc13d7b7fbe2b24e50",
+      scriptRef: undefined,
+    },
+    {
+      txHash:
+        "4f070d5ffaa972c554bdbbad5d01ddd032fddf91f8f3262136b8cce0ba3b790a",
+      outputIndex: 0,
+      assets: { lovelace: 10000000n },
+      address:
+        "addr_test1wrqlusc0rxkzfz5206j8mvgxqqkyxfl9gtplm3s26eypzqcxsnfs3",
+      datumHash: undefined,
+      datum:
+        "d87981581c9fc430ea1f3adc20eebb813b2649e85c934ea5bc13d7b7fbe2b24e50",
+      scriptRef: undefined,
+    },
+    {
+      txHash:
+        "f4918fe2de471b137901d6809e849ee920ed9013f7454fd073bd5b632b9596f0",
+      outputIndex: 0,
+      assets: { lovelace: 10000000n },
+      address:
+        "addr_test1wrqlusc0rxkzfz5206j8mvgxqqkyxfl9gtplm3s26eypzqcxsnfs3",
+      datumHash: undefined,
+      datum:
+        "d87981581c9fc430ea1f3adc20eebb813b2649e85c934ea5bc13d7b7fbe2b24e50",
+      scriptRef: undefined,
+    },
+  ] satisfies UTxO[],
+  transaction:
+    "84a8008482582035509191d07f018849fa7d32217b70ae33b49983aea21339850d6fcda31b030b008258204f070d5ffaa972c554bdbbad5d01ddd032fddf91f8f3262136b8cce0ba3b790a0082582075af72128f59d7cae87965399a01fd775fb8f69095cecb5ce45f55b8e3f5052c00825820f4918fe2de471b137901d6809e849ee920ed9013f7454fd073bd5b632b9596f0000181825839009fc430ea1f3adc20eebb813b2649e85c934ea5bc13d7b7fbe2b24e505064b671634d14cb8d543e71dd8eb437a47efb47b0b22882866c420d1a025f365c021a000323a40b58203f42956d83a3940b571b4cf51c6098535b9c7e0b240bf4daaa0fb1c917e8a4370d81825820f4918fe2de471b137901d6809e849ee920ed9013f7454fd073bd5b632b9596f0010e81581c9fc430ea1f3adc20eebb813b2649e85c934ea5bc13d7b7fbe2b24e5010825839009fc430ea1f3adc20eebb813b2649e85c934ea5bc13d7b7fbe2b24e505064b671634d14cb8d543e71dd8eb437a47efb47b0b22882866c420d821b000000022ca6f211a2581c22691d3d969ecf5802226290c2fb98e2bc08522d5b726c1f5f400105a1445465737403581cef6ed47a6917a3cbbeb46561e8853da969343794d66128598a34af2ca14e4275726e61626c65546f6b656e3201111a004c4b40a20584840000d879814d48656c6c6f2c20576f726c6421821966ad1a0077ca99840001d879814d48656c6c6f2c20576f726c6421821966ad1a0077ca99840002d879814d48656c6c6f2c20576f726c6421821966ad1a0077ca99840003d879814d48656c6c6f2c20576f726c6421821966ad1a0077ca99068158eb58e901000032323232323223223225333006323253330083371e6eb8c008c028dd5002a4410d48656c6c6f2c20576f726c642100100114a06644646600200200644a66601c00229404c94ccc030cdc79bae301000200414a226600600600260200026eb0c02cc030c030c030c030c030c030c030c030c024dd5180098049baa002375c600260126ea80188c02c0045261365653330043370e900018029baa001132325333009300b002149858dd7180480098031baa0011653330023370e900018019baa0011323253330073009002149858dd7180380098021baa001165734aae7555cf2ab9f5742ae881f5f6",
 
-export const redeemersExUnits = [
-  {
-    redeemer_tag: "spend",
-    redeemer_index: 0,
-    ex_units: { mem: 26285, steps: 7850649 },
-  },
-  {
-    redeemer_tag: "spend",
-    redeemer_index: 1,
-    ex_units: { mem: 26285, steps: 7850649 },
-  },
-  {
-    redeemer_tag: "spend",
-    redeemer_index: 2,
-    ex_units: { mem: 26285, steps: 7850649 },
-  },
-  {
-    redeemer_tag: "spend",
-    redeemer_index: 3,
-    ex_units: { mem: 26285, steps: 7850649 },
-  },
-];
+  redeemersExUnits: [
+    {
+      redeemer_tag: "spend",
+      redeemer_index: 0,
+      ex_units: { mem: 26285, steps: 7850649 },
+    },
+    {
+      redeemer_tag: "spend",
+      redeemer_index: 1,
+      ex_units: { mem: 26285, steps: 7850649 },
+    },
+    {
+      redeemer_tag: "spend",
+      redeemer_index: 2,
+      ex_units: { mem: 26285, steps: 7850649 },
+    },
+    {
+      redeemer_tag: "spend",
+      redeemer_index: 3,
+      ex_units: { mem: 26285, steps: 7850649 },
+    },
+  ],
+};
+
+export const evalSample2 = {
+  utxos: [
+    {
+      txHash:
+        "FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF",
+      outputIndex: 0,
+      address:
+        "addr_test1wrzqlyffcf5yq3htqge9h9k29zv6d7ny0rqam6d4c5eqdfgg0h7yw",
+      assets: { lovelace: 14000000n },
+      datum: "d87980",
+      scriptRef: {
+        type: "PlutusV2",
+        script:
+          "59010601000032323232323232323232322223253330083371e6eb8cc014c01c00520004890d48656c6c6f2c20576f726c642100149858cc020c94ccc020cdc3a400000226464a66601e60220042930a99806249334c6973742f5475706c652f436f6e73747220636f6e7461696e73206d6f7265206974656d73207468616e2065787065637465640016375c601e002600e0062a660149212b436f6e73747220696e64657820646964206e6f74206d6174636820616e7920747970652076617269616e740016300a37540040046600200290001111199980319b8700100300c233330050053370000890011807000801001118031baa0015734ae6d5ce2ab9d5573caae7d5d0aba201",
+      },
+    },
+  ] satisfies UTxO[],
+  transaction:
+    "84A30081825820FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF00018182581D70C40F9129C2684046EB02325B96CA2899A6FA6478C1DDE9B5C53206A51A00D59F800200A10581840000D8799F4D48656C6C6F2C20576F726C6421FF820000F5F6",
+  redeemersExUnits: [
+    {
+      ex_units: { mem: 15694, steps: 3776833 },
+      redeemer_index: 0,
+      redeemer_tag: "spend",
+    },
+  ],
+};

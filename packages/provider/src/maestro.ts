@@ -338,15 +338,15 @@ export class Maestro implements Provider {
   ): Promise<EvalRedeemer[]> {
     // Transform UTxOs to the Maestro format
     const additionalMaestroUTxOs = (additionalUTxOs || []).map((utxo) => ({
-      index: utxo.outputIndex,
       tx_hash: utxo.txHash,
-      tx_cbor: utxoToCore(utxo).to_cbor_hex,
+      index: utxo.outputIndex,
+      txout_cbor: utxoToCore(utxo).output().to_cbor_hex(),
     }));
 
     // Prepare payload
     const payload = {
       cbor: tx,
-      additionalMaestroUTxOs,
+      additional_utxos: additionalMaestroUTxOs,
     };
 
     // Perform fetch request
