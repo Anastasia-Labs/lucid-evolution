@@ -4,7 +4,7 @@ import React, { useState, useEffect } from "react";
 
 <div style={{ marginBottom: "10rem" }}></div>
 
-![](/lucid-evolution-red-icon.png)
+![](/lucid-evolution-al-red.png)
 
 <div className="fade-in">
   <Hero
@@ -46,7 +46,6 @@ const paymentTx = await lucid
 .complete();
 
 const signedPaymentTx = await paymentTx.sign.withWallet().complete();
-
 const paymentTxHash = await signedPaymentTx.submit();
 console.log("(Wen Midgard?) Tx Hash:", paymentTxHash);`}
 />
@@ -125,7 +124,7 @@ Initialize a new TypeScript project
 <Cards>
   <Cards.Card
     title="Core Concept 2: Choose wallet"
-    href="/documentation/core-concepts/create-choose-wallet"
+    href="/documentation/core-concepts/choose-wallet"
   />
 </Cards>
 
@@ -593,62 +592,69 @@ const allKeywords = [...redKeywords, ...highlightedKeywords];
 const keywordRegex = new RegExp(`\\b(${allKeywords.join("|")})\\b`, "g");
 
 const LoadingSpinner = () => (
+
 <div style={{ display: "inline-block", marginLeft: "10px" }}>
-<div
-style={{
-          width: "16px",
-          height: "16px",
-          border: "2px solid #2d2d2d",
-          borderTop: "2px solid #ff6b6b",
-          borderRadius: "50%",
-          transform: `rotate(${spinnerAngle}deg)`,
-        }} ></div>
+  <div
+    style={{
+      width: "16px",
+      height: "16px",
+      border: "2px solid #2d2d2d",
+      borderTop: "2px solid #ff6b6b",
+      borderRadius: "50%",
+      transform: `rotate(${spinnerAngle}deg)`,
+    }}
+  ></div>
 </div>
 );
 
 const SuccessIcon = () => (
+
 <svg
-width="16"
-height="16"
-viewBox="0 0 20 20"
-fill="none"
-xmlns="http://www.w3.org/2000/svg"
-style={{ marginRight: "6px" }} >
-<circle cx="10" cy="10" r="8" stroke="#2ecc71" strokeWidth="2" />
-<path
-        d="M6 10L9 13L14 8"
-        stroke="#2ecc71"
-        strokeWidth="2"
-        strokeLinecap="round"
-        strokeLinejoin="round"
-      />
+  width="16"
+  height="16"
+  viewBox="0 0 20 20"
+  fill="none"
+  xmlns="http://www.w3.org/2000/svg"
+  style={{ marginRight: "6px" }}
+>
+  <circle cx="10" cy="10" r="8" stroke="#2ecc71" strokeWidth="2" />
+  <path
+    d="M6 10L9 13L14 8"
+    stroke="#2ecc71"
+    strokeWidth="2"
+    strokeLinecap="round"
+    strokeLinejoin="round"
+  />
 </svg>
 );
 
 return (
-<div
-style={{
+
+ <div
+      style={{
         position: "relative",
-        height: isMobile ? 'auto' : componentHeight,
+        height: componentHeight,
         overflow: "hidden",
         borderRadius: "8px",
         fontFamily: 'Consolas, Monaco, "Andale Mono", "Ubuntu Mono", monospace',
         boxShadow: "0 4px 6px rgba(0, 0, 0, 0.1)",
         fontSize: isMobile ? '12px' : '14px',
         ...style,
-      }} >
+      }}
+    >
 {/* IDE-like header with gradient */}
 <div
-style={{
+        style={{
           background: "linear-gradient(to right, #2a2a2a, #3a3a3a)",
-          padding: isMobile ? "6px 12px" : "8px 16px",
-          height: isMobile ? "30px" : headerHeight,
+          padding: "8px 16px",
+          height: headerHeight,
           borderTopLeftRadius: "8px",
           borderTopRightRadius: "8px",
           display: "flex",
-          alignItems: "left",
+          alignItems: "center",
           borderBottom: "1px solid #444",
-        }} >
+        }}
+      >
 <span
 style={{
             color: "rgba(255, 255, 255, 0.6)",
@@ -674,20 +680,23 @@ make_payment.ts
 </div>
 
       {/* Code content */}
-      <div
+       <div
         style={{
           position: "relative",
           backgroundColor: "#1e1e1e",
-          height: isMobile ? 'auto' : `calc(100% - ${headerHeight})`,
+          height: `calc(100% - ${headerHeight})`,
+          display: "flex",
+          flexDirection: "column",
         }}
       >
         <pre
           style={{
             backgroundColor: "transparent",
-            height: isMobile ? 'auto' : codeHeight,
+            height: codeHeight,
             overflow: "auto",
             margin: 0,
-            padding: isMobile ? "12px" : "16px",
+            padding: "16px",
+            flexGrow: 1,
           }}
         >
           <code
@@ -743,18 +752,14 @@ make_payment.ts
         </pre>
         <div
           style={{
-            position: "relative",
-            bottom: 0,
-            left: 0,
-            right: 0,
-            padding: isMobile ? "12px" : "12px 16px",
+            padding: "12px 16px",
             backgroundColor: "#2d2d2d",
             borderBottomLeftRadius: "8px",
             borderBottomRightRadius: "8px",
             fontFamily: 'Consolas, Monaco, "Andale Mono", "Ubuntu Mono", monospace',
             fontSize: isMobile ? "11px" : "14px",
-            minHeight: isMobile ? '120px' : terminalHeight,
-            overflow: "hidden",
+            height: terminalHeight,
+            overflowY: "auto",
             display: "flex",
             flexDirection: "column",
             justifyContent: "flex-start",
@@ -859,20 +864,19 @@ make_payment.ts
 
       {/* Progress bar */}
       {(isSubmitting || progress > 0) && (
-
-  <div
-    style={{
-      position: "absolute",
-      top: 0, 
-      left: 0,
-      right: 0,
-      height: "2px",
-      background: "linear-gradient(to right, #c0392b, #e74c3c)",
-      width: `${progress}%`,
-      transition: "width 0.1s linear",
-      zIndex: 10,
-    }}
-  />
+        <div
+          style={{
+            position: "absolute",
+            top: 0,
+            left: 0,
+            right: 0,
+            height: "2px",
+            background: "linear-gradient(to right, #c0392b, #e74c3c)",
+            width: `${progress}%`,
+            transition: "width 0.1s linear",
+            zIndex: 10,
+          }}
+        />
       )}
     </div>
 
