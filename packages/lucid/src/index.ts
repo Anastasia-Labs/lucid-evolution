@@ -1,6 +1,7 @@
 export * from "./lucid-evolution/index.js";
 export * from "./tx-builder/index.js";
 export * from "./tx-sign-builder/index.js";
+export * from "./tx-submit/index.js";
 export * from "./Errors.js";
 export * from "./core.js";
 export * from "@lucid-evolution/core-types";
