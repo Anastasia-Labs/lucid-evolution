@@ -2,9 +2,9 @@ import { Callout, Steps } from "nextra/components";
 
 # Smart Contract Interactions
 
-It's important to understand that on the Cardano blockchain, you don't directly interact with "smart contracts", atleast not in the traditional sense. 
+It's important to understand that on the Cardano blockchain, you don't directly interact with "smart contracts", atleast not in the traditional sense.
 
-- Instead, you work with validators. These validators are responsible for verifying the actions taken in a given transaction, rather than executing or calling any actions themselves. 
+- Instead, you work with validators. These validators are responsible for verifying the actions taken in a given transaction, rather than executing or calling any actions themselves.
 
 - A validator checks whether the transaction meets its requirements, and if it does, the transaction is processed successfully. If the requirements are not met, the transaction fails (is not allowed to execute).
 
@@ -138,3 +138,9 @@ const tx = await lucid
   .readFrom([scriptUtxo])
   .complete();
 ```
+
+<Callout>
+  Remember that when interacting with Plutus scripts, you need to provide
+  appropriate datums and redeemers. Always ensure your transaction meets the
+  validator's requirements to avoid failures.
+</Callout>
