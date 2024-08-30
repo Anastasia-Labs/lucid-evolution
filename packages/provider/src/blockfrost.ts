@@ -1,9 +1,8 @@
-import { CML } from "../core.js";
+import { CML } from "./core.js";
 import { fromHex, sleep } from "@lucid-evolution/core-utils";
 import { applyDoubleCborEncoding } from "@lucid-evolution/utils";
 import {
   Address,
-  Assets,
   Credential,
   Datum,
   DatumHash,
@@ -19,9 +18,8 @@ import {
   Unit,
   UTxO,
 } from "@lucid-evolution/core-types";
-import packageJson from "../../package.json";
-import * as BlockFrostSchema from "./schema.js";
-import { pipe, Record } from "effect";
+import packageJson from "../package.json";
+import * as _Blockfrost from "./internal/blockfrost.js";
 
 export class Blockfrost implements Provider {
   url: string;
@@ -318,7 +316,7 @@ export class Blockfrost implements Provider {
   ): Promise<EvalRedeemer[]> {
     const payload = {
       cbor: tx,
-      additionalUtxoSet: toAditionalUTXOs(additionalUTxOs),
+      additionalUtxoSet: _Blockfrost.toAditionalUTXOs(additionalUTxOs),
     };
 
     const res = await fetch(`${this.url}/utils/txs/evaluate/utxos`, {
@@ -359,63 +357,12 @@ export class Blockfrost implements Provider {
   }
 }
 
-/**
- * This function is temporarily needed only, until Blockfrost returns the datum natively in Cbor.
- * The conversion is ambigious, that's why it's better to get the datum directly in Cbor.
- */
-export function datumJsonToCbor(json: DatumJson): Datum {
-  const convert = (json: DatumJson): CML.PlutusData => {
-    if (!isNaN(json.int!)) {
-      return CML.PlutusData.new_integer(
-        CML.BigInteger.from_str(json.int!.toString()),
-      );
-    } else if (json.bytes || !isNaN(Number(json.bytes))) {
-      return CML.PlutusData.new_bytes(fromHex(json.bytes!));
-    } else if (json.map) {
-      const m = CML.PlutusMap.new();
-      json.map.forEach(({ k, v }: { k: unknown; v: unknown }) => {
-        m.set(convert(k as DatumJson), convert(v as DatumJson));
-      });
-      return CML.PlutusData.new_map(m);
-    } else if (json.list) {
-      const l = CML.PlutusDataList.new();
-      json.list.forEach((v: DatumJson) => {
-        l.add(convert(v));
-      });
-      return CML.PlutusData.new_list(l);
-    } else if (!isNaN(json.constructor! as unknown as number)) {
-      const l = CML.PlutusDataList.new();
-      json.fields!.forEach((v: DatumJson) => {
-        l.add(convert(v));
-      });
-      return CML.PlutusData.new_constr_plutus_data(
-        CML.ConstrPlutusData.new(
-          CML.BigInteger.from_str(json.constructor!.toString()).as_u64()!,
-          l,
-        ),
-      );
-    }
-    throw new Error("Unsupported type");
-  };
-
-  return convert(json).to_cbor_hex();
-}
-
 const handleRateLimit = async (count: number): Promise<void> => {
   if (count % 100 === 0) {
     await sleep(5_000); // 1 seconds for every 100 requests
   } else if (count % 10 === 0) {
     await sleep(500); // 100 milliseconds for every 10 requests
   }
-};
-
-type DatumJson = {
-  int?: number;
-  bytes?: string;
-  list?: Array<DatumJson>;
-  map?: Array<{ k: unknown; v: unknown }>;
-  fields?: Array<DatumJson>;
-  [constructor: string]: unknown; // number; constructor needs to be simulated like this as optional argument
 };
 
 type BlockfrostUtxoResult = Array<{
@@ -449,52 +396,3 @@ type BlockfrostRedeemer = {
 };
 
 const lucid = packageJson.version; // Lucid version
-
-const toAditionalUTXOs = (
-  utxos: UTxO[] | undefined,
-): [BlockFrostSchema.TxIn, BlockFrostSchema.TxOut][] =>
-  (utxos || []).map((utxo) => [
-    {
-      txId: utxo.txHash,
-      index: utxo.outputIndex,
-    } satisfies BlockFrostSchema.TxIn,
-    {
-      address: utxo.address,
-      value: {
-        coins: Number(utxo.assets["lovelace"]),
-        assets: fromAssets(utxo.assets),
-      },
-      datumHash: utxo.datumHash,
-      datum: utxo.datum,
-      script: toTxOutScript(utxo.scriptRef),
-    } satisfies BlockFrostSchema.TxOut,
-  ]);
-
-const toTxOutScript = (
-  scriptRef: UTxO["scriptRef"],
-): BlockFrostSchema.TxOut["script"] => {
-  if (scriptRef) {
-    switch (scriptRef.type) {
-      case "PlutusV1":
-        return { "plutus:v1": scriptRef.script };
-      case "PlutusV2":
-        return { "plutus:v2": scriptRef.script };
-      case "PlutusV3":
-        return { "plutus:v3": scriptRef.script };
-      default:
-        return undefined;
-    }
-  }
-};
-
-const fromAssets = (assets: Assets) =>
-  pipe(
-    Record.remove(assets, "lovelace"),
-    Record.mapEntries((amount, unit) => [
-      unit.length === 56
-        ? unit.slice(0, 56)
-        : unit.slice(0, 56) + "." + unit.slice(56),
-      Number(amount),
-    ]),
-    (r) => (Record.isEmptyRecord(r) ? undefined : r),
-  );
