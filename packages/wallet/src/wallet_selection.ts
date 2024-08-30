@@ -179,7 +179,7 @@ export const makeWalletFromPrivateKey = (
       return { poolId: null, rewards: 0n };
     },
     signTx: async (tx: CML.Transaction): Promise<CML.TransactionWitnessSet> => {
-      const signed = priv.sign(tx.to_cbor_bytes());
+      const signed = priv.sign(tx.body().to_cbor_bytes());
       const witness = CML.Vkeywitness.new(priv.to_public(), signed);
       const txWitnessSetBuilder = CML.TransactionWitnessSetBuilder.new();
       txWitnessSetBuilder.add_vkey(witness);
@@ -267,7 +267,7 @@ export const makeWalletFromAPI = (
         : { poolId: null, rewards: 0n };
     },
     signTx: async (tx: CML.Transaction): Promise<CML.TransactionWitnessSet> => {
-      const witnessSet = await api.signTx(toHex(tx.to_cbor_bytes()), true);
+      const witnessSet = await api.signTx(toHex(tx.body().to_cbor_bytes()), true);
       return CML.TransactionWitnessSet.from_cbor_hex(witnessSet);
     },
     signMessage: async (
