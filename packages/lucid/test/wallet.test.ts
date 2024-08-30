@@ -84,8 +84,6 @@ describe("Wallet", () => {
   });
 
   test("selectWallet.fromPrivateKey", async () => {
-    const privateKey = CML.PrivateKey.generate_ed25519().to_bech32();
-    console.log("privateKey :>> ", privateKey);
     const program = Effect.gen(function* () {
       const privateKey = CML.PrivateKey.generate_ed25519().to_bech32();
       const [VITE_API_URL, VITE_BLOCKFROST_KEY] = yield* loadConfig;
