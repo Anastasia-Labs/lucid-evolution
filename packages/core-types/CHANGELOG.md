@@ -1,5 +1,11 @@
 # @lucid-evolution/core-types
 
+## 0.1.14
+
+### Patch Changes
+
+- [#258](https://github.com/Anastasia-Labs/lucid-evolution/pull/258) [`8372b50`](https://github.com/Anastasia-Labs/lucid-evolution/commit/8372b50972bd99d5cfe122ebb0bfb98908484e0d) Thanks [@hadelive](https://github.com/hadelive)! - fix emulator submitTx function
+
 ## 0.1.13
 
 ### Patch Changes

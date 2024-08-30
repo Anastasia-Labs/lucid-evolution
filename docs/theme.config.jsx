@@ -2,7 +2,6 @@ import Image from "next/image";
 import { useRouter } from "next/router";
 
 export default {
-  
   project: {
     link: "https://github.com/Anastasia-Labs/lucid-evolution",
   },
@@ -34,13 +33,12 @@ export default {
       />
     </>
   ),
-  faviconGlyph: "📕",
   sidebar: {
     defaultMenuCollapseLevel: 1,
     toggleButton: true,
     autoCollapse: true,
   },
-  
+
   darkMode: false,
 
   search: {
@@ -59,7 +57,7 @@ export default {
         href="https://github.com/Anastasia-Labs/lucid-evolution/releases"
         target="_blank"
       >
-        🎉 Discover our latest updates for Lucid Evolution! Learn more →
+        🎉 We are Chang Hardfork READY! Learn more →
       </a>
     ),
   },
@@ -67,6 +65,8 @@ export default {
   chat: {
     link: "https://discord.gg/s89P9gpEff",
   },
+
+  gitTimestamp: () => null,
 
   navigation: {
     prev: true,
@@ -81,8 +81,37 @@ export default {
   editLink: {
     text: "Contribute to this page →",
   },
+
   head: (
     <>
+      <link
+        rel="icon"
+        type="image/svg+xml"
+        sizes="any"
+        href="https://raw.githubusercontent.com/Anastasia-Labs/lucid-evolution/main/docs/public/lucid-evolution-al-red.svg"
+      />
+      <meta
+        name="twitter:image"
+        content="https://raw.githubusercontent.com/Anastasia-Labs/lucid-evolution/main/docs/public/lucid-evolution-al-red.svg"
+      />
+      <meta
+        name="twitter:site:domain"
+        content="https://github.com/Anastasia-Labs/lucid-evolution"
+      />
+
+      <script
+        dangerouslySetInnerHTML={{
+          __html: `
+            if (!window.localStorage.getItem("theme_default")) {
+              window.localStorage.setItem("theme", "dark");
+              window.localStorage.setItem("theme_default", "dark");
+              document.documentElement.classList.add("dark");
+              document.documentElement.classList.remove("light");
+            }
+          `,
+        }}
+      />
+
       <style>{`
               
         .nextra-nav-container nav a:hover {

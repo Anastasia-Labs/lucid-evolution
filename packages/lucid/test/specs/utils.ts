@@ -9,7 +9,7 @@ export const handleSignSubmit = (signBuilder: TxSignBuilder) =>
     const txHash = yield* signed.submitProgram();
     yield* Effect.logDebug(`🚀 Transaction submitted: ${txHash}`);
     yield* Effect.logDebug(`Confirming Transaction...`);
-    yield* Effect.tryPromise(() => user.awaitTx(txHash, 20_000));
+    yield* Effect.tryPromise(() => user.awaitTx(txHash, 40_000));
     yield* Effect.logDebug(`✅ Transaction confirmed: ${txHash}`);
     yield* Effect.logDebug("Pausing for 10 seconds...");
     yield* Effect.sleep("10 seconds");
