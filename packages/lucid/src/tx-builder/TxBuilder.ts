@@ -6,12 +6,14 @@ import {
   Assets,
   Label,
   Lovelace,
+  PaymentKeyHash,
   PoolId,
   Redeemer,
   RedeemerBuilder,
   RewardAddress,
   Script,
   ScriptType,
+  StakeKeyHash,
   UTxO,
 } from "@lucid-evolution/core-types";
 import * as Collect from "./internal/Collect.js";
@@ -70,7 +72,8 @@ export type TxBuilder = {
       scriptRef?: Script | undefined,
     ) => TxBuilder;
   };
-  addSigner: (address: Address) => TxBuilder;
+  addSigner: (address: Address | RewardAddress) => TxBuilder;
+  addSignerKey: (keyHash: PaymentKeyHash | StakeKeyHash) => TxBuilder;
   registerStake: (rewardAddress: RewardAddress) => TxBuilder;
   deRegisterStake: (
     rewardAddress: RewardAddress,
@@ -200,8 +203,13 @@ export function makeTxBuilder(lucidConfig: LucidConfig): TxBuilder {
         return txBuilder;
       },
     },
-    addSigner: (address: Address) => {
+    addSigner: (address: Address | RewardAddress) => {
       const program = Signer.addSigner(config, address);
+      config.programs.push(program);
+      return txBuilder;
+    },
+    addSignerKey: (keyHash: PaymentKeyHash | StakeKeyHash) => {
+      const program = Signer.addSignerKey(config, keyHash);
       config.programs.push(program);
       return txBuilder;
     },
