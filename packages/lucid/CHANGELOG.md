@@ -1,5 +1,15 @@
 # @lucid-evolution/lucid
 
+## 0.3.18
+
+### Patch Changes
+
+- [#273](https://github.com/Anastasia-Labs/lucid-evolution/pull/273) [`f119e2f`](https://github.com/Anastasia-Labs/lucid-evolution/commit/f119e2f64c3d5869f9a2b44832f267c45a6567e0) Thanks [@hadelive](https://github.com/hadelive)! - fix sellect wallet from private key
+
+- Updated dependencies [[`f119e2f`](https://github.com/Anastasia-Labs/lucid-evolution/commit/f119e2f64c3d5869f9a2b44832f267c45a6567e0)]:
+  - @lucid-evolution/provider@0.1.47
+  - @lucid-evolution/wallet@0.1.42
+
 ## 0.3.17
 
 ### Patch Changes
