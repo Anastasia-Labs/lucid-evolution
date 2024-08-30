@@ -1,5 +1,13 @@
 # @lucid-evolution/lucid
 
+## 0.3.19
+
+### Patch Changes
+
+- [#276](https://github.com/Anastasia-Labs/lucid-evolution/pull/276) [`0a87f69`](https://github.com/Anastasia-Labs/lucid-evolution/commit/0a87f692dddc0e080831ac39a7aaa243f0122fbf) Thanks [@solidsnakedev](https://github.com/solidsnakedev)! - add missing types to selectWallet.fromSeed; export TxSubmit types
+
+- [#272](https://github.com/Anastasia-Labs/lucid-evolution/pull/272) [`56cbe22`](https://github.com/Anastasia-Labs/lucid-evolution/commit/56cbe228b8b1830415a9cb99d4ff66744959b07b) Thanks [@hadelive](https://github.com/hadelive)! - add sign by keyhash
+
 ## 0.3.18
 
 ### Patch Changes
