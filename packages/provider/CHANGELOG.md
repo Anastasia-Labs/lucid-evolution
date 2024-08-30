@@ -1,5 +1,16 @@
 # @lucid-evolution/provider
 
+## 0.1.46
+
+### Patch Changes
+
+- [#268](https://github.com/Anastasia-Labs/lucid-evolution/pull/268) [`f8f905a`](https://github.com/Anastasia-Labs/lucid-evolution/commit/f8f905aeda20b30a03ba69e4b062a80a7a5be7de) Thanks [@solidsnakedev](https://github.com/solidsnakedev)! - update providers structure and improve side effects
+
+- Updated dependencies [[`f8f905a`](https://github.com/Anastasia-Labs/lucid-evolution/commit/f8f905aeda20b30a03ba69e4b062a80a7a5be7de)]:
+  - @lucid-evolution/core-types@0.1.15
+  - @lucid-evolution/utils@0.1.37
+  - @lucid-evolution/wallet@0.1.41
+
 ## 0.1.45
 
 ### Patch Changes
