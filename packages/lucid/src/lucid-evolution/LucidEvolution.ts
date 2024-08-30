@@ -36,7 +36,14 @@ export type LucidEvolution = {
   newTx: () => TxBuilder.TxBuilder;
   fromTx: (tx: Transaction) => TxSignBuilder.TxSignBuilder;
   selectWallet: {
-    fromSeed: (seed: string) => void;
+    fromSeed: (
+      seed: string,
+      options?: {
+        addressType?: "Base" | "Enterprise";
+        accountIndex?: number;
+        password?: string;
+      },
+    ) => void;
     fromPrivateKey: (privateKey: PrivateKey) => void;
     fromAPI: (walletAPI: WalletApi) => void;
     fromAddress: (address: string, utxos: UTxO[]) => void;
@@ -109,8 +116,20 @@ export const Lucid = async (
         CML.Transaction.from_cbor_hex(tx),
       ),
     selectWallet: {
-      fromSeed: (seed: string) => {
-        config.wallet = makeWalletFromSeed(config.provider, network, seed);
+      fromSeed: (
+        seed: string,
+        options?: {
+          addressType?: "Base" | "Enterprise";
+          accountIndex?: number;
+          password?: string;
+        },
+      ) => {
+        config.wallet = makeWalletFromSeed(
+          config.provider,
+          network,
+          seed,
+          options,
+        );
       },
       fromPrivateKey: (privateKey: PrivateKey) => {
         config.wallet = makeWalletFromPrivateKey(
