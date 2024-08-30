@@ -1,5 +1,12 @@
 # @lucid-evolution/plutus
 
+## 0.1.21
+
+### Patch Changes
+
+- Updated dependencies [[`f8f905a`](https://github.com/Anastasia-Labs/lucid-evolution/commit/f8f905aeda20b30a03ba69e4b062a80a7a5be7de)]:
+  - @lucid-evolution/core-types@0.1.15
+
 ## 0.1.20
 
 ### Patch Changes
