@@ -179,8 +179,10 @@ export const makeWalletFromPrivateKey = (
       return { poolId: null, rewards: 0n };
     },
     signTx: async (tx: CML.Transaction): Promise<CML.TransactionWitnessSet> => {
-      const signed = priv.sign(tx.to_cbor_bytes());
-      const witness = CML.Vkeywitness.new(priv.to_public(), signed);
+      const witness = CML.make_vkey_witness(
+        CML.hash_transaction(tx.body()),
+        priv,
+      );
       const txWitnessSetBuilder = CML.TransactionWitnessSetBuilder.new();
       txWitnessSetBuilder.add_vkey(witness);
       return txWitnessSetBuilder.build();

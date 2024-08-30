@@ -14,6 +14,8 @@ import {
   evaluateAContractWithDatum,
   compose,
   multiSigner,
+  signByWalletFromPrivateKey,
+  emulatorFromPrivateKey,
 } from "./service.js";
 
 const distributeRewards = Effect.gen(function* ($) {
@@ -36,6 +38,7 @@ describe.sequential("Emulator", () => {
     const exit = await Effect.runPromiseExit(program);
     expect(exit._tag).toBe("Success");
     emulator.awaitBlock(4);
+    emulatorFromPrivateKey.awaitBlock(4);
     const exit1 = await Effect.runPromiseExit(program);
     expect(exit1._tag).toBe("Failure");
   });
@@ -44,6 +47,7 @@ describe.sequential("Emulator", () => {
     const program = pipe(registerStake, Effect.provide(EmulatorUser.layer));
     const exit = await Effect.runPromiseExit(program);
     emulator.awaitBlock(4);
+    emulatorFromPrivateKey.awaitBlock(4);
     expect(exit._tag).toBe("Success");
   });
 
@@ -51,6 +55,7 @@ describe.sequential("Emulator", () => {
     const program = pipe(delegateTo, Effect.provide(EmulatorUser.layer));
     const exit = await Effect.runPromiseExit(program);
     emulator.awaitBlock(4);
+    emulatorFromPrivateKey.awaitBlock(4);
     expect(exit._tag).toBe("Success");
   });
 
@@ -61,6 +66,7 @@ describe.sequential("Emulator", () => {
     );
     const exit = await Effect.runPromiseExit(program);
     emulator.awaitBlock(4);
+    emulatorFromPrivateKey.awaitBlock(4);
     expect(exit._tag).toBe("Success");
   });
 
@@ -68,6 +74,7 @@ describe.sequential("Emulator", () => {
     const program = pipe(distributeRewards, Effect.provide(EmulatorUser.layer));
     const exit = await Effect.runPromiseExit(program);
     emulator.awaitBlock(4);
+    emulatorFromPrivateKey.awaitBlock(4);
     expect(exit._tag).toBe("Success");
   });
 
@@ -78,6 +85,7 @@ describe.sequential("Emulator", () => {
     );
     const exit = await Effect.runPromiseExit(program);
     emulator.awaitBlock(4);
+    emulatorFromPrivateKey.awaitBlock(4);
     expect(exit._tag).toBe("Success");
   });
 
@@ -88,6 +96,7 @@ describe.sequential("Emulator", () => {
     );
     const exit = await Effect.runPromiseExit(program);
     emulator.awaitBlock(4);
+    emulatorFromPrivateKey.awaitBlock(4);
     expect(exit._tag).toBe("Success");
   });
 
@@ -95,6 +104,7 @@ describe.sequential("Emulator", () => {
     const program = pipe(deRegisterStake, Effect.provide(EmulatorUser.layer));
     const exit = await Effect.runPromiseExit(program);
     emulator.awaitBlock(4);
+    emulatorFromPrivateKey.awaitBlock(4);
     expect(exit._tag).toBe("Success");
   });
 
@@ -102,6 +112,7 @@ describe.sequential("Emulator", () => {
     const program = pipe(evaluateAContract, Effect.provide(EmulatorUser.layer));
     const exit = await Effect.runPromiseExit(program);
     emulator.awaitBlock(4);
+    emulatorFromPrivateKey.awaitBlock(4);
     expect(exit._tag).toBe("Success");
   });
 
@@ -112,6 +123,7 @@ describe.sequential("Emulator", () => {
     );
     const exit = await Effect.runPromiseExit(program);
     emulator.awaitBlock(4);
+    emulatorFromPrivateKey.awaitBlock(4);
     expect(exit._tag).toBe("Success");
   });
 
@@ -119,6 +131,7 @@ describe.sequential("Emulator", () => {
     const program = pipe(compose, Effect.provide(EmulatorUser.layer));
     const exit = await Effect.runPromiseExit(program);
     emulator.awaitBlock(4);
+    emulatorFromPrivateKey.awaitBlock(4);
     expect(exit._tag).toBe("Success");
   });
 
@@ -126,6 +139,18 @@ describe.sequential("Emulator", () => {
     const program = pipe(multiSigner, Effect.provide(EmulatorUser.layer));
     const exit = await Effect.runPromiseExit(program);
     emulator.awaitBlock(4);
+    emulatorFromPrivateKey.awaitBlock(4);
+    expect(exit._tag).toBe("Success");
+  });
+
+  test("signByWalletFromPrivateKey", async () => {
+    const program = pipe(
+      signByWalletFromPrivateKey,
+      Effect.provide(EmulatorUser.layer),
+    );
+    const exit = await Effect.runPromiseExit(program);
+    emulator.awaitBlock(4);
+    emulatorFromPrivateKey.awaitBlock(4);
     expect(exit._tag).toBe("Success");
   });
 });

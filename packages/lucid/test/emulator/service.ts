@@ -15,6 +15,7 @@ import {
   withLogRetry,
 } from "../specs/utils";
 import { Emulator, generateEmulatorAccount } from "@lucid-evolution/provider";
+import { generateEmulatorAccountFrommPrivateKey } from "../../../provider/src";
 
 export const EMULATOR_ACCOUNT = generateEmulatorAccount({
   lovelace: 75000000000n,
@@ -22,6 +23,8 @@ export const EMULATOR_ACCOUNT = generateEmulatorAccount({
 export const EMULATOR_ACCOUNT_1 = generateEmulatorAccount({
   lovelace: 80000000000n,
 });
+export const EMULATOR_ACCOUNT_FROM_PRIVATE_KEY =
+  await generateEmulatorAccountFrommPrivateKey({ lovelace: 90000000000n });
 export const REWARD_AMOUNT = 100000000n;
 export const EMULATOR_POOL_ID =
   "pool1nmfr5j5rnqndprtazre802glpc3h865sy50mxdny65kfgf3e5eh";
@@ -31,6 +34,10 @@ const alwaysSucceedScript: SpendingValidator = {
   script: "49480100002221200101",
 };
 
+export const emulatorFromPrivateKey = await Effect.gen(function* () {
+  return new Emulator([EMULATOR_ACCOUNT_FROM_PRIVATE_KEY]);
+}).pipe(Effect.runPromise);
+
 export const emulator = await Effect.gen(function* () {
   return new Emulator([EMULATOR_ACCOUNT]);
 }).pipe(Effect.runPromise);
@@ -38,9 +45,17 @@ export const emulator = await Effect.gen(function* () {
 const makeEmulatorUser = Effect.gen(function* ($) {
   const user = yield* Effect.tryPromise(() => Lucid(emulator, "Custom"));
   user.selectWallet.fromSeed(EMULATOR_ACCOUNT.seedPhrase);
+  const userFromPrivateKey = yield* Effect.tryPromise(() =>
+    Lucid(emulatorFromPrivateKey, "Custom"),
+  );
+  userFromPrivateKey.selectWallet.fromPrivateKey(
+    EMULATOR_ACCOUNT_FROM_PRIVATE_KEY.privateKey,
+  );
   return {
     user,
     emulator,
+    emulatorFromPrivateKey,
+    userFromPrivateKey,
   };
 });
 
@@ -79,7 +94,7 @@ export const mintInSlotRange = Effect.gen(function* () {
 }).pipe(Effect.flatMap(handleSignSubmitWithoutValidation));
 
 export const registerStake = Effect.gen(function* () {
-  const { user, emulator } = yield* EmulatorUser;
+  const { user } = yield* EmulatorUser;
   const rewardAddress = yield* pipe(
     Effect.promise(() => user.wallet().rewardAddress()),
     Effect.andThen(Effect.fromNullable),
@@ -250,3 +265,17 @@ export const multiSigner = Effect.gen(function* ($) {
   const assembleTx = tx.assemble([firstSign, secondSign]);
   return assembleTx;
 }).pipe(Effect.flatMap(handleSubmit), withLogRetry);
+
+export const signByWalletFromPrivateKey = Effect.gen(function* ($) {
+  const { userFromPrivateKey } = yield* EmulatorUser;
+  const scriptAddress = validatorToAddress("Custom", alwaysSucceedScript);
+  const signBuilder = yield* userFromPrivateKey
+    .newTx()
+    .pay.ToContract(
+      scriptAddress,
+      { kind: "inline", value: Data.to("313131") },
+      { lovelace: 5000000n },
+    )
+    .completeProgram();
+  return signBuilder;
+}).pipe(Effect.flatMap(handleSignSubmitWithoutValidation), withLogRetry);

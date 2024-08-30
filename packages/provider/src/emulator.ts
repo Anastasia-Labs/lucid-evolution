@@ -38,7 +38,28 @@ export type EmulatorAccount = {
   address: Address;
   assets: Assets;
   outputData?: OutputData;
+  privateKey: string;
 };
+
+export async function generateEmulatorAccountFrommPrivateKey(
+  assets: Assets,
+): Promise<EmulatorAccount> {
+  const privateKey = CML.PrivateKey.generate_ed25519().to_bech32();
+  const priv = CML.PrivateKey.from_bech32(privateKey);
+  const pubKeyHash = priv.to_public().hash();
+  const address = CML.EnterpriseAddress.new(
+    0,
+    CML.Credential.new_pub_key(pubKeyHash),
+  )
+    .to_address()
+    .to_bech32(undefined);
+  return {
+    seedPhrase: "",
+    address: address,
+    assets,
+    privateKey: privateKey,
+  };
+}
 
 export function generateEmulatorAccount(assets: Assets): EmulatorAccount {
   const seedPhrase = generateSeedPhrase();
@@ -50,6 +71,7 @@ export function generateEmulatorAccount(assets: Assets): EmulatorAccount {
       network: "Custom",
     }).address,
     assets,
+    privateKey: "",
   };
 }
 
