@@ -81,8 +81,8 @@ describe("maestro", async () => {
     const redeemers = await maestro.evaluateTx(cbor);
     assert.equal(Array.from(redeemers).length, 1);
   });
-  //Waiting on Maestro to update cost model
-  test.skip("evaluates additonal utxos - sample 1", async () => {
+
+  test("evaluates additonal utxos - sample 1", async () => {
     const redeemers = await maestro.evaluateTx(
       PreprodConstants.evalSample1.transaction,
       PreprodConstants.evalSample1.utxos,
@@ -93,13 +93,11 @@ describe("maestro", async () => {
     );
   });
 
-  //Waiting on Maestro to update cost model
-  test.skip("evaluates additinal utxos - sample 2", async () => {
+  test("evaluates additinal utxos - sample 2", async () => {
     const redeemers = await maestro.evaluateTx(
       PreprodConstants.evalSample2.transaction,
       PreprodConstants.evalSample2.utxos,
     );
-    console.log(redeemers);
     assert.deepStrictEqual(
       redeemers,
       PreprodConstants.evalSample2.redeemersExUnits,
