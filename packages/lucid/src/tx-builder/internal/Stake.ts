@@ -69,17 +69,12 @@ export const deRegisterStake = (
       credential: CML.Credential,
       config: TxBuilder.TxBuilderConfig,
     ): CML.SingleCertificateBuilder => {
-      const network = config.lucidConfig.network;
-      return network === "Preview" || network === "Preprod"
-        ? CML.SingleCertificateBuilder.new(
-            CML.Certificate.new_unreg_cert(
-              credential,
-              config.lucidConfig.protocolParameters.keyDeposit,
-            ),
-          )
-        : CML.SingleCertificateBuilder.new(
-            CML.Certificate.new_stake_deregistration(credential),
-          );
+      return CML.SingleCertificateBuilder.new(
+        CML.Certificate.new_unreg_cert(
+          credential,
+          config.lucidConfig.protocolParameters.keyDeposit,
+        ),
+      );
     };
 
     switch (stakeCredential.type) {

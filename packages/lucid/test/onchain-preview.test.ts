@@ -281,7 +281,8 @@ describe.sequential("Onchain testing", () => {
     expect(exit._tag).toBe("Success");
   });
 
-  //Helps recycle utxos when the coin selection algorithm is set to Largest first
+  // Helps recycle utxos when the coin selection algorithm is set to Largest first
+  // and reduce UTxO bloat in wallet
   test("recycleUTxOs", async () => {
     const program = pipe(
       WalletEndpoint.recycleUTxOs,

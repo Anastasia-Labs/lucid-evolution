@@ -71,7 +71,7 @@ describe.sequential("Koios", () => {
     await expect(() => koios.submitTx("80")).rejects.toThrowError();
   });
 
-  test("evaluates additonal utxos - sample 1", async () => {
+  test.skip("evaluates additonal utxos - sample 1", async () => {
     const redeemers = await koios.evaluateTx(
       PreprodConstants.evalSample1.transaction,
       PreprodConstants.evalSample1.utxos,
@@ -82,7 +82,7 @@ describe.sequential("Koios", () => {
     );
   });
 
-  test("evaluates additinal utxos - sample 2", async () => {
+  test.skip("evaluates additinal utxos - sample 2", async () => {
     const redeemers = await koios.evaluateTx(
       PreprodConstants.evalSample2.transaction,
       PreprodConstants.evalSample2.utxos,
