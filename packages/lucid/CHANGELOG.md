@@ -1,5 +1,11 @@
 # @lucid-evolution/lucid
 
+## 0.3.20
+
+### Patch Changes
+
+- [#279](https://github.com/Anastasia-Labs/lucid-evolution/pull/279) [`018fffc`](https://github.com/Anastasia-Labs/lucid-evolution/commit/018fffc39b97887521cf92296404757ebcfc709b) Thanks [@solidsnakedev](https://github.com/solidsnakedev)! - enable mainnet hardfork
+
 ## 0.3.19
 
 ### Patch Changes
