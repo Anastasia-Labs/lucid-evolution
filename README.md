@@ -1,70 +1,85 @@
-# Lucid Evolution
+<p align="center">
+  <img width="130px" src="docs/public/lucid-evolution-al-red.svg" align="center"/>
+  <h1 align="center">Lucid Evolution</h1>
+  <p align="center">Next-generation transaction builder for users and an off-chain framework for highly scalable dApps on Cardano</p>
+</p>
 
 <p align="center">
   <a href="https://github.com/Anastasia-Labs/lucid-evolution/actions/workflows/main.yml">
     <img src="https://github.com/Anastasia-Labs/lucid-evolution/actions/workflows/main.yml/badge.svg" alt="Build Status"/>
   </a>
   <img src="https://img.shields.io/npm/v/%40lucid-evolution%2Flucid" alt="NPM Version"/>
-  <img src="https://img.shields.io/npm/d18m/%40lucid-evolution%2Flucid" alt="NPM Downloads"/>
- <img alt="Discord" src="https://img.shields.io/discord/947985069111377951?logo=discord">
+  <img src="https://img.shields.io/npm/dy/%40lucid-evolution%2Flucid" alt="NPM Downloads"/>
+  <a href="https://discord.gg/s89P9gpEff">
+    <img alt="Discord" src="https://img.shields.io/discord/947985069111377951?logo=discord">
+  </a>
 </p>
 
-## What's inside?
+## Introduction
 
-Lucid evolution includes the following packages
+Lucid Evolution is a comprehensive suite of tools designed to facilitate the off-chain development of scalable dApps and the creation of complex transactions on the Cardano blockchain
 
-### Packages
+## Packages
 
-Lucid Evolution consists of the following packages:
+| Package                              | Description                         |
+| ------------------------------------ | ----------------------------------- |
+| `@lucid-evolution/lucid`             | Core package for Lucid Evolution    |
+| `@lucid-evolution/bip39`             | BIP-39 mnemonic code implementation |
+| `@lucid-evolution/core-types`        | Shared type definitions             |
+| `@lucid-evolution/core-utils`        | Common utility functions            |
+| `@lucid-evolution/crc8`              | CRC8 calculation utilities          |
+| `@lucid-evolution/plutus`            | Plutus integration tools            |
+| `@lucid-evolution/provider`          | Data provider interfaces            |
+| `@lucid-evolution/sign_data`         | Data signing utilities              |
+| `@lucid-evolution/utils`             | General-purpose utility functions   |
+| `@lucid-evolution/wallet`            | Wallet integration package          |
+| `@lucid-evolution/typescript-config` | Shared TypeScript configurations    |
+| `@lucid-evolution/eslint-config`     | Shared ESLint configurations        |
 
-- `docs`: Documentation resources for Lucid Evolution.
-- `@lucid-evolution/lucid`: Main package for Lucid Evolution.
-- `@lucid-evolution/bip39`: Package for BIP-39 mnemonic code.
-- `@lucid-evolution/core-types`: Core types used across Lucid Evolution packages.
-- `@lucid-evolution/core-utils`: Core utilities used across Lucid Evolution packages.
-- `@lucid-evolution/crc8`: Package for CRC8 calculation.
-- `@lucid-evolution/plutus`: Package for Plutus integration.
-- `@lucid-evolution/provider`: Package for providing data.
-- `@lucid-evolution/sign_data`: Package for signing data.
-- `@lucid-evolution/utils`: Utility functions for Lucid Evolution.
-- `@lucid-evolution/wallet`: Wallet package for Lucid Evolution.
-- `@lucid-evolution/typescript-config`: Houses `tsconfig.json` files utilized across the `monorepo`.
-- `@lucid-evolution/eslint-config`: Contains ESLint configurations, including `eslint-config-next` and `eslint-config-prettier`.
+## Tech Stack
 
-All packages in Lucid Evolution are built using [TypeScript](https://www.typescriptlang.org/) and [ Effect ](https://effect.website/docs/why-effect). This combination enables us to manage side effects effectively, scale faster, and enhance type safety and developer experience.
+- [**TypeScript**](https://www.typescriptlang.org/): For static type checking
+- [**Effect**](https://effect.website/docs/why-effect): Manages side effects, facilitating the creation of effectful functions that track errors, handle synchronous and asynchronous operations, and provide error short-circuiting capabilities
+- [**ESLint**](https://eslint.org/): For code linting
+- [**Prettier**](https://prettier.io): For code formatting
 
-### Utilities
+## Getting Started
 
-The monorepo is equipped with essential tools to facilitate development workflows:
+### Installation
 
-- [TypeScript](https://www.typescriptlang.org/) for static type checking
-- [Effect](https://effect.website/docs/why-effect) Manages side effects, facilitating the creation of effectful functions that track errors, handle synchronous and asynchronous operations, and provide error short-circuiting capabilities.
-- [ESLint](https://eslint.org/) for code linting
-- [Prettier](https://prettier.io) for code formatting
+```
+git clone https://github.com/Anastasia-Labs/lucid-evolution.git
+cd lucid-evolution
+pnpm install
+```
 
 ### Build
 
-To build packages, run the following command:
+To build all packages:
 
 ```
-cd lucid-evolution
 pnpm build
 ```
 
-### Develop
+### Development
 
-To develop docs, run the following command and visit the custom `basePath` http://localhost:3000/lucid-evolution:
+To run the documentation site locally:
 
 ```
-cd lucid-evolution
 pnpm dev
 ```
 
-To test packages, run the following command:
+- Visit http://localhost:3000/lucid-evolution to view the docs
+
+### Testing
+
+Run tests across all packages:
 
 ```
 pnpm test
 ```
+
+### Code Quality
 
 To format files with prettier, run the following command:
 
@@ -84,16 +99,28 @@ To check linting, run the following command:
 pnpm lint
 ```
 
-### Remote Caching
+## Documentation
+
+For comprehensive documentation, please visit our [official documentation site](https://anastasia-labs.github.io/lucid-evolution/)
+
+## Remote Caching
 
 Lucid Evolution leverages the remote caching functionality provided by GitHub to optimize continuous integration (CI) pipelines.
 
-By default, local caching is employed. Although there are no immediate plans for remote caching, the repository remains adaptable to future enhancements.
+By default, local caching is employed. Although there are no immediate plans for remote caching, the repository remains adaptable to future enhancements
 
-### Contribution
+## Contributing
 
-Contributions to Lucid Evolution are welcome! Feel free to submit issues, feature requests, or pull requests to help improve the project.
+We welcome contributions to Lucid Evolution! Please feel free to submit issues, create pull requests, or engage in discussions to help improve the project
 
-### License
+## License
 
-Lucid Evolution is licensed under the MIT License, permitting unrestricted use, distribution, and modification.
+Lucid Evolution is open-source software licensed under the [MIT License](https://anastasia-labs.github.io/lucid-evolution/information/license)
+
+## Community
+
+Join our [Discord community](https://discord.gg/s89P9gpEff) for discussions, support, and updates
+
+---
+
+<p align="center">Developed with ❤️ by Anastasia Labs</p>

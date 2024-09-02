@@ -6,7 +6,7 @@ import { Callout, Steps, Cards, Tabs, FileTree } from "nextra/components";
 
 Lucid Evolution is an advanced off-chain framework for Cardano. This guide will help you install the necessary packages to start building with Lucid Evolution
 
-<div style={{ marginBottom: "6rem" }}></div>
+<div style={{ marginBottom: "4rem" }}></div>
 
 # Package Managers
 
@@ -14,29 +14,23 @@ Lucid Evolution is an advanced off-chain framework for Cardano. This guide will 
 
 <Tabs items={['Node.js', 'Bun']}>
   <Tabs.Tab>
-  <Callout type="info">
-  Ensure you have Node.js version 14 or higher installed on your system before proceeding.
-  </Callout>
     <Tabs items={['pnpm', 'npm', 'yarn']}>
       <Tabs.Tab>
         **pnpm** Fast, disk space efficient package manager
         ```bash
-        # Installing the lucid package will export all other packages as well
         pnpm i @lucid-evolution/lucid 
         ```
       </Tabs.Tab>
       <Tabs.Tab>
         **npm** is a package manager for JavaScript
         ```bash
-        # For example, if you only want to query utxos and don't need the rest of the library
-        npm i @lucid-evolution/provider 
+        npm i @lucid-evolution/lucid 
         ```
       </Tabs.Tab>
       <Tabs.Tab>
         **Yarn** is a software packaging system
         ```bash
-        # Only installing the utils package, each individual package can be installed on its own
-        yarn add @lucid-evolution/utils 
+        yarn add @lucid-evolution/lucid  
         ```
       </Tabs.Tab>
     </Tabs>
@@ -45,12 +39,19 @@ Lucid Evolution is an advanced off-chain framework for Cardano. This guide will 
 
     **Bun**: An all-in-one JavaScript runtime, bundler, and package manager
     ```bash
-    # Only installing the plutus package
-    bun i @lucid-evolution/plutus
+    bun i @lucid-evolution/lucid
     ```
 
   </Tabs.Tab>
 </Tabs>
+
+<Callout type="info">
+Ensure you have Node.js version 14 or higher installed on your system before trying to install Lucid Evolution
+</Callout>  
+
+<Callout type="info">
+Installing the `lucid` package will automatically export all other packages in the library as well
+</Callout>  
 
 <div style={{ marginBottom: "6rem" }}></div>
 
@@ -94,6 +95,10 @@ Lucid Evolution separates packages to allow users to import only what they need,
   </FileTree.Folder>
 </FileTree>
 
+<Callout>
+If you only want to query utxos and don't need the rest of the library, you could install the `@lucid-evolution/utils` package
+</Callout>
+
 <div style={{ marginBottom: "6rem" }}></div>
 
 # Next Steps
@@ -103,15 +108,15 @@ Lucid Evolution separates packages to allow users to import only what they need,
 Now that you've installed Lucid Evolution, you're ready to start building! Check out these resources to get started:
 
 <Cards>
-  <Cards.Card icon="🚀" title=" Quickstart Guide" href="/" />
+  <Cards.Card icon="⚡" title=" Quickstart" href="/" />
   <Cards.Card
-    icon="📘"
-    title=" API Documentation"
+    icon="📕"
+    title=" Documentation"
     href="/documentation/core-concepts/instantiate-evolution"
   />
   <Cards.Card
     icon="💡"
-    title=" Example Projects"
+    title=" Examples"
     href="/documentation/examples/hello-world"
   />
 </Cards>

@@ -27,8 +27,6 @@ const spend_val: SpendingValidator = {
 Datums and redeemers are crucial for interacting with validators
 
 ```typescript
-import { Constr, Data } from "@lucid-evolution/plutus";
-
 const datum = Data.to(new Constr(0, [publicKeyHash]));
 const redeemer = Data.to(new Constr(0, [fromText("Hello, World!")]));
 ```
@@ -82,8 +80,6 @@ const tx = await lucid
 Some validators are parameterized, you can apply parameters dynamically
 
 ```typescript
-import { applyParamsToScript } from "@lucid-evolution/utils";
-
 const mintingPolicy = {
   type: "PlutusV2",
   script: applyParamsToScript(
