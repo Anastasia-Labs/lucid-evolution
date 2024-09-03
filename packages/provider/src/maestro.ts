@@ -82,7 +82,7 @@ export class Maestro implements Provider {
           ),
         ),
         PlutusV3: Object.fromEntries(
-          result.plutus_cost_models.plutus_v2.map(
+          result.plutus_cost_models.plutus_v3.map(
             (value: number, index: number) => [index.toString(), value],
           ),
         ),
