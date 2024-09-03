@@ -2,7 +2,6 @@ import Image from "next/image";
 import { useRouter } from "next/router";
 
 export default {
-  
   project: {
     link: "https://github.com/Anastasia-Labs/lucid-evolution",
   },
@@ -17,7 +16,7 @@ export default {
       };
     }
     return {
-      title: "Lucid Evolution - Home",
+      title: "Lucid Evolution - Welcome",
     };
   },
 
@@ -34,13 +33,12 @@ export default {
       />
     </>
   ),
-  faviconGlyph: "📕",
   sidebar: {
     defaultMenuCollapseLevel: 1,
     toggleButton: true,
     autoCollapse: true,
   },
-  
+
   darkMode: false,
 
   search: {
@@ -83,8 +81,33 @@ export default {
   editLink: {
     text: "Contribute to this page →",
   },
+
   head: (
     <>
+      <link
+        rel="icon"
+        type="image/svg+xml"
+        sizes="any"
+        href="https://avatars.githubusercontent.com/u/125997902?s=200&v=4"
+      />
+      <meta
+        name="twitter:image"
+        content="https://anastasialabs.com/assets/img/logo/logo.png"
+      />
+      <meta name="twitter:site:domain" content="https://anastasialabs.com/" />
+      <script
+        dangerouslySetInnerHTML={{
+          __html: `
+            if (!window.localStorage.getItem("theme_default")) {
+              window.localStorage.setItem("theme", "dark");
+              window.localStorage.setItem("theme_default", "dark");
+              document.documentElement.classList.add("dark");
+              document.documentElement.classList.remove("light");
+            }
+          `,
+        }}
+      />
+
       <style>{`
               
         .nextra-nav-container nav a:hover {
@@ -142,7 +165,7 @@ export default {
                       </a>
                     </li>
                     <li>
-                      <a href="/api-reference">API Reference</a>
+                      <a href="https://anastasialabs.com">Anastasia Labs</a>
                     </li>
                   </ul>
                 </div>
@@ -153,7 +176,7 @@ export default {
                       <a href="https://discord.gg/s89P9gpEff">Discord</a>
                     </li>
                     <li>
-                      <a href="https://x.com/AnastasiaLabs">Twitter</a>
+                      <a href="https://x.com/AnastasiaLabs">X</a>
                     </li>
                   </ul>
                 </div>

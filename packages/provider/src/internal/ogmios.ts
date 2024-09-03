@@ -1,5 +1,7 @@
 import * as S from "@effect/schema/Schema";
+import { fromUnit } from "@lucid-evolution/utils";
 import { Record } from "effect";
+import * as CoreType from "@lucid-evolution/core-types";
 
 export const JSONRPCSchema = <A, I, R>(schema: S.Schema<A, I, R>) =>
   S.extend(
@@ -10,10 +12,6 @@ export const JSONRPCSchema = <A, I, R>(schema: S.Schema<A, I, R>) =>
     }),
     S.Union(S.Struct({ result: schema }), S.Struct({ error: S.Object })),
   );
-
-// export type ProtocolParameters = S.Schema.Type<typeof ProtocolParametersSchema>;
-export interface ProtocolParameters
-  extends S.Schema.Type<typeof ProtocolParametersSchema> {}
 
 const LovelaceAsset = S.Struct({
   lovelace: S.Number,
@@ -105,48 +103,10 @@ export const ProtocolParametersSchema = S.Struct({
   version: S.Struct({ major: S.Number, minor: S.Number }),
 });
 
-export const KupoValueSchema = S.Struct({
-  coins: S.Number,
-  assets: S.Record(S.String, S.Number),
-});
-export interface KupoValue extends S.Schema.Type<typeof KupoValueSchema> {}
+export interface ProtocolParameters
+  extends S.Schema.Type<typeof ProtocolParametersSchema> {}
 
-export const KupoUTxO = S.Struct({
-  transaction_index: S.Number,
-  transaction_id: S.String,
-  output_index: S.Number,
-  address: S.String,
-  value: KupoValueSchema,
-  datum_hash: S.NullOr(S.String),
-  datum_type: S.optional(S.Literal("hash", "inline")),
-  script_hash: S.NullOr(S.String),
-  created_at: S.Struct({
-    slot_no: S.Number,
-    header_hash: S.String,
-  }),
-  spent_at: S.NullOr(
-    S.Struct({
-      slot_no: S.Number,
-      header_hash: S.String,
-    }),
-  ),
-});
-
-export interface KupoUTxO extends S.Schema.Type<typeof KupoUTxO> {}
-
-export const KupoScriptSchema = S.NullOr(
-  S.Struct({
-    language: S.Literal("native", "plutus:v1", "plutus:v2", "plutus:v3"),
-    script: S.String,
-  }),
-);
-export type KupoScript = S.Schema.Type<typeof KupoScriptSchema>;
-
-export const KupoDatumSchema = S.NullOr(S.Struct({ datum: S.String }));
-
-export type KupoDatum = S.Schema.Type<typeof KupoDatumSchema>;
-
-export const KupoDelegation = S.NullOr(
+export const Delegation = S.NullOr(
   S.Record(
     S.String,
     S.Struct({
@@ -158,22 +118,78 @@ export const KupoDelegation = S.NullOr(
 );
 
 type Script = {
-  language: "plutus:V1" | "plutus:v2" | "plutus:v3";
+  language: "plutus:v1" | "plutus:v2" | "plutus:v3";
   cbor: string;
 };
 
+export type Assets = Record<string, Record<string, number>>;
+
 export type Value = {
   ada: { lovelace: number };
-} & Asset;
+} & Assets;
 
-export type Asset = Record<string, Record<string, number>>;
-
-export type AdditionalUTxOs = ReadonlyArray<{
+export type UTxO = {
   transaction: { id: string };
   index: number;
   address: string;
   value: Value;
   datumHash?: string | null;
   datum?: string | null;
-  script: Script;
-}>;
+  script?: Script | null;
+};
+
+export const RedeemerSchema = S.Struct({
+  validator: S.Struct({
+    purpose: S.String,
+    index: S.Int,
+  }),
+  budget: S.Struct({
+    memory: S.Int,
+    cpu: S.Int,
+  }),
+});
+
+export const toOgmiosUTxOs = (utxos: CoreType.UTxO[] | undefined): UTxO[] => {
+  const toOgmiosScript = (
+    scriptRef: CoreType.UTxO["scriptRef"],
+  ): UTxO["script"] | null => {
+    if (scriptRef) {
+      switch (scriptRef.type) {
+        case "PlutusV1":
+          return { language: "plutus:v1", cbor: scriptRef.script };
+        case "PlutusV2":
+          return { language: "plutus:v2", cbor: scriptRef.script };
+        case "PlutusV3":
+          return { language: "plutus:v3", cbor: scriptRef.script };
+        default:
+          return null;
+      }
+    }
+  };
+  const toOgmiosAssets = (assets: CoreType.Assets): Assets => {
+    const newAssets: Assets = {};
+    Object.entries(assets).map(([unit, amount]) => {
+      if (unit == "lovelace") return;
+      const { policyId, assetName } = fromUnit(unit);
+      newAssets[policyId][assetName ? assetName : ""] = Number(amount);
+    });
+    return newAssets;
+  };
+
+  return (utxos || []).map(
+    (utxo): UTxO => ({
+      transaction: {
+        id: utxo.txHash,
+      },
+      index: utxo.outputIndex,
+      address: utxo.address,
+      value: {
+        ada: { lovelace: Number(utxo.assets["lovelace"]) },
+        ...toOgmiosAssets(utxo.assets),
+      },
+      datumHash: utxo.datumHash,
+      datum: utxo.datum,
+      script: toOgmiosScript(utxo.scriptRef),
+    }),
+  );
+};

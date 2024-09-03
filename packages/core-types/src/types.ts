@@ -281,3 +281,12 @@ export type Metadata = {
   };
   444: Metadata["222"] & { decimals?: number };
 };
+
+export type DatumJson = {
+  int?: number;
+  bytes?: string;
+  list?: Array<DatumJson>;
+  map?: Array<{ k: unknown; v: unknown }>;
+  fields?: Array<DatumJson>;
+  [constructor: string]: unknown; // number; constructor needs to be simulated like this as optional argument
+};

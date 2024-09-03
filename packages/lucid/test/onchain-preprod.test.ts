@@ -14,6 +14,7 @@ import * as MintBurnEndpoints from "./specs/mint-burn.js";
 import * as ParametrizedEndpoints from "./specs/hello-params.js";
 import * as TxChain from "./specs/tx-chaining.js";
 import * as MetadataEndpoint from "./specs/metadata.js";
+import * as WalletEndpoint from "./specs/wallet.js";
 
 describe.sequential("Onchain testing", () => {
   test("TxChain", async () => {
@@ -270,9 +271,21 @@ describe.sequential("Onchain testing", () => {
     expect(exit._tag).toBe("Success");
   });
 
-  test("Mint Test - Pay ADA", async () => {
+  test("Mint Test - Pay", async () => {
     const program = pipe(
       MintBurnEndpoints.pay,
+      Effect.provide(User.layer),
+      Effect.provide(NetworkConfig.layerPreprod),
+    );
+    const exit = await Effect.runPromiseExit(program);
+    expect(exit._tag).toBe("Success");
+  });
+
+  // Helps recycle utxos when the coin selection algorithm is set to Largest first
+  // and reduce UTxO bloat in wallet
+  test("recycleUTxOs", async () => {
+    const program = pipe(
+      WalletEndpoint.recycleUTxOs,
       Effect.provide(User.layer),
       Effect.provide(NetworkConfig.layerPreprod),
     );

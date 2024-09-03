@@ -1,4 +1,17 @@
+import {
+  HttpClient,
+  HttpClientRequest,
+  HttpClientResponse,
+} from "@effect/platform";
+import { HttpBodyError } from "@effect/platform/HttpBody";
+import { HttpClientError } from "@effect/platform/HttpClientError";
+import { ArrayFormatter } from "@effect/schema";
 import * as S from "@effect/schema/Schema";
+import { Effect, pipe } from "effect";
+import * as CoreType from "@lucid-evolution/core-types";
+import { applyDoubleCborEncoding } from "@lucid-evolution/utils";
+import { ParseError } from "@effect/schema/ParseResult";
+import { TimeoutException } from "effect/Cause";
 
 export const ProtocolParametersSchema = S.Struct({
   pvt_motion_no_confidence: S.Number,
@@ -63,7 +76,7 @@ export const ProtocolParametersSchema = S.Struct({
 export interface ProtocolParameters
   extends S.Schema.Type<typeof ProtocolParametersSchema> {}
 
-export const KoiosAssetSchema = S.Struct({
+export const AssetSchema = S.Struct({
   policy_id: S.String,
   asset_name: S.NullOr(S.String),
   fingerprint: S.String,
@@ -71,7 +84,7 @@ export const KoiosAssetSchema = S.Struct({
   quantity: S.String,
 });
 
-export interface KoiosAsset extends S.Schema.Type<typeof KoiosAssetSchema> {}
+export interface Asset extends S.Schema.Type<typeof AssetSchema> {}
 
 const ReferenceScriptSchema = S.Struct({
   hash: S.NullOr(S.String),
@@ -84,7 +97,7 @@ const ReferenceScriptSchema = S.Struct({
 export interface ReferenceScript
   extends S.Schema.Type<typeof ReferenceScriptSchema> {}
 
-export const KoiosUTxOSchema = S.Struct({
+export const UTxOSchema = S.Struct({
   tx_hash: S.String,
   tx_index: S.Number,
   block_time: S.Number,
@@ -98,27 +111,26 @@ export const KoiosUTxOSchema = S.Struct({
     }),
   ),
   reference_script: S.NullOr(ReferenceScriptSchema),
-  asset_list: S.NullOr(S.Array(KoiosAssetSchema)),
+  asset_list: S.NullOr(S.Array(AssetSchema)),
 });
 
-export interface KoiosUTxO extends S.Schema.Type<typeof KoiosUTxOSchema> {}
+export interface UTxO extends S.Schema.Type<typeof UTxOSchema> {}
 
-export const KoiosAddressInfoSchema = S.Array(
+export const AddressInfoSchema = S.Array(
   S.NullishOr(
     S.Struct({
       address: S.String,
       balance: S.String,
       stake_address: S.NullOr(S.String),
       script_address: S.Boolean,
-      utxo_set: S.Array(KoiosUTxOSchema),
+      utxo_set: S.Array(UTxOSchema),
     }),
   ),
 );
 
-export interface KoiosAddressInfo
-  extends S.Schema.Type<typeof KoiosAddressInfoSchema> {}
+export interface AddressInfo extends S.Schema.Type<typeof AddressInfoSchema> {}
 
-export const KoiosInputOutputSchema = S.Struct({
+export const InputOutputSchema = S.Struct({
   payment_addr: S.Struct({
     bech32: S.String,
     cred: S.String,
@@ -135,13 +147,12 @@ export const KoiosInputOutputSchema = S.Struct({
     }),
   ),
   reference_script: S.NullOr(ReferenceScriptSchema),
-  asset_list: S.Array(KoiosAssetSchema),
+  asset_list: S.Array(AssetSchema),
 });
 
-export interface KoiosInputOutput
-  extends S.Schema.Type<typeof KoiosInputOutputSchema> {}
+export interface InputOutput extends S.Schema.Type<typeof InputOutputSchema> {}
 
-export const KoiosTxInfoSchema = S.Struct({
+export const TxInfoSchema = S.Struct({
   tx_hash: S.String,
   block_hash: S.String,
   block_height: S.Number,
@@ -157,11 +168,11 @@ export const KoiosTxInfoSchema = S.Struct({
   deposit: S.String,
   invalid_before: S.NullOr(S.String),
   invalid_after: S.NullOr(S.String),
-  collateral_inputs: S.NullOr(S.Array(KoiosInputOutputSchema)),
-  collateral_output: S.NullOr(KoiosInputOutputSchema),
-  reference_inputs: S.NullOr(S.Array(KoiosInputOutputSchema)),
-  inputs: S.Array(KoiosInputOutputSchema),
-  outputs: S.Array(KoiosInputOutputSchema),
+  collateral_inputs: S.NullOr(S.Array(InputOutputSchema)),
+  collateral_output: S.NullOr(InputOutputSchema),
+  reference_inputs: S.NullOr(S.Array(InputOutputSchema)),
+  inputs: S.Array(InputOutputSchema),
+  outputs: S.Array(InputOutputSchema),
   withdrawals: S.NullOr(
     S.Array(
       S.Struct({
@@ -170,7 +181,7 @@ export const KoiosTxInfoSchema = S.Struct({
       }),
     ),
   ),
-  assets_minted: S.NullOr(S.Array(KoiosAssetSchema)),
+  assets_minted: S.NullOr(S.Array(AssetSchema)),
   metadata: S.NullOr(S.Object),
   certificates: S.NullOr(
     S.Array(
@@ -232,4 +243,127 @@ export const KoiosTxInfoSchema = S.Struct({
   proposal_procedures: S.Object,
 });
 
-export interface KoiosTxInfo extends S.Schema.Type<typeof KoiosTxInfoSchema> {}
+export interface TxInfo extends S.Schema.Type<typeof TxInfoSchema> {}
+
+export const TxHashSchema = S.String;
+
+export const AssetAddressSchema = S.Struct({
+  payment_address: S.String,
+  stake_address: S.NullOr(S.String),
+  quantity: S.String,
+});
+
+export interface AssetAddress
+  extends S.Schema.Type<typeof AssetAddressSchema> {}
+
+//NOTE: account_info schema is not complete
+// https://preprod.koios.rest/#post-/account_info
+export const AccountInfoSchema = S.Struct({
+  delegated_pool: S.NullOr(S.String),
+  rewards_available: S.NumberFromString,
+});
+
+//NOTE: datum_info schema is not complete
+// https://preprod.koios.rest/#post-/datum_info
+export const DatumInfo = S.Struct({
+  bytes: S.String,
+});
+
+export const postWithSchemaValidation = <A, I, R>(
+  url: string | URL,
+  data: unknown,
+  schema: S.Schema<A, I, R>,
+): Effect.Effect<A, HttpClientError | HttpBodyError | ParseError, R> =>
+  pipe(
+    HttpClientRequest.post(url),
+    HttpClientRequest.jsonBody(data),
+    Effect.flatMap(HttpClient.fetchOk),
+    HttpClientResponse.json,
+    Effect.flatMap(S.decodeUnknown(schema)),
+    // Effect.scoped
+  );
+
+export const getWithSchemaValidation = <A, I, R>(
+  url: string | URL,
+  schema: S.Schema<A, I, R>,
+) =>
+  pipe(
+    HttpClientRequest.get(url),
+    HttpClient.fetchOk,
+    HttpClientResponse.json,
+    Effect.flatMap(S.decodeUnknown(schema)),
+  );
+
+export const toUTxO = (koiosUTxO: UTxO, address: string): CoreType.UTxO => ({
+  txHash: koiosUTxO.tx_hash,
+  outputIndex: koiosUTxO.tx_index,
+  assets: (() => {
+    const a: CoreType.Assets = {};
+    if (koiosUTxO.asset_list) {
+      koiosUTxO.asset_list.forEach((am: Asset) => {
+        a[am.policy_id + am.asset_name] = BigInt(am.quantity);
+      });
+    }
+    a["lovelace"] = BigInt(koiosUTxO.value);
+    return a;
+  })(),
+  address: address,
+  datumHash: koiosUTxO.inline_datum
+    ? undefined
+    : koiosUTxO.datum_hash || undefined,
+  datum: koiosUTxO.inline_datum ? koiosUTxO.inline_datum.bytes : undefined,
+  scriptRef: toScriptRef(koiosUTxO.reference_script),
+});
+
+export const toScriptRef = (
+  reference_script: ReferenceScript | null,
+): CoreType.Script | undefined => {
+  if (reference_script && reference_script.bytes && reference_script.type) {
+    switch (reference_script.type) {
+      case "plutusV1":
+        return {
+          type: "PlutusV1" as const,
+          script: applyDoubleCborEncoding(reference_script.bytes),
+        };
+      case "plutusV2":
+        return {
+          type: "PlutusV2" as const,
+          script: applyDoubleCborEncoding(reference_script.bytes),
+        };
+      case "plutusV3":
+        return {
+          type: "PlutusV3" as const,
+          script: applyDoubleCborEncoding(reference_script.bytes),
+        };
+      default:
+        return undefined;
+    }
+  }
+};
+
+export const getUtxosEffect = (
+  baseUrl: string,
+  addressOrCredential: CoreType.Address | CoreType.Credential,
+): Effect.Effect<
+  CoreType.UTxO[],
+  string | HttpClientError | HttpBodyError | ParseError
+> => {
+  const url = `${baseUrl}/address_info`;
+  const body = {
+    _addresses: [addressOrCredential],
+  };
+  const schema = AddressInfoSchema;
+  const result = pipe(
+    Effect.if(typeof addressOrCredential === "string", {
+      onFalse: () =>
+        Effect.fail("Credential Type is not supported in Koios yet."),
+      onTrue: () => postWithSchemaValidation(url, body, schema),
+    }),
+    Effect.map(([result]) =>
+      result
+        ? result.utxo_set.map((koiosUtxo) => toUTxO(koiosUtxo, result.address))
+        : [],
+    ),
+  );
+  return result;
+};

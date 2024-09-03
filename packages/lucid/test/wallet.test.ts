@@ -1,12 +1,15 @@
 import { assert, describe, test } from "vitest";
 import {
   Blockfrost,
+  fromHex,
   generateSeedPhrase,
+  getAddressDetails,
   Lucid,
   Maestro,
   MaestroSupportedNetworks,
 } from "../src/index.js";
 import { Config, Effect } from "effect";
+import { CML } from "../src/core.js";
 
 const loadConfig = Effect.gen(function* () {
   return yield* Config.all([
@@ -76,6 +79,28 @@ describe("Wallet", () => {
       );
       const utxos = yield* Effect.promise(() => user.wallet().getUtxos());
       assert(utxos);
+    });
+    await Effect.runPromise(program);
+  });
+
+  test("selectWallet.fromPrivateKey", async () => {
+    const program = Effect.gen(function* () {
+      const privateKey = CML.PrivateKey.generate_ed25519().to_bech32();
+      const [VITE_API_URL, VITE_BLOCKFROST_KEY] = yield* loadConfig;
+
+      const user = yield* Effect.tryPromise(() =>
+        Lucid(new Blockfrost(VITE_API_URL, VITE_BLOCKFROST_KEY), NETWORK),
+      );
+      user.selectWallet.fromPrivateKey(privateKey);
+
+      const address = yield* Effect.promise(() => user.wallet().address());
+      const addressDetails = getAddressDetails(address);
+      const paymentCredential = addressDetails.paymentCredential;
+      if (paymentCredential) {
+        assert.equal(fromHex(paymentCredential.hash).length, 28);
+      } else {
+        assert.isNotNull(paymentCredential);
+      }
     });
     await Effect.runPromise(program);
   });

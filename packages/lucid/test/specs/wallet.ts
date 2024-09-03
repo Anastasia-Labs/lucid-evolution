@@ -6,9 +6,17 @@ export const recycleUTxOs = Effect.gen(function* ($) {
   const { user } = yield* User;
   const allUtxos = yield* Effect.tryPromise(() => user.wallet().getUtxos());
 
-  const signBuilder = yield* user
-    .newTx()
-    .collectFrom(_Array.take(allUtxos, 5))
-    .completeProgram();
-  return signBuilder;
+  // Clean up wallet with many UTxOs
+  // TODO: Use compose() when fixed
+  if (allUtxos.length > 40) {
+    return yield* user
+      .newTx()
+      .collectFrom(allUtxos.slice(30))
+      .completeProgram();
+  } else {
+    return yield* user
+      .newTx()
+      .collectFrom(_Array.take(allUtxos, 5))
+      .completeProgram();
+  }
 }).pipe(Effect.flatMap(handleSignSubmit), withLogRetry, Effect.orDie);

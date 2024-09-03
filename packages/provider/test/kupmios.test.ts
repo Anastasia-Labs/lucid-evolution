@@ -95,4 +95,26 @@ describe("Kupmios", async () => {
     const redeemers = await kupmios.evaluateTx(cbor);
     assert.equal(Array.from(redeemers).length, 1);
   });
+
+  test("evaluates additonal utxos - sample 1", async () => {
+    const redeemers = await kupmios.evaluateTx(
+      PreprodConstants.evalSample1.transaction,
+      PreprodConstants.evalSample1.utxos,
+    );
+    assert.deepStrictEqual(
+      redeemers,
+      PreprodConstants.evalSample1.redeemersExUnits,
+    );
+  });
+
+  test("evaluates additinal utxos - sample 2", async () => {
+    const redeemers = await kupmios.evaluateTx(
+      PreprodConstants.evalSample2.transaction,
+      PreprodConstants.evalSample2.utxos,
+    );
+    assert.deepStrictEqual(
+      redeemers,
+      PreprodConstants.evalSample2.redeemersExUnits,
+    );
+  });
 });

@@ -1,5 +1,41 @@
 # @lucid-evolution/lucid
 
+## 0.3.20
+
+### Patch Changes
+
+- [#279](https://github.com/Anastasia-Labs/lucid-evolution/pull/279) [`018fffc`](https://github.com/Anastasia-Labs/lucid-evolution/commit/018fffc39b97887521cf92296404757ebcfc709b) Thanks [@solidsnakedev](https://github.com/solidsnakedev)! - enable mainnet hardfork
+
+## 0.3.19
+
+### Patch Changes
+
+- [#276](https://github.com/Anastasia-Labs/lucid-evolution/pull/276) [`0a87f69`](https://github.com/Anastasia-Labs/lucid-evolution/commit/0a87f692dddc0e080831ac39a7aaa243f0122fbf) Thanks [@solidsnakedev](https://github.com/solidsnakedev)! - add missing types to selectWallet.fromSeed; export TxSubmit types
+
+- [#272](https://github.com/Anastasia-Labs/lucid-evolution/pull/272) [`56cbe22`](https://github.com/Anastasia-Labs/lucid-evolution/commit/56cbe228b8b1830415a9cb99d4ff66744959b07b) Thanks [@hadelive](https://github.com/hadelive)! - add sign by keyhash
+
+## 0.3.18
+
+### Patch Changes
+
+- [#273](https://github.com/Anastasia-Labs/lucid-evolution/pull/273) [`f119e2f`](https://github.com/Anastasia-Labs/lucid-evolution/commit/f119e2f64c3d5869f9a2b44832f267c45a6567e0) Thanks [@hadelive](https://github.com/hadelive)! - fix sellect wallet from private key
+
+- Updated dependencies [[`f119e2f`](https://github.com/Anastasia-Labs/lucid-evolution/commit/f119e2f64c3d5869f9a2b44832f267c45a6567e0)]:
+  - @lucid-evolution/provider@0.1.47
+  - @lucid-evolution/wallet@0.1.42
+
+## 0.3.17
+
+### Patch Changes
+
+- Updated dependencies [[`f8f905a`](https://github.com/Anastasia-Labs/lucid-evolution/commit/f8f905aeda20b30a03ba69e4b062a80a7a5be7de)]:
+  - @lucid-evolution/core-types@0.1.15
+  - @lucid-evolution/provider@0.1.46
+  - @lucid-evolution/utils@0.1.37
+  - @lucid-evolution/plutus@0.1.21
+  - @lucid-evolution/sign_data@0.1.18
+  - @lucid-evolution/wallet@0.1.41
+
 ## 0.3.16
 
 ### Patch Changes
