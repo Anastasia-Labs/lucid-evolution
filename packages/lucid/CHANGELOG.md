@@ -1,5 +1,14 @@
 # @lucid-evolution/lucid
 
+## 0.3.22
+
+### Patch Changes
+
+- [#283](https://github.com/Anastasia-Labs/lucid-evolution/pull/283) [`83cc37c`](https://github.com/Anastasia-Labs/lucid-evolution/commit/83cc37c801f29eaf4d4968f173cbe3e656f7e2a8) Thanks [@nikhils9](https://github.com/nikhils9)! - Export CML
+
+- Updated dependencies [[`8c76538`](https://github.com/Anastasia-Labs/lucid-evolution/commit/8c76538d3d64fc2698d858b1d6c5beaaeb594162)]:
+  - @lucid-evolution/provider@0.1.49
+
 ## 0.3.21
 
 ### Patch Changes
