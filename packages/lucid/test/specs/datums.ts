@@ -16,11 +16,7 @@ const alwaysSucceedScript: SpendingValidator = {
 export const payWithAsHashDatum = Effect.gen(function* ($) {
   const { user } = yield* User;
   const address = yield* Effect.promise(() => user.wallet().address());
-  const paymentCredential = paymentCredentialOf(address);
-  console.log("paymentCredential.hash :>> ", paymentCredential.hash);
   const scriptAddress = validatorToAddress("Preprod", alwaysSucceedScript);
-  const cred = paymentCredentialOf(scriptAddress);
-  console.log("cred.hash :>> ", cred.hash);
   const signBuilder = yield* user
     .newTx()
     .pay.ToContract(
