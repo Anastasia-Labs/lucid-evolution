@@ -1,5 +1,5 @@
 import { expect, it } from "vitest";
-import * as CML from "@anastasia-labs/cardano-multiplatform-lib-nodejs";
+import * as CML from "@dcspark/cardano-multiplatform-lib-nodejs";
 import { coreToUtxo } from "../src/index.js";
 import { UTxO } from "@lucid-evolution/core-types";
 

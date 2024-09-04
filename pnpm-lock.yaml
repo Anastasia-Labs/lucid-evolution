@@ -75,12 +75,12 @@ importers:
 
   packages/core-types:
     dependencies:
-      '@anastasia-labs/cardano-multiplatform-lib-browser':
-        specifier: ^5.3.1-3
-        version: 5.3.1-3
-      '@anastasia-labs/cardano-multiplatform-lib-nodejs':
-        specifier: ^5.3.1-3
-        version: 5.3.1-3
+      '@dcspark/cardano-multiplatform-lib-browser':
+        specifier: ^6.0.1
+        version: 6.0.1
+      '@dcspark/cardano-multiplatform-lib-nodejs':
+        specifier: ^6.0.1
+        version: 6.0.1
     devDependencies:
       '@types/node':
         specifier: ^20.12.8
@@ -94,12 +94,12 @@ importers:
 
   packages/core-utils:
     dependencies:
-      '@anastasia-labs/cardano-multiplatform-lib-browser':
-        specifier: ^5.3.1-3
-        version: 5.3.1-3
-      '@anastasia-labs/cardano-multiplatform-lib-nodejs':
-        specifier: ^5.3.1-3
-        version: 5.3.1-3
+      '@dcspark/cardano-multiplatform-lib-browser':
+        specifier: ^6.0.1
+        version: 6.0.1
+      '@dcspark/cardano-multiplatform-lib-nodejs':
+        specifier: ^6.0.1
+        version: 6.0.1
     devDependencies:
       '@types/node':
         specifier: ^20.12.8
@@ -152,12 +152,12 @@ importers:
 
   packages/lucid:
     dependencies:
-      '@anastasia-labs/cardano-multiplatform-lib-browser':
-        specifier: ^5.3.1-3
-        version: 5.3.1-3
-      '@anastasia-labs/cardano-multiplatform-lib-nodejs':
-        specifier: ^5.3.1-3
-        version: 5.3.1-3
+      '@dcspark/cardano-multiplatform-lib-browser':
+        specifier: ^6.0.1
+        version: 6.0.1
+      '@dcspark/cardano-multiplatform-lib-nodejs':
+        specifier: ^6.0.1
+        version: 6.0.1
       '@effect/schema':
         specifier: ^0.66.14
         version: 0.66.16(effect@3.5.6)(fast-check@3.20.0)
@@ -219,12 +219,12 @@ importers:
 
   packages/plutus:
     dependencies:
-      '@anastasia-labs/cardano-multiplatform-lib-browser':
-        specifier: ^5.3.1-3
-        version: 5.3.1-3
-      '@anastasia-labs/cardano-multiplatform-lib-nodejs':
-        specifier: ^5.3.1-3
-        version: 5.3.1-3
+      '@dcspark/cardano-multiplatform-lib-browser':
+        specifier: ^6.0.1
+        version: 6.0.1
+      '@dcspark/cardano-multiplatform-lib-nodejs':
+        specifier: ^6.0.1
+        version: 6.0.1
       '@lucid-evolution/core-types':
         specifier: workspace:*
         version: link:../core-types
@@ -247,12 +247,12 @@ importers:
 
   packages/provider:
     dependencies:
-      '@anastasia-labs/cardano-multiplatform-lib-browser':
-        specifier: ^5.3.1-3
-        version: 5.3.1-3
-      '@anastasia-labs/cardano-multiplatform-lib-nodejs':
-        specifier: ^5.3.1-3
-        version: 5.3.1-3
+      '@dcspark/cardano-multiplatform-lib-browser':
+        specifier: ^6.0.1
+        version: 6.0.1
+      '@dcspark/cardano-multiplatform-lib-nodejs':
+        specifier: ^6.0.1
+        version: 6.0.1
       '@effect/platform':
         specifier: ^0.59.2
         version: 0.59.2(@effect/schema@0.68.26)(effect@3.5.6)
@@ -290,12 +290,12 @@ importers:
 
   packages/sign_data:
     dependencies:
-      '@anastasia-labs/cardano-multiplatform-lib-browser':
-        specifier: ^5.3.1-3
-        version: 5.3.1-3
-      '@anastasia-labs/cardano-multiplatform-lib-nodejs':
-        specifier: ^5.3.1-3
-        version: 5.3.1-3
+      '@dcspark/cardano-multiplatform-lib-browser':
+        specifier: ^6.0.1
+        version: 6.0.1
+      '@dcspark/cardano-multiplatform-lib-nodejs':
+        specifier: ^6.0.1
+        version: 6.0.1
       '@emurgo/cardano-message-signing-browser':
         specifier: ^1.0.1
         version: 1.0.1
@@ -325,12 +325,12 @@ importers:
 
   packages/utils:
     dependencies:
-      '@anastasia-labs/cardano-multiplatform-lib-browser':
-        specifier: ^5.3.1-3
-        version: 5.3.1-3
-      '@anastasia-labs/cardano-multiplatform-lib-nodejs':
-        specifier: ^5.3.1-3
-        version: 5.3.1-3
+      '@dcspark/cardano-multiplatform-lib-browser':
+        specifier: ^6.0.1
+        version: 6.0.1
+      '@dcspark/cardano-multiplatform-lib-nodejs':
+        specifier: ^6.0.1
+        version: 6.0.1
       '@effect/schema':
         specifier: ^0.68.16
         version: 0.68.16(effect@3.4.6)
@@ -386,9 +386,9 @@ importers:
 
   packages/wallet:
     dependencies:
-      '@anastasia-labs/cardano-multiplatform-lib-nodejs':
-        specifier: ^5.3.1-3
-        version: 5.3.1-3
+      '@dcspark/cardano-multiplatform-lib-nodejs':
+        specifier: ^6.0.1
+        version: 6.0.1
       '@lucid-evolution/core-types':
         specifier: workspace:*
         version: link:../core-types
@@ -425,11 +425,11 @@ packages:
       '@jridgewell/trace-mapping': 0.3.25
     dev: true
 
-  /@anastasia-labs/cardano-multiplatform-lib-browser@5.3.1-3:
+  /@dcspark/cardano-multiplatform-lib-browser@6.0.1:
     resolution: {integrity: sha512-SQRufQIMjpzgwAgjrmw8UQ80rmgRakyjtYUUx0ayiPKpakFzCN3yFRe9MZY5kPsHes87Rj75xqpitXD1MfddrQ==}
     dev: false
 
-  /@anastasia-labs/cardano-multiplatform-lib-nodejs@5.3.1-3:
+  /@dcspark/cardano-multiplatform-lib-nodejs@6.0.1:
     resolution: {integrity: sha512-GZS9K6BJM0jJNN3m1brvq3KtSU/36tfiXnj0ChOwNZfCHU9pK0KgGRLhsN87jv6eJLEvbpr/QQr96zjHcwQIyg==}
     dev: false
 
