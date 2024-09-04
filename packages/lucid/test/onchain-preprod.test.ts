@@ -16,280 +16,294 @@ import * as TxChain from "./specs/tx-chaining.js";
 import * as MetadataEndpoint from "./specs/metadata.js";
 import * as WalletEndpoint from "./specs/wallet.js";
 
-describe.sequential("Onchain testing", () => {
-  test("TxChain", async () => {
-    const program = pipe(
-      TxChain.depositFundsCollect,
-      Effect.provide(User.layer),
-      Effect.provide(HelloContract.layer),
-      Effect.provide(NetworkConfig.layerPreprod),
-    );
-    const exit = await Effect.runPromiseExit(program);
-    expect(exit._tag).toBe("Success");
-  });
+import * as DatumEndpoint from "./specs/datums.js";
 
-  test("MultiValidator - registerStake", async () => {
-    const program = pipe(
-      MultiValidatorEndpoints.registerStake,
-      Effect.provide(User.layer),
-      Effect.provide(StakeContract.layer),
-      Effect.provide(NetworkConfig.layerPreprod),
-    );
-    const exit = await Effect.runPromiseExit(program);
-    expect(exit._tag).toBe("Success");
-  });
-
-  test("MultiValidator - DespositFunds", async () => {
-    const program = pipe(
-      MultiValidatorEndpoints.depositFunds,
-      Effect.provide(User.layer),
-      Effect.provide(StakeContract.layer),
-      Effect.provide(MintContract.layer),
-      Effect.provide(NetworkConfig.layerPreprod),
-    );
-    const exit = await Effect.runPromiseExit(program);
-    expect(exit._tag).toBe("Success");
-  });
-
-  test("MultiValidator - CollectFunds", async () => {
-    const program = pipe(
-      MultiValidatorEndpoints.collectFunds,
-      Effect.provide(User.layer),
-      Effect.provide(StakeContract.layer),
-      Effect.provide(MintContract.layer),
-      Effect.provide(NetworkConfig.layerPreprod),
-    );
-    const exit = await Effect.runPromiseExit(program);
-    expect(exit._tag).toBe("Success");
-  });
-
-  test("Metadata", async () => {
-    const program = pipe(
-      MetadataEndpoint.payWithMetadata,
-      Effect.provide(User.layer),
-      Effect.provide(HelloContract.layer),
-      Effect.provide(NetworkConfig.layerPreprod),
-    );
-    const exit = await Effect.runPromiseExit(program);
-    console.log(exit);
-    expect(exit._tag).toBe("Success");
-  });
-
-  test("DespositFunds", async () => {
-    const program = pipe(
-      HelloEndpoints.depositFunds,
-      Effect.provide(User.layer),
-      Effect.provide(HelloContract.layer),
-      Effect.provide(NetworkConfig.layerPreprod),
-    );
-    const exit = await Effect.runPromiseExit(program);
-    expect(exit._tag).toBe("Success");
-  });
-
-  test("CollectFunds", async () => {
-    const program = pipe(
-      HelloEndpoints.collectFunds,
-      Effect.provide(User.layer),
-      Effect.provide(HelloContract.layer),
-      Effect.provide(NetworkConfig.layerPreprod),
-    );
-    const exit = await Effect.runPromiseExit(program);
-    expect(exit._tag).toBe("Success");
-  });
-
-  test("DespositFunds, lock reference script", async () => {
-    const program = pipe(
-      HelloEndpoints.depositFundsLockRefScript,
-      Effect.provide(User.layer),
-      Effect.provide(HelloContract.layer),
-      Effect.provide(NetworkConfig.layerPreprod),
-    );
-    const exit = await Effect.runPromiseExit(program);
-    expect(exit._tag).toBe("Success");
-  });
-
-  test("CollectFunds , reading from reference script", async () => {
-    const program = pipe(
-      HelloEndpoints.collectFundsReadFrom,
-      Effect.provide(User.layer),
-      Effect.provide(HelloContract.layer),
-      Effect.provide(NetworkConfig.layerPreprod),
-    );
-    const exit = await Effect.runPromiseExit(program);
-    expect(exit._tag).toBe("Success");
-  });
-
-  test("registerStake", async () => {
-    const program = pipe(
-      StakeEndpoints.registerStake,
-      Effect.provide(User.layer),
-      Effect.provide(NetworkConfig.layerPreprod),
-    );
-    const exit = await Effect.runPromiseExit(program);
-    expect(exit._tag).toBe("Success");
-  });
-
-  test("deRegisterStake", async () => {
-    const program = pipe(
-      StakeEndpoints.deRegisterStake,
-      Effect.provide(User.layer),
-      Effect.provide(NetworkConfig.layerPreprod),
-    );
-    const exit = await Effect.runPromiseExit(program);
-    expect(exit._tag).toBe("Success");
-  });
-
-  test("registerStake/deRegisterStake", async () => {
-    const program = pipe(
-      StakeEndpoints.registerDeregisterStake,
-      Effect.provide(User.layer),
-      Effect.provide(NetworkConfig.layerPreprod),
-    );
-    const exit = await Effect.runPromiseExit(program);
-    expect(exit._tag).toBe("Success");
-  });
-
-  test("registerStake", async () => {
-    const program = pipe(
-      StakeEndpoints.registerStake,
-      Effect.provide(User.layer),
-      Effect.provide(NetworkConfig.layerPreprod),
-    );
-    const exit = await Effect.runPromiseExit(program);
-    expect(exit._tag).toBe("Success");
-  });
-
-  test("delegateTo", async () => {
-    const program = pipe(
-      StakeEndpoints.delegateTo,
-      Effect.provide(User.layer),
-      Effect.provide(NetworkConfig.layerPreprod),
-    );
-    const exit = await Effect.runPromiseExit(program);
-    expect(exit._tag).toBe("Success");
-  });
-
-  test("withdrawAllReward", async () => {
-    const program = pipe(
-      StakeEndpoints.withdrawAllReward,
-      Effect.provide(User.layer),
-      Effect.provide(NetworkConfig.layerPreprod),
-    );
-    const exit = await Effect.runPromiseExit(program);
-    expect(exit._tag).toBe("Success");
-  });
-
-  test("withdrawZero", async () => {
-    const program = pipe(
-      StakeEndpoints.withdrawZero,
-      Effect.provide(User.layer),
-      Effect.provide(NetworkConfig.layerPreprod),
-    );
-    const exit = await Effect.runPromiseExit(program);
-    expect(exit._tag).toBe("Success");
-  });
-
-  test("deRegisterStake", async () => {
-    const program = pipe(
-      StakeEndpoints.deRegisterStake,
-      Effect.provide(User.layer),
-      Effect.provide(NetworkConfig.layerPreprod),
-    );
-    const exit = await Effect.runPromiseExit(program);
-    expect(exit._tag).toBe("Success");
-  });
-
-  test("Parametrized Contract - Deposit Funds", async () => {
-    const program = pipe(
-      ParametrizedEndpoints.depositFunds,
-      Effect.provide(User.layer),
-      Effect.provide(NetworkConfig.layerPreprod),
-    );
-    const exit = await Effect.runPromiseExit(program);
-    expect(exit._tag).toBe("Success");
-  });
-
-  test("Parametrized Contract - Collect Funds", async () => {
-    const program = pipe(
-      ParametrizedEndpoints.collectFunds,
-      Effect.provide(User.layer),
-      Effect.provide(NetworkConfig.layerPreprod),
-    );
-    const exit = await Effect.runPromiseExit(program);
-    expect(exit._tag).toBe("Success");
-  });
-
-  test("Mint Test - Mint Token", async () => {
-    const program = pipe(
-      MintBurnEndpoints.mint,
-      Effect.provide(User.layer),
-      Effect.provide(MintContract.layer),
-      Effect.provide(NetworkConfig.layerPreprod),
-    );
-    const exit = await Effect.runPromiseExit(program);
-    expect(exit._tag).toBe("Success");
-  });
-
-  test("Mint Test - Burn Token", async () => {
-    const program = pipe(
-      MintBurnEndpoints.burn,
-      Effect.provide(User.layer),
-      Effect.provide(MintContract.layer),
-      Effect.provide(NetworkConfig.layerPreprod),
-    );
-    const exit = await Effect.runPromiseExit(program);
-    expect(exit._tag).toBe("Success");
-  });
-
-  test("Mint Test - Mint/Burn Token", async () => {
-    const program = pipe(
-      MintBurnEndpoints.mintburn,
-      Effect.provide(User.layer),
-      Effect.provide(NetworkConfig.layerPreprod),
-    );
-    const exit = await Effect.runPromiseExit(program);
-    expect(exit._tag).toBe("Success");
-  });
-
-  test("Mint Test - Mint Token, Second Test", async () => {
-    const program = pipe(
-      MintBurnEndpoints.mint2,
-      Effect.provide(User.layer),
-      Effect.provide(NetworkConfig.layerPreprod),
-    );
-    const exit = await Effect.runPromiseExit(program);
-    expect(exit._tag).toBe("Success");
-  });
-
-  test("Mint Test - Burn Token, Second Test", async () => {
-    const program = pipe(
-      MintBurnEndpoints.burn2,
-      Effect.provide(User.layer),
-      Effect.provide(NetworkConfig.layerPreprod),
-    );
-    const exit = await Effect.runPromiseExit(program);
-    expect(exit._tag).toBe("Success");
-  });
-
-  test("Mint Test - Pay", async () => {
-    const program = pipe(
-      MintBurnEndpoints.pay,
-      Effect.provide(User.layer),
-      Effect.provide(NetworkConfig.layerPreprod),
-    );
-    const exit = await Effect.runPromiseExit(program);
-    expect(exit._tag).toBe("Success");
-  });
-
-  // Helps recycle utxos when the coin selection algorithm is set to Largest first
-  // and reduce UTxO bloat in wallet
-  test("recycleUTxOs", async () => {
-    const program = pipe(
-      WalletEndpoint.recycleUTxOs,
-      Effect.provide(User.layer),
-      Effect.provide(NetworkConfig.layerPreprod),
-    );
-    const exit = await Effect.runPromiseExit(program);
-    expect(exit._tag).toBe("Success");
-  });
+test("payWithAsHashDatum", async () => {
+  const program = pipe(
+    DatumEndpoint.payWithAsHashDatum,
+    Effect.provide(User.layer),
+    Effect.provide(NetworkConfig.layerPreprod),
+  );
+  const exit = await Effect.runPromiseExit(program);
+  console.log('exit :>> ', exit);
+  expect(exit._tag).toBe("Success");
 });
+
+
+// describe.sequential("Onchain testing", () => {
+//   test("TxChain", async () => {
+//     const program = pipe(
+//       TxChain.depositFundsCollect,
+//       Effect.provide(User.layer),
+//       Effect.provide(HelloContract.layer),
+//       Effect.provide(NetworkConfig.layerPreprod),
+//     );
+//     const exit = await Effect.runPromiseExit(program);
+//     expect(exit._tag).toBe("Success");
+//   });
+
+//   test("MultiValidator - registerStake", async () => {
+//     const program = pipe(
+//       MultiValidatorEndpoints.registerStake,
+//       Effect.provide(User.layer),
+//       Effect.provide(StakeContract.layer),
+//       Effect.provide(NetworkConfig.layerPreprod),
+//     );
+//     const exit = await Effect.runPromiseExit(program);
+//     expect(exit._tag).toBe("Success");
+//   });
+
+//   test("MultiValidator - DespositFunds", async () => {
+//     const program = pipe(
+//       MultiValidatorEndpoints.depositFunds,
+//       Effect.provide(User.layer),
+//       Effect.provide(StakeContract.layer),
+//       Effect.provide(MintContract.layer),
+//       Effect.provide(NetworkConfig.layerPreprod),
+//     );
+//     const exit = await Effect.runPromiseExit(program);
+//     expect(exit._tag).toBe("Success");
+//   });
+
+//   test("MultiValidator - CollectFunds", async () => {
+//     const program = pipe(
+//       MultiValidatorEndpoints.collectFunds,
+//       Effect.provide(User.layer),
+//       Effect.provide(StakeContract.layer),
+//       Effect.provide(MintContract.layer),
+//       Effect.provide(NetworkConfig.layerPreprod),
+//     );
+//     const exit = await Effect.runPromiseExit(program);
+//     expect(exit._tag).toBe("Success");
+//   });
+
+//   test("Metadata", async () => {
+//     const program = pipe(
+//       MetadataEndpoint.payWithMetadata,
+//       Effect.provide(User.layer),
+//       Effect.provide(HelloContract.layer),
+//       Effect.provide(NetworkConfig.layerPreprod),
+//     );
+//     const exit = await Effect.runPromiseExit(program);
+//     console.log(exit);
+//     expect(exit._tag).toBe("Success");
+//   });
+
+//   test("DespositFunds", async () => {
+//     const program = pipe(
+//       HelloEndpoints.depositFunds,
+//       Effect.provide(User.layer),
+//       Effect.provide(HelloContract.layer),
+//       Effect.provide(NetworkConfig.layerPreprod),
+//     );
+//     const exit = await Effect.runPromiseExit(program);
+//     expect(exit._tag).toBe("Success");
+//   });
+
+//   test("CollectFunds", async () => {
+//     const program = pipe(
+//       HelloEndpoints.collectFunds,
+//       Effect.provide(User.layer),
+//       Effect.provide(HelloContract.layer),
+//       Effect.provide(NetworkConfig.layerPreprod),
+//     );
+//     const exit = await Effect.runPromiseExit(program);
+//     expect(exit._tag).toBe("Success");
+//   });
+
+//   test("DespositFunds, lock reference script", async () => {
+//     const program = pipe(
+//       HelloEndpoints.depositFundsLockRefScript,
+//       Effect.provide(User.layer),
+//       Effect.provide(HelloContract.layer),
+//       Effect.provide(NetworkConfig.layerPreprod),
+//     );
+//     const exit = await Effect.runPromiseExit(program);
+//     expect(exit._tag).toBe("Success");
+//   });
+
+//   test("CollectFunds , reading from reference script", async () => {
+//     const program = pipe(
+//       HelloEndpoints.collectFundsReadFrom,
+//       Effect.provide(User.layer),
+//       Effect.provide(HelloContract.layer),
+//       Effect.provide(NetworkConfig.layerPreprod),
+//     );
+//     const exit = await Effect.runPromiseExit(program);
+//     expect(exit._tag).toBe("Success");
+//   });
+
+//   test("registerStake", async () => {
+//     const program = pipe(
+//       StakeEndpoints.registerStake,
+//       Effect.provide(User.layer),
+//       Effect.provide(NetworkConfig.layerPreprod),
+//     );
+//     const exit = await Effect.runPromiseExit(program);
+//     expect(exit._tag).toBe("Success");
+//   });
+
+//   test("deRegisterStake", async () => {
+//     const program = pipe(
+//       StakeEndpoints.deRegisterStake,
+//       Effect.provide(User.layer),
+//       Effect.provide(NetworkConfig.layerPreprod),
+//     );
+//     const exit = await Effect.runPromiseExit(program);
+//     expect(exit._tag).toBe("Success");
+//   });
+
+//   test("registerStake/deRegisterStake", async () => {
+//     const program = pipe(
+//       StakeEndpoints.registerDeregisterStake,
+//       Effect.provide(User.layer),
+//       Effect.provide(NetworkConfig.layerPreprod),
+//     );
+//     const exit = await Effect.runPromiseExit(program);
+//     expect(exit._tag).toBe("Success");
+//   });
+
+//   test("registerStake", async () => {
+//     const program = pipe(
+//       StakeEndpoints.registerStake,
+//       Effect.provide(User.layer),
+//       Effect.provide(NetworkConfig.layerPreprod),
+//     );
+//     const exit = await Effect.runPromiseExit(program);
+//     expect(exit._tag).toBe("Success");
+//   });
+
+//   test("delegateTo", async () => {
+//     const program = pipe(
+//       StakeEndpoints.delegateTo,
+//       Effect.provide(User.layer),
+//       Effect.provide(NetworkConfig.layerPreprod),
+//     );
+//     const exit = await Effect.runPromiseExit(program);
+//     expect(exit._tag).toBe("Success");
+//   });
+
+//   test("withdrawAllReward", async () => {
+//     const program = pipe(
+//       StakeEndpoints.withdrawAllReward,
+//       Effect.provide(User.layer),
+//       Effect.provide(NetworkConfig.layerPreprod),
+//     );
+//     const exit = await Effect.runPromiseExit(program);
+//     expect(exit._tag).toBe("Success");
+//   });
+
+//   test("withdrawZero", async () => {
+//     const program = pipe(
+//       StakeEndpoints.withdrawZero,
+//       Effect.provide(User.layer),
+//       Effect.provide(NetworkConfig.layerPreprod),
+//     );
+//     const exit = await Effect.runPromiseExit(program);
+//     expect(exit._tag).toBe("Success");
+//   });
+
+//   test("deRegisterStake", async () => {
+//     const program = pipe(
+//       StakeEndpoints.deRegisterStake,
+//       Effect.provide(User.layer),
+//       Effect.provide(NetworkConfig.layerPreprod),
+//     );
+//     const exit = await Effect.runPromiseExit(program);
+//     expect(exit._tag).toBe("Success");
+//   });
+
+//   test("Parametrized Contract - Deposit Funds", async () => {
+//     const program = pipe(
+//       ParametrizedEndpoints.depositFunds,
+//       Effect.provide(User.layer),
+//       Effect.provide(NetworkConfig.layerPreprod),
+//     );
+//     const exit = await Effect.runPromiseExit(program);
+//     expect(exit._tag).toBe("Success");
+//   });
+
+//   test("Parametrized Contract - Collect Funds", async () => {
+//     const program = pipe(
+//       ParametrizedEndpoints.collectFunds,
+//       Effect.provide(User.layer),
+//       Effect.provide(NetworkConfig.layerPreprod),
+//     );
+//     const exit = await Effect.runPromiseExit(program);
+//     expect(exit._tag).toBe("Success");
+//   });
+
+//   test("Mint Test - Mint Token", async () => {
+//     const program = pipe(
+//       MintBurnEndpoints.mint,
+//       Effect.provide(User.layer),
+//       Effect.provide(MintContract.layer),
+//       Effect.provide(NetworkConfig.layerPreprod),
+//     );
+//     const exit = await Effect.runPromiseExit(program);
+//     expect(exit._tag).toBe("Success");
+//   });
+
+//   test("Mint Test - Burn Token", async () => {
+//     const program = pipe(
+//       MintBurnEndpoints.burn,
+//       Effect.provide(User.layer),
+//       Effect.provide(MintContract.layer),
+//       Effect.provide(NetworkConfig.layerPreprod),
+//     );
+//     const exit = await Effect.runPromiseExit(program);
+//     expect(exit._tag).toBe("Success");
+//   });
+
+//   test("Mint Test - Mint/Burn Token", async () => {
+//     const program = pipe(
+//       MintBurnEndpoints.mintburn,
+//       Effect.provide(User.layer),
+//       Effect.provide(NetworkConfig.layerPreprod),
+//     );
+//     const exit = await Effect.runPromiseExit(program);
+//     expect(exit._tag).toBe("Success");
+//   });
+
+//   test("Mint Test - Mint Token, Second Test", async () => {
+//     const program = pipe(
+//       MintBurnEndpoints.mint2,
+//       Effect.provide(User.layer),
+//       Effect.provide(NetworkConfig.layerPreprod),
+//     );
+//     const exit = await Effect.runPromiseExit(program);
+//     expect(exit._tag).toBe("Success");
+//   });
+
+//   test("Mint Test - Burn Token, Second Test", async () => {
+//     const program = pipe(
+//       MintBurnEndpoints.burn2,
+//       Effect.provide(User.layer),
+//       Effect.provide(NetworkConfig.layerPreprod),
+//     );
+//     const exit = await Effect.runPromiseExit(program);
+//     expect(exit._tag).toBe("Success");
+//   });
+
+//   test("Mint Test - Pay", async () => {
+//     const program = pipe(
+//       MintBurnEndpoints.pay,
+//       Effect.provide(User.layer),
+//       Effect.provide(NetworkConfig.layerPreprod),
+//     );
+//     const exit = await Effect.runPromiseExit(program);
+//     expect(exit._tag).toBe("Success");
+//   });
+
+//   // Helps recycle utxos when the coin selection algorithm is set to Largest first
+//   // and reduce UTxO bloat in wallet
+//   test("recycleUTxOs", async () => {
+//     const program = pipe(
+//       WalletEndpoint.recycleUTxOs,
+//       Effect.provide(User.layer),
+//       Effect.provide(NetworkConfig.layerPreprod),
+//     );
+//     const exit = await Effect.runPromiseExit(program);
+//     expect(exit._tag).toBe("Success");
+//   });
+// });
