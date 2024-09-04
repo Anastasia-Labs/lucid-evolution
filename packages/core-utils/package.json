@@ -31,8 +31,8 @@
     "@anastasia-labs/cardano-multiplatform-lib-nodejs": "@anastasia-labs/cardano-multiplatform-lib-browser"
   },
   "dependencies": {
-    "@anastasia-labs/cardano-multiplatform-lib-browser": "^5.3.1-3",
-    "@anastasia-labs/cardano-multiplatform-lib-nodejs": "^5.3.1-3"
+    "@anastasia-labs/cardano-multiplatform-lib-browser": "^6.0.1-2",
+    "@anastasia-labs/cardano-multiplatform-lib-nodejs": "^6.0.1-2"
   },
   "devDependencies": {
     "@types/node": "^20.12.8",
