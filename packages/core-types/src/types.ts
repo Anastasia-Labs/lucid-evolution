@@ -17,6 +17,7 @@ export type ProtocolParameters = {
   coinsPerUtxoByte: bigint;
   collateralPercentage: number;
   maxCollateralInputs: number;
+  minFeeRefScriptCostPerByte: number;
   costModels: CostModels;
 };
 

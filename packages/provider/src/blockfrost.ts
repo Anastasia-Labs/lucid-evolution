@@ -34,7 +34,6 @@ export class Blockfrost implements Provider {
     const result = await fetch(`${this.url}/epochs/latest/parameters`, {
       headers: { project_id: this.projectId, lucid },
     }).then((res) => res.json());
-
     return {
       minFeeA: parseInt(result.min_fee_a),
       minFeeB: parseInt(result.min_fee_b),
@@ -49,6 +48,9 @@ export class Blockfrost implements Provider {
       coinsPerUtxoByte: BigInt(result.coins_per_utxo_size),
       collateralPercentage: parseInt(result.collateral_percent),
       maxCollateralInputs: parseInt(result.max_collateral_inputs),
+      minFeeRefScriptCostPerByte: parseInt(
+        result.min_fee_ref_script_cost_per_byte,
+      ),
       costModels: result.cost_models,
     };
   }

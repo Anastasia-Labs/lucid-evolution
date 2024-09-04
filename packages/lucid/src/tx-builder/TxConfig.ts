@@ -20,7 +20,7 @@ export const makeTxConfig = (
       CML.LinearFee.new(
         BigInt(protocolParameters.minFeeA),
         BigInt(protocolParameters.minFeeB),
-        BigInt(15),
+        BigInt(protocolParameters.minFeeRefScriptCostPerByte),
       ),
     )
     .coins_per_utxo_byte(protocolParameters.coinsPerUtxoByte)
