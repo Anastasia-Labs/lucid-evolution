@@ -70,6 +70,9 @@ export class Maestro implements Provider {
       coinsPerUtxoByte: BigInt(result.min_utxo_deposit_coefficient),
       collateralPercentage: parseInt(result.collateral_percentage),
       maxCollateralInputs: parseInt(result.max_collateral_inputs),
+      minFeeRefScriptCostPerByte: parseInt(
+        result.min_fee_ref_script_cost_per_byte,
+      ),
       costModels: {
         PlutusV1: Object.fromEntries(
           result.plutus_cost_models.plutus_v1.map(

@@ -63,6 +63,7 @@ export class Koios implements Provider {
       coinsPerUtxoByte: result.coins_per_utxo_size,
       collateralPercentage: result.collateral_percent,
       maxCollateralInputs: result.max_collateral_inputs,
+      minFeeRefScriptCostPerByte: result.min_fee_ref_script_cost_per_byte,
       costModels: {
         PlutusV1: Object.fromEntries(
           result.cost_models.PlutusV1.map((value, index) => [

@@ -378,6 +378,7 @@ const toProtocolParameters = (
     coinsPerUtxoByte: BigInt(result.minUtxoDepositCoefficient),
     collateralPercentage: result.collateralPercentage,
     maxCollateralInputs: result.maxCollateralInputs,
+    minFeeRefScriptCostPerByte: result.minFeeReferenceScripts.base,
     costModels: {
       PlutusV1: Object.fromEntries(
         result.plutusCostModels["plutus:v1"].map((value, index) => [
