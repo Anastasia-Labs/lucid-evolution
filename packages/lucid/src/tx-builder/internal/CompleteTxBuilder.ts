@@ -31,7 +31,6 @@ import {
 } from "@lucid-evolution/utils";
 import { SLOT_CONFIG_NETWORK } from "@lucid-evolution/plutus";
 import { collectFromUTxO } from "./Collect.js";
-import { fromHex } from "@lucid-evolution/core-utils";
 
 export type CompleteOptions = {
   coinSelection?: boolean;

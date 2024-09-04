@@ -28,7 +28,7 @@ import {
 import { coreToUtxo, getAddressDetails } from "@lucid-evolution/utils";
 import { fromHex } from "@lucid-evolution/core-utils";
 import { walletFromSeed } from "@lucid-evolution/wallet";
-import { RedeemerTag } from "@anastasia-labs/cardano-multiplatform-lib-nodejs";
+import { RedeemerTag } from "@dcspark/cardano-multiplatform-lib-nodejs";
 
 /** Concatentation of txHash + outputIndex */
 type FlatOutRef = string;

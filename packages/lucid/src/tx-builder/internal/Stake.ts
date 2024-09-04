@@ -2,7 +2,7 @@ import { Lovelace, Redeemer, RewardAddress } from "@lucid-evolution/core-types";
 import * as TxBuilder from "../TxBuilder.js";
 import { Effect, pipe } from "effect";
 import { ERROR_MESSAGE, TxBuilderError } from "../../Errors.js";
-import * as CML from "@anastasia-labs/cardano-multiplatform-lib-nodejs";
+import * as CML from "@dcspark/cardano-multiplatform-lib-nodejs";
 import { toPartial, toV1, toV2, validateAddressDetails } from "./TxUtils.js";
 
 export const stakeError = (cause: unknown) =>
