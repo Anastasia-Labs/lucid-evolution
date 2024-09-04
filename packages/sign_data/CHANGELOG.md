@@ -1,5 +1,15 @@
 # @lucid-evolution/sign_data
 
+## 0.1.19
+
+### Patch Changes
+
+- [#285](https://github.com/Anastasia-Labs/lucid-evolution/pull/285) [`59a15c8`](https://github.com/Anastasia-Labs/lucid-evolution/commit/59a15c83e16c1bf22a44e1e05ff7480ef39cb631) Thanks [@hadelive](https://github.com/hadelive)! - bump cml to 6.0.1-2
+
+- Updated dependencies [[`59a15c8`](https://github.com/Anastasia-Labs/lucid-evolution/commit/59a15c83e16c1bf22a44e1e05ff7480ef39cb631)]:
+  - @lucid-evolution/core-types@0.1.16
+  - @lucid-evolution/core-utils@0.1.14
+
 ## 0.1.18
 
 ### Patch Changes
