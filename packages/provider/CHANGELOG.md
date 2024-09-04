@@ -1,5 +1,11 @@
 # @lucid-evolution/provider
 
+## 0.1.49
+
+### Patch Changes
+
+- [#282](https://github.com/Anastasia-Labs/lucid-evolution/pull/282) [`8c76538`](https://github.com/Anastasia-Labs/lucid-evolution/commit/8c76538d3d64fc2698d858b1d6c5beaaeb594162) Thanks [@hadelive](https://github.com/hadelive)! - fix maestro plutus v3 cost models
+
 ## 0.1.48
 
 ### Patch Changes
