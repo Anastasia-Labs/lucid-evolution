@@ -458,6 +458,13 @@ export class Emulator implements Provider {
             plutusHashesOptional.push(script.hash().to_hex());
             break;
           }
+          case "PlutusV3": {
+            const script = CML.PlutusScript.from_v3(
+              CML.PlutusV3Script.from_cbor_bytes(fromHex(scriptRef.script)),
+            );
+            plutusHashesOptional.push(script.hash().to_hex());
+            break;
+          }
         }
       }
 

@@ -1,6 +1,9 @@
 import { CML } from "./core.js";
 import { fromHex, sleep } from "@lucid-evolution/core-utils";
-import { applyDoubleCborEncoding } from "@lucid-evolution/utils";
+import {
+  applyDoubleCborEncoding,
+  scriptFromNative,
+} from "@lucid-evolution/utils";
 import {
   Address,
   Credential,
@@ -283,7 +286,11 @@ export class Blockfrost implements Provider {
                   ).then((res) => res.json());
                   switch (type) {
                     case "timelock":
-                      return undefined;
+                      const { json: script } = await fetch(
+                        `${this.url}/scripts/${r.reference_script_hash}/json`,
+                        { headers: { project_id: this.projectId, lucid } },
+                      ).then((res) => res.json());
+                      return scriptFromNative(script);
                     case "plutusV1":
                       return {
                         type: "PlutusV1",
