@@ -1,5 +1,11 @@
 # @lucid-evolution/provider
 
+## 0.1.51
+
+### Patch Changes
+
+- [#293](https://github.com/Anastasia-Labs/lucid-evolution/pull/293) [`9a4f765`](https://github.com/Anastasia-Labs/lucid-evolution/commit/9a4f7656c4f172ce0487a2c7b453a56cb9883921) Thanks [@hadelive](https://github.com/hadelive)! - feat: support reference native script
+
 ## 0.1.50
 
 ### Patch Changes
