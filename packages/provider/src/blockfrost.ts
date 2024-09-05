@@ -286,11 +286,11 @@ export class Blockfrost implements Provider {
                   ).then((res) => res.json());
                   switch (type) {
                     case "timelock":
-                      const { json: script } = await fetch(
+                      const { json: native } = await fetch(
                         `${this.url}/scripts/${r.reference_script_hash}/json`,
                         { headers: { project_id: this.projectId, lucid } },
                       ).then((res) => res.json());
-                      return scriptFromNative(script);
+                      return scriptFromNative(native);
                     case "plutusV1":
                       return {
                         type: "PlutusV1",
