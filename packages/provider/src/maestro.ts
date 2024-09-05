@@ -71,7 +71,7 @@ export class Maestro implements Provider {
       collateralPercentage: parseInt(result.collateral_percentage),
       maxCollateralInputs: parseInt(result.max_collateral_inputs),
       minFeeRefScriptCostPerByte: parseInt(
-        result.min_fee_ref_script_cost_per_byte,
+        result.min_fee_reference_scripts.base,
       ),
       costModels: {
         PlutusV1: Object.fromEntries(
