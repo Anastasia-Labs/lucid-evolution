@@ -1,5 +1,11 @@
 # @lucid-evolution/provider
 
+## 0.1.50
+
+### Patch Changes
+
+- [#291](https://github.com/Anastasia-Labs/lucid-evolution/pull/291) [`6225208`](https://github.com/Anastasia-Labs/lucid-evolution/commit/62252086fb6d2adbecf56ec94da8b6d7c8a63e08) Thanks [@hadelive](https://github.com/hadelive)! - fix maestro protocol params
+
 ## 0.1.49
 
 ### Patch Changes
