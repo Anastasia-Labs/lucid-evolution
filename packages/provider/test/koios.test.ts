@@ -71,6 +71,8 @@ describe.sequential("Koios", () => {
     await expect(() => koios.submitTx("80")).rejects.toThrowError();
   });
 
+  // Contact Koios
+  // (FiberFailure) KoiosError: ResponseError: StatusCode: non 2xx status code (503 POST https://preprod.koios.rest/api/v1/ogmios)
   test.skip("evaluates additonal utxos - sample 1", async () => {
     const redeemers = await koios.evaluateTx(
       PreprodConstants.evalSample1.transaction,
@@ -82,6 +84,8 @@ describe.sequential("Koios", () => {
     );
   });
 
+  // Contact Koios
+  // (FiberFailure) KoiosError: ResponseError: StatusCode: non 2xx status code (503 POST https://preprod.koios.rest/api/v1/ogmios)
   test.skip("evaluates additinal utxos - sample 2", async () => {
     const redeemers = await koios.evaluateTx(
       PreprodConstants.evalSample2.transaction,

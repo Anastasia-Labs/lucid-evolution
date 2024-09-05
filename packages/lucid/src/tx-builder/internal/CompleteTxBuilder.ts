@@ -516,8 +516,11 @@ const evalTransaction = (
           slotConfig.slotLength,
         ),
       catch: (error) =>
-        //TODO: improve format
-        completeTxError(JSON.stringify(error).replace(/\\n/g, "")),
+        completeTxError(
+          JSON.stringify(error)
+            .replace(/\\n\s*/g, " ")
+            .trim(),
+        ),
     });
     return uplc_eval;
   });
