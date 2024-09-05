@@ -71,8 +71,6 @@ To inline the datum directly in the UTxO use `{ kind: "inline", value: Data.to("
 Like with native tokens, Lucid Evolution implicitly adds the minimum ADA requirement for datums.
 
 ```typescript
-import { Data } from "@lucid-evolution/plutus";
-
 const tx = await lucid
   .newTx()
   .pay.ToAddressWithData(
@@ -104,8 +102,6 @@ The `pay.ToAddressWithData` method accepts the following parameters:
 Lucid Evolution implicitly adds the minimum ADA requirement when sending native tokens.
 
 ```typescript
-import { fromText } from "@lucid-evolution/core-utils";
-
 const policyId = "00...";
 const assetName = "MyToken";
 

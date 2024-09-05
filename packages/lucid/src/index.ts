@@ -3,6 +3,7 @@ export * from "./tx-builder/index.js";
 export * from "./tx-sign-builder/index.js";
 export * from "./tx-submit/TxSubmit.js";
 export * from "./Errors.js";
+export * from "./core.js";
 export * from "@lucid-evolution/core-types";
 export * from "@lucid-evolution/core-utils";
 export * from "@lucid-evolution/plutus";

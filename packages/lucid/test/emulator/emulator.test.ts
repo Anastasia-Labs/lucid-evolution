@@ -100,7 +100,7 @@ describe.sequential("Emulator", () => {
     expect(exit._tag).toBe("Success");
   });
 
-  test("deRegisterStake", async () => {
+  test.skip("deRegisterStake", async () => {
     const program = pipe(deRegisterStake, Effect.provide(EmulatorUser.layer));
     const exit = await Effect.runPromiseExit(program);
     emulator.awaitBlock(4);

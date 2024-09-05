@@ -1,6 +1,9 @@
 import { CML } from "./core.js";
 import { fromHex, sleep } from "@lucid-evolution/core-utils";
-import { applyDoubleCborEncoding } from "@lucid-evolution/utils";
+import {
+  applyDoubleCborEncoding,
+  scriptFromNative,
+} from "@lucid-evolution/utils";
 import {
   Address,
   Credential,
@@ -34,7 +37,6 @@ export class Blockfrost implements Provider {
     const result = await fetch(`${this.url}/epochs/latest/parameters`, {
       headers: { project_id: this.projectId, lucid },
     }).then((res) => res.json());
-
     return {
       minFeeA: parseInt(result.min_fee_a),
       minFeeB: parseInt(result.min_fee_b),
@@ -49,6 +51,9 @@ export class Blockfrost implements Provider {
       coinsPerUtxoByte: BigInt(result.coins_per_utxo_size),
       collateralPercentage: parseInt(result.collateral_percent),
       maxCollateralInputs: parseInt(result.max_collateral_inputs),
+      minFeeRefScriptCostPerByte: parseInt(
+        result.min_fee_ref_script_cost_per_byte,
+      ),
       costModels: result.cost_models,
     };
   }
@@ -281,7 +286,11 @@ export class Blockfrost implements Provider {
                   ).then((res) => res.json());
                   switch (type) {
                     case "timelock":
-                      return undefined;
+                      const { json: native } = await fetch(
+                        `${this.url}/scripts/${r.reference_script_hash}/json`,
+                        { headers: { project_id: this.projectId, lucid } },
+                      ).then((res) => res.json());
+                      return scriptFromNative(native);
                     case "plutusV1":
                       return {
                         type: "PlutusV1",

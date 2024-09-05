@@ -323,7 +323,10 @@ const getScriptEffect = (
         Effect.map(({ language, script }) => {
           switch (language) {
             case "native":
-              return undefined;
+              return {
+                type: "Native",
+                script: script,
+              } satisfies Script;
             case "plutus:v1":
               return {
                 type: "PlutusV1",
@@ -378,6 +381,7 @@ const toProtocolParameters = (
     coinsPerUtxoByte: BigInt(result.minUtxoDepositCoefficient),
     collateralPercentage: result.collateralPercentage,
     maxCollateralInputs: result.maxCollateralInputs,
+    minFeeRefScriptCostPerByte: result.minFeeReferenceScripts.base,
     costModels: {
       PlutusV1: Object.fromEntries(
         result.plutusCostModels["plutus:v1"].map((value, index) => [

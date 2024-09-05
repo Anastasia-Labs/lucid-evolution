@@ -18,7 +18,11 @@ import {
   UTxO,
 } from "@lucid-evolution/core-types";
 import packageJson from "../package.json";
-import { applyDoubleCborEncoding, utxoToCore } from "@lucid-evolution/utils";
+import {
+  applyDoubleCborEncoding,
+  scriptFromNative,
+  utxoToCore,
+} from "@lucid-evolution/utils";
 import { fromHex } from "@lucid-evolution/core-utils";
 
 export type MaestroSupportedNetworks = "Mainnet" | "Preprod" | "Preview";
@@ -70,6 +74,9 @@ export class Maestro implements Provider {
       coinsPerUtxoByte: BigInt(result.min_utxo_deposit_coefficient),
       collateralPercentage: parseInt(result.collateral_percentage),
       maxCollateralInputs: parseInt(result.max_collateral_inputs),
+      minFeeRefScriptCostPerByte: parseInt(
+        result.min_fee_reference_scripts.base,
+      ),
       costModels: {
         PlutusV1: Object.fromEntries(
           result.plutus_cost_models.plutus_v1.map(
@@ -82,7 +89,7 @@ export class Maestro implements Provider {
           ),
         ),
         PlutusV3: Object.fromEntries(
-          result.plutus_cost_models.plutus_v2.map(
+          result.plutus_cost_models.plutus_v3.map(
             (value: number, index: number) => [index.toString(), value],
           ),
         ),
@@ -376,6 +383,8 @@ export class Maestro implements Provider {
 const toScriptRef = (reference_script: MaestroScript | undefined) => {
   if (reference_script && reference_script.bytes) {
     switch (reference_script.type) {
+      case "native":
+        return scriptFromNative(reference_script.json);
       case "plutusv1":
         return {
           type: "PlutusV1" as const,

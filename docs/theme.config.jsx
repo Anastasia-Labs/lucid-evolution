@@ -16,7 +16,7 @@ export default {
       };
     }
     return {
-      title: "Lucid Evolution - Home",
+      title: "Lucid Evolution - Welcome",
     };
   },
 
@@ -88,17 +88,13 @@ export default {
         rel="icon"
         type="image/svg+xml"
         sizes="any"
-        href="https://raw.githubusercontent.com/Anastasia-Labs/lucid-evolution/main/docs/public/lucid-evolution-al-red.svg"
+        href="https://avatars.githubusercontent.com/u/125997902?s=200&v=4"
       />
       <meta
         name="twitter:image"
-        content="https://raw.githubusercontent.com/Anastasia-Labs/lucid-evolution/main/docs/public/lucid-evolution-al-red.svg"
+        content="https://anastasialabs.com/assets/img/logo/logo.png"
       />
-      <meta
-        name="twitter:site:domain"
-        content="https://github.com/Anastasia-Labs/lucid-evolution"
-      />
-
+      <meta name="twitter:site:domain" content="https://anastasialabs.com/" />
       <script
         dangerouslySetInnerHTML={{
           __html: `
@@ -169,7 +165,7 @@ export default {
                       </a>
                     </li>
                     <li>
-                      <a href="/api-reference">API Reference</a>
+                      <a href="https://anastasialabs.com">Anastasia Labs</a>
                     </li>
                   </ul>
                 </div>
@@ -180,7 +176,7 @@ export default {
                       <a href="https://discord.gg/s89P9gpEff">Discord</a>
                     </li>
                     <li>
-                      <a href="https://x.com/AnastasiaLabs">Twitter</a>
+                      <a href="https://x.com/AnastasiaLabs">X</a>
                     </li>
                   </ul>
                 </div>

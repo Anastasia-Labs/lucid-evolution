@@ -9,7 +9,7 @@ import React, { useState, useEffect } from "react";
 <div className="fade-in">
   <Hero
     title="Lucid Evolution"
-    subtitle="Next-generation transaction builder for highly scalable dApps on Cardano"
+    subtitle="Next-generation transaction builder for users and an off-chain framework for highly scalable dApps on Cardano"
     ctaText="Start here"
     ctaLink="/install"
     ctaText2="Learn more"
@@ -47,7 +47,7 @@ const paymentTx = await lucid
 
 const signedPaymentTx = await paymentTx.sign.withWallet().complete();
 const paymentTxHash = await signedPaymentTx.submit();
-console.log("(Wen Midgard?) Tx Hash:", paymentTxHash);`}
+console.log("Tx Hash:", paymentTxHash);`}
 />
 
 <div>
@@ -171,13 +171,13 @@ Initialize a new TypeScript project
   and functionalities to support upcoming changes.
 </FAQBox>
 
-<FAQBox title="Can I contribute to the development of Lucid Evolution?">
+<FAQBox title="Can I contribute to the development?">
   Yes, of course! Contributions to Lucid Evolution are welcome. You have an
   idea? You can submit issues, feature requests, or pull requests on our GitHub
   repository to help improve the library and its documentation
 </FAQBox>
 
-<FAQBox title="How can I get help with Lucid Evolution?">
+<FAQBox title="How can I get help?">
   You can join the Anastasia Labs [Discord
   channel]("https://discord.gg/s89P9gpEff") to get help from the community and
   our team. We also have a dedicated channel for Lucid Evolution where you can
@@ -323,7 +323,7 @@ return (
       fontSize: "1.2rem",
       marginBottom: "2rem",
       color: "#666666",
-      maxWidth: "800px",
+      maxWidth: "600px",
       margin: "0 auto 2rem",
     }}
   >
@@ -423,18 +423,32 @@ return (
 ); }
 
 export const AnimatedCode = ({ code, style }) => {
-  const [isMobile, setIsMobile] = useState(false);
-  const [displayedCode, setDisplayedCode] = useState("");
-  const [showCursor, setShowCursor] = useState(true);
-  const [isCursorBlinking, setIsCursorBlinking] = useState(true);
-  const [showConfirmation, setShowConfirmation] = useState(false);
-  const [isSubmitting, setIsSubmitting] = useState(false);
-  const [isGlowing, setIsGlowing] = useState(false);
-  const [progress, setProgress] = useState(0);
-  const [spinnerAngle, setSpinnerAngle] = useState(0);
-  const [typedCommand, setTypedCommand] = useState("");
-  const [isCommandFullyTyped, setIsCommandFullyTyped] = useState(false);
-  const [startColorTransition, setStartColorTransition] = useState(false);
+ const grayKeywords = ["import", "from", "const", "await", "new", "console"];
+ const highlightedKeywords = [
+"Lucid",
+"pay",
+"ToAddress",
+"sign",
+"newTx",
+"withWallet",
+"selectWallet",
+"fromPrivateKey",
+"submit",
+"complete",
+];
+
+const [isMobile, setIsMobile] = useState(false);
+const [displayedCode, setDisplayedCode] = useState("");
+const [showCursor, setShowCursor] = useState(true);
+const [isCursorBlinking, setIsCursorBlinking] = useState(true);
+const [showConfirmation, setShowConfirmation] = useState(false);
+const [isSubmitting, setIsSubmitting] = useState(false);
+const [isGlowing, setIsGlowing] = useState(false);
+const [progress, setProgress] = useState(0);
+const [spinnerAngle, setSpinnerAngle] = useState(0);
+const [typedCommand, setTypedCommand] = useState("");
+const [isCommandFullyTyped, setIsCommandFullyTyped] = useState(false);
+const [startColorTransition, setStartColorTransition] = useState(false);
 
 const getRandomTypingDelay = () => Math.random() * 50 + 20;
 
@@ -574,21 +588,7 @@ animationFrameId = requestAnimationFrame(animateSpinner);
 
 }, [isSubmitting]);
 
-const redKeywords = ["import", "from", "const", "await", "new", "console"];
-const highlightedKeywords = [
-"Lucid",
-"pay",
-"ToAddress",
-"sign",
-"newTx",
-"withWallet",
-"selectWallet",
-"fromPrivateKey",
-"submit",
-"complete",
-];
-
-const allKeywords = [...redKeywords, ...highlightedKeywords];
+const allKeywords = [...grayKeywords, ...highlightedKeywords];
 const keywordRegex = new RegExp(`\\b(${allKeywords.join("|")})\\b`, "g");
 
 const LoadingSpinner = () => (
@@ -722,7 +722,7 @@ make_payment.ts
                 {line
                   ? line.split(keywordRegex).map((part, partIndex) => {
                       let style = {};
-                      if (redKeywords.includes(part)) {
+                      if (grayKeywords.includes(part)) {
                         style.color = "gray";
                       } else if (highlightedKeywords.includes(part)) {
                         style.color = "#ff6b6b";
@@ -821,7 +821,7 @@ make_payment.ts
                 }}
               >
                 <span style={{ marginRight: "5px", whiteSpace: "nowrap" }}>
-                  (Wen Midgard?) Tx Hash:
+                  Tx Hash:
                 </span>
                 <span
                   style={{
@@ -954,7 +954,7 @@ return (
 
 export function FAQBox({ title, children }) {
   const [isMobile, setIsMobile] = useState(false);
-
+  
 useEffect(() => {
 const checkMobile = () => {
 setIsMobile(window.innerWidth <= 768);

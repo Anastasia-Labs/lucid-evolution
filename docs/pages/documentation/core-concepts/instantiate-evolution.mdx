@@ -14,8 +14,7 @@ There are multiple builtin providers you can choose from in Lucid Evolution
 #### Blockfrost
 
 ```typescript
-import { Lucid } from "@lucid-evolution/lucid";
-import { Blockfrost } from "@lucid-evolution/provider";
+import { Lucid, Blockfrost } from "@lucid-evolution/lucid";
 
 const lucid = await Lucid(
   new Blockfrost("https://cardano-preprod.blockfrost.io/api/v0", "<projectId>"),
@@ -27,12 +26,10 @@ const lucid = await Lucid(
 
 #### Kupmios
 
-Kupmios is a mix of [Ogmios](https://ogmios.dev/) and
-[Kupo](https://cardanosolutions.github.io/kupo/).
+Kupmios is a mix of [Ogmios](https://ogmios.dev/) and [Kupo](https://cardanosolutions.github.io/kupo/).
 
 ```typescript
-import { Lucid } from "@lucid-evolution/lucid";
-import { Kupmios } from "@lucid-evolution/provider";
+import { Lucid, Kupmios } from "@lucid-evolution/lucid";
 
 const lucid = await Lucid(
   new Kupmios(
@@ -48,8 +45,7 @@ const lucid = await Lucid(
 #### Maestro
 
 ```typescript
-import { Lucid } from "@lucid-evolution/lucid";
-import { Maestro } from "@lucid-evolution/provider";
+import { Lucid, Maestro } from "@lucid-evolution/lucid";
 
 const lucid = await Lucid(
   new Maestro({
@@ -66,8 +62,7 @@ const lucid = await Lucid(
 #### Koios
 
 ```typescript
-import { Lucid } from "@lucid-evolution/lucid";
-import { Koios } from "@lucid-evolution/provider";
+import { Lucid, Koios } from "@lucid-evolution/lucid";
 
 const lucid = await Lucid(
   new Koios("https://preprod.koios.rest/api/v1"),

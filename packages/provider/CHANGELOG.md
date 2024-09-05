@@ -1,5 +1,35 @@
 # @lucid-evolution/provider
 
+## 0.1.51
+
+### Patch Changes
+
+- [#293](https://github.com/Anastasia-Labs/lucid-evolution/pull/293) [`9a4f765`](https://github.com/Anastasia-Labs/lucid-evolution/commit/9a4f7656c4f172ce0487a2c7b453a56cb9883921) Thanks [@hadelive](https://github.com/hadelive)! - feat: support reference native script
+
+## 0.1.50
+
+### Patch Changes
+
+- [#291](https://github.com/Anastasia-Labs/lucid-evolution/pull/291) [`6225208`](https://github.com/Anastasia-Labs/lucid-evolution/commit/62252086fb6d2adbecf56ec94da8b6d7c8a63e08) Thanks [@hadelive](https://github.com/hadelive)! - fix maestro protocol params
+
+## 0.1.49
+
+### Patch Changes
+
+- [#282](https://github.com/Anastasia-Labs/lucid-evolution/pull/282) [`8c76538`](https://github.com/Anastasia-Labs/lucid-evolution/commit/8c76538d3d64fc2698d858b1d6c5beaaeb594162) Thanks [@hadelive](https://github.com/hadelive)! - fix maestro plutus v3 cost models
+
+## 0.1.48
+
+### Patch Changes
+
+- [#285](https://github.com/Anastasia-Labs/lucid-evolution/pull/285) [`59a15c8`](https://github.com/Anastasia-Labs/lucid-evolution/commit/59a15c83e16c1bf22a44e1e05ff7480ef39cb631) Thanks [@hadelive](https://github.com/hadelive)! - bump cml to 6.0.1-2
+
+- Updated dependencies [[`59a15c8`](https://github.com/Anastasia-Labs/lucid-evolution/commit/59a15c83e16c1bf22a44e1e05ff7480ef39cb631)]:
+  - @lucid-evolution/core-types@0.1.16
+  - @lucid-evolution/core-utils@0.1.14
+  - @lucid-evolution/wallet@0.1.43
+  - @lucid-evolution/utils@0.1.38
+
 ## 0.1.47
 
 ### Patch Changes

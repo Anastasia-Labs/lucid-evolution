@@ -1,5 +1,49 @@
 # @lucid-evolution/lucid
 
+## 0.3.24
+
+### Patch Changes
+
+- Updated dependencies [[`9a4f765`](https://github.com/Anastasia-Labs/lucid-evolution/commit/9a4f7656c4f172ce0487a2c7b453a56cb9883921)]:
+  - @lucid-evolution/provider@0.1.51
+
+## 0.3.23
+
+### Patch Changes
+
+- Updated dependencies [[`6225208`](https://github.com/Anastasia-Labs/lucid-evolution/commit/62252086fb6d2adbecf56ec94da8b6d7c8a63e08)]:
+  - @lucid-evolution/provider@0.1.50
+
+## 0.3.22
+
+### Patch Changes
+
+- [#283](https://github.com/Anastasia-Labs/lucid-evolution/pull/283) [`83cc37c`](https://github.com/Anastasia-Labs/lucid-evolution/commit/83cc37c801f29eaf4d4968f173cbe3e656f7e2a8) Thanks [@nikhils9](https://github.com/nikhils9)! - Export CML
+
+- Updated dependencies [[`8c76538`](https://github.com/Anastasia-Labs/lucid-evolution/commit/8c76538d3d64fc2698d858b1d6c5beaaeb594162)]:
+  - @lucid-evolution/provider@0.1.49
+
+## 0.3.21
+
+### Patch Changes
+
+- [#285](https://github.com/Anastasia-Labs/lucid-evolution/pull/285) [`59a15c8`](https://github.com/Anastasia-Labs/lucid-evolution/commit/59a15c83e16c1bf22a44e1e05ff7480ef39cb631) Thanks [@hadelive](https://github.com/hadelive)! - bump cml to 6.0.1-2
+
+- Updated dependencies [[`59a15c8`](https://github.com/Anastasia-Labs/lucid-evolution/commit/59a15c83e16c1bf22a44e1e05ff7480ef39cb631)]:
+  - @lucid-evolution/core-types@0.1.16
+  - @lucid-evolution/core-utils@0.1.14
+  - @lucid-evolution/sign_data@0.1.19
+  - @lucid-evolution/provider@0.1.48
+  - @lucid-evolution/plutus@0.1.22
+  - @lucid-evolution/wallet@0.1.43
+  - @lucid-evolution/utils@0.1.38
+
+## 0.3.20
+
+### Patch Changes
+
+- [#279](https://github.com/Anastasia-Labs/lucid-evolution/pull/279) [`018fffc`](https://github.com/Anastasia-Labs/lucid-evolution/commit/018fffc39b97887521cf92296404757ebcfc709b) Thanks [@solidsnakedev](https://github.com/solidsnakedev)! - enable mainnet hardfork
+
 ## 0.3.19
 
 ### Patch Changes

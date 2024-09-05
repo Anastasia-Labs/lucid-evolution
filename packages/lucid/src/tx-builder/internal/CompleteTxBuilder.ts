@@ -554,37 +554,34 @@ const calculateMinRefScriptFee = (
 ): Effect.Effect<bigint, TxBuilderError, never> =>
   Effect.gen(function* () {
     let fee = 0n;
-    const network = config.lucidConfig.network;
-    if (network === "Preview" || network === "Preprod") {
-      let totalScriptSize = 0;
+    let totalScriptSize = 0;
 
-      config.readInputs.forEach((utxo) => {
-        if (utxo.scriptRef) {
-          totalScriptSize = totalScriptSize + utxo.scriptRef.script.length / 2;
-        }
-      });
-      config.collectedInputs.forEach((utxo) => {
-        if (utxo.scriptRef) {
-          totalScriptSize = totalScriptSize + utxo.scriptRef.script.length / 2;
-        }
-      });
-      if (totalScriptSize === 0) return fee;
-
-      const fees = [15.0, 18.0, 21.6, 25.92, 31.1, 37.32, 44.79, 53.75];
-
-      let counter = 0;
-      while (totalScriptSize > 0) {
-        if (counter > fees.length - 1) {
-          yield* completeTxError(
-            "Total reference script size in a transaction cannot exceed 200,000 bytes.",
-          );
-        }
-
-        if (totalScriptSize > 25000) fee = fee + BigInt(25000 * fees[counter]);
-        else fee = fee + BigInt(totalScriptSize * fees[counter]);
-        totalScriptSize = totalScriptSize - 25000;
-        counter++;
+    config.readInputs.forEach((utxo) => {
+      if (utxo.scriptRef) {
+        totalScriptSize = totalScriptSize + utxo.scriptRef.script.length / 2;
       }
+    });
+    config.collectedInputs.forEach((utxo) => {
+      if (utxo.scriptRef) {
+        totalScriptSize = totalScriptSize + utxo.scriptRef.script.length / 2;
+      }
+    });
+    if (totalScriptSize === 0) return fee;
+
+    const fees = [15.0, 18.0, 21.6, 25.92, 31.1, 37.32, 44.79, 53.75];
+
+    let counter = 0;
+    while (totalScriptSize > 0) {
+      if (counter > fees.length - 1) {
+        yield* completeTxError(
+          "Total reference script size in a transaction cannot exceed 200,000 bytes.",
+        );
+      }
+
+      if (totalScriptSize > 25000) fee = fee + BigInt(25000 * fees[counter]);
+      else fee = fee + BigInt(totalScriptSize * fees[counter]);
+      totalScriptSize = totalScriptSize - 25000;
+      counter++;
     }
     return fee;
   });

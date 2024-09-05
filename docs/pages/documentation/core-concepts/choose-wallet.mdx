@@ -10,8 +10,6 @@ You are provided multiple options to create and import a wallet
 If you don't have a private key yet, you can generate one with Lucid Evolution
 
 ```typescript
-import { generatePrivateKey } from "@lucid-evolution/utils";
-
 const privateKey = generatePrivateKey(); // Bech32 encoded private key
 console.log(privateKey);
 ```
@@ -23,8 +21,6 @@ console.log(privateKey);
 You can also generate a wallet from a seed phrase (mnemonic)
 
 ```typescript
-import { generateSeedphrase } from "@lucid-evolution/utils";
-
 const seedPhrase = generateSeedphrase(); // BIP-39
 console.log(seedPhrase);
 ```
@@ -83,8 +79,6 @@ lucid.selectWallet.fromSeed(seedPhrase);
 If you're integrating with a wallet provider that exposes an API conforming to the WalletApi interface, you can use it like this
 
 ```typescript
-import { WalletApi } from "@lucid-evolution/core-types";
-
 // `externalWalletApi` is your wallet provider's API
 const walletApi: WalletApi = externalWalletApi;
 lucid.selectWallet.fromAPI(walletApi);
