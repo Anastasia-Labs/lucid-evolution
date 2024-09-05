@@ -18,7 +18,11 @@ import {
   UTxO,
 } from "@lucid-evolution/core-types";
 import packageJson from "../package.json";
-import { applyDoubleCborEncoding, utxoToCore } from "@lucid-evolution/utils";
+import {
+  applyDoubleCborEncoding,
+  scriptFromNative,
+  utxoToCore,
+} from "@lucid-evolution/utils";
 import { fromHex } from "@lucid-evolution/core-utils";
 
 export type MaestroSupportedNetworks = "Mainnet" | "Preprod" | "Preview";
@@ -379,6 +383,8 @@ export class Maestro implements Provider {
 const toScriptRef = (reference_script: MaestroScript | undefined) => {
   if (reference_script && reference_script.bytes) {
     switch (reference_script.type) {
+      case "native":
+        return scriptFromNative(reference_script.json);
       case "plutusv1":
         return {
           type: "PlutusV1" as const,

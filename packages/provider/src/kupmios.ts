@@ -323,7 +323,10 @@ const getScriptEffect = (
         Effect.map(({ language, script }) => {
           switch (language) {
             case "native":
-              return undefined;
+              return {
+                type: "Native",
+                script: script,
+              } satisfies Script;
             case "plutus:v1":
               return {
                 type: "PlutusV1",
