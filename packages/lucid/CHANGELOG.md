@@ -1,5 +1,11 @@
 # @lucid-evolution/lucid
 
+## 0.3.25
+
+### Patch Changes
+
+- [#278](https://github.com/Anastasia-Labs/lucid-evolution/pull/278) [`538d607`](https://github.com/Anastasia-Labs/lucid-evolution/commit/538d607f63c36b6fe173022b4fe65810d17a1070) Thanks [@solidsnakedev](https://github.com/solidsnakedev)! - fix tx eval regex
+
 ## 0.3.24
 
 ### Patch Changes
