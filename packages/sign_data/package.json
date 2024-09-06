@@ -31,10 +31,10 @@
     "@emurgo/cardano-message-signing-nodejs": "@emurgo/cardano-message-signing-browser"
   },
   "dependencies": {
-    "@anastasia-labs/cardano-multiplatform-lib-nodejs": "^6.0.1-2",
-    "@anastasia-labs/cardano-multiplatform-lib-browser": "^6.0.1-2",
-    "@emurgo/cardano-message-signing-nodejs": "^1.0.1",
+    "@anastasia-labs/cardano-multiplatform-lib-browser": "6.0.2-1",
+    "@anastasia-labs/cardano-multiplatform-lib-nodejs": "6.0.2-1",
     "@emurgo/cardano-message-signing-browser": "^1.0.1",
+    "@emurgo/cardano-message-signing-nodejs": "^1.0.1",
     "@lucid-evolution/core-types": "workspace:*",
     "@lucid-evolution/core-utils": "workspace:*"
   },
