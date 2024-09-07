@@ -3,7 +3,13 @@ import * as TxBuilder from "../TxBuilder.js";
 import { Effect, pipe } from "effect";
 import { ERROR_MESSAGE, TxBuilderError } from "../../Errors.js";
 import * as CML from "@anastasia-labs/cardano-multiplatform-lib-nodejs";
-import { toPartial, toV1, toV2, validateAddressDetails } from "./TxUtils.js";
+import {
+  toPartial,
+  toV1,
+  toV2,
+  toV3,
+  validateAddressDetails,
+} from "./TxUtils.js";
 
 export const stakeError = (cause: unknown) =>
   new TxBuilderError({ cause: `{ Stake: ${cause} }` });
@@ -122,6 +128,15 @@ export const deRegisterStake = (
             );
             break;
           }
+          case "PlutusV3": {
+            config.txBuilder.add_cert(
+              certBuilder.plutus_script(
+                toPartial(toV3(script.script), red),
+                CML.Ed25519KeyHashList.new(),
+              ),
+            );
+            break;
+          }
           case "Native": {
             yield* stakeError(ERROR_MESSAGE.INVALID_SCRIPT);
             break;
@@ -201,6 +216,16 @@ export const withdraw =
               config.txBuilder.add_withdrawal(
                 withdrawBuilder.plutus_script(
                   toPartial(toV2(script.script), red),
+                  CML.Ed25519KeyHashList.new(),
+                ),
+              );
+              break;
+            }
+
+            case "PlutusV3": {
+              config.txBuilder.add_withdrawal(
+                withdrawBuilder.plutus_script(
+                  toPartial(toV3(script.script), red),
                   CML.Ed25519KeyHashList.new(),
                 ),
               );

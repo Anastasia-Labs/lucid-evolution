@@ -107,6 +107,12 @@ export function toScriptRef(script: Script): CML.Script {
           applyDoubleCborEncoding(script.script),
         ),
       );
+    case "PlutusV3":
+      return CML.Script.new_plutus_v3(
+        CML.PlutusV3Script.from_cbor_hex(
+          applyDoubleCborEncoding(script.script),
+        ),
+      );
     default:
       throw new Error("No variant matched.");
   }

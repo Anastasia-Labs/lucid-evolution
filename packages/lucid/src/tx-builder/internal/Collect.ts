@@ -5,7 +5,7 @@ import { Redeemer, RedeemerBuilder, UTxO } from "@lucid-evolution/core-types";
 import * as TxBuilder from "../TxBuilder.js";
 import { ERROR_MESSAGE, TxBuilderError } from "../../Errors.js";
 import * as CML from "@anastasia-labs/cardano-multiplatform-lib-nodejs";
-import { toPartial, toV1, toV2 } from "./TxUtils.js";
+import { toPartial, toV1, toV2, toV3 } from "./TxUtils.js";
 import { paymentCredentialOf } from "@lucid-evolution/utils";
 import { datumOf } from "../../lucid-evolution/utils.js";
 
@@ -84,6 +84,29 @@ export const collectFromUTxO =
                 ),
               );
               const partial = toPartial(v2, red);
+              config.txBuilder.add_input(
+                utxo.datum && utxo.datumHash
+                  ? input.plutus_script(
+                      partial,
+                      CML.Ed25519KeyHashList.new(),
+                      CML.PlutusData.from_cbor_hex(utxo.datum),
+                    )
+                  : input.plutus_script_inline_datum(
+                      partial,
+                      CML.Ed25519KeyHashList.new(),
+                    ),
+              );
+              break;
+            }
+            case "PlutusV3": {
+              const v3 = toV3(script.script);
+              const red = yield* $(
+                Effect.fromNullable(redeemer),
+                Effect.orElseFail(() =>
+                  collectError(ERROR_MESSAGE.MISSING_REDEEMER),
+                ),
+              );
+              const partial = toPartial(v3, red);
               config.txBuilder.add_input(
                 utxo.datum && utxo.datumHash
                   ? input.plutus_script(

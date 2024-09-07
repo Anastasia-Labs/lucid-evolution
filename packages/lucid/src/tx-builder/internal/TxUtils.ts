@@ -35,6 +35,11 @@ export const toV2 = (script: string) => {
   return CML.PlutusScript.from_v2(v2);
 };
 
+export const toV3 = (script: string) => {
+  const v3 = CML.PlutusV3Script.from_cbor_hex(script);
+  return CML.PlutusScript.from_v3(v3);
+};
+
 export const toPartial = (script: CML.PlutusScript, redeemer: CBORHex) =>
   CML.PartialPlutusWitness.new(
     CML.PlutusScriptWitness.new_script(script),

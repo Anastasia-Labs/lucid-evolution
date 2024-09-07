@@ -1,32 +1,23 @@
 use aiken/cbor
-use aiken/list
-use aiken/pairs
-use aiken/transaction.{Output, ScriptContext, Spend, WithdrawFrom}
-use aiken/transaction/credential.{Inline}
+use aiken/collection/list
+use aiken/collection/pairs
+use cardano/address.{Credential}
+use cardano/transaction.{Output, OutputReference, Transaction}
 
-type Redeemer {
+pub type Redeemer {
   input_indices: List<Int>,
 }
 
-validator {
-  fn spend(_datum: Data, redeemer: Int, ctx: ScriptContext) -> Bool {
-    expect ScriptContext { transaction, purpose: Spend(out_ref) } = ctx
-    expect Some(input) = list.at(transaction.inputs, redeemer)
+validator stake_multivalidator {
+  spend(_datum, redeemer: Int, own_ref: OutputReference, self: Transaction) {
+    expect Some(input) = list.at(self.inputs, redeemer)
     and {
-      (input.output_reference == out_ref)?,
-      pairs.has_key(
-        transaction.withdrawals,
-        Inline(input.output.address.payment_credential),
-      ),
+      (input.output_reference == own_ref)?,
+      pairs.has_key(self.withdrawals, input.output.address.payment_credential),
     }
   }
 
-  fn stake(redeemer: Redeemer, ctx: ScriptContext) -> Bool {
-    expect ScriptContext {
-      transaction,
-      purpose: WithdrawFrom(Inline(own_credential)),
-    } = ctx
-
+  withdraw(redeemer: Redeemer, own_credential: Credential, self: Transaction) {
     let at_script =
       fn(output: Output, acc: Int) {
         if output.address.payment_credential == own_credential {
@@ -38,19 +29,24 @@ validator {
 
     let input_count =
       list.foldl(
-        transaction.inputs,
+        self.inputs,
         0,
         fn(input, acc) { at_script(input.output, acc) },
       )
 
-    let output_count = list.foldl(transaction.outputs, 0, at_script)
+    let output_count = list.foldl(self.outputs, 0, at_script)
 
     trace cbor.diagnostic(input_count)
     trace cbor.diagnostic(output_count)
     and {
-      1 == 1, // to change script hash
+      1 == 1,
+      // to change script hash
       (input_count == output_count)?,
       (input_count == list.length(redeemer.input_indices))?,
     }
+  }
+
+  else(_) {
+    fail
   }
 }
