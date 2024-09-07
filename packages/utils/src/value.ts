@@ -94,7 +94,11 @@ export function addAssets(...assets: Assets[]): Assets {
   return assets.reduce((a, b) => {
     for (const k in b) {
       if (Object.hasOwn(b, k)) {
-        a[k] = (a[k] || 0n) + b[k];
+        if ((a[k] || 0n) + b[k] === 0n) {
+          delete a[k];
+        } else {
+          a[k] = (a[k] || 0n) + b[k];
+        }
       }
     }
     return a;
