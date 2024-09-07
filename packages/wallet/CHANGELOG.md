@@ -1,5 +1,17 @@
 # @lucid-evolution/wallet
 
+## 0.1.44
+
+### Patch Changes
+
+- [#298](https://github.com/Anastasia-Labs/lucid-evolution/pull/298) [`22a9c9c`](https://github.com/Anastasia-Labs/lucid-evolution/commit/22a9c9ceda21cad992727e3f46ae5dea89a0fe7e) Thanks [@solidsnakedev](https://github.com/solidsnakedev)! - update datum serialization to cardano_node_format() (indefinite length notation)
+
+- Updated dependencies [[`22a9c9c`](https://github.com/Anastasia-Labs/lucid-evolution/commit/22a9c9ceda21cad992727e3f46ae5dea89a0fe7e), [`083f991`](https://github.com/Anastasia-Labs/lucid-evolution/commit/083f991af49b1dcfe51267bf186db5100136de1d)]:
+  - @lucid-evolution/core-types@0.1.17
+  - @lucid-evolution/core-utils@0.1.15
+  - @lucid-evolution/sign_data@0.1.20
+  - @lucid-evolution/utils@0.1.39
+
 ## 0.1.43
 
 ### Patch Changes

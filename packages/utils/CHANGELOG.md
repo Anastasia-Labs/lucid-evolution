@@ -1,5 +1,18 @@
 # @lucid-evolution/utils
 
+## 0.1.39
+
+### Patch Changes
+
+- [#298](https://github.com/Anastasia-Labs/lucid-evolution/pull/298) [`22a9c9c`](https://github.com/Anastasia-Labs/lucid-evolution/commit/22a9c9ceda21cad992727e3f46ae5dea89a0fe7e) Thanks [@solidsnakedev](https://github.com/solidsnakedev)! - update datum serialization to cardano_node_format() (indefinite length notation)
+
+- [#299](https://github.com/Anastasia-Labs/lucid-evolution/pull/299) [`083f991`](https://github.com/Anastasia-Labs/lucid-evolution/commit/083f991af49b1dcfe51267bf186db5100136de1d) Thanks [@solidsnakedev](https://github.com/solidsnakedev)! - fix validatorToScriptHash
+
+- Updated dependencies [[`22a9c9c`](https://github.com/Anastasia-Labs/lucid-evolution/commit/22a9c9ceda21cad992727e3f46ae5dea89a0fe7e)]:
+  - @lucid-evolution/core-types@0.1.17
+  - @lucid-evolution/core-utils@0.1.15
+  - @lucid-evolution/plutus@0.1.23
+
 ## 0.1.38
 
 ### Patch Changes
