@@ -76,6 +76,14 @@ export function validatorToScriptHash(validator: Validator): ScriptHash {
       )
         .hash()
         .to_hex();
+    case "PlutusV3":
+      return CML.PlutusScript.from_v3(
+        CML.PlutusV3Script.from_cbor_hex(
+          applyDoubleCborEncoding(validator.script),
+        ),
+      )
+        .hash()
+        .to_hex();
     default:
       throw new Error("No variant matched");
   }
