@@ -308,7 +308,9 @@ function to<T = Data>(data: Exact<T>, type?: T): Datum | Redeemer {
     }
   }
   const d = type ? castTo<T>(data, type) : (data as Data);
-  return serialize(d).to_cbor_hex() as Datum | Redeemer;
+  return serialize(d).to_cardano_node_format().to_cbor_hex() as
+    | Datum
+    | Redeemer;
 }
 
 /**
