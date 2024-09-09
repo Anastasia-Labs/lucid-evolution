@@ -57,7 +57,7 @@ export default {
         href="https://github.com/Anastasia-Labs/lucid-evolution/releases"
         target="_blank"
       >
-        🎉 We are Chang Hardfork READY! Learn more →
+        🎉 Check out our latest release! Learn more →
       </a>
     ),
   },

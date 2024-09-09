@@ -7,14 +7,73 @@ import { Callout } from "nextra/components";
 In the Conway era, the Cardano blockchain is introducing significant governance features on-chain. These enhancements, as described in [CIP-1694](https://github.com/cardano-foundation/CIPs/tree/master/CIP-1694), enable ADA holders
 to participate in various on-chain decisions. Key changes include new script purposes, centralized data structures like committees, and new transaction features.
 
-### Proposal procedures
+Lucid Evolution now supports various governance actions as defined in CIP-1694. These include delegating votes to DReps, registering as a DRep, and managing stake and vote delegations.
 
-To describe proposal procedures and attach an arbitrary number of those in transaction skeletons. The balancing mechanism will take into account the required deposit for each of these procedures.
+### Delegate Vote to DRep
 
-### Parameter changes
+Delegates voting power from a reward address to a DRep
 
-To issue proposal procedures with a request for changes in parameters. If a script witness is attached to this proposal (typically the constitution script), it will be ran against the proposal. All kinds of parameter changes are supported, except for the cost models, which contain too many values and are not even yet taken into account by the current constitution.
+```typescript
+await lucid.delegateVoteToDrep(rewardAddress, drepId);
+```
 
-### Treasury withdrawals
+### Delegate Vote to Pool and DRep
 
-To issue proposal procedures with a request for treasury withdrawals. If a script witness is attached to this proposal (typically the constitution script), it will be ran against the proposal.
+Delegates both stake to a pool and voting power to a DRep
+
+```typescript
+await lucid.delegateVoteToPoolAndDrep(rewardAddress, poolId, drepId);
+```
+
+### Register and Delegate to DRep
+
+Registers a stake address and delegates voting power to a DRep in one action
+
+```typescript
+await lucid.registerAndDelegateToDrep(rewardAddress, drepId);
+```
+
+### Deregister DRep
+
+Deregisters your stake address as a DRep
+
+```typescript
+await lucid.deregisterDrep(rewardAddress);
+```
+
+## Example
+
+As these methods need `TxBuilderConfig`, they are initiated with `newTx()`
+
+```typescript
+const tx = await lucid
+  .newTx()
+  .delegateVoteToDrep(rewardAddress, drepId)
+  .complete(); 
+
+const signedTx = await tx.sign.withWallet().complete();
+const txHash = await signedTx.submit();
+```
+
+---
+
+## Governance Era Validators
+
+Lucid Evolution now supports attaching validators specific to governance actions:
+
+### voteValidator
+
+Attaches a validator script for voting on governance actions, which will ensure that votes are cast according to the rules defined in CIP-1694
+
+```typescript
+const tx = await lucid
+  .newTx()
+  .attachVoteValidator(voteValidator)
+  .complete();
+```
+
+### proposeValidator
+
+Attaches a validator script for proposing new governance actions, to make sure that the proposal is valid according to the specified rules 
+
+These functions are used internally when creating transactions for voting or proposing governance actions. They ensure that the appropriate validation logic is included in the transaction.
