@@ -51,7 +51,7 @@ console.log(txHash);
   Remember to select a wallet before attempting to build and submit
   transactions. The wallet selection methods we discussed in previous section
   **Core Concept 2: Choose Wallet** should be implemented before building the
-  transaction.
+  transaction
 </Callout>
 
 ## Putting everything together
@@ -77,3 +77,50 @@ const signedTx = await tx.sign.withWallet().complete();
 const txHash = await signedTx.submit();
 console.log(txHash);
 ```
+
+<Callout>
+Lucid Evolution can also be used with `Deno` as a runtime for JavaScript and TypeScript. While the packages are not directly available on deno.land, you can use them via `npm:` specifiers currently
+</Callout>
+
+### Deno Execution
+
+#### No Installation
+No separate installation is needed. You can import Lucid Evolution directly in your Deno script using the `npm:` specifier
+
+#### How to Use?
+```typescript
+import { Lucid, Blockfrost } from "npm:@lucid-evolution/lucid"; // npm: specifier
+
+const lucid = await Lucid(
+  new Blockfrost("https://cardano-preprod.blockfrost.io/api/v0", "your-api-key"),
+  "Preprod"
+);
+
+const seedPhrase = "your seed phrase";
+lucid.selectWallet.fromSeed(seedPhrase);
+
+const address = await lucid.wallet().address();
+console.log('address :>> ', address);
+
+const paymentTx = await lucid
+  .newTx()
+  .pay.ToAddress("addr_testa...", { lovelace: 5000000n })
+  .complete();
+
+const signedPaymentTx = await paymentTx.sign.withWallet().complete();
+const paymentTxHash = await signedPaymentTx.submit();
+console.log("Tx Hash:", paymentTxHash);
+```
+
+#### Running the Script
+
+To run your Deno script, use the following command:
+
+```
+deno run --allow-read --allow-net --allow-run your_script.js
+```
+
+<Callout>
+The `--allow-read`, `--allow-net`, and `--allow-run` flags are necessary to grant the required permissions to your script
+</Callout>
+
