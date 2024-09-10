@@ -1,6 +1,6 @@
 import { Callout, Steps } from "nextra/components";
 
-# Make Payments
+## Make Payments
 
 Lucid Evolution provides several methods for making payments, each with specific use cases
 
@@ -8,7 +8,7 @@ Lucid Evolution provides several methods for making payments, each with specific
 
 <Steps>
 
-## Simple ADA payment
+### Simple ADA payment
 
 Use `pay.ToAddress` for simple payments to a public key or native script address
 
@@ -28,7 +28,7 @@ const txHash = await signedTx.submit();
 
 ---
 
-## Multiple recipients
+### Multiple recipients
 
 You can chain multiple `pay.ToAddress` calls to pay to multiple recipients.
 Each `pay.ToAddress` call creates a new UTxO, also for the same addresses.
@@ -48,7 +48,7 @@ const txHash = await signedTx.submit();
 
 ---
 
-## Send ADA with metadata
+### Send ADA with metadata
 
 ```typescript
 const tx = await lucid
@@ -63,7 +63,7 @@ const txHash = await signedTx.submit();
 
 ---
 
-## Payment with datum or script reference
+### Payment with datum or script reference
 
 Use `pay.ToAddressWithData` to make a payment that includes a datum or script reference. The datum will be attached to the witness set and the datum hash is stored in the UTxO.
 
@@ -97,7 +97,7 @@ The `pay.ToAddressWithData` method accepts the following parameters:
 
 ---
 
-## Send native tokens
+### Send native tokens
 
 Lucid Evolution implicitly adds the minimum ADA requirement when sending native tokens.
 
@@ -116,7 +116,7 @@ const txHash = await signedTx.submit();
 
 ---
 
-## Payment to a Plutus script address
+### Payment to a Plutus script address
 
 Use `pay.ToContract` for payments to a Plutus script address. This method ensures that a datum is provided.
 

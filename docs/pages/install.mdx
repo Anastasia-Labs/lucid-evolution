@@ -12,46 +12,38 @@ Lucid Evolution is an advanced off-chain framework for Cardano. This guide will 
 
 ---
 
-<Tabs items={['Node.js', 'Bun']}>
+<Tabs items={["Node.js", "Bun"]}>
   <Tabs.Tab>
-    <Tabs items={['pnpm', 'npm', 'yarn']}>
+    <Tabs items={["pnpm", "npm", "yarn"]}>
       <Tabs.Tab>
-        **pnpm** Fast, disk space efficient package manager
-        ```bash
-        pnpm i @lucid-evolution/lucid 
-        ```
+      ```bash
+      pnpm i @lucid-evolution/lucid
+      ```
       </Tabs.Tab>
       <Tabs.Tab>
-        **npm** is a package manager for JavaScript
-        ```bash
-        npm i @lucid-evolution/lucid 
-        ```
+      ```bash
+      npm i @lucid-evolution/lucid 
+      ```
       </Tabs.Tab>
       <Tabs.Tab>
-        **Yarn** is a software packaging system
-        ```bash
-        yarn add @lucid-evolution/lucid  
-        ```
+      ```bash
+      yarn add @lucid-evolution/lucid 
+      ```
       </Tabs.Tab>
     </Tabs>
+
+    <Callout type="info">
+      Ensure you have Node.js version 14 or higher installed on your system
+      before trying to install Lucid Evolution
+    </Callout>
+
   </Tabs.Tab>
   <Tabs.Tab>
-
-    **Bun**: An all-in-one JavaScript runtime, bundler, and package manager
-    ```bash
-    bun i @lucid-evolution/lucid
-    ```
-
+  ```bash 
+  bun i @lucid-evolution/lucid 
+  ```
   </Tabs.Tab>
 </Tabs>
-
-<Callout type="info">
-Ensure you have Node.js version 14 or higher installed on your system before trying to install Lucid Evolution
-</Callout>  
-
-<Callout type="info">
-Installing the `lucid` package will automatically export all other packages in the library as well
-</Callout>  
 
 <div style={{ marginBottom: "6rem" }}></div>
 
@@ -96,7 +88,13 @@ Lucid Evolution separates packages to allow users to import only what they need,
 </FileTree>
 
 <Callout>
-If you only want to query utxos and don't need the rest of the library, you could install the `@lucid-evolution/utils` package
+  If you only want to query utxos and don't need the rest of the library, you
+  could install the `@lucid-evolution/utils` package
+</Callout>
+
+<Callout type="info">
+  Installing the `lucid` package will automatically export all other packages in
+  the library as well
 </Callout>
 
 <div style={{ marginBottom: "6rem" }}></div>
