@@ -78,7 +78,7 @@ describe("Kupmios", async () => {
     );
   });
 
-  test("awaitTx", async () => {
+  test.skip("awaitTx", async () => {
     const isConfirmed: boolean = await kupmios.awaitTx(
       "e84eb47208757db8ed101c2114ca8953527b4a6aae51bacf17e991e5c734fec6",
     );

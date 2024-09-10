@@ -17,8 +17,6 @@
       overlays = [
         rust-overlay.overlays.default
         (final: prev: {
-          # clang = final.llvmPackages_18.clang;
-          # clang-tools = final.llvmPackages_18.clang-tools;
           rustToolchain =
             let
               rust = prev.rust-bin;
@@ -51,52 +49,24 @@
             bun
             corepack_20
             nodejs_20
-            # clang_15
-            # clangStdenv
-            # boost
-            # llvm
-            # emscripten
             # C/C++ Libraries
-            # clang-tools
-            # llvmPackages_18.clang
-            # llvmPackages_18.clang-tools
-            #   llvmPackages_14.clang-tools
-
-            # cmake
-            # codespell
-            # conan
-            # cppcheck
-            # doxygen
-            # gtest
-            # lcov
-            # vcpkg
-            # vcpkg-tool
+            clang-tools
+            cmake
+            codespell
+            conan
+            cppcheck
+            doxygen
+            gtest
+            lcov
+            vcpkg
+            vcpkg-tool
           ]
           ++ (if system == "aarch64-darwin" then [ ] else [ gdb ]);
-          # shellHook = ''
-          #    export BLST_TEST_NO_STD=ok
-          #   export BLST_NO_ASM=ok
-          # '';
-          # shellHook = ''
-          #                   export CC=${pkgs.llvmPackages_16.clang-unwrapped}/bin/clang
-          #                   export CXX=${pkgs.llvmPackages_16.clang-unwrapped}/bin/clang++
-          #                   export PATH=${pkgs.llvmPackages_16.clang-unwrapped}/bin:$PATH
-          #       #             export CFLAGS="-O2 -ffunction-sections -fdata-sections -fPIC"
-          #       #             export CXXFLAGS="-O2 -ffunction-sections -fdata-sections -fPIC"
-          #       #             export CFLAGS="-ffreestanding"
-          #       # export CXXFLAGS="-ffreestanding"
-          #               export CC_wasm32_unknown_unknown = "${pkgs.llvmPackages_16.clang-unwrapped}/bin/clang-16";
-          #   export AR_wasm32_unknown_unknown = "${pkgs.llvmPackages_16.libllvm}/bin/llvm-ar";
-          #   export CFLAGS_wasm32_unknown_unknown = "-I ${pkgs.llvmPackages_16.libclang.lib}/lib/clang/16/include/";
-          #
-          #
-          #                   echo "Using Clang version: $(clang --version)"
-          # '';
           shellHook = ''
             export LIBCLANG_PATH=${pkgs.libclang.lib}/lib/
             export LD_LIBRARY_PATH=${pkgs.openssl}/lib:$LD_LIBRARY_PATH
             export CC_wasm32_unknown_unknown=${pkgs.llvmPackages_16.clang-unwrapped}/bin/clang-16
-            export CFLAGS_wasm32_unknown_unknown="-I ${pkgs.llvmPackages_14.libclang.lib}/lib/clang/14.0.6/include/"
+            export CFLAGS_wasm32_unknown_unknown="-I ${pkgs.llvmPackages_16.libclang.lib}/lib/clang/16/include/"
           '';
         };
       });

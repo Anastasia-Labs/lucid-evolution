@@ -9,14 +9,9 @@ crate-type = ["cdylib"]
 
 [dependencies]
 error = "0.1.9"
-uplc = "1.1.0"
+uplc = "1.1.1"
 wasm-bindgen = "0.2.89"
-# k256 = { version = "0.13.0" }
 js-sys = "0.3.61"
 getrandom = { version = "0.2", features = ["js"] }
-# blst = { version = "0.3.13"  , features = ["portable"]}
-
-# [build]
-# rustflags = ["-C no-zero-call-used-regs"]
 
 

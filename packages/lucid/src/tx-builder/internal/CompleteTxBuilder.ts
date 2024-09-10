@@ -287,7 +287,6 @@ export const applyUPLCEval = (
   uplcEval: Uint8Array[],
   txbuilder: CML.TransactionBuilder,
 ) => {
-  const totalExUnits = { mem: 0n, steps: 0n };
   for (const bytes of uplcEval) {
     const redeemer = CML.LegacyRedeemer.from_cbor_bytes(bytes);
     const exUnits = CML.ExUnits.new(
@@ -298,8 +297,6 @@ export const applyUPLCEval = (
       CML.RedeemerWitnessKey.new(redeemer.tag(), redeemer.index()),
       exUnits,
     );
-    totalExUnits.mem = totalExUnits.mem + redeemer.ex_units().mem();
-    totalExUnits.steps = totalExUnits.steps + redeemer.ex_units().steps();
   }
 };
 
@@ -513,27 +510,14 @@ const evalTransactionProvider = (
   Effect.gen(function* () {
     //FIX: this returns undefined
     const txEvaluation = setRedeemerstoZero(txRedeemerBuilder.draft_tx())!;
-    const txUtxos = [
-      ...walletInputs,
-      ...config.collectedInputs,
-      ...config.readInputs,
-    ];
-    // const ins = txUtxos.map((utxo) => utxoToTransactionInput(utxo));
-    // const outs = txUtxos.map((utxo) => utxoToTransactionOutput(utxo));
-    // const slotConfig = SLOT_CONFIG_NETWORK[config.lucidConfig.network];
+    const txUtxos = [...config.collectedInputs, ...config.readInputs];
     const uplc_eval = yield* Effect.tryPromise({
       try: () =>
         config.lucidConfig.provider.evaluateTx(
           txEvaluation.to_cbor_hex(),
-          // txUtxos
+          txUtxos,
         ),
-      catch: (error) =>
-        completeTxError(
-          error,
-          // JSON.stringify(error)
-          //   .replace(/\\n\s*/g, " ")
-          //   .trim()
-        ),
+      catch: (error) => completeTxError(error),
     });
     return uplc_eval;
   });
