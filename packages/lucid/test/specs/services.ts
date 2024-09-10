@@ -94,12 +94,14 @@ export class User extends Context.Tag("User")<
 const makeHelloService = Effect.gen(function* () {
   const helloCBOR = yield* pipe(
     Effect.fromNullable(
-      scripts.validators.find((v) => v.title === "hello_world.spend"),
+      scripts.validators.find(
+        (v) => v.title === "hello_world.hello_world.spend",
+      ),
     ),
     Effect.andThen((script) => script.compiledCode),
   );
   const hello: SpendingValidator = {
-    type: "PlutusV2",
+    type: "PlutusV3",
     script: applyDoubleCborEncoding(helloCBOR),
   };
   const contractAddress = validatorToAddress(NETWORK, hello);
@@ -121,12 +123,14 @@ const makeStakeService = Effect.gen(function* () {
   const networkConfig = yield* NetworkConfig;
   const stakeCBOR = yield* pipe(
     Effect.fromNullable(
-      scripts.validators.find((v) => v.title === "stake.stake"),
+      scripts.validators.find(
+        (v) => v.title === "stake.stake_multivalidator.withdraw",
+      ),
     ),
     Effect.andThen((script) => script.compiledCode),
   );
   const stake: Script = {
-    type: "PlutusV2",
+    type: "PlutusV3",
     script: applyDoubleCborEncoding(stakeCBOR),
   };
   const contractAddress = validatorToAddress(networkConfig.NETWORK, stake);
@@ -150,12 +154,14 @@ const makeMintService = Effect.gen(function* () {
   const networkConfig = yield* NetworkConfig;
   const mintCBOR = yield* pipe(
     Effect.fromNullable(
-      scripts.validators.find((v) => v.title === "mint.mint"),
+      scripts.validators.find(
+        (v) => v.title === "mint.mint_multi_validator.mint",
+      ),
     ),
     Effect.andThen((script) => script.compiledCode),
   );
   const mint: MintingPolicy = {
-    type: "PlutusV2",
+    type: "PlutusV3",
     script: applyDoubleCborEncoding(mintCBOR),
   };
   const policyId = mintingPolicyToId(mint);

@@ -100,14 +100,14 @@ export const collectFundsInternal = Effect.gen(function* ($) {
   const rdmrBuilderSelfSpend: RedeemerBuilder = {
     kind: "self",
     makeRedeemer: (inputIndex: bigint) => {
-      return Data.to(new Constr(1, [inputIndex]));
+      return Data.to(inputIndex);
     },
   };
 
   const rdmrBuilderSelectedSpend: RedeemerBuilder = {
     kind: "selected",
     makeRedeemer: (inputIndices: bigint[]) => {
-      return Data.to(new Constr(1, [new Constr(0, [inputIndices])]));
+      return Data.to(new Constr(0, [inputIndices]));
     },
     inputs: selectedMintUTxOs,
   };

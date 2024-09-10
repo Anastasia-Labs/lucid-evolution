@@ -2,7 +2,7 @@ import { Effect, pipe } from "effect";
 import { fromHex } from "@lucid-evolution/core-utils";
 import { Assets, Redeemer } from "@lucid-evolution/core-types";
 import * as CML from "@anastasia-labs/cardano-multiplatform-lib-nodejs";
-import { toPartial, toV1, toV2 } from "./TxUtils.js";
+import { toPartial, toV1, toV2, toV3 } from "./TxUtils.js";
 import { ERROR_MESSAGE, TxBuilderError } from "../../Errors.js";
 import * as TxBuilder from "../TxBuilder.js";
 import { addAssets } from "@lucid-evolution/utils";
@@ -67,6 +67,19 @@ export const mintAssets =
           config.txBuilder.add_mint(
             mintBuilder.plutus_script(
               toPartial(toV2(policy.script), red),
+              CML.Ed25519KeyHashList.new(),
+            ),
+          );
+          break;
+        }
+        case "PlutusV3": {
+          const red = yield* pipe(
+            Effect.fromNullable(redeemer),
+            Effect.orElseFail(() => mintError(ERROR_MESSAGE.MISSING_REDEEMER)),
+          );
+          config.txBuilder.add_mint(
+            mintBuilder.plutus_script(
+              toPartial(toV3(policy.script), red),
               CML.Ed25519KeyHashList.new(),
             ),
           );

@@ -28,7 +28,9 @@ export const depositFunds = Effect.gen(function* () {
   // const { contractAddress } = yield* HelloContractParams;
   const helloCBOR = yield* pipe(
     Effect.fromNullable(
-      scripts.validators.find((v) => v.title === "hello_world_params.spend"),
+      scripts.validators.find(
+        (v) => v.title === "hello_world_params.hello_world_params.spend",
+      ),
     ),
     Effect.andThen((script) => script.compiledCode),
   );
@@ -38,7 +40,7 @@ export const depositFunds = Effect.gen(function* () {
   ]);
 
   const hello: SpendingValidator = {
-    type: "PlutusV2",
+    type: "PlutusV3",
     script: applyDoubleCborEncoding(applied),
   };
 
@@ -63,7 +65,9 @@ export const collectFunds = Effect.gen(function* ($) {
   const networkConfig = yield* NetworkConfig;
   const helloCBOR = yield* pipe(
     Effect.fromNullable(
-      scripts.validators.find((v) => v.title === "hello_world_params.spend"),
+      scripts.validators.find(
+        (v) => v.title === "hello_world_params.hello_world_params.spend",
+      ),
     ),
     Effect.andThen((script) => script.compiledCode),
   );
@@ -75,7 +79,7 @@ export const collectFunds = Effect.gen(function* ($) {
     fromText("Hello, World!"),
   ]);
   const hello: SpendingValidator = {
-    type: "PlutusV2",
+    type: "PlutusV3",
     script: applyDoubleCborEncoding(applied),
   };
   const contractAddress = validatorToAddress(networkConfig.NETWORK, hello);

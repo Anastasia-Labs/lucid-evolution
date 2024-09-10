@@ -400,6 +400,12 @@ export class Emulator implements Provider {
 
         scriptHashes.push(scriptHash);
       }
+      for (let i = 0; i < (witnesses.plutus_v3_scripts()?.len() || 0); i++) {
+        const script = witnesses.plutus_v3_scripts()!.get(i);
+        const scriptHash = script.hash().to_hex();
+
+        scriptHashes.push(scriptHash);
+      }
       return scriptHashes;
     })();
 
@@ -510,6 +516,13 @@ export class Emulator implements Provider {
           case "PlutusV2": {
             const script = CML.PlutusScript.from_v2(
               CML.PlutusV2Script.from_cbor_bytes(fromHex(scriptRef.script)),
+            );
+            plutusHashesOptional.push(script.hash().to_hex());
+            break;
+          }
+          case "PlutusV3": {
+            const script = CML.PlutusScript.from_v3(
+              CML.PlutusV3Script.from_cbor_bytes(fromHex(scriptRef.script)),
             );
             plutusHashesOptional.push(script.hash().to_hex());
             break;

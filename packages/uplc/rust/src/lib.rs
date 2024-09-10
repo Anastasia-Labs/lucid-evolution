@@ -22,7 +22,7 @@ pub fn eval_phase_two_raw(
     return tx::eval_phase_two_raw(
         tx_bytes,
         &utxos_bytes,
-        cost_mdls_bytes,
+        Some(cost_mdls_bytes),
         (initial_budget_n, initial_budget_d),
         (slot_config_x, slot_config_y, slot_config_z),
         false,
