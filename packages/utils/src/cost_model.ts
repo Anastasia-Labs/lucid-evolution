@@ -20,9 +20,9 @@ export function createCostModels(costModels: CostModels): CML.CostModels {
   }
 
   // add plutus v3
-  // for (const cost of Object.values(costModels.PlutusV3)) {
-  //   costmodel[2]?.push(cost);
-  // }
+  for (const cost of Object.values(costModels.PlutusV3)) {
+    costmodel[2]?.push(cost);
+  }
 
   return CML.CostModels.from_json(JSON.stringify(costmodel));
 }

@@ -7,7 +7,13 @@ import {
   Tuple,
   Option,
 } from "effect";
-import { Address, Assets, UTxO, Wallet } from "@lucid-evolution/core-types";
+import {
+  Address,
+  Assets,
+  EvalRedeemer,
+  UTxO,
+  Wallet,
+} from "@lucid-evolution/core-types";
 import {
   ERROR_MESSAGE,
   RunTimeError,
@@ -32,6 +38,7 @@ import {
 import { SLOT_CONFIG_NETWORK } from "@lucid-evolution/plutus";
 import { collectFromUTxO } from "./Collect.js";
 import { fromHex } from "@lucid-evolution/core-utils";
+import { withdraw } from "./Stake.js";
 
 export type CompleteOptions = {
   coinSelection?: boolean;
@@ -193,48 +200,22 @@ export const selectionAndEvaluation = (
       catch: (error) => completeTxError(error),
     });
 
-    // TODO: fix the catch block to retain type of selectionAndEvaluation as Effect<void, TransactionError, never>
-    // instead of Effect<void, TransactionError | undefined, never>
-    //
-    // const txRedeemerBuilder: CML.TxRedeemerBuilder = yield* Effect.try({
-    //   try: () =>
-    //     config.txBuilder.build_for_evaluation(
-    //       0,
-    //       CML.Address.from_bech32(walletInfo.address),
-    //     ),
-    //   catch: (error) => {
-    //     // In case the "build_for_evaluation" fails due to addition of new redeemers leading to increased fees
-    //     // and the selected utxo inputs being insufficient, we would need to perform coin selection again
-    //     // before moving on to UPLC evaluation.
-    //     if (
-    //       error instanceof Error &&
-    //       error.message == "UTxO Balance Insufficient"
-    //     ) {
-    //       Effect.runPromiseExit(
-    //         selectionAndEvaluation(
-    //           config,
-    //           options,
-    //           walletInfo,
-    //           script_calculation,
-    //         ),
-    //       );
-    //     }
-    //     else
-    //       return completeTxError(
-    //       "NotFound",
-    //       `CML Tx Redeemer Builder`,
-    //     )
-    //   }
-    // });
-
-    if (
-      options.localUPLCEval !== false &&
-      txRedeemerBuilder.draft_tx().witness_set().redeemers()
-    ) {
-      applyUPLCEval(
-        yield* evalTransaction(config, txRedeemerBuilder, walletInfo.inputs),
-        config.txBuilder,
-      );
+    if (txRedeemerBuilder.draft_tx().witness_set().redeemers()) {
+      if (options.localUPLCEval !== false) {
+        applyUPLCEval(
+          yield* evalTransaction(config, txRedeemerBuilder, walletInfo.inputs),
+          config.txBuilder,
+        );
+      } else {
+        applyUPLCEvalProvider(
+          yield* evalTransactionProvider(
+            config,
+            txRedeemerBuilder,
+            walletInfo.inputs,
+          ),
+          config.txBuilder,
+        );
+      }
     }
   }).pipe(Effect.catchAllDefect((cause) => new RunTimeError({ cause })));
 
@@ -319,6 +300,44 @@ export const applyUPLCEval = (
     );
     totalExUnits.mem = totalExUnits.mem + redeemer.ex_units().mem();
     totalExUnits.steps = totalExUnits.steps + redeemer.ex_units().steps();
+  }
+};
+
+export const applyUPLCEvalProvider = (
+  evalRedeemerList: EvalRedeemer[],
+  txbuilder: CML.TransactionBuilder,
+) => {
+  for (const evalRedeemer of evalRedeemerList) {
+    const exUnits = CML.ExUnits.new(
+      BigInt(evalRedeemer.ex_units.mem),
+      BigInt(evalRedeemer.ex_units.steps),
+    );
+    txbuilder.set_exunits(
+      CML.RedeemerWitnessKey.new(
+        toCMLRedeemerTag(evalRedeemer.redeemer_tag),
+        BigInt(evalRedeemer.redeemer_index),
+      ),
+      exUnits,
+    );
+  }
+};
+
+export const toCMLRedeemerTag = (tag: string) => {
+  switch (tag) {
+    case "spend":
+      return CML.RedeemerTag.Spend;
+    case "mint":
+      return CML.RedeemerTag.Mint;
+    case "publish":
+      return CML.RedeemerTag.Cert;
+    case "withdraw":
+      return CML.RedeemerTag.Reward;
+    case "vote":
+      return CML.RedeemerTag.Voting;
+    case "propose":
+      return CML.RedeemerTag.Proposing;
+    default:
+      throw new Error(`Exhaustive check failed: Unhandled case ${tag}`);
   }
 };
 
@@ -484,6 +503,39 @@ const estimateFee = (
       config.txBuilder.set_fee(estimatedFee);
     }
     return estimatedFee;
+  });
+
+const evalTransactionProvider = (
+  config: TxBuilder.TxBuilderConfig,
+  txRedeemerBuilder: CML.TxRedeemerBuilder,
+  walletInputs: UTxO[],
+): Effect.Effect<EvalRedeemer[], TxBuilderError> =>
+  Effect.gen(function* () {
+    //FIX: this returns undefined
+    const txEvaluation = setRedeemerstoZero(txRedeemerBuilder.draft_tx())!;
+    const txUtxos = [
+      ...walletInputs,
+      ...config.collectedInputs,
+      ...config.readInputs,
+    ];
+    // const ins = txUtxos.map((utxo) => utxoToTransactionInput(utxo));
+    // const outs = txUtxos.map((utxo) => utxoToTransactionOutput(utxo));
+    // const slotConfig = SLOT_CONFIG_NETWORK[config.lucidConfig.network];
+    const uplc_eval = yield* Effect.tryPromise({
+      try: () =>
+        config.lucidConfig.provider.evaluateTx(
+          txEvaluation.to_cbor_hex(),
+          // txUtxos
+        ),
+      catch: (error) =>
+        completeTxError(
+          error,
+          // JSON.stringify(error)
+          //   .replace(/\\n\s*/g, " ")
+          //   .trim()
+        ),
+    });
+    return uplc_eval;
   });
 
 const evalTransaction = (

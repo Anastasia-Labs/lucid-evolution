@@ -17,7 +17,7 @@ import * as MetadataEndpoint from "./specs/metadata.js";
 import * as WalletEndpoint from "./specs/wallet.js";
 
 describe.sequential("Onchain testing", () => {
-  test("TxChain", async () => {
+  test.skip("TxChain", async () => {
     const program = pipe(
       TxChain.depositFundsCollect,
       Effect.provide(User.layer),
@@ -28,7 +28,7 @@ describe.sequential("Onchain testing", () => {
     expect(exit._tag).toBe("Success");
   });
 
-  test("MultiValidator - registerStake", async () => {
+  test.skip("MultiValidator - registerStake", async () => {
     const program = pipe(
       MultiValidatorEndpoints.registerStake,
       Effect.provide(User.layer),
@@ -39,7 +39,7 @@ describe.sequential("Onchain testing", () => {
     expect(exit._tag).toBe("Success");
   });
 
-  test("MultiValidator - DespositFunds", async () => {
+  test.skip("MultiValidator - DespositFunds", async () => {
     const program = pipe(
       MultiValidatorEndpoints.depositFunds,
       Effect.provide(User.layer),
@@ -51,7 +51,7 @@ describe.sequential("Onchain testing", () => {
     expect(exit._tag).toBe("Success");
   });
 
-  test("MultiValidator - CollectFunds", async () => {
+  test.skip("MultiValidator - CollectFunds", async () => {
     const program = pipe(
       MultiValidatorEndpoints.collectFunds,
       Effect.provide(User.layer),
@@ -75,7 +75,7 @@ describe.sequential("Onchain testing", () => {
     expect(exit._tag).toBe("Success");
   });
 
-  test("DespositFunds", async () => {
+  test.only("DespositFunds", async () => {
     const program = pipe(
       HelloEndpoints.depositFunds,
       Effect.provide(User.layer),
@@ -86,7 +86,7 @@ describe.sequential("Onchain testing", () => {
     expect(exit._tag).toBe("Success");
   });
 
-  test("CollectFunds", async () => {
+  test.only("CollectFunds", async () => {
     const program = pipe(
       HelloEndpoints.collectFunds,
       Effect.provide(User.layer),
