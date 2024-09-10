@@ -1,5 +1,11 @@
 # @lucid-evolution/uplc
 
+## 0.2.12
+
+### Patch Changes
+
+- [#302](https://github.com/Anastasia-Labs/lucid-evolution/pull/302) [`156c054`](https://github.com/Anastasia-Labs/lucid-evolution/commit/156c0546b15c8ea8d8a8c7c3eb1ba5d78ed60fc1) Thanks [@hadelive](https://github.com/hadelive)! - enable plutusV3
+
 ## 0.2.11
 
 ### Patch Changes
