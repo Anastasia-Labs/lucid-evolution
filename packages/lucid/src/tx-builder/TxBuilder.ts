@@ -3,7 +3,9 @@ import { LucidConfig } from "../lucid-evolution/LucidEvolution.js";
 import { OutputDatum } from "./types.js";
 import {
   Address,
+  Anchor,
   Assets,
+  Drep,
   Label,
   Lovelace,
   PaymentKeyHash,
@@ -25,6 +27,7 @@ import * as Interval from "./internal/Interval.js";
 import * as Signer from "./internal/Signer.js";
 import * as Stake from "./internal/Stake.js";
 import * as Pool from "./internal/Pool.js";
+import * as Governance from "./internal/Governance.js";
 import * as Metadata from "./internal/Metadata.js";
 import * as CompleteTxBuilder from "./internal/CompleteTxBuilder.js";
 import * as TxSignBuilder from "../tx-sign-builder/TxSignBuilder.js";
@@ -74,7 +77,13 @@ export type TxBuilder = {
   };
   addSigner: (address: Address | RewardAddress) => TxBuilder;
   addSignerKey: (keyHash: PaymentKeyHash | StakeKeyHash) => TxBuilder;
+  /**
+   * NOTE: Deprecate in future version
+   */
   registerStake: (rewardAddress: RewardAddress) => TxBuilder;
+  /**
+   * NOTE: Deprecate in future version
+   */
   deRegisterStake: (
     rewardAddress: RewardAddress,
     redeemer?: string,
@@ -84,17 +93,44 @@ export type TxBuilder = {
     amount: Lovelace,
     redeemer?: string | RedeemerBuilder,
   ) => TxBuilder;
+  register: {
+    Stake: (rewardAddress: RewardAddress) => TxBuilder;
+    DRep: (
+      rewardAddress: RewardAddress,
+      anchor?: Anchor,
+      redeemer?: string,
+    ) => TxBuilder;
+  };
+  deregister: {
+    Stake: (rewardAddress: RewardAddress, redeemer?: string) => TxBuilder;
+    DRep: (rewardAddress: RewardAddress, redeemer?: string) => TxBuilder;
+  };
   mintAssets: (
     assets: Assets,
     redeemer?: string | RedeemerBuilder,
   ) => TxBuilder;
   validFrom: (unixTime: number) => TxBuilder;
   validTo: (unixTime: number) => TxBuilder;
+  /**
+   * NOTE: Deprecate in future version
+   */
   delegateTo: (
     rewardAddress: RewardAddress,
     poolId: PoolId,
     redeemer?: Redeemer,
   ) => TxBuilder;
+  delegate: {
+    ToPool: (
+      rewardAddress: RewardAddress,
+      poolId: PoolId,
+      redeemer?: Redeemer,
+    ) => TxBuilder;
+    VoteToDRep: (
+      rewardAddress: RewardAddress,
+      drep: Drep,
+      redeemer?: Redeemer,
+    ) => TxBuilder;
+  };
   attachMetadata: (
     label: Label,
     metadata: Metadata.TransactionMetadata,
@@ -105,6 +141,8 @@ export type TxBuilder = {
     MintingPolicy: (mintingPolicy: Script) => TxBuilder;
     CertificateValidator: (certValidator: Script) => TxBuilder;
     WithdrawalValidator: (withdrawalValidator: Script) => TxBuilder;
+    VoteValidator: (voteValidator: Script) => TxBuilder;
+    ProposeValidator: (proposeValidator: Script) => TxBuilder;
   };
   compose: (tx: TxBuilder | null) => TxBuilder;
   setMinFee: (fee: bigint) => TxBuilder;
@@ -218,10 +256,47 @@ export function makeTxBuilder(lucidConfig: LucidConfig): TxBuilder {
       config.programs.push(program);
       return txBuilder;
     },
+    register: {
+      Stake: (rewardAddress: RewardAddress) => {
+        const program = Stake.registerStake(config, rewardAddress);
+        config.programs.push(program);
+        return txBuilder;
+      },
+      DRep: (
+        rewardAddress: RewardAddress,
+        anchor?: Anchor,
+        redeemer?: string,
+      ) => {
+        const program = Governance.registerDrep(
+          config,
+          rewardAddress,
+          anchor,
+          redeemer,
+        );
+        config.programs.push(program);
+        return txBuilder;
+      },
+    },
     deRegisterStake: (rewardAddress: RewardAddress, redeemer?: string) => {
       const program = Stake.deRegisterStake(config, rewardAddress, redeemer);
       config.programs.push(program);
       return txBuilder;
+    },
+    deregister: {
+      Stake: (rewardAddress: RewardAddress, redeemer?: string) => {
+        const program = Stake.deRegisterStake(config, rewardAddress, redeemer);
+        config.programs.push(program);
+        return txBuilder;
+      },
+      DRep: (rewardAddress: RewardAddress, redeemer?: string) => {
+        const program = Governance.deregisterDrep(
+          config,
+          rewardAddress,
+          redeemer,
+        );
+        config.programs.push(program);
+        return txBuilder;
+      },
     },
     withdraw: (
       rewardAddress: RewardAddress,
@@ -256,6 +331,37 @@ export function makeTxBuilder(lucidConfig: LucidConfig): TxBuilder {
       config.programs.push(program);
       return txBuilder;
     },
+    delegate: {
+      ToPool: (
+        rewardAddress: RewardAddress,
+        poolId: PoolId,
+        redeemer?: Redeemer,
+      ) => {
+        const program = Pool.delegateTo(
+          config,
+          rewardAddress,
+          poolId,
+          redeemer,
+        );
+        config.programs.push(program);
+        return txBuilder;
+      },
+
+      VoteToDRep: (
+        rewardAddress: RewardAddress,
+        drep: Drep,
+        redeemer?: Redeemer,
+      ) => {
+        const program = Governance.delegateVoteToDrep(
+          config,
+          rewardAddress,
+          drep,
+          redeemer,
+        );
+        config.programs.push(program);
+        return txBuilder;
+      },
+    },
     attachMetadata: (label: Label, metadata: Metadata.TransactionMetadata) => {
       const program = Metadata.attachMetadata(config, label, metadata);
       config.programs.push(program);
@@ -286,6 +392,16 @@ export function makeTxBuilder(lucidConfig: LucidConfig): TxBuilder {
       WithdrawalValidator: (withdrawalValidator: Script) => {
         const scriptKeyValue =
           Attach.attachWithdrawalValidator(withdrawalValidator);
+        config.scripts.set(scriptKeyValue.key, scriptKeyValue.value);
+        return txBuilder;
+      },
+      VoteValidator: (voteValidator: Script) => {
+        const scriptKeyValue = Attach.attachVoteValidator(voteValidator);
+        config.scripts.set(scriptKeyValue.key, scriptKeyValue.value);
+        return txBuilder;
+      },
+      ProposeValidator: (proposeValidator: Script) => {
+        const scriptKeyValue = Attach.attachProposeValidator(proposeValidator);
         config.scripts.set(scriptKeyValue.key, scriptKeyValue.value);
         return txBuilder;
       },

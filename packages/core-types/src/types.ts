@@ -10,6 +10,8 @@ export type ProtocolParameters = {
   maxValSize: number;
   keyDeposit: bigint;
   poolDeposit: bigint;
+  drepDeposit: bigint;
+  govActionDeposit: bigint;
   priceMem: number;
   priceStep: number;
   maxTxExMem: bigint;
@@ -75,12 +77,16 @@ export type Validator =
   | MintingPolicy
   | SpendingValidator
   | CertificateValidator
-  | WithdrawalValidator;
+  | WithdrawalValidator
+  | VoteValidator
+  | ProposeValidator;
 
 export type MintingPolicy = Script;
 export type SpendingValidator = Script;
 export type CertificateValidator = Script;
 export type WithdrawalValidator = Script;
+export type VoteValidator = Script;
+export type ProposeValidator = Script;
 
 /** Bech32 */
 export type Address = string;
@@ -290,4 +296,48 @@ export type DatumJson = {
   map?: Array<{ k: unknown; v: unknown }>;
   fields?: Array<DatumJson>;
   [constructor: string]: unknown; // number; constructor needs to be simulated like this as optional argument
+};
+
+export type Anchor = {
+  url: string;
+  dataHash: string;
+};
+
+export type AlwaysAbstain = {
+  __typename: "AlwaysAbstain";
+};
+
+export type AlwaysNoConfidence = {
+  __typename: "AlwaysNoConfidence";
+};
+
+export type Drep = Credential | AlwaysAbstain | AlwaysNoConfidence;
+
+export const isDRepCredential = (deleg: Drep): deleg is Credential =>
+  !("__typename" in deleg);
+
+export const isDRepAlwaysAbstain = (deleg: Drep): deleg is AlwaysAbstain =>
+  !isDRepCredential(deleg) && deleg.__typename === "AlwaysAbstain";
+
+export const isDRepAlwaysNoConfidence = (
+  deleg: Drep,
+): deleg is AlwaysNoConfidence =>
+  !isDRepCredential(deleg) && deleg.__typename === "AlwaysNoConfidence";
+
+export const toCMLDrep = (drep: Drep): CML.DRep => {
+  if (isDRepAlwaysAbstain(drep)) {
+    return CML.DRep.new_always_abstain();
+  } else if (isDRepAlwaysNoConfidence(drep)) {
+    return CML.DRep.new_always_no_confidence();
+  } else if (isDRepCredential(drep)) {
+    switch (drep.type) {
+      case "Key":
+        return CML.DRep.new_key(CML.Ed25519KeyHash.from_hex(drep.hash));
+      case "Script":
+        return CML.DRep.new_script(CML.ScriptHash.from_hex(drep.hash));
+      default:
+        throw new Error("Invalid DRep type");
+    }
+  }
+  throw new Error("Unsupported");
 };
