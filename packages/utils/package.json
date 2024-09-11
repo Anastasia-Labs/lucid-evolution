@@ -35,8 +35,6 @@
     "@anastasia-labs/cardano-multiplatform-lib-browser": "6.0.2-1",
     "@anastasia-labs/cardano-multiplatform-lib-nodejs": "6.0.2-1",
     "@effect/schema": "^0.68.16",
-    "@emurgo/cardano-serialization-lib-browser": "^11.5.0",
-    "@emurgo/cardano-serialization-lib-nodejs": "^11.5.0",
     "@harmoniclabs/plutus-data": "^1.2.4",
     "@harmoniclabs/uplc": "^1.2.4",
     "@lucid-evolution/core-types": "workspace:*",

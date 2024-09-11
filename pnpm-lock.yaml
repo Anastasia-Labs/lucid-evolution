@@ -337,12 +337,6 @@ importers:
       '@effect/schema':
         specifier: ^0.68.16
         version: 0.68.16(effect@3.4.6)
-      '@emurgo/cardano-serialization-lib-browser':
-        specifier: ^11.5.0
-        version: 11.5.0
-      '@emurgo/cardano-serialization-lib-nodejs':
-        specifier: ^11.5.0
-        version: 11.5.0
       '@harmoniclabs/plutus-data':
         specifier: ^1.2.4
         version: 1.2.4(@harmoniclabs/bytestring@1.0.0)(@harmoniclabs/cbor@1.3.0)
@@ -921,14 +915,6 @@ packages:
 
   /@emurgo/cardano-message-signing-nodejs@1.0.1:
     resolution: {integrity: sha512-PoKh1tQnJX18f8iEr8Jk1KXxKCn9eqaSslMI1pyOJvYRJhQVDLCh0+9YReufjp0oFJIY1ShcrR+4/WnECVZUKQ==}
-    dev: false
-
-  /@emurgo/cardano-serialization-lib-browser@11.5.0:
-    resolution: {integrity: sha512-qchOJ9NYDUz10tzs5r5QhP9hK0p+ZOlRiBwPdTAxqAYLw/8emYBkQQLaS8T1DF6EkeudyrgS00ym5Trw1fo4iA==}
-    dev: false
-
-  /@emurgo/cardano-serialization-lib-nodejs@11.5.0:
-    resolution: {integrity: sha512-IlVABlRgo9XaTR1NunwZpWcxnfEv04ba2l1vkUz4S1W7Jt36F4CtffP+jPeqBZGnAe+fnUwo0XjIJC3ZTNToNQ==}
     dev: false
 
   /@esbuild/aix-ppc64@0.21.5:

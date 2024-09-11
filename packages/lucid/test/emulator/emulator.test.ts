@@ -16,6 +16,7 @@ import {
   multiSigner,
   signByWalletFromPrivateKey,
   emulatorFromPrivateKey,
+  depositFundsLockRefScript,
 } from "./service.js";
 
 const distributeRewards = Effect.gen(function* ($) {
@@ -146,6 +147,16 @@ describe.sequential("Emulator", () => {
   test("signByWalletFromPrivateKey", async () => {
     const program = pipe(
       signByWalletFromPrivateKey,
+      Effect.provide(EmulatorUser.layer),
+    );
+    const exit = await Effect.runPromiseExit(program);
+    emulator.awaitBlock(4);
+    emulatorFromPrivateKey.awaitBlock(4);
+    expect(exit._tag).toBe("Success");
+  });
+  test("txWithReferenceScript", async () => {
+    const program = pipe(
+      depositFundsLockRefScript,
       Effect.provide(EmulatorUser.layer),
     );
     const exit = await Effect.runPromiseExit(program);
