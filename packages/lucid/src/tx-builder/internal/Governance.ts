@@ -90,7 +90,7 @@ export const registerAndDelegateToPool = (
 export const registerAndDelegateToDrep = (
   config: TxBuilder.TxBuilderConfig,
   rewardAddress: RewardAddress,
-  drep: CML.DRep,
+  drep: Drep,
   redeemer?: Redeemer,
 ): Effect.Effect<void, TxBuilderError> =>
   Effect.gen(function* () {
@@ -98,13 +98,13 @@ export const registerAndDelegateToDrep = (
       rewardAddress,
       config,
     );
-
+    const cmlDrep = toCMLDrep(drep);
     const buildCert = (credential: CML.Credential) =>
       CML.SingleCertificateBuilder.new(
         CML.Certificate.new_vote_reg_deleg_cert(
           credential,
-          drep,
-          config.lucidConfig.protocolParameters.drepDeposit,
+          cmlDrep,
+          config.lucidConfig.protocolParameters.keyDeposit,
         ),
       );
 

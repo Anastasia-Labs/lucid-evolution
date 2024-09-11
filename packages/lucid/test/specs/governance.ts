@@ -99,7 +99,22 @@ export const registerAndDelegateToPool = Effect.gen(function* ($) {
   );
   const signBuilder = yield* user
     .newTx()
-    .register.AndDelegateToPool(rewardAddress, poolId)
+    .registerAndDelegate.ToPool(rewardAddress, poolId)
+    .completeProgram();
+  return signBuilder;
+}).pipe(Effect.flatMap(handleSignSubmit), withLogRetry, Effect.orDie);
+
+export const registerAndDelegateToDrep = Effect.gen(function* ($) {
+  const { user } = yield* User;
+  const rewardAddress = yield* pipe(
+    Effect.promise(() => user.wallet().rewardAddress()),
+    Effect.andThen(Effect.fromNullable),
+  );
+  const signBuilder = yield* user
+    .newTx()
+    .registerAndDelegate.ToDrep(rewardAddress, {
+      __typename: "AlwaysAbstain",
+    })
     .completeProgram();
   return signBuilder;
 }).pipe(Effect.flatMap(handleSignSubmit), withLogRetry, Effect.orDie);

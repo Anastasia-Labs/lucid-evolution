@@ -100,11 +100,6 @@ export type TxBuilder = {
       anchor?: Anchor,
       redeemer?: string,
     ) => TxBuilder;
-    AndDelegateToPool: (
-      rewardAddress: RewardAddress,
-      poolId: PoolId,
-      redeemer?: Redeemer,
-    ) => TxBuilder;
   };
   deregister: {
     Stake: (rewardAddress: RewardAddress, redeemer?: string) => TxBuilder;
@@ -138,6 +133,18 @@ export type TxBuilder = {
     VoteToPoolAndDRep: (
       rewardAddress: RewardAddress,
       poolId: PoolId,
+      drep: Drep,
+      redeemer?: Redeemer,
+    ) => TxBuilder;
+  };
+  registerAndDelegate: {
+    ToPool: (
+      rewardAddress: RewardAddress,
+      poolId: PoolId,
+      redeemer?: Redeemer,
+    ) => TxBuilder;
+    ToDrep: (
+      rewardAddress: RewardAddress,
       drep: Drep,
       redeemer?: Redeemer,
     ) => TxBuilder;
@@ -287,20 +294,6 @@ export function makeTxBuilder(lucidConfig: LucidConfig): TxBuilder {
         config.programs.push(program);
         return txBuilder;
       },
-      AndDelegateToPool: (
-        rewardAddress: RewardAddress,
-        poolId: PoolId,
-        redeemer?: Redeemer,
-      ) => {
-        const program = Governance.registerAndDelegateToPool(
-          config,
-          rewardAddress,
-          poolId,
-          redeemer,
-        );
-        config.programs.push(program);
-        return txBuilder;
-      },
     },
     deRegisterStake: (rewardAddress: RewardAddress, redeemer?: string) => {
       const program = Stake.deRegisterStake(config, rewardAddress, redeemer);
@@ -397,6 +390,36 @@ export function makeTxBuilder(lucidConfig: LucidConfig): TxBuilder {
           config,
           rewardAddress,
           poolId,
+          drep,
+          redeemer,
+        );
+        config.programs.push(program);
+        return txBuilder;
+      },
+    },
+    registerAndDelegate: {
+      ToPool: (
+        rewardAddress: RewardAddress,
+        poolId: PoolId,
+        redeemer?: Redeemer,
+      ) => {
+        const program = Governance.registerAndDelegateToPool(
+          config,
+          rewardAddress,
+          poolId,
+          redeemer,
+        );
+        config.programs.push(program);
+        return txBuilder;
+      },
+      ToDrep: (
+        rewardAddress: RewardAddress,
+        drep: Drep,
+        redeemer?: Redeemer,
+      ) => {
+        const program = Governance.registerAndDelegateToDrep(
+          config,
+          rewardAddress,
           drep,
           redeemer,
         );
