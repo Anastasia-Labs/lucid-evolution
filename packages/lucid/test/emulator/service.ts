@@ -7,7 +7,14 @@ import {
   validatorToAddress,
 } from "@lucid-evolution/utils";
 import { Effect, Context, Layer, pipe, Console } from "effect";
-import { Data, fromText, Lucid, SpendingValidator } from "../../src";
+import {
+  Data,
+  Constr,
+  fromText,
+  Lucid,
+  SpendingValidator,
+  applyDoubleCborEncoding,
+} from "../../src";
 import {
   handleSignSubmit,
   handleSignSubmitWithoutValidation,
@@ -16,6 +23,7 @@ import {
 } from "../specs/utils";
 import { Emulator, generateEmulatorAccount } from "@lucid-evolution/provider";
 import { generateEmulatorAccountFrommPrivateKey } from "../../../provider/src";
+import scripts from "../specs/contracts/plutus.json";
 
 export const EMULATOR_ACCOUNT = generateEmulatorAccount({
   lovelace: 75000000000n,
@@ -275,6 +283,46 @@ export const signByWalletFromPrivateKey = Effect.gen(function* ($) {
       scriptAddress,
       { kind: "inline", value: Data.to("313131") },
       { lovelace: 5000000n },
+    )
+    .completeProgram();
+  return signBuilder;
+}).pipe(Effect.flatMap(handleSignSubmitWithoutValidation), withLogRetry);
+
+export const depositFundsLockRefScript = Effect.gen(function* ($) {
+  const { user } = yield* EmulatorUser;
+  const publicKeyHash = getAddressDetails(
+    yield* Effect.promise(() => user.wallet().address()),
+  ).paymentCredential?.hash;
+  const datum = Data.to(new Constr(0, [publicKeyHash!]));
+
+  const helloCBOR = yield* pipe(
+    Effect.fromNullable(
+      scripts.validators.find(
+        (v) => v.title === "hello_world.hello_world.spend",
+      ),
+    ),
+    Effect.andThen((script) => script.compiledCode),
+  );
+  const hello: SpendingValidator = {
+    type: "PlutusV3",
+    script: applyDoubleCborEncoding(helloCBOR),
+  };
+  const contractAddress = validatorToAddress("Custom", hello);
+  yield* pipe(
+    Effect.tryPromise(() => user.utxosAt(contractAddress)),
+    // Effect.andThen((utxos) => Console.log(utxos)),
+  );
+
+  const signBuilder = yield* user
+    .newTx()
+    .pay.ToAddressWithData(
+      contractAddress,
+      {
+        kind: "inline",
+        value: datum,
+      },
+      { lovelace: 10_000_000n },
+      hello,
     )
     .completeProgram();
   return signBuilder;
