@@ -182,6 +182,16 @@ describe.sequential("Onchain testing", () => {
     expect(exit._tag).toBe("Success");
   });
 
+  test("voteDelegPoolAndDrepAlwaysAbstain", async () => {
+    const program = pipe(
+      GovernanceEndpoints.voteDelegPoolAndDrepAlwaysAbstain,
+      Effect.provide(User.layer),
+      Effect.provide(NetworkConfig.layerPreprod),
+    );
+    const exit = await Effect.runPromiseExit(program);
+    expect(exit._tag).toBe("Success");
+  });
+
   test("delegateTo", async () => {
     const program = pipe(
       StakeEndpoints.delegateTo,

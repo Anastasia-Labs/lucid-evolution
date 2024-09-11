@@ -130,6 +130,12 @@ export type TxBuilder = {
       drep: Drep,
       redeemer?: Redeemer,
     ) => TxBuilder;
+    VoteToPoolAndDRep: (
+      rewardAddress: RewardAddress,
+      poolId: PoolId,
+      drep: Drep,
+      redeemer?: Redeemer,
+    ) => TxBuilder;
   };
   attachMetadata: (
     label: Label,
@@ -355,6 +361,23 @@ export function makeTxBuilder(lucidConfig: LucidConfig): TxBuilder {
         const program = Governance.delegateVoteToDrep(
           config,
           rewardAddress,
+          drep,
+          redeemer,
+        );
+        config.programs.push(program);
+        return txBuilder;
+      },
+
+      VoteToPoolAndDRep: (
+        rewardAddress: RewardAddress,
+        poolId: PoolId,
+        drep: Drep,
+        redeemer?: Redeemer,
+      ) => {
+        const program = Governance.delegateVoteToPoolAndDrep(
+          config,
+          rewardAddress,
+          poolId,
           drep,
           redeemer,
         );

@@ -1,5 +1,5 @@
 import { Effect, pipe } from "effect";
-import { User } from "./services";
+import { NetworkConfig, User } from "./services";
 import { handleSignSubmit, withLogRetry } from "./utils";
 
 export const registerDrep = Effect.gen(function* ($) {
@@ -59,6 +59,27 @@ export const voteDelegDrepAlwaysNoConfidence = Effect.gen(function* ($) {
     .newTx()
     .delegate.VoteToDRep(rewardAddress, {
       __typename: "AlwaysNoConfidence",
+    })
+    .completeProgram();
+  return signBuilder;
+}).pipe(Effect.flatMap(handleSignSubmit), withLogRetry, Effect.orDie);
+
+export const voteDelegPoolAndDrepAlwaysAbstain = Effect.gen(function* ($) {
+  const { user } = yield* User;
+  const networkConfig = yield* NetworkConfig;
+  const rewardAddress = yield* pipe(
+    Effect.promise(() => user.wallet().rewardAddress()),
+    Effect.andThen(Effect.fromNullable),
+  );
+  const poolId =
+    networkConfig.NETWORK == "Preprod"
+      ? "pool1nmfr5j5rnqndprtazre802glpc3h865sy50mxdny65kfgf3e5eh"
+      : "pool1ynfnjspgckgxjf2zeye8s33jz3e3ndk9pcwp0qzaupzvvd8ukwt";
+
+  const signBuilder = yield* user
+    .newTx()
+    .delegate.VoteToPoolAndDRep(rewardAddress, poolId, {
+      __typename: "AlwaysAbstain",
     })
     .completeProgram();
   return signBuilder;

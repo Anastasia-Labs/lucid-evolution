@@ -42,7 +42,7 @@ export const delegateVoteToPoolAndDrep = (
   config: TxBuilder.TxBuilderConfig,
   rewardAddress: RewardAddress,
   poolId: PoolId,
-  drep: CML.DRep,
+  drep: Drep,
   redeemer?: Redeemer,
 ): Effect.Effect<void, TxBuilderError> =>
   Effect.gen(function* () {
@@ -50,13 +50,13 @@ export const delegateVoteToPoolAndDrep = (
       rewardAddress,
       config,
     );
-
+    const cmlDrep = toCMLDrep(drep);
     const buildCert = (credential: CML.Credential) =>
       CML.SingleCertificateBuilder.new(
         CML.Certificate.new_stake_vote_deleg_cert(
           credential,
           CML.Ed25519KeyHash.from_bech32(poolId),
-          drep,
+          cmlDrep,
         ),
       );
 
