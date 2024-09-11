@@ -148,6 +148,12 @@ export type TxBuilder = {
       drep: Drep,
       redeemer?: Redeemer,
     ) => TxBuilder;
+    ToPoolAndDrep: (
+      rewardAddress: RewardAddress,
+      poolId: PoolId,
+      drep: Drep,
+      redeemer?: Redeemer,
+    ) => TxBuilder;
   };
   attachMetadata: (
     label: Label,
@@ -420,6 +426,22 @@ export function makeTxBuilder(lucidConfig: LucidConfig): TxBuilder {
         const program = Governance.registerAndDelegateToDrep(
           config,
           rewardAddress,
+          drep,
+          redeemer,
+        );
+        config.programs.push(program);
+        return txBuilder;
+      },
+      ToPoolAndDrep: (
+        rewardAddress: RewardAddress,
+        poolId: PoolId,
+        drep: Drep,
+        redeemer?: Redeemer,
+      ) => {
+        const program = Governance.registerAndDelegateToPoolAndDrep(
+          config,
+          rewardAddress,
+          poolId,
           drep,
           redeemer,
         );

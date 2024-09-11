@@ -111,6 +111,32 @@ export const registerAndDelegateToDrep = (
     yield* processCertificate(stakeCredential, config, buildCert, redeemer);
   });
 
+export const registerAndDelegateToPoolAndDrep = (
+  config: TxBuilder.TxBuilderConfig,
+  rewardAddress: RewardAddress,
+  poolId: PoolId,
+  drep: Drep,
+  redeemer?: Redeemer,
+): Effect.Effect<void, TxBuilderError> =>
+  Effect.gen(function* () {
+    const stakeCredential = yield* validateAndGetStakeCredential(
+      rewardAddress,
+      config,
+    );
+    const cmlDrep = toCMLDrep(drep);
+    const buildCert = (credential: CML.Credential) =>
+      CML.SingleCertificateBuilder.new(
+        CML.Certificate.new_stake_vote_reg_deleg_cert(
+          credential,
+          CML.Ed25519KeyHash.from_bech32(poolId),
+          cmlDrep,
+          config.lucidConfig.protocolParameters.keyDeposit,
+        ),
+      );
+
+    yield* processCertificate(stakeCredential, config, buildCert, redeemer);
+  });
+
 export const registerDrep = (
   config: TxBuilder.TxBuilderConfig,
   rewardAddress: RewardAddress,
