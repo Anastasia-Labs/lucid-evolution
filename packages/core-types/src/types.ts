@@ -323,3 +323,21 @@ export const isDRepAlwaysNoConfidence = (
   deleg: Drep,
 ): deleg is AlwaysNoConfidence =>
   !isDRepCredential(deleg) && deleg.__typename === "AlwaysNoConfidence";
+
+export const toCMLDrep = (drep: Drep): CML.DRep => {
+  if (isDRepAlwaysAbstain(drep)) {
+    return CML.DRep.new_always_abstain();
+  } else if (isDRepAlwaysNoConfidence(drep)) {
+    return CML.DRep.new_always_no_confidence();
+  } else if (isDRepCredential(drep)) {
+    switch (drep.type) {
+      case "Key":
+        return CML.DRep.new_key(CML.Ed25519KeyHash.from_hex(drep.hash));
+      case "Script":
+        return CML.DRep.new_script(CML.ScriptHash.from_hex(drep.hash));
+      default:
+        throw new Error("Invalid DRep type");
+    }
+  }
+  throw new Error("Unsupported");
+};

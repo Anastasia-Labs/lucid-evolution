@@ -33,3 +33,33 @@ export const deregisterDrep = Effect.gen(function* ($) {
     .completeProgram();
   return signBuilder;
 }).pipe(Effect.flatMap(handleSignSubmit), withLogRetry, Effect.orDie);
+
+export const voteDelegDrepAlwaysAbstain = Effect.gen(function* ($) {
+  const { user } = yield* User;
+  const rewardAddress = yield* pipe(
+    Effect.promise(() => user.wallet().rewardAddress()),
+    Effect.andThen(Effect.fromNullable),
+  );
+  const signBuilder = yield* user
+    .newTx()
+    .delegate.VoteToDRep(rewardAddress, {
+      __typename: "AlwaysAbstain",
+    })
+    .completeProgram();
+  return signBuilder;
+}).pipe(Effect.flatMap(handleSignSubmit), withLogRetry, Effect.orDie);
+
+export const voteDelegDrepAlwaysNoConfidence = Effect.gen(function* ($) {
+  const { user } = yield* User;
+  const rewardAddress = yield* pipe(
+    Effect.promise(() => user.wallet().rewardAddress()),
+    Effect.andThen(Effect.fromNullable),
+  );
+  const signBuilder = yield* user
+    .newTx()
+    .delegate.VoteToDRep(rewardAddress, {
+      __typename: "AlwaysNoConfidence",
+    })
+    .completeProgram();
+  return signBuilder;
+}).pipe(Effect.flatMap(handleSignSubmit), withLogRetry, Effect.orDie);

@@ -162,6 +162,26 @@ describe.sequential("Onchain testing", () => {
     expect(exit._tag).toBe("Success");
   });
 
+  test("voteDelegDrepAlwaysAbstain", async () => {
+    const program = pipe(
+      GovernanceEndpoints.voteDelegDrepAlwaysAbstain,
+      Effect.provide(User.layer),
+      Effect.provide(NetworkConfig.layerPreprod),
+    );
+    const exit = await Effect.runPromiseExit(program);
+    expect(exit._tag).toBe("Success");
+  });
+
+  test("voteDelegDrepAlwaysNoConfidence", async () => {
+    const program = pipe(
+      GovernanceEndpoints.voteDelegDrepAlwaysNoConfidence,
+      Effect.provide(User.layer),
+      Effect.provide(NetworkConfig.layerPreprod),
+    );
+    const exit = await Effect.runPromiseExit(program);
+    expect(exit._tag).toBe("Success");
+  });
+
   test("delegateTo", async () => {
     const program = pipe(
       StakeEndpoints.delegateTo,
@@ -311,7 +331,7 @@ describe.sequential("Onchain testing", () => {
     const program = pipe(
       GovernanceEndpoints.registerDrep,
       Effect.provide(User.layer),
-      Effect.provide(NetworkConfig.layerPreview),
+      Effect.provide(NetworkConfig.layerPreprod),
     );
     const exit = await Effect.runPromiseExit(program);
     expect(exit._tag).toBe("Success");

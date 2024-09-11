@@ -1,8 +1,13 @@
 import {
   Anchor,
+  Drep,
+  isDRepAlwaysAbstain,
+  isDRepAlwaysNoConfidence,
+  isDRepCredential,
   PoolId,
   Redeemer,
   RewardAddress,
+  toCMLDrep,
 } from "@lucid-evolution/core-types";
 import * as TxBuilder from "../TxBuilder.js";
 import * as CML from "@anastasia-labs/cardano-multiplatform-lib-nodejs";
@@ -16,7 +21,7 @@ import {
 export const delegateVoteToDrep = (
   config: TxBuilder.TxBuilderConfig,
   rewardAddress: RewardAddress,
-  drep: CML.DRep,
+  drep: Drep,
   redeemer?: Redeemer,
 ): Effect.Effect<void, TxBuilderError> =>
   Effect.gen(function* () {
@@ -24,10 +29,10 @@ export const delegateVoteToDrep = (
       rewardAddress,
       config,
     );
-
+    const cmlDrep = toCMLDrep(drep);
     const buildCert = (credential: CML.Credential) =>
       CML.SingleCertificateBuilder.new(
-        CML.Certificate.new_vote_deleg_cert(credential, drep),
+        CML.Certificate.new_vote_deleg_cert(credential, cmlDrep),
       );
 
     yield* processCertificate(stakeCredential, config, buildCert, redeemer);

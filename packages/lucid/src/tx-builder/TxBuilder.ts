@@ -5,6 +5,7 @@ import {
   Address,
   Anchor,
   Assets,
+  Drep,
   Label,
   Lovelace,
   PaymentKeyHash,
@@ -94,7 +95,11 @@ export type TxBuilder = {
   ) => TxBuilder;
   register: {
     Stake: (rewardAddress: RewardAddress) => TxBuilder;
-    DRep: (rewardAddress: RewardAddress) => TxBuilder;
+    DRep: (
+      rewardAddress: RewardAddress,
+      anchor?: Anchor,
+      redeemer?: string,
+    ) => TxBuilder;
   };
   deregister: {
     Stake: (rewardAddress: RewardAddress, redeemer?: string) => TxBuilder;
@@ -120,9 +125,9 @@ export type TxBuilder = {
       poolId: PoolId,
       redeemer?: Redeemer,
     ) => TxBuilder;
-    ToDRep: (
+    VoteToDRep: (
       rewardAddress: RewardAddress,
-      poolId: PoolId,
+      drep: Drep,
       redeemer?: Redeemer,
     ) => TxBuilder;
   };
@@ -342,12 +347,18 @@ export function makeTxBuilder(lucidConfig: LucidConfig): TxBuilder {
         return txBuilder;
       },
 
-      ToDRep: (
-        DReprdAddress: RewardAddress,
-        poolId: PoolId,
+      VoteToDRep: (
+        rewardAddress: RewardAddress,
+        drep: Drep,
         redeemer?: Redeemer,
       ) => {
-        //TODO:
+        const program = Governance.delegateVoteToDrep(
+          config,
+          rewardAddress,
+          drep,
+          redeemer,
+        );
+        config.programs.push(program);
         return txBuilder;
       },
     },
