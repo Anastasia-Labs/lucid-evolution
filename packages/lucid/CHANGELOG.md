@@ -1,5 +1,16 @@
 # @lucid-evolution/lucid
 
+## 0.3.28
+
+### Patch Changes
+
+- [#309](https://github.com/Anastasia-Labs/lucid-evolution/pull/309) [`8ddb8c0`](https://github.com/Anastasia-Labs/lucid-evolution/commit/8ddb8c0381eb4e0a63715a6abd4aeb77bbd3c162) Thanks [@hadelive](https://github.com/hadelive)! - remove CSL dependency
+
+- Updated dependencies [[`8ddb8c0`](https://github.com/Anastasia-Labs/lucid-evolution/commit/8ddb8c0381eb4e0a63715a6abd4aeb77bbd3c162), [`020ba4f`](https://github.com/Anastasia-Labs/lucid-evolution/commit/020ba4fc869a8b41480241ced40ff827e837ab31)]:
+  - @lucid-evolution/utils@0.1.41
+  - @lucid-evolution/provider@0.1.54
+  - @lucid-evolution/wallet@0.1.46
+
 ## 0.3.27
 
 ### Patch Changes
