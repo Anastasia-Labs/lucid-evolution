@@ -100,6 +100,11 @@ export type TxBuilder = {
       anchor?: Anchor,
       redeemer?: string,
     ) => TxBuilder;
+    AndDelegateToPool: (
+      rewardAddress: RewardAddress,
+      poolId: PoolId,
+      redeemer?: Redeemer,
+    ) => TxBuilder;
   };
   deregister: {
     Stake: (rewardAddress: RewardAddress, redeemer?: string) => TxBuilder;
@@ -277,6 +282,20 @@ export function makeTxBuilder(lucidConfig: LucidConfig): TxBuilder {
           config,
           rewardAddress,
           anchor,
+          redeemer,
+        );
+        config.programs.push(program);
+        return txBuilder;
+      },
+      AndDelegateToPool: (
+        rewardAddress: RewardAddress,
+        poolId: PoolId,
+        redeemer?: Redeemer,
+      ) => {
+        const program = Governance.registerAndDelegateToPool(
+          config,
+          rewardAddress,
+          poolId,
           redeemer,
         );
         config.programs.push(program);

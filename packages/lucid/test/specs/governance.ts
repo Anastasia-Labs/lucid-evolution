@@ -84,3 +84,22 @@ export const voteDelegPoolAndDrepAlwaysAbstain = Effect.gen(function* ($) {
     .completeProgram();
   return signBuilder;
 }).pipe(Effect.flatMap(handleSignSubmit), withLogRetry, Effect.orDie);
+
+export const registerAndDelegateToPool = Effect.gen(function* ($) {
+  const { user } = yield* User;
+  const networkConfig = yield* NetworkConfig;
+  const poolId =
+    networkConfig.NETWORK == "Preprod"
+      ? "pool1nmfr5j5rnqndprtazre802glpc3h865sy50mxdny65kfgf3e5eh"
+      : "pool1ynfnjspgckgxjf2zeye8s33jz3e3ndk9pcwp0qzaupzvvd8ukwt";
+
+  const rewardAddress = yield* pipe(
+    Effect.promise(() => user.wallet().rewardAddress()),
+    Effect.andThen(Effect.fromNullable),
+  );
+  const signBuilder = yield* user
+    .newTx()
+    .register.AndDelegateToPool(rewardAddress, poolId)
+    .completeProgram();
+  return signBuilder;
+}).pipe(Effect.flatMap(handleSignSubmit), withLogRetry, Effect.orDie);
