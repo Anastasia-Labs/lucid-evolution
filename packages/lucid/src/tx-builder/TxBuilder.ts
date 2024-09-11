@@ -5,7 +5,7 @@ import {
   Address,
   Anchor,
   Assets,
-  Drep,
+  DRep,
   Label,
   Lovelace,
   PaymentKeyHash,
@@ -127,10 +127,39 @@ export type TxBuilder = {
     ) => TxBuilder;
     VoteToDRep: (
       rewardAddress: RewardAddress,
-      drep: Drep,
+      drep: DRep,
+      redeemer?: Redeemer,
+    ) => TxBuilder;
+    VoteToPoolAndDRep: (
+      rewardAddress: RewardAddress,
+      poolId: PoolId,
+      drep: DRep,
       redeemer?: Redeemer,
     ) => TxBuilder;
   };
+  registerAndDelegate: {
+    ToPool: (
+      rewardAddress: RewardAddress,
+      poolId: PoolId,
+      redeemer?: Redeemer,
+    ) => TxBuilder;
+    ToDRep: (
+      rewardAddress: RewardAddress,
+      drep: DRep,
+      redeemer?: Redeemer,
+    ) => TxBuilder;
+    ToPoolAndDRep: (
+      rewardAddress: RewardAddress,
+      poolId: PoolId,
+      drep: DRep,
+      redeemer?: Redeemer,
+    ) => TxBuilder;
+  };
+  updateDRep: (
+    rewardAddress: RewardAddress,
+    anchor?: Anchor,
+    redeemer?: Redeemer,
+  ) => TxBuilder;
   attachMetadata: (
     label: Label,
     metadata: Metadata.TransactionMetadata,
@@ -267,7 +296,7 @@ export function makeTxBuilder(lucidConfig: LucidConfig): TxBuilder {
         anchor?: Anchor,
         redeemer?: string,
       ) => {
-        const program = Governance.registerDrep(
+        const program = Governance.registerDRep(
           config,
           rewardAddress,
           anchor,
@@ -289,7 +318,7 @@ export function makeTxBuilder(lucidConfig: LucidConfig): TxBuilder {
         return txBuilder;
       },
       DRep: (rewardAddress: RewardAddress, redeemer?: string) => {
-        const program = Governance.deregisterDrep(
+        const program = Governance.deregisterDRep(
           config,
           rewardAddress,
           redeemer,
@@ -349,10 +378,10 @@ export function makeTxBuilder(lucidConfig: LucidConfig): TxBuilder {
 
       VoteToDRep: (
         rewardAddress: RewardAddress,
-        drep: Drep,
+        drep: DRep,
         redeemer?: Redeemer,
       ) => {
-        const program = Governance.delegateVoteToDrep(
+        const program = Governance.delegateVoteToDRep(
           config,
           rewardAddress,
           drep,
@@ -361,6 +390,83 @@ export function makeTxBuilder(lucidConfig: LucidConfig): TxBuilder {
         config.programs.push(program);
         return txBuilder;
       },
+
+      VoteToPoolAndDRep: (
+        rewardAddress: RewardAddress,
+        poolId: PoolId,
+        drep: DRep,
+        redeemer?: Redeemer,
+      ) => {
+        const program = Governance.delegateVoteToPoolAndDRep(
+          config,
+          rewardAddress,
+          poolId,
+          drep,
+          redeemer,
+        );
+        config.programs.push(program);
+        return txBuilder;
+      },
+    },
+    registerAndDelegate: {
+      ToPool: (
+        rewardAddress: RewardAddress,
+        poolId: PoolId,
+        redeemer?: Redeemer,
+      ) => {
+        const program = Governance.registerAndDelegateToPool(
+          config,
+          rewardAddress,
+          poolId,
+          redeemer,
+        );
+        config.programs.push(program);
+        return txBuilder;
+      },
+      ToDRep: (
+        rewardAddress: RewardAddress,
+        drep: DRep,
+        redeemer?: Redeemer,
+      ) => {
+        const program = Governance.registerAndDelegateToDRep(
+          config,
+          rewardAddress,
+          drep,
+          redeemer,
+        );
+        config.programs.push(program);
+        return txBuilder;
+      },
+      ToPoolAndDRep: (
+        rewardAddress: RewardAddress,
+        poolId: PoolId,
+        drep: DRep,
+        redeemer?: Redeemer,
+      ) => {
+        const program = Governance.registerAndDelegateToPoolAndDRep(
+          config,
+          rewardAddress,
+          poolId,
+          drep,
+          redeemer,
+        );
+        config.programs.push(program);
+        return txBuilder;
+      },
+    },
+    updateDRep: (
+      rewardAddress: RewardAddress,
+      anchor?: Anchor,
+      redeemer?: Redeemer,
+    ) => {
+      const program = Governance.updateDRep(
+        config,
+        rewardAddress,
+        anchor,
+        redeemer,
+      );
+      config.programs.push(program);
+      return txBuilder;
     },
     attachMetadata: (label: Label, metadata: Metadata.TransactionMetadata) => {
       const program = Metadata.attachMetadata(config, label, metadata);

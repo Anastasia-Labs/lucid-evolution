@@ -162,9 +162,9 @@ describe.sequential("Onchain testing", () => {
     expect(exit._tag).toBe("Success");
   });
 
-  test("voteDelegDrepAlwaysAbstain", async () => {
+  test("voteDelegDRepAlwaysAbstain", async () => {
     const program = pipe(
-      GovernanceEndpoints.voteDelegDrepAlwaysAbstain,
+      GovernanceEndpoints.voteDelegDRepAlwaysAbstain,
       Effect.provide(User.layer),
       Effect.provide(NetworkConfig.layerPreprod),
     );
@@ -172,9 +172,19 @@ describe.sequential("Onchain testing", () => {
     expect(exit._tag).toBe("Success");
   });
 
-  test("voteDelegDrepAlwaysNoConfidence", async () => {
+  test("voteDelegDRepAlwaysNoConfidence", async () => {
     const program = pipe(
-      GovernanceEndpoints.voteDelegDrepAlwaysNoConfidence,
+      GovernanceEndpoints.voteDelegDRepAlwaysNoConfidence,
+      Effect.provide(User.layer),
+      Effect.provide(NetworkConfig.layerPreprod),
+    );
+    const exit = await Effect.runPromiseExit(program);
+    expect(exit._tag).toBe("Success");
+  });
+
+  test("voteDelegPoolAndDRepAlwaysAbstain", async () => {
+    const program = pipe(
+      GovernanceEndpoints.voteDelegPoolAndDRepAlwaysAbstain,
       Effect.provide(User.layer),
       Effect.provide(NetworkConfig.layerPreprod),
     );
@@ -205,6 +215,66 @@ describe.sequential("Onchain testing", () => {
   test("withdrawZero", async () => {
     const program = pipe(
       StakeEndpoints.withdrawZero,
+      Effect.provide(User.layer),
+      Effect.provide(NetworkConfig.layerPreprod),
+    );
+    const exit = await Effect.runPromiseExit(program);
+    expect(exit._tag).toBe("Success");
+  });
+
+  test("deRegisterStake", async () => {
+    const program = pipe(
+      StakeEndpoints.deRegisterStake,
+      Effect.provide(User.layer),
+      Effect.provide(NetworkConfig.layerPreprod),
+    );
+    const exit = await Effect.runPromiseExit(program);
+    expect(exit._tag).toBe("Success");
+  });
+
+  test("registerAndDelegateToPool", async () => {
+    const program = pipe(
+      GovernanceEndpoints.registerAndDelegateToPool,
+      Effect.provide(User.layer),
+      Effect.provide(NetworkConfig.layerPreprod),
+    );
+    const exit = await Effect.runPromiseExit(program);
+    expect(exit._tag).toBe("Success");
+  });
+
+  test("deRegisterStake", async () => {
+    const program = pipe(
+      StakeEndpoints.deRegisterStake,
+      Effect.provide(User.layer),
+      Effect.provide(NetworkConfig.layerPreprod),
+    );
+    const exit = await Effect.runPromiseExit(program);
+    expect(exit._tag).toBe("Success");
+  });
+
+  test("registerAndDelegateToDRep", async () => {
+    const program = pipe(
+      GovernanceEndpoints.registerAndDelegateToDRep,
+      Effect.provide(User.layer),
+      Effect.provide(NetworkConfig.layerPreprod),
+    );
+    const exit = await Effect.runPromiseExit(program);
+    expect(exit._tag).toBe("Success");
+  });
+
+  test("deRegisterStake", async () => {
+    const program = pipe(
+      StakeEndpoints.deRegisterStake,
+      Effect.provide(User.layer),
+      Effect.provide(NetworkConfig.layerPreprod),
+    );
+    const exit = await Effect.runPromiseExit(program);
+    expect(exit._tag).toBe("Success");
+  });
+
+  test("registerAndDelegateToPoolAndDRep", async () => {
+    const program = pipe(
+      GovernanceEndpoints.registerAndDelegateToPoolAndDRep,
       Effect.provide(User.layer),
       Effect.provide(NetworkConfig.layerPreprod),
     );
@@ -327,9 +397,9 @@ describe.sequential("Onchain testing", () => {
     expect(exit._tag).toBe("Success");
   });
 
-  test("registerDrep", async () => {
+  test("registerDRep", async () => {
     const program = pipe(
-      GovernanceEndpoints.registerDrep,
+      GovernanceEndpoints.registerDRep,
       Effect.provide(User.layer),
       Effect.provide(NetworkConfig.layerPreprod),
     );
@@ -337,9 +407,19 @@ describe.sequential("Onchain testing", () => {
     expect(exit._tag).toBe("Success");
   });
 
-  test("deregisterDrep", async () => {
+  test("updateDRep", async () => {
     const program = pipe(
-      GovernanceEndpoints.deregisterDrep,
+      GovernanceEndpoints.updateDRep,
+      Effect.provide(User.layer),
+      Effect.provide(NetworkConfig.layerPreprod),
+    );
+    const exit = await Effect.runPromiseExit(program);
+    expect(exit._tag).toBe("Success");
+  });
+
+  test("deregisterDRep", async () => {
+    const program = pipe(
+      GovernanceEndpoints.deregisterDRep,
       Effect.provide(User.layer),
       Effect.provide(NetworkConfig.layerPreprod),
     );

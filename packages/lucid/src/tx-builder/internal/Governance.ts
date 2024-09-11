@@ -1,13 +1,13 @@
 import {
   Anchor,
-  Drep,
+  DRep,
   isDRepAlwaysAbstain,
   isDRepAlwaysNoConfidence,
   isDRepCredential,
   PoolId,
   Redeemer,
   RewardAddress,
-  toCMLDrep,
+  toCMLDRep,
 } from "@lucid-evolution/core-types";
 import * as TxBuilder from "../TxBuilder.js";
 import * as CML from "@anastasia-labs/cardano-multiplatform-lib-nodejs";
@@ -18,10 +18,10 @@ import {
   validateAndGetStakeCredential,
 } from "./TxUtils.js";
 
-export const delegateVoteToDrep = (
+export const delegateVoteToDRep = (
   config: TxBuilder.TxBuilderConfig,
   rewardAddress: RewardAddress,
-  drep: Drep,
+  drep: DRep,
   redeemer?: Redeemer,
 ): Effect.Effect<void, TxBuilderError> =>
   Effect.gen(function* () {
@@ -29,20 +29,20 @@ export const delegateVoteToDrep = (
       rewardAddress,
       config,
     );
-    const cmlDrep = toCMLDrep(drep);
+    const cmlDRep = toCMLDRep(drep);
     const buildCert = (credential: CML.Credential) =>
       CML.SingleCertificateBuilder.new(
-        CML.Certificate.new_vote_deleg_cert(credential, cmlDrep),
+        CML.Certificate.new_vote_deleg_cert(credential, cmlDRep),
       );
 
     yield* processCertificate(stakeCredential, config, buildCert, redeemer);
   });
 
-export const delegateVoteToPoolAndDrep = (
+export const delegateVoteToPoolAndDRep = (
   config: TxBuilder.TxBuilderConfig,
   rewardAddress: RewardAddress,
   poolId: PoolId,
-  drep: CML.DRep,
+  drep: DRep,
   redeemer?: Redeemer,
 ): Effect.Effect<void, TxBuilderError> =>
   Effect.gen(function* () {
@@ -50,13 +50,13 @@ export const delegateVoteToPoolAndDrep = (
       rewardAddress,
       config,
     );
-
+    const cmlDRep = toCMLDRep(drep);
     const buildCert = (credential: CML.Credential) =>
       CML.SingleCertificateBuilder.new(
         CML.Certificate.new_stake_vote_deleg_cert(
           credential,
           CML.Ed25519KeyHash.from_bech32(poolId),
-          drep,
+          cmlDRep,
         ),
       );
 
@@ -87,10 +87,10 @@ export const registerAndDelegateToPool = (
     yield* processCertificate(stakeCredential, config, buildCert, redeemer);
   });
 
-export const registerAndDelegateToDrep = (
+export const registerAndDelegateToDRep = (
   config: TxBuilder.TxBuilderConfig,
   rewardAddress: RewardAddress,
-  drep: CML.DRep,
+  drep: DRep,
   redeemer?: Redeemer,
 ): Effect.Effect<void, TxBuilderError> =>
   Effect.gen(function* () {
@@ -98,20 +98,46 @@ export const registerAndDelegateToDrep = (
       rewardAddress,
       config,
     );
-
+    const cmlDRep = toCMLDRep(drep);
     const buildCert = (credential: CML.Credential) =>
       CML.SingleCertificateBuilder.new(
         CML.Certificate.new_vote_reg_deleg_cert(
           credential,
-          drep,
-          config.lucidConfig.protocolParameters.drepDeposit,
+          cmlDRep,
+          config.lucidConfig.protocolParameters.keyDeposit,
         ),
       );
 
     yield* processCertificate(stakeCredential, config, buildCert, redeemer);
   });
 
-export const registerDrep = (
+export const registerAndDelegateToPoolAndDRep = (
+  config: TxBuilder.TxBuilderConfig,
+  rewardAddress: RewardAddress,
+  poolId: PoolId,
+  drep: DRep,
+  redeemer?: Redeemer,
+): Effect.Effect<void, TxBuilderError> =>
+  Effect.gen(function* () {
+    const stakeCredential = yield* validateAndGetStakeCredential(
+      rewardAddress,
+      config,
+    );
+    const cmlDRep = toCMLDRep(drep);
+    const buildCert = (credential: CML.Credential) =>
+      CML.SingleCertificateBuilder.new(
+        CML.Certificate.new_stake_vote_reg_deleg_cert(
+          credential,
+          CML.Ed25519KeyHash.from_bech32(poolId),
+          cmlDRep,
+          config.lucidConfig.protocolParameters.keyDeposit,
+        ),
+      );
+
+    yield* processCertificate(stakeCredential, config, buildCert, redeemer);
+  });
+
+export const registerDRep = (
   config: TxBuilder.TxBuilderConfig,
   rewardAddress: RewardAddress,
   anchor?: Anchor,
@@ -140,7 +166,7 @@ export const registerDrep = (
     yield* processCertificate(stakeCredential, config, buildCert, redeemer);
   });
 
-export const deregisterDrep = (
+export const deregisterDRep = (
   config: TxBuilder.TxBuilderConfig,
   rewardAddress: RewardAddress,
   redeemer?: Redeemer,
@@ -159,5 +185,30 @@ export const deregisterDrep = (
         ),
       );
 
+    yield* processCertificate(stakeCredential, config, buildCert, redeemer);
+  });
+
+export const updateDRep = (
+  config: TxBuilder.TxBuilderConfig,
+  rewardAddress: RewardAddress,
+  anchor?: Anchor,
+  redeemer?: Redeemer,
+): Effect.Effect<void, TxBuilderError> =>
+  Effect.gen(function* () {
+    const stakeCredential = yield* validateAndGetStakeCredential(
+      rewardAddress,
+      config,
+    );
+    const cmlAnchor = anchor
+      ? CML.Anchor.new(
+          CML.Url.from_json(anchor.url),
+          CML.AnchorDocHash.from_hex(anchor.dataHash),
+        )
+      : undefined;
+
+    const buildCert = (credential: CML.Credential) =>
+      CML.SingleCertificateBuilder.new(
+        CML.Certificate.new_update_drep_cert(credential, cmlAnchor),
+      );
     yield* processCertificate(stakeCredential, config, buildCert, redeemer);
   });
