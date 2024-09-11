@@ -311,20 +311,20 @@ export type AlwaysNoConfidence = {
   __typename: "AlwaysNoConfidence";
 };
 
-export type Drep = Credential | AlwaysAbstain | AlwaysNoConfidence;
+export type DRep = Credential | AlwaysAbstain | AlwaysNoConfidence;
 
-export const isDRepCredential = (deleg: Drep): deleg is Credential =>
+export const isDRepCredential = (deleg: DRep): deleg is Credential =>
   !("__typename" in deleg);
 
-export const isDRepAlwaysAbstain = (deleg: Drep): deleg is AlwaysAbstain =>
+export const isDRepAlwaysAbstain = (deleg: DRep): deleg is AlwaysAbstain =>
   !isDRepCredential(deleg) && deleg.__typename === "AlwaysAbstain";
 
 export const isDRepAlwaysNoConfidence = (
-  deleg: Drep,
+  deleg: DRep,
 ): deleg is AlwaysNoConfidence =>
   !isDRepCredential(deleg) && deleg.__typename === "AlwaysNoConfidence";
 
-export const toCMLDrep = (drep: Drep): CML.DRep => {
+export const toCMLDRep = (drep: DRep): CML.DRep => {
   if (isDRepAlwaysAbstain(drep)) {
     return CML.DRep.new_always_abstain();
   } else if (isDRepAlwaysNoConfidence(drep)) {

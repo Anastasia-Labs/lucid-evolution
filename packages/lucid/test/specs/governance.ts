@@ -2,7 +2,7 @@ import { Effect, pipe } from "effect";
 import { NetworkConfig, User } from "./services";
 import { handleSignSubmit, withLogRetry } from "./utils";
 
-export const registerDrep = Effect.gen(function* ($) {
+export const registerDRep = Effect.gen(function* ($) {
   const { user } = yield* User;
   const rewardAddress = yield* pipe(
     Effect.promise(() => user.wallet().rewardAddress()),
@@ -21,7 +21,7 @@ export const registerDrep = Effect.gen(function* ($) {
   Effect.orDie,
 );
 
-export const deregisterDrep = Effect.gen(function* ($) {
+export const deregisterDRep = Effect.gen(function* ($) {
   const { user } = yield* User;
   const rewardAddress = yield* pipe(
     Effect.promise(() => user.wallet().rewardAddress()),
@@ -34,7 +34,20 @@ export const deregisterDrep = Effect.gen(function* ($) {
   return signBuilder;
 }).pipe(Effect.flatMap(handleSignSubmit), withLogRetry, Effect.orDie);
 
-export const voteDelegDrepAlwaysAbstain = Effect.gen(function* ($) {
+export const updateDRep = Effect.gen(function* ($) {
+  const { user } = yield* User;
+  const rewardAddress = yield* pipe(
+    Effect.promise(() => user.wallet().rewardAddress()),
+    Effect.andThen(Effect.fromNullable),
+  );
+  const signBuilder = yield* user
+    .newTx()
+    .updateDRep(rewardAddress)
+    .completeProgram();
+  return signBuilder;
+}).pipe(Effect.flatMap(handleSignSubmit), withLogRetry, Effect.orDie);
+
+export const voteDelegDRepAlwaysAbstain = Effect.gen(function* ($) {
   const { user } = yield* User;
   const rewardAddress = yield* pipe(
     Effect.promise(() => user.wallet().rewardAddress()),
@@ -49,7 +62,7 @@ export const voteDelegDrepAlwaysAbstain = Effect.gen(function* ($) {
   return signBuilder;
 }).pipe(Effect.flatMap(handleSignSubmit), withLogRetry, Effect.orDie);
 
-export const voteDelegDrepAlwaysNoConfidence = Effect.gen(function* ($) {
+export const voteDelegDRepAlwaysNoConfidence = Effect.gen(function* ($) {
   const { user } = yield* User;
   const rewardAddress = yield* pipe(
     Effect.promise(() => user.wallet().rewardAddress()),
@@ -64,7 +77,7 @@ export const voteDelegDrepAlwaysNoConfidence = Effect.gen(function* ($) {
   return signBuilder;
 }).pipe(Effect.flatMap(handleSignSubmit), withLogRetry, Effect.orDie);
 
-export const voteDelegPoolAndDrepAlwaysAbstain = Effect.gen(function* ($) {
+export const voteDelegPoolAndDRepAlwaysAbstain = Effect.gen(function* ($) {
   const { user } = yield* User;
   const networkConfig = yield* NetworkConfig;
   const rewardAddress = yield* pipe(
@@ -104,7 +117,7 @@ export const registerAndDelegateToPool = Effect.gen(function* ($) {
   return signBuilder;
 }).pipe(Effect.flatMap(handleSignSubmit), withLogRetry, Effect.orDie);
 
-export const registerAndDelegateToDrep = Effect.gen(function* ($) {
+export const registerAndDelegateToDRep = Effect.gen(function* ($) {
   const { user } = yield* User;
   const rewardAddress = yield* pipe(
     Effect.promise(() => user.wallet().rewardAddress()),
@@ -112,14 +125,14 @@ export const registerAndDelegateToDrep = Effect.gen(function* ($) {
   );
   const signBuilder = yield* user
     .newTx()
-    .registerAndDelegate.ToDrep(rewardAddress, {
+    .registerAndDelegate.ToDRep(rewardAddress, {
       __typename: "AlwaysAbstain",
     })
     .completeProgram();
   return signBuilder;
 }).pipe(Effect.flatMap(handleSignSubmit), withLogRetry, Effect.orDie);
 
-export const registerAndDelegateToPoolAndDrep = Effect.gen(function* ($) {
+export const registerAndDelegateToPoolAndDRep = Effect.gen(function* ($) {
   const { user } = yield* User;
   const rewardAddress = yield* pipe(
     Effect.promise(() => user.wallet().rewardAddress()),
@@ -132,7 +145,7 @@ export const registerAndDelegateToPoolAndDrep = Effect.gen(function* ($) {
       : "pool1ynfnjspgckgxjf2zeye8s33jz3e3ndk9pcwp0qzaupzvvd8ukwt";
   const signBuilder = yield* user
     .newTx()
-    .registerAndDelegate.ToPoolAndDrep(rewardAddress, poolId, {
+    .registerAndDelegate.ToPoolAndDRep(rewardAddress, poolId, {
       __typename: "AlwaysAbstain",
     })
     .completeProgram();
