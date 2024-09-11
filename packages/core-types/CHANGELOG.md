@@ -1,5 +1,11 @@
 # @lucid-evolution/core-types
 
+## 0.1.18
+
+### Patch Changes
+
+- [#308](https://github.com/Anastasia-Labs/lucid-evolution/pull/308) [`2afc548`](https://github.com/Anastasia-Labs/lucid-evolution/commit/2afc5485d65c7811a66339daa4c90493026cf51e) Thanks [@solidsnakedev](https://github.com/solidsnakedev)! - add governance modules
+
 ## 0.1.17
 
 ### Patch Changes
