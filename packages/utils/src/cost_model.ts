@@ -34,6 +34,8 @@ export const PROTOCOL_PARAMETERS_DEFAULT: ProtocolParameters = {
   maxValSize: 5000,
   keyDeposit: 2000000n,
   poolDeposit: 500000000n,
+  drepDeposit: 500000000n,
+  govActionDeposit: 100000000000n,
   priceMem: 0.0577,
   priceStep: 0.0000721,
   maxTxExMem: 14000000n,

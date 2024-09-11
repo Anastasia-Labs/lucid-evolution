@@ -74,7 +74,13 @@ export type TxBuilder = {
   };
   addSigner: (address: Address | RewardAddress) => TxBuilder;
   addSignerKey: (keyHash: PaymentKeyHash | StakeKeyHash) => TxBuilder;
+  /**
+   * NOTE: Deprecate in future version
+   */
   registerStake: (rewardAddress: RewardAddress) => TxBuilder;
+  /**
+   * NOTE: Deprecate in future version
+   */
   deRegisterStake: (
     rewardAddress: RewardAddress,
     redeemer?: string,
@@ -84,17 +90,40 @@ export type TxBuilder = {
     amount: Lovelace,
     redeemer?: string | RedeemerBuilder,
   ) => TxBuilder;
+  register: {
+    Stake: (rewardAddress: RewardAddress) => TxBuilder;
+    DRep: (rewardAddress: RewardAddress) => TxBuilder;
+  };
+  deregister: {
+    Stake: (rewardAddress: RewardAddress, redeemer?: string) => TxBuilder;
+    DRep: (rewardAddress: RewardAddress, redeemer?: string) => TxBuilder;
+  };
   mintAssets: (
     assets: Assets,
     redeemer?: string | RedeemerBuilder,
   ) => TxBuilder;
   validFrom: (unixTime: number) => TxBuilder;
   validTo: (unixTime: number) => TxBuilder;
+  /**
+   * NOTE: Deprecate in future version
+   */
   delegateTo: (
     rewardAddress: RewardAddress,
     poolId: PoolId,
     redeemer?: Redeemer,
   ) => TxBuilder;
+  delegate: {
+    ToPool: (
+      rewardAddress: RewardAddress,
+      poolId: PoolId,
+      redeemer?: Redeemer,
+    ) => TxBuilder;
+    ToDRep: (
+      rewardAddress: RewardAddress,
+      poolId: PoolId,
+      redeemer?: Redeemer,
+    ) => TxBuilder;
+  };
   attachMetadata: (
     label: Label,
     metadata: Metadata.TransactionMetadata,
@@ -105,6 +134,8 @@ export type TxBuilder = {
     MintingPolicy: (mintingPolicy: Script) => TxBuilder;
     CertificateValidator: (certValidator: Script) => TxBuilder;
     WithdrawalValidator: (withdrawalValidator: Script) => TxBuilder;
+    VoteValidator: (voteValidator: Script) => TxBuilder;
+    ProposeValidator: (proposeValidator: Script) => TxBuilder;
   };
   compose: (tx: TxBuilder | null) => TxBuilder;
   setMinFee: (fee: bigint) => TxBuilder;
@@ -218,10 +249,32 @@ export function makeTxBuilder(lucidConfig: LucidConfig): TxBuilder {
       config.programs.push(program);
       return txBuilder;
     },
+    register: {
+      Stake: (rewardAddress: RewardAddress) => {
+        const program = Stake.registerStake(config, rewardAddress);
+        config.programs.push(program);
+        return txBuilder;
+      },
+      DRep: (rewardAddress: RewardAddress) => {
+        //TODO:
+        return txBuilder;
+      },
+    },
     deRegisterStake: (rewardAddress: RewardAddress, redeemer?: string) => {
       const program = Stake.deRegisterStake(config, rewardAddress, redeemer);
       config.programs.push(program);
       return txBuilder;
+    },
+    deregister: {
+      Stake: (rewardAddress: RewardAddress, redeemer?: string) => {
+        const program = Stake.deRegisterStake(config, rewardAddress, redeemer);
+        config.programs.push(program);
+        return txBuilder;
+      },
+      DRep: (rewardAddress: RewardAddress, redeemer?: string) => {
+        //TODO:
+        return txBuilder;
+      },
     },
     withdraw: (
       rewardAddress: RewardAddress,
@@ -256,6 +309,31 @@ export function makeTxBuilder(lucidConfig: LucidConfig): TxBuilder {
       config.programs.push(program);
       return txBuilder;
     },
+    delegate: {
+      ToPool: (
+        rewardAddress: RewardAddress,
+        poolId: PoolId,
+        redeemer?: Redeemer,
+      ) => {
+        const program = Pool.delegateTo(
+          config,
+          rewardAddress,
+          poolId,
+          redeemer,
+        );
+        config.programs.push(program);
+        return txBuilder;
+      },
+
+      ToDRep: (
+        DReprdAddress: RewardAddress,
+        poolId: PoolId,
+        redeemer?: Redeemer,
+      ) => {
+        //TODO:
+        return txBuilder;
+      },
+    },
     attachMetadata: (label: Label, metadata: Metadata.TransactionMetadata) => {
       const program = Metadata.attachMetadata(config, label, metadata);
       config.programs.push(program);
@@ -286,6 +364,16 @@ export function makeTxBuilder(lucidConfig: LucidConfig): TxBuilder {
       WithdrawalValidator: (withdrawalValidator: Script) => {
         const scriptKeyValue =
           Attach.attachWithdrawalValidator(withdrawalValidator);
+        config.scripts.set(scriptKeyValue.key, scriptKeyValue.value);
+        return txBuilder;
+      },
+      VoteValidator: (voteValidator: Script) => {
+        const scriptKeyValue = Attach.attachVoteValidator(voteValidator);
+        config.scripts.set(scriptKeyValue.key, scriptKeyValue.value);
+        return txBuilder;
+      },
+      ProposeValidator: (proposeValidator: Script) => {
+        const scriptKeyValue = Attach.attachProposeValidator(proposeValidator);
         config.scripts.set(scriptKeyValue.key, scriptKeyValue.value);
         return txBuilder;
       },

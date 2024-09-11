@@ -65,6 +65,8 @@ export class Maestro implements Provider {
       maxValSize: parseInt(result.max_value_size.bytes),
       keyDeposit: BigInt(result.stake_credential_deposit.ada.lovelace),
       poolDeposit: BigInt(result.stake_pool_deposit.ada.lovelace),
+      drepDeposit: BigInt(result.delegate_representative_deposit.ada.lovelace),
+      govActionDeposit: BigInt(result.governance_action_deposit.ada.lovelace),
       priceMem: decimalFromRationalString(
         result.script_execution_prices.memory,
       ),

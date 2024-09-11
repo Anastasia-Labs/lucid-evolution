@@ -56,6 +56,8 @@ export class Koios implements Provider {
       maxValSize: result.max_val_size,
       keyDeposit: result.key_deposit,
       poolDeposit: result.pool_deposit,
+      drepDeposit: BigInt(result.drep_deposit),
+      govActionDeposit: BigInt(result.gov_action_deposit),
       priceMem: result.price_mem,
       priceStep: result.price_step,
       maxTxExMem: result.max_tx_ex_mem,

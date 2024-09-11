@@ -1,18 +1,23 @@
-import { CML } from "../../core.js";
-import { CBORHex, OutputDatum } from "../types.js";
-import { Effect } from "effect";
+import * as CML from "@anastasia-labs/cardano-multiplatform-lib-nodejs";
+import { CBORHex } from "../types.js";
+import { Effect, pipe } from "effect";
 import { networkToId, getAddressDetails } from "@lucid-evolution/utils";
 import {
   Address,
   AddressDetails,
-  Assets,
+  Redeemer,
   RedeemerBuilder,
   RewardAddress,
-  UTxO,
+  Credential,
 } from "@lucid-evolution/core-types";
 import { ERROR_MESSAGE, TxBuilderError } from "../../Errors.js";
 import { LucidConfig } from "../../lucid-evolution/LucidEvolution.js";
 import { TxBuilderConfig } from "../TxBuilder.js";
+
+import * as TxBuilder from "../TxBuilder.js";
+
+export const txBuilderError = (cause: unknown) =>
+  new TxBuilderError({ cause: `{ TxBuilderError : ${cause} }` });
 
 //TODO: improve error message, utils is used in different modules
 export const toCMLAddress = (
@@ -28,17 +33,12 @@ export const toCMLAddress = (
 
 export const toV1 = (script: string) =>
   CML.PlutusScript.from_v1(CML.PlutusV1Script.from_cbor_hex(script));
-export const toV2 = (script: string) => {
-  // console.log("before");
-  const v2 = CML.PlutusV2Script.from_cbor_hex(script);
-  // console.log("v2", v2.hash().to_hex());
-  return CML.PlutusScript.from_v2(v2);
-};
 
-export const toV3 = (script: string) => {
-  const v3 = CML.PlutusV3Script.from_cbor_hex(script);
-  return CML.PlutusScript.from_v3(v3);
-};
+export const toV2 = (script: string) =>
+  CML.PlutusScript.from_v2(CML.PlutusV2Script.from_cbor_hex(script));
+
+export const toV3 = (script: string) =>
+  CML.PlutusScript.from_v3(CML.PlutusV3Script.from_cbor_hex(script));
 
 export const toPartial = (script: CML.PlutusScript, redeemer: CBORHex) =>
   CML.PartialPlutusWitness.new(
@@ -101,4 +101,95 @@ export const validateAddressDetails = (
       });
 
     return addressDetails;
+  });
+
+export const processCertificate = (
+  stakeCredential: Credential,
+  config: TxBuilder.TxBuilderConfig,
+  buildCert: (credential: CML.Credential) => CML.SingleCertificateBuilder,
+  redeemer?: Redeemer,
+): Effect.Effect<void, TxBuilderError> =>
+  Effect.gen(function* () {
+    switch (stakeCredential.type) {
+      case "Key": {
+        const credential = CML.Credential.new_pub_key(
+          CML.Ed25519KeyHash.from_hex(stakeCredential.hash),
+        );
+        const certBuilder = buildCert(credential);
+        config.txBuilder.add_cert(certBuilder.payment_key());
+        break;
+      }
+
+      case "Script": {
+        const credential = CML.Credential.new_script(
+          CML.ScriptHash.from_hex(stakeCredential.hash),
+        );
+        const certBuilder = buildCert(credential);
+
+        const script = yield* pipe(
+          Effect.fromNullable(config.scripts.get(stakeCredential.hash)),
+          Effect.orElseFail(() =>
+            txBuilderError(ERROR_MESSAGE.MISSING_SCRIPT(stakeCredential.hash)),
+          ),
+        );
+
+        const red = yield* pipe(
+          Effect.fromNullable(redeemer),
+          Effect.orElseFail(() =>
+            txBuilderError(ERROR_MESSAGE.MISSING_REDEEMER),
+          ),
+        );
+
+        const addPlutusCertificate = (scriptVersion: CML.PlutusScript) => {
+          config.txBuilder.add_cert(
+            certBuilder.plutus_script(
+              toPartial(scriptVersion, red),
+              CML.Ed25519KeyHashList.new(),
+            ),
+          );
+        };
+
+        switch (script.type) {
+          case "PlutusV1":
+            addPlutusCertificate(toV1(script.script));
+            break;
+
+          case "PlutusV2":
+            addPlutusCertificate(toV2(script.script));
+            break;
+          case "PlutusV3":
+            addPlutusCertificate(toV3(script.script));
+            break;
+
+          case "Native":
+            yield* txBuilderError("NotFound");
+            break;
+        }
+        break;
+      }
+    }
+  });
+
+export const validateAndGetStakeCredential = (
+  rewardAddress: RewardAddress,
+  config: TxBuilder.TxBuilderConfig,
+): Effect.Effect<Credential, TxBuilderError> =>
+  Effect.gen(function* () {
+    const addressDetails = yield* pipe(
+      validateAddressDetails(rewardAddress, config.lucidConfig),
+      Effect.andThen((address) =>
+        address.type !== "Reward"
+          ? txBuilderError(ERROR_MESSAGE.MISSING_REWARD_TYPE)
+          : Effect.succeed(address),
+      ),
+    );
+
+    const stakeCredential = yield* pipe(
+      Effect.fromNullable(addressDetails.stakeCredential),
+      Effect.orElseFail(() =>
+        txBuilderError(ERROR_MESSAGE.MISSING_STAKE_CREDENTIAL),
+      ),
+    );
+
+    return stakeCredential;
   });

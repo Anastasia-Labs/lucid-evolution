@@ -10,6 +10,8 @@ export type ProtocolParameters = {
   maxValSize: number;
   keyDeposit: bigint;
   poolDeposit: bigint;
+  drepDeposit: bigint;
+  govActionDeposit: bigint;
   priceMem: number;
   priceStep: number;
   maxTxExMem: bigint;
@@ -75,12 +77,16 @@ export type Validator =
   | MintingPolicy
   | SpendingValidator
   | CertificateValidator
-  | WithdrawalValidator;
+  | WithdrawalValidator
+  | VoteValidator
+  | ProposeValidator;
 
 export type MintingPolicy = Script;
 export type SpendingValidator = Script;
 export type CertificateValidator = Script;
 export type WithdrawalValidator = Script;
+export type VoteValidator = Script;
+export type ProposeValidator = Script;
 
 /** Bech32 */
 export type Address = string;

@@ -366,6 +366,8 @@ const toProtocolParameters = (
     maxValSize: result.maxValueSize.bytes,
     keyDeposit: BigInt(result.stakeCredentialDeposit.ada.lovelace),
     poolDeposit: BigInt(result.stakePoolDeposit.ada.lovelace),
+    drepDeposit: BigInt(result.delegateRepresentativeDeposit.ada.lovelace),
+    govActionDeposit: BigInt(result.governanceActionDeposit.ada.lovelace),
     priceMem:
       result.scriptExecutionPrices.memory[0] /
       result.scriptExecutionPrices.memory[1],
