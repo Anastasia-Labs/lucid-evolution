@@ -1,5 +1,12 @@
 # @lucid-evolution/sign_data
 
+## 0.1.21
+
+### Patch Changes
+
+- Updated dependencies [[`2afc548`](https://github.com/Anastasia-Labs/lucid-evolution/commit/2afc5485d65c7811a66339daa4c90493026cf51e)]:
+  - @lucid-evolution/core-types@0.1.18
+
 ## 0.1.20
 
 ### Patch Changes

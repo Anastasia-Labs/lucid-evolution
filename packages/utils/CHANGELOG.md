@@ -1,5 +1,15 @@
 # @lucid-evolution/utils
 
+## 0.1.42
+
+### Patch Changes
+
+- [#308](https://github.com/Anastasia-Labs/lucid-evolution/pull/308) [`2afc548`](https://github.com/Anastasia-Labs/lucid-evolution/commit/2afc5485d65c7811a66339daa4c90493026cf51e) Thanks [@solidsnakedev](https://github.com/solidsnakedev)! - add governance modules
+
+- Updated dependencies [[`2afc548`](https://github.com/Anastasia-Labs/lucid-evolution/commit/2afc5485d65c7811a66339daa4c90493026cf51e)]:
+  - @lucid-evolution/core-types@0.1.18
+  - @lucid-evolution/plutus@0.1.24
+
 ## 0.1.41
 
 ### Patch Changes
