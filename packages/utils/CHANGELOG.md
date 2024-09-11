@@ -1,5 +1,13 @@
 # @lucid-evolution/utils
 
+## 0.1.41
+
+### Patch Changes
+
+- [#309](https://github.com/Anastasia-Labs/lucid-evolution/pull/309) [`8ddb8c0`](https://github.com/Anastasia-Labs/lucid-evolution/commit/8ddb8c0381eb4e0a63715a6abd4aeb77bbd3c162) Thanks [@hadelive](https://github.com/hadelive)! - remove CSL dependency
+
+- [#303](https://github.com/Anastasia-Labs/lucid-evolution/pull/303) [`020ba4f`](https://github.com/Anastasia-Labs/lucid-evolution/commit/020ba4fc869a8b41480241ced40ff827e837ab31) Thanks [@keyan-m](https://github.com/keyan-m)! - removal of asset units with 0 quantity affter `addAssets`
+
 ## 0.1.40
 
 ### Patch Changes
