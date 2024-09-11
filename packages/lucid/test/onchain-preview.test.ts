@@ -9,6 +9,7 @@ import {
 } from "./specs/services.js";
 import * as HelloEndpoints from "./specs/hello.js";
 import * as StakeEndpoints from "./specs/stake.js";
+import * as GovernanceEndpoints from "./specs/governance.js";
 import * as MultiValidatorEndpoints from "./specs/multi-validators.js";
 import * as MintBurnEndpoints from "./specs/mint-burn.js";
 import * as ParametrizedEndpoints from "./specs/hello-params.js";
@@ -286,6 +287,26 @@ describe.sequential("Onchain testing", () => {
   test("recycleUTxOs", async () => {
     const program = pipe(
       WalletEndpoint.recycleUTxOs,
+      Effect.provide(User.layer),
+      Effect.provide(NetworkConfig.layerPreview),
+    );
+    const exit = await Effect.runPromiseExit(program);
+    expect(exit._tag).toBe("Success");
+  });
+
+  test("registerDrep", async () => {
+    const program = pipe(
+      GovernanceEndpoints.registerDrep,
+      Effect.provide(User.layer),
+      Effect.provide(NetworkConfig.layerPreview),
+    );
+    const exit = await Effect.runPromiseExit(program);
+    expect(exit._tag).toBe("Success");
+  });
+
+  test("deregisterDrep", async () => {
+    const program = pipe(
+      GovernanceEndpoints.deregisterDrep,
       Effect.provide(User.layer),
       Effect.provide(NetworkConfig.layerPreview),
     );

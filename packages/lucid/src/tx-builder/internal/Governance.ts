@@ -1,4 +1,9 @@
-import { PoolId, Redeemer, RewardAddress } from "@lucid-evolution/core-types";
+import {
+  Anchor,
+  PoolId,
+  Redeemer,
+  RewardAddress,
+} from "@lucid-evolution/core-types";
 import * as TxBuilder from "../TxBuilder.js";
 import * as CML from "@anastasia-labs/cardano-multiplatform-lib-nodejs";
 import { TxBuilderError } from "../../Errors.js";
@@ -98,6 +103,35 @@ export const registerAndDelegateToDrep = (
         ),
       );
 
+    yield* processCertificate(stakeCredential, config, buildCert, redeemer);
+  });
+
+export const registerDrep = (
+  config: TxBuilder.TxBuilderConfig,
+  rewardAddress: RewardAddress,
+  anchor?: Anchor,
+  redeemer?: Redeemer,
+): Effect.Effect<void, TxBuilderError> =>
+  Effect.gen(function* () {
+    const stakeCredential = yield* validateAndGetStakeCredential(
+      rewardAddress,
+      config,
+    );
+    const cmlAnchor = anchor
+      ? CML.Anchor.new(
+          CML.Url.from_json(anchor.url),
+          CML.AnchorDocHash.from_hex(anchor.dataHash),
+        )
+      : undefined;
+
+    const buildCert = (credential: CML.Credential) =>
+      CML.SingleCertificateBuilder.new(
+        CML.Certificate.new_reg_drep_cert(
+          credential,
+          config.lucidConfig.protocolParameters.drepDeposit,
+          cmlAnchor,
+        ),
+      );
     yield* processCertificate(stakeCredential, config, buildCert, redeemer);
   });
 

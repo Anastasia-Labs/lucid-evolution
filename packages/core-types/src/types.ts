@@ -297,3 +297,29 @@ export type DatumJson = {
   fields?: Array<DatumJson>;
   [constructor: string]: unknown; // number; constructor needs to be simulated like this as optional argument
 };
+
+export type Anchor = {
+  url: string;
+  dataHash: string;
+};
+
+export type AlwaysAbstain = {
+  __typename: "AlwaysAbstain";
+};
+
+export type AlwaysNoConfidence = {
+  __typename: "AlwaysNoConfidence";
+};
+
+export type Drep = Credential | AlwaysAbstain | AlwaysNoConfidence;
+
+export const isDRepCredential = (deleg: Drep): deleg is Credential =>
+  !("__typename" in deleg);
+
+export const isDRepAlwaysAbstain = (deleg: Drep): deleg is AlwaysAbstain =>
+  !isDRepCredential(deleg) && deleg.__typename === "AlwaysAbstain";
+
+export const isDRepAlwaysNoConfidence = (
+  deleg: Drep,
+): deleg is AlwaysNoConfidence =>
+  !isDRepCredential(deleg) && deleg.__typename === "AlwaysNoConfidence";

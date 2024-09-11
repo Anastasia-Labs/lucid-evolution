@@ -3,6 +3,7 @@ import { LucidConfig } from "../lucid-evolution/LucidEvolution.js";
 import { OutputDatum } from "./types.js";
 import {
   Address,
+  Anchor,
   Assets,
   Label,
   Lovelace,
@@ -25,6 +26,7 @@ import * as Interval from "./internal/Interval.js";
 import * as Signer from "./internal/Signer.js";
 import * as Stake from "./internal/Stake.js";
 import * as Pool from "./internal/Pool.js";
+import * as Governance from "./internal/Governance.js";
 import * as Metadata from "./internal/Metadata.js";
 import * as CompleteTxBuilder from "./internal/CompleteTxBuilder.js";
 import * as TxSignBuilder from "../tx-sign-builder/TxSignBuilder.js";
@@ -255,8 +257,18 @@ export function makeTxBuilder(lucidConfig: LucidConfig): TxBuilder {
         config.programs.push(program);
         return txBuilder;
       },
-      DRep: (rewardAddress: RewardAddress) => {
-        //TODO:
+      DRep: (
+        rewardAddress: RewardAddress,
+        anchor?: Anchor,
+        redeemer?: string,
+      ) => {
+        const program = Governance.registerDrep(
+          config,
+          rewardAddress,
+          anchor,
+          redeemer,
+        );
+        config.programs.push(program);
         return txBuilder;
       },
     },
@@ -272,7 +284,12 @@ export function makeTxBuilder(lucidConfig: LucidConfig): TxBuilder {
         return txBuilder;
       },
       DRep: (rewardAddress: RewardAddress, redeemer?: string) => {
-        //TODO:
+        const program = Governance.deregisterDrep(
+          config,
+          rewardAddress,
+          redeemer,
+        );
+        config.programs.push(program);
         return txBuilder;
       },
     },
