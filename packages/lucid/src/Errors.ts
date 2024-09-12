@@ -22,6 +22,7 @@ export const ERROR_MESSAGE = {
   SCRIPT_CREDENTIAL_NOT_ALLOWED:
     "SCRIPT_CREDENTIAL_NOT_ALLOWED: Only verification key credential is allowed",
   INVALID_SCRIPT: "INVALID_SCRIPT: Script is invalid",
+  EXPECTED_KEY_HASH: "EXPECTED_KEY_HASH",
   INVALID_NETWORK: (
     address: string,
     actualNetworkId: number,

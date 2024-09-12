@@ -231,7 +231,7 @@ export function discoverOwnUsedTxKeyHashes(
           //TODO: Missing test
           const credential = cert
             .as_auth_committee_hot_cert()
-            ?.committee_hot_credential();
+            ?.committee_cold_credential();
           if (credential) {
             usedKeyHashes.push(credential.as_pub_key()?.to_hex());
           }
