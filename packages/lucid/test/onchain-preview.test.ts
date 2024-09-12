@@ -6,6 +6,8 @@ import {
   MintContract,
   User,
   NetworkConfig,
+  SimpleMintContract,
+  SimpleStakeContract,
 } from "./specs/services.js";
 import * as HelloEndpoints from "./specs/hello.js";
 import * as StakeEndpoints from "./specs/stake.js";
@@ -58,6 +60,29 @@ describe.sequential("Onchain testing", () => {
       Effect.provide(User.layer),
       Effect.provide(StakeContract.layer),
       Effect.provide(MintContract.layer),
+      Effect.provide(NetworkConfig.layerPreview),
+    );
+    const exit = await Effect.runPromiseExit(program);
+    expect(exit._tag).toBe("Success");
+  });
+
+  test("MultiValidator - registerSimpleStake", async () => {
+    const program = pipe(
+      MultiValidatorEndpoints.registerSimpleStake,
+      Effect.provide(User.layer),
+      Effect.provide(SimpleStakeContract.layer),
+      Effect.provide(NetworkConfig.layerPreview),
+    );
+    const exit = await Effect.runPromiseExit(program);
+    expect(exit._tag).toBe("Success");
+  });
+
+  test("MultiValidator - mintAndWithdrawSimpleStake", async () => {
+    const program = pipe(
+      MultiValidatorEndpoints.mintAndWithdraw,
+      Effect.provide(User.layer),
+      Effect.provide(SimpleMintContract.layer),
+      Effect.provide(SimpleStakeContract.layer),
       Effect.provide(NetworkConfig.layerPreview),
     );
     const exit = await Effect.runPromiseExit(program);

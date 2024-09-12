@@ -117,6 +117,33 @@
       "hash": "f654f6a31f6c4cc2c39a169f2c022404aa9f19d43137b0448b219a3e"
     },
     {
+      "title": "simple_mint.mint_policy.withdraw",
+      "redeemer": {
+        "title": "redeemer",
+        "schema": {
+          "$ref": "#/definitions/simple_mint~1WithdrawRedeemer"
+        }
+      },
+      "compiledCode": "58d0010100323232323232253330023232323232323253233300a3370e90020018992999805980118061baa006132325333010301200213371e6eb8c014c03cdd500424501310016375c6020002601a6ea801858c038c030dd50020a99980518008018992999805980118061baa006132325333010301200213370e6eb4c014c03cdd5004240042c6eb4c040004c034dd50030b1bae300e300c37540082c6e1d20002300d001300837540026014601600460120026012004600e00260086ea8004526136565734aae7555cf2ab9f5742ae89",
+      "hash": "0d26f1decee50c24498585cb9cba2b6aa629c83023b327bb10fb67b9"
+    },
+    {
+      "title": "simple_mint.mint_policy.mint",
+      "redeemer": {
+        "title": "redeemer",
+        "schema": {
+          "$ref": "#/definitions/simple_mint~1MintRedeemer"
+        }
+      },
+      "compiledCode": "58d0010100323232323232253330023232323232323253233300a3370e90020018992999805980118061baa006132325333010301200213371e6eb8c014c03cdd500424501310016375c6020002601a6ea801858c038c030dd50020a99980518008018992999805980118061baa006132325333010301200213370e6eb4c014c03cdd5004240042c6eb4c040004c034dd50030b1bae300e300c37540082c6e1d20002300d001300837540026014601600460120026012004600e00260086ea8004526136565734aae7555cf2ab9f5742ae89",
+      "hash": "0d26f1decee50c24498585cb9cba2b6aa629c83023b327bb10fb67b9"
+    },
+    {
+      "title": "simple_mint.mint_policy.else",
+      "compiledCode": "58d0010100323232323232253330023232323232323253233300a3370e90020018992999805980118061baa006132325333010301200213371e6eb8c014c03cdd500424501310016375c6020002601a6ea801858c038c030dd50020a99980518008018992999805980118061baa006132325333010301200213370e6eb4c014c03cdd5004240042c6eb4c040004c034dd50030b1bae300e300c37540082c6e1d20002300d001300837540026014601600460120026012004600e00260086ea8004526136565734aae7555cf2ab9f5742ae89",
+      "hash": "0d26f1decee50c24498585cb9cba2b6aa629c83023b327bb10fb67b9"
+    },
+    {
       "title": "stake.stake_multivalidator.spend",
       "datum": {
         "title": "_datum",
@@ -152,7 +179,6 @@
   ],
   "definitions": {
     "ByteArray": {
-      "title": "ByteArray",
       "dataType": "bytes"
     },
     "Data": {
@@ -227,6 +253,38 @@
             {
               "title": "input_indices",
               "$ref": "#/definitions/List$Int"
+            }
+          ]
+        }
+      ]
+    },
+    "simple_mint/MintRedeemer": {
+      "title": "MintRedeemer",
+      "anyOf": [
+        {
+          "title": "MintRedeemer",
+          "dataType": "constructor",
+          "index": 0,
+          "fields": [
+            {
+              "title": "idx",
+              "$ref": "#/definitions/Int"
+            }
+          ]
+        }
+      ]
+    },
+    "simple_mint/WithdrawRedeemer": {
+      "title": "WithdrawRedeemer",
+      "anyOf": [
+        {
+          "title": "WithdrawRedeemer",
+          "dataType": "constructor",
+          "index": 0,
+          "fields": [
+            {
+              "title": "msg",
+              "$ref": "#/definitions/ByteArray"
             }
           ]
         }

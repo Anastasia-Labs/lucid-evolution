@@ -1,5 +1,11 @@
 import { Effect, pipe } from "effect";
-import { StakeContract, User, MintContract } from "./services";
+import {
+  StakeContract,
+  User,
+  MintContract,
+  SimpleStakeContract,
+  SimpleMintContract,
+} from "./services";
 import { Constr, Data } from "@lucid-evolution/plutus";
 import { fromText, RedeemerBuilder, UTxO } from "../../src";
 import { handleSignSubmit, withLogRetry } from "./utils";
@@ -198,3 +204,45 @@ export const registerStake = Effect.gen(function* ($) {
   withLogRetry,
   Effect.orDie,
 );
+
+export const registerSimpleStake = Effect.gen(function* ($) {
+  const { user } = yield* User;
+  const { rewardAddress } = yield* SimpleStakeContract;
+  const signBuilder = yield* user
+    .newTx()
+    .registerStake(rewardAddress)
+    .completeProgram();
+
+  return signBuilder;
+}).pipe(
+  Effect.flatMap(handleSignSubmit),
+  Effect.catchTag("TxSubmitError", (error) =>
+    error.message.includes("StakeKeyAlreadyRegisteredDELEG") ||
+    error.message.includes("StakeKeyRegisteredDELEG")
+      ? Effect.log("Stake Already registered")
+      : Effect.fail(error),
+  ),
+  withLogRetry,
+  Effect.orDie,
+);
+
+export const mintAndWithdraw = Effect.gen(function* () {
+  const { user } = yield* User;
+  const addr = yield* Effect.promise(() => user.wallet().address());
+  const { stake, rewardAddress } = yield* SimpleStakeContract;
+  const { mint, policyId } = yield* SimpleMintContract;
+
+  const signBuilder = yield* user
+    .newTx()
+    .mintAssets(
+      {
+        [policyId + fromText("MintWithdraw")]: 1n,
+      },
+      Data.to(new Constr(0, [1n])),
+    )
+    .withdraw(rewardAddress, 0n, Data.to(new Constr(0, [fromText("1")])))
+    .attach.WithdrawalValidator(stake)
+    .attach.MintingPolicy(mint)
+    .completeProgram();
+  return signBuilder;
+}).pipe(Effect.flatMap(handleSignSubmit), withLogRetry, Effect.orDie);

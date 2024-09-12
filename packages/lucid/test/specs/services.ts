@@ -180,3 +180,71 @@ export class MintContract extends Context.Tag("MintContract")<
 >() {
   static readonly layer = Layer.effect(MintContract, makeMintService);
 }
+
+const makeSimpleMintService = Effect.gen(function* () {
+  const networkConfig = yield* NetworkConfig;
+  const mintCBOR = yield* pipe(
+    Effect.fromNullable(
+      scripts.validators.find(
+        (v) => v.title === "simple_mint.mint_policy.mint",
+      ),
+    ),
+    Effect.andThen((script) => script.compiledCode),
+  );
+  const mint: MintingPolicy = {
+    type: "PlutusV3",
+    script: applyDoubleCborEncoding(mintCBOR),
+  };
+  const policyId = mintingPolicyToId(mint);
+  const contractAddress = validatorToAddress(networkConfig.NETWORK, mint);
+  return {
+    mintCBOR,
+    mint,
+    policyId,
+    contractAddress,
+  };
+}).pipe(Effect.orDie);
+
+export class SimpleMintContract extends Context.Tag("SimpleMintContract")<
+  SimpleMintContract,
+  Effect.Effect.Success<typeof makeSimpleMintService>
+>() {
+  static readonly layer = Layer.effect(
+    SimpleMintContract,
+    makeSimpleMintService,
+  );
+}
+
+const makeSimpleStakeService = Effect.gen(function* () {
+  const networkConfig = yield* NetworkConfig;
+  const stakeCBOR = yield* pipe(
+    Effect.fromNullable(
+      scripts.validators.find(
+        (v) => v.title === "simple_mint.mint_policy.withdraw",
+      ),
+    ),
+    Effect.andThen((script) => script.compiledCode),
+  );
+  const stake: Script = {
+    type: "PlutusV3",
+    script: applyDoubleCborEncoding(stakeCBOR),
+  };
+  const contractAddress = validatorToAddress(networkConfig.NETWORK, stake);
+  const rewardAddress = validatorToRewardAddress(networkConfig.NETWORK, stake);
+  return {
+    stakeCBOR,
+    stake,
+    contractAddress,
+    rewardAddress,
+  };
+}).pipe(Effect.orDie);
+
+export class SimpleStakeContract extends Context.Tag("SimpleStakeContract")<
+  SimpleStakeContract,
+  Effect.Effect.Success<typeof makeSimpleStakeService>
+>() {
+  static readonly layer = Layer.effect(
+    SimpleStakeContract,
+    makeSimpleStakeService,
+  );
+}
