@@ -1,5 +1,11 @@
 # @lucid-evolution/wallet
 
+## 0.1.48
+
+### Patch Changes
+
+- [#313](https://github.com/Anastasia-Labs/lucid-evolution/pull/313) [`76af78f`](https://github.com/Anastasia-Labs/lucid-evolution/commit/76af78fedb6a41400bb1204596e0ef39953ce82c) Thanks [@hadelive](https://github.com/hadelive)! - Add governance certs
+
 ## 0.1.47
 
 ### Patch Changes
