@@ -1,5 +1,15 @@
 # @lucid-evolution/lucid
 
+## 0.3.30
+
+### Patch Changes
+
+- [#313](https://github.com/Anastasia-Labs/lucid-evolution/pull/313) [`76af78f`](https://github.com/Anastasia-Labs/lucid-evolution/commit/76af78fedb6a41400bb1204596e0ef39953ce82c) Thanks [@hadelive](https://github.com/hadelive)! - Add governance certs
+
+- Updated dependencies [[`76af78f`](https://github.com/Anastasia-Labs/lucid-evolution/commit/76af78fedb6a41400bb1204596e0ef39953ce82c)]:
+  - @lucid-evolution/wallet@0.1.48
+  - @lucid-evolution/provider@0.1.56
+
 ## 0.3.29
 
 ### Patch Changes
