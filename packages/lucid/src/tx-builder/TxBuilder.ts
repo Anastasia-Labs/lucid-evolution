@@ -160,6 +160,14 @@ export type TxBuilder = {
     anchor?: Anchor,
     redeemer?: Redeemer,
   ) => TxBuilder;
+  authCommitteeHot: (
+    coldAddress: RewardAddress,
+    hotAddress: RewardAddress,
+  ) => TxBuilder;
+  resignCommitteeHot: (
+    coldAddress: RewardAddress,
+    anchor?: Anchor,
+  ) => TxBuilder;
   attachMetadata: (
     label: Label,
     metadata: Metadata.TransactionMetadata,
@@ -464,6 +472,27 @@ export function makeTxBuilder(lucidConfig: LucidConfig): TxBuilder {
         rewardAddress,
         anchor,
         redeemer,
+      );
+      config.programs.push(program);
+      return txBuilder;
+    },
+    authCommitteeHot: (
+      coldAddress: RewardAddress,
+      hotAddress: RewardAddress,
+    ) => {
+      const program = Governance.authCommitteeHot(
+        config,
+        coldAddress,
+        hotAddress,
+      );
+      config.programs.push(program);
+      return txBuilder;
+    },
+    resignCommitteeHot: (coldAddress: RewardAddress, anchor?: Anchor) => {
+      const program = Governance.resignCommitteeHot(
+        config,
+        coldAddress,
+        anchor,
       );
       config.programs.push(program);
       return txBuilder;
