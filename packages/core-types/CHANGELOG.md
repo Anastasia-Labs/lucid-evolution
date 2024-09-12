@@ -1,5 +1,11 @@
 # @lucid-evolution/core-types
 
+## 0.1.19
+
+### Patch Changes
+
+- [#315](https://github.com/Anastasia-Labs/lucid-evolution/pull/315) [`93e4784`](https://github.com/Anastasia-Labs/lucid-evolution/commit/93e4784b3397a13b197b04c4de897c455ae62088) Thanks [@hadelive](https://github.com/hadelive)! - bump core-types
+
 ## 0.1.18
 
 ### Patch Changes
