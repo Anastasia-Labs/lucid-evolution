@@ -5,7 +5,6 @@ import {
   Redeemer,
   RewardAddress,
   toCMLDRep,
-  Credential,
 } from "@lucid-evolution/core-types";
 import * as TxBuilder from "../TxBuilder.js";
 import * as CML from "@anastasia-labs/cardano-multiplatform-lib-nodejs";
@@ -230,8 +229,6 @@ export const authCommitteeHot = (
     const hotCredential = CML.Credential.new_pub_key(
       CML.Ed25519KeyHash.from_hex(hotCred.hash),
     );
-    console.log("coldCred.hash :>> ", coldCred.hash);
-    console.log("hotCred.hash :>> ", hotCred.hash);
     const certBuilder = CML.SingleCertificateBuilder.new(
       CML.Certificate.new_auth_committee_hot_cert(
         coldCredential,
