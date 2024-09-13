@@ -154,16 +154,22 @@ export const registerDRep = (
           CML.AnchorDocHash.from_hex(anchor.dataHash),
         )
       : undefined;
-
-    const buildCert = (credential: CML.Credential) =>
-      CML.SingleCertificateBuilder.new(
-        CML.Certificate.new_reg_drep_cert(
-          credential,
-          config.lucidConfig.protocolParameters.drepDeposit,
-          cmlAnchor,
-        ),
-      );
-    yield* processCertificate(stakeCredential, config, buildCert, redeemer);
+    const credential =
+      stakeCredential.type === "Key"
+        ? CML.Credential.new_pub_key(
+            CML.Ed25519KeyHash.from_hex(stakeCredential.hash),
+          )
+        : CML.Credential.new_script(
+            CML.ScriptHash.from_hex(stakeCredential.hash),
+          );
+    const certBuilder = CML.SingleCertificateBuilder.new(
+      CML.Certificate.new_reg_drep_cert(
+        credential,
+        config.lucidConfig.protocolParameters.drepDeposit,
+        cmlAnchor,
+      ),
+    );
+    config.txBuilder.add_cert(certBuilder.skip_witness());
   });
 
 export const deregisterDRep = (
