@@ -1,5 +1,11 @@
 # @lucid-evolution/lucid
 
+## 0.3.34
+
+### Patch Changes
+
+- [#323](https://github.com/Anastasia-Labs/lucid-evolution/pull/323) [`a1b58a9`](https://github.com/Anastasia-Labs/lucid-evolution/commit/a1b58a9992c65da63e9ed4f28cbd5a4f31f299be) Thanks [@hadelive](https://github.com/hadelive)! - update committee certs
+
 ## 0.3.33
 
 ### Patch Changes
