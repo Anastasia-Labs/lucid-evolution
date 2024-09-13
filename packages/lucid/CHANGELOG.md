@@ -1,5 +1,11 @@
 # @lucid-evolution/lucid
 
+## 0.3.32
+
+### Patch Changes
+
+- [`0d5831e`](https://github.com/Anastasia-Labs/lucid-evolution/commit/0d5831e1aee73f780cee800ff33c25be8da19123) Thanks [@hadelive](https://github.com/hadelive)! - skip reg drep witness
+
 ## 0.3.31
 
 ### Patch Changes
