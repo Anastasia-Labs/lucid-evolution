@@ -1,5 +1,17 @@
 # @lucid-evolution/wallet
 
+## 0.1.50
+
+### Patch Changes
+
+- [#321](https://github.com/Anastasia-Labs/lucid-evolution/pull/321) [`5869fe7`](https://github.com/Anastasia-Labs/lucid-evolution/commit/5869fe7e5f99892988f7f372beae004035e31179) Thanks [@hadelive](https://github.com/hadelive)! - fix register drep required wits
+
+- Updated dependencies [[`5869fe7`](https://github.com/Anastasia-Labs/lucid-evolution/commit/5869fe7e5f99892988f7f372beae004035e31179)]:
+  - @lucid-evolution/core-types@0.1.20
+  - @lucid-evolution/core-utils@0.1.16
+  - @lucid-evolution/sign_data@0.1.23
+  - @lucid-evolution/utils@0.1.44
+
 ## 0.1.49
 
 ### Patch Changes
