@@ -1,6 +1,12 @@
 import { Effect, pipe } from "effect";
-import { NetworkConfig, User } from "./services";
+import {
+  AlwaysYesDrepContract,
+  NetworkConfig,
+  SimpleStakeContract,
+  User,
+} from "./services";
 import { handleSignSubmit, withLogRetry } from "./utils";
+import { Data } from "../../src";
 
 export const registerDRep = Effect.gen(function* ($) {
   const { user } = yield* User;
@@ -151,3 +157,37 @@ export const registerAndDelegateToPoolAndDRep = Effect.gen(function* ($) {
     .completeProgram();
   return signBuilder;
 }).pipe(Effect.flatMap(handleSignSubmit), withLogRetry, Effect.orDie);
+
+export const registerScriptDRep = Effect.gen(function* ($) {
+  const { user } = yield* User;
+  const { rewardAddress, script } = yield* AlwaysYesDrepContract;
+  const signBuilder = yield* user
+    .newTx()
+    .register.DRep(rewardAddress, undefined, Data.void())
+    .attach.Script(script)
+    .setMinFee(200_000n)
+    .completeProgram();
+  return signBuilder;
+}).pipe(
+  Effect.flatMap(handleSignSubmit),
+  Effect.catchTag("TxSubmitError", (error) => Effect.fail(error)),
+  withLogRetry,
+  Effect.orDie,
+);
+
+export const deregisterScriptDRep = Effect.gen(function* ($) {
+  const { user } = yield* User;
+  const { rewardAddress, script } = yield* AlwaysYesDrepContract;
+  const signBuilder = yield* user
+    .newTx()
+    .deregister.DRep(rewardAddress, Data.void())
+    .attach.Script(script)
+    .setMinFee(200_000n)
+    .completeProgram();
+  return signBuilder;
+}).pipe(
+  Effect.flatMap(handleSignSubmit),
+  Effect.catchTag("TxSubmitError", (error) => Effect.fail(error)),
+  withLogRetry,
+  Effect.orDie,
+);

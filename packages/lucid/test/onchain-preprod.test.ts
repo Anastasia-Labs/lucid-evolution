@@ -8,6 +8,7 @@ import {
   NetworkConfig,
   SimpleStakeContract,
   SimpleMintContract,
+  AlwaysYesDrepContract,
 } from "./specs/services.js";
 import * as HelloEndpoints from "./specs/hello.js";
 import * as StakeEndpoints from "./specs/stake.js";
@@ -446,6 +447,28 @@ describe.sequential("Onchain testing", () => {
     const program = pipe(
       GovernanceEndpoints.deregisterDRep,
       Effect.provide(User.layer),
+      Effect.provide(NetworkConfig.layerPreprod),
+    );
+    const exit = await Effect.runPromiseExit(program);
+    expect(exit._tag).toBe("Success");
+  });
+
+  test("registerScriptDRep", async () => {
+    const program = pipe(
+      GovernanceEndpoints.registerScriptDRep,
+      Effect.provide(User.layer),
+      Effect.provide(AlwaysYesDrepContract.layer),
+      Effect.provide(NetworkConfig.layerPreprod),
+    );
+    const exit = await Effect.runPromiseExit(program);
+    expect(exit._tag).toBe("Success");
+  });
+
+  test("deregisterScriptDRep", async () => {
+    const program = pipe(
+      GovernanceEndpoints.deregisterScriptDRep,
+      Effect.provide(User.layer),
+      Effect.provide(AlwaysYesDrepContract.layer),
       Effect.provide(NetworkConfig.layerPreprod),
     );
     const exit = await Effect.runPromiseExit(program);

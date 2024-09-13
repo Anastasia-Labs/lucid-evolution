@@ -12,6 +12,22 @@
   },
   "validators": [
     {
+      "title": "always_yes_drep.always_yes.vote",
+      "redeemer": {
+        "title": "_redeemer",
+        "schema": {
+          "$ref": "#/definitions/Data"
+        }
+      },
+      "compiledCode": "584f010100323232323225333002323232323253330073370e900418041baa0011324a2601460126ea80045289804980500118040009804001180300098021baa00114984d9595cd2ab9d5573cae855d11",
+      "hash": "99e21871b90d685cb26c4171169a54e5ed4f26f39dfc161b35fb8112"
+    },
+    {
+      "title": "always_yes_drep.always_yes.else",
+      "compiledCode": "584f010100323232323225333002323232323253330073370e900418041baa0011324a2601460126ea80045289804980500118040009804001180300098021baa00114984d9595cd2ab9d5573cae855d11",
+      "hash": "99e21871b90d685cb26c4171169a54e5ed4f26f39dfc161b35fb8112"
+    },
+    {
       "title": "hello_world.hello_world.spend",
       "datum": {
         "title": "datum",

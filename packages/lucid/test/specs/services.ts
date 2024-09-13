@@ -248,3 +248,37 @@ export class SimpleStakeContract extends Context.Tag("SimpleStakeContract")<
     makeSimpleStakeService,
   );
 }
+
+const makeAlwaysYesDrepService = Effect.gen(function* () {
+  const networkConfig = yield* NetworkConfig;
+  const cbor = yield* pipe(
+    Effect.fromNullable(
+      scripts.validators.find(
+        (v) => v.title === "always_yes_drep.always_yes.else",
+      ),
+    ),
+    Effect.andThen((script) => script.compiledCode),
+  );
+  const script: Script = {
+    type: "PlutusV3",
+    script: applyDoubleCborEncoding(cbor),
+  };
+  const contractAddress = validatorToAddress(networkConfig.NETWORK, script);
+  const rewardAddress = validatorToRewardAddress(networkConfig.NETWORK, script);
+  return {
+    cbor,
+    script,
+    contractAddress,
+    rewardAddress,
+  };
+}).pipe(Effect.orDie);
+
+export class AlwaysYesDrepContract extends Context.Tag("AlwaysYesDrepContract")<
+  AlwaysYesDrepContract,
+  Effect.Effect.Success<typeof makeAlwaysYesDrepService>
+>() {
+  static readonly layer = Layer.effect(
+    AlwaysYesDrepContract,
+    makeAlwaysYesDrepService,
+  );
+}
