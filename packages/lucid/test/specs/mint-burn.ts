@@ -10,7 +10,7 @@ import {
   selectUTxOs,
   unixTimeToSlot,
 } from "../../src/index.js";
-import { Effect } from "effect";
+import { Effect, pipe } from "effect";
 import { MintContract, NETWORK, NetworkConfig, User } from "./services.js";
 import { handleSignSubmit, handleSubmit, withLogRetry } from "./utils.js";
 
@@ -223,6 +223,33 @@ export const mintInSlotRange = Effect.gen(function* () {
       { kind: "inline", value: datum },
       { [policy + fromText("BurnableToken2")]: 1n },
     )
+    .completeProgram();
+  return signBuilder;
+}).pipe(Effect.flatMap(handleSubmit));
+
+export const mintAndWithdraw = Effect.gen(function* () {
+  const { user } = yield* User;
+  const networkConfig = yield* NetworkConfig;
+  const addr = yield* Effect.promise(() => user.wallet().address());
+  const mint = mkMintinPolicy(addr);
+  const policy = mintingPolicyToId(mint);
+  const datum = Data.to(123n);
+  const rewardAddress = yield* pipe(
+    Effect.promise(() => user.wallet().rewardAddress()),
+    Effect.andThen(Effect.fromNullable),
+  );
+  const signBuilder = yield* user
+    .newTx()
+    .mintAssets({
+      [policy + fromText("multipurpose")]: 1n,
+    })
+    // .withdraw(rewardAddress, 0n)
+    .pay.ToAddressWithData(
+      addr,
+      { kind: "inline", value: datum },
+      { [policy + fromText("multipurpose")]: 1n },
+    )
+    .attach.MintingPolicy(mint)
     .completeProgram();
   return signBuilder;
 }).pipe(Effect.flatMap(handleSubmit));
