@@ -216,49 +216,42 @@ export const authCommitteeHot = (
   config: TxBuilder.TxBuilderConfig,
   coldAddress: RewardAddress,
   hotAddress: RewardAddress,
+  redeemer?: Redeemer,
 ): Effect.Effect<void, TxBuilderError> =>
   Effect.gen(function* () {
     const coldCred = yield* validateAndGetStakeCredential(coldAddress, config);
     const hotCred = yield* validateAndGetStakeCredential(hotAddress, config);
-    if (coldCred.type === "Script" || hotCred.type === "Script") {
-      yield* governanceError(ERROR_MESSAGE.EXPECTED_KEY_HASH);
-    }
-    const coldCredential = CML.Credential.new_pub_key(
-      CML.Ed25519KeyHash.from_hex(coldCred.hash),
-    );
-    const hotCredential = CML.Credential.new_pub_key(
-      CML.Ed25519KeyHash.from_hex(hotCred.hash),
-    );
-    const certBuilder = CML.SingleCertificateBuilder.new(
-      CML.Certificate.new_auth_committee_hot_cert(
-        coldCredential,
-        hotCredential,
-      ),
-    );
-    config.txBuilder.add_cert(certBuilder.payment_key());
+    const hotCredential: CML.Credential =
+      hotCred.type === "Key"
+        ? CML.Credential.new_pub_key(CML.Ed25519KeyHash.from_hex(hotCred.hash))
+        : CML.Credential.new_script(CML.ScriptHash.from_hex(hotCred.hash));
+    const buildCert = (credential: CML.Credential) =>
+      CML.SingleCertificateBuilder.new(
+        CML.Certificate.new_auth_committee_hot_cert(credential, hotCredential),
+      );
+
+    yield* processCertificate(coldCred, config, buildCert, redeemer);
   });
 
 export const resignCommitteeHot = (
   config: TxBuilder.TxBuilderConfig,
   coldAddress: RewardAddress,
   anchor?: Anchor,
+  redeemer?: Redeemer,
 ): Effect.Effect<void, TxBuilderError> =>
   Effect.gen(function* () {
     const coldCred = yield* validateAndGetStakeCredential(coldAddress, config);
-    if (coldCred.type === "Script") {
-      yield* governanceError(ERROR_MESSAGE.EXPECTED_KEY_HASH);
-    }
-    const coldCredential = CML.Credential.new_pub_key(
-      CML.Ed25519KeyHash.from_hex(coldCred.hash),
-    );
     const cmlAnchor = anchor
       ? CML.Anchor.new(
           CML.Url.from_json(anchor.url),
           CML.AnchorDocHash.from_hex(anchor.dataHash),
         )
       : undefined;
-    const certBuilder = CML.SingleCertificateBuilder.new(
-      CML.Certificate.new_resign_committee_cold_cert(coldCredential, cmlAnchor),
-    );
-    config.txBuilder.add_cert(certBuilder.payment_key());
+
+    const buildCert = (credential: CML.Credential) =>
+      CML.SingleCertificateBuilder.new(
+        CML.Certificate.new_resign_committee_cold_cert(credential, cmlAnchor),
+      );
+
+    yield* processCertificate(coldCred, config, buildCert, redeemer);
   });

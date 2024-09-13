@@ -479,20 +479,27 @@ export function makeTxBuilder(lucidConfig: LucidConfig): TxBuilder {
     authCommitteeHot: (
       coldAddress: RewardAddress,
       hotAddress: RewardAddress,
+      redeemer?: Redeemer,
     ) => {
       const program = Governance.authCommitteeHot(
         config,
         coldAddress,
         hotAddress,
+        redeemer,
       );
       config.programs.push(program);
       return txBuilder;
     },
-    resignCommitteeHot: (coldAddress: RewardAddress, anchor?: Anchor) => {
+    resignCommitteeHot: (
+      coldAddress: RewardAddress,
+      anchor?: Anchor,
+      redeemer?: Redeemer,
+    ) => {
       const program = Governance.resignCommitteeHot(
         config,
         coldAddress,
         anchor,
+        redeemer,
       );
       config.programs.push(program);
       return txBuilder;
