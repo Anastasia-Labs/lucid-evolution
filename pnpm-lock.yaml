@@ -76,11 +76,11 @@ importers:
   packages/core-types:
     dependencies:
       '@anastasia-labs/cardano-multiplatform-lib-browser':
-        specifier: 6.0.2-1
-        version: 6.0.2-1
+        specifier: 6.0.2-2
+        version: 6.0.2-2
       '@anastasia-labs/cardano-multiplatform-lib-nodejs':
-        specifier: 6.0.2-1
-        version: 6.0.2-1
+        specifier: 6.0.2-2
+        version: 6.0.2-2
     devDependencies:
       '@types/node':
         specifier: ^20.12.8
@@ -95,11 +95,11 @@ importers:
   packages/core-utils:
     dependencies:
       '@anastasia-labs/cardano-multiplatform-lib-browser':
-        specifier: 6.0.2-1
-        version: 6.0.2-1
+        specifier: 6.0.2-2
+        version: 6.0.2-2
       '@anastasia-labs/cardano-multiplatform-lib-nodejs':
-        specifier: 6.0.2-1
-        version: 6.0.2-1
+        specifier: 6.0.2-2
+        version: 6.0.2-2
     devDependencies:
       '@types/node':
         specifier: ^20.12.8
@@ -153,11 +153,11 @@ importers:
   packages/lucid:
     dependencies:
       '@anastasia-labs/cardano-multiplatform-lib-browser':
-        specifier: 6.0.2-1
-        version: 6.0.2-1
+        specifier: 6.0.2-2
+        version: 6.0.2-2
       '@anastasia-labs/cardano-multiplatform-lib-nodejs':
-        specifier: 6.0.2-1
-        version: 6.0.2-1
+        specifier: 6.0.2-2
+        version: 6.0.2-2
       '@effect/schema':
         specifier: ^0.66.14
         version: 0.66.16(effect@3.5.6)(fast-check@3.22.0)
@@ -220,11 +220,11 @@ importers:
   packages/plutus:
     dependencies:
       '@anastasia-labs/cardano-multiplatform-lib-browser':
-        specifier: 6.0.2-1
-        version: 6.0.2-1
+        specifier: 6.0.2-2
+        version: 6.0.2-2
       '@anastasia-labs/cardano-multiplatform-lib-nodejs':
-        specifier: 6.0.2-1
-        version: 6.0.2-1
+        specifier: 6.0.2-2
+        version: 6.0.2-2
       '@lucid-evolution/core-types':
         specifier: workspace:*
         version: link:../core-types
@@ -251,11 +251,11 @@ importers:
   packages/provider:
     dependencies:
       '@anastasia-labs/cardano-multiplatform-lib-browser':
-        specifier: 6.0.2-1
-        version: 6.0.2-1
+        specifier: 6.0.2-2
+        version: 6.0.2-2
       '@anastasia-labs/cardano-multiplatform-lib-nodejs':
-        specifier: 6.0.2-1
-        version: 6.0.2-1
+        specifier: 6.0.2-2
+        version: 6.0.2-2
       '@effect/platform':
         specifier: ^0.59.2
         version: 0.59.2(@effect/schema@0.68.26)(effect@3.5.6)
@@ -294,11 +294,11 @@ importers:
   packages/sign_data:
     dependencies:
       '@anastasia-labs/cardano-multiplatform-lib-browser':
-        specifier: 6.0.2-1
-        version: 6.0.2-1
+        specifier: 6.0.2-2
+        version: 6.0.2-2
       '@anastasia-labs/cardano-multiplatform-lib-nodejs':
-        specifier: 6.0.2-1
-        version: 6.0.2-1
+        specifier: 6.0.2-2
+        version: 6.0.2-2
       '@emurgo/cardano-message-signing-browser':
         specifier: ^1.0.1
         version: 1.0.1
@@ -329,11 +329,11 @@ importers:
   packages/utils:
     dependencies:
       '@anastasia-labs/cardano-multiplatform-lib-browser':
-        specifier: 6.0.2-1
-        version: 6.0.2-1
+        specifier: 6.0.2-2
+        version: 6.0.2-2
       '@anastasia-labs/cardano-multiplatform-lib-nodejs':
-        specifier: 6.0.2-1
-        version: 6.0.2-1
+        specifier: 6.0.2-2
+        version: 6.0.2-2
       '@effect/schema':
         specifier: ^0.68.16
         version: 0.68.16(effect@3.4.6)
@@ -384,11 +384,11 @@ importers:
   packages/wallet:
     dependencies:
       '@anastasia-labs/cardano-multiplatform-lib-browser':
-        specifier: 6.0.2-1
-        version: 6.0.2-1
+        specifier: 6.0.2-2
+        version: 6.0.2-2
       '@anastasia-labs/cardano-multiplatform-lib-nodejs':
-        specifier: 6.0.2-1
-        version: 6.0.2-1
+        specifier: 6.0.2-2
+        version: 6.0.2-2
       '@lucid-evolution/core-types':
         specifier: workspace:*
         version: link:../core-types
@@ -425,12 +425,12 @@ packages:
       '@jridgewell/trace-mapping': 0.3.25
     dev: true
 
-  /@anastasia-labs/cardano-multiplatform-lib-browser@6.0.2-1:
-    resolution: {integrity: sha512-MypiWF3VUVNSEkfpDVnwx1Gju2UIbEtWMfnwwM8SNfVYTh8vALbIFyRQNbJbNP95OTSi87cPMGMb7/itpeB70w==}
+  /@anastasia-labs/cardano-multiplatform-lib-browser@6.0.2-2:
+    resolution: {integrity: sha512-sSPPjO1Zye82YVqrUGIKrli/Zt2pPkZkQd/jv9k6AzjIZdNPD3hvuB2yH6RHeZUO8+K57bu9r7Rlyf7VGbhhTQ==}
     dev: false
 
-  /@anastasia-labs/cardano-multiplatform-lib-nodejs@6.0.2-1:
-    resolution: {integrity: sha512-HzXrxx3fyrZ/04wIbBbRBVHsX1CXLLMvG48aUlJmlbxJKFki/HsKgVhhoYdlsCQESo7EBZNeRHuqg9IqqaacUQ==}
+  /@anastasia-labs/cardano-multiplatform-lib-nodejs@6.0.2-2:
+    resolution: {integrity: sha512-KLYHyJWtFsTUUbIVz9dn5GiCbI4Mrx5mRpDWXa3lVLWFKok6AkvYlyHk4OH4NNa4JBerrHTB6ZJrk75UgKAaMA==}
     dev: false
 
   /@babel/code-frame@7.24.7:
