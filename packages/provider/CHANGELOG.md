@@ -1,5 +1,11 @@
 # @lucid-evolution/provider
 
+## 0.1.59
+
+### Patch Changes
+
+- [#325](https://github.com/Anastasia-Labs/lucid-evolution/pull/325) [`a85ae4d`](https://github.com/Anastasia-Labs/lucid-evolution/commit/a85ae4d386287359c734b8342f50a5082ecf1625) Thanks [@hadelive](https://github.com/hadelive)! - handle new blockfrost response
+
 ## 0.1.58
 
 ### Patch Changes
