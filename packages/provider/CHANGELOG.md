@@ -1,5 +1,13 @@
 # @lucid-evolution/provider
 
+## 0.1.60
+
+### Patch Changes
+
+- Updated dependencies []:
+  - @lucid-evolution/utils@0.1.45
+  - @lucid-evolution/wallet@0.1.51
+
 ## 0.1.59
 
 ### Patch Changes
