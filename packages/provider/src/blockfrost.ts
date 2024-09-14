@@ -339,11 +339,11 @@ export class Blockfrost implements Provider {
       },
       body: JSON.stringify(payload),
     }).then((res) => res.json());
-    if (!res || res.error) {
+    if (!res || res.fault) {
       const message =
         res?.status_code === 400
           ? res.message
-          : `Could not evaluate the transaction: ${JSON.stringify(res)}`;
+          : `Could not evaluate the transaction: ${JSON.stringify(res)}. Transaction: ${tx}`;
       throw new Error(message);
     }
     const blockfrostRedeemer = res as BlockfrostRedeemer;
