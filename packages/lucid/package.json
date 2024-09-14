@@ -1,6 +1,6 @@
 {
   "name": "@lucid-evolution/lucid",
-  "version": "0.3.34",
+  "version": "0.3.35",
   "license": "MIT",
   "author": "",
   "description": "Next-generation transaction builder for highly scalable dApps on Cardano",
