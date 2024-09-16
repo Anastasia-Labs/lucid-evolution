@@ -7,7 +7,7 @@ export const JSONRPCSchema = <A, I, R>(schema: S.Schema<A, I, R>) =>
   S.extend(
     S.Struct({
       jsonrpc: S.String,
-      method: S.String,
+      method: S.optional(S.String),
       id: S.NullOr(S.Number),
     }),
     S.Union(S.Struct({ result: schema }), S.Struct({ error: S.Object })),
@@ -150,6 +150,10 @@ export const RedeemerSchema = S.Struct({
 });
 
 export const toOgmiosUTxOs = (utxos: CoreType.UTxO[] | undefined): UTxO[] => {
+  // NOTE: Ogmios only works with single encoding, not double encoding.
+  // You will get the following error:
+  // "Invalid request: couldn't decode Plutus script."
+  // TODO: Ensure the CBOR script is sent with single encoding.
   const toOgmiosScript = (
     scriptRef: CoreType.UTxO["scriptRef"],
   ): UTxO["script"] | null => {
@@ -166,12 +170,16 @@ export const toOgmiosUTxOs = (utxos: CoreType.UTxO[] | undefined): UTxO[] => {
       }
     }
   };
-  const toOgmiosAssets = (assets: CoreType.Assets): Assets => {
+
+  const toOgmiosAssets = (assets: CoreType.Assets) => {
     const newAssets: Assets = {};
-    Object.entries(assets).map(([unit, amount]) => {
+    Object.entries(assets).forEach(([unit, amount]) => {
       if (unit == "lovelace") return;
       const { policyId, assetName } = fromUnit(unit);
-      newAssets[policyId][assetName ? assetName : ""] = Number(amount);
+      if (!newAssets[policyId]) {
+        newAssets[policyId] = {};
+      }
+      return (newAssets[policyId][assetName ? assetName : ""] = Number(amount));
     });
     return newAssets;
   };
