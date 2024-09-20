@@ -71,9 +71,7 @@ describe.sequential("Koios", () => {
     await expect(() => koios.submitTx("80")).rejects.toThrowError();
   });
 
-  // Contact Koios
-  // (FiberFailure) KoiosError: ResponseError: StatusCode: non 2xx status code (503 POST https://preprod.koios.rest/api/v1/ogmios)
-  test.skip("evaluates additonal utxos - sample 1", async () => {
+  test("evaluates additonal utxos - sample 1", async () => {
     const redeemers = await koios.evaluateTx(
       PreprodConstants.evalSample1.transaction,
       PreprodConstants.evalSample1.utxos,
@@ -84,9 +82,7 @@ describe.sequential("Koios", () => {
     );
   });
 
-  // Contact Koios
-  // (FiberFailure) KoiosError: ResponseError: StatusCode: non 2xx status code (503 POST https://preprod.koios.rest/api/v1/ogmios)
-  test.skip("evaluates additinal utxos - sample 2", async () => {
+  test("evaluates additinal utxos - sample 2", async () => {
     const redeemers = await koios.evaluateTx(
       PreprodConstants.evalSample2.transaction,
       PreprodConstants.evalSample2.utxos,
@@ -94,6 +90,17 @@ describe.sequential("Koios", () => {
     assert.deepStrictEqual(
       redeemers,
       PreprodConstants.evalSample2.redeemersExUnits,
+    );
+  });
+
+  test("evaluates additinal utxos - sample 3", async () => {
+    const redeemers = await koios.evaluateTx(
+      PreprodConstants.evalSample3.transaction,
+      PreprodConstants.evalSample3.utxos,
+    );
+    assert.deepStrictEqual(
+      redeemers,
+      PreprodConstants.evalSample3.redeemersExUnits,
     );
   });
 });

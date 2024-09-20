@@ -103,4 +103,16 @@ describe("maestro", async () => {
       PreprodConstants.evalSample2.redeemersExUnits,
     );
   });
+  // NOTE: The following transaction doesn't work with Maestro TX evaluation.
+  //Error: Evaluate transaction failed: {"code":400,"error":"Bad Request","message":"A validator threw an error while executing redeemer withdraw:0. The following information was returned: 'Script must be executed as stake withdrawal'"}
+  test.skip("evaluates additinal utxos - sample 3", async () => {
+    const redeemers = await maestro.evaluateTx(
+      PreprodConstants.evalSample3.transaction,
+      PreprodConstants.evalSample3.utxos,
+    );
+    assert.deepStrictEqual(
+      redeemers,
+      PreprodConstants.evalSample3.redeemersExUnits,
+    );
+  });
 });

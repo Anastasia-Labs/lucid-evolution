@@ -421,7 +421,7 @@ const fetchOgmiosParse = <A, I, R>(
     HttpClientRequest.jsonBody(data),
     Effect.flatMap(HttpClient.fetch),
     HttpClientResponse.json,
-    Effect.flatMap(S.decodeUnknown(schema, { onExcessProperty: "error" })),
+    Effect.flatMap(S.decodeUnknown(schema)),
     Effect.catchTag("ParseError", (e) =>
       Effect.fail(ArrayFormatter.formatErrorSync(e)),
     ),

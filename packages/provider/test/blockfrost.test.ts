@@ -100,4 +100,12 @@ describe("Blockfrost", async () => {
       PreprodConstants.evalSample2.redeemersExUnits,
     );
   });
+  // NOTE: The following transaction doesn't work with Blockfrost TX evaluation.
+  // It is very likely that the issue is due to them not upgrading from Ogmios 5.6, which is an outdated version, to the latest one.
+  test.skip("evaluates additinal utxos - sample 2", async () => {
+    const redeemers = await blockfrost.evaluateTx(
+      PreprodConstants.evalSample3.transaction,
+      PreprodConstants.evalSample3.utxos,
+    );
+  });
 });
