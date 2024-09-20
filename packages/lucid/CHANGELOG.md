@@ -1,5 +1,11 @@
 # @lucid-evolution/lucid
 
+## 0.3.38
+
+### Patch Changes
+
+- [#331](https://github.com/Anastasia-Labs/lucid-evolution/pull/331) [`5f573dd`](https://github.com/Anastasia-Labs/lucid-evolution/commit/5f573dddf53fa711f69cbdff42ede4aea61ffcbc) Thanks [@nikhils9](https://github.com/nikhils9)! - Fix `RedeemerBuilder` issue with `mintAssets`
+
 ## 0.3.37
 
 ### Patch Changes
