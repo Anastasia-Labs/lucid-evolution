@@ -19,7 +19,6 @@ export const mintAssets =
   (config: TxBuilder.TxBuilderConfig, assets: Assets) =>
   (redeemer?: Redeemer): Effect.Effect<void, TxBuilderError> =>
     Effect.gen(function* () {
-      config.mintedAssets = addAssets(config.mintedAssets, assets);
       const units = Object.keys(assets);
       const policyId = units[0].slice(0, 56);
       const mintAssets = CML.MapAssetNameToNonZeroInt64.new();

@@ -35,6 +35,7 @@ import { TransactionError } from "../Errors.js";
 import { Either } from "effect/Either";
 import { Effect } from "effect";
 import { handleRedeemerBuilder } from "./internal/TxUtils.js";
+import { addAssets } from "@lucid-evolution/utils";
 
 export type TxBuilderConfig = {
   readonly lucidConfig: LucidConfig;
@@ -345,6 +346,7 @@ export function makeTxBuilder(lucidConfig: LucidConfig): TxBuilder {
       return txBuilder;
     },
     mintAssets: (assets: Assets, redeemer?: string | RedeemerBuilder) => {
+      config.mintedAssets = addAssets(config.mintedAssets, assets);
       const partialProgram = Mint.mintAssets(config, assets);
       handleRedeemerBuilder(config, partialProgram, redeemer);
       return txBuilder;
