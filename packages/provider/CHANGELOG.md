@@ -1,5 +1,15 @@
 # @lucid-evolution/provider
 
+## 0.1.61
+
+### Patch Changes
+
+- [#330](https://github.com/Anastasia-Labs/lucid-evolution/pull/330) [`876fee9`](https://github.com/Anastasia-Labs/lucid-evolution/commit/876fee988089ec56355a68f0279899c1d299b9cc) Thanks [@solidsnakedev](https://github.com/solidsnakedev)! - fix toOgmiosAssets
+
+- Updated dependencies [[`d0ae360`](https://github.com/Anastasia-Labs/lucid-evolution/commit/d0ae360e432822796f8db9e985a894f17bf385b9)]:
+  - @lucid-evolution/utils@0.1.46
+  - @lucid-evolution/wallet@0.1.52
+
 ## 0.1.60
 
 ### Patch Changes
