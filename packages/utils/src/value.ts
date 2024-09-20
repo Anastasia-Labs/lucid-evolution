@@ -2,6 +2,7 @@ import { Assets, PolicyId, UTxO, Unit } from "@lucid-evolution/core-types";
 import { fromHex, fromText, toHex, toText } from "@lucid-evolution/core-utils";
 import { CML } from "./core.js";
 import { fromLabel, toLabel } from "./label.js";
+import { pipe } from "effect";
 
 export function valueToAssets(value: CML.Value): Assets {
   const assets: Assets = {};
@@ -118,3 +119,32 @@ export async function getUniqueTokenName(utxo: UTxO): Promise<string> {
 
   return toHex(hash);
 }
+
+/**
+ *
+ * Sort Assets following [RFC 7049 Section 3.9](https://datatracker.ietf.org/doc/html/rfc7049#section-3.9) sorting rules
+ */
+export const sortCanonical = (assets: Assets): Assets =>
+  pipe(
+    Object.entries(assets).sort(([aUnit], [bUnit]) => {
+      const a = fromUnit(aUnit);
+      const b = fromUnit(bUnit);
+      // Compare policy lengths
+      // NOTE: all policies have the same length, because they must be 28 bytes
+      // but because Lovelace is in the assets we must compare the length
+      if (a.policyId.length !== b.policyId.length)
+        return a.policyId.length - b.policyId.length;
+      // If policy IDs are the same, compare asset names length
+      if (a.policyId === b.policyId) {
+        const aAssetName = a.assetName || "";
+        const bAssetName = b.assetName || "";
+        if (aAssetName.length !== bAssetName.length)
+          return aAssetName.length - bAssetName.length;
+        // If asset names have same length but are different, compare them lexicographically
+        return aAssetName.localeCompare(bAssetName);
+      }
+      // If policy IDs have same length but are different, compare them lexicographically
+      return a.policyId.localeCompare(b.policyId);
+    }),
+    Object.fromEntries,
+  );

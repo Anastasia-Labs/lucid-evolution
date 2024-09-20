@@ -52,8 +52,23 @@ export interface TxSignBuilder {
   };
   /** Assembles the transaction with the given witnesses.  */
   assemble: (witnesses: TransactionWitnesses[]) => TxSignBuilder;
-  /** Converts the transaction body to CBOR format. */
-  toCBOR: () => CBORHex;
+  /**
+   * Converts the transaction to CBOR (Concise Binary Object Representation) format.
+   *
+   * Supports both canonical and non-canonical formats.
+   *
+   * Canonical format follows [RFC 7049 Section 3.9](https://datatracker.ietf.org/doc/html/rfc7049#section-3.9) rules
+   *
+   * Non-canonical format example:
+   * ```typescript
+   * .toCBOR();
+   * ```
+   * Canonical format example:
+   * ```typescript
+   * .toCBOR({ canonical: true });
+   * ```
+   */
+  toCBOR: (options?: { canonical: boolean }) => CBORHex;
   /** Converts the transaction body to JSON format. */
   toJSON: () => object;
   /** Computes the hash of the transaction body. */
@@ -117,7 +132,10 @@ export const makeTxSignBuilder = (
       config.programs.push(program);
       return txSignBuilder;
     },
-    toCBOR: () => config.txComplete.to_cbor_hex(),
+    toCBOR: (options = { canonical: false }) =>
+      options.canonical
+        ? config.txComplete.to_canonical_cbor_hex()
+        : config.txComplete.to_cbor_hex(),
     toJSON: () =>
       S.decodeUnknownSync(S.parseJson(S.Object))(config.txComplete.to_json()),
     toHash: () => CML.hash_transaction(config.txComplete.body()).to_hex(),
