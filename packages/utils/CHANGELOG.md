@@ -1,5 +1,11 @@
 # @lucid-evolution/utils
 
+## 0.1.46
+
+### Patch Changes
+
+- [#333](https://github.com/Anastasia-Labs/lucid-evolution/pull/333) [`d0ae360`](https://github.com/Anastasia-Labs/lucid-evolution/commit/d0ae360e432822796f8db9e985a894f17bf385b9) Thanks [@solidsnakedev](https://github.com/solidsnakedev)! - add canonical format
+
 ## 0.1.45
 
 ### Patch Changes
