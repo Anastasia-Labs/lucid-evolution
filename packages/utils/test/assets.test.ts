@@ -1,0 +1,55 @@
+import { assert, test } from "vitest";
+import { assetsToValue, sortCanonical } from "../src/value";
+
+const unsortedAssets = {
+  b7cafbba7e8d5dde2557c07254cd0e296bb581e72917a5179b4a00b04275726e61626c65546f6b656e:
+    237n,
+  "22691d3d969ecf5802226290c2fb98e2bc08522d5b726c1f5f4001054275726e61626c65546f6b656e506c75747573":
+    16n,
+  "22691d3d969ecf5802226290c2fb98e2bc08522d5b726c1f5f400105accbfb633f637e3bb1abee40c9539d1effd742cd2716b3b1db9de3aaf3f37794":
+    16n,
+  "6847ab77caa4eeec47e3740422c3e0f617f53b00d4e8649f61d3d98b4275726e61626c65546f6b656e":
+    8n,
+  b7cafbba7e8d5dde2557c07254cd0e296bb581e72917a5179b4a00b04275726e61626c65546f6b656e32:
+    108n,
+  d8906ca5c7ba124a0407a32dab37b2c82b13b3dcd9111e42940dcea46578616d706c65: 2n,
+  "22691d3d969ecf5802226290c2fb98e2bc08522d5b726c1f5f40010554657374": 66n,
+  lovelace: 4047250n,
+};
+
+const sortedAssets = {
+  lovelace: 4047250n,
+  "22691d3d969ecf5802226290c2fb98e2bc08522d5b726c1f5f40010554657374": 66n,
+  "22691d3d969ecf5802226290c2fb98e2bc08522d5b726c1f5f4001054275726e61626c65546f6b656e506c75747573":
+    16n,
+  "22691d3d969ecf5802226290c2fb98e2bc08522d5b726c1f5f400105accbfb633f637e3bb1abee40c9539d1effd742cd2716b3b1db9de3aaf3f37794":
+    16n,
+  "6847ab77caa4eeec47e3740422c3e0f617f53b00d4e8649f61d3d98b4275726e61626c65546f6b656e":
+    8n,
+  b7cafbba7e8d5dde2557c07254cd0e296bb581e72917a5179b4a00b04275726e61626c65546f6b656e:
+    237n,
+  b7cafbba7e8d5dde2557c07254cd0e296bb581e72917a5179b4a00b04275726e61626c65546f6b656e32:
+    108n,
+  d8906ca5c7ba124a0407a32dab37b2c82b13b3dcd9111e42940dcea46578616d706c65: 2n,
+};
+
+const sortedAssetsCBOR =
+  "821a003dc192a4581c22691d3d969ecf5802226290c2fb98e2bc08522d5b726c1f5f400105a344546573741842534275726e61626c65546f6b656e506c75747573105820accbfb633f637e3bb1abee40c9539d1effd742cd2716b3b1db9de3aaf3f3779410581c6847ab77caa4eeec47e3740422c3e0f617f53b00d4e8649f61d3d98ba14d4275726e61626c65546f6b656e08581cb7cafbba7e8d5dde2557c07254cd0e296bb581e72917a5179b4a00b0a24d4275726e61626c65546f6b656e18ed4e4275726e61626c65546f6b656e32186c581cd8906ca5c7ba124a0407a32dab37b2c82b13b3dcd9111e42940dcea4a1476578616d706c6502";
+
+test("Canonical sorting of Assets", () => {
+  assert.deepStrictEqual(sortedAssets, sortCanonical(unsortedAssets));
+});
+
+test("Canonical sorting of Assets (CBOR)", () => {
+  assert.deepStrictEqual(
+    assetsToValue(unsortedAssets).to_canonical_cbor_hex(),
+    assetsToValue(sortCanonical(unsortedAssets)).to_cbor_hex(),
+  );
+});
+
+test("CBOR equality after canonical sorting of Assets", () => {
+  assert.deepStrictEqual(
+    sortedAssetsCBOR,
+    assetsToValue(sortCanonical(unsortedAssets)).to_cbor_hex(),
+  );
+});
