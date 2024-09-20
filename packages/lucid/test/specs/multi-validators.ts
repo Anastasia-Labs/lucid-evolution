@@ -70,6 +70,7 @@ export const collectFundsInternal = Effect.gen(function* ($) {
   const { user } = yield* User;
   const stakeContract = yield* StakeContract;
   const mintContract = yield* MintContract;
+  const address = yield* Effect.promise(() => user.wallet().address());
 
   const stakeUtxos = yield* Effect.tryPromise(() =>
     user.utxosAt(stakeContract.contractAddress),
@@ -162,16 +163,15 @@ export const collectFundsInternal = Effect.gen(function* ($) {
     },
     inputs: selectedMintUTxOs,
   };
+  const mint = {
+    [mintContract.policyId + fromText("Test")]: 1n,
+  };
 
   const signBuilder = yield* txBuilder
     .withdraw(stakeContract.rewardAddress, 0n, rdmrBuilderWithdraw)
     .readFrom([stakeUtxoScriptRef, mintUtxoScriptRef])
-    .mintAssets(
-      {
-        [mintContract.policyId + fromText("Test")]: 1n,
-      },
-      rdmrBuilderMint,
-    )
+    .mintAssets(mint, rdmrBuilderMint)
+    .pay.ToAddress(address, mint)
     .setMinFee(200_000n)
     .completeProgram();
   return signBuilder;
