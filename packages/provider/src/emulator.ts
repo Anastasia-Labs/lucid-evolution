@@ -22,13 +22,13 @@ import {
   UTxO,
 } from "@lucid-evolution/core-types";
 import {
+  fromCMLRedeemerTag,
   generateSeedPhrase,
   PROTOCOL_PARAMETERS_DEFAULT,
 } from "@lucid-evolution/utils";
 import { coreToUtxo, getAddressDetails } from "@lucid-evolution/utils";
 import { fromHex } from "@lucid-evolution/core-utils";
 import { walletFromSeed } from "@lucid-evolution/wallet";
-import { RedeemerTag } from "@anastasia-labs/cardano-multiplatform-lib-nodejs";
 
 /** Concatentation of txHash + outputIndex */
 type FlatOutRef = string;
@@ -919,7 +919,7 @@ export class Emulator implements Provider {
             steps: Number(legacyRedeemer.ex_units().steps()),
           },
           redeemer_index: Number(legacyRedeemer.index()),
-          redeemer_tag: redeemerTagToString(legacyRedeemer.tag()),
+          redeemer_tag: fromCMLRedeemerTag(legacyRedeemer.tag()),
         });
       }
       return evalRedeemers;
@@ -939,7 +939,7 @@ export class Emulator implements Provider {
               steps: Number(redeemerVal.ex_units().steps()),
             },
             redeemer_index: Number(key.index),
-            redeemer_tag: redeemerTagToString(key.tag()),
+            redeemer_tag: fromCMLRedeemerTag(key.tag()),
           });
         }
       }
@@ -1019,24 +1019,5 @@ export class Emulator implements Provider {
       }
       console.log(`\n${"\u2581".repeat(60)}\n`);
     }
-  }
-}
-
-function redeemerTagToString(tag: RedeemerTag): string {
-  switch (tag) {
-    case RedeemerTag.Spend:
-      return "spend";
-    case RedeemerTag.Mint:
-      return "mint";
-    case RedeemerTag.Cert:
-      return "cert";
-    case RedeemerTag.Reward:
-      return "reward";
-    case RedeemerTag.Voting:
-      return "voting";
-    case RedeemerTag.Proposing:
-      return "proposing";
-    default:
-      return "unknown";
   }
 }

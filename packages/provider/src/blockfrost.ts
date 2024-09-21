@@ -14,6 +14,7 @@ import {
   OutRef,
   ProtocolParameters,
   Provider,
+  RedeemerTag,
   RewardAddress,
   Script,
   Transaction,
@@ -357,7 +358,7 @@ export class Blockfrost implements Provider {
       ([redeemerPointer, data]) => {
         const [pTag, pIndex] = redeemerPointer.split(":");
         evalRedeemers.push({
-          redeemer_tag: pTag,
+          redeemer_tag: pTag as RedeemerTag,
           redeemer_index: Number(pIndex),
           ex_units: { mem: Number(data.memory), steps: Number(data.steps) },
         });
