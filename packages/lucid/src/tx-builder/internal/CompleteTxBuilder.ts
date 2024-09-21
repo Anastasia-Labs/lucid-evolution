@@ -34,6 +34,7 @@ import {
   utxoToCore,
   utxoToTransactionInput,
   utxoToTransactionOutput,
+  toCMLRedeemerTag,
 } from "@lucid-evolution/utils";
 import { SLOT_CONFIG_NETWORK } from "@lucid-evolution/plutus";
 import { collectFromUTxO } from "./Collect.js";
@@ -316,25 +317,6 @@ export const applyUPLCEvalProvider = (
       ),
       exUnits,
     );
-  }
-};
-
-export const toCMLRedeemerTag = (tag: string) => {
-  switch (tag) {
-    case "spend":
-      return CML.RedeemerTag.Spend;
-    case "mint":
-      return CML.RedeemerTag.Mint;
-    case "publish":
-      return CML.RedeemerTag.Cert;
-    case "withdraw":
-      return CML.RedeemerTag.Reward;
-    case "vote":
-      return CML.RedeemerTag.Voting;
-    case "propose":
-      return CML.RedeemerTag.Proposing;
-    default:
-      throw new Error(`Exhaustive check failed: Unhandled case ${tag}`);
   }
 };
 

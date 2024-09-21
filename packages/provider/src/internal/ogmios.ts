@@ -140,7 +140,14 @@ export type UTxO = {
 
 export const RedeemerSchema = S.Struct({
   validator: S.Struct({
-    purpose: S.String,
+    purpose: S.Literal(
+      "spend",
+      "mint",
+      "publish",
+      "withdraw",
+      "vote",
+      "propose",
+    ),
     index: S.Int,
   }),
   budget: S.Struct({
