@@ -1,5 +1,11 @@
 # @lucid-evolution/uplc
 
+## 0.2.15
+
+### Patch Changes
+
+- [#337](https://github.com/Anastasia-Labs/lucid-evolution/pull/337) [`ad4e56f`](https://github.com/Anastasia-Labs/lucid-evolution/commit/ad4e56f9556e99b6b534dd476ca5fc38f6fcd3d6) Thanks [@solidsnakedev](https://github.com/solidsnakedev)! - update aiken uplc to 1.1.3; add redeemer utils; update redeemer types
+
 ## 0.2.14
 
 ### Patch Changes
