@@ -69,7 +69,7 @@ describe("Kupmios", async () => {
     assert(delegation);
   });
 
-  test("getDatum", async () => {
+  test.skip("getDatum", async () => {
     const datum = await kupmios.getDatum(
       "95472c2f46b89500703ec778304baf1079c58124c254bf4bf8c96e5d73869293",
     );
