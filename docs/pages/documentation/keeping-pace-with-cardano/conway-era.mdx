@@ -7,14 +7,156 @@ import { Callout } from "nextra/components";
 In the Conway era, the Cardano blockchain is introducing significant governance features on-chain. These enhancements, as described in [CIP-1694](https://github.com/cardano-foundation/CIPs/tree/master/CIP-1694), enable ADA holders
 to participate in various on-chain decisions. Key changes include new script purposes, centralized data structures like committees, and new transaction features.
 
-### Proposal procedures
+Lucid Evolution now supports various governance actions as defined in CIP-1694. These include delegating votes to DReps, registering as a DRep, and managing stake and vote delegations.
 
-To describe proposal procedures and attach an arbitrary number of those in transaction skeletons. The balancing mechanism will take into account the required deposit for each of these procedures.
+## As a ADA Holder
 
-### Parameter changes
+As an ADA holder, you can participate in governance through various voting strategies and delegation options.
 
-To issue proposal procedures with a request for changes in parameters. If a script witness is attached to this proposal (typically the constitution script), it will be ran against the proposal. All kinds of parameter changes are supported, except for the cost models, which contain too many values and are not even yet taken into account by the current constitution.
+### Delegation Options
 
-### Treasury withdrawals
+#### Delegate Vote to DRep
 
-To issue proposal procedures with a request for treasury withdrawals. If a script witness is attached to this proposal (typically the constitution script), it will be ran against the proposal.
+Delegates voting power from a reward address to a DRep
+```typescript
+await lucid.newTx()
+  .delegate.VoteToDRep(rewardAddress, drep)
+```
+
+#### Delegate Vote to Pool and DRep
+
+Delegates both stake to a pool and voting power to a DRep in one action
+
+```typescript
+await lucid.newTx()
+  .delegate.VoteToPoolAndDrep(rewardAddress, poolId, drep)
+```
+
+### Registration and Delegation
+#### Register and Delegate to DRep
+
+Registers a stake address and delegates voting power to a DRep in one action
+
+```typescript
+await lucid.newTx()
+  .registerAndDelegate.ToDrep(rewardAddress, drep)
+```
+
+#### Register and Delegate to Pool
+
+Registers a stake address and delegates stake to a pool 
+```typescript
+await lucid.newTx()
+  .registerAndDelegate.ToPool(rewardAddress, poolId)
+```
+
+#### Register and Delegate to Pool and DRep
+Registers a stake address, and delegates voting power to a DRep (In this case `AlwaysAbstain`) in one action
+
+```typescript
+await lucid.newTx()
+  .registerAndDelegate.ToPoolAndDRep(rewardAddress, poolId, {
+      __typename: "AlwaysAbstain",
+    })
+```
+
+### Voting Strategies
+
+#### Always Abstain
+
+```typescript
+await lucid.newTx()
+    .delegate.VoteToDRep(rewardAddress, {
+      __typename: "AlwaysAbstain",
+    })
+```
+
+You can also both delegate to a pool and vote to a DRep in one action
+
+```typescript
+await lucid.newTx()
+.newTx()
+    .delegate.VoteToPoolAndDRep(rewardAddress, poolId, {
+      __typename: "AlwaysAbstain",
+    })
+```
+
+#### Always No Confidence
+
+```typescript
+await lucid.newTx()
+    .delegate.VoteToDRep(rewardAddress, {
+      __typename: "AlwaysNoConfidence",
+    })
+```
+
+<Callout>
+Choosing `AlwaysNoConfidence` or `AlwaysAbstain` requires a DRep object with `__typename` property set to the desired value, as it can be observed in the examples abover
+</Callout>
+
+## As a DRep
+
+As a DRep, you can perform the following actions
+
+### Register as a DRep
+
+Registers a stake address as a DRep
+
+```typescript
+await lucid.newTx()
+  .register.DRep(rewardAddress)
+```
+
+### Update DRep
+
+Updates the information of a DRep
+
+```typescript
+await lucid.newTx()
+  .updateDRep(rewardAddress)
+```
+
+### Deregister DRep
+
+Deregisters your stake address as a DRep
+
+```typescript
+await lucid.newTx()
+  .deregister.DRep(rewardAddress)
+```
+
+## Script-based DReps
+
+Lucid Evolution supports script-based DReps, allowing for programmatic voting behavior
+
+#### Register Script DRep
+
+```typescript
+await lucid
+  .newTx()
+  .register.DRep(rewardAddress)
+  .attach.Script(script)
+```
+
+#### Deregister Script DRep
+
+```typescript
+await lucid
+  .newTx()
+  .deregister.DRep(rewardAddress)
+```
+
+## Example
+
+To utilize these methods, you need to initiate the `TxBuilder` configuration by calling `newTx()` after `Lucid` is initialized
+
+```typescript
+  // You can define a DRep object
+  const drep: DRep = { __typename: "AlwaysAbstain" }; // Example AlwaysAbstain DRep
+
+  // Create and complete the transaction
+  const tx = await lucid
+    .newTx()
+    .delegate.VoteToDRep(rewardAddress, drep)
+    .complete();
+```

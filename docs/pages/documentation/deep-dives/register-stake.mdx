@@ -50,6 +50,19 @@ const tx = await lucid
 
 ---
 
+<Callout>
+**Register and Delegate to a stake pool**
+
+You can combine both registration and delegation into a single transaction too
+
+```typescript
+const tx = await lucid
+  .newTx()
+  .registerAndDelegateToPool(rewardAddress, "poolabc...")
+  .complete();
+```
+</Callout>
+
 ## Deregister staking
 
 Deregistering a stake key will reclaim the `2 ADA` deposit initially taken during registration.
@@ -60,3 +73,4 @@ const tx = await lucid
   .deRegisterStake(rewardAddress)
   .complete();
 ```
+
