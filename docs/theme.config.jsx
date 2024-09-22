@@ -57,7 +57,7 @@ export default {
         href="https://github.com/Anastasia-Labs/lucid-evolution/releases"
         target="_blank"
       >
-        🎉 We are Chang Hardfork READY! Learn more →
+        🎉 Plutus v3 is enabled in our latest release! Learn more →
       </a>
     ),
   },
@@ -173,10 +173,10 @@ export default {
                   <h3>Community</h3>
                   <ul>
                     <li>
-                      <a href="https://discord.gg/s89P9gpEff">Discord</a>
+                      <a href="https://discord.gg/s89P9gpEff">Discord ⤴</a>
                     </li>
                     <li>
-                      <a href="https://x.com/AnastasiaLabs">X</a>
+                      <a href="https://x.com/AnastasiaLabs">X ⤴</a>
                     </li>
                   </ul>
                 </div>
