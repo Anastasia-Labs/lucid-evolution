@@ -1,5 +1,11 @@
 # @lucid-evolution/uplc
 
+## 0.2.16
+
+### Patch Changes
+
+- [#340](https://github.com/Anastasia-Labs/lucid-evolution/pull/340) [`33135ed`](https://github.com/Anastasia-Labs/lucid-evolution/commit/33135ed8532a3140025751cbc7e1b7efae74545d) Thanks [@hadelive](https://github.com/hadelive)! - optimize uplc wasm size
+
 ## 0.2.15
 
 ### Patch Changes
