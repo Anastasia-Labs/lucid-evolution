@@ -10,8 +10,18 @@ crate-type = ["cdylib"]
 [dependencies]
 error = "0.1.9"
 uplc = "1.1.3"
-wasm-bindgen = "0.2.89"
-js-sys = "0.3.61"
+wasm-bindgen = "0.2.93"
+js-sys = "0.3.70"
+wee_alloc = "0.4.5"
+
+# required for wasm usage of getrandom
 getrandom = { version = "0.2", features = ["js"] }
 
+[profile.release]
+codegen-units = 1
+opt-level = "z"
+lto = true
+debug = false
 
+[package.metadata.wasm-pack.profile.release]
+wasm-opt = ['-Oz']
