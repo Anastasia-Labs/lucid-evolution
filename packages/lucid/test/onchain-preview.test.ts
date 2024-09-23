@@ -315,6 +315,46 @@ describe.skip.sequential("Onchain testing", () => {
     expect(exit._tag).toBe("Success");
   });
 
+  test("registerNativeStake", async () => {
+    const program = pipe(
+      StakeEndpoints.registerNativeStake,
+      Effect.provide(User.layer),
+      Effect.provide(NetworkConfig.layerPreview),
+    );
+    const exit = await Effect.runPromiseExit(program);
+    expect(exit._tag).toBe("Success");
+  });
+
+  test("delegateNativeStakeTo", async () => {
+    const program = pipe(
+      StakeEndpoints.delegateNativeStakeTo,
+      Effect.provide(User.layer),
+      Effect.provide(NetworkConfig.layerPreview),
+    );
+    const exit = await Effect.runPromiseExit(program);
+    expect(exit._tag).toBe("Success");
+  });
+
+  test("withdrawAllNativeStake", async () => {
+    const program = pipe(
+      StakeEndpoints.withdrawAllNativeStakeReward,
+      Effect.provide(User.layer),
+      Effect.provide(NetworkConfig.layerPreview),
+    );
+    const exit = await Effect.runPromiseExit(program);
+    expect(exit._tag).toBe("Success");
+  });
+
+  test("deRegisterNativeStake", async () => {
+    const program = pipe(
+      StakeEndpoints.deRegisterNativeStake,
+      Effect.provide(User.layer),
+      Effect.provide(NetworkConfig.layerPreview),
+    );
+    const exit = await Effect.runPromiseExit(program);
+    expect(exit._tag).toBe("Success");
+  });
+
   test("Parametrized Contract - Deposit Funds", async () => {
     const program = pipe(
       ParametrizedEndpoints.depositFunds,

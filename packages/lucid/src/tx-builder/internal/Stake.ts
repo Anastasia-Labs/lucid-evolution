@@ -104,12 +104,14 @@ export const deRegisterStake = (
             stakeError(ERROR_MESSAGE.MISSING_SCRIPT(stakeCredential.hash)),
           ),
         );
-        const red = yield* pipe(
-          Effect.fromNullable(redeemer),
-          Effect.orElseFail(() => stakeError(ERROR_MESSAGE.MISSING_REDEEMER)),
-        );
+        const handleRedeemer = () =>
+          pipe(
+            Effect.fromNullable(redeemer),
+            Effect.orElseFail(() => stakeError(ERROR_MESSAGE.MISSING_REDEEMER)),
+          );
         switch (script.type) {
           case "PlutusV1": {
+            const red = yield* handleRedeemer();
             config.txBuilder.add_cert(
               certBuilder.plutus_script(
                 toPartial(toV1(script.script), red),
@@ -120,6 +122,7 @@ export const deRegisterStake = (
           }
 
           case "PlutusV2": {
+            const red = yield* handleRedeemer();
             config.txBuilder.add_cert(
               certBuilder.plutus_script(
                 toPartial(toV2(script.script), red),
@@ -129,6 +132,7 @@ export const deRegisterStake = (
             break;
           }
           case "PlutusV3": {
+            const red = yield* handleRedeemer();
             config.txBuilder.add_cert(
               certBuilder.plutus_script(
                 toPartial(toV3(script.script), red),
