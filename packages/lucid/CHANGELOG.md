@@ -1,5 +1,11 @@
 # @lucid-evolution/lucid
 
+## 0.3.42
+
+### Patch Changes
+
+- [#343](https://github.com/Anastasia-Labs/lucid-evolution/pull/343) [`54ef5c2`](https://github.com/Anastasia-Labs/lucid-evolution/commit/54ef5c23b173dd43f9e86089c7a95acb0c7a42eb) Thanks [@hadelive](https://github.com/hadelive)! - support native-script stake
+
 ## 0.3.41
 
 ### Patch Changes
