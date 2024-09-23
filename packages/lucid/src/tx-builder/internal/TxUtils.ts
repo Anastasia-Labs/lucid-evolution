@@ -133,20 +133,21 @@ export const processCertificate = (
           ),
         );
 
-        const red = yield* pipe(
-          Effect.fromNullable(redeemer),
-          Effect.orElseFail(() =>
-            txBuilderError(ERROR_MESSAGE.MISSING_REDEEMER),
-          ),
-        );
-
         const addPlutusCertificate = (scriptVersion: CML.PlutusScript) => {
-          config.txBuilder.add_cert(
-            certBuilder.plutus_script(
-              toPartial(scriptVersion, red),
-              CML.Ed25519KeyHashList.new(),
-            ),
-          );
+          Effect.gen(function* () {
+            const red = yield* pipe(
+              Effect.fromNullable(redeemer),
+              Effect.orElseFail(() =>
+                txBuilderError(ERROR_MESSAGE.MISSING_REDEEMER),
+              ),
+            );
+            config.txBuilder.add_cert(
+              certBuilder.plutus_script(
+                toPartial(scriptVersion, red),
+                CML.Ed25519KeyHashList.new(),
+              ),
+            );
+          });
         };
 
         switch (script.type) {
@@ -162,7 +163,12 @@ export const processCertificate = (
             break;
 
           case "Native":
-            yield* txBuilderError("NotFound");
+            config.txBuilder.add_cert(
+              certBuilder.native_script(
+                CML.NativeScript.from_cbor_hex(script.script),
+                CML.NativeScriptWitnessInfo.assume_signature_count(),
+              ),
+            );
             break;
         }
         break;
