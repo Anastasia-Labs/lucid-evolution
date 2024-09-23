@@ -27,7 +27,7 @@ const mkMintinPolicy = (address: string) => {
     ],
   });
 };
-const mkSlotRangeMintinPolicy = (
+const mkSlotRangeMintingPolicy = (
   duration: number,
   address: string,
   network: Network,
@@ -209,7 +209,7 @@ export const mintInSlotRange = Effect.gen(function* () {
   const { user } = yield* User;
   const networkConfig = yield* NetworkConfig;
   const addr = yield* Effect.promise(() => user.wallet().address());
-  const mint = mkSlotRangeMintinPolicy(60_000, addr, networkConfig.NETWORK);
+  const mint = mkSlotRangeMintingPolicy(60_000, addr, networkConfig.NETWORK);
   const policy = mintingPolicyToId(mint);
   const datum = Data.to(123n);
 
