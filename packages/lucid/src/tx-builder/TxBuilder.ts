@@ -16,6 +16,7 @@ import {
   Script,
   ScriptType,
   StakeKeyHash,
+  TxOutput,
   UTxO,
 } from "@lucid-evolution/core-types";
 import * as Collect from "./internal/Collect.js";
@@ -33,7 +34,7 @@ import * as CompleteTxBuilder from "./internal/CompleteTxBuilder.js";
 import * as TxSignBuilder from "../tx-sign-builder/TxSignBuilder.js";
 import { TransactionError } from "../Errors.js";
 import { Either } from "effect/Either";
-import { Effect } from "effect";
+import { Effect, pipe } from "effect";
 import { handleRedeemerBuilder } from "./internal/TxUtils.js";
 import { addAssets } from "@lucid-evolution/utils";
 
@@ -45,6 +46,7 @@ export type TxBuilderConfig = {
   readInputs: UTxO[];
   consumedInputs: UTxO[];
   totalOutputAssets: Assets;
+  payToOutputs: TxOutput[];
   mintedAssets: Assets;
   scripts: Map<string, { type: ScriptType; script: string }>;
   programs: Effect.Effect<void, TransactionError, never>[];
@@ -202,7 +204,7 @@ export type TxBuilder = {
   chainSafe: () => Promise<
     Either<[UTxO[], UTxO[], TxSignBuilder.TxSignBuilder], TransactionError>
   >;
-  config: () => TxBuilderConfig;
+  config: () => Promise<TxBuilderConfig>;
 };
 
 export function makeTxBuilder(lucidConfig: LucidConfig): TxBuilder {
@@ -214,6 +216,7 @@ export function makeTxBuilder(lucidConfig: LucidConfig): TxBuilder {
     readInputs: [],
     consumedInputs: [],
     totalOutputAssets: {},
+    payToOutputs: [],
     mintedAssets: {},
     scripts: new Map(),
     programs: [],
@@ -551,7 +554,9 @@ export function makeTxBuilder(lucidConfig: LucidConfig): TxBuilder {
       },
     },
     compose: (tx: TxBuilder | null) => {
-      config.programs.concat(tx?.config().programs ?? []);
+      if (tx) {
+        config.programs.push(Effect.promise(() => tx.config()));
+      }
       return txBuilder;
     },
     setMinFee: (fee: bigint) => {
@@ -580,7 +585,11 @@ export function makeTxBuilder(lucidConfig: LucidConfig): TxBuilder {
       makeReturn(CompleteTxBuilder.complete(config, options)).unsafeRun(),
     chainSafe: (options?: CompleteTxBuilder.CompleteOptions) =>
       makeReturn(CompleteTxBuilder.complete(config, options)).safeRun(),
-    config: () => config,
+    config: () =>
+      Effect.gen(function* () {
+        yield* Effect.all(config.programs, { concurrency: "unbounded" });
+        return config;
+      }).pipe(Effect.runPromise),
   };
   return txBuilder;
 }
