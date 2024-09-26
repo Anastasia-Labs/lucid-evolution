@@ -1,5 +1,11 @@
 # @lucid-evolution/lucid
 
+## 0.3.44
+
+### Patch Changes
+
+- [#348](https://github.com/Anastasia-Labs/lucid-evolution/pull/348) [`7f9c1a4`](https://github.com/Anastasia-Labs/lucid-evolution/commit/7f9c1a4e23bdfe934e22865d364651936c183070) Thanks [@solidsnakedev](https://github.com/solidsnakedev)! - set collateral option
+
 ## 0.3.43
 
 ### Patch Changes
