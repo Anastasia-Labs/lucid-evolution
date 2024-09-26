@@ -1,5 +1,11 @@
 # @lucid-evolution/lucid
 
+## 0.3.43
+
+### Patch Changes
+
+- [#346](https://github.com/Anastasia-Labs/lucid-evolution/pull/346) [`d3b97fe`](https://github.com/Anastasia-Labs/lucid-evolution/commit/d3b97fe49d164e62ebd56b80da1767d4fe10a106) Thanks [@solidsnakedev](https://github.com/solidsnakedev)! - execute programs when returning config()
+
 ## 0.3.42
 
 ### Patch Changes
