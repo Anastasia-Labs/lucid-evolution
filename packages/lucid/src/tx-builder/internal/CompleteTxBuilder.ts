@@ -45,6 +45,7 @@ export type CompleteOptions = {
   coinSelection?: boolean;
   changeAddress?: Address;
   localUPLCEval?: boolean; // replaces nativeUPLC
+  setCollateral: bigint;
 };
 
 export const completeTxError = (cause: unknown) =>
@@ -84,7 +85,11 @@ const getWalletInfo = (
 
 export const complete = (
   config: TxBuilder.TxBuilderConfig,
-  options: CompleteOptions = { coinSelection: true, localUPLCEval: true },
+  options: CompleteOptions = {
+    coinSelection: true,
+    localUPLCEval: true,
+    setCollateral: 5_000_000n,
+  },
 ) =>
   Effect.gen(function* () {
     yield* Effect.all(config.programs, { concurrency: "unbounded" });
@@ -94,9 +99,15 @@ export const complete = (
     if (hasScriptExecutions) {
       const collateralInput = yield* findCollateral(
         config.lucidConfig.protocolParameters.coinsPerUtxoByte,
+        options.setCollateral,
         walletInfo.inputs,
       );
-      setCollateral(config, collateralInput, walletInfo.address);
+      setCollateral(
+        config,
+        options.setCollateral,
+        collateralInput,
+        walletInfo.address,
+      );
     }
     // First round of coin selection and UPLC evaluation. The fee estimation is lacking
     // the script execution costs as they aren't available yet.
@@ -349,6 +360,7 @@ export const setRedeemerstoZero = (tx: CML.Transaction) => {
 
 const setCollateral = (
   config: TxBuilder.TxBuilderConfig,
+  setCollateral: bigint,
   collateralInputs: UTxO[],
   changeAddress: string,
 ) => {
@@ -361,7 +373,7 @@ const setCollateral = (
   }
   const returnassets = pipe(
     sumAssetsFromInputs(collateralInputs),
-    Record.union({ lovelace: -5_000_000n }, _BigInt.sum),
+    Record.union({ lovelace: -setCollateral }, _BigInt.sum),
   );
 
   const collateralOutputBuilder =
@@ -379,15 +391,16 @@ const setCollateral = (
 
 const findCollateral = (
   coinsPerUtxoByte: bigint,
+  setCollateral: bigint,
   inputs: UTxO[],
 ): Effect.Effect<UTxO[], TxBuilderError, never> =>
   Effect.gen(function* () {
     // NOTE: While the required collateral is 5 ADA, there may be instances where the UTXOs encountered do not contain enough ADA to be returned to the collateral return address.
     // For example:
     // A UTXO with 5.5 ADA will result in an error message such as `BabbageOutputTooSmallUTxO`, since only 0.5 ADA would be returned to the collateral return address.
-    const collateralLovelace: Assets = { lovelace: 5_000_000n };
+    const collateralLovelace: Assets = { lovelace: setCollateral };
     const error = completeTxError(
-      `Your wallet does not have enough funds to cover the required 5 ADA collateral. Or it contains UTxOs with reference scripts; which
+      `Your wallet does not have enough funds to cover the required ${setCollateral} Lovelace collateral. Or it contains UTxOs with reference scripts; which
       are excluded from collateral selection.`,
     );
     const selected = yield* recursive(
@@ -400,7 +413,7 @@ const findCollateral = (
 
     if (selected.length > 3)
       yield* completeTxError(
-        `Selected ${selected.length} inputs as collateral, but max collateral inputs is 3 to cover the 5 ADA collateral ${stringify(selected)}`,
+        `Selected ${selected.length} inputs as collateral, but max collateral inputs is 3 to cover the ${setCollateral} Lovelace collateral ${stringify(selected)}`,
       );
     return selected;
   });
