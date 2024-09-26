@@ -400,7 +400,7 @@ const findCollateral = (
     // A UTXO with 5.5 ADA will result in an error message such as `BabbageOutputTooSmallUTxO`, since only 0.5 ADA would be returned to the collateral return address.
     const collateralLovelace: Assets = { lovelace: setCollateral };
     const error = completeTxError(
-      `Your wallet does not have enough funds to cover the required 5 ADA collateral. Or it contains UTxOs with reference scripts; which
+      `Your wallet does not have enough funds to cover the required ${setCollateral} Lovelace collateral. Or it contains UTxOs with reference scripts; which
       are excluded from collateral selection.`,
     );
     const selected = yield* recursive(
@@ -413,7 +413,7 @@ const findCollateral = (
 
     if (selected.length > 3)
       yield* completeTxError(
-        `Selected ${selected.length} inputs as collateral, but max collateral inputs is 3 to cover the 5 ADA collateral ${stringify(selected)}`,
+        `Selected ${selected.length} inputs as collateral, but max collateral inputs is 3 to cover the ${setCollateral} Lovelace collateral ${stringify(selected)}`,
       );
     return selected;
   });
