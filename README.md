@@ -15,6 +15,79 @@
   </a>
 </p>
 
+There are a growing number of projects that are built on top of `lucid-evolution`! If you've built a library or a project on top of lucid-evolution, tell me about it [on X](https://twitter.com/solidsnakedev) or [on Discord](https://discord.gg/s89P9gpEff) . I'll add it below and tweet it out.
+
+<h3 align="center">Projects powered by lucid-evolution</h3>
+
+<table align="center" style="justify-content: center;align-items: center;display: flex;">
+  <tr>
+    <td align="center">
+      <img src="https://avatars.githubusercontent.com/u/131367296?s=200&v=4"  height="50px;" alt="Mynth" />
+      <br />
+      <a style="text-decoration:none;" href="https://mynth.ai/"  target="_blank">Mynth</a>
+    </td>
+    <td align="center">
+      <img src="https://avatars.githubusercontent.com/u/159527663?s=200&v=4"  height="50px;" alt="Pondora" />
+      <br />
+      <a style="text-decoration:none;" href="https://pondora.org/"  target="_blank">Pondora</a>
+    </td>
+    <td align="center">
+      <img src="https://avatars.githubusercontent.com/u/86468066?s=200&v=4"  height="50px;" alt="Genius Yield" />
+      <br />
+      <a style="text-decoration:none;" href="https://www.geniusyield.co/"  target="_blank">Genius Yield</a>
+    </td>
+    <td align="center">
+      <img src="https://avatars.githubusercontent.com/u/150360075?s=200&v=4"  height="50px;" alt="Splash" />
+      <br />
+      <a style="text-decoration:none;" href="https://www.splash.trade/"  target="_blank">Splash</a>
+    </td>
+    </tr><tr>
+    <td align="center">
+      <img src="https://app.ada.markets/assets/images/ADAmarkets.png" height="50px;" alt="Ada Markets" />
+      <br />
+      <a style="text-decoration:none;" href="https://ada.markets/" target="_blank">Ada Markets</a>
+    </td>
+    <td align="center">
+      <img src="https://avatars.githubusercontent.com/u/53253566?s=200&v=4" height="50px;" alt="Meld" />
+      <br />
+      <a style="text-decoration:none;" href="https://meld.com/"  target="_blank">Meld</a>
+    </td>
+    <td align="center">
+      <img src="https://summonplatform.io/wp-content/uploads/2022/07/Summon-Token-2048x2048.png" height="50px;" alt="Summon" />
+      <br />
+      <a style="text-decoration:none;" href="https://summonplatform.io/"  target="_blank">Summon</a>
+    </td>
+    <td align="center">
+      <img src="" height="50px;" alt="Logo" />
+      <br />
+      <a style="text-decoration:none;" href="https://website.com" target="_blank">Logo</a>
+    </td>
+    </tr><tr>
+    <td align="center">
+      <img src="" height="50px;" alt="Logo" />
+      <br />
+      <a style="text-decoration:none;" href="https://website.com" target="_blank">Logo</a>
+    </td>
+    <td align="center">
+      <img src="" height="50px;" alt="Logo" />
+      <br />
+      <a style="text-decoration:none;" href="https://website.com" target="_blank">Logo</a>
+    </td>
+    <td align="center">
+      <img src="" height="50px;" alt="Logo" />
+      <br />
+      <a style="text-decoration:none;" href="https://website.com" target="_blank">Logo</a>
+    </td>
+    <td align="center">
+      <img src="" height="50px;" alt="Logo" />
+      <br />
+      <a style="text-decoration:none;" href="https://website.com" target="_blank">Logo</a>
+    </td>
+  </tr>
+</table>
+
+<br/>
+
 ## Introduction
 
 Lucid Evolution is a comprehensive suite of tools designed to facilitate the off-chain development of scalable dApps and the creation of complex transactions on the Cardano blockchain
@@ -116,6 +189,9 @@ We welcome contributions to Lucid Evolution! Please feel free to submit issues, 
 ## License
 
 Lucid Evolution is open-source software licensed under the [MIT License](https://anastasia-labs.github.io/lucid-evolution/information/license)
+
+
+
 
 ## Community
 
