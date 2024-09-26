@@ -555,7 +555,11 @@ export function makeTxBuilder(lucidConfig: LucidConfig): TxBuilder {
     },
     compose: (tx: TxBuilder | null) => {
       if (tx) {
-        config.programs.push(Effect.promise(() => tx.config()));
+        const program = Effect.gen(function* () {
+          const config = yield* Effect.promise(() => tx.config());
+          yield* Effect.all(config.programs, { concurrency: "unbounded" });
+        });
+        config.programs.push(program);
       }
       return txBuilder;
     },
