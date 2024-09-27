@@ -1,5 +1,18 @@
 {
   "hello-world":"Hello World",
   "design-patterns":"Design Patterns",
-  "emulated-testing-framework":"Testing Framework via Emulator"
+  "emulated-testing-framework":"Testing Framework via Emulator",
+  "---": {
+    "type": "separator"
+  },
+  "smart-handles-offchain": {
+    "title": "Smart Handles Offchain  ⤴",
+    "href": "https://github.com/Anastasia-Labs/smart-handles-offchain",
+    "newWindow": true
+  },
+  "mint-chocolate-chip": {
+    "title": "Mint Chocolate Chip  ⤴",
+    "href": "https://github.com/MynthAI/mint-chocolate-chip",
+    "newWindow": true
+  }
 }
