@@ -30,6 +30,15 @@
     "type": "page"
   },
 
+  "showcase": {
+    "type": "page",
+    "title": "Showcase",
+    "theme": {
+      "typesetting": "article",
+      "layout": "default"
+    }
+  },
+  
   "information": {
     "title": "Information",
     "type": "menu",

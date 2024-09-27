@@ -1,0 +1,44 @@
+import { Cards } from 'nextra/components'
+
+# Powered by Lucid<span style={{color: '#8b0000'}}> Evolution</span>
+---
+
+<Cards>
+  <ShowcaseCard title="Mynth" href="https://www.mynth.ai" style={{ width: '200px', height: '250px' }}>
+    <>![Mynth](https://avatars.githubusercontent.com/u/131367296?s=200&v=4)</>
+  </ShowcaseCard>
+  <ShowcaseCard title="Pondora" href="https://pondora.org" style={{ width: '200px', height: '250px' }}>
+    <>![Pondora](https://avatars.githubusercontent.com/u/159527663?s=200&v=4)</>
+  </ShowcaseCard>
+  <ShowcaseCard title="Genius Yield" href="https://www.geniusyield.co" style={{ width: '200px', height: '250px' }}>
+    <>![Genius Yield](https://avatars.githubusercontent.com/u/86468066?s=200&v=4)</>
+  </ShowcaseCard>
+  <ShowcaseCard title="Splash" href="https://www.splash.trade" style={{ width: '200px', height: '250px' }}>
+    <>![Splash](https://avatars.githubusercontent.com/u/150360075?s=200&v=4)</>
+  </ShowcaseCard>
+  <ShowcaseCard title="ADA Markets" href="https://ada.markets" style={{ width: '200px', height: '250px' }}>
+    <>![ADA Markets](https://app.ada.markets/assets/images/ADAmarkets.png)</>
+  </ShowcaseCard>
+  <ShowcaseCard title="MELD" href="https://www.meld.com" style={{ width: '200px', height: '250px' }}>
+    <>![MELD](https://avatars.githubusercontent.com/u/53253566?s=200&v=4)</>
+  </ShowcaseCard>
+  <ShowcaseCard title="Summon" href="https://summonplatform.io" style={{ width: '200px', height: '250px' }}>
+    <>![Summon Platform](https://summonplatform.io/wp-content/uploads/2022/07/Summon-Token-2048x2048.png)</>
+  </ShowcaseCard>
+</Cards>
+
+# Let us know!
+---
+Are you building an open-source project with Lucid Evolution? We'd love to feature you here!
+
+export const ShowcaseCard = Object.assign(
+  Cards.Card.bind(),
+  {
+    displayName: 'ShowcaseCard',
+    defaultProps: {
+      image: true,
+      arrow: true,
+      target: '_blank'
+    }
+  }
+)
