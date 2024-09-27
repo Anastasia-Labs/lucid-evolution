@@ -19,7 +19,7 @@ export default {
       title: "Lucid Evolution - Welcome",
     };
   },
-
+  
   primaryHue: 0,
   primarySaturation: 90,
   logo: () => (

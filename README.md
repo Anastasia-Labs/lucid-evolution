@@ -190,9 +190,6 @@ We welcome contributions to Lucid Evolution! Please feel free to submit issues, 
 
 Lucid Evolution is open-source software licensed under the [MIT License](https://anastasia-labs.github.io/lucid-evolution/information/license)
 
-
-
-
 ## Community
 
 Join our [Discord community](https://discord.gg/s89P9gpEff) for discussions, support, and updates

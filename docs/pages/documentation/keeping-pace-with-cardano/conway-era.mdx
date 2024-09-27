@@ -1,4 +1,4 @@
-import { Callout } from "nextra/components";
+import { Callout, Steps } from "nextra/components";
 
 ## Governance and Conway Era
 
@@ -12,6 +12,8 @@ Lucid Evolution now supports various governance actions as defined in CIP-1694. 
 ## As a ADA Holder
 
 As an ADA holder, you can participate in governance through various voting strategies and delegation options.
+
+<Steps>
 
 ### Delegation Options
 
@@ -31,6 +33,8 @@ Delegates both stake to a pool and voting power to a DRep in one action
 await lucid.newTx()
   .delegate.VoteToPoolAndDrep(rewardAddress, poolId, drep)
 ```
+
+---
 
 ### Registration and Delegation
 #### Register and Delegate to DRep
@@ -59,6 +63,8 @@ await lucid.newTx()
       __typename: "AlwaysAbstain",
     })
 ```
+
+---
 
 ### Voting Strategies
 
@@ -90,13 +96,17 @@ await lucid.newTx()
     })
 ```
 
+</Steps>
+
 <Callout>
-Choosing `AlwaysNoConfidence` or `AlwaysAbstain` requires a DRep object with `__typename` property set to the desired value, as it can be observed in the examples abover
+Choosing `AlwaysNoConfidence` or `AlwaysAbstain` requires a DRep object with `__typename` property set to the desired value, as it can be observed in the examples above
 </Callout>
 
 ## As a DRep
 
 As a DRep, you can perform the following actions
+
+<Steps>
 
 ### Register as a DRep
 
@@ -107,6 +117,8 @@ await lucid.newTx()
   .register.DRep(rewardAddress)
 ```
 
+---
+
 ### Update DRep
 
 Updates the information of a DRep
@@ -115,6 +127,8 @@ Updates the information of a DRep
 await lucid.newTx()
   .updateDRep(rewardAddress)
 ```
+
+---
 
 ### Deregister DRep
 
@@ -125,11 +139,17 @@ await lucid.newTx()
   .deregister.DRep(rewardAddress)
 ```
 
+---
+
+</Steps>
+
 ## Script-based DReps
+
+<Steps>
 
 Lucid Evolution supports script-based DReps, allowing for programmatic voting behavior
 
-#### Register Script DRep
+### Register Script DRep
 
 ```typescript
 await lucid
@@ -138,13 +158,15 @@ await lucid
   .attach.Script(script)
 ```
 
-#### Deregister Script DRep
+### Deregister Script DRep
 
 ```typescript
 await lucid
   .newTx()
   .deregister.DRep(rewardAddress)
 ```
+
+</Steps>
 
 ## Example
 
