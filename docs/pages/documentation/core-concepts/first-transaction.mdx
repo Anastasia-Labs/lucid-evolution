@@ -1,6 +1,6 @@
 import { Callout, Steps } from "nextra/components";
 
-# Your first transaction
+## Your first transaction
 
 <Steps>
 ### Build
@@ -23,7 +23,7 @@ const tx = await lucid
 <Callout type="info" emoji="ℹ️">
   __Evolution-Notes:__ `payToAddress` -> `pay.ToAddress`
 </Callout>
-### Sign{" "}
+### Sign
 
 ```typescript
 const signedTx = await tx.sign.withWallet().complete();
