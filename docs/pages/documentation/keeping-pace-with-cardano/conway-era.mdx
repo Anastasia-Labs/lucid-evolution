@@ -17,7 +17,7 @@ As an ADA holder, you can participate in governance through various voting strat
 
 ### Delegation Options
 
-#### Delegate Vote to DRep
+**Delegate Vote to DRep** 
 
 Delegates voting power from a reward address to a DRep
 ```typescript
@@ -25,7 +25,7 @@ await lucid.newTx()
   .delegate.VoteToDRep(rewardAddress, drep)
 ```
 
-#### Delegate Vote to Pool and DRep
+**Delegate Vote to Pool and DRep**
 
 Delegates both stake to a pool and voting power to a DRep in one action
 
@@ -37,7 +37,8 @@ await lucid.newTx()
 ---
 
 ### Registration and Delegation
-#### Register and Delegate to DRep
+
+**Register and Delegate to DRep**
 
 Registers a stake address and delegates voting power to a DRep in one action
 
@@ -46,7 +47,7 @@ await lucid.newTx()
   .registerAndDelegate.ToDrep(rewardAddress, drep)
 ```
 
-#### Register and Delegate to Pool
+**Register and Delegate to Pool**
 
 Registers a stake address and delegates stake to a pool 
 ```typescript
@@ -54,7 +55,8 @@ await lucid.newTx()
   .registerAndDelegate.ToPool(rewardAddress, poolId)
 ```
 
-#### Register and Delegate to Pool and DRep
+**Register and Delegate to Pool and DRep**
+
 Registers a stake address, and delegates voting power to a DRep (In this case `AlwaysAbstain`) in one action
 
 ```typescript
@@ -68,7 +70,7 @@ await lucid.newTx()
 
 ### Voting Strategies
 
-#### Always Abstain
+**Always Abstain**
 
 ```typescript
 await lucid.newTx()
@@ -87,7 +89,7 @@ await lucid.newTx()
     })
 ```
 
-#### Always No Confidence
+**Always No Confidence**
 
 ```typescript
 await lucid.newTx()
