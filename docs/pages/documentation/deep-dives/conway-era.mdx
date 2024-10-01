@@ -1,44 +1,41 @@
-import { Callout, Steps } from "nextra/components";
+import { Callout, Steps, Tabs } from "nextra/components";
+import Link from 'next/link';
 
-## Governance and Conway Era
-
-<Callout>This section is under construction 🛠️</Callout>
+# Governance and Conway Era
 
 In the Conway era, the Cardano blockchain is introducing significant governance features on-chain. These enhancements, as described in [CIP-1694](https://github.com/cardano-foundation/CIPs/tree/master/CIP-1694), enable ADA holders
 to participate in various on-chain decisions. Key changes include new script purposes, centralized data structures like committees, and new transaction features.
 
 Lucid Evolution now supports various governance actions as defined in CIP-1694. These include delegating votes to DReps, registering as a DRep, and managing stake and vote delegations.
 
-## As a ADA Holder
+<Callout>This section is under construction 🛠️</Callout>
 
-As an ADA holder, you can participate in governance through various voting strategies and delegation options.
+## As an ADA Holder
+
+Being part of the community, you can participate in governance through various voting strategies and delegation options
 
 <Steps>
 
 ### Delegation Options
 
-**Delegate Vote to DRep** 
-
-Delegates voting power from a reward address to a DRep
+Delegates the voting power of the specified reward address to a given DRep
 ```typescript
 await lucid.newTx()
   .delegate.VoteToDRep(rewardAddress, drep)
 ```
 
-**Delegate Vote to Pool and DRep**
+<Callout>
 
-Delegates both stake to a pool and voting power to a DRep in one action
+Delegates both your ADA stake to specified pool and your voting power to a given DRep in one action
 
 ```typescript
 await lucid.newTx()
   .delegate.VoteToPoolAndDrep(rewardAddress, poolId, drep)
 ```
-
+</Callout>
 ---
 
 ### Registration and Delegation
-
-**Register and Delegate to DRep**
 
 Registers a stake address and delegates voting power to a DRep in one action
 
@@ -47,15 +44,7 @@ await lucid.newTx()
   .registerAndDelegate.ToDrep(rewardAddress, drep)
 ```
 
-**Register and Delegate to Pool**
-
-Registers a stake address and delegates stake to a pool 
-```typescript
-await lucid.newTx()
-  .registerAndDelegate.ToPool(rewardAddress, poolId)
-```
-
-**Register and Delegate to Pool and DRep**
+<Callout>
 
 Registers a stake address, and delegates voting power to a DRep (In this case `AlwaysAbstain`) in one action
 
@@ -65,12 +54,14 @@ await lucid.newTx()
       __typename: "AlwaysAbstain",
     })
 ```
-
+</Callout>
 ---
 
-### Voting Strategies
+### Predefined Voting Strategies
 
-**Always Abstain**
+<Tabs items={['Always Abstain', 'Always No Confidence']}>
+  <Tabs.Tab>
+  **Always Abstain**
 
 ```typescript
 await lucid.newTx()
@@ -78,18 +69,9 @@ await lucid.newTx()
       __typename: "AlwaysAbstain",
     })
 ```
-
-You can also both delegate to a pool and vote to a DRep in one action
-
-```typescript
-await lucid.newTx()
-.newTx()
-    .delegate.VoteToPoolAndDRep(rewardAddress, poolId, {
-      __typename: "AlwaysAbstain",
-    })
-```
-
-**Always No Confidence**
+  </Tabs.Tab>
+  <Tabs.Tab>
+  **Always No Confidence**
 
 ```typescript
 await lucid.newTx()
@@ -97,6 +79,9 @@ await lucid.newTx()
       __typename: "AlwaysNoConfidence",
     })
 ```
+  </Tabs.Tab>
+</Tabs>
+
 
 </Steps>
 
@@ -106,11 +91,8 @@ Choosing `AlwaysNoConfidence` or `AlwaysAbstain` requires a DRep object with `__
 
 ## As a DRep
 
-As a DRep, you can perform the following actions
-
 <Steps>
-
-### Register as a DRep
+### Register / Deregister DRep
 
 Registers a stake address as a DRep
 
@@ -118,6 +100,13 @@ Registers a stake address as a DRep
 await lucid.newTx()
   .register.DRep(rewardAddress)
 ```
+
+<Callout>
+You need to <Link href="/documentation/deep-dives/register-stake">__register the associated stake address__</Link> firstly to be able to register as a DRep 
+</Callout>
+
+
+
 
 ---
 
@@ -129,30 +118,24 @@ Updates the information of a DRep
 await lucid.newTx()
   .updateDRep(rewardAddress)
 ```
-
+</Steps>
 ---
 
 ### Deregister DRep
-
 Deregisters your stake address as a DRep
-
 ```typescript
 await lucid.newTx()
   .deregister.DRep(rewardAddress)
 ```
 
----
-
-</Steps>
 
 ## Script-based DReps
 
-<Steps>
-
 Lucid Evolution supports script-based DReps, allowing for programmatic voting behavior
 
-### Register Script DRep
-
+<Steps>
+<Tabs items={['Register Script DRep', 'Deregister Script  DRep']}>
+  <Tabs.Tab>
 ```typescript
 await lucid
   .newTx()
@@ -160,13 +143,17 @@ await lucid
   .attach.Script(script)
 ```
 
-### Deregister Script DRep
-
+  </Tabs.Tab>
+  <Tabs.Tab>
 ```typescript
 await lucid
   .newTx()
   .deregister.DRep(rewardAddress)
 ```
+  </Tabs.Tab>
+</Tabs>
+
+
 
 </Steps>
 
