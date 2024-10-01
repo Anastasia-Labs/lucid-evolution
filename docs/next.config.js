@@ -5,12 +5,9 @@ const withNextra = require('nextra')({
   defaultShowCopyCode: true,
   readingTime: true,
 })
- 
-module.exports = {
-  ...withNextra({
-    images: { unoptimized: true },
-  }),
+
+module.exports = withNextra({
   output: 'export',
+  images: { unoptimized: true },
   basePath: "/lucid-evolution",
-}
- 
+})
