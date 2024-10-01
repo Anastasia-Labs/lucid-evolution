@@ -1,7 +1,7 @@
 import { Callout, Steps, Tabs } from "nextra/components";
 
 ## Staking your wallet
-
+This section covers the operations for staking your wallet on the Cardano network.
 <Steps>
 ### Register stake key
  
@@ -26,7 +26,17 @@ const tx = await lucid
   .delegateTo(rewardAddress, "poolabc...")
   .complete();
 ```
+<Callout>
+**Register and Delegate to a stake pool**
+You can combine both registration and delegation into a single transaction 
 
+```typescript
+const tx = await lucid
+  .newTx()
+  .registerAndDelegateToPool(rewardAddress, "poolabc...")
+  .complete();
+```
+</Callout>
 ---
 
 ### Withdraw rewards
@@ -55,19 +65,6 @@ const tx = await lucid
   .deRegisterStake(rewardAddress)
   .complete();
 ```
-
-<Callout>
-**Register and Delegate to a stake pool**
-
-You can combine both registration and delegation into a single transaction too
-
-```typescript
-const tx = await lucid
-  .newTx()
-  .registerAndDelegateToPool(rewardAddress, "poolabc...")
-  .complete();
-```
-</Callout>
 
 <Callout>
 After registering a stake key you can retrieve the reward address associated with it:
