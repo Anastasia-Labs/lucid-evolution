@@ -65,9 +65,9 @@ const tx = await lucid
   .deRegisterStake(rewardAddress)
   .complete();
 ```
-
+---
 <Callout>
-After registering a stake key you can retrieve the reward address associated with it:
+You can query the reward address (`stake_...`) associated with your stake key:
 
 ```typescript
 const rewardAddress = await lucid.wallet().rewardAddress();
