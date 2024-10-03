@@ -1,5 +1,6 @@
 import Image from "next/image";
 import { useRouter } from "next/router";
+import Script from 'next/script';
 
 export default {
   project: {
@@ -95,19 +96,16 @@ export default {
         content="https://anastasialabs.com/assets/img/logo/logo.png"
       />
       <meta name="twitter:site:domain" content="https://anastasialabs.com/" />
-      <script
-        dangerouslySetInnerHTML={{
-          __html: `
-            if (!window.localStorage.getItem("theme_default")) {
-              window.localStorage.setItem("theme", "dark");
-              window.localStorage.setItem("theme_default", "dark");
-              document.documentElement.classList.add("dark");
-              document.documentElement.classList.remove("light");
-            }
-          `,
-        }}
-      />
-
+      <Script id="force-dark-mode" strategy="beforeInteractive">
+        {`
+          if (!window.localStorage.getItem("theme_default")) {
+            window.localStorage.setItem("theme", "dark");
+            window.localStorage.setItem("theme_default", "dark");
+            document.documentElement.classList.add("dark");
+            document.documentElement.classList.remove("light");
+          }
+        `}
+      </Script>
       <style>{`
               
         .nextra-nav-container nav a:hover {

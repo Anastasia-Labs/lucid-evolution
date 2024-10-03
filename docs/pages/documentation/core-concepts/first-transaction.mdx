@@ -71,7 +71,6 @@ const tx = await lucid
   .complete();
 
 const signedTx = await tx.sign.withWallet().complete();
-
 const txHash = await signedTx.submit();
 console.log(txHash);
 ```

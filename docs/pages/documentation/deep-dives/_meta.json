@@ -2,7 +2,9 @@
   "make-payments": "Make a Payment",
   "mint-assets": "Mint Assets",
   "register-stake": "Stake your ADA",
+  "conway-era": "Governance and Conway Era",
   "register-retire-stakepool": "Register / Retire a Stakepool",
   "smart-contract-interactions": "Interact with a Smart Contract",
+  "transaction-chaining": "Transaction Chaining",
   "emulator": "Emulator"
 }

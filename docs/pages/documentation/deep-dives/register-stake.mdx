@@ -1,15 +1,11 @@
-import { Callout, Steps } from "nextra/components";
+import { Callout, Steps, Tabs } from "nextra/components";
 
 ## Staking your wallet
-
-```typescript
-const rewardAddress = await lucid.wallet().rewardAddress();
-```
-
+This section covers the operations for staking your wallet on the Cardano network.
 <Steps>
 ### Register stake key
-
-When registering a stake key with the Cardano network, a deposit of `2 ADA` is required. This deposit acts as a pledge and is temporarily deducted from the wallet balance
+ 
+ When registering a stake key with the Cardano network, a deposit of `2 ADA` is required. This deposit acts as a pledge and is temporarily deducted from the wallet balance
 
 ```typescript
 const tx = await lucid
@@ -30,7 +26,17 @@ const tx = await lucid
   .delegateTo(rewardAddress, "poolabc...")
   .complete();
 ```
+<Callout>
+**Register and Delegate to a stake pool**
+You can combine both registration and delegation into a single transaction 
 
+```typescript
+const tx = await lucid
+  .newTx()
+  .registerAndDelegateToPool(rewardAddress, "poolabc...")
+  .complete();
+```
+</Callout>
 ---
 
 ### Withdraw rewards
@@ -50,22 +56,8 @@ const tx = await lucid
 
 ---
 
-<Callout>
-**Register and Delegate to a stake pool**
-
-You can combine both registration and delegation into a single transaction too
-
-```typescript
-const tx = await lucid
-  .newTx()
-  .registerAndDelegateToPool(rewardAddress, "poolabc...")
-  .complete();
-```
-</Callout>
-
-## Deregister staking
-
-Deregistering a stake key will reclaim the `2 ADA` deposit initially taken during registration.
+### Deregister stake key
+  Deregistering a stake key will reclaim the `2 ADA` deposit initially taken during registration.
 
 ```typescript
 const tx = await lucid
@@ -73,4 +65,15 @@ const tx = await lucid
   .deRegisterStake(rewardAddress)
   .complete();
 ```
+---
+<Callout>
+You can query the reward address (`stake_...`) associated with your stake key:
+
+```typescript
+const rewardAddress = await lucid.wallet().rewardAddress();
+```
+</Callout>
+
+
+
 

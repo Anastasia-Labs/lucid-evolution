@@ -1,6 +1,6 @@
 <p align="center">
   <img width="130px" src="docs/public/lucid-evolution-al-red.svg" align="center"/>
-  <h1 align="center">Lucid Evolution</h1>
+  <h1 align="center">Lucid <span style="color: #AD1F1E;">Evolution</span></h1>
   <p align="center">Next-generation transaction builder for users and an off-chain framework for highly scalable dApps on Cardano</p>
 </p>
 
@@ -8,11 +8,11 @@
   <a href="https://github.com/Anastasia-Labs/lucid-evolution/actions/workflows/main.yml">
     <img src="https://github.com/Anastasia-Labs/lucid-evolution/actions/workflows/main.yml/badge.svg" alt="Build Status"/>
   </a>
-  <img src="https://img.shields.io/npm/v/%40lucid-evolution%2Flucid" alt="NPM Version"/>
   <img src="https://img.shields.io/npm/dy/%40lucid-evolution%2Flucid" alt="NPM Downloads"/>
   <a href="https://discord.gg/s89P9gpEff">
     <img alt="Discord" src="https://img.shields.io/discord/947985069111377951?logo=discord">
   </a>
+  <img alt="NPM Version" src="https://img.shields.io/npm/v/%40lucid-evolution%2Flucid?color=%2350C62A">
 </p>
 
 There are a growing number of projects that are built on top of `lucid-evolution`! If you've built a library or a project on top of lucid-evolution, tell me about it [on X](https://twitter.com/solidsnakedev) or [on Discord](https://discord.gg/s89P9gpEff) . I'll add it below and tweet it out.
@@ -58,25 +58,15 @@ There are a growing number of projects that are built on top of `lucid-evolution
       <a style="text-decoration:none;" href="https://summonplatform.io/"  target="_blank">Summon</a>
     </td>
     <td align="center">
-      <img src="" height="50px;" alt="Logo" />
+      <img src="https://avatars.githubusercontent.com/u/171672240?s=200&v=4" height="50px;" alt="Strike Finance" />
       <br />
-      <a style="text-decoration:none;" href="https://website.com" target="_blank">Logo</a>
+      <a style="text-decoration:none;" href="https://www.strikefinance.org" target="_blank">Strike Finance</a>
     </td>
     </tr><tr>
     <td align="center">
-      <img src="" height="50px;" alt="Logo" />
+      <img src="https://ugc.production.linktr.ee/00f8a70f-e3ee-49e1-a4e0-e03607edd37d_Twitter-Avatar.jpeg?io=true&size=avatar-v3_0" height="50px;" alt="Atrium" />
       <br />
-      <a style="text-decoration:none;" href="https://website.com" target="_blank">Logo</a>
-    </td>
-    <td align="center">
-      <img src="" height="50px;" alt="Logo" />
-      <br />
-      <a style="text-decoration:none;" href="https://website.com" target="_blank">Logo</a>
-    </td>
-    <td align="center">
-      <img src="" height="50px;" alt="Logo" />
-      <br />
-      <a style="text-decoration:none;" href="https://website.com" target="_blank">Logo</a>
+      <a style="text-decoration:none;" href="https://alpha.atrium.io/connect" target="_blank">Atrium</a>
     </td>
     <td align="center">
       <img src="" height="50px;" alt="Logo" />
@@ -142,7 +132,7 @@ To run the documentation site locally:
 pnpm dev
 ```
 
-- Visit http://localhost:3000/lucid-evolution to view the docs
+Visit http://localhost:3000/lucid-evolution to view the docs
 
 ### Testing
 
