@@ -266,7 +266,11 @@ export const Data = {
  * Convert PlutusData to Cbor encoded data.\
  * Or apply a shape and convert the provided data struct to Cbor encoded data.
  */
-function to<T = Data>(data: Exact<T>, type?: T): Datum | Redeemer {
+function to<T = Data>(
+  data: Exact<T>,
+  type?: T,
+  canonical: boolean = false,
+): Datum | Redeemer {
   function serialize(data: Data): CML.PlutusData {
     try {
       if (typeof data === "bigint") {
@@ -308,9 +312,9 @@ function to<T = Data>(data: Exact<T>, type?: T): Datum | Redeemer {
     }
   }
   const d = type ? castTo<T>(data, type) : (data as Data);
-  return serialize(d).to_cardano_node_format().to_cbor_hex() as
-    | Datum
-    | Redeemer;
+  return canonical
+    ? (serialize(d).to_canonical_cbor_hex() as Datum | Redeemer)
+    : (serialize(d).to_cardano_node_format().to_cbor_hex() as Datum | Redeemer);
 }
 
 /**

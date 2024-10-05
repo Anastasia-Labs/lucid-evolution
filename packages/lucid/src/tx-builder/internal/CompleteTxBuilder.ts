@@ -46,6 +46,7 @@ export type CompleteOptions = {
   changeAddress?: Address;
   localUPLCEval?: boolean; // replaces nativeUPLC
   setCollateral: bigint;
+  canonical: boolean;
 };
 
 export const completeTxError = (cause: unknown) =>
@@ -89,6 +90,7 @@ export const complete = (
     coinSelection: true,
     localUPLCEval: true,
     setCollateral: 5_000_000n,
+    canonical: false,
   },
 ) =>
   Effect.gen(function* () {
@@ -151,7 +153,12 @@ export const complete = (
     return Tuple.make(
       updatedWalletInputs,
       derivedInputs,
-      TxSignBuilder.makeTxSignBuilder(config.lucidConfig, tx),
+      TxSignBuilder.makeTxSignBuilder(
+        config.lucidConfig,
+        options.canonical
+          ? CML.Transaction.from_cbor_bytes(tx.to_canonical_cbor_bytes())
+          : tx,
+      ),
     );
   }).pipe(Effect.catchAllDefect((cause) => new RunTimeError({ cause })));
 
