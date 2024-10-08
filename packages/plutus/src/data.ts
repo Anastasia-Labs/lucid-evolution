@@ -263,10 +263,28 @@ export const Data = {
 };
 
 /**
- * Convert PlutusData to Cbor encoded data.\
- * Or apply a shape and convert the provided data struct to Cbor encoded data.
+ * Convert PlutusData or Schema to CBOR-encoded data
+ *
+ * By default, the `canonical` option is set to `false`.
+ *
+ * @example Non Canonical format:
+ * ```ts
+ * Data.to<Data>(new Constr(0, ["deadbeef"])) -> 'd8799f44deadbeefff';
+ * ```
+ *
+ * @example Canonical format:
+ * ```ts
+ * Data.to<Data>(new Constr(0, ["deadbeef"]), undefined, { canonical: true }) -> 'd8798144deadbeef';
+ * ```
+ *
+ * Returns the encoded CBOR data as either `Datum` or `Redeemer`.
  */
-function to<T = Data>(data: Exact<T>, type?: T): Datum | Redeemer {
+function to<T = Data>(
+  data: Exact<T>,
+  type?: T,
+  options: { canonical?: boolean } = {},
+): Datum | Redeemer {
+  const { canonical = false } = options;
   function serialize(data: Data): CML.PlutusData {
     try {
       if (typeof data === "bigint") {
@@ -308,9 +326,9 @@ function to<T = Data>(data: Exact<T>, type?: T): Datum | Redeemer {
     }
   }
   const d = type ? castTo<T>(data, type) : (data as Data);
-  return serialize(d).to_cardano_node_format().to_cbor_hex() as
-    | Datum
-    | Redeemer;
+  return canonical
+    ? (serialize(d).to_canonical_cbor_hex() as Datum | Redeemer)
+    : (serialize(d).to_cardano_node_format().to_cbor_hex() as Datum | Redeemer);
 }
 
 /**
