@@ -1,5 +1,12 @@
 # @lucid-evolution/utils
 
+## 0.1.51
+
+### Patch Changes
+
+- Updated dependencies [[`974c5ef`](https://github.com/Anastasia-Labs/lucid-evolution/commit/974c5efb56db592ed4bc3c84ca3b5a4659182a51)]:
+  - @lucid-evolution/plutus@0.1.28
+
 ## 0.1.50
 
 ### Patch Changes

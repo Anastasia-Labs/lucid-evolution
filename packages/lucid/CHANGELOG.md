@@ -1,5 +1,17 @@
 # @lucid-evolution/lucid
 
+## 0.3.46
+
+### Patch Changes
+
+- [#357](https://github.com/Anastasia-Labs/lucid-evolution/pull/357) [`974c5ef`](https://github.com/Anastasia-Labs/lucid-evolution/commit/974c5efb56db592ed4bc3c84ca3b5a4659182a51) Thanks [@solidsnakedev](https://github.com/solidsnakedev)! - add canonical format option
+
+- Updated dependencies [[`974c5ef`](https://github.com/Anastasia-Labs/lucid-evolution/commit/974c5efb56db592ed4bc3c84ca3b5a4659182a51)]:
+  - @lucid-evolution/plutus@0.1.28
+  - @lucid-evolution/utils@0.1.51
+  - @lucid-evolution/provider@0.1.66
+  - @lucid-evolution/wallet@0.1.57
+
 ## 0.3.45
 
 ### Patch Changes
