@@ -1,5 +1,11 @@
 # @lucid-evolution/plutus
 
+## 0.1.28
+
+### Patch Changes
+
+- [#357](https://github.com/Anastasia-Labs/lucid-evolution/pull/357) [`974c5ef`](https://github.com/Anastasia-Labs/lucid-evolution/commit/974c5efb56db592ed4bc3c84ca3b5a4659182a51) Thanks [@solidsnakedev](https://github.com/solidsnakedev)! - add canonical format option
+
 ## 0.1.27
 
 ### Patch Changes
