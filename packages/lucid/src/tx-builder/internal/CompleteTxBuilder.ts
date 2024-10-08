@@ -45,8 +45,8 @@ export type CompleteOptions = {
   coinSelection?: boolean;
   changeAddress?: Address;
   localUPLCEval?: boolean; // replaces nativeUPLC
-  setCollateral: bigint;
-  canonical: boolean;
+  setCollateral?: bigint;
+  canonical?: boolean;
 };
 
 export const completeTxError = (cause: unknown) =>
@@ -86,56 +86,72 @@ const getWalletInfo = (
 
 export const complete = (
   config: TxBuilder.TxBuilderConfig,
-  options: CompleteOptions = {
-    coinSelection: true,
-    localUPLCEval: true,
-    setCollateral: 5_000_000n,
-    canonical: false,
-  },
+  options: CompleteOptions = {},
 ) =>
   Effect.gen(function* () {
-    yield* Effect.all(config.programs, { concurrency: "unbounded" });
     const walletInfo = yield* getWalletInfo(config);
+    // Set default options
+    const {
+      coinSelection = true,
+      changeAddress = walletInfo.address,
+      localUPLCEval = true,
+      setCollateral = 5_000_000n,
+      canonical = false,
+    } = options;
+    // Execute programs sequentially
+    yield* Effect.all(config.programs);
     const hasScriptExecutions: Boolean = config.scripts.size > 0;
     // Set collateral input if there are script executions
     if (hasScriptExecutions) {
       const collateralInput = yield* findCollateral(
         config.lucidConfig.protocolParameters.coinsPerUtxoByte,
-        options.setCollateral,
+        setCollateral,
         walletInfo.inputs,
       );
-      setCollateral(
+      applyCollateral(
         config,
-        options.setCollateral,
+        setCollateral,
         collateralInput,
         walletInfo.address,
       );
     }
     // First round of coin selection and UPLC evaluation. The fee estimation is lacking
     // the script execution costs as they aren't available yet.
-    yield* selectionAndEvaluation(config, options, walletInfo, false);
+    yield* selectionAndEvaluation(
+      config,
+      walletInfo,
+      coinSelection,
+      localUPLCEval,
+      false,
+    );
     // Second round of coin selection by including script execution costs in fee estimation.
     // UPLC evaluation need to be performed again if new inputs are selected during coin selection.
     // Because increasing the inputs can increase the script execution budgets.
     if (hasScriptExecutions)
-      yield* selectionAndEvaluation(config, options, walletInfo, true);
+      yield* selectionAndEvaluation(
+        config,
+        walletInfo,
+        coinSelection,
+        localUPLCEval,
+        true,
+      );
 
     config.txBuilder.add_change_if_needed(
-      CML.Address.from_bech32(walletInfo.address),
+      CML.Address.from_bech32(changeAddress),
       true,
     );
-    const tx = yield* Effect.try({
+    const transaction = yield* Effect.try({
       try: () =>
         config.txBuilder
           .build(
             CML.ChangeSelectionAlgo.Default,
-            CML.Address.from_bech32(walletInfo.address),
+            CML.Address.from_bech32(changeAddress),
           )
           .build_unchecked(),
       catch: (error) => completeTxError(error),
     });
 
-    const derivedInputs = deriveInputsFromTransaction(tx);
+    const derivedInputs = deriveInputsFromTransaction(transaction);
 
     const derivedWalletInputs = derivedInputs.filter(
       (utxo) => utxo.address === walletInfo.address,
@@ -155,17 +171,20 @@ export const complete = (
       derivedInputs,
       TxSignBuilder.makeTxSignBuilder(
         config.lucidConfig,
-        options.canonical
-          ? CML.Transaction.from_cbor_bytes(tx.to_canonical_cbor_bytes())
-          : tx,
+        canonical
+          ? CML.Transaction.from_cbor_bytes(
+              transaction.to_canonical_cbor_bytes(),
+            )
+          : transaction,
       ),
     );
   }).pipe(Effect.catchAllDefect((cause) => new RunTimeError({ cause })));
 
 export const selectionAndEvaluation = (
   config: TxBuilder.TxBuilderConfig,
-  options: CompleteOptions,
   walletInfo: WalletInfo,
+  coinSelection: boolean,
+  localUPLCEval: boolean,
   script_calculation: boolean,
 ): Effect.Effect<void, TransactionError, never> =>
   Effect.gen(function* () {
@@ -175,8 +194,8 @@ export const selectionAndEvaluation = (
     );
 
     const inputsToAdd =
-      options.coinSelection !== false
-        ? yield* coinSelection(config, availableInputs, script_calculation)
+      coinSelection !== false
+        ? yield* doCoinSelection(config, availableInputs, script_calculation)
         : [];
 
     // Skip UPLC evaluation for the second time if no new inputs are added
@@ -220,7 +239,7 @@ export const selectionAndEvaluation = (
     });
 
     if (txRedeemerBuilder.draft_tx().witness_set().redeemers()) {
-      if (options.localUPLCEval !== false) {
+      if (localUPLCEval !== false) {
         applyUPLCEval(
           yield* evalTransaction(config, txRedeemerBuilder, walletInfo.inputs),
           config.txBuilder,
@@ -365,7 +384,7 @@ export const setRedeemerstoZero = (tx: CML.Transaction) => {
   }
 };
 
-const setCollateral = (
+const applyCollateral = (
   config: TxBuilder.TxBuilderConfig,
   setCollateral: bigint,
   collateralInputs: UTxO[],
@@ -425,7 +444,7 @@ const findCollateral = (
     return selected;
   });
 
-const coinSelection = (
+const doCoinSelection = (
   config: TxBuilder.TxBuilderConfig,
   availableInputs: UTxO[],
   script_calculation: boolean,

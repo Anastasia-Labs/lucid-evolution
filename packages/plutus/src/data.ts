@@ -263,14 +263,28 @@ export const Data = {
 };
 
 /**
- * Convert PlutusData to Cbor encoded data.\
- * Or apply a shape and convert the provided data struct to Cbor encoded data.
+ * Convert PlutusData or Schema to CBOR-encoded data
+ *
+ * By default, the `canonical` option is set to `false`.
+ *
+ * @example Non Canonical format:
+ * ```ts
+ * Data.to<Data>(new Constr(0, ["deadbeef"])) -> 'd8799f44deadbeefff';
+ * ```
+ *
+ * @example Canonical format:
+ * ```ts
+ * Data.to<Data>(new Constr(0, ["deadbeef"]), undefined, { canonical: true }) -> 'd8798144deadbeef';
+ * ```
+ *
+ * Returns the encoded CBOR data as either `Datum` or `Redeemer`.
  */
 function to<T = Data>(
   data: Exact<T>,
   type?: T,
-  canonical: boolean = false,
+  options: { canonical?: boolean } = {},
 ): Datum | Redeemer {
+  const { canonical = false } = options;
   function serialize(data: Data): CML.PlutusData {
     try {
       if (typeof data === "bigint") {
