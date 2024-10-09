@@ -1,5 +1,11 @@
 # @lucid-evolution/lucid
 
+## 0.3.47
+
+### Patch Changes
+
+- [#359](https://github.com/Anastasia-Labs/lucid-evolution/pull/359) [`cb6476b`](https://github.com/Anastasia-Labs/lucid-evolution/commit/cb6476be9455f9d3fc599cda450c9ec5bbe5a500) Thanks [@solidsnakedev](https://github.com/solidsnakedev)! - add return .lucidConfig()
+
 ## 0.3.46
 
 ### Patch Changes
