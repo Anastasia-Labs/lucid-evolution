@@ -204,7 +204,18 @@ export type TxBuilder = {
   chainSafe: () => Promise<
     Either<[UTxO[], UTxO[], TxSignBuilder.TxSignBuilder], TransactionError>
   >;
+  /**
+   * **Warning:** This method executes all programs and mutates the TxBuilder state.
+   *
+   * Calling `.complete()` after executing this function will lead to unexpected behavior.
+   *
+   * It is recommended to call `.config()` only for debugging purposes
+   */
   config: () => Promise<TxBuilderConfig>;
+  /**
+   * Returns the current lucid instance configuration
+   */
+  lucidConfig: () => LucidConfig;
 };
 
 export function makeTxBuilder(lucidConfig: LucidConfig): TxBuilder {
@@ -591,9 +602,10 @@ export function makeTxBuilder(lucidConfig: LucidConfig): TxBuilder {
       makeReturn(CompleteTxBuilder.complete(config, options)).safeRun(),
     config: () =>
       Effect.gen(function* () {
-        yield* Effect.all(config.programs, { concurrency: "unbounded" });
+        yield* Effect.all(config.programs);
         return config;
       }).pipe(Effect.runPromise),
+    lucidConfig: () => config.lucidConfig,
   };
   return txBuilder;
 }
