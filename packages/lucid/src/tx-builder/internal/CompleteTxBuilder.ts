@@ -100,7 +100,9 @@ export const complete = (
     } = options;
     // Execute programs sequentially
     yield* Effect.all(config.programs);
-    const nonNativeScripts = Array.from(config.scripts.values()).filter((script) => script.type !== "Native")
+    const nonNativeScripts = Array.from(config.scripts.values()).filter(
+      (script) => script.type !== "Native",
+    );
     const hasScriptExecutions: Boolean = nonNativeScripts.length > 0;
     // Set collateral input if there are script executions
     if (hasScriptExecutions) {
@@ -671,8 +673,8 @@ const sumAssetsFromInputs = (inputs: UTxO[]) =>
   _Array.isEmptyArray(inputs)
     ? {}
     : inputs
-      .map((utxo) => utxo.assets)
-      .reduce((acc, cur) => Record.union(acc, cur, _BigInt.sum));
+        .map((utxo) => utxo.assets)
+        .reduce((acc, cur) => Record.union(acc, cur, _BigInt.sum));
 
 const calculateExtraLovelace = (
   leftoverAssets: Assets,
