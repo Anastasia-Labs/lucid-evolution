@@ -45,6 +45,28 @@ describe.sequential("Onchain testing", () => {
     expect(exit._tag).toBe("Success");
   });
 
+  test("MultiValidator - registerStakeAndDelegateToPool", async () => {
+    const program = pipe(
+      MultiValidatorEndpoints.registerStakeAndDelegateToPool,
+      Effect.provide(User.layer),
+      Effect.provide(SimpleStakeContract.layer),
+      Effect.provide(NetworkConfig.layerPreprod),
+    );
+    const exit = await Effect.runPromiseExit(program);
+    expect(exit._tag).toBe("Success");
+  });
+
+  test("MultiValidator - deRegisterStake", async () => {
+    const program = pipe(
+      MultiValidatorEndpoints.deRegisterStake,
+      Effect.provide(User.layer),
+      Effect.provide(SimpleStakeContract.layer),
+      Effect.provide(NetworkConfig.layerPreprod),
+    );
+    const exit = await Effect.runPromiseExit(program);
+    expect(exit._tag).toBe("Success");
+  });
+
   test("MultiValidator - DespositFunds", async () => {
     const program = pipe(
       MultiValidatorEndpoints.depositFunds,
@@ -85,6 +107,17 @@ describe.sequential("Onchain testing", () => {
       MultiValidatorEndpoints.mintAndWithdraw,
       Effect.provide(User.layer),
       Effect.provide(SimpleMintContract.layer),
+      Effect.provide(SimpleStakeContract.layer),
+      Effect.provide(NetworkConfig.layerPreprod),
+    );
+    const exit = await Effect.runPromiseExit(program);
+    expect(exit._tag).toBe("Success");
+  });
+
+  test("MultiValidator - deRegisterStake", async () => {
+    const program = pipe(
+      MultiValidatorEndpoints.deRegisterStake,
+      Effect.provide(User.layer),
       Effect.provide(SimpleStakeContract.layer),
       Effect.provide(NetworkConfig.layerPreprod),
     );

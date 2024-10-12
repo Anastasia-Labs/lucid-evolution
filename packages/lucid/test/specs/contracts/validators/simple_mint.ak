@@ -9,8 +9,16 @@ pub type WithdrawRedeemer {
   msg: ByteArray,
 }
 
+pub type PublishRedeemer {
+  msg: ByteArray,
+}
+
 validator mint_policy {
   withdraw(redeemer: WithdrawRedeemer, _account: Credential, _self: Transaction) {
+    redeemer.msg == "1"
+  }
+
+  publish(redeemer: PublishRedeemer, _account: Credential, _self: Transaction) {
     redeemer.msg == "1"
   }
 

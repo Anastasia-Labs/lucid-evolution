@@ -165,7 +165,6 @@ export const registerScriptDRep = Effect.gen(function* ($) {
     .newTx()
     .register.DRep(rewardAddress, undefined, Data.void())
     .attach.Script(script)
-    .setMinFee(200_000n)
     .completeProgram();
   return signBuilder;
 }).pipe(
@@ -182,7 +181,6 @@ export const deregisterScriptDRep = Effect.gen(function* ($) {
     .newTx()
     .deregister.DRep(rewardAddress, Data.void())
     .attach.Script(script)
-    .setMinFee(200_000n)
     .completeProgram();
   return signBuilder;
 }).pipe(
