@@ -1,5 +1,11 @@
 # @lucid-evolution/lucid
 
+## 0.3.48
+
+### Patch Changes
+
+- [#364](https://github.com/Anastasia-Labs/lucid-evolution/pull/364) [`9b6312d`](https://github.com/Anastasia-Labs/lucid-evolution/commit/9b6312d319c3cd378030fc72e974403becb0257b) Thanks [@hadelive](https://github.com/hadelive)! - update script cert
+
 ## 0.3.47
 
 ### Patch Changes
