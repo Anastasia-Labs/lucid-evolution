@@ -134,20 +134,15 @@ export const processCertificate = (
         );
 
         const addPlutusCertificate = (scriptVersion: CML.PlutusScript) => {
-          Effect.gen(function* () {
-            const red = yield* pipe(
-              Effect.fromNullable(redeemer),
-              Effect.orElseFail(() =>
-                txBuilderError(ERROR_MESSAGE.MISSING_REDEEMER),
-              ),
-            );
-            config.txBuilder.add_cert(
-              certBuilder.plutus_script(
-                toPartial(scriptVersion, red),
-                CML.Ed25519KeyHashList.new(),
-              ),
-            );
-          });
+          if (redeemer == undefined) {
+            return txBuilderError(ERROR_MESSAGE.MISSING_REDEEMER);
+          }
+          config.txBuilder.add_cert(
+            certBuilder.plutus_script(
+              toPartial(scriptVersion, redeemer),
+              CML.Ed25519KeyHashList.new(),
+            ),
+          );
         };
 
         switch (script.type) {
