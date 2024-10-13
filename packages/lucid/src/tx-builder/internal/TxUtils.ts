@@ -133,28 +133,35 @@ export const processCertificate = (
           ),
         );
 
-        const addPlutusCertificate = (scriptVersion: CML.PlutusScript) => {
-          if (redeemer == undefined) {
-            return txBuilderError(ERROR_MESSAGE.MISSING_REDEEMER);
-          }
-          config.txBuilder.add_cert(
-            certBuilder.plutus_script(
-              toPartial(scriptVersion, redeemer),
-              CML.Ed25519KeyHashList.new(),
-            ),
-          );
+        const addPlutusCertificate = (
+          scriptVersion: CML.PlutusScript,
+        ): Effect.Effect<void, TxBuilderError> => {
+          return Effect.gen(function* () {
+            const red = yield* pipe(
+              Effect.fromNullable(redeemer),
+              Effect.orElseFail(() =>
+                txBuilderError(ERROR_MESSAGE.MISSING_REDEEMER),
+              ),
+            );
+            config.txBuilder.add_cert(
+              certBuilder.plutus_script(
+                toPartial(scriptVersion, red),
+                CML.Ed25519KeyHashList.new(),
+              ),
+            );
+          });
         };
 
         switch (script.type) {
           case "PlutusV1":
-            addPlutusCertificate(toV1(script.script));
+            yield* addPlutusCertificate(toV1(script.script));
             break;
 
           case "PlutusV2":
-            addPlutusCertificate(toV2(script.script));
+            yield* addPlutusCertificate(toV2(script.script));
             break;
           case "PlutusV3":
-            addPlutusCertificate(toV3(script.script));
+            yield* addPlutusCertificate(toV3(script.script));
             break;
 
           case "Native":
