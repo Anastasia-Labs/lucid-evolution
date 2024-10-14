@@ -133,8 +133,10 @@ export const processCertificate = (
           ),
         );
 
-        const addPlutusCertificate = (scriptVersion: CML.PlutusScript) => {
-          Effect.gen(function* () {
+        const addPlutusCertificate = (
+          scriptVersion: CML.PlutusScript,
+        ): Effect.Effect<void, TxBuilderError> => {
+          return Effect.gen(function* () {
             const red = yield* pipe(
               Effect.fromNullable(redeemer),
               Effect.orElseFail(() =>
@@ -152,14 +154,14 @@ export const processCertificate = (
 
         switch (script.type) {
           case "PlutusV1":
-            addPlutusCertificate(toV1(script.script));
+            yield* addPlutusCertificate(toV1(script.script));
             break;
 
           case "PlutusV2":
-            addPlutusCertificate(toV2(script.script));
+            yield* addPlutusCertificate(toV2(script.script));
             break;
           case "PlutusV3":
-            addPlutusCertificate(toV3(script.script));
+            yield* addPlutusCertificate(toV3(script.script));
             break;
 
           case "Native":

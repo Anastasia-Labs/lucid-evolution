@@ -1,5 +1,17 @@
 # @lucid-evolution/lucid
 
+## 0.3.49
+
+### Patch Changes
+
+- [#366](https://github.com/Anastasia-Labs/lucid-evolution/pull/366) [`fe6beb0`](https://github.com/Anastasia-Labs/lucid-evolution/commit/fe6beb024053f262b0441ea1777eddee1b90e07d) Thanks [@hadelive](https://github.com/hadelive)! - update process certs
+
+## 0.3.48
+
+### Patch Changes
+
+- [#364](https://github.com/Anastasia-Labs/lucid-evolution/pull/364) [`9b6312d`](https://github.com/Anastasia-Labs/lucid-evolution/commit/9b6312d319c3cd378030fc72e974403becb0257b) Thanks [@hadelive](https://github.com/hadelive)! - update script cert
+
 ## 0.3.47
 
 ### Patch Changes

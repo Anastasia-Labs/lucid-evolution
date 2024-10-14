@@ -5,6 +5,7 @@ import {
   MintContract,
   SimpleStakeContract,
   SimpleMintContract,
+  NetworkConfig,
 } from "./services";
 import { Constr, Data } from "@lucid-evolution/plutus";
 import { fromText, RedeemerBuilder, UTxO } from "../../src";
@@ -204,6 +205,48 @@ export const registerStake = Effect.gen(function* ($) {
   withLogRetry,
   Effect.orDie,
 );
+
+export const registerStakeAndDelegateToPool = Effect.gen(function* ($) {
+  const { user } = yield* User;
+  const { stake, rewardAddress } = yield* SimpleStakeContract;
+  const networkConfig = yield* NetworkConfig;
+  const poolId =
+    networkConfig.NETWORK == "Preprod"
+      ? "pool1nmfr5j5rnqndprtazre802glpc3h865sy50mxdny65kfgf3e5eh"
+      : "pool1ynfnjspgckgxjf2zeye8s33jz3e3ndk9pcwp0qzaupzvvd8ukwt";
+  const signBuilder = yield* user
+    .newTx()
+    .registerAndDelegate.ToPool(
+      rewardAddress,
+      poolId,
+      Data.to(new Constr(0, [fromText("1")])),
+    )
+    .attach.WithdrawalValidator(stake)
+    .completeProgram();
+
+  return signBuilder;
+}).pipe(
+  Effect.flatMap(handleSignSubmit),
+  Effect.catchTag("TxSubmitError", (error) =>
+    error.message.includes("StakeKeyAlreadyRegisteredDELEG") ||
+    error.message.includes("StakeKeyRegisteredDELEG")
+      ? Effect.log("Stake Already registered")
+      : Effect.fail(error),
+  ),
+  withLogRetry,
+  Effect.orDie,
+);
+
+export const deRegisterStake = Effect.gen(function* ($) {
+  const { user } = yield* User;
+  const { stake, rewardAddress } = yield* SimpleStakeContract;
+  const signBuilder = yield* user
+    .newTx()
+    .deRegisterStake(rewardAddress, Data.to(new Constr(0, [fromText("1")])))
+    .attach.WithdrawalValidator(stake)
+    .completeProgram();
+  return signBuilder;
+}).pipe(Effect.flatMap(handleSignSubmit), withLogRetry, Effect.orDie);
 
 export const registerSimpleStake = Effect.gen(function* ($) {
   const { user } = yield* User;
