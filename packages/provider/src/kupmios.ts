@@ -294,14 +294,13 @@ const getDatumEffect = (
     if (datum_type === "inline" && datum_hash) {
       const pattern = `${kupoUrl}/datums/${datum_hash}`;
       const schema = Kupo.DatumSchema;
-      const policy = Schedule.addDelay(
-        Schedule.recurs(10), // Retry for a maximum of 10 times
-        () => "10 millis" // Add a delay of 10 milliseconds between retries
-      )
-      return yield* Effect.retry(fetchKupoParse(pattern, schema), policy).pipe(
+      return yield* fetchKupoParse(pattern, schema).pipe(
         Effect.flatMap(Effect.fromNullable),
         Effect.map((result) => result.datum),
-        Effect.timeout(10_000),
+        Effect.retry(
+          Schedule.compose(Schedule.exponential(50), Schedule.recurs(5)),
+        ),
+        Effect.timeout(5_000),
       );
     } else return undefined;
   });
@@ -320,14 +319,13 @@ const getScriptEffect = (
     if (script_hash) {
       const pattern = `${kupoUrl}/scripts/${script_hash}`;
       const schema = Kupo.ScriptSchema;
-      const policy = Schedule.addDelay(
-        Schedule.recurs(10), // Retry for a maximum of 10 times
-        () => "10 millis" // Add a delay of 10 milliseconds between retries
-      )
       return yield* pipe(
-        Effect.retry(fetchKupoParse(pattern, schema), policy),
+        fetchKupoParse(pattern, schema),
         Effect.flatMap(Effect.fromNullable),
-        Effect.timeout(10_000),
+        Effect.retry(
+          Schedule.compose(Schedule.exponential(50), Schedule.recurs(5)),
+        ),
+        Effect.timeout(5_000),
         Effect.map(({ language, script }) => {
           switch (language) {
             case "native":
