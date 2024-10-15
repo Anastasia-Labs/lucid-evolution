@@ -297,7 +297,10 @@ const getDatumEffect = (
       return yield* fetchKupoParse(pattern, schema).pipe(
         Effect.flatMap(Effect.fromNullable),
         Effect.map((result) => result.datum),
-        Effect.timeout(10_000),
+        Effect.retry(
+          Schedule.compose(Schedule.exponential(50), Schedule.recurs(5)),
+        ),
+        Effect.timeout(5_000),
       );
     } else return undefined;
   });
@@ -319,7 +322,10 @@ const getScriptEffect = (
       return yield* pipe(
         fetchKupoParse(pattern, schema),
         Effect.flatMap(Effect.fromNullable),
-        Effect.timeout(10_000),
+        Effect.retry(
+          Schedule.compose(Schedule.exponential(50), Schedule.recurs(5)),
+        ),
+        Effect.timeout(5_000),
         Effect.map(({ language, script }) => {
           switch (language) {
             case "native":
