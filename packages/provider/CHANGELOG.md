@@ -1,5 +1,11 @@
 # @lucid-evolution/provider
 
+## 0.1.67
+
+### Patch Changes
+
+- [#369](https://github.com/Anastasia-Labs/lucid-evolution/pull/369) [`d60c249`](https://github.com/Anastasia-Labs/lucid-evolution/commit/d60c24906fa0133b993185d86d3834a159c79a27) Thanks [@solidsnakedev](https://github.com/solidsnakedev)! - add retry mechanism to getDatumEffect and getScriptEffect
+
 ## 0.1.66
 
 ### Patch Changes
