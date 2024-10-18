@@ -22,6 +22,26 @@ There are a growing number of projects that are built on top of `lucid-evolution
 <table align="center" style="justify-content: center;align-items: center;display: flex;">
   <tr>
     <td align="center">
+      <img src="https://avatars.githubusercontent.com/u/76267411?v=4" height="50px;" alt="Liqwid Finance" />
+      <br />
+      <a style="text-decoration:none;" href="https://liqwid.finance" target="_blank">Liqwid Finance</a>
+    </td>
+    <td align="center">
+      <img src="https://avatars.githubusercontent.com/u/150360075?s=200&v=4"  height="50px;" alt="Splash" />
+      <br />
+      <a style="text-decoration:none;" href="https://www.splash.trade/"  target="_blank">Splash</a>
+    </td>
+    <td align="center">
+      <img src="https://avatars.githubusercontent.com/u/53253566?s=200&v=4" height="50px;" alt="Meld" />
+      <br />
+      <a style="text-decoration:none;" href="https://meld.com/"  target="_blank">Meld</a>
+    </td>
+    <td align="center">
+      <img src="https://avatars.githubusercontent.com/u/84299480?v=4" height="50px;" alt="Maestro" />
+      <br />
+      <a style="text-decoration:none;" href="https://www.gomaestro.org" target="_blank">Maestro</a>
+    </td>
+    <td align="center">
       <img src="https://avatars.githubusercontent.com/u/131367296?s=200&v=4"  height="50px;" alt="Mynth" />
       <br />
       <a style="text-decoration:none;" href="https://mynth.ai/"  target="_blank">Mynth</a>
@@ -31,47 +51,36 @@ There are a growing number of projects that are built on top of `lucid-evolution
       <br />
       <a style="text-decoration:none;" href="https://pondora.org/"  target="_blank">Pondora</a>
     </td>
-    <td align="center">
-      <img src="https://avatars.githubusercontent.com/u/86468066?s=200&v=4"  height="50px;" alt="Genius Yield" />
-      <br />
-      <a style="text-decoration:none;" href="https://www.geniusyield.co/"  target="_blank">Genius Yield</a>
-    </td>
-    <td align="center">
-      <img src="https://avatars.githubusercontent.com/u/150360075?s=200&v=4"  height="50px;" alt="Splash" />
-      <br />
-      <a style="text-decoration:none;" href="https://www.splash.trade/"  target="_blank">Splash</a>
-    </td>
     </tr><tr>
-    <td align="center">
-      <img src="https://app.ada.markets/assets/images/ADAmarkets.png" height="50px;" alt="Ada Markets" />
-      <br />
-      <a style="text-decoration:none;" href="https://ada.markets/" target="_blank">Ada Markets</a>
-    </td>
-    <td align="center">
-      <img src="https://avatars.githubusercontent.com/u/53253566?s=200&v=4" height="50px;" alt="Meld" />
-      <br />
-      <a style="text-decoration:none;" href="https://meld.com/"  target="_blank">Meld</a>
-    </td>
-    <td align="center">
-      <img src="https://summonplatform.io/wp-content/uploads/2022/07/Summon-Token-2048x2048.png" height="50px;" alt="Summon" />
-      <br />
-      <a style="text-decoration:none;" href="https://summonplatform.io/"  target="_blank">Summon</a>
-    </td>
-    <td align="center">
-      <img src="https://avatars.githubusercontent.com/u/171672240?s=200&v=4" height="50px;" alt="Strike Finance" />
-      <br />
-      <a style="text-decoration:none;" href="https://www.strikefinance.org" target="_blank">Strike Finance</a>
-    </td>
-    </tr><tr>
-    <td align="center">
+      <td align="center">
       <img src="https://ugc.production.linktr.ee/00f8a70f-e3ee-49e1-a4e0-e03607edd37d_Twitter-Avatar.jpeg?io=true&size=avatar-v3_0" height="50px;" alt="Atrium" />
       <br />
       <a style="text-decoration:none;" href="https://alpha.atrium.io/connect" target="_blank">Atrium</a>
     </td>
     <td align="center">
-      <img src="" height="50px;" alt="Logo" />
+      <img src="https://avatars.githubusercontent.com/u/86468066?s=200&v=4"  height="50px;" alt="Genius Yield" />
       <br />
-      <a style="text-decoration:none;" href="https://website.com" target="_blank">Logo</a>
+      <a style="text-decoration:none;" href="https://www.geniusyield.co/"  target="_blank">Genius Yield</a>
+    </td>
+      <td align="center">
+      <img src="https://avatars.githubusercontent.com/u/94472318?v=4" height="50px;" alt="VESPR Wallet" />
+      <br />
+      <a style="text-decoration:none;" href="https://vespr.xyz" target="_blank">VESPR Wallet</a>
+    </td>
+    <td align="center">
+      <img src="https://app.ada.markets/assets/images/ADAmarkets.png" height="50px;" alt="Ada Markets" />
+      <br />
+      <a style="text-decoration:none;" href="https://ada.markets/" target="_blank">Ada Markets</a>
+    </td>
+        <td align="center">
+      <img src="https://avatars.githubusercontent.com/u/171672240?s=200&v=4" height="50px;" alt="Strike Finance" />
+      <br />
+      <a style="text-decoration:none;" href="https://www.strikefinance.org" target="_blank">Strike Finance</a>
+    </td>
+    <td align="center">
+      <img src="https://summonplatform.io/wp-content/uploads/2022/07/Summon-Token-2048x2048.png" height="50px;" alt="Summon" />
+      <br />
+      <a style="text-decoration:none;" href="https://summonplatform.io/"  target="_blank">Summon</a>
     </td>
   </tr>
 </table>
