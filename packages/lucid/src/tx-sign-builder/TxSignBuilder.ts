@@ -69,6 +69,7 @@ export interface TxSignBuilder {
    * ```
    */
   toCBOR: (options?: { canonical: boolean }) => CBORHex;
+  toTransaction: () => CML.Transaction;
   /** Converts the transaction body to JSON format. */
   toJSON: () => object;
   /** Computes the hash of the transaction body. */
@@ -136,6 +137,7 @@ export const makeTxSignBuilder = (
       options.canonical
         ? config.txComplete.to_canonical_cbor_hex()
         : config.txComplete.to_cbor_hex(),
+    toTransaction: () => config.txComplete,
     toJSON: () =>
       S.decodeUnknownSync(S.parseJson(S.Object))(config.txComplete.to_json()),
     toHash: () => CML.hash_transaction(config.txComplete.body()).to_hex(),

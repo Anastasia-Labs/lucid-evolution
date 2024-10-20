@@ -59,7 +59,7 @@ export const ProtocolParametersSchema = S.Struct({
     }),
     treasuryWithdrawals: TupleNumberFromString,
   }),
-  constitutionalCommitteeMinSize: S.Number,
+  constitutionalCommitteeMinSize: S.optional(S.Number),
   constitutionalCommitteeMaxTermLength: S.Number,
   governanceActionLifetime: S.Number,
   governanceActionDeposit: S.Struct({
