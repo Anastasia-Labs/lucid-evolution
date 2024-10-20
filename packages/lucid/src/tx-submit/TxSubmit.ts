@@ -79,6 +79,7 @@ export interface TxSigned {
    * ```
    */
   toCBOR: (options?: { canonical: boolean }) => CBORHex;
+  toTransaction: () => CML.Transaction;
   /** Converts the transaction (transaction body and witnesses) to JSON format. */
   toJSON: () => object;
   /** Computes the hash of the transaction. */
@@ -108,6 +109,7 @@ export const makeSubmit = (
       options.canonical
         ? txSigned.to_canonical_cbor_hex()
         : txSigned.to_cbor_hex(),
+    toTransaction: () => txSigned,
     toJSON: () =>
       S.decodeUnknownSync(S.parseJson(S.Object))(txSigned.to_json()),
     toHash: () => CML.hash_transaction(txSigned.body()).to_hex(),
