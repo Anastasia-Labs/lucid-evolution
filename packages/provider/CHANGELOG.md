@@ -1,5 +1,11 @@
 # @lucid-evolution/provider
 
+## 0.1.68
+
+### Patch Changes
+
+- [#373](https://github.com/Anastasia-Labs/lucid-evolution/pull/373) [`bcea535`](https://github.com/Anastasia-Labs/lucid-evolution/commit/bcea535356fa72e6582d02a4c8aea2cd0e614e42) Thanks [@solidsnakedev](https://github.com/solidsnakedev)! - expose CML.Transaction; set constitutionalCommitteeMinSize as optional type schema
+
 ## 0.1.67
 
 ### Patch Changes
