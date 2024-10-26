@@ -1,5 +1,11 @@
 # @lucid-evolution/provider
 
+## 0.1.69
+
+### Patch Changes
+
+- [#378](https://github.com/Anastasia-Labs/lucid-evolution/pull/378) [`fbb2404`](https://github.com/Anastasia-Labs/lucid-evolution/commit/fbb2404465673d71488a86594640eb5e4246a57d) Thanks [@hadelive](https://github.com/hadelive)! - support map redeemer
+
 ## 0.1.68
 
 ### Patch Changes
