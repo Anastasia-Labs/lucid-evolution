@@ -533,7 +533,7 @@ export class Emulator implements Provider {
       if (entry.utxo.datumHash) consumedHashes.add(entry.utxo.datumHash);
     }
 
-    type Tag = "Spend" | "Mint" | "Cert" | "Reward";
+    type Tag = "Spend" | "Mint" | "Cert" | "Reward" | "Proposing" | "Voting";
 
     const redeemers = (() => {
       const tagMap: Record<number, Tag> = {
@@ -541,6 +541,8 @@ export class Emulator implements Provider {
         1: "Mint",
         2: "Cert",
         3: "Reward",
+        4: "Proposing",
+        5: "Voting",
       };
       const collected = [];
       const redeemers = witnesses.redeemers();

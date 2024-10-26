@@ -359,10 +359,12 @@ export const applyUPLCEvalProvider = (
 
 export const setRedeemerstoZero = (tx: CML.Transaction) => {
   const redeemers = tx.witness_set().redeemers();
-  if (redeemers) {
+  if (!redeemers) return tx;
+  const arrLegacyRedeemer = redeemers.as_arr_legacy_redeemer();
+  if (arrLegacyRedeemer) {
     const redeemerList = CML.LegacyRedeemerList.new();
-    for (let i = 0; i < redeemers.as_arr_legacy_redeemer()!.len(); i++) {
-      const redeemer = redeemers.as_arr_legacy_redeemer()!.get(i);
+    for (let i = 0; i < arrLegacyRedeemer.len(); i++) {
+      const redeemer = arrLegacyRedeemer.get(i);
       const dummyRedeemer = CML.LegacyRedeemer.new(
         redeemer.tag(),
         redeemer.index(),
@@ -371,6 +373,7 @@ export const setRedeemerstoZero = (tx: CML.Transaction) => {
       );
       redeemerList.add(dummyRedeemer);
     }
+
     const dummyWitnessSet = tx.witness_set();
     dummyWitnessSet.set_redeemers(
       CML.Redeemers.new_arr_legacy_redeemer(redeemerList),
@@ -382,6 +385,23 @@ export const setRedeemerstoZero = (tx: CML.Transaction) => {
       tx.auxiliary_data(),
     );
   }
+  const mapRedeemerKeyToRedeemerVal =
+    redeemers.as_map_redeemer_key_to_redeemer_val();
+  if (mapRedeemerKeyToRedeemerVal) {
+    const dummyWitnessSet = tx.witness_set();
+    dummyWitnessSet.set_redeemers(
+      CML.Redeemers.new_map_redeemer_key_to_redeemer_val(
+        mapRedeemerKeyToRedeemerVal,
+      ),
+    );
+    return CML.Transaction.new(
+      tx.body(),
+      dummyWitnessSet,
+      true,
+      tx.auxiliary_data(),
+    );
+  }
+  return tx;
 };
 
 const applyCollateral = (
@@ -529,7 +549,6 @@ const evalTransactionProvider = (
   walletInputs: UTxO[],
 ): Effect.Effect<EvalRedeemer[], TxBuilderError> =>
   Effect.gen(function* () {
-    //FIX: this returns undefined
     const txEvaluation = setRedeemerstoZero(txRedeemerBuilder.draft_tx())!;
     const txUtxos = [...config.collectedInputs, ...config.readInputs];
     const uplc_eval = yield* Effect.tryPromise({
@@ -549,7 +568,6 @@ const evalTransaction = (
   walletInputs: UTxO[],
 ): Effect.Effect<Uint8Array[], TxBuilderError> =>
   Effect.gen(function* () {
-    //FIX: this returns undefined
     const txEvaluation = setRedeemerstoZero(txRedeemerBuilder.draft_tx())!;
     const txUtxos = [
       ...walletInputs,

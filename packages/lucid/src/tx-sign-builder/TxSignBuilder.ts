@@ -88,10 +88,24 @@ export const makeTxSignBuilder = (
   const redeemers = tx.witness_set().redeemers();
   const exUnits = { cpu: 0, mem: 0 };
   if (redeemers) {
-    for (let i = 0; i < redeemers.as_arr_legacy_redeemer()!.len(); i++) {
-      const redeemer = redeemers.as_arr_legacy_redeemer()!.get(i);
-      exUnits.cpu += parseInt(redeemer.ex_units().steps().toString());
-      exUnits.mem += parseInt(redeemer.ex_units().mem().toString());
+    const arrLegacyRedeemer = redeemers?.as_arr_legacy_redeemer();
+    if (arrLegacyRedeemer) {
+      for (let i = 0; i < arrLegacyRedeemer.len(); i++) {
+        const redeemer = arrLegacyRedeemer.get(i);
+        exUnits.cpu += parseInt(redeemer.ex_units().steps().toString());
+        exUnits.mem += parseInt(redeemer.ex_units().mem().toString());
+      }
+    }
+    const mapRedeemerKeyToRedeemerVal =
+      redeemers?.as_map_redeemer_key_to_redeemer_val();
+    if (mapRedeemerKeyToRedeemerVal) {
+      const keys = mapRedeemerKeyToRedeemerVal.keys();
+      for (let i = 0; i < (keys.len() || 0); i++) {
+        const key = keys.get(i);
+        const value = mapRedeemerKeyToRedeemerVal.get(key);
+        exUnits.cpu += parseInt(value!.ex_units().steps().toString());
+        exUnits.mem += parseInt(value!.ex_units().mem().toString());
+      }
     }
   }
   const config: TxSignBuilderConfig = {
