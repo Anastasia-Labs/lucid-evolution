@@ -24,7 +24,7 @@ There are a growing number of projects that are built on top of `lucid-evolution
     <td align="center">
       <img src="https://avatars.githubusercontent.com/u/37078161?s=200&v=4" height="50px;" alt="Cardano Foundation - IBC" />
       <br />
-      <a style="text-decoration:none;" href="https://github.com/cardano-foundation/cardano-ibc-incubator" target="_blank">Cardano Foundation - IBC</a>
+      <a style="text-decoration:none;" href="https://github.com/cardano-foundation/cardano-ibc-incubator" target="_blank">CF - IBC</a>
     </td>
     <td align="center">
       <img src="https://avatars.githubusercontent.com/u/76267411?v=4" height="50px;" alt="Liqwid Finance" />
