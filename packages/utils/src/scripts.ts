@@ -160,7 +160,10 @@ export function applyParamsToScript<T extends unknown[] = Data[]>(
   params: Exact<[...T]>,
   type?: T,
 ): string {
-  const program = parseUPLC(decode(decode(fromHex(plutusScript))), "flat");
+  const program = parseUPLC(
+    decode(decode(fromHex(applyDoubleCborEncoding(plutusScript)))),
+    "flat",
+  );
   const parameters = (type ? Data.castTo<T>(params, type) : params) as Data[];
   const appliedProgram = parameters.reduce((body, currentParameter) => {
     const data = UPLCConst.data(dataFromCbor(Data.to(currentParameter)));
