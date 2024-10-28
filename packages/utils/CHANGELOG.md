@@ -1,5 +1,11 @@
 # @lucid-evolution/utils
 
+## 0.1.52
+
+### Patch Changes
+
+- [#380](https://github.com/Anastasia-Labs/lucid-evolution/pull/380) [`ca75789`](https://github.com/Anastasia-Labs/lucid-evolution/commit/ca75789d60316387b08404d25d6181921e3b9c9a) Thanks [@solidsnakedev](https://github.com/solidsnakedev)! - add applyDoubleCborEncoding to applyParamsToScript
+
 ## 0.1.51
 
 ### Patch Changes
