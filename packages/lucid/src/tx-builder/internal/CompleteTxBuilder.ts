@@ -100,7 +100,10 @@ export const complete = (
     } = options;
     // Execute programs sequentially
     yield* Effect.all(config.programs);
-    const hasScriptExecutions: Boolean = config.scripts.size > 0;
+    const nonNativeScripts = Array.from(config.scripts.values()).filter(
+      (script) => script.type !== "Native",
+    );
+    const hasScriptExecutions: Boolean = nonNativeScripts.length > 0;
     // Set collateral input if there are script executions
     if (hasScriptExecutions) {
       const collateralInput = yield* findCollateral(
@@ -202,13 +205,7 @@ export const selectionAndEvaluation = (
     if (_Array.isEmptyArray(inputsToAdd) && script_calculation) return;
     let estimatedFee = 0n;
     if (_Array.isNonEmptyArray(inputsToAdd)) {
-      for (const utxo of inputsToAdd) {
-        const input = CML.SingleInputBuilder.from_transaction_unspent_output(
-          utxoToCore(utxo),
-        ).payment_key();
-        config.txBuilder.add_input(input);
-      }
-      config.collectedInputs = [...config.collectedInputs, ...inputsToAdd];
+      yield* collectFromUTxO(config, inputsToAdd)();
       estimatedFee = yield* estimateFee(config, script_calculation);
     }
 
