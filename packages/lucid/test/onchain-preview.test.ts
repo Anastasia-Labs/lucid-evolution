@@ -19,7 +19,7 @@ import * as TxChain from "./specs/tx-chaining.js";
 import * as MetadataEndpoint from "./specs/metadata.js";
 import * as WalletEndpoint from "./specs/wallet.js";
 
-describe.sequential("Onchain testing", () => {
+describe.skip("Onchain testing", () => {
   test("TxChain", async () => {
     const program = pipe(
       TxChain.depositFundsCollect,

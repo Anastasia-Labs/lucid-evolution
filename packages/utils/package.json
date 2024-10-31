@@ -44,7 +44,7 @@
     "@lucid-evolution/uplc": "workspace:*",
     "bip39": "^3.1.0",
     "cborg": "^4.2.0",
-    "effect": "^3.1.2"
+    "effect": "^3.10.4"
   },
   "devDependencies": {
     "@types/node": "^20.12.8",

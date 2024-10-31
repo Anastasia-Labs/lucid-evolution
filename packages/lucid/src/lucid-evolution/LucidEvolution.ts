@@ -15,7 +15,11 @@ import {
 } from "@lucid-evolution/core-types";
 import { CML } from "../core.js";
 import { datumOf, metadataOf } from "./utils.js";
-import { createCostModels, unixTimeToSlot } from "@lucid-evolution/utils";
+import {
+  createCostModels,
+  PROTOCOL_PARAMETERS_DEFAULT,
+  unixTimeToSlot,
+} from "@lucid-evolution/utils";
 import * as TxBuilder from "../tx-builder/TxBuilder.js";
 import * as TxConfig from "../tx-builder/TxConfig.js";
 import * as TxSignBuilder from "../tx-sign-builder/TxSignBuilder.js";
@@ -74,20 +78,32 @@ export type LucidConfig = {
   protocolParameters: ProtocolParameters;
 };
 
+type LucidOptions = {
+  /**
+   * Predefined protocol parameters to use instead of retrieving them from the provider.
+   * If not specified, it will fetch the latest protocol parameters from the provider.
+   */
+  presetProtocolParameters?: ProtocolParameters;
+};
+
 //TODO: turn this to Effect
 export const Lucid = async (
   provider: Provider,
   network: Network,
+  options: LucidOptions = {},
 ): Promise<LucidEvolution> => {
-  const protocolParam = await provider.getProtocolParameters();
-  const costModels = createCostModels(protocolParam.costModels);
+  const protocolParameters: ProtocolParameters =
+    options.presetProtocolParameters ||
+    (await provider.getProtocolParameters());
+
+  const costModels = createCostModels(protocolParameters.costModels);
   const config: LucidConfig = {
     provider: provider,
     network: network,
     wallet: undefined,
     costModels: costModels,
-    txbuilderconfig: TxConfig.makeTxConfig(protocolParam, costModels),
-    protocolParameters: protocolParam,
+    txbuilderconfig: TxConfig.makeTxConfig(protocolParameters, costModels),
+    protocolParameters,
   };
   if ("slot" in config.provider) {
     const emulator: Emulator = config.provider as Emulator;
