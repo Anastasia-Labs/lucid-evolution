@@ -1,5 +1,18 @@
 # @lucid-evolution/lucid
 
+## 0.4.0
+
+### Minor Changes
+
+- [#383](https://github.com/Anastasia-Labs/lucid-evolution/pull/383) [`0baf07f`](https://github.com/Anastasia-Labs/lucid-evolution/commit/0baf07fa5c0affadabdc7b8b581d3e4c6260960f) Thanks [@solidsnakedev](https://github.com/solidsnakedev)! - Make I/O-bound computations optional by allowing preset protocol parameters during Lucid initialization and preset wallet UTXOs during transaction building. Updated Effect library to the latest version.
+
+### Patch Changes
+
+- Updated dependencies [[`0baf07f`](https://github.com/Anastasia-Labs/lucid-evolution/commit/0baf07fa5c0affadabdc7b8b581d3e4c6260960f)]:
+  - @lucid-evolution/provider@0.1.71
+  - @lucid-evolution/utils@0.1.53
+  - @lucid-evolution/wallet@0.1.59
+
 ## 0.3.53
 
 ### Patch Changes
