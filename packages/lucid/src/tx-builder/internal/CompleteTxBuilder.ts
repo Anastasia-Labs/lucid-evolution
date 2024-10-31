@@ -38,88 +38,102 @@ import {
 } from "@lucid-evolution/utils";
 import { SLOT_CONFIG_NETWORK } from "@lucid-evolution/plutus";
 import { collectFromUTxO } from "./Collect.js";
-import { fromHex } from "@lucid-evolution/core-utils";
-import { withdraw } from "./Stake.js";
 
 export type CompleteOptions = {
+  /**
+   * Enable coin selection algorithm
+   * @default true
+   */
   coinSelection?: boolean;
+
+  /**
+   * Address to send change to
+   * @default wallet.address()
+   */
   changeAddress?: Address;
-  localUPLCEval?: boolean; // replaces nativeUPLC
+
+  /**
+   * Enable local UPLC evaluation
+   * @default true
+   */
+  localUPLCEval?: boolean;
+
+  /**
+   * Amount to set as collateral
+   * @default 5_000_000n
+   */
   setCollateral?: bigint;
+
+  /**
+   * Use canonical ordering
+   * @default false
+   */
   canonical?: boolean;
+
+  /**
+   * Preset UTXOs from the wallet to include in coin selection.
+   * If not provided, wallet UTXOs will be fetched by the provider.
+   *
+   * Note:
+   * UTXOs already specified in `collectFrom` will not cause duplication
+   * @default []
+   */
+  presetWalletInputs?: UTxO[];
 };
 
 export const completeTxError = (cause: unknown) =>
   new TxBuilderError({ cause: `{ Complete: ${cause} }` });
 
-type WalletInfo = {
-  wallet: Wallet;
-  address: string;
-  inputs: UTxO[];
-};
-
-const getWalletInfo = (
+export const complete = (
   config: TxBuilder.TxBuilderConfig,
-): Effect.Effect<WalletInfo, TxBuilderError, never> =>
+  options: CompleteOptions = {},
+): Effect.Effect<
+  [UTxO[], UTxO[], TxSignBuilder.TxSignBuilder],
+  TransactionError
+> =>
   Effect.gen(function* () {
     const wallet: Wallet = yield* pipe(
       Effect.fromNullable(config.lucidConfig.wallet),
       Effect.orElseFail(() => completeTxError(ERROR_MESSAGE.MISSING_WALLET)),
     );
-    const address: Address = yield* Effect.promise(() => wallet.address());
-    const inputs: UTxO[] = yield* pipe(
-      Effect.tryPromise({
-        try: () => wallet.getUtxos(),
-        catch: (error) => completeTxError(error),
-      }),
-    );
-    const walletInputs = _Array.isEmptyArray(config.walletInputs)
-      ? inputs
-      : config.walletInputs;
+    const walletAddress: string = yield* Effect.promise(() => wallet.address());
 
-    return {
-      wallet,
-      address,
-      inputs: walletInputs,
-    };
-  });
-
-export const complete = (
-  config: TxBuilder.TxBuilderConfig,
-  options: CompleteOptions = {},
-) =>
-  Effect.gen(function* () {
-    const walletInfo = yield* getWalletInfo(config);
-    // Set default options
+    // Extract and set default options for the transaction configuration
     const {
       coinSelection = true,
-      changeAddress = walletInfo.address,
+      changeAddress = walletAddress,
       localUPLCEval = true,
       setCollateral = 5_000_000n,
       canonical = false,
+      presetWalletInputs = [],
     } = options;
+
+    const walletInputs: UTxO[] =
+      presetWalletInputs.length === 0
+        ? yield* Effect.tryPromise({
+            try: () => wallet.getUtxos(),
+            catch: (error) => completeTxError(error),
+          })
+        : presetWalletInputs;
+
     // Execute programs sequentially
     yield* Effect.all(config.programs);
-    const hasScriptExecutions: Boolean = config.scripts.size > 0;
+    const hasScriptExecutions: boolean = config.scripts.size > 0;
     // Set collateral input if there are script executions
     if (hasScriptExecutions) {
       const collateralInput = yield* findCollateral(
         config.lucidConfig.protocolParameters.coinsPerUtxoByte,
         setCollateral,
-        walletInfo.inputs,
+        walletInputs,
       );
-      applyCollateral(
-        config,
-        setCollateral,
-        collateralInput,
-        walletInfo.address,
-      );
+      applyCollateral(config, setCollateral, collateralInput, changeAddress);
     }
     // First round of coin selection and UPLC evaluation. The fee estimation is lacking
     // the script execution costs as they aren't available yet.
     yield* selectionAndEvaluation(
       config,
-      walletInfo,
+      walletInputs,
+      changeAddress,
       coinSelection,
       localUPLCEval,
       false,
@@ -130,7 +144,8 @@ export const complete = (
     if (hasScriptExecutions)
       yield* selectionAndEvaluation(
         config,
-        walletInfo,
+        walletInputs,
+        changeAddress,
         coinSelection,
         localUPLCEval,
         true,
@@ -154,13 +169,10 @@ export const complete = (
     const derivedInputs = deriveInputsFromTransaction(transaction);
 
     const derivedWalletInputs = derivedInputs.filter(
-      (utxo) => utxo.address === walletInfo.address,
+      (utxo) => utxo.address === walletAddress,
     );
     const updatedWalletInputs = pipe(
-      _Array.differenceWith(isEqualUTxO)(
-        walletInfo.inputs,
-        config.consumedInputs,
-      ),
+      _Array.differenceWith(isEqualUTxO)(walletInputs, config.consumedInputs),
       (availableWalletInputs) => [
         ...derivedWalletInputs,
         ...availableWalletInputs,
@@ -182,14 +194,15 @@ export const complete = (
 
 export const selectionAndEvaluation = (
   config: TxBuilder.TxBuilderConfig,
-  walletInfo: WalletInfo,
+  walletInputs: UTxO[],
+  changeAddress: string,
   coinSelection: boolean,
   localUPLCEval: boolean,
   script_calculation: boolean,
 ): Effect.Effect<void, TransactionError, never> =>
   Effect.gen(function* () {
     const availableInputs = _Array.differenceWith(isEqualUTxO)(
-      walletInfo.inputs,
+      walletInputs,
       config.collectedInputs,
     );
 
@@ -233,7 +246,7 @@ export const selectionAndEvaluation = (
       try: () =>
         config.txBuilder.build_for_evaluation(
           0,
-          CML.Address.from_bech32(walletInfo.address),
+          CML.Address.from_bech32(changeAddress),
         ),
       catch: (error) => completeTxError(error),
     });
@@ -241,7 +254,7 @@ export const selectionAndEvaluation = (
     if (txRedeemerBuilder.draft_tx().witness_set().redeemers()) {
       if (localUPLCEval !== false) {
         applyUPLCEval(
-          yield* evalTransaction(config, txRedeemerBuilder, walletInfo.inputs),
+          yield* evalTransaction(config, txRedeemerBuilder, walletInputs),
           config.txBuilder,
         );
       } else {
@@ -249,7 +262,7 @@ export const selectionAndEvaluation = (
           yield* evalTransactionProvider(
             config,
             txRedeemerBuilder,
-            walletInfo.inputs,
+            walletInputs,
           ),
           config.txBuilder,
         );
@@ -257,7 +270,9 @@ export const selectionAndEvaluation = (
     }
   }).pipe(Effect.catchAllDefect((cause) => new RunTimeError({ cause })));
 
-export const completePartialPrograms = (config: TxBuilder.TxBuilderConfig) =>
+export const completePartialPrograms = (
+  config: TxBuilder.TxBuilderConfig,
+): Effect.Effect<void, TransactionError, never> =>
   Effect.gen(function* () {
     const sortedInputs = sortUTxOs(config.collectedInputs, "Canonical");
     const indicesMap: Map<string, bigint> = new Map();
@@ -324,7 +339,7 @@ export const completePartialPrograms = (config: TxBuilder.TxBuilderConfig) =>
 export const applyUPLCEval = (
   uplcEval: Uint8Array[],
   txbuilder: CML.TransactionBuilder,
-) => {
+): void => {
   for (const bytes of uplcEval) {
     const redeemer = CML.LegacyRedeemer.from_cbor_bytes(bytes);
     const exUnits = CML.ExUnits.new(
@@ -341,7 +356,7 @@ export const applyUPLCEval = (
 export const applyUPLCEvalProvider = (
   evalRedeemerList: EvalRedeemer[],
   txbuilder: CML.TransactionBuilder,
-) => {
+): void => {
   for (const evalRedeemer of evalRedeemerList) {
     const exUnits = CML.ExUnits.new(
       BigInt(evalRedeemer.ex_units.mem),
@@ -357,7 +372,7 @@ export const applyUPLCEvalProvider = (
   }
 };
 
-export const setRedeemerstoZero = (tx: CML.Transaction) => {
+export const setRedeemerstoZero = (tx: CML.Transaction): CML.Transaction => {
   const redeemers = tx.witness_set().redeemers();
   if (!redeemers) return tx;
   const arrLegacyRedeemer = redeemers.as_arr_legacy_redeemer();
@@ -409,7 +424,7 @@ const applyCollateral = (
   setCollateral: bigint,
   collateralInputs: UTxO[],
   changeAddress: string,
-) => {
+): void => {
   for (const utxo of collateralInputs) {
     const collateralInput =
       CML.SingleInputBuilder.from_transaction_unspent_output(
@@ -604,7 +619,7 @@ const calculateMinLovelace = (
   coinsPerUtxoByte: bigint,
   multiAssets?: Assets,
   changeAddress?: string,
-) => {
+): bigint => {
   const dummyAddress =
     "addr_test1qrngfyc452vy4twdrepdjc50d4kvqutgt0hs9w6j2qhcdjfx0gpv7rsrjtxv97rplyz3ymyaqdwqa635zrcdena94ljs0xy950";
   return CML.TransactionOutputBuilder.new()
@@ -661,7 +676,7 @@ const calculateMinRefScriptFee = (
     return fee;
   });
 
-const deriveInputsFromTransaction = (tx: CML.Transaction) => {
+const deriveInputsFromTransaction = (tx: CML.Transaction): UTxO[] => {
   const outputs = tx.body().outputs();
   const txHash = CML.hash_transaction(tx.body()).to_hex();
   const utxos: UTxO[] = [];
