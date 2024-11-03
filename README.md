@@ -17,14 +17,19 @@
 
 There are a growing number of projects that are built on top of `lucid-evolution`! If you've built a library or a project on top of lucid-evolution, tell me about it [on X](https://twitter.com/solidsnakedev) or [on Discord](https://discord.gg/s89P9gpEff) . I'll add it below and tweet it out.
 
-<h3 align="center">Projects powered by lucid-evolution</h3>
+<h3 align="center">Powered by Lucid <span style="color: #AD1F1E;">Evolution</span></h1>
 
 <table align="center" style="justify-content: center;align-items: center;display: flex;">
   <tr>
     <td align="center">
       <img src="https://avatars.githubusercontent.com/u/37078161?s=200&v=4" height="50px;" alt="Cardano Foundation - IBC" />
       <br />
-      <a style="text-decoration:none;" href="https://github.com/cardano-foundation/cardano-ibc-incubator" target="_blank">CF - IBC</a>
+      <a style="text-decoration:none;" href="https://github.com/cardano-foundation/cardano-ibc-incubator" target="_blank">Cardano Foundation <br/> - IBC</a>
+    </td>
+    <td align="center">
+      <img src="https://avatars.githubusercontent.com/u/36142236?s=200&v=4" height="50px;" alt="EMURGO Academy" />
+      <br />
+      <a style="text-decoration:none;" href="https://education.emurgo.io" target="_blank">EMURGO <br/> Academy</a>
     </td>
     <td align="center">
       <img src="https://avatars.githubusercontent.com/u/76267411?v=4" height="50px;" alt="Liqwid Finance" />
@@ -46,6 +51,7 @@ There are a growing number of projects that are built on top of `lucid-evolution
       <br />
       <a style="text-decoration:none;" href="https://www.gomaestro.org" target="_blank">Maestro</a>
     </td>
+     </tr><tr>
     <td align="center">
       <img src="https://avatars.githubusercontent.com/u/131367296?s=200&v=4"  height="50px;" alt="Mynth" />
       <br />
@@ -56,7 +62,11 @@ There are a growing number of projects that are built on top of `lucid-evolution
       <br />
       <a style="text-decoration:none;" href="https://pondora.org/"  target="_blank">Pondora</a>
     </td>
-    </tr><tr>
+    <td align="center">
+      <img src="https://avatars.githubusercontent.com/u/93930135?s=200&v=4" height="50px;" alt="WingRiders" />
+      <br />
+      <a style="text-decoration:none;" href="https://www.wingriders.com" target="_blank">WingRiders</a>
+    </td>
       <td align="center">
       <img src="https://ugc.production.linktr.ee/00f8a70f-e3ee-49e1-a4e0-e03607edd37d_Twitter-Avatar.jpeg?io=true&size=avatar-v3_0" height="50px;" alt="Atrium" />
       <br />
@@ -72,6 +82,7 @@ There are a growing number of projects that are built on top of `lucid-evolution
       <br />
       <a style="text-decoration:none;" href="https://vespr.xyz" target="_blank">VESPR Wallet</a>
     </td>
+     </tr><tr>
     <td align="center">
       <img src="https://app.ada.markets/assets/images/ADAmarkets.png" height="50px;" alt="Ada Markets" />
       <br />
@@ -87,9 +98,18 @@ There are a growing number of projects that are built on top of `lucid-evolution
       <br />
       <a style="text-decoration:none;" href="https://summonplatform.io/"  target="_blank">Summon</a>
     </td>
+    <td align="center">
+      <img src="https://avatars.githubusercontent.com/u/145890860?s=200&v=4" height="50px;" alt="GenWealth" />
+      <br />
+      <a style="text-decoration:none;" href="https://genwealth.app"  target="_blank">GenWealth</a>
+    </td>
+    <td align="center">
+      <img src="https://preview.betttingada.com/assets/images/logo/logo-bead.png" height="50px;" alt="BetttingADA" />
+      <br />
+      <a style="text-decoration:none;" href="https://preview.betttingada.com"  target="_blank">BetttingADA</a>
+    </td>
   </tr>
 </table>
-
 <br/>
 
 ## Introduction
