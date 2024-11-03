@@ -112,8 +112,6 @@ There are a growing number of projects that are built on top of `lucid-evolution
 </table>
 <br/>
 
-
-
 ## Introduction
 
 Lucid Evolution is a comprehensive suite of tools designed to facilitate the off-chain development of scalable dApps and the creation of complex transactions on the Cardano blockchain
