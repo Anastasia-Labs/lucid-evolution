@@ -17,7 +17,7 @@
 
 There are a growing number of projects that are built on top of `lucid-evolution`! If you've built a library or a project on top of lucid-evolution, tell me about it [on X](https://twitter.com/solidsnakedev) or [on Discord](https://discord.gg/s89P9gpEff) . I'll add it below and tweet it out.
 
-<h3 align="center">Projects powered by lucid-evolution</h3>
+<h3 align="center">Powered by Lucid <span style="color: #AD1F1E;">Evolution</span></h1>
 
 <table align="center" style="justify-content: center;align-items: center;display: flex;">
   <tr>
