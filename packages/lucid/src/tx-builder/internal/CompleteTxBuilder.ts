@@ -118,9 +118,9 @@ export const complete = (
 
     // Execute programs sequentially
     yield* Effect.all(config.programs);
-    const hasScriptExecutions: boolean = config.scripts.size > 0;
+    const hasPlutusScriptExecutions: boolean = Array.from(config.scripts.values()).some((value) => value.type !== "Native");
     // Set collateral input if there are script executions
-    if (hasScriptExecutions) {
+    if (hasPlutusScriptExecutions) {
       const collateralInput = yield* findCollateral(
         config.lucidConfig.protocolParameters.coinsPerUtxoByte,
         setCollateral,
@@ -141,7 +141,7 @@ export const complete = (
     // Second round of coin selection by including script execution costs in fee estimation.
     // UPLC evaluation need to be performed again if new inputs are selected during coin selection.
     // Because increasing the inputs can increase the script execution budgets.
-    if (hasScriptExecutions)
+    if (hasPlutusScriptExecutions)
       yield* selectionAndEvaluation(
         config,
         walletInputs,
