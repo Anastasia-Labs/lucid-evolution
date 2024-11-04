@@ -14,7 +14,6 @@ import { CML } from "./core.js";
 import { networkToId } from "./network.js";
 import { applyDoubleCborEncoding } from "./cbor.js";
 import { Data } from "@lucid-evolution/plutus";
-import * as UPLC from "@lucid-evolution/uplc";
 import {
   Application,
   encodeUPLC,
@@ -23,11 +22,11 @@ import {
   UPLCProgram,
 } from "@harmoniclabs/uplc";
 import { fromHex, toHex } from "@lucid-evolution/core-utils";
-import { Decoder, Encoder} from "@stricahq/cbors";
+import * as cbors from "@stricahq/cbors";
 import { dataFromCbor } from "@harmoniclabs/plutus-data";
 
-const { encode } = Encoder;
-const { decode } = Decoder;
+const { encode } = cbors.Encoder;
+const { decode } = cbors.Decoder;
 
 export function validatorToAddress(
   network: Network,
