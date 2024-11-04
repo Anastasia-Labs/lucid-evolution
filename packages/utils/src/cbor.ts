@@ -1,7 +1,7 @@
-import { fromHex, toHex } from "@lucid-evolution/core-utils";
-import { decode, encode } from "cborg";
+import { fromHex, sleep, toHex } from "@lucid-evolution/core-utils";
 import { CML } from "./core.js";
 import { Datum, DatumJson } from "@lucid-evolution/core-types";
+import { Decoder, Encoder } from "@stricahq/cbors";
 
 // 1st byte (58) 0101(major type 2) , 1000 (additional info)
 // 2n byte byte represents the lenght of the content
@@ -10,10 +10,10 @@ import { Datum, DatumJson } from "@lucid-evolution/core-types";
 // Apply double bytestring enconding of type `major type 2`
 export const applyDoubleCborEncoding = (script: string) => {
   try {
-    decode(decode(fromHex(script)));
+    Decoder.decode(Decoder.decode(Buffer.from(fromHex(script))).value);
     return script;
   } catch (error) {
-    return toHex(encode(fromHex(script)));
+    return toHex(Encoder.encode(fromHex(script)));
   }
 };
 

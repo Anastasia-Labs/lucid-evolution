@@ -23,8 +23,11 @@ import {
   UPLCProgram,
 } from "@harmoniclabs/uplc";
 import { fromHex, toHex } from "@lucid-evolution/core-utils";
-import { decode, encode } from "cborg";
+import { Decoder, Encoder} from "@stricahq/cbors";
 import { dataFromCbor } from "@harmoniclabs/plutus-data";
+
+const { encode } = Encoder;
+const { decode } = Decoder;
 
 export function validatorToAddress(
   network: Network,
@@ -161,7 +164,7 @@ export function applyParamsToScript<T extends unknown[] = Data[]>(
   type?: T,
 ): string {
   const program = parseUPLC(
-    decode(decode(fromHex(applyDoubleCborEncoding(plutusScript)))),
+    decode(decode(Buffer.from(fromHex(applyDoubleCborEncoding(plutusScript)))).value).value,
     "flat",
   );
   const parameters = (type ? Data.castTo<T>(params, type) : params) as Data[];
