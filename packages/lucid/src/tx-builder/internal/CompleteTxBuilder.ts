@@ -118,7 +118,9 @@ export const complete = (
 
     // Execute programs sequentially
     yield* Effect.all(config.programs);
-    const hasPlutusScriptExecutions: boolean = Array.from(config.scripts.values()).some((value) => value.type !== "Native");
+    const hasPlutusScriptExecutions: boolean = Array.from(
+      config.scripts.values(),
+    ).some((value) => value.type !== "Native");
     // Set collateral input if there are script executions
     if (hasPlutusScriptExecutions) {
       const collateralInput = yield* findCollateral(
