@@ -1,4 +1,4 @@
-import { fromHex, sleep, toHex } from "@lucid-evolution/core-utils";
+import { fromHex, toHex } from "@lucid-evolution/core-utils";
 import { CML } from "./core.js";
 import { Datum, DatumJson } from "@lucid-evolution/core-types";
 import * as cbors from "@stricahq/cbors";
