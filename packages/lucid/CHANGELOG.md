@@ -1,5 +1,11 @@
 # @lucid-evolution/lucid
 
+## 0.4.1
+
+### Patch Changes
+
+- [#389](https://github.com/Anastasia-Labs/lucid-evolution/pull/389) [`23f1fdd`](https://github.com/Anastasia-Labs/lucid-evolution/commit/23f1fddf74b131a4f6ee28e8c4d7020bf62d8bcc) Thanks [@sourabhxyz](https://github.com/sourabhxyz)! - add collateral only when Script is not NativeScript
+
 ## 0.4.0
 
 ### Minor Changes
