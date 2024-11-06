@@ -10,7 +10,7 @@ We support the `Mainnet`, `Preprod`, and `Preview` networks
 
 There are multiple builtin providers you can choose from in Lucid Evolution
 
-<Tabs items={['Blockfrost', 'Kupmios', 'Maestro', 'Koios']}>
+<Tabs items={['Blockfrost', 'Kupmios', 'Maestro', 'Koios', 'Yaci', 'UTxORPC']}>
   <Tabs.Tab>
 ```typescript
 import { Lucid, Blockfrost } from "@lucid-evolution/lucid";
@@ -59,13 +59,32 @@ const lucid = await Lucid(
 );
 ```
   </Tabs.Tab>
+  <Tabs.Tab>
+  YACI DevKit provides a local development environment with configurable block times and network parameters. For detailed setup instructions, visit the [YACI DevKit documentation](https://devkit.yaci.xyz/tutorials/lucid-evolution/overview).
+```typescript
+// Configure custom network slot settings for YACI DevKit
+SLOT_CONFIG_NETWORK['Custom'] = {
+  zeroTime: 1664060800000, // Unix timestamp in milliseconds
+  zeroSlot: 0,
+  slotLength: 1000,
+};
+
+const lucid = await Lucid(
+  new Kupmios(
+    "http://localhost:1442",
+    "http://localhost:1337" 
+  ),
+  "Custom" // Use custom network type for DevKit
+);
+```
+  </Tabs.Tab>
+  <Tabs.Tab>
+```typescript
+//TODO: https://github.com/utxorpc/lucid-evolution-provider
+```
+  </Tabs.Tab>
 </Tabs>
 
-
-<Callout type="info" emoji="ℹ️">
-  __Evolution-Notes:__ `Lucid.new()` has been replaced with `Lucid()`, as it's
-  now a factory function instead of a class
-</Callout>
 
 ---
 

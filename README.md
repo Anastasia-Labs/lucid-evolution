@@ -108,6 +108,12 @@ There are a growing number of projects that are built on top of `lucid-evolution
       <br />
       <a style="text-decoration:none;" href="https://preview.betttingada.com"  target="_blank">BetttingADA</a>
     </td>
+    <td align="center">
+      <img src="https://cardexscan.s3.us-east-1.amazonaws.com/cds_logo_vector_dark.png" height="50px;" alt="Summon" />
+      <br />
+      <a style="text-decoration:none;" href="https://cardexscan.com/home"  target="_blank">Cardexscan</a>
+    </td>
+    </tr><tr>
   </tr>
 </table>
 <br/>
