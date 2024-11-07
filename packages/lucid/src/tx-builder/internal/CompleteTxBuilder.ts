@@ -71,6 +71,12 @@ export type CompleteOptions = {
   canonical?: boolean;
 
   /**
+   * Include tiny change (lovelace) in transaction fee if it's too small
+   * @default false
+   */
+  includeTinyChangeInFee?: boolean;
+
+  /**
    * Preset UTXOs from the wallet to include in coin selection.
    * If not provided, wallet UTXOs will be fetched by the provider.
    *
@@ -79,6 +85,11 @@ export type CompleteOptions = {
    * @default []
    */
   presetWalletInputs?: UTxO[];
+};
+
+type CoinSelectionResult = {
+  selected: UTxO[];
+  burnable: Assets;
 };
 
 export const completeTxError = (cause: unknown) =>
@@ -105,6 +116,7 @@ export const complete = (
       localUPLCEval = true,
       setCollateral = 5_000_000n,
       canonical = false,
+      includeTinyChangeInFee = false,
       presetWalletInputs = [],
     } = options;
 
@@ -138,6 +150,7 @@ export const complete = (
       changeAddress,
       coinSelection,
       localUPLCEval,
+      includeTinyChangeInFee,
       false,
     );
     // Second round of coin selection by including script execution costs in fee estimation.
@@ -150,6 +163,7 @@ export const complete = (
         changeAddress,
         coinSelection,
         localUPLCEval,
+        includeTinyChangeInFee,
         true,
       );
 
@@ -200,6 +214,7 @@ export const selectionAndEvaluation = (
   changeAddress: string,
   coinSelection: boolean,
   localUPLCEval: boolean,
+  includeTinyChangeInFee: boolean,
   script_calculation: boolean,
 ): Effect.Effect<void, TransactionError, never> =>
   Effect.gen(function* () {
@@ -208,14 +223,22 @@ export const selectionAndEvaluation = (
       config.collectedInputs,
     );
 
-    const inputsToAdd =
+    const { selected: inputsToAdd, burnable } =
       coinSelection !== false
-        ? yield* doCoinSelection(config, availableInputs, script_calculation)
-        : [];
+        ? yield* doCoinSelection(
+            config,
+            availableInputs,
+            script_calculation,
+            includeTinyChangeInFee,
+          )
+        : { selected: [], burnable: {} };
 
     // Skip UPLC evaluation for the second time if no new inputs are added
-    if (_Array.isEmptyArray(inputsToAdd) && script_calculation) return;
     let estimatedFee = 0n;
+    if (_Array.isEmptyArray(inputsToAdd)) {
+      if (script_calculation) return;
+      estimatedFee += burnable.lovelace;
+    }
     if (_Array.isNonEmptyArray(inputsToAdd)) {
       for (const utxo of inputsToAdd) {
         const input = CML.SingleInputBuilder.from_transaction_unspent_output(
@@ -466,14 +489,14 @@ const findCollateral = (
       `Your wallet does not have enough funds to cover the required ${setCollateral} Lovelace collateral. Or it contains UTxOs with reference scripts; which
       are excluded from collateral selection.`,
     );
-    const selected = yield* recursive(
+    const { selected } = yield* recursive(
       sortUTxOs(inputs),
       collateralLovelace,
       coinsPerUtxoByte,
       undefined,
+      false,
       error,
     );
-
     if (selected.length > 3)
       yield* completeTxError(
         `Selected ${selected.length} inputs as collateral, but max collateral inputs is 3 to cover the ${setCollateral} Lovelace collateral ${stringify(selected)}`,
@@ -485,7 +508,8 @@ const doCoinSelection = (
   config: TxBuilder.TxBuilderConfig,
   availableInputs: UTxO[],
   script_calculation: boolean,
-): Effect.Effect<UTxO[], TxBuilderError> =>
+  includeTinyChangeInFee: boolean,
+): Effect.Effect<{ selected: UTxO[]; burnable: Assets }, TxBuilderError> =>
   Effect.gen(function* () {
     // NOTE: This is a fee estimation. If the amount is not enough, it may require increasing the fee.
     const estimatedFee: Assets = {
@@ -520,13 +544,13 @@ const doCoinSelection = (
     // Note: We are not done with coin selection even if "requiredAssets" is empty.
     // Because "notRequiredAssets" may not contain enough ADA to cover for minimum Ada requirement
     // when they need to be sent as change output. Hence, we allow for "recursive" to be invoked.
-    const selected = yield* recursive(
+    return yield* recursive(
       sortUTxOs(availableInputs),
       requiredAssets,
       config.lucidConfig.protocolParameters.coinsPerUtxoByte,
       notRequiredAssets,
+      includeTinyChangeInFee,
     );
-    return selected;
   });
 
 /**
@@ -745,8 +769,9 @@ export const recursive = (
   requiredAssets: Assets,
   coinsPerUtxoByte: bigint,
   externalAssets: Assets = {},
+  includeTinyChangeInFee?: boolean,
   error?: TxBuilderError,
-): Effect.Effect<UTxO[], TxBuilderError> =>
+): Effect.Effect<CoinSelectionResult, TxBuilderError> =>
   Effect.gen(function* () {
     let selected: UTxO[] = [];
     error ??= completeTxError(
@@ -779,6 +804,8 @@ export const recursive = (
 
       const extraSelected = selectUTxOs(remainingInputs, extraLovelace);
       if (_Array.isEmptyArray(extraSelected)) {
+        if (includeTinyChangeInFee)
+          return { selected: [...selected], burnable: extraLovelace };
         yield* completeTxError(
           `Your wallet does not have enough funds to cover required minimum ADA for change output: ${stringify(extraLovelace)}
           Or it contains UTxOs with reference scripts; which are excluded from coin selection.`,
@@ -797,5 +824,5 @@ export const recursive = (
         Option.getOrUndefined,
       );
     }
-    return selected;
+    return { selected, burnable: { lovelace: 0n } };
   });

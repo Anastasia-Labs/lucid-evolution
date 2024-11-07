@@ -49,7 +49,11 @@ describe("coinSelection", () => {
     const exit = await Effect.runPromiseExit(program);
     // TODO: try using only one exepect
     expect(exit._tag).toBe("Success");
-    if (exit._tag == "Success") expect(exit.value).toStrictEqual([inputs[1]]);
+    if (exit._tag == "Success")
+      expect(exit.value).toStrictEqual({
+        selected: [inputs[1]],
+        burnable: { lovelace: 0n },
+      });
   });
   it("should select largest first, and input index_1(5_000_000n), index_2(3_662_726n)", async () => {
     // console.log(selected);
@@ -67,7 +71,10 @@ describe("coinSelection", () => {
     // TODO: try using only one expect
     expect(exit._tag).toBe("Success");
     if (exit._tag == "Success")
-      expect(exit.value).toStrictEqual([inputs[1], inputs[2]]);
+      expect(exit.value).toStrictEqual({
+        selected: [inputs[1], inputs[2]],
+        burnable: { lovelace: 0n },
+      });
   });
 
   it("should select largest first, and input index 1, 0, 2", async () => {
@@ -85,7 +92,10 @@ describe("coinSelection", () => {
     // TODO: try using only one expect
     expect(exit._tag).toStrictEqual("Success");
     if (exit._tag == "Success")
-      expect(exit.value).toStrictEqual([inputs[1], inputs[0], inputs[2]]);
+      expect(exit.value).toStrictEqual({
+        selected: [inputs[1], inputs[0], inputs[2]],
+        burnable: { lovelace: 0n },
+      });
   });
   it("should select none", async () => {
     const inputs: UTxO[] = [
@@ -136,7 +146,10 @@ describe("coinSelection", () => {
     // TODO: try using only one exepect
     expect(exit._tag).toBe("Success");
     if (exit._tag == "Success")
-      expect(exit.value).toStrictEqual(expectedSelection);
+      expect(exit.value).toStrictEqual({
+        selected: expectedSelection,
+        burnable: { lovelace: 0n },
+      });
   });
   it("should select largest first, and input index 0, 2", async () => {
     const inputs: UTxO[] = [
@@ -151,7 +164,10 @@ describe("coinSelection", () => {
     // TODO: try using only one expect
     expect(exit._tag).toStrictEqual("Success");
     if (exit._tag == "Success")
-      expect(exit.value).toStrictEqual([inputs[0], inputs[2]]);
+      expect(exit.value).toStrictEqual({
+        selected: [inputs[0], inputs[2]],
+        burnable: { lovelace: 0n },
+      });
   });
 });
 
