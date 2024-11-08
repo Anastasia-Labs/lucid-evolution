@@ -1,5 +1,11 @@
 # @lucid-evolution/lucid
 
+## 0.4.2
+
+### Patch Changes
+
+- [#392](https://github.com/Anastasia-Labs/lucid-evolution/pull/392) [`56f2d6f`](https://github.com/Anastasia-Labs/lucid-evolution/commit/56f2d6f47fed754accbdc8988014d12bb1319cce) Thanks [@hadelive](https://github.com/hadelive)! - inlude tiny change in fee
+
 ## 0.4.1
 
 ### Patch Changes
