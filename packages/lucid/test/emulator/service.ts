@@ -47,7 +47,7 @@ export const emulatorFromPrivateKey = await Effect.gen(function* () {
 }).pipe(Effect.runPromise);
 
 export const emulator = await Effect.gen(function* () {
-  return new Emulator([EMULATOR_ACCOUNT]);
+  return new Emulator([EMULATOR_ACCOUNT, EMULATOR_ACCOUNT_1]);
 }).pipe(Effect.runPromise);
 
 const makeEmulatorUser = Effect.gen(function* ($) {
@@ -238,6 +238,7 @@ export const compose = Effect.gen(function* ($) {
       { lovelace: 5000000n },
     );
   const signBuilder = yield* txCompA.compose(txCompB).completeProgram();
+  console.log(signBuilder.toJSON());
   return signBuilder;
 }).pipe(Effect.flatMap(handleSignSubmitWithoutValidation), withLogRetry);
 
@@ -325,5 +326,53 @@ export const depositFundsLockRefScript = Effect.gen(function* ($) {
       hello,
     )
     .completeProgram();
+  return signBuilder;
+}).pipe(Effect.flatMap(handleSignSubmitWithoutValidation), withLogRetry);
+
+export const sendAllFund = Effect.gen(function* ($) {
+  const { user } = yield* EmulatorUser;
+  user.selectWallet.fromSeed(EMULATOR_ACCOUNT_1.seedPhrase);
+  const publicKeyHash = getAddressDetails(
+    yield* Effect.promise(() => user.wallet().address()),
+  ).paymentCredential?.hash;
+  const datum = Data.to(new Constr(0, [publicKeyHash!]));
+
+  const helloCBOR = yield* pipe(
+    Effect.fromNullable(
+      scripts.validators.find(
+        (v) => v.title === "hello_world.hello_world.spend",
+      ),
+    ),
+    Effect.andThen((script) => script.compiledCode),
+  );
+  const hello: SpendingValidator = {
+    type: "PlutusV3",
+    script: applyDoubleCborEncoding(helloCBOR),
+  };
+  const contractAddress = validatorToAddress("Custom", hello);
+  yield* pipe(
+    Effect.tryPromise(() => user.utxosAt(contractAddress)),
+    // Effect.andThen((utxos) => Console.log(utxos)),
+  );
+
+  const utxos = yield* Effect.promise(() => user.wallet().getUtxos());
+  let totalFund = 0n;
+  for (const utxo of utxos) {
+    totalFund += utxo.assets["lovelace"];
+  }
+  let remaining = 500_000n;
+
+  const signBuilder = yield* user
+    .newTx()
+    .pay.ToAddressWithData(
+      contractAddress,
+      {
+        kind: "inline",
+        value: datum,
+      },
+      { lovelace: totalFund - remaining },
+      hello,
+    )
+    .completeProgram({ includeLeftoverLovelaceAsFee: true });
   return signBuilder;
 }).pipe(Effect.flatMap(handleSignSubmitWithoutValidation), withLogRetry);
