@@ -71,10 +71,10 @@ export type CompleteOptions = {
   canonical?: boolean;
 
   /**
-   * Include tiny change (lovelace) in transaction fee if it's too small
+   * Include leftover lovelace in the transaction fee if there are no additional inputs available to cover the change output address.
    * @default false
    */
-  includeTinyChangeInFee?: boolean;
+  includeLeftoverLovelaceAsFee?: boolean;
 
   /**
    * Preset UTXOs from the wallet to include in coin selection.
@@ -116,7 +116,7 @@ export const complete = (
       localUPLCEval = true,
       setCollateral = 5_000_000n,
       canonical = false,
-      includeTinyChangeInFee = false,
+      includeLeftoverLovelaceAsFee = false,
       presetWalletInputs = [],
     } = options;
 
@@ -150,7 +150,7 @@ export const complete = (
       changeAddress,
       coinSelection,
       localUPLCEval,
-      includeTinyChangeInFee,
+      includeLeftoverLovelaceAsFee,
       false,
     );
     // Second round of coin selection by including script execution costs in fee estimation.
@@ -163,7 +163,7 @@ export const complete = (
         changeAddress,
         coinSelection,
         localUPLCEval,
-        includeTinyChangeInFee,
+        includeLeftoverLovelaceAsFee,
         true,
       );
 
@@ -214,7 +214,7 @@ export const selectionAndEvaluation = (
   changeAddress: string,
   coinSelection: boolean,
   localUPLCEval: boolean,
-  includeTinyChangeInFee: boolean,
+  includeLeftoverLovelaceAsFee: boolean,
   script_calculation: boolean,
 ): Effect.Effect<void, TransactionError, never> =>
   Effect.gen(function* () {
@@ -229,7 +229,7 @@ export const selectionAndEvaluation = (
             config,
             availableInputs,
             script_calculation,
-            includeTinyChangeInFee,
+            includeLeftoverLovelaceAsFee,
           )
         : { selected: [], burnable: {} };
 
@@ -508,7 +508,7 @@ const doCoinSelection = (
   config: TxBuilder.TxBuilderConfig,
   availableInputs: UTxO[],
   script_calculation: boolean,
-  includeTinyChangeInFee: boolean,
+  includeLeftoverLovelaceAsFee: boolean,
 ): Effect.Effect<{ selected: UTxO[]; burnable: Assets }, TxBuilderError> =>
   Effect.gen(function* () {
     // NOTE: This is a fee estimation. If the amount is not enough, it may require increasing the fee.
@@ -549,7 +549,7 @@ const doCoinSelection = (
       requiredAssets,
       config.lucidConfig.protocolParameters.coinsPerUtxoByte,
       notRequiredAssets,
-      includeTinyChangeInFee,
+      includeLeftoverLovelaceAsFee,
     );
   });
 
@@ -769,7 +769,7 @@ export const recursive = (
   requiredAssets: Assets,
   coinsPerUtxoByte: bigint,
   externalAssets: Assets = {},
-  includeTinyChangeInFee?: boolean,
+  includeLeftoverLovelaceAsFee?: boolean,
   error?: TxBuilderError,
 ): Effect.Effect<CoinSelectionResult, TxBuilderError> =>
   Effect.gen(function* () {
@@ -804,7 +804,7 @@ export const recursive = (
 
       const extraSelected = selectUTxOs(remainingInputs, extraLovelace);
       if (_Array.isEmptyArray(extraSelected)) {
-        if (includeTinyChangeInFee)
+        if (includeLeftoverLovelaceAsFee)
           return { selected: [...selected], burnable: extraLovelace };
         yield* completeTxError(
           `Your wallet does not have enough funds to cover required minimum ADA for change output: ${stringify(extraLovelace)}

@@ -238,6 +238,7 @@ export const compose = Effect.gen(function* ($) {
       { lovelace: 5000000n },
     );
   const signBuilder = yield* txCompA.compose(txCompB).completeProgram();
+  console.log(signBuilder.toJSON());
   return signBuilder;
 }).pipe(Effect.flatMap(handleSignSubmitWithoutValidation), withLogRetry);
 
@@ -372,6 +373,6 @@ export const sendAllFund = Effect.gen(function* ($) {
       { lovelace: totalFund - remaining },
       hello,
     )
-    .completeProgram({ includeTinyChangeInFee: true });
+    .completeProgram({ includeLeftoverLovelaceAsFee: true });
   return signBuilder;
 }).pipe(Effect.flatMap(handleSignSubmitWithoutValidation), withLogRetry);
