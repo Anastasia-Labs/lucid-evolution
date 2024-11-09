@@ -204,6 +204,7 @@ export type TxBuilder = {
   chainSafe: () => Promise<
     Either<[UTxO[], UTxO[], TxSignBuilder.TxSignBuilder], TransactionError>
   >;
+  rawConfig: () => TxBuilderConfig;
   /**
    * **Warning:** This method executes all programs and mutates the TxBuilder state.
    *
@@ -565,13 +566,33 @@ export function makeTxBuilder(lucidConfig: LucidConfig): TxBuilder {
       },
     },
     compose: (tx: TxBuilder | null) => {
-      if (tx) {
-        const program = Effect.gen(function* () {
-          const config = yield* Effect.promise(() => tx.config());
-          yield* Effect.all(config.programs, { concurrency: "unbounded" });
-        });
-        config.programs.push(program);
-      }
+      if (!tx) return txBuilder;
+      const rawConfig = tx.rawConfig();
+      config.walletInputs = [...config.walletInputs, ...rawConfig.walletInputs];
+      config.collectedInputs = [
+        ...config.collectedInputs,
+        ...rawConfig.collectedInputs,
+      ];
+      config.readInputs = [...config.readInputs, ...rawConfig.readInputs];
+      config.consumedInputs = [
+        ...config.consumedInputs,
+        ...rawConfig.consumedInputs,
+      ];
+      config.totalOutputAssets = {
+        ...config.totalOutputAssets,
+        ...rawConfig.totalOutputAssets,
+      };
+      config.payToOutputs = [...config.payToOutputs, ...rawConfig.payToOutputs];
+      config.mintedAssets = {
+        ...config.mintedAssets,
+        ...rawConfig.mintedAssets,
+      };
+      config.scripts = new Map([...config.scripts, ...rawConfig.scripts]);
+      config.programs = [...config.programs, ...rawConfig.programs];
+      config.partialPrograms = new Map([
+        ...config.partialPrograms,
+        ...rawConfig.partialPrograms,
+      ]);
       return txBuilder;
     },
     setMinFee: (fee: bigint) => {
@@ -600,6 +621,7 @@ export function makeTxBuilder(lucidConfig: LucidConfig): TxBuilder {
       makeReturn(CompleteTxBuilder.complete(config, options)).unsafeRun(),
     chainSafe: (options?: CompleteTxBuilder.CompleteOptions) =>
       makeReturn(CompleteTxBuilder.complete(config, options)).safeRun(),
+    rawConfig: () => config,
     config: () =>
       Effect.gen(function* () {
         yield* Effect.all(config.programs);

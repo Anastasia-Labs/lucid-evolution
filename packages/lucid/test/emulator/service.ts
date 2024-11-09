@@ -242,6 +242,39 @@ export const compose = Effect.gen(function* ($) {
   return signBuilder;
 }).pipe(Effect.flatMap(handleSignSubmitWithoutValidation), withLogRetry);
 
+export const multiTxCompose = Effect.gen(function* ($) {
+  const { user } = yield* EmulatorUser;
+  const addr = yield* Effect.promise(() => user.wallet().address());
+  const txCompA = user
+    .newTx()
+    .pay.ToAddressWithData(addr, { kind: "inline", value: Data.to(0n) }, {});
+  const txCompB = user
+    .newTx()
+    .pay.ToAddressWithData(addr, { kind: "inline", value: Data.to(10n) }, {})
+    .compose(
+      user
+        .newTx()
+        .pay.ToAddressWithData(addr, { kind: "inline", value: Data.to(1n) }, {})
+        .compose(
+          user
+            .newTx()
+            .pay.ToAddressWithData(
+              addr,
+              { kind: "inline", value: Data.to(2n) },
+              {},
+            ),
+        ),
+    );
+  const tx = user
+    .newTx()
+    .compose(txCompA)
+    .compose(txCompB)
+    .pay.ToAddressWithData(addr, { kind: "inline", value: Data.to(3n) }, {});
+  const signBuilder = yield* tx.completeProgram();
+  console.log(signBuilder.toJSON());
+  return signBuilder;
+}).pipe(Effect.flatMap(handleSignSubmitWithoutValidation), withLogRetry);
+
 export const multiSigner = Effect.gen(function* ($) {
   const { user, emulator } = yield* EmulatorUser;
   const { paymentCredential } = getAddressDetails(EMULATOR_ACCOUNT.address);

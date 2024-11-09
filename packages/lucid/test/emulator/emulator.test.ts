@@ -18,6 +18,7 @@ import {
   emulatorFromPrivateKey,
   depositFundsLockRefScript,
   sendAllFund,
+  multiTxCompose,
 } from "./service.js";
 
 const distributeRewards = Effect.gen(function* ($) {
@@ -131,6 +132,14 @@ describe.sequential("Emulator", () => {
 
   test("compose", async () => {
     const program = pipe(compose, Effect.provide(EmulatorUser.layer));
+    const exit = await Effect.runPromiseExit(program);
+    emulator.awaitBlock(4);
+    emulatorFromPrivateKey.awaitBlock(4);
+    expect(exit._tag).toBe("Success");
+  });
+
+  test("multiTxCompose", async () => {
+    const program = pipe(multiTxCompose, Effect.provide(EmulatorUser.layer));
     const exit = await Effect.runPromiseExit(program);
     emulator.awaitBlock(4);
     emulatorFromPrivateKey.awaitBlock(4);
