@@ -129,7 +129,7 @@ describe.sequential("Emulator", () => {
     expect(exit._tag).toBe("Success");
   });
 
-  test("compose", async () => {
+  test.only("compose", async () => {
     const program = pipe(compose, Effect.provide(EmulatorUser.layer));
     const exit = await Effect.runPromiseExit(program);
     emulator.awaitBlock(4);

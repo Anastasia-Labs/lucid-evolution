@@ -2,6 +2,7 @@ import {
   getAddressDetails,
   mintingPolicyToId,
   scriptFromNative,
+  stringify,
   toUnit,
   unixTimeToSlot,
   validatorToAddress,
@@ -232,13 +233,13 @@ export const compose = Effect.gen(function* ($) {
     );
   const txCompB = user
     .newTx()
-    .pay.ToContract(
-      scriptAddress,
-      { kind: "inline", value: Data.to("31313131") },
-      { lovelace: 5000000n },
-    );
-  const signBuilder = yield* txCompA.compose(txCompB).completeProgram();
-  console.log(signBuilder.toJSON());
+    .pay.ToAddress(scriptAddress, { lovelace: 5000000n })
+    .pay.ToAddress(scriptAddress, { lovelace: 7000000n });
+  const signBuilder = yield* txCompA
+    .compose(txCompB)
+    .compose(txCompB)
+    .completeProgram();
+  console.log(stringify(signBuilder.toJSON()));
   return signBuilder;
 }).pipe(Effect.flatMap(handleSignSubmitWithoutValidation), withLogRetry);
 

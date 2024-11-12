@@ -10,15 +10,14 @@ import {
   toV3,
   validateAddressDetails,
 } from "./TxUtils.js";
+import { TxConfig } from "./Service.js";
 
 export const stakeError = (cause: unknown) =>
   new TxBuilderError({ cause: `{ Stake: ${cause} }` });
 
-export const registerStake = (
-  config: TxBuilder.TxBuilderConfig,
-  rewardAddress: RewardAddress,
-): Effect.Effect<void, TxBuilderError> =>
+export const registerStake = (rewardAddress: RewardAddress) =>
   Effect.gen(function* () {
+    const { config } = yield* TxConfig;
     const addressDetails = yield* pipe(
       validateAddressDetails(rewardAddress, config.lucidConfig),
       Effect.andThen((address) =>
@@ -50,11 +49,11 @@ export const registerStake = (
   });
 
 export const deRegisterStake = (
-  config: TxBuilder.TxBuilderConfig,
   rewardAddress: RewardAddress,
   redeemer?: Redeemer,
-): Effect.Effect<void, TxBuilderError> =>
+) =>
   Effect.gen(function* () {
+    const { config } = yield* TxConfig;
     const addressDetails = yield* pipe(
       validateAddressDetails(rewardAddress, config.lucidConfig),
       Effect.andThen((address) =>
@@ -156,13 +155,9 @@ export const deRegisterStake = (
   });
 
 export const withdraw =
-  (
-    config: TxBuilder.TxBuilderConfig,
-    rewardAddress: RewardAddress,
-    amount: Lovelace,
-  ) =>
-  (redeemer?: Redeemer): Effect.Effect<void, TxBuilderError> =>
-    Effect.gen(function* ($) {
+  (rewardAddress: RewardAddress, amount: Lovelace) => (redeemer?: Redeemer) =>
+    Effect.gen(function* () {
+      const { config } = yield* TxConfig;
       const addressDetails = yield* pipe(
         validateAddressDetails(rewardAddress, config.lucidConfig),
         Effect.andThen((address) =>

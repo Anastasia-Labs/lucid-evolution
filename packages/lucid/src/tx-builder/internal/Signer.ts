@@ -9,15 +9,14 @@ import { Effect, pipe } from "effect";
 import * as CML from "@anastasia-labs/cardano-multiplatform-lib-nodejs";
 import { ERROR_MESSAGE, TxBuilderError } from "../../Errors.js";
 import { validateAddressDetails } from "./TxUtils.js";
+import { TxConfig } from "./Service.js";
 
 export const addSignerError = (cause: unknown) =>
   new TxBuilderError({ cause: `{ Signer: ${cause} }` });
 
-export const addSigner = (
-  config: TxBuilder.TxBuilderConfig,
-  address: Address | RewardAddress,
-) =>
+export const addSigner = (address: Address | RewardAddress) =>
   Effect.gen(function* () {
+    const { config } = yield* TxConfig;
     const addressDetails = yield* validateAddressDetails(
       address,
       config.lucidConfig,
@@ -42,13 +41,11 @@ export const addSigner = (
       yield* addSignerError(ERROR_MESSAGE.SCRIPT_CREDENTIAL_NOT_ALLOWED);
 
     return credential.hash;
-  }).pipe(Effect.flatMap((keyHash) => addSignerKey(config, keyHash)));
+  }).pipe(Effect.flatMap((keyHash) => addSignerKey(keyHash)));
 
 /** Add a payment or stake key hash as a required signer of the transaction. */
-export const addSignerKey = (
-  config: TxBuilder.TxBuilderConfig,
-  keyHash: PaymentKeyHash | StakeKeyHash,
-) =>
+export const addSignerKey = (keyHash: PaymentKeyHash | StakeKeyHash) =>
   Effect.gen(function* () {
+    const { config } = yield* TxConfig;
     config.txBuilder.add_required_signer(CML.Ed25519KeyHash.from_hex(keyHash));
   });
