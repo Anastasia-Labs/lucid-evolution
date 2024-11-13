@@ -1,5 +1,11 @@
 # @lucid-evolution/lucid
 
+## 0.4.3
+
+### Patch Changes
+
+- [#397](https://github.com/Anastasia-Labs/lucid-evolution/pull/397) [`0e5e891`](https://github.com/Anastasia-Labs/lucid-evolution/commit/0e5e89143e28957144466863a3518761f2ef71ee) Thanks [@hadelive](https://github.com/hadelive)! - fix compose
+
 ## 0.4.2
 
 ### Patch Changes
