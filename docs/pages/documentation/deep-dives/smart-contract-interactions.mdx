@@ -113,7 +113,7 @@ Below example is for your validator when it expects 1 integer argument, eg. `val
 const mintingPolicy = {
   type: "PlutusV3",
   script: applyParamsToScript(
-    "5907945907910100...",
+    applyDoubleCborEncoding("5907945907910100..."),
     [10n] // Parameters
   ),
 };
@@ -128,7 +128,7 @@ const yes = new Constr(1, []);
 const spendingValidator = {
   type: "PlutusV3",
   script: applyParamsToScript(
-    "5907945907910101...",
+    applyDoubleCborEncoding("5907945907910101..."),
     [pkh, yes] // Parameters
   ),
 };
@@ -149,7 +149,7 @@ const oRef = new Constr(0, [String(utxo.txHash), BigInt(utxo.outputIndex)]);
 const yourValidator = {
   type: "PlutusV3",
   script: applyParamsToScript(
-    "5907945907910102...",
+    applyDoubleCborEncoding("5907945907910102..."),
     [oRef] // Parameters
   ),
 };
@@ -184,7 +184,7 @@ const oRef = new Constr(0, [txID, txIdx]);
 const yourValidator = {
   type: "PlutusV3",
   script: applyParamsToScript(
-    "5907945907910103...",
+    applyDoubleCborEncoding("5907945907910103..."),
     [oRef] // Parameters
   ),
 };
