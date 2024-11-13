@@ -214,6 +214,10 @@ export type TxBuilder = {
    */
   config: () => Promise<TxBuilderConfig>;
   /**
+   * Returns the raw TxBuilderConfig
+   */
+  rawConfig: () => TxBuilderConfig;
+  /**
    * Returns the current lucid instance configuration
    */
   lucidConfig: () => LucidConfig;
@@ -550,9 +554,9 @@ export function makeTxBuilder(lucidConfig: LucidConfig): TxBuilder {
     },
     compose: (tx: TxBuilder | null) => {
       if (tx) {
-        console.log("before", config.programs.length);
+        const rawConfig = tx.rawConfig();
         config.programs = [...config.programs, ...tx.getPrograms()];
-        console.log("after", config.programs.length);
+        config.scripts = new Map([...config.scripts, ...rawConfig.scripts]);
       }
       return txBuilder;
     },
@@ -592,6 +596,7 @@ export function makeTxBuilder(lucidConfig: LucidConfig): TxBuilder {
       makeReturn(
         pipe(CompleteTxBuilder.complete(options), Effect.provide(configLayer)),
       ).safeRun(),
+    rawConfig: () => config,
     config: () =>
       pipe(
         Effect.gen(function* () {

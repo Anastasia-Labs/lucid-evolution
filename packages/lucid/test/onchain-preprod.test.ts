@@ -13,6 +13,7 @@ import {
 import * as HelloEndpoints from "./specs/hello.js";
 import * as StakeEndpoints from "./specs/stake.js";
 import * as GovernanceEndpoints from "./specs/governance.js";
+import * as ComposeEndpoints from "./specs/compose.js";
 import * as MultiValidatorEndpoints from "./specs/multi-validators.js";
 import * as MintBurnEndpoints from "./specs/mint-burn.js";
 import * as ParametrizedEndpoints from "./specs/hello-params.js";
@@ -543,6 +544,70 @@ describe.sequential("Onchain testing", () => {
       Effect.provide(User.layer),
       Effect.provide(AlwaysYesDrepContract.layer),
       Effect.provide(NetworkConfig.layerPreprod),
+    );
+    const exit = await Effect.runPromiseExit(program);
+    expect(exit._tag).toBe("Success");
+  });
+
+  test("composeMintTx", async () => {
+    const program = pipe(
+      ComposeEndpoints.composeMintTx,
+      Effect.provide(User.layer),
+      Effect.provide(NetworkConfig.layerPreprod),
+    );
+    const exit = await Effect.runPromiseExit(program);
+    expect(exit._tag).toBe("Success");
+  });
+
+  test("multiTxCompose", async () => {
+    const program = pipe(
+      ComposeEndpoints.multiTxCompose,
+      Effect.provide(User.layer),
+      Effect.provide(NetworkConfig.layerPreprod),
+    );
+    const exit = await Effect.runPromiseExit(program);
+    expect(exit._tag).toBe("Success");
+  });
+
+  test("composeMintAndRegisterStake", async () => {
+    const program = pipe(
+      ComposeEndpoints.composeMintAndRegisterStake,
+      Effect.provide(User.layer),
+      Effect.provide(NetworkConfig.layerPreprod),
+    );
+    const exit = await Effect.runPromiseExit(program);
+    expect(exit._tag).toBe("Success");
+  });
+
+  test("composeMintAndDeregisterStake", async () => {
+    const program = pipe(
+      ComposeEndpoints.composeMintAndDeregisterStake,
+      Effect.provide(User.layer),
+      Effect.provide(NetworkConfig.layerPreprod),
+    );
+    const exit = await Effect.runPromiseExit(program);
+    expect(exit._tag).toBe("Success");
+  });
+
+  test("composeDepositFundsLockRefScriptAndRegisterDrep", async () => {
+    const program = pipe(
+      ComposeEndpoints.composeDepositFundsLockRefScriptAndRegisterDrep,
+      Effect.provide(User.layer),
+      Effect.provide(AlwaysYesDrepContract.layer),
+      Effect.provide(NetworkConfig.layerPreprod),
+      Effect.provide(HelloContract.layer),
+    );
+    const exit = await Effect.runPromiseExit(program);
+    expect(exit._tag).toBe("Success");
+  });
+
+  test("composeCollectFundsReadFromAndDeregisterDrep", async () => {
+    const program = pipe(
+      ComposeEndpoints.composeCollectFundsReadFromAndDeregisterDrep,
+      Effect.provide(User.layer),
+      Effect.provide(AlwaysYesDrepContract.layer),
+      Effect.provide(NetworkConfig.layerPreprod),
+      Effect.provide(HelloContract.layer),
     );
     const exit = await Effect.runPromiseExit(program);
     expect(exit._tag).toBe("Success");

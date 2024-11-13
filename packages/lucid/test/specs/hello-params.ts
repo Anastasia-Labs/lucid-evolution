@@ -12,11 +12,11 @@ import { SpendingValidator } from "../../src/index.js";
 import scripts from "./contracts/plutus.json";
 import { handleSignSubmit, withLogRetry } from "./utils.js";
 
-const DatumSchema = Data.Object({
+export const DatumSchema = Data.Object({
   owner: Data.Bytes(),
 });
-type DatumType = Data.Static<typeof DatumSchema>;
-const DatumType = DatumSchema as unknown as DatumType;
+export type DatumType = Data.Static<typeof DatumSchema>;
+export const DatumType = DatumSchema as unknown as DatumType;
 
 export const depositFunds = Effect.gen(function* () {
   const { user } = yield* User;

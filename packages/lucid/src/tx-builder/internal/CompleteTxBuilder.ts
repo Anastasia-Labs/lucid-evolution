@@ -136,7 +136,7 @@ export const complete = (options: CompleteOptions = {}) =>
         setCollateral,
         walletInputs,
       );
-      applyCollateral(setCollateral, collateralInput, changeAddress);
+      yield* applyCollateral(setCollateral, collateralInput, changeAddress);
     }
     // First round of coin selection and UPLC evaluation. The fee estimation is lacking
     // the script execution costs as they aren't available yet.

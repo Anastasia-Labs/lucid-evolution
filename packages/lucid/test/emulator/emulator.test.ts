@@ -18,6 +18,10 @@ import {
   emulatorFromPrivateKey,
   depositFundsLockRefScript,
   sendAllFund,
+  multiTxCompose,
+  composeMintTx,
+  composeMintAndStake,
+  composeDeregister,
 } from "./service.js";
 
 const distributeRewards = Effect.gen(function* ($) {
@@ -32,16 +36,61 @@ const distributeRewards = Effect.gen(function* ($) {
 });
 
 describe.sequential("Emulator", () => {
+  test("composeMintTx", async () => {
+    const program = pipe(composeMintTx, Effect.provide(EmulatorUser.layer));
+    const exit = await Effect.runPromiseExit(program);
+    emulator.awaitBlock(1);
+    emulatorFromPrivateKey.awaitBlock(1);
+    expect(exit._tag).toBe("Success");
+  });
+
+  test.skip("composeMintAndStake", async () => {
+    const program = pipe(
+      composeMintAndStake,
+      Effect.provide(EmulatorUser.layer),
+    );
+    const exit = await Effect.runPromiseExit(program);
+    emulator.awaitBlock(4);
+    emulatorFromPrivateKey.awaitBlock(4);
+    expect(exit._tag).toBe("Success");
+  });
+
+  test.skip("composeDeregister", async () => {
+    const program = pipe(composeDeregister, Effect.provide(EmulatorUser.layer));
+    const exit = await Effect.runPromiseExit(program);
+    emulator.awaitBlock(1);
+    emulatorFromPrivateKey.awaitBlock(1);
+    expect(exit._tag).toBe("Success");
+  });
+
+  test("compose", async () => {
+    const program = pipe(compose, Effect.provide(EmulatorUser.layer));
+    const exit = await Effect.runPromiseExit(program);
+    emulator.awaitBlock(1);
+    emulatorFromPrivateKey.awaitBlock(1);
+    expect(exit._tag).toBe("Success");
+  });
+
+  test("multiTxCompose", async () => {
+    const program = pipe(multiTxCompose, Effect.provide(EmulatorUser.layer));
+    const exit = await Effect.runPromiseExit(program);
+    emulator.awaitBlock(1);
+    emulatorFromPrivateKey.awaitBlock(1);
+    expect(exit._tag).toBe("Success");
+  });
+
   test("waitBlock", async () => {
     const program = pipe(
       mintInSlotRange,
       Effect.provide(Layer.mergeAll(EmulatorUser.layer)),
     );
     const exit = await Effect.runPromiseExit(program);
+    console.log("exit :>> ", exit);
     expect(exit._tag).toBe("Success");
-    emulator.awaitBlock(4);
-    emulatorFromPrivateKey.awaitBlock(4);
+    emulator.awaitBlock(14);
+    emulatorFromPrivateKey.awaitBlock(14);
     const exit1 = await Effect.runPromiseExit(program);
+    console.log("exit1 :>> ", exit1);
     expect(exit1._tag).toBe("Failure");
   });
 
@@ -123,14 +172,6 @@ describe.sequential("Emulator", () => {
       evaluateAContractWithDatum,
       Effect.provide(EmulatorUser.layer),
     );
-    const exit = await Effect.runPromiseExit(program);
-    emulator.awaitBlock(4);
-    emulatorFromPrivateKey.awaitBlock(4);
-    expect(exit._tag).toBe("Success");
-  });
-
-  test.only("compose", async () => {
-    const program = pipe(compose, Effect.provide(EmulatorUser.layer));
     const exit = await Effect.runPromiseExit(program);
     emulator.awaitBlock(4);
     emulatorFromPrivateKey.awaitBlock(4);
