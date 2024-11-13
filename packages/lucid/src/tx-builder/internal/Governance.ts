@@ -14,17 +14,18 @@ import {
   processCertificate,
   validateAndGetStakeCredential,
 } from "./TxUtils.js";
+import { TxConfig } from "./Service.js";
 
 export const governanceError = (cause: unknown) =>
   new TxBuilderError({ cause: `{ Governance: ${cause} }` });
 
 export const delegateVoteToDRep = (
-  config: TxBuilder.TxBuilderConfig,
   rewardAddress: RewardAddress,
   drep: DRep,
   redeemer?: Redeemer,
-): Effect.Effect<void, TxBuilderError> =>
+) =>
   Effect.gen(function* () {
+    const { config } = yield* TxConfig;
     const stakeCredential = yield* validateAndGetStakeCredential(
       rewardAddress,
       config,
@@ -39,13 +40,13 @@ export const delegateVoteToDRep = (
   });
 
 export const delegateVoteToPoolAndDRep = (
-  config: TxBuilder.TxBuilderConfig,
   rewardAddress: RewardAddress,
   poolId: PoolId,
   drep: DRep,
   redeemer?: Redeemer,
-): Effect.Effect<void, TxBuilderError> =>
+) =>
   Effect.gen(function* () {
+    const { config } = yield* TxConfig;
     const stakeCredential = yield* validateAndGetStakeCredential(
       rewardAddress,
       config,
@@ -64,12 +65,12 @@ export const delegateVoteToPoolAndDRep = (
   });
 
 export const registerAndDelegateToPool = (
-  config: TxBuilder.TxBuilderConfig,
   rewardAddress: RewardAddress,
   poolId: PoolId,
   redeemer?: Redeemer,
-): Effect.Effect<void, TxBuilderError> =>
+) =>
   Effect.gen(function* () {
+    const { config } = yield* TxConfig;
     const stakeCredential = yield* validateAndGetStakeCredential(
       rewardAddress,
       config,
@@ -88,12 +89,12 @@ export const registerAndDelegateToPool = (
   });
 
 export const registerAndDelegateToDRep = (
-  config: TxBuilder.TxBuilderConfig,
   rewardAddress: RewardAddress,
   drep: DRep,
   redeemer?: Redeemer,
-): Effect.Effect<void, TxBuilderError> =>
+) =>
   Effect.gen(function* () {
+    const { config } = yield* TxConfig;
     const stakeCredential = yield* validateAndGetStakeCredential(
       rewardAddress,
       config,
@@ -112,13 +113,13 @@ export const registerAndDelegateToDRep = (
   });
 
 export const registerAndDelegateToPoolAndDRep = (
-  config: TxBuilder.TxBuilderConfig,
   rewardAddress: RewardAddress,
   poolId: PoolId,
   drep: DRep,
   redeemer?: Redeemer,
-): Effect.Effect<void, TxBuilderError> =>
+) =>
   Effect.gen(function* () {
+    const { config } = yield* TxConfig;
     const stakeCredential = yield* validateAndGetStakeCredential(
       rewardAddress,
       config,
@@ -138,12 +139,12 @@ export const registerAndDelegateToPoolAndDRep = (
   });
 
 export const registerDRep = (
-  config: TxBuilder.TxBuilderConfig,
   rewardAddress: RewardAddress,
   anchor?: Anchor,
   redeemer?: Redeemer,
-): Effect.Effect<void, TxBuilderError> =>
+) =>
   Effect.gen(function* () {
+    const { config } = yield* TxConfig;
     const stakeCredential = yield* validateAndGetStakeCredential(
       rewardAddress,
       config,
@@ -167,11 +168,11 @@ export const registerDRep = (
   });
 
 export const deregisterDRep = (
-  config: TxBuilder.TxBuilderConfig,
   rewardAddress: RewardAddress,
   redeemer?: Redeemer,
-): Effect.Effect<void, TxBuilderError> =>
+) =>
   Effect.gen(function* () {
+    const { config } = yield* TxConfig;
     const stakeCredential = yield* validateAndGetStakeCredential(
       rewardAddress,
       config,
@@ -189,12 +190,12 @@ export const deregisterDRep = (
   });
 
 export const updateDRep = (
-  config: TxBuilder.TxBuilderConfig,
   rewardAddress: RewardAddress,
   anchor?: Anchor,
   redeemer?: Redeemer,
-): Effect.Effect<void, TxBuilderError> =>
+) =>
   Effect.gen(function* () {
+    const { config } = yield* TxConfig;
     const stakeCredential = yield* validateAndGetStakeCredential(
       rewardAddress,
       config,
@@ -213,12 +214,12 @@ export const updateDRep = (
   });
 
 export const authCommitteeHot = (
-  config: TxBuilder.TxBuilderConfig,
   coldAddress: RewardAddress,
   hotAddress: RewardAddress,
   redeemer?: Redeemer,
-): Effect.Effect<void, TxBuilderError> =>
+) =>
   Effect.gen(function* () {
+    const { config } = yield* TxConfig;
     const coldCred = yield* validateAndGetStakeCredential(coldAddress, config);
     const hotCred = yield* validateAndGetStakeCredential(hotAddress, config);
     const hotCredential: CML.Credential =
@@ -234,12 +235,12 @@ export const authCommitteeHot = (
   });
 
 export const resignCommitteeHot = (
-  config: TxBuilder.TxBuilderConfig,
   coldAddress: RewardAddress,
   anchor?: Anchor,
   redeemer?: Redeemer,
-): Effect.Effect<void, TxBuilderError> =>
+) =>
   Effect.gen(function* () {
+    const { config } = yield* TxConfig;
     const coldCred = yield* validateAndGetStakeCredential(coldAddress, config);
     const cmlAnchor = anchor
       ? CML.Anchor.new(

@@ -38,6 +38,7 @@ import {
 } from "@lucid-evolution/utils";
 import { SLOT_CONFIG_NETWORK } from "@lucid-evolution/plutus";
 import { collectFromUTxO } from "./Collect.js";
+import { TxConfig } from "./Service.js";
 
 export type CompleteOptions = {
   /**
@@ -95,14 +96,9 @@ type CoinSelectionResult = {
 export const completeTxError = (cause: unknown) =>
   new TxBuilderError({ cause: `{ Complete: ${cause} }` });
 
-export const complete = (
-  config: TxBuilder.TxBuilderConfig,
-  options: CompleteOptions = {},
-): Effect.Effect<
-  [UTxO[], UTxO[], TxSignBuilder.TxSignBuilder],
-  TransactionError
-> =>
+export const complete = (options: CompleteOptions = {}) =>
   Effect.gen(function* () {
+    const { config } = yield* TxConfig;
     const wallet: Wallet = yield* pipe(
       Effect.fromNullable(config.lucidConfig.wallet),
       Effect.orElseFail(() => completeTxError(ERROR_MESSAGE.MISSING_WALLET)),
@@ -140,12 +136,11 @@ export const complete = (
         setCollateral,
         walletInputs,
       );
-      applyCollateral(config, setCollateral, collateralInput, changeAddress);
+      yield* applyCollateral(setCollateral, collateralInput, changeAddress);
     }
     // First round of coin selection and UPLC evaluation. The fee estimation is lacking
     // the script execution costs as they aren't available yet.
     yield* selectionAndEvaluation(
-      config,
       walletInputs,
       changeAddress,
       coinSelection,
@@ -158,7 +153,6 @@ export const complete = (
     // Because increasing the inputs can increase the script execution budgets.
     if (hasPlutusScriptExecutions)
       yield* selectionAndEvaluation(
-        config,
         walletInputs,
         changeAddress,
         coinSelection,
@@ -209,15 +203,15 @@ export const complete = (
   }).pipe(Effect.catchAllDefect((cause) => new RunTimeError({ cause })));
 
 export const selectionAndEvaluation = (
-  config: TxBuilder.TxBuilderConfig,
   walletInputs: UTxO[],
   changeAddress: string,
   coinSelection: boolean,
   localUPLCEval: boolean,
   includeLeftoverLovelaceAsFee: boolean,
   script_calculation: boolean,
-): Effect.Effect<void, TransactionError, never> =>
+) =>
   Effect.gen(function* () {
+    const { config } = yield* TxConfig;
     const availableInputs = _Array.differenceWith(isEqualUTxO)(
       walletInputs,
       config.collectedInputs,
@@ -263,7 +257,7 @@ export const selectionAndEvaluation = (
         yield* completeTxError(
           `RedeemerBuilder: Coin selection had to be updated after building redeemers, possibly leading to incorrect indices. Try setting a minimum fee of ${estimatedFee} lovelaces.`,
         );
-      } else yield* completePartialPrograms(config);
+      } else yield* completePartialPrograms();
     }
 
     // Build transaction to begin with UPLC evaluation
@@ -295,10 +289,10 @@ export const selectionAndEvaluation = (
     }
   }).pipe(Effect.catchAllDefect((cause) => new RunTimeError({ cause })));
 
-export const completePartialPrograms = (
-  config: TxBuilder.TxBuilderConfig,
-): Effect.Effect<void, TransactionError, never> =>
+//TODO: This should
+export const completePartialPrograms = () =>
   Effect.gen(function* () {
+    const { config } = yield* TxConfig;
     const sortedInputs = sortUTxOs(config.collectedInputs, "Canonical");
     const indicesMap: Map<string, bigint> = new Map();
     sortedInputs.forEach((value, index) => {
@@ -353,7 +347,7 @@ export const completePartialPrograms = (
           );
 
           const redeemer = redeemerBuilder.makeRedeemer(index);
-          const program = collectFromUTxO(config, [input], false)(redeemer);
+          const program = collectFromUTxO([input], false)(redeemer);
           newPrograms.push(program);
         }
       }
@@ -445,35 +439,36 @@ export const setRedeemerstoZero = (tx: CML.Transaction): CML.Transaction => {
 };
 
 const applyCollateral = (
-  config: TxBuilder.TxBuilderConfig,
   setCollateral: bigint,
   collateralInputs: UTxO[],
   changeAddress: string,
-): void => {
-  for (const utxo of collateralInputs) {
-    const collateralInput =
-      CML.SingleInputBuilder.from_transaction_unspent_output(
-        utxoToCore(utxo),
-      ).payment_key();
-    config.txBuilder.add_collateral(collateralInput);
-  }
-  const returnassets = pipe(
-    sumAssetsFromInputs(collateralInputs),
-    Record.union({ lovelace: -setCollateral }, _BigInt.sum),
-  );
-
-  const collateralOutputBuilder =
-    CML.TransactionOutputBuilder.new().with_address(
-      CML.Address.from_bech32(changeAddress),
+) =>
+  Effect.gen(function* () {
+    const { config } = yield* TxConfig;
+    for (const utxo of collateralInputs) {
+      const collateralInput =
+        CML.SingleInputBuilder.from_transaction_unspent_output(
+          utxoToCore(utxo),
+        ).payment_key();
+      config.txBuilder.add_collateral(collateralInput);
+    }
+    const returnassets = pipe(
+      sumAssetsFromInputs(collateralInputs),
+      Record.union({ lovelace: -setCollateral }, _BigInt.sum),
     );
-  config.txBuilder.set_collateral_return(
-    collateralOutputBuilder
-      .next()
-      .with_value(assetsToValue(returnassets))
-      .build()
-      .output(),
-  );
-};
+
+    const collateralOutputBuilder =
+      CML.TransactionOutputBuilder.new().with_address(
+        CML.Address.from_bech32(changeAddress),
+      );
+    config.txBuilder.set_collateral_return(
+      collateralOutputBuilder
+        .next()
+        .with_value(assetsToValue(returnassets))
+        .build()
+        .output(),
+    );
+  });
 
 const findCollateral = (
   coinsPerUtxoByte: bigint,

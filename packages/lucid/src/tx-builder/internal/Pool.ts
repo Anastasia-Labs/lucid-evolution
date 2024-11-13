@@ -18,17 +18,18 @@ import {
 import * as CML from "@anastasia-labs/cardano-multiplatform-lib-nodejs";
 import { LucidConfig } from "../../lucid-evolution/LucidEvolution.js";
 import { fromText } from "@lucid-evolution/core-utils";
+import { TxConfig } from "./Service.js";
 
 export const poolError = (cause: unknown) =>
   new TxBuilderError({ cause: `{ Pool : ${cause} }` });
 
 export const delegateTo = (
-  config: TxBuilder.TxBuilderConfig,
   rewardAddress: RewardAddress,
   poolId: PoolId,
   redeemer?: Redeemer,
-): Effect.Effect<void, TxBuilderError> =>
+) =>
   Effect.gen(function* () {
+    const { config } = yield* TxConfig;
     const addressDetails = yield* pipe(
       validateAddressDetails(rewardAddress, config.lucidConfig),
       Effect.andThen((address) =>
@@ -129,11 +130,9 @@ export const delegateTo = (
   });
 
 /** Register a stake pool. A pool deposit is required. The metadataUrl needs to be hosted already before making the registration. */
-export const registerPool = (
-  config: TxBuilder.TxBuilderConfig,
-  poolParams: PoolParams,
-) =>
+export const registerPool = (poolParams: PoolParams) =>
   Effect.gen(function* () {
+    const { config } = yield* TxConfig;
     const poolRegistration = yield* createPoolRegistration(
       poolParams,
       config.lucidConfig,

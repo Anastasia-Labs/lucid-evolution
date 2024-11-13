@@ -15,6 +15,7 @@ import { LucidConfig } from "../../lucid-evolution/LucidEvolution.js";
 import { TxBuilderConfig } from "../TxBuilder.js";
 
 import * as TxBuilder from "../TxBuilder.js";
+import { TxConfig } from "./Service.js";
 
 export const txBuilderError = (cause: unknown) =>
   new TxBuilderError({ cause: `{ TxBuilderError : ${cause} }` });
@@ -50,7 +51,7 @@ export const handleRedeemerBuilder = (
   config: TxBuilderConfig,
   partialProgram: (
     redeemer?: string | undefined,
-  ) => Effect.Effect<void, TxBuilderError, never>,
+  ) => Effect.Effect<void, TxBuilderError, TxConfig>,
   redeemer?: string | RedeemerBuilder,
 ) => {
   if (typeof redeemer === "object") {

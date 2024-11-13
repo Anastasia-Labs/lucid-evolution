@@ -34,9 +34,10 @@ import * as CompleteTxBuilder from "./internal/CompleteTxBuilder.js";
 import * as TxSignBuilder from "../tx-sign-builder/TxSignBuilder.js";
 import { TransactionError } from "../Errors.js";
 import { Either } from "effect/Either";
-import { Effect, pipe } from "effect";
+import { Effect, Exit, Layer, pipe } from "effect";
 import { handleRedeemerBuilder } from "./internal/TxUtils.js";
 import { addAssets } from "@lucid-evolution/utils";
+import { TxConfig } from "./internal/Service.js";
 
 export type TxBuilderConfig = {
   readonly lucidConfig: LucidConfig;
@@ -49,10 +50,10 @@ export type TxBuilderConfig = {
   payToOutputs: TxOutput[];
   mintedAssets: Assets;
   scripts: Map<string, { type: ScriptType; script: string }>;
-  programs: Effect.Effect<void, TransactionError, never>[];
+  programs: Effect.Effect<void, TransactionError, TxConfig>[];
   partialPrograms: Map<
     RedeemerBuilder,
-    (redeemer?: string) => Effect.Effect<void, TransactionError, never>
+    (redeemer?: string) => Effect.Effect<void, TransactionError, TxConfig>
   >;
   minFee: bigint | undefined;
 };
@@ -213,9 +214,17 @@ export type TxBuilder = {
    */
   config: () => Promise<TxBuilderConfig>;
   /**
+   * Returns the raw TxBuilderConfig
+   */
+  rawConfig: () => TxBuilderConfig;
+  /**
    * Returns the current lucid instance configuration
    */
   lucidConfig: () => LucidConfig;
+  /**
+   * Returns the current txbuilder programs
+   */
+  getPrograms: () => Effect.Effect<void, TransactionError, TxConfig>[];
 };
 
 export function makeTxBuilder(lucidConfig: LucidConfig): TxBuilder {
@@ -234,6 +243,7 @@ export function makeTxBuilder(lucidConfig: LucidConfig): TxBuilder {
     partialPrograms: new Map(),
     minFee: undefined,
   };
+  const configLayer = Layer.succeed(TxConfig, { config });
   const txBuilder: TxBuilder = {
     readFrom: (utxos: UTxO[]) => {
       utxos.map((utxo) => {
@@ -249,14 +259,14 @@ export function makeTxBuilder(lucidConfig: LucidConfig): TxBuilder {
     collectFrom: (utxos: UTxO[], redeemer?: string | RedeemerBuilder) => {
       const program =
         typeof redeemer === "object"
-          ? Collect.collectFromUTxOPartial(config, utxos, redeemer)
-          : Collect.collectFromUTxO(config, utxos)(redeemer);
+          ? Collect.collectFromUTxOPartial(utxos, redeemer)
+          : Collect.collectFromUTxO(utxos)(redeemer);
       config.programs.push(program);
       return txBuilder;
     },
     pay: {
       ToAddress: (address: string, assets: Assets) => {
-        const program = Pay.payToAddress(config, address, assets);
+        const program = Pay.payToAddress(address, assets);
         config.programs.push(program);
         return txBuilder;
       },
@@ -267,7 +277,6 @@ export function makeTxBuilder(lucidConfig: LucidConfig): TxBuilder {
         scriptRef?: Script | undefined,
       ) => {
         const program = Pay.payToAddressWithData(
-          config,
           address,
           outputDatum,
           assets,
@@ -283,7 +292,6 @@ export function makeTxBuilder(lucidConfig: LucidConfig): TxBuilder {
         scriptRef?: Script | undefined,
       ) => {
         const program = Pay.payToContract(
-          config,
           address,
           outputDatum,
           assets,
@@ -294,23 +302,23 @@ export function makeTxBuilder(lucidConfig: LucidConfig): TxBuilder {
       },
     },
     addSigner: (address: Address | RewardAddress) => {
-      const program = Signer.addSigner(config, address);
+      const program = Signer.addSigner(address);
       config.programs.push(program);
       return txBuilder;
     },
     addSignerKey: (keyHash: PaymentKeyHash | StakeKeyHash) => {
-      const program = Signer.addSignerKey(config, keyHash);
+      const program = Signer.addSignerKey(keyHash);
       config.programs.push(program);
       return txBuilder;
     },
     registerStake: (rewardAddress: RewardAddress) => {
-      const program = Stake.registerStake(config, rewardAddress);
+      const program = Stake.registerStake(rewardAddress);
       config.programs.push(program);
       return txBuilder;
     },
     register: {
       Stake: (rewardAddress: RewardAddress) => {
-        const program = Stake.registerStake(config, rewardAddress);
+        const program = Stake.registerStake(rewardAddress);
         config.programs.push(program);
         return txBuilder;
       },
@@ -320,7 +328,6 @@ export function makeTxBuilder(lucidConfig: LucidConfig): TxBuilder {
         redeemer?: string,
       ) => {
         const program = Governance.registerDRep(
-          config,
           rewardAddress,
           anchor,
           redeemer,
@@ -330,22 +337,18 @@ export function makeTxBuilder(lucidConfig: LucidConfig): TxBuilder {
       },
     },
     deRegisterStake: (rewardAddress: RewardAddress, redeemer?: string) => {
-      const program = Stake.deRegisterStake(config, rewardAddress, redeemer);
+      const program = Stake.deRegisterStake(rewardAddress, redeemer);
       config.programs.push(program);
       return txBuilder;
     },
     deregister: {
       Stake: (rewardAddress: RewardAddress, redeemer?: string) => {
-        const program = Stake.deRegisterStake(config, rewardAddress, redeemer);
+        const program = Stake.deRegisterStake(rewardAddress, redeemer);
         config.programs.push(program);
         return txBuilder;
       },
       DRep: (rewardAddress: RewardAddress, redeemer?: string) => {
-        const program = Governance.deregisterDRep(
-          config,
-          rewardAddress,
-          redeemer,
-        );
+        const program = Governance.deregisterDRep(rewardAddress, redeemer);
         config.programs.push(program);
         return txBuilder;
       },
@@ -355,23 +358,25 @@ export function makeTxBuilder(lucidConfig: LucidConfig): TxBuilder {
       amount: Lovelace,
       redeemer?: string | RedeemerBuilder,
     ) => {
-      const partialProgram = Stake.withdraw(config, rewardAddress, amount);
+      const partialProgram = Stake.withdraw(rewardAddress, amount);
+      //TODO: improve function workflow
       handleRedeemerBuilder(config, partialProgram, redeemer);
       return txBuilder;
     },
     mintAssets: (assets: Assets, redeemer?: string | RedeemerBuilder) => {
       config.mintedAssets = addAssets(config.mintedAssets, assets);
-      const partialProgram = Mint.mintAssets(config, assets);
+      const partialProgram = Mint.mintAssets(assets);
+      //TODO: improve function workflow
       handleRedeemerBuilder(config, partialProgram, redeemer);
       return txBuilder;
     },
     validFrom: (unixTime: number) => {
-      const program = Interval.validFrom(config, unixTime);
+      const program = Interval.validFrom(unixTime);
       config.programs.push(program);
       return txBuilder;
     },
     validTo: (unixTime: number) => {
-      const program = Interval.validTo(config, unixTime);
+      const program = Interval.validTo(unixTime);
       config.programs.push(program);
       return txBuilder;
     },
@@ -380,7 +385,7 @@ export function makeTxBuilder(lucidConfig: LucidConfig): TxBuilder {
       poolId: PoolId,
       redeemer?: Redeemer,
     ) => {
-      const program = Pool.delegateTo(config, rewardAddress, poolId, redeemer);
+      const program = Pool.delegateTo(rewardAddress, poolId, redeemer);
       config.programs.push(program);
       return txBuilder;
     },
@@ -390,12 +395,7 @@ export function makeTxBuilder(lucidConfig: LucidConfig): TxBuilder {
         poolId: PoolId,
         redeemer?: Redeemer,
       ) => {
-        const program = Pool.delegateTo(
-          config,
-          rewardAddress,
-          poolId,
-          redeemer,
-        );
+        const program = Pool.delegateTo(rewardAddress, poolId, redeemer);
         config.programs.push(program);
         return txBuilder;
       },
@@ -406,7 +406,6 @@ export function makeTxBuilder(lucidConfig: LucidConfig): TxBuilder {
         redeemer?: Redeemer,
       ) => {
         const program = Governance.delegateVoteToDRep(
-          config,
           rewardAddress,
           drep,
           redeemer,
@@ -422,7 +421,6 @@ export function makeTxBuilder(lucidConfig: LucidConfig): TxBuilder {
         redeemer?: Redeemer,
       ) => {
         const program = Governance.delegateVoteToPoolAndDRep(
-          config,
           rewardAddress,
           poolId,
           drep,
@@ -439,7 +437,6 @@ export function makeTxBuilder(lucidConfig: LucidConfig): TxBuilder {
         redeemer?: Redeemer,
       ) => {
         const program = Governance.registerAndDelegateToPool(
-          config,
           rewardAddress,
           poolId,
           redeemer,
@@ -453,7 +450,6 @@ export function makeTxBuilder(lucidConfig: LucidConfig): TxBuilder {
         redeemer?: Redeemer,
       ) => {
         const program = Governance.registerAndDelegateToDRep(
-          config,
           rewardAddress,
           drep,
           redeemer,
@@ -468,7 +464,6 @@ export function makeTxBuilder(lucidConfig: LucidConfig): TxBuilder {
         redeemer?: Redeemer,
       ) => {
         const program = Governance.registerAndDelegateToPoolAndDRep(
-          config,
           rewardAddress,
           poolId,
           drep,
@@ -483,12 +478,7 @@ export function makeTxBuilder(lucidConfig: LucidConfig): TxBuilder {
       anchor?: Anchor,
       redeemer?: Redeemer,
     ) => {
-      const program = Governance.updateDRep(
-        config,
-        rewardAddress,
-        anchor,
-        redeemer,
-      );
+      const program = Governance.updateDRep(rewardAddress, anchor, redeemer);
       config.programs.push(program);
       return txBuilder;
     },
@@ -498,7 +488,6 @@ export function makeTxBuilder(lucidConfig: LucidConfig): TxBuilder {
       redeemer?: Redeemer,
     ) => {
       const program = Governance.authCommitteeHot(
-        config,
         coldAddress,
         hotAddress,
         redeemer,
@@ -512,7 +501,6 @@ export function makeTxBuilder(lucidConfig: LucidConfig): TxBuilder {
       redeemer?: Redeemer,
     ) => {
       const program = Governance.resignCommitteeHot(
-        config,
         coldAddress,
         anchor,
         redeemer,
@@ -566,11 +554,9 @@ export function makeTxBuilder(lucidConfig: LucidConfig): TxBuilder {
     },
     compose: (tx: TxBuilder | null) => {
       if (tx) {
-        const program = Effect.gen(function* () {
-          const config = yield* Effect.promise(() => tx.config());
-          yield* Effect.all(config.programs, { concurrency: "unbounded" });
-        });
-        config.programs.push(program);
+        const rawConfig = tx.rawConfig();
+        config.programs = [...config.programs, ...tx.getPrograms()];
+        config.scripts = new Map([...config.scripts, ...rawConfig.scripts]);
       }
       return txBuilder;
     },
@@ -580,32 +566,48 @@ export function makeTxBuilder(lucidConfig: LucidConfig): TxBuilder {
     },
     complete: (options?: CompleteTxBuilder.CompleteOptions) =>
       makeReturn(
-        CompleteTxBuilder.complete(config, options).pipe(
+        pipe(
+          CompleteTxBuilder.complete(options),
+          Effect.provide(configLayer),
           Effect.map((result) => result[2]),
         ),
       ).unsafeRun(),
     completeProgram: (options?: CompleteTxBuilder.CompleteOptions) =>
-      CompleteTxBuilder.complete(config, options).pipe(
+      pipe(
+        CompleteTxBuilder.complete(options),
+        Effect.provide(configLayer),
         Effect.map((result) => result[2]),
       ),
     completeSafe: (options?: CompleteTxBuilder.CompleteOptions) =>
       makeReturn(
-        CompleteTxBuilder.complete(config, options).pipe(
+        pipe(
+          CompleteTxBuilder.complete(options),
+          Effect.provide(configLayer),
           Effect.map((result) => result[2]),
         ),
       ).safeRun(),
     chainProgram: (options?: CompleteTxBuilder.CompleteOptions) =>
-      CompleteTxBuilder.complete(config, options),
+      pipe(CompleteTxBuilder.complete(options), Effect.provide(configLayer)),
     chain: (options?: CompleteTxBuilder.CompleteOptions) =>
-      makeReturn(CompleteTxBuilder.complete(config, options)).unsafeRun(),
+      makeReturn(
+        pipe(CompleteTxBuilder.complete(options), Effect.provide(configLayer)),
+      ).unsafeRun(),
     chainSafe: (options?: CompleteTxBuilder.CompleteOptions) =>
-      makeReturn(CompleteTxBuilder.complete(config, options)).safeRun(),
+      makeReturn(
+        pipe(CompleteTxBuilder.complete(options), Effect.provide(configLayer)),
+      ).safeRun(),
+    rawConfig: () => config,
     config: () =>
-      Effect.gen(function* () {
-        yield* Effect.all(config.programs);
-        return config;
-      }).pipe(Effect.runPromise),
+      pipe(
+        Effect.gen(function* () {
+          yield* Effect.all(config.programs);
+          return config;
+        }),
+        Effect.provide(configLayer),
+        Effect.runPromise,
+      ),
     lucidConfig: () => config.lucidConfig,
+    getPrograms: () => config.programs,
   };
   return txBuilder;
 }

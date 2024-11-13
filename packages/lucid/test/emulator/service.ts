@@ -2,6 +2,7 @@ import {
   getAddressDetails,
   mintingPolicyToId,
   scriptFromNative,
+  stringify,
   toUnit,
   unixTimeToSlot,
   validatorToAddress,
@@ -82,7 +83,7 @@ export const mintInSlotRange = Effect.gen(function* () {
     scripts: [
       {
         type: "before",
-        slot: unixTimeToSlot("Custom", emulator.now() + 60000),
+        slot: unixTimeToSlot("Custom", emulator.now() + 360000),
       },
       { type: "sig", keyHash: paymentCredential?.hash! },
     ],
@@ -94,7 +95,7 @@ export const mintInSlotRange = Effect.gen(function* () {
     .mintAssets({
       [policyId + fromText("Wow")]: 123n,
     })
-    .validTo(emulator.now() + 30000)
+    .validTo(emulator.now() + 330000)
     .attach.MintingPolicy(mintingPolicy)
     .completeProgram();
 
@@ -238,7 +239,121 @@ export const compose = Effect.gen(function* ($) {
       { lovelace: 5000000n },
     );
   const signBuilder = yield* txCompA.compose(txCompB).completeProgram();
-  console.log(signBuilder.toJSON());
+  return signBuilder;
+}).pipe(Effect.flatMap(handleSignSubmitWithoutValidation), withLogRetry);
+
+export const multiTxCompose = Effect.gen(function* ($) {
+  const { user } = yield* EmulatorUser;
+  const addr = yield* Effect.promise(() => user.wallet().address());
+  const txCompA = user
+    .newTx()
+    .pay.ToAddressWithData(addr, { kind: "inline", value: Data.to(0n) }, {});
+  const txCompB = user
+    .newTx()
+    .pay.ToAddressWithData(addr, { kind: "inline", value: Data.to(10n) }, {})
+    .compose(
+      user
+        .newTx()
+        .pay.ToAddressWithData(addr, { kind: "inline", value: Data.to(1n) }, {})
+        .compose(
+          user
+            .newTx()
+            .pay.ToAddressWithData(
+              addr,
+              { kind: "inline", value: Data.to(2n) },
+              {},
+            ),
+        ),
+    );
+  const tx = user
+    .newTx()
+    .compose(txCompA)
+    .compose(txCompB)
+    .pay.ToAddressWithData(addr, { kind: "inline", value: Data.to(3n) }, {});
+  const signBuilder = yield* tx.completeProgram();
+  return signBuilder;
+}).pipe(Effect.flatMap(handleSignSubmitWithoutValidation), withLogRetry);
+
+export const composeMintTx = Effect.gen(function* ($) {
+  const { user, emulator } = yield* EmulatorUser;
+  const addr = yield* Effect.promise(() => user.wallet().address());
+  const txCompA = user
+    .newTx()
+    .pay.ToAddressWithData(addr, { kind: "inline", value: Data.to(0n) }, {});
+
+  const { paymentCredential } = getAddressDetails(EMULATOR_ACCOUNT.address);
+  const mintingPolicy = scriptFromNative({
+    type: "all",
+    scripts: [
+      {
+        type: "before",
+        slot: unixTimeToSlot("Custom", emulator.now() + 60000),
+      },
+      { type: "sig", keyHash: paymentCredential?.hash! },
+    ],
+  });
+
+  const policyId = mintingPolicyToId(mintingPolicy);
+  const txCompB = user
+    .newTx()
+    .mintAssets({
+      [policyId + fromText("Wow")]: 123n,
+    })
+    .validTo(emulator.now() + 30000)
+    .attach.MintingPolicy(mintingPolicy);
+  const tx = user.newTx().compose(txCompA).compose(txCompB);
+  const signBuilder = yield* tx.completeProgram();
+  return signBuilder;
+}).pipe(Effect.flatMap(handleSignSubmitWithoutValidation), withLogRetry);
+
+export const composeMintAndStake = Effect.gen(function* ($) {
+  const { user, emulator } = yield* EmulatorUser;
+  const addr = yield* Effect.promise(() => user.wallet().address());
+  const txCompA = user
+    .newTx()
+    .pay.ToAddressWithData(addr, { kind: "inline", value: Data.to(0n) }, {});
+
+  const { paymentCredential } = getAddressDetails(EMULATOR_ACCOUNT.address);
+  const mintingPolicy = scriptFromNative({
+    type: "all",
+    scripts: [
+      {
+        type: "before",
+        slot: unixTimeToSlot("Custom", emulator.now() + 60000),
+      },
+      { type: "sig", keyHash: paymentCredential?.hash! },
+    ],
+  });
+
+  const policyId = mintingPolicyToId(mintingPolicy);
+  const txCompB = user
+    .newTx()
+    .mintAssets({
+      [policyId + fromText("Wow")]: 123n,
+    })
+    .validTo(emulator.now() + 30000)
+    .attach.MintingPolicy(mintingPolicy);
+  const rewardAddress = yield* pipe(
+    Effect.promise(() => user.wallet().rewardAddress()),
+    Effect.andThen(Effect.fromNullable),
+  );
+  const txCompC = user.newTx().registerStake(rewardAddress);
+  const tx = user.newTx().compose(txCompA).compose(txCompB).compose(txCompC);
+  const signBuilder = yield* tx.completeProgram();
+  return signBuilder;
+}).pipe(Effect.flatMap(handleSignSubmitWithoutValidation), withLogRetry);
+
+export const composeDeregister = Effect.gen(function* ($) {
+  const { user } = yield* EmulatorUser;
+  const rewardAddress = yield* pipe(
+    Effect.promise(() => user.wallet().rewardAddress()),
+    Effect.andThen(Effect.fromNullable),
+  );
+
+  const signBuilder = yield* user
+    .newTx()
+    .deRegisterStake(rewardAddress)
+    .completeProgram();
   return signBuilder;
 }).pipe(Effect.flatMap(handleSignSubmitWithoutValidation), withLogRetry);
 

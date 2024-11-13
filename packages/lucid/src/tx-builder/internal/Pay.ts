@@ -12,17 +12,19 @@ import * as TxBuilder from "../TxBuilder.js";
 import { CML } from "../../core.js";
 import { toCMLAddress } from "./TxUtils.js";
 import { ERROR_MESSAGE, TxBuilderError } from "../../Errors.js";
+import { TxConfig } from "./Service.js";
 
 export const payError = (cause: unknown) =>
   new TxBuilderError({ cause: `{ Pay: ${cause} }` });
 
 /** Pay to a public key or native script address. */
 export const payToAddress = (
-  config: TxBuilder.TxBuilderConfig,
+  // config: TxBuilder.TxBuilderConfig,
   address: Address,
   assets: Assets,
 ) =>
   Effect.gen(function* () {
+    const { config } = yield* TxConfig;
     const outputBuilder = CML.TransactionOutputBuilder.new()
       .with_address(yield* toCMLAddress(address, config.lucidConfig))
       .next();
@@ -59,13 +61,13 @@ export const payToAddress = (
 
 /** Pay to a public key or native script address with datum or scriptRef. */
 export const payToAddressWithData = (
-  config: TxBuilder.TxBuilderConfig,
   address: Address,
   outputDatum: OutputDatum,
   assets?: Assets,
   scriptRef?: Script,
 ) =>
   Effect.gen(function* () {
+    const { config } = yield* TxConfig;
     //TODO: Test with datumhash
     const outputBuilder = buildBaseOutput(address, outputDatum, scriptRef);
 
@@ -99,7 +101,6 @@ export const payToAddressWithData = (
 
 /** Pay to a plutus script address with datum or scriptRef. */
 export const payToContract = (
-  config: TxBuilder.TxBuilderConfig,
   address: Address,
   outputDatum: OutputDatum,
   assets?: Assets,
@@ -107,13 +108,7 @@ export const payToContract = (
 ) =>
   Effect.gen(function* () {
     if (!outputDatum.value) yield* payError(ERROR_MESSAGE.DATUM_NOT_SET);
-    return yield* payToAddressWithData(
-      config,
-      address,
-      outputDatum,
-      assets,
-      scriptRef,
-    );
+    return yield* payToAddressWithData(address, outputDatum, assets, scriptRef);
   });
 
 const buildBaseOutput = (
