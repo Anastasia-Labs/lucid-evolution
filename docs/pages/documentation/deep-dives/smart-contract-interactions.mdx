@@ -77,14 +77,85 @@ const tx = await lucid
 
 ## Apply parameters
 
-Some validators are parameterized, you can apply parameters dynamically
-
+Some validators are parameterized, you can apply parameters dynamically.
+Below example is for your validator when it expects 1 integer argument, eg. `validator minting_policy(first_param: Int) { .. }`
 ```typescript
 const mintingPolicy = {
-  type: "PlutusV2",
+  type: "PlutusV3",
   script: applyParamsToScript(
     "5907945907910100...",
     [10n] // Parameters
+  ),
+};
+```
+
+Next example is for your validator when it expects 2 arguments, eg. a ByteArray and a Boolean.
+For example, `validator spending_validator(pkh: VerificationKeyHash, yes_no: Bool) { .. }`
+```typescript
+const pkh = paymentCredentialOf(address).hash;
+const yes = new Constr(1, []);
+
+const spendingValidator = {
+  type: "PlutusV3",
+  script: applyParamsToScript(
+    "5907945907910101...",
+    [pkh, yes] // Parameters
+  ),
+};
+```
+
+The following example is for your validator when it expects a more complex type, for example:
+```gleam
+type OutputReference {
+  transaction_id: ByteArray,
+  output_index: Int,
+}
+
+validator your_validator(o_ref: OutputReference) { .. }
+```
+```typescript
+const oRef = new Constr(0, [String(utxo.txHash), BigInt(utxo.outputIndex)]);
+
+const yourValidator = {
+  type: "PlutusV3",
+  script: applyParamsToScript(
+    "5907945907910102...",
+    [oRef] // Parameters
+  ),
+};
+```
+Note that this OutputReference format is Aiken's, for Plutus format,
+```haskell
+data TxOutRef = TxOutRef
+  { txOutRefId  :: TxId
+  , txOutRefIdx :: Integer
+  }
+```
+where TxId itself is another type like `newtype TxId = TxId { getTxId :: PlutusTx.BuiltinByteString }`,
+this would translate to the following Aiken code:
+```gleam
+type TransactionId {
+    tx_id: ByteArray
+}
+
+type OutputReference {
+  transaction_id: TransactionId,
+  output_index: Int,
+}
+
+validator your_validator(o_ref: OutputReference) { .. }
+```
+In this case, you can provide the parameter for your validator like:
+```typescript
+const txID = new Constr(0, [String(utxo.txHash)]);
+const txIdx = BigInt(utxo.outputIndex)
+const oRef = new Constr(0, [txID, txIdx]);
+
+const yourValidator = {
+  type: "PlutusV3",
+  script: applyParamsToScript(
+    "5907945907910103...",
+    [oRef] // Parameters
   ),
 };
 ```
