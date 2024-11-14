@@ -65,9 +65,10 @@
     "@lucid-evolution/uplc": "workspace:*",
     "@lucid-evolution/utils": "workspace:*",
     "@lucid-evolution/wallet": "workspace:*",
-    "effect": "^3.10.4"
+    "effect": "^3.10.14"
   },
   "devDependencies": {
+    "@effect/vitest": "^0.13.14",
     "@types/node": "^20.12.8",
     "cborg": "^4.2.0",
     "esbuild-plugin-wasm": "^1.1.0",
@@ -75,6 +76,6 @@
     "tsx": "^4.9.0",
     "typescript": "5.5.0-dev.20240430",
     "vite-plugin-wasm": "^3.3.0",
-    "vitest": "^2.0.3"
+    "vitest": "^2.1.5"
   }
 }
