@@ -105,14 +105,14 @@ by using the `RedeemerBuilder` to help building your redeemer.
 
 ```typescript
 const scriptInputs: UTxO[] = [
-    { txHash: "a", outputIndex: 0, address: "scriptAddress", assets: { lovelace } },
-    { txHash: "b", outputIndex: 1, address: "scriptAddress", assets: { lovelace } },
-    { txHash: "c", outputIndex: 2, address: "scriptAddress", assets: { lovelace } },
+    { txHash: "a", outputIndex: 1, address: "scriptAddress", assets: { lovelace } },
+    { txHash: "b", outputIndex: 2, address: "scriptAddress", assets: { lovelace } },
+    { txHash: "d", outputIndex: 4, address: "scriptAddress", assets: { lovelace } },
 ];
 const randomInputs: UTxO[] = [
-    { txHash: "d", outputIndex: 3, address: "randomAddress", assets: { lovelace } },
-    { txHash: "e", outputIndex: 4, address: "randomAddress", assets: { lovelace } },
-    { txHash: "f", outputIndex: 5, address: "randomAddress", assets: { lovelace } },
+    { txHash: "c", outputIndex: 3, address: "randomAddress", assets: { lovelace } },
+    { txHash: "e", outputIndex: 5, address: "randomAddress", assets: { lovelace } },
+    { txHash: "f", outputIndex: 6, address: "randomAddress", assets: { lovelace } },
 ];
 
 const inputs: UTxO[] = [scriptInputs[0], scriptInputs[1], randomInputs[0], scriptInputs[2], randomInputs[1], randomInputs[2]];
