@@ -115,19 +115,18 @@ const randomInputs: UTxO[] = [
     { txHash: "f", outputIndex: 6, address: "randomAddress", assets: { lovelace } },
 ];
 
-const inputs: UTxO[] = [scriptInputs[0], scriptInputs[1], randomInputs[0], scriptInputs[2], randomInputs[1], randomInputs[2]];
 const redeemer: RedeemerBuilder = {
     kind: "selected",
     makeRedeemer: (inputIdxs: bigint[]) => {
         const tupleList = inputIdxs.map((inputIdx, i) => [inputIdx, BigInt(i)]); // List<(inputIdx, outputIdx)>
         return Data.to(tupleList);
     },
-    inputs,
+    inputs: scriptInputs,
 };
 
 const tx = await lucid
     .newTx()
-    .collectFrom(inputs, redeemer)
+    .collectFrom([...scriptInputs, ...randomInputs], redeemer)
     .attach.SpendingValidator(script)
     .pay.ToContract("scriptAddress", datum, { lovelace })
     .pay.ToContract("scriptAddress", datum, { lovelace })
