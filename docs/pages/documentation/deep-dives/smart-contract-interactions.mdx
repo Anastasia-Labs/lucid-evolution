@@ -91,10 +91,12 @@ This is provided via ordered lists of input/output indices of inputs/ouputs pres
 
 For e.g.
 ```
-Inputs     :  [scriptInputA, scriptInputC, randomInput3, scriptInputB, randomInput1, randomInput2]          // random inputs are not the concerned script inputs
+Inputs     :  [scriptInputA, scriptInputB, randomInput1, scriptInputC, randomInput2, randomInput3]          // random inputs are not the concerned script inputs
 Outputs    :  [outputA, outputB, outputC, randomOuput1, randomOutput2, randomOutput3]
 InputIdxs  :  [0, 1, 3]
 OutputIdxs :  [0, 1, 2]
+
+where type Redeemer = List<(inputIdx, outputIdx)>
 ```
 
 Luckily [lucid-evolution](https://github.com/Anastasia-Labs/lucid-evolution)
@@ -102,7 +104,39 @@ provides a high-level interface that abstracts all the complexity away and makes
 by using the `RedeemerBuilder` to help building your redeemer.
 
 ```typescript
-https://github.com/Anastasia-Labs/design-patterns/blob/main/utxo-indexers/examples/offchain-example.ts
+const scriptInputs: UTxO[] = [
+    { txHash: "a", outputIndex: 0, address: "scriptAddress", assets: { lovelace } },
+    { txHash: "b", outputIndex: 1, address: "scriptAddress", assets: { lovelace } },
+    { txHash: "c", outputIndex: 2, address: "scriptAddress", assets: { lovelace } },
+];
+const randomInputs: UTxO[] = [
+    { txHash: "d", outputIndex: 3, address: "randomAddress", assets: { lovelace } },
+    { txHash: "e", outputIndex: 4, address: "randomAddress", assets: { lovelace } },
+    { txHash: "f", outputIndex: 5, address: "randomAddress", assets: { lovelace } },
+];
+
+const inputs: UTxO[] = [scriptInputs[0], scriptInputs[1], randomInputs[0], scriptInputs[2], randomInputs[1], randomInputs[2]];
+const redeemer: RedeemerBuilder = {
+    kind: "selected",
+    makeRedeemer: (inputIdxs: bigint[]) => {
+        const tupleList = inputIdxs.map((inputIdx, i) => [inputIdx, BigInt(i)]); // List<(inputIdx, outputIdx)>
+        return Data.to(tupleList);
+    },
+    inputs,
+};
+
+const tx = await lucid
+    .newTx()
+    .collectFrom(inputs, redeemer)
+    .attach.SpendingValidator(script)
+    .pay.ToContract("scriptAddress", datum, { lovelace })
+    .pay.ToContract("scriptAddress", datum, { lovelace })
+    .pay.ToContract("scriptAddress", datum, { lovelace })
+    .pay.ToAddress("randomAddress", { lovelace })
+    .pay.ToAddress("randomAddress", { lovelace })
+    .pay.ToAddress("randomAddress", { lovelace })
+    .addSigner("randomAddress")
+    .complete();
 ```
 
 ## Apply parameters
