@@ -1,10 +1,10 @@
 import { Callout, Steps, Tabs } from "nextra/components";
 
-# Make Payments
+## Make Payments
 
 Lucid Evolution provides several methods for making payments, each with its own specific use case:
 
----
+
 
 
 <Tabs items={['Simple ADA Payment', 'Multiple Recipients', 'Native Tokens', 'w/ Metadata', 'w/ Datum/Script', 'To Plutus Script']}>
@@ -20,10 +20,6 @@ Lucid Evolution provides several methods for making payments, each with its own 
     const signedTx = await tx.sign.withWallet().complete();
     const txHash = await signedTx.submit();
     ```
-
-    <Callout type="info">
-    Evolution Note: Changed from `payToAddress` to `pay.ToAddress`
-    </Callout>
   </Tabs.Tab>
 
   <Tabs.Tab>

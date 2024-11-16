@@ -83,10 +83,10 @@ There are a growing number of projects that are built on top of `lucid-evolution
       <a style="text-decoration:none;" href="https://vespr.xyz" target="_blank">VESPR Wallet</a>
     </td>
      </tr><tr>
-    <td align="center">
-      <img src="https://app.ada.markets/assets/images/ADAmarkets.png" height="50px;" alt="Ada Markets" />
+         <td align="center">
+        <img src="https://fetch.hosky.io/assets/images/fetch-white.png" height="28px;" alt="Fetch" />
       <br />
-      <a style="text-decoration:none;" href="https://ada.markets/" target="_blank">Ada Markets</a>
+      <a style="text-decoration:none;" href="https://fetch.hosky.io/swap"  target="_blank">Fetch</a>
     </td>
         <td align="center">
       <img src="https://avatars.githubusercontent.com/u/171672240?s=200&v=4" height="50px;" alt="Strike Finance" />
@@ -113,7 +113,7 @@ There are a growing number of projects that are built on top of `lucid-evolution
       <br />
       <a style="text-decoration:none;" href="https://cardexscan.com/home"  target="_blank">Cardexscan</a>
     </td>
-    </tr><tr>
+     </tr><tr>
   </tr>
 </table>
 <br/>
