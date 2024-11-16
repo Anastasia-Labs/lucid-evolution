@@ -1,5 +1,15 @@
 # @lucid-evolution/provider
 
+## 0.1.72
+
+### Patch Changes
+
+- [#402](https://github.com/Anastasia-Labs/lucid-evolution/pull/402) [`f304a79`](https://github.com/Anastasia-Labs/lucid-evolution/commit/f304a798fbc0b48e5005867bea103ce4046608d6) Thanks [@hadelive](https://github.com/hadelive)! - cjs compatible
+
+- Updated dependencies [[`f304a79`](https://github.com/Anastasia-Labs/lucid-evolution/commit/f304a798fbc0b48e5005867bea103ce4046608d6)]:
+  - @lucid-evolution/utils@0.1.54
+  - @lucid-evolution/wallet@0.1.60
+
 ## 0.1.71
 
 ### Patch Changes
