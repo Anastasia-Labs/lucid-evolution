@@ -817,8 +817,6 @@ export class Emulator implements Provider {
 
     // Check consumed witnesses
 
-    console.log("consumedHashes :>> ", consumedHashes);
-    console.log("keyHashes :>> ", keyHashes);
     const [extraKeyHash] = keyHashes.filter(
       (keyHash) => !consumedHashes.has(keyHash),
     );

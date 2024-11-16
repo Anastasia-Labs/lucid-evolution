@@ -42,8 +42,8 @@
     "@lucid-evolution/crc8": "workspace:*",
     "@lucid-evolution/plutus": "workspace:*",
     "@lucid-evolution/uplc": "workspace:*",
+    "@stricahq/cbors": "^1.0.3",
     "bip39": "^3.1.0",
-    "cborg": "^4.2.0",
     "effect": "^3.10.4"
   },
   "devDependencies": {
