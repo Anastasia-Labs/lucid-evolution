@@ -22,10 +22,8 @@ import {
   UPLCProgram,
 } from "@harmoniclabs/uplc";
 import { fromHex, toHex } from "@lucid-evolution/core-utils";
-import * as cbors from "@stricahq/cbors";
+import { decode } from "cbor-x";
 import { dataFromCbor } from "@harmoniclabs/plutus-data";
-
-const { Encoder, Decoder } = cbors;
 
 export function validatorToAddress(
   network: Network,
@@ -162,11 +160,7 @@ export function applyParamsToScript<T extends unknown[] = Data[]>(
   type?: T,
 ): string {
   const program = parseUPLC(
-    Decoder.decode(
-      Decoder.decode(
-        Buffer.from(fromHex(applyDoubleCborEncoding(plutusScript))),
-      ).value,
-    ).value,
+    decode(decode(fromHex(applyDoubleCborEncoding(plutusScript)))),
     "flat",
   );
   const parameters = (type ? Data.castTo<T>(params, type) : params) as Data[];
@@ -176,12 +170,10 @@ export function applyParamsToScript<T extends unknown[] = Data[]>(
     return appliedParameter;
   }, program.body);
 
-  return toHex(
-    Encoder.encode(
-      Encoder.encode(
-        encodeUPLC(new UPLCProgram(program.version, appliedProgram)).toBuffer()
-          .buffer,
-      ),
+  return applyDoubleCborEncoding(
+    toHex(
+      encodeUPLC(new UPLCProgram(program.version, appliedProgram)).toBuffer()
+        .buffer,
     ),
   );
 }
