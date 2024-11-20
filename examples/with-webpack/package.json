@@ -23,7 +23,7 @@
     "webpack-dev-server": "^5.0.4"
   },
   "dependencies": {
-    "@lucid-evolution/lucid": "0.4.0",
+    "@lucid-evolution/lucid": "workspace:*",
     "copy-webpack-plugin": "^12.0.2",
     "file-loader": "^6.2.0",
     "force": "^0.0.3",
