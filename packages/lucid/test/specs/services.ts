@@ -11,6 +11,7 @@ import {
   validatorToRewardAddress,
   Network,
   Koios,
+  PROTOCOL_PARAMETERS_DEFAULT,
 } from "../../src/index.js";
 import scripts from "./contracts/plutus.json";
 
@@ -66,6 +67,7 @@ const makeUser = Effect.gen(function* ($) {
         networkConfig.BLOCKFROST_KEY,
       ),
       networkConfig.NETWORK,
+      { presetProtocolParameters: PROTOCOL_PARAMETERS_DEFAULT },
     ),
   );
   user.selectWallet.fromSeed(networkConfig.WALLET_SEED);
