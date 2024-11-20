@@ -1,0 +1,33 @@
+{
+  "name": "with-webpack",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "build": "webpack",
+    "start": "webpack serve",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "description": "",
+  "devDependencies": {
+    "@swc/core": "^1.7.10",
+    "@types/lodash": "^4.17.7",
+    "html-webpack-plugin": "^5.6.0",
+    "swc-loader": "^0.2.6",
+    "ts-loader": "^9.5.1",
+    "typescript": "^5.5.4",
+    "webpack": "^5.93.0",
+    "webpack-cli": "^5.1.4",
+    "webpack-dev-server": "^5.0.4"
+  },
+  "dependencies": {
+    "@lucid-evolution/lucid": "0.4.0",
+    "copy-webpack-plugin": "^12.0.2",
+    "file-loader": "^6.2.0",
+    "force": "^0.0.3",
+    "lodash": "^4.17.21",
+    "webpack-demo": "link:"
+  }
+}
