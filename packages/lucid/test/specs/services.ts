@@ -11,6 +11,8 @@ import {
   validatorToRewardAddress,
   Network,
   Koios,
+  PROTOCOL_PARAMETERS_DEFAULT,
+  Kupmios,
 } from "../../src/index.js";
 import scripts from "./contracts/plutus.json";
 
@@ -21,11 +23,15 @@ const preprod = Effect.gen(function* ($) {
     Config.string("VITE_BLOCKFROST_API_URL_PREPROD"),
     Config.string("VITE_BLOCKFROST_KEY_PREPROD"),
     Config.string("VITE_WALLET_SEED_2"),
+    Config.string("VITE_KUPO_KEY"),
+    Config.string("VITE_OGMIOS_KEY"),
   ]);
   return {
     BLOCKFROST_API_URL: config[0],
     BLOCKFROST_KEY: config[1],
     WALLET_SEED: config[2],
+    KUPO_KEY: config[3],
+    OGMIOS_KEY: config[4],
     NETWORK: "Preprod" as Network,
   };
 }).pipe(Effect.orDie);
@@ -41,6 +47,8 @@ const preview = Effect.gen(function* ($) {
     BLOCKFROST_KEY: config[1],
     WALLET_SEED: config[2],
     NETWORK: "Preview" as Network,
+    KUPO_KEY: "",
+    OGMIOS_KEY: "",
   };
 }).pipe(Effect.orDie);
 
@@ -51,6 +59,8 @@ export class NetworkConfig extends Context.Tag("NetworkConfig")<
     BLOCKFROST_KEY: string;
     WALLET_SEED: string;
     NETWORK: Network;
+    OGMIOS_KEY: string;
+    KUPO_KEY: string;
   }
 >() {
   static readonly layerPreprod = Layer.effect(NetworkConfig, preprod);
@@ -61,11 +71,9 @@ const makeUser = Effect.gen(function* ($) {
   const networkConfig = yield* NetworkConfig;
   const user = yield* Effect.tryPromise(() =>
     Lucid(
-      new Blockfrost(
-        networkConfig.BLOCKFROST_API_URL,
-        networkConfig.BLOCKFROST_KEY,
-      ),
+      new Kupmios(networkConfig.KUPO_KEY, networkConfig.OGMIOS_KEY),
       networkConfig.NETWORK,
+      // { presetProtocolParameters: PROTOCOL_PARAMETERS_DEFAULT },
     ),
   );
   user.selectWallet.fromSeed(networkConfig.WALLET_SEED);

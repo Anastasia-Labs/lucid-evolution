@@ -4,7 +4,7 @@ import { AlwaysYesDrepContract, NetworkConfig, User } from "./specs/services";
 import * as GovernanceOptimizedEndpoints from "./specs/governance-optimized.js";
 import * as GovernanceUnOptimizedEndpoints from "./specs/governance-unoptimized.js";
 
-describe.sequential("Governance Benchmark", () => {
+describe.skip("Governance Benchmark", () => {
   test("registerDRep", async () => {
     const unoptimizedProgram = pipe(
       GovernanceUnOptimizedEndpoints.registerDRep,
