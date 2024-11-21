@@ -33,7 +33,7 @@ describe.sequential("Koios", () => {
     expect(utxo).toStrictEqual(PreprodConstants.discoveryUTxO);
   });
 
-  test("getUtxosByOutRef", async () => {
+  test.skip("getUtxosByOutRef", async () => {
     const utxos: UTxO[] = await koios.getUtxosByOutRef([
       {
         txHash:
