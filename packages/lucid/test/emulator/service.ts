@@ -97,7 +97,7 @@ export const mintInSlotRange = Effect.gen(function* () {
     })
     .validTo(emulator.now() + 330000)
     .attach.MintingPolicy(mintingPolicy)
-    .completeProgram();
+    .completeProgram({ localUPLCEval: false });
 
   return signBuilder;
 }).pipe(Effect.flatMap(handleSignSubmitWithoutValidation));
@@ -111,7 +111,7 @@ export const registerStake = Effect.gen(function* () {
   const signBuilder = yield* user
     .newTx()
     .registerStake(rewardAddress)
-    .completeProgram();
+    .completeProgram({ localUPLCEval: false });
   return signBuilder;
 }).pipe(
   Effect.flatMap(handleSignSubmitWithoutValidation),
@@ -134,7 +134,7 @@ export const delegateTo = Effect.gen(function* ($) {
   const signBuilder = yield* user
     .newTx()
     .delegateTo(rewardAddress, EMULATOR_POOL_ID)
-    .completeProgram();
+    .completeProgram({ localUPLCEval: false });
   return signBuilder;
 }).pipe(Effect.flatMap(handleSignSubmitWithoutValidation), withLogRetry);
 
@@ -148,7 +148,7 @@ export const deRegisterStake = Effect.gen(function* ($) {
   const signBuilder = yield* user
     .newTx()
     .deRegisterStake(rewardAddress)
-    .completeProgram();
+    .completeProgram({ localUPLCEval: false });
   return signBuilder;
 }).pipe(Effect.flatMap(handleSignSubmitWithoutValidation), withLogRetry);
 
@@ -162,7 +162,7 @@ export const registerDeregisterStake = Effect.gen(function* ($) {
     .newTx()
     .registerStake(rewardAddress)
     .deRegisterStake(rewardAddress)
-    .completeProgram();
+    .completeProgram({ localUPLCEval: false });
   return signBuilder;
 }).pipe(
   Effect.flatMap(handleSignSubmit),
@@ -184,7 +184,7 @@ export const withdrawReward = (amount: bigint) =>
     const signBuilder = yield* user
       .newTx()
       .withdraw(rewardAddress, amount)
-      .completeProgram();
+      .completeProgram({ localUPLCEval: false });
     return signBuilder;
   }).pipe(Effect.flatMap(handleSignSubmitWithoutValidation), withLogRetry);
 
@@ -198,7 +198,7 @@ export const evaluateAContract = Effect.gen(function* ($) {
       { kind: "inline", value: Data.void() },
       { lovelace: 5000000n },
     )
-    .completeProgram();
+    .completeProgram({ localUPLCEval: false });
   return signBuilder;
 }).pipe(Effect.flatMap(handleSignSubmitWithoutValidation), withLogRetry);
 
@@ -217,7 +217,7 @@ export const evaluateAContractWithDatum = Effect.gen(function* ($) {
       { kind: "inline", value: Data.to("313131") },
       { lovelace: 5000000n },
     )
-    .completeProgram();
+    .completeProgram({ localUPLCEval: false });
   return signBuilder;
 }).pipe(Effect.flatMap(handleSignSubmitWithoutValidation), withLogRetry);
 
@@ -238,7 +238,9 @@ export const compose = Effect.gen(function* ($) {
       { kind: "inline", value: Data.to("31313131") },
       { lovelace: 5000000n },
     );
-  const signBuilder = yield* txCompA.compose(txCompB).completeProgram();
+  const signBuilder = yield* txCompA
+    .compose(txCompB)
+    .completeProgram({ localUPLCEval: false });
   return signBuilder;
 }).pipe(Effect.flatMap(handleSignSubmitWithoutValidation), withLogRetry);
 
@@ -270,7 +272,7 @@ export const multiTxCompose = Effect.gen(function* ($) {
     .compose(txCompA)
     .compose(txCompB)
     .pay.ToAddressWithData(addr, { kind: "inline", value: Data.to(3n) }, {});
-  const signBuilder = yield* tx.completeProgram();
+  const signBuilder = yield* tx.completeProgram({ localUPLCEval: false });
   return signBuilder;
 }).pipe(Effect.flatMap(handleSignSubmitWithoutValidation), withLogRetry);
 
@@ -302,7 +304,7 @@ export const composeMintTx = Effect.gen(function* ($) {
     .validTo(emulator.now() + 30000)
     .attach.MintingPolicy(mintingPolicy);
   const tx = user.newTx().compose(txCompA).compose(txCompB);
-  const signBuilder = yield* tx.completeProgram();
+  const signBuilder = yield* tx.completeProgram({ localUPLCEval: false });
   return signBuilder;
 }).pipe(Effect.flatMap(handleSignSubmitWithoutValidation), withLogRetry);
 
@@ -339,7 +341,7 @@ export const composeMintAndStake = Effect.gen(function* ($) {
   );
   const txCompC = user.newTx().registerStake(rewardAddress);
   const tx = user.newTx().compose(txCompA).compose(txCompB).compose(txCompC);
-  const signBuilder = yield* tx.completeProgram();
+  const signBuilder = yield* tx.completeProgram({ localUPLCEval: false });
   return signBuilder;
 }).pipe(Effect.flatMap(handleSignSubmitWithoutValidation), withLogRetry);
 
@@ -353,7 +355,7 @@ export const composeDeregister = Effect.gen(function* ($) {
   const signBuilder = yield* user
     .newTx()
     .deRegisterStake(rewardAddress)
-    .completeProgram();
+    .completeProgram({ localUPLCEval: false });
   return signBuilder;
 }).pipe(Effect.flatMap(handleSignSubmitWithoutValidation), withLogRetry);
 
@@ -382,7 +384,7 @@ export const multiSigner = Effect.gen(function* ($) {
     })
     .validTo(emulator.now() + 1200000)
     .attach.MintingPolicy(mintingPolicy)
-    .completeProgram();
+    .completeProgram({ localUPLCEval: false });
   const firstSign = yield* Effect.promise(() => tx.partialSign.withWallet());
   user.selectWallet.fromSeed(EMULATOR_ACCOUNT_1.seedPhrase);
   const secondSign = yield* Effect.promise(() => tx.partialSign.withWallet());
@@ -400,7 +402,7 @@ export const signByWalletFromPrivateKey = Effect.gen(function* ($) {
       { kind: "inline", value: Data.to("313131") },
       { lovelace: 5000000n },
     )
-    .completeProgram();
+    .completeProgram({ localUPLCEval: false });
   return signBuilder;
 }).pipe(Effect.flatMap(handleSignSubmitWithoutValidation), withLogRetry);
 
@@ -440,7 +442,7 @@ export const depositFundsLockRefScript = Effect.gen(function* ($) {
       { lovelace: 10_000_000n },
       hello,
     )
-    .completeProgram();
+    .completeProgram({ localUPLCEval: false });
   return signBuilder;
 }).pipe(Effect.flatMap(handleSignSubmitWithoutValidation), withLogRetry);
 

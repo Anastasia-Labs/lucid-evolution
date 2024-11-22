@@ -53,8 +53,8 @@
     "@anastasia-labs/cardano-multiplatform-lib-nodejs": "@anastasia-labs/cardano-multiplatform-lib-browser"
   },
   "dependencies": {
-    "@anastasia-labs/cardano-multiplatform-lib-browser": "6.0.2-2",
-    "@anastasia-labs/cardano-multiplatform-lib-nodejs": "6.0.2-2",
+    "@anastasia-labs/cardano-multiplatform-lib-browser": "6.0.2-3",
+    "@anastasia-labs/cardano-multiplatform-lib-nodejs": "6.0.2-3",
     "@effect/schema": "^0.66.14",
     "@emurgo/cardano-message-signing-nodejs": "^1.0.1",
     "@lucid-evolution/core-types": "workspace:*",
