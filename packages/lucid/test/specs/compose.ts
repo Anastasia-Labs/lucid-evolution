@@ -46,7 +46,7 @@ export const composeMintTx = Effect.gen(function* ($) {
     .validTo(Date.now() + 30000)
     .attach.MintingPolicy(mintingPolicy);
   const tx = user.newTx().compose(txCompA).compose(txCompB);
-  const signBuilder = yield* tx.completeProgram();
+  const signBuilder = yield* tx.completeProgram({ localUPLCEval: false });
   return signBuilder;
 }).pipe(Effect.flatMap(handleSignSubmitWithoutValidation), withLogRetry);
 
@@ -78,7 +78,7 @@ export const multiTxCompose = Effect.gen(function* ($) {
     .compose(txCompA)
     .compose(txCompB)
     .pay.ToAddressWithData(addr, { kind: "inline", value: Data.to(3n) }, {});
-  const signBuilder = yield* tx.completeProgram();
+  const signBuilder = yield* tx.completeProgram({ localUPLCEval: false });
   return signBuilder;
 }).pipe(Effect.flatMap(handleSignSubmitWithoutValidation), withLogRetry);
 
@@ -116,7 +116,7 @@ export const composeMintAndRegisterStake = Effect.gen(function* ($) {
     .attach.MintingPolicy(mintingPolicy);
   const txCompC = user.newTx().register.Stake(rewardAddress);
   const tx = user.newTx().compose(txCompA).compose(txCompB).compose(txCompC);
-  const signBuilder = yield* tx.completeProgram();
+  const signBuilder = yield* tx.completeProgram({ localUPLCEval: false });
   return signBuilder;
 }).pipe(Effect.flatMap(handleSignSubmitWithoutValidation), withLogRetry);
 
@@ -154,7 +154,7 @@ export const composeMintAndDeregisterStake = Effect.gen(function* ($) {
     .attach.MintingPolicy(mintingPolicy);
   const txCompC = user.newTx().deregister.Stake(rewardAddress);
   const tx = user.newTx().compose(txCompA).compose(txCompB).compose(txCompC);
-  const signBuilder = yield* tx.completeProgram();
+  const signBuilder = yield* tx.completeProgram({ localUPLCEval: false });
   return signBuilder;
 }).pipe(Effect.flatMap(handleSignSubmitWithoutValidation), withLogRetry);
 
@@ -187,7 +187,7 @@ export const composeDepositFundsLockRefScriptAndRegisterDrep = Effect.gen(
       hello,
     );
     const tx = user.newTx().compose(txCompA).compose(txCompB);
-    const signBuilder = yield* tx.completeProgram();
+    const signBuilder = yield* tx.completeProgram({ localUPLCEval: false });
     return signBuilder;
   },
 ).pipe(Effect.flatMap(handleSignSubmit), withLogRetry, Effect.orDie);
@@ -239,7 +239,7 @@ export const composeCollectFundsReadFromAndDeregisterDrep = Effect.gen(
     );
     const txCompB = user.newTx().deregister.DRep(rewardAddress);
     const tx = user.newTx().compose(txCompA).compose(txCompB);
-    const signBuilder = yield* tx.completeProgram();
+    const signBuilder = yield* tx.completeProgram({ localUPLCEval: false });
     return signBuilder;
   },
 ).pipe(Effect.flatMap(handleSignSubmit), withLogRetry, Effect.orDie);

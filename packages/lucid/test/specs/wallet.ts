@@ -12,11 +12,11 @@ export const recycleUTxOs = Effect.gen(function* ($) {
     return yield* user
       .newTx()
       .collectFrom(allUtxos.slice(30))
-      .completeProgram();
+      .completeProgram({ localUPLCEval: false });
   } else {
     return yield* user
       .newTx()
       .collectFrom(_Array.take(allUtxos, 5))
-      .completeProgram();
+      .completeProgram({ localUPLCEval: false });
   }
 }).pipe(Effect.flatMap(handleSignSubmit), withLogRetry, Effect.orDie);

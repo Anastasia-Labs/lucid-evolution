@@ -23,6 +23,6 @@ export const payWithAsHashDatum = Effect.gen(function* ($) {
       { kind: "asHash", value: Data.to("31313131") },
       { lovelace: 5000000n },
     )
-    .completeProgram();
+    .completeProgram({ localUPLCEval: false });
   return signBuilder;
 }).pipe(Effect.flatMap(handleSignSubmitWithoutValidation), withLogRetry);

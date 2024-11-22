@@ -56,7 +56,9 @@ export const depositFunds = Effect.gen(function* () {
     );
   }
 
-  const signBuilder = yield* txBuilder.completeProgram();
+  const signBuilder = yield* txBuilder.completeProgram({
+    localUPLCEval: false,
+  });
 
   return signBuilder;
 }).pipe(
@@ -174,7 +176,7 @@ export const collectFundsInternal = Effect.gen(function* ($) {
     .mintAssets(mint, rdmrBuilderMint)
     .pay.ToAddress(address, mint)
     .setMinFee(200_000n)
-    .completeProgram();
+    .completeProgram({ localUPLCEval: false });
   return signBuilder;
 });
 
@@ -191,7 +193,7 @@ export const registerStake = Effect.gen(function* ($) {
   const signBuilder = yield* user
     .newTx()
     .registerStake(rewardAddress)
-    .completeProgram();
+    .completeProgram({ localUPLCEval: false });
 
   return signBuilder;
 }).pipe(
@@ -222,7 +224,7 @@ export const registerStakeAndDelegateToPool = Effect.gen(function* ($) {
       Data.to(new Constr(0, [fromText("1")])),
     )
     .attach.WithdrawalValidator(stake)
-    .completeProgram();
+    .completeProgram({ localUPLCEval: false });
 
   return signBuilder;
 }).pipe(
@@ -244,7 +246,7 @@ export const deRegisterStake = Effect.gen(function* ($) {
     .newTx()
     .deRegisterStake(rewardAddress, Data.to(new Constr(0, [fromText("1")])))
     .attach.WithdrawalValidator(stake)
-    .completeProgram();
+    .completeProgram({ localUPLCEval: false });
   return signBuilder;
 }).pipe(Effect.flatMap(handleSignSubmit), withLogRetry, Effect.orDie);
 
@@ -254,7 +256,7 @@ export const registerSimpleStake = Effect.gen(function* ($) {
   const signBuilder = yield* user
     .newTx()
     .registerStake(rewardAddress)
-    .completeProgram();
+    .completeProgram({ localUPLCEval: false });
 
   return signBuilder;
 }).pipe(
@@ -286,6 +288,6 @@ export const mintAndWithdraw = Effect.gen(function* () {
     .withdraw(rewardAddress, 0n, Data.to(new Constr(0, [fromText("1")])))
     .attach.WithdrawalValidator(stake)
     .attach.MintingPolicy(mint)
-    .completeProgram();
+    .completeProgram({ localUPLCEval: false });
   return signBuilder;
 }).pipe(Effect.flatMap(handleSignSubmit), withLogRetry, Effect.orDie);

@@ -32,8 +32,8 @@
     "@emurgo/cardano-serialization-lib-nodejs": "@emurgo/cardano-serialization-lib-browser"
   },
   "dependencies": {
-    "@anastasia-labs/cardano-multiplatform-lib-browser": "6.0.2-2",
-    "@anastasia-labs/cardano-multiplatform-lib-nodejs": "6.0.2-2",
+    "@anastasia-labs/cardano-multiplatform-lib-browser": "6.0.2-3",
+    "@anastasia-labs/cardano-multiplatform-lib-nodejs": "6.0.2-3",
     "@effect/schema": "^0.68.16",
     "@harmoniclabs/plutus-data": "^1.2.4",
     "@harmoniclabs/uplc": "^1.2.4",

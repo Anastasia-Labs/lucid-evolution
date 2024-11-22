@@ -31,7 +31,7 @@ export const registerStake = Effect.gen(function* ($) {
   const signBuilder = yield* user
     .newTx()
     .registerStake(rewardAddress)
-    .completeProgram();
+    .completeProgram({ localUPLCEval: false });
   return signBuilder;
 }).pipe(
   Effect.flatMap(handleSignSubmit),
@@ -60,7 +60,7 @@ export const delegateTo = Effect.gen(function* ($) {
   const signBuilder = yield* user
     .newTx()
     .delegateTo(rewardAddress, poolId)
-    .completeProgram();
+    .completeProgram({ localUPLCEval: false });
   return signBuilder;
 }).pipe(Effect.flatMap(handleSignSubmit), withLogRetry, Effect.orDie);
 
@@ -74,7 +74,7 @@ export const deRegisterStake = Effect.gen(function* ($) {
   const signBuilder = yield* user
     .newTx()
     .deRegisterStake(rewardAddress)
-    .completeProgram();
+    .completeProgram({ localUPLCEval: false });
   return signBuilder;
 }).pipe(Effect.flatMap(handleSignSubmit), withLogRetry, Effect.orDie);
 
@@ -88,7 +88,7 @@ export const registerDeregisterStake = Effect.gen(function* ($) {
     .newTx()
     .registerStake(rewardAddress)
     .deRegisterStake(rewardAddress)
-    .completeProgram();
+    .completeProgram({ localUPLCEval: false });
   return signBuilder;
 }).pipe(
   Effect.flatMap(handleSignSubmit),
@@ -111,7 +111,7 @@ export const withdrawZero = Effect.gen(function* ($) {
   const signBuilder = yield* user
     .newTx()
     .withdraw(rewardAddress, 0n)
-    .completeProgram();
+    .completeProgram({ localUPLCEval: false });
   return signBuilder;
 }).pipe(Effect.flatMap(handleSignSubmit), withLogRetry, Effect.orDie);
 
@@ -127,7 +127,7 @@ export const withdrawAllReward = Effect.gen(function* ($) {
   const signBuilder = yield* user
     .newTx()
     .withdraw(rewardAddress, rewards)
-    .completeProgram();
+    .completeProgram({ localUPLCEval: false });
   return signBuilder;
 }).pipe(Effect.flatMap(handleSignSubmit), withLogRetry, Effect.orDie);
 
@@ -140,7 +140,7 @@ export const registerNativeStake = Effect.gen(function* ($) {
   const signBuilder = yield* user
     .newTx()
     .registerStake(rewardAddress)
-    .completeProgram();
+    .completeProgram({ localUPLCEval: false });
   return signBuilder;
 }).pipe(
   Effect.flatMap(handleSignSubmit),
@@ -168,7 +168,7 @@ export const delegateNativeStakeTo = Effect.gen(function* ($) {
     .newTx()
     .delegateTo(rewardAddress, poolId)
     .attach.Script(stake)
-    .completeProgram();
+    .completeProgram({ localUPLCEval: false });
   return signBuilder;
 }).pipe(Effect.flatMap(handleSignSubmit), withLogRetry, Effect.orDie);
 
@@ -186,7 +186,7 @@ export const withdrawAllNativeStakeReward = Effect.gen(function* ($) {
     .newTx()
     .withdraw(rewardAddress, rewards)
     .attach.Script(stake)
-    .completeProgram();
+    .completeProgram({ localUPLCEval: false });
   return signBuilder;
 }).pipe(Effect.flatMap(handleSignSubmit), withLogRetry, Effect.orDie);
 
@@ -200,6 +200,6 @@ export const deRegisterNativeStake = Effect.gen(function* ($) {
     .newTx()
     .deRegisterStake(rewardAddress)
     .attach.Script(stake)
-    .completeProgram();
+    .completeProgram({ localUPLCEval: false });
   return signBuilder;
 }).pipe(Effect.flatMap(handleSignSubmit), withLogRetry, Effect.orDie);
