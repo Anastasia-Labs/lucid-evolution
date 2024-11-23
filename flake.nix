@@ -21,7 +21,7 @@
         default = pkgs.mkShell {
           packages = with pkgs; [
             bun
-            corepack_22
+            pnpm
             nodejs_22
           ];
         };

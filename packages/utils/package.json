@@ -19,7 +19,7 @@
     "access": "public"
   },
   "scripts": {
-    "build": "tsup src/index.ts --format esm,cjs --dts --clean",
+    "build": "tsup src/index.ts",
     "lint": "tsc --noEmit",
     "clean": "rm -rf .turbo && rm -rf node_modules && rm -rf dist",
     "test": "vitest run"
@@ -42,8 +42,8 @@
     "@lucid-evolution/crc8": "workspace:*",
     "@lucid-evolution/plutus": "workspace:*",
     "@lucid-evolution/uplc": "workspace:*",
-    "@stricahq/cbors": "^1.0.3",
     "bip39": "^3.1.0",
+    "cbor-x": "^1.6.0",
     "effect": "^3.10.4"
   },
   "devDependencies": {

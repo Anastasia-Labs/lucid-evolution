@@ -231,7 +231,7 @@ export const composeCollectFundsReadFromAndDeregisterDrep = Effect.gen(
     const txCompA = user
       .newTx()
       .collectFrom([utxos[0]], redeemer)
-      .readFrom([readUtxo])
+      // .readFrom([readUtxo])
       .addSigner(addr);
     const rewardAddress = yield* pipe(
       Effect.promise(() => user.wallet().rewardAddress()),
