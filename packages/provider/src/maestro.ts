@@ -17,7 +17,7 @@ import {
   Unit,
   UTxO,
 } from "@lucid-evolution/core-types";
-import packageJson from "../package.json";
+import packageJson from "../package.json" assert { type: "json" };
 import {
   applyDoubleCborEncoding,
   scriptFromNative,
