@@ -1,5 +1,11 @@
 # @lucid-evolution/utils
 
+## 0.1.55
+
+### Patch Changes
+
+- [#406](https://github.com/Anastasia-Labs/lucid-evolution/pull/406) [`18c3c4d`](https://github.com/Anastasia-Labs/lucid-evolution/commit/18c3c4d3676fa12d631b177116d93c35896ecea4) Thanks [@solidsnakedev](https://github.com/solidsnakedev)! - fix cbor encoding/decoding in browser, installed cbor-x
+
 ## 0.1.54
 
 ### Patch Changes
