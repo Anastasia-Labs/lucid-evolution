@@ -423,7 +423,7 @@ describe.sequential("Onchain testing", () => {
     expect(exit._tag).toBe("Success");
   });
 
-  test.skip("Mint Test - Burn Token", async () => {
+  test("Mint Test - Burn Token", async () => {
     const program = pipe(
       MintBurnEndpoints.burn,
       Effect.provide(User.layer),

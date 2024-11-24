@@ -16,7 +16,7 @@ import {
   Unit,
   UTxO,
 } from "@lucid-evolution/core-types";
-import { applyDoubleCborEncoding, fromUnit } from "@lucid-evolution/utils";
+import { fromUnit } from "@lucid-evolution/utils";
 import * as S from "@effect/schema/Schema";
 import { Effect, pipe, Array as _Array, Schedule, Data } from "effect";
 import {
@@ -331,22 +331,22 @@ const getScriptEffect = (
             case "native":
               return {
                 type: "Native",
-                script: script,
+                script,
               } satisfies Script;
             case "plutus:v1":
               return {
                 type: "PlutusV1",
-                script: applyDoubleCborEncoding(script),
+                script,
               } satisfies Script;
             case "plutus:v2":
               return {
                 type: "PlutusV2",
-                script: applyDoubleCborEncoding(script),
+                script,
               } satisfies Script;
             case "plutus:v3":
               return {
                 type: "PlutusV3",
-                script: applyDoubleCborEncoding(script),
+                script,
               } satisfies Script;
           }
         }),

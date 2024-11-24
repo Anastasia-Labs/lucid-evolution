@@ -1,9 +1,6 @@
 import { CML } from "./core.js";
 import { fromHex, sleep } from "@lucid-evolution/core-utils";
-import {
-  applyDoubleCborEncoding,
-  scriptFromNative,
-} from "@lucid-evolution/utils";
+import { scriptFromNative } from "@lucid-evolution/utils";
 import {
   Address,
   Credential,
@@ -297,17 +294,17 @@ export class Blockfrost implements Provider {
                     case "plutusV1":
                       return {
                         type: "PlutusV1",
-                        script: applyDoubleCborEncoding(script),
+                        script,
                       } satisfies Script;
                     case "plutusV2":
                       return {
                         type: "PlutusV2",
-                        script: applyDoubleCborEncoding(script),
+                        script,
                       } satisfies Script;
                     case "plutusV3":
                       return {
                         type: "PlutusV3",
-                        script: applyDoubleCborEncoding(script),
+                        script,
                       } satisfies Script;
                   }
                 })()
