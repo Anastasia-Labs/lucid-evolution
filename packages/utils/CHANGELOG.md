@@ -1,5 +1,13 @@
 # @lucid-evolution/utils
 
+## 0.1.56
+
+### Patch Changes
+
+- [#407](https://github.com/Anastasia-Labs/lucid-evolution/pull/407) [`7857343`](https://github.com/Anastasia-Labs/lucid-evolution/commit/785734347e5b4d99a20866f715884f5c7e9a2d0c) Thanks [@fabianbormann](https://github.com/fabianbormann)! - ensure lovelace amounts use BigInt type
+
+- [#410](https://github.com/Anastasia-Labs/lucid-evolution/pull/410) [`2ef5e3c`](https://github.com/Anastasia-Labs/lucid-evolution/commit/2ef5e3c166799e3d7eeeb642205a33a27ab2c324) Thanks [@solidsnakedev](https://github.com/solidsnakedev)! - supports single and double cbor encoding
+
 ## 0.1.55
 
 ### Patch Changes
