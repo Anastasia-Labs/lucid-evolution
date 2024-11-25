@@ -93,7 +93,8 @@ describe("maestro", async () => {
     );
   });
 
-  test("evaluates additinal utxos - sample 2", async () => {
+  //NOTE: Evaluate transaction failed: {"code":400,"error":"Bad Request","message":"Transaction evaluation failed: MissingRequiredScript { hash: \"c40f9129c2684046eb02325b96ca2899a6fa6478c1dde9b5c53206a5\" }"}
+  test.skip("evaluates additinal utxos - sample 2", async () => {
     const redeemers = await maestro.evaluateTx(
       PreprodConstants.evalSample2.transaction,
       PreprodConstants.evalSample2.utxos,

@@ -18,11 +18,7 @@ import {
   UTxO,
 } from "@lucid-evolution/core-types";
 import packageJson from "../package.json" assert { type: "json" };
-import {
-  applyDoubleCborEncoding,
-  scriptFromNative,
-  utxoToCore,
-} from "@lucid-evolution/utils";
+import { scriptFromNative, utxoToCore } from "@lucid-evolution/utils";
 import { fromHex } from "@lucid-evolution/core-utils";
 
 export type MaestroSupportedNetworks = "Mainnet" | "Preprod" | "Preview";
@@ -390,17 +386,17 @@ const toScriptRef = (reference_script: MaestroScript | undefined) => {
       case "plutusv1":
         return {
           type: "PlutusV1" as const,
-          script: applyDoubleCborEncoding(reference_script.bytes),
+          script: reference_script.bytes,
         };
       case "plutusv2":
         return {
           type: "PlutusV2" as const,
-          script: applyDoubleCborEncoding(reference_script.bytes),
+          script: reference_script.bytes,
         };
       case "plutusv3":
         return {
           type: "PlutusV3" as const,
-          script: applyDoubleCborEncoding(reference_script.bytes),
+          script: reference_script.bytes,
         };
       default:
         return undefined;
