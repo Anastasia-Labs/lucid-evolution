@@ -12,7 +12,7 @@ import {
 } from "@lucid-evolution/core-types";
 import { CML } from "./core.js";
 import { networkToId } from "./network.js";
-import { CBROEncodingLevel } from "./cbor.js";
+import { CBOREncodingLevel } from "./cbor.js";
 import { Data } from "@lucid-evolution/plutus";
 import {
   Application,
@@ -146,7 +146,7 @@ export function applyParamsToScript<T extends unknown[] = Data[]>(
   params: Exact<[...T]>,
   type?: T,
 ): string {
-  const encodingLevel = CBROEncodingLevel(plutusScript);
+  const encodingLevel = CBOREncodingLevel(plutusScript);
   const program: UPLCProgram =
     encodingLevel === "double"
       ? parseUPLC(decode(decode(fromHex(plutusScript))), "flat")

@@ -22,7 +22,7 @@ export const applyDoubleCborEncoding = (script: string) => {
   }
 };
 
-export const CBROEncodingLevel = (script: string): "double" | "single" => {
+export const CBOREncodingLevel = (script: string): "double" | "single" => {
   try {
     decode(decode(fromHex(script)));
     return "double" as const;
