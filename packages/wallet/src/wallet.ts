@@ -1,6 +1,3 @@
-[warn] --jsx-bracket-same-line is deprecated.
-[warn] Ignored unknown option --loglevel=error. Did you mean --log-level?
-[warn] Ignored unknown option --stdin.
 import { getAddressDetails } from "@lucid-evolution/utils";
 import { fromHex } from "@lucid-evolution/core-utils";
 import {
