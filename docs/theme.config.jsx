@@ -17,7 +17,7 @@ export default {
       };
     }
     return {
-      title: "Lucid Evolution - Welcome",
+      title: "Welcome",
     };
   },
   
