@@ -1,3 +1,6 @@
+[warn] --jsx-bracket-same-line is deprecated.
+[warn] Ignored unknown option --loglevel=error. Did you mean --log-level?
+[warn] Ignored unknown option --stdin.
 import { getAddressDetails } from "@lucid-evolution/utils";
 import { fromHex } from "@lucid-evolution/core-utils";
 import {
@@ -20,13 +23,16 @@ type FromSeed = {
 
 export function walletFromSeed(
   seed: string,
-  options: {
+  options?: {
     password?: string;
     addressType?: "Base" | "Enterprise";
     accountIndex?: number;
     network?: Network;
-  } = { addressType: "Base", accountIndex: 0, network: "Mainnet" },
+  }
 ): FromSeed {
+  const DEFAULT_ADDRESS_TYPE = "Base";
+  const DEFAULT_ACCOUNT_INDEX = 0;
+
   function harden(num: number): number {
     if (typeof num !== "number") throw new Error("Type number required here!");
     return 0x80000000 + num;
@@ -35,15 +41,15 @@ export function walletFromSeed(
   const entropy = mnemonicToEntropy(seed);
   const rootKey = CML.Bip32PrivateKey.from_bip39_entropy(
     fromHex(entropy),
-    options.password
+    options?.password
       ? new TextEncoder().encode(options.password)
-      : new Uint8Array(),
+      : new Uint8Array()
   );
 
   const accountKey = rootKey
     .derive(harden(1852))
     .derive(harden(1815))
-    .derive(harden(options.accountIndex!));
+    .derive(harden(options?.accountIndex ?? DEFAULT_ACCOUNT_INDEX));
 
   rootKey.free();
 
@@ -53,29 +59,29 @@ export function walletFromSeed(
   const paymentKeyHash = paymentKey.to_public().hash();
   const stakeKeyHash = stakeKey.to_public().hash();
 
-  const networkId = options.network === "Mainnet" ? 1 : 0;
+  const networkId = options?.network === "Mainnet" ? 1 : 0;
 
   const address =
-    options.addressType === "Base"
+    options?.addressType === DEFAULT_ADDRESS_TYPE
       ? CML.BaseAddress.new(
           networkId,
           CML.Credential.new_pub_key(paymentKeyHash),
-          CML.Credential.new_pub_key(stakeKeyHash),
+          CML.Credential.new_pub_key(stakeKeyHash)
         )
           .to_address()
           .to_bech32(undefined)
       : CML.EnterpriseAddress.new(
           networkId,
-          CML.Credential.new_pub_key(paymentKeyHash),
+          CML.Credential.new_pub_key(paymentKeyHash)
         )
           .to_address()
           .to_bech32(undefined);
 
   const rewardAddress =
-    options.addressType === "Base"
+    options?.addressType === DEFAULT_ADDRESS_TYPE
       ? CML.RewardAddress.new(
           networkId,
-          CML.Credential.new_pub_key(stakeKeyHash),
+          CML.Credential.new_pub_key(stakeKeyHash)
         )
           .to_address()
           .to_bech32(undefined)
@@ -85,14 +91,17 @@ export function walletFromSeed(
     address,
     rewardAddress,
     paymentKey: paymentKey.to_bech32(),
-    stakeKey: options.addressType === "Base" ? stakeKey.to_bech32() : null,
+    stakeKey:
+      options?.addressType === DEFAULT_ADDRESS_TYPE
+        ? stakeKey.to_bech32()
+        : null,
   };
 }
 
 export function discoverOwnUsedTxKeyHashes(
   tx: CML.Transaction,
   ownKeyHashes: Array<KeyHash>,
-  ownUtxos: Array<UTxO>,
+  ownUtxos: Array<UTxO>
 ): Array<KeyHash> {
   const usedKeyHashes = [];
 
@@ -103,7 +112,7 @@ export function discoverOwnUsedTxKeyHashes(
     const txHash = input.transaction_id().to_hex();
     const outputIndex = Number(input.index());
     const utxo = ownUtxos.find(
-      (utxo) => utxo.txHash === txHash && utxo.outputIndex === outputIndex,
+      (utxo) => utxo.txHash === txHash && utxo.outputIndex === outputIndex
     );
     if (utxo) {
       const { paymentCredential } = getAddressDetails(utxo.address);
@@ -344,7 +353,7 @@ export function discoverOwnUsedTxKeyHashes(
       const txHash = input.transaction_id().to_hex();
       const outputIndex = Number(input.index());
       const utxo = ownUtxos.find(
-        (utxo) => utxo.txHash === txHash && utxo.outputIndex === outputIndex,
+        (utxo) => utxo.txHash === txHash && utxo.outputIndex === outputIndex
       );
       if (utxo) {
         const { paymentCredential } = getAddressDetails(utxo.address);
