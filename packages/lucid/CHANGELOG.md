@@ -1,5 +1,11 @@
 # @lucid-evolution/lucid
 
+## 0.4.7
+
+### Patch Changes
+
+- [#413](https://github.com/Anastasia-Labs/lucid-evolution/pull/413) [`898777b`](https://github.com/Anastasia-Labs/lucid-evolution/commit/898777beac2e10ca176a9c7bc6295a3af1bc8a60) Thanks [@solidsnakedev](https://github.com/solidsnakedev)! - Enable the creation of a Lucid instance with undefined providers and networks.
+
 ## 0.4.6
 
 ### Patch Changes
