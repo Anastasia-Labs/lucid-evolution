@@ -1,10 +1,10 @@
 import { Callout, Steps, Tabs } from "nextra/components";
 
-# Make Payments
+## Make Payments
 
 Lucid Evolution provides several methods for making payments, each with its own specific use case:
 
----
+
 
 
 <Tabs items={['Simple ADA Payment', 'Multiple Recipients', 'Native Tokens', 'w/ Metadata', 'w/ Datum/Script', 'To Plutus Script']}>
@@ -20,10 +20,6 @@ Lucid Evolution provides several methods for making payments, each with its own 
     const signedTx = await tx.sign.withWallet().complete();
     const txHash = await signedTx.submit();
     ```
-
-    <Callout type="info">
-    Evolution Note: Changed from `payToAddress` to `pay.ToAddress`
-    </Callout>
   </Tabs.Tab>
 
   <Tabs.Tab>
@@ -79,43 +75,68 @@ Lucid Evolution provides several methods for making payments, each with its own 
   </Tabs.Tab>
 
   <Tabs.Tab>
-  For more complex scenarios, `pay.ToAddressWithData` allows you to include a datum or script reference. Lucid Evolution then implicitly adds the minimum ADA requirement for datums.
+  For more complex scenarios, `pay.ToAddressWithData` allows you to include a datum or a reference script. Lucid Evolution then implicitly adds the minimum ADA requirement for datums.
     <Tabs items={['With Datum', 'With Script Reference']}>
       <Tabs.Tab>
-        The datum is attached to the witness set, with its hash stored in the UTxO:
+        The datum can be attached in different ways:
 
         ```typescript
-        const tx = await lucid
-          .newTx()
-          .pay.ToAddressWithData(
-            "addr_test...",
-            { kind: "hash", value: Data.to("31313131") },
-            { lovelace: 5000000n }
-          )
-          .complete();
+         // As hash - datum is attached to the witness set, with its hash stored in the UTxO
+    const tx = await lucid
+      .newTx()
+      .pay.ToAddressWithData(
+        "addr_test...",
+        { kind: "hash", value: Data.to("31313131") },
+        { lovelace: 5000000n }
+      )
+      .complete();
 
-        const signedTx = await tx.sign.withWallet().complete();
-        const txHash = await signedTx.submit();
+    // As inline - datum stored directly in UTxO
+    const tx = await lucid
+      .newTx()
+      .pay.ToAddressWithData(
+        "addr_test...",
+        { kind: "inline", value: Data.to("31313131") },
+        { lovelace: 5000000n }
+      )
+      .complete();
         ```
       </Tabs.Tab>
       <Tabs.Tab>
-        To inline the datum directly in the UTxO:
+    
+      ```typescript
+      // Deploy a reference script
+      const deployRefScriptTx = await lucid
+        .newTx()
+      .pay.ToAddressWithData(
+        scriptAddress,
+        { kind: "inline", value: datum },
+        { lovelace: 5_000_000n },
+        referenceScript // The script to be stored as a reference for subsequent transactions
+      )
+      .complete();
+    ```
 
-        ```typescript
-        { kind: "inline", value: Data.to("31313131") }
-        ```
+    ```typescript
+    // Later, transactions can reference the deployed script instead of including it
+    // For example:
+
+    const allUTxOs = await lucid.utxosAt(scriptAddress);
+    const refScriptUTxO = allUTxOs.filter(utxo => utxo.scriptRef); // Find UTxO with reference script depending on your use case
+    
+    const useRefScriptTx = await lucid
+      .newTx()
+      .collectFrom([utxoToSpend], redeemer) // Specify your action, for example: which UTxO to spend and which redeemer to use
+      .readFrom([refScriptUTxO]) // Reference the script UTxO
+      .complete();
+    ```
+    <Callout type="info">
+    Reference scripts are stored on-chain in a UTxO and can be "referenced" by other transactions, reducing transaction sizes and costs. This way the script only needs to be stored once and can be reused by multiple transactions.
+    </Callout>
       </Tabs.Tab>
     </Tabs>
 
-    <Callout type="info">
-    Evolution Note: Changed from `payToAddressWithData` to `pay.ToAddressWithData`
-
-    Parameters:
-    - Address
-    - OutputDatum (can be "hash", "inline", or "asHash")
-    - Assets (optional)
-    - Script reference (optional)
-    </Callout>
+    
   </Tabs.Tab>
 
   <Tabs.Tab>
