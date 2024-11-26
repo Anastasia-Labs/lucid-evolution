@@ -3,7 +3,11 @@ import { LucidConfig } from "../lucid-evolution/LucidEvolution.js";
 import { Effect } from "effect";
 import * as S from "@effect/schema/Schema";
 //TODO: move to commont utils
-import { PrivateKey, TransactionWitnesses } from "@lucid-evolution/core-types";
+import {
+  PrivateKey,
+  TransactionWitnesses,
+  Wallet,
+} from "@lucid-evolution/core-types";
 import { TransactionSignError } from "../Errors.js";
 import { TxSigned } from "../tx-submit/TxSubmit.js";
 import * as CompleteTxSigner from "./internal/CompleteTxSigner.js";
@@ -15,7 +19,7 @@ export interface TxSignBuilderConfig {
   txComplete: CML.Transaction;
   witnessSetBuilder: CML.TransactionWitnessSetBuilder;
   programs: Effect.Effect<void, TransactionSignError, never>[];
-  lucidConfig: LucidConfig;
+  wallet: Wallet | undefined;
   fee: number;
   exUnits: { cpu: number; mem: number } | null;
 }
@@ -82,7 +86,7 @@ export interface TxSignBuilder {
 }
 
 export const makeTxSignBuilder = (
-  lucidConfig: LucidConfig,
+  wallet: Wallet | undefined,
   tx: CML.Transaction,
 ): TxSignBuilder => {
   const redeemers = tx.witness_set().redeemers();
@@ -112,7 +116,7 @@ export const makeTxSignBuilder = (
     txComplete: tx,
     witnessSetBuilder: CML.TransactionWitnessSetBuilder.new(),
     programs: [],
-    lucidConfig: lucidConfig,
+    wallet: wallet,
     fee: parseInt(tx.body().fee().toString()),
     exUnits: exUnits,
   };

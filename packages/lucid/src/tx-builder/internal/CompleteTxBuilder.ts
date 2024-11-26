@@ -192,7 +192,7 @@ export const complete = (options: CompleteOptions = {}) =>
       updatedWalletInputs,
       derivedInputs,
       TxSignBuilder.makeTxSignBuilder(
-        config.lucidConfig,
+        config.lucidConfig.wallet,
         canonical
           ? CML.Transaction.from_cbor_bytes(
               transaction.to_canonical_cbor_bytes(),

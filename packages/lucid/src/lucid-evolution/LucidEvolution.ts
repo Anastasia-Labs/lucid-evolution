@@ -31,9 +31,12 @@ import {
   makeWalletFromSeed,
 } from "@lucid-evolution/wallet";
 import { Emulator } from "@lucid-evolution/provider";
+import { Effect, pipe, Data as _Data } from "effect";
+import { NullableError, UnauthorizedNetwork } from "../Errors.js";
+import { TimeoutExceptionTypeId } from "effect/Cause";
 
 export type LucidEvolution = {
-  config: () => LucidConfig;
+  config: () => Partial<LucidConfig>;
   wallet: () => Wallet;
   overrideUTxOs: (utxos: UTxO[]) => void;
   switchProvider: (provider: Provider) => Promise<void>;
@@ -88,30 +91,47 @@ type LucidOptions = {
 
 //TODO: turn this to Effect
 export const Lucid = async (
-  provider: Provider,
-  network: Network,
+  provider?: Provider | undefined,
+  network?: Network,
   options: LucidOptions = {},
 ): Promise<LucidEvolution> => {
-  const protocolParameters: ProtocolParameters =
+  const protocolParameters: ProtocolParameters | undefined =
     options.presetProtocolParameters ||
-    (await provider.getProtocolParameters());
+    (await provider?.getProtocolParameters());
 
-  const costModels = createCostModels(protocolParameters.costModels);
-  const config: LucidConfig = {
+  const costModels = protocolParameters
+    ? createCostModels(protocolParameters.costModels)
+    : undefined;
+  const config: Partial<LucidConfig> = {
     provider: provider,
     network: network,
     wallet: undefined,
     costModels: costModels,
-    txbuilderconfig: TxConfig.makeTxConfig(protocolParameters, costModels),
+    txbuilderconfig:
+      protocolParameters && costModels
+        ? TxConfig.makeTxConfig(protocolParameters, costModels)
+        : undefined,
     protocolParameters,
   };
-  if ("slot" in config.provider) {
+  if (config.provider && "slot" in config.provider) {
     const emulator: Emulator = config.provider as Emulator;
-    SLOT_CONFIG_NETWORK[network] = {
-      zeroTime: emulator.now(),
-      zeroSlot: 0,
-      slotLength: 1000,
-    };
+    Effect.gen(function* () {
+      const custom = yield* pipe(
+        validateNotNullableNetwork(network),
+        Effect.filterOrFail(
+          (network) => network === "Custom",
+          () =>
+            new UnauthorizedNetwork({
+              message: `Expected Custom, received ${String(network)}`,
+            }),
+        ),
+      );
+      SLOT_CONFIG_NETWORK[custom] = {
+        zeroTime: emulator.now(),
+        zeroSlot: 0,
+        slotLength: 1000,
+      };
+    }).pipe(Effect.runSync);
   }
   return {
     config: () => config,
@@ -125,10 +145,34 @@ export const Lucid = async (
       config.txbuilderconfig = TxConfig.makeTxConfig(protocolParam, costModels);
       config.protocolParameters = protocolParam;
     },
-    newTx: (): TxBuilder.TxBuilder => TxBuilder.makeTxBuilder(config),
+    newTx: (): TxBuilder.TxBuilder =>
+      Effect.gen(function* () {
+        const provider = yield* Effect.fromNullable(config.provider);
+        const network = yield* Effect.fromNullable(config.network);
+        const costModels = yield* validateNotNullable(
+          config.costModels,
+          "CostModels are not set in Lucid instance",
+        );
+        const txbuilderconfig = yield* validateNotNullable(
+          config.txbuilderconfig,
+          "txbuilderconfig is not set in Lucid instance",
+        );
+        const protocolParameters = yield* validateNotNullable(
+          config.protocolParameters,
+          "protocolParameters are not set in Lucid instance",
+        );
+        return TxBuilder.makeTxBuilder({
+          provider,
+          network,
+          wallet: config.wallet,
+          costModels,
+          txbuilderconfig,
+          protocolParameters,
+        });
+      }).pipe(Effect.runSync),
     fromTx: (tx: Transaction) =>
       TxSignBuilder.makeTxSignBuilder(
-        config,
+        config.wallet,
         CML.Transaction.from_cbor_hex(tx),
       ),
     selectWallet: {
@@ -139,48 +183,122 @@ export const Lucid = async (
           accountIndex?: number;
           password?: string;
         },
-      ) => {
-        config.wallet = makeWalletFromSeed(
-          config.provider,
-          network,
-          seed,
-          options,
-        );
-      },
-      fromPrivateKey: (privateKey: PrivateKey) => {
-        config.wallet = makeWalletFromPrivateKey(
-          config.provider,
-          network,
-          privateKey,
-        );
-      },
-      fromAPI: (walletAPI: WalletApi) => {
-        config.wallet = makeWalletFromAPI(config.provider, walletAPI);
-      },
-      fromAddress: (address: string, utxos: UTxO[]) => {
-        config.wallet = makeWalletFromAddress(
-          config.provider,
-          network,
-          address,
-          utxos,
-        );
-      },
+      ) =>
+        Effect.gen(function* () {
+          config.wallet = makeWalletFromSeed(
+            yield* validateNotNullableProvider(config.provider),
+            yield* validateNotNullableNetwork(network),
+            seed,
+            options,
+          );
+        }).pipe(Effect.runSync),
+      fromPrivateKey: (privateKey: PrivateKey) =>
+        Effect.gen(function* () {
+          config.wallet = makeWalletFromPrivateKey(
+            yield* validateNotNullableProvider(config.provider),
+            yield* validateNotNullableNetwork(network),
+            privateKey,
+          );
+        }).pipe(Effect.runSync),
+      fromAPI: (walletAPI: WalletApi) =>
+        Effect.gen(function* () {
+          config.wallet = makeWalletFromAPI(
+            yield* validateNotNullableProvider(config.provider),
+            walletAPI,
+          );
+        }).pipe(Effect.runSync),
+      fromAddress: (address: string, utxos: UTxO[]) =>
+        Effect.gen(function* () {
+          config.wallet = makeWalletFromAddress(
+            yield* validateNotNullableProvider(config.provider),
+            yield* validateNotNullableNetwork(network),
+            address,
+            utxos,
+          );
+        }).pipe(Effect.runSync),
     },
-    currentSlot: () => {
-      return unixTimeToSlot(config.network, Date.now());
-    },
+    currentSlot: () =>
+      pipe(
+        validateNotNullableNetwork(config.network),
+        Effect.map((network) => unixTimeToSlot(network, Date.now())),
+        Effect.runSync,
+      ),
     utxosAt: (addressOrCredential: string | Credential) =>
-      config.provider.getUtxos(addressOrCredential),
+      pipe(
+        validateNotNullableProvider(config.provider),
+        Effect.flatMap((provider) =>
+          Effect.promise(() => provider.getUtxos(addressOrCredential)),
+        ),
+        Effect.runPromise,
+      ),
     utxosAtWithUnit: (addressOrCredential: string | Credential, unit: Unit) =>
-      config.provider.getUtxosWithUnit(addressOrCredential, unit),
-    utxoByUnit: (unit: Unit) => config.provider.getUtxoByUnit(unit),
+      pipe(
+        validateNotNullableProvider(config.provider),
+        Effect.flatMap((provider) =>
+          Effect.promise(() =>
+            provider.getUtxosWithUnit(addressOrCredential, unit),
+          ),
+        ),
+        Effect.runPromise,
+      ),
+    utxoByUnit: (unit: Unit) =>
+      pipe(
+        validateNotNullableProvider(config.provider),
+        Effect.flatMap((provider) =>
+          Effect.promise(() => provider.getUtxoByUnit(unit)),
+        ),
+        Effect.runPromise,
+      ),
     utxosByOutRef: (outRefs: OutRef[]) =>
-      config.provider.getUtxosByOutRef(outRefs),
-    delegationAt: config.provider.getDelegation,
+      pipe(
+        validateNotNullableProvider(config.provider),
+        Effect.flatMap((provider) =>
+          Effect.promise(() => provider.getUtxosByOutRef(outRefs)),
+        ),
+        Effect.runPromise,
+      ),
+    delegationAt: (rewardAddress: string) =>
+      pipe(
+        validateNotNullableProvider(config.provider),
+        Effect.flatMap((provider) =>
+          Effect.promise(() => provider.getDelegation(rewardAddress)),
+        ),
+        Effect.runPromise,
+      ),
     awaitTx: (txHash: TxHash, checkInterval?: number) =>
-      config.provider.awaitTx(txHash, checkInterval),
+      pipe(
+        validateNotNullableProvider(config.provider),
+        Effect.flatMap((provider) =>
+          Effect.promise(() => provider.awaitTx(txHash, checkInterval)),
+        ),
+        Effect.runPromise,
+      ),
     datumOf: <T extends Data>(utxo: UTxO, type?: T | undefined) =>
-      datumOf(config.provider, utxo, type),
-    metadataOf: (unit: string) => metadataOf(config.provider, unit),
+      pipe(
+        validateNotNullableProvider(config.provider),
+        Effect.flatMap((provider) =>
+          Effect.promise(() => datumOf(provider, utxo, type)),
+        ),
+        Effect.runPromise,
+      ),
+    metadataOf: (unit: string) =>
+      pipe(
+        validateNotNullableProvider(config.provider),
+        Effect.flatMap((provider) =>
+          Effect.promise(() => metadataOf(provider, unit)),
+        ),
+        Effect.runPromise,
+      ),
   };
 };
+
+const validateNotNullable = <T>(value: T | undefined, message: string) =>
+  pipe(
+    Effect.fromNullable(value),
+    Effect.orElseFail(() => new NullableError({ message })),
+  );
+
+const validateNotNullableNetwork = (network: Network | undefined) =>
+  validateNotNullable(network, "Network is not set in Lucid instance");
+const validateNotNullableProvider = (provider: Provider | undefined) =>
+  validateNotNullable(provider, "Provider is not set in Lucid instance");

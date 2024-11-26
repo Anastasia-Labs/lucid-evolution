@@ -27,7 +27,7 @@ export const withWallet = (
   config: TxSignBuilder.TxSignBuilderConfig,
 ): Effect.Effect<void, TxSignerError, never> =>
   pipe(
-    mkWitnessFromWallet(config.lucidConfig.wallet, config.txComplete),
+    mkWitnessFromWallet(config.wallet, config.txComplete),
     Effect.map((witness) => config.witnessSetBuilder.add_existing(witness)),
   );
 
@@ -35,7 +35,7 @@ export const partialWithWallet = (
   config: TxSignBuilder.TxSignBuilderConfig,
 ): Effect.Effect<TransactionWitnesses, TxSignerError> =>
   pipe(
-    mkWitnessFromWallet(config.lucidConfig.wallet, config.txComplete),
+    mkWitnessFromWallet(config.wallet, config.txComplete),
     Effect.map((witness) => witness.to_cbor_hex()),
   );
 

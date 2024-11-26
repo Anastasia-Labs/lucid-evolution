@@ -35,6 +35,16 @@ export const ERROR_MESSAGE = {
     `MISSING_POLICY: No policy found, policy_id: ${policyId}`,
 } as const;
 
+export class NullableError extends Data.TaggedError("NullableError")<{
+  readonly message: string;
+}> {}
+
+export class UnauthorizedNetwork extends Data.TaggedError(
+  "UnauthorizedNetwork",
+)<{
+  readonly message: string;
+}> {}
+
 export class TxBuilderError extends Data.TaggedError("TxBuilderError")<{
   readonly cause: unknown;
 }> {
