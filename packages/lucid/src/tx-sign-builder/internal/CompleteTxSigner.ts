@@ -31,7 +31,7 @@ export const completeTxSigner = (
       config.txComplete.auxiliary_data(),
     );
     const wallet = yield* pipe(
-      Effect.fromNullable(config.lucidConfig.wallet),
+      Effect.fromNullable(config.wallet),
       Effect.orElseFail(() => signError(ERROR_MESSAGE.MISSING_WALLET)),
     );
     return TxSubmitBuilder.makeSubmit(wallet, signedTx);
