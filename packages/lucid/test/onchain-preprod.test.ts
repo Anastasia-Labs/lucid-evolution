@@ -35,11 +35,22 @@ describe.sequential("Onchain testing", () => {
     expect(exit._tag).toBe("Success");
   });
 
-  test.skip("MultiValidator - registerStake", async () => {
+  test("MultiValidator - registerStake", async () => {
     const program = pipe(
       MultiValidatorEndpoints.registerStake,
       Effect.provide(User.layer),
-      Effect.provide(StakeContract.layer),
+      Effect.provide(SimpleStakeContract.layer),
+      Effect.provide(NetworkConfig.layerPreprod),
+    );
+    const exit = await Effect.runPromiseExit(program);
+    expect(exit._tag).toBe("Success");
+  });
+
+  test("MultiValidator - deRegisterStake", async () => {
+    const program = pipe(
+      MultiValidatorEndpoints.deRegisterStake,
+      Effect.provide(User.layer),
+      Effect.provide(SimpleStakeContract.layer),
       Effect.provide(NetworkConfig.layerPreprod),
     );
     const exit = await Effect.runPromiseExit(program);
@@ -569,7 +580,7 @@ describe.sequential("Onchain testing", () => {
     expect(exit._tag).toBe("Success");
   });
 
-  test.skip("composeMintAndRegisterStake", async () => {
+  test("composeMintAndRegisterStake", async () => {
     const program = pipe(
       ComposeEndpoints.composeMintAndRegisterStake,
       Effect.provide(User.layer),
@@ -579,7 +590,7 @@ describe.sequential("Onchain testing", () => {
     expect(exit._tag).toBe("Success");
   });
 
-  test.skip("composeMintAndDeregisterStake", async () => {
+  test("composeMintAndDeregisterStake", async () => {
     const program = pipe(
       ComposeEndpoints.composeMintAndDeregisterStake,
       Effect.provide(User.layer),

@@ -118,7 +118,7 @@ export const composeMintAndRegisterStake = Effect.gen(function* ($) {
   const tx = user.newTx().compose(txCompA).compose(txCompB).compose(txCompC);
   const signBuilder = yield* tx.completeProgram({ localUPLCEval: false });
   return signBuilder;
-}).pipe(Effect.flatMap(handleSignSubmitWithoutValidation), withLogRetry);
+}).pipe(Effect.flatMap(handleSignSubmit), withLogRetry);
 
 export const composeMintAndDeregisterStake = Effect.gen(function* ($) {
   const { user } = yield* User;
@@ -156,7 +156,7 @@ export const composeMintAndDeregisterStake = Effect.gen(function* ($) {
   const tx = user.newTx().compose(txCompA).compose(txCompB).compose(txCompC);
   const signBuilder = yield* tx.completeProgram({ localUPLCEval: false });
   return signBuilder;
-}).pipe(Effect.flatMap(handleSignSubmitWithoutValidation), withLogRetry);
+}).pipe(Effect.flatMap(handleSignSubmit), withLogRetry);
 
 export const composeDepositFundsLockRefScriptAndRegisterDrep = Effect.gen(
   function* () {
@@ -231,7 +231,7 @@ export const composeCollectFundsReadFromAndDeregisterDrep = Effect.gen(
     const txCompA = user
       .newTx()
       .collectFrom([utxos[0]], redeemer)
-      // .readFrom([readUtxo])
+      .readFrom([readUtxo])
       .addSigner(addr);
     const rewardAddress = yield* pipe(
       Effect.promise(() => user.wallet().rewardAddress()),

@@ -9,7 +9,6 @@ import {
   WithdrawalValidator,
 } from "@lucid-evolution/core-types";
 import { CML } from "../../core.js";
-import { applyDoubleCborEncoding } from "@lucid-evolution/utils";
 
 export const attachScript = ({ type, script }: Validator) => {
   //TODO: script should be a branded type
