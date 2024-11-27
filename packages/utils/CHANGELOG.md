@@ -1,5 +1,11 @@
 # @lucid-evolution/utils
 
+## 0.1.58
+
+### Patch Changes
+
+- [#420](https://github.com/Anastasia-Labs/lucid-evolution/pull/420) [`f8bf954`](https://github.com/Anastasia-Labs/lucid-evolution/commit/f8bf954959518f3dd96837a619cd96c6d3048944) Thanks [@hadelive](https://github.com/hadelive)! - fix double cbor encoding
+
 ## 0.1.57
 
 ### Patch Changes
