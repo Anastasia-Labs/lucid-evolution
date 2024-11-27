@@ -12,18 +12,18 @@ const helloCBORDoubleEncoded =
 
 test("expect same encoding application", () => {
   expect(helloCBORDoubleEncoded).toStrictEqual(
-    applyDoubleCborEncoding(helloCBORDoubleEncoded)
+    applyDoubleCborEncoding(helloCBORDoubleEncoded),
   );
 });
 
 test("expect enconding (major type 2) application", () => {
   expect(helloCBORDoubleEncoded).toStrictEqual(
-    applyDoubleCborEncoding(helloSingleCBOREncoded)
+    applyDoubleCborEncoding(helloSingleCBOREncoded),
   );
 });
 
 test("expect enconding of flat bytearray ", () => {
   expect(helloCBORDoubleEncoded).toStrictEqual(
-    applyDoubleCborEncoding(helloFlat)
+    applyDoubleCborEncoding(helloFlat),
   );
 });

@@ -29,7 +29,7 @@ const distributeRewards = Effect.gen(function* ($) {
   emulator.distributeRewards(REWARD_AMOUNT);
   const rewardInfo = yield* pipe(
     Effect.promise(() => user.wallet().getDelegation()),
-    Effect.andThen(Effect.fromNullable)
+    Effect.andThen(Effect.fromNullable),
   );
   assert.deepEqual(rewardInfo.poolId, EMULATOR_POOL_ID);
   assert.deepEqual(rewardInfo.rewards, REWARD_AMOUNT);
@@ -47,7 +47,7 @@ describe.sequential("Emulator", () => {
   test.skip("composeMintAndStake", async () => {
     const program = pipe(
       composeMintAndStake,
-      Effect.provide(EmulatorUser.layer)
+      Effect.provide(EmulatorUser.layer),
     );
     const exit = await Effect.runPromiseExit(program);
     emulator.awaitBlock(4);
@@ -82,7 +82,7 @@ describe.sequential("Emulator", () => {
   test("waitBlock", async () => {
     const program = pipe(
       mintInSlotRange,
-      Effect.provide(Layer.mergeAll(EmulatorUser.layer))
+      Effect.provide(Layer.mergeAll(EmulatorUser.layer)),
     );
     const exit = await Effect.runPromiseExit(program);
     console.log("exit :>> ", exit);
@@ -113,7 +113,7 @@ describe.sequential("Emulator", () => {
   test("withdrawAmount", async () => {
     const program = pipe(
       withdrawReward(0n),
-      Effect.provide(EmulatorUser.layer)
+      Effect.provide(EmulatorUser.layer),
     );
     const exit = await Effect.runPromiseExit(program);
     emulator.awaitBlock(4);
@@ -132,7 +132,7 @@ describe.sequential("Emulator", () => {
   test("withdrawRewards", async () => {
     const program = pipe(
       withdrawReward(REWARD_AMOUNT),
-      Effect.provide(EmulatorUser.layer)
+      Effect.provide(EmulatorUser.layer),
     );
     const exit = await Effect.runPromiseExit(program);
     emulator.awaitBlock(4);
@@ -143,7 +143,7 @@ describe.sequential("Emulator", () => {
   test("withdrawZeroAgain", async () => {
     const program = pipe(
       withdrawReward(0n),
-      Effect.provide(EmulatorUser.layer)
+      Effect.provide(EmulatorUser.layer),
     );
     const exit = await Effect.runPromiseExit(program);
     emulator.awaitBlock(4);
@@ -170,7 +170,7 @@ describe.sequential("Emulator", () => {
   test("evaluateAContractWithDatum", async () => {
     const program = pipe(
       evaluateAContractWithDatum,
-      Effect.provide(EmulatorUser.layer)
+      Effect.provide(EmulatorUser.layer),
     );
     const exit = await Effect.runPromiseExit(program);
     emulator.awaitBlock(4);
@@ -189,7 +189,7 @@ describe.sequential("Emulator", () => {
   test("signByWalletFromPrivateKey", async () => {
     const program = pipe(
       signByWalletFromPrivateKey,
-      Effect.provide(EmulatorUser.layer)
+      Effect.provide(EmulatorUser.layer),
     );
     const exit = await Effect.runPromiseExit(program);
     emulator.awaitBlock(4);
@@ -199,7 +199,7 @@ describe.sequential("Emulator", () => {
   test("txWithReferenceScript", async () => {
     const program = pipe(
       depositFundsLockRefScript,
-      Effect.provide(EmulatorUser.layer)
+      Effect.provide(EmulatorUser.layer),
     );
     const exit = await Effect.runPromiseExit(program);
     emulator.awaitBlock(4);
