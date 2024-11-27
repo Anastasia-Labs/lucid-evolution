@@ -1,5 +1,16 @@
 # @lucid-evolution/lucid
 
+## 0.4.8
+
+### Patch Changes
+
+- [#418](https://github.com/Anastasia-Labs/lucid-evolution/pull/418) [`45a541f`](https://github.com/Anastasia-Labs/lucid-evolution/commit/45a541ff10fd8ddf21036848c7b67e380e36518f) Thanks [@hadelive](https://github.com/hadelive)! - double cbor encoding
+
+- Updated dependencies [[`45a541f`](https://github.com/Anastasia-Labs/lucid-evolution/commit/45a541ff10fd8ddf21036848c7b67e380e36518f)]:
+  - @lucid-evolution/provider@0.1.75
+  - @lucid-evolution/utils@0.1.57
+  - @lucid-evolution/wallet@0.1.63
+
 ## 0.4.7
 
 ### Patch Changes
