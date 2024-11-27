@@ -591,9 +591,7 @@ const evalTransactionProvider = (
       try: () =>
         config.lucidConfig.provider.evaluateTx(
           txEvaluation.to_cbor_hex(),
-          //FIX: error when enabled
-          // KupmiosError: {\"jsonrpc\":\"2.0\",\"id\":null,\"error\":{\"code\":-32600,\"message\":\"Invalid request: couldn't decode plutus script.\"}}
-          // txUtxos,
+          txUtxos,
         ),
       catch: (error) => completeTxError(error),
     });
