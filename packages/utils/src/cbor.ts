@@ -57,10 +57,10 @@ export function datumJsonToCbor(json: DatumJson): Datum {
         l.add(convert(v));
       });
       const bigInt = CML.BigInteger.from_str(
-        json.constructor.toString()
+        json.constructor.toString(),
       ).as_u64()!;
       return CML.PlutusData.new_constr_plutus_data(
-        CML.ConstrPlutusData.new(bigInt, l)
+        CML.ConstrPlutusData.new(bigInt, l),
       );
     }
     throw new Error("Unsupported type");

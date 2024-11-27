@@ -37,7 +37,7 @@ test("Apply Parameters", () => {
     [
       "e6849315a2984aadcd1e42d9628f6d6cc071685bef02bb52502f86c9",
       "48656c6c6f2c20576f726c6421",
-    ]
+    ],
   );
 
   assert.strictEqual(helloApplied, applyDoubleCborEncoding(helloAppliedValid));

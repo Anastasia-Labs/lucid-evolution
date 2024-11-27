@@ -9,6 +9,7 @@ import {
   WithdrawalValidator,
 } from "@lucid-evolution/core-types";
 import { CML } from "../../core.js";
+import { applyDoubleCborEncoding } from "@lucid-evolution/utils";
 
 export const attachScript = ({ type, script }: Validator) => {
   //TODO: script should be a branded type
@@ -50,11 +51,11 @@ export const attachMintingPolicy = (mintingPolicy: MintingPolicy) =>
   attachScript(mintingPolicy);
 
 export const attachCertificateValidator = (
-  certValidator: CertificateValidator
+  certValidator: CertificateValidator,
 ) => attachScript(certValidator);
 
 export const attachWithdrawalValidator = (
-  withdrawalValidator: WithdrawalValidator
+  withdrawalValidator: WithdrawalValidator,
 ) => attachScript(withdrawalValidator);
 
 export const attachVoteValidator = (voteValidator: VoteValidator) =>

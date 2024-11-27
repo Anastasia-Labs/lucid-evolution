@@ -10,6 +10,7 @@ import * as S from "@effect/schema/Schema";
 import { Effect, pipe } from "effect";
 import * as CoreType from "@lucid-evolution/core-types";
 import { ParseError } from "@effect/schema/ParseResult";
+import { applyDoubleCborEncoding } from "@lucid-evolution/utils";
 import { TimeoutException } from "effect/Cause";
 
 export const ProtocolParametersSchema = S.Struct({
@@ -72,8 +73,8 @@ export const ProtocolParametersSchema = S.Struct({
   max_collateral_inputs: S.Number,
   coins_per_utxo_size: S.BigInt,
 });
-export interface ProtocolParameters
-  extends S.Schema.Type<typeof ProtocolParametersSchema> {}
+// export interface ProtocolParameters
+//   extends S.Schema.Type<typeof ProtocolParametersSchema> {}
 
 export const AssetSchema = S.Struct({
   policy_id: S.String,
@@ -314,7 +315,7 @@ export const toUTxO = (koiosUTxO: UTxO, address: string): CoreType.UTxO => ({
   scriptRef: toScriptRef(koiosUTxO.reference_script),
 });
 
-export const toScriptRef = (
+const toScriptRef = (
   reference_script: ReferenceScript | null,
 ): CoreType.Script | undefined => {
   if (reference_script && reference_script.bytes && reference_script.type) {
@@ -322,17 +323,17 @@ export const toScriptRef = (
       case "plutusV1":
         return {
           type: "PlutusV1" as const,
-          script: reference_script.bytes,
+          script: applyDoubleCborEncoding(reference_script.bytes),
         };
       case "plutusV2":
         return {
           type: "PlutusV2" as const,
-          script: reference_script.bytes,
+          script: applyDoubleCborEncoding(reference_script.bytes),
         };
       case "plutusV3":
         return {
           type: "PlutusV3" as const,
-          script: reference_script.bytes,
+          script: applyDoubleCborEncoding(reference_script.bytes),
         };
       default:
         return undefined;
