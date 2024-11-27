@@ -189,7 +189,7 @@ export const collectFunds = pipe(
 
 export const registerStake = Effect.gen(function* ($) {
   const { user } = yield* User;
-  const { rewardAddress } = yield* StakeContract;
+  const { rewardAddress } = yield* SimpleStakeContract;
   const signBuilder = yield* user
     .newTx()
     .registerStake(rewardAddress)
