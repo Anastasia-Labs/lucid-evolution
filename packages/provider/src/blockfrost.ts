@@ -1,6 +1,9 @@
 import { CML } from "./core.js";
 import { fromHex, sleep } from "@lucid-evolution/core-utils";
-import { scriptFromNative } from "@lucid-evolution/utils";
+import {
+  applyDoubleCborEncoding,
+  scriptFromNative,
+} from "@lucid-evolution/utils";
 import {
   Address,
   Credential,
@@ -52,7 +55,7 @@ export class Blockfrost implements Provider {
       collateralPercentage: parseInt(result.collateral_percent),
       maxCollateralInputs: parseInt(result.max_collateral_inputs),
       minFeeRefScriptCostPerByte: parseInt(
-        result.min_fee_ref_script_cost_per_byte,
+        result.min_fee_ref_script_cost_per_byte
       ),
       costModels: result.cost_models,
     };
@@ -64,10 +67,10 @@ export class Blockfrost implements Provider {
       const credentialBech32 =
         addressOrCredential.type === "Key"
           ? CML.Ed25519KeyHash.from_hex(addressOrCredential.hash).to_bech32(
-              "addr_vkh",
+              "addr_vkh"
             )
           : CML.ScriptHash.from_hex(addressOrCredential.hash).to_bech32(
-              "addr_vkh",
+              "addr_vkh"
             ); // should be 'script' (CIP-0005)
       return credentialBech32;
     })();
@@ -77,7 +80,7 @@ export class Blockfrost implements Provider {
       const pageResult: BlockfrostUtxoResult | BlockfrostUtxoError =
         await fetch(
           `${this.url}/addresses/${queryPredicate}/utxos?page=${page}`,
-          { headers: { project_id: this.projectId, lucid } },
+          { headers: { project_id: this.projectId, lucid } }
         ).then((res) => res.json());
       if ((pageResult as BlockfrostUtxoError).error) {
         if ((pageResult as BlockfrostUtxoError).status_code === 404) {
@@ -96,17 +99,17 @@ export class Blockfrost implements Provider {
 
   async getUtxosWithUnit(
     addressOrCredential: Address | Credential,
-    unit: Unit,
+    unit: Unit
   ): Promise<UTxO[]> {
     const queryPredicate = (() => {
       if (typeof addressOrCredential === "string") return addressOrCredential;
       const credentialBech32 =
         addressOrCredential.type === "Key"
           ? CML.Ed25519KeyHash.from_hex(addressOrCredential.hash).to_bech32(
-              "addr_vkh",
+              "addr_vkh"
             )
           : CML.ScriptHash.from_hex(addressOrCredential.hash).to_bech32(
-              "addr_vkh",
+              "addr_vkh"
             ); // should be 'script' (CIP-0005)
       return credentialBech32;
     })();
@@ -116,7 +119,7 @@ export class Blockfrost implements Provider {
       const pageResult: BlockfrostUtxoResult | BlockfrostUtxoError =
         await fetch(
           `${this.url}/addresses/${queryPredicate}/utxos/${unit}?page=${page}`,
-          { headers: { project_id: this.projectId, lucid } },
+          { headers: { project_id: this.projectId, lucid } }
         ).then((res) => res.json());
       if ((pageResult as BlockfrostUtxoError).error) {
         if ((pageResult as BlockfrostUtxoError).status_code === 404) {
@@ -136,7 +139,7 @@ export class Blockfrost implements Provider {
   async getUtxoByUnit(unit: Unit): Promise<UTxO> {
     const addresses = await fetch(
       `${this.url}/assets/${unit}/addresses?count=2`,
-      { headers: { project_id: this.projectId, lucid } },
+      { headers: { project_id: this.projectId, lucid } }
     ).then((res) => res.json());
 
     if (!addresses || addresses.error) {
@@ -171,14 +174,14 @@ export class Blockfrost implements Provider {
         const utxosResult: BlockfrostUtxoResult = result.outputs.map(
           (
             // deno-lint-ignore no-explicit-any
-            r: any,
+            r: any
           ) => ({
             ...r,
             tx_hash: txHash,
-          }),
+          })
         );
         return this.blockfrostUtxosToUtxos(utxosResult);
-      }),
+      })
     );
 
     return utxos
@@ -187,8 +190,8 @@ export class Blockfrost implements Provider {
         outRefs.some(
           (outRef) =>
             utxo.txHash === outRef.txHash &&
-            utxo.outputIndex === outRef.outputIndex,
-        ),
+            utxo.outputIndex === outRef.outputIndex
+        )
       );
   }
 
@@ -250,7 +253,7 @@ export class Blockfrost implements Provider {
   }
 
   private async blockfrostUtxosToUtxos(
-    result: BlockfrostUtxoResult,
+    result: BlockfrostUtxoResult
   ): Promise<UTxO[]> {
     const utxos: UTxO[] = [];
     const batchSize = 10;
@@ -266,7 +269,7 @@ export class Blockfrost implements Provider {
             txHash: r.tx_hash,
             outputIndex: r.output_index,
             assets: Object.fromEntries(
-              r.amount.map(({ unit, quantity }) => [unit, BigInt(quantity)]),
+              r.amount.map(({ unit, quantity }) => [unit, BigInt(quantity)])
             ),
             address: r.address,
             datumHash: (!r.inline_datum && r.data_hash) || undefined,
@@ -277,40 +280,40 @@ export class Blockfrost implements Provider {
                     `${this.url}/scripts/${r.reference_script_hash}`,
                     {
                       headers: { project_id: this.projectId, lucid },
-                    },
+                    }
                   ).then((res) => res.json());
 
                   const { cbor: script } = await fetch(
                     `${this.url}/scripts/${r.reference_script_hash}/cbor`,
-                    { headers: { project_id: this.projectId, lucid } },
+                    { headers: { project_id: this.projectId, lucid } }
                   ).then((res) => res.json());
                   switch (type) {
                     case "timelock":
                       const { json: native } = await fetch(
                         `${this.url}/scripts/${r.reference_script_hash}/json`,
-                        { headers: { project_id: this.projectId, lucid } },
+                        { headers: { project_id: this.projectId, lucid } }
                       ).then((res) => res.json());
                       return scriptFromNative(native);
                     case "plutusV1":
                       return {
                         type: "PlutusV1",
-                        script,
+                        script: applyDoubleCborEncoding(script),
                       } satisfies Script;
                     case "plutusV2":
                       return {
                         type: "PlutusV2",
-                        script,
+                        script: applyDoubleCborEncoding(script),
                       } satisfies Script;
                     case "plutusV3":
                       return {
                         type: "PlutusV3",
-                        script,
+                        script: applyDoubleCborEncoding(script),
                       } satisfies Script;
                   }
                 })()
               : undefined,
           };
-        }),
+        })
       );
 
       utxos.push(...batchResults);
@@ -321,7 +324,7 @@ export class Blockfrost implements Provider {
 
   async evaluateTx(
     tx: Transaction,
-    additionalUTxOs?: UTxO[], // for tx chaining
+    additionalUTxOs?: UTxO[] // for tx chaining
   ): Promise<EvalRedeemer[]> {
     const payload = {
       cbor: tx,
@@ -347,7 +350,7 @@ export class Blockfrost implements Provider {
     const blockfrostRedeemer = res as BlockfrostRedeemer;
     if (!("EvaluationResult" in blockfrostRedeemer.result)) {
       throw new Error(
-        `EvaluateTransaction fails: ${JSON.stringify(blockfrostRedeemer.result)}`,
+        `EvaluateTransaction fails: ${JSON.stringify(blockfrostRedeemer.result)}`
       );
     }
     const evalRedeemers: EvalRedeemer[] = [];
@@ -359,7 +362,7 @@ export class Blockfrost implements Provider {
           redeemer_index: Number(pIndex),
           ex_units: { mem: Number(data.memory), steps: Number(data.steps) },
         });
-      },
+      }
     );
 
     return evalRedeemers;

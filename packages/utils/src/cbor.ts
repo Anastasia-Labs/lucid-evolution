@@ -22,20 +22,6 @@ export const applyDoubleCborEncoding = (script: string) => {
   }
 };
 
-export const CBOREncodingLevel = (script: string): "double" | "single" => {
-  try {
-    decode(decode(fromHex(script)));
-    return "double" as const;
-  } catch (error) {
-    try {
-      decode(fromHex(script));
-      return "single" as const;
-    } catch (error) {
-      throw new Error("Script is not CBOR-encoded or invalid format.");
-    }
-  }
-};
-
 export function datumJsonToCbor(json: DatumJson): Datum {
   const convert = (json: any) => {
     if (!isNaN(json.int)) {
@@ -71,10 +57,10 @@ export function datumJsonToCbor(json: DatumJson): Datum {
         l.add(convert(v));
       });
       const bigInt = CML.BigInteger.from_str(
-        json.constructor.toString(),
+        json.constructor.toString()
       ).as_u64()!;
       return CML.PlutusData.new_constr_plutus_data(
-        CML.ConstrPlutusData.new(bigInt, l),
+        CML.ConstrPlutusData.new(bigInt, l)
       );
     }
     throw new Error("Unsupported type");

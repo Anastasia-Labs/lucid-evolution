@@ -1,321 +1,369 @@
-import * as S from "@effect/schema/Schema";
 import {
-  Address,
-  Credential,
-  Datum,
-  DatumHash,
-  Delegation,
-  EvalRedeemer,
-  OutRef,
-  ProtocolParameters,
-  Provider,
-  RewardAddress,
-  Transaction,
-  TxHash,
-  Unit,
-  UTxO,
-} from "@lucid-evolution/core-types";
-import { fromHex } from "@lucid-evolution/core-utils";
-import { fromUnit } from "@lucid-evolution/utils";
-import * as _Koios from "./internal/koios.js";
-import * as _Ogmios from "./internal/ogmios.js";
-import { Data, Effect, pipe, Schedule } from "effect";
+  HttpClient,
+  HttpClientRequest,
+  HttpClientResponse,
+} from "@effect/platform";
+import { HttpBodyError } from "@effect/platform/HttpBody";
+import { HttpClientError } from "@effect/platform/HttpClientError";
+import { ArrayFormatter } from "@effect/schema";
+import * as S from "@effect/schema/Schema";
+import { Effect, pipe } from "effect";
+import * as CoreType from "@lucid-evolution/core-types";
+import { applyDoubleCborEncoding } from "@lucid-evolution/utils";
+import { ParseError } from "@effect/schema/ParseResult";
+import { TimeoutException } from "effect/Cause";
 
-export class KoiosError extends Data.TaggedError("KoiosError")<{
-  cause?: unknown;
-}> {
-  get message() {
-    return `${this.cause}`;
-  }
-}
+export const ProtocolParametersSchema = S.Struct({
+  pvt_motion_no_confidence: S.Number,
+  pvt_committee_normal: S.Number,
+  pvt_committee_no_confidence: S.Number,
+  pvt_hard_fork_initiation: S.Number,
+  pvtpp_security_group: S.Number,
+  dvt_motion_no_confidence: S.Number,
+  dvt_committee_normal: S.Number,
+  dvt_committee_no_confidence: S.Number,
+  dvt_update_to_constitution: S.Number,
+  dvt_hard_fork_initiation: S.Number,
+  dvt_p_p_network_group: S.Number,
+  dvt_p_p_economic_group: S.Number,
+  dvt_p_p_technical_group: S.Number,
+  dvt_p_p_gov_group: S.Number,
+  dvt_treasury_withdrawal: S.Number,
+  committee_min_size: S.Number,
+  committee_max_term_length: S.Number,
+  gov_action_lifetime: S.Number,
+  gov_action_deposit: S.NumberFromString,
+  drep_deposit: S.NumberFromString,
+  drep_activity: S.Number,
+  min_fee_ref_script_cost_per_byte: S.Number,
+  epoch_no: S.Number,
+  min_fee_a: S.Number,
+  min_fee_b: S.Number,
+  max_block_size: S.Number,
+  max_tx_size: S.Number,
+  max_bh_size: S.Number,
+  key_deposit: S.BigInt,
+  pool_deposit: S.BigInt,
+  max_epoch: S.Number,
+  optimal_pool_count: S.Number,
+  influence: S.Number,
+  monetary_expand_rate: S.Number,
+  treasury_growth_rate: S.Number,
+  decentralisation: S.Number,
+  extra_entropy: S.NullOr(S.String),
+  protocol_major: S.Number,
+  protocol_minor: S.Number,
+  min_utxo_value: S.String,
+  min_pool_cost: S.String,
+  nonce: S.String,
+  block_hash: S.NullOr(S.String),
+  cost_models: S.Struct({
+    PlutusV1: S.Array(S.Number),
+    PlutusV2: S.Array(S.Number),
+    PlutusV3: S.Array(S.Number),
+  }),
+  price_mem: S.Number,
+  price_step: S.Number,
+  max_tx_ex_mem: S.BigIntFromNumber,
+  max_tx_ex_steps: S.BigIntFromNumber,
+  max_block_ex_mem: S.Number,
+  max_block_ex_steps: S.Number,
+  max_val_size: S.Number,
+  collateral_percent: S.Number,
+  max_collateral_inputs: S.Number,
+  coins_per_utxo_size: S.BigInt,
+});
+export interface ProtocolParameters
+  extends S.Schema.Type<typeof ProtocolParametersSchema> {}
 
-/**
- * @description This class supports Koios API v1.2a
- */
-export class Koios implements Provider {
-  private readonly baseUrl: string;
+export const AssetSchema = S.Struct({
+  policy_id: S.String,
+  asset_name: S.NullOr(S.String),
+  fingerprint: S.String,
+  decimals: S.Number,
+  quantity: S.String,
+});
 
-  constructor(baseUrl: string) {
-    this.baseUrl = baseUrl;
-  }
+export interface Asset extends S.Schema.Type<typeof AssetSchema> {}
 
-  async getProtocolParameters(): Promise<ProtocolParameters> {
-    const url = `${this.baseUrl}/epoch_params?limit=1`;
-    const schema = S.Array(_Koios.ProtocolParametersSchema);
-    const [result] = await pipe(
-      _Koios.getWithSchemaValidation(url, schema),
-      Effect.timeout(10_000),
-      Effect.catchAllCause((cause) => new KoiosError({ cause })),
-      Effect.runPromise,
-    );
+const ReferenceScriptSchema = S.Struct({
+  hash: S.NullOr(S.String),
+  size: S.NullOr(S.Number),
+  type: S.NullOr(S.String),
+  bytes: S.NullOr(S.String),
+  value: S.NullOr(S.Object),
+});
 
-    return {
-      minFeeA: result.min_fee_a,
-      minFeeB: result.min_fee_b,
-      maxTxSize: result.max_tx_size,
-      maxValSize: result.max_val_size,
-      keyDeposit: result.key_deposit,
-      poolDeposit: result.pool_deposit,
-      drepDeposit: BigInt(result.drep_deposit),
-      govActionDeposit: BigInt(result.gov_action_deposit),
-      priceMem: result.price_mem,
-      priceStep: result.price_step,
-      maxTxExMem: result.max_tx_ex_mem,
-      maxTxExSteps: result.max_tx_ex_steps,
-      coinsPerUtxoByte: result.coins_per_utxo_size,
-      collateralPercentage: result.collateral_percent,
-      maxCollateralInputs: result.max_collateral_inputs,
-      minFeeRefScriptCostPerByte: result.min_fee_ref_script_cost_per_byte,
-      costModels: {
-        PlutusV1: Object.fromEntries(
-          result.cost_models.PlutusV1.map((value, index) => [
-            index.toString(),
-            value,
-          ]),
+export interface ReferenceScript
+  extends S.Schema.Type<typeof ReferenceScriptSchema> {}
+
+export const UTxOSchema = S.Struct({
+  tx_hash: S.String,
+  tx_index: S.Number,
+  block_time: S.Number,
+  block_height: S.NullOr(S.Number),
+  value: S.String,
+  datum_hash: S.NullOr(S.String),
+  inline_datum: S.NullOr(
+    S.Struct({
+      bytes: S.String,
+      value: S.Object,
+    })
+  ),
+  reference_script: S.NullOr(ReferenceScriptSchema),
+  asset_list: S.NullOr(S.Array(AssetSchema)),
+});
+
+export interface UTxO extends S.Schema.Type<typeof UTxOSchema> {}
+
+export const AddressInfoSchema = S.Array(
+  S.NullishOr(
+    S.Struct({
+      address: S.String,
+      balance: S.String,
+      stake_address: S.NullOr(S.String),
+      script_address: S.Boolean,
+      utxo_set: S.Array(UTxOSchema),
+    })
+  )
+);
+
+export interface AddressInfo extends S.Schema.Type<typeof AddressInfoSchema> {}
+
+export const InputOutputSchema = S.Struct({
+  payment_addr: S.Struct({
+    bech32: S.String,
+    cred: S.String,
+  }),
+  stake_addr: S.NullOr(S.String),
+  tx_hash: S.String,
+  tx_index: S.Number,
+  value: S.String,
+  datum_hash: S.NullOr(S.String),
+  inline_datum: S.NullOr(
+    S.Struct({
+      bytes: S.String,
+      value: S.Object,
+    })
+  ),
+  reference_script: S.NullOr(ReferenceScriptSchema),
+  asset_list: S.Array(AssetSchema),
+});
+
+export interface InputOutput extends S.Schema.Type<typeof InputOutputSchema> {}
+
+export const TxInfoSchema = S.Struct({
+  tx_hash: S.String,
+  block_hash: S.String,
+  block_height: S.Number,
+  epoch_no: S.Number,
+  epoch_slot: S.Number,
+  absolute_slot: S.Number,
+  tx_timestamp: S.Number,
+  tx_block_index: S.Number,
+  tx_size: S.Number,
+  total_output: S.String,
+  fee: S.String,
+  treasury_donation: S.String,
+  deposit: S.String,
+  invalid_before: S.NullOr(S.String),
+  invalid_after: S.NullOr(S.String),
+  collateral_inputs: S.NullOr(S.Array(InputOutputSchema)),
+  collateral_output: S.NullOr(InputOutputSchema),
+  reference_inputs: S.NullOr(S.Array(InputOutputSchema)),
+  inputs: S.Array(InputOutputSchema),
+  outputs: S.Array(InputOutputSchema),
+  withdrawals: S.NullOr(
+    S.Array(
+      S.Struct({
+        amount: S.String,
+        stake_addr: S.String,
+      })
+    )
+  ),
+  assets_minted: S.NullOr(S.Array(AssetSchema)),
+  metadata: S.NullOr(S.Object),
+  certificates: S.NullOr(
+    S.Array(
+      S.Struct({
+        index: S.Number,
+        type: S.String,
+        info: S.NullOr(S.Object),
+      })
+    )
+  ),
+  native_scripts: S.NullOr(
+    S.Array(
+      S.Struct({
+        script_hash: S.String,
+        script_json: S.Object,
+      })
+    )
+  ),
+  plutus_contracts: S.NullOr(
+    S.Array(
+      S.Struct({
+        address: S.String,
+        spends_input: S.NullOr(
+          S.Struct({
+            tx_hash: S.String,
+            tx_index: S.Number,
+          })
         ),
-        PlutusV2: Object.fromEntries(
-          result.cost_models.PlutusV2.map((value, index) => [
-            index.toString(),
-            value,
-          ]),
-        ),
-        PlutusV3: Object.fromEntries(
-          result.cost_models.PlutusV3.map((value, index) => [
-            index.toString(),
-            value,
-          ]),
-        ),
-      },
-    };
-  }
-
-  async getUtxos(addressOrCredential: Address | Credential): Promise<UTxO[]> {
-    const result = await pipe(
-      _Koios.getUtxosEffect(this.baseUrl, addressOrCredential),
-      Effect.timeout(10_000),
-      Effect.catchAllCause((cause) => new KoiosError({ cause })),
-      Effect.runPromise,
-    );
-    return result;
-  }
-
-  async getUtxosWithUnit(
-    addressOrCredential: Address | Credential,
-    unit: Unit,
-  ): Promise<UTxO[]> {
-    const result = await pipe(
-      _Koios.getUtxosEffect(this.baseUrl, addressOrCredential),
-      Effect.map((utxos) =>
-        utxos.filter((utxo) => {
-          const keys = Object.keys(utxo.assets);
-          return keys.length > 0 && keys.includes(unit);
+        script_hash: S.String,
+        bytecode: S.String,
+        size: S.Number,
+        valid_contract: S.Boolean,
+        input: S.Struct({
+          redeemer: S.Struct({
+            purpose: S.Literal("spend", "mint", "cert", "reward"),
+            fee: S.String,
+            unit: S.Struct({
+              steps: S.String,
+              mem: S.String,
+            }),
+            datum: S.Struct({
+              hash: S.NullOr(S.String),
+              value: S.NullOr(S.Object),
+            }),
+          }),
+          datum: S.Struct({
+            hash: S.NullOr(S.String),
+            value: S.NullOr(S.Object),
+          }),
         }),
-      ),
-      Effect.timeout(10_000),
-      Effect.catchAllCause((cause) => new KoiosError({ cause })),
-      Effect.runPromise,
-    );
-    return result;
-  }
+      })
+    )
+  ),
+  //TODO: add S.Struct
+  // https://preprod.koios.rest/#post-/tx_info
+  voting_procedures: S.Array(S.Object),
+  //TODO: add S.Struct
+  // https://preprod.koios.rest/#post-/tx_info
+  proposal_procedures: S.Object,
+});
 
-  async getUtxoByUnit(unit: Unit): Promise<UTxO> {
-    let { policyId, assetName } = fromUnit(unit);
-    const url = `${this.baseUrl}/asset_addresses?_asset_policy=${policyId}&_asset_name=${assetName}`;
-    const result: UTxO = await pipe(
-      _Koios.getWithSchemaValidation(url, S.Array(_Koios.AssetAddressSchema)),
-      Effect.flatMap((adresses) =>
-        adresses.length === 0
-          ? Effect.fail("Unit not found")
-          : Effect.succeed(adresses),
-      ),
-      Effect.flatMap((adresses) =>
-        adresses.length > 1
-          ? Effect.fail("Unit needs to be an NFT or only held by one address.")
-          : Effect.succeed(adresses[0]),
-      ),
-      Effect.flatMap((address) =>
-        _Koios.getUtxosEffect(this.baseUrl, address.payment_address),
-      ),
-      Effect.map((utxos) =>
-        utxos.filter((utxo) => {
-          const keys = Object.keys(utxo.assets);
-          return keys.length > 0 && keys.includes(unit);
-        }),
-      ),
-      Effect.flatMap((utxos) =>
-        utxos.length > 1
-          ? Effect.fail("Unit needs to be an NFT or only held by one address.")
-          : Effect.succeed(utxos[0]),
-      ),
-      Effect.timeout(10_000),
-      Effect.catchAllCause((cause) => new KoiosError({ cause })),
-      Effect.runPromise,
-    );
-    return result;
-  }
+export interface TxInfo extends S.Schema.Type<typeof TxInfoSchema> {}
 
-  async getUtxosByOutRef(outRefs: OutRef[]): Promise<UTxO[]> {
-    const url = `${this.baseUrl}/tx_info`;
-    const body = {
-      _tx_hashes: [...new Set(outRefs.map((outRef) => outRef.txHash))],
-      _assets: true,
-      _scripts: true,
-    };
-    const schema = S.Array(_Koios.TxInfoSchema);
-    const [result] = await pipe(
-      _Koios.postWithSchemaValidation(url, body, schema),
-      Effect.timeout(10_000),
-      Effect.catchAllCause((cause) => new KoiosError({ cause })),
-      Effect.runPromise,
-    );
+export const TxHashSchema = S.String;
 
-    if (result) {
-      const utxos: UTxO[] = result.outputs.map(
-        (koiosInputOutput: _Koios.InputOutput) =>
-          _Koios.toUTxO(
-            {
-              tx_hash: koiosInputOutput.tx_hash,
-              tx_index: koiosInputOutput.tx_index,
-              block_time: 0,
-              block_height: result.block_height,
-              value: koiosInputOutput.value,
-              datum_hash: koiosInputOutput.datum_hash,
-              inline_datum: koiosInputOutput.inline_datum,
-              reference_script: koiosInputOutput.reference_script,
-              asset_list: koiosInputOutput.asset_list,
-            } satisfies _Koios.UTxO,
-            koiosInputOutput.payment_addr.bech32,
-          ),
-      );
-      return utxos.filter((utxo) =>
-        outRefs.some(
-          (outRef) =>
-            utxo.txHash === outRef.txHash &&
-            utxo.outputIndex === outRef.outputIndex,
-        ),
-      );
-    } else {
-      return [];
+export const AssetAddressSchema = S.Struct({
+  payment_address: S.String,
+  stake_address: S.NullOr(S.String),
+  quantity: S.String,
+});
+
+export interface AssetAddress
+  extends S.Schema.Type<typeof AssetAddressSchema> {}
+
+//NOTE: account_info schema is not complete
+// https://preprod.koios.rest/#post-/account_info
+export const AccountInfoSchema = S.Struct({
+  delegated_pool: S.NullOr(S.String),
+  rewards_available: S.NumberFromString,
+});
+
+//NOTE: datum_info schema is not complete
+// https://preprod.koios.rest/#post-/datum_info
+export const DatumInfo = S.Struct({
+  bytes: S.String,
+});
+
+export const postWithSchemaValidation = <A, I, R>(
+  url: string | URL,
+  data: unknown,
+  schema: S.Schema<A, I, R>
+): Effect.Effect<A, HttpClientError | HttpBodyError | ParseError, R> =>
+  pipe(
+    HttpClientRequest.post(url),
+    HttpClientRequest.jsonBody(data),
+    Effect.flatMap(HttpClient.fetchOk),
+    HttpClientResponse.json,
+    Effect.flatMap(S.decodeUnknown(schema))
+    // Effect.scoped
+  );
+
+export const getWithSchemaValidation = <A, I, R>(
+  url: string | URL,
+  schema: S.Schema<A, I, R>
+) =>
+  pipe(
+    HttpClientRequest.get(url),
+    HttpClient.fetchOk,
+    HttpClientResponse.json,
+    Effect.flatMap(S.decodeUnknown(schema))
+  );
+
+export const toUTxO = (koiosUTxO: UTxO, address: string): CoreType.UTxO => ({
+  txHash: koiosUTxO.tx_hash,
+  outputIndex: koiosUTxO.tx_index,
+  assets: (() => {
+    const a: CoreType.Assets = {};
+    if (koiosUTxO.asset_list) {
+      koiosUTxO.asset_list.forEach((am: Asset) => {
+        a[am.policy_id + am.asset_name] = BigInt(am.quantity);
+      });
+    }
+    a["lovelace"] = BigInt(koiosUTxO.value);
+    return a;
+  })(),
+  address: address,
+  datumHash: koiosUTxO.inline_datum
+    ? undefined
+    : koiosUTxO.datum_hash || undefined,
+  datum: koiosUTxO.inline_datum ? koiosUTxO.inline_datum.bytes : undefined,
+  scriptRef: toScriptRef(koiosUTxO.reference_script),
+});
+
+export const toScriptRef = (
+  reference_script: ReferenceScript | null
+): CoreType.Script | undefined => {
+  if (reference_script && reference_script.bytes && reference_script.type) {
+    switch (reference_script.type) {
+      case "plutusV1":
+        return {
+          type: "PlutusV1" as const,
+          script: applyDoubleCborEncoding(reference_script.bytes),
+        };
+      case "plutusV2":
+        return {
+          type: "PlutusV2" as const,
+          script: applyDoubleCborEncoding(reference_script.bytes),
+        };
+      case "plutusV3":
+        return {
+          type: "PlutusV3" as const,
+          script: applyDoubleCborEncoding(reference_script.bytes),
+        };
+      default:
+        return undefined;
     }
   }
+};
 
-  async getDelegation(rewardAddress: RewardAddress): Promise<Delegation> {
-    const body = {
-      _stake_addresses: [rewardAddress],
-    };
-    const url = `${this.baseUrl}/account_info`;
-    const result = await pipe(
-      _Koios.postWithSchemaValidation(
-        url,
-        body,
-        S.Array(_Koios.AccountInfoSchema),
-      ),
-      Effect.flatMap((result) =>
-        result.length === 0
-          ? Effect.fail("No Delegation Found by Reward Address")
-          : Effect.succeed(result[0]),
-      ),
-      Effect.timeout(10_000),
-      Effect.catchAllCause((cause) => new KoiosError({ cause })),
-      Effect.runPromise,
-    );
-
-    return {
-      poolId: result.delegated_pool || null,
-      rewards: BigInt(result.rewards_available),
-    };
-  }
-
-  async getDatum(datumHash: DatumHash): Promise<Datum> {
-    const url = `${this.baseUrl}/datum_info`;
-    const body = {
-      _datum_hashes: [datumHash],
-    };
-    const result = await pipe(
-      _Koios.postWithSchemaValidation(url, body, S.Array(_Koios.DatumInfo)),
-      Effect.flatMap((result) =>
-        result.length === 0
-          ? Effect.fail("No Datum Found by Datum Hash")
-          : Effect.succeed(result[0]),
-      ),
-      Effect.timeout(10_000),
-      Effect.catchAllCause((cause) => new KoiosError({ cause })),
-      Effect.runPromise,
-    );
-    return result.bytes;
-  }
-
-  async awaitTx(txHash: TxHash, checkInterval = 20000): Promise<boolean> {
-    const url = `${this.baseUrl}/tx_info`;
-    const body = {
-      _tx_hashes: [txHash],
-    };
-    const schema = S.Array(_Koios.TxInfoSchema);
-    const result = await pipe(
-      _Koios.postWithSchemaValidation(url, body, schema),
-      Effect.repeat({
-        schedule: Schedule.exponential(checkInterval),
-        until: (result) => result.length > 0,
-      }),
-      Effect.timeout(160_000),
-      Effect.orDie,
-      Effect.as(true),
-      Effect.runPromise,
-    );
-
-    return result;
-  }
-
-  async submitTx(tx: Transaction): Promise<TxHash> {
-    const url = `${this.baseUrl}/submittx`;
-    const body = fromHex(tx);
-    const schema = _Koios.TxHashSchema;
-    const result = await pipe(
-      _Koios.postWithSchemaValidation(url, body, schema),
-      Effect.timeout(10_000),
-      Effect.catchAllCause((cause) => new KoiosError({ cause })),
-      Effect.runPromise,
-    );
-    return result;
-  }
-
-  async evaluateTx(
-    tx: Transaction,
-    additionalUTxOs?: UTxO[],
-  ): Promise<EvalRedeemer[]> {
-    // Prepare request data
-    const url = `${this.baseUrl}/ogmios`;
-    const body = {
-      jsonrpc: "2.0",
-      method: "evaluateTransaction",
-      params: {
-        transaction: { cbor: tx },
-        additionalUtxo: _Ogmios.toOgmiosUTxOs(additionalUTxOs),
-      },
-      id: null,
-    };
-    const schema = _Ogmios.JSONRPCSchema(S.Array(_Ogmios.RedeemerSchema));
-    const result = await pipe(
-      _Koios.postWithSchemaValidation(url, body, schema),
-      Effect.flatMap((response) =>
-        "error" in response
-          ? Effect.fail(response)
-          : Effect.succeed(response.result),
-      ),
-      Effect.timeout(10_000),
-      Effect.catchAllCause((cause) => new KoiosError({ cause })),
-      Effect.runPromise,
-    );
-
-    const evalRedeemers = result.map((item) => ({
-      ex_units: {
-        mem: item.budget.memory,
-        steps: item.budget.cpu,
-      },
-      redeemer_index: item.validator.index,
-      redeemer_tag: item.validator.purpose,
-    }));
-
-    return evalRedeemers;
-  }
-}
+export const getUtxosEffect = (
+  baseUrl: string,
+  addressOrCredential: CoreType.Address | CoreType.Credential
+): Effect.Effect<
+  CoreType.UTxO[],
+  string | HttpClientError | HttpBodyError | ParseError
+> => {
+  const url = `${baseUrl}/address_info`;
+  const body = {
+    _addresses: [addressOrCredential],
+  };
+  const schema = AddressInfoSchema;
+  const result = pipe(
+    Effect.if(typeof addressOrCredential === "string", {
+      onFalse: () =>
+        Effect.fail("Credential Type is not supported in Koios yet."),
+      onTrue: () => postWithSchemaValidation(url, body, schema),
+    }),
+    Effect.map(([result]) =>
+      result
+        ? result.utxo_set.map((koiosUtxo) => toUTxO(koiosUtxo, result.address))
+        : []
+    )
+  );
+  return result;
+};
