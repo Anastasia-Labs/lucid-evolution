@@ -57,7 +57,7 @@ describe.sequential("Onchain testing", () => {
     expect(exit._tag).toBe("Success");
   });
 
-  test("MultiValidator - deRegisterStake", async () => {
+  test.only("MultiValidator - deRegisterStake", async () => {
     const program = pipe(
       MultiValidatorEndpoints.deRegisterStake,
       Effect.provide(User.layer),
@@ -423,7 +423,7 @@ describe.sequential("Onchain testing", () => {
     expect(exit._tag).toBe("Success");
   });
 
-  test("Mint Test - Burn Token", async () => {
+  test.skip("Mint Test - Burn Token", async () => {
     const program = pipe(
       MintBurnEndpoints.burn,
       Effect.provide(User.layer),

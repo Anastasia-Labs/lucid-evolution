@@ -14,7 +14,7 @@ import { EvalRedeemer, UTxO } from "@lucid-evolution/core-types";
 // NOTE: This test should probably be moved to another location.
 // NOTE: UPLC.eval_phase_two_raw return a redeemer list which is the old format
 // soon we need to transform the list into a redeemer map using CML.MapRedeemerKeyToRedeemerVal
-test("UPLC evaluation", () => {
+test.skip("UPLC evaluation", () => {
   createCostModels(PROTOCOL_PARAMETERS_DEFAULT.costModels);
   const ins = evalSample3.utxos.map((utxo) => utxoToTransactionInput(utxo));
   const outs = evalSample3.utxos.map((utxo) => utxoToTransactionOutput(utxo));

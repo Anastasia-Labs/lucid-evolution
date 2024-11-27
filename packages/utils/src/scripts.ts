@@ -12,7 +12,7 @@ import {
 } from "@lucid-evolution/core-types";
 import { CML } from "./core.js";
 import { networkToId } from "./network.js";
-import { CBOREncodingLevel } from "./cbor.js";
+import { applyDoubleCborEncoding } from "./cbor.js";
 import { Data } from "@lucid-evolution/plutus";
 import {
   Application,
@@ -20,10 +20,9 @@ import {
   parseUPLC,
   UPLCConst,
   UPLCProgram,
-  UPLCTerm,
 } from "@harmoniclabs/uplc";
 import { fromHex, toHex } from "@lucid-evolution/core-utils";
-import { decode, encode } from "cbor-x";
+import { decode } from "cbor-x";
 import { dataFromCbor } from "@harmoniclabs/plutus-data";
 
 export function validatorToAddress(
@@ -62,19 +61,25 @@ export function validatorToScriptHash(validator: Validator): ScriptHash {
       return CML.NativeScript.from_cbor_hex(validator.script).hash().to_hex();
     case "PlutusV1":
       return CML.PlutusScript.from_v1(
-        CML.PlutusV1Script.from_cbor_hex(validator.script),
+        CML.PlutusV1Script.from_cbor_hex(
+          applyDoubleCborEncoding(validator.script),
+        ),
       )
         .hash()
         .to_hex();
     case "PlutusV2":
       return CML.PlutusScript.from_v2(
-        CML.PlutusV2Script.from_cbor_hex(validator.script),
+        CML.PlutusV2Script.from_cbor_hex(
+          applyDoubleCborEncoding(validator.script),
+        ),
       )
         .hash()
         .to_hex();
     case "PlutusV3":
       return CML.PlutusScript.from_v3(
-        CML.PlutusV3Script.from_cbor_hex(validator.script),
+        CML.PlutusV3Script.from_cbor_hex(
+          applyDoubleCborEncoding(validator.script),
+        ),
       )
         .hash()
         .to_hex();
@@ -91,15 +96,21 @@ export function toScriptRef(script: Script): CML.Script {
       );
     case "PlutusV1":
       return CML.Script.new_plutus_v1(
-        CML.PlutusV1Script.from_cbor_hex(script.script),
+        CML.PlutusV1Script.from_cbor_hex(
+          applyDoubleCborEncoding(script.script),
+        ),
       );
     case "PlutusV2":
       return CML.Script.new_plutus_v2(
-        CML.PlutusV2Script.from_cbor_hex(script.script),
+        CML.PlutusV2Script.from_cbor_hex(
+          applyDoubleCborEncoding(script.script),
+        ),
       );
     case "PlutusV3":
       return CML.Script.new_plutus_v3(
-        CML.PlutusV3Script.from_cbor_hex(script.script),
+        CML.PlutusV3Script.from_cbor_hex(
+          applyDoubleCborEncoding(script.script),
+        ),
       );
     default:
       throw new Error("No variant matched.");
@@ -140,37 +151,29 @@ export function mintingPolicyToId(mintingPolicy: MintingPolicy): PolicyId {
 
 /**
  * Applies a list of parameters, in the form of the `Data` type, to a CBOR encoded script.
+ *
+ * The `plutusScript` must be double CBOR encoded(bytes). Ensure to use the `applyDoubleCborEncoding` function.
  */
 export function applyParamsToScript<T extends unknown[] = Data[]>(
   plutusScript: string,
   params: Exact<[...T]>,
   type?: T,
 ): string {
-  const encodingLevel = CBOREncodingLevel(plutusScript);
-  const program: UPLCProgram =
-    encodingLevel === "double"
-      ? parseUPLC(decode(decode(fromHex(plutusScript))), "flat")
-      : parseUPLC(decode(fromHex(plutusScript)), "flat");
-  const parameters = (type ? Data.castTo<T>(params, type) : params) as Data[];
-
-  const appliedProgram: UPLCTerm = parameters.reduce(
-    (body, currentParameter) => {
-      const data = UPLCConst.data(dataFromCbor(Data.to(currentParameter)));
-      const appliedParameter = new Application(body, data);
-      return appliedParameter;
-    },
-    program.body,
+  const program = parseUPLC(
+    decode(decode(fromHex(applyDoubleCborEncoding(plutusScript)))),
+    "flat",
   );
+  const parameters = (type ? Data.castTo<T>(params, type) : params) as Data[];
+  const appliedProgram = parameters.reduce((body, currentParameter) => {
+    const data = UPLCConst.data(dataFromCbor(Data.to(currentParameter)));
+    const appliedParameter = new Application(body, data);
+    return appliedParameter;
+  }, program.body);
 
-  const compiledUPLC: ArrayBufferLike = encodeUPLC(
-    new UPLCProgram(program.version, appliedProgram),
-  ).toBuffer().buffer.buffer;
-
-  switch (encodingLevel) {
-    case "double":
-      return toHex(encode(encode(compiledUPLC)));
-
-    case "single":
-      return toHex(encode(compiledUPLC));
-  }
+  return applyDoubleCborEncoding(
+    toHex(
+      encodeUPLC(new UPLCProgram(program.version, appliedProgram)).toBuffer()
+        .buffer,
+    ),
+  );
 }

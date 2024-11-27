@@ -9,6 +9,7 @@ import { ArrayFormatter } from "@effect/schema";
 import * as S from "@effect/schema/Schema";
 import { Effect, pipe } from "effect";
 import * as CoreType from "@lucid-evolution/core-types";
+import { applyDoubleCborEncoding } from "@lucid-evolution/utils";
 import { ParseError } from "@effect/schema/ParseResult";
 import { TimeoutException } from "effect/Cause";
 
@@ -322,17 +323,17 @@ export const toScriptRef = (
       case "plutusV1":
         return {
           type: "PlutusV1" as const,
-          script: reference_script.bytes,
+          script: applyDoubleCborEncoding(reference_script.bytes),
         };
       case "plutusV2":
         return {
           type: "PlutusV2" as const,
-          script: reference_script.bytes,
+          script: applyDoubleCborEncoding(reference_script.bytes),
         };
       case "plutusV3":
         return {
           type: "PlutusV3" as const,
-          script: reference_script.bytes,
+          script: applyDoubleCborEncoding(reference_script.bytes),
         };
       default:
         return undefined;
