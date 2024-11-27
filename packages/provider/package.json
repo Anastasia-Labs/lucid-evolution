@@ -1,6 +1,6 @@
 {
   "name": "@lucid-evolution/provider",
-  "version": "0.1.75",
+  "version": "0.1.76",
   "description": "",
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
