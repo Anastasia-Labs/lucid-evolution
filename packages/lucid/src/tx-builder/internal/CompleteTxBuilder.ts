@@ -225,7 +225,7 @@ export const selectionAndEvaluation = (
             script_calculation,
             includeLeftoverLovelaceAsFee,
           )
-        : { selected: [], burnable: {} };
+        : { selected: [], burnable: { lovelace: 0n } };
 
     // Skip UPLC evaluation for the second time if no new inputs are added
     let estimatedFee = 0n;
