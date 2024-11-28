@@ -1,5 +1,15 @@
 # @lucid-evolution/provider
 
+## 0.1.77
+
+### Patch Changes
+
+- [#423](https://github.com/Anastasia-Labs/lucid-evolution/pull/423) [`d51efd2`](https://github.com/Anastasia-Labs/lucid-evolution/commit/d51efd29f9b8637b9ec05e4ee8556451727a3442) Thanks [@solidsnakedev](https://github.com/solidsnakedev)! - enforce single encoding for tx evaluation in providerrs; fix blockfrost redeemer labels
+
+- Updated dependencies [[`d51efd2`](https://github.com/Anastasia-Labs/lucid-evolution/commit/d51efd29f9b8637b9ec05e4ee8556451727a3442)]:
+  - @lucid-evolution/utils@0.1.59
+  - @lucid-evolution/wallet@0.1.65
+
 ## 0.1.76
 
 ### Patch Changes
