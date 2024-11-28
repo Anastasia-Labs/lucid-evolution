@@ -22,6 +22,34 @@ export const applyDoubleCborEncoding = (script: string) => {
   }
 };
 
+export const applySingleCborEncoding = (script: string) => {
+  try {
+    decode(decode(fromHex(script)));
+    return toHex(decode(fromHex(script)));
+  } catch (error) {
+    try {
+      decode(fromHex(script));
+      return script;
+    } catch (error) {
+      return toHex(Uint8Array.from(encode(fromHex(script).buffer)));
+    }
+  }
+};
+
+export const CBOREncodingLevel = (script: string): "double" | "single" => {
+  try {
+    decode(decode(fromHex(script)));
+    return "double" as const;
+  } catch (error) {
+    try {
+      decode(fromHex(script));
+      return "single" as const;
+    } catch (error) {
+      throw new Error("Script is not CBOR-encoded or invalid format.");
+    }
+  }
+};
+
 export function datumJsonToCbor(json: DatumJson): Datum {
   const convert = (json: any) => {
     if (!isNaN(json.int)) {

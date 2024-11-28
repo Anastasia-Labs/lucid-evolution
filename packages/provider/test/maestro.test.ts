@@ -93,8 +93,7 @@ describe("maestro", async () => {
     );
   });
 
-  //NOTE: Evaluate transaction failed: {"code":400,"error":"Bad Request","message":"Transaction evaluation failed: MissingRequiredScript { hash: \"c40f9129c2684046eb02325b96ca2899a6fa6478c1dde9b5c53206a5\" }"}
-  test.skip("evaluates additinal utxos - sample 2", async () => {
+  test("evaluates additinal utxos - sample 2", async () => {
     const redeemers = await maestro.evaluateTx(
       PreprodConstants.evalSample2.transaction,
       PreprodConstants.evalSample2.utxos,
@@ -107,6 +106,19 @@ describe("maestro", async () => {
   // NOTE: The following transaction doesn't work with Maestro TX evaluation.
   //Error: Evaluate transaction failed: {"code":400,"error":"Bad Request","message":"A validator threw an error while executing redeemer withdraw:0. The following information was returned: 'Script must be executed as stake withdrawal'"}
   test.skip("evaluates additinal utxos - sample 3", async () => {
+    const redeemers = await maestro.evaluateTx(
+      PreprodConstants.evalSample3.transaction,
+      PreprodConstants.evalSample3.utxos,
+    );
+    assert.deepStrictEqual(
+      redeemers,
+      PreprodConstants.evalSample3.redeemersExUnits,
+    );
+  });
+
+  // NOTE: The following transaction doesn't work with Maestro TX evaluation.
+  //Error: Evaluate transaction failed: {"code":400,"error":"Bad Request","message":"A validator threw an error while executing redeemer withdraw:0. The following information was returned: 'Script must be executed as stake withdrawal'"}
+  test.skip("evaluates additinal utxos - sample 4", async () => {
     const redeemers = await maestro.evaluateTx(
       PreprodConstants.evalSample3.transaction,
       PreprodConstants.evalSample3.utxos,

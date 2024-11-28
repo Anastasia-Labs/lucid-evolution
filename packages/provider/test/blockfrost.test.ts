@@ -100,12 +100,29 @@ describe("Blockfrost", async () => {
       PreprodConstants.evalSample2.redeemersExUnits,
     );
   });
-  // NOTE: The following transaction doesn't work with Blockfrost TX evaluation.
-  // It is very likely that the issue is due to them not upgrading from Ogmios 5.6, which is an outdated version, to the latest one.
-  test.skip("evaluates additinal utxos - sample 2", async () => {
+  // NOTE: The following transaction doesn't work with Blockfrost's TX evaluation.
+  // This is likely because they have not upgraded from Ogmios 5.6 to Ogmios 6.0 or to the latest version.
+  // Error: Could not evaluate the transaction: {"type":"jsonwsp/fault","version":"1.0","servicename":"ogmios","fault":{"code":"client","string":"Invalid request: failed to decode payload from base64 or base16."},"reflection":{"id":"17f6c075-6d70-444e-a0e5-7cbbd064508c"}}.
+  // Transaction: 84ac00828258209dec9370f3c40d5934f4ea67dcacf22f0cdb74acbbecf4638ae141748e9c6601008258209dec9370f3c40d5934f4ea67dcacf22f0cdb74acbbecf4638ae141748e9c66010101828258390091d2bdc73e1de0d2cc776d3dc4e58db5d0ebca3772dac052aa49fdc8c2ab6459a71e7172b510aadb5b60f6da53a7116e45ca7f60c4145a61821a002d0c9ea1581c6af660f258a83733ab5bbf1c779286d3d9c7881ccad209fe6d0ffc9ba14c4d5954455354544f4b454e321a08f0d1808258390091d2bdc73e1de0d2cc776d3dc4e58db5d0ebca3772dac052aa49fdc8c2ab6459a71e7172b510aadb5b60f6da53a7116e45ca7f60c4145a61821b0000000253dcc429a2581c6af660f258a83733ab5bbf1c779286d3d9c7881ccad209fe6d0ffc9ba14c4d5954455354544f4b454e321aa9df8c80581cc993b4822e24f62fbb291bef2feea56dc70d93122dcb15715b0427aea14c4d5954455354544f4b454e311a77359400021a00095dfb031a039152bc05a2581df05724eab01c199500967c1f96e827811e6618b9bf521f6b46c427007800581df0c0c837b81dd43f25cc77446ad70d669379bdab898d83922adff1d86500081a0391502809a1581caacd6c58a4894b4ca6c3ea429fcd4318b301d9c0eec7f031d08a0780a35820e6bc4fcf950a505075ce1e9206c48a58dbb4255fdafdec9617f12c538ed025b1205820c784a5780f4637fa9027e6eedabc24e425a458a481b1be6ae4dee6d7081dbb7b2058209cc2aa27327ee7b4ca48c0cf2fa035579cfc1d16fcc6222bd673b02dfc393e55200b58203c95151f49608a1dde1bc4cd4f25a50733e271792fec4b05f0f949ac599c8bb70d818258209dec9370f3c40d5934f4ea67dcacf22f0cdb74acbbecf4638ae141748e9c660101108258390091d2bdc73e1de0d2cc776d3dc4e58db5d0ebca3772dac052aa49fdc8c2ab6459a71e7172b510aadb5b60f6da53a7116e45ca7f60c4145a61821b000000025399d6e4a2581cc993b4822e24f62fbb291bef2feea56dc70d93122dcb15715b0427aea14c4d5954455354544f4b454e311a77359400581c6af660f258a83733ab5bbf1c779286d3d9c7881ccad209fe6d0ffc9ba14c4d5954455354544f4b454e321aa9df8c80111a004c4b401284825820fa957d2b1dd37de2281dff8dd58c245baf1a7600067e3512056276c1787eb1e90082582023be0164e07ec84dea989dc4fb58017defc17849679b7dd36d59ae19d0e5a07800825820a8275eccb3dae1b8ae58837aa22d3c1cbe4df15e5ebc869bd0d710e50b6c44b000825820b8fd5caa1dc06c6bb1c713cf9f948012454cfdc028a34c47270dd253780fd20e00a10584840000d87b80821a0001e8f41a021657a9840100d879808219d24f1a012255d08403009fd8799f581c91d2bdc73e1de0d2cc776d3dc4e58db5d0ebca3772dac052aa49fdc8581cc2ab6459a71e7172b510aadb5b60f6da53a7116e45ca7f60c4145a61ffff821a000457311a054b95e4840301d87980821a00011b351a0132060af5f6
+  test.skip("evaluates additinal utxos - sample 3", async () => {
     const redeemers = await blockfrost.evaluateTx(
       PreprodConstants.evalSample3.transaction,
       PreprodConstants.evalSample3.utxos,
+    );
+    assert.deepStrictEqual(
+      redeemers,
+      PreprodConstants.evalSample3.redeemersExUnits,
+    );
+  });
+
+  test("evaluates additinal utxos - sample 4", async () => {
+    const redeemers = await blockfrost.evaluateTx(
+      PreprodConstants.evalSample4.transaction,
+      PreprodConstants.evalSample4.utxos,
+    );
+    assert.deepStrictEqual(
+      redeemers,
+      PreprodConstants.evalSample4.redeemersExUnits,
     );
   });
 });

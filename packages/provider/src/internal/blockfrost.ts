@@ -1,5 +1,6 @@
 import { pipe, Record } from "effect";
 import * as CoreType from "@lucid-evolution/core-types";
+import { applySingleCborEncoding } from "@lucid-evolution/utils";
 
 /**
  * Blockfrost only supports Ogmios 5.6
@@ -78,11 +79,11 @@ export const toTxOutScript = (
   if (scriptRef) {
     switch (scriptRef.type) {
       case "PlutusV1":
-        return { "plutus:v1": scriptRef.script };
+        return { "plutus:v1": applySingleCborEncoding(scriptRef.script) };
       case "PlutusV2":
-        return { "plutus:v2": scriptRef.script };
+        return { "plutus:v2": applySingleCborEncoding(scriptRef.script) };
       case "PlutusV3":
-        return { "plutus:v3": scriptRef.script };
+        return { "plutus:v3": applySingleCborEncoding(scriptRef.script) };
       default:
         return undefined;
     }
@@ -100,3 +101,18 @@ export const fromAssets = (assets: CoreType.Assets) =>
     ]),
     (r) => (Record.isEmptyRecord(r) ? undefined : r),
   );
+
+export type LegacyRedeemerTag = "spend" | "mint" | "certificate" | "withdrawal";
+
+export const fromLegacyRedeemerTag = (
+  redeemerTag: LegacyRedeemerTag,
+): CoreType.RedeemerTag => {
+  switch (redeemerTag) {
+    case "certificate":
+      return "publish";
+    case "withdrawal":
+      return "withdraw";
+    default:
+      return redeemerTag;
+  }
+};
