@@ -1,5 +1,11 @@
 # @lucid-evolution/lucid
 
+## 0.4.11
+
+### Patch Changes
+
+- [#427](https://github.com/Anastasia-Labs/lucid-evolution/pull/427) [`3e5b782`](https://github.com/Anastasia-Labs/lucid-evolution/commit/3e5b78248560b7545c0d807de84168b66caed39d) Thanks [@hadelive](https://github.com/hadelive)! - default burnable lovelace
+
 ## 0.4.10
 
 ### Patch Changes
