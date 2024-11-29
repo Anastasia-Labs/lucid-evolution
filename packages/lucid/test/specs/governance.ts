@@ -6,7 +6,7 @@ import {
   User,
 } from "./services";
 import { handleSignSubmit, withLogRetry } from "./utils";
-import { Data } from "../../src";
+import { Data, getAddressDetails } from "../../src";
 
 export const registerDRep = Effect.gen(function* ($) {
   const { user } = yield* User;
@@ -189,3 +189,67 @@ export const deregisterScriptDRep = Effect.gen(function* ($) {
   withLogRetry,
   Effect.orDie,
 );
+
+export const registerAndDelegateToPoolAndScriptDRep = Effect.gen(function* ($) {
+  const { user } = yield* User;
+  const { rewardAddress, script } = yield* AlwaysYesDrepContract;
+  const networkConfig = yield* NetworkConfig;
+  const poolId =
+    networkConfig.NETWORK == "Preprod"
+      ? "pool1nmfr5j5rnqndprtazre802glpc3h865sy50mxdny65kfgf3e5eh"
+      : "pool1ynfnjspgckgxjf2zeye8s33jz3e3ndk9pcwp0qzaupzvvd8ukwt";
+  const signBuilder = yield* user
+    .newTx()
+    .registerAndDelegate.ToPoolAndDRep(
+      rewardAddress,
+      poolId,
+      {
+        __typename: "AlwaysAbstain",
+      },
+      Data.void(),
+    )
+    .attach.Script(script)
+    .completeProgram({ localUPLCEval: false });
+  return signBuilder;
+}).pipe(Effect.flatMap(handleSignSubmit), withLogRetry, Effect.orDie);
+
+export const deregisterStakeScriptDRep = Effect.gen(function* ($) {
+  const { user } = yield* User;
+  const { rewardAddress, script } = yield* AlwaysYesDrepContract;
+  const signBuilder = yield* user
+    .newTx()
+    .deregister.Stake(rewardAddress, Data.void())
+    .attach.Script(script)
+    .completeProgram({ localUPLCEval: false });
+  return signBuilder;
+}).pipe(
+  Effect.flatMap(handleSignSubmit),
+  Effect.catchTag("TxSubmitError", (error) => Effect.fail(error)),
+  withLogRetry,
+  Effect.orDie,
+);
+
+export const registerAndDelegateToPoolAndDRepKeyCred = Effect.gen(
+  function* ($) {
+    const { user } = yield* User;
+    const { rewardAddress, script } = yield* AlwaysYesDrepContract;
+    const address = yield* Effect.promise(() => user.wallet().address());
+    const addressDetails = getAddressDetails(address);
+    const networkConfig = yield* NetworkConfig;
+    const poolId =
+      networkConfig.NETWORK == "Preprod"
+        ? "pool1nmfr5j5rnqndprtazre802glpc3h865sy50mxdny65kfgf3e5eh"
+        : "pool1ynfnjspgckgxjf2zeye8s33jz3e3ndk9pcwp0qzaupzvvd8ukwt";
+    const signBuilder = yield* user
+      .newTx()
+      .registerAndDelegate.ToPoolAndDRep(
+        rewardAddress,
+        poolId,
+        { type: "Key", hash: addressDetails.stakeCredential!.hash },
+        Data.void(),
+      )
+      .attach.Script(script)
+      .completeProgram({ localUPLCEval: false });
+    return signBuilder;
+  },
+).pipe(Effect.flatMap(handleSignSubmit), withLogRetry, Effect.orDie);
