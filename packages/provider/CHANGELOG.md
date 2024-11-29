@@ -1,5 +1,11 @@
 # @lucid-evolution/provider
 
+## 0.1.78
+
+### Patch Changes
+
+- [#431](https://github.com/Anastasia-Labs/lucid-evolution/pull/431) [`87dbc3a`](https://github.com/Anastasia-Labs/lucid-evolution/commit/87dbc3a93c2181ec26f984ac6e5bb73b6e1553c5) Thanks [@solidsnakedev](https://github.com/solidsnakedev)! - koios error message; upgrade pnpm to version 9
+
 ## 0.1.77
 
 ### Patch Changes
