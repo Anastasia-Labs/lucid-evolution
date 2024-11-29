@@ -623,4 +623,26 @@ describe.sequential("Onchain testing", () => {
     const exit = await Effect.runPromiseExit(program);
     expect(exit._tag).toBe("Success");
   });
+
+  test("registerAndDelegateToPoolAndScriptDRep", async () => {
+    const program = pipe(
+      GovernanceEndpoints.registerAndDelegateToPoolAndScriptDRep,
+      Effect.provide(User.layer),
+      Effect.provide(AlwaysYesDrepContract.layer),
+      Effect.provide(NetworkConfig.layerPreprod),
+    );
+    const exit = await Effect.runPromiseExit(program);
+    expect(exit._tag).toBe("Success");
+  });
+
+  test("deregisterScriptDRep", async () => {
+    const program = pipe(
+      GovernanceEndpoints.deregisterStakeScriptDRep,
+      Effect.provide(User.layer),
+      Effect.provide(AlwaysYesDrepContract.layer),
+      Effect.provide(NetworkConfig.layerPreprod),
+    );
+    const exit = await Effect.runPromiseExit(program);
+    expect(exit._tag).toBe("Success");
+  });
 });
