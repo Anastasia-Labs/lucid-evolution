@@ -277,7 +277,7 @@ export const postWithSchemaValidation = <A, I, R>(
   pipe(
     HttpClientRequest.post(url),
     HttpClientRequest.jsonBody(data),
-    Effect.flatMap(HttpClient.fetchOk),
+    Effect.flatMap(HttpClient.fetch),
     HttpClientResponse.json,
     Effect.flatMap(S.decodeUnknown(schema)),
     // Effect.scoped
