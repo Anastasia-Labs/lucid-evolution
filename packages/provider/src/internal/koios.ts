@@ -272,21 +272,21 @@ export const postWithSchemaValidation = <A, I, R>(
   url: string | URL,
   data: unknown,
   schema: S.Schema<A, I, R>,
-  headers?: Record<string, string>,
+  headers: Record<string, string> = {},
 ): Effect.Effect<A, HttpClientError | HttpBodyError | ParseError, R> =>
   pipe(
-    HttpClientRequest.post(url),
-    HttpClientRequest.jsonBody(data),
-    Effect.map((req: HttpClientRequest.HttpClientRequest) => {
-      if (headers) {
-        return HttpClientRequest.setHeaders(headers)(req);
-      }
-      return req;
-    }),
+    Effect.succeed(HttpClientRequest.post(url)),
+    Effect.map(HttpClientRequest.setHeaders(headers)),
+    Effect.flatMap((req) =>
+      headers["Content-Type"] === "application/cbor"
+        ? Effect.succeed(
+            HttpClientRequest.uint8ArrayBody(data as Uint8Array, headers['Content-Type'])(req),
+          )
+        : HttpClientRequest.jsonBody(data)(req),
+    ),
     Effect.flatMap(HttpClient.fetch),
     HttpClientResponse.json,
     Effect.flatMap(S.decodeUnknown(schema)),
-    // Effect.scoped
   );
 
 export const getWithSchemaValidation = <A, I, R>(
