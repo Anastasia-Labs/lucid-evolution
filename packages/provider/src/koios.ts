@@ -272,8 +272,8 @@ export class Koios implements Provider {
     const schema = _Koios.TxHashSchema;
     const result = await pipe(
       _Koios.postWithSchemaValidation(url, body, schema, {
-				'Content-Type': 'application/cbor',
-			}),
+        "Content-Type": "application/cbor",
+      }),
       Effect.timeout(10_000),
       Effect.catchAllCause((cause) => new KoiosError({ cause })),
       Effect.runPromise,

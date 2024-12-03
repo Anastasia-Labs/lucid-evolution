@@ -280,7 +280,10 @@ export const postWithSchemaValidation = <A, I, R>(
     Effect.flatMap((req) =>
       headers["Content-Type"] === "application/cbor"
         ? Effect.succeed(
-            HttpClientRequest.uint8ArrayBody(data as Uint8Array, headers['Content-Type'])(req),
+            HttpClientRequest.uint8ArrayBody(
+              data as Uint8Array,
+              headers["Content-Type"],
+            )(req),
           )
         : HttpClientRequest.jsonBody(data)(req),
     ),
