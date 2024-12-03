@@ -1,17 +1,16 @@
 import {
+  HttpBody,
   HttpClient,
   HttpClientRequest,
   HttpClientResponse,
 } from "@effect/platform";
 import { HttpBodyError } from "@effect/platform/HttpBody";
 import { HttpClientError } from "@effect/platform/HttpClientError";
-import { ArrayFormatter } from "@effect/schema";
 import * as S from "@effect/schema/Schema";
 import { Effect, pipe } from "effect";
 import * as CoreType from "@lucid-evolution/core-types";
 import { ParseError } from "@effect/schema/ParseResult";
 import { applyDoubleCborEncoding } from "@lucid-evolution/utils";
-import { TimeoutException } from "effect/Cause";
 
 export const ProtocolParametersSchema = S.Struct({
   pvt_motion_no_confidence: S.Number,
@@ -273,14 +272,24 @@ export const postWithSchemaValidation = <A, I, R>(
   url: string | URL,
   data: unknown,
   schema: S.Schema<A, I, R>,
+  headers: Record<string, string> = {},
 ): Effect.Effect<A, HttpClientError | HttpBodyError | ParseError, R> =>
   pipe(
-    HttpClientRequest.post(url),
-    HttpClientRequest.jsonBody(data),
+    Effect.succeed(HttpClientRequest.post(url)),
+    Effect.map(HttpClientRequest.setHeaders(headers)),
+    Effect.flatMap((req) =>
+      headers["Content-Type"] === "application/cbor"
+        ? Effect.succeed(
+            HttpClientRequest.uint8ArrayBody(
+              data as Uint8Array,
+              headers["Content-Type"],
+            )(req),
+          )
+        : HttpClientRequest.jsonBody(data)(req),
+    ),
     Effect.flatMap(HttpClient.fetch),
     HttpClientResponse.json,
     Effect.flatMap(S.decodeUnknown(schema)),
-    // Effect.scoped
   );
 
 export const getWithSchemaValidation = <A, I, R>(
