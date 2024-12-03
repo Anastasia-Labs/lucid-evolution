@@ -1,5 +1,11 @@
 # @lucid-evolution/provider
 
+## 0.1.79
+
+### Patch Changes
+
+- [#433](https://github.com/Anastasia-Labs/lucid-evolution/pull/433) [`4e01e51`](https://github.com/Anastasia-Labs/lucid-evolution/commit/4e01e51b2afba34d3ef1d089722a1294c7f253bc) Thanks [@kozer](https://github.com/kozer)! - fix koios submit tx
+
 ## 0.1.78
 
 ### Patch Changes
