@@ -250,27 +250,6 @@ export const deRegisterStake = Effect.gen(function* ($) {
   return signBuilder;
 }).pipe(Effect.flatMap(handleSignSubmit), withLogRetry, Effect.orDie);
 
-export const registerSimpleStake = Effect.gen(function* ($) {
-  const { user } = yield* User;
-  const { rewardAddress } = yield* SimpleStakeContract;
-  const signBuilder = yield* user
-    .newTx()
-    .registerStake(rewardAddress)
-    .completeProgram({ localUPLCEval: false });
-
-  return signBuilder;
-}).pipe(
-  Effect.flatMap(handleSignSubmit),
-  Effect.catchTag("TxSubmitError", (error) =>
-    error.message.includes("StakeKeyAlreadyRegisteredDELEG") ||
-    error.message.includes("StakeKeyRegisteredDELEG")
-      ? Effect.log("Stake Already registered")
-      : Effect.fail(error),
-  ),
-  withLogRetry,
-  Effect.orDie,
-);
-
 export const mintAndWithdraw = Effect.gen(function* () {
   const { user } = yield* User;
   const addr = yield* Effect.promise(() => user.wallet().address());
