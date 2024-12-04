@@ -4,14 +4,14 @@ import { Callout, Steps, Tabs } from "nextra/components";
 
 Lucid Evolution can be used with or without a blockchain provider, which allows you to query data and submit transactions.
 
-We support the `Mainnet`, `Preprod`, and `Preview` networks
+Evolution supports the `Mainnet`, `Preprod`, `Preview` and `Custom` networks
 
 ## Provider selection
 
 There are multiple builtin providers you can choose from in Lucid Evolution
 
-<Tabs items={['Blockfrost', 'Kupmios', 'Maestro', 'Koios', 'Yaci', 'UTxORPC']}>
-  <Tabs.Tab>
+### Blockfrost
+
 ```typescript
 import { Lucid, Blockfrost } from "@lucid-evolution/lucid";
 
@@ -20,8 +20,9 @@ const lucid = await Lucid(
   "Preprod"
 );
 ```
-  </Tabs.Tab>
-<Tabs.Tab>
+
+### Kupmios
+
 ```typescript
 import { Lucid, Kupmios } from "@lucid-evolution/lucid";
 
@@ -34,8 +35,9 @@ const lucid = await Lucid(
 );
 ```
 Kupmios is a mix of [Ogmios](https://ogmios.dev/) and [Kupo](https://cardanosolutions.github.io/kupo/).
-  </Tabs.Tab>
-  <Tabs.Tab>
+
+
+### Maestro
 ```typescript
 import { Lucid, Maestro } from "@lucid-evolution/lucid";
 
@@ -48,8 +50,8 @@ const lucid = await Lucid(
   "Preprod" // For MAINNET: "Mainnet"
 );
 ```
-  </Tabs.Tab>
-  <Tabs.Tab>
+
+### Koios
 ```typescript
 import { Lucid, Koios } from "@lucid-evolution/lucid";
 
@@ -58,9 +60,9 @@ const lucid = await Lucid(
   "Preprod"
 );
 ```
-  </Tabs.Tab>
-  <Tabs.Tab>
-  YACI DevKit provides a local development environment with configurable block times and network parameters. For detailed setup instructions, visit the [YACI DevKit documentation](https://devkit.yaci.xyz/tutorials/lucid-evolution/overview).
+
+### YACI DevKit
+YACI DevKit provides a local development environment with configurable block times and network parameters. For detailed setup instructions, visit the [YACI DevKit documentation](https://devkit.yaci.xyz/tutorials/lucid-evolution/overview).
 ```typescript
 // Configure custom network slot settings for YACI DevKit
 SLOT_CONFIG_NETWORK['Custom'] = {
@@ -77,13 +79,13 @@ const lucid = await Lucid(
   "Custom" // Use custom network type for DevKit
 );
 ```
-  </Tabs.Tab>
-  <Tabs.Tab>
+
+
+### UTxORPC
 ```typescript
 //TODO: https://github.com/utxorpc/lucid-evolution-provider
 ```
-  </Tabs.Tab>
-</Tabs>
+
 
 
 ---
