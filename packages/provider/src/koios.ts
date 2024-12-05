@@ -34,16 +34,22 @@ export class KoiosError extends Data.TaggedError("KoiosError")<{
  */
 export class Koios implements Provider {
   private readonly baseUrl: string;
+  private readonly token?: string;
 
-  constructor(baseUrl: string) {
+  constructor(baseUrl: string, token?: string) {
     this.baseUrl = baseUrl;
+    this.token = token;
   }
 
   async getProtocolParameters(): Promise<ProtocolParameters> {
     const url = `${this.baseUrl}/epoch_params?limit=1`;
     const schema = S.Array(_Koios.ProtocolParametersSchema);
     const [result] = await pipe(
-      _Koios.getWithSchemaValidation(url, schema),
+      _Koios.getWithSchemaValidation(
+        url,
+        schema,
+        _Koios.getHeadersWithToken(this.token),
+      ),
       Effect.timeout(10_000),
       Effect.catchAllCause((cause) => new KoiosError({ cause })),
       Effect.runPromise,
@@ -91,7 +97,11 @@ export class Koios implements Provider {
 
   async getUtxos(addressOrCredential: Address | Credential): Promise<UTxO[]> {
     const result = await pipe(
-      _Koios.getUtxosEffect(this.baseUrl, addressOrCredential),
+      _Koios.getUtxosEffect(
+        this.baseUrl,
+        addressOrCredential,
+        _Koios.getHeadersWithToken(this.token),
+      ),
       Effect.timeout(10_000),
       Effect.catchAllCause((cause) => new KoiosError({ cause })),
       Effect.runPromise,
@@ -104,7 +114,11 @@ export class Koios implements Provider {
     unit: Unit,
   ): Promise<UTxO[]> {
     const result = await pipe(
-      _Koios.getUtxosEffect(this.baseUrl, addressOrCredential),
+      _Koios.getUtxosEffect(
+        this.baseUrl,
+        addressOrCredential,
+        _Koios.getHeadersWithToken(this.token),
+      ),
       Effect.map((utxos) =>
         utxos.filter((utxo) => {
           const keys = Object.keys(utxo.assets);
@@ -122,7 +136,11 @@ export class Koios implements Provider {
     let { policyId, assetName } = fromUnit(unit);
     const url = `${this.baseUrl}/asset_addresses?_asset_policy=${policyId}&_asset_name=${assetName}`;
     const result: UTxO = await pipe(
-      _Koios.getWithSchemaValidation(url, S.Array(_Koios.AssetAddressSchema)),
+      _Koios.getWithSchemaValidation(
+        url,
+        S.Array(_Koios.AssetAddressSchema),
+        _Koios.getHeadersWithToken(this.token),
+      ),
       Effect.flatMap((adresses) =>
         adresses.length === 0
           ? Effect.fail("Unit not found")
@@ -163,7 +181,12 @@ export class Koios implements Provider {
     };
     const schema = S.Array(_Koios.TxInfoSchema);
     const [result] = await pipe(
-      _Koios.postWithSchemaValidation(url, body, schema),
+      _Koios.postWithSchemaValidation(
+        url,
+        body,
+        schema,
+        _Koios.getHeadersWithToken(this.token),
+      ),
       Effect.timeout(10_000),
       Effect.catchAllCause((cause) => new KoiosError({ cause })),
       Effect.runPromise,
@@ -209,6 +232,7 @@ export class Koios implements Provider {
         url,
         body,
         S.Array(_Koios.AccountInfoSchema),
+        _Koios.getHeadersWithToken(this.token),
       ),
       Effect.flatMap((result) =>
         result.length === 0
@@ -232,7 +256,12 @@ export class Koios implements Provider {
       _datum_hashes: [datumHash],
     };
     const result = await pipe(
-      _Koios.postWithSchemaValidation(url, body, S.Array(_Koios.DatumInfo)),
+      _Koios.postWithSchemaValidation(
+        url,
+        body,
+        S.Array(_Koios.DatumInfo),
+        _Koios.getHeadersWithToken(this.token),
+      ),
       Effect.flatMap((result) =>
         result.length === 0
           ? Effect.fail("No Datum Found by Datum Hash")
@@ -252,7 +281,12 @@ export class Koios implements Provider {
     };
     const schema = S.Array(_Koios.TxInfoSchema);
     const result = await pipe(
-      _Koios.postWithSchemaValidation(url, body, schema),
+      _Koios.postWithSchemaValidation(
+        url,
+        body,
+        schema,
+        _Koios.getHeadersWithToken(this.token),
+      ),
       Effect.repeat({
         schedule: Schedule.exponential(checkInterval),
         until: (result) => result.length > 0,
@@ -271,9 +305,14 @@ export class Koios implements Provider {
     const body = fromHex(tx);
     const schema = _Koios.TxHashSchema;
     const result = await pipe(
-      _Koios.postWithSchemaValidation(url, body, schema, {
-        "Content-Type": "application/cbor",
-      }),
+      _Koios.postWithSchemaValidation(
+        url,
+        body,
+        schema,
+        _Koios.getHeadersWithToken(this.token, {
+          "Content-Type": "application/cbor",
+        }),
+      ),
       Effect.timeout(10_000),
       Effect.catchAllCause((cause) => new KoiosError({ cause })),
       Effect.runPromise,
@@ -298,7 +337,12 @@ export class Koios implements Provider {
     };
     const schema = _Ogmios.JSONRPCSchema(S.Array(_Ogmios.RedeemerSchema));
     const result = await pipe(
-      _Koios.postWithSchemaValidation(url, body, schema),
+      _Koios.postWithSchemaValidation(
+        url,
+        body,
+        schema,
+        _Koios.getHeadersWithToken(this.token),
+      ),
       Effect.flatMap((response) =>
         "error" in response
           ? Effect.fail(response)

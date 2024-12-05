@@ -1,8 +1,9 @@
 import { Koios } from "../src/koios.js";
 import { ProtocolParameters, UTxO } from "@lucid-evolution/core-types";
-import { assert, describe, expect, test, vi } from "vitest";
+import { assert, beforeEach, describe, expect, test, vi } from "vitest";
 import * as PreprodConstants from "./preprod-constants.js";
 import * as _Koios from "../src/internal/koios.js";
+import { Effect } from "effect";
 
 //TODO: improve test assetion
 describe.sequential("Koios", () => {
@@ -153,5 +154,228 @@ describe.sequential("Koios", () => {
       redeemers,
       PreprodConstants.evalSample4.redeemersExUnits,
     );
+  });
+
+  describe("Token Authentication", () => {
+    const MOCK_TOKEN = "test-token-123";
+    const BASE_URL = "https://preprod.koios.rest/api/v1";
+    let koiosWithToken: Koios;
+
+    beforeEach(() => {
+      vi.restoreAllMocks();
+      koiosWithToken = new Koios(BASE_URL, MOCK_TOKEN);
+    });
+    beforeEach(() => {
+      vi.restoreAllMocks();
+      koiosWithToken = new Koios(BASE_URL, MOCK_TOKEN);
+    });
+
+    test("getHeadersWithToken utility function", () => {
+      // Test with token
+      const headersWithToken = _Koios.getHeadersWithToken(MOCK_TOKEN);
+      expect(headersWithToken).toEqual({
+        Authorization: `Bearer ${MOCK_TOKEN}`,
+      });
+
+      // Test without token
+      const headersWithoutToken = _Koios.getHeadersWithToken(undefined);
+      expect(headersWithoutToken).toEqual({});
+
+      // Test merging with existing headers
+      const existingHeaders = { "Content-Type": "application/json" };
+      const mergedHeaders = _Koios.getHeadersWithToken(
+        MOCK_TOKEN,
+        existingHeaders,
+      );
+      expect(mergedHeaders).toEqual({
+        Authorization: `Bearer ${MOCK_TOKEN}`,
+        "Content-Type": "application/json",
+      });
+    });
+
+    test("constructor properly stores token", () => {
+      // @ts-expect-error accessing private field for testing
+      expect(koiosWithToken.token).toBe(MOCK_TOKEN);
+
+      const koiosWithoutToken = new Koios("https://preprod.koios.rest/api/v1");
+      // @ts-expect-error accessing private field for testing
+      expect(koiosWithoutToken.token).toBeUndefined();
+    });
+
+    test("getProtocolParameters includes token", async () => {
+      const mockResponse = [
+        {
+          min_fee_a: 44,
+          min_fee_b: 155381,
+          max_tx_size: 16384,
+          max_val_size: 5000,
+          key_deposit: "2000000",
+          pool_deposit: "500000000",
+          price_mem: 0.0577,
+          price_step: 0.0000721,
+          max_tx_ex_mem: 14000000,
+          max_tx_ex_steps: 10000000000,
+          max_block_ex_mem: 62000000,
+          max_block_ex_steps: 20000000000,
+          extra_entropy: null,
+          protocol_major: 8,
+          protocol_minor: 0,
+          min_utxo_value: "1000000",
+          min_pool_cost: "340000000",
+          nonce: "1",
+          block_hash: null,
+          collateral_percent: 150,
+          max_collateral_inputs: 3,
+          coins_per_utxo_size: "4310",
+          cost_models: {
+            PlutusV1: [1],
+            PlutusV2: [1],
+            PlutusV3: [1],
+          },
+          epoch_no: 1,
+          max_block_size: 90112,
+          max_bh_size: 1100,
+          min_fee_ref_script_cost_per_byte: 4310,
+          max_epoch: 18,
+          optimal_pool_count: 500,
+          influence: 0.3,
+          monetary_expand_rate: 0.003,
+          treasury_growth_rate: 0.2,
+          decentralisation: 0,
+          pvt_motion_no_confidence: 1,
+          pvt_committee_normal: 1,
+          pvt_committee_no_confidence: 1,
+          pvt_hard_fork_initiation: 1,
+          pvtpp_security_group: 1,
+          dvt_motion_no_confidence: 1,
+          dvt_committee_normal: 1,
+          dvt_committee_no_confidence: 1,
+          dvt_update_to_constitution: 1,
+          dvt_hard_fork_initiation: 1,
+          dvt_p_p_network_group: 1,
+          dvt_p_p_economic_group: 1,
+          dvt_p_p_technical_group: 1,
+          dvt_p_p_gov_group: 1,
+          dvt_treasury_withdrawal: 1,
+          committee_min_size: 1,
+          committee_max_term_length: 1,
+          gov_action_lifetime: 1,
+          gov_action_deposit: "1",
+          drep_deposit: "1",
+          drep_activity: 1,
+        },
+      ];
+
+      const fetchSpy = vi.spyOn(global, "fetch").mockImplementation(
+        async () =>
+          ({
+            ok: true,
+            status: 200,
+            statusText: "OK",
+            headers: new Headers({ "content-type": "application/json" }),
+            json: () => Promise.resolve(mockResponse),
+            text: () => Promise.resolve(JSON.stringify(mockResponse)),
+          }) as Response,
+      );
+
+			await koiosWithToken.getProtocolParameters();
+
+      expect(fetchSpy).toHaveBeenCalledTimes(1);
+      const [url, options] = fetchSpy.mock.calls[0];
+
+      expect(url.toString()).toBe(`${BASE_URL}/epoch_params?limit=1`);
+      expect(options?.method).toBe("GET");
+      const headers = options?.headers as Headers;
+      expect(headers.get("authorization")).toBe(`Bearer ${MOCK_TOKEN}`);
+
+      fetchSpy.mockRestore();
+    });
+
+    test("getDatum includes token", async () => {
+      const mockResponse = [
+        {
+          bytes: "mock-datum",
+        },
+      ];
+
+      const fetchSpy = vi.spyOn(global, "fetch").mockImplementation(
+        async () =>
+          ({
+            ok: true,
+            status: 200,
+            statusText: "OK",
+            headers: new Headers({ "content-type": "application/json" }),
+            json: () => Promise.resolve(mockResponse),
+            text: () => Promise.resolve(JSON.stringify(mockResponse)),
+          }) as Response,
+      );
+
+      const datumHash = "test-datum-hash";
+      await koiosWithToken.getDatum(datumHash);
+
+      expect(fetchSpy).toHaveBeenCalledTimes(1);
+      const [url, options] = fetchSpy.mock.calls[0];
+
+      // URL and method verification
+      expect(url.toString()).toBe(`${BASE_URL}/datum_info`);
+      expect(options?.method).toBe("POST");
+
+      // Headers verification
+      const headers = options?.headers as Headers;
+      expect(headers.get("authorization")).toBe(`Bearer ${MOCK_TOKEN}`);
+      expect(headers.get("content-type")).toBe("application/json");
+
+      // Body verification
+      const decoder = new TextDecoder();
+      const bodyText = decoder.decode(options?.body as Uint8Array);
+      const bodyJson = JSON.parse(bodyText);
+      expect(bodyJson).toEqual({
+        _datum_hashes: [datumHash],
+      });
+
+      fetchSpy.mockRestore();
+    });
+
+    test("submitTx includes token with CBOR headers", async () => {
+      const mockTxHash = "mock-tx-hash";
+      const mockTx = "mock-transaction";
+
+      const fetchSpy = vi
+        .spyOn(global, "fetch")
+        .mockImplementation(async (url, options) => {
+          return {
+            ok: true,
+            status: 200,
+            statusText: "OK",
+            headers: new Headers({ "content-type": "application/json" }),
+            json: () => Promise.resolve(mockTxHash),
+            text: () => Promise.resolve(JSON.stringify(mockTxHash)),
+          } as Response;
+        });
+
+      await Effect.runPromise(
+        Effect.gen(function* (_) {
+          const result = yield* _(
+            _Koios.postWithSchemaValidation(
+              "https://preprod.koios.rest/api/v1/submittx",
+              mockTx,
+              _Koios.TxHashSchema,
+              _Koios.getHeadersWithToken(MOCK_TOKEN, {
+                "Content-Type": "application/cbor",
+              }),
+            ),
+          );
+
+          const [, options] = fetchSpy.mock.calls[0];
+          const headers = options?.headers as Headers;
+          expect(headers.get("authorization")).toBe(`Bearer ${MOCK_TOKEN}`);
+          expect(headers.get("content-type")).toBe("application/cbor");
+
+          return result;
+        }),
+      );
+
+      fetchSpy.mockRestore();
+    });
   });
 });
