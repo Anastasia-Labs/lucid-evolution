@@ -278,7 +278,7 @@ describe.sequential("Koios", () => {
           }) as Response,
       );
 
-			await koiosWithToken.getProtocolParameters();
+      await koiosWithToken.getProtocolParameters();
 
       expect(fetchSpy).toHaveBeenCalledTimes(1);
       const [url, options] = fetchSpy.mock.calls[0];
