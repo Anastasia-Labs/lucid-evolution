@@ -333,43 +333,32 @@ describe.sequential("Koios", () => {
     });
 
     test("submitTx includes token with CBOR headers", async () => {
-      const mockTxHash = "mock-tx-hash";
-      const mockTx = "mock-transaction";
+      const mockTransaction = PreprodConstants.evalSample1.transaction;
+      const expectedTxHash =
+        "e84eb47208757db8ed101c2114ca8953527b4a6aae51bacf17e991e5c734fec6";
 
-      const fetchSpy = vi
-        .spyOn(global, "fetch")
-        .mockImplementation(async (url, options) => {
-          return {
-            ok: true,
-            status: 200,
-            statusText: "OK",
-            headers: new Headers({ "content-type": "application/json" }),
-            json: () => Promise.resolve(mockTxHash),
-            text: () => Promise.resolve(JSON.stringify(mockTxHash)),
-          } as Response;
-        });
-
-      await Effect.runPromise(
-        Effect.gen(function* (_) {
-          const result = yield* _(
-            _Koios.postWithSchemaValidation(
-              "https://preprod.koios.rest/api/v1/submittx",
-              mockTx,
-              _Koios.TxHashSchema,
-              _Koios.getHeadersWithToken(MOCK_TOKEN, {
-                "Content-Type": "application/cbor",
-              }),
-            ),
-          );
-
-          const [, options] = fetchSpy.mock.calls[0];
-          const headers = options?.headers as Headers;
-          expect(headers.get("authorization")).toBe(`Bearer ${MOCK_TOKEN}`);
-          expect(headers.get("content-type")).toBe("application/cbor");
-
-          return result;
+      const fetchSpy = vi.spyOn(global, "fetch").mockResolvedValue({
+        ok: true,
+        status: 200,
+        statusText: "OK",
+        headers: new Headers({
+          "content-type": "application/json",
         }),
-      );
+        text: () => Promise.resolve(JSON.stringify(expectedTxHash)),
+        json: () => Promise.resolve(expectedTxHash),
+        body: null,
+      } as Response);
+
+      expect(await koiosWithToken.submitTx(mockTransaction)).toBe(expectedTxHash);
+
+      expect(fetchSpy).toHaveBeenCalledTimes(1);
+      const [url, options] = fetchSpy.mock.calls[0];
+
+      expect(url.toString()).toBe(`${BASE_URL}/submittx`);
+      expect(options?.method).toBe("POST");
+      const headers = options?.headers as Headers;
+      expect(headers.get("authorization")).toBe(`Bearer ${MOCK_TOKEN}`);
+      expect(headers.get("content-type")).toBe("application/cbor");
 
       fetchSpy.mockRestore();
     });
