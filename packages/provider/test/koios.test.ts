@@ -165,10 +165,6 @@ describe.sequential("Koios", () => {
       vi.restoreAllMocks();
       koiosWithToken = new Koios(BASE_URL, MOCK_TOKEN);
     });
-    beforeEach(() => {
-      vi.restoreAllMocks();
-      koiosWithToken = new Koios(BASE_URL, MOCK_TOKEN);
-    });
 
     test("getHeadersWithToken utility function", () => {
       // Test with token
