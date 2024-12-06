@@ -349,7 +349,9 @@ describe.sequential("Koios", () => {
         body: null,
       } as Response);
 
-      expect(await koiosWithToken.submitTx(mockTransaction)).toBe(expectedTxHash);
+      expect(await koiosWithToken.submitTx(mockTransaction)).toBe(
+        expectedTxHash,
+      );
 
       expect(fetchSpy).toHaveBeenCalledTimes(1);
       const [url, options] = fetchSpy.mock.calls[0];
