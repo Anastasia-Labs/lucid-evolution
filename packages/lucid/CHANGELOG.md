@@ -1,5 +1,14 @@
 # @lucid-evolution/lucid
 
+## 0.4.14
+
+### Patch Changes
+
+- [#436](https://github.com/Anastasia-Labs/lucid-evolution/pull/436) [`6844e1e`](https://github.com/Anastasia-Labs/lucid-evolution/commit/6844e1ebc5f2bdb2ef7987d67e926cb8f4d8d427) Thanks [@hadelive](https://github.com/hadelive)! - minimum fee used in collateral calc
+
+- Updated dependencies [[`6844e1e`](https://github.com/Anastasia-Labs/lucid-evolution/commit/6844e1ebc5f2bdb2ef7987d67e926cb8f4d8d427)]:
+  - @lucid-evolution/provider@0.1.80
+
 ## 0.4.13
 
 ### Patch Changes
