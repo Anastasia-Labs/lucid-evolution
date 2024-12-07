@@ -268,6 +268,19 @@ export const DatumInfo = S.Struct({
   bytes: S.String,
 });
 
+export const getHeadersWithToken = (
+  token?: string,
+  headers: Record<string, string> = {},
+): Record<string, string> => {
+  if (token) {
+    return {
+      ...headers,
+      Authorization: `Bearer ${token}`,
+    };
+  }
+  return headers;
+};
+
 export const postWithSchemaValidation = <A, I, R>(
   url: string | URL,
   data: unknown,
@@ -295,10 +308,12 @@ export const postWithSchemaValidation = <A, I, R>(
 export const getWithSchemaValidation = <A, I, R>(
   url: string | URL,
   schema: S.Schema<A, I, R>,
+  headers: Record<string, string> = {},
 ) =>
   pipe(
-    HttpClientRequest.get(url),
-    HttpClient.fetchOk,
+    Effect.succeed(HttpClientRequest.get(url)),
+    Effect.map(HttpClientRequest.setHeaders(headers)),
+    Effect.flatMap(HttpClient.fetch),
     HttpClientResponse.json,
     Effect.flatMap(S.decodeUnknown(schema)),
   );
@@ -353,6 +368,7 @@ const toScriptRef = (
 export const getUtxosEffect = (
   baseUrl: string,
   addressOrCredential: CoreType.Address | CoreType.Credential,
+  headers: Record<string, string> = {},
 ): Effect.Effect<
   CoreType.UTxO[],
   string | HttpClientError | HttpBodyError | ParseError
@@ -366,7 +382,7 @@ export const getUtxosEffect = (
     Effect.if(typeof addressOrCredential === "string", {
       onFalse: () =>
         Effect.fail("Credential Type is not supported in Koios yet."),
-      onTrue: () => postWithSchemaValidation(url, body, schema),
+      onTrue: () => postWithSchemaValidation(url, body, schema, headers),
     }),
     Effect.map(([result]) =>
       result
