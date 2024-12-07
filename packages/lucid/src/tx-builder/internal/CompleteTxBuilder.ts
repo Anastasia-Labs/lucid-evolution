@@ -129,15 +129,7 @@ export const complete = (options: CompleteOptions = {}) =>
     const hasPlutusScriptExecutions: boolean = Array.from(
       config.scripts.values(),
     ).some((value) => value.type !== "Native");
-    // Set collateral input if there are script executions
-    if (hasPlutusScriptExecutions) {
-      const collateralInput = yield* findCollateral(
-        config.lucidConfig.protocolParameters.coinsPerUtxoByte,
-        setCollateral,
-        walletInputs,
-      );
-      yield* applyCollateral(setCollateral, collateralInput, changeAddress);
-    }
+
     // First round of coin selection and UPLC evaluation. The fee estimation is lacking
     // the script execution costs as they aren't available yet.
     yield* selectionAndEvaluation(
@@ -151,7 +143,26 @@ export const complete = (options: CompleteOptions = {}) =>
     // Second round of coin selection by including script execution costs in fee estimation.
     // UPLC evaluation need to be performed again if new inputs are selected during coin selection.
     // Because increasing the inputs can increase the script execution budgets.
-    if (hasPlutusScriptExecutions)
+    // Set collateral input if there are script executions
+    if (hasPlutusScriptExecutions) {
+      const minFee = config.txBuilder.min_fee(true);
+      const refScriptFee = yield* calculateMinRefScriptFee(config);
+      let estimatedFee = minFee + refScriptFee;
+
+      const totalCollateral = BigInt(
+        Math.max(
+          (config.lucidConfig.protocolParameters.collateralPercentage *
+            Number(estimatedFee)) /
+            100,
+          Number(setCollateral),
+        ),
+      );
+      const collateralInput = yield* findCollateral(
+        config.lucidConfig.protocolParameters.coinsPerUtxoByte,
+        totalCollateral,
+        walletInputs,
+      );
+      yield* applyCollateral(totalCollateral, collateralInput, changeAddress);
       yield* selectionAndEvaluation(
         walletInputs,
         changeAddress,
@@ -160,7 +171,7 @@ export const complete = (options: CompleteOptions = {}) =>
         includeLeftoverLovelaceAsFee,
         true,
       );
-
+    }
     config.txBuilder.add_change_if_needed(
       CML.Address.from_bech32(changeAddress),
       true,

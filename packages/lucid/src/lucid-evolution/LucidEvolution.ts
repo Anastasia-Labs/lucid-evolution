@@ -118,13 +118,13 @@ export const Lucid = async (
     Effect.gen(function* () {
       const custom = yield* pipe(
         validateNotNullableNetwork(network),
-        Effect.filterOrFail(
-          (network) => network === "Custom",
-          () =>
-            new UnauthorizedNetwork({
-              message: `Expected Custom, received ${String(network)}`,
-            }),
-        ),
+        // Effect.filterOrFail(
+        //   (network) => network === "Custom",
+        //   () =>
+        //     new UnauthorizedNetwork({
+        //       message: `Expected Custom, received ${String(network)}`,
+        //     }),
+        // ),
       );
       SLOT_CONFIG_NETWORK[custom] = {
         zeroTime: emulator.now(),
