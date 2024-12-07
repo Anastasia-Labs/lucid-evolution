@@ -196,13 +196,19 @@ export type TxBuilder = {
   completeSafe: (
     options?: CompleteTxBuilder.CompleteOptions,
   ) => Promise<Either<TxSignBuilder.TxSignBuilder, TransactionError>>;
-  chainProgram: () => Effect.Effect<
+  chainProgram: (
+    options?: CompleteTxBuilder.CompleteOptions,
+  ) => Effect.Effect<
     [UTxO[], UTxO[], TxSignBuilder.TxSignBuilder],
     TransactionError,
     never
   >;
-  chain: () => Promise<[UTxO[], UTxO[], TxSignBuilder.TxSignBuilder]>;
-  chainSafe: () => Promise<
+  chain: (
+    options?: CompleteTxBuilder.CompleteOptions,
+  ) => Promise<[UTxO[], UTxO[], TxSignBuilder.TxSignBuilder]>;
+  chainSafe: (
+    options?: CompleteTxBuilder.CompleteOptions,
+  ) => Promise<
     Either<[UTxO[], UTxO[], TxSignBuilder.TxSignBuilder], TransactionError>
   >;
   /**
