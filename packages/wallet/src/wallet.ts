@@ -20,15 +20,19 @@ type FromSeed = {
 
 export function walletFromSeed(
   seed: string,
-  options?: {
+  options: {
     password?: string;
     addressType?: "Base" | "Enterprise";
     accountIndex?: number;
     network?: Network;
-  }
+  } = {},
 ): FromSeed {
-  const DEFAULT_ADDRESS_TYPE = "Base";
-  const DEFAULT_ACCOUNT_INDEX = 0;
+  //Set default options
+  const {
+    addressType = "Base",
+    accountIndex = 0,
+    network = "Mainnet",
+  } = options;
 
   function harden(num: number): number {
     if (typeof num !== "number") throw new Error("Type number required here!");
@@ -40,13 +44,13 @@ export function walletFromSeed(
     fromHex(entropy),
     options?.password
       ? new TextEncoder().encode(options.password)
-      : new Uint8Array()
+      : new Uint8Array(),
   );
 
   const accountKey = rootKey
     .derive(harden(1852))
     .derive(harden(1815))
-    .derive(harden(options?.accountIndex ?? DEFAULT_ACCOUNT_INDEX));
+    .derive(harden(accountIndex));
 
   rootKey.free();
 
@@ -56,29 +60,29 @@ export function walletFromSeed(
   const paymentKeyHash = paymentKey.to_public().hash();
   const stakeKeyHash = stakeKey.to_public().hash();
 
-  const networkId = options?.network === "Mainnet" ? 1 : 0;
+  const networkId = network === "Mainnet" ? 1 : 0;
 
   const address =
-    options?.addressType === DEFAULT_ADDRESS_TYPE
+    addressType === "Base"
       ? CML.BaseAddress.new(
           networkId,
           CML.Credential.new_pub_key(paymentKeyHash),
-          CML.Credential.new_pub_key(stakeKeyHash)
+          CML.Credential.new_pub_key(stakeKeyHash),
         )
           .to_address()
           .to_bech32(undefined)
       : CML.EnterpriseAddress.new(
           networkId,
-          CML.Credential.new_pub_key(paymentKeyHash)
+          CML.Credential.new_pub_key(paymentKeyHash),
         )
           .to_address()
           .to_bech32(undefined);
 
   const rewardAddress =
-    options?.addressType === DEFAULT_ADDRESS_TYPE
+    addressType === "Base"
       ? CML.RewardAddress.new(
           networkId,
-          CML.Credential.new_pub_key(stakeKeyHash)
+          CML.Credential.new_pub_key(stakeKeyHash),
         )
           .to_address()
           .to_bech32(undefined)
@@ -88,17 +92,14 @@ export function walletFromSeed(
     address,
     rewardAddress,
     paymentKey: paymentKey.to_bech32(),
-    stakeKey:
-      options?.addressType === DEFAULT_ADDRESS_TYPE
-        ? stakeKey.to_bech32()
-        : null,
+    stakeKey: addressType === "Base" ? stakeKey.to_bech32() : null,
   };
 }
 
 export function discoverOwnUsedTxKeyHashes(
   tx: CML.Transaction,
   ownKeyHashes: Array<KeyHash>,
-  ownUtxos: Array<UTxO>
+  ownUtxos: Array<UTxO>,
 ): Array<KeyHash> {
   const usedKeyHashes = [];
 
@@ -109,7 +110,7 @@ export function discoverOwnUsedTxKeyHashes(
     const txHash = input.transaction_id().to_hex();
     const outputIndex = Number(input.index());
     const utxo = ownUtxos.find(
-      (utxo) => utxo.txHash === txHash && utxo.outputIndex === outputIndex
+      (utxo) => utxo.txHash === txHash && utxo.outputIndex === outputIndex,
     );
     if (utxo) {
       const { paymentCredential } = getAddressDetails(utxo.address);
@@ -350,7 +351,7 @@ export function discoverOwnUsedTxKeyHashes(
       const txHash = input.transaction_id().to_hex();
       const outputIndex = Number(input.index());
       const utxo = ownUtxos.find(
-        (utxo) => utxo.txHash === txHash && utxo.outputIndex === outputIndex
+        (utxo) => utxo.txHash === txHash && utxo.outputIndex === outputIndex,
       );
       if (utxo) {
         const { paymentCredential } = getAddressDetails(utxo.address);
