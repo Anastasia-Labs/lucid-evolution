@@ -272,3 +272,11 @@ const tx = await lucid
   appropriate datums and redeemers. Always ensure your transaction meets the
   validator's requirements to avoid failures.
 </Callout>
+
+---
+
+## Troubleshooting
+
+<Callout type="warning">
+If you encounter a `TxBuilderError` with `{ Complete: {} }` when building transactions with Aiken contracts, try adding `.complete({localUPLCEval: false})` to your transaction builder. This bypasses the local cost model estimation and lets the TxBuilder handle execution units, which can help resolve mismatches between Aiken and Lucid Evolution's cost models.
+</Callout>
