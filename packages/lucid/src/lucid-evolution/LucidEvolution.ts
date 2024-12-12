@@ -226,11 +226,11 @@ export const Lucid = async (
         Effect.runSync,
       ),
     unixTimeToSlot: (unixTime: UnixTime) =>
-    pipe(
-      validateNotNullableNetwork(config.network),
-      Effect.map((network) => unixTimeToSlot(network, unixTime)),
-      Effect.runSync,
-    ),
+      pipe(
+        validateNotNullableNetwork(config.network),
+        Effect.map((network) => unixTimeToSlot(network, unixTime)),
+        Effect.runSync,
+      ),
     utxosAt: (addressOrCredential: string | Credential) =>
       pipe(
         validateNotNullableProvider(config.provider),
