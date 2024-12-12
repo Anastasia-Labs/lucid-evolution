@@ -9,6 +9,7 @@ import {
   Transaction,
   TxHash,
   Unit,
+  UnixTime,
   UTxO,
   Wallet,
   WalletApi,
@@ -56,6 +57,7 @@ export type LucidEvolution = {
     fromAddress: (address: string, utxos: UTxO[]) => void;
   };
   currentSlot: () => number;
+  unixTimeToSlot: (unixTime: UnixTime) => number;
   utxosAt: (addressOrCredential: string | Credential) => Promise<UTxO[]>;
   utxosAtWithUnit: (
     addressOrCredential: string | Credential,
@@ -223,6 +225,12 @@ export const Lucid = async (
         Effect.map((network) => unixTimeToSlot(network, Date.now())),
         Effect.runSync,
       ),
+    unixTimeToSlot: (unixTime: UnixTime) =>
+    pipe(
+      validateNotNullableNetwork(config.network),
+      Effect.map((network) => unixTimeToSlot(network, unixTime)),
+      Effect.runSync,
+    ),
     utxosAt: (addressOrCredential: string | Credential) =>
       pipe(
         validateNotNullableProvider(config.provider),
