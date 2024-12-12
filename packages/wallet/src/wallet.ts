@@ -11,7 +11,7 @@ import {
 import { CML } from "./core.js";
 import { mnemonicToEntropy } from "bip39";
 
-type FromSeed = {
+export type FromSeed = {
   address: Address;
   rewardAddress: RewardAddress | null;
   paymentKey: PrivateKey;
@@ -25,8 +25,15 @@ export function walletFromSeed(
     addressType?: "Base" | "Enterprise";
     accountIndex?: number;
     network?: Network;
-  } = { addressType: "Base", accountIndex: 0, network: "Mainnet" },
+  } = {},
 ): FromSeed {
+  //Set default options
+  const {
+    addressType = "Base",
+    accountIndex = 0,
+    network = "Mainnet",
+  } = options;
+
   function harden(num: number): number {
     if (typeof num !== "number") throw new Error("Type number required here!");
     return 0x80000000 + num;
@@ -35,7 +42,7 @@ export function walletFromSeed(
   const entropy = mnemonicToEntropy(seed);
   const rootKey = CML.Bip32PrivateKey.from_bip39_entropy(
     fromHex(entropy),
-    options.password
+    options?.password
       ? new TextEncoder().encode(options.password)
       : new Uint8Array(),
   );
@@ -43,7 +50,7 @@ export function walletFromSeed(
   const accountKey = rootKey
     .derive(harden(1852))
     .derive(harden(1815))
-    .derive(harden(options.accountIndex!));
+    .derive(harden(accountIndex));
 
   rootKey.free();
 
@@ -53,10 +60,10 @@ export function walletFromSeed(
   const paymentKeyHash = paymentKey.to_public().hash();
   const stakeKeyHash = stakeKey.to_public().hash();
 
-  const networkId = options.network === "Mainnet" ? 1 : 0;
+  const networkId = network === "Mainnet" ? 1 : 0;
 
   const address =
-    options.addressType === "Base"
+    addressType === "Base"
       ? CML.BaseAddress.new(
           networkId,
           CML.Credential.new_pub_key(paymentKeyHash),
@@ -72,7 +79,7 @@ export function walletFromSeed(
           .to_bech32(undefined);
 
   const rewardAddress =
-    options.addressType === "Base"
+    addressType === "Base"
       ? CML.RewardAddress.new(
           networkId,
           CML.Credential.new_pub_key(stakeKeyHash),
@@ -85,7 +92,7 @@ export function walletFromSeed(
     address,
     rewardAddress,
     paymentKey: paymentKey.to_bech32(),
-    stakeKey: options.addressType === "Base" ? stakeKey.to_bech32() : null,
+    stakeKey: addressType === "Base" ? stakeKey.to_bech32() : null,
   };
 }
 
