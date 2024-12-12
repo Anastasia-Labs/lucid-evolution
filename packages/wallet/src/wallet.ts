@@ -11,7 +11,7 @@ import {
 import { CML } from "./core.js";
 import { mnemonicToEntropy } from "bip39";
 
-type FromSeed = {
+export type FromSeed = {
   address: Address;
   rewardAddress: RewardAddress | null;
   paymentKey: PrivateKey;
