@@ -1,3 +1,4 @@
+import { applyDoubleCborEncoding } from "@lucid-evolution/utils";
 import {
   CertificateValidator,
   MintingPolicy,
@@ -19,18 +20,24 @@ export const attachScript = ({ type, script }: Validator) => {
       };
     case "PlutusV1":
       return {
-        key: CML.PlutusV1Script.from_cbor_hex(script).hash().to_hex(),
-        value: { type, script },
+        key: CML.PlutusV1Script.from_cbor_hex(applyDoubleCborEncoding(script))
+          .hash()
+          .to_hex(),
+        value: { type, script: applyDoubleCborEncoding(script) },
       };
     case "PlutusV2":
       return {
-        key: CML.PlutusV2Script.from_cbor_hex(script).hash().to_hex(),
-        value: { type, script },
+        key: CML.PlutusV2Script.from_cbor_hex(applyDoubleCborEncoding(script))
+          .hash()
+          .to_hex(),
+        value: { type, script: applyDoubleCborEncoding(script) },
       };
     case "PlutusV3":
       return {
-        key: CML.PlutusV3Script.from_cbor_hex(script).hash().to_hex(),
-        value: { type, script },
+        key: CML.PlutusV3Script.from_cbor_hex(applyDoubleCborEncoding(script))
+          .hash()
+          .to_hex(),
+        value: { type, script: applyDoubleCborEncoding(script) },
       };
     default:
       throw new Error(`Exhaustive check failed: Unhandled case ${type}`);

@@ -35,11 +35,34 @@ describe.sequential("Onchain testing", () => {
     expect(exit._tag).toBe("Success");
   });
 
-  test.skip("MultiValidator - registerStake", async () => {
+  test("MultiValidator - registerStake", async () => {
     const program = pipe(
       MultiValidatorEndpoints.registerStake,
       Effect.provide(User.layer),
-      Effect.provide(StakeContract.layer),
+      Effect.provide(SimpleStakeContract.layer),
+      Effect.provide(NetworkConfig.layerPreprod),
+    );
+    const exit = await Effect.runPromiseExit(program);
+    expect(exit._tag).toBe("Success");
+  });
+
+  test("MultiValidator - mintAndWithdrawSimpleStake", async () => {
+    const program = pipe(
+      MultiValidatorEndpoints.mintAndWithdraw,
+      Effect.provide(User.layer),
+      Effect.provide(SimpleMintContract.layer),
+      Effect.provide(SimpleStakeContract.layer),
+      Effect.provide(NetworkConfig.layerPreprod),
+    );
+    const exit = await Effect.runPromiseExit(program);
+    expect(exit._tag).toBe("Success");
+  });
+
+  test("MultiValidator - deRegisterStake", async () => {
+    const program = pipe(
+      MultiValidatorEndpoints.deRegisterStake,
+      Effect.provide(User.layer),
+      Effect.provide(SimpleStakeContract.layer),
       Effect.provide(NetworkConfig.layerPreprod),
     );
     const exit = await Effect.runPromiseExit(program);
@@ -92,40 +115,6 @@ describe.sequential("Onchain testing", () => {
     expect(exit._tag).toBe("Success");
   });
 
-  test("MultiValidator - registerSimpleStake", async () => {
-    const program = pipe(
-      MultiValidatorEndpoints.registerSimpleStake,
-      Effect.provide(User.layer),
-      Effect.provide(SimpleStakeContract.layer),
-      Effect.provide(NetworkConfig.layerPreprod),
-    );
-    const exit = await Effect.runPromiseExit(program);
-    expect(exit._tag).toBe("Success");
-  });
-
-  test("MultiValidator - mintAndWithdrawSimpleStake", async () => {
-    const program = pipe(
-      MultiValidatorEndpoints.mintAndWithdraw,
-      Effect.provide(User.layer),
-      Effect.provide(SimpleMintContract.layer),
-      Effect.provide(SimpleStakeContract.layer),
-      Effect.provide(NetworkConfig.layerPreprod),
-    );
-    const exit = await Effect.runPromiseExit(program);
-    expect(exit._tag).toBe("Success");
-  });
-
-  test("MultiValidator - deRegisterStake", async () => {
-    const program = pipe(
-      MultiValidatorEndpoints.deRegisterStake,
-      Effect.provide(User.layer),
-      Effect.provide(SimpleStakeContract.layer),
-      Effect.provide(NetworkConfig.layerPreprod),
-    );
-    const exit = await Effect.runPromiseExit(program);
-    expect(exit._tag).toBe("Success");
-  });
-
   test("Metadata", async () => {
     const program = pipe(
       MetadataEndpoint.payWithMetadata,
@@ -149,7 +138,7 @@ describe.sequential("Onchain testing", () => {
     expect(exit._tag).toBe("Success");
   });
 
-  test.skip("CollectFunds", async () => {
+  test("CollectFunds", async () => {
     const program = pipe(
       HelloEndpoints.collectFunds,
       Effect.provide(User.layer),
@@ -176,36 +165,6 @@ describe.sequential("Onchain testing", () => {
       HelloEndpoints.collectFundsReadFrom,
       Effect.provide(User.layer),
       Effect.provide(HelloContract.layer),
-      Effect.provide(NetworkConfig.layerPreprod),
-    );
-    const exit = await Effect.runPromiseExit(program);
-    expect(exit._tag).toBe("Success");
-  });
-
-  test("registerStake", async () => {
-    const program = pipe(
-      StakeEndpoints.registerStake,
-      Effect.provide(User.layer),
-      Effect.provide(NetworkConfig.layerPreprod),
-    );
-    const exit = await Effect.runPromiseExit(program);
-    expect(exit._tag).toBe("Success");
-  });
-
-  test("deRegisterStake", async () => {
-    const program = pipe(
-      StakeEndpoints.deRegisterStake,
-      Effect.provide(User.layer),
-      Effect.provide(NetworkConfig.layerPreprod),
-    );
-    const exit = await Effect.runPromiseExit(program);
-    expect(exit._tag).toBe("Success");
-  });
-
-  test.skip("registerStake/deRegisterStake", async () => {
-    const program = pipe(
-      StakeEndpoints.registerDeregisterStake,
-      Effect.provide(User.layer),
       Effect.provide(NetworkConfig.layerPreprod),
     );
     const exit = await Effect.runPromiseExit(program);
@@ -569,7 +528,7 @@ describe.sequential("Onchain testing", () => {
     expect(exit._tag).toBe("Success");
   });
 
-  test.skip("composeMintAndRegisterStake", async () => {
+  test("composeMintAndRegisterStake", async () => {
     const program = pipe(
       ComposeEndpoints.composeMintAndRegisterStake,
       Effect.provide(User.layer),
@@ -579,7 +538,7 @@ describe.sequential("Onchain testing", () => {
     expect(exit._tag).toBe("Success");
   });
 
-  test.skip("composeMintAndDeregisterStake", async () => {
+  test("composeMintAndDeregisterStake", async () => {
     const program = pipe(
       ComposeEndpoints.composeMintAndDeregisterStake,
       Effect.provide(User.layer),
@@ -589,7 +548,7 @@ describe.sequential("Onchain testing", () => {
     expect(exit._tag).toBe("Success");
   });
 
-  test.skip("composeDepositFundsLockRefScriptAndRegisterDrep", async () => {
+  test("composeDepositFundsLockRefScriptAndRegisterDrep", async () => {
     const program = pipe(
       ComposeEndpoints.composeDepositFundsLockRefScriptAndRegisterDrep,
       Effect.provide(User.layer),
@@ -601,13 +560,35 @@ describe.sequential("Onchain testing", () => {
     expect(exit._tag).toBe("Success");
   });
 
-  test.skip("composeCollectFundsReadFromAndDeregisterDrep", async () => {
+  test("composeCollectFundsReadFromAndDeregisterDrep", async () => {
     const program = pipe(
       ComposeEndpoints.composeCollectFundsReadFromAndDeregisterDrep,
       Effect.provide(User.layer),
       Effect.provide(AlwaysYesDrepContract.layer),
       Effect.provide(NetworkConfig.layerPreprod),
       Effect.provide(HelloContract.layer),
+    );
+    const exit = await Effect.runPromiseExit(program);
+    expect(exit._tag).toBe("Success");
+  });
+
+  test("registerAndDelegateToPoolAndScriptDRep", async () => {
+    const program = pipe(
+      GovernanceEndpoints.registerAndDelegateToPoolAndScriptDRep,
+      Effect.provide(User.layer),
+      Effect.provide(AlwaysYesDrepContract.layer),
+      Effect.provide(NetworkConfig.layerPreprod),
+    );
+    const exit = await Effect.runPromiseExit(program);
+    expect(exit._tag).toBe("Success");
+  });
+
+  test("deregisterScriptDRep", async () => {
+    const program = pipe(
+      GovernanceEndpoints.deregisterStakeScriptDRep,
+      Effect.provide(User.layer),
+      Effect.provide(AlwaysYesDrepContract.layer),
+      Effect.provide(NetworkConfig.layerPreprod),
     );
     const exit = await Effect.runPromiseExit(program);
     expect(exit._tag).toBe("Success");

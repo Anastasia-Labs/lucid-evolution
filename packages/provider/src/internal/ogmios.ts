@@ -1,5 +1,5 @@
 import * as S from "@effect/schema/Schema";
-import { fromUnit } from "@lucid-evolution/utils";
+import { applySingleCborEncoding, fromUnit } from "@lucid-evolution/utils";
 import { Record } from "effect";
 import * as CoreType from "@lucid-evolution/core-types";
 
@@ -167,11 +167,20 @@ export const toOgmiosUTxOs = (utxos: CoreType.UTxO[] | undefined): UTxO[] => {
     if (scriptRef) {
       switch (scriptRef.type) {
         case "PlutusV1":
-          return { language: "plutus:v1", cbor: scriptRef.script };
+          return {
+            language: "plutus:v1",
+            cbor: applySingleCborEncoding(scriptRef.script),
+          };
         case "PlutusV2":
-          return { language: "plutus:v2", cbor: scriptRef.script };
+          return {
+            language: "plutus:v2",
+            cbor: applySingleCborEncoding(scriptRef.script),
+          };
         case "PlutusV3":
-          return { language: "plutus:v3", cbor: scriptRef.script };
+          return {
+            language: "plutus:v3",
+            cbor: applySingleCborEncoding(scriptRef.script),
+          };
         default:
           return null;
       }

@@ -1,5 +1,53 @@
 # @lucid-evolution/provider
 
+## 0.1.80
+
+### Patch Changes
+
+- [#436](https://github.com/Anastasia-Labs/lucid-evolution/pull/436) [`6844e1e`](https://github.com/Anastasia-Labs/lucid-evolution/commit/6844e1ebc5f2bdb2ef7987d67e926cb8f4d8d427) Thanks [@hadelive](https://github.com/hadelive)! - minimum fee used in collateral calc
+
+## 0.1.79
+
+### Patch Changes
+
+- [#433](https://github.com/Anastasia-Labs/lucid-evolution/pull/433) [`4e01e51`](https://github.com/Anastasia-Labs/lucid-evolution/commit/4e01e51b2afba34d3ef1d089722a1294c7f253bc) Thanks [@kozer](https://github.com/kozer)! - fix koios submit tx
+
+## 0.1.78
+
+### Patch Changes
+
+- [#431](https://github.com/Anastasia-Labs/lucid-evolution/pull/431) [`87dbc3a`](https://github.com/Anastasia-Labs/lucid-evolution/commit/87dbc3a93c2181ec26f984ac6e5bb73b6e1553c5) Thanks [@solidsnakedev](https://github.com/solidsnakedev)! - koios error message; upgrade pnpm to version 9
+
+## 0.1.77
+
+### Patch Changes
+
+- [#423](https://github.com/Anastasia-Labs/lucid-evolution/pull/423) [`d51efd2`](https://github.com/Anastasia-Labs/lucid-evolution/commit/d51efd29f9b8637b9ec05e4ee8556451727a3442) Thanks [@solidsnakedev](https://github.com/solidsnakedev)! - enforce single encoding for tx evaluation in providerrs; fix blockfrost redeemer labels
+
+- Updated dependencies [[`d51efd2`](https://github.com/Anastasia-Labs/lucid-evolution/commit/d51efd29f9b8637b9ec05e4ee8556451727a3442)]:
+  - @lucid-evolution/utils@0.1.59
+  - @lucid-evolution/wallet@0.1.65
+
+## 0.1.76
+
+### Patch Changes
+
+- [#420](https://github.com/Anastasia-Labs/lucid-evolution/pull/420) [`f8bf954`](https://github.com/Anastasia-Labs/lucid-evolution/commit/f8bf954959518f3dd96837a619cd96c6d3048944) Thanks [@hadelive](https://github.com/hadelive)! - fix double cbor encoding
+
+- Updated dependencies [[`f8bf954`](https://github.com/Anastasia-Labs/lucid-evolution/commit/f8bf954959518f3dd96837a619cd96c6d3048944)]:
+  - @lucid-evolution/utils@0.1.58
+  - @lucid-evolution/wallet@0.1.64
+
+## 0.1.75
+
+### Patch Changes
+
+- [#418](https://github.com/Anastasia-Labs/lucid-evolution/pull/418) [`45a541f`](https://github.com/Anastasia-Labs/lucid-evolution/commit/45a541ff10fd8ddf21036848c7b67e380e36518f) Thanks [@hadelive](https://github.com/hadelive)! - double cbor encoding
+
+- Updated dependencies [[`45a541f`](https://github.com/Anastasia-Labs/lucid-evolution/commit/45a541ff10fd8ddf21036848c7b67e380e36518f)]:
+  - @lucid-evolution/utils@0.1.57
+  - @lucid-evolution/wallet@0.1.63
+
 ## 0.1.74
 
 ### Patch Changes

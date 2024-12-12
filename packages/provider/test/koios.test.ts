@@ -1,7 +1,8 @@
 import { Koios } from "../src/koios.js";
 import { ProtocolParameters, UTxO } from "@lucid-evolution/core-types";
-import { assert, describe, expect, test } from "vitest";
+import { assert, describe, expect, test, vi } from "vitest";
 import * as PreprodConstants from "./preprod-constants.js";
+import * as _Koios from "../src/internal/koios.js";
 
 //TODO: improve test assetion
 describe.sequential("Koios", () => {
@@ -70,7 +71,46 @@ describe.sequential("Koios", () => {
   test("submitTxBadRequest", async () => {
     await expect(() => koios.submitTx("80")).rejects.toThrowError();
   });
+  test("submitTx sends correct CBOR headers", async () => {
+    const mockTransaction = PreprodConstants.evalSample1.transaction;
+    const expectedTxHash =
+      "e84eb47208757db8ed101c2114ca8953527b4a6aae51bacf17e991e5c734fec6";
 
+    const fetchSpy = vi.spyOn(global, "fetch").mockResolvedValue({
+      ok: true,
+      status: 200,
+      statusText: "OK",
+      headers: new Headers({
+        "content-type": "application/json",
+      }),
+      text: () => Promise.resolve(JSON.stringify(expectedTxHash)),
+      json: () => Promise.resolve(expectedTxHash),
+      body: null,
+    } as Response);
+
+    const koios = new Koios("https://preprod.koios.rest/api/v1");
+    expect(await koios.submitTx(mockTransaction)).toBe(expectedTxHash);
+
+    expect(fetchSpy).toHaveBeenCalledTimes(1);
+    expect(fetchSpy).toHaveBeenCalledWith(
+      expect.objectContaining({
+        href: "https://preprod.koios.rest/api/v1/submittx",
+      }),
+      expect.objectContaining({
+        method: "POST",
+        headers: expect.objectContaining({
+          get: expect.any(Function),
+        }),
+        body: expect.any(Uint8Array),
+      }),
+    );
+    const [, options] = fetchSpy.mock.calls[0];
+    const headers = options?.headers as Headers;
+    expect(headers.get("content-type")).toBe("application/cbor");
+    expect(options?.body).toBeInstanceOf(Uint8Array);
+
+    vi.restoreAllMocks();
+  });
   test("evaluates additonal utxos - sample 1", async () => {
     const redeemers = await koios.evaluateTx(
       PreprodConstants.evalSample1.transaction,
@@ -101,6 +141,17 @@ describe.sequential("Koios", () => {
     assert.deepStrictEqual(
       redeemers,
       PreprodConstants.evalSample3.redeemersExUnits,
+    );
+  });
+
+  test("evaluates additinal utxos - sample 4", async () => {
+    const redeemers = await koios.evaluateTx(
+      PreprodConstants.evalSample4.transaction,
+      PreprodConstants.evalSample4.utxos,
+    );
+    assert.deepStrictEqual(
+      redeemers,
+      PreprodConstants.evalSample4.redeemersExUnits,
     );
   });
 });

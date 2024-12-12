@@ -1,16 +1,16 @@
 import {
+  HttpBody,
   HttpClient,
   HttpClientRequest,
   HttpClientResponse,
 } from "@effect/platform";
 import { HttpBodyError } from "@effect/platform/HttpBody";
 import { HttpClientError } from "@effect/platform/HttpClientError";
-import { ArrayFormatter } from "@effect/schema";
 import * as S from "@effect/schema/Schema";
 import { Effect, pipe } from "effect";
 import * as CoreType from "@lucid-evolution/core-types";
 import { ParseError } from "@effect/schema/ParseResult";
-import { TimeoutException } from "effect/Cause";
+import { applyDoubleCborEncoding } from "@lucid-evolution/utils";
 
 export const ProtocolParametersSchema = S.Struct({
   pvt_motion_no_confidence: S.Number,
@@ -72,8 +72,8 @@ export const ProtocolParametersSchema = S.Struct({
   max_collateral_inputs: S.Number,
   coins_per_utxo_size: S.BigInt,
 });
-export interface ProtocolParameters
-  extends S.Schema.Type<typeof ProtocolParametersSchema> {}
+// export interface ProtocolParameters
+//   extends S.Schema.Type<typeof ProtocolParametersSchema> {}
 
 export const AssetSchema = S.Struct({
   policy_id: S.String,
@@ -272,14 +272,24 @@ export const postWithSchemaValidation = <A, I, R>(
   url: string | URL,
   data: unknown,
   schema: S.Schema<A, I, R>,
+  headers: Record<string, string> = {},
 ): Effect.Effect<A, HttpClientError | HttpBodyError | ParseError, R> =>
   pipe(
-    HttpClientRequest.post(url),
-    HttpClientRequest.jsonBody(data),
-    Effect.flatMap(HttpClient.fetchOk),
+    Effect.succeed(HttpClientRequest.post(url)),
+    Effect.map(HttpClientRequest.setHeaders(headers)),
+    Effect.flatMap((req) =>
+      headers["Content-Type"] === "application/cbor"
+        ? Effect.succeed(
+            HttpClientRequest.uint8ArrayBody(
+              data as Uint8Array,
+              headers["Content-Type"],
+            )(req),
+          )
+        : HttpClientRequest.jsonBody(data)(req),
+    ),
+    Effect.flatMap(HttpClient.fetch),
     HttpClientResponse.json,
     Effect.flatMap(S.decodeUnknown(schema)),
-    // Effect.scoped
   );
 
 export const getWithSchemaValidation = <A, I, R>(
@@ -314,7 +324,7 @@ export const toUTxO = (koiosUTxO: UTxO, address: string): CoreType.UTxO => ({
   scriptRef: toScriptRef(koiosUTxO.reference_script),
 });
 
-export const toScriptRef = (
+const toScriptRef = (
   reference_script: ReferenceScript | null,
 ): CoreType.Script | undefined => {
   if (reference_script && reference_script.bytes && reference_script.type) {
@@ -322,17 +332,17 @@ export const toScriptRef = (
       case "plutusV1":
         return {
           type: "PlutusV1" as const,
-          script: reference_script.bytes,
+          script: applyDoubleCborEncoding(reference_script.bytes),
         };
       case "plutusV2":
         return {
           type: "PlutusV2" as const,
-          script: reference_script.bytes,
+          script: applyDoubleCborEncoding(reference_script.bytes),
         };
       case "plutusV3":
         return {
           type: "PlutusV3" as const,
-          script: reference_script.bytes,
+          script: applyDoubleCborEncoding(reference_script.bytes),
         };
       default:
         return undefined;

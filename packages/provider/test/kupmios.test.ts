@@ -128,4 +128,14 @@ describe("Kupmios", async () => {
       PreprodConstants.evalSample3.redeemersExUnits,
     );
   });
+  test("evaluates additinal utxos - sample 4", async () => {
+    const redeemers = await kupmios.evaluateTx(
+      PreprodConstants.evalSample4.transaction,
+      PreprodConstants.evalSample4.utxos,
+    );
+    assert.deepStrictEqual(
+      redeemers,
+      PreprodConstants.evalSample4.redeemersExUnits,
+    );
+  });
 });

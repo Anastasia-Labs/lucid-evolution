@@ -22,6 +22,20 @@ export const applyDoubleCborEncoding = (script: string) => {
   }
 };
 
+export const applySingleCborEncoding = (script: string) => {
+  try {
+    decode(decode(fromHex(script)));
+    return toHex(decode(fromHex(script)));
+  } catch (error) {
+    try {
+      decode(fromHex(script));
+      return script;
+    } catch (error) {
+      return toHex(Uint8Array.from(encode(fromHex(script).buffer)));
+    }
+  }
+};
+
 export const CBOREncodingLevel = (script: string): "double" | "single" => {
   try {
     decode(decode(fromHex(script)));

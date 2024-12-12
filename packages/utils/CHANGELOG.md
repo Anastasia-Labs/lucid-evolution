@@ -1,5 +1,23 @@
 # @lucid-evolution/utils
 
+## 0.1.59
+
+### Patch Changes
+
+- [#423](https://github.com/Anastasia-Labs/lucid-evolution/pull/423) [`d51efd2`](https://github.com/Anastasia-Labs/lucid-evolution/commit/d51efd29f9b8637b9ec05e4ee8556451727a3442) Thanks [@solidsnakedev](https://github.com/solidsnakedev)! - enforce single encoding for tx evaluation in providerrs; fix blockfrost redeemer labels
+
+## 0.1.58
+
+### Patch Changes
+
+- [#420](https://github.com/Anastasia-Labs/lucid-evolution/pull/420) [`f8bf954`](https://github.com/Anastasia-Labs/lucid-evolution/commit/f8bf954959518f3dd96837a619cd96c6d3048944) Thanks [@hadelive](https://github.com/hadelive)! - fix double cbor encoding
+
+## 0.1.57
+
+### Patch Changes
+
+- [#418](https://github.com/Anastasia-Labs/lucid-evolution/pull/418) [`45a541f`](https://github.com/Anastasia-Labs/lucid-evolution/commit/45a541ff10fd8ddf21036848c7b67e380e36518f) Thanks [@hadelive](https://github.com/hadelive)! - double cbor encoding
+
 ## 0.1.56
 
 ### Patch Changes

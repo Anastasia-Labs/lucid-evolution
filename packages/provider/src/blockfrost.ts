@@ -1,6 +1,9 @@
 import { CML } from "./core.js";
 import { fromHex, sleep } from "@lucid-evolution/core-utils";
-import { scriptFromNative } from "@lucid-evolution/utils";
+import {
+  applyDoubleCborEncoding,
+  scriptFromNative,
+} from "@lucid-evolution/utils";
 import {
   Address,
   Credential,
@@ -11,7 +14,6 @@ import {
   OutRef,
   ProtocolParameters,
   Provider,
-  RedeemerTag,
   RewardAddress,
   Script,
   Transaction,
@@ -294,17 +296,17 @@ export class Blockfrost implements Provider {
                     case "plutusV1":
                       return {
                         type: "PlutusV1",
-                        script,
+                        script: applyDoubleCborEncoding(script),
                       } satisfies Script;
                     case "plutusV2":
                       return {
                         type: "PlutusV2",
-                        script,
+                        script: applyDoubleCborEncoding(script),
                       } satisfies Script;
                     case "plutusV3":
                       return {
                         type: "PlutusV3",
-                        script,
+                        script: applyDoubleCborEncoding(script),
                       } satisfies Script;
                   }
                 })()
@@ -355,7 +357,9 @@ export class Blockfrost implements Provider {
       ([redeemerPointer, data]) => {
         const [pTag, pIndex] = redeemerPointer.split(":");
         evalRedeemers.push({
-          redeemer_tag: pTag as RedeemerTag,
+          redeemer_tag: _Blockfrost.fromLegacyRedeemerTag(
+            pTag as _Blockfrost.LegacyRedeemerTag,
+          ),
           redeemer_index: Number(pIndex),
           ex_units: { mem: Number(data.memory), steps: Number(data.steps) },
         });
