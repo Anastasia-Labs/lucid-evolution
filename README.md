@@ -17,7 +17,7 @@
 
 There are a growing number of projects that are built on top of `lucid-evolution`! If you've built a library or a project on top of lucid-evolution, tell me about it [on X](https://twitter.com/solidsnakedev) or [on Discord](https://discord.gg/s89P9gpEff) . I'll add it below and tweet it out.
 
-<h3 align="center">Powered by Lucid <span style="color: #AD1F1E;">Evolution</span></h1>
+<h3 align="center">Powered by Lucid Evolution</span></h1>
 
 <table align="center" style="justify-content: center;align-items: center;display: flex;">
   <tr>
@@ -42,17 +42,22 @@ There are a growing number of projects that are built on top of `lucid-evolution
       <a style="text-decoration:none;" href="https://liqwid.finance" target="_blank">Liqwid Finance</a>
     </td>
     <td align="center">
+      <img src="https://avatars.githubusercontent.com/u/86611411?s=200&v=4" height="50px;" alt="Indigo Protocol" />
+      <br />
+      <a style="text-decoration:none;" href="https://indigoprotocol.io" target="_blank">Indigo Protocol</a>
+    </td>
+    <td align="center">
       <img src="https://avatars.githubusercontent.com/u/150360075?s=200&v=4"  height="50px;" alt="Splash" />
       <br />
       <a style="text-decoration:none;" href="https://www.splash.trade/"  target="_blank">Splash</a>
     </td>
+  </tr>
+  <tr>
     <td align="center">
       <img src="https://avatars.githubusercontent.com/u/53253566?s=200&v=4" height="50px;" alt="Meld" />
       <br />
       <a style="text-decoration:none;" href="https://meld.com/"  target="_blank">Meld</a>
     </td>
-  </tr>
-  <tr>
     <td align="center">
       <img src="https://avatars.githubusercontent.com/u/84299480?v=4" height="50px;" alt="Maestro" />
       <br />
@@ -78,13 +83,12 @@ There are a growing number of projects that are built on top of `lucid-evolution
       <br />
       <a style="text-decoration:none;" href="https://alpha.atrium.io/connect" target="_blank">Atrium</a>
     </td>
+    <tr>
     <td align="center">
       <img src="https://avatars.githubusercontent.com/u/86468066?s=200&v=4"  height="50px;" alt="Genius Yield" />
       <br />
       <a style="text-decoration:none;" href="https://www.geniusyield.co/"  target="_blank">Genius Yield</a>
     </td>
-  </tr>
-  <tr>
     <td align="center">
       <img src="https://avatars.githubusercontent.com/u/94472318?v=4" height="50px;" alt="VESPR Wallet" />
       <br />
@@ -110,13 +114,12 @@ There are a growing number of projects that are built on top of `lucid-evolution
       <br />
       <a style="text-decoration:none;" href="https://genwealth.app"  target="_blank">GenWealth</a>
     </td>
+      <tr>
     <td align="center">
       <img src="https://preview.betttingada.com/assets/images/logo/logo-bead.png" height="50px;" alt="BetttingADA" />
       <br />
       <a style="text-decoration:none;" href="https://preview.betttingada.com"  target="_blank">BetttingADA</a>
     </td>
-      </tr>
-  <tr>
     <td align="center">
       <img src="https://cardexscan.s3.us-east-1.amazonaws.com/cds_logo_vector_dark.png" height="50px;" alt="Summon" />
       <br />

@@ -40,8 +40,6 @@ export default {
     autoCollapse: true,
   },
 
-  darkMode: false,
-
   search: {
     placeholder: "🔎 Explore the Evolution",
   },
@@ -58,7 +56,8 @@ export default {
         href="https://github.com/Anastasia-Labs/lucid-evolution/releases"
         target="_blank"
       >
-        🎉 Check out our latest release! Learn more →
+        ❤️ Support Lucid Evolution in Fund 13 - Your vote can help shape the future of Cardano Developer Experience!
+        →
       </a>
     ),
   },
@@ -75,7 +74,7 @@ export default {
   },
 
   feedback: {
-    content: "Your feedback on our docs →",
+    content: "Give feedback on our docs →",
     labels: "feedback",
   },
 
@@ -96,16 +95,33 @@ export default {
         content="https://anastasialabs.com/assets/img/logo/logo.png"
       />
       <meta name="twitter:site:domain" content="https://anastasialabs.com/" />
-      <Script id="force-dark-mode" strategy="beforeInteractive">
-        {`
-          if (!window.localStorage.getItem("theme_default")) {
-            window.localStorage.setItem("theme", "dark");
-            window.localStorage.setItem("theme_default", "dark");
-            document.documentElement.classList.add("dark");
-            document.documentElement.classList.remove("light");
+      <style>{`
+        :root {
+          color-scheme: dark;
+        }
+        
+        html {
+          background: #111111 !important;
+          color-scheme: dark;
+        }
+
+        body {
+          background: #111111 !important;
+          color-scheme: dark;
+        }
+
+        /* Force dark mode for mobile */
+        @media (prefers-color-scheme: light) {
+          html {
+            background: #111111 !important;
+            color-scheme: dark;
           }
-        `}
-      </Script>
+          body {
+            background: #111111 !important;
+            color-scheme: dark;
+          }
+        }
+      `}</style>
       <style>{`
               
         .nextra-nav-container nav a:hover {
@@ -291,5 +307,9 @@ export default {
         `}</style>
       </>
     ),
+  },
+  nextThemes: {
+    forcedTheme: 'dark',
+    defaultTheme: 'dark',
   },
 };

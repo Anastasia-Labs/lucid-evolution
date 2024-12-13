@@ -4,12 +4,9 @@ import { Callout, Steps, Tabs } from "nextra/components";
 
 Lucid Evolution provides several methods for making payments, each with its own specific use case:
 
+### Simple ADA Payment
 
-
-
-<Tabs items={['Simple ADA Payment', 'Multiple Recipients', 'Native Tokens', 'w/ Metadata', 'w/ Datum/Script', 'To Plutus Script']}>
-  <Tabs.Tab>
-    For straightforward payments to a public key or native script address, use `pay.ToAddress`:
+For straightforward payments to a public key or native script address, use `pay.ToAddress`:
 
     ```typescript
     const tx = await lucid
@@ -20,10 +17,11 @@ Lucid Evolution provides several methods for making payments, each with its own 
     const signedTx = await tx.sign.withWallet().complete();
     const txHash = await signedTx.submit();
     ```
-  </Tabs.Tab>
 
-  <Tabs.Tab>
-    Chain multiple `pay.ToAddress` calls to pay multiple recipients:
+
+### Multiple Recipients
+
+Chain multiple `pay.ToAddress` calls to pay multiple recipients:
 
     ```typescript
     const tx = await lucid
@@ -40,10 +38,10 @@ Lucid Evolution provides several methods for making payments, each with its own 
     <Callout type="info">
     Each `pay.ToAddress` call creates a new UTxO, even for the same address. Lucid Evolution considers the order of outputs.
     </Callout>
-  </Tabs.Tab>
 
-  <Tabs.Tab>
-    Lucid Evolution automatically adds the minimum ADA requirement for payments in Cardano Native Tokens (CNTs):
+### Native Tokens
+
+Lucid Evolution automatically adds the minimum ADA requirement for payments in Cardano Native Tokens (CNTs):
 
     ```typescript
     const policyId = "00...";
@@ -57,10 +55,11 @@ Lucid Evolution provides several methods for making payments, each with its own 
     const signedTx = await tx.sign.withWallet().complete();
     const txHash = await signedTx.submit();
     ```
-  </Tabs.Tab>
 
-  <Tabs.Tab>
-    Attach metadata to your ADA payments:
+
+### Attach Metadata
+
+Attach metadata to your ADA payments:
 
     ```typescript
     const tx = await lucid
@@ -72,10 +71,10 @@ Lucid Evolution provides several methods for making payments, each with its own 
     const signedTx = await tx.sign.withWallet().complete();
     const txHash = await signedTx.submit();
     ```
-  </Tabs.Tab>
 
-  <Tabs.Tab>
-  For more complex scenarios, `pay.ToAddressWithData` allows you to include a datum or a reference script. Lucid Evolution then implicitly adds the minimum ADA requirement for datums.
+### Datum/Script
+
+For more complex scenarios, `pay.ToAddressWithData` allows you to include a datum or a reference script. Lucid Evolution then implicitly adds the minimum ADA requirement for datums.
     <Tabs items={['With Datum', 'With Script Reference']}>
       <Tabs.Tab>
         The datum can be attached in different ways:
@@ -136,10 +135,9 @@ Lucid Evolution provides several methods for making payments, each with its own 
       </Tabs.Tab>
     </Tabs>
 
-    
-  </Tabs.Tab>
+  
+### Plutus Script
 
-  <Tabs.Tab>
 Use `pay.ToContract` for payments to a Plutus script address. This method ensures that a datum is provided.
 
     ```typescript
@@ -155,5 +153,3 @@ Use `pay.ToContract` for payments to a Plutus script address. This method ensure
     const signedTx = await tx.sign.withWallet().complete();
     const txHash = await signedTx.submit();
     ```
-  </Tabs.Tab>
-</Tabs>
