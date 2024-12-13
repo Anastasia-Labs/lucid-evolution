@@ -60,9 +60,9 @@ export const payToAddress = (
   });
 
 /** Pay to a public key or native script address with datum or scriptRef. */
-export const payToAddressWithData = (
+export const ToAddressWithData = (
   address: Address,
-  outputDatum: OutputDatum,
+  outputDatum?: OutputDatum,
   assets?: Assets,
   scriptRef?: Script,
 ) =>
@@ -100,48 +100,52 @@ export const payToAddressWithData = (
   });
 
 /** Pay to a plutus script address with datum or scriptRef. */
-export const payToContract = (
+export const ToContract = (
   address: Address,
-  outputDatum: OutputDatum,
+  outputDatum?: OutputDatum,
   assets?: Assets,
   scriptRef?: Script,
-) =>
-  Effect.gen(function* () {
-    if (!outputDatum.value) yield* payError(ERROR_MESSAGE.DATUM_NOT_SET);
-    return yield* payToAddressWithData(address, outputDatum, assets, scriptRef);
-  });
+) => ToAddressWithData(address, outputDatum, assets, scriptRef);
 
-const buildBaseOutput = (
+export const buildBaseOutput = (
   address: Address,
-  outputDatum: OutputDatum,
-  scriptRef: Script | undefined,
+  outputDatum?: OutputDatum,
+  scriptRef?: Script,
 ) => {
   let baseBuilder: CML.TransactionOutputBuilder;
   const addressBuilder = CML.TransactionOutputBuilder.new().with_address(
     CML.Address.from_bech32(address),
   );
-
-  switch (outputDatum.kind) {
-    case "hash": {
-      const datumOption = CML.DatumOption.new_hash(
-        CML.DatumHash.from_hex(outputDatum.value),
+  if (outputDatum) {
+    if (outputDatum.value.trim() === "") {
+      throw new Error(
+        "datum value is missing. Please provide a non-empty cbor hex data.",
       );
-      baseBuilder = addressBuilder.with_data(datumOption);
-      break;
     }
-    case "asHash": {
-      const plutusData = CML.PlutusData.from_cbor_hex(outputDatum.value);
-      baseBuilder = addressBuilder.with_communication_data(plutusData);
-      break;
+    switch (outputDatum.kind) {
+      case "hash": {
+        const datumOption = CML.DatumOption.new_hash(
+          CML.DatumHash.from_hex(outputDatum.value),
+        );
+        baseBuilder = addressBuilder.with_data(datumOption);
+        break;
+      }
+      case "asHash": {
+        const plutusData = CML.PlutusData.from_cbor_hex(outputDatum.value);
+        baseBuilder = addressBuilder.with_communication_data(plutusData);
+        break;
+      }
+      case "inline": {
+        const plutusData = CML.PlutusData.from_cbor_hex(outputDatum.value);
+        const datumOption = CML.DatumOption.new_datum(plutusData);
+        baseBuilder = addressBuilder.with_data(datumOption);
+        break;
+      }
+      default:
+        throw new Error(`Unknown outputDatum: ${outputDatum}`);
     }
-    case "inline": {
-      const plutusData = CML.PlutusData.from_cbor_hex(outputDatum.value);
-      const datumOption = CML.DatumOption.new_datum(plutusData);
-      baseBuilder = addressBuilder.with_data(datumOption);
-      break;
-    }
-    default:
-      throw new Error(`Unknown outputDatum: ${outputDatum}`);
+  } else {
+    baseBuilder = addressBuilder;
   }
 
   return scriptRef

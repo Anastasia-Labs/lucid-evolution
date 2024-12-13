@@ -66,15 +66,67 @@ export type TxBuilder = {
   ) => TxBuilder;
   pay: {
     ToAddress: (address: string, assets: Assets) => TxBuilder;
+    /**
+     * Creates an output that lock funds to a target address, with optional parameters for attaching a datum, assets, and a reference script.
+     *
+     * **Warning:** When working with Plutus V1 or V2 contracts, omitting the `outputDatum` can result in a permanently locked UTXO.
+     *
+     * @example
+     * ```ts
+     * const refScript: Script = {
+     *   type: "PlutusV3",
+     *   script: "450100002499",
+     *  };
+     *
+     * const signBuilder = await user
+     *   .newTx()
+     *   .pay.ToAddressWithData(
+     *     "addr1q98wl3hnya9l94rt58ky533deyqe9t8zz5n9su26k8e5g23yar4q0adtaax9q9g0kphpv2ws7vxqwu6ln6pqx7j29nfqsfy9mg",
+     *     {
+     *       kind: "inline",
+     *       value: "d8799f44deadbeefff",
+     *     },
+     *     { lovelace: 10_000_000n },
+     *     refScript
+     *   )
+     *   .complete();
+     * ```
+     */
     ToAddressWithData: (
       address: string,
-      outputDatum: OutputDatum,
+      outputDatum?: OutputDatum,
       assets?: Assets | undefined,
       scriptRef?: Script | undefined,
     ) => TxBuilder;
+    /**
+     * Creates an output that lock funds to a target address, with optional parameters for attaching a datum, assets, and a reference script.
+     *
+     * **Warning:** When working with Plutus V1 or V2 contracts, omitting the `outputDatum` can result in a permanently locked UTXO.
+     *
+     * @example
+     * ```ts
+     * const refScript: Script = {
+     *   type: "PlutusV3",
+     *   script: "450100002499",
+     *  };
+     *
+     * const signBuilder = await user
+     *   .newTx()
+     *   .pay.ToContract(
+     *     "addr1q98wl3hnya9l94rt58ky533deyqe9t8zz5n9su26k8e5g23yar4q0adtaax9q9g0kphpv2ws7vxqwu6ln6pqx7j29nfqsfy9mg",
+     *     {
+     *       kind: "inline",
+     *       value: "d8799f44deadbeefff",
+     *     },
+     *     { lovelace: 10_000_000n },
+     *     refScript
+     *   )
+     *   .complete();
+     * ```
+     */
     ToContract: (
       address: string,
-      outputDatum: OutputDatum,
+      outputDatum?: OutputDatum,
       assets?: Assets | undefined,
       scriptRef?: Script | undefined,
     ) => TxBuilder;
@@ -278,11 +330,11 @@ export function makeTxBuilder(lucidConfig: LucidConfig): TxBuilder {
       },
       ToAddressWithData: (
         address: string,
-        outputDatum: OutputDatum,
+        outputDatum?: OutputDatum,
         assets?: Assets,
         scriptRef?: Script | undefined,
       ) => {
-        const program = Pay.payToAddressWithData(
+        const program = Pay.ToAddressWithData(
           address,
           outputDatum,
           assets,
@@ -293,16 +345,11 @@ export function makeTxBuilder(lucidConfig: LucidConfig): TxBuilder {
       },
       ToContract: (
         address: string,
-        outputDatum: OutputDatum,
+        outputDatum?: OutputDatum,
         assets?: Assets,
         scriptRef?: Script | undefined,
       ) => {
-        const program = Pay.payToContract(
-          address,
-          outputDatum,
-          assets,
-          scriptRef,
-        );
+        const program = Pay.ToContract(address, outputDatum, assets, scriptRef);
         config.programs.push(program);
         return txBuilder;
       },
