@@ -78,7 +78,7 @@ export const mint = Effect.gen(function* () {
     )
     .attach.MintingPolicy(nativeMint)
     .attach.MintingPolicy(plutusMint.mint)
-    .completeProgram({ localUPLCEval: false });
+    .completeProgram();
   return signBuilder;
 }).pipe(Effect.flatMap(handleSignSubmit), withLogRetry);
 
@@ -114,7 +114,7 @@ export const burn = Effect.gen(function* () {
     .mintAssets(burnAssets, mintRedeemer)
     .attach.MintingPolicy(nativeMint)
     .attach.MintingPolicy(plutusMint.mint)
-    .completeProgram({ localUPLCEval: false });
+    .completeProgram();
   return signBuilder;
 }).pipe(Effect.flatMap(handleSignSubmit), withLogRetry);
 
@@ -132,7 +132,7 @@ export const mintburn = Effect.gen(function* () {
       [policy + fromText("BurnableToken2")]: -1n,
     })
     .attach.MintingPolicy(mint)
-    .completeProgram({ localUPLCEval: false });
+    .completeProgram();
   return signBuilder;
 }).pipe(Effect.flatMap(handleSignSubmit), withLogRetry, Effect.orDie);
 
@@ -149,7 +149,7 @@ export const mint2 = Effect.gen(function* () {
       [policy + fromText("BurnableToken2")]: 1n,
     })
     .attach.MintingPolicy(mint)
-    .completeProgram({ localUPLCEval: false });
+    .completeProgram();
   return signBuilder;
 }).pipe(Effect.flatMap(handleSignSubmit), withLogRetry, Effect.orDie);
 
@@ -166,7 +166,7 @@ export const burn2 = Effect.gen(function* () {
       [policy + fromText("BurnableToken2")]: -1n,
     })
     .attach.MintingPolicy(mint)
-    .completeProgram({ localUPLCEval: false });
+    .completeProgram();
   return signBuilder;
 }).pipe(Effect.flatMap(handleSignSubmit), withLogRetry, Effect.orDie);
 
@@ -201,7 +201,7 @@ export const pay = Effect.gen(function* () {
     .pay.ToAddressWithData(addr, { kind: "inline", value: datum }, undefined)
     .mintAssets({ [policy + fromText("BurnableToken2")]: 3n })
     .attach.MintingPolicy(mint)
-    .completeProgram({ localUPLCEval: false });
+    .completeProgram();
   return signBuilder;
 }).pipe(Effect.flatMap(handleSignSubmit), withLogRetry, Effect.orDie);
 
@@ -223,7 +223,7 @@ export const mintInSlotRange = Effect.gen(function* () {
       { kind: "inline", value: datum },
       { [policy + fromText("BurnableToken2")]: 1n },
     )
-    .completeProgram({ localUPLCEval: false });
+    .completeProgram();
   return signBuilder;
 }).pipe(Effect.flatMap(handleSubmit));
 
@@ -250,6 +250,6 @@ export const mintAndWithdraw = Effect.gen(function* () {
       { [policy + fromText("multipurpose")]: 1n },
     )
     .attach.MintingPolicy(mint)
-    .completeProgram({ localUPLCEval: false });
+    .completeProgram();
   return signBuilder;
 }).pipe(Effect.flatMap(handleSubmit));

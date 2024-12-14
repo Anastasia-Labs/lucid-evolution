@@ -12,6 +12,6 @@ export const payWithMetadata = Effect.gen(function* () {
       { lovelace: 2_000_000n },
     )
     .attachMetadata(1337, new Uint8Array([1, 2]))
-    .completeProgram({ localUPLCEval: false });
+    .completeProgram();
   return signBuilder;
 }).pipe(Effect.flatMap(handleSignSubmit), withLogRetry, Effect.orDie);

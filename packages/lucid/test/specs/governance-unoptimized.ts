@@ -15,7 +15,7 @@ export const registerDRep = Effect.gen(function* ($) {
     .newTx()
     .register.DRep(rewardAddress)
     .setMinFee(200_000n)
-    .completeProgram({ localUPLCEval: false })
+    .completeProgram()
     .pipe(
       Effect.tap(Effect.log(`${UNOPTIMIZED} registerDRep`)),
       Effect.withLogSpan("TimeSpan"),
@@ -37,7 +37,7 @@ export const deregisterDRep = Effect.gen(function* ($) {
   const signBuilder = yield* user
     .newTx()
     .deregister.DRep(rewardAddress)
-    .completeProgram({ localUPLCEval: false })
+    .completeProgram()
     .pipe(
       Effect.tap(Effect.log(`${UNOPTIMIZED} deregisterDRep`)),
       Effect.withLogSpan("TimeSpan"),
@@ -55,7 +55,7 @@ export const updateDRep = Effect.gen(function* ($) {
   const signBuilder = yield* user
     .newTx()
     .updateDRep(rewardAddress)
-    .completeProgram({ localUPLCEval: false })
+    .completeProgram()
     .pipe(
       Effect.tap(Effect.log(`${UNOPTIMIZED} updateDRep`)),
       Effect.withLogSpan("TimeSpan"),
@@ -76,7 +76,7 @@ export const voteDelegDRepAlwaysAbstain = Effect.gen(function* ($) {
     .delegate.VoteToDRep(rewardAddress, {
       __typename: "AlwaysAbstain",
     })
-    .completeProgram({ localUPLCEval: false })
+    .completeProgram()
     .pipe(
       Effect.tap(Effect.log(`${UNOPTIMIZED} voteDelegDRepAlwaysAbstain`)),
       Effect.withLogSpan("TimeSpan"),
@@ -96,7 +96,7 @@ export const voteDelegDRepAlwaysNoConfidence = Effect.gen(function* ($) {
     .delegate.VoteToDRep(rewardAddress, {
       __typename: "AlwaysNoConfidence",
     })
-    .completeProgram({ localUPLCEval: false })
+    .completeProgram()
     .pipe(
       Effect.tap(Effect.log(`${UNOPTIMIZED} voteDelegDRepAlwaysNoConfidence`)),
       Effect.withLogSpan("TimeSpan"),
@@ -122,7 +122,7 @@ export const voteDelegPoolAndDRepAlwaysAbstain = Effect.gen(function* ($) {
     .delegate.VoteToPoolAndDRep(rewardAddress, poolId, {
       __typename: "AlwaysAbstain",
     })
-    .completeProgram({ localUPLCEval: false })
+    .completeProgram()
     .pipe(
       Effect.tap(
         Effect.log(`${UNOPTIMIZED} voteDelegPoolAndDRepAlwaysAbstain`),
@@ -148,7 +148,7 @@ export const registerAndDelegateToPool = Effect.gen(function* ($) {
   const signBuilder = yield* user
     .newTx()
     .registerAndDelegate.ToPool(rewardAddress, poolId)
-    .completeProgram({ localUPLCEval: false })
+    .completeProgram()
     .pipe(
       Effect.tap(Effect.log(`${UNOPTIMIZED} registerAndDelegateToPool`)),
       Effect.withLogSpan("TimeSpan"),
@@ -168,7 +168,7 @@ export const registerAndDelegateToDRep = Effect.gen(function* ($) {
     .registerAndDelegate.ToDRep(rewardAddress, {
       __typename: "AlwaysAbstain",
     })
-    .completeProgram({ localUPLCEval: false })
+    .completeProgram()
     .pipe(
       Effect.tap(Effect.log(`${UNOPTIMIZED} registerAndDelegateToDRep`)),
       Effect.withLogSpan("TimeSpan"),
@@ -193,7 +193,7 @@ export const registerAndDelegateToPoolAndDRep = Effect.gen(function* ($) {
     .registerAndDelegate.ToPoolAndDRep(rewardAddress, poolId, {
       __typename: "AlwaysAbstain",
     })
-    .completeProgram({ localUPLCEval: false })
+    .completeProgram()
     .pipe(
       Effect.tap(Effect.log(`${UNOPTIMIZED} registerAndDelegateToPoolAndDRep`)),
       Effect.withLogSpan("TimeSpan"),
@@ -209,7 +209,7 @@ export const registerScriptDRep = Effect.gen(function* ($) {
     .newTx()
     .register.DRep(rewardAddress, undefined, Data.void())
     .attach.Script(script)
-    .completeProgram({ localUPLCEval: false })
+    .completeProgram()
     .pipe(
       Effect.tap(Effect.log(`${UNOPTIMIZED} registerScriptDRep`)),
       Effect.withLogSpan("TimeSpan"),
@@ -225,7 +225,7 @@ export const deregisterScriptDRep = Effect.gen(function* ($) {
     .newTx()
     .deregister.DRep(rewardAddress, Data.void())
     .attach.Script(script)
-    .completeProgram({ localUPLCEval: false })
+    .completeProgram()
     .pipe(
       Effect.tap(Effect.log(`${UNOPTIMIZED} deregisterScriptDRep`)),
       Effect.withLogSpan("TimeSpan"),
