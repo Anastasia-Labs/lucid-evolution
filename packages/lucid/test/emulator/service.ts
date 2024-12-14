@@ -2,12 +2,11 @@ import {
   getAddressDetails,
   mintingPolicyToId,
   scriptFromNative,
-  stringify,
   toUnit,
   unixTimeToSlot,
   validatorToAddress,
 } from "@lucid-evolution/utils";
-import { Effect, Context, Layer, pipe, Console } from "effect";
+import { Effect, Context, Layer, pipe } from "effect";
 import {
   Data,
   Constr,
@@ -51,7 +50,7 @@ export const emulator = await Effect.gen(function* () {
   return new Emulator([EMULATOR_ACCOUNT, EMULATOR_ACCOUNT_1]);
 }).pipe(Effect.runPromise);
 
-const makeEmulatorUser = Effect.gen(function* ($) {
+const makeEmulatorUser = Effect.gen(function* () {
   const user = yield* Effect.tryPromise(() => Lucid(emulator, "Custom"));
   user.selectWallet.fromSeed(EMULATOR_ACCOUNT.seedPhrase);
   const userFromPrivateKey = yield* Effect.tryPromise(() =>
@@ -125,7 +124,7 @@ export const registerStake = Effect.gen(function* () {
   Effect.orDie,
 );
 
-export const delegateTo = Effect.gen(function* ($) {
+export const delegateTo = Effect.gen(function* () {
   const { user } = yield* EmulatorUser;
   const rewardAddress = yield* pipe(
     Effect.promise(() => user.wallet().rewardAddress()),
@@ -138,7 +137,7 @@ export const delegateTo = Effect.gen(function* ($) {
   return signBuilder;
 }).pipe(Effect.flatMap(handleSignSubmitWithoutValidation), withLogRetry);
 
-export const deRegisterStake = Effect.gen(function* ($) {
+export const deRegisterStake = Effect.gen(function* () {
   const { user } = yield* EmulatorUser;
   const rewardAddress = yield* pipe(
     Effect.promise(() => user.wallet().rewardAddress()),
@@ -152,7 +151,7 @@ export const deRegisterStake = Effect.gen(function* ($) {
   return signBuilder;
 }).pipe(Effect.flatMap(handleSignSubmitWithoutValidation), withLogRetry);
 
-export const registerDeregisterStake = Effect.gen(function* ($) {
+export const registerDeregisterStake = Effect.gen(function* () {
   const { user } = yield* EmulatorUser;
   const rewardAddress = yield* pipe(
     Effect.promise(() => user.wallet().rewardAddress()),
@@ -175,7 +174,7 @@ export const registerDeregisterStake = Effect.gen(function* ($) {
 );
 
 export const withdrawReward = (amount: bigint) =>
-  Effect.gen(function* ($) {
+  Effect.gen(function* () {
     const { user } = yield* EmulatorUser;
     const rewardAddress = yield* pipe(
       Effect.promise(() => user.wallet().rewardAddress()),
@@ -188,7 +187,7 @@ export const withdrawReward = (amount: bigint) =>
     return signBuilder;
   }).pipe(Effect.flatMap(handleSignSubmitWithoutValidation), withLogRetry);
 
-export const evaluateAContract = Effect.gen(function* ($) {
+export const evaluateAContract = Effect.gen(function* () {
   const { user } = yield* EmulatorUser;
   const scriptAddress = validatorToAddress("Custom", alwaysSucceedScript);
   const signBuilder = yield* user
@@ -202,7 +201,7 @@ export const evaluateAContract = Effect.gen(function* ($) {
   return signBuilder;
 }).pipe(Effect.flatMap(handleSignSubmitWithoutValidation), withLogRetry);
 
-export const evaluateAContractWithDatum = Effect.gen(function* ($) {
+export const evaluateAContractWithDatum = Effect.gen(function* () {
   const { user } = yield* EmulatorUser;
   const scriptAddress = validatorToAddress("Custom", alwaysSucceedScript);
   const signBuilder = yield* user
@@ -221,7 +220,7 @@ export const evaluateAContractWithDatum = Effect.gen(function* ($) {
   return signBuilder;
 }).pipe(Effect.flatMap(handleSignSubmitWithoutValidation), withLogRetry);
 
-export const compose = Effect.gen(function* ($) {
+export const compose = Effect.gen(function* () {
   const { user } = yield* EmulatorUser;
   const scriptAddress = validatorToAddress("Custom", alwaysSucceedScript);
   const txCompA = user
@@ -242,7 +241,7 @@ export const compose = Effect.gen(function* ($) {
   return signBuilder;
 }).pipe(Effect.flatMap(handleSignSubmitWithoutValidation), withLogRetry);
 
-export const multiTxCompose = Effect.gen(function* ($) {
+export const multiTxCompose = Effect.gen(function* () {
   const { user } = yield* EmulatorUser;
   const addr = yield* Effect.promise(() => user.wallet().address());
   const txCompA = user
@@ -274,7 +273,7 @@ export const multiTxCompose = Effect.gen(function* ($) {
   return signBuilder;
 }).pipe(Effect.flatMap(handleSignSubmitWithoutValidation), withLogRetry);
 
-export const composeMintTx = Effect.gen(function* ($) {
+export const composeMintTx = Effect.gen(function* () {
   const { user, emulator } = yield* EmulatorUser;
   const addr = yield* Effect.promise(() => user.wallet().address());
   const txCompA = user
@@ -306,7 +305,7 @@ export const composeMintTx = Effect.gen(function* ($) {
   return signBuilder;
 }).pipe(Effect.flatMap(handleSignSubmitWithoutValidation), withLogRetry);
 
-export const composeMintAndStake = Effect.gen(function* ($) {
+export const composeMintAndStake = Effect.gen(function* () {
   const { user, emulator } = yield* EmulatorUser;
   const addr = yield* Effect.promise(() => user.wallet().address());
   const txCompA = user
@@ -343,7 +342,7 @@ export const composeMintAndStake = Effect.gen(function* ($) {
   return signBuilder;
 }).pipe(Effect.flatMap(handleSignSubmitWithoutValidation), withLogRetry);
 
-export const composeDeregister = Effect.gen(function* ($) {
+export const composeDeregister = Effect.gen(function* () {
   const { user } = yield* EmulatorUser;
   const rewardAddress = yield* pipe(
     Effect.promise(() => user.wallet().rewardAddress()),
@@ -357,7 +356,7 @@ export const composeDeregister = Effect.gen(function* ($) {
   return signBuilder;
 }).pipe(Effect.flatMap(handleSignSubmitWithoutValidation), withLogRetry);
 
-export const multiSigner = Effect.gen(function* ($) {
+export const multiSigner = Effect.gen(function* () {
   const { user, emulator } = yield* EmulatorUser;
   const { paymentCredential } = getAddressDetails(EMULATOR_ACCOUNT.address);
   const { paymentCredential: paymentCredential1 } = getAddressDetails(
@@ -383,14 +382,18 @@ export const multiSigner = Effect.gen(function* ($) {
     .validTo(emulator.now() + 1200000)
     .attach.MintingPolicy(mintingPolicy)
     .completeProgram();
-  const firstSign = yield* Effect.promise(() => tx.partialSign.withWallet());
+  const firstSign = yield* user
+    .fromTx(tx.toCBOR())
+    .partialSign.withWalletEffect();
   user.selectWallet.fromSeed(EMULATOR_ACCOUNT_1.seedPhrase);
-  const secondSign = yield* Effect.promise(() => tx.partialSign.withWallet());
+  const secondSign = yield* user
+    .fromTx(tx.toCBOR())
+    .partialSign.withWalletEffect();
   const assembleTx = tx.assemble([firstSign, secondSign]);
   return assembleTx;
 }).pipe(Effect.flatMap(handleSubmit), withLogRetry);
 
-export const signByWalletFromPrivateKey = Effect.gen(function* ($) {
+export const signByWalletFromPrivateKey = Effect.gen(function* () {
   const { userFromPrivateKey } = yield* EmulatorUser;
   const scriptAddress = validatorToAddress("Custom", alwaysSucceedScript);
   const signBuilder = yield* userFromPrivateKey
@@ -404,7 +407,7 @@ export const signByWalletFromPrivateKey = Effect.gen(function* ($) {
   return signBuilder;
 }).pipe(Effect.flatMap(handleSignSubmitWithoutValidation), withLogRetry);
 
-export const depositFundsLockRefScript = Effect.gen(function* ($) {
+export const depositFundsLockRefScript = Effect.gen(function* () {
   const { user } = yield* EmulatorUser;
   const publicKeyHash = getAddressDetails(
     yield* Effect.promise(() => user.wallet().address()),
@@ -444,7 +447,7 @@ export const depositFundsLockRefScript = Effect.gen(function* ($) {
   return signBuilder;
 }).pipe(Effect.flatMap(handleSignSubmitWithoutValidation), withLogRetry);
 
-export const sendAllFund = Effect.gen(function* ($) {
+export const sendAllFund = Effect.gen(function* () {
   const { user } = yield* EmulatorUser;
   user.selectWallet.fromSeed(EMULATOR_ACCOUNT_1.seedPhrase);
   const publicKeyHash = getAddressDetails(
