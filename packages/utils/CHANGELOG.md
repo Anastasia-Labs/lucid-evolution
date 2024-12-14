@@ -1,5 +1,14 @@
 # @lucid-evolution/utils
 
+## 0.1.60
+
+### Patch Changes
+
+- [#443](https://github.com/Anastasia-Labs/lucid-evolution/pull/443) [`dd3bd77`](https://github.com/Anastasia-Labs/lucid-evolution/commit/dd3bd772f59fc774c32b140e1e06314df2c69e4b) Thanks [@nikhils9](https://github.com/nikhils9)! - Fix `unixTimeToSlot` for Custom network
+
+- Updated dependencies [[`a375179`](https://github.com/Anastasia-Labs/lucid-evolution/commit/a375179960e0d17a17d97474c53b9f285c9d5ad0)]:
+  - @lucid-evolution/uplc@0.2.18
+
 ## 0.1.59
 
 ### Patch Changes
