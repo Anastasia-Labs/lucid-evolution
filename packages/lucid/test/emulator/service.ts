@@ -382,13 +382,13 @@ export const multiSigner = Effect.gen(function* () {
     .validTo(emulator.now() + 1200000)
     .attach.MintingPolicy(mintingPolicy)
     .completeProgram();
-  const firstSign = yield* Effect.promise(() =>
-    user.fromTx(tx.toCBOR()).partialSign.withWallet(),
-  );
+  const firstSign = yield* user
+    .fromTx(tx.toCBOR())
+    .partialSign.withWalletEffect();
   user.selectWallet.fromSeed(EMULATOR_ACCOUNT_1.seedPhrase);
-  const secondSign = yield* Effect.promise(() =>
-    user.fromTx(tx.toCBOR()).partialSign.withWallet(),
-  );
+  const secondSign = yield* user
+    .fromTx(tx.toCBOR())
+    .partialSign.withWalletEffect();
   const assembleTx = tx.assemble([firstSign, secondSign]);
   return assembleTx;
 }).pipe(Effect.flatMap(handleSubmit), withLogRetry);
