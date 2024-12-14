@@ -35,7 +35,7 @@ export const depositFunds = Effect.gen(function* () {
       { lovelace: 10_000_000n },
     )
     .setMinFee(1_000_000n)
-    .completeProgram({ localUPLCEval: false });
+    .completeProgram();
   return signBuilder;
 }).pipe(Effect.flatMap(handleSignSubmit), withLogRetry, Effect.orDie);
 
@@ -68,7 +68,7 @@ export const collectFunds = Effect.gen(function* ($) {
     .collectFrom(utxos, redeemer)
     .attach.SpendingValidator(hello)
     .addSigner(addr)
-    .completeProgram({ localUPLCEval: false });
+    .completeProgram();
   return signBuilder;
 }).pipe(Effect.flatMap(handleSignSubmit), withLogRetry, Effect.orDie);
 
@@ -96,7 +96,7 @@ export const depositFundsLockRefScript = Effect.gen(function* () {
       { lovelace: 10_000_000n },
       hello,
     )
-    .completeProgram({ localUPLCEval: false });
+    .completeProgram();
   return signBuilder;
 }).pipe(Effect.flatMap(handleSignSubmit), withLogRetry, Effect.orDie);
 
@@ -140,6 +140,6 @@ export const collectFundsReadFrom = Effect.gen(function* ($) {
     .collectFrom([utxos[0]], redeemer)
     .readFrom([readUtxo])
     .addSigner(addr)
-    .completeProgram({ localUPLCEval: false });
+    .completeProgram();
   return signBuilder;
 }).pipe(Effect.flatMap(handleSignSubmit), withLogRetry, Effect.orDie);

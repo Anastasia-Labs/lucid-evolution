@@ -176,7 +176,7 @@ export const collectFundsInternal = Effect.gen(function* ($) {
     .mintAssets(mint, rdmrBuilderMint)
     .pay.ToAddress(address, mint)
     .setMinFee(200_000n)
-    .completeProgram({ localUPLCEval: false });
+    .completeProgram();
   return signBuilder;
 });
 
@@ -193,7 +193,7 @@ export const registerStake = Effect.gen(function* ($) {
   const signBuilder = yield* user
     .newTx()
     .registerStake(rewardAddress)
-    .completeProgram({ localUPLCEval: false });
+    .completeProgram();
 
   return signBuilder;
 }).pipe(
@@ -224,7 +224,7 @@ export const registerStakeAndDelegateToPool = Effect.gen(function* ($) {
       Data.to(new Constr(0, [fromText("1")])),
     )
     .attach.WithdrawalValidator(stake)
-    .completeProgram({ localUPLCEval: false });
+    .completeProgram();
 
   return signBuilder;
 }).pipe(
@@ -246,7 +246,7 @@ export const deRegisterStake = Effect.gen(function* ($) {
     .newTx()
     .deRegisterStake(rewardAddress, Data.to(new Constr(0, [fromText("1")])))
     .attach.WithdrawalValidator(stake)
-    .completeProgram({ localUPLCEval: false });
+    .completeProgram();
   return signBuilder;
 }).pipe(Effect.flatMap(handleSignSubmit), withLogRetry, Effect.orDie);
 
@@ -267,6 +267,6 @@ export const mintAndWithdraw = Effect.gen(function* () {
     .withdraw(rewardAddress, 0n, Data.to(new Constr(0, [fromText("1")])))
     .attach.WithdrawalValidator(stake)
     .attach.MintingPolicy(mint)
-    .completeProgram({ localUPLCEval: false });
+    .completeProgram();
   return signBuilder;
 }).pipe(Effect.flatMap(handleSignSubmit), withLogRetry, Effect.orDie);

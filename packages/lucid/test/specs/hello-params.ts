@@ -56,7 +56,7 @@ export const depositFunds = Effect.gen(function* () {
       },
       { lovelace: 10_000_000n },
     )
-    .completeProgram({ localUPLCEval: false });
+    .completeProgram();
   return signBuilder;
 }).pipe(Effect.flatMap(handleSignSubmit), withLogRetry, Effect.orDie);
 
@@ -102,6 +102,6 @@ export const collectFunds = Effect.gen(function* ($) {
     .collectFrom([ownerUTxO], redeemer)
     .attach.SpendingValidator(hello)
     .addSigner(addr)
-    .completeProgram({ localUPLCEval: false });
+    .completeProgram();
   return signBuilder;
 }).pipe(Effect.flatMap(handleSignSubmit), withLogRetry, Effect.orDie);
