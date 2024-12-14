@@ -1,5 +1,19 @@
 # @lucid-evolution/lucid
 
+## 0.4.15
+
+### Patch Changes
+
+- [#444](https://github.com/Anastasia-Labs/lucid-evolution/pull/444) [`d6870fb`](https://github.com/Anastasia-Labs/lucid-evolution/commit/d6870fbbd478fae445f33b1841180f7124ac0ce8) Thanks [@solidsnakedev](https://github.com/solidsnakedev)! - allow undefined datum output
+
+- [#443](https://github.com/Anastasia-Labs/lucid-evolution/pull/443) [`dd3bd77`](https://github.com/Anastasia-Labs/lucid-evolution/commit/dd3bd772f59fc774c32b140e1e06314df2c69e4b) Thanks [@nikhils9](https://github.com/nikhils9)! - Fix `unixTimeToSlot` for Custom network
+
+- Updated dependencies [[`8622e93`](https://github.com/Anastasia-Labs/lucid-evolution/commit/8622e93a002c4e9bc797d9e2e5d6804f573d1261), [`a375179`](https://github.com/Anastasia-Labs/lucid-evolution/commit/a375179960e0d17a17d97474c53b9f285c9d5ad0), [`dd3bd77`](https://github.com/Anastasia-Labs/lucid-evolution/commit/dd3bd772f59fc774c32b140e1e06314df2c69e4b)]:
+  - @lucid-evolution/wallet@0.1.66
+  - @lucid-evolution/uplc@0.2.18
+  - @lucid-evolution/utils@0.1.60
+  - @lucid-evolution/provider@0.1.81
+
 ## 0.4.14
 
 ### Patch Changes

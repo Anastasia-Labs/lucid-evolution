@@ -1,6 +1,6 @@
 {
   "name": "@lucid-evolution/wallet",
-  "version": "0.1.65",
+  "version": "0.1.66",
   "description": "",
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
@@ -23,7 +23,6 @@
     "lint": "tsc --noEmit",
     "clean": "rm -rf .turbo && rm -rf node_modules && rm -rf dist",
     "test": "vitest run"
-
   },
   "keywords": [],
   "author": "",
