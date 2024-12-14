@@ -85,12 +85,10 @@ describe.sequential("Emulator", () => {
       Effect.provide(Layer.mergeAll(EmulatorUser.layer)),
     );
     const exit = await Effect.runPromiseExit(program);
-    console.log("exit :>> ", exit);
     expect(exit._tag).toBe("Success");
     emulator.awaitBlock(14);
     emulatorFromPrivateKey.awaitBlock(14);
     const exit1 = await Effect.runPromiseExit(program);
-    console.log("exit1 :>> ", exit1);
     expect(exit1._tag).toBe("Failure");
   });
 
@@ -178,13 +176,13 @@ describe.sequential("Emulator", () => {
     expect(exit._tag).toBe("Success");
   });
 
-  // test("multiSigner", async () => {
-  //   const program = pipe(multiSigner, Effect.provide(EmulatorUser.layer));
-  //   const exit = await Effect.runPromiseExit(program);
-  //   emulator.awaitBlock(4);
-  //   emulatorFromPrivateKey.awaitBlock(4);
-  //   expect(exit._tag).toBe("Success");
-  // });
+  test("multiSigner", async () => {
+    const program = pipe(multiSigner, Effect.provide(EmulatorUser.layer));
+    const exit = await Effect.runPromiseExit(program);
+    emulator.awaitBlock(4);
+    emulatorFromPrivateKey.awaitBlock(4);
+    expect(exit._tag).toBe("Success");
+  });
 
   test("signByWalletFromPrivateKey", async () => {
     const program = pipe(
