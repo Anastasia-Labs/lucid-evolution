@@ -56,7 +56,7 @@ export default {
         href="https://github.com/Anastasia-Labs/lucid-evolution/releases"
         target="_blank"
       >
-        ❤️ Support Lucid Evolution in Fund 13 - Your vote can help shape the future of Cardano Developer Experience!
+        Check out our latest release!
         →
       </a>
     ),

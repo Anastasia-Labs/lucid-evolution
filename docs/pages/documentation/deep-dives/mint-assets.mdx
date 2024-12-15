@@ -103,6 +103,21 @@ address,
 .complete();
 ```
 
+<Callout>
+
+An alternative way to define the metadata is to use an object:
+
+```typescript
+const metadataObject = {
+  [fromText("myKey")]: Data.to(fromText("myValue"))
+}
+
+const metadataCBOR = Data.to(
+  { metadata: new Map(Object.entries(metadataObject)), version: 0n },
+  CIP68Datum
+);
+```
+</Callout>
 ---
 
 ## Burn

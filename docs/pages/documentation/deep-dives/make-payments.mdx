@@ -18,26 +18,29 @@ For straightforward payments to a public key or native script address, use `pay.
     const txHash = await signedTx.submit();
     ```
 
+---
 
 ### Multiple Recipients
 
 Chain multiple `pay.ToAddress` calls to pay multiple recipients:
 
-    ```typescript
-    const tx = await lucid
-      .newTx()
-      .pay.ToAddress("addr_testa...", { lovelace: 5000000n })
-      .pay.ToAddress("addr_testb...", { lovelace: 5000000n })
-      .pay.ToAddress("addr_testc...", { lovelace: 5000000n })
-      .complete();
+```typescript
+const tx = await lucid
+  .newTx()
+  .pay.ToAddress("addr_testa...", { lovelace: 5000000n })
+  .pay.ToAddress("addr_testb...", { lovelace: 5000000n })
+  .pay.ToAddress("addr_testc...", { lovelace: 5000000n })
+  .complete();
 
-    const signedTx = await tx.sign.withWallet().complete();
-    const txHash = await signedTx.submit();
-    ```
+const signedTx = await tx.sign.withWallet().complete();
+const txHash = await signedTx.submit();
+```
 
-    <Callout type="info">
-    Each `pay.ToAddress` call creates a new UTxO, even for the same address. Lucid Evolution considers the order of outputs.
-    </Callout>
+<Callout type="info">
+Each `pay.ToAddress` call creates a new UTxO, even for the same address. Lucid Evolution considers the order of outputs.
+</Callout>
+
+---
 
 ### Native Tokens
 
@@ -56,33 +59,36 @@ Lucid Evolution automatically adds the minimum ADA requirement for payments in C
     const txHash = await signedTx.submit();
     ```
 
-
+---
 ### Attach Metadata
 
 Attach metadata to your ADA payments:
 
-    ```typescript
-    const tx = await lucid
-      .newTx()
-      .pay.ToAddress("addr_test...", { lovelace: 5000000n })
-      .attachMetadata(1, { msg: "Hello from Anastasia Labs" })
-      .complete();
+```typescript
+const tx = await lucid
+  .newTx()
+  .pay.ToAddress("addr_test...", { lovelace: 5000000n })
+  .attachMetadata(1, { msg: "Hello from Anastasia Labs" })
+  .complete();
 
-    const signedTx = await tx.sign.withWallet().complete();
-    const txHash = await signedTx.submit();
-    ```
+const signedTx = await tx.sign.withWallet().complete();
+const txHash = await signedTx.submit();
+```
 
-### Datum/Script
+---
+
+### Datum / Reference Script
 
 For more complex scenarios, `pay.ToAddressWithData` allows you to include a datum or a reference script. Lucid Evolution then implicitly adds the minimum ADA requirement for datums.
-    <Tabs items={['With Datum', 'With Script Reference']}>
-      <Tabs.Tab>
-        The datum can be attached in different ways:
 
-        ```typescript
-         // As hash - datum is attached to the witness set, with its hash stored in the UTxO
-    const tx = await lucid
-      .newTx()
+**With a Datum**
+
+The datum can be attached in different ways:
+
+```typescript
+// As hash - datum is attached to the witness set, with its hash stored in the UTxO
+const tx = await lucid
+  .newTx()
       .pay.ToAddressWithData(
         "addr_test...",
         { kind: "hash", value: Data.to("31313131") },
@@ -90,66 +96,68 @@ For more complex scenarios, `pay.ToAddressWithData` allows you to include a datu
       )
       .complete();
 
-    // As inline - datum stored directly in UTxO
-    const tx = await lucid
-      .newTx()
+// As inline - datum stored directly in UTxO
+const tx = await lucid
+  .newTx()
       .pay.ToAddressWithData(
         "addr_test...",
         { kind: "inline", value: Data.to("31313131") },
         { lovelace: 5000000n }
       )
       .complete();
-        ```
-      </Tabs.Tab>
-      <Tabs.Tab>
-    
-      ```typescript
-      // Deploy a reference script
-      const deployRefScriptTx = await lucid
-        .newTx()
-      .pay.ToAddressWithData(
-        scriptAddress,
-        { kind: "inline", value: datum },
-        { lovelace: 5_000_000n },
-        referenceScript // The script to be stored as a reference for subsequent transactions
-      )
-      .complete();
-    ```
+```
 
-    ```typescript
-    // Later, transactions can reference the deployed script instead of including it
-    // For example:
+--- 
 
-    const allUTxOs = await lucid.utxosAt(scriptAddress);
-    const refScriptUTxO = allUTxOs.filter(utxo => utxo.scriptRef); // Find UTxO with reference script depending on your use case
-    
-    const useRefScriptTx = await lucid
-      .newTx()
-      .collectFrom([utxoToSpend], redeemer) // Specify your action, for example: which UTxO to spend and which redeemer to use
-      .readFrom([refScriptUTxO]) // Reference the script UTxO
-      .complete();
-    ```
-    <Callout type="info">
-    Reference scripts are stored on-chain in a UTxO and can be "referenced" by other transactions, reducing transaction sizes and costs. This way the script only needs to be stored once and can be reused by multiple transactions.
-    </Callout>
-      </Tabs.Tab>
-    </Tabs>
+**With Script Reference**
 
-  
+Deploy a reference script:
+
+```typescript
+const deployRefScriptTx = await lucid
+  .newTx()
+  .pay.ToAddressWithData(
+    scriptAddress,
+    { kind: "inline", value: datum },
+    { lovelace: 5_000_000n },
+    referenceScript // The script to be stored as a reference for subsequent transactions
+  )
+  .complete();
+```
+
+Later, transactions can reference the deployed script instead of including it, for example:
+
+```typescript
+const allUTxOs = await lucid.utxosAt(scriptAddress);
+const refScriptUTxO = allUTxOs.filter(utxo => utxo.scriptRef); // Find UTxO with reference script depending on your use case
+
+const useRefScriptTx = await lucid
+  .newTx()
+  .collectFrom([utxoToSpend], redeemer) // Specify your action, for example: which UTxO to spend and which redeemer to use
+  .readFrom([refScriptUTxO]) // Reference the script UTxO
+  .complete();
+```
+
+<Callout type="info">
+Reference scripts are stored on-chain in a UTxO and can be "referenced" by other transactions, reducing transaction sizes and costs. This way the script only needs to be stored once and can be reused by multiple transactions.
+</Callout>
+
+---
+
 ### Plutus Script
 
 Use `pay.ToContract` for payments to a Plutus script address. This method ensures that a datum is provided.
 
-    ```typescript
-    const tx = await lucid
-      .newTx()
-      .pay.ToContract(
-        "addr_test...",
-        { kind: "inline", value: Data.to("31313131") },
-        { lovelace: 5000000n }
-      )
-      .complete();
+```typescript
+const tx = await lucid
+  .newTx()
+  .pay.ToContract(
+    "addr_test...",
+    { kind: "inline", value: Data.to("31313131") },
+    { lovelace: 5000000n }
+  )
+  .complete();
 
-    const signedTx = await tx.sign.withWallet().complete();
-    const txHash = await signedTx.submit();
-    ```
+const signedTx = await tx.sign.withWallet().complete();
+const txHash = await signedTx.submit();
+```
