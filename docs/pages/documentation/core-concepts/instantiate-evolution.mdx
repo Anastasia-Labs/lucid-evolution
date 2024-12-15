@@ -21,6 +21,8 @@ const lucid = await Lucid(
 );
 ```
 
+---
+
 ### Kupmios
 
 ```typescript
@@ -34,8 +36,12 @@ const lucid = await Lucid(
   "Preview"
 );
 ```
-Kupmios is a mix of [Ogmios](https://ogmios.dev/) and [Kupo](https://cardanosolutions.github.io/kupo/).
 
+<Callout type="info">
+Kupmios is a mix of [Ogmios](https://ogmios.dev/) and [Kupo](https://cardanosolutions.github.io/kupo/).
+</Callout>
+
+---
 
 ### Maestro
 
@@ -52,6 +58,8 @@ const lucid = await Lucid(
 );
 ```
 
+---
+
 ### Koios
 
 ```typescript
@@ -62,6 +70,8 @@ const lucid = await Lucid(
   "Preprod"
 );
 ```
+
+---
 
 ### YACI DevKit
 
@@ -83,6 +93,8 @@ const lucid = await Lucid(
 );
 ```
 
+---
+
 ### UTxORPC
 ```typescript
 //TODO: https://github.com/utxorpc/lucid-evolution-provider
@@ -96,13 +108,15 @@ The `provider` in `lucid.provider` is the provider instance you passed to `Lucid
 
 ### Query UTxOs
 
-#### Using Provider
+**Using Provider**
 
 ```typescript
 const utxos = await lucid.provider.getUtxos("addr_test...");
 ```
 
-#### Using Convenience Method
+---
+
+**Using Convenience Method**
 
 ```typescript
 const utxos = await lucid.utxosAt("addr_test...");
@@ -112,21 +126,27 @@ const utxos = await lucid.utxosAt("addr_test...");
 This convenience method internally uses `lucid.provider.getUtxos()`.
 </Callout>
 
+---
+
 ### Query Datums
 
-#### Using Provider
+**Using Provider**
 
 ```typescript
 const datum = await lucid.provider.getDatum("<datum_hash>");
 ```
 
-#### Using Convenience Method
+---
+
+**Using Convenience Method**
 
 ```typescript
 const datum = await lucid.datumOf("<datum_hash>");
 ```
 
-#### Querying datum from a UTxO:
+---
+
+**Querying datum from a UTxO**
 
 ```typescript
 const [scriptUtxo] = await lucid.utxosAt("addr_test...");
@@ -134,13 +154,15 @@ const datum = await lucid.datumOf(scriptUtxo);
 ```
 
 <Callout type="info">
-`lucid.datumOf(scriptUtxo)` is a convenience method that internally uses `lucid.provider.getDatum()` if the datum isn't already attached to the UTxO. When you query the datum for a UTxO, Lucid automatically adds the datum to the UTxO. This means that subsequent queries for the same UTxO will return the result instantly, without the need for an additional network request.
+`lucid.datumOf(scriptUtxo)` is a convenience method that internally uses `lucid.provider.getDatum()` if the datum isn't already attached to the UTxO.
+
+When you query the datum for a UTxO, Lucid automatically adds the datum to the UTxO. This means that subsequent queries for the same UTxO will return the result instantly, without the need for an additional network request.
  </Callout>
 
 
 ### Query Protocol Parameters
 
-Using the provider directly:
+**Using the provider directly:**
 
 ```typescript
 const protocolParameters = await lucid.provider.getProtocolParameters();
