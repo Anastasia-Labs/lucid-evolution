@@ -23,7 +23,7 @@ import {
   withLogRetry,
 } from "../specs/utils";
 import { Emulator, generateEmulatorAccount } from "@lucid-evolution/provider";
-import { generateEmulatorAccountFrommPrivateKey } from "../../../provider/src";
+import { generateEmulatorAccountfromPrivateKey } from "../../../provider/src";
 import scripts from "../specs/contracts/plutus.json";
 
 export const EMULATOR_ACCOUNT = generateEmulatorAccount({
@@ -33,7 +33,7 @@ export const EMULATOR_ACCOUNT_1 = generateEmulatorAccount({
   lovelace: 80000000000n,
 });
 export const EMULATOR_ACCOUNT_FROM_PRIVATE_KEY =
-  await generateEmulatorAccountFrommPrivateKey({ lovelace: 90000000000n });
+  await generateEmulatorAccountfromPrivateKey({ lovelace: 90000000000n });
 export const REWARD_AMOUNT = 100000000n;
 export const EMULATOR_POOL_ID =
   "pool1nmfr5j5rnqndprtazre802glpc3h865sy50mxdny65kfgf3e5eh";
