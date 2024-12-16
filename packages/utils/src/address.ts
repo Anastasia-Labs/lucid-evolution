@@ -57,39 +57,27 @@ export function validatorToRewardAddress(
 export function getAddressDetails(address: string): AddressDetails {
   // Base Address
   try {
-    // const parsedAddress = CML.BaseAddress.from_address(
-    //   addressFromHexOrBech32(address),
-    // )!;
     const parsedAddress = CML.BaseAddress.from_address(
-      CML.Address.from_bech32(address),
+      addressFromHexOrBech32(address),
     )!;
     const paymentCredential: Credential =
       parsedAddress.payment().kind() === 0
         ? {
             type: "Key",
-            // hash: toHex(
-            //   parsedAddress.payment_cred().to_keyhash()!.to_bytes(),
-            // ),
             hash: parsedAddress.payment().as_pub_key()!.to_hex(),
           }
         : {
             type: "Script",
-            // hash: toHex(
-            //   parsedAddress.payment_cred().to_scripthash()!.to_bytes(),
-            // ),
             hash: parsedAddress.payment().as_script()!.to_hex(),
           };
     const stakeCredential: Credential =
       parsedAddress.stake().kind() === 0
-        ? // parsedAddress.stake_cred().kind() === 0
-          {
+        ? {
             type: "Key",
             hash: parsedAddress.stake().as_pub_key()!.to_hex(),
-            // hash: toHex(parsedAddress.stake_cred().to_keyhash()!.to_bytes()),
           }
         : {
             type: "Script",
-            // hash: toHex(parsedAddress.stake_cred().to_scripthash()!.to_bytes()),
             hash: parsedAddress.stake().as_script()!.to_hex(),
           };
     return {
@@ -97,7 +85,6 @@ export function getAddressDetails(address: string): AddressDetails {
       networkId: parsedAddress.to_address().network_id(),
       address: {
         bech32: parsedAddress.to_address().to_bech32(undefined),
-        // hex: toHex(parsedAddress.to_address().to_bytes()),
         hex: parsedAddress.to_address().to_hex(),
       },
       paymentCredential,
@@ -109,24 +96,18 @@ export function getAddressDetails(address: string): AddressDetails {
 
   // Enterprise Address
   try {
-    // const parsedAddress = CML.EnterpriseAddress.from_address(
-    //   addressFromHexOrBech32(address)
-    // )!;
     const parsedAddress = CML.EnterpriseAddress.from_address(
-      CML.Address.from_bech32(address),
+      addressFromHexOrBech32(address),
     )!;
     const paymentCredential: Credential =
       parsedAddress.payment().kind() === 0
         ? {
             type: "Key",
-            // hash: toHex(parsedAddress.payment_cred().to_keyhash()!.to_bytes()),
             hash: parsedAddress.payment().as_pub_key()!.to_hex(),
           }
         : {
             type: "Script",
-            hash:
-              // parsedAddress.payment_cred().to_scripthash()!.to_bytes()
-              parsedAddress.payment().as_script()!.to_hex(),
+            hash: parsedAddress.payment().as_script()!.to_hex(),
           };
     return {
       type: "Enterprise",
@@ -143,22 +124,17 @@ export function getAddressDetails(address: string): AddressDetails {
 
   // Pointer Address
   try {
-    // const parsedAddress = CML.PointerAddress.from_address(
-    //   addressFromHexOrBech32(address)
-    // )!;
     const parsedAddress = CML.PointerAddress.from_address(
-      CML.Address.from_bech32(address),
+      addressFromHexOrBech32(address),
     )!;
     const paymentCredential: Credential =
       parsedAddress?.payment().kind() === 0
         ? {
             type: "Key",
-            // hash: toHex(parsedAddress.payment_cred().to_keyhash()!.to_bytes()),
             hash: parsedAddress.payment().as_pub_key()!.to_hex(),
           }
         : {
             type: "Script",
-            // hash: toHex( parsedAddress.payment_cred().to_scripthash()!.to_bytes()),
             hash: parsedAddress.payment().as_script()!.to_hex(),
           };
     return {
@@ -166,7 +142,6 @@ export function getAddressDetails(address: string): AddressDetails {
       networkId: parsedAddress.to_address().network_id(),
       address: {
         bech32: parsedAddress.to_address().to_bech32(undefined),
-        // hex: toHex(parsedAddress.to_address().to_bytes()),
         hex: parsedAddress.to_address().to_hex(),
       },
       paymentCredential,
@@ -177,11 +152,8 @@ export function getAddressDetails(address: string): AddressDetails {
 
   // Reward Address
   try {
-    // const parsedAddress = CML.RewardAddress.from_address(
-    //   addressFromHexOrBech32(address)
-    // )!;
     const parsedAddress = CML.RewardAddress.from_address(
-      CML.Address.from_bech32(address),
+      addressFromHexOrBech32(address),
     )!;
     const stakeCredential: Credential =
       parsedAddress.payment().kind() === 0
@@ -198,7 +170,6 @@ export function getAddressDetails(address: string): AddressDetails {
       networkId: parsedAddress.to_address().network_id(),
       address: {
         bech32: parsedAddress.to_address().to_bech32(undefined),
-        // hex: toHex(parsedAddress.to_address().to_bytes()),
         hex: parsedAddress.to_address().to_hex(),
       },
       stakeCredential,
@@ -211,7 +182,6 @@ export function getAddressDetails(address: string): AddressDetails {
   try {
     const parsedAddress = ((address: string): CML.ByronAddress => {
       try {
-        // return CML.ByronAddress.from_bytes(fromHex(address));
         return CML.ByronAddress.from_cbor_hex(address);
       } catch (_e) {
         try {
@@ -227,7 +197,6 @@ export function getAddressDetails(address: string): AddressDetails {
       networkId: parsedAddress.content().network_id(),
       address: {
         bech32: "",
-        // hex: toHex(parsedAddress.to_address().to_bytes()),
         hex: parsedAddress.to_address().to_hex(),
       },
     };

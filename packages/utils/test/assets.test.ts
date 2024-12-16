@@ -1,5 +1,5 @@
 import { assert, test } from "vitest";
-import { assetsToValue, sortCanonical } from "../src/value";
+import { assetsToValue, sortCanonical } from "../src/value.js";
 
 const unsortedAssets = {
   b7cafbba7e8d5dde2557c07254cd0e296bb581e72917a5179b4a00b04275726e61626c65546f6b656e:
