@@ -1,8 +1,8 @@
 import { Constr } from "@lucid-evolution/plutus";
-import { applyParamsToScript, validatorToScriptHash } from "../src/scripts";
+import { applyParamsToScript, validatorToScriptHash } from "../src/scripts.js";
 import { assert, test } from "vitest";
 import { WithdrawalValidator } from "@lucid-evolution/core-types";
-import { applyDoubleCborEncoding } from "../src/cbor";
+import { applyDoubleCborEncoding } from "../src/cbor.js";
 
 // Parametrized Contract Spec
 // type Redeemer {
