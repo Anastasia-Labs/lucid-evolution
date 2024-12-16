@@ -1,5 +1,11 @@
 # @lucid-evolution/utils
 
+## 0.1.61
+
+### Patch Changes
+
+- [#452](https://github.com/Anastasia-Labs/lucid-evolution/pull/452) [`9e8cfc6`](https://github.com/Anastasia-Labs/lucid-evolution/commit/9e8cfc6c47fb3d6e45f397f944321c2fe5cf610a) Thanks [@solidsnakedev](https://github.com/solidsnakedev)! - use addressFromHexOrBech32 in getAddressDetails
+
 ## 0.1.60
 
 ### Patch Changes
