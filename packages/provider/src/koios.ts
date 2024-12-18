@@ -60,9 +60,11 @@ export class KoiosError extends Data.TaggedError("KoiosError")<{
  */
 export class Koios implements Provider {
   private readonly baseUrl: string;
+  private readonly token?: string;
 
-  constructor(baseUrl: string) {
+  constructor(baseUrl: string, token?: string) {
     this.baseUrl = baseUrl;
+    this.token = token;
   }
 
   async getProtocolParameters(): Promise<ProtocolParameters> {
