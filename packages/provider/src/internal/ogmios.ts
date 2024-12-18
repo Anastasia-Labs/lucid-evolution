@@ -1,17 +1,15 @@
-import * as S from "@effect/schema/Schema";
+import { Schema as S } from "effect";
 import { applySingleCborEncoding, fromUnit } from "@lucid-evolution/utils";
 import { Record } from "effect";
 import * as CoreType from "@lucid-evolution/core-types";
 
 export const JSONRPCSchema = <A, I, R>(schema: S.Schema<A, I, R>) =>
-  S.extend(
-    S.Struct({
-      jsonrpc: S.String,
-      method: S.optional(S.String),
-      id: S.NullOr(S.Number),
-    }),
-    S.Union(S.Struct({ result: schema }), S.Struct({ error: S.Object })),
-  );
+  S.Struct({
+    jsonrpc: S.String,
+    method: S.optional(S.String),
+    id: S.NullOr(S.Number),
+    result: schema,
+  }).annotations({ identifier: "JSONRPCSchema" });
 
 const LovelaceAsset = S.Struct({
   lovelace: S.Number,
@@ -101,20 +99,20 @@ export const ProtocolParametersSchema = S.Struct({
   collateralPercentage: S.Number,
   maxCollateralInputs: S.Number,
   version: S.Struct({ major: S.Number, minor: S.Number }),
-});
+}).annotations({ identifier: "ProtocolParametersSchema" });
 
 export interface ProtocolParameters
   extends S.Schema.Type<typeof ProtocolParametersSchema> {}
 
 export const Delegation = S.NullOr(
-  S.Record(
-    S.String,
-    S.Struct({
+  S.Record({
+    key: S.String,
+    value: S.Struct({
       delegate: S.Struct({ id: S.String }),
       rewards: S.Struct({ ada: S.Struct({ lovelace: S.Number }) }),
       deposit: S.Struct({ ada: S.Struct({ lovelace: S.Number }) }),
     }),
-  ),
+  }),
 );
 
 type Script = {
@@ -154,7 +152,7 @@ export const RedeemerSchema = S.Struct({
     memory: S.Int,
     cpu: S.Int,
   }),
-});
+}).annotations({ identifier: "RedeemerSchema" });
 
 export const toOgmiosUTxOs = (utxos: CoreType.UTxO[] | undefined): UTxO[] => {
   // NOTE: Ogmios only works with single encoding, not double encoding.

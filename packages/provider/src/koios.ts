@@ -1,4 +1,3 @@
-import * as S from "@effect/schema/Schema";
 import {
   Address,
   Credential,
@@ -19,7 +18,9 @@ import { fromHex } from "@lucid-evolution/core-utils";
 import { fromUnit } from "@lucid-evolution/utils";
 import * as _Koios from "./internal/koios.js";
 import * as _Ogmios from "./internal/ogmios.js";
-import { Data, Effect, pipe, Schedule } from "effect";
+import { Data, Effect, pipe, Schedule, Schema as S } from "effect";
+import { FetchHttpClient } from "@effect/platform";
+import * as HttpUtils from "./internal/HttpUtils.js";
 
 export class KoiosError extends Data.TaggedError("KoiosError")<{
   cause?: unknown;
@@ -30,20 +31,52 @@ export class KoiosError extends Data.TaggedError("KoiosError")<{
 }
 
 /**
- * @description This class supports Koios API v1.2a
+ *  Provides support for interacting with the Koios API
+ *
+ * @example Using the Preprod API URL:
+ * ```typescript
+ * const koios = new Koios(
+ *   "https://preview.koios.rest/api/v1", // Preprod Preview Environment
+ *   "optional-bearer-token" // Optional Bearer Token for authentication
+ * );
+ * ```
+ *
+ * @example Using the Preprod Stable API URL:
+ * ```typescript
+ * const koios = new Koios(
+ *   "https://preprod.koios.rest/api/v1", // Preprod Stable Environment
+ *   "optional-bearer-token" // Optional Bearer Token for authentication
+ * );
+ * ```
+ *
+ * @example Using the Mainnet API URL:
+ * ```typescript
+ * const koios = new Koios(
+ *   "https://api.koios.rest/api/v1", // Mainnet Environment
+ *   "optional-bearer-token" // Optional Bearer Token for authentication
+ * );
+ * ```
+ *
  */
 export class Koios implements Provider {
   private readonly baseUrl: string;
+  private readonly token?: string;
 
-  constructor(baseUrl: string) {
+  constructor(baseUrl: string, token?: string) {
     this.baseUrl = baseUrl;
+    this.token = token;
   }
 
   async getProtocolParameters(): Promise<ProtocolParameters> {
     const url = `${this.baseUrl}/epoch_params?limit=1`;
     const schema = S.Array(_Koios.ProtocolParametersSchema);
+    const bearerToken = this.token
+      ? { Authorization: `Bearer ${this.token}` }
+      : undefined;
     const [result] = await pipe(
-      _Koios.getWithSchemaValidation(url, schema),
+      HttpUtils.makeGet(url, schema, bearerToken),
+      // Allows for dependency injection and easier testing
+      Effect.provide(FetchHttpClient.layer),
       Effect.timeout(10_000),
       Effect.catchAllCause((cause) => new KoiosError({ cause })),
       Effect.runPromise,
@@ -90,8 +123,12 @@ export class Koios implements Provider {
   }
 
   async getUtxos(addressOrCredential: Address | Credential): Promise<UTxO[]> {
+    const bearerToken = this.token
+      ? { Authorization: `Bearer ${this.token}` }
+      : undefined;
+
     const result = await pipe(
-      _Koios.getUtxosEffect(this.baseUrl, addressOrCredential),
+      _Koios.getUtxosEffect(this.baseUrl, addressOrCredential, bearerToken),
       Effect.timeout(10_000),
       Effect.catchAllCause((cause) => new KoiosError({ cause })),
       Effect.runPromise,
@@ -103,8 +140,11 @@ export class Koios implements Provider {
     addressOrCredential: Address | Credential,
     unit: Unit,
   ): Promise<UTxO[]> {
+    const bearerToken = this.token
+      ? { Authorization: `Bearer ${this.token}` }
+      : undefined;
     const result = await pipe(
-      _Koios.getUtxosEffect(this.baseUrl, addressOrCredential),
+      _Koios.getUtxosEffect(this.baseUrl, addressOrCredential, bearerToken),
       Effect.map((utxos) =>
         utxos.filter((utxo) => {
           const keys = Object.keys(utxo.assets);
@@ -121,8 +161,13 @@ export class Koios implements Provider {
   async getUtxoByUnit(unit: Unit): Promise<UTxO> {
     let { policyId, assetName } = fromUnit(unit);
     const url = `${this.baseUrl}/asset_addresses?_asset_policy=${policyId}&_asset_name=${assetName}`;
+    const bearerToken = this.token
+      ? { Authorization: `Bearer ${this.token}` }
+      : undefined;
     const result: UTxO = await pipe(
-      _Koios.getWithSchemaValidation(url, S.Array(_Koios.AssetAddressSchema)),
+      HttpUtils.makeGet(url, S.Array(_Koios.AssetAddressSchema), bearerToken),
+      // Allows for dependency injection and easier testing
+      Effect.provide(FetchHttpClient.layer),
       Effect.flatMap((adresses) =>
         adresses.length === 0
           ? Effect.fail("Unit not found")
@@ -134,7 +179,11 @@ export class Koios implements Provider {
           : Effect.succeed(adresses[0]),
       ),
       Effect.flatMap((address) =>
-        _Koios.getUtxosEffect(this.baseUrl, address.payment_address),
+        _Koios.getUtxosEffect(
+          this.baseUrl,
+          address.payment_address,
+          bearerToken,
+        ),
       ),
       Effect.map((utxos) =>
         utxos.filter((utxo) => {
@@ -162,8 +211,13 @@ export class Koios implements Provider {
       _scripts: true,
     };
     const schema = S.Array(_Koios.TxInfoSchema);
+    const bearerToken = this.token
+      ? { Authorization: `Bearer ${this.token}` }
+      : undefined;
     const [result] = await pipe(
-      _Koios.postWithSchemaValidation(url, body, schema),
+      HttpUtils.makePostAsJson(url, body, schema, bearerToken),
+      // Allows for dependency injection and easier testing
+      Effect.provide(FetchHttpClient.layer),
       Effect.timeout(10_000),
       Effect.catchAllCause((cause) => new KoiosError({ cause })),
       Effect.runPromise,
@@ -204,12 +258,18 @@ export class Koios implements Provider {
       _stake_addresses: [rewardAddress],
     };
     const url = `${this.baseUrl}/account_info`;
+    const bearerToken = this.token
+      ? { Authorization: `Bearer ${this.token}` }
+      : undefined;
     const result = await pipe(
-      _Koios.postWithSchemaValidation(
+      HttpUtils.makePostAsJson(
         url,
         body,
         S.Array(_Koios.AccountInfoSchema),
+        bearerToken,
       ),
+      // Allows for dependency injection and easier testing
+      Effect.provide(FetchHttpClient.layer),
       Effect.flatMap((result) =>
         result.length === 0
           ? Effect.fail("No Delegation Found by Reward Address")
@@ -231,8 +291,18 @@ export class Koios implements Provider {
     const body = {
       _datum_hashes: [datumHash],
     };
+    const bearerToken = this.token
+      ? { Authorization: `Bearer ${this.token}` }
+      : undefined;
     const result = await pipe(
-      _Koios.postWithSchemaValidation(url, body, S.Array(_Koios.DatumInfo)),
+      HttpUtils.makePostAsJson(
+        url,
+        body,
+        S.Array(_Koios.DatumInfo),
+        bearerToken,
+      ),
+      // Allows for dependency injection and easier testing
+      Effect.provide(FetchHttpClient.layer),
       Effect.flatMap((result) =>
         result.length === 0
           ? Effect.fail("No Datum Found by Datum Hash")
@@ -251,12 +321,17 @@ export class Koios implements Provider {
       _tx_hashes: [txHash],
     };
     const schema = S.Array(_Koios.TxInfoSchema);
+    const bearerToken = this.token
+      ? { Authorization: `Bearer ${this.token}` }
+      : undefined;
     const result = await pipe(
-      _Koios.postWithSchemaValidation(url, body, schema),
+      HttpUtils.makePostAsJson(url, body, schema, bearerToken),
       Effect.repeat({
         schedule: Schedule.exponential(checkInterval),
         until: (result) => result.length > 0,
       }),
+      // Allows for dependency injection and easier testing
+      Effect.provide(FetchHttpClient.layer),
       Effect.timeout(160_000),
       Effect.orDie,
       Effect.as(true),
@@ -270,10 +345,13 @@ export class Koios implements Provider {
     const url = `${this.baseUrl}/submittx`;
     const body = fromHex(tx);
     const schema = _Koios.TxHashSchema;
+    const bearerToken = this.token
+      ? { Authorization: `Bearer ${this.token}` }
+      : undefined;
     const result = await pipe(
-      _Koios.postWithSchemaValidation(url, body, schema, {
-        "Content-Type": "application/cbor",
-      }),
+      HttpUtils.makePostAsUint8Array(url, body, schema, bearerToken),
+      // Allows for dependency injection and easier testing
+      Effect.provide(FetchHttpClient.layer),
       Effect.timeout(10_000),
       Effect.catchAllCause((cause) => new KoiosError({ cause })),
       Effect.runPromise,
@@ -297,13 +375,14 @@ export class Koios implements Provider {
       id: null,
     };
     const schema = _Ogmios.JSONRPCSchema(S.Array(_Ogmios.RedeemerSchema));
-    const result = await pipe(
-      _Koios.postWithSchemaValidation(url, body, schema),
-      Effect.flatMap((response) =>
-        "error" in response
-          ? Effect.fail(response)
-          : Effect.succeed(response.result),
-      ),
+    const bearerToken = this.token
+      ? { Authorization: `Bearer ${this.token}` }
+      : undefined;
+
+    const { result } = await pipe(
+      HttpUtils.makePostAsJson(url, body, schema, bearerToken),
+      // Allows for dependency injection and easier testing
+      Effect.provide(FetchHttpClient.layer),
       Effect.timeout(10_000),
       Effect.catchAllCause((cause) => new KoiosError({ cause })),
       Effect.runPromise,

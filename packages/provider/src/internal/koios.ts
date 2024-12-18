@@ -1,16 +1,9 @@
-import {
-  HttpBody,
-  HttpClient,
-  HttpClientRequest,
-  HttpClientResponse,
-} from "@effect/platform";
-import { HttpBodyError } from "@effect/platform/HttpBody";
-import { HttpClientError } from "@effect/platform/HttpClientError";
-import * as S from "@effect/schema/Schema";
-import { Effect, pipe } from "effect";
+import { FetchHttpClient, HttpBody, HttpClientError } from "@effect/platform";
+import { Effect, pipe, Schema as S } from "effect";
 import * as CoreType from "@lucid-evolution/core-types";
-import { ParseError } from "@effect/schema/ParseResult";
 import { applyDoubleCborEncoding } from "@lucid-evolution/utils";
+import { ParseError } from "effect/ParseResult";
+import * as HttpUtils from "./HttpUtils.js";
 
 export const ProtocolParametersSchema = S.Struct({
   pvt_motion_no_confidence: S.Number,
@@ -72,8 +65,8 @@ export const ProtocolParametersSchema = S.Struct({
   max_collateral_inputs: S.Number,
   coins_per_utxo_size: S.BigInt,
 });
-// export interface ProtocolParameters
-//   extends S.Schema.Type<typeof ProtocolParametersSchema> {}
+export interface ProtocolParameters
+  extends S.Schema.Type<typeof ProtocolParametersSchema> {}
 
 export const AssetSchema = S.Struct({
   policy_id: S.String,
@@ -268,40 +261,18 @@ export const DatumInfo = S.Struct({
   bytes: S.String,
 });
 
-export const postWithSchemaValidation = <A, I, R>(
-  url: string | URL,
-  data: unknown,
-  schema: S.Schema<A, I, R>,
+export const getHeadersWithToken = (
+  token?: string,
   headers: Record<string, string> = {},
-): Effect.Effect<A, HttpClientError | HttpBodyError | ParseError, R> =>
-  pipe(
-    Effect.succeed(HttpClientRequest.post(url)),
-    Effect.map(HttpClientRequest.setHeaders(headers)),
-    Effect.flatMap((req) =>
-      headers["Content-Type"] === "application/cbor"
-        ? Effect.succeed(
-            HttpClientRequest.uint8ArrayBody(
-              data as Uint8Array,
-              headers["Content-Type"],
-            )(req),
-          )
-        : HttpClientRequest.jsonBody(data)(req),
-    ),
-    Effect.flatMap(HttpClient.fetch),
-    HttpClientResponse.json,
-    Effect.flatMap(S.decodeUnknown(schema)),
-  );
-
-export const getWithSchemaValidation = <A, I, R>(
-  url: string | URL,
-  schema: S.Schema<A, I, R>,
-) =>
-  pipe(
-    HttpClientRequest.get(url),
-    HttpClient.fetchOk,
-    HttpClientResponse.json,
-    Effect.flatMap(S.decodeUnknown(schema)),
-  );
+): Record<string, string> => {
+  if (token) {
+    return {
+      ...headers,
+      Authorization: `Bearer ${token}`,
+    };
+  }
+  return headers;
+};
 
 export const toUTxO = (koiosUTxO: UTxO, address: string): CoreType.UTxO => ({
   txHash: koiosUTxO.tx_hash,
@@ -353,9 +324,14 @@ const toScriptRef = (
 export const getUtxosEffect = (
   baseUrl: string,
   addressOrCredential: CoreType.Address | CoreType.Credential,
+  headers: Record<string, string> | undefined,
 ): Effect.Effect<
   CoreType.UTxO[],
-  string | HttpClientError | HttpBodyError | ParseError
+  | string
+  | HttpBody.HttpBodyError
+  | HttpClientError.HttpClientError
+  | ParseError,
+  never
 > => {
   const url = `${baseUrl}/address_info`;
   const body = {
@@ -366,13 +342,14 @@ export const getUtxosEffect = (
     Effect.if(typeof addressOrCredential === "string", {
       onFalse: () =>
         Effect.fail("Credential Type is not supported in Koios yet."),
-      onTrue: () => postWithSchemaValidation(url, body, schema),
+      onTrue: () => HttpUtils.makePostAsJson(url, body, schema, headers),
     }),
     Effect.map(([result]) =>
       result
         ? result.utxo_set.map((koiosUtxo) => toUTxO(koiosUtxo, result.address))
         : [],
     ),
+    Effect.provide(FetchHttpClient.layer),
   );
   return result;
 };

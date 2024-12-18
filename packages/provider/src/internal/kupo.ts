@@ -1,9 +1,8 @@
-import * as S from "@effect/schema/Schema";
-import { Record } from "effect";
+import { Schema as S } from "effect";
 
 export const ValueSchema = S.Struct({
   coins: S.Number,
-  assets: S.Record(S.String, S.Number),
+  assets: S.Record({ key: S.String, value: S.Number }),
 });
 export interface Value extends S.Schema.Type<typeof ValueSchema> {}
 
@@ -43,12 +42,12 @@ export const DatumSchema = S.NullOr(S.Struct({ datum: S.String }));
 export type Datum = S.Schema.Type<typeof DatumSchema>;
 
 export const DelegationSchema = S.NullOr(
-  S.Record(
-    S.String,
-    S.Struct({
+  S.Record({
+    key: S.String,
+    value: S.Struct({
       delegate: S.Struct({ id: S.String }),
       rewards: S.Struct({ ada: S.Struct({ lovelace: S.Number }) }),
       deposit: S.Struct({ ada: S.Struct({ lovelace: S.Number }) }),
     }),
-  ),
+  }),
 );
