@@ -1,5 +1,48 @@
 # @lucid-evolution/provider
 
+## 0.1.83
+
+### Patch Changes
+
+- [#455](https://github.com/Anastasia-Labs/lucid-evolution/pull/455) [`855cc2a`](https://github.com/Anastasia-Labs/lucid-evolution/commit/855cc2a55f4789571cdfa1adaa25948fa49ece30) Thanks [@solidsnakedev](https://github.com/solidsnakedev)! - Upgrade kupmios and koios provider
+
+  # Koios
+
+  Before
+
+  ```ts
+  const koios = new KoiosProvider("<api-url>");
+  ```
+
+  After
+
+  ```ts
+  const koios = new KoiosProvider("<koios-api-url>");
+  ```
+
+  or
+
+  ```ts
+  const koios = new KoiosProvider("<koios-api-url>", "<koios-bearer-token>");
+  ```
+
+  # Kupmios
+
+  Before
+
+  ```ts
+  const kupmios = new Kupmios("<kupo-api-url>", "<ogmios-api-url>");
+  ```
+
+  After
+
+  ```ts
+  const kupmios = new Kupmios("<kupo-api-url>", "<ogmios-api-url>", {
+    kupoHeader: { "dmtr-api-key": "<kupo-api-key>" },
+    ogmiosHeader: { "dmtr-api-key": "<ogmios-api-key>" },
+  });
+  ```
+
 ## 0.1.82
 
 ### Patch Changes
