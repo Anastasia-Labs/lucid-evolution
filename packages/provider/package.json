@@ -32,13 +32,13 @@
   "dependencies": {
     "@anastasia-labs/cardano-multiplatform-lib-browser": "6.0.2-3",
     "@anastasia-labs/cardano-multiplatform-lib-nodejs": "6.0.2-3",
-    "@effect/platform": "^0.59.2",
+    "@effect/platform": "^0.71.3",
     "@effect/schema": "^0.68.26",
     "@lucid-evolution/core-types": "workspace:*",
     "@lucid-evolution/core-utils": "workspace:*",
     "@lucid-evolution/utils": "workspace:*",
     "@lucid-evolution/wallet": "workspace:*",
-    "effect": "^3.10.4"
+    "effect": "^3.11.7"
   },
   "devDependencies": {
     "@types/node": "^20.12.8",

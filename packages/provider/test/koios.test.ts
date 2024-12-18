@@ -4,7 +4,6 @@ import { assert, describe, expect, test, vi } from "vitest";
 import * as PreprodConstants from "./preprod-constants.js";
 import * as _Koios from "../src/internal/koios.js";
 
-//TODO: improve test assetion
 describe.sequential("Koios", () => {
   const koios = new Koios("https://preprod.koios.rest/api/v1");
   test("getProtocolParameters", async () => {
@@ -34,6 +33,15 @@ describe.sequential("Koios", () => {
     expect(utxo).toStrictEqual(PreprodConstants.discoveryUTxO);
   });
 
+  //NOTE:
+  // Koios returns the byte field as null, which is not correct
+  //{
+  //  hash: '6fa54f6a07204543bee0cbdf05e6d1700c86e013c26c9c8ef419f0ba',
+  //  size: 2516,
+  //  type: 'plutusV2',
+  //  bytes: null,
+  //  value: null
+  //}
   test.skip("getUtxosByOutRef", async () => {
     const utxos: UTxO[] = await koios.getUtxosByOutRef([
       {
