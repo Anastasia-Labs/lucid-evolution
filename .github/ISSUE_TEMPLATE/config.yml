@@ -1,0 +1,11 @@
+blank_issues_enabled: false
+contact_links:
+  - name: 📚 Documentation
+    url: https://anastasia-labs.github.io/lucid-evolution/
+    about: Check the documentation first - your question might already be answered
+  - name: 🤔 Questions & Discussions
+    url: https://github.com/Anastasia-Labs/lucid-evolution/discussions
+    about: Use GitHub discussions for message-board style questions and discussions
+  - name: 💬 Chat on Discord
+    url: https://discord.gg/KCeEjr94DG
+    about: Ask questions and discuss with other developers using Lucid Evolution
