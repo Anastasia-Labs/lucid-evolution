@@ -1,4 +1,4 @@
-import { Effect, pipe } from "effect";
+import { Effect } from "effect";
 import { Data } from "@lucid-evolution/plutus";
 import { utxoToCore } from "@lucid-evolution/utils";
 import { UTxO } from "@lucid-evolution/core-types";
@@ -16,13 +16,16 @@ export const readFrom = (
   Effect.gen(function* () {
     if (utxos.length === 0) yield* readError(ERROR_MESSAGE.EMPTY_UTXO);
     for (const utxo of utxos) {
-      if (utxo.datumHash) {
+      if (utxo.datum && utxo.datumHash) {
+        utxo.datumHash = undefined;
+      } else if (utxo.datumHash) {
         const data = yield* Effect.tryPromise({
           try: () => datumOf(config.lucidConfig.provider, utxo),
           catch: (cause) => readError(cause),
         });
 
         utxo.datum = Data.to(data);
+        utxo.datumHash = undefined;
       }
       const coreUtxo = utxoToCore(utxo);
       // An array of unspent transaction outputs to be used as inputs when running uplc eval.
