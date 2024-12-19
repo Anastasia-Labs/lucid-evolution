@@ -12,7 +12,7 @@ Fixes # (issue)
 - [ ] 📚 Docs
 
 If the feature is substantial or introduces breaking changes without a discussion, its best to open an [issue](https://github.com/Anastasia-Labs/lucid-evolution/issues) first.
-    
+
 ## Checklist
 
 - [ ] I commented my code
@@ -21,4 +21,4 @@ If the feature is substantial or introduces breaking changes without a discussio
 
 ## Additional Notes
 
-<!-- Any additional information we should know? --> 
+<!-- Any additional information we should know? -->
