@@ -23,6 +23,7 @@
             bun
             pnpm
             nodejs_22
+            typescript-language-server
           ];
         };
       });
