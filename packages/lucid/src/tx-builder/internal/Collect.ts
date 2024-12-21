@@ -2,7 +2,6 @@ import { Effect, pipe } from "effect";
 import { Data } from "@lucid-evolution/plutus";
 import { utxoToCore } from "@lucid-evolution/utils";
 import { Redeemer, RedeemerBuilder, UTxO } from "@lucid-evolution/core-types";
-import * as TxBuilder from "../TxBuilder.js";
 import { ERROR_MESSAGE, TxBuilderError } from "../../Errors.js";
 import * as CML from "@anastasia-labs/cardano-multiplatform-lib-nodejs";
 import { toPartial, toV1, toV2, toV3 } from "./TxUtils.js";
@@ -19,15 +18,22 @@ export const collectFromUTxO =
     Effect.gen(function* () {
       const { config } = yield* TxConfig;
       if (utxos.length === 0) yield* collectError(ERROR_MESSAGE.EMPTY_UTXO);
-      for (const utxo of utxos) {
-        if (utxo.datumHash && !utxo.datum) {
-          const data = yield* Effect.tryPromise({
-            try: () => datumOf(config.lucidConfig.provider, utxo),
-            catch: (cause) => collectError({ cause }),
-          });
+      for (const { datumHash, datum, ...rest } of utxos) {
+        // This UTXO value is intended solely for internal use.
+        // When the UTXO contains a datumHash but no datum, the datum must be fetched and included.
+        // This ensures the txBuilder can later add the datum into the Plutus data transaction witness field.
+        // Additionally, when evaluating a transaction, the datum field must be removed if the datumHash has a value.
+        const resolvedDatum =
+          datumHash && !datum
+            ? yield* pipe(
+                Effect.promise(() =>
+                  config.lucidConfig.provider.getDatum(datumHash),
+                ),
+                Effect.map(Data.to),
+              )
+            : datum;
+        const utxo: UTxO = { ...rest, datumHash, datum: resolvedDatum };
 
-          utxo.datum = Data.to(data);
-        }
         const coreUtxo = utxoToCore(utxo);
 
         // An array of unspent transaction outputs to be used as inputs when running uplc eval.
