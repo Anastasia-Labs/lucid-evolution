@@ -597,7 +597,16 @@ const evalTransactionProvider = (
 ): Effect.Effect<EvalRedeemer[], TxBuilderError> =>
   Effect.gen(function* () {
     const txEvaluation = setRedeemerstoZero(txRedeemerBuilder.draft_tx())!;
-    const txUtxos = [...config.collectedInputs, ...config.readInputs];
+    // Normalize UTXOs that include both a datum and a datumHash.
+    // If a datumHash is present, the datum field is removed.
+    // This ensures consistency when preparing UTXOs for evaluation.
+    const txUtxos = [...config.collectedInputs, ...config.readInputs].map(
+      ({ datumHash, datum, ...rest }) => ({
+        ...rest,
+        datumHash,
+        datum: datumHash ? undefined : datum,
+      }),
+    );
     const uplc_eval = yield* Effect.tryPromise({
       try: () =>
         config.lucidConfig.provider.evaluateTx(
@@ -616,11 +625,18 @@ const evalTransaction = (
 ): Effect.Effect<Uint8Array[], TxBuilderError> =>
   Effect.gen(function* () {
     const txEvaluation = setRedeemerstoZero(txRedeemerBuilder.draft_tx())!;
+    // Normalize UTXOs that include both a datum and a datumHash.
+    // If a datumHash is present, the datum field is removed.
+    // This ensures consistency when preparing UTXOs for evaluation.
     const txUtxos = [
       ...walletInputs,
       ...config.collectedInputs,
       ...config.readInputs,
-    ];
+    ].map(({ datumHash, datum, ...rest }) => ({
+      ...rest,
+      datumHash,
+      datum: datumHash ? undefined : datum,
+    }));
     const ins = txUtxos.map((utxo) => utxoToTransactionInput(utxo));
     const outs = txUtxos.map((utxo) => utxoToTransactionOutput(utxo));
     const slotConfig = SLOT_CONFIG_NETWORK[config.lucidConfig.network];

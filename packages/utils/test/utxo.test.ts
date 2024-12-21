@@ -1,6 +1,6 @@
 import { expect, it } from "vitest";
 import * as CML from "@anastasia-labs/cardano-multiplatform-lib-nodejs";
-import { coreToUtxo } from "../src/index.js";
+import { coreToUtxo, utxoToCore } from "../src/index.js";
 import { UTxO } from "@lucid-evolution/core-types";
 
 it("should deserialize CBOR UTXO data from the first sample", () => {
@@ -37,4 +37,28 @@ it("should deserialize CBOR UTXO data from the second sample", () => {
     scriptRef: undefined,
   };
   expect(coreToUtxo(cmlUTXO)).toStrictEqual(utxo);
+});
+
+it("should deserialize to utxo withn datumHash", () => {
+  const utxo: UTxO = {
+    txHash: "f061f4e8490472008182fc922e8ecd414f2fa5005ea218202bd324fbe8746919",
+    outputIndex: 0,
+    address: "addr_test1wqn7wnkhny2j475ac709vg3kw6wf59f3hdl3htfpwg8xmtqtxyz6a",
+    assets: { lovelace: 10000000n },
+    datumHash:
+      "48300c087b5dbc6198ed7cfbd5c04028360e0d9270eec318addbae8b6305a909",
+    datum:
+      "d8799f581c9fc430ea1f3adc20eebb813b2649e85c934ea5bc13d7b7fbe2b24e50ff",
+    scriptRef: undefined,
+  };
+  expect(coreToUtxo(utxoToCore(utxo))).toStrictEqual({
+    txHash: "f061f4e8490472008182fc922e8ecd414f2fa5005ea218202bd324fbe8746919",
+    outputIndex: 0,
+    assets: { lovelace: 10000000n },
+    address: "addr_test1wqn7wnkhny2j475ac709vg3kw6wf59f3hdl3htfpwg8xmtqtxyz6a",
+    datumHash:
+      "48300c087b5dbc6198ed7cfbd5c04028360e0d9270eec318addbae8b6305a909",
+    datum: undefined,
+    scriptRef: undefined,
+  });
 });

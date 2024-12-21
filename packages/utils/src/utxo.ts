@@ -279,12 +279,12 @@ const buildDatum = (
   utxo: UTxO,
   builder: CML.TransactionOutputBuilder,
 ): CML.TransactionOutputBuilder => {
-  //TODO: test with DatumHash
-  if (utxo.datumHash)
-    return builder.with_data(
-      CML.DatumOption.new_hash(CML.DatumHash.from_hex(utxo.datumHash)),
+  // with DatumHash
+  if (utxo.datumHash && utxo.datum)
+    return builder.with_communication_data(
+      CML.PlutusData.from_cbor_hex(utxo.datum),
     );
-  // inline datum
+  // with InlineDatum
   if (utxo.datum)
     return builder.with_data(
       CML.DatumOption.new_datum(CML.PlutusData.from_cbor_hex(utxo.datum)),
