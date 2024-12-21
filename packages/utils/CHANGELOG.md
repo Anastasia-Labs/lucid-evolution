@@ -1,5 +1,12 @@
 # @lucid-evolution/utils
 
+## 0.1.62
+
+### Patch Changes
+
+- [#459](https://github.com/Anastasia-Labs/lucid-evolution/pull/459) [`59b51f9`](https://github.com/Anastasia-Labs/lucid-evolution/commit/59b51f96f4201d464b91ec44467963789f7b9983) Thanks [@solidsnakedev](https://github.com/solidsnakedev)! - UTXO handling to normalize entries containing both a `datum` and `datumHash`.
+  The `datum` field is now removed when a `datumHash` is present to ensure consistency and avoid errors during transaction evaluation.
+
 ## 0.1.61
 
 ### Patch Changes
