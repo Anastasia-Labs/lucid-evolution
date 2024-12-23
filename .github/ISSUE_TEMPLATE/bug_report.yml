@@ -1,4 +1,4 @@
-name: 🐛 Bug Report
+name: 🛠️ Bug Report
 description: Report an issue with Lucid Evolution
 labels: ['bug']
 body:
@@ -6,18 +6,12 @@ body:
     attributes:
       value: |
 
-        Thanks for taking the time to make Lucid Evolution more robust!
-        # 🔍 Bug Report Details
-
-        > Please fill out the information below carefully
-
-        ---
-
-        **Note:** The more information you provide, the faster we can help.
-
-        - ✅ Thorough reports get resolved faster
-        - ❌ Incomplete reports may be closed
+        Thank you for helping us improve Lucid Evolution! Please fill out the details below to ensure we can address the issue efficiently.
         
+         **Notes:**
+        - ✅ Detailed reports help us resolve issues faster.
+        - ❌ Vague or incomplete reports may be closed or delayed.
+
   - type: textarea
     id: bug-description
     attributes:
@@ -62,6 +56,11 @@ body:
         - Custom
     validations:
       required: true
+  - type: textarea
+    id: additional-context
+    attributes:
+      label: Additional context
+      description: Any other context or screenshots about the issue here.
   - type: checkboxes
     id: checkboxes
     attributes:
