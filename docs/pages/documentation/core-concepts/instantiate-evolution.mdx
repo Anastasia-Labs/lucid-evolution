@@ -2,13 +2,13 @@ import { Callout, Steps, Tabs } from "nextra/components";
 
 # Instantiate Lucid
 
-Lucid Evolution can be used with or without a blockchain provider, which allows you to query data and submit transactions.
+Lucid Evolution is a library for transaction building and designing the way you want to frame your off-chain. It can be used with or without a provider or a certain network for different purposes. The library supports the `Mainnet`, `Preprod`, `Preview` and `Custom` networks
 
-Evolution supports the `Mainnet`, `Preprod`, `Preview` and `Custom` networks
+To be able to query UTxOs, datums, and protocol parameters, you need to choose a provider and a provider is a service that allows Lucid Evolution to interact with the Cardano blockchain.
 
 ## Provider selection
 
-There are multiple builtin providers you can choose from in Lucid Evolution
+You can choose one of the following providers to use with Lucid Evolution
 
 ### Blockfrost
 
@@ -37,7 +37,7 @@ const lucid = await Lucid(
 );
 ```
 
-##### with API keys
+**with API keys**
 
 ```typescript
 const lucid = await Lucid(
@@ -66,11 +66,11 @@ import { Lucid, Maestro } from "@lucid-evolution/lucid";
 
 const lucid = await Lucid(
   new Maestro({
-    network: "Preprod", // For MAINNET: "Mainnet"
+    network: "Preprod", // For MAINNET: "Mainnet" (1)
     apiKey: "<Your-API-Key>", // Get yours by visiting https://docs.gomaestro.org/docs/Getting-started/Sign-up-login
     turboSubmit: false, // Read about paid turbo transaction submission feature at https://docs.gomaestro.org/docs/Dapp%20Platform/Turbo%20Transaction
   }),
-  "Preprod" // For MAINNET: "Mainnet"
+  "Preprod" // For MAINNET: "Mainnet" (2)
 );
 ```
 
@@ -87,7 +87,7 @@ const lucid = await Lucid(
 );
 ```
 
-#### with bearer token
+**with bearer token**
 
 ```typescript
 const lucid = await Lucid(
@@ -128,23 +128,23 @@ const lucid = await Lucid(
 //TODO: https://github.com/utxorpc/lucid-evolution-provider
 ```
 
----
+## Query the provider
 
-## Query Provider
+By querying the provider you are essentially asking "what's on the blockchain?", this way you can query any on-chain data.
 
 The `provider` in `lucid.provider` is the provider instance you passed to `Lucid()` when selecting your provider (Blockfrost, Kupmios, Maestro, Koios, etc.).
 
-### Query UTxOs
+### UTxOs
 
-**Using Provider**
+UTxOs (Unspent Transaction Outputs) are the fundamental building blocks in Cardano's eUTxO model. One of its differentiator from account-based models is that your wallet's balance is the sum of all UTxOs at your address.
+
+**Using provider**
 
 ```typescript
 const utxos = await lucid.provider.getUtxos("addr_test...");
 ```
 
----
-
-**Using Convenience Method**
+**or using convenience method**
 
 ```typescript
 const utxos = await lucid.utxosAt("addr_test...");
@@ -156,7 +156,12 @@ This convenience method internally uses `lucid.provider.getUtxos()`.
 
 ---
 
-### Query Datums
+### Datums
+
+In Cardano, datums are pieces of data attached to UTxOs. Lets get some terminology out of the way.
+
+- *Inline datums*: When the complete datum is stored directly in the UTxO
+- *Datum hashes*: When only a hash of the datum is stored on-chain
 
 **Using Provider**
 
@@ -164,17 +169,13 @@ This convenience method internally uses `lucid.provider.getUtxos()`.
 const datum = await lucid.provider.getDatum("<datum_hash>");
 ```
 
----
-
-**Using Convenience Method**
+**or using convenience method**
 
 ```typescript
 const datum = await lucid.datumOf("<datum_hash>");
 ```
 
----
-
-**Querying datum from a UTxO**
+**or querying a datum from a scriptUTxO**
 
 ```typescript
 const [scriptUtxo] = await lucid.utxosAt("addr_test...");
@@ -182,13 +183,17 @@ const datum = await lucid.datumOf(scriptUtxo);
 ```
 
 <Callout type="info">
-`lucid.datumOf(scriptUtxo)` is a convenience method that internally uses `lucid.provider.getDatum()` if the datum isn't already attached to the UTxO.
+`lucid.datumOf(utxo)` is a convenience method that handles both inline datums and datum hashes:
 
-When you query the datum for a UTxO, Lucid automatically adds the datum to the UTxO. This means that subsequent queries for the same UTxO will return the result instantly, without the need for an additional network request.
- </Callout>
+1. For UTxOs with inline datums → returns the datum directly
+2. For UTxOs with datum hashes → fetches the full datum using `provider.getDatum()`
 
+Once fetched, the datum is cached in the UTxO object for subsequent queries, avoiding additional network requests.
+</Callout>
 
-### Query Protocol Parameters
+### Protocol Parameters
+
+Protocol parameters define the rules and constraints of the Cardano network like tx fees, max block size, max tx size, plutus execution costs, minimum UTxO ada value
 
 **Using the provider directly:**
 

@@ -49,19 +49,6 @@ export default {
     backToTop: true,
   },
 
-  banner: {
-    key: "latest-release",
-    text: (
-      <a
-        href="https://github.com/Anastasia-Labs/lucid-evolution/releases"
-        target="_blank"
-      >
-        Check out our latest release!
-        →
-      </a>
-    ),
-  },
-
   chat: {
     link: "https://discord.gg/s89P9gpEff",
   },
