@@ -5,7 +5,7 @@ body:
   - type: markdown
     attributes:
       value: |
-        Thanks for taking the time to fill out this feature request for Lucid Evolution.
+        Thanks for taking the time to fill out this feature request for Lucid Evolution. What do you have in mind?
   - type: textarea
     id: feature-description
     attributes:

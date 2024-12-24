@@ -1,7 +1,7 @@
 <p align="center">
   <img width="130px" src="docs/public/lucid-evolution-al-red.svg" align="center"/>
   <h1 align="center">Lucid <span style="color: #AD1F1E;">Evolution</span></h1>
-  <p align="center">Next-generation transaction builder for users and an off-chain framework for highly scalable dApps on Cardano</p>
+  <p align="center">Highly scalable, production-ready transaction builder & off-chain framework for users and dApps on Cardano</p>
 </p>
 
 <p align="center">
