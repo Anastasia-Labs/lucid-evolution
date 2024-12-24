@@ -33,6 +33,12 @@ body:
     validations:
       required: true
   - type: textarea
+    id: expected-behavior
+    attributes:
+      label: Expected Behavior
+      description: Describe the expected outcome, what should have happened?
+      placeholder: Describe what you expected to happen
+  - type: textarea
     id: system-info
     attributes:
       label: Error Details
@@ -67,7 +73,7 @@ body:
       label: Validations
       description: Before submitting the issue, please make sure you do the following
       options:
-        - label: Read the [Documentation](https://anastasia-labs.github.io/lucid-evolution/)
+        - label: Read the [documentation](https://anastasia-labs.github.io/lucid-evolution/)
           required: true
         - label: Check that there isn't already an [issue](https://github.com/Anastasia-Labs/lucid-evolution/issues) that reports the same bug to avoid creating a duplicate
           required: true

@@ -1,10 +1,9 @@
 {
-  "make-payments": "Make a Payment",
+  "make-payments": "Make Payment",
   "mint-assets": "Mint Assets",
   "register-stake": "Stake your ADA",
-  "conway-era": "Governance and Conway Era",
-  "register-retire-stakepool": "Register / Retire a Stakepool",
-  "smart-contract-interactions": "Interact with a Smart Contract",
+  "governance": "Governance",
+  "smart-contract-interactions": "Interact with Validators",
   "transaction-chaining": "Transaction Chaining",
   "emulator": "Emulator"
 }

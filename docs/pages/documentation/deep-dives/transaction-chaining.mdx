@@ -13,7 +13,7 @@ Transaction chaining sorts UTXOs on a “first-come-first-served” basis, enabl
 
 In this process, transactions enter the mempool for validation. Each transaction is tied to a specific UTXO state; changes in this state prevent transaction execution unless the original UTXO is present. This ensures that transactions are processed in the order they are received.
 
-### Implementation in Lucid Evolution
+### Implementation
 
 ```typescript
 const [newWalletInputs, derivedOutputs, tx] = await user
@@ -34,7 +34,7 @@ const txHash = await signed.submit();
 
 </Steps>
 
-## Components
+### Components
 
 - `newWalletInputs`: This includes all UTXOs that were not spent in the transaction and the new wallet UTXOs derived from the output transaction
 
@@ -42,7 +42,7 @@ const txHash = await signed.submit();
 
 - `tx`: The new transaction that is ready to be submitted
 
-## Fresh set of UTXOs
+### Fresh set of UTXOs
 
 To construct a new transaction using tx chaining, the UTXOs belonging to the wallet must be overridden. This is necessary because these UTXOs are not yet recorded on the blockchain.
 
