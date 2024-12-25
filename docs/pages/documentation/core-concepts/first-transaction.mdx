@@ -2,6 +2,8 @@ import { Callout, Steps } from "nextra/components";
 
 ## Your first transaction
 
+A couple fundamentals to remember are that in Cardano's eUTxO model, a transaction can consume one or more UTxOs as inputs. Create one or more UTxOs as outputs and that a transaction must be balanced (sum of inputs = sum of outputs + fees).
+
 <Steps>
 ### Build
 
@@ -46,26 +48,29 @@ console.log(txHash);
 <Callout>
   Remember to select a wallet before attempting to build and submit
   transactions. The wallet selection methods we discussed in previous section
-  **Core Concept 2: Choose Wallet** should be implemented before building the
+  **[Core Concept 2: Choose Wallet](./core-concepts/choose-wallet)** should be implemented before building the
   transaction.
 </Callout>
+
 ## Putting everything together
 
 ```typescript
 import { Lucid, Blockfrost } from "@lucid-evolution/lucid";
 
+// Initialize Lucid with a provider
 const lucid = await Lucid(
   new Blockfrost("https://cardano-preprod.blockfrost.io/api/v0", "<projectId>"),
   "Preprod"
 );
 
+// Select a wallet for signing
 lucid.selectWallet.fromPrivateKey(privateKey);
 
+// Build, sign and submit transaction
 const tx = await lucid
   .newTx()
-  .pay.ToAddress("addr_testa...", { lovelace: 5000000n })
-  .pay.ToAddress("addr_testb...", { lovelace: 5000000n })
-  .complete();
+  .pay.ToAddress("addr_testa...", { lovelace: 5000000n }) // Pay 5 ADA to addr_testa
+  .complete(); // Balances the transaction and initiates coin selection
 
 const signedTx = await tx.sign.withWallet().complete();
 const txHash = await signedTx.submit();

@@ -15,14 +15,14 @@ To be able to delegate your voting power, you must first register the associated
 
 ### Voting Delegation
 
-**Delegate your voting power to a specific DRep:**
+**Delegate your voting power to a specific DRep**
 
 ```typescript
 await lucid.newTx()
   .delegate.VoteToDRep(rewardAddress, drep)
 ```
 ---
-**Register a stake address and delegate voting power to a DRep in one action:**
+**Register a stake address and delegate voting power to a DRep in one action**
 
 ```typescript
 await lucid.newTx()
@@ -31,7 +31,7 @@ await lucid.newTx()
 
 ---
 
-**Delegate both your ADA stake to a pool and your voting power to a DRep in one action:**
+**Delegate both your ADA stake to a pool and your voting power to a DRep in one action**
 
 ```typescript
 await lucid.newTx()
@@ -53,7 +53,7 @@ await lucid.newTx()
 
 ### Predefined Voting Strategies
 
-**Always Abstain:**
+**Always Abstain**
 
 ```typescript
 await lucid.newTx()
@@ -64,7 +64,7 @@ await lucid.newTx()
 
 ---
 
-**Always No Confidence:**
+**Always No Confidence**
 
 ```typescript
 await lucid.newTx()
@@ -78,7 +78,7 @@ As a Delegated Representative (DRep), you can manage your status and information
 
 ### Managing DRep Status
 
-**Register a stake address as a DRep:**
+**Register a stake address as a DRep**
 
 ```typescript
 await lucid.newTx()
@@ -89,7 +89,7 @@ await lucid.newTx()
 
 ---
 
-**Update DRep information:**
+**Update DRep information**
 
 ```typescript
 await lucid.newTx()
@@ -98,7 +98,7 @@ await lucid.newTx()
 
 ---
 
-**Deregister a DRep stake address:**
+**Deregister a DRep stake address**
 
 ```typescript
 await lucid.newTx()
@@ -113,9 +113,7 @@ Remember to register the associated stake address before registering as a DRep. 
 
 Lucid Evolution supports script-based DReps, enabling programmatic voting behavior for more complex governance strategies
 
----
-
-**Register Script DRep:**
+**Register Script DRep**
 
 ```typescript
 await lucid
@@ -126,7 +124,7 @@ await lucid
 
 ---
 
-**Deregister Script DRep:**
+**Deregister Script DRep**
 
 ```typescript
 await lucid
