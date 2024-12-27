@@ -150,6 +150,34 @@ importers:
         specifier: ^5.4.5
         version: 5.7.2
 
+  packages/experimental:
+    dependencies:
+      '@anastasia-labs/cardano-multiplatform-lib-browser':
+        specifier: 6.0.2-3
+        version: 6.0.2-3
+      '@anastasia-labs/cardano-multiplatform-lib-nodejs':
+        specifier: 6.0.2-3
+        version: 6.0.2-3
+      effect:
+        specifier: ^3.12.0
+        version: 3.12.0
+    devDependencies:
+      '@effect/vitest':
+        specifier: ^0.16.0
+        version: 0.16.0(effect@3.12.0)(vitest@2.1.8(@types/node@20.17.10))
+      '@types/node':
+        specifier: ^20.12.8
+        version: 20.17.10
+      tsup:
+        specifier: ^8.0.2
+        version: 8.3.5(postcss@8.4.49)(tsx@4.19.2)(typescript@5.7.2)
+      typescript:
+        specifier: ^5.4.5
+        version: 5.7.2
+      vitest:
+        specifier: ^2.0.5
+        version: 2.1.8(@types/node@20.17.10)
+
   packages/lucid:
     dependencies:
       '@anastasia-labs/cardano-multiplatform-lib-browser':
@@ -160,7 +188,7 @@ importers:
         version: 6.0.2-3
       '@effect/schema':
         specifier: ^0.66.14
-        version: 0.66.16(effect@3.11.7)(fast-check@3.23.2)
+        version: 0.66.16(effect@3.12.0)(fast-check@3.23.2)
       '@emurgo/cardano-message-signing-nodejs':
         specifier: ^1.0.1
         version: 1.1.0
@@ -190,7 +218,7 @@ importers:
         version: link:../wallet
       effect:
         specifier: ^3.10.4
-        version: 3.11.7
+        version: 3.12.0
     devDependencies:
       '@types/node':
         specifier: ^20.12.8
@@ -610,6 +638,12 @@ packages:
     resolution: {integrity: sha512-/rmIb+4QaQTecdTfeYSZtNikIV+BeIbYDl/hpgBTaS96en7pKNW5hcygFQhdocjKguIL7Y/be+oUrVafWV60ew==}
     peerDependencies:
       effect: ^3.5.7
+
+  '@effect/vitest@0.16.0':
+    resolution: {integrity: sha512-caUXVs8Xsf07XUHRu1pOsHDiww7rE556+0PYZHIg+X6oL6gA9k2+d8ZFmutaW9hJoSQuy+vKyYAFM9/1rVSSAQ==}
+    peerDependencies:
+      effect: ^3.12.0
+      vitest: ^2.0.5
 
   '@emurgo/cardano-message-signing-browser@1.1.0':
     resolution: {integrity: sha512-LyeiGIqCyZu9DZnKsi4wlBjZA1MN+uy3Cqpb5J6RZWvFXDJnCoxrYB/EixUiGRD/la4WsldBgtPsrIHyGsVkpg==}
@@ -2313,6 +2347,9 @@ packages:
 
   effect@3.11.7:
     resolution: {integrity: sha512-laj+TCxWGn0eOv6jNmS9vavMO01Z4vvRr7v5airaOUfE7Zr5PrHiECpiI5HRvOewxa1im/4EcOvRodOZ1S2Y7Q==}
+
+  effect@3.12.0:
+    resolution: {integrity: sha512-b/u9s3b9HfTo0qygVouegP0hkbiuxRIeaCe1ppf8P88hPyl6lKCbErtn7Az4jG7LuU7f0Wgm4c8WXbMcL2j8+g==}
 
   electron-to-chromium@1.5.73:
     resolution: {integrity: sha512-8wGNxG9tAG5KhGd3eeA0o6ixhiNdgr0DcHWm85XPCphwZgD1lIEoi6t3VERayWao7SF7AAZTw6oARGJeVjH8Kg==}
@@ -5124,15 +5161,20 @@ snapshots:
       find-my-way-ts: 0.1.5
       multipasta: 0.2.5
 
-  '@effect/schema@0.66.16(effect@3.11.7)(fast-check@3.23.2)':
+  '@effect/schema@0.66.16(effect@3.12.0)(fast-check@3.23.2)':
     dependencies:
-      effect: 3.11.7
+      effect: 3.12.0
       fast-check: 3.23.2
 
   '@effect/schema@0.68.27(effect@3.11.7)':
     dependencies:
       effect: 3.11.7
       fast-check: 3.23.2
+
+  '@effect/vitest@0.16.0(effect@3.12.0)(vitest@2.1.8(@types/node@20.17.10))':
+    dependencies:
+      effect: 3.12.0
+      vitest: 2.1.8(@types/node@20.17.10)
 
   '@emurgo/cardano-message-signing-browser@1.1.0': {}
 
@@ -6662,6 +6704,10 @@ snapshots:
   eastasianwidth@0.2.0: {}
 
   effect@3.11.7:
+    dependencies:
+      fast-check: 3.23.2
+
+  effect@3.12.0:
     dependencies:
       fast-check: 3.23.2
 

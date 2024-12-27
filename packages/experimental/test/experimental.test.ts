@@ -1,3 +1,4 @@
-import { test } from "vitest";
+import { AssetName } from "../src/index.js";
+import { it } from "@effect/vitest";
 
-test("experimental", () => {});
+it.effect("experimental", () => AssetName.from_hex("deadbeef"));
