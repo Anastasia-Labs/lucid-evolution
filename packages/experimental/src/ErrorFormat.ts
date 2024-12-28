@@ -1,4 +1,4 @@
-import { Predicate } from "effect";
+import { Effect, Predicate } from "effect";
 
 export const make = ({
   cause,
@@ -7,7 +7,8 @@ export const make = ({
   message?: string;
   cause?: unknown;
 }) => {
-  if (!message && !cause) return { message: `{ "message": "Unknown error occurred" }` };
+  if (!message && !cause)
+    return { message: `{ "message": "Unknown error occurred" }` };
   if (!message)
     return Predicate.isError(cause)
       ? { message: `{ "message": "${cause.message}" }`, cause }
@@ -16,7 +17,10 @@ export const make = ({
 
   const causeStr = Predicate.isError(cause) ? cause.message : String(cause);
 
-  return { message: `{ "message": "${message}" , "cause": "${causeStr}" }`, cause };
+  return {
+    message: `{ "message": "${message}" , "cause": "${causeStr}" }`,
+    cause,
+  };
 };
 
 export const makeFromUnknown = ({ cause }: { cause: unknown }) =>
