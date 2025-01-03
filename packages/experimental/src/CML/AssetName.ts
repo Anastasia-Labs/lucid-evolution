@@ -1,5 +1,5 @@
 import { Data, Effect } from "effect";
-import * as ErrorFormat from "../ErrorFormat.js";
+import * as FormatError from "../FormatError.js";
 import { AssetName } from "@anastasia-labs/cardano-multiplatform-lib-nodejs";
 
 class AssetNameError extends Data.TaggedError("AssetNameError")<{
@@ -12,7 +12,7 @@ export const from_cbor_bytes = Effect.fn(function* (bytes: Uint8Array) {
     Effect.catchAllDefect(
       (cause) =>
         new AssetNameError(
-          ErrorFormat.make({
+          FormatError.make({
             message: `Oops! Looks like [${bytes}] is not correct`,
             cause,
           }),
@@ -26,7 +26,7 @@ export const from_cbor_hex = Effect.fn(function* (hex: string) {
     Effect.catchAllDefect(
       (cause) =>
         new AssetNameError(
-          ErrorFormat.make({
+          FormatError.make({
             message: `Oops! Looks like [${hex}] is not correct`,
             cause,
           }),
@@ -51,7 +51,7 @@ export const from_hex = Effect.fn(function* (hex: string) {
     Effect.catchAllDefect(
       (cause) =>
         new AssetNameError(
-          ErrorFormat.make({
+          FormatError.make({
             message: `Oops! Looks like [${hex}] is not correct, ensure the string is a properly formatted as hex`,
             cause,
           }),
@@ -65,7 +65,7 @@ export const from_json = Effect.fn(function* (json: string) {
     Effect.catchAllDefect(
       (cause) =>
         new AssetNameError(
-          ErrorFormat.make({
+          FormatError.make({
             message: `Oops! Looks like [${json}] is not correct`,
             cause,
           }),
@@ -79,7 +79,7 @@ export const from_raw_bytes = Effect.fn(function* (bytes: Uint8Array) {
     Effect.catchAllDefect(
       (cause) =>
         new AssetNameError(
-          ErrorFormat.make({
+          FormatError.make({
             message: `Oops! Looks like [${bytes}] is not correct`,
             cause,
           }),
@@ -93,7 +93,7 @@ export const from_str = Effect.fn(function* (utf8: string) {
     Effect.catchAllDefect(
       (cause) =>
         new AssetNameError(
-          ErrorFormat.make({
+          FormatError.make({
             message: `Oops! Looks like [${utf8}] is not correct, ensure the string is a properly formatted in UTF-8 and max 64 bytes in length`,
             cause,
           }),
