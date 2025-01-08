@@ -1,12 +1,26 @@
 import { Data, Effect } from "effect";
-import * as FormatError from "../FormatError.js";
+import * as FormatError from "./FormatError.js";
 import { AssetName } from "@anastasia-labs/cardano-multiplatform-lib-nodejs";
 
-class AssetNameError extends Data.TaggedError("AssetNameError")<{
+export class AssetNameError extends Data.TaggedError("AssetNameError")<{
   cause?: unknown;
   message?: string;
 }> {}
 
+/**
+ * Converts a `cbor` bytes into CML class `AssetName`
+ * @example
+ * ```ts
+ * import { AssetName } from "@lucid-evolution/..."
+ *
+ * const helloCbor = new Uint8Array([0x68, 0x65, 0x6c, 0x6c, 0x6f]);
+ *
+ * AssetName.from_cbor_bytes(helloCbor);
+ * ```
+ * @since 1.0.0
+ * @category Constructors
+ *
+ */
 export const from_cbor_bytes = Effect.fn(function* (bytes: Uint8Array) {
   return yield* Effect.sync(() => AssetName.from_cbor_bytes(bytes)).pipe(
     Effect.catchAllDefect(
@@ -20,6 +34,9 @@ export const from_cbor_bytes = Effect.fn(function* (bytes: Uint8Array) {
     ),
   );
 });
+
+export const unsafe_from_cbor_bytes = (bytes: Uint8Array): AssetName =>
+  from_cbor_bytes(bytes).pipe(Effect.runSync);
 
 export const from_cbor_hex = Effect.fn(function* (hex: string) {
   return yield* Effect.sync(() => AssetName.from_cbor_hex(hex)).pipe(
@@ -43,21 +60,20 @@ export const from_cbor_hex = Effect.fn(function* (hex: string) {
  * @example
  * ```ts
  * const helloHex = "68656c6c6f"
- * AssetName.from_hex(helloHex));
+ * AssetName.from_hex(helloHex);
  * ```
  */
 export const from_hex = Effect.fn(function* (hex: string) {
-  return yield* Effect.sync(() => AssetName.from_hex(hex)).pipe(
-    Effect.catchAllDefect(
-      (cause) =>
-        new AssetNameError(
-          FormatError.make({
-            message: `Oops! Looks like [${hex}] is not correct, ensure the string is a properly formatted as hex`,
-            cause,
-          }),
-        ),
-    ),
-  );
+  return yield* Effect.try({
+    try: () => AssetName.from_hex(hex),
+    catch: (cause) =>
+      new AssetNameError(
+        FormatError.make({
+          message: `Oops! Looks like [${hex}] is not correct`,
+          cause,
+        }),
+      ),
+  });
 });
 
 export const from_json = Effect.fn(function* (json: string) {
@@ -94,7 +110,7 @@ export const from_str = Effect.fn(function* (utf8: string) {
       (cause) =>
         new AssetNameError(
           FormatError.make({
-            message: `Oops! Looks like [${utf8}] is not correct, ensure the string is a properly formatted in UTF-8 and max 64 bytes in length`,
+            message: `Oops! Looks like [${utf8}] is not correct`,
             cause,
           }),
         ),

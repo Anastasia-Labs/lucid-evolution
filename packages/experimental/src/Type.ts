@@ -1,4 +1,34 @@
 import * as CML from "@anastasia-labs/cardano-multiplatform-lib-nodejs";
+
+export type Minting = Script;
+export type Spending = Script;
+export type Certificate = Script;
+export type Withdrawal = Script;
+export type Vote = Script;
+export type Propose = Script;
+
+export type Script = { type: ScriptType; script: string };
+export type ScriptType = "Native" | PlutusVersion;
+export type PlutusVersion = "PlutusV1" | "PlutusV2" | "PlutusV3";
+
+/** Bech32 */
+export type Address = string;
+
+export type AddressType =
+  | "Base"
+  | "Enterprise"
+  | "Pointer"
+  | "Reward"
+  | "Byron";
+
+export type AddressDetails = {
+  type: AddressType;
+  networkId: number;
+  address: { bech32: Address; hex: string };
+  paymentCredential?: Credential;
+  stakeCredential?: Credential;
+};
+
 type CostModel = Record<string, number>;
 
 export type CostModels = Record<PlutusVersion, CostModel>;

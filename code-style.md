@@ -5,6 +5,7 @@
 - Functionality tied to a specific platform or library should be isolated in its own package.
 
 ### Example
+
 For instance, if you have libraries accomplishing the same task, you should separate them into different packages:
 
 ```
@@ -18,7 +19,7 @@ packages/
 In `cml/index.ts`, you might have:
 
 ```ts
-import * as CML from 'cml-library';
+import * as CML from "cml-library";
 
 export const add = (a: number, b: number): number => {
   return CML.add(a, b);
@@ -28,38 +29,128 @@ export const add = (a: number, b: number): number => {
 In `cardano-js/index.ts`, you might have:
 
 ```ts
-import * as CardanoJS from 'cardano-js-library';
+import * as CardanoJS from "cardano-js-library";
 
 export const add = (a: number, b: number): number => {
   return CardanoJS.add(a, b);
 };
 ```
 
+## Support ESM Modern typescript convention, CJS for legacy and minimum support
+
+Use a Base config `tsconfig.base.json` as follows
+
+```json
+{
+  "compilerOptions": {
+    "rootDir": "./src",
+    "strict": true,
+    "moduleResolution": "node",
+    "sourceMap": true
+  },
+  "files": ["src/index.ts"],
+  "include": ["src/**/*"],
+  "exclude": ["dist", "node_modules", "test"]
+}
+```
+
+Use a ESM config `tsconfig.esm.json` as follows
+Note: `declaration` is set to true in ESM config to generate type definitions for both ESM and CJS
+`declarationMap` is set to true in ESM config to generate source maps for type definitions
+
+```json
+{
+  "extends": "./tsconfig.base.json",
+  "compilerOptions": {
+    "target": "esnext",
+    "module": "esnext",
+    "outDir": "./dist/esm",
+    "declaration": true,
+    "declarationMap": true,
+    "declarationDir": "./dist/types"
+  }
+}
+```
+
+Use a CJS config `tsconfig.cjs.json` as follows
+
+```json
+{
+  "extends": "./tsconfig.base.json",
+  "compilerOptions": {
+    "target": "es6",
+    "module": "commonjs",
+    "outDir": "./dist/cjs",
+    "declaration": false
+  }
+}
+```
+
+A basic `package.json` should look like the following
+
+```json
+{
+  "name": "@your-entity/your-package-name",
+  "version": "0.0.0",
+  "description": "",
+  "main": "./dist/esm/index.js",
+  "types": "./dist/types/index.d.ts",
+  "type": "module",
+  "exports": {
+    ".": {
+      "types": "./dist/types/index.d.ts",
+      "require": "./dist/cjs/index.js",
+      "import": "./dist/esm/index.js"
+    }
+  },
+  "files": [
+    "dist"
+  ],
+  "publishConfig": {
+    "access": "public"
+  },
+  "scripts": {
+    "build": "rm -rf dist && tsc --project tsconfig.esm.json && tsc --project tsconfig.cjs.json",
+    "test": "vitest run",
+    "lint": "tsc --noEmit",
+    "clean": "rm -rf .turbo && rm -rf node_modules && rm -rf dist"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "MIT",
+  ...
+```
+
 ## Naming Conventions
+
 - Variables: camelCase
 - Functions: camelCase
 - Classes: PascalCase
 - Modules: PascalCase
 - Files: PascalCase
 - Constants: UPPER_SNAKE_CASE
-- Private members: _prefixedCamelCase
+- Private members: \_prefixedCamelCase
 - Do not use I as a prefix for interface names.
 
 ## null vs undefined
+
 - Use undefined. Do not use null.
 
 ## Class vs Functions
+
 - Do not use classes, use function closures instead.
 
 ## Type Annotations
+
 - Use `type` for unions and `interface` for opaque types and function signature:
+
 ```typescript
-type Status = "active" | "inactive" | "pending"
+type Status = "active" | "inactive" | "pending";
 
 interface User {
   readonly id: number;
   readonly name: string;
-  readonly status: Status
+  readonly status: Status;
 }
 
 interface Repository<T> {
@@ -70,12 +161,14 @@ interface Repository<T> {
 ```
 
 ## Use const keyword over function keyword
+
 ### Example
+
 ```ts
 // Use const
 const myFunction = () => {
   // implementation
-}
+};
 
 // Don't use function keyword
 function myFunction() {
@@ -84,32 +177,38 @@ function myFunction() {
 ```
 
 Reasoning:
+
 - `const` declarations are block-scoped
 - Prevents accidental reassignment
 - Consistent with modern JavaScript practices
 
 ## Prefer ternary operator over if-else when possible
+
 ### Example:
+
 ```typescript
 // Instead of using if-else:
 const getResult = (condition: boolean): string => {
   if (condition) {
-    return 'value1';
+    return "value1";
   } else {
-    return 'value2';
+    return "value2";
   }
-}
+};
 
 // Use ternary operator:
-const getResult = (condition: boolean): string => 
-  condition ? 'value1' : 'value2';
+const getResult = (condition: boolean): string =>
+  condition ? "value1" : "value2";
 ```
 
-
 ## Flags
+
 More than 2 related Boolean properties on a type should be turned into an union type flag.
+
 ### Example
+
 Instead of:
+
 ```ts
 interface ModeOptions {
   min: boolean;
@@ -119,31 +218,37 @@ interface ModeOptions {
 ```
 
 Use:
+
 ```ts
 type ModeOptions = {
-  mode: "min" | "max" | "average";
-}
+  mode?: "min" | "max" | "average";
+};
 
 // Usage with optional parameter
-const calculate = (value: Array<number>, options?: ModeOptions) => {
-  const { mode = "average" } = options
+const calculate = (value: Array<number>, options: ModeOptions = {}) => {
+  const { mode = "average" } = options;
+  return mode;
   // ... implementation
 };
 ```
 
 ## Peer Dependency Usage
+
 Use peer dependencies for shared libraries to prevent bundling conflicts and provide flexibility.
 
 ## Semantic Versioning
+
 Follow `major.minor.patch` versioning to clearly communicate changes and prevent breaking changes.
 
 ## Code Structure
+
 - The code structure should follow the principles of modularity, reusability, and ease of testing.
 - Modules should be organized by functionality and purpose.
 - Module types should be defined at the top of the file.
 - Package names should describe their purpose and scope clearly
 
 ### Example Structure
+
 ```
 packages/
   my-package/
@@ -152,6 +257,7 @@ packages/
 ```
 
 ### Example Code
+
 Inside `Calculator.ts`, you define Effect-based functions and functions known to be safe:
 
 ```ts
@@ -162,14 +268,18 @@ export class CalculatorError extends Data.TaggedError("CalculatorError")<{
 }> {}
 
 // Sum is a safe function therefore effect is not needed
-export const sum = (self: number, that: number): number =>
-  self + that;
+export const sum = (self: number, that: number): number => self + that;
 
 // Divide two numbers using Effect, with type safe error for division by zero
-export const divide = (self: number, that: number): Effect.Effect<number, CalculatorError> => 
+export const divide = (
+  self: number,
+  that: number,
+): Effect.Effect<number, CalculatorError> =>
   that === 0
-  ? Effect.fail(new CalculatorError({ message: `Cannot divide ${self} by zero` }))
-  : Effect.succeed(self / that);
+    ? Effect.fail(
+        new CalculatorError({ message: `Cannot divide ${self} by zero` }),
+      )
+    : Effect.succeed(self / that);
 ```
 
 Inside `Calculator.ts`, you define unsafe functions adding the `unsafe` prefix:
@@ -177,28 +287,31 @@ Inside `Calculator.ts`, you define unsafe functions adding the `unsafe` prefix:
 ```ts
 // Divide two numbers without using Effect, with error handling for division by zero
 export const unsafeDivide = (self: number, that: number): number =>
-  Effect.runSync(divide(self,that))
+  Effect.runSync(divide(self, that));
 ```
 
 ```ts
 // For Effect-based functions
 import { divide } from "my-package/Calculator";
-divide(1, 0)
+divide(1, 0);
 // For unsafe functions
 import { unsafeDivide } from "my-package/Calculator";
-unsafeDivide(1, 0)
+unsafeDivide(1, 0);
 // For module import
 import { Calculator } from "my-package";
-Calculator.divide(1, 0)
-Calculator.unsafeDivide(1, 0)
+Calculator.divide(1, 0);
+Calculator.unsafeDivide(1, 0);
 ```
 
 ## Code Formatting
-Formatting is handled by Prettier CLI.  
+
+Formatting is handled by Prettier CLI.
 
 ## Function Comments
-Comments should be the foundation of library documentation. 
+
+Comments should be the foundation of library documentation.
 Each function must have a comment that follows these rules:
+
 - A concise description of the function's purpose
 - The version when the function was introduced using @since tag
 - An example of function usage with @example tag
@@ -208,48 +321,50 @@ Each function must have a comment that follows these rules:
 /**
  * Sums two numbers
  * @since 1.0.0
- * 
+ *
  * @example
  * import { sum } from "my-package/Calculator";
  * sum(1, 2) // 3
  */
-export const sum = (self: number, that: number): number =>
-  self + that;
+export const sum = (self: number, that: number): number => self + that;
 ```
 
-
 ## Testing Requirements
+
 - Unit tests are required for all functions
 - Test files must be named `*.test.ts`
 - Use `vitest` for testing
 - Use `@effect/vitest` for testing Effect-based functions
 
 ### Example
+
 ```ts
-import { expect, test } from 'vitest'
-import { it } from '@effect/vitest'
+import { expect, test } from "vitest";
+import { it, describe } from "@effect/vitest";
 
-test('sum adds two numbers', () => {
-  expect(sum(1, 2)).toBe(3)
-})
+test("sum adds two numbers", () => {
+  expect(sum(1, 2)).toBe(3);
+});
 
-test('divide handles zero division', () => {
-  it.effect('should fail on divide by zero', () =>
-    Effect.gen(function* (_) {
-      const result = yield* _(divide(1, 0))
-      expect(result).toBeInstanceOf(CalculatorError)
-    })
-  )
-})
+describe("divide handles zero division", () => {
+  it.effect("should fail on divide by zero", () =>
+    Effect.gen(function* () {
+      const result = yield* Effect.flip(divide(1, 0));
+      expect(result).toBeInstanceOf(CalculatorError);
+    }),
+  );
+});
 ```
 
 ## Error Handling
 
 ### Error Messages
+
 - Provide clear error messages (`message` field)
 - Consider adding helpful context:
   - Input values that caused the error
   - Potential solutions or remediation steps
+
 ```ts
 import { Data, Effect } from "effect";
 import { FormatError } from "experimental";
@@ -269,12 +384,13 @@ const parse = (input: string): Effect.Effect<any, JSONParseError, never> =>
         FormatError.make({
           message: `Cannot parse input ${input}. Check if the input is valid JSON.`,
           cause: unknown,
-        })
+        }),
       ),
   });
 ```
 
 ### Generic vs Specific Errors
+
 - Use generic error types (like `CalculatorError`) as the default approach. Generic errors provide more flexibility and reduce code complexity
 - Only create specific error types (like `DivideByZeroError`) when strictly necessary
 - Keep error types consistent within a domain
@@ -287,11 +403,16 @@ class CalculatorError extends Data.TaggedError("CalculatorError")<{
   message?: string;
 }> {}
 
-const divide = (a: number, b: number): Effect.Effect<number, CalculatorError, never> =>
+const divide = (
+  a: number,
+  b: number,
+): Effect.Effect<number, CalculatorError, never> =>
   b === 0
-    ? Effect.fail(new CalculatorError({
-        message: `Cannot divide ${a} by zero`,
-      }))
+    ? Effect.fail(
+        new CalculatorError({
+          message: `Cannot divide ${a} by zero`,
+        }),
+      )
     : Effect.succeed(a / b);
 
 Effect.runSync(divide(1, 0));
@@ -304,11 +425,16 @@ class DivideByZeroError extends Data.TaggedError("DivideByZeroError")<{
   message: string;
 }> {}
 
-const divide = (a: number, b: number): Effect.Effect<number, DivideByZeroError, never> =>
+const divide = (
+  a: number,
+  b: number,
+): Effect.Effect<number, DivideByZeroError, never> =>
   b === 0
-    ? Effect.fail(new DivideByZeroError({
-        message: `Cannot divide ${a} by zero`,
-      }))
+    ? Effect.fail(
+        new DivideByZeroError({
+          message: `Cannot divide ${a} by zero`,
+        }),
+      )
     : Effect.succeed(a / b);
 Effect.runSync(divide(1, 0));
 ```

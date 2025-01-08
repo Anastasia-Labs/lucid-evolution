@@ -43,11 +43,15 @@ export const toId = (network: Network) => {
  * Network.fromId(0, { defaultNetwork: "Preprod" }); // Preprod
  * ```
  */
-export const fromId = (
-  id: 0 | 1,
-  options: { defaultNetwork?: Network } = {},
-): Network => {
-  const { defaultNetwork = "Preview" } = options;
-  if (id === 1) return "Mainnet";
-  return defaultNetwork;
+export const fromId = <
+  ID extends 0 | 1,
+  Options extends Exclude<Network, "Mainnet">,
+>(
+  id: ID,
+  options?: { defaultNetwork?: Options },
+): InferReturnType<ID, Options> => {
+  const { defaultNetwork = "Preview" } = options ?? {};
+  if (id === 1) return "Mainnet" as InferReturnType<ID, Options>;
+  return defaultNetwork as InferReturnType<ID, Options>;
 };
+type InferReturnType<ID, Options> = ID extends 1 ? "Mainnet" : Options;

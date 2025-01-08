@@ -2,14 +2,14 @@
   "name": "@lucid-evolution/experimental",
   "version": "0.0.0",
   "description": "",
-  "main": "./dist/index.js",
-  "types": "./dist/index.d.ts",
+  "main": "./dist/esm/index.js",
+  "types": "./dist/types/index.d.ts",
   "type": "module",
   "exports": {
     ".": {
-      "types": "./dist/index.d.ts",
-      "require": "./dist/index.cjs",
-      "import": "./dist/index.js"
+      "types": "./dist/types/index.d.ts",
+      "require": "./dist/cjs/index.js",
+      "import": "./dist/esm/index.js"
     }
   },
   "files": [
@@ -19,7 +19,7 @@
     "access": "public"
   },
   "scripts": {
-    "build": "tsup",
+    "build": "rm -rf dist && tsc --project tsconfig.esm.json && tsc --project tsconfig.cjs.json",
     "test": "vitest run",
     "lint": "tsc --noEmit",
     "clean": "rm -rf .turbo && rm -rf node_modules && rm -rf dist"
@@ -33,13 +33,19 @@
   "dependencies": {
     "@anastasia-labs/cardano-multiplatform-lib-browser": "6.0.2-3",
     "@anastasia-labs/cardano-multiplatform-lib-nodejs": "6.0.2-3",
-    "effect": "^3.12.0"
+    "@harmoniclabs/plutus-data": "^1.2.4",
+    "@harmoniclabs/uplc": "^1.2.4",
+    "@sinclair/typebox": "^0.32.28",
+    "cbor-x": "^1.6.0",
+    "effect": "^3.12.1"
   },
   "devDependencies": {
     "@effect/vitest": "^0.16.0",
+    "@microsoft/api-extractor": "^7.49.0",
     "@types/node": "^20.12.8",
     "tsup": "^8.0.2",
     "typescript": "^5.4.5",
+    "unbuild": "^3.2.0",
     "vitest": "^2.0.5"
   }
 }

@@ -1,8 +1,6 @@
-import * as Types from "./Core/types.js";
 import * as CML from "@anastasia-labs/cardano-multiplatform-lib-nodejs";
-import * as Network from "./Network.js";
-import { applyDoubleCborEncoding } from "./cbor.js";
-import { Data } from "@lucid-evolution/plutus";
+import * as CBOR from "./CBOR.js";
+import { Data } from "./Data.js";
 import {
   Application,
   encodeUPLC,
@@ -10,11 +8,11 @@ import {
   UPLCConst,
   UPLCProgram,
 } from "@harmoniclabs/uplc";
-import { fromHex, toHex } from "@lucid-evolution/core-utils";
+import * as Bytes from "./Core/Bytes.js";
 import { decode } from "cbor-x";
 import { dataFromCbor } from "@harmoniclabs/plutus-data";
+import { Exact } from "./Type.js";
 
-export type Minting = Script;
 export type Spending = Script;
 export type Certificate = Script;
 export type Withdrawal = Script;
@@ -34,19 +32,19 @@ export function toCMLScript(script: Script): CML.Script {
     case "PlutusV1":
       return CML.Script.new_plutus_v1(
         CML.PlutusV1Script.from_cbor_hex(
-          applyDoubleCborEncoding(script.script),
+          CBOR.applyDoubleCborEncoding(script.script),
         ),
       );
     case "PlutusV2":
       return CML.Script.new_plutus_v2(
         CML.PlutusV2Script.from_cbor_hex(
-          applyDoubleCborEncoding(script.script),
+          CBOR.applyDoubleCborEncoding(script.script),
         ),
       );
     case "PlutusV3":
       return CML.Script.new_plutus_v3(
         CML.PlutusV3Script.from_cbor_hex(
-          applyDoubleCborEncoding(script.script),
+          CBOR.applyDoubleCborEncoding(script.script),
         ),
       );
     default:
@@ -54,36 +52,32 @@ export function toCMLScript(script: Script): CML.Script {
   }
 }
 
-export function fromCMLScript(scriptRef: CML.Script): Script {
-  const kind = scriptRef.kind();
+export function fromCMLScript(script: CML.Script): Script {
+  const kind = script.kind();
   switch (kind) {
     case 0:
       return {
         type: "Native",
-        script: scriptRef.as_native()!.to_cbor_hex(),
+        script: script.as_native()!.to_cbor_hex(),
       };
     case 1:
       return {
         type: "PlutusV1",
-        script: scriptRef.as_plutus_v1()!.to_cbor_hex(),
+        script: script.as_plutus_v1()!.to_cbor_hex(),
       };
     case 2:
       return {
         type: "PlutusV2",
-        script: scriptRef.as_plutus_v2()!.to_cbor_hex(),
+        script: script.as_plutus_v2()!.to_cbor_hex(),
       };
     case 3:
       return {
         type: "PlutusV3",
-        script: scriptRef.as_plutus_v3()!.to_cbor_hex(),
+        script: script.as_plutus_v3()!.to_cbor_hex(),
       };
     default:
       throw new Error("No variant matched.");
   }
-}
-
-export function mintingPolicyToId(mintingPolicy: MintingPolicy): PolicyId {
-  return validatorToScriptHash(mintingPolicy);
 }
 
 /**
@@ -97,7 +91,7 @@ export function applyParamsToScript<T extends unknown[] = Data[]>(
   type?: T,
 ): string {
   const program = parseUPLC(
-    decode(decode(fromHex(applyDoubleCborEncoding(plutusScript)))),
+    decode(decode(Bytes.fromHex(CBOR.applyDoubleCborEncoding(plutusScript)))),
     "flat",
   );
   const parameters = (type ? Data.castTo<T>(params, type) : params) as Data[];
@@ -107,8 +101,8 @@ export function applyParamsToScript<T extends unknown[] = Data[]>(
     return appliedParameter;
   }, program.body);
 
-  return applyDoubleCborEncoding(
-    toHex(
+  return CBOR.applyDoubleCborEncoding(
+    Bytes.toHex(
       encodeUPLC(new UPLCProgram(program.version, appliedProgram)).toBuffer()
         .buffer,
     ),

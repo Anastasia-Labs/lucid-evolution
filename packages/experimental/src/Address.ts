@@ -1,29 +1,18 @@
 import * as CML from "@anastasia-labs/cardano-multiplatform-lib-nodejs";
 import * as Network from "./Network.js";
 import * as Validator from "./Validator.js";
-import * as CMLAddress from "./CML/Address.js";
-
-/** Bech32 */
-export type Address = string;
-
-export type AddressType =
-  | "Base"
-  | "Enterprise"
-  | "Pointer"
-  | "Reward"
-  | "Byron";
-
-export type AddressDetails = {
-  type: AddressType;
-  networkId: number;
-  address: { bech32: Address; hex: string };
-  paymentCredential?: Credential;
-  stakeCredential?: Credential;
-};
+import * as CMLAddress from "./CMLAddress.js";
+import {
+  AddressDetails,
+  Certificate,
+  RewardAddress,
+  Withdrawal,
+  Credential,
+} from "./Type.js";
 
 export function validatorToRewardAddress(
   network: Network.Network,
-  validator: Validator.Certificate | Validator.Withdrawal,
+  validator: Certificate | Withdrawal,
 ): RewardAddress {
   const validatorHash = Validator.toScriptHash(validator);
   return CML.RewardAddress.new(
@@ -78,7 +67,7 @@ export function getAddressDetails(address: string): AddressDetails {
   // Enterprise Address
   try {
     const parsedAddress = CML.EnterpriseAddress.from_address(
-      addressFromHexOrBech32(address),
+      CMLAddress.fromHexOrBech32(address),
     )!;
     const paymentCredential: Credential =
       parsedAddress.payment().kind() === 0
@@ -106,7 +95,7 @@ export function getAddressDetails(address: string): AddressDetails {
   // Pointer Address
   try {
     const parsedAddress = CML.PointerAddress.from_address(
-      addressFromHexOrBech32(address),
+      CMLAddress.fromHexOrBech32(address),
     )!;
     const paymentCredential: Credential =
       parsedAddress?.payment().kind() === 0
@@ -134,7 +123,7 @@ export function getAddressDetails(address: string): AddressDetails {
   // Reward Address
   try {
     const parsedAddress = CML.RewardAddress.from_address(
-      addressFromHexOrBech32(address),
+      CMLAddress.fromHexOrBech32(address),
     )!;
     const stakeCredential: Credential =
       parsedAddress.payment().kind() === 0
