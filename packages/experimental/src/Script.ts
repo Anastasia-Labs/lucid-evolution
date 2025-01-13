@@ -76,7 +76,7 @@ export function fromCMLScript(script: CML.Script): Script {
         script: script.as_plutus_v3()!.to_cbor_hex(),
       };
     default:
-      throw new Error("No variant matched.");
+      throw new Error(`Exhaustive check failed: Unhandled case '${kind}' encountered.`)
   }
 }
 

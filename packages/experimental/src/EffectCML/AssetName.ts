@@ -55,13 +55,13 @@ export const from_cbor_hex = Effect.fn(function* (hex: string) {
 /**
  * Converts a `hex` string into CML class `AssetName`
  *
- * @since 1.0.0
- *
  * @example
  * ```ts
  * const helloHex = "68656c6c6f"
  * AssetName.from_hex(helloHex);
  * ```
+ * 
+ * @since 1.0.0
  */
 export const from_hex = Effect.fn(function* (hex: string) {
   return yield* Effect.try({

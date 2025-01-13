@@ -1,5 +1,5 @@
 // export * as FormatError from "./FormatError.js";
-export * as WrappedCML from "./EffectCML/index.js";
+export * as EffectCML from "./EffectCML/index.js";
 export * as Bytes from "./Core/Bytes.js";
 export * as CML from "@anastasia-labs/cardano-multiplatform-lib-nodejs";
 export * as Network from "./Network.js";

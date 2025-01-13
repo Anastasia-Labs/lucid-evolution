@@ -3,8 +3,6 @@ export type Network = "Mainnet" | "Preview" | "Preprod" | "Custom";
 /**
  * Converts a Network type to Id number
  *
- * @since 1.0.0
- *
  * @example
  * ```ts
  * import { Network } from "@lucid-evolution/..."
@@ -12,6 +10,8 @@ export type Network = "Mainnet" | "Preview" | "Preprod" | "Custom";
  * Network.toId("Preprod"); // 0
  * Network.toId("Mainnet"); // 1
  * ```
+ * 
+ * @since 1.0.0
  */
 export const toId = <T extends Network>(network: T): 0 | 1 => {
   switch (network) {

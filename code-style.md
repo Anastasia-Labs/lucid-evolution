@@ -328,21 +328,21 @@ Formatting is handled by Prettier CLI.
 ## Function Comments
 
 Comments should be the foundation of library documentation.
-Each function must have a comment that follows these rules:
+Each function must contain the following:
 
-- A concise description of the function's purpose
-- The version when the function was introduced using @since tag
-- An example of function usage with @example tag
-- The example must include the import statement
+1. A concise description of the function's purpose
+2. An example of function usage with @example tag. The example must include the import statement
+3. The version when the function was introduced using @since tag
 
 ```ts
 /**
  * Sums two numbers
- * @since 1.0.0
  *
  * @example
  * import { sum } from "my-package/Calculator";
  * sum(1, 2) // 3
+ * 
+ * @since 1.0.0
  */
 export const sum = (self: number, that: number): number => self + that;
 ```
