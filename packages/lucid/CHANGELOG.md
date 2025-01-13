@@ -1,5 +1,16 @@
 # @lucid-evolution/lucid
 
+## 0.4.19
+
+### Patch Changes
+
+- [#472](https://github.com/Anastasia-Labs/lucid-evolution/pull/472) [`0342519`](https://github.com/Anastasia-Labs/lucid-evolution/commit/0342519266ca6ff9e96c1e646f7150b78ba095a8) Thanks [@hadelive](https://github.com/hadelive)! - support esd,cjs
+
+- Updated dependencies [[`0342519`](https://github.com/Anastasia-Labs/lucid-evolution/commit/0342519266ca6ff9e96c1e646f7150b78ba095a8)]:
+  - @lucid-evolution/utils@0.1.63
+  - @lucid-evolution/provider@0.1.85
+  - @lucid-evolution/wallet@0.1.69
+
 ## 0.4.18
 
 ### Patch Changes
