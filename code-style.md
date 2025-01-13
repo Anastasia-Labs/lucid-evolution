@@ -303,6 +303,24 @@ Calculator.divide(1, 0);
 Calculator.unsafeDivide(1, 0);
 ```
 
+## Pattern Matching
+Use switch statements for pattern matching, and make sure to handle all possible cases including the default case.
+
+```ts
+export const toId = <T extends Network>(network: T): 0 | 1 => {
+  switch (network) {
+    case "Preview":
+    case "Preprod":
+    case "Custom":
+      return 0;
+    case "Mainnet":
+      return 1;
+    default:
+      throw new Error(`Exhaustive check failed: Unhandled case '${network}' encountered.`);
+  }
+};
+```
+
 ## Code Formatting
 
 Formatting is handled by Prettier CLI.

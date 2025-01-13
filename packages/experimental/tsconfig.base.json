@@ -3,9 +3,9 @@
     "rootDir": "./src",
     "strict": true,
     "moduleResolution": "node",
-    "sourceMap": true
+    "sourceMap": true,
   },
   "files": ["src/index.ts"],
-  "include": ["src/**/*"],
+  // "include": ["src/**/*"],
   "exclude": ["dist", "node_modules", "test"]
 }

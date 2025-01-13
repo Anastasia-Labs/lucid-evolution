@@ -10,6 +10,21 @@
       "types": "./dist/types/index.d.ts",
       "require": "./dist/cjs/index.js",
       "import": "./dist/esm/index.js"
+    },
+    "./Script": {
+      "types": "./dist/types/Script.d.ts",
+      "require": "./dist/cjs/Script.js",
+      "import": "./dist/esm/Script.js"
+    },
+    "./Network": {
+      "types": "./dist/types/Network.d.ts",
+      "require": "./dist/cjs/Network.js",
+      "import": "./dist/esm/Network.js"
+    },
+    "./EffectCML/AssetName": {
+        "types": "./dist/types/EffectCML/AssetName.d.ts",
+        "require": "./dist/cjs/EffectCML/AssetName.js",
+        "import": "./dist/esm/EffectCML/AssetName.js"
     }
   },
   "files": [
@@ -19,7 +34,7 @@
     "access": "public"
   },
   "scripts": {
-    "build": "rm -rf dist && tsc --project tsconfig.esm.json && tsc --project tsconfig.cjs.json",
+    "build": "rm -rf dist && tsc -p tsconfig.esm.json  && tsc -p tsconfig.cjs.json",
     "test": "vitest run",
     "lint": "tsc --noEmit",
     "clean": "rm -rf .turbo && rm -rf node_modules && rm -rf dist"

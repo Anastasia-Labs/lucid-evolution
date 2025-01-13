@@ -1,7 +1,7 @@
 import * as CML from "@anastasia-labs/cardano-multiplatform-lib-nodejs";
 import * as Network from "./Network.js";
 import * as Validator from "./Validator.js";
-import * as CMLAddress from "./CMLAddress.js";
+import * as EffectCML from "./EffectCML/index.js";
 import {
   AddressDetails,
   Certificate,
@@ -28,7 +28,7 @@ export function getAddressDetails(address: string): AddressDetails {
   // Base Address
   try {
     const parsedAddress = CML.BaseAddress.from_address(
-      CMLAddress.fromHexOrBech32(address),
+      EffectCML.Address.unsafeFromHexOrBech32(address),
     )!;
     const paymentCredential: Credential =
       parsedAddress.payment().kind() === 0
@@ -67,7 +67,7 @@ export function getAddressDetails(address: string): AddressDetails {
   // Enterprise Address
   try {
     const parsedAddress = CML.EnterpriseAddress.from_address(
-      CMLAddress.fromHexOrBech32(address),
+      EffectCML.Address.unsafeFromHexOrBech32(address),
     )!;
     const paymentCredential: Credential =
       parsedAddress.payment().kind() === 0
@@ -95,7 +95,7 @@ export function getAddressDetails(address: string): AddressDetails {
   // Pointer Address
   try {
     const parsedAddress = CML.PointerAddress.from_address(
-      CMLAddress.fromHexOrBech32(address),
+      EffectCML.Address.unsafeFromHexOrBech32(address),
     )!;
     const paymentCredential: Credential =
       parsedAddress?.payment().kind() === 0
@@ -123,7 +123,7 @@ export function getAddressDetails(address: string): AddressDetails {
   // Reward Address
   try {
     const parsedAddress = CML.RewardAddress.from_address(
-      CMLAddress.fromHexOrBech32(address),
+      EffectCML.Address.unsafeFromHexOrBech32(address),
     )!;
     const stakeCredential: Credential =
       parsedAddress.payment().kind() === 0

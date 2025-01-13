@@ -13,19 +13,16 @@ export type Network = "Mainnet" | "Preview" | "Preprod" | "Custom";
  * Network.toId("Mainnet"); // 1
  * ```
  */
-
-export const toId = (network: Network) => {
+export const toId = <T extends Network>(network: T): 0 | 1 => {
   switch (network) {
     case "Preview":
-      return 0 as const;
     case "Preprod":
-      return 0 as const;
     case "Custom":
-      return 0 as const;
+      return 0;
     case "Mainnet":
-      return 1 as const;
+      return 1;
     default:
-      throw new Error("Network not found");
+      throw new Error(`Exhaustive check failed: Unhandled case ${network}`);
   }
 };
 
@@ -48,7 +45,7 @@ export const fromId = <
   Options extends Exclude<Network, "Mainnet">,
 >(
   id: ID,
-  options?: { defaultNetwork?: Options },
+  options?: { defaultNetwork?: Options }
 ): InferReturnType<ID, Options> => {
   const { defaultNetwork = "Preview" } = options ?? {};
   if (id === 1) return "Mainnet" as InferReturnType<ID, Options>;

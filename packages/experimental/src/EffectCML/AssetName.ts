@@ -1,5 +1,5 @@
 import { Data, Effect } from "effect";
-import * as FormatError from "./FormatError.js";
+import * as FormatError from "../FormatError.js";
 import { AssetName } from "@anastasia-labs/cardano-multiplatform-lib-nodejs";
 
 export class AssetNameError extends Data.TaggedError("AssetNameError")<{

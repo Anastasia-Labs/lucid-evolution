@@ -8,7 +8,7 @@ import { decode, encode } from "cbor-x";
 // 3rd byte represents bytestring content
 // https://www.rfc-editor.org/rfc/rfc7049#section-2.1
 // Apply double bytestring enconding of type `major type 2`
-export const applyDoubleCborEncoding = (script: string) => {
+export const applyDoubleCborEncoding = (script: string): string => {
   try {
     decode(decode(Bytes.fromHex(script)));
     return script;
@@ -18,13 +18,13 @@ export const applyDoubleCborEncoding = (script: string) => {
       return Bytes.toHex(Uint8Array.from(encode(Bytes.fromHex(script).buffer)));
     } catch (error) {
       return Bytes.toHex(
-        Uint8Array.from(encode(encode(Bytes.fromHex(script).buffer))),
+        Uint8Array.from(encode(encode(Bytes.fromHex(script).buffer)))
       );
     }
   }
 };
 
-export const applySingleCborEncoding = (script: string) => {
+export const applySingleCborEncoding = (script: string): string => {
   try {
     decode(decode(Bytes.fromHex(script)));
     return Bytes.toHex(decode(Bytes.fromHex(script)));
@@ -87,10 +87,10 @@ export function datumJsonToCbor(json: DatumJson): Datum {
         l.add(convert(v));
       });
       const bigInt = CML.BigInteger.from_str(
-        json.constructor.toString(),
+        json.constructor.toString()
       ).as_u64()!;
       return CML.PlutusData.new_constr_plutus_data(
-        CML.ConstrPlutusData.new(bigInt, l),
+        CML.ConstrPlutusData.new(bigInt, l)
       );
     }
     throw new Error("Unsupported type");
