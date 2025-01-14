@@ -8,18 +8,18 @@ import { Callout } from "nextra/components";
 
 **Outputs** define the new UTxOs that your transaction will create. Each output must contain a minimum amount of ADA, which is determined by the current protocol parameters.
 
-**Fees** are calculated automatically based on your transaction's size and any execution units used (for smart contracts). Evolution library handles this calculation for you, and fees are *-for now-* always (looking at you [babel fees](https://iohk.io/en/blog/posts/2021/02/25/babel-fees/)) paid in ADA (lovelace).
+**Fees** are calculated automatically based on your transaction's size and any execution units used (for smart contracts). Evolution library handles this calculation for you, and fees are _-for now-_ always (looking at you [babel fees](https://iohk.io/en/blog/posts/2021/02/25/babel-fees/)) paid in ADA (lovelace).
 
 **Transaction Witnesses** are cryptographic signatures that prove you own the input UTxOs. These are added when you sign the transaction, either with your wallet or a private key.
 
 <Callout type="info">
-**Understanding Values**
-- `lovelace` is the smallest unit of ADA (1 ADA = 1,000,000 lovelace)
-- Values use BigInt notation (append `n` to numbers)
-- Example: `5000000n` = 5 ADA
+  **Understanding Values** - `lovelace` is the smallest unit of ADA (1 ADA =
+  1,000,000 lovelace) - Values use BigInt notation (append `n` to numbers) -
+  Example: `5000000n` = 5 ADA
 </Callout>
 
 ### Coin Selection
+
 When `.complete()` is called, Evolution library internally queries available UTxOs in your wallet and selects "optimal" UTxOs to cover certain criteria for succesful transaction building. UTxOs are selected based on these criteria:
 
 - Output amounts
@@ -31,25 +31,52 @@ To be more specific, we can take a look at a basic case where you have these UTx
 
 ```typescript
 [
-  { amount: 3_000_000n },  // 3 ADA
+  { amount: 3_000_000n }, // 3 ADA
   { amount: 10_000_000n }, // 10 ADA
-  { amount: 1_000_000n },  // 1 ADA
+  { amount: 1_000_000n }, // 1 ADA
 ]
 ```
 
 You might want to send 5 ADA from that wallet. What Evolution concretely would do in that scenario is it will select the 10 ADA UTxO and pay 5 ADA to recipient. It will also pay ~0.18 ADA for fees (depending on protocol parameters) and return ~4.82 ADA (5 - 0.18) to your wallet as "change".
 
-
 ### Fee Calculation
+
 Fees are automatically calculated based on a few things. It can be about transaction size in bytes, number of inputs and outputs or execution units (if using smart contracts, more on that [later](/documentation/deep-dives/smart-contract-interactions)).
 
 <Callout type="info">
 You can override coin selection by manually selecting UTxOs:
+
 ```typescript
 const tx = await lucid
   .newTx()
-  .collectFrom([specificUtxo])  // Manual UTxO selection
+  .collectFrom([specificUtxo]) // Manual UTxO selection
   .pay.ToAddress("addr_test...", { lovelace: 5000000n })
   .complete();
 ```
+
 </Callout>
+
+<Callout type="info">
+**Understanding Fee Calculation**
+
+- The base fee uses two protocol parameters, `minFeeA` (fee per byte of transaction size) and `minFeeB` (constant fee added to every transaction)
+- Additional fees are added for reference scripts based on their size
+- When you need precise fee handling (e.g., sending maximum amount from a wallet), you can:
+
+```typescript
+// Draft the transaction to calculate the fee
+  const draftTx = await lucid
+    .newTx()
+    .pay.ToAddress("addr_test...", { lovelace: amount })
+    .complete();
+
+  const fee = (await draftTx.complete()).toTransaction().body().fee();
+
+  // Build the final transaction using calculated fee
+  const finalTx = await lucid
+    .newTx()
+    .pay.ToAddress("addr_test...", { lovelace: amount - fee })
+    .complete();
+```
+</Callout>
+
