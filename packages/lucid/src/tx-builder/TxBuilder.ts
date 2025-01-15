@@ -34,7 +34,7 @@ import * as CompleteTxBuilder from "./internal/CompleteTxBuilder.js";
 import * as TxSignBuilder from "../tx-sign-builder/TxSignBuilder.js";
 import { TransactionError } from "../Errors.js";
 import { Either } from "effect/Either";
-import { Effect, Exit, Layer, pipe } from "effect";
+import { Effect, Layer, pipe } from "effect";
 import { handleRedeemerBuilder } from "./internal/TxUtils.js";
 import { addAssets } from "@lucid-evolution/utils";
 import { TxConfig } from "./internal/Service.js";
@@ -310,7 +310,7 @@ export function makeTxBuilder(lucidConfig: LucidConfig): TxBuilder {
           config.scripts.set(scriptKeyValue.key, scriptKeyValue.value);
         }
       });
-      const program = Read.readFrom(config, utxos);
+      const program = Read.readFrom(utxos);
       config.programs.push(program);
       return txBuilder;
     },

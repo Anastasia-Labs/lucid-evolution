@@ -4,7 +4,7 @@ import { utxoToCore } from "@lucid-evolution/utils";
 import { Redeemer, RedeemerBuilder, UTxO } from "@lucid-evolution/core-types";
 import { ERROR_MESSAGE, TxBuilderError } from "../../Errors.js";
 import * as CML from "@anastasia-labs/cardano-multiplatform-lib-nodejs";
-import { toPartial, toV1, toV2, toV3 } from "./TxUtils.js";
+import { resolveDatum, toPartial, toV1, toV2, toV3 } from "./TxUtils.js";
 import { paymentCredentialOf } from "@lucid-evolution/utils";
 import { datumOf } from "../../lucid-evolution/utils.js";
 import { TxConfig } from "./Service.js";
@@ -18,30 +18,20 @@ export const collectFromUTxO =
     Effect.gen(function* () {
       const { config } = yield* TxConfig;
       if (utxos.length === 0) yield* collectError(ERROR_MESSAGE.EMPTY_UTXO);
-      for (const { datumHash, datum, ...rest } of utxos) {
-        // This UTXO value is intended solely for internal use.
-        // When the UTXO contains a datumHash but no datum, the datum must be fetched and included.
-        // This ensures the txBuilder can later add the datum into the Plutus data transaction witness field.
-        // Additionally, when evaluating a transaction, the datum field must be removed if the datumHash has a value.
-        const resolvedDatum =
-          datumHash && !datum
-            ? yield* pipe(
-                Effect.promise(() =>
-                  config.lucidConfig.provider.getDatum(datumHash),
-                ),
-                Effect.map(Data.to),
-              )
-            : datum;
-        const utxo: UTxO = { ...rest, datumHash, datum: resolvedDatum };
-
-        const coreUtxo = utxoToCore(utxo);
-
-        // An array of unspent transaction outputs to be used as inputs when running uplc eval.
-        // To prevent same utxos being insert twice, the ones whose redeemers need to be built
+      for (const utxo of utxos) {
+        // fetch the datum when the datumHash is present
+        const resolvedDatum = yield* resolveDatum(
+          utxo.datumHash,
+          utxo.datum,
+          config.lucidConfig.provider,
+        );
+        // Skip adding UTxO to collectedInputs when building redeemers to prevent duplicate inputs
+        // Store inputs for later use in the txBuilder
         if (collectInputs) config.collectedInputs.push(utxo);
         //TODO: Add config.collectedAssets
-        const input =
-          CML.SingleInputBuilder.from_transaction_unspent_output(coreUtxo);
+        const input = CML.SingleInputBuilder.from_transaction_unspent_output(
+          utxoToCore({ ...utxo, datum: resolvedDatum }),
+        );
         const credential = paymentCredentialOf(utxo.address);
 
         if (credential.type == "Script") {

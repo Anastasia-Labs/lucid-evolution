@@ -39,6 +39,7 @@ import {
 import { SLOT_CONFIG_NETWORK } from "@lucid-evolution/plutus";
 import { collectFromUTxO } from "./Collect.js";
 import { TxConfig } from "./Service.js";
+import { isError } from "effect/Predicate";
 
 export type CompleteOptions = {
   /**
@@ -655,9 +656,13 @@ const evalTransaction = (
         ),
       catch: (error) =>
         completeTxError(
-          JSON.stringify(error)
-            .replace(/\\n\s*/g, " ")
-            .trim(),
+          `${
+            isError(error)
+              ? error
+              : JSON.stringify(error)
+                  .replace(/\\n\s*/g, " ")
+                  .trim()
+          }`,
         ),
     });
     return uplc_eval;
@@ -694,16 +699,16 @@ const calculateMinRefScriptFee = (
     let fee = 0n;
     let totalScriptSize = 0;
 
-    config.readInputs.forEach((utxo) => {
+    for (const utxo of config.readInputs) {
       if (utxo.scriptRef) {
         totalScriptSize = totalScriptSize + utxo.scriptRef.script.length / 2;
       }
-    });
-    config.collectedInputs.forEach((utxo) => {
+    }
+    for (const utxo of config.collectedInputs) {
       if (utxo.scriptRef) {
         totalScriptSize = totalScriptSize + utxo.scriptRef.script.length / 2;
       }
-    });
+    }
     if (totalScriptSize === 0) return fee;
 
     const fees = [15.0, 18.0, 21.6, 25.92, 31.1, 37.32, 44.79, 53.75];
