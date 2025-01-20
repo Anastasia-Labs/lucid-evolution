@@ -29,20 +29,14 @@ async function component() {
 
   const rewardAddress = await lucid.wallet().rewardAddress();
   console.log("rewardAddress :>> ", rewardAddress);
-  const signBuilder = await lucid
-    .newTx()
-    .registerStake(rewardAddress)
-    .setMinFee(300000n)
-    .complete();
-  const signed = await signBuilder.sign.withWallet().complete();
-  const txHash = await signed.submit();
-  console.log("txHash :>> ", txHash);
-  console.log(`🚀 Transaction submitted: ${txHash}`);
-  console.log(`Confirming Transaction...`);
-  await lucid.awaitTx(txHash, 40_000);
 
   const vote = await lucid
     .newTx()
+    .registerStake(rewardAddress)
+    .delegate.ToPool(
+      rewardAddress,
+      "pool1nmfr5j5rnqndprtazre802glpc3h865sy50mxdny65kfgf3e5eh"
+    )
     .delegate.VoteToDRep(rewardAddress, {
       __typename: "AlwaysAbstain",
     })
@@ -53,6 +47,17 @@ async function component() {
   console.log(`🚀 Transaction submitted: ${voteTxHash}`);
   console.log(`Confirming Transaction...`);
   await lucid.awaitTx(voteTxHash, 40_000);
+
+  const signBuilder = await lucid
+    .newTx()
+    .deRegisterStake(rewardAddress)
+    .setMinFee(300000n)
+    .complete();
+  const signed = await signBuilder.sign.withWallet().complete();
+  const txHash = await signed.submit();
+  console.log(`🚀 Transaction submitted: ${txHash}`);
+  console.log(`Confirming Transaction...`);
+  await lucid.awaitTx(txHash, 40_000);
   // Lodash, now imported by this script
   element.innerHTML = _.join(["Hello", "webpack"], " ");
 
