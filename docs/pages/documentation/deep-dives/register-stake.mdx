@@ -33,7 +33,7 @@ You can combine both registration and delegation into a single transaction
 ```typescript
 const tx = await lucid
   .newTx()
-  .registerAndDelegateToPool(rewardAddress, "poolabc...")
+  .registerAndDelegate.ToPool(rewardAddress, "poolabc...")
   .complete();
 ```
 </Callout>
@@ -67,7 +67,7 @@ const tx = await lucid
 ```
 ---
 <Callout>
-You can query the reward address (`stake_...`) associated with your stake key like this
+You can query the reward address (`stake_...`) associated with your stake key like this:
 
 ```typescript
 const rewardAddress = await lucid.wallet().rewardAddress();

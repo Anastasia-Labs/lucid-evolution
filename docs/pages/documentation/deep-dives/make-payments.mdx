@@ -37,7 +37,8 @@ const txHash = await signedTx.submit();
 ```
 
 <Callout type="info">
-Each `pay.ToAddress` call creates a new UTxO, even for the same address. Lucid Evolution considers the order of outputs.
+  Each `pay.ToAddress` call creates a new UTxO, even for the same address. Lucid
+  Evolution considers the order of outputs.
 </Callout>
 
 ---
@@ -60,6 +61,7 @@ Lucid Evolution automatically adds the minimum ADA requirement for payments in C
     ```
 
 ---
+
 ### Attach Metadata
 
 Attach metadata to your ADA payments:
@@ -89,25 +91,25 @@ The datum can be attached in different ways:
 // As hash - datum is attached to the witness set, with its hash stored in the UTxO
 const tx = await lucid
   .newTx()
-      .pay.ToAddressWithData(
-        "addr_test...",
-        { kind: "hash", value: Data.to("31313131") },
-        { lovelace: 5000000n }
-      )
-      .complete();
+  .pay.ToAddressWithData(
+    "addr_test...",
+    { kind: "hash", value: Data.to("31313131") },
+    { lovelace: 5000000n }
+  )
+  .complete();
 
 // As inline - datum stored directly in UTxO
 const tx = await lucid
   .newTx()
-      .pay.ToAddressWithData(
-        "addr_test...",
-        { kind: "inline", value: Data.to("31313131") },
-        { lovelace: 5000000n }
-      )
-      .complete();
+  .pay.ToAddressWithData(
+    "addr_test...",
+    { kind: "inline", value: Data.to("31313131") },
+    { lovelace: 5000000n }
+  )
+  .complete();
 ```
 
---- 
+---
 
 **With Script Reference**
 
@@ -129,7 +131,7 @@ Later, transactions can reference the deployed script instead of including it, f
 
 ```typescript
 const allUTxOs = await lucid.utxosAt(scriptAddress);
-const refScriptUTxO = allUTxOs.filter(utxo => utxo.scriptRef); // Find UTxO with reference script depending on your use case
+const refScriptUTxO = allUTxOs.filter((utxo) => utxo.scriptRef); // Find UTxO with reference script depending on your use case
 
 const useRefScriptTx = await lucid
   .newTx()
@@ -139,7 +141,9 @@ const useRefScriptTx = await lucid
 ```
 
 <Callout type="info">
-Reference scripts are stored on-chain in a UTxO and can be "referenced" by other transactions, reducing transaction sizes and costs. This way the script only needs to be stored once and can be reused by multiple transactions.
+  Reference scripts are stored on-chain in a UTxO and can be "referenced" by
+  other transactions, reducing transaction sizes and costs. This way the script
+  only needs to be stored once and can be reused by multiple transactions.
 </Callout>
 
 ---
@@ -161,3 +165,21 @@ const tx = await lucid
 const signedTx = await tx.sign.withWallet().complete();
 const txHash = await signedTx.submit();
 ```
+
+---
+
+<Callout type="info">
+**Minimum ADA Calculation**
+
+Every UTxO on Cardano must hold a minimum amount of ADA (lovelace), which increases with UTxO size (in bytes). This is particularly relevant for native tokens, as their metadata (e.g., names, quantities, policies) adds to the UTxO size. A utility function for this is:
+
+```typescript
+const minLovelace = calculateMinLovelaceFromUTxO(
+  coinsPerUtxoByte, // from protocol parameters
+  utxo
+);
+```
+
+The minimum ADA requirement acts as “rent” for blockchain storage, ensuring UTxOs cover their storage costs and preventing spam from tiny UTxOs (dust), which could bloat the blockchain state and degrade performance. It also guarantees sufficient ADA to cover future transaction fees for moving tokens.
+
+</Callout>
