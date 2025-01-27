@@ -9,6 +9,8 @@ import {
   RedeemerBuilder,
   RewardAddress,
   Credential,
+  UTxO,
+  Provider,
 } from "@lucid-evolution/core-types";
 import { ERROR_MESSAGE, TxBuilderError } from "../../Errors.js";
 import { LucidConfig } from "../../lucid-evolution/LucidEvolution.js";
@@ -16,6 +18,7 @@ import { TxBuilderConfig } from "../TxBuilder.js";
 
 import * as TxBuilder from "../TxBuilder.js";
 import { TxConfig } from "./Service.js";
+import { Data } from "@lucid-evolution/plutus";
 
 export const txBuilderError = (cause: unknown) =>
   new TxBuilderError({ cause: `{ TxBuilderError : ${cause} }` });
@@ -201,4 +204,21 @@ export const validateAndGetStakeCredential = (
     );
 
     return stakeCredential;
+  });
+
+export const resolveDatum = (
+  datumHash: UTxO["datumHash"],
+  datum: UTxO["datum"],
+  provider: Provider,
+) =>
+  Effect.gen(function* () {
+    // Only fetch the datum if the datumHash is present and the datum is not present.
+    if (!datumHash || datum) return datum;
+    return yield* pipe(
+      Effect.tryPromise({
+        try: () => provider.getDatum(datumHash),
+        catch: txBuilderError,
+      }),
+      Effect.map(Data.to),
+    );
   });

@@ -1,18 +1,17 @@
 {
-  "hello-world":"Hello World",
-  "design-patterns":"Design Patterns",
-  "emulated-testing-framework":"Testing Framework via Emulator",
-  "---": {
-    "type": "separator"
-  },
   "smart-handles-offchain": {
-    "title": "Smart Handles Offchain  ⤴",
+    "title": "Smart Handles ⤴",
     "href": "https://github.com/Anastasia-Labs/smart-handles-offchain",
     "newWindow": true
   },
   "mint-chocolate-chip": {
-    "title": "Mint Chocolate Chip  ⤴",
+    "title": "Mint Chocolate Chip ⤴",
     "href": "https://github.com/MynthAI/mint-chocolate-chip",
+    "newWindow": true
+  },
+  "payment-subscription": {
+    "title": "Payment Subscription ⤴",
+    "href": "https://github.com/Anastasia-Labs/payment-subscription-offchain",
     "newWindow": true
   }
 }

@@ -1,5 +1,13 @@
 # @lucid-evolution/lucid
 
+## 0.4.20
+
+### Patch Changes
+
+- [#475](https://github.com/Anastasia-Labs/lucid-evolution/pull/475) [`377add4`](https://github.com/Anastasia-Labs/lucid-evolution/commit/377add4ac84ec8e278485426e92e9dabe1826593) Thanks [@solidsnakedev](https://github.com/solidsnakedev)! - Previously, readFrom directly used TxBuilderConfig as input, which contradicted the builder design, where all TxBuilder modules are effect types and depend on TxConfig as Context. This mismatch led to conflicts with the compose API.
+
+  To resolve this, TxConfig is now passed via dependency injection, aligning readFrom with the effect-driven architecture of the TxBuilder modules.
+
 ## 0.4.19
 
 ### Patch Changes

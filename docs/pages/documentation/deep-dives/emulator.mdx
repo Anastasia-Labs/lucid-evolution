@@ -50,8 +50,8 @@ emulator.log();
 </Callout>
 </Steps>
 
-### Example - Simulated transaction
-
+<Callout type="info">
+  Example - Simulated transaction
 ```typescript
 const tx = await lucid
   .newTx()
@@ -63,3 +63,23 @@ const txHash = await signedTx.submit();
 // Simulate the passage of time and block confirmations in the emulator
 await emulator.awaitBlock(10);
 ```
+</Callout>
+
+### Protocol Parameters
+
+You can use the emulator with custom protocol parameters to bypass these limits during development.
+
+```typescript
+const lucid = Lucid("<Provider>", "<Network>", {
+  presetProtocolParameters: {
+    ...PROTOCOL_PARAMETERS_DEFAULT,
+    minFeeA: 0,           // per-byte fee
+    minFeeB: 0,           // constant fee
+    priceMem: 0,          
+    priceStep: 0,        
+    coinsPerUtxoByte: 0n, // min-ADA requirement
+  },
+});
+```
+
+This configuration disables fees and minimum ADA requirements, allowing you to test and debug your transaction logic without being constrained by network limits. Remember to test with actual protocol parameters before deploying to mainnet.
