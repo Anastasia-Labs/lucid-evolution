@@ -53,7 +53,6 @@ const tx = await lucid
   .pay.ToAddress("addr_test...", { lovelace: 5000000n })
   .complete();
 ```
-
 </Callout>
 
 <Callout type="info">
@@ -80,3 +79,36 @@ const tx = await lucid
 ```
 </Callout>
 
+### CML Integration
+
+CML (Cardano Multiplatform Library) provides low-level primitives for Cardano blockchain interactions, and Lucid Evolution heavily leverages CML for various core functionality.
+
+- **Fee Estimation**: Evolution uses CML for base fee calculation, while handling specific cases like script execution fees (via local UPLC or providers) and reference script fees internally.
+
+- **Key Management**: For operations like deriving addresses from private keys, Evolution provides high-level APIs (like `makeWalletFromPrivateKey`), but you can also use CML directly for more granular control:
+
+```typescript
+const pubKeyHash = CML.PrivateKey.from_bech32(privateKey)
+  .to_public()
+  .hash()
+  .to_hex();
+```
+
+<Callout type="info">
+  While Evolution abstracts most CML complexity, understanding that CML powers
+  the core operations can help when you need fine-grained control or are
+  debugging transaction issues.
+</Callout>
+
+### Hashing Functions
+
+Lucid Evolution doesn't expose hash functions directly. Instead, it recommends using the [noble-hashes](https://github.com/paulmillr/noble-hashes) library for cryptographic hashing needs, which is audited and secure.
+
+- Compatible with both Node.js and browser environments
+- Provides implementations of common hash functions including `blake2b` which is compatible with Aiken's on-chain hash functions
+
+<Callout type="info">
+  When working with smart contracts, ensure you're using the same hash function
+  and parameters as your on-chain code. For example, if using Aiken's
+  `blake2b_224`, configure noble-hashes accordingly.
+</Callout>
