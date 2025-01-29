@@ -4,17 +4,47 @@ import {
   PoolId,
   Redeemer,
   RewardAddress,
-  toCMLDRep,
+  Credential,
+  AlwaysAbstain,
+  AlwaysNoConfidence,
 } from "@lucid-evolution/core-types";
-import * as TxBuilder from "../TxBuilder.js";
 import * as CML from "@anastasia-labs/cardano-multiplatform-lib-nodejs";
-import { ERROR_MESSAGE, TxBuilderError } from "../../Errors.js";
+import { TxBuilderError } from "../../Errors.js";
 import { Effect } from "effect";
 import {
   processCertificate,
   validateAndGetStakeCredential,
 } from "./TxUtils.js";
 import { TxConfig } from "./Service.js";
+
+export const isDRepCredential = (deleg: DRep): deleg is Credential =>
+  !("__typename" in deleg);
+
+export const isDRepAlwaysAbstain = (deleg: DRep): deleg is AlwaysAbstain =>
+  !isDRepCredential(deleg) && deleg.__typename === "AlwaysAbstain";
+
+export const isDRepAlwaysNoConfidence = (
+  deleg: DRep,
+): deleg is AlwaysNoConfidence =>
+  !isDRepCredential(deleg) && deleg.__typename === "AlwaysNoConfidence";
+
+export const toCMLDRep = (drep: DRep): CML.DRep => {
+  if (isDRepAlwaysAbstain(drep)) {
+    return CML.DRep.new_always_abstain();
+  } else if (isDRepAlwaysNoConfidence(drep)) {
+    return CML.DRep.new_always_no_confidence();
+  } else if (isDRepCredential(drep)) {
+    switch (drep.type) {
+      case "Key":
+        return CML.DRep.new_key(CML.Ed25519KeyHash.from_hex(drep.hash));
+      case "Script":
+        return CML.DRep.new_script(CML.ScriptHash.from_hex(drep.hash));
+      default:
+        throw new Error(`Unsupported DRep type: ${drep.type}`);
+    }
+  }
+  throw new Error(`Unexpected DRep type: ${drep}`);
+};
 
 export const governanceError = (cause: unknown) =>
   new TxBuilderError({ cause: `{ Governance: ${cause} }` });
@@ -30,7 +60,7 @@ export const delegateVoteToDRep = (
       rewardAddress,
       config,
     );
-    const cmlDRep = toCMLDRep(drep);
+    const cmlDRep: CML.DRep = toCMLDRep(drep);
     const buildCert = (credential: CML.Credential) =>
       CML.SingleCertificateBuilder.new(
         CML.Certificate.new_vote_deleg_cert(credential, cmlDRep),
