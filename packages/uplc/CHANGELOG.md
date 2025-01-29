@@ -1,5 +1,11 @@
 # @lucid-evolution/uplc
 
+## 0.2.19
+
+### Patch Changes
+
+- [#483](https://github.com/Anastasia-Labs/lucid-evolution/pull/483) [`09a41ae`](https://github.com/Anastasia-Labs/lucid-evolution/commit/09a41ae8b7030dd3f4e04d6721e1d9fa77e02b12) Thanks [@MicroProofs](https://github.com/MicroProofs)! - bump uplc version to 1.1.10
+
 ## 0.2.18
 
 ### Patch Changes

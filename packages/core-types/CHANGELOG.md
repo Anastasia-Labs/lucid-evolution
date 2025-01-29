@@ -1,5 +1,11 @@
 # @lucid-evolution/core-types
 
+## 0.1.22
+
+### Patch Changes
+
+- [#485](https://github.com/Anastasia-Labs/lucid-evolution/pull/485) [`2335ef1`](https://github.com/Anastasia-Labs/lucid-evolution/commit/2335ef101f8a5d2a92324c7fd8536d5d8927531e) Thanks [@solidsnakedev](https://github.com/solidsnakedev)! - attempt to fix drep issue
+
 ## 0.1.21
 
 ### Patch Changes
