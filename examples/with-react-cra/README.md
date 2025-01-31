@@ -2,10 +2,34 @@
 
 A minimal `Create React App` template for Cardano dApps using Lucid Evolution.
 
+## Quick Customization
+
+This template is designed to be easily customizable. All app-wide settings are in a single configuration file:
+
+```typescript
+// src/config/app.config.ts
+export const appConfig = {
+  title: 'Your Project Name',        // Change the app title
+  logo: {
+    path: '/your-logo.png',         // Add your logo to public/ folder and update path
+    alt: 'Your Logo Alt Text'
+  },
+  socials: {
+    discord: 'https://discord.gg/your-server',  // Your Discord invite
+    github: 'https://github.com/your-org'       // Your GitHub org/repo
+  }
+}
+```
+
+Modify this file to customize the app with your own:
+- Project name/title
+- Logo (place your logo in the `public/` folder)
+- Social links (Discord & GitHub)
+
 ## Prerequisites
 
 1. Get Blockfrost API key from [blockfrost.io](https://blockfrost.io)
-2. Create a `.env` file in the project root (`.env.example` file provided):
+2. Create a `.env` file in the project root (`.env.example` file provided for you as a reference):
 
 ```bash
 REACT_APP_BLOCKFROST_API_KEY=your_blockfrost_api_key_here
@@ -25,13 +49,15 @@ cd examples/with-react-cra
 yarn install
 ```
 
-3. Start the development server:
+3. Customize the app by editing `src/config/app.config.ts`
+
+4. Start the development server:
 
 ```bash
 yarn start
 ```
 
-4. Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+5. Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
 
 ## Project Structure
 
@@ -41,6 +67,7 @@ src/
 │   ├── ConnectButton.tsx   # Wallet connection button
 │   └── WalletConnect.tsx   # Wallet connection modal
 ├── config/             # Configuration files
+│   ├── app.config.ts   # App-wide settings (title, logo, socials)
 │   └── theme.ts        # UI theme configuration
 ├── hooks/              # Custom React hooks
 │   └── useWallet.ts    # Wallet and Lucid initialization hook
