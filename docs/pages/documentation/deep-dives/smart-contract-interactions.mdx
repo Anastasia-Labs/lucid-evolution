@@ -209,7 +209,17 @@ const tx = await lucid
 
 ### Apply parameters
 
-Some validators are parameterized, you can apply parameters dynamically.
+Some validators are parameterized, you can apply parameters dynamically. The library handles CBOR encoding automatically to ensure correct script compilation.
+
+<Callout type="info">
+**Understanding CBOR Encoding**
+- The `applyParamsToScript` function internally handles CBOR encoding
+- You don't need to manually apply `applyDoubleCborEncoding` when using `applyParamsToScript`
+- Evolution library provides a utility function to check CBOR encoding levels:
+```typescript
+const encodingLevel = CBOREncodingLevel(script); // Returns "double" | "single"
+```
+</Callout>
 
 **Single argument**
 
@@ -223,7 +233,7 @@ validator minting_policy(first_param: Int) { .. }
 const mintingPolicy = {
   type: "PlutusV3",
   script: applyParamsToScript(
-    applyDoubleCborEncoding("5907945907910100..."),
+    "5907945907910100...", // CBOR hex of the compiled script
     [10n] // Parameters
   ),
 };
@@ -246,7 +256,7 @@ const yes = new Constr(1, []);
 const spendingValidator = {
   type: "PlutusV3",
   script: applyParamsToScript(
-    applyDoubleCborEncoding("5907945907910101..."),
+    "5907945907910101...", // CBOR hex of the compiled script
     [pkh, yes] // Parameters
   ),
 };
@@ -273,7 +283,7 @@ const oRef = new Constr(0, [String(utxo.txHash), BigInt(utxo.outputIndex)]);
 const yourValidator = {
   type: "PlutusV3",
   script: applyParamsToScript(
-    applyDoubleCborEncoding("5907945907910102..."),
+    "5907945907910102...", // CBOR
     [oRef] // Parameters
   ),
 };
@@ -316,12 +326,13 @@ const oRef = new Constr(0, [txID, txIdx]);
 const yourValidator = {
   type: "PlutusV3",
   script: applyParamsToScript(
-    applyDoubleCborEncoding("5907945907910103..."),
+    "5907945907910103...", 
     [oRef] // Parameters
   ),
 };
 ```
 </Callout>
+
 ---
 
 ### Plutus script purposes
@@ -359,7 +370,7 @@ const tx = await lucid
 
 ### Read UTxOs and plutus scripts
 
-Lucid Evolution allows you to conveniently read/reference UTxOs. If a Plutus script is already stored in the UTxO, there's no need to attach the same script explicitly in the transaction, resulting in cost savings.
+Lucid Evolution allows you to conveniently read/reference UTxOs. If a Plutus script is already stored in the UTxO, there's no need to attach the same script explicitly in the transaction (reference script), resulting in cost savings.
 
 ```typescript
 const tx = await lucid
