@@ -1,19 +1,25 @@
 import ConnectButton from "./components/ConnectButton";
 import WalletConnect from "./components/WalletConnect";
+import SendAdaButton from "./components/SendAdaButton";
 import { theme } from "./config/theme";
 import "./styles/globals.css";
 import { useEffect, useState, useRef, useCallback } from "react";
 import { useWallet } from "./hooks/useWallet";
+import { Lucid } from "@lucid-evolution/lucid";
 
 function App() {
   const { isConnected, usedAddresses, initLucid } = useWallet();
   const hasLoggedAddress = useRef(false);
   const [walletAddress, setWalletAddress] = useState<string | null>(null);
+  const [lucidInstance, setLucidInstance] = useState<Awaited<
+    ReturnType<typeof Lucid>
+  > | null>(null);
 
   const initialize = useCallback(async () => {
     try {
-      const lucidInstance = await initLucid();
-      if (lucidInstance) {
+      const instance = await initLucid();
+      if (instance) {
+        setLucidInstance(instance);
         if (usedAddresses?.[0] && usedAddresses[0] !== walletAddress) {
           setWalletAddress(usedAddresses[0]);
           if (!hasLoggedAddress.current) {
@@ -32,6 +38,7 @@ function App() {
       initialize();
     } else {
       setWalletAddress(null);
+      setLucidInstance(null);
       hasLoggedAddress.current = false;
     }
   }, [isConnected, initialize]);
@@ -101,9 +108,72 @@ function App() {
       <main style={{ padding: "2rem", maxWidth: "1200px", margin: "0 auto" }}>
         <WalletConnect />
         {isConnected && walletAddress && (
-          <div style={{ marginTop: "2rem", color: theme.colors.text.primary }}>
-            <h2>Connected Wallet Info:</h2>
-            <p>Address: {walletAddress}</p>
+          <div style={{ marginTop: "2rem" }}>
+            <div
+              style={{
+                background: theme.colors.background.secondary,
+                borderRadius: "12px",
+                border: `1px solid ${theme.colors.border.secondary}`,
+                padding: "1.5rem",
+                marginBottom: "2rem",
+              }}
+            >
+              <h2
+                style={{
+                  color: theme.colors.text.primary,
+                  marginBottom: "1rem",
+                  fontSize: "1.1rem",
+                  fontWeight: 500,
+                }}
+              >
+                Connected Wallet
+              </h2>
+              <div
+                style={{
+                  display: "flex",
+                  alignItems: "center",
+                  gap: "0.5rem",
+                  background: theme.colors.background.card,
+                  padding: "0.75rem 1rem",
+                  borderRadius: "8px",
+                  border: `1px solid ${theme.colors.border.primary}`,
+                  maxWidth: "100%",
+                  overflow: "hidden",
+                }}
+              >
+                <span
+                  style={{
+                    color: theme.colors.text.primary,
+                    opacity: 0.7,
+                    fontSize: "0.9rem",
+                  }}
+                >
+                  {walletAddress.slice(0, 20)}...{walletAddress.slice(-20)}
+                </span>
+              </div>
+            </div>
+
+            {/* Transaction Example Section */}
+            <div
+              style={{
+                padding: "1.5rem",
+                background: theme.colors.background.secondary,
+                borderRadius: "12px",
+                border: `1px solid ${theme.colors.border.secondary}`,
+              }}
+            >
+              <h3
+                style={{
+                  color: theme.colors.text.primary,
+                  marginBottom: "1.5rem",
+                  fontSize: "1.1rem",
+                  fontWeight: 500,
+                }}
+              >
+                Dummy Button - Create a Sample Transaction via Click
+              </h3>
+              <SendAdaButton lucidInstance={lucidInstance} />
+            </div>
           </div>
         )}
       </main>
