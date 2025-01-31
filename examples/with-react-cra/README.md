@@ -9,19 +9,20 @@ This template is designed to be easily customizable. All app-wide settings are i
 ```typescript
 // src/config/app.config.ts
 export const appConfig = {
-  title: 'Your Project Name',        // Change the app title
+  title: "Your Project Name", // Change the app title
   logo: {
-    path: '/your-logo.png',         // Add your logo to public/ folder and update path
-    alt: 'Your Logo Alt Text'
+    path: "/your-logo.png", // Add your logo to public/ folder and update path
+    alt: "Your Logo Alt Text",
   },
   socials: {
-    discord: 'https://discord.gg/your-server',  // Your Discord invite
-    github: 'https://github.com/your-org'       // Your GitHub org/repo
-  }
-}
+    discord: "https://discord.gg/your-server", // Your Discord invite
+    github: "https://github.com/your-org", // Your GitHub org/repo
+  },
+};
 ```
 
 Modify this file to customize the app with your own:
+
 - Project name/title
 - Logo (place your logo in the `public/` folder)
 - Social links (Discord & GitHub)
@@ -91,10 +92,12 @@ Currently configured for Preprod testnet. To use on other networks, modify the `
 The template includes a dummy transaction feature that demonstrates secure transaction handling using a secure approach:
 
 1. Transaction Building (Client-Side):
+
    - Creates an unsigned transaction with specified parameters (amount, addresses)
    - Converts the transaction to CBOR (Concise Binary Object Representation) format
 
 2. Wallet Interaction:
+
    - The unsigned CBOR transaction is passed to the wallet
    - Wallet signs the transaction using CIP-30 standards
    - Private keys never leave the wallet's secure environment
