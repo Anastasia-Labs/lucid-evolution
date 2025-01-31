@@ -1,0 +1,31 @@
+{
+  "name": "with-nextjs",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "NODE_ENV=development && next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "next lint"
+  },
+  "dependencies": {
+    "@cardano-foundation/cardano-connect-with-wallet": "^0.2.8",
+    "@cardano-foundation/cardano-connect-with-wallet-core": "^0.2.4",
+    "@lucid-evolution/lucid": "0.4.4" ,
+    "@types/node": "20.11.16",
+    "@types/react": "18.2.51",
+    "@types/react-dom": "18.2.18",
+    "autoprefixer": "10.4.17",
+    "eslint": "8.56.0",
+    "next": "^14.1.0",
+    "postcss": "8.4.33",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
+    "tailwindcss": "3.4.1",
+    "typescript": "5.3.3",
+    "daisyui": "^4.6.1"
+  },
+  "devDependencies": {
+    "eslint-config-next": "^14.1.0"
+  }
+}
