@@ -2,31 +2,6 @@
 
 A minimal `Create React App` template for Cardano dApps using Lucid Evolution.
 
-## Quick Customization
-
-This template is designed to be easily customizable. All app-wide settings are in a single configuration file:
-
-```typescript
-// src/config/app.config.ts
-export const appConfig = {
-  title: "Your Project Name", // Change the app title
-  logo: {
-    path: "/your-logo.png", // Add your logo to public/ folder and update path
-    alt: "Your Logo Alt Text",
-  },
-  socials: {
-    discord: "https://discord.gg/your-server", // Your Discord invite
-    github: "https://github.com/your-org", // Your GitHub org/repo
-  },
-};
-```
-
-Modify this file to customize the app with your own:
-
-- Project name/title
-- Logo (place your logo in the `public/` folder)
-- Social links (Discord & GitHub)
-
 ## Prerequisites
 
 1. Get Blockfrost API key from [blockfrost.io](https://blockfrost.io)
@@ -35,6 +10,24 @@ Modify this file to customize the app with your own:
 ```bash
 REACT_APP_BLOCKFROST_API_KEY=your_blockfrost_api_key_here
 ```
+
+## User Interface
+
+### Initial Connect Wallet Screen
+
+![Connect Wallet](./public/readme/connect-wallet.png)
+
+### Wallet Selection Modal
+
+![Wallet Modal](./public/readme/wallet-modal.png)
+
+### Connected Wallet View
+
+![Connected Wallet](./public/readme/connected-wallet.png)
+
+### Console - Success log
+
+![Console - Success log](./public/readme/success-log.png)
 
 ## Quick Start
 
@@ -59,6 +52,25 @@ yarn start
 ```
 
 5. Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+
+## Quick Customization
+
+This template is designed to be easily customizable. All app-wide settings are in a single configuration file, modify it to your needs:
+
+```typescript
+// src/config/app.config.ts
+export const appConfig = {
+  title: "Your Project Name", // Change the app title
+  logo: {
+    path: "/your-logo.png", // Add your logo to public/ folder and update path
+    alt: "Your Logo Alt Text",
+  },
+  socials: {
+    discord: "https://discord.gg/your-server", // Your Discord invite
+    github: "https://github.com/your-org", // Your GitHub org/repo
+  },
+};
+```
 
 ## Project Structure
 
@@ -89,41 +101,22 @@ Currently configured for Preprod testnet. To use on other networks, modify the `
 
 ## Transaction Example & Security
 
-The template includes a dummy transaction feature that demonstrates secure transaction handling using a secure approach:
+Includes a dummy button that demonstrates transaction handling using a secure approach:
 
-1. Transaction Building (Client-Side):
+- Transaction Building (Client-Side):
 
    - Creates an unsigned transaction with specified parameters (amount, addresses)
    - Converts the transaction to CBOR (Concise Binary Object Representation) format
 
-2. Wallet Interaction:
+- Wallet Interaction:
 
    - The unsigned CBOR transaction is passed to the wallet
    - Wallet signs the transaction using CIP-30 standards
    - Private keys never leave the wallet's secure environment
    - Signing is done completely client-side in the user's browser
 
-3. Submission:
+- Submission:
    - The signed transaction is submitted to the Cardano network
    - Only public information (addresses, amounts) and the signed CBOR are used
    - No sensitive data is ever exposed or transmitted
 
-The example demonstrates best practices for building secure Cardano dApps where all sensitive operations are delegated to the user's wallet while maintaining a simple, frontend-only architecture.
-
-## Demo Screenshots
-
-### Initial Connect Wallet Screen
-
-![Connect Wallet](./public/readme/connect-wallet.png)
-
-### Wallet Selection Modal
-
-![Wallet Modal](./public/readme/wallet-modal.png)
-
-### Connected Wallet View
-
-![Connected Wallet](./public/readme/connected-wallet.png)
-
-### Console - Success log
-
-![Console - Success log](./public/readme/success-log.png)
