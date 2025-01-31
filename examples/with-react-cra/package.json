@@ -1,0 +1,46 @@
+{
+  "name": "lucid-evolution-cra-example",
+  "version": "0.1.0",
+  "private": true,
+  "dependencies": {
+    "@cardano-foundation/cardano-connect-with-wallet": "0.2.9",
+    "@cardano-foundation/cardano-connect-with-wallet-core": "0.2.5",
+    "@craco/craco": "^7.1.0",
+    "@harmoniclabs/bytestring": "^1.0.0",
+    "@harmoniclabs/cbor": "^1.6.0",
+    "@harmoniclabs/pair": "^1.0.0",
+    "@lucid-evolution/lucid": "^0.4.21",
+    "@types/node": "^16.7.13",
+    "@types/react": "^18.0.0",
+    "@types/react-dom": "^18.0.0",
+    "buffer": "^6.0.3",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
+    "react-scripts": "5.0.1",
+    "typescript": "^4.4.2"
+  },
+  "scripts": {
+    "start": "craco start",
+    "build": "craco build"
+  },
+  "eslintConfig": {
+    "extends": [
+      "react-app"
+    ]
+  },
+  "browserslist": {
+    "production": [
+      ">0.2%",
+      "not dead",
+      "not op_mini all"
+    ],
+    "development": [
+      "last 1 chrome version",
+      "last 1 firefox version",
+      "last 1 safari version"
+    ]
+  },
+  "devDependencies": {
+    "@babel/plugin-proposal-private-property-in-object": "^7.21.11"
+  }
+}
