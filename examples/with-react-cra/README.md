@@ -59,6 +59,27 @@ src/
 
 Currently configured for Preprod testnet. To use on other networks, modify the `NetworkType` in `useWallet.ts` and update the Blockfrost endpoint accordingly.
 
+## Transaction Example & Security
+
+The template includes a dummy transaction feature that demonstrates secure transaction handling using a secure approach:
+
+1. Transaction Building (Client-Side):
+   - Creates an unsigned transaction with specified parameters (amount, addresses)
+   - Converts the transaction to CBOR (Concise Binary Object Representation) format
+
+2. Wallet Interaction:
+   - The unsigned CBOR transaction is passed to the wallet
+   - Wallet signs the transaction using CIP-30 standards
+   - Private keys never leave the wallet's secure environment
+   - Signing is done completely client-side in the user's browser
+
+3. Submission:
+   - The signed transaction is submitted to the Cardano network
+   - Only public information (addresses, amounts) and the signed CBOR are used
+   - No sensitive data is ever exposed or transmitted
+
+The example demonstrates best practices for building secure Cardano dApps where all sensitive operations are delegated to the user's wallet while maintaining a simple, frontend-only architecture.
+
 ## Demo Screenshots
 
 ### Initial Connect Wallet Screen
