@@ -1,0 +1,16 @@
+{
+  "short_name": "Lucid Evolution",
+  "name": "Lucid Evolution Example",
+  "icons": [
+    {
+      "src": "lucid-evolution-al-red.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any"
+    }
+  ],
+  "start_url": ".",
+  "display": "standalone",
+  "theme_color": "#000000",
+  "background_color": "#000000"
+}

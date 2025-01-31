@@ -1,0 +1,45 @@
+@import url("https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600&display=swap");
+
+body {
+  margin: 0;
+  padding: 0;
+  background: #111827;
+  font-family: "JetBrains Mono", monospace;
+}
+
+dialog::backdrop {
+  background: rgba(0, 0, 0, 0.5);
+  backdrop-filter: blur(4px);
+}
+
+.wallet-button-wrapper {
+  opacity: 0.9;
+  transition: opacity 0.2s ease;
+}
+
+.wallet-button-wrapper:hover {
+  opacity: 1;
+}
+
+button:hover {
+  color: #ef4444 !important;
+}
+
+* {
+  font-family: "JetBrains Mono", monospace;
+  letter-spacing: -0.025em;
+}
+
+/* Socials */
+a[href*="discord.gg"],
+a[href*="github.com"] {
+  opacity: 0.8;
+  transition: all 0.2s ease;
+}
+
+a[href*="discord.gg"]:hover,
+a[href*="github.com"]:hover {
+  opacity: 1;
+  color: #ef4444 !important;
+  border-color: #ef4444 !important;
+}
