@@ -14,7 +14,7 @@ import {
   PROTOCOL_PARAMETERS_DEFAULT,
   Kupmios,
 } from "../../src/index.js";
-import scripts from "./contracts/plutus.json";
+import scripts from "./contracts/plutus.json" assert { type: "json" };
 
 export const NETWORK: Network = "Preprod";
 
