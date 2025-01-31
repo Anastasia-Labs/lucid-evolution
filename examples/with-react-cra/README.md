@@ -50,7 +50,6 @@ src/
 └── index.tsx         # Entry point
 ```
 
-
 ## Dependencies
 
 - [@lucid-evolution/lucid](https://github.com/Anastasia-Labs/lucid-evolution)
@@ -63,13 +62,17 @@ Currently configured for Preprod testnet. To use on other networks, modify the `
 ## Demo Screenshots
 
 ### Initial Connect Wallet Screen
+
 ![Connect Wallet](./public/readme/connect-wallet.png)
 
 ### Wallet Selection Modal
+
 ![Wallet Modal](./public/readme/wallet-modal.png)
 
 ### Connected Wallet View
+
 ![Connected Wallet](./public/readme/connected-wallet.png)
 
 ### Console - Success log
+
 ![Console - Success log](./public/readme/success-log.png)

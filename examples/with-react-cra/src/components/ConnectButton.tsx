@@ -16,7 +16,7 @@ const ConnectButton = () => {
       connect(installedExtensions[0]);
     } else if (installedExtensions.length > 1) {
       const modal = document.getElementById(
-        "wallet-modal"
+        "wallet-modal",
       ) as HTMLDialogElement;
       if (modal) modal.showModal();
     }
@@ -93,7 +93,7 @@ const ConnectButton = () => {
                 onClick={() => {
                   connect(wallet);
                   const modal = document.getElementById(
-                    "wallet-modal"
+                    "wallet-modal",
                   ) as HTMLDialogElement;
                   if (modal) modal.close();
                 }}
@@ -131,7 +131,7 @@ const ConnectButton = () => {
           <button
             onClick={() => {
               const modal = document.getElementById(
-                "wallet-modal"
+                "wallet-modal",
               ) as HTMLDialogElement;
               if (modal) modal.close();
             }}

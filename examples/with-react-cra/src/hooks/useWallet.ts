@@ -31,7 +31,10 @@ export const useWallet = () => {
     }
 
     const now = Date.now();
-    if (lucidInstance.current && now - lastInitTime.current < REFRESH_INTERVAL) {
+    if (
+      lucidInstance.current &&
+      now - lastInitTime.current < REFRESH_INTERVAL
+    ) {
       return lucidInstance.current;
     }
 
@@ -40,15 +43,15 @@ export const useWallet = () => {
       const lucid = await Lucid(
         new Blockfrost(
           "https://cardano-preprod.blockfrost.io/api/v0",
-          process.env.REACT_APP_BLOCKFROST_API_KEY
+          process.env.REACT_APP_BLOCKFROST_API_KEY,
         ),
-        "Preprod"
+        "Preprod",
       );
-      
-      // wallet API 
+
+      // wallet API
       const api = await window.cardano[enabledWallet].enable();
       await lucid.selectWallet.fromAPI(api);
-     
+
       if (!hasLogged.current) {
         console.log("✅ Lucid initialized successfully");
         console.log("✓ Wallet connected and ready");
