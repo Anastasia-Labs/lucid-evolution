@@ -43,7 +43,10 @@ export const registerStake = (rewardAddress: RewardAddress) =>
             CML.ScriptHash.from_hex(stakeCredential.hash),
           );
     const certBuilder = CML.SingleCertificateBuilder.new(
-      CML.Certificate.new_stake_registration(credential),
+      CML.Certificate.new_reg_cert(
+        credential,
+        config.lucidConfig.protocolParameters.keyDeposit,
+      ),
     );
     config.txBuilder.add_cert(certBuilder.skip_witness());
   });

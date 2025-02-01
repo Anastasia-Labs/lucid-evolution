@@ -105,18 +105,17 @@ Includes a dummy button that demonstrates transaction handling using a secure ap
 
 - Transaction Building (Client-Side):
 
-   - Creates an unsigned transaction with specified parameters (amount, addresses)
-   - Converts the transaction to CBOR (Concise Binary Object Representation) format
+  - Creates an unsigned transaction with specified parameters (amount, addresses)
+  - Converts the transaction to CBOR (Concise Binary Object Representation) format
 
 - Wallet Interaction:
 
-   - The unsigned CBOR transaction is passed to the wallet
-   - Wallet signs the transaction using CIP-30 standards
-   - Private keys never leave the wallet's secure environment
-   - Signing is done completely client-side in the user's browser
+  - The unsigned CBOR transaction is passed to the wallet
+  - Wallet signs the transaction using CIP-30 standards
+  - Private keys never leave the wallet's secure environment
+  - Signing is done completely client-side in the user's browser
 
 - Submission:
-   - The signed transaction is submitted to the Cardano network
-   - Only public information (addresses, amounts) and the signed CBOR are used
-   - No sensitive data is ever exposed or transmitted
-
+  - The signed transaction is submitted to the Cardano network
+  - Only public information (addresses, amounts) and the signed CBOR are used
+  - No sensitive data is ever exposed or transmitted
