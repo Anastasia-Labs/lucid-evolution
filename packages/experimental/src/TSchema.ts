@@ -1,14 +1,15 @@
 import { Schema, SchemaAST } from "effect";
 import { NonEmptyReadonlyArray } from "effect/Array";
 import * as Data from "../src/Data.js";
+import * as CBOR from "./CBOR.js";
 
 /**
  * Schema transformations between TypeScript types and Plutus Data
- * 
+ *
  * This module provides bidirectional transformations:
  * 1. TypeScript types => Plutus Data type => CBOR hex
  * 2. CBOR hex => Plutus Data type => TypeScript types
- * 
+ *
  * @since 1.0.0
  */
 
@@ -18,14 +19,14 @@ interface Literal<
 
 /**
  * Creates a schema for literal types with Plutus Data Constructor transformation
- * 
+ *
  * @example
  * import { TSchema } from "@lucid-evolution/experimental";
- * 
+ *
  * const RedeemAction = TSchema.Literal("spend", "mint", "withdraw");
  * const encoded = TSchema.unsafeEncode(RedeemAction, "spend"); // { index: 0n, fields: [] }
  * const decoded = TSchema.unsafeDecode(RedeemAction, encoded); // "spend"
- * 
+ *
  * @since 1.0.0
  */
 export const Literal = <
@@ -51,13 +52,13 @@ interface Array<S extends Schema.Schema.Any> extends Schema.Array$<S> {}
 
 /**
  * Creates a schema for arrays with Plutus list type annotation
- * 
+ *
  * @example
  * import { TSchema } from "@lucid-evolution/experimental";
- * 
+ *
  * const TokenList = TSchema.Array(TSchema.ByteArray);
- * const result = TSchema.unsafeDecode(TokenList, ["deadbeef", "cafe"]); 
- * 
+ * const result = TSchema.unsafeDecode(TokenList, ["deadbeef", "cafe"]);
+ *
  * @since 1.0.0
  */
 export const Array = <S extends Schema.Schema.Any>(items: S): Array<S> =>
@@ -71,14 +72,14 @@ interface Nullable<S extends Schema.Schema.All>
  * Represents optional values as:
  * - Just(value) with index 0
  * - Nothing with index 1
- * 
+ *
  * @example
  * import { TSchema } from "@lucid-evolution/experimental";
- * 
+ *
  * const MaybeDeadline = TSchema.Nullable(TSchema.Integer);
  * const just = TSchema.unsafeEncode(MaybeDeadline, 1000n); // { index: 0n, fields: [1000n] }
  * const nothing = TSchema.unsafeEncode(MaybeDeadline, null); // { index: 1n, fields: [] }
- * 
+ *
  * @since 1.0.0
  */
 export const Nullable = <S extends Schema.Schema.All>(self: S): Nullable<S> =>
@@ -100,25 +101,21 @@ interface Boolean
  * Schema for boolean values using Plutus Data Constructor
  * - False with index 0
  * - True with index 1
- * 
+ *
  * @example
  * import { TSchema } from "@lucid-evolution/experimental";
- * 
+ *
  * const isLocked = TSchema.unsafeEncode(TSchema.Boolean, true); // { index: 1n, fields: [] }
  * const decoded = TSchema.unsafeDecode(TSchema.Boolean, isLocked); // true
- * 
+ *
  * @since 1.0.0
  */
-export const Boolean: Boolean = Schema.transform(
-  Data.Constr,
-  Schema.Boolean,
-  {
-    strict: true,
-    encode: (boolean) =>
-      boolean ? { index: 1n, fields: [] } : { index: 0n, fields: [] },
-    decode: ({ index }) => index === 1n,
-  }
-);
+export const Boolean: Boolean = Schema.transform(Data.Constr, Schema.Boolean, {
+  strict: true,
+  encode: (boolean) =>
+    boolean ? { index: 1n, fields: [] } : { index: 0n, fields: [] },
+  decode: ({ index }) => index === 1n,
+});
 
 interface Struct<Fields extends Schema.Struct.Fields>
   extends Schema.transform<typeof Data.Constr, Schema.Struct<Fields>> {}
@@ -126,22 +123,22 @@ interface Struct<Fields extends Schema.Struct.Fields>
 /**
  * Creates a schema for struct types using Plutus Data Constructor
  * Objects are represented as a constructor with index 0 and fields as an array
- * 
+ *
  * @example
  * import { TSchema } from "@lucid-evolution/experimental";
- * 
+ *
  * const Token = TSchema.Struct({
  *   policyId: TSchema.ByteArray,
  *   assetName: TSchema.ByteArray,
  *   amount: TSchema.Integer
  * });
- * 
+ *
  * const encoded = TSchema.unsafeEncode(Token, {
  *   policyId: "deadbeef",
  *   assetName: "cafe",
  *   amount: 1000n
  * }); // { index: 0n, fields: ["deadbeef", "cafe", 1000n] }
- * 
+ *
  * @since 1.0.0
  */
 export const Struct = <Fields extends Schema.Struct.Fields>(
@@ -189,14 +186,14 @@ export const ByteArray: ByteArray = Schema.String.annotations({
 
 /**
  * Decodes a value from Plutus Data Constructor to TypeScript type without error handling
- * 
+ *
  * @example
  * import { TSchema } from "@lucid-evolution/experimental";
- * 
+ *
  * const data = { index: 0n, fields: ["deadbeef", "cafe", 1000n] };
  * const token = TSchema.unsafeDecode(Token, data);
  * // { policyId: "deadbeef", assetName: "cafe", amount: 1000n }
- * 
+ *
  * @throws {Error} If decoding fails
  * @since 1.0.0
  */
@@ -208,10 +205,10 @@ export const unsafeDecode = <A, I>(
 
 /**
  * Encodes a TypeScript value to Plutus Data Constructor without error handling
- * 
+ *
  * @example
  * import { TSchema } from "@lucid-evolution/experimental";
- * 
+ *
  * const token = {
  *   policyId: "deadbeef",
  *   assetName: "cafe",
@@ -219,7 +216,7 @@ export const unsafeDecode = <A, I>(
  * };
  * const data = TSchema.unsafeEncode(Token, token);
  * // { index: 0n, fields: ["deadbeef", "cafe", 1000n] }
- * 
+ *
  * @throws {Error} If encoding fails
  * @since 1.0.0
  */
@@ -228,3 +225,19 @@ export const unsafeEncode = <A, I>(
   input: unknown,
   options?: SchemaAST.ParseOptions
 ) => Schema.encodeUnknownSync(schema, options)(input);
+
+export const unsafeEncodeCBOR = <A, D extends Data.Data>(
+  schema: Schema.Schema<A, D, never>,
+  input: unknown
+) => {
+  const data = unsafeEncode(schema, input);
+  return CBOR.toCBOR(data);
+};
+
+export const unsafeDecodeCBOR = <A, D extends Data.Data>(
+  schema: Schema.Schema<A, D, never>,
+  input: string
+) => {
+  const data = CBOR.fromCBOR(input);
+  return unsafeDecode(schema, data);
+};

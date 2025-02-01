@@ -16,6 +16,8 @@ import { Schema } from "effect";
  *
  * @since 1.0.0
  */
+//TODO: Data type is a special type and must be branded with a unique symbol to prevent mixing with other bigint or string values
+//TODO: Branded types can be constructed with a make constructor
 export type Data =
   | bigint // Integer
   | string // Bytes in hex
