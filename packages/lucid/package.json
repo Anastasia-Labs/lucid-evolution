@@ -55,8 +55,9 @@
   "dependencies": {
     "@anastasia-labs/cardano-multiplatform-lib-browser": "6.0.2-3",
     "@anastasia-labs/cardano-multiplatform-lib-nodejs": "6.0.2-3",
-    "@effect/schema": "^0.66.14",
-    "@emurgo/cardano-message-signing-nodejs": "^1.0.1",
+    "@cardano-sdk/core": "^0.45.1",
+    "@effect/schema": "^0.66.16",
+    "@emurgo/cardano-message-signing-nodejs": "^1.1.0",
     "@lucid-evolution/core-types": "workspace:*",
     "@lucid-evolution/core-utils": "workspace:*",
     "@lucid-evolution/plutus": "workspace:*",
@@ -65,16 +66,16 @@
     "@lucid-evolution/uplc": "workspace:*",
     "@lucid-evolution/utils": "workspace:*",
     "@lucid-evolution/wallet": "workspace:*",
-    "effect": "^3.12.4"
+    "effect": "^3.12.7"
   },
   "devDependencies": {
-    "@effect/vitest": "^0.17.0",
-    "@types/node": "^20.12.8",
+    "@effect/vitest": "^0.17.3",
+    "@types/node": "^20.17.16",
     "esbuild-plugin-wasm": "^1.1.0",
-    "tsup": "^8.0.2",
-    "tsx": "^4.9.0",
+    "tsup": "^8.3.6",
+    "tsx": "^4.19.2",
     "typescript": "5.5.0-dev.20240430",
-    "vite-plugin-wasm": "^3.3.0",
-    "vitest": "^2.0.3"
+    "vite-plugin-wasm": "^3.4.1",
+    "vitest": "^2.1.8"
   }
 }
