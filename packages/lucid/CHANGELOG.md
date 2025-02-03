@@ -1,5 +1,16 @@
 # @lucid-evolution/lucid
 
+## 0.4.22
+
+### Patch Changes
+
+- [#493](https://github.com/Anastasia-Labs/lucid-evolution/pull/493) [`9ad2c36`](https://github.com/Anastasia-Labs/lucid-evolution/commit/9ad2c366e4647423adc7a81753fd084255358709) Thanks [@hadelive](https://github.com/hadelive)! - drepid to credential
+
+- [#478](https://github.com/Anastasia-Labs/lucid-evolution/pull/478) [`d7bed7f`](https://github.com/Anastasia-Labs/lucid-evolution/commit/d7bed7fa15939e852811f5abc7ab928c7c303718) Thanks [@solidsnakedev](https://github.com/solidsnakedev)! - improve emulator test structure; update emulator provider; upgrade effect dependency at lucid package
+
+- Updated dependencies [[`d7bed7f`](https://github.com/Anastasia-Labs/lucid-evolution/commit/d7bed7fa15939e852811f5abc7ab928c7c303718)]:
+  - @lucid-evolution/provider@0.1.87
+
 ## 0.4.21
 
 ### Patch Changes
