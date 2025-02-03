@@ -1,5 +1,11 @@
 # @lucid-evolution/provider
 
+## 0.1.87
+
+### Patch Changes
+
+- [#478](https://github.com/Anastasia-Labs/lucid-evolution/pull/478) [`d7bed7f`](https://github.com/Anastasia-Labs/lucid-evolution/commit/d7bed7fa15939e852811f5abc7ab928c7c303718) Thanks [@solidsnakedev](https://github.com/solidsnakedev)! - improve emulator test structure; update emulator provider; upgrade effect dependency at lucid package
+
 ## 0.1.86
 
 ### Patch Changes
