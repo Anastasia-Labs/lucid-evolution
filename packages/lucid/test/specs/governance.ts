@@ -1,12 +1,8 @@
 import { Effect, pipe } from "effect";
-import {
-  AlwaysYesDrepContract,
-  NetworkConfig,
-  SimpleStakeContract,
-  User,
-} from "./services";
+import { AlwaysYesDrepContract, NetworkConfig, User } from "./services";
 import { handleSignSubmit, withLogRetry } from "./utils";
 import { Data, getAddressDetails } from "../../src";
+import { drepIDToCredential } from "../../src/tx-builder/internal/Governance";
 
 export const registerDRep = Effect.gen(function* ($) {
   const { user } = yield* User;
@@ -90,10 +86,7 @@ export const voteDelegPoolAndDRepAlwaysAbstain = Effect.gen(function* ($) {
     Effect.promise(() => user.wallet().rewardAddress()),
     Effect.andThen(Effect.fromNullable),
   );
-  const poolId =
-    networkConfig.NETWORK == "Preprod"
-      ? "pool1nmfr5j5rnqndprtazre802glpc3h865sy50mxdny65kfgf3e5eh"
-      : "pool1ynfnjspgckgxjf2zeye8s33jz3e3ndk9pcwp0qzaupzvvd8ukwt";
+  const poolId = getPoolId(networkConfig.NETWORK);
 
   const signBuilder = yield* user
     .newTx()
@@ -107,10 +100,7 @@ export const voteDelegPoolAndDRepAlwaysAbstain = Effect.gen(function* ($) {
 export const registerAndDelegateToPool = Effect.gen(function* ($) {
   const { user } = yield* User;
   const networkConfig = yield* NetworkConfig;
-  const poolId =
-    networkConfig.NETWORK == "Preprod"
-      ? "pool1nmfr5j5rnqndprtazre802glpc3h865sy50mxdny65kfgf3e5eh"
-      : "pool1ynfnjspgckgxjf2zeye8s33jz3e3ndk9pcwp0qzaupzvvd8ukwt";
+  const poolId = getPoolId(networkConfig.NETWORK);
 
   const rewardAddress = yield* pipe(
     Effect.promise(() => user.wallet().rewardAddress()),
@@ -145,10 +135,7 @@ export const registerAndDelegateToPoolAndDRep = Effect.gen(function* ($) {
     Effect.andThen(Effect.fromNullable),
   );
   const networkConfig = yield* NetworkConfig;
-  const poolId =
-    networkConfig.NETWORK == "Preprod"
-      ? "pool1nmfr5j5rnqndprtazre802glpc3h865sy50mxdny65kfgf3e5eh"
-      : "pool1ynfnjspgckgxjf2zeye8s33jz3e3ndk9pcwp0qzaupzvvd8ukwt";
+  const poolId = getPoolId(networkConfig.NETWORK);
   const signBuilder = yield* user
     .newTx()
     .registerAndDelegate.ToPoolAndDRep(rewardAddress, poolId, {
@@ -194,10 +181,7 @@ export const registerAndDelegateToPoolAndScriptDRep = Effect.gen(function* ($) {
   const { user } = yield* User;
   const { rewardAddress, script } = yield* AlwaysYesDrepContract;
   const networkConfig = yield* NetworkConfig;
-  const poolId =
-    networkConfig.NETWORK == "Preprod"
-      ? "pool1nmfr5j5rnqndprtazre802glpc3h865sy50mxdny65kfgf3e5eh"
-      : "pool1ynfnjspgckgxjf2zeye8s33jz3e3ndk9pcwp0qzaupzvvd8ukwt";
+  const poolId = getPoolId(networkConfig.NETWORK);
   const signBuilder = yield* user
     .newTx()
     .registerAndDelegate.ToPoolAndDRep(
@@ -233,19 +217,16 @@ export const registerAndDelegateToPoolAndDRepKeyCred = Effect.gen(
   function* ($) {
     const { user } = yield* User;
     const { rewardAddress, script } = yield* AlwaysYesDrepContract;
-    const address = yield* Effect.promise(() => user.wallet().address());
-    const addressDetails = getAddressDetails(address);
     const networkConfig = yield* NetworkConfig;
-    const poolId =
-      networkConfig.NETWORK == "Preprod"
-        ? "pool1nmfr5j5rnqndprtazre802glpc3h865sy50mxdny65kfgf3e5eh"
-        : "pool1ynfnjspgckgxjf2zeye8s33jz3e3ndk9pcwp0qzaupzvvd8ukwt";
+    const poolId = getPoolId(networkConfig.NETWORK);
+    const drepId = getDRepId(networkConfig.NETWORK);
+
     const signBuilder = yield* user
       .newTx()
       .registerAndDelegate.ToPoolAndDRep(
         rewardAddress,
         poolId,
-        { type: "Key", hash: addressDetails.stakeCredential!.hash },
+        drepIDToCredential(drepId),
         Data.void(),
       )
       .attach.Script(script)
@@ -253,3 +234,15 @@ export const registerAndDelegateToPoolAndDRepKeyCred = Effect.gen(
     return signBuilder;
   },
 ).pipe(Effect.flatMap(handleSignSubmit), withLogRetry, Effect.orDie);
+
+function getPoolId(network: string): string {
+  return network === "Preprod"
+    ? "pool1nmfr5j5rnqndprtazre802glpc3h865sy50mxdny65kfgf3e5eh"
+    : "pool1ynfnjspgckgxjf2zeye8s33jz3e3ndk9pcwp0qzaupzvvd8ukwt";
+}
+
+function getDRepId(network: string): string {
+  return network === "Preprod"
+    ? "drep1ygzqwwtgcewhzvxu942xufzl4pg7gnttw9h4e0agm30fnwsqcv00v"
+    : "drep1ygpw93clyzccmen0mfuhcsj5n4e33f8xx3dwl2l5spd9m7qhxh2pd";
+}
