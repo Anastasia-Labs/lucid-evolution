@@ -711,6 +711,8 @@ export class Emulator implements Provider {
         1. Stake registration
         2. Stake deregistration
         3. Stake delegation
+        4. RegCert
+        5. UnregCert
 
         All other certificate types are not checked and considered valid.
       */
@@ -778,6 +780,42 @@ export class Emulator implements Provider {
             );
           }
           certRequests.push({ type: "Delegation", rewardAddress, poolId });
+          break;
+        }
+        case 5: {
+          const regCert = cert.as_reg_cert()!;
+          const rewardAddress = CML.RewardAddress.new(
+            CML.NetworkInfo.testnet().network_id(),
+            regCert.stake_credential(),
+          )
+            .to_address()
+            .to_bech32(undefined);
+          if (this.chain[rewardAddress]?.registeredStake) {
+            throw new Error(
+              `Stake key is already registered. Reward address: ${rewardAddress}`,
+            );
+          }
+          certRequests.push({ type: "Registration", rewardAddress });
+          break;
+        }
+        case 6: {
+          const unRegCert = cert.as_unreg_cert()!;
+          const rewardAddress = CML.RewardAddress.new(
+            CML.NetworkInfo.testnet().network_id(),
+            unRegCert.stake_credential(),
+          )
+            .to_address()
+            .to_bech32(undefined);
+
+          const { stakeCredential } = getAddressDetails(rewardAddress);
+          checkAndConsumeHash(stakeCredential!, "Cert", index);
+
+          if (!this.chain[rewardAddress]?.registeredStake) {
+            throw new Error(
+              `Stake key is already deregistered. Reward address: ${rewardAddress}`,
+            );
+          }
+          certRequests.push({ type: "Deregistration", rewardAddress });
           break;
         }
       }

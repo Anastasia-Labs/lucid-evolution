@@ -51,9 +51,7 @@ describe("Emulator", () => {
       }).pipe(Effect.provide(TestEnvironment)),
   );
 
-  //NOTE: This test is failing because the stake address is not being deregistered
-  // TxSubmitError: Error: Extraneous vkey witness. Key hash: 2f1d5aa2f580814c5ce8658c18c0a35be369edcb047d5f7a455b185a
-  it.effect.fails("should register and then deregister stake address", () =>
+  it.effect("should register and then deregister stake address", () =>
     Effect.gen(function* () {
       yield* StakeExecutor.registerStake;
       yield* StakeExecutor.deregisterStake;
