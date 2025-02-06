@@ -90,3 +90,15 @@ export function toText(hex: string): string {
 export function fromText(text: string): string {
   return toHex(new TextEncoder().encode(text));
 }
+
+/**
+ * Checks if the provided value is a valid hexadecimal string.
+ *
+ * @example
+ * isHex("cafe0123") // returns true
+ * isHex("cafe012")  // returns false because of odd length
+ *
+ * @since 1.0.0
+ */
+export const isHex = (value: string): boolean =>
+  typeof value === "string" && /^[0-9a-fA-F]+$/.test(value) && value.length % 2 === 0;

@@ -1,8 +1,10 @@
 import { Schema, SchemaAST } from "effect";
 import { NonEmptyReadonlyArray } from "effect/Array";
 import * as Data from "../src/Data.js";
-import * as CBOR from "./CBOR.js";
 
+export { ByteArray } from "../src/Data.js";
+
+export { Integer } from "../src/Data.js";
 /**
  * Schema transformations between TypeScript types and Plutus Data
  *
@@ -160,84 +162,3 @@ export const Struct = <Fields extends Schema.Struct.Fields>(
       );
     },
   });
-
-interface Integer extends Schema.SchemaClass<bigint, bigint, never> {}
-
-/**
- * Schema for Plutus Integer type
- * @since 1.0.0
- */
-export const Integer: Integer = Schema.BigIntFromSelf.annotations({
-  identifier: "Integer",
-});
-
-interface ByteArray extends Schema.SchemaClass<string, string, never> {}
-/**
- * Schema for Plutus byte array represented as a hexadecimal string
- *
- * Byte arrays must be encoded as hexadecimal strings (e.g. "deadbeef")
- * where each byte is represented by two hexadecimal digits.
- *
- * @since 1.0.0
- */
-export const ByteArray: ByteArray = Schema.String.annotations({
-  identifier: "ByteArray",
-});
-
-/**
- * Decodes a value from Plutus Data Constructor to TypeScript type without error handling
- *
- * @example
- * import { TSchema } from "@lucid-evolution/experimental";
- *
- * const data = { index: 0n, fields: ["deadbeef", "cafe", 1000n] };
- * const token = TSchema.unsafeDecode(Token, data);
- * // { policyId: "deadbeef", assetName: "cafe", amount: 1000n }
- *
- * @throws {Error} If decoding fails
- * @since 1.0.0
- */
-export const unsafeDecode = <A, I>(
-  schema: Schema.Schema<A, I, never>,
-  input: unknown,
-  options?: SchemaAST.ParseOptions
-) => Schema.decodeUnknownSync(schema, options)(input);
-
-/**
- * Encodes a TypeScript value to Plutus Data Constructor without error handling
- *
- * @example
- * import { TSchema } from "@lucid-evolution/experimental";
- *
- * const token = {
- *   policyId: "deadbeef",
- *   assetName: "cafe",
- *   amount: 1000n
- * };
- * const data = TSchema.unsafeEncode(Token, token);
- * // { index: 0n, fields: ["deadbeef", "cafe", 1000n] }
- *
- * @throws {Error} If encoding fails
- * @since 1.0.0
- */
-export const unsafeEncode = <A, I>(
-  schema: Schema.Schema<A, I, never>,
-  input: unknown,
-  options?: SchemaAST.ParseOptions
-) => Schema.encodeUnknownSync(schema, options)(input);
-
-export const unsafeEncodeCBOR = <A, D extends Data.Data>(
-  schema: Schema.Schema<A, D, never>,
-  input: unknown
-) => {
-  const data = unsafeEncode(schema, input);
-  return CBOR.toCBOR(data);
-};
-
-export const unsafeDecodeCBOR = <A, D extends Data.Data>(
-  schema: Schema.Schema<A, D, never>,
-  input: string
-) => {
-  const data = CBOR.fromCBOR(input);
-  return unsafeDecode(schema, data);
-};
