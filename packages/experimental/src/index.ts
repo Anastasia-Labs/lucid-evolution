@@ -6,3 +6,5 @@ export * as Network from "./Network.js";
 export * as Credential from "./Credential.js";
 export * as CBOR from "./CBOR.js";
 export * as Script from "./Script.js";
+export * as Data from "./Data.js";
+export * as TypeSchema from "./TypeSchema.js";

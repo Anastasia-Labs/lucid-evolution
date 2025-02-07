@@ -4,18 +4,32 @@ import * as CML from "@anastasia-labs/cardano-multiplatform-lib-nodejs";
 import { ParseIssue } from "effect/ParseResult";
 
 /**
- * Plutus data types and schemas for serialization/deserialization
- *
+ * Plutus data types and schemas for serialization/deserialization between 
+ * TypeScript types and Cardano's Plutus data format
+ * 
  * @since 1.0.0
  */
 
 /**
- * Represents Plutus Data types that can be used in smart contracts
+ * Core Plutus Data types that can be used in Cardano smart contracts
  *
  * @example
- * import { Data } from "./Plutus"
+ * import { Data } from "@lucid-evolution/experimental"
+ * 
+ * // Integer type
  * const integerData: Data = 42n
+ * 
+ * // Bytes type (hex encoded)
  * const bytesData: Data = "deadbeef"
+ * 
+ * // Map type
+ * const mapData: Data = new Map([["deadbeef", 42n]])
+ * 
+ * // List type
+ * const listData: Data = [42n, "deadbeef"]
+ * 
+ * // Constructor type
+ * const constrData: Data = { index: 0n, fields: [42n, "deadbeef"] }
  *
  * @since 1.0.0
  */
@@ -27,13 +41,20 @@ export type Data =
   | ReadonlyArray<Data> // List
   | { index: bigint; fields: ReadonlyArray<Data> };
 
+/**
+ * Helper function for formatting parse issues into human readable messages
+ * 
+ * @internal
+ */
 const renderParseIssue = (issue: ParseIssue): string | undefined =>
   typeof issue.actual === "object" ? "[complex value]" : String(issue.actual);
 
 // Schema Definitions
 
 /**
- * Creates a schema filter that ensures a string is in hexadecimal format.
+ * Schema validator that ensures strings are valid hexadecimal format
+ * 
+ * @internal
  */
 const HexString = <A extends string, I>(self: Schema.Schema<A, I>) =>
   pipe(
@@ -46,11 +67,8 @@ const HexString = <A extends string, I>(self: Schema.Schema<A, I>) =>
 
 interface ByteArray extends Schema.SchemaClass<string, string, never> {}
 /**
- * Schema for Plutus byte array represented as a hexadecimal string
- *
- * Byte arrays must be encoded as hexadecimal strings (e.g. "deadbeef")
- * where each byte is represented by two hexadecimal digits.
- *
+ * Schema for Plutus byte arrays that validates and ensures proper hexadecimal format
+ * 
  * @since 1.0.0
  */
 export const ByteArray: ByteArray = pipe(
@@ -67,6 +85,17 @@ export const ByteArray: ByteArray = pipe(
   identifier: "ByteArray",
 });
 
+/**
+ * Type guard for checking if a value is a valid ByteArray
+ * 
+ * @example
+ * import { Data } from "@lucid-evolution/experimental"
+ * 
+ * isByteArray("deadbeef") // true
+ * isByteArray("not-hex") // false
+ * 
+ * @since 1.0.0
+ */
 export const isByteArray = Schema.is(ByteArray);
 
 interface Constr
@@ -88,6 +117,17 @@ export const Constr: Constr = Schema.Struct({
   },
 });
 
+/**
+ * Type guard for checking if a value is a valid Plutus Constructor
+ * 
+ * @example
+ * import { Data } from "@lucid-evolution/experimental"
+ * 
+ * isConstr({ index: 0n, fields: ["deadbeef"] }) // true
+ * isConstr("not-a-constructor") // false
+ * 
+ * @since 1.0.0
+ */
 export const isConstr = Schema.is(Constr);
 
 interface Map
@@ -113,8 +153,18 @@ export const Map: Map = Schema.ReadonlyMapFromSelf({
   },
 });
 
+/**
+ * Type guard for checking if a value is a valid Plutus Map
+ * 
+ * @example
+ * import { Data } from "@lucid-evolution/experimental"
+ * 
+ * isMap(new Map([["deadbeef", 42n]])) // true
+ * isMap({ key: "value" }) // false
+ * 
+ * @since 1.0.0
+ */
 export const isMap = Schema.is(Map);
-
 
 interface List extends Schema.Array$<Schema.suspend<Data, Data, never>> {}
 /**
@@ -130,6 +180,17 @@ export const List: List = Schema.Array(
   },
 });
 
+/**
+ * Type guard for checking if a value is a valid Plutus List
+ * 
+ * @example
+ * import { Data } from "@lucid-evolution/experimental"
+ * 
+ * isList([42n, "deadbeef"]) // true
+ * isList("not-a-list") // false
+ * 
+ * @since 1.0.0
+ */
 export const isList = Schema.is(List);
 
 interface Integer extends Schema.SchemaClass<bigint, bigint, never> {}
@@ -144,6 +205,17 @@ export const Integer: Integer = Schema.BigIntFromSelf.annotations({
   },
 });
 
+/**
+ * Type guard for checking if a value is a valid Plutus Integer
+ * 
+ * @example
+ * import { Data } from "@lucid-evolution/experimental"
+ * 
+ * isInteger(42n) // true
+ * isInteger(42) // false
+ * 
+ * @since 1.0.0
+ */
 export const isInteger = Schema.is(Integer);
 
 export const Data: Schema.Schema<Data> = Schema.Union(
@@ -157,11 +229,25 @@ export const Data: Schema.Schema<Data> = Schema.Union(
 });
 
 /**
- * Converts input data to a CBOR hex string using a provided schema.
+ * Converts TypeScript data into CBOR hex string
  *
  * @example
- * import { toCBOR } from "@lucid-evolution/experimental";
- * const cbor = toCBOR(data, schema, { canonical: true });
+ * import { Data, Type } from "@lucid-evolution/experimental"
+ * 
+ * const Token = Type.Struct({
+ *   policyId: Type.ByteArray,
+ *   assetName: Type.ByteArray,
+ *   amount: Type.Integer
+ * })
+ * 
+ * const token = {
+ *   policyId: "deadbeef",
+ *   assetName: "cafe",
+ *   amount: 1000n
+ * }
+ * 
+ * // Convert to canonical CBOR
+ * const cbor = Data.toCBOR(token, Token, { canonical: true })
  *
  * @since 1.0.0
  */
@@ -212,11 +298,11 @@ export const toCBOR = <Source, Target extends Data>(
 };
 
 /**
- * Decodes a CBOR hex string to a TypeScript type using a provided schema.
+ * Decodes a CBOR hex string to a TypeScript type
  *
  * @example
- * import { fromCBOR } from "@lucid-evolution/experimental";
- * const data = fromCBOR(cborHexString, schema);
+ * import { Data } from "@lucid-evolution/experimental";
+ * const data = Data.fromCBOR(cborHexString, schema);
  *
  * @since 1.0.0
  */
@@ -229,12 +315,17 @@ export function fromCBOR<Source, Target extends Data>(
   input: string,
   schema?: Schema.Schema<Source, Target>
 ): Source | Data {
-  const data: Data = resolveCBOR(input);
+  const data = resolveCBOR(input);
   return schema ? fromData(data, schema) : data;
 }
 
 export const resolveCBOR = (input: string): Data => {
-  const data = CML.PlutusData.from_cbor_hex(input);
+  let data: CML.PlutusData;
+  try {
+    data = CML.PlutusData.from_cbor_hex(input);
+  } catch (error) {
+    throw new Error(`Failed to resolve CBOR input: ${input}`);
+  }
   switch (data.kind()) {
     case CML.PlutusDataKind.Integer:
       return BigInt(data.as_integer()!.to_str());
@@ -277,7 +368,7 @@ export const resolveCBOR = (input: string): Data => {
 };
 
 /**
- * Decodes an unknown value from Plutus Data Constructor to a TypeScript type without error handling.
+ * Decodes an unknown value from Plutus Data Constructor to a TypeScript type
  *
  * @example
  * import { Type , Data } from "@lucid-evolution/experimental";
@@ -292,7 +383,6 @@ export const resolveCBOR = (input: string): Data => {
  * const token = Data.fromData(data, Token);
  * // { policyId: "deadbeef", assetName: "cafe", amount: 1000n }
  *
- * @throws {Error} If decoding fails due to invalid input or schema mismatch.
  * @since 1.0.0
  */
 export const fromData = <Source, Target extends Data>(
@@ -302,7 +392,7 @@ export const fromData = <Source, Target extends Data>(
 ): Source => Schema.decodeUnknownSync(schema, options)(input);
 
 /**
- * Encodes a TypeScript value to Plutus Data Constructor without error handling
+ * Encodes a TypeScript value to Plutus Data Constructor
  *
  * @example
  * import { Data } from "@lucid-evolution/experimental";
@@ -315,7 +405,6 @@ export const fromData = <Source, Target extends Data>(
  * const data = Data.toData(token, Token);
  * // { index: 0n, fields: ["deadbeef", "cafe", 1000n] }
  *
- * @throws {Error} If encoding fails
  * @since 1.0.0
  */
 export const toData = <Source, Target extends Data>(
