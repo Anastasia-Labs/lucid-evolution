@@ -1,10 +1,10 @@
 import { Schema, SchemaAST } from "effect";
 import { NonEmptyReadonlyArray } from "effect/Array";
-import * as Data from "../src/Data.js";
+import * as Data from "./Data.js";
 
-export { ByteArray } from "../src/Data.js";
+export { ByteArray } from "./Data.js";
 
-export { Integer } from "../src/Data.js";
+export { Integer } from "./Data.js";
 /**
  * Schema transformations between TypeScript types and Plutus Data
  *

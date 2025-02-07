@@ -67,6 +67,8 @@ export const ByteArray: ByteArray = pipe(
   identifier: "ByteArray",
 });
 
+export const isByteArray = Schema.is(ByteArray);
+
 interface Constr
   extends Schema.Struct<{
     index: Schema.SchemaClass<bigint, bigint, never>;
@@ -85,6 +87,8 @@ export const Constr: Constr = Schema.Struct({
     return `Expected Constr but got ${renderParseIssue(issue)}.`;
   },
 });
+
+export const isConstr = Schema.is(Constr);
 
 interface Map
   extends Schema.ReadonlyMapFromSelf<
@@ -109,6 +113,9 @@ export const Map: Map = Schema.ReadonlyMapFromSelf({
   },
 });
 
+export const isMap = Schema.is(Map);
+
+
 interface List extends Schema.Array$<Schema.suspend<Data, Data, never>> {}
 /**
  * Schema for Plutus List type
@@ -123,6 +130,8 @@ export const List: List = Schema.Array(
   },
 });
 
+export const isList = Schema.is(List);
+
 interface Integer extends Schema.SchemaClass<bigint, bigint, never> {}
 /**
  * Schema for Plutus Integer type
@@ -134,6 +143,8 @@ export const Integer: Integer = Schema.BigIntFromSelf.annotations({
     return `Expected Integer but got ${renderParseIssue(issue)}.`;
   },
 });
+
+export const isInteger = Schema.is(Integer);
 
 export const Data: Schema.Schema<Data> = Schema.Union(
   List,
@@ -156,7 +167,7 @@ export const Data: Schema.Schema<Data> = Schema.Union(
  */
 export const toCBOR = <Source, Target extends Data>(
   input: unknown,
-  schema: Schema.Schema<Source, Target>,
+  schema?: Schema.Schema<Source, Target>,
   options: {
     canonical?: boolean;
     parseOptions?: SchemaAST.ParseOptions;
@@ -191,20 +202,36 @@ export const toCBOR = <Source, Target extends Data>(
     }
     throw new Error(`Unsupported type: ${typeof data}`);
   };
-  const data: Data = toData(input, schema, options.parseOptions);
+  const data: Data = schema
+    ? toData(input, schema, options.parseOptions)
+    : toData(input, Data);
   const cmlPlutusData: CML.PlutusData = toCMLPlutusData(data);
   return canonical
     ? cmlPlutusData.to_canonical_cbor_hex()
     : cmlPlutusData.to_cardano_node_format().to_cbor_hex();
 };
 
-export const fromCBOR = <Source, Target extends Data>(
+/**
+ * Decodes a CBOR hex string to a TypeScript type using a provided schema.
+ *
+ * @example
+ * import { fromCBOR } from "@lucid-evolution/experimental";
+ * const data = fromCBOR(cborHexString, schema);
+ *
+ * @since 1.0.0
+ */
+export function fromCBOR(input: string): Data;
+export function fromCBOR<Source, Target extends Data>(
   input: string,
   schema: Schema.Schema<Source, Target>
-): Source => {
+): Source;
+export function fromCBOR<Source, Target extends Data>(
+  input: string,
+  schema?: Schema.Schema<Source, Target>
+): Source | Data {
   const data: Data = resolveCBOR(input);
-  return fromData(data, schema);
-};
+  return schema ? fromData(data, schema) : data;
+}
 
 export const resolveCBOR = (input: string): Data => {
   const data = CML.PlutusData.from_cbor_hex(input);
