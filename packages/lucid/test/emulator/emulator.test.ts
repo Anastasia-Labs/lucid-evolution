@@ -7,6 +7,7 @@ import * as StakeExecutor from "./executor/StakeExecutor.js";
 import * as PayExecutor from "./executor/PayExecutor.js";
 import * as MintExecutor from "./executor/MintExecutor.js";
 import * as HelloExecutor from "./executor/HelloExecutor.js";
+import * as SignExecutor from "./executor/SignExecutor.js";
 import { HelloContract } from "../specs/services.js";
 import { Data } from "@lucid-evolution/plutus";
 import { CONSTANTS } from "./Constants.js";
@@ -181,6 +182,12 @@ describe("Emulator", () => {
     Effect.gen(function* () {
       const userUTxOs = yield* PayExecutor.multiTxCompose;
       expect(userUTxOs.length).toBe(6);
+    }).pipe(Effect.provide(TestEnvironment)),
+  );
+  it.effect("should successfully verify message", () =>
+    Effect.gen(function* () {
+      const isValid = yield* SignExecutor.verifySignedMessage;
+      expect(isValid).toBe(true);
     }).pipe(Effect.provide(TestEnvironment)),
   );
 });
