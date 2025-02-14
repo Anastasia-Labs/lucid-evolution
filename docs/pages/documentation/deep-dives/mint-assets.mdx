@@ -60,47 +60,65 @@ const scriptWithParams = applyParamsToScript(
   [param1, param2, ...]
 );
 ```
+
 - Minting tokens creates them, but it doesn't automatically assign them to any address. After minting, the tokens are technically "owned" by the transaction itself.
 - Purpose of `pay.ToAddress()` is to send the newly minted tokens to a specific address
-</Callout>
+  </Callout>
 
 </Steps>
 
-## CIP68 Token Standard
+## CIP-0068 Token Standard
 
-CIP68 is a token standard that extends CIP25 to provide richer metadata functionality.
-
-### Define the CIP68 datum schema
+[CIP-0068](https://github.com/cardano-foundation/CIPs/tree/master/CIP-0068) is a token standard that extends [CIP-0025](https://github.com/cardano-foundation/CIPs/tree/master/CIP-0025) to provide richer metadata functionality.
 
 ```typescript
-const CIP68DatumSchema = Data.Object({
-metadata: Data.Map(Data.Any(), Data.Any()),
-version: Data.Integer(),
+const tokenName = "Your Token Name";
+const tokenImage = "ipfs://QmV0CID...";
+
+const metadata = Data.fromJson({
+  name: tokenName,
+  image: tokenImage,
+  otherFields,
 });
-type CIP68DatumSchemaType = Data.Static<typeof CIP68DatumSchema>;
-const CIP68Datum = CIP68DatumSchema as unknown as CIP68DatumSchemaType;
+const version = BigInt(1);
+const extra: Data[] = []; // Custom user defined plutus data. Setting data is optional, but the field is required and needs to be at least Unit/Void: #6.121([])
+const cip68 = new Constr(0, [metadata, version, extra]);
 
-const metadataMap = new Map();
-metadataMap.set(fromText("myKey"), Data.to(fromText("myValue")));
+const datum = Data.to(cip68);
+const redeemer = Data.void(); // Your CIP-0068 Script Redeemer
 
-const metadataCBOR = Data.to(
-{ metadata: metadataMap, version: 0n },
-CIP68Datum
-);
+const spendingValidator: SpendingValidator = { type: "PlutusV3", script: YourCip0068Script };
+const validatorAddress = validatorToAddress(network, spendingValidator);
+
+const mintingPolicy: MintingPolicy = { type: "PlutusV3", script: YourCip0068Script }; // might be the same as the spending validator if it's multi-purpose
+const policyID = mintingPolicyToId(mintingPolicy);
+
+const assetName = fromText(tokenName);
+
+const refUnit = toUnit(policyID, assetName, 100); // the reference token
+const usrUnit = toUnit(policyID, assetName, label); // label: 222 | 333 | 444
 
 const tx = await lucid
-.newTx()
-.mintAssets({
-[policyId + fromText("MyToken")]: 1n,
-})
-.pay.ToAddressWithData(
-address,
-{ kind: "inline", value: metadataCBOR },
-{ [policyId + fromText("MyToken")]: 1n }
-)
-.validTo(Date.now() + 900000)
-.attach.MintingPolicy(mintingPolicy)
-.complete();
+  .newTx()
+  .mintAssets(
+    {
+      [refUnit]: 1n,
+      [usrUnit]: BigInt(qty),
+    },
+    redeemer
+  )
+  .attach.MintingPolicy(mintingPolicy)
+  .pay.ToContract(
+    validatorAddress,
+    {
+      kind: "inline",
+      value: datum,
+    },
+    {
+      [refUnit]: 1n,
+    }
+  )
+  .complete();
 ```
 
 <Callout>
@@ -109,14 +127,12 @@ An alternative way to define the metadata is to use an object:
 
 ```typescript
 const metadataObject = {
-  [fromText("myKey")]: Data.to(fromText("myValue"))
-}
+  [fromText("myKey")]: Data.to(fromText("myValue")),
+};
 
-const metadataCBOR = Data.to(
-  { metadata: new Map(Object.entries(metadataObject)), version: 0n },
-  CIP68Datum
-);
+const metadataCBOR = Data.to({ metadata: new Map(Object.entries(metadataObject)), version: 0n }, CIP68Datum);
 ```
+
 </Callout>
 
 ## Burn
@@ -139,9 +155,9 @@ const txHash = await signed.submit();
 ```
 
 <Callout>
-  - All assets minted in a single `mintAssets` call should be of the same policy id. You can chain multiple `mintAssets` calls if you need to mint assets with different policy ids 
-  - The minting policy must be attached to the transaction using `attach.MintingPolicy` 
-  - Lucid Evolution supports `Native`, `PlutusV1 / V2 / V3` minting policies. The appropriate script type will be used based on the policy you attach. 
-  - When using Plutus scripts (V1 / V2 / V3), make sure to provide an appropriate redeemer. 
-  - The `validTo` field is important for time-locked minting policies to ensure the transaction is submitted within the valid time range
+  - All assets minted in a single `mintAssets` call should be of the same policy id. You can chain multiple `mintAssets` calls if you need to mint assets with
+  different policy ids - The minting policy must be attached to the transaction using `attach.MintingPolicy` - Lucid Evolution supports `Native`, `PlutusV1 / V2
+  / V3` minting policies. The appropriate script type will be used based on the policy you attach. - When using Plutus scripts (V1 / V2 / V3), make sure to
+  provide an appropriate redeemer. - The `validTo` field is important for time-locked minting policies to ensure the transaction is submitted within the valid
+  time range
 </Callout>
