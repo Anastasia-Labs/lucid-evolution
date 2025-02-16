@@ -721,9 +721,8 @@ const calculateMinRefScriptFee = (
         );
       }
 
-      if (totalScriptSize > 25000)
-        fee = fee + BigInt(Math.ceil(25000 * fees[counter]));
-      else fee = fee + BigInt(Math.ceil(totalScriptSize * fees[counter]));
+      if (totalScriptSize > 25000) fee = fee + BigInt(25000 * fees[counter]);
+      else fee = fee + BigInt(totalScriptSize * fees[counter]);
       totalScriptSize = totalScriptSize - 25000;
       counter++;
     }
