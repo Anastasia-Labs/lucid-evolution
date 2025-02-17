@@ -538,9 +538,9 @@ describe.sequential("Onchain testing", () => {
     expect(exit._tag).toBe("Success");
   });
 
-  test("composeMintAndDeregisterStake", async () => {
+  test("composeDeregisterStake", async () => {
     const program = pipe(
-      ComposeEndpoints.composeMintAndDeregisterStake,
+      ComposeEndpoints.composeDeregisterStake,
       Effect.provide(User.layer),
       Effect.provide(NetworkConfig.layerPreprod),
     );

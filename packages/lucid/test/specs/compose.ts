@@ -120,9 +120,8 @@ export const composeMintAndRegisterStake = Effect.gen(function* ($) {
   return signBuilder;
 }).pipe(Effect.flatMap(handleSignSubmit), withLogRetry);
 
-export const composeMintAndDeregisterStake = Effect.gen(function* ($) {
+export const composeDeregisterStake = Effect.gen(function* ($) {
   const { user } = yield* User;
-  const networkConfig = yield* NetworkConfig;
   const addr = yield* Effect.promise(() => user.wallet().address());
   const rewardAddress = yield* pipe(
     Effect.promise(() => user.wallet().rewardAddress()),
@@ -132,28 +131,8 @@ export const composeMintAndDeregisterStake = Effect.gen(function* ($) {
     .newTx()
     .pay.ToAddressWithData(addr, { kind: "inline", value: Data.to(0n) }, {});
 
-  const { paymentCredential } = getAddressDetails(addr);
-  const mintingPolicy = scriptFromNative({
-    type: "all",
-    scripts: [
-      {
-        type: "before",
-        slot: unixTimeToSlot(networkConfig.NETWORK, Date.now() + 60000),
-      },
-      { type: "sig", keyHash: paymentCredential?.hash! },
-    ],
-  });
-
-  const policyId = mintingPolicyToId(mintingPolicy);
-  const txCompB = user
-    .newTx()
-    .mintAssets({
-      [policyId + fromText("Wow")]: 123n,
-    })
-    .validTo(Date.now() + 30000)
-    .attach.MintingPolicy(mintingPolicy);
   const txCompC = user.newTx().deregister.Stake(rewardAddress);
-  const tx = user.newTx().compose(txCompA).compose(txCompB).compose(txCompC);
+  const tx = user.newTx().compose(txCompA).compose(txCompC);
   const signBuilder = yield* tx.completeProgram();
   return signBuilder;
 }).pipe(Effect.flatMap(handleSignSubmit), withLogRetry);
