@@ -58,3 +58,12 @@ export const multiTxCompose = Effect.gen(function* () {
   emulator.awaitBlock(1);
   return yield* User.getUtxos;
 });
+
+export const mintAndPayTxCompose = Effect.gen(function* () {
+  const { emulator } = yield* EmulatorInstance;
+  yield* pipe(
+    PayBuilder.mintAndPayTxCompose,
+    Effect.flatMap(handleSignSubmitWithoutValidation),
+  );
+  emulator.awaitBlock(1);
+});
