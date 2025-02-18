@@ -4,9 +4,9 @@ import * as CML from "@anastasia-labs/cardano-multiplatform-lib-nodejs";
 import { ParseIssue } from "effect/ParseResult";
 
 /**
- * Plutus data types and schemas for serialization/deserialization between 
+ * Plutus data types and schemas for serialization/deserialization between
  * TypeScript types and Cardano's Plutus data format
- * 
+ *
  * @since 1.0.0
  */
 
@@ -15,19 +15,19 @@ import { ParseIssue } from "effect/ParseResult";
  *
  * @example
  * import { Data } from "@lucid-evolution/experimental"
- * 
+ *
  * // Integer type
  * const integerData: Data = 42n
- * 
+ *
  * // Bytes type (hex encoded)
  * const bytesData: Data = "deadbeef"
- * 
+ *
  * // Map type
  * const mapData: Data = new Map([["deadbeef", 42n]])
- * 
+ *
  * // List type
  * const listData: Data = [42n, "deadbeef"]
- * 
+ *
  * // Constructor type
  * const constrData: Data = { index: 0n, fields: [42n, "deadbeef"] }
  *
@@ -43,7 +43,7 @@ export type Data =
 
 /**
  * Helper function for formatting parse issues into human readable messages
- * 
+ *
  * @internal
  */
 const renderParseIssue = (issue: ParseIssue): string | undefined =>
@@ -53,22 +53,24 @@ const renderParseIssue = (issue: ParseIssue): string | undefined =>
 
 /**
  * Schema validator that ensures strings are valid hexadecimal format
- * 
+ *
  * @internal
  */
-const HexString = <A extends string, I>(self: Schema.Schema<A, I>) =>
+const HexString = <Source extends string, Target>(
+  self: Schema.Schema<Source, Target>,
+) =>
   pipe(
     self,
     Schema.filter((value) => Bytes.isHex(value), {
       message: (issue) =>
         `Expected a hexadecimal string but received: ${issue.actual}.`,
-    })
+    }),
   );
 
 interface ByteArray extends Schema.SchemaClass<string, string, never> {}
 /**
  * Schema for Plutus byte arrays that validates and ensures proper hexadecimal format
- * 
+ *
  * @since 1.0.0
  */
 export const ByteArray: ByteArray = pipe(
@@ -80,20 +82,20 @@ export const ByteArray: ByteArray = pipe(
       };
     },
   }),
-  HexString
+  HexString,
 ).annotations({
   identifier: "ByteArray",
 });
 
 /**
  * Type guard for checking if a value is a valid ByteArray
- * 
+ *
  * @example
  * import { Data } from "@lucid-evolution/experimental"
- * 
+ *
  * isByteArray("deadbeef") // true
  * isByteArray("not-hex") // false
- * 
+ *
  * @since 1.0.0
  */
 export const isByteArray = Schema.is(ByteArray);
@@ -119,13 +121,13 @@ export const Constr: Constr = Schema.Struct({
 
 /**
  * Type guard for checking if a value is a valid Plutus Constructor
- * 
+ *
  * @example
  * import { Data } from "@lucid-evolution/experimental"
- * 
+ *
  * isConstr({ index: 0n, fields: ["deadbeef"] }) // true
  * isConstr("not-a-constructor") // false
- * 
+ *
  * @since 1.0.0
  */
 export const isConstr = Schema.is(Constr);
@@ -155,13 +157,13 @@ export const Map: Map = Schema.ReadonlyMapFromSelf({
 
 /**
  * Type guard for checking if a value is a valid Plutus Map
- * 
+ *
  * @example
  * import { Data } from "@lucid-evolution/experimental"
- * 
+ *
  * isMap(new Map([["deadbeef", 42n]])) // true
  * isMap({ key: "value" }) // false
- * 
+ *
  * @since 1.0.0
  */
 export const isMap = Schema.is(Map);
@@ -172,7 +174,7 @@ interface List extends Schema.Array$<Schema.suspend<Data, Data, never>> {}
  * @since 1.0.0
  */
 export const List: List = Schema.Array(
-  Schema.suspend((): Schema.Schema<Data> => Data)
+  Schema.suspend((): Schema.Schema<Data> => Data),
 ).annotations({
   identifier: "List",
   message: (issue: ParseIssue) => {
@@ -182,13 +184,13 @@ export const List: List = Schema.Array(
 
 /**
  * Type guard for checking if a value is a valid Plutus List
- * 
+ *
  * @example
  * import { Data } from "@lucid-evolution/experimental"
- * 
+ *
  * isList([42n, "deadbeef"]) // true
  * isList("not-a-list") // false
- * 
+ *
  * @since 1.0.0
  */
 export const isList = Schema.is(List);
@@ -207,13 +209,13 @@ export const Integer: Integer = Schema.BigIntFromSelf.annotations({
 
 /**
  * Type guard for checking if a value is a valid Plutus Integer
- * 
+ *
  * @example
  * import { Data } from "@lucid-evolution/experimental"
- * 
+ *
  * isInteger(42n) // true
  * isInteger(42) // false
- * 
+ *
  * @since 1.0.0
  */
 export const isInteger = Schema.is(Integer);
@@ -223,7 +225,7 @@ export const Data: Schema.Schema<Data> = Schema.Union(
   Map,
   Constr,
   Integer,
-  ByteArray
+  ByteArray,
 ).annotations({
   identifier: "Data",
 });
@@ -233,19 +235,19 @@ export const Data: Schema.Schema<Data> = Schema.Union(
  *
  * @example
  * import { Data, Type } from "@lucid-evolution/experimental"
- * 
+ *
  * const Token = Type.Struct({
  *   policyId: Type.ByteArray,
  *   assetName: Type.ByteArray,
  *   amount: Type.Integer
  * })
- * 
+ *
  * const token = {
  *   policyId: "deadbeef",
  *   assetName: "cafe",
  *   amount: 1000n
  * }
- * 
+ *
  * // Convert to canonical CBOR
  * const cbor = Data.toCBOR(token, Token, { canonical: true })
  *
@@ -257,13 +259,13 @@ export const toCBOR = <Source, Target extends Data>(
   options: {
     canonical?: boolean;
     parseOptions?: SchemaAST.ParseOptions;
-  } = {}
+  } = {},
 ): string => {
   const { canonical = false } = options;
   const toCMLPlutusData = (data: Data): CML.PlutusData => {
     if (Schema.is(Integer)(data))
       return CML.PlutusData.new_integer(
-        CML.BigInteger.from_str(data.toString())
+        CML.BigInteger.from_str(data.toString()),
       );
     if (Schema.is(ByteArray)(data))
       return CML.PlutusData.new_bytes(Bytes.fromHex(data));
@@ -283,7 +285,7 @@ export const toCBOR = <Source, Target extends Data>(
       const fields = CML.PlutusDataList.new();
       data.fields.forEach((item) => fields.add(toCMLPlutusData(item)));
       return CML.PlutusData.new_constr_plutus_data(
-        CML.ConstrPlutusData.new(data.index, fields)
+        CML.ConstrPlutusData.new(data.index, fields),
       );
     }
     throw new Error(`Unsupported type: ${typeof data}`);
@@ -309,11 +311,11 @@ export const toCBOR = <Source, Target extends Data>(
 export function fromCBOR(input: string): Data;
 export function fromCBOR<Source, Target extends Data>(
   input: string,
-  schema: Schema.Schema<Source, Target>
+  schema: Schema.Schema<Source, Target>,
 ): Source;
 export function fromCBOR<Source, Target extends Data>(
   input: string,
-  schema?: Schema.Schema<Source, Target>
+  schema?: Schema.Schema<Source, Target>,
 ): Source | Data {
   const data = resolveCBOR(input);
   return schema ? fromData(data, schema) : data;
@@ -388,7 +390,7 @@ export const resolveCBOR = (input: string): Data => {
 export const fromData = <Source, Target extends Data>(
   input: unknown,
   schema: Schema.Schema<Source, Target>,
-  options: SchemaAST.ParseOptions = {}
+  options: SchemaAST.ParseOptions = {},
 ): Source => Schema.decodeUnknownSync(schema, options)(input);
 
 /**
@@ -410,5 +412,5 @@ export const fromData = <Source, Target extends Data>(
 export const toData = <Source, Target extends Data>(
   input: unknown,
   schema: Schema.Schema<Source, Target>,
-  options?: SchemaAST.ParseOptions
+  options?: SchemaAST.ParseOptions,
 ): Target => Schema.encodeUnknownSync(schema, options)(input);

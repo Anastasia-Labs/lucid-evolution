@@ -1,5 +1,5 @@
 import { Schema, SchemaAST } from "effect";
-import { NonEmptyReadonlyArray } from "effect/Array";
+import { NonEmptyReadonlyArray, ReadonlyArray } from "effect/Array";
 import * as Data from "./Data.js";
 
 export { ByteArray } from "./Data.js";
@@ -160,5 +160,37 @@ export const Struct = <Fields extends Schema.Struct.Fields>(
       return Object.fromEntries(
         keys.map((key, index) => [key, constr.fields[index]])
       );
+    },
+  });
+
+interface Union<Members extends ReadonlyArray<Schema.Schema.Any>>
+  extends Schema.transform<
+    typeof Data.Constr,
+    Schema.Schema<
+      Schema.Schema.Type<[...Members][number]>,
+      Schema.Schema.Encoded<[...Members][number]>,
+      Schema.Schema.Context<[...Members][number]>
+    >
+  > {}
+
+export const Union = <Members extends ReadonlyArray<Schema.Schema.Any>>(
+  ...members: Members
+): Union<Members> =>
+  Schema.transform(Data.Constr, Schema.Union(...members), {
+    strict: false,
+    encode: (value, toA) => {
+      const index = BigInt(
+        members.findIndex((schema) => Schema.is(schema)(toA))
+      );
+      // Wrap value in an array if not already an array to handle multiple fields
+      const fields = globalThis.Array.isArray(value) ? value : [value];
+      return { index, fields };
+    },
+    decode: (value: {
+      readonly index: bigint;
+      readonly fields: readonly Data.Data[];
+    }) => {
+      // Return array if multiple fields, single value otherwise
+      return value.fields.length === 1 ? value.fields[0] : value.fields;
     },
   });
