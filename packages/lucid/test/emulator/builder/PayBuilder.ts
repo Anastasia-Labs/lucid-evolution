@@ -1,6 +1,11 @@
 import { Effect } from "effect";
 import { User } from "../service/EmulatorUser.js";
-import { getAddressDetails, validatorToAddress } from "@lucid-evolution/utils";
+import {
+  getAddressDetails,
+  mintingPolicyToId,
+  toUnit,
+  validatorToAddress,
+} from "@lucid-evolution/utils";
 import { Script } from "@lucid-evolution/core-types";
 import { Constr, Data } from "@lucid-evolution/plutus";
 import { HelloContract } from "../../specs/services.js";
@@ -88,4 +93,29 @@ export const multiTxCompose = Effect.gen(function* () {
     .pay.ToAddressWithData(addr, { kind: "inline", value: Data.to(3n) }, {});
   const signBuilder = yield* tx.completeProgram();
   return signBuilder;
+});
+
+export const mintAndPayTxCompose = Effect.gen(function* () {
+  const { user } = yield* User;
+  const alwaysSucceedScript: Script = {
+    type: "PlutusV2",
+    script: "49480100002221200101",
+  };
+  const alwaysSucceedAddress = validatorToAddress(
+    "Custom",
+    alwaysSucceedScript,
+  );
+  const mintedAssetUnit = toUnit(mintingPolicyToId(alwaysSucceedScript), "");
+  const mintedAsset = { [mintedAssetUnit]: 1n };
+
+  const baseTx = user
+    .newTx()
+    .attach.MintingPolicy(alwaysSucceedScript)
+    .mintAssets(mintedAsset, Data.void())
+    .pay.ToContract(
+      alwaysSucceedAddress,
+      { kind: "inline", value: Data.void() },
+      mintedAsset,
+    );
+  return yield* user.newTx().compose(baseTx).completeProgram();
 });

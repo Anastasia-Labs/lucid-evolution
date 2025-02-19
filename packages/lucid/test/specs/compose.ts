@@ -129,7 +129,11 @@ export const composeDeregisterStake = Effect.gen(function* ($) {
   );
   const txCompA = user
     .newTx()
-    .pay.ToAddressWithData(addr, { kind: "inline", value: Data.to(0n) }, {});
+    .pay.ToAddressWithData(
+      addr,
+      { kind: "inline", value: Data.to(0n) },
+      { lovelace: 10_000_000n },
+    );
 
   const txCompC = user.newTx().deregister.Stake(rewardAddress);
   const tx = user.newTx().compose(txCompA).compose(txCompC);

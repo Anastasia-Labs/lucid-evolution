@@ -184,6 +184,11 @@ describe("Emulator", () => {
       expect(userUTxOs.length).toBe(6);
     }).pipe(Effect.provide(TestEnvironment)),
   );
+  it.effect("should successfully compose mint and pay transactions", () =>
+    Effect.gen(function* () {
+      yield* PayExecutor.mintAndPayTxCompose;
+    }).pipe(Effect.provide(TestEnvironment)),
+  );
   it.effect("should successfully verify message", () =>
     Effect.gen(function* () {
       const isValid = yield* SignExecutor.verifySignedMessage;

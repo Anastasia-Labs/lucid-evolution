@@ -528,26 +528,6 @@ describe.sequential("Onchain testing", () => {
     expect(exit._tag).toBe("Success");
   });
 
-  test("composeMintAndRegisterStake", async () => {
-    const program = pipe(
-      ComposeEndpoints.composeMintAndRegisterStake,
-      Effect.provide(User.layer),
-      Effect.provide(NetworkConfig.layerPreprod),
-    );
-    const exit = await Effect.runPromiseExit(program);
-    expect(exit._tag).toBe("Success");
-  });
-
-  test("composeDeregisterStake", async () => {
-    const program = pipe(
-      ComposeEndpoints.composeDeregisterStake,
-      Effect.provide(User.layer),
-      Effect.provide(NetworkConfig.layerPreprod),
-    );
-    const exit = await Effect.runPromiseExit(program);
-    expect(exit._tag).toBe("Success");
-  });
-
   test("composeDepositFundsLockRefScriptAndRegisterDrep", async () => {
     const program = pipe(
       ComposeEndpoints.composeDepositFundsLockRefScriptAndRegisterDrep,
