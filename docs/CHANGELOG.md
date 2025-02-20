@@ -1,5 +1,11 @@
 # docs
 
+## 2.0.0
+
+### Major Changes
+
+- [#504](https://github.com/Anastasia-Labs/lucid-evolution/pull/504) [`2aefba5`](https://github.com/Anastasia-Labs/lucid-evolution/commit/2aefba5236fc82ce5fbb73de252ef8ae149d4136) Thanks [@ariady-putra](https://github.com/ariady-putra)! - Improve CIP-0068 Token Standard Code example
+
 ## 1.0.0
 
 ### Major Changes
