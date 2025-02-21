@@ -2,6 +2,7 @@ import { pipe, Schema, SchemaAST } from "effect";
 import * as Bytes from "./Core/Bytes.js";
 import * as CML from "@anastasia-labs/cardano-multiplatform-lib-nodejs";
 import { ParseIssue } from "effect/ParseResult";
+import * as DataJson from "./DataJson.js";
 
 /**
  * Plutus data types and schemas for serialization/deserialization between
@@ -33,21 +34,95 @@ import { ParseIssue } from "effect/ParseResult";
  *
  * @since 1.0.0
  */
-//TODO: Map, Array, and Constr types will carry the format indefinite length or definite length
 export type Data =
   | bigint // Integer
   | string // Bytes in hex
-  | ReadonlyMap<string, Data> // Map/AssocList
+  | ReadonlyMap<string, Data> // Map
   | ReadonlyArray<Data> // List
   | { index: bigint; fields: ReadonlyArray<Data> };
+
+//TODO: make a toJson function
+export const toJson = (data: Data): DataJson.Data => {
+  if (typeof data === "bigint") return { int: Number(data) };
+  if (typeof data === "string") return { bytes: data };
+  if (isMap(data)) {
+    const map: Record<string, DataJson.Data> = {};
+    data.forEach((value, key) => {
+      map[key] = toJson(value);
+    });
+    return map satisfies DataJson.Map;
+  }
+  if (isList(data)) return data.map(toJson) satisfies DataJson.List;
+  if (isConstr(data))
+    return { constructor: Number(data.index), fields: data.fields.map(toJson) };
+
+  throw new Error("Invalid Data type");
+};
+
+const fromJson = (data: DataJson.Data): Data => {
+  if (DataJson.isInteger(data)) return BigInt(data.int);
+  if (DataJson.isByteArray(data)) return data.bytes;
+  if (DataJson.isMap(data)) {
+    const map = new globalThis.Map<string, Data>();
+    for (const [key, value] of Object.entries(data)) {
+      map.set(key, fromJson(value));
+    }
+    return map;
+  }
+  if (DataJson.isList(data)) return data.map(fromJson);
+  if (DataJson.isConstr(data))
+    return {
+      index: BigInt(data.constructor),
+      fields: data.fields.map(fromJson),
+    };
+  throw new Error("Invalid Data type");
+};
 
 /**
  * Helper function for formatting parse issues into human readable messages
  *
  * @internal
  */
-const renderParseIssue = (issue: ParseIssue): string | undefined =>
+export const renderParseIssue = (issue: ParseIssue): string | undefined =>
   typeof issue.actual === "object" ? "[complex value]" : String(issue.actual);
+
+export const renderNestedParseIssue = (
+  issue: ParseIssue,
+  maxDepth: number
+): string => {
+  const resolve = (value: unknown, currentDepth: number): string => {
+    if (currentDepth >= maxDepth) return "[complex value]";
+    if (value === null) return "null";
+    if (value === undefined) return "undefined";
+    if (typeof value === "bigint") return value.toString() + "n";
+    if (typeof value === "string") return `"${value}"`;
+    if (typeof value === "number") return value.toString();
+    if (typeof value === "boolean") return value.toString();
+    if (Array.isArray(value)) {
+      return `[${value.map((v) => resolve(v, currentDepth + 1)).join(", ")}]`;
+    }
+    if (value instanceof globalThis.Map) {
+      const entries = Array.from(value.entries()).map(
+        ([key, val]) =>
+          `${resolve(key, currentDepth + 1)} => ${resolve(val, currentDepth + 1)}`
+      );
+      return `Map { ${entries.join(", ")} }`;
+    }
+    if (value instanceof Set) {
+      return `Set(${Array.from(value)
+        .map((v) => resolve(v, currentDepth + 1))
+        .join(", ")})`;
+    }
+    if (typeof value === "object") {
+      const entries = Object.entries(value).map(
+        ([k, v]) => `${k}: ${resolve(v, currentDepth + 1)}`
+      );
+      return `{ ${entries.join(", ")} }`;
+    }
+    return String(value);
+  };
+  return resolve(issue.actual, 0);
+};
 
 // Schema Definitions
 
@@ -57,14 +132,14 @@ const renderParseIssue = (issue: ParseIssue): string | undefined =>
  * @internal
  */
 const HexString = <Source extends string, Target>(
-  self: Schema.Schema<Source, Target>,
+  self: Schema.Schema<Source, Target>
 ) =>
   pipe(
     self,
     Schema.filter((value) => Bytes.isHex(value), {
       message: (issue) =>
         `Expected a hexadecimal string but received: ${issue.actual}.`,
-    }),
+    })
   );
 
 interface ByteArray extends Schema.SchemaClass<string, string, never> {}
@@ -74,15 +149,16 @@ interface ByteArray extends Schema.SchemaClass<string, string, never> {}
  * @since 1.0.0
  */
 export const ByteArray: ByteArray = pipe(
-  Schema.String.annotations({
-    message: (issue: ParseIssue) => {
-      return {
-        message: `Expected ByteArray but got ${renderParseIssue(issue)}.`,
-        override: true,
-      };
-    },
-  }),
-  HexString,
+  Schema.String,
+  // .annotations({
+  //   message: (issue: ParseIssue) => {
+  //     return {
+  //       message: `Expected ByteArray but got ${renderNestedParseIssue(issue, 2)}.`,
+  //       override: true,
+  //     };
+  //   },
+  // }),
+  HexString
 ).annotations({
   identifier: "ByteArray",
 });
@@ -112,7 +188,8 @@ interface Constr
 export const Constr: Constr = Schema.Struct({
   index: Schema.BigIntFromSelf,
   fields: Schema.Array(Schema.suspend((): Schema.Schema<Data> => Data)),
-}).annotations({
+})
+.annotations({
   identifier: "Constr",
   message: (issue: ParseIssue) => {
     return `Expected Constr but got ${renderParseIssue(issue)}.`;
@@ -148,12 +225,13 @@ export const Map: Map = Schema.ReadonlyMapFromSelf({
   value: Schema.suspend((): Schema.Schema<Data> => Data).annotations({
     identifier: "value",
   }),
-}).annotations({
-  identifier: "Map",
-  message: (issue: ParseIssue) => {
-    return `Expected Map but got ${renderParseIssue(issue)}.`;
-  },
-});
+})
+// .annotations({
+//   identifier: "Map",
+//   message: (issue: ParseIssue) => {
+//     return `Expected Map but got ${renderParseIssue(issue)}.`;
+//   },
+// });
 
 /**
  * Type guard for checking if a value is a valid Plutus Map
@@ -174,13 +252,14 @@ interface List extends Schema.Array$<Schema.suspend<Data, Data, never>> {}
  * @since 1.0.0
  */
 export const List: List = Schema.Array(
-  Schema.suspend((): Schema.Schema<Data> => Data),
-).annotations({
-  identifier: "List",
-  message: (issue: ParseIssue) => {
-    return `Expected List but got ${renderParseIssue(issue)}.`;
-  },
-});
+  Schema.suspend((): Schema.Schema<Data> => Data)
+)
+// .annotations({
+//   identifier: "List",
+//   message: (issue: ParseIssue) => {
+//     return `Expected List but got ${renderParseIssue(issue)}.`;
+//   },
+// });
 
 /**
  * Type guard for checking if a value is a valid Plutus List
@@ -200,12 +279,13 @@ interface Integer extends Schema.SchemaClass<bigint, bigint, never> {}
  * Schema for Plutus Integer type
  * @since 1.0.0
  */
-export const Integer: Integer = Schema.BigIntFromSelf.annotations({
-  identifier: "Integer",
-  message: (issue: ParseIssue) => {
-    return `Expected Integer but got ${renderParseIssue(issue)}.`;
-  },
-});
+export const Integer: Integer = Schema.BigIntFromSelf
+// .annotations({
+//   identifier: "Integer",
+//   message: (issue: ParseIssue) => {
+//     return `Expected Integer but got ${renderParseIssue(issue)}.`;
+//   },
+// });
 
 /**
  * Type guard for checking if a value is a valid Plutus Integer
@@ -225,7 +305,7 @@ export const Data: Schema.Schema<Data> = Schema.Union(
   Map,
   Constr,
   Integer,
-  ByteArray,
+  ByteArray
 ).annotations({
   identifier: "Data",
 });
@@ -259,13 +339,13 @@ export const toCBOR = <Source, Target extends Data>(
   options: {
     canonical?: boolean;
     parseOptions?: SchemaAST.ParseOptions;
-  } = {},
+  } = {}
 ): string => {
   const { canonical = false } = options;
   const toCMLPlutusData = (data: Data): CML.PlutusData => {
     if (Schema.is(Integer)(data))
       return CML.PlutusData.new_integer(
-        CML.BigInteger.from_str(data.toString()),
+        CML.BigInteger.from_str(data.toString())
       );
     if (Schema.is(ByteArray)(data))
       return CML.PlutusData.new_bytes(Bytes.fromHex(data));
@@ -285,7 +365,7 @@ export const toCBOR = <Source, Target extends Data>(
       const fields = CML.PlutusDataList.new();
       data.fields.forEach((item) => fields.add(toCMLPlutusData(item)));
       return CML.PlutusData.new_constr_plutus_data(
-        CML.ConstrPlutusData.new(data.index, fields),
+        CML.ConstrPlutusData.new(data.index, fields)
       );
     }
     throw new Error(`Unsupported type: ${typeof data}`);
@@ -311,11 +391,11 @@ export const toCBOR = <Source, Target extends Data>(
 export function fromCBOR(input: string): Data;
 export function fromCBOR<Source, Target extends Data>(
   input: string,
-  schema: Schema.Schema<Source, Target>,
+  schema: Schema.Schema<Source, Target>
 ): Source;
 export function fromCBOR<Source, Target extends Data>(
   input: string,
-  schema?: Schema.Schema<Source, Target>,
+  schema?: Schema.Schema<Source, Target>
 ): Source | Data {
   const data = resolveCBOR(input);
   return schema ? fromData(data, schema) : data;
@@ -390,7 +470,7 @@ export const resolveCBOR = (input: string): Data => {
 export const fromData = <Source, Target extends Data>(
   input: unknown,
   schema: Schema.Schema<Source, Target>,
-  options: SchemaAST.ParseOptions = {},
+  options: SchemaAST.ParseOptions = {}
 ): Source => Schema.decodeUnknownSync(schema, options)(input);
 
 /**
@@ -412,5 +492,5 @@ export const fromData = <Source, Target extends Data>(
 export const toData = <Source, Target extends Data>(
   input: unknown,
   schema: Schema.Schema<Source, Target>,
-  options?: SchemaAST.ParseOptions,
+  options?: SchemaAST.ParseOptions
 ): Target => Schema.encodeUnknownSync(schema, options)(input);
