@@ -22,9 +22,9 @@
       "import": "./dist/esm/Network.js"
     },
     "./EffectCML/AssetName": {
-        "types": "./dist/types/EffectCML/AssetName.d.ts",
-        "require": "./dist/cjs/EffectCML/AssetName.js",
-        "import": "./dist/esm/EffectCML/AssetName.js"
+      "types": "./dist/types/EffectCML/AssetName.d.ts",
+      "require": "./dist/cjs/EffectCML/AssetName.js",
+      "import": "./dist/esm/EffectCML/AssetName.js"
     }
   },
   "files": [
@@ -52,7 +52,7 @@
     "@harmoniclabs/uplc": "^1.2.4",
     "@sinclair/typebox": "^0.32.28",
     "cbor-x": "^1.6.0",
-    "effect": "^3.12.1"
+    "effect": "^3.13.2"
   },
   "devDependencies": {
     "@effect/vitest": "^0.16.0",

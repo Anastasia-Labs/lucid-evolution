@@ -37,9 +37,12 @@ import * as DataJson from "./DataJson.js";
 export type Data =
   | bigint // Integer
   | string // Bytes in hex
-  | ReadonlyMap<string, Data> // Map
+  | Map
   | ReadonlyArray<Data> // List
   | { index: bigint; fields: ReadonlyArray<Data> };
+
+export type Map = ReadonlyMap<string, Data>;
+
 
 //TODO: make a toJson function
 export const toJson = (data: Data): DataJson.Data => {
@@ -59,7 +62,7 @@ export const toJson = (data: Data): DataJson.Data => {
   throw new Error("Invalid Data type");
 };
 
-const fromJson = (data: DataJson.Data): Data => {
+export const fromJson = (data: DataJson.Data): Data => {
   if (DataJson.isInteger(data)) return BigInt(data.int);
   if (DataJson.isByteArray(data)) return data.bytes;
   if (DataJson.isMap(data)) {
@@ -188,13 +191,15 @@ interface Constr
 export const Constr: Constr = Schema.Struct({
   index: Schema.BigIntFromSelf,
   fields: Schema.Array(Schema.suspend((): Schema.Schema<Data> => Data)),
-})
-.annotations({
+}).annotations({
   identifier: "Constr",
-  message: (issue: ParseIssue) => {
-    return `Expected Constr but got ${renderParseIssue(issue)}.`;
-  },
-});
+})
+// .annotations({
+//   identifier: "Constr",
+//   message: (issue: ParseIssue) => {
+//     return `Expected Constr but got ${renderParseIssue(issue)}.`;
+//   },
+// });
 
 /**
  * Type guard for checking if a value is a valid Plutus Constructor
@@ -209,7 +214,7 @@ export const Constr: Constr = Schema.Struct({
  */
 export const isConstr = Schema.is(Constr);
 
-interface Map
+interface _Map
   extends Schema.ReadonlyMapFromSelf<
     Schema.SchemaClass<string, string, never>,
     Schema.suspend<Data, Data, never>
@@ -218,7 +223,7 @@ interface Map
  * Schema for Plutus AssocList (Map) type
  * @since 1.0.0
  */
-export const Map: Map = Schema.ReadonlyMapFromSelf({
+export const Map: _Map = Schema.ReadonlyMapFromSelf({
   key: HexString(Schema.String).annotations({
     identifier: "key",
   }),
