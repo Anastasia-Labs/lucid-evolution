@@ -15,7 +15,7 @@ This setup allows you to create a mock blockchain state with predefined addresse
 const emulator = new Emulator([
   {
     address: "addr_test...",
-    assets: { lovelace: 3000000000n },
+    assets: { "lovelace": 3000000000n },
   },
   // You can add multiple addresses with different asset distributions
 ]);
@@ -55,7 +55,7 @@ emulator.log();
 ```typescript
 const tx = await lucid
   .newTx()
-  .pay.ToAddress("addr_test...", { lovelace: 1000000n })
+  .pay.ToAddress("addr_test...", { "lovelace": 1000000n })
   .complete();
 const signedTx = await tx.sign().complete();
 const txHash = await signedTx.submit();

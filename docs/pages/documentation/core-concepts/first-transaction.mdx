@@ -12,8 +12,8 @@ Let's create a simple transaction where we send `5 ADA` to two recipients each:
 ```typescript
 const tx = await lucid
   .newTx()
-  .pay.ToAddress("addr_testa...", { lovelace: 5000000n })
-  .pay.ToAddress("addr_testb...", { lovelace: 5000000n })
+  .pay.ToAddress("addr_testa...", { "lovelace": 5000000n })
+  .pay.ToAddress("addr_testb...", { "lovelace": 5000000n })
   .complete();
 ```
 

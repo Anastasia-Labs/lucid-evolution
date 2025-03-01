@@ -34,7 +34,7 @@ const tx = await lucid
   .pay.ToAddressWithData(
     scriptAddress,
     { inline: datum },
-    { lovelace: 10_000_000n }
+    { "lovelace": 10_000_000n }
   )
   .complete();
 ```
@@ -47,7 +47,7 @@ const tx = await lucid
   .pay.ToAddressWithData(
     scriptAddress,
     { hash: datumHash },
-    { lovelace: 10_000_000n }
+    { "lovelace": 10_000_000n }
   )
   .complete();
 ```
@@ -59,7 +59,7 @@ const tx = await lucid
   .pay.ToAddressWithData(
     scriptAddress,
     datum,
-    { lovelace: 10_000_000n },
+    { "lovelace": 10_000_000n },
     referencedScript,
   )
   .complete();
@@ -168,15 +168,15 @@ Evolution library provides a high-level interface that abstracts all the complex
 ```typescript
 // UTxOs we want to spend from the script (script inputs)
 const scriptInputs: UTxO[] = [
-    { txHash: "a", outputIndex: 1, address: "scriptAddress", assets: { lovelace: 10_000000n } },
-    { txHash: "b", outputIndex: 2, address: "scriptAddress", assets: { lovelace: 20_000000n } },
-    { txHash: "d", outputIndex: 4, address: "scriptAddress", assets: { lovelace: 40_000000n } },
+    { txHash: "a", outputIndex: 1, address: "scriptAddress", assets: { "lovelace": 10_000000n } },
+    { txHash: "b", outputIndex: 2, address: "scriptAddress", assets: { "lovelace": 20_000000n } },
+    { txHash: "d", outputIndex: 4, address: "scriptAddress", assets: { "lovelace": 40_000000n } },
 ];
 // Other UTxOs (random inputs)
 const randomInputs: UTxO[] = [
-    { txHash: "c", outputIndex: 3, address: "randomAddress", assets: { lovelace: 30_000000n } },
-    { txHash: "e", outputIndex: 5, address: "randomAddress", assets: { lovelace: 50_000000n } },
-    { txHash: "f", outputIndex: 6, address: "randomAddress", assets: { lovelace: 60_000000n } },
+    { txHash: "c", outputIndex: 3, address: "randomAddress", assets: { "lovelace": 30_000000n } },
+    { txHash: "e", outputIndex: 5, address: "randomAddress", assets: { "lovelace": 50_000000n } },
+    { txHash: "f", outputIndex: 6, address: "randomAddress", assets: { "lovelace": 60_000000n } },
 ];
 
 const redeemer: RedeemerBuilder = {
@@ -194,13 +194,13 @@ const tx = await lucid
     .collectFrom([...scriptInputs, ...randomInputs], redeemer)
     .attach.SpendingValidator(script)
     // Outputs maintain the same order as script inputs
-    .pay.ToContract("scriptAddress", datum, { lovelace: 10_000000n })
-    .pay.ToContract("scriptAddress", datum, { lovelace: 20_000000n })
-    .pay.ToContract("scriptAddress", datum, { lovelace: 40_000000n })
+    .pay.ToContract("scriptAddress", datum, { "lovelace": 10_000000n })
+    .pay.ToContract("scriptAddress", datum, { "lovelace": 20_000000n })
+    .pay.ToContract("scriptAddress", datum, { "lovelace": 40_000000n })
     // Other outputs
-    .pay.ToAddress("randomAddress", { lovelace: 30_000000n })
-    .pay.ToAddress("randomAddress", { lovelace: 50_000000n })
-    .pay.ToAddress("randomAddress", { lovelace: 60_000000n })
+    .pay.ToAddress("randomAddress", { "lovelace": 30_000000n })
+    .pay.ToAddress("randomAddress", { "lovelace": 50_000000n })
+    .pay.ToAddress("randomAddress", { "lovelace": 60_000000n })
     .addSigner("randomAddress")
     .complete();
 ```

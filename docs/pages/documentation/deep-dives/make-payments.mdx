@@ -11,7 +11,7 @@ For straightforward payments to a public key or native script address, use `pay.
     ```typescript
     const tx = await lucid
       .newTx()
-      .pay.ToAddress("addr_test...", { lovelace: 5000000n })
+      .pay.ToAddress("addr_test...", { "lovelace": 5000000n })
       .complete();
 
     const signedTx = await tx.sign.withWallet().complete();
@@ -27,9 +27,9 @@ Chain multiple `pay.ToAddress` calls to pay multiple recipients:
 ```typescript
 const tx = await lucid
   .newTx()
-  .pay.ToAddress("addr_testa...", { lovelace: 5000000n })
-  .pay.ToAddress("addr_testb...", { lovelace: 5000000n })
-  .pay.ToAddress("addr_testc...", { lovelace: 5000000n })
+  .pay.ToAddress("addr_testa...", { "lovelace": 5000000n })
+  .pay.ToAddress("addr_testb...", { "lovelace": 5000000n })
+  .pay.ToAddress("addr_testc...", { "lovelace": 5000000n })
   .complete();
 
 const signedTx = await tx.sign.withWallet().complete();
@@ -69,7 +69,7 @@ Attach metadata to your ADA payments:
 ```typescript
 const tx = await lucid
   .newTx()
-  .pay.ToAddress("addr_test...", { lovelace: 5000000n })
+  .pay.ToAddress("addr_test...", { "lovelace": 5000000n })
   .attachMetadata(1, { msg: "Hello from Anastasia Labs" })
   .complete();
 
@@ -94,7 +94,7 @@ const tx = await lucid
   .pay.ToAddressWithData(
     "addr_test...",
     { kind: "hash", value: Data.to("31313131") },
-    { lovelace: 5000000n }
+    { "lovelace": 5000000n }
   )
   .complete();
 
@@ -104,7 +104,7 @@ const tx = await lucid
   .pay.ToAddressWithData(
     "addr_test...",
     { kind: "inline", value: Data.to("31313131") },
-    { lovelace: 5000000n }
+    { "lovelace": 5000000n }
   )
   .complete();
 ```
@@ -121,7 +121,7 @@ const deployRefScriptTx = await lucid
   .pay.ToAddressWithData(
     scriptAddress,
     { kind: "inline", value: datum },
-    { lovelace: 5_000_000n },
+    { "lovelace": 5_000_000n },
     referenceScript // The script to be stored as a reference for subsequent transactions
   )
   .complete();
@@ -158,7 +158,7 @@ const tx = await lucid
   .pay.ToContract(
     "addr_test...",
     { kind: "inline", value: Data.to("31313131") },
-    { lovelace: 5000000n }
+    { "lovelace": 5000000n }
   )
   .complete();
 

@@ -50,7 +50,7 @@ You can override coin selection by manually selecting UTxOs:
 const tx = await lucid
   .newTx()
   .collectFrom([specificUtxo]) // Manual UTxO selection
-  .pay.ToAddress("addr_test...", { lovelace: 5000000n })
+  .pay.ToAddress("addr_test...", { "lovelace": 5000000n })
   .complete();
 ```
 </Callout>
@@ -66,7 +66,7 @@ const tx = await lucid
 // Draft the transaction to calculate the fee
   const draftTx = await lucid
     .newTx()
-    .pay.ToAddress("addr_test...", { lovelace: amount })
+    .pay.ToAddress("addr_test...", { "lovelace": amount })
     .complete();
 
   const fee = (await draftTx.complete()).toTransaction().body().fee();
@@ -74,7 +74,7 @@ const tx = await lucid
   // Build the final transaction using calculated fee
   const finalTx = await lucid
     .newTx()
-    .pay.ToAddress("addr_test...", { lovelace: amount - fee })
+    .pay.ToAddress("addr_test...", { "lovelace": amount - fee })
     .complete();
 ```
 </Callout>
