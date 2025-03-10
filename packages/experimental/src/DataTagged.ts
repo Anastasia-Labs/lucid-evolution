@@ -1,8 +1,18 @@
-import { Either, Record, Schema, SchemaAST } from "effect";
+import { Either, pipe, Schema, SchemaAST } from "effect";
 import * as Bytes from "./Core/Bytes.js";
 import * as CML from "@anastasia-labs/cardano-multiplatform-lib-nodejs";
-import { ReadonlyMap } from "effect/Schema";
 import { ParseError } from "effect/ParseResult";
+
+export const HexString = <Source extends string, Target>(
+  self: Schema.Schema<Source, Target>
+) =>
+  pipe(
+    self,
+    Schema.filter((value) => Bytes.isHex(value), {
+      message: (issue) =>
+        `Expected a hexadecimal string but got: ${issue.actual}.`,
+    })
+  );
 
 /**
  * Plutus data types and schemas for serialization/deserialization between
@@ -10,19 +20,48 @@ import { ParseError } from "effect/ParseResult";
  *
  * @since 2.0.0
  */
-export type Data =
-  | { _tag: "Integer"; integer: bigint }
-  | { _tag: "ByteArray"; bytearray: string }
-  | { _tag: "List"; list: readonly Data[] }
-  | { _tag: "Map"; map: ReadonlyMap<Data, Data> }
-  | { _tag: "Constr"; index: bigint; fields: readonly Data[] };
+export type Data = Integer | ByteArray | List | Map | Constr;
+
+/**
+ * List type with a generic parameter T that specifies the element type
+ */
+export interface List<T extends Data = Data> {
+  readonly _tag: "List";
+  readonly list: readonly T[];
+}
+
+export interface Map<K extends Data = Data, V extends Data = Data> {
+  readonly _tag: "Map";
+  readonly map: ReadonlyArray<readonly [K, V]>;
+}
+
+export interface Constr<
+  T extends bigint = bigint,
+  U extends readonly Data[] = readonly Data[],
+> {
+  readonly _tag: "Constr";
+  readonly index: T;
+  readonly fields: U;
+}
+
+export interface Integer<T extends bigint = bigint> {
+  readonly _tag: "Integer";
+  readonly integer: T;
+}
+
+export interface ByteArray<T extends string = string> {
+  readonly _tag: "ByteArray";
+  readonly bytearray: T;
+}
+
+export type DataTuple = readonly [Data, Data];
 
 export const Integer = Schema.TaggedStruct("Integer", {
   integer: Schema.BigIntFromSelf,
 }).annotations({ schema: "integer" });
 
 export const ByteArray = Schema.TaggedStruct("ByteArray", {
-  bytearray: Schema.String,
+  bytearray: Schema.String.pipe(HexString),
 }).annotations({ schema: "ByteArray" });
 
 export const List = Schema.TaggedStruct("List", {
@@ -30,10 +69,12 @@ export const List = Schema.TaggedStruct("List", {
 }).annotations({ schema: "List" });
 
 export const Map = Schema.TaggedStruct("Map", {
-  map: Schema.ReadonlyMapFromSelf({
-    key: Schema.suspend((): Schema.Schema<Data> => Data),
-    value: Schema.suspend((): Schema.Schema<Data> => Data),
-  }),
+  map: Schema.Array(
+    Schema.Tuple(
+      Schema.suspend((): Schema.Schema<Data> => Data),
+      Schema.suspend((): Schema.Schema<Data> => Data)
+    )
+  ),
 }).annotations({ schema: "Map" });
 
 export const Constr = Schema.TaggedStruct("Constr", {
@@ -43,15 +84,17 @@ export const Constr = Schema.TaggedStruct("Constr", {
 
 export const Data = Schema.Union(Integer, ByteArray, List, Map, Constr);
 
-export const isByteArray = (data: Data) => data._tag === "ByteArray";
+export const isByteArray = (data: Data): data is ByteArray =>
+  data._tag === "ByteArray";
 
-export const isInteger = (data: Data) => data._tag === "Integer";
+export const isInteger = (data: Data): data is Integer =>
+  data._tag === "Integer";
 
-export const isList = (data: Data) => data._tag === "List";
+export const isList = (data: Data): data is List => data._tag === "List";
 
-export const isMap = (data: Data) => data._tag === "Map";
+export const isMap = (data: Data): data is Map => data._tag === "Map";
 
-export const isConstr = (data: Data) => data._tag === "Constr";
+export const isConstr = (data: Data): data is Constr => data._tag === "Constr";
 
 /**
  * Converts TypeScript data into CBOR hex string
@@ -100,8 +143,8 @@ export const toCBOR = <Source, Target extends Data>(
       }
       case "Map": {
         const map = CML.PlutusMap.new();
-        Object.entries(data.map).forEach(([key, value]) => {
-          const plutusKey = CML.PlutusData.new_bytes(Bytes.fromHex(key));
+        data.map.forEach(([key, value]) => {
+          const plutusKey = toCMLPlutusData(key);
           map.set(plutusKey, toCMLPlutusData(value));
         });
         return CML.PlutusData.new_map(map);
@@ -171,16 +214,16 @@ export const resolveCBOR = (input: string): Data => {
     }
     case CML.PlutusDataKind.Map: {
       const plutusMap = data.as_map()!;
-      const map = new globalThis.Map<Data, Data>();
+      const tuples: DataTuple[] = [];
       const keys = plutusMap.keys();
       for (let i = 0; i < keys.len(); i++) {
         const keyData = resolveCBOR(keys.get(i).to_cbor_hex());
         // const key = isByteArray(keyData) ? keyData.bytearray : String(keyData);
         const key = resolveCBOR(keys.get(i).to_cbor_hex());
         const val = resolveCBOR(plutusMap.get(keys.get(i))!.to_cbor_hex());
-        map.set(key, val);
+        tuples.push([key, val]);
       }
-      return { _tag: "Map", map };
+      return { _tag: "Map", map: tuples };
     }
     case CML.PlutusDataKind.ConstrPlutusData: {
       const constrData = data.as_constr_plutus_data()!;
@@ -259,3 +302,114 @@ export const safeToData = <Source, Target extends Data>(
   options?: SchemaAST.ParseOptions
 ): Either.Either<Target, ParseError> =>
   Schema.encodeUnknownEither(schema, options)(input);
+
+/**
+ * Creates a Plutus Data List type from an array of Data elements
+ *
+ * @example
+ * import { Data } from "@lucid-evolution/experimental";
+ *
+ * // Create a list with multiple elements of the same type
+ * const integerList = Data.makeList<Data.Integer>([
+ *   Data.makeInteger(42n),
+ *   Data.makeInteger(100n)
+ * ]);
+ *
+ * // Create a list with a single element
+ * const singleList = Data.makeList([Data.makeInteger(42n)]);
+ *
+ * // Create a mixed list with different element types
+ * const mixedList = Data.makeList<Data>([
+ *   Data.makeInteger(42n),
+ *   Data.makeByteArray("deadbeef")
+ * ]);
+ *
+ * @since 2.0.0
+ */
+export const makeList = <T extends Data = Data>(
+  items: readonly T[]
+): List<T> => ({
+  _tag: "List",
+  list: items,
+});
+
+/**
+ * Creates a Plutus Data Integer type from a bigint value
+ *
+ * @example
+ * import { Data } from "@lucid-evolution/experimental";
+ *
+ * const myInteger = Data.makeInteger(42n);
+ *
+ * @since 2.0.0
+ */
+export const makeInteger = <T extends bigint = bigint>(
+  value: T
+): Integer<T> => ({
+  _tag: "Integer",
+  integer: value,
+});
+
+/**
+ * Creates a Plutus Data ByteArray type from a hex string
+ *
+ * @example
+ * import { Data } from "@lucid-evolution/experimental";
+ *
+ * const myByteArray = Data.makeByteArray("deadbeef");
+ *
+ * @since 2.0.0
+ */
+export const makeByteArray = <T extends string = string>(
+  value: T
+): ByteArray<T> => ({
+  _tag: "ByteArray",
+  bytearray: value,
+});
+
+/**
+ * Creates a Plutus Data Map type from an array of key-value tuples
+ *
+ * @example
+ * import { Data } from "@lucid-evolution/experimental";
+ *
+ * const myMap = Data.makeMap([
+ *   [Data.makeByteArray("key1"), Data.makeInteger(42n)],
+ *   [Data.makeByteArray("key2"), Data.makeByteArray("value2")]
+ * ]);
+ *
+ * @since 2.0.0
+ */
+export const makeMap = <K extends Data = Data, V extends Data = Data>(
+  entries: ReadonlyArray<readonly [K, V]>
+) => ({
+  _tag: "Map",
+  map: entries,
+});
+
+/**
+ * Creates a Plutus Data Constr type (constructor) with the given index and fields
+ *
+ * @example
+ * import { Data } from "@lucid-evolution/experimental";
+ *
+ * // Create a constructor for a custom data type (e.g., a "Mint" action with amount)
+ * const mint = Data.makeConstr(0n, [Data.makeInteger(5n)]);
+ *
+ * // Create a constructor with no fields (e.g., a "Burn" action)
+ * const burn = Data.makeConstr(1n, []);
+ *
+ * @since 2.0.0
+ */
+export const makeConstr = <
+  T extends bigint = bigint,
+  U extends readonly Data[] = readonly Data[],
+>(
+  index: T,
+  fields: U
+): Constr<T, U> => ({
+  _tag: "Constr",
+  index,
+  fields,
+});
+

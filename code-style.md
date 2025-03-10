@@ -304,6 +304,7 @@ Calculator.unsafeDivide(1, 0);
 ```
 
 ## Pattern Matching
+
 Use switch statements for pattern matching, and make sure to handle all possible cases including the default case.
 
 ```ts
@@ -316,7 +317,9 @@ export const toId = <T extends Network>(network: T): 0 | 1 => {
     case "Mainnet":
       return 1;
     default:
-      throw new Error(`Exhaustive check failed: Unhandled case '${network}' encountered.`);
+      throw new Error(
+        `Exhaustive check failed: Unhandled case '${network}' encountered.`,
+      );
   }
 };
 ```
@@ -341,7 +344,7 @@ Each function must contain the following:
  * @example
  * import { sum } from "my-package/Calculator";
  * sum(1, 2) // 3
- * 
+ *
  * @since 1.0.0
  */
 export const sum = (self: number, that: number): number => self + that;
@@ -456,3 +459,15 @@ const divide = (
     : Effect.succeed(a / b);
 Effect.runSync(divide(1, 0));
 ```
+
+## Avoid using `any` type
+- Avoid using `any` type as it defeats the purpose of TypeScript's type system.
+- Use `unknown` instead of `any` to enforce type checking.
+- Use `unknown` when you need to accept any type but still want to enforce type checking later.
+
+## Avoid using `as` type assertion keyword
+- Avoid using `as` keyword unless absolutely necessary.
+- Instead use `satisfies` operator to ensure that an object conforms to a specific type.
+
+## Types should be defined using Effect schemas
+- Use Effect schemas to define types for better type safety and runtime validation.
