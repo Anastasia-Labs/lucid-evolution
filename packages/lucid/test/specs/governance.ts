@@ -1,8 +1,8 @@
 import { Effect, pipe } from "effect";
 import { AlwaysYesDrepContract, NetworkConfig, User } from "./services";
 import { handleSignSubmit, withLogRetry } from "./utils";
-import { Data, getAddressDetails } from "../../src";
-import { drepIDToCredential } from "../../src/tx-builder/internal/Governance";
+import { Data } from "../../src";
+import { drepIDToCredential } from "@lucid-evolution/utils";
 
 export const registerDRep = Effect.gen(function* ($) {
   const { user } = yield* User;

@@ -16,7 +16,6 @@ import {
   validateAndGetStakeCredential,
 } from "./TxUtils.js";
 import { TxConfig } from "./Service.js";
-import { Cardano } from "@cardano-sdk/core";
 
 export const isDRepCredential = (deleg: DRep): deleg is Credential =>
   !("__typename" in deleg);
@@ -45,18 +44,6 @@ export const toCMLDRep = (drep: DRep): CML.DRep => {
     }
   }
   throw new Error(`Unexpected DRep type: ${drep}`);
-};
-
-export const drepIDToCredential = (drepID: string): Credential => {
-  if (!Cardano.DRepID.isValid(drepID)) {
-    throw new Error(`Invalid DRep ID: ${drepID}`);
-  }
-  const drepId = Cardano.DRepID(drepID);
-  const drepCred = Cardano.DRepID.toCredential(drepId);
-  return {
-    type: drepCred.type == Cardano.CredentialType.KeyHash ? "Key" : "Script",
-    hash: drepCred.hash,
-  };
 };
 
 export const governanceError = (cause: unknown) =>
