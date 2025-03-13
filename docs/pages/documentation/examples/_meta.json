@@ -1,4 +1,9 @@
 {
+  "aiken-gift-card": {
+    "title": "Aiken Docs - Gift Card ⤴",
+    "href": "https://aiken-lang.org/example--gift-card#the-app",
+    "newWindow": true
+  },
   "smart-handles-offchain": {
     "title": "Smart Handles ⤴",
     "href": "https://github.com/Anastasia-Labs/smart-handles-offchain",

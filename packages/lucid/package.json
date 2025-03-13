@@ -1,6 +1,6 @@
 {
   "name": "@lucid-evolution/lucid",
-  "version": "0.4.22",
+  "version": "0.4.24",
   "license": "MIT",
   "author": "",
   "description": "Next-generation transaction builder for highly scalable dApps on Cardano",
@@ -55,7 +55,6 @@
   "dependencies": {
     "@anastasia-labs/cardano-multiplatform-lib-browser": "6.0.2-3",
     "@anastasia-labs/cardano-multiplatform-lib-nodejs": "6.0.2-3",
-    "@cardano-sdk/core": "^0.45.1",
     "@effect/schema": "^0.66.16",
     "@emurgo/cardano-message-signing-nodejs": "^1.1.0",
     "@lucid-evolution/core-types": "workspace:*",

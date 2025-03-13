@@ -1,5 +1,24 @@
 # @lucid-evolution/lucid
 
+## 0.4.24
+
+### Patch Changes
+
+- [#538](https://github.com/Anastasia-Labs/lucid-evolution/pull/538) [`9503425`](https://github.com/Anastasia-Labs/lucid-evolution/commit/95034257fb3edda5605a76054fdfc70d51640441) Thanks [@hadelive](https://github.com/hadelive)! - expose drepIDToCredential
+
+- Updated dependencies [[`9503425`](https://github.com/Anastasia-Labs/lucid-evolution/commit/95034257fb3edda5605a76054fdfc70d51640441)]:
+  - @lucid-evolution/utils@0.1.65
+  - @lucid-evolution/provider@0.1.88
+  - @lucid-evolution/wallet@0.1.71
+
+## 0.4.23
+
+### Patch Changes
+
+- [#522](https://github.com/Anastasia-Labs/lucid-evolution/pull/522) [`7c3591c`](https://github.com/Anastasia-Labs/lucid-evolution/commit/7c3591cc3136b6a429d4c86224c4d8c4ab86bcc3) Thanks [@hadelive](https://github.com/hadelive)! - fix compose minting transactions
+
+- [#505](https://github.com/Anastasia-Labs/lucid-evolution/pull/505) [`39559d1`](https://github.com/Anastasia-Labs/lucid-evolution/commit/39559d17954a9e5d07d54acad69558a9522397ca) Thanks [@hadelive](https://github.com/hadelive)! - Added Math.ceil to round up floating-point fee calculations before converting to BigInt. This fixes an issue where BigInt was being created from non-integer values, which could lead to runtime errors.
+
 ## 0.4.22
 
 ### Patch Changes
