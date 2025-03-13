@@ -2,7 +2,7 @@ import { Callout, Steps, Tabs } from "nextra/components";
 
 # Governance and Conway Era
 
-The Conway era introduces significant on-chain governance features to the Cardano blockchain,
+Conway era introduces significant on-chain governance features to the Cardano blockchain,
 as outlined in [CIP-1694](https://github.com/cardano-foundation/CIPs/tree/master/CIP-1694).
 These features enable ADA holders to participate in on-chain decisions through a system of delegation and direct voting.
 
@@ -11,16 +11,16 @@ These features enable ADA holders to participate in on-chain decisions through a
   stake address registration [here](/documentation/deep-dives/register-stake).
 </Callout>
 
-<Tabs items={['for ADA holders', 'for DReps']}>
+<Tabs items={['ADA holders', 'DReps']}>
   <Tabs.Tab>
     As an ADA holder, you can participate in governance by delegating your voting power or voting directly.
     
-    <Tabs items={['Delegate Voting Power', 'Predefined Strategies', 'Complete Examples']}>
+    <Tabs items={['Delegate Voting Power', 'Predefined Strategies']}>
       <Tabs.Tab>
         
         You can delegate your voting power to a trusted Delegated Representative (DRep). If you have a DRep ID (starts with `drep1...`), convert it to a Credential:
         
-        ```typescript
+  ```typescript
         import { drepIDToCredential } from "@lucid-evolution/lucid";
         
         // Convert DRep ID to Credential
@@ -34,29 +34,28 @@ These features enable ADA holders to participate in on-chain decisions through a
         ```
 
         <Callout type="info">
-        **1-Step Convenience Functions**
+        **Convenience Functions**
 
-        **Register** your **stake address** and **delegate voting power** to a DRep:
+        **Register** your **stake address** and **delegate** voting power to a **DRep**:
 
         ```typescript
         await lucid.newTx()
           .registerAndDelegate.ToDrep(rewardAddress, drepCredential)
           .complete();
         ```
-
-        **Delegate** to a **stake pool** and a **DRep**:
-
-        ```typescript
-        await lucid.newTx()
-          .delegate.VoteToPoolAndDrep(rewardAddress, poolId, drepCredential)
-          .complete();
-        ```
-
-        **Register** your **stake address**, **delegate to a stake pool** and **DRep**:
+        **Register** your **stake address**, **delegate** to a **stake pool** and **DRep**:
 
         ```typescript
         await lucid.newTx()
           .registerAndDelegate.ToPoolAndDRep(rewardAddress, poolId, drepCredential)
+          .complete();
+        ```
+
+        **Delegate** to a **stake pool** and **DRep**:
+
+        ```typescript
+        await lucid.newTx()
+          .delegate.VoteToPoolAndDrep(rewardAddress, poolId, drepCredential)
           .complete();
         ```
         </Callout>
@@ -87,16 +86,18 @@ These features enable ADA holders to participate in on-chain decisions through a
         ```
       </Tabs.Tab>
 
-      <Tabs.Tab>
+    </Tabs>
 
-        Here's a complete example of delegating to a DRep:
+    ## Example
+
+    Here's a complete example of delegating to a DRep:
 
         ```typescript
         import { Lucid, Blockfrost, drepIDToCredential } from "@lucid-evolution/lucid";
 
         // Initialize Lucid
         const lucid = await Lucid(
-          new Blockfrost("https://cardano-mainnet.blockfrost.io/api/v0", "your-project-id"),
+          new Blockfrost("https://cardano-mainnet.blockfrost.io/api/v0", "<blockfrost-api-key>"),
           "Mainnet"
         );
 
@@ -119,9 +120,6 @@ These features enable ADA holders to participate in on-chain decisions through a
         const signedTx = await tx.sign.withWallet().complete();
         const txHash = await signedTx.submit();
         ```
-      </Tabs.Tab>
-    </Tabs>
-
   </Tabs.Tab>
   
   <Tabs.Tab>
@@ -132,7 +130,7 @@ These features enable ADA holders to participate in on-chain decisions through a
         
         To register your stake address as a DRep:
         
-        ```typescript
+  ```typescript
         await lucid.newTx()
           .register.DRep(rewardAddress)
           .complete();
@@ -140,7 +138,7 @@ These features enable ADA holders to participate in on-chain decisions through a
         
         To deregister:
         
-        ```typescript
+   ```typescript
         await lucid.newTx()
           .deregister.DRep(rewardAddress)
           .complete();
@@ -151,7 +149,7 @@ These features enable ADA holders to participate in on-chain decisions through a
         
         You can update your metadata without reregistering:
         
-        ```typescript
+  ```typescript
         await lucid.newTx()
           .updateDRep(rewardAddress, anchor)
           .complete();
@@ -162,7 +160,7 @@ These features enable ADA holders to participate in on-chain decisions through a
       <Tabs.Tab>
         For programmatic voting, you can create a script-based DRep:
         
-        ```typescript
+  ```typescript
         await lucid.newTx()
           .register.DRep(rewardAddress)
           .attach.Script(script)

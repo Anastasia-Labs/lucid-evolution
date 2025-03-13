@@ -2,85 +2,96 @@ import { Callout, Steps, Tabs } from "nextra/components";
 
 # Smart Contract Interactions
 
-## Understanding Validators on Cardano
+## Introduction to Validators
 
 It's important to understand that on the Cardano blockchain, you don't directly interact with "smart contracts", at least not in the traditional sense.
 
-- Instead, you work with **validators**. These validators are responsible for verifying the actions taken in a given transaction, rather than executing or calling any actions themselves. Validators are pure functions that return `true` or `false`.
+Instead, you work with validators. These validators are responsible for verifying the actions taken in a given transaction, rather than executing or calling any actions themselves. Validators are pure functions that return true or false.
 
-- A validator checks whether the transaction meets its requirements, and if it does, the transaction is processed successfully. If the requirements are not met, the transaction fails (is not allowed to execute).
+A validator checks whether the transaction meets its requirements, and if it does, the transaction is processed successfully. If the requirements are not met, the transaction fails (is not allowed to execute).
 
-<Callout type="info">
-  For a comprehensive understanding of validators, a good place to start is the
-  official [Aiken
-  documentation](https://aiken-lang.org/language-tour/validators).
+### Concepts
+
+<Tabs items={['Datums', 'Redeemers']}>
+  <Tabs.Tab>
+
+**Datums** are data attached to script UTxOs (like state variables)
+
+    ```typescript
+    const datum = Data.to(new Constr(0, [publicKeyHash]));
+    ```
+
+    <Callout type="info">
+You can define datum schemas for type safety:
+
+```typescript
+const DatumSchema = Data.Object({
+  owner: Data.Bytes(),
+});
+type DatumType = Data.Static<typeof DatumSchema>;
+const DatumType = DatumSchema as unknown as DatumType;
+```
 </Callout>
 
-## Basic Interaction Workflow
+    </Tabs.Tab>
+    <Tabs.Tab>
+**Redeemers** are arguments provided when spending a UTxO from a script address
+
+```typescript
+    const redeemer = Data.to(new Constr(0, [fromText("Hello, World!")]));
+    ```
+     </Tabs.Tab>
+</Tabs>
+
+## Basic Flow
 
 <Steps>
+### Create a Validator Instance
 
-### Instantiate validator
-
-Lucid Evolution consumes compiled validators. On-chain scripts can be written in `PlutusTx`, `Aiken`, `Plutarch`, and many other languages available in the Cardano ecosystem. We then derive the address from the compiled script with Lucid Evolution.
+Lucid consumes compiled validators from languages like PlutusTx, Aiken, or Plutarch:
 
 ```typescript
 const spend_val: SpendingValidator = {
-  type: "PlutusV2",
-  script: "59099a590997010000...", // from plutus.json of the compiled contract code, this is the compiled script in CBOR format
+  type: "PlutusV3",
+  script: "59099a590997010000...", // CBOR format from plutus.json
 };
 
 const scriptAddress = lucid.utils.validatorToAddress(validator);
 ```
 
-### Locking funds at Script Address
+### Lock Funds at Script Address
+
+<Tabs items={['Inline Datum', 'Datum Hash']}>
+  <Tabs.Tab>
+
+    ```typescript
+    const tx = await lucid
+      .newTx()
+      .pay.ToContract(scriptAddress, { inline: datum }, { lovelace: 10_000_000n })
+      .complete();
+    ```
+  </Tabs.Tab>
+  <Tabs.Tab>
 
 ```typescript
-// Lock assets to the script address with inline datum
 const tx = await lucid
   .newTx()
-  .pay.ToAddressWithData(
-    scriptAddress,
-    { inline: datum },
-    { lovelace: 10_000_000n }
-  )
+  .pay.ToContract(scriptAddress, { hash: datumHash }, { lovelace: 10_000_000n })
   .complete();
-```
-
-**or with datum hash**
-
-```typescript
-const tx = await lucid
-  .newTx()
-  .pay.ToAddressWithData(
-    scriptAddress,
-    { hash: datumHash },
-    { lovelace: 10_000_000n }
-  )
-  .complete();
-```
-
-```typescript
-// Publish reference script
-const tx = await lucid
-  .newTx()
-  .pay.ToAddressWithData(
-    scriptAddress,
-    datum,
-    { lovelace: 10_000_000n },
-    referencedScript
-  )
-  .complete();
-```
+    ```
+  </Tabs.Tab>
+</Tabs>
 
 <Callout type="info">
-  Reference scripts allow reuse of validator code and can be used systemically
-  to reduce fees
+  **Terminology Note:** `pay.ToAddressWithData` and `pay.ToContract` are
+  functionally identical. `ToContract` is just an alias that better expresses
+  the intent when working with smart contracts.
 </Callout>
 
-### Spending (Redeeming) from Script Address
+### Spend (Redeem) from Script Address
 
 ```typescript
+// Find the UTxO we want to spend
 const allUTxOs = await lucid.utxosAt(scriptAddress);
 const ownerUTxO = allUTxOs.find((utxo) => {
   if (utxo.datum) {
@@ -92,50 +103,28 @@ const ownerUTxO = allUTxOs.find((utxo) => {
 // Spend script UTxO
 const tx = await lucid
   .newTx()
-  .collectFrom(
-    [ownerUTxO], // UTxO at script address
-    redeemer // Arguments we provide
-  )
-  .attachSpendingValidator(spend_val) // Attach validator if not using reference script
-  .complete();
-```
-
-**or using a reference script**
-
-```typescript
-const tx = await lucid
-  .newTx()
-  .collectFrom(
-    [ownerUTxO],
-    redeemer,
-    referenceScriptUtxo // UTxO containing validator code
-  )
+  .collectFrom([ownerUTxO], redeemer) // Provide the redeemer argument
+  .attachSpendingValidator(spend_val) // Attach validator
   .complete();
 ```
 
 </Steps>
 
-<Callout type="warning">
-  **Script Execution Units** - **Each** script execution consumes CPU and memory
-  units - Reference scripts reduce fees by avoiding script storage in each
-  transaction
-</Callout>
+## Validator Types
 
-## Validator Types and Purposes
-
-Lucid supports different validator purposes:
+Lucid Evolution supports different validator types, each serving a specific purpose:
 
 ```typescript
-// Attach different validator types
-.attach.SpendingValidator(validator)    // spending UTxOs
-.attach.MintingPolicy(mintingPolicy)    // minting tokens
-.attach.CertificateValidator(validator) // stake operations
-.attach.WithdrawalValidator(validator)  // reward withdrawals
-.attach.VoteValidator(validator)        // governance votes
-.attach.ProposeValidator(validator)     // governance proposals
+// Attaching different validator types
+.attach.SpendingValidator(validator)    // For spending UTxOs
+.attach.MintingPolicy(validator)        // For minting tokens
+.attach.CertificateValidator(validator) // For stake operations
+.attach.WithdrawalValidator(validator)  // For reward withdrawals
+.attach.VoteValidator(validator)        // For governance votes
+.attach.ProposeValidator(validator)     // For governance proposals
 ```
 
-Like native scripts, Plutus scripts can be used for various purposes:
+Corresponding transaction operations:
 
 ```typescript
 .collectFrom(utxos, redeemer)           // Spending UTxOs
@@ -145,55 +134,41 @@ Like native scripts, Plutus scripts can be used for various purposes:
 .withdraw(stakeAddress, rewardAmount, redeemer) // Reward withdrawal
 ```
 
-## Working with Datums and Redeemers
+## Advanced Concepts
 
-Datums are data attached to script UTxOs and redeemers are the arguments you provide when spending a UTxO from a script address:
+### Redeemer Builder
+
+Redeemer Indexing [design pattern](https://github.com/Anastasia-Labs/design-patterns/blob/main/utxo-indexers/UTXO-INDEXERS.md)
+leverages the deterministic script evaluation property of the Cardano ledger to achieve substantial performance gains in onchain code.
+
+In scenarios where the protocol necessitates spending from the script back to a specific output—such as returning funds from the script to the same script,
+directing them to another script, or transferring assets to a wallet, it is imperative to ensure that each script input is uniquely associated with an output.
+
+This preventive measure is essential for mitigating the risk of
+[Double Satisfaction Attack](https://github.com/Anastasia-Labs/design-patterns/blob/main/stake-validator/STAKE-VALIDATOR.md#protect-against-double-satisfaction-exploit).
+
+You can use a redeemer containing one-to-one correlation between script input UTxOs and output UTxOs.
+This is provided via ordered lists of input/output indices of inputs/ouputs present in the Script Context.
+
+For e.g.
+
+```
+Inputs     :  [scriptInputA, scriptInputB, randomInput1, scriptInputC, randomInput2, randomInput3]          // random inputs are not the concerned script inputs
+Outputs    :  [outputA, outputB, outputC, randomOuput1, randomOutput2, randomOutput3]
+InputIdxs  :  [0, 1, 3]
+OutputIdxs :  [0, 1, 2]
+where type Redeemer = List<(inputIdx, outputIdx)>
+```
+
+Evolution library provides a high-level interface that abstracts all the complexity away and makes writing offchain code for this design pattern simple
+by using the `RedeemerBuilder` to help building your redeemer.
 
 ```typescript
-const datum = Data.to(new Constr(0, [publicKeyHash]));
-const redeemer = Data.to(new Constr(0, [fromText("Hello, World!")]));
-```
-
-You can also define datum schemas for type safety:
-
-```typescript
-const DatumSchema = Data.Object({
-  owner: Data.Bytes(),
-});
-type DatumType = Data.Static<typeof DatumSchema>;
-const DatumType = DatumSchema as unknown as DatumType;
-```
-
-## Advanced Techniques
-
-### Redeemer Builder Pattern
-
-Redeemer indexing is a [design pattern](https://github.com/Anastasia-Labs/design-patterns/blob/main/utxo-indexers/UTXO-INDEXERS.md) that leverages Cardano's deterministic script evaluation to improve on-chain performance.
-
-When a protocol needs to spend from a script and send outputs back (whether to the same script, another script, or a wallet), it's imperative to maintain a one-to-one relationship between script inputs and outputs. This prevents [Double Satisfaction](https://github.com/Anastasia-Labs/design-patterns/blob/main/stake-validator/STAKE-VALIDATOR.md#protect-against-double-satisfaction-exploit) attacks and the redeemer maintains this relationship using ordered lists of input/output indices from the Script Context.
-
-<Callout>
-```
-Inputs     :  [scriptInputA, scriptInputB, randomInput1, scriptInputC, randomInput2, randomInput3]
-Outputs    :  [outputA, outputB, outputC, randomOutput1, randomOutput2, randomOutput3]
-InputIdxs  :  [0, 1, 3]        // Index of each script input
-OutputIdxs :  [0, 1, 2]        // Corresponding output indices
-
-type Redeemer = List<(inputIdx, outputIdx)> // Pairs of corresponding input/output indices
-
-```
-</Callout>
-
-Evolution library provides a high-level interface that abstracts all the complexity away by using the `RedeemerBuilder`:
-
-```typescript
-// UTxOs we want to spend from the script (script inputs)
 const scriptInputs: UTxO[] = [
     { txHash: "a", outputIndex: 1, address: "scriptAddress", assets: { lovelace: 10_000000n } },
     { txHash: "b", outputIndex: 2, address: "scriptAddress", assets: { lovelace: 20_000000n } },
     { txHash: "d", outputIndex: 4, address: "scriptAddress", assets: { lovelace: 40_000000n } },
 ];
-// Other UTxOs (random inputs)
 const randomInputs: UTxO[] = [
     { txHash: "c", outputIndex: 3, address: "randomAddress", assets: { lovelace: 30_000000n } },
     { txHash: "e", outputIndex: 5, address: "randomAddress", assets: { lovelace: 50_000000n } },
@@ -203,8 +178,7 @@ const randomInputs: UTxO[] = [
 const redeemer: RedeemerBuilder = {
     kind: "selected",
     makeRedeemer: (inputIdxs: bigint[]) => {
-        // Map each input index to its corresponding output index
-        const tupleList = inputIdxs.map((inputIdx, i) => [inputIdx, BigInt(i)]);
+        const tupleList = inputIdxs.map((inputIdx, i) => [inputIdx, BigInt(i)]); // List<(inputIdx, outputIdx)>
         return Data.to(tupleList);
     },
     inputs: scriptInputs,
@@ -214,11 +188,9 @@ const tx = await lucid
     .newTx()
     .collectFrom([...scriptInputs, ...randomInputs], redeemer)
     .attach.SpendingValidator(script)
-    // Outputs maintain the same order as script inputs
     .pay.ToContract("scriptAddress", datum, { lovelace: 10_000000n })
     .pay.ToContract("scriptAddress", datum, { lovelace: 20_000000n })
     .pay.ToContract("scriptAddress", datum, { lovelace: 40_000000n })
-    // Other outputs
     .pay.ToAddress("randomAddress", { lovelace: 30_000000n })
     .pay.ToAddress("randomAddress", { lovelace: 50_000000n })
     .pay.ToAddress("randomAddress", { lovelace: 60_000000n })
@@ -228,31 +200,53 @@ const tx = await lucid
 
 ---
 
-### Applying Parameters to Validators
 
-Some validators are parameterized, you can apply parameters dynamically. The library handles CBOR encoding automatically to ensure correct script compilation.
+### Reference Scripts
 
-<Callout type="info">
-  **Understanding CBOR Encoding** 
-  - The `applyParamsToScript` function
-  internally handles CBOR encoding 
-  - You don't need to manually apply
-  `applyDoubleCborEncoding` when using `applyParamsToScript` 
-  - Evolution library
-  provides a utility function to check CBOR encoding levels: 
-  
-  ```typescript
-  const encodingLevel = CBOREncodingLevel(script); // Returns "double" | "single"
-  ```
-</Callout>
+Reference scripts, point to an already on-chain script rather than including it entirely, without reference scripts, the full script code must have been included in each transaction.
+Reduces transaction size and base fee (execution costs remain the same)
 
-<Tabs items={['Single argument', 'Multiple arguments', 'Complex type']}>
+
+<Tabs items={['Deploy a Reference Script', 'Use a Reference Script']}>
   <Tabs.Tab>
-    When your validator expects 1 integer argument
-
-    ```rust
-    validator minting_policy(first_param: Int) { .. }
+    ```typescript
+    // Deploy a script as a reference script
+    const deployScriptTx = await lucid
+      .newTx()
+      .pay.ToAddressWithData(
+        scriptAddress,
+        { kind: "inline", value: datum },
+        { lovelace: 5_000_000n },
+        script // The script to be stored as a reference
+      )
+      .complete();
     ```
+  </Tabs.Tab>
+  <Tabs.Tab>
+    ```typescript
+    // Find a UTxO containing a reference script
+    const allUTxOs = await lucid.utxosAt(scriptAddress);
+    const refScriptUTxO = allUTxOs.filter((utxo) => utxo.scriptRef)[0];
+
+    // Use the reference script instead of attaching the validator
+    const tx = await lucid
+      .newTx()
+      .collectFrom([utxoToSpend], redeemer)
+      .readFrom([refScriptUTxO]) // Reference the script UTxO
+      .complete();
+    ```
+
+  </Tabs.Tab>
+</Tabs>
+
+---
+
+### Applying Parameters
+
+Many validators are parameterized, you can apply parameters dynamically.
+
+<Tabs items={['Single Parameter', 'Multiple Parameters', 'Complex Types']}>
+  <Tabs.Tab>
 
     ```typescript
     const mintingPolicy = {
@@ -263,16 +257,18 @@ Some validators are parameterized, you can apply parameters dynamically. The lib
       ),
     };
     ```
+  <Callout type="info">
+    For a validator expecting **one** parameter:
+
+    ```rust
+    validator minting_policy(first_param: Int) { .. }
+    ```
+    </Callout>
 
   </Tabs.Tab>
   
   <Tabs.Tab>
-    Next example is for your validator when it expects 2 arguments, eg. a `ByteArray` and a `Boolean`.
-
-    ```rust
-    validator spending_validator(pkh: VerificationKeyHash, yes_no: Bool) { .. }
-    ```
-
+   
     ```typescript
     const pkh = paymentCredentialOf(address).hash;
     const yes = new Constr(1, []);
@@ -280,26 +276,23 @@ Some validators are parameterized, you can apply parameters dynamically. The lib
     const spendingValidator = {
       type: "PlutusV3",
       script: applyParamsToScript(
-        "5907945907910101...", // CBOR hex of the compiled script
+        "5907945907910101...", // CBOR hex
         [pkh, yes] // Parameters
       ),
     };
     ```
+  <Callout type="info">
+    For a validator expecting **multiple** parameters:
+
+    ```rust
+    validator spending_validator(pkh: VerificationKeyHash, yes_no: Bool) { .. }
+    ```
+    </Callout>
 
   </Tabs.Tab>
   
   <Tabs.Tab>
-    The following example is for your validator when it expects a more complex type
-
-    ```rust
-    type OutputReference {
-      transaction_id: ByteArray,
-      output_index: Int,
-    }
-
-    validator your_validator(o_ref: OutputReference) { .. }
-    ```
-
+           
     ```typescript
     const oRef = new Constr(0, [String(utxo.txHash), BigInt(utxo.outputIndex)]);
 
@@ -311,35 +304,21 @@ Some validators are parameterized, you can apply parameters dynamically. The lib
       ),
     };
     ```
-
     <Callout type="info">
-    Note that the previous `OutputReference` type is for Aiken, the equivalent Plutus type is:
-    ```haskell
-    data TxOutRef = TxOutRef
-      { txOutRefId  :: TxId
-      , txOutRefIdx :: Integer
-      }
-
-    -- where TxId itself is another type like
-    newtype TxId = TxId { getTxId :: PlutusTx.BuiltinByteString }
-    ```
-
-    which would translate to the following Aiken code:
+    For validators expecting **complex types**:
 
     ```rust
-    type TransactionId {
-        tx_id: ByteArray
-    }
-
     type OutputReference {
-      transaction_id: TransactionId,
+      transaction_id: ByteArray,
       output_index: Int,
     }
 
     validator your_validator(o_ref: OutputReference) { .. }
     ```
+    </Callout> 
 
-    In this case, you can provide the parameter for your validator like:
+    <Callout type="info">
+    For nested types in Plutus/Aiken, adjust the construction accordingly:
 
     ```typescript
     const txID = new Constr(0, [String(utxo.txHash)]);
@@ -357,13 +336,21 @@ Some validators are parameterized, you can apply parameters dynamically. The lib
     </Callout>
 
   </Tabs.Tab>
+
+<Callout>
+  `applyParamsToScript` function handles CBOR encoding internally. 
+  You can check encoding levels with:
+  ```typescript
+  const encodingLevel = CBOREncodingLevel(script); // Returns "double" | "single"
+  ```
+</Callout>
 </Tabs>
 
 ---
 
 ### Multi-validator Interactions
 
-You can run and execute multiple validators in a single transaction with Lucid Evolution. The only limitation is the execution units limit:
+You can use multiple validators in a single transaction, limited only by execution unit caps:
 
 ```typescript
 const tx = await lucid
@@ -378,28 +365,19 @@ const tx = await lucid
   .complete();
 ```
 
----
-
-### Reading UTxOs and Reference Scripts
-
-Lucid Evolution allows you to conveniently read/reference UTxOs. If a Plutus script is already stored in the UTxO, there's no need to attach the same script explicitly in the transaction (reference script), resulting in cost savings.
-
-```typescript
-const tx = await lucid
-  .newTx()
-  .readFrom([scriptUtxo])
-  // ...
-  .complete();
-```
-
 ## Troubleshooting & Best Practices
 
-<Callout type="warning">
-**Common Issues to Watch For**
+| Common Issue              | Best Practice                                                                     |
+| ------------------------- | --------------------------------------------------------------------------------- |
+| **Datum/Redeemer Format** | Ensure they match validator expectations precisely                                |
+| **Minimum ADA**           | Provide sufficient ADA for all outputs                                            |
+| **Collateral**            | Include appropriate amount of collateral when spending from script addresses      |
+| **Signatories**           | Include all required signers for the validators that require/check them           |
+| **Execution Units**       | Monitor the limits when working with multiple validators                          |
+| **Reference Scripts**     | Use reference scripts when possible to significantly reduce transaction costs     |
 
-- Provide correct datum/redeemer format (matching validator expectations)
-- Handle minimum ADA requirements, provide collateral when spending from script addresses
-- Include required signatories (if validator checks them)
-- Check execution unit limits when working with multiple validators
-- Use reference scripts where possible to reduce transaction costs
+
+<Callout type="info">
+  For a comprehensive documentation of validators, see the official [Aiken
+  documentation](https://aiken-lang.org/language-tour/validators).
 </Callout>

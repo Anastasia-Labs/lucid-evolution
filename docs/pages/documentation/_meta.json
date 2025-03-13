@@ -17,6 +17,8 @@
     "type": "separator"
   },
 
+  "under-the-hood": "Under The Hood",
+
   "examples": {
     "title": "Examples",
     "theme": {

@@ -1,7 +1,7 @@
 {
-  "make-payments": "Make Payment",
-  "mint-assets": "Mint Assets",
-  "register-stake": "Stake your ADA",
+  "pay-methods": "Pay Methods",
+  "mint-burn-assets": "Mint & Burn Assets",
+  "register-stake": "Staking",
   "governance": "Governance",
   "smart-contract-interactions": "Interact with Validators",
   "transaction-chaining": "Transaction Chaining",

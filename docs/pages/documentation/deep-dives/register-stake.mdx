@@ -5,7 +5,7 @@ This section covers the operations for staking your wallet on the Cardano networ
 <Steps>
 ### Register stake key
  
- When registering a stake key with the Cardano network, a deposit of `2 ADA` is required. This deposit acts as a pledge and is temporarily deducted from the wallet balance
+ When registering a stake key with the Cardano network, a deposit of `2 ADA` is required. This deposit acts as a pledge and is temporarily deducted from the wallet balance.
 
 ```typescript
 const tx = await lucid
@@ -14,11 +14,18 @@ const tx = await lucid
     .complete();
 ```
 
+<Callout type="info">
+You can query the reward address (`stake_...`) associated with your stake key like this:
+
+```typescript
+const rewardAddress = await lucid.wallet().rewardAddress();
+```
+</Callout>
 ---
 
 ### Delegate to a stake pool
 
-Delegating to a stake pool involves associating your stake key with a pool identified by its unique ID
+Delegating to a stake pool involves associating your stake key with a pool identified by its unique ID.
 
 ```typescript
 const tx = await lucid
@@ -65,14 +72,7 @@ const tx = await lucid
   .deRegisterStake(rewardAddress)
   .complete();
 ```
----
-<Callout>
-You can query the reward address (`stake_...`) associated with your stake key like this:
 
-```typescript
-const rewardAddress = await lucid.wallet().rewardAddress();
-```
-</Callout>
 
 
 
