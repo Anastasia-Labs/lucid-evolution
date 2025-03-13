@@ -36,12 +36,20 @@ pnpm build
 
 ## Environment Variables
 
-In a `.env` file:
+This project uses environment variables for configuration. Copy the `.env.example` file to `.env.local` to set up your environment:
 
+```bash
+cp .env.example .env.local
 ```
-DREP_ID_PREPROD=drep_dummy_preprod
-DREP_ID_MAINNET=drep_dummy_mainnet
-```
+
+Then edit the `.env.local` file to add your configurations:
+
+- `DREP_ID_MAINNET`: Your DRep ID for mainnet
+- `DREP_ID_PREPROD`: Your DRep ID for preprod testnet
+- `KOIOS_API_MAINNET`: Koios API endpoint for mainnet (optional)
+- `KOIOS_API_PREPROD`: Koios API endpoint for preprod testnet (optional)
+
+For development, the application will use the preprod variables. In production, it will use the mainnet variables.
 
 ## Flow
 

@@ -5,6 +5,12 @@ import { NetworkType } from "@cardano-foundation/cardano-connect-with-wallet-cor
 import Image from "next/image";
 import { motion, AnimatePresence } from "framer-motion";
 
+declare global {
+  interface Window {
+    my_modal: any;
+  }
+}
+
 const WalletModal = () => {
   const { isConnected, connect, installedExtensions } = useCardano({
     limitNetwork: NetworkType.TESTNET,

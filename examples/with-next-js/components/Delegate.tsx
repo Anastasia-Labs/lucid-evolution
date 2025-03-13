@@ -39,6 +39,7 @@ const Delegate = ({ showToast }: DelegateProps) => {
       const data = await response.json();
 
       if (!response.ok) {
+        console.error("Server response error:", data);
         throw new Error(data.error || "Failed to create transaction");
       }
 
