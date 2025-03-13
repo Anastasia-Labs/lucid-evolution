@@ -1,16 +1,72 @@
-# Example - DRep Delegation
+# Cardano DRep Delegation Example with Next.js
 
-A nice looking web interface for delegating voting power to a DRep. Easy to swap out the DRep ID and other config stuff for your own DRep/usecases and just use it as a starting point.
+This project demonstrates a modern web interface for delegating voting power to a Delegation Representative (DRep) in Cardano governance system. It provides an example of how to integrate Cardano wallets with a Next.js application and handle on-chain governance transactions using Evolution library.
+
+## Technologies Used
+
+- **Next.js**: React framework for the frontend and API routes
+- **@lucid-evolution/lucid**: Library for building and submitting Cardano transactions
+- **@cardano-foundation/cardano-connect-with-wallet**: For wallet connection and CIP-30 interactions
+- **Tailwind CSS**: For styling the UI
+
+## Prerequisites
+
+- Node.js 18+ and pnpm
+- A Cardano wallet with extension (like Eternl, Nami, Flint, etc.)
+- Some tAda on testnet if you're testing on Preprod
+
+## Setup and Installation
+
+1. Clone the repository:
+
+   ```bash
+   git clone https://github.com/lucid-evolution/lucid-evolution.git
+   cd lucid-evolution/examples/with-next-js
+   ```
+
+2. Install dependencies:
+
+   ```bash
+   pnpm install
+   ```
+
+3. Set up environment variables:
+
+   ```bash
+   cp .env.example .env.local
+   ```
+
+4. Edit the `.env.local` file with your configuration:
+
+   ```
+   # DRep IDs for governance voting
+   DREP_ID_MAINNET=your_mainnet_drep_id
+   DREP_ID_PREPROD=your_preprod_drep_id
+
+   > **Important**: The DRep IDs must be properly configured or you'll encounter a "DRep ID not properly configured" error when attempting to delegate.
+
+5. Start the development server:
+
+   ```bash
+   pnpm dev
+   ```
+
+6. Open [http://localhost:3000](http://localhost:3000) in your browser
+
+## Building for Production
+
+To create a production build:
+
+```bash
+pnpm build
+```
+
 
 ## User Interface
 
 ### Main Screen
 
 ![Main Screen](./public/readme/main.png)
-
-### Voting History
-
-![Voting History](./public/readme/vote-history.png)
 
 ### Initial Connect Wallet Screen
 
@@ -24,72 +80,22 @@ A nice looking web interface for delegating voting power to a DRep. Easy to swap
 
 ![Connected Wallet](./public/readme/after-connect.png)
 
-## Setup
+### Voting History
 
-```bash
-pnpm install
+![Voting History](./public/readme/vote-history.png)
 
-pnpm dev
+## Troubleshooting
 
-pnpm build
-```
+### "DRep ID not properly configured" Error
 
-## Environment Variables
+If you encounter this error when attempting to delegate:
 
-This project uses environment variables for configuration. Copy the `.env.example` file to `.env.local` to set up your environment:
+1. Ensure you have created a `.env.local` file with valid DRep IDs
+2. Make sure the DRep IDs are properly formatted and valid
+3. Check the browser console for additional error details
 
-```bash
-cp .env.example .env.local
-```
+### Wallet Connection Issues
 
-Then edit the `.env.local` file to add your configurations:
-
-- `DREP_ID_MAINNET`: Your DRep ID for mainnet
-- `DREP_ID_PREPROD`: Your DRep ID for preprod testnet
-- `KOIOS_API_MAINNET`: Koios API endpoint for mainnet (optional)
-- `KOIOS_API_PREPROD`: Koios API endpoint for preprod testnet (optional)
-
-For development, the application will use the preprod variables. In production, it will use the mainnet variables.
-
-## Flow
-
-```mermaid
-%%{init: {'theme': 'base', 'themeVariables': { 'fontSize': '16px' }}}%%
-flowchart LR
-    subgraph Phase3[" Connection "]
-    direction TB
-        User -->|Yes| D[Connect Wallet<br>CIP-30]
-    end
-
-    subgraph Phase4[" Delegation "]
-    direction TB
-        D --> E[Delegate Button]
-
-        subgraph " Tx Building"
-        direction TB
-            E --> F1[Frontend Captures<br>Delegation Intent]
-
-            F1 --> F2[Send Request<br>to Backend]
-
-            F2 --> F3[Backend Builds<br>Tx]
-
-            F3 --> F4[Return tx.cbor<br>to Frontend]
-        end
-
-        F4 --> G[Wallet Signs<br>tx.cbor]
-
-        G --> H[Transaction<br>Confirmed]
-    end
-
-    style User fill:#f0f0f0,stroke:#333
-    style H fill:#e6ffe6,stroke:#333
-    style F1 fill:#fff4e6,stroke:#333
-    style F2 fill:#fff4e6,stroke:#333
-    style F3 fill:#fff4e6,stroke:#333
-    style F4 fill:#fff4e6,stroke:#333
-
-    classDef secureProcess fill:#fff4e6,stroke:#333;
-    classDef default font-size:14px;
-    classDef phase font-size:16px,font-weight:bold;
-    class Phase1,Phase2,Phase3,Phase4 phase
-```
+1. Ensure you have a supported wallet installed (Eternl, Nami, Flint, etc.)
+2. Check that your wallet is set to the correct network (Mainnet or Preprod)
+3. Try refreshing the page and reconnecting
