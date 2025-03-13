@@ -45,6 +45,8 @@ This project demonstrates a modern web interface for delegating voting power to 
 
    > **Important**: The DRep IDs must be properly configured or you'll encounter a "DRep ID not properly configured" error when attempting to delegate.
 
+   ```
+
 5. Start the development server:
 
    ```bash
@@ -60,7 +62,6 @@ To create a production build:
 ```bash
 pnpm build
 ```
-
 
 ## User Interface
 

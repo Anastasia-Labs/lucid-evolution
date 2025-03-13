@@ -1,0 +1,10 @@
+# Build files
+.next/**/*
+**/.next/**/*
+.next
+node_modules/**/*
+node_modules
+
+# Generated types
+next-env.d.ts
+**/types/**/* 

@@ -7,7 +7,7 @@ import { motion, AnimatePresence } from "framer-motion";
 
 declare global {
   interface Window {
-    my_modal: any;
+    my_modal: HTMLDialogElement;
   }
 }
 

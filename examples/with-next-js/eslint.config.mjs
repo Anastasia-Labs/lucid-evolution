@@ -15,6 +15,15 @@ const eslintConfig = [
     rules: {
       "@next/next/no-duplicate-head": "off",
     },
+    ignores: [
+      ".next/**/*",
+      ".next",
+      "**/.next/**/*",
+      "node_modules/**/*",
+      "node_modules",
+      "next-env.d.ts",
+      "**/types/**/*",
+    ],
   },
 ];
 

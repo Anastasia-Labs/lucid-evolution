@@ -3,23 +3,24 @@ import { NextApiRequest, NextApiResponse } from "next";
 
 export default async function handler(
   req: NextApiRequest,
-  res: NextApiResponse
+  res: NextApiResponse,
 ) {
   if (req.method === "POST") {
     const initLucid = () => {
       if (process.env.NODE_ENV === "development") {
         return Lucid(
           new Koios(
-            process.env.KOIOS_API_PREPROD || "https://preprod.koios.rest/api/v1"
+            process.env.KOIOS_API_PREPROD ||
+              "https://preprod.koios.rest/api/v1",
           ),
-          "Preprod"
+          "Preprod",
         );
       } else {
         return Lucid(
           new Koios(
-            process.env.KOIOS_API_MAINNET || "https://api.koios.rest/api/v1"
+            process.env.KOIOS_API_MAINNET || "https://api.koios.rest/api/v1",
           ),
-          "Mainnet"
+          "Mainnet",
         );
       }
     };
