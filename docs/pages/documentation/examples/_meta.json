@@ -1,12 +1,22 @@
 {
   "aiken-gift-card": {
-    "title": "Aiken Docs - Gift Card ⤴",
+    "title": "Gift Card ⤴",
     "href": "https://aiken-lang.org/example--gift-card#the-app",
+    "newWindow": true
+  },
+  "aiken-upgradable-multisig": {
+    "title": "Upgradable Multisig ⤴",
+    "href": "https://github.com/Anastasia-Labs/aiken-multisig-offchain",
     "newWindow": true
   },
   "smart-handles-offchain": {
     "title": "Smart Handles ⤴",
     "href": "https://github.com/Anastasia-Labs/smart-handles-offchain",
+    "newWindow": true
+  },
+  "single-asset-staking": {
+    "title": "Single Asset Staking ⤴",
+    "href": "https://github.com/Anastasia-Labs/single-asset-staking-offchain",
     "newWindow": true
   },
   "mint-chocolate-chip": {
@@ -17,6 +27,16 @@
   "payment-subscription": {
     "title": "Payment Subscription ⤴",
     "href": "https://github.com/Anastasia-Labs/payment-subscription-offchain",
+    "newWindow": true
+  },
+  "linear-vesting": {
+    "title": "Linear Vesting ⤴",
+    "href": "https://github.com/Anastasia-Labs/linear-vesting-offchain",
+    "newWindow": true
+  },
+  "direct-offer": {
+    "title": "Direct Offer ⤴",
+    "href": "https://github.com/Anastasia-Labs/direct-offer-offchain",
     "newWindow": true
   }
 }

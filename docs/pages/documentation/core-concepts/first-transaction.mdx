@@ -28,11 +28,13 @@ const tx = await lucid
 const signedTx = await tx.sign.withWallet().complete();
 ```
 
-You could also choose to sign the transaction with a private key:
+<Callout type="info">
+  You could also choose to sign the transaction with a private key:
 
-```typescript
-const signedTx = await tx.sign.withPrivateKey(privateKey).complete();
-```
+  ```typescript
+  const signedTx = await tx.sign.withPrivateKey(privateKey).complete();
+  ```
+</Callout>
 
 ### Submit
 
@@ -40,16 +42,13 @@ Lastly we submit the transaction:
 
 ```typescript
 const txHash = await signedTx.submit();
-console.log(txHash);
 ```
 
 </Steps>
 
-<Callout>
+<Callout type="warning">
   Remember to select a wallet before attempting to build and submit
-  transactions. The wallet selection methods we discussed in previous section
-  **[Core Concept 2: Choose Wallet](./core-concepts/choose-wallet)** should be implemented before building the
-  transaction.
+  transactions. Wallet selection discussed in [**Core Concept 2: Choose Wallet**](./wallet-management) should be implemented before attempting to build and submit transactions.
 </Callout>
 
 ## Putting everything together
@@ -59,7 +58,7 @@ import { Lucid, Blockfrost } from "@lucid-evolution/lucid";
 
 // Initialize Lucid with a provider
 const lucid = await Lucid(
-  new Blockfrost("https://cardano-preprod.blockfrost.io/api/v0", "<projectId>"),
+  new Blockfrost("https://cardano-preprod.blockfrost.io/api/v0", "<blockfrost-api-key>"),
   "Preprod"
 );
 

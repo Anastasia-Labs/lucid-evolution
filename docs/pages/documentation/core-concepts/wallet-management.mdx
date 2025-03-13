@@ -1,59 +1,81 @@
 import { Callout, Steps, Tabs } from "nextra/components";
 
-## Create a wallet
+# Wallet Management
 
-You are provided with multiple options to create and import a wallet
+This section covers everything you need to know about creating, selecting, and querying wallets using the Evolution library:
 
-### Private Key
+<Steps>
+### Create
 
-Generate a new private key
+You are provided with different methods to create a wallet:
+
+<Tabs items={['Private Key', 'Seed Phrase']}>
+  <Tabs.Tab>
+
+Generate a new private key.
 
 ```typescript
+import { generatePrivateKey } from "@lucid-evolution/lucid";
+
 const privateKey = generatePrivateKey(); // Bech32 encoded private key
 console.log(privateKey);
 ```
 
-### Seed Phrase
+</Tabs.Tab>
 
-Generate a new seed phrase (mnemonic)
+<Tabs.Tab>
+
+Generate a new seed phrase (mnemonic).
 
 ```typescript
+import { generateSeedPhrase } from "@lucid-evolution/lucid";
+
 const seedPhrase = generateSeedPhrase(); // BIP-39
 console.log(seedPhrase);
 ```
 
-## Choosing Wallet
+</Tabs.Tab>
 
-Use any suitable method to select a wallet and interact with the blockchain through it
+</Tabs>
 
-### Private Key
+### Select
 
-Select a wallet using a private key
+Use any suitable method to select a wallet and interact with the blockchain through it:
+
+<Tabs items={['Private Key', 'Seed Phrase', 'Wallet API', 'Address-only']}>
+  <Tabs.Tab>
+
+Select a wallet using a private key.
 
 ```typescript
 lucid.selectWallet.fromPrivateKey(privateKey);
 ```
 
-### Seed Phrase
+</Tabs.Tab>
 
-Select a wallet using a seed phrase (mnemonic)
+<Tabs.Tab>
+
+Select a wallet using a seed phrase (mnemonic).
 
 ```typescript
-const seedPhrase = "your seed phrase here...";
+const seedPhrase = "your seed phrase here ...";
 lucid.selectWallet.fromSeed(seedPhrase);
 ```
 
-### Wallet API
+</Tabs.Tab>
+
+<Tabs.Tab>
 
 If you're integrating with a wallet provider that exposes an API conforming to the `WalletApi` interface. This works for any [CIP-30](https://github.com/cardano-foundation/CIPs/tree/master/CIP-0030) compliant wallet.
 
 ```typescript
-// `externalWalletApi` is your wallet provider's API
 const walletApi: WalletApi = externalWalletApi;
 lucid.selectWallet.fromAPI(walletApi);
 ```
 
-### Address-only
+</Tabs.Tab>
+
+<Tabs.Tab>
 
 This method will create a limited wallet that can still query the address and its UTxOs. You can use it to build transactions that **others will sign**, as it cannot sign transactions (no private key).
 
@@ -63,21 +85,29 @@ const utxos = await lucid.utxosAt(address);
 lucid.selectWallet.fromAddress(address, utxos);
 ```
 
+</Tabs.Tab>
+
+</Tabs>
+
 <Callout type="warning">
-Transactions built with an address-only wallet will need to be signed by a wallet with the actual private keys before they can be submitted.
+  Transactions built with an address-only wallet will need to be signed by a
+  wallet with the actual private keys before they can be submitted.
 </Callout>
 
-## Query your wallet
+### Query
 
-Wallet queries are like asking "what's in my wallet?". You are able to fetch data associated with the selected wallet.
+You can fetch data associated with the selected wallet using these methods:
 
-### Address
+<Tabs items={['Address', 'UTXOs', 'Delegation']}>
+  <Tabs.Tab>
 
 ```typescript
 const address = await lucid.wallet().address(); // Bech32 encodedaddress
 ```
 
-### UTXOs
+</Tabs.Tab>
+
+<Tabs.Tab>
 
 UTXOs associated with the selected wallet
 
@@ -85,10 +115,18 @@ UTXOs associated with the selected wallet
 const utxos = await lucid.wallet().getUtxos();
 ```
 
-### Delegation
+</Tabs.Tab>
+
+<Tabs.Tab>
 
 Query your wallet's stake delegation status:
 
 ```typescript
 const delegation = await lucid.wallet().getDelegation();
 ```
+
+</Tabs.Tab>
+
+</Tabs>
+
+</Steps>
