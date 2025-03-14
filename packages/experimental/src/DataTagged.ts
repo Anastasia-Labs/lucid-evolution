@@ -27,12 +27,12 @@ export type Data = Integer | ByteArray | List | Map | Constr;
  */
 export interface List<T extends Data = Data> {
   readonly _tag: "List";
-  readonly list: readonly T[];
+  readonly array: readonly T[];
 }
 
 export interface Map<K extends Data = Data, V extends Data = Data> {
   readonly _tag: "Map";
-  readonly map: ReadonlyArray<readonly [K, V]>;
+  readonly entries: ReadonlyArray<readonly [K, V]>;
 }
 
 export interface Constr<
@@ -65,11 +65,11 @@ export const ByteArray = Schema.TaggedStruct("ByteArray", {
 }).annotations({ schema: "ByteArray" });
 
 export const List = Schema.TaggedStruct("List", {
-  list: Schema.Array(Schema.suspend((): Schema.Schema<Data> => Data)),
+  array: Schema.Array(Schema.suspend((): Schema.Schema<Data> => Data)),
 }).annotations({ schema: "List" });
 
 export const Map = Schema.TaggedStruct("Map", {
-  map: Schema.Array(
+  entries: Schema.Array(
     Schema.Tuple(
       Schema.suspend((): Schema.Schema<Data> => Data),
       Schema.suspend((): Schema.Schema<Data> => Data)
@@ -138,12 +138,12 @@ export const toCBOR = <Source, Target extends Data>(
         return CML.PlutusData.new_bytes(Bytes.fromHex(data.bytearray));
       case "List": {
         const list = CML.PlutusDataList.new();
-        data.list.forEach((item) => list.add(toCMLPlutusData(item)));
+        data.array.forEach((item) => list.add(toCMLPlutusData(item)));
         return CML.PlutusData.new_list(list);
       }
       case "Map": {
         const map = CML.PlutusMap.new();
-        data.map.forEach(([key, value]) => {
+        data.entries.forEach(([key, value]) => {
           const plutusKey = toCMLPlutusData(key);
           map.set(plutusKey, toCMLPlutusData(value));
         });
@@ -162,8 +162,8 @@ export const toCBOR = <Source, Target extends Data>(
   };
 
   const data: Data = schema
-    ? toData(input, schema, options.parseOptions)
-    : toData(input, Data);
+    ? encodeData(input, schema, options.parseOptions)
+    : encodeData(input, Data);
   const cmlPlutusData = toCMLPlutusData(data);
   return canonical
     ? cmlPlutusData.to_canonical_cbor_hex()
@@ -189,7 +189,7 @@ export function fromCBOR<Source, Target extends Data>(
   schema?: Schema.Schema<Source, Target>
 ): Source | Data {
   const data = resolveCBOR(input);
-  return schema ? fromData(data, schema) : data;
+  return schema ? decodeData(data, schema) : data;
 }
 
 export const resolveCBOR = (input: string): Data => {
@@ -210,7 +210,7 @@ export const resolveCBOR = (input: string): Data => {
       for (let i = 0; i < list.len(); i++) {
         array.push(resolveCBOR(list.get(i).to_cbor_hex()));
       }
-      return { _tag: "List", list: array };
+      return { _tag: "List", array: array };
     }
     case CML.PlutusDataKind.Map: {
       const plutusMap = data.as_map()!;
@@ -223,7 +223,7 @@ export const resolveCBOR = (input: string): Data => {
         const val = resolveCBOR(plutusMap.get(keys.get(i))!.to_cbor_hex());
         tuples.push([key, val]);
       }
-      return { _tag: "Map", map: tuples };
+      return { _tag: "Map", entries: tuples };
     }
     case CML.PlutusDataKind.ConstrPlutusData: {
       const constrData = data.as_constr_plutus_data()!;
@@ -261,7 +261,7 @@ export const resolveCBOR = (input: string): Data => {
  *
  * @since 1.0.0
  */
-export const fromData = <Source, Target extends Data>(
+export const decodeData = <Source, Target extends Data>(
   input: unknown,
   schema: Schema.Schema<Source, Target>,
   options: SchemaAST.ParseOptions = {}
@@ -290,7 +290,7 @@ export const safeFromData = <Source, Target extends Data>(
  *
  * @since 1.0.0
  */
-export const toData = <Source, Target extends Data>(
+export const encodeData = <Source, Target extends Data>(
   input: unknown,
   schema: Schema.Schema<Source, Target>,
   options?: SchemaAST.ParseOptions
@@ -330,7 +330,7 @@ export const makeList = <T extends Data = Data>(
   items: readonly T[]
 ): List<T> => ({
   _tag: "List",
-  list: items,
+  array: items,
 });
 
 /**
