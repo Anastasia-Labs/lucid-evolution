@@ -1,7 +1,5 @@
 import { Callout, Steps, Tabs } from "nextra/components";
 
-# Smart Contract Interactions
-
 ## Introduction to Validators
 
 It's important to understand that on the Cardano blockchain, you don't directly interact with "smart contracts", at least not in the traditional sense.
@@ -13,15 +11,14 @@ A validator checks whether the transaction meets its requirements, and if it doe
 ### Concepts
 
 <Tabs items={['Datums', 'Redeemers']}>
-  <Tabs.Tab>
-
+<Tabs.Tab>
 **Datums** are data attached to script UTxOs (like state variables)
 
-    ```typescript
-    const datum = Data.to(new Constr(0, [publicKeyHash]));
-    ```
+```typescript
+const datum = Data.to(new Constr(0, [publicKeyHash]));
+```
 
-    <Callout type="info">
+<Callout type="info">
 You can define datum schemas for type safety:
 
 ```typescript
@@ -31,16 +28,18 @@ const DatumSchema = Data.Object({
 type DatumType = Data.Static<typeof DatumSchema>;
 const DatumType = DatumSchema as unknown as DatumType;
 ```
-</Callout>
 
-    </Tabs.Tab>
-    <Tabs.Tab>
+</Callout>
+</Tabs.Tab>
+
+<Tabs.Tab>
 **Redeemers** are arguments provided when spending a UTxO from a script address
 
 ```typescript
-    const redeemer = Data.to(new Constr(0, [fromText("Hello, World!")]));
-    ```
-     </Tabs.Tab>
+const redeemer = Data.to(new Constr(0, [fromText("Hello, World!")]));
+```
+
+</Tabs.Tab>
 </Tabs>
 
 ## Basic Flow
@@ -62,30 +61,28 @@ const scriptAddress = lucid.utils.validatorToAddress(validator);
 ### Lock Funds at Script Address
 
 <Tabs items={['Inline Datum', 'Datum Hash']}>
-  <Tabs.Tab>
-
-    ```typescript
-    const tx = await lucid
-      .newTx()
-      .pay.ToContract(scriptAddress, { inline: datum }, { lovelace: 10_000_000n })
-      .complete();
-    ```
-  </Tabs.Tab>
-  <Tabs.Tab>
-
+<Tabs.Tab>
+```typescript
+const tx = await lucid
+  .newTx()
+  .pay.ToContract(scriptAddress, { inline: datum }, { lovelace: 10_000_000n })
+  .complete();
+```
+</Tabs.Tab>
+<Tabs.Tab>
 ```typescript
 const tx = await lucid
   .newTx()
   .pay.ToContract(scriptAddress, { hash: datumHash }, { lovelace: 10_000_000n })
   .complete();
-    ```
-  </Tabs.Tab>
+```
+</Tabs.Tab>
 </Tabs>
 
 <Callout type="info">
-  **Terminology Note:** `pay.ToAddressWithData` and `pay.ToContract` are
-  functionally identical. `ToContract` is just an alias that better expresses
-  the intent when working with smart contracts.
+  **Terminology Note:** `payToAddressWithData` and `payToContract` are
+  functionally identical. `pay.ToContract` is just an alias that better
+  expresses the intent when working with smart contracts.
 </Callout>
 
 ### Spend (Redeem) from Script Address
@@ -104,7 +101,7 @@ const ownerUTxO = allUTxOs.find((utxo) => {
 const tx = await lucid
   .newTx()
   .collectFrom([ownerUTxO], redeemer) // Provide the redeemer argument
-  .attachSpendingValidator(spend_val) // Attach validator
+  .attach.SpendingValidator(spend_val) // Attach validator
   .complete();
 ```
 
@@ -148,15 +145,15 @@ This preventive measure is essential for mitigating the risk of
 [Double Satisfaction Attack](https://github.com/Anastasia-Labs/design-patterns/blob/main/stake-validator/STAKE-VALIDATOR.md#protect-against-double-satisfaction-exploit).
 
 You can use a redeemer containing one-to-one correlation between script input UTxOs and output UTxOs.
-This is provided via ordered lists of input/output indices of inputs/ouputs present in the Script Context.
+This is provided via ordered lists of input/output indices of inputs/outputs present in the Script Context.
 
-For e.g.
+For example:
 
 ```
-Inputs     :  [scriptInputA, scriptInputB, randomInput1, scriptInputC, randomInput2, randomInput3]          // random inputs are not the concerned script inputs
-Outputs    :  [outputA, outputB, outputC, randomOuput1, randomOutput2, randomOutput3]
-InputIdxs  :  [0, 1, 3]
-OutputIdxs :  [0, 1, 2]
+Inputs     : [scriptInputA, scriptInputB, randomInput1, scriptInputC, randomInput2, randomInput3]  // random inputs are not the concerned script inputs
+Outputs    : [outputA, outputB, outputC, randomOutput1, randomOutput2, randomOutput3]
+InputIdxs  : [0, 1, 3]
+OutputIdxs : [0, 1, 2]
 where type Redeemer = List<(inputIdx, outputIdx)>
 ```
 
@@ -165,78 +162,105 @@ by using the `RedeemerBuilder` to help building your redeemer.
 
 ```typescript
 const scriptInputs: UTxO[] = [
-    { txHash: "a", outputIndex: 1, address: "scriptAddress", assets: { lovelace: 10_000000n } },
-    { txHash: "b", outputIndex: 2, address: "scriptAddress", assets: { lovelace: 20_000000n } },
-    { txHash: "d", outputIndex: 4, address: "scriptAddress", assets: { lovelace: 40_000000n } },
+  {
+    txHash: "a",
+    outputIndex: 1,
+    address: "scriptAddress",
+    assets: { lovelace: 10_000000n },
+  },
+  {
+    txHash: "b",
+    outputIndex: 2,
+    address: "scriptAddress",
+    assets: { lovelace: 20_000000n },
+  },
+  {
+    txHash: "d",
+    outputIndex: 4,
+    address: "scriptAddress",
+    assets: { lovelace: 40_000000n },
+  },
 ];
 const randomInputs: UTxO[] = [
-    { txHash: "c", outputIndex: 3, address: "randomAddress", assets: { lovelace: 30_000000n } },
-    { txHash: "e", outputIndex: 5, address: "randomAddress", assets: { lovelace: 50_000000n } },
-    { txHash: "f", outputIndex: 6, address: "randomAddress", assets: { lovelace: 60_000000n } },
+  {
+    txHash: "c",
+    outputIndex: 3,
+    address: "randomAddress",
+    assets: { lovelace: 30_000000n },
+  },
+  {
+    txHash: "e",
+    outputIndex: 5,
+    address: "randomAddress",
+    assets: { lovelace: 50_000000n },
+  },
+  {
+    txHash: "f",
+    outputIndex: 6,
+    address: "randomAddress",
+    assets: { lovelace: 60_000000n },
+  },
 ];
 
 const redeemer: RedeemerBuilder = {
-    kind: "selected",
-    makeRedeemer: (inputIdxs: bigint[]) => {
-        const tupleList = inputIdxs.map((inputIdx, i) => [inputIdx, BigInt(i)]); // List<(inputIdx, outputIdx)>
-        return Data.to(tupleList);
-    },
-    inputs: scriptInputs,
+  kind: "selected",
+  makeRedeemer: (inputIdxs: bigint[]) => {
+    const tupleList = inputIdxs.map((inputIdx, i) => [inputIdx, BigInt(i)]); // List<(inputIdx, outputIdx)>
+    return Data.to(tupleList);
+  },
+  inputs: scriptInputs,
 };
 
 const tx = await lucid
-    .newTx()
-    .collectFrom([...scriptInputs, ...randomInputs], redeemer)
-    .attach.SpendingValidator(script)
-    .pay.ToContract("scriptAddress", datum, { lovelace: 10_000000n })
-    .pay.ToContract("scriptAddress", datum, { lovelace: 20_000000n })
-    .pay.ToContract("scriptAddress", datum, { lovelace: 40_000000n })
-    .pay.ToAddress("randomAddress", { lovelace: 30_000000n })
-    .pay.ToAddress("randomAddress", { lovelace: 50_000000n })
-    .pay.ToAddress("randomAddress", { lovelace: 60_000000n })
-    .addSigner("randomAddress")
-    .complete();
+  .newTx()
+  .collectFrom([...scriptInputs, ...randomInputs], redeemer)
+  .attach.SpendingValidator(script)
+  .pay.ToContract("scriptAddress", datum, { lovelace: 10_000000n })
+  .pay.ToContract("scriptAddress", datum, { lovelace: 20_000000n })
+  .pay.ToContract("scriptAddress", datum, { lovelace: 40_000000n })
+  .pay.ToAddress("randomAddress", { lovelace: 30_000000n })
+  .pay.ToAddress("randomAddress", { lovelace: 50_000000n })
+  .pay.ToAddress("randomAddress", { lovelace: 60_000000n })
+  .addSigner("randomAddress")
+  .complete();
 ```
 
 ---
 
-
 ### Reference Scripts
 
-Reference scripts, point to an already on-chain script rather than including it entirely, without reference scripts, the full script code must have been included in each transaction.
-Reduces transaction size and base fee (execution costs remain the same)
-
+Reference scripts point to an already on-chain script rather than including it entirely. Without reference scripts, the full script code must be included in each transaction.
+This reduces transaction size and base fee (execution costs remain the same).
 
 <Tabs items={['Deploy a Reference Script', 'Use a Reference Script']}>
-  <Tabs.Tab>
-    ```typescript
-    // Deploy a script as a reference script
-    const deployScriptTx = await lucid
-      .newTx()
-      .pay.ToAddressWithData(
-        scriptAddress,
-        { kind: "inline", value: datum },
-        { lovelace: 5_000_000n },
-        script // The script to be stored as a reference
-      )
-      .complete();
-    ```
-  </Tabs.Tab>
-  <Tabs.Tab>
-    ```typescript
-    // Find a UTxO containing a reference script
-    const allUTxOs = await lucid.utxosAt(scriptAddress);
-    const refScriptUTxO = allUTxOs.filter((utxo) => utxo.scriptRef)[0];
+<Tabs.Tab>
+```typescript
+// Deploy a script as a reference script
+const deployScriptTx = await lucid
+  .newTx()
+  .pay.ToAddressWithData(
+    scriptAddress,
+    { kind: "inline", value: datum },
+    { lovelace: 5_000_000n },
+    script // The script to be stored as a reference
+  )
+  .complete();
+```
+</Tabs.Tab>
+<Tabs.Tab>
+```typescript
+// Find a UTxO containing a reference script
+const allUTxOs = await lucid.utxosAt(scriptAddress);
+const refScriptUTxO = allUTxOs.filter((utxo) => utxo.scriptRef)[0];
 
-    // Use the reference script instead of attaching the validator
-    const tx = await lucid
-      .newTx()
-      .collectFrom([utxoToSpend], redeemer)
-      .readFrom([refScriptUTxO]) // Reference the script UTxO
-      .complete();
-    ```
-
-  </Tabs.Tab>
+// Use the reference script instead of attaching the validator
+const tx = await lucid
+  .newTx()
+  .collectFrom([utxoToSpend], redeemer)
+  .readFrom([refScriptUTxO]) // Reference the script UTxO
+  .complete();
+```
+</Tabs.Tab>
 </Tabs>
 
 ---
@@ -246,96 +270,98 @@ Reduces transaction size and base fee (execution costs remain the same)
 Many validators are parameterized, you can apply parameters dynamically.
 
 <Tabs items={['Single Parameter', 'Multiple Parameters', 'Complex Types']}>
-  <Tabs.Tab>
+<Tabs.Tab>
+```typescript
+const mintingPolicy = {
+  type: "PlutusV3",
+  script: applyParamsToScript(
+    "5907945907910100...", // CBOR hex of the compiled script
+    [10n] // Parameters
+  ),
+};
+````
 
-    ```typescript
-    const mintingPolicy = {
-      type: "PlutusV3",
-      script: applyParamsToScript(
-        "5907945907910100...", // CBOR hex of the compiled script
-        [10n] // Parameters
-      ),
-    };
-    ```
-  <Callout type="info">
-    For a validator expecting **one** parameter:
+<Callout type="info">
+For a validator expecting **one** parameter:
 
-    ```rust
-    validator minting_policy(first_param: Int) { .. }
-    ```
-    </Callout>
+```rust
+validator minting_policy(first_param: Int) { .. }
+```
 
-  </Tabs.Tab>
+</Callout>
+</Tabs.Tab>
   
-  <Tabs.Tab>
-   
-    ```typescript
-    const pkh = paymentCredentialOf(address).hash;
-    const yes = new Constr(1, []);
+<Tabs.Tab>
+```typescript
+const pkh = paymentCredentialOf(address).hash;
+const yes = new Constr(1, []);
 
-    const spendingValidator = {
-      type: "PlutusV3",
-      script: applyParamsToScript(
-        "5907945907910101...", // CBOR hex
-        [pkh, yes] // Parameters
-      ),
-    };
-    ```
-  <Callout type="info">
-    For a validator expecting **multiple** parameters:
+const spendingValidator = {
+type: "PlutusV3",
+script: applyParamsToScript(
+"5907945907910101...", // CBOR hex
+[pkh, yes] // Parameters
+),
+};
 
-    ```rust
-    validator spending_validator(pkh: VerificationKeyHash, yes_no: Bool) { .. }
-    ```
-    </Callout>
+````
+<Callout type="info">
+For a validator expecting **multiple** parameters:
 
-  </Tabs.Tab>
+```rust
+validator spending_validator(pkh: VerificationKeyHash, yes_no: Bool) { .. }
+````
+
+</Callout>
+</Tabs.Tab>
   
-  <Tabs.Tab>
-           
-    ```typescript
-    const oRef = new Constr(0, [String(utxo.txHash), BigInt(utxo.outputIndex)]);
+<Tabs.Tab>
+```typescript
+const oRef = new Constr(0, [String(utxo.txHash), BigInt(utxo.outputIndex)]);
 
-    const yourValidator = {
-      type: "PlutusV3",
-      script: applyParamsToScript(
-        "5907945907910102...", // CBOR
-        [oRef] // Parameters
-      ),
-    };
-    ```
-    <Callout type="info">
-    For validators expecting **complex types**:
+const yourValidator = {
+  type: "PlutusV3",
+  script: applyParamsToScript(
+    "5907945907910102...", // CBOR
+    [oRef] // Parameters
+    ),
+};
 
-    ```rust
-    type OutputReference {
-      transaction_id: ByteArray,
-      output_index: Int,
-    }
+````
+<Callout type="info">
+For validators expecting **complex types**:
 
-    validator your_validator(o_ref: OutputReference) { .. }
-    ```
-    </Callout> 
+```rust
+type OutputReference {
+  transaction_id: ByteArray,
+  output_index: Int,
+}
 
-    <Callout type="info">
-    For nested types in Plutus/Aiken, adjust the construction accordingly:
+validator your_validator(o_ref: OutputReference) { .. }
+````
 
-    ```typescript
-    const txID = new Constr(0, [String(utxo.txHash)]);
-    const txIdx = BigInt(utxo.outputIndex);
-    const oRef = new Constr(0, [txID, txIdx]);
+</Callout>
 
-    const yourValidator = {
-      type: "PlutusV3",
-      script: applyParamsToScript(
-        "5907945907910103...",
-        [oRef] // Parameters
-      ),
-    };
-    ```
-    </Callout>
+<Callout type="info">
+For nested types in Plutus/Aiken, adjust the construction accordingly:
 
-  </Tabs.Tab>
+```typescript
+const txID = new Constr(0, [String(utxo.txHash)]);
+const txIdx = BigInt(utxo.outputIndex);
+const oRef = new Constr(0, [txID, txIdx]);
+
+const yourValidator = {
+  type: "PlutusV3",
+  script: applyParamsToScript(
+    "5907945907910103...",
+    [oRef] // Parameters
+  ),
+};
+```
+
+</Callout>
+</Tabs.Tab>
+</Tabs>
 
 <Callout>
   `applyParamsToScript` function handles CBOR encoding internally. 
@@ -344,7 +370,6 @@ Many validators are parameterized, you can apply parameters dynamically.
   const encodingLevel = CBOREncodingLevel(script); // Returns "double" | "single"
   ```
 </Callout>
-</Tabs>
 
 ---
 
@@ -367,15 +392,14 @@ const tx = await lucid
 
 ## Troubleshooting & Best Practices
 
-| Common Issue              | Best Practice                                                                     |
-| ------------------------- | --------------------------------------------------------------------------------- |
-| **Datum/Redeemer Format** | Ensure they match validator expectations precisely                                |
-| **Minimum ADA**           | Provide sufficient ADA for all outputs                                            |
-| **Collateral**            | Include appropriate amount of collateral when spending from script addresses      |
-| **Signatories**           | Include all required signers for the validators that require/check them           |
-| **Execution Units**       | Monitor the limits when working with multiple validators                          |
-| **Reference Scripts**     | Use reference scripts when possible to significantly reduce transaction costs     |
-
+| Common Issue              | Best Practice                                                                 |
+| ------------------------- | ----------------------------------------------------------------------------- |
+| **Datum/Redeemer Format** | Ensure they match validator expectations precisely                            |
+| **Minimum ADA**           | Provide sufficient ADA for all outputs                                        |
+| **Collateral**            | Include appropriate amount of collateral when spending from script addresses  |
+| **Signatories**           | Include all required signers for the validators that require/check them       |
+| **Execution Units**       | Monitor the limits when working with multiple validators                      |
+| **Reference Scripts**     | Use reference scripts when possible to significantly reduce transaction costs |
 
 <Callout type="info">
   For a comprehensive documentation of validators, see the official [Aiken
