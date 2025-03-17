@@ -1,4 +1,12 @@
 {
+  "create-evolution-next-app": {
+    "title": "Evolution + Next.js App ⤴",
+    "href": "https://github.com/Anastasia-Labs/create-evolution-app",
+    "newWindow": true
+  },
+  "---": {
+    "type": "separator"
+  },
   "aiken-gift-card": {
     "title": "Gift Card ⤴",
     "href": "https://aiken-lang.org/example--gift-card#the-app",
