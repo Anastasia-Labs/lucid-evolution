@@ -1,27 +1,28 @@
 import { Callout, Steps, Tabs } from "nextra/components";
 
-## Staking your wallet
+## Staking
+
 This section covers the operations for staking your wallet on the Cardano network.
+
+<Tabs items={["Register", "Deregister"]}>
+<Tabs.Tab>
 <Steps>
 ### Register stake key
- 
- When registering a stake key with the Cardano network, a deposit of `2 ADA` is required. This deposit acts as a pledge and is temporarily deducted from the wallet balance.
+
+When registering a stake key with the Cardano network, a deposit of `2 ADA` is required. This deposit acts as a pledge and is temporarily deducted from the wallet balance.
 
 ```typescript
-const tx = await lucid
-    .newTx()
-    .registerStake(rewardAddress)
-    .complete();
+const tx = await lucid.newTx().registerStake(rewardAddress).complete();
 ```
 
-<Callout type="info">
-You can query the reward address (`stake_...`) associated with your stake key like this:
+<Callout>
+Query the reward address (`stake_...`) of the selected wallet:
 
 ```typescript
 const rewardAddress = await lucid.wallet().rewardAddress();
 ```
+
 </Callout>
----
 
 ### Delegate to a stake pool
 
@@ -33,9 +34,9 @@ const tx = await lucid
   .delegateTo(rewardAddress, "poolabc...")
   .complete();
 ```
-<Callout>
-**Register and Delegate to a stake pool**
-You can combine both registration and delegation into a single transaction 
+
+<Callout type="info">
+You can combine both registration and delegation into a single transaction:
 
 ```typescript
 const tx = await lucid
@@ -43,12 +44,12 @@ const tx = await lucid
   .registerAndDelegate.ToPool(rewardAddress, "poolabc...")
   .complete();
 ```
+
 </Callout>
----
 
 ### Withdraw rewards
 
-Allows the wallet holder to claim any rewards accumulated through staking. The rewards are withdrawn to the wallets balance
+Allows the wallet holder to claim any rewards accumulated through staking. The rewards are withdrawn to the wallets balance.
 
 ```typescript
 const delegation = await lucid.wallet().getDelegation();
@@ -60,20 +61,15 @@ const tx = await lucid
 ```
 
 </Steps>
-
----
-
+</Tabs.Tab>
+<Tabs.Tab>
 ### Deregister stake key
-  Deregistering a stake key will reclaim the `2 ADA` deposit initially taken during registration.
+
+Deregistering a stake key will reclaim the `2 ADA` deposit initially taken during registration.
 
 ```typescript
-const tx = await lucid
-  .newTx()
-  .deRegisterStake(rewardAddress)
-  .complete();
+const tx = await lucid.newTx().deRegisterStake(rewardAddress).complete();
 ```
 
-
-
-
-
+</Tabs.Tab>
+</Tabs>
