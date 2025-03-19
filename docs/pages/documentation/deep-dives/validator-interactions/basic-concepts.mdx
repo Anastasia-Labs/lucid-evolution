@@ -4,24 +4,23 @@ import { Callout, Steps, Tabs } from "nextra/components";
 
 ## Introduction to Validators
 
-It's important to understand that on the Cardano blockchain, you don't directly interact with "smart contracts" aka "validators", at least not in the traditional sense.
+It's important to understand that on the Cardano blockchain, you don't directly interact with "smart contracts", at least not in the traditional sense.
 
-Validators are responsible for verifying the actions taken in a given transaction, rather than executing or calling any actions themselves. Validators are pure functions that return true or false.
+Instead, you work with validators. These validators are responsible for verifying the actions taken in a given transaction, rather than executing or calling any actions themselves. Validators are pure functions that return true or false.
 
 A validator checks whether the transaction meets its requirements, and if it does, the transaction is processed successfully. If the requirements are not met, the transaction fails (is not allowed to execute).
 
 ### Concepts
 
 <Tabs items={['Datums', 'Redeemers']}>
-  <Tabs.Tab>
-
+<Tabs.Tab>
 **Datums** are data attached to script UTxOs (like state variables)
 
-    ```typescript
-    const datum = Data.to(new Constr(0, [publicKeyHash]));
-    ```
+```typescript
+const datum = Data.to(new Constr(0, [publicKeyHash]));
+```
 
-    <Callout type="info">
+<Callout type="info">
 You can define datum schemas for type safety:
 
 ```typescript
@@ -31,16 +30,18 @@ const DatumSchema = Data.Object({
 type DatumType = Data.Static<typeof DatumSchema>;
 const DatumType = DatumSchema as unknown as DatumType;
 ```
-</Callout>
 
-    </Tabs.Tab>
-    <Tabs.Tab>
+</Callout>
+</Tabs.Tab>
+
+<Tabs.Tab>
 **Redeemers** are arguments provided when spending a UTxO from a script address
 
 ```typescript
-    const redeemer = Data.to(new Constr(0, [fromText("Hello, World!")]));
-    ```
-     </Tabs.Tab>
+const redeemer = Data.to(new Constr(0, [fromText("Hello, World!")]));
+```
+
+</Tabs.Tab>
 </Tabs>
 
 ## Basic Flow
@@ -62,30 +63,28 @@ const scriptAddress = lucid.utils.validatorToAddress(validator);
 ### Lock Funds at Script Address
 
 <Tabs items={['Inline Datum', 'Datum Hash']}>
-  <Tabs.Tab>
-
-    ```typescript
-    const tx = await lucid
-      .newTx()
-      .pay.ToContract(scriptAddress, { inline: datum }, { lovelace: 10_000_000n })
-      .complete();
-    ```
-  </Tabs.Tab>
-  <Tabs.Tab>
-
+<Tabs.Tab>
+```typescript
+const tx = await lucid
+  .newTx()
+  .pay.ToContract(scriptAddress, { inline: datum }, { lovelace: 10_000_000n })
+  .complete();
+```
+</Tabs.Tab>
+<Tabs.Tab>
 ```typescript
 const tx = await lucid
   .newTx()
   .pay.ToContract(scriptAddress, { hash: datumHash }, { lovelace: 10_000_000n })
   .complete();
-    ```
-  </Tabs.Tab>
+```
+</Tabs.Tab>
 </Tabs>
 
 <Callout type="info">
-  **Terminology Note:** `pay.ToAddressWithData` and `pay.ToContract` are
-  functionally identical. `ToContract` is just an alias that better expresses
-  the intent when working with smart contracts.
+  **Terminology Note:** `payToAddressWithData` and `payToContract` are
+  functionally identical. `pay.ToContract` is just an alias that better
+  expresses the intent when working with smart contracts.
 </Callout>
 
 ### Spend (Redeem) from Script Address
@@ -104,7 +103,7 @@ const ownerUTxO = allUTxOs.find((utxo) => {
 const tx = await lucid
   .newTx()
   .collectFrom([ownerUTxO], redeemer) // Provide the redeemer argument
-  .attachSpendingValidator(spend_val) // Attach validator
+  .attach.SpendingValidator(spend_val) // Attach validator
   .complete();
 ```
 
@@ -136,14 +135,14 @@ Corresponding transaction operations:
 
 ## Troubleshooting & Best Practices
 
-| Common Issue              | Best Practice                                                                     |
-| ------------------------- | --------------------------------------------------------------------------------- |
-| **Datum/Redeemer Format** | Ensure they match validator expectations precisely                                |
-| **Minimum ADA**           | Provide sufficient ADA for all outputs                                            |
-| **Collateral**            | Include appropriate amount of collateral when spending from script addresses      |
-| **Signatories**           | Include all required signers for the validators that require/check them           |
-| **Execution Units**       | Monitor the limits when working with multiple validators                          |
-| **Reference Scripts**     | Use reference scripts when possible to significantly reduce transaction costs     |
+| Common Issue              | Best Practice                                                                 |
+| ------------------------- | ----------------------------------------------------------------------------- |
+| **Datum/Redeemer Format** | Ensure they match validator expectations precisely                            |
+| **Minimum ADA**           | Provide sufficient ADA for all outputs                                        |
+| **Collateral**            | Include appropriate amount of collateral when spending from script addresses  |
+| **Signatories**           | Include all required signers for the validators that require/check them       |
+| **Execution Units**       | Monitor the limits when working with multiple validators                      |
+| **Reference Scripts**     | Use reference scripts when possible to significantly reduce transaction costs |
 
 
 <Callout type="info">

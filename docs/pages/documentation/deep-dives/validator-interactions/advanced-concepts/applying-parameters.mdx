@@ -6,7 +6,6 @@ Many validators are parameterized, you can apply parameters dynamically.
 
 <Tabs items={['Single Parameter', 'Multiple Parameters', 'Complex Types']}>
   <Tabs.Tab>
-
     ```typescript
     const mintingPolicy = {
       type: "PlutusV3",
@@ -23,11 +22,9 @@ Many validators are parameterized, you can apply parameters dynamically.
     validator minting_policy(first_param: Int) { .. }
     ```
     </Callout>
-
   </Tabs.Tab>
   
   <Tabs.Tab>
-   
     ```typescript
     const pkh = paymentCredentialOf(address).hash;
     const yes = new Constr(1, []);
@@ -50,8 +47,7 @@ Many validators are parameterized, you can apply parameters dynamically.
 
   </Tabs.Tab>
   
-  <Tabs.Tab>
-           
+  <Tabs.Tab>  
     ```typescript
     const oRef = new Constr(0, [String(utxo.txHash), BigInt(utxo.outputIndex)]);
 
@@ -93,8 +89,8 @@ Many validators are parameterized, you can apply parameters dynamically.
     };
     ```
     </Callout>
-
   </Tabs.Tab>
+</Tabs>
 
 <Callout>
   `applyParamsToScript` function handles CBOR encoding internally. 
@@ -103,4 +99,3 @@ Many validators are parameterized, you can apply parameters dynamically.
   const encodingLevel = CBOREncodingLevel(script); // Returns "double" | "single"
   ```
 </Callout>
-</Tabs>

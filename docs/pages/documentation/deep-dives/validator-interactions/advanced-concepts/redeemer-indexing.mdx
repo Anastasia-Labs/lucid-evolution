@@ -19,15 +19,15 @@ Attack](https://github.com/Anastasia-Labs/design-patterns/blob/main/stake-valida
 
 You can use a redeemer containing one-to-one correlation between script input
 UTxOs and output UTxOs. This is provided via ordered lists of input/output
-indices of required inputs/ouputs present in the Script Context.
+indices of required inputs/outputs present in the Script Context.
 
-For e.g.
+For example:
 
 ```
-Inputs     :  [scriptInputA, scriptInputB, randomInput1, scriptInputC, randomInput2, randomInput3]          // random inputs are not the concerned script inputs
-Outputs    :  [outputA, outputB, outputC, randomOuput1, randomOutput2, randomOutput3]
-InputIdxs  :  [0, 1, 3]
-OutputIdxs :  [0, 1, 2]
+Inputs     : [scriptInputA, scriptInputB, randomInput1, scriptInputC, randomInput2, randomInput3]  // random inputs are not the concerned script inputs
+Outputs    : [outputA, outputB, outputC, randomOutput1, randomOutput2, randomOutput3]
+InputIdxs  : [0, 1, 3]
+OutputIdxs : [0, 1, 2]
 where type Redeemer = List<(inputIdx, outputIdx)>
 ```
 
@@ -67,14 +67,44 @@ obtain redeemer with required input indices.
 
     ```typescript
     const scriptInputs: UTxO[] = [
-        { txHash: "a", outputIndex: 1, address: "scriptAddress", assets: { lovelace: 10_000000n } },
-        { txHash: "b", outputIndex: 2, address: "scriptAddress", assets: { lovelace: 20_000000n } },
-        { txHash: "d", outputIndex: 4, address: "scriptAddress", assets: { lovelace: 40_000000n } },
+      {
+        txHash: "a",
+        outputIndex: 1,
+        address: "scriptAddress",
+        assets: { lovelace: 10_000000n },
+      },
+      {
+        txHash: "b",
+        outputIndex: 2,
+        address: "scriptAddress",
+        assets: { lovelace: 20_000000n },
+      },
+      {
+        txHash: "d",
+        outputIndex: 4,
+        address: "scriptAddress",
+        assets: { lovelace: 40_000000n },
+      },
     ];
     const randomInputs: UTxO[] = [
-        { txHash: "c", outputIndex: 3, address: "randomAddress", assets: { lovelace: 30_000000n } },
-        { txHash: "e", outputIndex: 5, address: "randomAddress", assets: { lovelace: 50_000000n } },
-        { txHash: "f", outputIndex: 6, address: "randomAddress", assets: { lovelace: 60_000000n } },
+      {
+        txHash: "c",
+        outputIndex: 3,
+        address: "randomAddress",
+        assets: { lovelace: 30_000000n },
+      },
+      {
+        txHash: "e",
+        outputIndex: 5,
+        address: "randomAddress",
+        assets: { lovelace: 50_000000n },
+      },
+      {
+        txHash: "f",
+        outputIndex: 6,
+        address: "randomAddress",
+        assets: { lovelace: 60_000000n },
+      },
     ];    
 
     const tx = await lucid

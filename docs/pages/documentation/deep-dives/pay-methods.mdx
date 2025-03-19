@@ -1,6 +1,6 @@
 import { Callout, Steps, Tabs } from "nextra/components";
 
-# Pay Methods
+## Pay Methods
 
 Evolution library provides several `.pay` methods to create transaction outputs on the Cardano blockchain. These methods allow you to send ADA, native tokens, attach datums, deploy reference scripts, and interact with smart contracts. This guide covers all the available pay methods and their use cases.
 
@@ -80,6 +80,8 @@ Evolution library provides several `.pay` methods to create transaction outputs 
 
     ### Datums
 
+    Include a datum to your transaction output:
+    
     <Tabs items={['Datum Hash', 'Inline Datum']}>
       <Tabs.Tab>
         ```typescript
@@ -108,7 +110,3 @@ Evolution library provides several `.pay` methods to create transaction outputs 
         ```
       </Tabs.Tab>
     </Tabs>
-
-    <Callout type="info">
-      `pay.ToAddressWithData` allows you to include a datum to your transaction output
-    </Callout>
