@@ -3,7 +3,12 @@
   "mint-burn-assets": "Mint & Burn Assets",
   "register-stake": "Staking",
   "governance": "Governance",
-  "smart-contract-interactions": "Interact with Validators",
+  "validator-interactions": {
+    "title": "Interact with Validators",
+    "theme": {
+      "breadcrumb": false
+    }
+  },
   "transaction-chaining": "Transaction Chaining",
   "emulator": "Emulator"
 }
