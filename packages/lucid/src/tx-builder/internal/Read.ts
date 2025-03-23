@@ -21,9 +21,16 @@ export const readFrom = (utxos: UTxO[]) =>
       );
 
       const coreUtxo = utxoToCore({ ...utxo, datum: resolvedDatum });
-      config.txBuilder.add_reference_input(coreUtxo);
+      const exists = config.readInputs.some(
+        (input) =>
+          input.txHash === utxo.txHash &&
+          input.outputIndex === utxo.outputIndex,
+      );
 
-      // Store inputs for later use in the txBuilder
-      config.readInputs.push(utxo);
+      if (!exists) {
+        config.txBuilder.add_reference_input(coreUtxo);
+        // Store inputs for later use in the txBuilder
+        config.readInputs.push(utxo);
+      }
     }
   });

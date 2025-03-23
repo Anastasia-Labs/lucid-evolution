@@ -98,6 +98,38 @@ export const depositFundsCollect = Effect.gen(function* () {
   yield* Effect.all(programs);
 }).pipe(withLogRetry, Effect.orDie);
 
+export const readRefInputTwice = Effect.gen(function* () {
+  const { user } = yield* User;
+  const scriptAddress =
+    "addr_test1wr4rcqxrusa76m068pv8xxpl65ajw2u08dk7mx3kjrjaf6gryukn2";
+  const [newWalletInputs, derivedOutputs, refTx] = yield* user
+    .newTx()
+    .pay.ToAddressWithData(
+      scriptAddress,
+      { kind: "inline", value: Data.void() },
+      { lovelace: 10_000_000n },
+    )
+    .chainProgram();
+
+  const tx = yield* refTx.sign.withWallet().completeProgram();
+  yield* tx.submitProgram();
+  const refInput = derivedOutputs.find(
+    (utxo) => utxo.address == scriptAddress,
+  )!;
+
+  // Referencing the output twice (directly) in the same transaction doesn't
+  // work.
+
+  user.overrideUTxOs(newWalletInputs);
+  const txCompose = yield* user
+    .newTx()
+    .readFrom([refInput])
+    .readFrom([refInput])
+    .completeProgram();
+  const txSign = yield* txCompose.sign.withWallet().completeProgram();
+  yield* txSign.submitProgram();
+});
+
 const fetchForOwner = (utxos: UTxO[], ownerKeyHash: PaymentKeyHash) =>
   utxos.filter((value) => {
     if (value.datum) {
