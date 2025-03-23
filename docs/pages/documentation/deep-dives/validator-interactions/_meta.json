@@ -1,9 +1,4 @@
 {
-  "basic-concepts": "Basic Concepts",
-  "advanced-concepts": {
-    "title": "Advanced Concepts",
-    "theme": {
-      "breadcrumb": false
-    }
-  }
+  "overview": "Overview",
+  "advanced": "Advanced"
 }

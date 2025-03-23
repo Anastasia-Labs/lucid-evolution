@@ -1,8 +1,6 @@
 import { Callout, Steps, Tabs } from "nextra/components";
 
-# Basic Concepts
-
-## Introduction to Validators
+## Introduction
 
 It's important to understand that on the Cardano blockchain, you don't directly interact with "smart contracts", at least not in the traditional sense.
 
@@ -44,7 +42,7 @@ const redeemer = Data.to(new Constr(0, [fromText("Hello, World!")]));
 </Tabs.Tab>
 </Tabs>
 
-## Basic Flow
+## Workflow
 
 <Steps>
 ### Create a Validator Instance
@@ -82,9 +80,9 @@ const tx = await lucid
 </Tabs>
 
 <Callout type="info">
-  **Terminology Note:** `payToAddressWithData` and `payToContract` are
-  functionally identical. `pay.ToContract` is just an alias that better
-  expresses the intent when working with smart contracts.
+  `pay.ToAddressWithData` and `pay.ToContract` are functionally identical.
+  `pay.ToContract` is just an alias that better expresses the intent when
+  working with smart contracts.
 </Callout>
 
 ### Spend (Redeem) from Script Address
@@ -143,7 +141,6 @@ Corresponding transaction operations:
 | **Signatories**           | Include all required signers for the validators that require/check them       |
 | **Execution Units**       | Monitor the limits when working with multiple validators                      |
 | **Reference Scripts**     | Use reference scripts when possible to significantly reduce transaction costs |
-
 
 <Callout type="info">
   For a comprehensive documentation of validators, see the official [Aiken

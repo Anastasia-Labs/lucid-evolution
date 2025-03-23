@@ -1,17 +1,7 @@
 {
-  "core-concepts": {
-    "title": "Core Concepts",
-    "theme": {
-      "breadcrumb": false
-    }
-  },
+  "core-concepts": "Core Concepts",
 
-  "deep-dives": {
-    "title": "Deep Dives",
-    "theme": {
-      "breadcrumb": false
-    }
-  },
+  "deep-dives": "Deep Dives",
 
   "---": {
     "type": "separator"
@@ -19,10 +9,5 @@
 
   "under-the-hood": "Under The Hood",
 
-  "examples": {
-    "title": "Examples",
-    "theme": {
-      "breadcrumb": false
-    }
-  }
+  "examples": "Examples"
 }
