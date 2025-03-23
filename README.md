@@ -152,7 +152,7 @@ import { Lucid, Koios, generateSeedPhrase } from "@lucid-evolution/lucid";
 // Initialize Lucid with a provider
 const lucid = await Lucid(
   new Koios("https://preprod.koios.rest/api/v1"),
-  "Preprod"
+  "Preprod",
 );
 
 const seedPhrase = generateSeedPhrase(); // BIP-39
