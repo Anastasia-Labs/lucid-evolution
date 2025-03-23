@@ -152,7 +152,7 @@ import { Lucid, Koios, generateSeedPhrase } from "@lucid-evolution/lucid";
 // Initialize Lucid with a provider
 const lucid = await Lucid(
   new Koios("https://preprod.koios.rest/api/v1"),
-  "Preprod",
+  "Preprod"
 );
 
 const seedPhrase = generateSeedPhrase(); // BIP-39
@@ -295,24 +295,15 @@ pnpm --filter @lucid-evolution/lucid test
 
 <div align="center">
   <details>
-    <summary><strong>📋 View </strong>Testing Requirements</summary>
+    <summary><strong>🧪 Testing Details</strong></summary>
     <div style="text-align: left; margin-top: 15px;">
-      <p>For <strong>complete test coverage</strong> including on-chain tests, you'll need:</p>
-      <ul>
-        <li>Create <code>.env</code> files in <code>packages/lucid</code> and <code>packages/provider</code></li>
-        <li>Blockfrost API keys (preprod and mainnet)</li>
-        <li>A test wallet seed phrase</li>
-        <li>Maestro API key (for provider tests)</li>
-        <li>Kupo and Ogmios authenticated endpoint URLs</li>
-      </ul>
-      <p><em>Many unit tests and emulator-based tests will run without these credentials.</em></p>
+      <p>Lucid Evolution includes both unit tests and on-chain integration tests.</p>
+      <p>For detailed testing instructions, including environment setup and API keys, please refer to our <a href="./CONTRIBUTING.md#local-testing">CONTRIBUTING guide</a>.</p>
     </div>
   </details>
 </div>
 
 <div style="margin: 20px 0;"></div>
-
-Tests include both on-chain interactions (preprod/preview networks) and local emulation.
 
 ### 📖 Local Documentation
 
@@ -326,7 +317,7 @@ pnpm dev
 
 ## 📜 License
 
-Lucid Evolution is open-source software licensed under the [MIT License](https://anastasia-labs.github.io/lucid-evolution/information/license).
+Lucid Evolution is licensed under the [MIT License](./LICENSE).
 
 ---
 
