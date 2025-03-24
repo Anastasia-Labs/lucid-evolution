@@ -151,11 +151,13 @@ export const complete = (options: CompleteOptions = {}) =>
       let estimatedFee = minFee + refScriptFee;
 
       const totalCollateral = BigInt(
-        Math.max(
-          (config.lucidConfig.protocolParameters.collateralPercentage *
-            Number(estimatedFee)) /
-            100,
-          Number(setCollateral),
+        Math.ceil(
+          Math.max(
+            (config.lucidConfig.protocolParameters.collateralPercentage *
+              Number(estimatedFee)) /
+              100,
+            Number(setCollateral),
+          ),
         ),
       );
       const collateralInput = yield* findCollateral(
