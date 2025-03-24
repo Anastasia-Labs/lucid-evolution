@@ -1,5 +1,11 @@
 # @lucid-evolution/lucid
 
+## 0.4.25
+
+### Patch Changes
+
+- [#562](https://github.com/Anastasia-Labs/lucid-evolution/pull/562) [`413bef5`](https://github.com/Anastasia-Labs/lucid-evolution/commit/413bef53b925425adb035658146db3ca60331e31) Thanks [@hadelive](https://github.com/hadelive)! - fix duplicate reference inputs
+
 ## 0.4.24
 
 ### Patch Changes
