@@ -44,7 +44,7 @@ export function fromHex(hex: string): Uint8Array {
   const al = hl / 2;
   if (hl % 2)
     throw new Error(
-      "padded hex string expected, got unpadded hex of length " + hl,
+      "padded hex string expected, got unpadded hex of length " + hl + " " + hex,
     );
   const array = new Uint8Array(al);
   for (let ai = 0, hi = 0; ai < al; ai++, hi += 2) {
@@ -101,4 +101,6 @@ export function fromText(text: string): string {
  * @since 1.0.0
  */
 export const isHex = (value: string): boolean =>
-  typeof value === "string" && /^[0-9a-fA-F]+$/.test(value) && value.length % 2 === 0;
+  typeof value === "string" &&
+  /^[0-9a-fA-F]+$/.test(value) &&
+  value.length % 2 === 0;

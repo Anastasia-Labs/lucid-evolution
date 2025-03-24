@@ -1,18 +1,53 @@
-import { Either, pipe, Schema, SchemaAST } from "effect";
+import {
+  Array as _Array,
+  Arbitrary,
+  Either,
+  FastCheck,
+  pipe,
+  Schema,
+  SchemaAST,
+} from "effect";
 import * as Bytes from "./Core/Bytes.js";
 import * as CML from "@anastasia-labs/cardano-multiplatform-lib-nodejs";
 import { ParseError } from "effect/ParseResult";
 
+export const dedupeArrayTuple = <
+  Fst extends Schema.Schema.Any,
+  Snd extends Schema.Schema.Any,
+>(
+  schema: Schema.Tuple2<Fst, Snd>
+) => {
+  const item = Arbitrary.make(schema);
+  return Schema.Array(schema).pipe(
+    Schema.filter(
+      (tuples) =>
+        tuples.map(([a, _]) => a).length ===
+        _Array.dedupeWith(tuples, (a, b) => isEqual(a[0], b[0])).length,
+      // {
+      //   const firstElements = tuples.map(([a, _]) => a);
+      //   const uniqueFirstElements = _Array.dedupeWith(firstElements, isEqual);
+      //   return firstElements.length === uniqueFirstElements.length;
+      // },
+      {
+        title: `Unique Tuple Array (${schema})`,
+        arbitrary: () => (fc) => fc.uniqueArray(item, { maxLength: 3 }),
+      }
+    )
+  );
+};
+
+/**
+ * Regular expression that matches valid hexadecimal strings.
+ * Validates that a string:
+ * - Contains only hexadecimal characters (0-9, a-f)
+ * - Has an even number of characters (bytes are represented as pairs of hex digits)
+ * - Can be empty (matches zero or more pairs)
+ */
+export const HEX_REGEX = /^(?:[0-9a-f]{2})*$/;
+
 export const HexString = <Source extends string, Target>(
   self: Schema.Schema<Source, Target>
-) =>
-  pipe(
-    self,
-    Schema.filter((value) => Bytes.isHex(value), {
-      message: (issue) =>
-        `Expected a hexadecimal string but got: ${issue.actual}.`,
-    })
-  );
+) => pipe(self, Schema.pattern(HEX_REGEX));
 
 /**
  * Plutus data types and schemas for serialization/deserialization between
@@ -27,12 +62,12 @@ export type Data = Integer | ByteArray | List | Map | Constr;
  */
 export interface List<T extends Data = Data> {
   readonly _tag: "List";
-  readonly array: readonly T[];
+  readonly value: readonly T[];
 }
 
 export interface Map<K extends Data = Data, V extends Data = Data> {
   readonly _tag: "Map";
-  readonly entries: ReadonlyArray<readonly [K, V]>;
+  readonly value: ReadonlyArray<readonly [K, V]>;
 }
 
 export interface Constr<
@@ -46,55 +81,73 @@ export interface Constr<
 
 export interface Integer<T extends bigint = bigint> {
   readonly _tag: "Integer";
-  readonly integer: T;
+  readonly value: T;
 }
 
 export interface ByteArray<T extends string = string> {
   readonly _tag: "ByteArray";
-  readonly bytearray: T;
+  readonly value: T;
 }
 
 export type DataTuple = readonly [Data, Data];
 
 export const Integer = Schema.TaggedStruct("Integer", {
-  integer: Schema.BigIntFromSelf,
-}).annotations({ schema: "integer" });
+  value: Schema.BigIntFromSelf,
+});
 
 export const ByteArray = Schema.TaggedStruct("ByteArray", {
-  bytearray: Schema.String.pipe(HexString),
-}).annotations({ schema: "ByteArray" });
+  value: Schema.String.pipe(Schema.lowercased(), HexString),
+});
 
 export const List = Schema.TaggedStruct("List", {
-  array: Schema.Array(Schema.suspend((): Schema.Schema<Data> => Data)),
-}).annotations({ schema: "List" });
+  value: Schema.Array(
+    Schema.suspend((): Schema.Schema<Data> => Data)
+  ).annotations({
+    arbitrary: () => (fc) => fc.array(Arbitrary.make(Data), { maxLength: 3 }),
+  }),
+});
 
 export const Map = Schema.TaggedStruct("Map", {
-  entries: Schema.Array(
+  value: dedupeArrayTuple(
     Schema.Tuple(
       Schema.suspend((): Schema.Schema<Data> => Data),
       Schema.suspend((): Schema.Schema<Data> => Data)
     )
   ),
-}).annotations({ schema: "Map" });
+  // Schema.Array(
+  //   Schema.Tuple(
+  //     Schema.suspend((): Schema.Schema<Data> => Data),
+  //     Schema.suspend((): Schema.Schema<Data> => Data)
+  //   )
+  // ),
+});
 
 export const Constr = Schema.TaggedStruct("Constr", {
-  index: Schema.BigIntFromSelf,
-  fields: Schema.Array(Schema.suspend((): Schema.Schema<Data> => Data)),
-}).annotations({ schema: "Constr" });
+  index: Schema.BigIntFromSelf.pipe(Schema.betweenBigInt(0n, 2n ** 64n - 1n)),
+  fields: Schema.Array(
+    Schema.suspend((): Schema.Schema<Data> => Data)
+  ).annotations({
+    arbitrary: () => (fc) => fc.array(Arbitrary.make(Data), { maxLength: 3 }),
+  }),
+});
 
-export const Data = Schema.Union(Integer, ByteArray, List, Map, Constr);
+export const Data: Schema.Schema<Data> = Schema.Union(
+  Integer,
+  ByteArray,
+  List,
+  Map,
+  Constr
+);
 
-export const isByteArray = (data: Data): data is ByteArray =>
-  data._tag === "ByteArray";
+export const isByteArray = Schema.is(ByteArray);
 
-export const isInteger = (data: Data): data is Integer =>
-  data._tag === "Integer";
+export const isInteger = Schema.is(Integer);
 
-export const isList = (data: Data): data is List => data._tag === "List";
+export const isList = Schema.is(List);
 
-export const isMap = (data: Data): data is Map => data._tag === "Map";
+export const isMap = Schema.is(Map);
 
-export const isConstr = (data: Data): data is Constr => data._tag === "Constr";
+export const isConstr = Schema.is(Constr);
 
 /**
  * Converts TypeScript data into CBOR hex string
@@ -132,18 +185,18 @@ export const toCBOR = <Source, Target extends Data>(
     switch (data._tag) {
       case "Integer":
         return CML.PlutusData.new_integer(
-          CML.BigInteger.from_str(data.integer.toString())
+          CML.BigInteger.from_str(data.value.toString())
         );
       case "ByteArray":
-        return CML.PlutusData.new_bytes(Bytes.fromHex(data.bytearray));
+        return CML.PlutusData.new_bytes(Bytes.fromHex(data.value));
       case "List": {
         const list = CML.PlutusDataList.new();
-        data.array.forEach((item) => list.add(toCMLPlutusData(item)));
+        data.value.forEach((item) => list.add(toCMLPlutusData(item)));
         return CML.PlutusData.new_list(list);
       }
       case "Map": {
         const map = CML.PlutusMap.new();
-        data.entries.forEach(([key, value]) => {
+        data.value.forEach(([key, value]) => {
           const plutusKey = toCMLPlutusData(key);
           map.set(plutusKey, toCMLPlutusData(value));
         });
@@ -201,29 +254,29 @@ export const resolveCBOR = (input: string): Data => {
   }
   switch (data.kind()) {
     case CML.PlutusDataKind.Integer:
-      return { _tag: "Integer", integer: BigInt(data.as_integer()!.to_str()) };
+      return Integer.make({ value: BigInt(data.as_integer()!.to_str()) });
     case CML.PlutusDataKind.Bytes:
-      return { _tag: "ByteArray", bytearray: Bytes.toHex(data.as_bytes()!) };
+      return ByteArray.make({
+        value: Bytes.toHex(data.as_bytes()!),
+      });
     case CML.PlutusDataKind.List: {
       const list = data.as_list()!;
       const array = [];
       for (let i = 0; i < list.len(); i++) {
         array.push(resolveCBOR(list.get(i).to_cbor_hex()));
       }
-      return { _tag: "List", array: array };
+      return List.make({ value: array });
     }
     case CML.PlutusDataKind.Map: {
       const plutusMap = data.as_map()!;
       const tuples: DataTuple[] = [];
       const keys = plutusMap.keys();
       for (let i = 0; i < keys.len(); i++) {
-        const keyData = resolveCBOR(keys.get(i).to_cbor_hex());
-        // const key = isByteArray(keyData) ? keyData.bytearray : String(keyData);
         const key = resolveCBOR(keys.get(i).to_cbor_hex());
         const val = resolveCBOR(plutusMap.get(keys.get(i))!.to_cbor_hex());
         tuples.push([key, val]);
       }
-      return { _tag: "Map", entries: tuples };
+      return Map.make({ value: tuples });
     }
     case CML.PlutusDataKind.ConstrPlutusData: {
       const constrData = data.as_constr_plutus_data()!;
@@ -232,11 +285,10 @@ export const resolveCBOR = (input: string): Data => {
       for (let i = 0; i < list.len(); i++) {
         fields.push(resolveCBOR(list.get(i).to_cbor_hex()));
       }
-      return {
-        _tag: "Constr",
+      return Constr.make({
         index: BigInt(constrData.alternative()),
         fields,
-      };
+      });
     }
     default:
       throw new Error(`Unsupported type: ${data.kind()}`);
@@ -326,12 +378,8 @@ export const safeToData = <Source, Target extends Data>(
  *
  * @since 2.0.0
  */
-export const makeList = <T extends Data = Data>(
-  items: readonly T[]
-): List<T> => ({
-  _tag: "List",
-  array: items,
-});
+export const makeList = <T extends Data>(value: readonly T[]) =>
+  List.make({ value });
 
 /**
  * Creates a Plutus Data Integer type from a bigint value
@@ -343,12 +391,8 @@ export const makeList = <T extends Data = Data>(
  *
  * @since 2.0.0
  */
-export const makeInteger = <T extends bigint = bigint>(
-  value: T
-): Integer<T> => ({
-  _tag: "Integer",
-  integer: value,
-});
+export const makeInteger = <T extends bigint = bigint>(value: T) =>
+  Integer.make({ value });
 
 /**
  * Creates a Plutus Data ByteArray type from a hex string
@@ -360,12 +404,8 @@ export const makeInteger = <T extends bigint = bigint>(
  *
  * @since 2.0.0
  */
-export const makeByteArray = <T extends string = string>(
-  value: T
-): ByteArray<T> => ({
-  _tag: "ByteArray",
-  bytearray: value,
-});
+export const makeByteArray = <T extends string = string>(value: T) =>
+  ByteArray.make({ value });
 
 /**
  * Creates a Plutus Data Map type from an array of key-value tuples
@@ -381,11 +421,8 @@ export const makeByteArray = <T extends string = string>(
  * @since 2.0.0
  */
 export const makeMap = <K extends Data = Data, V extends Data = Data>(
-  entries: ReadonlyArray<readonly [K, V]>
-) => ({
-  _tag: "Map",
-  map: entries,
-});
+  value: ReadonlyArray<readonly [K, V]>
+) => Map.make({ value });
 
 /**
  * Creates a Plutus Data Constr type (constructor) with the given index and fields
@@ -407,9 +444,304 @@ export const makeConstr = <
 >(
   index: T,
   fields: U
-): Constr<T, U> => ({
-  _tag: "Constr",
-  index,
-  fields,
-});
+) => Constr.make({ index, fields });
 
+const replacer = (key: string, value: any) => {
+  if (typeof value === "bigint") {
+    return value.toString() + "n";
+  }
+  return value;
+};
+
+const reviver = (key: string, value: any) => {
+  if (typeof value === "string" && value.endsWith("n")) {
+    return BigInt(value.slice(0, -1));
+  }
+  return value;
+};
+
+export const toJSON = (data: Data): string => {
+  return JSON.stringify(data, replacer, 2);
+};
+
+export const fromJSON = (json: string): Data => {
+  const parsed = JSON.parse(json, reviver);
+  if (parsed._tag === undefined) {
+    throw new Error("Invalid data format");
+  }
+  return parsed;
+};
+
+export const equals = (a: Data, b: Data): boolean => toJSON(a) === toJSON(b);
+
+export const isEqual = (a: Data, b: Data): boolean => {
+  if (a._tag !== b._tag) {
+    return false;
+  }
+
+  if (a._tag === "Integer" && b._tag === "Integer") {
+    return a.value === b.value;
+  }
+
+  if (a._tag === "ByteArray" && b._tag === "ByteArray") {
+    return a.value === b.value;
+  }
+  if (a._tag === "List" && b._tag === "List") {
+    return (
+      a.value.length === b.value.length &&
+      a.value.every((item, index) => isEqual(item, b.value[index]))
+    );
+  }
+  if (a._tag === "Map" && b._tag === "Map") {
+    return (
+      a.value.length === b.value.length &&
+      a.value.every(([key, value], index) => {
+        const [otherKey, otherValue] = b.value[index];
+        return isEqual(key, otherKey) && isEqual(value, otherValue);
+      })
+    );
+  }
+  if (a._tag === "Constr" && b._tag === "Constr") {
+    return (
+      a.index === b.index &&
+      a.fields.length === b.fields.length &&
+      a.fields.every((field, index) => isEqual(field, b.fields[index]))
+    );
+  }
+  return false;
+};
+
+/**
+ * Compares two Data values according to CBOR canonical ordering rules
+ *
+ * @example
+ * import { compareData } from "experimental/DataTagged";
+ *
+ * compareData(DataTagged.makeInteger(1n), DataTagged.makeInteger(2n)); // -1
+ * compareData(DataTagged.makeInteger(2n), DataTagged.makeInteger(2n)); // 0
+ * compareData(DataTagged.makeByteArray("a"), DataTagged.makeByteArray("b")); // -1
+ *
+ * @since 1.0.0
+ */
+export const compare = (a: Data, b: Data): number => {
+  // Compare by type first
+  const typeOrder = {
+    Integer: 3,
+    ByteArray: 4,
+    List: 2,
+    Map: 1,
+    Constr: 0,
+  } as const;
+
+  if (a._tag !== b._tag) {
+    return typeOrder[a._tag] - typeOrder[b._tag];
+  }
+
+  // Then compare by value for same types
+  if (a._tag === "Integer" && b._tag === "Integer") {
+    return a.value < b.value ? -1 : a.value > b.value ? 1 : 0;
+  }
+
+  if (a._tag === "ByteArray" && b._tag === "ByteArray") {
+    return a.value < b.value ? -1 : a.value > b.value ? 1 : 0;
+  }
+
+  if (a._tag === "List" && b._tag === "List") {
+    // Compare list lengths first
+    const lengthDiff = a.value.length - b.value.length;
+    if (lengthDiff !== 0) {
+      return lengthDiff;
+    }
+
+    // Compare elements one by one
+    for (let i = 0; i < a.value.length; i++) {
+      const comparison = compare(a.value[i], b.value[i]);
+      if (comparison !== 0) {
+        return comparison;
+      }
+    }
+    return 0;
+  }
+
+  if (a._tag === "Map" && b._tag === "Map") {
+    // Compare map sizes first
+    const lengthDiff = a.value.length - b.value.length;
+    if (lengthDiff !== 0) {
+      return lengthDiff;
+    }
+
+    // Maps should already be sorted by key, so compare entries in order
+    for (let i = 0; i < a.value.length; i++) {
+      // Compare keys first
+      const keyComparison = compare(a.value[i][0], b.value[i][0]);
+      if (keyComparison !== 0) {
+        return keyComparison;
+      }
+
+      // If keys are equal, compare values
+      const valueComparison = compare(a.value[i][1], b.value[i][1]);
+      if (valueComparison !== 0) {
+        return valueComparison;
+      }
+    }
+    return 0;
+  }
+
+  if (a._tag === "Constr" && b._tag === "Constr") {
+    // Compare constructor index first
+    if (a.index !== b.index) {
+      // Safely compare bigint values
+      return a.index < b.index ? -1 : 1;
+    }
+
+    // Compare field lengths
+    const lengthDiff = a.fields.length - b.fields.length;
+    if (lengthDiff !== 0) {
+      return lengthDiff;
+    }
+
+    // Then compare fields one by one
+    for (let i = 0; i < a.fields.length; i++) {
+      const comparison = compare(a.fields[i], b.fields[i]);
+      if (comparison !== 0) {
+        return comparison;
+      }
+    }
+    return 0;
+  }
+
+  // This should never happen due to exhaustive tag checking above
+  return 0;
+};
+
+/**
+ * Creates an arbitrary that generates DataTagged.Data values with controlled depth
+ *
+ * @example
+ * import { genData } from "@lucid-evolution/experimental/test/temp/data-tagged-generator";
+ *
+ * const data = genData(3);
+ * const sample = Arbitrary.sample(data);
+ *
+ * @since 2.0.0
+ */
+export const genData = (depth: number = 3): FastCheck.Arbitrary<Data> => {
+  if (depth <= 0) {
+    // Base cases: Integer or ByteArray
+    return FastCheck.oneof(genInteger(), genByteArray());
+  }
+
+  // Recursive cases with decreasing depth
+  return FastCheck.oneof(
+    genInteger(),
+    genByteArray(),
+    genConstr(depth - 1),
+    genList(depth - 1),
+    genMap(depth - 1)
+  );
+};
+
+/**
+ * Creates an arbitrary that generates DataTagged.ByteArray values
+ *
+ * @since 2.0.0
+ */
+export const genByteArray = (): FastCheck.Arbitrary<ByteArray> =>
+  FastCheck.string({
+    minLength: 0,
+    maxLength: 64,
+  }).map((value) => makeByteArray(Bytes.fromText(value)));
+
+/**
+ * Creates an arbitrary that generates DataTagged.Integer values
+ *
+ * @since 2.0.0
+ */
+export const genInteger = (): FastCheck.Arbitrary<Integer> =>
+  FastCheck.bigInt({ min: 0n, max: 64n - 1n }).map((value) =>
+    makeInteger(value)
+  );
+
+/**
+ * Creates an arbitrary that generates DataTagged.List values
+ *
+ * @since 2.0.0
+ */
+export const genList = (depth: number): FastCheck.Arbitrary<List> =>
+  FastCheck.array(genData(depth), {
+    minLength: 0,
+    maxLength: 5,
+  }).map((value) => makeList(value));
+
+/**
+ * Creates an arbitrary that generates DataTagged.Constr values
+ *
+ * @since 2.0.0
+ */
+export const genConstr = (depth: number): FastCheck.Arbitrary<Constr> =>
+  FastCheck.tuple(
+    FastCheck.bigInt(0n, 2n ** 64n - 1n),
+    FastCheck.array(genData(depth), {
+      minLength: 0,
+      maxLength: 5,
+    })
+  ).map(([index, fields]) => makeConstr(index, fields));
+
+/**
+ * Creates an arbitrary that generates DataTagged.Map values
+ * Following the Plutus distribution of key types:
+ * - 60% ByteArray keys
+ * - 30% Integer keys
+ * - 10% Complex keys
+ *
+ * @since 2.0.0
+ */
+/**
+ * Creates an arbitrary that generates DataTagged.Map values with unique keys
+ * Following the Plutus distribution of key types:
+ * - 60% ByteArray keys
+ * - 30% Integer keys
+ * - 10% Complex keys
+ *
+ * @example
+ * import { genMap } from "@lucid-evolution/experimental/test/temp/data-tagged-generator";
+ *
+ * const mapArb = genMap(2);
+ * const sample = Arbitrary.sample(mapArb);
+ *
+ * @since 2.0.0
+ */
+export const genMap = (depth: number): FastCheck.Arbitrary<Map> => {
+  // Helper to create key-value pairs with unique keys
+  const uniqueKeyValuePairs = <T extends Data>(
+    keyGen: FastCheck.Arbitrary<T>,
+    maxSize: number
+  ) =>
+    FastCheck.uniqueArray(
+      FastCheck.tuple(keyGen, genData(depth > 0 ? depth - 1 : 0)),
+      {
+        minLength: 0,
+        maxLength: maxSize * 2, // Generate more than needed to increase chance of unique keys
+        selector: (pair) => {
+          const keyStr = toJSON(pair[0]);
+          return keyStr;
+        },
+      }
+    ).map((pairs) => pairs.sort((a, b) => compare(a[0], b[0])));
+
+  // ByteArray keys (more frequent)
+  const byteArrayPairs = uniqueKeyValuePairs(genByteArray(), 3);
+
+  // Integer keys (medium frequency)
+  const integerPairs = uniqueKeyValuePairs(genInteger(), 3);
+
+  // Complex keys (less frequent)
+  const complexPairs = uniqueKeyValuePairs(
+    genData(depth > 1 ? depth - 2 : 0),
+    2
+  );
+
+  return FastCheck.oneof(byteArrayPairs, integerPairs, complexPairs).map(
+    (pairs) => makeMap(pairs)
+  );
+};
