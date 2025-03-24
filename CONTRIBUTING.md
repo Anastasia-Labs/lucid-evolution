@@ -10,8 +10,6 @@ Lucid Evolution is structured as a monorepo with multiple packages. Each package
 - Consider performance implications when modifying core functionality
 - Follow the existing coding patterns and practices
 
-Let's build amazing Cardano tools together!
-
 ## Ways to Contribute
 
 - Reporting bugs
