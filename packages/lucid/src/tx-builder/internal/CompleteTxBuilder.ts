@@ -226,10 +226,13 @@ export const selectionAndEvaluation = (
 ) =>
   Effect.gen(function* () {
     const { config } = yield* TxConfig;
-    const availableInputs = _Array.differenceWith(isEqualUTxO)(
-      walletInputs,
-      config.collectedInputs,
+    const refScriptInputs = config.readInputs.filter(
+      (input) => input.scriptRef,
     );
+    const availableInputs = _Array.differenceWith(isEqualUTxO)(walletInputs, [
+      ...config.collectedInputs,
+      ...refScriptInputs,
+    ]);
 
     const { selected: inputsToAdd, burnable } =
       coinSelection !== false
@@ -809,7 +812,7 @@ export const recursive = (
       Or it contains UTxOs with reference scripts; which are excluded from coin selection.`,
     );
     if (!Record.isEmptyRecord(requiredAssets)) {
-      selected = selectUTxOs(inputs, requiredAssets);
+      selected = selectUTxOs(inputs, requiredAssets, true);
       if (_Array.isEmptyArray(selected)) yield* error;
     }
 
@@ -832,7 +835,7 @@ export const recursive = (
         selected,
       );
 
-      const extraSelected = selectUTxOs(remainingInputs, extraLovelace);
+      const extraSelected = selectUTxOs(remainingInputs, extraLovelace, true);
       if (_Array.isEmptyArray(extraSelected)) {
         if (includeLeftoverLovelaceAsFee)
           return { selected: [...selected], burnable: extraLovelace };
