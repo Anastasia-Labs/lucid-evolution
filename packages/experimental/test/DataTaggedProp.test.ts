@@ -1,7 +1,7 @@
 import { describe, expect, it } from "vitest";
 import * as DataTagged from "../src/DataTagged.js";
 import * as TypeTaggedSchema from "../src/TypeTaggedSchema.js";
-import { Arbitrary, FastCheck, Schema } from "effect";
+import { Arbitrary, FastCheck } from "effect";
 
 /**
  * Property-based testing for DataTagged and TypeTaggedSchema
@@ -436,24 +436,56 @@ describe("DataTagged Property Tests", () => {
 
       it("should handle literal types through roundtrip", () => {
         // Define literal schema
-        const Direction = TypeTaggedSchema.Literal(
-          "north",
-          "south",
-          "east",
-          "west"
+        const Coordinate = TypeTaggedSchema.Union(
+          TypeTaggedSchema.OneLiteral("north"),
+          TypeTaggedSchema.OneLiteral("south"),
+          TypeTaggedSchema.OneLiteral("east"),
+          TypeTaggedSchema.OneLiteral("west"),
+          TypeTaggedSchema.Struct({
+            north: TypeTaggedSchema.ByteArray,
+            east: TypeTaggedSchema.ByteArray,
+          }),
+          TypeTaggedSchema.Struct({
+            north: TypeTaggedSchema.ByteArray,
+            west: TypeTaggedSchema.ByteArray,
+          }),
+          TypeTaggedSchema.Struct({
+            south: TypeTaggedSchema.ByteArray,
+            west: TypeTaggedSchema.ByteArray,
+          }),
+          TypeTaggedSchema.Struct({
+            south: TypeTaggedSchema.ByteArray,
+            east: TypeTaggedSchema.ByteArray,
+          })
         );
-
         // Create arbitrary directly from schema
-        const directionArb = Arbitrary.make(Direction);
-
+        const directionArb = Arbitrary.make(Coordinate);
         FastCheck.assert(
           FastCheck.property(directionArb, (value) => {
-            const encoded = DataTagged.encodeData(value, Direction);
+            const encoded = DataTagged.encodeData(value, Coordinate);
             const cbor = DataTagged.toCBOR(encoded);
             const decoded = DataTagged.fromCBOR(cbor);
-            const result = DataTagged.decodeData(decoded, Direction);
-
+            const result = DataTagged.decodeData(decoded, Coordinate);
             expect(result).toEqual(value);
+          })
+        );
+      });
+
+      it("should handle refined schemas with custom validation", () => {
+        // Define schema with refinement for positive integers
+        const PositiveInt = TypeTaggedSchema.Integer.pipe(
+          TypeTaggedSchema.filter((value) => value > 0n || "Not PositiveInt")
+        );
+        // Create arbitrary directly from schema with positive integers only
+        const positiveIntArb = Arbitrary.make(PositiveInt);
+        FastCheck.assert(
+          FastCheck.property(positiveIntArb, (value) => {
+            const encoded = DataTagged.encodeData(value, PositiveInt);
+            const cbor = DataTagged.toCBOR(encoded);
+            const decoded = DataTagged.fromCBOR(cbor);
+            const result = DataTagged.decodeData(decoded, PositiveInt);
+            expect(result).toEqual(value);
+            expect(result > 0n).toBe(true);
           })
         );
       });

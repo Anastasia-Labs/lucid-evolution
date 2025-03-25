@@ -92,6 +92,36 @@ export const Literal = <
     }
   );
 
+interface OneLiteral<
+  Single extends Exclude<SchemaAST.LiteralValue, null | bigint>,
+> extends Schema.transform<
+    typeof DataTagged.Constr,
+    Schema.Literal<[Single]>
+  > {}
+
+export const OneLiteral = <
+  Single extends Exclude<SchemaAST.LiteralValue, null | bigint>,
+>(
+  self: Single
+): OneLiteral<Single> =>
+  Schema.transform(
+    DataTagged.Constr.annotations({
+      identifier: "Data.Constr",
+    }),
+    Schema.Literal(self).annotations({
+      identifier: "Literal",
+    }),
+    {
+      strict: true,
+      encode: (value) =>
+        DataTagged.Constr.make({
+          index: 0n,
+          fields: [],
+        }),
+      decode: (value) => self,
+    }
+  );
+
 interface Array<S extends Schema.Schema.Any>
   extends Schema.transform<typeof DataTagged.List, Schema.Array$<S>> {}
 
@@ -302,8 +332,10 @@ interface Union<Members extends ReadonlyArray<Schema.Schema.Any>>
 
 export const Union = <Members extends ReadonlyArray<Schema.Schema.Any>>(
   ...members: Members
-): Union<Members> =>
-  Schema.transformOrFail(
+): Union<Members> => {
+  // Check if members are literal ast , and spread them
+
+  return Schema.transformOrFail(
     DataTagged.Constr,
     Schema.typeSchema(Schema.Union(...members)),
     {
@@ -314,10 +346,11 @@ export const Union = <Members extends ReadonlyArray<Schema.Schema.Any>>(
           members[index] as Schema.Schema<any, any, never>
         )(value).pipe(
           ParseResult.map((value) => {
+            const a = value;
             return {
               _tag: "Constr",
               index: BigInt(index),
-              fields: [value.fields[0]],
+              fields: value.fields.length > 0 ? value.fields : [],
             };
           })
         );
@@ -342,6 +375,7 @@ export const Union = <Members extends ReadonlyArray<Schema.Schema.Any>>(
       },
     }
   );
+};
 
 interface Tuple<Elements extends Schema.TupleType.Elements>
   extends Schema.transform<typeof DataTagged.List, Schema.Tuple<Elements>> {}
@@ -362,3 +396,7 @@ export const Tuple = <Elements extends Schema.TupleType.Elements>(
       decode: ({ value }) => value,
     }
   );
+
+
+export const compose = Schema.compose
+export const filter = Schema.filter
