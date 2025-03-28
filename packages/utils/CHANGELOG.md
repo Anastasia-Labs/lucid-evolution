@@ -1,5 +1,26 @@
 # @lucid-evolution/utils
 
+## 0.1.65
+
+### Patch Changes
+
+- [#538](https://github.com/Anastasia-Labs/lucid-evolution/pull/538) [`9503425`](https://github.com/Anastasia-Labs/lucid-evolution/commit/95034257fb3edda5605a76054fdfc70d51640441) Thanks [@hadelive](https://github.com/hadelive)! - expose drepIDToCredential
+
+## 0.1.64
+
+### Patch Changes
+
+- Updated dependencies [[`2335ef1`](https://github.com/Anastasia-Labs/lucid-evolution/commit/2335ef101f8a5d2a92324c7fd8536d5d8927531e), [`09a41ae`](https://github.com/Anastasia-Labs/lucid-evolution/commit/09a41ae8b7030dd3f4e04d6721e1d9fa77e02b12)]:
+  - @lucid-evolution/core-types@0.1.22
+  - @lucid-evolution/uplc@0.2.19
+  - @lucid-evolution/plutus@0.1.29
+
+## 0.1.63
+
+### Patch Changes
+
+- [#472](https://github.com/Anastasia-Labs/lucid-evolution/pull/472) [`0342519`](https://github.com/Anastasia-Labs/lucid-evolution/commit/0342519266ca6ff9e96c1e646f7150b78ba095a8) Thanks [@hadelive](https://github.com/hadelive)! - support esd,cjs
+
 ## 0.1.62
 
 ### Patch Changes

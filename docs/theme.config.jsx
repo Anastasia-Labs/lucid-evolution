@@ -1,6 +1,6 @@
 import Image from "next/image";
 import { useRouter } from "next/router";
-import Script from 'next/script';
+import Script from "next/script";
 
 export default {
   project: {
@@ -20,17 +20,17 @@ export default {
       title: "Welcome",
     };
   },
-  
+
   primaryHue: 0,
   primarySaturation: 90,
   logo: () => (
     <>
       <Image
-        src="https://anastasialabs.com/assets/img/logo/logo.png"
+        src="/lucid-evolution/al-logo.png"
         height="200"
         width="200"
         style={{ marginRight: "1em" }}
-        alt=""
+        alt="Anastasia Labs Logo"
       />
     </>
   ),
@@ -47,19 +47,6 @@ export default {
   toc: {
     float: true,
     backToTop: true,
-  },
-
-  banner: {
-    key: "latest-release",
-    text: (
-      <a
-        href="https://github.com/Anastasia-Labs/lucid-evolution/releases"
-        target="_blank"
-      >
-        Check out our latest release!
-        →
-      </a>
-    ),
   },
 
   chat: {
@@ -309,7 +296,7 @@ export default {
     ),
   },
   nextThemes: {
-    forcedTheme: 'dark',
-    defaultTheme: 'dark',
+    forcedTheme: "dark",
+    defaultTheme: "dark",
   },
 };

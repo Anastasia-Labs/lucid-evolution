@@ -35,6 +35,17 @@ describe.sequential("Onchain testing", () => {
     expect(exit._tag).toBe("Success");
   });
 
+  test("Read Reference Input Twice", async () => {
+    const program = pipe(
+      TxChain.readRefInputTwice,
+      Effect.provide(User.layer),
+      Effect.provide(HelloContract.layer),
+      Effect.provide(NetworkConfig.layerPreprod),
+    );
+    const exit = await Effect.runPromiseExit(program);
+    expect(exit._tag).toBe("Success");
+  });
+
   test("MultiValidator - registerStake", async () => {
     const program = pipe(
       MultiValidatorEndpoints.registerStake,
@@ -521,26 +532,6 @@ describe.sequential("Onchain testing", () => {
   test("multiTxCompose", async () => {
     const program = pipe(
       ComposeEndpoints.multiTxCompose,
-      Effect.provide(User.layer),
-      Effect.provide(NetworkConfig.layerPreprod),
-    );
-    const exit = await Effect.runPromiseExit(program);
-    expect(exit._tag).toBe("Success");
-  });
-
-  test("composeMintAndRegisterStake", async () => {
-    const program = pipe(
-      ComposeEndpoints.composeMintAndRegisterStake,
-      Effect.provide(User.layer),
-      Effect.provide(NetworkConfig.layerPreprod),
-    );
-    const exit = await Effect.runPromiseExit(program);
-    expect(exit._tag).toBe("Success");
-  });
-
-  test("composeMintAndDeregisterStake", async () => {
-    const program = pipe(
-      ComposeEndpoints.composeMintAndDeregisterStake,
       Effect.provide(User.layer),
       Effect.provide(NetworkConfig.layerPreprod),
     );

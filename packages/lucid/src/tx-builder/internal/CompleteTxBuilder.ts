@@ -39,6 +39,7 @@ import {
 import { SLOT_CONFIG_NETWORK } from "@lucid-evolution/plutus";
 import { collectFromUTxO } from "./Collect.js";
 import { TxConfig } from "./Service.js";
+import { isError } from "effect/Predicate";
 
 export type CompleteOptions = {
   /**
@@ -150,11 +151,13 @@ export const complete = (options: CompleteOptions = {}) =>
       let estimatedFee = minFee + refScriptFee;
 
       const totalCollateral = BigInt(
-        Math.max(
-          (config.lucidConfig.protocolParameters.collateralPercentage *
-            Number(estimatedFee)) /
-            100,
-          Number(setCollateral),
+        Math.ceil(
+          Math.max(
+            (config.lucidConfig.protocolParameters.collateralPercentage *
+              Number(estimatedFee)) /
+              100,
+            Number(setCollateral),
+          ),
         ),
       );
       const collateralInput = yield* findCollateral(
@@ -223,10 +226,13 @@ export const selectionAndEvaluation = (
 ) =>
   Effect.gen(function* () {
     const { config } = yield* TxConfig;
-    const availableInputs = _Array.differenceWith(isEqualUTxO)(
-      walletInputs,
-      config.collectedInputs,
+    const refScriptInputs = config.readInputs.filter(
+      (input) => input.scriptRef,
     );
+    const availableInputs = _Array.differenceWith(isEqualUTxO)(walletInputs, [
+      ...config.collectedInputs,
+      ...refScriptInputs,
+    ]);
 
     const { selected: inputsToAdd, burnable } =
       coinSelection !== false
@@ -655,9 +661,13 @@ const evalTransaction = (
         ),
       catch: (error) =>
         completeTxError(
-          JSON.stringify(error)
-            .replace(/\\n\s*/g, " ")
-            .trim(),
+          `${
+            isError(error)
+              ? error
+              : JSON.stringify(error)
+                  .replace(/\\n\s*/g, " ")
+                  .trim()
+          }`,
         ),
     });
     return uplc_eval;
@@ -694,16 +704,16 @@ const calculateMinRefScriptFee = (
     let fee = 0n;
     let totalScriptSize = 0;
 
-    config.readInputs.forEach((utxo) => {
+    for (const utxo of config.readInputs) {
       if (utxo.scriptRef) {
         totalScriptSize = totalScriptSize + utxo.scriptRef.script.length / 2;
       }
-    });
-    config.collectedInputs.forEach((utxo) => {
+    }
+    for (const utxo of config.collectedInputs) {
       if (utxo.scriptRef) {
         totalScriptSize = totalScriptSize + utxo.scriptRef.script.length / 2;
       }
-    });
+    }
     if (totalScriptSize === 0) return fee;
 
     const fees = [15.0, 18.0, 21.6, 25.92, 31.1, 37.32, 44.79, 53.75];
@@ -716,8 +726,9 @@ const calculateMinRefScriptFee = (
         );
       }
 
-      if (totalScriptSize > 25000) fee = fee + BigInt(25000 * fees[counter]);
-      else fee = fee + BigInt(totalScriptSize * fees[counter]);
+      if (totalScriptSize > 25000)
+        fee = fee + BigInt(Math.ceil(25000 * fees[counter]));
+      else fee = fee + BigInt(Math.ceil(totalScriptSize * fees[counter]));
       totalScriptSize = totalScriptSize - 25000;
       counter++;
     }
@@ -801,7 +812,7 @@ export const recursive = (
       Or it contains UTxOs with reference scripts; which are excluded from coin selection.`,
     );
     if (!Record.isEmptyRecord(requiredAssets)) {
-      selected = selectUTxOs(inputs, requiredAssets);
+      selected = selectUTxOs(inputs, requiredAssets, true);
       if (_Array.isEmptyArray(selected)) yield* error;
     }
 
@@ -824,7 +835,7 @@ export const recursive = (
         selected,
       );
 
-      const extraSelected = selectUTxOs(remainingInputs, extraLovelace);
+      const extraSelected = selectUTxOs(remainingInputs, extraLovelace, true);
       if (_Array.isEmptyArray(extraSelected)) {
         if (includeLeftoverLovelaceAsFee)
           return { selected: [...selected], burnable: extraLovelace };

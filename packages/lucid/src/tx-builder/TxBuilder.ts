@@ -17,6 +17,7 @@ import {
   ScriptType,
   StakeKeyHash,
   TxOutput,
+  Unit,
   UTxO,
 } from "@lucid-evolution/core-types";
 import * as Collect from "./internal/Collect.js";
@@ -34,7 +35,7 @@ import * as CompleteTxBuilder from "./internal/CompleteTxBuilder.js";
 import * as TxSignBuilder from "../tx-sign-builder/TxSignBuilder.js";
 import { TransactionError } from "../Errors.js";
 import { Either } from "effect/Either";
-import { Effect, Exit, Layer, pipe } from "effect";
+import { Effect, Layer, pipe } from "effect";
 import { handleRedeemerBuilder } from "./internal/TxUtils.js";
 import { addAssets } from "@lucid-evolution/utils";
 import { TxConfig } from "./internal/Service.js";
@@ -310,7 +311,7 @@ export function makeTxBuilder(lucidConfig: LucidConfig): TxBuilder {
           config.scripts.set(scriptKeyValue.key, scriptKeyValue.value);
         }
       });
-      const program = Read.readFrom(config, utxos);
+      const program = Read.readFrom(utxos);
       config.programs.push(program);
       return txBuilder;
     },
@@ -610,6 +611,15 @@ export function makeTxBuilder(lucidConfig: LucidConfig): TxBuilder {
         const rawConfig = tx.rawConfig();
         config.programs = [...config.programs, ...tx.getPrograms()];
         config.scripts = new Map([...config.scripts, ...rawConfig.scripts]);
+        config.mintedAssets = Object.entries({
+          ...config.mintedAssets,
+          ...rawConfig.mintedAssets,
+        }).reduce<Assets>((acc, [key, value]) => {
+          acc[key as Unit | "lovelace"] =
+            (config.mintedAssets[key as Unit | "lovelace"] || 0n) +
+            BigInt(value);
+          return acc;
+        }, {});
       }
       return txBuilder;
     },

@@ -1,5 +1,75 @@
 # @lucid-evolution/lucid
 
+## 0.4.25
+
+### Patch Changes
+
+- [#562](https://github.com/Anastasia-Labs/lucid-evolution/pull/562) [`413bef5`](https://github.com/Anastasia-Labs/lucid-evolution/commit/413bef53b925425adb035658146db3ca60331e31) Thanks [@hadelive](https://github.com/hadelive)! - fix duplicate reference inputs
+
+## 0.4.24
+
+### Patch Changes
+
+- [#538](https://github.com/Anastasia-Labs/lucid-evolution/pull/538) [`9503425`](https://github.com/Anastasia-Labs/lucid-evolution/commit/95034257fb3edda5605a76054fdfc70d51640441) Thanks [@hadelive](https://github.com/hadelive)! - expose drepIDToCredential
+
+- Updated dependencies [[`9503425`](https://github.com/Anastasia-Labs/lucid-evolution/commit/95034257fb3edda5605a76054fdfc70d51640441)]:
+  - @lucid-evolution/utils@0.1.65
+  - @lucid-evolution/provider@0.1.88
+  - @lucid-evolution/wallet@0.1.71
+
+## 0.4.23
+
+### Patch Changes
+
+- [#522](https://github.com/Anastasia-Labs/lucid-evolution/pull/522) [`7c3591c`](https://github.com/Anastasia-Labs/lucid-evolution/commit/7c3591cc3136b6a429d4c86224c4d8c4ab86bcc3) Thanks [@hadelive](https://github.com/hadelive)! - fix compose minting transactions
+
+- [#505](https://github.com/Anastasia-Labs/lucid-evolution/pull/505) [`39559d1`](https://github.com/Anastasia-Labs/lucid-evolution/commit/39559d17954a9e5d07d54acad69558a9522397ca) Thanks [@hadelive](https://github.com/hadelive)! - Added Math.ceil to round up floating-point fee calculations before converting to BigInt. This fixes an issue where BigInt was being created from non-integer values, which could lead to runtime errors.
+
+## 0.4.22
+
+### Patch Changes
+
+- [#493](https://github.com/Anastasia-Labs/lucid-evolution/pull/493) [`9ad2c36`](https://github.com/Anastasia-Labs/lucid-evolution/commit/9ad2c366e4647423adc7a81753fd084255358709) Thanks [@hadelive](https://github.com/hadelive)! - drepid to credential
+
+- [#478](https://github.com/Anastasia-Labs/lucid-evolution/pull/478) [`d7bed7f`](https://github.com/Anastasia-Labs/lucid-evolution/commit/d7bed7fa15939e852811f5abc7ab928c7c303718) Thanks [@solidsnakedev](https://github.com/solidsnakedev)! - improve emulator test structure; update emulator provider; upgrade effect dependency at lucid package
+
+- Updated dependencies [[`d7bed7f`](https://github.com/Anastasia-Labs/lucid-evolution/commit/d7bed7fa15939e852811f5abc7ab928c7c303718)]:
+  - @lucid-evolution/provider@0.1.87
+
+## 0.4.21
+
+### Patch Changes
+
+- [#485](https://github.com/Anastasia-Labs/lucid-evolution/pull/485) [`2335ef1`](https://github.com/Anastasia-Labs/lucid-evolution/commit/2335ef101f8a5d2a92324c7fd8536d5d8927531e) Thanks [@solidsnakedev](https://github.com/solidsnakedev)! - attempt to fix drep issue
+
+- Updated dependencies [[`2335ef1`](https://github.com/Anastasia-Labs/lucid-evolution/commit/2335ef101f8a5d2a92324c7fd8536d5d8927531e), [`09a41ae`](https://github.com/Anastasia-Labs/lucid-evolution/commit/09a41ae8b7030dd3f4e04d6721e1d9fa77e02b12)]:
+  - @lucid-evolution/core-types@0.1.22
+  - @lucid-evolution/uplc@0.2.19
+  - @lucid-evolution/plutus@0.1.29
+  - @lucid-evolution/provider@0.1.86
+  - @lucid-evolution/sign_data@0.1.25
+  - @lucid-evolution/utils@0.1.64
+  - @lucid-evolution/wallet@0.1.70
+
+## 0.4.20
+
+### Patch Changes
+
+- [#475](https://github.com/Anastasia-Labs/lucid-evolution/pull/475) [`377add4`](https://github.com/Anastasia-Labs/lucid-evolution/commit/377add4ac84ec8e278485426e92e9dabe1826593) Thanks [@solidsnakedev](https://github.com/solidsnakedev)! - Previously, readFrom directly used TxBuilderConfig as input, which contradicted the builder design, where all TxBuilder modules are effect types and depend on TxConfig as Context. This mismatch led to conflicts with the compose API.
+
+  To resolve this, TxConfig is now passed via dependency injection, aligning readFrom with the effect-driven architecture of the TxBuilder modules.
+
+## 0.4.19
+
+### Patch Changes
+
+- [#472](https://github.com/Anastasia-Labs/lucid-evolution/pull/472) [`0342519`](https://github.com/Anastasia-Labs/lucid-evolution/commit/0342519266ca6ff9e96c1e646f7150b78ba095a8) Thanks [@hadelive](https://github.com/hadelive)! - support esd,cjs
+
+- Updated dependencies [[`0342519`](https://github.com/Anastasia-Labs/lucid-evolution/commit/0342519266ca6ff9e96c1e646f7150b78ba095a8)]:
+  - @lucid-evolution/utils@0.1.63
+  - @lucid-evolution/provider@0.1.85
+  - @lucid-evolution/wallet@0.1.69
+
 ## 0.4.18
 
 ### Patch Changes

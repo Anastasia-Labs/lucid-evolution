@@ -1,67 +1,191 @@
-import { Callout, Steps } from "nextra/components";
+import { Callout, Steps, Tabs } from "nextra/components";
 
-# Test and emulate
+# Test and Emulate
 
-<Callout>This section is under construction 🛠️</Callout>
+The Emulator allows developers to test and validate their transactions in a controlled environment without interacting with a real blockchain. This is essential for debugging, rapid prototyping, and ensuring transaction logic is correct before deploying to a `testnet` or `mainnet`.
 
-Emulator allows developers to test and validate their transactions in a controlled environment without interacting with a real blockchain. This is important for debugging, rapid prototyping, and ensuring transaction logic is correct before deploying to a `testnet` or `mainnet`
-
----
+## Basic Usage
 
 <Steps>
-## Initialize emulator
+### Initialize Emulator
 
-This setup allows you to create a mock blockchain state with predefined addresses and asset distributions
+Create a mock blockchain state with predefined addresses and asset distributions:
 
 ```typescript
+// Create an emulator with a test account
 const emulator = new Emulator([
-  {
-    address: "addr_test...",
-    assets: { lovelace: 3000000000n },
-  },
-  // You can add multiple addresses with different asset distributions
+  generateEmulatorAccount({
+    lovelace: 80000000000n, // 80,000 ADA
+  }),
 ]);
 
-const lucid = await Lucid(emulator);
+// Initialize Lucid with the emulator
+const lucid = await Lucid(emulator, "Custom");
 ```
 
-### Working with time ranges
+### Create Test Accounts
+
+You can generate test accounts with helper functions:
 
 ```typescript
-const tx = await lucid
-  .newTx()
-  .validTo(emulator.now())
-  .complete();
+// Generate account with seed phrase (can access wallet features)
+const seedAccount = generateEmulatorAccount({
+  lovelace: 75000000000n,
+});
+
+// Generate account from private key
+const privateKeyAccount = generateEmulatorAccountFromPrivateKey({
+  lovelace: 90000000000n,
+});
+
+// Use the account with Lucid
+lucid.selectWallet.fromSeed(seedAccount.seedPhrase);
+// or
+lucid.selectWallet.fromPrivateKey(privateKeyAccount.privateKey);
 ```
 
-### Distribute staking rewards
-
-The emulator allows you to conveniently distribute rewards to all delegated stake addresses.
+### Building and Submitting Transactions
 
 ```typescript
-emulator.distributeRewards(100000000n);
-```
-
-<Callout>
-At any point in the emulation you can call the following code to get the current state of the emulated blockchain. It gives you insights into the distribution of funds across addresses and shows you the current block height and slot.
-
-```typescript
-emulator.log();
-```
-
-</Callout>
-</Steps>
-
-## Example - Simulated transaction
-
-```typescript
+// Create a simple payment transaction
 const tx = await lucid
   .newTx()
   .pay.ToAddress("addr_test...", { lovelace: 1000000n })
   .complete();
-const signedTx = await tx.sign().complete();
+
+const signedTx = await tx.sign.withWallet().complete();
 const txHash = await signedTx.submit();
 
-// Simulate the passage of time and block confirmations in the emulator
+// Simulate the passage of time and block confirmations
 await emulator.awaitBlock(10);
 ```
+
+### Query Blockchain State
+
+You can query the emulator's blockchain state:
+
+```typescript
+// Get UTxOs at an address
+const utxos = await emulator.getUtxos(address);
+
+// Get UTxOs containing a specific token
+const nftUtxos = await emulator.getUtxosWithUnit(address, assetId);
+
+// Get UTxOs by reference
+const specificUtxos = await emulator.getUtxosByOutRef([
+  { txHash: "abc...", outputIndex: 0 },
+]);
+
+// Find the single UTxO holding a specific token (e.g., NFT)
+const nftUtxo = await emulator.getUtxoByUnit(assetId);
+
+// Get protocol parameters
+const params = await emulator.getProtocolParameters();
+
+// Get datum by hash
+const datum = await emulator.getDatum(datumHash);
+```
+
+</Steps>
+
+## Advanced Features
+
+<Tabs items={['Time Control', 'Staking & Rewards', 'Custom Protocol Parameters', 'Script Transactions']}>
+  <Tabs.Tab>
+    ```typescript
+    // Advance time by slots
+    emulator.awaitSlot(20);
+    
+    // Advance by blocks
+    emulator.awaitBlock(1);
+    
+    // Check current time
+    const currentTime = emulator.now();
+    ```
+  </Tabs.Tab>
+  <Tabs.Tab>
+    ```typescript
+    // Register stake address
+    const registerTx = await lucid
+      .newTx()
+      .registerStake(rewardAddress)
+      .complete();
+    await registerTx.sign.withWallet().complete().submit();
+    
+    // Delegate to a stake pool
+    const delegateTx = await lucid
+      .newTx()
+      .delegateTo(rewardAddress, "pool1...")
+      .complete();
+    await delegateTx.sign.withWallet().complete().submit();
+    
+    // Distribute rewards to all delegated stake addresses
+    emulator.distributeRewards(100000000n);  // 100 ADA in rewards
+    
+    // Query delegation status and rewards
+    const delegation = await emulator.getDelegation(rewardAddress);
+    console.log("Delegated to:", delegation.poolId);
+    console.log("Rewards available:", delegation.rewards);
+    
+    // Withdraw rewards
+    const withdrawTx = await lucid
+      .newTx()
+      .withdraw(rewardAddress, delegation.rewards)
+      .complete();
+    await withdrawTx.sign.withWallet().complete().submit();
+    ```
+  </Tabs.Tab>
+  <Tabs.Tab>
+    ```typescript
+    // Customize protocol parameters for testing
+    const customEmulator = new Emulator(
+      [/* accounts */],
+      {
+        ...PROTOCOL_PARAMETERS_DEFAULT,
+        minFeeA: 0,             // per-byte fee
+        minFeeB: 0,             // constant fee
+        priceMem: 0,            // memory price
+        priceStep: 0,           // execution price
+        coinsPerUtxoByte: 0n,   // min-ADA requirement
+        maxTxExMem: 14000000,   // max transaction execution memory
+        maxTxExSteps: 10000000000, // max transaction execution steps
+      }
+    );
+    
+    const lucid = await Lucid(customEmulator, "Custom");
+    ```
+  </Tabs.Tab>
+  <Tabs.Tab>
+    ```typescript
+    // Create a transaction that spends from a script address
+    const tx = await lucid
+      .newTx()
+      .collectFrom([scriptUtxo], redeemer)
+      .attach.SpendingValidator(validator)
+      .complete();
+    
+    // Evaluate transaction to get execution units
+    const txEval = await emulator.evaluateTx(
+      tx.toCBOR(),
+      [scriptUtxo]
+    );
+    console.log("Tx Evaluation:", txEval);
+    ```
+  </Tabs.Tab>
+</Tabs>
+
+<Callout type="info">
+  The emulator is a simplified version of the Cardano network designed for
+  testing. It implements core functionality like UTxO tracking, block
+  advancement, staking operations, and transaction validation.
+</Callout>
+
+## Limitations
+
+While the emulator is useful for testing, be aware of some limitations:
+
+- Not all Cardano features are implemented (e.g., complex governance operations)
+- Performance characteristics differ from the real network
+- The emulator uses simplified validation compared to the actual ledger
+
+Always test critical applications on testnet before deploying to mainnet.

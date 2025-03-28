@@ -1,7 +1,7 @@
 <p align="center">
   <img width="130px" src="docs/public/lucid-evolution-al-red.svg" align="center"/>
   <h1 align="center">Lucid <span style="color: #AD1F1E;">Evolution</span></h1>
-  <p align="center">Next-generation transaction builder for users and an off-chain framework for highly scalable dApps on Cardano</p>
+  <p align="center">A highly scalable, production-ready transaction builder and off-chain framework for dApps and devs on Cardano.</p>
 </p>
 
 <p align="center">
@@ -130,112 +130,197 @@ There are a growing number of projects that are built on top of `lucid-evolution
 </table>
 <br/>
 
-## Introduction
+---
 
-Lucid Evolution is a comprehensive suite of tools designed to facilitate the off-chain development of scalable dApps and the creation of complex transactions on the Cardano blockchain
+## 📦 [Install](https://anastasia-labs.github.io/lucid-evolution/install)
 
-## Packages
-
-| Package                              | Description                         |
-| ------------------------------------ | ----------------------------------- |
-| `@lucid-evolution/lucid`             | Core package for Lucid Evolution    |
-| `@lucid-evolution/bip39`             | BIP-39 mnemonic code implementation |
-| `@lucid-evolution/core-types`        | Shared type definitions             |
-| `@lucid-evolution/core-utils`        | Common utility functions            |
-| `@lucid-evolution/crc8`              | CRC8 calculation utilities          |
-| `@lucid-evolution/plutus`            | Plutus integration tools            |
-| `@lucid-evolution/provider`          | Data provider interfaces            |
-| `@lucid-evolution/sign_data`         | Data signing utilities              |
-| `@lucid-evolution/utils`             | General-purpose utility functions   |
-| `@lucid-evolution/wallet`            | Wallet integration package          |
-| `@lucid-evolution/typescript-config` | Shared TypeScript configurations    |
-| `@lucid-evolution/eslint-config`     | Shared ESLint configurations        |
-
-## Tech Stack
-
-- [**TypeScript**](https://www.typescriptlang.org/): For static type checking
-- [**Effect**](https://effect.website/docs/why-effect): Manages side effects, facilitating the creation of effectful functions that track errors, handle synchronous and asynchronous operations, and provide error short-circuiting capabilities
-- [**ESLint**](https://eslint.org/): For code linting
-- [**Prettier**](https://prettier.io): For code formatting
-
-## Getting Started
-
-### Installation
-
+```bash
+pnpm i @lucid-evolution/lucid
 ```
+
+<div align="center">
+  <strong>💡 Installing the <code>lucid</code> package automatically includes all other packages in the library.</strong>
+</div>
+
+---
+
+## 🚀 Quick Start
+
+```typescript
+import { Lucid, Koios, generateSeedPhrase } from "@lucid-evolution/lucid";
+
+// Initialize Lucid with a provider
+const lucid = await Lucid(
+  new Koios("https://preprod.koios.rest/api/v1"),
+  "Preprod",
+);
+
+const seedPhrase = generateSeedPhrase(); // BIP-39
+lucid.selectWallet.fromSeed(seedPhrase); // Select a wallet for signing
+
+// Build, sign and submit transaction
+const tx = await lucid
+  .newTx()
+  .pay.ToAddress("addr_testa...", { lovelace: 5000000n }) // Pay 5 ADA to addr_testa...
+  .pay.ToAddress("addr_testb...", { lovelace: 5000000n }) // Pay 5 ADA to addr_testb...
+  .complete(); // Balance the transaction and initiate UTxO selection
+
+const signedTx = await tx.sign.withWallet().complete();
+const txHash = await signedTx.submit();
+
+console.log("Transaction Submitted:", txHash);
+```
+
+---
+
+## 📚 Documentation
+
+For comprehensive documentation including API references, examples, and guides, visit our [official documentation site](https://anastasia-labs.github.io/lucid-evolution/).
+
+- 🔍 [Core Concepts](https://anastasia-labs.github.io/lucid-evolution/documentation/core-concepts/instantiate-evolution)
+- 🧠 [Deep Dives](https://anastasia-labs.github.io/lucid-evolution/documentation/deep-dives/pay-methods)
+- ⚙️ [Under the Hood](https://anastasia-labs.github.io/lucid-evolution/documentation/under-the-hood)
+
+---
+
+## 👥 Community and Support
+
+- [Discord Community](https://discord.gg/s89P9gpEff): Join for discussions, support, and updates
+- [GitHub Issues](https://github.com/Anastasia-Labs/lucid-evolution/issues): Report bugs or request features
+
+---
+
+## 🤝 Contributing
+
+We welcome contributions to Lucid Evolution! Please check our [CONTRIBUTING.md](./CONTRIBUTING.md) guide for more information.
+
+### ⚒️ Getting Started
+
+```bash
 git clone https://github.com/Anastasia-Labs/lucid-evolution.git
+```
+
+```bash
 cd lucid-evolution
 pnpm install
 ```
 
-### Build
+##### Build all packages
 
-To build all packages:
-
-```
+```bash
 pnpm build
 ```
 
-### Development
+<div style="margin: 20px 0;"></div>
 
-To run the documentation site locally:
+<div align="center">
+  <details>
+    <summary><strong>📦 View</strong> Package Overview</summary>
+    <div style="text-align: left; margin-top: 15px;">
+      <table>
+        <thead>
+          <tr>
+            <th>Package</th>
+            <th>Description</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><code>@lucid-evolution/lucid</code></td>
+            <td>Core package for Lucid Evolution</td>
+          </tr>
+          <tr>
+            <td><code>@lucid-evolution/bip39</code></td>
+            <td>BIP-39 mnemonic code implementation</td>
+          </tr>
+          <tr>
+            <td><code>@lucid-evolution/core-types</code></td>
+            <td>Shared type definitions</td>
+          </tr>
+          <tr>
+            <td><code>@lucid-evolution/core-utils</code></td>
+            <td>Common utility functions</td>
+          </tr>
+          <tr>
+            <td><code>@lucid-evolution/crc8</code></td>
+            <td>CRC8 calculation utilities</td>
+          </tr>
+          <tr>
+            <td><code>@lucid-evolution/plutus</code></td>
+            <td>Plutus integration tools</td>
+          </tr>
+          <tr>
+            <td><code>@lucid-evolution/provider</code></td>
+            <td>Data provider interfaces</td>
+          </tr>
+          <tr>
+            <td><code>@lucid-evolution/sign_data</code></td>
+            <td>Data signing utilities</td>
+          </tr>
+          <tr>
+            <td><code>@lucid-evolution/utils</code></td>
+            <td>General-purpose utility functions</td>
+          </tr>
+          <tr>
+            <td><code>@lucid-evolution/wallet</code></td>
+            <td>Wallet integration package</td>
+          </tr>
+          <tr>
+            <td><code>@lucid-evolution/typescript-config</code></td>
+            <td>Shared TypeScript configurations</td>
+          </tr>
+          <tr>
+            <td><code>@lucid-evolution/eslint-config</code></td>
+            <td>Shared ESLint configurations</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </details>
+</div>
 
+<div style="margin: 20px 0;"></div>
+
+### 🧪 Testing
+
+```bash
+# Run tests across all packages
+pnpm test
+
+# Run tests for a specific package
+pnpm --filter @lucid-evolution/lucid test
 ```
+
+<div style="margin: 20px 0;"></div>
+
+<div align="center">
+  <details>
+    <summary><strong>🧪 Testing Details</strong></summary>
+    <div style="text-align: left; margin-top: 15px;">
+      <p>Lucid Evolution includes both unit tests and on-chain integration tests.</p>
+      <p>For detailed testing instructions, including environment setup and API keys, please refer to our <a href="./CONTRIBUTING.md#local-testing">CONTRIBUTING guide</a>.</p>
+    </div>
+  </details>
+</div>
+
+<div style="margin: 20px 0;"></div>
+
+### 📖 Local Documentation
+
+```bash
 pnpm dev
 ```
 
-Visit http://localhost:3000/lucid-evolution to view the docs
-
-### Testing
-
-Run tests across all packages:
-
-```
-pnpm test
-```
-
-### Code Quality
-
-To format files with prettier, run the following command:
-
-```
-pnpm format
-```
-
-To check formatting, run the following command:
-
-```
-pnpm format-check
-```
-
-To check linting, run the following command:
-
-```
-pnpm lint
-```
-
-## Documentation
-
-For comprehensive documentation, please visit our [official documentation site](https://anastasia-labs.github.io/lucid-evolution/)
-
-## Remote Caching
-
-Lucid Evolution leverages the remote caching functionality provided by GitHub to optimize continuous integration (CI) pipelines.
-
-By default, local caching is employed. Although there are no immediate plans for remote caching, the repository remains adaptable to future enhancements
-
-## Contributing
-
-We welcome contributions to Lucid Evolution! Please feel free to submit issues, create pull requests, or engage in discussions to help improve the project
-
-## License
-
-Lucid Evolution is open-source software licensed under the [MIT License](https://anastasia-labs.github.io/lucid-evolution/information/license)
-
-## Community
-
-Join our [Discord community](https://discord.gg/s89P9gpEff) for discussions, support, and updates
+> Visit http://localhost:3000/lucid-evolution
 
 ---
 
-<p align="center">Developed with ❤️ by Anastasia Labs</p>
+## 📜 License
+
+Lucid Evolution is licensed under the [MIT License](./LICENSE).
+
+---
+
+<div style="margin: 20px 0;"></div>
+
+<p align="center">Maintained with ❤️ by <a href="https://anastasialabs.com/">Anastasia Labs</a></p>

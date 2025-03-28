@@ -1,6 +1,8 @@
 import { Callout, Steps } from "nextra/components";
 
-## Your first transaction
+## First transaction
+
+A couple fundamentals to remember are that in Cardano's eUTxO model, a transaction can consume one or more UTxOs as inputs. Create one or more UTxOs as outputs and that a transaction must be balanced (sum of inputs = sum of outputs + fees).
 
 <Steps>
 ### Build
@@ -15,59 +17,50 @@ const tx = await lucid
   .complete();
 ```
 
-<Callout>
-  To balance the transaction and initiate coin selection, transactions always
-  need to end with `.complete()`
-</Callout>
-
 ### Sign
 
 ```typescript
 const signedTx = await tx.sign.withWallet().complete();
 ```
 
-You could also choose to sign the transaction with a private key:
-
-```typescript
-const signedTx = await tx.sign.withPrivateKey(privateKey).complete();
-```
-
 ### Submit
-
-Lastly we submit the transaction:
 
 ```typescript
 const txHash = await signedTx.submit();
-console.log(txHash);
 ```
 
 </Steps>
 
-<Callout>
-  Remember to select a wallet before attempting to build and submit
-  transactions. The wallet selection methods we discussed in previous section
-  **Core Concept 2: Choose Wallet** should be implemented before building the
-  transaction.
+<Callout type="warning">
+  Remember to [select](./wallet-management) a wallet before attempting to build and submit
+  transactions.
 </Callout>
-## Putting everything together
+
+---
+
+## Putting it all together
 
 ```typescript
-import { Lucid, Blockfrost } from "@lucid-evolution/lucid";
+import { Lucid, Koios, generateSeedPhrase } from "@lucid-evolution/lucid";
 
+// Initialize Lucid with a provider
 const lucid = await Lucid(
-  new Blockfrost("https://cardano-preprod.blockfrost.io/api/v0", "<projectId>"),
+  new Koios("https://preprod.koios.rest/api/v1"),
   "Preprod"
 );
 
-lucid.selectWallet.fromPrivateKey(privateKey);
+const seedPhrase = generateSeedPhrase(); // BIP-39
+lucid.selectWallet.fromSeed(seedPhrase); // Select a wallet for signing
 
+// Build, sign and submit transaction
 const tx = await lucid
   .newTx()
-  .pay.ToAddress("addr_testa...", { lovelace: 5000000n })
-  .pay.ToAddress("addr_testb...", { lovelace: 5000000n })
-  .complete();
+  .pay.ToAddress("addr_testa...", { lovelace: 5000000n }) // Pay 5 ADA to addr_testa...
+  .pay.ToAddress("addr_testb...", { lovelace: 5000000n }) // Pay 5 ADA to addr_testb...
+  .complete(); // Balance the transaction and initiate UTxO selection
 
 const signedTx = await tx.sign.withWallet().complete();
 const txHash = await signedTx.submit();
-console.log(txHash);
+
+console.log("Transaction Submitted:", txHash);
 ```

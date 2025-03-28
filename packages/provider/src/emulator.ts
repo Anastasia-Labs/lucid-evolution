@@ -41,9 +41,9 @@ export type EmulatorAccount = {
   privateKey: string;
 };
 
-export async function generateEmulatorAccountFromPrivateKey(
+export function generateEmulatorAccountFromPrivateKey(
   assets: Assets,
-): Promise<EmulatorAccount> {
+): EmulatorAccount {
   const privateKey = CML.PrivateKey.generate_ed25519().to_bech32();
   const priv = CML.PrivateKey.from_bech32(privateKey);
   const pubKeyHash = priv.to_public().hash();

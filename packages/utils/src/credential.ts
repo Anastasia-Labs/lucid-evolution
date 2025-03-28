@@ -9,6 +9,7 @@ import {
 import { networkToId } from "./network.js";
 import { CML } from "./core.js";
 import { getAddressDetails } from "./address.js";
+import { Cardano } from "@cardano-sdk/core";
 
 export function credentialToAddress(
   network: Network,
@@ -84,3 +85,15 @@ export function stakeCredentialOf(rewardAddress: RewardAddress): Credential {
   }
   return stakeCredential;
 }
+
+export const drepIDToCredential = (drepID: string): Credential => {
+  if (!Cardano.DRepID.isValid(drepID)) {
+    throw new Error(`Invalid DRep ID: ${drepID}`);
+  }
+  const drepId = Cardano.DRepID(drepID);
+  const drepCred = Cardano.DRepID.toCredential(drepId);
+  return {
+    type: drepCred.type == Cardano.CredentialType.KeyHash ? "Key" : "Script",
+    hash: drepCred.hash,
+  };
+};

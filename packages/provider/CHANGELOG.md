@@ -1,5 +1,36 @@
 # @lucid-evolution/provider
 
+## 0.1.88
+
+### Patch Changes
+
+- Updated dependencies [[`9503425`](https://github.com/Anastasia-Labs/lucid-evolution/commit/95034257fb3edda5605a76054fdfc70d51640441)]:
+  - @lucid-evolution/utils@0.1.65
+  - @lucid-evolution/wallet@0.1.71
+
+## 0.1.87
+
+### Patch Changes
+
+- [#478](https://github.com/Anastasia-Labs/lucid-evolution/pull/478) [`d7bed7f`](https://github.com/Anastasia-Labs/lucid-evolution/commit/d7bed7fa15939e852811f5abc7ab928c7c303718) Thanks [@solidsnakedev](https://github.com/solidsnakedev)! - improve emulator test structure; update emulator provider; upgrade effect dependency at lucid package
+
+## 0.1.86
+
+### Patch Changes
+
+- Updated dependencies [[`2335ef1`](https://github.com/Anastasia-Labs/lucid-evolution/commit/2335ef101f8a5d2a92324c7fd8536d5d8927531e)]:
+  - @lucid-evolution/core-types@0.1.22
+  - @lucid-evolution/utils@0.1.64
+  - @lucid-evolution/wallet@0.1.70
+
+## 0.1.85
+
+### Patch Changes
+
+- Updated dependencies [[`0342519`](https://github.com/Anastasia-Labs/lucid-evolution/commit/0342519266ca6ff9e96c1e646f7150b78ba095a8)]:
+  - @lucid-evolution/utils@0.1.63
+  - @lucid-evolution/wallet@0.1.69
+
 ## 0.1.84
 
 ### Patch Changes

@@ -14,7 +14,7 @@ import {
   PROTOCOL_PARAMETERS_DEFAULT,
   Kupmios,
 } from "../../src/index.js";
-import scripts from "./contracts/plutus.json";
+import scripts from "./contracts/plutus.json" assert { type: "json" };
 
 export const NETWORK: Network = "Preprod";
 
@@ -71,7 +71,10 @@ const makeUser = Effect.gen(function* ($) {
   const networkConfig = yield* NetworkConfig;
   const user = yield* Effect.tryPromise(() =>
     Lucid(
-      new Kupmios(networkConfig.KUPO_KEY, networkConfig.OGMIOS_KEY),
+      new Blockfrost(
+        networkConfig.BLOCKFROST_API_URL,
+        networkConfig.BLOCKFROST_KEY,
+      ),
       networkConfig.NETWORK,
       // { presetProtocolParameters: PROTOCOL_PARAMETERS_DEFAULT },
     ),
