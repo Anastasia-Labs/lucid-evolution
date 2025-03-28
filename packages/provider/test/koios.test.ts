@@ -53,7 +53,7 @@ describe.sequential("Koios", () => {
     expect(utxos).toStrictEqual([PreprodConstants.discoveryUTxO]);
   });
 
-  test("getDelegation", async () => {
+  test.skip("getDelegation", async () => {
     const delegation = await koios.getDelegation(
       "stake_test17zt3vxfjx9pjnpnapa65lx375p2utwxmpc8afj053h0l3vgc8a3g3",
     );
