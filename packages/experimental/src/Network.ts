@@ -10,7 +10,7 @@ export type Network = "Mainnet" | "Preview" | "Preprod" | "Custom";
  * Network.toId("Preprod"); // 0
  * Network.toId("Mainnet"); // 1
  * ```
- * 
+ *
  * @since 1.0.0
  */
 export const toId = <T extends Network>(network: T): 0 | 1 => {
@@ -45,7 +45,7 @@ export const fromId = <
   Options extends Exclude<Network, "Mainnet">,
 >(
   id: ID,
-  options?: { defaultNetwork?: Options }
+  options?: { defaultNetwork?: Options },
 ): InferReturnType<ID, Options> => {
   const { defaultNetwork = "Preview" } = options ?? {};
   if (id === 1) return "Mainnet" as InferReturnType<ID, Options>;

@@ -1,5 +1,5 @@
 import { pipe, Record, Schema, SchemaAST } from "effect";
-import * as Bytes from "./Core/Bytes.js";
+import * as Bytes from "./Bytes.js";
 import * as CML from "@anastasia-labs/cardano-multiplatform-lib-nodejs";
 import { ParseIssue } from "effect/ParseResult";
 
@@ -9,12 +9,7 @@ import { ParseIssue } from "effect/ParseResult";
  *
  * @since 1.0.0
  */
-export type Data =
-  | Integer
-  | ByteArray
-  | List
-  | Map
-  | Constr;
+export type Data = Integer | ByteArray | List | Map | Constr;
 
 export interface List extends ReadonlyArray<Data> {}
 

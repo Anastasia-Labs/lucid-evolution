@@ -1,20 +1,25 @@
 import * as CML from "@anastasia-labs/cardano-multiplatform-lib-nodejs";
 import * as Network from "./Network.js";
-import { RewardAddress, Credential } from "./Type.js";
+import * as Address from "./Address.js";
+import * as KeyHash from "./KeyHash.js";
+import * as ScriptHash from "./ScriptHash.js";
+
+export type Credential = {
+  type: "Key" | "Script";
+  hash: KeyHash.KeyHash | ScriptHash.ScriptHash;
+};
 
 export function toRewardAddress(
   network: Network.Network,
-  stakeCredential: Credential,
-): RewardAddress {
+  stakeCredential: Credential
+): Address.RewardAddress {
   return CML.RewardAddress.new(
     Network.toId(network),
     stakeCredential.type === "Key"
       ? CML.Credential.new_pub_key(
-          CML.Ed25519KeyHash.from_hex(stakeCredential.hash),
+          CML.Ed25519KeyHash.from_hex(stakeCredential.hash)
         )
-      : CML.Credential.new_script(
-          CML.ScriptHash.from_hex(stakeCredential.hash),
-        ),
+      : CML.Credential.new_script(CML.ScriptHash.from_hex(stakeCredential.hash))
   )
     .to_address()
     .to_bech32(undefined);

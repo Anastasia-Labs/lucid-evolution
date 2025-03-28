@@ -11,20 +11,15 @@
       "require": "./dist/cjs/index.js",
       "import": "./dist/esm/index.js"
     },
-    "./Script": {
-      "types": "./dist/types/Script.d.ts",
-      "require": "./dist/cjs/Script.js",
-      "import": "./dist/esm/Script.js"
+    "./*": {
+      "types": "./dist/types/*.d.ts",
+      "require": "./dist/cjs/*.js",
+      "import": "./dist/esm/*.js"
     },
-    "./Network": {
-      "types": "./dist/types/Network.d.ts",
-      "require": "./dist/cjs/Network.js",
-      "import": "./dist/esm/Network.js"
-    },
-    "./EffectCML/AssetName": {
-      "types": "./dist/types/EffectCML/AssetName.d.ts",
-      "require": "./dist/cjs/EffectCML/AssetName.js",
-      "import": "./dist/esm/EffectCML/AssetName.js"
+    "./**/*.js": {
+      "types": "./dist/types/*.d.ts",
+      "require": "./dist/cjs/*.js",
+      "import": "./dist/esm/*.js"
     }
   },
   "files": [
@@ -35,6 +30,7 @@
   },
   "scripts": {
     "build": "rm -rf dist && tsc -p tsconfig.esm.json  && tsc -p tsconfig.cjs.json",
+    "generate:cml-wrappers": "tsx tools/generate-cml-wrappers.ts",
     "test": "vitest run",
     "lint": "tsc --noEmit",
     "clean": "rm -rf .turbo && rm -rf node_modules && rm -rf dist"
@@ -48,19 +44,18 @@
   "dependencies": {
     "@anastasia-labs/cardano-multiplatform-lib-browser": "6.0.2-3",
     "@anastasia-labs/cardano-multiplatform-lib-nodejs": "6.0.2-3",
+    "@effect/platform-node": "^0.73.6",
     "@harmoniclabs/plutus-data": "^1.2.4",
     "@harmoniclabs/uplc": "^1.2.4",
-    "@sinclair/typebox": "^0.32.28",
     "cbor-x": "^1.6.0",
-    "effect": "^3.13.2"
+    "effect": "^3.14.1"
   },
   "devDependencies": {
     "@effect/vitest": "^0.16.0",
     "@microsoft/api-extractor": "^7.49.0",
-    "@types/node": "^20.12.8",
+    "@types/node": "^22.13.11",
     "tsup": "^8.0.2",
-    "typescript": "^5.4.5",
-    "unbuild": "^3.2.0",
+    "typescript": "^5.8.2",
     "vitest": "^2.0.5"
   }
 }

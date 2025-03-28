@@ -1,4 +1,4 @@
-import { Effect, Predicate } from "effect";
+import { Predicate } from "effect";
 
 export const make = ({
   cause,

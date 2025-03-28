@@ -471,3 +471,8 @@ Effect.runSync(divide(1, 0));
 
 ## Types should be defined using Effect schemas
 - Use Effect schemas to define types for better type safety and runtime validation.
+
+## Be careful with equality checks
+- Use `===` and `!==` for comparing primitive types to ensure strict equality.
+- Remember that TypeScript's equality operators compare object references, not their values.
+- For deep equality checks on nested objects, consider using Effect's Equal utility.

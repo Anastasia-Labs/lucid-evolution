@@ -1,10 +1,8 @@
-// export * as FormatError from "./FormatError.js";
-export * as EffectCML from "./EffectCML/index.js";
-export * as Bytes from "./Core/Bytes.js";
-export * as CML from "@anastasia-labs/cardano-multiplatform-lib-nodejs";
+export * as EffectCML from "./CML/index.js";
+export * as Bytes from "./Bytes.js";
 export * as Network from "./Network.js";
 export * as Credential from "./Credential.js";
-export * as CBOR from "./CBOR.js";
 export * as Script from "./Script.js";
 export * as Data from "./Data.js";
-export * as TypeSchema from "./TypeSchema.js";
+export * as TSchema from "./TSchema.js";
+export * as CML from "./CML/index.js"

@@ -6,6 +6,6 @@
     "sourceMap": true,
   },
   "files": ["src/index.ts"],
-  // "include": ["src/**/*"],
+  "include": ["src/**/*"],
   "exclude": ["dist", "node_modules", "test"]
 }

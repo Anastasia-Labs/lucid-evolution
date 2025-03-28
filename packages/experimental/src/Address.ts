@@ -1,23 +1,37 @@
-import * as CML from "@anastasia-labs/cardano-multiplatform-lib-nodejs";
 import * as Network from "./Network.js";
-import * as Validator from "./Validator.js";
-import * as EffectCML from "./EffectCML/index.js";
-import {
-  AddressDetails,
-  Certificate,
-  RewardAddress,
-  Withdrawal,
-  Credential,
-} from "./Type.js";
+import * as Script from "./Script.js";
+import * as CML from "./CML/index.js";
+import * as Credential from "./Credential.js";
+
+/** Bech32 */
+export type RewardAddress = string;
+
+export type AddressType =
+  | "Base"
+  | "Enterprise"
+  | "Pointer"
+  | "Reward"
+  | "Byron";
+
+export type AddressDetails = {
+  type: AddressType;
+  networkId: number;
+  address: { bech32: Address; hex: string };
+  paymentCredential?: Credential.Credential;
+  stakeCredential?: Credential.Credential;
+};
+
+/** Bech32 */
+export type Address = string;
 
 export function validatorToRewardAddress(
   network: Network.Network,
-  validator: Certificate | Withdrawal,
+  validator: Script.Certificate | Script.Withdrawal
 ): RewardAddress {
-  const validatorHash = Validator.toScriptHash(validator);
-  return CML.RewardAddress.new(
+  const validatorHash = Script.toScriptHash(validator);
+  return CML.RewardAddress.unsafe_new(
     Network.toId(network),
-    CML.Credential.new_script(CML.ScriptHash.from_hex(validatorHash)),
+    CML.Credential.unsafeNewScript(CML.ScriptHash.unsafeFromHex(validatorHash))
   )
     .to_address()
     .to_bech32(undefined);
@@ -27,10 +41,10 @@ export function validatorToRewardAddress(
 export function getAddressDetails(address: string): AddressDetails {
   // Base Address
   try {
-    const parsedAddress = CML.BaseAddress.from_address(
-      EffectCML.Address.unsafeFromHexOrBech32(address),
+    const parsedAddress = CML.BaseAddress.unsafeFromAddress(
+      unsafeFromHexOrBech32(address)
     )!;
-    const paymentCredential: Credential =
+    const paymentCredential: Credential.Credential =
       parsedAddress.payment().kind() === 0
         ? {
             type: "Key",
@@ -40,7 +54,7 @@ export function getAddressDetails(address: string): AddressDetails {
             type: "Script",
             hash: parsedAddress.payment().as_script()!.to_hex(),
           };
-    const stakeCredential: Credential =
+    const stakeCredential: Credential.Credential =
       parsedAddress.stake().kind() === 0
         ? {
             type: "Key",
@@ -66,10 +80,10 @@ export function getAddressDetails(address: string): AddressDetails {
 
   // Enterprise Address
   try {
-    const parsedAddress = CML.EnterpriseAddress.from_address(
-      EffectCML.Address.unsafeFromHexOrBech32(address),
+    const parsedAddress = CML.EnterpriseAddress.unsafeFromAddress(
+      unsafeFromHexOrBech32(address)
     )!;
-    const paymentCredential: Credential =
+    const paymentCredential: Credential.Credential =
       parsedAddress.payment().kind() === 0
         ? {
             type: "Key",
@@ -94,10 +108,10 @@ export function getAddressDetails(address: string): AddressDetails {
 
   // Pointer Address
   try {
-    const parsedAddress = CML.PointerAddress.from_address(
-      EffectCML.Address.unsafeFromHexOrBech32(address),
+    const parsedAddress = CML.PointerAddress.unsafeFromAddress(
+      unsafeFromHexOrBech32(address)
     )!;
-    const paymentCredential: Credential =
+    const paymentCredential: Credential.Credential =
       parsedAddress?.payment().kind() === 0
         ? {
             type: "Key",
@@ -122,10 +136,10 @@ export function getAddressDetails(address: string): AddressDetails {
 
   // Reward Address
   try {
-    const parsedAddress = CML.RewardAddress.from_address(
-      EffectCML.Address.unsafeFromHexOrBech32(address),
+    const parsedAddress = CML.RewardAddress.unsafeFromAddress(
+      unsafeFromHexOrBech32(address)
     )!;
-    const stakeCredential: Credential =
+    const stakeCredential: Credential.Credential =
       parsedAddress.payment().kind() === 0
         ? {
             type: "Key",
@@ -150,12 +164,12 @@ export function getAddressDetails(address: string): AddressDetails {
 
   // Limited support for Byron addresses
   try {
-    const parsedAddress = ((address: string): CML.ByronAddress => {
+    const parsedAddress = ((address: string): CML.ByronAddress.ByronAddress => {
       try {
-        return CML.ByronAddress.from_cbor_hex(address);
+        return CML.ByronAddress.unsafeFromCborHex(address);
       } catch (_e) {
         try {
-          return CML.ByronAddress.from_base58(address);
+          return CML.ByronAddress.unsafeFromBase58(address);
         } catch (_e) {
           throw new Error("Could not deserialize address.");
         }
@@ -175,4 +189,17 @@ export function getAddressDetails(address: string): AddressDetails {
   }
 
   throw new Error("No address type matched for: " + address);
+}
+
+
+export function unsafeFromHexOrBech32(address: string): CML.Address.Address{
+  try {
+    return CML.Address.unsafeFromHex(address);
+  } catch (_e) {
+    try {
+      return CML.Address.unsafeFromBech32(address);
+    } catch (_e) {
+      throw new Error("Could not deserialize address.");
+    }
+  }
 }
