@@ -424,7 +424,7 @@ export const makeList = <T extends Data>(value: readonly T[]) =>
  * @since 2.0.0
  */
 export const makeInteger = <T extends bigint = bigint>(value: T) =>
-  Integer.make({ value }) as Integer<T>;
+  Integer.make({ value });
 
 /**
  * Creates a Plutus Data ByteArray type from a hex string
@@ -436,8 +436,8 @@ export const makeInteger = <T extends bigint = bigint>(value: T) =>
  *
  * @since 2.0.0
  */
-export const makeByteArray = <T extends string>(value: T): ByteArray<T> =>
-  ByteArray.make({ value }) as ByteArray<T>;
+export const makeByteArray = <T extends string>(value: T) =>
+  ByteArray.make({ value });
 
 /**
  * Creates a Plutus Data Map type from an array of key-value tuples
@@ -472,7 +472,7 @@ export const makeMap = (value: ReadonlyArray<readonly [Data, Data]>) =>
 export const makeConstr = <T extends bigint, U extends readonly Data[]>(
   index: T,
   fields: U,
-): Constr<T, U> => Constr.make({ index, fields }) as Constr<T, U>;
+) => Constr.make({ index, fields });
 
 const replacer = (key: string, value: any) => {
   if (typeof value === "bigint") {

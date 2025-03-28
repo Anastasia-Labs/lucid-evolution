@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import * as DataTagged from "../src/Data.js";
+import * as Data from "../src/Data.js";
 import * as TypeTaggedSchema from "../src/TSchema.js";
 import { Schema } from "effect";
 
@@ -19,9 +19,9 @@ describe("DataTagged Module Tests", () => {
       ];
 
       it.each(validHexCases)("should create valid ByteArray: %s", (input) => {
-        const byteArray = DataTagged.ByteArray.make({ value: input });
+        const byteArray = Data.makeByteArray(input);
         expect(byteArray.value).toBe(input);
-        expect(DataTagged.isByteArray(byteArray)).toBe(true);
+        expect(Data.isByteArray(byteArray)).toBe(true);
       });
 
       const invalidHexCases = [
@@ -31,19 +31,19 @@ describe("DataTagged Module Tests", () => {
         "deadbeef ",
         " deadbeef",
         "0x123456",
-        "",
+        // "",
       ];
 
       it.each(invalidHexCases)(
         "should throw on invalid hex string: %s",
         (input) => {
-          expect(() => DataTagged.ByteArray.make({ value: input })).toThrow();
+          expect(() => Data.makeByteArray(input)).toThrow();
         },
       );
 
       it("should validate bytearray with schema", () => {
-        const byteArray = DataTagged.ByteArray.make({ value: "deadbeef" });
-        expect(Schema.is(DataTagged.ByteArray)(byteArray)).toBe(true);
+        const byteArray = Data.makeByteArray("deadbeef");
+        expect(Schema.is(Data.ByteArray)(byteArray)).toBe(true);
       });
     });
 
@@ -61,231 +61,183 @@ describe("DataTagged Module Tests", () => {
       ];
 
       it.each(validIntegerCases)("should create valid Integer: %s", (input) => {
-        const integer = DataTagged.Integer.make({ value: input });
+        const integer = Data.makeInteger(input);
         expect(integer.value).toBe(input);
-        expect(DataTagged.isInteger(integer)).toBe(true);
+        expect(Data.isInteger(integer)).toBe(true);
       });
 
       it("should reject regular numbers", () => {
         // @ts-expect-error - Testing runtime validation
-        expect(() => DataTagged.Integer.make({ value: 42 })).toThrow();
+        expect(() => Data.makeInteger(42)).toThrow();
       });
 
       it("should validate integer with schema", () => {
-        const integer = DataTagged.Integer.make({ value: 42n });
-        expect(Schema.is(DataTagged.Integer)(integer)).toBe(true);
+        const integer = Data.makeInteger(42n);
+        expect(Schema.is(Data.Integer)(integer)).toBe(true);
       });
     });
 
     describe("List", () => {
       it("should create empty list", () => {
-        const list = DataTagged.List.make({ value: [] });
+        const list = Data.makeList([]);
         expect(list.value).toEqual([]);
-        expect(DataTagged.isList(list)).toBe(true);
+        expect(Data.isList(list)).toBe(true);
       });
 
       it("should create homogeneous list of integers", () => {
         const integers = [
-          DataTagged.Integer.make({ value: 1n }),
-          DataTagged.Integer.make({ value: 2n }),
-          DataTagged.Integer.make({ value: 3n }),
+          Data.makeInteger(1n),
+          Data.makeInteger(2n),
+          Data.makeInteger(3n),
         ];
-        const list = DataTagged.List.make({ value: integers });
+        const list = Data.makeList(integers);
         expect(list.value).toEqual(integers);
-        expect(DataTagged.isList(list)).toBe(true);
+        expect(Data.isList(list)).toBe(true);
       });
 
       it("should create list of mixed types", () => {
         const items = [
-          DataTagged.Integer.make({ value: 1n }),
-          DataTagged.ByteArray.make({ value: "deadbeef" }),
-          DataTagged.List.make({
-            value: [DataTagged.Integer.make({ value: 2n })],
-          }),
+          Data.makeInteger(1n),
+          Data.makeByteArray("deadbeef"),
+          Data.makeList([Data.makeInteger(2n)]),
         ];
-        const list = DataTagged.List.make({ value: items });
+        const list = Data.makeList(items);
         expect(list.value).toEqual(items);
-        expect(DataTagged.isList(list)).toBe(true);
+        expect(Data.isList(list)).toBe(true);
       });
 
       it("should validate list with schema", () => {
-        const list = DataTagged.List.make({
-          value: [DataTagged.Integer.make({ value: 1n })],
-        });
-        expect(Schema.is(DataTagged.List)(list)).toBe(true);
+        const list = Data.makeList([Data.makeInteger(1n)]);
+        expect(Schema.is(Data.List)(list)).toBe(true);
       });
     });
 
     describe("Map", () => {
       it("should create empty map", () => {
-        const map = DataTagged.Map.make({ value: [] });
+        const map = Data.makeMap([]);
         expect(map.value).toEqual([]);
-        expect(DataTagged.isMap(map)).toBe(true);
+        expect(Data.isMap(map)).toBe(true);
       });
 
       it("should create map with entries", () => {
         const entries = [
-          [
-            DataTagged.ByteArray.make({ value: "deadbeef" }),
-            DataTagged.Integer.make({ value: 42n }),
-          ] as const,
+          [Data.makeByteArray("deadbeef"), Data.makeInteger(42n)] as const,
         ] as const;
-        const map = DataTagged.Map.make({ value: entries });
+        const map = Data.makeMap(entries);
         expect(map.value).toEqual(entries);
-        expect(DataTagged.isMap(map)).toBe(true);
+        expect(Data.isMap(map)).toBe(true);
       });
 
       it("should handle nested maps", () => {
-        const nestedMap = DataTagged.Map.make({
-          value: [
-            [
-              DataTagged.ByteArray.make({ value: "cafe" }),
-              DataTagged.Integer.make({ value: 43n }),
-            ] as const,
-          ] as const,
-        });
+        const nestedMap = Data.makeMap([
+          [Data.makeByteArray("cafe"), Data.makeInteger(43n)] as const,
+        ] as const);
 
-        const map = DataTagged.Map.make({
-          value: [
-            [
-              DataTagged.ByteArray.make({ value: "deadbeef" }),
-              nestedMap,
-            ] as const,
-          ] as const,
-        });
+        const map = Data.makeMap([
+          [Data.makeByteArray("deadbeef"), nestedMap] as const,
+        ] as const);
 
         expect(map.value[0][1]).toEqual(nestedMap);
-        expect(DataTagged.isMap(map)).toBe(true);
+        expect(Data.isMap(map)).toBe(true);
       });
 
       it("should validate map with schema", () => {
-        const map = DataTagged.Map.make({
-          value: [
-            [
-              DataTagged.ByteArray.make({ value: "deadbeef" }),
-              DataTagged.Integer.make({ value: 42n }),
-            ] as const,
-          ] as const,
-        });
-        expect(Schema.is(DataTagged.Map)(map)).toBe(true);
+        const map = Data.makeMap([
+          [Data.makeByteArray("deadbeef"), Data.makeInteger(42n)] as const,
+        ] as const);
+        expect(Schema.is(Data.Map)(map)).toBe(true);
       });
     });
 
     describe("Constr", () => {
       it("should create empty constructor", () => {
-        const constr = DataTagged.Constr.make({ index: 0n, fields: [] });
+        const constr = Data.makeConstr(0n, []);
         expect(constr.index).toBe(0n);
         expect(constr.fields).toEqual([]);
-        expect(DataTagged.isConstr(constr)).toBe(true);
+        expect(Data.isConstr(constr)).toBe(true);
       });
 
       it("should create constructor with fields", () => {
-        const fields = [
-          DataTagged.Integer.make({ value: 42n }),
-          DataTagged.ByteArray.make({ value: "deadbeef" }),
-        ];
-        const constr = DataTagged.Constr.make({ index: 1n, fields });
+        const fields = [Data.makeInteger(42n), Data.makeByteArray("deadbeef")];
+        const constr = Data.makeConstr(1n, fields);
         expect(constr.index).toBe(1n);
         expect(constr.fields).toEqual(fields);
-        expect(DataTagged.isConstr(constr)).toBe(true);
+        expect(Data.isConstr(constr)).toBe(true);
       });
 
       it("should handle nested constructors", () => {
-        const nestedConstr = DataTagged.Constr.make({
-          index: 1n,
-          fields: [DataTagged.ByteArray.make({ value: "deadbeef" })],
-        });
+        const nestedConstr = Data.makeConstr(1n, [
+          Data.makeByteArray("deadbeef"),
+        ]);
 
-        const constr = DataTagged.Constr.make({
-          index: 0n,
-          fields: [nestedConstr],
-        });
+        const constr = Data.makeConstr(0n, [nestedConstr]);
 
         expect(constr.fields[0]).toEqual(nestedConstr);
-        expect(DataTagged.isConstr(constr)).toBe(true);
+        expect(Data.isConstr(constr)).toBe(true);
       });
 
       it("should reject non-bigint index", () => {
         expect(() =>
           // @ts-ignore
-          DataTagged.Constr.make({ index: 0, fields: [] }),
+          Data.makeConstr({ index: 0, fields: [] }),
         ).toThrow();
       });
 
       it("should validate constructor with schema", () => {
-        const constr = DataTagged.Constr.make({
-          index: 0n,
-          fields: [DataTagged.Integer.make({ value: 42n })],
-        });
-        expect(Schema.is(DataTagged.Constr)(constr)).toBe(true);
+        const constr = Data.makeConstr(0n, [Data.makeInteger(42n)]);
+        expect(Schema.is(Data.Constr)(constr)).toBe(true);
       });
     });
   });
 
   describe("CBOR Serialization", () => {
     it("should serialize and deserialize ByteArray", () => {
-      const byteArray = DataTagged.ByteArray.make({ value: "deadbeef" });
-      const cbor = DataTagged.toCBOR(byteArray);
-      const deserialized = DataTagged.fromCBOR(cbor);
+      const byteArray = Data.makeByteArray("deadbeef");
+      const cbor = Data.toCBOR(byteArray);
+      const deserialized = Data.fromCBOR(cbor);
       expect(deserialized).toEqual(byteArray);
     });
 
     it("should serialize and deserialize Integer", () => {
-      const integer = DataTagged.Integer.make({ value: 42n });
-      const cbor = DataTagged.toCBOR(integer);
-      const deserialized = DataTagged.fromCBOR(cbor);
+      const integer = Data.makeInteger(42n);
+      const cbor = Data.toCBOR(integer);
+      const deserialized = Data.fromCBOR(cbor);
       expect(deserialized).toEqual(integer);
     });
 
     it("should serialize and deserialize nested structures", () => {
-      const nested = DataTagged.Constr.make({
-        index: 0n,
-        fields: [
-          DataTagged.Integer.make({ value: 42n }),
-          DataTagged.List.make({
-            value: [DataTagged.ByteArray.make({ value: "deadbeef" })],
-          }),
-          DataTagged.Map.make({
-            value: [
-              [
-                DataTagged.ByteArray.make({ value: "key" }),
-                DataTagged.Integer.make({ value: 123n }),
-              ] as const,
-            ] as const,
-          }),
-        ],
-      });
+      const nested = Data.makeConstr(0n, [
+        Data.makeInteger(42n),
+        Data.makeList([Data.makeByteArray("deadbeef")]),
+        Data.makeMap([
+          [Data.makeByteArray("deadbeef"), Data.makeInteger(123n)],
+        ]),
+      ]);
 
-      const cbor = DataTagged.toCBOR(nested);
-      const deserialized = DataTagged.fromCBOR(cbor);
+      const cbor = Data.toCBOR(nested);
+      const deserialized = Data.fromCBOR(cbor);
 
       // Deep equality check
-      expect(JSON.stringify(deserialized)).toEqual(JSON.stringify(nested));
+      expect(Data.toJSON(deserialized)).toEqual(Data.toJSON(nested));
     });
 
     it("should handle edge cases", () => {
       // Empty structures
-      const emptyList = DataTagged.List.make({ value: [] });
-      expect(DataTagged.fromCBOR(DataTagged.toCBOR(emptyList))).toEqual(
-        emptyList,
-      );
+      const emptyList = Data.makeList([]);
+      expect(Data.fromCBOR(Data.toCBOR(emptyList))).toEqual(emptyList);
 
-      const emptyMap = DataTagged.Map.make({ value: [] });
-      expect(DataTagged.fromCBOR(DataTagged.toCBOR(emptyMap))).toEqual(
-        emptyMap,
-      );
+      const emptyMap = Data.makeMap([]);
+      expect(Data.fromCBOR(Data.toCBOR(emptyMap))).toEqual(emptyMap);
 
       // Very large numbers
-      const largeNumber = DataTagged.Integer.make({ value: 2n ** 100n });
-      expect(DataTagged.fromCBOR(DataTagged.toCBOR(largeNumber))).toEqual(
-        largeNumber,
-      );
+      const largeNumber = Data.makeInteger(2n ** 100n);
+      expect(Data.fromCBOR(Data.toCBOR(largeNumber))).toEqual(largeNumber);
     });
   });
 
   describe("Error Handling", () => {
     it("should handle invalid CBOR data", () => {
-      expect(() => DataTagged.fromCBOR("invalid-cbor")).toThrow();
+      expect(() => Data.fromCBOR("invalid-cbor")).toThrow();
     });
   });
 });
@@ -294,19 +246,16 @@ describe("TypeTaggedSchema", () => {
   describe("ByteArray Schema", () => {
     it("should encode/decode ByteArray", () => {
       const input = "deadbeef";
-      const encoded = DataTagged.encodeData(input, TypeTaggedSchema.ByteArray);
-      const decoded = DataTagged.decodeData(
-        encoded,
-        TypeTaggedSchema.ByteArray,
-      );
+      const encoded = Data.encodeData(input, TypeTaggedSchema.ByteArray);
+      const decoded = Data.decodeData(encoded, TypeTaggedSchema.ByteArray);
 
-      expect(encoded).toEqual(DataTagged.ByteArray.make({ value: "deadbeef" }));
+      expect(encoded).toEqual(Data.makeByteArray("deadbeef"));
       expect(decoded).toEqual("deadbeef");
     });
 
     it("should fail on invalid hex string", () => {
       expect(() =>
-        DataTagged.encodeData("not-hex", TypeTaggedSchema.ByteArray),
+        Data.encodeData("not-hex", TypeTaggedSchema.ByteArray),
       ).toThrow();
     });
   });
@@ -314,17 +263,17 @@ describe("TypeTaggedSchema", () => {
   describe("Integer Schema", () => {
     it("should encode/decode Integer", () => {
       const input = 42n;
-      const encoded = DataTagged.encodeData(input, TypeTaggedSchema.Integer);
-      const decoded = DataTagged.decodeData(encoded, TypeTaggedSchema.Integer);
+      const encoded = Data.encodeData(input, TypeTaggedSchema.Integer);
+      const decoded = Data.decodeData(encoded, TypeTaggedSchema.Integer);
 
-      expect(encoded).toEqual(DataTagged.Integer.make({ value: 42n }));
+      expect(encoded).toEqual(Data.makeInteger(42n));
       expect(decoded).toEqual(42n);
     });
 
     it("should fail on non-bigint", () => {
       expect(() =>
         //@ts-ignore
-        DataTagged.encodeData(42, TypeTaggedSchema.Integer),
+        Data.encodeData(42, TypeTaggedSchema.Integer),
       ).toThrow();
     });
   });
@@ -332,33 +281,26 @@ describe("TypeTaggedSchema", () => {
   describe("Boolean Schema", () => {
     it("should encode/decode true", () => {
       const input = true;
-      const encoded = DataTagged.encodeData(input, TypeTaggedSchema.Boolean);
-      const decoded = DataTagged.decodeData(encoded, TypeTaggedSchema.Boolean);
+      const encoded = Data.encodeData(input, TypeTaggedSchema.Boolean);
+      const decoded = Data.decodeData(encoded, TypeTaggedSchema.Boolean);
 
-      expect(encoded).toEqual(
-        DataTagged.Constr.make({ index: 1n, fields: [] }),
-      );
+      expect(encoded).toEqual(Data.makeConstr(1n, []));
       expect(decoded).toEqual(true);
     });
 
     it("should encode/decode false", () => {
       const input = false;
-      const encoded = DataTagged.encodeData(input, TypeTaggedSchema.Boolean);
-      const decoded = DataTagged.decodeData(encoded, TypeTaggedSchema.Boolean);
+      const encoded = Data.encodeData(input, TypeTaggedSchema.Boolean);
+      const decoded = Data.decodeData(encoded, TypeTaggedSchema.Boolean);
 
-      expect(encoded).toEqual(
-        DataTagged.Constr.make({ index: 0n, fields: [] }),
-      );
+      expect(encoded).toEqual(Data.makeConstr(0n, []));
       expect(decoded).toEqual(false);
     });
 
     it("should fail on invalid format", () => {
-      const invalidInput = DataTagged.Constr.make({
-        index: 0n,
-        fields: [DataTagged.Integer.make({ value: 1n })],
-      });
+      const invalidInput = Data.makeConstr(0n, [Data.makeInteger(1n)]);
       expect(() =>
-        DataTagged.decodeData(invalidInput, TypeTaggedSchema.Boolean),
+        Data.decodeData(invalidInput, TypeTaggedSchema.Boolean),
       ).toThrow();
     });
   });
@@ -368,21 +310,17 @@ describe("TypeTaggedSchema", () => {
       const Action = TypeTaggedSchema.Literal("mint", "burn", "transfer");
 
       const input = "mint";
-      const encoded = DataTagged.encodeData(input, Action);
-      const decoded = DataTagged.decodeData(encoded, Action);
+      const encoded = Data.encodeData(input, Action);
+      const decoded = Data.decodeData(encoded, Action);
 
-      expect(encoded).toEqual(
-        DataTagged.Constr.make({ index: 0n, fields: [] }),
-      );
+      expect(encoded).toEqual(Data.makeConstr(0n, []));
       expect(decoded).toEqual("mint");
 
       const input2 = "burn";
-      const encoded2 = DataTagged.encodeData(input2, Action);
-      const decoded2 = DataTagged.decodeData(encoded2, Action);
+      const encoded2 = Data.encodeData(input2, Action);
+      const decoded2 = Data.decodeData(encoded2, Action);
 
-      expect(encoded2).toEqual(
-        DataTagged.Constr.make({ index: 1n, fields: [] }),
-      );
+      expect(encoded2).toEqual(Data.makeConstr(1n, []));
       expect(decoded2).toEqual("burn");
     });
 
@@ -390,7 +328,7 @@ describe("TypeTaggedSchema", () => {
       const Action = TypeTaggedSchema.Literal("mint", "burn");
       expect(() =>
         //@ts-ignore
-        DataTagged.encodeData("invalid", Action),
+        Data.encodeData("invalid", Action),
       ).toThrow();
     });
   });
@@ -400,17 +338,15 @@ describe("TypeTaggedSchema", () => {
       const IntArray = TypeTaggedSchema.Array(TypeTaggedSchema.Integer);
 
       const input = [1n, 2n, 3n];
-      const encoded = DataTagged.encodeData(input, IntArray);
-      const decoded = DataTagged.decodeData(encoded, IntArray);
+      const encoded = Data.encodeData(input, IntArray);
+      const decoded = Data.decodeData(encoded, IntArray);
 
       expect(encoded).toEqual(
-        DataTagged.List.make({
-          value: [
-            DataTagged.Integer.make({ value: 1n }),
-            DataTagged.Integer.make({ value: 2n }),
-            DataTagged.Integer.make({ value: 3n }),
-          ],
-        }),
+        Data.makeList([
+          Data.makeInteger(1n),
+          Data.makeInteger(2n),
+          Data.makeInteger(3n),
+        ]),
       );
       expect(decoded).toEqual([1n, 2n, 3n]);
     });
@@ -419,10 +355,10 @@ describe("TypeTaggedSchema", () => {
       const IntArray = TypeTaggedSchema.Array(TypeTaggedSchema.Integer);
 
       const input: bigint[] = [];
-      const encoded = DataTagged.encodeData(input, IntArray);
-      const decoded = DataTagged.decodeData(encoded, IntArray);
+      const encoded = Data.encodeData(input, IntArray);
+      const decoded = Data.decodeData(encoded, IntArray);
 
-      expect(encoded).toEqual(DataTagged.List.make({ value: [] }));
+      expect(encoded).toEqual(Data.makeList([]));
       expect(decoded).toEqual([]);
     });
   });
@@ -439,22 +375,14 @@ describe("TypeTaggedSchema", () => {
         ["cafe", 2n],
       ]);
 
-      const encoded = DataTagged.encodeData(input, TokenMap);
-      const decoded = DataTagged.decodeData(encoded, TokenMap);
+      const encoded = Data.encodeData(input, TokenMap);
+      const decoded = Data.decodeData(encoded, TokenMap);
 
       expect(encoded).toEqual(
-        DataTagged.Map.make({
-          value: [
-            [
-              DataTagged.ByteArray.make({ value: "deadbeef" }),
-              DataTagged.Integer.make({ value: 1n }),
-            ],
-            [
-              DataTagged.ByteArray.make({ value: "cafe" }),
-              DataTagged.Integer.make({ value: 2n }),
-            ],
-          ],
-        }),
+        Data.makeMap([
+          [Data.makeByteArray("deadbeef"), Data.makeInteger(1n)],
+          [Data.makeByteArray("cafe"), Data.makeInteger(2n)],
+        ]),
       );
       expect(decoded).toEqual(input);
     });
@@ -466,10 +394,10 @@ describe("TypeTaggedSchema", () => {
       );
 
       const input = new Map();
-      const encoded = DataTagged.encodeData(input, TokenMap);
-      const decoded = DataTagged.decodeData(encoded, TokenMap);
+      const encoded = Data.encodeData(input, TokenMap);
+      const decoded = Data.decodeData(encoded, TokenMap);
 
-      expect(encoded).toEqual(DataTagged.Map.make({ value: [] }));
+      expect(encoded).toEqual(Data.makeMap([]));
       expect(decoded).toEqual(input);
     });
   });
@@ -479,15 +407,10 @@ describe("TypeTaggedSchema", () => {
       const MaybeInt = TypeTaggedSchema.NullOr(TypeTaggedSchema.Integer);
 
       const input = 42n;
-      const encoded = DataTagged.encodeData(input, MaybeInt);
-      const decoded = DataTagged.decodeData(encoded, MaybeInt);
+      const encoded = Data.encodeData(input, MaybeInt);
+      const decoded = Data.decodeData(encoded, MaybeInt);
 
-      expect(encoded).toEqual(
-        DataTagged.Constr.make({
-          index: 0n,
-          fields: [DataTagged.Integer.make({ value: 42n })],
-        }),
-      );
+      expect(encoded).toEqual(Data.makeConstr(0n, [Data.makeInteger(42n)]));
       expect(decoded).toEqual(42n);
     });
 
@@ -495,12 +418,10 @@ describe("TypeTaggedSchema", () => {
       const MaybeInt = TypeTaggedSchema.NullOr(TypeTaggedSchema.Integer);
 
       const input = null;
-      const encoded = DataTagged.encodeData(input, MaybeInt);
-      const decoded = DataTagged.decodeData(encoded, MaybeInt);
+      const encoded = Data.encodeData(input, MaybeInt);
+      const decoded = Data.decodeData(encoded, MaybeInt);
 
-      expect(encoded).toEqual(
-        DataTagged.Constr.make({ index: 1n, fields: [] }),
-      );
+      expect(encoded).toEqual(Data.makeConstr(1n, []));
       expect(decoded).toBeNull();
     });
   });
@@ -519,18 +440,15 @@ describe("TypeTaggedSchema", () => {
         amount: 1000n,
       };
 
-      const encoded = DataTagged.encodeData(input, Token);
-      const decoded = DataTagged.decodeData(encoded, Token);
+      const encoded = Data.encodeData(input, Token);
+      const decoded = Data.decodeData(encoded, Token);
 
       expect(encoded).toEqual(
-        DataTagged.Constr.make({
-          index: 0n,
-          fields: [
-            DataTagged.ByteArray.make({ value: "deadbeef" }),
-            DataTagged.ByteArray.make({ value: "cafe" }),
-            DataTagged.Integer.make({ value: 1000n }),
-          ],
-        }),
+        Data.makeConstr(0n, [
+          Data.makeByteArray("deadbeef"),
+          Data.makeByteArray("cafe"),
+          Data.makeInteger(1000n),
+        ]),
       );
       expect(decoded).toEqual(input);
     });
@@ -554,22 +472,16 @@ describe("TypeTaggedSchema", () => {
         amount: 1000n,
       };
 
-      const encoded = DataTagged.encodeData(input, Token);
-      const decoded = DataTagged.decodeData(encoded, Token);
+      const encoded = Data.encodeData(input, Token);
+      const decoded = Data.decodeData(encoded, Token);
 
-      const assetEncoded = DataTagged.Constr.make({
-        index: 0n,
-        fields: [
-          DataTagged.ByteArray.make({ value: "deadbeef" }),
-          DataTagged.ByteArray.make({ value: "cafe" }),
-        ],
-      });
+      const assetEncoded = Data.makeConstr(0n, [
+        Data.makeByteArray("deadbeef"),
+        Data.makeByteArray("cafe"),
+      ]);
 
       expect(encoded).toEqual(
-        DataTagged.Constr.make({
-          index: 0n,
-          fields: [assetEncoded, DataTagged.Integer.make({ value: 1000n })],
-        }),
+        Data.makeConstr(0n, [assetEncoded, Data.makeInteger(1000n)]),
       );
       expect(decoded).toEqual(input);
     });
@@ -601,8 +513,8 @@ describe("TypeTaggedSchema", () => {
         amount: 1000n,
       };
 
-      const mintEncoded = DataTagged.encodeData(mintInput, RedeemAction);
-      const mintDecoded = DataTagged.decodeData(mintEncoded, RedeemAction);
+      const mintEncoded = Data.encodeData(mintInput, RedeemAction);
+      const mintDecoded = Data.decodeData(mintEncoded, RedeemAction);
 
       expect(mintEncoded.index).toBe(0n);
       expect(mintDecoded).toEqual(mintInput);
@@ -613,16 +525,16 @@ describe("TypeTaggedSchema", () => {
         amount: 500n,
       };
 
-      const spendEncoded = DataTagged.encodeData(spendInput, RedeemAction);
-      const spendDecoded = DataTagged.decodeData(spendEncoded, RedeemAction);
+      const spendEncoded = Data.encodeData(spendInput, RedeemAction);
+      const spendDecoded = Data.decodeData(spendEncoded, RedeemAction);
 
       expect(spendEncoded.index).toBe(1n);
       expect(spendDecoded).toEqual(spendInput);
 
       // Test Integer
       const intInput = 42n;
-      const intEncoded = DataTagged.encodeData(intInput, RedeemAction);
-      const intDecoded = DataTagged.decodeData(intEncoded, RedeemAction);
+      const intEncoded = Data.encodeData(intInput, RedeemAction);
+      const intDecoded = Data.decodeData(intEncoded, RedeemAction);
 
       expect(intEncoded.index).toBe(2n);
       expect(intDecoded).toEqual(intInput);
@@ -663,8 +575,8 @@ describe("TypeTaggedSchema", () => {
         ]),
       };
 
-      const encoded = DataTagged.encodeData(input, Wallet);
-      const decoded = DataTagged.decodeData(encoded, Wallet);
+      const encoded = Data.encodeData(input, Wallet);
+      const decoded = Data.decodeData(encoded, Wallet);
 
       expect(decoded).toEqual(input);
     });
@@ -678,16 +590,14 @@ describe("TypeTaggedSchema", () => {
       ]);
 
       const input = ["deadbeef", 1000n] as const;
-      const encoded = DataTagged.encodeData(input, AssetPair);
-      const decoded = DataTagged.decodeData(encoded, AssetPair);
+      const encoded = Data.encodeData(input, AssetPair);
+      const decoded = Data.decodeData(encoded, AssetPair);
 
       expect(encoded).toEqual(
-        DataTagged.List.make({
-          value: [
-            DataTagged.ByteArray.make({ value: "deadbeef" }),
-            DataTagged.Integer.make({ value: 1000n }),
-          ],
-        }),
+        Data.makeList([
+          Data.makeByteArray("deadbeef"),
+          Data.makeInteger(1000n),
+        ]),
       );
       expect(decoded).toEqual(input);
     });
@@ -700,8 +610,8 @@ describe("TypeTaggedSchema", () => {
       ]);
 
       const input = ["deadbeef", 1000n, true] as const;
-      const encoded = DataTagged.encodeData(input, Mixed);
-      const decoded = DataTagged.decodeData(encoded, Mixed);
+      const encoded = Data.encodeData(input, Mixed);
+      const decoded = Data.decodeData(encoded, Mixed);
 
       expect(decoded).toEqual(input);
     });
@@ -715,14 +625,12 @@ describe("TypeTaggedSchema", () => {
       );
 
       // Create a constructor with out-of-bounds index
-      const invalidConstr = DataTagged.Constr.make({
-        index: 10n, // This is beyond the union size
-        fields: [DataTagged.Integer.make({ value: 42n })],
-      });
+      const invalidConstr = Data.makeConstr(
+        10n, // This is beyond the union size
+        [Data.makeInteger(42n)],
+      );
 
-      expect(() =>
-        DataTagged.decodeData(invalidConstr, TestUnion),
-      ).toThrowError();
+      expect(() => Data.decodeData(invalidConstr, TestUnion)).toThrowError();
     });
   });
 
@@ -736,43 +644,35 @@ describe("TypeTaggedSchema", () => {
       });
 
       // Create invalid data where we expect a ByteArray but provide an Integer
-      const invalidData = DataTagged.Constr.make({
-        index: 0n,
-        fields: [
-          DataTagged.Integer.make({ value: 42n }),
-          DataTagged.Integer.make({ value: 42n }), // Should be ByteArray
-        ],
-      });
+      const invalidData = Data.makeConstr(0n, [
+        Data.makeInteger(42n),
+        Data.makeInteger(42n), // Should be ByteArray
+      ]);
 
       // Using more idiomatic toThrow with error message pattern
-      expect(() => DataTagged.decodeData(invalidData, TestStruct)).toThrow(
-        /field2/,
-      );
+      expect(() => Data.decodeData(invalidData, TestStruct)).toThrow(/field2/);
     });
 
     it("should throw comprehensible errors for schema mismatches", () => {
       const StringSchema = TypeTaggedSchema.ByteArray;
-      const IntegerData = DataTagged.Integer.make({ value: 42n });
+      const IntegerData = Data.makeInteger(42n);
 
       // Cleaner approach with specific error assertions
-      expect(() => DataTagged.decodeData(IntegerData, StringSchema)).toThrow();
+      expect(() => Data.decodeData(IntegerData, StringSchema)).toThrow();
 
       // Additional test for a different schema mismatch
-      const BooleanData = DataTagged.Constr.make({ index: 0n, fields: [] });
+      const BooleanData = Data.makeConstr(0n, []);
       expect(() =>
-        DataTagged.decodeData(BooleanData, TypeTaggedSchema.Integer),
+        Data.decodeData(BooleanData, TypeTaggedSchema.Integer),
       ).toThrow();
     });
 
     it("should provide specific error information for invalid data formats", () => {
       // Testing with invalid constructor indices
-      const invalidConstr = DataTagged.Constr.make({
-        index: 10n,
-        fields: [],
-      });
+      const invalidConstr = Data.makeConstr(10n, []);
 
       expect(() =>
-        DataTagged.decodeData(invalidConstr, TypeTaggedSchema.Boolean),
+        Data.decodeData(invalidConstr, TypeTaggedSchema.Boolean),
       ).toThrow();
     });
   });

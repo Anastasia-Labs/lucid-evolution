@@ -387,7 +387,6 @@ describe("DataTagged Property Tests", () => {
             amount: TypeTaggedSchema.Integer,
           }),
         });
-        type TransferAction = typeof TransferAction.Type;
 
         const Action = TypeTaggedSchema.Union(
           MintAction,

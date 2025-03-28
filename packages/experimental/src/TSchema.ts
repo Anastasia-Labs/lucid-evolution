@@ -353,8 +353,6 @@ interface Union<Members extends ReadonlyArray<Schema.Schema.Any>>
 export const Union = <Members extends ReadonlyArray<Schema.Schema.Any>>(
   ...members: Members
 ): Union<Members> => {
-  // Check if members are literal ast , and spread them
-
   return Schema.transformOrFail(
     DataTagged.Constr,
     Schema.typeSchema(Schema.Union(...members)),
@@ -366,11 +364,11 @@ export const Union = <Members extends ReadonlyArray<Schema.Schema.Any>>(
           members[index] as Schema.Schema<any, any, never>,
         )(value).pipe(
           ParseResult.map((value) => {
-            const a = value;
+            const fields = [value];
             return {
               _tag: "Constr",
               index: BigInt(index),
-              fields: value.fields.length > 0 ? value.fields : [],
+              fields,
             };
           }),
         );
@@ -391,7 +389,7 @@ export const Union = <Members extends ReadonlyArray<Schema.Schema.Any>>(
         }
         // Get the member schema for this index
         const member = members[memberIndex] as Schema.Schema<any, any, never>;
-        return ParseResult.decode(member)(value);
+        return ParseResult.decode(member)(value.fields[0]);
       },
     },
   );
