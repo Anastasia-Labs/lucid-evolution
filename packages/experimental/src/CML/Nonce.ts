@@ -9,11 +9,11 @@ export class NonceError extends Data.TaggedError("NonceError")<{
 
 /**
  * Method free of Nonce
- * 
+ *
  * @example
  * import { Nonce } from "@lucid-evolution/experimental";
  * import { Effect } from "effect";
- * 
+ *
  * // Using Effect for safe execution with error handling
  * Effect.gen(function*() {
  * // Assume we have a Nonce instance
@@ -21,7 +21,7 @@ export class NonceError extends Data.TaggedError("NonceError")<{
  *   const result = yield* Nonce.free(instance);
  *   console.log(result);
  * });
- * 
+ *
  * @since 2.0.0
  * @category Methods
  */
@@ -33,18 +33,18 @@ export const free = Effect.fn(
         new NonceError({
           message: `Nonce.free failed Hint: Check if you're calling free() more than once.`,
         }),
-    })
+    }),
 );
 
 /**
  * Unsafely calls instance.free without Effect wrapper
- * 
+ *
  * @example
  * import { Nonce } from "@lucid-evolution/experimental";
- * 
+ *
  * // Assume we have a Nonce instance
  * const instance = ... ;
- * 
+ *
  * // Using try/catch for error handling
  * try {
  *   const result = Nonce.unsafeFree(instance);
@@ -52,7 +52,7 @@ export const free = Effect.fn(
  * } catch (error) {
  *   console.error(`Nonce.unsafeFree failed: ${error.message}`);
  * }
- * 
+ *
  * @since 2.0.0
  * @category Methods
  */
@@ -61,11 +61,11 @@ export const unsafeFree = (instance: CML.Nonce): void =>
 
 /**
  * Method toCborBytes of Nonce
- * 
+ *
  * @example
  * import { Nonce } from "@lucid-evolution/experimental";
  * import { Effect } from "effect";
- * 
+ *
  * // Using Effect for safe execution with error handling
  * Effect.gen(function*() {
  * // Assume we have a Nonce instance
@@ -73,7 +73,7 @@ export const unsafeFree = (instance: CML.Nonce): void =>
  *   const result = yield* Nonce.toCborBytes(instance);
  *   console.log(result);
  * });
- * 
+ *
  * @since 2.0.0
  * @category Methods
  */
@@ -85,18 +85,18 @@ export const toCborBytes = Effect.fn(
         new NonceError({
           message: `Nonce.toCborBytes failed Nonce is not valid for Uint8Array conversion. Hint: Check byte length and encoding.`,
         }),
-    })
+    }),
 );
 
 /**
  * Unsafely calls instance.toCborBytes without Effect wrapper
- * 
+ *
  * @example
  * import { Nonce } from "@lucid-evolution/experimental";
- * 
+ *
  * // Assume we have a Nonce instance
  * const instance = ... ;
- * 
+ *
  * // Using try/catch for error handling
  * try {
  *   const result = Nonce.unsafeToCborBytes(instance);
@@ -104,7 +104,7 @@ export const toCborBytes = Effect.fn(
  * } catch (error) {
  *   console.error(`Nonce.unsafeToCborBytes failed: ${error.message}`);
  * }
- * 
+ *
  * @since 2.0.0
  * @category Methods
  */
@@ -113,11 +113,11 @@ export const unsafeToCborBytes = (instance: CML.Nonce): Uint8Array =>
 
 /**
  * Method toCanonicalCborBytes of Nonce
- * 
+ *
  * @example
  * import { Nonce } from "@lucid-evolution/experimental";
  * import { Effect } from "effect";
- * 
+ *
  * // Using Effect for safe execution with error handling
  * Effect.gen(function*() {
  * // Assume we have a Nonce instance
@@ -125,7 +125,7 @@ export const unsafeToCborBytes = (instance: CML.Nonce): Uint8Array =>
  *   const result = yield* Nonce.toCanonicalCborBytes(instance);
  *   console.log(result);
  * });
- * 
+ *
  * @since 2.0.0
  * @category Methods
  */
@@ -137,18 +137,18 @@ export const toCanonicalCborBytes = Effect.fn(
         new NonceError({
           message: `Nonce.toCanonicalCborBytes failed Nonce is not valid for Uint8Array conversion. Hint: Check byte length and encoding.`,
         }),
-    })
+    }),
 );
 
 /**
  * Unsafely calls instance.toCanonicalCborBytes without Effect wrapper
- * 
+ *
  * @example
  * import { Nonce } from "@lucid-evolution/experimental";
- * 
+ *
  * // Assume we have a Nonce instance
  * const instance = ... ;
- * 
+ *
  * // Using try/catch for error handling
  * try {
  *   const result = Nonce.unsafeToCanonicalCborBytes(instance);
@@ -156,7 +156,7 @@ export const toCanonicalCborBytes = Effect.fn(
  * } catch (error) {
  *   console.error(`Nonce.unsafeToCanonicalCborBytes failed: ${error.message}`);
  * }
- * 
+ *
  * @since 2.0.0
  * @category Methods
  */
@@ -165,38 +165,39 @@ export const unsafeToCanonicalCborBytes = (instance: CML.Nonce): Uint8Array =>
 
 /**
  * Static method fromCborBytes of Nonce
- * 
+ *
  * @example
  * import { Nonce } from "@lucid-evolution/experimental";
  * import { Effect } from "effect";
- * 
+ *
  * // Using Effect for safe execution with error handling
  * Effect.gen(function*() {
- * 
+ *
  *   const result = yield* Nonce.fromCborBytes( parameters );
  *   console.log(result);
  * });
- * 
+ *
  * @since 2.0.0
  * @category Constructors
  */
 export const fromCborBytes = Effect.fn(function* (cborBytes: Uint8Array) {
   return yield* Effect.try({
     try: () => CML.Nonce.from_cbor_bytes(cborBytes),
-    catch: () => new NonceError({
-      message: `Nonce.fromCborBytes failed with parameters: ${cborBytes}. Hint: Check byte length and encoding.`,
-    }),
+    catch: () =>
+      new NonceError({
+        message: `Nonce.fromCborBytes failed with parameters: ${cborBytes}. Hint: Check byte length and encoding.`,
+      }),
   });
 });
 
 /**
  * Unsafely calls Nonce.fromCborBytes without Effect wrapper
- * 
+ *
  * @example
  * import { Nonce } from "@lucid-evolution/experimental";
- * 
- * 
- * 
+ *
+ *
+ *
  * // Using try/catch for error handling
  * try {
  *   const result = Nonce.unsafeFromCborBytes( parameters );
@@ -204,7 +205,7 @@ export const fromCborBytes = Effect.fn(function* (cborBytes: Uint8Array) {
  * } catch (error) {
  *   console.error(`Nonce.unsafeFromCborBytes failed: ${error.message}`);
  * }
- * 
+ *
  * @since 2.0.0
  * @category Constructors
  */
@@ -213,11 +214,11 @@ export const unsafeFromCborBytes = (cborBytes: Uint8Array) =>
 
 /**
  * Method toCborHex of Nonce
- * 
+ *
  * @example
  * import { Nonce } from "@lucid-evolution/experimental";
  * import { Effect } from "effect";
- * 
+ *
  * // Using Effect for safe execution with error handling
  * Effect.gen(function*() {
  * // Assume we have a Nonce instance
@@ -225,7 +226,7 @@ export const unsafeFromCborBytes = (cborBytes: Uint8Array) =>
  *   const result = yield* Nonce.toCborHex(instance);
  *   console.log(result);
  * });
- * 
+ *
  * @since 2.0.0
  * @category Methods
  */
@@ -237,18 +238,18 @@ export const toCborHex = Effect.fn(
         new NonceError({
           message: `Nonce.toCborHex failed Nonce is not valid for string conversion. Hint: Make sure it's a valid hex string representing CBOR data.`,
         }),
-    })
+    }),
 );
 
 /**
  * Unsafely calls instance.toCborHex without Effect wrapper
- * 
+ *
  * @example
  * import { Nonce } from "@lucid-evolution/experimental";
- * 
+ *
  * // Assume we have a Nonce instance
  * const instance = ... ;
- * 
+ *
  * // Using try/catch for error handling
  * try {
  *   const result = Nonce.unsafeToCborHex(instance);
@@ -256,7 +257,7 @@ export const toCborHex = Effect.fn(
  * } catch (error) {
  *   console.error(`Nonce.unsafeToCborHex failed: ${error.message}`);
  * }
- * 
+ *
  * @since 2.0.0
  * @category Methods
  */
@@ -265,11 +266,11 @@ export const unsafeToCborHex = (instance: CML.Nonce): string =>
 
 /**
  * Method toCanonicalCborHex of Nonce
- * 
+ *
  * @example
  * import { Nonce } from "@lucid-evolution/experimental";
  * import { Effect } from "effect";
- * 
+ *
  * // Using Effect for safe execution with error handling
  * Effect.gen(function*() {
  * // Assume we have a Nonce instance
@@ -277,7 +278,7 @@ export const unsafeToCborHex = (instance: CML.Nonce): string =>
  *   const result = yield* Nonce.toCanonicalCborHex(instance);
  *   console.log(result);
  * });
- * 
+ *
  * @since 2.0.0
  * @category Methods
  */
@@ -289,18 +290,18 @@ export const toCanonicalCborHex = Effect.fn(
         new NonceError({
           message: `Nonce.toCanonicalCborHex failed Nonce is not valid for string conversion. Hint: Make sure it's a valid hex string representing CBOR data.`,
         }),
-    })
+    }),
 );
 
 /**
  * Unsafely calls instance.toCanonicalCborHex without Effect wrapper
- * 
+ *
  * @example
  * import { Nonce } from "@lucid-evolution/experimental";
- * 
+ *
  * // Assume we have a Nonce instance
  * const instance = ... ;
- * 
+ *
  * // Using try/catch for error handling
  * try {
  *   const result = Nonce.unsafeToCanonicalCborHex(instance);
@@ -308,7 +309,7 @@ export const toCanonicalCborHex = Effect.fn(
  * } catch (error) {
  *   console.error(`Nonce.unsafeToCanonicalCborHex failed: ${error.message}`);
  * }
- * 
+ *
  * @since 2.0.0
  * @category Methods
  */
@@ -317,38 +318,39 @@ export const unsafeToCanonicalCborHex = (instance: CML.Nonce): string =>
 
 /**
  * Static method fromCborHex of Nonce
- * 
+ *
  * @example
  * import { Nonce } from "@lucid-evolution/experimental";
  * import { Effect } from "effect";
- * 
+ *
  * // Using Effect for safe execution with error handling
  * Effect.gen(function*() {
- * 
+ *
  *   const result = yield* Nonce.fromCborHex( parameters );
  *   console.log(result);
  * });
- * 
+ *
  * @since 2.0.0
  * @category Constructors
  */
 export const fromCborHex = Effect.fn(function* (cborBytes: string) {
   return yield* Effect.try({
     try: () => CML.Nonce.from_cbor_hex(cborBytes),
-    catch: () => new NonceError({
-      message: `Nonce.fromCborHex failed with parameters: ${cborBytes}. Hint: Make sure it's a valid hex string representing CBOR data.`,
-    }),
+    catch: () =>
+      new NonceError({
+        message: `Nonce.fromCborHex failed with parameters: ${cborBytes}. Hint: Make sure it's a valid hex string representing CBOR data.`,
+      }),
   });
 });
 
 /**
  * Unsafely calls Nonce.fromCborHex without Effect wrapper
- * 
+ *
  * @example
  * import { Nonce } from "@lucid-evolution/experimental";
- * 
- * 
- * 
+ *
+ *
+ *
  * // Using try/catch for error handling
  * try {
  *   const result = Nonce.unsafeFromCborHex( parameters );
@@ -356,7 +358,7 @@ export const fromCborHex = Effect.fn(function* (cborBytes: string) {
  * } catch (error) {
  *   console.error(`Nonce.unsafeFromCborHex failed: ${error.message}`);
  * }
- * 
+ *
  * @since 2.0.0
  * @category Constructors
  */
@@ -365,11 +367,11 @@ export const unsafeFromCborHex = (cborBytes: string) =>
 
 /**
  * Method toJson of Nonce
- * 
+ *
  * @example
  * import { Nonce } from "@lucid-evolution/experimental";
  * import { Effect } from "effect";
- * 
+ *
  * // Using Effect for safe execution with error handling
  * Effect.gen(function*() {
  * // Assume we have a Nonce instance
@@ -377,7 +379,7 @@ export const unsafeFromCborHex = (cborBytes: string) =>
  *   const result = yield* Nonce.toJson(instance);
  *   console.log(result);
  * });
- * 
+ *
  * @since 2.0.0
  * @category Methods
  */
@@ -389,18 +391,18 @@ export const toJson = Effect.fn(
         new NonceError({
           message: `Nonce.toJson failed Nonce is not valid for string conversion. Hint: Validate your JSON structure.`,
         }),
-    })
+    }),
 );
 
 /**
  * Unsafely calls instance.toJson without Effect wrapper
- * 
+ *
  * @example
  * import { Nonce } from "@lucid-evolution/experimental";
- * 
+ *
  * // Assume we have a Nonce instance
  * const instance = ... ;
- * 
+ *
  * // Using try/catch for error handling
  * try {
  *   const result = Nonce.unsafeToJson(instance);
@@ -408,7 +410,7 @@ export const toJson = Effect.fn(
  * } catch (error) {
  *   console.error(`Nonce.unsafeToJson failed: ${error.message}`);
  * }
- * 
+ *
  * @since 2.0.0
  * @category Methods
  */
@@ -417,11 +419,11 @@ export const unsafeToJson = (instance: CML.Nonce): string =>
 
 /**
  * Method toJsValue of Nonce
- * 
+ *
  * @example
  * import { Nonce } from "@lucid-evolution/experimental";
  * import { Effect } from "effect";
- * 
+ *
  * // Using Effect for safe execution with error handling
  * Effect.gen(function*() {
  * // Assume we have a Nonce instance
@@ -429,7 +431,7 @@ export const unsafeToJson = (instance: CML.Nonce): string =>
  *   const result = yield* Nonce.toJsValue(instance);
  *   console.log(result);
  * });
- * 
+ *
  * @since 2.0.0
  * @category Methods
  */
@@ -441,18 +443,18 @@ export const toJsValue = Effect.fn(
         new NonceError({
           message: `Nonce.toJsValue failed Nonce is not valid for any conversion. `,
         }),
-    })
+    }),
 );
 
 /**
  * Unsafely calls instance.toJsValue without Effect wrapper
- * 
+ *
  * @example
  * import { Nonce } from "@lucid-evolution/experimental";
- * 
+ *
  * // Assume we have a Nonce instance
  * const instance = ... ;
- * 
+ *
  * // Using try/catch for error handling
  * try {
  *   const result = Nonce.unsafeToJsValue(instance);
@@ -460,7 +462,7 @@ export const toJsValue = Effect.fn(
  * } catch (error) {
  *   console.error(`Nonce.unsafeToJsValue failed: ${error.message}`);
  * }
- * 
+ *
  * @since 2.0.0
  * @category Methods
  */
@@ -469,38 +471,39 @@ export const unsafeToJsValue = (instance: CML.Nonce): any =>
 
 /**
  * Static method fromJson of Nonce
- * 
+ *
  * @example
  * import { Nonce } from "@lucid-evolution/experimental";
  * import { Effect } from "effect";
- * 
+ *
  * // Using Effect for safe execution with error handling
  * Effect.gen(function*() {
- * 
+ *
  *   const result = yield* Nonce.fromJson( parameters );
  *   console.log(result);
  * });
- * 
+ *
  * @since 2.0.0
  * @category Constructors
  */
 export const fromJson = Effect.fn(function* (json: string) {
   return yield* Effect.try({
     try: () => CML.Nonce.from_json(json),
-    catch: () => new NonceError({
-      message: `Nonce.fromJson failed with parameters: ${json}. Hint: Validate your JSON structure.`,
-    }),
+    catch: () =>
+      new NonceError({
+        message: `Nonce.fromJson failed with parameters: ${json}. Hint: Validate your JSON structure.`,
+      }),
   });
 });
 
 /**
  * Unsafely calls Nonce.fromJson without Effect wrapper
- * 
+ *
  * @example
  * import { Nonce } from "@lucid-evolution/experimental";
- * 
- * 
- * 
+ *
+ *
+ *
  * // Using try/catch for error handling
  * try {
  *   const result = Nonce.unsafeFromJson( parameters );
@@ -508,47 +511,47 @@ export const fromJson = Effect.fn(function* (json: string) {
  * } catch (error) {
  *   console.error(`Nonce.unsafeFromJson failed: ${error.message}`);
  * }
- * 
+ *
  * @since 2.0.0
  * @category Constructors
  */
-export const unsafeFromJson = (json: string) =>
-  Effect.runSync(fromJson(json));
+export const unsafeFromJson = (json: string) => Effect.runSync(fromJson(json));
 
 /**
  * Static method newIdentity of Nonce
- * 
+ *
  * @example
  * import { Nonce } from "@lucid-evolution/experimental";
  * import { Effect } from "effect";
- * 
+ *
  * // Using Effect for safe execution with error handling
  * Effect.gen(function*() {
- * 
+ *
  *   const result = yield* Nonce.newIdentity();
  *   console.log(result);
  * });
- * 
+ *
  * @since 2.0.0
  * @category Constructors
  */
 export const newIdentity = Effect.fn(function* () {
   return yield* Effect.try({
     try: () => CML.Nonce.new_identity(),
-    catch: () => new NonceError({
-      message: `Nonce.newIdentity failed `,
-    }),
+    catch: () =>
+      new NonceError({
+        message: `Nonce.newIdentity failed `,
+      }),
   });
 });
 
 /**
  * Unsafely calls Nonce.newIdentity without Effect wrapper
- * 
+ *
  * @example
  * import { Nonce } from "@lucid-evolution/experimental";
- * 
- * 
- * 
+ *
+ *
+ *
  * // Using try/catch for error handling
  * try {
  *   const result = Nonce.unsafeNewIdentity();
@@ -556,47 +559,47 @@ export const newIdentity = Effect.fn(function* () {
  * } catch (error) {
  *   console.error(`Nonce.unsafeNewIdentity failed: ${error.message}`);
  * }
- * 
+ *
  * @since 2.0.0
  * @category Constructors
  */
-export const unsafeNewIdentity = () =>
-  Effect.runSync(newIdentity());
+export const unsafeNewIdentity = () => Effect.runSync(newIdentity());
 
 /**
  * Static method newHash of Nonce
- * 
+ *
  * @example
  * import { Nonce } from "@lucid-evolution/experimental";
  * import { Effect } from "effect";
- * 
+ *
  * // Using Effect for safe execution with error handling
  * Effect.gen(function*() {
- * 
+ *
  *   const result = yield* Nonce.newHash( parameters );
  *   console.log(result);
  * });
- * 
+ *
  * @since 2.0.0
  * @category Constructors
  */
 export const newHash = Effect.fn(function* (hash: CML.NonceHash) {
   return yield* Effect.try({
     try: () => CML.Nonce.new_hash(hash),
-    catch: () => new NonceError({
-      message: `Nonce.newHash failed with parameters: ${hash} (NonceHash). `,
-    }),
+    catch: () =>
+      new NonceError({
+        message: `Nonce.newHash failed with parameters: ${hash} (NonceHash). `,
+      }),
   });
 });
 
 /**
  * Unsafely calls Nonce.newHash without Effect wrapper
- * 
+ *
  * @example
  * import { Nonce } from "@lucid-evolution/experimental";
- * 
- * 
- * 
+ *
+ *
+ *
  * // Using try/catch for error handling
  * try {
  *   const result = Nonce.unsafeNewHash( parameters );
@@ -604,7 +607,7 @@ export const newHash = Effect.fn(function* (hash: CML.NonceHash) {
  * } catch (error) {
  *   console.error(`Nonce.unsafeNewHash failed: ${error.message}`);
  * }
- * 
+ *
  * @since 2.0.0
  * @category Constructors
  */
@@ -613,11 +616,11 @@ export const unsafeNewHash = (hash: CML.NonceHash) =>
 
 /**
  * Method kind of Nonce
- * 
+ *
  * @example
  * import { Nonce } from "@lucid-evolution/experimental";
  * import { Effect } from "effect";
- * 
+ *
  * // Using Effect for safe execution with error handling
  * Effect.gen(function*() {
  * // Assume we have a Nonce instance
@@ -625,7 +628,7 @@ export const unsafeNewHash = (hash: CML.NonceHash) =>
  *   const result = yield* Nonce.kind(instance);
  *   console.log(result);
  * });
- * 
+ *
  * @since 2.0.0
  * @category Methods
  */
@@ -637,18 +640,18 @@ export const kind = Effect.fn(
         new NonceError({
           message: `Nonce.kind failed `,
         }),
-    })
+    }),
 );
 
 /**
  * Unsafely calls instance.kind without Effect wrapper
- * 
+ *
  * @example
  * import { Nonce } from "@lucid-evolution/experimental";
- * 
+ *
  * // Assume we have a Nonce instance
  * const instance = ... ;
- * 
+ *
  * // Using try/catch for error handling
  * try {
  *   const result = Nonce.unsafeKind(instance);
@@ -656,7 +659,7 @@ export const kind = Effect.fn(
  * } catch (error) {
  *   console.error(`Nonce.unsafeKind failed: ${error.message}`);
  * }
- * 
+ *
  * @since 2.0.0
  * @category Methods
  */
@@ -665,11 +668,11 @@ export const unsafeKind = (instance: CML.Nonce): CML.NonceKind =>
 
 /**
  * Method asHash of Nonce
- * 
+ *
  * @example
  * import { Nonce } from "@lucid-evolution/experimental";
  * import { Effect } from "effect";
- * 
+ *
  * // Using Effect for safe execution with error handling
  * Effect.gen(function*() {
  * // Assume we have a Nonce instance
@@ -677,7 +680,7 @@ export const unsafeKind = (instance: CML.Nonce): CML.NonceKind =>
  *   const result = yield* Nonce.asHash(instance);
  *   console.log(result);
  * });
- * 
+ *
  * @since 2.0.0
  * @category Methods
  */
@@ -689,18 +692,18 @@ export const asHash = Effect.fn(
         new NonceError({
           message: `Nonce.asHash failed `,
         }),
-    })
+    }),
 );
 
 /**
  * Unsafely calls instance.asHash without Effect wrapper
- * 
+ *
  * @example
  * import { Nonce } from "@lucid-evolution/experimental";
- * 
+ *
  * // Assume we have a Nonce instance
  * const instance = ... ;
- * 
+ *
  * // Using try/catch for error handling
  * try {
  *   const result = Nonce.unsafeAsHash(instance);
@@ -708,7 +711,7 @@ export const asHash = Effect.fn(
  * } catch (error) {
  *   console.error(`Nonce.unsafeAsHash failed: ${error.message}`);
  * }
- * 
+ *
  * @since 2.0.0
  * @category Methods
  */

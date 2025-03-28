@@ -2,10 +2,14 @@ import * as CML from "@anastasia-labs/cardano-multiplatform-lib-nodejs";
 
 export type AddressHeaderKind = CML.AddressHeaderKind;
 
-export const BasePaymentKeyStakeKey = CML.AddressHeaderKind.BasePaymentKeyStakeKey;
-export const BasePaymentScriptStakeKey = CML.AddressHeaderKind.BasePaymentScriptStakeKey;
-export const BasePaymentKeyStakeScript = CML.AddressHeaderKind.BasePaymentKeyStakeScript;
-export const BasePaymentScriptStakeScript = CML.AddressHeaderKind.BasePaymentScriptStakeScript;
+export const BasePaymentKeyStakeKey =
+  CML.AddressHeaderKind.BasePaymentKeyStakeKey;
+export const BasePaymentScriptStakeKey =
+  CML.AddressHeaderKind.BasePaymentScriptStakeKey;
+export const BasePaymentKeyStakeScript =
+  CML.AddressHeaderKind.BasePaymentKeyStakeScript;
+export const BasePaymentScriptStakeScript =
+  CML.AddressHeaderKind.BasePaymentScriptStakeScript;
 export const PointerKey = CML.AddressHeaderKind.PointerKey;
 export const PointerScript = CML.AddressHeaderKind.PointerScript;
 export const EnterpriseKey = CML.AddressHeaderKind.EnterpriseKey;
@@ -14,16 +18,15 @@ export const Byron = CML.AddressHeaderKind.Byron;
 export const RewardKey = CML.AddressHeaderKind.RewardKey;
 export const RewardScript = CML.AddressHeaderKind.RewardScript;
 
-
 /**
  * Get all values of the AddressHeaderKind enum
- * 
+ *
  * @example
  * import { AddressHeaderKind } from "@lucid-evolution/experimental";
- * 
+ *
  * const allValues = AddressHeaderKind.values();
  * console.log(allValues);
- * 
+ *
  * @since 2.0.0
  * @category Utils
  */
@@ -38,18 +41,18 @@ export const values = (): Array<CML.AddressHeaderKind> => [
   CML.AddressHeaderKind.EnterpriseScript,
   CML.AddressHeaderKind.Byron,
   CML.AddressHeaderKind.RewardKey,
-  CML.AddressHeaderKind.RewardScript
+  CML.AddressHeaderKind.RewardScript,
 ];
 
 /**
  * Convert AddressHeaderKind enum value to string
- * 
+ *
  * @example
  * import { AddressHeaderKind } from "@lucid-evolution/experimental";
- * 
+ *
  * const name = AddressHeaderKind.toString(CML.AddressHeaderKind.BasePaymentKeyStakeKey);
  * console.log(name); // "BasePaymentKeyStakeKey"
- * 
+ *
  * @since 2.0.0
  * @category Utils
  */
@@ -84,13 +87,13 @@ export const toString = (value: CML.AddressHeaderKind): string => {
 
 /**
  * Convert string to AddressHeaderKind enum value
- * 
+ *
  * @example
  * import { AddressHeaderKind } from "@lucid-evolution/experimental";
- * 
+ *
  * const value = AddressHeaderKind.fromString("BasePaymentKeyStakeKey");
  * console.log(value); // Some(CML.AddressHeaderKind.BasePaymentKeyStakeKey)
- * 
+ *
  * @since 2.0.0
  * @category Utils
  */

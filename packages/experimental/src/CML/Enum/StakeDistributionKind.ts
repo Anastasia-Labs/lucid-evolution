@@ -5,33 +5,32 @@ export type StakeDistributionKind = CML.StakeDistributionKind;
 export const SingleKey = CML.StakeDistributionKind.SingleKey;
 export const BootstrapEra = CML.StakeDistributionKind.BootstrapEra;
 
-
 /**
  * Get all values of the StakeDistributionKind enum
- * 
+ *
  * @example
  * import { StakeDistributionKind } from "@lucid-evolution/experimental";
- * 
+ *
  * const allValues = StakeDistributionKind.values();
  * console.log(allValues);
- * 
+ *
  * @since 2.0.0
  * @category Utils
  */
 export const values = (): Array<CML.StakeDistributionKind> => [
   CML.StakeDistributionKind.SingleKey,
-  CML.StakeDistributionKind.BootstrapEra
+  CML.StakeDistributionKind.BootstrapEra,
 ];
 
 /**
  * Convert StakeDistributionKind enum value to string
- * 
+ *
  * @example
  * import { StakeDistributionKind } from "@lucid-evolution/experimental";
- * 
+ *
  * const name = StakeDistributionKind.toString(CML.StakeDistributionKind.SingleKey);
  * console.log(name); // "SingleKey"
- * 
+ *
  * @since 2.0.0
  * @category Utils
  */
@@ -48,17 +47,19 @@ export const toString = (value: CML.StakeDistributionKind): string => {
 
 /**
  * Convert string to StakeDistributionKind enum value
- * 
+ *
  * @example
  * import { StakeDistributionKind } from "@lucid-evolution/experimental";
- * 
+ *
  * const value = StakeDistributionKind.fromString("SingleKey");
  * console.log(value); // Some(CML.StakeDistributionKind.SingleKey)
- * 
+ *
  * @since 2.0.0
  * @category Utils
  */
-export const fromString = (str: string): CML.StakeDistributionKind | undefined => {
+export const fromString = (
+  str: string,
+): CML.StakeDistributionKind | undefined => {
   switch (str) {
     case "SingleKey":
       return CML.StakeDistributionKind.SingleKey;

@@ -9,11 +9,11 @@ export class Ipv4Error extends Data.TaggedError("Ipv4Error")<{
 
 /**
  * Method free of Ipv4
- * 
+ *
  * @example
  * import { Ipv4 } from "@lucid-evolution/experimental";
  * import { Effect } from "effect";
- * 
+ *
  * // Using Effect for safe execution with error handling
  * Effect.gen(function*() {
  * // Assume we have a Ipv4 instance
@@ -21,7 +21,7 @@ export class Ipv4Error extends Data.TaggedError("Ipv4Error")<{
  *   const result = yield* Ipv4.free(instance);
  *   console.log(result);
  * });
- * 
+ *
  * @since 2.0.0
  * @category Methods
  */
@@ -33,18 +33,18 @@ export const free = Effect.fn(
         new Ipv4Error({
           message: `Ipv4.free failed Hint: Check if you're calling free() more than once.`,
         }),
-    })
+    }),
 );
 
 /**
  * Unsafely calls instance.free without Effect wrapper
- * 
+ *
  * @example
  * import { Ipv4 } from "@lucid-evolution/experimental";
- * 
+ *
  * // Assume we have a Ipv4 instance
  * const instance = ... ;
- * 
+ *
  * // Using try/catch for error handling
  * try {
  *   const result = Ipv4.unsafeFree(instance);
@@ -52,7 +52,7 @@ export const free = Effect.fn(
  * } catch (error) {
  *   console.error(`Ipv4.unsafeFree failed: ${error.message}`);
  * }
- * 
+ *
  * @since 2.0.0
  * @category Methods
  */
@@ -61,11 +61,11 @@ export const unsafeFree = (instance: CML.Ipv4): void =>
 
 /**
  * Method toCborBytes of Ipv4
- * 
+ *
  * @example
  * import { Ipv4 } from "@lucid-evolution/experimental";
  * import { Effect } from "effect";
- * 
+ *
  * // Using Effect for safe execution with error handling
  * Effect.gen(function*() {
  * // Assume we have a Ipv4 instance
@@ -73,7 +73,7 @@ export const unsafeFree = (instance: CML.Ipv4): void =>
  *   const result = yield* Ipv4.toCborBytes(instance);
  *   console.log(result);
  * });
- * 
+ *
  * @since 2.0.0
  * @category Methods
  */
@@ -85,18 +85,18 @@ export const toCborBytes = Effect.fn(
         new Ipv4Error({
           message: `Ipv4.toCborBytes failed Ipv4 is not valid for Uint8Array conversion. Hint: Check byte length and encoding.`,
         }),
-    })
+    }),
 );
 
 /**
  * Unsafely calls instance.toCborBytes without Effect wrapper
- * 
+ *
  * @example
  * import { Ipv4 } from "@lucid-evolution/experimental";
- * 
+ *
  * // Assume we have a Ipv4 instance
  * const instance = ... ;
- * 
+ *
  * // Using try/catch for error handling
  * try {
  *   const result = Ipv4.unsafeToCborBytes(instance);
@@ -104,7 +104,7 @@ export const toCborBytes = Effect.fn(
  * } catch (error) {
  *   console.error(`Ipv4.unsafeToCborBytes failed: ${error.message}`);
  * }
- * 
+ *
  * @since 2.0.0
  * @category Methods
  */
@@ -113,11 +113,11 @@ export const unsafeToCborBytes = (instance: CML.Ipv4): Uint8Array =>
 
 /**
  * Method toCanonicalCborBytes of Ipv4
- * 
+ *
  * @example
  * import { Ipv4 } from "@lucid-evolution/experimental";
  * import { Effect } from "effect";
- * 
+ *
  * // Using Effect for safe execution with error handling
  * Effect.gen(function*() {
  * // Assume we have a Ipv4 instance
@@ -125,7 +125,7 @@ export const unsafeToCborBytes = (instance: CML.Ipv4): Uint8Array =>
  *   const result = yield* Ipv4.toCanonicalCborBytes(instance);
  *   console.log(result);
  * });
- * 
+ *
  * @since 2.0.0
  * @category Methods
  */
@@ -137,18 +137,18 @@ export const toCanonicalCborBytes = Effect.fn(
         new Ipv4Error({
           message: `Ipv4.toCanonicalCborBytes failed Ipv4 is not valid for Uint8Array conversion. Hint: Check byte length and encoding.`,
         }),
-    })
+    }),
 );
 
 /**
  * Unsafely calls instance.toCanonicalCborBytes without Effect wrapper
- * 
+ *
  * @example
  * import { Ipv4 } from "@lucid-evolution/experimental";
- * 
+ *
  * // Assume we have a Ipv4 instance
  * const instance = ... ;
- * 
+ *
  * // Using try/catch for error handling
  * try {
  *   const result = Ipv4.unsafeToCanonicalCborBytes(instance);
@@ -156,7 +156,7 @@ export const toCanonicalCborBytes = Effect.fn(
  * } catch (error) {
  *   console.error(`Ipv4.unsafeToCanonicalCborBytes failed: ${error.message}`);
  * }
- * 
+ *
  * @since 2.0.0
  * @category Methods
  */
@@ -165,38 +165,39 @@ export const unsafeToCanonicalCborBytes = (instance: CML.Ipv4): Uint8Array =>
 
 /**
  * Static method fromCborBytes of Ipv4
- * 
+ *
  * @example
  * import { Ipv4 } from "@lucid-evolution/experimental";
  * import { Effect } from "effect";
- * 
+ *
  * // Using Effect for safe execution with error handling
  * Effect.gen(function*() {
- * 
+ *
  *   const result = yield* Ipv4.fromCborBytes( parameters );
  *   console.log(result);
  * });
- * 
+ *
  * @since 2.0.0
  * @category Constructors
  */
 export const fromCborBytes = Effect.fn(function* (cborBytes: Uint8Array) {
   return yield* Effect.try({
     try: () => CML.Ipv4.from_cbor_bytes(cborBytes),
-    catch: () => new Ipv4Error({
-      message: `Ipv4.fromCborBytes failed with parameters: ${cborBytes}. Hint: Check byte length and encoding.`,
-    }),
+    catch: () =>
+      new Ipv4Error({
+        message: `Ipv4.fromCborBytes failed with parameters: ${cborBytes}. Hint: Check byte length and encoding.`,
+      }),
   });
 });
 
 /**
  * Unsafely calls Ipv4.fromCborBytes without Effect wrapper
- * 
+ *
  * @example
  * import { Ipv4 } from "@lucid-evolution/experimental";
- * 
- * 
- * 
+ *
+ *
+ *
  * // Using try/catch for error handling
  * try {
  *   const result = Ipv4.unsafeFromCborBytes( parameters );
@@ -204,7 +205,7 @@ export const fromCborBytes = Effect.fn(function* (cborBytes: Uint8Array) {
  * } catch (error) {
  *   console.error(`Ipv4.unsafeFromCborBytes failed: ${error.message}`);
  * }
- * 
+ *
  * @since 2.0.0
  * @category Constructors
  */
@@ -213,11 +214,11 @@ export const unsafeFromCborBytes = (cborBytes: Uint8Array) =>
 
 /**
  * Method toCborHex of Ipv4
- * 
+ *
  * @example
  * import { Ipv4 } from "@lucid-evolution/experimental";
  * import { Effect } from "effect";
- * 
+ *
  * // Using Effect for safe execution with error handling
  * Effect.gen(function*() {
  * // Assume we have a Ipv4 instance
@@ -225,7 +226,7 @@ export const unsafeFromCborBytes = (cborBytes: Uint8Array) =>
  *   const result = yield* Ipv4.toCborHex(instance);
  *   console.log(result);
  * });
- * 
+ *
  * @since 2.0.0
  * @category Methods
  */
@@ -237,18 +238,18 @@ export const toCborHex = Effect.fn(
         new Ipv4Error({
           message: `Ipv4.toCborHex failed Ipv4 is not valid for string conversion. Hint: Make sure it's a valid hex string representing CBOR data.`,
         }),
-    })
+    }),
 );
 
 /**
  * Unsafely calls instance.toCborHex without Effect wrapper
- * 
+ *
  * @example
  * import { Ipv4 } from "@lucid-evolution/experimental";
- * 
+ *
  * // Assume we have a Ipv4 instance
  * const instance = ... ;
- * 
+ *
  * // Using try/catch for error handling
  * try {
  *   const result = Ipv4.unsafeToCborHex(instance);
@@ -256,7 +257,7 @@ export const toCborHex = Effect.fn(
  * } catch (error) {
  *   console.error(`Ipv4.unsafeToCborHex failed: ${error.message}`);
  * }
- * 
+ *
  * @since 2.0.0
  * @category Methods
  */
@@ -265,11 +266,11 @@ export const unsafeToCborHex = (instance: CML.Ipv4): string =>
 
 /**
  * Method toCanonicalCborHex of Ipv4
- * 
+ *
  * @example
  * import { Ipv4 } from "@lucid-evolution/experimental";
  * import { Effect } from "effect";
- * 
+ *
  * // Using Effect for safe execution with error handling
  * Effect.gen(function*() {
  * // Assume we have a Ipv4 instance
@@ -277,7 +278,7 @@ export const unsafeToCborHex = (instance: CML.Ipv4): string =>
  *   const result = yield* Ipv4.toCanonicalCborHex(instance);
  *   console.log(result);
  * });
- * 
+ *
  * @since 2.0.0
  * @category Methods
  */
@@ -289,18 +290,18 @@ export const toCanonicalCborHex = Effect.fn(
         new Ipv4Error({
           message: `Ipv4.toCanonicalCborHex failed Ipv4 is not valid for string conversion. Hint: Make sure it's a valid hex string representing CBOR data.`,
         }),
-    })
+    }),
 );
 
 /**
  * Unsafely calls instance.toCanonicalCborHex without Effect wrapper
- * 
+ *
  * @example
  * import { Ipv4 } from "@lucid-evolution/experimental";
- * 
+ *
  * // Assume we have a Ipv4 instance
  * const instance = ... ;
- * 
+ *
  * // Using try/catch for error handling
  * try {
  *   const result = Ipv4.unsafeToCanonicalCborHex(instance);
@@ -308,7 +309,7 @@ export const toCanonicalCborHex = Effect.fn(
  * } catch (error) {
  *   console.error(`Ipv4.unsafeToCanonicalCborHex failed: ${error.message}`);
  * }
- * 
+ *
  * @since 2.0.0
  * @category Methods
  */
@@ -317,38 +318,39 @@ export const unsafeToCanonicalCborHex = (instance: CML.Ipv4): string =>
 
 /**
  * Static method fromCborHex of Ipv4
- * 
+ *
  * @example
  * import { Ipv4 } from "@lucid-evolution/experimental";
  * import { Effect } from "effect";
- * 
+ *
  * // Using Effect for safe execution with error handling
  * Effect.gen(function*() {
- * 
+ *
  *   const result = yield* Ipv4.fromCborHex( parameters );
  *   console.log(result);
  * });
- * 
+ *
  * @since 2.0.0
  * @category Constructors
  */
 export const fromCborHex = Effect.fn(function* (cborBytes: string) {
   return yield* Effect.try({
     try: () => CML.Ipv4.from_cbor_hex(cborBytes),
-    catch: () => new Ipv4Error({
-      message: `Ipv4.fromCborHex failed with parameters: ${cborBytes}. Hint: Make sure it's a valid hex string representing CBOR data.`,
-    }),
+    catch: () =>
+      new Ipv4Error({
+        message: `Ipv4.fromCborHex failed with parameters: ${cborBytes}. Hint: Make sure it's a valid hex string representing CBOR data.`,
+      }),
   });
 });
 
 /**
  * Unsafely calls Ipv4.fromCborHex without Effect wrapper
- * 
+ *
  * @example
  * import { Ipv4 } from "@lucid-evolution/experimental";
- * 
- * 
- * 
+ *
+ *
+ *
  * // Using try/catch for error handling
  * try {
  *   const result = Ipv4.unsafeFromCborHex( parameters );
@@ -356,7 +358,7 @@ export const fromCborHex = Effect.fn(function* (cborBytes: string) {
  * } catch (error) {
  *   console.error(`Ipv4.unsafeFromCborHex failed: ${error.message}`);
  * }
- * 
+ *
  * @since 2.0.0
  * @category Constructors
  */
@@ -365,11 +367,11 @@ export const unsafeFromCborHex = (cborBytes: string) =>
 
 /**
  * Method toJson of Ipv4
- * 
+ *
  * @example
  * import { Ipv4 } from "@lucid-evolution/experimental";
  * import { Effect } from "effect";
- * 
+ *
  * // Using Effect for safe execution with error handling
  * Effect.gen(function*() {
  * // Assume we have a Ipv4 instance
@@ -377,7 +379,7 @@ export const unsafeFromCborHex = (cborBytes: string) =>
  *   const result = yield* Ipv4.toJson(instance);
  *   console.log(result);
  * });
- * 
+ *
  * @since 2.0.0
  * @category Methods
  */
@@ -389,18 +391,18 @@ export const toJson = Effect.fn(
         new Ipv4Error({
           message: `Ipv4.toJson failed Ipv4 is not valid for string conversion. Hint: Validate your JSON structure.`,
         }),
-    })
+    }),
 );
 
 /**
  * Unsafely calls instance.toJson without Effect wrapper
- * 
+ *
  * @example
  * import { Ipv4 } from "@lucid-evolution/experimental";
- * 
+ *
  * // Assume we have a Ipv4 instance
  * const instance = ... ;
- * 
+ *
  * // Using try/catch for error handling
  * try {
  *   const result = Ipv4.unsafeToJson(instance);
@@ -408,7 +410,7 @@ export const toJson = Effect.fn(
  * } catch (error) {
  *   console.error(`Ipv4.unsafeToJson failed: ${error.message}`);
  * }
- * 
+ *
  * @since 2.0.0
  * @category Methods
  */
@@ -417,11 +419,11 @@ export const unsafeToJson = (instance: CML.Ipv4): string =>
 
 /**
  * Method toJsValue of Ipv4
- * 
+ *
  * @example
  * import { Ipv4 } from "@lucid-evolution/experimental";
  * import { Effect } from "effect";
- * 
+ *
  * // Using Effect for safe execution with error handling
  * Effect.gen(function*() {
  * // Assume we have a Ipv4 instance
@@ -429,7 +431,7 @@ export const unsafeToJson = (instance: CML.Ipv4): string =>
  *   const result = yield* Ipv4.toJsValue(instance);
  *   console.log(result);
  * });
- * 
+ *
  * @since 2.0.0
  * @category Methods
  */
@@ -441,18 +443,18 @@ export const toJsValue = Effect.fn(
         new Ipv4Error({
           message: `Ipv4.toJsValue failed Ipv4 is not valid for any conversion. `,
         }),
-    })
+    }),
 );
 
 /**
  * Unsafely calls instance.toJsValue without Effect wrapper
- * 
+ *
  * @example
  * import { Ipv4 } from "@lucid-evolution/experimental";
- * 
+ *
  * // Assume we have a Ipv4 instance
  * const instance = ... ;
- * 
+ *
  * // Using try/catch for error handling
  * try {
  *   const result = Ipv4.unsafeToJsValue(instance);
@@ -460,7 +462,7 @@ export const toJsValue = Effect.fn(
  * } catch (error) {
  *   console.error(`Ipv4.unsafeToJsValue failed: ${error.message}`);
  * }
- * 
+ *
  * @since 2.0.0
  * @category Methods
  */
@@ -469,38 +471,39 @@ export const unsafeToJsValue = (instance: CML.Ipv4): any =>
 
 /**
  * Static method fromJson of Ipv4
- * 
+ *
  * @example
  * import { Ipv4 } from "@lucid-evolution/experimental";
  * import { Effect } from "effect";
- * 
+ *
  * // Using Effect for safe execution with error handling
  * Effect.gen(function*() {
- * 
+ *
  *   const result = yield* Ipv4.fromJson( parameters );
  *   console.log(result);
  * });
- * 
+ *
  * @since 2.0.0
  * @category Constructors
  */
 export const fromJson = Effect.fn(function* (json: string) {
   return yield* Effect.try({
     try: () => CML.Ipv4.from_json(json),
-    catch: () => new Ipv4Error({
-      message: `Ipv4.fromJson failed with parameters: ${json}. Hint: Validate your JSON structure.`,
-    }),
+    catch: () =>
+      new Ipv4Error({
+        message: `Ipv4.fromJson failed with parameters: ${json}. Hint: Validate your JSON structure.`,
+      }),
   });
 });
 
 /**
  * Unsafely calls Ipv4.fromJson without Effect wrapper
- * 
+ *
  * @example
  * import { Ipv4 } from "@lucid-evolution/experimental";
- * 
- * 
- * 
+ *
+ *
+ *
  * // Using try/catch for error handling
  * try {
  *   const result = Ipv4.unsafeFromJson( parameters );
@@ -508,20 +511,19 @@ export const fromJson = Effect.fn(function* (json: string) {
  * } catch (error) {
  *   console.error(`Ipv4.unsafeFromJson failed: ${error.message}`);
  * }
- * 
+ *
  * @since 2.0.0
  * @category Constructors
  */
-export const unsafeFromJson = (json: string) =>
-  Effect.runSync(fromJson(json));
+export const unsafeFromJson = (json: string) => Effect.runSync(fromJson(json));
 
 /**
  * Method get of Ipv4
- * 
+ *
  * @example
  * import { Ipv4 } from "@lucid-evolution/experimental";
  * import { Effect } from "effect";
- * 
+ *
  * // Using Effect for safe execution with error handling
  * Effect.gen(function*() {
  * // Assume we have a Ipv4 instance
@@ -529,7 +531,7 @@ export const unsafeFromJson = (json: string) =>
  *   const result = yield* Ipv4.get(instance);
  *   console.log(result);
  * });
- * 
+ *
  * @since 2.0.0
  * @category Methods
  */
@@ -541,18 +543,18 @@ export const get = Effect.fn(
         new Ipv4Error({
           message: `Ipv4.get failed `,
         }),
-    })
+    }),
 );
 
 /**
  * Unsafely calls instance.get without Effect wrapper
- * 
+ *
  * @example
  * import { Ipv4 } from "@lucid-evolution/experimental";
- * 
+ *
  * // Assume we have a Ipv4 instance
  * const instance = ... ;
- * 
+ *
  * // Using try/catch for error handling
  * try {
  *   const result = Ipv4.unsafeGet(instance);
@@ -560,7 +562,7 @@ export const get = Effect.fn(
  * } catch (error) {
  *   console.error(`Ipv4.unsafeGet failed: ${error.message}`);
  * }
- * 
+ *
  * @since 2.0.0
  * @category Methods
  */

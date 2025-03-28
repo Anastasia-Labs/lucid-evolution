@@ -9,16 +9,15 @@ export const Reward = CML.RedeemerTag.Reward;
 export const Voting = CML.RedeemerTag.Voting;
 export const Proposing = CML.RedeemerTag.Proposing;
 
-
 /**
  * Get all values of the RedeemerTag enum
- * 
+ *
  * @example
  * import { RedeemerTag } from "@lucid-evolution/experimental";
- * 
+ *
  * const allValues = RedeemerTag.values();
  * console.log(allValues);
- * 
+ *
  * @since 2.0.0
  * @category Utils
  */
@@ -28,18 +27,18 @@ export const values = (): Array<CML.RedeemerTag> => [
   CML.RedeemerTag.Cert,
   CML.RedeemerTag.Reward,
   CML.RedeemerTag.Voting,
-  CML.RedeemerTag.Proposing
+  CML.RedeemerTag.Proposing,
 ];
 
 /**
  * Convert RedeemerTag enum value to string
- * 
+ *
  * @example
  * import { RedeemerTag } from "@lucid-evolution/experimental";
- * 
+ *
  * const name = RedeemerTag.toString(CML.RedeemerTag.Spend);
  * console.log(name); // "Spend"
- * 
+ *
  * @since 2.0.0
  * @category Utils
  */
@@ -64,13 +63,13 @@ export const toString = (value: CML.RedeemerTag): string => {
 
 /**
  * Convert string to RedeemerTag enum value
- * 
+ *
  * @example
  * import { RedeemerTag } from "@lucid-evolution/experimental";
- * 
+ *
  * const value = RedeemerTag.fromString("Spend");
  * console.log(value); // Some(CML.RedeemerTag.Spend)
- * 
+ *
  * @since 2.0.0
  * @category Utils
  */

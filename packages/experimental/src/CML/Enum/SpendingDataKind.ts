@@ -6,34 +6,33 @@ export const SpendingDataPubKey = CML.SpendingDataKind.SpendingDataPubKey;
 export const SpendingDataScript = CML.SpendingDataKind.SpendingDataScript;
 export const SpendingDataRedeem = CML.SpendingDataKind.SpendingDataRedeem;
 
-
 /**
  * Get all values of the SpendingDataKind enum
- * 
+ *
  * @example
  * import { SpendingDataKind } from "@lucid-evolution/experimental";
- * 
+ *
  * const allValues = SpendingDataKind.values();
  * console.log(allValues);
- * 
+ *
  * @since 2.0.0
  * @category Utils
  */
 export const values = (): Array<CML.SpendingDataKind> => [
   CML.SpendingDataKind.SpendingDataPubKey,
   CML.SpendingDataKind.SpendingDataScript,
-  CML.SpendingDataKind.SpendingDataRedeem
+  CML.SpendingDataKind.SpendingDataRedeem,
 ];
 
 /**
  * Convert SpendingDataKind enum value to string
- * 
+ *
  * @example
  * import { SpendingDataKind } from "@lucid-evolution/experimental";
- * 
+ *
  * const name = SpendingDataKind.toString(CML.SpendingDataKind.SpendingDataPubKey);
  * console.log(name); // "SpendingDataPubKey"
- * 
+ *
  * @since 2.0.0
  * @category Utils
  */
@@ -52,13 +51,13 @@ export const toString = (value: CML.SpendingDataKind): string => {
 
 /**
  * Convert string to SpendingDataKind enum value
- * 
+ *
  * @example
  * import { SpendingDataKind } from "@lucid-evolution/experimental";
- * 
+ *
  * const value = SpendingDataKind.fromString("SpendingDataPubKey");
  * console.log(value); // Some(CML.SpendingDataKind.SpendingDataPubKey)
- * 
+ *
  * @since 2.0.0
  * @category Utils
  */

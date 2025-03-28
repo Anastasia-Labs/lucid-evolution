@@ -92,7 +92,7 @@ export interface List$
   > {}
 export const List: List$ = Schema.TaggedStruct("List", {
   value: Schema.Array(
-    Schema.suspend((): Schema.Schema<Data> => Data)
+    Schema.suspend((): Schema.Schema<Data> => Data),
   ).annotations({
     arbitrary: () => (fc) => fc.array(Arbitrary.make(Data), { maxLength: 3 }),
   }),
@@ -104,14 +104,14 @@ export const uniqueByFirst = <
   Fst extends Schema.Schema<Data>,
   Snd extends Schema.Schema<Data>,
 >(
-  schema: Schema.Tuple2<Fst, Snd>
+  schema: Schema.Tuple2<Fst, Snd>,
 ) => {
   return Schema.Array(schema).pipe(
     Schema.filter(
       (tuples) =>
         tuples.map(([a, _]) => a).length ===
-        _Array.dedupeWith(tuples, (a, b) => isEqual(a[0], b[0])).length
-    )
+        _Array.dedupeWith(tuples, (a, b) => isEqual(a[0], b[0])).length,
+    ),
   );
 };
 
@@ -135,8 +135,8 @@ export const Map: Map$ = Schema.TaggedStruct("Map", {
   value: uniqueByFirst(
     Schema.Tuple(
       Schema.suspend((): Schema.Schema<Data> => Data),
-      Schema.suspend((): Schema.Schema<Data> => Data)
-    )
+      Schema.suspend((): Schema.Schema<Data> => Data),
+    ),
   ),
 }).annotations({
   identifier: "Map",
@@ -155,7 +155,7 @@ export interface Constr$
 export const Constr: Constr$ = Schema.TaggedStruct("Constr", {
   index: Schema.BigIntFromSelf.pipe(Schema.betweenBigInt(0n, 2n ** 64n - 1n)),
   fields: Schema.Array(
-    Schema.suspend((): Schema.Schema<Data> => Data)
+    Schema.suspend((): Schema.Schema<Data> => Data),
   ).annotations({
     arbitrary: () => (fc) => fc.array(Arbitrary.make(Data), { maxLength: 3 }),
   }),
@@ -168,7 +168,7 @@ export const Data: Schema.Schema<Data> = Schema.Union(
   ByteArray,
   List,
   Map,
-  Constr
+  Constr,
 );
 
 export const isByteArray = Schema.is(ByteArray);
@@ -210,14 +210,14 @@ export const toCBOR = <Source, Target extends Data>(
   options: {
     canonical?: boolean;
     parseOptions?: SchemaAST.ParseOptions;
-  } = {}
+  } = {},
 ): string => {
   const { canonical = false } = options;
   const toCMLPlutusData = (data: Data): CML.PlutusData => {
     switch (data._tag) {
       case "Integer":
         return CML.PlutusData.new_integer(
-          CML.BigInteger.from_str(data.value.toString())
+          CML.BigInteger.from_str(data.value.toString()),
         );
       case "ByteArray":
         return CML.PlutusData.new_bytes(Bytes.fromHex(data.value));
@@ -238,7 +238,7 @@ export const toCBOR = <Source, Target extends Data>(
         const fields = CML.PlutusDataList.new();
         data.fields.forEach((item) => fields.add(toCMLPlutusData(item)));
         return CML.PlutusData.new_constr_plutus_data(
-          CML.ConstrPlutusData.new(data.index, fields)
+          CML.ConstrPlutusData.new(data.index, fields),
         );
       }
       default:
@@ -267,11 +267,11 @@ export const toCBOR = <Source, Target extends Data>(
 export function fromCBOR(input: string): Data;
 export function fromCBOR<Source, Target extends Data>(
   input: string,
-  schema: Schema.Schema<Source, Target>
+  schema: Schema.Schema<Source, Target>,
 ): Source;
 export function fromCBOR<Source, Target extends Data>(
   input: string,
-  schema?: Schema.Schema<Source, Target>
+  schema?: Schema.Schema<Source, Target>,
 ): Source | Data {
   const data = resolveCBOR(input);
   return schema ? decodeData(data, schema) : data;
@@ -348,13 +348,13 @@ export const resolveCBOR = (input: string): Data => {
 export const decodeData = <Source, Target extends Data>(
   input: unknown,
   schema: Schema.Schema<Source, Target>,
-  options: SchemaAST.ParseOptions = {}
+  options: SchemaAST.ParseOptions = {},
 ): Source => Schema.decodeUnknownSync(schema, options)(input);
 
 export const safeFromData = <Source, Target extends Data>(
   input: unknown,
   schema: Schema.Schema<Source, Target>,
-  options: SchemaAST.ParseOptions = {}
+  options: SchemaAST.ParseOptions = {},
 ): Either.Either<Source, ParseError> =>
   Schema.decodeUnknownEither(schema, options)(input);
 
@@ -377,13 +377,13 @@ export const safeFromData = <Source, Target extends Data>(
 export const encodeData = <Source, Target extends Data>(
   input: unknown,
   schema: Schema.Schema<Source, Target>,
-  options?: SchemaAST.ParseOptions
+  options?: SchemaAST.ParseOptions,
 ): Target => Schema.encodeUnknownSync(schema, options)(input);
 
 export const safeToData = <Source, Target extends Data>(
   input: unknown,
   schema: Schema.Schema<Source, Target>,
-  options?: SchemaAST.ParseOptions
+  options?: SchemaAST.ParseOptions,
 ): Either.Either<Target, ParseError> =>
   Schema.encodeUnknownEither(schema, options)(input);
 
@@ -471,7 +471,7 @@ export const makeMap = (value: ReadonlyArray<readonly [Data, Data]>) =>
  */
 export const makeConstr = <T extends bigint, U extends readonly Data[]>(
   index: T,
-  fields: U
+  fields: U,
 ): Constr<T, U> => Constr.make({ index, fields }) as Constr<T, U>;
 
 const replacer = (key: string, value: any) => {
@@ -665,7 +665,7 @@ export const genData = (depth: number = 3): FastCheck.Arbitrary<Data> => {
     genByteArray(),
     genConstr(depth - 1),
     genList(depth - 1),
-    genMap(depth - 1)
+    genMap(depth - 1),
   );
 };
 
@@ -687,7 +687,7 @@ export const genByteArray = (): FastCheck.Arbitrary<ByteArray> =>
  */
 export const genInteger = (): FastCheck.Arbitrary<Integer> =>
   FastCheck.bigInt({ min: 0n, max: 64n - 1n }).map((value) =>
-    makeInteger(value)
+    makeInteger(value),
   );
 
 /**
@@ -712,7 +712,7 @@ export const genConstr = (depth: number): FastCheck.Arbitrary<Constr> =>
     FastCheck.array(genData(depth), {
       minLength: 0,
       maxLength: 5,
-    })
+    }),
   ).map(([index, fields]) => makeConstr(index, fields));
 
 /**
@@ -743,7 +743,7 @@ export const genMap = (depth: number): FastCheck.Arbitrary<Map> => {
   // Helper to create key-value pairs with unique keys
   const uniqueKeyValuePairs = <T extends Data>(
     keyGen: FastCheck.Arbitrary<T>,
-    maxSize: number
+    maxSize: number,
   ) =>
     FastCheck.uniqueArray(
       FastCheck.tuple(keyGen, genData(depth > 0 ? depth - 1 : 0)),
@@ -754,7 +754,7 @@ export const genMap = (depth: number): FastCheck.Arbitrary<Map> => {
           const keyStr = toJSON(pair[0]);
           return keyStr;
         },
-      }
+      },
     ).map((pairs) => pairs.sort((a, b) => compare(a[0], b[0])));
 
   // ByteArray keys (more frequent)
@@ -766,11 +766,11 @@ export const genMap = (depth: number): FastCheck.Arbitrary<Map> => {
   // Complex keys (less frequent)
   const complexPairs = uniqueKeyValuePairs(
     genData(depth > 1 ? depth - 2 : 0),
-    2
+    2,
   );
 
   return FastCheck.oneof(byteArrayPairs, integerPairs, complexPairs).map(
-    (pairs) => makeMap(pairs)
+    (pairs) => makeMap(pairs),
   );
 };
 
@@ -779,7 +779,7 @@ export const sort = (data: Data): Data => {
     case "Map": {
       // First recursively sort any nested Data in both keys and values
       const sortedPairs = data.value.map(
-        ([key, value]) => [sort(key), sort(value)] as const
+        ([key, value]) => [sort(key), sort(value)] as const,
       );
 
       // Then sort the pairs by key

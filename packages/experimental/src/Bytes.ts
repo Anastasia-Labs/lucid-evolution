@@ -44,7 +44,10 @@ export function fromHex(hex: string): Uint8Array {
   const al = hl / 2;
   if (hl % 2)
     throw new Error(
-      "padded hex string expected, got unpadded hex of length " + hl + " " + hex,
+      "padded hex string expected, got unpadded hex of length " +
+        hl +
+        " " +
+        hex,
     );
   const array = new Uint8Array(al);
   for (let ai = 0, hi = 0; ai < al; ai++, hi += 2) {

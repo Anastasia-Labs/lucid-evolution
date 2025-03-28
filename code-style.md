@@ -461,18 +461,22 @@ Effect.runSync(divide(1, 0));
 ```
 
 ## Avoid using `any` type
+
 - Avoid using `any` type as it defeats the purpose of TypeScript's type system.
 - Use `unknown` instead of `any` to enforce type checking.
 - Use `unknown` when you need to accept any type but still want to enforce type checking later.
 
 ## Avoid using `as` type assertion keyword
+
 - Avoid using `as` keyword unless absolutely necessary.
 - Instead use `satisfies` operator to ensure that an object conforms to a specific type.
 
 ## Types should be defined using Effect schemas
+
 - Use Effect schemas to define types for better type safety and runtime validation.
 
 ## Be careful with equality checks
+
 - Use `===` and `!==` for comparing primitive types to ensure strict equality.
 - Remember that TypeScript's equality operators compare object references, not their values.
 - For deep equality checks on nested objects, consider using Effect's Equal utility.

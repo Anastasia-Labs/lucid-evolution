@@ -10,6 +10,5 @@ import { pipe, Schema } from "effect";
 export const HEX_REGEX = /^(?:[0-9a-f]{2})*$/;
 
 export const HexString = <Source extends string, Target>(
-  self: Schema.Schema<Source, Target>
+  self: Schema.Schema<Source, Target>,
 ) => pipe(self, Schema.pattern(HEX_REGEX));
-

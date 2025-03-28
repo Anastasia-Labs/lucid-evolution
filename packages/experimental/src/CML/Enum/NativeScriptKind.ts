@@ -7,18 +7,18 @@ export const ScriptAll = CML.NativeScriptKind.ScriptAll;
 export const ScriptAny = CML.NativeScriptKind.ScriptAny;
 export const ScriptNOfK = CML.NativeScriptKind.ScriptNOfK;
 export const ScriptInvalidBefore = CML.NativeScriptKind.ScriptInvalidBefore;
-export const ScriptInvalidHereafter = CML.NativeScriptKind.ScriptInvalidHereafter;
-
+export const ScriptInvalidHereafter =
+  CML.NativeScriptKind.ScriptInvalidHereafter;
 
 /**
  * Get all values of the NativeScriptKind enum
- * 
+ *
  * @example
  * import { NativeScriptKind } from "@lucid-evolution/experimental";
- * 
+ *
  * const allValues = NativeScriptKind.values();
  * console.log(allValues);
- * 
+ *
  * @since 2.0.0
  * @category Utils
  */
@@ -28,18 +28,18 @@ export const values = (): Array<CML.NativeScriptKind> => [
   CML.NativeScriptKind.ScriptAny,
   CML.NativeScriptKind.ScriptNOfK,
   CML.NativeScriptKind.ScriptInvalidBefore,
-  CML.NativeScriptKind.ScriptInvalidHereafter
+  CML.NativeScriptKind.ScriptInvalidHereafter,
 ];
 
 /**
  * Convert NativeScriptKind enum value to string
- * 
+ *
  * @example
  * import { NativeScriptKind } from "@lucid-evolution/experimental";
- * 
+ *
  * const name = NativeScriptKind.toString(CML.NativeScriptKind.ScriptPubkey);
  * console.log(name); // "ScriptPubkey"
- * 
+ *
  * @since 2.0.0
  * @category Utils
  */
@@ -64,13 +64,13 @@ export const toString = (value: CML.NativeScriptKind): string => {
 
 /**
  * Convert string to NativeScriptKind enum value
- * 
+ *
  * @example
  * import { NativeScriptKind } from "@lucid-evolution/experimental";
- * 
+ *
  * const value = NativeScriptKind.fromString("ScriptPubkey");
  * console.log(value); // Some(CML.NativeScriptKind.ScriptPubkey)
- * 
+ *
  * @since 2.0.0
  * @category Utils
  */

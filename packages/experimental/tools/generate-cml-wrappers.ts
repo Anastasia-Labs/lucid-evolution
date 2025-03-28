@@ -93,7 +93,7 @@ const extractDeclarations = (filePath: string): Result => {
     filePath,
     fileContent,
     ts.ScriptTarget.Latest,
-    true
+    true,
   );
 
   sourceFile.forEachChild((node) => {
@@ -107,8 +107,8 @@ const extractDeclarations = (filePath: string): Result => {
           const methodName = member.name.getText(sourceFile);
           const isStatic = Boolean(
             member.modifiers?.some(
-              (m) => m.kind === ts.SyntaxKind.StaticKeyword
-            )
+              (m) => m.kind === ts.SyntaxKind.StaticKeyword,
+            ),
           );
           const parameters = member.parameters
             .map((param) => {
@@ -139,7 +139,7 @@ const extractDeclarations = (filePath: string): Result => {
         result.classes.push({ name: className, methods });
       }
     }
-    
+
     // Extract enums
     if (ts.isEnumDeclaration(node) && node.name) {
       const enumName = node.name.text;
@@ -227,7 +227,7 @@ const processTypeName = (typeName: string): string => {
     const baseType = typeName.substring(0, typeName.indexOf("<"));
     const genericPart = typeName.substring(
       typeName.indexOf("<") + 1,
-      typeName.lastIndexOf(">")
+      typeName.lastIndexOf(">"),
     );
 
     // Process the generic parameters
@@ -382,7 +382,7 @@ const generateErrorMessage = (
   parameters: Array<ProcessedParameter>,
   isStatic: boolean,
   className: string,
-  returnType: string
+  returnType: string,
 ): string => {
   // Start with the operation context and add class name
   let message = `${className}.${methodName} failed `;
@@ -441,7 +441,7 @@ const generateErrorMessage = (
  */
 const generateFunctionErrorMessage = (
   functionName: string,
-  parameters: Array<ProcessedParameter>
+  parameters: Array<ProcessedParameter>,
 ): string => {
   // Start with the operation context
   let message = `${functionName} failed`;
@@ -487,7 +487,10 @@ const generateFunctionErrorMessage = (
     message += `. Hint: Verify input data is valid for hashing.`;
   } else if (functionName.includes("parse")) {
     message += `. Hint: Check that input format is correct.`;
-  } else if (functionName.includes("encode") || functionName.includes("decode")) {
+  } else if (
+    functionName.includes("encode") ||
+    functionName.includes("decode")
+  ) {
     message += `. Hint: Verify encoding/decoding format compatibility.`;
   } else {
     message += `.`;
@@ -499,10 +502,7 @@ const generateFunctionErrorMessage = (
 /**
  * Generate wrapper code for a class
  */
-const generateWrapper = (
-  classInfo: ClassInfo,
-  config: Config
-): string => {
+const generateWrapper = (classInfo: ClassInfo, config: Config): string => {
   const { name: className } = classInfo;
 
   // Updated imports to import the entire library with a namespace
@@ -545,14 +545,14 @@ import * as CML from "${config.libraryImport}";`;
       }));
 
       // Instance variable placeholder for non-static methods
-      const instanceExample = !isStatic 
+      const instanceExample = !isStatic
         ? `// Assume we have a ${className} instance
  * const instance = ... ;`
         : "";
 
       // Use parameter name as placeholder instead of trying to guess values
       const paramPlaceholders = processedParameters
-        .map(p => p.name)
+        .map((p) => p.name)
         .join(", ");
 
       // Improved JSDoc with realistic examples for effect-based function
@@ -611,7 +611,7 @@ import * as CML from "${config.libraryImport}";`;
           processedParameters,
           true,
           className,
-          processedReturnType
+          processedReturnType,
         );
 
         return `${jsDoc}
@@ -646,7 +646,7 @@ export const ${unsafeName} = (${paramsList}) =>
           processedParameters,
           false,
           className,
-          processedReturnType
+          processedReturnType,
         );
 
         // For instance methods, we need to create a function that calls the method on the instance
@@ -677,10 +677,7 @@ export const ${unsafeName} = (${paramsList}): ${processedReturnType} =>
 /**
  * Generate wrapper code for an enum
  */
-const generateEnumWrapper = (
-  enumInfo: EnumInfo,
-  config: Config
-): string => {
+const generateEnumWrapper = (enumInfo: EnumInfo, config: Config): string => {
   const { name: enumName, members } = enumInfo;
 
   // Create imports
@@ -688,12 +685,12 @@ const generateEnumWrapper = (
 
   // Export enum type alias
   const typeExport = `export type ${enumName} = CML.${enumName};`;
-  
+
   // Export enum values
   const membersExport = members
     .map((member) => `export const ${member} = CML.${enumName}.${member};`)
     .join("\n");
-  
+
   // Create helper functions for string conversion if useful
   const helperFunctions = `
 /**
@@ -760,7 +757,7 @@ export const fromString = (str: string): CML.${enumName} | undefined => {
  */
 const generateFunctionWrapper = (
   functionInfo: FunctionInfo,
-  config: Config
+  config: Config,
 ): string => {
   const { name: originalFunctionName, parameters, returnType } = functionInfo;
 
@@ -784,18 +781,21 @@ const generateFunctionWrapper = (
   const paramsList = processedParameters
     .map((p) => `${p.name}: ${p.type}`)
     .join(", ");
-  
+
   // Use parameter names when calling the original function
   const paramsCall = processedParameters.map((p) => p.name).join(", ");
 
   // Generate better error message for functions with class parameters
-  const errorMessage = generateFunctionErrorMessage(originalFunctionName, processedParameters);
+  const errorMessage = generateFunctionErrorMessage(
+    originalFunctionName,
+    processedParameters,
+  );
 
   // Create function error type
   const errorClassName = `${name.charAt(0).toUpperCase() + name.slice(1)}Error`;
 
   // Create example parameter values for documentation based on parameter types
-  const paramExamples = processedParameters.map(p => {
+  const paramExamples = processedParameters.map((p) => {
     const paramType = p.type.toLowerCase();
     if (paramType.includes("string")) return `"example"`;
     if (paramType.includes("number")) return "42";
@@ -872,12 +872,12 @@ export const ${unsafeName} = (${paramsList}): ${processedReturnType} =>
 const createIndex = (
   classes: Array<ClassInfo>,
   enums: Array<EnumInfo>,
-  outputDir: string
+  outputDir: string,
 ): void => {
   const classExports = classes
     .map((cls) => `export * as ${cls.name} from './${cls.name}.js';`)
     .join("\n");
-    
+
   // Update enum exports to point to the Enum subdirectory (PascalCase)
   const enumExports = enums
     .map((e) => `export * as ${e.name} from './Enum/${e.name}.js';`)
@@ -911,23 +911,29 @@ ${enumExports}
 /**
  * Creates index file for function wrappers
  */
-const createFunctionsIndex = (functions: Array<FunctionInfo>, outputDir: string): void => {
+const createFunctionsIndex = (
+  functions: Array<FunctionInfo>,
+  outputDir: string,
+): void => {
   // Group functions by first letter for better organization
   const functionsByLetter: Record<string, Array<string>> = {};
-  
-  functions.forEach(func => {
+
+  functions.forEach((func) => {
     const firstLetter = func.name.charAt(0).toUpperCase();
     if (!functionsByLetter[firstLetter]) {
       functionsByLetter[firstLetter] = [];
     }
     functionsByLetter[firstLetter].push(func.name);
   });
-  
+
   // Create exports organized by first letter
   const content = `// This file is auto-generated - do not modify
-${Object.entries(functionsByLetter).map(([letter, funcs]) => 
-  `// ${letter}\n${funcs.map(f => `export * from './${f}.js';`).join('\n')}`
-).join('\n\n')}
+${Object.entries(functionsByLetter)
+  .map(
+    ([letter, funcs]) =>
+      `// ${letter}\n${funcs.map((f) => `export * from './${f}.js';`).join("\n")}`,
+  )
+  .join("\n\n")}
 `;
 
   fs.writeFileSync(path.join(outputDir, "index.ts"), content);
@@ -972,13 +978,15 @@ const generate = (config: Config): void => {
   // Using PascalCase for "Enum" directory
   const enumsDir = path.join(config.outputDir, "Enum");
   const functionsDir = path.join(config.outputDir, "Utils");
-  
+
   fs.mkdirSync(enumsDir, { recursive: true });
   fs.mkdirSync(functionsDir, { recursive: true });
 
   // Extract declarations from declaration file
   const { classes, enums, functions } = extractDeclarations(config.sourceFile);
-  console.log(`Found ${classes.length} classes, ${enums.length} enums, and ${functions.length} functions to wrap`);
+  console.log(
+    `Found ${classes.length} classes, ${enums.length} enums, and ${functions.length} functions to wrap`,
+  );
 
   // Generate wrapper for each class
   for (const classInfo of classes) {
@@ -997,7 +1005,7 @@ const generate = (config: Config): void => {
     fs.writeFileSync(outputPath, wrapperCode);
     console.log(`Generated wrapper for enum ${enumInfo.name}`);
   }
-  
+
   // Generate wrapper for each function
   for (const functionInfo of functions) {
     const outputPath = path.join(functionsDir, `${functionInfo.name}.ts`);
@@ -1009,20 +1017,22 @@ const generate = (config: Config): void => {
 
   // Create index files
   createIndex(classes, enums, config.outputDir);
-  
+
   // Create index file for enums directory
   if (enums.length > 0) {
     createEnumsIndex(enums, enumsDir);
   }
-  
+
   // Create index file for functions directory
   if (functions.length > 0) {
     createFunctionsIndex(functions, functionsDir);
-    
+
     // Update main index to export functions module
     const mainIndexPath = path.join(config.outputDir, "index.ts");
     const mainIndexContent = fs.readFileSync(mainIndexPath, "utf8");
-    const updatedContent = mainIndexContent + "\n// Utils\nexport * as Utils from './Utils/index.js';\n";
+    const updatedContent =
+      mainIndexContent +
+      "\n// Utils\nexport * as Utils from './Utils/index.js';\n";
     fs.writeFileSync(mainIndexPath, updatedContent);
   }
 

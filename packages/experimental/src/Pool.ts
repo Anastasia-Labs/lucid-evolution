@@ -1,7 +1,7 @@
-import * as Assets from "./Assets.js"
-import * as Address from "./Address.js"
-import * as VRF from "./VRF.js"
-import * as Relay from "./Relay.js"
+import * as Assets from "./Assets.js";
+import * as Address from "./Address.js";
+import * as VRF from "./VRF.js";
+import * as Relay from "./Relay.js";
 
 /** Bech32 */
 export type PoolId = string;

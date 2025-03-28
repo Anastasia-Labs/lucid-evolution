@@ -1,4 +1,4 @@
-import {  ParseResult, Schema, SchemaAST } from "effect";
+import { ParseResult, Schema, SchemaAST } from "effect";
 import { NonEmptyReadonlyArray } from "effect/Array";
 import * as DataTagged from "./Data.js";
 import * as Combinator from "./Combinator.js";
@@ -26,7 +26,7 @@ export const ByteArray: ByteArray = Schema.transform(
     strict: true,
     encode: (value) => DataTagged.ByteArray.make({ value: value }),
     decode: (value) => value.value,
-  }
+  },
 );
 
 interface Integer
@@ -44,7 +44,7 @@ export const Integer: Integer = Schema.transform(
     strict: true,
     encode: (value) => DataTagged.Integer.make({ value }),
     decode: ({ value }) => value,
-  }
+  },
 );
 
 interface Literal<
@@ -88,7 +88,7 @@ export const Literal = <
           fields: [],
         }),
       decode: (value) => self[Number(value.index)],
-    }
+    },
   );
 
 interface OneLiteral<
@@ -101,7 +101,7 @@ interface OneLiteral<
 export const OneLiteral = <
   Single extends Exclude<SchemaAST.LiteralValue, null | bigint>,
 >(
-  self: Single
+  self: Single,
 ): OneLiteral<Single> =>
   Schema.transform(
     DataTagged.Constr.annotations({
@@ -118,7 +118,7 @@ export const OneLiteral = <
           fields: [],
         }),
       decode: (value) => self,
-    }
+    },
   );
 
 interface Array<S extends Schema.Schema.Any>
@@ -143,7 +143,7 @@ export const Array = <S extends Schema.Schema.Any>(items: S): Array<S> =>
       strict: false,
       encode: (value) => DataTagged.List.make({ value }),
       decode: ({ value }) => value,
-    }
+    },
   );
 
 interface Map<K extends Schema.Schema.Any, V extends Schema.Schema.Any>
@@ -151,7 +151,7 @@ interface Map<K extends Schema.Schema.Any, V extends Schema.Schema.Any>
 
 export const Map = <K extends Schema.Schema.Any, V extends Schema.Schema.Any>(
   key: K,
-  value: V
+  value: V,
 ): Map<K, V> =>
   Schema.transform(
     DataTagged.Map.annotations({
@@ -170,7 +170,7 @@ export const Map = <K extends Schema.Schema.Any, V extends Schema.Schema.Any>(
       decode: ({ value: entries }) => {
         return entries;
       },
-    }
+    },
   );
 
 interface Nullable<S extends Schema.Schema.All>
@@ -208,13 +208,15 @@ export const NullOr = <S extends Schema.Schema.All>(self: S): Nullable<S> =>
             }),
       decode: (value) =>
         value.index === 1n ? null : (value.fields[0] as Schema.Schema.Type<S>),
-    }
+    },
   );
 
 interface Undefined<S extends Schema.Schema.Any>
   extends Schema.transform<typeof DataTagged.Constr, Schema.UndefinedOr<S>> {}
 
-export const UndefinedOr = <S extends Schema.Schema.Any>(self: S): Undefined<S> =>
+export const UndefinedOr = <S extends Schema.Schema.Any>(
+  self: S,
+): Undefined<S> =>
   Schema.transform(DataTagged.Constr, Schema.UndefinedOr(self), {
     strict: true,
     encode: (value) =>
@@ -258,7 +260,7 @@ export const Boolean: Boolean = Schema.transformOrFail(
       boolean
         ? ParseResult.succeed(DataTagged.Constr.make({ index: 1n, fields: [] }))
         : ParseResult.succeed(
-            DataTagged.Constr.make({ index: 0n, fields: [] })
+            DataTagged.Constr.make({ index: 0n, fields: [] }),
           ),
     decode: ({ index, fields }, _, ast) => {
       if (index !== 0n && index !== 1n) {
@@ -266,8 +268,8 @@ export const Boolean: Boolean = Schema.transformOrFail(
           new ParseResult.Type(
             ast,
             { index, fields },
-            `Expected constructor index to be 0 or 1, got ${index}`
-          )
+            `Expected constructor index to be 0 or 1, got ${index}`,
+          ),
         );
       }
       if (fields.length !== 0) {
@@ -275,13 +277,13 @@ export const Boolean: Boolean = Schema.transformOrFail(
           new ParseResult.Type(
             ast,
             { index, fields },
-            "Expected a constructor with no fields"
-          )
+            "Expected a constructor with no fields",
+          ),
         );
       }
       return ParseResult.succeed(index === 1n);
     },
-  }
+  },
 );
 
 interface Struct<Fields extends Schema.Struct.Fields>
@@ -309,7 +311,7 @@ interface Struct<Fields extends Schema.Struct.Fields>
  * @since 1.0.0
  */
 export const Struct = <Fields extends Schema.Struct.Fields>(
-  fields: Fields
+  fields: Fields,
 ): Struct<Fields> =>
   Schema.transform(
     DataTagged.Constr.annotations({
@@ -331,10 +333,10 @@ export const Struct = <Fields extends Schema.Struct.Fields>(
       }) => {
         const keys = Object.keys(fields);
         return Object.fromEntries(
-          keys.map((key, index) => [key, constr.fields[index]])
+          keys.map((key, index) => [key, constr.fields[index]]),
         );
       },
-    }
+    },
   );
 
 interface Union<Members extends ReadonlyArray<Schema.Schema.Any>>
@@ -361,7 +363,7 @@ export const Union = <Members extends ReadonlyArray<Schema.Schema.Any>>(
       encode: (value, _, ast, toA) => {
         const index = members.findIndex((schema) => Schema.is(schema)(toA));
         return ParseResult.encode(
-          members[index] as Schema.Schema<any, any, never>
+          members[index] as Schema.Schema<any, any, never>,
         )(value).pipe(
           ParseResult.map((value) => {
             const a = value;
@@ -370,7 +372,7 @@ export const Union = <Members extends ReadonlyArray<Schema.Schema.Any>>(
               index: BigInt(index),
               fields: value.fields.length > 0 ? value.fields : [],
             };
-          })
+          }),
         );
       },
       decode: (value, _, ast) => {
@@ -383,15 +385,15 @@ export const Union = <Members extends ReadonlyArray<Schema.Schema.Any>>(
               value,
               `Invalid union index: ${memberIndex}. Expected index between 0 and ${
                 members.length - 1
-              }`
-            )
+              }`,
+            ),
           );
         }
         // Get the member schema for this index
         const member = members[memberIndex] as Schema.Schema<any, any, never>;
         return ParseResult.decode(member)(value);
       },
-    }
+    },
   );
 };
 
@@ -399,7 +401,7 @@ interface Tuple<Elements extends Schema.TupleType.Elements>
   extends Schema.transform<typeof DataTagged.List, Schema.Tuple<Elements>> {}
 
 export const Tuple = <Elements extends Schema.TupleType.Elements>(
-  element: [...Elements]
+  element: [...Elements],
 ): Tuple<Elements> =>
   Schema.transform(
     DataTagged.List.annotations({
@@ -412,7 +414,7 @@ export const Tuple = <Elements extends Schema.TupleType.Elements>(
       strict: false,
       encode: (value) => DataTagged.List.make({ value }),
       decode: ({ value }) => value,
-    }
+    },
   );
 
 export const compose = Schema.compose;

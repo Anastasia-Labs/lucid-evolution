@@ -26,19 +26,25 @@ export function toCMLScript(script: Script): CML.Script {
   switch (script.type) {
     case "Native":
       return CML.Script.new_native(
-        CML.NativeScript.from_cbor_hex(script.script)
+        CML.NativeScript.from_cbor_hex(script.script),
       );
     case "PlutusV1":
       return CML.Script.new_plutus_v1(
-        CML.PlutusV1Script.from_cbor_hex(applyDoubleCborEncoding(script.script))
+        CML.PlutusV1Script.from_cbor_hex(
+          applyDoubleCborEncoding(script.script),
+        ),
       );
     case "PlutusV2":
       return CML.Script.new_plutus_v2(
-        CML.PlutusV2Script.from_cbor_hex(applyDoubleCborEncoding(script.script))
+        CML.PlutusV2Script.from_cbor_hex(
+          applyDoubleCborEncoding(script.script),
+        ),
       );
     case "PlutusV3":
       return CML.Script.new_plutus_v3(
-        CML.PlutusV3Script.from_cbor_hex(applyDoubleCborEncoding(script.script))
+        CML.PlutusV3Script.from_cbor_hex(
+          applyDoubleCborEncoding(script.script),
+        ),
       );
     default:
       throw new Error("No variant matched.");
@@ -70,7 +76,7 @@ export function fromCMLScript(script: CML.Script): Script {
       };
     default:
       throw new Error(
-        `Exhaustive check failed: Unhandled case '${kind}' encountered.`
+        `Exhaustive check failed: Unhandled case '${kind}' encountered.`,
       );
   }
 }
@@ -87,20 +93,20 @@ export function applyParamsToScript<
 >(
   plutusScript: string,
   params: T,
-  type?: Schema.Schema<Source, Target>
+  type?: Schema.Schema<Source, Target>,
 ): string {
   const program = UPLC.parseUPLC(
     CBORX.decode(
-      CBORX.decode(Bytes.fromHex(applyDoubleCborEncoding(plutusScript)))
+      CBORX.decode(Bytes.fromHex(applyDoubleCborEncoding(plutusScript))),
     ),
-    "flat"
+    "flat",
   );
   const parameters = type
     ? params.map((param) => DataTagged.encodeData(param, type))
     : params;
   const appliedProgram = parameters.reduce((body, currentParameter) => {
     const data = UPLC.UPLCConst.data(
-      dataFromCbor(DataTagged.toCBOR(currentParameter))
+      dataFromCbor(DataTagged.toCBOR(currentParameter)),
     );
     const appliedParameter = new UPLC.Application(body, data);
     return appliedParameter;
@@ -109,9 +115,9 @@ export function applyParamsToScript<
   return applyDoubleCborEncoding(
     Bytes.toHex(
       UPLC.encodeUPLC(
-        new UPLC.UPLCProgram(program.version, appliedProgram)
-      ).toBuffer().buffer
-    )
+        new UPLC.UPLCProgram(program.version, appliedProgram),
+      ).toBuffer().buffer,
+    ),
   );
 }
 
@@ -128,13 +134,13 @@ export const applyDoubleCborEncoding = (script: string): string => {
     try {
       CBORX.decode(Bytes.fromHex(script));
       return Bytes.toHex(
-        Uint8Array.from(CBORX.encode(Bytes.fromHex(script).buffer))
+        Uint8Array.from(CBORX.encode(Bytes.fromHex(script).buffer)),
       );
     } catch (error) {
       return Bytes.toHex(
         Uint8Array.from(
-          CBORX.encode(CBORX.encode(Bytes.fromHex(script).buffer))
-        )
+          CBORX.encode(CBORX.encode(Bytes.fromHex(script).buffer)),
+        ),
       );
     }
   }
@@ -150,7 +156,7 @@ export const applySingleCborEncoding = (script: string): string => {
       return script;
     } catch (error) {
       return Bytes.toHex(
-        Uint8Array.from(CBORX.encode(Bytes.fromHex(script).buffer))
+        Uint8Array.from(CBORX.encode(Bytes.fromHex(script).buffer)),
       );
     }
   }
@@ -173,7 +179,7 @@ export const CBOREncodingLevel = (script: string): "double" | "single" => {
 export function toAddress(
   network: Network.Network,
   validator: Spending,
-  stakeCredential?: Credential.Credential
+  stakeCredential?: Credential.Credential,
 ): Address.Address {
   const validatorHash = toScriptHash(validator);
   if (stakeCredential) {
@@ -182,18 +188,18 @@ export function toAddress(
       CML.Credential.new_script(CML.ScriptHash.from_hex(validatorHash)),
       stakeCredential.type === "Key"
         ? CML.Credential.new_pub_key(
-            CML.Ed25519KeyHash.from_hex(stakeCredential.hash)
+            CML.Ed25519KeyHash.from_hex(stakeCredential.hash),
           )
         : CML.Credential.new_script(
-            CML.ScriptHash.from_hex(stakeCredential.hash)
-          )
+            CML.ScriptHash.from_hex(stakeCredential.hash),
+          ),
     )
       .to_address()
       .to_bech32(undefined);
   } else {
     return CML.EnterpriseAddress.new(
       Network.toId(network),
-      CML.Credential.new_script(CML.ScriptHash.from_hex(validatorHash))
+      CML.Credential.new_script(CML.ScriptHash.from_hex(validatorHash)),
     )
       .to_address()
       .to_bech32(undefined);
@@ -207,24 +213,24 @@ export function toScriptHash(validator: Script): ScriptHash.ScriptHash {
     case "PlutusV1":
       return CML.PlutusScript.from_v1(
         CML.PlutusV1Script.from_cbor_hex(
-          applyDoubleCborEncoding(validator.script)
-        )
+          applyDoubleCborEncoding(validator.script),
+        ),
       )
         .hash()
         .to_hex();
     case "PlutusV2":
       return CML.PlutusScript.from_v2(
         CML.PlutusV2Script.from_cbor_hex(
-          applyDoubleCborEncoding(validator.script)
-        )
+          applyDoubleCborEncoding(validator.script),
+        ),
       )
         .hash()
         .to_hex();
     case "PlutusV3":
       return CML.PlutusScript.from_v3(
         CML.PlutusV3Script.from_cbor_hex(
-          applyDoubleCborEncoding(validator.script)
-        )
+          applyDoubleCborEncoding(validator.script),
+        ),
       )
         .hash()
         .to_hex();

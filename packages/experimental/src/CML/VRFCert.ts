@@ -9,11 +9,11 @@ export class VRFCertError extends Data.TaggedError("VRFCertError")<{
 
 /**
  * Method free of VRFCert
- * 
+ *
  * @example
  * import { VRFCert } from "@lucid-evolution/experimental";
  * import { Effect } from "effect";
- * 
+ *
  * // Using Effect for safe execution with error handling
  * Effect.gen(function*() {
  * // Assume we have a VRFCert instance
@@ -21,7 +21,7 @@ export class VRFCertError extends Data.TaggedError("VRFCertError")<{
  *   const result = yield* VRFCert.free(instance);
  *   console.log(result);
  * });
- * 
+ *
  * @since 2.0.0
  * @category Methods
  */
@@ -33,18 +33,18 @@ export const free = Effect.fn(
         new VRFCertError({
           message: `VRFCert.free failed Hint: Check if you're calling free() more than once.`,
         }),
-    })
+    }),
 );
 
 /**
  * Unsafely calls instance.free without Effect wrapper
- * 
+ *
  * @example
  * import { VRFCert } from "@lucid-evolution/experimental";
- * 
+ *
  * // Assume we have a VRFCert instance
  * const instance = ... ;
- * 
+ *
  * // Using try/catch for error handling
  * try {
  *   const result = VRFCert.unsafeFree(instance);
@@ -52,7 +52,7 @@ export const free = Effect.fn(
  * } catch (error) {
  *   console.error(`VRFCert.unsafeFree failed: ${error.message}`);
  * }
- * 
+ *
  * @since 2.0.0
  * @category Methods
  */
@@ -61,11 +61,11 @@ export const unsafeFree = (instance: CML.VRFCert): void =>
 
 /**
  * Method toCborBytes of VRFCert
- * 
+ *
  * @example
  * import { VRFCert } from "@lucid-evolution/experimental";
  * import { Effect } from "effect";
- * 
+ *
  * // Using Effect for safe execution with error handling
  * Effect.gen(function*() {
  * // Assume we have a VRFCert instance
@@ -73,7 +73,7 @@ export const unsafeFree = (instance: CML.VRFCert): void =>
  *   const result = yield* VRFCert.toCborBytes(instance);
  *   console.log(result);
  * });
- * 
+ *
  * @since 2.0.0
  * @category Methods
  */
@@ -85,18 +85,18 @@ export const toCborBytes = Effect.fn(
         new VRFCertError({
           message: `VRFCert.toCborBytes failed VRFCert is not valid for Uint8Array conversion. Hint: Check byte length and encoding.`,
         }),
-    })
+    }),
 );
 
 /**
  * Unsafely calls instance.toCborBytes without Effect wrapper
- * 
+ *
  * @example
  * import { VRFCert } from "@lucid-evolution/experimental";
- * 
+ *
  * // Assume we have a VRFCert instance
  * const instance = ... ;
- * 
+ *
  * // Using try/catch for error handling
  * try {
  *   const result = VRFCert.unsafeToCborBytes(instance);
@@ -104,7 +104,7 @@ export const toCborBytes = Effect.fn(
  * } catch (error) {
  *   console.error(`VRFCert.unsafeToCborBytes failed: ${error.message}`);
  * }
- * 
+ *
  * @since 2.0.0
  * @category Methods
  */
@@ -113,11 +113,11 @@ export const unsafeToCborBytes = (instance: CML.VRFCert): Uint8Array =>
 
 /**
  * Method toCanonicalCborBytes of VRFCert
- * 
+ *
  * @example
  * import { VRFCert } from "@lucid-evolution/experimental";
  * import { Effect } from "effect";
- * 
+ *
  * // Using Effect for safe execution with error handling
  * Effect.gen(function*() {
  * // Assume we have a VRFCert instance
@@ -125,7 +125,7 @@ export const unsafeToCborBytes = (instance: CML.VRFCert): Uint8Array =>
  *   const result = yield* VRFCert.toCanonicalCborBytes(instance);
  *   console.log(result);
  * });
- * 
+ *
  * @since 2.0.0
  * @category Methods
  */
@@ -137,18 +137,18 @@ export const toCanonicalCborBytes = Effect.fn(
         new VRFCertError({
           message: `VRFCert.toCanonicalCborBytes failed VRFCert is not valid for Uint8Array conversion. Hint: Check byte length and encoding.`,
         }),
-    })
+    }),
 );
 
 /**
  * Unsafely calls instance.toCanonicalCborBytes without Effect wrapper
- * 
+ *
  * @example
  * import { VRFCert } from "@lucid-evolution/experimental";
- * 
+ *
  * // Assume we have a VRFCert instance
  * const instance = ... ;
- * 
+ *
  * // Using try/catch for error handling
  * try {
  *   const result = VRFCert.unsafeToCanonicalCborBytes(instance);
@@ -156,7 +156,7 @@ export const toCanonicalCborBytes = Effect.fn(
  * } catch (error) {
  *   console.error(`VRFCert.unsafeToCanonicalCborBytes failed: ${error.message}`);
  * }
- * 
+ *
  * @since 2.0.0
  * @category Methods
  */
@@ -165,38 +165,39 @@ export const unsafeToCanonicalCborBytes = (instance: CML.VRFCert): Uint8Array =>
 
 /**
  * Static method fromCborBytes of VRFCert
- * 
+ *
  * @example
  * import { VRFCert } from "@lucid-evolution/experimental";
  * import { Effect } from "effect";
- * 
+ *
  * // Using Effect for safe execution with error handling
  * Effect.gen(function*() {
- * 
+ *
  *   const result = yield* VRFCert.fromCborBytes( parameters );
  *   console.log(result);
  * });
- * 
+ *
  * @since 2.0.0
  * @category Constructors
  */
 export const fromCborBytes = Effect.fn(function* (cborBytes: Uint8Array) {
   return yield* Effect.try({
     try: () => CML.VRFCert.from_cbor_bytes(cborBytes),
-    catch: () => new VRFCertError({
-      message: `VRFCert.fromCborBytes failed with parameters: ${cborBytes}. Hint: Check byte length and encoding.`,
-    }),
+    catch: () =>
+      new VRFCertError({
+        message: `VRFCert.fromCborBytes failed with parameters: ${cborBytes}. Hint: Check byte length and encoding.`,
+      }),
   });
 });
 
 /**
  * Unsafely calls VRFCert.fromCborBytes without Effect wrapper
- * 
+ *
  * @example
  * import { VRFCert } from "@lucid-evolution/experimental";
- * 
- * 
- * 
+ *
+ *
+ *
  * // Using try/catch for error handling
  * try {
  *   const result = VRFCert.unsafeFromCborBytes( parameters );
@@ -204,7 +205,7 @@ export const fromCborBytes = Effect.fn(function* (cborBytes: Uint8Array) {
  * } catch (error) {
  *   console.error(`VRFCert.unsafeFromCborBytes failed: ${error.message}`);
  * }
- * 
+ *
  * @since 2.0.0
  * @category Constructors
  */
@@ -213,11 +214,11 @@ export const unsafeFromCborBytes = (cborBytes: Uint8Array) =>
 
 /**
  * Method toCborHex of VRFCert
- * 
+ *
  * @example
  * import { VRFCert } from "@lucid-evolution/experimental";
  * import { Effect } from "effect";
- * 
+ *
  * // Using Effect for safe execution with error handling
  * Effect.gen(function*() {
  * // Assume we have a VRFCert instance
@@ -225,7 +226,7 @@ export const unsafeFromCborBytes = (cborBytes: Uint8Array) =>
  *   const result = yield* VRFCert.toCborHex(instance);
  *   console.log(result);
  * });
- * 
+ *
  * @since 2.0.0
  * @category Methods
  */
@@ -237,18 +238,18 @@ export const toCborHex = Effect.fn(
         new VRFCertError({
           message: `VRFCert.toCborHex failed VRFCert is not valid for string conversion. Hint: Make sure it's a valid hex string representing CBOR data.`,
         }),
-    })
+    }),
 );
 
 /**
  * Unsafely calls instance.toCborHex without Effect wrapper
- * 
+ *
  * @example
  * import { VRFCert } from "@lucid-evolution/experimental";
- * 
+ *
  * // Assume we have a VRFCert instance
  * const instance = ... ;
- * 
+ *
  * // Using try/catch for error handling
  * try {
  *   const result = VRFCert.unsafeToCborHex(instance);
@@ -256,7 +257,7 @@ export const toCborHex = Effect.fn(
  * } catch (error) {
  *   console.error(`VRFCert.unsafeToCborHex failed: ${error.message}`);
  * }
- * 
+ *
  * @since 2.0.0
  * @category Methods
  */
@@ -265,11 +266,11 @@ export const unsafeToCborHex = (instance: CML.VRFCert): string =>
 
 /**
  * Method toCanonicalCborHex of VRFCert
- * 
+ *
  * @example
  * import { VRFCert } from "@lucid-evolution/experimental";
  * import { Effect } from "effect";
- * 
+ *
  * // Using Effect for safe execution with error handling
  * Effect.gen(function*() {
  * // Assume we have a VRFCert instance
@@ -277,7 +278,7 @@ export const unsafeToCborHex = (instance: CML.VRFCert): string =>
  *   const result = yield* VRFCert.toCanonicalCborHex(instance);
  *   console.log(result);
  * });
- * 
+ *
  * @since 2.0.0
  * @category Methods
  */
@@ -289,18 +290,18 @@ export const toCanonicalCborHex = Effect.fn(
         new VRFCertError({
           message: `VRFCert.toCanonicalCborHex failed VRFCert is not valid for string conversion. Hint: Make sure it's a valid hex string representing CBOR data.`,
         }),
-    })
+    }),
 );
 
 /**
  * Unsafely calls instance.toCanonicalCborHex without Effect wrapper
- * 
+ *
  * @example
  * import { VRFCert } from "@lucid-evolution/experimental";
- * 
+ *
  * // Assume we have a VRFCert instance
  * const instance = ... ;
- * 
+ *
  * // Using try/catch for error handling
  * try {
  *   const result = VRFCert.unsafeToCanonicalCborHex(instance);
@@ -308,7 +309,7 @@ export const toCanonicalCborHex = Effect.fn(
  * } catch (error) {
  *   console.error(`VRFCert.unsafeToCanonicalCborHex failed: ${error.message}`);
  * }
- * 
+ *
  * @since 2.0.0
  * @category Methods
  */
@@ -317,38 +318,39 @@ export const unsafeToCanonicalCborHex = (instance: CML.VRFCert): string =>
 
 /**
  * Static method fromCborHex of VRFCert
- * 
+ *
  * @example
  * import { VRFCert } from "@lucid-evolution/experimental";
  * import { Effect } from "effect";
- * 
+ *
  * // Using Effect for safe execution with error handling
  * Effect.gen(function*() {
- * 
+ *
  *   const result = yield* VRFCert.fromCborHex( parameters );
  *   console.log(result);
  * });
- * 
+ *
  * @since 2.0.0
  * @category Constructors
  */
 export const fromCborHex = Effect.fn(function* (cborBytes: string) {
   return yield* Effect.try({
     try: () => CML.VRFCert.from_cbor_hex(cborBytes),
-    catch: () => new VRFCertError({
-      message: `VRFCert.fromCborHex failed with parameters: ${cborBytes}. Hint: Make sure it's a valid hex string representing CBOR data.`,
-    }),
+    catch: () =>
+      new VRFCertError({
+        message: `VRFCert.fromCborHex failed with parameters: ${cborBytes}. Hint: Make sure it's a valid hex string representing CBOR data.`,
+      }),
   });
 });
 
 /**
  * Unsafely calls VRFCert.fromCborHex without Effect wrapper
- * 
+ *
  * @example
  * import { VRFCert } from "@lucid-evolution/experimental";
- * 
- * 
- * 
+ *
+ *
+ *
  * // Using try/catch for error handling
  * try {
  *   const result = VRFCert.unsafeFromCborHex( parameters );
@@ -356,7 +358,7 @@ export const fromCborHex = Effect.fn(function* (cborBytes: string) {
  * } catch (error) {
  *   console.error(`VRFCert.unsafeFromCborHex failed: ${error.message}`);
  * }
- * 
+ *
  * @since 2.0.0
  * @category Constructors
  */
@@ -365,11 +367,11 @@ export const unsafeFromCborHex = (cborBytes: string) =>
 
 /**
  * Method toJson of VRFCert
- * 
+ *
  * @example
  * import { VRFCert } from "@lucid-evolution/experimental";
  * import { Effect } from "effect";
- * 
+ *
  * // Using Effect for safe execution with error handling
  * Effect.gen(function*() {
  * // Assume we have a VRFCert instance
@@ -377,7 +379,7 @@ export const unsafeFromCborHex = (cborBytes: string) =>
  *   const result = yield* VRFCert.toJson(instance);
  *   console.log(result);
  * });
- * 
+ *
  * @since 2.0.0
  * @category Methods
  */
@@ -389,18 +391,18 @@ export const toJson = Effect.fn(
         new VRFCertError({
           message: `VRFCert.toJson failed VRFCert is not valid for string conversion. Hint: Validate your JSON structure.`,
         }),
-    })
+    }),
 );
 
 /**
  * Unsafely calls instance.toJson without Effect wrapper
- * 
+ *
  * @example
  * import { VRFCert } from "@lucid-evolution/experimental";
- * 
+ *
  * // Assume we have a VRFCert instance
  * const instance = ... ;
- * 
+ *
  * // Using try/catch for error handling
  * try {
  *   const result = VRFCert.unsafeToJson(instance);
@@ -408,7 +410,7 @@ export const toJson = Effect.fn(
  * } catch (error) {
  *   console.error(`VRFCert.unsafeToJson failed: ${error.message}`);
  * }
- * 
+ *
  * @since 2.0.0
  * @category Methods
  */
@@ -417,11 +419,11 @@ export const unsafeToJson = (instance: CML.VRFCert): string =>
 
 /**
  * Method toJsValue of VRFCert
- * 
+ *
  * @example
  * import { VRFCert } from "@lucid-evolution/experimental";
  * import { Effect } from "effect";
- * 
+ *
  * // Using Effect for safe execution with error handling
  * Effect.gen(function*() {
  * // Assume we have a VRFCert instance
@@ -429,7 +431,7 @@ export const unsafeToJson = (instance: CML.VRFCert): string =>
  *   const result = yield* VRFCert.toJsValue(instance);
  *   console.log(result);
  * });
- * 
+ *
  * @since 2.0.0
  * @category Methods
  */
@@ -441,18 +443,18 @@ export const toJsValue = Effect.fn(
         new VRFCertError({
           message: `VRFCert.toJsValue failed VRFCert is not valid for any conversion. `,
         }),
-    })
+    }),
 );
 
 /**
  * Unsafely calls instance.toJsValue without Effect wrapper
- * 
+ *
  * @example
  * import { VRFCert } from "@lucid-evolution/experimental";
- * 
+ *
  * // Assume we have a VRFCert instance
  * const instance = ... ;
- * 
+ *
  * // Using try/catch for error handling
  * try {
  *   const result = VRFCert.unsafeToJsValue(instance);
@@ -460,7 +462,7 @@ export const toJsValue = Effect.fn(
  * } catch (error) {
  *   console.error(`VRFCert.unsafeToJsValue failed: ${error.message}`);
  * }
- * 
+ *
  * @since 2.0.0
  * @category Methods
  */
@@ -469,38 +471,39 @@ export const unsafeToJsValue = (instance: CML.VRFCert): any =>
 
 /**
  * Static method fromJson of VRFCert
- * 
+ *
  * @example
  * import { VRFCert } from "@lucid-evolution/experimental";
  * import { Effect } from "effect";
- * 
+ *
  * // Using Effect for safe execution with error handling
  * Effect.gen(function*() {
- * 
+ *
  *   const result = yield* VRFCert.fromJson( parameters );
  *   console.log(result);
  * });
- * 
+ *
  * @since 2.0.0
  * @category Constructors
  */
 export const fromJson = Effect.fn(function* (json: string) {
   return yield* Effect.try({
     try: () => CML.VRFCert.from_json(json),
-    catch: () => new VRFCertError({
-      message: `VRFCert.fromJson failed with parameters: ${json}. Hint: Validate your JSON structure.`,
-    }),
+    catch: () =>
+      new VRFCertError({
+        message: `VRFCert.fromJson failed with parameters: ${json}. Hint: Validate your JSON structure.`,
+      }),
   });
 });
 
 /**
  * Unsafely calls VRFCert.fromJson without Effect wrapper
- * 
+ *
  * @example
  * import { VRFCert } from "@lucid-evolution/experimental";
- * 
- * 
- * 
+ *
+ *
+ *
  * // Using try/catch for error handling
  * try {
  *   const result = VRFCert.unsafeFromJson( parameters );
@@ -508,20 +511,19 @@ export const fromJson = Effect.fn(function* (json: string) {
  * } catch (error) {
  *   console.error(`VRFCert.unsafeFromJson failed: ${error.message}`);
  * }
- * 
+ *
  * @since 2.0.0
  * @category Constructors
  */
-export const unsafeFromJson = (json: string) =>
-  Effect.runSync(fromJson(json));
+export const unsafeFromJson = (json: string) => Effect.runSync(fromJson(json));
 
 /**
  * Method output of VRFCert
- * 
+ *
  * @example
  * import { VRFCert } from "@lucid-evolution/experimental";
  * import { Effect } from "effect";
- * 
+ *
  * // Using Effect for safe execution with error handling
  * Effect.gen(function*() {
  * // Assume we have a VRFCert instance
@@ -529,7 +531,7 @@ export const unsafeFromJson = (json: string) =>
  *   const result = yield* VRFCert.output(instance);
  *   console.log(result);
  * });
- * 
+ *
  * @since 2.0.0
  * @category Methods
  */
@@ -541,18 +543,18 @@ export const output = Effect.fn(
         new VRFCertError({
           message: `VRFCert.output failed `,
         }),
-    })
+    }),
 );
 
 /**
  * Unsafely calls instance.output without Effect wrapper
- * 
+ *
  * @example
  * import { VRFCert } from "@lucid-evolution/experimental";
- * 
+ *
  * // Assume we have a VRFCert instance
  * const instance = ... ;
- * 
+ *
  * // Using try/catch for error handling
  * try {
  *   const result = VRFCert.unsafeOutput(instance);
@@ -560,7 +562,7 @@ export const output = Effect.fn(
  * } catch (error) {
  *   console.error(`VRFCert.unsafeOutput failed: ${error.message}`);
  * }
- * 
+ *
  * @since 2.0.0
  * @category Methods
  */
@@ -569,11 +571,11 @@ export const unsafeOutput = (instance: CML.VRFCert): Uint8Array =>
 
 /**
  * Method proof of VRFCert
- * 
+ *
  * @example
  * import { VRFCert } from "@lucid-evolution/experimental";
  * import { Effect } from "effect";
- * 
+ *
  * // Using Effect for safe execution with error handling
  * Effect.gen(function*() {
  * // Assume we have a VRFCert instance
@@ -581,7 +583,7 @@ export const unsafeOutput = (instance: CML.VRFCert): Uint8Array =>
  *   const result = yield* VRFCert.proof(instance);
  *   console.log(result);
  * });
- * 
+ *
  * @since 2.0.0
  * @category Methods
  */
@@ -593,18 +595,18 @@ export const proof = Effect.fn(
         new VRFCertError({
           message: `VRFCert.proof failed `,
         }),
-    })
+    }),
 );
 
 /**
  * Unsafely calls instance.proof without Effect wrapper
- * 
+ *
  * @example
  * import { VRFCert } from "@lucid-evolution/experimental";
- * 
+ *
  * // Assume we have a VRFCert instance
  * const instance = ... ;
- * 
+ *
  * // Using try/catch for error handling
  * try {
  *   const result = VRFCert.unsafeProof(instance);
@@ -612,7 +614,7 @@ export const proof = Effect.fn(
  * } catch (error) {
  *   console.error(`VRFCert.unsafeProof failed: ${error.message}`);
  * }
- * 
+ *
  * @since 2.0.0
  * @category Methods
  */
@@ -621,38 +623,42 @@ export const unsafeProof = (instance: CML.VRFCert): Uint8Array =>
 
 /**
  * Static method _new of VRFCert
- * 
+ *
  * @example
  * import { VRFCert } from "@lucid-evolution/experimental";
  * import { Effect } from "effect";
- * 
+ *
  * // Using Effect for safe execution with error handling
  * Effect.gen(function*() {
- * 
+ *
  *   const result = yield* VRFCert._new( parameters );
  *   console.log(result);
  * });
- * 
+ *
  * @since 2.0.0
  * @category Constructors
  */
-export const _new = Effect.fn(function* (output: Uint8Array, proof: Uint8Array) {
+export const _new = Effect.fn(function* (
+  output: Uint8Array,
+  proof: Uint8Array,
+) {
   return yield* Effect.try({
     try: () => CML.VRFCert.new(output, proof),
-    catch: () => new VRFCertError({
-      message: `VRFCert._new failed with parameters: ${output}, ${proof}. `,
-    }),
+    catch: () =>
+      new VRFCertError({
+        message: `VRFCert._new failed with parameters: ${output}, ${proof}. `,
+      }),
   });
 });
 
 /**
  * Unsafely calls VRFCert._new without Effect wrapper
- * 
+ *
  * @example
  * import { VRFCert } from "@lucid-evolution/experimental";
- * 
- * 
- * 
+ *
+ *
+ *
  * // Using try/catch for error handling
  * try {
  *   const result = VRFCert.unsafe_new( parameters );
@@ -660,7 +666,7 @@ export const _new = Effect.fn(function* (output: Uint8Array, proof: Uint8Array) 
  * } catch (error) {
  *   console.error(`VRFCert.unsafe_new failed: ${error.message}`);
  * }
- * 
+ *
  * @since 2.0.0
  * @category Constructors
  */

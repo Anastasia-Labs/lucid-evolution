@@ -17,7 +17,7 @@ describe("DataTagged Property Tests", () => {
             const decoded = DataTagged.fromCBOR(cbor);
             expect(DataTagged.isByteArray(value)).toBe(true);
             expect(value).toEqual(decoded);
-          })
+          }),
         );
       });
 
@@ -28,7 +28,7 @@ describe("DataTagged Property Tests", () => {
             const decoded = DataTagged.fromCBOR(cbor);
             expect(DataTagged.isInteger(value)).toBe(true);
             expect(value).toEqual(decoded);
-          })
+          }),
         );
       });
 
@@ -40,7 +40,7 @@ describe("DataTagged Property Tests", () => {
             const decoded = DataTagged.fromCBOR(cbor);
             expect(DataTagged.isConstr(value)).toBe(true);
             expect(value).toStrictEqual(decoded);
-          })
+          }),
         );
       });
 
@@ -51,7 +51,7 @@ describe("DataTagged Property Tests", () => {
             const decoded = DataTagged.fromCBOR(cbor);
             expect(DataTagged.isList(value)).toBe(true);
             expect(value).toEqual(decoded);
-          })
+          }),
         );
       });
 
@@ -62,7 +62,7 @@ describe("DataTagged Property Tests", () => {
             const decoded = DataTagged.fromCBOR(cbor);
             expect(DataTagged.isMap(value)).toBe(true);
             expect(value).toEqual(decoded);
-          })
+          }),
         );
       });
     });
@@ -77,14 +77,14 @@ describe("DataTagged Property Tests", () => {
           FastCheck.property(byteArrayArb, (value) => {
             const encoded = DataTagged.encodeData(
               value,
-              TypeTaggedSchema.ByteArray
+              TypeTaggedSchema.ByteArray,
             );
             const decoded = DataTagged.decodeData(
               encoded,
-              TypeTaggedSchema.ByteArray
+              TypeTaggedSchema.ByteArray,
             );
             expect(decoded).toEqual(value);
-          })
+          }),
         );
       });
 
@@ -95,14 +95,14 @@ describe("DataTagged Property Tests", () => {
           FastCheck.property(integerArb, (value) => {
             const encoded = DataTagged.encodeData(
               value,
-              TypeTaggedSchema.Integer
+              TypeTaggedSchema.Integer,
             );
             const decoded = DataTagged.decodeData(
               encoded,
-              TypeTaggedSchema.Integer
+              TypeTaggedSchema.Integer,
             );
             expect(decoded).toEqual(value);
-          })
+          }),
         );
       });
 
@@ -113,14 +113,14 @@ describe("DataTagged Property Tests", () => {
           FastCheck.property(booleanArb, (value) => {
             const encoded = DataTagged.encodeData(
               value,
-              TypeTaggedSchema.Boolean
+              TypeTaggedSchema.Boolean,
             );
             const decoded = DataTagged.decodeData(
               encoded,
-              TypeTaggedSchema.Boolean
+              TypeTaggedSchema.Boolean,
             );
             expect(decoded).toEqual(value);
-          })
+          }),
         );
       });
     });
@@ -145,7 +145,7 @@ describe("DataTagged Property Tests", () => {
             expect(decoded.policyId).toEqual(value.policyId);
             expect(decoded.assetName).toEqual(value.assetName);
             expect(decoded.amount).toEqual(value.amount);
-          })
+          }),
         );
       });
 
@@ -176,7 +176,7 @@ describe("DataTagged Property Tests", () => {
 
             // Deep equality check
             expect(decoded).toEqual(value);
-          })
+          }),
         );
       });
     });
@@ -211,7 +211,7 @@ describe("DataTagged Property Tests", () => {
             expect(decoded.policyId).toEqual(value.policyId);
             expect(decoded.assetName).toEqual(value.assetName);
             expect(decoded.amount).toEqual(value.amount);
-          })
+          }),
         );
       });
     });
@@ -234,7 +234,7 @@ describe("DataTagged Property Tests", () => {
             for (let i = 0; i < value.length; i++) {
               expect(decoded[i]).toEqual(value[i]);
             }
-          })
+          }),
         );
       });
 
@@ -243,7 +243,7 @@ describe("DataTagged Property Tests", () => {
           // Define map schema
           const TokenMap = TypeTaggedSchema.Map(
             TypeTaggedSchema.ByteArray,
-            TypeTaggedSchema.Integer
+            TypeTaggedSchema.Integer,
           );
 
           // Create two maps with same entries but different insertion order
@@ -277,7 +277,7 @@ describe("DataTagged Property Tests", () => {
             id: TypeTaggedSchema.ByteArray,
             metadata: TypeTaggedSchema.Map(
               TypeTaggedSchema.ByteArray,
-              TypeTaggedSchema.ByteArray
+              TypeTaggedSchema.ByteArray,
             ),
           });
 
@@ -290,9 +290,9 @@ describe("DataTagged Property Tests", () => {
                   const aBuffer = Buffer.from(keyA, "hex");
                   const bBuffer = Buffer.from(keyB, "hex");
                   return aBuffer.compare(bBuffer);
-                })
+                }),
               ),
-            })
+            }),
           );
 
           FastCheck.assert(
@@ -309,9 +309,9 @@ describe("DataTagged Property Tests", () => {
               // Verify map properties are intact
               expect(result.id).toEqual(value.id);
               expect(Array.from(result.metadata.entries())).toEqual(
-                Array.from(value.metadata.entries())
+                Array.from(value.metadata.entries()),
               );
-            })
+            }),
           );
         });
       });
@@ -327,8 +327,8 @@ describe("DataTagged Property Tests", () => {
           metadata: TypeTaggedSchema.NullOr(
             TypeTaggedSchema.Map(
               TypeTaggedSchema.ByteArray,
-              TypeTaggedSchema.ByteArray
-            )
+              TypeTaggedSchema.ByteArray,
+            ),
           ),
         });
 
@@ -342,7 +342,7 @@ describe("DataTagged Property Tests", () => {
                   const aBuffer = Buffer.from(keyA, "hex");
                   const bBuffer = Buffer.from(keyB, "hex");
                   return aBuffer.compare(bBuffer);
-                })
+                }),
               )
             : metadata,
         }));
@@ -358,7 +358,7 @@ describe("DataTagged Property Tests", () => {
 
             // Use expect with JSON.stringify for complex object comparison
             expect(result).toEqual(value);
-          })
+          }),
         );
       });
 
@@ -392,7 +392,7 @@ describe("DataTagged Property Tests", () => {
         const Action = TypeTaggedSchema.Union(
           MintAction,
           BurnAction,
-          TransferAction
+          TransferAction,
         );
 
         // Create arbitrary directly from union schema
@@ -405,7 +405,7 @@ describe("DataTagged Property Tests", () => {
             const decoded = DataTagged.fromCBOR(cbor);
             const result = DataTagged.decodeData(decoded, Action);
             expect(result).toEqual(value);
-          })
+          }),
         );
       });
 
@@ -430,7 +430,7 @@ describe("DataTagged Property Tests", () => {
             expect(result[0]).toEqual(value[0]);
             expect(result[1]).toEqual(value[1]);
             expect(result[2]).toEqual(value[2]);
-          })
+          }),
         );
       });
 
@@ -456,7 +456,7 @@ describe("DataTagged Property Tests", () => {
           TypeTaggedSchema.Struct({
             south: TypeTaggedSchema.ByteArray,
             east: TypeTaggedSchema.ByteArray,
-          })
+          }),
         );
         // Create arbitrary directly from schema
         const directionArb = Arbitrary.make(Coordinate);
@@ -467,7 +467,7 @@ describe("DataTagged Property Tests", () => {
             const decoded = DataTagged.fromCBOR(cbor);
             const result = DataTagged.decodeData(decoded, Coordinate);
             expect(result).toEqual(value);
-          })
+          }),
         );
       });
 
@@ -493,7 +493,7 @@ describe("DataTagged Property Tests", () => {
               expect(result[i].assetName).toEqual(value[i].assetName);
               expect(result[i].amount).toEqual(value[i].amount);
             }
-          })
+          }),
         );
       });
 
@@ -504,7 +504,7 @@ describe("DataTagged Property Tests", () => {
             policyId: TypeTaggedSchema.ByteArray,
             assetName: TypeTaggedSchema.ByteArray,
             amount: TypeTaggedSchema.Integer,
-          })
+          }),
         );
         // Create arbitrary directly from schema
         const nullableArb = Arbitrary.make(NullableSchema);
@@ -515,7 +515,7 @@ describe("DataTagged Property Tests", () => {
             const decoded = DataTagged.fromCBOR(cbor);
             const result = DataTagged.decodeData(decoded, NullableSchema);
             expect(result).toEqual(value);
-          })
+          }),
         );
       });
 
@@ -526,7 +526,7 @@ describe("DataTagged Property Tests", () => {
             policyId: TypeTaggedSchema.ByteArray,
             assetName: TypeTaggedSchema.ByteArray,
             amount: TypeTaggedSchema.Integer,
-          })
+          }),
         );
         // Create arbitrary directly from schema
         const optionalArb = Arbitrary.make(OptionalSchema);
@@ -537,14 +537,14 @@ describe("DataTagged Property Tests", () => {
             const decoded = DataTagged.fromCBOR(cbor);
             const result = DataTagged.decodeData(decoded, OptionalSchema);
             expect(result).toEqual(value);
-          })
+          }),
         );
       });
 
       it("should handle refined schemas with custom validation", () => {
         // Define schema with refinement for positive integers
         const PositiveInt = TypeTaggedSchema.Integer.pipe(
-          TypeTaggedSchema.filter((value) => value > 0n || "Not PositiveInt")
+          TypeTaggedSchema.filter((value) => value > 0n || "Not PositiveInt"),
         );
         // Create arbitrary directly from schema with positive integers only
         const positiveIntArb = Arbitrary.make(PositiveInt);
@@ -556,7 +556,7 @@ describe("DataTagged Property Tests", () => {
             const result = DataTagged.decodeData(decoded, PositiveInt);
             expect(result).toEqual(value);
             expect(result > 0n).toBe(true);
-          })
+          }),
         );
       });
     });

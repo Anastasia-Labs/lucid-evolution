@@ -1,8 +1,8 @@
-import * as Address from './Address.js';
-import * as Assets from './Assets.js';
-import * as Datum from './Datum.js';
-import * as Script from './Script.js';
-import * as OutRef from './OutRef.js';
+import * as Address from "./Address.js";
+import * as Assets from "./Assets.js";
+import * as Datum from "./Datum.js";
+import * as Script from "./Script.js";
+import * as OutRef from "./OutRef.js";
 
 export type UTxO = OutRef.OutRef & TxOutput;
 

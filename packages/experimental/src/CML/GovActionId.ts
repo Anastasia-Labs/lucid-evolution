@@ -9,11 +9,11 @@ export class GovActionIdError extends Data.TaggedError("GovActionIdError")<{
 
 /**
  * Method free of GovActionId
- * 
+ *
  * @example
  * import { GovActionId } from "@lucid-evolution/experimental";
  * import { Effect } from "effect";
- * 
+ *
  * // Using Effect for safe execution with error handling
  * Effect.gen(function*() {
  * // Assume we have a GovActionId instance
@@ -21,7 +21,7 @@ export class GovActionIdError extends Data.TaggedError("GovActionIdError")<{
  *   const result = yield* GovActionId.free(instance);
  *   console.log(result);
  * });
- * 
+ *
  * @since 2.0.0
  * @category Methods
  */
@@ -33,18 +33,18 @@ export const free = Effect.fn(
         new GovActionIdError({
           message: `GovActionId.free failed Hint: Check if you're calling free() more than once.`,
         }),
-    })
+    }),
 );
 
 /**
  * Unsafely calls instance.free without Effect wrapper
- * 
+ *
  * @example
  * import { GovActionId } from "@lucid-evolution/experimental";
- * 
+ *
  * // Assume we have a GovActionId instance
  * const instance = ... ;
- * 
+ *
  * // Using try/catch for error handling
  * try {
  *   const result = GovActionId.unsafeFree(instance);
@@ -52,7 +52,7 @@ export const free = Effect.fn(
  * } catch (error) {
  *   console.error(`GovActionId.unsafeFree failed: ${error.message}`);
  * }
- * 
+ *
  * @since 2.0.0
  * @category Methods
  */
@@ -61,11 +61,11 @@ export const unsafeFree = (instance: CML.GovActionId): void =>
 
 /**
  * Method toCborBytes of GovActionId
- * 
+ *
  * @example
  * import { GovActionId } from "@lucid-evolution/experimental";
  * import { Effect } from "effect";
- * 
+ *
  * // Using Effect for safe execution with error handling
  * Effect.gen(function*() {
  * // Assume we have a GovActionId instance
@@ -73,7 +73,7 @@ export const unsafeFree = (instance: CML.GovActionId): void =>
  *   const result = yield* GovActionId.toCborBytes(instance);
  *   console.log(result);
  * });
- * 
+ *
  * @since 2.0.0
  * @category Methods
  */
@@ -85,18 +85,18 @@ export const toCborBytes = Effect.fn(
         new GovActionIdError({
           message: `GovActionId.toCborBytes failed GovActionId is not valid for Uint8Array conversion. Hint: Check byte length and encoding.`,
         }),
-    })
+    }),
 );
 
 /**
  * Unsafely calls instance.toCborBytes without Effect wrapper
- * 
+ *
  * @example
  * import { GovActionId } from "@lucid-evolution/experimental";
- * 
+ *
  * // Assume we have a GovActionId instance
  * const instance = ... ;
- * 
+ *
  * // Using try/catch for error handling
  * try {
  *   const result = GovActionId.unsafeToCborBytes(instance);
@@ -104,7 +104,7 @@ export const toCborBytes = Effect.fn(
  * } catch (error) {
  *   console.error(`GovActionId.unsafeToCborBytes failed: ${error.message}`);
  * }
- * 
+ *
  * @since 2.0.0
  * @category Methods
  */
@@ -113,11 +113,11 @@ export const unsafeToCborBytes = (instance: CML.GovActionId): Uint8Array =>
 
 /**
  * Method toCanonicalCborBytes of GovActionId
- * 
+ *
  * @example
  * import { GovActionId } from "@lucid-evolution/experimental";
  * import { Effect } from "effect";
- * 
+ *
  * // Using Effect for safe execution with error handling
  * Effect.gen(function*() {
  * // Assume we have a GovActionId instance
@@ -125,7 +125,7 @@ export const unsafeToCborBytes = (instance: CML.GovActionId): Uint8Array =>
  *   const result = yield* GovActionId.toCanonicalCborBytes(instance);
  *   console.log(result);
  * });
- * 
+ *
  * @since 2.0.0
  * @category Methods
  */
@@ -137,18 +137,18 @@ export const toCanonicalCborBytes = Effect.fn(
         new GovActionIdError({
           message: `GovActionId.toCanonicalCborBytes failed GovActionId is not valid for Uint8Array conversion. Hint: Check byte length and encoding.`,
         }),
-    })
+    }),
 );
 
 /**
  * Unsafely calls instance.toCanonicalCborBytes without Effect wrapper
- * 
+ *
  * @example
  * import { GovActionId } from "@lucid-evolution/experimental";
- * 
+ *
  * // Assume we have a GovActionId instance
  * const instance = ... ;
- * 
+ *
  * // Using try/catch for error handling
  * try {
  *   const result = GovActionId.unsafeToCanonicalCborBytes(instance);
@@ -156,47 +156,49 @@ export const toCanonicalCborBytes = Effect.fn(
  * } catch (error) {
  *   console.error(`GovActionId.unsafeToCanonicalCborBytes failed: ${error.message}`);
  * }
- * 
+ *
  * @since 2.0.0
  * @category Methods
  */
-export const unsafeToCanonicalCborBytes = (instance: CML.GovActionId): Uint8Array =>
-  Effect.runSync(toCanonicalCborBytes(instance));
+export const unsafeToCanonicalCborBytes = (
+  instance: CML.GovActionId,
+): Uint8Array => Effect.runSync(toCanonicalCborBytes(instance));
 
 /**
  * Static method fromCborBytes of GovActionId
- * 
+ *
  * @example
  * import { GovActionId } from "@lucid-evolution/experimental";
  * import { Effect } from "effect";
- * 
+ *
  * // Using Effect for safe execution with error handling
  * Effect.gen(function*() {
- * 
+ *
  *   const result = yield* GovActionId.fromCborBytes( parameters );
  *   console.log(result);
  * });
- * 
+ *
  * @since 2.0.0
  * @category Constructors
  */
 export const fromCborBytes = Effect.fn(function* (cborBytes: Uint8Array) {
   return yield* Effect.try({
     try: () => CML.GovActionId.from_cbor_bytes(cborBytes),
-    catch: () => new GovActionIdError({
-      message: `GovActionId.fromCborBytes failed with parameters: ${cborBytes}. Hint: Check byte length and encoding.`,
-    }),
+    catch: () =>
+      new GovActionIdError({
+        message: `GovActionId.fromCborBytes failed with parameters: ${cborBytes}. Hint: Check byte length and encoding.`,
+      }),
   });
 });
 
 /**
  * Unsafely calls GovActionId.fromCborBytes without Effect wrapper
- * 
+ *
  * @example
  * import { GovActionId } from "@lucid-evolution/experimental";
- * 
- * 
- * 
+ *
+ *
+ *
  * // Using try/catch for error handling
  * try {
  *   const result = GovActionId.unsafeFromCborBytes( parameters );
@@ -204,7 +206,7 @@ export const fromCborBytes = Effect.fn(function* (cborBytes: Uint8Array) {
  * } catch (error) {
  *   console.error(`GovActionId.unsafeFromCborBytes failed: ${error.message}`);
  * }
- * 
+ *
  * @since 2.0.0
  * @category Constructors
  */
@@ -213,11 +215,11 @@ export const unsafeFromCborBytes = (cborBytes: Uint8Array) =>
 
 /**
  * Method toCborHex of GovActionId
- * 
+ *
  * @example
  * import { GovActionId } from "@lucid-evolution/experimental";
  * import { Effect } from "effect";
- * 
+ *
  * // Using Effect for safe execution with error handling
  * Effect.gen(function*() {
  * // Assume we have a GovActionId instance
@@ -225,7 +227,7 @@ export const unsafeFromCborBytes = (cborBytes: Uint8Array) =>
  *   const result = yield* GovActionId.toCborHex(instance);
  *   console.log(result);
  * });
- * 
+ *
  * @since 2.0.0
  * @category Methods
  */
@@ -237,18 +239,18 @@ export const toCborHex = Effect.fn(
         new GovActionIdError({
           message: `GovActionId.toCborHex failed GovActionId is not valid for string conversion. Hint: Make sure it's a valid hex string representing CBOR data.`,
         }),
-    })
+    }),
 );
 
 /**
  * Unsafely calls instance.toCborHex without Effect wrapper
- * 
+ *
  * @example
  * import { GovActionId } from "@lucid-evolution/experimental";
- * 
+ *
  * // Assume we have a GovActionId instance
  * const instance = ... ;
- * 
+ *
  * // Using try/catch for error handling
  * try {
  *   const result = GovActionId.unsafeToCborHex(instance);
@@ -256,7 +258,7 @@ export const toCborHex = Effect.fn(
  * } catch (error) {
  *   console.error(`GovActionId.unsafeToCborHex failed: ${error.message}`);
  * }
- * 
+ *
  * @since 2.0.0
  * @category Methods
  */
@@ -265,11 +267,11 @@ export const unsafeToCborHex = (instance: CML.GovActionId): string =>
 
 /**
  * Method toCanonicalCborHex of GovActionId
- * 
+ *
  * @example
  * import { GovActionId } from "@lucid-evolution/experimental";
  * import { Effect } from "effect";
- * 
+ *
  * // Using Effect for safe execution with error handling
  * Effect.gen(function*() {
  * // Assume we have a GovActionId instance
@@ -277,7 +279,7 @@ export const unsafeToCborHex = (instance: CML.GovActionId): string =>
  *   const result = yield* GovActionId.toCanonicalCborHex(instance);
  *   console.log(result);
  * });
- * 
+ *
  * @since 2.0.0
  * @category Methods
  */
@@ -289,18 +291,18 @@ export const toCanonicalCborHex = Effect.fn(
         new GovActionIdError({
           message: `GovActionId.toCanonicalCborHex failed GovActionId is not valid for string conversion. Hint: Make sure it's a valid hex string representing CBOR data.`,
         }),
-    })
+    }),
 );
 
 /**
  * Unsafely calls instance.toCanonicalCborHex without Effect wrapper
- * 
+ *
  * @example
  * import { GovActionId } from "@lucid-evolution/experimental";
- * 
+ *
  * // Assume we have a GovActionId instance
  * const instance = ... ;
- * 
+ *
  * // Using try/catch for error handling
  * try {
  *   const result = GovActionId.unsafeToCanonicalCborHex(instance);
@@ -308,7 +310,7 @@ export const toCanonicalCborHex = Effect.fn(
  * } catch (error) {
  *   console.error(`GovActionId.unsafeToCanonicalCborHex failed: ${error.message}`);
  * }
- * 
+ *
  * @since 2.0.0
  * @category Methods
  */
@@ -317,38 +319,39 @@ export const unsafeToCanonicalCborHex = (instance: CML.GovActionId): string =>
 
 /**
  * Static method fromCborHex of GovActionId
- * 
+ *
  * @example
  * import { GovActionId } from "@lucid-evolution/experimental";
  * import { Effect } from "effect";
- * 
+ *
  * // Using Effect for safe execution with error handling
  * Effect.gen(function*() {
- * 
+ *
  *   const result = yield* GovActionId.fromCborHex( parameters );
  *   console.log(result);
  * });
- * 
+ *
  * @since 2.0.0
  * @category Constructors
  */
 export const fromCborHex = Effect.fn(function* (cborBytes: string) {
   return yield* Effect.try({
     try: () => CML.GovActionId.from_cbor_hex(cborBytes),
-    catch: () => new GovActionIdError({
-      message: `GovActionId.fromCborHex failed with parameters: ${cborBytes}. Hint: Make sure it's a valid hex string representing CBOR data.`,
-    }),
+    catch: () =>
+      new GovActionIdError({
+        message: `GovActionId.fromCborHex failed with parameters: ${cborBytes}. Hint: Make sure it's a valid hex string representing CBOR data.`,
+      }),
   });
 });
 
 /**
  * Unsafely calls GovActionId.fromCborHex without Effect wrapper
- * 
+ *
  * @example
  * import { GovActionId } from "@lucid-evolution/experimental";
- * 
- * 
- * 
+ *
+ *
+ *
  * // Using try/catch for error handling
  * try {
  *   const result = GovActionId.unsafeFromCborHex( parameters );
@@ -356,7 +359,7 @@ export const fromCborHex = Effect.fn(function* (cborBytes: string) {
  * } catch (error) {
  *   console.error(`GovActionId.unsafeFromCborHex failed: ${error.message}`);
  * }
- * 
+ *
  * @since 2.0.0
  * @category Constructors
  */
@@ -365,11 +368,11 @@ export const unsafeFromCborHex = (cborBytes: string) =>
 
 /**
  * Method toJson of GovActionId
- * 
+ *
  * @example
  * import { GovActionId } from "@lucid-evolution/experimental";
  * import { Effect } from "effect";
- * 
+ *
  * // Using Effect for safe execution with error handling
  * Effect.gen(function*() {
  * // Assume we have a GovActionId instance
@@ -377,7 +380,7 @@ export const unsafeFromCborHex = (cborBytes: string) =>
  *   const result = yield* GovActionId.toJson(instance);
  *   console.log(result);
  * });
- * 
+ *
  * @since 2.0.0
  * @category Methods
  */
@@ -389,18 +392,18 @@ export const toJson = Effect.fn(
         new GovActionIdError({
           message: `GovActionId.toJson failed GovActionId is not valid for string conversion. Hint: Validate your JSON structure.`,
         }),
-    })
+    }),
 );
 
 /**
  * Unsafely calls instance.toJson without Effect wrapper
- * 
+ *
  * @example
  * import { GovActionId } from "@lucid-evolution/experimental";
- * 
+ *
  * // Assume we have a GovActionId instance
  * const instance = ... ;
- * 
+ *
  * // Using try/catch for error handling
  * try {
  *   const result = GovActionId.unsafeToJson(instance);
@@ -408,7 +411,7 @@ export const toJson = Effect.fn(
  * } catch (error) {
  *   console.error(`GovActionId.unsafeToJson failed: ${error.message}`);
  * }
- * 
+ *
  * @since 2.0.0
  * @category Methods
  */
@@ -417,11 +420,11 @@ export const unsafeToJson = (instance: CML.GovActionId): string =>
 
 /**
  * Method toJsValue of GovActionId
- * 
+ *
  * @example
  * import { GovActionId } from "@lucid-evolution/experimental";
  * import { Effect } from "effect";
- * 
+ *
  * // Using Effect for safe execution with error handling
  * Effect.gen(function*() {
  * // Assume we have a GovActionId instance
@@ -429,7 +432,7 @@ export const unsafeToJson = (instance: CML.GovActionId): string =>
  *   const result = yield* GovActionId.toJsValue(instance);
  *   console.log(result);
  * });
- * 
+ *
  * @since 2.0.0
  * @category Methods
  */
@@ -441,18 +444,18 @@ export const toJsValue = Effect.fn(
         new GovActionIdError({
           message: `GovActionId.toJsValue failed GovActionId is not valid for any conversion. `,
         }),
-    })
+    }),
 );
 
 /**
  * Unsafely calls instance.toJsValue without Effect wrapper
- * 
+ *
  * @example
  * import { GovActionId } from "@lucid-evolution/experimental";
- * 
+ *
  * // Assume we have a GovActionId instance
  * const instance = ... ;
- * 
+ *
  * // Using try/catch for error handling
  * try {
  *   const result = GovActionId.unsafeToJsValue(instance);
@@ -460,7 +463,7 @@ export const toJsValue = Effect.fn(
  * } catch (error) {
  *   console.error(`GovActionId.unsafeToJsValue failed: ${error.message}`);
  * }
- * 
+ *
  * @since 2.0.0
  * @category Methods
  */
@@ -469,38 +472,39 @@ export const unsafeToJsValue = (instance: CML.GovActionId): any =>
 
 /**
  * Static method fromJson of GovActionId
- * 
+ *
  * @example
  * import { GovActionId } from "@lucid-evolution/experimental";
  * import { Effect } from "effect";
- * 
+ *
  * // Using Effect for safe execution with error handling
  * Effect.gen(function*() {
- * 
+ *
  *   const result = yield* GovActionId.fromJson( parameters );
  *   console.log(result);
  * });
- * 
+ *
  * @since 2.0.0
  * @category Constructors
  */
 export const fromJson = Effect.fn(function* (json: string) {
   return yield* Effect.try({
     try: () => CML.GovActionId.from_json(json),
-    catch: () => new GovActionIdError({
-      message: `GovActionId.fromJson failed with parameters: ${json}. Hint: Validate your JSON structure.`,
-    }),
+    catch: () =>
+      new GovActionIdError({
+        message: `GovActionId.fromJson failed with parameters: ${json}. Hint: Validate your JSON structure.`,
+      }),
   });
 });
 
 /**
  * Unsafely calls GovActionId.fromJson without Effect wrapper
- * 
+ *
  * @example
  * import { GovActionId } from "@lucid-evolution/experimental";
- * 
- * 
- * 
+ *
+ *
+ *
  * // Using try/catch for error handling
  * try {
  *   const result = GovActionId.unsafeFromJson( parameters );
@@ -508,20 +512,19 @@ export const fromJson = Effect.fn(function* (json: string) {
  * } catch (error) {
  *   console.error(`GovActionId.unsafeFromJson failed: ${error.message}`);
  * }
- * 
+ *
  * @since 2.0.0
  * @category Constructors
  */
-export const unsafeFromJson = (json: string) =>
-  Effect.runSync(fromJson(json));
+export const unsafeFromJson = (json: string) => Effect.runSync(fromJson(json));
 
 /**
  * Method transactionId of GovActionId
- * 
+ *
  * @example
  * import { GovActionId } from "@lucid-evolution/experimental";
  * import { Effect } from "effect";
- * 
+ *
  * // Using Effect for safe execution with error handling
  * Effect.gen(function*() {
  * // Assume we have a GovActionId instance
@@ -529,30 +532,32 @@ export const unsafeFromJson = (json: string) =>
  *   const result = yield* GovActionId.transactionId(instance);
  *   console.log(result);
  * });
- * 
+ *
  * @since 2.0.0
  * @category Methods
  */
 export const transactionId = Effect.fn(
-  (instance: CML.GovActionId): Effect.Effect<CML.TransactionHash, GovActionIdError> =>
+  (
+    instance: CML.GovActionId,
+  ): Effect.Effect<CML.TransactionHash, GovActionIdError> =>
     Effect.try({
       try: () => instance.transaction_id(),
       catch: () =>
         new GovActionIdError({
           message: `GovActionId.transactionId failed `,
         }),
-    })
+    }),
 );
 
 /**
  * Unsafely calls instance.transactionId without Effect wrapper
- * 
+ *
  * @example
  * import { GovActionId } from "@lucid-evolution/experimental";
- * 
+ *
  * // Assume we have a GovActionId instance
  * const instance = ... ;
- * 
+ *
  * // Using try/catch for error handling
  * try {
  *   const result = GovActionId.unsafeTransactionId(instance);
@@ -560,20 +565,21 @@ export const transactionId = Effect.fn(
  * } catch (error) {
  *   console.error(`GovActionId.unsafeTransactionId failed: ${error.message}`);
  * }
- * 
+ *
  * @since 2.0.0
  * @category Methods
  */
-export const unsafeTransactionId = (instance: CML.GovActionId): CML.TransactionHash =>
-  Effect.runSync(transactionId(instance));
+export const unsafeTransactionId = (
+  instance: CML.GovActionId,
+): CML.TransactionHash => Effect.runSync(transactionId(instance));
 
 /**
  * Method govActionIndex of GovActionId
- * 
+ *
  * @example
  * import { GovActionId } from "@lucid-evolution/experimental";
  * import { Effect } from "effect";
- * 
+ *
  * // Using Effect for safe execution with error handling
  * Effect.gen(function*() {
  * // Assume we have a GovActionId instance
@@ -581,7 +587,7 @@ export const unsafeTransactionId = (instance: CML.GovActionId): CML.TransactionH
  *   const result = yield* GovActionId.govActionIndex(instance);
  *   console.log(result);
  * });
- * 
+ *
  * @since 2.0.0
  * @category Methods
  */
@@ -593,18 +599,18 @@ export const govActionIndex = Effect.fn(
         new GovActionIdError({
           message: `GovActionId.govActionIndex failed `,
         }),
-    })
+    }),
 );
 
 /**
  * Unsafely calls instance.govActionIndex without Effect wrapper
- * 
+ *
  * @example
  * import { GovActionId } from "@lucid-evolution/experimental";
- * 
+ *
  * // Assume we have a GovActionId instance
  * const instance = ... ;
- * 
+ *
  * // Using try/catch for error handling
  * try {
  *   const result = GovActionId.unsafeGovActionIndex(instance);
@@ -612,7 +618,7 @@ export const govActionIndex = Effect.fn(
  * } catch (error) {
  *   console.error(`GovActionId.unsafeGovActionIndex failed: ${error.message}`);
  * }
- * 
+ *
  * @since 2.0.0
  * @category Methods
  */
@@ -621,38 +627,42 @@ export const unsafeGovActionIndex = (instance: CML.GovActionId): bigint =>
 
 /**
  * Static method _new of GovActionId
- * 
+ *
  * @example
  * import { GovActionId } from "@lucid-evolution/experimental";
  * import { Effect } from "effect";
- * 
+ *
  * // Using Effect for safe execution with error handling
  * Effect.gen(function*() {
- * 
+ *
  *   const result = yield* GovActionId._new( parameters );
  *   console.log(result);
  * });
- * 
+ *
  * @since 2.0.0
  * @category Constructors
  */
-export const _new = Effect.fn(function* (transactionId: CML.TransactionHash, govActionIndex: bigint) {
+export const _new = Effect.fn(function* (
+  transactionId: CML.TransactionHash,
+  govActionIndex: bigint,
+) {
   return yield* Effect.try({
     try: () => CML.GovActionId.new(transactionId, govActionIndex),
-    catch: () => new GovActionIdError({
-      message: `GovActionId._new failed with parameters: ${transactionId} (TransactionHash), ${govActionIndex}. `,
-    }),
+    catch: () =>
+      new GovActionIdError({
+        message: `GovActionId._new failed with parameters: ${transactionId} (TransactionHash), ${govActionIndex}. `,
+      }),
   });
 });
 
 /**
  * Unsafely calls GovActionId._new without Effect wrapper
- * 
+ *
  * @example
  * import { GovActionId } from "@lucid-evolution/experimental";
- * 
- * 
- * 
+ *
+ *
+ *
  * // Using try/catch for error handling
  * try {
  *   const result = GovActionId.unsafe_new( parameters );
@@ -660,9 +670,11 @@ export const _new = Effect.fn(function* (transactionId: CML.TransactionHash, gov
  * } catch (error) {
  *   console.error(`GovActionId.unsafe_new failed: ${error.message}`);
  * }
- * 
+ *
  * @since 2.0.0
  * @category Constructors
  */
-export const unsafe_new = (transactionId: CML.TransactionHash, govActionIndex: bigint) =>
-  Effect.runSync(_new(transactionId, govActionIndex));
+export const unsafe_new = (
+  transactionId: CML.TransactionHash,
+  govActionIndex: bigint,
+) => Effect.runSync(_new(transactionId, govActionIndex));

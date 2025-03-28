@@ -8,16 +8,15 @@ export const Enterprise = CML.AddressKind.Enterprise;
 export const Reward = CML.AddressKind.Reward;
 export const Byron = CML.AddressKind.Byron;
 
-
 /**
  * Get all values of the AddressKind enum
- * 
+ *
  * @example
  * import { AddressKind } from "@lucid-evolution/experimental";
- * 
+ *
  * const allValues = AddressKind.values();
  * console.log(allValues);
- * 
+ *
  * @since 2.0.0
  * @category Utils
  */
@@ -26,18 +25,18 @@ export const values = (): Array<CML.AddressKind> => [
   CML.AddressKind.Ptr,
   CML.AddressKind.Enterprise,
   CML.AddressKind.Reward,
-  CML.AddressKind.Byron
+  CML.AddressKind.Byron,
 ];
 
 /**
  * Convert AddressKind enum value to string
- * 
+ *
  * @example
  * import { AddressKind } from "@lucid-evolution/experimental";
- * 
+ *
  * const name = AddressKind.toString(CML.AddressKind.Base);
  * console.log(name); // "Base"
- * 
+ *
  * @since 2.0.0
  * @category Utils
  */
@@ -60,13 +59,13 @@ export const toString = (value: CML.AddressKind): string => {
 
 /**
  * Convert string to AddressKind enum value
- * 
+ *
  * @example
  * import { AddressKind } from "@lucid-evolution/experimental";
- * 
+ *
  * const value = AddressKind.fromString("Base");
  * console.log(value); // Some(CML.AddressKind.Base)
- * 
+ *
  * @since 2.0.0
  * @category Utils
  */

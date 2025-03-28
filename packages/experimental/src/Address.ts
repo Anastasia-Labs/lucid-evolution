@@ -26,12 +26,12 @@ export type Address = string;
 
 export function validatorToRewardAddress(
   network: Network.Network,
-  validator: Script.Certificate | Script.Withdrawal
+  validator: Script.Certificate | Script.Withdrawal,
 ): RewardAddress {
   const validatorHash = Script.toScriptHash(validator);
   return CML.RewardAddress.unsafe_new(
     Network.toId(network),
-    CML.Credential.unsafeNewScript(CML.ScriptHash.unsafeFromHex(validatorHash))
+    CML.Credential.unsafeNewScript(CML.ScriptHash.unsafeFromHex(validatorHash)),
   )
     .to_address()
     .to_bech32(undefined);
@@ -42,7 +42,7 @@ export function getAddressDetails(address: string): AddressDetails {
   // Base Address
   try {
     const parsedAddress = CML.BaseAddress.unsafeFromAddress(
-      unsafeFromHexOrBech32(address)
+      unsafeFromHexOrBech32(address),
     )!;
     const paymentCredential: Credential.Credential =
       parsedAddress.payment().kind() === 0
@@ -81,7 +81,7 @@ export function getAddressDetails(address: string): AddressDetails {
   // Enterprise Address
   try {
     const parsedAddress = CML.EnterpriseAddress.unsafeFromAddress(
-      unsafeFromHexOrBech32(address)
+      unsafeFromHexOrBech32(address),
     )!;
     const paymentCredential: Credential.Credential =
       parsedAddress.payment().kind() === 0
@@ -109,7 +109,7 @@ export function getAddressDetails(address: string): AddressDetails {
   // Pointer Address
   try {
     const parsedAddress = CML.PointerAddress.unsafeFromAddress(
-      unsafeFromHexOrBech32(address)
+      unsafeFromHexOrBech32(address),
     )!;
     const paymentCredential: Credential.Credential =
       parsedAddress?.payment().kind() === 0
@@ -137,7 +137,7 @@ export function getAddressDetails(address: string): AddressDetails {
   // Reward Address
   try {
     const parsedAddress = CML.RewardAddress.unsafeFromAddress(
-      unsafeFromHexOrBech32(address)
+      unsafeFromHexOrBech32(address),
     )!;
     const stakeCredential: Credential.Credential =
       parsedAddress.payment().kind() === 0
@@ -191,8 +191,7 @@ export function getAddressDetails(address: string): AddressDetails {
   throw new Error("No address type matched for: " + address);
 }
 
-
-export function unsafeFromHexOrBech32(address: string): CML.Address.Address{
+export function unsafeFromHexOrBech32(address: string): CML.Address.Address {
   try {
     return CML.Address.unsafeFromHex(address);
   } catch (_e) {

@@ -9,11 +9,11 @@ export class UnitIntervalError extends Data.TaggedError("UnitIntervalError")<{
 
 /**
  * Method free of UnitInterval
- * 
+ *
  * @example
  * import { UnitInterval } from "@lucid-evolution/experimental";
  * import { Effect } from "effect";
- * 
+ *
  * // Using Effect for safe execution with error handling
  * Effect.gen(function*() {
  * // Assume we have a UnitInterval instance
@@ -21,7 +21,7 @@ export class UnitIntervalError extends Data.TaggedError("UnitIntervalError")<{
  *   const result = yield* UnitInterval.free(instance);
  *   console.log(result);
  * });
- * 
+ *
  * @since 2.0.0
  * @category Methods
  */
@@ -33,18 +33,18 @@ export const free = Effect.fn(
         new UnitIntervalError({
           message: `UnitInterval.free failed Hint: Check if you're calling free() more than once.`,
         }),
-    })
+    }),
 );
 
 /**
  * Unsafely calls instance.free without Effect wrapper
- * 
+ *
  * @example
  * import { UnitInterval } from "@lucid-evolution/experimental";
- * 
+ *
  * // Assume we have a UnitInterval instance
  * const instance = ... ;
- * 
+ *
  * // Using try/catch for error handling
  * try {
  *   const result = UnitInterval.unsafeFree(instance);
@@ -52,7 +52,7 @@ export const free = Effect.fn(
  * } catch (error) {
  *   console.error(`UnitInterval.unsafeFree failed: ${error.message}`);
  * }
- * 
+ *
  * @since 2.0.0
  * @category Methods
  */
@@ -61,11 +61,11 @@ export const unsafeFree = (instance: CML.UnitInterval): void =>
 
 /**
  * Method toCborBytes of UnitInterval
- * 
+ *
  * @example
  * import { UnitInterval } from "@lucid-evolution/experimental";
  * import { Effect } from "effect";
- * 
+ *
  * // Using Effect for safe execution with error handling
  * Effect.gen(function*() {
  * // Assume we have a UnitInterval instance
@@ -73,7 +73,7 @@ export const unsafeFree = (instance: CML.UnitInterval): void =>
  *   const result = yield* UnitInterval.toCborBytes(instance);
  *   console.log(result);
  * });
- * 
+ *
  * @since 2.0.0
  * @category Methods
  */
@@ -85,18 +85,18 @@ export const toCborBytes = Effect.fn(
         new UnitIntervalError({
           message: `UnitInterval.toCborBytes failed UnitInterval is not valid for Uint8Array conversion. Hint: Check byte length and encoding.`,
         }),
-    })
+    }),
 );
 
 /**
  * Unsafely calls instance.toCborBytes without Effect wrapper
- * 
+ *
  * @example
  * import { UnitInterval } from "@lucid-evolution/experimental";
- * 
+ *
  * // Assume we have a UnitInterval instance
  * const instance = ... ;
- * 
+ *
  * // Using try/catch for error handling
  * try {
  *   const result = UnitInterval.unsafeToCborBytes(instance);
@@ -104,7 +104,7 @@ export const toCborBytes = Effect.fn(
  * } catch (error) {
  *   console.error(`UnitInterval.unsafeToCborBytes failed: ${error.message}`);
  * }
- * 
+ *
  * @since 2.0.0
  * @category Methods
  */
@@ -113,11 +113,11 @@ export const unsafeToCborBytes = (instance: CML.UnitInterval): Uint8Array =>
 
 /**
  * Method toCanonicalCborBytes of UnitInterval
- * 
+ *
  * @example
  * import { UnitInterval } from "@lucid-evolution/experimental";
  * import { Effect } from "effect";
- * 
+ *
  * // Using Effect for safe execution with error handling
  * Effect.gen(function*() {
  * // Assume we have a UnitInterval instance
@@ -125,7 +125,7 @@ export const unsafeToCborBytes = (instance: CML.UnitInterval): Uint8Array =>
  *   const result = yield* UnitInterval.toCanonicalCborBytes(instance);
  *   console.log(result);
  * });
- * 
+ *
  * @since 2.0.0
  * @category Methods
  */
@@ -137,18 +137,18 @@ export const toCanonicalCborBytes = Effect.fn(
         new UnitIntervalError({
           message: `UnitInterval.toCanonicalCborBytes failed UnitInterval is not valid for Uint8Array conversion. Hint: Check byte length and encoding.`,
         }),
-    })
+    }),
 );
 
 /**
  * Unsafely calls instance.toCanonicalCborBytes without Effect wrapper
- * 
+ *
  * @example
  * import { UnitInterval } from "@lucid-evolution/experimental";
- * 
+ *
  * // Assume we have a UnitInterval instance
  * const instance = ... ;
- * 
+ *
  * // Using try/catch for error handling
  * try {
  *   const result = UnitInterval.unsafeToCanonicalCborBytes(instance);
@@ -156,47 +156,49 @@ export const toCanonicalCborBytes = Effect.fn(
  * } catch (error) {
  *   console.error(`UnitInterval.unsafeToCanonicalCborBytes failed: ${error.message}`);
  * }
- * 
+ *
  * @since 2.0.0
  * @category Methods
  */
-export const unsafeToCanonicalCborBytes = (instance: CML.UnitInterval): Uint8Array =>
-  Effect.runSync(toCanonicalCborBytes(instance));
+export const unsafeToCanonicalCborBytes = (
+  instance: CML.UnitInterval,
+): Uint8Array => Effect.runSync(toCanonicalCborBytes(instance));
 
 /**
  * Static method fromCborBytes of UnitInterval
- * 
+ *
  * @example
  * import { UnitInterval } from "@lucid-evolution/experimental";
  * import { Effect } from "effect";
- * 
+ *
  * // Using Effect for safe execution with error handling
  * Effect.gen(function*() {
- * 
+ *
  *   const result = yield* UnitInterval.fromCborBytes( parameters );
  *   console.log(result);
  * });
- * 
+ *
  * @since 2.0.0
  * @category Constructors
  */
 export const fromCborBytes = Effect.fn(function* (cborBytes: Uint8Array) {
   return yield* Effect.try({
     try: () => CML.UnitInterval.from_cbor_bytes(cborBytes),
-    catch: () => new UnitIntervalError({
-      message: `UnitInterval.fromCborBytes failed with parameters: ${cborBytes}. Hint: Check byte length and encoding.`,
-    }),
+    catch: () =>
+      new UnitIntervalError({
+        message: `UnitInterval.fromCborBytes failed with parameters: ${cborBytes}. Hint: Check byte length and encoding.`,
+      }),
   });
 });
 
 /**
  * Unsafely calls UnitInterval.fromCborBytes without Effect wrapper
- * 
+ *
  * @example
  * import { UnitInterval } from "@lucid-evolution/experimental";
- * 
- * 
- * 
+ *
+ *
+ *
  * // Using try/catch for error handling
  * try {
  *   const result = UnitInterval.unsafeFromCborBytes( parameters );
@@ -204,7 +206,7 @@ export const fromCborBytes = Effect.fn(function* (cborBytes: Uint8Array) {
  * } catch (error) {
  *   console.error(`UnitInterval.unsafeFromCborBytes failed: ${error.message}`);
  * }
- * 
+ *
  * @since 2.0.0
  * @category Constructors
  */
@@ -213,11 +215,11 @@ export const unsafeFromCborBytes = (cborBytes: Uint8Array) =>
 
 /**
  * Method toCborHex of UnitInterval
- * 
+ *
  * @example
  * import { UnitInterval } from "@lucid-evolution/experimental";
  * import { Effect } from "effect";
- * 
+ *
  * // Using Effect for safe execution with error handling
  * Effect.gen(function*() {
  * // Assume we have a UnitInterval instance
@@ -225,7 +227,7 @@ export const unsafeFromCborBytes = (cborBytes: Uint8Array) =>
  *   const result = yield* UnitInterval.toCborHex(instance);
  *   console.log(result);
  * });
- * 
+ *
  * @since 2.0.0
  * @category Methods
  */
@@ -237,18 +239,18 @@ export const toCborHex = Effect.fn(
         new UnitIntervalError({
           message: `UnitInterval.toCborHex failed UnitInterval is not valid for string conversion. Hint: Make sure it's a valid hex string representing CBOR data.`,
         }),
-    })
+    }),
 );
 
 /**
  * Unsafely calls instance.toCborHex without Effect wrapper
- * 
+ *
  * @example
  * import { UnitInterval } from "@lucid-evolution/experimental";
- * 
+ *
  * // Assume we have a UnitInterval instance
  * const instance = ... ;
- * 
+ *
  * // Using try/catch for error handling
  * try {
  *   const result = UnitInterval.unsafeToCborHex(instance);
@@ -256,7 +258,7 @@ export const toCborHex = Effect.fn(
  * } catch (error) {
  *   console.error(`UnitInterval.unsafeToCborHex failed: ${error.message}`);
  * }
- * 
+ *
  * @since 2.0.0
  * @category Methods
  */
@@ -265,11 +267,11 @@ export const unsafeToCborHex = (instance: CML.UnitInterval): string =>
 
 /**
  * Method toCanonicalCborHex of UnitInterval
- * 
+ *
  * @example
  * import { UnitInterval } from "@lucid-evolution/experimental";
  * import { Effect } from "effect";
- * 
+ *
  * // Using Effect for safe execution with error handling
  * Effect.gen(function*() {
  * // Assume we have a UnitInterval instance
@@ -277,7 +279,7 @@ export const unsafeToCborHex = (instance: CML.UnitInterval): string =>
  *   const result = yield* UnitInterval.toCanonicalCborHex(instance);
  *   console.log(result);
  * });
- * 
+ *
  * @since 2.0.0
  * @category Methods
  */
@@ -289,18 +291,18 @@ export const toCanonicalCborHex = Effect.fn(
         new UnitIntervalError({
           message: `UnitInterval.toCanonicalCborHex failed UnitInterval is not valid for string conversion. Hint: Make sure it's a valid hex string representing CBOR data.`,
         }),
-    })
+    }),
 );
 
 /**
  * Unsafely calls instance.toCanonicalCborHex without Effect wrapper
- * 
+ *
  * @example
  * import { UnitInterval } from "@lucid-evolution/experimental";
- * 
+ *
  * // Assume we have a UnitInterval instance
  * const instance = ... ;
- * 
+ *
  * // Using try/catch for error handling
  * try {
  *   const result = UnitInterval.unsafeToCanonicalCborHex(instance);
@@ -308,7 +310,7 @@ export const toCanonicalCborHex = Effect.fn(
  * } catch (error) {
  *   console.error(`UnitInterval.unsafeToCanonicalCborHex failed: ${error.message}`);
  * }
- * 
+ *
  * @since 2.0.0
  * @category Methods
  */
@@ -317,38 +319,39 @@ export const unsafeToCanonicalCborHex = (instance: CML.UnitInterval): string =>
 
 /**
  * Static method fromCborHex of UnitInterval
- * 
+ *
  * @example
  * import { UnitInterval } from "@lucid-evolution/experimental";
  * import { Effect } from "effect";
- * 
+ *
  * // Using Effect for safe execution with error handling
  * Effect.gen(function*() {
- * 
+ *
  *   const result = yield* UnitInterval.fromCborHex( parameters );
  *   console.log(result);
  * });
- * 
+ *
  * @since 2.0.0
  * @category Constructors
  */
 export const fromCborHex = Effect.fn(function* (cborBytes: string) {
   return yield* Effect.try({
     try: () => CML.UnitInterval.from_cbor_hex(cborBytes),
-    catch: () => new UnitIntervalError({
-      message: `UnitInterval.fromCborHex failed with parameters: ${cborBytes}. Hint: Make sure it's a valid hex string representing CBOR data.`,
-    }),
+    catch: () =>
+      new UnitIntervalError({
+        message: `UnitInterval.fromCborHex failed with parameters: ${cborBytes}. Hint: Make sure it's a valid hex string representing CBOR data.`,
+      }),
   });
 });
 
 /**
  * Unsafely calls UnitInterval.fromCborHex without Effect wrapper
- * 
+ *
  * @example
  * import { UnitInterval } from "@lucid-evolution/experimental";
- * 
- * 
- * 
+ *
+ *
+ *
  * // Using try/catch for error handling
  * try {
  *   const result = UnitInterval.unsafeFromCborHex( parameters );
@@ -356,7 +359,7 @@ export const fromCborHex = Effect.fn(function* (cborBytes: string) {
  * } catch (error) {
  *   console.error(`UnitInterval.unsafeFromCborHex failed: ${error.message}`);
  * }
- * 
+ *
  * @since 2.0.0
  * @category Constructors
  */
@@ -365,11 +368,11 @@ export const unsafeFromCborHex = (cborBytes: string) =>
 
 /**
  * Method toJson of UnitInterval
- * 
+ *
  * @example
  * import { UnitInterval } from "@lucid-evolution/experimental";
  * import { Effect } from "effect";
- * 
+ *
  * // Using Effect for safe execution with error handling
  * Effect.gen(function*() {
  * // Assume we have a UnitInterval instance
@@ -377,7 +380,7 @@ export const unsafeFromCborHex = (cborBytes: string) =>
  *   const result = yield* UnitInterval.toJson(instance);
  *   console.log(result);
  * });
- * 
+ *
  * @since 2.0.0
  * @category Methods
  */
@@ -389,18 +392,18 @@ export const toJson = Effect.fn(
         new UnitIntervalError({
           message: `UnitInterval.toJson failed UnitInterval is not valid for string conversion. Hint: Validate your JSON structure.`,
         }),
-    })
+    }),
 );
 
 /**
  * Unsafely calls instance.toJson without Effect wrapper
- * 
+ *
  * @example
  * import { UnitInterval } from "@lucid-evolution/experimental";
- * 
+ *
  * // Assume we have a UnitInterval instance
  * const instance = ... ;
- * 
+ *
  * // Using try/catch for error handling
  * try {
  *   const result = UnitInterval.unsafeToJson(instance);
@@ -408,7 +411,7 @@ export const toJson = Effect.fn(
  * } catch (error) {
  *   console.error(`UnitInterval.unsafeToJson failed: ${error.message}`);
  * }
- * 
+ *
  * @since 2.0.0
  * @category Methods
  */
@@ -417,11 +420,11 @@ export const unsafeToJson = (instance: CML.UnitInterval): string =>
 
 /**
  * Method toJsValue of UnitInterval
- * 
+ *
  * @example
  * import { UnitInterval } from "@lucid-evolution/experimental";
  * import { Effect } from "effect";
- * 
+ *
  * // Using Effect for safe execution with error handling
  * Effect.gen(function*() {
  * // Assume we have a UnitInterval instance
@@ -429,7 +432,7 @@ export const unsafeToJson = (instance: CML.UnitInterval): string =>
  *   const result = yield* UnitInterval.toJsValue(instance);
  *   console.log(result);
  * });
- * 
+ *
  * @since 2.0.0
  * @category Methods
  */
@@ -441,18 +444,18 @@ export const toJsValue = Effect.fn(
         new UnitIntervalError({
           message: `UnitInterval.toJsValue failed UnitInterval is not valid for any conversion. `,
         }),
-    })
+    }),
 );
 
 /**
  * Unsafely calls instance.toJsValue without Effect wrapper
- * 
+ *
  * @example
  * import { UnitInterval } from "@lucid-evolution/experimental";
- * 
+ *
  * // Assume we have a UnitInterval instance
  * const instance = ... ;
- * 
+ *
  * // Using try/catch for error handling
  * try {
  *   const result = UnitInterval.unsafeToJsValue(instance);
@@ -460,7 +463,7 @@ export const toJsValue = Effect.fn(
  * } catch (error) {
  *   console.error(`UnitInterval.unsafeToJsValue failed: ${error.message}`);
  * }
- * 
+ *
  * @since 2.0.0
  * @category Methods
  */
@@ -469,38 +472,39 @@ export const unsafeToJsValue = (instance: CML.UnitInterval): any =>
 
 /**
  * Static method fromJson of UnitInterval
- * 
+ *
  * @example
  * import { UnitInterval } from "@lucid-evolution/experimental";
  * import { Effect } from "effect";
- * 
+ *
  * // Using Effect for safe execution with error handling
  * Effect.gen(function*() {
- * 
+ *
  *   const result = yield* UnitInterval.fromJson( parameters );
  *   console.log(result);
  * });
- * 
+ *
  * @since 2.0.0
  * @category Constructors
  */
 export const fromJson = Effect.fn(function* (json: string) {
   return yield* Effect.try({
     try: () => CML.UnitInterval.from_json(json),
-    catch: () => new UnitIntervalError({
-      message: `UnitInterval.fromJson failed with parameters: ${json}. Hint: Validate your JSON structure.`,
-    }),
+    catch: () =>
+      new UnitIntervalError({
+        message: `UnitInterval.fromJson failed with parameters: ${json}. Hint: Validate your JSON structure.`,
+      }),
   });
 });
 
 /**
  * Unsafely calls UnitInterval.fromJson without Effect wrapper
- * 
+ *
  * @example
  * import { UnitInterval } from "@lucid-evolution/experimental";
- * 
- * 
- * 
+ *
+ *
+ *
  * // Using try/catch for error handling
  * try {
  *   const result = UnitInterval.unsafeFromJson( parameters );
@@ -508,20 +512,19 @@ export const fromJson = Effect.fn(function* (json: string) {
  * } catch (error) {
  *   console.error(`UnitInterval.unsafeFromJson failed: ${error.message}`);
  * }
- * 
+ *
  * @since 2.0.0
  * @category Constructors
  */
-export const unsafeFromJson = (json: string) =>
-  Effect.runSync(fromJson(json));
+export const unsafeFromJson = (json: string) => Effect.runSync(fromJson(json));
 
 /**
  * Method start of UnitInterval
- * 
+ *
  * @example
  * import { UnitInterval } from "@lucid-evolution/experimental";
  * import { Effect } from "effect";
- * 
+ *
  * // Using Effect for safe execution with error handling
  * Effect.gen(function*() {
  * // Assume we have a UnitInterval instance
@@ -529,7 +532,7 @@ export const unsafeFromJson = (json: string) =>
  *   const result = yield* UnitInterval.start(instance);
  *   console.log(result);
  * });
- * 
+ *
  * @since 2.0.0
  * @category Methods
  */
@@ -541,18 +544,18 @@ export const start = Effect.fn(
         new UnitIntervalError({
           message: `UnitInterval.start failed `,
         }),
-    })
+    }),
 );
 
 /**
  * Unsafely calls instance.start without Effect wrapper
- * 
+ *
  * @example
  * import { UnitInterval } from "@lucid-evolution/experimental";
- * 
+ *
  * // Assume we have a UnitInterval instance
  * const instance = ... ;
- * 
+ *
  * // Using try/catch for error handling
  * try {
  *   const result = UnitInterval.unsafeStart(instance);
@@ -560,7 +563,7 @@ export const start = Effect.fn(
  * } catch (error) {
  *   console.error(`UnitInterval.unsafeStart failed: ${error.message}`);
  * }
- * 
+ *
  * @since 2.0.0
  * @category Methods
  */
@@ -569,11 +572,11 @@ export const unsafeStart = (instance: CML.UnitInterval): bigint =>
 
 /**
  * Method end of UnitInterval
- * 
+ *
  * @example
  * import { UnitInterval } from "@lucid-evolution/experimental";
  * import { Effect } from "effect";
- * 
+ *
  * // Using Effect for safe execution with error handling
  * Effect.gen(function*() {
  * // Assume we have a UnitInterval instance
@@ -581,7 +584,7 @@ export const unsafeStart = (instance: CML.UnitInterval): bigint =>
  *   const result = yield* UnitInterval.end(instance);
  *   console.log(result);
  * });
- * 
+ *
  * @since 2.0.0
  * @category Methods
  */
@@ -593,18 +596,18 @@ export const end = Effect.fn(
         new UnitIntervalError({
           message: `UnitInterval.end failed `,
         }),
-    })
+    }),
 );
 
 /**
  * Unsafely calls instance.end without Effect wrapper
- * 
+ *
  * @example
  * import { UnitInterval } from "@lucid-evolution/experimental";
- * 
+ *
  * // Assume we have a UnitInterval instance
  * const instance = ... ;
- * 
+ *
  * // Using try/catch for error handling
  * try {
  *   const result = UnitInterval.unsafeEnd(instance);
@@ -612,7 +615,7 @@ export const end = Effect.fn(
  * } catch (error) {
  *   console.error(`UnitInterval.unsafeEnd failed: ${error.message}`);
  * }
- * 
+ *
  * @since 2.0.0
  * @category Methods
  */
@@ -621,38 +624,39 @@ export const unsafeEnd = (instance: CML.UnitInterval): bigint =>
 
 /**
  * Static method _new of UnitInterval
- * 
+ *
  * @example
  * import { UnitInterval } from "@lucid-evolution/experimental";
  * import { Effect } from "effect";
- * 
+ *
  * // Using Effect for safe execution with error handling
  * Effect.gen(function*() {
- * 
+ *
  *   const result = yield* UnitInterval._new( parameters );
  *   console.log(result);
  * });
- * 
+ *
  * @since 2.0.0
  * @category Constructors
  */
 export const _new = Effect.fn(function* (start: bigint, end: bigint) {
   return yield* Effect.try({
     try: () => CML.UnitInterval.new(start, end),
-    catch: () => new UnitIntervalError({
-      message: `UnitInterval._new failed with parameters: ${start}, ${end}. `,
-    }),
+    catch: () =>
+      new UnitIntervalError({
+        message: `UnitInterval._new failed with parameters: ${start}, ${end}. `,
+      }),
   });
 });
 
 /**
  * Unsafely calls UnitInterval._new without Effect wrapper
- * 
+ *
  * @example
  * import { UnitInterval } from "@lucid-evolution/experimental";
- * 
- * 
- * 
+ *
+ *
+ *
  * // Using try/catch for error handling
  * try {
  *   const result = UnitInterval.unsafe_new( parameters );
@@ -660,7 +664,7 @@ export const _new = Effect.fn(function* (start: bigint, end: bigint) {
  * } catch (error) {
  *   console.error(`UnitInterval.unsafe_new failed: ${error.message}`);
  * }
- * 
+ *
  * @since 2.0.0
  * @category Constructors
  */

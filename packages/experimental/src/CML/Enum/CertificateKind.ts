@@ -15,21 +15,21 @@ export const StakeRegDelegCert = CML.CertificateKind.StakeRegDelegCert;
 export const VoteRegDelegCert = CML.CertificateKind.VoteRegDelegCert;
 export const StakeVoteRegDelegCert = CML.CertificateKind.StakeVoteRegDelegCert;
 export const AuthCommitteeHotCert = CML.CertificateKind.AuthCommitteeHotCert;
-export const ResignCommitteeColdCert = CML.CertificateKind.ResignCommitteeColdCert;
+export const ResignCommitteeColdCert =
+  CML.CertificateKind.ResignCommitteeColdCert;
 export const RegDrepCert = CML.CertificateKind.RegDrepCert;
 export const UnregDrepCert = CML.CertificateKind.UnregDrepCert;
 export const UpdateDrepCert = CML.CertificateKind.UpdateDrepCert;
 
-
 /**
  * Get all values of the CertificateKind enum
- * 
+ *
  * @example
  * import { CertificateKind } from "@lucid-evolution/experimental";
- * 
+ *
  * const allValues = CertificateKind.values();
  * console.log(allValues);
- * 
+ *
  * @since 2.0.0
  * @category Utils
  */
@@ -50,18 +50,18 @@ export const values = (): Array<CML.CertificateKind> => [
   CML.CertificateKind.ResignCommitteeColdCert,
   CML.CertificateKind.RegDrepCert,
   CML.CertificateKind.UnregDrepCert,
-  CML.CertificateKind.UpdateDrepCert
+  CML.CertificateKind.UpdateDrepCert,
 ];
 
 /**
  * Convert CertificateKind enum value to string
- * 
+ *
  * @example
  * import { CertificateKind } from "@lucid-evolution/experimental";
- * 
+ *
  * const name = CertificateKind.toString(CML.CertificateKind.StakeRegistration);
  * console.log(name); // "StakeRegistration"
- * 
+ *
  * @since 2.0.0
  * @category Utils
  */
@@ -108,13 +108,13 @@ export const toString = (value: CML.CertificateKind): string => {
 
 /**
  * Convert string to CertificateKind enum value
- * 
+ *
  * @example
  * import { CertificateKind } from "@lucid-evolution/experimental";
- * 
+ *
  * const value = CertificateKind.fromString("StakeRegistration");
  * console.log(value); // Some(CML.CertificateKind.StakeRegistration)
- * 
+ *
  * @since 2.0.0
  * @category Utils
  */

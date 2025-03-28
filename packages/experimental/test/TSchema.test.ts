@@ -13,22 +13,22 @@ describe("TypeTaggedSchema Tests", () => {
         const input = "deadbeef";
         const encoded = DataTagged.encodeData(
           input,
-          TypeTaggedSchema.ByteArray
+          TypeTaggedSchema.ByteArray,
         );
         const decoded = DataTagged.decodeData(
           encoded,
-          TypeTaggedSchema.ByteArray
+          TypeTaggedSchema.ByteArray,
         );
 
         expect(encoded).toEqual(
-          DataTagged.ByteArray.make({ value: "deadbeef" })
+          DataTagged.ByteArray.make({ value: "deadbeef" }),
         );
         expect(decoded).toEqual("deadbeef");
       });
 
       it("should fail on invalid hex string", () => {
         expect(() =>
-          DataTagged.encodeData("not-hex", TypeTaggedSchema.ByteArray)
+          DataTagged.encodeData("not-hex", TypeTaggedSchema.ByteArray),
         ).toThrow();
       });
     });
@@ -39,7 +39,7 @@ describe("TypeTaggedSchema Tests", () => {
         const encoded = DataTagged.encodeData(input, TypeTaggedSchema.Integer);
         const decoded = DataTagged.decodeData(
           encoded,
-          TypeTaggedSchema.Integer
+          TypeTaggedSchema.Integer,
         );
 
         expect(encoded).toEqual(DataTagged.Integer.make({ value: 42n }));
@@ -49,7 +49,7 @@ describe("TypeTaggedSchema Tests", () => {
       it("should fail on non-bigint", () => {
         expect(() =>
           //@ts-ignore
-          DataTagged.encodeData(42, TypeTaggedSchema.Integer)
+          DataTagged.encodeData(42, TypeTaggedSchema.Integer),
         ).toThrow();
       });
     });
@@ -60,11 +60,11 @@ describe("TypeTaggedSchema Tests", () => {
         const encoded = DataTagged.encodeData(input, TypeTaggedSchema.Boolean);
         const decoded = DataTagged.decodeData(
           encoded,
-          TypeTaggedSchema.Boolean
+          TypeTaggedSchema.Boolean,
         );
 
         expect(encoded).toEqual(
-          DataTagged.Constr.make({ index: 1n, fields: [] })
+          DataTagged.Constr.make({ index: 1n, fields: [] }),
         );
         expect(decoded).toEqual(true);
       });
@@ -74,11 +74,11 @@ describe("TypeTaggedSchema Tests", () => {
         const encoded = DataTagged.encodeData(input, TypeTaggedSchema.Boolean);
         const decoded = DataTagged.decodeData(
           encoded,
-          TypeTaggedSchema.Boolean
+          TypeTaggedSchema.Boolean,
         );
 
         expect(encoded).toEqual(
-          DataTagged.Constr.make({ index: 0n, fields: [] })
+          DataTagged.Constr.make({ index: 0n, fields: [] }),
         );
         expect(decoded).toEqual(false);
       });
@@ -89,7 +89,7 @@ describe("TypeTaggedSchema Tests", () => {
           fields: [DataTagged.Integer.make({ value: 1n })],
         });
         expect(() =>
-          DataTagged.decodeData(invalidInput, TypeTaggedSchema.Boolean)
+          DataTagged.decodeData(invalidInput, TypeTaggedSchema.Boolean),
         ).toThrow();
       });
     });
@@ -111,7 +111,7 @@ describe("TypeTaggedSchema Tests", () => {
               DataTagged.Integer.make({ value: 2n }),
               DataTagged.Integer.make({ value: 3n }),
             ],
-          })
+          }),
         );
         expect(decoded).toEqual([1n, 2n, 3n]);
       });
@@ -132,7 +132,7 @@ describe("TypeTaggedSchema Tests", () => {
       it("should encode/decode maps", () => {
         const TokenMap = TypeTaggedSchema.Map(
           TypeTaggedSchema.ByteArray,
-          TypeTaggedSchema.Integer
+          TypeTaggedSchema.Integer,
         );
 
         const input = new Map([
@@ -155,7 +155,7 @@ describe("TypeTaggedSchema Tests", () => {
                 DataTagged.Integer.make({ value: 2n }),
               ],
             ],
-          })
+          }),
         );
         expect(decoded).toEqual(input);
       });
@@ -163,7 +163,7 @@ describe("TypeTaggedSchema Tests", () => {
       it("should handle empty maps", () => {
         const TokenMap = TypeTaggedSchema.Map(
           TypeTaggedSchema.ByteArray,
-          TypeTaggedSchema.Integer
+          TypeTaggedSchema.Integer,
         );
 
         const input = new Map();
@@ -173,34 +173,34 @@ describe("TypeTaggedSchema Tests", () => {
         expect(encoded).toEqual(DataTagged.Map.make({ value: [] }));
         expect(decoded).toEqual(input);
       });
-      
+
       it("should deterministically encode Maps regardless of insertion order", () => {
         const TokenMap = TypeTaggedSchema.Map(
           TypeTaggedSchema.ByteArray,
-          TypeTaggedSchema.Integer
+          TypeTaggedSchema.Integer,
         );
-        
+
         // Create two maps with same entries but different insertion order
         const map1 = new Map([
           ["deadbeef", 1n],
           ["cafe", 2n],
-          ["babe", 3n]
+          ["babe", 3n],
         ]);
-        
+
         const map2 = new Map([
           ["cafe", 2n],
           ["babe", 3n],
-          ["deadbeef", 1n]
+          ["deadbeef", 1n],
         ]);
-        
+
         // Encode both maps
         const encoded1 = DataTagged.encodeData(map1, TokenMap);
         const encoded2 = DataTagged.encodeData(map2, TokenMap);
-        
+
         // Convert to CBOR
         const cbor1 = DataTagged.toCBOR(encoded1);
         const cbor2 = DataTagged.toCBOR(encoded2);
-        
+
         // The CBOR outputs should be identical if sorting is working correctly
         expect(cbor1).toEqual(cbor2);
       });
@@ -231,7 +231,7 @@ describe("TypeTaggedSchema Tests", () => {
               DataTagged.ByteArray.make({ value: "cafe" }),
               DataTagged.Integer.make({ value: 1000n }),
             ],
-          })
+          }),
         );
         expect(decoded).toEqual(input);
       });
@@ -270,7 +270,7 @@ describe("TypeTaggedSchema Tests", () => {
           DataTagged.Constr.make({
             index: 0n,
             fields: [assetEncoded, DataTagged.Integer.make({ value: 1000n })],
-          })
+          }),
         );
         expect(decoded).toEqual(input);
       });
@@ -293,7 +293,7 @@ describe("TypeTaggedSchema Tests", () => {
               DataTagged.ByteArray.make({ value: "deadbeef" }),
               DataTagged.Integer.make({ value: 1000n }),
             ],
-          })
+          }),
         );
         expect(decoded).toEqual(input);
       });
@@ -325,7 +325,7 @@ describe("TypeTaggedSchema Tests", () => {
           DataTagged.Constr.make({
             index: 0n,
             fields: [DataTagged.Integer.make({ value: 42n })],
-          })
+          }),
         );
         expect(decoded).toEqual(42n);
       });
@@ -338,7 +338,7 @@ describe("TypeTaggedSchema Tests", () => {
         const decoded = DataTagged.decodeData(encoded, MaybeInt);
 
         expect(encoded).toEqual(
-          DataTagged.Constr.make({ index: 1n, fields: [] })
+          DataTagged.Constr.make({ index: 1n, fields: [] }),
         );
         expect(decoded).toBeNull();
       });
@@ -353,7 +353,7 @@ describe("TypeTaggedSchema Tests", () => {
         const decoded = DataTagged.decodeData(encoded, Action);
 
         expect(encoded).toEqual(
-          DataTagged.Constr.make({ index: 0n, fields: [] })
+          DataTagged.Constr.make({ index: 0n, fields: [] }),
         );
         expect(decoded).toEqual("mint");
 
@@ -362,7 +362,7 @@ describe("TypeTaggedSchema Tests", () => {
         const decoded2 = DataTagged.decodeData(encoded2, Action);
 
         expect(encoded2).toEqual(
-          DataTagged.Constr.make({ index: 1n, fields: [] })
+          DataTagged.Constr.make({ index: 1n, fields: [] }),
         );
         expect(decoded2).toEqual("burn");
       });
@@ -371,7 +371,7 @@ describe("TypeTaggedSchema Tests", () => {
         const Action = TypeTaggedSchema.Literal("mint", "burn");
         expect(() =>
           //@ts-ignore
-          DataTagged.encodeData("invalid", Action)
+          DataTagged.encodeData("invalid", Action),
         ).toThrow();
       });
     });
@@ -392,7 +392,7 @@ describe("TypeTaggedSchema Tests", () => {
         const RedeemAction = TypeTaggedSchema.Union(
           MintRedeem,
           SpendRedeem,
-          TypeTaggedSchema.Integer
+          TypeTaggedSchema.Integer,
         );
 
         // Test MintRedeem
@@ -432,7 +432,7 @@ describe("TypeTaggedSchema Tests", () => {
       it("should throw when decoding invalid constructor index", () => {
         const TestUnion = TypeTaggedSchema.Union(
           TypeTaggedSchema.Integer,
-          TypeTaggedSchema.ByteArray
+          TypeTaggedSchema.ByteArray,
         );
 
         // Create a constructor with out-of-bounds index
@@ -442,7 +442,7 @@ describe("TypeTaggedSchema Tests", () => {
         });
 
         expect(() =>
-          DataTagged.decodeData(invalidConstr, TestUnion)
+          DataTagged.decodeData(invalidConstr, TestUnion),
         ).toThrowError();
       });
     });
@@ -464,8 +464,8 @@ describe("TypeTaggedSchema Tests", () => {
         metadata: TypeTaggedSchema.NullOr(
           TypeTaggedSchema.Map(
             TypeTaggedSchema.ByteArray,
-            TypeTaggedSchema.ByteArray
-          )
+            TypeTaggedSchema.ByteArray,
+          ),
         ),
       });
 
@@ -506,7 +506,7 @@ describe("TypeTaggedSchema Tests", () => {
       });
 
       expect(() => DataTagged.decodeData(invalidData, TestStruct)).toThrow(
-        /field2/
+        /field2/,
       );
     });
 
@@ -514,13 +514,11 @@ describe("TypeTaggedSchema Tests", () => {
       const StringSchema = TypeTaggedSchema.ByteArray;
       const IntegerData = DataTagged.Integer.make({ value: 42n });
 
-      expect(() =>
-        DataTagged.decodeData(IntegerData, StringSchema)
-      ).toThrow();
+      expect(() => DataTagged.decodeData(IntegerData, StringSchema)).toThrow();
 
       const BooleanData = DataTagged.Constr.make({ index: 0n, fields: [] });
       expect(() =>
-        DataTagged.decodeData(BooleanData, TypeTaggedSchema.Integer)
+        DataTagged.decodeData(BooleanData, TypeTaggedSchema.Integer),
       ).toThrow();
     });
   });
