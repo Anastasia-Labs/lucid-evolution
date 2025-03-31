@@ -1,5 +1,5 @@
 import * as CML from "@anastasia-labs/cardano-multiplatform-lib-nodejs";
-import * as DataTagged from "./Data.js";
+import * as Data from "./Data.js";
 import * as UPLC from "@harmoniclabs/uplc";
 import * as Bytes from "./Bytes.js";
 import * as CBORX from "cbor-x";
@@ -88,7 +88,7 @@ export function fromCMLScript(script: CML.Script): Script {
  */
 export function applyParamsToScript<
   Source,
-  Target extends DataTagged.Data,
+  Target extends Data.Data,
   T extends Target[],
 >(
   plutusScript: string,
@@ -102,11 +102,11 @@ export function applyParamsToScript<
     "flat",
   );
   const parameters = type
-    ? params.map((param) => DataTagged.encodeDataUnsafe(param, type))
+    ? params.map((param) => Data.encodeDataUnsafe(param, type))
     : params;
   const appliedProgram = parameters.reduce((body, currentParameter) => {
     const data = UPLC.UPLCConst.data(
-      dataFromCbor(DataTagged.encodeCBORUnsafe(currentParameter)),
+      dataFromCbor(Data.encodeCBORUnsafe(currentParameter)),
     );
     const appliedParameter = new UPLC.Application(body, data);
     return appliedParameter;

@@ -4,10 +4,10 @@ import * as TSchema from "../src/TSchema.js";
 import { Schema } from "effect";
 
 /**
- * Tests for the core DataTagged module functionality -
+ * Tests for the core Data module functionality -
  * focusing on basic data types, their construction and validation
  */
-describe("DataTagged Module Tests", () => {
+describe("Data Module Tests", () => {
   describe("Basic Types", () => {
     describe("ByteArray", () => {
       const validHexCases = [

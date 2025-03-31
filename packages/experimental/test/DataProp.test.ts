@@ -1,21 +1,21 @@
 import { describe, expect, it } from "vitest";
-import * as DataTagged from "../src/Data.js";
-import * as TypeTaggedSchema from "../src/TSchema.js";
+import * as Data from "../src/Data.js";
+import * as TSchema from "../src/TSchema.js";
 import { Arbitrary, FastCheck } from "effect";
 
 /**
- * Property-based testing for DataTagged and TypeTaggedSchema
+ * Property-based testing for Data and TypeTaggedSchema
  * focusing on roundtrip serialization properties for all data types
  */
-describe("DataTagged Property Tests", () => {
-  describe("DataTagged Core Types", () => {
+describe("Data Property Tests", () => {
+  describe("Data Core Types", () => {
     describe("Schema-Based Arbitrary Generation", () => {
       it("should generate valid ByteArray data and roundtrip", () => {
         FastCheck.assert(
-          FastCheck.property(DataTagged.genByteArray(), (value) => {
-            const cbor = DataTagged.encodeCBORUnsafe(value);
-            const decoded = DataTagged.decodeCBORUnsafe(cbor);
-            expect(DataTagged.isByteArray(value)).toBe(true);
+          FastCheck.property(Data.genByteArray(), (value) => {
+            const cbor = Data.encodeCBORUnsafe(value);
+            const decoded = Data.decodeCBORUnsafe(cbor);
+            expect(Data.isByteArray(value)).toBe(true);
             expect(value).toEqual(decoded);
           }),
         );
@@ -23,10 +23,10 @@ describe("DataTagged Property Tests", () => {
 
       it("should generate valid Integer data and roundtrip", () => {
         FastCheck.assert(
-          FastCheck.property(DataTagged.genInteger(), (value) => {
-            const cbor = DataTagged.encodeCBORUnsafe(value);
-            const decoded = DataTagged.decodeCBORUnsafe(cbor);
-            expect(DataTagged.isInteger(value)).toBe(true);
+          FastCheck.property(Data.genInteger(), (value) => {
+            const cbor = Data.encodeCBORUnsafe(value);
+            const decoded = Data.decodeCBORUnsafe(cbor);
+            expect(Data.isInteger(value)).toBe(true);
             expect(value).toEqual(decoded);
           }),
         );
@@ -35,10 +35,10 @@ describe("DataTagged Property Tests", () => {
       it("should generate valid Constr data and roundtrip", () => {
         // Limit runs for complex structures
         FastCheck.assert(
-          FastCheck.property(DataTagged.genConstr(2), (value) => {
-            const cbor = DataTagged.encodeCBORUnsafe(value);
-            const decoded = DataTagged.decodeCBORUnsafe(cbor);
-            expect(DataTagged.isConstr(value)).toBe(true);
+          FastCheck.property(Data.genConstr(2), (value) => {
+            const cbor = Data.encodeCBORUnsafe(value);
+            const decoded = Data.decodeCBORUnsafe(cbor);
+            expect(Data.isConstr(value)).toBe(true);
             expect(value).toStrictEqual(decoded);
           }),
         );
@@ -46,10 +46,10 @@ describe("DataTagged Property Tests", () => {
 
       it("should generate valid List data and roundtrip", () => {
         FastCheck.assert(
-          FastCheck.property(DataTagged.genList(2), (value) => {
-            const cbor = DataTagged.encodeCBORUnsafe(value);
-            const decoded = DataTagged.decodeCBORUnsafe(cbor);
-            expect(DataTagged.isList(value)).toBe(true);
+          FastCheck.property(Data.genList(2), (value) => {
+            const cbor = Data.encodeCBORUnsafe(value);
+            const decoded = Data.decodeCBORUnsafe(cbor);
+            expect(Data.isList(value)).toBe(true);
             expect(value).toEqual(decoded);
           }),
         );
@@ -57,10 +57,10 @@ describe("DataTagged Property Tests", () => {
 
       it("should generate valid Map data and roundtrip", () => {
         FastCheck.assert(
-          FastCheck.property(DataTagged.genMap(2), (value) => {
-            const cbor = DataTagged.encodeCBORUnsafe(value);
-            const decoded = DataTagged.decodeCBORUnsafe(cbor);
-            expect(DataTagged.isMap(value)).toBe(true);
+          FastCheck.property(Data.genMap(2), (value) => {
+            const cbor = Data.encodeCBORUnsafe(value);
+            const decoded = Data.decodeCBORUnsafe(cbor);
+            expect(Data.isMap(value)).toBe(true);
             expect(value).toEqual(decoded);
           }),
         );
@@ -71,17 +71,17 @@ describe("DataTagged Property Tests", () => {
   describe("TypeTaggedSchema Property Tests", () => {
     describe("Basic Schema Roundtrips", () => {
       it("should maintain ByteArray through roundtrip", () => {
-        const byteArrayArb = Arbitrary.make(TypeTaggedSchema.ByteArray);
+        const byteArrayArb = Arbitrary.make(TSchema.ByteArray);
 
         FastCheck.assert(
           FastCheck.property(byteArrayArb, (value) => {
-            const encoded = DataTagged.encodeDataUnsafe(
+            const encoded = Data.encodeDataUnsafe(
               value,
-              TypeTaggedSchema.ByteArray,
+              TSchema.ByteArray,
             );
-            const decoded = DataTagged.decodeDataUnsafe(
+            const decoded = Data.decodeDataUnsafe(
               encoded,
-              TypeTaggedSchema.ByteArray,
+              TSchema.ByteArray,
             );
             expect(decoded).toEqual(value);
           }),
@@ -89,17 +89,17 @@ describe("DataTagged Property Tests", () => {
       });
 
       it("should maintain Integer through roundtrip", () => {
-        const integerArb = Arbitrary.make(TypeTaggedSchema.Integer);
+        const integerArb = Arbitrary.make(TSchema.Integer);
 
         FastCheck.assert(
           FastCheck.property(integerArb, (value) => {
-            const encoded = DataTagged.encodeDataUnsafe(
+            const encoded = Data.encodeDataUnsafe(
               value,
-              TypeTaggedSchema.Integer,
+              TSchema.Integer,
             );
-            const decoded = DataTagged.decodeDataUnsafe(
+            const decoded = Data.decodeDataUnsafe(
               encoded,
-              TypeTaggedSchema.Integer,
+              TSchema.Integer,
             );
             expect(decoded).toEqual(value);
           }),
@@ -107,17 +107,17 @@ describe("DataTagged Property Tests", () => {
       });
 
       it("should maintain Boolean through roundtrip", () => {
-        const booleanArb = Arbitrary.make(TypeTaggedSchema.Boolean);
+        const booleanArb = Arbitrary.make(TSchema.Boolean);
 
         FastCheck.assert(
           FastCheck.property(booleanArb, (value) => {
-            const encoded = DataTagged.encodeDataUnsafe(
+            const encoded = Data.encodeDataUnsafe(
               value,
-              TypeTaggedSchema.Boolean,
+              TSchema.Boolean,
             );
-            const decoded = DataTagged.decodeDataUnsafe(
+            const decoded = Data.decodeDataUnsafe(
               encoded,
-              TypeTaggedSchema.Boolean,
+              TSchema.Boolean,
             );
             expect(decoded).toEqual(value);
           }),
@@ -128,10 +128,10 @@ describe("DataTagged Property Tests", () => {
     describe("Struct Schema", () => {
       it("should maintain struct data through roundtrip", () => {
         // Define a simple struct schema
-        const Token = TypeTaggedSchema.Struct({
-          policyId: TypeTaggedSchema.ByteArray,
-          assetName: TypeTaggedSchema.ByteArray,
-          amount: TypeTaggedSchema.Integer,
+        const Token = TSchema.Struct({
+          policyId: TSchema.ByteArray,
+          assetName: TSchema.ByteArray,
+          amount: TSchema.Integer,
         });
 
         // Create arbitrary directly from schema
@@ -139,8 +139,8 @@ describe("DataTagged Property Tests", () => {
 
         FastCheck.assert(
           FastCheck.property(tokenArb, (value) => {
-            const encoded = DataTagged.encodeDataUnsafe(value, Token);
-            const decoded = DataTagged.decodeDataUnsafe(encoded, Token);
+            const encoded = Data.encodeDataUnsafe(value, Token);
+            const decoded = Data.decodeDataUnsafe(encoded, Token);
 
             expect(decoded.policyId).toEqual(value.policyId);
             expect(decoded.assetName).toEqual(value.assetName);
@@ -151,16 +151,16 @@ describe("DataTagged Property Tests", () => {
 
       it("should handle complex nested structures", () => {
         // Define nested schemas
-        const Asset = TypeTaggedSchema.Struct({
-          policyId: TypeTaggedSchema.ByteArray,
-          assetName: TypeTaggedSchema.ByteArray,
+        const Asset = TSchema.Struct({
+          policyId: TSchema.ByteArray,
+          assetName: TSchema.ByteArray,
         });
 
-        const Wallet = TypeTaggedSchema.Struct({
-          owner: TypeTaggedSchema.ByteArray,
-          balance: TypeTaggedSchema.Integer,
-          assets: TypeTaggedSchema.Array(Asset),
-          active: TypeTaggedSchema.Boolean,
+        const Wallet = TSchema.Struct({
+          owner: TSchema.ByteArray,
+          balance: TSchema.Integer,
+          assets: TSchema.Array(Asset),
+          active: TSchema.Boolean,
         });
 
         // Create arbitrary directly from schema
@@ -169,10 +169,10 @@ describe("DataTagged Property Tests", () => {
         FastCheck.assert(
           FastCheck.property(walletArb, (value) => {
             // Full roundtrip including CBOR serialization
-            const encoded = DataTagged.encodeDataUnsafe(value, Wallet);
-            const cbor = DataTagged.encodeCBORUnsafe(encoded);
-            const fromCbor = DataTagged.decodeCBORUnsafe(cbor);
-            const decoded = DataTagged.decodeDataUnsafe(fromCbor, Wallet);
+            const encoded = Data.encodeDataUnsafe(value, Wallet);
+            const cbor = Data.encodeCBORUnsafe(encoded);
+            const fromCbor = Data.decodeCBORUnsafe(cbor);
+            const decoded = Data.decodeDataUnsafe(fromCbor, Wallet);
 
             // Deep equality check
             expect(decoded).toEqual(value);
@@ -184,10 +184,10 @@ describe("DataTagged Property Tests", () => {
     describe("CBOR Roundtrips", () => {
       it("should maintain data through CBOR roundtrip", () => {
         // Define a schema for testing
-        const Asset = TypeTaggedSchema.Struct({
-          policyId: TypeTaggedSchema.ByteArray,
-          assetName: TypeTaggedSchema.ByteArray,
-          amount: TypeTaggedSchema.Integer,
+        const Asset = TSchema.Struct({
+          policyId: TSchema.ByteArray,
+          assetName: TSchema.ByteArray,
+          amount: TSchema.Integer,
         });
 
         // Create an arbitrary directly from schema
@@ -195,17 +195,17 @@ describe("DataTagged Property Tests", () => {
 
         FastCheck.assert(
           FastCheck.property(assetArb, (value) => {
-            // Encode to DataTagged format
-            const dataTagged = DataTagged.encodeDataUnsafe(value, Asset);
+            // Encode to Data format
+            const encoded = Data.encodeDataUnsafe(value, Asset);
 
             // Convert to CBOR
-            const cbor = DataTagged.encodeCBORUnsafe(dataTagged);
+            const cbor = Data.encodeCBORUnsafe(encoded);
 
             // Decode from CBOR
-            const fromCbor = DataTagged.decodeCBORUnsafe(cbor);
+            const fromCbor = Data.decodeCBORUnsafe(cbor);
 
             // Decode to original format
-            const decoded = DataTagged.decodeDataUnsafe(fromCbor, Asset);
+            const decoded = Data.decodeDataUnsafe(fromCbor, Asset);
 
             // Check equality using expect
             expect(decoded.policyId).toEqual(value.policyId);
@@ -219,15 +219,15 @@ describe("DataTagged Property Tests", () => {
     describe("Collection Schemas", () => {
       it("should maintain arrays through roundtrip", () => {
         // Define array schema
-        const IntArray = TypeTaggedSchema.Array(TypeTaggedSchema.Integer);
+        const IntArray = TSchema.Array(TSchema.Integer);
 
         // Create arbitrary directly from schema
         const intArrayArb = Arbitrary.make(IntArray);
 
         FastCheck.assert(
           FastCheck.property(intArrayArb, (value) => {
-            const encoded = DataTagged.encodeDataUnsafe(value, IntArray);
-            const decoded = DataTagged.decodeDataUnsafe(encoded, IntArray);
+            const encoded = Data.encodeDataUnsafe(value, IntArray);
+            const decoded = Data.decodeDataUnsafe(encoded, IntArray);
 
             expect(decoded.length).toEqual(value.length);
 
@@ -241,9 +241,9 @@ describe("DataTagged Property Tests", () => {
       describe("Map Schema", () => {
         it("should deterministically encode Maps regardless of insertion order", () => {
           // Define map schema
-          const TokenMap = TypeTaggedSchema.Map(
-            TypeTaggedSchema.ByteArray,
-            TypeTaggedSchema.Integer,
+          const TokenMap = TSchema.Map(
+            TSchema.ByteArray,
+            TSchema.Integer,
           );
 
           // Create two maps with same entries but different insertion order
@@ -260,12 +260,12 @@ describe("DataTagged Property Tests", () => {
           ]);
 
           // Encode both maps
-          const encoded1 = DataTagged.encodeDataUnsafe(map1, TokenMap);
-          const encoded2 = DataTagged.encodeDataUnsafe(map2, TokenMap);
+          const encoded1 = Data.encodeDataUnsafe(map1, TokenMap);
+          const encoded2 = Data.encodeDataUnsafe(map2, TokenMap);
 
           // Convert to CBOR
-          const cbor1 = DataTagged.encodeCBORUnsafe(encoded1);
-          const cbor2 = DataTagged.encodeCBORUnsafe(encoded2);
+          const cbor1 = Data.encodeCBORUnsafe(encoded1);
+          const cbor2 = Data.encodeCBORUnsafe(encoded2);
 
           // The CBOR outputs should be identical if sorting is working correctly
           expect(cbor1).toEqual(cbor2);
@@ -273,11 +273,11 @@ describe("DataTagged Property Tests", () => {
 
         it("should handle map sorting for consistent serialization", () => {
           // Schema with a map
-          const MetadataAsset = TypeTaggedSchema.Struct({
-            id: TypeTaggedSchema.ByteArray,
-            metadata: TypeTaggedSchema.Map(
-              TypeTaggedSchema.ByteArray,
-              TypeTaggedSchema.ByteArray,
+          const MetadataAsset = TSchema.Struct({
+            id: TSchema.ByteArray,
+            metadata: TSchema.Map(
+              TSchema.ByteArray,
+              TSchema.ByteArray,
             ),
           });
 
@@ -298,10 +298,10 @@ describe("DataTagged Property Tests", () => {
           FastCheck.assert(
             FastCheck.property(sortedArb, (value) => {
               // Roundtrip
-              const encoded = DataTagged.encodeDataUnsafe(value, MetadataAsset);
-              const cbor = DataTagged.encodeCBORUnsafe(encoded);
-              const decoded = DataTagged.decodeCBORUnsafe(cbor);
-              const result = DataTagged.decodeDataUnsafe(
+              const encoded = Data.encodeDataUnsafe(value, MetadataAsset);
+              const cbor = Data.encodeCBORUnsafe(encoded);
+              const decoded = Data.decodeCBORUnsafe(cbor);
+              const result = Data.decodeDataUnsafe(
                 decoded,
                 MetadataAsset,
               );
@@ -323,14 +323,14 @@ describe("DataTagged Property Tests", () => {
     describe("Advanced Schema Types", () => {
       it("should roundtrip through complex struct schema with nullable maps", () => {
         // Define a complex nested schema
-        const Asset = TypeTaggedSchema.Struct({
-          policyId: TypeTaggedSchema.ByteArray,
-          assetName: TypeTaggedSchema.ByteArray,
-          amount: TypeTaggedSchema.Integer,
-          metadata: TypeTaggedSchema.NullOr(
-            TypeTaggedSchema.Map(
-              TypeTaggedSchema.ByteArray,
-              TypeTaggedSchema.ByteArray,
+        const Asset = TSchema.Struct({
+          policyId: TSchema.ByteArray,
+          assetName: TSchema.ByteArray,
+          amount: TSchema.Integer,
+          metadata: TSchema.NullOr(
+            TSchema.Map(
+              TSchema.ByteArray,
+              TSchema.ByteArray,
             ),
           ),
         });
@@ -354,10 +354,10 @@ describe("DataTagged Property Tests", () => {
           FastCheck.property(assetArb, (value) => {
             // Handle null vs undefined
 
-            const encoded = DataTagged.encodeDataUnsafe(value, Asset);
-            const cbor = DataTagged.encodeCBORUnsafe(encoded);
-            const decoded = DataTagged.decodeCBORUnsafe(cbor);
-            const result = DataTagged.decodeDataUnsafe(decoded, Asset);
+            const encoded = Data.encodeDataUnsafe(value, Asset);
+            const cbor = Data.encodeCBORUnsafe(encoded);
+            const decoded = Data.decodeCBORUnsafe(cbor);
+            const result = Data.decodeDataUnsafe(decoded, Asset);
 
             // Use expect with JSON.stringify for complex object comparison
             expect(result).toEqual(value);
@@ -367,31 +367,31 @@ describe("DataTagged Property Tests", () => {
 
       it("should handle union types through roundtrip", () => {
         // Define union schemas
-        const MintAction = TypeTaggedSchema.Struct({
-          MintAction: TypeTaggedSchema.Struct({
-            policyId: TypeTaggedSchema.ByteArray,
-            assetName: TypeTaggedSchema.ByteArray,
-            amount: TypeTaggedSchema.Integer,
+        const MintAction = TSchema.Struct({
+          MintAction: TSchema.Struct({
+            policyId: TSchema.ByteArray,
+            assetName: TSchema.ByteArray,
+            amount: TSchema.Integer,
           }),
         });
 
-        const BurnAction = TypeTaggedSchema.Struct({
-          BurnAction: TypeTaggedSchema.Struct({
-            policyId: TypeTaggedSchema.ByteArray,
-            assetName: TypeTaggedSchema.ByteArray,
-            amount: TypeTaggedSchema.Integer,
+        const BurnAction = TSchema.Struct({
+          BurnAction: TSchema.Struct({
+            policyId: TSchema.ByteArray,
+            assetName: TSchema.ByteArray,
+            amount: TSchema.Integer,
           }),
         });
 
-        const TransferAction = TypeTaggedSchema.Struct({
-          TransferAction: TypeTaggedSchema.Struct({
-            from: TypeTaggedSchema.ByteArray,
-            to: TypeTaggedSchema.ByteArray,
-            amount: TypeTaggedSchema.Integer,
+        const TransferAction = TSchema.Struct({
+          TransferAction: TSchema.Struct({
+            from: TSchema.ByteArray,
+            to: TSchema.ByteArray,
+            amount: TSchema.Integer,
           }),
         });
 
-        const Action = TypeTaggedSchema.Union(
+        const Action = TSchema.Union(
           MintAction,
           BurnAction,
           TransferAction,
@@ -402,10 +402,10 @@ describe("DataTagged Property Tests", () => {
 
         FastCheck.assert(
           FastCheck.property(actionArb, (value) => {
-            const encoded = DataTagged.encodeDataUnsafe(value, Action);
-            const cbor = DataTagged.encodeCBORUnsafe(encoded);
-            const decoded = DataTagged.decodeCBORUnsafe(cbor);
-            const result = DataTagged.decodeDataUnsafe(decoded, Action);
+            const encoded = Data.encodeDataUnsafe(value, Action);
+            const cbor = Data.encodeCBORUnsafe(encoded);
+            const decoded = Data.decodeCBORUnsafe(cbor);
+            const result = Data.decodeDataUnsafe(decoded, Action);
             expect(result).toEqual(value);
           }),
         );
@@ -413,10 +413,10 @@ describe("DataTagged Property Tests", () => {
 
       it("should handle tuples through roundtrip", () => {
         // Define tuple schema
-        const AssetTuple = TypeTaggedSchema.Tuple([
-          TypeTaggedSchema.ByteArray,
-          TypeTaggedSchema.Integer,
-          TypeTaggedSchema.Boolean,
+        const AssetTuple = TSchema.Tuple([
+          TSchema.ByteArray,
+          TSchema.Integer,
+          TSchema.Boolean,
         ]);
 
         // Create arbitrary directly from schema
@@ -424,10 +424,10 @@ describe("DataTagged Property Tests", () => {
 
         FastCheck.assert(
           FastCheck.property(tupleArb, (value) => {
-            const encoded = DataTagged.encodeDataUnsafe(value, AssetTuple);
-            const cbor = DataTagged.encodeCBORUnsafe(encoded);
-            const decoded = DataTagged.decodeCBORUnsafe(cbor);
-            const result = DataTagged.decodeDataUnsafe(decoded, AssetTuple);
+            const encoded = Data.encodeDataUnsafe(value, AssetTuple);
+            const cbor = Data.encodeCBORUnsafe(encoded);
+            const decoded = Data.decodeCBORUnsafe(cbor);
+            const result = Data.decodeDataUnsafe(decoded, AssetTuple);
 
             expect(result[0]).toEqual(value[0]);
             expect(result[1]).toEqual(value[1]);
@@ -438,36 +438,36 @@ describe("DataTagged Property Tests", () => {
 
       it("should handle literal types through roundtrip", () => {
         // Define literal schema
-        const Coordinate = TypeTaggedSchema.Union(
-          TypeTaggedSchema.OneLiteral("north"),
-          TypeTaggedSchema.OneLiteral("south"),
-          TypeTaggedSchema.OneLiteral("east"),
-          TypeTaggedSchema.OneLiteral("west"),
-          TypeTaggedSchema.Struct({
-            north: TypeTaggedSchema.ByteArray,
-            east: TypeTaggedSchema.ByteArray,
+        const Coordinate = TSchema.Union(
+          TSchema.OneLiteral("north"),
+          TSchema.OneLiteral("south"),
+          TSchema.OneLiteral("east"),
+          TSchema.OneLiteral("west"),
+          TSchema.Struct({
+            north: TSchema.ByteArray,
+            east: TSchema.ByteArray,
           }),
-          TypeTaggedSchema.Struct({
-            north: TypeTaggedSchema.ByteArray,
-            west: TypeTaggedSchema.ByteArray,
+          TSchema.Struct({
+            north: TSchema.ByteArray,
+            west: TSchema.ByteArray,
           }),
-          TypeTaggedSchema.Struct({
-            south: TypeTaggedSchema.ByteArray,
-            west: TypeTaggedSchema.ByteArray,
+          TSchema.Struct({
+            south: TSchema.ByteArray,
+            west: TSchema.ByteArray,
           }),
-          TypeTaggedSchema.Struct({
-            south: TypeTaggedSchema.ByteArray,
-            east: TypeTaggedSchema.ByteArray,
+          TSchema.Struct({
+            south: TSchema.ByteArray,
+            east: TSchema.ByteArray,
           }),
         );
         // Create arbitrary directly from schema
         const directionArb = Arbitrary.make(Coordinate);
         FastCheck.assert(
           FastCheck.property(directionArb, (value) => {
-            const encoded = DataTagged.encodeDataUnsafe(value, Coordinate);
-            const cbor = DataTagged.encodeCBORUnsafe(encoded);
-            const decoded = DataTagged.decodeCBORUnsafe(cbor);
-            const result = DataTagged.decodeDataUnsafe(decoded, Coordinate);
+            const encoded = Data.encodeDataUnsafe(value, Coordinate);
+            const cbor = Data.encodeCBORUnsafe(encoded);
+            const decoded = Data.decodeCBORUnsafe(cbor);
+            const result = Data.decodeDataUnsafe(decoded, Coordinate);
             expect(result).toEqual(value);
           }),
         );
@@ -475,20 +475,20 @@ describe("DataTagged Property Tests", () => {
 
       it("should handle array of structs through roundtrip", () => {
         // Define array of structs schema
-        const Asset = TypeTaggedSchema.Struct({
-          policyId: TypeTaggedSchema.ByteArray,
-          assetName: TypeTaggedSchema.ByteArray,
-          amount: TypeTaggedSchema.Integer,
+        const Asset = TSchema.Struct({
+          policyId: TSchema.ByteArray,
+          assetName: TSchema.ByteArray,
+          amount: TSchema.Integer,
         });
-        const AssetArray = TypeTaggedSchema.Array(Asset);
+        const AssetArray = TSchema.Array(Asset);
         // Create arbitrary directly from schema
         const assetArrayArb = Arbitrary.make(AssetArray);
         FastCheck.assert(
           FastCheck.property(assetArrayArb, (value) => {
-            const encoded = DataTagged.encodeDataUnsafe(value, AssetArray);
-            const cbor = DataTagged.encodeCBORUnsafe(encoded);
-            const decoded = DataTagged.decodeCBORUnsafe(cbor);
-            const result = DataTagged.decodeDataUnsafe(decoded, AssetArray);
+            const encoded = Data.encodeDataUnsafe(value, AssetArray);
+            const cbor = Data.encodeCBORUnsafe(encoded);
+            const decoded = Data.decodeCBORUnsafe(cbor);
+            const result = Data.decodeDataUnsafe(decoded, AssetArray);
             expect(result.length).toEqual(value.length);
             for (let i = 0; i < value.length; i++) {
               expect(result[i].policyId).toEqual(value[i].policyId);
@@ -501,21 +501,21 @@ describe("DataTagged Property Tests", () => {
 
       it("should handle nullable types through roundtrip", () => {
         // Define nullable schema
-        const NullableSchema = TypeTaggedSchema.NullOr(
-          TypeTaggedSchema.Struct({
-            policyId: TypeTaggedSchema.ByteArray,
-            assetName: TypeTaggedSchema.ByteArray,
-            amount: TypeTaggedSchema.Integer,
+        const NullableSchema = TSchema.NullOr(
+          TSchema.Struct({
+            policyId: TSchema.ByteArray,
+            assetName: TSchema.ByteArray,
+            amount: TSchema.Integer,
           }),
         );
         // Create arbitrary directly from schema
         const nullableArb = Arbitrary.make(NullableSchema);
         FastCheck.assert(
           FastCheck.property(nullableArb, (value) => {
-            const encoded = DataTagged.encodeDataUnsafe(value, NullableSchema);
-            const cbor = DataTagged.encodeCBORUnsafe(encoded);
-            const decoded = DataTagged.decodeCBORUnsafe(cbor);
-            const result = DataTagged.decodeDataUnsafe(decoded, NullableSchema);
+            const encoded = Data.encodeDataUnsafe(value, NullableSchema);
+            const cbor = Data.encodeCBORUnsafe(encoded);
+            const decoded = Data.decodeCBORUnsafe(cbor);
+            const result = Data.decodeDataUnsafe(decoded, NullableSchema);
             expect(result).toEqual(value);
           }),
         );
@@ -523,21 +523,21 @@ describe("DataTagged Property Tests", () => {
 
       it("should handle optional types through roundtrip", () => {
         // Define optional schema
-        const OptionalSchema = TypeTaggedSchema.UndefinedOr(
-          TypeTaggedSchema.Struct({
-            policyId: TypeTaggedSchema.ByteArray,
-            assetName: TypeTaggedSchema.ByteArray,
-            amount: TypeTaggedSchema.Integer,
+        const OptionalSchema = TSchema.UndefinedOr(
+          TSchema.Struct({
+            policyId: TSchema.ByteArray,
+            assetName: TSchema.ByteArray,
+            amount: TSchema.Integer,
           }),
         );
         // Create arbitrary directly from schema
         const optionalArb = Arbitrary.make(OptionalSchema);
         FastCheck.assert(
           FastCheck.property(optionalArb, (value) => {
-            const encoded = DataTagged.encodeDataUnsafe(value, OptionalSchema);
-            const cbor = DataTagged.encodeCBORUnsafe(encoded);
-            const decoded = DataTagged.decodeCBORUnsafe(cbor);
-            const result = DataTagged.decodeDataUnsafe(decoded, OptionalSchema);
+            const encoded = Data.encodeDataUnsafe(value, OptionalSchema);
+            const cbor = Data.encodeCBORUnsafe(encoded);
+            const decoded = Data.decodeCBORUnsafe(cbor);
+            const result = Data.decodeDataUnsafe(decoded, OptionalSchema);
             expect(result).toEqual(value);
           }),
         );
@@ -545,17 +545,17 @@ describe("DataTagged Property Tests", () => {
 
       it("should handle refined schemas with custom validation", () => {
         // Define schema with refinement for positive integers
-        const PositiveInt = TypeTaggedSchema.Integer.pipe(
-          TypeTaggedSchema.filter((value) => value > 0n || "Not PositiveInt"),
+        const PositiveInt = TSchema.Integer.pipe(
+          TSchema.filter((value) => value > 0n || "Not PositiveInt"),
         );
         // Create arbitrary directly from schema with positive integers only
         const positiveIntArb = Arbitrary.make(PositiveInt);
         FastCheck.assert(
           FastCheck.property(positiveIntArb, (value) => {
-            const encoded = DataTagged.encodeDataUnsafe(value, PositiveInt);
-            const cbor = DataTagged.encodeCBORUnsafe(encoded);
-            const decoded = DataTagged.decodeCBORUnsafe(cbor);
-            const result = DataTagged.decodeDataUnsafe(decoded, PositiveInt);
+            const encoded = Data.encodeDataUnsafe(value, PositiveInt);
+            const cbor = Data.encodeCBORUnsafe(encoded);
+            const decoded = Data.decodeCBORUnsafe(cbor);
+            const result = Data.decodeDataUnsafe(decoded, PositiveInt);
             expect(result).toEqual(value);
             expect(result > 0n).toBe(true);
           }),
