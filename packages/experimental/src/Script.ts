@@ -102,11 +102,11 @@ export function applyParamsToScript<
     "flat",
   );
   const parameters = type
-    ? params.map((param) => DataTagged.encodeData(param, type))
+    ? params.map((param) => DataTagged.encodeDataUnsafe(param, type))
     : params;
   const appliedProgram = parameters.reduce((body, currentParameter) => {
     const data = UPLC.UPLCConst.data(
-      dataFromCbor(DataTagged.toCBOR(currentParameter)),
+      dataFromCbor(DataTagged.encodeCBORUnsafe(currentParameter)),
     );
     const appliedParameter = new UPLC.Application(body, data);
     return appliedParameter;

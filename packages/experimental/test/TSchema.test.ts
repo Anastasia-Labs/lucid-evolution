@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
-import * as DataTagged from "../src/Data.js";
-import * as TypeTaggedSchema from "../src/TSchema.js";
+import * as Data from "../src/Data.js";
+import * as TSchema from "../src/TSchema.js";
 
 /**
  * Tests for TypeTaggedSchema module functionality -
@@ -11,24 +11,16 @@ describe("TypeTaggedSchema Tests", () => {
     describe("ByteArray Schema", () => {
       it("should encode/decode ByteArray", () => {
         const input = "deadbeef";
-        const encoded = DataTagged.encodeData(
-          input,
-          TypeTaggedSchema.ByteArray,
-        );
-        const decoded = DataTagged.decodeData(
-          encoded,
-          TypeTaggedSchema.ByteArray,
-        );
+        const encoded = Data.encodeDataUnsafe(input, TSchema.ByteArray);
+        const decoded = Data.decodeDataUnsafe(encoded, TSchema.ByteArray);
 
-        expect(encoded).toEqual(
-          DataTagged.ByteArray.make({ value: "deadbeef" }),
-        );
+        expect(encoded).toEqual(Data.mkByte("deadbeef"));
         expect(decoded).toEqual("deadbeef");
       });
 
       it("should fail on invalid hex string", () => {
         expect(() =>
-          DataTagged.encodeData("not-hex", TypeTaggedSchema.ByteArray),
+          Data.encodeDataUnsafe("not-hex", TSchema.ByteArray),
         ).toThrow();
       });
     });
@@ -36,20 +28,17 @@ describe("TypeTaggedSchema Tests", () => {
     describe("Integer Schema", () => {
       it("should encode/decode Integer", () => {
         const input = 42n;
-        const encoded = DataTagged.encodeData(input, TypeTaggedSchema.Integer);
-        const decoded = DataTagged.decodeData(
-          encoded,
-          TypeTaggedSchema.Integer,
-        );
+        const encoded = Data.encodeDataUnsafe(input, TSchema.Integer);
+        const decoded = Data.decodeDataUnsafe(encoded, TSchema.Integer);
 
-        expect(encoded).toEqual(DataTagged.Integer.make({ value: 42n }));
+        expect(encoded).toEqual(Data.mkInt(42n));
         expect(decoded).toEqual(42n);
       });
 
       it("should fail on non-bigint", () => {
         expect(() =>
           //@ts-ignore
-          DataTagged.encodeData(42, TypeTaggedSchema.Integer),
+          Data.encodeDataUnsafe(42, TSchema.Integer),
         ).toThrow();
       });
     });
@@ -57,39 +46,26 @@ describe("TypeTaggedSchema Tests", () => {
     describe("Boolean Schema", () => {
       it("should encode/decode true", () => {
         const input = true;
-        const encoded = DataTagged.encodeData(input, TypeTaggedSchema.Boolean);
-        const decoded = DataTagged.decodeData(
-          encoded,
-          TypeTaggedSchema.Boolean,
-        );
+        const encoded = Data.encodeDataUnsafe(input, TSchema.Boolean);
+        const decoded = Data.decodeDataUnsafe(encoded, TSchema.Boolean);
 
-        expect(encoded).toEqual(
-          DataTagged.Constr.make({ index: 1n, fields: [] }),
-        );
+        expect(encoded).toEqual(Data.mkConstr(1n, []));
         expect(decoded).toEqual(true);
       });
 
       it("should encode/decode false", () => {
         const input = false;
-        const encoded = DataTagged.encodeData(input, TypeTaggedSchema.Boolean);
-        const decoded = DataTagged.decodeData(
-          encoded,
-          TypeTaggedSchema.Boolean,
-        );
+        const encoded = Data.encodeDataUnsafe(input, TSchema.Boolean);
+        const decoded = Data.decodeDataUnsafe(encoded, TSchema.Boolean);
 
-        expect(encoded).toEqual(
-          DataTagged.Constr.make({ index: 0n, fields: [] }),
-        );
+        expect(encoded).toEqual(Data.mkConstr(0n, []));
         expect(decoded).toEqual(false);
       });
 
       it("should fail on invalid format", () => {
-        const invalidInput = DataTagged.Constr.make({
-          index: 0n,
-          fields: [DataTagged.Integer.make({ value: 1n })],
-        });
+        const invalidInput = Data.mkConstr(0n, [Data.mkInt(1n)]);
         expect(() =>
-          DataTagged.decodeData(invalidInput, TypeTaggedSchema.Boolean),
+          Data.decodeDataUnsafe(invalidInput, TSchema.Boolean),
         ).toThrow();
       });
     });
@@ -98,87 +74,70 @@ describe("TypeTaggedSchema Tests", () => {
   describe("Complex Types", () => {
     describe("Array Schema", () => {
       it("should encode/decode arrays", () => {
-        const IntArray = TypeTaggedSchema.Array(TypeTaggedSchema.Integer);
+        const IntArray = TSchema.Array(TSchema.Integer);
 
         const input = [1n, 2n, 3n];
-        const encoded = DataTagged.encodeData(input, IntArray);
-        const decoded = DataTagged.decodeData(encoded, IntArray);
+        const encoded = Data.encodeDataUnsafe(input, IntArray);
+        const decoded = Data.decodeDataUnsafe(encoded, IntArray);
 
         expect(encoded).toEqual(
-          DataTagged.List.make({
-            value: [
-              DataTagged.Integer.make({ value: 1n }),
-              DataTagged.Integer.make({ value: 2n }),
-              DataTagged.Integer.make({ value: 3n }),
-            ],
-          }),
+          Data.mkList([Data.mkInt(1n), Data.mkInt(2n), Data.mkInt(3n)]),
         );
         expect(decoded).toEqual([1n, 2n, 3n]);
       });
 
       it("should handle empty arrays", () => {
-        const IntArray = TypeTaggedSchema.Array(TypeTaggedSchema.Integer);
+        const IntArray = TSchema.Array(TSchema.Integer);
 
         const input: bigint[] = [];
-        const encoded = DataTagged.encodeData(input, IntArray);
-        const decoded = DataTagged.decodeData(encoded, IntArray);
+        const encoded = Data.encodeDataUnsafe(input, IntArray);
+        const decoded = Data.decodeDataUnsafe(encoded, IntArray);
 
-        expect(encoded).toEqual(DataTagged.List.make({ value: [] }));
+        expect(encoded).toEqual(Data.mkList([]));
         expect(decoded).toEqual([]);
       });
     });
 
     describe("Map Schema", () => {
       it("should encode/decode maps", () => {
-        const TokenMap = TypeTaggedSchema.Map(
-          TypeTaggedSchema.ByteArray,
-          TypeTaggedSchema.Integer,
-        );
+        const TokenMap = TSchema.Map(TSchema.ByteArray, TSchema.Integer);
 
         const input = new Map([
           ["deadbeef", 1n],
           ["cafe", 2n],
         ]);
 
-        const encoded = DataTagged.encodeData(input, TokenMap);
-        const decoded = DataTagged.decodeData(encoded, TokenMap);
+        const encoded = Data.encodeDataUnsafe(input, TokenMap);
+        const decoded = Data.decodeDataUnsafe(encoded, TokenMap);
 
         expect(encoded).toEqual(
-          DataTagged.Map.make({
-            value: [
-              [
-                DataTagged.ByteArray.make({ value: "deadbeef" }),
-                DataTagged.Integer.make({ value: 1n }),
-              ],
-              [
-                DataTagged.ByteArray.make({ value: "cafe" }),
-                DataTagged.Integer.make({ value: 2n }),
-              ],
-            ],
-          }),
+          Data.mkMap([
+            {
+              k: Data.mkByte("deadbeef"),
+              v: Data.mkInt(1n),
+            },
+            {
+              k: Data.mkByte("cafe"),
+              v: Data.mkInt(2n),
+            },
+          ]),
         );
         expect(decoded).toEqual(input);
       });
 
       it("should handle empty maps", () => {
-        const TokenMap = TypeTaggedSchema.Map(
-          TypeTaggedSchema.ByteArray,
-          TypeTaggedSchema.Integer,
-        );
+        const TokenMap = TSchema.Map(TSchema.ByteArray, TSchema.Integer);
 
         const input = new Map();
-        const encoded = DataTagged.encodeData(input, TokenMap);
-        const decoded = DataTagged.decodeData(encoded, TokenMap);
+        const encoded = Data.encodeDataUnsafe(input, TokenMap);
+        const decoded = Data.decodeDataUnsafe(encoded, TokenMap);
 
-        expect(encoded).toEqual(DataTagged.Map.make({ value: [] }));
+        expect(encoded).toEqual(Data.mkMap([]));
         expect(decoded).toEqual(input);
       });
 
       it("should deterministically encode Maps regardless of insertion order", () => {
-        const TokenMap = TypeTaggedSchema.Map(
-          TypeTaggedSchema.ByteArray,
-          TypeTaggedSchema.Integer,
-        );
+        const TokenMap = TSchema.Map(TSchema.ByteArray, TSchema.Integer);
 
         // Create two maps with same entries but different insertion order
         const map1 = new Map([
@@ -194,12 +153,12 @@ describe("TypeTaggedSchema Tests", () => {
         ]);
 
         // Encode both maps
-        const encoded1 = DataTagged.encodeData(map1, TokenMap);
-        const encoded2 = DataTagged.encodeData(map2, TokenMap);
+        const encoded1 = Data.encodeDataUnsafe(map1, TokenMap);
+        const encoded2 = Data.encodeDataUnsafe(map2, TokenMap);
 
         // Convert to CBOR
-        const cbor1 = DataTagged.toCBOR(encoded1);
-        const cbor2 = DataTagged.toCBOR(encoded2);
+        const cbor1 = Data.encodeCBORUnsafe(encoded1);
+        const cbor2 = Data.encodeCBORUnsafe(encoded2);
 
         // The CBOR outputs should be identical if sorting is working correctly
         expect(cbor1).toEqual(cbor2);
@@ -208,10 +167,10 @@ describe("TypeTaggedSchema Tests", () => {
 
     describe("Struct Schema", () => {
       it("should encode/decode structs", () => {
-        const Token = TypeTaggedSchema.Struct({
-          policyId: TypeTaggedSchema.ByteArray,
-          assetName: TypeTaggedSchema.ByteArray,
-          amount: TypeTaggedSchema.Integer,
+        const Token = TSchema.Struct({
+          policyId: TSchema.ByteArray,
+          assetName: TSchema.ByteArray,
+          amount: TSchema.Integer,
         });
 
         const input = {
@@ -220,31 +179,29 @@ describe("TypeTaggedSchema Tests", () => {
           amount: 1000n,
         };
 
-        const encoded = DataTagged.encodeData(input, Token);
-        const decoded = DataTagged.decodeData(encoded, Token);
+        const encoded = Data.encodeDataUnsafe(input, Token);
+        const decoded = Data.decodeDataUnsafe(encoded, Token);
 
         expect(encoded).toEqual(
-          DataTagged.Constr.make({
-            index: 0n,
-            fields: [
-              DataTagged.ByteArray.make({ value: "deadbeef" }),
-              DataTagged.ByteArray.make({ value: "cafe" }),
-              DataTagged.Integer.make({ value: 1000n }),
-            ],
-          }),
+          Data.mkConstr(0n, [
+            Data.mkByte("deadbeef"),
+            Data.mkByte("cafe"),
+            Data.mkInt(1000n),
+          ]),
         );
+
         expect(decoded).toEqual(input);
       });
 
       it("should handle nested structs", () => {
-        const Asset = TypeTaggedSchema.Struct({
-          policyId: TypeTaggedSchema.ByteArray,
-          assetName: TypeTaggedSchema.ByteArray,
+        const Asset = TSchema.Struct({
+          policyId: TSchema.ByteArray,
+          assetName: TSchema.ByteArray,
         });
 
-        const Token = TypeTaggedSchema.Struct({
+        const Token = TSchema.Struct({
           asset: Asset,
-          amount: TypeTaggedSchema.Integer,
+          amount: TSchema.Integer,
         });
 
         const input = {
@@ -255,22 +212,16 @@ describe("TypeTaggedSchema Tests", () => {
           amount: 1000n,
         };
 
-        const encoded = DataTagged.encodeData(input, Token);
-        const decoded = DataTagged.decodeData(encoded, Token);
+        const encoded = Data.encodeDataUnsafe(input, Token);
+        const decoded = Data.decodeDataUnsafe(encoded, Token);
 
-        const assetEncoded = DataTagged.Constr.make({
-          index: 0n,
-          fields: [
-            DataTagged.ByteArray.make({ value: "deadbeef" }),
-            DataTagged.ByteArray.make({ value: "cafe" }),
-          ],
-        });
+        const assetEncoded = Data.mkConstr(0n, [
+          Data.mkByte("deadbeef"),
+          Data.mkByte("cafe"),
+        ]);
 
         expect(encoded).toEqual(
-          DataTagged.Constr.make({
-            index: 0n,
-            fields: [assetEncoded, DataTagged.Integer.make({ value: 1000n })],
-          }),
+          Data.mkConstr(0n, [assetEncoded, Data.mkInt(1000n)]),
         );
         expect(decoded).toEqual(input);
       });
@@ -278,36 +229,28 @@ describe("TypeTaggedSchema Tests", () => {
 
     describe("Tuple Schema", () => {
       it("should encode/decode tuples", () => {
-        const AssetPair = TypeTaggedSchema.Tuple([
-          TypeTaggedSchema.ByteArray,
-          TypeTaggedSchema.Integer,
-        ]);
+        const AssetPair = TSchema.Tuple([TSchema.ByteArray, TSchema.Integer]);
 
         const input = ["deadbeef", 1000n] as const;
-        const encoded = DataTagged.encodeData(input, AssetPair);
-        const decoded = DataTagged.decodeData(encoded, AssetPair);
+        const encoded = Data.encodeDataUnsafe(input, AssetPair);
+        const decoded = Data.decodeDataUnsafe(encoded, AssetPair);
 
         expect(encoded).toEqual(
-          DataTagged.List.make({
-            value: [
-              DataTagged.ByteArray.make({ value: "deadbeef" }),
-              DataTagged.Integer.make({ value: 1000n }),
-            ],
-          }),
+          Data.mkList([Data.mkByte("deadbeef"), Data.mkInt(1000n)]),
         );
         expect(decoded).toEqual(input);
       });
 
       it("should handle heterogeneous tuples", () => {
-        const Mixed = TypeTaggedSchema.Tuple([
-          TypeTaggedSchema.ByteArray,
-          TypeTaggedSchema.Integer,
-          TypeTaggedSchema.Boolean,
+        const Mixed = TSchema.Tuple([
+          TSchema.ByteArray,
+          TSchema.Integer,
+          TSchema.Boolean,
         ]);
 
         const input = ["deadbeef", 1000n, true] as const;
-        const encoded = DataTagged.encodeData(input, Mixed);
-        const decoded = DataTagged.decodeData(encoded, Mixed);
+        const encoded = Data.encodeDataUnsafe(input, Mixed);
+        const decoded = Data.decodeDataUnsafe(encoded, Mixed);
 
         expect(decoded).toEqual(input);
       });
@@ -315,84 +258,73 @@ describe("TypeTaggedSchema Tests", () => {
 
     describe("Nullable Schema", () => {
       it("should encode/decode non-null values", () => {
-        const MaybeInt = TypeTaggedSchema.NullOr(TypeTaggedSchema.Integer);
+        const MaybeInt = TSchema.NullOr(TSchema.Integer);
 
         const input = 42n;
-        const encoded = DataTagged.encodeData(input, MaybeInt);
-        const decoded = DataTagged.decodeData(encoded, MaybeInt);
+        const encoded = Data.encodeDataUnsafe(input, MaybeInt);
+        const decoded = Data.decodeDataUnsafe(encoded, MaybeInt);
 
-        expect(encoded).toEqual(
-          DataTagged.Constr.make({
-            index: 0n,
-            fields: [DataTagged.Integer.make({ value: 42n })],
-          }),
-        );
+        expect(encoded).toEqual(Data.mkConstr(0n, [Data.mkInt(42n)]));
         expect(decoded).toEqual(42n);
       });
 
       it("should encode/decode null values", () => {
-        const MaybeInt = TypeTaggedSchema.NullOr(TypeTaggedSchema.Integer);
+        const MaybeInt = TSchema.NullOr(TSchema.Integer);
 
         const input = null;
-        const encoded = DataTagged.encodeData(input, MaybeInt);
-        const decoded = DataTagged.decodeData(encoded, MaybeInt);
+        const encoded = Data.encodeDataUnsafe(input, MaybeInt);
+        const decoded = Data.decodeDataUnsafe(encoded, MaybeInt);
 
-        expect(encoded).toEqual(
-          DataTagged.Constr.make({ index: 1n, fields: [] }),
-        );
+        expect(encoded).toEqual(Data.mkConstr(1n, []));
         expect(decoded).toBeNull();
       });
     });
 
     describe("Literal Schema", () => {
       it("should encode/decode literals", () => {
-        const Action = TypeTaggedSchema.Literal("mint", "burn", "transfer");
+        const Action = TSchema.Literal("mint", "burn", "transfer");
 
         const input = "mint";
-        const encoded = DataTagged.encodeData(input, Action);
-        const decoded = DataTagged.decodeData(encoded, Action);
+        const encoded = Data.encodeDataUnsafe(input, Action);
+        const decoded = Data.decodeDataUnsafe(encoded, Action);
 
-        expect(encoded).toEqual(
-          DataTagged.Constr.make({ index: 0n, fields: [] }),
-        );
+        expect(encoded).toEqual(Data.mkConstr(0n, []));
         expect(decoded).toEqual("mint");
 
         const input2 = "burn";
-        const encoded2 = DataTagged.encodeData(input2, Action);
-        const decoded2 = DataTagged.decodeData(encoded2, Action);
+        const encoded2 = Data.encodeDataUnsafe(input2, Action);
+        const decoded2 = Data.decodeDataUnsafe(encoded2, Action);
 
-        expect(encoded2).toEqual(
-          DataTagged.Constr.make({ index: 1n, fields: [] }),
-        );
+        expect(encoded2).toEqual(Data.mkConstr(1n, []));
         expect(decoded2).toEqual("burn");
       });
 
       it("should fail on invalid literal", () => {
-        const Action = TypeTaggedSchema.Literal("mint", "burn");
+        const Action = TSchema.Literal("mint", "burn");
         expect(() =>
           //@ts-ignore
-          DataTagged.encodeData("invalid", Action),
+          Data.encodeDataUnsafe("invalid", Action),
         ).toThrow();
       });
     });
 
     describe("Union Schema", () => {
       it("should encode/decode union types", () => {
-        const MintRedeem = TypeTaggedSchema.Struct({
-          policyId: TypeTaggedSchema.ByteArray,
-          assetName: TypeTaggedSchema.ByteArray,
-          amount: TypeTaggedSchema.Integer,
+        const MintRedeem = TSchema.Struct({
+          policyId: TSchema.ByteArray,
+          assetName: TSchema.ByteArray,
+          amount: TSchema.Integer,
         });
 
-        const SpendRedeem = TypeTaggedSchema.Struct({
-          address: TypeTaggedSchema.ByteArray,
-          amount: TypeTaggedSchema.Integer,
+        const SpendRedeem = TSchema.Struct({
+          address: TSchema.ByteArray,
+          amount: TSchema.Integer,
         });
 
-        const RedeemAction = TypeTaggedSchema.Union(
+        const RedeemAction = TSchema.Union(
           MintRedeem,
           SpendRedeem,
-          TypeTaggedSchema.Integer,
+          TSchema.Integer,
         );
 
         // Test MintRedeem
@@ -402,8 +334,8 @@ describe("TypeTaggedSchema Tests", () => {
           amount: 1000n,
         };
 
-        const mintEncoded = DataTagged.encodeData(mintInput, RedeemAction);
-        const mintDecoded = DataTagged.decodeData(mintEncoded, RedeemAction);
+        const mintEncoded = Data.encodeDataUnsafe(mintInput, RedeemAction);
+        const mintDecoded = Data.decodeDataUnsafe(mintEncoded, RedeemAction);
 
         expect(mintEncoded.index).toBe(0n);
         expect(mintDecoded).toEqual(mintInput);
@@ -414,35 +346,32 @@ describe("TypeTaggedSchema Tests", () => {
           amount: 500n,
         };
 
-        const spendEncoded = DataTagged.encodeData(spendInput, RedeemAction);
-        const spendDecoded = DataTagged.decodeData(spendEncoded, RedeemAction);
+        const spendEncoded = Data.encodeDataUnsafe(spendInput, RedeemAction);
+        const spendDecoded = Data.decodeDataUnsafe(spendEncoded, RedeemAction);
 
         expect(spendEncoded.index).toBe(1n);
         expect(spendDecoded).toEqual(spendInput);
 
         // Test Integer
         const intInput = 42n;
-        const intEncoded = DataTagged.encodeData(intInput, RedeemAction);
-        const intDecoded = DataTagged.decodeData(intEncoded, RedeemAction);
+        const intEncoded = Data.encodeDataUnsafe(intInput, RedeemAction);
+        const intDecoded = Data.decodeDataUnsafe(intEncoded, RedeemAction);
 
         expect(intEncoded.index).toBe(2n);
         expect(intDecoded).toEqual(intInput);
       });
 
       it("should throw when decoding invalid constructor index", () => {
-        const TestUnion = TypeTaggedSchema.Union(
-          TypeTaggedSchema.Integer,
-          TypeTaggedSchema.ByteArray,
-        );
+        const TestUnion = TSchema.Union(TSchema.Integer, TSchema.ByteArray);
 
         // Create a constructor with out-of-bounds index
-        const invalidConstr = DataTagged.Constr.make({
-          index: 10n, // This is beyond the union size
-          fields: [DataTagged.Integer.make({ value: 42n })],
-        });
+        const invalidConstr = Data.mkConstr(
+          10n, // This is beyond the union size
+          [Data.mkInt(42n)],
+        );
 
         expect(() =>
-          DataTagged.decodeData(invalidConstr, TestUnion),
+          Data.decodeDataUnsafe(invalidConstr, TestUnion),
         ).toThrowError();
       });
     });
@@ -450,22 +379,19 @@ describe("TypeTaggedSchema Tests", () => {
 
   describe("Complex Combinations", () => {
     it("should handle complex nested schemas", () => {
-      const Asset = TypeTaggedSchema.Struct({
-        policyId: TypeTaggedSchema.ByteArray,
-        assetName: TypeTaggedSchema.ByteArray,
+      const Asset = TSchema.Struct({
+        policyId: TSchema.ByteArray,
+        assetName: TSchema.ByteArray,
       });
 
-      const TokenList = TypeTaggedSchema.Array(Asset);
+      const TokenList = TSchema.Array(Asset);
 
-      const Wallet = TypeTaggedSchema.Struct({
-        owner: TypeTaggedSchema.ByteArray,
+      const Wallet = TSchema.Struct({
+        owner: TSchema.ByteArray,
         tokens: TokenList,
-        active: TypeTaggedSchema.Boolean,
-        metadata: TypeTaggedSchema.NullOr(
-          TypeTaggedSchema.Map(
-            TypeTaggedSchema.ByteArray,
-            TypeTaggedSchema.ByteArray,
-          ),
+        active: TSchema.Boolean,
+        metadata: TSchema.NullOr(
+          TSchema.Map(TSchema.ByteArray, TSchema.ByteArray),
         ),
       });
 
@@ -482,8 +408,8 @@ describe("TypeTaggedSchema Tests", () => {
         ]),
       };
 
-      const encoded = DataTagged.encodeData(input, Wallet);
-      const decoded = DataTagged.decodeData(encoded, Wallet);
+      const encoded = Data.encodeDataUnsafe(input, Wallet);
+      const decoded = Data.decodeDataUnsafe(encoded, Wallet);
 
       expect(decoded).toEqual(input);
     });
@@ -491,34 +417,31 @@ describe("TypeTaggedSchema Tests", () => {
 
   describe("Error Handling", () => {
     it("should provide helpful error messages for decoding failures", () => {
-      const TestStruct = TypeTaggedSchema.Struct({
-        field1: TypeTaggedSchema.Integer,
-        field2: TypeTaggedSchema.ByteArray,
+      const TestStruct = TSchema.Struct({
+        field1: TSchema.Integer,
+        field2: TSchema.ByteArray,
       });
 
       // Create invalid data where we expect a ByteArray but provide an Integer
-      const invalidData = DataTagged.Constr.make({
-        index: 0n,
-        fields: [
-          DataTagged.Integer.make({ value: 42n }),
-          DataTagged.Integer.make({ value: 42n }), // Should be ByteArray
-        ],
-      });
+      const invalidData = Data.mkConstr(0n, [
+        Data.mkInt(42n),
+        Data.mkInt(42n), // Should be ByteArray
+      ]);
 
-      expect(() => DataTagged.decodeData(invalidData, TestStruct)).toThrow(
+      expect(() => Data.decodeDataUnsafe(invalidData, TestStruct)).toThrow(
         /field2/,
       );
     });
 
     it("should throw comprehensible errors for schema mismatches", () => {
-      const StringSchema = TypeTaggedSchema.ByteArray;
-      const IntegerData = DataTagged.Integer.make({ value: 42n });
+      const StringSchema = TSchema.ByteArray;
+      const IntegerData = Data.mkInt(42n);
 
-      expect(() => DataTagged.decodeData(IntegerData, StringSchema)).toThrow();
+      expect(() => Data.decodeDataUnsafe(IntegerData, StringSchema)).toThrow();
 
-      const BooleanData = DataTagged.Constr.make({ index: 0n, fields: [] });
+      const BooleanData = Data.mkConstr(0n, []);
       expect(() =>
-        DataTagged.decodeData(BooleanData, TypeTaggedSchema.Integer),
+        Data.decodeDataUnsafe(BooleanData, TSchema.Integer),
       ).toThrow();
     });
   });

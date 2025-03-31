@@ -1,6 +1,6 @@
 import { ParseResult, Schema, SchemaAST } from "effect";
 import { NonEmptyReadonlyArray } from "effect/Array";
-import * as DataTagged from "./Data.js";
+import * as Data from "./Data.js";
 import * as Combinator from "./Combinator.js";
 
 /**
@@ -9,50 +9,68 @@ import * as Combinator from "./Combinator.js";
  * This module provides bidirectional transformations:
  * 1. TypeScript types => Plutus Data type => CBOR hex
  * 2. CBOR hex => Plutus Data type => TypeScript types
- *
- * @since 1.0.0
  */
 
 interface ByteArray
   extends Schema.transform<
-    typeof DataTagged.ByteArray,
+    typeof Data.ByteArray,
     Schema.Schema<string, string>
   > {}
 
+/**
+ * Creates a schema for byte arrays using Plutus Data ByteArray transformation
+ * The byte array is represented as a hex string
+ *
+ * @example
+ * import { TSchema , Data } from "@lucid-evolution/experimental";
+ *
+ * const Token = TSchema.ByteArray;
+ * const encoded = Data.encodeDataUnsafe(Token, "deadbeef"); // { _tag : "ByteArray", bytes: "deadbeef" }
+ * const decoded = Data.decodeDataUnsafe(Token, encoded); // "deadbeef"
+ *
+ * @since 2.0.0
+ */
 export const ByteArray: ByteArray = Schema.transform(
-  DataTagged.ByteArray,
+  Data.ByteArray,
   Schema.String.pipe(Combinator.HexString),
   {
     strict: true,
-    encode: (value) => DataTagged.ByteArray.make({ value: value }),
-    decode: (value) => value.value,
+    encode: (value) => Data.mkByte(value),
+    decode: (value) => value.bytearray,
   },
 );
 
 interface Integer
-  extends Schema.transform<
-    typeof DataTagged.Integer,
-    typeof Schema.BigIntFromSelf
-  > {}
+  extends Schema.transform<typeof Data.Integer, typeof Schema.BigIntFromSelf> {}
 
+/**
+ * Creates a schema for integers using Plutus Data Integer transformation
+ * The integer is represented as a BigInt
+ *
+ * @example
+ * import { TSchema } from "@lucid-evolution/experimental";
+ *
+ * const Token = TSchema.Integer;
+ * const encoded = Data.encodeDataUnsafe(Token, 1000n); // { _tag : "Integer", integer: 1000n }
+ * const decoded = Data.decodeDataUnsafe(Token, encoded); // 1000n
+ *
+ * @since 2.0.0
+ */
 export const Integer: Integer = Schema.transform(
-  DataTagged.Integer,
+  Data.Integer,
   Schema.BigIntFromSelf.annotations({
     identifier: "Integer",
   }),
   {
     strict: true,
-    encode: (value) => DataTagged.Integer.make({ value }),
-    decode: ({ value }) => value,
+    encode: (value) => Data.mkInt(value),
+    decode: (value) => value.integer,
   },
 );
 
 interface Literal<
   Literals extends NonEmptyReadonlyArray<SchemaAST.LiteralValue>,
-> extends Schema.transform<
-    typeof DataTagged.Constr,
-    Schema.Literal<[...Literals]>
-  > {}
+> extends Schema.transform<typeof Data.Constr, Schema.Literal<[...Literals]>> {}
 
 /**
  * Creates a schema for literal types with Plutus Data Constructor transformation
@@ -61,10 +79,10 @@ interface Literal<
  * import { TSchema } from "@lucid-evolution/experimental";
  *
  * const RedeemAction = TSchema.Literal("spend", "mint", "withdraw");
- * const encoded = TSchema.unsafeEncode(RedeemAction, "spend"); // { index: 0n, fields: [] }
- * const decoded = TSchema.unsafeDecode(RedeemAction, encoded); // "spend"
+ * const encoded = Data.encodeDataUnsafe(RedeemAction, "spend"); // { index: 0n, fields: [] }
+ * const decoded = Data.decodeDataUnsafe(RedeemAction, encoded); // "spend"
  *
- * @since 1.0.0
+ * @since 2.0.0
  */
 export const Literal = <
   Literals extends NonEmptyReadonlyArray<
@@ -74,7 +92,7 @@ export const Literal = <
   ...self: Literals
 ): Literal<Literals> =>
   Schema.transform(
-    DataTagged.Constr.annotations({
+    Data.Constr.annotations({
       identifier: "Data.Constr",
     }),
     Schema.Literal(...self).annotations({
@@ -82,21 +100,14 @@ export const Literal = <
     }),
     {
       strict: true,
-      encode: (value) =>
-        DataTagged.Constr.make({
-          index: BigInt(self.indexOf(value)),
-          fields: [],
-        }),
+      encode: (value) => Data.mkConstr(BigInt(self.indexOf(value)), []),
       decode: (value) => self[Number(value.index)],
     },
   );
 
 interface OneLiteral<
   Single extends Exclude<SchemaAST.LiteralValue, null | bigint>,
-> extends Schema.transform<
-    typeof DataTagged.Constr,
-    Schema.Literal<[Single]>
-  > {}
+> extends Schema.transform<typeof Data.Constr, Schema.Literal<[Single]>> {}
 
 export const OneLiteral = <
   Single extends Exclude<SchemaAST.LiteralValue, null | bigint>,
@@ -104,7 +115,7 @@ export const OneLiteral = <
   self: Single,
 ): OneLiteral<Single> =>
   Schema.transform(
-    DataTagged.Constr.annotations({
+    Data.Constr.annotations({
       identifier: "Data.Constr",
     }),
     Schema.Literal(self).annotations({
@@ -112,17 +123,13 @@ export const OneLiteral = <
     }),
     {
       strict: true,
-      encode: (value) =>
-        DataTagged.Constr.make({
-          index: 0n,
-          fields: [],
-        }),
+      encode: (value) => Data.mkConstr(0n, []),
       decode: (value) => self,
     },
   );
 
 interface Array<S extends Schema.Schema.Any>
-  extends Schema.transform<typeof DataTagged.List, Schema.Array$<S>> {}
+  extends Schema.transform<typeof Data.List, Schema.Array$<S>> {}
 
 /**
  * Creates a schema for arrays with Plutus list type annotation
@@ -131,50 +138,68 @@ interface Array<S extends Schema.Schema.Any>
  * import { TSchema } from "@lucid-evolution/experimental";
  *
  * const TokenList = TSchema.Array(TSchema.ByteArray);
- * const result = TSchema.unsafeDecode(TokenList, ["deadbeef", "cafe"]);
+ * const result = Data.encodeDataUnsafe(TokenList, ["deadbeef", "cafe"]); // { _tag : "List", list: ["deadbeef", "cafe"] }
  *
  * @since 1.0.0
  */
 export const Array = <S extends Schema.Schema.Any>(items: S): Array<S> =>
   Schema.transform(
-    DataTagged.List.annotations({ identifier: "Data.List" }),
+    Data.List.annotations({ identifier: "Data.List" }),
     Schema.Array(items).annotations({ identifier: "Array" }),
     {
       strict: false,
-      encode: (value) => DataTagged.List.make({ value }),
-      decode: ({ value }) => value,
+      encode: (value) => Data.mkList(value),
+      decode: (value) => value.list,
     },
   );
 
 interface Map<K extends Schema.Schema.Any, V extends Schema.Schema.Any>
-  extends Schema.transform<typeof DataTagged.Map, Schema.Map$<K, V>> {}
+  extends Schema.transform<typeof Data.Map, Schema.Map$<K, V>> {}
 
+/**
+ * Creates a schema for maps with Plutus Map type annotation
+ * Maps are represented as a constructor with index 0 and fields as an array of key-value pairs
+ *
+ * @example
+ * import { TSchema } from "@lucid-evolution/experimental";
+ *
+ *  const TokenMap = TSchema.Map(TSchema.ByteArray, TSchema.Integer);
+ *  const input = new Map([
+ *    ["deadbeef", 1n],
+ *    ["cafe", 2n],
+ *  ]);
+ *
+ *  const encoded = Data.unsafeEncodeData(input, TokenMap); // { _tag: "Map", map: [{ k: "deadbeef", v: 1n }, { k: "cafe", v: 2n }] }
+ *
+ * @since 2.0.0
+ */
 export const Map = <K extends Schema.Schema.Any, V extends Schema.Schema.Any>(
   key: K,
   value: V,
 ): Map<K, V> =>
   Schema.transform(
-    DataTagged.Map.annotations({
+    Data.Map.annotations({
       identifier: "Data.Map",
     }),
     Schema.Map({ key, value }).annotations({
       identifier: "Map",
     }),
     {
-      strict: false,
+      strict: true,
       encode: (entries) => {
-        return DataTagged.Map.make({
-          value: entries.map(([key, value]) => [key, value] as const),
-        });
+        return Data.mkMap(entries.map(([k, v]) => ({ k, v })));
       },
-      decode: ({ value: entries }) => {
-        return entries;
+      decode: (value) => {
+        return value.entries.map((entry) => [entry.k, entry.v]) as [
+          Schema.Schema.Type<K>,
+          Schema.Schema.Type<V>,
+        ];
       },
     },
   );
 
-interface Nullable<S extends Schema.Schema.All>
-  extends Schema.transform<typeof DataTagged.Constr, Schema.NullOr<S>> {}
+interface NullOr<S extends Schema.Schema.All>
+  extends Schema.transform<typeof Data.Constr, Schema.NullOr<S>> {}
 
 /**
  * Creates a schema for nullable types that transforms to/from Plutus Data Constructor
@@ -185,47 +210,52 @@ interface Nullable<S extends Schema.Schema.All>
  * @example
  * import { TSchema } from "@lucid-evolution/experimental";
  *
- * const MaybeDeadline = TSchema.Nullable(TSchema.Integer);
- * const just = TSchema.unsafeEncode(MaybeDeadline, 1000n); // { index: 0n, fields: [1000n] }
- * const nothing = TSchema.unsafeEncode(MaybeDeadline, null); // { index: 1n, fields: [] }
+ * const MaybeDeadline = TSchema.NullOr(TSchema.Integer);
+ * const just = Data.encodeDataUnsafe(MaybeDeadline, 1000n); // { index: 0n, fields: [1000n] }
+ * const nothing = Data.encodeDataUnsafe(MaybeDeadline, null); // { index: 1n, fields: [] }
  *
- * @since 1.0.0
+ * @since 2.0.0
  */
-export const NullOr = <S extends Schema.Schema.All>(self: S): Nullable<S> =>
+export const NullOr = <S extends Schema.Schema.All>(self: S): NullOr<S> =>
   Schema.transform(
-    DataTagged.Constr.annotations({
+    Data.Constr.annotations({
       identifier: "Data.Constr",
     }),
     Schema.NullOr(self),
     {
       strict: true,
       encode: (value) =>
-        value === null
-          ? DataTagged.Constr.make({ index: 1n, fields: [] })
-          : DataTagged.Constr.make({
-              index: 0n,
-              fields: [value],
-            }),
+        value === null ? Data.mkConstr(1n, []) : Data.mkConstr(0n, [value]),
       decode: (value) =>
         value.index === 1n ? null : (value.fields[0] as Schema.Schema.Type<S>),
     },
   );
 
-interface Undefined<S extends Schema.Schema.Any>
-  extends Schema.transform<typeof DataTagged.Constr, Schema.UndefinedOr<S>> {}
+interface UndefineOr<S extends Schema.Schema.Any>
+  extends Schema.transform<typeof Data.Constr, Schema.UndefinedOr<S>> {}
 
+/**
+ * Creates a schema for undefined types that transforms to/from Plutus Data Constructor
+ * Represents optional values as:
+ * - Just(value) with index 0
+ * - Nothing with index 1
+ *
+ * @example
+ * import { TSchema } from "@lucid-evolution/experimental";
+ *
+ * const MaybeDeadline = TSchema.UndefinedOr(TSchema.Integer);
+ * const just = Data.encodeDataUnsafe(MaybeDeadline, 1000n); // { index: 0n, fields: [1000n] }
+ * const nothing = Data.encodeDataUnsafe(MaybeDeadline, undefined); // { index: 1n, fields: [] }
+ *
+ * @since 2.0.0
+ */
 export const UndefinedOr = <S extends Schema.Schema.Any>(
   self: S,
-): Undefined<S> =>
-  Schema.transform(DataTagged.Constr, Schema.UndefinedOr(self), {
+): UndefineOr<S> =>
+  Schema.transform(Data.Constr, Schema.UndefinedOr(self), {
     strict: true,
     encode: (value) =>
-      value === undefined
-        ? DataTagged.Constr.make({ index: 1n, fields: [] })
-        : DataTagged.Constr.make({
-            index: 0n,
-            fields: [value],
-          }),
+      value === undefined ? Data.mkConstr(1n, []) : Data.mkConstr(0n, [value]),
     decode: (value) =>
       value.index === 1n
         ? undefined
@@ -234,7 +264,7 @@ export const UndefinedOr = <S extends Schema.Schema.Any>(
 
 interface Boolean
   extends Schema.transform<
-    typeof DataTagged.Constr,
+    typeof Data.Constr,
     Schema.SchemaClass<boolean, boolean, never>
   > {}
 
@@ -246,22 +276,20 @@ interface Boolean
  * @example
  * import { TSchema } from "@lucid-evolution/experimental";
  *
- * const isLocked = TSchema.unsafeEncode(TSchema.Boolean, true); // { index: 1n, fields: [] }
- * const decoded = TSchema.unsafeDecode(TSchema.Boolean, isLocked); // true
+ * const isLocked = Data.encodeDataUnsafe(TSchema.Boolean, true); // { index: 1n, fields: [] }
+ * const decoded = Data.decodeDataUnsafe(TSchema.Boolean, isLocked); // true
  *
- * @since 1.0.0
+ * @since 2.0.0
  */
 export const Boolean: Boolean = Schema.transformOrFail(
-  DataTagged.Constr,
+  Data.Constr,
   Schema.Boolean,
   {
     strict: true,
     encode: (boolean) =>
       boolean
-        ? ParseResult.succeed(DataTagged.Constr.make({ index: 1n, fields: [] }))
-        : ParseResult.succeed(
-            DataTagged.Constr.make({ index: 0n, fields: [] }),
-          ),
+        ? ParseResult.succeed(Data.mkConstr(1n, []))
+        : ParseResult.succeed(Data.mkConstr(0n, [])),
     decode: ({ index, fields }, _, ast) => {
       if (index !== 0n && index !== 1n) {
         return ParseResult.fail(
@@ -287,7 +315,7 @@ export const Boolean: Boolean = Schema.transformOrFail(
 );
 
 interface Struct<Fields extends Schema.Struct.Fields>
-  extends Schema.transform<typeof DataTagged.Constr, Schema.Struct<Fields>> {}
+  extends Schema.transform<typeof Data.Constr, Schema.Struct<Fields>> {}
 
 /**
  * Creates a schema for struct types using Plutus Data Constructor
@@ -302,19 +330,19 @@ interface Struct<Fields extends Schema.Struct.Fields>
  *   amount: TSchema.Integer
  * });
  *
- * const encoded = TSchema.unsafeEncode(Token, {
+ * const encoded = Data.encodeDataUnsafe(Token, {
  *   policyId: "deadbeef",
  *   assetName: "cafe",
  *   amount: 1000n
  * }); // { index: 0n, fields: ["deadbeef", "cafe", 1000n] }
  *
- * @since 1.0.0
+ * @since 2.0.0
  */
 export const Struct = <Fields extends Schema.Struct.Fields>(
   fields: Fields,
 ): Struct<Fields> =>
   Schema.transform(
-    DataTagged.Constr.annotations({
+    Data.Constr.annotations({
       identifier: "Data.Constr",
     }),
     Schema.Struct(fields).annotations({
@@ -323,10 +351,7 @@ export const Struct = <Fields extends Schema.Struct.Fields>(
     {
       strict: false,
       encode: (obj) =>
-        DataTagged.Constr.make({
-          index: 0n,
-          fields: Object.values(obj),
-        }),
+        Data.mkConstr(0n, Object.values(obj) as readonly Data.Data[]),
       decode: (constr: {
         readonly index: bigint;
         readonly fields: readonly any[];
@@ -341,7 +366,7 @@ export const Struct = <Fields extends Schema.Struct.Fields>(
 
 interface Union<Members extends ReadonlyArray<Schema.Schema.Any>>
   extends Schema.transformOrFail<
-    typeof DataTagged.Constr,
+    typeof Data.Constr,
     Schema.SchemaClass<
       Schema.Schema.Type<[...Members][number]>,
       Schema.Schema.Type<[...Members][number]>,
@@ -350,11 +375,40 @@ interface Union<Members extends ReadonlyArray<Schema.Schema.Any>>
     never
   > {}
 
+/**
+ * Creates a schema for union types using Plutus Data Constructor
+ * Unions are represented as a constructor with index 0 and fields as an array
+ *
+ * @example
+ * import { TSchema } from "@lucid-evolution/experimental";
+ *
+ * const MintRedeem = TSchema.Struct({
+ *   policyId: TSchema.ByteArray,
+ *   assetName: TSchema.ByteArray,
+ *   amount: TSchema.Integer,
+ * });
+ * const SpendRedeem = TSchema.Struct({
+ *   address: TSchema.ByteArray,
+ *   amount: TSchema.Integer,
+ * });
+ *
+ * const RedeemAction = TSchema.Union(MintRedeem, SpendRedeem);
+ *
+ * const mintInput = {
+ *   policyId: "deadbeef",
+ *   assetName: "cafe",
+ *   amount: 1000n,
+ * };
+ * const mintEncoded = Data.unsafeEncodeData(mintInput, RedeemAction); // { index: 0n, fields: ["deadbeef", "cafe", 1000n] }
+ * const mintDecoded = Data.unsafeDecodeData(mintEncoded, RedeemAction); // { policyId: "deadbeef", assetName: "cafe", amount: 1000n }
+ *
+ * @since 2.0.0
+ */
 export const Union = <Members extends ReadonlyArray<Schema.Schema.Any>>(
   ...members: Members
 ): Union<Members> => {
   return Schema.transformOrFail(
-    DataTagged.Constr,
+    Data.Constr,
     Schema.typeSchema(Schema.Union(...members)),
     {
       strict: false,
@@ -365,11 +419,7 @@ export const Union = <Members extends ReadonlyArray<Schema.Schema.Any>>(
         )(value).pipe(
           ParseResult.map((value) => {
             const fields = [value];
-            return {
-              _tag: "Constr",
-              index: BigInt(index),
-              fields,
-            };
+            return Data.mkConstr(BigInt(index), fields);
           }),
         );
       },
@@ -396,13 +446,33 @@ export const Union = <Members extends ReadonlyArray<Schema.Schema.Any>>(
 };
 
 interface Tuple<Elements extends Schema.TupleType.Elements>
-  extends Schema.transform<typeof DataTagged.List, Schema.Tuple<Elements>> {}
-
+  extends Schema.transform<typeof Data.List, Schema.Tuple<Elements>> {}
+/**
+ * Creates a schema for tuple types using Plutus Data List transformation
+ * Tuples are represented as a constructor with index 0 and fields as an array
+ *
+ * @example
+ * import { TSchema } from "@lucid-evolution/experimental";
+ *
+ * const Token = TSchema.Tuple(
+ *   TSchema.ByteArray,
+ *   TSchema.Integer,
+ *   TSchema.Boolean
+ * );
+ * const encoded = Data.encodeDataUnsafe(Token, [
+ *   "deadbeef",
+ *   1000n,
+ *   true,
+ * ]); // { index: 0n, fields: ["deadbeef", 1000n, true] }
+ * const decoded = Data.decodeDataUnsafe(Token, encoded); // ["deadbeef", 1000n, true]
+ *
+ * @since 2.0.0
+ */
 export const Tuple = <Elements extends Schema.TupleType.Elements>(
   element: [...Elements],
 ): Tuple<Elements> =>
   Schema.transform(
-    DataTagged.List.annotations({
+    Data.List.annotations({
       identifier: "Data.List",
     }),
     Schema.Tuple(...element).annotations({
@@ -410,10 +480,11 @@ export const Tuple = <Elements extends Schema.TupleType.Elements>(
     }),
     {
       strict: false,
-      encode: (value) => DataTagged.List.make({ value }),
-      decode: ({ value }) => value,
+      encode: (value) => Data.mkList(value),
+      decode: (value) => value.list,
     },
   );
 
 export const compose = Schema.compose;
+
 export const filter = Schema.filter;

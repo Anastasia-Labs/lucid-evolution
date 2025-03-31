@@ -13,8 +13,8 @@ describe("DataTagged Property Tests", () => {
       it("should generate valid ByteArray data and roundtrip", () => {
         FastCheck.assert(
           FastCheck.property(DataTagged.genByteArray(), (value) => {
-            const cbor = DataTagged.toCBOR(value);
-            const decoded = DataTagged.fromCBOR(cbor);
+            const cbor = DataTagged.encodeCBORUnsafe(value);
+            const decoded = DataTagged.decodeCBORUnsafe(cbor);
             expect(DataTagged.isByteArray(value)).toBe(true);
             expect(value).toEqual(decoded);
           }),
@@ -24,8 +24,8 @@ describe("DataTagged Property Tests", () => {
       it("should generate valid Integer data and roundtrip", () => {
         FastCheck.assert(
           FastCheck.property(DataTagged.genInteger(), (value) => {
-            const cbor = DataTagged.toCBOR(value);
-            const decoded = DataTagged.fromCBOR(cbor);
+            const cbor = DataTagged.encodeCBORUnsafe(value);
+            const decoded = DataTagged.decodeCBORUnsafe(cbor);
             expect(DataTagged.isInteger(value)).toBe(true);
             expect(value).toEqual(decoded);
           }),
@@ -36,8 +36,8 @@ describe("DataTagged Property Tests", () => {
         // Limit runs for complex structures
         FastCheck.assert(
           FastCheck.property(DataTagged.genConstr(2), (value) => {
-            const cbor = DataTagged.toCBOR(value);
-            const decoded = DataTagged.fromCBOR(cbor);
+            const cbor = DataTagged.encodeCBORUnsafe(value);
+            const decoded = DataTagged.decodeCBORUnsafe(cbor);
             expect(DataTagged.isConstr(value)).toBe(true);
             expect(value).toStrictEqual(decoded);
           }),
@@ -47,8 +47,8 @@ describe("DataTagged Property Tests", () => {
       it("should generate valid List data and roundtrip", () => {
         FastCheck.assert(
           FastCheck.property(DataTagged.genList(2), (value) => {
-            const cbor = DataTagged.toCBOR(value);
-            const decoded = DataTagged.fromCBOR(cbor);
+            const cbor = DataTagged.encodeCBORUnsafe(value);
+            const decoded = DataTagged.decodeCBORUnsafe(cbor);
             expect(DataTagged.isList(value)).toBe(true);
             expect(value).toEqual(decoded);
           }),
@@ -58,8 +58,8 @@ describe("DataTagged Property Tests", () => {
       it("should generate valid Map data and roundtrip", () => {
         FastCheck.assert(
           FastCheck.property(DataTagged.genMap(2), (value) => {
-            const cbor = DataTagged.toCBOR(value);
-            const decoded = DataTagged.fromCBOR(cbor);
+            const cbor = DataTagged.encodeCBORUnsafe(value);
+            const decoded = DataTagged.decodeCBORUnsafe(cbor);
             expect(DataTagged.isMap(value)).toBe(true);
             expect(value).toEqual(decoded);
           }),
@@ -75,11 +75,11 @@ describe("DataTagged Property Tests", () => {
 
         FastCheck.assert(
           FastCheck.property(byteArrayArb, (value) => {
-            const encoded = DataTagged.encodeData(
+            const encoded = DataTagged.encodeDataUnsafe(
               value,
               TypeTaggedSchema.ByteArray,
             );
-            const decoded = DataTagged.decodeData(
+            const decoded = DataTagged.decodeDataUnsafe(
               encoded,
               TypeTaggedSchema.ByteArray,
             );
@@ -93,11 +93,11 @@ describe("DataTagged Property Tests", () => {
 
         FastCheck.assert(
           FastCheck.property(integerArb, (value) => {
-            const encoded = DataTagged.encodeData(
+            const encoded = DataTagged.encodeDataUnsafe(
               value,
               TypeTaggedSchema.Integer,
             );
-            const decoded = DataTagged.decodeData(
+            const decoded = DataTagged.decodeDataUnsafe(
               encoded,
               TypeTaggedSchema.Integer,
             );
@@ -111,11 +111,11 @@ describe("DataTagged Property Tests", () => {
 
         FastCheck.assert(
           FastCheck.property(booleanArb, (value) => {
-            const encoded = DataTagged.encodeData(
+            const encoded = DataTagged.encodeDataUnsafe(
               value,
               TypeTaggedSchema.Boolean,
             );
-            const decoded = DataTagged.decodeData(
+            const decoded = DataTagged.decodeDataUnsafe(
               encoded,
               TypeTaggedSchema.Boolean,
             );
@@ -139,8 +139,8 @@ describe("DataTagged Property Tests", () => {
 
         FastCheck.assert(
           FastCheck.property(tokenArb, (value) => {
-            const encoded = DataTagged.encodeData(value, Token);
-            const decoded = DataTagged.decodeData(encoded, Token);
+            const encoded = DataTagged.encodeDataUnsafe(value, Token);
+            const decoded = DataTagged.decodeDataUnsafe(encoded, Token);
 
             expect(decoded.policyId).toEqual(value.policyId);
             expect(decoded.assetName).toEqual(value.assetName);
@@ -169,10 +169,10 @@ describe("DataTagged Property Tests", () => {
         FastCheck.assert(
           FastCheck.property(walletArb, (value) => {
             // Full roundtrip including CBOR serialization
-            const encoded = DataTagged.encodeData(value, Wallet);
-            const cbor = DataTagged.toCBOR(encoded);
-            const fromCbor = DataTagged.fromCBOR(cbor);
-            const decoded = DataTagged.decodeData(fromCbor, Wallet);
+            const encoded = DataTagged.encodeDataUnsafe(value, Wallet);
+            const cbor = DataTagged.encodeCBORUnsafe(encoded);
+            const fromCbor = DataTagged.decodeCBORUnsafe(cbor);
+            const decoded = DataTagged.decodeDataUnsafe(fromCbor, Wallet);
 
             // Deep equality check
             expect(decoded).toEqual(value);
@@ -196,16 +196,16 @@ describe("DataTagged Property Tests", () => {
         FastCheck.assert(
           FastCheck.property(assetArb, (value) => {
             // Encode to DataTagged format
-            const dataTagged = DataTagged.encodeData(value, Asset);
+            const dataTagged = DataTagged.encodeDataUnsafe(value, Asset);
 
             // Convert to CBOR
-            const cbor = DataTagged.toCBOR(dataTagged);
+            const cbor = DataTagged.encodeCBORUnsafe(dataTagged);
 
             // Decode from CBOR
-            const fromCbor = DataTagged.fromCBOR(cbor);
+            const fromCbor = DataTagged.decodeCBORUnsafe(cbor);
 
             // Decode to original format
-            const decoded = DataTagged.decodeData(fromCbor, Asset);
+            const decoded = DataTagged.decodeDataUnsafe(fromCbor, Asset);
 
             // Check equality using expect
             expect(decoded.policyId).toEqual(value.policyId);
@@ -226,8 +226,8 @@ describe("DataTagged Property Tests", () => {
 
         FastCheck.assert(
           FastCheck.property(intArrayArb, (value) => {
-            const encoded = DataTagged.encodeData(value, IntArray);
-            const decoded = DataTagged.decodeData(encoded, IntArray);
+            const encoded = DataTagged.encodeDataUnsafe(value, IntArray);
+            const decoded = DataTagged.decodeDataUnsafe(encoded, IntArray);
 
             expect(decoded.length).toEqual(value.length);
 
@@ -260,12 +260,12 @@ describe("DataTagged Property Tests", () => {
           ]);
 
           // Encode both maps
-          const encoded1 = DataTagged.encodeData(map1, TokenMap);
-          const encoded2 = DataTagged.encodeData(map2, TokenMap);
+          const encoded1 = DataTagged.encodeDataUnsafe(map1, TokenMap);
+          const encoded2 = DataTagged.encodeDataUnsafe(map2, TokenMap);
 
           // Convert to CBOR
-          const cbor1 = DataTagged.toCBOR(encoded1);
-          const cbor2 = DataTagged.toCBOR(encoded2);
+          const cbor1 = DataTagged.encodeCBORUnsafe(encoded1);
+          const cbor2 = DataTagged.encodeCBORUnsafe(encoded2);
 
           // The CBOR outputs should be identical if sorting is working correctly
           expect(cbor1).toEqual(cbor2);
@@ -298,10 +298,13 @@ describe("DataTagged Property Tests", () => {
           FastCheck.assert(
             FastCheck.property(sortedArb, (value) => {
               // Roundtrip
-              const encoded = DataTagged.encodeData(value, MetadataAsset);
-              const cbor = DataTagged.toCBOR(encoded);
-              const decoded = DataTagged.fromCBOR(cbor);
-              const result = DataTagged.decodeData(decoded, MetadataAsset);
+              const encoded = DataTagged.encodeDataUnsafe(value, MetadataAsset);
+              const cbor = DataTagged.encodeCBORUnsafe(encoded);
+              const decoded = DataTagged.decodeCBORUnsafe(cbor);
+              const result = DataTagged.decodeDataUnsafe(
+                decoded,
+                MetadataAsset,
+              );
 
               // Verify the original value is preserved through the roundtrip
               expect(result).toEqual(value);
@@ -351,10 +354,10 @@ describe("DataTagged Property Tests", () => {
           FastCheck.property(assetArb, (value) => {
             // Handle null vs undefined
 
-            const encoded = DataTagged.encodeData(value, Asset);
-            const cbor = DataTagged.toCBOR(encoded);
-            const decoded = DataTagged.fromCBOR(cbor);
-            const result = DataTagged.decodeData(decoded, Asset);
+            const encoded = DataTagged.encodeDataUnsafe(value, Asset);
+            const cbor = DataTagged.encodeCBORUnsafe(encoded);
+            const decoded = DataTagged.decodeCBORUnsafe(cbor);
+            const result = DataTagged.decodeDataUnsafe(decoded, Asset);
 
             // Use expect with JSON.stringify for complex object comparison
             expect(result).toEqual(value);
@@ -399,10 +402,10 @@ describe("DataTagged Property Tests", () => {
 
         FastCheck.assert(
           FastCheck.property(actionArb, (value) => {
-            const encoded = DataTagged.encodeData(value, Action);
-            const cbor = DataTagged.toCBOR(encoded);
-            const decoded = DataTagged.fromCBOR(cbor);
-            const result = DataTagged.decodeData(decoded, Action);
+            const encoded = DataTagged.encodeDataUnsafe(value, Action);
+            const cbor = DataTagged.encodeCBORUnsafe(encoded);
+            const decoded = DataTagged.decodeCBORUnsafe(cbor);
+            const result = DataTagged.decodeDataUnsafe(decoded, Action);
             expect(result).toEqual(value);
           }),
         );
@@ -421,10 +424,10 @@ describe("DataTagged Property Tests", () => {
 
         FastCheck.assert(
           FastCheck.property(tupleArb, (value) => {
-            const encoded = DataTagged.encodeData(value, AssetTuple);
-            const cbor = DataTagged.toCBOR(encoded);
-            const decoded = DataTagged.fromCBOR(cbor);
-            const result = DataTagged.decodeData(decoded, AssetTuple);
+            const encoded = DataTagged.encodeDataUnsafe(value, AssetTuple);
+            const cbor = DataTagged.encodeCBORUnsafe(encoded);
+            const decoded = DataTagged.decodeCBORUnsafe(cbor);
+            const result = DataTagged.decodeDataUnsafe(decoded, AssetTuple);
 
             expect(result[0]).toEqual(value[0]);
             expect(result[1]).toEqual(value[1]);
@@ -461,10 +464,10 @@ describe("DataTagged Property Tests", () => {
         const directionArb = Arbitrary.make(Coordinate);
         FastCheck.assert(
           FastCheck.property(directionArb, (value) => {
-            const encoded = DataTagged.encodeData(value, Coordinate);
-            const cbor = DataTagged.toCBOR(encoded);
-            const decoded = DataTagged.fromCBOR(cbor);
-            const result = DataTagged.decodeData(decoded, Coordinate);
+            const encoded = DataTagged.encodeDataUnsafe(value, Coordinate);
+            const cbor = DataTagged.encodeCBORUnsafe(encoded);
+            const decoded = DataTagged.decodeCBORUnsafe(cbor);
+            const result = DataTagged.decodeDataUnsafe(decoded, Coordinate);
             expect(result).toEqual(value);
           }),
         );
@@ -482,10 +485,10 @@ describe("DataTagged Property Tests", () => {
         const assetArrayArb = Arbitrary.make(AssetArray);
         FastCheck.assert(
           FastCheck.property(assetArrayArb, (value) => {
-            const encoded = DataTagged.encodeData(value, AssetArray);
-            const cbor = DataTagged.toCBOR(encoded);
-            const decoded = DataTagged.fromCBOR(cbor);
-            const result = DataTagged.decodeData(decoded, AssetArray);
+            const encoded = DataTagged.encodeDataUnsafe(value, AssetArray);
+            const cbor = DataTagged.encodeCBORUnsafe(encoded);
+            const decoded = DataTagged.decodeCBORUnsafe(cbor);
+            const result = DataTagged.decodeDataUnsafe(decoded, AssetArray);
             expect(result.length).toEqual(value.length);
             for (let i = 0; i < value.length; i++) {
               expect(result[i].policyId).toEqual(value[i].policyId);
@@ -509,10 +512,10 @@ describe("DataTagged Property Tests", () => {
         const nullableArb = Arbitrary.make(NullableSchema);
         FastCheck.assert(
           FastCheck.property(nullableArb, (value) => {
-            const encoded = DataTagged.encodeData(value, NullableSchema);
-            const cbor = DataTagged.toCBOR(encoded);
-            const decoded = DataTagged.fromCBOR(cbor);
-            const result = DataTagged.decodeData(decoded, NullableSchema);
+            const encoded = DataTagged.encodeDataUnsafe(value, NullableSchema);
+            const cbor = DataTagged.encodeCBORUnsafe(encoded);
+            const decoded = DataTagged.decodeCBORUnsafe(cbor);
+            const result = DataTagged.decodeDataUnsafe(decoded, NullableSchema);
             expect(result).toEqual(value);
           }),
         );
@@ -531,10 +534,10 @@ describe("DataTagged Property Tests", () => {
         const optionalArb = Arbitrary.make(OptionalSchema);
         FastCheck.assert(
           FastCheck.property(optionalArb, (value) => {
-            const encoded = DataTagged.encodeData(value, OptionalSchema);
-            const cbor = DataTagged.toCBOR(encoded);
-            const decoded = DataTagged.fromCBOR(cbor);
-            const result = DataTagged.decodeData(decoded, OptionalSchema);
+            const encoded = DataTagged.encodeDataUnsafe(value, OptionalSchema);
+            const cbor = DataTagged.encodeCBORUnsafe(encoded);
+            const decoded = DataTagged.decodeCBORUnsafe(cbor);
+            const result = DataTagged.decodeDataUnsafe(decoded, OptionalSchema);
             expect(result).toEqual(value);
           }),
         );
@@ -549,10 +552,10 @@ describe("DataTagged Property Tests", () => {
         const positiveIntArb = Arbitrary.make(PositiveInt);
         FastCheck.assert(
           FastCheck.property(positiveIntArb, (value) => {
-            const encoded = DataTagged.encodeData(value, PositiveInt);
-            const cbor = DataTagged.toCBOR(encoded);
-            const decoded = DataTagged.fromCBOR(cbor);
-            const result = DataTagged.decodeData(decoded, PositiveInt);
+            const encoded = DataTagged.encodeDataUnsafe(value, PositiveInt);
+            const cbor = DataTagged.encodeCBORUnsafe(encoded);
+            const decoded = DataTagged.decodeCBORUnsafe(cbor);
+            const result = DataTagged.decodeDataUnsafe(decoded, PositiveInt);
             expect(result).toEqual(value);
             expect(result > 0n).toBe(true);
           }),
