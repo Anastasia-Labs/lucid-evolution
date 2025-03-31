@@ -1,19 +1,36 @@
+/**
+ * @since 2.0.0
+ */
 import { Data, Effect } from "effect";
 import * as CML from "@anastasia-labs/cardano-multiplatform-lib-nodejs";
 
+/**
+ * Type alias for the CML NetworkInfo class
+ *
+ * @since 2.0.0
+ * @category Types
+ */
 export type NetworkInfo = CML.NetworkInfo;
 
+/**
+ * Error class for NetworkInfo operations
+ * 
+ * This error is thrown when operations on NetworkInfo instances fail.
+ *
+ * @since 2.0.0
+ * @category Errors
+ */
 export class NetworkInfoError extends Data.TaggedError("NetworkInfoError")<{
   message?: string;
 }> {}
 
 /**
  * Method free of NetworkInfo
- *
+ * 
  * @example
  * import { NetworkInfo } from "@lucid-evolution/experimental";
  * import { Effect } from "effect";
- *
+ * 
  * // Using Effect for safe execution with error handling
  * Effect.gen(function*() {
  * // Assume we have a NetworkInfo instance
@@ -21,7 +38,7 @@ export class NetworkInfoError extends Data.TaggedError("NetworkInfoError")<{
  *   const result = yield* NetworkInfo.free(instance);
  *   console.log(result);
  * });
- *
+ * 
  * @since 2.0.0
  * @category Methods
  */
@@ -33,93 +50,87 @@ export const free = Effect.fn(
         new NetworkInfoError({
           message: `NetworkInfo.free failed Hint: Check if you're calling free() more than once.`,
         }),
-    }),
+    })
 );
 
 /**
  * Unsafely calls instance.free without Effect wrapper
- *
+ * 
  * @example
  * import { NetworkInfo } from "@lucid-evolution/experimental";
- *
+ * 
  * // Assume we have a NetworkInfo instance
  * const instance = ... ;
- *
+ * 
  * // Using try/catch for error handling
  * try {
- *   const result = NetworkInfo.unsafeFree(instance);
+ *   const result = NetworkInfo.freeUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`NetworkInfo.unsafeFree failed: ${error.message}`);
+ *   console.error(`NetworkInfo.freeUnsafe failed: ${error.message}`);
  * }
- *
+ * 
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeFree = (instance: CML.NetworkInfo): void =>
+export const freeUnsafe = (instance: CML.NetworkInfo): void =>
   Effect.runSync(free(instance));
 
 /**
  * Static method _new of NetworkInfo
- *
+ * 
  * @example
  * import { NetworkInfo } from "@lucid-evolution/experimental";
  * import { Effect } from "effect";
- *
+ * 
  * // Using Effect for safe execution with error handling
  * Effect.gen(function*() {
- *
+ * 
  *   const result = yield* NetworkInfo._new( parameters );
  *   console.log(result);
  * });
- *
+ * 
  * @since 2.0.0
  * @category Constructors
  */
-export const _new = Effect.fn(function* (
-  networkId: number,
-  protocolMagic: CML.ProtocolMagic,
-) {
+export const _new = Effect.fn(function* (networkId: number, protocolMagic: CML.ProtocolMagic) {
   return yield* Effect.try({
     try: () => CML.NetworkInfo.new(networkId, protocolMagic),
-    catch: () =>
-      new NetworkInfoError({
-        message: `NetworkInfo._new failed with parameters: ${networkId}, ${protocolMagic} (ProtocolMagic). `,
-      }),
+    catch: () => new NetworkInfoError({
+      message: `NetworkInfo._new failed with parameters: ${networkId}, ${protocolMagic} (ProtocolMagic). `,
+    }),
   });
 });
 
 /**
  * Unsafely calls NetworkInfo._new without Effect wrapper
- *
+ * 
  * @example
  * import { NetworkInfo } from "@lucid-evolution/experimental";
- *
- *
- *
+ * 
+ * 
+ * 
  * // Using try/catch for error handling
  * try {
- *   const result = NetworkInfo.unsafe_new( parameters );
+ *   const result = NetworkInfo._newUnsafe( parameters );
  *   console.log(result);
  * } catch (error) {
- *   console.error(`NetworkInfo.unsafe_new failed: ${error.message}`);
+ *   console.error(`NetworkInfo._newUnsafe failed: ${error.message}`);
  * }
- *
+ * 
  * @since 2.0.0
- * @category Constructors
+ * @category ConstructorsUnsafe
  */
-export const unsafe_new = (
-  networkId: number,
-  protocolMagic: CML.ProtocolMagic,
-) => Effect.runSync(_new(networkId, protocolMagic));
+export const _newUnsafe = (networkId: number, protocolMagic: CML.ProtocolMagic) =>
+  Effect.runSync(_new(networkId, protocolMagic));
 
 /**
  * Method networkId of NetworkInfo
- *
+ * 
  * @example
  * import { NetworkInfo } from "@lucid-evolution/experimental";
  * import { Effect } from "effect";
- *
+ * 
  * // Using Effect for safe execution with error handling
  * Effect.gen(function*() {
  * // Assume we have a NetworkInfo instance
@@ -127,7 +138,7 @@ export const unsafe_new = (
  *   const result = yield* NetworkInfo.networkId(instance);
  *   console.log(result);
  * });
- *
+ * 
  * @since 2.0.0
  * @category Methods
  */
@@ -139,39 +150,39 @@ export const networkId = Effect.fn(
         new NetworkInfoError({
           message: `NetworkInfo.networkId failed `,
         }),
-    }),
+    })
 );
 
 /**
  * Unsafely calls instance.networkId without Effect wrapper
- *
+ * 
  * @example
  * import { NetworkInfo } from "@lucid-evolution/experimental";
- *
+ * 
  * // Assume we have a NetworkInfo instance
  * const instance = ... ;
- *
+ * 
  * // Using try/catch for error handling
  * try {
- *   const result = NetworkInfo.unsafeNetworkId(instance);
+ *   const result = NetworkInfo.networkIdUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`NetworkInfo.unsafeNetworkId failed: ${error.message}`);
+ *   console.error(`NetworkInfo.networkIdUnsafe failed: ${error.message}`);
  * }
- *
+ * 
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeNetworkId = (instance: CML.NetworkInfo): number =>
+export const networkIdUnsafe = (instance: CML.NetworkInfo): number =>
   Effect.runSync(networkId(instance));
 
 /**
  * Method protocolMagic of NetworkInfo
- *
+ * 
  * @example
  * import { NetworkInfo } from "@lucid-evolution/experimental";
  * import { Effect } from "effect";
- *
+ * 
  * // Using Effect for safe execution with error handling
  * Effect.gen(function*() {
  * // Assume we have a NetworkInfo instance
@@ -179,283 +190,280 @@ export const unsafeNetworkId = (instance: CML.NetworkInfo): number =>
  *   const result = yield* NetworkInfo.protocolMagic(instance);
  *   console.log(result);
  * });
- *
+ * 
  * @since 2.0.0
  * @category Methods
  */
 export const protocolMagic = Effect.fn(
-  (
-    instance: CML.NetworkInfo,
-  ): Effect.Effect<CML.ProtocolMagic, NetworkInfoError> =>
+  (instance: CML.NetworkInfo): Effect.Effect<CML.ProtocolMagic, NetworkInfoError> =>
     Effect.try({
       try: () => instance.protocol_magic(),
       catch: () =>
         new NetworkInfoError({
           message: `NetworkInfo.protocolMagic failed `,
         }),
-    }),
+    })
 );
 
 /**
  * Unsafely calls instance.protocolMagic without Effect wrapper
- *
+ * 
  * @example
  * import { NetworkInfo } from "@lucid-evolution/experimental";
- *
+ * 
  * // Assume we have a NetworkInfo instance
  * const instance = ... ;
- *
+ * 
  * // Using try/catch for error handling
  * try {
- *   const result = NetworkInfo.unsafeProtocolMagic(instance);
+ *   const result = NetworkInfo.protocolMagicUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`NetworkInfo.unsafeProtocolMagic failed: ${error.message}`);
+ *   console.error(`NetworkInfo.protocolMagicUnsafe failed: ${error.message}`);
  * }
- *
+ * 
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeProtocolMagic = (
-  instance: CML.NetworkInfo,
-): CML.ProtocolMagic => Effect.runSync(protocolMagic(instance));
+export const protocolMagicUnsafe = (instance: CML.NetworkInfo): CML.ProtocolMagic =>
+  Effect.runSync(protocolMagic(instance));
 
 /**
  * Static method testnet of NetworkInfo
- *
+ * 
  * @example
  * import { NetworkInfo } from "@lucid-evolution/experimental";
  * import { Effect } from "effect";
- *
+ * 
  * // Using Effect for safe execution with error handling
  * Effect.gen(function*() {
- *
+ * 
  *   const result = yield* NetworkInfo.testnet();
  *   console.log(result);
  * });
- *
+ * 
  * @since 2.0.0
  * @category Constructors
  */
 export const testnet = Effect.fn(function* () {
   return yield* Effect.try({
     try: () => CML.NetworkInfo.testnet(),
-    catch: () =>
-      new NetworkInfoError({
-        message: `NetworkInfo.testnet failed `,
-      }),
+    catch: () => new NetworkInfoError({
+      message: `NetworkInfo.testnet failed `,
+    }),
   });
 });
 
 /**
  * Unsafely calls NetworkInfo.testnet without Effect wrapper
- *
+ * 
  * @example
  * import { NetworkInfo } from "@lucid-evolution/experimental";
- *
- *
- *
+ * 
+ * 
+ * 
  * // Using try/catch for error handling
  * try {
- *   const result = NetworkInfo.unsafeTestnet();
+ *   const result = NetworkInfo.testnetUnsafe();
  *   console.log(result);
  * } catch (error) {
- *   console.error(`NetworkInfo.unsafeTestnet failed: ${error.message}`);
+ *   console.error(`NetworkInfo.testnetUnsafe failed: ${error.message}`);
  * }
- *
+ * 
  * @since 2.0.0
- * @category Constructors
+ * @category ConstructorsUnsafe
  */
-export const unsafeTestnet = () => Effect.runSync(testnet());
+export const testnetUnsafe = () =>
+  Effect.runSync(testnet());
 
 /**
  * Static method mainnet of NetworkInfo
- *
+ * 
  * @example
  * import { NetworkInfo } from "@lucid-evolution/experimental";
  * import { Effect } from "effect";
- *
+ * 
  * // Using Effect for safe execution with error handling
  * Effect.gen(function*() {
- *
+ * 
  *   const result = yield* NetworkInfo.mainnet();
  *   console.log(result);
  * });
- *
+ * 
  * @since 2.0.0
  * @category Constructors
  */
 export const mainnet = Effect.fn(function* () {
   return yield* Effect.try({
     try: () => CML.NetworkInfo.mainnet(),
-    catch: () =>
-      new NetworkInfoError({
-        message: `NetworkInfo.mainnet failed `,
-      }),
+    catch: () => new NetworkInfoError({
+      message: `NetworkInfo.mainnet failed `,
+    }),
   });
 });
 
 /**
  * Unsafely calls NetworkInfo.mainnet without Effect wrapper
- *
+ * 
  * @example
  * import { NetworkInfo } from "@lucid-evolution/experimental";
- *
- *
- *
+ * 
+ * 
+ * 
  * // Using try/catch for error handling
  * try {
- *   const result = NetworkInfo.unsafeMainnet();
+ *   const result = NetworkInfo.mainnetUnsafe();
  *   console.log(result);
  * } catch (error) {
- *   console.error(`NetworkInfo.unsafeMainnet failed: ${error.message}`);
+ *   console.error(`NetworkInfo.mainnetUnsafe failed: ${error.message}`);
  * }
- *
+ * 
  * @since 2.0.0
- * @category Constructors
+ * @category ConstructorsUnsafe
  */
-export const unsafeMainnet = () => Effect.runSync(mainnet());
+export const mainnetUnsafe = () =>
+  Effect.runSync(mainnet());
 
 /**
  * Static method preview of NetworkInfo
- *
+ * 
  * @example
  * import { NetworkInfo } from "@lucid-evolution/experimental";
  * import { Effect } from "effect";
- *
+ * 
  * // Using Effect for safe execution with error handling
  * Effect.gen(function*() {
- *
+ * 
  *   const result = yield* NetworkInfo.preview();
  *   console.log(result);
  * });
- *
+ * 
  * @since 2.0.0
  * @category Constructors
  */
 export const preview = Effect.fn(function* () {
   return yield* Effect.try({
     try: () => CML.NetworkInfo.preview(),
-    catch: () =>
-      new NetworkInfoError({
-        message: `NetworkInfo.preview failed `,
-      }),
+    catch: () => new NetworkInfoError({
+      message: `NetworkInfo.preview failed `,
+    }),
   });
 });
 
 /**
  * Unsafely calls NetworkInfo.preview without Effect wrapper
- *
+ * 
  * @example
  * import { NetworkInfo } from "@lucid-evolution/experimental";
- *
- *
- *
+ * 
+ * 
+ * 
  * // Using try/catch for error handling
  * try {
- *   const result = NetworkInfo.unsafePreview();
+ *   const result = NetworkInfo.previewUnsafe();
  *   console.log(result);
  * } catch (error) {
- *   console.error(`NetworkInfo.unsafePreview failed: ${error.message}`);
+ *   console.error(`NetworkInfo.previewUnsafe failed: ${error.message}`);
  * }
- *
+ * 
  * @since 2.0.0
- * @category Constructors
+ * @category ConstructorsUnsafe
  */
-export const unsafePreview = () => Effect.runSync(preview());
+export const previewUnsafe = () =>
+  Effect.runSync(preview());
 
 /**
  * Static method preprod of NetworkInfo
- *
+ * 
  * @example
  * import { NetworkInfo } from "@lucid-evolution/experimental";
  * import { Effect } from "effect";
- *
+ * 
  * // Using Effect for safe execution with error handling
  * Effect.gen(function*() {
- *
+ * 
  *   const result = yield* NetworkInfo.preprod();
  *   console.log(result);
  * });
- *
+ * 
  * @since 2.0.0
  * @category Constructors
  */
 export const preprod = Effect.fn(function* () {
   return yield* Effect.try({
     try: () => CML.NetworkInfo.preprod(),
-    catch: () =>
-      new NetworkInfoError({
-        message: `NetworkInfo.preprod failed `,
-      }),
+    catch: () => new NetworkInfoError({
+      message: `NetworkInfo.preprod failed `,
+    }),
   });
 });
 
 /**
  * Unsafely calls NetworkInfo.preprod without Effect wrapper
- *
+ * 
  * @example
  * import { NetworkInfo } from "@lucid-evolution/experimental";
- *
- *
- *
+ * 
+ * 
+ * 
  * // Using try/catch for error handling
  * try {
- *   const result = NetworkInfo.unsafePreprod();
+ *   const result = NetworkInfo.preprodUnsafe();
  *   console.log(result);
  * } catch (error) {
- *   console.error(`NetworkInfo.unsafePreprod failed: ${error.message}`);
+ *   console.error(`NetworkInfo.preprodUnsafe failed: ${error.message}`);
  * }
- *
+ * 
  * @since 2.0.0
- * @category Constructors
+ * @category ConstructorsUnsafe
  */
-export const unsafePreprod = () => Effect.runSync(preprod());
+export const preprodUnsafe = () =>
+  Effect.runSync(preprod());
 
 /**
  * Static method sanchoTestnet of NetworkInfo
- *
+ * 
  * @example
  * import { NetworkInfo } from "@lucid-evolution/experimental";
  * import { Effect } from "effect";
- *
+ * 
  * // Using Effect for safe execution with error handling
  * Effect.gen(function*() {
- *
+ * 
  *   const result = yield* NetworkInfo.sanchoTestnet();
  *   console.log(result);
  * });
- *
+ * 
  * @since 2.0.0
  * @category Constructors
  */
 export const sanchoTestnet = Effect.fn(function* () {
   return yield* Effect.try({
     try: () => CML.NetworkInfo.sancho_testnet(),
-    catch: () =>
-      new NetworkInfoError({
-        message: `NetworkInfo.sanchoTestnet failed `,
-      }),
+    catch: () => new NetworkInfoError({
+      message: `NetworkInfo.sanchoTestnet failed `,
+    }),
   });
 });
 
 /**
  * Unsafely calls NetworkInfo.sanchoTestnet without Effect wrapper
- *
+ * 
  * @example
  * import { NetworkInfo } from "@lucid-evolution/experimental";
- *
- *
- *
+ * 
+ * 
+ * 
  * // Using try/catch for error handling
  * try {
- *   const result = NetworkInfo.unsafeSanchoTestnet();
+ *   const result = NetworkInfo.sanchoTestnetUnsafe();
  *   console.log(result);
  * } catch (error) {
- *   console.error(`NetworkInfo.unsafeSanchoTestnet failed: ${error.message}`);
+ *   console.error(`NetworkInfo.sanchoTestnetUnsafe failed: ${error.message}`);
  * }
- *
+ * 
  * @since 2.0.0
- * @category Constructors
+ * @category ConstructorsUnsafe
  */
-export const unsafeSanchoTestnet = () => Effect.runSync(sanchoTestnet());
+export const sanchoTestnetUnsafe = () =>
+  Effect.runSync(sanchoTestnet());

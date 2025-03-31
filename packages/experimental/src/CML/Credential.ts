@@ -1,19 +1,36 @@
+/**
+ * @since 2.0.0
+ */
 import { Data, Effect } from "effect";
 import * as CML from "@anastasia-labs/cardano-multiplatform-lib-nodejs";
 
+/**
+ * Type alias for the CML Credential class
+ *
+ * @since 2.0.0
+ * @category Types
+ */
 export type Credential = CML.Credential;
 
+/**
+ * Error class for Credential operations
+ * 
+ * This error is thrown when operations on Credential instances fail.
+ *
+ * @since 2.0.0
+ * @category Errors
+ */
 export class CredentialError extends Data.TaggedError("CredentialError")<{
   message?: string;
 }> {}
 
 /**
  * Method free of Credential
- *
+ * 
  * @example
  * import { Credential } from "@lucid-evolution/experimental";
  * import { Effect } from "effect";
- *
+ * 
  * // Using Effect for safe execution with error handling
  * Effect.gen(function*() {
  * // Assume we have a Credential instance
@@ -21,7 +38,7 @@ export class CredentialError extends Data.TaggedError("CredentialError")<{
  *   const result = yield* Credential.free(instance);
  *   console.log(result);
  * });
- *
+ * 
  * @since 2.0.0
  * @category Methods
  */
@@ -33,39 +50,39 @@ export const free = Effect.fn(
         new CredentialError({
           message: `Credential.free failed Hint: Check if you're calling free() more than once.`,
         }),
-    }),
+    })
 );
 
 /**
  * Unsafely calls instance.free without Effect wrapper
- *
+ * 
  * @example
  * import { Credential } from "@lucid-evolution/experimental";
- *
+ * 
  * // Assume we have a Credential instance
  * const instance = ... ;
- *
+ * 
  * // Using try/catch for error handling
  * try {
- *   const result = Credential.unsafeFree(instance);
+ *   const result = Credential.freeUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`Credential.unsafeFree failed: ${error.message}`);
+ *   console.error(`Credential.freeUnsafe failed: ${error.message}`);
  * }
- *
+ * 
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeFree = (instance: CML.Credential): void =>
+export const freeUnsafe = (instance: CML.Credential): void =>
   Effect.runSync(free(instance));
 
 /**
  * Method toCborBytes of Credential
- *
+ * 
  * @example
  * import { Credential } from "@lucid-evolution/experimental";
  * import { Effect } from "effect";
- *
+ * 
  * // Using Effect for safe execution with error handling
  * Effect.gen(function*() {
  * // Assume we have a Credential instance
@@ -73,7 +90,7 @@ export const unsafeFree = (instance: CML.Credential): void =>
  *   const result = yield* Credential.toCborBytes(instance);
  *   console.log(result);
  * });
- *
+ * 
  * @since 2.0.0
  * @category Methods
  */
@@ -85,39 +102,39 @@ export const toCborBytes = Effect.fn(
         new CredentialError({
           message: `Credential.toCborBytes failed Credential is not valid for Uint8Array conversion. Hint: Check byte length and encoding.`,
         }),
-    }),
+    })
 );
 
 /**
  * Unsafely calls instance.toCborBytes without Effect wrapper
- *
+ * 
  * @example
  * import { Credential } from "@lucid-evolution/experimental";
- *
+ * 
  * // Assume we have a Credential instance
  * const instance = ... ;
- *
+ * 
  * // Using try/catch for error handling
  * try {
- *   const result = Credential.unsafeToCborBytes(instance);
+ *   const result = Credential.toCborBytesUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`Credential.unsafeToCborBytes failed: ${error.message}`);
+ *   console.error(`Credential.toCborBytesUnsafe failed: ${error.message}`);
  * }
- *
+ * 
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeToCborBytes = (instance: CML.Credential): Uint8Array =>
+export const toCborBytesUnsafe = (instance: CML.Credential): Uint8Array =>
   Effect.runSync(toCborBytes(instance));
 
 /**
  * Method toCanonicalCborBytes of Credential
- *
+ * 
  * @example
  * import { Credential } from "@lucid-evolution/experimental";
  * import { Effect } from "effect";
- *
+ * 
  * // Using Effect for safe execution with error handling
  * Effect.gen(function*() {
  * // Assume we have a Credential instance
@@ -125,7 +142,7 @@ export const unsafeToCborBytes = (instance: CML.Credential): Uint8Array =>
  *   const result = yield* Credential.toCanonicalCborBytes(instance);
  *   console.log(result);
  * });
- *
+ * 
  * @since 2.0.0
  * @category Methods
  */
@@ -137,89 +154,87 @@ export const toCanonicalCborBytes = Effect.fn(
         new CredentialError({
           message: `Credential.toCanonicalCborBytes failed Credential is not valid for Uint8Array conversion. Hint: Check byte length and encoding.`,
         }),
-    }),
+    })
 );
 
 /**
  * Unsafely calls instance.toCanonicalCborBytes without Effect wrapper
- *
+ * 
  * @example
  * import { Credential } from "@lucid-evolution/experimental";
- *
+ * 
  * // Assume we have a Credential instance
  * const instance = ... ;
- *
+ * 
  * // Using try/catch for error handling
  * try {
- *   const result = Credential.unsafeToCanonicalCborBytes(instance);
+ *   const result = Credential.toCanonicalCborBytesUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`Credential.unsafeToCanonicalCborBytes failed: ${error.message}`);
+ *   console.error(`Credential.toCanonicalCborBytesUnsafe failed: ${error.message}`);
  * }
- *
+ * 
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeToCanonicalCborBytes = (
-  instance: CML.Credential,
-): Uint8Array => Effect.runSync(toCanonicalCborBytes(instance));
+export const toCanonicalCborBytesUnsafe = (instance: CML.Credential): Uint8Array =>
+  Effect.runSync(toCanonicalCborBytes(instance));
 
 /**
  * Static method fromCborBytes of Credential
- *
+ * 
  * @example
  * import { Credential } from "@lucid-evolution/experimental";
  * import { Effect } from "effect";
- *
+ * 
  * // Using Effect for safe execution with error handling
  * Effect.gen(function*() {
- *
+ * 
  *   const result = yield* Credential.fromCborBytes( parameters );
  *   console.log(result);
  * });
- *
+ * 
  * @since 2.0.0
  * @category Constructors
  */
 export const fromCborBytes = Effect.fn(function* (cborBytes: Uint8Array) {
   return yield* Effect.try({
     try: () => CML.Credential.from_cbor_bytes(cborBytes),
-    catch: () =>
-      new CredentialError({
-        message: `Credential.fromCborBytes failed with parameters: ${cborBytes}. Hint: Check byte length and encoding.`,
-      }),
+    catch: () => new CredentialError({
+      message: `Credential.fromCborBytes failed with parameters: ${cborBytes}. Hint: Check byte length and encoding.`,
+    }),
   });
 });
 
 /**
  * Unsafely calls Credential.fromCborBytes without Effect wrapper
- *
+ * 
  * @example
  * import { Credential } from "@lucid-evolution/experimental";
- *
- *
- *
+ * 
+ * 
+ * 
  * // Using try/catch for error handling
  * try {
- *   const result = Credential.unsafeFromCborBytes( parameters );
+ *   const result = Credential.fromCborBytesUnsafe( parameters );
  *   console.log(result);
  * } catch (error) {
- *   console.error(`Credential.unsafeFromCborBytes failed: ${error.message}`);
+ *   console.error(`Credential.fromCborBytesUnsafe failed: ${error.message}`);
  * }
- *
+ * 
  * @since 2.0.0
- * @category Constructors
+ * @category ConstructorsUnsafe
  */
-export const unsafeFromCborBytes = (cborBytes: Uint8Array) =>
+export const fromCborBytesUnsafe = (cborBytes: Uint8Array) =>
   Effect.runSync(fromCborBytes(cborBytes));
 
 /**
  * Method toCborHex of Credential
- *
+ * 
  * @example
  * import { Credential } from "@lucid-evolution/experimental";
  * import { Effect } from "effect";
- *
+ * 
  * // Using Effect for safe execution with error handling
  * Effect.gen(function*() {
  * // Assume we have a Credential instance
@@ -227,7 +242,7 @@ export const unsafeFromCborBytes = (cborBytes: Uint8Array) =>
  *   const result = yield* Credential.toCborHex(instance);
  *   console.log(result);
  * });
- *
+ * 
  * @since 2.0.0
  * @category Methods
  */
@@ -239,39 +254,39 @@ export const toCborHex = Effect.fn(
         new CredentialError({
           message: `Credential.toCborHex failed Credential is not valid for string conversion. Hint: Make sure it's a valid hex string representing CBOR data.`,
         }),
-    }),
+    })
 );
 
 /**
  * Unsafely calls instance.toCborHex without Effect wrapper
- *
+ * 
  * @example
  * import { Credential } from "@lucid-evolution/experimental";
- *
+ * 
  * // Assume we have a Credential instance
  * const instance = ... ;
- *
+ * 
  * // Using try/catch for error handling
  * try {
- *   const result = Credential.unsafeToCborHex(instance);
+ *   const result = Credential.toCborHexUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`Credential.unsafeToCborHex failed: ${error.message}`);
+ *   console.error(`Credential.toCborHexUnsafe failed: ${error.message}`);
  * }
- *
+ * 
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeToCborHex = (instance: CML.Credential): string =>
+export const toCborHexUnsafe = (instance: CML.Credential): string =>
   Effect.runSync(toCborHex(instance));
 
 /**
  * Method toCanonicalCborHex of Credential
- *
+ * 
  * @example
  * import { Credential } from "@lucid-evolution/experimental";
  * import { Effect } from "effect";
- *
+ * 
  * // Using Effect for safe execution with error handling
  * Effect.gen(function*() {
  * // Assume we have a Credential instance
@@ -279,7 +294,7 @@ export const unsafeToCborHex = (instance: CML.Credential): string =>
  *   const result = yield* Credential.toCanonicalCborHex(instance);
  *   console.log(result);
  * });
- *
+ * 
  * @since 2.0.0
  * @category Methods
  */
@@ -291,88 +306,87 @@ export const toCanonicalCborHex = Effect.fn(
         new CredentialError({
           message: `Credential.toCanonicalCborHex failed Credential is not valid for string conversion. Hint: Make sure it's a valid hex string representing CBOR data.`,
         }),
-    }),
+    })
 );
 
 /**
  * Unsafely calls instance.toCanonicalCborHex without Effect wrapper
- *
+ * 
  * @example
  * import { Credential } from "@lucid-evolution/experimental";
- *
+ * 
  * // Assume we have a Credential instance
  * const instance = ... ;
- *
+ * 
  * // Using try/catch for error handling
  * try {
- *   const result = Credential.unsafeToCanonicalCborHex(instance);
+ *   const result = Credential.toCanonicalCborHexUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`Credential.unsafeToCanonicalCborHex failed: ${error.message}`);
+ *   console.error(`Credential.toCanonicalCborHexUnsafe failed: ${error.message}`);
  * }
- *
+ * 
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeToCanonicalCborHex = (instance: CML.Credential): string =>
+export const toCanonicalCborHexUnsafe = (instance: CML.Credential): string =>
   Effect.runSync(toCanonicalCborHex(instance));
 
 /**
  * Static method fromCborHex of Credential
- *
+ * 
  * @example
  * import { Credential } from "@lucid-evolution/experimental";
  * import { Effect } from "effect";
- *
+ * 
  * // Using Effect for safe execution with error handling
  * Effect.gen(function*() {
- *
+ * 
  *   const result = yield* Credential.fromCborHex( parameters );
  *   console.log(result);
  * });
- *
+ * 
  * @since 2.0.0
  * @category Constructors
  */
 export const fromCborHex = Effect.fn(function* (cborBytes: string) {
   return yield* Effect.try({
     try: () => CML.Credential.from_cbor_hex(cborBytes),
-    catch: () =>
-      new CredentialError({
-        message: `Credential.fromCborHex failed with parameters: ${cborBytes}. Hint: Make sure it's a valid hex string representing CBOR data.`,
-      }),
+    catch: () => new CredentialError({
+      message: `Credential.fromCborHex failed with parameters: ${cborBytes}. Hint: Make sure it's a valid hex string representing CBOR data.`,
+    }),
   });
 });
 
 /**
  * Unsafely calls Credential.fromCborHex without Effect wrapper
- *
+ * 
  * @example
  * import { Credential } from "@lucid-evolution/experimental";
- *
- *
- *
+ * 
+ * 
+ * 
  * // Using try/catch for error handling
  * try {
- *   const result = Credential.unsafeFromCborHex( parameters );
+ *   const result = Credential.fromCborHexUnsafe( parameters );
  *   console.log(result);
  * } catch (error) {
- *   console.error(`Credential.unsafeFromCborHex failed: ${error.message}`);
+ *   console.error(`Credential.fromCborHexUnsafe failed: ${error.message}`);
  * }
- *
+ * 
  * @since 2.0.0
- * @category Constructors
+ * @category ConstructorsUnsafe
  */
-export const unsafeFromCborHex = (cborBytes: string) =>
+export const fromCborHexUnsafe = (cborBytes: string) =>
   Effect.runSync(fromCborHex(cborBytes));
 
 /**
  * Method toJson of Credential
- *
+ * 
  * @example
  * import { Credential } from "@lucid-evolution/experimental";
  * import { Effect } from "effect";
- *
+ * 
  * // Using Effect for safe execution with error handling
  * Effect.gen(function*() {
  * // Assume we have a Credential instance
@@ -380,7 +394,7 @@ export const unsafeFromCborHex = (cborBytes: string) =>
  *   const result = yield* Credential.toJson(instance);
  *   console.log(result);
  * });
- *
+ * 
  * @since 2.0.0
  * @category Methods
  */
@@ -392,39 +406,39 @@ export const toJson = Effect.fn(
         new CredentialError({
           message: `Credential.toJson failed Credential is not valid for string conversion. Hint: Validate your JSON structure.`,
         }),
-    }),
+    })
 );
 
 /**
  * Unsafely calls instance.toJson without Effect wrapper
- *
+ * 
  * @example
  * import { Credential } from "@lucid-evolution/experimental";
- *
+ * 
  * // Assume we have a Credential instance
  * const instance = ... ;
- *
+ * 
  * // Using try/catch for error handling
  * try {
- *   const result = Credential.unsafeToJson(instance);
+ *   const result = Credential.toJsonUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`Credential.unsafeToJson failed: ${error.message}`);
+ *   console.error(`Credential.toJsonUnsafe failed: ${error.message}`);
  * }
- *
+ * 
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeToJson = (instance: CML.Credential): string =>
+export const toJsonUnsafe = (instance: CML.Credential): string =>
   Effect.runSync(toJson(instance));
 
 /**
  * Method toJsValue of Credential
- *
+ * 
  * @example
  * import { Credential } from "@lucid-evolution/experimental";
  * import { Effect } from "effect";
- *
+ * 
  * // Using Effect for safe execution with error handling
  * Effect.gen(function*() {
  * // Assume we have a Credential instance
@@ -432,7 +446,7 @@ export const unsafeToJson = (instance: CML.Credential): string =>
  *   const result = yield* Credential.toJsValue(instance);
  *   console.log(result);
  * });
- *
+ * 
  * @since 2.0.0
  * @category Methods
  */
@@ -444,185 +458,183 @@ export const toJsValue = Effect.fn(
         new CredentialError({
           message: `Credential.toJsValue failed Credential is not valid for any conversion. `,
         }),
-    }),
+    })
 );
 
 /**
  * Unsafely calls instance.toJsValue without Effect wrapper
- *
+ * 
  * @example
  * import { Credential } from "@lucid-evolution/experimental";
- *
+ * 
  * // Assume we have a Credential instance
  * const instance = ... ;
- *
+ * 
  * // Using try/catch for error handling
  * try {
- *   const result = Credential.unsafeToJsValue(instance);
+ *   const result = Credential.toJsValueUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`Credential.unsafeToJsValue failed: ${error.message}`);
+ *   console.error(`Credential.toJsValueUnsafe failed: ${error.message}`);
  * }
- *
+ * 
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeToJsValue = (instance: CML.Credential): any =>
+export const toJsValueUnsafe = (instance: CML.Credential): any =>
   Effect.runSync(toJsValue(instance));
 
 /**
  * Static method fromJson of Credential
- *
+ * 
  * @example
  * import { Credential } from "@lucid-evolution/experimental";
  * import { Effect } from "effect";
- *
+ * 
  * // Using Effect for safe execution with error handling
  * Effect.gen(function*() {
- *
+ * 
  *   const result = yield* Credential.fromJson( parameters );
  *   console.log(result);
  * });
- *
+ * 
  * @since 2.0.0
  * @category Constructors
  */
 export const fromJson = Effect.fn(function* (json: string) {
   return yield* Effect.try({
     try: () => CML.Credential.from_json(json),
-    catch: () =>
-      new CredentialError({
-        message: `Credential.fromJson failed with parameters: ${json}. Hint: Validate your JSON structure.`,
-      }),
+    catch: () => new CredentialError({
+      message: `Credential.fromJson failed with parameters: ${json}. Hint: Validate your JSON structure.`,
+    }),
   });
 });
 
 /**
  * Unsafely calls Credential.fromJson without Effect wrapper
- *
+ * 
  * @example
  * import { Credential } from "@lucid-evolution/experimental";
- *
- *
- *
+ * 
+ * 
+ * 
  * // Using try/catch for error handling
  * try {
- *   const result = Credential.unsafeFromJson( parameters );
+ *   const result = Credential.fromJsonUnsafe( parameters );
  *   console.log(result);
  * } catch (error) {
- *   console.error(`Credential.unsafeFromJson failed: ${error.message}`);
+ *   console.error(`Credential.fromJsonUnsafe failed: ${error.message}`);
  * }
- *
+ * 
  * @since 2.0.0
- * @category Constructors
+ * @category ConstructorsUnsafe
  */
-export const unsafeFromJson = (json: string) => Effect.runSync(fromJson(json));
+export const fromJsonUnsafe = (json: string) =>
+  Effect.runSync(fromJson(json));
 
 /**
  * Static method newPubKey of Credential
- *
+ * 
  * @example
  * import { Credential } from "@lucid-evolution/experimental";
  * import { Effect } from "effect";
- *
+ * 
  * // Using Effect for safe execution with error handling
  * Effect.gen(function*() {
- *
+ * 
  *   const result = yield* Credential.newPubKey( parameters );
  *   console.log(result);
  * });
- *
+ * 
  * @since 2.0.0
  * @category Constructors
  */
 export const newPubKey = Effect.fn(function* (hash: CML.Ed25519KeyHash) {
   return yield* Effect.try({
     try: () => CML.Credential.new_pub_key(hash),
-    catch: () =>
-      new CredentialError({
-        message: `Credential.newPubKey failed with parameters: ${hash} (Ed25519KeyHash). `,
-      }),
+    catch: () => new CredentialError({
+      message: `Credential.newPubKey failed with parameters: ${hash} (Ed25519KeyHash). `,
+    }),
   });
 });
 
 /**
  * Unsafely calls Credential.newPubKey without Effect wrapper
- *
+ * 
  * @example
  * import { Credential } from "@lucid-evolution/experimental";
- *
- *
- *
+ * 
+ * 
+ * 
  * // Using try/catch for error handling
  * try {
- *   const result = Credential.unsafeNewPubKey( parameters );
+ *   const result = Credential.newPubKeyUnsafe( parameters );
  *   console.log(result);
  * } catch (error) {
- *   console.error(`Credential.unsafeNewPubKey failed: ${error.message}`);
+ *   console.error(`Credential.newPubKeyUnsafe failed: ${error.message}`);
  * }
- *
+ * 
  * @since 2.0.0
- * @category Constructors
+ * @category ConstructorsUnsafe
  */
-export const unsafeNewPubKey = (hash: CML.Ed25519KeyHash) =>
+export const newPubKeyUnsafe = (hash: CML.Ed25519KeyHash) =>
   Effect.runSync(newPubKey(hash));
 
 /**
  * Static method newScript of Credential
- *
+ * 
  * @example
  * import { Credential } from "@lucid-evolution/experimental";
  * import { Effect } from "effect";
- *
+ * 
  * // Using Effect for safe execution with error handling
  * Effect.gen(function*() {
- *
+ * 
  *   const result = yield* Credential.newScript( parameters );
  *   console.log(result);
  * });
- *
+ * 
  * @since 2.0.0
  * @category Constructors
  */
 export const newScript = Effect.fn(function* (hash: CML.ScriptHash) {
   return yield* Effect.try({
     try: () => CML.Credential.new_script(hash),
-    catch: () =>
-      new CredentialError({
-        message: `Credential.newScript failed with parameters: ${hash} (ScriptHash). `,
-      }),
+    catch: () => new CredentialError({
+      message: `Credential.newScript failed with parameters: ${hash} (ScriptHash). `,
+    }),
   });
 });
 
 /**
  * Unsafely calls Credential.newScript without Effect wrapper
- *
+ * 
  * @example
  * import { Credential } from "@lucid-evolution/experimental";
- *
- *
- *
+ * 
+ * 
+ * 
  * // Using try/catch for error handling
  * try {
- *   const result = Credential.unsafeNewScript( parameters );
+ *   const result = Credential.newScriptUnsafe( parameters );
  *   console.log(result);
  * } catch (error) {
- *   console.error(`Credential.unsafeNewScript failed: ${error.message}`);
+ *   console.error(`Credential.newScriptUnsafe failed: ${error.message}`);
  * }
- *
+ * 
  * @since 2.0.0
- * @category Constructors
+ * @category ConstructorsUnsafe
  */
-export const unsafeNewScript = (hash: CML.ScriptHash) =>
+export const newScriptUnsafe = (hash: CML.ScriptHash) =>
   Effect.runSync(newScript(hash));
 
 /**
  * Method kind of Credential
- *
+ * 
  * @example
  * import { Credential } from "@lucid-evolution/experimental";
  * import { Effect } from "effect";
- *
+ * 
  * // Using Effect for safe execution with error handling
  * Effect.gen(function*() {
  * // Assume we have a Credential instance
@@ -630,53 +642,51 @@ export const unsafeNewScript = (hash: CML.ScriptHash) =>
  *   const result = yield* Credential.kind(instance);
  *   console.log(result);
  * });
- *
+ * 
  * @since 2.0.0
  * @category Methods
  */
 export const kind = Effect.fn(
-  (
-    instance: CML.Credential,
-  ): Effect.Effect<CML.CredentialKind, CredentialError> =>
+  (instance: CML.Credential): Effect.Effect<CML.CredentialKind, CredentialError> =>
     Effect.try({
       try: () => instance.kind(),
       catch: () =>
         new CredentialError({
           message: `Credential.kind failed `,
         }),
-    }),
+    })
 );
 
 /**
  * Unsafely calls instance.kind without Effect wrapper
- *
+ * 
  * @example
  * import { Credential } from "@lucid-evolution/experimental";
- *
+ * 
  * // Assume we have a Credential instance
  * const instance = ... ;
- *
+ * 
  * // Using try/catch for error handling
  * try {
- *   const result = Credential.unsafeKind(instance);
+ *   const result = Credential.kindUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`Credential.unsafeKind failed: ${error.message}`);
+ *   console.error(`Credential.kindUnsafe failed: ${error.message}`);
  * }
- *
+ * 
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeKind = (instance: CML.Credential): CML.CredentialKind =>
+export const kindUnsafe = (instance: CML.Credential): CML.CredentialKind =>
   Effect.runSync(kind(instance));
 
 /**
  * Method asPubKey of Credential
- *
+ * 
  * @example
  * import { Credential } from "@lucid-evolution/experimental";
  * import { Effect } from "effect";
- *
+ * 
  * // Using Effect for safe execution with error handling
  * Effect.gen(function*() {
  * // Assume we have a Credential instance
@@ -684,54 +694,51 @@ export const unsafeKind = (instance: CML.Credential): CML.CredentialKind =>
  *   const result = yield* Credential.asPubKey(instance);
  *   console.log(result);
  * });
- *
+ * 
  * @since 2.0.0
  * @category Methods
  */
 export const asPubKey = Effect.fn(
-  (
-    instance: CML.Credential,
-  ): Effect.Effect<CML.Ed25519KeyHash | undefined, CredentialError> =>
+  (instance: CML.Credential): Effect.Effect<CML.Ed25519KeyHash | undefined, CredentialError> =>
     Effect.try({
       try: () => instance.as_pub_key(),
       catch: () =>
         new CredentialError({
           message: `Credential.asPubKey failed `,
         }),
-    }),
+    })
 );
 
 /**
  * Unsafely calls instance.asPubKey without Effect wrapper
- *
+ * 
  * @example
  * import { Credential } from "@lucid-evolution/experimental";
- *
+ * 
  * // Assume we have a Credential instance
  * const instance = ... ;
- *
+ * 
  * // Using try/catch for error handling
  * try {
- *   const result = Credential.unsafeAsPubKey(instance);
+ *   const result = Credential.asPubKeyUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`Credential.unsafeAsPubKey failed: ${error.message}`);
+ *   console.error(`Credential.asPubKeyUnsafe failed: ${error.message}`);
  * }
- *
+ * 
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeAsPubKey = (
-  instance: CML.Credential,
-): CML.Ed25519KeyHash | undefined => Effect.runSync(asPubKey(instance));
+export const asPubKeyUnsafe = (instance: CML.Credential): CML.Ed25519KeyHash | undefined =>
+  Effect.runSync(asPubKey(instance));
 
 /**
  * Method asScript of Credential
- *
+ * 
  * @example
  * import { Credential } from "@lucid-evolution/experimental";
  * import { Effect } from "effect";
- *
+ * 
  * // Using Effect for safe execution with error handling
  * Effect.gen(function*() {
  * // Assume we have a Credential instance
@@ -739,43 +746,40 @@ export const unsafeAsPubKey = (
  *   const result = yield* Credential.asScript(instance);
  *   console.log(result);
  * });
- *
+ * 
  * @since 2.0.0
  * @category Methods
  */
 export const asScript = Effect.fn(
-  (
-    instance: CML.Credential,
-  ): Effect.Effect<CML.ScriptHash | undefined, CredentialError> =>
+  (instance: CML.Credential): Effect.Effect<CML.ScriptHash | undefined, CredentialError> =>
     Effect.try({
       try: () => instance.as_script(),
       catch: () =>
         new CredentialError({
           message: `Credential.asScript failed `,
         }),
-    }),
+    })
 );
 
 /**
  * Unsafely calls instance.asScript without Effect wrapper
- *
+ * 
  * @example
  * import { Credential } from "@lucid-evolution/experimental";
- *
+ * 
  * // Assume we have a Credential instance
  * const instance = ... ;
- *
+ * 
  * // Using try/catch for error handling
  * try {
- *   const result = Credential.unsafeAsScript(instance);
+ *   const result = Credential.asScriptUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`Credential.unsafeAsScript failed: ${error.message}`);
+ *   console.error(`Credential.asScriptUnsafe failed: ${error.message}`);
  * }
- *
+ * 
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeAsScript = (
-  instance: CML.Credential,
-): CML.ScriptHash | undefined => Effect.runSync(asScript(instance));
+export const asScriptUnsafe = (instance: CML.Credential): CML.ScriptHash | undefined =>
+  Effect.runSync(asScript(instance));

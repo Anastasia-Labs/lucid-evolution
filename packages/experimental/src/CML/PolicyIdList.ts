@@ -1,19 +1,36 @@
+/**
+ * @since 2.0.0
+ */
 import { Data, Effect } from "effect";
 import * as CML from "@anastasia-labs/cardano-multiplatform-lib-nodejs";
 
+/**
+ * Type alias for the CML PolicyIdList class
+ *
+ * @since 2.0.0
+ * @category Types
+ */
 export type PolicyIdList = CML.PolicyIdList;
 
+/**
+ * Error class for PolicyIdList operations
+ * 
+ * This error is thrown when operations on PolicyIdList instances fail.
+ *
+ * @since 2.0.0
+ * @category Errors
+ */
 export class PolicyIdListError extends Data.TaggedError("PolicyIdListError")<{
   message?: string;
 }> {}
 
 /**
  * Method free of PolicyIdList
- *
+ * 
  * @example
  * import { PolicyIdList } from "@lucid-evolution/experimental";
  * import { Effect } from "effect";
- *
+ * 
  * // Using Effect for safe execution with error handling
  * Effect.gen(function*() {
  * // Assume we have a PolicyIdList instance
@@ -21,7 +38,7 @@ export class PolicyIdListError extends Data.TaggedError("PolicyIdListError")<{
  *   const result = yield* PolicyIdList.free(instance);
  *   console.log(result);
  * });
- *
+ * 
  * @since 2.0.0
  * @category Methods
  */
@@ -33,87 +50,87 @@ export const free = Effect.fn(
         new PolicyIdListError({
           message: `PolicyIdList.free failed Hint: Check if you're calling free() more than once.`,
         }),
-    }),
+    })
 );
 
 /**
  * Unsafely calls instance.free without Effect wrapper
- *
+ * 
  * @example
  * import { PolicyIdList } from "@lucid-evolution/experimental";
- *
+ * 
  * // Assume we have a PolicyIdList instance
  * const instance = ... ;
- *
+ * 
  * // Using try/catch for error handling
  * try {
- *   const result = PolicyIdList.unsafeFree(instance);
+ *   const result = PolicyIdList.freeUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`PolicyIdList.unsafeFree failed: ${error.message}`);
+ *   console.error(`PolicyIdList.freeUnsafe failed: ${error.message}`);
  * }
- *
+ * 
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeFree = (instance: CML.PolicyIdList): void =>
+export const freeUnsafe = (instance: CML.PolicyIdList): void =>
   Effect.runSync(free(instance));
 
 /**
  * Static method _new of PolicyIdList
- *
+ * 
  * @example
  * import { PolicyIdList } from "@lucid-evolution/experimental";
  * import { Effect } from "effect";
- *
+ * 
  * // Using Effect for safe execution with error handling
  * Effect.gen(function*() {
- *
+ * 
  *   const result = yield* PolicyIdList._new();
  *   console.log(result);
  * });
- *
+ * 
  * @since 2.0.0
  * @category Constructors
  */
 export const _new = Effect.fn(function* () {
   return yield* Effect.try({
     try: () => CML.PolicyIdList.new(),
-    catch: () =>
-      new PolicyIdListError({
-        message: `PolicyIdList._new failed `,
-      }),
+    catch: () => new PolicyIdListError({
+      message: `PolicyIdList._new failed `,
+    }),
   });
 });
 
 /**
  * Unsafely calls PolicyIdList._new without Effect wrapper
- *
+ * 
  * @example
  * import { PolicyIdList } from "@lucid-evolution/experimental";
- *
- *
- *
+ * 
+ * 
+ * 
  * // Using try/catch for error handling
  * try {
- *   const result = PolicyIdList.unsafe_new();
+ *   const result = PolicyIdList._newUnsafe();
  *   console.log(result);
  * } catch (error) {
- *   console.error(`PolicyIdList.unsafe_new failed: ${error.message}`);
+ *   console.error(`PolicyIdList._newUnsafe failed: ${error.message}`);
  * }
- *
+ * 
  * @since 2.0.0
- * @category Constructors
+ * @category ConstructorsUnsafe
  */
-export const unsafe_new = () => Effect.runSync(_new());
+export const _newUnsafe = () =>
+  Effect.runSync(_new());
 
 /**
  * Method len of PolicyIdList
- *
+ * 
  * @example
  * import { PolicyIdList } from "@lucid-evolution/experimental";
  * import { Effect } from "effect";
- *
+ * 
  * // Using Effect for safe execution with error handling
  * Effect.gen(function*() {
  * // Assume we have a PolicyIdList instance
@@ -121,7 +138,7 @@ export const unsafe_new = () => Effect.runSync(_new());
  *   const result = yield* PolicyIdList.len(instance);
  *   console.log(result);
  * });
- *
+ * 
  * @since 2.0.0
  * @category Methods
  */
@@ -133,39 +150,39 @@ export const len = Effect.fn(
         new PolicyIdListError({
           message: `PolicyIdList.len failed `,
         }),
-    }),
+    })
 );
 
 /**
  * Unsafely calls instance.len without Effect wrapper
- *
+ * 
  * @example
  * import { PolicyIdList } from "@lucid-evolution/experimental";
- *
+ * 
  * // Assume we have a PolicyIdList instance
  * const instance = ... ;
- *
+ * 
  * // Using try/catch for error handling
  * try {
- *   const result = PolicyIdList.unsafeLen(instance);
+ *   const result = PolicyIdList.lenUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`PolicyIdList.unsafeLen failed: ${error.message}`);
+ *   console.error(`PolicyIdList.lenUnsafe failed: ${error.message}`);
  * }
- *
+ * 
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeLen = (instance: CML.PolicyIdList): number =>
+export const lenUnsafe = (instance: CML.PolicyIdList): number =>
   Effect.runSync(len(instance));
 
 /**
  * Method get of PolicyIdList
- *
+ * 
  * @example
  * import { PolicyIdList } from "@lucid-evolution/experimental";
  * import { Effect } from "effect";
- *
+ * 
  * // Using Effect for safe execution with error handling
  * Effect.gen(function*() {
  * // Assume we have a PolicyIdList instance
@@ -173,56 +190,51 @@ export const unsafeLen = (instance: CML.PolicyIdList): number =>
  *   const result = yield* PolicyIdList.get(instance,  parameters );
  *   console.log(result);
  * });
- *
+ * 
  * @since 2.0.0
  * @category Methods
  */
 export const get = Effect.fn(
-  (
-    instance: CML.PolicyIdList,
-    index: number,
-  ): Effect.Effect<CML.ScriptHash, PolicyIdListError> =>
+  (instance: CML.PolicyIdList, index: number): Effect.Effect<CML.ScriptHash, PolicyIdListError> =>
     Effect.try({
       try: () => instance.get(index),
       catch: () =>
         new PolicyIdListError({
           message: `PolicyIdList.get failed with parameters: ${index}. `,
         }),
-    }),
+    })
 );
 
 /**
  * Unsafely calls instance.get without Effect wrapper
- *
+ * 
  * @example
  * import { PolicyIdList } from "@lucid-evolution/experimental";
- *
+ * 
  * // Assume we have a PolicyIdList instance
  * const instance = ... ;
- *
+ * 
  * // Using try/catch for error handling
  * try {
- *   const result = PolicyIdList.unsafeGet(instance,  parameters );
+ *   const result = PolicyIdList.getUnsafe(instance,  parameters );
  *   console.log(result);
  * } catch (error) {
- *   console.error(`PolicyIdList.unsafeGet failed: ${error.message}`);
+ *   console.error(`PolicyIdList.getUnsafe failed: ${error.message}`);
  * }
- *
+ * 
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeGet = (
-  instance: CML.PolicyIdList,
-  index: number,
-): CML.ScriptHash => Effect.runSync(get(instance, index));
+export const getUnsafe = (instance: CML.PolicyIdList, index: number): CML.ScriptHash =>
+  Effect.runSync(get(instance, index));
 
 /**
  * Method add of PolicyIdList
- *
+ * 
  * @example
  * import { PolicyIdList } from "@lucid-evolution/experimental";
  * import { Effect } from "effect";
- *
+ * 
  * // Using Effect for safe execution with error handling
  * Effect.gen(function*() {
  * // Assume we have a PolicyIdList instance
@@ -230,45 +242,40 @@ export const unsafeGet = (
  *   const result = yield* PolicyIdList.add(instance,  parameters );
  *   console.log(result);
  * });
- *
+ * 
  * @since 2.0.0
  * @category Methods
  */
 export const add = Effect.fn(
-  (
-    instance: CML.PolicyIdList,
-    elem: CML.ScriptHash,
-  ): Effect.Effect<void, PolicyIdListError> =>
+  (instance: CML.PolicyIdList, elem: CML.ScriptHash): Effect.Effect<void, PolicyIdListError> =>
     Effect.try({
       try: () => instance.add(elem),
       catch: () =>
         new PolicyIdListError({
           message: `PolicyIdList.add failed with parameters: ${elem} (ScriptHash). `,
         }),
-    }),
+    })
 );
 
 /**
  * Unsafely calls instance.add without Effect wrapper
- *
+ * 
  * @example
  * import { PolicyIdList } from "@lucid-evolution/experimental";
- *
+ * 
  * // Assume we have a PolicyIdList instance
  * const instance = ... ;
- *
+ * 
  * // Using try/catch for error handling
  * try {
- *   const result = PolicyIdList.unsafeAdd(instance,  parameters );
+ *   const result = PolicyIdList.addUnsafe(instance,  parameters );
  *   console.log(result);
  * } catch (error) {
- *   console.error(`PolicyIdList.unsafeAdd failed: ${error.message}`);
+ *   console.error(`PolicyIdList.addUnsafe failed: ${error.message}`);
  * }
- *
+ * 
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeAdd = (
-  instance: CML.PolicyIdList,
-  elem: CML.ScriptHash,
-): void => Effect.runSync(add(instance, elem));
+export const addUnsafe = (instance: CML.PolicyIdList, elem: CML.ScriptHash): void =>
+  Effect.runSync(add(instance, elem));

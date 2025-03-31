@@ -1,19 +1,36 @@
+/**
+ * @since 2.0.0
+ */
 import { Data, Effect } from "effect";
 import * as CML from "@anastasia-labs/cardano-multiplatform-lib-nodejs";
 
+/**
+ * Type alias for the CML Rational class
+ *
+ * @since 2.0.0
+ * @category Types
+ */
 export type Rational = CML.Rational;
 
+/**
+ * Error class for Rational operations
+ * 
+ * This error is thrown when operations on Rational instances fail.
+ *
+ * @since 2.0.0
+ * @category Errors
+ */
 export class RationalError extends Data.TaggedError("RationalError")<{
   message?: string;
 }> {}
 
 /**
  * Method free of Rational
- *
+ * 
  * @example
  * import { Rational } from "@lucid-evolution/experimental";
  * import { Effect } from "effect";
- *
+ * 
  * // Using Effect for safe execution with error handling
  * Effect.gen(function*() {
  * // Assume we have a Rational instance
@@ -21,7 +38,7 @@ export class RationalError extends Data.TaggedError("RationalError")<{
  *   const result = yield* Rational.free(instance);
  *   console.log(result);
  * });
- *
+ * 
  * @since 2.0.0
  * @category Methods
  */
@@ -33,39 +50,39 @@ export const free = Effect.fn(
         new RationalError({
           message: `Rational.free failed Hint: Check if you're calling free() more than once.`,
         }),
-    }),
+    })
 );
 
 /**
  * Unsafely calls instance.free without Effect wrapper
- *
+ * 
  * @example
  * import { Rational } from "@lucid-evolution/experimental";
- *
+ * 
  * // Assume we have a Rational instance
  * const instance = ... ;
- *
+ * 
  * // Using try/catch for error handling
  * try {
- *   const result = Rational.unsafeFree(instance);
+ *   const result = Rational.freeUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`Rational.unsafeFree failed: ${error.message}`);
+ *   console.error(`Rational.freeUnsafe failed: ${error.message}`);
  * }
- *
+ * 
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeFree = (instance: CML.Rational): void =>
+export const freeUnsafe = (instance: CML.Rational): void =>
   Effect.runSync(free(instance));
 
 /**
  * Method toCborBytes of Rational
- *
+ * 
  * @example
  * import { Rational } from "@lucid-evolution/experimental";
  * import { Effect } from "effect";
- *
+ * 
  * // Using Effect for safe execution with error handling
  * Effect.gen(function*() {
  * // Assume we have a Rational instance
@@ -73,7 +90,7 @@ export const unsafeFree = (instance: CML.Rational): void =>
  *   const result = yield* Rational.toCborBytes(instance);
  *   console.log(result);
  * });
- *
+ * 
  * @since 2.0.0
  * @category Methods
  */
@@ -85,39 +102,39 @@ export const toCborBytes = Effect.fn(
         new RationalError({
           message: `Rational.toCborBytes failed Rational is not valid for Uint8Array conversion. Hint: Check byte length and encoding.`,
         }),
-    }),
+    })
 );
 
 /**
  * Unsafely calls instance.toCborBytes without Effect wrapper
- *
+ * 
  * @example
  * import { Rational } from "@lucid-evolution/experimental";
- *
+ * 
  * // Assume we have a Rational instance
  * const instance = ... ;
- *
+ * 
  * // Using try/catch for error handling
  * try {
- *   const result = Rational.unsafeToCborBytes(instance);
+ *   const result = Rational.toCborBytesUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`Rational.unsafeToCborBytes failed: ${error.message}`);
+ *   console.error(`Rational.toCborBytesUnsafe failed: ${error.message}`);
  * }
- *
+ * 
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeToCborBytes = (instance: CML.Rational): Uint8Array =>
+export const toCborBytesUnsafe = (instance: CML.Rational): Uint8Array =>
   Effect.runSync(toCborBytes(instance));
 
 /**
  * Method toCanonicalCborBytes of Rational
- *
+ * 
  * @example
  * import { Rational } from "@lucid-evolution/experimental";
  * import { Effect } from "effect";
- *
+ * 
  * // Using Effect for safe execution with error handling
  * Effect.gen(function*() {
  * // Assume we have a Rational instance
@@ -125,7 +142,7 @@ export const unsafeToCborBytes = (instance: CML.Rational): Uint8Array =>
  *   const result = yield* Rational.toCanonicalCborBytes(instance);
  *   console.log(result);
  * });
- *
+ * 
  * @since 2.0.0
  * @category Methods
  */
@@ -137,89 +154,87 @@ export const toCanonicalCborBytes = Effect.fn(
         new RationalError({
           message: `Rational.toCanonicalCborBytes failed Rational is not valid for Uint8Array conversion. Hint: Check byte length and encoding.`,
         }),
-    }),
+    })
 );
 
 /**
  * Unsafely calls instance.toCanonicalCborBytes without Effect wrapper
- *
+ * 
  * @example
  * import { Rational } from "@lucid-evolution/experimental";
- *
+ * 
  * // Assume we have a Rational instance
  * const instance = ... ;
- *
+ * 
  * // Using try/catch for error handling
  * try {
- *   const result = Rational.unsafeToCanonicalCborBytes(instance);
+ *   const result = Rational.toCanonicalCborBytesUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`Rational.unsafeToCanonicalCborBytes failed: ${error.message}`);
+ *   console.error(`Rational.toCanonicalCborBytesUnsafe failed: ${error.message}`);
  * }
- *
+ * 
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeToCanonicalCborBytes = (
-  instance: CML.Rational,
-): Uint8Array => Effect.runSync(toCanonicalCborBytes(instance));
+export const toCanonicalCborBytesUnsafe = (instance: CML.Rational): Uint8Array =>
+  Effect.runSync(toCanonicalCborBytes(instance));
 
 /**
  * Static method fromCborBytes of Rational
- *
+ * 
  * @example
  * import { Rational } from "@lucid-evolution/experimental";
  * import { Effect } from "effect";
- *
+ * 
  * // Using Effect for safe execution with error handling
  * Effect.gen(function*() {
- *
+ * 
  *   const result = yield* Rational.fromCborBytes( parameters );
  *   console.log(result);
  * });
- *
+ * 
  * @since 2.0.0
  * @category Constructors
  */
 export const fromCborBytes = Effect.fn(function* (cborBytes: Uint8Array) {
   return yield* Effect.try({
     try: () => CML.Rational.from_cbor_bytes(cborBytes),
-    catch: () =>
-      new RationalError({
-        message: `Rational.fromCborBytes failed with parameters: ${cborBytes}. Hint: Check byte length and encoding.`,
-      }),
+    catch: () => new RationalError({
+      message: `Rational.fromCborBytes failed with parameters: ${cborBytes}. Hint: Check byte length and encoding.`,
+    }),
   });
 });
 
 /**
  * Unsafely calls Rational.fromCborBytes without Effect wrapper
- *
+ * 
  * @example
  * import { Rational } from "@lucid-evolution/experimental";
- *
- *
- *
+ * 
+ * 
+ * 
  * // Using try/catch for error handling
  * try {
- *   const result = Rational.unsafeFromCborBytes( parameters );
+ *   const result = Rational.fromCborBytesUnsafe( parameters );
  *   console.log(result);
  * } catch (error) {
- *   console.error(`Rational.unsafeFromCborBytes failed: ${error.message}`);
+ *   console.error(`Rational.fromCborBytesUnsafe failed: ${error.message}`);
  * }
- *
+ * 
  * @since 2.0.0
- * @category Constructors
+ * @category ConstructorsUnsafe
  */
-export const unsafeFromCborBytes = (cborBytes: Uint8Array) =>
+export const fromCborBytesUnsafe = (cborBytes: Uint8Array) =>
   Effect.runSync(fromCborBytes(cborBytes));
 
 /**
  * Method toCborHex of Rational
- *
+ * 
  * @example
  * import { Rational } from "@lucid-evolution/experimental";
  * import { Effect } from "effect";
- *
+ * 
  * // Using Effect for safe execution with error handling
  * Effect.gen(function*() {
  * // Assume we have a Rational instance
@@ -227,7 +242,7 @@ export const unsafeFromCborBytes = (cborBytes: Uint8Array) =>
  *   const result = yield* Rational.toCborHex(instance);
  *   console.log(result);
  * });
- *
+ * 
  * @since 2.0.0
  * @category Methods
  */
@@ -239,39 +254,39 @@ export const toCborHex = Effect.fn(
         new RationalError({
           message: `Rational.toCborHex failed Rational is not valid for string conversion. Hint: Make sure it's a valid hex string representing CBOR data.`,
         }),
-    }),
+    })
 );
 
 /**
  * Unsafely calls instance.toCborHex without Effect wrapper
- *
+ * 
  * @example
  * import { Rational } from "@lucid-evolution/experimental";
- *
+ * 
  * // Assume we have a Rational instance
  * const instance = ... ;
- *
+ * 
  * // Using try/catch for error handling
  * try {
- *   const result = Rational.unsafeToCborHex(instance);
+ *   const result = Rational.toCborHexUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`Rational.unsafeToCborHex failed: ${error.message}`);
+ *   console.error(`Rational.toCborHexUnsafe failed: ${error.message}`);
  * }
- *
+ * 
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeToCborHex = (instance: CML.Rational): string =>
+export const toCborHexUnsafe = (instance: CML.Rational): string =>
   Effect.runSync(toCborHex(instance));
 
 /**
  * Method toCanonicalCborHex of Rational
- *
+ * 
  * @example
  * import { Rational } from "@lucid-evolution/experimental";
  * import { Effect } from "effect";
- *
+ * 
  * // Using Effect for safe execution with error handling
  * Effect.gen(function*() {
  * // Assume we have a Rational instance
@@ -279,7 +294,7 @@ export const unsafeToCborHex = (instance: CML.Rational): string =>
  *   const result = yield* Rational.toCanonicalCborHex(instance);
  *   console.log(result);
  * });
- *
+ * 
  * @since 2.0.0
  * @category Methods
  */
@@ -291,88 +306,87 @@ export const toCanonicalCborHex = Effect.fn(
         new RationalError({
           message: `Rational.toCanonicalCborHex failed Rational is not valid for string conversion. Hint: Make sure it's a valid hex string representing CBOR data.`,
         }),
-    }),
+    })
 );
 
 /**
  * Unsafely calls instance.toCanonicalCborHex without Effect wrapper
- *
+ * 
  * @example
  * import { Rational } from "@lucid-evolution/experimental";
- *
+ * 
  * // Assume we have a Rational instance
  * const instance = ... ;
- *
+ * 
  * // Using try/catch for error handling
  * try {
- *   const result = Rational.unsafeToCanonicalCborHex(instance);
+ *   const result = Rational.toCanonicalCborHexUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`Rational.unsafeToCanonicalCborHex failed: ${error.message}`);
+ *   console.error(`Rational.toCanonicalCborHexUnsafe failed: ${error.message}`);
  * }
- *
+ * 
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeToCanonicalCborHex = (instance: CML.Rational): string =>
+export const toCanonicalCborHexUnsafe = (instance: CML.Rational): string =>
   Effect.runSync(toCanonicalCborHex(instance));
 
 /**
  * Static method fromCborHex of Rational
- *
+ * 
  * @example
  * import { Rational } from "@lucid-evolution/experimental";
  * import { Effect } from "effect";
- *
+ * 
  * // Using Effect for safe execution with error handling
  * Effect.gen(function*() {
- *
+ * 
  *   const result = yield* Rational.fromCborHex( parameters );
  *   console.log(result);
  * });
- *
+ * 
  * @since 2.0.0
  * @category Constructors
  */
 export const fromCborHex = Effect.fn(function* (cborBytes: string) {
   return yield* Effect.try({
     try: () => CML.Rational.from_cbor_hex(cborBytes),
-    catch: () =>
-      new RationalError({
-        message: `Rational.fromCborHex failed with parameters: ${cborBytes}. Hint: Make sure it's a valid hex string representing CBOR data.`,
-      }),
+    catch: () => new RationalError({
+      message: `Rational.fromCborHex failed with parameters: ${cborBytes}. Hint: Make sure it's a valid hex string representing CBOR data.`,
+    }),
   });
 });
 
 /**
  * Unsafely calls Rational.fromCborHex without Effect wrapper
- *
+ * 
  * @example
  * import { Rational } from "@lucid-evolution/experimental";
- *
- *
- *
+ * 
+ * 
+ * 
  * // Using try/catch for error handling
  * try {
- *   const result = Rational.unsafeFromCborHex( parameters );
+ *   const result = Rational.fromCborHexUnsafe( parameters );
  *   console.log(result);
  * } catch (error) {
- *   console.error(`Rational.unsafeFromCborHex failed: ${error.message}`);
+ *   console.error(`Rational.fromCborHexUnsafe failed: ${error.message}`);
  * }
- *
+ * 
  * @since 2.0.0
- * @category Constructors
+ * @category ConstructorsUnsafe
  */
-export const unsafeFromCborHex = (cborBytes: string) =>
+export const fromCborHexUnsafe = (cborBytes: string) =>
   Effect.runSync(fromCborHex(cborBytes));
 
 /**
  * Method toJson of Rational
- *
+ * 
  * @example
  * import { Rational } from "@lucid-evolution/experimental";
  * import { Effect } from "effect";
- *
+ * 
  * // Using Effect for safe execution with error handling
  * Effect.gen(function*() {
  * // Assume we have a Rational instance
@@ -380,7 +394,7 @@ export const unsafeFromCborHex = (cborBytes: string) =>
  *   const result = yield* Rational.toJson(instance);
  *   console.log(result);
  * });
- *
+ * 
  * @since 2.0.0
  * @category Methods
  */
@@ -392,39 +406,39 @@ export const toJson = Effect.fn(
         new RationalError({
           message: `Rational.toJson failed Rational is not valid for string conversion. Hint: Validate your JSON structure.`,
         }),
-    }),
+    })
 );
 
 /**
  * Unsafely calls instance.toJson without Effect wrapper
- *
+ * 
  * @example
  * import { Rational } from "@lucid-evolution/experimental";
- *
+ * 
  * // Assume we have a Rational instance
  * const instance = ... ;
- *
+ * 
  * // Using try/catch for error handling
  * try {
- *   const result = Rational.unsafeToJson(instance);
+ *   const result = Rational.toJsonUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`Rational.unsafeToJson failed: ${error.message}`);
+ *   console.error(`Rational.toJsonUnsafe failed: ${error.message}`);
  * }
- *
+ * 
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeToJson = (instance: CML.Rational): string =>
+export const toJsonUnsafe = (instance: CML.Rational): string =>
   Effect.runSync(toJson(instance));
 
 /**
  * Method toJsValue of Rational
- *
+ * 
  * @example
  * import { Rational } from "@lucid-evolution/experimental";
  * import { Effect } from "effect";
- *
+ * 
  * // Using Effect for safe execution with error handling
  * Effect.gen(function*() {
  * // Assume we have a Rational instance
@@ -432,7 +446,7 @@ export const unsafeToJson = (instance: CML.Rational): string =>
  *   const result = yield* Rational.toJsValue(instance);
  *   console.log(result);
  * });
- *
+ * 
  * @since 2.0.0
  * @category Methods
  */
@@ -444,87 +458,87 @@ export const toJsValue = Effect.fn(
         new RationalError({
           message: `Rational.toJsValue failed Rational is not valid for any conversion. `,
         }),
-    }),
+    })
 );
 
 /**
  * Unsafely calls instance.toJsValue without Effect wrapper
- *
+ * 
  * @example
  * import { Rational } from "@lucid-evolution/experimental";
- *
+ * 
  * // Assume we have a Rational instance
  * const instance = ... ;
- *
+ * 
  * // Using try/catch for error handling
  * try {
- *   const result = Rational.unsafeToJsValue(instance);
+ *   const result = Rational.toJsValueUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`Rational.unsafeToJsValue failed: ${error.message}`);
+ *   console.error(`Rational.toJsValueUnsafe failed: ${error.message}`);
  * }
- *
+ * 
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeToJsValue = (instance: CML.Rational): any =>
+export const toJsValueUnsafe = (instance: CML.Rational): any =>
   Effect.runSync(toJsValue(instance));
 
 /**
  * Static method fromJson of Rational
- *
+ * 
  * @example
  * import { Rational } from "@lucid-evolution/experimental";
  * import { Effect } from "effect";
- *
+ * 
  * // Using Effect for safe execution with error handling
  * Effect.gen(function*() {
- *
+ * 
  *   const result = yield* Rational.fromJson( parameters );
  *   console.log(result);
  * });
- *
+ * 
  * @since 2.0.0
  * @category Constructors
  */
 export const fromJson = Effect.fn(function* (json: string) {
   return yield* Effect.try({
     try: () => CML.Rational.from_json(json),
-    catch: () =>
-      new RationalError({
-        message: `Rational.fromJson failed with parameters: ${json}. Hint: Validate your JSON structure.`,
-      }),
+    catch: () => new RationalError({
+      message: `Rational.fromJson failed with parameters: ${json}. Hint: Validate your JSON structure.`,
+    }),
   });
 });
 
 /**
  * Unsafely calls Rational.fromJson without Effect wrapper
- *
+ * 
  * @example
  * import { Rational } from "@lucid-evolution/experimental";
- *
- *
- *
+ * 
+ * 
+ * 
  * // Using try/catch for error handling
  * try {
- *   const result = Rational.unsafeFromJson( parameters );
+ *   const result = Rational.fromJsonUnsafe( parameters );
  *   console.log(result);
  * } catch (error) {
- *   console.error(`Rational.unsafeFromJson failed: ${error.message}`);
+ *   console.error(`Rational.fromJsonUnsafe failed: ${error.message}`);
  * }
- *
+ * 
  * @since 2.0.0
- * @category Constructors
+ * @category ConstructorsUnsafe
  */
-export const unsafeFromJson = (json: string) => Effect.runSync(fromJson(json));
+export const fromJsonUnsafe = (json: string) =>
+  Effect.runSync(fromJson(json));
 
 /**
  * Method numerator of Rational
- *
+ * 
  * @example
  * import { Rational } from "@lucid-evolution/experimental";
  * import { Effect } from "effect";
- *
+ * 
  * // Using Effect for safe execution with error handling
  * Effect.gen(function*() {
  * // Assume we have a Rational instance
@@ -532,7 +546,7 @@ export const unsafeFromJson = (json: string) => Effect.runSync(fromJson(json));
  *   const result = yield* Rational.numerator(instance);
  *   console.log(result);
  * });
- *
+ * 
  * @since 2.0.0
  * @category Methods
  */
@@ -544,39 +558,39 @@ export const numerator = Effect.fn(
         new RationalError({
           message: `Rational.numerator failed `,
         }),
-    }),
+    })
 );
 
 /**
  * Unsafely calls instance.numerator without Effect wrapper
- *
+ * 
  * @example
  * import { Rational } from "@lucid-evolution/experimental";
- *
+ * 
  * // Assume we have a Rational instance
  * const instance = ... ;
- *
+ * 
  * // Using try/catch for error handling
  * try {
- *   const result = Rational.unsafeNumerator(instance);
+ *   const result = Rational.numeratorUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`Rational.unsafeNumerator failed: ${error.message}`);
+ *   console.error(`Rational.numeratorUnsafe failed: ${error.message}`);
  * }
- *
+ * 
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeNumerator = (instance: CML.Rational): bigint =>
+export const numeratorUnsafe = (instance: CML.Rational): bigint =>
   Effect.runSync(numerator(instance));
 
 /**
  * Method denominator of Rational
- *
+ * 
  * @example
  * import { Rational } from "@lucid-evolution/experimental";
  * import { Effect } from "effect";
- *
+ * 
  * // Using Effect for safe execution with error handling
  * Effect.gen(function*() {
  * // Assume we have a Rational instance
@@ -584,7 +598,7 @@ export const unsafeNumerator = (instance: CML.Rational): bigint =>
  *   const result = yield* Rational.denominator(instance);
  *   console.log(result);
  * });
- *
+ * 
  * @since 2.0.0
  * @category Methods
  */
@@ -596,80 +610,76 @@ export const denominator = Effect.fn(
         new RationalError({
           message: `Rational.denominator failed `,
         }),
-    }),
+    })
 );
 
 /**
  * Unsafely calls instance.denominator without Effect wrapper
- *
+ * 
  * @example
  * import { Rational } from "@lucid-evolution/experimental";
- *
+ * 
  * // Assume we have a Rational instance
  * const instance = ... ;
- *
+ * 
  * // Using try/catch for error handling
  * try {
- *   const result = Rational.unsafeDenominator(instance);
+ *   const result = Rational.denominatorUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`Rational.unsafeDenominator failed: ${error.message}`);
+ *   console.error(`Rational.denominatorUnsafe failed: ${error.message}`);
  * }
- *
+ * 
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeDenominator = (instance: CML.Rational): bigint =>
+export const denominatorUnsafe = (instance: CML.Rational): bigint =>
   Effect.runSync(denominator(instance));
 
 /**
  * Static method _new of Rational
- *
+ * 
  * @example
  * import { Rational } from "@lucid-evolution/experimental";
  * import { Effect } from "effect";
- *
+ * 
  * // Using Effect for safe execution with error handling
  * Effect.gen(function*() {
- *
+ * 
  *   const result = yield* Rational._new( parameters );
  *   console.log(result);
  * });
- *
+ * 
  * @since 2.0.0
  * @category Constructors
  */
-export const _new = Effect.fn(function* (
-  numerator: bigint,
-  denominator: bigint,
-) {
+export const _new = Effect.fn(function* (numerator: bigint, denominator: bigint) {
   return yield* Effect.try({
     try: () => CML.Rational.new(numerator, denominator),
-    catch: () =>
-      new RationalError({
-        message: `Rational._new failed with parameters: ${numerator}, ${denominator}. `,
-      }),
+    catch: () => new RationalError({
+      message: `Rational._new failed with parameters: ${numerator}, ${denominator}. `,
+    }),
   });
 });
 
 /**
  * Unsafely calls Rational._new without Effect wrapper
- *
+ * 
  * @example
  * import { Rational } from "@lucid-evolution/experimental";
- *
- *
- *
+ * 
+ * 
+ * 
  * // Using try/catch for error handling
  * try {
- *   const result = Rational.unsafe_new( parameters );
+ *   const result = Rational._newUnsafe( parameters );
  *   console.log(result);
  * } catch (error) {
- *   console.error(`Rational.unsafe_new failed: ${error.message}`);
+ *   console.error(`Rational._newUnsafe failed: ${error.message}`);
  * }
- *
+ * 
  * @since 2.0.0
- * @category Constructors
+ * @category ConstructorsUnsafe
  */
-export const unsafe_new = (numerator: bigint, denominator: bigint) =>
+export const _newUnsafe = (numerator: bigint, denominator: bigint) =>
   Effect.runSync(_new(numerator, denominator));

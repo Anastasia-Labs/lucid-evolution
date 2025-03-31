@@ -1,21 +1,36 @@
+/**
+ * @since 2.0.0
+ */
 import { Data, Effect } from "effect";
 import * as CML from "@anastasia-labs/cardano-multiplatform-lib-nodejs";
 
+/**
+ * Type alias for the CML ProtocolParamUpdate class
+ *
+ * @since 2.0.0
+ * @category Types
+ */
 export type ProtocolParamUpdate = CML.ProtocolParamUpdate;
 
-export class ProtocolParamUpdateError extends Data.TaggedError(
-  "ProtocolParamUpdateError",
-)<{
+/**
+ * Error class for ProtocolParamUpdate operations
+ * 
+ * This error is thrown when operations on ProtocolParamUpdate instances fail.
+ *
+ * @since 2.0.0
+ * @category Errors
+ */
+export class ProtocolParamUpdateError extends Data.TaggedError("ProtocolParamUpdateError")<{
   message?: string;
 }> {}
 
 /**
  * Method free of ProtocolParamUpdate
- *
+ * 
  * @example
  * import { ProtocolParamUpdate } from "@lucid-evolution/experimental";
  * import { Effect } from "effect";
- *
+ * 
  * // Using Effect for safe execution with error handling
  * Effect.gen(function*() {
  * // Assume we have a ProtocolParamUpdate instance
@@ -23,53 +38,51 @@ export class ProtocolParamUpdateError extends Data.TaggedError(
  *   const result = yield* ProtocolParamUpdate.free(instance);
  *   console.log(result);
  * });
- *
+ * 
  * @since 2.0.0
  * @category Methods
  */
 export const free = Effect.fn(
-  (
-    instance: CML.ProtocolParamUpdate,
-  ): Effect.Effect<void, ProtocolParamUpdateError> =>
+  (instance: CML.ProtocolParamUpdate): Effect.Effect<void, ProtocolParamUpdateError> =>
     Effect.try({
       try: () => instance.free(),
       catch: () =>
         new ProtocolParamUpdateError({
           message: `ProtocolParamUpdate.free failed Hint: Check if you're calling free() more than once.`,
         }),
-    }),
+    })
 );
 
 /**
  * Unsafely calls instance.free without Effect wrapper
- *
+ * 
  * @example
  * import { ProtocolParamUpdate } from "@lucid-evolution/experimental";
- *
+ * 
  * // Assume we have a ProtocolParamUpdate instance
  * const instance = ... ;
- *
+ * 
  * // Using try/catch for error handling
  * try {
- *   const result = ProtocolParamUpdate.unsafeFree(instance);
+ *   const result = ProtocolParamUpdate.freeUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`ProtocolParamUpdate.unsafeFree failed: ${error.message}`);
+ *   console.error(`ProtocolParamUpdate.freeUnsafe failed: ${error.message}`);
  * }
- *
+ * 
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeFree = (instance: CML.ProtocolParamUpdate): void =>
+export const freeUnsafe = (instance: CML.ProtocolParamUpdate): void =>
   Effect.runSync(free(instance));
 
 /**
  * Method toCborBytes of ProtocolParamUpdate
- *
+ * 
  * @example
  * import { ProtocolParamUpdate } from "@lucid-evolution/experimental";
  * import { Effect } from "effect";
- *
+ * 
  * // Using Effect for safe execution with error handling
  * Effect.gen(function*() {
  * // Assume we have a ProtocolParamUpdate instance
@@ -77,54 +90,51 @@ export const unsafeFree = (instance: CML.ProtocolParamUpdate): void =>
  *   const result = yield* ProtocolParamUpdate.toCborBytes(instance);
  *   console.log(result);
  * });
- *
+ * 
  * @since 2.0.0
  * @category Methods
  */
 export const toCborBytes = Effect.fn(
-  (
-    instance: CML.ProtocolParamUpdate,
-  ): Effect.Effect<Uint8Array, ProtocolParamUpdateError> =>
+  (instance: CML.ProtocolParamUpdate): Effect.Effect<Uint8Array, ProtocolParamUpdateError> =>
     Effect.try({
       try: () => instance.to_cbor_bytes(),
       catch: () =>
         new ProtocolParamUpdateError({
           message: `ProtocolParamUpdate.toCborBytes failed ProtocolParamUpdate is not valid for Uint8Array conversion. Hint: Check byte length and encoding.`,
         }),
-    }),
+    })
 );
 
 /**
  * Unsafely calls instance.toCborBytes without Effect wrapper
- *
+ * 
  * @example
  * import { ProtocolParamUpdate } from "@lucid-evolution/experimental";
- *
+ * 
  * // Assume we have a ProtocolParamUpdate instance
  * const instance = ... ;
- *
+ * 
  * // Using try/catch for error handling
  * try {
- *   const result = ProtocolParamUpdate.unsafeToCborBytes(instance);
+ *   const result = ProtocolParamUpdate.toCborBytesUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`ProtocolParamUpdate.unsafeToCborBytes failed: ${error.message}`);
+ *   console.error(`ProtocolParamUpdate.toCborBytesUnsafe failed: ${error.message}`);
  * }
- *
+ * 
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeToCborBytes = (
-  instance: CML.ProtocolParamUpdate,
-): Uint8Array => Effect.runSync(toCborBytes(instance));
+export const toCborBytesUnsafe = (instance: CML.ProtocolParamUpdate): Uint8Array =>
+  Effect.runSync(toCborBytes(instance));
 
 /**
  * Method toCanonicalCborBytes of ProtocolParamUpdate
- *
+ * 
  * @example
  * import { ProtocolParamUpdate } from "@lucid-evolution/experimental";
  * import { Effect } from "effect";
- *
+ * 
  * // Using Effect for safe execution with error handling
  * Effect.gen(function*() {
  * // Assume we have a ProtocolParamUpdate instance
@@ -132,103 +142,99 @@ export const unsafeToCborBytes = (
  *   const result = yield* ProtocolParamUpdate.toCanonicalCborBytes(instance);
  *   console.log(result);
  * });
- *
+ * 
  * @since 2.0.0
  * @category Methods
  */
 export const toCanonicalCborBytes = Effect.fn(
-  (
-    instance: CML.ProtocolParamUpdate,
-  ): Effect.Effect<Uint8Array, ProtocolParamUpdateError> =>
+  (instance: CML.ProtocolParamUpdate): Effect.Effect<Uint8Array, ProtocolParamUpdateError> =>
     Effect.try({
       try: () => instance.to_canonical_cbor_bytes(),
       catch: () =>
         new ProtocolParamUpdateError({
           message: `ProtocolParamUpdate.toCanonicalCborBytes failed ProtocolParamUpdate is not valid for Uint8Array conversion. Hint: Check byte length and encoding.`,
         }),
-    }),
+    })
 );
 
 /**
  * Unsafely calls instance.toCanonicalCborBytes without Effect wrapper
- *
+ * 
  * @example
  * import { ProtocolParamUpdate } from "@lucid-evolution/experimental";
- *
+ * 
  * // Assume we have a ProtocolParamUpdate instance
  * const instance = ... ;
- *
+ * 
  * // Using try/catch for error handling
  * try {
- *   const result = ProtocolParamUpdate.unsafeToCanonicalCborBytes(instance);
+ *   const result = ProtocolParamUpdate.toCanonicalCborBytesUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`ProtocolParamUpdate.unsafeToCanonicalCborBytes failed: ${error.message}`);
+ *   console.error(`ProtocolParamUpdate.toCanonicalCborBytesUnsafe failed: ${error.message}`);
  * }
- *
+ * 
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeToCanonicalCborBytes = (
-  instance: CML.ProtocolParamUpdate,
-): Uint8Array => Effect.runSync(toCanonicalCborBytes(instance));
+export const toCanonicalCborBytesUnsafe = (instance: CML.ProtocolParamUpdate): Uint8Array =>
+  Effect.runSync(toCanonicalCborBytes(instance));
 
 /**
  * Static method fromCborBytes of ProtocolParamUpdate
- *
+ * 
  * @example
  * import { ProtocolParamUpdate } from "@lucid-evolution/experimental";
  * import { Effect } from "effect";
- *
+ * 
  * // Using Effect for safe execution with error handling
  * Effect.gen(function*() {
- *
+ * 
  *   const result = yield* ProtocolParamUpdate.fromCborBytes( parameters );
  *   console.log(result);
  * });
- *
+ * 
  * @since 2.0.0
  * @category Constructors
  */
 export const fromCborBytes = Effect.fn(function* (cborBytes: Uint8Array) {
   return yield* Effect.try({
     try: () => CML.ProtocolParamUpdate.from_cbor_bytes(cborBytes),
-    catch: () =>
-      new ProtocolParamUpdateError({
-        message: `ProtocolParamUpdate.fromCborBytes failed with parameters: ${cborBytes}. Hint: Check byte length and encoding.`,
-      }),
+    catch: () => new ProtocolParamUpdateError({
+      message: `ProtocolParamUpdate.fromCborBytes failed with parameters: ${cborBytes}. Hint: Check byte length and encoding.`,
+    }),
   });
 });
 
 /**
  * Unsafely calls ProtocolParamUpdate.fromCborBytes without Effect wrapper
- *
+ * 
  * @example
  * import { ProtocolParamUpdate } from "@lucid-evolution/experimental";
- *
- *
- *
+ * 
+ * 
+ * 
  * // Using try/catch for error handling
  * try {
- *   const result = ProtocolParamUpdate.unsafeFromCborBytes( parameters );
+ *   const result = ProtocolParamUpdate.fromCborBytesUnsafe( parameters );
  *   console.log(result);
  * } catch (error) {
- *   console.error(`ProtocolParamUpdate.unsafeFromCborBytes failed: ${error.message}`);
+ *   console.error(`ProtocolParamUpdate.fromCborBytesUnsafe failed: ${error.message}`);
  * }
- *
+ * 
  * @since 2.0.0
- * @category Constructors
+ * @category ConstructorsUnsafe
  */
-export const unsafeFromCborBytes = (cborBytes: Uint8Array) =>
+export const fromCborBytesUnsafe = (cborBytes: Uint8Array) =>
   Effect.runSync(fromCborBytes(cborBytes));
 
 /**
  * Method toCborHex of ProtocolParamUpdate
- *
+ * 
  * @example
  * import { ProtocolParamUpdate } from "@lucid-evolution/experimental";
  * import { Effect } from "effect";
- *
+ * 
  * // Using Effect for safe execution with error handling
  * Effect.gen(function*() {
  * // Assume we have a ProtocolParamUpdate instance
@@ -236,53 +242,51 @@ export const unsafeFromCborBytes = (cborBytes: Uint8Array) =>
  *   const result = yield* ProtocolParamUpdate.toCborHex(instance);
  *   console.log(result);
  * });
- *
+ * 
  * @since 2.0.0
  * @category Methods
  */
 export const toCborHex = Effect.fn(
-  (
-    instance: CML.ProtocolParamUpdate,
-  ): Effect.Effect<string, ProtocolParamUpdateError> =>
+  (instance: CML.ProtocolParamUpdate): Effect.Effect<string, ProtocolParamUpdateError> =>
     Effect.try({
       try: () => instance.to_cbor_hex(),
       catch: () =>
         new ProtocolParamUpdateError({
           message: `ProtocolParamUpdate.toCborHex failed ProtocolParamUpdate is not valid for string conversion. Hint: Make sure it's a valid hex string representing CBOR data.`,
         }),
-    }),
+    })
 );
 
 /**
  * Unsafely calls instance.toCborHex without Effect wrapper
- *
+ * 
  * @example
  * import { ProtocolParamUpdate } from "@lucid-evolution/experimental";
- *
+ * 
  * // Assume we have a ProtocolParamUpdate instance
  * const instance = ... ;
- *
+ * 
  * // Using try/catch for error handling
  * try {
- *   const result = ProtocolParamUpdate.unsafeToCborHex(instance);
+ *   const result = ProtocolParamUpdate.toCborHexUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`ProtocolParamUpdate.unsafeToCborHex failed: ${error.message}`);
+ *   console.error(`ProtocolParamUpdate.toCborHexUnsafe failed: ${error.message}`);
  * }
- *
+ * 
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeToCborHex = (instance: CML.ProtocolParamUpdate): string =>
+export const toCborHexUnsafe = (instance: CML.ProtocolParamUpdate): string =>
   Effect.runSync(toCborHex(instance));
 
 /**
  * Method toCanonicalCborHex of ProtocolParamUpdate
- *
+ * 
  * @example
  * import { ProtocolParamUpdate } from "@lucid-evolution/experimental";
  * import { Effect } from "effect";
- *
+ * 
  * // Using Effect for safe execution with error handling
  * Effect.gen(function*() {
  * // Assume we have a ProtocolParamUpdate instance
@@ -290,103 +294,99 @@ export const unsafeToCborHex = (instance: CML.ProtocolParamUpdate): string =>
  *   const result = yield* ProtocolParamUpdate.toCanonicalCborHex(instance);
  *   console.log(result);
  * });
- *
+ * 
  * @since 2.0.0
  * @category Methods
  */
 export const toCanonicalCborHex = Effect.fn(
-  (
-    instance: CML.ProtocolParamUpdate,
-  ): Effect.Effect<string, ProtocolParamUpdateError> =>
+  (instance: CML.ProtocolParamUpdate): Effect.Effect<string, ProtocolParamUpdateError> =>
     Effect.try({
       try: () => instance.to_canonical_cbor_hex(),
       catch: () =>
         new ProtocolParamUpdateError({
           message: `ProtocolParamUpdate.toCanonicalCborHex failed ProtocolParamUpdate is not valid for string conversion. Hint: Make sure it's a valid hex string representing CBOR data.`,
         }),
-    }),
+    })
 );
 
 /**
  * Unsafely calls instance.toCanonicalCborHex without Effect wrapper
- *
+ * 
  * @example
  * import { ProtocolParamUpdate } from "@lucid-evolution/experimental";
- *
+ * 
  * // Assume we have a ProtocolParamUpdate instance
  * const instance = ... ;
- *
+ * 
  * // Using try/catch for error handling
  * try {
- *   const result = ProtocolParamUpdate.unsafeToCanonicalCborHex(instance);
+ *   const result = ProtocolParamUpdate.toCanonicalCborHexUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`ProtocolParamUpdate.unsafeToCanonicalCborHex failed: ${error.message}`);
+ *   console.error(`ProtocolParamUpdate.toCanonicalCborHexUnsafe failed: ${error.message}`);
  * }
- *
+ * 
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeToCanonicalCborHex = (
-  instance: CML.ProtocolParamUpdate,
-): string => Effect.runSync(toCanonicalCborHex(instance));
+export const toCanonicalCborHexUnsafe = (instance: CML.ProtocolParamUpdate): string =>
+  Effect.runSync(toCanonicalCborHex(instance));
 
 /**
  * Static method fromCborHex of ProtocolParamUpdate
- *
+ * 
  * @example
  * import { ProtocolParamUpdate } from "@lucid-evolution/experimental";
  * import { Effect } from "effect";
- *
+ * 
  * // Using Effect for safe execution with error handling
  * Effect.gen(function*() {
- *
+ * 
  *   const result = yield* ProtocolParamUpdate.fromCborHex( parameters );
  *   console.log(result);
  * });
- *
+ * 
  * @since 2.0.0
  * @category Constructors
  */
 export const fromCborHex = Effect.fn(function* (cborBytes: string) {
   return yield* Effect.try({
     try: () => CML.ProtocolParamUpdate.from_cbor_hex(cborBytes),
-    catch: () =>
-      new ProtocolParamUpdateError({
-        message: `ProtocolParamUpdate.fromCborHex failed with parameters: ${cborBytes}. Hint: Make sure it's a valid hex string representing CBOR data.`,
-      }),
+    catch: () => new ProtocolParamUpdateError({
+      message: `ProtocolParamUpdate.fromCborHex failed with parameters: ${cborBytes}. Hint: Make sure it's a valid hex string representing CBOR data.`,
+    }),
   });
 });
 
 /**
  * Unsafely calls ProtocolParamUpdate.fromCborHex without Effect wrapper
- *
+ * 
  * @example
  * import { ProtocolParamUpdate } from "@lucid-evolution/experimental";
- *
- *
- *
+ * 
+ * 
+ * 
  * // Using try/catch for error handling
  * try {
- *   const result = ProtocolParamUpdate.unsafeFromCborHex( parameters );
+ *   const result = ProtocolParamUpdate.fromCborHexUnsafe( parameters );
  *   console.log(result);
  * } catch (error) {
- *   console.error(`ProtocolParamUpdate.unsafeFromCborHex failed: ${error.message}`);
+ *   console.error(`ProtocolParamUpdate.fromCborHexUnsafe failed: ${error.message}`);
  * }
- *
+ * 
  * @since 2.0.0
- * @category Constructors
+ * @category ConstructorsUnsafe
  */
-export const unsafeFromCborHex = (cborBytes: string) =>
+export const fromCborHexUnsafe = (cborBytes: string) =>
   Effect.runSync(fromCborHex(cborBytes));
 
 /**
  * Method toJson of ProtocolParamUpdate
- *
+ * 
  * @example
  * import { ProtocolParamUpdate } from "@lucid-evolution/experimental";
  * import { Effect } from "effect";
- *
+ * 
  * // Using Effect for safe execution with error handling
  * Effect.gen(function*() {
  * // Assume we have a ProtocolParamUpdate instance
@@ -394,53 +394,51 @@ export const unsafeFromCborHex = (cborBytes: string) =>
  *   const result = yield* ProtocolParamUpdate.toJson(instance);
  *   console.log(result);
  * });
- *
+ * 
  * @since 2.0.0
  * @category Methods
  */
 export const toJson = Effect.fn(
-  (
-    instance: CML.ProtocolParamUpdate,
-  ): Effect.Effect<string, ProtocolParamUpdateError> =>
+  (instance: CML.ProtocolParamUpdate): Effect.Effect<string, ProtocolParamUpdateError> =>
     Effect.try({
       try: () => instance.to_json(),
       catch: () =>
         new ProtocolParamUpdateError({
           message: `ProtocolParamUpdate.toJson failed ProtocolParamUpdate is not valid for string conversion. Hint: Validate your JSON structure.`,
         }),
-    }),
+    })
 );
 
 /**
  * Unsafely calls instance.toJson without Effect wrapper
- *
+ * 
  * @example
  * import { ProtocolParamUpdate } from "@lucid-evolution/experimental";
- *
+ * 
  * // Assume we have a ProtocolParamUpdate instance
  * const instance = ... ;
- *
+ * 
  * // Using try/catch for error handling
  * try {
- *   const result = ProtocolParamUpdate.unsafeToJson(instance);
+ *   const result = ProtocolParamUpdate.toJsonUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`ProtocolParamUpdate.unsafeToJson failed: ${error.message}`);
+ *   console.error(`ProtocolParamUpdate.toJsonUnsafe failed: ${error.message}`);
  * }
- *
+ * 
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeToJson = (instance: CML.ProtocolParamUpdate): string =>
+export const toJsonUnsafe = (instance: CML.ProtocolParamUpdate): string =>
   Effect.runSync(toJson(instance));
 
 /**
  * Method toJsValue of ProtocolParamUpdate
- *
+ * 
  * @example
  * import { ProtocolParamUpdate } from "@lucid-evolution/experimental";
  * import { Effect } from "effect";
- *
+ * 
  * // Using Effect for safe execution with error handling
  * Effect.gen(function*() {
  * // Assume we have a ProtocolParamUpdate instance
@@ -448,101 +446,99 @@ export const unsafeToJson = (instance: CML.ProtocolParamUpdate): string =>
  *   const result = yield* ProtocolParamUpdate.toJsValue(instance);
  *   console.log(result);
  * });
- *
+ * 
  * @since 2.0.0
  * @category Methods
  */
 export const toJsValue = Effect.fn(
-  (
-    instance: CML.ProtocolParamUpdate,
-  ): Effect.Effect<any, ProtocolParamUpdateError> =>
+  (instance: CML.ProtocolParamUpdate): Effect.Effect<any, ProtocolParamUpdateError> =>
     Effect.try({
       try: () => instance.to_js_value(),
       catch: () =>
         new ProtocolParamUpdateError({
           message: `ProtocolParamUpdate.toJsValue failed ProtocolParamUpdate is not valid for any conversion. `,
         }),
-    }),
+    })
 );
 
 /**
  * Unsafely calls instance.toJsValue without Effect wrapper
- *
+ * 
  * @example
  * import { ProtocolParamUpdate } from "@lucid-evolution/experimental";
- *
+ * 
  * // Assume we have a ProtocolParamUpdate instance
  * const instance = ... ;
- *
+ * 
  * // Using try/catch for error handling
  * try {
- *   const result = ProtocolParamUpdate.unsafeToJsValue(instance);
+ *   const result = ProtocolParamUpdate.toJsValueUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`ProtocolParamUpdate.unsafeToJsValue failed: ${error.message}`);
+ *   console.error(`ProtocolParamUpdate.toJsValueUnsafe failed: ${error.message}`);
  * }
- *
+ * 
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeToJsValue = (instance: CML.ProtocolParamUpdate): any =>
+export const toJsValueUnsafe = (instance: CML.ProtocolParamUpdate): any =>
   Effect.runSync(toJsValue(instance));
 
 /**
  * Static method fromJson of ProtocolParamUpdate
- *
+ * 
  * @example
  * import { ProtocolParamUpdate } from "@lucid-evolution/experimental";
  * import { Effect } from "effect";
- *
+ * 
  * // Using Effect for safe execution with error handling
  * Effect.gen(function*() {
- *
+ * 
  *   const result = yield* ProtocolParamUpdate.fromJson( parameters );
  *   console.log(result);
  * });
- *
+ * 
  * @since 2.0.0
  * @category Constructors
  */
 export const fromJson = Effect.fn(function* (json: string) {
   return yield* Effect.try({
     try: () => CML.ProtocolParamUpdate.from_json(json),
-    catch: () =>
-      new ProtocolParamUpdateError({
-        message: `ProtocolParamUpdate.fromJson failed with parameters: ${json}. Hint: Validate your JSON structure.`,
-      }),
+    catch: () => new ProtocolParamUpdateError({
+      message: `ProtocolParamUpdate.fromJson failed with parameters: ${json}. Hint: Validate your JSON structure.`,
+    }),
   });
 });
 
 /**
  * Unsafely calls ProtocolParamUpdate.fromJson without Effect wrapper
- *
+ * 
  * @example
  * import { ProtocolParamUpdate } from "@lucid-evolution/experimental";
- *
- *
- *
+ * 
+ * 
+ * 
  * // Using try/catch for error handling
  * try {
- *   const result = ProtocolParamUpdate.unsafeFromJson( parameters );
+ *   const result = ProtocolParamUpdate.fromJsonUnsafe( parameters );
  *   console.log(result);
  * } catch (error) {
- *   console.error(`ProtocolParamUpdate.unsafeFromJson failed: ${error.message}`);
+ *   console.error(`ProtocolParamUpdate.fromJsonUnsafe failed: ${error.message}`);
  * }
- *
+ * 
  * @since 2.0.0
- * @category Constructors
+ * @category ConstructorsUnsafe
  */
-export const unsafeFromJson = (json: string) => Effect.runSync(fromJson(json));
+export const fromJsonUnsafe = (json: string) =>
+  Effect.runSync(fromJson(json));
 
 /**
  * Method setMinfeeA of ProtocolParamUpdate
- *
+ * 
  * @example
  * import { ProtocolParamUpdate } from "@lucid-evolution/experimental";
  * import { Effect } from "effect";
- *
+ * 
  * // Using Effect for safe execution with error handling
  * Effect.gen(function*() {
  * // Assume we have a ProtocolParamUpdate instance
@@ -550,56 +546,51 @@ export const unsafeFromJson = (json: string) => Effect.runSync(fromJson(json));
  *   const result = yield* ProtocolParamUpdate.setMinfeeA(instance,  parameters );
  *   console.log(result);
  * });
- *
+ * 
  * @since 2.0.0
  * @category Methods
  */
 export const setMinfeeA = Effect.fn(
-  (
-    instance: CML.ProtocolParamUpdate,
-    minfeeA: bigint,
-  ): Effect.Effect<void, ProtocolParamUpdateError> =>
+  (instance: CML.ProtocolParamUpdate, minfeeA: bigint): Effect.Effect<void, ProtocolParamUpdateError> =>
     Effect.try({
       try: () => instance.set_minfee_a(minfeeA),
       catch: () =>
         new ProtocolParamUpdateError({
           message: `ProtocolParamUpdate.setMinfeeA failed with parameters: ${minfeeA}. `,
         }),
-    }),
+    })
 );
 
 /**
  * Unsafely calls instance.setMinfeeA without Effect wrapper
- *
+ * 
  * @example
  * import { ProtocolParamUpdate } from "@lucid-evolution/experimental";
- *
+ * 
  * // Assume we have a ProtocolParamUpdate instance
  * const instance = ... ;
- *
+ * 
  * // Using try/catch for error handling
  * try {
- *   const result = ProtocolParamUpdate.unsafeSetMinfeeA(instance,  parameters );
+ *   const result = ProtocolParamUpdate.setMinfeeAUnsafe(instance,  parameters );
  *   console.log(result);
  * } catch (error) {
- *   console.error(`ProtocolParamUpdate.unsafeSetMinfeeA failed: ${error.message}`);
+ *   console.error(`ProtocolParamUpdate.setMinfeeAUnsafe failed: ${error.message}`);
  * }
- *
+ * 
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeSetMinfeeA = (
-  instance: CML.ProtocolParamUpdate,
-  minfeeA: bigint,
-): void => Effect.runSync(setMinfeeA(instance, minfeeA));
+export const setMinfeeAUnsafe = (instance: CML.ProtocolParamUpdate, minfeeA: bigint): void =>
+  Effect.runSync(setMinfeeA(instance, minfeeA));
 
 /**
  * Method minfeeA of ProtocolParamUpdate
- *
+ * 
  * @example
  * import { ProtocolParamUpdate } from "@lucid-evolution/experimental";
  * import { Effect } from "effect";
- *
+ * 
  * // Using Effect for safe execution with error handling
  * Effect.gen(function*() {
  * // Assume we have a ProtocolParamUpdate instance
@@ -607,54 +598,51 @@ export const unsafeSetMinfeeA = (
  *   const result = yield* ProtocolParamUpdate.minfeeA(instance);
  *   console.log(result);
  * });
- *
+ * 
  * @since 2.0.0
  * @category Methods
  */
 export const minfeeA = Effect.fn(
-  (
-    instance: CML.ProtocolParamUpdate,
-  ): Effect.Effect<bigint | undefined, ProtocolParamUpdateError> =>
+  (instance: CML.ProtocolParamUpdate): Effect.Effect<bigint | undefined, ProtocolParamUpdateError> =>
     Effect.try({
       try: () => instance.minfee_a(),
       catch: () =>
         new ProtocolParamUpdateError({
           message: `ProtocolParamUpdate.minfeeA failed `,
         }),
-    }),
+    })
 );
 
 /**
  * Unsafely calls instance.minfeeA without Effect wrapper
- *
+ * 
  * @example
  * import { ProtocolParamUpdate } from "@lucid-evolution/experimental";
- *
+ * 
  * // Assume we have a ProtocolParamUpdate instance
  * const instance = ... ;
- *
+ * 
  * // Using try/catch for error handling
  * try {
- *   const result = ProtocolParamUpdate.unsafeMinfeeA(instance);
+ *   const result = ProtocolParamUpdate.minfeeAUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`ProtocolParamUpdate.unsafeMinfeeA failed: ${error.message}`);
+ *   console.error(`ProtocolParamUpdate.minfeeAUnsafe failed: ${error.message}`);
  * }
- *
+ * 
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeMinfeeA = (
-  instance: CML.ProtocolParamUpdate,
-): bigint | undefined => Effect.runSync(minfeeA(instance));
+export const minfeeAUnsafe = (instance: CML.ProtocolParamUpdate): bigint | undefined =>
+  Effect.runSync(minfeeA(instance));
 
 /**
  * Method setMinfeeB of ProtocolParamUpdate
- *
+ * 
  * @example
  * import { ProtocolParamUpdate } from "@lucid-evolution/experimental";
  * import { Effect } from "effect";
- *
+ * 
  * // Using Effect for safe execution with error handling
  * Effect.gen(function*() {
  * // Assume we have a ProtocolParamUpdate instance
@@ -662,56 +650,51 @@ export const unsafeMinfeeA = (
  *   const result = yield* ProtocolParamUpdate.setMinfeeB(instance,  parameters );
  *   console.log(result);
  * });
- *
+ * 
  * @since 2.0.0
  * @category Methods
  */
 export const setMinfeeB = Effect.fn(
-  (
-    instance: CML.ProtocolParamUpdate,
-    minfeeB: bigint,
-  ): Effect.Effect<void, ProtocolParamUpdateError> =>
+  (instance: CML.ProtocolParamUpdate, minfeeB: bigint): Effect.Effect<void, ProtocolParamUpdateError> =>
     Effect.try({
       try: () => instance.set_minfee_b(minfeeB),
       catch: () =>
         new ProtocolParamUpdateError({
           message: `ProtocolParamUpdate.setMinfeeB failed with parameters: ${minfeeB}. `,
         }),
-    }),
+    })
 );
 
 /**
  * Unsafely calls instance.setMinfeeB without Effect wrapper
- *
+ * 
  * @example
  * import { ProtocolParamUpdate } from "@lucid-evolution/experimental";
- *
+ * 
  * // Assume we have a ProtocolParamUpdate instance
  * const instance = ... ;
- *
+ * 
  * // Using try/catch for error handling
  * try {
- *   const result = ProtocolParamUpdate.unsafeSetMinfeeB(instance,  parameters );
+ *   const result = ProtocolParamUpdate.setMinfeeBUnsafe(instance,  parameters );
  *   console.log(result);
  * } catch (error) {
- *   console.error(`ProtocolParamUpdate.unsafeSetMinfeeB failed: ${error.message}`);
+ *   console.error(`ProtocolParamUpdate.setMinfeeBUnsafe failed: ${error.message}`);
  * }
- *
+ * 
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeSetMinfeeB = (
-  instance: CML.ProtocolParamUpdate,
-  minfeeB: bigint,
-): void => Effect.runSync(setMinfeeB(instance, minfeeB));
+export const setMinfeeBUnsafe = (instance: CML.ProtocolParamUpdate, minfeeB: bigint): void =>
+  Effect.runSync(setMinfeeB(instance, minfeeB));
 
 /**
  * Method minfeeB of ProtocolParamUpdate
- *
+ * 
  * @example
  * import { ProtocolParamUpdate } from "@lucid-evolution/experimental";
  * import { Effect } from "effect";
- *
+ * 
  * // Using Effect for safe execution with error handling
  * Effect.gen(function*() {
  * // Assume we have a ProtocolParamUpdate instance
@@ -719,54 +702,51 @@ export const unsafeSetMinfeeB = (
  *   const result = yield* ProtocolParamUpdate.minfeeB(instance);
  *   console.log(result);
  * });
- *
+ * 
  * @since 2.0.0
  * @category Methods
  */
 export const minfeeB = Effect.fn(
-  (
-    instance: CML.ProtocolParamUpdate,
-  ): Effect.Effect<bigint | undefined, ProtocolParamUpdateError> =>
+  (instance: CML.ProtocolParamUpdate): Effect.Effect<bigint | undefined, ProtocolParamUpdateError> =>
     Effect.try({
       try: () => instance.minfee_b(),
       catch: () =>
         new ProtocolParamUpdateError({
           message: `ProtocolParamUpdate.minfeeB failed `,
         }),
-    }),
+    })
 );
 
 /**
  * Unsafely calls instance.minfeeB without Effect wrapper
- *
+ * 
  * @example
  * import { ProtocolParamUpdate } from "@lucid-evolution/experimental";
- *
+ * 
  * // Assume we have a ProtocolParamUpdate instance
  * const instance = ... ;
- *
+ * 
  * // Using try/catch for error handling
  * try {
- *   const result = ProtocolParamUpdate.unsafeMinfeeB(instance);
+ *   const result = ProtocolParamUpdate.minfeeBUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`ProtocolParamUpdate.unsafeMinfeeB failed: ${error.message}`);
+ *   console.error(`ProtocolParamUpdate.minfeeBUnsafe failed: ${error.message}`);
  * }
- *
+ * 
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeMinfeeB = (
-  instance: CML.ProtocolParamUpdate,
-): bigint | undefined => Effect.runSync(minfeeB(instance));
+export const minfeeBUnsafe = (instance: CML.ProtocolParamUpdate): bigint | undefined =>
+  Effect.runSync(minfeeB(instance));
 
 /**
  * Method setMaxBlockBodySize of ProtocolParamUpdate
- *
+ * 
  * @example
  * import { ProtocolParamUpdate } from "@lucid-evolution/experimental";
  * import { Effect } from "effect";
- *
+ * 
  * // Using Effect for safe execution with error handling
  * Effect.gen(function*() {
  * // Assume we have a ProtocolParamUpdate instance
@@ -774,56 +754,51 @@ export const unsafeMinfeeB = (
  *   const result = yield* ProtocolParamUpdate.setMaxBlockBodySize(instance,  parameters );
  *   console.log(result);
  * });
- *
+ * 
  * @since 2.0.0
  * @category Methods
  */
 export const setMaxBlockBodySize = Effect.fn(
-  (
-    instance: CML.ProtocolParamUpdate,
-    maxBlockBodySize: bigint,
-  ): Effect.Effect<void, ProtocolParamUpdateError> =>
+  (instance: CML.ProtocolParamUpdate, maxBlockBodySize: bigint): Effect.Effect<void, ProtocolParamUpdateError> =>
     Effect.try({
       try: () => instance.set_max_block_body_size(maxBlockBodySize),
       catch: () =>
         new ProtocolParamUpdateError({
           message: `ProtocolParamUpdate.setMaxBlockBodySize failed with parameters: ${maxBlockBodySize}. `,
         }),
-    }),
+    })
 );
 
 /**
  * Unsafely calls instance.setMaxBlockBodySize without Effect wrapper
- *
+ * 
  * @example
  * import { ProtocolParamUpdate } from "@lucid-evolution/experimental";
- *
+ * 
  * // Assume we have a ProtocolParamUpdate instance
  * const instance = ... ;
- *
+ * 
  * // Using try/catch for error handling
  * try {
- *   const result = ProtocolParamUpdate.unsafeSetMaxBlockBodySize(instance,  parameters );
+ *   const result = ProtocolParamUpdate.setMaxBlockBodySizeUnsafe(instance,  parameters );
  *   console.log(result);
  * } catch (error) {
- *   console.error(`ProtocolParamUpdate.unsafeSetMaxBlockBodySize failed: ${error.message}`);
+ *   console.error(`ProtocolParamUpdate.setMaxBlockBodySizeUnsafe failed: ${error.message}`);
  * }
- *
+ * 
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeSetMaxBlockBodySize = (
-  instance: CML.ProtocolParamUpdate,
-  maxBlockBodySize: bigint,
-): void => Effect.runSync(setMaxBlockBodySize(instance, maxBlockBodySize));
+export const setMaxBlockBodySizeUnsafe = (instance: CML.ProtocolParamUpdate, maxBlockBodySize: bigint): void =>
+  Effect.runSync(setMaxBlockBodySize(instance, maxBlockBodySize));
 
 /**
  * Method maxBlockBodySize of ProtocolParamUpdate
- *
+ * 
  * @example
  * import { ProtocolParamUpdate } from "@lucid-evolution/experimental";
  * import { Effect } from "effect";
- *
+ * 
  * // Using Effect for safe execution with error handling
  * Effect.gen(function*() {
  * // Assume we have a ProtocolParamUpdate instance
@@ -831,54 +806,51 @@ export const unsafeSetMaxBlockBodySize = (
  *   const result = yield* ProtocolParamUpdate.maxBlockBodySize(instance);
  *   console.log(result);
  * });
- *
+ * 
  * @since 2.0.0
  * @category Methods
  */
 export const maxBlockBodySize = Effect.fn(
-  (
-    instance: CML.ProtocolParamUpdate,
-  ): Effect.Effect<bigint | undefined, ProtocolParamUpdateError> =>
+  (instance: CML.ProtocolParamUpdate): Effect.Effect<bigint | undefined, ProtocolParamUpdateError> =>
     Effect.try({
       try: () => instance.max_block_body_size(),
       catch: () =>
         new ProtocolParamUpdateError({
           message: `ProtocolParamUpdate.maxBlockBodySize failed `,
         }),
-    }),
+    })
 );
 
 /**
  * Unsafely calls instance.maxBlockBodySize without Effect wrapper
- *
+ * 
  * @example
  * import { ProtocolParamUpdate } from "@lucid-evolution/experimental";
- *
+ * 
  * // Assume we have a ProtocolParamUpdate instance
  * const instance = ... ;
- *
+ * 
  * // Using try/catch for error handling
  * try {
- *   const result = ProtocolParamUpdate.unsafeMaxBlockBodySize(instance);
+ *   const result = ProtocolParamUpdate.maxBlockBodySizeUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`ProtocolParamUpdate.unsafeMaxBlockBodySize failed: ${error.message}`);
+ *   console.error(`ProtocolParamUpdate.maxBlockBodySizeUnsafe failed: ${error.message}`);
  * }
- *
+ * 
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeMaxBlockBodySize = (
-  instance: CML.ProtocolParamUpdate,
-): bigint | undefined => Effect.runSync(maxBlockBodySize(instance));
+export const maxBlockBodySizeUnsafe = (instance: CML.ProtocolParamUpdate): bigint | undefined =>
+  Effect.runSync(maxBlockBodySize(instance));
 
 /**
  * Method setMaxTransactionSize of ProtocolParamUpdate
- *
+ * 
  * @example
  * import { ProtocolParamUpdate } from "@lucid-evolution/experimental";
  * import { Effect } from "effect";
- *
+ * 
  * // Using Effect for safe execution with error handling
  * Effect.gen(function*() {
  * // Assume we have a ProtocolParamUpdate instance
@@ -886,56 +858,51 @@ export const unsafeMaxBlockBodySize = (
  *   const result = yield* ProtocolParamUpdate.setMaxTransactionSize(instance,  parameters );
  *   console.log(result);
  * });
- *
+ * 
  * @since 2.0.0
  * @category Methods
  */
 export const setMaxTransactionSize = Effect.fn(
-  (
-    instance: CML.ProtocolParamUpdate,
-    maxTransactionSize: bigint,
-  ): Effect.Effect<void, ProtocolParamUpdateError> =>
+  (instance: CML.ProtocolParamUpdate, maxTransactionSize: bigint): Effect.Effect<void, ProtocolParamUpdateError> =>
     Effect.try({
       try: () => instance.set_max_transaction_size(maxTransactionSize),
       catch: () =>
         new ProtocolParamUpdateError({
           message: `ProtocolParamUpdate.setMaxTransactionSize failed with parameters: ${maxTransactionSize}. `,
         }),
-    }),
+    })
 );
 
 /**
  * Unsafely calls instance.setMaxTransactionSize without Effect wrapper
- *
+ * 
  * @example
  * import { ProtocolParamUpdate } from "@lucid-evolution/experimental";
- *
+ * 
  * // Assume we have a ProtocolParamUpdate instance
  * const instance = ... ;
- *
+ * 
  * // Using try/catch for error handling
  * try {
- *   const result = ProtocolParamUpdate.unsafeSetMaxTransactionSize(instance,  parameters );
+ *   const result = ProtocolParamUpdate.setMaxTransactionSizeUnsafe(instance,  parameters );
  *   console.log(result);
  * } catch (error) {
- *   console.error(`ProtocolParamUpdate.unsafeSetMaxTransactionSize failed: ${error.message}`);
+ *   console.error(`ProtocolParamUpdate.setMaxTransactionSizeUnsafe failed: ${error.message}`);
  * }
- *
+ * 
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeSetMaxTransactionSize = (
-  instance: CML.ProtocolParamUpdate,
-  maxTransactionSize: bigint,
-): void => Effect.runSync(setMaxTransactionSize(instance, maxTransactionSize));
+export const setMaxTransactionSizeUnsafe = (instance: CML.ProtocolParamUpdate, maxTransactionSize: bigint): void =>
+  Effect.runSync(setMaxTransactionSize(instance, maxTransactionSize));
 
 /**
  * Method maxTransactionSize of ProtocolParamUpdate
- *
+ * 
  * @example
  * import { ProtocolParamUpdate } from "@lucid-evolution/experimental";
  * import { Effect } from "effect";
- *
+ * 
  * // Using Effect for safe execution with error handling
  * Effect.gen(function*() {
  * // Assume we have a ProtocolParamUpdate instance
@@ -943,54 +910,51 @@ export const unsafeSetMaxTransactionSize = (
  *   const result = yield* ProtocolParamUpdate.maxTransactionSize(instance);
  *   console.log(result);
  * });
- *
+ * 
  * @since 2.0.0
  * @category Methods
  */
 export const maxTransactionSize = Effect.fn(
-  (
-    instance: CML.ProtocolParamUpdate,
-  ): Effect.Effect<bigint | undefined, ProtocolParamUpdateError> =>
+  (instance: CML.ProtocolParamUpdate): Effect.Effect<bigint | undefined, ProtocolParamUpdateError> =>
     Effect.try({
       try: () => instance.max_transaction_size(),
       catch: () =>
         new ProtocolParamUpdateError({
           message: `ProtocolParamUpdate.maxTransactionSize failed `,
         }),
-    }),
+    })
 );
 
 /**
  * Unsafely calls instance.maxTransactionSize without Effect wrapper
- *
+ * 
  * @example
  * import { ProtocolParamUpdate } from "@lucid-evolution/experimental";
- *
+ * 
  * // Assume we have a ProtocolParamUpdate instance
  * const instance = ... ;
- *
+ * 
  * // Using try/catch for error handling
  * try {
- *   const result = ProtocolParamUpdate.unsafeMaxTransactionSize(instance);
+ *   const result = ProtocolParamUpdate.maxTransactionSizeUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`ProtocolParamUpdate.unsafeMaxTransactionSize failed: ${error.message}`);
+ *   console.error(`ProtocolParamUpdate.maxTransactionSizeUnsafe failed: ${error.message}`);
  * }
- *
+ * 
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeMaxTransactionSize = (
-  instance: CML.ProtocolParamUpdate,
-): bigint | undefined => Effect.runSync(maxTransactionSize(instance));
+export const maxTransactionSizeUnsafe = (instance: CML.ProtocolParamUpdate): bigint | undefined =>
+  Effect.runSync(maxTransactionSize(instance));
 
 /**
  * Method setMaxBlockHeaderSize of ProtocolParamUpdate
- *
+ * 
  * @example
  * import { ProtocolParamUpdate } from "@lucid-evolution/experimental";
  * import { Effect } from "effect";
- *
+ * 
  * // Using Effect for safe execution with error handling
  * Effect.gen(function*() {
  * // Assume we have a ProtocolParamUpdate instance
@@ -998,56 +962,51 @@ export const unsafeMaxTransactionSize = (
  *   const result = yield* ProtocolParamUpdate.setMaxBlockHeaderSize(instance,  parameters );
  *   console.log(result);
  * });
- *
+ * 
  * @since 2.0.0
  * @category Methods
  */
 export const setMaxBlockHeaderSize = Effect.fn(
-  (
-    instance: CML.ProtocolParamUpdate,
-    maxBlockHeaderSize: bigint,
-  ): Effect.Effect<void, ProtocolParamUpdateError> =>
+  (instance: CML.ProtocolParamUpdate, maxBlockHeaderSize: bigint): Effect.Effect<void, ProtocolParamUpdateError> =>
     Effect.try({
       try: () => instance.set_max_block_header_size(maxBlockHeaderSize),
       catch: () =>
         new ProtocolParamUpdateError({
           message: `ProtocolParamUpdate.setMaxBlockHeaderSize failed with parameters: ${maxBlockHeaderSize}. `,
         }),
-    }),
+    })
 );
 
 /**
  * Unsafely calls instance.setMaxBlockHeaderSize without Effect wrapper
- *
+ * 
  * @example
  * import { ProtocolParamUpdate } from "@lucid-evolution/experimental";
- *
+ * 
  * // Assume we have a ProtocolParamUpdate instance
  * const instance = ... ;
- *
+ * 
  * // Using try/catch for error handling
  * try {
- *   const result = ProtocolParamUpdate.unsafeSetMaxBlockHeaderSize(instance,  parameters );
+ *   const result = ProtocolParamUpdate.setMaxBlockHeaderSizeUnsafe(instance,  parameters );
  *   console.log(result);
  * } catch (error) {
- *   console.error(`ProtocolParamUpdate.unsafeSetMaxBlockHeaderSize failed: ${error.message}`);
+ *   console.error(`ProtocolParamUpdate.setMaxBlockHeaderSizeUnsafe failed: ${error.message}`);
  * }
- *
+ * 
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeSetMaxBlockHeaderSize = (
-  instance: CML.ProtocolParamUpdate,
-  maxBlockHeaderSize: bigint,
-): void => Effect.runSync(setMaxBlockHeaderSize(instance, maxBlockHeaderSize));
+export const setMaxBlockHeaderSizeUnsafe = (instance: CML.ProtocolParamUpdate, maxBlockHeaderSize: bigint): void =>
+  Effect.runSync(setMaxBlockHeaderSize(instance, maxBlockHeaderSize));
 
 /**
  * Method maxBlockHeaderSize of ProtocolParamUpdate
- *
+ * 
  * @example
  * import { ProtocolParamUpdate } from "@lucid-evolution/experimental";
  * import { Effect } from "effect";
- *
+ * 
  * // Using Effect for safe execution with error handling
  * Effect.gen(function*() {
  * // Assume we have a ProtocolParamUpdate instance
@@ -1055,54 +1014,51 @@ export const unsafeSetMaxBlockHeaderSize = (
  *   const result = yield* ProtocolParamUpdate.maxBlockHeaderSize(instance);
  *   console.log(result);
  * });
- *
+ * 
  * @since 2.0.0
  * @category Methods
  */
 export const maxBlockHeaderSize = Effect.fn(
-  (
-    instance: CML.ProtocolParamUpdate,
-  ): Effect.Effect<bigint | undefined, ProtocolParamUpdateError> =>
+  (instance: CML.ProtocolParamUpdate): Effect.Effect<bigint | undefined, ProtocolParamUpdateError> =>
     Effect.try({
       try: () => instance.max_block_header_size(),
       catch: () =>
         new ProtocolParamUpdateError({
           message: `ProtocolParamUpdate.maxBlockHeaderSize failed `,
         }),
-    }),
+    })
 );
 
 /**
  * Unsafely calls instance.maxBlockHeaderSize without Effect wrapper
- *
+ * 
  * @example
  * import { ProtocolParamUpdate } from "@lucid-evolution/experimental";
- *
+ * 
  * // Assume we have a ProtocolParamUpdate instance
  * const instance = ... ;
- *
+ * 
  * // Using try/catch for error handling
  * try {
- *   const result = ProtocolParamUpdate.unsafeMaxBlockHeaderSize(instance);
+ *   const result = ProtocolParamUpdate.maxBlockHeaderSizeUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`ProtocolParamUpdate.unsafeMaxBlockHeaderSize failed: ${error.message}`);
+ *   console.error(`ProtocolParamUpdate.maxBlockHeaderSizeUnsafe failed: ${error.message}`);
  * }
- *
+ * 
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeMaxBlockHeaderSize = (
-  instance: CML.ProtocolParamUpdate,
-): bigint | undefined => Effect.runSync(maxBlockHeaderSize(instance));
+export const maxBlockHeaderSizeUnsafe = (instance: CML.ProtocolParamUpdate): bigint | undefined =>
+  Effect.runSync(maxBlockHeaderSize(instance));
 
 /**
  * Method setKeyDeposit of ProtocolParamUpdate
- *
+ * 
  * @example
  * import { ProtocolParamUpdate } from "@lucid-evolution/experimental";
  * import { Effect } from "effect";
- *
+ * 
  * // Using Effect for safe execution with error handling
  * Effect.gen(function*() {
  * // Assume we have a ProtocolParamUpdate instance
@@ -1110,56 +1066,51 @@ export const unsafeMaxBlockHeaderSize = (
  *   const result = yield* ProtocolParamUpdate.setKeyDeposit(instance,  parameters );
  *   console.log(result);
  * });
- *
+ * 
  * @since 2.0.0
  * @category Methods
  */
 export const setKeyDeposit = Effect.fn(
-  (
-    instance: CML.ProtocolParamUpdate,
-    keyDeposit: bigint,
-  ): Effect.Effect<void, ProtocolParamUpdateError> =>
+  (instance: CML.ProtocolParamUpdate, keyDeposit: bigint): Effect.Effect<void, ProtocolParamUpdateError> =>
     Effect.try({
       try: () => instance.set_key_deposit(keyDeposit),
       catch: () =>
         new ProtocolParamUpdateError({
           message: `ProtocolParamUpdate.setKeyDeposit failed with parameters: ${keyDeposit}. `,
         }),
-    }),
+    })
 );
 
 /**
  * Unsafely calls instance.setKeyDeposit without Effect wrapper
- *
+ * 
  * @example
  * import { ProtocolParamUpdate } from "@lucid-evolution/experimental";
- *
+ * 
  * // Assume we have a ProtocolParamUpdate instance
  * const instance = ... ;
- *
+ * 
  * // Using try/catch for error handling
  * try {
- *   const result = ProtocolParamUpdate.unsafeSetKeyDeposit(instance,  parameters );
+ *   const result = ProtocolParamUpdate.setKeyDepositUnsafe(instance,  parameters );
  *   console.log(result);
  * } catch (error) {
- *   console.error(`ProtocolParamUpdate.unsafeSetKeyDeposit failed: ${error.message}`);
+ *   console.error(`ProtocolParamUpdate.setKeyDepositUnsafe failed: ${error.message}`);
  * }
- *
+ * 
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeSetKeyDeposit = (
-  instance: CML.ProtocolParamUpdate,
-  keyDeposit: bigint,
-): void => Effect.runSync(setKeyDeposit(instance, keyDeposit));
+export const setKeyDepositUnsafe = (instance: CML.ProtocolParamUpdate, keyDeposit: bigint): void =>
+  Effect.runSync(setKeyDeposit(instance, keyDeposit));
 
 /**
  * Method keyDeposit of ProtocolParamUpdate
- *
+ * 
  * @example
  * import { ProtocolParamUpdate } from "@lucid-evolution/experimental";
  * import { Effect } from "effect";
- *
+ * 
  * // Using Effect for safe execution with error handling
  * Effect.gen(function*() {
  * // Assume we have a ProtocolParamUpdate instance
@@ -1167,54 +1118,51 @@ export const unsafeSetKeyDeposit = (
  *   const result = yield* ProtocolParamUpdate.keyDeposit(instance);
  *   console.log(result);
  * });
- *
+ * 
  * @since 2.0.0
  * @category Methods
  */
 export const keyDeposit = Effect.fn(
-  (
-    instance: CML.ProtocolParamUpdate,
-  ): Effect.Effect<bigint | undefined, ProtocolParamUpdateError> =>
+  (instance: CML.ProtocolParamUpdate): Effect.Effect<bigint | undefined, ProtocolParamUpdateError> =>
     Effect.try({
       try: () => instance.key_deposit(),
       catch: () =>
         new ProtocolParamUpdateError({
           message: `ProtocolParamUpdate.keyDeposit failed `,
         }),
-    }),
+    })
 );
 
 /**
  * Unsafely calls instance.keyDeposit without Effect wrapper
- *
+ * 
  * @example
  * import { ProtocolParamUpdate } from "@lucid-evolution/experimental";
- *
+ * 
  * // Assume we have a ProtocolParamUpdate instance
  * const instance = ... ;
- *
+ * 
  * // Using try/catch for error handling
  * try {
- *   const result = ProtocolParamUpdate.unsafeKeyDeposit(instance);
+ *   const result = ProtocolParamUpdate.keyDepositUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`ProtocolParamUpdate.unsafeKeyDeposit failed: ${error.message}`);
+ *   console.error(`ProtocolParamUpdate.keyDepositUnsafe failed: ${error.message}`);
  * }
- *
+ * 
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeKeyDeposit = (
-  instance: CML.ProtocolParamUpdate,
-): bigint | undefined => Effect.runSync(keyDeposit(instance));
+export const keyDepositUnsafe = (instance: CML.ProtocolParamUpdate): bigint | undefined =>
+  Effect.runSync(keyDeposit(instance));
 
 /**
  * Method setPoolDeposit of ProtocolParamUpdate
- *
+ * 
  * @example
  * import { ProtocolParamUpdate } from "@lucid-evolution/experimental";
  * import { Effect } from "effect";
- *
+ * 
  * // Using Effect for safe execution with error handling
  * Effect.gen(function*() {
  * // Assume we have a ProtocolParamUpdate instance
@@ -1222,56 +1170,51 @@ export const unsafeKeyDeposit = (
  *   const result = yield* ProtocolParamUpdate.setPoolDeposit(instance,  parameters );
  *   console.log(result);
  * });
- *
+ * 
  * @since 2.0.0
  * @category Methods
  */
 export const setPoolDeposit = Effect.fn(
-  (
-    instance: CML.ProtocolParamUpdate,
-    poolDeposit: bigint,
-  ): Effect.Effect<void, ProtocolParamUpdateError> =>
+  (instance: CML.ProtocolParamUpdate, poolDeposit: bigint): Effect.Effect<void, ProtocolParamUpdateError> =>
     Effect.try({
       try: () => instance.set_pool_deposit(poolDeposit),
       catch: () =>
         new ProtocolParamUpdateError({
           message: `ProtocolParamUpdate.setPoolDeposit failed with parameters: ${poolDeposit}. `,
         }),
-    }),
+    })
 );
 
 /**
  * Unsafely calls instance.setPoolDeposit without Effect wrapper
- *
+ * 
  * @example
  * import { ProtocolParamUpdate } from "@lucid-evolution/experimental";
- *
+ * 
  * // Assume we have a ProtocolParamUpdate instance
  * const instance = ... ;
- *
+ * 
  * // Using try/catch for error handling
  * try {
- *   const result = ProtocolParamUpdate.unsafeSetPoolDeposit(instance,  parameters );
+ *   const result = ProtocolParamUpdate.setPoolDepositUnsafe(instance,  parameters );
  *   console.log(result);
  * } catch (error) {
- *   console.error(`ProtocolParamUpdate.unsafeSetPoolDeposit failed: ${error.message}`);
+ *   console.error(`ProtocolParamUpdate.setPoolDepositUnsafe failed: ${error.message}`);
  * }
- *
+ * 
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeSetPoolDeposit = (
-  instance: CML.ProtocolParamUpdate,
-  poolDeposit: bigint,
-): void => Effect.runSync(setPoolDeposit(instance, poolDeposit));
+export const setPoolDepositUnsafe = (instance: CML.ProtocolParamUpdate, poolDeposit: bigint): void =>
+  Effect.runSync(setPoolDeposit(instance, poolDeposit));
 
 /**
  * Method poolDeposit of ProtocolParamUpdate
- *
+ * 
  * @example
  * import { ProtocolParamUpdate } from "@lucid-evolution/experimental";
  * import { Effect } from "effect";
- *
+ * 
  * // Using Effect for safe execution with error handling
  * Effect.gen(function*() {
  * // Assume we have a ProtocolParamUpdate instance
@@ -1279,54 +1222,51 @@ export const unsafeSetPoolDeposit = (
  *   const result = yield* ProtocolParamUpdate.poolDeposit(instance);
  *   console.log(result);
  * });
- *
+ * 
  * @since 2.0.0
  * @category Methods
  */
 export const poolDeposit = Effect.fn(
-  (
-    instance: CML.ProtocolParamUpdate,
-  ): Effect.Effect<bigint | undefined, ProtocolParamUpdateError> =>
+  (instance: CML.ProtocolParamUpdate): Effect.Effect<bigint | undefined, ProtocolParamUpdateError> =>
     Effect.try({
       try: () => instance.pool_deposit(),
       catch: () =>
         new ProtocolParamUpdateError({
           message: `ProtocolParamUpdate.poolDeposit failed `,
         }),
-    }),
+    })
 );
 
 /**
  * Unsafely calls instance.poolDeposit without Effect wrapper
- *
+ * 
  * @example
  * import { ProtocolParamUpdate } from "@lucid-evolution/experimental";
- *
+ * 
  * // Assume we have a ProtocolParamUpdate instance
  * const instance = ... ;
- *
+ * 
  * // Using try/catch for error handling
  * try {
- *   const result = ProtocolParamUpdate.unsafePoolDeposit(instance);
+ *   const result = ProtocolParamUpdate.poolDepositUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`ProtocolParamUpdate.unsafePoolDeposit failed: ${error.message}`);
+ *   console.error(`ProtocolParamUpdate.poolDepositUnsafe failed: ${error.message}`);
  * }
- *
+ * 
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafePoolDeposit = (
-  instance: CML.ProtocolParamUpdate,
-): bigint | undefined => Effect.runSync(poolDeposit(instance));
+export const poolDepositUnsafe = (instance: CML.ProtocolParamUpdate): bigint | undefined =>
+  Effect.runSync(poolDeposit(instance));
 
 /**
  * Method setMaximumEpoch of ProtocolParamUpdate
- *
+ * 
  * @example
  * import { ProtocolParamUpdate } from "@lucid-evolution/experimental";
  * import { Effect } from "effect";
- *
+ * 
  * // Using Effect for safe execution with error handling
  * Effect.gen(function*() {
  * // Assume we have a ProtocolParamUpdate instance
@@ -1334,56 +1274,51 @@ export const unsafePoolDeposit = (
  *   const result = yield* ProtocolParamUpdate.setMaximumEpoch(instance,  parameters );
  *   console.log(result);
  * });
- *
+ * 
  * @since 2.0.0
  * @category Methods
  */
 export const setMaximumEpoch = Effect.fn(
-  (
-    instance: CML.ProtocolParamUpdate,
-    maximumEpoch: bigint,
-  ): Effect.Effect<void, ProtocolParamUpdateError> =>
+  (instance: CML.ProtocolParamUpdate, maximumEpoch: bigint): Effect.Effect<void, ProtocolParamUpdateError> =>
     Effect.try({
       try: () => instance.set_maximum_epoch(maximumEpoch),
       catch: () =>
         new ProtocolParamUpdateError({
           message: `ProtocolParamUpdate.setMaximumEpoch failed with parameters: ${maximumEpoch}. `,
         }),
-    }),
+    })
 );
 
 /**
  * Unsafely calls instance.setMaximumEpoch without Effect wrapper
- *
+ * 
  * @example
  * import { ProtocolParamUpdate } from "@lucid-evolution/experimental";
- *
+ * 
  * // Assume we have a ProtocolParamUpdate instance
  * const instance = ... ;
- *
+ * 
  * // Using try/catch for error handling
  * try {
- *   const result = ProtocolParamUpdate.unsafeSetMaximumEpoch(instance,  parameters );
+ *   const result = ProtocolParamUpdate.setMaximumEpochUnsafe(instance,  parameters );
  *   console.log(result);
  * } catch (error) {
- *   console.error(`ProtocolParamUpdate.unsafeSetMaximumEpoch failed: ${error.message}`);
+ *   console.error(`ProtocolParamUpdate.setMaximumEpochUnsafe failed: ${error.message}`);
  * }
- *
+ * 
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeSetMaximumEpoch = (
-  instance: CML.ProtocolParamUpdate,
-  maximumEpoch: bigint,
-): void => Effect.runSync(setMaximumEpoch(instance, maximumEpoch));
+export const setMaximumEpochUnsafe = (instance: CML.ProtocolParamUpdate, maximumEpoch: bigint): void =>
+  Effect.runSync(setMaximumEpoch(instance, maximumEpoch));
 
 /**
  * Method maximumEpoch of ProtocolParamUpdate
- *
+ * 
  * @example
  * import { ProtocolParamUpdate } from "@lucid-evolution/experimental";
  * import { Effect } from "effect";
- *
+ * 
  * // Using Effect for safe execution with error handling
  * Effect.gen(function*() {
  * // Assume we have a ProtocolParamUpdate instance
@@ -1391,54 +1326,51 @@ export const unsafeSetMaximumEpoch = (
  *   const result = yield* ProtocolParamUpdate.maximumEpoch(instance);
  *   console.log(result);
  * });
- *
+ * 
  * @since 2.0.0
  * @category Methods
  */
 export const maximumEpoch = Effect.fn(
-  (
-    instance: CML.ProtocolParamUpdate,
-  ): Effect.Effect<bigint | undefined, ProtocolParamUpdateError> =>
+  (instance: CML.ProtocolParamUpdate): Effect.Effect<bigint | undefined, ProtocolParamUpdateError> =>
     Effect.try({
       try: () => instance.maximum_epoch(),
       catch: () =>
         new ProtocolParamUpdateError({
           message: `ProtocolParamUpdate.maximumEpoch failed `,
         }),
-    }),
+    })
 );
 
 /**
  * Unsafely calls instance.maximumEpoch without Effect wrapper
- *
+ * 
  * @example
  * import { ProtocolParamUpdate } from "@lucid-evolution/experimental";
- *
+ * 
  * // Assume we have a ProtocolParamUpdate instance
  * const instance = ... ;
- *
+ * 
  * // Using try/catch for error handling
  * try {
- *   const result = ProtocolParamUpdate.unsafeMaximumEpoch(instance);
+ *   const result = ProtocolParamUpdate.maximumEpochUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`ProtocolParamUpdate.unsafeMaximumEpoch failed: ${error.message}`);
+ *   console.error(`ProtocolParamUpdate.maximumEpochUnsafe failed: ${error.message}`);
  * }
- *
+ * 
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeMaximumEpoch = (
-  instance: CML.ProtocolParamUpdate,
-): bigint | undefined => Effect.runSync(maximumEpoch(instance));
+export const maximumEpochUnsafe = (instance: CML.ProtocolParamUpdate): bigint | undefined =>
+  Effect.runSync(maximumEpoch(instance));
 
 /**
  * Method setNOpt of ProtocolParamUpdate
- *
+ * 
  * @example
  * import { ProtocolParamUpdate } from "@lucid-evolution/experimental";
  * import { Effect } from "effect";
- *
+ * 
  * // Using Effect for safe execution with error handling
  * Effect.gen(function*() {
  * // Assume we have a ProtocolParamUpdate instance
@@ -1446,56 +1378,51 @@ export const unsafeMaximumEpoch = (
  *   const result = yield* ProtocolParamUpdate.setNOpt(instance,  parameters );
  *   console.log(result);
  * });
- *
+ * 
  * @since 2.0.0
  * @category Methods
  */
 export const setNOpt = Effect.fn(
-  (
-    instance: CML.ProtocolParamUpdate,
-    nOpt: bigint,
-  ): Effect.Effect<void, ProtocolParamUpdateError> =>
+  (instance: CML.ProtocolParamUpdate, nOpt: bigint): Effect.Effect<void, ProtocolParamUpdateError> =>
     Effect.try({
       try: () => instance.set_n_opt(nOpt),
       catch: () =>
         new ProtocolParamUpdateError({
           message: `ProtocolParamUpdate.setNOpt failed with parameters: ${nOpt}. `,
         }),
-    }),
+    })
 );
 
 /**
  * Unsafely calls instance.setNOpt without Effect wrapper
- *
+ * 
  * @example
  * import { ProtocolParamUpdate } from "@lucid-evolution/experimental";
- *
+ * 
  * // Assume we have a ProtocolParamUpdate instance
  * const instance = ... ;
- *
+ * 
  * // Using try/catch for error handling
  * try {
- *   const result = ProtocolParamUpdate.unsafeSetNOpt(instance,  parameters );
+ *   const result = ProtocolParamUpdate.setNOptUnsafe(instance,  parameters );
  *   console.log(result);
  * } catch (error) {
- *   console.error(`ProtocolParamUpdate.unsafeSetNOpt failed: ${error.message}`);
+ *   console.error(`ProtocolParamUpdate.setNOptUnsafe failed: ${error.message}`);
  * }
- *
+ * 
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeSetNOpt = (
-  instance: CML.ProtocolParamUpdate,
-  nOpt: bigint,
-): void => Effect.runSync(setNOpt(instance, nOpt));
+export const setNOptUnsafe = (instance: CML.ProtocolParamUpdate, nOpt: bigint): void =>
+  Effect.runSync(setNOpt(instance, nOpt));
 
 /**
  * Method nOpt of ProtocolParamUpdate
- *
+ * 
  * @example
  * import { ProtocolParamUpdate } from "@lucid-evolution/experimental";
  * import { Effect } from "effect";
- *
+ * 
  * // Using Effect for safe execution with error handling
  * Effect.gen(function*() {
  * // Assume we have a ProtocolParamUpdate instance
@@ -1503,54 +1430,51 @@ export const unsafeSetNOpt = (
  *   const result = yield* ProtocolParamUpdate.nOpt(instance);
  *   console.log(result);
  * });
- *
+ * 
  * @since 2.0.0
  * @category Methods
  */
 export const nOpt = Effect.fn(
-  (
-    instance: CML.ProtocolParamUpdate,
-  ): Effect.Effect<bigint | undefined, ProtocolParamUpdateError> =>
+  (instance: CML.ProtocolParamUpdate): Effect.Effect<bigint | undefined, ProtocolParamUpdateError> =>
     Effect.try({
       try: () => instance.n_opt(),
       catch: () =>
         new ProtocolParamUpdateError({
           message: `ProtocolParamUpdate.nOpt failed `,
         }),
-    }),
+    })
 );
 
 /**
  * Unsafely calls instance.nOpt without Effect wrapper
- *
+ * 
  * @example
  * import { ProtocolParamUpdate } from "@lucid-evolution/experimental";
- *
+ * 
  * // Assume we have a ProtocolParamUpdate instance
  * const instance = ... ;
- *
+ * 
  * // Using try/catch for error handling
  * try {
- *   const result = ProtocolParamUpdate.unsafeNOpt(instance);
+ *   const result = ProtocolParamUpdate.nOptUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`ProtocolParamUpdate.unsafeNOpt failed: ${error.message}`);
+ *   console.error(`ProtocolParamUpdate.nOptUnsafe failed: ${error.message}`);
  * }
- *
+ * 
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeNOpt = (
-  instance: CML.ProtocolParamUpdate,
-): bigint | undefined => Effect.runSync(nOpt(instance));
+export const nOptUnsafe = (instance: CML.ProtocolParamUpdate): bigint | undefined =>
+  Effect.runSync(nOpt(instance));
 
 /**
  * Method setPoolPledgeInfluence of ProtocolParamUpdate
- *
+ * 
  * @example
  * import { ProtocolParamUpdate } from "@lucid-evolution/experimental";
  * import { Effect } from "effect";
- *
+ * 
  * // Using Effect for safe execution with error handling
  * Effect.gen(function*() {
  * // Assume we have a ProtocolParamUpdate instance
@@ -1558,57 +1482,51 @@ export const unsafeNOpt = (
  *   const result = yield* ProtocolParamUpdate.setPoolPledgeInfluence(instance,  parameters );
  *   console.log(result);
  * });
- *
+ * 
  * @since 2.0.0
  * @category Methods
  */
 export const setPoolPledgeInfluence = Effect.fn(
-  (
-    instance: CML.ProtocolParamUpdate,
-    poolPledgeInfluence: CML.Rational,
-  ): Effect.Effect<void, ProtocolParamUpdateError> =>
+  (instance: CML.ProtocolParamUpdate, poolPledgeInfluence: CML.Rational): Effect.Effect<void, ProtocolParamUpdateError> =>
     Effect.try({
       try: () => instance.set_pool_pledge_influence(poolPledgeInfluence),
       catch: () =>
         new ProtocolParamUpdateError({
           message: `ProtocolParamUpdate.setPoolPledgeInfluence failed with parameters: ${poolPledgeInfluence} (Rational). `,
         }),
-    }),
+    })
 );
 
 /**
  * Unsafely calls instance.setPoolPledgeInfluence without Effect wrapper
- *
+ * 
  * @example
  * import { ProtocolParamUpdate } from "@lucid-evolution/experimental";
- *
+ * 
  * // Assume we have a ProtocolParamUpdate instance
  * const instance = ... ;
- *
+ * 
  * // Using try/catch for error handling
  * try {
- *   const result = ProtocolParamUpdate.unsafeSetPoolPledgeInfluence(instance,  parameters );
+ *   const result = ProtocolParamUpdate.setPoolPledgeInfluenceUnsafe(instance,  parameters );
  *   console.log(result);
  * } catch (error) {
- *   console.error(`ProtocolParamUpdate.unsafeSetPoolPledgeInfluence failed: ${error.message}`);
+ *   console.error(`ProtocolParamUpdate.setPoolPledgeInfluenceUnsafe failed: ${error.message}`);
  * }
- *
+ * 
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeSetPoolPledgeInfluence = (
-  instance: CML.ProtocolParamUpdate,
-  poolPledgeInfluence: CML.Rational,
-): void =>
+export const setPoolPledgeInfluenceUnsafe = (instance: CML.ProtocolParamUpdate, poolPledgeInfluence: CML.Rational): void =>
   Effect.runSync(setPoolPledgeInfluence(instance, poolPledgeInfluence));
 
 /**
  * Method poolPledgeInfluence of ProtocolParamUpdate
- *
+ * 
  * @example
  * import { ProtocolParamUpdate } from "@lucid-evolution/experimental";
  * import { Effect } from "effect";
- *
+ * 
  * // Using Effect for safe execution with error handling
  * Effect.gen(function*() {
  * // Assume we have a ProtocolParamUpdate instance
@@ -1616,54 +1534,51 @@ export const unsafeSetPoolPledgeInfluence = (
  *   const result = yield* ProtocolParamUpdate.poolPledgeInfluence(instance);
  *   console.log(result);
  * });
- *
+ * 
  * @since 2.0.0
  * @category Methods
  */
 export const poolPledgeInfluence = Effect.fn(
-  (
-    instance: CML.ProtocolParamUpdate,
-  ): Effect.Effect<CML.Rational | undefined, ProtocolParamUpdateError> =>
+  (instance: CML.ProtocolParamUpdate): Effect.Effect<CML.Rational | undefined, ProtocolParamUpdateError> =>
     Effect.try({
       try: () => instance.pool_pledge_influence(),
       catch: () =>
         new ProtocolParamUpdateError({
           message: `ProtocolParamUpdate.poolPledgeInfluence failed `,
         }),
-    }),
+    })
 );
 
 /**
  * Unsafely calls instance.poolPledgeInfluence without Effect wrapper
- *
+ * 
  * @example
  * import { ProtocolParamUpdate } from "@lucid-evolution/experimental";
- *
+ * 
  * // Assume we have a ProtocolParamUpdate instance
  * const instance = ... ;
- *
+ * 
  * // Using try/catch for error handling
  * try {
- *   const result = ProtocolParamUpdate.unsafePoolPledgeInfluence(instance);
+ *   const result = ProtocolParamUpdate.poolPledgeInfluenceUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`ProtocolParamUpdate.unsafePoolPledgeInfluence failed: ${error.message}`);
+ *   console.error(`ProtocolParamUpdate.poolPledgeInfluenceUnsafe failed: ${error.message}`);
  * }
- *
+ * 
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafePoolPledgeInfluence = (
-  instance: CML.ProtocolParamUpdate,
-): CML.Rational | undefined => Effect.runSync(poolPledgeInfluence(instance));
+export const poolPledgeInfluenceUnsafe = (instance: CML.ProtocolParamUpdate): CML.Rational | undefined =>
+  Effect.runSync(poolPledgeInfluence(instance));
 
 /**
  * Method setExpansionRate of ProtocolParamUpdate
- *
+ * 
  * @example
  * import { ProtocolParamUpdate } from "@lucid-evolution/experimental";
  * import { Effect } from "effect";
- *
+ * 
  * // Using Effect for safe execution with error handling
  * Effect.gen(function*() {
  * // Assume we have a ProtocolParamUpdate instance
@@ -1671,56 +1586,51 @@ export const unsafePoolPledgeInfluence = (
  *   const result = yield* ProtocolParamUpdate.setExpansionRate(instance,  parameters );
  *   console.log(result);
  * });
- *
+ * 
  * @since 2.0.0
  * @category Methods
  */
 export const setExpansionRate = Effect.fn(
-  (
-    instance: CML.ProtocolParamUpdate,
-    expansionRate: CML.UnitInterval,
-  ): Effect.Effect<void, ProtocolParamUpdateError> =>
+  (instance: CML.ProtocolParamUpdate, expansionRate: CML.UnitInterval): Effect.Effect<void, ProtocolParamUpdateError> =>
     Effect.try({
       try: () => instance.set_expansion_rate(expansionRate),
       catch: () =>
         new ProtocolParamUpdateError({
           message: `ProtocolParamUpdate.setExpansionRate failed with parameters: ${expansionRate} (UnitInterval). `,
         }),
-    }),
+    })
 );
 
 /**
  * Unsafely calls instance.setExpansionRate without Effect wrapper
- *
+ * 
  * @example
  * import { ProtocolParamUpdate } from "@lucid-evolution/experimental";
- *
+ * 
  * // Assume we have a ProtocolParamUpdate instance
  * const instance = ... ;
- *
+ * 
  * // Using try/catch for error handling
  * try {
- *   const result = ProtocolParamUpdate.unsafeSetExpansionRate(instance,  parameters );
+ *   const result = ProtocolParamUpdate.setExpansionRateUnsafe(instance,  parameters );
  *   console.log(result);
  * } catch (error) {
- *   console.error(`ProtocolParamUpdate.unsafeSetExpansionRate failed: ${error.message}`);
+ *   console.error(`ProtocolParamUpdate.setExpansionRateUnsafe failed: ${error.message}`);
  * }
- *
+ * 
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeSetExpansionRate = (
-  instance: CML.ProtocolParamUpdate,
-  expansionRate: CML.UnitInterval,
-): void => Effect.runSync(setExpansionRate(instance, expansionRate));
+export const setExpansionRateUnsafe = (instance: CML.ProtocolParamUpdate, expansionRate: CML.UnitInterval): void =>
+  Effect.runSync(setExpansionRate(instance, expansionRate));
 
 /**
  * Method expansionRate of ProtocolParamUpdate
- *
+ * 
  * @example
  * import { ProtocolParamUpdate } from "@lucid-evolution/experimental";
  * import { Effect } from "effect";
- *
+ * 
  * // Using Effect for safe execution with error handling
  * Effect.gen(function*() {
  * // Assume we have a ProtocolParamUpdate instance
@@ -1728,54 +1638,51 @@ export const unsafeSetExpansionRate = (
  *   const result = yield* ProtocolParamUpdate.expansionRate(instance);
  *   console.log(result);
  * });
- *
+ * 
  * @since 2.0.0
  * @category Methods
  */
 export const expansionRate = Effect.fn(
-  (
-    instance: CML.ProtocolParamUpdate,
-  ): Effect.Effect<CML.UnitInterval | undefined, ProtocolParamUpdateError> =>
+  (instance: CML.ProtocolParamUpdate): Effect.Effect<CML.UnitInterval | undefined, ProtocolParamUpdateError> =>
     Effect.try({
       try: () => instance.expansion_rate(),
       catch: () =>
         new ProtocolParamUpdateError({
           message: `ProtocolParamUpdate.expansionRate failed `,
         }),
-    }),
+    })
 );
 
 /**
  * Unsafely calls instance.expansionRate without Effect wrapper
- *
+ * 
  * @example
  * import { ProtocolParamUpdate } from "@lucid-evolution/experimental";
- *
+ * 
  * // Assume we have a ProtocolParamUpdate instance
  * const instance = ... ;
- *
+ * 
  * // Using try/catch for error handling
  * try {
- *   const result = ProtocolParamUpdate.unsafeExpansionRate(instance);
+ *   const result = ProtocolParamUpdate.expansionRateUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`ProtocolParamUpdate.unsafeExpansionRate failed: ${error.message}`);
+ *   console.error(`ProtocolParamUpdate.expansionRateUnsafe failed: ${error.message}`);
  * }
- *
+ * 
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeExpansionRate = (
-  instance: CML.ProtocolParamUpdate,
-): CML.UnitInterval | undefined => Effect.runSync(expansionRate(instance));
+export const expansionRateUnsafe = (instance: CML.ProtocolParamUpdate): CML.UnitInterval | undefined =>
+  Effect.runSync(expansionRate(instance));
 
 /**
  * Method setTreasuryGrowthRate of ProtocolParamUpdate
- *
+ * 
  * @example
  * import { ProtocolParamUpdate } from "@lucid-evolution/experimental";
  * import { Effect } from "effect";
- *
+ * 
  * // Using Effect for safe execution with error handling
  * Effect.gen(function*() {
  * // Assume we have a ProtocolParamUpdate instance
@@ -1783,56 +1690,51 @@ export const unsafeExpansionRate = (
  *   const result = yield* ProtocolParamUpdate.setTreasuryGrowthRate(instance,  parameters );
  *   console.log(result);
  * });
- *
+ * 
  * @since 2.0.0
  * @category Methods
  */
 export const setTreasuryGrowthRate = Effect.fn(
-  (
-    instance: CML.ProtocolParamUpdate,
-    treasuryGrowthRate: CML.UnitInterval,
-  ): Effect.Effect<void, ProtocolParamUpdateError> =>
+  (instance: CML.ProtocolParamUpdate, treasuryGrowthRate: CML.UnitInterval): Effect.Effect<void, ProtocolParamUpdateError> =>
     Effect.try({
       try: () => instance.set_treasury_growth_rate(treasuryGrowthRate),
       catch: () =>
         new ProtocolParamUpdateError({
           message: `ProtocolParamUpdate.setTreasuryGrowthRate failed with parameters: ${treasuryGrowthRate} (UnitInterval). `,
         }),
-    }),
+    })
 );
 
 /**
  * Unsafely calls instance.setTreasuryGrowthRate without Effect wrapper
- *
+ * 
  * @example
  * import { ProtocolParamUpdate } from "@lucid-evolution/experimental";
- *
+ * 
  * // Assume we have a ProtocolParamUpdate instance
  * const instance = ... ;
- *
+ * 
  * // Using try/catch for error handling
  * try {
- *   const result = ProtocolParamUpdate.unsafeSetTreasuryGrowthRate(instance,  parameters );
+ *   const result = ProtocolParamUpdate.setTreasuryGrowthRateUnsafe(instance,  parameters );
  *   console.log(result);
  * } catch (error) {
- *   console.error(`ProtocolParamUpdate.unsafeSetTreasuryGrowthRate failed: ${error.message}`);
+ *   console.error(`ProtocolParamUpdate.setTreasuryGrowthRateUnsafe failed: ${error.message}`);
  * }
- *
+ * 
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeSetTreasuryGrowthRate = (
-  instance: CML.ProtocolParamUpdate,
-  treasuryGrowthRate: CML.UnitInterval,
-): void => Effect.runSync(setTreasuryGrowthRate(instance, treasuryGrowthRate));
+export const setTreasuryGrowthRateUnsafe = (instance: CML.ProtocolParamUpdate, treasuryGrowthRate: CML.UnitInterval): void =>
+  Effect.runSync(setTreasuryGrowthRate(instance, treasuryGrowthRate));
 
 /**
  * Method treasuryGrowthRate of ProtocolParamUpdate
- *
+ * 
  * @example
  * import { ProtocolParamUpdate } from "@lucid-evolution/experimental";
  * import { Effect } from "effect";
- *
+ * 
  * // Using Effect for safe execution with error handling
  * Effect.gen(function*() {
  * // Assume we have a ProtocolParamUpdate instance
@@ -1840,54 +1742,51 @@ export const unsafeSetTreasuryGrowthRate = (
  *   const result = yield* ProtocolParamUpdate.treasuryGrowthRate(instance);
  *   console.log(result);
  * });
- *
+ * 
  * @since 2.0.0
  * @category Methods
  */
 export const treasuryGrowthRate = Effect.fn(
-  (
-    instance: CML.ProtocolParamUpdate,
-  ): Effect.Effect<CML.UnitInterval | undefined, ProtocolParamUpdateError> =>
+  (instance: CML.ProtocolParamUpdate): Effect.Effect<CML.UnitInterval | undefined, ProtocolParamUpdateError> =>
     Effect.try({
       try: () => instance.treasury_growth_rate(),
       catch: () =>
         new ProtocolParamUpdateError({
           message: `ProtocolParamUpdate.treasuryGrowthRate failed `,
         }),
-    }),
+    })
 );
 
 /**
  * Unsafely calls instance.treasuryGrowthRate without Effect wrapper
- *
+ * 
  * @example
  * import { ProtocolParamUpdate } from "@lucid-evolution/experimental";
- *
+ * 
  * // Assume we have a ProtocolParamUpdate instance
  * const instance = ... ;
- *
+ * 
  * // Using try/catch for error handling
  * try {
- *   const result = ProtocolParamUpdate.unsafeTreasuryGrowthRate(instance);
+ *   const result = ProtocolParamUpdate.treasuryGrowthRateUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`ProtocolParamUpdate.unsafeTreasuryGrowthRate failed: ${error.message}`);
+ *   console.error(`ProtocolParamUpdate.treasuryGrowthRateUnsafe failed: ${error.message}`);
  * }
- *
+ * 
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeTreasuryGrowthRate = (
-  instance: CML.ProtocolParamUpdate,
-): CML.UnitInterval | undefined => Effect.runSync(treasuryGrowthRate(instance));
+export const treasuryGrowthRateUnsafe = (instance: CML.ProtocolParamUpdate): CML.UnitInterval | undefined =>
+  Effect.runSync(treasuryGrowthRate(instance));
 
 /**
  * Method setMinPoolCost of ProtocolParamUpdate
- *
+ * 
  * @example
  * import { ProtocolParamUpdate } from "@lucid-evolution/experimental";
  * import { Effect } from "effect";
- *
+ * 
  * // Using Effect for safe execution with error handling
  * Effect.gen(function*() {
  * // Assume we have a ProtocolParamUpdate instance
@@ -1895,56 +1794,51 @@ export const unsafeTreasuryGrowthRate = (
  *   const result = yield* ProtocolParamUpdate.setMinPoolCost(instance,  parameters );
  *   console.log(result);
  * });
- *
+ * 
  * @since 2.0.0
  * @category Methods
  */
 export const setMinPoolCost = Effect.fn(
-  (
-    instance: CML.ProtocolParamUpdate,
-    minPoolCost: bigint,
-  ): Effect.Effect<void, ProtocolParamUpdateError> =>
+  (instance: CML.ProtocolParamUpdate, minPoolCost: bigint): Effect.Effect<void, ProtocolParamUpdateError> =>
     Effect.try({
       try: () => instance.set_min_pool_cost(minPoolCost),
       catch: () =>
         new ProtocolParamUpdateError({
           message: `ProtocolParamUpdate.setMinPoolCost failed with parameters: ${minPoolCost}. `,
         }),
-    }),
+    })
 );
 
 /**
  * Unsafely calls instance.setMinPoolCost without Effect wrapper
- *
+ * 
  * @example
  * import { ProtocolParamUpdate } from "@lucid-evolution/experimental";
- *
+ * 
  * // Assume we have a ProtocolParamUpdate instance
  * const instance = ... ;
- *
+ * 
  * // Using try/catch for error handling
  * try {
- *   const result = ProtocolParamUpdate.unsafeSetMinPoolCost(instance,  parameters );
+ *   const result = ProtocolParamUpdate.setMinPoolCostUnsafe(instance,  parameters );
  *   console.log(result);
  * } catch (error) {
- *   console.error(`ProtocolParamUpdate.unsafeSetMinPoolCost failed: ${error.message}`);
+ *   console.error(`ProtocolParamUpdate.setMinPoolCostUnsafe failed: ${error.message}`);
  * }
- *
+ * 
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeSetMinPoolCost = (
-  instance: CML.ProtocolParamUpdate,
-  minPoolCost: bigint,
-): void => Effect.runSync(setMinPoolCost(instance, minPoolCost));
+export const setMinPoolCostUnsafe = (instance: CML.ProtocolParamUpdate, minPoolCost: bigint): void =>
+  Effect.runSync(setMinPoolCost(instance, minPoolCost));
 
 /**
  * Method minPoolCost of ProtocolParamUpdate
- *
+ * 
  * @example
  * import { ProtocolParamUpdate } from "@lucid-evolution/experimental";
  * import { Effect } from "effect";
- *
+ * 
  * // Using Effect for safe execution with error handling
  * Effect.gen(function*() {
  * // Assume we have a ProtocolParamUpdate instance
@@ -1952,54 +1846,51 @@ export const unsafeSetMinPoolCost = (
  *   const result = yield* ProtocolParamUpdate.minPoolCost(instance);
  *   console.log(result);
  * });
- *
+ * 
  * @since 2.0.0
  * @category Methods
  */
 export const minPoolCost = Effect.fn(
-  (
-    instance: CML.ProtocolParamUpdate,
-  ): Effect.Effect<bigint | undefined, ProtocolParamUpdateError> =>
+  (instance: CML.ProtocolParamUpdate): Effect.Effect<bigint | undefined, ProtocolParamUpdateError> =>
     Effect.try({
       try: () => instance.min_pool_cost(),
       catch: () =>
         new ProtocolParamUpdateError({
           message: `ProtocolParamUpdate.minPoolCost failed `,
         }),
-    }),
+    })
 );
 
 /**
  * Unsafely calls instance.minPoolCost without Effect wrapper
- *
+ * 
  * @example
  * import { ProtocolParamUpdate } from "@lucid-evolution/experimental";
- *
+ * 
  * // Assume we have a ProtocolParamUpdate instance
  * const instance = ... ;
- *
+ * 
  * // Using try/catch for error handling
  * try {
- *   const result = ProtocolParamUpdate.unsafeMinPoolCost(instance);
+ *   const result = ProtocolParamUpdate.minPoolCostUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`ProtocolParamUpdate.unsafeMinPoolCost failed: ${error.message}`);
+ *   console.error(`ProtocolParamUpdate.minPoolCostUnsafe failed: ${error.message}`);
  * }
- *
+ * 
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeMinPoolCost = (
-  instance: CML.ProtocolParamUpdate,
-): bigint | undefined => Effect.runSync(minPoolCost(instance));
+export const minPoolCostUnsafe = (instance: CML.ProtocolParamUpdate): bigint | undefined =>
+  Effect.runSync(minPoolCost(instance));
 
 /**
  * Method setAdaPerUtxoByte of ProtocolParamUpdate
- *
+ * 
  * @example
  * import { ProtocolParamUpdate } from "@lucid-evolution/experimental";
  * import { Effect } from "effect";
- *
+ * 
  * // Using Effect for safe execution with error handling
  * Effect.gen(function*() {
  * // Assume we have a ProtocolParamUpdate instance
@@ -2007,56 +1898,51 @@ export const unsafeMinPoolCost = (
  *   const result = yield* ProtocolParamUpdate.setAdaPerUtxoByte(instance,  parameters );
  *   console.log(result);
  * });
- *
+ * 
  * @since 2.0.0
  * @category Methods
  */
 export const setAdaPerUtxoByte = Effect.fn(
-  (
-    instance: CML.ProtocolParamUpdate,
-    adaPerUtxoByte: bigint,
-  ): Effect.Effect<void, ProtocolParamUpdateError> =>
+  (instance: CML.ProtocolParamUpdate, adaPerUtxoByte: bigint): Effect.Effect<void, ProtocolParamUpdateError> =>
     Effect.try({
       try: () => instance.set_ada_per_utxo_byte(adaPerUtxoByte),
       catch: () =>
         new ProtocolParamUpdateError({
           message: `ProtocolParamUpdate.setAdaPerUtxoByte failed with parameters: ${adaPerUtxoByte}. `,
         }),
-    }),
+    })
 );
 
 /**
  * Unsafely calls instance.setAdaPerUtxoByte without Effect wrapper
- *
+ * 
  * @example
  * import { ProtocolParamUpdate } from "@lucid-evolution/experimental";
- *
+ * 
  * // Assume we have a ProtocolParamUpdate instance
  * const instance = ... ;
- *
+ * 
  * // Using try/catch for error handling
  * try {
- *   const result = ProtocolParamUpdate.unsafeSetAdaPerUtxoByte(instance,  parameters );
+ *   const result = ProtocolParamUpdate.setAdaPerUtxoByteUnsafe(instance,  parameters );
  *   console.log(result);
  * } catch (error) {
- *   console.error(`ProtocolParamUpdate.unsafeSetAdaPerUtxoByte failed: ${error.message}`);
+ *   console.error(`ProtocolParamUpdate.setAdaPerUtxoByteUnsafe failed: ${error.message}`);
  * }
- *
+ * 
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeSetAdaPerUtxoByte = (
-  instance: CML.ProtocolParamUpdate,
-  adaPerUtxoByte: bigint,
-): void => Effect.runSync(setAdaPerUtxoByte(instance, adaPerUtxoByte));
+export const setAdaPerUtxoByteUnsafe = (instance: CML.ProtocolParamUpdate, adaPerUtxoByte: bigint): void =>
+  Effect.runSync(setAdaPerUtxoByte(instance, adaPerUtxoByte));
 
 /**
  * Method adaPerUtxoByte of ProtocolParamUpdate
- *
+ * 
  * @example
  * import { ProtocolParamUpdate } from "@lucid-evolution/experimental";
  * import { Effect } from "effect";
- *
+ * 
  * // Using Effect for safe execution with error handling
  * Effect.gen(function*() {
  * // Assume we have a ProtocolParamUpdate instance
@@ -2064,54 +1950,51 @@ export const unsafeSetAdaPerUtxoByte = (
  *   const result = yield* ProtocolParamUpdate.adaPerUtxoByte(instance);
  *   console.log(result);
  * });
- *
+ * 
  * @since 2.0.0
  * @category Methods
  */
 export const adaPerUtxoByte = Effect.fn(
-  (
-    instance: CML.ProtocolParamUpdate,
-  ): Effect.Effect<bigint | undefined, ProtocolParamUpdateError> =>
+  (instance: CML.ProtocolParamUpdate): Effect.Effect<bigint | undefined, ProtocolParamUpdateError> =>
     Effect.try({
       try: () => instance.ada_per_utxo_byte(),
       catch: () =>
         new ProtocolParamUpdateError({
           message: `ProtocolParamUpdate.adaPerUtxoByte failed `,
         }),
-    }),
+    })
 );
 
 /**
  * Unsafely calls instance.adaPerUtxoByte without Effect wrapper
- *
+ * 
  * @example
  * import { ProtocolParamUpdate } from "@lucid-evolution/experimental";
- *
+ * 
  * // Assume we have a ProtocolParamUpdate instance
  * const instance = ... ;
- *
+ * 
  * // Using try/catch for error handling
  * try {
- *   const result = ProtocolParamUpdate.unsafeAdaPerUtxoByte(instance);
+ *   const result = ProtocolParamUpdate.adaPerUtxoByteUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`ProtocolParamUpdate.unsafeAdaPerUtxoByte failed: ${error.message}`);
+ *   console.error(`ProtocolParamUpdate.adaPerUtxoByteUnsafe failed: ${error.message}`);
  * }
- *
+ * 
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeAdaPerUtxoByte = (
-  instance: CML.ProtocolParamUpdate,
-): bigint | undefined => Effect.runSync(adaPerUtxoByte(instance));
+export const adaPerUtxoByteUnsafe = (instance: CML.ProtocolParamUpdate): bigint | undefined =>
+  Effect.runSync(adaPerUtxoByte(instance));
 
 /**
  * Method setCostModelsForScriptLanguages of ProtocolParamUpdate
- *
+ * 
  * @example
  * import { ProtocolParamUpdate } from "@lucid-evolution/experimental";
  * import { Effect } from "effect";
- *
+ * 
  * // Using Effect for safe execution with error handling
  * Effect.gen(function*() {
  * // Assume we have a ProtocolParamUpdate instance
@@ -2119,62 +2002,51 @@ export const unsafeAdaPerUtxoByte = (
  *   const result = yield* ProtocolParamUpdate.setCostModelsForScriptLanguages(instance,  parameters );
  *   console.log(result);
  * });
- *
+ * 
  * @since 2.0.0
  * @category Methods
  */
 export const setCostModelsForScriptLanguages = Effect.fn(
-  (
-    instance: CML.ProtocolParamUpdate,
-    costModelsForScriptLanguages: CML.CostModels,
-  ): Effect.Effect<void, ProtocolParamUpdateError> =>
+  (instance: CML.ProtocolParamUpdate, costModelsForScriptLanguages: CML.CostModels): Effect.Effect<void, ProtocolParamUpdateError> =>
     Effect.try({
-      try: () =>
-        instance.set_cost_models_for_script_languages(
-          costModelsForScriptLanguages,
-        ),
+      try: () => instance.set_cost_models_for_script_languages(costModelsForScriptLanguages),
       catch: () =>
         new ProtocolParamUpdateError({
           message: `ProtocolParamUpdate.setCostModelsForScriptLanguages failed with parameters: ${costModelsForScriptLanguages} (CostModels). `,
         }),
-    }),
+    })
 );
 
 /**
  * Unsafely calls instance.setCostModelsForScriptLanguages without Effect wrapper
- *
+ * 
  * @example
  * import { ProtocolParamUpdate } from "@lucid-evolution/experimental";
- *
+ * 
  * // Assume we have a ProtocolParamUpdate instance
  * const instance = ... ;
- *
+ * 
  * // Using try/catch for error handling
  * try {
- *   const result = ProtocolParamUpdate.unsafeSetCostModelsForScriptLanguages(instance,  parameters );
+ *   const result = ProtocolParamUpdate.setCostModelsForScriptLanguagesUnsafe(instance,  parameters );
  *   console.log(result);
  * } catch (error) {
- *   console.error(`ProtocolParamUpdate.unsafeSetCostModelsForScriptLanguages failed: ${error.message}`);
+ *   console.error(`ProtocolParamUpdate.setCostModelsForScriptLanguagesUnsafe failed: ${error.message}`);
  * }
- *
+ * 
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeSetCostModelsForScriptLanguages = (
-  instance: CML.ProtocolParamUpdate,
-  costModelsForScriptLanguages: CML.CostModels,
-): void =>
-  Effect.runSync(
-    setCostModelsForScriptLanguages(instance, costModelsForScriptLanguages),
-  );
+export const setCostModelsForScriptLanguagesUnsafe = (instance: CML.ProtocolParamUpdate, costModelsForScriptLanguages: CML.CostModels): void =>
+  Effect.runSync(setCostModelsForScriptLanguages(instance, costModelsForScriptLanguages));
 
 /**
  * Method costModelsForScriptLanguages of ProtocolParamUpdate
- *
+ * 
  * @example
  * import { ProtocolParamUpdate } from "@lucid-evolution/experimental";
  * import { Effect } from "effect";
- *
+ * 
  * // Using Effect for safe execution with error handling
  * Effect.gen(function*() {
  * // Assume we have a ProtocolParamUpdate instance
@@ -2182,55 +2054,51 @@ export const unsafeSetCostModelsForScriptLanguages = (
  *   const result = yield* ProtocolParamUpdate.costModelsForScriptLanguages(instance);
  *   console.log(result);
  * });
- *
+ * 
  * @since 2.0.0
  * @category Methods
  */
 export const costModelsForScriptLanguages = Effect.fn(
-  (
-    instance: CML.ProtocolParamUpdate,
-  ): Effect.Effect<CML.CostModels | undefined, ProtocolParamUpdateError> =>
+  (instance: CML.ProtocolParamUpdate): Effect.Effect<CML.CostModels | undefined, ProtocolParamUpdateError> =>
     Effect.try({
       try: () => instance.cost_models_for_script_languages(),
       catch: () =>
         new ProtocolParamUpdateError({
           message: `ProtocolParamUpdate.costModelsForScriptLanguages failed `,
         }),
-    }),
+    })
 );
 
 /**
  * Unsafely calls instance.costModelsForScriptLanguages without Effect wrapper
- *
+ * 
  * @example
  * import { ProtocolParamUpdate } from "@lucid-evolution/experimental";
- *
+ * 
  * // Assume we have a ProtocolParamUpdate instance
  * const instance = ... ;
- *
+ * 
  * // Using try/catch for error handling
  * try {
- *   const result = ProtocolParamUpdate.unsafeCostModelsForScriptLanguages(instance);
+ *   const result = ProtocolParamUpdate.costModelsForScriptLanguagesUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`ProtocolParamUpdate.unsafeCostModelsForScriptLanguages failed: ${error.message}`);
+ *   console.error(`ProtocolParamUpdate.costModelsForScriptLanguagesUnsafe failed: ${error.message}`);
  * }
- *
+ * 
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeCostModelsForScriptLanguages = (
-  instance: CML.ProtocolParamUpdate,
-): CML.CostModels | undefined =>
+export const costModelsForScriptLanguagesUnsafe = (instance: CML.ProtocolParamUpdate): CML.CostModels | undefined =>
   Effect.runSync(costModelsForScriptLanguages(instance));
 
 /**
  * Method setExecutionCosts of ProtocolParamUpdate
- *
+ * 
  * @example
  * import { ProtocolParamUpdate } from "@lucid-evolution/experimental";
  * import { Effect } from "effect";
- *
+ * 
  * // Using Effect for safe execution with error handling
  * Effect.gen(function*() {
  * // Assume we have a ProtocolParamUpdate instance
@@ -2238,56 +2106,51 @@ export const unsafeCostModelsForScriptLanguages = (
  *   const result = yield* ProtocolParamUpdate.setExecutionCosts(instance,  parameters );
  *   console.log(result);
  * });
- *
+ * 
  * @since 2.0.0
  * @category Methods
  */
 export const setExecutionCosts = Effect.fn(
-  (
-    instance: CML.ProtocolParamUpdate,
-    executionCosts: CML.ExUnitPrices,
-  ): Effect.Effect<void, ProtocolParamUpdateError> =>
+  (instance: CML.ProtocolParamUpdate, executionCosts: CML.ExUnitPrices): Effect.Effect<void, ProtocolParamUpdateError> =>
     Effect.try({
       try: () => instance.set_execution_costs(executionCosts),
       catch: () =>
         new ProtocolParamUpdateError({
           message: `ProtocolParamUpdate.setExecutionCosts failed with parameters: ${executionCosts} (ExUnitPrices). `,
         }),
-    }),
+    })
 );
 
 /**
  * Unsafely calls instance.setExecutionCosts without Effect wrapper
- *
+ * 
  * @example
  * import { ProtocolParamUpdate } from "@lucid-evolution/experimental";
- *
+ * 
  * // Assume we have a ProtocolParamUpdate instance
  * const instance = ... ;
- *
+ * 
  * // Using try/catch for error handling
  * try {
- *   const result = ProtocolParamUpdate.unsafeSetExecutionCosts(instance,  parameters );
+ *   const result = ProtocolParamUpdate.setExecutionCostsUnsafe(instance,  parameters );
  *   console.log(result);
  * } catch (error) {
- *   console.error(`ProtocolParamUpdate.unsafeSetExecutionCosts failed: ${error.message}`);
+ *   console.error(`ProtocolParamUpdate.setExecutionCostsUnsafe failed: ${error.message}`);
  * }
- *
+ * 
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeSetExecutionCosts = (
-  instance: CML.ProtocolParamUpdate,
-  executionCosts: CML.ExUnitPrices,
-): void => Effect.runSync(setExecutionCosts(instance, executionCosts));
+export const setExecutionCostsUnsafe = (instance: CML.ProtocolParamUpdate, executionCosts: CML.ExUnitPrices): void =>
+  Effect.runSync(setExecutionCosts(instance, executionCosts));
 
 /**
  * Method executionCosts of ProtocolParamUpdate
- *
+ * 
  * @example
  * import { ProtocolParamUpdate } from "@lucid-evolution/experimental";
  * import { Effect } from "effect";
- *
+ * 
  * // Using Effect for safe execution with error handling
  * Effect.gen(function*() {
  * // Assume we have a ProtocolParamUpdate instance
@@ -2295,54 +2158,51 @@ export const unsafeSetExecutionCosts = (
  *   const result = yield* ProtocolParamUpdate.executionCosts(instance);
  *   console.log(result);
  * });
- *
+ * 
  * @since 2.0.0
  * @category Methods
  */
 export const executionCosts = Effect.fn(
-  (
-    instance: CML.ProtocolParamUpdate,
-  ): Effect.Effect<CML.ExUnitPrices | undefined, ProtocolParamUpdateError> =>
+  (instance: CML.ProtocolParamUpdate): Effect.Effect<CML.ExUnitPrices | undefined, ProtocolParamUpdateError> =>
     Effect.try({
       try: () => instance.execution_costs(),
       catch: () =>
         new ProtocolParamUpdateError({
           message: `ProtocolParamUpdate.executionCosts failed `,
         }),
-    }),
+    })
 );
 
 /**
  * Unsafely calls instance.executionCosts without Effect wrapper
- *
+ * 
  * @example
  * import { ProtocolParamUpdate } from "@lucid-evolution/experimental";
- *
+ * 
  * // Assume we have a ProtocolParamUpdate instance
  * const instance = ... ;
- *
+ * 
  * // Using try/catch for error handling
  * try {
- *   const result = ProtocolParamUpdate.unsafeExecutionCosts(instance);
+ *   const result = ProtocolParamUpdate.executionCostsUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`ProtocolParamUpdate.unsafeExecutionCosts failed: ${error.message}`);
+ *   console.error(`ProtocolParamUpdate.executionCostsUnsafe failed: ${error.message}`);
  * }
- *
+ * 
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeExecutionCosts = (
-  instance: CML.ProtocolParamUpdate,
-): CML.ExUnitPrices | undefined => Effect.runSync(executionCosts(instance));
+export const executionCostsUnsafe = (instance: CML.ProtocolParamUpdate): CML.ExUnitPrices | undefined =>
+  Effect.runSync(executionCosts(instance));
 
 /**
  * Method setMaxTxExUnits of ProtocolParamUpdate
- *
+ * 
  * @example
  * import { ProtocolParamUpdate } from "@lucid-evolution/experimental";
  * import { Effect } from "effect";
- *
+ * 
  * // Using Effect for safe execution with error handling
  * Effect.gen(function*() {
  * // Assume we have a ProtocolParamUpdate instance
@@ -2350,56 +2210,51 @@ export const unsafeExecutionCosts = (
  *   const result = yield* ProtocolParamUpdate.setMaxTxExUnits(instance,  parameters );
  *   console.log(result);
  * });
- *
+ * 
  * @since 2.0.0
  * @category Methods
  */
 export const setMaxTxExUnits = Effect.fn(
-  (
-    instance: CML.ProtocolParamUpdate,
-    maxTxExUnits: CML.ExUnits,
-  ): Effect.Effect<void, ProtocolParamUpdateError> =>
+  (instance: CML.ProtocolParamUpdate, maxTxExUnits: CML.ExUnits): Effect.Effect<void, ProtocolParamUpdateError> =>
     Effect.try({
       try: () => instance.set_max_tx_ex_units(maxTxExUnits),
       catch: () =>
         new ProtocolParamUpdateError({
           message: `ProtocolParamUpdate.setMaxTxExUnits failed with parameters: ${maxTxExUnits} (ExUnits). `,
         }),
-    }),
+    })
 );
 
 /**
  * Unsafely calls instance.setMaxTxExUnits without Effect wrapper
- *
+ * 
  * @example
  * import { ProtocolParamUpdate } from "@lucid-evolution/experimental";
- *
+ * 
  * // Assume we have a ProtocolParamUpdate instance
  * const instance = ... ;
- *
+ * 
  * // Using try/catch for error handling
  * try {
- *   const result = ProtocolParamUpdate.unsafeSetMaxTxExUnits(instance,  parameters );
+ *   const result = ProtocolParamUpdate.setMaxTxExUnitsUnsafe(instance,  parameters );
  *   console.log(result);
  * } catch (error) {
- *   console.error(`ProtocolParamUpdate.unsafeSetMaxTxExUnits failed: ${error.message}`);
+ *   console.error(`ProtocolParamUpdate.setMaxTxExUnitsUnsafe failed: ${error.message}`);
  * }
- *
+ * 
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeSetMaxTxExUnits = (
-  instance: CML.ProtocolParamUpdate,
-  maxTxExUnits: CML.ExUnits,
-): void => Effect.runSync(setMaxTxExUnits(instance, maxTxExUnits));
+export const setMaxTxExUnitsUnsafe = (instance: CML.ProtocolParamUpdate, maxTxExUnits: CML.ExUnits): void =>
+  Effect.runSync(setMaxTxExUnits(instance, maxTxExUnits));
 
 /**
  * Method maxTxExUnits of ProtocolParamUpdate
- *
+ * 
  * @example
  * import { ProtocolParamUpdate } from "@lucid-evolution/experimental";
  * import { Effect } from "effect";
- *
+ * 
  * // Using Effect for safe execution with error handling
  * Effect.gen(function*() {
  * // Assume we have a ProtocolParamUpdate instance
@@ -2407,54 +2262,51 @@ export const unsafeSetMaxTxExUnits = (
  *   const result = yield* ProtocolParamUpdate.maxTxExUnits(instance);
  *   console.log(result);
  * });
- *
+ * 
  * @since 2.0.0
  * @category Methods
  */
 export const maxTxExUnits = Effect.fn(
-  (
-    instance: CML.ProtocolParamUpdate,
-  ): Effect.Effect<CML.ExUnits | undefined, ProtocolParamUpdateError> =>
+  (instance: CML.ProtocolParamUpdate): Effect.Effect<CML.ExUnits | undefined, ProtocolParamUpdateError> =>
     Effect.try({
       try: () => instance.max_tx_ex_units(),
       catch: () =>
         new ProtocolParamUpdateError({
           message: `ProtocolParamUpdate.maxTxExUnits failed `,
         }),
-    }),
+    })
 );
 
 /**
  * Unsafely calls instance.maxTxExUnits without Effect wrapper
- *
+ * 
  * @example
  * import { ProtocolParamUpdate } from "@lucid-evolution/experimental";
- *
+ * 
  * // Assume we have a ProtocolParamUpdate instance
  * const instance = ... ;
- *
+ * 
  * // Using try/catch for error handling
  * try {
- *   const result = ProtocolParamUpdate.unsafeMaxTxExUnits(instance);
+ *   const result = ProtocolParamUpdate.maxTxExUnitsUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`ProtocolParamUpdate.unsafeMaxTxExUnits failed: ${error.message}`);
+ *   console.error(`ProtocolParamUpdate.maxTxExUnitsUnsafe failed: ${error.message}`);
  * }
- *
+ * 
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeMaxTxExUnits = (
-  instance: CML.ProtocolParamUpdate,
-): CML.ExUnits | undefined => Effect.runSync(maxTxExUnits(instance));
+export const maxTxExUnitsUnsafe = (instance: CML.ProtocolParamUpdate): CML.ExUnits | undefined =>
+  Effect.runSync(maxTxExUnits(instance));
 
 /**
  * Method setMaxBlockExUnits of ProtocolParamUpdate
- *
+ * 
  * @example
  * import { ProtocolParamUpdate } from "@lucid-evolution/experimental";
  * import { Effect } from "effect";
- *
+ * 
  * // Using Effect for safe execution with error handling
  * Effect.gen(function*() {
  * // Assume we have a ProtocolParamUpdate instance
@@ -2462,56 +2314,51 @@ export const unsafeMaxTxExUnits = (
  *   const result = yield* ProtocolParamUpdate.setMaxBlockExUnits(instance,  parameters );
  *   console.log(result);
  * });
- *
+ * 
  * @since 2.0.0
  * @category Methods
  */
 export const setMaxBlockExUnits = Effect.fn(
-  (
-    instance: CML.ProtocolParamUpdate,
-    maxBlockExUnits: CML.ExUnits,
-  ): Effect.Effect<void, ProtocolParamUpdateError> =>
+  (instance: CML.ProtocolParamUpdate, maxBlockExUnits: CML.ExUnits): Effect.Effect<void, ProtocolParamUpdateError> =>
     Effect.try({
       try: () => instance.set_max_block_ex_units(maxBlockExUnits),
       catch: () =>
         new ProtocolParamUpdateError({
           message: `ProtocolParamUpdate.setMaxBlockExUnits failed with parameters: ${maxBlockExUnits} (ExUnits). `,
         }),
-    }),
+    })
 );
 
 /**
  * Unsafely calls instance.setMaxBlockExUnits without Effect wrapper
- *
+ * 
  * @example
  * import { ProtocolParamUpdate } from "@lucid-evolution/experimental";
- *
+ * 
  * // Assume we have a ProtocolParamUpdate instance
  * const instance = ... ;
- *
+ * 
  * // Using try/catch for error handling
  * try {
- *   const result = ProtocolParamUpdate.unsafeSetMaxBlockExUnits(instance,  parameters );
+ *   const result = ProtocolParamUpdate.setMaxBlockExUnitsUnsafe(instance,  parameters );
  *   console.log(result);
  * } catch (error) {
- *   console.error(`ProtocolParamUpdate.unsafeSetMaxBlockExUnits failed: ${error.message}`);
+ *   console.error(`ProtocolParamUpdate.setMaxBlockExUnitsUnsafe failed: ${error.message}`);
  * }
- *
+ * 
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeSetMaxBlockExUnits = (
-  instance: CML.ProtocolParamUpdate,
-  maxBlockExUnits: CML.ExUnits,
-): void => Effect.runSync(setMaxBlockExUnits(instance, maxBlockExUnits));
+export const setMaxBlockExUnitsUnsafe = (instance: CML.ProtocolParamUpdate, maxBlockExUnits: CML.ExUnits): void =>
+  Effect.runSync(setMaxBlockExUnits(instance, maxBlockExUnits));
 
 /**
  * Method maxBlockExUnits of ProtocolParamUpdate
- *
+ * 
  * @example
  * import { ProtocolParamUpdate } from "@lucid-evolution/experimental";
  * import { Effect } from "effect";
- *
+ * 
  * // Using Effect for safe execution with error handling
  * Effect.gen(function*() {
  * // Assume we have a ProtocolParamUpdate instance
@@ -2519,54 +2366,51 @@ export const unsafeSetMaxBlockExUnits = (
  *   const result = yield* ProtocolParamUpdate.maxBlockExUnits(instance);
  *   console.log(result);
  * });
- *
+ * 
  * @since 2.0.0
  * @category Methods
  */
 export const maxBlockExUnits = Effect.fn(
-  (
-    instance: CML.ProtocolParamUpdate,
-  ): Effect.Effect<CML.ExUnits | undefined, ProtocolParamUpdateError> =>
+  (instance: CML.ProtocolParamUpdate): Effect.Effect<CML.ExUnits | undefined, ProtocolParamUpdateError> =>
     Effect.try({
       try: () => instance.max_block_ex_units(),
       catch: () =>
         new ProtocolParamUpdateError({
           message: `ProtocolParamUpdate.maxBlockExUnits failed `,
         }),
-    }),
+    })
 );
 
 /**
  * Unsafely calls instance.maxBlockExUnits without Effect wrapper
- *
+ * 
  * @example
  * import { ProtocolParamUpdate } from "@lucid-evolution/experimental";
- *
+ * 
  * // Assume we have a ProtocolParamUpdate instance
  * const instance = ... ;
- *
+ * 
  * // Using try/catch for error handling
  * try {
- *   const result = ProtocolParamUpdate.unsafeMaxBlockExUnits(instance);
+ *   const result = ProtocolParamUpdate.maxBlockExUnitsUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`ProtocolParamUpdate.unsafeMaxBlockExUnits failed: ${error.message}`);
+ *   console.error(`ProtocolParamUpdate.maxBlockExUnitsUnsafe failed: ${error.message}`);
  * }
- *
+ * 
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeMaxBlockExUnits = (
-  instance: CML.ProtocolParamUpdate,
-): CML.ExUnits | undefined => Effect.runSync(maxBlockExUnits(instance));
+export const maxBlockExUnitsUnsafe = (instance: CML.ProtocolParamUpdate): CML.ExUnits | undefined =>
+  Effect.runSync(maxBlockExUnits(instance));
 
 /**
  * Method setMaxValueSize of ProtocolParamUpdate
- *
+ * 
  * @example
  * import { ProtocolParamUpdate } from "@lucid-evolution/experimental";
  * import { Effect } from "effect";
- *
+ * 
  * // Using Effect for safe execution with error handling
  * Effect.gen(function*() {
  * // Assume we have a ProtocolParamUpdate instance
@@ -2574,56 +2418,51 @@ export const unsafeMaxBlockExUnits = (
  *   const result = yield* ProtocolParamUpdate.setMaxValueSize(instance,  parameters );
  *   console.log(result);
  * });
- *
+ * 
  * @since 2.0.0
  * @category Methods
  */
 export const setMaxValueSize = Effect.fn(
-  (
-    instance: CML.ProtocolParamUpdate,
-    maxValueSize: bigint,
-  ): Effect.Effect<void, ProtocolParamUpdateError> =>
+  (instance: CML.ProtocolParamUpdate, maxValueSize: bigint): Effect.Effect<void, ProtocolParamUpdateError> =>
     Effect.try({
       try: () => instance.set_max_value_size(maxValueSize),
       catch: () =>
         new ProtocolParamUpdateError({
           message: `ProtocolParamUpdate.setMaxValueSize failed with parameters: ${maxValueSize}. `,
         }),
-    }),
+    })
 );
 
 /**
  * Unsafely calls instance.setMaxValueSize without Effect wrapper
- *
+ * 
  * @example
  * import { ProtocolParamUpdate } from "@lucid-evolution/experimental";
- *
+ * 
  * // Assume we have a ProtocolParamUpdate instance
  * const instance = ... ;
- *
+ * 
  * // Using try/catch for error handling
  * try {
- *   const result = ProtocolParamUpdate.unsafeSetMaxValueSize(instance,  parameters );
+ *   const result = ProtocolParamUpdate.setMaxValueSizeUnsafe(instance,  parameters );
  *   console.log(result);
  * } catch (error) {
- *   console.error(`ProtocolParamUpdate.unsafeSetMaxValueSize failed: ${error.message}`);
+ *   console.error(`ProtocolParamUpdate.setMaxValueSizeUnsafe failed: ${error.message}`);
  * }
- *
+ * 
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeSetMaxValueSize = (
-  instance: CML.ProtocolParamUpdate,
-  maxValueSize: bigint,
-): void => Effect.runSync(setMaxValueSize(instance, maxValueSize));
+export const setMaxValueSizeUnsafe = (instance: CML.ProtocolParamUpdate, maxValueSize: bigint): void =>
+  Effect.runSync(setMaxValueSize(instance, maxValueSize));
 
 /**
  * Method maxValueSize of ProtocolParamUpdate
- *
+ * 
  * @example
  * import { ProtocolParamUpdate } from "@lucid-evolution/experimental";
  * import { Effect } from "effect";
- *
+ * 
  * // Using Effect for safe execution with error handling
  * Effect.gen(function*() {
  * // Assume we have a ProtocolParamUpdate instance
@@ -2631,54 +2470,51 @@ export const unsafeSetMaxValueSize = (
  *   const result = yield* ProtocolParamUpdate.maxValueSize(instance);
  *   console.log(result);
  * });
- *
+ * 
  * @since 2.0.0
  * @category Methods
  */
 export const maxValueSize = Effect.fn(
-  (
-    instance: CML.ProtocolParamUpdate,
-  ): Effect.Effect<bigint | undefined, ProtocolParamUpdateError> =>
+  (instance: CML.ProtocolParamUpdate): Effect.Effect<bigint | undefined, ProtocolParamUpdateError> =>
     Effect.try({
       try: () => instance.max_value_size(),
       catch: () =>
         new ProtocolParamUpdateError({
           message: `ProtocolParamUpdate.maxValueSize failed `,
         }),
-    }),
+    })
 );
 
 /**
  * Unsafely calls instance.maxValueSize without Effect wrapper
- *
+ * 
  * @example
  * import { ProtocolParamUpdate } from "@lucid-evolution/experimental";
- *
+ * 
  * // Assume we have a ProtocolParamUpdate instance
  * const instance = ... ;
- *
+ * 
  * // Using try/catch for error handling
  * try {
- *   const result = ProtocolParamUpdate.unsafeMaxValueSize(instance);
+ *   const result = ProtocolParamUpdate.maxValueSizeUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`ProtocolParamUpdate.unsafeMaxValueSize failed: ${error.message}`);
+ *   console.error(`ProtocolParamUpdate.maxValueSizeUnsafe failed: ${error.message}`);
  * }
- *
+ * 
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeMaxValueSize = (
-  instance: CML.ProtocolParamUpdate,
-): bigint | undefined => Effect.runSync(maxValueSize(instance));
+export const maxValueSizeUnsafe = (instance: CML.ProtocolParamUpdate): bigint | undefined =>
+  Effect.runSync(maxValueSize(instance));
 
 /**
  * Method setCollateralPercentage of ProtocolParamUpdate
- *
+ * 
  * @example
  * import { ProtocolParamUpdate } from "@lucid-evolution/experimental";
  * import { Effect } from "effect";
- *
+ * 
  * // Using Effect for safe execution with error handling
  * Effect.gen(function*() {
  * // Assume we have a ProtocolParamUpdate instance
@@ -2686,57 +2522,51 @@ export const unsafeMaxValueSize = (
  *   const result = yield* ProtocolParamUpdate.setCollateralPercentage(instance,  parameters );
  *   console.log(result);
  * });
- *
+ * 
  * @since 2.0.0
  * @category Methods
  */
 export const setCollateralPercentage = Effect.fn(
-  (
-    instance: CML.ProtocolParamUpdate,
-    collateralPercentage: bigint,
-  ): Effect.Effect<void, ProtocolParamUpdateError> =>
+  (instance: CML.ProtocolParamUpdate, collateralPercentage: bigint): Effect.Effect<void, ProtocolParamUpdateError> =>
     Effect.try({
       try: () => instance.set_collateral_percentage(collateralPercentage),
       catch: () =>
         new ProtocolParamUpdateError({
           message: `ProtocolParamUpdate.setCollateralPercentage failed with parameters: ${collateralPercentage}. `,
         }),
-    }),
+    })
 );
 
 /**
  * Unsafely calls instance.setCollateralPercentage without Effect wrapper
- *
+ * 
  * @example
  * import { ProtocolParamUpdate } from "@lucid-evolution/experimental";
- *
+ * 
  * // Assume we have a ProtocolParamUpdate instance
  * const instance = ... ;
- *
+ * 
  * // Using try/catch for error handling
  * try {
- *   const result = ProtocolParamUpdate.unsafeSetCollateralPercentage(instance,  parameters );
+ *   const result = ProtocolParamUpdate.setCollateralPercentageUnsafe(instance,  parameters );
  *   console.log(result);
  * } catch (error) {
- *   console.error(`ProtocolParamUpdate.unsafeSetCollateralPercentage failed: ${error.message}`);
+ *   console.error(`ProtocolParamUpdate.setCollateralPercentageUnsafe failed: ${error.message}`);
  * }
- *
+ * 
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeSetCollateralPercentage = (
-  instance: CML.ProtocolParamUpdate,
-  collateralPercentage: bigint,
-): void =>
+export const setCollateralPercentageUnsafe = (instance: CML.ProtocolParamUpdate, collateralPercentage: bigint): void =>
   Effect.runSync(setCollateralPercentage(instance, collateralPercentage));
 
 /**
  * Method collateralPercentage of ProtocolParamUpdate
- *
+ * 
  * @example
  * import { ProtocolParamUpdate } from "@lucid-evolution/experimental";
  * import { Effect } from "effect";
- *
+ * 
  * // Using Effect for safe execution with error handling
  * Effect.gen(function*() {
  * // Assume we have a ProtocolParamUpdate instance
@@ -2744,54 +2574,51 @@ export const unsafeSetCollateralPercentage = (
  *   const result = yield* ProtocolParamUpdate.collateralPercentage(instance);
  *   console.log(result);
  * });
- *
+ * 
  * @since 2.0.0
  * @category Methods
  */
 export const collateralPercentage = Effect.fn(
-  (
-    instance: CML.ProtocolParamUpdate,
-  ): Effect.Effect<bigint | undefined, ProtocolParamUpdateError> =>
+  (instance: CML.ProtocolParamUpdate): Effect.Effect<bigint | undefined, ProtocolParamUpdateError> =>
     Effect.try({
       try: () => instance.collateral_percentage(),
       catch: () =>
         new ProtocolParamUpdateError({
           message: `ProtocolParamUpdate.collateralPercentage failed `,
         }),
-    }),
+    })
 );
 
 /**
  * Unsafely calls instance.collateralPercentage without Effect wrapper
- *
+ * 
  * @example
  * import { ProtocolParamUpdate } from "@lucid-evolution/experimental";
- *
+ * 
  * // Assume we have a ProtocolParamUpdate instance
  * const instance = ... ;
- *
+ * 
  * // Using try/catch for error handling
  * try {
- *   const result = ProtocolParamUpdate.unsafeCollateralPercentage(instance);
+ *   const result = ProtocolParamUpdate.collateralPercentageUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`ProtocolParamUpdate.unsafeCollateralPercentage failed: ${error.message}`);
+ *   console.error(`ProtocolParamUpdate.collateralPercentageUnsafe failed: ${error.message}`);
  * }
- *
+ * 
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeCollateralPercentage = (
-  instance: CML.ProtocolParamUpdate,
-): bigint | undefined => Effect.runSync(collateralPercentage(instance));
+export const collateralPercentageUnsafe = (instance: CML.ProtocolParamUpdate): bigint | undefined =>
+  Effect.runSync(collateralPercentage(instance));
 
 /**
  * Method setMaxCollateralInputs of ProtocolParamUpdate
- *
+ * 
  * @example
  * import { ProtocolParamUpdate } from "@lucid-evolution/experimental";
  * import { Effect } from "effect";
- *
+ * 
  * // Using Effect for safe execution with error handling
  * Effect.gen(function*() {
  * // Assume we have a ProtocolParamUpdate instance
@@ -2799,57 +2626,51 @@ export const unsafeCollateralPercentage = (
  *   const result = yield* ProtocolParamUpdate.setMaxCollateralInputs(instance,  parameters );
  *   console.log(result);
  * });
- *
+ * 
  * @since 2.0.0
  * @category Methods
  */
 export const setMaxCollateralInputs = Effect.fn(
-  (
-    instance: CML.ProtocolParamUpdate,
-    maxCollateralInputs: bigint,
-  ): Effect.Effect<void, ProtocolParamUpdateError> =>
+  (instance: CML.ProtocolParamUpdate, maxCollateralInputs: bigint): Effect.Effect<void, ProtocolParamUpdateError> =>
     Effect.try({
       try: () => instance.set_max_collateral_inputs(maxCollateralInputs),
       catch: () =>
         new ProtocolParamUpdateError({
           message: `ProtocolParamUpdate.setMaxCollateralInputs failed with parameters: ${maxCollateralInputs}. `,
         }),
-    }),
+    })
 );
 
 /**
  * Unsafely calls instance.setMaxCollateralInputs without Effect wrapper
- *
+ * 
  * @example
  * import { ProtocolParamUpdate } from "@lucid-evolution/experimental";
- *
+ * 
  * // Assume we have a ProtocolParamUpdate instance
  * const instance = ... ;
- *
+ * 
  * // Using try/catch for error handling
  * try {
- *   const result = ProtocolParamUpdate.unsafeSetMaxCollateralInputs(instance,  parameters );
+ *   const result = ProtocolParamUpdate.setMaxCollateralInputsUnsafe(instance,  parameters );
  *   console.log(result);
  * } catch (error) {
- *   console.error(`ProtocolParamUpdate.unsafeSetMaxCollateralInputs failed: ${error.message}`);
+ *   console.error(`ProtocolParamUpdate.setMaxCollateralInputsUnsafe failed: ${error.message}`);
  * }
- *
+ * 
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeSetMaxCollateralInputs = (
-  instance: CML.ProtocolParamUpdate,
-  maxCollateralInputs: bigint,
-): void =>
+export const setMaxCollateralInputsUnsafe = (instance: CML.ProtocolParamUpdate, maxCollateralInputs: bigint): void =>
   Effect.runSync(setMaxCollateralInputs(instance, maxCollateralInputs));
 
 /**
  * Method maxCollateralInputs of ProtocolParamUpdate
- *
+ * 
  * @example
  * import { ProtocolParamUpdate } from "@lucid-evolution/experimental";
  * import { Effect } from "effect";
- *
+ * 
  * // Using Effect for safe execution with error handling
  * Effect.gen(function*() {
  * // Assume we have a ProtocolParamUpdate instance
@@ -2857,54 +2678,51 @@ export const unsafeSetMaxCollateralInputs = (
  *   const result = yield* ProtocolParamUpdate.maxCollateralInputs(instance);
  *   console.log(result);
  * });
- *
+ * 
  * @since 2.0.0
  * @category Methods
  */
 export const maxCollateralInputs = Effect.fn(
-  (
-    instance: CML.ProtocolParamUpdate,
-  ): Effect.Effect<bigint | undefined, ProtocolParamUpdateError> =>
+  (instance: CML.ProtocolParamUpdate): Effect.Effect<bigint | undefined, ProtocolParamUpdateError> =>
     Effect.try({
       try: () => instance.max_collateral_inputs(),
       catch: () =>
         new ProtocolParamUpdateError({
           message: `ProtocolParamUpdate.maxCollateralInputs failed `,
         }),
-    }),
+    })
 );
 
 /**
  * Unsafely calls instance.maxCollateralInputs without Effect wrapper
- *
+ * 
  * @example
  * import { ProtocolParamUpdate } from "@lucid-evolution/experimental";
- *
+ * 
  * // Assume we have a ProtocolParamUpdate instance
  * const instance = ... ;
- *
+ * 
  * // Using try/catch for error handling
  * try {
- *   const result = ProtocolParamUpdate.unsafeMaxCollateralInputs(instance);
+ *   const result = ProtocolParamUpdate.maxCollateralInputsUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`ProtocolParamUpdate.unsafeMaxCollateralInputs failed: ${error.message}`);
+ *   console.error(`ProtocolParamUpdate.maxCollateralInputsUnsafe failed: ${error.message}`);
  * }
- *
+ * 
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeMaxCollateralInputs = (
-  instance: CML.ProtocolParamUpdate,
-): bigint | undefined => Effect.runSync(maxCollateralInputs(instance));
+export const maxCollateralInputsUnsafe = (instance: CML.ProtocolParamUpdate): bigint | undefined =>
+  Effect.runSync(maxCollateralInputs(instance));
 
 /**
  * Method setPoolVotingThresholds of ProtocolParamUpdate
- *
+ * 
  * @example
  * import { ProtocolParamUpdate } from "@lucid-evolution/experimental";
  * import { Effect } from "effect";
- *
+ * 
  * // Using Effect for safe execution with error handling
  * Effect.gen(function*() {
  * // Assume we have a ProtocolParamUpdate instance
@@ -2912,57 +2730,51 @@ export const unsafeMaxCollateralInputs = (
  *   const result = yield* ProtocolParamUpdate.setPoolVotingThresholds(instance,  parameters );
  *   console.log(result);
  * });
- *
+ * 
  * @since 2.0.0
  * @category Methods
  */
 export const setPoolVotingThresholds = Effect.fn(
-  (
-    instance: CML.ProtocolParamUpdate,
-    poolVotingThresholds: CML.PoolVotingThresholds,
-  ): Effect.Effect<void, ProtocolParamUpdateError> =>
+  (instance: CML.ProtocolParamUpdate, poolVotingThresholds: CML.PoolVotingThresholds): Effect.Effect<void, ProtocolParamUpdateError> =>
     Effect.try({
       try: () => instance.set_pool_voting_thresholds(poolVotingThresholds),
       catch: () =>
         new ProtocolParamUpdateError({
           message: `ProtocolParamUpdate.setPoolVotingThresholds failed with parameters: ${poolVotingThresholds} (PoolVotingThresholds). `,
         }),
-    }),
+    })
 );
 
 /**
  * Unsafely calls instance.setPoolVotingThresholds without Effect wrapper
- *
+ * 
  * @example
  * import { ProtocolParamUpdate } from "@lucid-evolution/experimental";
- *
+ * 
  * // Assume we have a ProtocolParamUpdate instance
  * const instance = ... ;
- *
+ * 
  * // Using try/catch for error handling
  * try {
- *   const result = ProtocolParamUpdate.unsafeSetPoolVotingThresholds(instance,  parameters );
+ *   const result = ProtocolParamUpdate.setPoolVotingThresholdsUnsafe(instance,  parameters );
  *   console.log(result);
  * } catch (error) {
- *   console.error(`ProtocolParamUpdate.unsafeSetPoolVotingThresholds failed: ${error.message}`);
+ *   console.error(`ProtocolParamUpdate.setPoolVotingThresholdsUnsafe failed: ${error.message}`);
  * }
- *
+ * 
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeSetPoolVotingThresholds = (
-  instance: CML.ProtocolParamUpdate,
-  poolVotingThresholds: CML.PoolVotingThresholds,
-): void =>
+export const setPoolVotingThresholdsUnsafe = (instance: CML.ProtocolParamUpdate, poolVotingThresholds: CML.PoolVotingThresholds): void =>
   Effect.runSync(setPoolVotingThresholds(instance, poolVotingThresholds));
 
 /**
  * Method poolVotingThresholds of ProtocolParamUpdate
- *
+ * 
  * @example
  * import { ProtocolParamUpdate } from "@lucid-evolution/experimental";
  * import { Effect } from "effect";
- *
+ * 
  * // Using Effect for safe execution with error handling
  * Effect.gen(function*() {
  * // Assume we have a ProtocolParamUpdate instance
@@ -2970,58 +2782,51 @@ export const unsafeSetPoolVotingThresholds = (
  *   const result = yield* ProtocolParamUpdate.poolVotingThresholds(instance);
  *   console.log(result);
  * });
- *
+ * 
  * @since 2.0.0
  * @category Methods
  */
 export const poolVotingThresholds = Effect.fn(
-  (
-    instance: CML.ProtocolParamUpdate,
-  ): Effect.Effect<
-    CML.PoolVotingThresholds | undefined,
-    ProtocolParamUpdateError
-  > =>
+  (instance: CML.ProtocolParamUpdate): Effect.Effect<CML.PoolVotingThresholds | undefined, ProtocolParamUpdateError> =>
     Effect.try({
       try: () => instance.pool_voting_thresholds(),
       catch: () =>
         new ProtocolParamUpdateError({
           message: `ProtocolParamUpdate.poolVotingThresholds failed `,
         }),
-    }),
+    })
 );
 
 /**
  * Unsafely calls instance.poolVotingThresholds without Effect wrapper
- *
+ * 
  * @example
  * import { ProtocolParamUpdate } from "@lucid-evolution/experimental";
- *
+ * 
  * // Assume we have a ProtocolParamUpdate instance
  * const instance = ... ;
- *
+ * 
  * // Using try/catch for error handling
  * try {
- *   const result = ProtocolParamUpdate.unsafePoolVotingThresholds(instance);
+ *   const result = ProtocolParamUpdate.poolVotingThresholdsUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`ProtocolParamUpdate.unsafePoolVotingThresholds failed: ${error.message}`);
+ *   console.error(`ProtocolParamUpdate.poolVotingThresholdsUnsafe failed: ${error.message}`);
  * }
- *
+ * 
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafePoolVotingThresholds = (
-  instance: CML.ProtocolParamUpdate,
-): CML.PoolVotingThresholds | undefined =>
+export const poolVotingThresholdsUnsafe = (instance: CML.ProtocolParamUpdate): CML.PoolVotingThresholds | undefined =>
   Effect.runSync(poolVotingThresholds(instance));
 
 /**
  * Method setDRepVotingThresholds of ProtocolParamUpdate
- *
+ * 
  * @example
  * import { ProtocolParamUpdate } from "@lucid-evolution/experimental";
  * import { Effect } from "effect";
- *
+ * 
  * // Using Effect for safe execution with error handling
  * Effect.gen(function*() {
  * // Assume we have a ProtocolParamUpdate instance
@@ -3029,57 +2834,51 @@ export const unsafePoolVotingThresholds = (
  *   const result = yield* ProtocolParamUpdate.setDRepVotingThresholds(instance,  parameters );
  *   console.log(result);
  * });
- *
+ * 
  * @since 2.0.0
  * @category Methods
  */
 export const setDRepVotingThresholds = Effect.fn(
-  (
-    instance: CML.ProtocolParamUpdate,
-    dRepVotingThresholds: CML.DRepVotingThresholds,
-  ): Effect.Effect<void, ProtocolParamUpdateError> =>
+  (instance: CML.ProtocolParamUpdate, dRepVotingThresholds: CML.DRepVotingThresholds): Effect.Effect<void, ProtocolParamUpdateError> =>
     Effect.try({
       try: () => instance.set_d_rep_voting_thresholds(dRepVotingThresholds),
       catch: () =>
         new ProtocolParamUpdateError({
           message: `ProtocolParamUpdate.setDRepVotingThresholds failed with parameters: ${dRepVotingThresholds} (DRepVotingThresholds). `,
         }),
-    }),
+    })
 );
 
 /**
  * Unsafely calls instance.setDRepVotingThresholds without Effect wrapper
- *
+ * 
  * @example
  * import { ProtocolParamUpdate } from "@lucid-evolution/experimental";
- *
+ * 
  * // Assume we have a ProtocolParamUpdate instance
  * const instance = ... ;
- *
+ * 
  * // Using try/catch for error handling
  * try {
- *   const result = ProtocolParamUpdate.unsafeSetDRepVotingThresholds(instance,  parameters );
+ *   const result = ProtocolParamUpdate.setDRepVotingThresholdsUnsafe(instance,  parameters );
  *   console.log(result);
  * } catch (error) {
- *   console.error(`ProtocolParamUpdate.unsafeSetDRepVotingThresholds failed: ${error.message}`);
+ *   console.error(`ProtocolParamUpdate.setDRepVotingThresholdsUnsafe failed: ${error.message}`);
  * }
- *
+ * 
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeSetDRepVotingThresholds = (
-  instance: CML.ProtocolParamUpdate,
-  dRepVotingThresholds: CML.DRepVotingThresholds,
-): void =>
+export const setDRepVotingThresholdsUnsafe = (instance: CML.ProtocolParamUpdate, dRepVotingThresholds: CML.DRepVotingThresholds): void =>
   Effect.runSync(setDRepVotingThresholds(instance, dRepVotingThresholds));
 
 /**
  * Method dRepVotingThresholds of ProtocolParamUpdate
- *
+ * 
  * @example
  * import { ProtocolParamUpdate } from "@lucid-evolution/experimental";
  * import { Effect } from "effect";
- *
+ * 
  * // Using Effect for safe execution with error handling
  * Effect.gen(function*() {
  * // Assume we have a ProtocolParamUpdate instance
@@ -3087,58 +2886,51 @@ export const unsafeSetDRepVotingThresholds = (
  *   const result = yield* ProtocolParamUpdate.dRepVotingThresholds(instance);
  *   console.log(result);
  * });
- *
+ * 
  * @since 2.0.0
  * @category Methods
  */
 export const dRepVotingThresholds = Effect.fn(
-  (
-    instance: CML.ProtocolParamUpdate,
-  ): Effect.Effect<
-    CML.DRepVotingThresholds | undefined,
-    ProtocolParamUpdateError
-  > =>
+  (instance: CML.ProtocolParamUpdate): Effect.Effect<CML.DRepVotingThresholds | undefined, ProtocolParamUpdateError> =>
     Effect.try({
       try: () => instance.d_rep_voting_thresholds(),
       catch: () =>
         new ProtocolParamUpdateError({
           message: `ProtocolParamUpdate.dRepVotingThresholds failed `,
         }),
-    }),
+    })
 );
 
 /**
  * Unsafely calls instance.dRepVotingThresholds without Effect wrapper
- *
+ * 
  * @example
  * import { ProtocolParamUpdate } from "@lucid-evolution/experimental";
- *
+ * 
  * // Assume we have a ProtocolParamUpdate instance
  * const instance = ... ;
- *
+ * 
  * // Using try/catch for error handling
  * try {
- *   const result = ProtocolParamUpdate.unsafeDRepVotingThresholds(instance);
+ *   const result = ProtocolParamUpdate.dRepVotingThresholdsUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`ProtocolParamUpdate.unsafeDRepVotingThresholds failed: ${error.message}`);
+ *   console.error(`ProtocolParamUpdate.dRepVotingThresholdsUnsafe failed: ${error.message}`);
  * }
- *
+ * 
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeDRepVotingThresholds = (
-  instance: CML.ProtocolParamUpdate,
-): CML.DRepVotingThresholds | undefined =>
+export const dRepVotingThresholdsUnsafe = (instance: CML.ProtocolParamUpdate): CML.DRepVotingThresholds | undefined =>
   Effect.runSync(dRepVotingThresholds(instance));
 
 /**
  * Method setMinCommitteeSize of ProtocolParamUpdate
- *
+ * 
  * @example
  * import { ProtocolParamUpdate } from "@lucid-evolution/experimental";
  * import { Effect } from "effect";
- *
+ * 
  * // Using Effect for safe execution with error handling
  * Effect.gen(function*() {
  * // Assume we have a ProtocolParamUpdate instance
@@ -3146,56 +2938,51 @@ export const unsafeDRepVotingThresholds = (
  *   const result = yield* ProtocolParamUpdate.setMinCommitteeSize(instance,  parameters );
  *   console.log(result);
  * });
- *
+ * 
  * @since 2.0.0
  * @category Methods
  */
 export const setMinCommitteeSize = Effect.fn(
-  (
-    instance: CML.ProtocolParamUpdate,
-    minCommitteeSize: bigint,
-  ): Effect.Effect<void, ProtocolParamUpdateError> =>
+  (instance: CML.ProtocolParamUpdate, minCommitteeSize: bigint): Effect.Effect<void, ProtocolParamUpdateError> =>
     Effect.try({
       try: () => instance.set_min_committee_size(minCommitteeSize),
       catch: () =>
         new ProtocolParamUpdateError({
           message: `ProtocolParamUpdate.setMinCommitteeSize failed with parameters: ${minCommitteeSize}. `,
         }),
-    }),
+    })
 );
 
 /**
  * Unsafely calls instance.setMinCommitteeSize without Effect wrapper
- *
+ * 
  * @example
  * import { ProtocolParamUpdate } from "@lucid-evolution/experimental";
- *
+ * 
  * // Assume we have a ProtocolParamUpdate instance
  * const instance = ... ;
- *
+ * 
  * // Using try/catch for error handling
  * try {
- *   const result = ProtocolParamUpdate.unsafeSetMinCommitteeSize(instance,  parameters );
+ *   const result = ProtocolParamUpdate.setMinCommitteeSizeUnsafe(instance,  parameters );
  *   console.log(result);
  * } catch (error) {
- *   console.error(`ProtocolParamUpdate.unsafeSetMinCommitteeSize failed: ${error.message}`);
+ *   console.error(`ProtocolParamUpdate.setMinCommitteeSizeUnsafe failed: ${error.message}`);
  * }
- *
+ * 
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeSetMinCommitteeSize = (
-  instance: CML.ProtocolParamUpdate,
-  minCommitteeSize: bigint,
-): void => Effect.runSync(setMinCommitteeSize(instance, minCommitteeSize));
+export const setMinCommitteeSizeUnsafe = (instance: CML.ProtocolParamUpdate, minCommitteeSize: bigint): void =>
+  Effect.runSync(setMinCommitteeSize(instance, minCommitteeSize));
 
 /**
  * Method minCommitteeSize of ProtocolParamUpdate
- *
+ * 
  * @example
  * import { ProtocolParamUpdate } from "@lucid-evolution/experimental";
  * import { Effect } from "effect";
- *
+ * 
  * // Using Effect for safe execution with error handling
  * Effect.gen(function*() {
  * // Assume we have a ProtocolParamUpdate instance
@@ -3203,54 +2990,51 @@ export const unsafeSetMinCommitteeSize = (
  *   const result = yield* ProtocolParamUpdate.minCommitteeSize(instance);
  *   console.log(result);
  * });
- *
+ * 
  * @since 2.0.0
  * @category Methods
  */
 export const minCommitteeSize = Effect.fn(
-  (
-    instance: CML.ProtocolParamUpdate,
-  ): Effect.Effect<bigint | undefined, ProtocolParamUpdateError> =>
+  (instance: CML.ProtocolParamUpdate): Effect.Effect<bigint | undefined, ProtocolParamUpdateError> =>
     Effect.try({
       try: () => instance.min_committee_size(),
       catch: () =>
         new ProtocolParamUpdateError({
           message: `ProtocolParamUpdate.minCommitteeSize failed `,
         }),
-    }),
+    })
 );
 
 /**
  * Unsafely calls instance.minCommitteeSize without Effect wrapper
- *
+ * 
  * @example
  * import { ProtocolParamUpdate } from "@lucid-evolution/experimental";
- *
+ * 
  * // Assume we have a ProtocolParamUpdate instance
  * const instance = ... ;
- *
+ * 
  * // Using try/catch for error handling
  * try {
- *   const result = ProtocolParamUpdate.unsafeMinCommitteeSize(instance);
+ *   const result = ProtocolParamUpdate.minCommitteeSizeUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`ProtocolParamUpdate.unsafeMinCommitteeSize failed: ${error.message}`);
+ *   console.error(`ProtocolParamUpdate.minCommitteeSizeUnsafe failed: ${error.message}`);
  * }
- *
+ * 
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeMinCommitteeSize = (
-  instance: CML.ProtocolParamUpdate,
-): bigint | undefined => Effect.runSync(minCommitteeSize(instance));
+export const minCommitteeSizeUnsafe = (instance: CML.ProtocolParamUpdate): bigint | undefined =>
+  Effect.runSync(minCommitteeSize(instance));
 
 /**
  * Method setCommitteeTermLimit of ProtocolParamUpdate
- *
+ * 
  * @example
  * import { ProtocolParamUpdate } from "@lucid-evolution/experimental";
  * import { Effect } from "effect";
- *
+ * 
  * // Using Effect for safe execution with error handling
  * Effect.gen(function*() {
  * // Assume we have a ProtocolParamUpdate instance
@@ -3258,56 +3042,51 @@ export const unsafeMinCommitteeSize = (
  *   const result = yield* ProtocolParamUpdate.setCommitteeTermLimit(instance,  parameters );
  *   console.log(result);
  * });
- *
+ * 
  * @since 2.0.0
  * @category Methods
  */
 export const setCommitteeTermLimit = Effect.fn(
-  (
-    instance: CML.ProtocolParamUpdate,
-    committeeTermLimit: bigint,
-  ): Effect.Effect<void, ProtocolParamUpdateError> =>
+  (instance: CML.ProtocolParamUpdate, committeeTermLimit: bigint): Effect.Effect<void, ProtocolParamUpdateError> =>
     Effect.try({
       try: () => instance.set_committee_term_limit(committeeTermLimit),
       catch: () =>
         new ProtocolParamUpdateError({
           message: `ProtocolParamUpdate.setCommitteeTermLimit failed with parameters: ${committeeTermLimit}. `,
         }),
-    }),
+    })
 );
 
 /**
  * Unsafely calls instance.setCommitteeTermLimit without Effect wrapper
- *
+ * 
  * @example
  * import { ProtocolParamUpdate } from "@lucid-evolution/experimental";
- *
+ * 
  * // Assume we have a ProtocolParamUpdate instance
  * const instance = ... ;
- *
+ * 
  * // Using try/catch for error handling
  * try {
- *   const result = ProtocolParamUpdate.unsafeSetCommitteeTermLimit(instance,  parameters );
+ *   const result = ProtocolParamUpdate.setCommitteeTermLimitUnsafe(instance,  parameters );
  *   console.log(result);
  * } catch (error) {
- *   console.error(`ProtocolParamUpdate.unsafeSetCommitteeTermLimit failed: ${error.message}`);
+ *   console.error(`ProtocolParamUpdate.setCommitteeTermLimitUnsafe failed: ${error.message}`);
  * }
- *
+ * 
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeSetCommitteeTermLimit = (
-  instance: CML.ProtocolParamUpdate,
-  committeeTermLimit: bigint,
-): void => Effect.runSync(setCommitteeTermLimit(instance, committeeTermLimit));
+export const setCommitteeTermLimitUnsafe = (instance: CML.ProtocolParamUpdate, committeeTermLimit: bigint): void =>
+  Effect.runSync(setCommitteeTermLimit(instance, committeeTermLimit));
 
 /**
  * Method committeeTermLimit of ProtocolParamUpdate
- *
+ * 
  * @example
  * import { ProtocolParamUpdate } from "@lucid-evolution/experimental";
  * import { Effect } from "effect";
- *
+ * 
  * // Using Effect for safe execution with error handling
  * Effect.gen(function*() {
  * // Assume we have a ProtocolParamUpdate instance
@@ -3315,54 +3094,51 @@ export const unsafeSetCommitteeTermLimit = (
  *   const result = yield* ProtocolParamUpdate.committeeTermLimit(instance);
  *   console.log(result);
  * });
- *
+ * 
  * @since 2.0.0
  * @category Methods
  */
 export const committeeTermLimit = Effect.fn(
-  (
-    instance: CML.ProtocolParamUpdate,
-  ): Effect.Effect<bigint | undefined, ProtocolParamUpdateError> =>
+  (instance: CML.ProtocolParamUpdate): Effect.Effect<bigint | undefined, ProtocolParamUpdateError> =>
     Effect.try({
       try: () => instance.committee_term_limit(),
       catch: () =>
         new ProtocolParamUpdateError({
           message: `ProtocolParamUpdate.committeeTermLimit failed `,
         }),
-    }),
+    })
 );
 
 /**
  * Unsafely calls instance.committeeTermLimit without Effect wrapper
- *
+ * 
  * @example
  * import { ProtocolParamUpdate } from "@lucid-evolution/experimental";
- *
+ * 
  * // Assume we have a ProtocolParamUpdate instance
  * const instance = ... ;
- *
+ * 
  * // Using try/catch for error handling
  * try {
- *   const result = ProtocolParamUpdate.unsafeCommitteeTermLimit(instance);
+ *   const result = ProtocolParamUpdate.committeeTermLimitUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`ProtocolParamUpdate.unsafeCommitteeTermLimit failed: ${error.message}`);
+ *   console.error(`ProtocolParamUpdate.committeeTermLimitUnsafe failed: ${error.message}`);
  * }
- *
+ * 
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeCommitteeTermLimit = (
-  instance: CML.ProtocolParamUpdate,
-): bigint | undefined => Effect.runSync(committeeTermLimit(instance));
+export const committeeTermLimitUnsafe = (instance: CML.ProtocolParamUpdate): bigint | undefined =>
+  Effect.runSync(committeeTermLimit(instance));
 
 /**
  * Method setGovernanceActionValidityPeriod of ProtocolParamUpdate
- *
+ * 
  * @example
  * import { ProtocolParamUpdate } from "@lucid-evolution/experimental";
  * import { Effect } from "effect";
- *
+ * 
  * // Using Effect for safe execution with error handling
  * Effect.gen(function*() {
  * // Assume we have a ProtocolParamUpdate instance
@@ -3370,62 +3146,51 @@ export const unsafeCommitteeTermLimit = (
  *   const result = yield* ProtocolParamUpdate.setGovernanceActionValidityPeriod(instance,  parameters );
  *   console.log(result);
  * });
- *
+ * 
  * @since 2.0.0
  * @category Methods
  */
 export const setGovernanceActionValidityPeriod = Effect.fn(
-  (
-    instance: CML.ProtocolParamUpdate,
-    governanceActionValidityPeriod: bigint,
-  ): Effect.Effect<void, ProtocolParamUpdateError> =>
+  (instance: CML.ProtocolParamUpdate, governanceActionValidityPeriod: bigint): Effect.Effect<void, ProtocolParamUpdateError> =>
     Effect.try({
-      try: () =>
-        instance.set_governance_action_validity_period(
-          governanceActionValidityPeriod,
-        ),
+      try: () => instance.set_governance_action_validity_period(governanceActionValidityPeriod),
       catch: () =>
         new ProtocolParamUpdateError({
           message: `ProtocolParamUpdate.setGovernanceActionValidityPeriod failed with parameters: ${governanceActionValidityPeriod}. `,
         }),
-    }),
+    })
 );
 
 /**
  * Unsafely calls instance.setGovernanceActionValidityPeriod without Effect wrapper
- *
+ * 
  * @example
  * import { ProtocolParamUpdate } from "@lucid-evolution/experimental";
- *
+ * 
  * // Assume we have a ProtocolParamUpdate instance
  * const instance = ... ;
- *
+ * 
  * // Using try/catch for error handling
  * try {
- *   const result = ProtocolParamUpdate.unsafeSetGovernanceActionValidityPeriod(instance,  parameters );
+ *   const result = ProtocolParamUpdate.setGovernanceActionValidityPeriodUnsafe(instance,  parameters );
  *   console.log(result);
  * } catch (error) {
- *   console.error(`ProtocolParamUpdate.unsafeSetGovernanceActionValidityPeriod failed: ${error.message}`);
+ *   console.error(`ProtocolParamUpdate.setGovernanceActionValidityPeriodUnsafe failed: ${error.message}`);
  * }
- *
+ * 
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeSetGovernanceActionValidityPeriod = (
-  instance: CML.ProtocolParamUpdate,
-  governanceActionValidityPeriod: bigint,
-): void =>
-  Effect.runSync(
-    setGovernanceActionValidityPeriod(instance, governanceActionValidityPeriod),
-  );
+export const setGovernanceActionValidityPeriodUnsafe = (instance: CML.ProtocolParamUpdate, governanceActionValidityPeriod: bigint): void =>
+  Effect.runSync(setGovernanceActionValidityPeriod(instance, governanceActionValidityPeriod));
 
 /**
  * Method governanceActionValidityPeriod of ProtocolParamUpdate
- *
+ * 
  * @example
  * import { ProtocolParamUpdate } from "@lucid-evolution/experimental";
  * import { Effect } from "effect";
- *
+ * 
  * // Using Effect for safe execution with error handling
  * Effect.gen(function*() {
  * // Assume we have a ProtocolParamUpdate instance
@@ -3433,55 +3198,51 @@ export const unsafeSetGovernanceActionValidityPeriod = (
  *   const result = yield* ProtocolParamUpdate.governanceActionValidityPeriod(instance);
  *   console.log(result);
  * });
- *
+ * 
  * @since 2.0.0
  * @category Methods
  */
 export const governanceActionValidityPeriod = Effect.fn(
-  (
-    instance: CML.ProtocolParamUpdate,
-  ): Effect.Effect<bigint | undefined, ProtocolParamUpdateError> =>
+  (instance: CML.ProtocolParamUpdate): Effect.Effect<bigint | undefined, ProtocolParamUpdateError> =>
     Effect.try({
       try: () => instance.governance_action_validity_period(),
       catch: () =>
         new ProtocolParamUpdateError({
           message: `ProtocolParamUpdate.governanceActionValidityPeriod failed `,
         }),
-    }),
+    })
 );
 
 /**
  * Unsafely calls instance.governanceActionValidityPeriod without Effect wrapper
- *
+ * 
  * @example
  * import { ProtocolParamUpdate } from "@lucid-evolution/experimental";
- *
+ * 
  * // Assume we have a ProtocolParamUpdate instance
  * const instance = ... ;
- *
+ * 
  * // Using try/catch for error handling
  * try {
- *   const result = ProtocolParamUpdate.unsafeGovernanceActionValidityPeriod(instance);
+ *   const result = ProtocolParamUpdate.governanceActionValidityPeriodUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`ProtocolParamUpdate.unsafeGovernanceActionValidityPeriod failed: ${error.message}`);
+ *   console.error(`ProtocolParamUpdate.governanceActionValidityPeriodUnsafe failed: ${error.message}`);
  * }
- *
+ * 
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeGovernanceActionValidityPeriod = (
-  instance: CML.ProtocolParamUpdate,
-): bigint | undefined =>
+export const governanceActionValidityPeriodUnsafe = (instance: CML.ProtocolParamUpdate): bigint | undefined =>
   Effect.runSync(governanceActionValidityPeriod(instance));
 
 /**
  * Method setGovernanceActionDeposit of ProtocolParamUpdate
- *
+ * 
  * @example
  * import { ProtocolParamUpdate } from "@lucid-evolution/experimental";
  * import { Effect } from "effect";
- *
+ * 
  * // Using Effect for safe execution with error handling
  * Effect.gen(function*() {
  * // Assume we have a ProtocolParamUpdate instance
@@ -3489,58 +3250,51 @@ export const unsafeGovernanceActionValidityPeriod = (
  *   const result = yield* ProtocolParamUpdate.setGovernanceActionDeposit(instance,  parameters );
  *   console.log(result);
  * });
- *
+ * 
  * @since 2.0.0
  * @category Methods
  */
 export const setGovernanceActionDeposit = Effect.fn(
-  (
-    instance: CML.ProtocolParamUpdate,
-    governanceActionDeposit: bigint,
-  ): Effect.Effect<void, ProtocolParamUpdateError> =>
+  (instance: CML.ProtocolParamUpdate, governanceActionDeposit: bigint): Effect.Effect<void, ProtocolParamUpdateError> =>
     Effect.try({
-      try: () =>
-        instance.set_governance_action_deposit(governanceActionDeposit),
+      try: () => instance.set_governance_action_deposit(governanceActionDeposit),
       catch: () =>
         new ProtocolParamUpdateError({
           message: `ProtocolParamUpdate.setGovernanceActionDeposit failed with parameters: ${governanceActionDeposit}. `,
         }),
-    }),
+    })
 );
 
 /**
  * Unsafely calls instance.setGovernanceActionDeposit without Effect wrapper
- *
+ * 
  * @example
  * import { ProtocolParamUpdate } from "@lucid-evolution/experimental";
- *
+ * 
  * // Assume we have a ProtocolParamUpdate instance
  * const instance = ... ;
- *
+ * 
  * // Using try/catch for error handling
  * try {
- *   const result = ProtocolParamUpdate.unsafeSetGovernanceActionDeposit(instance,  parameters );
+ *   const result = ProtocolParamUpdate.setGovernanceActionDepositUnsafe(instance,  parameters );
  *   console.log(result);
  * } catch (error) {
- *   console.error(`ProtocolParamUpdate.unsafeSetGovernanceActionDeposit failed: ${error.message}`);
+ *   console.error(`ProtocolParamUpdate.setGovernanceActionDepositUnsafe failed: ${error.message}`);
  * }
- *
+ * 
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeSetGovernanceActionDeposit = (
-  instance: CML.ProtocolParamUpdate,
-  governanceActionDeposit: bigint,
-): void =>
+export const setGovernanceActionDepositUnsafe = (instance: CML.ProtocolParamUpdate, governanceActionDeposit: bigint): void =>
   Effect.runSync(setGovernanceActionDeposit(instance, governanceActionDeposit));
 
 /**
  * Method governanceActionDeposit of ProtocolParamUpdate
- *
+ * 
  * @example
  * import { ProtocolParamUpdate } from "@lucid-evolution/experimental";
  * import { Effect } from "effect";
- *
+ * 
  * // Using Effect for safe execution with error handling
  * Effect.gen(function*() {
  * // Assume we have a ProtocolParamUpdate instance
@@ -3548,54 +3302,51 @@ export const unsafeSetGovernanceActionDeposit = (
  *   const result = yield* ProtocolParamUpdate.governanceActionDeposit(instance);
  *   console.log(result);
  * });
- *
+ * 
  * @since 2.0.0
  * @category Methods
  */
 export const governanceActionDeposit = Effect.fn(
-  (
-    instance: CML.ProtocolParamUpdate,
-  ): Effect.Effect<bigint | undefined, ProtocolParamUpdateError> =>
+  (instance: CML.ProtocolParamUpdate): Effect.Effect<bigint | undefined, ProtocolParamUpdateError> =>
     Effect.try({
       try: () => instance.governance_action_deposit(),
       catch: () =>
         new ProtocolParamUpdateError({
           message: `ProtocolParamUpdate.governanceActionDeposit failed `,
         }),
-    }),
+    })
 );
 
 /**
  * Unsafely calls instance.governanceActionDeposit without Effect wrapper
- *
+ * 
  * @example
  * import { ProtocolParamUpdate } from "@lucid-evolution/experimental";
- *
+ * 
  * // Assume we have a ProtocolParamUpdate instance
  * const instance = ... ;
- *
+ * 
  * // Using try/catch for error handling
  * try {
- *   const result = ProtocolParamUpdate.unsafeGovernanceActionDeposit(instance);
+ *   const result = ProtocolParamUpdate.governanceActionDepositUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`ProtocolParamUpdate.unsafeGovernanceActionDeposit failed: ${error.message}`);
+ *   console.error(`ProtocolParamUpdate.governanceActionDepositUnsafe failed: ${error.message}`);
  * }
- *
+ * 
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeGovernanceActionDeposit = (
-  instance: CML.ProtocolParamUpdate,
-): bigint | undefined => Effect.runSync(governanceActionDeposit(instance));
+export const governanceActionDepositUnsafe = (instance: CML.ProtocolParamUpdate): bigint | undefined =>
+  Effect.runSync(governanceActionDeposit(instance));
 
 /**
  * Method setDRepDeposit of ProtocolParamUpdate
- *
+ * 
  * @example
  * import { ProtocolParamUpdate } from "@lucid-evolution/experimental";
  * import { Effect } from "effect";
- *
+ * 
  * // Using Effect for safe execution with error handling
  * Effect.gen(function*() {
  * // Assume we have a ProtocolParamUpdate instance
@@ -3603,56 +3354,51 @@ export const unsafeGovernanceActionDeposit = (
  *   const result = yield* ProtocolParamUpdate.setDRepDeposit(instance,  parameters );
  *   console.log(result);
  * });
- *
+ * 
  * @since 2.0.0
  * @category Methods
  */
 export const setDRepDeposit = Effect.fn(
-  (
-    instance: CML.ProtocolParamUpdate,
-    dRepDeposit: bigint,
-  ): Effect.Effect<void, ProtocolParamUpdateError> =>
+  (instance: CML.ProtocolParamUpdate, dRepDeposit: bigint): Effect.Effect<void, ProtocolParamUpdateError> =>
     Effect.try({
       try: () => instance.set_d_rep_deposit(dRepDeposit),
       catch: () =>
         new ProtocolParamUpdateError({
           message: `ProtocolParamUpdate.setDRepDeposit failed with parameters: ${dRepDeposit}. `,
         }),
-    }),
+    })
 );
 
 /**
  * Unsafely calls instance.setDRepDeposit without Effect wrapper
- *
+ * 
  * @example
  * import { ProtocolParamUpdate } from "@lucid-evolution/experimental";
- *
+ * 
  * // Assume we have a ProtocolParamUpdate instance
  * const instance = ... ;
- *
+ * 
  * // Using try/catch for error handling
  * try {
- *   const result = ProtocolParamUpdate.unsafeSetDRepDeposit(instance,  parameters );
+ *   const result = ProtocolParamUpdate.setDRepDepositUnsafe(instance,  parameters );
  *   console.log(result);
  * } catch (error) {
- *   console.error(`ProtocolParamUpdate.unsafeSetDRepDeposit failed: ${error.message}`);
+ *   console.error(`ProtocolParamUpdate.setDRepDepositUnsafe failed: ${error.message}`);
  * }
- *
+ * 
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeSetDRepDeposit = (
-  instance: CML.ProtocolParamUpdate,
-  dRepDeposit: bigint,
-): void => Effect.runSync(setDRepDeposit(instance, dRepDeposit));
+export const setDRepDepositUnsafe = (instance: CML.ProtocolParamUpdate, dRepDeposit: bigint): void =>
+  Effect.runSync(setDRepDeposit(instance, dRepDeposit));
 
 /**
  * Method dRepDeposit of ProtocolParamUpdate
- *
+ * 
  * @example
  * import { ProtocolParamUpdate } from "@lucid-evolution/experimental";
  * import { Effect } from "effect";
- *
+ * 
  * // Using Effect for safe execution with error handling
  * Effect.gen(function*() {
  * // Assume we have a ProtocolParamUpdate instance
@@ -3660,54 +3406,51 @@ export const unsafeSetDRepDeposit = (
  *   const result = yield* ProtocolParamUpdate.dRepDeposit(instance);
  *   console.log(result);
  * });
- *
+ * 
  * @since 2.0.0
  * @category Methods
  */
 export const dRepDeposit = Effect.fn(
-  (
-    instance: CML.ProtocolParamUpdate,
-  ): Effect.Effect<bigint | undefined, ProtocolParamUpdateError> =>
+  (instance: CML.ProtocolParamUpdate): Effect.Effect<bigint | undefined, ProtocolParamUpdateError> =>
     Effect.try({
       try: () => instance.d_rep_deposit(),
       catch: () =>
         new ProtocolParamUpdateError({
           message: `ProtocolParamUpdate.dRepDeposit failed `,
         }),
-    }),
+    })
 );
 
 /**
  * Unsafely calls instance.dRepDeposit without Effect wrapper
- *
+ * 
  * @example
  * import { ProtocolParamUpdate } from "@lucid-evolution/experimental";
- *
+ * 
  * // Assume we have a ProtocolParamUpdate instance
  * const instance = ... ;
- *
+ * 
  * // Using try/catch for error handling
  * try {
- *   const result = ProtocolParamUpdate.unsafeDRepDeposit(instance);
+ *   const result = ProtocolParamUpdate.dRepDepositUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`ProtocolParamUpdate.unsafeDRepDeposit failed: ${error.message}`);
+ *   console.error(`ProtocolParamUpdate.dRepDepositUnsafe failed: ${error.message}`);
  * }
- *
+ * 
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeDRepDeposit = (
-  instance: CML.ProtocolParamUpdate,
-): bigint | undefined => Effect.runSync(dRepDeposit(instance));
+export const dRepDepositUnsafe = (instance: CML.ProtocolParamUpdate): bigint | undefined =>
+  Effect.runSync(dRepDeposit(instance));
 
 /**
  * Method setDRepInactivityPeriod of ProtocolParamUpdate
- *
+ * 
  * @example
  * import { ProtocolParamUpdate } from "@lucid-evolution/experimental";
  * import { Effect } from "effect";
- *
+ * 
  * // Using Effect for safe execution with error handling
  * Effect.gen(function*() {
  * // Assume we have a ProtocolParamUpdate instance
@@ -3715,57 +3458,51 @@ export const unsafeDRepDeposit = (
  *   const result = yield* ProtocolParamUpdate.setDRepInactivityPeriod(instance,  parameters );
  *   console.log(result);
  * });
- *
+ * 
  * @since 2.0.0
  * @category Methods
  */
 export const setDRepInactivityPeriod = Effect.fn(
-  (
-    instance: CML.ProtocolParamUpdate,
-    dRepInactivityPeriod: bigint,
-  ): Effect.Effect<void, ProtocolParamUpdateError> =>
+  (instance: CML.ProtocolParamUpdate, dRepInactivityPeriod: bigint): Effect.Effect<void, ProtocolParamUpdateError> =>
     Effect.try({
       try: () => instance.set_d_rep_inactivity_period(dRepInactivityPeriod),
       catch: () =>
         new ProtocolParamUpdateError({
           message: `ProtocolParamUpdate.setDRepInactivityPeriod failed with parameters: ${dRepInactivityPeriod}. `,
         }),
-    }),
+    })
 );
 
 /**
  * Unsafely calls instance.setDRepInactivityPeriod without Effect wrapper
- *
+ * 
  * @example
  * import { ProtocolParamUpdate } from "@lucid-evolution/experimental";
- *
+ * 
  * // Assume we have a ProtocolParamUpdate instance
  * const instance = ... ;
- *
+ * 
  * // Using try/catch for error handling
  * try {
- *   const result = ProtocolParamUpdate.unsafeSetDRepInactivityPeriod(instance,  parameters );
+ *   const result = ProtocolParamUpdate.setDRepInactivityPeriodUnsafe(instance,  parameters );
  *   console.log(result);
  * } catch (error) {
- *   console.error(`ProtocolParamUpdate.unsafeSetDRepInactivityPeriod failed: ${error.message}`);
+ *   console.error(`ProtocolParamUpdate.setDRepInactivityPeriodUnsafe failed: ${error.message}`);
  * }
- *
+ * 
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeSetDRepInactivityPeriod = (
-  instance: CML.ProtocolParamUpdate,
-  dRepInactivityPeriod: bigint,
-): void =>
+export const setDRepInactivityPeriodUnsafe = (instance: CML.ProtocolParamUpdate, dRepInactivityPeriod: bigint): void =>
   Effect.runSync(setDRepInactivityPeriod(instance, dRepInactivityPeriod));
 
 /**
  * Method dRepInactivityPeriod of ProtocolParamUpdate
- *
+ * 
  * @example
  * import { ProtocolParamUpdate } from "@lucid-evolution/experimental";
  * import { Effect } from "effect";
- *
+ * 
  * // Using Effect for safe execution with error handling
  * Effect.gen(function*() {
  * // Assume we have a ProtocolParamUpdate instance
@@ -3773,54 +3510,51 @@ export const unsafeSetDRepInactivityPeriod = (
  *   const result = yield* ProtocolParamUpdate.dRepInactivityPeriod(instance);
  *   console.log(result);
  * });
- *
+ * 
  * @since 2.0.0
  * @category Methods
  */
 export const dRepInactivityPeriod = Effect.fn(
-  (
-    instance: CML.ProtocolParamUpdate,
-  ): Effect.Effect<bigint | undefined, ProtocolParamUpdateError> =>
+  (instance: CML.ProtocolParamUpdate): Effect.Effect<bigint | undefined, ProtocolParamUpdateError> =>
     Effect.try({
       try: () => instance.d_rep_inactivity_period(),
       catch: () =>
         new ProtocolParamUpdateError({
           message: `ProtocolParamUpdate.dRepInactivityPeriod failed `,
         }),
-    }),
+    })
 );
 
 /**
  * Unsafely calls instance.dRepInactivityPeriod without Effect wrapper
- *
+ * 
  * @example
  * import { ProtocolParamUpdate } from "@lucid-evolution/experimental";
- *
+ * 
  * // Assume we have a ProtocolParamUpdate instance
  * const instance = ... ;
- *
+ * 
  * // Using try/catch for error handling
  * try {
- *   const result = ProtocolParamUpdate.unsafeDRepInactivityPeriod(instance);
+ *   const result = ProtocolParamUpdate.dRepInactivityPeriodUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`ProtocolParamUpdate.unsafeDRepInactivityPeriod failed: ${error.message}`);
+ *   console.error(`ProtocolParamUpdate.dRepInactivityPeriodUnsafe failed: ${error.message}`);
  * }
- *
+ * 
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeDRepInactivityPeriod = (
-  instance: CML.ProtocolParamUpdate,
-): bigint | undefined => Effect.runSync(dRepInactivityPeriod(instance));
+export const dRepInactivityPeriodUnsafe = (instance: CML.ProtocolParamUpdate): bigint | undefined =>
+  Effect.runSync(dRepInactivityPeriod(instance));
 
 /**
  * Method setMinFeeRefScriptCostPerByte of ProtocolParamUpdate
- *
+ * 
  * @example
  * import { ProtocolParamUpdate } from "@lucid-evolution/experimental";
  * import { Effect } from "effect";
- *
+ * 
  * // Using Effect for safe execution with error handling
  * Effect.gen(function*() {
  * // Assume we have a ProtocolParamUpdate instance
@@ -3828,62 +3562,51 @@ export const unsafeDRepInactivityPeriod = (
  *   const result = yield* ProtocolParamUpdate.setMinFeeRefScriptCostPerByte(instance,  parameters );
  *   console.log(result);
  * });
- *
+ * 
  * @since 2.0.0
  * @category Methods
  */
 export const setMinFeeRefScriptCostPerByte = Effect.fn(
-  (
-    instance: CML.ProtocolParamUpdate,
-    minFeeRefScriptCostPerByte: CML.Rational,
-  ): Effect.Effect<void, ProtocolParamUpdateError> =>
+  (instance: CML.ProtocolParamUpdate, minFeeRefScriptCostPerByte: CML.Rational): Effect.Effect<void, ProtocolParamUpdateError> =>
     Effect.try({
-      try: () =>
-        instance.set_min_fee_ref_script_cost_per_byte(
-          minFeeRefScriptCostPerByte,
-        ),
+      try: () => instance.set_min_fee_ref_script_cost_per_byte(minFeeRefScriptCostPerByte),
       catch: () =>
         new ProtocolParamUpdateError({
           message: `ProtocolParamUpdate.setMinFeeRefScriptCostPerByte failed with parameters: ${minFeeRefScriptCostPerByte} (Rational). `,
         }),
-    }),
+    })
 );
 
 /**
  * Unsafely calls instance.setMinFeeRefScriptCostPerByte without Effect wrapper
- *
+ * 
  * @example
  * import { ProtocolParamUpdate } from "@lucid-evolution/experimental";
- *
+ * 
  * // Assume we have a ProtocolParamUpdate instance
  * const instance = ... ;
- *
+ * 
  * // Using try/catch for error handling
  * try {
- *   const result = ProtocolParamUpdate.unsafeSetMinFeeRefScriptCostPerByte(instance,  parameters );
+ *   const result = ProtocolParamUpdate.setMinFeeRefScriptCostPerByteUnsafe(instance,  parameters );
  *   console.log(result);
  * } catch (error) {
- *   console.error(`ProtocolParamUpdate.unsafeSetMinFeeRefScriptCostPerByte failed: ${error.message}`);
+ *   console.error(`ProtocolParamUpdate.setMinFeeRefScriptCostPerByteUnsafe failed: ${error.message}`);
  * }
- *
+ * 
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeSetMinFeeRefScriptCostPerByte = (
-  instance: CML.ProtocolParamUpdate,
-  minFeeRefScriptCostPerByte: CML.Rational,
-): void =>
-  Effect.runSync(
-    setMinFeeRefScriptCostPerByte(instance, minFeeRefScriptCostPerByte),
-  );
+export const setMinFeeRefScriptCostPerByteUnsafe = (instance: CML.ProtocolParamUpdate, minFeeRefScriptCostPerByte: CML.Rational): void =>
+  Effect.runSync(setMinFeeRefScriptCostPerByte(instance, minFeeRefScriptCostPerByte));
 
 /**
  * Method minFeeRefScriptCostPerByte of ProtocolParamUpdate
- *
+ * 
  * @example
  * import { ProtocolParamUpdate } from "@lucid-evolution/experimental";
  * import { Effect } from "effect";
- *
+ * 
  * // Using Effect for safe execution with error handling
  * Effect.gen(function*() {
  * // Assume we have a ProtocolParamUpdate instance
@@ -3891,92 +3614,88 @@ export const unsafeSetMinFeeRefScriptCostPerByte = (
  *   const result = yield* ProtocolParamUpdate.minFeeRefScriptCostPerByte(instance);
  *   console.log(result);
  * });
- *
+ * 
  * @since 2.0.0
  * @category Methods
  */
 export const minFeeRefScriptCostPerByte = Effect.fn(
-  (
-    instance: CML.ProtocolParamUpdate,
-  ): Effect.Effect<CML.Rational | undefined, ProtocolParamUpdateError> =>
+  (instance: CML.ProtocolParamUpdate): Effect.Effect<CML.Rational | undefined, ProtocolParamUpdateError> =>
     Effect.try({
       try: () => instance.min_fee_ref_script_cost_per_byte(),
       catch: () =>
         new ProtocolParamUpdateError({
           message: `ProtocolParamUpdate.minFeeRefScriptCostPerByte failed `,
         }),
-    }),
+    })
 );
 
 /**
  * Unsafely calls instance.minFeeRefScriptCostPerByte without Effect wrapper
- *
+ * 
  * @example
  * import { ProtocolParamUpdate } from "@lucid-evolution/experimental";
- *
+ * 
  * // Assume we have a ProtocolParamUpdate instance
  * const instance = ... ;
- *
+ * 
  * // Using try/catch for error handling
  * try {
- *   const result = ProtocolParamUpdate.unsafeMinFeeRefScriptCostPerByte(instance);
+ *   const result = ProtocolParamUpdate.minFeeRefScriptCostPerByteUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`ProtocolParamUpdate.unsafeMinFeeRefScriptCostPerByte failed: ${error.message}`);
+ *   console.error(`ProtocolParamUpdate.minFeeRefScriptCostPerByteUnsafe failed: ${error.message}`);
  * }
- *
+ * 
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeMinFeeRefScriptCostPerByte = (
-  instance: CML.ProtocolParamUpdate,
-): CML.Rational | undefined =>
+export const minFeeRefScriptCostPerByteUnsafe = (instance: CML.ProtocolParamUpdate): CML.Rational | undefined =>
   Effect.runSync(minFeeRefScriptCostPerByte(instance));
 
 /**
  * Static method _new of ProtocolParamUpdate
- *
+ * 
  * @example
  * import { ProtocolParamUpdate } from "@lucid-evolution/experimental";
  * import { Effect } from "effect";
- *
+ * 
  * // Using Effect for safe execution with error handling
  * Effect.gen(function*() {
- *
+ * 
  *   const result = yield* ProtocolParamUpdate._new();
  *   console.log(result);
  * });
- *
+ * 
  * @since 2.0.0
  * @category Constructors
  */
 export const _new = Effect.fn(function* () {
   return yield* Effect.try({
     try: () => CML.ProtocolParamUpdate.new(),
-    catch: () =>
-      new ProtocolParamUpdateError({
-        message: `ProtocolParamUpdate._new failed `,
-      }),
+    catch: () => new ProtocolParamUpdateError({
+      message: `ProtocolParamUpdate._new failed `,
+    }),
   });
 });
 
 /**
  * Unsafely calls ProtocolParamUpdate._new without Effect wrapper
- *
+ * 
  * @example
  * import { ProtocolParamUpdate } from "@lucid-evolution/experimental";
- *
- *
- *
+ * 
+ * 
+ * 
  * // Using try/catch for error handling
  * try {
- *   const result = ProtocolParamUpdate.unsafe_new();
+ *   const result = ProtocolParamUpdate._newUnsafe();
  *   console.log(result);
  * } catch (error) {
- *   console.error(`ProtocolParamUpdate.unsafe_new failed: ${error.message}`);
+ *   console.error(`ProtocolParamUpdate._newUnsafe failed: ${error.message}`);
  * }
- *
+ * 
  * @since 2.0.0
- * @category Constructors
+ * @category ConstructorsUnsafe
  */
-export const unsafe_new = () => Effect.runSync(_new());
+export const _newUnsafe = () =>
+  Effect.runSync(_new());

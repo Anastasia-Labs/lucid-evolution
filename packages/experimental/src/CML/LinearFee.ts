@@ -1,19 +1,36 @@
+/**
+ * @since 2.0.0
+ */
 import { Data, Effect } from "effect";
 import * as CML from "@anastasia-labs/cardano-multiplatform-lib-nodejs";
 
+/**
+ * Type alias for the CML LinearFee class
+ *
+ * @since 2.0.0
+ * @category Types
+ */
 export type LinearFee = CML.LinearFee;
 
+/**
+ * Error class for LinearFee operations
+ * 
+ * This error is thrown when operations on LinearFee instances fail.
+ *
+ * @since 2.0.0
+ * @category Errors
+ */
 export class LinearFeeError extends Data.TaggedError("LinearFeeError")<{
   message?: string;
 }> {}
 
 /**
  * Method free of LinearFee
- *
+ * 
  * @example
  * import { LinearFee } from "@lucid-evolution/experimental";
  * import { Effect } from "effect";
- *
+ * 
  * // Using Effect for safe execution with error handling
  * Effect.gen(function*() {
  * // Assume we have a LinearFee instance
@@ -21,7 +38,7 @@ export class LinearFeeError extends Data.TaggedError("LinearFeeError")<{
  *   const result = yield* LinearFee.free(instance);
  *   console.log(result);
  * });
- *
+ * 
  * @since 2.0.0
  * @category Methods
  */
@@ -33,95 +50,87 @@ export const free = Effect.fn(
         new LinearFeeError({
           message: `LinearFee.free failed Hint: Check if you're calling free() more than once.`,
         }),
-    }),
+    })
 );
 
 /**
  * Unsafely calls instance.free without Effect wrapper
- *
+ * 
  * @example
  * import { LinearFee } from "@lucid-evolution/experimental";
- *
+ * 
  * // Assume we have a LinearFee instance
  * const instance = ... ;
- *
+ * 
  * // Using try/catch for error handling
  * try {
- *   const result = LinearFee.unsafeFree(instance);
+ *   const result = LinearFee.freeUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`LinearFee.unsafeFree failed: ${error.message}`);
+ *   console.error(`LinearFee.freeUnsafe failed: ${error.message}`);
  * }
- *
+ * 
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeFree = (instance: CML.LinearFee): void =>
+export const freeUnsafe = (instance: CML.LinearFee): void =>
   Effect.runSync(free(instance));
 
 /**
  * Static method _new of LinearFee
- *
+ * 
  * @example
  * import { LinearFee } from "@lucid-evolution/experimental";
  * import { Effect } from "effect";
- *
+ * 
  * // Using Effect for safe execution with error handling
  * Effect.gen(function*() {
- *
+ * 
  *   const result = yield* LinearFee._new( parameters );
  *   console.log(result);
  * });
- *
+ * 
  * @since 2.0.0
  * @category Constructors
  */
-export const _new = Effect.fn(function* (
-  coefficient: bigint,
-  constant: bigint,
-  refScriptCostPerByte: bigint,
-) {
+export const _new = Effect.fn(function* (coefficient: bigint, constant: bigint, refScriptCostPerByte: bigint) {
   return yield* Effect.try({
     try: () => CML.LinearFee.new(coefficient, constant, refScriptCostPerByte),
-    catch: () =>
-      new LinearFeeError({
-        message: `LinearFee._new failed with parameters: ${coefficient}, ${constant}, ${refScriptCostPerByte}. `,
-      }),
+    catch: () => new LinearFeeError({
+      message: `LinearFee._new failed with parameters: ${coefficient}, ${constant}, ${refScriptCostPerByte}. `,
+    }),
   });
 });
 
 /**
  * Unsafely calls LinearFee._new without Effect wrapper
- *
+ * 
  * @example
  * import { LinearFee } from "@lucid-evolution/experimental";
- *
- *
- *
+ * 
+ * 
+ * 
  * // Using try/catch for error handling
  * try {
- *   const result = LinearFee.unsafe_new( parameters );
+ *   const result = LinearFee._newUnsafe( parameters );
  *   console.log(result);
  * } catch (error) {
- *   console.error(`LinearFee.unsafe_new failed: ${error.message}`);
+ *   console.error(`LinearFee._newUnsafe failed: ${error.message}`);
  * }
- *
+ * 
  * @since 2.0.0
- * @category Constructors
+ * @category ConstructorsUnsafe
  */
-export const unsafe_new = (
-  coefficient: bigint,
-  constant: bigint,
-  refScriptCostPerByte: bigint,
-) => Effect.runSync(_new(coefficient, constant, refScriptCostPerByte));
+export const _newUnsafe = (coefficient: bigint, constant: bigint, refScriptCostPerByte: bigint) =>
+  Effect.runSync(_new(coefficient, constant, refScriptCostPerByte));
 
 /**
  * Method coefficient of LinearFee
- *
+ * 
  * @example
  * import { LinearFee } from "@lucid-evolution/experimental";
  * import { Effect } from "effect";
- *
+ * 
  * // Using Effect for safe execution with error handling
  * Effect.gen(function*() {
  * // Assume we have a LinearFee instance
@@ -129,7 +138,7 @@ export const unsafe_new = (
  *   const result = yield* LinearFee.coefficient(instance);
  *   console.log(result);
  * });
- *
+ * 
  * @since 2.0.0
  * @category Methods
  */
@@ -141,39 +150,39 @@ export const coefficient = Effect.fn(
         new LinearFeeError({
           message: `LinearFee.coefficient failed `,
         }),
-    }),
+    })
 );
 
 /**
  * Unsafely calls instance.coefficient without Effect wrapper
- *
+ * 
  * @example
  * import { LinearFee } from "@lucid-evolution/experimental";
- *
+ * 
  * // Assume we have a LinearFee instance
  * const instance = ... ;
- *
+ * 
  * // Using try/catch for error handling
  * try {
- *   const result = LinearFee.unsafeCoefficient(instance);
+ *   const result = LinearFee.coefficientUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`LinearFee.unsafeCoefficient failed: ${error.message}`);
+ *   console.error(`LinearFee.coefficientUnsafe failed: ${error.message}`);
  * }
- *
+ * 
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeCoefficient = (instance: CML.LinearFee): bigint =>
+export const coefficientUnsafe = (instance: CML.LinearFee): bigint =>
   Effect.runSync(coefficient(instance));
 
 /**
  * Method constant of LinearFee
- *
+ * 
  * @example
  * import { LinearFee } from "@lucid-evolution/experimental";
  * import { Effect } from "effect";
- *
+ * 
  * // Using Effect for safe execution with error handling
  * Effect.gen(function*() {
  * // Assume we have a LinearFee instance
@@ -181,7 +190,7 @@ export const unsafeCoefficient = (instance: CML.LinearFee): bigint =>
  *   const result = yield* LinearFee.constant(instance);
  *   console.log(result);
  * });
- *
+ * 
  * @since 2.0.0
  * @category Methods
  */
@@ -193,39 +202,39 @@ export const constant = Effect.fn(
         new LinearFeeError({
           message: `LinearFee.constant failed `,
         }),
-    }),
+    })
 );
 
 /**
  * Unsafely calls instance.constant without Effect wrapper
- *
+ * 
  * @example
  * import { LinearFee } from "@lucid-evolution/experimental";
- *
+ * 
  * // Assume we have a LinearFee instance
  * const instance = ... ;
- *
+ * 
  * // Using try/catch for error handling
  * try {
- *   const result = LinearFee.unsafeConstant(instance);
+ *   const result = LinearFee.constantUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`LinearFee.unsafeConstant failed: ${error.message}`);
+ *   console.error(`LinearFee.constantUnsafe failed: ${error.message}`);
  * }
- *
+ * 
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeConstant = (instance: CML.LinearFee): bigint =>
+export const constantUnsafe = (instance: CML.LinearFee): bigint =>
   Effect.runSync(constant(instance));
 
 /**
  * Method refScriptCostPerByte of LinearFee
- *
+ * 
  * @example
  * import { LinearFee } from "@lucid-evolution/experimental";
  * import { Effect } from "effect";
- *
+ * 
  * // Using Effect for safe execution with error handling
  * Effect.gen(function*() {
  * // Assume we have a LinearFee instance
@@ -233,7 +242,7 @@ export const unsafeConstant = (instance: CML.LinearFee): bigint =>
  *   const result = yield* LinearFee.refScriptCostPerByte(instance);
  *   console.log(result);
  * });
- *
+ * 
  * @since 2.0.0
  * @category Methods
  */
@@ -245,28 +254,28 @@ export const refScriptCostPerByte = Effect.fn(
         new LinearFeeError({
           message: `LinearFee.refScriptCostPerByte failed `,
         }),
-    }),
+    })
 );
 
 /**
  * Unsafely calls instance.refScriptCostPerByte without Effect wrapper
- *
+ * 
  * @example
  * import { LinearFee } from "@lucid-evolution/experimental";
- *
+ * 
  * // Assume we have a LinearFee instance
  * const instance = ... ;
- *
+ * 
  * // Using try/catch for error handling
  * try {
- *   const result = LinearFee.unsafeRefScriptCostPerByte(instance);
+ *   const result = LinearFee.refScriptCostPerByteUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`LinearFee.unsafeRefScriptCostPerByte failed: ${error.message}`);
+ *   console.error(`LinearFee.refScriptCostPerByteUnsafe failed: ${error.message}`);
  * }
- *
+ * 
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeRefScriptCostPerByte = (instance: CML.LinearFee): bigint =>
+export const refScriptCostPerByteUnsafe = (instance: CML.LinearFee): bigint =>
   Effect.runSync(refScriptCostPerByte(instance));

@@ -360,7 +360,7 @@ const processMethodName = (name: string): string => {
 };
 
 /**
- * Process method names for unsafe variants (convert unsafe_name to unsafeName)
+ * Process method names for unsafe variants (convert unsafe_name to nameUnsafe)
  */
 const processUnsafeName = (name: string): string => {
   // First convert the base name to camelCase
@@ -369,8 +369,8 @@ const processUnsafeName = (name: string): string => {
   // Then make sure it doesn't conflict with reserved keywords
   const safeName = safeMethodName(camelCaseName);
 
-  // Format using unsafeXxx convention
-  return `unsafe${safeName.charAt(0).toUpperCase()}${safeName.slice(1)}`;
+  // Format using xxxUnsafe convention (suffix instead of prefix)
+  return `${safeName}Unsafe`;
 };
 
 /**
@@ -500,20 +500,46 @@ const generateFunctionErrorMessage = (
 };
 
 /**
+ * Generate a version header for all generated files
+ */
+const generateVersionHeader = (version: string): string => {
+  return `/**
+ * @since ${version}
+ */\n`;
+};
+
+/**
  * Generate wrapper code for a class
  */
 const generateWrapper = (classInfo: ClassInfo, config: Config): string => {
   const { name: className } = classInfo;
 
+  // Add version header
+  const versionHeader = generateVersionHeader(config.version);
+
   // Updated imports to import the entire library with a namespace
   const imports = `import { Data, Effect } from "effect";
 import * as CML from "${config.libraryImport}";`;
 
-  // Export type alias for the CML class
-  const typeExport = `export type ${className} = CML.${className};`;
+  // Add JSDoc to type alias
+  const typeExport = `/**
+ * Type alias for the CML ${className} class
+ *
+ * @since ${config.version}
+ * @category Types
+ */
+export type ${className} = CML.${className};`;
 
-  // Generate error class
-  const errorClass = `export class ${className}Error extends Data.TaggedError("${className}Error")<{
+  // Add JSDoc to error class
+  const errorClass = `/**
+ * Error class for ${className} operations
+ * 
+ * This error is thrown when operations on ${className} instances fail.
+ *
+ * @since ${config.version}
+ * @category Errors
+ */
+export class ${className}Error extends Data.TaggedError("${className}Error")<{
   message?: string;
 }> {}`;
 
@@ -530,7 +556,7 @@ import * as CML from "${config.libraryImport}";`;
       // Use safe method name to avoid reserved keywords and convert to camelCase
       const name = processMethodName(originalMethodName);
 
-      // Create proper unsafeName in camelCase format (unsafeMethodName)
+      // Create proper unsafeName in camelCase format (nameUnsafe)
       const unsafeName = processUnsafeName(originalMethodName);
 
       // Add CML namespace to the return type
@@ -592,7 +618,7 @@ import * as CML from "${config.libraryImport}";`;
  * }
  * 
  * @since ${config.version}
- * @category ${isStatic ? "Constructors" : "Methods"}
+ * @category ${isStatic ? "Constructors" : "Methods"}Unsafe
  */`;
 
       if (isStatic) {
@@ -671,7 +697,7 @@ export const ${unsafeName} = (${paramsList}): ${processedReturnType} =>
     })
     .join("\n\n");
 
-  return `${imports}\n\n${typeExport}\n\n${errorClass}\n\n${methodWrappers}\n`;
+  return `${versionHeader}${imports}\n\n${typeExport}\n\n${errorClass}\n\n${methodWrappers}\n`;
 };
 
 /**
@@ -680,16 +706,38 @@ export const ${unsafeName} = (${paramsList}): ${processedReturnType} =>
 const generateEnumWrapper = (enumInfo: EnumInfo, config: Config): string => {
   const { name: enumName, members } = enumInfo;
 
+  // Add version header
+  const versionHeader = generateVersionHeader(config.version);
+
   // Create imports
   const imports = `import * as CML from "${config.libraryImport}";`;
 
-  // Export enum type alias
-  const typeExport = `export type ${enumName} = CML.${enumName};`;
+  // Add JSDoc to enum type alias
+  const typeExport = `/**
+ * Type alias for the CML ${enumName} enum
+ *
+ * @since ${config.version}
+ * @category Types
+ */
+export type ${enumName} = CML.${enumName};`;
 
-  // Export enum values
+  // Export enum values with JSDoc
   const membersExport = members
-    .map((member) => `export const ${member} = CML.${enumName}.${member};`)
-    .join("\n");
+    .map(
+      (member) => `/**
+ * ${member} variant of the ${enumName} enum
+ * 
+ * @example
+ * import { ${enumName} } from "@${config.packageName}";
+ * 
+ * const kind = ${enumName}.${member};
+ * 
+ * @since ${config.version}
+ * @category Variants
+ */
+export const ${member} = CML.${enumName}.${member};`
+    )
+    .join("\n\n");
 
   // Create helper functions for string conversion if useful
   const helperFunctions = `
@@ -749,7 +797,7 @@ export const fromString = (str: string): CML.${enumName} | undefined => {
   }
 };`;
 
-  return `${imports}\n\n${typeExport}\n\n${membersExport}\n\n${helperFunctions}\n`;
+  return `${versionHeader}${imports}\n\n${typeExport}\n\n${membersExport}\n\n${helperFunctions}\n`;
 };
 
 /**
@@ -761,10 +809,13 @@ const generateFunctionWrapper = (
 ): string => {
   const { name: originalFunctionName, parameters, returnType } = functionInfo;
 
+  // Add version header
+  const versionHeader = generateVersionHeader(config.version);
+
   // Use safe function name to avoid reserved keywords and convert to camelCase
   const name = processMethodName(originalFunctionName);
 
-  // Create proper unsafeName in camelCase format (unsafeMethodName)
+  // Create proper unsafeName in camelCase format (nameUnsafe)
   const unsafeName = processUnsafeName(originalFunctionName);
 
   // Add CML namespace to the return type
@@ -791,8 +842,16 @@ const generateFunctionWrapper = (
     processedParameters,
   );
 
-  // Create function error type
+  // Create function error type with JSDoc
   const errorClassName = `${name.charAt(0).toUpperCase() + name.slice(1)}Error`;
+  const errorClassJSDoc = `/**
+ * Error class for ${originalFunctionName} function
+ * 
+ * This error is thrown when the ${originalFunctionName} function fails.
+ *
+ * @since ${config.version}
+ * @category Errors
+ */`;
 
   // Create example parameter values for documentation based on parameter types
   const paramExamples = processedParameters.map((p) => {
@@ -840,12 +899,13 @@ const generateFunctionWrapper = (
  * }
  * 
  * @since ${config.version}
- * @category Functions
+ * @category FunctionsUnsafe
  */`;
 
-  return `import { Data, Effect } from "effect";
+  return `${versionHeader}import { Data, Effect } from "effect";
 import * as CML from "${config.libraryImport}";
 
+${errorClassJSDoc}
 export class ${errorClassName} extends Data.TaggedError("${errorClassName}")<{
   message?: string;
 }> {}
@@ -873,7 +933,10 @@ const createIndex = (
   classes: Array<ClassInfo>,
   enums: Array<EnumInfo>,
   outputDir: string,
+  config: Config,
 ): void => {
+  const versionHeader = generateVersionHeader(config.version);
+  
   const classExports = classes
     .map((cls) => `export * as ${cls.name} from './${cls.name}.js';`)
     .join("\n");
@@ -883,7 +946,7 @@ const createIndex = (
     .map((e) => `export * as ${e.name} from './Enum/${e.name}.js';`)
     .join("\n");
 
-  const content = `// This file is auto-generated - do not modify
+  const content = `${versionHeader}// This file is auto-generated - do not modify
 ${classExports}
 
 // Enums
@@ -896,12 +959,14 @@ ${enumExports}
 /**
  * Creates index file for enum wrappers
  */
-const createEnumsIndex = (enums: Array<EnumInfo>, outputDir: string): void => {
+const createEnumsIndex = (enums: Array<EnumInfo>, outputDir: string, config: Config): void => {
+  const versionHeader = generateVersionHeader(config.version);
+  
   const enumExports = enums
     .map((e) => `export * as ${e.name} from './${e.name}.js';`)
     .join("\n");
 
-  const content = `// This file is auto-generated - do not modify
+  const content = `${versionHeader}// This file is auto-generated - do not modify
 ${enumExports}
 `;
 
@@ -914,7 +979,10 @@ ${enumExports}
 const createFunctionsIndex = (
   functions: Array<FunctionInfo>,
   outputDir: string,
+  config: Config,
 ): void => {
+  const versionHeader = generateVersionHeader(config.version);
+  
   // Group functions by first letter for better organization
   const functionsByLetter: Record<string, Array<string>> = {};
 
@@ -927,7 +995,7 @@ const createFunctionsIndex = (
   });
 
   // Create exports organized by first letter
-  const content = `// This file is auto-generated - do not modify
+  const content = `${versionHeader}// This file is auto-generated - do not modify
 ${Object.entries(functionsByLetter)
   .map(
     ([letter, funcs]) =>
@@ -1015,17 +1083,17 @@ const generate = (config: Config): void => {
     console.log(`Generated wrapper for function ${functionInfo.name}`);
   }
 
-  // Create index files
-  createIndex(classes, enums, config.outputDir);
+  // Create index files with version
+  createIndex(classes, enums, config.outputDir, config);
 
   // Create index file for enums directory
   if (enums.length > 0) {
-    createEnumsIndex(enums, enumsDir);
+    createEnumsIndex(enums, enumsDir, config);
   }
 
   // Create index file for functions directory
   if (functions.length > 0) {
-    createFunctionsIndex(functions, functionsDir);
+    createFunctionsIndex(functions, functionsDir, config);
 
     // Update main index to export functions module
     const mainIndexPath = path.join(config.outputDir, "index.ts");
@@ -1033,6 +1101,8 @@ const generate = (config: Config): void => {
     const updatedContent =
       mainIndexContent +
       "\n// Utils\nexport * as Utils from './Utils/index.js';\n";
+    
+    // Write the updated content with the version header preserved at the top
     fs.writeFileSync(mainIndexPath, updatedContent);
   }
 

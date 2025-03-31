@@ -1,19 +1,36 @@
+/**
+ * @since 2.0.0
+ */
 import { Data, Effect } from "effect";
 import * as CML from "@anastasia-labs/cardano-multiplatform-lib-nodejs";
 
+/**
+ * Type alias for the CML PoolParams class
+ *
+ * @since 2.0.0
+ * @category Types
+ */
 export type PoolParams = CML.PoolParams;
 
+/**
+ * Error class for PoolParams operations
+ * 
+ * This error is thrown when operations on PoolParams instances fail.
+ *
+ * @since 2.0.0
+ * @category Errors
+ */
 export class PoolParamsError extends Data.TaggedError("PoolParamsError")<{
   message?: string;
 }> {}
 
 /**
  * Method free of PoolParams
- *
+ * 
  * @example
  * import { PoolParams } from "@lucid-evolution/experimental";
  * import { Effect } from "effect";
- *
+ * 
  * // Using Effect for safe execution with error handling
  * Effect.gen(function*() {
  * // Assume we have a PoolParams instance
@@ -21,7 +38,7 @@ export class PoolParamsError extends Data.TaggedError("PoolParamsError")<{
  *   const result = yield* PoolParams.free(instance);
  *   console.log(result);
  * });
- *
+ * 
  * @since 2.0.0
  * @category Methods
  */
@@ -33,39 +50,39 @@ export const free = Effect.fn(
         new PoolParamsError({
           message: `PoolParams.free failed Hint: Check if you're calling free() more than once.`,
         }),
-    }),
+    })
 );
 
 /**
  * Unsafely calls instance.free without Effect wrapper
- *
+ * 
  * @example
  * import { PoolParams } from "@lucid-evolution/experimental";
- *
+ * 
  * // Assume we have a PoolParams instance
  * const instance = ... ;
- *
+ * 
  * // Using try/catch for error handling
  * try {
- *   const result = PoolParams.unsafeFree(instance);
+ *   const result = PoolParams.freeUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`PoolParams.unsafeFree failed: ${error.message}`);
+ *   console.error(`PoolParams.freeUnsafe failed: ${error.message}`);
  * }
- *
+ * 
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeFree = (instance: CML.PoolParams): void =>
+export const freeUnsafe = (instance: CML.PoolParams): void =>
   Effect.runSync(free(instance));
 
 /**
  * Method toCborBytes of PoolParams
- *
+ * 
  * @example
  * import { PoolParams } from "@lucid-evolution/experimental";
  * import { Effect } from "effect";
- *
+ * 
  * // Using Effect for safe execution with error handling
  * Effect.gen(function*() {
  * // Assume we have a PoolParams instance
@@ -73,7 +90,7 @@ export const unsafeFree = (instance: CML.PoolParams): void =>
  *   const result = yield* PoolParams.toCborBytes(instance);
  *   console.log(result);
  * });
- *
+ * 
  * @since 2.0.0
  * @category Methods
  */
@@ -85,39 +102,39 @@ export const toCborBytes = Effect.fn(
         new PoolParamsError({
           message: `PoolParams.toCborBytes failed PoolParams is not valid for Uint8Array conversion. Hint: Check byte length and encoding.`,
         }),
-    }),
+    })
 );
 
 /**
  * Unsafely calls instance.toCborBytes without Effect wrapper
- *
+ * 
  * @example
  * import { PoolParams } from "@lucid-evolution/experimental";
- *
+ * 
  * // Assume we have a PoolParams instance
  * const instance = ... ;
- *
+ * 
  * // Using try/catch for error handling
  * try {
- *   const result = PoolParams.unsafeToCborBytes(instance);
+ *   const result = PoolParams.toCborBytesUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`PoolParams.unsafeToCborBytes failed: ${error.message}`);
+ *   console.error(`PoolParams.toCborBytesUnsafe failed: ${error.message}`);
  * }
- *
+ * 
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeToCborBytes = (instance: CML.PoolParams): Uint8Array =>
+export const toCborBytesUnsafe = (instance: CML.PoolParams): Uint8Array =>
   Effect.runSync(toCborBytes(instance));
 
 /**
  * Method toCanonicalCborBytes of PoolParams
- *
+ * 
  * @example
  * import { PoolParams } from "@lucid-evolution/experimental";
  * import { Effect } from "effect";
- *
+ * 
  * // Using Effect for safe execution with error handling
  * Effect.gen(function*() {
  * // Assume we have a PoolParams instance
@@ -125,7 +142,7 @@ export const unsafeToCborBytes = (instance: CML.PoolParams): Uint8Array =>
  *   const result = yield* PoolParams.toCanonicalCborBytes(instance);
  *   console.log(result);
  * });
- *
+ * 
  * @since 2.0.0
  * @category Methods
  */
@@ -137,89 +154,87 @@ export const toCanonicalCborBytes = Effect.fn(
         new PoolParamsError({
           message: `PoolParams.toCanonicalCborBytes failed PoolParams is not valid for Uint8Array conversion. Hint: Check byte length and encoding.`,
         }),
-    }),
+    })
 );
 
 /**
  * Unsafely calls instance.toCanonicalCborBytes without Effect wrapper
- *
+ * 
  * @example
  * import { PoolParams } from "@lucid-evolution/experimental";
- *
+ * 
  * // Assume we have a PoolParams instance
  * const instance = ... ;
- *
+ * 
  * // Using try/catch for error handling
  * try {
- *   const result = PoolParams.unsafeToCanonicalCborBytes(instance);
+ *   const result = PoolParams.toCanonicalCborBytesUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`PoolParams.unsafeToCanonicalCborBytes failed: ${error.message}`);
+ *   console.error(`PoolParams.toCanonicalCborBytesUnsafe failed: ${error.message}`);
  * }
- *
+ * 
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeToCanonicalCborBytes = (
-  instance: CML.PoolParams,
-): Uint8Array => Effect.runSync(toCanonicalCborBytes(instance));
+export const toCanonicalCborBytesUnsafe = (instance: CML.PoolParams): Uint8Array =>
+  Effect.runSync(toCanonicalCborBytes(instance));
 
 /**
  * Static method fromCborBytes of PoolParams
- *
+ * 
  * @example
  * import { PoolParams } from "@lucid-evolution/experimental";
  * import { Effect } from "effect";
- *
+ * 
  * // Using Effect for safe execution with error handling
  * Effect.gen(function*() {
- *
+ * 
  *   const result = yield* PoolParams.fromCborBytes( parameters );
  *   console.log(result);
  * });
- *
+ * 
  * @since 2.0.0
  * @category Constructors
  */
 export const fromCborBytes = Effect.fn(function* (cborBytes: Uint8Array) {
   return yield* Effect.try({
     try: () => CML.PoolParams.from_cbor_bytes(cborBytes),
-    catch: () =>
-      new PoolParamsError({
-        message: `PoolParams.fromCborBytes failed with parameters: ${cborBytes}. Hint: Check byte length and encoding.`,
-      }),
+    catch: () => new PoolParamsError({
+      message: `PoolParams.fromCborBytes failed with parameters: ${cborBytes}. Hint: Check byte length and encoding.`,
+    }),
   });
 });
 
 /**
  * Unsafely calls PoolParams.fromCborBytes without Effect wrapper
- *
+ * 
  * @example
  * import { PoolParams } from "@lucid-evolution/experimental";
- *
- *
- *
+ * 
+ * 
+ * 
  * // Using try/catch for error handling
  * try {
- *   const result = PoolParams.unsafeFromCborBytes( parameters );
+ *   const result = PoolParams.fromCborBytesUnsafe( parameters );
  *   console.log(result);
  * } catch (error) {
- *   console.error(`PoolParams.unsafeFromCborBytes failed: ${error.message}`);
+ *   console.error(`PoolParams.fromCborBytesUnsafe failed: ${error.message}`);
  * }
- *
+ * 
  * @since 2.0.0
- * @category Constructors
+ * @category ConstructorsUnsafe
  */
-export const unsafeFromCborBytes = (cborBytes: Uint8Array) =>
+export const fromCborBytesUnsafe = (cborBytes: Uint8Array) =>
   Effect.runSync(fromCborBytes(cborBytes));
 
 /**
  * Method toCborHex of PoolParams
- *
+ * 
  * @example
  * import { PoolParams } from "@lucid-evolution/experimental";
  * import { Effect } from "effect";
- *
+ * 
  * // Using Effect for safe execution with error handling
  * Effect.gen(function*() {
  * // Assume we have a PoolParams instance
@@ -227,7 +242,7 @@ export const unsafeFromCborBytes = (cborBytes: Uint8Array) =>
  *   const result = yield* PoolParams.toCborHex(instance);
  *   console.log(result);
  * });
- *
+ * 
  * @since 2.0.0
  * @category Methods
  */
@@ -239,39 +254,39 @@ export const toCborHex = Effect.fn(
         new PoolParamsError({
           message: `PoolParams.toCborHex failed PoolParams is not valid for string conversion. Hint: Make sure it's a valid hex string representing CBOR data.`,
         }),
-    }),
+    })
 );
 
 /**
  * Unsafely calls instance.toCborHex without Effect wrapper
- *
+ * 
  * @example
  * import { PoolParams } from "@lucid-evolution/experimental";
- *
+ * 
  * // Assume we have a PoolParams instance
  * const instance = ... ;
- *
+ * 
  * // Using try/catch for error handling
  * try {
- *   const result = PoolParams.unsafeToCborHex(instance);
+ *   const result = PoolParams.toCborHexUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`PoolParams.unsafeToCborHex failed: ${error.message}`);
+ *   console.error(`PoolParams.toCborHexUnsafe failed: ${error.message}`);
  * }
- *
+ * 
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeToCborHex = (instance: CML.PoolParams): string =>
+export const toCborHexUnsafe = (instance: CML.PoolParams): string =>
   Effect.runSync(toCborHex(instance));
 
 /**
  * Method toCanonicalCborHex of PoolParams
- *
+ * 
  * @example
  * import { PoolParams } from "@lucid-evolution/experimental";
  * import { Effect } from "effect";
- *
+ * 
  * // Using Effect for safe execution with error handling
  * Effect.gen(function*() {
  * // Assume we have a PoolParams instance
@@ -279,7 +294,7 @@ export const unsafeToCborHex = (instance: CML.PoolParams): string =>
  *   const result = yield* PoolParams.toCanonicalCborHex(instance);
  *   console.log(result);
  * });
- *
+ * 
  * @since 2.0.0
  * @category Methods
  */
@@ -291,88 +306,87 @@ export const toCanonicalCborHex = Effect.fn(
         new PoolParamsError({
           message: `PoolParams.toCanonicalCborHex failed PoolParams is not valid for string conversion. Hint: Make sure it's a valid hex string representing CBOR data.`,
         }),
-    }),
+    })
 );
 
 /**
  * Unsafely calls instance.toCanonicalCborHex without Effect wrapper
- *
+ * 
  * @example
  * import { PoolParams } from "@lucid-evolution/experimental";
- *
+ * 
  * // Assume we have a PoolParams instance
  * const instance = ... ;
- *
+ * 
  * // Using try/catch for error handling
  * try {
- *   const result = PoolParams.unsafeToCanonicalCborHex(instance);
+ *   const result = PoolParams.toCanonicalCborHexUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`PoolParams.unsafeToCanonicalCborHex failed: ${error.message}`);
+ *   console.error(`PoolParams.toCanonicalCborHexUnsafe failed: ${error.message}`);
  * }
- *
+ * 
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeToCanonicalCborHex = (instance: CML.PoolParams): string =>
+export const toCanonicalCborHexUnsafe = (instance: CML.PoolParams): string =>
   Effect.runSync(toCanonicalCborHex(instance));
 
 /**
  * Static method fromCborHex of PoolParams
- *
+ * 
  * @example
  * import { PoolParams } from "@lucid-evolution/experimental";
  * import { Effect } from "effect";
- *
+ * 
  * // Using Effect for safe execution with error handling
  * Effect.gen(function*() {
- *
+ * 
  *   const result = yield* PoolParams.fromCborHex( parameters );
  *   console.log(result);
  * });
- *
+ * 
  * @since 2.0.0
  * @category Constructors
  */
 export const fromCborHex = Effect.fn(function* (cborBytes: string) {
   return yield* Effect.try({
     try: () => CML.PoolParams.from_cbor_hex(cborBytes),
-    catch: () =>
-      new PoolParamsError({
-        message: `PoolParams.fromCborHex failed with parameters: ${cborBytes}. Hint: Make sure it's a valid hex string representing CBOR data.`,
-      }),
+    catch: () => new PoolParamsError({
+      message: `PoolParams.fromCborHex failed with parameters: ${cborBytes}. Hint: Make sure it's a valid hex string representing CBOR data.`,
+    }),
   });
 });
 
 /**
  * Unsafely calls PoolParams.fromCborHex without Effect wrapper
- *
+ * 
  * @example
  * import { PoolParams } from "@lucid-evolution/experimental";
- *
- *
- *
+ * 
+ * 
+ * 
  * // Using try/catch for error handling
  * try {
- *   const result = PoolParams.unsafeFromCborHex( parameters );
+ *   const result = PoolParams.fromCborHexUnsafe( parameters );
  *   console.log(result);
  * } catch (error) {
- *   console.error(`PoolParams.unsafeFromCborHex failed: ${error.message}`);
+ *   console.error(`PoolParams.fromCborHexUnsafe failed: ${error.message}`);
  * }
- *
+ * 
  * @since 2.0.0
- * @category Constructors
+ * @category ConstructorsUnsafe
  */
-export const unsafeFromCborHex = (cborBytes: string) =>
+export const fromCborHexUnsafe = (cborBytes: string) =>
   Effect.runSync(fromCborHex(cborBytes));
 
 /**
  * Method toJson of PoolParams
- *
+ * 
  * @example
  * import { PoolParams } from "@lucid-evolution/experimental";
  * import { Effect } from "effect";
- *
+ * 
  * // Using Effect for safe execution with error handling
  * Effect.gen(function*() {
  * // Assume we have a PoolParams instance
@@ -380,7 +394,7 @@ export const unsafeFromCborHex = (cborBytes: string) =>
  *   const result = yield* PoolParams.toJson(instance);
  *   console.log(result);
  * });
- *
+ * 
  * @since 2.0.0
  * @category Methods
  */
@@ -392,39 +406,39 @@ export const toJson = Effect.fn(
         new PoolParamsError({
           message: `PoolParams.toJson failed PoolParams is not valid for string conversion. Hint: Validate your JSON structure.`,
         }),
-    }),
+    })
 );
 
 /**
  * Unsafely calls instance.toJson without Effect wrapper
- *
+ * 
  * @example
  * import { PoolParams } from "@lucid-evolution/experimental";
- *
+ * 
  * // Assume we have a PoolParams instance
  * const instance = ... ;
- *
+ * 
  * // Using try/catch for error handling
  * try {
- *   const result = PoolParams.unsafeToJson(instance);
+ *   const result = PoolParams.toJsonUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`PoolParams.unsafeToJson failed: ${error.message}`);
+ *   console.error(`PoolParams.toJsonUnsafe failed: ${error.message}`);
  * }
- *
+ * 
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeToJson = (instance: CML.PoolParams): string =>
+export const toJsonUnsafe = (instance: CML.PoolParams): string =>
   Effect.runSync(toJson(instance));
 
 /**
  * Method toJsValue of PoolParams
- *
+ * 
  * @example
  * import { PoolParams } from "@lucid-evolution/experimental";
  * import { Effect } from "effect";
- *
+ * 
  * // Using Effect for safe execution with error handling
  * Effect.gen(function*() {
  * // Assume we have a PoolParams instance
@@ -432,7 +446,7 @@ export const unsafeToJson = (instance: CML.PoolParams): string =>
  *   const result = yield* PoolParams.toJsValue(instance);
  *   console.log(result);
  * });
- *
+ * 
  * @since 2.0.0
  * @category Methods
  */
@@ -444,87 +458,87 @@ export const toJsValue = Effect.fn(
         new PoolParamsError({
           message: `PoolParams.toJsValue failed PoolParams is not valid for any conversion. `,
         }),
-    }),
+    })
 );
 
 /**
  * Unsafely calls instance.toJsValue without Effect wrapper
- *
+ * 
  * @example
  * import { PoolParams } from "@lucid-evolution/experimental";
- *
+ * 
  * // Assume we have a PoolParams instance
  * const instance = ... ;
- *
+ * 
  * // Using try/catch for error handling
  * try {
- *   const result = PoolParams.unsafeToJsValue(instance);
+ *   const result = PoolParams.toJsValueUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`PoolParams.unsafeToJsValue failed: ${error.message}`);
+ *   console.error(`PoolParams.toJsValueUnsafe failed: ${error.message}`);
  * }
- *
+ * 
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeToJsValue = (instance: CML.PoolParams): any =>
+export const toJsValueUnsafe = (instance: CML.PoolParams): any =>
   Effect.runSync(toJsValue(instance));
 
 /**
  * Static method fromJson of PoolParams
- *
+ * 
  * @example
  * import { PoolParams } from "@lucid-evolution/experimental";
  * import { Effect } from "effect";
- *
+ * 
  * // Using Effect for safe execution with error handling
  * Effect.gen(function*() {
- *
+ * 
  *   const result = yield* PoolParams.fromJson( parameters );
  *   console.log(result);
  * });
- *
+ * 
  * @since 2.0.0
  * @category Constructors
  */
 export const fromJson = Effect.fn(function* (json: string) {
   return yield* Effect.try({
     try: () => CML.PoolParams.from_json(json),
-    catch: () =>
-      new PoolParamsError({
-        message: `PoolParams.fromJson failed with parameters: ${json}. Hint: Validate your JSON structure.`,
-      }),
+    catch: () => new PoolParamsError({
+      message: `PoolParams.fromJson failed with parameters: ${json}. Hint: Validate your JSON structure.`,
+    }),
   });
 });
 
 /**
  * Unsafely calls PoolParams.fromJson without Effect wrapper
- *
+ * 
  * @example
  * import { PoolParams } from "@lucid-evolution/experimental";
- *
- *
- *
+ * 
+ * 
+ * 
  * // Using try/catch for error handling
  * try {
- *   const result = PoolParams.unsafeFromJson( parameters );
+ *   const result = PoolParams.fromJsonUnsafe( parameters );
  *   console.log(result);
  * } catch (error) {
- *   console.error(`PoolParams.unsafeFromJson failed: ${error.message}`);
+ *   console.error(`PoolParams.fromJsonUnsafe failed: ${error.message}`);
  * }
- *
+ * 
  * @since 2.0.0
- * @category Constructors
+ * @category ConstructorsUnsafe
  */
-export const unsafeFromJson = (json: string) => Effect.runSync(fromJson(json));
+export const fromJsonUnsafe = (json: string) =>
+  Effect.runSync(fromJson(json));
 
 /**
  * Method operator of PoolParams
- *
+ * 
  * @example
  * import { PoolParams } from "@lucid-evolution/experimental";
  * import { Effect } from "effect";
- *
+ * 
  * // Using Effect for safe execution with error handling
  * Effect.gen(function*() {
  * // Assume we have a PoolParams instance
@@ -532,53 +546,51 @@ export const unsafeFromJson = (json: string) => Effect.runSync(fromJson(json));
  *   const result = yield* PoolParams.operator(instance);
  *   console.log(result);
  * });
- *
+ * 
  * @since 2.0.0
  * @category Methods
  */
 export const operator = Effect.fn(
-  (
-    instance: CML.PoolParams,
-  ): Effect.Effect<CML.Ed25519KeyHash, PoolParamsError> =>
+  (instance: CML.PoolParams): Effect.Effect<CML.Ed25519KeyHash, PoolParamsError> =>
     Effect.try({
       try: () => instance.operator(),
       catch: () =>
         new PoolParamsError({
           message: `PoolParams.operator failed `,
         }),
-    }),
+    })
 );
 
 /**
  * Unsafely calls instance.operator without Effect wrapper
- *
+ * 
  * @example
  * import { PoolParams } from "@lucid-evolution/experimental";
- *
+ * 
  * // Assume we have a PoolParams instance
  * const instance = ... ;
- *
+ * 
  * // Using try/catch for error handling
  * try {
- *   const result = PoolParams.unsafeOperator(instance);
+ *   const result = PoolParams.operatorUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`PoolParams.unsafeOperator failed: ${error.message}`);
+ *   console.error(`PoolParams.operatorUnsafe failed: ${error.message}`);
  * }
- *
+ * 
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeOperator = (instance: CML.PoolParams): CML.Ed25519KeyHash =>
+export const operatorUnsafe = (instance: CML.PoolParams): CML.Ed25519KeyHash =>
   Effect.runSync(operator(instance));
 
 /**
  * Method vrfKeyhash of PoolParams
- *
+ * 
  * @example
  * import { PoolParams } from "@lucid-evolution/experimental";
  * import { Effect } from "effect";
- *
+ * 
  * // Using Effect for safe execution with error handling
  * Effect.gen(function*() {
  * // Assume we have a PoolParams instance
@@ -586,7 +598,7 @@ export const unsafeOperator = (instance: CML.PoolParams): CML.Ed25519KeyHash =>
  *   const result = yield* PoolParams.vrfKeyhash(instance);
  *   console.log(result);
  * });
- *
+ * 
  * @since 2.0.0
  * @category Methods
  */
@@ -598,39 +610,39 @@ export const vrfKeyhash = Effect.fn(
         new PoolParamsError({
           message: `PoolParams.vrfKeyhash failed `,
         }),
-    }),
+    })
 );
 
 /**
  * Unsafely calls instance.vrfKeyhash without Effect wrapper
- *
+ * 
  * @example
  * import { PoolParams } from "@lucid-evolution/experimental";
- *
+ * 
  * // Assume we have a PoolParams instance
  * const instance = ... ;
- *
+ * 
  * // Using try/catch for error handling
  * try {
- *   const result = PoolParams.unsafeVrfKeyhash(instance);
+ *   const result = PoolParams.vrfKeyhashUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`PoolParams.unsafeVrfKeyhash failed: ${error.message}`);
+ *   console.error(`PoolParams.vrfKeyhashUnsafe failed: ${error.message}`);
  * }
- *
+ * 
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeVrfKeyhash = (instance: CML.PoolParams): CML.VRFKeyHash =>
+export const vrfKeyhashUnsafe = (instance: CML.PoolParams): CML.VRFKeyHash =>
   Effect.runSync(vrfKeyhash(instance));
 
 /**
  * Method pledge of PoolParams
- *
+ * 
  * @example
  * import { PoolParams } from "@lucid-evolution/experimental";
  * import { Effect } from "effect";
- *
+ * 
  * // Using Effect for safe execution with error handling
  * Effect.gen(function*() {
  * // Assume we have a PoolParams instance
@@ -638,7 +650,7 @@ export const unsafeVrfKeyhash = (instance: CML.PoolParams): CML.VRFKeyHash =>
  *   const result = yield* PoolParams.pledge(instance);
  *   console.log(result);
  * });
- *
+ * 
  * @since 2.0.0
  * @category Methods
  */
@@ -650,39 +662,39 @@ export const pledge = Effect.fn(
         new PoolParamsError({
           message: `PoolParams.pledge failed `,
         }),
-    }),
+    })
 );
 
 /**
  * Unsafely calls instance.pledge without Effect wrapper
- *
+ * 
  * @example
  * import { PoolParams } from "@lucid-evolution/experimental";
- *
+ * 
  * // Assume we have a PoolParams instance
  * const instance = ... ;
- *
+ * 
  * // Using try/catch for error handling
  * try {
- *   const result = PoolParams.unsafePledge(instance);
+ *   const result = PoolParams.pledgeUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`PoolParams.unsafePledge failed: ${error.message}`);
+ *   console.error(`PoolParams.pledgeUnsafe failed: ${error.message}`);
  * }
- *
+ * 
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafePledge = (instance: CML.PoolParams): bigint =>
+export const pledgeUnsafe = (instance: CML.PoolParams): bigint =>
   Effect.runSync(pledge(instance));
 
 /**
  * Method cost of PoolParams
- *
+ * 
  * @example
  * import { PoolParams } from "@lucid-evolution/experimental";
  * import { Effect } from "effect";
- *
+ * 
  * // Using Effect for safe execution with error handling
  * Effect.gen(function*() {
  * // Assume we have a PoolParams instance
@@ -690,7 +702,7 @@ export const unsafePledge = (instance: CML.PoolParams): bigint =>
  *   const result = yield* PoolParams.cost(instance);
  *   console.log(result);
  * });
- *
+ * 
  * @since 2.0.0
  * @category Methods
  */
@@ -702,39 +714,39 @@ export const cost = Effect.fn(
         new PoolParamsError({
           message: `PoolParams.cost failed `,
         }),
-    }),
+    })
 );
 
 /**
  * Unsafely calls instance.cost without Effect wrapper
- *
+ * 
  * @example
  * import { PoolParams } from "@lucid-evolution/experimental";
- *
+ * 
  * // Assume we have a PoolParams instance
  * const instance = ... ;
- *
+ * 
  * // Using try/catch for error handling
  * try {
- *   const result = PoolParams.unsafeCost(instance);
+ *   const result = PoolParams.costUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`PoolParams.unsafeCost failed: ${error.message}`);
+ *   console.error(`PoolParams.costUnsafe failed: ${error.message}`);
  * }
- *
+ * 
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeCost = (instance: CML.PoolParams): bigint =>
+export const costUnsafe = (instance: CML.PoolParams): bigint =>
   Effect.runSync(cost(instance));
 
 /**
  * Method margin of PoolParams
- *
+ * 
  * @example
  * import { PoolParams } from "@lucid-evolution/experimental";
  * import { Effect } from "effect";
- *
+ * 
  * // Using Effect for safe execution with error handling
  * Effect.gen(function*() {
  * // Assume we have a PoolParams instance
@@ -742,53 +754,51 @@ export const unsafeCost = (instance: CML.PoolParams): bigint =>
  *   const result = yield* PoolParams.margin(instance);
  *   console.log(result);
  * });
- *
+ * 
  * @since 2.0.0
  * @category Methods
  */
 export const margin = Effect.fn(
-  (
-    instance: CML.PoolParams,
-  ): Effect.Effect<CML.UnitInterval, PoolParamsError> =>
+  (instance: CML.PoolParams): Effect.Effect<CML.UnitInterval, PoolParamsError> =>
     Effect.try({
       try: () => instance.margin(),
       catch: () =>
         new PoolParamsError({
           message: `PoolParams.margin failed `,
         }),
-    }),
+    })
 );
 
 /**
  * Unsafely calls instance.margin without Effect wrapper
- *
+ * 
  * @example
  * import { PoolParams } from "@lucid-evolution/experimental";
- *
+ * 
  * // Assume we have a PoolParams instance
  * const instance = ... ;
- *
+ * 
  * // Using try/catch for error handling
  * try {
- *   const result = PoolParams.unsafeMargin(instance);
+ *   const result = PoolParams.marginUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`PoolParams.unsafeMargin failed: ${error.message}`);
+ *   console.error(`PoolParams.marginUnsafe failed: ${error.message}`);
  * }
- *
+ * 
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeMargin = (instance: CML.PoolParams): CML.UnitInterval =>
+export const marginUnsafe = (instance: CML.PoolParams): CML.UnitInterval =>
   Effect.runSync(margin(instance));
 
 /**
  * Method rewardAccount of PoolParams
- *
+ * 
  * @example
  * import { PoolParams } from "@lucid-evolution/experimental";
  * import { Effect } from "effect";
- *
+ * 
  * // Using Effect for safe execution with error handling
  * Effect.gen(function*() {
  * // Assume we have a PoolParams instance
@@ -796,54 +806,51 @@ export const unsafeMargin = (instance: CML.PoolParams): CML.UnitInterval =>
  *   const result = yield* PoolParams.rewardAccount(instance);
  *   console.log(result);
  * });
- *
+ * 
  * @since 2.0.0
  * @category Methods
  */
 export const rewardAccount = Effect.fn(
-  (
-    instance: CML.PoolParams,
-  ): Effect.Effect<CML.RewardAddress, PoolParamsError> =>
+  (instance: CML.PoolParams): Effect.Effect<CML.RewardAddress, PoolParamsError> =>
     Effect.try({
       try: () => instance.reward_account(),
       catch: () =>
         new PoolParamsError({
           message: `PoolParams.rewardAccount failed `,
         }),
-    }),
+    })
 );
 
 /**
  * Unsafely calls instance.rewardAccount without Effect wrapper
- *
+ * 
  * @example
  * import { PoolParams } from "@lucid-evolution/experimental";
- *
+ * 
  * // Assume we have a PoolParams instance
  * const instance = ... ;
- *
+ * 
  * // Using try/catch for error handling
  * try {
- *   const result = PoolParams.unsafeRewardAccount(instance);
+ *   const result = PoolParams.rewardAccountUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`PoolParams.unsafeRewardAccount failed: ${error.message}`);
+ *   console.error(`PoolParams.rewardAccountUnsafe failed: ${error.message}`);
  * }
- *
+ * 
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeRewardAccount = (
-  instance: CML.PoolParams,
-): CML.RewardAddress => Effect.runSync(rewardAccount(instance));
+export const rewardAccountUnsafe = (instance: CML.PoolParams): CML.RewardAddress =>
+  Effect.runSync(rewardAccount(instance));
 
 /**
  * Method poolOwners of PoolParams
- *
+ * 
  * @example
  * import { PoolParams } from "@lucid-evolution/experimental";
  * import { Effect } from "effect";
- *
+ * 
  * // Using Effect for safe execution with error handling
  * Effect.gen(function*() {
  * // Assume we have a PoolParams instance
@@ -851,54 +858,51 @@ export const unsafeRewardAccount = (
  *   const result = yield* PoolParams.poolOwners(instance);
  *   console.log(result);
  * });
- *
+ * 
  * @since 2.0.0
  * @category Methods
  */
 export const poolOwners = Effect.fn(
-  (
-    instance: CML.PoolParams,
-  ): Effect.Effect<CML.Ed25519KeyHashList, PoolParamsError> =>
+  (instance: CML.PoolParams): Effect.Effect<CML.Ed25519KeyHashList, PoolParamsError> =>
     Effect.try({
       try: () => instance.pool_owners(),
       catch: () =>
         new PoolParamsError({
           message: `PoolParams.poolOwners failed `,
         }),
-    }),
+    })
 );
 
 /**
  * Unsafely calls instance.poolOwners without Effect wrapper
- *
+ * 
  * @example
  * import { PoolParams } from "@lucid-evolution/experimental";
- *
+ * 
  * // Assume we have a PoolParams instance
  * const instance = ... ;
- *
+ * 
  * // Using try/catch for error handling
  * try {
- *   const result = PoolParams.unsafePoolOwners(instance);
+ *   const result = PoolParams.poolOwnersUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`PoolParams.unsafePoolOwners failed: ${error.message}`);
+ *   console.error(`PoolParams.poolOwnersUnsafe failed: ${error.message}`);
  * }
- *
+ * 
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafePoolOwners = (
-  instance: CML.PoolParams,
-): CML.Ed25519KeyHashList => Effect.runSync(poolOwners(instance));
+export const poolOwnersUnsafe = (instance: CML.PoolParams): CML.Ed25519KeyHashList =>
+  Effect.runSync(poolOwners(instance));
 
 /**
  * Method relays of PoolParams
- *
+ * 
  * @example
  * import { PoolParams } from "@lucid-evolution/experimental";
  * import { Effect } from "effect";
- *
+ * 
  * // Using Effect for safe execution with error handling
  * Effect.gen(function*() {
  * // Assume we have a PoolParams instance
@@ -906,7 +910,7 @@ export const unsafePoolOwners = (
  *   const result = yield* PoolParams.relays(instance);
  *   console.log(result);
  * });
- *
+ * 
  * @since 2.0.0
  * @category Methods
  */
@@ -918,39 +922,39 @@ export const relays = Effect.fn(
         new PoolParamsError({
           message: `PoolParams.relays failed `,
         }),
-    }),
+    })
 );
 
 /**
  * Unsafely calls instance.relays without Effect wrapper
- *
+ * 
  * @example
  * import { PoolParams } from "@lucid-evolution/experimental";
- *
+ * 
  * // Assume we have a PoolParams instance
  * const instance = ... ;
- *
+ * 
  * // Using try/catch for error handling
  * try {
- *   const result = PoolParams.unsafeRelays(instance);
+ *   const result = PoolParams.relaysUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`PoolParams.unsafeRelays failed: ${error.message}`);
+ *   console.error(`PoolParams.relaysUnsafe failed: ${error.message}`);
  * }
- *
+ * 
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeRelays = (instance: CML.PoolParams): CML.RelayList =>
+export const relaysUnsafe = (instance: CML.PoolParams): CML.RelayList =>
   Effect.runSync(relays(instance));
 
 /**
  * Method poolMetadata of PoolParams
- *
+ * 
  * @example
  * import { PoolParams } from "@lucid-evolution/experimental";
  * import { Effect } from "effect";
- *
+ * 
  * // Using Effect for safe execution with error handling
  * Effect.gen(function*() {
  * // Assume we have a PoolParams instance
@@ -958,135 +962,88 @@ export const unsafeRelays = (instance: CML.PoolParams): CML.RelayList =>
  *   const result = yield* PoolParams.poolMetadata(instance);
  *   console.log(result);
  * });
- *
+ * 
  * @since 2.0.0
  * @category Methods
  */
 export const poolMetadata = Effect.fn(
-  (
-    instance: CML.PoolParams,
-  ): Effect.Effect<CML.PoolMetadata | undefined, PoolParamsError> =>
+  (instance: CML.PoolParams): Effect.Effect<CML.PoolMetadata | undefined, PoolParamsError> =>
     Effect.try({
       try: () => instance.pool_metadata(),
       catch: () =>
         new PoolParamsError({
           message: `PoolParams.poolMetadata failed `,
         }),
-    }),
+    })
 );
 
 /**
  * Unsafely calls instance.poolMetadata without Effect wrapper
- *
+ * 
  * @example
  * import { PoolParams } from "@lucid-evolution/experimental";
- *
+ * 
  * // Assume we have a PoolParams instance
  * const instance = ... ;
- *
+ * 
  * // Using try/catch for error handling
  * try {
- *   const result = PoolParams.unsafePoolMetadata(instance);
+ *   const result = PoolParams.poolMetadataUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`PoolParams.unsafePoolMetadata failed: ${error.message}`);
+ *   console.error(`PoolParams.poolMetadataUnsafe failed: ${error.message}`);
  * }
- *
+ * 
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafePoolMetadata = (
-  instance: CML.PoolParams,
-): CML.PoolMetadata | undefined => Effect.runSync(poolMetadata(instance));
+export const poolMetadataUnsafe = (instance: CML.PoolParams): CML.PoolMetadata | undefined =>
+  Effect.runSync(poolMetadata(instance));
 
 /**
  * Static method _new of PoolParams
- *
+ * 
  * @example
  * import { PoolParams } from "@lucid-evolution/experimental";
  * import { Effect } from "effect";
- *
+ * 
  * // Using Effect for safe execution with error handling
  * Effect.gen(function*() {
- *
+ * 
  *   const result = yield* PoolParams._new( parameters );
  *   console.log(result);
  * });
- *
+ * 
  * @since 2.0.0
  * @category Constructors
  */
-export const _new = Effect.fn(function* (
-  operator: CML.Ed25519KeyHash,
-  vrfKeyhash: CML.VRFKeyHash,
-  pledge: bigint,
-  cost: bigint,
-  margin: CML.UnitInterval,
-  rewardAccount: CML.RewardAddress,
-  poolOwners: CML.Ed25519KeyHashList,
-  relays: CML.RelayList,
-  poolMetadata: CML.PoolMetadata,
-) {
+export const _new = Effect.fn(function* (operator: CML.Ed25519KeyHash, vrfKeyhash: CML.VRFKeyHash, pledge: bigint, cost: bigint, margin: CML.UnitInterval, rewardAccount: CML.RewardAddress, poolOwners: CML.Ed25519KeyHashList, relays: CML.RelayList, poolMetadata: CML.PoolMetadata) {
   return yield* Effect.try({
-    try: () =>
-      CML.PoolParams.new(
-        operator,
-        vrfKeyhash,
-        pledge,
-        cost,
-        margin,
-        rewardAccount,
-        poolOwners,
-        relays,
-        poolMetadata,
-      ),
-    catch: () =>
-      new PoolParamsError({
-        message: `PoolParams._new failed with parameters: ${operator} (Ed25519KeyHash), ${vrfKeyhash} (VRFKeyHash), ${pledge}, ${cost}, ${margin} (UnitInterval), ${rewardAccount} (RewardAddress), ${poolOwners} (Ed25519KeyHashList), ${relays} (RelayList), ${poolMetadata} (PoolMetadata). `,
-      }),
+    try: () => CML.PoolParams.new(operator, vrfKeyhash, pledge, cost, margin, rewardAccount, poolOwners, relays, poolMetadata),
+    catch: () => new PoolParamsError({
+      message: `PoolParams._new failed with parameters: ${operator} (Ed25519KeyHash), ${vrfKeyhash} (VRFKeyHash), ${pledge}, ${cost}, ${margin} (UnitInterval), ${rewardAccount} (RewardAddress), ${poolOwners} (Ed25519KeyHashList), ${relays} (RelayList), ${poolMetadata} (PoolMetadata). `,
+    }),
   });
 });
 
 /**
  * Unsafely calls PoolParams._new without Effect wrapper
- *
+ * 
  * @example
  * import { PoolParams } from "@lucid-evolution/experimental";
- *
- *
- *
+ * 
+ * 
+ * 
  * // Using try/catch for error handling
  * try {
- *   const result = PoolParams.unsafe_new( parameters );
+ *   const result = PoolParams._newUnsafe( parameters );
  *   console.log(result);
  * } catch (error) {
- *   console.error(`PoolParams.unsafe_new failed: ${error.message}`);
+ *   console.error(`PoolParams._newUnsafe failed: ${error.message}`);
  * }
- *
+ * 
  * @since 2.0.0
- * @category Constructors
+ * @category ConstructorsUnsafe
  */
-export const unsafe_new = (
-  operator: CML.Ed25519KeyHash,
-  vrfKeyhash: CML.VRFKeyHash,
-  pledge: bigint,
-  cost: bigint,
-  margin: CML.UnitInterval,
-  rewardAccount: CML.RewardAddress,
-  poolOwners: CML.Ed25519KeyHashList,
-  relays: CML.RelayList,
-  poolMetadata: CML.PoolMetadata,
-) =>
-  Effect.runSync(
-    _new(
-      operator,
-      vrfKeyhash,
-      pledge,
-      cost,
-      margin,
-      rewardAccount,
-      poolOwners,
-      relays,
-      poolMetadata,
-    ),
-  );
+export const _newUnsafe = (operator: CML.Ed25519KeyHash, vrfKeyhash: CML.VRFKeyHash, pledge: bigint, cost: bigint, margin: CML.UnitInterval, rewardAccount: CML.RewardAddress, poolOwners: CML.Ed25519KeyHashList, relays: CML.RelayList, poolMetadata: CML.PoolMetadata) =>
+  Effect.runSync(_new(operator, vrfKeyhash, pledge, cost, margin, rewardAccount, poolOwners, relays, poolMetadata));
