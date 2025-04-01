@@ -6,7 +6,7 @@ import * as _Koios from "../src/internal/koios.js";
 
 describe.sequential("Koios", () => {
   const koios = new Koios("https://preprod.koios.rest/api/v1");
-  
+
   test("getProtocolParameters", async () => {
     try {
       const pp: ProtocolParameters = await koios.getProtocolParameters();
@@ -184,7 +184,10 @@ describe.sequential("Koios", () => {
         PreprodConstants.evalSample1.redeemersExUnits,
       );
     } catch (error) {
-      console.error("evaluates additional utxos - sample 1 test failed:", error);
+      console.error(
+        "evaluates additional utxos - sample 1 test failed:",
+        error,
+      );
       throw error;
     }
   });
@@ -200,7 +203,10 @@ describe.sequential("Koios", () => {
         PreprodConstants.evalSample2.redeemersExUnits,
       );
     } catch (error) {
-      console.error("evaluates additional utxos - sample 2 test failed:", error);
+      console.error(
+        "evaluates additional utxos - sample 2 test failed:",
+        error,
+      );
       throw error;
     }
   });
@@ -216,7 +222,10 @@ describe.sequential("Koios", () => {
         PreprodConstants.evalSample3.redeemersExUnits,
       );
     } catch (error) {
-      console.error("evaluates additional utxos - sample 3 test failed:", error);
+      console.error(
+        "evaluates additional utxos - sample 3 test failed:",
+        error,
+      );
       throw error;
     }
   });
@@ -232,7 +241,10 @@ describe.sequential("Koios", () => {
         PreprodConstants.evalSample4.redeemersExUnits,
       );
     } catch (error) {
-      console.error("evaluates additional utxos - sample 4 test failed:", error);
+      console.error(
+        "evaluates additional utxos - sample 4 test failed:",
+        error,
+      );
       throw error;
     }
   });
