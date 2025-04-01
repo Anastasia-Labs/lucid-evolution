@@ -2,6 +2,7 @@
   "name": "@lucid-evolution/experimental",
   "version": "0.0.0",
   "description": "",
+  "homepage": "https://github.com/anastasia-labs/lucid-evolution",
   "main": "./dist/esm/index.js",
   "types": "./dist/types/index.d.ts",
   "type": "module",
@@ -33,7 +34,8 @@
     "generate:cml-wrappers": "tsx tools/generate-cml-wrappers.ts",
     "test": "vitest run",
     "lint": "tsc --noEmit",
-    "clean": "rm -rf .turbo && rm -rf node_modules && rm -rf dist"
+    "clean": "rm -rf .turbo && rm -rf node_modules && rm -rf dist",
+    "docgen": "docgen"
   },
   "keywords": [],
   "author": "",
@@ -51,6 +53,7 @@
     "effect": "^3.14.1"
   },
   "devDependencies": {
+    "@effect/docgen": "^0.5.2",
     "@effect/vitest": "^0.16.0",
     "@microsoft/api-extractor": "^7.49.0",
     "@types/node": "^22.13.11",

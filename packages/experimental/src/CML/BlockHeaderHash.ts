@@ -14,64 +14,36 @@ export type BlockHeaderHash = CML.BlockHeaderHash;
 
 /**
  * Error class for BlockHeaderHash operations
- *
+ * 
  * This error is thrown when operations on BlockHeaderHash instances fail.
  *
  * @since 2.0.0
  * @category Errors
  */
-export class BlockHeaderHashError extends Data.TaggedError(
-  "BlockHeaderHashError",
-)<{
+export class BlockHeaderHashError extends Data.TaggedError("BlockHeaderHashError")<{
   message?: string;
 }> {}
 
 /**
  * Method free of BlockHeaderHash
- *
- * @example
- * import { BlockHeaderHash } from "@lucid-evolution/experimental";
- * import { Effect } from "effect";
- *
- * // Using Effect for safe execution with error handling
- * Effect.gen(function*() {
- * // Assume we have a BlockHeaderHash instance
- * const instance = ... ;
- *   const result = yield* BlockHeaderHash.free(instance);
- *   console.log(result);
- * });
- *
+ * 
  * @since 2.0.0
  * @category Methods
  */
-export const free = Effect.fn(
-  (instance: CML.BlockHeaderHash): Effect.Effect<void, BlockHeaderHashError> =>
+export const free: (instance: CML.BlockHeaderHash) => Effect.Effect<void, BlockHeaderHashError> = Effect.fn(
+  (instance: CML.BlockHeaderHash) =>
     Effect.try({
       try: () => instance.free(),
       catch: () =>
         new BlockHeaderHashError({
           message: `BlockHeaderHash.free failed Hint: Check if you're calling free() more than once.`,
         }),
-    }),
+    })
 );
 
 /**
  * Unsafely calls instance.free without Effect wrapper
- *
- * @example
- * import { BlockHeaderHash } from "@lucid-evolution/experimental";
- *
- * // Assume we have a BlockHeaderHash instance
- * const instance = ... ;
- *
- * // Using try/catch for error handling
- * try {
- *   const result = BlockHeaderHash.freeUnsafe(instance);
- *   console.log(result);
- * } catch (error) {
- *   console.error(`BlockHeaderHash.freeUnsafe failed: ${error.message}`);
- * }
- *
+ * 
  * @since 2.0.0
  * @category MethodsUnsafe
  */
@@ -80,158 +52,74 @@ export const freeUnsafe = (instance: CML.BlockHeaderHash): void =>
 
 /**
  * Method toBech32 of BlockHeaderHash
- *
- * @example
- * import { BlockHeaderHash } from "@lucid-evolution/experimental";
- * import { Effect } from "effect";
- *
- * // Using Effect for safe execution with error handling
- * Effect.gen(function*() {
- * // Assume we have a BlockHeaderHash instance
- * const instance = ... ;
- *   const result = yield* BlockHeaderHash.toBech32(instance,  parameters );
- *   console.log(result);
- * });
- *
+ * 
  * @since 2.0.0
  * @category Methods
  */
-export const toBech32 = Effect.fn(
-  (
-    instance: CML.BlockHeaderHash,
-    prefix: string,
-  ): Effect.Effect<string, BlockHeaderHashError> =>
+export const toBech32: (instance: CML.BlockHeaderHash, prefix: string) => Effect.Effect<string, BlockHeaderHashError> = Effect.fn(
+  (instance: CML.BlockHeaderHash, prefix: string) =>
     Effect.try({
       try: () => instance.to_bech32(prefix),
       catch: () =>
         new BlockHeaderHashError({
           message: `BlockHeaderHash.toBech32 failed with parameters: ${prefix}. BlockHeaderHash is not valid for string conversion. `,
         }),
-    }),
+    })
 );
 
 /**
  * Unsafely calls instance.toBech32 without Effect wrapper
- *
- * @example
- * import { BlockHeaderHash } from "@lucid-evolution/experimental";
- *
- * // Assume we have a BlockHeaderHash instance
- * const instance = ... ;
- *
- * // Using try/catch for error handling
- * try {
- *   const result = BlockHeaderHash.toBech32Unsafe(instance,  parameters );
- *   console.log(result);
- * } catch (error) {
- *   console.error(`BlockHeaderHash.toBech32Unsafe failed: ${error.message}`);
- * }
- *
+ * 
  * @since 2.0.0
  * @category MethodsUnsafe
  */
-export const toBech32Unsafe = (
-  instance: CML.BlockHeaderHash,
-  prefix: string,
-): string => Effect.runSync(toBech32(instance, prefix));
+export const toBech32Unsafe = (instance: CML.BlockHeaderHash, prefix: string): string =>
+  Effect.runSync(toBech32(instance, prefix));
 
 /**
  * Static method fromBech32 of BlockHeaderHash
- *
- * @example
- * import { BlockHeaderHash } from "@lucid-evolution/experimental";
- * import { Effect } from "effect";
- *
- * // Using Effect for safe execution with error handling
- * Effect.gen(function*() {
- *
- *   const result = yield* BlockHeaderHash.fromBech32( parameters );
- *   console.log(result);
- * });
- *
+ * 
  * @since 2.0.0
  * @category Constructors
  */
-export const fromBech32 = Effect.fn(function* (bech32Str: string) {
+export const fromBech32: (bech32Str: string) => Effect.Effect<CML.BlockHeaderHash, BlockHeaderHashError> = Effect.fn(function* (bech32Str: string) {
   return yield* Effect.try({
     try: () => CML.BlockHeaderHash.from_bech32(bech32Str),
-    catch: () =>
-      new BlockHeaderHashError({
-        message: `BlockHeaderHash.fromBech32 failed with parameters: ${bech32Str}. `,
-      }),
+    catch: () => new BlockHeaderHashError({
+      message: `BlockHeaderHash.fromBech32 failed with parameters: ${bech32Str}. `,
+    }),
   });
 });
 
 /**
  * Unsafely calls BlockHeaderHash.fromBech32 without Effect wrapper
- *
- * @example
- * import { BlockHeaderHash } from "@lucid-evolution/experimental";
- *
- *
- *
- * // Using try/catch for error handling
- * try {
- *   const result = BlockHeaderHash.fromBech32Unsafe( parameters );
- *   console.log(result);
- * } catch (error) {
- *   console.error(`BlockHeaderHash.fromBech32Unsafe failed: ${error.message}`);
- * }
- *
+ * 
  * @since 2.0.0
  * @category ConstructorsUnsafe
  */
-export const fromBech32Unsafe = (bech32Str: string) =>
+export const fromBech32Unsafe = (bech32Str: string): CML.BlockHeaderHash =>
   Effect.runSync(fromBech32(bech32Str));
 
 /**
  * Method toRawBytes of BlockHeaderHash
- *
- * @example
- * import { BlockHeaderHash } from "@lucid-evolution/experimental";
- * import { Effect } from "effect";
- *
- * // Using Effect for safe execution with error handling
- * Effect.gen(function*() {
- * // Assume we have a BlockHeaderHash instance
- * const instance = ... ;
- *   const result = yield* BlockHeaderHash.toRawBytes(instance);
- *   console.log(result);
- * });
- *
+ * 
  * @since 2.0.0
  * @category Methods
  */
-export const toRawBytes = Effect.fn(
-  (
-    instance: CML.BlockHeaderHash,
-  ): Effect.Effect<Uint8Array, BlockHeaderHashError> =>
+export const toRawBytes: (instance: CML.BlockHeaderHash) => Effect.Effect<Uint8Array, BlockHeaderHashError> = Effect.fn(
+  (instance: CML.BlockHeaderHash) =>
     Effect.try({
       try: () => instance.to_raw_bytes(),
       catch: () =>
         new BlockHeaderHashError({
           message: `BlockHeaderHash.toRawBytes failed BlockHeaderHash is not valid for Uint8Array conversion. Hint: Check byte length and encoding.`,
         }),
-    }),
+    })
 );
 
 /**
  * Unsafely calls instance.toRawBytes without Effect wrapper
- *
- * @example
- * import { BlockHeaderHash } from "@lucid-evolution/experimental";
- *
- * // Assume we have a BlockHeaderHash instance
- * const instance = ... ;
- *
- * // Using try/catch for error handling
- * try {
- *   const result = BlockHeaderHash.toRawBytesUnsafe(instance);
- *   console.log(result);
- * } catch (error) {
- *   console.error(`BlockHeaderHash.toRawBytesUnsafe failed: ${error.message}`);
- * }
- *
+ * 
  * @since 2.0.0
  * @category MethodsUnsafe
  */
@@ -240,101 +128,48 @@ export const toRawBytesUnsafe = (instance: CML.BlockHeaderHash): Uint8Array =>
 
 /**
  * Static method fromRawBytes of BlockHeaderHash
- *
- * @example
- * import { BlockHeaderHash } from "@lucid-evolution/experimental";
- * import { Effect } from "effect";
- *
- * // Using Effect for safe execution with error handling
- * Effect.gen(function*() {
- *
- *   const result = yield* BlockHeaderHash.fromRawBytes( parameters );
- *   console.log(result);
- * });
- *
+ * 
  * @since 2.0.0
  * @category Constructors
  */
-export const fromRawBytes = Effect.fn(function* (bytes: Uint8Array) {
+export const fromRawBytes: (bytes: Uint8Array) => Effect.Effect<CML.BlockHeaderHash, BlockHeaderHashError> = Effect.fn(function* (bytes: Uint8Array) {
   return yield* Effect.try({
     try: () => CML.BlockHeaderHash.from_raw_bytes(bytes),
-    catch: () =>
-      new BlockHeaderHashError({
-        message: `BlockHeaderHash.fromRawBytes failed with parameters: ${bytes}. Hint: Check byte length and encoding.`,
-      }),
+    catch: () => new BlockHeaderHashError({
+      message: `BlockHeaderHash.fromRawBytes failed with parameters: ${bytes}. Hint: Check byte length and encoding.`,
+    }),
   });
 });
 
 /**
  * Unsafely calls BlockHeaderHash.fromRawBytes without Effect wrapper
- *
- * @example
- * import { BlockHeaderHash } from "@lucid-evolution/experimental";
- *
- *
- *
- * // Using try/catch for error handling
- * try {
- *   const result = BlockHeaderHash.fromRawBytesUnsafe( parameters );
- *   console.log(result);
- * } catch (error) {
- *   console.error(`BlockHeaderHash.fromRawBytesUnsafe failed: ${error.message}`);
- * }
- *
+ * 
  * @since 2.0.0
  * @category ConstructorsUnsafe
  */
-export const fromRawBytesUnsafe = (bytes: Uint8Array) =>
+export const fromRawBytesUnsafe = (bytes: Uint8Array): CML.BlockHeaderHash =>
   Effect.runSync(fromRawBytes(bytes));
 
 /**
  * Method toHex of BlockHeaderHash
- *
- * @example
- * import { BlockHeaderHash } from "@lucid-evolution/experimental";
- * import { Effect } from "effect";
- *
- * // Using Effect for safe execution with error handling
- * Effect.gen(function*() {
- * // Assume we have a BlockHeaderHash instance
- * const instance = ... ;
- *   const result = yield* BlockHeaderHash.toHex(instance);
- *   console.log(result);
- * });
- *
+ * 
  * @since 2.0.0
  * @category Methods
  */
-export const toHex = Effect.fn(
-  (
-    instance: CML.BlockHeaderHash,
-  ): Effect.Effect<string, BlockHeaderHashError> =>
+export const toHex: (instance: CML.BlockHeaderHash) => Effect.Effect<string, BlockHeaderHashError> = Effect.fn(
+  (instance: CML.BlockHeaderHash) =>
     Effect.try({
       try: () => instance.to_hex(),
       catch: () =>
         new BlockHeaderHashError({
           message: `BlockHeaderHash.toHex failed BlockHeaderHash is not valid for string conversion. Hint: Ensure hex string has valid characters and length.`,
         }),
-    }),
+    })
 );
 
 /**
  * Unsafely calls instance.toHex without Effect wrapper
- *
- * @example
- * import { BlockHeaderHash } from "@lucid-evolution/experimental";
- *
- * // Assume we have a BlockHeaderHash instance
- * const instance = ... ;
- *
- * // Using try/catch for error handling
- * try {
- *   const result = BlockHeaderHash.toHexUnsafe(instance);
- *   console.log(result);
- * } catch (error) {
- *   console.error(`BlockHeaderHash.toHexUnsafe failed: ${error.message}`);
- * }
- *
+ * 
  * @since 2.0.0
  * @category MethodsUnsafe
  */
@@ -343,48 +178,24 @@ export const toHexUnsafe = (instance: CML.BlockHeaderHash): string =>
 
 /**
  * Static method fromHex of BlockHeaderHash
- *
- * @example
- * import { BlockHeaderHash } from "@lucid-evolution/experimental";
- * import { Effect } from "effect";
- *
- * // Using Effect for safe execution with error handling
- * Effect.gen(function*() {
- *
- *   const result = yield* BlockHeaderHash.fromHex( parameters );
- *   console.log(result);
- * });
- *
+ * 
  * @since 2.0.0
  * @category Constructors
  */
-export const fromHex = Effect.fn(function* (input: string) {
+export const fromHex: (input: string) => Effect.Effect<CML.BlockHeaderHash, BlockHeaderHashError> = Effect.fn(function* (input: string) {
   return yield* Effect.try({
     try: () => CML.BlockHeaderHash.from_hex(input),
-    catch: () =>
-      new BlockHeaderHashError({
-        message: `BlockHeaderHash.fromHex failed with parameters: ${input}. Hint: Ensure hex string has valid characters and length.`,
-      }),
+    catch: () => new BlockHeaderHashError({
+      message: `BlockHeaderHash.fromHex failed with parameters: ${input}. Hint: Ensure hex string has valid characters and length.`,
+    }),
   });
 });
 
 /**
  * Unsafely calls BlockHeaderHash.fromHex without Effect wrapper
- *
- * @example
- * import { BlockHeaderHash } from "@lucid-evolution/experimental";
- *
- *
- *
- * // Using try/catch for error handling
- * try {
- *   const result = BlockHeaderHash.fromHexUnsafe( parameters );
- *   console.log(result);
- * } catch (error) {
- *   console.error(`BlockHeaderHash.fromHexUnsafe failed: ${error.message}`);
- * }
- *
+ * 
  * @since 2.0.0
  * @category ConstructorsUnsafe
  */
-export const fromHexUnsafe = (input: string) => Effect.runSync(fromHex(input));
+export const fromHexUnsafe = (input: string): CML.BlockHeaderHash =>
+  Effect.runSync(fromHex(input));

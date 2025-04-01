@@ -14,7 +14,7 @@ export type HeaderBody = CML.HeaderBody;
 
 /**
  * Error class for HeaderBody operations
- *
+ * 
  * This error is thrown when operations on HeaderBody instances fail.
  *
  * @since 2.0.0
@@ -26,50 +26,24 @@ export class HeaderBodyError extends Data.TaggedError("HeaderBodyError")<{
 
 /**
  * Method free of HeaderBody
- *
- * @example
- * import { HeaderBody } from "@lucid-evolution/experimental";
- * import { Effect } from "effect";
- *
- * // Using Effect for safe execution with error handling
- * Effect.gen(function*() {
- * // Assume we have a HeaderBody instance
- * const instance = ... ;
- *   const result = yield* HeaderBody.free(instance);
- *   console.log(result);
- * });
- *
+ * 
  * @since 2.0.0
  * @category Methods
  */
-export const free = Effect.fn(
-  (instance: CML.HeaderBody): Effect.Effect<void, HeaderBodyError> =>
+export const free: (instance: CML.HeaderBody) => Effect.Effect<void, HeaderBodyError> = Effect.fn(
+  (instance: CML.HeaderBody) =>
     Effect.try({
       try: () => instance.free(),
       catch: () =>
         new HeaderBodyError({
           message: `HeaderBody.free failed Hint: Check if you're calling free() more than once.`,
         }),
-    }),
+    })
 );
 
 /**
  * Unsafely calls instance.free without Effect wrapper
- *
- * @example
- * import { HeaderBody } from "@lucid-evolution/experimental";
- *
- * // Assume we have a HeaderBody instance
- * const instance = ... ;
- *
- * // Using try/catch for error handling
- * try {
- *   const result = HeaderBody.freeUnsafe(instance);
- *   console.log(result);
- * } catch (error) {
- *   console.error(`HeaderBody.freeUnsafe failed: ${error.message}`);
- * }
- *
+ * 
  * @since 2.0.0
  * @category MethodsUnsafe
  */
@@ -78,50 +52,24 @@ export const freeUnsafe = (instance: CML.HeaderBody): void =>
 
 /**
  * Method toCborBytes of HeaderBody
- *
- * @example
- * import { HeaderBody } from "@lucid-evolution/experimental";
- * import { Effect } from "effect";
- *
- * // Using Effect for safe execution with error handling
- * Effect.gen(function*() {
- * // Assume we have a HeaderBody instance
- * const instance = ... ;
- *   const result = yield* HeaderBody.toCborBytes(instance);
- *   console.log(result);
- * });
- *
+ * 
  * @since 2.0.0
  * @category Methods
  */
-export const toCborBytes = Effect.fn(
-  (instance: CML.HeaderBody): Effect.Effect<Uint8Array, HeaderBodyError> =>
+export const toCborBytes: (instance: CML.HeaderBody) => Effect.Effect<Uint8Array, HeaderBodyError> = Effect.fn(
+  (instance: CML.HeaderBody) =>
     Effect.try({
       try: () => instance.to_cbor_bytes(),
       catch: () =>
         new HeaderBodyError({
           message: `HeaderBody.toCborBytes failed HeaderBody is not valid for Uint8Array conversion. Hint: Check byte length and encoding.`,
         }),
-    }),
+    })
 );
 
 /**
  * Unsafely calls instance.toCborBytes without Effect wrapper
- *
- * @example
- * import { HeaderBody } from "@lucid-evolution/experimental";
- *
- * // Assume we have a HeaderBody instance
- * const instance = ... ;
- *
- * // Using try/catch for error handling
- * try {
- *   const result = HeaderBody.toCborBytesUnsafe(instance);
- *   console.log(result);
- * } catch (error) {
- *   console.error(`HeaderBody.toCborBytesUnsafe failed: ${error.message}`);
- * }
- *
+ * 
  * @since 2.0.0
  * @category MethodsUnsafe
  */
@@ -130,152 +78,74 @@ export const toCborBytesUnsafe = (instance: CML.HeaderBody): Uint8Array =>
 
 /**
  * Method toCanonicalCborBytes of HeaderBody
- *
- * @example
- * import { HeaderBody } from "@lucid-evolution/experimental";
- * import { Effect } from "effect";
- *
- * // Using Effect for safe execution with error handling
- * Effect.gen(function*() {
- * // Assume we have a HeaderBody instance
- * const instance = ... ;
- *   const result = yield* HeaderBody.toCanonicalCborBytes(instance);
- *   console.log(result);
- * });
- *
+ * 
  * @since 2.0.0
  * @category Methods
  */
-export const toCanonicalCborBytes = Effect.fn(
-  (instance: CML.HeaderBody): Effect.Effect<Uint8Array, HeaderBodyError> =>
+export const toCanonicalCborBytes: (instance: CML.HeaderBody) => Effect.Effect<Uint8Array, HeaderBodyError> = Effect.fn(
+  (instance: CML.HeaderBody) =>
     Effect.try({
       try: () => instance.to_canonical_cbor_bytes(),
       catch: () =>
         new HeaderBodyError({
           message: `HeaderBody.toCanonicalCborBytes failed HeaderBody is not valid for Uint8Array conversion. Hint: Check byte length and encoding.`,
         }),
-    }),
+    })
 );
 
 /**
  * Unsafely calls instance.toCanonicalCborBytes without Effect wrapper
- *
- * @example
- * import { HeaderBody } from "@lucid-evolution/experimental";
- *
- * // Assume we have a HeaderBody instance
- * const instance = ... ;
- *
- * // Using try/catch for error handling
- * try {
- *   const result = HeaderBody.toCanonicalCborBytesUnsafe(instance);
- *   console.log(result);
- * } catch (error) {
- *   console.error(`HeaderBody.toCanonicalCborBytesUnsafe failed: ${error.message}`);
- * }
- *
+ * 
  * @since 2.0.0
  * @category MethodsUnsafe
  */
-export const toCanonicalCborBytesUnsafe = (
-  instance: CML.HeaderBody,
-): Uint8Array => Effect.runSync(toCanonicalCborBytes(instance));
+export const toCanonicalCborBytesUnsafe = (instance: CML.HeaderBody): Uint8Array =>
+  Effect.runSync(toCanonicalCborBytes(instance));
 
 /**
  * Static method fromCborBytes of HeaderBody
- *
- * @example
- * import { HeaderBody } from "@lucid-evolution/experimental";
- * import { Effect } from "effect";
- *
- * // Using Effect for safe execution with error handling
- * Effect.gen(function*() {
- *
- *   const result = yield* HeaderBody.fromCborBytes( parameters );
- *   console.log(result);
- * });
- *
+ * 
  * @since 2.0.0
  * @category Constructors
  */
-export const fromCborBytes = Effect.fn(function* (cborBytes: Uint8Array) {
+export const fromCborBytes: (cborBytes: Uint8Array) => Effect.Effect<CML.HeaderBody, HeaderBodyError> = Effect.fn(function* (cborBytes: Uint8Array) {
   return yield* Effect.try({
     try: () => CML.HeaderBody.from_cbor_bytes(cborBytes),
-    catch: () =>
-      new HeaderBodyError({
-        message: `HeaderBody.fromCborBytes failed with parameters: ${cborBytes}. Hint: Check byte length and encoding.`,
-      }),
+    catch: () => new HeaderBodyError({
+      message: `HeaderBody.fromCborBytes failed with parameters: ${cborBytes}. Hint: Check byte length and encoding.`,
+    }),
   });
 });
 
 /**
  * Unsafely calls HeaderBody.fromCborBytes without Effect wrapper
- *
- * @example
- * import { HeaderBody } from "@lucid-evolution/experimental";
- *
- *
- *
- * // Using try/catch for error handling
- * try {
- *   const result = HeaderBody.fromCborBytesUnsafe( parameters );
- *   console.log(result);
- * } catch (error) {
- *   console.error(`HeaderBody.fromCborBytesUnsafe failed: ${error.message}`);
- * }
- *
+ * 
  * @since 2.0.0
  * @category ConstructorsUnsafe
  */
-export const fromCborBytesUnsafe = (cborBytes: Uint8Array) =>
+export const fromCborBytesUnsafe = (cborBytes: Uint8Array): CML.HeaderBody =>
   Effect.runSync(fromCborBytes(cborBytes));
 
 /**
  * Method toCborHex of HeaderBody
- *
- * @example
- * import { HeaderBody } from "@lucid-evolution/experimental";
- * import { Effect } from "effect";
- *
- * // Using Effect for safe execution with error handling
- * Effect.gen(function*() {
- * // Assume we have a HeaderBody instance
- * const instance = ... ;
- *   const result = yield* HeaderBody.toCborHex(instance);
- *   console.log(result);
- * });
- *
+ * 
  * @since 2.0.0
  * @category Methods
  */
-export const toCborHex = Effect.fn(
-  (instance: CML.HeaderBody): Effect.Effect<string, HeaderBodyError> =>
+export const toCborHex: (instance: CML.HeaderBody) => Effect.Effect<string, HeaderBodyError> = Effect.fn(
+  (instance: CML.HeaderBody) =>
     Effect.try({
       try: () => instance.to_cbor_hex(),
       catch: () =>
         new HeaderBodyError({
           message: `HeaderBody.toCborHex failed HeaderBody is not valid for string conversion. Hint: Make sure it's a valid hex string representing CBOR data.`,
         }),
-    }),
+    })
 );
 
 /**
  * Unsafely calls instance.toCborHex without Effect wrapper
- *
- * @example
- * import { HeaderBody } from "@lucid-evolution/experimental";
- *
- * // Assume we have a HeaderBody instance
- * const instance = ... ;
- *
- * // Using try/catch for error handling
- * try {
- *   const result = HeaderBody.toCborHexUnsafe(instance);
- *   console.log(result);
- * } catch (error) {
- *   console.error(`HeaderBody.toCborHexUnsafe failed: ${error.message}`);
- * }
- *
+ * 
  * @since 2.0.0
  * @category MethodsUnsafe
  */
@@ -284,50 +154,24 @@ export const toCborHexUnsafe = (instance: CML.HeaderBody): string =>
 
 /**
  * Method toCanonicalCborHex of HeaderBody
- *
- * @example
- * import { HeaderBody } from "@lucid-evolution/experimental";
- * import { Effect } from "effect";
- *
- * // Using Effect for safe execution with error handling
- * Effect.gen(function*() {
- * // Assume we have a HeaderBody instance
- * const instance = ... ;
- *   const result = yield* HeaderBody.toCanonicalCborHex(instance);
- *   console.log(result);
- * });
- *
+ * 
  * @since 2.0.0
  * @category Methods
  */
-export const toCanonicalCborHex = Effect.fn(
-  (instance: CML.HeaderBody): Effect.Effect<string, HeaderBodyError> =>
+export const toCanonicalCborHex: (instance: CML.HeaderBody) => Effect.Effect<string, HeaderBodyError> = Effect.fn(
+  (instance: CML.HeaderBody) =>
     Effect.try({
       try: () => instance.to_canonical_cbor_hex(),
       catch: () =>
         new HeaderBodyError({
           message: `HeaderBody.toCanonicalCborHex failed HeaderBody is not valid for string conversion. Hint: Make sure it's a valid hex string representing CBOR data.`,
         }),
-    }),
+    })
 );
 
 /**
  * Unsafely calls instance.toCanonicalCborHex without Effect wrapper
- *
- * @example
- * import { HeaderBody } from "@lucid-evolution/experimental";
- *
- * // Assume we have a HeaderBody instance
- * const instance = ... ;
- *
- * // Using try/catch for error handling
- * try {
- *   const result = HeaderBody.toCanonicalCborHexUnsafe(instance);
- *   console.log(result);
- * } catch (error) {
- *   console.error(`HeaderBody.toCanonicalCborHexUnsafe failed: ${error.message}`);
- * }
- *
+ * 
  * @since 2.0.0
  * @category MethodsUnsafe
  */
@@ -336,99 +180,48 @@ export const toCanonicalCborHexUnsafe = (instance: CML.HeaderBody): string =>
 
 /**
  * Static method fromCborHex of HeaderBody
- *
- * @example
- * import { HeaderBody } from "@lucid-evolution/experimental";
- * import { Effect } from "effect";
- *
- * // Using Effect for safe execution with error handling
- * Effect.gen(function*() {
- *
- *   const result = yield* HeaderBody.fromCborHex( parameters );
- *   console.log(result);
- * });
- *
+ * 
  * @since 2.0.0
  * @category Constructors
  */
-export const fromCborHex = Effect.fn(function* (cborBytes: string) {
+export const fromCborHex: (cborBytes: string) => Effect.Effect<CML.HeaderBody, HeaderBodyError> = Effect.fn(function* (cborBytes: string) {
   return yield* Effect.try({
     try: () => CML.HeaderBody.from_cbor_hex(cborBytes),
-    catch: () =>
-      new HeaderBodyError({
-        message: `HeaderBody.fromCborHex failed with parameters: ${cborBytes}. Hint: Make sure it's a valid hex string representing CBOR data.`,
-      }),
+    catch: () => new HeaderBodyError({
+      message: `HeaderBody.fromCborHex failed with parameters: ${cborBytes}. Hint: Make sure it's a valid hex string representing CBOR data.`,
+    }),
   });
 });
 
 /**
  * Unsafely calls HeaderBody.fromCborHex without Effect wrapper
- *
- * @example
- * import { HeaderBody } from "@lucid-evolution/experimental";
- *
- *
- *
- * // Using try/catch for error handling
- * try {
- *   const result = HeaderBody.fromCborHexUnsafe( parameters );
- *   console.log(result);
- * } catch (error) {
- *   console.error(`HeaderBody.fromCborHexUnsafe failed: ${error.message}`);
- * }
- *
+ * 
  * @since 2.0.0
  * @category ConstructorsUnsafe
  */
-export const fromCborHexUnsafe = (cborBytes: string) =>
+export const fromCborHexUnsafe = (cborBytes: string): CML.HeaderBody =>
   Effect.runSync(fromCborHex(cborBytes));
 
 /**
  * Method toJson of HeaderBody
- *
- * @example
- * import { HeaderBody } from "@lucid-evolution/experimental";
- * import { Effect } from "effect";
- *
- * // Using Effect for safe execution with error handling
- * Effect.gen(function*() {
- * // Assume we have a HeaderBody instance
- * const instance = ... ;
- *   const result = yield* HeaderBody.toJson(instance);
- *   console.log(result);
- * });
- *
+ * 
  * @since 2.0.0
  * @category Methods
  */
-export const toJson = Effect.fn(
-  (instance: CML.HeaderBody): Effect.Effect<string, HeaderBodyError> =>
+export const toJson: (instance: CML.HeaderBody) => Effect.Effect<string, HeaderBodyError> = Effect.fn(
+  (instance: CML.HeaderBody) =>
     Effect.try({
       try: () => instance.to_json(),
       catch: () =>
         new HeaderBodyError({
           message: `HeaderBody.toJson failed HeaderBody is not valid for string conversion. Hint: Validate your JSON structure.`,
         }),
-    }),
+    })
 );
 
 /**
  * Unsafely calls instance.toJson without Effect wrapper
- *
- * @example
- * import { HeaderBody } from "@lucid-evolution/experimental";
- *
- * // Assume we have a HeaderBody instance
- * const instance = ... ;
- *
- * // Using try/catch for error handling
- * try {
- *   const result = HeaderBody.toJsonUnsafe(instance);
- *   console.log(result);
- * } catch (error) {
- *   console.error(`HeaderBody.toJsonUnsafe failed: ${error.message}`);
- * }
- *
+ * 
  * @since 2.0.0
  * @category MethodsUnsafe
  */
@@ -437,50 +230,24 @@ export const toJsonUnsafe = (instance: CML.HeaderBody): string =>
 
 /**
  * Method toJsValue of HeaderBody
- *
- * @example
- * import { HeaderBody } from "@lucid-evolution/experimental";
- * import { Effect } from "effect";
- *
- * // Using Effect for safe execution with error handling
- * Effect.gen(function*() {
- * // Assume we have a HeaderBody instance
- * const instance = ... ;
- *   const result = yield* HeaderBody.toJsValue(instance);
- *   console.log(result);
- * });
- *
+ * 
  * @since 2.0.0
  * @category Methods
  */
-export const toJsValue = Effect.fn(
-  (instance: CML.HeaderBody): Effect.Effect<any, HeaderBodyError> =>
+export const toJsValue: (instance: CML.HeaderBody) => Effect.Effect<any, HeaderBodyError> = Effect.fn(
+  (instance: CML.HeaderBody) =>
     Effect.try({
       try: () => instance.to_js_value(),
       catch: () =>
         new HeaderBodyError({
           message: `HeaderBody.toJsValue failed HeaderBody is not valid for any conversion. `,
         }),
-    }),
+    })
 );
 
 /**
  * Unsafely calls instance.toJsValue without Effect wrapper
- *
- * @example
- * import { HeaderBody } from "@lucid-evolution/experimental";
- *
- * // Assume we have a HeaderBody instance
- * const instance = ... ;
- *
- * // Using try/catch for error handling
- * try {
- *   const result = HeaderBody.toJsValueUnsafe(instance);
- *   console.log(result);
- * } catch (error) {
- *   console.error(`HeaderBody.toJsValueUnsafe failed: ${error.message}`);
- * }
- *
+ * 
  * @since 2.0.0
  * @category MethodsUnsafe
  */
@@ -489,98 +256,48 @@ export const toJsValueUnsafe = (instance: CML.HeaderBody): any =>
 
 /**
  * Static method fromJson of HeaderBody
- *
- * @example
- * import { HeaderBody } from "@lucid-evolution/experimental";
- * import { Effect } from "effect";
- *
- * // Using Effect for safe execution with error handling
- * Effect.gen(function*() {
- *
- *   const result = yield* HeaderBody.fromJson( parameters );
- *   console.log(result);
- * });
- *
+ * 
  * @since 2.0.0
  * @category Constructors
  */
-export const fromJson = Effect.fn(function* (json: string) {
+export const fromJson: (json: string) => Effect.Effect<CML.HeaderBody, HeaderBodyError> = Effect.fn(function* (json: string) {
   return yield* Effect.try({
     try: () => CML.HeaderBody.from_json(json),
-    catch: () =>
-      new HeaderBodyError({
-        message: `HeaderBody.fromJson failed with parameters: ${json}. Hint: Validate your JSON structure.`,
-      }),
+    catch: () => new HeaderBodyError({
+      message: `HeaderBody.fromJson failed with parameters: ${json}. Hint: Validate your JSON structure.`,
+    }),
   });
 });
 
 /**
  * Unsafely calls HeaderBody.fromJson without Effect wrapper
- *
- * @example
- * import { HeaderBody } from "@lucid-evolution/experimental";
- *
- *
- *
- * // Using try/catch for error handling
- * try {
- *   const result = HeaderBody.fromJsonUnsafe( parameters );
- *   console.log(result);
- * } catch (error) {
- *   console.error(`HeaderBody.fromJsonUnsafe failed: ${error.message}`);
- * }
- *
+ * 
  * @since 2.0.0
  * @category ConstructorsUnsafe
  */
-export const fromJsonUnsafe = (json: string) => Effect.runSync(fromJson(json));
+export const fromJsonUnsafe = (json: string): CML.HeaderBody =>
+  Effect.runSync(fromJson(json));
 
 /**
  * Method blockNumber of HeaderBody
- *
- * @example
- * import { HeaderBody } from "@lucid-evolution/experimental";
- * import { Effect } from "effect";
- *
- * // Using Effect for safe execution with error handling
- * Effect.gen(function*() {
- * // Assume we have a HeaderBody instance
- * const instance = ... ;
- *   const result = yield* HeaderBody.blockNumber(instance);
- *   console.log(result);
- * });
- *
+ * 
  * @since 2.0.0
  * @category Methods
  */
-export const blockNumber = Effect.fn(
-  (instance: CML.HeaderBody): Effect.Effect<bigint, HeaderBodyError> =>
+export const blockNumber: (instance: CML.HeaderBody) => Effect.Effect<bigint, HeaderBodyError> = Effect.fn(
+  (instance: CML.HeaderBody) =>
     Effect.try({
       try: () => instance.block_number(),
       catch: () =>
         new HeaderBodyError({
           message: `HeaderBody.blockNumber failed `,
         }),
-    }),
+    })
 );
 
 /**
  * Unsafely calls instance.blockNumber without Effect wrapper
- *
- * @example
- * import { HeaderBody } from "@lucid-evolution/experimental";
- *
- * // Assume we have a HeaderBody instance
- * const instance = ... ;
- *
- * // Using try/catch for error handling
- * try {
- *   const result = HeaderBody.blockNumberUnsafe(instance);
- *   console.log(result);
- * } catch (error) {
- *   console.error(`HeaderBody.blockNumberUnsafe failed: ${error.message}`);
- * }
- *
+ * 
  * @since 2.0.0
  * @category MethodsUnsafe
  */
@@ -589,50 +306,24 @@ export const blockNumberUnsafe = (instance: CML.HeaderBody): bigint =>
 
 /**
  * Method slot of HeaderBody
- *
- * @example
- * import { HeaderBody } from "@lucid-evolution/experimental";
- * import { Effect } from "effect";
- *
- * // Using Effect for safe execution with error handling
- * Effect.gen(function*() {
- * // Assume we have a HeaderBody instance
- * const instance = ... ;
- *   const result = yield* HeaderBody.slot(instance);
- *   console.log(result);
- * });
- *
+ * 
  * @since 2.0.0
  * @category Methods
  */
-export const slot = Effect.fn(
-  (instance: CML.HeaderBody): Effect.Effect<bigint, HeaderBodyError> =>
+export const slot: (instance: CML.HeaderBody) => Effect.Effect<bigint, HeaderBodyError> = Effect.fn(
+  (instance: CML.HeaderBody) =>
     Effect.try({
       try: () => instance.slot(),
       catch: () =>
         new HeaderBodyError({
           message: `HeaderBody.slot failed `,
         }),
-    }),
+    })
 );
 
 /**
  * Unsafely calls instance.slot without Effect wrapper
- *
- * @example
- * import { HeaderBody } from "@lucid-evolution/experimental";
- *
- * // Assume we have a HeaderBody instance
- * const instance = ... ;
- *
- * // Using try/catch for error handling
- * try {
- *   const result = HeaderBody.slotUnsafe(instance);
- *   console.log(result);
- * } catch (error) {
- *   console.error(`HeaderBody.slotUnsafe failed: ${error.message}`);
- * }
- *
+ * 
  * @since 2.0.0
  * @category MethodsUnsafe
  */
@@ -641,105 +332,50 @@ export const slotUnsafe = (instance: CML.HeaderBody): bigint =>
 
 /**
  * Method prevHash of HeaderBody
- *
- * @example
- * import { HeaderBody } from "@lucid-evolution/experimental";
- * import { Effect } from "effect";
- *
- * // Using Effect for safe execution with error handling
- * Effect.gen(function*() {
- * // Assume we have a HeaderBody instance
- * const instance = ... ;
- *   const result = yield* HeaderBody.prevHash(instance);
- *   console.log(result);
- * });
- *
+ * 
  * @since 2.0.0
  * @category Methods
  */
-export const prevHash = Effect.fn(
-  (
-    instance: CML.HeaderBody,
-  ): Effect.Effect<CML.BlockHeaderHash | undefined, HeaderBodyError> =>
+export const prevHash: (instance: CML.HeaderBody) => Effect.Effect<CML.BlockHeaderHash | undefined, HeaderBodyError> = Effect.fn(
+  (instance: CML.HeaderBody) =>
     Effect.try({
       try: () => instance.prev_hash(),
       catch: () =>
         new HeaderBodyError({
           message: `HeaderBody.prevHash failed `,
         }),
-    }),
+    })
 );
 
 /**
  * Unsafely calls instance.prevHash without Effect wrapper
- *
- * @example
- * import { HeaderBody } from "@lucid-evolution/experimental";
- *
- * // Assume we have a HeaderBody instance
- * const instance = ... ;
- *
- * // Using try/catch for error handling
- * try {
- *   const result = HeaderBody.prevHashUnsafe(instance);
- *   console.log(result);
- * } catch (error) {
- *   console.error(`HeaderBody.prevHashUnsafe failed: ${error.message}`);
- * }
- *
+ * 
  * @since 2.0.0
  * @category MethodsUnsafe
  */
-export const prevHashUnsafe = (
-  instance: CML.HeaderBody,
-): CML.BlockHeaderHash | undefined => Effect.runSync(prevHash(instance));
+export const prevHashUnsafe = (instance: CML.HeaderBody): CML.BlockHeaderHash | undefined =>
+  Effect.runSync(prevHash(instance));
 
 /**
  * Method issuerVkey of HeaderBody
- *
- * @example
- * import { HeaderBody } from "@lucid-evolution/experimental";
- * import { Effect } from "effect";
- *
- * // Using Effect for safe execution with error handling
- * Effect.gen(function*() {
- * // Assume we have a HeaderBody instance
- * const instance = ... ;
- *   const result = yield* HeaderBody.issuerVkey(instance);
- *   console.log(result);
- * });
- *
+ * 
  * @since 2.0.0
  * @category Methods
  */
-export const issuerVkey = Effect.fn(
-  (instance: CML.HeaderBody): Effect.Effect<CML.PublicKey, HeaderBodyError> =>
+export const issuerVkey: (instance: CML.HeaderBody) => Effect.Effect<CML.PublicKey, HeaderBodyError> = Effect.fn(
+  (instance: CML.HeaderBody) =>
     Effect.try({
       try: () => instance.issuer_vkey(),
       catch: () =>
         new HeaderBodyError({
           message: `HeaderBody.issuerVkey failed `,
         }),
-    }),
+    })
 );
 
 /**
  * Unsafely calls instance.issuerVkey without Effect wrapper
- *
- * @example
- * import { HeaderBody } from "@lucid-evolution/experimental";
- *
- * // Assume we have a HeaderBody instance
- * const instance = ... ;
- *
- * // Using try/catch for error handling
- * try {
- *   const result = HeaderBody.issuerVkeyUnsafe(instance);
- *   console.log(result);
- * } catch (error) {
- *   console.error(`HeaderBody.issuerVkeyUnsafe failed: ${error.message}`);
- * }
- *
+ * 
  * @since 2.0.0
  * @category MethodsUnsafe
  */
@@ -748,50 +384,24 @@ export const issuerVkeyUnsafe = (instance: CML.HeaderBody): CML.PublicKey =>
 
 /**
  * Method vrfVkey of HeaderBody
- *
- * @example
- * import { HeaderBody } from "@lucid-evolution/experimental";
- * import { Effect } from "effect";
- *
- * // Using Effect for safe execution with error handling
- * Effect.gen(function*() {
- * // Assume we have a HeaderBody instance
- * const instance = ... ;
- *   const result = yield* HeaderBody.vrfVkey(instance);
- *   console.log(result);
- * });
- *
+ * 
  * @since 2.0.0
  * @category Methods
  */
-export const vrfVkey = Effect.fn(
-  (instance: CML.HeaderBody): Effect.Effect<CML.VRFVkey, HeaderBodyError> =>
+export const vrfVkey: (instance: CML.HeaderBody) => Effect.Effect<CML.VRFVkey, HeaderBodyError> = Effect.fn(
+  (instance: CML.HeaderBody) =>
     Effect.try({
       try: () => instance.vrf_vkey(),
       catch: () =>
         new HeaderBodyError({
           message: `HeaderBody.vrfVkey failed `,
         }),
-    }),
+    })
 );
 
 /**
  * Unsafely calls instance.vrfVkey without Effect wrapper
- *
- * @example
- * import { HeaderBody } from "@lucid-evolution/experimental";
- *
- * // Assume we have a HeaderBody instance
- * const instance = ... ;
- *
- * // Using try/catch for error handling
- * try {
- *   const result = HeaderBody.vrfVkeyUnsafe(instance);
- *   console.log(result);
- * } catch (error) {
- *   console.error(`HeaderBody.vrfVkeyUnsafe failed: ${error.message}`);
- * }
- *
+ * 
  * @since 2.0.0
  * @category MethodsUnsafe
  */
@@ -800,50 +410,24 @@ export const vrfVkeyUnsafe = (instance: CML.HeaderBody): CML.VRFVkey =>
 
 /**
  * Method vrfResult of HeaderBody
- *
- * @example
- * import { HeaderBody } from "@lucid-evolution/experimental";
- * import { Effect } from "effect";
- *
- * // Using Effect for safe execution with error handling
- * Effect.gen(function*() {
- * // Assume we have a HeaderBody instance
- * const instance = ... ;
- *   const result = yield* HeaderBody.vrfResult(instance);
- *   console.log(result);
- * });
- *
+ * 
  * @since 2.0.0
  * @category Methods
  */
-export const vrfResult = Effect.fn(
-  (instance: CML.HeaderBody): Effect.Effect<CML.VRFCert, HeaderBodyError> =>
+export const vrfResult: (instance: CML.HeaderBody) => Effect.Effect<CML.VRFCert, HeaderBodyError> = Effect.fn(
+  (instance: CML.HeaderBody) =>
     Effect.try({
       try: () => instance.vrf_result(),
       catch: () =>
         new HeaderBodyError({
           message: `HeaderBody.vrfResult failed `,
         }),
-    }),
+    })
 );
 
 /**
  * Unsafely calls instance.vrfResult without Effect wrapper
- *
- * @example
- * import { HeaderBody } from "@lucid-evolution/experimental";
- *
- * // Assume we have a HeaderBody instance
- * const instance = ... ;
- *
- * // Using try/catch for error handling
- * try {
- *   const result = HeaderBody.vrfResultUnsafe(instance);
- *   console.log(result);
- * } catch (error) {
- *   console.error(`HeaderBody.vrfResultUnsafe failed: ${error.message}`);
- * }
- *
+ * 
  * @since 2.0.0
  * @category MethodsUnsafe
  */
@@ -852,50 +436,24 @@ export const vrfResultUnsafe = (instance: CML.HeaderBody): CML.VRFCert =>
 
 /**
  * Method blockBodySize of HeaderBody
- *
- * @example
- * import { HeaderBody } from "@lucid-evolution/experimental";
- * import { Effect } from "effect";
- *
- * // Using Effect for safe execution with error handling
- * Effect.gen(function*() {
- * // Assume we have a HeaderBody instance
- * const instance = ... ;
- *   const result = yield* HeaderBody.blockBodySize(instance);
- *   console.log(result);
- * });
- *
+ * 
  * @since 2.0.0
  * @category Methods
  */
-export const blockBodySize = Effect.fn(
-  (instance: CML.HeaderBody): Effect.Effect<bigint, HeaderBodyError> =>
+export const blockBodySize: (instance: CML.HeaderBody) => Effect.Effect<bigint, HeaderBodyError> = Effect.fn(
+  (instance: CML.HeaderBody) =>
     Effect.try({
       try: () => instance.block_body_size(),
       catch: () =>
         new HeaderBodyError({
           message: `HeaderBody.blockBodySize failed `,
         }),
-    }),
+    })
 );
 
 /**
  * Unsafely calls instance.blockBodySize without Effect wrapper
- *
- * @example
- * import { HeaderBody } from "@lucid-evolution/experimental";
- *
- * // Assume we have a HeaderBody instance
- * const instance = ... ;
- *
- * // Using try/catch for error handling
- * try {
- *   const result = HeaderBody.blockBodySizeUnsafe(instance);
- *   console.log(result);
- * } catch (error) {
- *   console.error(`HeaderBody.blockBodySizeUnsafe failed: ${error.message}`);
- * }
- *
+ * 
  * @since 2.0.0
  * @category MethodsUnsafe
  */
@@ -904,261 +462,102 @@ export const blockBodySizeUnsafe = (instance: CML.HeaderBody): bigint =>
 
 /**
  * Method blockBodyHash of HeaderBody
- *
- * @example
- * import { HeaderBody } from "@lucid-evolution/experimental";
- * import { Effect } from "effect";
- *
- * // Using Effect for safe execution with error handling
- * Effect.gen(function*() {
- * // Assume we have a HeaderBody instance
- * const instance = ... ;
- *   const result = yield* HeaderBody.blockBodyHash(instance);
- *   console.log(result);
- * });
- *
+ * 
  * @since 2.0.0
  * @category Methods
  */
-export const blockBodyHash = Effect.fn(
-  (
-    instance: CML.HeaderBody,
-  ): Effect.Effect<CML.BlockBodyHash, HeaderBodyError> =>
+export const blockBodyHash: (instance: CML.HeaderBody) => Effect.Effect<CML.BlockBodyHash, HeaderBodyError> = Effect.fn(
+  (instance: CML.HeaderBody) =>
     Effect.try({
       try: () => instance.block_body_hash(),
       catch: () =>
         new HeaderBodyError({
           message: `HeaderBody.blockBodyHash failed `,
         }),
-    }),
+    })
 );
 
 /**
  * Unsafely calls instance.blockBodyHash without Effect wrapper
- *
- * @example
- * import { HeaderBody } from "@lucid-evolution/experimental";
- *
- * // Assume we have a HeaderBody instance
- * const instance = ... ;
- *
- * // Using try/catch for error handling
- * try {
- *   const result = HeaderBody.blockBodyHashUnsafe(instance);
- *   console.log(result);
- * } catch (error) {
- *   console.error(`HeaderBody.blockBodyHashUnsafe failed: ${error.message}`);
- * }
- *
+ * 
  * @since 2.0.0
  * @category MethodsUnsafe
  */
-export const blockBodyHashUnsafe = (
-  instance: CML.HeaderBody,
-): CML.BlockBodyHash => Effect.runSync(blockBodyHash(instance));
+export const blockBodyHashUnsafe = (instance: CML.HeaderBody): CML.BlockBodyHash =>
+  Effect.runSync(blockBodyHash(instance));
 
 /**
  * Method operationalCert of HeaderBody
- *
- * @example
- * import { HeaderBody } from "@lucid-evolution/experimental";
- * import { Effect } from "effect";
- *
- * // Using Effect for safe execution with error handling
- * Effect.gen(function*() {
- * // Assume we have a HeaderBody instance
- * const instance = ... ;
- *   const result = yield* HeaderBody.operationalCert(instance);
- *   console.log(result);
- * });
- *
+ * 
  * @since 2.0.0
  * @category Methods
  */
-export const operationalCert = Effect.fn(
-  (
-    instance: CML.HeaderBody,
-  ): Effect.Effect<CML.OperationalCert, HeaderBodyError> =>
+export const operationalCert: (instance: CML.HeaderBody) => Effect.Effect<CML.OperationalCert, HeaderBodyError> = Effect.fn(
+  (instance: CML.HeaderBody) =>
     Effect.try({
       try: () => instance.operational_cert(),
       catch: () =>
         new HeaderBodyError({
           message: `HeaderBody.operationalCert failed `,
         }),
-    }),
+    })
 );
 
 /**
  * Unsafely calls instance.operationalCert without Effect wrapper
- *
- * @example
- * import { HeaderBody } from "@lucid-evolution/experimental";
- *
- * // Assume we have a HeaderBody instance
- * const instance = ... ;
- *
- * // Using try/catch for error handling
- * try {
- *   const result = HeaderBody.operationalCertUnsafe(instance);
- *   console.log(result);
- * } catch (error) {
- *   console.error(`HeaderBody.operationalCertUnsafe failed: ${error.message}`);
- * }
- *
+ * 
  * @since 2.0.0
  * @category MethodsUnsafe
  */
-export const operationalCertUnsafe = (
-  instance: CML.HeaderBody,
-): CML.OperationalCert => Effect.runSync(operationalCert(instance));
+export const operationalCertUnsafe = (instance: CML.HeaderBody): CML.OperationalCert =>
+  Effect.runSync(operationalCert(instance));
 
 /**
  * Method protocolVersion of HeaderBody
- *
- * @example
- * import { HeaderBody } from "@lucid-evolution/experimental";
- * import { Effect } from "effect";
- *
- * // Using Effect for safe execution with error handling
- * Effect.gen(function*() {
- * // Assume we have a HeaderBody instance
- * const instance = ... ;
- *   const result = yield* HeaderBody.protocolVersion(instance);
- *   console.log(result);
- * });
- *
+ * 
  * @since 2.0.0
  * @category Methods
  */
-export const protocolVersion = Effect.fn(
-  (
-    instance: CML.HeaderBody,
-  ): Effect.Effect<CML.ProtocolVersion, HeaderBodyError> =>
+export const protocolVersion: (instance: CML.HeaderBody) => Effect.Effect<CML.ProtocolVersion, HeaderBodyError> = Effect.fn(
+  (instance: CML.HeaderBody) =>
     Effect.try({
       try: () => instance.protocol_version(),
       catch: () =>
         new HeaderBodyError({
           message: `HeaderBody.protocolVersion failed `,
         }),
-    }),
+    })
 );
 
 /**
  * Unsafely calls instance.protocolVersion without Effect wrapper
- *
- * @example
- * import { HeaderBody } from "@lucid-evolution/experimental";
- *
- * // Assume we have a HeaderBody instance
- * const instance = ... ;
- *
- * // Using try/catch for error handling
- * try {
- *   const result = HeaderBody.protocolVersionUnsafe(instance);
- *   console.log(result);
- * } catch (error) {
- *   console.error(`HeaderBody.protocolVersionUnsafe failed: ${error.message}`);
- * }
- *
+ * 
  * @since 2.0.0
  * @category MethodsUnsafe
  */
-export const protocolVersionUnsafe = (
-  instance: CML.HeaderBody,
-): CML.ProtocolVersion => Effect.runSync(protocolVersion(instance));
+export const protocolVersionUnsafe = (instance: CML.HeaderBody): CML.ProtocolVersion =>
+  Effect.runSync(protocolVersion(instance));
 
 /**
  * Static method _new of HeaderBody
- *
- * @example
- * import { HeaderBody } from "@lucid-evolution/experimental";
- * import { Effect } from "effect";
- *
- * // Using Effect for safe execution with error handling
- * Effect.gen(function*() {
- *
- *   const result = yield* HeaderBody._new( parameters );
- *   console.log(result);
- * });
- *
+ * 
  * @since 2.0.0
  * @category Constructors
  */
-export const _new = Effect.fn(function* (
-  blockNumber: bigint,
-  slot: bigint,
-  prevHash: CML.BlockHeaderHash | undefined,
-  issuerVkey: CML.PublicKey,
-  vrfVkey: CML.VRFVkey,
-  vrfResult: CML.VRFCert,
-  blockBodySize: bigint,
-  blockBodyHash: CML.BlockBodyHash,
-  operationalCert: CML.OperationalCert,
-  protocolVersion: CML.ProtocolVersion,
-) {
+export const _new: (blockNumber: bigint, slot: bigint, prevHash: CML.BlockHeaderHash | undefined, issuerVkey: CML.PublicKey, vrfVkey: CML.VRFVkey, vrfResult: CML.VRFCert, blockBodySize: bigint, blockBodyHash: CML.BlockBodyHash, operationalCert: CML.OperationalCert, protocolVersion: CML.ProtocolVersion) => Effect.Effect<CML.HeaderBody, HeaderBodyError> = Effect.fn(function* (blockNumber: bigint, slot: bigint, prevHash: CML.BlockHeaderHash | undefined, issuerVkey: CML.PublicKey, vrfVkey: CML.VRFVkey, vrfResult: CML.VRFCert, blockBodySize: bigint, blockBodyHash: CML.BlockBodyHash, operationalCert: CML.OperationalCert, protocolVersion: CML.ProtocolVersion) {
   return yield* Effect.try({
-    try: () =>
-      CML.HeaderBody.new(
-        blockNumber,
-        slot,
-        prevHash,
-        issuerVkey,
-        vrfVkey,
-        vrfResult,
-        blockBodySize,
-        blockBodyHash,
-        operationalCert,
-        protocolVersion,
-      ),
-    catch: () =>
-      new HeaderBodyError({
-        message: `HeaderBody._new failed with parameters: ${blockNumber}, ${slot}, ${prevHash}, ${issuerVkey} (PublicKey), ${vrfVkey} (VRFVkey), ${vrfResult} (VRFCert), ${blockBodySize}, ${blockBodyHash} (BlockBodyHash), ${operationalCert} (OperationalCert), ${protocolVersion} (ProtocolVersion). `,
-      }),
+    try: () => CML.HeaderBody.new(blockNumber, slot, prevHash, issuerVkey, vrfVkey, vrfResult, blockBodySize, blockBodyHash, operationalCert, protocolVersion),
+    catch: () => new HeaderBodyError({
+      message: `HeaderBody._new failed with parameters: ${blockNumber}, ${slot}, ${prevHash}, ${issuerVkey} (PublicKey), ${vrfVkey} (VRFVkey), ${vrfResult} (VRFCert), ${blockBodySize}, ${blockBodyHash} (BlockBodyHash), ${operationalCert} (OperationalCert), ${protocolVersion} (ProtocolVersion). `,
+    }),
   });
 });
 
 /**
  * Unsafely calls HeaderBody._new without Effect wrapper
- *
- * @example
- * import { HeaderBody } from "@lucid-evolution/experimental";
- *
- *
- *
- * // Using try/catch for error handling
- * try {
- *   const result = HeaderBody._newUnsafe( parameters );
- *   console.log(result);
- * } catch (error) {
- *   console.error(`HeaderBody._newUnsafe failed: ${error.message}`);
- * }
- *
+ * 
  * @since 2.0.0
  * @category ConstructorsUnsafe
  */
-export const _newUnsafe = (
-  blockNumber: bigint,
-  slot: bigint,
-  prevHash: CML.BlockHeaderHash | undefined,
-  issuerVkey: CML.PublicKey,
-  vrfVkey: CML.VRFVkey,
-  vrfResult: CML.VRFCert,
-  blockBodySize: bigint,
-  blockBodyHash: CML.BlockBodyHash,
-  operationalCert: CML.OperationalCert,
-  protocolVersion: CML.ProtocolVersion,
-) =>
-  Effect.runSync(
-    _new(
-      blockNumber,
-      slot,
-      prevHash,
-      issuerVkey,
-      vrfVkey,
-      vrfResult,
-      blockBodySize,
-      blockBodyHash,
-      operationalCert,
-      protocolVersion,
-    ),
-  );
+export const _newUnsafe = (blockNumber: bigint, slot: bigint, prevHash: CML.BlockHeaderHash | undefined, issuerVkey: CML.PublicKey, vrfVkey: CML.VRFVkey, vrfResult: CML.VRFCert, blockBodySize: bigint, blockBodyHash: CML.BlockBodyHash, operationalCert: CML.OperationalCert, protocolVersion: CML.ProtocolVersion): CML.HeaderBody =>
+  Effect.runSync(_new(blockNumber, slot, prevHash, issuerVkey, vrfVkey, vrfResult, blockBodySize, blockBodyHash, operationalCert, protocolVersion));

@@ -14,66 +14,36 @@ export type ConstrPlutusData = CML.ConstrPlutusData;
 
 /**
  * Error class for ConstrPlutusData operations
- *
+ * 
  * This error is thrown when operations on ConstrPlutusData instances fail.
  *
  * @since 2.0.0
  * @category Errors
  */
-export class ConstrPlutusDataError extends Data.TaggedError(
-  "ConstrPlutusDataError",
-)<{
+export class ConstrPlutusDataError extends Data.TaggedError("ConstrPlutusDataError")<{
   message?: string;
 }> {}
 
 /**
  * Method free of ConstrPlutusData
- *
- * @example
- * import { ConstrPlutusData } from "@lucid-evolution/experimental";
- * import { Effect } from "effect";
- *
- * // Using Effect for safe execution with error handling
- * Effect.gen(function*() {
- * // Assume we have a ConstrPlutusData instance
- * const instance = ... ;
- *   const result = yield* ConstrPlutusData.free(instance);
- *   console.log(result);
- * });
- *
+ * 
  * @since 2.0.0
  * @category Methods
  */
-export const free = Effect.fn(
-  (
-    instance: CML.ConstrPlutusData,
-  ): Effect.Effect<void, ConstrPlutusDataError> =>
+export const free: (instance: CML.ConstrPlutusData) => Effect.Effect<void, ConstrPlutusDataError> = Effect.fn(
+  (instance: CML.ConstrPlutusData) =>
     Effect.try({
       try: () => instance.free(),
       catch: () =>
         new ConstrPlutusDataError({
           message: `ConstrPlutusData.free failed Hint: Check if you're calling free() more than once.`,
         }),
-    }),
+    })
 );
 
 /**
  * Unsafely calls instance.free without Effect wrapper
- *
- * @example
- * import { ConstrPlutusData } from "@lucid-evolution/experimental";
- *
- * // Assume we have a ConstrPlutusData instance
- * const instance = ... ;
- *
- * // Using try/catch for error handling
- * try {
- *   const result = ConstrPlutusData.freeUnsafe(instance);
- *   console.log(result);
- * } catch (error) {
- *   console.error(`ConstrPlutusData.freeUnsafe failed: ${error.message}`);
- * }
- *
+ * 
  * @since 2.0.0
  * @category MethodsUnsafe
  */
@@ -82,52 +52,24 @@ export const freeUnsafe = (instance: CML.ConstrPlutusData): void =>
 
 /**
  * Method toCborBytes of ConstrPlutusData
- *
- * @example
- * import { ConstrPlutusData } from "@lucid-evolution/experimental";
- * import { Effect } from "effect";
- *
- * // Using Effect for safe execution with error handling
- * Effect.gen(function*() {
- * // Assume we have a ConstrPlutusData instance
- * const instance = ... ;
- *   const result = yield* ConstrPlutusData.toCborBytes(instance);
- *   console.log(result);
- * });
- *
+ * 
  * @since 2.0.0
  * @category Methods
  */
-export const toCborBytes = Effect.fn(
-  (
-    instance: CML.ConstrPlutusData,
-  ): Effect.Effect<Uint8Array, ConstrPlutusDataError> =>
+export const toCborBytes: (instance: CML.ConstrPlutusData) => Effect.Effect<Uint8Array, ConstrPlutusDataError> = Effect.fn(
+  (instance: CML.ConstrPlutusData) =>
     Effect.try({
       try: () => instance.to_cbor_bytes(),
       catch: () =>
         new ConstrPlutusDataError({
           message: `ConstrPlutusData.toCborBytes failed ConstrPlutusData is not valid for Uint8Array conversion. Hint: Check byte length and encoding.`,
         }),
-    }),
+    })
 );
 
 /**
  * Unsafely calls instance.toCborBytes without Effect wrapper
- *
- * @example
- * import { ConstrPlutusData } from "@lucid-evolution/experimental";
- *
- * // Assume we have a ConstrPlutusData instance
- * const instance = ... ;
- *
- * // Using try/catch for error handling
- * try {
- *   const result = ConstrPlutusData.toCborBytesUnsafe(instance);
- *   console.log(result);
- * } catch (error) {
- *   console.error(`ConstrPlutusData.toCborBytesUnsafe failed: ${error.message}`);
- * }
- *
+ * 
  * @since 2.0.0
  * @category MethodsUnsafe
  */
@@ -136,156 +78,74 @@ export const toCborBytesUnsafe = (instance: CML.ConstrPlutusData): Uint8Array =>
 
 /**
  * Method toCanonicalCborBytes of ConstrPlutusData
- *
- * @example
- * import { ConstrPlutusData } from "@lucid-evolution/experimental";
- * import { Effect } from "effect";
- *
- * // Using Effect for safe execution with error handling
- * Effect.gen(function*() {
- * // Assume we have a ConstrPlutusData instance
- * const instance = ... ;
- *   const result = yield* ConstrPlutusData.toCanonicalCborBytes(instance);
- *   console.log(result);
- * });
- *
+ * 
  * @since 2.0.0
  * @category Methods
  */
-export const toCanonicalCborBytes = Effect.fn(
-  (
-    instance: CML.ConstrPlutusData,
-  ): Effect.Effect<Uint8Array, ConstrPlutusDataError> =>
+export const toCanonicalCborBytes: (instance: CML.ConstrPlutusData) => Effect.Effect<Uint8Array, ConstrPlutusDataError> = Effect.fn(
+  (instance: CML.ConstrPlutusData) =>
     Effect.try({
       try: () => instance.to_canonical_cbor_bytes(),
       catch: () =>
         new ConstrPlutusDataError({
           message: `ConstrPlutusData.toCanonicalCborBytes failed ConstrPlutusData is not valid for Uint8Array conversion. Hint: Check byte length and encoding.`,
         }),
-    }),
+    })
 );
 
 /**
  * Unsafely calls instance.toCanonicalCborBytes without Effect wrapper
- *
- * @example
- * import { ConstrPlutusData } from "@lucid-evolution/experimental";
- *
- * // Assume we have a ConstrPlutusData instance
- * const instance = ... ;
- *
- * // Using try/catch for error handling
- * try {
- *   const result = ConstrPlutusData.toCanonicalCborBytesUnsafe(instance);
- *   console.log(result);
- * } catch (error) {
- *   console.error(`ConstrPlutusData.toCanonicalCborBytesUnsafe failed: ${error.message}`);
- * }
- *
+ * 
  * @since 2.0.0
  * @category MethodsUnsafe
  */
-export const toCanonicalCborBytesUnsafe = (
-  instance: CML.ConstrPlutusData,
-): Uint8Array => Effect.runSync(toCanonicalCborBytes(instance));
+export const toCanonicalCborBytesUnsafe = (instance: CML.ConstrPlutusData): Uint8Array =>
+  Effect.runSync(toCanonicalCborBytes(instance));
 
 /**
  * Static method fromCborBytes of ConstrPlutusData
- *
- * @example
- * import { ConstrPlutusData } from "@lucid-evolution/experimental";
- * import { Effect } from "effect";
- *
- * // Using Effect for safe execution with error handling
- * Effect.gen(function*() {
- *
- *   const result = yield* ConstrPlutusData.fromCborBytes( parameters );
- *   console.log(result);
- * });
- *
+ * 
  * @since 2.0.0
  * @category Constructors
  */
-export const fromCborBytes = Effect.fn(function* (cborBytes: Uint8Array) {
+export const fromCborBytes: (cborBytes: Uint8Array) => Effect.Effect<CML.ConstrPlutusData, ConstrPlutusDataError> = Effect.fn(function* (cborBytes: Uint8Array) {
   return yield* Effect.try({
     try: () => CML.ConstrPlutusData.from_cbor_bytes(cborBytes),
-    catch: () =>
-      new ConstrPlutusDataError({
-        message: `ConstrPlutusData.fromCborBytes failed with parameters: ${cborBytes}. Hint: Check byte length and encoding.`,
-      }),
+    catch: () => new ConstrPlutusDataError({
+      message: `ConstrPlutusData.fromCborBytes failed with parameters: ${cborBytes}. Hint: Check byte length and encoding.`,
+    }),
   });
 });
 
 /**
  * Unsafely calls ConstrPlutusData.fromCborBytes without Effect wrapper
- *
- * @example
- * import { ConstrPlutusData } from "@lucid-evolution/experimental";
- *
- *
- *
- * // Using try/catch for error handling
- * try {
- *   const result = ConstrPlutusData.fromCborBytesUnsafe( parameters );
- *   console.log(result);
- * } catch (error) {
- *   console.error(`ConstrPlutusData.fromCborBytesUnsafe failed: ${error.message}`);
- * }
- *
+ * 
  * @since 2.0.0
  * @category ConstructorsUnsafe
  */
-export const fromCborBytesUnsafe = (cborBytes: Uint8Array) =>
+export const fromCborBytesUnsafe = (cborBytes: Uint8Array): CML.ConstrPlutusData =>
   Effect.runSync(fromCborBytes(cborBytes));
 
 /**
  * Method toCborHex of ConstrPlutusData
- *
- * @example
- * import { ConstrPlutusData } from "@lucid-evolution/experimental";
- * import { Effect } from "effect";
- *
- * // Using Effect for safe execution with error handling
- * Effect.gen(function*() {
- * // Assume we have a ConstrPlutusData instance
- * const instance = ... ;
- *   const result = yield* ConstrPlutusData.toCborHex(instance);
- *   console.log(result);
- * });
- *
+ * 
  * @since 2.0.0
  * @category Methods
  */
-export const toCborHex = Effect.fn(
-  (
-    instance: CML.ConstrPlutusData,
-  ): Effect.Effect<string, ConstrPlutusDataError> =>
+export const toCborHex: (instance: CML.ConstrPlutusData) => Effect.Effect<string, ConstrPlutusDataError> = Effect.fn(
+  (instance: CML.ConstrPlutusData) =>
     Effect.try({
       try: () => instance.to_cbor_hex(),
       catch: () =>
         new ConstrPlutusDataError({
           message: `ConstrPlutusData.toCborHex failed ConstrPlutusData is not valid for string conversion. Hint: Make sure it's a valid hex string representing CBOR data.`,
         }),
-    }),
+    })
 );
 
 /**
  * Unsafely calls instance.toCborHex without Effect wrapper
- *
- * @example
- * import { ConstrPlutusData } from "@lucid-evolution/experimental";
- *
- * // Assume we have a ConstrPlutusData instance
- * const instance = ... ;
- *
- * // Using try/catch for error handling
- * try {
- *   const result = ConstrPlutusData.toCborHexUnsafe(instance);
- *   console.log(result);
- * } catch (error) {
- *   console.error(`ConstrPlutusData.toCborHexUnsafe failed: ${error.message}`);
- * }
- *
+ * 
  * @since 2.0.0
  * @category MethodsUnsafe
  */
@@ -294,156 +154,74 @@ export const toCborHexUnsafe = (instance: CML.ConstrPlutusData): string =>
 
 /**
  * Method toCanonicalCborHex of ConstrPlutusData
- *
- * @example
- * import { ConstrPlutusData } from "@lucid-evolution/experimental";
- * import { Effect } from "effect";
- *
- * // Using Effect for safe execution with error handling
- * Effect.gen(function*() {
- * // Assume we have a ConstrPlutusData instance
- * const instance = ... ;
- *   const result = yield* ConstrPlutusData.toCanonicalCborHex(instance);
- *   console.log(result);
- * });
- *
+ * 
  * @since 2.0.0
  * @category Methods
  */
-export const toCanonicalCborHex = Effect.fn(
-  (
-    instance: CML.ConstrPlutusData,
-  ): Effect.Effect<string, ConstrPlutusDataError> =>
+export const toCanonicalCborHex: (instance: CML.ConstrPlutusData) => Effect.Effect<string, ConstrPlutusDataError> = Effect.fn(
+  (instance: CML.ConstrPlutusData) =>
     Effect.try({
       try: () => instance.to_canonical_cbor_hex(),
       catch: () =>
         new ConstrPlutusDataError({
           message: `ConstrPlutusData.toCanonicalCborHex failed ConstrPlutusData is not valid for string conversion. Hint: Make sure it's a valid hex string representing CBOR data.`,
         }),
-    }),
+    })
 );
 
 /**
  * Unsafely calls instance.toCanonicalCborHex without Effect wrapper
- *
- * @example
- * import { ConstrPlutusData } from "@lucid-evolution/experimental";
- *
- * // Assume we have a ConstrPlutusData instance
- * const instance = ... ;
- *
- * // Using try/catch for error handling
- * try {
- *   const result = ConstrPlutusData.toCanonicalCborHexUnsafe(instance);
- *   console.log(result);
- * } catch (error) {
- *   console.error(`ConstrPlutusData.toCanonicalCborHexUnsafe failed: ${error.message}`);
- * }
- *
+ * 
  * @since 2.0.0
  * @category MethodsUnsafe
  */
-export const toCanonicalCborHexUnsafe = (
-  instance: CML.ConstrPlutusData,
-): string => Effect.runSync(toCanonicalCborHex(instance));
+export const toCanonicalCborHexUnsafe = (instance: CML.ConstrPlutusData): string =>
+  Effect.runSync(toCanonicalCborHex(instance));
 
 /**
  * Static method fromCborHex of ConstrPlutusData
- *
- * @example
- * import { ConstrPlutusData } from "@lucid-evolution/experimental";
- * import { Effect } from "effect";
- *
- * // Using Effect for safe execution with error handling
- * Effect.gen(function*() {
- *
- *   const result = yield* ConstrPlutusData.fromCborHex( parameters );
- *   console.log(result);
- * });
- *
+ * 
  * @since 2.0.0
  * @category Constructors
  */
-export const fromCborHex = Effect.fn(function* (cborBytes: string) {
+export const fromCborHex: (cborBytes: string) => Effect.Effect<CML.ConstrPlutusData, ConstrPlutusDataError> = Effect.fn(function* (cborBytes: string) {
   return yield* Effect.try({
     try: () => CML.ConstrPlutusData.from_cbor_hex(cborBytes),
-    catch: () =>
-      new ConstrPlutusDataError({
-        message: `ConstrPlutusData.fromCborHex failed with parameters: ${cborBytes}. Hint: Make sure it's a valid hex string representing CBOR data.`,
-      }),
+    catch: () => new ConstrPlutusDataError({
+      message: `ConstrPlutusData.fromCborHex failed with parameters: ${cborBytes}. Hint: Make sure it's a valid hex string representing CBOR data.`,
+    }),
   });
 });
 
 /**
  * Unsafely calls ConstrPlutusData.fromCborHex without Effect wrapper
- *
- * @example
- * import { ConstrPlutusData } from "@lucid-evolution/experimental";
- *
- *
- *
- * // Using try/catch for error handling
- * try {
- *   const result = ConstrPlutusData.fromCborHexUnsafe( parameters );
- *   console.log(result);
- * } catch (error) {
- *   console.error(`ConstrPlutusData.fromCborHexUnsafe failed: ${error.message}`);
- * }
- *
+ * 
  * @since 2.0.0
  * @category ConstructorsUnsafe
  */
-export const fromCborHexUnsafe = (cborBytes: string) =>
+export const fromCborHexUnsafe = (cborBytes: string): CML.ConstrPlutusData =>
   Effect.runSync(fromCborHex(cborBytes));
 
 /**
  * Method toJson of ConstrPlutusData
- *
- * @example
- * import { ConstrPlutusData } from "@lucid-evolution/experimental";
- * import { Effect } from "effect";
- *
- * // Using Effect for safe execution with error handling
- * Effect.gen(function*() {
- * // Assume we have a ConstrPlutusData instance
- * const instance = ... ;
- *   const result = yield* ConstrPlutusData.toJson(instance);
- *   console.log(result);
- * });
- *
+ * 
  * @since 2.0.0
  * @category Methods
  */
-export const toJson = Effect.fn(
-  (
-    instance: CML.ConstrPlutusData,
-  ): Effect.Effect<string, ConstrPlutusDataError> =>
+export const toJson: (instance: CML.ConstrPlutusData) => Effect.Effect<string, ConstrPlutusDataError> = Effect.fn(
+  (instance: CML.ConstrPlutusData) =>
     Effect.try({
       try: () => instance.to_json(),
       catch: () =>
         new ConstrPlutusDataError({
           message: `ConstrPlutusData.toJson failed ConstrPlutusData is not valid for string conversion. Hint: Validate your JSON structure.`,
         }),
-    }),
+    })
 );
 
 /**
  * Unsafely calls instance.toJson without Effect wrapper
- *
- * @example
- * import { ConstrPlutusData } from "@lucid-evolution/experimental";
- *
- * // Assume we have a ConstrPlutusData instance
- * const instance = ... ;
- *
- * // Using try/catch for error handling
- * try {
- *   const result = ConstrPlutusData.toJsonUnsafe(instance);
- *   console.log(result);
- * } catch (error) {
- *   console.error(`ConstrPlutusData.toJsonUnsafe failed: ${error.message}`);
- * }
- *
+ * 
  * @since 2.0.0
  * @category MethodsUnsafe
  */
@@ -452,50 +230,24 @@ export const toJsonUnsafe = (instance: CML.ConstrPlutusData): string =>
 
 /**
  * Method toJsValue of ConstrPlutusData
- *
- * @example
- * import { ConstrPlutusData } from "@lucid-evolution/experimental";
- * import { Effect } from "effect";
- *
- * // Using Effect for safe execution with error handling
- * Effect.gen(function*() {
- * // Assume we have a ConstrPlutusData instance
- * const instance = ... ;
- *   const result = yield* ConstrPlutusData.toJsValue(instance);
- *   console.log(result);
- * });
- *
+ * 
  * @since 2.0.0
  * @category Methods
  */
-export const toJsValue = Effect.fn(
-  (instance: CML.ConstrPlutusData): Effect.Effect<any, ConstrPlutusDataError> =>
+export const toJsValue: (instance: CML.ConstrPlutusData) => Effect.Effect<any, ConstrPlutusDataError> = Effect.fn(
+  (instance: CML.ConstrPlutusData) =>
     Effect.try({
       try: () => instance.to_js_value(),
       catch: () =>
         new ConstrPlutusDataError({
           message: `ConstrPlutusData.toJsValue failed ConstrPlutusData is not valid for any conversion. `,
         }),
-    }),
+    })
 );
 
 /**
  * Unsafely calls instance.toJsValue without Effect wrapper
- *
- * @example
- * import { ConstrPlutusData } from "@lucid-evolution/experimental";
- *
- * // Assume we have a ConstrPlutusData instance
- * const instance = ... ;
- *
- * // Using try/catch for error handling
- * try {
- *   const result = ConstrPlutusData.toJsValueUnsafe(instance);
- *   console.log(result);
- * } catch (error) {
- *   console.error(`ConstrPlutusData.toJsValueUnsafe failed: ${error.message}`);
- * }
- *
+ * 
  * @since 2.0.0
  * @category MethodsUnsafe
  */
@@ -504,100 +256,48 @@ export const toJsValueUnsafe = (instance: CML.ConstrPlutusData): any =>
 
 /**
  * Static method fromJson of ConstrPlutusData
- *
- * @example
- * import { ConstrPlutusData } from "@lucid-evolution/experimental";
- * import { Effect } from "effect";
- *
- * // Using Effect for safe execution with error handling
- * Effect.gen(function*() {
- *
- *   const result = yield* ConstrPlutusData.fromJson( parameters );
- *   console.log(result);
- * });
- *
+ * 
  * @since 2.0.0
  * @category Constructors
  */
-export const fromJson = Effect.fn(function* (json: string) {
+export const fromJson: (json: string) => Effect.Effect<CML.ConstrPlutusData, ConstrPlutusDataError> = Effect.fn(function* (json: string) {
   return yield* Effect.try({
     try: () => CML.ConstrPlutusData.from_json(json),
-    catch: () =>
-      new ConstrPlutusDataError({
-        message: `ConstrPlutusData.fromJson failed with parameters: ${json}. Hint: Validate your JSON structure.`,
-      }),
+    catch: () => new ConstrPlutusDataError({
+      message: `ConstrPlutusData.fromJson failed with parameters: ${json}. Hint: Validate your JSON structure.`,
+    }),
   });
 });
 
 /**
  * Unsafely calls ConstrPlutusData.fromJson without Effect wrapper
- *
- * @example
- * import { ConstrPlutusData } from "@lucid-evolution/experimental";
- *
- *
- *
- * // Using try/catch for error handling
- * try {
- *   const result = ConstrPlutusData.fromJsonUnsafe( parameters );
- *   console.log(result);
- * } catch (error) {
- *   console.error(`ConstrPlutusData.fromJsonUnsafe failed: ${error.message}`);
- * }
- *
+ * 
  * @since 2.0.0
  * @category ConstructorsUnsafe
  */
-export const fromJsonUnsafe = (json: string) => Effect.runSync(fromJson(json));
+export const fromJsonUnsafe = (json: string): CML.ConstrPlutusData =>
+  Effect.runSync(fromJson(json));
 
 /**
  * Method alternative of ConstrPlutusData
- *
- * @example
- * import { ConstrPlutusData } from "@lucid-evolution/experimental";
- * import { Effect } from "effect";
- *
- * // Using Effect for safe execution with error handling
- * Effect.gen(function*() {
- * // Assume we have a ConstrPlutusData instance
- * const instance = ... ;
- *   const result = yield* ConstrPlutusData.alternative(instance);
- *   console.log(result);
- * });
- *
+ * 
  * @since 2.0.0
  * @category Methods
  */
-export const alternative = Effect.fn(
-  (
-    instance: CML.ConstrPlutusData,
-  ): Effect.Effect<bigint, ConstrPlutusDataError> =>
+export const alternative: (instance: CML.ConstrPlutusData) => Effect.Effect<bigint, ConstrPlutusDataError> = Effect.fn(
+  (instance: CML.ConstrPlutusData) =>
     Effect.try({
       try: () => instance.alternative(),
       catch: () =>
         new ConstrPlutusDataError({
           message: `ConstrPlutusData.alternative failed `,
         }),
-    }),
+    })
 );
 
 /**
  * Unsafely calls instance.alternative without Effect wrapper
- *
- * @example
- * import { ConstrPlutusData } from "@lucid-evolution/experimental";
- *
- * // Assume we have a ConstrPlutusData instance
- * const instance = ... ;
- *
- * // Using try/catch for error handling
- * try {
- *   const result = ConstrPlutusData.alternativeUnsafe(instance);
- *   console.log(result);
- * } catch (error) {
- *   console.error(`ConstrPlutusData.alternativeUnsafe failed: ${error.message}`);
- * }
- *
+ * 
  * @since 2.0.0
  * @category MethodsUnsafe
  */
@@ -606,107 +306,50 @@ export const alternativeUnsafe = (instance: CML.ConstrPlutusData): bigint =>
 
 /**
  * Method fields of ConstrPlutusData
- *
- * @example
- * import { ConstrPlutusData } from "@lucid-evolution/experimental";
- * import { Effect } from "effect";
- *
- * // Using Effect for safe execution with error handling
- * Effect.gen(function*() {
- * // Assume we have a ConstrPlutusData instance
- * const instance = ... ;
- *   const result = yield* ConstrPlutusData.fields(instance);
- *   console.log(result);
- * });
- *
+ * 
  * @since 2.0.0
  * @category Methods
  */
-export const fields = Effect.fn(
-  (
-    instance: CML.ConstrPlutusData,
-  ): Effect.Effect<CML.PlutusDataList, ConstrPlutusDataError> =>
+export const fields: (instance: CML.ConstrPlutusData) => Effect.Effect<CML.PlutusDataList, ConstrPlutusDataError> = Effect.fn(
+  (instance: CML.ConstrPlutusData) =>
     Effect.try({
       try: () => instance.fields(),
       catch: () =>
         new ConstrPlutusDataError({
           message: `ConstrPlutusData.fields failed `,
         }),
-    }),
+    })
 );
 
 /**
  * Unsafely calls instance.fields without Effect wrapper
- *
- * @example
- * import { ConstrPlutusData } from "@lucid-evolution/experimental";
- *
- * // Assume we have a ConstrPlutusData instance
- * const instance = ... ;
- *
- * // Using try/catch for error handling
- * try {
- *   const result = ConstrPlutusData.fieldsUnsafe(instance);
- *   console.log(result);
- * } catch (error) {
- *   console.error(`ConstrPlutusData.fieldsUnsafe failed: ${error.message}`);
- * }
- *
+ * 
  * @since 2.0.0
  * @category MethodsUnsafe
  */
-export const fieldsUnsafe = (
-  instance: CML.ConstrPlutusData,
-): CML.PlutusDataList => Effect.runSync(fields(instance));
+export const fieldsUnsafe = (instance: CML.ConstrPlutusData): CML.PlutusDataList =>
+  Effect.runSync(fields(instance));
 
 /**
  * Static method _new of ConstrPlutusData
- *
- * @example
- * import { ConstrPlutusData } from "@lucid-evolution/experimental";
- * import { Effect } from "effect";
- *
- * // Using Effect for safe execution with error handling
- * Effect.gen(function*() {
- *
- *   const result = yield* ConstrPlutusData._new( parameters );
- *   console.log(result);
- * });
- *
+ * 
  * @since 2.0.0
  * @category Constructors
  */
-export const _new = Effect.fn(function* (
-  alternative: bigint,
-  fields: CML.PlutusDataList,
-) {
+export const _new: (alternative: bigint, fields: CML.PlutusDataList) => Effect.Effect<CML.ConstrPlutusData, ConstrPlutusDataError> = Effect.fn(function* (alternative: bigint, fields: CML.PlutusDataList) {
   return yield* Effect.try({
     try: () => CML.ConstrPlutusData.new(alternative, fields),
-    catch: () =>
-      new ConstrPlutusDataError({
-        message: `ConstrPlutusData._new failed with parameters: ${alternative}, ${fields} (PlutusDataList). `,
-      }),
+    catch: () => new ConstrPlutusDataError({
+      message: `ConstrPlutusData._new failed with parameters: ${alternative}, ${fields} (PlutusDataList). `,
+    }),
   });
 });
 
 /**
  * Unsafely calls ConstrPlutusData._new without Effect wrapper
- *
- * @example
- * import { ConstrPlutusData } from "@lucid-evolution/experimental";
- *
- *
- *
- * // Using try/catch for error handling
- * try {
- *   const result = ConstrPlutusData._newUnsafe( parameters );
- *   console.log(result);
- * } catch (error) {
- *   console.error(`ConstrPlutusData._newUnsafe failed: ${error.message}`);
- * }
- *
+ * 
  * @since 2.0.0
  * @category ConstructorsUnsafe
  */
-export const _newUnsafe = (alternative: bigint, fields: CML.PlutusDataList) =>
+export const _newUnsafe = (alternative: bigint, fields: CML.PlutusDataList): CML.ConstrPlutusData =>
   Effect.runSync(_new(alternative, fields));

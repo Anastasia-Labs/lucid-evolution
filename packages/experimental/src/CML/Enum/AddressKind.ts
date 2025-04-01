@@ -13,12 +13,7 @@ export type AddressKind = CML.AddressKind;
 
 /**
  * Base variant of the AddressKind enum
- *
- * @example
- * import { AddressKind } from "@lucid-evolution/experimental";
- *
- * const kind = AddressKind.Base;
- *
+ * 
  * @since 2.0.0
  * @category Variants
  */
@@ -26,12 +21,7 @@ export const Base = CML.AddressKind.Base;
 
 /**
  * Ptr variant of the AddressKind enum
- *
- * @example
- * import { AddressKind } from "@lucid-evolution/experimental";
- *
- * const kind = AddressKind.Ptr;
- *
+ * 
  * @since 2.0.0
  * @category Variants
  */
@@ -39,12 +29,7 @@ export const Ptr = CML.AddressKind.Ptr;
 
 /**
  * Enterprise variant of the AddressKind enum
- *
- * @example
- * import { AddressKind } from "@lucid-evolution/experimental";
- *
- * const kind = AddressKind.Enterprise;
- *
+ * 
  * @since 2.0.0
  * @category Variants
  */
@@ -52,12 +37,7 @@ export const Enterprise = CML.AddressKind.Enterprise;
 
 /**
  * Reward variant of the AddressKind enum
- *
- * @example
- * import { AddressKind } from "@lucid-evolution/experimental";
- *
- * const kind = AddressKind.Reward;
- *
+ * 
  * @since 2.0.0
  * @category Variants
  */
@@ -65,26 +45,16 @@ export const Reward = CML.AddressKind.Reward;
 
 /**
  * Byron variant of the AddressKind enum
- *
- * @example
- * import { AddressKind } from "@lucid-evolution/experimental";
- *
- * const kind = AddressKind.Byron;
- *
+ * 
  * @since 2.0.0
  * @category Variants
  */
 export const Byron = CML.AddressKind.Byron;
 
+
 /**
  * Get all values of the AddressKind enum
- *
- * @example
- * import { AddressKind } from "@lucid-evolution/experimental";
- *
- * const allValues = AddressKind.values();
- * console.log(allValues);
- *
+ * 
  * @since 2.0.0
  * @category Utils
  */
@@ -93,18 +63,12 @@ export const values = (): Array<CML.AddressKind> => [
   CML.AddressKind.Ptr,
   CML.AddressKind.Enterprise,
   CML.AddressKind.Reward,
-  CML.AddressKind.Byron,
+  CML.AddressKind.Byron
 ];
 
 /**
  * Convert AddressKind enum value to string
- *
- * @example
- * import { AddressKind } from "@lucid-evolution/experimental";
- *
- * const name = AddressKind.toString(CML.AddressKind.Base);
- * console.log(name); // "Base"
- *
+ * 
  * @since 2.0.0
  * @category Utils
  */
@@ -127,13 +91,7 @@ export const toString = (value: CML.AddressKind): string => {
 
 /**
  * Convert string to AddressKind enum value
- *
- * @example
- * import { AddressKind } from "@lucid-evolution/experimental";
- *
- * const value = AddressKind.fromString("Base");
- * console.log(value); // Some(CML.AddressKind.Base)
- *
+ * 
  * @since 2.0.0
  * @category Utils
  */

@@ -13,12 +13,7 @@ export type NativeScriptKind = CML.NativeScriptKind;
 
 /**
  * ScriptPubkey variant of the NativeScriptKind enum
- *
- * @example
- * import { NativeScriptKind } from "@lucid-evolution/experimental";
- *
- * const kind = NativeScriptKind.ScriptPubkey;
- *
+ * 
  * @since 2.0.0
  * @category Variants
  */
@@ -26,12 +21,7 @@ export const ScriptPubkey = CML.NativeScriptKind.ScriptPubkey;
 
 /**
  * ScriptAll variant of the NativeScriptKind enum
- *
- * @example
- * import { NativeScriptKind } from "@lucid-evolution/experimental";
- *
- * const kind = NativeScriptKind.ScriptAll;
- *
+ * 
  * @since 2.0.0
  * @category Variants
  */
@@ -39,12 +29,7 @@ export const ScriptAll = CML.NativeScriptKind.ScriptAll;
 
 /**
  * ScriptAny variant of the NativeScriptKind enum
- *
- * @example
- * import { NativeScriptKind } from "@lucid-evolution/experimental";
- *
- * const kind = NativeScriptKind.ScriptAny;
- *
+ * 
  * @since 2.0.0
  * @category Variants
  */
@@ -52,12 +37,7 @@ export const ScriptAny = CML.NativeScriptKind.ScriptAny;
 
 /**
  * ScriptNOfK variant of the NativeScriptKind enum
- *
- * @example
- * import { NativeScriptKind } from "@lucid-evolution/experimental";
- *
- * const kind = NativeScriptKind.ScriptNOfK;
- *
+ * 
  * @since 2.0.0
  * @category Variants
  */
@@ -65,12 +45,7 @@ export const ScriptNOfK = CML.NativeScriptKind.ScriptNOfK;
 
 /**
  * ScriptInvalidBefore variant of the NativeScriptKind enum
- *
- * @example
- * import { NativeScriptKind } from "@lucid-evolution/experimental";
- *
- * const kind = NativeScriptKind.ScriptInvalidBefore;
- *
+ * 
  * @since 2.0.0
  * @category Variants
  */
@@ -78,27 +53,16 @@ export const ScriptInvalidBefore = CML.NativeScriptKind.ScriptInvalidBefore;
 
 /**
  * ScriptInvalidHereafter variant of the NativeScriptKind enum
- *
- * @example
- * import { NativeScriptKind } from "@lucid-evolution/experimental";
- *
- * const kind = NativeScriptKind.ScriptInvalidHereafter;
- *
+ * 
  * @since 2.0.0
  * @category Variants
  */
-export const ScriptInvalidHereafter =
-  CML.NativeScriptKind.ScriptInvalidHereafter;
+export const ScriptInvalidHereafter = CML.NativeScriptKind.ScriptInvalidHereafter;
+
 
 /**
  * Get all values of the NativeScriptKind enum
- *
- * @example
- * import { NativeScriptKind } from "@lucid-evolution/experimental";
- *
- * const allValues = NativeScriptKind.values();
- * console.log(allValues);
- *
+ * 
  * @since 2.0.0
  * @category Utils
  */
@@ -108,18 +72,12 @@ export const values = (): Array<CML.NativeScriptKind> => [
   CML.NativeScriptKind.ScriptAny,
   CML.NativeScriptKind.ScriptNOfK,
   CML.NativeScriptKind.ScriptInvalidBefore,
-  CML.NativeScriptKind.ScriptInvalidHereafter,
+  CML.NativeScriptKind.ScriptInvalidHereafter
 ];
 
 /**
  * Convert NativeScriptKind enum value to string
- *
- * @example
- * import { NativeScriptKind } from "@lucid-evolution/experimental";
- *
- * const name = NativeScriptKind.toString(CML.NativeScriptKind.ScriptPubkey);
- * console.log(name); // "ScriptPubkey"
- *
+ * 
  * @since 2.0.0
  * @category Utils
  */
@@ -144,13 +102,7 @@ export const toString = (value: CML.NativeScriptKind): string => {
 
 /**
  * Convert string to NativeScriptKind enum value
- *
- * @example
- * import { NativeScriptKind } from "@lucid-evolution/experimental";
- *
- * const value = NativeScriptKind.fromString("ScriptPubkey");
- * console.log(value); // Some(CML.NativeScriptKind.ScriptPubkey)
- *
+ * 
  * @since 2.0.0
  * @category Utils
  */

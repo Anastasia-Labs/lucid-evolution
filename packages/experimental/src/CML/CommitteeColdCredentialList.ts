@@ -14,66 +14,36 @@ export type CommitteeColdCredentialList = CML.CommitteeColdCredentialList;
 
 /**
  * Error class for CommitteeColdCredentialList operations
- *
+ * 
  * This error is thrown when operations on CommitteeColdCredentialList instances fail.
  *
  * @since 2.0.0
  * @category Errors
  */
-export class CommitteeColdCredentialListError extends Data.TaggedError(
-  "CommitteeColdCredentialListError",
-)<{
+export class CommitteeColdCredentialListError extends Data.TaggedError("CommitteeColdCredentialListError")<{
   message?: string;
 }> {}
 
 /**
  * Method free of CommitteeColdCredentialList
- *
- * @example
- * import { CommitteeColdCredentialList } from "@lucid-evolution/experimental";
- * import { Effect } from "effect";
- *
- * // Using Effect for safe execution with error handling
- * Effect.gen(function*() {
- * // Assume we have a CommitteeColdCredentialList instance
- * const instance = ... ;
- *   const result = yield* CommitteeColdCredentialList.free(instance);
- *   console.log(result);
- * });
- *
+ * 
  * @since 2.0.0
  * @category Methods
  */
-export const free = Effect.fn(
-  (
-    instance: CML.CommitteeColdCredentialList,
-  ): Effect.Effect<void, CommitteeColdCredentialListError> =>
+export const free: (instance: CML.CommitteeColdCredentialList) => Effect.Effect<void, CommitteeColdCredentialListError> = Effect.fn(
+  (instance: CML.CommitteeColdCredentialList) =>
     Effect.try({
       try: () => instance.free(),
       catch: () =>
         new CommitteeColdCredentialListError({
           message: `CommitteeColdCredentialList.free failed Hint: Check if you're calling free() more than once.`,
         }),
-    }),
+    })
 );
 
 /**
  * Unsafely calls instance.free without Effect wrapper
- *
- * @example
- * import { CommitteeColdCredentialList } from "@lucid-evolution/experimental";
- *
- * // Assume we have a CommitteeColdCredentialList instance
- * const instance = ... ;
- *
- * // Using try/catch for error handling
- * try {
- *   const result = CommitteeColdCredentialList.freeUnsafe(instance);
- *   console.log(result);
- * } catch (error) {
- *   console.error(`CommitteeColdCredentialList.freeUnsafe failed: ${error.message}`);
- * }
- *
+ * 
  * @since 2.0.0
  * @category MethodsUnsafe
  */
@@ -82,100 +52,48 @@ export const freeUnsafe = (instance: CML.CommitteeColdCredentialList): void =>
 
 /**
  * Static method _new of CommitteeColdCredentialList
- *
- * @example
- * import { CommitteeColdCredentialList } from "@lucid-evolution/experimental";
- * import { Effect } from "effect";
- *
- * // Using Effect for safe execution with error handling
- * Effect.gen(function*() {
- *
- *   const result = yield* CommitteeColdCredentialList._new();
- *   console.log(result);
- * });
- *
+ * 
  * @since 2.0.0
  * @category Constructors
  */
-export const _new = Effect.fn(function* () {
+export const _new: () => Effect.Effect<CML.CommitteeColdCredentialList, CommitteeColdCredentialListError> = Effect.fn(function* () {
   return yield* Effect.try({
     try: () => CML.CommitteeColdCredentialList.new(),
-    catch: () =>
-      new CommitteeColdCredentialListError({
-        message: `CommitteeColdCredentialList._new failed `,
-      }),
+    catch: () => new CommitteeColdCredentialListError({
+      message: `CommitteeColdCredentialList._new failed `,
+    }),
   });
 });
 
 /**
  * Unsafely calls CommitteeColdCredentialList._new without Effect wrapper
- *
- * @example
- * import { CommitteeColdCredentialList } from "@lucid-evolution/experimental";
- *
- *
- *
- * // Using try/catch for error handling
- * try {
- *   const result = CommitteeColdCredentialList._newUnsafe();
- *   console.log(result);
- * } catch (error) {
- *   console.error(`CommitteeColdCredentialList._newUnsafe failed: ${error.message}`);
- * }
- *
+ * 
  * @since 2.0.0
  * @category ConstructorsUnsafe
  */
-export const _newUnsafe = () => Effect.runSync(_new());
+export const _newUnsafe = (): CML.CommitteeColdCredentialList =>
+  Effect.runSync(_new());
 
 /**
  * Method len of CommitteeColdCredentialList
- *
- * @example
- * import { CommitteeColdCredentialList } from "@lucid-evolution/experimental";
- * import { Effect } from "effect";
- *
- * // Using Effect for safe execution with error handling
- * Effect.gen(function*() {
- * // Assume we have a CommitteeColdCredentialList instance
- * const instance = ... ;
- *   const result = yield* CommitteeColdCredentialList.len(instance);
- *   console.log(result);
- * });
- *
+ * 
  * @since 2.0.0
  * @category Methods
  */
-export const len = Effect.fn(
-  (
-    instance: CML.CommitteeColdCredentialList,
-  ): Effect.Effect<number, CommitteeColdCredentialListError> =>
+export const len: (instance: CML.CommitteeColdCredentialList) => Effect.Effect<number, CommitteeColdCredentialListError> = Effect.fn(
+  (instance: CML.CommitteeColdCredentialList) =>
     Effect.try({
       try: () => instance.len(),
       catch: () =>
         new CommitteeColdCredentialListError({
           message: `CommitteeColdCredentialList.len failed `,
         }),
-    }),
+    })
 );
 
 /**
  * Unsafely calls instance.len without Effect wrapper
- *
- * @example
- * import { CommitteeColdCredentialList } from "@lucid-evolution/experimental";
- *
- * // Assume we have a CommitteeColdCredentialList instance
- * const instance = ... ;
- *
- * // Using try/catch for error handling
- * try {
- *   const result = CommitteeColdCredentialList.lenUnsafe(instance);
- *   console.log(result);
- * } catch (error) {
- *   console.error(`CommitteeColdCredentialList.lenUnsafe failed: ${error.message}`);
- * }
- *
+ * 
  * @since 2.0.0
  * @category MethodsUnsafe
  */
@@ -184,114 +102,52 @@ export const lenUnsafe = (instance: CML.CommitteeColdCredentialList): number =>
 
 /**
  * Method get of CommitteeColdCredentialList
- *
- * @example
- * import { CommitteeColdCredentialList } from "@lucid-evolution/experimental";
- * import { Effect } from "effect";
- *
- * // Using Effect for safe execution with error handling
- * Effect.gen(function*() {
- * // Assume we have a CommitteeColdCredentialList instance
- * const instance = ... ;
- *   const result = yield* CommitteeColdCredentialList.get(instance,  parameters );
- *   console.log(result);
- * });
- *
+ * 
  * @since 2.0.0
  * @category Methods
  */
-export const get = Effect.fn(
-  (
-    instance: CML.CommitteeColdCredentialList,
-    index: number,
-  ): Effect.Effect<CML.Credential, CommitteeColdCredentialListError> =>
+export const get: (instance: CML.CommitteeColdCredentialList, index: number) => Effect.Effect<CML.Credential, CommitteeColdCredentialListError> = Effect.fn(
+  (instance: CML.CommitteeColdCredentialList, index: number) =>
     Effect.try({
       try: () => instance.get(index),
       catch: () =>
         new CommitteeColdCredentialListError({
           message: `CommitteeColdCredentialList.get failed with parameters: ${index}. `,
         }),
-    }),
+    })
 );
 
 /**
  * Unsafely calls instance.get without Effect wrapper
- *
- * @example
- * import { CommitteeColdCredentialList } from "@lucid-evolution/experimental";
- *
- * // Assume we have a CommitteeColdCredentialList instance
- * const instance = ... ;
- *
- * // Using try/catch for error handling
- * try {
- *   const result = CommitteeColdCredentialList.getUnsafe(instance,  parameters );
- *   console.log(result);
- * } catch (error) {
- *   console.error(`CommitteeColdCredentialList.getUnsafe failed: ${error.message}`);
- * }
- *
+ * 
  * @since 2.0.0
  * @category MethodsUnsafe
  */
-export const getUnsafe = (
-  instance: CML.CommitteeColdCredentialList,
-  index: number,
-): CML.Credential => Effect.runSync(get(instance, index));
+export const getUnsafe = (instance: CML.CommitteeColdCredentialList, index: number): CML.Credential =>
+  Effect.runSync(get(instance, index));
 
 /**
  * Method add of CommitteeColdCredentialList
- *
- * @example
- * import { CommitteeColdCredentialList } from "@lucid-evolution/experimental";
- * import { Effect } from "effect";
- *
- * // Using Effect for safe execution with error handling
- * Effect.gen(function*() {
- * // Assume we have a CommitteeColdCredentialList instance
- * const instance = ... ;
- *   const result = yield* CommitteeColdCredentialList.add(instance,  parameters );
- *   console.log(result);
- * });
- *
+ * 
  * @since 2.0.0
  * @category Methods
  */
-export const add = Effect.fn(
-  (
-    instance: CML.CommitteeColdCredentialList,
-    elem: CML.Credential,
-  ): Effect.Effect<void, CommitteeColdCredentialListError> =>
+export const add: (instance: CML.CommitteeColdCredentialList, elem: CML.Credential) => Effect.Effect<void, CommitteeColdCredentialListError> = Effect.fn(
+  (instance: CML.CommitteeColdCredentialList, elem: CML.Credential) =>
     Effect.try({
       try: () => instance.add(elem),
       catch: () =>
         new CommitteeColdCredentialListError({
           message: `CommitteeColdCredentialList.add failed with parameters: ${elem} (Credential). `,
         }),
-    }),
+    })
 );
 
 /**
  * Unsafely calls instance.add without Effect wrapper
- *
- * @example
- * import { CommitteeColdCredentialList } from "@lucid-evolution/experimental";
- *
- * // Assume we have a CommitteeColdCredentialList instance
- * const instance = ... ;
- *
- * // Using try/catch for error handling
- * try {
- *   const result = CommitteeColdCredentialList.addUnsafe(instance,  parameters );
- *   console.log(result);
- * } catch (error) {
- *   console.error(`CommitteeColdCredentialList.addUnsafe failed: ${error.message}`);
- * }
- *
+ * 
  * @since 2.0.0
  * @category MethodsUnsafe
  */
-export const addUnsafe = (
-  instance: CML.CommitteeColdCredentialList,
-  elem: CML.Credential,
-): void => Effect.runSync(add(instance, elem));
+export const addUnsafe = (instance: CML.CommitteeColdCredentialList, elem: CML.Credential): void =>
+  Effect.runSync(add(instance, elem));

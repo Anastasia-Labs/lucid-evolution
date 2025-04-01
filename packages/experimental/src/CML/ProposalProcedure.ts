@@ -14,66 +14,36 @@ export type ProposalProcedure = CML.ProposalProcedure;
 
 /**
  * Error class for ProposalProcedure operations
- *
+ * 
  * This error is thrown when operations on ProposalProcedure instances fail.
  *
  * @since 2.0.0
  * @category Errors
  */
-export class ProposalProcedureError extends Data.TaggedError(
-  "ProposalProcedureError",
-)<{
+export class ProposalProcedureError extends Data.TaggedError("ProposalProcedureError")<{
   message?: string;
 }> {}
 
 /**
  * Method free of ProposalProcedure
- *
- * @example
- * import { ProposalProcedure } from "@lucid-evolution/experimental";
- * import { Effect } from "effect";
- *
- * // Using Effect for safe execution with error handling
- * Effect.gen(function*() {
- * // Assume we have a ProposalProcedure instance
- * const instance = ... ;
- *   const result = yield* ProposalProcedure.free(instance);
- *   console.log(result);
- * });
- *
+ * 
  * @since 2.0.0
  * @category Methods
  */
-export const free = Effect.fn(
-  (
-    instance: CML.ProposalProcedure,
-  ): Effect.Effect<void, ProposalProcedureError> =>
+export const free: (instance: CML.ProposalProcedure) => Effect.Effect<void, ProposalProcedureError> = Effect.fn(
+  (instance: CML.ProposalProcedure) =>
     Effect.try({
       try: () => instance.free(),
       catch: () =>
         new ProposalProcedureError({
           message: `ProposalProcedure.free failed Hint: Check if you're calling free() more than once.`,
         }),
-    }),
+    })
 );
 
 /**
  * Unsafely calls instance.free without Effect wrapper
- *
- * @example
- * import { ProposalProcedure } from "@lucid-evolution/experimental";
- *
- * // Assume we have a ProposalProcedure instance
- * const instance = ... ;
- *
- * // Using try/catch for error handling
- * try {
- *   const result = ProposalProcedure.freeUnsafe(instance);
- *   console.log(result);
- * } catch (error) {
- *   console.error(`ProposalProcedure.freeUnsafe failed: ${error.message}`);
- * }
- *
+ * 
  * @since 2.0.0
  * @category MethodsUnsafe
  */
@@ -82,211 +52,100 @@ export const freeUnsafe = (instance: CML.ProposalProcedure): void =>
 
 /**
  * Method toCborBytes of ProposalProcedure
- *
- * @example
- * import { ProposalProcedure } from "@lucid-evolution/experimental";
- * import { Effect } from "effect";
- *
- * // Using Effect for safe execution with error handling
- * Effect.gen(function*() {
- * // Assume we have a ProposalProcedure instance
- * const instance = ... ;
- *   const result = yield* ProposalProcedure.toCborBytes(instance);
- *   console.log(result);
- * });
- *
+ * 
  * @since 2.0.0
  * @category Methods
  */
-export const toCborBytes = Effect.fn(
-  (
-    instance: CML.ProposalProcedure,
-  ): Effect.Effect<Uint8Array, ProposalProcedureError> =>
+export const toCborBytes: (instance: CML.ProposalProcedure) => Effect.Effect<Uint8Array, ProposalProcedureError> = Effect.fn(
+  (instance: CML.ProposalProcedure) =>
     Effect.try({
       try: () => instance.to_cbor_bytes(),
       catch: () =>
         new ProposalProcedureError({
           message: `ProposalProcedure.toCborBytes failed ProposalProcedure is not valid for Uint8Array conversion. Hint: Check byte length and encoding.`,
         }),
-    }),
+    })
 );
 
 /**
  * Unsafely calls instance.toCborBytes without Effect wrapper
- *
- * @example
- * import { ProposalProcedure } from "@lucid-evolution/experimental";
- *
- * // Assume we have a ProposalProcedure instance
- * const instance = ... ;
- *
- * // Using try/catch for error handling
- * try {
- *   const result = ProposalProcedure.toCborBytesUnsafe(instance);
- *   console.log(result);
- * } catch (error) {
- *   console.error(`ProposalProcedure.toCborBytesUnsafe failed: ${error.message}`);
- * }
- *
+ * 
  * @since 2.0.0
  * @category MethodsUnsafe
  */
-export const toCborBytesUnsafe = (
-  instance: CML.ProposalProcedure,
-): Uint8Array => Effect.runSync(toCborBytes(instance));
+export const toCborBytesUnsafe = (instance: CML.ProposalProcedure): Uint8Array =>
+  Effect.runSync(toCborBytes(instance));
 
 /**
  * Method toCanonicalCborBytes of ProposalProcedure
- *
- * @example
- * import { ProposalProcedure } from "@lucid-evolution/experimental";
- * import { Effect } from "effect";
- *
- * // Using Effect for safe execution with error handling
- * Effect.gen(function*() {
- * // Assume we have a ProposalProcedure instance
- * const instance = ... ;
- *   const result = yield* ProposalProcedure.toCanonicalCborBytes(instance);
- *   console.log(result);
- * });
- *
+ * 
  * @since 2.0.0
  * @category Methods
  */
-export const toCanonicalCborBytes = Effect.fn(
-  (
-    instance: CML.ProposalProcedure,
-  ): Effect.Effect<Uint8Array, ProposalProcedureError> =>
+export const toCanonicalCborBytes: (instance: CML.ProposalProcedure) => Effect.Effect<Uint8Array, ProposalProcedureError> = Effect.fn(
+  (instance: CML.ProposalProcedure) =>
     Effect.try({
       try: () => instance.to_canonical_cbor_bytes(),
       catch: () =>
         new ProposalProcedureError({
           message: `ProposalProcedure.toCanonicalCborBytes failed ProposalProcedure is not valid for Uint8Array conversion. Hint: Check byte length and encoding.`,
         }),
-    }),
+    })
 );
 
 /**
  * Unsafely calls instance.toCanonicalCborBytes without Effect wrapper
- *
- * @example
- * import { ProposalProcedure } from "@lucid-evolution/experimental";
- *
- * // Assume we have a ProposalProcedure instance
- * const instance = ... ;
- *
- * // Using try/catch for error handling
- * try {
- *   const result = ProposalProcedure.toCanonicalCborBytesUnsafe(instance);
- *   console.log(result);
- * } catch (error) {
- *   console.error(`ProposalProcedure.toCanonicalCborBytesUnsafe failed: ${error.message}`);
- * }
- *
+ * 
  * @since 2.0.0
  * @category MethodsUnsafe
  */
-export const toCanonicalCborBytesUnsafe = (
-  instance: CML.ProposalProcedure,
-): Uint8Array => Effect.runSync(toCanonicalCborBytes(instance));
+export const toCanonicalCborBytesUnsafe = (instance: CML.ProposalProcedure): Uint8Array =>
+  Effect.runSync(toCanonicalCborBytes(instance));
 
 /**
  * Static method fromCborBytes of ProposalProcedure
- *
- * @example
- * import { ProposalProcedure } from "@lucid-evolution/experimental";
- * import { Effect } from "effect";
- *
- * // Using Effect for safe execution with error handling
- * Effect.gen(function*() {
- *
- *   const result = yield* ProposalProcedure.fromCborBytes( parameters );
- *   console.log(result);
- * });
- *
+ * 
  * @since 2.0.0
  * @category Constructors
  */
-export const fromCborBytes = Effect.fn(function* (cborBytes: Uint8Array) {
+export const fromCborBytes: (cborBytes: Uint8Array) => Effect.Effect<CML.ProposalProcedure, ProposalProcedureError> = Effect.fn(function* (cborBytes: Uint8Array) {
   return yield* Effect.try({
     try: () => CML.ProposalProcedure.from_cbor_bytes(cborBytes),
-    catch: () =>
-      new ProposalProcedureError({
-        message: `ProposalProcedure.fromCborBytes failed with parameters: ${cborBytes}. Hint: Check byte length and encoding.`,
-      }),
+    catch: () => new ProposalProcedureError({
+      message: `ProposalProcedure.fromCborBytes failed with parameters: ${cborBytes}. Hint: Check byte length and encoding.`,
+    }),
   });
 });
 
 /**
  * Unsafely calls ProposalProcedure.fromCborBytes without Effect wrapper
- *
- * @example
- * import { ProposalProcedure } from "@lucid-evolution/experimental";
- *
- *
- *
- * // Using try/catch for error handling
- * try {
- *   const result = ProposalProcedure.fromCborBytesUnsafe( parameters );
- *   console.log(result);
- * } catch (error) {
- *   console.error(`ProposalProcedure.fromCborBytesUnsafe failed: ${error.message}`);
- * }
- *
+ * 
  * @since 2.0.0
  * @category ConstructorsUnsafe
  */
-export const fromCborBytesUnsafe = (cborBytes: Uint8Array) =>
+export const fromCborBytesUnsafe = (cborBytes: Uint8Array): CML.ProposalProcedure =>
   Effect.runSync(fromCborBytes(cborBytes));
 
 /**
  * Method toCborHex of ProposalProcedure
- *
- * @example
- * import { ProposalProcedure } from "@lucid-evolution/experimental";
- * import { Effect } from "effect";
- *
- * // Using Effect for safe execution with error handling
- * Effect.gen(function*() {
- * // Assume we have a ProposalProcedure instance
- * const instance = ... ;
- *   const result = yield* ProposalProcedure.toCborHex(instance);
- *   console.log(result);
- * });
- *
+ * 
  * @since 2.0.0
  * @category Methods
  */
-export const toCborHex = Effect.fn(
-  (
-    instance: CML.ProposalProcedure,
-  ): Effect.Effect<string, ProposalProcedureError> =>
+export const toCborHex: (instance: CML.ProposalProcedure) => Effect.Effect<string, ProposalProcedureError> = Effect.fn(
+  (instance: CML.ProposalProcedure) =>
     Effect.try({
       try: () => instance.to_cbor_hex(),
       catch: () =>
         new ProposalProcedureError({
           message: `ProposalProcedure.toCborHex failed ProposalProcedure is not valid for string conversion. Hint: Make sure it's a valid hex string representing CBOR data.`,
         }),
-    }),
+    })
 );
 
 /**
  * Unsafely calls instance.toCborHex without Effect wrapper
- *
- * @example
- * import { ProposalProcedure } from "@lucid-evolution/experimental";
- *
- * // Assume we have a ProposalProcedure instance
- * const instance = ... ;
- *
- * // Using try/catch for error handling
- * try {
- *   const result = ProposalProcedure.toCborHexUnsafe(instance);
- *   console.log(result);
- * } catch (error) {
- *   console.error(`ProposalProcedure.toCborHexUnsafe failed: ${error.message}`);
- * }
- *
+ * 
  * @since 2.0.0
  * @category MethodsUnsafe
  */
@@ -295,156 +154,74 @@ export const toCborHexUnsafe = (instance: CML.ProposalProcedure): string =>
 
 /**
  * Method toCanonicalCborHex of ProposalProcedure
- *
- * @example
- * import { ProposalProcedure } from "@lucid-evolution/experimental";
- * import { Effect } from "effect";
- *
- * // Using Effect for safe execution with error handling
- * Effect.gen(function*() {
- * // Assume we have a ProposalProcedure instance
- * const instance = ... ;
- *   const result = yield* ProposalProcedure.toCanonicalCborHex(instance);
- *   console.log(result);
- * });
- *
+ * 
  * @since 2.0.0
  * @category Methods
  */
-export const toCanonicalCborHex = Effect.fn(
-  (
-    instance: CML.ProposalProcedure,
-  ): Effect.Effect<string, ProposalProcedureError> =>
+export const toCanonicalCborHex: (instance: CML.ProposalProcedure) => Effect.Effect<string, ProposalProcedureError> = Effect.fn(
+  (instance: CML.ProposalProcedure) =>
     Effect.try({
       try: () => instance.to_canonical_cbor_hex(),
       catch: () =>
         new ProposalProcedureError({
           message: `ProposalProcedure.toCanonicalCborHex failed ProposalProcedure is not valid for string conversion. Hint: Make sure it's a valid hex string representing CBOR data.`,
         }),
-    }),
+    })
 );
 
 /**
  * Unsafely calls instance.toCanonicalCborHex without Effect wrapper
- *
- * @example
- * import { ProposalProcedure } from "@lucid-evolution/experimental";
- *
- * // Assume we have a ProposalProcedure instance
- * const instance = ... ;
- *
- * // Using try/catch for error handling
- * try {
- *   const result = ProposalProcedure.toCanonicalCborHexUnsafe(instance);
- *   console.log(result);
- * } catch (error) {
- *   console.error(`ProposalProcedure.toCanonicalCborHexUnsafe failed: ${error.message}`);
- * }
- *
+ * 
  * @since 2.0.0
  * @category MethodsUnsafe
  */
-export const toCanonicalCborHexUnsafe = (
-  instance: CML.ProposalProcedure,
-): string => Effect.runSync(toCanonicalCborHex(instance));
+export const toCanonicalCborHexUnsafe = (instance: CML.ProposalProcedure): string =>
+  Effect.runSync(toCanonicalCborHex(instance));
 
 /**
  * Static method fromCborHex of ProposalProcedure
- *
- * @example
- * import { ProposalProcedure } from "@lucid-evolution/experimental";
- * import { Effect } from "effect";
- *
- * // Using Effect for safe execution with error handling
- * Effect.gen(function*() {
- *
- *   const result = yield* ProposalProcedure.fromCborHex( parameters );
- *   console.log(result);
- * });
- *
+ * 
  * @since 2.0.0
  * @category Constructors
  */
-export const fromCborHex = Effect.fn(function* (cborBytes: string) {
+export const fromCborHex: (cborBytes: string) => Effect.Effect<CML.ProposalProcedure, ProposalProcedureError> = Effect.fn(function* (cborBytes: string) {
   return yield* Effect.try({
     try: () => CML.ProposalProcedure.from_cbor_hex(cborBytes),
-    catch: () =>
-      new ProposalProcedureError({
-        message: `ProposalProcedure.fromCborHex failed with parameters: ${cborBytes}. Hint: Make sure it's a valid hex string representing CBOR data.`,
-      }),
+    catch: () => new ProposalProcedureError({
+      message: `ProposalProcedure.fromCborHex failed with parameters: ${cborBytes}. Hint: Make sure it's a valid hex string representing CBOR data.`,
+    }),
   });
 });
 
 /**
  * Unsafely calls ProposalProcedure.fromCborHex without Effect wrapper
- *
- * @example
- * import { ProposalProcedure } from "@lucid-evolution/experimental";
- *
- *
- *
- * // Using try/catch for error handling
- * try {
- *   const result = ProposalProcedure.fromCborHexUnsafe( parameters );
- *   console.log(result);
- * } catch (error) {
- *   console.error(`ProposalProcedure.fromCborHexUnsafe failed: ${error.message}`);
- * }
- *
+ * 
  * @since 2.0.0
  * @category ConstructorsUnsafe
  */
-export const fromCborHexUnsafe = (cborBytes: string) =>
+export const fromCborHexUnsafe = (cborBytes: string): CML.ProposalProcedure =>
   Effect.runSync(fromCborHex(cborBytes));
 
 /**
  * Method toJson of ProposalProcedure
- *
- * @example
- * import { ProposalProcedure } from "@lucid-evolution/experimental";
- * import { Effect } from "effect";
- *
- * // Using Effect for safe execution with error handling
- * Effect.gen(function*() {
- * // Assume we have a ProposalProcedure instance
- * const instance = ... ;
- *   const result = yield* ProposalProcedure.toJson(instance);
- *   console.log(result);
- * });
- *
+ * 
  * @since 2.0.0
  * @category Methods
  */
-export const toJson = Effect.fn(
-  (
-    instance: CML.ProposalProcedure,
-  ): Effect.Effect<string, ProposalProcedureError> =>
+export const toJson: (instance: CML.ProposalProcedure) => Effect.Effect<string, ProposalProcedureError> = Effect.fn(
+  (instance: CML.ProposalProcedure) =>
     Effect.try({
       try: () => instance.to_json(),
       catch: () =>
         new ProposalProcedureError({
           message: `ProposalProcedure.toJson failed ProposalProcedure is not valid for string conversion. Hint: Validate your JSON structure.`,
         }),
-    }),
+    })
 );
 
 /**
  * Unsafely calls instance.toJson without Effect wrapper
- *
- * @example
- * import { ProposalProcedure } from "@lucid-evolution/experimental";
- *
- * // Assume we have a ProposalProcedure instance
- * const instance = ... ;
- *
- * // Using try/catch for error handling
- * try {
- *   const result = ProposalProcedure.toJsonUnsafe(instance);
- *   console.log(result);
- * } catch (error) {
- *   console.error(`ProposalProcedure.toJsonUnsafe failed: ${error.message}`);
- * }
- *
+ * 
  * @since 2.0.0
  * @category MethodsUnsafe
  */
@@ -453,52 +230,24 @@ export const toJsonUnsafe = (instance: CML.ProposalProcedure): string =>
 
 /**
  * Method toJsValue of ProposalProcedure
- *
- * @example
- * import { ProposalProcedure } from "@lucid-evolution/experimental";
- * import { Effect } from "effect";
- *
- * // Using Effect for safe execution with error handling
- * Effect.gen(function*() {
- * // Assume we have a ProposalProcedure instance
- * const instance = ... ;
- *   const result = yield* ProposalProcedure.toJsValue(instance);
- *   console.log(result);
- * });
- *
+ * 
  * @since 2.0.0
  * @category Methods
  */
-export const toJsValue = Effect.fn(
-  (
-    instance: CML.ProposalProcedure,
-  ): Effect.Effect<any, ProposalProcedureError> =>
+export const toJsValue: (instance: CML.ProposalProcedure) => Effect.Effect<any, ProposalProcedureError> = Effect.fn(
+  (instance: CML.ProposalProcedure) =>
     Effect.try({
       try: () => instance.to_js_value(),
       catch: () =>
         new ProposalProcedureError({
           message: `ProposalProcedure.toJsValue failed ProposalProcedure is not valid for any conversion. `,
         }),
-    }),
+    })
 );
 
 /**
  * Unsafely calls instance.toJsValue without Effect wrapper
- *
- * @example
- * import { ProposalProcedure } from "@lucid-evolution/experimental";
- *
- * // Assume we have a ProposalProcedure instance
- * const instance = ... ;
- *
- * // Using try/catch for error handling
- * try {
- *   const result = ProposalProcedure.toJsValueUnsafe(instance);
- *   console.log(result);
- * } catch (error) {
- *   console.error(`ProposalProcedure.toJsValueUnsafe failed: ${error.message}`);
- * }
- *
+ * 
  * @since 2.0.0
  * @category MethodsUnsafe
  */
@@ -507,100 +256,48 @@ export const toJsValueUnsafe = (instance: CML.ProposalProcedure): any =>
 
 /**
  * Static method fromJson of ProposalProcedure
- *
- * @example
- * import { ProposalProcedure } from "@lucid-evolution/experimental";
- * import { Effect } from "effect";
- *
- * // Using Effect for safe execution with error handling
- * Effect.gen(function*() {
- *
- *   const result = yield* ProposalProcedure.fromJson( parameters );
- *   console.log(result);
- * });
- *
+ * 
  * @since 2.0.0
  * @category Constructors
  */
-export const fromJson = Effect.fn(function* (json: string) {
+export const fromJson: (json: string) => Effect.Effect<CML.ProposalProcedure, ProposalProcedureError> = Effect.fn(function* (json: string) {
   return yield* Effect.try({
     try: () => CML.ProposalProcedure.from_json(json),
-    catch: () =>
-      new ProposalProcedureError({
-        message: `ProposalProcedure.fromJson failed with parameters: ${json}. Hint: Validate your JSON structure.`,
-      }),
+    catch: () => new ProposalProcedureError({
+      message: `ProposalProcedure.fromJson failed with parameters: ${json}. Hint: Validate your JSON structure.`,
+    }),
   });
 });
 
 /**
  * Unsafely calls ProposalProcedure.fromJson without Effect wrapper
- *
- * @example
- * import { ProposalProcedure } from "@lucid-evolution/experimental";
- *
- *
- *
- * // Using try/catch for error handling
- * try {
- *   const result = ProposalProcedure.fromJsonUnsafe( parameters );
- *   console.log(result);
- * } catch (error) {
- *   console.error(`ProposalProcedure.fromJsonUnsafe failed: ${error.message}`);
- * }
- *
+ * 
  * @since 2.0.0
  * @category ConstructorsUnsafe
  */
-export const fromJsonUnsafe = (json: string) => Effect.runSync(fromJson(json));
+export const fromJsonUnsafe = (json: string): CML.ProposalProcedure =>
+  Effect.runSync(fromJson(json));
 
 /**
  * Method deposit of ProposalProcedure
- *
- * @example
- * import { ProposalProcedure } from "@lucid-evolution/experimental";
- * import { Effect } from "effect";
- *
- * // Using Effect for safe execution with error handling
- * Effect.gen(function*() {
- * // Assume we have a ProposalProcedure instance
- * const instance = ... ;
- *   const result = yield* ProposalProcedure.deposit(instance);
- *   console.log(result);
- * });
- *
+ * 
  * @since 2.0.0
  * @category Methods
  */
-export const deposit = Effect.fn(
-  (
-    instance: CML.ProposalProcedure,
-  ): Effect.Effect<bigint, ProposalProcedureError> =>
+export const deposit: (instance: CML.ProposalProcedure) => Effect.Effect<bigint, ProposalProcedureError> = Effect.fn(
+  (instance: CML.ProposalProcedure) =>
     Effect.try({
       try: () => instance.deposit(),
       catch: () =>
         new ProposalProcedureError({
           message: `ProposalProcedure.deposit failed `,
         }),
-    }),
+    })
 );
 
 /**
  * Unsafely calls instance.deposit without Effect wrapper
- *
- * @example
- * import { ProposalProcedure } from "@lucid-evolution/experimental";
- *
- * // Assume we have a ProposalProcedure instance
- * const instance = ... ;
- *
- * // Using try/catch for error handling
- * try {
- *   const result = ProposalProcedure.depositUnsafe(instance);
- *   console.log(result);
- * } catch (error) {
- *   console.error(`ProposalProcedure.depositUnsafe failed: ${error.message}`);
- * }
- *
+ * 
  * @since 2.0.0
  * @category MethodsUnsafe
  */
@@ -609,162 +306,76 @@ export const depositUnsafe = (instance: CML.ProposalProcedure): bigint =>
 
 /**
  * Method rewardAccount of ProposalProcedure
- *
- * @example
- * import { ProposalProcedure } from "@lucid-evolution/experimental";
- * import { Effect } from "effect";
- *
- * // Using Effect for safe execution with error handling
- * Effect.gen(function*() {
- * // Assume we have a ProposalProcedure instance
- * const instance = ... ;
- *   const result = yield* ProposalProcedure.rewardAccount(instance);
- *   console.log(result);
- * });
- *
+ * 
  * @since 2.0.0
  * @category Methods
  */
-export const rewardAccount = Effect.fn(
-  (
-    instance: CML.ProposalProcedure,
-  ): Effect.Effect<CML.RewardAddress, ProposalProcedureError> =>
+export const rewardAccount: (instance: CML.ProposalProcedure) => Effect.Effect<CML.RewardAddress, ProposalProcedureError> = Effect.fn(
+  (instance: CML.ProposalProcedure) =>
     Effect.try({
       try: () => instance.reward_account(),
       catch: () =>
         new ProposalProcedureError({
           message: `ProposalProcedure.rewardAccount failed `,
         }),
-    }),
+    })
 );
 
 /**
  * Unsafely calls instance.rewardAccount without Effect wrapper
- *
- * @example
- * import { ProposalProcedure } from "@lucid-evolution/experimental";
- *
- * // Assume we have a ProposalProcedure instance
- * const instance = ... ;
- *
- * // Using try/catch for error handling
- * try {
- *   const result = ProposalProcedure.rewardAccountUnsafe(instance);
- *   console.log(result);
- * } catch (error) {
- *   console.error(`ProposalProcedure.rewardAccountUnsafe failed: ${error.message}`);
- * }
- *
+ * 
  * @since 2.0.0
  * @category MethodsUnsafe
  */
-export const rewardAccountUnsafe = (
-  instance: CML.ProposalProcedure,
-): CML.RewardAddress => Effect.runSync(rewardAccount(instance));
+export const rewardAccountUnsafe = (instance: CML.ProposalProcedure): CML.RewardAddress =>
+  Effect.runSync(rewardAccount(instance));
 
 /**
  * Method govAction of ProposalProcedure
- *
- * @example
- * import { ProposalProcedure } from "@lucid-evolution/experimental";
- * import { Effect } from "effect";
- *
- * // Using Effect for safe execution with error handling
- * Effect.gen(function*() {
- * // Assume we have a ProposalProcedure instance
- * const instance = ... ;
- *   const result = yield* ProposalProcedure.govAction(instance);
- *   console.log(result);
- * });
- *
+ * 
  * @since 2.0.0
  * @category Methods
  */
-export const govAction = Effect.fn(
-  (
-    instance: CML.ProposalProcedure,
-  ): Effect.Effect<CML.GovAction, ProposalProcedureError> =>
+export const govAction: (instance: CML.ProposalProcedure) => Effect.Effect<CML.GovAction, ProposalProcedureError> = Effect.fn(
+  (instance: CML.ProposalProcedure) =>
     Effect.try({
       try: () => instance.gov_action(),
       catch: () =>
         new ProposalProcedureError({
           message: `ProposalProcedure.govAction failed `,
         }),
-    }),
+    })
 );
 
 /**
  * Unsafely calls instance.govAction without Effect wrapper
- *
- * @example
- * import { ProposalProcedure } from "@lucid-evolution/experimental";
- *
- * // Assume we have a ProposalProcedure instance
- * const instance = ... ;
- *
- * // Using try/catch for error handling
- * try {
- *   const result = ProposalProcedure.govActionUnsafe(instance);
- *   console.log(result);
- * } catch (error) {
- *   console.error(`ProposalProcedure.govActionUnsafe failed: ${error.message}`);
- * }
- *
+ * 
  * @since 2.0.0
  * @category MethodsUnsafe
  */
-export const govActionUnsafe = (
-  instance: CML.ProposalProcedure,
-): CML.GovAction => Effect.runSync(govAction(instance));
+export const govActionUnsafe = (instance: CML.ProposalProcedure): CML.GovAction =>
+  Effect.runSync(govAction(instance));
 
 /**
  * Method anchor of ProposalProcedure
- *
- * @example
- * import { ProposalProcedure } from "@lucid-evolution/experimental";
- * import { Effect } from "effect";
- *
- * // Using Effect for safe execution with error handling
- * Effect.gen(function*() {
- * // Assume we have a ProposalProcedure instance
- * const instance = ... ;
- *   const result = yield* ProposalProcedure.anchor(instance);
- *   console.log(result);
- * });
- *
+ * 
  * @since 2.0.0
  * @category Methods
  */
-export const anchor = Effect.fn(
-  (
-    instance: CML.ProposalProcedure,
-  ): Effect.Effect<CML.Anchor, ProposalProcedureError> =>
+export const anchor: (instance: CML.ProposalProcedure) => Effect.Effect<CML.Anchor, ProposalProcedureError> = Effect.fn(
+  (instance: CML.ProposalProcedure) =>
     Effect.try({
       try: () => instance.anchor(),
       catch: () =>
         new ProposalProcedureError({
           message: `ProposalProcedure.anchor failed `,
         }),
-    }),
+    })
 );
 
 /**
  * Unsafely calls instance.anchor without Effect wrapper
- *
- * @example
- * import { ProposalProcedure } from "@lucid-evolution/experimental";
- *
- * // Assume we have a ProposalProcedure instance
- * const instance = ... ;
- *
- * // Using try/catch for error handling
- * try {
- *   const result = ProposalProcedure.anchorUnsafe(instance);
- *   console.log(result);
- * } catch (error) {
- *   console.error(`ProposalProcedure.anchorUnsafe failed: ${error.message}`);
- * }
- *
+ * 
  * @since 2.0.0
  * @category MethodsUnsafe
  */
@@ -773,59 +384,24 @@ export const anchorUnsafe = (instance: CML.ProposalProcedure): CML.Anchor =>
 
 /**
  * Static method _new of ProposalProcedure
- *
- * @example
- * import { ProposalProcedure } from "@lucid-evolution/experimental";
- * import { Effect } from "effect";
- *
- * // Using Effect for safe execution with error handling
- * Effect.gen(function*() {
- *
- *   const result = yield* ProposalProcedure._new( parameters );
- *   console.log(result);
- * });
- *
+ * 
  * @since 2.0.0
  * @category Constructors
  */
-export const _new = Effect.fn(function* (
-  deposit: bigint,
-  rewardAccount: CML.RewardAddress,
-  govAction: CML.GovAction,
-  anchor: CML.Anchor,
-) {
+export const _new: (deposit: bigint, rewardAccount: CML.RewardAddress, govAction: CML.GovAction, anchor: CML.Anchor) => Effect.Effect<CML.ProposalProcedure, ProposalProcedureError> = Effect.fn(function* (deposit: bigint, rewardAccount: CML.RewardAddress, govAction: CML.GovAction, anchor: CML.Anchor) {
   return yield* Effect.try({
-    try: () =>
-      CML.ProposalProcedure.new(deposit, rewardAccount, govAction, anchor),
-    catch: () =>
-      new ProposalProcedureError({
-        message: `ProposalProcedure._new failed with parameters: ${deposit}, ${rewardAccount} (RewardAddress), ${govAction} (GovAction), ${anchor} (Anchor). `,
-      }),
+    try: () => CML.ProposalProcedure.new(deposit, rewardAccount, govAction, anchor),
+    catch: () => new ProposalProcedureError({
+      message: `ProposalProcedure._new failed with parameters: ${deposit}, ${rewardAccount} (RewardAddress), ${govAction} (GovAction), ${anchor} (Anchor). `,
+    }),
   });
 });
 
 /**
  * Unsafely calls ProposalProcedure._new without Effect wrapper
- *
- * @example
- * import { ProposalProcedure } from "@lucid-evolution/experimental";
- *
- *
- *
- * // Using try/catch for error handling
- * try {
- *   const result = ProposalProcedure._newUnsafe( parameters );
- *   console.log(result);
- * } catch (error) {
- *   console.error(`ProposalProcedure._newUnsafe failed: ${error.message}`);
- * }
- *
+ * 
  * @since 2.0.0
  * @category ConstructorsUnsafe
  */
-export const _newUnsafe = (
-  deposit: bigint,
-  rewardAccount: CML.RewardAddress,
-  govAction: CML.GovAction,
-  anchor: CML.Anchor,
-) => Effect.runSync(_new(deposit, rewardAccount, govAction, anchor));
+export const _newUnsafe = (deposit: bigint, rewardAccount: CML.RewardAddress, govAction: CML.GovAction, anchor: CML.Anchor): CML.ProposalProcedure =>
+  Effect.runSync(_new(deposit, rewardAccount, govAction, anchor));

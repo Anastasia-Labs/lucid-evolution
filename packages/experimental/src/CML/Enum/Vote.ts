@@ -13,12 +13,7 @@ export type Vote = CML.Vote;
 
 /**
  * No variant of the Vote enum
- *
- * @example
- * import { Vote } from "@lucid-evolution/experimental";
- *
- * const kind = Vote.No;
- *
+ * 
  * @since 2.0.0
  * @category Variants
  */
@@ -26,12 +21,7 @@ export const No = CML.Vote.No;
 
 /**
  * Yes variant of the Vote enum
- *
- * @example
- * import { Vote } from "@lucid-evolution/experimental";
- *
- * const kind = Vote.Yes;
- *
+ * 
  * @since 2.0.0
  * @category Variants
  */
@@ -39,44 +29,28 @@ export const Yes = CML.Vote.Yes;
 
 /**
  * Abstain variant of the Vote enum
- *
- * @example
- * import { Vote } from "@lucid-evolution/experimental";
- *
- * const kind = Vote.Abstain;
- *
+ * 
  * @since 2.0.0
  * @category Variants
  */
 export const Abstain = CML.Vote.Abstain;
 
+
 /**
  * Get all values of the Vote enum
- *
- * @example
- * import { Vote } from "@lucid-evolution/experimental";
- *
- * const allValues = Vote.values();
- * console.log(allValues);
- *
+ * 
  * @since 2.0.0
  * @category Utils
  */
 export const values = (): Array<CML.Vote> => [
   CML.Vote.No,
   CML.Vote.Yes,
-  CML.Vote.Abstain,
+  CML.Vote.Abstain
 ];
 
 /**
  * Convert Vote enum value to string
- *
- * @example
- * import { Vote } from "@lucid-evolution/experimental";
- *
- * const name = Vote.toString(CML.Vote.No);
- * console.log(name); // "No"
- *
+ * 
  * @since 2.0.0
  * @category Utils
  */
@@ -95,13 +69,7 @@ export const toString = (value: CML.Vote): string => {
 
 /**
  * Convert string to Vote enum value
- *
- * @example
- * import { Vote } from "@lucid-evolution/experimental";
- *
- * const value = Vote.fromString("No");
- * console.log(value); // Some(CML.Vote.No)
- *
+ * 
  * @since 2.0.0
  * @category Utils
  */

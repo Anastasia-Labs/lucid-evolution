@@ -13,12 +13,7 @@ export type CIP25Version = CML.CIP25Version;
 
 /**
  * V1 variant of the CIP25Version enum
- *
- * @example
- * import { CIP25Version } from "@lucid-evolution/experimental";
- *
- * const kind = CIP25Version.V1;
- *
+ * 
  * @since 2.0.0
  * @category Variants
  */
@@ -26,43 +21,27 @@ export const V1 = CML.CIP25Version.V1;
 
 /**
  * V2 variant of the CIP25Version enum
- *
- * @example
- * import { CIP25Version } from "@lucid-evolution/experimental";
- *
- * const kind = CIP25Version.V2;
- *
+ * 
  * @since 2.0.0
  * @category Variants
  */
 export const V2 = CML.CIP25Version.V2;
 
+
 /**
  * Get all values of the CIP25Version enum
- *
- * @example
- * import { CIP25Version } from "@lucid-evolution/experimental";
- *
- * const allValues = CIP25Version.values();
- * console.log(allValues);
- *
+ * 
  * @since 2.0.0
  * @category Utils
  */
 export const values = (): Array<CML.CIP25Version> => [
   CML.CIP25Version.V1,
-  CML.CIP25Version.V2,
+  CML.CIP25Version.V2
 ];
 
 /**
  * Convert CIP25Version enum value to string
- *
- * @example
- * import { CIP25Version } from "@lucid-evolution/experimental";
- *
- * const name = CIP25Version.toString(CML.CIP25Version.V1);
- * console.log(name); // "V1"
- *
+ * 
  * @since 2.0.0
  * @category Utils
  */
@@ -79,13 +58,7 @@ export const toString = (value: CML.CIP25Version): string => {
 
 /**
  * Convert string to CIP25Version enum value
- *
- * @example
- * import { CIP25Version } from "@lucid-evolution/experimental";
- *
- * const value = CIP25Version.fromString("V1");
- * console.log(value); // Some(CML.CIP25Version.V1)
- *
+ * 
  * @since 2.0.0
  * @category Utils
  */
