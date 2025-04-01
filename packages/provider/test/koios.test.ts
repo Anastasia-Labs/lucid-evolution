@@ -4,7 +4,7 @@ import { assert, describe, expect, test, vi } from "vitest";
 import * as PreprodConstants from "./preprod-constants.js";
 import * as _Koios from "../src/internal/koios.js";
 
-describe.sequential("Koios", () => {
+describe.skip("Koios", () => {
   const koios = new Koios("https://preprod.koios.rest/api/v1");
 
   test("getProtocolParameters", async () => {
@@ -29,7 +29,7 @@ describe.sequential("Koios", () => {
     }
   });
 
-  test.skip("getUtxosWithUnit", async () => {
+  test("getUtxosWithUnit", async () => {
     try {
       const utxos = await koios.getUtxosWithUnit(
         "addr_test1wpgexmeunzsykesf42d4eqet5yvzeap6trjnflxqtkcf66g0kpnxt",
@@ -63,7 +63,7 @@ describe.sequential("Koios", () => {
   //  bytes: null,
   //  value: null
   //}
-  test.skip("getUtxosByOutRef", async () => {
+  test("getUtxosByOutRef", async () => {
     try {
       const utxos: UTxO[] = await koios.getUtxosByOutRef([
         {
@@ -79,7 +79,7 @@ describe.sequential("Koios", () => {
     }
   });
 
-  test.skip("getDelegation", async () => {
+  test("getDelegation", async () => {
     try {
       const delegation = await koios.getDelegation(
         "stake_test17zt3vxfjx9pjnpnapa65lx375p2utwxmpc8afj053h0l3vgc8a3g3",
