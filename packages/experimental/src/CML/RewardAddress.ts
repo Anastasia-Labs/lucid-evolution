@@ -14,7 +14,7 @@ export type RewardAddress = CML.RewardAddress;
 
 /**
  * Error class for RewardAddress operations
- * 
+ *
  * This error is thrown when operations on RewardAddress instances fail.
  *
  * @since 2.0.0
@@ -26,11 +26,11 @@ export class RewardAddressError extends Data.TaggedError("RewardAddressError")<{
 
 /**
  * Method free of RewardAddress
- * 
+ *
  * @example
  * import { RewardAddress } from "@lucid-evolution/experimental";
  * import { Effect } from "effect";
- * 
+ *
  * // Using Effect for safe execution with error handling
  * Effect.gen(function*() {
  * // Assume we have a RewardAddress instance
@@ -38,7 +38,7 @@ export class RewardAddressError extends Data.TaggedError("RewardAddressError")<{
  *   const result = yield* RewardAddress.free(instance);
  *   console.log(result);
  * });
- * 
+ *
  * @since 2.0.0
  * @category Methods
  */
@@ -50,18 +50,18 @@ export const free = Effect.fn(
         new RewardAddressError({
           message: `RewardAddress.free failed Hint: Check if you're calling free() more than once.`,
         }),
-    })
+    }),
 );
 
 /**
  * Unsafely calls instance.free without Effect wrapper
- * 
+ *
  * @example
  * import { RewardAddress } from "@lucid-evolution/experimental";
- * 
+ *
  * // Assume we have a RewardAddress instance
  * const instance = ... ;
- * 
+ *
  * // Using try/catch for error handling
  * try {
  *   const result = RewardAddress.freeUnsafe(instance);
@@ -69,7 +69,7 @@ export const free = Effect.fn(
  * } catch (error) {
  *   console.error(`RewardAddress.freeUnsafe failed: ${error.message}`);
  * }
- * 
+ *
  * @since 2.0.0
  * @category MethodsUnsafe
  */
@@ -78,11 +78,11 @@ export const freeUnsafe = (instance: CML.RewardAddress): void =>
 
 /**
  * Method toJson of RewardAddress
- * 
+ *
  * @example
  * import { RewardAddress } from "@lucid-evolution/experimental";
  * import { Effect } from "effect";
- * 
+ *
  * // Using Effect for safe execution with error handling
  * Effect.gen(function*() {
  * // Assume we have a RewardAddress instance
@@ -90,7 +90,7 @@ export const freeUnsafe = (instance: CML.RewardAddress): void =>
  *   const result = yield* RewardAddress.toJson(instance);
  *   console.log(result);
  * });
- * 
+ *
  * @since 2.0.0
  * @category Methods
  */
@@ -102,18 +102,18 @@ export const toJson = Effect.fn(
         new RewardAddressError({
           message: `RewardAddress.toJson failed RewardAddress is not valid for string conversion. Hint: Validate your JSON structure.`,
         }),
-    })
+    }),
 );
 
 /**
  * Unsafely calls instance.toJson without Effect wrapper
- * 
+ *
  * @example
  * import { RewardAddress } from "@lucid-evolution/experimental";
- * 
+ *
  * // Assume we have a RewardAddress instance
  * const instance = ... ;
- * 
+ *
  * // Using try/catch for error handling
  * try {
  *   const result = RewardAddress.toJsonUnsafe(instance);
@@ -121,7 +121,7 @@ export const toJson = Effect.fn(
  * } catch (error) {
  *   console.error(`RewardAddress.toJsonUnsafe failed: ${error.message}`);
  * }
- * 
+ *
  * @since 2.0.0
  * @category MethodsUnsafe
  */
@@ -130,11 +130,11 @@ export const toJsonUnsafe = (instance: CML.RewardAddress): string =>
 
 /**
  * Method toJsValue of RewardAddress
- * 
+ *
  * @example
  * import { RewardAddress } from "@lucid-evolution/experimental";
  * import { Effect } from "effect";
- * 
+ *
  * // Using Effect for safe execution with error handling
  * Effect.gen(function*() {
  * // Assume we have a RewardAddress instance
@@ -142,7 +142,7 @@ export const toJsonUnsafe = (instance: CML.RewardAddress): string =>
  *   const result = yield* RewardAddress.toJsValue(instance);
  *   console.log(result);
  * });
- * 
+ *
  * @since 2.0.0
  * @category Methods
  */
@@ -154,18 +154,18 @@ export const toJsValue = Effect.fn(
         new RewardAddressError({
           message: `RewardAddress.toJsValue failed RewardAddress is not valid for any conversion. `,
         }),
-    })
+    }),
 );
 
 /**
  * Unsafely calls instance.toJsValue without Effect wrapper
- * 
+ *
  * @example
  * import { RewardAddress } from "@lucid-evolution/experimental";
- * 
+ *
  * // Assume we have a RewardAddress instance
  * const instance = ... ;
- * 
+ *
  * // Using try/catch for error handling
  * try {
  *   const result = RewardAddress.toJsValueUnsafe(instance);
@@ -173,7 +173,7 @@ export const toJsValue = Effect.fn(
  * } catch (error) {
  *   console.error(`RewardAddress.toJsValueUnsafe failed: ${error.message}`);
  * }
- * 
+ *
  * @since 2.0.0
  * @category MethodsUnsafe
  */
@@ -182,38 +182,39 @@ export const toJsValueUnsafe = (instance: CML.RewardAddress): any =>
 
 /**
  * Static method fromJson of RewardAddress
- * 
+ *
  * @example
  * import { RewardAddress } from "@lucid-evolution/experimental";
  * import { Effect } from "effect";
- * 
+ *
  * // Using Effect for safe execution with error handling
  * Effect.gen(function*() {
- * 
+ *
  *   const result = yield* RewardAddress.fromJson( parameters );
  *   console.log(result);
  * });
- * 
+ *
  * @since 2.0.0
  * @category Constructors
  */
 export const fromJson = Effect.fn(function* (json: string) {
   return yield* Effect.try({
     try: () => CML.RewardAddress.from_json(json),
-    catch: () => new RewardAddressError({
-      message: `RewardAddress.fromJson failed with parameters: ${json}. Hint: Validate your JSON structure.`,
-    }),
+    catch: () =>
+      new RewardAddressError({
+        message: `RewardAddress.fromJson failed with parameters: ${json}. Hint: Validate your JSON structure.`,
+      }),
   });
 });
 
 /**
  * Unsafely calls RewardAddress.fromJson without Effect wrapper
- * 
+ *
  * @example
  * import { RewardAddress } from "@lucid-evolution/experimental";
- * 
- * 
- * 
+ *
+ *
+ *
  * // Using try/catch for error handling
  * try {
  *   const result = RewardAddress.fromJsonUnsafe( parameters );
@@ -221,47 +222,50 @@ export const fromJson = Effect.fn(function* (json: string) {
  * } catch (error) {
  *   console.error(`RewardAddress.fromJsonUnsafe failed: ${error.message}`);
  * }
- * 
+ *
  * @since 2.0.0
  * @category ConstructorsUnsafe
  */
-export const fromJsonUnsafe = (json: string) =>
-  Effect.runSync(fromJson(json));
+export const fromJsonUnsafe = (json: string) => Effect.runSync(fromJson(json));
 
 /**
  * Static method _new of RewardAddress
- * 
+ *
  * @example
  * import { RewardAddress } from "@lucid-evolution/experimental";
  * import { Effect } from "effect";
- * 
+ *
  * // Using Effect for safe execution with error handling
  * Effect.gen(function*() {
- * 
+ *
  *   const result = yield* RewardAddress._new( parameters );
  *   console.log(result);
  * });
- * 
+ *
  * @since 2.0.0
  * @category Constructors
  */
-export const _new = Effect.fn(function* (network: number, payment: CML.Credential) {
+export const _new = Effect.fn(function* (
+  network: number,
+  payment: CML.Credential,
+) {
   return yield* Effect.try({
     try: () => CML.RewardAddress.new(network, payment),
-    catch: () => new RewardAddressError({
-      message: `RewardAddress._new failed with parameters: ${network}, ${payment} (Credential). `,
-    }),
+    catch: () =>
+      new RewardAddressError({
+        message: `RewardAddress._new failed with parameters: ${network}, ${payment} (Credential). `,
+      }),
   });
 });
 
 /**
  * Unsafely calls RewardAddress._new without Effect wrapper
- * 
+ *
  * @example
  * import { RewardAddress } from "@lucid-evolution/experimental";
- * 
- * 
- * 
+ *
+ *
+ *
  * // Using try/catch for error handling
  * try {
  *   const result = RewardAddress._newUnsafe( parameters );
@@ -269,7 +273,7 @@ export const _new = Effect.fn(function* (network: number, payment: CML.Credentia
  * } catch (error) {
  *   console.error(`RewardAddress._newUnsafe failed: ${error.message}`);
  * }
- * 
+ *
  * @since 2.0.0
  * @category ConstructorsUnsafe
  */
@@ -278,11 +282,11 @@ export const _newUnsafe = (network: number, payment: CML.Credential) =>
 
 /**
  * Method toAddress of RewardAddress
- * 
+ *
  * @example
  * import { RewardAddress } from "@lucid-evolution/experimental";
  * import { Effect } from "effect";
- * 
+ *
  * // Using Effect for safe execution with error handling
  * Effect.gen(function*() {
  * // Assume we have a RewardAddress instance
@@ -290,30 +294,32 @@ export const _newUnsafe = (network: number, payment: CML.Credential) =>
  *   const result = yield* RewardAddress.toAddress(instance);
  *   console.log(result);
  * });
- * 
+ *
  * @since 2.0.0
  * @category Methods
  */
 export const toAddress = Effect.fn(
-  (instance: CML.RewardAddress): Effect.Effect<CML.Address, RewardAddressError> =>
+  (
+    instance: CML.RewardAddress,
+  ): Effect.Effect<CML.Address, RewardAddressError> =>
     Effect.try({
       try: () => instance.to_address(),
       catch: () =>
         new RewardAddressError({
           message: `RewardAddress.toAddress failed RewardAddress is not valid for Address conversion. `,
         }),
-    })
+    }),
 );
 
 /**
  * Unsafely calls instance.toAddress without Effect wrapper
- * 
+ *
  * @example
  * import { RewardAddress } from "@lucid-evolution/experimental";
- * 
+ *
  * // Assume we have a RewardAddress instance
  * const instance = ... ;
- * 
+ *
  * // Using try/catch for error handling
  * try {
  *   const result = RewardAddress.toAddressUnsafe(instance);
@@ -321,7 +327,7 @@ export const toAddress = Effect.fn(
  * } catch (error) {
  *   console.error(`RewardAddress.toAddressUnsafe failed: ${error.message}`);
  * }
- * 
+ *
  * @since 2.0.0
  * @category MethodsUnsafe
  */
@@ -330,38 +336,39 @@ export const toAddressUnsafe = (instance: CML.RewardAddress): CML.Address =>
 
 /**
  * Static method fromAddress of RewardAddress
- * 
+ *
  * @example
  * import { RewardAddress } from "@lucid-evolution/experimental";
  * import { Effect } from "effect";
- * 
+ *
  * // Using Effect for safe execution with error handling
  * Effect.gen(function*() {
- * 
+ *
  *   const result = yield* RewardAddress.fromAddress( parameters );
  *   console.log(result);
  * });
- * 
+ *
  * @since 2.0.0
  * @category Constructors
  */
 export const fromAddress = Effect.fn(function* (address: CML.Address) {
   return yield* Effect.try({
     try: () => CML.RewardAddress.from_address(address),
-    catch: () => new RewardAddressError({
-      message: `RewardAddress.fromAddress failed with parameters: ${address} (Address). `,
-    }),
+    catch: () =>
+      new RewardAddressError({
+        message: `RewardAddress.fromAddress failed with parameters: ${address} (Address). `,
+      }),
   });
 });
 
 /**
  * Unsafely calls RewardAddress.fromAddress without Effect wrapper
- * 
+ *
  * @example
  * import { RewardAddress } from "@lucid-evolution/experimental";
- * 
- * 
- * 
+ *
+ *
+ *
  * // Using try/catch for error handling
  * try {
  *   const result = RewardAddress.fromAddressUnsafe( parameters );
@@ -369,7 +376,7 @@ export const fromAddress = Effect.fn(function* (address: CML.Address) {
  * } catch (error) {
  *   console.error(`RewardAddress.fromAddressUnsafe failed: ${error.message}`);
  * }
- * 
+ *
  * @since 2.0.0
  * @category ConstructorsUnsafe
  */
@@ -378,11 +385,11 @@ export const fromAddressUnsafe = (address: CML.Address) =>
 
 /**
  * Method networkId of RewardAddress
- * 
+ *
  * @example
  * import { RewardAddress } from "@lucid-evolution/experimental";
  * import { Effect } from "effect";
- * 
+ *
  * // Using Effect for safe execution with error handling
  * Effect.gen(function*() {
  * // Assume we have a RewardAddress instance
@@ -390,7 +397,7 @@ export const fromAddressUnsafe = (address: CML.Address) =>
  *   const result = yield* RewardAddress.networkId(instance);
  *   console.log(result);
  * });
- * 
+ *
  * @since 2.0.0
  * @category Methods
  */
@@ -402,18 +409,18 @@ export const networkId = Effect.fn(
         new RewardAddressError({
           message: `RewardAddress.networkId failed `,
         }),
-    })
+    }),
 );
 
 /**
  * Unsafely calls instance.networkId without Effect wrapper
- * 
+ *
  * @example
  * import { RewardAddress } from "@lucid-evolution/experimental";
- * 
+ *
  * // Assume we have a RewardAddress instance
  * const instance = ... ;
- * 
+ *
  * // Using try/catch for error handling
  * try {
  *   const result = RewardAddress.networkIdUnsafe(instance);
@@ -421,7 +428,7 @@ export const networkId = Effect.fn(
  * } catch (error) {
  *   console.error(`RewardAddress.networkIdUnsafe failed: ${error.message}`);
  * }
- * 
+ *
  * @since 2.0.0
  * @category MethodsUnsafe
  */
@@ -430,11 +437,11 @@ export const networkIdUnsafe = (instance: CML.RewardAddress): number =>
 
 /**
  * Method payment of RewardAddress
- * 
+ *
  * @example
  * import { RewardAddress } from "@lucid-evolution/experimental";
  * import { Effect } from "effect";
- * 
+ *
  * // Using Effect for safe execution with error handling
  * Effect.gen(function*() {
  * // Assume we have a RewardAddress instance
@@ -442,30 +449,32 @@ export const networkIdUnsafe = (instance: CML.RewardAddress): number =>
  *   const result = yield* RewardAddress.payment(instance);
  *   console.log(result);
  * });
- * 
+ *
  * @since 2.0.0
  * @category Methods
  */
 export const payment = Effect.fn(
-  (instance: CML.RewardAddress): Effect.Effect<CML.Credential, RewardAddressError> =>
+  (
+    instance: CML.RewardAddress,
+  ): Effect.Effect<CML.Credential, RewardAddressError> =>
     Effect.try({
       try: () => instance.payment(),
       catch: () =>
         new RewardAddressError({
           message: `RewardAddress.payment failed `,
         }),
-    })
+    }),
 );
 
 /**
  * Unsafely calls instance.payment without Effect wrapper
- * 
+ *
  * @example
  * import { RewardAddress } from "@lucid-evolution/experimental";
- * 
+ *
  * // Assume we have a RewardAddress instance
  * const instance = ... ;
- * 
+ *
  * // Using try/catch for error handling
  * try {
  *   const result = RewardAddress.paymentUnsafe(instance);
@@ -473,7 +482,7 @@ export const payment = Effect.fn(
  * } catch (error) {
  *   console.error(`RewardAddress.paymentUnsafe failed: ${error.message}`);
  * }
- * 
+ *
  * @since 2.0.0
  * @category MethodsUnsafe
  */

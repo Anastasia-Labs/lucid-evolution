@@ -14,7 +14,7 @@ export type DRep = CML.DRep;
 
 /**
  * Error class for DRep operations
- * 
+ *
  * This error is thrown when operations on DRep instances fail.
  *
  * @since 2.0.0
@@ -26,11 +26,11 @@ export class DRepError extends Data.TaggedError("DRepError")<{
 
 /**
  * Method free of DRep
- * 
+ *
  * @example
  * import { DRep } from "@lucid-evolution/experimental";
  * import { Effect } from "effect";
- * 
+ *
  * // Using Effect for safe execution with error handling
  * Effect.gen(function*() {
  * // Assume we have a DRep instance
@@ -38,7 +38,7 @@ export class DRepError extends Data.TaggedError("DRepError")<{
  *   const result = yield* DRep.free(instance);
  *   console.log(result);
  * });
- * 
+ *
  * @since 2.0.0
  * @category Methods
  */
@@ -50,18 +50,18 @@ export const free = Effect.fn(
         new DRepError({
           message: `DRep.free failed Hint: Check if you're calling free() more than once.`,
         }),
-    })
+    }),
 );
 
 /**
  * Unsafely calls instance.free without Effect wrapper
- * 
+ *
  * @example
  * import { DRep } from "@lucid-evolution/experimental";
- * 
+ *
  * // Assume we have a DRep instance
  * const instance = ... ;
- * 
+ *
  * // Using try/catch for error handling
  * try {
  *   const result = DRep.freeUnsafe(instance);
@@ -69,7 +69,7 @@ export const free = Effect.fn(
  * } catch (error) {
  *   console.error(`DRep.freeUnsafe failed: ${error.message}`);
  * }
- * 
+ *
  * @since 2.0.0
  * @category MethodsUnsafe
  */
@@ -78,11 +78,11 @@ export const freeUnsafe = (instance: CML.DRep): void =>
 
 /**
  * Method toCborBytes of DRep
- * 
+ *
  * @example
  * import { DRep } from "@lucid-evolution/experimental";
  * import { Effect } from "effect";
- * 
+ *
  * // Using Effect for safe execution with error handling
  * Effect.gen(function*() {
  * // Assume we have a DRep instance
@@ -90,7 +90,7 @@ export const freeUnsafe = (instance: CML.DRep): void =>
  *   const result = yield* DRep.toCborBytes(instance);
  *   console.log(result);
  * });
- * 
+ *
  * @since 2.0.0
  * @category Methods
  */
@@ -102,18 +102,18 @@ export const toCborBytes = Effect.fn(
         new DRepError({
           message: `DRep.toCborBytes failed DRep is not valid for Uint8Array conversion. Hint: Check byte length and encoding.`,
         }),
-    })
+    }),
 );
 
 /**
  * Unsafely calls instance.toCborBytes without Effect wrapper
- * 
+ *
  * @example
  * import { DRep } from "@lucid-evolution/experimental";
- * 
+ *
  * // Assume we have a DRep instance
  * const instance = ... ;
- * 
+ *
  * // Using try/catch for error handling
  * try {
  *   const result = DRep.toCborBytesUnsafe(instance);
@@ -121,7 +121,7 @@ export const toCborBytes = Effect.fn(
  * } catch (error) {
  *   console.error(`DRep.toCborBytesUnsafe failed: ${error.message}`);
  * }
- * 
+ *
  * @since 2.0.0
  * @category MethodsUnsafe
  */
@@ -130,11 +130,11 @@ export const toCborBytesUnsafe = (instance: CML.DRep): Uint8Array =>
 
 /**
  * Method toCanonicalCborBytes of DRep
- * 
+ *
  * @example
  * import { DRep } from "@lucid-evolution/experimental";
  * import { Effect } from "effect";
- * 
+ *
  * // Using Effect for safe execution with error handling
  * Effect.gen(function*() {
  * // Assume we have a DRep instance
@@ -142,7 +142,7 @@ export const toCborBytesUnsafe = (instance: CML.DRep): Uint8Array =>
  *   const result = yield* DRep.toCanonicalCborBytes(instance);
  *   console.log(result);
  * });
- * 
+ *
  * @since 2.0.0
  * @category Methods
  */
@@ -154,18 +154,18 @@ export const toCanonicalCborBytes = Effect.fn(
         new DRepError({
           message: `DRep.toCanonicalCborBytes failed DRep is not valid for Uint8Array conversion. Hint: Check byte length and encoding.`,
         }),
-    })
+    }),
 );
 
 /**
  * Unsafely calls instance.toCanonicalCborBytes without Effect wrapper
- * 
+ *
  * @example
  * import { DRep } from "@lucid-evolution/experimental";
- * 
+ *
  * // Assume we have a DRep instance
  * const instance = ... ;
- * 
+ *
  * // Using try/catch for error handling
  * try {
  *   const result = DRep.toCanonicalCborBytesUnsafe(instance);
@@ -173,7 +173,7 @@ export const toCanonicalCborBytes = Effect.fn(
  * } catch (error) {
  *   console.error(`DRep.toCanonicalCborBytesUnsafe failed: ${error.message}`);
  * }
- * 
+ *
  * @since 2.0.0
  * @category MethodsUnsafe
  */
@@ -182,38 +182,39 @@ export const toCanonicalCborBytesUnsafe = (instance: CML.DRep): Uint8Array =>
 
 /**
  * Static method fromCborBytes of DRep
- * 
+ *
  * @example
  * import { DRep } from "@lucid-evolution/experimental";
  * import { Effect } from "effect";
- * 
+ *
  * // Using Effect for safe execution with error handling
  * Effect.gen(function*() {
- * 
+ *
  *   const result = yield* DRep.fromCborBytes( parameters );
  *   console.log(result);
  * });
- * 
+ *
  * @since 2.0.0
  * @category Constructors
  */
 export const fromCborBytes = Effect.fn(function* (cborBytes: Uint8Array) {
   return yield* Effect.try({
     try: () => CML.DRep.from_cbor_bytes(cborBytes),
-    catch: () => new DRepError({
-      message: `DRep.fromCborBytes failed with parameters: ${cborBytes}. Hint: Check byte length and encoding.`,
-    }),
+    catch: () =>
+      new DRepError({
+        message: `DRep.fromCborBytes failed with parameters: ${cborBytes}. Hint: Check byte length and encoding.`,
+      }),
   });
 });
 
 /**
  * Unsafely calls DRep.fromCborBytes without Effect wrapper
- * 
+ *
  * @example
  * import { DRep } from "@lucid-evolution/experimental";
- * 
- * 
- * 
+ *
+ *
+ *
  * // Using try/catch for error handling
  * try {
  *   const result = DRep.fromCborBytesUnsafe( parameters );
@@ -221,7 +222,7 @@ export const fromCborBytes = Effect.fn(function* (cborBytes: Uint8Array) {
  * } catch (error) {
  *   console.error(`DRep.fromCborBytesUnsafe failed: ${error.message}`);
  * }
- * 
+ *
  * @since 2.0.0
  * @category ConstructorsUnsafe
  */
@@ -230,11 +231,11 @@ export const fromCborBytesUnsafe = (cborBytes: Uint8Array) =>
 
 /**
  * Method toCborHex of DRep
- * 
+ *
  * @example
  * import { DRep } from "@lucid-evolution/experimental";
  * import { Effect } from "effect";
- * 
+ *
  * // Using Effect for safe execution with error handling
  * Effect.gen(function*() {
  * // Assume we have a DRep instance
@@ -242,7 +243,7 @@ export const fromCborBytesUnsafe = (cborBytes: Uint8Array) =>
  *   const result = yield* DRep.toCborHex(instance);
  *   console.log(result);
  * });
- * 
+ *
  * @since 2.0.0
  * @category Methods
  */
@@ -254,18 +255,18 @@ export const toCborHex = Effect.fn(
         new DRepError({
           message: `DRep.toCborHex failed DRep is not valid for string conversion. Hint: Make sure it's a valid hex string representing CBOR data.`,
         }),
-    })
+    }),
 );
 
 /**
  * Unsafely calls instance.toCborHex without Effect wrapper
- * 
+ *
  * @example
  * import { DRep } from "@lucid-evolution/experimental";
- * 
+ *
  * // Assume we have a DRep instance
  * const instance = ... ;
- * 
+ *
  * // Using try/catch for error handling
  * try {
  *   const result = DRep.toCborHexUnsafe(instance);
@@ -273,7 +274,7 @@ export const toCborHex = Effect.fn(
  * } catch (error) {
  *   console.error(`DRep.toCborHexUnsafe failed: ${error.message}`);
  * }
- * 
+ *
  * @since 2.0.0
  * @category MethodsUnsafe
  */
@@ -282,11 +283,11 @@ export const toCborHexUnsafe = (instance: CML.DRep): string =>
 
 /**
  * Method toCanonicalCborHex of DRep
- * 
+ *
  * @example
  * import { DRep } from "@lucid-evolution/experimental";
  * import { Effect } from "effect";
- * 
+ *
  * // Using Effect for safe execution with error handling
  * Effect.gen(function*() {
  * // Assume we have a DRep instance
@@ -294,7 +295,7 @@ export const toCborHexUnsafe = (instance: CML.DRep): string =>
  *   const result = yield* DRep.toCanonicalCborHex(instance);
  *   console.log(result);
  * });
- * 
+ *
  * @since 2.0.0
  * @category Methods
  */
@@ -306,18 +307,18 @@ export const toCanonicalCborHex = Effect.fn(
         new DRepError({
           message: `DRep.toCanonicalCborHex failed DRep is not valid for string conversion. Hint: Make sure it's a valid hex string representing CBOR data.`,
         }),
-    })
+    }),
 );
 
 /**
  * Unsafely calls instance.toCanonicalCborHex without Effect wrapper
- * 
+ *
  * @example
  * import { DRep } from "@lucid-evolution/experimental";
- * 
+ *
  * // Assume we have a DRep instance
  * const instance = ... ;
- * 
+ *
  * // Using try/catch for error handling
  * try {
  *   const result = DRep.toCanonicalCborHexUnsafe(instance);
@@ -325,7 +326,7 @@ export const toCanonicalCborHex = Effect.fn(
  * } catch (error) {
  *   console.error(`DRep.toCanonicalCborHexUnsafe failed: ${error.message}`);
  * }
- * 
+ *
  * @since 2.0.0
  * @category MethodsUnsafe
  */
@@ -334,38 +335,39 @@ export const toCanonicalCborHexUnsafe = (instance: CML.DRep): string =>
 
 /**
  * Static method fromCborHex of DRep
- * 
+ *
  * @example
  * import { DRep } from "@lucid-evolution/experimental";
  * import { Effect } from "effect";
- * 
+ *
  * // Using Effect for safe execution with error handling
  * Effect.gen(function*() {
- * 
+ *
  *   const result = yield* DRep.fromCborHex( parameters );
  *   console.log(result);
  * });
- * 
+ *
  * @since 2.0.0
  * @category Constructors
  */
 export const fromCborHex = Effect.fn(function* (cborBytes: string) {
   return yield* Effect.try({
     try: () => CML.DRep.from_cbor_hex(cborBytes),
-    catch: () => new DRepError({
-      message: `DRep.fromCborHex failed with parameters: ${cborBytes}. Hint: Make sure it's a valid hex string representing CBOR data.`,
-    }),
+    catch: () =>
+      new DRepError({
+        message: `DRep.fromCborHex failed with parameters: ${cborBytes}. Hint: Make sure it's a valid hex string representing CBOR data.`,
+      }),
   });
 });
 
 /**
  * Unsafely calls DRep.fromCborHex without Effect wrapper
- * 
+ *
  * @example
  * import { DRep } from "@lucid-evolution/experimental";
- * 
- * 
- * 
+ *
+ *
+ *
  * // Using try/catch for error handling
  * try {
  *   const result = DRep.fromCborHexUnsafe( parameters );
@@ -373,7 +375,7 @@ export const fromCborHex = Effect.fn(function* (cborBytes: string) {
  * } catch (error) {
  *   console.error(`DRep.fromCborHexUnsafe failed: ${error.message}`);
  * }
- * 
+ *
  * @since 2.0.0
  * @category ConstructorsUnsafe
  */
@@ -382,11 +384,11 @@ export const fromCborHexUnsafe = (cborBytes: string) =>
 
 /**
  * Method toJson of DRep
- * 
+ *
  * @example
  * import { DRep } from "@lucid-evolution/experimental";
  * import { Effect } from "effect";
- * 
+ *
  * // Using Effect for safe execution with error handling
  * Effect.gen(function*() {
  * // Assume we have a DRep instance
@@ -394,7 +396,7 @@ export const fromCborHexUnsafe = (cborBytes: string) =>
  *   const result = yield* DRep.toJson(instance);
  *   console.log(result);
  * });
- * 
+ *
  * @since 2.0.0
  * @category Methods
  */
@@ -406,18 +408,18 @@ export const toJson = Effect.fn(
         new DRepError({
           message: `DRep.toJson failed DRep is not valid for string conversion. Hint: Validate your JSON structure.`,
         }),
-    })
+    }),
 );
 
 /**
  * Unsafely calls instance.toJson without Effect wrapper
- * 
+ *
  * @example
  * import { DRep } from "@lucid-evolution/experimental";
- * 
+ *
  * // Assume we have a DRep instance
  * const instance = ... ;
- * 
+ *
  * // Using try/catch for error handling
  * try {
  *   const result = DRep.toJsonUnsafe(instance);
@@ -425,7 +427,7 @@ export const toJson = Effect.fn(
  * } catch (error) {
  *   console.error(`DRep.toJsonUnsafe failed: ${error.message}`);
  * }
- * 
+ *
  * @since 2.0.0
  * @category MethodsUnsafe
  */
@@ -434,11 +436,11 @@ export const toJsonUnsafe = (instance: CML.DRep): string =>
 
 /**
  * Method toJsValue of DRep
- * 
+ *
  * @example
  * import { DRep } from "@lucid-evolution/experimental";
  * import { Effect } from "effect";
- * 
+ *
  * // Using Effect for safe execution with error handling
  * Effect.gen(function*() {
  * // Assume we have a DRep instance
@@ -446,7 +448,7 @@ export const toJsonUnsafe = (instance: CML.DRep): string =>
  *   const result = yield* DRep.toJsValue(instance);
  *   console.log(result);
  * });
- * 
+ *
  * @since 2.0.0
  * @category Methods
  */
@@ -458,18 +460,18 @@ export const toJsValue = Effect.fn(
         new DRepError({
           message: `DRep.toJsValue failed DRep is not valid for any conversion. `,
         }),
-    })
+    }),
 );
 
 /**
  * Unsafely calls instance.toJsValue without Effect wrapper
- * 
+ *
  * @example
  * import { DRep } from "@lucid-evolution/experimental";
- * 
+ *
  * // Assume we have a DRep instance
  * const instance = ... ;
- * 
+ *
  * // Using try/catch for error handling
  * try {
  *   const result = DRep.toJsValueUnsafe(instance);
@@ -477,7 +479,7 @@ export const toJsValue = Effect.fn(
  * } catch (error) {
  *   console.error(`DRep.toJsValueUnsafe failed: ${error.message}`);
  * }
- * 
+ *
  * @since 2.0.0
  * @category MethodsUnsafe
  */
@@ -486,38 +488,39 @@ export const toJsValueUnsafe = (instance: CML.DRep): any =>
 
 /**
  * Static method fromJson of DRep
- * 
+ *
  * @example
  * import { DRep } from "@lucid-evolution/experimental";
  * import { Effect } from "effect";
- * 
+ *
  * // Using Effect for safe execution with error handling
  * Effect.gen(function*() {
- * 
+ *
  *   const result = yield* DRep.fromJson( parameters );
  *   console.log(result);
  * });
- * 
+ *
  * @since 2.0.0
  * @category Constructors
  */
 export const fromJson = Effect.fn(function* (json: string) {
   return yield* Effect.try({
     try: () => CML.DRep.from_json(json),
-    catch: () => new DRepError({
-      message: `DRep.fromJson failed with parameters: ${json}. Hint: Validate your JSON structure.`,
-    }),
+    catch: () =>
+      new DRepError({
+        message: `DRep.fromJson failed with parameters: ${json}. Hint: Validate your JSON structure.`,
+      }),
   });
 });
 
 /**
  * Unsafely calls DRep.fromJson without Effect wrapper
- * 
+ *
  * @example
  * import { DRep } from "@lucid-evolution/experimental";
- * 
- * 
- * 
+ *
+ *
+ *
  * // Using try/catch for error handling
  * try {
  *   const result = DRep.fromJsonUnsafe( parameters );
@@ -525,47 +528,47 @@ export const fromJson = Effect.fn(function* (json: string) {
  * } catch (error) {
  *   console.error(`DRep.fromJsonUnsafe failed: ${error.message}`);
  * }
- * 
+ *
  * @since 2.0.0
  * @category ConstructorsUnsafe
  */
-export const fromJsonUnsafe = (json: string) =>
-  Effect.runSync(fromJson(json));
+export const fromJsonUnsafe = (json: string) => Effect.runSync(fromJson(json));
 
 /**
  * Static method newKey of DRep
- * 
+ *
  * @example
  * import { DRep } from "@lucid-evolution/experimental";
  * import { Effect } from "effect";
- * 
+ *
  * // Using Effect for safe execution with error handling
  * Effect.gen(function*() {
- * 
+ *
  *   const result = yield* DRep.newKey( parameters );
  *   console.log(result);
  * });
- * 
+ *
  * @since 2.0.0
  * @category Constructors
  */
 export const newKey = Effect.fn(function* (pool: CML.Ed25519KeyHash) {
   return yield* Effect.try({
     try: () => CML.DRep.new_key(pool),
-    catch: () => new DRepError({
-      message: `DRep.newKey failed with parameters: ${pool} (Ed25519KeyHash). `,
-    }),
+    catch: () =>
+      new DRepError({
+        message: `DRep.newKey failed with parameters: ${pool} (Ed25519KeyHash). `,
+      }),
   });
 });
 
 /**
  * Unsafely calls DRep.newKey without Effect wrapper
- * 
+ *
  * @example
  * import { DRep } from "@lucid-evolution/experimental";
- * 
- * 
- * 
+ *
+ *
+ *
  * // Using try/catch for error handling
  * try {
  *   const result = DRep.newKeyUnsafe( parameters );
@@ -573,7 +576,7 @@ export const newKey = Effect.fn(function* (pool: CML.Ed25519KeyHash) {
  * } catch (error) {
  *   console.error(`DRep.newKeyUnsafe failed: ${error.message}`);
  * }
- * 
+ *
  * @since 2.0.0
  * @category ConstructorsUnsafe
  */
@@ -582,38 +585,39 @@ export const newKeyUnsafe = (pool: CML.Ed25519KeyHash) =>
 
 /**
  * Static method newScript of DRep
- * 
+ *
  * @example
  * import { DRep } from "@lucid-evolution/experimental";
  * import { Effect } from "effect";
- * 
+ *
  * // Using Effect for safe execution with error handling
  * Effect.gen(function*() {
- * 
+ *
  *   const result = yield* DRep.newScript( parameters );
  *   console.log(result);
  * });
- * 
+ *
  * @since 2.0.0
  * @category Constructors
  */
 export const newScript = Effect.fn(function* (scriptHash: CML.ScriptHash) {
   return yield* Effect.try({
     try: () => CML.DRep.new_script(scriptHash),
-    catch: () => new DRepError({
-      message: `DRep.newScript failed with parameters: ${scriptHash} (ScriptHash). `,
-    }),
+    catch: () =>
+      new DRepError({
+        message: `DRep.newScript failed with parameters: ${scriptHash} (ScriptHash). `,
+      }),
   });
 });
 
 /**
  * Unsafely calls DRep.newScript without Effect wrapper
- * 
+ *
  * @example
  * import { DRep } from "@lucid-evolution/experimental";
- * 
- * 
- * 
+ *
+ *
+ *
  * // Using try/catch for error handling
  * try {
  *   const result = DRep.newScriptUnsafe( parameters );
@@ -621,7 +625,7 @@ export const newScript = Effect.fn(function* (scriptHash: CML.ScriptHash) {
  * } catch (error) {
  *   console.error(`DRep.newScriptUnsafe failed: ${error.message}`);
  * }
- * 
+ *
  * @since 2.0.0
  * @category ConstructorsUnsafe
  */
@@ -630,38 +634,39 @@ export const newScriptUnsafe = (scriptHash: CML.ScriptHash) =>
 
 /**
  * Static method newAlwaysAbstain of DRep
- * 
+ *
  * @example
  * import { DRep } from "@lucid-evolution/experimental";
  * import { Effect } from "effect";
- * 
+ *
  * // Using Effect for safe execution with error handling
  * Effect.gen(function*() {
- * 
+ *
  *   const result = yield* DRep.newAlwaysAbstain();
  *   console.log(result);
  * });
- * 
+ *
  * @since 2.0.0
  * @category Constructors
  */
 export const newAlwaysAbstain = Effect.fn(function* () {
   return yield* Effect.try({
     try: () => CML.DRep.new_always_abstain(),
-    catch: () => new DRepError({
-      message: `DRep.newAlwaysAbstain failed `,
-    }),
+    catch: () =>
+      new DRepError({
+        message: `DRep.newAlwaysAbstain failed `,
+      }),
   });
 });
 
 /**
  * Unsafely calls DRep.newAlwaysAbstain without Effect wrapper
- * 
+ *
  * @example
  * import { DRep } from "@lucid-evolution/experimental";
- * 
- * 
- * 
+ *
+ *
+ *
  * // Using try/catch for error handling
  * try {
  *   const result = DRep.newAlwaysAbstainUnsafe();
@@ -669,47 +674,47 @@ export const newAlwaysAbstain = Effect.fn(function* () {
  * } catch (error) {
  *   console.error(`DRep.newAlwaysAbstainUnsafe failed: ${error.message}`);
  * }
- * 
+ *
  * @since 2.0.0
  * @category ConstructorsUnsafe
  */
-export const newAlwaysAbstainUnsafe = () =>
-  Effect.runSync(newAlwaysAbstain());
+export const newAlwaysAbstainUnsafe = () => Effect.runSync(newAlwaysAbstain());
 
 /**
  * Static method newAlwaysNoConfidence of DRep
- * 
+ *
  * @example
  * import { DRep } from "@lucid-evolution/experimental";
  * import { Effect } from "effect";
- * 
+ *
  * // Using Effect for safe execution with error handling
  * Effect.gen(function*() {
- * 
+ *
  *   const result = yield* DRep.newAlwaysNoConfidence();
  *   console.log(result);
  * });
- * 
+ *
  * @since 2.0.0
  * @category Constructors
  */
 export const newAlwaysNoConfidence = Effect.fn(function* () {
   return yield* Effect.try({
     try: () => CML.DRep.new_always_no_confidence(),
-    catch: () => new DRepError({
-      message: `DRep.newAlwaysNoConfidence failed `,
-    }),
+    catch: () =>
+      new DRepError({
+        message: `DRep.newAlwaysNoConfidence failed `,
+      }),
   });
 });
 
 /**
  * Unsafely calls DRep.newAlwaysNoConfidence without Effect wrapper
- * 
+ *
  * @example
  * import { DRep } from "@lucid-evolution/experimental";
- * 
- * 
- * 
+ *
+ *
+ *
  * // Using try/catch for error handling
  * try {
  *   const result = DRep.newAlwaysNoConfidenceUnsafe();
@@ -717,7 +722,7 @@ export const newAlwaysNoConfidence = Effect.fn(function* () {
  * } catch (error) {
  *   console.error(`DRep.newAlwaysNoConfidenceUnsafe failed: ${error.message}`);
  * }
- * 
+ *
  * @since 2.0.0
  * @category ConstructorsUnsafe
  */
@@ -726,11 +731,11 @@ export const newAlwaysNoConfidenceUnsafe = () =>
 
 /**
  * Method kind of DRep
- * 
+ *
  * @example
  * import { DRep } from "@lucid-evolution/experimental";
  * import { Effect } from "effect";
- * 
+ *
  * // Using Effect for safe execution with error handling
  * Effect.gen(function*() {
  * // Assume we have a DRep instance
@@ -738,7 +743,7 @@ export const newAlwaysNoConfidenceUnsafe = () =>
  *   const result = yield* DRep.kind(instance);
  *   console.log(result);
  * });
- * 
+ *
  * @since 2.0.0
  * @category Methods
  */
@@ -750,18 +755,18 @@ export const kind = Effect.fn(
         new DRepError({
           message: `DRep.kind failed `,
         }),
-    })
+    }),
 );
 
 /**
  * Unsafely calls instance.kind without Effect wrapper
- * 
+ *
  * @example
  * import { DRep } from "@lucid-evolution/experimental";
- * 
+ *
  * // Assume we have a DRep instance
  * const instance = ... ;
- * 
+ *
  * // Using try/catch for error handling
  * try {
  *   const result = DRep.kindUnsafe(instance);
@@ -769,7 +774,7 @@ export const kind = Effect.fn(
  * } catch (error) {
  *   console.error(`DRep.kindUnsafe failed: ${error.message}`);
  * }
- * 
+ *
  * @since 2.0.0
  * @category MethodsUnsafe
  */
@@ -778,11 +783,11 @@ export const kindUnsafe = (instance: CML.DRep): CML.DRepKind =>
 
 /**
  * Method asKey of DRep
- * 
+ *
  * @example
  * import { DRep } from "@lucid-evolution/experimental";
  * import { Effect } from "effect";
- * 
+ *
  * // Using Effect for safe execution with error handling
  * Effect.gen(function*() {
  * // Assume we have a DRep instance
@@ -790,30 +795,32 @@ export const kindUnsafe = (instance: CML.DRep): CML.DRepKind =>
  *   const result = yield* DRep.asKey(instance);
  *   console.log(result);
  * });
- * 
+ *
  * @since 2.0.0
  * @category Methods
  */
 export const asKey = Effect.fn(
-  (instance: CML.DRep): Effect.Effect<CML.Ed25519KeyHash | undefined, DRepError> =>
+  (
+    instance: CML.DRep,
+  ): Effect.Effect<CML.Ed25519KeyHash | undefined, DRepError> =>
     Effect.try({
       try: () => instance.as_key(),
       catch: () =>
         new DRepError({
           message: `DRep.asKey failed `,
         }),
-    })
+    }),
 );
 
 /**
  * Unsafely calls instance.asKey without Effect wrapper
- * 
+ *
  * @example
  * import { DRep } from "@lucid-evolution/experimental";
- * 
+ *
  * // Assume we have a DRep instance
  * const instance = ... ;
- * 
+ *
  * // Using try/catch for error handling
  * try {
  *   const result = DRep.asKeyUnsafe(instance);
@@ -821,20 +828,21 @@ export const asKey = Effect.fn(
  * } catch (error) {
  *   console.error(`DRep.asKeyUnsafe failed: ${error.message}`);
  * }
- * 
+ *
  * @since 2.0.0
  * @category MethodsUnsafe
  */
-export const asKeyUnsafe = (instance: CML.DRep): CML.Ed25519KeyHash | undefined =>
-  Effect.runSync(asKey(instance));
+export const asKeyUnsafe = (
+  instance: CML.DRep,
+): CML.Ed25519KeyHash | undefined => Effect.runSync(asKey(instance));
 
 /**
  * Method asScript of DRep
- * 
+ *
  * @example
  * import { DRep } from "@lucid-evolution/experimental";
  * import { Effect } from "effect";
- * 
+ *
  * // Using Effect for safe execution with error handling
  * Effect.gen(function*() {
  * // Assume we have a DRep instance
@@ -842,7 +850,7 @@ export const asKeyUnsafe = (instance: CML.DRep): CML.Ed25519KeyHash | undefined 
  *   const result = yield* DRep.asScript(instance);
  *   console.log(result);
  * });
- * 
+ *
  * @since 2.0.0
  * @category Methods
  */
@@ -854,18 +862,18 @@ export const asScript = Effect.fn(
         new DRepError({
           message: `DRep.asScript failed `,
         }),
-    })
+    }),
 );
 
 /**
  * Unsafely calls instance.asScript without Effect wrapper
- * 
+ *
  * @example
  * import { DRep } from "@lucid-evolution/experimental";
- * 
+ *
  * // Assume we have a DRep instance
  * const instance = ... ;
- * 
+ *
  * // Using try/catch for error handling
  * try {
  *   const result = DRep.asScriptUnsafe(instance);
@@ -873,9 +881,10 @@ export const asScript = Effect.fn(
  * } catch (error) {
  *   console.error(`DRep.asScriptUnsafe failed: ${error.message}`);
  * }
- * 
+ *
  * @since 2.0.0
  * @category MethodsUnsafe
  */
-export const asScriptUnsafe = (instance: CML.DRep): CML.ScriptHash | undefined =>
-  Effect.runSync(asScript(instance));
+export const asScriptUnsafe = (
+  instance: CML.DRep,
+): CML.ScriptHash | undefined => Effect.runSync(asScript(instance));

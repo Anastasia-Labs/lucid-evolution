@@ -14,7 +14,7 @@ export type BigInteger = CML.BigInteger;
 
 /**
  * Error class for BigInteger operations
- * 
+ *
  * This error is thrown when operations on BigInteger instances fail.
  *
  * @since 2.0.0
@@ -26,11 +26,11 @@ export class BigIntegerError extends Data.TaggedError("BigIntegerError")<{
 
 /**
  * Method free of BigInteger
- * 
+ *
  * @example
  * import { BigInteger } from "@lucid-evolution/experimental";
  * import { Effect } from "effect";
- * 
+ *
  * // Using Effect for safe execution with error handling
  * Effect.gen(function*() {
  * // Assume we have a BigInteger instance
@@ -38,7 +38,7 @@ export class BigIntegerError extends Data.TaggedError("BigIntegerError")<{
  *   const result = yield* BigInteger.free(instance);
  *   console.log(result);
  * });
- * 
+ *
  * @since 2.0.0
  * @category Methods
  */
@@ -50,18 +50,18 @@ export const free = Effect.fn(
         new BigIntegerError({
           message: `BigInteger.free failed Hint: Check if you're calling free() more than once.`,
         }),
-    })
+    }),
 );
 
 /**
  * Unsafely calls instance.free without Effect wrapper
- * 
+ *
  * @example
  * import { BigInteger } from "@lucid-evolution/experimental";
- * 
+ *
  * // Assume we have a BigInteger instance
  * const instance = ... ;
- * 
+ *
  * // Using try/catch for error handling
  * try {
  *   const result = BigInteger.freeUnsafe(instance);
@@ -69,7 +69,7 @@ export const free = Effect.fn(
  * } catch (error) {
  *   console.error(`BigInteger.freeUnsafe failed: ${error.message}`);
  * }
- * 
+ *
  * @since 2.0.0
  * @category MethodsUnsafe
  */
@@ -78,11 +78,11 @@ export const freeUnsafe = (instance: CML.BigInteger): void =>
 
 /**
  * Method toCborBytes of BigInteger
- * 
+ *
  * @example
  * import { BigInteger } from "@lucid-evolution/experimental";
  * import { Effect } from "effect";
- * 
+ *
  * // Using Effect for safe execution with error handling
  * Effect.gen(function*() {
  * // Assume we have a BigInteger instance
@@ -90,7 +90,7 @@ export const freeUnsafe = (instance: CML.BigInteger): void =>
  *   const result = yield* BigInteger.toCborBytes(instance);
  *   console.log(result);
  * });
- * 
+ *
  * @since 2.0.0
  * @category Methods
  */
@@ -102,18 +102,18 @@ export const toCborBytes = Effect.fn(
         new BigIntegerError({
           message: `BigInteger.toCborBytes failed BigInteger is not valid for Uint8Array conversion. Hint: Check byte length and encoding.`,
         }),
-    })
+    }),
 );
 
 /**
  * Unsafely calls instance.toCborBytes without Effect wrapper
- * 
+ *
  * @example
  * import { BigInteger } from "@lucid-evolution/experimental";
- * 
+ *
  * // Assume we have a BigInteger instance
  * const instance = ... ;
- * 
+ *
  * // Using try/catch for error handling
  * try {
  *   const result = BigInteger.toCborBytesUnsafe(instance);
@@ -121,7 +121,7 @@ export const toCborBytes = Effect.fn(
  * } catch (error) {
  *   console.error(`BigInteger.toCborBytesUnsafe failed: ${error.message}`);
  * }
- * 
+ *
  * @since 2.0.0
  * @category MethodsUnsafe
  */
@@ -130,11 +130,11 @@ export const toCborBytesUnsafe = (instance: CML.BigInteger): Uint8Array =>
 
 /**
  * Method toCanonicalCborBytes of BigInteger
- * 
+ *
  * @example
  * import { BigInteger } from "@lucid-evolution/experimental";
  * import { Effect } from "effect";
- * 
+ *
  * // Using Effect for safe execution with error handling
  * Effect.gen(function*() {
  * // Assume we have a BigInteger instance
@@ -142,7 +142,7 @@ export const toCborBytesUnsafe = (instance: CML.BigInteger): Uint8Array =>
  *   const result = yield* BigInteger.toCanonicalCborBytes(instance);
  *   console.log(result);
  * });
- * 
+ *
  * @since 2.0.0
  * @category Methods
  */
@@ -154,18 +154,18 @@ export const toCanonicalCborBytes = Effect.fn(
         new BigIntegerError({
           message: `BigInteger.toCanonicalCborBytes failed BigInteger is not valid for Uint8Array conversion. Hint: Check byte length and encoding.`,
         }),
-    })
+    }),
 );
 
 /**
  * Unsafely calls instance.toCanonicalCborBytes without Effect wrapper
- * 
+ *
  * @example
  * import { BigInteger } from "@lucid-evolution/experimental";
- * 
+ *
  * // Assume we have a BigInteger instance
  * const instance = ... ;
- * 
+ *
  * // Using try/catch for error handling
  * try {
  *   const result = BigInteger.toCanonicalCborBytesUnsafe(instance);
@@ -173,47 +173,49 @@ export const toCanonicalCborBytes = Effect.fn(
  * } catch (error) {
  *   console.error(`BigInteger.toCanonicalCborBytesUnsafe failed: ${error.message}`);
  * }
- * 
+ *
  * @since 2.0.0
  * @category MethodsUnsafe
  */
-export const toCanonicalCborBytesUnsafe = (instance: CML.BigInteger): Uint8Array =>
-  Effect.runSync(toCanonicalCborBytes(instance));
+export const toCanonicalCborBytesUnsafe = (
+  instance: CML.BigInteger,
+): Uint8Array => Effect.runSync(toCanonicalCborBytes(instance));
 
 /**
  * Static method fromCborBytes of BigInteger
- * 
+ *
  * @example
  * import { BigInteger } from "@lucid-evolution/experimental";
  * import { Effect } from "effect";
- * 
+ *
  * // Using Effect for safe execution with error handling
  * Effect.gen(function*() {
- * 
+ *
  *   const result = yield* BigInteger.fromCborBytes( parameters );
  *   console.log(result);
  * });
- * 
+ *
  * @since 2.0.0
  * @category Constructors
  */
 export const fromCborBytes = Effect.fn(function* (cborBytes: Uint8Array) {
   return yield* Effect.try({
     try: () => CML.BigInteger.from_cbor_bytes(cborBytes),
-    catch: () => new BigIntegerError({
-      message: `BigInteger.fromCborBytes failed with parameters: ${cborBytes}. Hint: Check byte length and encoding.`,
-    }),
+    catch: () =>
+      new BigIntegerError({
+        message: `BigInteger.fromCborBytes failed with parameters: ${cborBytes}. Hint: Check byte length and encoding.`,
+      }),
   });
 });
 
 /**
  * Unsafely calls BigInteger.fromCborBytes without Effect wrapper
- * 
+ *
  * @example
  * import { BigInteger } from "@lucid-evolution/experimental";
- * 
- * 
- * 
+ *
+ *
+ *
  * // Using try/catch for error handling
  * try {
  *   const result = BigInteger.fromCborBytesUnsafe( parameters );
@@ -221,7 +223,7 @@ export const fromCborBytes = Effect.fn(function* (cborBytes: Uint8Array) {
  * } catch (error) {
  *   console.error(`BigInteger.fromCborBytesUnsafe failed: ${error.message}`);
  * }
- * 
+ *
  * @since 2.0.0
  * @category ConstructorsUnsafe
  */
@@ -230,11 +232,11 @@ export const fromCborBytesUnsafe = (cborBytes: Uint8Array) =>
 
 /**
  * Method toCborHex of BigInteger
- * 
+ *
  * @example
  * import { BigInteger } from "@lucid-evolution/experimental";
  * import { Effect } from "effect";
- * 
+ *
  * // Using Effect for safe execution with error handling
  * Effect.gen(function*() {
  * // Assume we have a BigInteger instance
@@ -242,7 +244,7 @@ export const fromCborBytesUnsafe = (cborBytes: Uint8Array) =>
  *   const result = yield* BigInteger.toCborHex(instance);
  *   console.log(result);
  * });
- * 
+ *
  * @since 2.0.0
  * @category Methods
  */
@@ -254,18 +256,18 @@ export const toCborHex = Effect.fn(
         new BigIntegerError({
           message: `BigInteger.toCborHex failed BigInteger is not valid for string conversion. Hint: Make sure it's a valid hex string representing CBOR data.`,
         }),
-    })
+    }),
 );
 
 /**
  * Unsafely calls instance.toCborHex without Effect wrapper
- * 
+ *
  * @example
  * import { BigInteger } from "@lucid-evolution/experimental";
- * 
+ *
  * // Assume we have a BigInteger instance
  * const instance = ... ;
- * 
+ *
  * // Using try/catch for error handling
  * try {
  *   const result = BigInteger.toCborHexUnsafe(instance);
@@ -273,7 +275,7 @@ export const toCborHex = Effect.fn(
  * } catch (error) {
  *   console.error(`BigInteger.toCborHexUnsafe failed: ${error.message}`);
  * }
- * 
+ *
  * @since 2.0.0
  * @category MethodsUnsafe
  */
@@ -282,11 +284,11 @@ export const toCborHexUnsafe = (instance: CML.BigInteger): string =>
 
 /**
  * Method toCanonicalCborHex of BigInteger
- * 
+ *
  * @example
  * import { BigInteger } from "@lucid-evolution/experimental";
  * import { Effect } from "effect";
- * 
+ *
  * // Using Effect for safe execution with error handling
  * Effect.gen(function*() {
  * // Assume we have a BigInteger instance
@@ -294,7 +296,7 @@ export const toCborHexUnsafe = (instance: CML.BigInteger): string =>
  *   const result = yield* BigInteger.toCanonicalCborHex(instance);
  *   console.log(result);
  * });
- * 
+ *
  * @since 2.0.0
  * @category Methods
  */
@@ -306,18 +308,18 @@ export const toCanonicalCborHex = Effect.fn(
         new BigIntegerError({
           message: `BigInteger.toCanonicalCborHex failed BigInteger is not valid for string conversion. Hint: Make sure it's a valid hex string representing CBOR data.`,
         }),
-    })
+    }),
 );
 
 /**
  * Unsafely calls instance.toCanonicalCborHex without Effect wrapper
- * 
+ *
  * @example
  * import { BigInteger } from "@lucid-evolution/experimental";
- * 
+ *
  * // Assume we have a BigInteger instance
  * const instance = ... ;
- * 
+ *
  * // Using try/catch for error handling
  * try {
  *   const result = BigInteger.toCanonicalCborHexUnsafe(instance);
@@ -325,7 +327,7 @@ export const toCanonicalCborHex = Effect.fn(
  * } catch (error) {
  *   console.error(`BigInteger.toCanonicalCborHexUnsafe failed: ${error.message}`);
  * }
- * 
+ *
  * @since 2.0.0
  * @category MethodsUnsafe
  */
@@ -334,38 +336,39 @@ export const toCanonicalCborHexUnsafe = (instance: CML.BigInteger): string =>
 
 /**
  * Static method fromCborHex of BigInteger
- * 
+ *
  * @example
  * import { BigInteger } from "@lucid-evolution/experimental";
  * import { Effect } from "effect";
- * 
+ *
  * // Using Effect for safe execution with error handling
  * Effect.gen(function*() {
- * 
+ *
  *   const result = yield* BigInteger.fromCborHex( parameters );
  *   console.log(result);
  * });
- * 
+ *
  * @since 2.0.0
  * @category Constructors
  */
 export const fromCborHex = Effect.fn(function* (cborBytes: string) {
   return yield* Effect.try({
     try: () => CML.BigInteger.from_cbor_hex(cborBytes),
-    catch: () => new BigIntegerError({
-      message: `BigInteger.fromCborHex failed with parameters: ${cborBytes}. Hint: Make sure it's a valid hex string representing CBOR data.`,
-    }),
+    catch: () =>
+      new BigIntegerError({
+        message: `BigInteger.fromCborHex failed with parameters: ${cborBytes}. Hint: Make sure it's a valid hex string representing CBOR data.`,
+      }),
   });
 });
 
 /**
  * Unsafely calls BigInteger.fromCborHex without Effect wrapper
- * 
+ *
  * @example
  * import { BigInteger } from "@lucid-evolution/experimental";
- * 
- * 
- * 
+ *
+ *
+ *
  * // Using try/catch for error handling
  * try {
  *   const result = BigInteger.fromCborHexUnsafe( parameters );
@@ -373,7 +376,7 @@ export const fromCborHex = Effect.fn(function* (cborBytes: string) {
  * } catch (error) {
  *   console.error(`BigInteger.fromCborHexUnsafe failed: ${error.message}`);
  * }
- * 
+ *
  * @since 2.0.0
  * @category ConstructorsUnsafe
  */
@@ -382,11 +385,11 @@ export const fromCborHexUnsafe = (cborBytes: string) =>
 
 /**
  * Method toJson of BigInteger
- * 
+ *
  * @example
  * import { BigInteger } from "@lucid-evolution/experimental";
  * import { Effect } from "effect";
- * 
+ *
  * // Using Effect for safe execution with error handling
  * Effect.gen(function*() {
  * // Assume we have a BigInteger instance
@@ -394,7 +397,7 @@ export const fromCborHexUnsafe = (cborBytes: string) =>
  *   const result = yield* BigInteger.toJson(instance);
  *   console.log(result);
  * });
- * 
+ *
  * @since 2.0.0
  * @category Methods
  */
@@ -406,18 +409,18 @@ export const toJson = Effect.fn(
         new BigIntegerError({
           message: `BigInteger.toJson failed BigInteger is not valid for string conversion. Hint: Validate your JSON structure.`,
         }),
-    })
+    }),
 );
 
 /**
  * Unsafely calls instance.toJson without Effect wrapper
- * 
+ *
  * @example
  * import { BigInteger } from "@lucid-evolution/experimental";
- * 
+ *
  * // Assume we have a BigInteger instance
  * const instance = ... ;
- * 
+ *
  * // Using try/catch for error handling
  * try {
  *   const result = BigInteger.toJsonUnsafe(instance);
@@ -425,7 +428,7 @@ export const toJson = Effect.fn(
  * } catch (error) {
  *   console.error(`BigInteger.toJsonUnsafe failed: ${error.message}`);
  * }
- * 
+ *
  * @since 2.0.0
  * @category MethodsUnsafe
  */
@@ -434,11 +437,11 @@ export const toJsonUnsafe = (instance: CML.BigInteger): string =>
 
 /**
  * Method toJsValue of BigInteger
- * 
+ *
  * @example
  * import { BigInteger } from "@lucid-evolution/experimental";
  * import { Effect } from "effect";
- * 
+ *
  * // Using Effect for safe execution with error handling
  * Effect.gen(function*() {
  * // Assume we have a BigInteger instance
@@ -446,7 +449,7 @@ export const toJsonUnsafe = (instance: CML.BigInteger): string =>
  *   const result = yield* BigInteger.toJsValue(instance);
  *   console.log(result);
  * });
- * 
+ *
  * @since 2.0.0
  * @category Methods
  */
@@ -458,18 +461,18 @@ export const toJsValue = Effect.fn(
         new BigIntegerError({
           message: `BigInteger.toJsValue failed BigInteger is not valid for any conversion. `,
         }),
-    })
+    }),
 );
 
 /**
  * Unsafely calls instance.toJsValue without Effect wrapper
- * 
+ *
  * @example
  * import { BigInteger } from "@lucid-evolution/experimental";
- * 
+ *
  * // Assume we have a BigInteger instance
  * const instance = ... ;
- * 
+ *
  * // Using try/catch for error handling
  * try {
  *   const result = BigInteger.toJsValueUnsafe(instance);
@@ -477,7 +480,7 @@ export const toJsValue = Effect.fn(
  * } catch (error) {
  *   console.error(`BigInteger.toJsValueUnsafe failed: ${error.message}`);
  * }
- * 
+ *
  * @since 2.0.0
  * @category MethodsUnsafe
  */
@@ -486,38 +489,39 @@ export const toJsValueUnsafe = (instance: CML.BigInteger): any =>
 
 /**
  * Static method fromJson of BigInteger
- * 
+ *
  * @example
  * import { BigInteger } from "@lucid-evolution/experimental";
  * import { Effect } from "effect";
- * 
+ *
  * // Using Effect for safe execution with error handling
  * Effect.gen(function*() {
- * 
+ *
  *   const result = yield* BigInteger.fromJson( parameters );
  *   console.log(result);
  * });
- * 
+ *
  * @since 2.0.0
  * @category Constructors
  */
 export const fromJson = Effect.fn(function* (json: string) {
   return yield* Effect.try({
     try: () => CML.BigInteger.from_json(json),
-    catch: () => new BigIntegerError({
-      message: `BigInteger.fromJson failed with parameters: ${json}. Hint: Validate your JSON structure.`,
-    }),
+    catch: () =>
+      new BigIntegerError({
+        message: `BigInteger.fromJson failed with parameters: ${json}. Hint: Validate your JSON structure.`,
+      }),
   });
 });
 
 /**
  * Unsafely calls BigInteger.fromJson without Effect wrapper
- * 
+ *
  * @example
  * import { BigInteger } from "@lucid-evolution/experimental";
- * 
- * 
- * 
+ *
+ *
+ *
  * // Using try/catch for error handling
  * try {
  *   const result = BigInteger.fromJsonUnsafe( parameters );
@@ -525,47 +529,47 @@ export const fromJson = Effect.fn(function* (json: string) {
  * } catch (error) {
  *   console.error(`BigInteger.fromJsonUnsafe failed: ${error.message}`);
  * }
- * 
+ *
  * @since 2.0.0
  * @category ConstructorsUnsafe
  */
-export const fromJsonUnsafe = (json: string) =>
-  Effect.runSync(fromJson(json));
+export const fromJsonUnsafe = (json: string) => Effect.runSync(fromJson(json));
 
 /**
  * Static method fromInt of BigInteger
- * 
+ *
  * @example
  * import { BigInteger } from "@lucid-evolution/experimental";
  * import { Effect } from "effect";
- * 
+ *
  * // Using Effect for safe execution with error handling
  * Effect.gen(function*() {
- * 
+ *
  *   const result = yield* BigInteger.fromInt( parameters );
  *   console.log(result);
  * });
- * 
+ *
  * @since 2.0.0
  * @category Constructors
  */
 export const fromInt = Effect.fn(function* (x: CML.Int) {
   return yield* Effect.try({
     try: () => CML.BigInteger.from_int(x),
-    catch: () => new BigIntegerError({
-      message: `BigInteger.fromInt failed with parameters: ${x} (Int). `,
-    }),
+    catch: () =>
+      new BigIntegerError({
+        message: `BigInteger.fromInt failed with parameters: ${x} (Int). `,
+      }),
   });
 });
 
 /**
  * Unsafely calls BigInteger.fromInt without Effect wrapper
- * 
+ *
  * @example
  * import { BigInteger } from "@lucid-evolution/experimental";
- * 
- * 
- * 
+ *
+ *
+ *
  * // Using try/catch for error handling
  * try {
  *   const result = BigInteger.fromIntUnsafe( parameters );
@@ -573,47 +577,47 @@ export const fromInt = Effect.fn(function* (x: CML.Int) {
  * } catch (error) {
  *   console.error(`BigInteger.fromIntUnsafe failed: ${error.message}`);
  * }
- * 
+ *
  * @since 2.0.0
  * @category ConstructorsUnsafe
  */
-export const fromIntUnsafe = (x: CML.Int) =>
-  Effect.runSync(fromInt(x));
+export const fromIntUnsafe = (x: CML.Int) => Effect.runSync(fromInt(x));
 
 /**
  * Static method fromStr of BigInteger
- * 
+ *
  * @example
  * import { BigInteger } from "@lucid-evolution/experimental";
  * import { Effect } from "effect";
- * 
+ *
  * // Using Effect for safe execution with error handling
  * Effect.gen(function*() {
- * 
+ *
  *   const result = yield* BigInteger.fromStr( parameters );
  *   console.log(result);
  * });
- * 
+ *
  * @since 2.0.0
  * @category Constructors
  */
 export const fromStr = Effect.fn(function* (s: string) {
   return yield* Effect.try({
     try: () => CML.BigInteger.from_str(s),
-    catch: () => new BigIntegerError({
-      message: `BigInteger.fromStr failed with parameters: ${s}. Hint: Not all BigInteger instances can be stringified.`,
-    }),
+    catch: () =>
+      new BigIntegerError({
+        message: `BigInteger.fromStr failed with parameters: ${s}. Hint: Not all BigInteger instances can be stringified.`,
+      }),
   });
 });
 
 /**
  * Unsafely calls BigInteger.fromStr without Effect wrapper
- * 
+ *
  * @example
  * import { BigInteger } from "@lucid-evolution/experimental";
- * 
- * 
- * 
+ *
+ *
+ *
  * // Using try/catch for error handling
  * try {
  *   const result = BigInteger.fromStrUnsafe( parameters );
@@ -621,20 +625,19 @@ export const fromStr = Effect.fn(function* (s: string) {
  * } catch (error) {
  *   console.error(`BigInteger.fromStrUnsafe failed: ${error.message}`);
  * }
- * 
+ *
  * @since 2.0.0
  * @category ConstructorsUnsafe
  */
-export const fromStrUnsafe = (s: string) =>
-  Effect.runSync(fromStr(s));
+export const fromStrUnsafe = (s: string) => Effect.runSync(fromStr(s));
 
 /**
  * Method toStr of BigInteger
- * 
+ *
  * @example
  * import { BigInteger } from "@lucid-evolution/experimental";
  * import { Effect } from "effect";
- * 
+ *
  * // Using Effect for safe execution with error handling
  * Effect.gen(function*() {
  * // Assume we have a BigInteger instance
@@ -642,7 +645,7 @@ export const fromStrUnsafe = (s: string) =>
  *   const result = yield* BigInteger.toStr(instance);
  *   console.log(result);
  * });
- * 
+ *
  * @since 2.0.0
  * @category Methods
  */
@@ -654,18 +657,18 @@ export const toStr = Effect.fn(
         new BigIntegerError({
           message: `BigInteger.toStr failed BigInteger is not valid for string conversion. Hint: Not all BigInteger instances can be stringified.`,
         }),
-    })
+    }),
 );
 
 /**
  * Unsafely calls instance.toStr without Effect wrapper
- * 
+ *
  * @example
  * import { BigInteger } from "@lucid-evolution/experimental";
- * 
+ *
  * // Assume we have a BigInteger instance
  * const instance = ... ;
- * 
+ *
  * // Using try/catch for error handling
  * try {
  *   const result = BigInteger.toStrUnsafe(instance);
@@ -673,7 +676,7 @@ export const toStr = Effect.fn(
  * } catch (error) {
  *   console.error(`BigInteger.toStrUnsafe failed: ${error.message}`);
  * }
- * 
+ *
  * @since 2.0.0
  * @category MethodsUnsafe
  */
@@ -682,11 +685,11 @@ export const toStrUnsafe = (instance: CML.BigInteger): string =>
 
 /**
  * Method asU64 of BigInteger
- * 
+ *
  * @example
  * import { BigInteger } from "@lucid-evolution/experimental";
  * import { Effect } from "effect";
- * 
+ *
  * // Using Effect for safe execution with error handling
  * Effect.gen(function*() {
  * // Assume we have a BigInteger instance
@@ -694,30 +697,32 @@ export const toStrUnsafe = (instance: CML.BigInteger): string =>
  *   const result = yield* BigInteger.asU64(instance);
  *   console.log(result);
  * });
- * 
+ *
  * @since 2.0.0
  * @category Methods
  */
 export const asU64 = Effect.fn(
-  (instance: CML.BigInteger): Effect.Effect<bigint | undefined, BigIntegerError> =>
+  (
+    instance: CML.BigInteger,
+  ): Effect.Effect<bigint | undefined, BigIntegerError> =>
     Effect.try({
       try: () => instance.as_u64(),
       catch: () =>
         new BigIntegerError({
           message: `BigInteger.asU64 failed `,
         }),
-    })
+    }),
 );
 
 /**
  * Unsafely calls instance.asU64 without Effect wrapper
- * 
+ *
  * @example
  * import { BigInteger } from "@lucid-evolution/experimental";
- * 
+ *
  * // Assume we have a BigInteger instance
  * const instance = ... ;
- * 
+ *
  * // Using try/catch for error handling
  * try {
  *   const result = BigInteger.asU64Unsafe(instance);
@@ -725,7 +730,7 @@ export const asU64 = Effect.fn(
  * } catch (error) {
  *   console.error(`BigInteger.asU64Unsafe failed: ${error.message}`);
  * }
- * 
+ *
  * @since 2.0.0
  * @category MethodsUnsafe
  */
@@ -734,11 +739,11 @@ export const asU64Unsafe = (instance: CML.BigInteger): bigint | undefined =>
 
 /**
  * Method asInt of BigInteger
- * 
+ *
  * @example
  * import { BigInteger } from "@lucid-evolution/experimental";
  * import { Effect } from "effect";
- * 
+ *
  * // Using Effect for safe execution with error handling
  * Effect.gen(function*() {
  * // Assume we have a BigInteger instance
@@ -746,30 +751,32 @@ export const asU64Unsafe = (instance: CML.BigInteger): bigint | undefined =>
  *   const result = yield* BigInteger.asInt(instance);
  *   console.log(result);
  * });
- * 
+ *
  * @since 2.0.0
  * @category Methods
  */
 export const asInt = Effect.fn(
-  (instance: CML.BigInteger): Effect.Effect<CML.Int | undefined, BigIntegerError> =>
+  (
+    instance: CML.BigInteger,
+  ): Effect.Effect<CML.Int | undefined, BigIntegerError> =>
     Effect.try({
       try: () => instance.as_int(),
       catch: () =>
         new BigIntegerError({
           message: `BigInteger.asInt failed `,
         }),
-    })
+    }),
 );
 
 /**
  * Unsafely calls instance.asInt without Effect wrapper
- * 
+ *
  * @example
  * import { BigInteger } from "@lucid-evolution/experimental";
- * 
+ *
  * // Assume we have a BigInteger instance
  * const instance = ... ;
- * 
+ *
  * // Using try/catch for error handling
  * try {
  *   const result = BigInteger.asIntUnsafe(instance);
@@ -777,7 +784,7 @@ export const asInt = Effect.fn(
  * } catch (error) {
  *   console.error(`BigInteger.asIntUnsafe failed: ${error.message}`);
  * }
- * 
+ *
  * @since 2.0.0
  * @category MethodsUnsafe
  */

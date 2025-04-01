@@ -14,7 +14,7 @@ export type Ipv6 = CML.Ipv6;
 
 /**
  * Error class for Ipv6 operations
- * 
+ *
  * This error is thrown when operations on Ipv6 instances fail.
  *
  * @since 2.0.0
@@ -26,11 +26,11 @@ export class Ipv6Error extends Data.TaggedError("Ipv6Error")<{
 
 /**
  * Method free of Ipv6
- * 
+ *
  * @example
  * import { Ipv6 } from "@lucid-evolution/experimental";
  * import { Effect } from "effect";
- * 
+ *
  * // Using Effect for safe execution with error handling
  * Effect.gen(function*() {
  * // Assume we have a Ipv6 instance
@@ -38,7 +38,7 @@ export class Ipv6Error extends Data.TaggedError("Ipv6Error")<{
  *   const result = yield* Ipv6.free(instance);
  *   console.log(result);
  * });
- * 
+ *
  * @since 2.0.0
  * @category Methods
  */
@@ -50,18 +50,18 @@ export const free = Effect.fn(
         new Ipv6Error({
           message: `Ipv6.free failed Hint: Check if you're calling free() more than once.`,
         }),
-    })
+    }),
 );
 
 /**
  * Unsafely calls instance.free without Effect wrapper
- * 
+ *
  * @example
  * import { Ipv6 } from "@lucid-evolution/experimental";
- * 
+ *
  * // Assume we have a Ipv6 instance
  * const instance = ... ;
- * 
+ *
  * // Using try/catch for error handling
  * try {
  *   const result = Ipv6.freeUnsafe(instance);
@@ -69,7 +69,7 @@ export const free = Effect.fn(
  * } catch (error) {
  *   console.error(`Ipv6.freeUnsafe failed: ${error.message}`);
  * }
- * 
+ *
  * @since 2.0.0
  * @category MethodsUnsafe
  */
@@ -78,11 +78,11 @@ export const freeUnsafe = (instance: CML.Ipv6): void =>
 
 /**
  * Method toCborBytes of Ipv6
- * 
+ *
  * @example
  * import { Ipv6 } from "@lucid-evolution/experimental";
  * import { Effect } from "effect";
- * 
+ *
  * // Using Effect for safe execution with error handling
  * Effect.gen(function*() {
  * // Assume we have a Ipv6 instance
@@ -90,7 +90,7 @@ export const freeUnsafe = (instance: CML.Ipv6): void =>
  *   const result = yield* Ipv6.toCborBytes(instance);
  *   console.log(result);
  * });
- * 
+ *
  * @since 2.0.0
  * @category Methods
  */
@@ -102,18 +102,18 @@ export const toCborBytes = Effect.fn(
         new Ipv6Error({
           message: `Ipv6.toCborBytes failed Ipv6 is not valid for Uint8Array conversion. Hint: Check byte length and encoding.`,
         }),
-    })
+    }),
 );
 
 /**
  * Unsafely calls instance.toCborBytes without Effect wrapper
- * 
+ *
  * @example
  * import { Ipv6 } from "@lucid-evolution/experimental";
- * 
+ *
  * // Assume we have a Ipv6 instance
  * const instance = ... ;
- * 
+ *
  * // Using try/catch for error handling
  * try {
  *   const result = Ipv6.toCborBytesUnsafe(instance);
@@ -121,7 +121,7 @@ export const toCborBytes = Effect.fn(
  * } catch (error) {
  *   console.error(`Ipv6.toCborBytesUnsafe failed: ${error.message}`);
  * }
- * 
+ *
  * @since 2.0.0
  * @category MethodsUnsafe
  */
@@ -130,11 +130,11 @@ export const toCborBytesUnsafe = (instance: CML.Ipv6): Uint8Array =>
 
 /**
  * Method toCanonicalCborBytes of Ipv6
- * 
+ *
  * @example
  * import { Ipv6 } from "@lucid-evolution/experimental";
  * import { Effect } from "effect";
- * 
+ *
  * // Using Effect for safe execution with error handling
  * Effect.gen(function*() {
  * // Assume we have a Ipv6 instance
@@ -142,7 +142,7 @@ export const toCborBytesUnsafe = (instance: CML.Ipv6): Uint8Array =>
  *   const result = yield* Ipv6.toCanonicalCborBytes(instance);
  *   console.log(result);
  * });
- * 
+ *
  * @since 2.0.0
  * @category Methods
  */
@@ -154,18 +154,18 @@ export const toCanonicalCborBytes = Effect.fn(
         new Ipv6Error({
           message: `Ipv6.toCanonicalCborBytes failed Ipv6 is not valid for Uint8Array conversion. Hint: Check byte length and encoding.`,
         }),
-    })
+    }),
 );
 
 /**
  * Unsafely calls instance.toCanonicalCborBytes without Effect wrapper
- * 
+ *
  * @example
  * import { Ipv6 } from "@lucid-evolution/experimental";
- * 
+ *
  * // Assume we have a Ipv6 instance
  * const instance = ... ;
- * 
+ *
  * // Using try/catch for error handling
  * try {
  *   const result = Ipv6.toCanonicalCborBytesUnsafe(instance);
@@ -173,7 +173,7 @@ export const toCanonicalCborBytes = Effect.fn(
  * } catch (error) {
  *   console.error(`Ipv6.toCanonicalCborBytesUnsafe failed: ${error.message}`);
  * }
- * 
+ *
  * @since 2.0.0
  * @category MethodsUnsafe
  */
@@ -182,38 +182,39 @@ export const toCanonicalCborBytesUnsafe = (instance: CML.Ipv6): Uint8Array =>
 
 /**
  * Static method fromCborBytes of Ipv6
- * 
+ *
  * @example
  * import { Ipv6 } from "@lucid-evolution/experimental";
  * import { Effect } from "effect";
- * 
+ *
  * // Using Effect for safe execution with error handling
  * Effect.gen(function*() {
- * 
+ *
  *   const result = yield* Ipv6.fromCborBytes( parameters );
  *   console.log(result);
  * });
- * 
+ *
  * @since 2.0.0
  * @category Constructors
  */
 export const fromCborBytes = Effect.fn(function* (cborBytes: Uint8Array) {
   return yield* Effect.try({
     try: () => CML.Ipv6.from_cbor_bytes(cborBytes),
-    catch: () => new Ipv6Error({
-      message: `Ipv6.fromCborBytes failed with parameters: ${cborBytes}. Hint: Check byte length and encoding.`,
-    }),
+    catch: () =>
+      new Ipv6Error({
+        message: `Ipv6.fromCborBytes failed with parameters: ${cborBytes}. Hint: Check byte length and encoding.`,
+      }),
   });
 });
 
 /**
  * Unsafely calls Ipv6.fromCborBytes without Effect wrapper
- * 
+ *
  * @example
  * import { Ipv6 } from "@lucid-evolution/experimental";
- * 
- * 
- * 
+ *
+ *
+ *
  * // Using try/catch for error handling
  * try {
  *   const result = Ipv6.fromCborBytesUnsafe( parameters );
@@ -221,7 +222,7 @@ export const fromCborBytes = Effect.fn(function* (cborBytes: Uint8Array) {
  * } catch (error) {
  *   console.error(`Ipv6.fromCborBytesUnsafe failed: ${error.message}`);
  * }
- * 
+ *
  * @since 2.0.0
  * @category ConstructorsUnsafe
  */
@@ -230,11 +231,11 @@ export const fromCborBytesUnsafe = (cborBytes: Uint8Array) =>
 
 /**
  * Method toCborHex of Ipv6
- * 
+ *
  * @example
  * import { Ipv6 } from "@lucid-evolution/experimental";
  * import { Effect } from "effect";
- * 
+ *
  * // Using Effect for safe execution with error handling
  * Effect.gen(function*() {
  * // Assume we have a Ipv6 instance
@@ -242,7 +243,7 @@ export const fromCborBytesUnsafe = (cborBytes: Uint8Array) =>
  *   const result = yield* Ipv6.toCborHex(instance);
  *   console.log(result);
  * });
- * 
+ *
  * @since 2.0.0
  * @category Methods
  */
@@ -254,18 +255,18 @@ export const toCborHex = Effect.fn(
         new Ipv6Error({
           message: `Ipv6.toCborHex failed Ipv6 is not valid for string conversion. Hint: Make sure it's a valid hex string representing CBOR data.`,
         }),
-    })
+    }),
 );
 
 /**
  * Unsafely calls instance.toCborHex without Effect wrapper
- * 
+ *
  * @example
  * import { Ipv6 } from "@lucid-evolution/experimental";
- * 
+ *
  * // Assume we have a Ipv6 instance
  * const instance = ... ;
- * 
+ *
  * // Using try/catch for error handling
  * try {
  *   const result = Ipv6.toCborHexUnsafe(instance);
@@ -273,7 +274,7 @@ export const toCborHex = Effect.fn(
  * } catch (error) {
  *   console.error(`Ipv6.toCborHexUnsafe failed: ${error.message}`);
  * }
- * 
+ *
  * @since 2.0.0
  * @category MethodsUnsafe
  */
@@ -282,11 +283,11 @@ export const toCborHexUnsafe = (instance: CML.Ipv6): string =>
 
 /**
  * Method toCanonicalCborHex of Ipv6
- * 
+ *
  * @example
  * import { Ipv6 } from "@lucid-evolution/experimental";
  * import { Effect } from "effect";
- * 
+ *
  * // Using Effect for safe execution with error handling
  * Effect.gen(function*() {
  * // Assume we have a Ipv6 instance
@@ -294,7 +295,7 @@ export const toCborHexUnsafe = (instance: CML.Ipv6): string =>
  *   const result = yield* Ipv6.toCanonicalCborHex(instance);
  *   console.log(result);
  * });
- * 
+ *
  * @since 2.0.0
  * @category Methods
  */
@@ -306,18 +307,18 @@ export const toCanonicalCborHex = Effect.fn(
         new Ipv6Error({
           message: `Ipv6.toCanonicalCborHex failed Ipv6 is not valid for string conversion. Hint: Make sure it's a valid hex string representing CBOR data.`,
         }),
-    })
+    }),
 );
 
 /**
  * Unsafely calls instance.toCanonicalCborHex without Effect wrapper
- * 
+ *
  * @example
  * import { Ipv6 } from "@lucid-evolution/experimental";
- * 
+ *
  * // Assume we have a Ipv6 instance
  * const instance = ... ;
- * 
+ *
  * // Using try/catch for error handling
  * try {
  *   const result = Ipv6.toCanonicalCborHexUnsafe(instance);
@@ -325,7 +326,7 @@ export const toCanonicalCborHex = Effect.fn(
  * } catch (error) {
  *   console.error(`Ipv6.toCanonicalCborHexUnsafe failed: ${error.message}`);
  * }
- * 
+ *
  * @since 2.0.0
  * @category MethodsUnsafe
  */
@@ -334,38 +335,39 @@ export const toCanonicalCborHexUnsafe = (instance: CML.Ipv6): string =>
 
 /**
  * Static method fromCborHex of Ipv6
- * 
+ *
  * @example
  * import { Ipv6 } from "@lucid-evolution/experimental";
  * import { Effect } from "effect";
- * 
+ *
  * // Using Effect for safe execution with error handling
  * Effect.gen(function*() {
- * 
+ *
  *   const result = yield* Ipv6.fromCborHex( parameters );
  *   console.log(result);
  * });
- * 
+ *
  * @since 2.0.0
  * @category Constructors
  */
 export const fromCborHex = Effect.fn(function* (cborBytes: string) {
   return yield* Effect.try({
     try: () => CML.Ipv6.from_cbor_hex(cborBytes),
-    catch: () => new Ipv6Error({
-      message: `Ipv6.fromCborHex failed with parameters: ${cborBytes}. Hint: Make sure it's a valid hex string representing CBOR data.`,
-    }),
+    catch: () =>
+      new Ipv6Error({
+        message: `Ipv6.fromCborHex failed with parameters: ${cborBytes}. Hint: Make sure it's a valid hex string representing CBOR data.`,
+      }),
   });
 });
 
 /**
  * Unsafely calls Ipv6.fromCborHex without Effect wrapper
- * 
+ *
  * @example
  * import { Ipv6 } from "@lucid-evolution/experimental";
- * 
- * 
- * 
+ *
+ *
+ *
  * // Using try/catch for error handling
  * try {
  *   const result = Ipv6.fromCborHexUnsafe( parameters );
@@ -373,7 +375,7 @@ export const fromCborHex = Effect.fn(function* (cborBytes: string) {
  * } catch (error) {
  *   console.error(`Ipv6.fromCborHexUnsafe failed: ${error.message}`);
  * }
- * 
+ *
  * @since 2.0.0
  * @category ConstructorsUnsafe
  */
@@ -382,11 +384,11 @@ export const fromCborHexUnsafe = (cborBytes: string) =>
 
 /**
  * Method toJson of Ipv6
- * 
+ *
  * @example
  * import { Ipv6 } from "@lucid-evolution/experimental";
  * import { Effect } from "effect";
- * 
+ *
  * // Using Effect for safe execution with error handling
  * Effect.gen(function*() {
  * // Assume we have a Ipv6 instance
@@ -394,7 +396,7 @@ export const fromCborHexUnsafe = (cborBytes: string) =>
  *   const result = yield* Ipv6.toJson(instance);
  *   console.log(result);
  * });
- * 
+ *
  * @since 2.0.0
  * @category Methods
  */
@@ -406,18 +408,18 @@ export const toJson = Effect.fn(
         new Ipv6Error({
           message: `Ipv6.toJson failed Ipv6 is not valid for string conversion. Hint: Validate your JSON structure.`,
         }),
-    })
+    }),
 );
 
 /**
  * Unsafely calls instance.toJson without Effect wrapper
- * 
+ *
  * @example
  * import { Ipv6 } from "@lucid-evolution/experimental";
- * 
+ *
  * // Assume we have a Ipv6 instance
  * const instance = ... ;
- * 
+ *
  * // Using try/catch for error handling
  * try {
  *   const result = Ipv6.toJsonUnsafe(instance);
@@ -425,7 +427,7 @@ export const toJson = Effect.fn(
  * } catch (error) {
  *   console.error(`Ipv6.toJsonUnsafe failed: ${error.message}`);
  * }
- * 
+ *
  * @since 2.0.0
  * @category MethodsUnsafe
  */
@@ -434,11 +436,11 @@ export const toJsonUnsafe = (instance: CML.Ipv6): string =>
 
 /**
  * Method toJsValue of Ipv6
- * 
+ *
  * @example
  * import { Ipv6 } from "@lucid-evolution/experimental";
  * import { Effect } from "effect";
- * 
+ *
  * // Using Effect for safe execution with error handling
  * Effect.gen(function*() {
  * // Assume we have a Ipv6 instance
@@ -446,7 +448,7 @@ export const toJsonUnsafe = (instance: CML.Ipv6): string =>
  *   const result = yield* Ipv6.toJsValue(instance);
  *   console.log(result);
  * });
- * 
+ *
  * @since 2.0.0
  * @category Methods
  */
@@ -458,18 +460,18 @@ export const toJsValue = Effect.fn(
         new Ipv6Error({
           message: `Ipv6.toJsValue failed Ipv6 is not valid for any conversion. `,
         }),
-    })
+    }),
 );
 
 /**
  * Unsafely calls instance.toJsValue without Effect wrapper
- * 
+ *
  * @example
  * import { Ipv6 } from "@lucid-evolution/experimental";
- * 
+ *
  * // Assume we have a Ipv6 instance
  * const instance = ... ;
- * 
+ *
  * // Using try/catch for error handling
  * try {
  *   const result = Ipv6.toJsValueUnsafe(instance);
@@ -477,7 +479,7 @@ export const toJsValue = Effect.fn(
  * } catch (error) {
  *   console.error(`Ipv6.toJsValueUnsafe failed: ${error.message}`);
  * }
- * 
+ *
  * @since 2.0.0
  * @category MethodsUnsafe
  */
@@ -486,38 +488,39 @@ export const toJsValueUnsafe = (instance: CML.Ipv6): any =>
 
 /**
  * Static method fromJson of Ipv6
- * 
+ *
  * @example
  * import { Ipv6 } from "@lucid-evolution/experimental";
  * import { Effect } from "effect";
- * 
+ *
  * // Using Effect for safe execution with error handling
  * Effect.gen(function*() {
- * 
+ *
  *   const result = yield* Ipv6.fromJson( parameters );
  *   console.log(result);
  * });
- * 
+ *
  * @since 2.0.0
  * @category Constructors
  */
 export const fromJson = Effect.fn(function* (json: string) {
   return yield* Effect.try({
     try: () => CML.Ipv6.from_json(json),
-    catch: () => new Ipv6Error({
-      message: `Ipv6.fromJson failed with parameters: ${json}. Hint: Validate your JSON structure.`,
-    }),
+    catch: () =>
+      new Ipv6Error({
+        message: `Ipv6.fromJson failed with parameters: ${json}. Hint: Validate your JSON structure.`,
+      }),
   });
 });
 
 /**
  * Unsafely calls Ipv6.fromJson without Effect wrapper
- * 
+ *
  * @example
  * import { Ipv6 } from "@lucid-evolution/experimental";
- * 
- * 
- * 
+ *
+ *
+ *
  * // Using try/catch for error handling
  * try {
  *   const result = Ipv6.fromJsonUnsafe( parameters );
@@ -525,20 +528,19 @@ export const fromJson = Effect.fn(function* (json: string) {
  * } catch (error) {
  *   console.error(`Ipv6.fromJsonUnsafe failed: ${error.message}`);
  * }
- * 
+ *
  * @since 2.0.0
  * @category ConstructorsUnsafe
  */
-export const fromJsonUnsafe = (json: string) =>
-  Effect.runSync(fromJson(json));
+export const fromJsonUnsafe = (json: string) => Effect.runSync(fromJson(json));
 
 /**
  * Method get of Ipv6
- * 
+ *
  * @example
  * import { Ipv6 } from "@lucid-evolution/experimental";
  * import { Effect } from "effect";
- * 
+ *
  * // Using Effect for safe execution with error handling
  * Effect.gen(function*() {
  * // Assume we have a Ipv6 instance
@@ -546,7 +548,7 @@ export const fromJsonUnsafe = (json: string) =>
  *   const result = yield* Ipv6.get(instance);
  *   console.log(result);
  * });
- * 
+ *
  * @since 2.0.0
  * @category Methods
  */
@@ -558,18 +560,18 @@ export const get = Effect.fn(
         new Ipv6Error({
           message: `Ipv6.get failed `,
         }),
-    })
+    }),
 );
 
 /**
  * Unsafely calls instance.get without Effect wrapper
- * 
+ *
  * @example
  * import { Ipv6 } from "@lucid-evolution/experimental";
- * 
+ *
  * // Assume we have a Ipv6 instance
  * const instance = ... ;
- * 
+ *
  * // Using try/catch for error handling
  * try {
  *   const result = Ipv6.getUnsafe(instance);
@@ -577,7 +579,7 @@ export const get = Effect.fn(
  * } catch (error) {
  *   console.error(`Ipv6.getUnsafe failed: ${error.message}`);
  * }
- * 
+ *
  * @since 2.0.0
  * @category MethodsUnsafe
  */

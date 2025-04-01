@@ -735,7 +735,7 @@ export type ${enumName} = CML.${enumName};`;
  * @since ${config.version}
  * @category Variants
  */
-export const ${member} = CML.${enumName}.${member};`
+export const ${member} = CML.${enumName}.${member};`,
     )
     .join("\n\n");
 
@@ -936,7 +936,7 @@ const createIndex = (
   config: Config,
 ): void => {
   const versionHeader = generateVersionHeader(config.version);
-  
+
   const classExports = classes
     .map((cls) => `export * as ${cls.name} from './${cls.name}.js';`)
     .join("\n");
@@ -959,9 +959,13 @@ ${enumExports}
 /**
  * Creates index file for enum wrappers
  */
-const createEnumsIndex = (enums: Array<EnumInfo>, outputDir: string, config: Config): void => {
+const createEnumsIndex = (
+  enums: Array<EnumInfo>,
+  outputDir: string,
+  config: Config,
+): void => {
   const versionHeader = generateVersionHeader(config.version);
-  
+
   const enumExports = enums
     .map((e) => `export * as ${e.name} from './${e.name}.js';`)
     .join("\n");
@@ -982,7 +986,7 @@ const createFunctionsIndex = (
   config: Config,
 ): void => {
   const versionHeader = generateVersionHeader(config.version);
-  
+
   // Group functions by first letter for better organization
   const functionsByLetter: Record<string, Array<string>> = {};
 
@@ -1101,7 +1105,7 @@ const generate = (config: Config): void => {
     const updatedContent =
       mainIndexContent +
       "\n// Utils\nexport * as Utils from './Utils/index.js';\n";
-    
+
     // Write the updated content with the version header preserved at the top
     fs.writeFileSync(mainIndexPath, updatedContent);
   }

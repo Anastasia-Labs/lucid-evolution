@@ -14,7 +14,7 @@ export type Vkeywitness = CML.Vkeywitness;
 
 /**
  * Error class for Vkeywitness operations
- * 
+ *
  * This error is thrown when operations on Vkeywitness instances fail.
  *
  * @since 2.0.0
@@ -26,11 +26,11 @@ export class VkeywitnessError extends Data.TaggedError("VkeywitnessError")<{
 
 /**
  * Method free of Vkeywitness
- * 
+ *
  * @example
  * import { Vkeywitness } from "@lucid-evolution/experimental";
  * import { Effect } from "effect";
- * 
+ *
  * // Using Effect for safe execution with error handling
  * Effect.gen(function*() {
  * // Assume we have a Vkeywitness instance
@@ -38,7 +38,7 @@ export class VkeywitnessError extends Data.TaggedError("VkeywitnessError")<{
  *   const result = yield* Vkeywitness.free(instance);
  *   console.log(result);
  * });
- * 
+ *
  * @since 2.0.0
  * @category Methods
  */
@@ -50,18 +50,18 @@ export const free = Effect.fn(
         new VkeywitnessError({
           message: `Vkeywitness.free failed Hint: Check if you're calling free() more than once.`,
         }),
-    })
+    }),
 );
 
 /**
  * Unsafely calls instance.free without Effect wrapper
- * 
+ *
  * @example
  * import { Vkeywitness } from "@lucid-evolution/experimental";
- * 
+ *
  * // Assume we have a Vkeywitness instance
  * const instance = ... ;
- * 
+ *
  * // Using try/catch for error handling
  * try {
  *   const result = Vkeywitness.freeUnsafe(instance);
@@ -69,7 +69,7 @@ export const free = Effect.fn(
  * } catch (error) {
  *   console.error(`Vkeywitness.freeUnsafe failed: ${error.message}`);
  * }
- * 
+ *
  * @since 2.0.0
  * @category MethodsUnsafe
  */
@@ -78,11 +78,11 @@ export const freeUnsafe = (instance: CML.Vkeywitness): void =>
 
 /**
  * Method toCborBytes of Vkeywitness
- * 
+ *
  * @example
  * import { Vkeywitness } from "@lucid-evolution/experimental";
  * import { Effect } from "effect";
- * 
+ *
  * // Using Effect for safe execution with error handling
  * Effect.gen(function*() {
  * // Assume we have a Vkeywitness instance
@@ -90,7 +90,7 @@ export const freeUnsafe = (instance: CML.Vkeywitness): void =>
  *   const result = yield* Vkeywitness.toCborBytes(instance);
  *   console.log(result);
  * });
- * 
+ *
  * @since 2.0.0
  * @category Methods
  */
@@ -102,18 +102,18 @@ export const toCborBytes = Effect.fn(
         new VkeywitnessError({
           message: `Vkeywitness.toCborBytes failed Vkeywitness is not valid for Uint8Array conversion. Hint: Check byte length and encoding.`,
         }),
-    })
+    }),
 );
 
 /**
  * Unsafely calls instance.toCborBytes without Effect wrapper
- * 
+ *
  * @example
  * import { Vkeywitness } from "@lucid-evolution/experimental";
- * 
+ *
  * // Assume we have a Vkeywitness instance
  * const instance = ... ;
- * 
+ *
  * // Using try/catch for error handling
  * try {
  *   const result = Vkeywitness.toCborBytesUnsafe(instance);
@@ -121,7 +121,7 @@ export const toCborBytes = Effect.fn(
  * } catch (error) {
  *   console.error(`Vkeywitness.toCborBytesUnsafe failed: ${error.message}`);
  * }
- * 
+ *
  * @since 2.0.0
  * @category MethodsUnsafe
  */
@@ -130,11 +130,11 @@ export const toCborBytesUnsafe = (instance: CML.Vkeywitness): Uint8Array =>
 
 /**
  * Method toCanonicalCborBytes of Vkeywitness
- * 
+ *
  * @example
  * import { Vkeywitness } from "@lucid-evolution/experimental";
  * import { Effect } from "effect";
- * 
+ *
  * // Using Effect for safe execution with error handling
  * Effect.gen(function*() {
  * // Assume we have a Vkeywitness instance
@@ -142,7 +142,7 @@ export const toCborBytesUnsafe = (instance: CML.Vkeywitness): Uint8Array =>
  *   const result = yield* Vkeywitness.toCanonicalCborBytes(instance);
  *   console.log(result);
  * });
- * 
+ *
  * @since 2.0.0
  * @category Methods
  */
@@ -154,18 +154,18 @@ export const toCanonicalCborBytes = Effect.fn(
         new VkeywitnessError({
           message: `Vkeywitness.toCanonicalCborBytes failed Vkeywitness is not valid for Uint8Array conversion. Hint: Check byte length and encoding.`,
         }),
-    })
+    }),
 );
 
 /**
  * Unsafely calls instance.toCanonicalCborBytes without Effect wrapper
- * 
+ *
  * @example
  * import { Vkeywitness } from "@lucid-evolution/experimental";
- * 
+ *
  * // Assume we have a Vkeywitness instance
  * const instance = ... ;
- * 
+ *
  * // Using try/catch for error handling
  * try {
  *   const result = Vkeywitness.toCanonicalCborBytesUnsafe(instance);
@@ -173,47 +173,49 @@ export const toCanonicalCborBytes = Effect.fn(
  * } catch (error) {
  *   console.error(`Vkeywitness.toCanonicalCborBytesUnsafe failed: ${error.message}`);
  * }
- * 
+ *
  * @since 2.0.0
  * @category MethodsUnsafe
  */
-export const toCanonicalCborBytesUnsafe = (instance: CML.Vkeywitness): Uint8Array =>
-  Effect.runSync(toCanonicalCborBytes(instance));
+export const toCanonicalCborBytesUnsafe = (
+  instance: CML.Vkeywitness,
+): Uint8Array => Effect.runSync(toCanonicalCborBytes(instance));
 
 /**
  * Static method fromCborBytes of Vkeywitness
- * 
+ *
  * @example
  * import { Vkeywitness } from "@lucid-evolution/experimental";
  * import { Effect } from "effect";
- * 
+ *
  * // Using Effect for safe execution with error handling
  * Effect.gen(function*() {
- * 
+ *
  *   const result = yield* Vkeywitness.fromCborBytes( parameters );
  *   console.log(result);
  * });
- * 
+ *
  * @since 2.0.0
  * @category Constructors
  */
 export const fromCborBytes = Effect.fn(function* (cborBytes: Uint8Array) {
   return yield* Effect.try({
     try: () => CML.Vkeywitness.from_cbor_bytes(cborBytes),
-    catch: () => new VkeywitnessError({
-      message: `Vkeywitness.fromCborBytes failed with parameters: ${cborBytes}. Hint: Check byte length and encoding.`,
-    }),
+    catch: () =>
+      new VkeywitnessError({
+        message: `Vkeywitness.fromCborBytes failed with parameters: ${cborBytes}. Hint: Check byte length and encoding.`,
+      }),
   });
 });
 
 /**
  * Unsafely calls Vkeywitness.fromCborBytes without Effect wrapper
- * 
+ *
  * @example
  * import { Vkeywitness } from "@lucid-evolution/experimental";
- * 
- * 
- * 
+ *
+ *
+ *
  * // Using try/catch for error handling
  * try {
  *   const result = Vkeywitness.fromCborBytesUnsafe( parameters );
@@ -221,7 +223,7 @@ export const fromCborBytes = Effect.fn(function* (cborBytes: Uint8Array) {
  * } catch (error) {
  *   console.error(`Vkeywitness.fromCborBytesUnsafe failed: ${error.message}`);
  * }
- * 
+ *
  * @since 2.0.0
  * @category ConstructorsUnsafe
  */
@@ -230,11 +232,11 @@ export const fromCborBytesUnsafe = (cborBytes: Uint8Array) =>
 
 /**
  * Method toCborHex of Vkeywitness
- * 
+ *
  * @example
  * import { Vkeywitness } from "@lucid-evolution/experimental";
  * import { Effect } from "effect";
- * 
+ *
  * // Using Effect for safe execution with error handling
  * Effect.gen(function*() {
  * // Assume we have a Vkeywitness instance
@@ -242,7 +244,7 @@ export const fromCborBytesUnsafe = (cborBytes: Uint8Array) =>
  *   const result = yield* Vkeywitness.toCborHex(instance);
  *   console.log(result);
  * });
- * 
+ *
  * @since 2.0.0
  * @category Methods
  */
@@ -254,18 +256,18 @@ export const toCborHex = Effect.fn(
         new VkeywitnessError({
           message: `Vkeywitness.toCborHex failed Vkeywitness is not valid for string conversion. Hint: Make sure it's a valid hex string representing CBOR data.`,
         }),
-    })
+    }),
 );
 
 /**
  * Unsafely calls instance.toCborHex without Effect wrapper
- * 
+ *
  * @example
  * import { Vkeywitness } from "@lucid-evolution/experimental";
- * 
+ *
  * // Assume we have a Vkeywitness instance
  * const instance = ... ;
- * 
+ *
  * // Using try/catch for error handling
  * try {
  *   const result = Vkeywitness.toCborHexUnsafe(instance);
@@ -273,7 +275,7 @@ export const toCborHex = Effect.fn(
  * } catch (error) {
  *   console.error(`Vkeywitness.toCborHexUnsafe failed: ${error.message}`);
  * }
- * 
+ *
  * @since 2.0.0
  * @category MethodsUnsafe
  */
@@ -282,11 +284,11 @@ export const toCborHexUnsafe = (instance: CML.Vkeywitness): string =>
 
 /**
  * Method toCanonicalCborHex of Vkeywitness
- * 
+ *
  * @example
  * import { Vkeywitness } from "@lucid-evolution/experimental";
  * import { Effect } from "effect";
- * 
+ *
  * // Using Effect for safe execution with error handling
  * Effect.gen(function*() {
  * // Assume we have a Vkeywitness instance
@@ -294,7 +296,7 @@ export const toCborHexUnsafe = (instance: CML.Vkeywitness): string =>
  *   const result = yield* Vkeywitness.toCanonicalCborHex(instance);
  *   console.log(result);
  * });
- * 
+ *
  * @since 2.0.0
  * @category Methods
  */
@@ -306,18 +308,18 @@ export const toCanonicalCborHex = Effect.fn(
         new VkeywitnessError({
           message: `Vkeywitness.toCanonicalCborHex failed Vkeywitness is not valid for string conversion. Hint: Make sure it's a valid hex string representing CBOR data.`,
         }),
-    })
+    }),
 );
 
 /**
  * Unsafely calls instance.toCanonicalCborHex without Effect wrapper
- * 
+ *
  * @example
  * import { Vkeywitness } from "@lucid-evolution/experimental";
- * 
+ *
  * // Assume we have a Vkeywitness instance
  * const instance = ... ;
- * 
+ *
  * // Using try/catch for error handling
  * try {
  *   const result = Vkeywitness.toCanonicalCborHexUnsafe(instance);
@@ -325,7 +327,7 @@ export const toCanonicalCborHex = Effect.fn(
  * } catch (error) {
  *   console.error(`Vkeywitness.toCanonicalCborHexUnsafe failed: ${error.message}`);
  * }
- * 
+ *
  * @since 2.0.0
  * @category MethodsUnsafe
  */
@@ -334,38 +336,39 @@ export const toCanonicalCborHexUnsafe = (instance: CML.Vkeywitness): string =>
 
 /**
  * Static method fromCborHex of Vkeywitness
- * 
+ *
  * @example
  * import { Vkeywitness } from "@lucid-evolution/experimental";
  * import { Effect } from "effect";
- * 
+ *
  * // Using Effect for safe execution with error handling
  * Effect.gen(function*() {
- * 
+ *
  *   const result = yield* Vkeywitness.fromCborHex( parameters );
  *   console.log(result);
  * });
- * 
+ *
  * @since 2.0.0
  * @category Constructors
  */
 export const fromCborHex = Effect.fn(function* (cborBytes: string) {
   return yield* Effect.try({
     try: () => CML.Vkeywitness.from_cbor_hex(cborBytes),
-    catch: () => new VkeywitnessError({
-      message: `Vkeywitness.fromCborHex failed with parameters: ${cborBytes}. Hint: Make sure it's a valid hex string representing CBOR data.`,
-    }),
+    catch: () =>
+      new VkeywitnessError({
+        message: `Vkeywitness.fromCborHex failed with parameters: ${cborBytes}. Hint: Make sure it's a valid hex string representing CBOR data.`,
+      }),
   });
 });
 
 /**
  * Unsafely calls Vkeywitness.fromCborHex without Effect wrapper
- * 
+ *
  * @example
  * import { Vkeywitness } from "@lucid-evolution/experimental";
- * 
- * 
- * 
+ *
+ *
+ *
  * // Using try/catch for error handling
  * try {
  *   const result = Vkeywitness.fromCborHexUnsafe( parameters );
@@ -373,7 +376,7 @@ export const fromCborHex = Effect.fn(function* (cborBytes: string) {
  * } catch (error) {
  *   console.error(`Vkeywitness.fromCborHexUnsafe failed: ${error.message}`);
  * }
- * 
+ *
  * @since 2.0.0
  * @category ConstructorsUnsafe
  */
@@ -382,11 +385,11 @@ export const fromCborHexUnsafe = (cborBytes: string) =>
 
 /**
  * Method toJson of Vkeywitness
- * 
+ *
  * @example
  * import { Vkeywitness } from "@lucid-evolution/experimental";
  * import { Effect } from "effect";
- * 
+ *
  * // Using Effect for safe execution with error handling
  * Effect.gen(function*() {
  * // Assume we have a Vkeywitness instance
@@ -394,7 +397,7 @@ export const fromCborHexUnsafe = (cborBytes: string) =>
  *   const result = yield* Vkeywitness.toJson(instance);
  *   console.log(result);
  * });
- * 
+ *
  * @since 2.0.0
  * @category Methods
  */
@@ -406,18 +409,18 @@ export const toJson = Effect.fn(
         new VkeywitnessError({
           message: `Vkeywitness.toJson failed Vkeywitness is not valid for string conversion. Hint: Validate your JSON structure.`,
         }),
-    })
+    }),
 );
 
 /**
  * Unsafely calls instance.toJson without Effect wrapper
- * 
+ *
  * @example
  * import { Vkeywitness } from "@lucid-evolution/experimental";
- * 
+ *
  * // Assume we have a Vkeywitness instance
  * const instance = ... ;
- * 
+ *
  * // Using try/catch for error handling
  * try {
  *   const result = Vkeywitness.toJsonUnsafe(instance);
@@ -425,7 +428,7 @@ export const toJson = Effect.fn(
  * } catch (error) {
  *   console.error(`Vkeywitness.toJsonUnsafe failed: ${error.message}`);
  * }
- * 
+ *
  * @since 2.0.0
  * @category MethodsUnsafe
  */
@@ -434,11 +437,11 @@ export const toJsonUnsafe = (instance: CML.Vkeywitness): string =>
 
 /**
  * Method toJsValue of Vkeywitness
- * 
+ *
  * @example
  * import { Vkeywitness } from "@lucid-evolution/experimental";
  * import { Effect } from "effect";
- * 
+ *
  * // Using Effect for safe execution with error handling
  * Effect.gen(function*() {
  * // Assume we have a Vkeywitness instance
@@ -446,7 +449,7 @@ export const toJsonUnsafe = (instance: CML.Vkeywitness): string =>
  *   const result = yield* Vkeywitness.toJsValue(instance);
  *   console.log(result);
  * });
- * 
+ *
  * @since 2.0.0
  * @category Methods
  */
@@ -458,18 +461,18 @@ export const toJsValue = Effect.fn(
         new VkeywitnessError({
           message: `Vkeywitness.toJsValue failed Vkeywitness is not valid for any conversion. `,
         }),
-    })
+    }),
 );
 
 /**
  * Unsafely calls instance.toJsValue without Effect wrapper
- * 
+ *
  * @example
  * import { Vkeywitness } from "@lucid-evolution/experimental";
- * 
+ *
  * // Assume we have a Vkeywitness instance
  * const instance = ... ;
- * 
+ *
  * // Using try/catch for error handling
  * try {
  *   const result = Vkeywitness.toJsValueUnsafe(instance);
@@ -477,7 +480,7 @@ export const toJsValue = Effect.fn(
  * } catch (error) {
  *   console.error(`Vkeywitness.toJsValueUnsafe failed: ${error.message}`);
  * }
- * 
+ *
  * @since 2.0.0
  * @category MethodsUnsafe
  */
@@ -486,38 +489,39 @@ export const toJsValueUnsafe = (instance: CML.Vkeywitness): any =>
 
 /**
  * Static method fromJson of Vkeywitness
- * 
+ *
  * @example
  * import { Vkeywitness } from "@lucid-evolution/experimental";
  * import { Effect } from "effect";
- * 
+ *
  * // Using Effect for safe execution with error handling
  * Effect.gen(function*() {
- * 
+ *
  *   const result = yield* Vkeywitness.fromJson( parameters );
  *   console.log(result);
  * });
- * 
+ *
  * @since 2.0.0
  * @category Constructors
  */
 export const fromJson = Effect.fn(function* (json: string) {
   return yield* Effect.try({
     try: () => CML.Vkeywitness.from_json(json),
-    catch: () => new VkeywitnessError({
-      message: `Vkeywitness.fromJson failed with parameters: ${json}. Hint: Validate your JSON structure.`,
-    }),
+    catch: () =>
+      new VkeywitnessError({
+        message: `Vkeywitness.fromJson failed with parameters: ${json}. Hint: Validate your JSON structure.`,
+      }),
   });
 });
 
 /**
  * Unsafely calls Vkeywitness.fromJson without Effect wrapper
- * 
+ *
  * @example
  * import { Vkeywitness } from "@lucid-evolution/experimental";
- * 
- * 
- * 
+ *
+ *
+ *
  * // Using try/catch for error handling
  * try {
  *   const result = Vkeywitness.fromJsonUnsafe( parameters );
@@ -525,20 +529,19 @@ export const fromJson = Effect.fn(function* (json: string) {
  * } catch (error) {
  *   console.error(`Vkeywitness.fromJsonUnsafe failed: ${error.message}`);
  * }
- * 
+ *
  * @since 2.0.0
  * @category ConstructorsUnsafe
  */
-export const fromJsonUnsafe = (json: string) =>
-  Effect.runSync(fromJson(json));
+export const fromJsonUnsafe = (json: string) => Effect.runSync(fromJson(json));
 
 /**
  * Method vkey of Vkeywitness
- * 
+ *
  * @example
  * import { Vkeywitness } from "@lucid-evolution/experimental";
  * import { Effect } from "effect";
- * 
+ *
  * // Using Effect for safe execution with error handling
  * Effect.gen(function*() {
  * // Assume we have a Vkeywitness instance
@@ -546,7 +549,7 @@ export const fromJsonUnsafe = (json: string) =>
  *   const result = yield* Vkeywitness.vkey(instance);
  *   console.log(result);
  * });
- * 
+ *
  * @since 2.0.0
  * @category Methods
  */
@@ -558,18 +561,18 @@ export const vkey = Effect.fn(
         new VkeywitnessError({
           message: `Vkeywitness.vkey failed `,
         }),
-    })
+    }),
 );
 
 /**
  * Unsafely calls instance.vkey without Effect wrapper
- * 
+ *
  * @example
  * import { Vkeywitness } from "@lucid-evolution/experimental";
- * 
+ *
  * // Assume we have a Vkeywitness instance
  * const instance = ... ;
- * 
+ *
  * // Using try/catch for error handling
  * try {
  *   const result = Vkeywitness.vkeyUnsafe(instance);
@@ -577,7 +580,7 @@ export const vkey = Effect.fn(
  * } catch (error) {
  *   console.error(`Vkeywitness.vkeyUnsafe failed: ${error.message}`);
  * }
- * 
+ *
  * @since 2.0.0
  * @category MethodsUnsafe
  */
@@ -586,11 +589,11 @@ export const vkeyUnsafe = (instance: CML.Vkeywitness): CML.PublicKey =>
 
 /**
  * Method ed25519Signature of Vkeywitness
- * 
+ *
  * @example
  * import { Vkeywitness } from "@lucid-evolution/experimental";
  * import { Effect } from "effect";
- * 
+ *
  * // Using Effect for safe execution with error handling
  * Effect.gen(function*() {
  * // Assume we have a Vkeywitness instance
@@ -598,30 +601,32 @@ export const vkeyUnsafe = (instance: CML.Vkeywitness): CML.PublicKey =>
  *   const result = yield* Vkeywitness.ed25519Signature(instance);
  *   console.log(result);
  * });
- * 
+ *
  * @since 2.0.0
  * @category Methods
  */
 export const ed25519Signature = Effect.fn(
-  (instance: CML.Vkeywitness): Effect.Effect<CML.Ed25519Signature, VkeywitnessError> =>
+  (
+    instance: CML.Vkeywitness,
+  ): Effect.Effect<CML.Ed25519Signature, VkeywitnessError> =>
     Effect.try({
       try: () => instance.ed25519_signature(),
       catch: () =>
         new VkeywitnessError({
           message: `Vkeywitness.ed25519Signature failed `,
         }),
-    })
+    }),
 );
 
 /**
  * Unsafely calls instance.ed25519Signature without Effect wrapper
- * 
+ *
  * @example
  * import { Vkeywitness } from "@lucid-evolution/experimental";
- * 
+ *
  * // Assume we have a Vkeywitness instance
  * const instance = ... ;
- * 
+ *
  * // Using try/catch for error handling
  * try {
  *   const result = Vkeywitness.ed25519SignatureUnsafe(instance);
@@ -629,47 +634,52 @@ export const ed25519Signature = Effect.fn(
  * } catch (error) {
  *   console.error(`Vkeywitness.ed25519SignatureUnsafe failed: ${error.message}`);
  * }
- * 
+ *
  * @since 2.0.0
  * @category MethodsUnsafe
  */
-export const ed25519SignatureUnsafe = (instance: CML.Vkeywitness): CML.Ed25519Signature =>
-  Effect.runSync(ed25519Signature(instance));
+export const ed25519SignatureUnsafe = (
+  instance: CML.Vkeywitness,
+): CML.Ed25519Signature => Effect.runSync(ed25519Signature(instance));
 
 /**
  * Static method _new of Vkeywitness
- * 
+ *
  * @example
  * import { Vkeywitness } from "@lucid-evolution/experimental";
  * import { Effect } from "effect";
- * 
+ *
  * // Using Effect for safe execution with error handling
  * Effect.gen(function*() {
- * 
+ *
  *   const result = yield* Vkeywitness._new( parameters );
  *   console.log(result);
  * });
- * 
+ *
  * @since 2.0.0
  * @category Constructors
  */
-export const _new = Effect.fn(function* (vkey: CML.PublicKey, ed25519Signature: CML.Ed25519Signature) {
+export const _new = Effect.fn(function* (
+  vkey: CML.PublicKey,
+  ed25519Signature: CML.Ed25519Signature,
+) {
   return yield* Effect.try({
     try: () => CML.Vkeywitness.new(vkey, ed25519Signature),
-    catch: () => new VkeywitnessError({
-      message: `Vkeywitness._new failed with parameters: ${vkey} (PublicKey), ${ed25519Signature} (Ed25519Signature). `,
-    }),
+    catch: () =>
+      new VkeywitnessError({
+        message: `Vkeywitness._new failed with parameters: ${vkey} (PublicKey), ${ed25519Signature} (Ed25519Signature). `,
+      }),
   });
 });
 
 /**
  * Unsafely calls Vkeywitness._new without Effect wrapper
- * 
+ *
  * @example
  * import { Vkeywitness } from "@lucid-evolution/experimental";
- * 
- * 
- * 
+ *
+ *
+ *
  * // Using try/catch for error handling
  * try {
  *   const result = Vkeywitness._newUnsafe( parameters );
@@ -677,9 +687,11 @@ export const _new = Effect.fn(function* (vkey: CML.PublicKey, ed25519Signature: 
  * } catch (error) {
  *   console.error(`Vkeywitness._newUnsafe failed: ${error.message}`);
  * }
- * 
+ *
  * @since 2.0.0
  * @category ConstructorsUnsafe
  */
-export const _newUnsafe = (vkey: CML.PublicKey, ed25519Signature: CML.Ed25519Signature) =>
-  Effect.runSync(_new(vkey, ed25519Signature));
+export const _newUnsafe = (
+  vkey: CML.PublicKey,
+  ed25519Signature: CML.Ed25519Signature,
+) => Effect.runSync(_new(vkey, ed25519Signature));

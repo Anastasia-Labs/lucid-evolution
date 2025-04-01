@@ -14,7 +14,7 @@ export type Redeemers = CML.Redeemers;
 
 /**
  * Error class for Redeemers operations
- * 
+ *
  * This error is thrown when operations on Redeemers instances fail.
  *
  * @since 2.0.0
@@ -26,11 +26,11 @@ export class RedeemersError extends Data.TaggedError("RedeemersError")<{
 
 /**
  * Method free of Redeemers
- * 
+ *
  * @example
  * import { Redeemers } from "@lucid-evolution/experimental";
  * import { Effect } from "effect";
- * 
+ *
  * // Using Effect for safe execution with error handling
  * Effect.gen(function*() {
  * // Assume we have a Redeemers instance
@@ -38,7 +38,7 @@ export class RedeemersError extends Data.TaggedError("RedeemersError")<{
  *   const result = yield* Redeemers.free(instance);
  *   console.log(result);
  * });
- * 
+ *
  * @since 2.0.0
  * @category Methods
  */
@@ -50,18 +50,18 @@ export const free = Effect.fn(
         new RedeemersError({
           message: `Redeemers.free failed Hint: Check if you're calling free() more than once.`,
         }),
-    })
+    }),
 );
 
 /**
  * Unsafely calls instance.free without Effect wrapper
- * 
+ *
  * @example
  * import { Redeemers } from "@lucid-evolution/experimental";
- * 
+ *
  * // Assume we have a Redeemers instance
  * const instance = ... ;
- * 
+ *
  * // Using try/catch for error handling
  * try {
  *   const result = Redeemers.freeUnsafe(instance);
@@ -69,7 +69,7 @@ export const free = Effect.fn(
  * } catch (error) {
  *   console.error(`Redeemers.freeUnsafe failed: ${error.message}`);
  * }
- * 
+ *
  * @since 2.0.0
  * @category MethodsUnsafe
  */
@@ -78,11 +78,11 @@ export const freeUnsafe = (instance: CML.Redeemers): void =>
 
 /**
  * Method toFlatFormat of Redeemers
- * 
+ *
  * @example
  * import { Redeemers } from "@lucid-evolution/experimental";
  * import { Effect } from "effect";
- * 
+ *
  * // Using Effect for safe execution with error handling
  * Effect.gen(function*() {
  * // Assume we have a Redeemers instance
@@ -90,30 +90,32 @@ export const freeUnsafe = (instance: CML.Redeemers): void =>
  *   const result = yield* Redeemers.toFlatFormat(instance);
  *   console.log(result);
  * });
- * 
+ *
  * @since 2.0.0
  * @category Methods
  */
 export const toFlatFormat = Effect.fn(
-  (instance: CML.Redeemers): Effect.Effect<CML.LegacyRedeemerList, RedeemersError> =>
+  (
+    instance: CML.Redeemers,
+  ): Effect.Effect<CML.LegacyRedeemerList, RedeemersError> =>
     Effect.try({
       try: () => instance.to_flat_format(),
       catch: () =>
         new RedeemersError({
           message: `Redeemers.toFlatFormat failed Redeemers is not valid for LegacyRedeemerList conversion. `,
         }),
-    })
+    }),
 );
 
 /**
  * Unsafely calls instance.toFlatFormat without Effect wrapper
- * 
+ *
  * @example
  * import { Redeemers } from "@lucid-evolution/experimental";
- * 
+ *
  * // Assume we have a Redeemers instance
  * const instance = ... ;
- * 
+ *
  * // Using try/catch for error handling
  * try {
  *   const result = Redeemers.toFlatFormatUnsafe(instance);
@@ -121,20 +123,21 @@ export const toFlatFormat = Effect.fn(
  * } catch (error) {
  *   console.error(`Redeemers.toFlatFormatUnsafe failed: ${error.message}`);
  * }
- * 
+ *
  * @since 2.0.0
  * @category MethodsUnsafe
  */
-export const toFlatFormatUnsafe = (instance: CML.Redeemers): CML.LegacyRedeemerList =>
-  Effect.runSync(toFlatFormat(instance));
+export const toFlatFormatUnsafe = (
+  instance: CML.Redeemers,
+): CML.LegacyRedeemerList => Effect.runSync(toFlatFormat(instance));
 
 /**
  * Method toCborBytes of Redeemers
- * 
+ *
  * @example
  * import { Redeemers } from "@lucid-evolution/experimental";
  * import { Effect } from "effect";
- * 
+ *
  * // Using Effect for safe execution with error handling
  * Effect.gen(function*() {
  * // Assume we have a Redeemers instance
@@ -142,7 +145,7 @@ export const toFlatFormatUnsafe = (instance: CML.Redeemers): CML.LegacyRedeemerL
  *   const result = yield* Redeemers.toCborBytes(instance);
  *   console.log(result);
  * });
- * 
+ *
  * @since 2.0.0
  * @category Methods
  */
@@ -154,18 +157,18 @@ export const toCborBytes = Effect.fn(
         new RedeemersError({
           message: `Redeemers.toCborBytes failed Redeemers is not valid for Uint8Array conversion. Hint: Check byte length and encoding.`,
         }),
-    })
+    }),
 );
 
 /**
  * Unsafely calls instance.toCborBytes without Effect wrapper
- * 
+ *
  * @example
  * import { Redeemers } from "@lucid-evolution/experimental";
- * 
+ *
  * // Assume we have a Redeemers instance
  * const instance = ... ;
- * 
+ *
  * // Using try/catch for error handling
  * try {
  *   const result = Redeemers.toCborBytesUnsafe(instance);
@@ -173,7 +176,7 @@ export const toCborBytes = Effect.fn(
  * } catch (error) {
  *   console.error(`Redeemers.toCborBytesUnsafe failed: ${error.message}`);
  * }
- * 
+ *
  * @since 2.0.0
  * @category MethodsUnsafe
  */
@@ -182,11 +185,11 @@ export const toCborBytesUnsafe = (instance: CML.Redeemers): Uint8Array =>
 
 /**
  * Method toCanonicalCborBytes of Redeemers
- * 
+ *
  * @example
  * import { Redeemers } from "@lucid-evolution/experimental";
  * import { Effect } from "effect";
- * 
+ *
  * // Using Effect for safe execution with error handling
  * Effect.gen(function*() {
  * // Assume we have a Redeemers instance
@@ -194,7 +197,7 @@ export const toCborBytesUnsafe = (instance: CML.Redeemers): Uint8Array =>
  *   const result = yield* Redeemers.toCanonicalCborBytes(instance);
  *   console.log(result);
  * });
- * 
+ *
  * @since 2.0.0
  * @category Methods
  */
@@ -206,18 +209,18 @@ export const toCanonicalCborBytes = Effect.fn(
         new RedeemersError({
           message: `Redeemers.toCanonicalCborBytes failed Redeemers is not valid for Uint8Array conversion. Hint: Check byte length and encoding.`,
         }),
-    })
+    }),
 );
 
 /**
  * Unsafely calls instance.toCanonicalCborBytes without Effect wrapper
- * 
+ *
  * @example
  * import { Redeemers } from "@lucid-evolution/experimental";
- * 
+ *
  * // Assume we have a Redeemers instance
  * const instance = ... ;
- * 
+ *
  * // Using try/catch for error handling
  * try {
  *   const result = Redeemers.toCanonicalCborBytesUnsafe(instance);
@@ -225,47 +228,49 @@ export const toCanonicalCborBytes = Effect.fn(
  * } catch (error) {
  *   console.error(`Redeemers.toCanonicalCborBytesUnsafe failed: ${error.message}`);
  * }
- * 
+ *
  * @since 2.0.0
  * @category MethodsUnsafe
  */
-export const toCanonicalCborBytesUnsafe = (instance: CML.Redeemers): Uint8Array =>
-  Effect.runSync(toCanonicalCborBytes(instance));
+export const toCanonicalCborBytesUnsafe = (
+  instance: CML.Redeemers,
+): Uint8Array => Effect.runSync(toCanonicalCborBytes(instance));
 
 /**
  * Static method fromCborBytes of Redeemers
- * 
+ *
  * @example
  * import { Redeemers } from "@lucid-evolution/experimental";
  * import { Effect } from "effect";
- * 
+ *
  * // Using Effect for safe execution with error handling
  * Effect.gen(function*() {
- * 
+ *
  *   const result = yield* Redeemers.fromCborBytes( parameters );
  *   console.log(result);
  * });
- * 
+ *
  * @since 2.0.0
  * @category Constructors
  */
 export const fromCborBytes = Effect.fn(function* (cborBytes: Uint8Array) {
   return yield* Effect.try({
     try: () => CML.Redeemers.from_cbor_bytes(cborBytes),
-    catch: () => new RedeemersError({
-      message: `Redeemers.fromCborBytes failed with parameters: ${cborBytes}. Hint: Check byte length and encoding.`,
-    }),
+    catch: () =>
+      new RedeemersError({
+        message: `Redeemers.fromCborBytes failed with parameters: ${cborBytes}. Hint: Check byte length and encoding.`,
+      }),
   });
 });
 
 /**
  * Unsafely calls Redeemers.fromCborBytes without Effect wrapper
- * 
+ *
  * @example
  * import { Redeemers } from "@lucid-evolution/experimental";
- * 
- * 
- * 
+ *
+ *
+ *
  * // Using try/catch for error handling
  * try {
  *   const result = Redeemers.fromCborBytesUnsafe( parameters );
@@ -273,7 +278,7 @@ export const fromCborBytes = Effect.fn(function* (cborBytes: Uint8Array) {
  * } catch (error) {
  *   console.error(`Redeemers.fromCborBytesUnsafe failed: ${error.message}`);
  * }
- * 
+ *
  * @since 2.0.0
  * @category ConstructorsUnsafe
  */
@@ -282,11 +287,11 @@ export const fromCborBytesUnsafe = (cborBytes: Uint8Array) =>
 
 /**
  * Method toCborHex of Redeemers
- * 
+ *
  * @example
  * import { Redeemers } from "@lucid-evolution/experimental";
  * import { Effect } from "effect";
- * 
+ *
  * // Using Effect for safe execution with error handling
  * Effect.gen(function*() {
  * // Assume we have a Redeemers instance
@@ -294,7 +299,7 @@ export const fromCborBytesUnsafe = (cborBytes: Uint8Array) =>
  *   const result = yield* Redeemers.toCborHex(instance);
  *   console.log(result);
  * });
- * 
+ *
  * @since 2.0.0
  * @category Methods
  */
@@ -306,18 +311,18 @@ export const toCborHex = Effect.fn(
         new RedeemersError({
           message: `Redeemers.toCborHex failed Redeemers is not valid for string conversion. Hint: Make sure it's a valid hex string representing CBOR data.`,
         }),
-    })
+    }),
 );
 
 /**
  * Unsafely calls instance.toCborHex without Effect wrapper
- * 
+ *
  * @example
  * import { Redeemers } from "@lucid-evolution/experimental";
- * 
+ *
  * // Assume we have a Redeemers instance
  * const instance = ... ;
- * 
+ *
  * // Using try/catch for error handling
  * try {
  *   const result = Redeemers.toCborHexUnsafe(instance);
@@ -325,7 +330,7 @@ export const toCborHex = Effect.fn(
  * } catch (error) {
  *   console.error(`Redeemers.toCborHexUnsafe failed: ${error.message}`);
  * }
- * 
+ *
  * @since 2.0.0
  * @category MethodsUnsafe
  */
@@ -334,11 +339,11 @@ export const toCborHexUnsafe = (instance: CML.Redeemers): string =>
 
 /**
  * Method toCanonicalCborHex of Redeemers
- * 
+ *
  * @example
  * import { Redeemers } from "@lucid-evolution/experimental";
  * import { Effect } from "effect";
- * 
+ *
  * // Using Effect for safe execution with error handling
  * Effect.gen(function*() {
  * // Assume we have a Redeemers instance
@@ -346,7 +351,7 @@ export const toCborHexUnsafe = (instance: CML.Redeemers): string =>
  *   const result = yield* Redeemers.toCanonicalCborHex(instance);
  *   console.log(result);
  * });
- * 
+ *
  * @since 2.0.0
  * @category Methods
  */
@@ -358,18 +363,18 @@ export const toCanonicalCborHex = Effect.fn(
         new RedeemersError({
           message: `Redeemers.toCanonicalCborHex failed Redeemers is not valid for string conversion. Hint: Make sure it's a valid hex string representing CBOR data.`,
         }),
-    })
+    }),
 );
 
 /**
  * Unsafely calls instance.toCanonicalCborHex without Effect wrapper
- * 
+ *
  * @example
  * import { Redeemers } from "@lucid-evolution/experimental";
- * 
+ *
  * // Assume we have a Redeemers instance
  * const instance = ... ;
- * 
+ *
  * // Using try/catch for error handling
  * try {
  *   const result = Redeemers.toCanonicalCborHexUnsafe(instance);
@@ -377,7 +382,7 @@ export const toCanonicalCborHex = Effect.fn(
  * } catch (error) {
  *   console.error(`Redeemers.toCanonicalCborHexUnsafe failed: ${error.message}`);
  * }
- * 
+ *
  * @since 2.0.0
  * @category MethodsUnsafe
  */
@@ -386,38 +391,39 @@ export const toCanonicalCborHexUnsafe = (instance: CML.Redeemers): string =>
 
 /**
  * Static method fromCborHex of Redeemers
- * 
+ *
  * @example
  * import { Redeemers } from "@lucid-evolution/experimental";
  * import { Effect } from "effect";
- * 
+ *
  * // Using Effect for safe execution with error handling
  * Effect.gen(function*() {
- * 
+ *
  *   const result = yield* Redeemers.fromCborHex( parameters );
  *   console.log(result);
  * });
- * 
+ *
  * @since 2.0.0
  * @category Constructors
  */
 export const fromCborHex = Effect.fn(function* (cborBytes: string) {
   return yield* Effect.try({
     try: () => CML.Redeemers.from_cbor_hex(cborBytes),
-    catch: () => new RedeemersError({
-      message: `Redeemers.fromCborHex failed with parameters: ${cborBytes}. Hint: Make sure it's a valid hex string representing CBOR data.`,
-    }),
+    catch: () =>
+      new RedeemersError({
+        message: `Redeemers.fromCborHex failed with parameters: ${cborBytes}. Hint: Make sure it's a valid hex string representing CBOR data.`,
+      }),
   });
 });
 
 /**
  * Unsafely calls Redeemers.fromCborHex without Effect wrapper
- * 
+ *
  * @example
  * import { Redeemers } from "@lucid-evolution/experimental";
- * 
- * 
- * 
+ *
+ *
+ *
  * // Using try/catch for error handling
  * try {
  *   const result = Redeemers.fromCborHexUnsafe( parameters );
@@ -425,7 +431,7 @@ export const fromCborHex = Effect.fn(function* (cborBytes: string) {
  * } catch (error) {
  *   console.error(`Redeemers.fromCborHexUnsafe failed: ${error.message}`);
  * }
- * 
+ *
  * @since 2.0.0
  * @category ConstructorsUnsafe
  */
@@ -434,11 +440,11 @@ export const fromCborHexUnsafe = (cborBytes: string) =>
 
 /**
  * Method toJson of Redeemers
- * 
+ *
  * @example
  * import { Redeemers } from "@lucid-evolution/experimental";
  * import { Effect } from "effect";
- * 
+ *
  * // Using Effect for safe execution with error handling
  * Effect.gen(function*() {
  * // Assume we have a Redeemers instance
@@ -446,7 +452,7 @@ export const fromCborHexUnsafe = (cborBytes: string) =>
  *   const result = yield* Redeemers.toJson(instance);
  *   console.log(result);
  * });
- * 
+ *
  * @since 2.0.0
  * @category Methods
  */
@@ -458,18 +464,18 @@ export const toJson = Effect.fn(
         new RedeemersError({
           message: `Redeemers.toJson failed Redeemers is not valid for string conversion. Hint: Validate your JSON structure.`,
         }),
-    })
+    }),
 );
 
 /**
  * Unsafely calls instance.toJson without Effect wrapper
- * 
+ *
  * @example
  * import { Redeemers } from "@lucid-evolution/experimental";
- * 
+ *
  * // Assume we have a Redeemers instance
  * const instance = ... ;
- * 
+ *
  * // Using try/catch for error handling
  * try {
  *   const result = Redeemers.toJsonUnsafe(instance);
@@ -477,7 +483,7 @@ export const toJson = Effect.fn(
  * } catch (error) {
  *   console.error(`Redeemers.toJsonUnsafe failed: ${error.message}`);
  * }
- * 
+ *
  * @since 2.0.0
  * @category MethodsUnsafe
  */
@@ -486,11 +492,11 @@ export const toJsonUnsafe = (instance: CML.Redeemers): string =>
 
 /**
  * Method toJsValue of Redeemers
- * 
+ *
  * @example
  * import { Redeemers } from "@lucid-evolution/experimental";
  * import { Effect } from "effect";
- * 
+ *
  * // Using Effect for safe execution with error handling
  * Effect.gen(function*() {
  * // Assume we have a Redeemers instance
@@ -498,7 +504,7 @@ export const toJsonUnsafe = (instance: CML.Redeemers): string =>
  *   const result = yield* Redeemers.toJsValue(instance);
  *   console.log(result);
  * });
- * 
+ *
  * @since 2.0.0
  * @category Methods
  */
@@ -510,18 +516,18 @@ export const toJsValue = Effect.fn(
         new RedeemersError({
           message: `Redeemers.toJsValue failed Redeemers is not valid for any conversion. `,
         }),
-    })
+    }),
 );
 
 /**
  * Unsafely calls instance.toJsValue without Effect wrapper
- * 
+ *
  * @example
  * import { Redeemers } from "@lucid-evolution/experimental";
- * 
+ *
  * // Assume we have a Redeemers instance
  * const instance = ... ;
- * 
+ *
  * // Using try/catch for error handling
  * try {
  *   const result = Redeemers.toJsValueUnsafe(instance);
@@ -529,7 +535,7 @@ export const toJsValue = Effect.fn(
  * } catch (error) {
  *   console.error(`Redeemers.toJsValueUnsafe failed: ${error.message}`);
  * }
- * 
+ *
  * @since 2.0.0
  * @category MethodsUnsafe
  */
@@ -538,38 +544,39 @@ export const toJsValueUnsafe = (instance: CML.Redeemers): any =>
 
 /**
  * Static method fromJson of Redeemers
- * 
+ *
  * @example
  * import { Redeemers } from "@lucid-evolution/experimental";
  * import { Effect } from "effect";
- * 
+ *
  * // Using Effect for safe execution with error handling
  * Effect.gen(function*() {
- * 
+ *
  *   const result = yield* Redeemers.fromJson( parameters );
  *   console.log(result);
  * });
- * 
+ *
  * @since 2.0.0
  * @category Constructors
  */
 export const fromJson = Effect.fn(function* (json: string) {
   return yield* Effect.try({
     try: () => CML.Redeemers.from_json(json),
-    catch: () => new RedeemersError({
-      message: `Redeemers.fromJson failed with parameters: ${json}. Hint: Validate your JSON structure.`,
-    }),
+    catch: () =>
+      new RedeemersError({
+        message: `Redeemers.fromJson failed with parameters: ${json}. Hint: Validate your JSON structure.`,
+      }),
   });
 });
 
 /**
  * Unsafely calls Redeemers.fromJson without Effect wrapper
- * 
+ *
  * @example
  * import { Redeemers } from "@lucid-evolution/experimental";
- * 
- * 
- * 
+ *
+ *
+ *
  * // Using try/catch for error handling
  * try {
  *   const result = Redeemers.fromJsonUnsafe( parameters );
@@ -577,47 +584,49 @@ export const fromJson = Effect.fn(function* (json: string) {
  * } catch (error) {
  *   console.error(`Redeemers.fromJsonUnsafe failed: ${error.message}`);
  * }
- * 
+ *
  * @since 2.0.0
  * @category ConstructorsUnsafe
  */
-export const fromJsonUnsafe = (json: string) =>
-  Effect.runSync(fromJson(json));
+export const fromJsonUnsafe = (json: string) => Effect.runSync(fromJson(json));
 
 /**
  * Static method newArrLegacyRedeemer of Redeemers
- * 
+ *
  * @example
  * import { Redeemers } from "@lucid-evolution/experimental";
  * import { Effect } from "effect";
- * 
+ *
  * // Using Effect for safe execution with error handling
  * Effect.gen(function*() {
- * 
+ *
  *   const result = yield* Redeemers.newArrLegacyRedeemer( parameters );
  *   console.log(result);
  * });
- * 
+ *
  * @since 2.0.0
  * @category Constructors
  */
-export const newArrLegacyRedeemer = Effect.fn(function* (arrLegacyRedeemer: CML.LegacyRedeemerList) {
+export const newArrLegacyRedeemer = Effect.fn(function* (
+  arrLegacyRedeemer: CML.LegacyRedeemerList,
+) {
   return yield* Effect.try({
     try: () => CML.Redeemers.new_arr_legacy_redeemer(arrLegacyRedeemer),
-    catch: () => new RedeemersError({
-      message: `Redeemers.newArrLegacyRedeemer failed with parameters: ${arrLegacyRedeemer} (LegacyRedeemerList). `,
-    }),
+    catch: () =>
+      new RedeemersError({
+        message: `Redeemers.newArrLegacyRedeemer failed with parameters: ${arrLegacyRedeemer} (LegacyRedeemerList). `,
+      }),
   });
 });
 
 /**
  * Unsafely calls Redeemers.newArrLegacyRedeemer without Effect wrapper
- * 
+ *
  * @example
  * import { Redeemers } from "@lucid-evolution/experimental";
- * 
- * 
- * 
+ *
+ *
+ *
  * // Using try/catch for error handling
  * try {
  *   const result = Redeemers.newArrLegacyRedeemerUnsafe( parameters );
@@ -625,47 +634,54 @@ export const newArrLegacyRedeemer = Effect.fn(function* (arrLegacyRedeemer: CML.
  * } catch (error) {
  *   console.error(`Redeemers.newArrLegacyRedeemerUnsafe failed: ${error.message}`);
  * }
- * 
+ *
  * @since 2.0.0
  * @category ConstructorsUnsafe
  */
-export const newArrLegacyRedeemerUnsafe = (arrLegacyRedeemer: CML.LegacyRedeemerList) =>
-  Effect.runSync(newArrLegacyRedeemer(arrLegacyRedeemer));
+export const newArrLegacyRedeemerUnsafe = (
+  arrLegacyRedeemer: CML.LegacyRedeemerList,
+) => Effect.runSync(newArrLegacyRedeemer(arrLegacyRedeemer));
 
 /**
  * Static method newMapRedeemerKeyToRedeemerVal of Redeemers
- * 
+ *
  * @example
  * import { Redeemers } from "@lucid-evolution/experimental";
  * import { Effect } from "effect";
- * 
+ *
  * // Using Effect for safe execution with error handling
  * Effect.gen(function*() {
- * 
+ *
  *   const result = yield* Redeemers.newMapRedeemerKeyToRedeemerVal( parameters );
  *   console.log(result);
  * });
- * 
+ *
  * @since 2.0.0
  * @category Constructors
  */
-export const newMapRedeemerKeyToRedeemerVal = Effect.fn(function* (mapRedeemerKeyToRedeemerVal: CML.MapRedeemerKeyToRedeemerVal) {
+export const newMapRedeemerKeyToRedeemerVal = Effect.fn(function* (
+  mapRedeemerKeyToRedeemerVal: CML.MapRedeemerKeyToRedeemerVal,
+) {
   return yield* Effect.try({
-    try: () => CML.Redeemers.new_map_redeemer_key_to_redeemer_val(mapRedeemerKeyToRedeemerVal),
-    catch: () => new RedeemersError({
-      message: `Redeemers.newMapRedeemerKeyToRedeemerVal failed with parameters: ${mapRedeemerKeyToRedeemerVal} (MapRedeemerKeyToRedeemerVal). `,
-    }),
+    try: () =>
+      CML.Redeemers.new_map_redeemer_key_to_redeemer_val(
+        mapRedeemerKeyToRedeemerVal,
+      ),
+    catch: () =>
+      new RedeemersError({
+        message: `Redeemers.newMapRedeemerKeyToRedeemerVal failed with parameters: ${mapRedeemerKeyToRedeemerVal} (MapRedeemerKeyToRedeemerVal). `,
+      }),
   });
 });
 
 /**
  * Unsafely calls Redeemers.newMapRedeemerKeyToRedeemerVal without Effect wrapper
- * 
+ *
  * @example
  * import { Redeemers } from "@lucid-evolution/experimental";
- * 
- * 
- * 
+ *
+ *
+ *
  * // Using try/catch for error handling
  * try {
  *   const result = Redeemers.newMapRedeemerKeyToRedeemerValUnsafe( parameters );
@@ -673,20 +689,22 @@ export const newMapRedeemerKeyToRedeemerVal = Effect.fn(function* (mapRedeemerKe
  * } catch (error) {
  *   console.error(`Redeemers.newMapRedeemerKeyToRedeemerValUnsafe failed: ${error.message}`);
  * }
- * 
+ *
  * @since 2.0.0
  * @category ConstructorsUnsafe
  */
-export const newMapRedeemerKeyToRedeemerValUnsafe = (mapRedeemerKeyToRedeemerVal: CML.MapRedeemerKeyToRedeemerVal) =>
+export const newMapRedeemerKeyToRedeemerValUnsafe = (
+  mapRedeemerKeyToRedeemerVal: CML.MapRedeemerKeyToRedeemerVal,
+) =>
   Effect.runSync(newMapRedeemerKeyToRedeemerVal(mapRedeemerKeyToRedeemerVal));
 
 /**
  * Method kind of Redeemers
- * 
+ *
  * @example
  * import { Redeemers } from "@lucid-evolution/experimental";
  * import { Effect } from "effect";
- * 
+ *
  * // Using Effect for safe execution with error handling
  * Effect.gen(function*() {
  * // Assume we have a Redeemers instance
@@ -694,7 +712,7 @@ export const newMapRedeemerKeyToRedeemerValUnsafe = (mapRedeemerKeyToRedeemerVal
  *   const result = yield* Redeemers.kind(instance);
  *   console.log(result);
  * });
- * 
+ *
  * @since 2.0.0
  * @category Methods
  */
@@ -706,18 +724,18 @@ export const kind = Effect.fn(
         new RedeemersError({
           message: `Redeemers.kind failed `,
         }),
-    })
+    }),
 );
 
 /**
  * Unsafely calls instance.kind without Effect wrapper
- * 
+ *
  * @example
  * import { Redeemers } from "@lucid-evolution/experimental";
- * 
+ *
  * // Assume we have a Redeemers instance
  * const instance = ... ;
- * 
+ *
  * // Using try/catch for error handling
  * try {
  *   const result = Redeemers.kindUnsafe(instance);
@@ -725,7 +743,7 @@ export const kind = Effect.fn(
  * } catch (error) {
  *   console.error(`Redeemers.kindUnsafe failed: ${error.message}`);
  * }
- * 
+ *
  * @since 2.0.0
  * @category MethodsUnsafe
  */
@@ -734,11 +752,11 @@ export const kindUnsafe = (instance: CML.Redeemers): CML.RedeemersKind =>
 
 /**
  * Method asArrLegacyRedeemer of Redeemers
- * 
+ *
  * @example
  * import { Redeemers } from "@lucid-evolution/experimental";
  * import { Effect } from "effect";
- * 
+ *
  * // Using Effect for safe execution with error handling
  * Effect.gen(function*() {
  * // Assume we have a Redeemers instance
@@ -746,30 +764,32 @@ export const kindUnsafe = (instance: CML.Redeemers): CML.RedeemersKind =>
  *   const result = yield* Redeemers.asArrLegacyRedeemer(instance);
  *   console.log(result);
  * });
- * 
+ *
  * @since 2.0.0
  * @category Methods
  */
 export const asArrLegacyRedeemer = Effect.fn(
-  (instance: CML.Redeemers): Effect.Effect<CML.LegacyRedeemerList | undefined, RedeemersError> =>
+  (
+    instance: CML.Redeemers,
+  ): Effect.Effect<CML.LegacyRedeemerList | undefined, RedeemersError> =>
     Effect.try({
       try: () => instance.as_arr_legacy_redeemer(),
       catch: () =>
         new RedeemersError({
           message: `Redeemers.asArrLegacyRedeemer failed `,
         }),
-    })
+    }),
 );
 
 /**
  * Unsafely calls instance.asArrLegacyRedeemer without Effect wrapper
- * 
+ *
  * @example
  * import { Redeemers } from "@lucid-evolution/experimental";
- * 
+ *
  * // Assume we have a Redeemers instance
  * const instance = ... ;
- * 
+ *
  * // Using try/catch for error handling
  * try {
  *   const result = Redeemers.asArrLegacyRedeemerUnsafe(instance);
@@ -777,20 +797,22 @@ export const asArrLegacyRedeemer = Effect.fn(
  * } catch (error) {
  *   console.error(`Redeemers.asArrLegacyRedeemerUnsafe failed: ${error.message}`);
  * }
- * 
+ *
  * @since 2.0.0
  * @category MethodsUnsafe
  */
-export const asArrLegacyRedeemerUnsafe = (instance: CML.Redeemers): CML.LegacyRedeemerList | undefined =>
+export const asArrLegacyRedeemerUnsafe = (
+  instance: CML.Redeemers,
+): CML.LegacyRedeemerList | undefined =>
   Effect.runSync(asArrLegacyRedeemer(instance));
 
 /**
  * Method asMapRedeemerKeyToRedeemerVal of Redeemers
- * 
+ *
  * @example
  * import { Redeemers } from "@lucid-evolution/experimental";
  * import { Effect } from "effect";
- * 
+ *
  * // Using Effect for safe execution with error handling
  * Effect.gen(function*() {
  * // Assume we have a Redeemers instance
@@ -798,30 +820,35 @@ export const asArrLegacyRedeemerUnsafe = (instance: CML.Redeemers): CML.LegacyRe
  *   const result = yield* Redeemers.asMapRedeemerKeyToRedeemerVal(instance);
  *   console.log(result);
  * });
- * 
+ *
  * @since 2.0.0
  * @category Methods
  */
 export const asMapRedeemerKeyToRedeemerVal = Effect.fn(
-  (instance: CML.Redeemers): Effect.Effect<CML.MapRedeemerKeyToRedeemerVal | undefined, RedeemersError> =>
+  (
+    instance: CML.Redeemers,
+  ): Effect.Effect<
+    CML.MapRedeemerKeyToRedeemerVal | undefined,
+    RedeemersError
+  > =>
     Effect.try({
       try: () => instance.as_map_redeemer_key_to_redeemer_val(),
       catch: () =>
         new RedeemersError({
           message: `Redeemers.asMapRedeemerKeyToRedeemerVal failed `,
         }),
-    })
+    }),
 );
 
 /**
  * Unsafely calls instance.asMapRedeemerKeyToRedeemerVal without Effect wrapper
- * 
+ *
  * @example
  * import { Redeemers } from "@lucid-evolution/experimental";
- * 
+ *
  * // Assume we have a Redeemers instance
  * const instance = ... ;
- * 
+ *
  * // Using try/catch for error handling
  * try {
  *   const result = Redeemers.asMapRedeemerKeyToRedeemerValUnsafe(instance);
@@ -829,9 +856,11 @@ export const asMapRedeemerKeyToRedeemerVal = Effect.fn(
  * } catch (error) {
  *   console.error(`Redeemers.asMapRedeemerKeyToRedeemerValUnsafe failed: ${error.message}`);
  * }
- * 
+ *
  * @since 2.0.0
  * @category MethodsUnsafe
  */
-export const asMapRedeemerKeyToRedeemerValUnsafe = (instance: CML.Redeemers): CML.MapRedeemerKeyToRedeemerVal | undefined =>
+export const asMapRedeemerKeyToRedeemerValUnsafe = (
+  instance: CML.Redeemers,
+): CML.MapRedeemerKeyToRedeemerVal | undefined =>
   Effect.runSync(asMapRedeemerKeyToRedeemerVal(instance));

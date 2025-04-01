@@ -14,7 +14,7 @@ export type PrivateKey = CML.PrivateKey;
 
 /**
  * Error class for PrivateKey operations
- * 
+ *
  * This error is thrown when operations on PrivateKey instances fail.
  *
  * @since 2.0.0
@@ -26,11 +26,11 @@ export class PrivateKeyError extends Data.TaggedError("PrivateKeyError")<{
 
 /**
  * Method free of PrivateKey
- * 
+ *
  * @example
  * import { PrivateKey } from "@lucid-evolution/experimental";
  * import { Effect } from "effect";
- * 
+ *
  * // Using Effect for safe execution with error handling
  * Effect.gen(function*() {
  * // Assume we have a PrivateKey instance
@@ -38,7 +38,7 @@ export class PrivateKeyError extends Data.TaggedError("PrivateKeyError")<{
  *   const result = yield* PrivateKey.free(instance);
  *   console.log(result);
  * });
- * 
+ *
  * @since 2.0.0
  * @category Methods
  */
@@ -50,18 +50,18 @@ export const free = Effect.fn(
         new PrivateKeyError({
           message: `PrivateKey.free failed Hint: Check if you're calling free() more than once.`,
         }),
-    })
+    }),
 );
 
 /**
  * Unsafely calls instance.free without Effect wrapper
- * 
+ *
  * @example
  * import { PrivateKey } from "@lucid-evolution/experimental";
- * 
+ *
  * // Assume we have a PrivateKey instance
  * const instance = ... ;
- * 
+ *
  * // Using try/catch for error handling
  * try {
  *   const result = PrivateKey.freeUnsafe(instance);
@@ -69,7 +69,7 @@ export const free = Effect.fn(
  * } catch (error) {
  *   console.error(`PrivateKey.freeUnsafe failed: ${error.message}`);
  * }
- * 
+ *
  * @since 2.0.0
  * @category MethodsUnsafe
  */
@@ -78,11 +78,11 @@ export const freeUnsafe = (instance: CML.PrivateKey): void =>
 
 /**
  * Method toPublic of PrivateKey
- * 
+ *
  * @example
  * import { PrivateKey } from "@lucid-evolution/experimental";
  * import { Effect } from "effect";
- * 
+ *
  * // Using Effect for safe execution with error handling
  * Effect.gen(function*() {
  * // Assume we have a PrivateKey instance
@@ -90,7 +90,7 @@ export const freeUnsafe = (instance: CML.PrivateKey): void =>
  *   const result = yield* PrivateKey.toPublic(instance);
  *   console.log(result);
  * });
- * 
+ *
  * @since 2.0.0
  * @category Methods
  */
@@ -102,18 +102,18 @@ export const toPublic = Effect.fn(
         new PrivateKeyError({
           message: `PrivateKey.toPublic failed PrivateKey is not valid for PublicKey conversion. `,
         }),
-    })
+    }),
 );
 
 /**
  * Unsafely calls instance.toPublic without Effect wrapper
- * 
+ *
  * @example
  * import { PrivateKey } from "@lucid-evolution/experimental";
- * 
+ *
  * // Assume we have a PrivateKey instance
  * const instance = ... ;
- * 
+ *
  * // Using try/catch for error handling
  * try {
  *   const result = PrivateKey.toPublicUnsafe(instance);
@@ -121,7 +121,7 @@ export const toPublic = Effect.fn(
  * } catch (error) {
  *   console.error(`PrivateKey.toPublicUnsafe failed: ${error.message}`);
  * }
- * 
+ *
  * @since 2.0.0
  * @category MethodsUnsafe
  */
@@ -130,38 +130,39 @@ export const toPublicUnsafe = (instance: CML.PrivateKey): CML.PublicKey =>
 
 /**
  * Static method generateEd25519 of PrivateKey
- * 
+ *
  * @example
  * import { PrivateKey } from "@lucid-evolution/experimental";
  * import { Effect } from "effect";
- * 
+ *
  * // Using Effect for safe execution with error handling
  * Effect.gen(function*() {
- * 
+ *
  *   const result = yield* PrivateKey.generateEd25519();
  *   console.log(result);
  * });
- * 
+ *
  * @since 2.0.0
  * @category Constructors
  */
 export const generateEd25519 = Effect.fn(function* () {
   return yield* Effect.try({
     try: () => CML.PrivateKey.generate_ed25519(),
-    catch: () => new PrivateKeyError({
-      message: `PrivateKey.generateEd25519 failed `,
-    }),
+    catch: () =>
+      new PrivateKeyError({
+        message: `PrivateKey.generateEd25519 failed `,
+      }),
   });
 });
 
 /**
  * Unsafely calls PrivateKey.generateEd25519 without Effect wrapper
- * 
+ *
  * @example
  * import { PrivateKey } from "@lucid-evolution/experimental";
- * 
- * 
- * 
+ *
+ *
+ *
  * // Using try/catch for error handling
  * try {
  *   const result = PrivateKey.generateEd25519Unsafe();
@@ -169,47 +170,47 @@ export const generateEd25519 = Effect.fn(function* () {
  * } catch (error) {
  *   console.error(`PrivateKey.generateEd25519Unsafe failed: ${error.message}`);
  * }
- * 
+ *
  * @since 2.0.0
  * @category ConstructorsUnsafe
  */
-export const generateEd25519Unsafe = () =>
-  Effect.runSync(generateEd25519());
+export const generateEd25519Unsafe = () => Effect.runSync(generateEd25519());
 
 /**
  * Static method generateEd25519extended of PrivateKey
- * 
+ *
  * @example
  * import { PrivateKey } from "@lucid-evolution/experimental";
  * import { Effect } from "effect";
- * 
+ *
  * // Using Effect for safe execution with error handling
  * Effect.gen(function*() {
- * 
+ *
  *   const result = yield* PrivateKey.generateEd25519extended();
  *   console.log(result);
  * });
- * 
+ *
  * @since 2.0.0
  * @category Constructors
  */
 export const generateEd25519extended = Effect.fn(function* () {
   return yield* Effect.try({
     try: () => CML.PrivateKey.generate_ed25519extended(),
-    catch: () => new PrivateKeyError({
-      message: `PrivateKey.generateEd25519extended failed `,
-    }),
+    catch: () =>
+      new PrivateKeyError({
+        message: `PrivateKey.generateEd25519extended failed `,
+      }),
   });
 });
 
 /**
  * Unsafely calls PrivateKey.generateEd25519extended without Effect wrapper
- * 
+ *
  * @example
  * import { PrivateKey } from "@lucid-evolution/experimental";
- * 
- * 
- * 
+ *
+ *
+ *
  * // Using try/catch for error handling
  * try {
  *   const result = PrivateKey.generateEd25519extendedUnsafe();
@@ -217,7 +218,7 @@ export const generateEd25519extended = Effect.fn(function* () {
  * } catch (error) {
  *   console.error(`PrivateKey.generateEd25519extendedUnsafe failed: ${error.message}`);
  * }
- * 
+ *
  * @since 2.0.0
  * @category ConstructorsUnsafe
  */
@@ -226,38 +227,39 @@ export const generateEd25519extendedUnsafe = () =>
 
 /**
  * Static method fromBech32 of PrivateKey
- * 
+ *
  * @example
  * import { PrivateKey } from "@lucid-evolution/experimental";
  * import { Effect } from "effect";
- * 
+ *
  * // Using Effect for safe execution with error handling
  * Effect.gen(function*() {
- * 
+ *
  *   const result = yield* PrivateKey.fromBech32( parameters );
  *   console.log(result);
  * });
- * 
+ *
  * @since 2.0.0
  * @category Constructors
  */
 export const fromBech32 = Effect.fn(function* (bech32Str: string) {
   return yield* Effect.try({
     try: () => CML.PrivateKey.from_bech32(bech32Str),
-    catch: () => new PrivateKeyError({
-      message: `PrivateKey.fromBech32 failed with parameters: ${bech32Str}. `,
-    }),
+    catch: () =>
+      new PrivateKeyError({
+        message: `PrivateKey.fromBech32 failed with parameters: ${bech32Str}. `,
+      }),
   });
 });
 
 /**
  * Unsafely calls PrivateKey.fromBech32 without Effect wrapper
- * 
+ *
  * @example
  * import { PrivateKey } from "@lucid-evolution/experimental";
- * 
- * 
- * 
+ *
+ *
+ *
  * // Using try/catch for error handling
  * try {
  *   const result = PrivateKey.fromBech32Unsafe( parameters );
@@ -265,7 +267,7 @@ export const fromBech32 = Effect.fn(function* (bech32Str: string) {
  * } catch (error) {
  *   console.error(`PrivateKey.fromBech32Unsafe failed: ${error.message}`);
  * }
- * 
+ *
  * @since 2.0.0
  * @category ConstructorsUnsafe
  */
@@ -274,11 +276,11 @@ export const fromBech32Unsafe = (bech32Str: string) =>
 
 /**
  * Method toBech32 of PrivateKey
- * 
+ *
  * @example
  * import { PrivateKey } from "@lucid-evolution/experimental";
  * import { Effect } from "effect";
- * 
+ *
  * // Using Effect for safe execution with error handling
  * Effect.gen(function*() {
  * // Assume we have a PrivateKey instance
@@ -286,7 +288,7 @@ export const fromBech32Unsafe = (bech32Str: string) =>
  *   const result = yield* PrivateKey.toBech32(instance);
  *   console.log(result);
  * });
- * 
+ *
  * @since 2.0.0
  * @category Methods
  */
@@ -298,18 +300,18 @@ export const toBech32 = Effect.fn(
         new PrivateKeyError({
           message: `PrivateKey.toBech32 failed PrivateKey is not valid for string conversion. `,
         }),
-    })
+    }),
 );
 
 /**
  * Unsafely calls instance.toBech32 without Effect wrapper
- * 
+ *
  * @example
  * import { PrivateKey } from "@lucid-evolution/experimental";
- * 
+ *
  * // Assume we have a PrivateKey instance
  * const instance = ... ;
- * 
+ *
  * // Using try/catch for error handling
  * try {
  *   const result = PrivateKey.toBech32Unsafe(instance);
@@ -317,7 +319,7 @@ export const toBech32 = Effect.fn(
  * } catch (error) {
  *   console.error(`PrivateKey.toBech32Unsafe failed: ${error.message}`);
  * }
- * 
+ *
  * @since 2.0.0
  * @category MethodsUnsafe
  */
@@ -326,11 +328,11 @@ export const toBech32Unsafe = (instance: CML.PrivateKey): string =>
 
 /**
  * Method toRawBytes of PrivateKey
- * 
+ *
  * @example
  * import { PrivateKey } from "@lucid-evolution/experimental";
  * import { Effect } from "effect";
- * 
+ *
  * // Using Effect for safe execution with error handling
  * Effect.gen(function*() {
  * // Assume we have a PrivateKey instance
@@ -338,7 +340,7 @@ export const toBech32Unsafe = (instance: CML.PrivateKey): string =>
  *   const result = yield* PrivateKey.toRawBytes(instance);
  *   console.log(result);
  * });
- * 
+ *
  * @since 2.0.0
  * @category Methods
  */
@@ -350,18 +352,18 @@ export const toRawBytes = Effect.fn(
         new PrivateKeyError({
           message: `PrivateKey.toRawBytes failed PrivateKey is not valid for Uint8Array conversion. Hint: Check byte length and encoding.`,
         }),
-    })
+    }),
 );
 
 /**
  * Unsafely calls instance.toRawBytes without Effect wrapper
- * 
+ *
  * @example
  * import { PrivateKey } from "@lucid-evolution/experimental";
- * 
+ *
  * // Assume we have a PrivateKey instance
  * const instance = ... ;
- * 
+ *
  * // Using try/catch for error handling
  * try {
  *   const result = PrivateKey.toRawBytesUnsafe(instance);
@@ -369,7 +371,7 @@ export const toRawBytes = Effect.fn(
  * } catch (error) {
  *   console.error(`PrivateKey.toRawBytesUnsafe failed: ${error.message}`);
  * }
- * 
+ *
  * @since 2.0.0
  * @category MethodsUnsafe
  */
@@ -378,38 +380,39 @@ export const toRawBytesUnsafe = (instance: CML.PrivateKey): Uint8Array =>
 
 /**
  * Static method fromExtendedBytes of PrivateKey
- * 
+ *
  * @example
  * import { PrivateKey } from "@lucid-evolution/experimental";
  * import { Effect } from "effect";
- * 
+ *
  * // Using Effect for safe execution with error handling
  * Effect.gen(function*() {
- * 
+ *
  *   const result = yield* PrivateKey.fromExtendedBytes( parameters );
  *   console.log(result);
  * });
- * 
+ *
  * @since 2.0.0
  * @category Constructors
  */
 export const fromExtendedBytes = Effect.fn(function* (bytes: Uint8Array) {
   return yield* Effect.try({
     try: () => CML.PrivateKey.from_extended_bytes(bytes),
-    catch: () => new PrivateKeyError({
-      message: `PrivateKey.fromExtendedBytes failed with parameters: ${bytes}. Hint: Check byte length and encoding.`,
-    }),
+    catch: () =>
+      new PrivateKeyError({
+        message: `PrivateKey.fromExtendedBytes failed with parameters: ${bytes}. Hint: Check byte length and encoding.`,
+      }),
   });
 });
 
 /**
  * Unsafely calls PrivateKey.fromExtendedBytes without Effect wrapper
- * 
+ *
  * @example
  * import { PrivateKey } from "@lucid-evolution/experimental";
- * 
- * 
- * 
+ *
+ *
+ *
  * // Using try/catch for error handling
  * try {
  *   const result = PrivateKey.fromExtendedBytesUnsafe( parameters );
@@ -417,7 +420,7 @@ export const fromExtendedBytes = Effect.fn(function* (bytes: Uint8Array) {
  * } catch (error) {
  *   console.error(`PrivateKey.fromExtendedBytesUnsafe failed: ${error.message}`);
  * }
- * 
+ *
  * @since 2.0.0
  * @category ConstructorsUnsafe
  */
@@ -426,38 +429,39 @@ export const fromExtendedBytesUnsafe = (bytes: Uint8Array) =>
 
 /**
  * Static method fromNormalBytes of PrivateKey
- * 
+ *
  * @example
  * import { PrivateKey } from "@lucid-evolution/experimental";
  * import { Effect } from "effect";
- * 
+ *
  * // Using Effect for safe execution with error handling
  * Effect.gen(function*() {
- * 
+ *
  *   const result = yield* PrivateKey.fromNormalBytes( parameters );
  *   console.log(result);
  * });
- * 
+ *
  * @since 2.0.0
  * @category Constructors
  */
 export const fromNormalBytes = Effect.fn(function* (bytes: Uint8Array) {
   return yield* Effect.try({
     try: () => CML.PrivateKey.from_normal_bytes(bytes),
-    catch: () => new PrivateKeyError({
-      message: `PrivateKey.fromNormalBytes failed with parameters: ${bytes}. Hint: Check byte length and encoding.`,
-    }),
+    catch: () =>
+      new PrivateKeyError({
+        message: `PrivateKey.fromNormalBytes failed with parameters: ${bytes}. Hint: Check byte length and encoding.`,
+      }),
   });
 });
 
 /**
  * Unsafely calls PrivateKey.fromNormalBytes without Effect wrapper
- * 
+ *
  * @example
  * import { PrivateKey } from "@lucid-evolution/experimental";
- * 
- * 
- * 
+ *
+ *
+ *
  * // Using try/catch for error handling
  * try {
  *   const result = PrivateKey.fromNormalBytesUnsafe( parameters );
@@ -465,7 +469,7 @@ export const fromNormalBytes = Effect.fn(function* (bytes: Uint8Array) {
  * } catch (error) {
  *   console.error(`PrivateKey.fromNormalBytesUnsafe failed: ${error.message}`);
  * }
- * 
+ *
  * @since 2.0.0
  * @category ConstructorsUnsafe
  */
@@ -474,11 +478,11 @@ export const fromNormalBytesUnsafe = (bytes: Uint8Array) =>
 
 /**
  * Method sign of PrivateKey
- * 
+ *
  * @example
  * import { PrivateKey } from "@lucid-evolution/experimental";
  * import { Effect } from "effect";
- * 
+ *
  * // Using Effect for safe execution with error handling
  * Effect.gen(function*() {
  * // Assume we have a PrivateKey instance
@@ -486,30 +490,33 @@ export const fromNormalBytesUnsafe = (bytes: Uint8Array) =>
  *   const result = yield* PrivateKey.sign(instance,  parameters );
  *   console.log(result);
  * });
- * 
+ *
  * @since 2.0.0
  * @category Methods
  */
 export const sign = Effect.fn(
-  (instance: CML.PrivateKey, message: Uint8Array): Effect.Effect<CML.Ed25519Signature, PrivateKeyError> =>
+  (
+    instance: CML.PrivateKey,
+    message: Uint8Array,
+  ): Effect.Effect<CML.Ed25519Signature, PrivateKeyError> =>
     Effect.try({
       try: () => instance.sign(message),
       catch: () =>
         new PrivateKeyError({
           message: `PrivateKey.sign failed with parameters: ${message}. `,
         }),
-    })
+    }),
 );
 
 /**
  * Unsafely calls instance.sign without Effect wrapper
- * 
+ *
  * @example
  * import { PrivateKey } from "@lucid-evolution/experimental";
- * 
+ *
  * // Assume we have a PrivateKey instance
  * const instance = ... ;
- * 
+ *
  * // Using try/catch for error handling
  * try {
  *   const result = PrivateKey.signUnsafe(instance,  parameters );
@@ -517,9 +524,11 @@ export const sign = Effect.fn(
  * } catch (error) {
  *   console.error(`PrivateKey.signUnsafe failed: ${error.message}`);
  * }
- * 
+ *
  * @since 2.0.0
  * @category MethodsUnsafe
  */
-export const signUnsafe = (instance: CML.PrivateKey, message: Uint8Array): CML.Ed25519Signature =>
-  Effect.runSync(sign(instance, message));
+export const signUnsafe = (
+  instance: CML.PrivateKey,
+  message: Uint8Array,
+): CML.Ed25519Signature => Effect.runSync(sign(instance, message));

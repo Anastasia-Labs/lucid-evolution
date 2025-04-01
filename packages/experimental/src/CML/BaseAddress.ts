@@ -14,7 +14,7 @@ export type BaseAddress = CML.BaseAddress;
 
 /**
  * Error class for BaseAddress operations
- * 
+ *
  * This error is thrown when operations on BaseAddress instances fail.
  *
  * @since 2.0.0
@@ -26,11 +26,11 @@ export class BaseAddressError extends Data.TaggedError("BaseAddressError")<{
 
 /**
  * Method free of BaseAddress
- * 
+ *
  * @example
  * import { BaseAddress } from "@lucid-evolution/experimental";
  * import { Effect } from "effect";
- * 
+ *
  * // Using Effect for safe execution with error handling
  * Effect.gen(function*() {
  * // Assume we have a BaseAddress instance
@@ -38,7 +38,7 @@ export class BaseAddressError extends Data.TaggedError("BaseAddressError")<{
  *   const result = yield* BaseAddress.free(instance);
  *   console.log(result);
  * });
- * 
+ *
  * @since 2.0.0
  * @category Methods
  */
@@ -50,18 +50,18 @@ export const free = Effect.fn(
         new BaseAddressError({
           message: `BaseAddress.free failed Hint: Check if you're calling free() more than once.`,
         }),
-    })
+    }),
 );
 
 /**
  * Unsafely calls instance.free without Effect wrapper
- * 
+ *
  * @example
  * import { BaseAddress } from "@lucid-evolution/experimental";
- * 
+ *
  * // Assume we have a BaseAddress instance
  * const instance = ... ;
- * 
+ *
  * // Using try/catch for error handling
  * try {
  *   const result = BaseAddress.freeUnsafe(instance);
@@ -69,7 +69,7 @@ export const free = Effect.fn(
  * } catch (error) {
  *   console.error(`BaseAddress.freeUnsafe failed: ${error.message}`);
  * }
- * 
+ *
  * @since 2.0.0
  * @category MethodsUnsafe
  */
@@ -78,38 +78,43 @@ export const freeUnsafe = (instance: CML.BaseAddress): void =>
 
 /**
  * Static method _new of BaseAddress
- * 
+ *
  * @example
  * import { BaseAddress } from "@lucid-evolution/experimental";
  * import { Effect } from "effect";
- * 
+ *
  * // Using Effect for safe execution with error handling
  * Effect.gen(function*() {
- * 
+ *
  *   const result = yield* BaseAddress._new( parameters );
  *   console.log(result);
  * });
- * 
+ *
  * @since 2.0.0
  * @category Constructors
  */
-export const _new = Effect.fn(function* (network: number, payment: CML.Credential, stake: CML.Credential) {
+export const _new = Effect.fn(function* (
+  network: number,
+  payment: CML.Credential,
+  stake: CML.Credential,
+) {
   return yield* Effect.try({
     try: () => CML.BaseAddress.new(network, payment, stake),
-    catch: () => new BaseAddressError({
-      message: `BaseAddress._new failed with parameters: ${network}, ${payment} (Credential), ${stake} (Credential). `,
-    }),
+    catch: () =>
+      new BaseAddressError({
+        message: `BaseAddress._new failed with parameters: ${network}, ${payment} (Credential), ${stake} (Credential). `,
+      }),
   });
 });
 
 /**
  * Unsafely calls BaseAddress._new without Effect wrapper
- * 
+ *
  * @example
  * import { BaseAddress } from "@lucid-evolution/experimental";
- * 
- * 
- * 
+ *
+ *
+ *
  * // Using try/catch for error handling
  * try {
  *   const result = BaseAddress._newUnsafe( parameters );
@@ -117,20 +122,23 @@ export const _new = Effect.fn(function* (network: number, payment: CML.Credentia
  * } catch (error) {
  *   console.error(`BaseAddress._newUnsafe failed: ${error.message}`);
  * }
- * 
+ *
  * @since 2.0.0
  * @category ConstructorsUnsafe
  */
-export const _newUnsafe = (network: number, payment: CML.Credential, stake: CML.Credential) =>
-  Effect.runSync(_new(network, payment, stake));
+export const _newUnsafe = (
+  network: number,
+  payment: CML.Credential,
+  stake: CML.Credential,
+) => Effect.runSync(_new(network, payment, stake));
 
 /**
  * Method toAddress of BaseAddress
- * 
+ *
  * @example
  * import { BaseAddress } from "@lucid-evolution/experimental";
  * import { Effect } from "effect";
- * 
+ *
  * // Using Effect for safe execution with error handling
  * Effect.gen(function*() {
  * // Assume we have a BaseAddress instance
@@ -138,7 +146,7 @@ export const _newUnsafe = (network: number, payment: CML.Credential, stake: CML.
  *   const result = yield* BaseAddress.toAddress(instance);
  *   console.log(result);
  * });
- * 
+ *
  * @since 2.0.0
  * @category Methods
  */
@@ -150,18 +158,18 @@ export const toAddress = Effect.fn(
         new BaseAddressError({
           message: `BaseAddress.toAddress failed BaseAddress is not valid for Address conversion. `,
         }),
-    })
+    }),
 );
 
 /**
  * Unsafely calls instance.toAddress without Effect wrapper
- * 
+ *
  * @example
  * import { BaseAddress } from "@lucid-evolution/experimental";
- * 
+ *
  * // Assume we have a BaseAddress instance
  * const instance = ... ;
- * 
+ *
  * // Using try/catch for error handling
  * try {
  *   const result = BaseAddress.toAddressUnsafe(instance);
@@ -169,7 +177,7 @@ export const toAddress = Effect.fn(
  * } catch (error) {
  *   console.error(`BaseAddress.toAddressUnsafe failed: ${error.message}`);
  * }
- * 
+ *
  * @since 2.0.0
  * @category MethodsUnsafe
  */
@@ -178,38 +186,39 @@ export const toAddressUnsafe = (instance: CML.BaseAddress): CML.Address =>
 
 /**
  * Static method fromAddress of BaseAddress
- * 
+ *
  * @example
  * import { BaseAddress } from "@lucid-evolution/experimental";
  * import { Effect } from "effect";
- * 
+ *
  * // Using Effect for safe execution with error handling
  * Effect.gen(function*() {
- * 
+ *
  *   const result = yield* BaseAddress.fromAddress( parameters );
  *   console.log(result);
  * });
- * 
+ *
  * @since 2.0.0
  * @category Constructors
  */
 export const fromAddress = Effect.fn(function* (address: CML.Address) {
   return yield* Effect.try({
     try: () => CML.BaseAddress.from_address(address),
-    catch: () => new BaseAddressError({
-      message: `BaseAddress.fromAddress failed with parameters: ${address} (Address). `,
-    }),
+    catch: () =>
+      new BaseAddressError({
+        message: `BaseAddress.fromAddress failed with parameters: ${address} (Address). `,
+      }),
   });
 });
 
 /**
  * Unsafely calls BaseAddress.fromAddress without Effect wrapper
- * 
+ *
  * @example
  * import { BaseAddress } from "@lucid-evolution/experimental";
- * 
- * 
- * 
+ *
+ *
+ *
  * // Using try/catch for error handling
  * try {
  *   const result = BaseAddress.fromAddressUnsafe( parameters );
@@ -217,7 +226,7 @@ export const fromAddress = Effect.fn(function* (address: CML.Address) {
  * } catch (error) {
  *   console.error(`BaseAddress.fromAddressUnsafe failed: ${error.message}`);
  * }
- * 
+ *
  * @since 2.0.0
  * @category ConstructorsUnsafe
  */
@@ -226,11 +235,11 @@ export const fromAddressUnsafe = (address: CML.Address) =>
 
 /**
  * Method networkId of BaseAddress
- * 
+ *
  * @example
  * import { BaseAddress } from "@lucid-evolution/experimental";
  * import { Effect } from "effect";
- * 
+ *
  * // Using Effect for safe execution with error handling
  * Effect.gen(function*() {
  * // Assume we have a BaseAddress instance
@@ -238,7 +247,7 @@ export const fromAddressUnsafe = (address: CML.Address) =>
  *   const result = yield* BaseAddress.networkId(instance);
  *   console.log(result);
  * });
- * 
+ *
  * @since 2.0.0
  * @category Methods
  */
@@ -250,18 +259,18 @@ export const networkId = Effect.fn(
         new BaseAddressError({
           message: `BaseAddress.networkId failed `,
         }),
-    })
+    }),
 );
 
 /**
  * Unsafely calls instance.networkId without Effect wrapper
- * 
+ *
  * @example
  * import { BaseAddress } from "@lucid-evolution/experimental";
- * 
+ *
  * // Assume we have a BaseAddress instance
  * const instance = ... ;
- * 
+ *
  * // Using try/catch for error handling
  * try {
  *   const result = BaseAddress.networkIdUnsafe(instance);
@@ -269,7 +278,7 @@ export const networkId = Effect.fn(
  * } catch (error) {
  *   console.error(`BaseAddress.networkIdUnsafe failed: ${error.message}`);
  * }
- * 
+ *
  * @since 2.0.0
  * @category MethodsUnsafe
  */
@@ -278,11 +287,11 @@ export const networkIdUnsafe = (instance: CML.BaseAddress): number =>
 
 /**
  * Method payment of BaseAddress
- * 
+ *
  * @example
  * import { BaseAddress } from "@lucid-evolution/experimental";
  * import { Effect } from "effect";
- * 
+ *
  * // Using Effect for safe execution with error handling
  * Effect.gen(function*() {
  * // Assume we have a BaseAddress instance
@@ -290,30 +299,32 @@ export const networkIdUnsafe = (instance: CML.BaseAddress): number =>
  *   const result = yield* BaseAddress.payment(instance);
  *   console.log(result);
  * });
- * 
+ *
  * @since 2.0.0
  * @category Methods
  */
 export const payment = Effect.fn(
-  (instance: CML.BaseAddress): Effect.Effect<CML.Credential, BaseAddressError> =>
+  (
+    instance: CML.BaseAddress,
+  ): Effect.Effect<CML.Credential, BaseAddressError> =>
     Effect.try({
       try: () => instance.payment(),
       catch: () =>
         new BaseAddressError({
           message: `BaseAddress.payment failed `,
         }),
-    })
+    }),
 );
 
 /**
  * Unsafely calls instance.payment without Effect wrapper
- * 
+ *
  * @example
  * import { BaseAddress } from "@lucid-evolution/experimental";
- * 
+ *
  * // Assume we have a BaseAddress instance
  * const instance = ... ;
- * 
+ *
  * // Using try/catch for error handling
  * try {
  *   const result = BaseAddress.paymentUnsafe(instance);
@@ -321,7 +332,7 @@ export const payment = Effect.fn(
  * } catch (error) {
  *   console.error(`BaseAddress.paymentUnsafe failed: ${error.message}`);
  * }
- * 
+ *
  * @since 2.0.0
  * @category MethodsUnsafe
  */
@@ -330,11 +341,11 @@ export const paymentUnsafe = (instance: CML.BaseAddress): CML.Credential =>
 
 /**
  * Method stake of BaseAddress
- * 
+ *
  * @example
  * import { BaseAddress } from "@lucid-evolution/experimental";
  * import { Effect } from "effect";
- * 
+ *
  * // Using Effect for safe execution with error handling
  * Effect.gen(function*() {
  * // Assume we have a BaseAddress instance
@@ -342,30 +353,32 @@ export const paymentUnsafe = (instance: CML.BaseAddress): CML.Credential =>
  *   const result = yield* BaseAddress.stake(instance);
  *   console.log(result);
  * });
- * 
+ *
  * @since 2.0.0
  * @category Methods
  */
 export const stake = Effect.fn(
-  (instance: CML.BaseAddress): Effect.Effect<CML.Credential, BaseAddressError> =>
+  (
+    instance: CML.BaseAddress,
+  ): Effect.Effect<CML.Credential, BaseAddressError> =>
     Effect.try({
       try: () => instance.stake(),
       catch: () =>
         new BaseAddressError({
           message: `BaseAddress.stake failed `,
         }),
-    })
+    }),
 );
 
 /**
  * Unsafely calls instance.stake without Effect wrapper
- * 
+ *
  * @example
  * import { BaseAddress } from "@lucid-evolution/experimental";
- * 
+ *
  * // Assume we have a BaseAddress instance
  * const instance = ... ;
- * 
+ *
  * // Using try/catch for error handling
  * try {
  *   const result = BaseAddress.stakeUnsafe(instance);
@@ -373,7 +386,7 @@ export const stake = Effect.fn(
  * } catch (error) {
  *   console.error(`BaseAddress.stakeUnsafe failed: ${error.message}`);
  * }
- * 
+ *
  * @since 2.0.0
  * @category MethodsUnsafe
  */

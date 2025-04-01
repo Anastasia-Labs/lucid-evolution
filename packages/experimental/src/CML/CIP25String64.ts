@@ -14,7 +14,7 @@ export type CIP25String64 = CML.CIP25String64;
 
 /**
  * Error class for CIP25String64 operations
- * 
+ *
  * This error is thrown when operations on CIP25String64 instances fail.
  *
  * @since 2.0.0
@@ -26,11 +26,11 @@ export class CIP25String64Error extends Data.TaggedError("CIP25String64Error")<{
 
 /**
  * Method free of CIP25String64
- * 
+ *
  * @example
  * import { CIP25String64 } from "@lucid-evolution/experimental";
  * import { Effect } from "effect";
- * 
+ *
  * // Using Effect for safe execution with error handling
  * Effect.gen(function*() {
  * // Assume we have a CIP25String64 instance
@@ -38,7 +38,7 @@ export class CIP25String64Error extends Data.TaggedError("CIP25String64Error")<{
  *   const result = yield* CIP25String64.free(instance);
  *   console.log(result);
  * });
- * 
+ *
  * @since 2.0.0
  * @category Methods
  */
@@ -50,18 +50,18 @@ export const free = Effect.fn(
         new CIP25String64Error({
           message: `CIP25String64.free failed Hint: Check if you're calling free() more than once.`,
         }),
-    })
+    }),
 );
 
 /**
  * Unsafely calls instance.free without Effect wrapper
- * 
+ *
  * @example
  * import { CIP25String64 } from "@lucid-evolution/experimental";
- * 
+ *
  * // Assume we have a CIP25String64 instance
  * const instance = ... ;
- * 
+ *
  * // Using try/catch for error handling
  * try {
  *   const result = CIP25String64.freeUnsafe(instance);
@@ -69,7 +69,7 @@ export const free = Effect.fn(
  * } catch (error) {
  *   console.error(`CIP25String64.freeUnsafe failed: ${error.message}`);
  * }
- * 
+ *
  * @since 2.0.0
  * @category MethodsUnsafe
  */
@@ -78,11 +78,11 @@ export const freeUnsafe = (instance: CML.CIP25String64): void =>
 
 /**
  * Method toCborBytes of CIP25String64
- * 
+ *
  * @example
  * import { CIP25String64 } from "@lucid-evolution/experimental";
  * import { Effect } from "effect";
- * 
+ *
  * // Using Effect for safe execution with error handling
  * Effect.gen(function*() {
  * // Assume we have a CIP25String64 instance
@@ -90,30 +90,32 @@ export const freeUnsafe = (instance: CML.CIP25String64): void =>
  *   const result = yield* CIP25String64.toCborBytes(instance);
  *   console.log(result);
  * });
- * 
+ *
  * @since 2.0.0
  * @category Methods
  */
 export const toCborBytes = Effect.fn(
-  (instance: CML.CIP25String64): Effect.Effect<Uint8Array, CIP25String64Error> =>
+  (
+    instance: CML.CIP25String64,
+  ): Effect.Effect<Uint8Array, CIP25String64Error> =>
     Effect.try({
       try: () => instance.to_cbor_bytes(),
       catch: () =>
         new CIP25String64Error({
           message: `CIP25String64.toCborBytes failed CIP25String64 is not valid for Uint8Array conversion. Hint: Check byte length and encoding.`,
         }),
-    })
+    }),
 );
 
 /**
  * Unsafely calls instance.toCborBytes without Effect wrapper
- * 
+ *
  * @example
  * import { CIP25String64 } from "@lucid-evolution/experimental";
- * 
+ *
  * // Assume we have a CIP25String64 instance
  * const instance = ... ;
- * 
+ *
  * // Using try/catch for error handling
  * try {
  *   const result = CIP25String64.toCborBytesUnsafe(instance);
@@ -121,7 +123,7 @@ export const toCborBytes = Effect.fn(
  * } catch (error) {
  *   console.error(`CIP25String64.toCborBytesUnsafe failed: ${error.message}`);
  * }
- * 
+ *
  * @since 2.0.0
  * @category MethodsUnsafe
  */
@@ -130,38 +132,39 @@ export const toCborBytesUnsafe = (instance: CML.CIP25String64): Uint8Array =>
 
 /**
  * Static method fromCborBytes of CIP25String64
- * 
+ *
  * @example
  * import { CIP25String64 } from "@lucid-evolution/experimental";
  * import { Effect } from "effect";
- * 
+ *
  * // Using Effect for safe execution with error handling
  * Effect.gen(function*() {
- * 
+ *
  *   const result = yield* CIP25String64.fromCborBytes( parameters );
  *   console.log(result);
  * });
- * 
+ *
  * @since 2.0.0
  * @category Constructors
  */
 export const fromCborBytes = Effect.fn(function* (cborBytes: Uint8Array) {
   return yield* Effect.try({
     try: () => CML.CIP25String64.from_cbor_bytes(cborBytes),
-    catch: () => new CIP25String64Error({
-      message: `CIP25String64.fromCborBytes failed with parameters: ${cborBytes}. Hint: Check byte length and encoding.`,
-    }),
+    catch: () =>
+      new CIP25String64Error({
+        message: `CIP25String64.fromCborBytes failed with parameters: ${cborBytes}. Hint: Check byte length and encoding.`,
+      }),
   });
 });
 
 /**
  * Unsafely calls CIP25String64.fromCborBytes without Effect wrapper
- * 
+ *
  * @example
  * import { CIP25String64 } from "@lucid-evolution/experimental";
- * 
- * 
- * 
+ *
+ *
+ *
  * // Using try/catch for error handling
  * try {
  *   const result = CIP25String64.fromCborBytesUnsafe( parameters );
@@ -169,7 +172,7 @@ export const fromCborBytes = Effect.fn(function* (cborBytes: Uint8Array) {
  * } catch (error) {
  *   console.error(`CIP25String64.fromCborBytesUnsafe failed: ${error.message}`);
  * }
- * 
+ *
  * @since 2.0.0
  * @category ConstructorsUnsafe
  */
@@ -178,11 +181,11 @@ export const fromCborBytesUnsafe = (cborBytes: Uint8Array) =>
 
 /**
  * Method toCborHex of CIP25String64
- * 
+ *
  * @example
  * import { CIP25String64 } from "@lucid-evolution/experimental";
  * import { Effect } from "effect";
- * 
+ *
  * // Using Effect for safe execution with error handling
  * Effect.gen(function*() {
  * // Assume we have a CIP25String64 instance
@@ -190,7 +193,7 @@ export const fromCborBytesUnsafe = (cborBytes: Uint8Array) =>
  *   const result = yield* CIP25String64.toCborHex(instance);
  *   console.log(result);
  * });
- * 
+ *
  * @since 2.0.0
  * @category Methods
  */
@@ -202,18 +205,18 @@ export const toCborHex = Effect.fn(
         new CIP25String64Error({
           message: `CIP25String64.toCborHex failed CIP25String64 is not valid for string conversion. Hint: Make sure it's a valid hex string representing CBOR data.`,
         }),
-    })
+    }),
 );
 
 /**
  * Unsafely calls instance.toCborHex without Effect wrapper
- * 
+ *
  * @example
  * import { CIP25String64 } from "@lucid-evolution/experimental";
- * 
+ *
  * // Assume we have a CIP25String64 instance
  * const instance = ... ;
- * 
+ *
  * // Using try/catch for error handling
  * try {
  *   const result = CIP25String64.toCborHexUnsafe(instance);
@@ -221,7 +224,7 @@ export const toCborHex = Effect.fn(
  * } catch (error) {
  *   console.error(`CIP25String64.toCborHexUnsafe failed: ${error.message}`);
  * }
- * 
+ *
  * @since 2.0.0
  * @category MethodsUnsafe
  */
@@ -230,38 +233,39 @@ export const toCborHexUnsafe = (instance: CML.CIP25String64): string =>
 
 /**
  * Static method fromCborHex of CIP25String64
- * 
+ *
  * @example
  * import { CIP25String64 } from "@lucid-evolution/experimental";
  * import { Effect } from "effect";
- * 
+ *
  * // Using Effect for safe execution with error handling
  * Effect.gen(function*() {
- * 
+ *
  *   const result = yield* CIP25String64.fromCborHex( parameters );
  *   console.log(result);
  * });
- * 
+ *
  * @since 2.0.0
  * @category Constructors
  */
 export const fromCborHex = Effect.fn(function* (cborBytes: string) {
   return yield* Effect.try({
     try: () => CML.CIP25String64.from_cbor_hex(cborBytes),
-    catch: () => new CIP25String64Error({
-      message: `CIP25String64.fromCborHex failed with parameters: ${cborBytes}. Hint: Make sure it's a valid hex string representing CBOR data.`,
-    }),
+    catch: () =>
+      new CIP25String64Error({
+        message: `CIP25String64.fromCborHex failed with parameters: ${cborBytes}. Hint: Make sure it's a valid hex string representing CBOR data.`,
+      }),
   });
 });
 
 /**
  * Unsafely calls CIP25String64.fromCborHex without Effect wrapper
- * 
+ *
  * @example
  * import { CIP25String64 } from "@lucid-evolution/experimental";
- * 
- * 
- * 
+ *
+ *
+ *
  * // Using try/catch for error handling
  * try {
  *   const result = CIP25String64.fromCborHexUnsafe( parameters );
@@ -269,7 +273,7 @@ export const fromCborHex = Effect.fn(function* (cborBytes: string) {
  * } catch (error) {
  *   console.error(`CIP25String64.fromCborHexUnsafe failed: ${error.message}`);
  * }
- * 
+ *
  * @since 2.0.0
  * @category ConstructorsUnsafe
  */
@@ -278,11 +282,11 @@ export const fromCborHexUnsafe = (cborBytes: string) =>
 
 /**
  * Method toJson of CIP25String64
- * 
+ *
  * @example
  * import { CIP25String64 } from "@lucid-evolution/experimental";
  * import { Effect } from "effect";
- * 
+ *
  * // Using Effect for safe execution with error handling
  * Effect.gen(function*() {
  * // Assume we have a CIP25String64 instance
@@ -290,7 +294,7 @@ export const fromCborHexUnsafe = (cborBytes: string) =>
  *   const result = yield* CIP25String64.toJson(instance);
  *   console.log(result);
  * });
- * 
+ *
  * @since 2.0.0
  * @category Methods
  */
@@ -302,18 +306,18 @@ export const toJson = Effect.fn(
         new CIP25String64Error({
           message: `CIP25String64.toJson failed CIP25String64 is not valid for string conversion. Hint: Validate your JSON structure.`,
         }),
-    })
+    }),
 );
 
 /**
  * Unsafely calls instance.toJson without Effect wrapper
- * 
+ *
  * @example
  * import { CIP25String64 } from "@lucid-evolution/experimental";
- * 
+ *
  * // Assume we have a CIP25String64 instance
  * const instance = ... ;
- * 
+ *
  * // Using try/catch for error handling
  * try {
  *   const result = CIP25String64.toJsonUnsafe(instance);
@@ -321,7 +325,7 @@ export const toJson = Effect.fn(
  * } catch (error) {
  *   console.error(`CIP25String64.toJsonUnsafe failed: ${error.message}`);
  * }
- * 
+ *
  * @since 2.0.0
  * @category MethodsUnsafe
  */
@@ -330,11 +334,11 @@ export const toJsonUnsafe = (instance: CML.CIP25String64): string =>
 
 /**
  * Method toJsValue of CIP25String64
- * 
+ *
  * @example
  * import { CIP25String64 } from "@lucid-evolution/experimental";
  * import { Effect } from "effect";
- * 
+ *
  * // Using Effect for safe execution with error handling
  * Effect.gen(function*() {
  * // Assume we have a CIP25String64 instance
@@ -342,7 +346,7 @@ export const toJsonUnsafe = (instance: CML.CIP25String64): string =>
  *   const result = yield* CIP25String64.toJsValue(instance);
  *   console.log(result);
  * });
- * 
+ *
  * @since 2.0.0
  * @category Methods
  */
@@ -354,18 +358,18 @@ export const toJsValue = Effect.fn(
         new CIP25String64Error({
           message: `CIP25String64.toJsValue failed CIP25String64 is not valid for any conversion. `,
         }),
-    })
+    }),
 );
 
 /**
  * Unsafely calls instance.toJsValue without Effect wrapper
- * 
+ *
  * @example
  * import { CIP25String64 } from "@lucid-evolution/experimental";
- * 
+ *
  * // Assume we have a CIP25String64 instance
  * const instance = ... ;
- * 
+ *
  * // Using try/catch for error handling
  * try {
  *   const result = CIP25String64.toJsValueUnsafe(instance);
@@ -373,7 +377,7 @@ export const toJsValue = Effect.fn(
  * } catch (error) {
  *   console.error(`CIP25String64.toJsValueUnsafe failed: ${error.message}`);
  * }
- * 
+ *
  * @since 2.0.0
  * @category MethodsUnsafe
  */
@@ -382,38 +386,39 @@ export const toJsValueUnsafe = (instance: CML.CIP25String64): any =>
 
 /**
  * Static method fromJson of CIP25String64
- * 
+ *
  * @example
  * import { CIP25String64 } from "@lucid-evolution/experimental";
  * import { Effect } from "effect";
- * 
+ *
  * // Using Effect for safe execution with error handling
  * Effect.gen(function*() {
- * 
+ *
  *   const result = yield* CIP25String64.fromJson( parameters );
  *   console.log(result);
  * });
- * 
+ *
  * @since 2.0.0
  * @category Constructors
  */
 export const fromJson = Effect.fn(function* (json: string) {
   return yield* Effect.try({
     try: () => CML.CIP25String64.from_json(json),
-    catch: () => new CIP25String64Error({
-      message: `CIP25String64.fromJson failed with parameters: ${json}. Hint: Validate your JSON structure.`,
-    }),
+    catch: () =>
+      new CIP25String64Error({
+        message: `CIP25String64.fromJson failed with parameters: ${json}. Hint: Validate your JSON structure.`,
+      }),
   });
 });
 
 /**
  * Unsafely calls CIP25String64.fromJson without Effect wrapper
- * 
+ *
  * @example
  * import { CIP25String64 } from "@lucid-evolution/experimental";
- * 
- * 
- * 
+ *
+ *
+ *
  * // Using try/catch for error handling
  * try {
  *   const result = CIP25String64.fromJsonUnsafe( parameters );
@@ -421,20 +426,19 @@ export const fromJson = Effect.fn(function* (json: string) {
  * } catch (error) {
  *   console.error(`CIP25String64.fromJsonUnsafe failed: ${error.message}`);
  * }
- * 
+ *
  * @since 2.0.0
  * @category ConstructorsUnsafe
  */
-export const fromJsonUnsafe = (json: string) =>
-  Effect.runSync(fromJson(json));
+export const fromJsonUnsafe = (json: string) => Effect.runSync(fromJson(json));
 
 /**
  * Method get of CIP25String64
- * 
+ *
  * @example
  * import { CIP25String64 } from "@lucid-evolution/experimental";
  * import { Effect } from "effect";
- * 
+ *
  * // Using Effect for safe execution with error handling
  * Effect.gen(function*() {
  * // Assume we have a CIP25String64 instance
@@ -442,7 +446,7 @@ export const fromJsonUnsafe = (json: string) =>
  *   const result = yield* CIP25String64.get(instance);
  *   console.log(result);
  * });
- * 
+ *
  * @since 2.0.0
  * @category Methods
  */
@@ -454,18 +458,18 @@ export const get = Effect.fn(
         new CIP25String64Error({
           message: `CIP25String64.get failed `,
         }),
-    })
+    }),
 );
 
 /**
  * Unsafely calls instance.get without Effect wrapper
- * 
+ *
  * @example
  * import { CIP25String64 } from "@lucid-evolution/experimental";
- * 
+ *
  * // Assume we have a CIP25String64 instance
  * const instance = ... ;
- * 
+ *
  * // Using try/catch for error handling
  * try {
  *   const result = CIP25String64.getUnsafe(instance);
@@ -473,7 +477,7 @@ export const get = Effect.fn(
  * } catch (error) {
  *   console.error(`CIP25String64.getUnsafe failed: ${error.message}`);
  * }
- * 
+ *
  * @since 2.0.0
  * @category MethodsUnsafe
  */
@@ -482,38 +486,39 @@ export const getUnsafe = (instance: CML.CIP25String64): string =>
 
 /**
  * Static method _new of CIP25String64
- * 
+ *
  * @example
  * import { CIP25String64 } from "@lucid-evolution/experimental";
  * import { Effect } from "effect";
- * 
+ *
  * // Using Effect for safe execution with error handling
  * Effect.gen(function*() {
- * 
+ *
  *   const result = yield* CIP25String64._new( parameters );
  *   console.log(result);
  * });
- * 
+ *
  * @since 2.0.0
  * @category Constructors
  */
 export const _new = Effect.fn(function* (s: string) {
   return yield* Effect.try({
     try: () => CML.CIP25String64.new(s),
-    catch: () => new CIP25String64Error({
-      message: `CIP25String64._new failed with parameters: ${s}. `,
-    }),
+    catch: () =>
+      new CIP25String64Error({
+        message: `CIP25String64._new failed with parameters: ${s}. `,
+      }),
   });
 });
 
 /**
  * Unsafely calls CIP25String64._new without Effect wrapper
- * 
+ *
  * @example
  * import { CIP25String64 } from "@lucid-evolution/experimental";
- * 
- * 
- * 
+ *
+ *
+ *
  * // Using try/catch for error handling
  * try {
  *   const result = CIP25String64._newUnsafe( parameters );
@@ -521,20 +526,19 @@ export const _new = Effect.fn(function* (s: string) {
  * } catch (error) {
  *   console.error(`CIP25String64._newUnsafe failed: ${error.message}`);
  * }
- * 
+ *
  * @since 2.0.0
  * @category ConstructorsUnsafe
  */
-export const _newUnsafe = (s: string) =>
-  Effect.runSync(_new(s));
+export const _newUnsafe = (s: string) => Effect.runSync(_new(s));
 
 /**
  * Method toStr of CIP25String64
- * 
+ *
  * @example
  * import { CIP25String64 } from "@lucid-evolution/experimental";
  * import { Effect } from "effect";
- * 
+ *
  * // Using Effect for safe execution with error handling
  * Effect.gen(function*() {
  * // Assume we have a CIP25String64 instance
@@ -542,7 +546,7 @@ export const _newUnsafe = (s: string) =>
  *   const result = yield* CIP25String64.toStr(instance);
  *   console.log(result);
  * });
- * 
+ *
  * @since 2.0.0
  * @category Methods
  */
@@ -554,18 +558,18 @@ export const toStr = Effect.fn(
         new CIP25String64Error({
           message: `CIP25String64.toStr failed CIP25String64 is not valid for string conversion. Hint: Not all CIP25String64 instances can be stringified.`,
         }),
-    })
+    }),
 );
 
 /**
  * Unsafely calls instance.toStr without Effect wrapper
- * 
+ *
  * @example
  * import { CIP25String64 } from "@lucid-evolution/experimental";
- * 
+ *
  * // Assume we have a CIP25String64 instance
  * const instance = ... ;
- * 
+ *
  * // Using try/catch for error handling
  * try {
  *   const result = CIP25String64.toStrUnsafe(instance);
@@ -573,7 +577,7 @@ export const toStr = Effect.fn(
  * } catch (error) {
  *   console.error(`CIP25String64.toStrUnsafe failed: ${error.message}`);
  * }
- * 
+ *
  * @since 2.0.0
  * @category MethodsUnsafe
  */
@@ -582,11 +586,11 @@ export const toStrUnsafe = (instance: CML.CIP25String64): string =>
 
 /**
  * Method getStr of CIP25String64
- * 
+ *
  * @example
  * import { CIP25String64 } from "@lucid-evolution/experimental";
  * import { Effect } from "effect";
- * 
+ *
  * // Using Effect for safe execution with error handling
  * Effect.gen(function*() {
  * // Assume we have a CIP25String64 instance
@@ -594,7 +598,7 @@ export const toStrUnsafe = (instance: CML.CIP25String64): string =>
  *   const result = yield* CIP25String64.getStr(instance);
  *   console.log(result);
  * });
- * 
+ *
  * @since 2.0.0
  * @category Methods
  */
@@ -606,18 +610,18 @@ export const getStr = Effect.fn(
         new CIP25String64Error({
           message: `CIP25String64.getStr failed Hint: Not all CIP25String64 instances can be stringified.`,
         }),
-    })
+    }),
 );
 
 /**
  * Unsafely calls instance.getStr without Effect wrapper
- * 
+ *
  * @example
  * import { CIP25String64 } from "@lucid-evolution/experimental";
- * 
+ *
  * // Assume we have a CIP25String64 instance
  * const instance = ... ;
- * 
+ *
  * // Using try/catch for error handling
  * try {
  *   const result = CIP25String64.getStrUnsafe(instance);
@@ -625,7 +629,7 @@ export const getStr = Effect.fn(
  * } catch (error) {
  *   console.error(`CIP25String64.getStrUnsafe failed: ${error.message}`);
  * }
- * 
+ *
  * @since 2.0.0
  * @category MethodsUnsafe
  */

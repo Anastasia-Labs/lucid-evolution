@@ -14,7 +14,7 @@ export type PlutusMap = CML.PlutusMap;
 
 /**
  * Error class for PlutusMap operations
- * 
+ *
  * This error is thrown when operations on PlutusMap instances fail.
  *
  * @since 2.0.0
@@ -26,11 +26,11 @@ export class PlutusMapError extends Data.TaggedError("PlutusMapError")<{
 
 /**
  * Method free of PlutusMap
- * 
+ *
  * @example
  * import { PlutusMap } from "@lucid-evolution/experimental";
  * import { Effect } from "effect";
- * 
+ *
  * // Using Effect for safe execution with error handling
  * Effect.gen(function*() {
  * // Assume we have a PlutusMap instance
@@ -38,7 +38,7 @@ export class PlutusMapError extends Data.TaggedError("PlutusMapError")<{
  *   const result = yield* PlutusMap.free(instance);
  *   console.log(result);
  * });
- * 
+ *
  * @since 2.0.0
  * @category Methods
  */
@@ -50,18 +50,18 @@ export const free = Effect.fn(
         new PlutusMapError({
           message: `PlutusMap.free failed Hint: Check if you're calling free() more than once.`,
         }),
-    })
+    }),
 );
 
 /**
  * Unsafely calls instance.free without Effect wrapper
- * 
+ *
  * @example
  * import { PlutusMap } from "@lucid-evolution/experimental";
- * 
+ *
  * // Assume we have a PlutusMap instance
  * const instance = ... ;
- * 
+ *
  * // Using try/catch for error handling
  * try {
  *   const result = PlutusMap.freeUnsafe(instance);
@@ -69,7 +69,7 @@ export const free = Effect.fn(
  * } catch (error) {
  *   console.error(`PlutusMap.freeUnsafe failed: ${error.message}`);
  * }
- * 
+ *
  * @since 2.0.0
  * @category MethodsUnsafe
  */
@@ -78,11 +78,11 @@ export const freeUnsafe = (instance: CML.PlutusMap): void =>
 
 /**
  * Method toCborBytes of PlutusMap
- * 
+ *
  * @example
  * import { PlutusMap } from "@lucid-evolution/experimental";
  * import { Effect } from "effect";
- * 
+ *
  * // Using Effect for safe execution with error handling
  * Effect.gen(function*() {
  * // Assume we have a PlutusMap instance
@@ -90,7 +90,7 @@ export const freeUnsafe = (instance: CML.PlutusMap): void =>
  *   const result = yield* PlutusMap.toCborBytes(instance);
  *   console.log(result);
  * });
- * 
+ *
  * @since 2.0.0
  * @category Methods
  */
@@ -102,18 +102,18 @@ export const toCborBytes = Effect.fn(
         new PlutusMapError({
           message: `PlutusMap.toCborBytes failed PlutusMap is not valid for Uint8Array conversion. Hint: Check byte length and encoding.`,
         }),
-    })
+    }),
 );
 
 /**
  * Unsafely calls instance.toCborBytes without Effect wrapper
- * 
+ *
  * @example
  * import { PlutusMap } from "@lucid-evolution/experimental";
- * 
+ *
  * // Assume we have a PlutusMap instance
  * const instance = ... ;
- * 
+ *
  * // Using try/catch for error handling
  * try {
  *   const result = PlutusMap.toCborBytesUnsafe(instance);
@@ -121,7 +121,7 @@ export const toCborBytes = Effect.fn(
  * } catch (error) {
  *   console.error(`PlutusMap.toCborBytesUnsafe failed: ${error.message}`);
  * }
- * 
+ *
  * @since 2.0.0
  * @category MethodsUnsafe
  */
@@ -130,11 +130,11 @@ export const toCborBytesUnsafe = (instance: CML.PlutusMap): Uint8Array =>
 
 /**
  * Method toCanonicalCborBytes of PlutusMap
- * 
+ *
  * @example
  * import { PlutusMap } from "@lucid-evolution/experimental";
  * import { Effect } from "effect";
- * 
+ *
  * // Using Effect for safe execution with error handling
  * Effect.gen(function*() {
  * // Assume we have a PlutusMap instance
@@ -142,7 +142,7 @@ export const toCborBytesUnsafe = (instance: CML.PlutusMap): Uint8Array =>
  *   const result = yield* PlutusMap.toCanonicalCborBytes(instance);
  *   console.log(result);
  * });
- * 
+ *
  * @since 2.0.0
  * @category Methods
  */
@@ -154,18 +154,18 @@ export const toCanonicalCborBytes = Effect.fn(
         new PlutusMapError({
           message: `PlutusMap.toCanonicalCborBytes failed PlutusMap is not valid for Uint8Array conversion. Hint: Check byte length and encoding.`,
         }),
-    })
+    }),
 );
 
 /**
  * Unsafely calls instance.toCanonicalCborBytes without Effect wrapper
- * 
+ *
  * @example
  * import { PlutusMap } from "@lucid-evolution/experimental";
- * 
+ *
  * // Assume we have a PlutusMap instance
  * const instance = ... ;
- * 
+ *
  * // Using try/catch for error handling
  * try {
  *   const result = PlutusMap.toCanonicalCborBytesUnsafe(instance);
@@ -173,47 +173,49 @@ export const toCanonicalCborBytes = Effect.fn(
  * } catch (error) {
  *   console.error(`PlutusMap.toCanonicalCborBytesUnsafe failed: ${error.message}`);
  * }
- * 
+ *
  * @since 2.0.0
  * @category MethodsUnsafe
  */
-export const toCanonicalCborBytesUnsafe = (instance: CML.PlutusMap): Uint8Array =>
-  Effect.runSync(toCanonicalCborBytes(instance));
+export const toCanonicalCborBytesUnsafe = (
+  instance: CML.PlutusMap,
+): Uint8Array => Effect.runSync(toCanonicalCborBytes(instance));
 
 /**
  * Static method fromCborBytes of PlutusMap
- * 
+ *
  * @example
  * import { PlutusMap } from "@lucid-evolution/experimental";
  * import { Effect } from "effect";
- * 
+ *
  * // Using Effect for safe execution with error handling
  * Effect.gen(function*() {
- * 
+ *
  *   const result = yield* PlutusMap.fromCborBytes( parameters );
  *   console.log(result);
  * });
- * 
+ *
  * @since 2.0.0
  * @category Constructors
  */
 export const fromCborBytes = Effect.fn(function* (cborBytes: Uint8Array) {
   return yield* Effect.try({
     try: () => CML.PlutusMap.from_cbor_bytes(cborBytes),
-    catch: () => new PlutusMapError({
-      message: `PlutusMap.fromCborBytes failed with parameters: ${cborBytes}. Hint: Check byte length and encoding.`,
-    }),
+    catch: () =>
+      new PlutusMapError({
+        message: `PlutusMap.fromCborBytes failed with parameters: ${cborBytes}. Hint: Check byte length and encoding.`,
+      }),
   });
 });
 
 /**
  * Unsafely calls PlutusMap.fromCborBytes without Effect wrapper
- * 
+ *
  * @example
  * import { PlutusMap } from "@lucid-evolution/experimental";
- * 
- * 
- * 
+ *
+ *
+ *
  * // Using try/catch for error handling
  * try {
  *   const result = PlutusMap.fromCborBytesUnsafe( parameters );
@@ -221,7 +223,7 @@ export const fromCborBytes = Effect.fn(function* (cborBytes: Uint8Array) {
  * } catch (error) {
  *   console.error(`PlutusMap.fromCborBytesUnsafe failed: ${error.message}`);
  * }
- * 
+ *
  * @since 2.0.0
  * @category ConstructorsUnsafe
  */
@@ -230,11 +232,11 @@ export const fromCborBytesUnsafe = (cborBytes: Uint8Array) =>
 
 /**
  * Method toCborHex of PlutusMap
- * 
+ *
  * @example
  * import { PlutusMap } from "@lucid-evolution/experimental";
  * import { Effect } from "effect";
- * 
+ *
  * // Using Effect for safe execution with error handling
  * Effect.gen(function*() {
  * // Assume we have a PlutusMap instance
@@ -242,7 +244,7 @@ export const fromCborBytesUnsafe = (cborBytes: Uint8Array) =>
  *   const result = yield* PlutusMap.toCborHex(instance);
  *   console.log(result);
  * });
- * 
+ *
  * @since 2.0.0
  * @category Methods
  */
@@ -254,18 +256,18 @@ export const toCborHex = Effect.fn(
         new PlutusMapError({
           message: `PlutusMap.toCborHex failed PlutusMap is not valid for string conversion. Hint: Make sure it's a valid hex string representing CBOR data.`,
         }),
-    })
+    }),
 );
 
 /**
  * Unsafely calls instance.toCborHex without Effect wrapper
- * 
+ *
  * @example
  * import { PlutusMap } from "@lucid-evolution/experimental";
- * 
+ *
  * // Assume we have a PlutusMap instance
  * const instance = ... ;
- * 
+ *
  * // Using try/catch for error handling
  * try {
  *   const result = PlutusMap.toCborHexUnsafe(instance);
@@ -273,7 +275,7 @@ export const toCborHex = Effect.fn(
  * } catch (error) {
  *   console.error(`PlutusMap.toCborHexUnsafe failed: ${error.message}`);
  * }
- * 
+ *
  * @since 2.0.0
  * @category MethodsUnsafe
  */
@@ -282,11 +284,11 @@ export const toCborHexUnsafe = (instance: CML.PlutusMap): string =>
 
 /**
  * Method toCanonicalCborHex of PlutusMap
- * 
+ *
  * @example
  * import { PlutusMap } from "@lucid-evolution/experimental";
  * import { Effect } from "effect";
- * 
+ *
  * // Using Effect for safe execution with error handling
  * Effect.gen(function*() {
  * // Assume we have a PlutusMap instance
@@ -294,7 +296,7 @@ export const toCborHexUnsafe = (instance: CML.PlutusMap): string =>
  *   const result = yield* PlutusMap.toCanonicalCborHex(instance);
  *   console.log(result);
  * });
- * 
+ *
  * @since 2.0.0
  * @category Methods
  */
@@ -306,18 +308,18 @@ export const toCanonicalCborHex = Effect.fn(
         new PlutusMapError({
           message: `PlutusMap.toCanonicalCborHex failed PlutusMap is not valid for string conversion. Hint: Make sure it's a valid hex string representing CBOR data.`,
         }),
-    })
+    }),
 );
 
 /**
  * Unsafely calls instance.toCanonicalCborHex without Effect wrapper
- * 
+ *
  * @example
  * import { PlutusMap } from "@lucid-evolution/experimental";
- * 
+ *
  * // Assume we have a PlutusMap instance
  * const instance = ... ;
- * 
+ *
  * // Using try/catch for error handling
  * try {
  *   const result = PlutusMap.toCanonicalCborHexUnsafe(instance);
@@ -325,7 +327,7 @@ export const toCanonicalCborHex = Effect.fn(
  * } catch (error) {
  *   console.error(`PlutusMap.toCanonicalCborHexUnsafe failed: ${error.message}`);
  * }
- * 
+ *
  * @since 2.0.0
  * @category MethodsUnsafe
  */
@@ -334,38 +336,39 @@ export const toCanonicalCborHexUnsafe = (instance: CML.PlutusMap): string =>
 
 /**
  * Static method fromCborHex of PlutusMap
- * 
+ *
  * @example
  * import { PlutusMap } from "@lucid-evolution/experimental";
  * import { Effect } from "effect";
- * 
+ *
  * // Using Effect for safe execution with error handling
  * Effect.gen(function*() {
- * 
+ *
  *   const result = yield* PlutusMap.fromCborHex( parameters );
  *   console.log(result);
  * });
- * 
+ *
  * @since 2.0.0
  * @category Constructors
  */
 export const fromCborHex = Effect.fn(function* (cborBytes: string) {
   return yield* Effect.try({
     try: () => CML.PlutusMap.from_cbor_hex(cborBytes),
-    catch: () => new PlutusMapError({
-      message: `PlutusMap.fromCborHex failed with parameters: ${cborBytes}. Hint: Make sure it's a valid hex string representing CBOR data.`,
-    }),
+    catch: () =>
+      new PlutusMapError({
+        message: `PlutusMap.fromCborHex failed with parameters: ${cborBytes}. Hint: Make sure it's a valid hex string representing CBOR data.`,
+      }),
   });
 });
 
 /**
  * Unsafely calls PlutusMap.fromCborHex without Effect wrapper
- * 
+ *
  * @example
  * import { PlutusMap } from "@lucid-evolution/experimental";
- * 
- * 
- * 
+ *
+ *
+ *
  * // Using try/catch for error handling
  * try {
  *   const result = PlutusMap.fromCborHexUnsafe( parameters );
@@ -373,7 +376,7 @@ export const fromCborHex = Effect.fn(function* (cborBytes: string) {
  * } catch (error) {
  *   console.error(`PlutusMap.fromCborHexUnsafe failed: ${error.message}`);
  * }
- * 
+ *
  * @since 2.0.0
  * @category ConstructorsUnsafe
  */
@@ -382,38 +385,39 @@ export const fromCborHexUnsafe = (cborBytes: string) =>
 
 /**
  * Static method _new of PlutusMap
- * 
+ *
  * @example
  * import { PlutusMap } from "@lucid-evolution/experimental";
  * import { Effect } from "effect";
- * 
+ *
  * // Using Effect for safe execution with error handling
  * Effect.gen(function*() {
- * 
+ *
  *   const result = yield* PlutusMap._new();
  *   console.log(result);
  * });
- * 
+ *
  * @since 2.0.0
  * @category Constructors
  */
 export const _new = Effect.fn(function* () {
   return yield* Effect.try({
     try: () => CML.PlutusMap.new(),
-    catch: () => new PlutusMapError({
-      message: `PlutusMap._new failed `,
-    }),
+    catch: () =>
+      new PlutusMapError({
+        message: `PlutusMap._new failed `,
+      }),
   });
 });
 
 /**
  * Unsafely calls PlutusMap._new without Effect wrapper
- * 
+ *
  * @example
  * import { PlutusMap } from "@lucid-evolution/experimental";
- * 
- * 
- * 
+ *
+ *
+ *
  * // Using try/catch for error handling
  * try {
  *   const result = PlutusMap._newUnsafe();
@@ -421,20 +425,19 @@ export const _new = Effect.fn(function* () {
  * } catch (error) {
  *   console.error(`PlutusMap._newUnsafe failed: ${error.message}`);
  * }
- * 
+ *
  * @since 2.0.0
  * @category ConstructorsUnsafe
  */
-export const _newUnsafe = () =>
-  Effect.runSync(_new());
+export const _newUnsafe = () => Effect.runSync(_new());
 
 /**
  * Method len of PlutusMap
- * 
+ *
  * @example
  * import { PlutusMap } from "@lucid-evolution/experimental";
  * import { Effect } from "effect";
- * 
+ *
  * // Using Effect for safe execution with error handling
  * Effect.gen(function*() {
  * // Assume we have a PlutusMap instance
@@ -442,7 +445,7 @@ export const _newUnsafe = () =>
  *   const result = yield* PlutusMap.len(instance);
  *   console.log(result);
  * });
- * 
+ *
  * @since 2.0.0
  * @category Methods
  */
@@ -454,18 +457,18 @@ export const len = Effect.fn(
         new PlutusMapError({
           message: `PlutusMap.len failed `,
         }),
-    })
+    }),
 );
 
 /**
  * Unsafely calls instance.len without Effect wrapper
- * 
+ *
  * @example
  * import { PlutusMap } from "@lucid-evolution/experimental";
- * 
+ *
  * // Assume we have a PlutusMap instance
  * const instance = ... ;
- * 
+ *
  * // Using try/catch for error handling
  * try {
  *   const result = PlutusMap.lenUnsafe(instance);
@@ -473,7 +476,7 @@ export const len = Effect.fn(
  * } catch (error) {
  *   console.error(`PlutusMap.lenUnsafe failed: ${error.message}`);
  * }
- * 
+ *
  * @since 2.0.0
  * @category MethodsUnsafe
  */
@@ -482,11 +485,11 @@ export const lenUnsafe = (instance: CML.PlutusMap): number =>
 
 /**
  * Method isEmpty of PlutusMap
- * 
+ *
  * @example
  * import { PlutusMap } from "@lucid-evolution/experimental";
  * import { Effect } from "effect";
- * 
+ *
  * // Using Effect for safe execution with error handling
  * Effect.gen(function*() {
  * // Assume we have a PlutusMap instance
@@ -494,7 +497,7 @@ export const lenUnsafe = (instance: CML.PlutusMap): number =>
  *   const result = yield* PlutusMap.isEmpty(instance);
  *   console.log(result);
  * });
- * 
+ *
  * @since 2.0.0
  * @category Methods
  */
@@ -506,18 +509,18 @@ export const isEmpty = Effect.fn(
         new PlutusMapError({
           message: `PlutusMap.isEmpty failed `,
         }),
-    })
+    }),
 );
 
 /**
  * Unsafely calls instance.isEmpty without Effect wrapper
- * 
+ *
  * @example
  * import { PlutusMap } from "@lucid-evolution/experimental";
- * 
+ *
  * // Assume we have a PlutusMap instance
  * const instance = ... ;
- * 
+ *
  * // Using try/catch for error handling
  * try {
  *   const result = PlutusMap.isEmptyUnsafe(instance);
@@ -525,7 +528,7 @@ export const isEmpty = Effect.fn(
  * } catch (error) {
  *   console.error(`PlutusMap.isEmptyUnsafe failed: ${error.message}`);
  * }
- * 
+ *
  * @since 2.0.0
  * @category MethodsUnsafe
  */
@@ -534,11 +537,11 @@ export const isEmptyUnsafe = (instance: CML.PlutusMap): boolean =>
 
 /**
  * Method set of PlutusMap
- * 
+ *
  * @example
  * import { PlutusMap } from "@lucid-evolution/experimental";
  * import { Effect } from "effect";
- * 
+ *
  * // Using Effect for safe execution with error handling
  * Effect.gen(function*() {
  * // Assume we have a PlutusMap instance
@@ -546,30 +549,34 @@ export const isEmptyUnsafe = (instance: CML.PlutusMap): boolean =>
  *   const result = yield* PlutusMap.set(instance,  parameters );
  *   console.log(result);
  * });
- * 
+ *
  * @since 2.0.0
  * @category Methods
  */
 export const set = Effect.fn(
-  (instance: CML.PlutusMap, key: CML.PlutusData, value: CML.PlutusData): Effect.Effect<void, PlutusMapError> =>
+  (
+    instance: CML.PlutusMap,
+    key: CML.PlutusData,
+    value: CML.PlutusData,
+  ): Effect.Effect<void, PlutusMapError> =>
     Effect.try({
       try: () => instance.set(key, value),
       catch: () =>
         new PlutusMapError({
           message: `PlutusMap.set failed with parameters: ${key} (PlutusData), ${value} (PlutusData). `,
         }),
-    })
+    }),
 );
 
 /**
  * Unsafely calls instance.set without Effect wrapper
- * 
+ *
  * @example
  * import { PlutusMap } from "@lucid-evolution/experimental";
- * 
+ *
  * // Assume we have a PlutusMap instance
  * const instance = ... ;
- * 
+ *
  * // Using try/catch for error handling
  * try {
  *   const result = PlutusMap.setUnsafe(instance,  parameters );
@@ -577,20 +584,23 @@ export const set = Effect.fn(
  * } catch (error) {
  *   console.error(`PlutusMap.setUnsafe failed: ${error.message}`);
  * }
- * 
+ *
  * @since 2.0.0
  * @category MethodsUnsafe
  */
-export const setUnsafe = (instance: CML.PlutusMap, key: CML.PlutusData, value: CML.PlutusData): void =>
-  Effect.runSync(set(instance, key, value));
+export const setUnsafe = (
+  instance: CML.PlutusMap,
+  key: CML.PlutusData,
+  value: CML.PlutusData,
+): void => Effect.runSync(set(instance, key, value));
 
 /**
  * Method get of PlutusMap
- * 
+ *
  * @example
  * import { PlutusMap } from "@lucid-evolution/experimental";
  * import { Effect } from "effect";
- * 
+ *
  * // Using Effect for safe execution with error handling
  * Effect.gen(function*() {
  * // Assume we have a PlutusMap instance
@@ -598,30 +608,33 @@ export const setUnsafe = (instance: CML.PlutusMap, key: CML.PlutusData, value: C
  *   const result = yield* PlutusMap.get(instance,  parameters );
  *   console.log(result);
  * });
- * 
+ *
  * @since 2.0.0
  * @category Methods
  */
 export const get = Effect.fn(
-  (instance: CML.PlutusMap, key: CML.PlutusData): Effect.Effect<CML.PlutusData | undefined, PlutusMapError> =>
+  (
+    instance: CML.PlutusMap,
+    key: CML.PlutusData,
+  ): Effect.Effect<CML.PlutusData | undefined, PlutusMapError> =>
     Effect.try({
       try: () => instance.get(key),
       catch: () =>
         new PlutusMapError({
           message: `PlutusMap.get failed with parameters: ${key} (PlutusData). `,
         }),
-    })
+    }),
 );
 
 /**
  * Unsafely calls instance.get without Effect wrapper
- * 
+ *
  * @example
  * import { PlutusMap } from "@lucid-evolution/experimental";
- * 
+ *
  * // Assume we have a PlutusMap instance
  * const instance = ... ;
- * 
+ *
  * // Using try/catch for error handling
  * try {
  *   const result = PlutusMap.getUnsafe(instance,  parameters );
@@ -629,20 +642,22 @@ export const get = Effect.fn(
  * } catch (error) {
  *   console.error(`PlutusMap.getUnsafe failed: ${error.message}`);
  * }
- * 
+ *
  * @since 2.0.0
  * @category MethodsUnsafe
  */
-export const getUnsafe = (instance: CML.PlutusMap, key: CML.PlutusData): CML.PlutusData | undefined =>
-  Effect.runSync(get(instance, key));
+export const getUnsafe = (
+  instance: CML.PlutusMap,
+  key: CML.PlutusData,
+): CML.PlutusData | undefined => Effect.runSync(get(instance, key));
 
 /**
  * Method getAll of PlutusMap
- * 
+ *
  * @example
  * import { PlutusMap } from "@lucid-evolution/experimental";
  * import { Effect } from "effect";
- * 
+ *
  * // Using Effect for safe execution with error handling
  * Effect.gen(function*() {
  * // Assume we have a PlutusMap instance
@@ -650,30 +665,33 @@ export const getUnsafe = (instance: CML.PlutusMap, key: CML.PlutusData): CML.Plu
  *   const result = yield* PlutusMap.getAll(instance,  parameters );
  *   console.log(result);
  * });
- * 
+ *
  * @since 2.0.0
  * @category Methods
  */
 export const getAll = Effect.fn(
-  (instance: CML.PlutusMap, key: CML.PlutusData): Effect.Effect<CML.PlutusDataList | undefined, PlutusMapError> =>
+  (
+    instance: CML.PlutusMap,
+    key: CML.PlutusData,
+  ): Effect.Effect<CML.PlutusDataList | undefined, PlutusMapError> =>
     Effect.try({
       try: () => instance.get_all(key),
       catch: () =>
         new PlutusMapError({
           message: `PlutusMap.getAll failed with parameters: ${key} (PlutusData). `,
         }),
-    })
+    }),
 );
 
 /**
  * Unsafely calls instance.getAll without Effect wrapper
- * 
+ *
  * @example
  * import { PlutusMap } from "@lucid-evolution/experimental";
- * 
+ *
  * // Assume we have a PlutusMap instance
  * const instance = ... ;
- * 
+ *
  * // Using try/catch for error handling
  * try {
  *   const result = PlutusMap.getAllUnsafe(instance,  parameters );
@@ -681,20 +699,22 @@ export const getAll = Effect.fn(
  * } catch (error) {
  *   console.error(`PlutusMap.getAllUnsafe failed: ${error.message}`);
  * }
- * 
+ *
  * @since 2.0.0
  * @category MethodsUnsafe
  */
-export const getAllUnsafe = (instance: CML.PlutusMap, key: CML.PlutusData): CML.PlutusDataList | undefined =>
-  Effect.runSync(getAll(instance, key));
+export const getAllUnsafe = (
+  instance: CML.PlutusMap,
+  key: CML.PlutusData,
+): CML.PlutusDataList | undefined => Effect.runSync(getAll(instance, key));
 
 /**
  * Method keys of PlutusMap
- * 
+ *
  * @example
  * import { PlutusMap } from "@lucid-evolution/experimental";
  * import { Effect } from "effect";
- * 
+ *
  * // Using Effect for safe execution with error handling
  * Effect.gen(function*() {
  * // Assume we have a PlutusMap instance
@@ -702,30 +722,32 @@ export const getAllUnsafe = (instance: CML.PlutusMap, key: CML.PlutusData): CML.
  *   const result = yield* PlutusMap.keys(instance);
  *   console.log(result);
  * });
- * 
+ *
  * @since 2.0.0
  * @category Methods
  */
 export const keys = Effect.fn(
-  (instance: CML.PlutusMap): Effect.Effect<CML.PlutusDataList, PlutusMapError> =>
+  (
+    instance: CML.PlutusMap,
+  ): Effect.Effect<CML.PlutusDataList, PlutusMapError> =>
     Effect.try({
       try: () => instance.keys(),
       catch: () =>
         new PlutusMapError({
           message: `PlutusMap.keys failed `,
         }),
-    })
+    }),
 );
 
 /**
  * Unsafely calls instance.keys without Effect wrapper
- * 
+ *
  * @example
  * import { PlutusMap } from "@lucid-evolution/experimental";
- * 
+ *
  * // Assume we have a PlutusMap instance
  * const instance = ... ;
- * 
+ *
  * // Using try/catch for error handling
  * try {
  *   const result = PlutusMap.keysUnsafe(instance);
@@ -733,7 +755,7 @@ export const keys = Effect.fn(
  * } catch (error) {
  *   console.error(`PlutusMap.keysUnsafe failed: ${error.message}`);
  * }
- * 
+ *
  * @since 2.0.0
  * @category MethodsUnsafe
  */

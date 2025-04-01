@@ -14,7 +14,7 @@ export type Crc32 = CML.Crc32;
 
 /**
  * Error class for Crc32 operations
- * 
+ *
  * This error is thrown when operations on Crc32 instances fail.
  *
  * @since 2.0.0
@@ -26,11 +26,11 @@ export class Crc32Error extends Data.TaggedError("Crc32Error")<{
 
 /**
  * Method free of Crc32
- * 
+ *
  * @example
  * import { Crc32 } from "@lucid-evolution/experimental";
  * import { Effect } from "effect";
- * 
+ *
  * // Using Effect for safe execution with error handling
  * Effect.gen(function*() {
  * // Assume we have a Crc32 instance
@@ -38,7 +38,7 @@ export class Crc32Error extends Data.TaggedError("Crc32Error")<{
  *   const result = yield* Crc32.free(instance);
  *   console.log(result);
  * });
- * 
+ *
  * @since 2.0.0
  * @category Methods
  */
@@ -50,18 +50,18 @@ export const free = Effect.fn(
         new Crc32Error({
           message: `Crc32.free failed Hint: Check if you're calling free() more than once.`,
         }),
-    })
+    }),
 );
 
 /**
  * Unsafely calls instance.free without Effect wrapper
- * 
+ *
  * @example
  * import { Crc32 } from "@lucid-evolution/experimental";
- * 
+ *
  * // Assume we have a Crc32 instance
  * const instance = ... ;
- * 
+ *
  * // Using try/catch for error handling
  * try {
  *   const result = Crc32.freeUnsafe(instance);
@@ -69,7 +69,7 @@ export const free = Effect.fn(
  * } catch (error) {
  *   console.error(`Crc32.freeUnsafe failed: ${error.message}`);
  * }
- * 
+ *
  * @since 2.0.0
  * @category MethodsUnsafe
  */
@@ -78,38 +78,39 @@ export const freeUnsafe = (instance: CML.Crc32): void =>
 
 /**
  * Static method _new of Crc32
- * 
+ *
  * @example
  * import { Crc32 } from "@lucid-evolution/experimental";
  * import { Effect } from "effect";
- * 
+ *
  * // Using Effect for safe execution with error handling
  * Effect.gen(function*() {
- * 
+ *
  *   const result = yield* Crc32._new();
  *   console.log(result);
  * });
- * 
+ *
  * @since 2.0.0
  * @category Constructors
  */
 export const _new = Effect.fn(function* () {
   return yield* Effect.try({
     try: () => CML.Crc32.new(),
-    catch: () => new Crc32Error({
-      message: `Crc32._new failed `,
-    }),
+    catch: () =>
+      new Crc32Error({
+        message: `Crc32._new failed `,
+      }),
   });
 });
 
 /**
  * Unsafely calls Crc32._new without Effect wrapper
- * 
+ *
  * @example
  * import { Crc32 } from "@lucid-evolution/experimental";
- * 
- * 
- * 
+ *
+ *
+ *
  * // Using try/catch for error handling
  * try {
  *   const result = Crc32._newUnsafe();
@@ -117,20 +118,19 @@ export const _new = Effect.fn(function* () {
  * } catch (error) {
  *   console.error(`Crc32._newUnsafe failed: ${error.message}`);
  * }
- * 
+ *
  * @since 2.0.0
  * @category ConstructorsUnsafe
  */
-export const _newUnsafe = () =>
-  Effect.runSync(_new());
+export const _newUnsafe = () => Effect.runSync(_new());
 
 /**
  * Method update of Crc32
- * 
+ *
  * @example
  * import { Crc32 } from "@lucid-evolution/experimental";
  * import { Effect } from "effect";
- * 
+ *
  * // Using Effect for safe execution with error handling
  * Effect.gen(function*() {
  * // Assume we have a Crc32 instance
@@ -138,7 +138,7 @@ export const _newUnsafe = () =>
  *   const result = yield* Crc32.update(instance,  parameters );
  *   console.log(result);
  * });
- * 
+ *
  * @since 2.0.0
  * @category Methods
  */
@@ -150,18 +150,18 @@ export const update = Effect.fn(
         new Crc32Error({
           message: `Crc32.update failed with parameters: ${bytes}. `,
         }),
-    })
+    }),
 );
 
 /**
  * Unsafely calls instance.update without Effect wrapper
- * 
+ *
  * @example
  * import { Crc32 } from "@lucid-evolution/experimental";
- * 
+ *
  * // Assume we have a Crc32 instance
  * const instance = ... ;
- * 
+ *
  * // Using try/catch for error handling
  * try {
  *   const result = Crc32.updateUnsafe(instance,  parameters );
@@ -169,7 +169,7 @@ export const update = Effect.fn(
  * } catch (error) {
  *   console.error(`Crc32.updateUnsafe failed: ${error.message}`);
  * }
- * 
+ *
  * @since 2.0.0
  * @category MethodsUnsafe
  */
@@ -178,11 +178,11 @@ export const updateUnsafe = (instance: CML.Crc32, bytes: Uint8Array): void =>
 
 /**
  * Method finalize of Crc32
- * 
+ *
  * @example
  * import { Crc32 } from "@lucid-evolution/experimental";
  * import { Effect } from "effect";
- * 
+ *
  * // Using Effect for safe execution with error handling
  * Effect.gen(function*() {
  * // Assume we have a Crc32 instance
@@ -190,7 +190,7 @@ export const updateUnsafe = (instance: CML.Crc32, bytes: Uint8Array): void =>
  *   const result = yield* Crc32.finalize(instance);
  *   console.log(result);
  * });
- * 
+ *
  * @since 2.0.0
  * @category Methods
  */
@@ -202,18 +202,18 @@ export const finalize = Effect.fn(
         new Crc32Error({
           message: `Crc32.finalize failed `,
         }),
-    })
+    }),
 );
 
 /**
  * Unsafely calls instance.finalize without Effect wrapper
- * 
+ *
  * @example
  * import { Crc32 } from "@lucid-evolution/experimental";
- * 
+ *
  * // Assume we have a Crc32 instance
  * const instance = ... ;
- * 
+ *
  * // Using try/catch for error handling
  * try {
  *   const result = Crc32.finalizeUnsafe(instance);
@@ -221,7 +221,7 @@ export const finalize = Effect.fn(
  * } catch (error) {
  *   console.error(`Crc32.finalizeUnsafe failed: ${error.message}`);
  * }
- * 
+ *
  * @since 2.0.0
  * @category MethodsUnsafe
  */

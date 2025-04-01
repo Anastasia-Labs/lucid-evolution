@@ -14,23 +14,25 @@ export type PlutusV2Script = CML.PlutusV2Script;
 
 /**
  * Error class for PlutusV2Script operations
- * 
+ *
  * This error is thrown when operations on PlutusV2Script instances fail.
  *
  * @since 2.0.0
  * @category Errors
  */
-export class PlutusV2ScriptError extends Data.TaggedError("PlutusV2ScriptError")<{
+export class PlutusV2ScriptError extends Data.TaggedError(
+  "PlutusV2ScriptError",
+)<{
   message?: string;
 }> {}
 
 /**
  * Method free of PlutusV2Script
- * 
+ *
  * @example
  * import { PlutusV2Script } from "@lucid-evolution/experimental";
  * import { Effect } from "effect";
- * 
+ *
  * // Using Effect for safe execution with error handling
  * Effect.gen(function*() {
  * // Assume we have a PlutusV2Script instance
@@ -38,7 +40,7 @@ export class PlutusV2ScriptError extends Data.TaggedError("PlutusV2ScriptError")
  *   const result = yield* PlutusV2Script.free(instance);
  *   console.log(result);
  * });
- * 
+ *
  * @since 2.0.0
  * @category Methods
  */
@@ -50,18 +52,18 @@ export const free = Effect.fn(
         new PlutusV2ScriptError({
           message: `PlutusV2Script.free failed Hint: Check if you're calling free() more than once.`,
         }),
-    })
+    }),
 );
 
 /**
  * Unsafely calls instance.free without Effect wrapper
- * 
+ *
  * @example
  * import { PlutusV2Script } from "@lucid-evolution/experimental";
- * 
+ *
  * // Assume we have a PlutusV2Script instance
  * const instance = ... ;
- * 
+ *
  * // Using try/catch for error handling
  * try {
  *   const result = PlutusV2Script.freeUnsafe(instance);
@@ -69,7 +71,7 @@ export const free = Effect.fn(
  * } catch (error) {
  *   console.error(`PlutusV2Script.freeUnsafe failed: ${error.message}`);
  * }
- * 
+ *
  * @since 2.0.0
  * @category MethodsUnsafe
  */
@@ -78,11 +80,11 @@ export const freeUnsafe = (instance: CML.PlutusV2Script): void =>
 
 /**
  * Method hash of PlutusV2Script
- * 
+ *
  * @example
  * import { PlutusV2Script } from "@lucid-evolution/experimental";
  * import { Effect } from "effect";
- * 
+ *
  * // Using Effect for safe execution with error handling
  * Effect.gen(function*() {
  * // Assume we have a PlutusV2Script instance
@@ -90,30 +92,32 @@ export const freeUnsafe = (instance: CML.PlutusV2Script): void =>
  *   const result = yield* PlutusV2Script.hash(instance);
  *   console.log(result);
  * });
- * 
+ *
  * @since 2.0.0
  * @category Methods
  */
 export const hash = Effect.fn(
-  (instance: CML.PlutusV2Script): Effect.Effect<CML.ScriptHash, PlutusV2ScriptError> =>
+  (
+    instance: CML.PlutusV2Script,
+  ): Effect.Effect<CML.ScriptHash, PlutusV2ScriptError> =>
     Effect.try({
       try: () => instance.hash(),
       catch: () =>
         new PlutusV2ScriptError({
           message: `PlutusV2Script.hash failed `,
         }),
-    })
+    }),
 );
 
 /**
  * Unsafely calls instance.hash without Effect wrapper
- * 
+ *
  * @example
  * import { PlutusV2Script } from "@lucid-evolution/experimental";
- * 
+ *
  * // Assume we have a PlutusV2Script instance
  * const instance = ... ;
- * 
+ *
  * // Using try/catch for error handling
  * try {
  *   const result = PlutusV2Script.hashUnsafe(instance);
@@ -121,7 +125,7 @@ export const hash = Effect.fn(
  * } catch (error) {
  *   console.error(`PlutusV2Script.hashUnsafe failed: ${error.message}`);
  * }
- * 
+ *
  * @since 2.0.0
  * @category MethodsUnsafe
  */
@@ -130,11 +134,11 @@ export const hashUnsafe = (instance: CML.PlutusV2Script): CML.ScriptHash =>
 
 /**
  * Method toRawBytes of PlutusV2Script
- * 
+ *
  * @example
  * import { PlutusV2Script } from "@lucid-evolution/experimental";
  * import { Effect } from "effect";
- * 
+ *
  * // Using Effect for safe execution with error handling
  * Effect.gen(function*() {
  * // Assume we have a PlutusV2Script instance
@@ -142,30 +146,32 @@ export const hashUnsafe = (instance: CML.PlutusV2Script): CML.ScriptHash =>
  *   const result = yield* PlutusV2Script.toRawBytes(instance);
  *   console.log(result);
  * });
- * 
+ *
  * @since 2.0.0
  * @category Methods
  */
 export const toRawBytes = Effect.fn(
-  (instance: CML.PlutusV2Script): Effect.Effect<Uint8Array, PlutusV2ScriptError> =>
+  (
+    instance: CML.PlutusV2Script,
+  ): Effect.Effect<Uint8Array, PlutusV2ScriptError> =>
     Effect.try({
       try: () => instance.to_raw_bytes(),
       catch: () =>
         new PlutusV2ScriptError({
           message: `PlutusV2Script.toRawBytes failed PlutusV2Script is not valid for Uint8Array conversion. Hint: Check byte length and encoding.`,
         }),
-    })
+    }),
 );
 
 /**
  * Unsafely calls instance.toRawBytes without Effect wrapper
- * 
+ *
  * @example
  * import { PlutusV2Script } from "@lucid-evolution/experimental";
- * 
+ *
  * // Assume we have a PlutusV2Script instance
  * const instance = ... ;
- * 
+ *
  * // Using try/catch for error handling
  * try {
  *   const result = PlutusV2Script.toRawBytesUnsafe(instance);
@@ -173,7 +179,7 @@ export const toRawBytes = Effect.fn(
  * } catch (error) {
  *   console.error(`PlutusV2Script.toRawBytesUnsafe failed: ${error.message}`);
  * }
- * 
+ *
  * @since 2.0.0
  * @category MethodsUnsafe
  */
@@ -182,38 +188,39 @@ export const toRawBytesUnsafe = (instance: CML.PlutusV2Script): Uint8Array =>
 
 /**
  * Static method fromRawBytes of PlutusV2Script
- * 
+ *
  * @example
  * import { PlutusV2Script } from "@lucid-evolution/experimental";
  * import { Effect } from "effect";
- * 
+ *
  * // Using Effect for safe execution with error handling
  * Effect.gen(function*() {
- * 
+ *
  *   const result = yield* PlutusV2Script.fromRawBytes( parameters );
  *   console.log(result);
  * });
- * 
+ *
  * @since 2.0.0
  * @category Constructors
  */
 export const fromRawBytes = Effect.fn(function* (bytes: Uint8Array) {
   return yield* Effect.try({
     try: () => CML.PlutusV2Script.from_raw_bytes(bytes),
-    catch: () => new PlutusV2ScriptError({
-      message: `PlutusV2Script.fromRawBytes failed with parameters: ${bytes}. Hint: Check byte length and encoding.`,
-    }),
+    catch: () =>
+      new PlutusV2ScriptError({
+        message: `PlutusV2Script.fromRawBytes failed with parameters: ${bytes}. Hint: Check byte length and encoding.`,
+      }),
   });
 });
 
 /**
  * Unsafely calls PlutusV2Script.fromRawBytes without Effect wrapper
- * 
+ *
  * @example
  * import { PlutusV2Script } from "@lucid-evolution/experimental";
- * 
- * 
- * 
+ *
+ *
+ *
  * // Using try/catch for error handling
  * try {
  *   const result = PlutusV2Script.fromRawBytesUnsafe( parameters );
@@ -221,7 +228,7 @@ export const fromRawBytes = Effect.fn(function* (bytes: Uint8Array) {
  * } catch (error) {
  *   console.error(`PlutusV2Script.fromRawBytesUnsafe failed: ${error.message}`);
  * }
- * 
+ *
  * @since 2.0.0
  * @category ConstructorsUnsafe
  */
@@ -230,11 +237,11 @@ export const fromRawBytesUnsafe = (bytes: Uint8Array) =>
 
 /**
  * Method toHex of PlutusV2Script
- * 
+ *
  * @example
  * import { PlutusV2Script } from "@lucid-evolution/experimental";
  * import { Effect } from "effect";
- * 
+ *
  * // Using Effect for safe execution with error handling
  * Effect.gen(function*() {
  * // Assume we have a PlutusV2Script instance
@@ -242,7 +249,7 @@ export const fromRawBytesUnsafe = (bytes: Uint8Array) =>
  *   const result = yield* PlutusV2Script.toHex(instance);
  *   console.log(result);
  * });
- * 
+ *
  * @since 2.0.0
  * @category Methods
  */
@@ -254,18 +261,18 @@ export const toHex = Effect.fn(
         new PlutusV2ScriptError({
           message: `PlutusV2Script.toHex failed PlutusV2Script is not valid for string conversion. Hint: Ensure hex string has valid characters and length.`,
         }),
-    })
+    }),
 );
 
 /**
  * Unsafely calls instance.toHex without Effect wrapper
- * 
+ *
  * @example
  * import { PlutusV2Script } from "@lucid-evolution/experimental";
- * 
+ *
  * // Assume we have a PlutusV2Script instance
  * const instance = ... ;
- * 
+ *
  * // Using try/catch for error handling
  * try {
  *   const result = PlutusV2Script.toHexUnsafe(instance);
@@ -273,7 +280,7 @@ export const toHex = Effect.fn(
  * } catch (error) {
  *   console.error(`PlutusV2Script.toHexUnsafe failed: ${error.message}`);
  * }
- * 
+ *
  * @since 2.0.0
  * @category MethodsUnsafe
  */
@@ -282,38 +289,39 @@ export const toHexUnsafe = (instance: CML.PlutusV2Script): string =>
 
 /**
  * Static method fromHex of PlutusV2Script
- * 
+ *
  * @example
  * import { PlutusV2Script } from "@lucid-evolution/experimental";
  * import { Effect } from "effect";
- * 
+ *
  * // Using Effect for safe execution with error handling
  * Effect.gen(function*() {
- * 
+ *
  *   const result = yield* PlutusV2Script.fromHex( parameters );
  *   console.log(result);
  * });
- * 
+ *
  * @since 2.0.0
  * @category Constructors
  */
 export const fromHex = Effect.fn(function* (input: string) {
   return yield* Effect.try({
     try: () => CML.PlutusV2Script.from_hex(input),
-    catch: () => new PlutusV2ScriptError({
-      message: `PlutusV2Script.fromHex failed with parameters: ${input}. Hint: Ensure hex string has valid characters and length.`,
-    }),
+    catch: () =>
+      new PlutusV2ScriptError({
+        message: `PlutusV2Script.fromHex failed with parameters: ${input}. Hint: Ensure hex string has valid characters and length.`,
+      }),
   });
 });
 
 /**
  * Unsafely calls PlutusV2Script.fromHex without Effect wrapper
- * 
+ *
  * @example
  * import { PlutusV2Script } from "@lucid-evolution/experimental";
- * 
- * 
- * 
+ *
+ *
+ *
  * // Using try/catch for error handling
  * try {
  *   const result = PlutusV2Script.fromHexUnsafe( parameters );
@@ -321,20 +329,19 @@ export const fromHex = Effect.fn(function* (input: string) {
  * } catch (error) {
  *   console.error(`PlutusV2Script.fromHexUnsafe failed: ${error.message}`);
  * }
- * 
+ *
  * @since 2.0.0
  * @category ConstructorsUnsafe
  */
-export const fromHexUnsafe = (input: string) =>
-  Effect.runSync(fromHex(input));
+export const fromHexUnsafe = (input: string) => Effect.runSync(fromHex(input));
 
 /**
  * Method toCborBytes of PlutusV2Script
- * 
+ *
  * @example
  * import { PlutusV2Script } from "@lucid-evolution/experimental";
  * import { Effect } from "effect";
- * 
+ *
  * // Using Effect for safe execution with error handling
  * Effect.gen(function*() {
  * // Assume we have a PlutusV2Script instance
@@ -342,30 +349,32 @@ export const fromHexUnsafe = (input: string) =>
  *   const result = yield* PlutusV2Script.toCborBytes(instance);
  *   console.log(result);
  * });
- * 
+ *
  * @since 2.0.0
  * @category Methods
  */
 export const toCborBytes = Effect.fn(
-  (instance: CML.PlutusV2Script): Effect.Effect<Uint8Array, PlutusV2ScriptError> =>
+  (
+    instance: CML.PlutusV2Script,
+  ): Effect.Effect<Uint8Array, PlutusV2ScriptError> =>
     Effect.try({
       try: () => instance.to_cbor_bytes(),
       catch: () =>
         new PlutusV2ScriptError({
           message: `PlutusV2Script.toCborBytes failed PlutusV2Script is not valid for Uint8Array conversion. Hint: Check byte length and encoding.`,
         }),
-    })
+    }),
 );
 
 /**
  * Unsafely calls instance.toCborBytes without Effect wrapper
- * 
+ *
  * @example
  * import { PlutusV2Script } from "@lucid-evolution/experimental";
- * 
+ *
  * // Assume we have a PlutusV2Script instance
  * const instance = ... ;
- * 
+ *
  * // Using try/catch for error handling
  * try {
  *   const result = PlutusV2Script.toCborBytesUnsafe(instance);
@@ -373,7 +382,7 @@ export const toCborBytes = Effect.fn(
  * } catch (error) {
  *   console.error(`PlutusV2Script.toCborBytesUnsafe failed: ${error.message}`);
  * }
- * 
+ *
  * @since 2.0.0
  * @category MethodsUnsafe
  */
@@ -382,11 +391,11 @@ export const toCborBytesUnsafe = (instance: CML.PlutusV2Script): Uint8Array =>
 
 /**
  * Method toCanonicalCborBytes of PlutusV2Script
- * 
+ *
  * @example
  * import { PlutusV2Script } from "@lucid-evolution/experimental";
  * import { Effect } from "effect";
- * 
+ *
  * // Using Effect for safe execution with error handling
  * Effect.gen(function*() {
  * // Assume we have a PlutusV2Script instance
@@ -394,30 +403,32 @@ export const toCborBytesUnsafe = (instance: CML.PlutusV2Script): Uint8Array =>
  *   const result = yield* PlutusV2Script.toCanonicalCborBytes(instance);
  *   console.log(result);
  * });
- * 
+ *
  * @since 2.0.0
  * @category Methods
  */
 export const toCanonicalCborBytes = Effect.fn(
-  (instance: CML.PlutusV2Script): Effect.Effect<Uint8Array, PlutusV2ScriptError> =>
+  (
+    instance: CML.PlutusV2Script,
+  ): Effect.Effect<Uint8Array, PlutusV2ScriptError> =>
     Effect.try({
       try: () => instance.to_canonical_cbor_bytes(),
       catch: () =>
         new PlutusV2ScriptError({
           message: `PlutusV2Script.toCanonicalCborBytes failed PlutusV2Script is not valid for Uint8Array conversion. Hint: Check byte length and encoding.`,
         }),
-    })
+    }),
 );
 
 /**
  * Unsafely calls instance.toCanonicalCborBytes without Effect wrapper
- * 
+ *
  * @example
  * import { PlutusV2Script } from "@lucid-evolution/experimental";
- * 
+ *
  * // Assume we have a PlutusV2Script instance
  * const instance = ... ;
- * 
+ *
  * // Using try/catch for error handling
  * try {
  *   const result = PlutusV2Script.toCanonicalCborBytesUnsafe(instance);
@@ -425,47 +436,49 @@ export const toCanonicalCborBytes = Effect.fn(
  * } catch (error) {
  *   console.error(`PlutusV2Script.toCanonicalCborBytesUnsafe failed: ${error.message}`);
  * }
- * 
+ *
  * @since 2.0.0
  * @category MethodsUnsafe
  */
-export const toCanonicalCborBytesUnsafe = (instance: CML.PlutusV2Script): Uint8Array =>
-  Effect.runSync(toCanonicalCborBytes(instance));
+export const toCanonicalCborBytesUnsafe = (
+  instance: CML.PlutusV2Script,
+): Uint8Array => Effect.runSync(toCanonicalCborBytes(instance));
 
 /**
  * Static method fromCborBytes of PlutusV2Script
- * 
+ *
  * @example
  * import { PlutusV2Script } from "@lucid-evolution/experimental";
  * import { Effect } from "effect";
- * 
+ *
  * // Using Effect for safe execution with error handling
  * Effect.gen(function*() {
- * 
+ *
  *   const result = yield* PlutusV2Script.fromCborBytes( parameters );
  *   console.log(result);
  * });
- * 
+ *
  * @since 2.0.0
  * @category Constructors
  */
 export const fromCborBytes = Effect.fn(function* (cborBytes: Uint8Array) {
   return yield* Effect.try({
     try: () => CML.PlutusV2Script.from_cbor_bytes(cborBytes),
-    catch: () => new PlutusV2ScriptError({
-      message: `PlutusV2Script.fromCborBytes failed with parameters: ${cborBytes}. Hint: Check byte length and encoding.`,
-    }),
+    catch: () =>
+      new PlutusV2ScriptError({
+        message: `PlutusV2Script.fromCborBytes failed with parameters: ${cborBytes}. Hint: Check byte length and encoding.`,
+      }),
   });
 });
 
 /**
  * Unsafely calls PlutusV2Script.fromCborBytes without Effect wrapper
- * 
+ *
  * @example
  * import { PlutusV2Script } from "@lucid-evolution/experimental";
- * 
- * 
- * 
+ *
+ *
+ *
  * // Using try/catch for error handling
  * try {
  *   const result = PlutusV2Script.fromCborBytesUnsafe( parameters );
@@ -473,7 +486,7 @@ export const fromCborBytes = Effect.fn(function* (cborBytes: Uint8Array) {
  * } catch (error) {
  *   console.error(`PlutusV2Script.fromCborBytesUnsafe failed: ${error.message}`);
  * }
- * 
+ *
  * @since 2.0.0
  * @category ConstructorsUnsafe
  */
@@ -482,11 +495,11 @@ export const fromCborBytesUnsafe = (cborBytes: Uint8Array) =>
 
 /**
  * Method toCborHex of PlutusV2Script
- * 
+ *
  * @example
  * import { PlutusV2Script } from "@lucid-evolution/experimental";
  * import { Effect } from "effect";
- * 
+ *
  * // Using Effect for safe execution with error handling
  * Effect.gen(function*() {
  * // Assume we have a PlutusV2Script instance
@@ -494,7 +507,7 @@ export const fromCborBytesUnsafe = (cborBytes: Uint8Array) =>
  *   const result = yield* PlutusV2Script.toCborHex(instance);
  *   console.log(result);
  * });
- * 
+ *
  * @since 2.0.0
  * @category Methods
  */
@@ -506,18 +519,18 @@ export const toCborHex = Effect.fn(
         new PlutusV2ScriptError({
           message: `PlutusV2Script.toCborHex failed PlutusV2Script is not valid for string conversion. Hint: Make sure it's a valid hex string representing CBOR data.`,
         }),
-    })
+    }),
 );
 
 /**
  * Unsafely calls instance.toCborHex without Effect wrapper
- * 
+ *
  * @example
  * import { PlutusV2Script } from "@lucid-evolution/experimental";
- * 
+ *
  * // Assume we have a PlutusV2Script instance
  * const instance = ... ;
- * 
+ *
  * // Using try/catch for error handling
  * try {
  *   const result = PlutusV2Script.toCborHexUnsafe(instance);
@@ -525,7 +538,7 @@ export const toCborHex = Effect.fn(
  * } catch (error) {
  *   console.error(`PlutusV2Script.toCborHexUnsafe failed: ${error.message}`);
  * }
- * 
+ *
  * @since 2.0.0
  * @category MethodsUnsafe
  */
@@ -534,11 +547,11 @@ export const toCborHexUnsafe = (instance: CML.PlutusV2Script): string =>
 
 /**
  * Method toCanonicalCborHex of PlutusV2Script
- * 
+ *
  * @example
  * import { PlutusV2Script } from "@lucid-evolution/experimental";
  * import { Effect } from "effect";
- * 
+ *
  * // Using Effect for safe execution with error handling
  * Effect.gen(function*() {
  * // Assume we have a PlutusV2Script instance
@@ -546,7 +559,7 @@ export const toCborHexUnsafe = (instance: CML.PlutusV2Script): string =>
  *   const result = yield* PlutusV2Script.toCanonicalCborHex(instance);
  *   console.log(result);
  * });
- * 
+ *
  * @since 2.0.0
  * @category Methods
  */
@@ -558,18 +571,18 @@ export const toCanonicalCborHex = Effect.fn(
         new PlutusV2ScriptError({
           message: `PlutusV2Script.toCanonicalCborHex failed PlutusV2Script is not valid for string conversion. Hint: Make sure it's a valid hex string representing CBOR data.`,
         }),
-    })
+    }),
 );
 
 /**
  * Unsafely calls instance.toCanonicalCborHex without Effect wrapper
- * 
+ *
  * @example
  * import { PlutusV2Script } from "@lucid-evolution/experimental";
- * 
+ *
  * // Assume we have a PlutusV2Script instance
  * const instance = ... ;
- * 
+ *
  * // Using try/catch for error handling
  * try {
  *   const result = PlutusV2Script.toCanonicalCborHexUnsafe(instance);
@@ -577,47 +590,49 @@ export const toCanonicalCborHex = Effect.fn(
  * } catch (error) {
  *   console.error(`PlutusV2Script.toCanonicalCborHexUnsafe failed: ${error.message}`);
  * }
- * 
+ *
  * @since 2.0.0
  * @category MethodsUnsafe
  */
-export const toCanonicalCborHexUnsafe = (instance: CML.PlutusV2Script): string =>
-  Effect.runSync(toCanonicalCborHex(instance));
+export const toCanonicalCborHexUnsafe = (
+  instance: CML.PlutusV2Script,
+): string => Effect.runSync(toCanonicalCborHex(instance));
 
 /**
  * Static method fromCborHex of PlutusV2Script
- * 
+ *
  * @example
  * import { PlutusV2Script } from "@lucid-evolution/experimental";
  * import { Effect } from "effect";
- * 
+ *
  * // Using Effect for safe execution with error handling
  * Effect.gen(function*() {
- * 
+ *
  *   const result = yield* PlutusV2Script.fromCborHex( parameters );
  *   console.log(result);
  * });
- * 
+ *
  * @since 2.0.0
  * @category Constructors
  */
 export const fromCborHex = Effect.fn(function* (cborBytes: string) {
   return yield* Effect.try({
     try: () => CML.PlutusV2Script.from_cbor_hex(cborBytes),
-    catch: () => new PlutusV2ScriptError({
-      message: `PlutusV2Script.fromCborHex failed with parameters: ${cborBytes}. Hint: Make sure it's a valid hex string representing CBOR data.`,
-    }),
+    catch: () =>
+      new PlutusV2ScriptError({
+        message: `PlutusV2Script.fromCborHex failed with parameters: ${cborBytes}. Hint: Make sure it's a valid hex string representing CBOR data.`,
+      }),
   });
 });
 
 /**
  * Unsafely calls PlutusV2Script.fromCborHex without Effect wrapper
- * 
+ *
  * @example
  * import { PlutusV2Script } from "@lucid-evolution/experimental";
- * 
- * 
- * 
+ *
+ *
+ *
  * // Using try/catch for error handling
  * try {
  *   const result = PlutusV2Script.fromCborHexUnsafe( parameters );
@@ -625,7 +640,7 @@ export const fromCborHex = Effect.fn(function* (cborBytes: string) {
  * } catch (error) {
  *   console.error(`PlutusV2Script.fromCborHexUnsafe failed: ${error.message}`);
  * }
- * 
+ *
  * @since 2.0.0
  * @category ConstructorsUnsafe
  */
@@ -634,11 +649,11 @@ export const fromCborHexUnsafe = (cborBytes: string) =>
 
 /**
  * Method toJson of PlutusV2Script
- * 
+ *
  * @example
  * import { PlutusV2Script } from "@lucid-evolution/experimental";
  * import { Effect } from "effect";
- * 
+ *
  * // Using Effect for safe execution with error handling
  * Effect.gen(function*() {
  * // Assume we have a PlutusV2Script instance
@@ -646,7 +661,7 @@ export const fromCborHexUnsafe = (cborBytes: string) =>
  *   const result = yield* PlutusV2Script.toJson(instance);
  *   console.log(result);
  * });
- * 
+ *
  * @since 2.0.0
  * @category Methods
  */
@@ -658,18 +673,18 @@ export const toJson = Effect.fn(
         new PlutusV2ScriptError({
           message: `PlutusV2Script.toJson failed PlutusV2Script is not valid for string conversion. Hint: Validate your JSON structure.`,
         }),
-    })
+    }),
 );
 
 /**
  * Unsafely calls instance.toJson without Effect wrapper
- * 
+ *
  * @example
  * import { PlutusV2Script } from "@lucid-evolution/experimental";
- * 
+ *
  * // Assume we have a PlutusV2Script instance
  * const instance = ... ;
- * 
+ *
  * // Using try/catch for error handling
  * try {
  *   const result = PlutusV2Script.toJsonUnsafe(instance);
@@ -677,7 +692,7 @@ export const toJson = Effect.fn(
  * } catch (error) {
  *   console.error(`PlutusV2Script.toJsonUnsafe failed: ${error.message}`);
  * }
- * 
+ *
  * @since 2.0.0
  * @category MethodsUnsafe
  */
@@ -686,11 +701,11 @@ export const toJsonUnsafe = (instance: CML.PlutusV2Script): string =>
 
 /**
  * Method toJsValue of PlutusV2Script
- * 
+ *
  * @example
  * import { PlutusV2Script } from "@lucid-evolution/experimental";
  * import { Effect } from "effect";
- * 
+ *
  * // Using Effect for safe execution with error handling
  * Effect.gen(function*() {
  * // Assume we have a PlutusV2Script instance
@@ -698,7 +713,7 @@ export const toJsonUnsafe = (instance: CML.PlutusV2Script): string =>
  *   const result = yield* PlutusV2Script.toJsValue(instance);
  *   console.log(result);
  * });
- * 
+ *
  * @since 2.0.0
  * @category Methods
  */
@@ -710,18 +725,18 @@ export const toJsValue = Effect.fn(
         new PlutusV2ScriptError({
           message: `PlutusV2Script.toJsValue failed PlutusV2Script is not valid for any conversion. `,
         }),
-    })
+    }),
 );
 
 /**
  * Unsafely calls instance.toJsValue without Effect wrapper
- * 
+ *
  * @example
  * import { PlutusV2Script } from "@lucid-evolution/experimental";
- * 
+ *
  * // Assume we have a PlutusV2Script instance
  * const instance = ... ;
- * 
+ *
  * // Using try/catch for error handling
  * try {
  *   const result = PlutusV2Script.toJsValueUnsafe(instance);
@@ -729,7 +744,7 @@ export const toJsValue = Effect.fn(
  * } catch (error) {
  *   console.error(`PlutusV2Script.toJsValueUnsafe failed: ${error.message}`);
  * }
- * 
+ *
  * @since 2.0.0
  * @category MethodsUnsafe
  */
@@ -738,38 +753,39 @@ export const toJsValueUnsafe = (instance: CML.PlutusV2Script): any =>
 
 /**
  * Static method fromJson of PlutusV2Script
- * 
+ *
  * @example
  * import { PlutusV2Script } from "@lucid-evolution/experimental";
  * import { Effect } from "effect";
- * 
+ *
  * // Using Effect for safe execution with error handling
  * Effect.gen(function*() {
- * 
+ *
  *   const result = yield* PlutusV2Script.fromJson( parameters );
  *   console.log(result);
  * });
- * 
+ *
  * @since 2.0.0
  * @category Constructors
  */
 export const fromJson = Effect.fn(function* (json: string) {
   return yield* Effect.try({
     try: () => CML.PlutusV2Script.from_json(json),
-    catch: () => new PlutusV2ScriptError({
-      message: `PlutusV2Script.fromJson failed with parameters: ${json}. Hint: Validate your JSON structure.`,
-    }),
+    catch: () =>
+      new PlutusV2ScriptError({
+        message: `PlutusV2Script.fromJson failed with parameters: ${json}. Hint: Validate your JSON structure.`,
+      }),
   });
 });
 
 /**
  * Unsafely calls PlutusV2Script.fromJson without Effect wrapper
- * 
+ *
  * @example
  * import { PlutusV2Script } from "@lucid-evolution/experimental";
- * 
- * 
- * 
+ *
+ *
+ *
  * // Using try/catch for error handling
  * try {
  *   const result = PlutusV2Script.fromJsonUnsafe( parameters );
@@ -777,9 +793,8 @@ export const fromJson = Effect.fn(function* (json: string) {
  * } catch (error) {
  *   console.error(`PlutusV2Script.fromJsonUnsafe failed: ${error.message}`);
  * }
- * 
+ *
  * @since 2.0.0
  * @category ConstructorsUnsafe
  */
-export const fromJsonUnsafe = (json: string) =>
-  Effect.runSync(fromJson(json));
+export const fromJsonUnsafe = (json: string) => Effect.runSync(fromJson(json));

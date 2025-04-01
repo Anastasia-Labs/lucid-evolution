@@ -14,7 +14,7 @@ export type AddressId = CML.AddressId;
 
 /**
  * Error class for AddressId operations
- * 
+ *
  * This error is thrown when operations on AddressId instances fail.
  *
  * @since 2.0.0
@@ -26,11 +26,11 @@ export class AddressIdError extends Data.TaggedError("AddressIdError")<{
 
 /**
  * Method free of AddressId
- * 
+ *
  * @example
  * import { AddressId } from "@lucid-evolution/experimental";
  * import { Effect } from "effect";
- * 
+ *
  * // Using Effect for safe execution with error handling
  * Effect.gen(function*() {
  * // Assume we have a AddressId instance
@@ -38,7 +38,7 @@ export class AddressIdError extends Data.TaggedError("AddressIdError")<{
  *   const result = yield* AddressId.free(instance);
  *   console.log(result);
  * });
- * 
+ *
  * @since 2.0.0
  * @category Methods
  */
@@ -50,18 +50,18 @@ export const free = Effect.fn(
         new AddressIdError({
           message: `AddressId.free failed Hint: Check if you're calling free() more than once.`,
         }),
-    })
+    }),
 );
 
 /**
  * Unsafely calls instance.free without Effect wrapper
- * 
+ *
  * @example
  * import { AddressId } from "@lucid-evolution/experimental";
- * 
+ *
  * // Assume we have a AddressId instance
  * const instance = ... ;
- * 
+ *
  * // Using try/catch for error handling
  * try {
  *   const result = AddressId.freeUnsafe(instance);
@@ -69,7 +69,7 @@ export const free = Effect.fn(
  * } catch (error) {
  *   console.error(`AddressId.freeUnsafe failed: ${error.message}`);
  * }
- * 
+ *
  * @since 2.0.0
  * @category MethodsUnsafe
  */
@@ -78,11 +78,11 @@ export const freeUnsafe = (instance: CML.AddressId): void =>
 
 /**
  * Method toBech32 of AddressId
- * 
+ *
  * @example
  * import { AddressId } from "@lucid-evolution/experimental";
  * import { Effect } from "effect";
- * 
+ *
  * // Using Effect for safe execution with error handling
  * Effect.gen(function*() {
  * // Assume we have a AddressId instance
@@ -90,30 +90,33 @@ export const freeUnsafe = (instance: CML.AddressId): void =>
  *   const result = yield* AddressId.toBech32(instance,  parameters );
  *   console.log(result);
  * });
- * 
+ *
  * @since 2.0.0
  * @category Methods
  */
 export const toBech32 = Effect.fn(
-  (instance: CML.AddressId, prefix: string): Effect.Effect<string, AddressIdError> =>
+  (
+    instance: CML.AddressId,
+    prefix: string,
+  ): Effect.Effect<string, AddressIdError> =>
     Effect.try({
       try: () => instance.to_bech32(prefix),
       catch: () =>
         new AddressIdError({
           message: `AddressId.toBech32 failed with parameters: ${prefix}. AddressId is not valid for string conversion. `,
         }),
-    })
+    }),
 );
 
 /**
  * Unsafely calls instance.toBech32 without Effect wrapper
- * 
+ *
  * @example
  * import { AddressId } from "@lucid-evolution/experimental";
- * 
+ *
  * // Assume we have a AddressId instance
  * const instance = ... ;
- * 
+ *
  * // Using try/catch for error handling
  * try {
  *   const result = AddressId.toBech32Unsafe(instance,  parameters );
@@ -121,47 +124,50 @@ export const toBech32 = Effect.fn(
  * } catch (error) {
  *   console.error(`AddressId.toBech32Unsafe failed: ${error.message}`);
  * }
- * 
+ *
  * @since 2.0.0
  * @category MethodsUnsafe
  */
-export const toBech32Unsafe = (instance: CML.AddressId, prefix: string): string =>
-  Effect.runSync(toBech32(instance, prefix));
+export const toBech32Unsafe = (
+  instance: CML.AddressId,
+  prefix: string,
+): string => Effect.runSync(toBech32(instance, prefix));
 
 /**
  * Static method fromBech32 of AddressId
- * 
+ *
  * @example
  * import { AddressId } from "@lucid-evolution/experimental";
  * import { Effect } from "effect";
- * 
+ *
  * // Using Effect for safe execution with error handling
  * Effect.gen(function*() {
- * 
+ *
  *   const result = yield* AddressId.fromBech32( parameters );
  *   console.log(result);
  * });
- * 
+ *
  * @since 2.0.0
  * @category Constructors
  */
 export const fromBech32 = Effect.fn(function* (bech32Str: string) {
   return yield* Effect.try({
     try: () => CML.AddressId.from_bech32(bech32Str),
-    catch: () => new AddressIdError({
-      message: `AddressId.fromBech32 failed with parameters: ${bech32Str}. `,
-    }),
+    catch: () =>
+      new AddressIdError({
+        message: `AddressId.fromBech32 failed with parameters: ${bech32Str}. `,
+      }),
   });
 });
 
 /**
  * Unsafely calls AddressId.fromBech32 without Effect wrapper
- * 
+ *
  * @example
  * import { AddressId } from "@lucid-evolution/experimental";
- * 
- * 
- * 
+ *
+ *
+ *
  * // Using try/catch for error handling
  * try {
  *   const result = AddressId.fromBech32Unsafe( parameters );
@@ -169,7 +175,7 @@ export const fromBech32 = Effect.fn(function* (bech32Str: string) {
  * } catch (error) {
  *   console.error(`AddressId.fromBech32Unsafe failed: ${error.message}`);
  * }
- * 
+ *
  * @since 2.0.0
  * @category ConstructorsUnsafe
  */
@@ -178,11 +184,11 @@ export const fromBech32Unsafe = (bech32Str: string) =>
 
 /**
  * Method toRawBytes of AddressId
- * 
+ *
  * @example
  * import { AddressId } from "@lucid-evolution/experimental";
  * import { Effect } from "effect";
- * 
+ *
  * // Using Effect for safe execution with error handling
  * Effect.gen(function*() {
  * // Assume we have a AddressId instance
@@ -190,7 +196,7 @@ export const fromBech32Unsafe = (bech32Str: string) =>
  *   const result = yield* AddressId.toRawBytes(instance);
  *   console.log(result);
  * });
- * 
+ *
  * @since 2.0.0
  * @category Methods
  */
@@ -202,18 +208,18 @@ export const toRawBytes = Effect.fn(
         new AddressIdError({
           message: `AddressId.toRawBytes failed AddressId is not valid for Uint8Array conversion. Hint: Check byte length and encoding.`,
         }),
-    })
+    }),
 );
 
 /**
  * Unsafely calls instance.toRawBytes without Effect wrapper
- * 
+ *
  * @example
  * import { AddressId } from "@lucid-evolution/experimental";
- * 
+ *
  * // Assume we have a AddressId instance
  * const instance = ... ;
- * 
+ *
  * // Using try/catch for error handling
  * try {
  *   const result = AddressId.toRawBytesUnsafe(instance);
@@ -221,7 +227,7 @@ export const toRawBytes = Effect.fn(
  * } catch (error) {
  *   console.error(`AddressId.toRawBytesUnsafe failed: ${error.message}`);
  * }
- * 
+ *
  * @since 2.0.0
  * @category MethodsUnsafe
  */
@@ -230,38 +236,39 @@ export const toRawBytesUnsafe = (instance: CML.AddressId): Uint8Array =>
 
 /**
  * Static method fromRawBytes of AddressId
- * 
+ *
  * @example
  * import { AddressId } from "@lucid-evolution/experimental";
  * import { Effect } from "effect";
- * 
+ *
  * // Using Effect for safe execution with error handling
  * Effect.gen(function*() {
- * 
+ *
  *   const result = yield* AddressId.fromRawBytes( parameters );
  *   console.log(result);
  * });
- * 
+ *
  * @since 2.0.0
  * @category Constructors
  */
 export const fromRawBytes = Effect.fn(function* (bytes: Uint8Array) {
   return yield* Effect.try({
     try: () => CML.AddressId.from_raw_bytes(bytes),
-    catch: () => new AddressIdError({
-      message: `AddressId.fromRawBytes failed with parameters: ${bytes}. Hint: Check byte length and encoding.`,
-    }),
+    catch: () =>
+      new AddressIdError({
+        message: `AddressId.fromRawBytes failed with parameters: ${bytes}. Hint: Check byte length and encoding.`,
+      }),
   });
 });
 
 /**
  * Unsafely calls AddressId.fromRawBytes without Effect wrapper
- * 
+ *
  * @example
  * import { AddressId } from "@lucid-evolution/experimental";
- * 
- * 
- * 
+ *
+ *
+ *
  * // Using try/catch for error handling
  * try {
  *   const result = AddressId.fromRawBytesUnsafe( parameters );
@@ -269,7 +276,7 @@ export const fromRawBytes = Effect.fn(function* (bytes: Uint8Array) {
  * } catch (error) {
  *   console.error(`AddressId.fromRawBytesUnsafe failed: ${error.message}`);
  * }
- * 
+ *
  * @since 2.0.0
  * @category ConstructorsUnsafe
  */
@@ -278,11 +285,11 @@ export const fromRawBytesUnsafe = (bytes: Uint8Array) =>
 
 /**
  * Method toHex of AddressId
- * 
+ *
  * @example
  * import { AddressId } from "@lucid-evolution/experimental";
  * import { Effect } from "effect";
- * 
+ *
  * // Using Effect for safe execution with error handling
  * Effect.gen(function*() {
  * // Assume we have a AddressId instance
@@ -290,7 +297,7 @@ export const fromRawBytesUnsafe = (bytes: Uint8Array) =>
  *   const result = yield* AddressId.toHex(instance);
  *   console.log(result);
  * });
- * 
+ *
  * @since 2.0.0
  * @category Methods
  */
@@ -302,18 +309,18 @@ export const toHex = Effect.fn(
         new AddressIdError({
           message: `AddressId.toHex failed AddressId is not valid for string conversion. Hint: Ensure hex string has valid characters and length.`,
         }),
-    })
+    }),
 );
 
 /**
  * Unsafely calls instance.toHex without Effect wrapper
- * 
+ *
  * @example
  * import { AddressId } from "@lucid-evolution/experimental";
- * 
+ *
  * // Assume we have a AddressId instance
  * const instance = ... ;
- * 
+ *
  * // Using try/catch for error handling
  * try {
  *   const result = AddressId.toHexUnsafe(instance);
@@ -321,7 +328,7 @@ export const toHex = Effect.fn(
  * } catch (error) {
  *   console.error(`AddressId.toHexUnsafe failed: ${error.message}`);
  * }
- * 
+ *
  * @since 2.0.0
  * @category MethodsUnsafe
  */
@@ -330,38 +337,39 @@ export const toHexUnsafe = (instance: CML.AddressId): string =>
 
 /**
  * Static method fromHex of AddressId
- * 
+ *
  * @example
  * import { AddressId } from "@lucid-evolution/experimental";
  * import { Effect } from "effect";
- * 
+ *
  * // Using Effect for safe execution with error handling
  * Effect.gen(function*() {
- * 
+ *
  *   const result = yield* AddressId.fromHex( parameters );
  *   console.log(result);
  * });
- * 
+ *
  * @since 2.0.0
  * @category Constructors
  */
 export const fromHex = Effect.fn(function* (input: string) {
   return yield* Effect.try({
     try: () => CML.AddressId.from_hex(input),
-    catch: () => new AddressIdError({
-      message: `AddressId.fromHex failed with parameters: ${input}. Hint: Ensure hex string has valid characters and length.`,
-    }),
+    catch: () =>
+      new AddressIdError({
+        message: `AddressId.fromHex failed with parameters: ${input}. Hint: Ensure hex string has valid characters and length.`,
+      }),
   });
 });
 
 /**
  * Unsafely calls AddressId.fromHex without Effect wrapper
- * 
+ *
  * @example
  * import { AddressId } from "@lucid-evolution/experimental";
- * 
- * 
- * 
+ *
+ *
+ *
  * // Using try/catch for error handling
  * try {
  *   const result = AddressId.fromHexUnsafe( parameters );
@@ -369,47 +377,51 @@ export const fromHex = Effect.fn(function* (input: string) {
  * } catch (error) {
  *   console.error(`AddressId.fromHexUnsafe failed: ${error.message}`);
  * }
- * 
+ *
  * @since 2.0.0
  * @category ConstructorsUnsafe
  */
-export const fromHexUnsafe = (input: string) =>
-  Effect.runSync(fromHex(input));
+export const fromHexUnsafe = (input: string) => Effect.runSync(fromHex(input));
 
 /**
  * Static method _new of AddressId
- * 
+ *
  * @example
  * import { AddressId } from "@lucid-evolution/experimental";
  * import { Effect } from "effect";
- * 
+ *
  * // Using Effect for safe execution with error handling
  * Effect.gen(function*() {
- * 
+ *
  *   const result = yield* AddressId._new( parameters );
  *   console.log(result);
  * });
- * 
+ *
  * @since 2.0.0
  * @category Constructors
  */
-export const _new = Effect.fn(function* (addrType: CML.ByronAddrType, spendingData: CML.SpendingData, attrs: CML.AddrAttributes) {
+export const _new = Effect.fn(function* (
+  addrType: CML.ByronAddrType,
+  spendingData: CML.SpendingData,
+  attrs: CML.AddrAttributes,
+) {
   return yield* Effect.try({
     try: () => CML.AddressId.new(addrType, spendingData, attrs),
-    catch: () => new AddressIdError({
-      message: `AddressId._new failed with parameters: ${addrType} (ByronAddrType), ${spendingData} (SpendingData), ${attrs} (AddrAttributes). `,
-    }),
+    catch: () =>
+      new AddressIdError({
+        message: `AddressId._new failed with parameters: ${addrType} (ByronAddrType), ${spendingData} (SpendingData), ${attrs} (AddrAttributes). `,
+      }),
   });
 });
 
 /**
  * Unsafely calls AddressId._new without Effect wrapper
- * 
+ *
  * @example
  * import { AddressId } from "@lucid-evolution/experimental";
- * 
- * 
- * 
+ *
+ *
+ *
  * // Using try/catch for error handling
  * try {
  *   const result = AddressId._newUnsafe( parameters );
@@ -417,9 +429,12 @@ export const _new = Effect.fn(function* (addrType: CML.ByronAddrType, spendingDa
  * } catch (error) {
  *   console.error(`AddressId._newUnsafe failed: ${error.message}`);
  * }
- * 
+ *
  * @since 2.0.0
  * @category ConstructorsUnsafe
  */
-export const _newUnsafe = (addrType: CML.ByronAddrType, spendingData: CML.SpendingData, attrs: CML.AddrAttributes) =>
-  Effect.runSync(_new(addrType, spendingData, attrs));
+export const _newUnsafe = (
+  addrType: CML.ByronAddrType,
+  spendingData: CML.SpendingData,
+  attrs: CML.AddrAttributes,
+) => Effect.runSync(_new(addrType, spendingData, attrs));

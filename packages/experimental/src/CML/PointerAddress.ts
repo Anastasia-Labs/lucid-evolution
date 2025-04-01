@@ -14,23 +14,25 @@ export type PointerAddress = CML.PointerAddress;
 
 /**
  * Error class for PointerAddress operations
- * 
+ *
  * This error is thrown when operations on PointerAddress instances fail.
  *
  * @since 2.0.0
  * @category Errors
  */
-export class PointerAddressError extends Data.TaggedError("PointerAddressError")<{
+export class PointerAddressError extends Data.TaggedError(
+  "PointerAddressError",
+)<{
   message?: string;
 }> {}
 
 /**
  * Method free of PointerAddress
- * 
+ *
  * @example
  * import { PointerAddress } from "@lucid-evolution/experimental";
  * import { Effect } from "effect";
- * 
+ *
  * // Using Effect for safe execution with error handling
  * Effect.gen(function*() {
  * // Assume we have a PointerAddress instance
@@ -38,7 +40,7 @@ export class PointerAddressError extends Data.TaggedError("PointerAddressError")
  *   const result = yield* PointerAddress.free(instance);
  *   console.log(result);
  * });
- * 
+ *
  * @since 2.0.0
  * @category Methods
  */
@@ -50,18 +52,18 @@ export const free = Effect.fn(
         new PointerAddressError({
           message: `PointerAddress.free failed Hint: Check if you're calling free() more than once.`,
         }),
-    })
+    }),
 );
 
 /**
  * Unsafely calls instance.free without Effect wrapper
- * 
+ *
  * @example
  * import { PointerAddress } from "@lucid-evolution/experimental";
- * 
+ *
  * // Assume we have a PointerAddress instance
  * const instance = ... ;
- * 
+ *
  * // Using try/catch for error handling
  * try {
  *   const result = PointerAddress.freeUnsafe(instance);
@@ -69,7 +71,7 @@ export const free = Effect.fn(
  * } catch (error) {
  *   console.error(`PointerAddress.freeUnsafe failed: ${error.message}`);
  * }
- * 
+ *
  * @since 2.0.0
  * @category MethodsUnsafe
  */
@@ -78,38 +80,43 @@ export const freeUnsafe = (instance: CML.PointerAddress): void =>
 
 /**
  * Static method _new of PointerAddress
- * 
+ *
  * @example
  * import { PointerAddress } from "@lucid-evolution/experimental";
  * import { Effect } from "effect";
- * 
+ *
  * // Using Effect for safe execution with error handling
  * Effect.gen(function*() {
- * 
+ *
  *   const result = yield* PointerAddress._new( parameters );
  *   console.log(result);
  * });
- * 
+ *
  * @since 2.0.0
  * @category Constructors
  */
-export const _new = Effect.fn(function* (network: number, payment: CML.Credential, stake: CML.Pointer) {
+export const _new = Effect.fn(function* (
+  network: number,
+  payment: CML.Credential,
+  stake: CML.Pointer,
+) {
   return yield* Effect.try({
     try: () => CML.PointerAddress.new(network, payment, stake),
-    catch: () => new PointerAddressError({
-      message: `PointerAddress._new failed with parameters: ${network}, ${payment} (Credential), ${stake} (Pointer). `,
-    }),
+    catch: () =>
+      new PointerAddressError({
+        message: `PointerAddress._new failed with parameters: ${network}, ${payment} (Credential), ${stake} (Pointer). `,
+      }),
   });
 });
 
 /**
  * Unsafely calls PointerAddress._new without Effect wrapper
- * 
+ *
  * @example
  * import { PointerAddress } from "@lucid-evolution/experimental";
- * 
- * 
- * 
+ *
+ *
+ *
  * // Using try/catch for error handling
  * try {
  *   const result = PointerAddress._newUnsafe( parameters );
@@ -117,20 +124,23 @@ export const _new = Effect.fn(function* (network: number, payment: CML.Credentia
  * } catch (error) {
  *   console.error(`PointerAddress._newUnsafe failed: ${error.message}`);
  * }
- * 
+ *
  * @since 2.0.0
  * @category ConstructorsUnsafe
  */
-export const _newUnsafe = (network: number, payment: CML.Credential, stake: CML.Pointer) =>
-  Effect.runSync(_new(network, payment, stake));
+export const _newUnsafe = (
+  network: number,
+  payment: CML.Credential,
+  stake: CML.Pointer,
+) => Effect.runSync(_new(network, payment, stake));
 
 /**
  * Method toAddress of PointerAddress
- * 
+ *
  * @example
  * import { PointerAddress } from "@lucid-evolution/experimental";
  * import { Effect } from "effect";
- * 
+ *
  * // Using Effect for safe execution with error handling
  * Effect.gen(function*() {
  * // Assume we have a PointerAddress instance
@@ -138,30 +148,32 @@ export const _newUnsafe = (network: number, payment: CML.Credential, stake: CML.
  *   const result = yield* PointerAddress.toAddress(instance);
  *   console.log(result);
  * });
- * 
+ *
  * @since 2.0.0
  * @category Methods
  */
 export const toAddress = Effect.fn(
-  (instance: CML.PointerAddress): Effect.Effect<CML.Address, PointerAddressError> =>
+  (
+    instance: CML.PointerAddress,
+  ): Effect.Effect<CML.Address, PointerAddressError> =>
     Effect.try({
       try: () => instance.to_address(),
       catch: () =>
         new PointerAddressError({
           message: `PointerAddress.toAddress failed PointerAddress is not valid for Address conversion. `,
         }),
-    })
+    }),
 );
 
 /**
  * Unsafely calls instance.toAddress without Effect wrapper
- * 
+ *
  * @example
  * import { PointerAddress } from "@lucid-evolution/experimental";
- * 
+ *
  * // Assume we have a PointerAddress instance
  * const instance = ... ;
- * 
+ *
  * // Using try/catch for error handling
  * try {
  *   const result = PointerAddress.toAddressUnsafe(instance);
@@ -169,7 +181,7 @@ export const toAddress = Effect.fn(
  * } catch (error) {
  *   console.error(`PointerAddress.toAddressUnsafe failed: ${error.message}`);
  * }
- * 
+ *
  * @since 2.0.0
  * @category MethodsUnsafe
  */
@@ -178,38 +190,39 @@ export const toAddressUnsafe = (instance: CML.PointerAddress): CML.Address =>
 
 /**
  * Static method fromAddress of PointerAddress
- * 
+ *
  * @example
  * import { PointerAddress } from "@lucid-evolution/experimental";
  * import { Effect } from "effect";
- * 
+ *
  * // Using Effect for safe execution with error handling
  * Effect.gen(function*() {
- * 
+ *
  *   const result = yield* PointerAddress.fromAddress( parameters );
  *   console.log(result);
  * });
- * 
+ *
  * @since 2.0.0
  * @category Constructors
  */
 export const fromAddress = Effect.fn(function* (address: CML.Address) {
   return yield* Effect.try({
     try: () => CML.PointerAddress.from_address(address),
-    catch: () => new PointerAddressError({
-      message: `PointerAddress.fromAddress failed with parameters: ${address} (Address). `,
-    }),
+    catch: () =>
+      new PointerAddressError({
+        message: `PointerAddress.fromAddress failed with parameters: ${address} (Address). `,
+      }),
   });
 });
 
 /**
  * Unsafely calls PointerAddress.fromAddress without Effect wrapper
- * 
+ *
  * @example
  * import { PointerAddress } from "@lucid-evolution/experimental";
- * 
- * 
- * 
+ *
+ *
+ *
  * // Using try/catch for error handling
  * try {
  *   const result = PointerAddress.fromAddressUnsafe( parameters );
@@ -217,7 +230,7 @@ export const fromAddress = Effect.fn(function* (address: CML.Address) {
  * } catch (error) {
  *   console.error(`PointerAddress.fromAddressUnsafe failed: ${error.message}`);
  * }
- * 
+ *
  * @since 2.0.0
  * @category ConstructorsUnsafe
  */
@@ -226,11 +239,11 @@ export const fromAddressUnsafe = (address: CML.Address) =>
 
 /**
  * Method networkId of PointerAddress
- * 
+ *
  * @example
  * import { PointerAddress } from "@lucid-evolution/experimental";
  * import { Effect } from "effect";
- * 
+ *
  * // Using Effect for safe execution with error handling
  * Effect.gen(function*() {
  * // Assume we have a PointerAddress instance
@@ -238,7 +251,7 @@ export const fromAddressUnsafe = (address: CML.Address) =>
  *   const result = yield* PointerAddress.networkId(instance);
  *   console.log(result);
  * });
- * 
+ *
  * @since 2.0.0
  * @category Methods
  */
@@ -250,18 +263,18 @@ export const networkId = Effect.fn(
         new PointerAddressError({
           message: `PointerAddress.networkId failed `,
         }),
-    })
+    }),
 );
 
 /**
  * Unsafely calls instance.networkId without Effect wrapper
- * 
+ *
  * @example
  * import { PointerAddress } from "@lucid-evolution/experimental";
- * 
+ *
  * // Assume we have a PointerAddress instance
  * const instance = ... ;
- * 
+ *
  * // Using try/catch for error handling
  * try {
  *   const result = PointerAddress.networkIdUnsafe(instance);
@@ -269,7 +282,7 @@ export const networkId = Effect.fn(
  * } catch (error) {
  *   console.error(`PointerAddress.networkIdUnsafe failed: ${error.message}`);
  * }
- * 
+ *
  * @since 2.0.0
  * @category MethodsUnsafe
  */
@@ -278,11 +291,11 @@ export const networkIdUnsafe = (instance: CML.PointerAddress): number =>
 
 /**
  * Method payment of PointerAddress
- * 
+ *
  * @example
  * import { PointerAddress } from "@lucid-evolution/experimental";
  * import { Effect } from "effect";
- * 
+ *
  * // Using Effect for safe execution with error handling
  * Effect.gen(function*() {
  * // Assume we have a PointerAddress instance
@@ -290,30 +303,32 @@ export const networkIdUnsafe = (instance: CML.PointerAddress): number =>
  *   const result = yield* PointerAddress.payment(instance);
  *   console.log(result);
  * });
- * 
+ *
  * @since 2.0.0
  * @category Methods
  */
 export const payment = Effect.fn(
-  (instance: CML.PointerAddress): Effect.Effect<CML.Credential, PointerAddressError> =>
+  (
+    instance: CML.PointerAddress,
+  ): Effect.Effect<CML.Credential, PointerAddressError> =>
     Effect.try({
       try: () => instance.payment(),
       catch: () =>
         new PointerAddressError({
           message: `PointerAddress.payment failed `,
         }),
-    })
+    }),
 );
 
 /**
  * Unsafely calls instance.payment without Effect wrapper
- * 
+ *
  * @example
  * import { PointerAddress } from "@lucid-evolution/experimental";
- * 
+ *
  * // Assume we have a PointerAddress instance
  * const instance = ... ;
- * 
+ *
  * // Using try/catch for error handling
  * try {
  *   const result = PointerAddress.paymentUnsafe(instance);
@@ -321,7 +336,7 @@ export const payment = Effect.fn(
  * } catch (error) {
  *   console.error(`PointerAddress.paymentUnsafe failed: ${error.message}`);
  * }
- * 
+ *
  * @since 2.0.0
  * @category MethodsUnsafe
  */
@@ -330,11 +345,11 @@ export const paymentUnsafe = (instance: CML.PointerAddress): CML.Credential =>
 
 /**
  * Method stake of PointerAddress
- * 
+ *
  * @example
  * import { PointerAddress } from "@lucid-evolution/experimental";
  * import { Effect } from "effect";
- * 
+ *
  * // Using Effect for safe execution with error handling
  * Effect.gen(function*() {
  * // Assume we have a PointerAddress instance
@@ -342,30 +357,32 @@ export const paymentUnsafe = (instance: CML.PointerAddress): CML.Credential =>
  *   const result = yield* PointerAddress.stake(instance);
  *   console.log(result);
  * });
- * 
+ *
  * @since 2.0.0
  * @category Methods
  */
 export const stake = Effect.fn(
-  (instance: CML.PointerAddress): Effect.Effect<CML.Pointer, PointerAddressError> =>
+  (
+    instance: CML.PointerAddress,
+  ): Effect.Effect<CML.Pointer, PointerAddressError> =>
     Effect.try({
       try: () => instance.stake(),
       catch: () =>
         new PointerAddressError({
           message: `PointerAddress.stake failed `,
         }),
-    })
+    }),
 );
 
 /**
  * Unsafely calls instance.stake without Effect wrapper
- * 
+ *
  * @example
  * import { PointerAddress } from "@lucid-evolution/experimental";
- * 
+ *
  * // Assume we have a PointerAddress instance
  * const instance = ... ;
- * 
+ *
  * // Using try/catch for error handling
  * try {
  *   const result = PointerAddress.stakeUnsafe(instance);
@@ -373,7 +390,7 @@ export const stake = Effect.fn(
  * } catch (error) {
  *   console.error(`PointerAddress.stakeUnsafe failed: ${error.message}`);
  * }
- * 
+ *
  * @since 2.0.0
  * @category MethodsUnsafe
  */

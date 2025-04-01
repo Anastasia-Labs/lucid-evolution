@@ -75,14 +75,8 @@ describe("Data Property Tests", () => {
 
         FastCheck.assert(
           FastCheck.property(byteArrayArb, (value) => {
-            const encoded = Data.encodeDataUnsafe(
-              value,
-              TSchema.ByteArray,
-            );
-            const decoded = Data.decodeDataUnsafe(
-              encoded,
-              TSchema.ByteArray,
-            );
+            const encoded = Data.encodeDataUnsafe(value, TSchema.ByteArray);
+            const decoded = Data.decodeDataUnsafe(encoded, TSchema.ByteArray);
             expect(decoded).toEqual(value);
           }),
         );
@@ -93,14 +87,8 @@ describe("Data Property Tests", () => {
 
         FastCheck.assert(
           FastCheck.property(integerArb, (value) => {
-            const encoded = Data.encodeDataUnsafe(
-              value,
-              TSchema.Integer,
-            );
-            const decoded = Data.decodeDataUnsafe(
-              encoded,
-              TSchema.Integer,
-            );
+            const encoded = Data.encodeDataUnsafe(value, TSchema.Integer);
+            const decoded = Data.decodeDataUnsafe(encoded, TSchema.Integer);
             expect(decoded).toEqual(value);
           }),
         );
@@ -111,14 +99,8 @@ describe("Data Property Tests", () => {
 
         FastCheck.assert(
           FastCheck.property(booleanArb, (value) => {
-            const encoded = Data.encodeDataUnsafe(
-              value,
-              TSchema.Boolean,
-            );
-            const decoded = Data.decodeDataUnsafe(
-              encoded,
-              TSchema.Boolean,
-            );
+            const encoded = Data.encodeDataUnsafe(value, TSchema.Boolean);
+            const decoded = Data.decodeDataUnsafe(encoded, TSchema.Boolean);
             expect(decoded).toEqual(value);
           }),
         );
@@ -241,10 +223,7 @@ describe("Data Property Tests", () => {
       describe("Map Schema", () => {
         it("should deterministically encode Maps regardless of insertion order", () => {
           // Define map schema
-          const TokenMap = TSchema.Map(
-            TSchema.ByteArray,
-            TSchema.Integer,
-          );
+          const TokenMap = TSchema.Map(TSchema.ByteArray, TSchema.Integer);
 
           // Create two maps with same entries but different insertion order
           const map1 = new Map([
@@ -275,10 +254,7 @@ describe("Data Property Tests", () => {
           // Schema with a map
           const MetadataAsset = TSchema.Struct({
             id: TSchema.ByteArray,
-            metadata: TSchema.Map(
-              TSchema.ByteArray,
-              TSchema.ByteArray,
-            ),
+            metadata: TSchema.Map(TSchema.ByteArray, TSchema.ByteArray),
           });
 
           // Create arbitrary and apply sorting function for consistent map ordering
@@ -301,10 +277,7 @@ describe("Data Property Tests", () => {
               const encoded = Data.encodeDataUnsafe(value, MetadataAsset);
               const cbor = Data.encodeCBORUnsafe(encoded);
               const decoded = Data.decodeCBORUnsafe(cbor);
-              const result = Data.decodeDataUnsafe(
-                decoded,
-                MetadataAsset,
-              );
+              const result = Data.decodeDataUnsafe(decoded, MetadataAsset);
 
               // Verify the original value is preserved through the roundtrip
               expect(result).toEqual(value);
@@ -328,10 +301,7 @@ describe("Data Property Tests", () => {
           assetName: TSchema.ByteArray,
           amount: TSchema.Integer,
           metadata: TSchema.NullOr(
-            TSchema.Map(
-              TSchema.ByteArray,
-              TSchema.ByteArray,
-            ),
+            TSchema.Map(TSchema.ByteArray, TSchema.ByteArray),
           ),
         });
 
@@ -391,11 +361,7 @@ describe("Data Property Tests", () => {
           }),
         });
 
-        const Action = TSchema.Union(
-          MintAction,
-          BurnAction,
-          TransferAction,
-        );
+        const Action = TSchema.Union(MintAction, BurnAction, TransferAction);
 
         // Create arbitrary directly from union schema
         const actionArb = Arbitrary.make(Action);

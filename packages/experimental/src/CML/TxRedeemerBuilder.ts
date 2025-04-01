@@ -14,23 +14,25 @@ export type TxRedeemerBuilder = CML.TxRedeemerBuilder;
 
 /**
  * Error class for TxRedeemerBuilder operations
- * 
+ *
  * This error is thrown when operations on TxRedeemerBuilder instances fail.
  *
  * @since 2.0.0
  * @category Errors
  */
-export class TxRedeemerBuilderError extends Data.TaggedError("TxRedeemerBuilderError")<{
+export class TxRedeemerBuilderError extends Data.TaggedError(
+  "TxRedeemerBuilderError",
+)<{
   message?: string;
 }> {}
 
 /**
  * Method free of TxRedeemerBuilder
- * 
+ *
  * @example
  * import { TxRedeemerBuilder } from "@lucid-evolution/experimental";
  * import { Effect } from "effect";
- * 
+ *
  * // Using Effect for safe execution with error handling
  * Effect.gen(function*() {
  * // Assume we have a TxRedeemerBuilder instance
@@ -38,30 +40,32 @@ export class TxRedeemerBuilderError extends Data.TaggedError("TxRedeemerBuilderE
  *   const result = yield* TxRedeemerBuilder.free(instance);
  *   console.log(result);
  * });
- * 
+ *
  * @since 2.0.0
  * @category Methods
  */
 export const free = Effect.fn(
-  (instance: CML.TxRedeemerBuilder): Effect.Effect<void, TxRedeemerBuilderError> =>
+  (
+    instance: CML.TxRedeemerBuilder,
+  ): Effect.Effect<void, TxRedeemerBuilderError> =>
     Effect.try({
       try: () => instance.free(),
       catch: () =>
         new TxRedeemerBuilderError({
           message: `TxRedeemerBuilder.free failed Hint: Check if you're calling free() more than once.`,
         }),
-    })
+    }),
 );
 
 /**
  * Unsafely calls instance.free without Effect wrapper
- * 
+ *
  * @example
  * import { TxRedeemerBuilder } from "@lucid-evolution/experimental";
- * 
+ *
  * // Assume we have a TxRedeemerBuilder instance
  * const instance = ... ;
- * 
+ *
  * // Using try/catch for error handling
  * try {
  *   const result = TxRedeemerBuilder.freeUnsafe(instance);
@@ -69,7 +73,7 @@ export const free = Effect.fn(
  * } catch (error) {
  *   console.error(`TxRedeemerBuilder.freeUnsafe failed: ${error.message}`);
  * }
- * 
+ *
  * @since 2.0.0
  * @category MethodsUnsafe
  */
@@ -78,11 +82,11 @@ export const freeUnsafe = (instance: CML.TxRedeemerBuilder): void =>
 
 /**
  * Method build of TxRedeemerBuilder
- * 
+ *
  * @example
  * import { TxRedeemerBuilder } from "@lucid-evolution/experimental";
  * import { Effect } from "effect";
- * 
+ *
  * // Using Effect for safe execution with error handling
  * Effect.gen(function*() {
  * // Assume we have a TxRedeemerBuilder instance
@@ -90,30 +94,32 @@ export const freeUnsafe = (instance: CML.TxRedeemerBuilder): void =>
  *   const result = yield* TxRedeemerBuilder.build(instance);
  *   console.log(result);
  * });
- * 
+ *
  * @since 2.0.0
  * @category Methods
  */
 export const build = Effect.fn(
-  (instance: CML.TxRedeemerBuilder): Effect.Effect<CML.Redeemers, TxRedeemerBuilderError> =>
+  (
+    instance: CML.TxRedeemerBuilder,
+  ): Effect.Effect<CML.Redeemers, TxRedeemerBuilderError> =>
     Effect.try({
       try: () => instance.build(),
       catch: () =>
         new TxRedeemerBuilderError({
           message: `TxRedeemerBuilder.build failed `,
         }),
-    })
+    }),
 );
 
 /**
  * Unsafely calls instance.build without Effect wrapper
- * 
+ *
  * @example
  * import { TxRedeemerBuilder } from "@lucid-evolution/experimental";
- * 
+ *
  * // Assume we have a TxRedeemerBuilder instance
  * const instance = ... ;
- * 
+ *
  * // Using try/catch for error handling
  * try {
  *   const result = TxRedeemerBuilder.buildUnsafe(instance);
@@ -121,7 +127,7 @@ export const build = Effect.fn(
  * } catch (error) {
  *   console.error(`TxRedeemerBuilder.buildUnsafe failed: ${error.message}`);
  * }
- * 
+ *
  * @since 2.0.0
  * @category MethodsUnsafe
  */
@@ -130,11 +136,11 @@ export const buildUnsafe = (instance: CML.TxRedeemerBuilder): CML.Redeemers =>
 
 /**
  * Method setExunits of TxRedeemerBuilder
- * 
+ *
  * @example
  * import { TxRedeemerBuilder } from "@lucid-evolution/experimental";
  * import { Effect } from "effect";
- * 
+ *
  * // Using Effect for safe execution with error handling
  * Effect.gen(function*() {
  * // Assume we have a TxRedeemerBuilder instance
@@ -142,30 +148,34 @@ export const buildUnsafe = (instance: CML.TxRedeemerBuilder): CML.Redeemers =>
  *   const result = yield* TxRedeemerBuilder.setExunits(instance,  parameters );
  *   console.log(result);
  * });
- * 
+ *
  * @since 2.0.0
  * @category Methods
  */
 export const setExunits = Effect.fn(
-  (instance: CML.TxRedeemerBuilder, redeemer: CML.RedeemerWitnessKey, exUnits: CML.ExUnits): Effect.Effect<void, TxRedeemerBuilderError> =>
+  (
+    instance: CML.TxRedeemerBuilder,
+    redeemer: CML.RedeemerWitnessKey,
+    exUnits: CML.ExUnits,
+  ): Effect.Effect<void, TxRedeemerBuilderError> =>
     Effect.try({
       try: () => instance.set_exunits(redeemer, exUnits),
       catch: () =>
         new TxRedeemerBuilderError({
           message: `TxRedeemerBuilder.setExunits failed with parameters: ${redeemer} (RedeemerWitnessKey), ${exUnits} (ExUnits). `,
         }),
-    })
+    }),
 );
 
 /**
  * Unsafely calls instance.setExunits without Effect wrapper
- * 
+ *
  * @example
  * import { TxRedeemerBuilder } from "@lucid-evolution/experimental";
- * 
+ *
  * // Assume we have a TxRedeemerBuilder instance
  * const instance = ... ;
- * 
+ *
  * // Using try/catch for error handling
  * try {
  *   const result = TxRedeemerBuilder.setExunitsUnsafe(instance,  parameters );
@@ -173,20 +183,23 @@ export const setExunits = Effect.fn(
  * } catch (error) {
  *   console.error(`TxRedeemerBuilder.setExunitsUnsafe failed: ${error.message}`);
  * }
- * 
+ *
  * @since 2.0.0
  * @category MethodsUnsafe
  */
-export const setExunitsUnsafe = (instance: CML.TxRedeemerBuilder, redeemer: CML.RedeemerWitnessKey, exUnits: CML.ExUnits): void =>
-  Effect.runSync(setExunits(instance, redeemer, exUnits));
+export const setExunitsUnsafe = (
+  instance: CML.TxRedeemerBuilder,
+  redeemer: CML.RedeemerWitnessKey,
+  exUnits: CML.ExUnits,
+): void => Effect.runSync(setExunits(instance, redeemer, exUnits));
 
 /**
  * Method draftBody of TxRedeemerBuilder
- * 
+ *
  * @example
  * import { TxRedeemerBuilder } from "@lucid-evolution/experimental";
  * import { Effect } from "effect";
- * 
+ *
  * // Using Effect for safe execution with error handling
  * Effect.gen(function*() {
  * // Assume we have a TxRedeemerBuilder instance
@@ -194,30 +207,32 @@ export const setExunitsUnsafe = (instance: CML.TxRedeemerBuilder, redeemer: CML.
  *   const result = yield* TxRedeemerBuilder.draftBody(instance);
  *   console.log(result);
  * });
- * 
+ *
  * @since 2.0.0
  * @category Methods
  */
 export const draftBody = Effect.fn(
-  (instance: CML.TxRedeemerBuilder): Effect.Effect<CML.TransactionBody, TxRedeemerBuilderError> =>
+  (
+    instance: CML.TxRedeemerBuilder,
+  ): Effect.Effect<CML.TransactionBody, TxRedeemerBuilderError> =>
     Effect.try({
       try: () => instance.draft_body(),
       catch: () =>
         new TxRedeemerBuilderError({
           message: `TxRedeemerBuilder.draftBody failed `,
         }),
-    })
+    }),
 );
 
 /**
  * Unsafely calls instance.draftBody without Effect wrapper
- * 
+ *
  * @example
  * import { TxRedeemerBuilder } from "@lucid-evolution/experimental";
- * 
+ *
  * // Assume we have a TxRedeemerBuilder instance
  * const instance = ... ;
- * 
+ *
  * // Using try/catch for error handling
  * try {
  *   const result = TxRedeemerBuilder.draftBodyUnsafe(instance);
@@ -225,20 +240,21 @@ export const draftBody = Effect.fn(
  * } catch (error) {
  *   console.error(`TxRedeemerBuilder.draftBodyUnsafe failed: ${error.message}`);
  * }
- * 
+ *
  * @since 2.0.0
  * @category MethodsUnsafe
  */
-export const draftBodyUnsafe = (instance: CML.TxRedeemerBuilder): CML.TransactionBody =>
-  Effect.runSync(draftBody(instance));
+export const draftBodyUnsafe = (
+  instance: CML.TxRedeemerBuilder,
+): CML.TransactionBody => Effect.runSync(draftBody(instance));
 
 /**
  * Method auxiliaryData of TxRedeemerBuilder
- * 
+ *
  * @example
  * import { TxRedeemerBuilder } from "@lucid-evolution/experimental";
  * import { Effect } from "effect";
- * 
+ *
  * // Using Effect for safe execution with error handling
  * Effect.gen(function*() {
  * // Assume we have a TxRedeemerBuilder instance
@@ -246,30 +262,32 @@ export const draftBodyUnsafe = (instance: CML.TxRedeemerBuilder): CML.Transactio
  *   const result = yield* TxRedeemerBuilder.auxiliaryData(instance);
  *   console.log(result);
  * });
- * 
+ *
  * @since 2.0.0
  * @category Methods
  */
 export const auxiliaryData = Effect.fn(
-  (instance: CML.TxRedeemerBuilder): Effect.Effect<CML.AuxiliaryData | undefined, TxRedeemerBuilderError> =>
+  (
+    instance: CML.TxRedeemerBuilder,
+  ): Effect.Effect<CML.AuxiliaryData | undefined, TxRedeemerBuilderError> =>
     Effect.try({
       try: () => instance.auxiliary_data(),
       catch: () =>
         new TxRedeemerBuilderError({
           message: `TxRedeemerBuilder.auxiliaryData failed `,
         }),
-    })
+    }),
 );
 
 /**
  * Unsafely calls instance.auxiliaryData without Effect wrapper
- * 
+ *
  * @example
  * import { TxRedeemerBuilder } from "@lucid-evolution/experimental";
- * 
+ *
  * // Assume we have a TxRedeemerBuilder instance
  * const instance = ... ;
- * 
+ *
  * // Using try/catch for error handling
  * try {
  *   const result = TxRedeemerBuilder.auxiliaryDataUnsafe(instance);
@@ -277,20 +295,21 @@ export const auxiliaryData = Effect.fn(
  * } catch (error) {
  *   console.error(`TxRedeemerBuilder.auxiliaryDataUnsafe failed: ${error.message}`);
  * }
- * 
+ *
  * @since 2.0.0
  * @category MethodsUnsafe
  */
-export const auxiliaryDataUnsafe = (instance: CML.TxRedeemerBuilder): CML.AuxiliaryData | undefined =>
-  Effect.runSync(auxiliaryData(instance));
+export const auxiliaryDataUnsafe = (
+  instance: CML.TxRedeemerBuilder,
+): CML.AuxiliaryData | undefined => Effect.runSync(auxiliaryData(instance));
 
 /**
  * Method draftTx of TxRedeemerBuilder
- * 
+ *
  * @example
  * import { TxRedeemerBuilder } from "@lucid-evolution/experimental";
  * import { Effect } from "effect";
- * 
+ *
  * // Using Effect for safe execution with error handling
  * Effect.gen(function*() {
  * // Assume we have a TxRedeemerBuilder instance
@@ -298,30 +317,32 @@ export const auxiliaryDataUnsafe = (instance: CML.TxRedeemerBuilder): CML.Auxili
  *   const result = yield* TxRedeemerBuilder.draftTx(instance);
  *   console.log(result);
  * });
- * 
+ *
  * @since 2.0.0
  * @category Methods
  */
 export const draftTx = Effect.fn(
-  (instance: CML.TxRedeemerBuilder): Effect.Effect<CML.Transaction, TxRedeemerBuilderError> =>
+  (
+    instance: CML.TxRedeemerBuilder,
+  ): Effect.Effect<CML.Transaction, TxRedeemerBuilderError> =>
     Effect.try({
       try: () => instance.draft_tx(),
       catch: () =>
         new TxRedeemerBuilderError({
           message: `TxRedeemerBuilder.draftTx failed `,
         }),
-    })
+    }),
 );
 
 /**
  * Unsafely calls instance.draftTx without Effect wrapper
- * 
+ *
  * @example
  * import { TxRedeemerBuilder } from "@lucid-evolution/experimental";
- * 
+ *
  * // Assume we have a TxRedeemerBuilder instance
  * const instance = ... ;
- * 
+ *
  * // Using try/catch for error handling
  * try {
  *   const result = TxRedeemerBuilder.draftTxUnsafe(instance);
@@ -329,9 +350,10 @@ export const draftTx = Effect.fn(
  * } catch (error) {
  *   console.error(`TxRedeemerBuilder.draftTxUnsafe failed: ${error.message}`);
  * }
- * 
+ *
  * @since 2.0.0
  * @category MethodsUnsafe
  */
-export const draftTxUnsafe = (instance: CML.TxRedeemerBuilder): CML.Transaction =>
-  Effect.runSync(draftTx(instance));
+export const draftTxUnsafe = (
+  instance: CML.TxRedeemerBuilder,
+): CML.Transaction => Effect.runSync(draftTx(instance));

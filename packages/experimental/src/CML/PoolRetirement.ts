@@ -14,23 +14,25 @@ export type PoolRetirement = CML.PoolRetirement;
 
 /**
  * Error class for PoolRetirement operations
- * 
+ *
  * This error is thrown when operations on PoolRetirement instances fail.
  *
  * @since 2.0.0
  * @category Errors
  */
-export class PoolRetirementError extends Data.TaggedError("PoolRetirementError")<{
+export class PoolRetirementError extends Data.TaggedError(
+  "PoolRetirementError",
+)<{
   message?: string;
 }> {}
 
 /**
  * Method free of PoolRetirement
- * 
+ *
  * @example
  * import { PoolRetirement } from "@lucid-evolution/experimental";
  * import { Effect } from "effect";
- * 
+ *
  * // Using Effect for safe execution with error handling
  * Effect.gen(function*() {
  * // Assume we have a PoolRetirement instance
@@ -38,7 +40,7 @@ export class PoolRetirementError extends Data.TaggedError("PoolRetirementError")
  *   const result = yield* PoolRetirement.free(instance);
  *   console.log(result);
  * });
- * 
+ *
  * @since 2.0.0
  * @category Methods
  */
@@ -50,18 +52,18 @@ export const free = Effect.fn(
         new PoolRetirementError({
           message: `PoolRetirement.free failed Hint: Check if you're calling free() more than once.`,
         }),
-    })
+    }),
 );
 
 /**
  * Unsafely calls instance.free without Effect wrapper
- * 
+ *
  * @example
  * import { PoolRetirement } from "@lucid-evolution/experimental";
- * 
+ *
  * // Assume we have a PoolRetirement instance
  * const instance = ... ;
- * 
+ *
  * // Using try/catch for error handling
  * try {
  *   const result = PoolRetirement.freeUnsafe(instance);
@@ -69,7 +71,7 @@ export const free = Effect.fn(
  * } catch (error) {
  *   console.error(`PoolRetirement.freeUnsafe failed: ${error.message}`);
  * }
- * 
+ *
  * @since 2.0.0
  * @category MethodsUnsafe
  */
@@ -78,11 +80,11 @@ export const freeUnsafe = (instance: CML.PoolRetirement): void =>
 
 /**
  * Method toCborBytes of PoolRetirement
- * 
+ *
  * @example
  * import { PoolRetirement } from "@lucid-evolution/experimental";
  * import { Effect } from "effect";
- * 
+ *
  * // Using Effect for safe execution with error handling
  * Effect.gen(function*() {
  * // Assume we have a PoolRetirement instance
@@ -90,30 +92,32 @@ export const freeUnsafe = (instance: CML.PoolRetirement): void =>
  *   const result = yield* PoolRetirement.toCborBytes(instance);
  *   console.log(result);
  * });
- * 
+ *
  * @since 2.0.0
  * @category Methods
  */
 export const toCborBytes = Effect.fn(
-  (instance: CML.PoolRetirement): Effect.Effect<Uint8Array, PoolRetirementError> =>
+  (
+    instance: CML.PoolRetirement,
+  ): Effect.Effect<Uint8Array, PoolRetirementError> =>
     Effect.try({
       try: () => instance.to_cbor_bytes(),
       catch: () =>
         new PoolRetirementError({
           message: `PoolRetirement.toCborBytes failed PoolRetirement is not valid for Uint8Array conversion. Hint: Check byte length and encoding.`,
         }),
-    })
+    }),
 );
 
 /**
  * Unsafely calls instance.toCborBytes without Effect wrapper
- * 
+ *
  * @example
  * import { PoolRetirement } from "@lucid-evolution/experimental";
- * 
+ *
  * // Assume we have a PoolRetirement instance
  * const instance = ... ;
- * 
+ *
  * // Using try/catch for error handling
  * try {
  *   const result = PoolRetirement.toCborBytesUnsafe(instance);
@@ -121,7 +125,7 @@ export const toCborBytes = Effect.fn(
  * } catch (error) {
  *   console.error(`PoolRetirement.toCborBytesUnsafe failed: ${error.message}`);
  * }
- * 
+ *
  * @since 2.0.0
  * @category MethodsUnsafe
  */
@@ -130,11 +134,11 @@ export const toCborBytesUnsafe = (instance: CML.PoolRetirement): Uint8Array =>
 
 /**
  * Method toCanonicalCborBytes of PoolRetirement
- * 
+ *
  * @example
  * import { PoolRetirement } from "@lucid-evolution/experimental";
  * import { Effect } from "effect";
- * 
+ *
  * // Using Effect for safe execution with error handling
  * Effect.gen(function*() {
  * // Assume we have a PoolRetirement instance
@@ -142,30 +146,32 @@ export const toCborBytesUnsafe = (instance: CML.PoolRetirement): Uint8Array =>
  *   const result = yield* PoolRetirement.toCanonicalCborBytes(instance);
  *   console.log(result);
  * });
- * 
+ *
  * @since 2.0.0
  * @category Methods
  */
 export const toCanonicalCborBytes = Effect.fn(
-  (instance: CML.PoolRetirement): Effect.Effect<Uint8Array, PoolRetirementError> =>
+  (
+    instance: CML.PoolRetirement,
+  ): Effect.Effect<Uint8Array, PoolRetirementError> =>
     Effect.try({
       try: () => instance.to_canonical_cbor_bytes(),
       catch: () =>
         new PoolRetirementError({
           message: `PoolRetirement.toCanonicalCborBytes failed PoolRetirement is not valid for Uint8Array conversion. Hint: Check byte length and encoding.`,
         }),
-    })
+    }),
 );
 
 /**
  * Unsafely calls instance.toCanonicalCborBytes without Effect wrapper
- * 
+ *
  * @example
  * import { PoolRetirement } from "@lucid-evolution/experimental";
- * 
+ *
  * // Assume we have a PoolRetirement instance
  * const instance = ... ;
- * 
+ *
  * // Using try/catch for error handling
  * try {
  *   const result = PoolRetirement.toCanonicalCborBytesUnsafe(instance);
@@ -173,47 +179,49 @@ export const toCanonicalCborBytes = Effect.fn(
  * } catch (error) {
  *   console.error(`PoolRetirement.toCanonicalCborBytesUnsafe failed: ${error.message}`);
  * }
- * 
+ *
  * @since 2.0.0
  * @category MethodsUnsafe
  */
-export const toCanonicalCborBytesUnsafe = (instance: CML.PoolRetirement): Uint8Array =>
-  Effect.runSync(toCanonicalCborBytes(instance));
+export const toCanonicalCborBytesUnsafe = (
+  instance: CML.PoolRetirement,
+): Uint8Array => Effect.runSync(toCanonicalCborBytes(instance));
 
 /**
  * Static method fromCborBytes of PoolRetirement
- * 
+ *
  * @example
  * import { PoolRetirement } from "@lucid-evolution/experimental";
  * import { Effect } from "effect";
- * 
+ *
  * // Using Effect for safe execution with error handling
  * Effect.gen(function*() {
- * 
+ *
  *   const result = yield* PoolRetirement.fromCborBytes( parameters );
  *   console.log(result);
  * });
- * 
+ *
  * @since 2.0.0
  * @category Constructors
  */
 export const fromCborBytes = Effect.fn(function* (cborBytes: Uint8Array) {
   return yield* Effect.try({
     try: () => CML.PoolRetirement.from_cbor_bytes(cborBytes),
-    catch: () => new PoolRetirementError({
-      message: `PoolRetirement.fromCborBytes failed with parameters: ${cborBytes}. Hint: Check byte length and encoding.`,
-    }),
+    catch: () =>
+      new PoolRetirementError({
+        message: `PoolRetirement.fromCborBytes failed with parameters: ${cborBytes}. Hint: Check byte length and encoding.`,
+      }),
   });
 });
 
 /**
  * Unsafely calls PoolRetirement.fromCborBytes without Effect wrapper
- * 
+ *
  * @example
  * import { PoolRetirement } from "@lucid-evolution/experimental";
- * 
- * 
- * 
+ *
+ *
+ *
  * // Using try/catch for error handling
  * try {
  *   const result = PoolRetirement.fromCborBytesUnsafe( parameters );
@@ -221,7 +229,7 @@ export const fromCborBytes = Effect.fn(function* (cborBytes: Uint8Array) {
  * } catch (error) {
  *   console.error(`PoolRetirement.fromCborBytesUnsafe failed: ${error.message}`);
  * }
- * 
+ *
  * @since 2.0.0
  * @category ConstructorsUnsafe
  */
@@ -230,11 +238,11 @@ export const fromCborBytesUnsafe = (cborBytes: Uint8Array) =>
 
 /**
  * Method toCborHex of PoolRetirement
- * 
+ *
  * @example
  * import { PoolRetirement } from "@lucid-evolution/experimental";
  * import { Effect } from "effect";
- * 
+ *
  * // Using Effect for safe execution with error handling
  * Effect.gen(function*() {
  * // Assume we have a PoolRetirement instance
@@ -242,7 +250,7 @@ export const fromCborBytesUnsafe = (cborBytes: Uint8Array) =>
  *   const result = yield* PoolRetirement.toCborHex(instance);
  *   console.log(result);
  * });
- * 
+ *
  * @since 2.0.0
  * @category Methods
  */
@@ -254,18 +262,18 @@ export const toCborHex = Effect.fn(
         new PoolRetirementError({
           message: `PoolRetirement.toCborHex failed PoolRetirement is not valid for string conversion. Hint: Make sure it's a valid hex string representing CBOR data.`,
         }),
-    })
+    }),
 );
 
 /**
  * Unsafely calls instance.toCborHex without Effect wrapper
- * 
+ *
  * @example
  * import { PoolRetirement } from "@lucid-evolution/experimental";
- * 
+ *
  * // Assume we have a PoolRetirement instance
  * const instance = ... ;
- * 
+ *
  * // Using try/catch for error handling
  * try {
  *   const result = PoolRetirement.toCborHexUnsafe(instance);
@@ -273,7 +281,7 @@ export const toCborHex = Effect.fn(
  * } catch (error) {
  *   console.error(`PoolRetirement.toCborHexUnsafe failed: ${error.message}`);
  * }
- * 
+ *
  * @since 2.0.0
  * @category MethodsUnsafe
  */
@@ -282,11 +290,11 @@ export const toCborHexUnsafe = (instance: CML.PoolRetirement): string =>
 
 /**
  * Method toCanonicalCborHex of PoolRetirement
- * 
+ *
  * @example
  * import { PoolRetirement } from "@lucid-evolution/experimental";
  * import { Effect } from "effect";
- * 
+ *
  * // Using Effect for safe execution with error handling
  * Effect.gen(function*() {
  * // Assume we have a PoolRetirement instance
@@ -294,7 +302,7 @@ export const toCborHexUnsafe = (instance: CML.PoolRetirement): string =>
  *   const result = yield* PoolRetirement.toCanonicalCborHex(instance);
  *   console.log(result);
  * });
- * 
+ *
  * @since 2.0.0
  * @category Methods
  */
@@ -306,18 +314,18 @@ export const toCanonicalCborHex = Effect.fn(
         new PoolRetirementError({
           message: `PoolRetirement.toCanonicalCborHex failed PoolRetirement is not valid for string conversion. Hint: Make sure it's a valid hex string representing CBOR data.`,
         }),
-    })
+    }),
 );
 
 /**
  * Unsafely calls instance.toCanonicalCborHex without Effect wrapper
- * 
+ *
  * @example
  * import { PoolRetirement } from "@lucid-evolution/experimental";
- * 
+ *
  * // Assume we have a PoolRetirement instance
  * const instance = ... ;
- * 
+ *
  * // Using try/catch for error handling
  * try {
  *   const result = PoolRetirement.toCanonicalCborHexUnsafe(instance);
@@ -325,47 +333,49 @@ export const toCanonicalCborHex = Effect.fn(
  * } catch (error) {
  *   console.error(`PoolRetirement.toCanonicalCborHexUnsafe failed: ${error.message}`);
  * }
- * 
+ *
  * @since 2.0.0
  * @category MethodsUnsafe
  */
-export const toCanonicalCborHexUnsafe = (instance: CML.PoolRetirement): string =>
-  Effect.runSync(toCanonicalCborHex(instance));
+export const toCanonicalCborHexUnsafe = (
+  instance: CML.PoolRetirement,
+): string => Effect.runSync(toCanonicalCborHex(instance));
 
 /**
  * Static method fromCborHex of PoolRetirement
- * 
+ *
  * @example
  * import { PoolRetirement } from "@lucid-evolution/experimental";
  * import { Effect } from "effect";
- * 
+ *
  * // Using Effect for safe execution with error handling
  * Effect.gen(function*() {
- * 
+ *
  *   const result = yield* PoolRetirement.fromCborHex( parameters );
  *   console.log(result);
  * });
- * 
+ *
  * @since 2.0.0
  * @category Constructors
  */
 export const fromCborHex = Effect.fn(function* (cborBytes: string) {
   return yield* Effect.try({
     try: () => CML.PoolRetirement.from_cbor_hex(cborBytes),
-    catch: () => new PoolRetirementError({
-      message: `PoolRetirement.fromCborHex failed with parameters: ${cborBytes}. Hint: Make sure it's a valid hex string representing CBOR data.`,
-    }),
+    catch: () =>
+      new PoolRetirementError({
+        message: `PoolRetirement.fromCborHex failed with parameters: ${cborBytes}. Hint: Make sure it's a valid hex string representing CBOR data.`,
+      }),
   });
 });
 
 /**
  * Unsafely calls PoolRetirement.fromCborHex without Effect wrapper
- * 
+ *
  * @example
  * import { PoolRetirement } from "@lucid-evolution/experimental";
- * 
- * 
- * 
+ *
+ *
+ *
  * // Using try/catch for error handling
  * try {
  *   const result = PoolRetirement.fromCborHexUnsafe( parameters );
@@ -373,7 +383,7 @@ export const fromCborHex = Effect.fn(function* (cborBytes: string) {
  * } catch (error) {
  *   console.error(`PoolRetirement.fromCborHexUnsafe failed: ${error.message}`);
  * }
- * 
+ *
  * @since 2.0.0
  * @category ConstructorsUnsafe
  */
@@ -382,11 +392,11 @@ export const fromCborHexUnsafe = (cborBytes: string) =>
 
 /**
  * Method toJson of PoolRetirement
- * 
+ *
  * @example
  * import { PoolRetirement } from "@lucid-evolution/experimental";
  * import { Effect } from "effect";
- * 
+ *
  * // Using Effect for safe execution with error handling
  * Effect.gen(function*() {
  * // Assume we have a PoolRetirement instance
@@ -394,7 +404,7 @@ export const fromCborHexUnsafe = (cborBytes: string) =>
  *   const result = yield* PoolRetirement.toJson(instance);
  *   console.log(result);
  * });
- * 
+ *
  * @since 2.0.0
  * @category Methods
  */
@@ -406,18 +416,18 @@ export const toJson = Effect.fn(
         new PoolRetirementError({
           message: `PoolRetirement.toJson failed PoolRetirement is not valid for string conversion. Hint: Validate your JSON structure.`,
         }),
-    })
+    }),
 );
 
 /**
  * Unsafely calls instance.toJson without Effect wrapper
- * 
+ *
  * @example
  * import { PoolRetirement } from "@lucid-evolution/experimental";
- * 
+ *
  * // Assume we have a PoolRetirement instance
  * const instance = ... ;
- * 
+ *
  * // Using try/catch for error handling
  * try {
  *   const result = PoolRetirement.toJsonUnsafe(instance);
@@ -425,7 +435,7 @@ export const toJson = Effect.fn(
  * } catch (error) {
  *   console.error(`PoolRetirement.toJsonUnsafe failed: ${error.message}`);
  * }
- * 
+ *
  * @since 2.0.0
  * @category MethodsUnsafe
  */
@@ -434,11 +444,11 @@ export const toJsonUnsafe = (instance: CML.PoolRetirement): string =>
 
 /**
  * Method toJsValue of PoolRetirement
- * 
+ *
  * @example
  * import { PoolRetirement } from "@lucid-evolution/experimental";
  * import { Effect } from "effect";
- * 
+ *
  * // Using Effect for safe execution with error handling
  * Effect.gen(function*() {
  * // Assume we have a PoolRetirement instance
@@ -446,7 +456,7 @@ export const toJsonUnsafe = (instance: CML.PoolRetirement): string =>
  *   const result = yield* PoolRetirement.toJsValue(instance);
  *   console.log(result);
  * });
- * 
+ *
  * @since 2.0.0
  * @category Methods
  */
@@ -458,18 +468,18 @@ export const toJsValue = Effect.fn(
         new PoolRetirementError({
           message: `PoolRetirement.toJsValue failed PoolRetirement is not valid for any conversion. `,
         }),
-    })
+    }),
 );
 
 /**
  * Unsafely calls instance.toJsValue without Effect wrapper
- * 
+ *
  * @example
  * import { PoolRetirement } from "@lucid-evolution/experimental";
- * 
+ *
  * // Assume we have a PoolRetirement instance
  * const instance = ... ;
- * 
+ *
  * // Using try/catch for error handling
  * try {
  *   const result = PoolRetirement.toJsValueUnsafe(instance);
@@ -477,7 +487,7 @@ export const toJsValue = Effect.fn(
  * } catch (error) {
  *   console.error(`PoolRetirement.toJsValueUnsafe failed: ${error.message}`);
  * }
- * 
+ *
  * @since 2.0.0
  * @category MethodsUnsafe
  */
@@ -486,38 +496,39 @@ export const toJsValueUnsafe = (instance: CML.PoolRetirement): any =>
 
 /**
  * Static method fromJson of PoolRetirement
- * 
+ *
  * @example
  * import { PoolRetirement } from "@lucid-evolution/experimental";
  * import { Effect } from "effect";
- * 
+ *
  * // Using Effect for safe execution with error handling
  * Effect.gen(function*() {
- * 
+ *
  *   const result = yield* PoolRetirement.fromJson( parameters );
  *   console.log(result);
  * });
- * 
+ *
  * @since 2.0.0
  * @category Constructors
  */
 export const fromJson = Effect.fn(function* (json: string) {
   return yield* Effect.try({
     try: () => CML.PoolRetirement.from_json(json),
-    catch: () => new PoolRetirementError({
-      message: `PoolRetirement.fromJson failed with parameters: ${json}. Hint: Validate your JSON structure.`,
-    }),
+    catch: () =>
+      new PoolRetirementError({
+        message: `PoolRetirement.fromJson failed with parameters: ${json}. Hint: Validate your JSON structure.`,
+      }),
   });
 });
 
 /**
  * Unsafely calls PoolRetirement.fromJson without Effect wrapper
- * 
+ *
  * @example
  * import { PoolRetirement } from "@lucid-evolution/experimental";
- * 
- * 
- * 
+ *
+ *
+ *
  * // Using try/catch for error handling
  * try {
  *   const result = PoolRetirement.fromJsonUnsafe( parameters );
@@ -525,20 +536,19 @@ export const fromJson = Effect.fn(function* (json: string) {
  * } catch (error) {
  *   console.error(`PoolRetirement.fromJsonUnsafe failed: ${error.message}`);
  * }
- * 
+ *
  * @since 2.0.0
  * @category ConstructorsUnsafe
  */
-export const fromJsonUnsafe = (json: string) =>
-  Effect.runSync(fromJson(json));
+export const fromJsonUnsafe = (json: string) => Effect.runSync(fromJson(json));
 
 /**
  * Method pool of PoolRetirement
- * 
+ *
  * @example
  * import { PoolRetirement } from "@lucid-evolution/experimental";
  * import { Effect } from "effect";
- * 
+ *
  * // Using Effect for safe execution with error handling
  * Effect.gen(function*() {
  * // Assume we have a PoolRetirement instance
@@ -546,30 +556,32 @@ export const fromJsonUnsafe = (json: string) =>
  *   const result = yield* PoolRetirement.pool(instance);
  *   console.log(result);
  * });
- * 
+ *
  * @since 2.0.0
  * @category Methods
  */
 export const pool = Effect.fn(
-  (instance: CML.PoolRetirement): Effect.Effect<CML.Ed25519KeyHash, PoolRetirementError> =>
+  (
+    instance: CML.PoolRetirement,
+  ): Effect.Effect<CML.Ed25519KeyHash, PoolRetirementError> =>
     Effect.try({
       try: () => instance.pool(),
       catch: () =>
         new PoolRetirementError({
           message: `PoolRetirement.pool failed `,
         }),
-    })
+    }),
 );
 
 /**
  * Unsafely calls instance.pool without Effect wrapper
- * 
+ *
  * @example
  * import { PoolRetirement } from "@lucid-evolution/experimental";
- * 
+ *
  * // Assume we have a PoolRetirement instance
  * const instance = ... ;
- * 
+ *
  * // Using try/catch for error handling
  * try {
  *   const result = PoolRetirement.poolUnsafe(instance);
@@ -577,7 +589,7 @@ export const pool = Effect.fn(
  * } catch (error) {
  *   console.error(`PoolRetirement.poolUnsafe failed: ${error.message}`);
  * }
- * 
+ *
  * @since 2.0.0
  * @category MethodsUnsafe
  */
@@ -586,11 +598,11 @@ export const poolUnsafe = (instance: CML.PoolRetirement): CML.Ed25519KeyHash =>
 
 /**
  * Method epoch of PoolRetirement
- * 
+ *
  * @example
  * import { PoolRetirement } from "@lucid-evolution/experimental";
  * import { Effect } from "effect";
- * 
+ *
  * // Using Effect for safe execution with error handling
  * Effect.gen(function*() {
  * // Assume we have a PoolRetirement instance
@@ -598,7 +610,7 @@ export const poolUnsafe = (instance: CML.PoolRetirement): CML.Ed25519KeyHash =>
  *   const result = yield* PoolRetirement.epoch(instance);
  *   console.log(result);
  * });
- * 
+ *
  * @since 2.0.0
  * @category Methods
  */
@@ -610,18 +622,18 @@ export const epoch = Effect.fn(
         new PoolRetirementError({
           message: `PoolRetirement.epoch failed `,
         }),
-    })
+    }),
 );
 
 /**
  * Unsafely calls instance.epoch without Effect wrapper
- * 
+ *
  * @example
  * import { PoolRetirement } from "@lucid-evolution/experimental";
- * 
+ *
  * // Assume we have a PoolRetirement instance
  * const instance = ... ;
- * 
+ *
  * // Using try/catch for error handling
  * try {
  *   const result = PoolRetirement.epochUnsafe(instance);
@@ -629,7 +641,7 @@ export const epoch = Effect.fn(
  * } catch (error) {
  *   console.error(`PoolRetirement.epochUnsafe failed: ${error.message}`);
  * }
- * 
+ *
  * @since 2.0.0
  * @category MethodsUnsafe
  */
@@ -638,38 +650,42 @@ export const epochUnsafe = (instance: CML.PoolRetirement): bigint =>
 
 /**
  * Static method _new of PoolRetirement
- * 
+ *
  * @example
  * import { PoolRetirement } from "@lucid-evolution/experimental";
  * import { Effect } from "effect";
- * 
+ *
  * // Using Effect for safe execution with error handling
  * Effect.gen(function*() {
- * 
+ *
  *   const result = yield* PoolRetirement._new( parameters );
  *   console.log(result);
  * });
- * 
+ *
  * @since 2.0.0
  * @category Constructors
  */
-export const _new = Effect.fn(function* (pool: CML.Ed25519KeyHash, epoch: bigint) {
+export const _new = Effect.fn(function* (
+  pool: CML.Ed25519KeyHash,
+  epoch: bigint,
+) {
   return yield* Effect.try({
     try: () => CML.PoolRetirement.new(pool, epoch),
-    catch: () => new PoolRetirementError({
-      message: `PoolRetirement._new failed with parameters: ${pool} (Ed25519KeyHash), ${epoch}. `,
-    }),
+    catch: () =>
+      new PoolRetirementError({
+        message: `PoolRetirement._new failed with parameters: ${pool} (Ed25519KeyHash), ${epoch}. `,
+      }),
   });
 });
 
 /**
  * Unsafely calls PoolRetirement._new without Effect wrapper
- * 
+ *
  * @example
  * import { PoolRetirement } from "@lucid-evolution/experimental";
- * 
- * 
- * 
+ *
+ *
+ *
  * // Using try/catch for error handling
  * try {
  *   const result = PoolRetirement._newUnsafe( parameters );
@@ -677,7 +693,7 @@ export const _new = Effect.fn(function* (pool: CML.Ed25519KeyHash, epoch: bigint
  * } catch (error) {
  *   console.error(`PoolRetirement._newUnsafe failed: ${error.message}`);
  * }
- * 
+ *
  * @since 2.0.0
  * @category ConstructorsUnsafe
  */

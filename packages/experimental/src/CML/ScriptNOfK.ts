@@ -14,7 +14,7 @@ export type ScriptNOfK = CML.ScriptNOfK;
 
 /**
  * Error class for ScriptNOfK operations
- * 
+ *
  * This error is thrown when operations on ScriptNOfK instances fail.
  *
  * @since 2.0.0
@@ -26,11 +26,11 @@ export class ScriptNOfKError extends Data.TaggedError("ScriptNOfKError")<{
 
 /**
  * Method free of ScriptNOfK
- * 
+ *
  * @example
  * import { ScriptNOfK } from "@lucid-evolution/experimental";
  * import { Effect } from "effect";
- * 
+ *
  * // Using Effect for safe execution with error handling
  * Effect.gen(function*() {
  * // Assume we have a ScriptNOfK instance
@@ -38,7 +38,7 @@ export class ScriptNOfKError extends Data.TaggedError("ScriptNOfKError")<{
  *   const result = yield* ScriptNOfK.free(instance);
  *   console.log(result);
  * });
- * 
+ *
  * @since 2.0.0
  * @category Methods
  */
@@ -50,18 +50,18 @@ export const free = Effect.fn(
         new ScriptNOfKError({
           message: `ScriptNOfK.free failed Hint: Check if you're calling free() more than once.`,
         }),
-    })
+    }),
 );
 
 /**
  * Unsafely calls instance.free without Effect wrapper
- * 
+ *
  * @example
  * import { ScriptNOfK } from "@lucid-evolution/experimental";
- * 
+ *
  * // Assume we have a ScriptNOfK instance
  * const instance = ... ;
- * 
+ *
  * // Using try/catch for error handling
  * try {
  *   const result = ScriptNOfK.freeUnsafe(instance);
@@ -69,7 +69,7 @@ export const free = Effect.fn(
  * } catch (error) {
  *   console.error(`ScriptNOfK.freeUnsafe failed: ${error.message}`);
  * }
- * 
+ *
  * @since 2.0.0
  * @category MethodsUnsafe
  */
@@ -78,11 +78,11 @@ export const freeUnsafe = (instance: CML.ScriptNOfK): void =>
 
 /**
  * Method toCborBytes of ScriptNOfK
- * 
+ *
  * @example
  * import { ScriptNOfK } from "@lucid-evolution/experimental";
  * import { Effect } from "effect";
- * 
+ *
  * // Using Effect for safe execution with error handling
  * Effect.gen(function*() {
  * // Assume we have a ScriptNOfK instance
@@ -90,7 +90,7 @@ export const freeUnsafe = (instance: CML.ScriptNOfK): void =>
  *   const result = yield* ScriptNOfK.toCborBytes(instance);
  *   console.log(result);
  * });
- * 
+ *
  * @since 2.0.0
  * @category Methods
  */
@@ -102,18 +102,18 @@ export const toCborBytes = Effect.fn(
         new ScriptNOfKError({
           message: `ScriptNOfK.toCborBytes failed ScriptNOfK is not valid for Uint8Array conversion. Hint: Check byte length and encoding.`,
         }),
-    })
+    }),
 );
 
 /**
  * Unsafely calls instance.toCborBytes without Effect wrapper
- * 
+ *
  * @example
  * import { ScriptNOfK } from "@lucid-evolution/experimental";
- * 
+ *
  * // Assume we have a ScriptNOfK instance
  * const instance = ... ;
- * 
+ *
  * // Using try/catch for error handling
  * try {
  *   const result = ScriptNOfK.toCborBytesUnsafe(instance);
@@ -121,7 +121,7 @@ export const toCborBytes = Effect.fn(
  * } catch (error) {
  *   console.error(`ScriptNOfK.toCborBytesUnsafe failed: ${error.message}`);
  * }
- * 
+ *
  * @since 2.0.0
  * @category MethodsUnsafe
  */
@@ -130,11 +130,11 @@ export const toCborBytesUnsafe = (instance: CML.ScriptNOfK): Uint8Array =>
 
 /**
  * Method toCanonicalCborBytes of ScriptNOfK
- * 
+ *
  * @example
  * import { ScriptNOfK } from "@lucid-evolution/experimental";
  * import { Effect } from "effect";
- * 
+ *
  * // Using Effect for safe execution with error handling
  * Effect.gen(function*() {
  * // Assume we have a ScriptNOfK instance
@@ -142,7 +142,7 @@ export const toCborBytesUnsafe = (instance: CML.ScriptNOfK): Uint8Array =>
  *   const result = yield* ScriptNOfK.toCanonicalCborBytes(instance);
  *   console.log(result);
  * });
- * 
+ *
  * @since 2.0.0
  * @category Methods
  */
@@ -154,18 +154,18 @@ export const toCanonicalCborBytes = Effect.fn(
         new ScriptNOfKError({
           message: `ScriptNOfK.toCanonicalCborBytes failed ScriptNOfK is not valid for Uint8Array conversion. Hint: Check byte length and encoding.`,
         }),
-    })
+    }),
 );
 
 /**
  * Unsafely calls instance.toCanonicalCborBytes without Effect wrapper
- * 
+ *
  * @example
  * import { ScriptNOfK } from "@lucid-evolution/experimental";
- * 
+ *
  * // Assume we have a ScriptNOfK instance
  * const instance = ... ;
- * 
+ *
  * // Using try/catch for error handling
  * try {
  *   const result = ScriptNOfK.toCanonicalCborBytesUnsafe(instance);
@@ -173,47 +173,49 @@ export const toCanonicalCborBytes = Effect.fn(
  * } catch (error) {
  *   console.error(`ScriptNOfK.toCanonicalCborBytesUnsafe failed: ${error.message}`);
  * }
- * 
+ *
  * @since 2.0.0
  * @category MethodsUnsafe
  */
-export const toCanonicalCborBytesUnsafe = (instance: CML.ScriptNOfK): Uint8Array =>
-  Effect.runSync(toCanonicalCborBytes(instance));
+export const toCanonicalCborBytesUnsafe = (
+  instance: CML.ScriptNOfK,
+): Uint8Array => Effect.runSync(toCanonicalCborBytes(instance));
 
 /**
  * Static method fromCborBytes of ScriptNOfK
- * 
+ *
  * @example
  * import { ScriptNOfK } from "@lucid-evolution/experimental";
  * import { Effect } from "effect";
- * 
+ *
  * // Using Effect for safe execution with error handling
  * Effect.gen(function*() {
- * 
+ *
  *   const result = yield* ScriptNOfK.fromCborBytes( parameters );
  *   console.log(result);
  * });
- * 
+ *
  * @since 2.0.0
  * @category Constructors
  */
 export const fromCborBytes = Effect.fn(function* (cborBytes: Uint8Array) {
   return yield* Effect.try({
     try: () => CML.ScriptNOfK.from_cbor_bytes(cborBytes),
-    catch: () => new ScriptNOfKError({
-      message: `ScriptNOfK.fromCborBytes failed with parameters: ${cborBytes}. Hint: Check byte length and encoding.`,
-    }),
+    catch: () =>
+      new ScriptNOfKError({
+        message: `ScriptNOfK.fromCborBytes failed with parameters: ${cborBytes}. Hint: Check byte length and encoding.`,
+      }),
   });
 });
 
 /**
  * Unsafely calls ScriptNOfK.fromCborBytes without Effect wrapper
- * 
+ *
  * @example
  * import { ScriptNOfK } from "@lucid-evolution/experimental";
- * 
- * 
- * 
+ *
+ *
+ *
  * // Using try/catch for error handling
  * try {
  *   const result = ScriptNOfK.fromCborBytesUnsafe( parameters );
@@ -221,7 +223,7 @@ export const fromCborBytes = Effect.fn(function* (cborBytes: Uint8Array) {
  * } catch (error) {
  *   console.error(`ScriptNOfK.fromCborBytesUnsafe failed: ${error.message}`);
  * }
- * 
+ *
  * @since 2.0.0
  * @category ConstructorsUnsafe
  */
@@ -230,11 +232,11 @@ export const fromCborBytesUnsafe = (cborBytes: Uint8Array) =>
 
 /**
  * Method toCborHex of ScriptNOfK
- * 
+ *
  * @example
  * import { ScriptNOfK } from "@lucid-evolution/experimental";
  * import { Effect } from "effect";
- * 
+ *
  * // Using Effect for safe execution with error handling
  * Effect.gen(function*() {
  * // Assume we have a ScriptNOfK instance
@@ -242,7 +244,7 @@ export const fromCborBytesUnsafe = (cborBytes: Uint8Array) =>
  *   const result = yield* ScriptNOfK.toCborHex(instance);
  *   console.log(result);
  * });
- * 
+ *
  * @since 2.0.0
  * @category Methods
  */
@@ -254,18 +256,18 @@ export const toCborHex = Effect.fn(
         new ScriptNOfKError({
           message: `ScriptNOfK.toCborHex failed ScriptNOfK is not valid for string conversion. Hint: Make sure it's a valid hex string representing CBOR data.`,
         }),
-    })
+    }),
 );
 
 /**
  * Unsafely calls instance.toCborHex without Effect wrapper
- * 
+ *
  * @example
  * import { ScriptNOfK } from "@lucid-evolution/experimental";
- * 
+ *
  * // Assume we have a ScriptNOfK instance
  * const instance = ... ;
- * 
+ *
  * // Using try/catch for error handling
  * try {
  *   const result = ScriptNOfK.toCborHexUnsafe(instance);
@@ -273,7 +275,7 @@ export const toCborHex = Effect.fn(
  * } catch (error) {
  *   console.error(`ScriptNOfK.toCborHexUnsafe failed: ${error.message}`);
  * }
- * 
+ *
  * @since 2.0.0
  * @category MethodsUnsafe
  */
@@ -282,11 +284,11 @@ export const toCborHexUnsafe = (instance: CML.ScriptNOfK): string =>
 
 /**
  * Method toCanonicalCborHex of ScriptNOfK
- * 
+ *
  * @example
  * import { ScriptNOfK } from "@lucid-evolution/experimental";
  * import { Effect } from "effect";
- * 
+ *
  * // Using Effect for safe execution with error handling
  * Effect.gen(function*() {
  * // Assume we have a ScriptNOfK instance
@@ -294,7 +296,7 @@ export const toCborHexUnsafe = (instance: CML.ScriptNOfK): string =>
  *   const result = yield* ScriptNOfK.toCanonicalCborHex(instance);
  *   console.log(result);
  * });
- * 
+ *
  * @since 2.0.0
  * @category Methods
  */
@@ -306,18 +308,18 @@ export const toCanonicalCborHex = Effect.fn(
         new ScriptNOfKError({
           message: `ScriptNOfK.toCanonicalCborHex failed ScriptNOfK is not valid for string conversion. Hint: Make sure it's a valid hex string representing CBOR data.`,
         }),
-    })
+    }),
 );
 
 /**
  * Unsafely calls instance.toCanonicalCborHex without Effect wrapper
- * 
+ *
  * @example
  * import { ScriptNOfK } from "@lucid-evolution/experimental";
- * 
+ *
  * // Assume we have a ScriptNOfK instance
  * const instance = ... ;
- * 
+ *
  * // Using try/catch for error handling
  * try {
  *   const result = ScriptNOfK.toCanonicalCborHexUnsafe(instance);
@@ -325,7 +327,7 @@ export const toCanonicalCborHex = Effect.fn(
  * } catch (error) {
  *   console.error(`ScriptNOfK.toCanonicalCborHexUnsafe failed: ${error.message}`);
  * }
- * 
+ *
  * @since 2.0.0
  * @category MethodsUnsafe
  */
@@ -334,38 +336,39 @@ export const toCanonicalCborHexUnsafe = (instance: CML.ScriptNOfK): string =>
 
 /**
  * Static method fromCborHex of ScriptNOfK
- * 
+ *
  * @example
  * import { ScriptNOfK } from "@lucid-evolution/experimental";
  * import { Effect } from "effect";
- * 
+ *
  * // Using Effect for safe execution with error handling
  * Effect.gen(function*() {
- * 
+ *
  *   const result = yield* ScriptNOfK.fromCborHex( parameters );
  *   console.log(result);
  * });
- * 
+ *
  * @since 2.0.0
  * @category Constructors
  */
 export const fromCborHex = Effect.fn(function* (cborBytes: string) {
   return yield* Effect.try({
     try: () => CML.ScriptNOfK.from_cbor_hex(cborBytes),
-    catch: () => new ScriptNOfKError({
-      message: `ScriptNOfK.fromCborHex failed with parameters: ${cborBytes}. Hint: Make sure it's a valid hex string representing CBOR data.`,
-    }),
+    catch: () =>
+      new ScriptNOfKError({
+        message: `ScriptNOfK.fromCborHex failed with parameters: ${cborBytes}. Hint: Make sure it's a valid hex string representing CBOR data.`,
+      }),
   });
 });
 
 /**
  * Unsafely calls ScriptNOfK.fromCborHex without Effect wrapper
- * 
+ *
  * @example
  * import { ScriptNOfK } from "@lucid-evolution/experimental";
- * 
- * 
- * 
+ *
+ *
+ *
  * // Using try/catch for error handling
  * try {
  *   const result = ScriptNOfK.fromCborHexUnsafe( parameters );
@@ -373,7 +376,7 @@ export const fromCborHex = Effect.fn(function* (cborBytes: string) {
  * } catch (error) {
  *   console.error(`ScriptNOfK.fromCborHexUnsafe failed: ${error.message}`);
  * }
- * 
+ *
  * @since 2.0.0
  * @category ConstructorsUnsafe
  */
@@ -382,11 +385,11 @@ export const fromCborHexUnsafe = (cborBytes: string) =>
 
 /**
  * Method toJson of ScriptNOfK
- * 
+ *
  * @example
  * import { ScriptNOfK } from "@lucid-evolution/experimental";
  * import { Effect } from "effect";
- * 
+ *
  * // Using Effect for safe execution with error handling
  * Effect.gen(function*() {
  * // Assume we have a ScriptNOfK instance
@@ -394,7 +397,7 @@ export const fromCborHexUnsafe = (cborBytes: string) =>
  *   const result = yield* ScriptNOfK.toJson(instance);
  *   console.log(result);
  * });
- * 
+ *
  * @since 2.0.0
  * @category Methods
  */
@@ -406,18 +409,18 @@ export const toJson = Effect.fn(
         new ScriptNOfKError({
           message: `ScriptNOfK.toJson failed ScriptNOfK is not valid for string conversion. Hint: Validate your JSON structure.`,
         }),
-    })
+    }),
 );
 
 /**
  * Unsafely calls instance.toJson without Effect wrapper
- * 
+ *
  * @example
  * import { ScriptNOfK } from "@lucid-evolution/experimental";
- * 
+ *
  * // Assume we have a ScriptNOfK instance
  * const instance = ... ;
- * 
+ *
  * // Using try/catch for error handling
  * try {
  *   const result = ScriptNOfK.toJsonUnsafe(instance);
@@ -425,7 +428,7 @@ export const toJson = Effect.fn(
  * } catch (error) {
  *   console.error(`ScriptNOfK.toJsonUnsafe failed: ${error.message}`);
  * }
- * 
+ *
  * @since 2.0.0
  * @category MethodsUnsafe
  */
@@ -434,11 +437,11 @@ export const toJsonUnsafe = (instance: CML.ScriptNOfK): string =>
 
 /**
  * Method toJsValue of ScriptNOfK
- * 
+ *
  * @example
  * import { ScriptNOfK } from "@lucid-evolution/experimental";
  * import { Effect } from "effect";
- * 
+ *
  * // Using Effect for safe execution with error handling
  * Effect.gen(function*() {
  * // Assume we have a ScriptNOfK instance
@@ -446,7 +449,7 @@ export const toJsonUnsafe = (instance: CML.ScriptNOfK): string =>
  *   const result = yield* ScriptNOfK.toJsValue(instance);
  *   console.log(result);
  * });
- * 
+ *
  * @since 2.0.0
  * @category Methods
  */
@@ -458,18 +461,18 @@ export const toJsValue = Effect.fn(
         new ScriptNOfKError({
           message: `ScriptNOfK.toJsValue failed ScriptNOfK is not valid for any conversion. `,
         }),
-    })
+    }),
 );
 
 /**
  * Unsafely calls instance.toJsValue without Effect wrapper
- * 
+ *
  * @example
  * import { ScriptNOfK } from "@lucid-evolution/experimental";
- * 
+ *
  * // Assume we have a ScriptNOfK instance
  * const instance = ... ;
- * 
+ *
  * // Using try/catch for error handling
  * try {
  *   const result = ScriptNOfK.toJsValueUnsafe(instance);
@@ -477,7 +480,7 @@ export const toJsValue = Effect.fn(
  * } catch (error) {
  *   console.error(`ScriptNOfK.toJsValueUnsafe failed: ${error.message}`);
  * }
- * 
+ *
  * @since 2.0.0
  * @category MethodsUnsafe
  */
@@ -486,38 +489,39 @@ export const toJsValueUnsafe = (instance: CML.ScriptNOfK): any =>
 
 /**
  * Static method fromJson of ScriptNOfK
- * 
+ *
  * @example
  * import { ScriptNOfK } from "@lucid-evolution/experimental";
  * import { Effect } from "effect";
- * 
+ *
  * // Using Effect for safe execution with error handling
  * Effect.gen(function*() {
- * 
+ *
  *   const result = yield* ScriptNOfK.fromJson( parameters );
  *   console.log(result);
  * });
- * 
+ *
  * @since 2.0.0
  * @category Constructors
  */
 export const fromJson = Effect.fn(function* (json: string) {
   return yield* Effect.try({
     try: () => CML.ScriptNOfK.from_json(json),
-    catch: () => new ScriptNOfKError({
-      message: `ScriptNOfK.fromJson failed with parameters: ${json}. Hint: Validate your JSON structure.`,
-    }),
+    catch: () =>
+      new ScriptNOfKError({
+        message: `ScriptNOfK.fromJson failed with parameters: ${json}. Hint: Validate your JSON structure.`,
+      }),
   });
 });
 
 /**
  * Unsafely calls ScriptNOfK.fromJson without Effect wrapper
- * 
+ *
  * @example
  * import { ScriptNOfK } from "@lucid-evolution/experimental";
- * 
- * 
- * 
+ *
+ *
+ *
  * // Using try/catch for error handling
  * try {
  *   const result = ScriptNOfK.fromJsonUnsafe( parameters );
@@ -525,20 +529,19 @@ export const fromJson = Effect.fn(function* (json: string) {
  * } catch (error) {
  *   console.error(`ScriptNOfK.fromJsonUnsafe failed: ${error.message}`);
  * }
- * 
+ *
  * @since 2.0.0
  * @category ConstructorsUnsafe
  */
-export const fromJsonUnsafe = (json: string) =>
-  Effect.runSync(fromJson(json));
+export const fromJsonUnsafe = (json: string) => Effect.runSync(fromJson(json));
 
 /**
  * Method n of ScriptNOfK
- * 
+ *
  * @example
  * import { ScriptNOfK } from "@lucid-evolution/experimental";
  * import { Effect } from "effect";
- * 
+ *
  * // Using Effect for safe execution with error handling
  * Effect.gen(function*() {
  * // Assume we have a ScriptNOfK instance
@@ -546,7 +549,7 @@ export const fromJsonUnsafe = (json: string) =>
  *   const result = yield* ScriptNOfK.n(instance);
  *   console.log(result);
  * });
- * 
+ *
  * @since 2.0.0
  * @category Methods
  */
@@ -558,18 +561,18 @@ export const n = Effect.fn(
         new ScriptNOfKError({
           message: `ScriptNOfK.n failed `,
         }),
-    })
+    }),
 );
 
 /**
  * Unsafely calls instance.n without Effect wrapper
- * 
+ *
  * @example
  * import { ScriptNOfK } from "@lucid-evolution/experimental";
- * 
+ *
  * // Assume we have a ScriptNOfK instance
  * const instance = ... ;
- * 
+ *
  * // Using try/catch for error handling
  * try {
  *   const result = ScriptNOfK.nUnsafe(instance);
@@ -577,7 +580,7 @@ export const n = Effect.fn(
  * } catch (error) {
  *   console.error(`ScriptNOfK.nUnsafe failed: ${error.message}`);
  * }
- * 
+ *
  * @since 2.0.0
  * @category MethodsUnsafe
  */
@@ -586,11 +589,11 @@ export const nUnsafe = (instance: CML.ScriptNOfK): bigint =>
 
 /**
  * Method nativeScripts of ScriptNOfK
- * 
+ *
  * @example
  * import { ScriptNOfK } from "@lucid-evolution/experimental";
  * import { Effect } from "effect";
- * 
+ *
  * // Using Effect for safe execution with error handling
  * Effect.gen(function*() {
  * // Assume we have a ScriptNOfK instance
@@ -598,30 +601,32 @@ export const nUnsafe = (instance: CML.ScriptNOfK): bigint =>
  *   const result = yield* ScriptNOfK.nativeScripts(instance);
  *   console.log(result);
  * });
- * 
+ *
  * @since 2.0.0
  * @category Methods
  */
 export const nativeScripts = Effect.fn(
-  (instance: CML.ScriptNOfK): Effect.Effect<CML.NativeScriptList, ScriptNOfKError> =>
+  (
+    instance: CML.ScriptNOfK,
+  ): Effect.Effect<CML.NativeScriptList, ScriptNOfKError> =>
     Effect.try({
       try: () => instance.native_scripts(),
       catch: () =>
         new ScriptNOfKError({
           message: `ScriptNOfK.nativeScripts failed `,
         }),
-    })
+    }),
 );
 
 /**
  * Unsafely calls instance.nativeScripts without Effect wrapper
- * 
+ *
  * @example
  * import { ScriptNOfK } from "@lucid-evolution/experimental";
- * 
+ *
  * // Assume we have a ScriptNOfK instance
  * const instance = ... ;
- * 
+ *
  * // Using try/catch for error handling
  * try {
  *   const result = ScriptNOfK.nativeScriptsUnsafe(instance);
@@ -629,47 +634,52 @@ export const nativeScripts = Effect.fn(
  * } catch (error) {
  *   console.error(`ScriptNOfK.nativeScriptsUnsafe failed: ${error.message}`);
  * }
- * 
+ *
  * @since 2.0.0
  * @category MethodsUnsafe
  */
-export const nativeScriptsUnsafe = (instance: CML.ScriptNOfK): CML.NativeScriptList =>
-  Effect.runSync(nativeScripts(instance));
+export const nativeScriptsUnsafe = (
+  instance: CML.ScriptNOfK,
+): CML.NativeScriptList => Effect.runSync(nativeScripts(instance));
 
 /**
  * Static method _new of ScriptNOfK
- * 
+ *
  * @example
  * import { ScriptNOfK } from "@lucid-evolution/experimental";
  * import { Effect } from "effect";
- * 
+ *
  * // Using Effect for safe execution with error handling
  * Effect.gen(function*() {
- * 
+ *
  *   const result = yield* ScriptNOfK._new( parameters );
  *   console.log(result);
  * });
- * 
+ *
  * @since 2.0.0
  * @category Constructors
  */
-export const _new = Effect.fn(function* (n: bigint, nativeScripts: CML.NativeScriptList) {
+export const _new = Effect.fn(function* (
+  n: bigint,
+  nativeScripts: CML.NativeScriptList,
+) {
   return yield* Effect.try({
     try: () => CML.ScriptNOfK.new(n, nativeScripts),
-    catch: () => new ScriptNOfKError({
-      message: `ScriptNOfK._new failed with parameters: ${n}, ${nativeScripts} (NativeScriptList). `,
-    }),
+    catch: () =>
+      new ScriptNOfKError({
+        message: `ScriptNOfK._new failed with parameters: ${n}, ${nativeScripts} (NativeScriptList). `,
+      }),
   });
 });
 
 /**
  * Unsafely calls ScriptNOfK._new without Effect wrapper
- * 
+ *
  * @example
  * import { ScriptNOfK } from "@lucid-evolution/experimental";
- * 
- * 
- * 
+ *
+ *
+ *
  * // Using try/catch for error handling
  * try {
  *   const result = ScriptNOfK._newUnsafe( parameters );
@@ -677,7 +687,7 @@ export const _new = Effect.fn(function* (n: bigint, nativeScripts: CML.NativeScr
  * } catch (error) {
  *   console.error(`ScriptNOfK._newUnsafe failed: ${error.message}`);
  * }
- * 
+ *
  * @since 2.0.0
  * @category ConstructorsUnsafe
  */

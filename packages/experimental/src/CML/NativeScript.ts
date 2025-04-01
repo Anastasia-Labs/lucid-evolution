@@ -14,7 +14,7 @@ export type NativeScript = CML.NativeScript;
 
 /**
  * Error class for NativeScript operations
- * 
+ *
  * This error is thrown when operations on NativeScript instances fail.
  *
  * @since 2.0.0
@@ -26,11 +26,11 @@ export class NativeScriptError extends Data.TaggedError("NativeScriptError")<{
 
 /**
  * Method free of NativeScript
- * 
+ *
  * @example
  * import { NativeScript } from "@lucid-evolution/experimental";
  * import { Effect } from "effect";
- * 
+ *
  * // Using Effect for safe execution with error handling
  * Effect.gen(function*() {
  * // Assume we have a NativeScript instance
@@ -38,7 +38,7 @@ export class NativeScriptError extends Data.TaggedError("NativeScriptError")<{
  *   const result = yield* NativeScript.free(instance);
  *   console.log(result);
  * });
- * 
+ *
  * @since 2.0.0
  * @category Methods
  */
@@ -50,18 +50,18 @@ export const free = Effect.fn(
         new NativeScriptError({
           message: `NativeScript.free failed Hint: Check if you're calling free() more than once.`,
         }),
-    })
+    }),
 );
 
 /**
  * Unsafely calls instance.free without Effect wrapper
- * 
+ *
  * @example
  * import { NativeScript } from "@lucid-evolution/experimental";
- * 
+ *
  * // Assume we have a NativeScript instance
  * const instance = ... ;
- * 
+ *
  * // Using try/catch for error handling
  * try {
  *   const result = NativeScript.freeUnsafe(instance);
@@ -69,7 +69,7 @@ export const free = Effect.fn(
  * } catch (error) {
  *   console.error(`NativeScript.freeUnsafe failed: ${error.message}`);
  * }
- * 
+ *
  * @since 2.0.0
  * @category MethodsUnsafe
  */
@@ -78,11 +78,11 @@ export const freeUnsafe = (instance: CML.NativeScript): void =>
 
 /**
  * Method getRequiredSigners of NativeScript
- * 
+ *
  * @example
  * import { NativeScript } from "@lucid-evolution/experimental";
  * import { Effect } from "effect";
- * 
+ *
  * // Using Effect for safe execution with error handling
  * Effect.gen(function*() {
  * // Assume we have a NativeScript instance
@@ -90,30 +90,32 @@ export const freeUnsafe = (instance: CML.NativeScript): void =>
  *   const result = yield* NativeScript.getRequiredSigners(instance);
  *   console.log(result);
  * });
- * 
+ *
  * @since 2.0.0
  * @category Methods
  */
 export const getRequiredSigners = Effect.fn(
-  (instance: CML.NativeScript): Effect.Effect<CML.Ed25519KeyHashList, NativeScriptError> =>
+  (
+    instance: CML.NativeScript,
+  ): Effect.Effect<CML.Ed25519KeyHashList, NativeScriptError> =>
     Effect.try({
       try: () => instance.get_required_signers(),
       catch: () =>
         new NativeScriptError({
           message: `NativeScript.getRequiredSigners failed `,
         }),
-    })
+    }),
 );
 
 /**
  * Unsafely calls instance.getRequiredSigners without Effect wrapper
- * 
+ *
  * @example
  * import { NativeScript } from "@lucid-evolution/experimental";
- * 
+ *
  * // Assume we have a NativeScript instance
  * const instance = ... ;
- * 
+ *
  * // Using try/catch for error handling
  * try {
  *   const result = NativeScript.getRequiredSignersUnsafe(instance);
@@ -121,20 +123,21 @@ export const getRequiredSigners = Effect.fn(
  * } catch (error) {
  *   console.error(`NativeScript.getRequiredSignersUnsafe failed: ${error.message}`);
  * }
- * 
+ *
  * @since 2.0.0
  * @category MethodsUnsafe
  */
-export const getRequiredSignersUnsafe = (instance: CML.NativeScript): CML.Ed25519KeyHashList =>
-  Effect.runSync(getRequiredSigners(instance));
+export const getRequiredSignersUnsafe = (
+  instance: CML.NativeScript,
+): CML.Ed25519KeyHashList => Effect.runSync(getRequiredSigners(instance));
 
 /**
  * Method hash of NativeScript
- * 
+ *
  * @example
  * import { NativeScript } from "@lucid-evolution/experimental";
  * import { Effect } from "effect";
- * 
+ *
  * // Using Effect for safe execution with error handling
  * Effect.gen(function*() {
  * // Assume we have a NativeScript instance
@@ -142,30 +145,32 @@ export const getRequiredSignersUnsafe = (instance: CML.NativeScript): CML.Ed2551
  *   const result = yield* NativeScript.hash(instance);
  *   console.log(result);
  * });
- * 
+ *
  * @since 2.0.0
  * @category Methods
  */
 export const hash = Effect.fn(
-  (instance: CML.NativeScript): Effect.Effect<CML.ScriptHash, NativeScriptError> =>
+  (
+    instance: CML.NativeScript,
+  ): Effect.Effect<CML.ScriptHash, NativeScriptError> =>
     Effect.try({
       try: () => instance.hash(),
       catch: () =>
         new NativeScriptError({
           message: `NativeScript.hash failed `,
         }),
-    })
+    }),
 );
 
 /**
  * Unsafely calls instance.hash without Effect wrapper
- * 
+ *
  * @example
  * import { NativeScript } from "@lucid-evolution/experimental";
- * 
+ *
  * // Assume we have a NativeScript instance
  * const instance = ... ;
- * 
+ *
  * // Using try/catch for error handling
  * try {
  *   const result = NativeScript.hashUnsafe(instance);
@@ -173,7 +178,7 @@ export const hash = Effect.fn(
  * } catch (error) {
  *   console.error(`NativeScript.hashUnsafe failed: ${error.message}`);
  * }
- * 
+ *
  * @since 2.0.0
  * @category MethodsUnsafe
  */
@@ -182,11 +187,11 @@ export const hashUnsafe = (instance: CML.NativeScript): CML.ScriptHash =>
 
 /**
  * Method verify of NativeScript
- * 
+ *
  * @example
  * import { NativeScript } from "@lucid-evolution/experimental";
  * import { Effect } from "effect";
- * 
+ *
  * // Using Effect for safe execution with error handling
  * Effect.gen(function*() {
  * // Assume we have a NativeScript instance
@@ -194,30 +199,35 @@ export const hashUnsafe = (instance: CML.NativeScript): CML.ScriptHash =>
  *   const result = yield* NativeScript.verify(instance,  parameters );
  *   console.log(result);
  * });
- * 
+ *
  * @since 2.0.0
  * @category Methods
  */
 export const verify = Effect.fn(
-  (instance: CML.NativeScript, lowerBound: bigint | undefined, upperBound: bigint | undefined, keyHashes: CML.Ed25519KeyHashList): Effect.Effect<boolean, NativeScriptError> =>
+  (
+    instance: CML.NativeScript,
+    lowerBound: bigint | undefined,
+    upperBound: bigint | undefined,
+    keyHashes: CML.Ed25519KeyHashList,
+  ): Effect.Effect<boolean, NativeScriptError> =>
     Effect.try({
       try: () => instance.verify(lowerBound, upperBound, keyHashes),
       catch: () =>
         new NativeScriptError({
           message: `NativeScript.verify failed with parameters: ${lowerBound}, ${upperBound}, ${keyHashes} (Ed25519KeyHashList). `,
         }),
-    })
+    }),
 );
 
 /**
  * Unsafely calls instance.verify without Effect wrapper
- * 
+ *
  * @example
  * import { NativeScript } from "@lucid-evolution/experimental";
- * 
+ *
  * // Assume we have a NativeScript instance
  * const instance = ... ;
- * 
+ *
  * // Using try/catch for error handling
  * try {
  *   const result = NativeScript.verifyUnsafe(instance,  parameters );
@@ -225,20 +235,25 @@ export const verify = Effect.fn(
  * } catch (error) {
  *   console.error(`NativeScript.verifyUnsafe failed: ${error.message}`);
  * }
- * 
+ *
  * @since 2.0.0
  * @category MethodsUnsafe
  */
-export const verifyUnsafe = (instance: CML.NativeScript, lowerBound: bigint | undefined, upperBound: bigint | undefined, keyHashes: CML.Ed25519KeyHashList): boolean =>
+export const verifyUnsafe = (
+  instance: CML.NativeScript,
+  lowerBound: bigint | undefined,
+  upperBound: bigint | undefined,
+  keyHashes: CML.Ed25519KeyHashList,
+): boolean =>
   Effect.runSync(verify(instance, lowerBound, upperBound, keyHashes));
 
 /**
  * Method toCborBytes of NativeScript
- * 
+ *
  * @example
  * import { NativeScript } from "@lucid-evolution/experimental";
  * import { Effect } from "effect";
- * 
+ *
  * // Using Effect for safe execution with error handling
  * Effect.gen(function*() {
  * // Assume we have a NativeScript instance
@@ -246,7 +261,7 @@ export const verifyUnsafe = (instance: CML.NativeScript, lowerBound: bigint | un
  *   const result = yield* NativeScript.toCborBytes(instance);
  *   console.log(result);
  * });
- * 
+ *
  * @since 2.0.0
  * @category Methods
  */
@@ -258,18 +273,18 @@ export const toCborBytes = Effect.fn(
         new NativeScriptError({
           message: `NativeScript.toCborBytes failed NativeScript is not valid for Uint8Array conversion. Hint: Check byte length and encoding.`,
         }),
-    })
+    }),
 );
 
 /**
  * Unsafely calls instance.toCborBytes without Effect wrapper
- * 
+ *
  * @example
  * import { NativeScript } from "@lucid-evolution/experimental";
- * 
+ *
  * // Assume we have a NativeScript instance
  * const instance = ... ;
- * 
+ *
  * // Using try/catch for error handling
  * try {
  *   const result = NativeScript.toCborBytesUnsafe(instance);
@@ -277,7 +292,7 @@ export const toCborBytes = Effect.fn(
  * } catch (error) {
  *   console.error(`NativeScript.toCborBytesUnsafe failed: ${error.message}`);
  * }
- * 
+ *
  * @since 2.0.0
  * @category MethodsUnsafe
  */
@@ -286,11 +301,11 @@ export const toCborBytesUnsafe = (instance: CML.NativeScript): Uint8Array =>
 
 /**
  * Method toCanonicalCborBytes of NativeScript
- * 
+ *
  * @example
  * import { NativeScript } from "@lucid-evolution/experimental";
  * import { Effect } from "effect";
- * 
+ *
  * // Using Effect for safe execution with error handling
  * Effect.gen(function*() {
  * // Assume we have a NativeScript instance
@@ -298,7 +313,7 @@ export const toCborBytesUnsafe = (instance: CML.NativeScript): Uint8Array =>
  *   const result = yield* NativeScript.toCanonicalCborBytes(instance);
  *   console.log(result);
  * });
- * 
+ *
  * @since 2.0.0
  * @category Methods
  */
@@ -310,18 +325,18 @@ export const toCanonicalCborBytes = Effect.fn(
         new NativeScriptError({
           message: `NativeScript.toCanonicalCborBytes failed NativeScript is not valid for Uint8Array conversion. Hint: Check byte length and encoding.`,
         }),
-    })
+    }),
 );
 
 /**
  * Unsafely calls instance.toCanonicalCborBytes without Effect wrapper
- * 
+ *
  * @example
  * import { NativeScript } from "@lucid-evolution/experimental";
- * 
+ *
  * // Assume we have a NativeScript instance
  * const instance = ... ;
- * 
+ *
  * // Using try/catch for error handling
  * try {
  *   const result = NativeScript.toCanonicalCborBytesUnsafe(instance);
@@ -329,47 +344,49 @@ export const toCanonicalCborBytes = Effect.fn(
  * } catch (error) {
  *   console.error(`NativeScript.toCanonicalCborBytesUnsafe failed: ${error.message}`);
  * }
- * 
+ *
  * @since 2.0.0
  * @category MethodsUnsafe
  */
-export const toCanonicalCborBytesUnsafe = (instance: CML.NativeScript): Uint8Array =>
-  Effect.runSync(toCanonicalCborBytes(instance));
+export const toCanonicalCborBytesUnsafe = (
+  instance: CML.NativeScript,
+): Uint8Array => Effect.runSync(toCanonicalCborBytes(instance));
 
 /**
  * Static method fromCborBytes of NativeScript
- * 
+ *
  * @example
  * import { NativeScript } from "@lucid-evolution/experimental";
  * import { Effect } from "effect";
- * 
+ *
  * // Using Effect for safe execution with error handling
  * Effect.gen(function*() {
- * 
+ *
  *   const result = yield* NativeScript.fromCborBytes( parameters );
  *   console.log(result);
  * });
- * 
+ *
  * @since 2.0.0
  * @category Constructors
  */
 export const fromCborBytes = Effect.fn(function* (cborBytes: Uint8Array) {
   return yield* Effect.try({
     try: () => CML.NativeScript.from_cbor_bytes(cborBytes),
-    catch: () => new NativeScriptError({
-      message: `NativeScript.fromCborBytes failed with parameters: ${cborBytes}. Hint: Check byte length and encoding.`,
-    }),
+    catch: () =>
+      new NativeScriptError({
+        message: `NativeScript.fromCborBytes failed with parameters: ${cborBytes}. Hint: Check byte length and encoding.`,
+      }),
   });
 });
 
 /**
  * Unsafely calls NativeScript.fromCborBytes without Effect wrapper
- * 
+ *
  * @example
  * import { NativeScript } from "@lucid-evolution/experimental";
- * 
- * 
- * 
+ *
+ *
+ *
  * // Using try/catch for error handling
  * try {
  *   const result = NativeScript.fromCborBytesUnsafe( parameters );
@@ -377,7 +394,7 @@ export const fromCborBytes = Effect.fn(function* (cborBytes: Uint8Array) {
  * } catch (error) {
  *   console.error(`NativeScript.fromCborBytesUnsafe failed: ${error.message}`);
  * }
- * 
+ *
  * @since 2.0.0
  * @category ConstructorsUnsafe
  */
@@ -386,11 +403,11 @@ export const fromCborBytesUnsafe = (cborBytes: Uint8Array) =>
 
 /**
  * Method toCborHex of NativeScript
- * 
+ *
  * @example
  * import { NativeScript } from "@lucid-evolution/experimental";
  * import { Effect } from "effect";
- * 
+ *
  * // Using Effect for safe execution with error handling
  * Effect.gen(function*() {
  * // Assume we have a NativeScript instance
@@ -398,7 +415,7 @@ export const fromCborBytesUnsafe = (cborBytes: Uint8Array) =>
  *   const result = yield* NativeScript.toCborHex(instance);
  *   console.log(result);
  * });
- * 
+ *
  * @since 2.0.0
  * @category Methods
  */
@@ -410,18 +427,18 @@ export const toCborHex = Effect.fn(
         new NativeScriptError({
           message: `NativeScript.toCborHex failed NativeScript is not valid for string conversion. Hint: Make sure it's a valid hex string representing CBOR data.`,
         }),
-    })
+    }),
 );
 
 /**
  * Unsafely calls instance.toCborHex without Effect wrapper
- * 
+ *
  * @example
  * import { NativeScript } from "@lucid-evolution/experimental";
- * 
+ *
  * // Assume we have a NativeScript instance
  * const instance = ... ;
- * 
+ *
  * // Using try/catch for error handling
  * try {
  *   const result = NativeScript.toCborHexUnsafe(instance);
@@ -429,7 +446,7 @@ export const toCborHex = Effect.fn(
  * } catch (error) {
  *   console.error(`NativeScript.toCborHexUnsafe failed: ${error.message}`);
  * }
- * 
+ *
  * @since 2.0.0
  * @category MethodsUnsafe
  */
@@ -438,11 +455,11 @@ export const toCborHexUnsafe = (instance: CML.NativeScript): string =>
 
 /**
  * Method toCanonicalCborHex of NativeScript
- * 
+ *
  * @example
  * import { NativeScript } from "@lucid-evolution/experimental";
  * import { Effect } from "effect";
- * 
+ *
  * // Using Effect for safe execution with error handling
  * Effect.gen(function*() {
  * // Assume we have a NativeScript instance
@@ -450,7 +467,7 @@ export const toCborHexUnsafe = (instance: CML.NativeScript): string =>
  *   const result = yield* NativeScript.toCanonicalCborHex(instance);
  *   console.log(result);
  * });
- * 
+ *
  * @since 2.0.0
  * @category Methods
  */
@@ -462,18 +479,18 @@ export const toCanonicalCborHex = Effect.fn(
         new NativeScriptError({
           message: `NativeScript.toCanonicalCborHex failed NativeScript is not valid for string conversion. Hint: Make sure it's a valid hex string representing CBOR data.`,
         }),
-    })
+    }),
 );
 
 /**
  * Unsafely calls instance.toCanonicalCborHex without Effect wrapper
- * 
+ *
  * @example
  * import { NativeScript } from "@lucid-evolution/experimental";
- * 
+ *
  * // Assume we have a NativeScript instance
  * const instance = ... ;
- * 
+ *
  * // Using try/catch for error handling
  * try {
  *   const result = NativeScript.toCanonicalCborHexUnsafe(instance);
@@ -481,7 +498,7 @@ export const toCanonicalCborHex = Effect.fn(
  * } catch (error) {
  *   console.error(`NativeScript.toCanonicalCborHexUnsafe failed: ${error.message}`);
  * }
- * 
+ *
  * @since 2.0.0
  * @category MethodsUnsafe
  */
@@ -490,38 +507,39 @@ export const toCanonicalCborHexUnsafe = (instance: CML.NativeScript): string =>
 
 /**
  * Static method fromCborHex of NativeScript
- * 
+ *
  * @example
  * import { NativeScript } from "@lucid-evolution/experimental";
  * import { Effect } from "effect";
- * 
+ *
  * // Using Effect for safe execution with error handling
  * Effect.gen(function*() {
- * 
+ *
  *   const result = yield* NativeScript.fromCborHex( parameters );
  *   console.log(result);
  * });
- * 
+ *
  * @since 2.0.0
  * @category Constructors
  */
 export const fromCborHex = Effect.fn(function* (cborBytes: string) {
   return yield* Effect.try({
     try: () => CML.NativeScript.from_cbor_hex(cborBytes),
-    catch: () => new NativeScriptError({
-      message: `NativeScript.fromCborHex failed with parameters: ${cborBytes}. Hint: Make sure it's a valid hex string representing CBOR data.`,
-    }),
+    catch: () =>
+      new NativeScriptError({
+        message: `NativeScript.fromCborHex failed with parameters: ${cborBytes}. Hint: Make sure it's a valid hex string representing CBOR data.`,
+      }),
   });
 });
 
 /**
  * Unsafely calls NativeScript.fromCborHex without Effect wrapper
- * 
+ *
  * @example
  * import { NativeScript } from "@lucid-evolution/experimental";
- * 
- * 
- * 
+ *
+ *
+ *
  * // Using try/catch for error handling
  * try {
  *   const result = NativeScript.fromCborHexUnsafe( parameters );
@@ -529,7 +547,7 @@ export const fromCborHex = Effect.fn(function* (cborBytes: string) {
  * } catch (error) {
  *   console.error(`NativeScript.fromCborHexUnsafe failed: ${error.message}`);
  * }
- * 
+ *
  * @since 2.0.0
  * @category ConstructorsUnsafe
  */
@@ -538,11 +556,11 @@ export const fromCborHexUnsafe = (cborBytes: string) =>
 
 /**
  * Method toJson of NativeScript
- * 
+ *
  * @example
  * import { NativeScript } from "@lucid-evolution/experimental";
  * import { Effect } from "effect";
- * 
+ *
  * // Using Effect for safe execution with error handling
  * Effect.gen(function*() {
  * // Assume we have a NativeScript instance
@@ -550,7 +568,7 @@ export const fromCborHexUnsafe = (cborBytes: string) =>
  *   const result = yield* NativeScript.toJson(instance);
  *   console.log(result);
  * });
- * 
+ *
  * @since 2.0.0
  * @category Methods
  */
@@ -562,18 +580,18 @@ export const toJson = Effect.fn(
         new NativeScriptError({
           message: `NativeScript.toJson failed NativeScript is not valid for string conversion. Hint: Validate your JSON structure.`,
         }),
-    })
+    }),
 );
 
 /**
  * Unsafely calls instance.toJson without Effect wrapper
- * 
+ *
  * @example
  * import { NativeScript } from "@lucid-evolution/experimental";
- * 
+ *
  * // Assume we have a NativeScript instance
  * const instance = ... ;
- * 
+ *
  * // Using try/catch for error handling
  * try {
  *   const result = NativeScript.toJsonUnsafe(instance);
@@ -581,7 +599,7 @@ export const toJson = Effect.fn(
  * } catch (error) {
  *   console.error(`NativeScript.toJsonUnsafe failed: ${error.message}`);
  * }
- * 
+ *
  * @since 2.0.0
  * @category MethodsUnsafe
  */
@@ -590,11 +608,11 @@ export const toJsonUnsafe = (instance: CML.NativeScript): string =>
 
 /**
  * Method toJsValue of NativeScript
- * 
+ *
  * @example
  * import { NativeScript } from "@lucid-evolution/experimental";
  * import { Effect } from "effect";
- * 
+ *
  * // Using Effect for safe execution with error handling
  * Effect.gen(function*() {
  * // Assume we have a NativeScript instance
@@ -602,7 +620,7 @@ export const toJsonUnsafe = (instance: CML.NativeScript): string =>
  *   const result = yield* NativeScript.toJsValue(instance);
  *   console.log(result);
  * });
- * 
+ *
  * @since 2.0.0
  * @category Methods
  */
@@ -614,18 +632,18 @@ export const toJsValue = Effect.fn(
         new NativeScriptError({
           message: `NativeScript.toJsValue failed NativeScript is not valid for any conversion. `,
         }),
-    })
+    }),
 );
 
 /**
  * Unsafely calls instance.toJsValue without Effect wrapper
- * 
+ *
  * @example
  * import { NativeScript } from "@lucid-evolution/experimental";
- * 
+ *
  * // Assume we have a NativeScript instance
  * const instance = ... ;
- * 
+ *
  * // Using try/catch for error handling
  * try {
  *   const result = NativeScript.toJsValueUnsafe(instance);
@@ -633,7 +651,7 @@ export const toJsValue = Effect.fn(
  * } catch (error) {
  *   console.error(`NativeScript.toJsValueUnsafe failed: ${error.message}`);
  * }
- * 
+ *
  * @since 2.0.0
  * @category MethodsUnsafe
  */
@@ -642,38 +660,39 @@ export const toJsValueUnsafe = (instance: CML.NativeScript): any =>
 
 /**
  * Static method fromJson of NativeScript
- * 
+ *
  * @example
  * import { NativeScript } from "@lucid-evolution/experimental";
  * import { Effect } from "effect";
- * 
+ *
  * // Using Effect for safe execution with error handling
  * Effect.gen(function*() {
- * 
+ *
  *   const result = yield* NativeScript.fromJson( parameters );
  *   console.log(result);
  * });
- * 
+ *
  * @since 2.0.0
  * @category Constructors
  */
 export const fromJson = Effect.fn(function* (json: string) {
   return yield* Effect.try({
     try: () => CML.NativeScript.from_json(json),
-    catch: () => new NativeScriptError({
-      message: `NativeScript.fromJson failed with parameters: ${json}. Hint: Validate your JSON structure.`,
-    }),
+    catch: () =>
+      new NativeScriptError({
+        message: `NativeScript.fromJson failed with parameters: ${json}. Hint: Validate your JSON structure.`,
+      }),
   });
 });
 
 /**
  * Unsafely calls NativeScript.fromJson without Effect wrapper
- * 
+ *
  * @example
  * import { NativeScript } from "@lucid-evolution/experimental";
- * 
- * 
- * 
+ *
+ *
+ *
  * // Using try/catch for error handling
  * try {
  *   const result = NativeScript.fromJsonUnsafe( parameters );
@@ -681,47 +700,49 @@ export const fromJson = Effect.fn(function* (json: string) {
  * } catch (error) {
  *   console.error(`NativeScript.fromJsonUnsafe failed: ${error.message}`);
  * }
- * 
+ *
  * @since 2.0.0
  * @category ConstructorsUnsafe
  */
-export const fromJsonUnsafe = (json: string) =>
-  Effect.runSync(fromJson(json));
+export const fromJsonUnsafe = (json: string) => Effect.runSync(fromJson(json));
 
 /**
  * Static method newScriptPubkey of NativeScript
- * 
+ *
  * @example
  * import { NativeScript } from "@lucid-evolution/experimental";
  * import { Effect } from "effect";
- * 
+ *
  * // Using Effect for safe execution with error handling
  * Effect.gen(function*() {
- * 
+ *
  *   const result = yield* NativeScript.newScriptPubkey( parameters );
  *   console.log(result);
  * });
- * 
+ *
  * @since 2.0.0
  * @category Constructors
  */
-export const newScriptPubkey = Effect.fn(function* (ed25519KeyHash: CML.Ed25519KeyHash) {
+export const newScriptPubkey = Effect.fn(function* (
+  ed25519KeyHash: CML.Ed25519KeyHash,
+) {
   return yield* Effect.try({
     try: () => CML.NativeScript.new_script_pubkey(ed25519KeyHash),
-    catch: () => new NativeScriptError({
-      message: `NativeScript.newScriptPubkey failed with parameters: ${ed25519KeyHash} (Ed25519KeyHash). `,
-    }),
+    catch: () =>
+      new NativeScriptError({
+        message: `NativeScript.newScriptPubkey failed with parameters: ${ed25519KeyHash} (Ed25519KeyHash). `,
+      }),
   });
 });
 
 /**
  * Unsafely calls NativeScript.newScriptPubkey without Effect wrapper
- * 
+ *
  * @example
  * import { NativeScript } from "@lucid-evolution/experimental";
- * 
- * 
- * 
+ *
+ *
+ *
  * // Using try/catch for error handling
  * try {
  *   const result = NativeScript.newScriptPubkeyUnsafe( parameters );
@@ -729,7 +750,7 @@ export const newScriptPubkey = Effect.fn(function* (ed25519KeyHash: CML.Ed25519K
  * } catch (error) {
  *   console.error(`NativeScript.newScriptPubkeyUnsafe failed: ${error.message}`);
  * }
- * 
+ *
  * @since 2.0.0
  * @category ConstructorsUnsafe
  */
@@ -738,38 +759,41 @@ export const newScriptPubkeyUnsafe = (ed25519KeyHash: CML.Ed25519KeyHash) =>
 
 /**
  * Static method newScriptAll of NativeScript
- * 
+ *
  * @example
  * import { NativeScript } from "@lucid-evolution/experimental";
  * import { Effect } from "effect";
- * 
+ *
  * // Using Effect for safe execution with error handling
  * Effect.gen(function*() {
- * 
+ *
  *   const result = yield* NativeScript.newScriptAll( parameters );
  *   console.log(result);
  * });
- * 
+ *
  * @since 2.0.0
  * @category Constructors
  */
-export const newScriptAll = Effect.fn(function* (nativeScripts: CML.NativeScriptList) {
+export const newScriptAll = Effect.fn(function* (
+  nativeScripts: CML.NativeScriptList,
+) {
   return yield* Effect.try({
     try: () => CML.NativeScript.new_script_all(nativeScripts),
-    catch: () => new NativeScriptError({
-      message: `NativeScript.newScriptAll failed with parameters: ${nativeScripts} (NativeScriptList). `,
-    }),
+    catch: () =>
+      new NativeScriptError({
+        message: `NativeScript.newScriptAll failed with parameters: ${nativeScripts} (NativeScriptList). `,
+      }),
   });
 });
 
 /**
  * Unsafely calls NativeScript.newScriptAll without Effect wrapper
- * 
+ *
  * @example
  * import { NativeScript } from "@lucid-evolution/experimental";
- * 
- * 
- * 
+ *
+ *
+ *
  * // Using try/catch for error handling
  * try {
  *   const result = NativeScript.newScriptAllUnsafe( parameters );
@@ -777,7 +801,7 @@ export const newScriptAll = Effect.fn(function* (nativeScripts: CML.NativeScript
  * } catch (error) {
  *   console.error(`NativeScript.newScriptAllUnsafe failed: ${error.message}`);
  * }
- * 
+ *
  * @since 2.0.0
  * @category ConstructorsUnsafe
  */
@@ -786,38 +810,41 @@ export const newScriptAllUnsafe = (nativeScripts: CML.NativeScriptList) =>
 
 /**
  * Static method newScriptAny of NativeScript
- * 
+ *
  * @example
  * import { NativeScript } from "@lucid-evolution/experimental";
  * import { Effect } from "effect";
- * 
+ *
  * // Using Effect for safe execution with error handling
  * Effect.gen(function*() {
- * 
+ *
  *   const result = yield* NativeScript.newScriptAny( parameters );
  *   console.log(result);
  * });
- * 
+ *
  * @since 2.0.0
  * @category Constructors
  */
-export const newScriptAny = Effect.fn(function* (nativeScripts: CML.NativeScriptList) {
+export const newScriptAny = Effect.fn(function* (
+  nativeScripts: CML.NativeScriptList,
+) {
   return yield* Effect.try({
     try: () => CML.NativeScript.new_script_any(nativeScripts),
-    catch: () => new NativeScriptError({
-      message: `NativeScript.newScriptAny failed with parameters: ${nativeScripts} (NativeScriptList). `,
-    }),
+    catch: () =>
+      new NativeScriptError({
+        message: `NativeScript.newScriptAny failed with parameters: ${nativeScripts} (NativeScriptList). `,
+      }),
   });
 });
 
 /**
  * Unsafely calls NativeScript.newScriptAny without Effect wrapper
- * 
+ *
  * @example
  * import { NativeScript } from "@lucid-evolution/experimental";
- * 
- * 
- * 
+ *
+ *
+ *
  * // Using try/catch for error handling
  * try {
  *   const result = NativeScript.newScriptAnyUnsafe( parameters );
@@ -825,7 +852,7 @@ export const newScriptAny = Effect.fn(function* (nativeScripts: CML.NativeScript
  * } catch (error) {
  *   console.error(`NativeScript.newScriptAnyUnsafe failed: ${error.message}`);
  * }
- * 
+ *
  * @since 2.0.0
  * @category ConstructorsUnsafe
  */
@@ -834,38 +861,42 @@ export const newScriptAnyUnsafe = (nativeScripts: CML.NativeScriptList) =>
 
 /**
  * Static method newScriptNOfK of NativeScript
- * 
+ *
  * @example
  * import { NativeScript } from "@lucid-evolution/experimental";
  * import { Effect } from "effect";
- * 
+ *
  * // Using Effect for safe execution with error handling
  * Effect.gen(function*() {
- * 
+ *
  *   const result = yield* NativeScript.newScriptNOfK( parameters );
  *   console.log(result);
  * });
- * 
+ *
  * @since 2.0.0
  * @category Constructors
  */
-export const newScriptNOfK = Effect.fn(function* (n: bigint, nativeScripts: CML.NativeScriptList) {
+export const newScriptNOfK = Effect.fn(function* (
+  n: bigint,
+  nativeScripts: CML.NativeScriptList,
+) {
   return yield* Effect.try({
     try: () => CML.NativeScript.new_script_n_of_k(n, nativeScripts),
-    catch: () => new NativeScriptError({
-      message: `NativeScript.newScriptNOfK failed with parameters: ${n}, ${nativeScripts} (NativeScriptList). `,
-    }),
+    catch: () =>
+      new NativeScriptError({
+        message: `NativeScript.newScriptNOfK failed with parameters: ${n}, ${nativeScripts} (NativeScriptList). `,
+      }),
   });
 });
 
 /**
  * Unsafely calls NativeScript.newScriptNOfK without Effect wrapper
- * 
+ *
  * @example
  * import { NativeScript } from "@lucid-evolution/experimental";
- * 
- * 
- * 
+ *
+ *
+ *
  * // Using try/catch for error handling
  * try {
  *   const result = NativeScript.newScriptNOfKUnsafe( parameters );
@@ -873,47 +904,50 @@ export const newScriptNOfK = Effect.fn(function* (n: bigint, nativeScripts: CML.
  * } catch (error) {
  *   console.error(`NativeScript.newScriptNOfKUnsafe failed: ${error.message}`);
  * }
- * 
+ *
  * @since 2.0.0
  * @category ConstructorsUnsafe
  */
-export const newScriptNOfKUnsafe = (n: bigint, nativeScripts: CML.NativeScriptList) =>
-  Effect.runSync(newScriptNOfK(n, nativeScripts));
+export const newScriptNOfKUnsafe = (
+  n: bigint,
+  nativeScripts: CML.NativeScriptList,
+) => Effect.runSync(newScriptNOfK(n, nativeScripts));
 
 /**
  * Static method newScriptInvalidBefore of NativeScript
- * 
+ *
  * @example
  * import { NativeScript } from "@lucid-evolution/experimental";
  * import { Effect } from "effect";
- * 
+ *
  * // Using Effect for safe execution with error handling
  * Effect.gen(function*() {
- * 
+ *
  *   const result = yield* NativeScript.newScriptInvalidBefore( parameters );
  *   console.log(result);
  * });
- * 
+ *
  * @since 2.0.0
  * @category Constructors
  */
 export const newScriptInvalidBefore = Effect.fn(function* (before: bigint) {
   return yield* Effect.try({
     try: () => CML.NativeScript.new_script_invalid_before(before),
-    catch: () => new NativeScriptError({
-      message: `NativeScript.newScriptInvalidBefore failed with parameters: ${before}. `,
-    }),
+    catch: () =>
+      new NativeScriptError({
+        message: `NativeScript.newScriptInvalidBefore failed with parameters: ${before}. `,
+      }),
   });
 });
 
 /**
  * Unsafely calls NativeScript.newScriptInvalidBefore without Effect wrapper
- * 
+ *
  * @example
  * import { NativeScript } from "@lucid-evolution/experimental";
- * 
- * 
- * 
+ *
+ *
+ *
  * // Using try/catch for error handling
  * try {
  *   const result = NativeScript.newScriptInvalidBeforeUnsafe( parameters );
@@ -921,7 +955,7 @@ export const newScriptInvalidBefore = Effect.fn(function* (before: bigint) {
  * } catch (error) {
  *   console.error(`NativeScript.newScriptInvalidBeforeUnsafe failed: ${error.message}`);
  * }
- * 
+ *
  * @since 2.0.0
  * @category ConstructorsUnsafe
  */
@@ -930,38 +964,39 @@ export const newScriptInvalidBeforeUnsafe = (before: bigint) =>
 
 /**
  * Static method newScriptInvalidHereafter of NativeScript
- * 
+ *
  * @example
  * import { NativeScript } from "@lucid-evolution/experimental";
  * import { Effect } from "effect";
- * 
+ *
  * // Using Effect for safe execution with error handling
  * Effect.gen(function*() {
- * 
+ *
  *   const result = yield* NativeScript.newScriptInvalidHereafter( parameters );
  *   console.log(result);
  * });
- * 
+ *
  * @since 2.0.0
  * @category Constructors
  */
 export const newScriptInvalidHereafter = Effect.fn(function* (after: bigint) {
   return yield* Effect.try({
     try: () => CML.NativeScript.new_script_invalid_hereafter(after),
-    catch: () => new NativeScriptError({
-      message: `NativeScript.newScriptInvalidHereafter failed with parameters: ${after}. `,
-    }),
+    catch: () =>
+      new NativeScriptError({
+        message: `NativeScript.newScriptInvalidHereafter failed with parameters: ${after}. `,
+      }),
   });
 });
 
 /**
  * Unsafely calls NativeScript.newScriptInvalidHereafter without Effect wrapper
- * 
+ *
  * @example
  * import { NativeScript } from "@lucid-evolution/experimental";
- * 
- * 
- * 
+ *
+ *
+ *
  * // Using try/catch for error handling
  * try {
  *   const result = NativeScript.newScriptInvalidHereafterUnsafe( parameters );
@@ -969,7 +1004,7 @@ export const newScriptInvalidHereafter = Effect.fn(function* (after: bigint) {
  * } catch (error) {
  *   console.error(`NativeScript.newScriptInvalidHereafterUnsafe failed: ${error.message}`);
  * }
- * 
+ *
  * @since 2.0.0
  * @category ConstructorsUnsafe
  */
@@ -978,11 +1013,11 @@ export const newScriptInvalidHereafterUnsafe = (after: bigint) =>
 
 /**
  * Method kind of NativeScript
- * 
+ *
  * @example
  * import { NativeScript } from "@lucid-evolution/experimental";
  * import { Effect } from "effect";
- * 
+ *
  * // Using Effect for safe execution with error handling
  * Effect.gen(function*() {
  * // Assume we have a NativeScript instance
@@ -990,30 +1025,32 @@ export const newScriptInvalidHereafterUnsafe = (after: bigint) =>
  *   const result = yield* NativeScript.kind(instance);
  *   console.log(result);
  * });
- * 
+ *
  * @since 2.0.0
  * @category Methods
  */
 export const kind = Effect.fn(
-  (instance: CML.NativeScript): Effect.Effect<CML.NativeScriptKind, NativeScriptError> =>
+  (
+    instance: CML.NativeScript,
+  ): Effect.Effect<CML.NativeScriptKind, NativeScriptError> =>
     Effect.try({
       try: () => instance.kind(),
       catch: () =>
         new NativeScriptError({
           message: `NativeScript.kind failed `,
         }),
-    })
+    }),
 );
 
 /**
  * Unsafely calls instance.kind without Effect wrapper
- * 
+ *
  * @example
  * import { NativeScript } from "@lucid-evolution/experimental";
- * 
+ *
  * // Assume we have a NativeScript instance
  * const instance = ... ;
- * 
+ *
  * // Using try/catch for error handling
  * try {
  *   const result = NativeScript.kindUnsafe(instance);
@@ -1021,7 +1058,7 @@ export const kind = Effect.fn(
  * } catch (error) {
  *   console.error(`NativeScript.kindUnsafe failed: ${error.message}`);
  * }
- * 
+ *
  * @since 2.0.0
  * @category MethodsUnsafe
  */
@@ -1030,11 +1067,11 @@ export const kindUnsafe = (instance: CML.NativeScript): CML.NativeScriptKind =>
 
 /**
  * Method asScriptPubkey of NativeScript
- * 
+ *
  * @example
  * import { NativeScript } from "@lucid-evolution/experimental";
  * import { Effect } from "effect";
- * 
+ *
  * // Using Effect for safe execution with error handling
  * Effect.gen(function*() {
  * // Assume we have a NativeScript instance
@@ -1042,30 +1079,32 @@ export const kindUnsafe = (instance: CML.NativeScript): CML.NativeScriptKind =>
  *   const result = yield* NativeScript.asScriptPubkey(instance);
  *   console.log(result);
  * });
- * 
+ *
  * @since 2.0.0
  * @category Methods
  */
 export const asScriptPubkey = Effect.fn(
-  (instance: CML.NativeScript): Effect.Effect<CML.ScriptPubkey | undefined, NativeScriptError> =>
+  (
+    instance: CML.NativeScript,
+  ): Effect.Effect<CML.ScriptPubkey | undefined, NativeScriptError> =>
     Effect.try({
       try: () => instance.as_script_pubkey(),
       catch: () =>
         new NativeScriptError({
           message: `NativeScript.asScriptPubkey failed `,
         }),
-    })
+    }),
 );
 
 /**
  * Unsafely calls instance.asScriptPubkey without Effect wrapper
- * 
+ *
  * @example
  * import { NativeScript } from "@lucid-evolution/experimental";
- * 
+ *
  * // Assume we have a NativeScript instance
  * const instance = ... ;
- * 
+ *
  * // Using try/catch for error handling
  * try {
  *   const result = NativeScript.asScriptPubkeyUnsafe(instance);
@@ -1073,20 +1112,21 @@ export const asScriptPubkey = Effect.fn(
  * } catch (error) {
  *   console.error(`NativeScript.asScriptPubkeyUnsafe failed: ${error.message}`);
  * }
- * 
+ *
  * @since 2.0.0
  * @category MethodsUnsafe
  */
-export const asScriptPubkeyUnsafe = (instance: CML.NativeScript): CML.ScriptPubkey | undefined =>
-  Effect.runSync(asScriptPubkey(instance));
+export const asScriptPubkeyUnsafe = (
+  instance: CML.NativeScript,
+): CML.ScriptPubkey | undefined => Effect.runSync(asScriptPubkey(instance));
 
 /**
  * Method asScriptAll of NativeScript
- * 
+ *
  * @example
  * import { NativeScript } from "@lucid-evolution/experimental";
  * import { Effect } from "effect";
- * 
+ *
  * // Using Effect for safe execution with error handling
  * Effect.gen(function*() {
  * // Assume we have a NativeScript instance
@@ -1094,30 +1134,32 @@ export const asScriptPubkeyUnsafe = (instance: CML.NativeScript): CML.ScriptPubk
  *   const result = yield* NativeScript.asScriptAll(instance);
  *   console.log(result);
  * });
- * 
+ *
  * @since 2.0.0
  * @category Methods
  */
 export const asScriptAll = Effect.fn(
-  (instance: CML.NativeScript): Effect.Effect<CML.ScriptAll | undefined, NativeScriptError> =>
+  (
+    instance: CML.NativeScript,
+  ): Effect.Effect<CML.ScriptAll | undefined, NativeScriptError> =>
     Effect.try({
       try: () => instance.as_script_all(),
       catch: () =>
         new NativeScriptError({
           message: `NativeScript.asScriptAll failed `,
         }),
-    })
+    }),
 );
 
 /**
  * Unsafely calls instance.asScriptAll without Effect wrapper
- * 
+ *
  * @example
  * import { NativeScript } from "@lucid-evolution/experimental";
- * 
+ *
  * // Assume we have a NativeScript instance
  * const instance = ... ;
- * 
+ *
  * // Using try/catch for error handling
  * try {
  *   const result = NativeScript.asScriptAllUnsafe(instance);
@@ -1125,20 +1167,21 @@ export const asScriptAll = Effect.fn(
  * } catch (error) {
  *   console.error(`NativeScript.asScriptAllUnsafe failed: ${error.message}`);
  * }
- * 
+ *
  * @since 2.0.0
  * @category MethodsUnsafe
  */
-export const asScriptAllUnsafe = (instance: CML.NativeScript): CML.ScriptAll | undefined =>
-  Effect.runSync(asScriptAll(instance));
+export const asScriptAllUnsafe = (
+  instance: CML.NativeScript,
+): CML.ScriptAll | undefined => Effect.runSync(asScriptAll(instance));
 
 /**
  * Method asScriptAny of NativeScript
- * 
+ *
  * @example
  * import { NativeScript } from "@lucid-evolution/experimental";
  * import { Effect } from "effect";
- * 
+ *
  * // Using Effect for safe execution with error handling
  * Effect.gen(function*() {
  * // Assume we have a NativeScript instance
@@ -1146,30 +1189,32 @@ export const asScriptAllUnsafe = (instance: CML.NativeScript): CML.ScriptAll | u
  *   const result = yield* NativeScript.asScriptAny(instance);
  *   console.log(result);
  * });
- * 
+ *
  * @since 2.0.0
  * @category Methods
  */
 export const asScriptAny = Effect.fn(
-  (instance: CML.NativeScript): Effect.Effect<CML.ScriptAny | undefined, NativeScriptError> =>
+  (
+    instance: CML.NativeScript,
+  ): Effect.Effect<CML.ScriptAny | undefined, NativeScriptError> =>
     Effect.try({
       try: () => instance.as_script_any(),
       catch: () =>
         new NativeScriptError({
           message: `NativeScript.asScriptAny failed `,
         }),
-    })
+    }),
 );
 
 /**
  * Unsafely calls instance.asScriptAny without Effect wrapper
- * 
+ *
  * @example
  * import { NativeScript } from "@lucid-evolution/experimental";
- * 
+ *
  * // Assume we have a NativeScript instance
  * const instance = ... ;
- * 
+ *
  * // Using try/catch for error handling
  * try {
  *   const result = NativeScript.asScriptAnyUnsafe(instance);
@@ -1177,20 +1222,21 @@ export const asScriptAny = Effect.fn(
  * } catch (error) {
  *   console.error(`NativeScript.asScriptAnyUnsafe failed: ${error.message}`);
  * }
- * 
+ *
  * @since 2.0.0
  * @category MethodsUnsafe
  */
-export const asScriptAnyUnsafe = (instance: CML.NativeScript): CML.ScriptAny | undefined =>
-  Effect.runSync(asScriptAny(instance));
+export const asScriptAnyUnsafe = (
+  instance: CML.NativeScript,
+): CML.ScriptAny | undefined => Effect.runSync(asScriptAny(instance));
 
 /**
  * Method asScriptNOfK of NativeScript
- * 
+ *
  * @example
  * import { NativeScript } from "@lucid-evolution/experimental";
  * import { Effect } from "effect";
- * 
+ *
  * // Using Effect for safe execution with error handling
  * Effect.gen(function*() {
  * // Assume we have a NativeScript instance
@@ -1198,30 +1244,32 @@ export const asScriptAnyUnsafe = (instance: CML.NativeScript): CML.ScriptAny | u
  *   const result = yield* NativeScript.asScriptNOfK(instance);
  *   console.log(result);
  * });
- * 
+ *
  * @since 2.0.0
  * @category Methods
  */
 export const asScriptNOfK = Effect.fn(
-  (instance: CML.NativeScript): Effect.Effect<CML.ScriptNOfK | undefined, NativeScriptError> =>
+  (
+    instance: CML.NativeScript,
+  ): Effect.Effect<CML.ScriptNOfK | undefined, NativeScriptError> =>
     Effect.try({
       try: () => instance.as_script_n_of_k(),
       catch: () =>
         new NativeScriptError({
           message: `NativeScript.asScriptNOfK failed `,
         }),
-    })
+    }),
 );
 
 /**
  * Unsafely calls instance.asScriptNOfK without Effect wrapper
- * 
+ *
  * @example
  * import { NativeScript } from "@lucid-evolution/experimental";
- * 
+ *
  * // Assume we have a NativeScript instance
  * const instance = ... ;
- * 
+ *
  * // Using try/catch for error handling
  * try {
  *   const result = NativeScript.asScriptNOfKUnsafe(instance);
@@ -1229,20 +1277,21 @@ export const asScriptNOfK = Effect.fn(
  * } catch (error) {
  *   console.error(`NativeScript.asScriptNOfKUnsafe failed: ${error.message}`);
  * }
- * 
+ *
  * @since 2.0.0
  * @category MethodsUnsafe
  */
-export const asScriptNOfKUnsafe = (instance: CML.NativeScript): CML.ScriptNOfK | undefined =>
-  Effect.runSync(asScriptNOfK(instance));
+export const asScriptNOfKUnsafe = (
+  instance: CML.NativeScript,
+): CML.ScriptNOfK | undefined => Effect.runSync(asScriptNOfK(instance));
 
 /**
  * Method asScriptInvalidBefore of NativeScript
- * 
+ *
  * @example
  * import { NativeScript } from "@lucid-evolution/experimental";
  * import { Effect } from "effect";
- * 
+ *
  * // Using Effect for safe execution with error handling
  * Effect.gen(function*() {
  * // Assume we have a NativeScript instance
@@ -1250,30 +1299,32 @@ export const asScriptNOfKUnsafe = (instance: CML.NativeScript): CML.ScriptNOfK |
  *   const result = yield* NativeScript.asScriptInvalidBefore(instance);
  *   console.log(result);
  * });
- * 
+ *
  * @since 2.0.0
  * @category Methods
  */
 export const asScriptInvalidBefore = Effect.fn(
-  (instance: CML.NativeScript): Effect.Effect<CML.ScriptInvalidBefore | undefined, NativeScriptError> =>
+  (
+    instance: CML.NativeScript,
+  ): Effect.Effect<CML.ScriptInvalidBefore | undefined, NativeScriptError> =>
     Effect.try({
       try: () => instance.as_script_invalid_before(),
       catch: () =>
         new NativeScriptError({
           message: `NativeScript.asScriptInvalidBefore failed `,
         }),
-    })
+    }),
 );
 
 /**
  * Unsafely calls instance.asScriptInvalidBefore without Effect wrapper
- * 
+ *
  * @example
  * import { NativeScript } from "@lucid-evolution/experimental";
- * 
+ *
  * // Assume we have a NativeScript instance
  * const instance = ... ;
- * 
+ *
  * // Using try/catch for error handling
  * try {
  *   const result = NativeScript.asScriptInvalidBeforeUnsafe(instance);
@@ -1281,20 +1332,22 @@ export const asScriptInvalidBefore = Effect.fn(
  * } catch (error) {
  *   console.error(`NativeScript.asScriptInvalidBeforeUnsafe failed: ${error.message}`);
  * }
- * 
+ *
  * @since 2.0.0
  * @category MethodsUnsafe
  */
-export const asScriptInvalidBeforeUnsafe = (instance: CML.NativeScript): CML.ScriptInvalidBefore | undefined =>
+export const asScriptInvalidBeforeUnsafe = (
+  instance: CML.NativeScript,
+): CML.ScriptInvalidBefore | undefined =>
   Effect.runSync(asScriptInvalidBefore(instance));
 
 /**
  * Method asScriptInvalidHereafter of NativeScript
- * 
+ *
  * @example
  * import { NativeScript } from "@lucid-evolution/experimental";
  * import { Effect } from "effect";
- * 
+ *
  * // Using Effect for safe execution with error handling
  * Effect.gen(function*() {
  * // Assume we have a NativeScript instance
@@ -1302,30 +1355,32 @@ export const asScriptInvalidBeforeUnsafe = (instance: CML.NativeScript): CML.Scr
  *   const result = yield* NativeScript.asScriptInvalidHereafter(instance);
  *   console.log(result);
  * });
- * 
+ *
  * @since 2.0.0
  * @category Methods
  */
 export const asScriptInvalidHereafter = Effect.fn(
-  (instance: CML.NativeScript): Effect.Effect<CML.ScriptInvalidHereafter | undefined, NativeScriptError> =>
+  (
+    instance: CML.NativeScript,
+  ): Effect.Effect<CML.ScriptInvalidHereafter | undefined, NativeScriptError> =>
     Effect.try({
       try: () => instance.as_script_invalid_hereafter(),
       catch: () =>
         new NativeScriptError({
           message: `NativeScript.asScriptInvalidHereafter failed `,
         }),
-    })
+    }),
 );
 
 /**
  * Unsafely calls instance.asScriptInvalidHereafter without Effect wrapper
- * 
+ *
  * @example
  * import { NativeScript } from "@lucid-evolution/experimental";
- * 
+ *
  * // Assume we have a NativeScript instance
  * const instance = ... ;
- * 
+ *
  * // Using try/catch for error handling
  * try {
  *   const result = NativeScript.asScriptInvalidHereafterUnsafe(instance);
@@ -1333,9 +1388,11 @@ export const asScriptInvalidHereafter = Effect.fn(
  * } catch (error) {
  *   console.error(`NativeScript.asScriptInvalidHereafterUnsafe failed: ${error.message}`);
  * }
- * 
+ *
  * @since 2.0.0
  * @category MethodsUnsafe
  */
-export const asScriptInvalidHereafterUnsafe = (instance: CML.NativeScript): CML.ScriptInvalidHereafter | undefined =>
+export const asScriptInvalidHereafterUnsafe = (
+  instance: CML.NativeScript,
+): CML.ScriptInvalidHereafter | undefined =>
   Effect.runSync(asScriptInvalidHereafter(instance));

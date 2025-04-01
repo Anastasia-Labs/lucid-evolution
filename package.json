@@ -18,9 +18,10 @@
     "@lucid-evolution/eslint-config": "workspace:*",
     "@lucid-evolution/typescript-config": "workspace:*",
     "prettier": "^3.2.5",
-    "turbo": "1.13.3"
+    "turbo": "2.4.4"
   },
   "engines": {
     "node": ">=18"
-  }
+  },
+  "packageManager": "pnpm@9.12.3"
 }

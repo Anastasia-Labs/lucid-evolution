@@ -14,7 +14,7 @@ export type PoolMetadata = CML.PoolMetadata;
 
 /**
  * Error class for PoolMetadata operations
- * 
+ *
  * This error is thrown when operations on PoolMetadata instances fail.
  *
  * @since 2.0.0
@@ -26,11 +26,11 @@ export class PoolMetadataError extends Data.TaggedError("PoolMetadataError")<{
 
 /**
  * Method free of PoolMetadata
- * 
+ *
  * @example
  * import { PoolMetadata } from "@lucid-evolution/experimental";
  * import { Effect } from "effect";
- * 
+ *
  * // Using Effect for safe execution with error handling
  * Effect.gen(function*() {
  * // Assume we have a PoolMetadata instance
@@ -38,7 +38,7 @@ export class PoolMetadataError extends Data.TaggedError("PoolMetadataError")<{
  *   const result = yield* PoolMetadata.free(instance);
  *   console.log(result);
  * });
- * 
+ *
  * @since 2.0.0
  * @category Methods
  */
@@ -50,18 +50,18 @@ export const free = Effect.fn(
         new PoolMetadataError({
           message: `PoolMetadata.free failed Hint: Check if you're calling free() more than once.`,
         }),
-    })
+    }),
 );
 
 /**
  * Unsafely calls instance.free without Effect wrapper
- * 
+ *
  * @example
  * import { PoolMetadata } from "@lucid-evolution/experimental";
- * 
+ *
  * // Assume we have a PoolMetadata instance
  * const instance = ... ;
- * 
+ *
  * // Using try/catch for error handling
  * try {
  *   const result = PoolMetadata.freeUnsafe(instance);
@@ -69,7 +69,7 @@ export const free = Effect.fn(
  * } catch (error) {
  *   console.error(`PoolMetadata.freeUnsafe failed: ${error.message}`);
  * }
- * 
+ *
  * @since 2.0.0
  * @category MethodsUnsafe
  */
@@ -78,11 +78,11 @@ export const freeUnsafe = (instance: CML.PoolMetadata): void =>
 
 /**
  * Method toCborBytes of PoolMetadata
- * 
+ *
  * @example
  * import { PoolMetadata } from "@lucid-evolution/experimental";
  * import { Effect } from "effect";
- * 
+ *
  * // Using Effect for safe execution with error handling
  * Effect.gen(function*() {
  * // Assume we have a PoolMetadata instance
@@ -90,7 +90,7 @@ export const freeUnsafe = (instance: CML.PoolMetadata): void =>
  *   const result = yield* PoolMetadata.toCborBytes(instance);
  *   console.log(result);
  * });
- * 
+ *
  * @since 2.0.0
  * @category Methods
  */
@@ -102,18 +102,18 @@ export const toCborBytes = Effect.fn(
         new PoolMetadataError({
           message: `PoolMetadata.toCborBytes failed PoolMetadata is not valid for Uint8Array conversion. Hint: Check byte length and encoding.`,
         }),
-    })
+    }),
 );
 
 /**
  * Unsafely calls instance.toCborBytes without Effect wrapper
- * 
+ *
  * @example
  * import { PoolMetadata } from "@lucid-evolution/experimental";
- * 
+ *
  * // Assume we have a PoolMetadata instance
  * const instance = ... ;
- * 
+ *
  * // Using try/catch for error handling
  * try {
  *   const result = PoolMetadata.toCborBytesUnsafe(instance);
@@ -121,7 +121,7 @@ export const toCborBytes = Effect.fn(
  * } catch (error) {
  *   console.error(`PoolMetadata.toCborBytesUnsafe failed: ${error.message}`);
  * }
- * 
+ *
  * @since 2.0.0
  * @category MethodsUnsafe
  */
@@ -130,11 +130,11 @@ export const toCborBytesUnsafe = (instance: CML.PoolMetadata): Uint8Array =>
 
 /**
  * Method toCanonicalCborBytes of PoolMetadata
- * 
+ *
  * @example
  * import { PoolMetadata } from "@lucid-evolution/experimental";
  * import { Effect } from "effect";
- * 
+ *
  * // Using Effect for safe execution with error handling
  * Effect.gen(function*() {
  * // Assume we have a PoolMetadata instance
@@ -142,7 +142,7 @@ export const toCborBytesUnsafe = (instance: CML.PoolMetadata): Uint8Array =>
  *   const result = yield* PoolMetadata.toCanonicalCborBytes(instance);
  *   console.log(result);
  * });
- * 
+ *
  * @since 2.0.0
  * @category Methods
  */
@@ -154,18 +154,18 @@ export const toCanonicalCborBytes = Effect.fn(
         new PoolMetadataError({
           message: `PoolMetadata.toCanonicalCborBytes failed PoolMetadata is not valid for Uint8Array conversion. Hint: Check byte length and encoding.`,
         }),
-    })
+    }),
 );
 
 /**
  * Unsafely calls instance.toCanonicalCborBytes without Effect wrapper
- * 
+ *
  * @example
  * import { PoolMetadata } from "@lucid-evolution/experimental";
- * 
+ *
  * // Assume we have a PoolMetadata instance
  * const instance = ... ;
- * 
+ *
  * // Using try/catch for error handling
  * try {
  *   const result = PoolMetadata.toCanonicalCborBytesUnsafe(instance);
@@ -173,47 +173,49 @@ export const toCanonicalCborBytes = Effect.fn(
  * } catch (error) {
  *   console.error(`PoolMetadata.toCanonicalCborBytesUnsafe failed: ${error.message}`);
  * }
- * 
+ *
  * @since 2.0.0
  * @category MethodsUnsafe
  */
-export const toCanonicalCborBytesUnsafe = (instance: CML.PoolMetadata): Uint8Array =>
-  Effect.runSync(toCanonicalCborBytes(instance));
+export const toCanonicalCborBytesUnsafe = (
+  instance: CML.PoolMetadata,
+): Uint8Array => Effect.runSync(toCanonicalCborBytes(instance));
 
 /**
  * Static method fromCborBytes of PoolMetadata
- * 
+ *
  * @example
  * import { PoolMetadata } from "@lucid-evolution/experimental";
  * import { Effect } from "effect";
- * 
+ *
  * // Using Effect for safe execution with error handling
  * Effect.gen(function*() {
- * 
+ *
  *   const result = yield* PoolMetadata.fromCborBytes( parameters );
  *   console.log(result);
  * });
- * 
+ *
  * @since 2.0.0
  * @category Constructors
  */
 export const fromCborBytes = Effect.fn(function* (cborBytes: Uint8Array) {
   return yield* Effect.try({
     try: () => CML.PoolMetadata.from_cbor_bytes(cborBytes),
-    catch: () => new PoolMetadataError({
-      message: `PoolMetadata.fromCborBytes failed with parameters: ${cborBytes}. Hint: Check byte length and encoding.`,
-    }),
+    catch: () =>
+      new PoolMetadataError({
+        message: `PoolMetadata.fromCborBytes failed with parameters: ${cborBytes}. Hint: Check byte length and encoding.`,
+      }),
   });
 });
 
 /**
  * Unsafely calls PoolMetadata.fromCborBytes without Effect wrapper
- * 
+ *
  * @example
  * import { PoolMetadata } from "@lucid-evolution/experimental";
- * 
- * 
- * 
+ *
+ *
+ *
  * // Using try/catch for error handling
  * try {
  *   const result = PoolMetadata.fromCborBytesUnsafe( parameters );
@@ -221,7 +223,7 @@ export const fromCborBytes = Effect.fn(function* (cborBytes: Uint8Array) {
  * } catch (error) {
  *   console.error(`PoolMetadata.fromCborBytesUnsafe failed: ${error.message}`);
  * }
- * 
+ *
  * @since 2.0.0
  * @category ConstructorsUnsafe
  */
@@ -230,11 +232,11 @@ export const fromCborBytesUnsafe = (cborBytes: Uint8Array) =>
 
 /**
  * Method toCborHex of PoolMetadata
- * 
+ *
  * @example
  * import { PoolMetadata } from "@lucid-evolution/experimental";
  * import { Effect } from "effect";
- * 
+ *
  * // Using Effect for safe execution with error handling
  * Effect.gen(function*() {
  * // Assume we have a PoolMetadata instance
@@ -242,7 +244,7 @@ export const fromCborBytesUnsafe = (cborBytes: Uint8Array) =>
  *   const result = yield* PoolMetadata.toCborHex(instance);
  *   console.log(result);
  * });
- * 
+ *
  * @since 2.0.0
  * @category Methods
  */
@@ -254,18 +256,18 @@ export const toCborHex = Effect.fn(
         new PoolMetadataError({
           message: `PoolMetadata.toCborHex failed PoolMetadata is not valid for string conversion. Hint: Make sure it's a valid hex string representing CBOR data.`,
         }),
-    })
+    }),
 );
 
 /**
  * Unsafely calls instance.toCborHex without Effect wrapper
- * 
+ *
  * @example
  * import { PoolMetadata } from "@lucid-evolution/experimental";
- * 
+ *
  * // Assume we have a PoolMetadata instance
  * const instance = ... ;
- * 
+ *
  * // Using try/catch for error handling
  * try {
  *   const result = PoolMetadata.toCborHexUnsafe(instance);
@@ -273,7 +275,7 @@ export const toCborHex = Effect.fn(
  * } catch (error) {
  *   console.error(`PoolMetadata.toCborHexUnsafe failed: ${error.message}`);
  * }
- * 
+ *
  * @since 2.0.0
  * @category MethodsUnsafe
  */
@@ -282,11 +284,11 @@ export const toCborHexUnsafe = (instance: CML.PoolMetadata): string =>
 
 /**
  * Method toCanonicalCborHex of PoolMetadata
- * 
+ *
  * @example
  * import { PoolMetadata } from "@lucid-evolution/experimental";
  * import { Effect } from "effect";
- * 
+ *
  * // Using Effect for safe execution with error handling
  * Effect.gen(function*() {
  * // Assume we have a PoolMetadata instance
@@ -294,7 +296,7 @@ export const toCborHexUnsafe = (instance: CML.PoolMetadata): string =>
  *   const result = yield* PoolMetadata.toCanonicalCborHex(instance);
  *   console.log(result);
  * });
- * 
+ *
  * @since 2.0.0
  * @category Methods
  */
@@ -306,18 +308,18 @@ export const toCanonicalCborHex = Effect.fn(
         new PoolMetadataError({
           message: `PoolMetadata.toCanonicalCborHex failed PoolMetadata is not valid for string conversion. Hint: Make sure it's a valid hex string representing CBOR data.`,
         }),
-    })
+    }),
 );
 
 /**
  * Unsafely calls instance.toCanonicalCborHex without Effect wrapper
- * 
+ *
  * @example
  * import { PoolMetadata } from "@lucid-evolution/experimental";
- * 
+ *
  * // Assume we have a PoolMetadata instance
  * const instance = ... ;
- * 
+ *
  * // Using try/catch for error handling
  * try {
  *   const result = PoolMetadata.toCanonicalCborHexUnsafe(instance);
@@ -325,7 +327,7 @@ export const toCanonicalCborHex = Effect.fn(
  * } catch (error) {
  *   console.error(`PoolMetadata.toCanonicalCborHexUnsafe failed: ${error.message}`);
  * }
- * 
+ *
  * @since 2.0.0
  * @category MethodsUnsafe
  */
@@ -334,38 +336,39 @@ export const toCanonicalCborHexUnsafe = (instance: CML.PoolMetadata): string =>
 
 /**
  * Static method fromCborHex of PoolMetadata
- * 
+ *
  * @example
  * import { PoolMetadata } from "@lucid-evolution/experimental";
  * import { Effect } from "effect";
- * 
+ *
  * // Using Effect for safe execution with error handling
  * Effect.gen(function*() {
- * 
+ *
  *   const result = yield* PoolMetadata.fromCborHex( parameters );
  *   console.log(result);
  * });
- * 
+ *
  * @since 2.0.0
  * @category Constructors
  */
 export const fromCborHex = Effect.fn(function* (cborBytes: string) {
   return yield* Effect.try({
     try: () => CML.PoolMetadata.from_cbor_hex(cborBytes),
-    catch: () => new PoolMetadataError({
-      message: `PoolMetadata.fromCborHex failed with parameters: ${cborBytes}. Hint: Make sure it's a valid hex string representing CBOR data.`,
-    }),
+    catch: () =>
+      new PoolMetadataError({
+        message: `PoolMetadata.fromCborHex failed with parameters: ${cborBytes}. Hint: Make sure it's a valid hex string representing CBOR data.`,
+      }),
   });
 });
 
 /**
  * Unsafely calls PoolMetadata.fromCborHex without Effect wrapper
- * 
+ *
  * @example
  * import { PoolMetadata } from "@lucid-evolution/experimental";
- * 
- * 
- * 
+ *
+ *
+ *
  * // Using try/catch for error handling
  * try {
  *   const result = PoolMetadata.fromCborHexUnsafe( parameters );
@@ -373,7 +376,7 @@ export const fromCborHex = Effect.fn(function* (cborBytes: string) {
  * } catch (error) {
  *   console.error(`PoolMetadata.fromCborHexUnsafe failed: ${error.message}`);
  * }
- * 
+ *
  * @since 2.0.0
  * @category ConstructorsUnsafe
  */
@@ -382,11 +385,11 @@ export const fromCborHexUnsafe = (cborBytes: string) =>
 
 /**
  * Method toJson of PoolMetadata
- * 
+ *
  * @example
  * import { PoolMetadata } from "@lucid-evolution/experimental";
  * import { Effect } from "effect";
- * 
+ *
  * // Using Effect for safe execution with error handling
  * Effect.gen(function*() {
  * // Assume we have a PoolMetadata instance
@@ -394,7 +397,7 @@ export const fromCborHexUnsafe = (cborBytes: string) =>
  *   const result = yield* PoolMetadata.toJson(instance);
  *   console.log(result);
  * });
- * 
+ *
  * @since 2.0.0
  * @category Methods
  */
@@ -406,18 +409,18 @@ export const toJson = Effect.fn(
         new PoolMetadataError({
           message: `PoolMetadata.toJson failed PoolMetadata is not valid for string conversion. Hint: Validate your JSON structure.`,
         }),
-    })
+    }),
 );
 
 /**
  * Unsafely calls instance.toJson without Effect wrapper
- * 
+ *
  * @example
  * import { PoolMetadata } from "@lucid-evolution/experimental";
- * 
+ *
  * // Assume we have a PoolMetadata instance
  * const instance = ... ;
- * 
+ *
  * // Using try/catch for error handling
  * try {
  *   const result = PoolMetadata.toJsonUnsafe(instance);
@@ -425,7 +428,7 @@ export const toJson = Effect.fn(
  * } catch (error) {
  *   console.error(`PoolMetadata.toJsonUnsafe failed: ${error.message}`);
  * }
- * 
+ *
  * @since 2.0.0
  * @category MethodsUnsafe
  */
@@ -434,11 +437,11 @@ export const toJsonUnsafe = (instance: CML.PoolMetadata): string =>
 
 /**
  * Method toJsValue of PoolMetadata
- * 
+ *
  * @example
  * import { PoolMetadata } from "@lucid-evolution/experimental";
  * import { Effect } from "effect";
- * 
+ *
  * // Using Effect for safe execution with error handling
  * Effect.gen(function*() {
  * // Assume we have a PoolMetadata instance
@@ -446,7 +449,7 @@ export const toJsonUnsafe = (instance: CML.PoolMetadata): string =>
  *   const result = yield* PoolMetadata.toJsValue(instance);
  *   console.log(result);
  * });
- * 
+ *
  * @since 2.0.0
  * @category Methods
  */
@@ -458,18 +461,18 @@ export const toJsValue = Effect.fn(
         new PoolMetadataError({
           message: `PoolMetadata.toJsValue failed PoolMetadata is not valid for any conversion. `,
         }),
-    })
+    }),
 );
 
 /**
  * Unsafely calls instance.toJsValue without Effect wrapper
- * 
+ *
  * @example
  * import { PoolMetadata } from "@lucid-evolution/experimental";
- * 
+ *
  * // Assume we have a PoolMetadata instance
  * const instance = ... ;
- * 
+ *
  * // Using try/catch for error handling
  * try {
  *   const result = PoolMetadata.toJsValueUnsafe(instance);
@@ -477,7 +480,7 @@ export const toJsValue = Effect.fn(
  * } catch (error) {
  *   console.error(`PoolMetadata.toJsValueUnsafe failed: ${error.message}`);
  * }
- * 
+ *
  * @since 2.0.0
  * @category MethodsUnsafe
  */
@@ -486,38 +489,39 @@ export const toJsValueUnsafe = (instance: CML.PoolMetadata): any =>
 
 /**
  * Static method fromJson of PoolMetadata
- * 
+ *
  * @example
  * import { PoolMetadata } from "@lucid-evolution/experimental";
  * import { Effect } from "effect";
- * 
+ *
  * // Using Effect for safe execution with error handling
  * Effect.gen(function*() {
- * 
+ *
  *   const result = yield* PoolMetadata.fromJson( parameters );
  *   console.log(result);
  * });
- * 
+ *
  * @since 2.0.0
  * @category Constructors
  */
 export const fromJson = Effect.fn(function* (json: string) {
   return yield* Effect.try({
     try: () => CML.PoolMetadata.from_json(json),
-    catch: () => new PoolMetadataError({
-      message: `PoolMetadata.fromJson failed with parameters: ${json}. Hint: Validate your JSON structure.`,
-    }),
+    catch: () =>
+      new PoolMetadataError({
+        message: `PoolMetadata.fromJson failed with parameters: ${json}. Hint: Validate your JSON structure.`,
+      }),
   });
 });
 
 /**
  * Unsafely calls PoolMetadata.fromJson without Effect wrapper
- * 
+ *
  * @example
  * import { PoolMetadata } from "@lucid-evolution/experimental";
- * 
- * 
- * 
+ *
+ *
+ *
  * // Using try/catch for error handling
  * try {
  *   const result = PoolMetadata.fromJsonUnsafe( parameters );
@@ -525,20 +529,19 @@ export const fromJson = Effect.fn(function* (json: string) {
  * } catch (error) {
  *   console.error(`PoolMetadata.fromJsonUnsafe failed: ${error.message}`);
  * }
- * 
+ *
  * @since 2.0.0
  * @category ConstructorsUnsafe
  */
-export const fromJsonUnsafe = (json: string) =>
-  Effect.runSync(fromJson(json));
+export const fromJsonUnsafe = (json: string) => Effect.runSync(fromJson(json));
 
 /**
  * Method url of PoolMetadata
- * 
+ *
  * @example
  * import { PoolMetadata } from "@lucid-evolution/experimental";
  * import { Effect } from "effect";
- * 
+ *
  * // Using Effect for safe execution with error handling
  * Effect.gen(function*() {
  * // Assume we have a PoolMetadata instance
@@ -546,7 +549,7 @@ export const fromJsonUnsafe = (json: string) =>
  *   const result = yield* PoolMetadata.url(instance);
  *   console.log(result);
  * });
- * 
+ *
  * @since 2.0.0
  * @category Methods
  */
@@ -558,18 +561,18 @@ export const url = Effect.fn(
         new PoolMetadataError({
           message: `PoolMetadata.url failed `,
         }),
-    })
+    }),
 );
 
 /**
  * Unsafely calls instance.url without Effect wrapper
- * 
+ *
  * @example
  * import { PoolMetadata } from "@lucid-evolution/experimental";
- * 
+ *
  * // Assume we have a PoolMetadata instance
  * const instance = ... ;
- * 
+ *
  * // Using try/catch for error handling
  * try {
  *   const result = PoolMetadata.urlUnsafe(instance);
@@ -577,7 +580,7 @@ export const url = Effect.fn(
  * } catch (error) {
  *   console.error(`PoolMetadata.urlUnsafe failed: ${error.message}`);
  * }
- * 
+ *
  * @since 2.0.0
  * @category MethodsUnsafe
  */
@@ -586,11 +589,11 @@ export const urlUnsafe = (instance: CML.PoolMetadata): CML.Url =>
 
 /**
  * Method poolMetadataHash of PoolMetadata
- * 
+ *
  * @example
  * import { PoolMetadata } from "@lucid-evolution/experimental";
  * import { Effect } from "effect";
- * 
+ *
  * // Using Effect for safe execution with error handling
  * Effect.gen(function*() {
  * // Assume we have a PoolMetadata instance
@@ -598,30 +601,32 @@ export const urlUnsafe = (instance: CML.PoolMetadata): CML.Url =>
  *   const result = yield* PoolMetadata.poolMetadataHash(instance);
  *   console.log(result);
  * });
- * 
+ *
  * @since 2.0.0
  * @category Methods
  */
 export const poolMetadataHash = Effect.fn(
-  (instance: CML.PoolMetadata): Effect.Effect<CML.PoolMetadataHash, PoolMetadataError> =>
+  (
+    instance: CML.PoolMetadata,
+  ): Effect.Effect<CML.PoolMetadataHash, PoolMetadataError> =>
     Effect.try({
       try: () => instance.pool_metadata_hash(),
       catch: () =>
         new PoolMetadataError({
           message: `PoolMetadata.poolMetadataHash failed `,
         }),
-    })
+    }),
 );
 
 /**
  * Unsafely calls instance.poolMetadataHash without Effect wrapper
- * 
+ *
  * @example
  * import { PoolMetadata } from "@lucid-evolution/experimental";
- * 
+ *
  * // Assume we have a PoolMetadata instance
  * const instance = ... ;
- * 
+ *
  * // Using try/catch for error handling
  * try {
  *   const result = PoolMetadata.poolMetadataHashUnsafe(instance);
@@ -629,47 +634,52 @@ export const poolMetadataHash = Effect.fn(
  * } catch (error) {
  *   console.error(`PoolMetadata.poolMetadataHashUnsafe failed: ${error.message}`);
  * }
- * 
+ *
  * @since 2.0.0
  * @category MethodsUnsafe
  */
-export const poolMetadataHashUnsafe = (instance: CML.PoolMetadata): CML.PoolMetadataHash =>
-  Effect.runSync(poolMetadataHash(instance));
+export const poolMetadataHashUnsafe = (
+  instance: CML.PoolMetadata,
+): CML.PoolMetadataHash => Effect.runSync(poolMetadataHash(instance));
 
 /**
  * Static method _new of PoolMetadata
- * 
+ *
  * @example
  * import { PoolMetadata } from "@lucid-evolution/experimental";
  * import { Effect } from "effect";
- * 
+ *
  * // Using Effect for safe execution with error handling
  * Effect.gen(function*() {
- * 
+ *
  *   const result = yield* PoolMetadata._new( parameters );
  *   console.log(result);
  * });
- * 
+ *
  * @since 2.0.0
  * @category Constructors
  */
-export const _new = Effect.fn(function* (url: CML.Url, poolMetadataHash: CML.PoolMetadataHash) {
+export const _new = Effect.fn(function* (
+  url: CML.Url,
+  poolMetadataHash: CML.PoolMetadataHash,
+) {
   return yield* Effect.try({
     try: () => CML.PoolMetadata.new(url, poolMetadataHash),
-    catch: () => new PoolMetadataError({
-      message: `PoolMetadata._new failed with parameters: ${url} (Url), ${poolMetadataHash} (PoolMetadataHash). `,
-    }),
+    catch: () =>
+      new PoolMetadataError({
+        message: `PoolMetadata._new failed with parameters: ${url} (Url), ${poolMetadataHash} (PoolMetadataHash). `,
+      }),
   });
 });
 
 /**
  * Unsafely calls PoolMetadata._new without Effect wrapper
- * 
+ *
  * @example
  * import { PoolMetadata } from "@lucid-evolution/experimental";
- * 
- * 
- * 
+ *
+ *
+ *
  * // Using try/catch for error handling
  * try {
  *   const result = PoolMetadata._newUnsafe( parameters );
@@ -677,9 +687,11 @@ export const _new = Effect.fn(function* (url: CML.Url, poolMetadataHash: CML.Poo
  * } catch (error) {
  *   console.error(`PoolMetadata._newUnsafe failed: ${error.message}`);
  * }
- * 
+ *
  * @since 2.0.0
  * @category ConstructorsUnsafe
  */
-export const _newUnsafe = (url: CML.Url, poolMetadataHash: CML.PoolMetadataHash) =>
-  Effect.runSync(_new(url, poolMetadataHash));
+export const _newUnsafe = (
+  url: CML.Url,
+  poolMetadataHash: CML.PoolMetadataHash,
+) => Effect.runSync(_new(url, poolMetadataHash));
