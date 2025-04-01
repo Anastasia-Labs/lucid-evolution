@@ -1,8 +1,25 @@
+/**
+ * @since 2.0.0
+ */
 import { Data, Effect } from "effect";
 import * as CML from "@anastasia-labs/cardano-multiplatform-lib-nodejs";
 
+/**
+ * Type alias for the CML PlutusScriptWitness class
+ *
+ * @since 2.0.0
+ * @category Types
+ */
 export type PlutusScriptWitness = CML.PlutusScriptWitness;
 
+/**
+ * Error class for PlutusScriptWitness operations
+ *
+ * This error is thrown when operations on PlutusScriptWitness instances fail.
+ *
+ * @since 2.0.0
+ * @category Errors
+ */
 export class PlutusScriptWitnessError extends Data.TaggedError(
   "PlutusScriptWitnessError",
 )<{
@@ -51,16 +68,16 @@ export const free = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = PlutusScriptWitness.unsafeFree(instance);
+ *   const result = PlutusScriptWitness.freeUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`PlutusScriptWitness.unsafeFree failed: ${error.message}`);
+ *   console.error(`PlutusScriptWitness.freeUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeFree = (instance: CML.PlutusScriptWitness): void =>
+export const freeUnsafe = (instance: CML.PlutusScriptWitness): void =>
   Effect.runSync(free(instance));
 
 /**
@@ -100,16 +117,16 @@ export const newScript = Effect.fn(function* (script: CML.PlutusScript) {
  *
  * // Using try/catch for error handling
  * try {
- *   const result = PlutusScriptWitness.unsafeNewScript( parameters );
+ *   const result = PlutusScriptWitness.newScriptUnsafe( parameters );
  *   console.log(result);
  * } catch (error) {
- *   console.error(`PlutusScriptWitness.unsafeNewScript failed: ${error.message}`);
+ *   console.error(`PlutusScriptWitness.newScriptUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Constructors
+ * @category ConstructorsUnsafe
  */
-export const unsafeNewScript = (script: CML.PlutusScript) =>
+export const newScriptUnsafe = (script: CML.PlutusScript) =>
   Effect.runSync(newScript(script));
 
 /**
@@ -149,16 +166,16 @@ export const newRef = Effect.fn(function* (hash: CML.ScriptHash) {
  *
  * // Using try/catch for error handling
  * try {
- *   const result = PlutusScriptWitness.unsafeNewRef( parameters );
+ *   const result = PlutusScriptWitness.newRefUnsafe( parameters );
  *   console.log(result);
  * } catch (error) {
- *   console.error(`PlutusScriptWitness.unsafeNewRef failed: ${error.message}`);
+ *   console.error(`PlutusScriptWitness.newRefUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Constructors
+ * @category ConstructorsUnsafe
  */
-export const unsafeNewRef = (hash: CML.ScriptHash) =>
+export const newRefUnsafe = (hash: CML.ScriptHash) =>
   Effect.runSync(newRef(hash));
 
 /**
@@ -203,14 +220,14 @@ export const hash = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = PlutusScriptWitness.unsafeHash(instance);
+ *   const result = PlutusScriptWitness.hashUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`PlutusScriptWitness.unsafeHash failed: ${error.message}`);
+ *   console.error(`PlutusScriptWitness.hashUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeHash = (instance: CML.PlutusScriptWitness): CML.ScriptHash =>
+export const hashUnsafe = (instance: CML.PlutusScriptWitness): CML.ScriptHash =>
   Effect.runSync(hash(instance));

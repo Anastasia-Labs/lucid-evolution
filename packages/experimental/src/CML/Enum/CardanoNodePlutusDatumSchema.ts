@@ -1,9 +1,41 @@
+/**
+ * @since 2.0.0
+ */
 import * as CML from "@anastasia-labs/cardano-multiplatform-lib-nodejs";
 
+/**
+ * Type alias for the CML CardanoNodePlutusDatumSchema enum
+ *
+ * @since 2.0.0
+ * @category Types
+ */
 export type CardanoNodePlutusDatumSchema = CML.CardanoNodePlutusDatumSchema;
 
+/**
+ * BasicConversions variant of the CardanoNodePlutusDatumSchema enum
+ *
+ * @example
+ * import { CardanoNodePlutusDatumSchema } from "@lucid-evolution/experimental";
+ *
+ * const kind = CardanoNodePlutusDatumSchema.BasicConversions;
+ *
+ * @since 2.0.0
+ * @category Variants
+ */
 export const BasicConversions =
   CML.CardanoNodePlutusDatumSchema.BasicConversions;
+
+/**
+ * DetailedSchema variant of the CardanoNodePlutusDatumSchema enum
+ *
+ * @example
+ * import { CardanoNodePlutusDatumSchema } from "@lucid-evolution/experimental";
+ *
+ * const kind = CardanoNodePlutusDatumSchema.DetailedSchema;
+ *
+ * @since 2.0.0
+ * @category Variants
+ */
 export const DetailedSchema = CML.CardanoNodePlutusDatumSchema.DetailedSchema;
 
 /**

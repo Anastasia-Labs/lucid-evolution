@@ -1,9 +1,26 @@
+/**
+ * @since 2.0.0
+ */
 import { Data, Effect } from "effect";
 import * as CML from "@anastasia-labs/cardano-multiplatform-lib-nodejs";
 
+/**
+ * Type alias for the CML TransactionBuilderConfigBuilder class
+ *
+ * @since 2.0.0
+ * @category Types
+ */
 export type TransactionBuilderConfigBuilder =
   CML.TransactionBuilderConfigBuilder;
 
+/**
+ * Error class for TransactionBuilderConfigBuilder operations
+ *
+ * This error is thrown when operations on TransactionBuilderConfigBuilder instances fail.
+ *
+ * @since 2.0.0
+ * @category Errors
+ */
 export class TransactionBuilderConfigBuilderError extends Data.TaggedError(
   "TransactionBuilderConfigBuilderError",
 )<{
@@ -52,16 +69,16 @@ export const free = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = TransactionBuilderConfigBuilder.unsafeFree(instance);
+ *   const result = TransactionBuilderConfigBuilder.freeUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`TransactionBuilderConfigBuilder.unsafeFree failed: ${error.message}`);
+ *   console.error(`TransactionBuilderConfigBuilder.freeUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeFree = (
+export const freeUnsafe = (
   instance: CML.TransactionBuilderConfigBuilder,
 ): void => Effect.runSync(free(instance));
 
@@ -102,16 +119,16 @@ export const _new = Effect.fn(function* () {
  *
  * // Using try/catch for error handling
  * try {
- *   const result = TransactionBuilderConfigBuilder.unsafe_new();
+ *   const result = TransactionBuilderConfigBuilder._newUnsafe();
  *   console.log(result);
  * } catch (error) {
- *   console.error(`TransactionBuilderConfigBuilder.unsafe_new failed: ${error.message}`);
+ *   console.error(`TransactionBuilderConfigBuilder._newUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Constructors
+ * @category ConstructorsUnsafe
  */
-export const unsafe_new = () => Effect.runSync(_new());
+export const _newUnsafe = () => Effect.runSync(_new());
 
 /**
  * Method feeAlgo of TransactionBuilderConfigBuilder
@@ -159,16 +176,16 @@ export const feeAlgo = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = TransactionBuilderConfigBuilder.unsafeFeeAlgo(instance,  parameters );
+ *   const result = TransactionBuilderConfigBuilder.feeAlgoUnsafe(instance,  parameters );
  *   console.log(result);
  * } catch (error) {
- *   console.error(`TransactionBuilderConfigBuilder.unsafeFeeAlgo failed: ${error.message}`);
+ *   console.error(`TransactionBuilderConfigBuilder.feeAlgoUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeFeeAlgo = (
+export const feeAlgoUnsafe = (
   instance: CML.TransactionBuilderConfigBuilder,
   _feeAlgo: CML.LinearFee,
 ): CML.TransactionBuilderConfigBuilder =>
@@ -220,16 +237,16 @@ export const coinsPerUtxoByte = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = TransactionBuilderConfigBuilder.unsafeCoinsPerUtxoByte(instance,  parameters );
+ *   const result = TransactionBuilderConfigBuilder.coinsPerUtxoByteUnsafe(instance,  parameters );
  *   console.log(result);
  * } catch (error) {
- *   console.error(`TransactionBuilderConfigBuilder.unsafeCoinsPerUtxoByte failed: ${error.message}`);
+ *   console.error(`TransactionBuilderConfigBuilder.coinsPerUtxoByteUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeCoinsPerUtxoByte = (
+export const coinsPerUtxoByteUnsafe = (
   instance: CML.TransactionBuilderConfigBuilder,
   _coinsPerUtxoByte: bigint,
 ): CML.TransactionBuilderConfigBuilder =>
@@ -281,16 +298,16 @@ export const poolDeposit = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = TransactionBuilderConfigBuilder.unsafePoolDeposit(instance,  parameters );
+ *   const result = TransactionBuilderConfigBuilder.poolDepositUnsafe(instance,  parameters );
  *   console.log(result);
  * } catch (error) {
- *   console.error(`TransactionBuilderConfigBuilder.unsafePoolDeposit failed: ${error.message}`);
+ *   console.error(`TransactionBuilderConfigBuilder.poolDepositUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafePoolDeposit = (
+export const poolDepositUnsafe = (
   instance: CML.TransactionBuilderConfigBuilder,
   _poolDeposit: bigint,
 ): CML.TransactionBuilderConfigBuilder =>
@@ -342,16 +359,16 @@ export const keyDeposit = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = TransactionBuilderConfigBuilder.unsafeKeyDeposit(instance,  parameters );
+ *   const result = TransactionBuilderConfigBuilder.keyDepositUnsafe(instance,  parameters );
  *   console.log(result);
  * } catch (error) {
- *   console.error(`TransactionBuilderConfigBuilder.unsafeKeyDeposit failed: ${error.message}`);
+ *   console.error(`TransactionBuilderConfigBuilder.keyDepositUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeKeyDeposit = (
+export const keyDepositUnsafe = (
   instance: CML.TransactionBuilderConfigBuilder,
   _keyDeposit: bigint,
 ): CML.TransactionBuilderConfigBuilder =>
@@ -403,16 +420,16 @@ export const maxValueSize = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = TransactionBuilderConfigBuilder.unsafeMaxValueSize(instance,  parameters );
+ *   const result = TransactionBuilderConfigBuilder.maxValueSizeUnsafe(instance,  parameters );
  *   console.log(result);
  * } catch (error) {
- *   console.error(`TransactionBuilderConfigBuilder.unsafeMaxValueSize failed: ${error.message}`);
+ *   console.error(`TransactionBuilderConfigBuilder.maxValueSizeUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeMaxValueSize = (
+export const maxValueSizeUnsafe = (
   instance: CML.TransactionBuilderConfigBuilder,
   _maxValueSize: number,
 ): CML.TransactionBuilderConfigBuilder =>
@@ -464,16 +481,16 @@ export const maxTxSize = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = TransactionBuilderConfigBuilder.unsafeMaxTxSize(instance,  parameters );
+ *   const result = TransactionBuilderConfigBuilder.maxTxSizeUnsafe(instance,  parameters );
  *   console.log(result);
  * } catch (error) {
- *   console.error(`TransactionBuilderConfigBuilder.unsafeMaxTxSize failed: ${error.message}`);
+ *   console.error(`TransactionBuilderConfigBuilder.maxTxSizeUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeMaxTxSize = (
+export const maxTxSizeUnsafe = (
   instance: CML.TransactionBuilderConfigBuilder,
   _maxTxSize: number,
 ): CML.TransactionBuilderConfigBuilder =>
@@ -525,16 +542,16 @@ export const preferPureChange = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = TransactionBuilderConfigBuilder.unsafePreferPureChange(instance,  parameters );
+ *   const result = TransactionBuilderConfigBuilder.preferPureChangeUnsafe(instance,  parameters );
  *   console.log(result);
  * } catch (error) {
- *   console.error(`TransactionBuilderConfigBuilder.unsafePreferPureChange failed: ${error.message}`);
+ *   console.error(`TransactionBuilderConfigBuilder.preferPureChangeUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafePreferPureChange = (
+export const preferPureChangeUnsafe = (
   instance: CML.TransactionBuilderConfigBuilder,
   _preferPureChange: boolean,
 ): CML.TransactionBuilderConfigBuilder =>
@@ -586,16 +603,16 @@ export const exUnitPrices = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = TransactionBuilderConfigBuilder.unsafeExUnitPrices(instance,  parameters );
+ *   const result = TransactionBuilderConfigBuilder.exUnitPricesUnsafe(instance,  parameters );
  *   console.log(result);
  * } catch (error) {
- *   console.error(`TransactionBuilderConfigBuilder.unsafeExUnitPrices failed: ${error.message}`);
+ *   console.error(`TransactionBuilderConfigBuilder.exUnitPricesUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeExUnitPrices = (
+export const exUnitPricesUnsafe = (
   instance: CML.TransactionBuilderConfigBuilder,
   _exUnitPrices: CML.ExUnitPrices,
 ): CML.TransactionBuilderConfigBuilder =>
@@ -647,16 +664,16 @@ export const costModels = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = TransactionBuilderConfigBuilder.unsafeCostModels(instance,  parameters );
+ *   const result = TransactionBuilderConfigBuilder.costModelsUnsafe(instance,  parameters );
  *   console.log(result);
  * } catch (error) {
- *   console.error(`TransactionBuilderConfigBuilder.unsafeCostModels failed: ${error.message}`);
+ *   console.error(`TransactionBuilderConfigBuilder.costModelsUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeCostModels = (
+export const costModelsUnsafe = (
   instance: CML.TransactionBuilderConfigBuilder,
   _costModels: CML.CostModels,
 ): CML.TransactionBuilderConfigBuilder =>
@@ -708,16 +725,16 @@ export const collateralPercentage = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = TransactionBuilderConfigBuilder.unsafeCollateralPercentage(instance,  parameters );
+ *   const result = TransactionBuilderConfigBuilder.collateralPercentageUnsafe(instance,  parameters );
  *   console.log(result);
  * } catch (error) {
- *   console.error(`TransactionBuilderConfigBuilder.unsafeCollateralPercentage failed: ${error.message}`);
+ *   console.error(`TransactionBuilderConfigBuilder.collateralPercentageUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeCollateralPercentage = (
+export const collateralPercentageUnsafe = (
   instance: CML.TransactionBuilderConfigBuilder,
   _collateralPercentage: number,
 ): CML.TransactionBuilderConfigBuilder =>
@@ -769,16 +786,16 @@ export const maxCollateralInputs = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = TransactionBuilderConfigBuilder.unsafeMaxCollateralInputs(instance,  parameters );
+ *   const result = TransactionBuilderConfigBuilder.maxCollateralInputsUnsafe(instance,  parameters );
  *   console.log(result);
  * } catch (error) {
- *   console.error(`TransactionBuilderConfigBuilder.unsafeMaxCollateralInputs failed: ${error.message}`);
+ *   console.error(`TransactionBuilderConfigBuilder.maxCollateralInputsUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeMaxCollateralInputs = (
+export const maxCollateralInputsUnsafe = (
   instance: CML.TransactionBuilderConfigBuilder,
   _maxCollateralInputs: number,
 ): CML.TransactionBuilderConfigBuilder =>
@@ -829,15 +846,15 @@ export const build = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = TransactionBuilderConfigBuilder.unsafeBuild(instance);
+ *   const result = TransactionBuilderConfigBuilder.buildUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`TransactionBuilderConfigBuilder.unsafeBuild failed: ${error.message}`);
+ *   console.error(`TransactionBuilderConfigBuilder.buildUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeBuild = (
+export const buildUnsafe = (
   instance: CML.TransactionBuilderConfigBuilder,
 ): CML.TransactionBuilderConfig => Effect.runSync(build(instance));

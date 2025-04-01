@@ -1,8 +1,25 @@
+/**
+ * @since 2.0.0
+ */
 import { Data, Effect } from "effect";
 import * as CML from "@anastasia-labs/cardano-multiplatform-lib-nodejs";
 
+/**
+ * Type alias for the CML GovAction class
+ *
+ * @since 2.0.0
+ * @category Types
+ */
 export type GovAction = CML.GovAction;
 
+/**
+ * Error class for GovAction operations
+ *
+ * This error is thrown when operations on GovAction instances fail.
+ *
+ * @since 2.0.0
+ * @category Errors
+ */
 export class GovActionError extends Data.TaggedError("GovActionError")<{
   message?: string;
 }> {}
@@ -47,16 +64,16 @@ export const free = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = GovAction.unsafeFree(instance);
+ *   const result = GovAction.freeUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`GovAction.unsafeFree failed: ${error.message}`);
+ *   console.error(`GovAction.freeUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeFree = (instance: CML.GovAction): void =>
+export const freeUnsafe = (instance: CML.GovAction): void =>
   Effect.runSync(free(instance));
 
 /**
@@ -101,16 +118,16 @@ export const scriptHash = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = GovAction.unsafeScriptHash(instance);
+ *   const result = GovAction.scriptHashUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`GovAction.unsafeScriptHash failed: ${error.message}`);
+ *   console.error(`GovAction.scriptHashUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeScriptHash = (
+export const scriptHashUnsafe = (
   instance: CML.GovAction,
 ): CML.ScriptHash | undefined => Effect.runSync(scriptHash(instance));
 
@@ -154,16 +171,16 @@ export const toCborBytes = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = GovAction.unsafeToCborBytes(instance);
+ *   const result = GovAction.toCborBytesUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`GovAction.unsafeToCborBytes failed: ${error.message}`);
+ *   console.error(`GovAction.toCborBytesUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeToCborBytes = (instance: CML.GovAction): Uint8Array =>
+export const toCborBytesUnsafe = (instance: CML.GovAction): Uint8Array =>
   Effect.runSync(toCborBytes(instance));
 
 /**
@@ -206,16 +223,16 @@ export const toCanonicalCborBytes = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = GovAction.unsafeToCanonicalCborBytes(instance);
+ *   const result = GovAction.toCanonicalCborBytesUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`GovAction.unsafeToCanonicalCborBytes failed: ${error.message}`);
+ *   console.error(`GovAction.toCanonicalCborBytesUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeToCanonicalCborBytes = (
+export const toCanonicalCborBytesUnsafe = (
   instance: CML.GovAction,
 ): Uint8Array => Effect.runSync(toCanonicalCborBytes(instance));
 
@@ -256,16 +273,16 @@ export const fromCborBytes = Effect.fn(function* (cborBytes: Uint8Array) {
  *
  * // Using try/catch for error handling
  * try {
- *   const result = GovAction.unsafeFromCborBytes( parameters );
+ *   const result = GovAction.fromCborBytesUnsafe( parameters );
  *   console.log(result);
  * } catch (error) {
- *   console.error(`GovAction.unsafeFromCborBytes failed: ${error.message}`);
+ *   console.error(`GovAction.fromCborBytesUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Constructors
+ * @category ConstructorsUnsafe
  */
-export const unsafeFromCborBytes = (cborBytes: Uint8Array) =>
+export const fromCborBytesUnsafe = (cborBytes: Uint8Array) =>
   Effect.runSync(fromCborBytes(cborBytes));
 
 /**
@@ -308,16 +325,16 @@ export const toCborHex = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = GovAction.unsafeToCborHex(instance);
+ *   const result = GovAction.toCborHexUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`GovAction.unsafeToCborHex failed: ${error.message}`);
+ *   console.error(`GovAction.toCborHexUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeToCborHex = (instance: CML.GovAction): string =>
+export const toCborHexUnsafe = (instance: CML.GovAction): string =>
   Effect.runSync(toCborHex(instance));
 
 /**
@@ -360,16 +377,16 @@ export const toCanonicalCborHex = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = GovAction.unsafeToCanonicalCborHex(instance);
+ *   const result = GovAction.toCanonicalCborHexUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`GovAction.unsafeToCanonicalCborHex failed: ${error.message}`);
+ *   console.error(`GovAction.toCanonicalCborHexUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeToCanonicalCborHex = (instance: CML.GovAction): string =>
+export const toCanonicalCborHexUnsafe = (instance: CML.GovAction): string =>
   Effect.runSync(toCanonicalCborHex(instance));
 
 /**
@@ -409,16 +426,16 @@ export const fromCborHex = Effect.fn(function* (cborBytes: string) {
  *
  * // Using try/catch for error handling
  * try {
- *   const result = GovAction.unsafeFromCborHex( parameters );
+ *   const result = GovAction.fromCborHexUnsafe( parameters );
  *   console.log(result);
  * } catch (error) {
- *   console.error(`GovAction.unsafeFromCborHex failed: ${error.message}`);
+ *   console.error(`GovAction.fromCborHexUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Constructors
+ * @category ConstructorsUnsafe
  */
-export const unsafeFromCborHex = (cborBytes: string) =>
+export const fromCborHexUnsafe = (cborBytes: string) =>
   Effect.runSync(fromCborHex(cborBytes));
 
 /**
@@ -461,16 +478,16 @@ export const toJson = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = GovAction.unsafeToJson(instance);
+ *   const result = GovAction.toJsonUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`GovAction.unsafeToJson failed: ${error.message}`);
+ *   console.error(`GovAction.toJsonUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeToJson = (instance: CML.GovAction): string =>
+export const toJsonUnsafe = (instance: CML.GovAction): string =>
   Effect.runSync(toJson(instance));
 
 /**
@@ -513,16 +530,16 @@ export const toJsValue = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = GovAction.unsafeToJsValue(instance);
+ *   const result = GovAction.toJsValueUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`GovAction.unsafeToJsValue failed: ${error.message}`);
+ *   console.error(`GovAction.toJsValueUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeToJsValue = (instance: CML.GovAction): any =>
+export const toJsValueUnsafe = (instance: CML.GovAction): any =>
   Effect.runSync(toJsValue(instance));
 
 /**
@@ -562,16 +579,16 @@ export const fromJson = Effect.fn(function* (json: string) {
  *
  * // Using try/catch for error handling
  * try {
- *   const result = GovAction.unsafeFromJson( parameters );
+ *   const result = GovAction.fromJsonUnsafe( parameters );
  *   console.log(result);
  * } catch (error) {
- *   console.error(`GovAction.unsafeFromJson failed: ${error.message}`);
+ *   console.error(`GovAction.fromJsonUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Constructors
+ * @category ConstructorsUnsafe
  */
-export const unsafeFromJson = (json: string) => Effect.runSync(fromJson(json));
+export const fromJsonUnsafe = (json: string) => Effect.runSync(fromJson(json));
 
 /**
  * Static method newParameterChangeAction of GovAction
@@ -615,16 +632,16 @@ export const newParameterChangeAction = Effect.fn(function* (
  *
  * // Using try/catch for error handling
  * try {
- *   const result = GovAction.unsafeNewParameterChangeAction( parameters );
+ *   const result = GovAction.newParameterChangeActionUnsafe( parameters );
  *   console.log(result);
  * } catch (error) {
- *   console.error(`GovAction.unsafeNewParameterChangeAction failed: ${error.message}`);
+ *   console.error(`GovAction.newParameterChangeActionUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Constructors
+ * @category ConstructorsUnsafe
  */
-export const unsafeNewParameterChangeAction = (
+export const newParameterChangeActionUnsafe = (
   actionId: CML.GovActionId | undefined,
   update: CML.ProtocolParamUpdate,
   policyHash: CML.ScriptHash,
@@ -670,16 +687,16 @@ export const newHardForkInitiationAction = Effect.fn(function* (
  *
  * // Using try/catch for error handling
  * try {
- *   const result = GovAction.unsafeNewHardForkInitiationAction( parameters );
+ *   const result = GovAction.newHardForkInitiationActionUnsafe( parameters );
  *   console.log(result);
  * } catch (error) {
- *   console.error(`GovAction.unsafeNewHardForkInitiationAction failed: ${error.message}`);
+ *   console.error(`GovAction.newHardForkInitiationActionUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Constructors
+ * @category ConstructorsUnsafe
  */
-export const unsafeNewHardForkInitiationAction = (
+export const newHardForkInitiationActionUnsafe = (
   actionId: CML.GovActionId | undefined,
   version: CML.ProtocolVersion,
 ) => Effect.runSync(newHardForkInitiationAction(actionId, version));
@@ -725,16 +742,16 @@ export const newTreasuryWithdrawalsAction = Effect.fn(function* (
  *
  * // Using try/catch for error handling
  * try {
- *   const result = GovAction.unsafeNewTreasuryWithdrawalsAction( parameters );
+ *   const result = GovAction.newTreasuryWithdrawalsActionUnsafe( parameters );
  *   console.log(result);
  * } catch (error) {
- *   console.error(`GovAction.unsafeNewTreasuryWithdrawalsAction failed: ${error.message}`);
+ *   console.error(`GovAction.newTreasuryWithdrawalsActionUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Constructors
+ * @category ConstructorsUnsafe
  */
-export const unsafeNewTreasuryWithdrawalsAction = (
+export const newTreasuryWithdrawalsActionUnsafe = (
   withdrawal: CML.MapRewardAccountToCoin,
   policyHash: CML.ScriptHash,
 ) => Effect.runSync(newTreasuryWithdrawalsAction(withdrawal, policyHash));
@@ -776,16 +793,16 @@ export const newNoConfidence = Effect.fn(function* (actionId: CML.GovActionId) {
  *
  * // Using try/catch for error handling
  * try {
- *   const result = GovAction.unsafeNewNoConfidence( parameters );
+ *   const result = GovAction.newNoConfidenceUnsafe( parameters );
  *   console.log(result);
  * } catch (error) {
- *   console.error(`GovAction.unsafeNewNoConfidence failed: ${error.message}`);
+ *   console.error(`GovAction.newNoConfidenceUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Constructors
+ * @category ConstructorsUnsafe
  */
-export const unsafeNewNoConfidence = (actionId: CML.GovActionId) =>
+export const newNoConfidenceUnsafe = (actionId: CML.GovActionId) =>
   Effect.runSync(newNoConfidence(actionId));
 
 /**
@@ -836,16 +853,16 @@ export const newUpdateCommittee = Effect.fn(function* (
  *
  * // Using try/catch for error handling
  * try {
- *   const result = GovAction.unsafeNewUpdateCommittee( parameters );
+ *   const result = GovAction.newUpdateCommitteeUnsafe( parameters );
  *   console.log(result);
  * } catch (error) {
- *   console.error(`GovAction.unsafeNewUpdateCommittee failed: ${error.message}`);
+ *   console.error(`GovAction.newUpdateCommitteeUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Constructors
+ * @category ConstructorsUnsafe
  */
-export const unsafeNewUpdateCommittee = (
+export const newUpdateCommitteeUnsafe = (
   actionId: CML.GovActionId | undefined,
   coldCredentials: CML.CommitteeColdCredentialList,
   credentials: CML.MapCommitteeColdCredentialToEpoch,
@@ -895,16 +912,16 @@ export const newNewConstitution = Effect.fn(function* (
  *
  * // Using try/catch for error handling
  * try {
- *   const result = GovAction.unsafeNewNewConstitution( parameters );
+ *   const result = GovAction.newNewConstitutionUnsafe( parameters );
  *   console.log(result);
  * } catch (error) {
- *   console.error(`GovAction.unsafeNewNewConstitution failed: ${error.message}`);
+ *   console.error(`GovAction.newNewConstitutionUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Constructors
+ * @category ConstructorsUnsafe
  */
-export const unsafeNewNewConstitution = (
+export const newNewConstitutionUnsafe = (
   actionId: CML.GovActionId | undefined,
   constitution: CML.Constitution,
 ) => Effect.runSync(newNewConstitution(actionId, constitution));
@@ -946,16 +963,16 @@ export const newInfoAction = Effect.fn(function* () {
  *
  * // Using try/catch for error handling
  * try {
- *   const result = GovAction.unsafeNewInfoAction();
+ *   const result = GovAction.newInfoActionUnsafe();
  *   console.log(result);
  * } catch (error) {
- *   console.error(`GovAction.unsafeNewInfoAction failed: ${error.message}`);
+ *   console.error(`GovAction.newInfoActionUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Constructors
+ * @category ConstructorsUnsafe
  */
-export const unsafeNewInfoAction = () => Effect.runSync(newInfoAction());
+export const newInfoActionUnsafe = () => Effect.runSync(newInfoAction());
 
 /**
  * Method kind of GovAction
@@ -997,16 +1014,16 @@ export const kind = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = GovAction.unsafeKind(instance);
+ *   const result = GovAction.kindUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`GovAction.unsafeKind failed: ${error.message}`);
+ *   console.error(`GovAction.kindUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeKind = (instance: CML.GovAction): CML.GovActionKind =>
+export const kindUnsafe = (instance: CML.GovAction): CML.GovActionKind =>
   Effect.runSync(kind(instance));
 
 /**
@@ -1051,16 +1068,16 @@ export const asParameterChangeAction = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = GovAction.unsafeAsParameterChangeAction(instance);
+ *   const result = GovAction.asParameterChangeActionUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`GovAction.unsafeAsParameterChangeAction failed: ${error.message}`);
+ *   console.error(`GovAction.asParameterChangeActionUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeAsParameterChangeAction = (
+export const asParameterChangeActionUnsafe = (
   instance: CML.GovAction,
 ): CML.ParameterChangeAction | undefined =>
   Effect.runSync(asParameterChangeAction(instance));
@@ -1107,16 +1124,16 @@ export const asHardForkInitiationAction = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = GovAction.unsafeAsHardForkInitiationAction(instance);
+ *   const result = GovAction.asHardForkInitiationActionUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`GovAction.unsafeAsHardForkInitiationAction failed: ${error.message}`);
+ *   console.error(`GovAction.asHardForkInitiationActionUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeAsHardForkInitiationAction = (
+export const asHardForkInitiationActionUnsafe = (
   instance: CML.GovAction,
 ): CML.HardForkInitiationAction | undefined =>
   Effect.runSync(asHardForkInitiationAction(instance));
@@ -1163,16 +1180,16 @@ export const asTreasuryWithdrawalsAction = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = GovAction.unsafeAsTreasuryWithdrawalsAction(instance);
+ *   const result = GovAction.asTreasuryWithdrawalsActionUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`GovAction.unsafeAsTreasuryWithdrawalsAction failed: ${error.message}`);
+ *   console.error(`GovAction.asTreasuryWithdrawalsActionUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeAsTreasuryWithdrawalsAction = (
+export const asTreasuryWithdrawalsActionUnsafe = (
   instance: CML.GovAction,
 ): CML.TreasuryWithdrawalsAction | undefined =>
   Effect.runSync(asTreasuryWithdrawalsAction(instance));
@@ -1219,16 +1236,16 @@ export const asNoConfidence = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = GovAction.unsafeAsNoConfidence(instance);
+ *   const result = GovAction.asNoConfidenceUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`GovAction.unsafeAsNoConfidence failed: ${error.message}`);
+ *   console.error(`GovAction.asNoConfidenceUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeAsNoConfidence = (
+export const asNoConfidenceUnsafe = (
   instance: CML.GovAction,
 ): CML.NoConfidence | undefined => Effect.runSync(asNoConfidence(instance));
 
@@ -1274,16 +1291,16 @@ export const asUpdateCommittee = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = GovAction.unsafeAsUpdateCommittee(instance);
+ *   const result = GovAction.asUpdateCommitteeUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`GovAction.unsafeAsUpdateCommittee failed: ${error.message}`);
+ *   console.error(`GovAction.asUpdateCommitteeUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeAsUpdateCommittee = (
+export const asUpdateCommitteeUnsafe = (
   instance: CML.GovAction,
 ): CML.UpdateCommittee | undefined =>
   Effect.runSync(asUpdateCommittee(instance));
@@ -1330,16 +1347,16 @@ export const asNewConstitution = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = GovAction.unsafeAsNewConstitution(instance);
+ *   const result = GovAction.asNewConstitutionUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`GovAction.unsafeAsNewConstitution failed: ${error.message}`);
+ *   console.error(`GovAction.asNewConstitutionUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeAsNewConstitution = (
+export const asNewConstitutionUnsafe = (
   instance: CML.GovAction,
 ): CML.NewConstitution | undefined =>
   Effect.runSync(asNewConstitution(instance));

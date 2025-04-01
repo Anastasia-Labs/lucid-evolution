@@ -1,8 +1,25 @@
+/**
+ * @since 2.0.0
+ */
 import { Data, Effect } from "effect";
 import * as CML from "@anastasia-labs/cardano-multiplatform-lib-nodejs";
 
+/**
+ * Type alias for the CML UnitInterval class
+ *
+ * @since 2.0.0
+ * @category Types
+ */
 export type UnitInterval = CML.UnitInterval;
 
+/**
+ * Error class for UnitInterval operations
+ *
+ * This error is thrown when operations on UnitInterval instances fail.
+ *
+ * @since 2.0.0
+ * @category Errors
+ */
 export class UnitIntervalError extends Data.TaggedError("UnitIntervalError")<{
   message?: string;
 }> {}
@@ -47,16 +64,16 @@ export const free = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = UnitInterval.unsafeFree(instance);
+ *   const result = UnitInterval.freeUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`UnitInterval.unsafeFree failed: ${error.message}`);
+ *   console.error(`UnitInterval.freeUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeFree = (instance: CML.UnitInterval): void =>
+export const freeUnsafe = (instance: CML.UnitInterval): void =>
   Effect.runSync(free(instance));
 
 /**
@@ -99,16 +116,16 @@ export const toCborBytes = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = UnitInterval.unsafeToCborBytes(instance);
+ *   const result = UnitInterval.toCborBytesUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`UnitInterval.unsafeToCborBytes failed: ${error.message}`);
+ *   console.error(`UnitInterval.toCborBytesUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeToCborBytes = (instance: CML.UnitInterval): Uint8Array =>
+export const toCborBytesUnsafe = (instance: CML.UnitInterval): Uint8Array =>
   Effect.runSync(toCborBytes(instance));
 
 /**
@@ -151,16 +168,16 @@ export const toCanonicalCborBytes = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = UnitInterval.unsafeToCanonicalCborBytes(instance);
+ *   const result = UnitInterval.toCanonicalCborBytesUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`UnitInterval.unsafeToCanonicalCborBytes failed: ${error.message}`);
+ *   console.error(`UnitInterval.toCanonicalCborBytesUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeToCanonicalCborBytes = (
+export const toCanonicalCborBytesUnsafe = (
   instance: CML.UnitInterval,
 ): Uint8Array => Effect.runSync(toCanonicalCborBytes(instance));
 
@@ -201,16 +218,16 @@ export const fromCborBytes = Effect.fn(function* (cborBytes: Uint8Array) {
  *
  * // Using try/catch for error handling
  * try {
- *   const result = UnitInterval.unsafeFromCborBytes( parameters );
+ *   const result = UnitInterval.fromCborBytesUnsafe( parameters );
  *   console.log(result);
  * } catch (error) {
- *   console.error(`UnitInterval.unsafeFromCborBytes failed: ${error.message}`);
+ *   console.error(`UnitInterval.fromCborBytesUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Constructors
+ * @category ConstructorsUnsafe
  */
-export const unsafeFromCborBytes = (cborBytes: Uint8Array) =>
+export const fromCborBytesUnsafe = (cborBytes: Uint8Array) =>
   Effect.runSync(fromCborBytes(cborBytes));
 
 /**
@@ -253,16 +270,16 @@ export const toCborHex = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = UnitInterval.unsafeToCborHex(instance);
+ *   const result = UnitInterval.toCborHexUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`UnitInterval.unsafeToCborHex failed: ${error.message}`);
+ *   console.error(`UnitInterval.toCborHexUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeToCborHex = (instance: CML.UnitInterval): string =>
+export const toCborHexUnsafe = (instance: CML.UnitInterval): string =>
   Effect.runSync(toCborHex(instance));
 
 /**
@@ -305,16 +322,16 @@ export const toCanonicalCborHex = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = UnitInterval.unsafeToCanonicalCborHex(instance);
+ *   const result = UnitInterval.toCanonicalCborHexUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`UnitInterval.unsafeToCanonicalCborHex failed: ${error.message}`);
+ *   console.error(`UnitInterval.toCanonicalCborHexUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeToCanonicalCborHex = (instance: CML.UnitInterval): string =>
+export const toCanonicalCborHexUnsafe = (instance: CML.UnitInterval): string =>
   Effect.runSync(toCanonicalCborHex(instance));
 
 /**
@@ -354,16 +371,16 @@ export const fromCborHex = Effect.fn(function* (cborBytes: string) {
  *
  * // Using try/catch for error handling
  * try {
- *   const result = UnitInterval.unsafeFromCborHex( parameters );
+ *   const result = UnitInterval.fromCborHexUnsafe( parameters );
  *   console.log(result);
  * } catch (error) {
- *   console.error(`UnitInterval.unsafeFromCborHex failed: ${error.message}`);
+ *   console.error(`UnitInterval.fromCborHexUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Constructors
+ * @category ConstructorsUnsafe
  */
-export const unsafeFromCborHex = (cborBytes: string) =>
+export const fromCborHexUnsafe = (cborBytes: string) =>
   Effect.runSync(fromCborHex(cborBytes));
 
 /**
@@ -406,16 +423,16 @@ export const toJson = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = UnitInterval.unsafeToJson(instance);
+ *   const result = UnitInterval.toJsonUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`UnitInterval.unsafeToJson failed: ${error.message}`);
+ *   console.error(`UnitInterval.toJsonUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeToJson = (instance: CML.UnitInterval): string =>
+export const toJsonUnsafe = (instance: CML.UnitInterval): string =>
   Effect.runSync(toJson(instance));
 
 /**
@@ -458,16 +475,16 @@ export const toJsValue = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = UnitInterval.unsafeToJsValue(instance);
+ *   const result = UnitInterval.toJsValueUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`UnitInterval.unsafeToJsValue failed: ${error.message}`);
+ *   console.error(`UnitInterval.toJsValueUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeToJsValue = (instance: CML.UnitInterval): any =>
+export const toJsValueUnsafe = (instance: CML.UnitInterval): any =>
   Effect.runSync(toJsValue(instance));
 
 /**
@@ -507,16 +524,16 @@ export const fromJson = Effect.fn(function* (json: string) {
  *
  * // Using try/catch for error handling
  * try {
- *   const result = UnitInterval.unsafeFromJson( parameters );
+ *   const result = UnitInterval.fromJsonUnsafe( parameters );
  *   console.log(result);
  * } catch (error) {
- *   console.error(`UnitInterval.unsafeFromJson failed: ${error.message}`);
+ *   console.error(`UnitInterval.fromJsonUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Constructors
+ * @category ConstructorsUnsafe
  */
-export const unsafeFromJson = (json: string) => Effect.runSync(fromJson(json));
+export const fromJsonUnsafe = (json: string) => Effect.runSync(fromJson(json));
 
 /**
  * Method start of UnitInterval
@@ -558,16 +575,16 @@ export const start = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = UnitInterval.unsafeStart(instance);
+ *   const result = UnitInterval.startUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`UnitInterval.unsafeStart failed: ${error.message}`);
+ *   console.error(`UnitInterval.startUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeStart = (instance: CML.UnitInterval): bigint =>
+export const startUnsafe = (instance: CML.UnitInterval): bigint =>
   Effect.runSync(start(instance));
 
 /**
@@ -610,16 +627,16 @@ export const end = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = UnitInterval.unsafeEnd(instance);
+ *   const result = UnitInterval.endUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`UnitInterval.unsafeEnd failed: ${error.message}`);
+ *   console.error(`UnitInterval.endUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeEnd = (instance: CML.UnitInterval): bigint =>
+export const endUnsafe = (instance: CML.UnitInterval): bigint =>
   Effect.runSync(end(instance));
 
 /**
@@ -659,14 +676,14 @@ export const _new = Effect.fn(function* (start: bigint, end: bigint) {
  *
  * // Using try/catch for error handling
  * try {
- *   const result = UnitInterval.unsafe_new( parameters );
+ *   const result = UnitInterval._newUnsafe( parameters );
  *   console.log(result);
  * } catch (error) {
- *   console.error(`UnitInterval.unsafe_new failed: ${error.message}`);
+ *   console.error(`UnitInterval._newUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Constructors
+ * @category ConstructorsUnsafe
  */
-export const unsafe_new = (start: bigint, end: bigint) =>
+export const _newUnsafe = (start: bigint, end: bigint) =>
   Effect.runSync(_new(start, end));

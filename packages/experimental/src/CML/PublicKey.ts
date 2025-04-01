@@ -1,8 +1,25 @@
+/**
+ * @since 2.0.0
+ */
 import { Data, Effect } from "effect";
 import * as CML from "@anastasia-labs/cardano-multiplatform-lib-nodejs";
 
+/**
+ * Type alias for the CML PublicKey class
+ *
+ * @since 2.0.0
+ * @category Types
+ */
 export type PublicKey = CML.PublicKey;
 
+/**
+ * Error class for PublicKey operations
+ *
+ * This error is thrown when operations on PublicKey instances fail.
+ *
+ * @since 2.0.0
+ * @category Errors
+ */
 export class PublicKeyError extends Data.TaggedError("PublicKeyError")<{
   message?: string;
 }> {}
@@ -47,16 +64,16 @@ export const free = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = PublicKey.unsafeFree(instance);
+ *   const result = PublicKey.freeUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`PublicKey.unsafeFree failed: ${error.message}`);
+ *   console.error(`PublicKey.freeUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeFree = (instance: CML.PublicKey): void =>
+export const freeUnsafe = (instance: CML.PublicKey): void =>
   Effect.runSync(free(instance));
 
 /**
@@ -96,16 +113,16 @@ export const fromBech32 = Effect.fn(function* (bech32Str: string) {
  *
  * // Using try/catch for error handling
  * try {
- *   const result = PublicKey.unsafeFromBech32( parameters );
+ *   const result = PublicKey.fromBech32Unsafe( parameters );
  *   console.log(result);
  * } catch (error) {
- *   console.error(`PublicKey.unsafeFromBech32 failed: ${error.message}`);
+ *   console.error(`PublicKey.fromBech32Unsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Constructors
+ * @category ConstructorsUnsafe
  */
-export const unsafeFromBech32 = (bech32Str: string) =>
+export const fromBech32Unsafe = (bech32Str: string) =>
   Effect.runSync(fromBech32(bech32Str));
 
 /**
@@ -148,16 +165,16 @@ export const toBech32 = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = PublicKey.unsafeToBech32(instance);
+ *   const result = PublicKey.toBech32Unsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`PublicKey.unsafeToBech32 failed: ${error.message}`);
+ *   console.error(`PublicKey.toBech32Unsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeToBech32 = (instance: CML.PublicKey): string =>
+export const toBech32Unsafe = (instance: CML.PublicKey): string =>
   Effect.runSync(toBech32(instance));
 
 /**
@@ -200,16 +217,16 @@ export const toRawBytes = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = PublicKey.unsafeToRawBytes(instance);
+ *   const result = PublicKey.toRawBytesUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`PublicKey.unsafeToRawBytes failed: ${error.message}`);
+ *   console.error(`PublicKey.toRawBytesUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeToRawBytes = (instance: CML.PublicKey): Uint8Array =>
+export const toRawBytesUnsafe = (instance: CML.PublicKey): Uint8Array =>
   Effect.runSync(toRawBytes(instance));
 
 /**
@@ -249,16 +266,16 @@ export const fromBytes = Effect.fn(function* (bytes: Uint8Array) {
  *
  * // Using try/catch for error handling
  * try {
- *   const result = PublicKey.unsafeFromBytes( parameters );
+ *   const result = PublicKey.fromBytesUnsafe( parameters );
  *   console.log(result);
  * } catch (error) {
- *   console.error(`PublicKey.unsafeFromBytes failed: ${error.message}`);
+ *   console.error(`PublicKey.fromBytesUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Constructors
+ * @category ConstructorsUnsafe
  */
-export const unsafeFromBytes = (bytes: Uint8Array) =>
+export const fromBytesUnsafe = (bytes: Uint8Array) =>
   Effect.runSync(fromBytes(bytes));
 
 /**
@@ -305,16 +322,16 @@ export const verify = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = PublicKey.unsafeVerify(instance,  parameters );
+ *   const result = PublicKey.verifyUnsafe(instance,  parameters );
  *   console.log(result);
  * } catch (error) {
- *   console.error(`PublicKey.unsafeVerify failed: ${error.message}`);
+ *   console.error(`PublicKey.verifyUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeVerify = (
+export const verifyUnsafe = (
   instance: CML.PublicKey,
   data: Uint8Array,
   signature: CML.Ed25519Signature,
@@ -362,14 +379,14 @@ export const hash = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = PublicKey.unsafeHash(instance);
+ *   const result = PublicKey.hashUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`PublicKey.unsafeHash failed: ${error.message}`);
+ *   console.error(`PublicKey.hashUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeHash = (instance: CML.PublicKey): CML.Ed25519KeyHash =>
+export const hashUnsafe = (instance: CML.PublicKey): CML.Ed25519KeyHash =>
   Effect.runSync(hash(instance));

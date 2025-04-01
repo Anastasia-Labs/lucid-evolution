@@ -1,6 +1,17 @@
+/**
+ * @since 2.0.0
+ */
 import { Data, Effect } from "effect";
 import * as CML from "@anastasia-labs/cardano-multiplatform-lib-nodejs";
 
+/**
+ * Error class for emip3_encrypt_with_password function
+ *
+ * This error is thrown when the emip3_encrypt_with_password function fails.
+ *
+ * @since 2.0.0
+ * @category Errors
+ */
 export class Emip3EncryptWithPasswordError extends Data.TaggedError(
   "Emip3EncryptWithPasswordError",
 )<{
@@ -42,19 +53,19 @@ export const emip3EncryptWithPassword = Effect.fn(function* (
  * Unsafely calls emip3_encrypt_with_password function without Effect wrapper
  *
  * @example
- * import { unsafeEmip3EncryptWithPassword } from "@lucid-evolution/experimental/CML/functions";
+ * import { emip3EncryptWithPasswordUnsafe } from "@lucid-evolution/experimental/CML/functions";
  *
  * try {
- *   const result = unsafeEmip3EncryptWithPassword("example", "example", "example", "example");
+ *   const result = emip3EncryptWithPasswordUnsafe("example", "example", "example", "example");
  *   console.log(result);
  * } catch (error) {
- *   console.error(`unsafeEmip3EncryptWithPassword failed: ${error.message}`);
+ *   console.error(`emip3EncryptWithPasswordUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Functions
+ * @category FunctionsUnsafe
  */
-export const unsafeEmip3EncryptWithPassword = (
+export const emip3EncryptWithPasswordUnsafe = (
   password: string,
   salt: string,
   nonce: string,

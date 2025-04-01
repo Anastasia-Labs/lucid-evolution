@@ -1,3 +1,6 @@
+/**
+ * @since 2.0.0
+ */
 // This file is auto-generated - do not modify
 export * as CardanoNodePlutusDatumSchema from "./CardanoNodePlutusDatumSchema.js";
 export * as Language from "./Language.js";

@@ -1,8 +1,25 @@
+/**
+ * @since 2.0.0
+ */
 import { Data, Effect } from "effect";
 import * as CML from "@anastasia-labs/cardano-multiplatform-lib-nodejs";
 
+/**
+ * Type alias for the CML VotingProcedures class
+ *
+ * @since 2.0.0
+ * @category Types
+ */
 export type VotingProcedures = CML.VotingProcedures;
 
+/**
+ * Error class for VotingProcedures operations
+ *
+ * This error is thrown when operations on VotingProcedures instances fail.
+ *
+ * @since 2.0.0
+ * @category Errors
+ */
 export class VotingProceduresError extends Data.TaggedError(
   "VotingProceduresError",
 )<{
@@ -51,16 +68,16 @@ export const free = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = VotingProcedures.unsafeFree(instance);
+ *   const result = VotingProcedures.freeUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`VotingProcedures.unsafeFree failed: ${error.message}`);
+ *   console.error(`VotingProcedures.freeUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeFree = (instance: CML.VotingProcedures): void =>
+export const freeUnsafe = (instance: CML.VotingProcedures): void =>
   Effect.runSync(free(instance));
 
 /**
@@ -100,16 +117,16 @@ export const _new = Effect.fn(function* () {
  *
  * // Using try/catch for error handling
  * try {
- *   const result = VotingProcedures.unsafe_new();
+ *   const result = VotingProcedures._newUnsafe();
  *   console.log(result);
  * } catch (error) {
- *   console.error(`VotingProcedures.unsafe_new failed: ${error.message}`);
+ *   console.error(`VotingProcedures._newUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Constructors
+ * @category ConstructorsUnsafe
  */
-export const unsafe_new = () => Effect.runSync(_new());
+export const _newUnsafe = () => Effect.runSync(_new());
 
 /**
  * Method len of VotingProcedures
@@ -153,16 +170,16 @@ export const len = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = VotingProcedures.unsafeLen(instance);
+ *   const result = VotingProcedures.lenUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`VotingProcedures.unsafeLen failed: ${error.message}`);
+ *   console.error(`VotingProcedures.lenUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeLen = (instance: CML.VotingProcedures): number =>
+export const lenUnsafe = (instance: CML.VotingProcedures): number =>
   Effect.runSync(len(instance));
 
 /**
@@ -212,16 +229,16 @@ export const insert = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = VotingProcedures.unsafeInsert(instance,  parameters );
+ *   const result = VotingProcedures.insertUnsafe(instance,  parameters );
  *   console.log(result);
  * } catch (error) {
- *   console.error(`VotingProcedures.unsafeInsert failed: ${error.message}`);
+ *   console.error(`VotingProcedures.insertUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeInsert = (
+export const insertUnsafe = (
   instance: CML.VotingProcedures,
   key: CML.Voter,
   value: CML.MapGovActionIdToVotingProcedure,
@@ -274,16 +291,16 @@ export const get = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = VotingProcedures.unsafeGet(instance,  parameters );
+ *   const result = VotingProcedures.getUnsafe(instance,  parameters );
  *   console.log(result);
  * } catch (error) {
- *   console.error(`VotingProcedures.unsafeGet failed: ${error.message}`);
+ *   console.error(`VotingProcedures.getUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeGet = (
+export const getUnsafe = (
   instance: CML.VotingProcedures,
   key: CML.Voter,
 ): CML.MapGovActionIdToVotingProcedure | undefined =>
@@ -331,14 +348,14 @@ export const keys = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = VotingProcedures.unsafeKeys(instance);
+ *   const result = VotingProcedures.keysUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`VotingProcedures.unsafeKeys failed: ${error.message}`);
+ *   console.error(`VotingProcedures.keysUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeKeys = (instance: CML.VotingProcedures): CML.VoterList =>
+export const keysUnsafe = (instance: CML.VotingProcedures): CML.VoterList =>
   Effect.runSync(keys(instance));

@@ -1,8 +1,25 @@
+/**
+ * @since 2.0.0
+ */
 import { Data, Effect } from "effect";
 import * as CML from "@anastasia-labs/cardano-multiplatform-lib-nodejs";
 
+/**
+ * Type alias for the CML SingleCertificateBuilder class
+ *
+ * @since 2.0.0
+ * @category Types
+ */
 export type SingleCertificateBuilder = CML.SingleCertificateBuilder;
 
+/**
+ * Error class for SingleCertificateBuilder operations
+ *
+ * This error is thrown when operations on SingleCertificateBuilder instances fail.
+ *
+ * @since 2.0.0
+ * @category Errors
+ */
 export class SingleCertificateBuilderError extends Data.TaggedError(
   "SingleCertificateBuilderError",
 )<{
@@ -51,16 +68,16 @@ export const free = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = SingleCertificateBuilder.unsafeFree(instance);
+ *   const result = SingleCertificateBuilder.freeUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`SingleCertificateBuilder.unsafeFree failed: ${error.message}`);
+ *   console.error(`SingleCertificateBuilder.freeUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeFree = (instance: CML.SingleCertificateBuilder): void =>
+export const freeUnsafe = (instance: CML.SingleCertificateBuilder): void =>
   Effect.runSync(free(instance));
 
 /**
@@ -100,16 +117,16 @@ export const _new = Effect.fn(function* (cert: CML.Certificate) {
  *
  * // Using try/catch for error handling
  * try {
- *   const result = SingleCertificateBuilder.unsafe_new( parameters );
+ *   const result = SingleCertificateBuilder._newUnsafe( parameters );
  *   console.log(result);
  * } catch (error) {
- *   console.error(`SingleCertificateBuilder.unsafe_new failed: ${error.message}`);
+ *   console.error(`SingleCertificateBuilder._newUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Constructors
+ * @category ConstructorsUnsafe
  */
-export const unsafe_new = (cert: CML.Certificate) => Effect.runSync(_new(cert));
+export const _newUnsafe = (cert: CML.Certificate) => Effect.runSync(_new(cert));
 
 /**
  * Method skipWitness of SingleCertificateBuilder
@@ -156,16 +173,16 @@ export const skipWitness = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = SingleCertificateBuilder.unsafeSkipWitness(instance);
+ *   const result = SingleCertificateBuilder.skipWitnessUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`SingleCertificateBuilder.unsafeSkipWitness failed: ${error.message}`);
+ *   console.error(`SingleCertificateBuilder.skipWitnessUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeSkipWitness = (
+export const skipWitnessUnsafe = (
   instance: CML.SingleCertificateBuilder,
 ): CML.CertificateBuilderResult => Effect.runSync(skipWitness(instance));
 
@@ -214,16 +231,16 @@ export const paymentKey = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = SingleCertificateBuilder.unsafePaymentKey(instance);
+ *   const result = SingleCertificateBuilder.paymentKeyUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`SingleCertificateBuilder.unsafePaymentKey failed: ${error.message}`);
+ *   console.error(`SingleCertificateBuilder.paymentKeyUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafePaymentKey = (
+export const paymentKeyUnsafe = (
   instance: CML.SingleCertificateBuilder,
 ): CML.CertificateBuilderResult => Effect.runSync(paymentKey(instance));
 
@@ -274,16 +291,16 @@ export const nativeScript = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = SingleCertificateBuilder.unsafeNativeScript(instance,  parameters );
+ *   const result = SingleCertificateBuilder.nativeScriptUnsafe(instance,  parameters );
  *   console.log(result);
  * } catch (error) {
- *   console.error(`SingleCertificateBuilder.unsafeNativeScript failed: ${error.message}`);
+ *   console.error(`SingleCertificateBuilder.nativeScriptUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeNativeScript = (
+export const nativeScriptUnsafe = (
   instance: CML.SingleCertificateBuilder,
   _nativeScript: CML.NativeScript,
   witnessInfo: CML.NativeScriptWitnessInfo,
@@ -337,16 +354,16 @@ export const plutusScript = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = SingleCertificateBuilder.unsafePlutusScript(instance,  parameters );
+ *   const result = SingleCertificateBuilder.plutusScriptUnsafe(instance,  parameters );
  *   console.log(result);
  * } catch (error) {
- *   console.error(`SingleCertificateBuilder.unsafePlutusScript failed: ${error.message}`);
+ *   console.error(`SingleCertificateBuilder.plutusScriptUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafePlutusScript = (
+export const plutusScriptUnsafe = (
   instance: CML.SingleCertificateBuilder,
   partialWitness: CML.PartialPlutusWitness,
   requiredSigners: CML.Ed25519KeyHashList,

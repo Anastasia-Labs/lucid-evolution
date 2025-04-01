@@ -1,8 +1,25 @@
+/**
+ * @since 2.0.0
+ */
 import { Data, Effect } from "effect";
 import * as CML from "@anastasia-labs/cardano-multiplatform-lib-nodejs";
 
+/**
+ * Type alias for the CML StakeRegDelegCert class
+ *
+ * @since 2.0.0
+ * @category Types
+ */
 export type StakeRegDelegCert = CML.StakeRegDelegCert;
 
+/**
+ * Error class for StakeRegDelegCert operations
+ *
+ * This error is thrown when operations on StakeRegDelegCert instances fail.
+ *
+ * @since 2.0.0
+ * @category Errors
+ */
 export class StakeRegDelegCertError extends Data.TaggedError(
   "StakeRegDelegCertError",
 )<{
@@ -51,16 +68,16 @@ export const free = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = StakeRegDelegCert.unsafeFree(instance);
+ *   const result = StakeRegDelegCert.freeUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`StakeRegDelegCert.unsafeFree failed: ${error.message}`);
+ *   console.error(`StakeRegDelegCert.freeUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeFree = (instance: CML.StakeRegDelegCert): void =>
+export const freeUnsafe = (instance: CML.StakeRegDelegCert): void =>
   Effect.runSync(free(instance));
 
 /**
@@ -105,16 +122,16 @@ export const toCborBytes = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = StakeRegDelegCert.unsafeToCborBytes(instance);
+ *   const result = StakeRegDelegCert.toCborBytesUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`StakeRegDelegCert.unsafeToCborBytes failed: ${error.message}`);
+ *   console.error(`StakeRegDelegCert.toCborBytesUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeToCborBytes = (
+export const toCborBytesUnsafe = (
   instance: CML.StakeRegDelegCert,
 ): Uint8Array => Effect.runSync(toCborBytes(instance));
 
@@ -160,16 +177,16 @@ export const toCanonicalCborBytes = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = StakeRegDelegCert.unsafeToCanonicalCborBytes(instance);
+ *   const result = StakeRegDelegCert.toCanonicalCborBytesUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`StakeRegDelegCert.unsafeToCanonicalCborBytes failed: ${error.message}`);
+ *   console.error(`StakeRegDelegCert.toCanonicalCborBytesUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeToCanonicalCborBytes = (
+export const toCanonicalCborBytesUnsafe = (
   instance: CML.StakeRegDelegCert,
 ): Uint8Array => Effect.runSync(toCanonicalCborBytes(instance));
 
@@ -210,16 +227,16 @@ export const fromCborBytes = Effect.fn(function* (cborBytes: Uint8Array) {
  *
  * // Using try/catch for error handling
  * try {
- *   const result = StakeRegDelegCert.unsafeFromCborBytes( parameters );
+ *   const result = StakeRegDelegCert.fromCborBytesUnsafe( parameters );
  *   console.log(result);
  * } catch (error) {
- *   console.error(`StakeRegDelegCert.unsafeFromCborBytes failed: ${error.message}`);
+ *   console.error(`StakeRegDelegCert.fromCborBytesUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Constructors
+ * @category ConstructorsUnsafe
  */
-export const unsafeFromCborBytes = (cborBytes: Uint8Array) =>
+export const fromCborBytesUnsafe = (cborBytes: Uint8Array) =>
   Effect.runSync(fromCborBytes(cborBytes));
 
 /**
@@ -264,16 +281,16 @@ export const toCborHex = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = StakeRegDelegCert.unsafeToCborHex(instance);
+ *   const result = StakeRegDelegCert.toCborHexUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`StakeRegDelegCert.unsafeToCborHex failed: ${error.message}`);
+ *   console.error(`StakeRegDelegCert.toCborHexUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeToCborHex = (instance: CML.StakeRegDelegCert): string =>
+export const toCborHexUnsafe = (instance: CML.StakeRegDelegCert): string =>
   Effect.runSync(toCborHex(instance));
 
 /**
@@ -318,16 +335,16 @@ export const toCanonicalCborHex = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = StakeRegDelegCert.unsafeToCanonicalCborHex(instance);
+ *   const result = StakeRegDelegCert.toCanonicalCborHexUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`StakeRegDelegCert.unsafeToCanonicalCborHex failed: ${error.message}`);
+ *   console.error(`StakeRegDelegCert.toCanonicalCborHexUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeToCanonicalCborHex = (
+export const toCanonicalCborHexUnsafe = (
   instance: CML.StakeRegDelegCert,
 ): string => Effect.runSync(toCanonicalCborHex(instance));
 
@@ -368,16 +385,16 @@ export const fromCborHex = Effect.fn(function* (cborBytes: string) {
  *
  * // Using try/catch for error handling
  * try {
- *   const result = StakeRegDelegCert.unsafeFromCborHex( parameters );
+ *   const result = StakeRegDelegCert.fromCborHexUnsafe( parameters );
  *   console.log(result);
  * } catch (error) {
- *   console.error(`StakeRegDelegCert.unsafeFromCborHex failed: ${error.message}`);
+ *   console.error(`StakeRegDelegCert.fromCborHexUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Constructors
+ * @category ConstructorsUnsafe
  */
-export const unsafeFromCborHex = (cborBytes: string) =>
+export const fromCborHexUnsafe = (cborBytes: string) =>
   Effect.runSync(fromCborHex(cborBytes));
 
 /**
@@ -422,16 +439,16 @@ export const toJson = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = StakeRegDelegCert.unsafeToJson(instance);
+ *   const result = StakeRegDelegCert.toJsonUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`StakeRegDelegCert.unsafeToJson failed: ${error.message}`);
+ *   console.error(`StakeRegDelegCert.toJsonUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeToJson = (instance: CML.StakeRegDelegCert): string =>
+export const toJsonUnsafe = (instance: CML.StakeRegDelegCert): string =>
   Effect.runSync(toJson(instance));
 
 /**
@@ -476,16 +493,16 @@ export const toJsValue = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = StakeRegDelegCert.unsafeToJsValue(instance);
+ *   const result = StakeRegDelegCert.toJsValueUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`StakeRegDelegCert.unsafeToJsValue failed: ${error.message}`);
+ *   console.error(`StakeRegDelegCert.toJsValueUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeToJsValue = (instance: CML.StakeRegDelegCert): any =>
+export const toJsValueUnsafe = (instance: CML.StakeRegDelegCert): any =>
   Effect.runSync(toJsValue(instance));
 
 /**
@@ -525,16 +542,16 @@ export const fromJson = Effect.fn(function* (json: string) {
  *
  * // Using try/catch for error handling
  * try {
- *   const result = StakeRegDelegCert.unsafeFromJson( parameters );
+ *   const result = StakeRegDelegCert.fromJsonUnsafe( parameters );
  *   console.log(result);
  * } catch (error) {
- *   console.error(`StakeRegDelegCert.unsafeFromJson failed: ${error.message}`);
+ *   console.error(`StakeRegDelegCert.fromJsonUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Constructors
+ * @category ConstructorsUnsafe
  */
-export const unsafeFromJson = (json: string) => Effect.runSync(fromJson(json));
+export const fromJsonUnsafe = (json: string) => Effect.runSync(fromJson(json));
 
 /**
  * Method stakeCredential of StakeRegDelegCert
@@ -578,16 +595,16 @@ export const stakeCredential = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = StakeRegDelegCert.unsafeStakeCredential(instance);
+ *   const result = StakeRegDelegCert.stakeCredentialUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`StakeRegDelegCert.unsafeStakeCredential failed: ${error.message}`);
+ *   console.error(`StakeRegDelegCert.stakeCredentialUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeStakeCredential = (
+export const stakeCredentialUnsafe = (
   instance: CML.StakeRegDelegCert,
 ): CML.Credential => Effect.runSync(stakeCredential(instance));
 
@@ -633,16 +650,16 @@ export const pool = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = StakeRegDelegCert.unsafePool(instance);
+ *   const result = StakeRegDelegCert.poolUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`StakeRegDelegCert.unsafePool failed: ${error.message}`);
+ *   console.error(`StakeRegDelegCert.poolUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafePool = (
+export const poolUnsafe = (
   instance: CML.StakeRegDelegCert,
 ): CML.Ed25519KeyHash => Effect.runSync(pool(instance));
 
@@ -688,16 +705,16 @@ export const deposit = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = StakeRegDelegCert.unsafeDeposit(instance);
+ *   const result = StakeRegDelegCert.depositUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`StakeRegDelegCert.unsafeDeposit failed: ${error.message}`);
+ *   console.error(`StakeRegDelegCert.depositUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeDeposit = (instance: CML.StakeRegDelegCert): bigint =>
+export const depositUnsafe = (instance: CML.StakeRegDelegCert): bigint =>
   Effect.runSync(deposit(instance));
 
 /**
@@ -741,16 +758,16 @@ export const _new = Effect.fn(function* (
  *
  * // Using try/catch for error handling
  * try {
- *   const result = StakeRegDelegCert.unsafe_new( parameters );
+ *   const result = StakeRegDelegCert._newUnsafe( parameters );
  *   console.log(result);
  * } catch (error) {
- *   console.error(`StakeRegDelegCert.unsafe_new failed: ${error.message}`);
+ *   console.error(`StakeRegDelegCert._newUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Constructors
+ * @category ConstructorsUnsafe
  */
-export const unsafe_new = (
+export const _newUnsafe = (
   stakeCredential: CML.Credential,
   pool: CML.Ed25519KeyHash,
   deposit: bigint,

@@ -1,6 +1,17 @@
+/**
+ * @since 2.0.0
+ */
 import { Data, Effect } from "effect";
 import * as CML from "@anastasia-labs/cardano-multiplatform-lib-nodejs";
 
+/**
+ * Error class for decode_metadatum_to_json_str function
+ *
+ * This error is thrown when the decode_metadatum_to_json_str function fails.
+ *
+ * @since 2.0.0
+ * @category Errors
+ */
 export class DecodeMetadatumToJsonStrError extends Data.TaggedError(
   "DecodeMetadatumToJsonStrError",
 )<{
@@ -40,19 +51,19 @@ export const decodeMetadatumToJsonStr = Effect.fn(function* (
  * Unsafely calls decode_metadatum_to_json_str function without Effect wrapper
  *
  * @example
- * import { unsafeDecodeMetadatumToJsonStr } from "@lucid-evolution/experimental/CML/functions";
+ * import { decodeMetadatumToJsonStrUnsafe } from "@lucid-evolution/experimental/CML/functions";
  *
  * try {
- *   const result = unsafeDecodeMetadatumToJsonStr(TransactionMetadatum instance , MetadataJsonSchema instance );
+ *   const result = decodeMetadatumToJsonStrUnsafe(TransactionMetadatum instance , MetadataJsonSchema instance );
  *   console.log(result);
  * } catch (error) {
- *   console.error(`unsafeDecodeMetadatumToJsonStr failed: ${error.message}`);
+ *   console.error(`decodeMetadatumToJsonStrUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Functions
+ * @category FunctionsUnsafe
  */
-export const unsafeDecodeMetadatumToJsonStr = (
+export const decodeMetadatumToJsonStrUnsafe = (
   metadatum: CML.TransactionMetadatum,
   schema: CML.MetadataJsonSchema,
 ): string => Effect.runSync(decodeMetadatumToJsonStr(metadatum, schema));

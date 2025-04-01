@@ -1,8 +1,40 @@
+/**
+ * @since 2.0.0
+ */
 import * as CML from "@anastasia-labs/cardano-multiplatform-lib-nodejs";
 
+/**
+ * Type alias for the CML DatumOptionKind enum
+ *
+ * @since 2.0.0
+ * @category Types
+ */
 export type DatumOptionKind = CML.DatumOptionKind;
 
+/**
+ * Hash variant of the DatumOptionKind enum
+ *
+ * @example
+ * import { DatumOptionKind } from "@lucid-evolution/experimental";
+ *
+ * const kind = DatumOptionKind.Hash;
+ *
+ * @since 2.0.0
+ * @category Variants
+ */
 export const Hash = CML.DatumOptionKind.Hash;
+
+/**
+ * Datum variant of the DatumOptionKind enum
+ *
+ * @example
+ * import { DatumOptionKind } from "@lucid-evolution/experimental";
+ *
+ * const kind = DatumOptionKind.Datum;
+ *
+ * @since 2.0.0
+ * @category Variants
+ */
 export const Datum = CML.DatumOptionKind.Datum;
 
 /**

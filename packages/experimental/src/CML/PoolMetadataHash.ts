@@ -1,8 +1,25 @@
+/**
+ * @since 2.0.0
+ */
 import { Data, Effect } from "effect";
 import * as CML from "@anastasia-labs/cardano-multiplatform-lib-nodejs";
 
+/**
+ * Type alias for the CML PoolMetadataHash class
+ *
+ * @since 2.0.0
+ * @category Types
+ */
 export type PoolMetadataHash = CML.PoolMetadataHash;
 
+/**
+ * Error class for PoolMetadataHash operations
+ *
+ * This error is thrown when operations on PoolMetadataHash instances fail.
+ *
+ * @since 2.0.0
+ * @category Errors
+ */
 export class PoolMetadataHashError extends Data.TaggedError(
   "PoolMetadataHashError",
 )<{
@@ -51,16 +68,16 @@ export const free = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = PoolMetadataHash.unsafeFree(instance);
+ *   const result = PoolMetadataHash.freeUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`PoolMetadataHash.unsafeFree failed: ${error.message}`);
+ *   console.error(`PoolMetadataHash.freeUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeFree = (instance: CML.PoolMetadataHash): void =>
+export const freeUnsafe = (instance: CML.PoolMetadataHash): void =>
   Effect.runSync(free(instance));
 
 /**
@@ -106,16 +123,16 @@ export const toBech32 = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = PoolMetadataHash.unsafeToBech32(instance,  parameters );
+ *   const result = PoolMetadataHash.toBech32Unsafe(instance,  parameters );
  *   console.log(result);
  * } catch (error) {
- *   console.error(`PoolMetadataHash.unsafeToBech32 failed: ${error.message}`);
+ *   console.error(`PoolMetadataHash.toBech32Unsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeToBech32 = (
+export const toBech32Unsafe = (
   instance: CML.PoolMetadataHash,
   prefix: string,
 ): string => Effect.runSync(toBech32(instance, prefix));
@@ -157,16 +174,16 @@ export const fromBech32 = Effect.fn(function* (bech32Str: string) {
  *
  * // Using try/catch for error handling
  * try {
- *   const result = PoolMetadataHash.unsafeFromBech32( parameters );
+ *   const result = PoolMetadataHash.fromBech32Unsafe( parameters );
  *   console.log(result);
  * } catch (error) {
- *   console.error(`PoolMetadataHash.unsafeFromBech32 failed: ${error.message}`);
+ *   console.error(`PoolMetadataHash.fromBech32Unsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Constructors
+ * @category ConstructorsUnsafe
  */
-export const unsafeFromBech32 = (bech32Str: string) =>
+export const fromBech32Unsafe = (bech32Str: string) =>
   Effect.runSync(fromBech32(bech32Str));
 
 /**
@@ -211,16 +228,16 @@ export const toRawBytes = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = PoolMetadataHash.unsafeToRawBytes(instance);
+ *   const result = PoolMetadataHash.toRawBytesUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`PoolMetadataHash.unsafeToRawBytes failed: ${error.message}`);
+ *   console.error(`PoolMetadataHash.toRawBytesUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeToRawBytes = (instance: CML.PoolMetadataHash): Uint8Array =>
+export const toRawBytesUnsafe = (instance: CML.PoolMetadataHash): Uint8Array =>
   Effect.runSync(toRawBytes(instance));
 
 /**
@@ -260,16 +277,16 @@ export const fromRawBytes = Effect.fn(function* (bytes: Uint8Array) {
  *
  * // Using try/catch for error handling
  * try {
- *   const result = PoolMetadataHash.unsafeFromRawBytes( parameters );
+ *   const result = PoolMetadataHash.fromRawBytesUnsafe( parameters );
  *   console.log(result);
  * } catch (error) {
- *   console.error(`PoolMetadataHash.unsafeFromRawBytes failed: ${error.message}`);
+ *   console.error(`PoolMetadataHash.fromRawBytesUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Constructors
+ * @category ConstructorsUnsafe
  */
-export const unsafeFromRawBytes = (bytes: Uint8Array) =>
+export const fromRawBytesUnsafe = (bytes: Uint8Array) =>
   Effect.runSync(fromRawBytes(bytes));
 
 /**
@@ -314,16 +331,16 @@ export const toHex = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = PoolMetadataHash.unsafeToHex(instance);
+ *   const result = PoolMetadataHash.toHexUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`PoolMetadataHash.unsafeToHex failed: ${error.message}`);
+ *   console.error(`PoolMetadataHash.toHexUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeToHex = (instance: CML.PoolMetadataHash): string =>
+export const toHexUnsafe = (instance: CML.PoolMetadataHash): string =>
   Effect.runSync(toHex(instance));
 
 /**
@@ -363,13 +380,13 @@ export const fromHex = Effect.fn(function* (input: string) {
  *
  * // Using try/catch for error handling
  * try {
- *   const result = PoolMetadataHash.unsafeFromHex( parameters );
+ *   const result = PoolMetadataHash.fromHexUnsafe( parameters );
  *   console.log(result);
  * } catch (error) {
- *   console.error(`PoolMetadataHash.unsafeFromHex failed: ${error.message}`);
+ *   console.error(`PoolMetadataHash.fromHexUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Constructors
+ * @category ConstructorsUnsafe
  */
-export const unsafeFromHex = (input: string) => Effect.runSync(fromHex(input));
+export const fromHexUnsafe = (input: string) => Effect.runSync(fromHex(input));

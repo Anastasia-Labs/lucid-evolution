@@ -1,8 +1,25 @@
+/**
+ * @since 2.0.0
+ */
 import { Data, Effect } from "effect";
 import * as CML from "@anastasia-labs/cardano-multiplatform-lib-nodejs";
 
+/**
+ * Type alias for the CML VRFCert class
+ *
+ * @since 2.0.0
+ * @category Types
+ */
 export type VRFCert = CML.VRFCert;
 
+/**
+ * Error class for VRFCert operations
+ *
+ * This error is thrown when operations on VRFCert instances fail.
+ *
+ * @since 2.0.0
+ * @category Errors
+ */
 export class VRFCertError extends Data.TaggedError("VRFCertError")<{
   message?: string;
 }> {}
@@ -47,16 +64,16 @@ export const free = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = VRFCert.unsafeFree(instance);
+ *   const result = VRFCert.freeUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`VRFCert.unsafeFree failed: ${error.message}`);
+ *   console.error(`VRFCert.freeUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeFree = (instance: CML.VRFCert): void =>
+export const freeUnsafe = (instance: CML.VRFCert): void =>
   Effect.runSync(free(instance));
 
 /**
@@ -99,16 +116,16 @@ export const toCborBytes = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = VRFCert.unsafeToCborBytes(instance);
+ *   const result = VRFCert.toCborBytesUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`VRFCert.unsafeToCborBytes failed: ${error.message}`);
+ *   console.error(`VRFCert.toCborBytesUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeToCborBytes = (instance: CML.VRFCert): Uint8Array =>
+export const toCborBytesUnsafe = (instance: CML.VRFCert): Uint8Array =>
   Effect.runSync(toCborBytes(instance));
 
 /**
@@ -151,16 +168,16 @@ export const toCanonicalCborBytes = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = VRFCert.unsafeToCanonicalCborBytes(instance);
+ *   const result = VRFCert.toCanonicalCborBytesUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`VRFCert.unsafeToCanonicalCborBytes failed: ${error.message}`);
+ *   console.error(`VRFCert.toCanonicalCborBytesUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeToCanonicalCborBytes = (instance: CML.VRFCert): Uint8Array =>
+export const toCanonicalCborBytesUnsafe = (instance: CML.VRFCert): Uint8Array =>
   Effect.runSync(toCanonicalCborBytes(instance));
 
 /**
@@ -200,16 +217,16 @@ export const fromCborBytes = Effect.fn(function* (cborBytes: Uint8Array) {
  *
  * // Using try/catch for error handling
  * try {
- *   const result = VRFCert.unsafeFromCborBytes( parameters );
+ *   const result = VRFCert.fromCborBytesUnsafe( parameters );
  *   console.log(result);
  * } catch (error) {
- *   console.error(`VRFCert.unsafeFromCborBytes failed: ${error.message}`);
+ *   console.error(`VRFCert.fromCborBytesUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Constructors
+ * @category ConstructorsUnsafe
  */
-export const unsafeFromCborBytes = (cborBytes: Uint8Array) =>
+export const fromCborBytesUnsafe = (cborBytes: Uint8Array) =>
   Effect.runSync(fromCborBytes(cborBytes));
 
 /**
@@ -252,16 +269,16 @@ export const toCborHex = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = VRFCert.unsafeToCborHex(instance);
+ *   const result = VRFCert.toCborHexUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`VRFCert.unsafeToCborHex failed: ${error.message}`);
+ *   console.error(`VRFCert.toCborHexUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeToCborHex = (instance: CML.VRFCert): string =>
+export const toCborHexUnsafe = (instance: CML.VRFCert): string =>
   Effect.runSync(toCborHex(instance));
 
 /**
@@ -304,16 +321,16 @@ export const toCanonicalCborHex = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = VRFCert.unsafeToCanonicalCborHex(instance);
+ *   const result = VRFCert.toCanonicalCborHexUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`VRFCert.unsafeToCanonicalCborHex failed: ${error.message}`);
+ *   console.error(`VRFCert.toCanonicalCborHexUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeToCanonicalCborHex = (instance: CML.VRFCert): string =>
+export const toCanonicalCborHexUnsafe = (instance: CML.VRFCert): string =>
   Effect.runSync(toCanonicalCborHex(instance));
 
 /**
@@ -353,16 +370,16 @@ export const fromCborHex = Effect.fn(function* (cborBytes: string) {
  *
  * // Using try/catch for error handling
  * try {
- *   const result = VRFCert.unsafeFromCborHex( parameters );
+ *   const result = VRFCert.fromCborHexUnsafe( parameters );
  *   console.log(result);
  * } catch (error) {
- *   console.error(`VRFCert.unsafeFromCborHex failed: ${error.message}`);
+ *   console.error(`VRFCert.fromCborHexUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Constructors
+ * @category ConstructorsUnsafe
  */
-export const unsafeFromCborHex = (cborBytes: string) =>
+export const fromCborHexUnsafe = (cborBytes: string) =>
   Effect.runSync(fromCborHex(cborBytes));
 
 /**
@@ -405,16 +422,16 @@ export const toJson = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = VRFCert.unsafeToJson(instance);
+ *   const result = VRFCert.toJsonUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`VRFCert.unsafeToJson failed: ${error.message}`);
+ *   console.error(`VRFCert.toJsonUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeToJson = (instance: CML.VRFCert): string =>
+export const toJsonUnsafe = (instance: CML.VRFCert): string =>
   Effect.runSync(toJson(instance));
 
 /**
@@ -457,16 +474,16 @@ export const toJsValue = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = VRFCert.unsafeToJsValue(instance);
+ *   const result = VRFCert.toJsValueUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`VRFCert.unsafeToJsValue failed: ${error.message}`);
+ *   console.error(`VRFCert.toJsValueUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeToJsValue = (instance: CML.VRFCert): any =>
+export const toJsValueUnsafe = (instance: CML.VRFCert): any =>
   Effect.runSync(toJsValue(instance));
 
 /**
@@ -506,16 +523,16 @@ export const fromJson = Effect.fn(function* (json: string) {
  *
  * // Using try/catch for error handling
  * try {
- *   const result = VRFCert.unsafeFromJson( parameters );
+ *   const result = VRFCert.fromJsonUnsafe( parameters );
  *   console.log(result);
  * } catch (error) {
- *   console.error(`VRFCert.unsafeFromJson failed: ${error.message}`);
+ *   console.error(`VRFCert.fromJsonUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Constructors
+ * @category ConstructorsUnsafe
  */
-export const unsafeFromJson = (json: string) => Effect.runSync(fromJson(json));
+export const fromJsonUnsafe = (json: string) => Effect.runSync(fromJson(json));
 
 /**
  * Method output of VRFCert
@@ -557,16 +574,16 @@ export const output = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = VRFCert.unsafeOutput(instance);
+ *   const result = VRFCert.outputUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`VRFCert.unsafeOutput failed: ${error.message}`);
+ *   console.error(`VRFCert.outputUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeOutput = (instance: CML.VRFCert): Uint8Array =>
+export const outputUnsafe = (instance: CML.VRFCert): Uint8Array =>
   Effect.runSync(output(instance));
 
 /**
@@ -609,16 +626,16 @@ export const proof = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = VRFCert.unsafeProof(instance);
+ *   const result = VRFCert.proofUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`VRFCert.unsafeProof failed: ${error.message}`);
+ *   console.error(`VRFCert.proofUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeProof = (instance: CML.VRFCert): Uint8Array =>
+export const proofUnsafe = (instance: CML.VRFCert): Uint8Array =>
   Effect.runSync(proof(instance));
 
 /**
@@ -661,14 +678,14 @@ export const _new = Effect.fn(function* (
  *
  * // Using try/catch for error handling
  * try {
- *   const result = VRFCert.unsafe_new( parameters );
+ *   const result = VRFCert._newUnsafe( parameters );
  *   console.log(result);
  * } catch (error) {
- *   console.error(`VRFCert.unsafe_new failed: ${error.message}`);
+ *   console.error(`VRFCert._newUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Constructors
+ * @category ConstructorsUnsafe
  */
-export const unsafe_new = (output: Uint8Array, proof: Uint8Array) =>
+export const _newUnsafe = (output: Uint8Array, proof: Uint8Array) =>
   Effect.runSync(_new(output, proof));

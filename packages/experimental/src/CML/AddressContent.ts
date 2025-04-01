@@ -1,8 +1,25 @@
+/**
+ * @since 2.0.0
+ */
 import { Data, Effect } from "effect";
 import * as CML from "@anastasia-labs/cardano-multiplatform-lib-nodejs";
 
+/**
+ * Type alias for the CML AddressContent class
+ *
+ * @since 2.0.0
+ * @category Types
+ */
 export type AddressContent = CML.AddressContent;
 
+/**
+ * Error class for AddressContent operations
+ *
+ * This error is thrown when operations on AddressContent instances fail.
+ *
+ * @since 2.0.0
+ * @category Errors
+ */
 export class AddressContentError extends Data.TaggedError(
   "AddressContentError",
 )<{
@@ -49,16 +66,16 @@ export const free = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = AddressContent.unsafeFree(instance);
+ *   const result = AddressContent.freeUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`AddressContent.unsafeFree failed: ${error.message}`);
+ *   console.error(`AddressContent.freeUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeFree = (instance: CML.AddressContent): void =>
+export const freeUnsafe = (instance: CML.AddressContent): void =>
   Effect.runSync(free(instance));
 
 /**
@@ -103,16 +120,16 @@ export const hashAndCreate = Effect.fn(function* (
  *
  * // Using try/catch for error handling
  * try {
- *   const result = AddressContent.unsafeHashAndCreate( parameters );
+ *   const result = AddressContent.hashAndCreateUnsafe( parameters );
  *   console.log(result);
  * } catch (error) {
- *   console.error(`AddressContent.unsafeHashAndCreate failed: ${error.message}`);
+ *   console.error(`AddressContent.hashAndCreateUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Constructors
+ * @category ConstructorsUnsafe
  */
-export const unsafeHashAndCreate = (
+export const hashAndCreateUnsafe = (
   addrType: CML.ByronAddrType,
   spendingData: CML.SpendingData,
   attributes: CML.AddrAttributes,
@@ -158,16 +175,16 @@ export const newRedeem = Effect.fn(function* (
  *
  * // Using try/catch for error handling
  * try {
- *   const result = AddressContent.unsafeNewRedeem( parameters );
+ *   const result = AddressContent.newRedeemUnsafe( parameters );
  *   console.log(result);
  * } catch (error) {
- *   console.error(`AddressContent.unsafeNewRedeem failed: ${error.message}`);
+ *   console.error(`AddressContent.newRedeemUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Constructors
+ * @category ConstructorsUnsafe
  */
-export const unsafeNewRedeem = (
+export const newRedeemUnsafe = (
   pubkey: CML.PublicKey,
   protocolMagic: CML.ProtocolMagic,
 ) => Effect.runSync(newRedeem(pubkey, protocolMagic));
@@ -212,16 +229,16 @@ export const newSimple = Effect.fn(function* (
  *
  * // Using try/catch for error handling
  * try {
- *   const result = AddressContent.unsafeNewSimple( parameters );
+ *   const result = AddressContent.newSimpleUnsafe( parameters );
  *   console.log(result);
  * } catch (error) {
- *   console.error(`AddressContent.unsafeNewSimple failed: ${error.message}`);
+ *   console.error(`AddressContent.newSimpleUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Constructors
+ * @category ConstructorsUnsafe
  */
-export const unsafeNewSimple = (
+export const newSimpleUnsafe = (
   xpub: CML.Bip32PublicKey,
   protocolMagic: CML.ProtocolMagic,
 ) => Effect.runSync(newSimple(xpub, protocolMagic));
@@ -268,16 +285,16 @@ export const toAddress = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = AddressContent.unsafeToAddress(instance);
+ *   const result = AddressContent.toAddressUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`AddressContent.unsafeToAddress failed: ${error.message}`);
+ *   console.error(`AddressContent.toAddressUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeToAddress = (
+export const toAddressUnsafe = (
   instance: CML.AddressContent,
 ): CML.ByronAddress => Effect.runSync(toAddress(instance));
 
@@ -323,16 +340,16 @@ export const byronProtocolMagic = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = AddressContent.unsafeByronProtocolMagic(instance);
+ *   const result = AddressContent.byronProtocolMagicUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`AddressContent.unsafeByronProtocolMagic failed: ${error.message}`);
+ *   console.error(`AddressContent.byronProtocolMagicUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeByronProtocolMagic = (
+export const byronProtocolMagicUnsafe = (
   instance: CML.AddressContent,
 ): CML.ProtocolMagic => Effect.runSync(byronProtocolMagic(instance));
 
@@ -376,16 +393,16 @@ export const networkId = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = AddressContent.unsafeNetworkId(instance);
+ *   const result = AddressContent.networkIdUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`AddressContent.unsafeNetworkId failed: ${error.message}`);
+ *   console.error(`AddressContent.networkIdUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeNetworkId = (instance: CML.AddressContent): number =>
+export const networkIdUnsafe = (instance: CML.AddressContent): number =>
   Effect.runSync(networkId(instance));
 
 /**
@@ -428,16 +445,16 @@ export const icarusFromKey = Effect.fn(function* (
  *
  * // Using try/catch for error handling
  * try {
- *   const result = AddressContent.unsafeIcarusFromKey( parameters );
+ *   const result = AddressContent.icarusFromKeyUnsafe( parameters );
  *   console.log(result);
  * } catch (error) {
- *   console.error(`AddressContent.unsafeIcarusFromKey failed: ${error.message}`);
+ *   console.error(`AddressContent.icarusFromKeyUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Constructors
+ * @category ConstructorsUnsafe
  */
-export const unsafeIcarusFromKey = (
+export const icarusFromKeyUnsafe = (
   key: CML.Bip32PublicKey,
   protocolMagic: CML.ProtocolMagic,
 ) => Effect.runSync(icarusFromKey(key, protocolMagic));
@@ -485,16 +502,16 @@ export const identicalWithPubkey = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = AddressContent.unsafeIdenticalWithPubkey(instance,  parameters );
+ *   const result = AddressContent.identicalWithPubkeyUnsafe(instance,  parameters );
  *   console.log(result);
  * } catch (error) {
- *   console.error(`AddressContent.unsafeIdenticalWithPubkey failed: ${error.message}`);
+ *   console.error(`AddressContent.identicalWithPubkeyUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeIdenticalWithPubkey = (
+export const identicalWithPubkeyUnsafe = (
   instance: CML.AddressContent,
   xpub: CML.Bip32PublicKey,
 ): boolean => Effect.runSync(identicalWithPubkey(instance, xpub));
@@ -541,16 +558,16 @@ export const toCborBytes = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = AddressContent.unsafeToCborBytes(instance);
+ *   const result = AddressContent.toCborBytesUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`AddressContent.unsafeToCborBytes failed: ${error.message}`);
+ *   console.error(`AddressContent.toCborBytesUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeToCborBytes = (instance: CML.AddressContent): Uint8Array =>
+export const toCborBytesUnsafe = (instance: CML.AddressContent): Uint8Array =>
   Effect.runSync(toCborBytes(instance));
 
 /**
@@ -590,16 +607,16 @@ export const fromCborBytes = Effect.fn(function* (cborBytes: Uint8Array) {
  *
  * // Using try/catch for error handling
  * try {
- *   const result = AddressContent.unsafeFromCborBytes( parameters );
+ *   const result = AddressContent.fromCborBytesUnsafe( parameters );
  *   console.log(result);
  * } catch (error) {
- *   console.error(`AddressContent.unsafeFromCborBytes failed: ${error.message}`);
+ *   console.error(`AddressContent.fromCborBytesUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Constructors
+ * @category ConstructorsUnsafe
  */
-export const unsafeFromCborBytes = (cborBytes: Uint8Array) =>
+export const fromCborBytesUnsafe = (cborBytes: Uint8Array) =>
   Effect.runSync(fromCborBytes(cborBytes));
 
 /**
@@ -642,16 +659,16 @@ export const toCborHex = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = AddressContent.unsafeToCborHex(instance);
+ *   const result = AddressContent.toCborHexUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`AddressContent.unsafeToCborHex failed: ${error.message}`);
+ *   console.error(`AddressContent.toCborHexUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeToCborHex = (instance: CML.AddressContent): string =>
+export const toCborHexUnsafe = (instance: CML.AddressContent): string =>
   Effect.runSync(toCborHex(instance));
 
 /**
@@ -691,16 +708,16 @@ export const fromCborHex = Effect.fn(function* (cborBytes: string) {
  *
  * // Using try/catch for error handling
  * try {
- *   const result = AddressContent.unsafeFromCborHex( parameters );
+ *   const result = AddressContent.fromCborHexUnsafe( parameters );
  *   console.log(result);
  * } catch (error) {
- *   console.error(`AddressContent.unsafeFromCborHex failed: ${error.message}`);
+ *   console.error(`AddressContent.fromCborHexUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Constructors
+ * @category ConstructorsUnsafe
  */
-export const unsafeFromCborHex = (cborBytes: string) =>
+export const fromCborHexUnsafe = (cborBytes: string) =>
   Effect.runSync(fromCborHex(cborBytes));
 
 /**
@@ -745,16 +762,16 @@ export const addressId = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = AddressContent.unsafeAddressId(instance);
+ *   const result = AddressContent.addressIdUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`AddressContent.unsafeAddressId failed: ${error.message}`);
+ *   console.error(`AddressContent.addressIdUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeAddressId = (instance: CML.AddressContent): CML.AddressId =>
+export const addressIdUnsafe = (instance: CML.AddressContent): CML.AddressId =>
   Effect.runSync(addressId(instance));
 
 /**
@@ -799,16 +816,16 @@ export const addrAttributes = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = AddressContent.unsafeAddrAttributes(instance);
+ *   const result = AddressContent.addrAttributesUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`AddressContent.unsafeAddrAttributes failed: ${error.message}`);
+ *   console.error(`AddressContent.addrAttributesUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeAddrAttributes = (
+export const addrAttributesUnsafe = (
   instance: CML.AddressContent,
 ): CML.AddrAttributes => Effect.runSync(addrAttributes(instance));
 
@@ -854,16 +871,16 @@ export const addrType = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = AddressContent.unsafeAddrType(instance);
+ *   const result = AddressContent.addrTypeUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`AddressContent.unsafeAddrType failed: ${error.message}`);
+ *   console.error(`AddressContent.addrTypeUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeAddrType = (
+export const addrTypeUnsafe = (
   instance: CML.AddressContent,
 ): CML.ByronAddrType => Effect.runSync(addrType(instance));
 
@@ -908,16 +925,16 @@ export const _new = Effect.fn(function* (
  *
  * // Using try/catch for error handling
  * try {
- *   const result = AddressContent.unsafe_new( parameters );
+ *   const result = AddressContent._newUnsafe( parameters );
  *   console.log(result);
  * } catch (error) {
- *   console.error(`AddressContent.unsafe_new failed: ${error.message}`);
+ *   console.error(`AddressContent._newUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Constructors
+ * @category ConstructorsUnsafe
  */
-export const unsafe_new = (
+export const _newUnsafe = (
   addressId: CML.AddressId,
   addrAttributes: CML.AddrAttributes,
   addrType: CML.ByronAddrType,

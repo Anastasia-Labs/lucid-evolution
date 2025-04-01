@@ -1,8 +1,25 @@
+/**
+ * @since 2.0.0
+ */
 import { Data, Effect } from "effect";
 import * as CML from "@anastasia-labs/cardano-multiplatform-lib-nodejs";
 
+/**
+ * Type alias for the CML TransactionOutputAmountBuilder class
+ *
+ * @since 2.0.0
+ * @category Types
+ */
 export type TransactionOutputAmountBuilder = CML.TransactionOutputAmountBuilder;
 
+/**
+ * Error class for TransactionOutputAmountBuilder operations
+ *
+ * This error is thrown when operations on TransactionOutputAmountBuilder instances fail.
+ *
+ * @since 2.0.0
+ * @category Errors
+ */
 export class TransactionOutputAmountBuilderError extends Data.TaggedError(
   "TransactionOutputAmountBuilderError",
 )<{
@@ -51,16 +68,16 @@ export const free = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = TransactionOutputAmountBuilder.unsafeFree(instance);
+ *   const result = TransactionOutputAmountBuilder.freeUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`TransactionOutputAmountBuilder.unsafeFree failed: ${error.message}`);
+ *   console.error(`TransactionOutputAmountBuilder.freeUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeFree = (
+export const freeUnsafe = (
   instance: CML.TransactionOutputAmountBuilder,
 ): void => Effect.runSync(free(instance));
 
@@ -110,16 +127,16 @@ export const withValue = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = TransactionOutputAmountBuilder.unsafeWithValue(instance,  parameters );
+ *   const result = TransactionOutputAmountBuilder.withValueUnsafe(instance,  parameters );
  *   console.log(result);
  * } catch (error) {
- *   console.error(`TransactionOutputAmountBuilder.unsafeWithValue failed: ${error.message}`);
+ *   console.error(`TransactionOutputAmountBuilder.withValueUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeWithValue = (
+export const withValueUnsafe = (
   instance: CML.TransactionOutputAmountBuilder,
   amount: CML.Value,
 ): CML.TransactionOutputAmountBuilder =>
@@ -173,16 +190,16 @@ export const withAssetAndMinRequiredCoin = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = TransactionOutputAmountBuilder.unsafeWithAssetAndMinRequiredCoin(instance,  parameters );
+ *   const result = TransactionOutputAmountBuilder.withAssetAndMinRequiredCoinUnsafe(instance,  parameters );
  *   console.log(result);
  * } catch (error) {
- *   console.error(`TransactionOutputAmountBuilder.unsafeWithAssetAndMinRequiredCoin failed: ${error.message}`);
+ *   console.error(`TransactionOutputAmountBuilder.withAssetAndMinRequiredCoinUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeWithAssetAndMinRequiredCoin = (
+export const withAssetAndMinRequiredCoinUnsafe = (
   instance: CML.TransactionOutputAmountBuilder,
   multiasset: CML.MultiAsset,
   coinsPerUtxoByte: bigint,
@@ -236,15 +253,15 @@ export const build = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = TransactionOutputAmountBuilder.unsafeBuild(instance);
+ *   const result = TransactionOutputAmountBuilder.buildUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`TransactionOutputAmountBuilder.unsafeBuild failed: ${error.message}`);
+ *   console.error(`TransactionOutputAmountBuilder.buildUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeBuild = (
+export const buildUnsafe = (
   instance: CML.TransactionOutputAmountBuilder,
 ): CML.SingleOutputBuilderResult => Effect.runSync(build(instance));

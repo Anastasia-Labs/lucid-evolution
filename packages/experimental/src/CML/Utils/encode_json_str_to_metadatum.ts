@@ -1,6 +1,17 @@
+/**
+ * @since 2.0.0
+ */
 import { Data, Effect } from "effect";
 import * as CML from "@anastasia-labs/cardano-multiplatform-lib-nodejs";
 
+/**
+ * Error class for encode_json_str_to_metadatum function
+ *
+ * This error is thrown when the encode_json_str_to_metadatum function fails.
+ *
+ * @since 2.0.0
+ * @category Errors
+ */
 export class EncodeJsonStrToMetadatumError extends Data.TaggedError(
   "EncodeJsonStrToMetadatumError",
 )<{
@@ -40,19 +51,19 @@ export const encodeJsonStrToMetadatum = Effect.fn(function* (
  * Unsafely calls encode_json_str_to_metadatum function without Effect wrapper
  *
  * @example
- * import { unsafeEncodeJsonStrToMetadatum } from "@lucid-evolution/experimental/CML/functions";
+ * import { encodeJsonStrToMetadatumUnsafe } from "@lucid-evolution/experimental/CML/functions";
  *
  * try {
- *   const result = unsafeEncodeJsonStrToMetadatum("example", MetadataJsonSchema instance );
+ *   const result = encodeJsonStrToMetadatumUnsafe("example", MetadataJsonSchema instance );
  *   console.log(result);
  * } catch (error) {
- *   console.error(`unsafeEncodeJsonStrToMetadatum failed: ${error.message}`);
+ *   console.error(`encodeJsonStrToMetadatumUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Functions
+ * @category FunctionsUnsafe
  */
-export const unsafeEncodeJsonStrToMetadatum = (
+export const encodeJsonStrToMetadatumUnsafe = (
   json: string,
   schema: CML.MetadataJsonSchema,
 ): CML.TransactionMetadatum =>

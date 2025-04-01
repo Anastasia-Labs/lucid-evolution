@@ -1,8 +1,25 @@
+/**
+ * @since 2.0.0
+ */
 import { Data, Effect } from "effect";
 import * as CML from "@anastasia-labs/cardano-multiplatform-lib-nodejs";
 
+/**
+ * Type alias for the CML CIP36RegistrationWitness class
+ *
+ * @since 2.0.0
+ * @category Types
+ */
 export type CIP36RegistrationWitness = CML.CIP36RegistrationWitness;
 
+/**
+ * Error class for CIP36RegistrationWitness operations
+ *
+ * This error is thrown when operations on CIP36RegistrationWitness instances fail.
+ *
+ * @since 2.0.0
+ * @category Errors
+ */
 export class CIP36RegistrationWitnessError extends Data.TaggedError(
   "CIP36RegistrationWitnessError",
 )<{
@@ -51,16 +68,16 @@ export const free = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = CIP36RegistrationWitness.unsafeFree(instance);
+ *   const result = CIP36RegistrationWitness.freeUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`CIP36RegistrationWitness.unsafeFree failed: ${error.message}`);
+ *   console.error(`CIP36RegistrationWitness.freeUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeFree = (instance: CML.CIP36RegistrationWitness): void =>
+export const freeUnsafe = (instance: CML.CIP36RegistrationWitness): void =>
   Effect.runSync(free(instance));
 
 /**
@@ -105,16 +122,16 @@ export const toCborBytes = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = CIP36RegistrationWitness.unsafeToCborBytes(instance);
+ *   const result = CIP36RegistrationWitness.toCborBytesUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`CIP36RegistrationWitness.unsafeToCborBytes failed: ${error.message}`);
+ *   console.error(`CIP36RegistrationWitness.toCborBytesUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeToCborBytes = (
+export const toCborBytesUnsafe = (
   instance: CML.CIP36RegistrationWitness,
 ): Uint8Array => Effect.runSync(toCborBytes(instance));
 
@@ -160,16 +177,16 @@ export const toCanonicalCborBytes = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = CIP36RegistrationWitness.unsafeToCanonicalCborBytes(instance);
+ *   const result = CIP36RegistrationWitness.toCanonicalCborBytesUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`CIP36RegistrationWitness.unsafeToCanonicalCborBytes failed: ${error.message}`);
+ *   console.error(`CIP36RegistrationWitness.toCanonicalCborBytesUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeToCanonicalCborBytes = (
+export const toCanonicalCborBytesUnsafe = (
   instance: CML.CIP36RegistrationWitness,
 ): Uint8Array => Effect.runSync(toCanonicalCborBytes(instance));
 
@@ -210,16 +227,16 @@ export const fromCborBytes = Effect.fn(function* (cborBytes: Uint8Array) {
  *
  * // Using try/catch for error handling
  * try {
- *   const result = CIP36RegistrationWitness.unsafeFromCborBytes( parameters );
+ *   const result = CIP36RegistrationWitness.fromCborBytesUnsafe( parameters );
  *   console.log(result);
  * } catch (error) {
- *   console.error(`CIP36RegistrationWitness.unsafeFromCborBytes failed: ${error.message}`);
+ *   console.error(`CIP36RegistrationWitness.fromCborBytesUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Constructors
+ * @category ConstructorsUnsafe
  */
-export const unsafeFromCborBytes = (cborBytes: Uint8Array) =>
+export const fromCborBytesUnsafe = (cborBytes: Uint8Array) =>
   Effect.runSync(fromCborBytes(cborBytes));
 
 /**
@@ -264,16 +281,16 @@ export const toCborHex = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = CIP36RegistrationWitness.unsafeToCborHex(instance);
+ *   const result = CIP36RegistrationWitness.toCborHexUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`CIP36RegistrationWitness.unsafeToCborHex failed: ${error.message}`);
+ *   console.error(`CIP36RegistrationWitness.toCborHexUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeToCborHex = (
+export const toCborHexUnsafe = (
   instance: CML.CIP36RegistrationWitness,
 ): string => Effect.runSync(toCborHex(instance));
 
@@ -319,16 +336,16 @@ export const toCanonicalCborHex = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = CIP36RegistrationWitness.unsafeToCanonicalCborHex(instance);
+ *   const result = CIP36RegistrationWitness.toCanonicalCborHexUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`CIP36RegistrationWitness.unsafeToCanonicalCborHex failed: ${error.message}`);
+ *   console.error(`CIP36RegistrationWitness.toCanonicalCborHexUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeToCanonicalCborHex = (
+export const toCanonicalCborHexUnsafe = (
   instance: CML.CIP36RegistrationWitness,
 ): string => Effect.runSync(toCanonicalCborHex(instance));
 
@@ -369,16 +386,16 @@ export const fromCborHex = Effect.fn(function* (cborBytes: string) {
  *
  * // Using try/catch for error handling
  * try {
- *   const result = CIP36RegistrationWitness.unsafeFromCborHex( parameters );
+ *   const result = CIP36RegistrationWitness.fromCborHexUnsafe( parameters );
  *   console.log(result);
  * } catch (error) {
- *   console.error(`CIP36RegistrationWitness.unsafeFromCborHex failed: ${error.message}`);
+ *   console.error(`CIP36RegistrationWitness.fromCborHexUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Constructors
+ * @category ConstructorsUnsafe
  */
-export const unsafeFromCborHex = (cborBytes: string) =>
+export const fromCborHexUnsafe = (cborBytes: string) =>
   Effect.runSync(fromCborHex(cborBytes));
 
 /**
@@ -423,16 +440,16 @@ export const toJson = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = CIP36RegistrationWitness.unsafeToJson(instance);
+ *   const result = CIP36RegistrationWitness.toJsonUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`CIP36RegistrationWitness.unsafeToJson failed: ${error.message}`);
+ *   console.error(`CIP36RegistrationWitness.toJsonUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeToJson = (instance: CML.CIP36RegistrationWitness): string =>
+export const toJsonUnsafe = (instance: CML.CIP36RegistrationWitness): string =>
   Effect.runSync(toJson(instance));
 
 /**
@@ -477,16 +494,16 @@ export const toJsValue = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = CIP36RegistrationWitness.unsafeToJsValue(instance);
+ *   const result = CIP36RegistrationWitness.toJsValueUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`CIP36RegistrationWitness.unsafeToJsValue failed: ${error.message}`);
+ *   console.error(`CIP36RegistrationWitness.toJsValueUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeToJsValue = (instance: CML.CIP36RegistrationWitness): any =>
+export const toJsValueUnsafe = (instance: CML.CIP36RegistrationWitness): any =>
   Effect.runSync(toJsValue(instance));
 
 /**
@@ -526,16 +543,16 @@ export const fromJson = Effect.fn(function* (json: string) {
  *
  * // Using try/catch for error handling
  * try {
- *   const result = CIP36RegistrationWitness.unsafeFromJson( parameters );
+ *   const result = CIP36RegistrationWitness.fromJsonUnsafe( parameters );
  *   console.log(result);
  * } catch (error) {
- *   console.error(`CIP36RegistrationWitness.unsafeFromJson failed: ${error.message}`);
+ *   console.error(`CIP36RegistrationWitness.fromJsonUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Constructors
+ * @category ConstructorsUnsafe
  */
-export const unsafeFromJson = (json: string) => Effect.runSync(fromJson(json));
+export const fromJsonUnsafe = (json: string) => Effect.runSync(fromJson(json));
 
 /**
  * Method stakeWitness of CIP36RegistrationWitness
@@ -579,16 +596,16 @@ export const stakeWitness = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = CIP36RegistrationWitness.unsafeStakeWitness(instance);
+ *   const result = CIP36RegistrationWitness.stakeWitnessUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`CIP36RegistrationWitness.unsafeStakeWitness failed: ${error.message}`);
+ *   console.error(`CIP36RegistrationWitness.stakeWitnessUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeStakeWitness = (
+export const stakeWitnessUnsafe = (
   instance: CML.CIP36RegistrationWitness,
 ): CML.Ed25519Signature => Effect.runSync(stakeWitness(instance));
 
@@ -629,14 +646,14 @@ export const _new = Effect.fn(function* (stakeWitness: CML.Ed25519Signature) {
  *
  * // Using try/catch for error handling
  * try {
- *   const result = CIP36RegistrationWitness.unsafe_new( parameters );
+ *   const result = CIP36RegistrationWitness._newUnsafe( parameters );
  *   console.log(result);
  * } catch (error) {
- *   console.error(`CIP36RegistrationWitness.unsafe_new failed: ${error.message}`);
+ *   console.error(`CIP36RegistrationWitness._newUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Constructors
+ * @category ConstructorsUnsafe
  */
-export const unsafe_new = (stakeWitness: CML.Ed25519Signature) =>
+export const _newUnsafe = (stakeWitness: CML.Ed25519Signature) =>
   Effect.runSync(_new(stakeWitness));

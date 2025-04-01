@@ -1,8 +1,25 @@
+/**
+ * @since 2.0.0
+ */
 import { Data, Effect } from "effect";
 import * as CML from "@anastasia-labs/cardano-multiplatform-lib-nodejs";
 
+/**
+ * Type alias for the CML RedeemerWitnessKey class
+ *
+ * @since 2.0.0
+ * @category Types
+ */
 export type RedeemerWitnessKey = CML.RedeemerWitnessKey;
 
+/**
+ * Error class for RedeemerWitnessKey operations
+ *
+ * This error is thrown when operations on RedeemerWitnessKey instances fail.
+ *
+ * @since 2.0.0
+ * @category Errors
+ */
 export class RedeemerWitnessKeyError extends Data.TaggedError(
   "RedeemerWitnessKeyError",
 )<{
@@ -51,16 +68,16 @@ export const free = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = RedeemerWitnessKey.unsafeFree(instance);
+ *   const result = RedeemerWitnessKey.freeUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`RedeemerWitnessKey.unsafeFree failed: ${error.message}`);
+ *   console.error(`RedeemerWitnessKey.freeUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeFree = (instance: CML.RedeemerWitnessKey): void =>
+export const freeUnsafe = (instance: CML.RedeemerWitnessKey): void =>
   Effect.runSync(free(instance));
 
 /**
@@ -100,16 +117,16 @@ export const _new = Effect.fn(function* (tag: CML.RedeemerTag, index: bigint) {
  *
  * // Using try/catch for error handling
  * try {
- *   const result = RedeemerWitnessKey.unsafe_new( parameters );
+ *   const result = RedeemerWitnessKey._newUnsafe( parameters );
  *   console.log(result);
  * } catch (error) {
- *   console.error(`RedeemerWitnessKey.unsafe_new failed: ${error.message}`);
+ *   console.error(`RedeemerWitnessKey._newUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Constructors
+ * @category ConstructorsUnsafe
  */
-export const unsafe_new = (tag: CML.RedeemerTag, index: bigint) =>
+export const _newUnsafe = (tag: CML.RedeemerTag, index: bigint) =>
   Effect.runSync(_new(tag, index));
 
 /**
@@ -149,14 +166,14 @@ export const fromRedeemer = Effect.fn(function* (redeemer: CML.LegacyRedeemer) {
  *
  * // Using try/catch for error handling
  * try {
- *   const result = RedeemerWitnessKey.unsafeFromRedeemer( parameters );
+ *   const result = RedeemerWitnessKey.fromRedeemerUnsafe( parameters );
  *   console.log(result);
  * } catch (error) {
- *   console.error(`RedeemerWitnessKey.unsafeFromRedeemer failed: ${error.message}`);
+ *   console.error(`RedeemerWitnessKey.fromRedeemerUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Constructors
+ * @category ConstructorsUnsafe
  */
-export const unsafeFromRedeemer = (redeemer: CML.LegacyRedeemer) =>
+export const fromRedeemerUnsafe = (redeemer: CML.LegacyRedeemer) =>
   Effect.runSync(fromRedeemer(redeemer));

@@ -1,8 +1,25 @@
+/**
+ * @since 2.0.0
+ */
 import { Data, Effect } from "effect";
 import * as CML from "@anastasia-labs/cardano-multiplatform-lib-nodejs";
 
+/**
+ * Type alias for the CML ConwayFormatAuxData class
+ *
+ * @since 2.0.0
+ * @category Types
+ */
 export type ConwayFormatAuxData = CML.ConwayFormatAuxData;
 
+/**
+ * Error class for ConwayFormatAuxData operations
+ *
+ * This error is thrown when operations on ConwayFormatAuxData instances fail.
+ *
+ * @since 2.0.0
+ * @category Errors
+ */
 export class ConwayFormatAuxDataError extends Data.TaggedError(
   "ConwayFormatAuxDataError",
 )<{
@@ -51,16 +68,16 @@ export const free = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = ConwayFormatAuxData.unsafeFree(instance);
+ *   const result = ConwayFormatAuxData.freeUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`ConwayFormatAuxData.unsafeFree failed: ${error.message}`);
+ *   console.error(`ConwayFormatAuxData.freeUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeFree = (instance: CML.ConwayFormatAuxData): void =>
+export const freeUnsafe = (instance: CML.ConwayFormatAuxData): void =>
   Effect.runSync(free(instance));
 
 /**
@@ -105,16 +122,16 @@ export const toCborBytes = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = ConwayFormatAuxData.unsafeToCborBytes(instance);
+ *   const result = ConwayFormatAuxData.toCborBytesUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`ConwayFormatAuxData.unsafeToCborBytes failed: ${error.message}`);
+ *   console.error(`ConwayFormatAuxData.toCborBytesUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeToCborBytes = (
+export const toCborBytesUnsafe = (
   instance: CML.ConwayFormatAuxData,
 ): Uint8Array => Effect.runSync(toCborBytes(instance));
 
@@ -160,16 +177,16 @@ export const toCanonicalCborBytes = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = ConwayFormatAuxData.unsafeToCanonicalCborBytes(instance);
+ *   const result = ConwayFormatAuxData.toCanonicalCborBytesUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`ConwayFormatAuxData.unsafeToCanonicalCborBytes failed: ${error.message}`);
+ *   console.error(`ConwayFormatAuxData.toCanonicalCborBytesUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeToCanonicalCborBytes = (
+export const toCanonicalCborBytesUnsafe = (
   instance: CML.ConwayFormatAuxData,
 ): Uint8Array => Effect.runSync(toCanonicalCborBytes(instance));
 
@@ -210,16 +227,16 @@ export const fromCborBytes = Effect.fn(function* (cborBytes: Uint8Array) {
  *
  * // Using try/catch for error handling
  * try {
- *   const result = ConwayFormatAuxData.unsafeFromCborBytes( parameters );
+ *   const result = ConwayFormatAuxData.fromCborBytesUnsafe( parameters );
  *   console.log(result);
  * } catch (error) {
- *   console.error(`ConwayFormatAuxData.unsafeFromCborBytes failed: ${error.message}`);
+ *   console.error(`ConwayFormatAuxData.fromCborBytesUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Constructors
+ * @category ConstructorsUnsafe
  */
-export const unsafeFromCborBytes = (cborBytes: Uint8Array) =>
+export const fromCborBytesUnsafe = (cborBytes: Uint8Array) =>
   Effect.runSync(fromCborBytes(cborBytes));
 
 /**
@@ -264,16 +281,16 @@ export const toCborHex = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = ConwayFormatAuxData.unsafeToCborHex(instance);
+ *   const result = ConwayFormatAuxData.toCborHexUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`ConwayFormatAuxData.unsafeToCborHex failed: ${error.message}`);
+ *   console.error(`ConwayFormatAuxData.toCborHexUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeToCborHex = (instance: CML.ConwayFormatAuxData): string =>
+export const toCborHexUnsafe = (instance: CML.ConwayFormatAuxData): string =>
   Effect.runSync(toCborHex(instance));
 
 /**
@@ -318,16 +335,16 @@ export const toCanonicalCborHex = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = ConwayFormatAuxData.unsafeToCanonicalCborHex(instance);
+ *   const result = ConwayFormatAuxData.toCanonicalCborHexUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`ConwayFormatAuxData.unsafeToCanonicalCborHex failed: ${error.message}`);
+ *   console.error(`ConwayFormatAuxData.toCanonicalCborHexUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeToCanonicalCborHex = (
+export const toCanonicalCborHexUnsafe = (
   instance: CML.ConwayFormatAuxData,
 ): string => Effect.runSync(toCanonicalCborHex(instance));
 
@@ -368,16 +385,16 @@ export const fromCborHex = Effect.fn(function* (cborBytes: string) {
  *
  * // Using try/catch for error handling
  * try {
- *   const result = ConwayFormatAuxData.unsafeFromCborHex( parameters );
+ *   const result = ConwayFormatAuxData.fromCborHexUnsafe( parameters );
  *   console.log(result);
  * } catch (error) {
- *   console.error(`ConwayFormatAuxData.unsafeFromCborHex failed: ${error.message}`);
+ *   console.error(`ConwayFormatAuxData.fromCborHexUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Constructors
+ * @category ConstructorsUnsafe
  */
-export const unsafeFromCborHex = (cborBytes: string) =>
+export const fromCborHexUnsafe = (cborBytes: string) =>
   Effect.runSync(fromCborHex(cborBytes));
 
 /**
@@ -422,16 +439,16 @@ export const toJson = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = ConwayFormatAuxData.unsafeToJson(instance);
+ *   const result = ConwayFormatAuxData.toJsonUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`ConwayFormatAuxData.unsafeToJson failed: ${error.message}`);
+ *   console.error(`ConwayFormatAuxData.toJsonUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeToJson = (instance: CML.ConwayFormatAuxData): string =>
+export const toJsonUnsafe = (instance: CML.ConwayFormatAuxData): string =>
   Effect.runSync(toJson(instance));
 
 /**
@@ -476,16 +493,16 @@ export const toJsValue = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = ConwayFormatAuxData.unsafeToJsValue(instance);
+ *   const result = ConwayFormatAuxData.toJsValueUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`ConwayFormatAuxData.unsafeToJsValue failed: ${error.message}`);
+ *   console.error(`ConwayFormatAuxData.toJsValueUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeToJsValue = (instance: CML.ConwayFormatAuxData): any =>
+export const toJsValueUnsafe = (instance: CML.ConwayFormatAuxData): any =>
   Effect.runSync(toJsValue(instance));
 
 /**
@@ -525,16 +542,16 @@ export const fromJson = Effect.fn(function* (json: string) {
  *
  * // Using try/catch for error handling
  * try {
- *   const result = ConwayFormatAuxData.unsafeFromJson( parameters );
+ *   const result = ConwayFormatAuxData.fromJsonUnsafe( parameters );
  *   console.log(result);
  * } catch (error) {
- *   console.error(`ConwayFormatAuxData.unsafeFromJson failed: ${error.message}`);
+ *   console.error(`ConwayFormatAuxData.fromJsonUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Constructors
+ * @category ConstructorsUnsafe
  */
-export const unsafeFromJson = (json: string) => Effect.runSync(fromJson(json));
+export const fromJsonUnsafe = (json: string) => Effect.runSync(fromJson(json));
 
 /**
  * Method setMetadata of ConwayFormatAuxData
@@ -579,16 +596,16 @@ export const setMetadata = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = ConwayFormatAuxData.unsafeSetMetadata(instance,  parameters );
+ *   const result = ConwayFormatAuxData.setMetadataUnsafe(instance,  parameters );
  *   console.log(result);
  * } catch (error) {
- *   console.error(`ConwayFormatAuxData.unsafeSetMetadata failed: ${error.message}`);
+ *   console.error(`ConwayFormatAuxData.setMetadataUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeSetMetadata = (
+export const setMetadataUnsafe = (
   instance: CML.ConwayFormatAuxData,
   metadata: CML.Metadata,
 ): void => Effect.runSync(setMetadata(instance, metadata));
@@ -635,16 +652,16 @@ export const metadata = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = ConwayFormatAuxData.unsafeMetadata(instance);
+ *   const result = ConwayFormatAuxData.metadataUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`ConwayFormatAuxData.unsafeMetadata failed: ${error.message}`);
+ *   console.error(`ConwayFormatAuxData.metadataUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeMetadata = (
+export const metadataUnsafe = (
   instance: CML.ConwayFormatAuxData,
 ): CML.Metadata | undefined => Effect.runSync(metadata(instance));
 
@@ -691,16 +708,16 @@ export const setNativeScripts = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = ConwayFormatAuxData.unsafeSetNativeScripts(instance,  parameters );
+ *   const result = ConwayFormatAuxData.setNativeScriptsUnsafe(instance,  parameters );
  *   console.log(result);
  * } catch (error) {
- *   console.error(`ConwayFormatAuxData.unsafeSetNativeScripts failed: ${error.message}`);
+ *   console.error(`ConwayFormatAuxData.setNativeScriptsUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeSetNativeScripts = (
+export const setNativeScriptsUnsafe = (
   instance: CML.ConwayFormatAuxData,
   nativeScripts: CML.NativeScriptList,
 ): void => Effect.runSync(setNativeScripts(instance, nativeScripts));
@@ -750,16 +767,16 @@ export const nativeScripts = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = ConwayFormatAuxData.unsafeNativeScripts(instance);
+ *   const result = ConwayFormatAuxData.nativeScriptsUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`ConwayFormatAuxData.unsafeNativeScripts failed: ${error.message}`);
+ *   console.error(`ConwayFormatAuxData.nativeScriptsUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeNativeScripts = (
+export const nativeScriptsUnsafe = (
   instance: CML.ConwayFormatAuxData,
 ): CML.NativeScriptList | undefined => Effect.runSync(nativeScripts(instance));
 
@@ -806,16 +823,16 @@ export const setPlutusV1Scripts = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = ConwayFormatAuxData.unsafeSetPlutusV1Scripts(instance,  parameters );
+ *   const result = ConwayFormatAuxData.setPlutusV1ScriptsUnsafe(instance,  parameters );
  *   console.log(result);
  * } catch (error) {
- *   console.error(`ConwayFormatAuxData.unsafeSetPlutusV1Scripts failed: ${error.message}`);
+ *   console.error(`ConwayFormatAuxData.setPlutusV1ScriptsUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeSetPlutusV1Scripts = (
+export const setPlutusV1ScriptsUnsafe = (
   instance: CML.ConwayFormatAuxData,
   plutusV1Scripts: CML.PlutusV1ScriptList,
 ): void => Effect.runSync(setPlutusV1Scripts(instance, plutusV1Scripts));
@@ -865,16 +882,16 @@ export const plutusV1Scripts = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = ConwayFormatAuxData.unsafePlutusV1Scripts(instance);
+ *   const result = ConwayFormatAuxData.plutusV1ScriptsUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`ConwayFormatAuxData.unsafePlutusV1Scripts failed: ${error.message}`);
+ *   console.error(`ConwayFormatAuxData.plutusV1ScriptsUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafePlutusV1Scripts = (
+export const plutusV1ScriptsUnsafe = (
   instance: CML.ConwayFormatAuxData,
 ): CML.PlutusV1ScriptList | undefined =>
   Effect.runSync(plutusV1Scripts(instance));
@@ -922,16 +939,16 @@ export const setPlutusV2Scripts = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = ConwayFormatAuxData.unsafeSetPlutusV2Scripts(instance,  parameters );
+ *   const result = ConwayFormatAuxData.setPlutusV2ScriptsUnsafe(instance,  parameters );
  *   console.log(result);
  * } catch (error) {
- *   console.error(`ConwayFormatAuxData.unsafeSetPlutusV2Scripts failed: ${error.message}`);
+ *   console.error(`ConwayFormatAuxData.setPlutusV2ScriptsUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeSetPlutusV2Scripts = (
+export const setPlutusV2ScriptsUnsafe = (
   instance: CML.ConwayFormatAuxData,
   plutusV2Scripts: CML.PlutusV2ScriptList,
 ): void => Effect.runSync(setPlutusV2Scripts(instance, plutusV2Scripts));
@@ -981,16 +998,16 @@ export const plutusV2Scripts = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = ConwayFormatAuxData.unsafePlutusV2Scripts(instance);
+ *   const result = ConwayFormatAuxData.plutusV2ScriptsUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`ConwayFormatAuxData.unsafePlutusV2Scripts failed: ${error.message}`);
+ *   console.error(`ConwayFormatAuxData.plutusV2ScriptsUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafePlutusV2Scripts = (
+export const plutusV2ScriptsUnsafe = (
   instance: CML.ConwayFormatAuxData,
 ): CML.PlutusV2ScriptList | undefined =>
   Effect.runSync(plutusV2Scripts(instance));
@@ -1038,16 +1055,16 @@ export const setPlutusV3Scripts = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = ConwayFormatAuxData.unsafeSetPlutusV3Scripts(instance,  parameters );
+ *   const result = ConwayFormatAuxData.setPlutusV3ScriptsUnsafe(instance,  parameters );
  *   console.log(result);
  * } catch (error) {
- *   console.error(`ConwayFormatAuxData.unsafeSetPlutusV3Scripts failed: ${error.message}`);
+ *   console.error(`ConwayFormatAuxData.setPlutusV3ScriptsUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeSetPlutusV3Scripts = (
+export const setPlutusV3ScriptsUnsafe = (
   instance: CML.ConwayFormatAuxData,
   plutusV3Scripts: CML.PlutusV3ScriptList,
 ): void => Effect.runSync(setPlutusV3Scripts(instance, plutusV3Scripts));
@@ -1097,16 +1114,16 @@ export const plutusV3Scripts = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = ConwayFormatAuxData.unsafePlutusV3Scripts(instance);
+ *   const result = ConwayFormatAuxData.plutusV3ScriptsUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`ConwayFormatAuxData.unsafePlutusV3Scripts failed: ${error.message}`);
+ *   console.error(`ConwayFormatAuxData.plutusV3ScriptsUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafePlutusV3Scripts = (
+export const plutusV3ScriptsUnsafe = (
   instance: CML.ConwayFormatAuxData,
 ): CML.PlutusV3ScriptList | undefined =>
   Effect.runSync(plutusV3Scripts(instance));
@@ -1148,13 +1165,13 @@ export const _new = Effect.fn(function* () {
  *
  * // Using try/catch for error handling
  * try {
- *   const result = ConwayFormatAuxData.unsafe_new();
+ *   const result = ConwayFormatAuxData._newUnsafe();
  *   console.log(result);
  * } catch (error) {
- *   console.error(`ConwayFormatAuxData.unsafe_new failed: ${error.message}`);
+ *   console.error(`ConwayFormatAuxData._newUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Constructors
+ * @category ConstructorsUnsafe
  */
-export const unsafe_new = () => Effect.runSync(_new());
+export const _newUnsafe = () => Effect.runSync(_new());

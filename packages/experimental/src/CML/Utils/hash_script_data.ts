@@ -1,6 +1,17 @@
+/**
+ * @since 2.0.0
+ */
 import { Data, Effect } from "effect";
 import * as CML from "@anastasia-labs/cardano-multiplatform-lib-nodejs";
 
+/**
+ * Error class for hash_script_data function
+ *
+ * This error is thrown when the hash_script_data function fails.
+ *
+ * @since 2.0.0
+ * @category Errors
+ */
 export class HashScriptDataError extends Data.TaggedError(
   "HashScriptDataError",
 )<{
@@ -41,19 +52,19 @@ export const hashScriptData = Effect.fn(function* (
  * Unsafely calls hash_script_data function without Effect wrapper
  *
  * @example
- * import { unsafeHashScriptData } from "@lucid-evolution/experimental/CML/functions";
+ * import { hashScriptDataUnsafe } from "@lucid-evolution/experimental/CML/functions";
  *
  * try {
- *   const result = unsafeHashScriptData(Redeemers instance , CostModels instance , PlutusDataList instance );
+ *   const result = hashScriptDataUnsafe(Redeemers instance , CostModels instance , PlutusDataList instance );
  *   console.log(result);
  * } catch (error) {
- *   console.error(`unsafeHashScriptData failed: ${error.message}`);
+ *   console.error(`hashScriptDataUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Functions
+ * @category FunctionsUnsafe
  */
-export const unsafeHashScriptData = (
+export const hashScriptDataUnsafe = (
   redeemers: CML.Redeemers,
   costModels: CML.CostModels,
   datums: CML.PlutusDataList,

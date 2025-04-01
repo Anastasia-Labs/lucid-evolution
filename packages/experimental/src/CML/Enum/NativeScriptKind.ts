@@ -1,12 +1,92 @@
+/**
+ * @since 2.0.0
+ */
 import * as CML from "@anastasia-labs/cardano-multiplatform-lib-nodejs";
 
+/**
+ * Type alias for the CML NativeScriptKind enum
+ *
+ * @since 2.0.0
+ * @category Types
+ */
 export type NativeScriptKind = CML.NativeScriptKind;
 
+/**
+ * ScriptPubkey variant of the NativeScriptKind enum
+ *
+ * @example
+ * import { NativeScriptKind } from "@lucid-evolution/experimental";
+ *
+ * const kind = NativeScriptKind.ScriptPubkey;
+ *
+ * @since 2.0.0
+ * @category Variants
+ */
 export const ScriptPubkey = CML.NativeScriptKind.ScriptPubkey;
+
+/**
+ * ScriptAll variant of the NativeScriptKind enum
+ *
+ * @example
+ * import { NativeScriptKind } from "@lucid-evolution/experimental";
+ *
+ * const kind = NativeScriptKind.ScriptAll;
+ *
+ * @since 2.0.0
+ * @category Variants
+ */
 export const ScriptAll = CML.NativeScriptKind.ScriptAll;
+
+/**
+ * ScriptAny variant of the NativeScriptKind enum
+ *
+ * @example
+ * import { NativeScriptKind } from "@lucid-evolution/experimental";
+ *
+ * const kind = NativeScriptKind.ScriptAny;
+ *
+ * @since 2.0.0
+ * @category Variants
+ */
 export const ScriptAny = CML.NativeScriptKind.ScriptAny;
+
+/**
+ * ScriptNOfK variant of the NativeScriptKind enum
+ *
+ * @example
+ * import { NativeScriptKind } from "@lucid-evolution/experimental";
+ *
+ * const kind = NativeScriptKind.ScriptNOfK;
+ *
+ * @since 2.0.0
+ * @category Variants
+ */
 export const ScriptNOfK = CML.NativeScriptKind.ScriptNOfK;
+
+/**
+ * ScriptInvalidBefore variant of the NativeScriptKind enum
+ *
+ * @example
+ * import { NativeScriptKind } from "@lucid-evolution/experimental";
+ *
+ * const kind = NativeScriptKind.ScriptInvalidBefore;
+ *
+ * @since 2.0.0
+ * @category Variants
+ */
 export const ScriptInvalidBefore = CML.NativeScriptKind.ScriptInvalidBefore;
+
+/**
+ * ScriptInvalidHereafter variant of the NativeScriptKind enum
+ *
+ * @example
+ * import { NativeScriptKind } from "@lucid-evolution/experimental";
+ *
+ * const kind = NativeScriptKind.ScriptInvalidHereafter;
+ *
+ * @since 2.0.0
+ * @category Variants
+ */
 export const ScriptInvalidHereafter =
   CML.NativeScriptKind.ScriptInvalidHereafter;
 

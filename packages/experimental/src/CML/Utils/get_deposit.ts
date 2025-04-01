@@ -1,6 +1,17 @@
+/**
+ * @since 2.0.0
+ */
 import { Data, Effect } from "effect";
 import * as CML from "@anastasia-labs/cardano-multiplatform-lib-nodejs";
 
+/**
+ * Error class for get_deposit function
+ *
+ * This error is thrown when the get_deposit function fails.
+ *
+ * @since 2.0.0
+ * @category Errors
+ */
 export class GetDepositError extends Data.TaggedError("GetDepositError")<{
   message?: string;
 }> {}
@@ -39,19 +50,19 @@ export const getDeposit = Effect.fn(function* (
  * Unsafely calls get_deposit function without Effect wrapper
  *
  * @example
- * import { unsafeGetDeposit } from "@lucid-evolution/experimental/CML/functions";
+ * import { getDepositUnsafe } from "@lucid-evolution/experimental/CML/functions";
  *
  * try {
- *   const result = unsafeGetDeposit(TransactionBody instance ,  appropriate value ,  appropriate value );
+ *   const result = getDepositUnsafe(TransactionBody instance ,  appropriate value ,  appropriate value );
  *   console.log(result);
  * } catch (error) {
- *   console.error(`unsafeGetDeposit failed: ${error.message}`);
+ *   console.error(`getDepositUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Functions
+ * @category FunctionsUnsafe
  */
-export const unsafeGetDeposit = (
+export const getDepositUnsafe = (
   txbody: CML.TransactionBody,
   poolDeposit: bigint,
   keyDeposit: bigint,

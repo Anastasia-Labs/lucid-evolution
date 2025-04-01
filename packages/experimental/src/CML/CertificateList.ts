@@ -1,8 +1,25 @@
+/**
+ * @since 2.0.0
+ */
 import { Data, Effect } from "effect";
 import * as CML from "@anastasia-labs/cardano-multiplatform-lib-nodejs";
 
+/**
+ * Type alias for the CML CertificateList class
+ *
+ * @since 2.0.0
+ * @category Types
+ */
 export type CertificateList = CML.CertificateList;
 
+/**
+ * Error class for CertificateList operations
+ *
+ * This error is thrown when operations on CertificateList instances fail.
+ *
+ * @since 2.0.0
+ * @category Errors
+ */
 export class CertificateListError extends Data.TaggedError(
   "CertificateListError",
 )<{
@@ -49,16 +66,16 @@ export const free = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = CertificateList.unsafeFree(instance);
+ *   const result = CertificateList.freeUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`CertificateList.unsafeFree failed: ${error.message}`);
+ *   console.error(`CertificateList.freeUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeFree = (instance: CML.CertificateList): void =>
+export const freeUnsafe = (instance: CML.CertificateList): void =>
   Effect.runSync(free(instance));
 
 /**
@@ -98,16 +115,16 @@ export const _new = Effect.fn(function* () {
  *
  * // Using try/catch for error handling
  * try {
- *   const result = CertificateList.unsafe_new();
+ *   const result = CertificateList._newUnsafe();
  *   console.log(result);
  * } catch (error) {
- *   console.error(`CertificateList.unsafe_new failed: ${error.message}`);
+ *   console.error(`CertificateList._newUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Constructors
+ * @category ConstructorsUnsafe
  */
-export const unsafe_new = () => Effect.runSync(_new());
+export const _newUnsafe = () => Effect.runSync(_new());
 
 /**
  * Method len of CertificateList
@@ -151,16 +168,16 @@ export const len = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = CertificateList.unsafeLen(instance);
+ *   const result = CertificateList.lenUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`CertificateList.unsafeLen failed: ${error.message}`);
+ *   console.error(`CertificateList.lenUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeLen = (instance: CML.CertificateList): number =>
+export const lenUnsafe = (instance: CML.CertificateList): number =>
   Effect.runSync(len(instance));
 
 /**
@@ -206,16 +223,16 @@ export const get = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = CertificateList.unsafeGet(instance,  parameters );
+ *   const result = CertificateList.getUnsafe(instance,  parameters );
  *   console.log(result);
  * } catch (error) {
- *   console.error(`CertificateList.unsafeGet failed: ${error.message}`);
+ *   console.error(`CertificateList.getUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeGet = (
+export const getUnsafe = (
   instance: CML.CertificateList,
   index: number,
 ): CML.Certificate => Effect.runSync(get(instance, index));
@@ -263,16 +280,16 @@ export const add = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = CertificateList.unsafeAdd(instance,  parameters );
+ *   const result = CertificateList.addUnsafe(instance,  parameters );
  *   console.log(result);
  * } catch (error) {
- *   console.error(`CertificateList.unsafeAdd failed: ${error.message}`);
+ *   console.error(`CertificateList.addUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeAdd = (
+export const addUnsafe = (
   instance: CML.CertificateList,
   elem: CML.Certificate,
 ): void => Effect.runSync(add(instance, elem));

@@ -1,8 +1,25 @@
+/**
+ * @since 2.0.0
+ */
 import { Data, Effect } from "effect";
 import * as CML from "@anastasia-labs/cardano-multiplatform-lib-nodejs";
 
+/**
+ * Type alias for the CML PlutusV1ScriptList class
+ *
+ * @since 2.0.0
+ * @category Types
+ */
 export type PlutusV1ScriptList = CML.PlutusV1ScriptList;
 
+/**
+ * Error class for PlutusV1ScriptList operations
+ *
+ * This error is thrown when operations on PlutusV1ScriptList instances fail.
+ *
+ * @since 2.0.0
+ * @category Errors
+ */
 export class PlutusV1ScriptListError extends Data.TaggedError(
   "PlutusV1ScriptListError",
 )<{
@@ -51,16 +68,16 @@ export const free = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = PlutusV1ScriptList.unsafeFree(instance);
+ *   const result = PlutusV1ScriptList.freeUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`PlutusV1ScriptList.unsafeFree failed: ${error.message}`);
+ *   console.error(`PlutusV1ScriptList.freeUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeFree = (instance: CML.PlutusV1ScriptList): void =>
+export const freeUnsafe = (instance: CML.PlutusV1ScriptList): void =>
   Effect.runSync(free(instance));
 
 /**
@@ -100,16 +117,16 @@ export const _new = Effect.fn(function* () {
  *
  * // Using try/catch for error handling
  * try {
- *   const result = PlutusV1ScriptList.unsafe_new();
+ *   const result = PlutusV1ScriptList._newUnsafe();
  *   console.log(result);
  * } catch (error) {
- *   console.error(`PlutusV1ScriptList.unsafe_new failed: ${error.message}`);
+ *   console.error(`PlutusV1ScriptList._newUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Constructors
+ * @category ConstructorsUnsafe
  */
-export const unsafe_new = () => Effect.runSync(_new());
+export const _newUnsafe = () => Effect.runSync(_new());
 
 /**
  * Method len of PlutusV1ScriptList
@@ -153,16 +170,16 @@ export const len = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = PlutusV1ScriptList.unsafeLen(instance);
+ *   const result = PlutusV1ScriptList.lenUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`PlutusV1ScriptList.unsafeLen failed: ${error.message}`);
+ *   console.error(`PlutusV1ScriptList.lenUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeLen = (instance: CML.PlutusV1ScriptList): number =>
+export const lenUnsafe = (instance: CML.PlutusV1ScriptList): number =>
   Effect.runSync(len(instance));
 
 /**
@@ -208,16 +225,16 @@ export const get = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = PlutusV1ScriptList.unsafeGet(instance,  parameters );
+ *   const result = PlutusV1ScriptList.getUnsafe(instance,  parameters );
  *   console.log(result);
  * } catch (error) {
- *   console.error(`PlutusV1ScriptList.unsafeGet failed: ${error.message}`);
+ *   console.error(`PlutusV1ScriptList.getUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeGet = (
+export const getUnsafe = (
   instance: CML.PlutusV1ScriptList,
   index: number,
 ): CML.PlutusV1Script => Effect.runSync(get(instance, index));
@@ -265,16 +282,16 @@ export const add = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = PlutusV1ScriptList.unsafeAdd(instance,  parameters );
+ *   const result = PlutusV1ScriptList.addUnsafe(instance,  parameters );
  *   console.log(result);
  * } catch (error) {
- *   console.error(`PlutusV1ScriptList.unsafeAdd failed: ${error.message}`);
+ *   console.error(`PlutusV1ScriptList.addUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeAdd = (
+export const addUnsafe = (
   instance: CML.PlutusV1ScriptList,
   elem: CML.PlutusV1Script,
 ): void => Effect.runSync(add(instance, elem));

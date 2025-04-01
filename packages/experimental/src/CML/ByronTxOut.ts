@@ -1,8 +1,25 @@
+/**
+ * @since 2.0.0
+ */
 import { Data, Effect } from "effect";
 import * as CML from "@anastasia-labs/cardano-multiplatform-lib-nodejs";
 
+/**
+ * Type alias for the CML ByronTxOut class
+ *
+ * @since 2.0.0
+ * @category Types
+ */
 export type ByronTxOut = CML.ByronTxOut;
 
+/**
+ * Error class for ByronTxOut operations
+ *
+ * This error is thrown when operations on ByronTxOut instances fail.
+ *
+ * @since 2.0.0
+ * @category Errors
+ */
 export class ByronTxOutError extends Data.TaggedError("ByronTxOutError")<{
   message?: string;
 }> {}
@@ -47,16 +64,16 @@ export const free = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = ByronTxOut.unsafeFree(instance);
+ *   const result = ByronTxOut.freeUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`ByronTxOut.unsafeFree failed: ${error.message}`);
+ *   console.error(`ByronTxOut.freeUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeFree = (instance: CML.ByronTxOut): void =>
+export const freeUnsafe = (instance: CML.ByronTxOut): void =>
   Effect.runSync(free(instance));
 
 /**
@@ -99,16 +116,16 @@ export const toCborBytes = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = ByronTxOut.unsafeToCborBytes(instance);
+ *   const result = ByronTxOut.toCborBytesUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`ByronTxOut.unsafeToCborBytes failed: ${error.message}`);
+ *   console.error(`ByronTxOut.toCborBytesUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeToCborBytes = (instance: CML.ByronTxOut): Uint8Array =>
+export const toCborBytesUnsafe = (instance: CML.ByronTxOut): Uint8Array =>
   Effect.runSync(toCborBytes(instance));
 
 /**
@@ -148,16 +165,16 @@ export const fromCborBytes = Effect.fn(function* (cborBytes: Uint8Array) {
  *
  * // Using try/catch for error handling
  * try {
- *   const result = ByronTxOut.unsafeFromCborBytes( parameters );
+ *   const result = ByronTxOut.fromCborBytesUnsafe( parameters );
  *   console.log(result);
  * } catch (error) {
- *   console.error(`ByronTxOut.unsafeFromCborBytes failed: ${error.message}`);
+ *   console.error(`ByronTxOut.fromCborBytesUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Constructors
+ * @category ConstructorsUnsafe
  */
-export const unsafeFromCborBytes = (cborBytes: Uint8Array) =>
+export const fromCborBytesUnsafe = (cborBytes: Uint8Array) =>
   Effect.runSync(fromCborBytes(cborBytes));
 
 /**
@@ -200,16 +217,16 @@ export const toCborHex = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = ByronTxOut.unsafeToCborHex(instance);
+ *   const result = ByronTxOut.toCborHexUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`ByronTxOut.unsafeToCborHex failed: ${error.message}`);
+ *   console.error(`ByronTxOut.toCborHexUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeToCborHex = (instance: CML.ByronTxOut): string =>
+export const toCborHexUnsafe = (instance: CML.ByronTxOut): string =>
   Effect.runSync(toCborHex(instance));
 
 /**
@@ -249,16 +266,16 @@ export const fromCborHex = Effect.fn(function* (cborBytes: string) {
  *
  * // Using try/catch for error handling
  * try {
- *   const result = ByronTxOut.unsafeFromCborHex( parameters );
+ *   const result = ByronTxOut.fromCborHexUnsafe( parameters );
  *   console.log(result);
  * } catch (error) {
- *   console.error(`ByronTxOut.unsafeFromCborHex failed: ${error.message}`);
+ *   console.error(`ByronTxOut.fromCborHexUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Constructors
+ * @category ConstructorsUnsafe
  */
-export const unsafeFromCborHex = (cborBytes: string) =>
+export const fromCborHexUnsafe = (cborBytes: string) =>
   Effect.runSync(fromCborHex(cborBytes));
 
 /**
@@ -303,16 +320,16 @@ export const address = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = ByronTxOut.unsafeAddress(instance);
+ *   const result = ByronTxOut.addressUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`ByronTxOut.unsafeAddress failed: ${error.message}`);
+ *   console.error(`ByronTxOut.addressUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeAddress = (instance: CML.ByronTxOut): CML.ByronAddress =>
+export const addressUnsafe = (instance: CML.ByronTxOut): CML.ByronAddress =>
   Effect.runSync(address(instance));
 
 /**
@@ -355,16 +372,16 @@ export const amount = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = ByronTxOut.unsafeAmount(instance);
+ *   const result = ByronTxOut.amountUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`ByronTxOut.unsafeAmount failed: ${error.message}`);
+ *   console.error(`ByronTxOut.amountUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeAmount = (instance: CML.ByronTxOut): bigint =>
+export const amountUnsafe = (instance: CML.ByronTxOut): bigint =>
   Effect.runSync(amount(instance));
 
 /**
@@ -407,14 +424,14 @@ export const _new = Effect.fn(function* (
  *
  * // Using try/catch for error handling
  * try {
- *   const result = ByronTxOut.unsafe_new( parameters );
+ *   const result = ByronTxOut._newUnsafe( parameters );
  *   console.log(result);
  * } catch (error) {
- *   console.error(`ByronTxOut.unsafe_new failed: ${error.message}`);
+ *   console.error(`ByronTxOut._newUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Constructors
+ * @category ConstructorsUnsafe
  */
-export const unsafe_new = (address: CML.ByronAddress, amount: bigint) =>
+export const _newUnsafe = (address: CML.ByronAddress, amount: bigint) =>
   Effect.runSync(_new(address, amount));

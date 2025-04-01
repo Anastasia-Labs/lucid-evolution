@@ -1,8 +1,25 @@
+/**
+ * @since 2.0.0
+ */
 import { Data, Effect } from "effect";
 import * as CML from "@anastasia-labs/cardano-multiplatform-lib-nodejs";
 
+/**
+ * Type alias for the CML RedeemerKeyList class
+ *
+ * @since 2.0.0
+ * @category Types
+ */
 export type RedeemerKeyList = CML.RedeemerKeyList;
 
+/**
+ * Error class for RedeemerKeyList operations
+ *
+ * This error is thrown when operations on RedeemerKeyList instances fail.
+ *
+ * @since 2.0.0
+ * @category Errors
+ */
 export class RedeemerKeyListError extends Data.TaggedError(
   "RedeemerKeyListError",
 )<{
@@ -49,16 +66,16 @@ export const free = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = RedeemerKeyList.unsafeFree(instance);
+ *   const result = RedeemerKeyList.freeUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`RedeemerKeyList.unsafeFree failed: ${error.message}`);
+ *   console.error(`RedeemerKeyList.freeUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeFree = (instance: CML.RedeemerKeyList): void =>
+export const freeUnsafe = (instance: CML.RedeemerKeyList): void =>
   Effect.runSync(free(instance));
 
 /**
@@ -98,16 +115,16 @@ export const _new = Effect.fn(function* () {
  *
  * // Using try/catch for error handling
  * try {
- *   const result = RedeemerKeyList.unsafe_new();
+ *   const result = RedeemerKeyList._newUnsafe();
  *   console.log(result);
  * } catch (error) {
- *   console.error(`RedeemerKeyList.unsafe_new failed: ${error.message}`);
+ *   console.error(`RedeemerKeyList._newUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Constructors
+ * @category ConstructorsUnsafe
  */
-export const unsafe_new = () => Effect.runSync(_new());
+export const _newUnsafe = () => Effect.runSync(_new());
 
 /**
  * Method len of RedeemerKeyList
@@ -151,16 +168,16 @@ export const len = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = RedeemerKeyList.unsafeLen(instance);
+ *   const result = RedeemerKeyList.lenUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`RedeemerKeyList.unsafeLen failed: ${error.message}`);
+ *   console.error(`RedeemerKeyList.lenUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeLen = (instance: CML.RedeemerKeyList): number =>
+export const lenUnsafe = (instance: CML.RedeemerKeyList): number =>
   Effect.runSync(len(instance));
 
 /**
@@ -206,16 +223,16 @@ export const get = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = RedeemerKeyList.unsafeGet(instance,  parameters );
+ *   const result = RedeemerKeyList.getUnsafe(instance,  parameters );
  *   console.log(result);
  * } catch (error) {
- *   console.error(`RedeemerKeyList.unsafeGet failed: ${error.message}`);
+ *   console.error(`RedeemerKeyList.getUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeGet = (
+export const getUnsafe = (
   instance: CML.RedeemerKeyList,
   index: number,
 ): CML.RedeemerKey => Effect.runSync(get(instance, index));
@@ -263,16 +280,16 @@ export const add = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = RedeemerKeyList.unsafeAdd(instance,  parameters );
+ *   const result = RedeemerKeyList.addUnsafe(instance,  parameters );
  *   console.log(result);
  * } catch (error) {
- *   console.error(`RedeemerKeyList.unsafeAdd failed: ${error.message}`);
+ *   console.error(`RedeemerKeyList.addUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeAdd = (
+export const addUnsafe = (
   instance: CML.RedeemerKeyList,
   elem: CML.RedeemerKey,
 ): void => Effect.runSync(add(instance, elem));

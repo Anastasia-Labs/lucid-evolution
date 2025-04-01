@@ -1,8 +1,25 @@
+/**
+ * @since 2.0.0
+ */
 import { Data, Effect } from "effect";
 import * as CML from "@anastasia-labs/cardano-multiplatform-lib-nodejs";
 
+/**
+ * Type alias for the CML ScriptInvalidHereafter class
+ *
+ * @since 2.0.0
+ * @category Types
+ */
 export type ScriptInvalidHereafter = CML.ScriptInvalidHereafter;
 
+/**
+ * Error class for ScriptInvalidHereafter operations
+ *
+ * This error is thrown when operations on ScriptInvalidHereafter instances fail.
+ *
+ * @since 2.0.0
+ * @category Errors
+ */
 export class ScriptInvalidHereafterError extends Data.TaggedError(
   "ScriptInvalidHereafterError",
 )<{
@@ -51,16 +68,16 @@ export const free = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = ScriptInvalidHereafter.unsafeFree(instance);
+ *   const result = ScriptInvalidHereafter.freeUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`ScriptInvalidHereafter.unsafeFree failed: ${error.message}`);
+ *   console.error(`ScriptInvalidHereafter.freeUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeFree = (instance: CML.ScriptInvalidHereafter): void =>
+export const freeUnsafe = (instance: CML.ScriptInvalidHereafter): void =>
   Effect.runSync(free(instance));
 
 /**
@@ -105,16 +122,16 @@ export const toCborBytes = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = ScriptInvalidHereafter.unsafeToCborBytes(instance);
+ *   const result = ScriptInvalidHereafter.toCborBytesUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`ScriptInvalidHereafter.unsafeToCborBytes failed: ${error.message}`);
+ *   console.error(`ScriptInvalidHereafter.toCborBytesUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeToCborBytes = (
+export const toCborBytesUnsafe = (
   instance: CML.ScriptInvalidHereafter,
 ): Uint8Array => Effect.runSync(toCborBytes(instance));
 
@@ -160,16 +177,16 @@ export const toCanonicalCborBytes = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = ScriptInvalidHereafter.unsafeToCanonicalCborBytes(instance);
+ *   const result = ScriptInvalidHereafter.toCanonicalCborBytesUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`ScriptInvalidHereafter.unsafeToCanonicalCborBytes failed: ${error.message}`);
+ *   console.error(`ScriptInvalidHereafter.toCanonicalCborBytesUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeToCanonicalCborBytes = (
+export const toCanonicalCborBytesUnsafe = (
   instance: CML.ScriptInvalidHereafter,
 ): Uint8Array => Effect.runSync(toCanonicalCborBytes(instance));
 
@@ -210,16 +227,16 @@ export const fromCborBytes = Effect.fn(function* (cborBytes: Uint8Array) {
  *
  * // Using try/catch for error handling
  * try {
- *   const result = ScriptInvalidHereafter.unsafeFromCborBytes( parameters );
+ *   const result = ScriptInvalidHereafter.fromCborBytesUnsafe( parameters );
  *   console.log(result);
  * } catch (error) {
- *   console.error(`ScriptInvalidHereafter.unsafeFromCborBytes failed: ${error.message}`);
+ *   console.error(`ScriptInvalidHereafter.fromCborBytesUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Constructors
+ * @category ConstructorsUnsafe
  */
-export const unsafeFromCborBytes = (cborBytes: Uint8Array) =>
+export const fromCborBytesUnsafe = (cborBytes: Uint8Array) =>
   Effect.runSync(fromCborBytes(cborBytes));
 
 /**
@@ -264,16 +281,16 @@ export const toCborHex = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = ScriptInvalidHereafter.unsafeToCborHex(instance);
+ *   const result = ScriptInvalidHereafter.toCborHexUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`ScriptInvalidHereafter.unsafeToCborHex failed: ${error.message}`);
+ *   console.error(`ScriptInvalidHereafter.toCborHexUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeToCborHex = (instance: CML.ScriptInvalidHereafter): string =>
+export const toCborHexUnsafe = (instance: CML.ScriptInvalidHereafter): string =>
   Effect.runSync(toCborHex(instance));
 
 /**
@@ -318,16 +335,16 @@ export const toCanonicalCborHex = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = ScriptInvalidHereafter.unsafeToCanonicalCborHex(instance);
+ *   const result = ScriptInvalidHereafter.toCanonicalCborHexUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`ScriptInvalidHereafter.unsafeToCanonicalCborHex failed: ${error.message}`);
+ *   console.error(`ScriptInvalidHereafter.toCanonicalCborHexUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeToCanonicalCborHex = (
+export const toCanonicalCborHexUnsafe = (
   instance: CML.ScriptInvalidHereafter,
 ): string => Effect.runSync(toCanonicalCborHex(instance));
 
@@ -368,16 +385,16 @@ export const fromCborHex = Effect.fn(function* (cborBytes: string) {
  *
  * // Using try/catch for error handling
  * try {
- *   const result = ScriptInvalidHereafter.unsafeFromCborHex( parameters );
+ *   const result = ScriptInvalidHereafter.fromCborHexUnsafe( parameters );
  *   console.log(result);
  * } catch (error) {
- *   console.error(`ScriptInvalidHereafter.unsafeFromCborHex failed: ${error.message}`);
+ *   console.error(`ScriptInvalidHereafter.fromCborHexUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Constructors
+ * @category ConstructorsUnsafe
  */
-export const unsafeFromCborHex = (cborBytes: string) =>
+export const fromCborHexUnsafe = (cborBytes: string) =>
   Effect.runSync(fromCborHex(cborBytes));
 
 /**
@@ -422,16 +439,16 @@ export const toJson = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = ScriptInvalidHereafter.unsafeToJson(instance);
+ *   const result = ScriptInvalidHereafter.toJsonUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`ScriptInvalidHereafter.unsafeToJson failed: ${error.message}`);
+ *   console.error(`ScriptInvalidHereafter.toJsonUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeToJson = (instance: CML.ScriptInvalidHereafter): string =>
+export const toJsonUnsafe = (instance: CML.ScriptInvalidHereafter): string =>
   Effect.runSync(toJson(instance));
 
 /**
@@ -476,16 +493,16 @@ export const toJsValue = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = ScriptInvalidHereafter.unsafeToJsValue(instance);
+ *   const result = ScriptInvalidHereafter.toJsValueUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`ScriptInvalidHereafter.unsafeToJsValue failed: ${error.message}`);
+ *   console.error(`ScriptInvalidHereafter.toJsValueUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeToJsValue = (instance: CML.ScriptInvalidHereafter): any =>
+export const toJsValueUnsafe = (instance: CML.ScriptInvalidHereafter): any =>
   Effect.runSync(toJsValue(instance));
 
 /**
@@ -525,16 +542,16 @@ export const fromJson = Effect.fn(function* (json: string) {
  *
  * // Using try/catch for error handling
  * try {
- *   const result = ScriptInvalidHereafter.unsafeFromJson( parameters );
+ *   const result = ScriptInvalidHereafter.fromJsonUnsafe( parameters );
  *   console.log(result);
  * } catch (error) {
- *   console.error(`ScriptInvalidHereafter.unsafeFromJson failed: ${error.message}`);
+ *   console.error(`ScriptInvalidHereafter.fromJsonUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Constructors
+ * @category ConstructorsUnsafe
  */
-export const unsafeFromJson = (json: string) => Effect.runSync(fromJson(json));
+export const fromJsonUnsafe = (json: string) => Effect.runSync(fromJson(json));
 
 /**
  * Method after of ScriptInvalidHereafter
@@ -578,16 +595,16 @@ export const after = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = ScriptInvalidHereafter.unsafeAfter(instance);
+ *   const result = ScriptInvalidHereafter.afterUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`ScriptInvalidHereafter.unsafeAfter failed: ${error.message}`);
+ *   console.error(`ScriptInvalidHereafter.afterUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeAfter = (instance: CML.ScriptInvalidHereafter): bigint =>
+export const afterUnsafe = (instance: CML.ScriptInvalidHereafter): bigint =>
   Effect.runSync(after(instance));
 
 /**
@@ -627,13 +644,13 @@ export const _new = Effect.fn(function* (after: bigint) {
  *
  * // Using try/catch for error handling
  * try {
- *   const result = ScriptInvalidHereafter.unsafe_new( parameters );
+ *   const result = ScriptInvalidHereafter._newUnsafe( parameters );
  *   console.log(result);
  * } catch (error) {
- *   console.error(`ScriptInvalidHereafter.unsafe_new failed: ${error.message}`);
+ *   console.error(`ScriptInvalidHereafter._newUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Constructors
+ * @category ConstructorsUnsafe
  */
-export const unsafe_new = (after: bigint) => Effect.runSync(_new(after));
+export const _newUnsafe = (after: bigint) => Effect.runSync(_new(after));

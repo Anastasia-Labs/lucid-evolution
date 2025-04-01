@@ -1,8 +1,25 @@
+/**
+ * @since 2.0.0
+ */
 import { Data, Effect } from "effect";
 import * as CML from "@anastasia-labs/cardano-multiplatform-lib-nodejs";
 
+/**
+ * Type alias for the CML UnregCert class
+ *
+ * @since 2.0.0
+ * @category Types
+ */
 export type UnregCert = CML.UnregCert;
 
+/**
+ * Error class for UnregCert operations
+ *
+ * This error is thrown when operations on UnregCert instances fail.
+ *
+ * @since 2.0.0
+ * @category Errors
+ */
 export class UnregCertError extends Data.TaggedError("UnregCertError")<{
   message?: string;
 }> {}
@@ -47,16 +64,16 @@ export const free = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = UnregCert.unsafeFree(instance);
+ *   const result = UnregCert.freeUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`UnregCert.unsafeFree failed: ${error.message}`);
+ *   console.error(`UnregCert.freeUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeFree = (instance: CML.UnregCert): void =>
+export const freeUnsafe = (instance: CML.UnregCert): void =>
   Effect.runSync(free(instance));
 
 /**
@@ -99,16 +116,16 @@ export const toCborBytes = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = UnregCert.unsafeToCborBytes(instance);
+ *   const result = UnregCert.toCborBytesUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`UnregCert.unsafeToCborBytes failed: ${error.message}`);
+ *   console.error(`UnregCert.toCborBytesUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeToCborBytes = (instance: CML.UnregCert): Uint8Array =>
+export const toCborBytesUnsafe = (instance: CML.UnregCert): Uint8Array =>
   Effect.runSync(toCborBytes(instance));
 
 /**
@@ -151,16 +168,16 @@ export const toCanonicalCborBytes = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = UnregCert.unsafeToCanonicalCborBytes(instance);
+ *   const result = UnregCert.toCanonicalCborBytesUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`UnregCert.unsafeToCanonicalCborBytes failed: ${error.message}`);
+ *   console.error(`UnregCert.toCanonicalCborBytesUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeToCanonicalCborBytes = (
+export const toCanonicalCborBytesUnsafe = (
   instance: CML.UnregCert,
 ): Uint8Array => Effect.runSync(toCanonicalCborBytes(instance));
 
@@ -201,16 +218,16 @@ export const fromCborBytes = Effect.fn(function* (cborBytes: Uint8Array) {
  *
  * // Using try/catch for error handling
  * try {
- *   const result = UnregCert.unsafeFromCborBytes( parameters );
+ *   const result = UnregCert.fromCborBytesUnsafe( parameters );
  *   console.log(result);
  * } catch (error) {
- *   console.error(`UnregCert.unsafeFromCborBytes failed: ${error.message}`);
+ *   console.error(`UnregCert.fromCborBytesUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Constructors
+ * @category ConstructorsUnsafe
  */
-export const unsafeFromCborBytes = (cborBytes: Uint8Array) =>
+export const fromCborBytesUnsafe = (cborBytes: Uint8Array) =>
   Effect.runSync(fromCborBytes(cborBytes));
 
 /**
@@ -253,16 +270,16 @@ export const toCborHex = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = UnregCert.unsafeToCborHex(instance);
+ *   const result = UnregCert.toCborHexUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`UnregCert.unsafeToCborHex failed: ${error.message}`);
+ *   console.error(`UnregCert.toCborHexUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeToCborHex = (instance: CML.UnregCert): string =>
+export const toCborHexUnsafe = (instance: CML.UnregCert): string =>
   Effect.runSync(toCborHex(instance));
 
 /**
@@ -305,16 +322,16 @@ export const toCanonicalCborHex = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = UnregCert.unsafeToCanonicalCborHex(instance);
+ *   const result = UnregCert.toCanonicalCborHexUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`UnregCert.unsafeToCanonicalCborHex failed: ${error.message}`);
+ *   console.error(`UnregCert.toCanonicalCborHexUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeToCanonicalCborHex = (instance: CML.UnregCert): string =>
+export const toCanonicalCborHexUnsafe = (instance: CML.UnregCert): string =>
   Effect.runSync(toCanonicalCborHex(instance));
 
 /**
@@ -354,16 +371,16 @@ export const fromCborHex = Effect.fn(function* (cborBytes: string) {
  *
  * // Using try/catch for error handling
  * try {
- *   const result = UnregCert.unsafeFromCborHex( parameters );
+ *   const result = UnregCert.fromCborHexUnsafe( parameters );
  *   console.log(result);
  * } catch (error) {
- *   console.error(`UnregCert.unsafeFromCborHex failed: ${error.message}`);
+ *   console.error(`UnregCert.fromCborHexUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Constructors
+ * @category ConstructorsUnsafe
  */
-export const unsafeFromCborHex = (cborBytes: string) =>
+export const fromCborHexUnsafe = (cborBytes: string) =>
   Effect.runSync(fromCborHex(cborBytes));
 
 /**
@@ -406,16 +423,16 @@ export const toJson = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = UnregCert.unsafeToJson(instance);
+ *   const result = UnregCert.toJsonUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`UnregCert.unsafeToJson failed: ${error.message}`);
+ *   console.error(`UnregCert.toJsonUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeToJson = (instance: CML.UnregCert): string =>
+export const toJsonUnsafe = (instance: CML.UnregCert): string =>
   Effect.runSync(toJson(instance));
 
 /**
@@ -458,16 +475,16 @@ export const toJsValue = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = UnregCert.unsafeToJsValue(instance);
+ *   const result = UnregCert.toJsValueUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`UnregCert.unsafeToJsValue failed: ${error.message}`);
+ *   console.error(`UnregCert.toJsValueUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeToJsValue = (instance: CML.UnregCert): any =>
+export const toJsValueUnsafe = (instance: CML.UnregCert): any =>
   Effect.runSync(toJsValue(instance));
 
 /**
@@ -507,16 +524,16 @@ export const fromJson = Effect.fn(function* (json: string) {
  *
  * // Using try/catch for error handling
  * try {
- *   const result = UnregCert.unsafeFromJson( parameters );
+ *   const result = UnregCert.fromJsonUnsafe( parameters );
  *   console.log(result);
  * } catch (error) {
- *   console.error(`UnregCert.unsafeFromJson failed: ${error.message}`);
+ *   console.error(`UnregCert.fromJsonUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Constructors
+ * @category ConstructorsUnsafe
  */
-export const unsafeFromJson = (json: string) => Effect.runSync(fromJson(json));
+export const fromJsonUnsafe = (json: string) => Effect.runSync(fromJson(json));
 
 /**
  * Method stakeCredential of UnregCert
@@ -558,16 +575,16 @@ export const stakeCredential = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = UnregCert.unsafeStakeCredential(instance);
+ *   const result = UnregCert.stakeCredentialUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`UnregCert.unsafeStakeCredential failed: ${error.message}`);
+ *   console.error(`UnregCert.stakeCredentialUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeStakeCredential = (
+export const stakeCredentialUnsafe = (
   instance: CML.UnregCert,
 ): CML.Credential => Effect.runSync(stakeCredential(instance));
 
@@ -611,16 +628,16 @@ export const deposit = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = UnregCert.unsafeDeposit(instance);
+ *   const result = UnregCert.depositUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`UnregCert.unsafeDeposit failed: ${error.message}`);
+ *   console.error(`UnregCert.depositUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeDeposit = (instance: CML.UnregCert): bigint =>
+export const depositUnsafe = (instance: CML.UnregCert): bigint =>
   Effect.runSync(deposit(instance));
 
 /**
@@ -663,14 +680,14 @@ export const _new = Effect.fn(function* (
  *
  * // Using try/catch for error handling
  * try {
- *   const result = UnregCert.unsafe_new( parameters );
+ *   const result = UnregCert._newUnsafe( parameters );
  *   console.log(result);
  * } catch (error) {
- *   console.error(`UnregCert.unsafe_new failed: ${error.message}`);
+ *   console.error(`UnregCert._newUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Constructors
+ * @category ConstructorsUnsafe
  */
-export const unsafe_new = (stakeCredential: CML.Credential, deposit: bigint) =>
+export const _newUnsafe = (stakeCredential: CML.Credential, deposit: bigint) =>
   Effect.runSync(_new(stakeCredential, deposit));

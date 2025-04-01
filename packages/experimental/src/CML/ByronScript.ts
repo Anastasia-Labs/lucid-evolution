@@ -1,8 +1,25 @@
+/**
+ * @since 2.0.0
+ */
 import { Data, Effect } from "effect";
 import * as CML from "@anastasia-labs/cardano-multiplatform-lib-nodejs";
 
+/**
+ * Type alias for the CML ByronScript class
+ *
+ * @since 2.0.0
+ * @category Types
+ */
 export type ByronScript = CML.ByronScript;
 
+/**
+ * Error class for ByronScript operations
+ *
+ * This error is thrown when operations on ByronScript instances fail.
+ *
+ * @since 2.0.0
+ * @category Errors
+ */
 export class ByronScriptError extends Data.TaggedError("ByronScriptError")<{
   message?: string;
 }> {}
@@ -47,16 +64,16 @@ export const free = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = ByronScript.unsafeFree(instance);
+ *   const result = ByronScript.freeUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`ByronScript.unsafeFree failed: ${error.message}`);
+ *   console.error(`ByronScript.freeUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeFree = (instance: CML.ByronScript): void =>
+export const freeUnsafe = (instance: CML.ByronScript): void =>
   Effect.runSync(free(instance));
 
 /**
@@ -102,16 +119,16 @@ export const toBech32 = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = ByronScript.unsafeToBech32(instance,  parameters );
+ *   const result = ByronScript.toBech32Unsafe(instance,  parameters );
  *   console.log(result);
  * } catch (error) {
- *   console.error(`ByronScript.unsafeToBech32 failed: ${error.message}`);
+ *   console.error(`ByronScript.toBech32Unsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeToBech32 = (
+export const toBech32Unsafe = (
   instance: CML.ByronScript,
   prefix: string,
 ): string => Effect.runSync(toBech32(instance, prefix));
@@ -153,16 +170,16 @@ export const fromBech32 = Effect.fn(function* (bech32Str: string) {
  *
  * // Using try/catch for error handling
  * try {
- *   const result = ByronScript.unsafeFromBech32( parameters );
+ *   const result = ByronScript.fromBech32Unsafe( parameters );
  *   console.log(result);
  * } catch (error) {
- *   console.error(`ByronScript.unsafeFromBech32 failed: ${error.message}`);
+ *   console.error(`ByronScript.fromBech32Unsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Constructors
+ * @category ConstructorsUnsafe
  */
-export const unsafeFromBech32 = (bech32Str: string) =>
+export const fromBech32Unsafe = (bech32Str: string) =>
   Effect.runSync(fromBech32(bech32Str));
 
 /**
@@ -205,16 +222,16 @@ export const toRawBytes = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = ByronScript.unsafeToRawBytes(instance);
+ *   const result = ByronScript.toRawBytesUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`ByronScript.unsafeToRawBytes failed: ${error.message}`);
+ *   console.error(`ByronScript.toRawBytesUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeToRawBytes = (instance: CML.ByronScript): Uint8Array =>
+export const toRawBytesUnsafe = (instance: CML.ByronScript): Uint8Array =>
   Effect.runSync(toRawBytes(instance));
 
 /**
@@ -254,16 +271,16 @@ export const fromRawBytes = Effect.fn(function* (bytes: Uint8Array) {
  *
  * // Using try/catch for error handling
  * try {
- *   const result = ByronScript.unsafeFromRawBytes( parameters );
+ *   const result = ByronScript.fromRawBytesUnsafe( parameters );
  *   console.log(result);
  * } catch (error) {
- *   console.error(`ByronScript.unsafeFromRawBytes failed: ${error.message}`);
+ *   console.error(`ByronScript.fromRawBytesUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Constructors
+ * @category ConstructorsUnsafe
  */
-export const unsafeFromRawBytes = (bytes: Uint8Array) =>
+export const fromRawBytesUnsafe = (bytes: Uint8Array) =>
   Effect.runSync(fromRawBytes(bytes));
 
 /**
@@ -306,16 +323,16 @@ export const toHex = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = ByronScript.unsafeToHex(instance);
+ *   const result = ByronScript.toHexUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`ByronScript.unsafeToHex failed: ${error.message}`);
+ *   console.error(`ByronScript.toHexUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeToHex = (instance: CML.ByronScript): string =>
+export const toHexUnsafe = (instance: CML.ByronScript): string =>
   Effect.runSync(toHex(instance));
 
 /**
@@ -355,13 +372,13 @@ export const fromHex = Effect.fn(function* (input: string) {
  *
  * // Using try/catch for error handling
  * try {
- *   const result = ByronScript.unsafeFromHex( parameters );
+ *   const result = ByronScript.fromHexUnsafe( parameters );
  *   console.log(result);
  * } catch (error) {
- *   console.error(`ByronScript.unsafeFromHex failed: ${error.message}`);
+ *   console.error(`ByronScript.fromHexUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Constructors
+ * @category ConstructorsUnsafe
  */
-export const unsafeFromHex = (input: string) => Effect.runSync(fromHex(input));
+export const fromHexUnsafe = (input: string) => Effect.runSync(fromHex(input));

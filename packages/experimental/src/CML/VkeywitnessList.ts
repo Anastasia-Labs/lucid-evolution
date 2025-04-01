@@ -1,8 +1,25 @@
+/**
+ * @since 2.0.0
+ */
 import { Data, Effect } from "effect";
 import * as CML from "@anastasia-labs/cardano-multiplatform-lib-nodejs";
 
+/**
+ * Type alias for the CML VkeywitnessList class
+ *
+ * @since 2.0.0
+ * @category Types
+ */
 export type VkeywitnessList = CML.VkeywitnessList;
 
+/**
+ * Error class for VkeywitnessList operations
+ *
+ * This error is thrown when operations on VkeywitnessList instances fail.
+ *
+ * @since 2.0.0
+ * @category Errors
+ */
 export class VkeywitnessListError extends Data.TaggedError(
   "VkeywitnessListError",
 )<{
@@ -49,16 +66,16 @@ export const free = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = VkeywitnessList.unsafeFree(instance);
+ *   const result = VkeywitnessList.freeUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`VkeywitnessList.unsafeFree failed: ${error.message}`);
+ *   console.error(`VkeywitnessList.freeUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeFree = (instance: CML.VkeywitnessList): void =>
+export const freeUnsafe = (instance: CML.VkeywitnessList): void =>
   Effect.runSync(free(instance));
 
 /**
@@ -98,16 +115,16 @@ export const _new = Effect.fn(function* () {
  *
  * // Using try/catch for error handling
  * try {
- *   const result = VkeywitnessList.unsafe_new();
+ *   const result = VkeywitnessList._newUnsafe();
  *   console.log(result);
  * } catch (error) {
- *   console.error(`VkeywitnessList.unsafe_new failed: ${error.message}`);
+ *   console.error(`VkeywitnessList._newUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Constructors
+ * @category ConstructorsUnsafe
  */
-export const unsafe_new = () => Effect.runSync(_new());
+export const _newUnsafe = () => Effect.runSync(_new());
 
 /**
  * Method len of VkeywitnessList
@@ -151,16 +168,16 @@ export const len = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = VkeywitnessList.unsafeLen(instance);
+ *   const result = VkeywitnessList.lenUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`VkeywitnessList.unsafeLen failed: ${error.message}`);
+ *   console.error(`VkeywitnessList.lenUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeLen = (instance: CML.VkeywitnessList): number =>
+export const lenUnsafe = (instance: CML.VkeywitnessList): number =>
   Effect.runSync(len(instance));
 
 /**
@@ -206,16 +223,16 @@ export const get = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = VkeywitnessList.unsafeGet(instance,  parameters );
+ *   const result = VkeywitnessList.getUnsafe(instance,  parameters );
  *   console.log(result);
  * } catch (error) {
- *   console.error(`VkeywitnessList.unsafeGet failed: ${error.message}`);
+ *   console.error(`VkeywitnessList.getUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeGet = (
+export const getUnsafe = (
   instance: CML.VkeywitnessList,
   index: number,
 ): CML.Vkeywitness => Effect.runSync(get(instance, index));
@@ -263,16 +280,16 @@ export const add = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = VkeywitnessList.unsafeAdd(instance,  parameters );
+ *   const result = VkeywitnessList.addUnsafe(instance,  parameters );
  *   console.log(result);
  * } catch (error) {
- *   console.error(`VkeywitnessList.unsafeAdd failed: ${error.message}`);
+ *   console.error(`VkeywitnessList.addUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeAdd = (
+export const addUnsafe = (
   instance: CML.VkeywitnessList,
   elem: CML.Vkeywitness,
 ): void => Effect.runSync(add(instance, elem));

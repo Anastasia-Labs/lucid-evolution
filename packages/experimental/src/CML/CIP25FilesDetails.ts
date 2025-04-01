@@ -1,8 +1,25 @@
+/**
+ * @since 2.0.0
+ */
 import { Data, Effect } from "effect";
 import * as CML from "@anastasia-labs/cardano-multiplatform-lib-nodejs";
 
+/**
+ * Type alias for the CML CIP25FilesDetails class
+ *
+ * @since 2.0.0
+ * @category Types
+ */
 export type CIP25FilesDetails = CML.CIP25FilesDetails;
 
+/**
+ * Error class for CIP25FilesDetails operations
+ *
+ * This error is thrown when operations on CIP25FilesDetails instances fail.
+ *
+ * @since 2.0.0
+ * @category Errors
+ */
 export class CIP25FilesDetailsError extends Data.TaggedError(
   "CIP25FilesDetailsError",
 )<{
@@ -51,16 +68,16 @@ export const free = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = CIP25FilesDetails.unsafeFree(instance);
+ *   const result = CIP25FilesDetails.freeUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`CIP25FilesDetails.unsafeFree failed: ${error.message}`);
+ *   console.error(`CIP25FilesDetails.freeUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeFree = (instance: CML.CIP25FilesDetails): void =>
+export const freeUnsafe = (instance: CML.CIP25FilesDetails): void =>
   Effect.runSync(free(instance));
 
 /**
@@ -105,16 +122,16 @@ export const toCborBytes = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = CIP25FilesDetails.unsafeToCborBytes(instance);
+ *   const result = CIP25FilesDetails.toCborBytesUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`CIP25FilesDetails.unsafeToCborBytes failed: ${error.message}`);
+ *   console.error(`CIP25FilesDetails.toCborBytesUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeToCborBytes = (
+export const toCborBytesUnsafe = (
   instance: CML.CIP25FilesDetails,
 ): Uint8Array => Effect.runSync(toCborBytes(instance));
 
@@ -155,16 +172,16 @@ export const fromCborBytes = Effect.fn(function* (cborBytes: Uint8Array) {
  *
  * // Using try/catch for error handling
  * try {
- *   const result = CIP25FilesDetails.unsafeFromCborBytes( parameters );
+ *   const result = CIP25FilesDetails.fromCborBytesUnsafe( parameters );
  *   console.log(result);
  * } catch (error) {
- *   console.error(`CIP25FilesDetails.unsafeFromCborBytes failed: ${error.message}`);
+ *   console.error(`CIP25FilesDetails.fromCborBytesUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Constructors
+ * @category ConstructorsUnsafe
  */
-export const unsafeFromCborBytes = (cborBytes: Uint8Array) =>
+export const fromCborBytesUnsafe = (cborBytes: Uint8Array) =>
   Effect.runSync(fromCborBytes(cborBytes));
 
 /**
@@ -209,16 +226,16 @@ export const toCborHex = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = CIP25FilesDetails.unsafeToCborHex(instance);
+ *   const result = CIP25FilesDetails.toCborHexUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`CIP25FilesDetails.unsafeToCborHex failed: ${error.message}`);
+ *   console.error(`CIP25FilesDetails.toCborHexUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeToCborHex = (instance: CML.CIP25FilesDetails): string =>
+export const toCborHexUnsafe = (instance: CML.CIP25FilesDetails): string =>
   Effect.runSync(toCborHex(instance));
 
 /**
@@ -258,16 +275,16 @@ export const fromCborHex = Effect.fn(function* (cborBytes: string) {
  *
  * // Using try/catch for error handling
  * try {
- *   const result = CIP25FilesDetails.unsafeFromCborHex( parameters );
+ *   const result = CIP25FilesDetails.fromCborHexUnsafe( parameters );
  *   console.log(result);
  * } catch (error) {
- *   console.error(`CIP25FilesDetails.unsafeFromCborHex failed: ${error.message}`);
+ *   console.error(`CIP25FilesDetails.fromCborHexUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Constructors
+ * @category ConstructorsUnsafe
  */
-export const unsafeFromCborHex = (cborBytes: string) =>
+export const fromCborHexUnsafe = (cborBytes: string) =>
   Effect.runSync(fromCborHex(cborBytes));
 
 /**
@@ -312,16 +329,16 @@ export const toJson = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = CIP25FilesDetails.unsafeToJson(instance);
+ *   const result = CIP25FilesDetails.toJsonUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`CIP25FilesDetails.unsafeToJson failed: ${error.message}`);
+ *   console.error(`CIP25FilesDetails.toJsonUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeToJson = (instance: CML.CIP25FilesDetails): string =>
+export const toJsonUnsafe = (instance: CML.CIP25FilesDetails): string =>
   Effect.runSync(toJson(instance));
 
 /**
@@ -366,16 +383,16 @@ export const toJsValue = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = CIP25FilesDetails.unsafeToJsValue(instance);
+ *   const result = CIP25FilesDetails.toJsValueUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`CIP25FilesDetails.unsafeToJsValue failed: ${error.message}`);
+ *   console.error(`CIP25FilesDetails.toJsValueUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeToJsValue = (instance: CML.CIP25FilesDetails): any =>
+export const toJsValueUnsafe = (instance: CML.CIP25FilesDetails): any =>
   Effect.runSync(toJsValue(instance));
 
 /**
@@ -415,16 +432,16 @@ export const fromJson = Effect.fn(function* (json: string) {
  *
  * // Using try/catch for error handling
  * try {
- *   const result = CIP25FilesDetails.unsafeFromJson( parameters );
+ *   const result = CIP25FilesDetails.fromJsonUnsafe( parameters );
  *   console.log(result);
  * } catch (error) {
- *   console.error(`CIP25FilesDetails.unsafeFromJson failed: ${error.message}`);
+ *   console.error(`CIP25FilesDetails.fromJsonUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Constructors
+ * @category ConstructorsUnsafe
  */
-export const unsafeFromJson = (json: string) => Effect.runSync(fromJson(json));
+export const fromJsonUnsafe = (json: string) => Effect.runSync(fromJson(json));
 
 /**
  * Method name of CIP25FilesDetails
@@ -468,16 +485,16 @@ export const name = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = CIP25FilesDetails.unsafeName(instance);
+ *   const result = CIP25FilesDetails.nameUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`CIP25FilesDetails.unsafeName failed: ${error.message}`);
+ *   console.error(`CIP25FilesDetails.nameUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeName = (
+export const nameUnsafe = (
   instance: CML.CIP25FilesDetails,
 ): CML.CIP25String64 => Effect.runSync(name(instance));
 
@@ -523,16 +540,16 @@ export const mediaType = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = CIP25FilesDetails.unsafeMediaType(instance);
+ *   const result = CIP25FilesDetails.mediaTypeUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`CIP25FilesDetails.unsafeMediaType failed: ${error.message}`);
+ *   console.error(`CIP25FilesDetails.mediaTypeUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeMediaType = (
+export const mediaTypeUnsafe = (
   instance: CML.CIP25FilesDetails,
 ): CML.CIP25String64 => Effect.runSync(mediaType(instance));
 
@@ -578,16 +595,16 @@ export const src = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = CIP25FilesDetails.unsafeSrc(instance);
+ *   const result = CIP25FilesDetails.srcUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`CIP25FilesDetails.unsafeSrc failed: ${error.message}`);
+ *   console.error(`CIP25FilesDetails.srcUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeSrc = (
+export const srcUnsafe = (
   instance: CML.CIP25FilesDetails,
 ): CML.CIP25ChunkableString => Effect.runSync(src(instance));
 
@@ -632,16 +649,16 @@ export const _new = Effect.fn(function* (
  *
  * // Using try/catch for error handling
  * try {
- *   const result = CIP25FilesDetails.unsafe_new( parameters );
+ *   const result = CIP25FilesDetails._newUnsafe( parameters );
  *   console.log(result);
  * } catch (error) {
- *   console.error(`CIP25FilesDetails.unsafe_new failed: ${error.message}`);
+ *   console.error(`CIP25FilesDetails._newUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Constructors
+ * @category ConstructorsUnsafe
  */
-export const unsafe_new = (
+export const _newUnsafe = (
   name: CML.CIP25String64,
   mediaType: CML.CIP25String64,
   src: CML.CIP25ChunkableString,

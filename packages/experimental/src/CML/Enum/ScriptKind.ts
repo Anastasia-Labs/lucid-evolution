@@ -1,10 +1,66 @@
+/**
+ * @since 2.0.0
+ */
 import * as CML from "@anastasia-labs/cardano-multiplatform-lib-nodejs";
 
+/**
+ * Type alias for the CML ScriptKind enum
+ *
+ * @since 2.0.0
+ * @category Types
+ */
 export type ScriptKind = CML.ScriptKind;
 
+/**
+ * Native variant of the ScriptKind enum
+ *
+ * @example
+ * import { ScriptKind } from "@lucid-evolution/experimental";
+ *
+ * const kind = ScriptKind.Native;
+ *
+ * @since 2.0.0
+ * @category Variants
+ */
 export const Native = CML.ScriptKind.Native;
+
+/**
+ * PlutusV1 variant of the ScriptKind enum
+ *
+ * @example
+ * import { ScriptKind } from "@lucid-evolution/experimental";
+ *
+ * const kind = ScriptKind.PlutusV1;
+ *
+ * @since 2.0.0
+ * @category Variants
+ */
 export const PlutusV1 = CML.ScriptKind.PlutusV1;
+
+/**
+ * PlutusV2 variant of the ScriptKind enum
+ *
+ * @example
+ * import { ScriptKind } from "@lucid-evolution/experimental";
+ *
+ * const kind = ScriptKind.PlutusV2;
+ *
+ * @since 2.0.0
+ * @category Variants
+ */
 export const PlutusV2 = CML.ScriptKind.PlutusV2;
+
+/**
+ * PlutusV3 variant of the ScriptKind enum
+ *
+ * @example
+ * import { ScriptKind } from "@lucid-evolution/experimental";
+ *
+ * const kind = ScriptKind.PlutusV3;
+ *
+ * @since 2.0.0
+ * @category Variants
+ */
 export const PlutusV3 = CML.ScriptKind.PlutusV3;
 
 /**

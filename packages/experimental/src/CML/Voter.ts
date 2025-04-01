@@ -1,8 +1,25 @@
+/**
+ * @since 2.0.0
+ */
 import { Data, Effect } from "effect";
 import * as CML from "@anastasia-labs/cardano-multiplatform-lib-nodejs";
 
+/**
+ * Type alias for the CML Voter class
+ *
+ * @since 2.0.0
+ * @category Types
+ */
 export type Voter = CML.Voter;
 
+/**
+ * Error class for Voter operations
+ *
+ * This error is thrown when operations on Voter instances fail.
+ *
+ * @since 2.0.0
+ * @category Errors
+ */
 export class VoterError extends Data.TaggedError("VoterError")<{
   message?: string;
 }> {}
@@ -47,16 +64,16 @@ export const free = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = Voter.unsafeFree(instance);
+ *   const result = Voter.freeUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`Voter.unsafeFree failed: ${error.message}`);
+ *   console.error(`Voter.freeUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeFree = (instance: CML.Voter): void =>
+export const freeUnsafe = (instance: CML.Voter): void =>
   Effect.runSync(free(instance));
 
 /**
@@ -101,16 +118,16 @@ export const keyHash = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = Voter.unsafeKeyHash(instance);
+ *   const result = Voter.keyHashUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`Voter.unsafeKeyHash failed: ${error.message}`);
+ *   console.error(`Voter.keyHashUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeKeyHash = (
+export const keyHashUnsafe = (
   instance: CML.Voter,
 ): CML.Ed25519KeyHash | undefined => Effect.runSync(keyHash(instance));
 
@@ -156,16 +173,16 @@ export const scriptHash = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = Voter.unsafeScriptHash(instance);
+ *   const result = Voter.scriptHashUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`Voter.unsafeScriptHash failed: ${error.message}`);
+ *   console.error(`Voter.scriptHashUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeScriptHash = (
+export const scriptHashUnsafe = (
   instance: CML.Voter,
 ): CML.ScriptHash | undefined => Effect.runSync(scriptHash(instance));
 
@@ -209,16 +226,16 @@ export const toCborBytes = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = Voter.unsafeToCborBytes(instance);
+ *   const result = Voter.toCborBytesUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`Voter.unsafeToCborBytes failed: ${error.message}`);
+ *   console.error(`Voter.toCborBytesUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeToCborBytes = (instance: CML.Voter): Uint8Array =>
+export const toCborBytesUnsafe = (instance: CML.Voter): Uint8Array =>
   Effect.runSync(toCborBytes(instance));
 
 /**
@@ -261,16 +278,16 @@ export const toCanonicalCborBytes = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = Voter.unsafeToCanonicalCborBytes(instance);
+ *   const result = Voter.toCanonicalCborBytesUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`Voter.unsafeToCanonicalCborBytes failed: ${error.message}`);
+ *   console.error(`Voter.toCanonicalCborBytesUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeToCanonicalCborBytes = (instance: CML.Voter): Uint8Array =>
+export const toCanonicalCborBytesUnsafe = (instance: CML.Voter): Uint8Array =>
   Effect.runSync(toCanonicalCborBytes(instance));
 
 /**
@@ -310,16 +327,16 @@ export const fromCborBytes = Effect.fn(function* (cborBytes: Uint8Array) {
  *
  * // Using try/catch for error handling
  * try {
- *   const result = Voter.unsafeFromCborBytes( parameters );
+ *   const result = Voter.fromCborBytesUnsafe( parameters );
  *   console.log(result);
  * } catch (error) {
- *   console.error(`Voter.unsafeFromCborBytes failed: ${error.message}`);
+ *   console.error(`Voter.fromCborBytesUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Constructors
+ * @category ConstructorsUnsafe
  */
-export const unsafeFromCborBytes = (cborBytes: Uint8Array) =>
+export const fromCborBytesUnsafe = (cborBytes: Uint8Array) =>
   Effect.runSync(fromCborBytes(cborBytes));
 
 /**
@@ -362,16 +379,16 @@ export const toCborHex = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = Voter.unsafeToCborHex(instance);
+ *   const result = Voter.toCborHexUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`Voter.unsafeToCborHex failed: ${error.message}`);
+ *   console.error(`Voter.toCborHexUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeToCborHex = (instance: CML.Voter): string =>
+export const toCborHexUnsafe = (instance: CML.Voter): string =>
   Effect.runSync(toCborHex(instance));
 
 /**
@@ -414,16 +431,16 @@ export const toCanonicalCborHex = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = Voter.unsafeToCanonicalCborHex(instance);
+ *   const result = Voter.toCanonicalCborHexUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`Voter.unsafeToCanonicalCborHex failed: ${error.message}`);
+ *   console.error(`Voter.toCanonicalCborHexUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeToCanonicalCborHex = (instance: CML.Voter): string =>
+export const toCanonicalCborHexUnsafe = (instance: CML.Voter): string =>
   Effect.runSync(toCanonicalCborHex(instance));
 
 /**
@@ -463,16 +480,16 @@ export const fromCborHex = Effect.fn(function* (cborBytes: string) {
  *
  * // Using try/catch for error handling
  * try {
- *   const result = Voter.unsafeFromCborHex( parameters );
+ *   const result = Voter.fromCborHexUnsafe( parameters );
  *   console.log(result);
  * } catch (error) {
- *   console.error(`Voter.unsafeFromCborHex failed: ${error.message}`);
+ *   console.error(`Voter.fromCborHexUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Constructors
+ * @category ConstructorsUnsafe
  */
-export const unsafeFromCborHex = (cborBytes: string) =>
+export const fromCborHexUnsafe = (cborBytes: string) =>
   Effect.runSync(fromCborHex(cborBytes));
 
 /**
@@ -515,16 +532,16 @@ export const toJson = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = Voter.unsafeToJson(instance);
+ *   const result = Voter.toJsonUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`Voter.unsafeToJson failed: ${error.message}`);
+ *   console.error(`Voter.toJsonUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeToJson = (instance: CML.Voter): string =>
+export const toJsonUnsafe = (instance: CML.Voter): string =>
   Effect.runSync(toJson(instance));
 
 /**
@@ -567,16 +584,16 @@ export const toJsValue = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = Voter.unsafeToJsValue(instance);
+ *   const result = Voter.toJsValueUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`Voter.unsafeToJsValue failed: ${error.message}`);
+ *   console.error(`Voter.toJsValueUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeToJsValue = (instance: CML.Voter): any =>
+export const toJsValueUnsafe = (instance: CML.Voter): any =>
   Effect.runSync(toJsValue(instance));
 
 /**
@@ -616,16 +633,16 @@ export const fromJson = Effect.fn(function* (json: string) {
  *
  * // Using try/catch for error handling
  * try {
- *   const result = Voter.unsafeFromJson( parameters );
+ *   const result = Voter.fromJsonUnsafe( parameters );
  *   console.log(result);
  * } catch (error) {
- *   console.error(`Voter.unsafeFromJson failed: ${error.message}`);
+ *   console.error(`Voter.fromJsonUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Constructors
+ * @category ConstructorsUnsafe
  */
-export const unsafeFromJson = (json: string) => Effect.runSync(fromJson(json));
+export const fromJsonUnsafe = (json: string) => Effect.runSync(fromJson(json));
 
 /**
  * Static method newConstitutionalCommitteeHotKeyHash of Voter
@@ -667,16 +684,16 @@ export const newConstitutionalCommitteeHotKeyHash = Effect.fn(function* (
  *
  * // Using try/catch for error handling
  * try {
- *   const result = Voter.unsafeNewConstitutionalCommitteeHotKeyHash( parameters );
+ *   const result = Voter.newConstitutionalCommitteeHotKeyHashUnsafe( parameters );
  *   console.log(result);
  * } catch (error) {
- *   console.error(`Voter.unsafeNewConstitutionalCommitteeHotKeyHash failed: ${error.message}`);
+ *   console.error(`Voter.newConstitutionalCommitteeHotKeyHashUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Constructors
+ * @category ConstructorsUnsafe
  */
-export const unsafeNewConstitutionalCommitteeHotKeyHash = (
+export const newConstitutionalCommitteeHotKeyHashUnsafe = (
   ed25519KeyHash: CML.Ed25519KeyHash,
 ) => Effect.runSync(newConstitutionalCommitteeHotKeyHash(ed25519KeyHash));
 
@@ -720,16 +737,16 @@ export const newConstitutionalCommitteeHotScriptHash = Effect.fn(function* (
  *
  * // Using try/catch for error handling
  * try {
- *   const result = Voter.unsafeNewConstitutionalCommitteeHotScriptHash( parameters );
+ *   const result = Voter.newConstitutionalCommitteeHotScriptHashUnsafe( parameters );
  *   console.log(result);
  * } catch (error) {
- *   console.error(`Voter.unsafeNewConstitutionalCommitteeHotScriptHash failed: ${error.message}`);
+ *   console.error(`Voter.newConstitutionalCommitteeHotScriptHashUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Constructors
+ * @category ConstructorsUnsafe
  */
-export const unsafeNewConstitutionalCommitteeHotScriptHash = (
+export const newConstitutionalCommitteeHotScriptHashUnsafe = (
   scriptHash: CML.ScriptHash,
 ) => Effect.runSync(newConstitutionalCommitteeHotScriptHash(scriptHash));
 
@@ -772,16 +789,16 @@ export const newDRepKeyHash = Effect.fn(function* (
  *
  * // Using try/catch for error handling
  * try {
- *   const result = Voter.unsafeNewDRepKeyHash( parameters );
+ *   const result = Voter.newDRepKeyHashUnsafe( parameters );
  *   console.log(result);
  * } catch (error) {
- *   console.error(`Voter.unsafeNewDRepKeyHash failed: ${error.message}`);
+ *   console.error(`Voter.newDRepKeyHashUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Constructors
+ * @category ConstructorsUnsafe
  */
-export const unsafeNewDRepKeyHash = (ed25519KeyHash: CML.Ed25519KeyHash) =>
+export const newDRepKeyHashUnsafe = (ed25519KeyHash: CML.Ed25519KeyHash) =>
   Effect.runSync(newDRepKeyHash(ed25519KeyHash));
 
 /**
@@ -823,16 +840,16 @@ export const newDRepScriptHash = Effect.fn(function* (
  *
  * // Using try/catch for error handling
  * try {
- *   const result = Voter.unsafeNewDRepScriptHash( parameters );
+ *   const result = Voter.newDRepScriptHashUnsafe( parameters );
  *   console.log(result);
  * } catch (error) {
- *   console.error(`Voter.unsafeNewDRepScriptHash failed: ${error.message}`);
+ *   console.error(`Voter.newDRepScriptHashUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Constructors
+ * @category ConstructorsUnsafe
  */
-export const unsafeNewDRepScriptHash = (scriptHash: CML.ScriptHash) =>
+export const newDRepScriptHashUnsafe = (scriptHash: CML.ScriptHash) =>
   Effect.runSync(newDRepScriptHash(scriptHash));
 
 /**
@@ -874,16 +891,16 @@ export const newStakingPoolKeyHash = Effect.fn(function* (
  *
  * // Using try/catch for error handling
  * try {
- *   const result = Voter.unsafeNewStakingPoolKeyHash( parameters );
+ *   const result = Voter.newStakingPoolKeyHashUnsafe( parameters );
  *   console.log(result);
  * } catch (error) {
- *   console.error(`Voter.unsafeNewStakingPoolKeyHash failed: ${error.message}`);
+ *   console.error(`Voter.newStakingPoolKeyHashUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Constructors
+ * @category ConstructorsUnsafe
  */
-export const unsafeNewStakingPoolKeyHash = (
+export const newStakingPoolKeyHashUnsafe = (
   ed25519KeyHash: CML.Ed25519KeyHash,
 ) => Effect.runSync(newStakingPoolKeyHash(ed25519KeyHash));
 
@@ -927,16 +944,16 @@ export const kind = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = Voter.unsafeKind(instance);
+ *   const result = Voter.kindUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`Voter.unsafeKind failed: ${error.message}`);
+ *   console.error(`Voter.kindUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeKind = (instance: CML.Voter): CML.VoterKind =>
+export const kindUnsafe = (instance: CML.Voter): CML.VoterKind =>
   Effect.runSync(kind(instance));
 
 /**
@@ -981,16 +998,16 @@ export const asConstitutionalCommitteeHotKeyHash = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = Voter.unsafeAsConstitutionalCommitteeHotKeyHash(instance);
+ *   const result = Voter.asConstitutionalCommitteeHotKeyHashUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`Voter.unsafeAsConstitutionalCommitteeHotKeyHash failed: ${error.message}`);
+ *   console.error(`Voter.asConstitutionalCommitteeHotKeyHashUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeAsConstitutionalCommitteeHotKeyHash = (
+export const asConstitutionalCommitteeHotKeyHashUnsafe = (
   instance: CML.Voter,
 ): CML.Ed25519KeyHash | undefined =>
   Effect.runSync(asConstitutionalCommitteeHotKeyHash(instance));
@@ -1037,16 +1054,16 @@ export const asConstitutionalCommitteeHotScriptHash = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = Voter.unsafeAsConstitutionalCommitteeHotScriptHash(instance);
+ *   const result = Voter.asConstitutionalCommitteeHotScriptHashUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`Voter.unsafeAsConstitutionalCommitteeHotScriptHash failed: ${error.message}`);
+ *   console.error(`Voter.asConstitutionalCommitteeHotScriptHashUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeAsConstitutionalCommitteeHotScriptHash = (
+export const asConstitutionalCommitteeHotScriptHashUnsafe = (
   instance: CML.Voter,
 ): CML.ScriptHash | undefined =>
   Effect.runSync(asConstitutionalCommitteeHotScriptHash(instance));
@@ -1093,16 +1110,16 @@ export const asDRepKeyHash = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = Voter.unsafeAsDRepKeyHash(instance);
+ *   const result = Voter.asDRepKeyHashUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`Voter.unsafeAsDRepKeyHash failed: ${error.message}`);
+ *   console.error(`Voter.asDRepKeyHashUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeAsDRepKeyHash = (
+export const asDRepKeyHashUnsafe = (
   instance: CML.Voter,
 ): CML.Ed25519KeyHash | undefined => Effect.runSync(asDRepKeyHash(instance));
 
@@ -1148,16 +1165,16 @@ export const asDRepScriptHash = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = Voter.unsafeAsDRepScriptHash(instance);
+ *   const result = Voter.asDRepScriptHashUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`Voter.unsafeAsDRepScriptHash failed: ${error.message}`);
+ *   console.error(`Voter.asDRepScriptHashUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeAsDRepScriptHash = (
+export const asDRepScriptHashUnsafe = (
   instance: CML.Voter,
 ): CML.ScriptHash | undefined => Effect.runSync(asDRepScriptHash(instance));
 
@@ -1203,16 +1220,16 @@ export const asStakingPoolKeyHash = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = Voter.unsafeAsStakingPoolKeyHash(instance);
+ *   const result = Voter.asStakingPoolKeyHashUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`Voter.unsafeAsStakingPoolKeyHash failed: ${error.message}`);
+ *   console.error(`Voter.asStakingPoolKeyHashUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeAsStakingPoolKeyHash = (
+export const asStakingPoolKeyHashUnsafe = (
   instance: CML.Voter,
 ): CML.Ed25519KeyHash | undefined =>
   Effect.runSync(asStakingPoolKeyHash(instance));

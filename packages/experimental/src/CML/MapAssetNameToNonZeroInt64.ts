@@ -1,8 +1,25 @@
+/**
+ * @since 2.0.0
+ */
 import { Data, Effect } from "effect";
 import * as CML from "@anastasia-labs/cardano-multiplatform-lib-nodejs";
 
+/**
+ * Type alias for the CML MapAssetNameToNonZeroInt64 class
+ *
+ * @since 2.0.0
+ * @category Types
+ */
 export type MapAssetNameToNonZeroInt64 = CML.MapAssetNameToNonZeroInt64;
 
+/**
+ * Error class for MapAssetNameToNonZeroInt64 operations
+ *
+ * This error is thrown when operations on MapAssetNameToNonZeroInt64 instances fail.
+ *
+ * @since 2.0.0
+ * @category Errors
+ */
 export class MapAssetNameToNonZeroInt64Error extends Data.TaggedError(
   "MapAssetNameToNonZeroInt64Error",
 )<{
@@ -51,16 +68,16 @@ export const free = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = MapAssetNameToNonZeroInt64.unsafeFree(instance);
+ *   const result = MapAssetNameToNonZeroInt64.freeUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`MapAssetNameToNonZeroInt64.unsafeFree failed: ${error.message}`);
+ *   console.error(`MapAssetNameToNonZeroInt64.freeUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeFree = (instance: CML.MapAssetNameToNonZeroInt64): void =>
+export const freeUnsafe = (instance: CML.MapAssetNameToNonZeroInt64): void =>
   Effect.runSync(free(instance));
 
 /**
@@ -100,16 +117,16 @@ export const _new = Effect.fn(function* () {
  *
  * // Using try/catch for error handling
  * try {
- *   const result = MapAssetNameToNonZeroInt64.unsafe_new();
+ *   const result = MapAssetNameToNonZeroInt64._newUnsafe();
  *   console.log(result);
  * } catch (error) {
- *   console.error(`MapAssetNameToNonZeroInt64.unsafe_new failed: ${error.message}`);
+ *   console.error(`MapAssetNameToNonZeroInt64._newUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Constructors
+ * @category ConstructorsUnsafe
  */
-export const unsafe_new = () => Effect.runSync(_new());
+export const _newUnsafe = () => Effect.runSync(_new());
 
 /**
  * Method len of MapAssetNameToNonZeroInt64
@@ -153,16 +170,16 @@ export const len = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = MapAssetNameToNonZeroInt64.unsafeLen(instance);
+ *   const result = MapAssetNameToNonZeroInt64.lenUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`MapAssetNameToNonZeroInt64.unsafeLen failed: ${error.message}`);
+ *   console.error(`MapAssetNameToNonZeroInt64.lenUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeLen = (instance: CML.MapAssetNameToNonZeroInt64): number =>
+export const lenUnsafe = (instance: CML.MapAssetNameToNonZeroInt64): number =>
   Effect.runSync(len(instance));
 
 /**
@@ -209,16 +226,16 @@ export const insert = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = MapAssetNameToNonZeroInt64.unsafeInsert(instance,  parameters );
+ *   const result = MapAssetNameToNonZeroInt64.insertUnsafe(instance,  parameters );
  *   console.log(result);
  * } catch (error) {
- *   console.error(`MapAssetNameToNonZeroInt64.unsafeInsert failed: ${error.message}`);
+ *   console.error(`MapAssetNameToNonZeroInt64.insertUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeInsert = (
+export const insertUnsafe = (
   instance: CML.MapAssetNameToNonZeroInt64,
   key: CML.AssetName,
   value: bigint,
@@ -267,16 +284,16 @@ export const get = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = MapAssetNameToNonZeroInt64.unsafeGet(instance,  parameters );
+ *   const result = MapAssetNameToNonZeroInt64.getUnsafe(instance,  parameters );
  *   console.log(result);
  * } catch (error) {
- *   console.error(`MapAssetNameToNonZeroInt64.unsafeGet failed: ${error.message}`);
+ *   console.error(`MapAssetNameToNonZeroInt64.getUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeGet = (
+export const getUnsafe = (
   instance: CML.MapAssetNameToNonZeroInt64,
   key: CML.AssetName,
 ): bigint | undefined => Effect.runSync(get(instance, key));
@@ -323,15 +340,15 @@ export const keys = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = MapAssetNameToNonZeroInt64.unsafeKeys(instance);
+ *   const result = MapAssetNameToNonZeroInt64.keysUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`MapAssetNameToNonZeroInt64.unsafeKeys failed: ${error.message}`);
+ *   console.error(`MapAssetNameToNonZeroInt64.keysUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeKeys = (
+export const keysUnsafe = (
   instance: CML.MapAssetNameToNonZeroInt64,
 ): CML.AssetNameList => Effect.runSync(keys(instance));

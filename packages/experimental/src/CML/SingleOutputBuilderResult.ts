@@ -1,8 +1,25 @@
+/**
+ * @since 2.0.0
+ */
 import { Data, Effect } from "effect";
 import * as CML from "@anastasia-labs/cardano-multiplatform-lib-nodejs";
 
+/**
+ * Type alias for the CML SingleOutputBuilderResult class
+ *
+ * @since 2.0.0
+ * @category Types
+ */
 export type SingleOutputBuilderResult = CML.SingleOutputBuilderResult;
 
+/**
+ * Error class for SingleOutputBuilderResult operations
+ *
+ * This error is thrown when operations on SingleOutputBuilderResult instances fail.
+ *
+ * @since 2.0.0
+ * @category Errors
+ */
 export class SingleOutputBuilderResultError extends Data.TaggedError(
   "SingleOutputBuilderResultError",
 )<{
@@ -51,16 +68,16 @@ export const free = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = SingleOutputBuilderResult.unsafeFree(instance);
+ *   const result = SingleOutputBuilderResult.freeUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`SingleOutputBuilderResult.unsafeFree failed: ${error.message}`);
+ *   console.error(`SingleOutputBuilderResult.freeUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeFree = (instance: CML.SingleOutputBuilderResult): void =>
+export const freeUnsafe = (instance: CML.SingleOutputBuilderResult): void =>
   Effect.runSync(free(instance));
 
 /**
@@ -100,16 +117,16 @@ export const _new = Effect.fn(function* (output: CML.TransactionOutput) {
  *
  * // Using try/catch for error handling
  * try {
- *   const result = SingleOutputBuilderResult.unsafe_new( parameters );
+ *   const result = SingleOutputBuilderResult._newUnsafe( parameters );
  *   console.log(result);
  * } catch (error) {
- *   console.error(`SingleOutputBuilderResult.unsafe_new failed: ${error.message}`);
+ *   console.error(`SingleOutputBuilderResult._newUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Constructors
+ * @category ConstructorsUnsafe
  */
-export const unsafe_new = (output: CML.TransactionOutput) =>
+export const _newUnsafe = (output: CML.TransactionOutput) =>
   Effect.runSync(_new(output));
 
 /**
@@ -154,16 +171,16 @@ export const output = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = SingleOutputBuilderResult.unsafeOutput(instance);
+ *   const result = SingleOutputBuilderResult.outputUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`SingleOutputBuilderResult.unsafeOutput failed: ${error.message}`);
+ *   console.error(`SingleOutputBuilderResult.outputUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeOutput = (
+export const outputUnsafe = (
   instance: CML.SingleOutputBuilderResult,
 ): CML.TransactionOutput => Effect.runSync(output(instance));
 
@@ -212,15 +229,15 @@ export const communicationDatum = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = SingleOutputBuilderResult.unsafeCommunicationDatum(instance);
+ *   const result = SingleOutputBuilderResult.communicationDatumUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`SingleOutputBuilderResult.unsafeCommunicationDatum failed: ${error.message}`);
+ *   console.error(`SingleOutputBuilderResult.communicationDatumUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeCommunicationDatum = (
+export const communicationDatumUnsafe = (
   instance: CML.SingleOutputBuilderResult,
 ): CML.PlutusData | undefined => Effect.runSync(communicationDatum(instance));

@@ -1,8 +1,25 @@
+/**
+ * @since 2.0.0
+ */
 import { Data, Effect } from "effect";
 import * as CML from "@anastasia-labs/cardano-multiplatform-lib-nodejs";
 
+/**
+ * Type alias for the CML Nonce class
+ *
+ * @since 2.0.0
+ * @category Types
+ */
 export type Nonce = CML.Nonce;
 
+/**
+ * Error class for Nonce operations
+ *
+ * This error is thrown when operations on Nonce instances fail.
+ *
+ * @since 2.0.0
+ * @category Errors
+ */
 export class NonceError extends Data.TaggedError("NonceError")<{
   message?: string;
 }> {}
@@ -47,16 +64,16 @@ export const free = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = Nonce.unsafeFree(instance);
+ *   const result = Nonce.freeUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`Nonce.unsafeFree failed: ${error.message}`);
+ *   console.error(`Nonce.freeUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeFree = (instance: CML.Nonce): void =>
+export const freeUnsafe = (instance: CML.Nonce): void =>
   Effect.runSync(free(instance));
 
 /**
@@ -99,16 +116,16 @@ export const toCborBytes = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = Nonce.unsafeToCborBytes(instance);
+ *   const result = Nonce.toCborBytesUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`Nonce.unsafeToCborBytes failed: ${error.message}`);
+ *   console.error(`Nonce.toCborBytesUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeToCborBytes = (instance: CML.Nonce): Uint8Array =>
+export const toCborBytesUnsafe = (instance: CML.Nonce): Uint8Array =>
   Effect.runSync(toCborBytes(instance));
 
 /**
@@ -151,16 +168,16 @@ export const toCanonicalCborBytes = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = Nonce.unsafeToCanonicalCborBytes(instance);
+ *   const result = Nonce.toCanonicalCborBytesUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`Nonce.unsafeToCanonicalCborBytes failed: ${error.message}`);
+ *   console.error(`Nonce.toCanonicalCborBytesUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeToCanonicalCborBytes = (instance: CML.Nonce): Uint8Array =>
+export const toCanonicalCborBytesUnsafe = (instance: CML.Nonce): Uint8Array =>
   Effect.runSync(toCanonicalCborBytes(instance));
 
 /**
@@ -200,16 +217,16 @@ export const fromCborBytes = Effect.fn(function* (cborBytes: Uint8Array) {
  *
  * // Using try/catch for error handling
  * try {
- *   const result = Nonce.unsafeFromCborBytes( parameters );
+ *   const result = Nonce.fromCborBytesUnsafe( parameters );
  *   console.log(result);
  * } catch (error) {
- *   console.error(`Nonce.unsafeFromCborBytes failed: ${error.message}`);
+ *   console.error(`Nonce.fromCborBytesUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Constructors
+ * @category ConstructorsUnsafe
  */
-export const unsafeFromCborBytes = (cborBytes: Uint8Array) =>
+export const fromCborBytesUnsafe = (cborBytes: Uint8Array) =>
   Effect.runSync(fromCborBytes(cborBytes));
 
 /**
@@ -252,16 +269,16 @@ export const toCborHex = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = Nonce.unsafeToCborHex(instance);
+ *   const result = Nonce.toCborHexUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`Nonce.unsafeToCborHex failed: ${error.message}`);
+ *   console.error(`Nonce.toCborHexUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeToCborHex = (instance: CML.Nonce): string =>
+export const toCborHexUnsafe = (instance: CML.Nonce): string =>
   Effect.runSync(toCborHex(instance));
 
 /**
@@ -304,16 +321,16 @@ export const toCanonicalCborHex = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = Nonce.unsafeToCanonicalCborHex(instance);
+ *   const result = Nonce.toCanonicalCborHexUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`Nonce.unsafeToCanonicalCborHex failed: ${error.message}`);
+ *   console.error(`Nonce.toCanonicalCborHexUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeToCanonicalCborHex = (instance: CML.Nonce): string =>
+export const toCanonicalCborHexUnsafe = (instance: CML.Nonce): string =>
   Effect.runSync(toCanonicalCborHex(instance));
 
 /**
@@ -353,16 +370,16 @@ export const fromCborHex = Effect.fn(function* (cborBytes: string) {
  *
  * // Using try/catch for error handling
  * try {
- *   const result = Nonce.unsafeFromCborHex( parameters );
+ *   const result = Nonce.fromCborHexUnsafe( parameters );
  *   console.log(result);
  * } catch (error) {
- *   console.error(`Nonce.unsafeFromCborHex failed: ${error.message}`);
+ *   console.error(`Nonce.fromCborHexUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Constructors
+ * @category ConstructorsUnsafe
  */
-export const unsafeFromCborHex = (cborBytes: string) =>
+export const fromCborHexUnsafe = (cborBytes: string) =>
   Effect.runSync(fromCborHex(cborBytes));
 
 /**
@@ -405,16 +422,16 @@ export const toJson = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = Nonce.unsafeToJson(instance);
+ *   const result = Nonce.toJsonUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`Nonce.unsafeToJson failed: ${error.message}`);
+ *   console.error(`Nonce.toJsonUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeToJson = (instance: CML.Nonce): string =>
+export const toJsonUnsafe = (instance: CML.Nonce): string =>
   Effect.runSync(toJson(instance));
 
 /**
@@ -457,16 +474,16 @@ export const toJsValue = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = Nonce.unsafeToJsValue(instance);
+ *   const result = Nonce.toJsValueUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`Nonce.unsafeToJsValue failed: ${error.message}`);
+ *   console.error(`Nonce.toJsValueUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeToJsValue = (instance: CML.Nonce): any =>
+export const toJsValueUnsafe = (instance: CML.Nonce): any =>
   Effect.runSync(toJsValue(instance));
 
 /**
@@ -506,16 +523,16 @@ export const fromJson = Effect.fn(function* (json: string) {
  *
  * // Using try/catch for error handling
  * try {
- *   const result = Nonce.unsafeFromJson( parameters );
+ *   const result = Nonce.fromJsonUnsafe( parameters );
  *   console.log(result);
  * } catch (error) {
- *   console.error(`Nonce.unsafeFromJson failed: ${error.message}`);
+ *   console.error(`Nonce.fromJsonUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Constructors
+ * @category ConstructorsUnsafe
  */
-export const unsafeFromJson = (json: string) => Effect.runSync(fromJson(json));
+export const fromJsonUnsafe = (json: string) => Effect.runSync(fromJson(json));
 
 /**
  * Static method newIdentity of Nonce
@@ -554,16 +571,16 @@ export const newIdentity = Effect.fn(function* () {
  *
  * // Using try/catch for error handling
  * try {
- *   const result = Nonce.unsafeNewIdentity();
+ *   const result = Nonce.newIdentityUnsafe();
  *   console.log(result);
  * } catch (error) {
- *   console.error(`Nonce.unsafeNewIdentity failed: ${error.message}`);
+ *   console.error(`Nonce.newIdentityUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Constructors
+ * @category ConstructorsUnsafe
  */
-export const unsafeNewIdentity = () => Effect.runSync(newIdentity());
+export const newIdentityUnsafe = () => Effect.runSync(newIdentity());
 
 /**
  * Static method newHash of Nonce
@@ -602,16 +619,16 @@ export const newHash = Effect.fn(function* (hash: CML.NonceHash) {
  *
  * // Using try/catch for error handling
  * try {
- *   const result = Nonce.unsafeNewHash( parameters );
+ *   const result = Nonce.newHashUnsafe( parameters );
  *   console.log(result);
  * } catch (error) {
- *   console.error(`Nonce.unsafeNewHash failed: ${error.message}`);
+ *   console.error(`Nonce.newHashUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Constructors
+ * @category ConstructorsUnsafe
  */
-export const unsafeNewHash = (hash: CML.NonceHash) =>
+export const newHashUnsafe = (hash: CML.NonceHash) =>
   Effect.runSync(newHash(hash));
 
 /**
@@ -654,16 +671,16 @@ export const kind = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = Nonce.unsafeKind(instance);
+ *   const result = Nonce.kindUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`Nonce.unsafeKind failed: ${error.message}`);
+ *   console.error(`Nonce.kindUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeKind = (instance: CML.Nonce): CML.NonceKind =>
+export const kindUnsafe = (instance: CML.Nonce): CML.NonceKind =>
   Effect.runSync(kind(instance));
 
 /**
@@ -706,14 +723,14 @@ export const asHash = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = Nonce.unsafeAsHash(instance);
+ *   const result = Nonce.asHashUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`Nonce.unsafeAsHash failed: ${error.message}`);
+ *   console.error(`Nonce.asHashUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeAsHash = (instance: CML.Nonce): CML.NonceHash | undefined =>
+export const asHashUnsafe = (instance: CML.Nonce): CML.NonceHash | undefined =>
   Effect.runSync(asHash(instance));

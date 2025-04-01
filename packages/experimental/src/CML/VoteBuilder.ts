@@ -1,8 +1,25 @@
+/**
+ * @since 2.0.0
+ */
 import { Data, Effect } from "effect";
 import * as CML from "@anastasia-labs/cardano-multiplatform-lib-nodejs";
 
+/**
+ * Type alias for the CML VoteBuilder class
+ *
+ * @since 2.0.0
+ * @category Types
+ */
 export type VoteBuilder = CML.VoteBuilder;
 
+/**
+ * Error class for VoteBuilder operations
+ *
+ * This error is thrown when operations on VoteBuilder instances fail.
+ *
+ * @since 2.0.0
+ * @category Errors
+ */
 export class VoteBuilderError extends Data.TaggedError("VoteBuilderError")<{
   message?: string;
 }> {}
@@ -47,16 +64,16 @@ export const free = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = VoteBuilder.unsafeFree(instance);
+ *   const result = VoteBuilder.freeUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`VoteBuilder.unsafeFree failed: ${error.message}`);
+ *   console.error(`VoteBuilder.freeUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeFree = (instance: CML.VoteBuilder): void =>
+export const freeUnsafe = (instance: CML.VoteBuilder): void =>
   Effect.runSync(free(instance));
 
 /**
@@ -96,16 +113,16 @@ export const _new = Effect.fn(function* () {
  *
  * // Using try/catch for error handling
  * try {
- *   const result = VoteBuilder.unsafe_new();
+ *   const result = VoteBuilder._newUnsafe();
  *   console.log(result);
  * } catch (error) {
- *   console.error(`VoteBuilder.unsafe_new failed: ${error.message}`);
+ *   console.error(`VoteBuilder._newUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Constructors
+ * @category ConstructorsUnsafe
  */
-export const unsafe_new = () => Effect.runSync(_new());
+export const _newUnsafe = () => Effect.runSync(_new());
 
 /**
  * Method withVote of VoteBuilder
@@ -152,16 +169,16 @@ export const withVote = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = VoteBuilder.unsafeWithVote(instance,  parameters );
+ *   const result = VoteBuilder.withVoteUnsafe(instance,  parameters );
  *   console.log(result);
  * } catch (error) {
- *   console.error(`VoteBuilder.unsafeWithVote failed: ${error.message}`);
+ *   console.error(`VoteBuilder.withVoteUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeWithVote = (
+export const withVoteUnsafe = (
   instance: CML.VoteBuilder,
   voter: CML.Voter,
   govActionId: CML.GovActionId,
@@ -223,16 +240,16 @@ export const withNativeScriptVote = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = VoteBuilder.unsafeWithNativeScriptVote(instance,  parameters );
+ *   const result = VoteBuilder.withNativeScriptVoteUnsafe(instance,  parameters );
  *   console.log(result);
  * } catch (error) {
- *   console.error(`VoteBuilder.unsafeWithNativeScriptVote failed: ${error.message}`);
+ *   console.error(`VoteBuilder.withNativeScriptVoteUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeWithNativeScriptVote = (
+export const withNativeScriptVoteUnsafe = (
   instance: CML.VoteBuilder,
   voter: CML.Voter,
   govActionId: CML.GovActionId,
@@ -307,16 +324,16 @@ export const withPlutusVote = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = VoteBuilder.unsafeWithPlutusVote(instance,  parameters );
+ *   const result = VoteBuilder.withPlutusVoteUnsafe(instance,  parameters );
  *   console.log(result);
  * } catch (error) {
- *   console.error(`VoteBuilder.unsafeWithPlutusVote failed: ${error.message}`);
+ *   console.error(`VoteBuilder.withPlutusVoteUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeWithPlutusVote = (
+export const withPlutusVoteUnsafe = (
   instance: CML.VoteBuilder,
   voter: CML.Voter,
   govActionId: CML.GovActionId,
@@ -391,16 +408,16 @@ export const withPlutusVoteInlineDatum = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = VoteBuilder.unsafeWithPlutusVoteInlineDatum(instance,  parameters );
+ *   const result = VoteBuilder.withPlutusVoteInlineDatumUnsafe(instance,  parameters );
  *   console.log(result);
  * } catch (error) {
- *   console.error(`VoteBuilder.unsafeWithPlutusVoteInlineDatum failed: ${error.message}`);
+ *   console.error(`VoteBuilder.withPlutusVoteInlineDatumUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeWithPlutusVoteInlineDatum = (
+export const withPlutusVoteInlineDatumUnsafe = (
   instance: CML.VoteBuilder,
   voter: CML.Voter,
   govActionId: CML.GovActionId,
@@ -461,14 +478,14 @@ export const build = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = VoteBuilder.unsafeBuild(instance);
+ *   const result = VoteBuilder.buildUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`VoteBuilder.unsafeBuild failed: ${error.message}`);
+ *   console.error(`VoteBuilder.buildUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeBuild = (instance: CML.VoteBuilder): CML.VoteBuilderResult =>
+export const buildUnsafe = (instance: CML.VoteBuilder): CML.VoteBuilderResult =>
   Effect.runSync(build(instance));

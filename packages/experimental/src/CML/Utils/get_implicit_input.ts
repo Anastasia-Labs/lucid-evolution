@@ -1,6 +1,17 @@
+/**
+ * @since 2.0.0
+ */
 import { Data, Effect } from "effect";
 import * as CML from "@anastasia-labs/cardano-multiplatform-lib-nodejs";
 
+/**
+ * Error class for get_implicit_input function
+ *
+ * This error is thrown when the get_implicit_input function fails.
+ *
+ * @since 2.0.0
+ * @category Errors
+ */
 export class GetImplicitInputError extends Data.TaggedError(
   "GetImplicitInputError",
 )<{
@@ -41,19 +52,19 @@ export const getImplicitInput = Effect.fn(function* (
  * Unsafely calls get_implicit_input function without Effect wrapper
  *
  * @example
- * import { unsafeGetImplicitInput } from "@lucid-evolution/experimental/CML/functions";
+ * import { getImplicitInputUnsafe } from "@lucid-evolution/experimental/CML/functions";
  *
  * try {
- *   const result = unsafeGetImplicitInput(TransactionBody instance ,  appropriate value ,  appropriate value );
+ *   const result = getImplicitInputUnsafe(TransactionBody instance ,  appropriate value ,  appropriate value );
  *   console.log(result);
  * } catch (error) {
- *   console.error(`unsafeGetImplicitInput failed: ${error.message}`);
+ *   console.error(`getImplicitInputUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Functions
+ * @category FunctionsUnsafe
  */
-export const unsafeGetImplicitInput = (
+export const getImplicitInputUnsafe = (
   txbody: CML.TransactionBody,
   poolDeposit: bigint,
   keyDeposit: bigint,

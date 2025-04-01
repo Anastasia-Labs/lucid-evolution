@@ -1,10 +1,66 @@
+/**
+ * @since 2.0.0
+ */
 import * as CML from "@anastasia-labs/cardano-multiplatform-lib-nodejs";
 
+/**
+ * Type alias for the CML DRepKind enum
+ *
+ * @since 2.0.0
+ * @category Types
+ */
 export type DRepKind = CML.DRepKind;
 
+/**
+ * Key variant of the DRepKind enum
+ *
+ * @example
+ * import { DRepKind } from "@lucid-evolution/experimental";
+ *
+ * const kind = DRepKind.Key;
+ *
+ * @since 2.0.0
+ * @category Variants
+ */
 export const Key = CML.DRepKind.Key;
+
+/**
+ * Script variant of the DRepKind enum
+ *
+ * @example
+ * import { DRepKind } from "@lucid-evolution/experimental";
+ *
+ * const kind = DRepKind.Script;
+ *
+ * @since 2.0.0
+ * @category Variants
+ */
 export const Script = CML.DRepKind.Script;
+
+/**
+ * AlwaysAbstain variant of the DRepKind enum
+ *
+ * @example
+ * import { DRepKind } from "@lucid-evolution/experimental";
+ *
+ * const kind = DRepKind.AlwaysAbstain;
+ *
+ * @since 2.0.0
+ * @category Variants
+ */
 export const AlwaysAbstain = CML.DRepKind.AlwaysAbstain;
+
+/**
+ * AlwaysNoConfidence variant of the DRepKind enum
+ *
+ * @example
+ * import { DRepKind } from "@lucid-evolution/experimental";
+ *
+ * const kind = DRepKind.AlwaysNoConfidence;
+ *
+ * @since 2.0.0
+ * @category Variants
+ */
 export const AlwaysNoConfidence = CML.DRepKind.AlwaysNoConfidence;
 
 /**

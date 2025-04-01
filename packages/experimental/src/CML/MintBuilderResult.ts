@@ -1,8 +1,25 @@
+/**
+ * @since 2.0.0
+ */
 import { Data, Effect } from "effect";
 import * as CML from "@anastasia-labs/cardano-multiplatform-lib-nodejs";
 
+/**
+ * Type alias for the CML MintBuilderResult class
+ *
+ * @since 2.0.0
+ * @category Types
+ */
 export type MintBuilderResult = CML.MintBuilderResult;
 
+/**
+ * Error class for MintBuilderResult operations
+ *
+ * This error is thrown when operations on MintBuilderResult instances fail.
+ *
+ * @since 2.0.0
+ * @category Errors
+ */
 export class MintBuilderResultError extends Data.TaggedError(
   "MintBuilderResultError",
 )<{
@@ -51,14 +68,14 @@ export const free = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = MintBuilderResult.unsafeFree(instance);
+ *   const result = MintBuilderResult.freeUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`MintBuilderResult.unsafeFree failed: ${error.message}`);
+ *   console.error(`MintBuilderResult.freeUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeFree = (instance: CML.MintBuilderResult): void =>
+export const freeUnsafe = (instance: CML.MintBuilderResult): void =>
   Effect.runSync(free(instance));

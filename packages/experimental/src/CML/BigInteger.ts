@@ -1,8 +1,25 @@
+/**
+ * @since 2.0.0
+ */
 import { Data, Effect } from "effect";
 import * as CML from "@anastasia-labs/cardano-multiplatform-lib-nodejs";
 
+/**
+ * Type alias for the CML BigInteger class
+ *
+ * @since 2.0.0
+ * @category Types
+ */
 export type BigInteger = CML.BigInteger;
 
+/**
+ * Error class for BigInteger operations
+ *
+ * This error is thrown when operations on BigInteger instances fail.
+ *
+ * @since 2.0.0
+ * @category Errors
+ */
 export class BigIntegerError extends Data.TaggedError("BigIntegerError")<{
   message?: string;
 }> {}
@@ -47,16 +64,16 @@ export const free = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = BigInteger.unsafeFree(instance);
+ *   const result = BigInteger.freeUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`BigInteger.unsafeFree failed: ${error.message}`);
+ *   console.error(`BigInteger.freeUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeFree = (instance: CML.BigInteger): void =>
+export const freeUnsafe = (instance: CML.BigInteger): void =>
   Effect.runSync(free(instance));
 
 /**
@@ -99,16 +116,16 @@ export const toCborBytes = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = BigInteger.unsafeToCborBytes(instance);
+ *   const result = BigInteger.toCborBytesUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`BigInteger.unsafeToCborBytes failed: ${error.message}`);
+ *   console.error(`BigInteger.toCborBytesUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeToCborBytes = (instance: CML.BigInteger): Uint8Array =>
+export const toCborBytesUnsafe = (instance: CML.BigInteger): Uint8Array =>
   Effect.runSync(toCborBytes(instance));
 
 /**
@@ -151,16 +168,16 @@ export const toCanonicalCborBytes = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = BigInteger.unsafeToCanonicalCborBytes(instance);
+ *   const result = BigInteger.toCanonicalCborBytesUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`BigInteger.unsafeToCanonicalCborBytes failed: ${error.message}`);
+ *   console.error(`BigInteger.toCanonicalCborBytesUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeToCanonicalCborBytes = (
+export const toCanonicalCborBytesUnsafe = (
   instance: CML.BigInteger,
 ): Uint8Array => Effect.runSync(toCanonicalCborBytes(instance));
 
@@ -201,16 +218,16 @@ export const fromCborBytes = Effect.fn(function* (cborBytes: Uint8Array) {
  *
  * // Using try/catch for error handling
  * try {
- *   const result = BigInteger.unsafeFromCborBytes( parameters );
+ *   const result = BigInteger.fromCborBytesUnsafe( parameters );
  *   console.log(result);
  * } catch (error) {
- *   console.error(`BigInteger.unsafeFromCborBytes failed: ${error.message}`);
+ *   console.error(`BigInteger.fromCborBytesUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Constructors
+ * @category ConstructorsUnsafe
  */
-export const unsafeFromCborBytes = (cborBytes: Uint8Array) =>
+export const fromCborBytesUnsafe = (cborBytes: Uint8Array) =>
   Effect.runSync(fromCborBytes(cborBytes));
 
 /**
@@ -253,16 +270,16 @@ export const toCborHex = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = BigInteger.unsafeToCborHex(instance);
+ *   const result = BigInteger.toCborHexUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`BigInteger.unsafeToCborHex failed: ${error.message}`);
+ *   console.error(`BigInteger.toCborHexUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeToCborHex = (instance: CML.BigInteger): string =>
+export const toCborHexUnsafe = (instance: CML.BigInteger): string =>
   Effect.runSync(toCborHex(instance));
 
 /**
@@ -305,16 +322,16 @@ export const toCanonicalCborHex = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = BigInteger.unsafeToCanonicalCborHex(instance);
+ *   const result = BigInteger.toCanonicalCborHexUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`BigInteger.unsafeToCanonicalCborHex failed: ${error.message}`);
+ *   console.error(`BigInteger.toCanonicalCborHexUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeToCanonicalCborHex = (instance: CML.BigInteger): string =>
+export const toCanonicalCborHexUnsafe = (instance: CML.BigInteger): string =>
   Effect.runSync(toCanonicalCborHex(instance));
 
 /**
@@ -354,16 +371,16 @@ export const fromCborHex = Effect.fn(function* (cborBytes: string) {
  *
  * // Using try/catch for error handling
  * try {
- *   const result = BigInteger.unsafeFromCborHex( parameters );
+ *   const result = BigInteger.fromCborHexUnsafe( parameters );
  *   console.log(result);
  * } catch (error) {
- *   console.error(`BigInteger.unsafeFromCborHex failed: ${error.message}`);
+ *   console.error(`BigInteger.fromCborHexUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Constructors
+ * @category ConstructorsUnsafe
  */
-export const unsafeFromCborHex = (cborBytes: string) =>
+export const fromCborHexUnsafe = (cborBytes: string) =>
   Effect.runSync(fromCborHex(cborBytes));
 
 /**
@@ -406,16 +423,16 @@ export const toJson = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = BigInteger.unsafeToJson(instance);
+ *   const result = BigInteger.toJsonUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`BigInteger.unsafeToJson failed: ${error.message}`);
+ *   console.error(`BigInteger.toJsonUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeToJson = (instance: CML.BigInteger): string =>
+export const toJsonUnsafe = (instance: CML.BigInteger): string =>
   Effect.runSync(toJson(instance));
 
 /**
@@ -458,16 +475,16 @@ export const toJsValue = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = BigInteger.unsafeToJsValue(instance);
+ *   const result = BigInteger.toJsValueUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`BigInteger.unsafeToJsValue failed: ${error.message}`);
+ *   console.error(`BigInteger.toJsValueUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeToJsValue = (instance: CML.BigInteger): any =>
+export const toJsValueUnsafe = (instance: CML.BigInteger): any =>
   Effect.runSync(toJsValue(instance));
 
 /**
@@ -507,16 +524,16 @@ export const fromJson = Effect.fn(function* (json: string) {
  *
  * // Using try/catch for error handling
  * try {
- *   const result = BigInteger.unsafeFromJson( parameters );
+ *   const result = BigInteger.fromJsonUnsafe( parameters );
  *   console.log(result);
  * } catch (error) {
- *   console.error(`BigInteger.unsafeFromJson failed: ${error.message}`);
+ *   console.error(`BigInteger.fromJsonUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Constructors
+ * @category ConstructorsUnsafe
  */
-export const unsafeFromJson = (json: string) => Effect.runSync(fromJson(json));
+export const fromJsonUnsafe = (json: string) => Effect.runSync(fromJson(json));
 
 /**
  * Static method fromInt of BigInteger
@@ -555,16 +572,16 @@ export const fromInt = Effect.fn(function* (x: CML.Int) {
  *
  * // Using try/catch for error handling
  * try {
- *   const result = BigInteger.unsafeFromInt( parameters );
+ *   const result = BigInteger.fromIntUnsafe( parameters );
  *   console.log(result);
  * } catch (error) {
- *   console.error(`BigInteger.unsafeFromInt failed: ${error.message}`);
+ *   console.error(`BigInteger.fromIntUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Constructors
+ * @category ConstructorsUnsafe
  */
-export const unsafeFromInt = (x: CML.Int) => Effect.runSync(fromInt(x));
+export const fromIntUnsafe = (x: CML.Int) => Effect.runSync(fromInt(x));
 
 /**
  * Static method fromStr of BigInteger
@@ -603,16 +620,16 @@ export const fromStr = Effect.fn(function* (s: string) {
  *
  * // Using try/catch for error handling
  * try {
- *   const result = BigInteger.unsafeFromStr( parameters );
+ *   const result = BigInteger.fromStrUnsafe( parameters );
  *   console.log(result);
  * } catch (error) {
- *   console.error(`BigInteger.unsafeFromStr failed: ${error.message}`);
+ *   console.error(`BigInteger.fromStrUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Constructors
+ * @category ConstructorsUnsafe
  */
-export const unsafeFromStr = (s: string) => Effect.runSync(fromStr(s));
+export const fromStrUnsafe = (s: string) => Effect.runSync(fromStr(s));
 
 /**
  * Method toStr of BigInteger
@@ -654,16 +671,16 @@ export const toStr = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = BigInteger.unsafeToStr(instance);
+ *   const result = BigInteger.toStrUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`BigInteger.unsafeToStr failed: ${error.message}`);
+ *   console.error(`BigInteger.toStrUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeToStr = (instance: CML.BigInteger): string =>
+export const toStrUnsafe = (instance: CML.BigInteger): string =>
   Effect.runSync(toStr(instance));
 
 /**
@@ -708,16 +725,16 @@ export const asU64 = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = BigInteger.unsafeAsU64(instance);
+ *   const result = BigInteger.asU64Unsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`BigInteger.unsafeAsU64 failed: ${error.message}`);
+ *   console.error(`BigInteger.asU64Unsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeAsU64 = (instance: CML.BigInteger): bigint | undefined =>
+export const asU64Unsafe = (instance: CML.BigInteger): bigint | undefined =>
   Effect.runSync(asU64(instance));
 
 /**
@@ -762,14 +779,14 @@ export const asInt = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = BigInteger.unsafeAsInt(instance);
+ *   const result = BigInteger.asIntUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`BigInteger.unsafeAsInt failed: ${error.message}`);
+ *   console.error(`BigInteger.asIntUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeAsInt = (instance: CML.BigInteger): CML.Int | undefined =>
+export const asIntUnsafe = (instance: CML.BigInteger): CML.Int | undefined =>
   Effect.runSync(asInt(instance));

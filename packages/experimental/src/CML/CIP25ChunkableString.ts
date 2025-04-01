@@ -1,8 +1,25 @@
+/**
+ * @since 2.0.0
+ */
 import { Data, Effect } from "effect";
 import * as CML from "@anastasia-labs/cardano-multiplatform-lib-nodejs";
 
+/**
+ * Type alias for the CML CIP25ChunkableString class
+ *
+ * @since 2.0.0
+ * @category Types
+ */
 export type CIP25ChunkableString = CML.CIP25ChunkableString;
 
+/**
+ * Error class for CIP25ChunkableString operations
+ *
+ * This error is thrown when operations on CIP25ChunkableString instances fail.
+ *
+ * @since 2.0.0
+ * @category Errors
+ */
 export class CIP25ChunkableStringError extends Data.TaggedError(
   "CIP25ChunkableStringError",
 )<{
@@ -51,16 +68,16 @@ export const free = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = CIP25ChunkableString.unsafeFree(instance);
+ *   const result = CIP25ChunkableString.freeUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`CIP25ChunkableString.unsafeFree failed: ${error.message}`);
+ *   console.error(`CIP25ChunkableString.freeUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeFree = (instance: CML.CIP25ChunkableString): void =>
+export const freeUnsafe = (instance: CML.CIP25ChunkableString): void =>
   Effect.runSync(free(instance));
 
 /**
@@ -105,16 +122,16 @@ export const toCborBytes = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = CIP25ChunkableString.unsafeToCborBytes(instance);
+ *   const result = CIP25ChunkableString.toCborBytesUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`CIP25ChunkableString.unsafeToCborBytes failed: ${error.message}`);
+ *   console.error(`CIP25ChunkableString.toCborBytesUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeToCborBytes = (
+export const toCborBytesUnsafe = (
   instance: CML.CIP25ChunkableString,
 ): Uint8Array => Effect.runSync(toCborBytes(instance));
 
@@ -155,16 +172,16 @@ export const fromCborBytes = Effect.fn(function* (cborBytes: Uint8Array) {
  *
  * // Using try/catch for error handling
  * try {
- *   const result = CIP25ChunkableString.unsafeFromCborBytes( parameters );
+ *   const result = CIP25ChunkableString.fromCborBytesUnsafe( parameters );
  *   console.log(result);
  * } catch (error) {
- *   console.error(`CIP25ChunkableString.unsafeFromCborBytes failed: ${error.message}`);
+ *   console.error(`CIP25ChunkableString.fromCborBytesUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Constructors
+ * @category ConstructorsUnsafe
  */
-export const unsafeFromCborBytes = (cborBytes: Uint8Array) =>
+export const fromCborBytesUnsafe = (cborBytes: Uint8Array) =>
   Effect.runSync(fromCborBytes(cborBytes));
 
 /**
@@ -209,16 +226,16 @@ export const toCborHex = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = CIP25ChunkableString.unsafeToCborHex(instance);
+ *   const result = CIP25ChunkableString.toCborHexUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`CIP25ChunkableString.unsafeToCborHex failed: ${error.message}`);
+ *   console.error(`CIP25ChunkableString.toCborHexUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeToCborHex = (instance: CML.CIP25ChunkableString): string =>
+export const toCborHexUnsafe = (instance: CML.CIP25ChunkableString): string =>
   Effect.runSync(toCborHex(instance));
 
 /**
@@ -258,16 +275,16 @@ export const fromCborHex = Effect.fn(function* (cborBytes: string) {
  *
  * // Using try/catch for error handling
  * try {
- *   const result = CIP25ChunkableString.unsafeFromCborHex( parameters );
+ *   const result = CIP25ChunkableString.fromCborHexUnsafe( parameters );
  *   console.log(result);
  * } catch (error) {
- *   console.error(`CIP25ChunkableString.unsafeFromCborHex failed: ${error.message}`);
+ *   console.error(`CIP25ChunkableString.fromCborHexUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Constructors
+ * @category ConstructorsUnsafe
  */
-export const unsafeFromCborHex = (cborBytes: string) =>
+export const fromCborHexUnsafe = (cborBytes: string) =>
   Effect.runSync(fromCborHex(cborBytes));
 
 /**
@@ -312,16 +329,16 @@ export const toJson = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = CIP25ChunkableString.unsafeToJson(instance);
+ *   const result = CIP25ChunkableString.toJsonUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`CIP25ChunkableString.unsafeToJson failed: ${error.message}`);
+ *   console.error(`CIP25ChunkableString.toJsonUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeToJson = (instance: CML.CIP25ChunkableString): string =>
+export const toJsonUnsafe = (instance: CML.CIP25ChunkableString): string =>
   Effect.runSync(toJson(instance));
 
 /**
@@ -366,16 +383,16 @@ export const toJsValue = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = CIP25ChunkableString.unsafeToJsValue(instance);
+ *   const result = CIP25ChunkableString.toJsValueUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`CIP25ChunkableString.unsafeToJsValue failed: ${error.message}`);
+ *   console.error(`CIP25ChunkableString.toJsValueUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeToJsValue = (instance: CML.CIP25ChunkableString): any =>
+export const toJsValueUnsafe = (instance: CML.CIP25ChunkableString): any =>
   Effect.runSync(toJsValue(instance));
 
 /**
@@ -415,16 +432,16 @@ export const fromJson = Effect.fn(function* (json: string) {
  *
  * // Using try/catch for error handling
  * try {
- *   const result = CIP25ChunkableString.unsafeFromJson( parameters );
+ *   const result = CIP25ChunkableString.fromJsonUnsafe( parameters );
  *   console.log(result);
  * } catch (error) {
- *   console.error(`CIP25ChunkableString.unsafeFromJson failed: ${error.message}`);
+ *   console.error(`CIP25ChunkableString.fromJsonUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Constructors
+ * @category ConstructorsUnsafe
  */
-export const unsafeFromJson = (json: string) => Effect.runSync(fromJson(json));
+export const fromJsonUnsafe = (json: string) => Effect.runSync(fromJson(json));
 
 /**
  * Static method newSingle of CIP25ChunkableString
@@ -463,16 +480,16 @@ export const newSingle = Effect.fn(function* (single: CML.CIP25String64) {
  *
  * // Using try/catch for error handling
  * try {
- *   const result = CIP25ChunkableString.unsafeNewSingle( parameters );
+ *   const result = CIP25ChunkableString.newSingleUnsafe( parameters );
  *   console.log(result);
  * } catch (error) {
- *   console.error(`CIP25ChunkableString.unsafeNewSingle failed: ${error.message}`);
+ *   console.error(`CIP25ChunkableString.newSingleUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Constructors
+ * @category ConstructorsUnsafe
  */
-export const unsafeNewSingle = (single: CML.CIP25String64) =>
+export const newSingleUnsafe = (single: CML.CIP25String64) =>
   Effect.runSync(newSingle(single));
 
 /**
@@ -512,16 +529,16 @@ export const newChunked = Effect.fn(function* (chunked: CML.CIP25String64List) {
  *
  * // Using try/catch for error handling
  * try {
- *   const result = CIP25ChunkableString.unsafeNewChunked( parameters );
+ *   const result = CIP25ChunkableString.newChunkedUnsafe( parameters );
  *   console.log(result);
  * } catch (error) {
- *   console.error(`CIP25ChunkableString.unsafeNewChunked failed: ${error.message}`);
+ *   console.error(`CIP25ChunkableString.newChunkedUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Constructors
+ * @category ConstructorsUnsafe
  */
-export const unsafeNewChunked = (chunked: CML.CIP25String64List) =>
+export const newChunkedUnsafe = (chunked: CML.CIP25String64List) =>
   Effect.runSync(newChunked(chunked));
 
 /**
@@ -566,16 +583,16 @@ export const kind = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = CIP25ChunkableString.unsafeKind(instance);
+ *   const result = CIP25ChunkableString.kindUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`CIP25ChunkableString.unsafeKind failed: ${error.message}`);
+ *   console.error(`CIP25ChunkableString.kindUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeKind = (
+export const kindUnsafe = (
   instance: CML.CIP25ChunkableString,
 ): CML.ChunkableStringKind => Effect.runSync(kind(instance));
 
@@ -621,16 +638,16 @@ export const asSingle = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = CIP25ChunkableString.unsafeAsSingle(instance);
+ *   const result = CIP25ChunkableString.asSingleUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`CIP25ChunkableString.unsafeAsSingle failed: ${error.message}`);
+ *   console.error(`CIP25ChunkableString.asSingleUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeAsSingle = (
+export const asSingleUnsafe = (
   instance: CML.CIP25ChunkableString,
 ): CML.CIP25String64 | undefined => Effect.runSync(asSingle(instance));
 
@@ -679,16 +696,16 @@ export const asChunked = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = CIP25ChunkableString.unsafeAsChunked(instance);
+ *   const result = CIP25ChunkableString.asChunkedUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`CIP25ChunkableString.unsafeAsChunked failed: ${error.message}`);
+ *   console.error(`CIP25ChunkableString.asChunkedUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeAsChunked = (
+export const asChunkedUnsafe = (
   instance: CML.CIP25ChunkableString,
 ): CML.CIP25String64List | undefined => Effect.runSync(asChunked(instance));
 
@@ -729,16 +746,16 @@ export const fromString = Effect.fn(function* (str: string) {
  *
  * // Using try/catch for error handling
  * try {
- *   const result = CIP25ChunkableString.unsafeFromString( parameters );
+ *   const result = CIP25ChunkableString.fromStringUnsafe( parameters );
  *   console.log(result);
  * } catch (error) {
- *   console.error(`CIP25ChunkableString.unsafeFromString failed: ${error.message}`);
+ *   console.error(`CIP25ChunkableString.fromStringUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Constructors
+ * @category ConstructorsUnsafe
  */
-export const unsafeFromString = (str: string) =>
+export const fromStringUnsafe = (str: string) =>
   Effect.runSync(fromString(str));
 
 /**
@@ -783,14 +800,14 @@ export const toString = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = CIP25ChunkableString.unsafeToString(instance);
+ *   const result = CIP25ChunkableString.toStringUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`CIP25ChunkableString.unsafeToString failed: ${error.message}`);
+ *   console.error(`CIP25ChunkableString.toStringUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeToString = (instance: CML.CIP25ChunkableString): string =>
+export const toStringUnsafe = (instance: CML.CIP25ChunkableString): string =>
   Effect.runSync(toString(instance));

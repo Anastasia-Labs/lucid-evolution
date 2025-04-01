@@ -1,6 +1,17 @@
+/**
+ * @since 2.0.0
+ */
 import { Data, Effect } from "effect";
 import * as CML from "@anastasia-labs/cardano-multiplatform-lib-nodejs";
 
+/**
+ * Error class for min_ada_required function
+ *
+ * This error is thrown when the min_ada_required function fails.
+ *
+ * @since 2.0.0
+ * @category Errors
+ */
 export class MinAdaRequiredError extends Data.TaggedError(
   "MinAdaRequiredError",
 )<{
@@ -40,19 +51,19 @@ export const minAdaRequired = Effect.fn(function* (
  * Unsafely calls min_ada_required function without Effect wrapper
  *
  * @example
- * import { unsafeMinAdaRequired } from "@lucid-evolution/experimental/CML/functions";
+ * import { minAdaRequiredUnsafe } from "@lucid-evolution/experimental/CML/functions";
  *
  * try {
- *   const result = unsafeMinAdaRequired(TransactionOutput instance ,  appropriate value );
+ *   const result = minAdaRequiredUnsafe(TransactionOutput instance ,  appropriate value );
  *   console.log(result);
  * } catch (error) {
- *   console.error(`unsafeMinAdaRequired failed: ${error.message}`);
+ *   console.error(`minAdaRequiredUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Functions
+ * @category FunctionsUnsafe
  */
-export const unsafeMinAdaRequired = (
+export const minAdaRequiredUnsafe = (
   output: CML.TransactionOutput,
   coinsPerUtxoByte: bigint,
 ): bigint => Effect.runSync(minAdaRequired(output, coinsPerUtxoByte));

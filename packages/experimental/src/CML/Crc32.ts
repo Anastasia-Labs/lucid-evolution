@@ -1,8 +1,25 @@
+/**
+ * @since 2.0.0
+ */
 import { Data, Effect } from "effect";
 import * as CML from "@anastasia-labs/cardano-multiplatform-lib-nodejs";
 
+/**
+ * Type alias for the CML Crc32 class
+ *
+ * @since 2.0.0
+ * @category Types
+ */
 export type Crc32 = CML.Crc32;
 
+/**
+ * Error class for Crc32 operations
+ *
+ * This error is thrown when operations on Crc32 instances fail.
+ *
+ * @since 2.0.0
+ * @category Errors
+ */
 export class Crc32Error extends Data.TaggedError("Crc32Error")<{
   message?: string;
 }> {}
@@ -47,16 +64,16 @@ export const free = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = Crc32.unsafeFree(instance);
+ *   const result = Crc32.freeUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`Crc32.unsafeFree failed: ${error.message}`);
+ *   console.error(`Crc32.freeUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeFree = (instance: CML.Crc32): void =>
+export const freeUnsafe = (instance: CML.Crc32): void =>
   Effect.runSync(free(instance));
 
 /**
@@ -96,16 +113,16 @@ export const _new = Effect.fn(function* () {
  *
  * // Using try/catch for error handling
  * try {
- *   const result = Crc32.unsafe_new();
+ *   const result = Crc32._newUnsafe();
  *   console.log(result);
  * } catch (error) {
- *   console.error(`Crc32.unsafe_new failed: ${error.message}`);
+ *   console.error(`Crc32._newUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Constructors
+ * @category ConstructorsUnsafe
  */
-export const unsafe_new = () => Effect.runSync(_new());
+export const _newUnsafe = () => Effect.runSync(_new());
 
 /**
  * Method update of Crc32
@@ -147,16 +164,16 @@ export const update = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = Crc32.unsafeUpdate(instance,  parameters );
+ *   const result = Crc32.updateUnsafe(instance,  parameters );
  *   console.log(result);
  * } catch (error) {
- *   console.error(`Crc32.unsafeUpdate failed: ${error.message}`);
+ *   console.error(`Crc32.updateUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeUpdate = (instance: CML.Crc32, bytes: Uint8Array): void =>
+export const updateUnsafe = (instance: CML.Crc32, bytes: Uint8Array): void =>
   Effect.runSync(update(instance, bytes));
 
 /**
@@ -199,14 +216,14 @@ export const finalize = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = Crc32.unsafeFinalize(instance);
+ *   const result = Crc32.finalizeUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`Crc32.unsafeFinalize failed: ${error.message}`);
+ *   console.error(`Crc32.finalizeUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeFinalize = (instance: CML.Crc32): number =>
+export const finalizeUnsafe = (instance: CML.Crc32): number =>
   Effect.runSync(finalize(instance));

@@ -1,6 +1,17 @@
+/**
+ * @since 2.0.0
+ */
 import { Data, Effect } from "effect";
 import * as CML from "@anastasia-labs/cardano-multiplatform-lib-nodejs";
 
+/**
+ * Error class for compute_total_ex_units function
+ *
+ * This error is thrown when the compute_total_ex_units function fails.
+ *
+ * @since 2.0.0
+ * @category Errors
+ */
 export class ComputeTotalExUnitsError extends Data.TaggedError(
   "ComputeTotalExUnitsError",
 )<{
@@ -39,18 +50,18 @@ export const computeTotalExUnits = Effect.fn(function* (
  * Unsafely calls compute_total_ex_units function without Effect wrapper
  *
  * @example
- * import { unsafeComputeTotalExUnits } from "@lucid-evolution/experimental/CML/functions";
+ * import { computeTotalExUnitsUnsafe } from "@lucid-evolution/experimental/CML/functions";
  *
  * try {
- *   const result = unsafeComputeTotalExUnits(Redeemers instance );
+ *   const result = computeTotalExUnitsUnsafe(Redeemers instance );
  *   console.log(result);
  * } catch (error) {
- *   console.error(`unsafeComputeTotalExUnits failed: ${error.message}`);
+ *   console.error(`computeTotalExUnitsUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Functions
+ * @category FunctionsUnsafe
  */
-export const unsafeComputeTotalExUnits = (
+export const computeTotalExUnitsUnsafe = (
   redeemers: CML.Redeemers,
 ): CML.ExUnits => Effect.runSync(computeTotalExUnits(redeemers));

@@ -1,8 +1,25 @@
+/**
+ * @since 2.0.0
+ */
 import { Data, Effect } from "effect";
 import * as CML from "@anastasia-labs/cardano-multiplatform-lib-nodejs";
 
+/**
+ * Type alias for the CML Certificate class
+ *
+ * @since 2.0.0
+ * @category Types
+ */
 export type Certificate = CML.Certificate;
 
+/**
+ * Error class for Certificate operations
+ *
+ * This error is thrown when operations on Certificate instances fail.
+ *
+ * @since 2.0.0
+ * @category Errors
+ */
 export class CertificateError extends Data.TaggedError("CertificateError")<{
   message?: string;
 }> {}
@@ -47,16 +64,16 @@ export const free = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = Certificate.unsafeFree(instance);
+ *   const result = Certificate.freeUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`Certificate.unsafeFree failed: ${error.message}`);
+ *   console.error(`Certificate.freeUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeFree = (instance: CML.Certificate): void =>
+export const freeUnsafe = (instance: CML.Certificate): void =>
   Effect.runSync(free(instance));
 
 /**
@@ -99,16 +116,16 @@ export const toCborBytes = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = Certificate.unsafeToCborBytes(instance);
+ *   const result = Certificate.toCborBytesUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`Certificate.unsafeToCborBytes failed: ${error.message}`);
+ *   console.error(`Certificate.toCborBytesUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeToCborBytes = (instance: CML.Certificate): Uint8Array =>
+export const toCborBytesUnsafe = (instance: CML.Certificate): Uint8Array =>
   Effect.runSync(toCborBytes(instance));
 
 /**
@@ -151,16 +168,16 @@ export const toCanonicalCborBytes = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = Certificate.unsafeToCanonicalCborBytes(instance);
+ *   const result = Certificate.toCanonicalCborBytesUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`Certificate.unsafeToCanonicalCborBytes failed: ${error.message}`);
+ *   console.error(`Certificate.toCanonicalCborBytesUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeToCanonicalCborBytes = (
+export const toCanonicalCborBytesUnsafe = (
   instance: CML.Certificate,
 ): Uint8Array => Effect.runSync(toCanonicalCborBytes(instance));
 
@@ -201,16 +218,16 @@ export const fromCborBytes = Effect.fn(function* (cborBytes: Uint8Array) {
  *
  * // Using try/catch for error handling
  * try {
- *   const result = Certificate.unsafeFromCborBytes( parameters );
+ *   const result = Certificate.fromCborBytesUnsafe( parameters );
  *   console.log(result);
  * } catch (error) {
- *   console.error(`Certificate.unsafeFromCborBytes failed: ${error.message}`);
+ *   console.error(`Certificate.fromCborBytesUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Constructors
+ * @category ConstructorsUnsafe
  */
-export const unsafeFromCborBytes = (cborBytes: Uint8Array) =>
+export const fromCborBytesUnsafe = (cborBytes: Uint8Array) =>
   Effect.runSync(fromCborBytes(cborBytes));
 
 /**
@@ -253,16 +270,16 @@ export const toCborHex = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = Certificate.unsafeToCborHex(instance);
+ *   const result = Certificate.toCborHexUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`Certificate.unsafeToCborHex failed: ${error.message}`);
+ *   console.error(`Certificate.toCborHexUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeToCborHex = (instance: CML.Certificate): string =>
+export const toCborHexUnsafe = (instance: CML.Certificate): string =>
   Effect.runSync(toCborHex(instance));
 
 /**
@@ -305,16 +322,16 @@ export const toCanonicalCborHex = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = Certificate.unsafeToCanonicalCborHex(instance);
+ *   const result = Certificate.toCanonicalCborHexUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`Certificate.unsafeToCanonicalCborHex failed: ${error.message}`);
+ *   console.error(`Certificate.toCanonicalCborHexUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeToCanonicalCborHex = (instance: CML.Certificate): string =>
+export const toCanonicalCborHexUnsafe = (instance: CML.Certificate): string =>
   Effect.runSync(toCanonicalCborHex(instance));
 
 /**
@@ -354,16 +371,16 @@ export const fromCborHex = Effect.fn(function* (cborBytes: string) {
  *
  * // Using try/catch for error handling
  * try {
- *   const result = Certificate.unsafeFromCborHex( parameters );
+ *   const result = Certificate.fromCborHexUnsafe( parameters );
  *   console.log(result);
  * } catch (error) {
- *   console.error(`Certificate.unsafeFromCborHex failed: ${error.message}`);
+ *   console.error(`Certificate.fromCborHexUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Constructors
+ * @category ConstructorsUnsafe
  */
-export const unsafeFromCborHex = (cborBytes: string) =>
+export const fromCborHexUnsafe = (cborBytes: string) =>
   Effect.runSync(fromCborHex(cborBytes));
 
 /**
@@ -406,16 +423,16 @@ export const toJson = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = Certificate.unsafeToJson(instance);
+ *   const result = Certificate.toJsonUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`Certificate.unsafeToJson failed: ${error.message}`);
+ *   console.error(`Certificate.toJsonUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeToJson = (instance: CML.Certificate): string =>
+export const toJsonUnsafe = (instance: CML.Certificate): string =>
   Effect.runSync(toJson(instance));
 
 /**
@@ -458,16 +475,16 @@ export const toJsValue = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = Certificate.unsafeToJsValue(instance);
+ *   const result = Certificate.toJsValueUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`Certificate.unsafeToJsValue failed: ${error.message}`);
+ *   console.error(`Certificate.toJsValueUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeToJsValue = (instance: CML.Certificate): any =>
+export const toJsValueUnsafe = (instance: CML.Certificate): any =>
   Effect.runSync(toJsValue(instance));
 
 /**
@@ -507,16 +524,16 @@ export const fromJson = Effect.fn(function* (json: string) {
  *
  * // Using try/catch for error handling
  * try {
- *   const result = Certificate.unsafeFromJson( parameters );
+ *   const result = Certificate.fromJsonUnsafe( parameters );
  *   console.log(result);
  * } catch (error) {
- *   console.error(`Certificate.unsafeFromJson failed: ${error.message}`);
+ *   console.error(`Certificate.fromJsonUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Constructors
+ * @category ConstructorsUnsafe
  */
-export const unsafeFromJson = (json: string) => Effect.runSync(fromJson(json));
+export const fromJsonUnsafe = (json: string) => Effect.runSync(fromJson(json));
 
 /**
  * Static method newStakeRegistration of Certificate
@@ -557,16 +574,16 @@ export const newStakeRegistration = Effect.fn(function* (
  *
  * // Using try/catch for error handling
  * try {
- *   const result = Certificate.unsafeNewStakeRegistration( parameters );
+ *   const result = Certificate.newStakeRegistrationUnsafe( parameters );
  *   console.log(result);
  * } catch (error) {
- *   console.error(`Certificate.unsafeNewStakeRegistration failed: ${error.message}`);
+ *   console.error(`Certificate.newStakeRegistrationUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Constructors
+ * @category ConstructorsUnsafe
  */
-export const unsafeNewStakeRegistration = (stakeCredential: CML.Credential) =>
+export const newStakeRegistrationUnsafe = (stakeCredential: CML.Credential) =>
   Effect.runSync(newStakeRegistration(stakeCredential));
 
 /**
@@ -608,16 +625,16 @@ export const newStakeDeregistration = Effect.fn(function* (
  *
  * // Using try/catch for error handling
  * try {
- *   const result = Certificate.unsafeNewStakeDeregistration( parameters );
+ *   const result = Certificate.newStakeDeregistrationUnsafe( parameters );
  *   console.log(result);
  * } catch (error) {
- *   console.error(`Certificate.unsafeNewStakeDeregistration failed: ${error.message}`);
+ *   console.error(`Certificate.newStakeDeregistrationUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Constructors
+ * @category ConstructorsUnsafe
  */
-export const unsafeNewStakeDeregistration = (stakeCredential: CML.Credential) =>
+export const newStakeDeregistrationUnsafe = (stakeCredential: CML.Credential) =>
   Effect.runSync(newStakeDeregistration(stakeCredential));
 
 /**
@@ -660,16 +677,16 @@ export const newStakeDelegation = Effect.fn(function* (
  *
  * // Using try/catch for error handling
  * try {
- *   const result = Certificate.unsafeNewStakeDelegation( parameters );
+ *   const result = Certificate.newStakeDelegationUnsafe( parameters );
  *   console.log(result);
  * } catch (error) {
- *   console.error(`Certificate.unsafeNewStakeDelegation failed: ${error.message}`);
+ *   console.error(`Certificate.newStakeDelegationUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Constructors
+ * @category ConstructorsUnsafe
  */
-export const unsafeNewStakeDelegation = (
+export const newStakeDelegationUnsafe = (
   stakeCredential: CML.Credential,
   pool: CML.Ed25519KeyHash,
 ) => Effect.runSync(newStakeDelegation(stakeCredential, pool));
@@ -713,16 +730,16 @@ export const newPoolRegistration = Effect.fn(function* (
  *
  * // Using try/catch for error handling
  * try {
- *   const result = Certificate.unsafeNewPoolRegistration( parameters );
+ *   const result = Certificate.newPoolRegistrationUnsafe( parameters );
  *   console.log(result);
  * } catch (error) {
- *   console.error(`Certificate.unsafeNewPoolRegistration failed: ${error.message}`);
+ *   console.error(`Certificate.newPoolRegistrationUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Constructors
+ * @category ConstructorsUnsafe
  */
-export const unsafeNewPoolRegistration = (poolParams: CML.PoolParams) =>
+export const newPoolRegistrationUnsafe = (poolParams: CML.PoolParams) =>
   Effect.runSync(newPoolRegistration(poolParams));
 
 /**
@@ -765,16 +782,16 @@ export const newPoolRetirement = Effect.fn(function* (
  *
  * // Using try/catch for error handling
  * try {
- *   const result = Certificate.unsafeNewPoolRetirement( parameters );
+ *   const result = Certificate.newPoolRetirementUnsafe( parameters );
  *   console.log(result);
  * } catch (error) {
- *   console.error(`Certificate.unsafeNewPoolRetirement failed: ${error.message}`);
+ *   console.error(`Certificate.newPoolRetirementUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Constructors
+ * @category ConstructorsUnsafe
  */
-export const unsafeNewPoolRetirement = (
+export const newPoolRetirementUnsafe = (
   pool: CML.Ed25519KeyHash,
   epoch: bigint,
 ) => Effect.runSync(newPoolRetirement(pool, epoch));
@@ -819,16 +836,16 @@ export const newRegCert = Effect.fn(function* (
  *
  * // Using try/catch for error handling
  * try {
- *   const result = Certificate.unsafeNewRegCert( parameters );
+ *   const result = Certificate.newRegCertUnsafe( parameters );
  *   console.log(result);
  * } catch (error) {
- *   console.error(`Certificate.unsafeNewRegCert failed: ${error.message}`);
+ *   console.error(`Certificate.newRegCertUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Constructors
+ * @category ConstructorsUnsafe
  */
-export const unsafeNewRegCert = (
+export const newRegCertUnsafe = (
   stakeCredential: CML.Credential,
   deposit: bigint,
 ) => Effect.runSync(newRegCert(stakeCredential, deposit));
@@ -873,16 +890,16 @@ export const newUnregCert = Effect.fn(function* (
  *
  * // Using try/catch for error handling
  * try {
- *   const result = Certificate.unsafeNewUnregCert( parameters );
+ *   const result = Certificate.newUnregCertUnsafe( parameters );
  *   console.log(result);
  * } catch (error) {
- *   console.error(`Certificate.unsafeNewUnregCert failed: ${error.message}`);
+ *   console.error(`Certificate.newUnregCertUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Constructors
+ * @category ConstructorsUnsafe
  */
-export const unsafeNewUnregCert = (
+export const newUnregCertUnsafe = (
   stakeCredential: CML.Credential,
   deposit: bigint,
 ) => Effect.runSync(newUnregCert(stakeCredential, deposit));
@@ -927,16 +944,16 @@ export const newVoteDelegCert = Effect.fn(function* (
  *
  * // Using try/catch for error handling
  * try {
- *   const result = Certificate.unsafeNewVoteDelegCert( parameters );
+ *   const result = Certificate.newVoteDelegCertUnsafe( parameters );
  *   console.log(result);
  * } catch (error) {
- *   console.error(`Certificate.unsafeNewVoteDelegCert failed: ${error.message}`);
+ *   console.error(`Certificate.newVoteDelegCertUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Constructors
+ * @category ConstructorsUnsafe
  */
-export const unsafeNewVoteDelegCert = (
+export const newVoteDelegCertUnsafe = (
   stakeCredential: CML.Credential,
   dRep: CML.DRep,
 ) => Effect.runSync(newVoteDelegCert(stakeCredential, dRep));
@@ -983,16 +1000,16 @@ export const newStakeVoteDelegCert = Effect.fn(function* (
  *
  * // Using try/catch for error handling
  * try {
- *   const result = Certificate.unsafeNewStakeVoteDelegCert( parameters );
+ *   const result = Certificate.newStakeVoteDelegCertUnsafe( parameters );
  *   console.log(result);
  * } catch (error) {
- *   console.error(`Certificate.unsafeNewStakeVoteDelegCert failed: ${error.message}`);
+ *   console.error(`Certificate.newStakeVoteDelegCertUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Constructors
+ * @category ConstructorsUnsafe
  */
-export const unsafeNewStakeVoteDelegCert = (
+export const newStakeVoteDelegCertUnsafe = (
   stakeCredential: CML.Credential,
   pool: CML.Ed25519KeyHash,
   dRep: CML.DRep,
@@ -1040,16 +1057,16 @@ export const newStakeRegDelegCert = Effect.fn(function* (
  *
  * // Using try/catch for error handling
  * try {
- *   const result = Certificate.unsafeNewStakeRegDelegCert( parameters );
+ *   const result = Certificate.newStakeRegDelegCertUnsafe( parameters );
  *   console.log(result);
  * } catch (error) {
- *   console.error(`Certificate.unsafeNewStakeRegDelegCert failed: ${error.message}`);
+ *   console.error(`Certificate.newStakeRegDelegCertUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Constructors
+ * @category ConstructorsUnsafe
  */
-export const unsafeNewStakeRegDelegCert = (
+export const newStakeRegDelegCertUnsafe = (
   stakeCredential: CML.Credential,
   pool: CML.Ed25519KeyHash,
   deposit: bigint,
@@ -1097,16 +1114,16 @@ export const newVoteRegDelegCert = Effect.fn(function* (
  *
  * // Using try/catch for error handling
  * try {
- *   const result = Certificate.unsafeNewVoteRegDelegCert( parameters );
+ *   const result = Certificate.newVoteRegDelegCertUnsafe( parameters );
  *   console.log(result);
  * } catch (error) {
- *   console.error(`Certificate.unsafeNewVoteRegDelegCert failed: ${error.message}`);
+ *   console.error(`Certificate.newVoteRegDelegCertUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Constructors
+ * @category ConstructorsUnsafe
  */
-export const unsafeNewVoteRegDelegCert = (
+export const newVoteRegDelegCertUnsafe = (
   stakeCredential: CML.Credential,
   dRep: CML.DRep,
   deposit: bigint,
@@ -1160,16 +1177,16 @@ export const newStakeVoteRegDelegCert = Effect.fn(function* (
  *
  * // Using try/catch for error handling
  * try {
- *   const result = Certificate.unsafeNewStakeVoteRegDelegCert( parameters );
+ *   const result = Certificate.newStakeVoteRegDelegCertUnsafe( parameters );
  *   console.log(result);
  * } catch (error) {
- *   console.error(`Certificate.unsafeNewStakeVoteRegDelegCert failed: ${error.message}`);
+ *   console.error(`Certificate.newStakeVoteRegDelegCertUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Constructors
+ * @category ConstructorsUnsafe
  */
-export const unsafeNewStakeVoteRegDelegCert = (
+export const newStakeVoteRegDelegCertUnsafe = (
   stakeCredential: CML.Credential,
   pool: CML.Ed25519KeyHash,
   dRep: CML.DRep,
@@ -1223,16 +1240,16 @@ export const newAuthCommitteeHotCert = Effect.fn(function* (
  *
  * // Using try/catch for error handling
  * try {
- *   const result = Certificate.unsafeNewAuthCommitteeHotCert( parameters );
+ *   const result = Certificate.newAuthCommitteeHotCertUnsafe( parameters );
  *   console.log(result);
  * } catch (error) {
- *   console.error(`Certificate.unsafeNewAuthCommitteeHotCert failed: ${error.message}`);
+ *   console.error(`Certificate.newAuthCommitteeHotCertUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Constructors
+ * @category ConstructorsUnsafe
  */
-export const unsafeNewAuthCommitteeHotCert = (
+export const newAuthCommitteeHotCertUnsafe = (
   committeeColdCredential: CML.Credential,
   committeeHotCredential: CML.Credential,
 ) =>
@@ -1284,16 +1301,16 @@ export const newResignCommitteeColdCert = Effect.fn(function* (
  *
  * // Using try/catch for error handling
  * try {
- *   const result = Certificate.unsafeNewResignCommitteeColdCert( parameters );
+ *   const result = Certificate.newResignCommitteeColdCertUnsafe( parameters );
  *   console.log(result);
  * } catch (error) {
- *   console.error(`Certificate.unsafeNewResignCommitteeColdCert failed: ${error.message}`);
+ *   console.error(`Certificate.newResignCommitteeColdCertUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Constructors
+ * @category ConstructorsUnsafe
  */
-export const unsafeNewResignCommitteeColdCert = (
+export const newResignCommitteeColdCertUnsafe = (
   committeeColdCredential: CML.Credential,
   anchor: CML.Anchor,
 ) =>
@@ -1341,16 +1358,16 @@ export const newRegDrepCert = Effect.fn(function* (
  *
  * // Using try/catch for error handling
  * try {
- *   const result = Certificate.unsafeNewRegDrepCert( parameters );
+ *   const result = Certificate.newRegDrepCertUnsafe( parameters );
  *   console.log(result);
  * } catch (error) {
- *   console.error(`Certificate.unsafeNewRegDrepCert failed: ${error.message}`);
+ *   console.error(`Certificate.newRegDrepCertUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Constructors
+ * @category ConstructorsUnsafe
  */
-export const unsafeNewRegDrepCert = (
+export const newRegDrepCertUnsafe = (
   drepCredential: CML.Credential,
   deposit: bigint,
   anchor: CML.Anchor,
@@ -1396,16 +1413,16 @@ export const newUnregDrepCert = Effect.fn(function* (
  *
  * // Using try/catch for error handling
  * try {
- *   const result = Certificate.unsafeNewUnregDrepCert( parameters );
+ *   const result = Certificate.newUnregDrepCertUnsafe( parameters );
  *   console.log(result);
  * } catch (error) {
- *   console.error(`Certificate.unsafeNewUnregDrepCert failed: ${error.message}`);
+ *   console.error(`Certificate.newUnregDrepCertUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Constructors
+ * @category ConstructorsUnsafe
  */
-export const unsafeNewUnregDrepCert = (
+export const newUnregDrepCertUnsafe = (
   drepCredential: CML.Credential,
   deposit: bigint,
 ) => Effect.runSync(newUnregDrepCert(drepCredential, deposit));
@@ -1450,16 +1467,16 @@ export const newUpdateDrepCert = Effect.fn(function* (
  *
  * // Using try/catch for error handling
  * try {
- *   const result = Certificate.unsafeNewUpdateDrepCert( parameters );
+ *   const result = Certificate.newUpdateDrepCertUnsafe( parameters );
  *   console.log(result);
  * } catch (error) {
- *   console.error(`Certificate.unsafeNewUpdateDrepCert failed: ${error.message}`);
+ *   console.error(`Certificate.newUpdateDrepCertUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Constructors
+ * @category ConstructorsUnsafe
  */
-export const unsafeNewUpdateDrepCert = (
+export const newUpdateDrepCertUnsafe = (
   drepCredential: CML.Credential,
   anchor: CML.Anchor,
 ) => Effect.runSync(newUpdateDrepCert(drepCredential, anchor));
@@ -1506,16 +1523,16 @@ export const kind = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = Certificate.unsafeKind(instance);
+ *   const result = Certificate.kindUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`Certificate.unsafeKind failed: ${error.message}`);
+ *   console.error(`Certificate.kindUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeKind = (instance: CML.Certificate): CML.CertificateKind =>
+export const kindUnsafe = (instance: CML.Certificate): CML.CertificateKind =>
   Effect.runSync(kind(instance));
 
 /**
@@ -1560,16 +1577,16 @@ export const asStakeRegistration = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = Certificate.unsafeAsStakeRegistration(instance);
+ *   const result = Certificate.asStakeRegistrationUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`Certificate.unsafeAsStakeRegistration failed: ${error.message}`);
+ *   console.error(`Certificate.asStakeRegistrationUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeAsStakeRegistration = (
+export const asStakeRegistrationUnsafe = (
   instance: CML.Certificate,
 ): CML.StakeRegistration | undefined =>
   Effect.runSync(asStakeRegistration(instance));
@@ -1616,16 +1633,16 @@ export const asStakeDeregistration = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = Certificate.unsafeAsStakeDeregistration(instance);
+ *   const result = Certificate.asStakeDeregistrationUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`Certificate.unsafeAsStakeDeregistration failed: ${error.message}`);
+ *   console.error(`Certificate.asStakeDeregistrationUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeAsStakeDeregistration = (
+export const asStakeDeregistrationUnsafe = (
   instance: CML.Certificate,
 ): CML.StakeDeregistration | undefined =>
   Effect.runSync(asStakeDeregistration(instance));
@@ -1672,16 +1689,16 @@ export const asStakeDelegation = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = Certificate.unsafeAsStakeDelegation(instance);
+ *   const result = Certificate.asStakeDelegationUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`Certificate.unsafeAsStakeDelegation failed: ${error.message}`);
+ *   console.error(`Certificate.asStakeDelegationUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeAsStakeDelegation = (
+export const asStakeDelegationUnsafe = (
   instance: CML.Certificate,
 ): CML.StakeDelegation | undefined =>
   Effect.runSync(asStakeDelegation(instance));
@@ -1728,16 +1745,16 @@ export const asPoolRegistration = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = Certificate.unsafeAsPoolRegistration(instance);
+ *   const result = Certificate.asPoolRegistrationUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`Certificate.unsafeAsPoolRegistration failed: ${error.message}`);
+ *   console.error(`Certificate.asPoolRegistrationUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeAsPoolRegistration = (
+export const asPoolRegistrationUnsafe = (
   instance: CML.Certificate,
 ): CML.PoolRegistration | undefined =>
   Effect.runSync(asPoolRegistration(instance));
@@ -1784,16 +1801,16 @@ export const asPoolRetirement = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = Certificate.unsafeAsPoolRetirement(instance);
+ *   const result = Certificate.asPoolRetirementUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`Certificate.unsafeAsPoolRetirement failed: ${error.message}`);
+ *   console.error(`Certificate.asPoolRetirementUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeAsPoolRetirement = (
+export const asPoolRetirementUnsafe = (
   instance: CML.Certificate,
 ): CML.PoolRetirement | undefined => Effect.runSync(asPoolRetirement(instance));
 
@@ -1839,16 +1856,16 @@ export const asRegCert = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = Certificate.unsafeAsRegCert(instance);
+ *   const result = Certificate.asRegCertUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`Certificate.unsafeAsRegCert failed: ${error.message}`);
+ *   console.error(`Certificate.asRegCertUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeAsRegCert = (
+export const asRegCertUnsafe = (
   instance: CML.Certificate,
 ): CML.RegCert | undefined => Effect.runSync(asRegCert(instance));
 
@@ -1894,16 +1911,16 @@ export const asUnregCert = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = Certificate.unsafeAsUnregCert(instance);
+ *   const result = Certificate.asUnregCertUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`Certificate.unsafeAsUnregCert failed: ${error.message}`);
+ *   console.error(`Certificate.asUnregCertUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeAsUnregCert = (
+export const asUnregCertUnsafe = (
   instance: CML.Certificate,
 ): CML.UnregCert | undefined => Effect.runSync(asUnregCert(instance));
 
@@ -1949,16 +1966,16 @@ export const asVoteDelegCert = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = Certificate.unsafeAsVoteDelegCert(instance);
+ *   const result = Certificate.asVoteDelegCertUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`Certificate.unsafeAsVoteDelegCert failed: ${error.message}`);
+ *   console.error(`Certificate.asVoteDelegCertUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeAsVoteDelegCert = (
+export const asVoteDelegCertUnsafe = (
   instance: CML.Certificate,
 ): CML.VoteDelegCert | undefined => Effect.runSync(asVoteDelegCert(instance));
 
@@ -2004,16 +2021,16 @@ export const asStakeVoteDelegCert = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = Certificate.unsafeAsStakeVoteDelegCert(instance);
+ *   const result = Certificate.asStakeVoteDelegCertUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`Certificate.unsafeAsStakeVoteDelegCert failed: ${error.message}`);
+ *   console.error(`Certificate.asStakeVoteDelegCertUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeAsStakeVoteDelegCert = (
+export const asStakeVoteDelegCertUnsafe = (
   instance: CML.Certificate,
 ): CML.StakeVoteDelegCert | undefined =>
   Effect.runSync(asStakeVoteDelegCert(instance));
@@ -2060,16 +2077,16 @@ export const asStakeRegDelegCert = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = Certificate.unsafeAsStakeRegDelegCert(instance);
+ *   const result = Certificate.asStakeRegDelegCertUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`Certificate.unsafeAsStakeRegDelegCert failed: ${error.message}`);
+ *   console.error(`Certificate.asStakeRegDelegCertUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeAsStakeRegDelegCert = (
+export const asStakeRegDelegCertUnsafe = (
   instance: CML.Certificate,
 ): CML.StakeRegDelegCert | undefined =>
   Effect.runSync(asStakeRegDelegCert(instance));
@@ -2116,16 +2133,16 @@ export const asVoteRegDelegCert = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = Certificate.unsafeAsVoteRegDelegCert(instance);
+ *   const result = Certificate.asVoteRegDelegCertUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`Certificate.unsafeAsVoteRegDelegCert failed: ${error.message}`);
+ *   console.error(`Certificate.asVoteRegDelegCertUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeAsVoteRegDelegCert = (
+export const asVoteRegDelegCertUnsafe = (
   instance: CML.Certificate,
 ): CML.VoteRegDelegCert | undefined =>
   Effect.runSync(asVoteRegDelegCert(instance));
@@ -2172,16 +2189,16 @@ export const asStakeVoteRegDelegCert = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = Certificate.unsafeAsStakeVoteRegDelegCert(instance);
+ *   const result = Certificate.asStakeVoteRegDelegCertUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`Certificate.unsafeAsStakeVoteRegDelegCert failed: ${error.message}`);
+ *   console.error(`Certificate.asStakeVoteRegDelegCertUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeAsStakeVoteRegDelegCert = (
+export const asStakeVoteRegDelegCertUnsafe = (
   instance: CML.Certificate,
 ): CML.StakeVoteRegDelegCert | undefined =>
   Effect.runSync(asStakeVoteRegDelegCert(instance));
@@ -2228,16 +2245,16 @@ export const asAuthCommitteeHotCert = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = Certificate.unsafeAsAuthCommitteeHotCert(instance);
+ *   const result = Certificate.asAuthCommitteeHotCertUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`Certificate.unsafeAsAuthCommitteeHotCert failed: ${error.message}`);
+ *   console.error(`Certificate.asAuthCommitteeHotCertUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeAsAuthCommitteeHotCert = (
+export const asAuthCommitteeHotCertUnsafe = (
   instance: CML.Certificate,
 ): CML.AuthCommitteeHotCert | undefined =>
   Effect.runSync(asAuthCommitteeHotCert(instance));
@@ -2284,16 +2301,16 @@ export const asResignCommitteeColdCert = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = Certificate.unsafeAsResignCommitteeColdCert(instance);
+ *   const result = Certificate.asResignCommitteeColdCertUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`Certificate.unsafeAsResignCommitteeColdCert failed: ${error.message}`);
+ *   console.error(`Certificate.asResignCommitteeColdCertUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeAsResignCommitteeColdCert = (
+export const asResignCommitteeColdCertUnsafe = (
   instance: CML.Certificate,
 ): CML.ResignCommitteeColdCert | undefined =>
   Effect.runSync(asResignCommitteeColdCert(instance));
@@ -2340,16 +2357,16 @@ export const asRegDrepCert = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = Certificate.unsafeAsRegDrepCert(instance);
+ *   const result = Certificate.asRegDrepCertUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`Certificate.unsafeAsRegDrepCert failed: ${error.message}`);
+ *   console.error(`Certificate.asRegDrepCertUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeAsRegDrepCert = (
+export const asRegDrepCertUnsafe = (
   instance: CML.Certificate,
 ): CML.RegDrepCert | undefined => Effect.runSync(asRegDrepCert(instance));
 
@@ -2395,16 +2412,16 @@ export const asUnregDrepCert = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = Certificate.unsafeAsUnregDrepCert(instance);
+ *   const result = Certificate.asUnregDrepCertUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`Certificate.unsafeAsUnregDrepCert failed: ${error.message}`);
+ *   console.error(`Certificate.asUnregDrepCertUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeAsUnregDrepCert = (
+export const asUnregDrepCertUnsafe = (
   instance: CML.Certificate,
 ): CML.UnregDrepCert | undefined => Effect.runSync(asUnregDrepCert(instance));
 
@@ -2450,15 +2467,15 @@ export const asUpdateDrepCert = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = Certificate.unsafeAsUpdateDrepCert(instance);
+ *   const result = Certificate.asUpdateDrepCertUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`Certificate.unsafeAsUpdateDrepCert failed: ${error.message}`);
+ *   console.error(`Certificate.asUpdateDrepCertUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeAsUpdateDrepCert = (
+export const asUpdateDrepCertUnsafe = (
   instance: CML.Certificate,
 ): CML.UpdateDrepCert | undefined => Effect.runSync(asUpdateDrepCert(instance));

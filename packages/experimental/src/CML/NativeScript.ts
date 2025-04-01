@@ -1,8 +1,25 @@
+/**
+ * @since 2.0.0
+ */
 import { Data, Effect } from "effect";
 import * as CML from "@anastasia-labs/cardano-multiplatform-lib-nodejs";
 
+/**
+ * Type alias for the CML NativeScript class
+ *
+ * @since 2.0.0
+ * @category Types
+ */
 export type NativeScript = CML.NativeScript;
 
+/**
+ * Error class for NativeScript operations
+ *
+ * This error is thrown when operations on NativeScript instances fail.
+ *
+ * @since 2.0.0
+ * @category Errors
+ */
 export class NativeScriptError extends Data.TaggedError("NativeScriptError")<{
   message?: string;
 }> {}
@@ -47,16 +64,16 @@ export const free = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = NativeScript.unsafeFree(instance);
+ *   const result = NativeScript.freeUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`NativeScript.unsafeFree failed: ${error.message}`);
+ *   console.error(`NativeScript.freeUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeFree = (instance: CML.NativeScript): void =>
+export const freeUnsafe = (instance: CML.NativeScript): void =>
   Effect.runSync(free(instance));
 
 /**
@@ -101,16 +118,16 @@ export const getRequiredSigners = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = NativeScript.unsafeGetRequiredSigners(instance);
+ *   const result = NativeScript.getRequiredSignersUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`NativeScript.unsafeGetRequiredSigners failed: ${error.message}`);
+ *   console.error(`NativeScript.getRequiredSignersUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeGetRequiredSigners = (
+export const getRequiredSignersUnsafe = (
   instance: CML.NativeScript,
 ): CML.Ed25519KeyHashList => Effect.runSync(getRequiredSigners(instance));
 
@@ -156,16 +173,16 @@ export const hash = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = NativeScript.unsafeHash(instance);
+ *   const result = NativeScript.hashUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`NativeScript.unsafeHash failed: ${error.message}`);
+ *   console.error(`NativeScript.hashUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeHash = (instance: CML.NativeScript): CML.ScriptHash =>
+export const hashUnsafe = (instance: CML.NativeScript): CML.ScriptHash =>
   Effect.runSync(hash(instance));
 
 /**
@@ -213,16 +230,16 @@ export const verify = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = NativeScript.unsafeVerify(instance,  parameters );
+ *   const result = NativeScript.verifyUnsafe(instance,  parameters );
  *   console.log(result);
  * } catch (error) {
- *   console.error(`NativeScript.unsafeVerify failed: ${error.message}`);
+ *   console.error(`NativeScript.verifyUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeVerify = (
+export const verifyUnsafe = (
   instance: CML.NativeScript,
   lowerBound: bigint | undefined,
   upperBound: bigint | undefined,
@@ -270,16 +287,16 @@ export const toCborBytes = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = NativeScript.unsafeToCborBytes(instance);
+ *   const result = NativeScript.toCborBytesUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`NativeScript.unsafeToCborBytes failed: ${error.message}`);
+ *   console.error(`NativeScript.toCborBytesUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeToCborBytes = (instance: CML.NativeScript): Uint8Array =>
+export const toCborBytesUnsafe = (instance: CML.NativeScript): Uint8Array =>
   Effect.runSync(toCborBytes(instance));
 
 /**
@@ -322,16 +339,16 @@ export const toCanonicalCborBytes = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = NativeScript.unsafeToCanonicalCborBytes(instance);
+ *   const result = NativeScript.toCanonicalCborBytesUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`NativeScript.unsafeToCanonicalCborBytes failed: ${error.message}`);
+ *   console.error(`NativeScript.toCanonicalCborBytesUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeToCanonicalCborBytes = (
+export const toCanonicalCborBytesUnsafe = (
   instance: CML.NativeScript,
 ): Uint8Array => Effect.runSync(toCanonicalCborBytes(instance));
 
@@ -372,16 +389,16 @@ export const fromCborBytes = Effect.fn(function* (cborBytes: Uint8Array) {
  *
  * // Using try/catch for error handling
  * try {
- *   const result = NativeScript.unsafeFromCborBytes( parameters );
+ *   const result = NativeScript.fromCborBytesUnsafe( parameters );
  *   console.log(result);
  * } catch (error) {
- *   console.error(`NativeScript.unsafeFromCborBytes failed: ${error.message}`);
+ *   console.error(`NativeScript.fromCborBytesUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Constructors
+ * @category ConstructorsUnsafe
  */
-export const unsafeFromCborBytes = (cborBytes: Uint8Array) =>
+export const fromCborBytesUnsafe = (cborBytes: Uint8Array) =>
   Effect.runSync(fromCborBytes(cborBytes));
 
 /**
@@ -424,16 +441,16 @@ export const toCborHex = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = NativeScript.unsafeToCborHex(instance);
+ *   const result = NativeScript.toCborHexUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`NativeScript.unsafeToCborHex failed: ${error.message}`);
+ *   console.error(`NativeScript.toCborHexUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeToCborHex = (instance: CML.NativeScript): string =>
+export const toCborHexUnsafe = (instance: CML.NativeScript): string =>
   Effect.runSync(toCborHex(instance));
 
 /**
@@ -476,16 +493,16 @@ export const toCanonicalCborHex = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = NativeScript.unsafeToCanonicalCborHex(instance);
+ *   const result = NativeScript.toCanonicalCborHexUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`NativeScript.unsafeToCanonicalCborHex failed: ${error.message}`);
+ *   console.error(`NativeScript.toCanonicalCborHexUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeToCanonicalCborHex = (instance: CML.NativeScript): string =>
+export const toCanonicalCborHexUnsafe = (instance: CML.NativeScript): string =>
   Effect.runSync(toCanonicalCborHex(instance));
 
 /**
@@ -525,16 +542,16 @@ export const fromCborHex = Effect.fn(function* (cborBytes: string) {
  *
  * // Using try/catch for error handling
  * try {
- *   const result = NativeScript.unsafeFromCborHex( parameters );
+ *   const result = NativeScript.fromCborHexUnsafe( parameters );
  *   console.log(result);
  * } catch (error) {
- *   console.error(`NativeScript.unsafeFromCborHex failed: ${error.message}`);
+ *   console.error(`NativeScript.fromCborHexUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Constructors
+ * @category ConstructorsUnsafe
  */
-export const unsafeFromCborHex = (cborBytes: string) =>
+export const fromCborHexUnsafe = (cborBytes: string) =>
   Effect.runSync(fromCborHex(cborBytes));
 
 /**
@@ -577,16 +594,16 @@ export const toJson = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = NativeScript.unsafeToJson(instance);
+ *   const result = NativeScript.toJsonUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`NativeScript.unsafeToJson failed: ${error.message}`);
+ *   console.error(`NativeScript.toJsonUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeToJson = (instance: CML.NativeScript): string =>
+export const toJsonUnsafe = (instance: CML.NativeScript): string =>
   Effect.runSync(toJson(instance));
 
 /**
@@ -629,16 +646,16 @@ export const toJsValue = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = NativeScript.unsafeToJsValue(instance);
+ *   const result = NativeScript.toJsValueUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`NativeScript.unsafeToJsValue failed: ${error.message}`);
+ *   console.error(`NativeScript.toJsValueUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeToJsValue = (instance: CML.NativeScript): any =>
+export const toJsValueUnsafe = (instance: CML.NativeScript): any =>
   Effect.runSync(toJsValue(instance));
 
 /**
@@ -678,16 +695,16 @@ export const fromJson = Effect.fn(function* (json: string) {
  *
  * // Using try/catch for error handling
  * try {
- *   const result = NativeScript.unsafeFromJson( parameters );
+ *   const result = NativeScript.fromJsonUnsafe( parameters );
  *   console.log(result);
  * } catch (error) {
- *   console.error(`NativeScript.unsafeFromJson failed: ${error.message}`);
+ *   console.error(`NativeScript.fromJsonUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Constructors
+ * @category ConstructorsUnsafe
  */
-export const unsafeFromJson = (json: string) => Effect.runSync(fromJson(json));
+export const fromJsonUnsafe = (json: string) => Effect.runSync(fromJson(json));
 
 /**
  * Static method newScriptPubkey of NativeScript
@@ -728,16 +745,16 @@ export const newScriptPubkey = Effect.fn(function* (
  *
  * // Using try/catch for error handling
  * try {
- *   const result = NativeScript.unsafeNewScriptPubkey( parameters );
+ *   const result = NativeScript.newScriptPubkeyUnsafe( parameters );
  *   console.log(result);
  * } catch (error) {
- *   console.error(`NativeScript.unsafeNewScriptPubkey failed: ${error.message}`);
+ *   console.error(`NativeScript.newScriptPubkeyUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Constructors
+ * @category ConstructorsUnsafe
  */
-export const unsafeNewScriptPubkey = (ed25519KeyHash: CML.Ed25519KeyHash) =>
+export const newScriptPubkeyUnsafe = (ed25519KeyHash: CML.Ed25519KeyHash) =>
   Effect.runSync(newScriptPubkey(ed25519KeyHash));
 
 /**
@@ -779,16 +796,16 @@ export const newScriptAll = Effect.fn(function* (
  *
  * // Using try/catch for error handling
  * try {
- *   const result = NativeScript.unsafeNewScriptAll( parameters );
+ *   const result = NativeScript.newScriptAllUnsafe( parameters );
  *   console.log(result);
  * } catch (error) {
- *   console.error(`NativeScript.unsafeNewScriptAll failed: ${error.message}`);
+ *   console.error(`NativeScript.newScriptAllUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Constructors
+ * @category ConstructorsUnsafe
  */
-export const unsafeNewScriptAll = (nativeScripts: CML.NativeScriptList) =>
+export const newScriptAllUnsafe = (nativeScripts: CML.NativeScriptList) =>
   Effect.runSync(newScriptAll(nativeScripts));
 
 /**
@@ -830,16 +847,16 @@ export const newScriptAny = Effect.fn(function* (
  *
  * // Using try/catch for error handling
  * try {
- *   const result = NativeScript.unsafeNewScriptAny( parameters );
+ *   const result = NativeScript.newScriptAnyUnsafe( parameters );
  *   console.log(result);
  * } catch (error) {
- *   console.error(`NativeScript.unsafeNewScriptAny failed: ${error.message}`);
+ *   console.error(`NativeScript.newScriptAnyUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Constructors
+ * @category ConstructorsUnsafe
  */
-export const unsafeNewScriptAny = (nativeScripts: CML.NativeScriptList) =>
+export const newScriptAnyUnsafe = (nativeScripts: CML.NativeScriptList) =>
   Effect.runSync(newScriptAny(nativeScripts));
 
 /**
@@ -882,16 +899,16 @@ export const newScriptNOfK = Effect.fn(function* (
  *
  * // Using try/catch for error handling
  * try {
- *   const result = NativeScript.unsafeNewScriptNOfK( parameters );
+ *   const result = NativeScript.newScriptNOfKUnsafe( parameters );
  *   console.log(result);
  * } catch (error) {
- *   console.error(`NativeScript.unsafeNewScriptNOfK failed: ${error.message}`);
+ *   console.error(`NativeScript.newScriptNOfKUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Constructors
+ * @category ConstructorsUnsafe
  */
-export const unsafeNewScriptNOfK = (
+export const newScriptNOfKUnsafe = (
   n: bigint,
   nativeScripts: CML.NativeScriptList,
 ) => Effect.runSync(newScriptNOfK(n, nativeScripts));
@@ -933,16 +950,16 @@ export const newScriptInvalidBefore = Effect.fn(function* (before: bigint) {
  *
  * // Using try/catch for error handling
  * try {
- *   const result = NativeScript.unsafeNewScriptInvalidBefore( parameters );
+ *   const result = NativeScript.newScriptInvalidBeforeUnsafe( parameters );
  *   console.log(result);
  * } catch (error) {
- *   console.error(`NativeScript.unsafeNewScriptInvalidBefore failed: ${error.message}`);
+ *   console.error(`NativeScript.newScriptInvalidBeforeUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Constructors
+ * @category ConstructorsUnsafe
  */
-export const unsafeNewScriptInvalidBefore = (before: bigint) =>
+export const newScriptInvalidBeforeUnsafe = (before: bigint) =>
   Effect.runSync(newScriptInvalidBefore(before));
 
 /**
@@ -982,16 +999,16 @@ export const newScriptInvalidHereafter = Effect.fn(function* (after: bigint) {
  *
  * // Using try/catch for error handling
  * try {
- *   const result = NativeScript.unsafeNewScriptInvalidHereafter( parameters );
+ *   const result = NativeScript.newScriptInvalidHereafterUnsafe( parameters );
  *   console.log(result);
  * } catch (error) {
- *   console.error(`NativeScript.unsafeNewScriptInvalidHereafter failed: ${error.message}`);
+ *   console.error(`NativeScript.newScriptInvalidHereafterUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Constructors
+ * @category ConstructorsUnsafe
  */
-export const unsafeNewScriptInvalidHereafter = (after: bigint) =>
+export const newScriptInvalidHereafterUnsafe = (after: bigint) =>
   Effect.runSync(newScriptInvalidHereafter(after));
 
 /**
@@ -1036,16 +1053,16 @@ export const kind = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = NativeScript.unsafeKind(instance);
+ *   const result = NativeScript.kindUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`NativeScript.unsafeKind failed: ${error.message}`);
+ *   console.error(`NativeScript.kindUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeKind = (instance: CML.NativeScript): CML.NativeScriptKind =>
+export const kindUnsafe = (instance: CML.NativeScript): CML.NativeScriptKind =>
   Effect.runSync(kind(instance));
 
 /**
@@ -1090,16 +1107,16 @@ export const asScriptPubkey = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = NativeScript.unsafeAsScriptPubkey(instance);
+ *   const result = NativeScript.asScriptPubkeyUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`NativeScript.unsafeAsScriptPubkey failed: ${error.message}`);
+ *   console.error(`NativeScript.asScriptPubkeyUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeAsScriptPubkey = (
+export const asScriptPubkeyUnsafe = (
   instance: CML.NativeScript,
 ): CML.ScriptPubkey | undefined => Effect.runSync(asScriptPubkey(instance));
 
@@ -1145,16 +1162,16 @@ export const asScriptAll = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = NativeScript.unsafeAsScriptAll(instance);
+ *   const result = NativeScript.asScriptAllUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`NativeScript.unsafeAsScriptAll failed: ${error.message}`);
+ *   console.error(`NativeScript.asScriptAllUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeAsScriptAll = (
+export const asScriptAllUnsafe = (
   instance: CML.NativeScript,
 ): CML.ScriptAll | undefined => Effect.runSync(asScriptAll(instance));
 
@@ -1200,16 +1217,16 @@ export const asScriptAny = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = NativeScript.unsafeAsScriptAny(instance);
+ *   const result = NativeScript.asScriptAnyUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`NativeScript.unsafeAsScriptAny failed: ${error.message}`);
+ *   console.error(`NativeScript.asScriptAnyUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeAsScriptAny = (
+export const asScriptAnyUnsafe = (
   instance: CML.NativeScript,
 ): CML.ScriptAny | undefined => Effect.runSync(asScriptAny(instance));
 
@@ -1255,16 +1272,16 @@ export const asScriptNOfK = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = NativeScript.unsafeAsScriptNOfK(instance);
+ *   const result = NativeScript.asScriptNOfKUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`NativeScript.unsafeAsScriptNOfK failed: ${error.message}`);
+ *   console.error(`NativeScript.asScriptNOfKUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeAsScriptNOfK = (
+export const asScriptNOfKUnsafe = (
   instance: CML.NativeScript,
 ): CML.ScriptNOfK | undefined => Effect.runSync(asScriptNOfK(instance));
 
@@ -1310,16 +1327,16 @@ export const asScriptInvalidBefore = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = NativeScript.unsafeAsScriptInvalidBefore(instance);
+ *   const result = NativeScript.asScriptInvalidBeforeUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`NativeScript.unsafeAsScriptInvalidBefore failed: ${error.message}`);
+ *   console.error(`NativeScript.asScriptInvalidBeforeUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeAsScriptInvalidBefore = (
+export const asScriptInvalidBeforeUnsafe = (
   instance: CML.NativeScript,
 ): CML.ScriptInvalidBefore | undefined =>
   Effect.runSync(asScriptInvalidBefore(instance));
@@ -1366,16 +1383,16 @@ export const asScriptInvalidHereafter = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = NativeScript.unsafeAsScriptInvalidHereafter(instance);
+ *   const result = NativeScript.asScriptInvalidHereafterUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`NativeScript.unsafeAsScriptInvalidHereafter failed: ${error.message}`);
+ *   console.error(`NativeScript.asScriptInvalidHereafterUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeAsScriptInvalidHereafter = (
+export const asScriptInvalidHereafterUnsafe = (
   instance: CML.NativeScript,
 ): CML.ScriptInvalidHereafter | undefined =>
   Effect.runSync(asScriptInvalidHereafter(instance));

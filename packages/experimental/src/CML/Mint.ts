@@ -1,8 +1,25 @@
+/**
+ * @since 2.0.0
+ */
 import { Data, Effect } from "effect";
 import * as CML from "@anastasia-labs/cardano-multiplatform-lib-nodejs";
 
+/**
+ * Type alias for the CML Mint class
+ *
+ * @since 2.0.0
+ * @category Types
+ */
 export type Mint = CML.Mint;
 
+/**
+ * Error class for Mint operations
+ *
+ * This error is thrown when operations on Mint instances fail.
+ *
+ * @since 2.0.0
+ * @category Errors
+ */
 export class MintError extends Data.TaggedError("MintError")<{
   message?: string;
 }> {}
@@ -47,16 +64,16 @@ export const free = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = Mint.unsafeFree(instance);
+ *   const result = Mint.freeUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`Mint.unsafeFree failed: ${error.message}`);
+ *   console.error(`Mint.freeUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeFree = (instance: CML.Mint): void =>
+export const freeUnsafe = (instance: CML.Mint): void =>
   Effect.runSync(free(instance));
 
 /**
@@ -96,16 +113,16 @@ export const _new = Effect.fn(function* () {
  *
  * // Using try/catch for error handling
  * try {
- *   const result = Mint.unsafe_new();
+ *   const result = Mint._newUnsafe();
  *   console.log(result);
  * } catch (error) {
- *   console.error(`Mint.unsafe_new failed: ${error.message}`);
+ *   console.error(`Mint._newUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Constructors
+ * @category ConstructorsUnsafe
  */
-export const unsafe_new = () => Effect.runSync(_new());
+export const _newUnsafe = () => Effect.runSync(_new());
 
 /**
  * Method policyCount of Mint
@@ -147,16 +164,16 @@ export const policyCount = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = Mint.unsafePolicyCount(instance);
+ *   const result = Mint.policyCountUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`Mint.unsafePolicyCount failed: ${error.message}`);
+ *   console.error(`Mint.policyCountUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafePolicyCount = (instance: CML.Mint): number =>
+export const policyCountUnsafe = (instance: CML.Mint): number =>
   Effect.runSync(policyCount(instance));
 
 /**
@@ -203,16 +220,16 @@ export const insertAssets = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = Mint.unsafeInsertAssets(instance,  parameters );
+ *   const result = Mint.insertAssetsUnsafe(instance,  parameters );
  *   console.log(result);
  * } catch (error) {
- *   console.error(`Mint.unsafeInsertAssets failed: ${error.message}`);
+ *   console.error(`Mint.insertAssetsUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeInsertAssets = (
+export const insertAssetsUnsafe = (
   instance: CML.Mint,
   policyId: CML.ScriptHash,
   assets: CML.MapAssetNameToNonZeroInt64,
@@ -262,16 +279,16 @@ export const getAssets = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = Mint.unsafeGetAssets(instance,  parameters );
+ *   const result = Mint.getAssetsUnsafe(instance,  parameters );
  *   console.log(result);
  * } catch (error) {
- *   console.error(`Mint.unsafeGetAssets failed: ${error.message}`);
+ *   console.error(`Mint.getAssetsUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeGetAssets = (
+export const getAssetsUnsafe = (
   instance: CML.Mint,
   key: CML.ScriptHash,
 ): CML.MapAssetNameToNonZeroInt64 | undefined =>
@@ -321,16 +338,16 @@ export const get = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = Mint.unsafeGet(instance,  parameters );
+ *   const result = Mint.getUnsafe(instance,  parameters );
  *   console.log(result);
  * } catch (error) {
- *   console.error(`Mint.unsafeGet failed: ${error.message}`);
+ *   console.error(`Mint.getUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeGet = (
+export const getUnsafe = (
   instance: CML.Mint,
   policyId: CML.ScriptHash,
   asset: CML.AssetName,
@@ -381,16 +398,16 @@ export const set = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = Mint.unsafeSet(instance,  parameters );
+ *   const result = Mint.setUnsafe(instance,  parameters );
  *   console.log(result);
  * } catch (error) {
- *   console.error(`Mint.unsafeSet failed: ${error.message}`);
+ *   console.error(`Mint.setUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeSet = (
+export const setUnsafe = (
   instance: CML.Mint,
   policyId: CML.ScriptHash,
   asset: CML.AssetName,
@@ -437,16 +454,16 @@ export const keys = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = Mint.unsafeKeys(instance);
+ *   const result = Mint.keysUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`Mint.unsafeKeys failed: ${error.message}`);
+ *   console.error(`Mint.keysUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeKeys = (instance: CML.Mint): CML.PolicyIdList =>
+export const keysUnsafe = (instance: CML.Mint): CML.PolicyIdList =>
   Effect.runSync(keys(instance));
 
 /**
@@ -489,16 +506,16 @@ export const checkedAdd = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = Mint.unsafeCheckedAdd(instance,  parameters );
+ *   const result = Mint.checkedAddUnsafe(instance,  parameters );
  *   console.log(result);
  * } catch (error) {
- *   console.error(`Mint.unsafeCheckedAdd failed: ${error.message}`);
+ *   console.error(`Mint.checkedAddUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeCheckedAdd = (instance: CML.Mint, rhs: CML.Mint): CML.Mint =>
+export const checkedAddUnsafe = (instance: CML.Mint, rhs: CML.Mint): CML.Mint =>
   Effect.runSync(checkedAdd(instance, rhs));
 
 /**
@@ -541,16 +558,16 @@ export const checkedSub = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = Mint.unsafeCheckedSub(instance,  parameters );
+ *   const result = Mint.checkedSubUnsafe(instance,  parameters );
  *   console.log(result);
  * } catch (error) {
- *   console.error(`Mint.unsafeCheckedSub failed: ${error.message}`);
+ *   console.error(`Mint.checkedSubUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeCheckedSub = (instance: CML.Mint, rhs: CML.Mint): CML.Mint =>
+export const checkedSubUnsafe = (instance: CML.Mint, rhs: CML.Mint): CML.Mint =>
   Effect.runSync(checkedSub(instance, rhs));
 
 /**
@@ -593,16 +610,16 @@ export const asPositiveMultiasset = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = Mint.unsafeAsPositiveMultiasset(instance);
+ *   const result = Mint.asPositiveMultiassetUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`Mint.unsafeAsPositiveMultiasset failed: ${error.message}`);
+ *   console.error(`Mint.asPositiveMultiassetUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeAsPositiveMultiasset = (
+export const asPositiveMultiassetUnsafe = (
   instance: CML.Mint,
 ): CML.MultiAsset => Effect.runSync(asPositiveMultiasset(instance));
 
@@ -646,15 +663,15 @@ export const asNegativeMultiasset = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = Mint.unsafeAsNegativeMultiasset(instance);
+ *   const result = Mint.asNegativeMultiassetUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`Mint.unsafeAsNegativeMultiasset failed: ${error.message}`);
+ *   console.error(`Mint.asNegativeMultiassetUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeAsNegativeMultiasset = (
+export const asNegativeMultiassetUnsafe = (
   instance: CML.Mint,
 ): CML.MultiAsset => Effect.runSync(asNegativeMultiasset(instance));

@@ -1,9 +1,53 @@
+/**
+ * @since 2.0.0
+ */
 import * as CML from "@anastasia-labs/cardano-multiplatform-lib-nodejs";
 
+/**
+ * Type alias for the CML RelayKind enum
+ *
+ * @since 2.0.0
+ * @category Types
+ */
 export type RelayKind = CML.RelayKind;
 
+/**
+ * SingleHostAddr variant of the RelayKind enum
+ *
+ * @example
+ * import { RelayKind } from "@lucid-evolution/experimental";
+ *
+ * const kind = RelayKind.SingleHostAddr;
+ *
+ * @since 2.0.0
+ * @category Variants
+ */
 export const SingleHostAddr = CML.RelayKind.SingleHostAddr;
+
+/**
+ * SingleHostName variant of the RelayKind enum
+ *
+ * @example
+ * import { RelayKind } from "@lucid-evolution/experimental";
+ *
+ * const kind = RelayKind.SingleHostName;
+ *
+ * @since 2.0.0
+ * @category Variants
+ */
 export const SingleHostName = CML.RelayKind.SingleHostName;
+
+/**
+ * MultiHostName variant of the RelayKind enum
+ *
+ * @example
+ * import { RelayKind } from "@lucid-evolution/experimental";
+ *
+ * const kind = RelayKind.MultiHostName;
+ *
+ * @since 2.0.0
+ * @category Variants
+ */
 export const MultiHostName = CML.RelayKind.MultiHostName;
 
 /**

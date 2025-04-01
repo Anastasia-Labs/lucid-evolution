@@ -1,8 +1,25 @@
+/**
+ * @since 2.0.0
+ */
 import { Data, Effect } from "effect";
 import * as CML from "@anastasia-labs/cardano-multiplatform-lib-nodejs";
 
+/**
+ * Type alias for the CML NoConfidence class
+ *
+ * @since 2.0.0
+ * @category Types
+ */
 export type NoConfidence = CML.NoConfidence;
 
+/**
+ * Error class for NoConfidence operations
+ *
+ * This error is thrown when operations on NoConfidence instances fail.
+ *
+ * @since 2.0.0
+ * @category Errors
+ */
 export class NoConfidenceError extends Data.TaggedError("NoConfidenceError")<{
   message?: string;
 }> {}
@@ -47,16 +64,16 @@ export const free = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = NoConfidence.unsafeFree(instance);
+ *   const result = NoConfidence.freeUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`NoConfidence.unsafeFree failed: ${error.message}`);
+ *   console.error(`NoConfidence.freeUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeFree = (instance: CML.NoConfidence): void =>
+export const freeUnsafe = (instance: CML.NoConfidence): void =>
   Effect.runSync(free(instance));
 
 /**
@@ -99,16 +116,16 @@ export const toCborBytes = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = NoConfidence.unsafeToCborBytes(instance);
+ *   const result = NoConfidence.toCborBytesUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`NoConfidence.unsafeToCborBytes failed: ${error.message}`);
+ *   console.error(`NoConfidence.toCborBytesUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeToCborBytes = (instance: CML.NoConfidence): Uint8Array =>
+export const toCborBytesUnsafe = (instance: CML.NoConfidence): Uint8Array =>
   Effect.runSync(toCborBytes(instance));
 
 /**
@@ -151,16 +168,16 @@ export const toCanonicalCborBytes = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = NoConfidence.unsafeToCanonicalCborBytes(instance);
+ *   const result = NoConfidence.toCanonicalCborBytesUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`NoConfidence.unsafeToCanonicalCborBytes failed: ${error.message}`);
+ *   console.error(`NoConfidence.toCanonicalCborBytesUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeToCanonicalCborBytes = (
+export const toCanonicalCborBytesUnsafe = (
   instance: CML.NoConfidence,
 ): Uint8Array => Effect.runSync(toCanonicalCborBytes(instance));
 
@@ -201,16 +218,16 @@ export const fromCborBytes = Effect.fn(function* (cborBytes: Uint8Array) {
  *
  * // Using try/catch for error handling
  * try {
- *   const result = NoConfidence.unsafeFromCborBytes( parameters );
+ *   const result = NoConfidence.fromCborBytesUnsafe( parameters );
  *   console.log(result);
  * } catch (error) {
- *   console.error(`NoConfidence.unsafeFromCborBytes failed: ${error.message}`);
+ *   console.error(`NoConfidence.fromCborBytesUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Constructors
+ * @category ConstructorsUnsafe
  */
-export const unsafeFromCborBytes = (cborBytes: Uint8Array) =>
+export const fromCborBytesUnsafe = (cborBytes: Uint8Array) =>
   Effect.runSync(fromCborBytes(cborBytes));
 
 /**
@@ -253,16 +270,16 @@ export const toCborHex = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = NoConfidence.unsafeToCborHex(instance);
+ *   const result = NoConfidence.toCborHexUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`NoConfidence.unsafeToCborHex failed: ${error.message}`);
+ *   console.error(`NoConfidence.toCborHexUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeToCborHex = (instance: CML.NoConfidence): string =>
+export const toCborHexUnsafe = (instance: CML.NoConfidence): string =>
   Effect.runSync(toCborHex(instance));
 
 /**
@@ -305,16 +322,16 @@ export const toCanonicalCborHex = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = NoConfidence.unsafeToCanonicalCborHex(instance);
+ *   const result = NoConfidence.toCanonicalCborHexUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`NoConfidence.unsafeToCanonicalCborHex failed: ${error.message}`);
+ *   console.error(`NoConfidence.toCanonicalCborHexUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeToCanonicalCborHex = (instance: CML.NoConfidence): string =>
+export const toCanonicalCborHexUnsafe = (instance: CML.NoConfidence): string =>
   Effect.runSync(toCanonicalCborHex(instance));
 
 /**
@@ -354,16 +371,16 @@ export const fromCborHex = Effect.fn(function* (cborBytes: string) {
  *
  * // Using try/catch for error handling
  * try {
- *   const result = NoConfidence.unsafeFromCborHex( parameters );
+ *   const result = NoConfidence.fromCborHexUnsafe( parameters );
  *   console.log(result);
  * } catch (error) {
- *   console.error(`NoConfidence.unsafeFromCborHex failed: ${error.message}`);
+ *   console.error(`NoConfidence.fromCborHexUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Constructors
+ * @category ConstructorsUnsafe
  */
-export const unsafeFromCborHex = (cborBytes: string) =>
+export const fromCborHexUnsafe = (cborBytes: string) =>
   Effect.runSync(fromCborHex(cborBytes));
 
 /**
@@ -406,16 +423,16 @@ export const toJson = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = NoConfidence.unsafeToJson(instance);
+ *   const result = NoConfidence.toJsonUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`NoConfidence.unsafeToJson failed: ${error.message}`);
+ *   console.error(`NoConfidence.toJsonUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeToJson = (instance: CML.NoConfidence): string =>
+export const toJsonUnsafe = (instance: CML.NoConfidence): string =>
   Effect.runSync(toJson(instance));
 
 /**
@@ -458,16 +475,16 @@ export const toJsValue = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = NoConfidence.unsafeToJsValue(instance);
+ *   const result = NoConfidence.toJsValueUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`NoConfidence.unsafeToJsValue failed: ${error.message}`);
+ *   console.error(`NoConfidence.toJsValueUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeToJsValue = (instance: CML.NoConfidence): any =>
+export const toJsValueUnsafe = (instance: CML.NoConfidence): any =>
   Effect.runSync(toJsValue(instance));
 
 /**
@@ -507,16 +524,16 @@ export const fromJson = Effect.fn(function* (json: string) {
  *
  * // Using try/catch for error handling
  * try {
- *   const result = NoConfidence.unsafeFromJson( parameters );
+ *   const result = NoConfidence.fromJsonUnsafe( parameters );
  *   console.log(result);
  * } catch (error) {
- *   console.error(`NoConfidence.unsafeFromJson failed: ${error.message}`);
+ *   console.error(`NoConfidence.fromJsonUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Constructors
+ * @category ConstructorsUnsafe
  */
-export const unsafeFromJson = (json: string) => Effect.runSync(fromJson(json));
+export const fromJsonUnsafe = (json: string) => Effect.runSync(fromJson(json));
 
 /**
  * Method actionId of NoConfidence
@@ -560,16 +577,16 @@ export const actionId = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = NoConfidence.unsafeActionId(instance);
+ *   const result = NoConfidence.actionIdUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`NoConfidence.unsafeActionId failed: ${error.message}`);
+ *   console.error(`NoConfidence.actionIdUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeActionId = (
+export const actionIdUnsafe = (
   instance: CML.NoConfidence,
 ): CML.GovActionId | undefined => Effect.runSync(actionId(instance));
 
@@ -610,14 +627,14 @@ export const _new = Effect.fn(function* (actionId: CML.GovActionId) {
  *
  * // Using try/catch for error handling
  * try {
- *   const result = NoConfidence.unsafe_new( parameters );
+ *   const result = NoConfidence._newUnsafe( parameters );
  *   console.log(result);
  * } catch (error) {
- *   console.error(`NoConfidence.unsafe_new failed: ${error.message}`);
+ *   console.error(`NoConfidence._newUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Constructors
+ * @category ConstructorsUnsafe
  */
-export const unsafe_new = (actionId: CML.GovActionId) =>
+export const _newUnsafe = (actionId: CML.GovActionId) =>
   Effect.runSync(_new(actionId));

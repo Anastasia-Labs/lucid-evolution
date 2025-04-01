@@ -1,9 +1,53 @@
+/**
+ * @since 2.0.0
+ */
 import * as CML from "@anastasia-labs/cardano-multiplatform-lib-nodejs";
 
+/**
+ * Type alias for the CML SpendingDataKind enum
+ *
+ * @since 2.0.0
+ * @category Types
+ */
 export type SpendingDataKind = CML.SpendingDataKind;
 
+/**
+ * SpendingDataPubKey variant of the SpendingDataKind enum
+ *
+ * @example
+ * import { SpendingDataKind } from "@lucid-evolution/experimental";
+ *
+ * const kind = SpendingDataKind.SpendingDataPubKey;
+ *
+ * @since 2.0.0
+ * @category Variants
+ */
 export const SpendingDataPubKey = CML.SpendingDataKind.SpendingDataPubKey;
+
+/**
+ * SpendingDataScript variant of the SpendingDataKind enum
+ *
+ * @example
+ * import { SpendingDataKind } from "@lucid-evolution/experimental";
+ *
+ * const kind = SpendingDataKind.SpendingDataScript;
+ *
+ * @since 2.0.0
+ * @category Variants
+ */
 export const SpendingDataScript = CML.SpendingDataKind.SpendingDataScript;
+
+/**
+ * SpendingDataRedeem variant of the SpendingDataKind enum
+ *
+ * @example
+ * import { SpendingDataKind } from "@lucid-evolution/experimental";
+ *
+ * const kind = SpendingDataKind.SpendingDataRedeem;
+ *
+ * @since 2.0.0
+ * @category Variants
+ */
 export const SpendingDataRedeem = CML.SpendingDataKind.SpendingDataRedeem;
 
 /**

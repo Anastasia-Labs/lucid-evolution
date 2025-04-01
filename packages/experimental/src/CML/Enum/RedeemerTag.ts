@@ -1,12 +1,92 @@
+/**
+ * @since 2.0.0
+ */
 import * as CML from "@anastasia-labs/cardano-multiplatform-lib-nodejs";
 
+/**
+ * Type alias for the CML RedeemerTag enum
+ *
+ * @since 2.0.0
+ * @category Types
+ */
 export type RedeemerTag = CML.RedeemerTag;
 
+/**
+ * Spend variant of the RedeemerTag enum
+ *
+ * @example
+ * import { RedeemerTag } from "@lucid-evolution/experimental";
+ *
+ * const kind = RedeemerTag.Spend;
+ *
+ * @since 2.0.0
+ * @category Variants
+ */
 export const Spend = CML.RedeemerTag.Spend;
+
+/**
+ * Mint variant of the RedeemerTag enum
+ *
+ * @example
+ * import { RedeemerTag } from "@lucid-evolution/experimental";
+ *
+ * const kind = RedeemerTag.Mint;
+ *
+ * @since 2.0.0
+ * @category Variants
+ */
 export const Mint = CML.RedeemerTag.Mint;
+
+/**
+ * Cert variant of the RedeemerTag enum
+ *
+ * @example
+ * import { RedeemerTag } from "@lucid-evolution/experimental";
+ *
+ * const kind = RedeemerTag.Cert;
+ *
+ * @since 2.0.0
+ * @category Variants
+ */
 export const Cert = CML.RedeemerTag.Cert;
+
+/**
+ * Reward variant of the RedeemerTag enum
+ *
+ * @example
+ * import { RedeemerTag } from "@lucid-evolution/experimental";
+ *
+ * const kind = RedeemerTag.Reward;
+ *
+ * @since 2.0.0
+ * @category Variants
+ */
 export const Reward = CML.RedeemerTag.Reward;
+
+/**
+ * Voting variant of the RedeemerTag enum
+ *
+ * @example
+ * import { RedeemerTag } from "@lucid-evolution/experimental";
+ *
+ * const kind = RedeemerTag.Voting;
+ *
+ * @since 2.0.0
+ * @category Variants
+ */
 export const Voting = CML.RedeemerTag.Voting;
+
+/**
+ * Proposing variant of the RedeemerTag enum
+ *
+ * @example
+ * import { RedeemerTag } from "@lucid-evolution/experimental";
+ *
+ * const kind = RedeemerTag.Proposing;
+ *
+ * @since 2.0.0
+ * @category Variants
+ */
 export const Proposing = CML.RedeemerTag.Proposing;
 
 /**

@@ -1,8 +1,25 @@
+/**
+ * @since 2.0.0
+ */
 import { Data, Effect } from "effect";
 import * as CML from "@anastasia-labs/cardano-multiplatform-lib-nodejs";
 
+/**
+ * Type alias for the CML PointerAddress class
+ *
+ * @since 2.0.0
+ * @category Types
+ */
 export type PointerAddress = CML.PointerAddress;
 
+/**
+ * Error class for PointerAddress operations
+ *
+ * This error is thrown when operations on PointerAddress instances fail.
+ *
+ * @since 2.0.0
+ * @category Errors
+ */
 export class PointerAddressError extends Data.TaggedError(
   "PointerAddressError",
 )<{
@@ -49,16 +66,16 @@ export const free = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = PointerAddress.unsafeFree(instance);
+ *   const result = PointerAddress.freeUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`PointerAddress.unsafeFree failed: ${error.message}`);
+ *   console.error(`PointerAddress.freeUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeFree = (instance: CML.PointerAddress): void =>
+export const freeUnsafe = (instance: CML.PointerAddress): void =>
   Effect.runSync(free(instance));
 
 /**
@@ -102,16 +119,16 @@ export const _new = Effect.fn(function* (
  *
  * // Using try/catch for error handling
  * try {
- *   const result = PointerAddress.unsafe_new( parameters );
+ *   const result = PointerAddress._newUnsafe( parameters );
  *   console.log(result);
  * } catch (error) {
- *   console.error(`PointerAddress.unsafe_new failed: ${error.message}`);
+ *   console.error(`PointerAddress._newUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Constructors
+ * @category ConstructorsUnsafe
  */
-export const unsafe_new = (
+export const _newUnsafe = (
   network: number,
   payment: CML.Credential,
   stake: CML.Pointer,
@@ -159,16 +176,16 @@ export const toAddress = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = PointerAddress.unsafeToAddress(instance);
+ *   const result = PointerAddress.toAddressUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`PointerAddress.unsafeToAddress failed: ${error.message}`);
+ *   console.error(`PointerAddress.toAddressUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeToAddress = (instance: CML.PointerAddress): CML.Address =>
+export const toAddressUnsafe = (instance: CML.PointerAddress): CML.Address =>
   Effect.runSync(toAddress(instance));
 
 /**
@@ -208,16 +225,16 @@ export const fromAddress = Effect.fn(function* (address: CML.Address) {
  *
  * // Using try/catch for error handling
  * try {
- *   const result = PointerAddress.unsafeFromAddress( parameters );
+ *   const result = PointerAddress.fromAddressUnsafe( parameters );
  *   console.log(result);
  * } catch (error) {
- *   console.error(`PointerAddress.unsafeFromAddress failed: ${error.message}`);
+ *   console.error(`PointerAddress.fromAddressUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Constructors
+ * @category ConstructorsUnsafe
  */
-export const unsafeFromAddress = (address: CML.Address) =>
+export const fromAddressUnsafe = (address: CML.Address) =>
   Effect.runSync(fromAddress(address));
 
 /**
@@ -260,16 +277,16 @@ export const networkId = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = PointerAddress.unsafeNetworkId(instance);
+ *   const result = PointerAddress.networkIdUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`PointerAddress.unsafeNetworkId failed: ${error.message}`);
+ *   console.error(`PointerAddress.networkIdUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeNetworkId = (instance: CML.PointerAddress): number =>
+export const networkIdUnsafe = (instance: CML.PointerAddress): number =>
   Effect.runSync(networkId(instance));
 
 /**
@@ -314,16 +331,16 @@ export const payment = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = PointerAddress.unsafePayment(instance);
+ *   const result = PointerAddress.paymentUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`PointerAddress.unsafePayment failed: ${error.message}`);
+ *   console.error(`PointerAddress.paymentUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafePayment = (instance: CML.PointerAddress): CML.Credential =>
+export const paymentUnsafe = (instance: CML.PointerAddress): CML.Credential =>
   Effect.runSync(payment(instance));
 
 /**
@@ -368,14 +385,14 @@ export const stake = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = PointerAddress.unsafeStake(instance);
+ *   const result = PointerAddress.stakeUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`PointerAddress.unsafeStake failed: ${error.message}`);
+ *   console.error(`PointerAddress.stakeUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeStake = (instance: CML.PointerAddress): CML.Pointer =>
+export const stakeUnsafe = (instance: CML.PointerAddress): CML.Pointer =>
   Effect.runSync(stake(instance));

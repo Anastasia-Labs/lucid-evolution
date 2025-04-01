@@ -1,6 +1,17 @@
+/**
+ * @since 2.0.0
+ */
 import { Data, Effect } from "effect";
 import * as CML from "@anastasia-labs/cardano-multiplatform-lib-nodejs";
 
+/**
+ * Error class for calc_script_data_hash function
+ *
+ * This error is thrown when the calc_script_data_hash function fails.
+ *
+ * @since 2.0.0
+ * @category Errors
+ */
 export class CalcScriptDataHashError extends Data.TaggedError(
   "CalcScriptDataHashError",
 )<{
@@ -43,19 +54,19 @@ export const calcScriptDataHash = Effect.fn(function* (
  * Unsafely calls calc_script_data_hash function without Effect wrapper
  *
  * @example
- * import { unsafeCalcScriptDataHash } from "@lucid-evolution/experimental/CML/functions";
+ * import { calcScriptDataHashUnsafe } from "@lucid-evolution/experimental/CML/functions";
  *
  * try {
- *   const result = unsafeCalcScriptDataHash(Redeemers instance , PlutusDataList instance , CostModels instance , LanguageList instance );
+ *   const result = calcScriptDataHashUnsafe(Redeemers instance , PlutusDataList instance , CostModels instance , LanguageList instance );
  *   console.log(result);
  * } catch (error) {
- *   console.error(`unsafeCalcScriptDataHash failed: ${error.message}`);
+ *   console.error(`calcScriptDataHashUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Functions
+ * @category FunctionsUnsafe
  */
-export const unsafeCalcScriptDataHash = (
+export const calcScriptDataHashUnsafe = (
   redeemers: CML.Redeemers,
   datums: CML.PlutusDataList,
   costModels: CML.CostModels,

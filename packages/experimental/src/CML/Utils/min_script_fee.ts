@@ -1,6 +1,17 @@
+/**
+ * @since 2.0.0
+ */
 import { Data, Effect } from "effect";
 import * as CML from "@anastasia-labs/cardano-multiplatform-lib-nodejs";
 
+/**
+ * Error class for min_script_fee function
+ *
+ * This error is thrown when the min_script_fee function fails.
+ *
+ * @since 2.0.0
+ * @category Errors
+ */
 export class MinScriptFeeError extends Data.TaggedError("MinScriptFeeError")<{
   message?: string;
 }> {}
@@ -38,19 +49,19 @@ export const minScriptFee = Effect.fn(function* (
  * Unsafely calls min_script_fee function without Effect wrapper
  *
  * @example
- * import { unsafeMinScriptFee } from "@lucid-evolution/experimental/CML/functions";
+ * import { minScriptFeeUnsafe } from "@lucid-evolution/experimental/CML/functions";
  *
  * try {
- *   const result = unsafeMinScriptFee(Transaction instance , ExUnitPrices instance );
+ *   const result = minScriptFeeUnsafe(Transaction instance , ExUnitPrices instance );
  *   console.log(result);
  * } catch (error) {
- *   console.error(`unsafeMinScriptFee failed: ${error.message}`);
+ *   console.error(`minScriptFeeUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Functions
+ * @category FunctionsUnsafe
  */
-export const unsafeMinScriptFee = (
+export const minScriptFeeUnsafe = (
   tx: CML.Transaction,
   exUnitPrices: CML.ExUnitPrices,
 ): bigint => Effect.runSync(minScriptFee(tx, exUnitPrices));

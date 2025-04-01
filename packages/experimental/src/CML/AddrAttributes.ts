@@ -1,8 +1,25 @@
+/**
+ * @since 2.0.0
+ */
 import { Data, Effect } from "effect";
 import * as CML from "@anastasia-labs/cardano-multiplatform-lib-nodejs";
 
+/**
+ * Type alias for the CML AddrAttributes class
+ *
+ * @since 2.0.0
+ * @category Types
+ */
 export type AddrAttributes = CML.AddrAttributes;
 
+/**
+ * Error class for AddrAttributes operations
+ *
+ * This error is thrown when operations on AddrAttributes instances fail.
+ *
+ * @since 2.0.0
+ * @category Errors
+ */
 export class AddrAttributesError extends Data.TaggedError(
   "AddrAttributesError",
 )<{
@@ -49,16 +66,16 @@ export const free = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = AddrAttributes.unsafeFree(instance);
+ *   const result = AddrAttributes.freeUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`AddrAttributes.unsafeFree failed: ${error.message}`);
+ *   console.error(`AddrAttributes.freeUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeFree = (instance: CML.AddrAttributes): void =>
+export const freeUnsafe = (instance: CML.AddrAttributes): void =>
   Effect.runSync(free(instance));
 
 /**
@@ -101,16 +118,16 @@ export const newBootstrapEra = Effect.fn(function* (
  *
  * // Using try/catch for error handling
  * try {
- *   const result = AddrAttributes.unsafeNewBootstrapEra( parameters );
+ *   const result = AddrAttributes.newBootstrapEraUnsafe( parameters );
  *   console.log(result);
  * } catch (error) {
- *   console.error(`AddrAttributes.unsafeNewBootstrapEra failed: ${error.message}`);
+ *   console.error(`AddrAttributes.newBootstrapEraUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Constructors
+ * @category ConstructorsUnsafe
  */
-export const unsafeNewBootstrapEra = (
+export const newBootstrapEraUnsafe = (
   hdap: CML.HDAddressPayload,
   protocolMagic: CML.ProtocolMagic,
 ) => Effect.runSync(newBootstrapEra(hdap, protocolMagic));
@@ -156,16 +173,16 @@ export const newSingleKey = Effect.fn(function* (
  *
  * // Using try/catch for error handling
  * try {
- *   const result = AddrAttributes.unsafeNewSingleKey( parameters );
+ *   const result = AddrAttributes.newSingleKeyUnsafe( parameters );
  *   console.log(result);
  * } catch (error) {
- *   console.error(`AddrAttributes.unsafeNewSingleKey failed: ${error.message}`);
+ *   console.error(`AddrAttributes.newSingleKeyUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Constructors
+ * @category ConstructorsUnsafe
  */
-export const unsafeNewSingleKey = (
+export const newSingleKeyUnsafe = (
   pubk: CML.Bip32PublicKey,
   hdap: CML.HDAddressPayload | undefined,
   protocolMagic: CML.ProtocolMagic,
@@ -213,16 +230,16 @@ export const toCborBytes = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = AddrAttributes.unsafeToCborBytes(instance);
+ *   const result = AddrAttributes.toCborBytesUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`AddrAttributes.unsafeToCborBytes failed: ${error.message}`);
+ *   console.error(`AddrAttributes.toCborBytesUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeToCborBytes = (instance: CML.AddrAttributes): Uint8Array =>
+export const toCborBytesUnsafe = (instance: CML.AddrAttributes): Uint8Array =>
   Effect.runSync(toCborBytes(instance));
 
 /**
@@ -262,16 +279,16 @@ export const fromCborBytes = Effect.fn(function* (cborBytes: Uint8Array) {
  *
  * // Using try/catch for error handling
  * try {
- *   const result = AddrAttributes.unsafeFromCborBytes( parameters );
+ *   const result = AddrAttributes.fromCborBytesUnsafe( parameters );
  *   console.log(result);
  * } catch (error) {
- *   console.error(`AddrAttributes.unsafeFromCborBytes failed: ${error.message}`);
+ *   console.error(`AddrAttributes.fromCborBytesUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Constructors
+ * @category ConstructorsUnsafe
  */
-export const unsafeFromCborBytes = (cborBytes: Uint8Array) =>
+export const fromCborBytesUnsafe = (cborBytes: Uint8Array) =>
   Effect.runSync(fromCborBytes(cborBytes));
 
 /**
@@ -314,16 +331,16 @@ export const toCborHex = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = AddrAttributes.unsafeToCborHex(instance);
+ *   const result = AddrAttributes.toCborHexUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`AddrAttributes.unsafeToCborHex failed: ${error.message}`);
+ *   console.error(`AddrAttributes.toCborHexUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeToCborHex = (instance: CML.AddrAttributes): string =>
+export const toCborHexUnsafe = (instance: CML.AddrAttributes): string =>
   Effect.runSync(toCborHex(instance));
 
 /**
@@ -363,16 +380,16 @@ export const fromCborHex = Effect.fn(function* (cborBytes: string) {
  *
  * // Using try/catch for error handling
  * try {
- *   const result = AddrAttributes.unsafeFromCborHex( parameters );
+ *   const result = AddrAttributes.fromCborHexUnsafe( parameters );
  *   console.log(result);
  * } catch (error) {
- *   console.error(`AddrAttributes.unsafeFromCborHex failed: ${error.message}`);
+ *   console.error(`AddrAttributes.fromCborHexUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Constructors
+ * @category ConstructorsUnsafe
  */
-export const unsafeFromCborHex = (cborBytes: string) =>
+export const fromCborHexUnsafe = (cborBytes: string) =>
   Effect.runSync(fromCborHex(cborBytes));
 
 /**
@@ -418,16 +435,16 @@ export const setStakeDistribution = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = AddrAttributes.unsafeSetStakeDistribution(instance,  parameters );
+ *   const result = AddrAttributes.setStakeDistributionUnsafe(instance,  parameters );
  *   console.log(result);
  * } catch (error) {
- *   console.error(`AddrAttributes.unsafeSetStakeDistribution failed: ${error.message}`);
+ *   console.error(`AddrAttributes.setStakeDistributionUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeSetStakeDistribution = (
+export const setStakeDistributionUnsafe = (
   instance: CML.AddrAttributes,
   stakeDistribution: CML.StakeDistribution,
 ): void => Effect.runSync(setStakeDistribution(instance, stakeDistribution));
@@ -474,16 +491,16 @@ export const stakeDistribution = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = AddrAttributes.unsafeStakeDistribution(instance);
+ *   const result = AddrAttributes.stakeDistributionUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`AddrAttributes.unsafeStakeDistribution failed: ${error.message}`);
+ *   console.error(`AddrAttributes.stakeDistributionUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeStakeDistribution = (
+export const stakeDistributionUnsafe = (
   instance: CML.AddrAttributes,
 ): CML.StakeDistribution | undefined =>
   Effect.runSync(stakeDistribution(instance));
@@ -531,16 +548,16 @@ export const setDerivationPath = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = AddrAttributes.unsafeSetDerivationPath(instance,  parameters );
+ *   const result = AddrAttributes.setDerivationPathUnsafe(instance,  parameters );
  *   console.log(result);
  * } catch (error) {
- *   console.error(`AddrAttributes.unsafeSetDerivationPath failed: ${error.message}`);
+ *   console.error(`AddrAttributes.setDerivationPathUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeSetDerivationPath = (
+export const setDerivationPathUnsafe = (
   instance: CML.AddrAttributes,
   derivationPath: CML.HDAddressPayload,
 ): void => Effect.runSync(setDerivationPath(instance, derivationPath));
@@ -587,16 +604,16 @@ export const derivationPath = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = AddrAttributes.unsafeDerivationPath(instance);
+ *   const result = AddrAttributes.derivationPathUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`AddrAttributes.unsafeDerivationPath failed: ${error.message}`);
+ *   console.error(`AddrAttributes.derivationPathUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeDerivationPath = (
+export const derivationPathUnsafe = (
   instance: CML.AddrAttributes,
 ): CML.HDAddressPayload | undefined => Effect.runSync(derivationPath(instance));
 
@@ -643,16 +660,16 @@ export const setProtocolMagic = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = AddrAttributes.unsafeSetProtocolMagic(instance,  parameters );
+ *   const result = AddrAttributes.setProtocolMagicUnsafe(instance,  parameters );
  *   console.log(result);
  * } catch (error) {
- *   console.error(`AddrAttributes.unsafeSetProtocolMagic failed: ${error.message}`);
+ *   console.error(`AddrAttributes.setProtocolMagicUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeSetProtocolMagic = (
+export const setProtocolMagicUnsafe = (
   instance: CML.AddrAttributes,
   protocolMagic: CML.ProtocolMagic,
 ): void => Effect.runSync(setProtocolMagic(instance, protocolMagic));
@@ -699,16 +716,16 @@ export const protocolMagic = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = AddrAttributes.unsafeProtocolMagic(instance);
+ *   const result = AddrAttributes.protocolMagicUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`AddrAttributes.unsafeProtocolMagic failed: ${error.message}`);
+ *   console.error(`AddrAttributes.protocolMagicUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeProtocolMagic = (
+export const protocolMagicUnsafe = (
   instance: CML.AddrAttributes,
 ): CML.ProtocolMagic | undefined => Effect.runSync(protocolMagic(instance));
 
@@ -749,13 +766,13 @@ export const _new = Effect.fn(function* () {
  *
  * // Using try/catch for error handling
  * try {
- *   const result = AddrAttributes.unsafe_new();
+ *   const result = AddrAttributes._newUnsafe();
  *   console.log(result);
  * } catch (error) {
- *   console.error(`AddrAttributes.unsafe_new failed: ${error.message}`);
+ *   console.error(`AddrAttributes._newUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Constructors
+ * @category ConstructorsUnsafe
  */
-export const unsafe_new = () => Effect.runSync(_new());
+export const _newUnsafe = () => Effect.runSync(_new());

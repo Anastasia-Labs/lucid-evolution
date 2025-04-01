@@ -1,8 +1,25 @@
+/**
+ * @since 2.0.0
+ */
 import { Data, Effect } from "effect";
 import * as CML from "@anastasia-labs/cardano-multiplatform-lib-nodejs";
 
+/**
+ * Type alias for the CML ResignCommitteeColdCert class
+ *
+ * @since 2.0.0
+ * @category Types
+ */
 export type ResignCommitteeColdCert = CML.ResignCommitteeColdCert;
 
+/**
+ * Error class for ResignCommitteeColdCert operations
+ *
+ * This error is thrown when operations on ResignCommitteeColdCert instances fail.
+ *
+ * @since 2.0.0
+ * @category Errors
+ */
 export class ResignCommitteeColdCertError extends Data.TaggedError(
   "ResignCommitteeColdCertError",
 )<{
@@ -51,16 +68,16 @@ export const free = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = ResignCommitteeColdCert.unsafeFree(instance);
+ *   const result = ResignCommitteeColdCert.freeUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`ResignCommitteeColdCert.unsafeFree failed: ${error.message}`);
+ *   console.error(`ResignCommitteeColdCert.freeUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeFree = (instance: CML.ResignCommitteeColdCert): void =>
+export const freeUnsafe = (instance: CML.ResignCommitteeColdCert): void =>
   Effect.runSync(free(instance));
 
 /**
@@ -105,16 +122,16 @@ export const toCborBytes = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = ResignCommitteeColdCert.unsafeToCborBytes(instance);
+ *   const result = ResignCommitteeColdCert.toCborBytesUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`ResignCommitteeColdCert.unsafeToCborBytes failed: ${error.message}`);
+ *   console.error(`ResignCommitteeColdCert.toCborBytesUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeToCborBytes = (
+export const toCborBytesUnsafe = (
   instance: CML.ResignCommitteeColdCert,
 ): Uint8Array => Effect.runSync(toCborBytes(instance));
 
@@ -160,16 +177,16 @@ export const toCanonicalCborBytes = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = ResignCommitteeColdCert.unsafeToCanonicalCborBytes(instance);
+ *   const result = ResignCommitteeColdCert.toCanonicalCborBytesUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`ResignCommitteeColdCert.unsafeToCanonicalCborBytes failed: ${error.message}`);
+ *   console.error(`ResignCommitteeColdCert.toCanonicalCborBytesUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeToCanonicalCborBytes = (
+export const toCanonicalCborBytesUnsafe = (
   instance: CML.ResignCommitteeColdCert,
 ): Uint8Array => Effect.runSync(toCanonicalCborBytes(instance));
 
@@ -210,16 +227,16 @@ export const fromCborBytes = Effect.fn(function* (cborBytes: Uint8Array) {
  *
  * // Using try/catch for error handling
  * try {
- *   const result = ResignCommitteeColdCert.unsafeFromCborBytes( parameters );
+ *   const result = ResignCommitteeColdCert.fromCborBytesUnsafe( parameters );
  *   console.log(result);
  * } catch (error) {
- *   console.error(`ResignCommitteeColdCert.unsafeFromCborBytes failed: ${error.message}`);
+ *   console.error(`ResignCommitteeColdCert.fromCborBytesUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Constructors
+ * @category ConstructorsUnsafe
  */
-export const unsafeFromCborBytes = (cborBytes: Uint8Array) =>
+export const fromCborBytesUnsafe = (cborBytes: Uint8Array) =>
   Effect.runSync(fromCborBytes(cborBytes));
 
 /**
@@ -264,16 +281,16 @@ export const toCborHex = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = ResignCommitteeColdCert.unsafeToCborHex(instance);
+ *   const result = ResignCommitteeColdCert.toCborHexUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`ResignCommitteeColdCert.unsafeToCborHex failed: ${error.message}`);
+ *   console.error(`ResignCommitteeColdCert.toCborHexUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeToCborHex = (
+export const toCborHexUnsafe = (
   instance: CML.ResignCommitteeColdCert,
 ): string => Effect.runSync(toCborHex(instance));
 
@@ -319,16 +336,16 @@ export const toCanonicalCborHex = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = ResignCommitteeColdCert.unsafeToCanonicalCborHex(instance);
+ *   const result = ResignCommitteeColdCert.toCanonicalCborHexUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`ResignCommitteeColdCert.unsafeToCanonicalCborHex failed: ${error.message}`);
+ *   console.error(`ResignCommitteeColdCert.toCanonicalCborHexUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeToCanonicalCborHex = (
+export const toCanonicalCborHexUnsafe = (
   instance: CML.ResignCommitteeColdCert,
 ): string => Effect.runSync(toCanonicalCborHex(instance));
 
@@ -369,16 +386,16 @@ export const fromCborHex = Effect.fn(function* (cborBytes: string) {
  *
  * // Using try/catch for error handling
  * try {
- *   const result = ResignCommitteeColdCert.unsafeFromCborHex( parameters );
+ *   const result = ResignCommitteeColdCert.fromCborHexUnsafe( parameters );
  *   console.log(result);
  * } catch (error) {
- *   console.error(`ResignCommitteeColdCert.unsafeFromCborHex failed: ${error.message}`);
+ *   console.error(`ResignCommitteeColdCert.fromCborHexUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Constructors
+ * @category ConstructorsUnsafe
  */
-export const unsafeFromCborHex = (cborBytes: string) =>
+export const fromCborHexUnsafe = (cborBytes: string) =>
   Effect.runSync(fromCborHex(cborBytes));
 
 /**
@@ -423,16 +440,16 @@ export const toJson = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = ResignCommitteeColdCert.unsafeToJson(instance);
+ *   const result = ResignCommitteeColdCert.toJsonUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`ResignCommitteeColdCert.unsafeToJson failed: ${error.message}`);
+ *   console.error(`ResignCommitteeColdCert.toJsonUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeToJson = (instance: CML.ResignCommitteeColdCert): string =>
+export const toJsonUnsafe = (instance: CML.ResignCommitteeColdCert): string =>
   Effect.runSync(toJson(instance));
 
 /**
@@ -477,16 +494,16 @@ export const toJsValue = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = ResignCommitteeColdCert.unsafeToJsValue(instance);
+ *   const result = ResignCommitteeColdCert.toJsValueUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`ResignCommitteeColdCert.unsafeToJsValue failed: ${error.message}`);
+ *   console.error(`ResignCommitteeColdCert.toJsValueUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeToJsValue = (instance: CML.ResignCommitteeColdCert): any =>
+export const toJsValueUnsafe = (instance: CML.ResignCommitteeColdCert): any =>
   Effect.runSync(toJsValue(instance));
 
 /**
@@ -526,16 +543,16 @@ export const fromJson = Effect.fn(function* (json: string) {
  *
  * // Using try/catch for error handling
  * try {
- *   const result = ResignCommitteeColdCert.unsafeFromJson( parameters );
+ *   const result = ResignCommitteeColdCert.fromJsonUnsafe( parameters );
  *   console.log(result);
  * } catch (error) {
- *   console.error(`ResignCommitteeColdCert.unsafeFromJson failed: ${error.message}`);
+ *   console.error(`ResignCommitteeColdCert.fromJsonUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Constructors
+ * @category ConstructorsUnsafe
  */
-export const unsafeFromJson = (json: string) => Effect.runSync(fromJson(json));
+export const fromJsonUnsafe = (json: string) => Effect.runSync(fromJson(json));
 
 /**
  * Method committeeColdCredential of ResignCommitteeColdCert
@@ -579,16 +596,16 @@ export const committeeColdCredential = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = ResignCommitteeColdCert.unsafeCommitteeColdCredential(instance);
+ *   const result = ResignCommitteeColdCert.committeeColdCredentialUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`ResignCommitteeColdCert.unsafeCommitteeColdCredential failed: ${error.message}`);
+ *   console.error(`ResignCommitteeColdCert.committeeColdCredentialUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeCommitteeColdCredential = (
+export const committeeColdCredentialUnsafe = (
   instance: CML.ResignCommitteeColdCert,
 ): CML.Credential => Effect.runSync(committeeColdCredential(instance));
 
@@ -634,16 +651,16 @@ export const anchor = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = ResignCommitteeColdCert.unsafeAnchor(instance);
+ *   const result = ResignCommitteeColdCert.anchorUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`ResignCommitteeColdCert.unsafeAnchor failed: ${error.message}`);
+ *   console.error(`ResignCommitteeColdCert.anchorUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeAnchor = (
+export const anchorUnsafe = (
   instance: CML.ResignCommitteeColdCert,
 ): CML.Anchor | undefined => Effect.runSync(anchor(instance));
 
@@ -687,16 +704,16 @@ export const _new = Effect.fn(function* (
  *
  * // Using try/catch for error handling
  * try {
- *   const result = ResignCommitteeColdCert.unsafe_new( parameters );
+ *   const result = ResignCommitteeColdCert._newUnsafe( parameters );
  *   console.log(result);
  * } catch (error) {
- *   console.error(`ResignCommitteeColdCert.unsafe_new failed: ${error.message}`);
+ *   console.error(`ResignCommitteeColdCert._newUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Constructors
+ * @category ConstructorsUnsafe
  */
-export const unsafe_new = (
+export const _newUnsafe = (
   committeeColdCredential: CML.Credential,
   anchor: CML.Anchor,
 ) => Effect.runSync(_new(committeeColdCredential, anchor));

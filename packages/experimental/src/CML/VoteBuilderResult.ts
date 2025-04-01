@@ -1,8 +1,25 @@
+/**
+ * @since 2.0.0
+ */
 import { Data, Effect } from "effect";
 import * as CML from "@anastasia-labs/cardano-multiplatform-lib-nodejs";
 
+/**
+ * Type alias for the CML VoteBuilderResult class
+ *
+ * @since 2.0.0
+ * @category Types
+ */
 export type VoteBuilderResult = CML.VoteBuilderResult;
 
+/**
+ * Error class for VoteBuilderResult operations
+ *
+ * This error is thrown when operations on VoteBuilderResult instances fail.
+ *
+ * @since 2.0.0
+ * @category Errors
+ */
 export class VoteBuilderResultError extends Data.TaggedError(
   "VoteBuilderResultError",
 )<{
@@ -51,14 +68,14 @@ export const free = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = VoteBuilderResult.unsafeFree(instance);
+ *   const result = VoteBuilderResult.freeUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`VoteBuilderResult.unsafeFree failed: ${error.message}`);
+ *   console.error(`VoteBuilderResult.freeUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeFree = (instance: CML.VoteBuilderResult): void =>
+export const freeUnsafe = (instance: CML.VoteBuilderResult): void =>
   Effect.runSync(free(instance));

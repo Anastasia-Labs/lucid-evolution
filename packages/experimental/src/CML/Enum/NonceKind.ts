@@ -1,8 +1,40 @@
+/**
+ * @since 2.0.0
+ */
 import * as CML from "@anastasia-labs/cardano-multiplatform-lib-nodejs";
 
+/**
+ * Type alias for the CML NonceKind enum
+ *
+ * @since 2.0.0
+ * @category Types
+ */
 export type NonceKind = CML.NonceKind;
 
+/**
+ * Identity variant of the NonceKind enum
+ *
+ * @example
+ * import { NonceKind } from "@lucid-evolution/experimental";
+ *
+ * const kind = NonceKind.Identity;
+ *
+ * @since 2.0.0
+ * @category Variants
+ */
 export const Identity = CML.NonceKind.Identity;
+
+/**
+ * Hash variant of the NonceKind enum
+ *
+ * @example
+ * import { NonceKind } from "@lucid-evolution/experimental";
+ *
+ * const kind = NonceKind.Hash;
+ *
+ * @since 2.0.0
+ * @category Variants
+ */
 export const Hash = CML.NonceKind.Hash;
 
 /**

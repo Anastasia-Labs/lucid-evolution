@@ -1,8 +1,25 @@
+/**
+ * @since 2.0.0
+ */
 import { Data, Effect } from "effect";
 import * as CML from "@anastasia-labs/cardano-multiplatform-lib-nodejs";
 
+/**
+ * Type alias for the CML MapRewardAccountToCoin class
+ *
+ * @since 2.0.0
+ * @category Types
+ */
 export type MapRewardAccountToCoin = CML.MapRewardAccountToCoin;
 
+/**
+ * Error class for MapRewardAccountToCoin operations
+ *
+ * This error is thrown when operations on MapRewardAccountToCoin instances fail.
+ *
+ * @since 2.0.0
+ * @category Errors
+ */
 export class MapRewardAccountToCoinError extends Data.TaggedError(
   "MapRewardAccountToCoinError",
 )<{
@@ -51,16 +68,16 @@ export const free = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = MapRewardAccountToCoin.unsafeFree(instance);
+ *   const result = MapRewardAccountToCoin.freeUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`MapRewardAccountToCoin.unsafeFree failed: ${error.message}`);
+ *   console.error(`MapRewardAccountToCoin.freeUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeFree = (instance: CML.MapRewardAccountToCoin): void =>
+export const freeUnsafe = (instance: CML.MapRewardAccountToCoin): void =>
   Effect.runSync(free(instance));
 
 /**
@@ -100,16 +117,16 @@ export const _new = Effect.fn(function* () {
  *
  * // Using try/catch for error handling
  * try {
- *   const result = MapRewardAccountToCoin.unsafe_new();
+ *   const result = MapRewardAccountToCoin._newUnsafe();
  *   console.log(result);
  * } catch (error) {
- *   console.error(`MapRewardAccountToCoin.unsafe_new failed: ${error.message}`);
+ *   console.error(`MapRewardAccountToCoin._newUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Constructors
+ * @category ConstructorsUnsafe
  */
-export const unsafe_new = () => Effect.runSync(_new());
+export const _newUnsafe = () => Effect.runSync(_new());
 
 /**
  * Method len of MapRewardAccountToCoin
@@ -153,16 +170,16 @@ export const len = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = MapRewardAccountToCoin.unsafeLen(instance);
+ *   const result = MapRewardAccountToCoin.lenUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`MapRewardAccountToCoin.unsafeLen failed: ${error.message}`);
+ *   console.error(`MapRewardAccountToCoin.lenUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeLen = (instance: CML.MapRewardAccountToCoin): number =>
+export const lenUnsafe = (instance: CML.MapRewardAccountToCoin): number =>
   Effect.runSync(len(instance));
 
 /**
@@ -209,16 +226,16 @@ export const insert = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = MapRewardAccountToCoin.unsafeInsert(instance,  parameters );
+ *   const result = MapRewardAccountToCoin.insertUnsafe(instance,  parameters );
  *   console.log(result);
  * } catch (error) {
- *   console.error(`MapRewardAccountToCoin.unsafeInsert failed: ${error.message}`);
+ *   console.error(`MapRewardAccountToCoin.insertUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeInsert = (
+export const insertUnsafe = (
   instance: CML.MapRewardAccountToCoin,
   key: CML.RewardAddress,
   value: bigint,
@@ -267,16 +284,16 @@ export const get = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = MapRewardAccountToCoin.unsafeGet(instance,  parameters );
+ *   const result = MapRewardAccountToCoin.getUnsafe(instance,  parameters );
  *   console.log(result);
  * } catch (error) {
- *   console.error(`MapRewardAccountToCoin.unsafeGet failed: ${error.message}`);
+ *   console.error(`MapRewardAccountToCoin.getUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeGet = (
+export const getUnsafe = (
   instance: CML.MapRewardAccountToCoin,
   key: CML.RewardAddress,
 ): bigint | undefined => Effect.runSync(get(instance, key));
@@ -323,15 +340,15 @@ export const keys = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = MapRewardAccountToCoin.unsafeKeys(instance);
+ *   const result = MapRewardAccountToCoin.keysUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`MapRewardAccountToCoin.unsafeKeys failed: ${error.message}`);
+ *   console.error(`MapRewardAccountToCoin.keysUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeKeys = (
+export const keysUnsafe = (
   instance: CML.MapRewardAccountToCoin,
 ): CML.RewardAccountList => Effect.runSync(keys(instance));

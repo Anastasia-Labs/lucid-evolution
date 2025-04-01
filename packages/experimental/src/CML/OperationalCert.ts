@@ -1,8 +1,25 @@
+/**
+ * @since 2.0.0
+ */
 import { Data, Effect } from "effect";
 import * as CML from "@anastasia-labs/cardano-multiplatform-lib-nodejs";
 
+/**
+ * Type alias for the CML OperationalCert class
+ *
+ * @since 2.0.0
+ * @category Types
+ */
 export type OperationalCert = CML.OperationalCert;
 
+/**
+ * Error class for OperationalCert operations
+ *
+ * This error is thrown when operations on OperationalCert instances fail.
+ *
+ * @since 2.0.0
+ * @category Errors
+ */
 export class OperationalCertError extends Data.TaggedError(
   "OperationalCertError",
 )<{
@@ -49,16 +66,16 @@ export const free = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = OperationalCert.unsafeFree(instance);
+ *   const result = OperationalCert.freeUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`OperationalCert.unsafeFree failed: ${error.message}`);
+ *   console.error(`OperationalCert.freeUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeFree = (instance: CML.OperationalCert): void =>
+export const freeUnsafe = (instance: CML.OperationalCert): void =>
   Effect.runSync(free(instance));
 
 /**
@@ -103,16 +120,16 @@ export const toCborBytes = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = OperationalCert.unsafeToCborBytes(instance);
+ *   const result = OperationalCert.toCborBytesUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`OperationalCert.unsafeToCborBytes failed: ${error.message}`);
+ *   console.error(`OperationalCert.toCborBytesUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeToCborBytes = (instance: CML.OperationalCert): Uint8Array =>
+export const toCborBytesUnsafe = (instance: CML.OperationalCert): Uint8Array =>
   Effect.runSync(toCborBytes(instance));
 
 /**
@@ -157,16 +174,16 @@ export const toCanonicalCborBytes = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = OperationalCert.unsafeToCanonicalCborBytes(instance);
+ *   const result = OperationalCert.toCanonicalCborBytesUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`OperationalCert.unsafeToCanonicalCborBytes failed: ${error.message}`);
+ *   console.error(`OperationalCert.toCanonicalCborBytesUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeToCanonicalCborBytes = (
+export const toCanonicalCborBytesUnsafe = (
   instance: CML.OperationalCert,
 ): Uint8Array => Effect.runSync(toCanonicalCborBytes(instance));
 
@@ -207,16 +224,16 @@ export const fromCborBytes = Effect.fn(function* (cborBytes: Uint8Array) {
  *
  * // Using try/catch for error handling
  * try {
- *   const result = OperationalCert.unsafeFromCborBytes( parameters );
+ *   const result = OperationalCert.fromCborBytesUnsafe( parameters );
  *   console.log(result);
  * } catch (error) {
- *   console.error(`OperationalCert.unsafeFromCborBytes failed: ${error.message}`);
+ *   console.error(`OperationalCert.fromCborBytesUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Constructors
+ * @category ConstructorsUnsafe
  */
-export const unsafeFromCborBytes = (cborBytes: Uint8Array) =>
+export const fromCborBytesUnsafe = (cborBytes: Uint8Array) =>
   Effect.runSync(fromCborBytes(cborBytes));
 
 /**
@@ -261,16 +278,16 @@ export const toCborHex = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = OperationalCert.unsafeToCborHex(instance);
+ *   const result = OperationalCert.toCborHexUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`OperationalCert.unsafeToCborHex failed: ${error.message}`);
+ *   console.error(`OperationalCert.toCborHexUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeToCborHex = (instance: CML.OperationalCert): string =>
+export const toCborHexUnsafe = (instance: CML.OperationalCert): string =>
   Effect.runSync(toCborHex(instance));
 
 /**
@@ -315,16 +332,16 @@ export const toCanonicalCborHex = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = OperationalCert.unsafeToCanonicalCborHex(instance);
+ *   const result = OperationalCert.toCanonicalCborHexUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`OperationalCert.unsafeToCanonicalCborHex failed: ${error.message}`);
+ *   console.error(`OperationalCert.toCanonicalCborHexUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeToCanonicalCborHex = (
+export const toCanonicalCborHexUnsafe = (
   instance: CML.OperationalCert,
 ): string => Effect.runSync(toCanonicalCborHex(instance));
 
@@ -365,16 +382,16 @@ export const fromCborHex = Effect.fn(function* (cborBytes: string) {
  *
  * // Using try/catch for error handling
  * try {
- *   const result = OperationalCert.unsafeFromCborHex( parameters );
+ *   const result = OperationalCert.fromCborHexUnsafe( parameters );
  *   console.log(result);
  * } catch (error) {
- *   console.error(`OperationalCert.unsafeFromCborHex failed: ${error.message}`);
+ *   console.error(`OperationalCert.fromCborHexUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Constructors
+ * @category ConstructorsUnsafe
  */
-export const unsafeFromCborHex = (cborBytes: string) =>
+export const fromCborHexUnsafe = (cborBytes: string) =>
   Effect.runSync(fromCborHex(cborBytes));
 
 /**
@@ -419,16 +436,16 @@ export const toJson = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = OperationalCert.unsafeToJson(instance);
+ *   const result = OperationalCert.toJsonUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`OperationalCert.unsafeToJson failed: ${error.message}`);
+ *   console.error(`OperationalCert.toJsonUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeToJson = (instance: CML.OperationalCert): string =>
+export const toJsonUnsafe = (instance: CML.OperationalCert): string =>
   Effect.runSync(toJson(instance));
 
 /**
@@ -471,16 +488,16 @@ export const toJsValue = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = OperationalCert.unsafeToJsValue(instance);
+ *   const result = OperationalCert.toJsValueUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`OperationalCert.unsafeToJsValue failed: ${error.message}`);
+ *   console.error(`OperationalCert.toJsValueUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeToJsValue = (instance: CML.OperationalCert): any =>
+export const toJsValueUnsafe = (instance: CML.OperationalCert): any =>
   Effect.runSync(toJsValue(instance));
 
 /**
@@ -520,16 +537,16 @@ export const fromJson = Effect.fn(function* (json: string) {
  *
  * // Using try/catch for error handling
  * try {
- *   const result = OperationalCert.unsafeFromJson( parameters );
+ *   const result = OperationalCert.fromJsonUnsafe( parameters );
  *   console.log(result);
  * } catch (error) {
- *   console.error(`OperationalCert.unsafeFromJson failed: ${error.message}`);
+ *   console.error(`OperationalCert.fromJsonUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Constructors
+ * @category ConstructorsUnsafe
  */
-export const unsafeFromJson = (json: string) => Effect.runSync(fromJson(json));
+export const fromJsonUnsafe = (json: string) => Effect.runSync(fromJson(json));
 
 /**
  * Method hotVkey of OperationalCert
@@ -573,16 +590,16 @@ export const hotVkey = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = OperationalCert.unsafeHotVkey(instance);
+ *   const result = OperationalCert.hotVkeyUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`OperationalCert.unsafeHotVkey failed: ${error.message}`);
+ *   console.error(`OperationalCert.hotVkeyUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeHotVkey = (instance: CML.OperationalCert): CML.KESVkey =>
+export const hotVkeyUnsafe = (instance: CML.OperationalCert): CML.KESVkey =>
   Effect.runSync(hotVkey(instance));
 
 /**
@@ -627,16 +644,16 @@ export const sequenceNumber = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = OperationalCert.unsafeSequenceNumber(instance);
+ *   const result = OperationalCert.sequenceNumberUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`OperationalCert.unsafeSequenceNumber failed: ${error.message}`);
+ *   console.error(`OperationalCert.sequenceNumberUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeSequenceNumber = (instance: CML.OperationalCert): bigint =>
+export const sequenceNumberUnsafe = (instance: CML.OperationalCert): bigint =>
   Effect.runSync(sequenceNumber(instance));
 
 /**
@@ -681,16 +698,16 @@ export const kesPeriod = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = OperationalCert.unsafeKesPeriod(instance);
+ *   const result = OperationalCert.kesPeriodUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`OperationalCert.unsafeKesPeriod failed: ${error.message}`);
+ *   console.error(`OperationalCert.kesPeriodUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeKesPeriod = (instance: CML.OperationalCert): bigint =>
+export const kesPeriodUnsafe = (instance: CML.OperationalCert): bigint =>
   Effect.runSync(kesPeriod(instance));
 
 /**
@@ -735,16 +752,16 @@ export const sigma = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = OperationalCert.unsafeSigma(instance);
+ *   const result = OperationalCert.sigmaUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`OperationalCert.unsafeSigma failed: ${error.message}`);
+ *   console.error(`OperationalCert.sigmaUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeSigma = (
+export const sigmaUnsafe = (
   instance: CML.OperationalCert,
 ): CML.Ed25519Signature => Effect.runSync(sigma(instance));
 
@@ -791,16 +808,16 @@ export const _new = Effect.fn(function* (
  *
  * // Using try/catch for error handling
  * try {
- *   const result = OperationalCert.unsafe_new( parameters );
+ *   const result = OperationalCert._newUnsafe( parameters );
  *   console.log(result);
  * } catch (error) {
- *   console.error(`OperationalCert.unsafe_new failed: ${error.message}`);
+ *   console.error(`OperationalCert._newUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Constructors
+ * @category ConstructorsUnsafe
  */
-export const unsafe_new = (
+export const _newUnsafe = (
   hotVkey: CML.KESVkey,
   sequenceNumber: bigint,
   kesPeriod: bigint,

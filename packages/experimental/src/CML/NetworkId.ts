@@ -1,8 +1,25 @@
+/**
+ * @since 2.0.0
+ */
 import { Data, Effect } from "effect";
 import * as CML from "@anastasia-labs/cardano-multiplatform-lib-nodejs";
 
+/**
+ * Type alias for the CML NetworkId class
+ *
+ * @since 2.0.0
+ * @category Types
+ */
 export type NetworkId = CML.NetworkId;
 
+/**
+ * Error class for NetworkId operations
+ *
+ * This error is thrown when operations on NetworkId instances fail.
+ *
+ * @since 2.0.0
+ * @category Errors
+ */
 export class NetworkIdError extends Data.TaggedError("NetworkIdError")<{
   message?: string;
 }> {}
@@ -47,16 +64,16 @@ export const free = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = NetworkId.unsafeFree(instance);
+ *   const result = NetworkId.freeUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`NetworkId.unsafeFree failed: ${error.message}`);
+ *   console.error(`NetworkId.freeUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeFree = (instance: CML.NetworkId): void =>
+export const freeUnsafe = (instance: CML.NetworkId): void =>
   Effect.runSync(free(instance));
 
 /**
@@ -99,16 +116,16 @@ export const toCborBytes = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = NetworkId.unsafeToCborBytes(instance);
+ *   const result = NetworkId.toCborBytesUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`NetworkId.unsafeToCborBytes failed: ${error.message}`);
+ *   console.error(`NetworkId.toCborBytesUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeToCborBytes = (instance: CML.NetworkId): Uint8Array =>
+export const toCborBytesUnsafe = (instance: CML.NetworkId): Uint8Array =>
   Effect.runSync(toCborBytes(instance));
 
 /**
@@ -151,16 +168,16 @@ export const toCanonicalCborBytes = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = NetworkId.unsafeToCanonicalCborBytes(instance);
+ *   const result = NetworkId.toCanonicalCborBytesUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`NetworkId.unsafeToCanonicalCborBytes failed: ${error.message}`);
+ *   console.error(`NetworkId.toCanonicalCborBytesUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeToCanonicalCborBytes = (
+export const toCanonicalCborBytesUnsafe = (
   instance: CML.NetworkId,
 ): Uint8Array => Effect.runSync(toCanonicalCborBytes(instance));
 
@@ -201,16 +218,16 @@ export const fromCborBytes = Effect.fn(function* (cborBytes: Uint8Array) {
  *
  * // Using try/catch for error handling
  * try {
- *   const result = NetworkId.unsafeFromCborBytes( parameters );
+ *   const result = NetworkId.fromCborBytesUnsafe( parameters );
  *   console.log(result);
  * } catch (error) {
- *   console.error(`NetworkId.unsafeFromCborBytes failed: ${error.message}`);
+ *   console.error(`NetworkId.fromCborBytesUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Constructors
+ * @category ConstructorsUnsafe
  */
-export const unsafeFromCborBytes = (cborBytes: Uint8Array) =>
+export const fromCborBytesUnsafe = (cborBytes: Uint8Array) =>
   Effect.runSync(fromCborBytes(cborBytes));
 
 /**
@@ -253,16 +270,16 @@ export const toCborHex = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = NetworkId.unsafeToCborHex(instance);
+ *   const result = NetworkId.toCborHexUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`NetworkId.unsafeToCborHex failed: ${error.message}`);
+ *   console.error(`NetworkId.toCborHexUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeToCborHex = (instance: CML.NetworkId): string =>
+export const toCborHexUnsafe = (instance: CML.NetworkId): string =>
   Effect.runSync(toCborHex(instance));
 
 /**
@@ -305,16 +322,16 @@ export const toCanonicalCborHex = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = NetworkId.unsafeToCanonicalCborHex(instance);
+ *   const result = NetworkId.toCanonicalCborHexUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`NetworkId.unsafeToCanonicalCborHex failed: ${error.message}`);
+ *   console.error(`NetworkId.toCanonicalCborHexUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeToCanonicalCborHex = (instance: CML.NetworkId): string =>
+export const toCanonicalCborHexUnsafe = (instance: CML.NetworkId): string =>
   Effect.runSync(toCanonicalCborHex(instance));
 
 /**
@@ -354,16 +371,16 @@ export const fromCborHex = Effect.fn(function* (cborBytes: string) {
  *
  * // Using try/catch for error handling
  * try {
- *   const result = NetworkId.unsafeFromCborHex( parameters );
+ *   const result = NetworkId.fromCborHexUnsafe( parameters );
  *   console.log(result);
  * } catch (error) {
- *   console.error(`NetworkId.unsafeFromCborHex failed: ${error.message}`);
+ *   console.error(`NetworkId.fromCborHexUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Constructors
+ * @category ConstructorsUnsafe
  */
-export const unsafeFromCborHex = (cborBytes: string) =>
+export const fromCborHexUnsafe = (cborBytes: string) =>
   Effect.runSync(fromCborHex(cborBytes));
 
 /**
@@ -406,16 +423,16 @@ export const toJson = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = NetworkId.unsafeToJson(instance);
+ *   const result = NetworkId.toJsonUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`NetworkId.unsafeToJson failed: ${error.message}`);
+ *   console.error(`NetworkId.toJsonUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeToJson = (instance: CML.NetworkId): string =>
+export const toJsonUnsafe = (instance: CML.NetworkId): string =>
   Effect.runSync(toJson(instance));
 
 /**
@@ -458,16 +475,16 @@ export const toJsValue = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = NetworkId.unsafeToJsValue(instance);
+ *   const result = NetworkId.toJsValueUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`NetworkId.unsafeToJsValue failed: ${error.message}`);
+ *   console.error(`NetworkId.toJsValueUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeToJsValue = (instance: CML.NetworkId): any =>
+export const toJsValueUnsafe = (instance: CML.NetworkId): any =>
   Effect.runSync(toJsValue(instance));
 
 /**
@@ -507,16 +524,16 @@ export const fromJson = Effect.fn(function* (json: string) {
  *
  * // Using try/catch for error handling
  * try {
- *   const result = NetworkId.unsafeFromJson( parameters );
+ *   const result = NetworkId.fromJsonUnsafe( parameters );
  *   console.log(result);
  * } catch (error) {
- *   console.error(`NetworkId.unsafeFromJson failed: ${error.message}`);
+ *   console.error(`NetworkId.fromJsonUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Constructors
+ * @category ConstructorsUnsafe
  */
-export const unsafeFromJson = (json: string) => Effect.runSync(fromJson(json));
+export const fromJsonUnsafe = (json: string) => Effect.runSync(fromJson(json));
 
 /**
  * Static method _new of NetworkId
@@ -555,16 +572,16 @@ export const _new = Effect.fn(function* (network: bigint) {
  *
  * // Using try/catch for error handling
  * try {
- *   const result = NetworkId.unsafe_new( parameters );
+ *   const result = NetworkId._newUnsafe( parameters );
  *   console.log(result);
  * } catch (error) {
- *   console.error(`NetworkId.unsafe_new failed: ${error.message}`);
+ *   console.error(`NetworkId._newUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Constructors
+ * @category ConstructorsUnsafe
  */
-export const unsafe_new = (network: bigint) => Effect.runSync(_new(network));
+export const _newUnsafe = (network: bigint) => Effect.runSync(_new(network));
 
 /**
  * Static method mainnet of NetworkId
@@ -603,16 +620,16 @@ export const mainnet = Effect.fn(function* () {
  *
  * // Using try/catch for error handling
  * try {
- *   const result = NetworkId.unsafeMainnet();
+ *   const result = NetworkId.mainnetUnsafe();
  *   console.log(result);
  * } catch (error) {
- *   console.error(`NetworkId.unsafeMainnet failed: ${error.message}`);
+ *   console.error(`NetworkId.mainnetUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Constructors
+ * @category ConstructorsUnsafe
  */
-export const unsafeMainnet = () => Effect.runSync(mainnet());
+export const mainnetUnsafe = () => Effect.runSync(mainnet());
 
 /**
  * Static method testnet of NetworkId
@@ -651,16 +668,16 @@ export const testnet = Effect.fn(function* () {
  *
  * // Using try/catch for error handling
  * try {
- *   const result = NetworkId.unsafeTestnet();
+ *   const result = NetworkId.testnetUnsafe();
  *   console.log(result);
  * } catch (error) {
- *   console.error(`NetworkId.unsafeTestnet failed: ${error.message}`);
+ *   console.error(`NetworkId.testnetUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Constructors
+ * @category ConstructorsUnsafe
  */
-export const unsafeTestnet = () => Effect.runSync(testnet());
+export const testnetUnsafe = () => Effect.runSync(testnet());
 
 /**
  * Method network of NetworkId
@@ -702,14 +719,14 @@ export const network = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = NetworkId.unsafeNetwork(instance);
+ *   const result = NetworkId.networkUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`NetworkId.unsafeNetwork failed: ${error.message}`);
+ *   console.error(`NetworkId.networkUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeNetwork = (instance: CML.NetworkId): bigint =>
+export const networkUnsafe = (instance: CML.NetworkId): bigint =>
   Effect.runSync(network(instance));

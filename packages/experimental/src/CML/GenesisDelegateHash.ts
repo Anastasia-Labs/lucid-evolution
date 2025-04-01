@@ -1,8 +1,25 @@
+/**
+ * @since 2.0.0
+ */
 import { Data, Effect } from "effect";
 import * as CML from "@anastasia-labs/cardano-multiplatform-lib-nodejs";
 
+/**
+ * Type alias for the CML GenesisDelegateHash class
+ *
+ * @since 2.0.0
+ * @category Types
+ */
 export type GenesisDelegateHash = CML.GenesisDelegateHash;
 
+/**
+ * Error class for GenesisDelegateHash operations
+ *
+ * This error is thrown when operations on GenesisDelegateHash instances fail.
+ *
+ * @since 2.0.0
+ * @category Errors
+ */
 export class GenesisDelegateHashError extends Data.TaggedError(
   "GenesisDelegateHashError",
 )<{
@@ -51,16 +68,16 @@ export const free = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = GenesisDelegateHash.unsafeFree(instance);
+ *   const result = GenesisDelegateHash.freeUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`GenesisDelegateHash.unsafeFree failed: ${error.message}`);
+ *   console.error(`GenesisDelegateHash.freeUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeFree = (instance: CML.GenesisDelegateHash): void =>
+export const freeUnsafe = (instance: CML.GenesisDelegateHash): void =>
   Effect.runSync(free(instance));
 
 /**
@@ -106,16 +123,16 @@ export const toBech32 = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = GenesisDelegateHash.unsafeToBech32(instance,  parameters );
+ *   const result = GenesisDelegateHash.toBech32Unsafe(instance,  parameters );
  *   console.log(result);
  * } catch (error) {
- *   console.error(`GenesisDelegateHash.unsafeToBech32 failed: ${error.message}`);
+ *   console.error(`GenesisDelegateHash.toBech32Unsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeToBech32 = (
+export const toBech32Unsafe = (
   instance: CML.GenesisDelegateHash,
   prefix: string,
 ): string => Effect.runSync(toBech32(instance, prefix));
@@ -157,16 +174,16 @@ export const fromBech32 = Effect.fn(function* (bech32Str: string) {
  *
  * // Using try/catch for error handling
  * try {
- *   const result = GenesisDelegateHash.unsafeFromBech32( parameters );
+ *   const result = GenesisDelegateHash.fromBech32Unsafe( parameters );
  *   console.log(result);
  * } catch (error) {
- *   console.error(`GenesisDelegateHash.unsafeFromBech32 failed: ${error.message}`);
+ *   console.error(`GenesisDelegateHash.fromBech32Unsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Constructors
+ * @category ConstructorsUnsafe
  */
-export const unsafeFromBech32 = (bech32Str: string) =>
+export const fromBech32Unsafe = (bech32Str: string) =>
   Effect.runSync(fromBech32(bech32Str));
 
 /**
@@ -211,16 +228,16 @@ export const toRawBytes = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = GenesisDelegateHash.unsafeToRawBytes(instance);
+ *   const result = GenesisDelegateHash.toRawBytesUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`GenesisDelegateHash.unsafeToRawBytes failed: ${error.message}`);
+ *   console.error(`GenesisDelegateHash.toRawBytesUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeToRawBytes = (
+export const toRawBytesUnsafe = (
   instance: CML.GenesisDelegateHash,
 ): Uint8Array => Effect.runSync(toRawBytes(instance));
 
@@ -261,16 +278,16 @@ export const fromRawBytes = Effect.fn(function* (bytes: Uint8Array) {
  *
  * // Using try/catch for error handling
  * try {
- *   const result = GenesisDelegateHash.unsafeFromRawBytes( parameters );
+ *   const result = GenesisDelegateHash.fromRawBytesUnsafe( parameters );
  *   console.log(result);
  * } catch (error) {
- *   console.error(`GenesisDelegateHash.unsafeFromRawBytes failed: ${error.message}`);
+ *   console.error(`GenesisDelegateHash.fromRawBytesUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Constructors
+ * @category ConstructorsUnsafe
  */
-export const unsafeFromRawBytes = (bytes: Uint8Array) =>
+export const fromRawBytesUnsafe = (bytes: Uint8Array) =>
   Effect.runSync(fromRawBytes(bytes));
 
 /**
@@ -315,16 +332,16 @@ export const toHex = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = GenesisDelegateHash.unsafeToHex(instance);
+ *   const result = GenesisDelegateHash.toHexUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`GenesisDelegateHash.unsafeToHex failed: ${error.message}`);
+ *   console.error(`GenesisDelegateHash.toHexUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeToHex = (instance: CML.GenesisDelegateHash): string =>
+export const toHexUnsafe = (instance: CML.GenesisDelegateHash): string =>
   Effect.runSync(toHex(instance));
 
 /**
@@ -364,13 +381,13 @@ export const fromHex = Effect.fn(function* (input: string) {
  *
  * // Using try/catch for error handling
  * try {
- *   const result = GenesisDelegateHash.unsafeFromHex( parameters );
+ *   const result = GenesisDelegateHash.fromHexUnsafe( parameters );
  *   console.log(result);
  * } catch (error) {
- *   console.error(`GenesisDelegateHash.unsafeFromHex failed: ${error.message}`);
+ *   console.error(`GenesisDelegateHash.fromHexUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Constructors
+ * @category ConstructorsUnsafe
  */
-export const unsafeFromHex = (input: string) => Effect.runSync(fromHex(input));
+export const fromHexUnsafe = (input: string) => Effect.runSync(fromHex(input));

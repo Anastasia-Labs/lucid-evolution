@@ -1,6 +1,17 @@
+/**
+ * @since 2.0.0
+ */
 import { Data, Effect } from "effect";
 import * as CML from "@anastasia-labs/cardano-multiplatform-lib-nodejs";
 
+/**
+ * Error class for hash_plutus_data function
+ *
+ * This error is thrown when the hash_plutus_data function fails.
+ *
+ * @since 2.0.0
+ * @category Errors
+ */
 export class HashPlutusDataError extends Data.TaggedError(
   "HashPlutusDataError",
 )<{
@@ -37,18 +48,18 @@ export const hashPlutusData = Effect.fn(function* (plutusData: CML.PlutusData) {
  * Unsafely calls hash_plutus_data function without Effect wrapper
  *
  * @example
- * import { unsafeHashPlutusData } from "@lucid-evolution/experimental/CML/functions";
+ * import { hashPlutusDataUnsafe } from "@lucid-evolution/experimental/CML/functions";
  *
  * try {
- *   const result = unsafeHashPlutusData(PlutusData instance );
+ *   const result = hashPlutusDataUnsafe(PlutusData instance );
  *   console.log(result);
  * } catch (error) {
- *   console.error(`unsafeHashPlutusData failed: ${error.message}`);
+ *   console.error(`hashPlutusDataUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Functions
+ * @category FunctionsUnsafe
  */
-export const unsafeHashPlutusData = (
+export const hashPlutusDataUnsafe = (
   plutusData: CML.PlutusData,
 ): CML.DatumHash => Effect.runSync(hashPlutusData(plutusData));

@@ -1,8 +1,25 @@
+/**
+ * @since 2.0.0
+ */
 import { Data, Effect } from "effect";
 import * as CML from "@anastasia-labs/cardano-multiplatform-lib-nodejs";
 
+/**
+ * Type alias for the CML AlonzoFormatTxOut class
+ *
+ * @since 2.0.0
+ * @category Types
+ */
 export type AlonzoFormatTxOut = CML.AlonzoFormatTxOut;
 
+/**
+ * Error class for AlonzoFormatTxOut operations
+ *
+ * This error is thrown when operations on AlonzoFormatTxOut instances fail.
+ *
+ * @since 2.0.0
+ * @category Errors
+ */
 export class AlonzoFormatTxOutError extends Data.TaggedError(
   "AlonzoFormatTxOutError",
 )<{
@@ -51,16 +68,16 @@ export const free = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = AlonzoFormatTxOut.unsafeFree(instance);
+ *   const result = AlonzoFormatTxOut.freeUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`AlonzoFormatTxOut.unsafeFree failed: ${error.message}`);
+ *   console.error(`AlonzoFormatTxOut.freeUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeFree = (instance: CML.AlonzoFormatTxOut): void =>
+export const freeUnsafe = (instance: CML.AlonzoFormatTxOut): void =>
   Effect.runSync(free(instance));
 
 /**
@@ -105,16 +122,16 @@ export const toCborBytes = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = AlonzoFormatTxOut.unsafeToCborBytes(instance);
+ *   const result = AlonzoFormatTxOut.toCborBytesUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`AlonzoFormatTxOut.unsafeToCborBytes failed: ${error.message}`);
+ *   console.error(`AlonzoFormatTxOut.toCborBytesUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeToCborBytes = (
+export const toCborBytesUnsafe = (
   instance: CML.AlonzoFormatTxOut,
 ): Uint8Array => Effect.runSync(toCborBytes(instance));
 
@@ -160,16 +177,16 @@ export const toCanonicalCborBytes = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = AlonzoFormatTxOut.unsafeToCanonicalCborBytes(instance);
+ *   const result = AlonzoFormatTxOut.toCanonicalCborBytesUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`AlonzoFormatTxOut.unsafeToCanonicalCborBytes failed: ${error.message}`);
+ *   console.error(`AlonzoFormatTxOut.toCanonicalCborBytesUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeToCanonicalCborBytes = (
+export const toCanonicalCborBytesUnsafe = (
   instance: CML.AlonzoFormatTxOut,
 ): Uint8Array => Effect.runSync(toCanonicalCborBytes(instance));
 
@@ -210,16 +227,16 @@ export const fromCborBytes = Effect.fn(function* (cborBytes: Uint8Array) {
  *
  * // Using try/catch for error handling
  * try {
- *   const result = AlonzoFormatTxOut.unsafeFromCborBytes( parameters );
+ *   const result = AlonzoFormatTxOut.fromCborBytesUnsafe( parameters );
  *   console.log(result);
  * } catch (error) {
- *   console.error(`AlonzoFormatTxOut.unsafeFromCborBytes failed: ${error.message}`);
+ *   console.error(`AlonzoFormatTxOut.fromCborBytesUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Constructors
+ * @category ConstructorsUnsafe
  */
-export const unsafeFromCborBytes = (cborBytes: Uint8Array) =>
+export const fromCborBytesUnsafe = (cborBytes: Uint8Array) =>
   Effect.runSync(fromCborBytes(cborBytes));
 
 /**
@@ -264,16 +281,16 @@ export const toCborHex = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = AlonzoFormatTxOut.unsafeToCborHex(instance);
+ *   const result = AlonzoFormatTxOut.toCborHexUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`AlonzoFormatTxOut.unsafeToCborHex failed: ${error.message}`);
+ *   console.error(`AlonzoFormatTxOut.toCborHexUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeToCborHex = (instance: CML.AlonzoFormatTxOut): string =>
+export const toCborHexUnsafe = (instance: CML.AlonzoFormatTxOut): string =>
   Effect.runSync(toCborHex(instance));
 
 /**
@@ -318,16 +335,16 @@ export const toCanonicalCborHex = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = AlonzoFormatTxOut.unsafeToCanonicalCborHex(instance);
+ *   const result = AlonzoFormatTxOut.toCanonicalCborHexUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`AlonzoFormatTxOut.unsafeToCanonicalCborHex failed: ${error.message}`);
+ *   console.error(`AlonzoFormatTxOut.toCanonicalCborHexUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeToCanonicalCborHex = (
+export const toCanonicalCborHexUnsafe = (
   instance: CML.AlonzoFormatTxOut,
 ): string => Effect.runSync(toCanonicalCborHex(instance));
 
@@ -368,16 +385,16 @@ export const fromCborHex = Effect.fn(function* (cborBytes: string) {
  *
  * // Using try/catch for error handling
  * try {
- *   const result = AlonzoFormatTxOut.unsafeFromCborHex( parameters );
+ *   const result = AlonzoFormatTxOut.fromCborHexUnsafe( parameters );
  *   console.log(result);
  * } catch (error) {
- *   console.error(`AlonzoFormatTxOut.unsafeFromCborHex failed: ${error.message}`);
+ *   console.error(`AlonzoFormatTxOut.fromCborHexUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Constructors
+ * @category ConstructorsUnsafe
  */
-export const unsafeFromCborHex = (cborBytes: string) =>
+export const fromCborHexUnsafe = (cborBytes: string) =>
   Effect.runSync(fromCborHex(cborBytes));
 
 /**
@@ -422,16 +439,16 @@ export const toJson = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = AlonzoFormatTxOut.unsafeToJson(instance);
+ *   const result = AlonzoFormatTxOut.toJsonUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`AlonzoFormatTxOut.unsafeToJson failed: ${error.message}`);
+ *   console.error(`AlonzoFormatTxOut.toJsonUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeToJson = (instance: CML.AlonzoFormatTxOut): string =>
+export const toJsonUnsafe = (instance: CML.AlonzoFormatTxOut): string =>
   Effect.runSync(toJson(instance));
 
 /**
@@ -476,16 +493,16 @@ export const toJsValue = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = AlonzoFormatTxOut.unsafeToJsValue(instance);
+ *   const result = AlonzoFormatTxOut.toJsValueUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`AlonzoFormatTxOut.unsafeToJsValue failed: ${error.message}`);
+ *   console.error(`AlonzoFormatTxOut.toJsValueUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeToJsValue = (instance: CML.AlonzoFormatTxOut): any =>
+export const toJsValueUnsafe = (instance: CML.AlonzoFormatTxOut): any =>
   Effect.runSync(toJsValue(instance));
 
 /**
@@ -525,16 +542,16 @@ export const fromJson = Effect.fn(function* (json: string) {
  *
  * // Using try/catch for error handling
  * try {
- *   const result = AlonzoFormatTxOut.unsafeFromJson( parameters );
+ *   const result = AlonzoFormatTxOut.fromJsonUnsafe( parameters );
  *   console.log(result);
  * } catch (error) {
- *   console.error(`AlonzoFormatTxOut.unsafeFromJson failed: ${error.message}`);
+ *   console.error(`AlonzoFormatTxOut.fromJsonUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Constructors
+ * @category ConstructorsUnsafe
  */
-export const unsafeFromJson = (json: string) => Effect.runSync(fromJson(json));
+export const fromJsonUnsafe = (json: string) => Effect.runSync(fromJson(json));
 
 /**
  * Method address of AlonzoFormatTxOut
@@ -578,16 +595,16 @@ export const address = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = AlonzoFormatTxOut.unsafeAddress(instance);
+ *   const result = AlonzoFormatTxOut.addressUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`AlonzoFormatTxOut.unsafeAddress failed: ${error.message}`);
+ *   console.error(`AlonzoFormatTxOut.addressUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeAddress = (instance: CML.AlonzoFormatTxOut): CML.Address =>
+export const addressUnsafe = (instance: CML.AlonzoFormatTxOut): CML.Address =>
   Effect.runSync(address(instance));
 
 /**
@@ -632,16 +649,16 @@ export const amount = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = AlonzoFormatTxOut.unsafeAmount(instance);
+ *   const result = AlonzoFormatTxOut.amountUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`AlonzoFormatTxOut.unsafeAmount failed: ${error.message}`);
+ *   console.error(`AlonzoFormatTxOut.amountUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeAmount = (instance: CML.AlonzoFormatTxOut): CML.Value =>
+export const amountUnsafe = (instance: CML.AlonzoFormatTxOut): CML.Value =>
   Effect.runSync(amount(instance));
 
 /**
@@ -687,16 +704,16 @@ export const setDatumHash = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = AlonzoFormatTxOut.unsafeSetDatumHash(instance,  parameters );
+ *   const result = AlonzoFormatTxOut.setDatumHashUnsafe(instance,  parameters );
  *   console.log(result);
  * } catch (error) {
- *   console.error(`AlonzoFormatTxOut.unsafeSetDatumHash failed: ${error.message}`);
+ *   console.error(`AlonzoFormatTxOut.setDatumHashUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeSetDatumHash = (
+export const setDatumHashUnsafe = (
   instance: CML.AlonzoFormatTxOut,
   datumHash: CML.DatumHash,
 ): void => Effect.runSync(setDatumHash(instance, datumHash));
@@ -743,16 +760,16 @@ export const datumHash = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = AlonzoFormatTxOut.unsafeDatumHash(instance);
+ *   const result = AlonzoFormatTxOut.datumHashUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`AlonzoFormatTxOut.unsafeDatumHash failed: ${error.message}`);
+ *   console.error(`AlonzoFormatTxOut.datumHashUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeDatumHash = (
+export const datumHashUnsafe = (
   instance: CML.AlonzoFormatTxOut,
 ): CML.DatumHash | undefined => Effect.runSync(datumHash(instance));
 
@@ -796,14 +813,14 @@ export const _new = Effect.fn(function* (
  *
  * // Using try/catch for error handling
  * try {
- *   const result = AlonzoFormatTxOut.unsafe_new( parameters );
+ *   const result = AlonzoFormatTxOut._newUnsafe( parameters );
  *   console.log(result);
  * } catch (error) {
- *   console.error(`AlonzoFormatTxOut.unsafe_new failed: ${error.message}`);
+ *   console.error(`AlonzoFormatTxOut._newUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Constructors
+ * @category ConstructorsUnsafe
  */
-export const unsafe_new = (address: CML.Address, amount: CML.Value) =>
+export const _newUnsafe = (address: CML.Address, amount: CML.Value) =>
   Effect.runSync(_new(address, amount));

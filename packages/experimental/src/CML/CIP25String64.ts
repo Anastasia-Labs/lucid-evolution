@@ -1,8 +1,25 @@
+/**
+ * @since 2.0.0
+ */
 import { Data, Effect } from "effect";
 import * as CML from "@anastasia-labs/cardano-multiplatform-lib-nodejs";
 
+/**
+ * Type alias for the CML CIP25String64 class
+ *
+ * @since 2.0.0
+ * @category Types
+ */
 export type CIP25String64 = CML.CIP25String64;
 
+/**
+ * Error class for CIP25String64 operations
+ *
+ * This error is thrown when operations on CIP25String64 instances fail.
+ *
+ * @since 2.0.0
+ * @category Errors
+ */
 export class CIP25String64Error extends Data.TaggedError("CIP25String64Error")<{
   message?: string;
 }> {}
@@ -47,16 +64,16 @@ export const free = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = CIP25String64.unsafeFree(instance);
+ *   const result = CIP25String64.freeUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`CIP25String64.unsafeFree failed: ${error.message}`);
+ *   console.error(`CIP25String64.freeUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeFree = (instance: CML.CIP25String64): void =>
+export const freeUnsafe = (instance: CML.CIP25String64): void =>
   Effect.runSync(free(instance));
 
 /**
@@ -101,16 +118,16 @@ export const toCborBytes = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = CIP25String64.unsafeToCborBytes(instance);
+ *   const result = CIP25String64.toCborBytesUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`CIP25String64.unsafeToCborBytes failed: ${error.message}`);
+ *   console.error(`CIP25String64.toCborBytesUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeToCborBytes = (instance: CML.CIP25String64): Uint8Array =>
+export const toCborBytesUnsafe = (instance: CML.CIP25String64): Uint8Array =>
   Effect.runSync(toCborBytes(instance));
 
 /**
@@ -150,16 +167,16 @@ export const fromCborBytes = Effect.fn(function* (cborBytes: Uint8Array) {
  *
  * // Using try/catch for error handling
  * try {
- *   const result = CIP25String64.unsafeFromCborBytes( parameters );
+ *   const result = CIP25String64.fromCborBytesUnsafe( parameters );
  *   console.log(result);
  * } catch (error) {
- *   console.error(`CIP25String64.unsafeFromCborBytes failed: ${error.message}`);
+ *   console.error(`CIP25String64.fromCborBytesUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Constructors
+ * @category ConstructorsUnsafe
  */
-export const unsafeFromCborBytes = (cborBytes: Uint8Array) =>
+export const fromCborBytesUnsafe = (cborBytes: Uint8Array) =>
   Effect.runSync(fromCborBytes(cborBytes));
 
 /**
@@ -202,16 +219,16 @@ export const toCborHex = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = CIP25String64.unsafeToCborHex(instance);
+ *   const result = CIP25String64.toCborHexUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`CIP25String64.unsafeToCborHex failed: ${error.message}`);
+ *   console.error(`CIP25String64.toCborHexUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeToCborHex = (instance: CML.CIP25String64): string =>
+export const toCborHexUnsafe = (instance: CML.CIP25String64): string =>
   Effect.runSync(toCborHex(instance));
 
 /**
@@ -251,16 +268,16 @@ export const fromCborHex = Effect.fn(function* (cborBytes: string) {
  *
  * // Using try/catch for error handling
  * try {
- *   const result = CIP25String64.unsafeFromCborHex( parameters );
+ *   const result = CIP25String64.fromCborHexUnsafe( parameters );
  *   console.log(result);
  * } catch (error) {
- *   console.error(`CIP25String64.unsafeFromCborHex failed: ${error.message}`);
+ *   console.error(`CIP25String64.fromCborHexUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Constructors
+ * @category ConstructorsUnsafe
  */
-export const unsafeFromCborHex = (cborBytes: string) =>
+export const fromCborHexUnsafe = (cborBytes: string) =>
   Effect.runSync(fromCborHex(cborBytes));
 
 /**
@@ -303,16 +320,16 @@ export const toJson = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = CIP25String64.unsafeToJson(instance);
+ *   const result = CIP25String64.toJsonUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`CIP25String64.unsafeToJson failed: ${error.message}`);
+ *   console.error(`CIP25String64.toJsonUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeToJson = (instance: CML.CIP25String64): string =>
+export const toJsonUnsafe = (instance: CML.CIP25String64): string =>
   Effect.runSync(toJson(instance));
 
 /**
@@ -355,16 +372,16 @@ export const toJsValue = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = CIP25String64.unsafeToJsValue(instance);
+ *   const result = CIP25String64.toJsValueUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`CIP25String64.unsafeToJsValue failed: ${error.message}`);
+ *   console.error(`CIP25String64.toJsValueUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeToJsValue = (instance: CML.CIP25String64): any =>
+export const toJsValueUnsafe = (instance: CML.CIP25String64): any =>
   Effect.runSync(toJsValue(instance));
 
 /**
@@ -404,16 +421,16 @@ export const fromJson = Effect.fn(function* (json: string) {
  *
  * // Using try/catch for error handling
  * try {
- *   const result = CIP25String64.unsafeFromJson( parameters );
+ *   const result = CIP25String64.fromJsonUnsafe( parameters );
  *   console.log(result);
  * } catch (error) {
- *   console.error(`CIP25String64.unsafeFromJson failed: ${error.message}`);
+ *   console.error(`CIP25String64.fromJsonUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Constructors
+ * @category ConstructorsUnsafe
  */
-export const unsafeFromJson = (json: string) => Effect.runSync(fromJson(json));
+export const fromJsonUnsafe = (json: string) => Effect.runSync(fromJson(json));
 
 /**
  * Method get of CIP25String64
@@ -455,16 +472,16 @@ export const get = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = CIP25String64.unsafeGet(instance);
+ *   const result = CIP25String64.getUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`CIP25String64.unsafeGet failed: ${error.message}`);
+ *   console.error(`CIP25String64.getUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeGet = (instance: CML.CIP25String64): string =>
+export const getUnsafe = (instance: CML.CIP25String64): string =>
   Effect.runSync(get(instance));
 
 /**
@@ -504,16 +521,16 @@ export const _new = Effect.fn(function* (s: string) {
  *
  * // Using try/catch for error handling
  * try {
- *   const result = CIP25String64.unsafe_new( parameters );
+ *   const result = CIP25String64._newUnsafe( parameters );
  *   console.log(result);
  * } catch (error) {
- *   console.error(`CIP25String64.unsafe_new failed: ${error.message}`);
+ *   console.error(`CIP25String64._newUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Constructors
+ * @category ConstructorsUnsafe
  */
-export const unsafe_new = (s: string) => Effect.runSync(_new(s));
+export const _newUnsafe = (s: string) => Effect.runSync(_new(s));
 
 /**
  * Method toStr of CIP25String64
@@ -555,16 +572,16 @@ export const toStr = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = CIP25String64.unsafeToStr(instance);
+ *   const result = CIP25String64.toStrUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`CIP25String64.unsafeToStr failed: ${error.message}`);
+ *   console.error(`CIP25String64.toStrUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeToStr = (instance: CML.CIP25String64): string =>
+export const toStrUnsafe = (instance: CML.CIP25String64): string =>
   Effect.runSync(toStr(instance));
 
 /**
@@ -607,14 +624,14 @@ export const getStr = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = CIP25String64.unsafeGetStr(instance);
+ *   const result = CIP25String64.getStrUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`CIP25String64.unsafeGetStr failed: ${error.message}`);
+ *   console.error(`CIP25String64.getStrUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeGetStr = (instance: CML.CIP25String64): string =>
+export const getStrUnsafe = (instance: CML.CIP25String64): string =>
   Effect.runSync(getStr(instance));

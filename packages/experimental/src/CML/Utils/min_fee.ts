@@ -1,6 +1,17 @@
+/**
+ * @since 2.0.0
+ */
 import { Data, Effect } from "effect";
 import * as CML from "@anastasia-labs/cardano-multiplatform-lib-nodejs";
 
+/**
+ * Error class for min_fee function
+ *
+ * This error is thrown when the min_fee function fails.
+ *
+ * @since 2.0.0
+ * @category Errors
+ */
 export class MinFeeError extends Data.TaggedError("MinFeeError")<{
   message?: string;
 }> {}
@@ -40,19 +51,19 @@ export const minFee = Effect.fn(function* (
  * Unsafely calls min_fee function without Effect wrapper
  *
  * @example
- * import { unsafeMinFee } from "@lucid-evolution/experimental/CML/functions";
+ * import { minFeeUnsafe } from "@lucid-evolution/experimental/CML/functions";
  *
  * try {
- *   const result = unsafeMinFee(Transaction instance , LinearFee instance , ExUnitPrices instance ,  appropriate value );
+ *   const result = minFeeUnsafe(Transaction instance , LinearFee instance , ExUnitPrices instance ,  appropriate value );
  *   console.log(result);
  * } catch (error) {
- *   console.error(`unsafeMinFee failed: ${error.message}`);
+ *   console.error(`minFeeUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Functions
+ * @category FunctionsUnsafe
  */
-export const unsafeMinFee = (
+export const minFeeUnsafe = (
   tx: CML.Transaction,
   linearFee: CML.LinearFee,
   exUnitPrices: CML.ExUnitPrices,

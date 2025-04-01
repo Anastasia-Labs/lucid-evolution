@@ -1,8 +1,25 @@
+/**
+ * @since 2.0.0
+ */
 import { Data, Effect } from "effect";
 import * as CML from "@anastasia-labs/cardano-multiplatform-lib-nodejs";
 
+/**
+ * Type alias for the CML PrivateKey class
+ *
+ * @since 2.0.0
+ * @category Types
+ */
 export type PrivateKey = CML.PrivateKey;
 
+/**
+ * Error class for PrivateKey operations
+ *
+ * This error is thrown when operations on PrivateKey instances fail.
+ *
+ * @since 2.0.0
+ * @category Errors
+ */
 export class PrivateKeyError extends Data.TaggedError("PrivateKeyError")<{
   message?: string;
 }> {}
@@ -47,16 +64,16 @@ export const free = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = PrivateKey.unsafeFree(instance);
+ *   const result = PrivateKey.freeUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`PrivateKey.unsafeFree failed: ${error.message}`);
+ *   console.error(`PrivateKey.freeUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeFree = (instance: CML.PrivateKey): void =>
+export const freeUnsafe = (instance: CML.PrivateKey): void =>
   Effect.runSync(free(instance));
 
 /**
@@ -99,16 +116,16 @@ export const toPublic = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = PrivateKey.unsafeToPublic(instance);
+ *   const result = PrivateKey.toPublicUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`PrivateKey.unsafeToPublic failed: ${error.message}`);
+ *   console.error(`PrivateKey.toPublicUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeToPublic = (instance: CML.PrivateKey): CML.PublicKey =>
+export const toPublicUnsafe = (instance: CML.PrivateKey): CML.PublicKey =>
   Effect.runSync(toPublic(instance));
 
 /**
@@ -148,16 +165,16 @@ export const generateEd25519 = Effect.fn(function* () {
  *
  * // Using try/catch for error handling
  * try {
- *   const result = PrivateKey.unsafeGenerateEd25519();
+ *   const result = PrivateKey.generateEd25519Unsafe();
  *   console.log(result);
  * } catch (error) {
- *   console.error(`PrivateKey.unsafeGenerateEd25519 failed: ${error.message}`);
+ *   console.error(`PrivateKey.generateEd25519Unsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Constructors
+ * @category ConstructorsUnsafe
  */
-export const unsafeGenerateEd25519 = () => Effect.runSync(generateEd25519());
+export const generateEd25519Unsafe = () => Effect.runSync(generateEd25519());
 
 /**
  * Static method generateEd25519extended of PrivateKey
@@ -196,16 +213,16 @@ export const generateEd25519extended = Effect.fn(function* () {
  *
  * // Using try/catch for error handling
  * try {
- *   const result = PrivateKey.unsafeGenerateEd25519extended();
+ *   const result = PrivateKey.generateEd25519extendedUnsafe();
  *   console.log(result);
  * } catch (error) {
- *   console.error(`PrivateKey.unsafeGenerateEd25519extended failed: ${error.message}`);
+ *   console.error(`PrivateKey.generateEd25519extendedUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Constructors
+ * @category ConstructorsUnsafe
  */
-export const unsafeGenerateEd25519extended = () =>
+export const generateEd25519extendedUnsafe = () =>
   Effect.runSync(generateEd25519extended());
 
 /**
@@ -245,16 +262,16 @@ export const fromBech32 = Effect.fn(function* (bech32Str: string) {
  *
  * // Using try/catch for error handling
  * try {
- *   const result = PrivateKey.unsafeFromBech32( parameters );
+ *   const result = PrivateKey.fromBech32Unsafe( parameters );
  *   console.log(result);
  * } catch (error) {
- *   console.error(`PrivateKey.unsafeFromBech32 failed: ${error.message}`);
+ *   console.error(`PrivateKey.fromBech32Unsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Constructors
+ * @category ConstructorsUnsafe
  */
-export const unsafeFromBech32 = (bech32Str: string) =>
+export const fromBech32Unsafe = (bech32Str: string) =>
   Effect.runSync(fromBech32(bech32Str));
 
 /**
@@ -297,16 +314,16 @@ export const toBech32 = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = PrivateKey.unsafeToBech32(instance);
+ *   const result = PrivateKey.toBech32Unsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`PrivateKey.unsafeToBech32 failed: ${error.message}`);
+ *   console.error(`PrivateKey.toBech32Unsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeToBech32 = (instance: CML.PrivateKey): string =>
+export const toBech32Unsafe = (instance: CML.PrivateKey): string =>
   Effect.runSync(toBech32(instance));
 
 /**
@@ -349,16 +366,16 @@ export const toRawBytes = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = PrivateKey.unsafeToRawBytes(instance);
+ *   const result = PrivateKey.toRawBytesUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`PrivateKey.unsafeToRawBytes failed: ${error.message}`);
+ *   console.error(`PrivateKey.toRawBytesUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeToRawBytes = (instance: CML.PrivateKey): Uint8Array =>
+export const toRawBytesUnsafe = (instance: CML.PrivateKey): Uint8Array =>
   Effect.runSync(toRawBytes(instance));
 
 /**
@@ -398,16 +415,16 @@ export const fromExtendedBytes = Effect.fn(function* (bytes: Uint8Array) {
  *
  * // Using try/catch for error handling
  * try {
- *   const result = PrivateKey.unsafeFromExtendedBytes( parameters );
+ *   const result = PrivateKey.fromExtendedBytesUnsafe( parameters );
  *   console.log(result);
  * } catch (error) {
- *   console.error(`PrivateKey.unsafeFromExtendedBytes failed: ${error.message}`);
+ *   console.error(`PrivateKey.fromExtendedBytesUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Constructors
+ * @category ConstructorsUnsafe
  */
-export const unsafeFromExtendedBytes = (bytes: Uint8Array) =>
+export const fromExtendedBytesUnsafe = (bytes: Uint8Array) =>
   Effect.runSync(fromExtendedBytes(bytes));
 
 /**
@@ -447,16 +464,16 @@ export const fromNormalBytes = Effect.fn(function* (bytes: Uint8Array) {
  *
  * // Using try/catch for error handling
  * try {
- *   const result = PrivateKey.unsafeFromNormalBytes( parameters );
+ *   const result = PrivateKey.fromNormalBytesUnsafe( parameters );
  *   console.log(result);
  * } catch (error) {
- *   console.error(`PrivateKey.unsafeFromNormalBytes failed: ${error.message}`);
+ *   console.error(`PrivateKey.fromNormalBytesUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Constructors
+ * @category ConstructorsUnsafe
  */
-export const unsafeFromNormalBytes = (bytes: Uint8Array) =>
+export const fromNormalBytesUnsafe = (bytes: Uint8Array) =>
   Effect.runSync(fromNormalBytes(bytes));
 
 /**
@@ -502,16 +519,16 @@ export const sign = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = PrivateKey.unsafeSign(instance,  parameters );
+ *   const result = PrivateKey.signUnsafe(instance,  parameters );
  *   console.log(result);
  * } catch (error) {
- *   console.error(`PrivateKey.unsafeSign failed: ${error.message}`);
+ *   console.error(`PrivateKey.signUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeSign = (
+export const signUnsafe = (
   instance: CML.PrivateKey,
   message: Uint8Array,
 ): CML.Ed25519Signature => Effect.runSync(sign(instance, message));

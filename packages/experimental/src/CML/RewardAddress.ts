@@ -1,8 +1,25 @@
+/**
+ * @since 2.0.0
+ */
 import { Data, Effect } from "effect";
 import * as CML from "@anastasia-labs/cardano-multiplatform-lib-nodejs";
 
+/**
+ * Type alias for the CML RewardAddress class
+ *
+ * @since 2.0.0
+ * @category Types
+ */
 export type RewardAddress = CML.RewardAddress;
 
+/**
+ * Error class for RewardAddress operations
+ *
+ * This error is thrown when operations on RewardAddress instances fail.
+ *
+ * @since 2.0.0
+ * @category Errors
+ */
 export class RewardAddressError extends Data.TaggedError("RewardAddressError")<{
   message?: string;
 }> {}
@@ -47,16 +64,16 @@ export const free = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = RewardAddress.unsafeFree(instance);
+ *   const result = RewardAddress.freeUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`RewardAddress.unsafeFree failed: ${error.message}`);
+ *   console.error(`RewardAddress.freeUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeFree = (instance: CML.RewardAddress): void =>
+export const freeUnsafe = (instance: CML.RewardAddress): void =>
   Effect.runSync(free(instance));
 
 /**
@@ -99,16 +116,16 @@ export const toJson = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = RewardAddress.unsafeToJson(instance);
+ *   const result = RewardAddress.toJsonUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`RewardAddress.unsafeToJson failed: ${error.message}`);
+ *   console.error(`RewardAddress.toJsonUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeToJson = (instance: CML.RewardAddress): string =>
+export const toJsonUnsafe = (instance: CML.RewardAddress): string =>
   Effect.runSync(toJson(instance));
 
 /**
@@ -151,16 +168,16 @@ export const toJsValue = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = RewardAddress.unsafeToJsValue(instance);
+ *   const result = RewardAddress.toJsValueUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`RewardAddress.unsafeToJsValue failed: ${error.message}`);
+ *   console.error(`RewardAddress.toJsValueUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeToJsValue = (instance: CML.RewardAddress): any =>
+export const toJsValueUnsafe = (instance: CML.RewardAddress): any =>
   Effect.runSync(toJsValue(instance));
 
 /**
@@ -200,16 +217,16 @@ export const fromJson = Effect.fn(function* (json: string) {
  *
  * // Using try/catch for error handling
  * try {
- *   const result = RewardAddress.unsafeFromJson( parameters );
+ *   const result = RewardAddress.fromJsonUnsafe( parameters );
  *   console.log(result);
  * } catch (error) {
- *   console.error(`RewardAddress.unsafeFromJson failed: ${error.message}`);
+ *   console.error(`RewardAddress.fromJsonUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Constructors
+ * @category ConstructorsUnsafe
  */
-export const unsafeFromJson = (json: string) => Effect.runSync(fromJson(json));
+export const fromJsonUnsafe = (json: string) => Effect.runSync(fromJson(json));
 
 /**
  * Static method _new of RewardAddress
@@ -251,16 +268,16 @@ export const _new = Effect.fn(function* (
  *
  * // Using try/catch for error handling
  * try {
- *   const result = RewardAddress.unsafe_new( parameters );
+ *   const result = RewardAddress._newUnsafe( parameters );
  *   console.log(result);
  * } catch (error) {
- *   console.error(`RewardAddress.unsafe_new failed: ${error.message}`);
+ *   console.error(`RewardAddress._newUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Constructors
+ * @category ConstructorsUnsafe
  */
-export const unsafe_new = (network: number, payment: CML.Credential) =>
+export const _newUnsafe = (network: number, payment: CML.Credential) =>
   Effect.runSync(_new(network, payment));
 
 /**
@@ -305,16 +322,16 @@ export const toAddress = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = RewardAddress.unsafeToAddress(instance);
+ *   const result = RewardAddress.toAddressUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`RewardAddress.unsafeToAddress failed: ${error.message}`);
+ *   console.error(`RewardAddress.toAddressUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeToAddress = (instance: CML.RewardAddress): CML.Address =>
+export const toAddressUnsafe = (instance: CML.RewardAddress): CML.Address =>
   Effect.runSync(toAddress(instance));
 
 /**
@@ -354,16 +371,16 @@ export const fromAddress = Effect.fn(function* (address: CML.Address) {
  *
  * // Using try/catch for error handling
  * try {
- *   const result = RewardAddress.unsafeFromAddress( parameters );
+ *   const result = RewardAddress.fromAddressUnsafe( parameters );
  *   console.log(result);
  * } catch (error) {
- *   console.error(`RewardAddress.unsafeFromAddress failed: ${error.message}`);
+ *   console.error(`RewardAddress.fromAddressUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Constructors
+ * @category ConstructorsUnsafe
  */
-export const unsafeFromAddress = (address: CML.Address) =>
+export const fromAddressUnsafe = (address: CML.Address) =>
   Effect.runSync(fromAddress(address));
 
 /**
@@ -406,16 +423,16 @@ export const networkId = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = RewardAddress.unsafeNetworkId(instance);
+ *   const result = RewardAddress.networkIdUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`RewardAddress.unsafeNetworkId failed: ${error.message}`);
+ *   console.error(`RewardAddress.networkIdUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeNetworkId = (instance: CML.RewardAddress): number =>
+export const networkIdUnsafe = (instance: CML.RewardAddress): number =>
   Effect.runSync(networkId(instance));
 
 /**
@@ -460,14 +477,14 @@ export const payment = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = RewardAddress.unsafePayment(instance);
+ *   const result = RewardAddress.paymentUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`RewardAddress.unsafePayment failed: ${error.message}`);
+ *   console.error(`RewardAddress.paymentUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafePayment = (instance: CML.RewardAddress): CML.Credential =>
+export const paymentUnsafe = (instance: CML.RewardAddress): CML.Credential =>
   Effect.runSync(payment(instance));

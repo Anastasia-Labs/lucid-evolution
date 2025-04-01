@@ -1,8 +1,25 @@
+/**
+ * @since 2.0.0
+ */
 import { Data, Effect } from "effect";
 import * as CML from "@anastasia-labs/cardano-multiplatform-lib-nodejs";
 
+/**
+ * Type alias for the CML Ed25519KeyHashList class
+ *
+ * @since 2.0.0
+ * @category Types
+ */
 export type Ed25519KeyHashList = CML.Ed25519KeyHashList;
 
+/**
+ * Error class for Ed25519KeyHashList operations
+ *
+ * This error is thrown when operations on Ed25519KeyHashList instances fail.
+ *
+ * @since 2.0.0
+ * @category Errors
+ */
 export class Ed25519KeyHashListError extends Data.TaggedError(
   "Ed25519KeyHashListError",
 )<{
@@ -51,16 +68,16 @@ export const free = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = Ed25519KeyHashList.unsafeFree(instance);
+ *   const result = Ed25519KeyHashList.freeUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`Ed25519KeyHashList.unsafeFree failed: ${error.message}`);
+ *   console.error(`Ed25519KeyHashList.freeUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeFree = (instance: CML.Ed25519KeyHashList): void =>
+export const freeUnsafe = (instance: CML.Ed25519KeyHashList): void =>
   Effect.runSync(free(instance));
 
 /**
@@ -100,16 +117,16 @@ export const _new = Effect.fn(function* () {
  *
  * // Using try/catch for error handling
  * try {
- *   const result = Ed25519KeyHashList.unsafe_new();
+ *   const result = Ed25519KeyHashList._newUnsafe();
  *   console.log(result);
  * } catch (error) {
- *   console.error(`Ed25519KeyHashList.unsafe_new failed: ${error.message}`);
+ *   console.error(`Ed25519KeyHashList._newUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Constructors
+ * @category ConstructorsUnsafe
  */
-export const unsafe_new = () => Effect.runSync(_new());
+export const _newUnsafe = () => Effect.runSync(_new());
 
 /**
  * Method len of Ed25519KeyHashList
@@ -153,16 +170,16 @@ export const len = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = Ed25519KeyHashList.unsafeLen(instance);
+ *   const result = Ed25519KeyHashList.lenUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`Ed25519KeyHashList.unsafeLen failed: ${error.message}`);
+ *   console.error(`Ed25519KeyHashList.lenUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeLen = (instance: CML.Ed25519KeyHashList): number =>
+export const lenUnsafe = (instance: CML.Ed25519KeyHashList): number =>
   Effect.runSync(len(instance));
 
 /**
@@ -208,16 +225,16 @@ export const get = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = Ed25519KeyHashList.unsafeGet(instance,  parameters );
+ *   const result = Ed25519KeyHashList.getUnsafe(instance,  parameters );
  *   console.log(result);
  * } catch (error) {
- *   console.error(`Ed25519KeyHashList.unsafeGet failed: ${error.message}`);
+ *   console.error(`Ed25519KeyHashList.getUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeGet = (
+export const getUnsafe = (
   instance: CML.Ed25519KeyHashList,
   index: number,
 ): CML.Ed25519KeyHash => Effect.runSync(get(instance, index));
@@ -265,16 +282,16 @@ export const add = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = Ed25519KeyHashList.unsafeAdd(instance,  parameters );
+ *   const result = Ed25519KeyHashList.addUnsafe(instance,  parameters );
  *   console.log(result);
  * } catch (error) {
- *   console.error(`Ed25519KeyHashList.unsafeAdd failed: ${error.message}`);
+ *   console.error(`Ed25519KeyHashList.addUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeAdd = (
+export const addUnsafe = (
   instance: CML.Ed25519KeyHashList,
   elem: CML.Ed25519KeyHash,
 ): void => Effect.runSync(add(instance, elem));

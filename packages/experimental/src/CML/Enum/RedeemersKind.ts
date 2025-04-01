@@ -1,8 +1,40 @@
+/**
+ * @since 2.0.0
+ */
 import * as CML from "@anastasia-labs/cardano-multiplatform-lib-nodejs";
 
+/**
+ * Type alias for the CML RedeemersKind enum
+ *
+ * @since 2.0.0
+ * @category Types
+ */
 export type RedeemersKind = CML.RedeemersKind;
 
+/**
+ * ArrLegacyRedeemer variant of the RedeemersKind enum
+ *
+ * @example
+ * import { RedeemersKind } from "@lucid-evolution/experimental";
+ *
+ * const kind = RedeemersKind.ArrLegacyRedeemer;
+ *
+ * @since 2.0.0
+ * @category Variants
+ */
 export const ArrLegacyRedeemer = CML.RedeemersKind.ArrLegacyRedeemer;
+
+/**
+ * MapRedeemerKeyToRedeemerVal variant of the RedeemersKind enum
+ *
+ * @example
+ * import { RedeemersKind } from "@lucid-evolution/experimental";
+ *
+ * const kind = RedeemersKind.MapRedeemerKeyToRedeemerVal;
+ *
+ * @since 2.0.0
+ * @category Variants
+ */
 export const MapRedeemerKeyToRedeemerVal =
   CML.RedeemersKind.MapRedeemerKeyToRedeemerVal;
 

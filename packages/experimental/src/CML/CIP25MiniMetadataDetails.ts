@@ -1,8 +1,25 @@
+/**
+ * @since 2.0.0
+ */
 import { Data, Effect } from "effect";
 import * as CML from "@anastasia-labs/cardano-multiplatform-lib-nodejs";
 
+/**
+ * Type alias for the CML CIP25MiniMetadataDetails class
+ *
+ * @since 2.0.0
+ * @category Types
+ */
 export type CIP25MiniMetadataDetails = CML.CIP25MiniMetadataDetails;
 
+/**
+ * Error class for CIP25MiniMetadataDetails operations
+ *
+ * This error is thrown when operations on CIP25MiniMetadataDetails instances fail.
+ *
+ * @since 2.0.0
+ * @category Errors
+ */
 export class CIP25MiniMetadataDetailsError extends Data.TaggedError(
   "CIP25MiniMetadataDetailsError",
 )<{
@@ -51,16 +68,16 @@ export const free = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = CIP25MiniMetadataDetails.unsafeFree(instance);
+ *   const result = CIP25MiniMetadataDetails.freeUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`CIP25MiniMetadataDetails.unsafeFree failed: ${error.message}`);
+ *   console.error(`CIP25MiniMetadataDetails.freeUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeFree = (instance: CML.CIP25MiniMetadataDetails): void =>
+export const freeUnsafe = (instance: CML.CIP25MiniMetadataDetails): void =>
   Effect.runSync(free(instance));
 
 /**
@@ -105,16 +122,16 @@ export const toJson = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = CIP25MiniMetadataDetails.unsafeToJson(instance);
+ *   const result = CIP25MiniMetadataDetails.toJsonUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`CIP25MiniMetadataDetails.unsafeToJson failed: ${error.message}`);
+ *   console.error(`CIP25MiniMetadataDetails.toJsonUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeToJson = (instance: CML.CIP25MiniMetadataDetails): string =>
+export const toJsonUnsafe = (instance: CML.CIP25MiniMetadataDetails): string =>
   Effect.runSync(toJson(instance));
 
 /**
@@ -159,16 +176,16 @@ export const toJsValue = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = CIP25MiniMetadataDetails.unsafeToJsValue(instance);
+ *   const result = CIP25MiniMetadataDetails.toJsValueUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`CIP25MiniMetadataDetails.unsafeToJsValue failed: ${error.message}`);
+ *   console.error(`CIP25MiniMetadataDetails.toJsValueUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeToJsValue = (instance: CML.CIP25MiniMetadataDetails): any =>
+export const toJsValueUnsafe = (instance: CML.CIP25MiniMetadataDetails): any =>
   Effect.runSync(toJsValue(instance));
 
 /**
@@ -208,16 +225,16 @@ export const fromJson = Effect.fn(function* (json: string) {
  *
  * // Using try/catch for error handling
  * try {
- *   const result = CIP25MiniMetadataDetails.unsafeFromJson( parameters );
+ *   const result = CIP25MiniMetadataDetails.fromJsonUnsafe( parameters );
  *   console.log(result);
  * } catch (error) {
- *   console.error(`CIP25MiniMetadataDetails.unsafeFromJson failed: ${error.message}`);
+ *   console.error(`CIP25MiniMetadataDetails.fromJsonUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Constructors
+ * @category ConstructorsUnsafe
  */
-export const unsafeFromJson = (json: string) => Effect.runSync(fromJson(json));
+export const fromJsonUnsafe = (json: string) => Effect.runSync(fromJson(json));
 
 /**
  * Static method _new of CIP25MiniMetadataDetails
@@ -256,16 +273,16 @@ export const _new = Effect.fn(function* () {
  *
  * // Using try/catch for error handling
  * try {
- *   const result = CIP25MiniMetadataDetails.unsafe_new();
+ *   const result = CIP25MiniMetadataDetails._newUnsafe();
  *   console.log(result);
  * } catch (error) {
- *   console.error(`CIP25MiniMetadataDetails.unsafe_new failed: ${error.message}`);
+ *   console.error(`CIP25MiniMetadataDetails._newUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Constructors
+ * @category ConstructorsUnsafe
  */
-export const unsafe_new = () => Effect.runSync(_new());
+export const _newUnsafe = () => Effect.runSync(_new());
 
 /**
  * Method setName of CIP25MiniMetadataDetails
@@ -310,16 +327,16 @@ export const setName = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = CIP25MiniMetadataDetails.unsafeSetName(instance,  parameters );
+ *   const result = CIP25MiniMetadataDetails.setNameUnsafe(instance,  parameters );
  *   console.log(result);
  * } catch (error) {
- *   console.error(`CIP25MiniMetadataDetails.unsafeSetName failed: ${error.message}`);
+ *   console.error(`CIP25MiniMetadataDetails.setNameUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeSetName = (
+export const setNameUnsafe = (
   instance: CML.CIP25MiniMetadataDetails,
   name: CML.CIP25String64,
 ): void => Effect.runSync(setName(instance, name));
@@ -369,16 +386,16 @@ export const name = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = CIP25MiniMetadataDetails.unsafeName(instance);
+ *   const result = CIP25MiniMetadataDetails.nameUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`CIP25MiniMetadataDetails.unsafeName failed: ${error.message}`);
+ *   console.error(`CIP25MiniMetadataDetails.nameUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeName = (
+export const nameUnsafe = (
   instance: CML.CIP25MiniMetadataDetails,
 ): CML.CIP25String64 | undefined => Effect.runSync(name(instance));
 
@@ -425,16 +442,16 @@ export const setImage = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = CIP25MiniMetadataDetails.unsafeSetImage(instance,  parameters );
+ *   const result = CIP25MiniMetadataDetails.setImageUnsafe(instance,  parameters );
  *   console.log(result);
  * } catch (error) {
- *   console.error(`CIP25MiniMetadataDetails.unsafeSetImage failed: ${error.message}`);
+ *   console.error(`CIP25MiniMetadataDetails.setImageUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeSetImage = (
+export const setImageUnsafe = (
   instance: CML.CIP25MiniMetadataDetails,
   image: CML.CIP25ChunkableString,
 ): void => Effect.runSync(setImage(instance, image));
@@ -484,16 +501,16 @@ export const image = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = CIP25MiniMetadataDetails.unsafeImage(instance);
+ *   const result = CIP25MiniMetadataDetails.imageUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`CIP25MiniMetadataDetails.unsafeImage failed: ${error.message}`);
+ *   console.error(`CIP25MiniMetadataDetails.imageUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeImage = (
+export const imageUnsafe = (
   instance: CML.CIP25MiniMetadataDetails,
 ): CML.CIP25ChunkableString | undefined => Effect.runSync(image(instance));
 
@@ -536,14 +553,14 @@ export const looseParse = Effect.fn(function* (
  *
  * // Using try/catch for error handling
  * try {
- *   const result = CIP25MiniMetadataDetails.unsafeLooseParse( parameters );
+ *   const result = CIP25MiniMetadataDetails.looseParseUnsafe( parameters );
  *   console.log(result);
  * } catch (error) {
- *   console.error(`CIP25MiniMetadataDetails.unsafeLooseParse failed: ${error.message}`);
+ *   console.error(`CIP25MiniMetadataDetails.looseParseUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Constructors
+ * @category ConstructorsUnsafe
  */
-export const unsafeLooseParse = (metadatum: CML.TransactionMetadatum) =>
+export const looseParseUnsafe = (metadatum: CML.TransactionMetadatum) =>
   Effect.runSync(looseParse(metadatum));

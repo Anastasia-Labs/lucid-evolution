@@ -1,8 +1,25 @@
+/**
+ * @since 2.0.0
+ */
 import { Data, Effect } from "effect";
 import * as CML from "@anastasia-labs/cardano-multiplatform-lib-nodejs";
 
+/**
+ * Type alias for the CML Vkeywitness class
+ *
+ * @since 2.0.0
+ * @category Types
+ */
 export type Vkeywitness = CML.Vkeywitness;
 
+/**
+ * Error class for Vkeywitness operations
+ *
+ * This error is thrown when operations on Vkeywitness instances fail.
+ *
+ * @since 2.0.0
+ * @category Errors
+ */
 export class VkeywitnessError extends Data.TaggedError("VkeywitnessError")<{
   message?: string;
 }> {}
@@ -47,16 +64,16 @@ export const free = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = Vkeywitness.unsafeFree(instance);
+ *   const result = Vkeywitness.freeUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`Vkeywitness.unsafeFree failed: ${error.message}`);
+ *   console.error(`Vkeywitness.freeUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeFree = (instance: CML.Vkeywitness): void =>
+export const freeUnsafe = (instance: CML.Vkeywitness): void =>
   Effect.runSync(free(instance));
 
 /**
@@ -99,16 +116,16 @@ export const toCborBytes = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = Vkeywitness.unsafeToCborBytes(instance);
+ *   const result = Vkeywitness.toCborBytesUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`Vkeywitness.unsafeToCborBytes failed: ${error.message}`);
+ *   console.error(`Vkeywitness.toCborBytesUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeToCborBytes = (instance: CML.Vkeywitness): Uint8Array =>
+export const toCborBytesUnsafe = (instance: CML.Vkeywitness): Uint8Array =>
   Effect.runSync(toCborBytes(instance));
 
 /**
@@ -151,16 +168,16 @@ export const toCanonicalCborBytes = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = Vkeywitness.unsafeToCanonicalCborBytes(instance);
+ *   const result = Vkeywitness.toCanonicalCborBytesUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`Vkeywitness.unsafeToCanonicalCborBytes failed: ${error.message}`);
+ *   console.error(`Vkeywitness.toCanonicalCborBytesUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeToCanonicalCborBytes = (
+export const toCanonicalCborBytesUnsafe = (
   instance: CML.Vkeywitness,
 ): Uint8Array => Effect.runSync(toCanonicalCborBytes(instance));
 
@@ -201,16 +218,16 @@ export const fromCborBytes = Effect.fn(function* (cborBytes: Uint8Array) {
  *
  * // Using try/catch for error handling
  * try {
- *   const result = Vkeywitness.unsafeFromCborBytes( parameters );
+ *   const result = Vkeywitness.fromCborBytesUnsafe( parameters );
  *   console.log(result);
  * } catch (error) {
- *   console.error(`Vkeywitness.unsafeFromCborBytes failed: ${error.message}`);
+ *   console.error(`Vkeywitness.fromCborBytesUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Constructors
+ * @category ConstructorsUnsafe
  */
-export const unsafeFromCborBytes = (cborBytes: Uint8Array) =>
+export const fromCborBytesUnsafe = (cborBytes: Uint8Array) =>
   Effect.runSync(fromCborBytes(cborBytes));
 
 /**
@@ -253,16 +270,16 @@ export const toCborHex = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = Vkeywitness.unsafeToCborHex(instance);
+ *   const result = Vkeywitness.toCborHexUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`Vkeywitness.unsafeToCborHex failed: ${error.message}`);
+ *   console.error(`Vkeywitness.toCborHexUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeToCborHex = (instance: CML.Vkeywitness): string =>
+export const toCborHexUnsafe = (instance: CML.Vkeywitness): string =>
   Effect.runSync(toCborHex(instance));
 
 /**
@@ -305,16 +322,16 @@ export const toCanonicalCborHex = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = Vkeywitness.unsafeToCanonicalCborHex(instance);
+ *   const result = Vkeywitness.toCanonicalCborHexUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`Vkeywitness.unsafeToCanonicalCborHex failed: ${error.message}`);
+ *   console.error(`Vkeywitness.toCanonicalCborHexUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeToCanonicalCborHex = (instance: CML.Vkeywitness): string =>
+export const toCanonicalCborHexUnsafe = (instance: CML.Vkeywitness): string =>
   Effect.runSync(toCanonicalCborHex(instance));
 
 /**
@@ -354,16 +371,16 @@ export const fromCborHex = Effect.fn(function* (cborBytes: string) {
  *
  * // Using try/catch for error handling
  * try {
- *   const result = Vkeywitness.unsafeFromCborHex( parameters );
+ *   const result = Vkeywitness.fromCborHexUnsafe( parameters );
  *   console.log(result);
  * } catch (error) {
- *   console.error(`Vkeywitness.unsafeFromCborHex failed: ${error.message}`);
+ *   console.error(`Vkeywitness.fromCborHexUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Constructors
+ * @category ConstructorsUnsafe
  */
-export const unsafeFromCborHex = (cborBytes: string) =>
+export const fromCborHexUnsafe = (cborBytes: string) =>
   Effect.runSync(fromCborHex(cborBytes));
 
 /**
@@ -406,16 +423,16 @@ export const toJson = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = Vkeywitness.unsafeToJson(instance);
+ *   const result = Vkeywitness.toJsonUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`Vkeywitness.unsafeToJson failed: ${error.message}`);
+ *   console.error(`Vkeywitness.toJsonUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeToJson = (instance: CML.Vkeywitness): string =>
+export const toJsonUnsafe = (instance: CML.Vkeywitness): string =>
   Effect.runSync(toJson(instance));
 
 /**
@@ -458,16 +475,16 @@ export const toJsValue = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = Vkeywitness.unsafeToJsValue(instance);
+ *   const result = Vkeywitness.toJsValueUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`Vkeywitness.unsafeToJsValue failed: ${error.message}`);
+ *   console.error(`Vkeywitness.toJsValueUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeToJsValue = (instance: CML.Vkeywitness): any =>
+export const toJsValueUnsafe = (instance: CML.Vkeywitness): any =>
   Effect.runSync(toJsValue(instance));
 
 /**
@@ -507,16 +524,16 @@ export const fromJson = Effect.fn(function* (json: string) {
  *
  * // Using try/catch for error handling
  * try {
- *   const result = Vkeywitness.unsafeFromJson( parameters );
+ *   const result = Vkeywitness.fromJsonUnsafe( parameters );
  *   console.log(result);
  * } catch (error) {
- *   console.error(`Vkeywitness.unsafeFromJson failed: ${error.message}`);
+ *   console.error(`Vkeywitness.fromJsonUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Constructors
+ * @category ConstructorsUnsafe
  */
-export const unsafeFromJson = (json: string) => Effect.runSync(fromJson(json));
+export const fromJsonUnsafe = (json: string) => Effect.runSync(fromJson(json));
 
 /**
  * Method vkey of Vkeywitness
@@ -558,16 +575,16 @@ export const vkey = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = Vkeywitness.unsafeVkey(instance);
+ *   const result = Vkeywitness.vkeyUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`Vkeywitness.unsafeVkey failed: ${error.message}`);
+ *   console.error(`Vkeywitness.vkeyUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeVkey = (instance: CML.Vkeywitness): CML.PublicKey =>
+export const vkeyUnsafe = (instance: CML.Vkeywitness): CML.PublicKey =>
   Effect.runSync(vkey(instance));
 
 /**
@@ -612,16 +629,16 @@ export const ed25519Signature = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = Vkeywitness.unsafeEd25519Signature(instance);
+ *   const result = Vkeywitness.ed25519SignatureUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`Vkeywitness.unsafeEd25519Signature failed: ${error.message}`);
+ *   console.error(`Vkeywitness.ed25519SignatureUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeEd25519Signature = (
+export const ed25519SignatureUnsafe = (
   instance: CML.Vkeywitness,
 ): CML.Ed25519Signature => Effect.runSync(ed25519Signature(instance));
 
@@ -665,16 +682,16 @@ export const _new = Effect.fn(function* (
  *
  * // Using try/catch for error handling
  * try {
- *   const result = Vkeywitness.unsafe_new( parameters );
+ *   const result = Vkeywitness._newUnsafe( parameters );
  *   console.log(result);
  * } catch (error) {
- *   console.error(`Vkeywitness.unsafe_new failed: ${error.message}`);
+ *   console.error(`Vkeywitness._newUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Constructors
+ * @category ConstructorsUnsafe
  */
-export const unsafe_new = (
+export const _newUnsafe = (
   vkey: CML.PublicKey,
   ed25519Signature: CML.Ed25519Signature,
 ) => Effect.runSync(_new(vkey, ed25519Signature));

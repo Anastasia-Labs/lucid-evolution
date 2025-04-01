@@ -1,8 +1,25 @@
+/**
+ * @since 2.0.0
+ */
 import { Data, Effect } from "effect";
 import * as CML from "@anastasia-labs/cardano-multiplatform-lib-nodejs";
 
+/**
+ * Type alias for the CML SingleInputBuilder class
+ *
+ * @since 2.0.0
+ * @category Types
+ */
 export type SingleInputBuilder = CML.SingleInputBuilder;
 
+/**
+ * Error class for SingleInputBuilder operations
+ *
+ * This error is thrown when operations on SingleInputBuilder instances fail.
+ *
+ * @since 2.0.0
+ * @category Errors
+ */
 export class SingleInputBuilderError extends Data.TaggedError(
   "SingleInputBuilderError",
 )<{
@@ -51,16 +68,16 @@ export const free = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = SingleInputBuilder.unsafeFree(instance);
+ *   const result = SingleInputBuilder.freeUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`SingleInputBuilder.unsafeFree failed: ${error.message}`);
+ *   console.error(`SingleInputBuilder.freeUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeFree = (instance: CML.SingleInputBuilder): void =>
+export const freeUnsafe = (instance: CML.SingleInputBuilder): void =>
   Effect.runSync(free(instance));
 
 /**
@@ -103,16 +120,16 @@ export const _new = Effect.fn(function* (
  *
  * // Using try/catch for error handling
  * try {
- *   const result = SingleInputBuilder.unsafe_new( parameters );
+ *   const result = SingleInputBuilder._newUnsafe( parameters );
  *   console.log(result);
  * } catch (error) {
- *   console.error(`SingleInputBuilder.unsafe_new failed: ${error.message}`);
+ *   console.error(`SingleInputBuilder._newUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Constructors
+ * @category ConstructorsUnsafe
  */
-export const unsafe_new = (
+export const _newUnsafe = (
   input: CML.TransactionInput,
   utxoInfo: CML.TransactionOutput,
 ) => Effect.runSync(_new(input, utxoInfo));
@@ -156,16 +173,16 @@ export const fromTransactionUnspentOutput = Effect.fn(function* (
  *
  * // Using try/catch for error handling
  * try {
- *   const result = SingleInputBuilder.unsafeFromTransactionUnspentOutput( parameters );
+ *   const result = SingleInputBuilder.fromTransactionUnspentOutputUnsafe( parameters );
  *   console.log(result);
  * } catch (error) {
- *   console.error(`SingleInputBuilder.unsafeFromTransactionUnspentOutput failed: ${error.message}`);
+ *   console.error(`SingleInputBuilder.fromTransactionUnspentOutputUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Constructors
+ * @category ConstructorsUnsafe
  */
-export const unsafeFromTransactionUnspentOutput = (
+export const fromTransactionUnspentOutputUnsafe = (
   utxo: CML.TransactionUnspentOutput,
 ) => Effect.runSync(fromTransactionUnspentOutput(utxo));
 
@@ -211,16 +228,16 @@ export const paymentKey = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = SingleInputBuilder.unsafePaymentKey(instance);
+ *   const result = SingleInputBuilder.paymentKeyUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`SingleInputBuilder.unsafePaymentKey failed: ${error.message}`);
+ *   console.error(`SingleInputBuilder.paymentKeyUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafePaymentKey = (
+export const paymentKeyUnsafe = (
   instance: CML.SingleInputBuilder,
 ): CML.InputBuilderResult => Effect.runSync(paymentKey(instance));
 
@@ -268,16 +285,16 @@ export const nativeScript = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = SingleInputBuilder.unsafeNativeScript(instance,  parameters );
+ *   const result = SingleInputBuilder.nativeScriptUnsafe(instance,  parameters );
  *   console.log(result);
  * } catch (error) {
- *   console.error(`SingleInputBuilder.unsafeNativeScript failed: ${error.message}`);
+ *   console.error(`SingleInputBuilder.nativeScriptUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeNativeScript = (
+export const nativeScriptUnsafe = (
   instance: CML.SingleInputBuilder,
   _nativeScript: CML.NativeScript,
   witnessInfo: CML.NativeScriptWitnessInfo,
@@ -329,16 +346,16 @@ export const plutusScript = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = SingleInputBuilder.unsafePlutusScript(instance,  parameters );
+ *   const result = SingleInputBuilder.plutusScriptUnsafe(instance,  parameters );
  *   console.log(result);
  * } catch (error) {
- *   console.error(`SingleInputBuilder.unsafePlutusScript failed: ${error.message}`);
+ *   console.error(`SingleInputBuilder.plutusScriptUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafePlutusScript = (
+export const plutusScriptUnsafe = (
   instance: CML.SingleInputBuilder,
   partialWitness: CML.PartialPlutusWitness,
   requiredSigners: CML.Ed25519KeyHashList,
@@ -393,16 +410,16 @@ export const plutusScriptInlineDatum = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = SingleInputBuilder.unsafePlutusScriptInlineDatum(instance,  parameters );
+ *   const result = SingleInputBuilder.plutusScriptInlineDatumUnsafe(instance,  parameters );
  *   console.log(result);
  * } catch (error) {
- *   console.error(`SingleInputBuilder.unsafePlutusScriptInlineDatum failed: ${error.message}`);
+ *   console.error(`SingleInputBuilder.plutusScriptInlineDatumUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafePlutusScriptInlineDatum = (
+export const plutusScriptInlineDatumUnsafe = (
   instance: CML.SingleInputBuilder,
   partialWitness: CML.PartialPlutusWitness,
   requiredSigners: CML.Ed25519KeyHashList,

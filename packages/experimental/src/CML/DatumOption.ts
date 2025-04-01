@@ -1,8 +1,25 @@
+/**
+ * @since 2.0.0
+ */
 import { Data, Effect } from "effect";
 import * as CML from "@anastasia-labs/cardano-multiplatform-lib-nodejs";
 
+/**
+ * Type alias for the CML DatumOption class
+ *
+ * @since 2.0.0
+ * @category Types
+ */
 export type DatumOption = CML.DatumOption;
 
+/**
+ * Error class for DatumOption operations
+ *
+ * This error is thrown when operations on DatumOption instances fail.
+ *
+ * @since 2.0.0
+ * @category Errors
+ */
 export class DatumOptionError extends Data.TaggedError("DatumOptionError")<{
   message?: string;
 }> {}
@@ -47,16 +64,16 @@ export const free = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = DatumOption.unsafeFree(instance);
+ *   const result = DatumOption.freeUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`DatumOption.unsafeFree failed: ${error.message}`);
+ *   console.error(`DatumOption.freeUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeFree = (instance: CML.DatumOption): void =>
+export const freeUnsafe = (instance: CML.DatumOption): void =>
   Effect.runSync(free(instance));
 
 /**
@@ -99,16 +116,16 @@ export const toCborBytes = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = DatumOption.unsafeToCborBytes(instance);
+ *   const result = DatumOption.toCborBytesUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`DatumOption.unsafeToCborBytes failed: ${error.message}`);
+ *   console.error(`DatumOption.toCborBytesUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeToCborBytes = (instance: CML.DatumOption): Uint8Array =>
+export const toCborBytesUnsafe = (instance: CML.DatumOption): Uint8Array =>
   Effect.runSync(toCborBytes(instance));
 
 /**
@@ -151,16 +168,16 @@ export const toCanonicalCborBytes = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = DatumOption.unsafeToCanonicalCborBytes(instance);
+ *   const result = DatumOption.toCanonicalCborBytesUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`DatumOption.unsafeToCanonicalCborBytes failed: ${error.message}`);
+ *   console.error(`DatumOption.toCanonicalCborBytesUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeToCanonicalCborBytes = (
+export const toCanonicalCborBytesUnsafe = (
   instance: CML.DatumOption,
 ): Uint8Array => Effect.runSync(toCanonicalCborBytes(instance));
 
@@ -201,16 +218,16 @@ export const fromCborBytes = Effect.fn(function* (cborBytes: Uint8Array) {
  *
  * // Using try/catch for error handling
  * try {
- *   const result = DatumOption.unsafeFromCborBytes( parameters );
+ *   const result = DatumOption.fromCborBytesUnsafe( parameters );
  *   console.log(result);
  * } catch (error) {
- *   console.error(`DatumOption.unsafeFromCborBytes failed: ${error.message}`);
+ *   console.error(`DatumOption.fromCborBytesUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Constructors
+ * @category ConstructorsUnsafe
  */
-export const unsafeFromCborBytes = (cborBytes: Uint8Array) =>
+export const fromCborBytesUnsafe = (cborBytes: Uint8Array) =>
   Effect.runSync(fromCborBytes(cborBytes));
 
 /**
@@ -253,16 +270,16 @@ export const toCborHex = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = DatumOption.unsafeToCborHex(instance);
+ *   const result = DatumOption.toCborHexUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`DatumOption.unsafeToCborHex failed: ${error.message}`);
+ *   console.error(`DatumOption.toCborHexUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeToCborHex = (instance: CML.DatumOption): string =>
+export const toCborHexUnsafe = (instance: CML.DatumOption): string =>
   Effect.runSync(toCborHex(instance));
 
 /**
@@ -305,16 +322,16 @@ export const toCanonicalCborHex = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = DatumOption.unsafeToCanonicalCborHex(instance);
+ *   const result = DatumOption.toCanonicalCborHexUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`DatumOption.unsafeToCanonicalCborHex failed: ${error.message}`);
+ *   console.error(`DatumOption.toCanonicalCborHexUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeToCanonicalCborHex = (instance: CML.DatumOption): string =>
+export const toCanonicalCborHexUnsafe = (instance: CML.DatumOption): string =>
   Effect.runSync(toCanonicalCborHex(instance));
 
 /**
@@ -354,16 +371,16 @@ export const fromCborHex = Effect.fn(function* (cborBytes: string) {
  *
  * // Using try/catch for error handling
  * try {
- *   const result = DatumOption.unsafeFromCborHex( parameters );
+ *   const result = DatumOption.fromCborHexUnsafe( parameters );
  *   console.log(result);
  * } catch (error) {
- *   console.error(`DatumOption.unsafeFromCborHex failed: ${error.message}`);
+ *   console.error(`DatumOption.fromCborHexUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Constructors
+ * @category ConstructorsUnsafe
  */
-export const unsafeFromCborHex = (cborBytes: string) =>
+export const fromCborHexUnsafe = (cborBytes: string) =>
   Effect.runSync(fromCborHex(cborBytes));
 
 /**
@@ -406,16 +423,16 @@ export const toJson = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = DatumOption.unsafeToJson(instance);
+ *   const result = DatumOption.toJsonUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`DatumOption.unsafeToJson failed: ${error.message}`);
+ *   console.error(`DatumOption.toJsonUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeToJson = (instance: CML.DatumOption): string =>
+export const toJsonUnsafe = (instance: CML.DatumOption): string =>
   Effect.runSync(toJson(instance));
 
 /**
@@ -458,16 +475,16 @@ export const toJsValue = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = DatumOption.unsafeToJsValue(instance);
+ *   const result = DatumOption.toJsValueUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`DatumOption.unsafeToJsValue failed: ${error.message}`);
+ *   console.error(`DatumOption.toJsValueUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeToJsValue = (instance: CML.DatumOption): any =>
+export const toJsValueUnsafe = (instance: CML.DatumOption): any =>
   Effect.runSync(toJsValue(instance));
 
 /**
@@ -507,16 +524,16 @@ export const fromJson = Effect.fn(function* (json: string) {
  *
  * // Using try/catch for error handling
  * try {
- *   const result = DatumOption.unsafeFromJson( parameters );
+ *   const result = DatumOption.fromJsonUnsafe( parameters );
  *   console.log(result);
  * } catch (error) {
- *   console.error(`DatumOption.unsafeFromJson failed: ${error.message}`);
+ *   console.error(`DatumOption.fromJsonUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Constructors
+ * @category ConstructorsUnsafe
  */
-export const unsafeFromJson = (json: string) => Effect.runSync(fromJson(json));
+export const fromJsonUnsafe = (json: string) => Effect.runSync(fromJson(json));
 
 /**
  * Static method newHash of DatumOption
@@ -555,16 +572,16 @@ export const newHash = Effect.fn(function* (datumHash: CML.DatumHash) {
  *
  * // Using try/catch for error handling
  * try {
- *   const result = DatumOption.unsafeNewHash( parameters );
+ *   const result = DatumOption.newHashUnsafe( parameters );
  *   console.log(result);
  * } catch (error) {
- *   console.error(`DatumOption.unsafeNewHash failed: ${error.message}`);
+ *   console.error(`DatumOption.newHashUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Constructors
+ * @category ConstructorsUnsafe
  */
-export const unsafeNewHash = (datumHash: CML.DatumHash) =>
+export const newHashUnsafe = (datumHash: CML.DatumHash) =>
   Effect.runSync(newHash(datumHash));
 
 /**
@@ -604,16 +621,16 @@ export const newDatum = Effect.fn(function* (datum: CML.PlutusData) {
  *
  * // Using try/catch for error handling
  * try {
- *   const result = DatumOption.unsafeNewDatum( parameters );
+ *   const result = DatumOption.newDatumUnsafe( parameters );
  *   console.log(result);
  * } catch (error) {
- *   console.error(`DatumOption.unsafeNewDatum failed: ${error.message}`);
+ *   console.error(`DatumOption.newDatumUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Constructors
+ * @category ConstructorsUnsafe
  */
-export const unsafeNewDatum = (datum: CML.PlutusData) =>
+export const newDatumUnsafe = (datum: CML.PlutusData) =>
   Effect.runSync(newDatum(datum));
 
 /**
@@ -658,16 +675,16 @@ export const kind = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = DatumOption.unsafeKind(instance);
+ *   const result = DatumOption.kindUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`DatumOption.unsafeKind failed: ${error.message}`);
+ *   console.error(`DatumOption.kindUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeKind = (instance: CML.DatumOption): CML.DatumOptionKind =>
+export const kindUnsafe = (instance: CML.DatumOption): CML.DatumOptionKind =>
   Effect.runSync(kind(instance));
 
 /**
@@ -712,16 +729,16 @@ export const asHash = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = DatumOption.unsafeAsHash(instance);
+ *   const result = DatumOption.asHashUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`DatumOption.unsafeAsHash failed: ${error.message}`);
+ *   console.error(`DatumOption.asHashUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeAsHash = (
+export const asHashUnsafe = (
   instance: CML.DatumOption,
 ): CML.DatumHash | undefined => Effect.runSync(asHash(instance));
 
@@ -767,15 +784,15 @@ export const asDatum = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = DatumOption.unsafeAsDatum(instance);
+ *   const result = DatumOption.asDatumUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`DatumOption.unsafeAsDatum failed: ${error.message}`);
+ *   console.error(`DatumOption.asDatumUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeAsDatum = (
+export const asDatumUnsafe = (
   instance: CML.DatumOption,
 ): CML.PlutusData | undefined => Effect.runSync(asDatum(instance));

@@ -1,8 +1,40 @@
+/**
+ * @since 2.0.0
+ */
 import * as CML from "@anastasia-labs/cardano-multiplatform-lib-nodejs";
 
+/**
+ * Type alias for the CML CredentialKind enum
+ *
+ * @since 2.0.0
+ * @category Types
+ */
 export type CredentialKind = CML.CredentialKind;
 
+/**
+ * PubKey variant of the CredentialKind enum
+ *
+ * @example
+ * import { CredentialKind } from "@lucid-evolution/experimental";
+ *
+ * const kind = CredentialKind.PubKey;
+ *
+ * @since 2.0.0
+ * @category Variants
+ */
 export const PubKey = CML.CredentialKind.PubKey;
+
+/**
+ * Script variant of the CredentialKind enum
+ *
+ * @example
+ * import { CredentialKind } from "@lucid-evolution/experimental";
+ *
+ * const kind = CredentialKind.Script;
+ *
+ * @since 2.0.0
+ * @category Variants
+ */
 export const Script = CML.CredentialKind.Script;
 
 /**

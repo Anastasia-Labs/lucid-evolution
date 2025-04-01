@@ -1,11 +1,79 @@
+/**
+ * @since 2.0.0
+ */
 import * as CML from "@anastasia-labs/cardano-multiplatform-lib-nodejs";
 
+/**
+ * Type alias for the CML PlutusDataKind enum
+ *
+ * @since 2.0.0
+ * @category Types
+ */
 export type PlutusDataKind = CML.PlutusDataKind;
 
+/**
+ * ConstrPlutusData variant of the PlutusDataKind enum
+ *
+ * @example
+ * import { PlutusDataKind } from "@lucid-evolution/experimental";
+ *
+ * const kind = PlutusDataKind.ConstrPlutusData;
+ *
+ * @since 2.0.0
+ * @category Variants
+ */
 export const ConstrPlutusData = CML.PlutusDataKind.ConstrPlutusData;
+
+/**
+ * Map variant of the PlutusDataKind enum
+ *
+ * @example
+ * import { PlutusDataKind } from "@lucid-evolution/experimental";
+ *
+ * const kind = PlutusDataKind.Map;
+ *
+ * @since 2.0.0
+ * @category Variants
+ */
 export const Map = CML.PlutusDataKind.Map;
+
+/**
+ * List variant of the PlutusDataKind enum
+ *
+ * @example
+ * import { PlutusDataKind } from "@lucid-evolution/experimental";
+ *
+ * const kind = PlutusDataKind.List;
+ *
+ * @since 2.0.0
+ * @category Variants
+ */
 export const List = CML.PlutusDataKind.List;
+
+/**
+ * Integer variant of the PlutusDataKind enum
+ *
+ * @example
+ * import { PlutusDataKind } from "@lucid-evolution/experimental";
+ *
+ * const kind = PlutusDataKind.Integer;
+ *
+ * @since 2.0.0
+ * @category Variants
+ */
 export const Integer = CML.PlutusDataKind.Integer;
+
+/**
+ * Bytes variant of the PlutusDataKind enum
+ *
+ * @example
+ * import { PlutusDataKind } from "@lucid-evolution/experimental";
+ *
+ * const kind = PlutusDataKind.Bytes;
+ *
+ * @since 2.0.0
+ * @category Variants
+ */
 export const Bytes = CML.PlutusDataKind.Bytes;
 
 /**

@@ -1,7 +1,27 @@
+/**
+ * @since 2.0.0
+ */
 import * as CML from "@anastasia-labs/cardano-multiplatform-lib-nodejs";
 
+/**
+ * Type alias for the CML ChangeSelectionAlgo enum
+ *
+ * @since 2.0.0
+ * @category Types
+ */
 export type ChangeSelectionAlgo = CML.ChangeSelectionAlgo;
 
+/**
+ * Default variant of the ChangeSelectionAlgo enum
+ *
+ * @example
+ * import { ChangeSelectionAlgo } from "@lucid-evolution/experimental";
+ *
+ * const kind = ChangeSelectionAlgo.Default;
+ *
+ * @since 2.0.0
+ * @category Variants
+ */
 export const Default = CML.ChangeSelectionAlgo.Default;
 
 /**

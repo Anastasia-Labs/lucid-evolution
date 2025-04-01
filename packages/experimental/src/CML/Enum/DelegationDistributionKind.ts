@@ -1,8 +1,40 @@
+/**
+ * @since 2.0.0
+ */
 import * as CML from "@anastasia-labs/cardano-multiplatform-lib-nodejs";
 
+/**
+ * Type alias for the CML DelegationDistributionKind enum
+ *
+ * @since 2.0.0
+ * @category Types
+ */
 export type DelegationDistributionKind = CML.DelegationDistributionKind;
 
+/**
+ * Weighted variant of the DelegationDistributionKind enum
+ *
+ * @example
+ * import { DelegationDistributionKind } from "@lucid-evolution/experimental";
+ *
+ * const kind = DelegationDistributionKind.Weighted;
+ *
+ * @since 2.0.0
+ * @category Variants
+ */
 export const Weighted = CML.DelegationDistributionKind.Weighted;
+
+/**
+ * Legacy variant of the DelegationDistributionKind enum
+ *
+ * @example
+ * import { DelegationDistributionKind } from "@lucid-evolution/experimental";
+ *
+ * const kind = DelegationDistributionKind.Legacy;
+ *
+ * @since 2.0.0
+ * @category Variants
+ */
 export const Legacy = CML.DelegationDistributionKind.Legacy;
 
 /**

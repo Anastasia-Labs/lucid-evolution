@@ -1,8 +1,25 @@
+/**
+ * @since 2.0.0
+ */
 import { Data, Effect } from "effect";
 import * as CML from "@anastasia-labs/cardano-multiplatform-lib-nodejs";
 
+/**
+ * Type alias for the CML ExUnitPrices class
+ *
+ * @since 2.0.0
+ * @category Types
+ */
 export type ExUnitPrices = CML.ExUnitPrices;
 
+/**
+ * Error class for ExUnitPrices operations
+ *
+ * This error is thrown when operations on ExUnitPrices instances fail.
+ *
+ * @since 2.0.0
+ * @category Errors
+ */
 export class ExUnitPricesError extends Data.TaggedError("ExUnitPricesError")<{
   message?: string;
 }> {}
@@ -47,16 +64,16 @@ export const free = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = ExUnitPrices.unsafeFree(instance);
+ *   const result = ExUnitPrices.freeUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`ExUnitPrices.unsafeFree failed: ${error.message}`);
+ *   console.error(`ExUnitPrices.freeUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeFree = (instance: CML.ExUnitPrices): void =>
+export const freeUnsafe = (instance: CML.ExUnitPrices): void =>
   Effect.runSync(free(instance));
 
 /**
@@ -99,16 +116,16 @@ export const toCborBytes = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = ExUnitPrices.unsafeToCborBytes(instance);
+ *   const result = ExUnitPrices.toCborBytesUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`ExUnitPrices.unsafeToCborBytes failed: ${error.message}`);
+ *   console.error(`ExUnitPrices.toCborBytesUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeToCborBytes = (instance: CML.ExUnitPrices): Uint8Array =>
+export const toCborBytesUnsafe = (instance: CML.ExUnitPrices): Uint8Array =>
   Effect.runSync(toCborBytes(instance));
 
 /**
@@ -151,16 +168,16 @@ export const toCanonicalCborBytes = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = ExUnitPrices.unsafeToCanonicalCborBytes(instance);
+ *   const result = ExUnitPrices.toCanonicalCborBytesUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`ExUnitPrices.unsafeToCanonicalCborBytes failed: ${error.message}`);
+ *   console.error(`ExUnitPrices.toCanonicalCborBytesUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeToCanonicalCborBytes = (
+export const toCanonicalCborBytesUnsafe = (
   instance: CML.ExUnitPrices,
 ): Uint8Array => Effect.runSync(toCanonicalCborBytes(instance));
 
@@ -201,16 +218,16 @@ export const fromCborBytes = Effect.fn(function* (cborBytes: Uint8Array) {
  *
  * // Using try/catch for error handling
  * try {
- *   const result = ExUnitPrices.unsafeFromCborBytes( parameters );
+ *   const result = ExUnitPrices.fromCborBytesUnsafe( parameters );
  *   console.log(result);
  * } catch (error) {
- *   console.error(`ExUnitPrices.unsafeFromCborBytes failed: ${error.message}`);
+ *   console.error(`ExUnitPrices.fromCborBytesUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Constructors
+ * @category ConstructorsUnsafe
  */
-export const unsafeFromCborBytes = (cborBytes: Uint8Array) =>
+export const fromCborBytesUnsafe = (cborBytes: Uint8Array) =>
   Effect.runSync(fromCborBytes(cborBytes));
 
 /**
@@ -253,16 +270,16 @@ export const toCborHex = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = ExUnitPrices.unsafeToCborHex(instance);
+ *   const result = ExUnitPrices.toCborHexUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`ExUnitPrices.unsafeToCborHex failed: ${error.message}`);
+ *   console.error(`ExUnitPrices.toCborHexUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeToCborHex = (instance: CML.ExUnitPrices): string =>
+export const toCborHexUnsafe = (instance: CML.ExUnitPrices): string =>
   Effect.runSync(toCborHex(instance));
 
 /**
@@ -305,16 +322,16 @@ export const toCanonicalCborHex = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = ExUnitPrices.unsafeToCanonicalCborHex(instance);
+ *   const result = ExUnitPrices.toCanonicalCborHexUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`ExUnitPrices.unsafeToCanonicalCborHex failed: ${error.message}`);
+ *   console.error(`ExUnitPrices.toCanonicalCborHexUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeToCanonicalCborHex = (instance: CML.ExUnitPrices): string =>
+export const toCanonicalCborHexUnsafe = (instance: CML.ExUnitPrices): string =>
   Effect.runSync(toCanonicalCborHex(instance));
 
 /**
@@ -354,16 +371,16 @@ export const fromCborHex = Effect.fn(function* (cborBytes: string) {
  *
  * // Using try/catch for error handling
  * try {
- *   const result = ExUnitPrices.unsafeFromCborHex( parameters );
+ *   const result = ExUnitPrices.fromCborHexUnsafe( parameters );
  *   console.log(result);
  * } catch (error) {
- *   console.error(`ExUnitPrices.unsafeFromCborHex failed: ${error.message}`);
+ *   console.error(`ExUnitPrices.fromCborHexUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Constructors
+ * @category ConstructorsUnsafe
  */
-export const unsafeFromCborHex = (cborBytes: string) =>
+export const fromCborHexUnsafe = (cborBytes: string) =>
   Effect.runSync(fromCborHex(cborBytes));
 
 /**
@@ -406,16 +423,16 @@ export const toJson = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = ExUnitPrices.unsafeToJson(instance);
+ *   const result = ExUnitPrices.toJsonUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`ExUnitPrices.unsafeToJson failed: ${error.message}`);
+ *   console.error(`ExUnitPrices.toJsonUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeToJson = (instance: CML.ExUnitPrices): string =>
+export const toJsonUnsafe = (instance: CML.ExUnitPrices): string =>
   Effect.runSync(toJson(instance));
 
 /**
@@ -458,16 +475,16 @@ export const toJsValue = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = ExUnitPrices.unsafeToJsValue(instance);
+ *   const result = ExUnitPrices.toJsValueUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`ExUnitPrices.unsafeToJsValue failed: ${error.message}`);
+ *   console.error(`ExUnitPrices.toJsValueUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeToJsValue = (instance: CML.ExUnitPrices): any =>
+export const toJsValueUnsafe = (instance: CML.ExUnitPrices): any =>
   Effect.runSync(toJsValue(instance));
 
 /**
@@ -507,16 +524,16 @@ export const fromJson = Effect.fn(function* (json: string) {
  *
  * // Using try/catch for error handling
  * try {
- *   const result = ExUnitPrices.unsafeFromJson( parameters );
+ *   const result = ExUnitPrices.fromJsonUnsafe( parameters );
  *   console.log(result);
  * } catch (error) {
- *   console.error(`ExUnitPrices.unsafeFromJson failed: ${error.message}`);
+ *   console.error(`ExUnitPrices.fromJsonUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Constructors
+ * @category ConstructorsUnsafe
  */
-export const unsafeFromJson = (json: string) => Effect.runSync(fromJson(json));
+export const fromJsonUnsafe = (json: string) => Effect.runSync(fromJson(json));
 
 /**
  * Method memPrice of ExUnitPrices
@@ -560,16 +577,16 @@ export const memPrice = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = ExUnitPrices.unsafeMemPrice(instance);
+ *   const result = ExUnitPrices.memPriceUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`ExUnitPrices.unsafeMemPrice failed: ${error.message}`);
+ *   console.error(`ExUnitPrices.memPriceUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeMemPrice = (instance: CML.ExUnitPrices): CML.Rational =>
+export const memPriceUnsafe = (instance: CML.ExUnitPrices): CML.Rational =>
   Effect.runSync(memPrice(instance));
 
 /**
@@ -614,16 +631,16 @@ export const stepPrice = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = ExUnitPrices.unsafeStepPrice(instance);
+ *   const result = ExUnitPrices.stepPriceUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`ExUnitPrices.unsafeStepPrice failed: ${error.message}`);
+ *   console.error(`ExUnitPrices.stepPriceUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeStepPrice = (instance: CML.ExUnitPrices): CML.Rational =>
+export const stepPriceUnsafe = (instance: CML.ExUnitPrices): CML.Rational =>
   Effect.runSync(stepPrice(instance));
 
 /**
@@ -666,14 +683,14 @@ export const _new = Effect.fn(function* (
  *
  * // Using try/catch for error handling
  * try {
- *   const result = ExUnitPrices.unsafe_new( parameters );
+ *   const result = ExUnitPrices._newUnsafe( parameters );
  *   console.log(result);
  * } catch (error) {
- *   console.error(`ExUnitPrices.unsafe_new failed: ${error.message}`);
+ *   console.error(`ExUnitPrices._newUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Constructors
+ * @category ConstructorsUnsafe
  */
-export const unsafe_new = (memPrice: CML.Rational, stepPrice: CML.Rational) =>
+export const _newUnsafe = (memPrice: CML.Rational, stepPrice: CML.Rational) =>
   Effect.runSync(_new(memPrice, stepPrice));

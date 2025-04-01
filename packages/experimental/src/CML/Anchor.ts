@@ -1,8 +1,25 @@
+/**
+ * @since 2.0.0
+ */
 import { Data, Effect } from "effect";
 import * as CML from "@anastasia-labs/cardano-multiplatform-lib-nodejs";
 
+/**
+ * Type alias for the CML Anchor class
+ *
+ * @since 2.0.0
+ * @category Types
+ */
 export type Anchor = CML.Anchor;
 
+/**
+ * Error class for Anchor operations
+ *
+ * This error is thrown when operations on Anchor instances fail.
+ *
+ * @since 2.0.0
+ * @category Errors
+ */
 export class AnchorError extends Data.TaggedError("AnchorError")<{
   message?: string;
 }> {}
@@ -47,16 +64,16 @@ export const free = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = Anchor.unsafeFree(instance);
+ *   const result = Anchor.freeUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`Anchor.unsafeFree failed: ${error.message}`);
+ *   console.error(`Anchor.freeUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeFree = (instance: CML.Anchor): void =>
+export const freeUnsafe = (instance: CML.Anchor): void =>
   Effect.runSync(free(instance));
 
 /**
@@ -99,16 +116,16 @@ export const toCborBytes = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = Anchor.unsafeToCborBytes(instance);
+ *   const result = Anchor.toCborBytesUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`Anchor.unsafeToCborBytes failed: ${error.message}`);
+ *   console.error(`Anchor.toCborBytesUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeToCborBytes = (instance: CML.Anchor): Uint8Array =>
+export const toCborBytesUnsafe = (instance: CML.Anchor): Uint8Array =>
   Effect.runSync(toCborBytes(instance));
 
 /**
@@ -151,16 +168,16 @@ export const toCanonicalCborBytes = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = Anchor.unsafeToCanonicalCborBytes(instance);
+ *   const result = Anchor.toCanonicalCborBytesUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`Anchor.unsafeToCanonicalCborBytes failed: ${error.message}`);
+ *   console.error(`Anchor.toCanonicalCborBytesUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeToCanonicalCborBytes = (instance: CML.Anchor): Uint8Array =>
+export const toCanonicalCborBytesUnsafe = (instance: CML.Anchor): Uint8Array =>
   Effect.runSync(toCanonicalCborBytes(instance));
 
 /**
@@ -200,16 +217,16 @@ export const fromCborBytes = Effect.fn(function* (cborBytes: Uint8Array) {
  *
  * // Using try/catch for error handling
  * try {
- *   const result = Anchor.unsafeFromCborBytes( parameters );
+ *   const result = Anchor.fromCborBytesUnsafe( parameters );
  *   console.log(result);
  * } catch (error) {
- *   console.error(`Anchor.unsafeFromCborBytes failed: ${error.message}`);
+ *   console.error(`Anchor.fromCborBytesUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Constructors
+ * @category ConstructorsUnsafe
  */
-export const unsafeFromCborBytes = (cborBytes: Uint8Array) =>
+export const fromCborBytesUnsafe = (cborBytes: Uint8Array) =>
   Effect.runSync(fromCborBytes(cborBytes));
 
 /**
@@ -252,16 +269,16 @@ export const toCborHex = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = Anchor.unsafeToCborHex(instance);
+ *   const result = Anchor.toCborHexUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`Anchor.unsafeToCborHex failed: ${error.message}`);
+ *   console.error(`Anchor.toCborHexUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeToCborHex = (instance: CML.Anchor): string =>
+export const toCborHexUnsafe = (instance: CML.Anchor): string =>
   Effect.runSync(toCborHex(instance));
 
 /**
@@ -304,16 +321,16 @@ export const toCanonicalCborHex = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = Anchor.unsafeToCanonicalCborHex(instance);
+ *   const result = Anchor.toCanonicalCborHexUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`Anchor.unsafeToCanonicalCborHex failed: ${error.message}`);
+ *   console.error(`Anchor.toCanonicalCborHexUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeToCanonicalCborHex = (instance: CML.Anchor): string =>
+export const toCanonicalCborHexUnsafe = (instance: CML.Anchor): string =>
   Effect.runSync(toCanonicalCborHex(instance));
 
 /**
@@ -353,16 +370,16 @@ export const fromCborHex = Effect.fn(function* (cborBytes: string) {
  *
  * // Using try/catch for error handling
  * try {
- *   const result = Anchor.unsafeFromCborHex( parameters );
+ *   const result = Anchor.fromCborHexUnsafe( parameters );
  *   console.log(result);
  * } catch (error) {
- *   console.error(`Anchor.unsafeFromCborHex failed: ${error.message}`);
+ *   console.error(`Anchor.fromCborHexUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Constructors
+ * @category ConstructorsUnsafe
  */
-export const unsafeFromCborHex = (cborBytes: string) =>
+export const fromCborHexUnsafe = (cborBytes: string) =>
   Effect.runSync(fromCborHex(cborBytes));
 
 /**
@@ -405,16 +422,16 @@ export const toJson = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = Anchor.unsafeToJson(instance);
+ *   const result = Anchor.toJsonUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`Anchor.unsafeToJson failed: ${error.message}`);
+ *   console.error(`Anchor.toJsonUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeToJson = (instance: CML.Anchor): string =>
+export const toJsonUnsafe = (instance: CML.Anchor): string =>
   Effect.runSync(toJson(instance));
 
 /**
@@ -457,16 +474,16 @@ export const toJsValue = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = Anchor.unsafeToJsValue(instance);
+ *   const result = Anchor.toJsValueUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`Anchor.unsafeToJsValue failed: ${error.message}`);
+ *   console.error(`Anchor.toJsValueUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeToJsValue = (instance: CML.Anchor): any =>
+export const toJsValueUnsafe = (instance: CML.Anchor): any =>
   Effect.runSync(toJsValue(instance));
 
 /**
@@ -506,16 +523,16 @@ export const fromJson = Effect.fn(function* (json: string) {
  *
  * // Using try/catch for error handling
  * try {
- *   const result = Anchor.unsafeFromJson( parameters );
+ *   const result = Anchor.fromJsonUnsafe( parameters );
  *   console.log(result);
  * } catch (error) {
- *   console.error(`Anchor.unsafeFromJson failed: ${error.message}`);
+ *   console.error(`Anchor.fromJsonUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Constructors
+ * @category ConstructorsUnsafe
  */
-export const unsafeFromJson = (json: string) => Effect.runSync(fromJson(json));
+export const fromJsonUnsafe = (json: string) => Effect.runSync(fromJson(json));
 
 /**
  * Method anchorUrl of Anchor
@@ -557,16 +574,16 @@ export const anchorUrl = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = Anchor.unsafeAnchorUrl(instance);
+ *   const result = Anchor.anchorUrlUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`Anchor.unsafeAnchorUrl failed: ${error.message}`);
+ *   console.error(`Anchor.anchorUrlUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeAnchorUrl = (instance: CML.Anchor): CML.Url =>
+export const anchorUrlUnsafe = (instance: CML.Anchor): CML.Url =>
   Effect.runSync(anchorUrl(instance));
 
 /**
@@ -609,16 +626,16 @@ export const anchorDocHash = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = Anchor.unsafeAnchorDocHash(instance);
+ *   const result = Anchor.anchorDocHashUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`Anchor.unsafeAnchorDocHash failed: ${error.message}`);
+ *   console.error(`Anchor.anchorDocHashUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeAnchorDocHash = (instance: CML.Anchor): CML.AnchorDocHash =>
+export const anchorDocHashUnsafe = (instance: CML.Anchor): CML.AnchorDocHash =>
   Effect.runSync(anchorDocHash(instance));
 
 /**
@@ -661,16 +678,16 @@ export const _new = Effect.fn(function* (
  *
  * // Using try/catch for error handling
  * try {
- *   const result = Anchor.unsafe_new( parameters );
+ *   const result = Anchor._newUnsafe( parameters );
  *   console.log(result);
  * } catch (error) {
- *   console.error(`Anchor.unsafe_new failed: ${error.message}`);
+ *   console.error(`Anchor._newUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Constructors
+ * @category ConstructorsUnsafe
  */
-export const unsafe_new = (
+export const _newUnsafe = (
   anchorUrl: CML.Url,
   anchorDocHash: CML.AnchorDocHash,
 ) => Effect.runSync(_new(anchorUrl, anchorDocHash));

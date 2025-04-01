@@ -1,8 +1,25 @@
+/**
+ * @since 2.0.0
+ */
 import { Data, Effect } from "effect";
 import * as CML from "@anastasia-labs/cardano-multiplatform-lib-nodejs";
 
+/**
+ * Type alias for the CML ConwayFormatTxOut class
+ *
+ * @since 2.0.0
+ * @category Types
+ */
 export type ConwayFormatTxOut = CML.ConwayFormatTxOut;
 
+/**
+ * Error class for ConwayFormatTxOut operations
+ *
+ * This error is thrown when operations on ConwayFormatTxOut instances fail.
+ *
+ * @since 2.0.0
+ * @category Errors
+ */
 export class ConwayFormatTxOutError extends Data.TaggedError(
   "ConwayFormatTxOutError",
 )<{
@@ -51,16 +68,16 @@ export const free = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = ConwayFormatTxOut.unsafeFree(instance);
+ *   const result = ConwayFormatTxOut.freeUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`ConwayFormatTxOut.unsafeFree failed: ${error.message}`);
+ *   console.error(`ConwayFormatTxOut.freeUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeFree = (instance: CML.ConwayFormatTxOut): void =>
+export const freeUnsafe = (instance: CML.ConwayFormatTxOut): void =>
   Effect.runSync(free(instance));
 
 /**
@@ -105,16 +122,16 @@ export const toCborBytes = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = ConwayFormatTxOut.unsafeToCborBytes(instance);
+ *   const result = ConwayFormatTxOut.toCborBytesUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`ConwayFormatTxOut.unsafeToCborBytes failed: ${error.message}`);
+ *   console.error(`ConwayFormatTxOut.toCborBytesUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeToCborBytes = (
+export const toCborBytesUnsafe = (
   instance: CML.ConwayFormatTxOut,
 ): Uint8Array => Effect.runSync(toCborBytes(instance));
 
@@ -160,16 +177,16 @@ export const toCanonicalCborBytes = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = ConwayFormatTxOut.unsafeToCanonicalCborBytes(instance);
+ *   const result = ConwayFormatTxOut.toCanonicalCborBytesUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`ConwayFormatTxOut.unsafeToCanonicalCborBytes failed: ${error.message}`);
+ *   console.error(`ConwayFormatTxOut.toCanonicalCborBytesUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeToCanonicalCborBytes = (
+export const toCanonicalCborBytesUnsafe = (
   instance: CML.ConwayFormatTxOut,
 ): Uint8Array => Effect.runSync(toCanonicalCborBytes(instance));
 
@@ -210,16 +227,16 @@ export const fromCborBytes = Effect.fn(function* (cborBytes: Uint8Array) {
  *
  * // Using try/catch for error handling
  * try {
- *   const result = ConwayFormatTxOut.unsafeFromCborBytes( parameters );
+ *   const result = ConwayFormatTxOut.fromCborBytesUnsafe( parameters );
  *   console.log(result);
  * } catch (error) {
- *   console.error(`ConwayFormatTxOut.unsafeFromCborBytes failed: ${error.message}`);
+ *   console.error(`ConwayFormatTxOut.fromCborBytesUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Constructors
+ * @category ConstructorsUnsafe
  */
-export const unsafeFromCborBytes = (cborBytes: Uint8Array) =>
+export const fromCborBytesUnsafe = (cborBytes: Uint8Array) =>
   Effect.runSync(fromCborBytes(cborBytes));
 
 /**
@@ -264,16 +281,16 @@ export const toCborHex = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = ConwayFormatTxOut.unsafeToCborHex(instance);
+ *   const result = ConwayFormatTxOut.toCborHexUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`ConwayFormatTxOut.unsafeToCborHex failed: ${error.message}`);
+ *   console.error(`ConwayFormatTxOut.toCborHexUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeToCborHex = (instance: CML.ConwayFormatTxOut): string =>
+export const toCborHexUnsafe = (instance: CML.ConwayFormatTxOut): string =>
   Effect.runSync(toCborHex(instance));
 
 /**
@@ -318,16 +335,16 @@ export const toCanonicalCborHex = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = ConwayFormatTxOut.unsafeToCanonicalCborHex(instance);
+ *   const result = ConwayFormatTxOut.toCanonicalCborHexUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`ConwayFormatTxOut.unsafeToCanonicalCborHex failed: ${error.message}`);
+ *   console.error(`ConwayFormatTxOut.toCanonicalCborHexUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeToCanonicalCborHex = (
+export const toCanonicalCborHexUnsafe = (
   instance: CML.ConwayFormatTxOut,
 ): string => Effect.runSync(toCanonicalCborHex(instance));
 
@@ -368,16 +385,16 @@ export const fromCborHex = Effect.fn(function* (cborBytes: string) {
  *
  * // Using try/catch for error handling
  * try {
- *   const result = ConwayFormatTxOut.unsafeFromCborHex( parameters );
+ *   const result = ConwayFormatTxOut.fromCborHexUnsafe( parameters );
  *   console.log(result);
  * } catch (error) {
- *   console.error(`ConwayFormatTxOut.unsafeFromCborHex failed: ${error.message}`);
+ *   console.error(`ConwayFormatTxOut.fromCborHexUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Constructors
+ * @category ConstructorsUnsafe
  */
-export const unsafeFromCborHex = (cborBytes: string) =>
+export const fromCborHexUnsafe = (cborBytes: string) =>
   Effect.runSync(fromCborHex(cborBytes));
 
 /**
@@ -422,16 +439,16 @@ export const toJson = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = ConwayFormatTxOut.unsafeToJson(instance);
+ *   const result = ConwayFormatTxOut.toJsonUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`ConwayFormatTxOut.unsafeToJson failed: ${error.message}`);
+ *   console.error(`ConwayFormatTxOut.toJsonUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeToJson = (instance: CML.ConwayFormatTxOut): string =>
+export const toJsonUnsafe = (instance: CML.ConwayFormatTxOut): string =>
   Effect.runSync(toJson(instance));
 
 /**
@@ -476,16 +493,16 @@ export const toJsValue = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = ConwayFormatTxOut.unsafeToJsValue(instance);
+ *   const result = ConwayFormatTxOut.toJsValueUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`ConwayFormatTxOut.unsafeToJsValue failed: ${error.message}`);
+ *   console.error(`ConwayFormatTxOut.toJsValueUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeToJsValue = (instance: CML.ConwayFormatTxOut): any =>
+export const toJsValueUnsafe = (instance: CML.ConwayFormatTxOut): any =>
   Effect.runSync(toJsValue(instance));
 
 /**
@@ -525,16 +542,16 @@ export const fromJson = Effect.fn(function* (json: string) {
  *
  * // Using try/catch for error handling
  * try {
- *   const result = ConwayFormatTxOut.unsafeFromJson( parameters );
+ *   const result = ConwayFormatTxOut.fromJsonUnsafe( parameters );
  *   console.log(result);
  * } catch (error) {
- *   console.error(`ConwayFormatTxOut.unsafeFromJson failed: ${error.message}`);
+ *   console.error(`ConwayFormatTxOut.fromJsonUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Constructors
+ * @category ConstructorsUnsafe
  */
-export const unsafeFromJson = (json: string) => Effect.runSync(fromJson(json));
+export const fromJsonUnsafe = (json: string) => Effect.runSync(fromJson(json));
 
 /**
  * Method address of ConwayFormatTxOut
@@ -578,16 +595,16 @@ export const address = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = ConwayFormatTxOut.unsafeAddress(instance);
+ *   const result = ConwayFormatTxOut.addressUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`ConwayFormatTxOut.unsafeAddress failed: ${error.message}`);
+ *   console.error(`ConwayFormatTxOut.addressUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeAddress = (instance: CML.ConwayFormatTxOut): CML.Address =>
+export const addressUnsafe = (instance: CML.ConwayFormatTxOut): CML.Address =>
   Effect.runSync(address(instance));
 
 /**
@@ -632,16 +649,16 @@ export const amount = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = ConwayFormatTxOut.unsafeAmount(instance);
+ *   const result = ConwayFormatTxOut.amountUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`ConwayFormatTxOut.unsafeAmount failed: ${error.message}`);
+ *   console.error(`ConwayFormatTxOut.amountUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeAmount = (instance: CML.ConwayFormatTxOut): CML.Value =>
+export const amountUnsafe = (instance: CML.ConwayFormatTxOut): CML.Value =>
   Effect.runSync(amount(instance));
 
 /**
@@ -687,16 +704,16 @@ export const setDatumOption = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = ConwayFormatTxOut.unsafeSetDatumOption(instance,  parameters );
+ *   const result = ConwayFormatTxOut.setDatumOptionUnsafe(instance,  parameters );
  *   console.log(result);
  * } catch (error) {
- *   console.error(`ConwayFormatTxOut.unsafeSetDatumOption failed: ${error.message}`);
+ *   console.error(`ConwayFormatTxOut.setDatumOptionUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeSetDatumOption = (
+export const setDatumOptionUnsafe = (
   instance: CML.ConwayFormatTxOut,
   datumOption: CML.DatumOption,
 ): void => Effect.runSync(setDatumOption(instance, datumOption));
@@ -743,16 +760,16 @@ export const datumOption = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = ConwayFormatTxOut.unsafeDatumOption(instance);
+ *   const result = ConwayFormatTxOut.datumOptionUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`ConwayFormatTxOut.unsafeDatumOption failed: ${error.message}`);
+ *   console.error(`ConwayFormatTxOut.datumOptionUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeDatumOption = (
+export const datumOptionUnsafe = (
   instance: CML.ConwayFormatTxOut,
 ): CML.DatumOption | undefined => Effect.runSync(datumOption(instance));
 
@@ -799,16 +816,16 @@ export const setScriptReference = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = ConwayFormatTxOut.unsafeSetScriptReference(instance,  parameters );
+ *   const result = ConwayFormatTxOut.setScriptReferenceUnsafe(instance,  parameters );
  *   console.log(result);
  * } catch (error) {
- *   console.error(`ConwayFormatTxOut.unsafeSetScriptReference failed: ${error.message}`);
+ *   console.error(`ConwayFormatTxOut.setScriptReferenceUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeSetScriptReference = (
+export const setScriptReferenceUnsafe = (
   instance: CML.ConwayFormatTxOut,
   scriptReference: CML.Script,
 ): void => Effect.runSync(setScriptReference(instance, scriptReference));
@@ -855,16 +872,16 @@ export const scriptReference = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = ConwayFormatTxOut.unsafeScriptReference(instance);
+ *   const result = ConwayFormatTxOut.scriptReferenceUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`ConwayFormatTxOut.unsafeScriptReference failed: ${error.message}`);
+ *   console.error(`ConwayFormatTxOut.scriptReferenceUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeScriptReference = (
+export const scriptReferenceUnsafe = (
   instance: CML.ConwayFormatTxOut,
 ): CML.Script | undefined => Effect.runSync(scriptReference(instance));
 
@@ -908,14 +925,14 @@ export const _new = Effect.fn(function* (
  *
  * // Using try/catch for error handling
  * try {
- *   const result = ConwayFormatTxOut.unsafe_new( parameters );
+ *   const result = ConwayFormatTxOut._newUnsafe( parameters );
  *   console.log(result);
  * } catch (error) {
- *   console.error(`ConwayFormatTxOut.unsafe_new failed: ${error.message}`);
+ *   console.error(`ConwayFormatTxOut._newUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Constructors
+ * @category ConstructorsUnsafe
  */
-export const unsafe_new = (address: CML.Address, amount: CML.Value) =>
+export const _newUnsafe = (address: CML.Address, amount: CML.Value) =>
   Effect.runSync(_new(address, amount));

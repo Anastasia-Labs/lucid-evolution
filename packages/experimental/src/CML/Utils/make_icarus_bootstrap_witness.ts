@@ -1,6 +1,17 @@
+/**
+ * @since 2.0.0
+ */
 import { Data, Effect } from "effect";
 import * as CML from "@anastasia-labs/cardano-multiplatform-lib-nodejs";
 
+/**
+ * Error class for make_icarus_bootstrap_witness function
+ *
+ * This error is thrown when the make_icarus_bootstrap_witness function fails.
+ *
+ * @since 2.0.0
+ * @category Errors
+ */
 export class MakeIcarusBootstrapWitnessError extends Data.TaggedError(
   "MakeIcarusBootstrapWitnessError",
 )<{
@@ -41,19 +52,19 @@ export const makeIcarusBootstrapWitness = Effect.fn(function* (
  * Unsafely calls make_icarus_bootstrap_witness function without Effect wrapper
  *
  * @example
- * import { unsafeMakeIcarusBootstrapWitness } from "@lucid-evolution/experimental/CML/functions";
+ * import { makeIcarusBootstrapWitnessUnsafe } from "@lucid-evolution/experimental/CML/functions";
  *
  * try {
- *   const result = unsafeMakeIcarusBootstrapWitness(TransactionHash instance , ByronAddress instance , Bip32PrivateKey instance );
+ *   const result = makeIcarusBootstrapWitnessUnsafe(TransactionHash instance , ByronAddress instance , Bip32PrivateKey instance );
  *   console.log(result);
  * } catch (error) {
- *   console.error(`unsafeMakeIcarusBootstrapWitness failed: ${error.message}`);
+ *   console.error(`makeIcarusBootstrapWitnessUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Functions
+ * @category FunctionsUnsafe
  */
-export const unsafeMakeIcarusBootstrapWitness = (
+export const makeIcarusBootstrapWitnessUnsafe = (
   txBodyHash: CML.TransactionHash,
   addr: CML.ByronAddress,
   key: CML.Bip32PrivateKey,

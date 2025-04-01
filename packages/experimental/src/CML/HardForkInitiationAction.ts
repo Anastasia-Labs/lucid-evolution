@@ -1,8 +1,25 @@
+/**
+ * @since 2.0.0
+ */
 import { Data, Effect } from "effect";
 import * as CML from "@anastasia-labs/cardano-multiplatform-lib-nodejs";
 
+/**
+ * Type alias for the CML HardForkInitiationAction class
+ *
+ * @since 2.0.0
+ * @category Types
+ */
 export type HardForkInitiationAction = CML.HardForkInitiationAction;
 
+/**
+ * Error class for HardForkInitiationAction operations
+ *
+ * This error is thrown when operations on HardForkInitiationAction instances fail.
+ *
+ * @since 2.0.0
+ * @category Errors
+ */
 export class HardForkInitiationActionError extends Data.TaggedError(
   "HardForkInitiationActionError",
 )<{
@@ -51,16 +68,16 @@ export const free = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = HardForkInitiationAction.unsafeFree(instance);
+ *   const result = HardForkInitiationAction.freeUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`HardForkInitiationAction.unsafeFree failed: ${error.message}`);
+ *   console.error(`HardForkInitiationAction.freeUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeFree = (instance: CML.HardForkInitiationAction): void =>
+export const freeUnsafe = (instance: CML.HardForkInitiationAction): void =>
   Effect.runSync(free(instance));
 
 /**
@@ -105,16 +122,16 @@ export const toCborBytes = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = HardForkInitiationAction.unsafeToCborBytes(instance);
+ *   const result = HardForkInitiationAction.toCborBytesUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`HardForkInitiationAction.unsafeToCborBytes failed: ${error.message}`);
+ *   console.error(`HardForkInitiationAction.toCborBytesUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeToCborBytes = (
+export const toCborBytesUnsafe = (
   instance: CML.HardForkInitiationAction,
 ): Uint8Array => Effect.runSync(toCborBytes(instance));
 
@@ -160,16 +177,16 @@ export const toCanonicalCborBytes = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = HardForkInitiationAction.unsafeToCanonicalCborBytes(instance);
+ *   const result = HardForkInitiationAction.toCanonicalCborBytesUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`HardForkInitiationAction.unsafeToCanonicalCborBytes failed: ${error.message}`);
+ *   console.error(`HardForkInitiationAction.toCanonicalCborBytesUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeToCanonicalCborBytes = (
+export const toCanonicalCborBytesUnsafe = (
   instance: CML.HardForkInitiationAction,
 ): Uint8Array => Effect.runSync(toCanonicalCborBytes(instance));
 
@@ -210,16 +227,16 @@ export const fromCborBytes = Effect.fn(function* (cborBytes: Uint8Array) {
  *
  * // Using try/catch for error handling
  * try {
- *   const result = HardForkInitiationAction.unsafeFromCborBytes( parameters );
+ *   const result = HardForkInitiationAction.fromCborBytesUnsafe( parameters );
  *   console.log(result);
  * } catch (error) {
- *   console.error(`HardForkInitiationAction.unsafeFromCborBytes failed: ${error.message}`);
+ *   console.error(`HardForkInitiationAction.fromCborBytesUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Constructors
+ * @category ConstructorsUnsafe
  */
-export const unsafeFromCborBytes = (cborBytes: Uint8Array) =>
+export const fromCborBytesUnsafe = (cborBytes: Uint8Array) =>
   Effect.runSync(fromCborBytes(cborBytes));
 
 /**
@@ -264,16 +281,16 @@ export const toCborHex = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = HardForkInitiationAction.unsafeToCborHex(instance);
+ *   const result = HardForkInitiationAction.toCborHexUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`HardForkInitiationAction.unsafeToCborHex failed: ${error.message}`);
+ *   console.error(`HardForkInitiationAction.toCborHexUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeToCborHex = (
+export const toCborHexUnsafe = (
   instance: CML.HardForkInitiationAction,
 ): string => Effect.runSync(toCborHex(instance));
 
@@ -319,16 +336,16 @@ export const toCanonicalCborHex = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = HardForkInitiationAction.unsafeToCanonicalCborHex(instance);
+ *   const result = HardForkInitiationAction.toCanonicalCborHexUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`HardForkInitiationAction.unsafeToCanonicalCborHex failed: ${error.message}`);
+ *   console.error(`HardForkInitiationAction.toCanonicalCborHexUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeToCanonicalCborHex = (
+export const toCanonicalCborHexUnsafe = (
   instance: CML.HardForkInitiationAction,
 ): string => Effect.runSync(toCanonicalCborHex(instance));
 
@@ -369,16 +386,16 @@ export const fromCborHex = Effect.fn(function* (cborBytes: string) {
  *
  * // Using try/catch for error handling
  * try {
- *   const result = HardForkInitiationAction.unsafeFromCborHex( parameters );
+ *   const result = HardForkInitiationAction.fromCborHexUnsafe( parameters );
  *   console.log(result);
  * } catch (error) {
- *   console.error(`HardForkInitiationAction.unsafeFromCborHex failed: ${error.message}`);
+ *   console.error(`HardForkInitiationAction.fromCborHexUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Constructors
+ * @category ConstructorsUnsafe
  */
-export const unsafeFromCborHex = (cborBytes: string) =>
+export const fromCborHexUnsafe = (cborBytes: string) =>
   Effect.runSync(fromCborHex(cborBytes));
 
 /**
@@ -423,16 +440,16 @@ export const toJson = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = HardForkInitiationAction.unsafeToJson(instance);
+ *   const result = HardForkInitiationAction.toJsonUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`HardForkInitiationAction.unsafeToJson failed: ${error.message}`);
+ *   console.error(`HardForkInitiationAction.toJsonUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeToJson = (instance: CML.HardForkInitiationAction): string =>
+export const toJsonUnsafe = (instance: CML.HardForkInitiationAction): string =>
   Effect.runSync(toJson(instance));
 
 /**
@@ -477,16 +494,16 @@ export const toJsValue = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = HardForkInitiationAction.unsafeToJsValue(instance);
+ *   const result = HardForkInitiationAction.toJsValueUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`HardForkInitiationAction.unsafeToJsValue failed: ${error.message}`);
+ *   console.error(`HardForkInitiationAction.toJsValueUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeToJsValue = (instance: CML.HardForkInitiationAction): any =>
+export const toJsValueUnsafe = (instance: CML.HardForkInitiationAction): any =>
   Effect.runSync(toJsValue(instance));
 
 /**
@@ -526,16 +543,16 @@ export const fromJson = Effect.fn(function* (json: string) {
  *
  * // Using try/catch for error handling
  * try {
- *   const result = HardForkInitiationAction.unsafeFromJson( parameters );
+ *   const result = HardForkInitiationAction.fromJsonUnsafe( parameters );
  *   console.log(result);
  * } catch (error) {
- *   console.error(`HardForkInitiationAction.unsafeFromJson failed: ${error.message}`);
+ *   console.error(`HardForkInitiationAction.fromJsonUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Constructors
+ * @category ConstructorsUnsafe
  */
-export const unsafeFromJson = (json: string) => Effect.runSync(fromJson(json));
+export const fromJsonUnsafe = (json: string) => Effect.runSync(fromJson(json));
 
 /**
  * Method actionId of HardForkInitiationAction
@@ -582,16 +599,16 @@ export const actionId = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = HardForkInitiationAction.unsafeActionId(instance);
+ *   const result = HardForkInitiationAction.actionIdUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`HardForkInitiationAction.unsafeActionId failed: ${error.message}`);
+ *   console.error(`HardForkInitiationAction.actionIdUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeActionId = (
+export const actionIdUnsafe = (
   instance: CML.HardForkInitiationAction,
 ): CML.GovActionId | undefined => Effect.runSync(actionId(instance));
 
@@ -637,16 +654,16 @@ export const version = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = HardForkInitiationAction.unsafeVersion(instance);
+ *   const result = HardForkInitiationAction.versionUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`HardForkInitiationAction.unsafeVersion failed: ${error.message}`);
+ *   console.error(`HardForkInitiationAction.versionUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeVersion = (
+export const versionUnsafe = (
   instance: CML.HardForkInitiationAction,
 ): CML.ProtocolVersion => Effect.runSync(version(instance));
 
@@ -690,16 +707,16 @@ export const _new = Effect.fn(function* (
  *
  * // Using try/catch for error handling
  * try {
- *   const result = HardForkInitiationAction.unsafe_new( parameters );
+ *   const result = HardForkInitiationAction._newUnsafe( parameters );
  *   console.log(result);
  * } catch (error) {
- *   console.error(`HardForkInitiationAction.unsafe_new failed: ${error.message}`);
+ *   console.error(`HardForkInitiationAction._newUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Constructors
+ * @category ConstructorsUnsafe
  */
-export const unsafe_new = (
+export const _newUnsafe = (
   actionId: CML.GovActionId | undefined,
   version: CML.ProtocolVersion,
 ) => Effect.runSync(_new(actionId, version));

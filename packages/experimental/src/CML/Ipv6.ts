@@ -1,8 +1,25 @@
+/**
+ * @since 2.0.0
+ */
 import { Data, Effect } from "effect";
 import * as CML from "@anastasia-labs/cardano-multiplatform-lib-nodejs";
 
+/**
+ * Type alias for the CML Ipv6 class
+ *
+ * @since 2.0.0
+ * @category Types
+ */
 export type Ipv6 = CML.Ipv6;
 
+/**
+ * Error class for Ipv6 operations
+ *
+ * This error is thrown when operations on Ipv6 instances fail.
+ *
+ * @since 2.0.0
+ * @category Errors
+ */
 export class Ipv6Error extends Data.TaggedError("Ipv6Error")<{
   message?: string;
 }> {}
@@ -47,16 +64,16 @@ export const free = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = Ipv6.unsafeFree(instance);
+ *   const result = Ipv6.freeUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`Ipv6.unsafeFree failed: ${error.message}`);
+ *   console.error(`Ipv6.freeUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeFree = (instance: CML.Ipv6): void =>
+export const freeUnsafe = (instance: CML.Ipv6): void =>
   Effect.runSync(free(instance));
 
 /**
@@ -99,16 +116,16 @@ export const toCborBytes = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = Ipv6.unsafeToCborBytes(instance);
+ *   const result = Ipv6.toCborBytesUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`Ipv6.unsafeToCborBytes failed: ${error.message}`);
+ *   console.error(`Ipv6.toCborBytesUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeToCborBytes = (instance: CML.Ipv6): Uint8Array =>
+export const toCborBytesUnsafe = (instance: CML.Ipv6): Uint8Array =>
   Effect.runSync(toCborBytes(instance));
 
 /**
@@ -151,16 +168,16 @@ export const toCanonicalCborBytes = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = Ipv6.unsafeToCanonicalCborBytes(instance);
+ *   const result = Ipv6.toCanonicalCborBytesUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`Ipv6.unsafeToCanonicalCborBytes failed: ${error.message}`);
+ *   console.error(`Ipv6.toCanonicalCborBytesUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeToCanonicalCborBytes = (instance: CML.Ipv6): Uint8Array =>
+export const toCanonicalCborBytesUnsafe = (instance: CML.Ipv6): Uint8Array =>
   Effect.runSync(toCanonicalCborBytes(instance));
 
 /**
@@ -200,16 +217,16 @@ export const fromCborBytes = Effect.fn(function* (cborBytes: Uint8Array) {
  *
  * // Using try/catch for error handling
  * try {
- *   const result = Ipv6.unsafeFromCborBytes( parameters );
+ *   const result = Ipv6.fromCborBytesUnsafe( parameters );
  *   console.log(result);
  * } catch (error) {
- *   console.error(`Ipv6.unsafeFromCborBytes failed: ${error.message}`);
+ *   console.error(`Ipv6.fromCborBytesUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Constructors
+ * @category ConstructorsUnsafe
  */
-export const unsafeFromCborBytes = (cborBytes: Uint8Array) =>
+export const fromCborBytesUnsafe = (cborBytes: Uint8Array) =>
   Effect.runSync(fromCborBytes(cborBytes));
 
 /**
@@ -252,16 +269,16 @@ export const toCborHex = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = Ipv6.unsafeToCborHex(instance);
+ *   const result = Ipv6.toCborHexUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`Ipv6.unsafeToCborHex failed: ${error.message}`);
+ *   console.error(`Ipv6.toCborHexUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeToCborHex = (instance: CML.Ipv6): string =>
+export const toCborHexUnsafe = (instance: CML.Ipv6): string =>
   Effect.runSync(toCborHex(instance));
 
 /**
@@ -304,16 +321,16 @@ export const toCanonicalCborHex = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = Ipv6.unsafeToCanonicalCborHex(instance);
+ *   const result = Ipv6.toCanonicalCborHexUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`Ipv6.unsafeToCanonicalCborHex failed: ${error.message}`);
+ *   console.error(`Ipv6.toCanonicalCborHexUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeToCanonicalCborHex = (instance: CML.Ipv6): string =>
+export const toCanonicalCborHexUnsafe = (instance: CML.Ipv6): string =>
   Effect.runSync(toCanonicalCborHex(instance));
 
 /**
@@ -353,16 +370,16 @@ export const fromCborHex = Effect.fn(function* (cborBytes: string) {
  *
  * // Using try/catch for error handling
  * try {
- *   const result = Ipv6.unsafeFromCborHex( parameters );
+ *   const result = Ipv6.fromCborHexUnsafe( parameters );
  *   console.log(result);
  * } catch (error) {
- *   console.error(`Ipv6.unsafeFromCborHex failed: ${error.message}`);
+ *   console.error(`Ipv6.fromCborHexUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Constructors
+ * @category ConstructorsUnsafe
  */
-export const unsafeFromCborHex = (cborBytes: string) =>
+export const fromCborHexUnsafe = (cborBytes: string) =>
   Effect.runSync(fromCborHex(cborBytes));
 
 /**
@@ -405,16 +422,16 @@ export const toJson = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = Ipv6.unsafeToJson(instance);
+ *   const result = Ipv6.toJsonUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`Ipv6.unsafeToJson failed: ${error.message}`);
+ *   console.error(`Ipv6.toJsonUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeToJson = (instance: CML.Ipv6): string =>
+export const toJsonUnsafe = (instance: CML.Ipv6): string =>
   Effect.runSync(toJson(instance));
 
 /**
@@ -457,16 +474,16 @@ export const toJsValue = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = Ipv6.unsafeToJsValue(instance);
+ *   const result = Ipv6.toJsValueUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`Ipv6.unsafeToJsValue failed: ${error.message}`);
+ *   console.error(`Ipv6.toJsValueUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeToJsValue = (instance: CML.Ipv6): any =>
+export const toJsValueUnsafe = (instance: CML.Ipv6): any =>
   Effect.runSync(toJsValue(instance));
 
 /**
@@ -506,16 +523,16 @@ export const fromJson = Effect.fn(function* (json: string) {
  *
  * // Using try/catch for error handling
  * try {
- *   const result = Ipv6.unsafeFromJson( parameters );
+ *   const result = Ipv6.fromJsonUnsafe( parameters );
  *   console.log(result);
  * } catch (error) {
- *   console.error(`Ipv6.unsafeFromJson failed: ${error.message}`);
+ *   console.error(`Ipv6.fromJsonUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Constructors
+ * @category ConstructorsUnsafe
  */
-export const unsafeFromJson = (json: string) => Effect.runSync(fromJson(json));
+export const fromJsonUnsafe = (json: string) => Effect.runSync(fromJson(json));
 
 /**
  * Method get of Ipv6
@@ -557,14 +574,14 @@ export const get = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = Ipv6.unsafeGet(instance);
+ *   const result = Ipv6.getUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`Ipv6.unsafeGet failed: ${error.message}`);
+ *   console.error(`Ipv6.getUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeGet = (instance: CML.Ipv6): Uint8Array =>
+export const getUnsafe = (instance: CML.Ipv6): Uint8Array =>
   Effect.runSync(get(instance));

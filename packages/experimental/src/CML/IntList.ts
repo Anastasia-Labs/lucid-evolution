@@ -1,8 +1,25 @@
+/**
+ * @since 2.0.0
+ */
 import { Data, Effect } from "effect";
 import * as CML from "@anastasia-labs/cardano-multiplatform-lib-nodejs";
 
+/**
+ * Type alias for the CML IntList class
+ *
+ * @since 2.0.0
+ * @category Types
+ */
 export type IntList = CML.IntList;
 
+/**
+ * Error class for IntList operations
+ *
+ * This error is thrown when operations on IntList instances fail.
+ *
+ * @since 2.0.0
+ * @category Errors
+ */
 export class IntListError extends Data.TaggedError("IntListError")<{
   message?: string;
 }> {}
@@ -47,16 +64,16 @@ export const free = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = IntList.unsafeFree(instance);
+ *   const result = IntList.freeUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`IntList.unsafeFree failed: ${error.message}`);
+ *   console.error(`IntList.freeUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeFree = (instance: CML.IntList): void =>
+export const freeUnsafe = (instance: CML.IntList): void =>
   Effect.runSync(free(instance));
 
 /**
@@ -96,16 +113,16 @@ export const _new = Effect.fn(function* () {
  *
  * // Using try/catch for error handling
  * try {
- *   const result = IntList.unsafe_new();
+ *   const result = IntList._newUnsafe();
  *   console.log(result);
  * } catch (error) {
- *   console.error(`IntList.unsafe_new failed: ${error.message}`);
+ *   console.error(`IntList._newUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Constructors
+ * @category ConstructorsUnsafe
  */
-export const unsafe_new = () => Effect.runSync(_new());
+export const _newUnsafe = () => Effect.runSync(_new());
 
 /**
  * Method len of IntList
@@ -147,16 +164,16 @@ export const len = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = IntList.unsafeLen(instance);
+ *   const result = IntList.lenUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`IntList.unsafeLen failed: ${error.message}`);
+ *   console.error(`IntList.lenUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeLen = (instance: CML.IntList): number =>
+export const lenUnsafe = (instance: CML.IntList): number =>
   Effect.runSync(len(instance));
 
 /**
@@ -202,16 +219,16 @@ export const get = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = IntList.unsafeGet(instance,  parameters );
+ *   const result = IntList.getUnsafe(instance,  parameters );
  *   console.log(result);
  * } catch (error) {
- *   console.error(`IntList.unsafeGet failed: ${error.message}`);
+ *   console.error(`IntList.getUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeGet = (instance: CML.IntList, index: number): CML.Int =>
+export const getUnsafe = (instance: CML.IntList, index: number): CML.Int =>
   Effect.runSync(get(instance, index));
 
 /**
@@ -254,14 +271,14 @@ export const add = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = IntList.unsafeAdd(instance,  parameters );
+ *   const result = IntList.addUnsafe(instance,  parameters );
  *   console.log(result);
  * } catch (error) {
- *   console.error(`IntList.unsafeAdd failed: ${error.message}`);
+ *   console.error(`IntList.addUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeAdd = (instance: CML.IntList, elem: CML.Int): void =>
+export const addUnsafe = (instance: CML.IntList, elem: CML.Int): void =>
   Effect.runSync(add(instance, elem));

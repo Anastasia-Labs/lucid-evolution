@@ -1,8 +1,40 @@
+/**
+ * @since 2.0.0
+ */
 import * as CML from "@anastasia-labs/cardano-multiplatform-lib-nodejs";
 
+/**
+ * Type alias for the CML TransactionOutputKind enum
+ *
+ * @since 2.0.0
+ * @category Types
+ */
 export type TransactionOutputKind = CML.TransactionOutputKind;
 
+/**
+ * AlonzoFormatTxOut variant of the TransactionOutputKind enum
+ *
+ * @example
+ * import { TransactionOutputKind } from "@lucid-evolution/experimental";
+ *
+ * const kind = TransactionOutputKind.AlonzoFormatTxOut;
+ *
+ * @since 2.0.0
+ * @category Variants
+ */
 export const AlonzoFormatTxOut = CML.TransactionOutputKind.AlonzoFormatTxOut;
+
+/**
+ * ConwayFormatTxOut variant of the TransactionOutputKind enum
+ *
+ * @example
+ * import { TransactionOutputKind } from "@lucid-evolution/experimental";
+ *
+ * const kind = TransactionOutputKind.ConwayFormatTxOut;
+ *
+ * @since 2.0.0
+ * @category Variants
+ */
 export const ConwayFormatTxOut = CML.TransactionOutputKind.ConwayFormatTxOut;
 
 /**

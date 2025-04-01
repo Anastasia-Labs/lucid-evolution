@@ -1,8 +1,40 @@
+/**
+ * @since 2.0.0
+ */
 import * as CML from "@anastasia-labs/cardano-multiplatform-lib-nodejs";
 
+/**
+ * Type alias for the CML CIP25Version enum
+ *
+ * @since 2.0.0
+ * @category Types
+ */
 export type CIP25Version = CML.CIP25Version;
 
+/**
+ * V1 variant of the CIP25Version enum
+ *
+ * @example
+ * import { CIP25Version } from "@lucid-evolution/experimental";
+ *
+ * const kind = CIP25Version.V1;
+ *
+ * @since 2.0.0
+ * @category Variants
+ */
 export const V1 = CML.CIP25Version.V1;
+
+/**
+ * V2 variant of the CIP25Version enum
+ *
+ * @example
+ * import { CIP25Version } from "@lucid-evolution/experimental";
+ *
+ * const kind = CIP25Version.V2;
+ *
+ * @since 2.0.0
+ * @category Variants
+ */
 export const V2 = CML.CIP25Version.V2;
 
 /**

@@ -1,8 +1,25 @@
+/**
+ * @since 2.0.0
+ */
 import { Data, Effect } from "effect";
 import * as CML from "@anastasia-labs/cardano-multiplatform-lib-nodejs";
 
+/**
+ * Type alias for the CML StakeVoteRegDelegCert class
+ *
+ * @since 2.0.0
+ * @category Types
+ */
 export type StakeVoteRegDelegCert = CML.StakeVoteRegDelegCert;
 
+/**
+ * Error class for StakeVoteRegDelegCert operations
+ *
+ * This error is thrown when operations on StakeVoteRegDelegCert instances fail.
+ *
+ * @since 2.0.0
+ * @category Errors
+ */
 export class StakeVoteRegDelegCertError extends Data.TaggedError(
   "StakeVoteRegDelegCertError",
 )<{
@@ -51,16 +68,16 @@ export const free = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = StakeVoteRegDelegCert.unsafeFree(instance);
+ *   const result = StakeVoteRegDelegCert.freeUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`StakeVoteRegDelegCert.unsafeFree failed: ${error.message}`);
+ *   console.error(`StakeVoteRegDelegCert.freeUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeFree = (instance: CML.StakeVoteRegDelegCert): void =>
+export const freeUnsafe = (instance: CML.StakeVoteRegDelegCert): void =>
   Effect.runSync(free(instance));
 
 /**
@@ -105,16 +122,16 @@ export const toCborBytes = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = StakeVoteRegDelegCert.unsafeToCborBytes(instance);
+ *   const result = StakeVoteRegDelegCert.toCborBytesUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`StakeVoteRegDelegCert.unsafeToCborBytes failed: ${error.message}`);
+ *   console.error(`StakeVoteRegDelegCert.toCborBytesUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeToCborBytes = (
+export const toCborBytesUnsafe = (
   instance: CML.StakeVoteRegDelegCert,
 ): Uint8Array => Effect.runSync(toCborBytes(instance));
 
@@ -160,16 +177,16 @@ export const toCanonicalCborBytes = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = StakeVoteRegDelegCert.unsafeToCanonicalCborBytes(instance);
+ *   const result = StakeVoteRegDelegCert.toCanonicalCborBytesUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`StakeVoteRegDelegCert.unsafeToCanonicalCborBytes failed: ${error.message}`);
+ *   console.error(`StakeVoteRegDelegCert.toCanonicalCborBytesUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeToCanonicalCborBytes = (
+export const toCanonicalCborBytesUnsafe = (
   instance: CML.StakeVoteRegDelegCert,
 ): Uint8Array => Effect.runSync(toCanonicalCborBytes(instance));
 
@@ -210,16 +227,16 @@ export const fromCborBytes = Effect.fn(function* (cborBytes: Uint8Array) {
  *
  * // Using try/catch for error handling
  * try {
- *   const result = StakeVoteRegDelegCert.unsafeFromCborBytes( parameters );
+ *   const result = StakeVoteRegDelegCert.fromCborBytesUnsafe( parameters );
  *   console.log(result);
  * } catch (error) {
- *   console.error(`StakeVoteRegDelegCert.unsafeFromCborBytes failed: ${error.message}`);
+ *   console.error(`StakeVoteRegDelegCert.fromCborBytesUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Constructors
+ * @category ConstructorsUnsafe
  */
-export const unsafeFromCborBytes = (cborBytes: Uint8Array) =>
+export const fromCborBytesUnsafe = (cborBytes: Uint8Array) =>
   Effect.runSync(fromCborBytes(cborBytes));
 
 /**
@@ -264,16 +281,16 @@ export const toCborHex = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = StakeVoteRegDelegCert.unsafeToCborHex(instance);
+ *   const result = StakeVoteRegDelegCert.toCborHexUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`StakeVoteRegDelegCert.unsafeToCborHex failed: ${error.message}`);
+ *   console.error(`StakeVoteRegDelegCert.toCborHexUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeToCborHex = (instance: CML.StakeVoteRegDelegCert): string =>
+export const toCborHexUnsafe = (instance: CML.StakeVoteRegDelegCert): string =>
   Effect.runSync(toCborHex(instance));
 
 /**
@@ -318,16 +335,16 @@ export const toCanonicalCborHex = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = StakeVoteRegDelegCert.unsafeToCanonicalCborHex(instance);
+ *   const result = StakeVoteRegDelegCert.toCanonicalCborHexUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`StakeVoteRegDelegCert.unsafeToCanonicalCborHex failed: ${error.message}`);
+ *   console.error(`StakeVoteRegDelegCert.toCanonicalCborHexUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeToCanonicalCborHex = (
+export const toCanonicalCborHexUnsafe = (
   instance: CML.StakeVoteRegDelegCert,
 ): string => Effect.runSync(toCanonicalCborHex(instance));
 
@@ -368,16 +385,16 @@ export const fromCborHex = Effect.fn(function* (cborBytes: string) {
  *
  * // Using try/catch for error handling
  * try {
- *   const result = StakeVoteRegDelegCert.unsafeFromCborHex( parameters );
+ *   const result = StakeVoteRegDelegCert.fromCborHexUnsafe( parameters );
  *   console.log(result);
  * } catch (error) {
- *   console.error(`StakeVoteRegDelegCert.unsafeFromCborHex failed: ${error.message}`);
+ *   console.error(`StakeVoteRegDelegCert.fromCborHexUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Constructors
+ * @category ConstructorsUnsafe
  */
-export const unsafeFromCborHex = (cborBytes: string) =>
+export const fromCborHexUnsafe = (cborBytes: string) =>
   Effect.runSync(fromCborHex(cborBytes));
 
 /**
@@ -422,16 +439,16 @@ export const toJson = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = StakeVoteRegDelegCert.unsafeToJson(instance);
+ *   const result = StakeVoteRegDelegCert.toJsonUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`StakeVoteRegDelegCert.unsafeToJson failed: ${error.message}`);
+ *   console.error(`StakeVoteRegDelegCert.toJsonUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeToJson = (instance: CML.StakeVoteRegDelegCert): string =>
+export const toJsonUnsafe = (instance: CML.StakeVoteRegDelegCert): string =>
   Effect.runSync(toJson(instance));
 
 /**
@@ -476,16 +493,16 @@ export const toJsValue = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = StakeVoteRegDelegCert.unsafeToJsValue(instance);
+ *   const result = StakeVoteRegDelegCert.toJsValueUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`StakeVoteRegDelegCert.unsafeToJsValue failed: ${error.message}`);
+ *   console.error(`StakeVoteRegDelegCert.toJsValueUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeToJsValue = (instance: CML.StakeVoteRegDelegCert): any =>
+export const toJsValueUnsafe = (instance: CML.StakeVoteRegDelegCert): any =>
   Effect.runSync(toJsValue(instance));
 
 /**
@@ -525,16 +542,16 @@ export const fromJson = Effect.fn(function* (json: string) {
  *
  * // Using try/catch for error handling
  * try {
- *   const result = StakeVoteRegDelegCert.unsafeFromJson( parameters );
+ *   const result = StakeVoteRegDelegCert.fromJsonUnsafe( parameters );
  *   console.log(result);
  * } catch (error) {
- *   console.error(`StakeVoteRegDelegCert.unsafeFromJson failed: ${error.message}`);
+ *   console.error(`StakeVoteRegDelegCert.fromJsonUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Constructors
+ * @category ConstructorsUnsafe
  */
-export const unsafeFromJson = (json: string) => Effect.runSync(fromJson(json));
+export const fromJsonUnsafe = (json: string) => Effect.runSync(fromJson(json));
 
 /**
  * Method stakeCredential of StakeVoteRegDelegCert
@@ -578,16 +595,16 @@ export const stakeCredential = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = StakeVoteRegDelegCert.unsafeStakeCredential(instance);
+ *   const result = StakeVoteRegDelegCert.stakeCredentialUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`StakeVoteRegDelegCert.unsafeStakeCredential failed: ${error.message}`);
+ *   console.error(`StakeVoteRegDelegCert.stakeCredentialUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeStakeCredential = (
+export const stakeCredentialUnsafe = (
   instance: CML.StakeVoteRegDelegCert,
 ): CML.Credential => Effect.runSync(stakeCredential(instance));
 
@@ -633,16 +650,16 @@ export const pool = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = StakeVoteRegDelegCert.unsafePool(instance);
+ *   const result = StakeVoteRegDelegCert.poolUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`StakeVoteRegDelegCert.unsafePool failed: ${error.message}`);
+ *   console.error(`StakeVoteRegDelegCert.poolUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafePool = (
+export const poolUnsafe = (
   instance: CML.StakeVoteRegDelegCert,
 ): CML.Ed25519KeyHash => Effect.runSync(pool(instance));
 
@@ -688,16 +705,16 @@ export const dRep = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = StakeVoteRegDelegCert.unsafeDRep(instance);
+ *   const result = StakeVoteRegDelegCert.dRepUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`StakeVoteRegDelegCert.unsafeDRep failed: ${error.message}`);
+ *   console.error(`StakeVoteRegDelegCert.dRepUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeDRep = (instance: CML.StakeVoteRegDelegCert): CML.DRep =>
+export const dRepUnsafe = (instance: CML.StakeVoteRegDelegCert): CML.DRep =>
   Effect.runSync(dRep(instance));
 
 /**
@@ -742,16 +759,16 @@ export const deposit = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = StakeVoteRegDelegCert.unsafeDeposit(instance);
+ *   const result = StakeVoteRegDelegCert.depositUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`StakeVoteRegDelegCert.unsafeDeposit failed: ${error.message}`);
+ *   console.error(`StakeVoteRegDelegCert.depositUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeDeposit = (instance: CML.StakeVoteRegDelegCert): bigint =>
+export const depositUnsafe = (instance: CML.StakeVoteRegDelegCert): bigint =>
   Effect.runSync(deposit(instance));
 
 /**
@@ -797,16 +814,16 @@ export const _new = Effect.fn(function* (
  *
  * // Using try/catch for error handling
  * try {
- *   const result = StakeVoteRegDelegCert.unsafe_new( parameters );
+ *   const result = StakeVoteRegDelegCert._newUnsafe( parameters );
  *   console.log(result);
  * } catch (error) {
- *   console.error(`StakeVoteRegDelegCert.unsafe_new failed: ${error.message}`);
+ *   console.error(`StakeVoteRegDelegCert._newUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Constructors
+ * @category ConstructorsUnsafe
  */
-export const unsafe_new = (
+export const _newUnsafe = (
   stakeCredential: CML.Credential,
   pool: CML.Ed25519KeyHash,
   dRep: CML.DRep,

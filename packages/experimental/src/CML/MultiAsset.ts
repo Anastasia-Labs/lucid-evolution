@@ -1,8 +1,25 @@
+/**
+ * @since 2.0.0
+ */
 import { Data, Effect } from "effect";
 import * as CML from "@anastasia-labs/cardano-multiplatform-lib-nodejs";
 
+/**
+ * Type alias for the CML MultiAsset class
+ *
+ * @since 2.0.0
+ * @category Types
+ */
 export type MultiAsset = CML.MultiAsset;
 
+/**
+ * Error class for MultiAsset operations
+ *
+ * This error is thrown when operations on MultiAsset instances fail.
+ *
+ * @since 2.0.0
+ * @category Errors
+ */
 export class MultiAssetError extends Data.TaggedError("MultiAssetError")<{
   message?: string;
 }> {}
@@ -47,16 +64,16 @@ export const free = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = MultiAsset.unsafeFree(instance);
+ *   const result = MultiAsset.freeUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`MultiAsset.unsafeFree failed: ${error.message}`);
+ *   console.error(`MultiAsset.freeUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeFree = (instance: CML.MultiAsset): void =>
+export const freeUnsafe = (instance: CML.MultiAsset): void =>
   Effect.runSync(free(instance));
 
 /**
@@ -96,16 +113,16 @@ export const _new = Effect.fn(function* () {
  *
  * // Using try/catch for error handling
  * try {
- *   const result = MultiAsset.unsafe_new();
+ *   const result = MultiAsset._newUnsafe();
  *   console.log(result);
  * } catch (error) {
- *   console.error(`MultiAsset.unsafe_new failed: ${error.message}`);
+ *   console.error(`MultiAsset._newUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Constructors
+ * @category ConstructorsUnsafe
  */
-export const unsafe_new = () => Effect.runSync(_new());
+export const _newUnsafe = () => Effect.runSync(_new());
 
 /**
  * Method policyCount of MultiAsset
@@ -147,16 +164,16 @@ export const policyCount = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = MultiAsset.unsafePolicyCount(instance);
+ *   const result = MultiAsset.policyCountUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`MultiAsset.unsafePolicyCount failed: ${error.message}`);
+ *   console.error(`MultiAsset.policyCountUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafePolicyCount = (instance: CML.MultiAsset): number =>
+export const policyCountUnsafe = (instance: CML.MultiAsset): number =>
   Effect.runSync(policyCount(instance));
 
 /**
@@ -203,16 +220,16 @@ export const insertAssets = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = MultiAsset.unsafeInsertAssets(instance,  parameters );
+ *   const result = MultiAsset.insertAssetsUnsafe(instance,  parameters );
  *   console.log(result);
  * } catch (error) {
- *   console.error(`MultiAsset.unsafeInsertAssets failed: ${error.message}`);
+ *   console.error(`MultiAsset.insertAssetsUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeInsertAssets = (
+export const insertAssetsUnsafe = (
   instance: CML.MultiAsset,
   policyId: CML.ScriptHash,
   assets: CML.MapAssetNameToCoin,
@@ -262,16 +279,16 @@ export const getAssets = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = MultiAsset.unsafeGetAssets(instance,  parameters );
+ *   const result = MultiAsset.getAssetsUnsafe(instance,  parameters );
  *   console.log(result);
  * } catch (error) {
- *   console.error(`MultiAsset.unsafeGetAssets failed: ${error.message}`);
+ *   console.error(`MultiAsset.getAssetsUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeGetAssets = (
+export const getAssetsUnsafe = (
   instance: CML.MultiAsset,
   key: CML.ScriptHash,
 ): CML.MapAssetNameToCoin | undefined =>
@@ -321,16 +338,16 @@ export const get = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = MultiAsset.unsafeGet(instance,  parameters );
+ *   const result = MultiAsset.getUnsafe(instance,  parameters );
  *   console.log(result);
  * } catch (error) {
- *   console.error(`MultiAsset.unsafeGet failed: ${error.message}`);
+ *   console.error(`MultiAsset.getUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeGet = (
+export const getUnsafe = (
   instance: CML.MultiAsset,
   policyId: CML.ScriptHash,
   asset: CML.AssetName,
@@ -381,16 +398,16 @@ export const set = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = MultiAsset.unsafeSet(instance,  parameters );
+ *   const result = MultiAsset.setUnsafe(instance,  parameters );
  *   console.log(result);
  * } catch (error) {
- *   console.error(`MultiAsset.unsafeSet failed: ${error.message}`);
+ *   console.error(`MultiAsset.setUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeSet = (
+export const setUnsafe = (
   instance: CML.MultiAsset,
   policyId: CML.ScriptHash,
   asset: CML.AssetName,
@@ -439,16 +456,16 @@ export const keys = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = MultiAsset.unsafeKeys(instance);
+ *   const result = MultiAsset.keysUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`MultiAsset.unsafeKeys failed: ${error.message}`);
+ *   console.error(`MultiAsset.keysUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeKeys = (instance: CML.MultiAsset): CML.PolicyIdList =>
+export const keysUnsafe = (instance: CML.MultiAsset): CML.PolicyIdList =>
   Effect.runSync(keys(instance));
 
 /**
@@ -494,16 +511,16 @@ export const checkedAdd = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = MultiAsset.unsafeCheckedAdd(instance,  parameters );
+ *   const result = MultiAsset.checkedAddUnsafe(instance,  parameters );
  *   console.log(result);
  * } catch (error) {
- *   console.error(`MultiAsset.unsafeCheckedAdd failed: ${error.message}`);
+ *   console.error(`MultiAsset.checkedAddUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeCheckedAdd = (
+export const checkedAddUnsafe = (
   instance: CML.MultiAsset,
   rhs: CML.MultiAsset,
 ): CML.MultiAsset => Effect.runSync(checkedAdd(instance, rhs));
@@ -551,16 +568,16 @@ export const checkedSub = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = MultiAsset.unsafeCheckedSub(instance,  parameters );
+ *   const result = MultiAsset.checkedSubUnsafe(instance,  parameters );
  *   console.log(result);
  * } catch (error) {
- *   console.error(`MultiAsset.unsafeCheckedSub failed: ${error.message}`);
+ *   console.error(`MultiAsset.checkedSubUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeCheckedSub = (
+export const checkedSubUnsafe = (
   instance: CML.MultiAsset,
   rhs: CML.MultiAsset,
 ): CML.MultiAsset => Effect.runSync(checkedSub(instance, rhs));
@@ -608,16 +625,16 @@ export const clampedSub = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = MultiAsset.unsafeClampedSub(instance,  parameters );
+ *   const result = MultiAsset.clampedSubUnsafe(instance,  parameters );
  *   console.log(result);
  * } catch (error) {
- *   console.error(`MultiAsset.unsafeClampedSub failed: ${error.message}`);
+ *   console.error(`MultiAsset.clampedSubUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeClampedSub = (
+export const clampedSubUnsafe = (
   instance: CML.MultiAsset,
   rhs: CML.MultiAsset,
 ): CML.MultiAsset => Effect.runSync(clampedSub(instance, rhs));

@@ -1,8 +1,25 @@
+/**
+ * @since 2.0.0
+ */
 import { Data, Effect } from "effect";
 import * as CML from "@anastasia-labs/cardano-multiplatform-lib-nodejs";
 
+/**
+ * Type alias for the CML KESVkey class
+ *
+ * @since 2.0.0
+ * @category Types
+ */
 export type KESVkey = CML.KESVkey;
 
+/**
+ * Error class for KESVkey operations
+ *
+ * This error is thrown when operations on KESVkey instances fail.
+ *
+ * @since 2.0.0
+ * @category Errors
+ */
 export class KESVkeyError extends Data.TaggedError("KESVkeyError")<{
   message?: string;
 }> {}
@@ -47,16 +64,16 @@ export const free = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = KESVkey.unsafeFree(instance);
+ *   const result = KESVkey.freeUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`KESVkey.unsafeFree failed: ${error.message}`);
+ *   console.error(`KESVkey.freeUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeFree = (instance: CML.KESVkey): void =>
+export const freeUnsafe = (instance: CML.KESVkey): void =>
   Effect.runSync(free(instance));
 
 /**
@@ -102,16 +119,16 @@ export const toBech32 = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = KESVkey.unsafeToBech32(instance,  parameters );
+ *   const result = KESVkey.toBech32Unsafe(instance,  parameters );
  *   console.log(result);
  * } catch (error) {
- *   console.error(`KESVkey.unsafeToBech32 failed: ${error.message}`);
+ *   console.error(`KESVkey.toBech32Unsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeToBech32 = (instance: CML.KESVkey, prefix: string): string =>
+export const toBech32Unsafe = (instance: CML.KESVkey, prefix: string): string =>
   Effect.runSync(toBech32(instance, prefix));
 
 /**
@@ -151,16 +168,16 @@ export const fromBech32 = Effect.fn(function* (bech32Str: string) {
  *
  * // Using try/catch for error handling
  * try {
- *   const result = KESVkey.unsafeFromBech32( parameters );
+ *   const result = KESVkey.fromBech32Unsafe( parameters );
  *   console.log(result);
  * } catch (error) {
- *   console.error(`KESVkey.unsafeFromBech32 failed: ${error.message}`);
+ *   console.error(`KESVkey.fromBech32Unsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Constructors
+ * @category ConstructorsUnsafe
  */
-export const unsafeFromBech32 = (bech32Str: string) =>
+export const fromBech32Unsafe = (bech32Str: string) =>
   Effect.runSync(fromBech32(bech32Str));
 
 /**
@@ -203,16 +220,16 @@ export const toRawBytes = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = KESVkey.unsafeToRawBytes(instance);
+ *   const result = KESVkey.toRawBytesUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`KESVkey.unsafeToRawBytes failed: ${error.message}`);
+ *   console.error(`KESVkey.toRawBytesUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeToRawBytes = (instance: CML.KESVkey): Uint8Array =>
+export const toRawBytesUnsafe = (instance: CML.KESVkey): Uint8Array =>
   Effect.runSync(toRawBytes(instance));
 
 /**
@@ -252,16 +269,16 @@ export const fromRawBytes = Effect.fn(function* (bytes: Uint8Array) {
  *
  * // Using try/catch for error handling
  * try {
- *   const result = KESVkey.unsafeFromRawBytes( parameters );
+ *   const result = KESVkey.fromRawBytesUnsafe( parameters );
  *   console.log(result);
  * } catch (error) {
- *   console.error(`KESVkey.unsafeFromRawBytes failed: ${error.message}`);
+ *   console.error(`KESVkey.fromRawBytesUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Constructors
+ * @category ConstructorsUnsafe
  */
-export const unsafeFromRawBytes = (bytes: Uint8Array) =>
+export const fromRawBytesUnsafe = (bytes: Uint8Array) =>
   Effect.runSync(fromRawBytes(bytes));
 
 /**
@@ -304,16 +321,16 @@ export const toHex = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = KESVkey.unsafeToHex(instance);
+ *   const result = KESVkey.toHexUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`KESVkey.unsafeToHex failed: ${error.message}`);
+ *   console.error(`KESVkey.toHexUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeToHex = (instance: CML.KESVkey): string =>
+export const toHexUnsafe = (instance: CML.KESVkey): string =>
   Effect.runSync(toHex(instance));
 
 /**
@@ -353,13 +370,13 @@ export const fromHex = Effect.fn(function* (input: string) {
  *
  * // Using try/catch for error handling
  * try {
- *   const result = KESVkey.unsafeFromHex( parameters );
+ *   const result = KESVkey.fromHexUnsafe( parameters );
  *   console.log(result);
  * } catch (error) {
- *   console.error(`KESVkey.unsafeFromHex failed: ${error.message}`);
+ *   console.error(`KESVkey.fromHexUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Constructors
+ * @category ConstructorsUnsafe
  */
-export const unsafeFromHex = (input: string) => Effect.runSync(fromHex(input));
+export const fromHexUnsafe = (input: string) => Effect.runSync(fromHex(input));

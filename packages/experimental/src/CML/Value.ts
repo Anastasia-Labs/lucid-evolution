@@ -1,8 +1,25 @@
+/**
+ * @since 2.0.0
+ */
 import { Data, Effect } from "effect";
 import * as CML from "@anastasia-labs/cardano-multiplatform-lib-nodejs";
 
+/**
+ * Type alias for the CML Value class
+ *
+ * @since 2.0.0
+ * @category Types
+ */
 export type Value = CML.Value;
 
+/**
+ * Error class for Value operations
+ *
+ * This error is thrown when operations on Value instances fail.
+ *
+ * @since 2.0.0
+ * @category Errors
+ */
 export class ValueError extends Data.TaggedError("ValueError")<{
   message?: string;
 }> {}
@@ -47,16 +64,16 @@ export const free = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = Value.unsafeFree(instance);
+ *   const result = Value.freeUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`Value.unsafeFree failed: ${error.message}`);
+ *   console.error(`Value.freeUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeFree = (instance: CML.Value): void =>
+export const freeUnsafe = (instance: CML.Value): void =>
   Effect.runSync(free(instance));
 
 /**
@@ -99,16 +116,16 @@ export const toCborBytes = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = Value.unsafeToCborBytes(instance);
+ *   const result = Value.toCborBytesUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`Value.unsafeToCborBytes failed: ${error.message}`);
+ *   console.error(`Value.toCborBytesUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeToCborBytes = (instance: CML.Value): Uint8Array =>
+export const toCborBytesUnsafe = (instance: CML.Value): Uint8Array =>
   Effect.runSync(toCborBytes(instance));
 
 /**
@@ -151,16 +168,16 @@ export const toCanonicalCborBytes = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = Value.unsafeToCanonicalCborBytes(instance);
+ *   const result = Value.toCanonicalCborBytesUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`Value.unsafeToCanonicalCborBytes failed: ${error.message}`);
+ *   console.error(`Value.toCanonicalCborBytesUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeToCanonicalCborBytes = (instance: CML.Value): Uint8Array =>
+export const toCanonicalCborBytesUnsafe = (instance: CML.Value): Uint8Array =>
   Effect.runSync(toCanonicalCborBytes(instance));
 
 /**
@@ -200,16 +217,16 @@ export const fromCborBytes = Effect.fn(function* (cborBytes: Uint8Array) {
  *
  * // Using try/catch for error handling
  * try {
- *   const result = Value.unsafeFromCborBytes( parameters );
+ *   const result = Value.fromCborBytesUnsafe( parameters );
  *   console.log(result);
  * } catch (error) {
- *   console.error(`Value.unsafeFromCborBytes failed: ${error.message}`);
+ *   console.error(`Value.fromCborBytesUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Constructors
+ * @category ConstructorsUnsafe
  */
-export const unsafeFromCborBytes = (cborBytes: Uint8Array) =>
+export const fromCborBytesUnsafe = (cborBytes: Uint8Array) =>
   Effect.runSync(fromCborBytes(cborBytes));
 
 /**
@@ -252,16 +269,16 @@ export const toCborHex = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = Value.unsafeToCborHex(instance);
+ *   const result = Value.toCborHexUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`Value.unsafeToCborHex failed: ${error.message}`);
+ *   console.error(`Value.toCborHexUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeToCborHex = (instance: CML.Value): string =>
+export const toCborHexUnsafe = (instance: CML.Value): string =>
   Effect.runSync(toCborHex(instance));
 
 /**
@@ -304,16 +321,16 @@ export const toCanonicalCborHex = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = Value.unsafeToCanonicalCborHex(instance);
+ *   const result = Value.toCanonicalCborHexUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`Value.unsafeToCanonicalCborHex failed: ${error.message}`);
+ *   console.error(`Value.toCanonicalCborHexUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeToCanonicalCborHex = (instance: CML.Value): string =>
+export const toCanonicalCborHexUnsafe = (instance: CML.Value): string =>
   Effect.runSync(toCanonicalCborHex(instance));
 
 /**
@@ -353,16 +370,16 @@ export const fromCborHex = Effect.fn(function* (cborBytes: string) {
  *
  * // Using try/catch for error handling
  * try {
- *   const result = Value.unsafeFromCborHex( parameters );
+ *   const result = Value.fromCborHexUnsafe( parameters );
  *   console.log(result);
  * } catch (error) {
- *   console.error(`Value.unsafeFromCborHex failed: ${error.message}`);
+ *   console.error(`Value.fromCborHexUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Constructors
+ * @category ConstructorsUnsafe
  */
-export const unsafeFromCborHex = (cborBytes: string) =>
+export const fromCborHexUnsafe = (cborBytes: string) =>
   Effect.runSync(fromCborHex(cborBytes));
 
 /**
@@ -405,16 +422,16 @@ export const toJson = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = Value.unsafeToJson(instance);
+ *   const result = Value.toJsonUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`Value.unsafeToJson failed: ${error.message}`);
+ *   console.error(`Value.toJsonUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeToJson = (instance: CML.Value): string =>
+export const toJsonUnsafe = (instance: CML.Value): string =>
   Effect.runSync(toJson(instance));
 
 /**
@@ -457,16 +474,16 @@ export const toJsValue = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = Value.unsafeToJsValue(instance);
+ *   const result = Value.toJsValueUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`Value.unsafeToJsValue failed: ${error.message}`);
+ *   console.error(`Value.toJsValueUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeToJsValue = (instance: CML.Value): any =>
+export const toJsValueUnsafe = (instance: CML.Value): any =>
   Effect.runSync(toJsValue(instance));
 
 /**
@@ -506,16 +523,16 @@ export const fromJson = Effect.fn(function* (json: string) {
  *
  * // Using try/catch for error handling
  * try {
- *   const result = Value.unsafeFromJson( parameters );
+ *   const result = Value.fromJsonUnsafe( parameters );
  *   console.log(result);
  * } catch (error) {
- *   console.error(`Value.unsafeFromJson failed: ${error.message}`);
+ *   console.error(`Value.fromJsonUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Constructors
+ * @category ConstructorsUnsafe
  */
-export const unsafeFromJson = (json: string) => Effect.runSync(fromJson(json));
+export const fromJsonUnsafe = (json: string) => Effect.runSync(fromJson(json));
 
 /**
  * Static method fromCoin of Value
@@ -554,16 +571,16 @@ export const fromCoin = Effect.fn(function* (coin: bigint) {
  *
  * // Using try/catch for error handling
  * try {
- *   const result = Value.unsafeFromCoin( parameters );
+ *   const result = Value.fromCoinUnsafe( parameters );
  *   console.log(result);
  * } catch (error) {
- *   console.error(`Value.unsafeFromCoin failed: ${error.message}`);
+ *   console.error(`Value.fromCoinUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Constructors
+ * @category ConstructorsUnsafe
  */
-export const unsafeFromCoin = (coin: bigint) => Effect.runSync(fromCoin(coin));
+export const fromCoinUnsafe = (coin: bigint) => Effect.runSync(fromCoin(coin));
 
 /**
  * Static method _new of Value
@@ -605,16 +622,16 @@ export const _new = Effect.fn(function* (
  *
  * // Using try/catch for error handling
  * try {
- *   const result = Value.unsafe_new( parameters );
+ *   const result = Value._newUnsafe( parameters );
  *   console.log(result);
  * } catch (error) {
- *   console.error(`Value.unsafe_new failed: ${error.message}`);
+ *   console.error(`Value._newUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Constructors
+ * @category ConstructorsUnsafe
  */
-export const unsafe_new = (coin: bigint, multiasset: CML.MultiAsset) =>
+export const _newUnsafe = (coin: bigint, multiasset: CML.MultiAsset) =>
   Effect.runSync(_new(coin, multiasset));
 
 /**
@@ -657,16 +674,16 @@ export const coin = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = Value.unsafeCoin(instance);
+ *   const result = Value.coinUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`Value.unsafeCoin failed: ${error.message}`);
+ *   console.error(`Value.coinUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeCoin = (instance: CML.Value): bigint =>
+export const coinUnsafe = (instance: CML.Value): bigint =>
   Effect.runSync(coin(instance));
 
 /**
@@ -709,16 +726,16 @@ export const multiAsset = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = Value.unsafeMultiAsset(instance);
+ *   const result = Value.multiAssetUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`Value.unsafeMultiAsset failed: ${error.message}`);
+ *   console.error(`Value.multiAssetUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeMultiAsset = (instance: CML.Value): CML.MultiAsset =>
+export const multiAssetUnsafe = (instance: CML.Value): CML.MultiAsset =>
   Effect.runSync(multiAsset(instance));
 
 /**
@@ -758,16 +775,16 @@ export const zero = Effect.fn(function* () {
  *
  * // Using try/catch for error handling
  * try {
- *   const result = Value.unsafeZero();
+ *   const result = Value.zeroUnsafe();
  *   console.log(result);
  * } catch (error) {
- *   console.error(`Value.unsafeZero failed: ${error.message}`);
+ *   console.error(`Value.zeroUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Constructors
+ * @category ConstructorsUnsafe
  */
-export const unsafeZero = () => Effect.runSync(zero());
+export const zeroUnsafe = () => Effect.runSync(zero());
 
 /**
  * Method isZero of Value
@@ -809,16 +826,16 @@ export const isZero = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = Value.unsafeIsZero(instance);
+ *   const result = Value.isZeroUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`Value.unsafeIsZero failed: ${error.message}`);
+ *   console.error(`Value.isZeroUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeIsZero = (instance: CML.Value): boolean =>
+export const isZeroUnsafe = (instance: CML.Value): boolean =>
   Effect.runSync(isZero(instance));
 
 /**
@@ -861,16 +878,16 @@ export const hasMultiassets = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = Value.unsafeHasMultiassets(instance);
+ *   const result = Value.hasMultiassetsUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`Value.unsafeHasMultiassets failed: ${error.message}`);
+ *   console.error(`Value.hasMultiassetsUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeHasMultiassets = (instance: CML.Value): boolean =>
+export const hasMultiassetsUnsafe = (instance: CML.Value): boolean =>
   Effect.runSync(hasMultiassets(instance));
 
 /**
@@ -913,16 +930,16 @@ export const checkedAdd = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = Value.unsafeCheckedAdd(instance,  parameters );
+ *   const result = Value.checkedAddUnsafe(instance,  parameters );
  *   console.log(result);
  * } catch (error) {
- *   console.error(`Value.unsafeCheckedAdd failed: ${error.message}`);
+ *   console.error(`Value.checkedAddUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeCheckedAdd = (
+export const checkedAddUnsafe = (
   instance: CML.Value,
   rhs: CML.Value,
 ): CML.Value => Effect.runSync(checkedAdd(instance, rhs));
@@ -967,16 +984,16 @@ export const checkedSub = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = Value.unsafeCheckedSub(instance,  parameters );
+ *   const result = Value.checkedSubUnsafe(instance,  parameters );
  *   console.log(result);
  * } catch (error) {
- *   console.error(`Value.unsafeCheckedSub failed: ${error.message}`);
+ *   console.error(`Value.checkedSubUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeCheckedSub = (
+export const checkedSubUnsafe = (
   instance: CML.Value,
   rhs: CML.Value,
 ): CML.Value => Effect.runSync(checkedSub(instance, rhs));
@@ -1021,16 +1038,16 @@ export const clampedSub = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = Value.unsafeClampedSub(instance,  parameters );
+ *   const result = Value.clampedSubUnsafe(instance,  parameters );
  *   console.log(result);
  * } catch (error) {
- *   console.error(`Value.unsafeClampedSub failed: ${error.message}`);
+ *   console.error(`Value.clampedSubUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeClampedSub = (
+export const clampedSubUnsafe = (
   instance: CML.Value,
   rhs: CML.Value,
 ): CML.Value => Effect.runSync(clampedSub(instance, rhs));

@@ -1,8 +1,25 @@
+/**
+ * @since 2.0.0
+ */
 import { Data, Effect } from "effect";
 import * as CML from "@anastasia-labs/cardano-multiplatform-lib-nodejs";
 
+/**
+ * Type alias for the CML StakeRegistration class
+ *
+ * @since 2.0.0
+ * @category Types
+ */
 export type StakeRegistration = CML.StakeRegistration;
 
+/**
+ * Error class for StakeRegistration operations
+ *
+ * This error is thrown when operations on StakeRegistration instances fail.
+ *
+ * @since 2.0.0
+ * @category Errors
+ */
 export class StakeRegistrationError extends Data.TaggedError(
   "StakeRegistrationError",
 )<{
@@ -51,16 +68,16 @@ export const free = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = StakeRegistration.unsafeFree(instance);
+ *   const result = StakeRegistration.freeUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`StakeRegistration.unsafeFree failed: ${error.message}`);
+ *   console.error(`StakeRegistration.freeUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeFree = (instance: CML.StakeRegistration): void =>
+export const freeUnsafe = (instance: CML.StakeRegistration): void =>
   Effect.runSync(free(instance));
 
 /**
@@ -105,16 +122,16 @@ export const toCborBytes = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = StakeRegistration.unsafeToCborBytes(instance);
+ *   const result = StakeRegistration.toCborBytesUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`StakeRegistration.unsafeToCborBytes failed: ${error.message}`);
+ *   console.error(`StakeRegistration.toCborBytesUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeToCborBytes = (
+export const toCborBytesUnsafe = (
   instance: CML.StakeRegistration,
 ): Uint8Array => Effect.runSync(toCborBytes(instance));
 
@@ -160,16 +177,16 @@ export const toCanonicalCborBytes = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = StakeRegistration.unsafeToCanonicalCborBytes(instance);
+ *   const result = StakeRegistration.toCanonicalCborBytesUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`StakeRegistration.unsafeToCanonicalCborBytes failed: ${error.message}`);
+ *   console.error(`StakeRegistration.toCanonicalCborBytesUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeToCanonicalCborBytes = (
+export const toCanonicalCborBytesUnsafe = (
   instance: CML.StakeRegistration,
 ): Uint8Array => Effect.runSync(toCanonicalCborBytes(instance));
 
@@ -210,16 +227,16 @@ export const fromCborBytes = Effect.fn(function* (cborBytes: Uint8Array) {
  *
  * // Using try/catch for error handling
  * try {
- *   const result = StakeRegistration.unsafeFromCborBytes( parameters );
+ *   const result = StakeRegistration.fromCborBytesUnsafe( parameters );
  *   console.log(result);
  * } catch (error) {
- *   console.error(`StakeRegistration.unsafeFromCborBytes failed: ${error.message}`);
+ *   console.error(`StakeRegistration.fromCborBytesUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Constructors
+ * @category ConstructorsUnsafe
  */
-export const unsafeFromCborBytes = (cborBytes: Uint8Array) =>
+export const fromCborBytesUnsafe = (cborBytes: Uint8Array) =>
   Effect.runSync(fromCborBytes(cborBytes));
 
 /**
@@ -264,16 +281,16 @@ export const toCborHex = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = StakeRegistration.unsafeToCborHex(instance);
+ *   const result = StakeRegistration.toCborHexUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`StakeRegistration.unsafeToCborHex failed: ${error.message}`);
+ *   console.error(`StakeRegistration.toCborHexUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeToCborHex = (instance: CML.StakeRegistration): string =>
+export const toCborHexUnsafe = (instance: CML.StakeRegistration): string =>
   Effect.runSync(toCborHex(instance));
 
 /**
@@ -318,16 +335,16 @@ export const toCanonicalCborHex = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = StakeRegistration.unsafeToCanonicalCborHex(instance);
+ *   const result = StakeRegistration.toCanonicalCborHexUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`StakeRegistration.unsafeToCanonicalCborHex failed: ${error.message}`);
+ *   console.error(`StakeRegistration.toCanonicalCborHexUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeToCanonicalCborHex = (
+export const toCanonicalCborHexUnsafe = (
   instance: CML.StakeRegistration,
 ): string => Effect.runSync(toCanonicalCborHex(instance));
 
@@ -368,16 +385,16 @@ export const fromCborHex = Effect.fn(function* (cborBytes: string) {
  *
  * // Using try/catch for error handling
  * try {
- *   const result = StakeRegistration.unsafeFromCborHex( parameters );
+ *   const result = StakeRegistration.fromCborHexUnsafe( parameters );
  *   console.log(result);
  * } catch (error) {
- *   console.error(`StakeRegistration.unsafeFromCborHex failed: ${error.message}`);
+ *   console.error(`StakeRegistration.fromCborHexUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Constructors
+ * @category ConstructorsUnsafe
  */
-export const unsafeFromCborHex = (cborBytes: string) =>
+export const fromCborHexUnsafe = (cborBytes: string) =>
   Effect.runSync(fromCborHex(cborBytes));
 
 /**
@@ -422,16 +439,16 @@ export const toJson = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = StakeRegistration.unsafeToJson(instance);
+ *   const result = StakeRegistration.toJsonUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`StakeRegistration.unsafeToJson failed: ${error.message}`);
+ *   console.error(`StakeRegistration.toJsonUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeToJson = (instance: CML.StakeRegistration): string =>
+export const toJsonUnsafe = (instance: CML.StakeRegistration): string =>
   Effect.runSync(toJson(instance));
 
 /**
@@ -476,16 +493,16 @@ export const toJsValue = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = StakeRegistration.unsafeToJsValue(instance);
+ *   const result = StakeRegistration.toJsValueUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`StakeRegistration.unsafeToJsValue failed: ${error.message}`);
+ *   console.error(`StakeRegistration.toJsValueUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeToJsValue = (instance: CML.StakeRegistration): any =>
+export const toJsValueUnsafe = (instance: CML.StakeRegistration): any =>
   Effect.runSync(toJsValue(instance));
 
 /**
@@ -525,16 +542,16 @@ export const fromJson = Effect.fn(function* (json: string) {
  *
  * // Using try/catch for error handling
  * try {
- *   const result = StakeRegistration.unsafeFromJson( parameters );
+ *   const result = StakeRegistration.fromJsonUnsafe( parameters );
  *   console.log(result);
  * } catch (error) {
- *   console.error(`StakeRegistration.unsafeFromJson failed: ${error.message}`);
+ *   console.error(`StakeRegistration.fromJsonUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Constructors
+ * @category ConstructorsUnsafe
  */
-export const unsafeFromJson = (json: string) => Effect.runSync(fromJson(json));
+export const fromJsonUnsafe = (json: string) => Effect.runSync(fromJson(json));
 
 /**
  * Method stakeCredential of StakeRegistration
@@ -578,16 +595,16 @@ export const stakeCredential = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = StakeRegistration.unsafeStakeCredential(instance);
+ *   const result = StakeRegistration.stakeCredentialUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`StakeRegistration.unsafeStakeCredential failed: ${error.message}`);
+ *   console.error(`StakeRegistration.stakeCredentialUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeStakeCredential = (
+export const stakeCredentialUnsafe = (
   instance: CML.StakeRegistration,
 ): CML.Credential => Effect.runSync(stakeCredential(instance));
 
@@ -628,14 +645,14 @@ export const _new = Effect.fn(function* (stakeCredential: CML.Credential) {
  *
  * // Using try/catch for error handling
  * try {
- *   const result = StakeRegistration.unsafe_new( parameters );
+ *   const result = StakeRegistration._newUnsafe( parameters );
  *   console.log(result);
  * } catch (error) {
- *   console.error(`StakeRegistration.unsafe_new failed: ${error.message}`);
+ *   console.error(`StakeRegistration._newUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Constructors
+ * @category ConstructorsUnsafe
  */
-export const unsafe_new = (stakeCredential: CML.Credential) =>
+export const _newUnsafe = (stakeCredential: CML.Credential) =>
   Effect.runSync(_new(stakeCredential));

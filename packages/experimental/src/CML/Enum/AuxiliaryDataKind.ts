@@ -1,9 +1,53 @@
+/**
+ * @since 2.0.0
+ */
 import * as CML from "@anastasia-labs/cardano-multiplatform-lib-nodejs";
 
+/**
+ * Type alias for the CML AuxiliaryDataKind enum
+ *
+ * @since 2.0.0
+ * @category Types
+ */
 export type AuxiliaryDataKind = CML.AuxiliaryDataKind;
 
+/**
+ * Shelley variant of the AuxiliaryDataKind enum
+ *
+ * @example
+ * import { AuxiliaryDataKind } from "@lucid-evolution/experimental";
+ *
+ * const kind = AuxiliaryDataKind.Shelley;
+ *
+ * @since 2.0.0
+ * @category Variants
+ */
 export const Shelley = CML.AuxiliaryDataKind.Shelley;
+
+/**
+ * ShelleyMA variant of the AuxiliaryDataKind enum
+ *
+ * @example
+ * import { AuxiliaryDataKind } from "@lucid-evolution/experimental";
+ *
+ * const kind = AuxiliaryDataKind.ShelleyMA;
+ *
+ * @since 2.0.0
+ * @category Variants
+ */
 export const ShelleyMA = CML.AuxiliaryDataKind.ShelleyMA;
+
+/**
+ * Conway variant of the AuxiliaryDataKind enum
+ *
+ * @example
+ * import { AuxiliaryDataKind } from "@lucid-evolution/experimental";
+ *
+ * const kind = AuxiliaryDataKind.Conway;
+ *
+ * @since 2.0.0
+ * @category Variants
+ */
 export const Conway = CML.AuxiliaryDataKind.Conway;
 
 /**

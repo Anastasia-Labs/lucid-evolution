@@ -1,8 +1,25 @@
+/**
+ * @since 2.0.0
+ */
 import { Data, Effect } from "effect";
 import * as CML from "@anastasia-labs/cardano-multiplatform-lib-nodejs";
 
+/**
+ * Type alias for the CML TransactionOutputBuilder class
+ *
+ * @since 2.0.0
+ * @category Types
+ */
 export type TransactionOutputBuilder = CML.TransactionOutputBuilder;
 
+/**
+ * Error class for TransactionOutputBuilder operations
+ *
+ * This error is thrown when operations on TransactionOutputBuilder instances fail.
+ *
+ * @since 2.0.0
+ * @category Errors
+ */
 export class TransactionOutputBuilderError extends Data.TaggedError(
   "TransactionOutputBuilderError",
 )<{
@@ -51,16 +68,16 @@ export const free = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = TransactionOutputBuilder.unsafeFree(instance);
+ *   const result = TransactionOutputBuilder.freeUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`TransactionOutputBuilder.unsafeFree failed: ${error.message}`);
+ *   console.error(`TransactionOutputBuilder.freeUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeFree = (instance: CML.TransactionOutputBuilder): void =>
+export const freeUnsafe = (instance: CML.TransactionOutputBuilder): void =>
   Effect.runSync(free(instance));
 
 /**
@@ -100,16 +117,16 @@ export const _new = Effect.fn(function* () {
  *
  * // Using try/catch for error handling
  * try {
- *   const result = TransactionOutputBuilder.unsafe_new();
+ *   const result = TransactionOutputBuilder._newUnsafe();
  *   console.log(result);
  * } catch (error) {
- *   console.error(`TransactionOutputBuilder.unsafe_new failed: ${error.message}`);
+ *   console.error(`TransactionOutputBuilder._newUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Constructors
+ * @category ConstructorsUnsafe
  */
-export const unsafe_new = () => Effect.runSync(_new());
+export const _newUnsafe = () => Effect.runSync(_new());
 
 /**
  * Method withAddress of TransactionOutputBuilder
@@ -157,16 +174,16 @@ export const withAddress = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = TransactionOutputBuilder.unsafeWithAddress(instance,  parameters );
+ *   const result = TransactionOutputBuilder.withAddressUnsafe(instance,  parameters );
  *   console.log(result);
  * } catch (error) {
- *   console.error(`TransactionOutputBuilder.unsafeWithAddress failed: ${error.message}`);
+ *   console.error(`TransactionOutputBuilder.withAddressUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeWithAddress = (
+export const withAddressUnsafe = (
   instance: CML.TransactionOutputBuilder,
   address: CML.Address,
 ): CML.TransactionOutputBuilder =>
@@ -218,16 +235,16 @@ export const withCommunicationData = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = TransactionOutputBuilder.unsafeWithCommunicationData(instance,  parameters );
+ *   const result = TransactionOutputBuilder.withCommunicationDataUnsafe(instance,  parameters );
  *   console.log(result);
  * } catch (error) {
- *   console.error(`TransactionOutputBuilder.unsafeWithCommunicationData failed: ${error.message}`);
+ *   console.error(`TransactionOutputBuilder.withCommunicationDataUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeWithCommunicationData = (
+export const withCommunicationDataUnsafe = (
   instance: CML.TransactionOutputBuilder,
   datum: CML.PlutusData,
 ): CML.TransactionOutputBuilder =>
@@ -279,16 +296,16 @@ export const withData = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = TransactionOutputBuilder.unsafeWithData(instance,  parameters );
+ *   const result = TransactionOutputBuilder.withDataUnsafe(instance,  parameters );
  *   console.log(result);
  * } catch (error) {
- *   console.error(`TransactionOutputBuilder.unsafeWithData failed: ${error.message}`);
+ *   console.error(`TransactionOutputBuilder.withDataUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeWithData = (
+export const withDataUnsafe = (
   instance: CML.TransactionOutputBuilder,
   datum: CML.DatumOption,
 ): CML.TransactionOutputBuilder => Effect.runSync(withData(instance, datum));
@@ -339,16 +356,16 @@ export const withReferenceScript = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = TransactionOutputBuilder.unsafeWithReferenceScript(instance,  parameters );
+ *   const result = TransactionOutputBuilder.withReferenceScriptUnsafe(instance,  parameters );
  *   console.log(result);
  * } catch (error) {
- *   console.error(`TransactionOutputBuilder.unsafeWithReferenceScript failed: ${error.message}`);
+ *   console.error(`TransactionOutputBuilder.withReferenceScriptUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeWithReferenceScript = (
+export const withReferenceScriptUnsafe = (
   instance: CML.TransactionOutputBuilder,
   scriptRef: CML.Script,
 ): CML.TransactionOutputBuilder =>
@@ -399,15 +416,15 @@ export const next = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = TransactionOutputBuilder.unsafeNext(instance);
+ *   const result = TransactionOutputBuilder.nextUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`TransactionOutputBuilder.unsafeNext failed: ${error.message}`);
+ *   console.error(`TransactionOutputBuilder.nextUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeNext = (
+export const nextUnsafe = (
   instance: CML.TransactionOutputBuilder,
 ): CML.TransactionOutputAmountBuilder => Effect.runSync(next(instance));

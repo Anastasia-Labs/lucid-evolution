@@ -1,8 +1,25 @@
+/**
+ * @since 2.0.0
+ */
 import { Data, Effect } from "effect";
 import * as CML from "@anastasia-labs/cardano-multiplatform-lib-nodejs";
 
+/**
+ * Type alias for the CML ProposalProcedureList class
+ *
+ * @since 2.0.0
+ * @category Types
+ */
 export type ProposalProcedureList = CML.ProposalProcedureList;
 
+/**
+ * Error class for ProposalProcedureList operations
+ *
+ * This error is thrown when operations on ProposalProcedureList instances fail.
+ *
+ * @since 2.0.0
+ * @category Errors
+ */
 export class ProposalProcedureListError extends Data.TaggedError(
   "ProposalProcedureListError",
 )<{
@@ -51,16 +68,16 @@ export const free = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = ProposalProcedureList.unsafeFree(instance);
+ *   const result = ProposalProcedureList.freeUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`ProposalProcedureList.unsafeFree failed: ${error.message}`);
+ *   console.error(`ProposalProcedureList.freeUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeFree = (instance: CML.ProposalProcedureList): void =>
+export const freeUnsafe = (instance: CML.ProposalProcedureList): void =>
   Effect.runSync(free(instance));
 
 /**
@@ -100,16 +117,16 @@ export const _new = Effect.fn(function* () {
  *
  * // Using try/catch for error handling
  * try {
- *   const result = ProposalProcedureList.unsafe_new();
+ *   const result = ProposalProcedureList._newUnsafe();
  *   console.log(result);
  * } catch (error) {
- *   console.error(`ProposalProcedureList.unsafe_new failed: ${error.message}`);
+ *   console.error(`ProposalProcedureList._newUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Constructors
+ * @category ConstructorsUnsafe
  */
-export const unsafe_new = () => Effect.runSync(_new());
+export const _newUnsafe = () => Effect.runSync(_new());
 
 /**
  * Method len of ProposalProcedureList
@@ -153,16 +170,16 @@ export const len = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = ProposalProcedureList.unsafeLen(instance);
+ *   const result = ProposalProcedureList.lenUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`ProposalProcedureList.unsafeLen failed: ${error.message}`);
+ *   console.error(`ProposalProcedureList.lenUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeLen = (instance: CML.ProposalProcedureList): number =>
+export const lenUnsafe = (instance: CML.ProposalProcedureList): number =>
   Effect.runSync(len(instance));
 
 /**
@@ -208,16 +225,16 @@ export const get = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = ProposalProcedureList.unsafeGet(instance,  parameters );
+ *   const result = ProposalProcedureList.getUnsafe(instance,  parameters );
  *   console.log(result);
  * } catch (error) {
- *   console.error(`ProposalProcedureList.unsafeGet failed: ${error.message}`);
+ *   console.error(`ProposalProcedureList.getUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeGet = (
+export const getUnsafe = (
   instance: CML.ProposalProcedureList,
   index: number,
 ): CML.ProposalProcedure => Effect.runSync(get(instance, index));
@@ -265,16 +282,16 @@ export const add = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = ProposalProcedureList.unsafeAdd(instance,  parameters );
+ *   const result = ProposalProcedureList.addUnsafe(instance,  parameters );
  *   console.log(result);
  * } catch (error) {
- *   console.error(`ProposalProcedureList.unsafeAdd failed: ${error.message}`);
+ *   console.error(`ProposalProcedureList.addUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeAdd = (
+export const addUnsafe = (
   instance: CML.ProposalProcedureList,
   elem: CML.ProposalProcedure,
 ): void => Effect.runSync(add(instance, elem));

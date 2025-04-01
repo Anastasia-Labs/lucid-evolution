@@ -1,8 +1,25 @@
+/**
+ * @since 2.0.0
+ */
 import { Data, Effect } from "effect";
 import * as CML from "@anastasia-labs/cardano-multiplatform-lib-nodejs";
 
+/**
+ * Type alias for the CML RegDrepCert class
+ *
+ * @since 2.0.0
+ * @category Types
+ */
 export type RegDrepCert = CML.RegDrepCert;
 
+/**
+ * Error class for RegDrepCert operations
+ *
+ * This error is thrown when operations on RegDrepCert instances fail.
+ *
+ * @since 2.0.0
+ * @category Errors
+ */
 export class RegDrepCertError extends Data.TaggedError("RegDrepCertError")<{
   message?: string;
 }> {}
@@ -47,16 +64,16 @@ export const free = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = RegDrepCert.unsafeFree(instance);
+ *   const result = RegDrepCert.freeUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`RegDrepCert.unsafeFree failed: ${error.message}`);
+ *   console.error(`RegDrepCert.freeUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeFree = (instance: CML.RegDrepCert): void =>
+export const freeUnsafe = (instance: CML.RegDrepCert): void =>
   Effect.runSync(free(instance));
 
 /**
@@ -99,16 +116,16 @@ export const toCborBytes = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = RegDrepCert.unsafeToCborBytes(instance);
+ *   const result = RegDrepCert.toCborBytesUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`RegDrepCert.unsafeToCborBytes failed: ${error.message}`);
+ *   console.error(`RegDrepCert.toCborBytesUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeToCborBytes = (instance: CML.RegDrepCert): Uint8Array =>
+export const toCborBytesUnsafe = (instance: CML.RegDrepCert): Uint8Array =>
   Effect.runSync(toCborBytes(instance));
 
 /**
@@ -151,16 +168,16 @@ export const toCanonicalCborBytes = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = RegDrepCert.unsafeToCanonicalCborBytes(instance);
+ *   const result = RegDrepCert.toCanonicalCborBytesUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`RegDrepCert.unsafeToCanonicalCborBytes failed: ${error.message}`);
+ *   console.error(`RegDrepCert.toCanonicalCborBytesUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeToCanonicalCborBytes = (
+export const toCanonicalCborBytesUnsafe = (
   instance: CML.RegDrepCert,
 ): Uint8Array => Effect.runSync(toCanonicalCborBytes(instance));
 
@@ -201,16 +218,16 @@ export const fromCborBytes = Effect.fn(function* (cborBytes: Uint8Array) {
  *
  * // Using try/catch for error handling
  * try {
- *   const result = RegDrepCert.unsafeFromCborBytes( parameters );
+ *   const result = RegDrepCert.fromCborBytesUnsafe( parameters );
  *   console.log(result);
  * } catch (error) {
- *   console.error(`RegDrepCert.unsafeFromCborBytes failed: ${error.message}`);
+ *   console.error(`RegDrepCert.fromCborBytesUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Constructors
+ * @category ConstructorsUnsafe
  */
-export const unsafeFromCborBytes = (cborBytes: Uint8Array) =>
+export const fromCborBytesUnsafe = (cborBytes: Uint8Array) =>
   Effect.runSync(fromCborBytes(cborBytes));
 
 /**
@@ -253,16 +270,16 @@ export const toCborHex = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = RegDrepCert.unsafeToCborHex(instance);
+ *   const result = RegDrepCert.toCborHexUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`RegDrepCert.unsafeToCborHex failed: ${error.message}`);
+ *   console.error(`RegDrepCert.toCborHexUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeToCborHex = (instance: CML.RegDrepCert): string =>
+export const toCborHexUnsafe = (instance: CML.RegDrepCert): string =>
   Effect.runSync(toCborHex(instance));
 
 /**
@@ -305,16 +322,16 @@ export const toCanonicalCborHex = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = RegDrepCert.unsafeToCanonicalCborHex(instance);
+ *   const result = RegDrepCert.toCanonicalCborHexUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`RegDrepCert.unsafeToCanonicalCborHex failed: ${error.message}`);
+ *   console.error(`RegDrepCert.toCanonicalCborHexUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeToCanonicalCborHex = (instance: CML.RegDrepCert): string =>
+export const toCanonicalCborHexUnsafe = (instance: CML.RegDrepCert): string =>
   Effect.runSync(toCanonicalCborHex(instance));
 
 /**
@@ -354,16 +371,16 @@ export const fromCborHex = Effect.fn(function* (cborBytes: string) {
  *
  * // Using try/catch for error handling
  * try {
- *   const result = RegDrepCert.unsafeFromCborHex( parameters );
+ *   const result = RegDrepCert.fromCborHexUnsafe( parameters );
  *   console.log(result);
  * } catch (error) {
- *   console.error(`RegDrepCert.unsafeFromCborHex failed: ${error.message}`);
+ *   console.error(`RegDrepCert.fromCborHexUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Constructors
+ * @category ConstructorsUnsafe
  */
-export const unsafeFromCborHex = (cborBytes: string) =>
+export const fromCborHexUnsafe = (cborBytes: string) =>
   Effect.runSync(fromCborHex(cborBytes));
 
 /**
@@ -406,16 +423,16 @@ export const toJson = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = RegDrepCert.unsafeToJson(instance);
+ *   const result = RegDrepCert.toJsonUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`RegDrepCert.unsafeToJson failed: ${error.message}`);
+ *   console.error(`RegDrepCert.toJsonUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeToJson = (instance: CML.RegDrepCert): string =>
+export const toJsonUnsafe = (instance: CML.RegDrepCert): string =>
   Effect.runSync(toJson(instance));
 
 /**
@@ -458,16 +475,16 @@ export const toJsValue = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = RegDrepCert.unsafeToJsValue(instance);
+ *   const result = RegDrepCert.toJsValueUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`RegDrepCert.unsafeToJsValue failed: ${error.message}`);
+ *   console.error(`RegDrepCert.toJsValueUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeToJsValue = (instance: CML.RegDrepCert): any =>
+export const toJsValueUnsafe = (instance: CML.RegDrepCert): any =>
   Effect.runSync(toJsValue(instance));
 
 /**
@@ -507,16 +524,16 @@ export const fromJson = Effect.fn(function* (json: string) {
  *
  * // Using try/catch for error handling
  * try {
- *   const result = RegDrepCert.unsafeFromJson( parameters );
+ *   const result = RegDrepCert.fromJsonUnsafe( parameters );
  *   console.log(result);
  * } catch (error) {
- *   console.error(`RegDrepCert.unsafeFromJson failed: ${error.message}`);
+ *   console.error(`RegDrepCert.fromJsonUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Constructors
+ * @category ConstructorsUnsafe
  */
-export const unsafeFromJson = (json: string) => Effect.runSync(fromJson(json));
+export const fromJsonUnsafe = (json: string) => Effect.runSync(fromJson(json));
 
 /**
  * Method drepCredential of RegDrepCert
@@ -560,16 +577,16 @@ export const drepCredential = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = RegDrepCert.unsafeDrepCredential(instance);
+ *   const result = RegDrepCert.drepCredentialUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`RegDrepCert.unsafeDrepCredential failed: ${error.message}`);
+ *   console.error(`RegDrepCert.drepCredentialUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeDrepCredential = (
+export const drepCredentialUnsafe = (
   instance: CML.RegDrepCert,
 ): CML.Credential => Effect.runSync(drepCredential(instance));
 
@@ -613,16 +630,16 @@ export const deposit = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = RegDrepCert.unsafeDeposit(instance);
+ *   const result = RegDrepCert.depositUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`RegDrepCert.unsafeDeposit failed: ${error.message}`);
+ *   console.error(`RegDrepCert.depositUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeDeposit = (instance: CML.RegDrepCert): bigint =>
+export const depositUnsafe = (instance: CML.RegDrepCert): bigint =>
   Effect.runSync(deposit(instance));
 
 /**
@@ -667,16 +684,16 @@ export const anchor = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = RegDrepCert.unsafeAnchor(instance);
+ *   const result = RegDrepCert.anchorUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`RegDrepCert.unsafeAnchor failed: ${error.message}`);
+ *   console.error(`RegDrepCert.anchorUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeAnchor = (
+export const anchorUnsafe = (
   instance: CML.RegDrepCert,
 ): CML.Anchor | undefined => Effect.runSync(anchor(instance));
 
@@ -721,16 +738,16 @@ export const _new = Effect.fn(function* (
  *
  * // Using try/catch for error handling
  * try {
- *   const result = RegDrepCert.unsafe_new( parameters );
+ *   const result = RegDrepCert._newUnsafe( parameters );
  *   console.log(result);
  * } catch (error) {
- *   console.error(`RegDrepCert.unsafe_new failed: ${error.message}`);
+ *   console.error(`RegDrepCert._newUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Constructors
+ * @category ConstructorsUnsafe
  */
-export const unsafe_new = (
+export const _newUnsafe = (
   drepCredential: CML.Credential,
   deposit: bigint,
   anchor: CML.Anchor,

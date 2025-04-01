@@ -1,8 +1,25 @@
+/**
+ * @since 2.0.0
+ */
 import { Data, Effect } from "effect";
 import * as CML from "@anastasia-labs/cardano-multiplatform-lib-nodejs";
 
+/**
+ * Type alias for the CML PlutusScript class
+ *
+ * @since 2.0.0
+ * @category Types
+ */
 export type PlutusScript = CML.PlutusScript;
 
+/**
+ * Error class for PlutusScript operations
+ *
+ * This error is thrown when operations on PlutusScript instances fail.
+ *
+ * @since 2.0.0
+ * @category Errors
+ */
 export class PlutusScriptError extends Data.TaggedError("PlutusScriptError")<{
   message?: string;
 }> {}
@@ -47,16 +64,16 @@ export const free = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = PlutusScript.unsafeFree(instance);
+ *   const result = PlutusScript.freeUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`PlutusScript.unsafeFree failed: ${error.message}`);
+ *   console.error(`PlutusScript.freeUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeFree = (instance: CML.PlutusScript): void =>
+export const freeUnsafe = (instance: CML.PlutusScript): void =>
   Effect.runSync(free(instance));
 
 /**
@@ -96,16 +113,16 @@ export const fromV1 = Effect.fn(function* (script: CML.PlutusV1Script) {
  *
  * // Using try/catch for error handling
  * try {
- *   const result = PlutusScript.unsafeFromV1( parameters );
+ *   const result = PlutusScript.fromV1Unsafe( parameters );
  *   console.log(result);
  * } catch (error) {
- *   console.error(`PlutusScript.unsafeFromV1 failed: ${error.message}`);
+ *   console.error(`PlutusScript.fromV1Unsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Constructors
+ * @category ConstructorsUnsafe
  */
-export const unsafeFromV1 = (script: CML.PlutusV1Script) =>
+export const fromV1Unsafe = (script: CML.PlutusV1Script) =>
   Effect.runSync(fromV1(script));
 
 /**
@@ -145,16 +162,16 @@ export const fromV2 = Effect.fn(function* (script: CML.PlutusV2Script) {
  *
  * // Using try/catch for error handling
  * try {
- *   const result = PlutusScript.unsafeFromV2( parameters );
+ *   const result = PlutusScript.fromV2Unsafe( parameters );
  *   console.log(result);
  * } catch (error) {
- *   console.error(`PlutusScript.unsafeFromV2 failed: ${error.message}`);
+ *   console.error(`PlutusScript.fromV2Unsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Constructors
+ * @category ConstructorsUnsafe
  */
-export const unsafeFromV2 = (script: CML.PlutusV2Script) =>
+export const fromV2Unsafe = (script: CML.PlutusV2Script) =>
   Effect.runSync(fromV2(script));
 
 /**
@@ -194,16 +211,16 @@ export const fromV3 = Effect.fn(function* (script: CML.PlutusV3Script) {
  *
  * // Using try/catch for error handling
  * try {
- *   const result = PlutusScript.unsafeFromV3( parameters );
+ *   const result = PlutusScript.fromV3Unsafe( parameters );
  *   console.log(result);
  * } catch (error) {
- *   console.error(`PlutusScript.unsafeFromV3 failed: ${error.message}`);
+ *   console.error(`PlutusScript.fromV3Unsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Constructors
+ * @category ConstructorsUnsafe
  */
-export const unsafeFromV3 = (script: CML.PlutusV3Script) =>
+export const fromV3Unsafe = (script: CML.PlutusV3Script) =>
   Effect.runSync(fromV3(script));
 
 /**
@@ -248,16 +265,16 @@ export const hash = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = PlutusScript.unsafeHash(instance);
+ *   const result = PlutusScript.hashUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`PlutusScript.unsafeHash failed: ${error.message}`);
+ *   console.error(`PlutusScript.hashUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeHash = (instance: CML.PlutusScript): CML.ScriptHash =>
+export const hashUnsafe = (instance: CML.PlutusScript): CML.ScriptHash =>
   Effect.runSync(hash(instance));
 
 /**
@@ -302,16 +319,16 @@ export const asV1 = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = PlutusScript.unsafeAsV1(instance);
+ *   const result = PlutusScript.asV1Unsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`PlutusScript.unsafeAsV1 failed: ${error.message}`);
+ *   console.error(`PlutusScript.asV1Unsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeAsV1 = (
+export const asV1Unsafe = (
   instance: CML.PlutusScript,
 ): CML.PlutusV1Script | undefined => Effect.runSync(asV1(instance));
 
@@ -357,16 +374,16 @@ export const asV2 = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = PlutusScript.unsafeAsV2(instance);
+ *   const result = PlutusScript.asV2Unsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`PlutusScript.unsafeAsV2 failed: ${error.message}`);
+ *   console.error(`PlutusScript.asV2Unsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeAsV2 = (
+export const asV2Unsafe = (
   instance: CML.PlutusScript,
 ): CML.PlutusV2Script | undefined => Effect.runSync(asV2(instance));
 
@@ -412,16 +429,16 @@ export const asV3 = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = PlutusScript.unsafeAsV3(instance);
+ *   const result = PlutusScript.asV3Unsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`PlutusScript.unsafeAsV3 failed: ${error.message}`);
+ *   console.error(`PlutusScript.asV3Unsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeAsV3 = (
+export const asV3Unsafe = (
   instance: CML.PlutusScript,
 ): CML.PlutusV3Script | undefined => Effect.runSync(asV3(instance));
 
@@ -467,14 +484,14 @@ export const version = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = PlutusScript.unsafeVersion(instance);
+ *   const result = PlutusScript.versionUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`PlutusScript.unsafeVersion failed: ${error.message}`);
+ *   console.error(`PlutusScript.versionUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeVersion = (instance: CML.PlutusScript): CML.Language =>
+export const versionUnsafe = (instance: CML.PlutusScript): CML.Language =>
   Effect.runSync(version(instance));

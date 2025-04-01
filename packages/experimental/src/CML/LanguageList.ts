@@ -1,8 +1,25 @@
+/**
+ * @since 2.0.0
+ */
 import { Data, Effect } from "effect";
 import * as CML from "@anastasia-labs/cardano-multiplatform-lib-nodejs";
 
+/**
+ * Type alias for the CML LanguageList class
+ *
+ * @since 2.0.0
+ * @category Types
+ */
 export type LanguageList = CML.LanguageList;
 
+/**
+ * Error class for LanguageList operations
+ *
+ * This error is thrown when operations on LanguageList instances fail.
+ *
+ * @since 2.0.0
+ * @category Errors
+ */
 export class LanguageListError extends Data.TaggedError("LanguageListError")<{
   message?: string;
 }> {}
@@ -47,16 +64,16 @@ export const free = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = LanguageList.unsafeFree(instance);
+ *   const result = LanguageList.freeUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`LanguageList.unsafeFree failed: ${error.message}`);
+ *   console.error(`LanguageList.freeUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeFree = (instance: CML.LanguageList): void =>
+export const freeUnsafe = (instance: CML.LanguageList): void =>
   Effect.runSync(free(instance));
 
 /**
@@ -96,16 +113,16 @@ export const _new = Effect.fn(function* () {
  *
  * // Using try/catch for error handling
  * try {
- *   const result = LanguageList.unsafe_new();
+ *   const result = LanguageList._newUnsafe();
  *   console.log(result);
  * } catch (error) {
- *   console.error(`LanguageList.unsafe_new failed: ${error.message}`);
+ *   console.error(`LanguageList._newUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Constructors
+ * @category ConstructorsUnsafe
  */
-export const unsafe_new = () => Effect.runSync(_new());
+export const _newUnsafe = () => Effect.runSync(_new());
 
 /**
  * Method len of LanguageList
@@ -147,16 +164,16 @@ export const len = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = LanguageList.unsafeLen(instance);
+ *   const result = LanguageList.lenUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`LanguageList.unsafeLen failed: ${error.message}`);
+ *   console.error(`LanguageList.lenUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeLen = (instance: CML.LanguageList): number =>
+export const lenUnsafe = (instance: CML.LanguageList): number =>
   Effect.runSync(len(instance));
 
 /**
@@ -202,16 +219,16 @@ export const get = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = LanguageList.unsafeGet(instance,  parameters );
+ *   const result = LanguageList.getUnsafe(instance,  parameters );
  *   console.log(result);
  * } catch (error) {
- *   console.error(`LanguageList.unsafeGet failed: ${error.message}`);
+ *   console.error(`LanguageList.getUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeGet = (
+export const getUnsafe = (
   instance: CML.LanguageList,
   index: number,
 ): CML.Language => Effect.runSync(get(instance, index));
@@ -259,16 +276,16 @@ export const add = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = LanguageList.unsafeAdd(instance,  parameters );
+ *   const result = LanguageList.addUnsafe(instance,  parameters );
  *   console.log(result);
  * } catch (error) {
- *   console.error(`LanguageList.unsafeAdd failed: ${error.message}`);
+ *   console.error(`LanguageList.addUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeAdd = (
+export const addUnsafe = (
   instance: CML.LanguageList,
   elem: CML.Language,
 ): void => Effect.runSync(add(instance, elem));

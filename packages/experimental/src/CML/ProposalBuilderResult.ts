@@ -1,8 +1,25 @@
+/**
+ * @since 2.0.0
+ */
 import { Data, Effect } from "effect";
 import * as CML from "@anastasia-labs/cardano-multiplatform-lib-nodejs";
 
+/**
+ * Type alias for the CML ProposalBuilderResult class
+ *
+ * @since 2.0.0
+ * @category Types
+ */
 export type ProposalBuilderResult = CML.ProposalBuilderResult;
 
+/**
+ * Error class for ProposalBuilderResult operations
+ *
+ * This error is thrown when operations on ProposalBuilderResult instances fail.
+ *
+ * @since 2.0.0
+ * @category Errors
+ */
 export class ProposalBuilderResultError extends Data.TaggedError(
   "ProposalBuilderResultError",
 )<{
@@ -51,14 +68,14 @@ export const free = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = ProposalBuilderResult.unsafeFree(instance);
+ *   const result = ProposalBuilderResult.freeUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`ProposalBuilderResult.unsafeFree failed: ${error.message}`);
+ *   console.error(`ProposalBuilderResult.freeUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeFree = (instance: CML.ProposalBuilderResult): void =>
+export const freeUnsafe = (instance: CML.ProposalBuilderResult): void =>
   Effect.runSync(free(instance));

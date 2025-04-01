@@ -1,8 +1,25 @@
+/**
+ * @since 2.0.0
+ */
 import { Data, Effect } from "effect";
 import * as CML from "@anastasia-labs/cardano-multiplatform-lib-nodejs";
 
+/**
+ * Type alias for the CML Bip32PrivateKey class
+ *
+ * @since 2.0.0
+ * @category Types
+ */
 export type Bip32PrivateKey = CML.Bip32PrivateKey;
 
+/**
+ * Error class for Bip32PrivateKey operations
+ *
+ * This error is thrown when operations on Bip32PrivateKey instances fail.
+ *
+ * @since 2.0.0
+ * @category Errors
+ */
 export class Bip32PrivateKeyError extends Data.TaggedError(
   "Bip32PrivateKeyError",
 )<{
@@ -49,16 +66,16 @@ export const free = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = Bip32PrivateKey.unsafeFree(instance);
+ *   const result = Bip32PrivateKey.freeUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`Bip32PrivateKey.unsafeFree failed: ${error.message}`);
+ *   console.error(`Bip32PrivateKey.freeUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeFree = (instance: CML.Bip32PrivateKey): void =>
+export const freeUnsafe = (instance: CML.Bip32PrivateKey): void =>
   Effect.runSync(free(instance));
 
 /**
@@ -104,16 +121,16 @@ export const derive = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = Bip32PrivateKey.unsafeDerive(instance,  parameters );
+ *   const result = Bip32PrivateKey.deriveUnsafe(instance,  parameters );
  *   console.log(result);
  * } catch (error) {
- *   console.error(`Bip32PrivateKey.unsafeDerive failed: ${error.message}`);
+ *   console.error(`Bip32PrivateKey.deriveUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeDerive = (
+export const deriveUnsafe = (
   instance: CML.Bip32PrivateKey,
   index: number,
 ): CML.Bip32PrivateKey => Effect.runSync(derive(instance, index));
@@ -155,16 +172,16 @@ export const from_128Xprv = Effect.fn(function* (bytes: Uint8Array) {
  *
  * // Using try/catch for error handling
  * try {
- *   const result = Bip32PrivateKey.unsafeFrom_128Xprv( parameters );
+ *   const result = Bip32PrivateKey.from_128XprvUnsafe( parameters );
  *   console.log(result);
  * } catch (error) {
- *   console.error(`Bip32PrivateKey.unsafeFrom_128Xprv failed: ${error.message}`);
+ *   console.error(`Bip32PrivateKey.from_128XprvUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Constructors
+ * @category ConstructorsUnsafe
  */
-export const unsafeFrom_128Xprv = (bytes: Uint8Array) =>
+export const from_128XprvUnsafe = (bytes: Uint8Array) =>
   Effect.runSync(from_128Xprv(bytes));
 
 /**
@@ -209,16 +226,16 @@ export const to_128Xprv = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = Bip32PrivateKey.unsafeTo_128Xprv(instance);
+ *   const result = Bip32PrivateKey.to_128XprvUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`Bip32PrivateKey.unsafeTo_128Xprv failed: ${error.message}`);
+ *   console.error(`Bip32PrivateKey.to_128XprvUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeTo_128Xprv = (instance: CML.Bip32PrivateKey): Uint8Array =>
+export const to_128XprvUnsafe = (instance: CML.Bip32PrivateKey): Uint8Array =>
   Effect.runSync(to_128Xprv(instance));
 
 /**
@@ -258,16 +275,16 @@ export const generateEd25519Bip32 = Effect.fn(function* () {
  *
  * // Using try/catch for error handling
  * try {
- *   const result = Bip32PrivateKey.unsafeGenerateEd25519Bip32();
+ *   const result = Bip32PrivateKey.generateEd25519Bip32Unsafe();
  *   console.log(result);
  * } catch (error) {
- *   console.error(`Bip32PrivateKey.unsafeGenerateEd25519Bip32 failed: ${error.message}`);
+ *   console.error(`Bip32PrivateKey.generateEd25519Bip32Unsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Constructors
+ * @category ConstructorsUnsafe
  */
-export const unsafeGenerateEd25519Bip32 = () =>
+export const generateEd25519Bip32Unsafe = () =>
   Effect.runSync(generateEd25519Bip32());
 
 /**
@@ -312,16 +329,16 @@ export const toRawKey = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = Bip32PrivateKey.unsafeToRawKey(instance);
+ *   const result = Bip32PrivateKey.toRawKeyUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`Bip32PrivateKey.unsafeToRawKey failed: ${error.message}`);
+ *   console.error(`Bip32PrivateKey.toRawKeyUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeToRawKey = (instance: CML.Bip32PrivateKey): CML.PrivateKey =>
+export const toRawKeyUnsafe = (instance: CML.Bip32PrivateKey): CML.PrivateKey =>
   Effect.runSync(toRawKey(instance));
 
 /**
@@ -366,16 +383,16 @@ export const toPublic = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = Bip32PrivateKey.unsafeToPublic(instance);
+ *   const result = Bip32PrivateKey.toPublicUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`Bip32PrivateKey.unsafeToPublic failed: ${error.message}`);
+ *   console.error(`Bip32PrivateKey.toPublicUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeToPublic = (
+export const toPublicUnsafe = (
   instance: CML.Bip32PrivateKey,
 ): CML.Bip32PublicKey => Effect.runSync(toPublic(instance));
 
@@ -416,16 +433,16 @@ export const fromRawBytes = Effect.fn(function* (bytes: Uint8Array) {
  *
  * // Using try/catch for error handling
  * try {
- *   const result = Bip32PrivateKey.unsafeFromRawBytes( parameters );
+ *   const result = Bip32PrivateKey.fromRawBytesUnsafe( parameters );
  *   console.log(result);
  * } catch (error) {
- *   console.error(`Bip32PrivateKey.unsafeFromRawBytes failed: ${error.message}`);
+ *   console.error(`Bip32PrivateKey.fromRawBytesUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Constructors
+ * @category ConstructorsUnsafe
  */
-export const unsafeFromRawBytes = (bytes: Uint8Array) =>
+export const fromRawBytesUnsafe = (bytes: Uint8Array) =>
   Effect.runSync(fromRawBytes(bytes));
 
 /**
@@ -470,16 +487,16 @@ export const toRawBytes = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = Bip32PrivateKey.unsafeToRawBytes(instance);
+ *   const result = Bip32PrivateKey.toRawBytesUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`Bip32PrivateKey.unsafeToRawBytes failed: ${error.message}`);
+ *   console.error(`Bip32PrivateKey.toRawBytesUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeToRawBytes = (instance: CML.Bip32PrivateKey): Uint8Array =>
+export const toRawBytesUnsafe = (instance: CML.Bip32PrivateKey): Uint8Array =>
   Effect.runSync(toRawBytes(instance));
 
 /**
@@ -519,16 +536,16 @@ export const fromBech32 = Effect.fn(function* (bech32Str: string) {
  *
  * // Using try/catch for error handling
  * try {
- *   const result = Bip32PrivateKey.unsafeFromBech32( parameters );
+ *   const result = Bip32PrivateKey.fromBech32Unsafe( parameters );
  *   console.log(result);
  * } catch (error) {
- *   console.error(`Bip32PrivateKey.unsafeFromBech32 failed: ${error.message}`);
+ *   console.error(`Bip32PrivateKey.fromBech32Unsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Constructors
+ * @category ConstructorsUnsafe
  */
-export const unsafeFromBech32 = (bech32Str: string) =>
+export const fromBech32Unsafe = (bech32Str: string) =>
   Effect.runSync(fromBech32(bech32Str));
 
 /**
@@ -573,16 +590,16 @@ export const toBech32 = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = Bip32PrivateKey.unsafeToBech32(instance);
+ *   const result = Bip32PrivateKey.toBech32Unsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`Bip32PrivateKey.unsafeToBech32 failed: ${error.message}`);
+ *   console.error(`Bip32PrivateKey.toBech32Unsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeToBech32 = (instance: CML.Bip32PrivateKey): string =>
+export const toBech32Unsafe = (instance: CML.Bip32PrivateKey): string =>
   Effect.runSync(toBech32(instance));
 
 /**
@@ -625,16 +642,16 @@ export const fromBip39Entropy = Effect.fn(function* (
  *
  * // Using try/catch for error handling
  * try {
- *   const result = Bip32PrivateKey.unsafeFromBip39Entropy( parameters );
+ *   const result = Bip32PrivateKey.fromBip39EntropyUnsafe( parameters );
  *   console.log(result);
  * } catch (error) {
- *   console.error(`Bip32PrivateKey.unsafeFromBip39Entropy failed: ${error.message}`);
+ *   console.error(`Bip32PrivateKey.fromBip39EntropyUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Constructors
+ * @category ConstructorsUnsafe
  */
-export const unsafeFromBip39Entropy = (
+export const fromBip39EntropyUnsafe = (
   entropy: Uint8Array,
   password: Uint8Array,
 ) => Effect.runSync(fromBip39Entropy(entropy, password));
@@ -681,14 +698,14 @@ export const chaincode = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = Bip32PrivateKey.unsafeChaincode(instance);
+ *   const result = Bip32PrivateKey.chaincodeUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`Bip32PrivateKey.unsafeChaincode failed: ${error.message}`);
+ *   console.error(`Bip32PrivateKey.chaincodeUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeChaincode = (instance: CML.Bip32PrivateKey): Uint8Array =>
+export const chaincodeUnsafe = (instance: CML.Bip32PrivateKey): Uint8Array =>
   Effect.runSync(chaincode(instance));

@@ -1,8 +1,25 @@
+/**
+ * @since 2.0.0
+ */
 import { Data, Effect } from "effect";
 import * as CML from "@anastasia-labs/cardano-multiplatform-lib-nodejs";
 
+/**
+ * Type alias for the CML DRepVotingThresholds class
+ *
+ * @since 2.0.0
+ * @category Types
+ */
 export type DRepVotingThresholds = CML.DRepVotingThresholds;
 
+/**
+ * Error class for DRepVotingThresholds operations
+ *
+ * This error is thrown when operations on DRepVotingThresholds instances fail.
+ *
+ * @since 2.0.0
+ * @category Errors
+ */
 export class DRepVotingThresholdsError extends Data.TaggedError(
   "DRepVotingThresholdsError",
 )<{
@@ -51,16 +68,16 @@ export const free = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = DRepVotingThresholds.unsafeFree(instance);
+ *   const result = DRepVotingThresholds.freeUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`DRepVotingThresholds.unsafeFree failed: ${error.message}`);
+ *   console.error(`DRepVotingThresholds.freeUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeFree = (instance: CML.DRepVotingThresholds): void =>
+export const freeUnsafe = (instance: CML.DRepVotingThresholds): void =>
   Effect.runSync(free(instance));
 
 /**
@@ -105,16 +122,16 @@ export const toCborBytes = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = DRepVotingThresholds.unsafeToCborBytes(instance);
+ *   const result = DRepVotingThresholds.toCborBytesUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`DRepVotingThresholds.unsafeToCborBytes failed: ${error.message}`);
+ *   console.error(`DRepVotingThresholds.toCborBytesUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeToCborBytes = (
+export const toCborBytesUnsafe = (
   instance: CML.DRepVotingThresholds,
 ): Uint8Array => Effect.runSync(toCborBytes(instance));
 
@@ -160,16 +177,16 @@ export const toCanonicalCborBytes = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = DRepVotingThresholds.unsafeToCanonicalCborBytes(instance);
+ *   const result = DRepVotingThresholds.toCanonicalCborBytesUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`DRepVotingThresholds.unsafeToCanonicalCborBytes failed: ${error.message}`);
+ *   console.error(`DRepVotingThresholds.toCanonicalCborBytesUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeToCanonicalCborBytes = (
+export const toCanonicalCborBytesUnsafe = (
   instance: CML.DRepVotingThresholds,
 ): Uint8Array => Effect.runSync(toCanonicalCborBytes(instance));
 
@@ -210,16 +227,16 @@ export const fromCborBytes = Effect.fn(function* (cborBytes: Uint8Array) {
  *
  * // Using try/catch for error handling
  * try {
- *   const result = DRepVotingThresholds.unsafeFromCborBytes( parameters );
+ *   const result = DRepVotingThresholds.fromCborBytesUnsafe( parameters );
  *   console.log(result);
  * } catch (error) {
- *   console.error(`DRepVotingThresholds.unsafeFromCborBytes failed: ${error.message}`);
+ *   console.error(`DRepVotingThresholds.fromCborBytesUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Constructors
+ * @category ConstructorsUnsafe
  */
-export const unsafeFromCborBytes = (cborBytes: Uint8Array) =>
+export const fromCborBytesUnsafe = (cborBytes: Uint8Array) =>
   Effect.runSync(fromCborBytes(cborBytes));
 
 /**
@@ -264,16 +281,16 @@ export const toCborHex = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = DRepVotingThresholds.unsafeToCborHex(instance);
+ *   const result = DRepVotingThresholds.toCborHexUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`DRepVotingThresholds.unsafeToCborHex failed: ${error.message}`);
+ *   console.error(`DRepVotingThresholds.toCborHexUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeToCborHex = (instance: CML.DRepVotingThresholds): string =>
+export const toCborHexUnsafe = (instance: CML.DRepVotingThresholds): string =>
   Effect.runSync(toCborHex(instance));
 
 /**
@@ -318,16 +335,16 @@ export const toCanonicalCborHex = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = DRepVotingThresholds.unsafeToCanonicalCborHex(instance);
+ *   const result = DRepVotingThresholds.toCanonicalCborHexUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`DRepVotingThresholds.unsafeToCanonicalCborHex failed: ${error.message}`);
+ *   console.error(`DRepVotingThresholds.toCanonicalCborHexUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeToCanonicalCborHex = (
+export const toCanonicalCborHexUnsafe = (
   instance: CML.DRepVotingThresholds,
 ): string => Effect.runSync(toCanonicalCborHex(instance));
 
@@ -368,16 +385,16 @@ export const fromCborHex = Effect.fn(function* (cborBytes: string) {
  *
  * // Using try/catch for error handling
  * try {
- *   const result = DRepVotingThresholds.unsafeFromCborHex( parameters );
+ *   const result = DRepVotingThresholds.fromCborHexUnsafe( parameters );
  *   console.log(result);
  * } catch (error) {
- *   console.error(`DRepVotingThresholds.unsafeFromCborHex failed: ${error.message}`);
+ *   console.error(`DRepVotingThresholds.fromCborHexUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Constructors
+ * @category ConstructorsUnsafe
  */
-export const unsafeFromCborHex = (cborBytes: string) =>
+export const fromCborHexUnsafe = (cborBytes: string) =>
   Effect.runSync(fromCborHex(cborBytes));
 
 /**
@@ -422,16 +439,16 @@ export const toJson = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = DRepVotingThresholds.unsafeToJson(instance);
+ *   const result = DRepVotingThresholds.toJsonUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`DRepVotingThresholds.unsafeToJson failed: ${error.message}`);
+ *   console.error(`DRepVotingThresholds.toJsonUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeToJson = (instance: CML.DRepVotingThresholds): string =>
+export const toJsonUnsafe = (instance: CML.DRepVotingThresholds): string =>
   Effect.runSync(toJson(instance));
 
 /**
@@ -476,16 +493,16 @@ export const toJsValue = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = DRepVotingThresholds.unsafeToJsValue(instance);
+ *   const result = DRepVotingThresholds.toJsValueUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`DRepVotingThresholds.unsafeToJsValue failed: ${error.message}`);
+ *   console.error(`DRepVotingThresholds.toJsValueUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeToJsValue = (instance: CML.DRepVotingThresholds): any =>
+export const toJsValueUnsafe = (instance: CML.DRepVotingThresholds): any =>
   Effect.runSync(toJsValue(instance));
 
 /**
@@ -525,16 +542,16 @@ export const fromJson = Effect.fn(function* (json: string) {
  *
  * // Using try/catch for error handling
  * try {
- *   const result = DRepVotingThresholds.unsafeFromJson( parameters );
+ *   const result = DRepVotingThresholds.fromJsonUnsafe( parameters );
  *   console.log(result);
  * } catch (error) {
- *   console.error(`DRepVotingThresholds.unsafeFromJson failed: ${error.message}`);
+ *   console.error(`DRepVotingThresholds.fromJsonUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Constructors
+ * @category ConstructorsUnsafe
  */
-export const unsafeFromJson = (json: string) => Effect.runSync(fromJson(json));
+export const fromJsonUnsafe = (json: string) => Effect.runSync(fromJson(json));
 
 /**
  * Method motionNoConfidence of DRepVotingThresholds
@@ -578,16 +595,16 @@ export const motionNoConfidence = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = DRepVotingThresholds.unsafeMotionNoConfidence(instance);
+ *   const result = DRepVotingThresholds.motionNoConfidenceUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`DRepVotingThresholds.unsafeMotionNoConfidence failed: ${error.message}`);
+ *   console.error(`DRepVotingThresholds.motionNoConfidenceUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeMotionNoConfidence = (
+export const motionNoConfidenceUnsafe = (
   instance: CML.DRepVotingThresholds,
 ): CML.UnitInterval => Effect.runSync(motionNoConfidence(instance));
 
@@ -633,16 +650,16 @@ export const committeeNormal = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = DRepVotingThresholds.unsafeCommitteeNormal(instance);
+ *   const result = DRepVotingThresholds.committeeNormalUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`DRepVotingThresholds.unsafeCommitteeNormal failed: ${error.message}`);
+ *   console.error(`DRepVotingThresholds.committeeNormalUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeCommitteeNormal = (
+export const committeeNormalUnsafe = (
   instance: CML.DRepVotingThresholds,
 ): CML.UnitInterval => Effect.runSync(committeeNormal(instance));
 
@@ -688,16 +705,16 @@ export const committeeNoConfidence = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = DRepVotingThresholds.unsafeCommitteeNoConfidence(instance);
+ *   const result = DRepVotingThresholds.committeeNoConfidenceUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`DRepVotingThresholds.unsafeCommitteeNoConfidence failed: ${error.message}`);
+ *   console.error(`DRepVotingThresholds.committeeNoConfidenceUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeCommitteeNoConfidence = (
+export const committeeNoConfidenceUnsafe = (
   instance: CML.DRepVotingThresholds,
 ): CML.UnitInterval => Effect.runSync(committeeNoConfidence(instance));
 
@@ -743,16 +760,16 @@ export const updateConstitution = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = DRepVotingThresholds.unsafeUpdateConstitution(instance);
+ *   const result = DRepVotingThresholds.updateConstitutionUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`DRepVotingThresholds.unsafeUpdateConstitution failed: ${error.message}`);
+ *   console.error(`DRepVotingThresholds.updateConstitutionUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeUpdateConstitution = (
+export const updateConstitutionUnsafe = (
   instance: CML.DRepVotingThresholds,
 ): CML.UnitInterval => Effect.runSync(updateConstitution(instance));
 
@@ -798,16 +815,16 @@ export const hardForkInitiation = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = DRepVotingThresholds.unsafeHardForkInitiation(instance);
+ *   const result = DRepVotingThresholds.hardForkInitiationUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`DRepVotingThresholds.unsafeHardForkInitiation failed: ${error.message}`);
+ *   console.error(`DRepVotingThresholds.hardForkInitiationUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeHardForkInitiation = (
+export const hardForkInitiationUnsafe = (
   instance: CML.DRepVotingThresholds,
 ): CML.UnitInterval => Effect.runSync(hardForkInitiation(instance));
 
@@ -853,16 +870,16 @@ export const ppNetworkGroup = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = DRepVotingThresholds.unsafePpNetworkGroup(instance);
+ *   const result = DRepVotingThresholds.ppNetworkGroupUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`DRepVotingThresholds.unsafePpNetworkGroup failed: ${error.message}`);
+ *   console.error(`DRepVotingThresholds.ppNetworkGroupUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafePpNetworkGroup = (
+export const ppNetworkGroupUnsafe = (
   instance: CML.DRepVotingThresholds,
 ): CML.UnitInterval => Effect.runSync(ppNetworkGroup(instance));
 
@@ -908,16 +925,16 @@ export const ppEconomicGroup = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = DRepVotingThresholds.unsafePpEconomicGroup(instance);
+ *   const result = DRepVotingThresholds.ppEconomicGroupUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`DRepVotingThresholds.unsafePpEconomicGroup failed: ${error.message}`);
+ *   console.error(`DRepVotingThresholds.ppEconomicGroupUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafePpEconomicGroup = (
+export const ppEconomicGroupUnsafe = (
   instance: CML.DRepVotingThresholds,
 ): CML.UnitInterval => Effect.runSync(ppEconomicGroup(instance));
 
@@ -963,16 +980,16 @@ export const ppTechnicalGroup = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = DRepVotingThresholds.unsafePpTechnicalGroup(instance);
+ *   const result = DRepVotingThresholds.ppTechnicalGroupUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`DRepVotingThresholds.unsafePpTechnicalGroup failed: ${error.message}`);
+ *   console.error(`DRepVotingThresholds.ppTechnicalGroupUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafePpTechnicalGroup = (
+export const ppTechnicalGroupUnsafe = (
   instance: CML.DRepVotingThresholds,
 ): CML.UnitInterval => Effect.runSync(ppTechnicalGroup(instance));
 
@@ -1018,16 +1035,16 @@ export const ppGovernanceGroup = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = DRepVotingThresholds.unsafePpGovernanceGroup(instance);
+ *   const result = DRepVotingThresholds.ppGovernanceGroupUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`DRepVotingThresholds.unsafePpGovernanceGroup failed: ${error.message}`);
+ *   console.error(`DRepVotingThresholds.ppGovernanceGroupUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafePpGovernanceGroup = (
+export const ppGovernanceGroupUnsafe = (
   instance: CML.DRepVotingThresholds,
 ): CML.UnitInterval => Effect.runSync(ppGovernanceGroup(instance));
 
@@ -1073,16 +1090,16 @@ export const treasuryWithdrawal = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = DRepVotingThresholds.unsafeTreasuryWithdrawal(instance);
+ *   const result = DRepVotingThresholds.treasuryWithdrawalUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`DRepVotingThresholds.unsafeTreasuryWithdrawal failed: ${error.message}`);
+ *   console.error(`DRepVotingThresholds.treasuryWithdrawalUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeTreasuryWithdrawal = (
+export const treasuryWithdrawalUnsafe = (
   instance: CML.DRepVotingThresholds,
 ): CML.UnitInterval => Effect.runSync(treasuryWithdrawal(instance));
 
@@ -1146,16 +1163,16 @@ export const _new = Effect.fn(function* (
  *
  * // Using try/catch for error handling
  * try {
- *   const result = DRepVotingThresholds.unsafe_new( parameters );
+ *   const result = DRepVotingThresholds._newUnsafe( parameters );
  *   console.log(result);
  * } catch (error) {
- *   console.error(`DRepVotingThresholds.unsafe_new failed: ${error.message}`);
+ *   console.error(`DRepVotingThresholds._newUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Constructors
+ * @category ConstructorsUnsafe
  */
-export const unsafe_new = (
+export const _newUnsafe = (
   motionNoConfidence: CML.UnitInterval,
   committeeNormal: CML.UnitInterval,
   committeeNoConfidence: CML.UnitInterval,

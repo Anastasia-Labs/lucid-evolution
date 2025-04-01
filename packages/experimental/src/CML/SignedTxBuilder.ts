@@ -1,8 +1,25 @@
+/**
+ * @since 2.0.0
+ */
 import { Data, Effect } from "effect";
 import * as CML from "@anastasia-labs/cardano-multiplatform-lib-nodejs";
 
+/**
+ * Type alias for the CML SignedTxBuilder class
+ *
+ * @since 2.0.0
+ * @category Types
+ */
 export type SignedTxBuilder = CML.SignedTxBuilder;
 
+/**
+ * Error class for SignedTxBuilder operations
+ *
+ * This error is thrown when operations on SignedTxBuilder instances fail.
+ *
+ * @since 2.0.0
+ * @category Errors
+ */
 export class SignedTxBuilderError extends Data.TaggedError(
   "SignedTxBuilderError",
 )<{
@@ -49,16 +66,16 @@ export const free = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = SignedTxBuilder.unsafeFree(instance);
+ *   const result = SignedTxBuilder.freeUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`SignedTxBuilder.unsafeFree failed: ${error.message}`);
+ *   console.error(`SignedTxBuilder.freeUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeFree = (instance: CML.SignedTxBuilder): void =>
+export const freeUnsafe = (instance: CML.SignedTxBuilder): void =>
   Effect.runSync(free(instance));
 
 /**
@@ -109,16 +126,16 @@ export const newWithData = Effect.fn(function* (
  *
  * // Using try/catch for error handling
  * try {
- *   const result = SignedTxBuilder.unsafeNewWithData( parameters );
+ *   const result = SignedTxBuilder.newWithDataUnsafe( parameters );
  *   console.log(result);
  * } catch (error) {
- *   console.error(`SignedTxBuilder.unsafeNewWithData failed: ${error.message}`);
+ *   console.error(`SignedTxBuilder.newWithDataUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Constructors
+ * @category ConstructorsUnsafe
  */
-export const unsafeNewWithData = (
+export const newWithDataUnsafe = (
   body: CML.TransactionBody,
   witnessSet: CML.TransactionWitnessSetBuilder,
   isValid: boolean,
@@ -166,16 +183,16 @@ export const newWithoutData = Effect.fn(function* (
  *
  * // Using try/catch for error handling
  * try {
- *   const result = SignedTxBuilder.unsafeNewWithoutData( parameters );
+ *   const result = SignedTxBuilder.newWithoutDataUnsafe( parameters );
  *   console.log(result);
  * } catch (error) {
- *   console.error(`SignedTxBuilder.unsafeNewWithoutData failed: ${error.message}`);
+ *   console.error(`SignedTxBuilder.newWithoutDataUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Constructors
+ * @category ConstructorsUnsafe
  */
-export const unsafeNewWithoutData = (
+export const newWithoutDataUnsafe = (
   body: CML.TransactionBody,
   witnessSet: CML.TransactionWitnessSetBuilder,
   isValid: boolean,
@@ -223,16 +240,16 @@ export const buildChecked = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = SignedTxBuilder.unsafeBuildChecked(instance);
+ *   const result = SignedTxBuilder.buildCheckedUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`SignedTxBuilder.unsafeBuildChecked failed: ${error.message}`);
+ *   console.error(`SignedTxBuilder.buildCheckedUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeBuildChecked = (
+export const buildCheckedUnsafe = (
   instance: CML.SignedTxBuilder,
 ): CML.Transaction => Effect.runSync(buildChecked(instance));
 
@@ -278,16 +295,16 @@ export const buildUnchecked = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = SignedTxBuilder.unsafeBuildUnchecked(instance);
+ *   const result = SignedTxBuilder.buildUncheckedUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`SignedTxBuilder.unsafeBuildUnchecked failed: ${error.message}`);
+ *   console.error(`SignedTxBuilder.buildUncheckedUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeBuildUnchecked = (
+export const buildUncheckedUnsafe = (
   instance: CML.SignedTxBuilder,
 ): CML.Transaction => Effect.runSync(buildUnchecked(instance));
 
@@ -334,16 +351,16 @@ export const addVkey = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = SignedTxBuilder.unsafeAddVkey(instance,  parameters );
+ *   const result = SignedTxBuilder.addVkeyUnsafe(instance,  parameters );
  *   console.log(result);
  * } catch (error) {
- *   console.error(`SignedTxBuilder.unsafeAddVkey failed: ${error.message}`);
+ *   console.error(`SignedTxBuilder.addVkeyUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeAddVkey = (
+export const addVkeyUnsafe = (
   instance: CML.SignedTxBuilder,
   vkey: CML.Vkeywitness,
 ): void => Effect.runSync(addVkey(instance, vkey));
@@ -391,16 +408,16 @@ export const addBootstrap = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = SignedTxBuilder.unsafeAddBootstrap(instance,  parameters );
+ *   const result = SignedTxBuilder.addBootstrapUnsafe(instance,  parameters );
  *   console.log(result);
  * } catch (error) {
- *   console.error(`SignedTxBuilder.unsafeAddBootstrap failed: ${error.message}`);
+ *   console.error(`SignedTxBuilder.addBootstrapUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeAddBootstrap = (
+export const addBootstrapUnsafe = (
   instance: CML.SignedTxBuilder,
   bootstrap: CML.BootstrapWitness,
 ): void => Effect.runSync(addBootstrap(instance, bootstrap));
@@ -447,16 +464,16 @@ export const body = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = SignedTxBuilder.unsafeBody(instance);
+ *   const result = SignedTxBuilder.bodyUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`SignedTxBuilder.unsafeBody failed: ${error.message}`);
+ *   console.error(`SignedTxBuilder.bodyUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeBody = (
+export const bodyUnsafe = (
   instance: CML.SignedTxBuilder,
 ): CML.TransactionBody => Effect.runSync(body(instance));
 
@@ -502,16 +519,16 @@ export const witnessSet = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = SignedTxBuilder.unsafeWitnessSet(instance);
+ *   const result = SignedTxBuilder.witnessSetUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`SignedTxBuilder.unsafeWitnessSet failed: ${error.message}`);
+ *   console.error(`SignedTxBuilder.witnessSetUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeWitnessSet = (
+export const witnessSetUnsafe = (
   instance: CML.SignedTxBuilder,
 ): CML.TransactionWitnessSetBuilder => Effect.runSync(witnessSet(instance));
 
@@ -557,16 +574,16 @@ export const isValid = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = SignedTxBuilder.unsafeIsValid(instance);
+ *   const result = SignedTxBuilder.isValidUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`SignedTxBuilder.unsafeIsValid failed: ${error.message}`);
+ *   console.error(`SignedTxBuilder.isValidUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeIsValid = (instance: CML.SignedTxBuilder): boolean =>
+export const isValidUnsafe = (instance: CML.SignedTxBuilder): boolean =>
   Effect.runSync(isValid(instance));
 
 /**
@@ -611,15 +628,15 @@ export const auxiliaryData = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = SignedTxBuilder.unsafeAuxiliaryData(instance);
+ *   const result = SignedTxBuilder.auxiliaryDataUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`SignedTxBuilder.unsafeAuxiliaryData failed: ${error.message}`);
+ *   console.error(`SignedTxBuilder.auxiliaryDataUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeAuxiliaryData = (
+export const auxiliaryDataUnsafe = (
   instance: CML.SignedTxBuilder,
 ): CML.AuxiliaryData | undefined => Effect.runSync(auxiliaryData(instance));

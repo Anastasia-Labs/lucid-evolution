@@ -1,9 +1,26 @@
+/**
+ * @since 2.0.0
+ */
 import { Data, Effect } from "effect";
 import * as CML from "@anastasia-labs/cardano-multiplatform-lib-nodejs";
 
+/**
+ * Type alias for the CML MapTransactionMetadatumToTransactionMetadatum class
+ *
+ * @since 2.0.0
+ * @category Types
+ */
 export type MapTransactionMetadatumToTransactionMetadatum =
   CML.MapTransactionMetadatumToTransactionMetadatum;
 
+/**
+ * Error class for MapTransactionMetadatumToTransactionMetadatum operations
+ *
+ * This error is thrown when operations on MapTransactionMetadatumToTransactionMetadatum instances fail.
+ *
+ * @since 2.0.0
+ * @category Errors
+ */
 export class MapTransactionMetadatumToTransactionMetadatumError extends Data.TaggedError(
   "MapTransactionMetadatumToTransactionMetadatumError",
 )<{
@@ -52,16 +69,16 @@ export const free = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = MapTransactionMetadatumToTransactionMetadatum.unsafeFree(instance);
+ *   const result = MapTransactionMetadatumToTransactionMetadatum.freeUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`MapTransactionMetadatumToTransactionMetadatum.unsafeFree failed: ${error.message}`);
+ *   console.error(`MapTransactionMetadatumToTransactionMetadatum.freeUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeFree = (
+export const freeUnsafe = (
   instance: CML.MapTransactionMetadatumToTransactionMetadatum,
 ): void => Effect.runSync(free(instance));
 
@@ -102,16 +119,16 @@ export const _new = Effect.fn(function* () {
  *
  * // Using try/catch for error handling
  * try {
- *   const result = MapTransactionMetadatumToTransactionMetadatum.unsafe_new();
+ *   const result = MapTransactionMetadatumToTransactionMetadatum._newUnsafe();
  *   console.log(result);
  * } catch (error) {
- *   console.error(`MapTransactionMetadatumToTransactionMetadatum.unsafe_new failed: ${error.message}`);
+ *   console.error(`MapTransactionMetadatumToTransactionMetadatum._newUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Constructors
+ * @category ConstructorsUnsafe
  */
-export const unsafe_new = () => Effect.runSync(_new());
+export const _newUnsafe = () => Effect.runSync(_new());
 
 /**
  * Method len of MapTransactionMetadatumToTransactionMetadatum
@@ -158,16 +175,16 @@ export const len = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = MapTransactionMetadatumToTransactionMetadatum.unsafeLen(instance);
+ *   const result = MapTransactionMetadatumToTransactionMetadatum.lenUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`MapTransactionMetadatumToTransactionMetadatum.unsafeLen failed: ${error.message}`);
+ *   console.error(`MapTransactionMetadatumToTransactionMetadatum.lenUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeLen = (
+export const lenUnsafe = (
   instance: CML.MapTransactionMetadatumToTransactionMetadatum,
 ): number => Effect.runSync(len(instance));
 
@@ -218,16 +235,16 @@ export const insert = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = MapTransactionMetadatumToTransactionMetadatum.unsafeInsert(instance,  parameters );
+ *   const result = MapTransactionMetadatumToTransactionMetadatum.insertUnsafe(instance,  parameters );
  *   console.log(result);
  * } catch (error) {
- *   console.error(`MapTransactionMetadatumToTransactionMetadatum.unsafeInsert failed: ${error.message}`);
+ *   console.error(`MapTransactionMetadatumToTransactionMetadatum.insertUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeInsert = (
+export const insertUnsafe = (
   instance: CML.MapTransactionMetadatumToTransactionMetadatum,
   key: CML.TransactionMetadatum,
   value: CML.TransactionMetadatum,
@@ -280,16 +297,16 @@ export const get = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = MapTransactionMetadatumToTransactionMetadatum.unsafeGet(instance,  parameters );
+ *   const result = MapTransactionMetadatumToTransactionMetadatum.getUnsafe(instance,  parameters );
  *   console.log(result);
  * } catch (error) {
- *   console.error(`MapTransactionMetadatumToTransactionMetadatum.unsafeGet failed: ${error.message}`);
+ *   console.error(`MapTransactionMetadatumToTransactionMetadatum.getUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeGet = (
+export const getUnsafe = (
   instance: CML.MapTransactionMetadatumToTransactionMetadatum,
   key: CML.TransactionMetadatum,
 ): CML.TransactionMetadatum | undefined => Effect.runSync(get(instance, key));
@@ -339,15 +356,15 @@ export const keys = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = MapTransactionMetadatumToTransactionMetadatum.unsafeKeys(instance);
+ *   const result = MapTransactionMetadatumToTransactionMetadatum.keysUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`MapTransactionMetadatumToTransactionMetadatum.unsafeKeys failed: ${error.message}`);
+ *   console.error(`MapTransactionMetadatumToTransactionMetadatum.keysUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeKeys = (
+export const keysUnsafe = (
   instance: CML.MapTransactionMetadatumToTransactionMetadatum,
 ): CML.TransactionMetadatumList => Effect.runSync(keys(instance));

@@ -1,8 +1,25 @@
+/**
+ * @since 2.0.0
+ */
 import { Data, Effect } from "effect";
 import * as CML from "@anastasia-labs/cardano-multiplatform-lib-nodejs";
 
+/**
+ * Type alias for the CML MetadatumMap class
+ *
+ * @since 2.0.0
+ * @category Types
+ */
 export type MetadatumMap = CML.MetadatumMap;
 
+/**
+ * Error class for MetadatumMap operations
+ *
+ * This error is thrown when operations on MetadatumMap instances fail.
+ *
+ * @since 2.0.0
+ * @category Errors
+ */
 export class MetadatumMapError extends Data.TaggedError("MetadatumMapError")<{
   message?: string;
 }> {}
@@ -47,16 +64,16 @@ export const free = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = MetadatumMap.unsafeFree(instance);
+ *   const result = MetadatumMap.freeUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`MetadatumMap.unsafeFree failed: ${error.message}`);
+ *   console.error(`MetadatumMap.freeUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeFree = (instance: CML.MetadatumMap): void =>
+export const freeUnsafe = (instance: CML.MetadatumMap): void =>
   Effect.runSync(free(instance));
 
 /**
@@ -96,16 +113,16 @@ export const _new = Effect.fn(function* () {
  *
  * // Using try/catch for error handling
  * try {
- *   const result = MetadatumMap.unsafe_new();
+ *   const result = MetadatumMap._newUnsafe();
  *   console.log(result);
  * } catch (error) {
- *   console.error(`MetadatumMap.unsafe_new failed: ${error.message}`);
+ *   console.error(`MetadatumMap._newUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Constructors
+ * @category ConstructorsUnsafe
  */
-export const unsafe_new = () => Effect.runSync(_new());
+export const _newUnsafe = () => Effect.runSync(_new());
 
 /**
  * Method len of MetadatumMap
@@ -147,16 +164,16 @@ export const len = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = MetadatumMap.unsafeLen(instance);
+ *   const result = MetadatumMap.lenUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`MetadatumMap.unsafeLen failed: ${error.message}`);
+ *   console.error(`MetadatumMap.lenUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeLen = (instance: CML.MetadatumMap): number =>
+export const lenUnsafe = (instance: CML.MetadatumMap): number =>
   Effect.runSync(len(instance));
 
 /**
@@ -203,16 +220,16 @@ export const set = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = MetadatumMap.unsafeSet(instance,  parameters );
+ *   const result = MetadatumMap.setUnsafe(instance,  parameters );
  *   console.log(result);
  * } catch (error) {
- *   console.error(`MetadatumMap.unsafeSet failed: ${error.message}`);
+ *   console.error(`MetadatumMap.setUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeSet = (
+export const setUnsafe = (
   instance: CML.MetadatumMap,
   key: CML.TransactionMetadatum,
   value: CML.TransactionMetadatum,
@@ -261,16 +278,16 @@ export const get = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = MetadatumMap.unsafeGet(instance,  parameters );
+ *   const result = MetadatumMap.getUnsafe(instance,  parameters );
  *   console.log(result);
  * } catch (error) {
- *   console.error(`MetadatumMap.unsafeGet failed: ${error.message}`);
+ *   console.error(`MetadatumMap.getUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeGet = (
+export const getUnsafe = (
   instance: CML.MetadatumMap,
   key: CML.TransactionMetadatum,
 ): CML.TransactionMetadatum | undefined => Effect.runSync(get(instance, key));
@@ -321,16 +338,16 @@ export const getAll = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = MetadatumMap.unsafeGetAll(instance,  parameters );
+ *   const result = MetadatumMap.getAllUnsafe(instance,  parameters );
  *   console.log(result);
  * } catch (error) {
- *   console.error(`MetadatumMap.unsafeGetAll failed: ${error.message}`);
+ *   console.error(`MetadatumMap.getAllUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeGetAll = (
+export const getAllUnsafe = (
   instance: CML.MetadatumMap,
   key: CML.TransactionMetadatum,
 ): CML.TransactionMetadatumList | undefined =>
@@ -378,14 +395,14 @@ export const keys = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = MetadatumMap.unsafeKeys(instance);
+ *   const result = MetadatumMap.keysUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`MetadatumMap.unsafeKeys failed: ${error.message}`);
+ *   console.error(`MetadatumMap.keysUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeKeys = (instance: CML.MetadatumMap): CML.MetadatumList =>
+export const keysUnsafe = (instance: CML.MetadatumMap): CML.MetadatumList =>
   Effect.runSync(keys(instance));

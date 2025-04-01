@@ -1,8 +1,25 @@
+/**
+ * @since 2.0.0
+ */
 import { Data, Effect } from "effect";
 import * as CML from "@anastasia-labs/cardano-multiplatform-lib-nodejs";
 
+/**
+ * Type alias for the CML RedeemerSetBuilder class
+ *
+ * @since 2.0.0
+ * @category Types
+ */
 export type RedeemerSetBuilder = CML.RedeemerSetBuilder;
 
+/**
+ * Error class for RedeemerSetBuilder operations
+ *
+ * This error is thrown when operations on RedeemerSetBuilder instances fail.
+ *
+ * @since 2.0.0
+ * @category Errors
+ */
 export class RedeemerSetBuilderError extends Data.TaggedError(
   "RedeemerSetBuilderError",
 )<{
@@ -51,16 +68,16 @@ export const free = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = RedeemerSetBuilder.unsafeFree(instance);
+ *   const result = RedeemerSetBuilder.freeUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`RedeemerSetBuilder.unsafeFree failed: ${error.message}`);
+ *   console.error(`RedeemerSetBuilder.freeUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeFree = (instance: CML.RedeemerSetBuilder): void =>
+export const freeUnsafe = (instance: CML.RedeemerSetBuilder): void =>
   Effect.runSync(free(instance));
 
 /**
@@ -100,16 +117,16 @@ export const _new = Effect.fn(function* () {
  *
  * // Using try/catch for error handling
  * try {
- *   const result = RedeemerSetBuilder.unsafe_new();
+ *   const result = RedeemerSetBuilder._newUnsafe();
  *   console.log(result);
  * } catch (error) {
- *   console.error(`RedeemerSetBuilder.unsafe_new failed: ${error.message}`);
+ *   console.error(`RedeemerSetBuilder._newUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Constructors
+ * @category ConstructorsUnsafe
  */
-export const unsafe_new = () => Effect.runSync(_new());
+export const _newUnsafe = () => Effect.runSync(_new());
 
 /**
  * Method isEmpty of RedeemerSetBuilder
@@ -153,16 +170,16 @@ export const isEmpty = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = RedeemerSetBuilder.unsafeIsEmpty(instance);
+ *   const result = RedeemerSetBuilder.isEmptyUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`RedeemerSetBuilder.unsafeIsEmpty failed: ${error.message}`);
+ *   console.error(`RedeemerSetBuilder.isEmptyUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeIsEmpty = (instance: CML.RedeemerSetBuilder): boolean =>
+export const isEmptyUnsafe = (instance: CML.RedeemerSetBuilder): boolean =>
   Effect.runSync(isEmpty(instance));
 
 /**
@@ -209,16 +226,16 @@ export const updateExUnits = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = RedeemerSetBuilder.unsafeUpdateExUnits(instance,  parameters );
+ *   const result = RedeemerSetBuilder.updateExUnitsUnsafe(instance,  parameters );
  *   console.log(result);
  * } catch (error) {
- *   console.error(`RedeemerSetBuilder.unsafeUpdateExUnits failed: ${error.message}`);
+ *   console.error(`RedeemerSetBuilder.updateExUnitsUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeUpdateExUnits = (
+export const updateExUnitsUnsafe = (
   instance: CML.RedeemerSetBuilder,
   key: CML.RedeemerWitnessKey,
   exUnits: CML.ExUnits,
@@ -267,16 +284,16 @@ export const addSpend = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = RedeemerSetBuilder.unsafeAddSpend(instance,  parameters );
+ *   const result = RedeemerSetBuilder.addSpendUnsafe(instance,  parameters );
  *   console.log(result);
  * } catch (error) {
- *   console.error(`RedeemerSetBuilder.unsafeAddSpend failed: ${error.message}`);
+ *   console.error(`RedeemerSetBuilder.addSpendUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeAddSpend = (
+export const addSpendUnsafe = (
   instance: CML.RedeemerSetBuilder,
   result: CML.InputBuilderResult,
 ): void => Effect.runSync(addSpend(instance, result));
@@ -324,16 +341,16 @@ export const addMint = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = RedeemerSetBuilder.unsafeAddMint(instance,  parameters );
+ *   const result = RedeemerSetBuilder.addMintUnsafe(instance,  parameters );
  *   console.log(result);
  * } catch (error) {
- *   console.error(`RedeemerSetBuilder.unsafeAddMint failed: ${error.message}`);
+ *   console.error(`RedeemerSetBuilder.addMintUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeAddMint = (
+export const addMintUnsafe = (
   instance: CML.RedeemerSetBuilder,
   result: CML.MintBuilderResult,
 ): void => Effect.runSync(addMint(instance, result));
@@ -381,16 +398,16 @@ export const addReward = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = RedeemerSetBuilder.unsafeAddReward(instance,  parameters );
+ *   const result = RedeemerSetBuilder.addRewardUnsafe(instance,  parameters );
  *   console.log(result);
  * } catch (error) {
- *   console.error(`RedeemerSetBuilder.unsafeAddReward failed: ${error.message}`);
+ *   console.error(`RedeemerSetBuilder.addRewardUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeAddReward = (
+export const addRewardUnsafe = (
   instance: CML.RedeemerSetBuilder,
   result: CML.WithdrawalBuilderResult,
 ): void => Effect.runSync(addReward(instance, result));
@@ -438,16 +455,16 @@ export const addCert = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = RedeemerSetBuilder.unsafeAddCert(instance,  parameters );
+ *   const result = RedeemerSetBuilder.addCertUnsafe(instance,  parameters );
  *   console.log(result);
  * } catch (error) {
- *   console.error(`RedeemerSetBuilder.unsafeAddCert failed: ${error.message}`);
+ *   console.error(`RedeemerSetBuilder.addCertUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeAddCert = (
+export const addCertUnsafe = (
   instance: CML.RedeemerSetBuilder,
   result: CML.CertificateBuilderResult,
 ): void => Effect.runSync(addCert(instance, result));
@@ -495,16 +512,16 @@ export const addProposal = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = RedeemerSetBuilder.unsafeAddProposal(instance,  parameters );
+ *   const result = RedeemerSetBuilder.addProposalUnsafe(instance,  parameters );
  *   console.log(result);
  * } catch (error) {
- *   console.error(`RedeemerSetBuilder.unsafeAddProposal failed: ${error.message}`);
+ *   console.error(`RedeemerSetBuilder.addProposalUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeAddProposal = (
+export const addProposalUnsafe = (
   instance: CML.RedeemerSetBuilder,
   result: CML.ProposalBuilderResult,
 ): void => Effect.runSync(addProposal(instance, result));
@@ -552,16 +569,16 @@ export const addVote = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = RedeemerSetBuilder.unsafeAddVote(instance,  parameters );
+ *   const result = RedeemerSetBuilder.addVoteUnsafe(instance,  parameters );
  *   console.log(result);
  * } catch (error) {
- *   console.error(`RedeemerSetBuilder.unsafeAddVote failed: ${error.message}`);
+ *   console.error(`RedeemerSetBuilder.addVoteUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeAddVote = (
+export const addVoteUnsafe = (
   instance: CML.RedeemerSetBuilder,
   result: CML.VoteBuilderResult,
 ): void => Effect.runSync(addVote(instance, result));
@@ -609,16 +626,16 @@ export const build = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = RedeemerSetBuilder.unsafeBuild(instance,  parameters );
+ *   const result = RedeemerSetBuilder.buildUnsafe(instance,  parameters );
  *   console.log(result);
  * } catch (error) {
- *   console.error(`RedeemerSetBuilder.unsafeBuild failed: ${error.message}`);
+ *   console.error(`RedeemerSetBuilder.buildUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeBuild = (
+export const buildUnsafe = (
   instance: CML.RedeemerSetBuilder,
   defaultToDummyExunits: boolean,
 ): CML.Redeemers => Effect.runSync(build(instance, defaultToDummyExunits));

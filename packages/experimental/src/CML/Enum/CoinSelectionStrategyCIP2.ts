@@ -1,11 +1,67 @@
+/**
+ * @since 2.0.0
+ */
 import * as CML from "@anastasia-labs/cardano-multiplatform-lib-nodejs";
 
+/**
+ * Type alias for the CML CoinSelectionStrategyCIP2 enum
+ *
+ * @since 2.0.0
+ * @category Types
+ */
 export type CoinSelectionStrategyCIP2 = CML.CoinSelectionStrategyCIP2;
 
+/**
+ * LargestFirst variant of the CoinSelectionStrategyCIP2 enum
+ *
+ * @example
+ * import { CoinSelectionStrategyCIP2 } from "@lucid-evolution/experimental";
+ *
+ * const kind = CoinSelectionStrategyCIP2.LargestFirst;
+ *
+ * @since 2.0.0
+ * @category Variants
+ */
 export const LargestFirst = CML.CoinSelectionStrategyCIP2.LargestFirst;
+
+/**
+ * RandomImprove variant of the CoinSelectionStrategyCIP2 enum
+ *
+ * @example
+ * import { CoinSelectionStrategyCIP2 } from "@lucid-evolution/experimental";
+ *
+ * const kind = CoinSelectionStrategyCIP2.RandomImprove;
+ *
+ * @since 2.0.0
+ * @category Variants
+ */
 export const RandomImprove = CML.CoinSelectionStrategyCIP2.RandomImprove;
+
+/**
+ * LargestFirstMultiAsset variant of the CoinSelectionStrategyCIP2 enum
+ *
+ * @example
+ * import { CoinSelectionStrategyCIP2 } from "@lucid-evolution/experimental";
+ *
+ * const kind = CoinSelectionStrategyCIP2.LargestFirstMultiAsset;
+ *
+ * @since 2.0.0
+ * @category Variants
+ */
 export const LargestFirstMultiAsset =
   CML.CoinSelectionStrategyCIP2.LargestFirstMultiAsset;
+
+/**
+ * RandomImproveMultiAsset variant of the CoinSelectionStrategyCIP2 enum
+ *
+ * @example
+ * import { CoinSelectionStrategyCIP2 } from "@lucid-evolution/experimental";
+ *
+ * const kind = CoinSelectionStrategyCIP2.RandomImproveMultiAsset;
+ *
+ * @since 2.0.0
+ * @category Variants
+ */
 export const RandomImproveMultiAsset =
   CML.CoinSelectionStrategyCIP2.RandomImproveMultiAsset;
 

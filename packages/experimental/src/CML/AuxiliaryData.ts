@@ -1,8 +1,25 @@
+/**
+ * @since 2.0.0
+ */
 import { Data, Effect } from "effect";
 import * as CML from "@anastasia-labs/cardano-multiplatform-lib-nodejs";
 
+/**
+ * Type alias for the CML AuxiliaryData class
+ *
+ * @since 2.0.0
+ * @category Types
+ */
 export type AuxiliaryData = CML.AuxiliaryData;
 
+/**
+ * Error class for AuxiliaryData operations
+ *
+ * This error is thrown when operations on AuxiliaryData instances fail.
+ *
+ * @since 2.0.0
+ * @category Errors
+ */
 export class AuxiliaryDataError extends Data.TaggedError("AuxiliaryDataError")<{
   message?: string;
 }> {}
@@ -47,16 +64,16 @@ export const free = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = AuxiliaryData.unsafeFree(instance);
+ *   const result = AuxiliaryData.freeUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`AuxiliaryData.unsafeFree failed: ${error.message}`);
+ *   console.error(`AuxiliaryData.freeUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeFree = (instance: CML.AuxiliaryData): void =>
+export const freeUnsafe = (instance: CML.AuxiliaryData): void =>
   Effect.runSync(free(instance));
 
 /**
@@ -96,16 +113,16 @@ export const _new = Effect.fn(function* () {
  *
  * // Using try/catch for error handling
  * try {
- *   const result = AuxiliaryData.unsafe_new();
+ *   const result = AuxiliaryData._newUnsafe();
  *   console.log(result);
  * } catch (error) {
- *   console.error(`AuxiliaryData.unsafe_new failed: ${error.message}`);
+ *   console.error(`AuxiliaryData._newUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Constructors
+ * @category ConstructorsUnsafe
  */
-export const unsafe_new = () => Effect.runSync(_new());
+export const _newUnsafe = () => Effect.runSync(_new());
 
 /**
  * Method metadata of AuxiliaryData
@@ -149,16 +166,16 @@ export const metadata = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = AuxiliaryData.unsafeMetadata(instance);
+ *   const result = AuxiliaryData.metadataUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`AuxiliaryData.unsafeMetadata failed: ${error.message}`);
+ *   console.error(`AuxiliaryData.metadataUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeMetadata = (
+export const metadataUnsafe = (
   instance: CML.AuxiliaryData,
 ): CML.Metadata | undefined => Effect.runSync(metadata(instance));
 
@@ -204,16 +221,16 @@ export const nativeScripts = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = AuxiliaryData.unsafeNativeScripts(instance);
+ *   const result = AuxiliaryData.nativeScriptsUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`AuxiliaryData.unsafeNativeScripts failed: ${error.message}`);
+ *   console.error(`AuxiliaryData.nativeScriptsUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeNativeScripts = (
+export const nativeScriptsUnsafe = (
   instance: CML.AuxiliaryData,
 ): CML.NativeScriptList | undefined => Effect.runSync(nativeScripts(instance));
 
@@ -259,16 +276,16 @@ export const plutusV1Scripts = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = AuxiliaryData.unsafePlutusV1Scripts(instance);
+ *   const result = AuxiliaryData.plutusV1ScriptsUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`AuxiliaryData.unsafePlutusV1Scripts failed: ${error.message}`);
+ *   console.error(`AuxiliaryData.plutusV1ScriptsUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafePlutusV1Scripts = (
+export const plutusV1ScriptsUnsafe = (
   instance: CML.AuxiliaryData,
 ): CML.PlutusV1ScriptList | undefined =>
   Effect.runSync(plutusV1Scripts(instance));
@@ -315,16 +332,16 @@ export const plutusV2Scripts = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = AuxiliaryData.unsafePlutusV2Scripts(instance);
+ *   const result = AuxiliaryData.plutusV2ScriptsUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`AuxiliaryData.unsafePlutusV2Scripts failed: ${error.message}`);
+ *   console.error(`AuxiliaryData.plutusV2ScriptsUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafePlutusV2Scripts = (
+export const plutusV2ScriptsUnsafe = (
   instance: CML.AuxiliaryData,
 ): CML.PlutusV2ScriptList | undefined =>
   Effect.runSync(plutusV2Scripts(instance));
@@ -372,16 +389,16 @@ export const addMetadata = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = AuxiliaryData.unsafeAddMetadata(instance,  parameters );
+ *   const result = AuxiliaryData.addMetadataUnsafe(instance,  parameters );
  *   console.log(result);
  * } catch (error) {
- *   console.error(`AuxiliaryData.unsafeAddMetadata failed: ${error.message}`);
+ *   console.error(`AuxiliaryData.addMetadataUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeAddMetadata = (
+export const addMetadataUnsafe = (
   instance: CML.AuxiliaryData,
   other: CML.Metadata,
 ): void => Effect.runSync(addMetadata(instance, other));
@@ -429,16 +446,16 @@ export const addNativeScripts = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = AuxiliaryData.unsafeAddNativeScripts(instance,  parameters );
+ *   const result = AuxiliaryData.addNativeScriptsUnsafe(instance,  parameters );
  *   console.log(result);
  * } catch (error) {
- *   console.error(`AuxiliaryData.unsafeAddNativeScripts failed: ${error.message}`);
+ *   console.error(`AuxiliaryData.addNativeScriptsUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeAddNativeScripts = (
+export const addNativeScriptsUnsafe = (
   instance: CML.AuxiliaryData,
   scripts: CML.NativeScriptList,
 ): void => Effect.runSync(addNativeScripts(instance, scripts));
@@ -486,16 +503,16 @@ export const addPlutusV1Scripts = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = AuxiliaryData.unsafeAddPlutusV1Scripts(instance,  parameters );
+ *   const result = AuxiliaryData.addPlutusV1ScriptsUnsafe(instance,  parameters );
  *   console.log(result);
  * } catch (error) {
- *   console.error(`AuxiliaryData.unsafeAddPlutusV1Scripts failed: ${error.message}`);
+ *   console.error(`AuxiliaryData.addPlutusV1ScriptsUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeAddPlutusV1Scripts = (
+export const addPlutusV1ScriptsUnsafe = (
   instance: CML.AuxiliaryData,
   scripts: CML.PlutusV1ScriptList,
 ): void => Effect.runSync(addPlutusV1Scripts(instance, scripts));
@@ -543,16 +560,16 @@ export const addPlutusV2Scripts = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = AuxiliaryData.unsafeAddPlutusV2Scripts(instance,  parameters );
+ *   const result = AuxiliaryData.addPlutusV2ScriptsUnsafe(instance,  parameters );
  *   console.log(result);
  * } catch (error) {
- *   console.error(`AuxiliaryData.unsafeAddPlutusV2Scripts failed: ${error.message}`);
+ *   console.error(`AuxiliaryData.addPlutusV2ScriptsUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeAddPlutusV2Scripts = (
+export const addPlutusV2ScriptsUnsafe = (
   instance: CML.AuxiliaryData,
   scripts: CML.PlutusV2ScriptList,
 ): void => Effect.runSync(addPlutusV2Scripts(instance, scripts));
@@ -600,16 +617,16 @@ export const add = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = AuxiliaryData.unsafeAdd(instance,  parameters );
+ *   const result = AuxiliaryData.addUnsafe(instance,  parameters );
  *   console.log(result);
  * } catch (error) {
- *   console.error(`AuxiliaryData.unsafeAdd failed: ${error.message}`);
+ *   console.error(`AuxiliaryData.addUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeAdd = (
+export const addUnsafe = (
   instance: CML.AuxiliaryData,
   other: CML.AuxiliaryData,
 ): void => Effect.runSync(add(instance, other));
@@ -656,16 +673,16 @@ export const toCborBytes = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = AuxiliaryData.unsafeToCborBytes(instance);
+ *   const result = AuxiliaryData.toCborBytesUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`AuxiliaryData.unsafeToCborBytes failed: ${error.message}`);
+ *   console.error(`AuxiliaryData.toCborBytesUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeToCborBytes = (instance: CML.AuxiliaryData): Uint8Array =>
+export const toCborBytesUnsafe = (instance: CML.AuxiliaryData): Uint8Array =>
   Effect.runSync(toCborBytes(instance));
 
 /**
@@ -710,16 +727,16 @@ export const toCanonicalCborBytes = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = AuxiliaryData.unsafeToCanonicalCborBytes(instance);
+ *   const result = AuxiliaryData.toCanonicalCborBytesUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`AuxiliaryData.unsafeToCanonicalCborBytes failed: ${error.message}`);
+ *   console.error(`AuxiliaryData.toCanonicalCborBytesUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeToCanonicalCborBytes = (
+export const toCanonicalCborBytesUnsafe = (
   instance: CML.AuxiliaryData,
 ): Uint8Array => Effect.runSync(toCanonicalCborBytes(instance));
 
@@ -760,16 +777,16 @@ export const fromCborBytes = Effect.fn(function* (cborBytes: Uint8Array) {
  *
  * // Using try/catch for error handling
  * try {
- *   const result = AuxiliaryData.unsafeFromCborBytes( parameters );
+ *   const result = AuxiliaryData.fromCborBytesUnsafe( parameters );
  *   console.log(result);
  * } catch (error) {
- *   console.error(`AuxiliaryData.unsafeFromCborBytes failed: ${error.message}`);
+ *   console.error(`AuxiliaryData.fromCborBytesUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Constructors
+ * @category ConstructorsUnsafe
  */
-export const unsafeFromCborBytes = (cborBytes: Uint8Array) =>
+export const fromCborBytesUnsafe = (cborBytes: Uint8Array) =>
   Effect.runSync(fromCborBytes(cborBytes));
 
 /**
@@ -812,16 +829,16 @@ export const toCborHex = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = AuxiliaryData.unsafeToCborHex(instance);
+ *   const result = AuxiliaryData.toCborHexUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`AuxiliaryData.unsafeToCborHex failed: ${error.message}`);
+ *   console.error(`AuxiliaryData.toCborHexUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeToCborHex = (instance: CML.AuxiliaryData): string =>
+export const toCborHexUnsafe = (instance: CML.AuxiliaryData): string =>
   Effect.runSync(toCborHex(instance));
 
 /**
@@ -864,16 +881,16 @@ export const toCanonicalCborHex = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = AuxiliaryData.unsafeToCanonicalCborHex(instance);
+ *   const result = AuxiliaryData.toCanonicalCborHexUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`AuxiliaryData.unsafeToCanonicalCborHex failed: ${error.message}`);
+ *   console.error(`AuxiliaryData.toCanonicalCborHexUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeToCanonicalCborHex = (instance: CML.AuxiliaryData): string =>
+export const toCanonicalCborHexUnsafe = (instance: CML.AuxiliaryData): string =>
   Effect.runSync(toCanonicalCborHex(instance));
 
 /**
@@ -913,16 +930,16 @@ export const fromCborHex = Effect.fn(function* (cborBytes: string) {
  *
  * // Using try/catch for error handling
  * try {
- *   const result = AuxiliaryData.unsafeFromCborHex( parameters );
+ *   const result = AuxiliaryData.fromCborHexUnsafe( parameters );
  *   console.log(result);
  * } catch (error) {
- *   console.error(`AuxiliaryData.unsafeFromCborHex failed: ${error.message}`);
+ *   console.error(`AuxiliaryData.fromCborHexUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Constructors
+ * @category ConstructorsUnsafe
  */
-export const unsafeFromCborHex = (cborBytes: string) =>
+export const fromCborHexUnsafe = (cborBytes: string) =>
   Effect.runSync(fromCborHex(cborBytes));
 
 /**
@@ -965,16 +982,16 @@ export const toJson = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = AuxiliaryData.unsafeToJson(instance);
+ *   const result = AuxiliaryData.toJsonUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`AuxiliaryData.unsafeToJson failed: ${error.message}`);
+ *   console.error(`AuxiliaryData.toJsonUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeToJson = (instance: CML.AuxiliaryData): string =>
+export const toJsonUnsafe = (instance: CML.AuxiliaryData): string =>
   Effect.runSync(toJson(instance));
 
 /**
@@ -1017,16 +1034,16 @@ export const toJsValue = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = AuxiliaryData.unsafeToJsValue(instance);
+ *   const result = AuxiliaryData.toJsValueUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`AuxiliaryData.unsafeToJsValue failed: ${error.message}`);
+ *   console.error(`AuxiliaryData.toJsValueUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeToJsValue = (instance: CML.AuxiliaryData): any =>
+export const toJsValueUnsafe = (instance: CML.AuxiliaryData): any =>
   Effect.runSync(toJsValue(instance));
 
 /**
@@ -1066,16 +1083,16 @@ export const fromJson = Effect.fn(function* (json: string) {
  *
  * // Using try/catch for error handling
  * try {
- *   const result = AuxiliaryData.unsafeFromJson( parameters );
+ *   const result = AuxiliaryData.fromJsonUnsafe( parameters );
  *   console.log(result);
  * } catch (error) {
- *   console.error(`AuxiliaryData.unsafeFromJson failed: ${error.message}`);
+ *   console.error(`AuxiliaryData.fromJsonUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Constructors
+ * @category ConstructorsUnsafe
  */
-export const unsafeFromJson = (json: string) => Effect.runSync(fromJson(json));
+export const fromJsonUnsafe = (json: string) => Effect.runSync(fromJson(json));
 
 /**
  * Static method newShelley of AuxiliaryData
@@ -1114,16 +1131,16 @@ export const newShelley = Effect.fn(function* (shelley: CML.Metadata) {
  *
  * // Using try/catch for error handling
  * try {
- *   const result = AuxiliaryData.unsafeNewShelley( parameters );
+ *   const result = AuxiliaryData.newShelleyUnsafe( parameters );
  *   console.log(result);
  * } catch (error) {
- *   console.error(`AuxiliaryData.unsafeNewShelley failed: ${error.message}`);
+ *   console.error(`AuxiliaryData.newShelleyUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Constructors
+ * @category ConstructorsUnsafe
  */
-export const unsafeNewShelley = (shelley: CML.Metadata) =>
+export const newShelleyUnsafe = (shelley: CML.Metadata) =>
   Effect.runSync(newShelley(shelley));
 
 /**
@@ -1165,16 +1182,16 @@ export const newShelleyMa = Effect.fn(function* (
  *
  * // Using try/catch for error handling
  * try {
- *   const result = AuxiliaryData.unsafeNewShelleyMa( parameters );
+ *   const result = AuxiliaryData.newShelleyMaUnsafe( parameters );
  *   console.log(result);
  * } catch (error) {
- *   console.error(`AuxiliaryData.unsafeNewShelleyMa failed: ${error.message}`);
+ *   console.error(`AuxiliaryData.newShelleyMaUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Constructors
+ * @category ConstructorsUnsafe
  */
-export const unsafeNewShelleyMa = (shelleyMa: CML.ShelleyMAFormatAuxData) =>
+export const newShelleyMaUnsafe = (shelleyMa: CML.ShelleyMAFormatAuxData) =>
   Effect.runSync(newShelleyMa(shelleyMa));
 
 /**
@@ -1214,16 +1231,16 @@ export const newConway = Effect.fn(function* (conway: CML.ConwayFormatAuxData) {
  *
  * // Using try/catch for error handling
  * try {
- *   const result = AuxiliaryData.unsafeNewConway( parameters );
+ *   const result = AuxiliaryData.newConwayUnsafe( parameters );
  *   console.log(result);
  * } catch (error) {
- *   console.error(`AuxiliaryData.unsafeNewConway failed: ${error.message}`);
+ *   console.error(`AuxiliaryData.newConwayUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Constructors
+ * @category ConstructorsUnsafe
  */
-export const unsafeNewConway = (conway: CML.ConwayFormatAuxData) =>
+export const newConwayUnsafe = (conway: CML.ConwayFormatAuxData) =>
   Effect.runSync(newConway(conway));
 
 /**
@@ -1268,16 +1285,16 @@ export const kind = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = AuxiliaryData.unsafeKind(instance);
+ *   const result = AuxiliaryData.kindUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`AuxiliaryData.unsafeKind failed: ${error.message}`);
+ *   console.error(`AuxiliaryData.kindUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeKind = (
+export const kindUnsafe = (
   instance: CML.AuxiliaryData,
 ): CML.AuxiliaryDataKind => Effect.runSync(kind(instance));
 
@@ -1323,16 +1340,16 @@ export const asShelley = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = AuxiliaryData.unsafeAsShelley(instance);
+ *   const result = AuxiliaryData.asShelleyUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`AuxiliaryData.unsafeAsShelley failed: ${error.message}`);
+ *   console.error(`AuxiliaryData.asShelleyUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeAsShelley = (
+export const asShelleyUnsafe = (
   instance: CML.AuxiliaryData,
 ): CML.Metadata | undefined => Effect.runSync(asShelley(instance));
 
@@ -1381,16 +1398,16 @@ export const asShelleyMa = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = AuxiliaryData.unsafeAsShelleyMa(instance);
+ *   const result = AuxiliaryData.asShelleyMaUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`AuxiliaryData.unsafeAsShelleyMa failed: ${error.message}`);
+ *   console.error(`AuxiliaryData.asShelleyMaUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeAsShelleyMa = (
+export const asShelleyMaUnsafe = (
   instance: CML.AuxiliaryData,
 ): CML.ShelleyMAFormatAuxData | undefined =>
   Effect.runSync(asShelleyMa(instance));
@@ -1437,15 +1454,15 @@ export const asConway = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = AuxiliaryData.unsafeAsConway(instance);
+ *   const result = AuxiliaryData.asConwayUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`AuxiliaryData.unsafeAsConway failed: ${error.message}`);
+ *   console.error(`AuxiliaryData.asConwayUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeAsConway = (
+export const asConwayUnsafe = (
   instance: CML.AuxiliaryData,
 ): CML.ConwayFormatAuxData | undefined => Effect.runSync(asConway(instance));

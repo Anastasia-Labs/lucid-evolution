@@ -1,8 +1,25 @@
+/**
+ * @since 2.0.0
+ */
 import { Data, Effect } from "effect";
 import * as CML from "@anastasia-labs/cardano-multiplatform-lib-nodejs";
 
+/**
+ * Type alias for the CML TransactionMetadatumLabels class
+ *
+ * @since 2.0.0
+ * @category Types
+ */
 export type TransactionMetadatumLabels = CML.TransactionMetadatumLabels;
 
+/**
+ * Error class for TransactionMetadatumLabels operations
+ *
+ * This error is thrown when operations on TransactionMetadatumLabels instances fail.
+ *
+ * @since 2.0.0
+ * @category Errors
+ */
 export class TransactionMetadatumLabelsError extends Data.TaggedError(
   "TransactionMetadatumLabelsError",
 )<{
@@ -51,16 +68,16 @@ export const free = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = TransactionMetadatumLabels.unsafeFree(instance);
+ *   const result = TransactionMetadatumLabels.freeUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`TransactionMetadatumLabels.unsafeFree failed: ${error.message}`);
+ *   console.error(`TransactionMetadatumLabels.freeUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeFree = (instance: CML.TransactionMetadatumLabels): void =>
+export const freeUnsafe = (instance: CML.TransactionMetadatumLabels): void =>
   Effect.runSync(free(instance));
 
 /**
@@ -100,16 +117,16 @@ export const _new = Effect.fn(function* () {
  *
  * // Using try/catch for error handling
  * try {
- *   const result = TransactionMetadatumLabels.unsafe_new();
+ *   const result = TransactionMetadatumLabels._newUnsafe();
  *   console.log(result);
  * } catch (error) {
- *   console.error(`TransactionMetadatumLabels.unsafe_new failed: ${error.message}`);
+ *   console.error(`TransactionMetadatumLabels._newUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Constructors
+ * @category ConstructorsUnsafe
  */
-export const unsafe_new = () => Effect.runSync(_new());
+export const _newUnsafe = () => Effect.runSync(_new());
 
 /**
  * Method len of TransactionMetadatumLabels
@@ -153,16 +170,16 @@ export const len = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = TransactionMetadatumLabels.unsafeLen(instance);
+ *   const result = TransactionMetadatumLabels.lenUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`TransactionMetadatumLabels.unsafeLen failed: ${error.message}`);
+ *   console.error(`TransactionMetadatumLabels.lenUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeLen = (instance: CML.TransactionMetadatumLabels): number =>
+export const lenUnsafe = (instance: CML.TransactionMetadatumLabels): number =>
   Effect.runSync(len(instance));
 
 /**
@@ -208,16 +225,16 @@ export const get = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = TransactionMetadatumLabels.unsafeGet(instance,  parameters );
+ *   const result = TransactionMetadatumLabels.getUnsafe(instance,  parameters );
  *   console.log(result);
  * } catch (error) {
- *   console.error(`TransactionMetadatumLabels.unsafeGet failed: ${error.message}`);
+ *   console.error(`TransactionMetadatumLabels.getUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeGet = (
+export const getUnsafe = (
   instance: CML.TransactionMetadatumLabels,
   index: number,
 ): bigint => Effect.runSync(get(instance, index));
@@ -265,16 +282,16 @@ export const add = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = TransactionMetadatumLabels.unsafeAdd(instance,  parameters );
+ *   const result = TransactionMetadatumLabels.addUnsafe(instance,  parameters );
  *   console.log(result);
  * } catch (error) {
- *   console.error(`TransactionMetadatumLabels.unsafeAdd failed: ${error.message}`);
+ *   console.error(`TransactionMetadatumLabels.addUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeAdd = (
+export const addUnsafe = (
   instance: CML.TransactionMetadatumLabels,
   elem: bigint,
 ): void => Effect.runSync(add(instance, elem));

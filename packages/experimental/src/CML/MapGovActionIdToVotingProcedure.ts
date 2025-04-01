@@ -1,9 +1,26 @@
+/**
+ * @since 2.0.0
+ */
 import { Data, Effect } from "effect";
 import * as CML from "@anastasia-labs/cardano-multiplatform-lib-nodejs";
 
+/**
+ * Type alias for the CML MapGovActionIdToVotingProcedure class
+ *
+ * @since 2.0.0
+ * @category Types
+ */
 export type MapGovActionIdToVotingProcedure =
   CML.MapGovActionIdToVotingProcedure;
 
+/**
+ * Error class for MapGovActionIdToVotingProcedure operations
+ *
+ * This error is thrown when operations on MapGovActionIdToVotingProcedure instances fail.
+ *
+ * @since 2.0.0
+ * @category Errors
+ */
 export class MapGovActionIdToVotingProcedureError extends Data.TaggedError(
   "MapGovActionIdToVotingProcedureError",
 )<{
@@ -52,16 +69,16 @@ export const free = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = MapGovActionIdToVotingProcedure.unsafeFree(instance);
+ *   const result = MapGovActionIdToVotingProcedure.freeUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`MapGovActionIdToVotingProcedure.unsafeFree failed: ${error.message}`);
+ *   console.error(`MapGovActionIdToVotingProcedure.freeUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeFree = (
+export const freeUnsafe = (
   instance: CML.MapGovActionIdToVotingProcedure,
 ): void => Effect.runSync(free(instance));
 
@@ -102,16 +119,16 @@ export const _new = Effect.fn(function* () {
  *
  * // Using try/catch for error handling
  * try {
- *   const result = MapGovActionIdToVotingProcedure.unsafe_new();
+ *   const result = MapGovActionIdToVotingProcedure._newUnsafe();
  *   console.log(result);
  * } catch (error) {
- *   console.error(`MapGovActionIdToVotingProcedure.unsafe_new failed: ${error.message}`);
+ *   console.error(`MapGovActionIdToVotingProcedure._newUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Constructors
+ * @category ConstructorsUnsafe
  */
-export const unsafe_new = () => Effect.runSync(_new());
+export const _newUnsafe = () => Effect.runSync(_new());
 
 /**
  * Method len of MapGovActionIdToVotingProcedure
@@ -155,16 +172,16 @@ export const len = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = MapGovActionIdToVotingProcedure.unsafeLen(instance);
+ *   const result = MapGovActionIdToVotingProcedure.lenUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`MapGovActionIdToVotingProcedure.unsafeLen failed: ${error.message}`);
+ *   console.error(`MapGovActionIdToVotingProcedure.lenUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeLen = (
+export const lenUnsafe = (
   instance: CML.MapGovActionIdToVotingProcedure,
 ): number => Effect.runSync(len(instance));
 
@@ -215,16 +232,16 @@ export const insert = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = MapGovActionIdToVotingProcedure.unsafeInsert(instance,  parameters );
+ *   const result = MapGovActionIdToVotingProcedure.insertUnsafe(instance,  parameters );
  *   console.log(result);
  * } catch (error) {
- *   console.error(`MapGovActionIdToVotingProcedure.unsafeInsert failed: ${error.message}`);
+ *   console.error(`MapGovActionIdToVotingProcedure.insertUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeInsert = (
+export const insertUnsafe = (
   instance: CML.MapGovActionIdToVotingProcedure,
   key: CML.GovActionId,
   value: CML.VotingProcedure,
@@ -277,16 +294,16 @@ export const get = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = MapGovActionIdToVotingProcedure.unsafeGet(instance,  parameters );
+ *   const result = MapGovActionIdToVotingProcedure.getUnsafe(instance,  parameters );
  *   console.log(result);
  * } catch (error) {
- *   console.error(`MapGovActionIdToVotingProcedure.unsafeGet failed: ${error.message}`);
+ *   console.error(`MapGovActionIdToVotingProcedure.getUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeGet = (
+export const getUnsafe = (
   instance: CML.MapGovActionIdToVotingProcedure,
   key: CML.GovActionId,
 ): CML.VotingProcedure | undefined => Effect.runSync(get(instance, key));
@@ -333,15 +350,15 @@ export const keys = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = MapGovActionIdToVotingProcedure.unsafeKeys(instance);
+ *   const result = MapGovActionIdToVotingProcedure.keysUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`MapGovActionIdToVotingProcedure.unsafeKeys failed: ${error.message}`);
+ *   console.error(`MapGovActionIdToVotingProcedure.keysUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeKeys = (
+export const keysUnsafe = (
   instance: CML.MapGovActionIdToVotingProcedure,
 ): CML.GovActionIdList => Effect.runSync(keys(instance));

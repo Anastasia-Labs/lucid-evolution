@@ -1,8 +1,25 @@
+/**
+ * @since 2.0.0
+ */
 import { Data, Effect } from "effect";
 import * as CML from "@anastasia-labs/cardano-multiplatform-lib-nodejs";
 
+/**
+ * Type alias for the CML ProtocolVersion class
+ *
+ * @since 2.0.0
+ * @category Types
+ */
 export type ProtocolVersion = CML.ProtocolVersion;
 
+/**
+ * Error class for ProtocolVersion operations
+ *
+ * This error is thrown when operations on ProtocolVersion instances fail.
+ *
+ * @since 2.0.0
+ * @category Errors
+ */
 export class ProtocolVersionError extends Data.TaggedError(
   "ProtocolVersionError",
 )<{
@@ -49,16 +66,16 @@ export const free = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = ProtocolVersion.unsafeFree(instance);
+ *   const result = ProtocolVersion.freeUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`ProtocolVersion.unsafeFree failed: ${error.message}`);
+ *   console.error(`ProtocolVersion.freeUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeFree = (instance: CML.ProtocolVersion): void =>
+export const freeUnsafe = (instance: CML.ProtocolVersion): void =>
   Effect.runSync(free(instance));
 
 /**
@@ -103,16 +120,16 @@ export const toCborBytes = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = ProtocolVersion.unsafeToCborBytes(instance);
+ *   const result = ProtocolVersion.toCborBytesUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`ProtocolVersion.unsafeToCborBytes failed: ${error.message}`);
+ *   console.error(`ProtocolVersion.toCborBytesUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeToCborBytes = (instance: CML.ProtocolVersion): Uint8Array =>
+export const toCborBytesUnsafe = (instance: CML.ProtocolVersion): Uint8Array =>
   Effect.runSync(toCborBytes(instance));
 
 /**
@@ -157,16 +174,16 @@ export const toCanonicalCborBytes = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = ProtocolVersion.unsafeToCanonicalCborBytes(instance);
+ *   const result = ProtocolVersion.toCanonicalCborBytesUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`ProtocolVersion.unsafeToCanonicalCborBytes failed: ${error.message}`);
+ *   console.error(`ProtocolVersion.toCanonicalCborBytesUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeToCanonicalCborBytes = (
+export const toCanonicalCborBytesUnsafe = (
   instance: CML.ProtocolVersion,
 ): Uint8Array => Effect.runSync(toCanonicalCborBytes(instance));
 
@@ -207,16 +224,16 @@ export const fromCborBytes = Effect.fn(function* (cborBytes: Uint8Array) {
  *
  * // Using try/catch for error handling
  * try {
- *   const result = ProtocolVersion.unsafeFromCborBytes( parameters );
+ *   const result = ProtocolVersion.fromCborBytesUnsafe( parameters );
  *   console.log(result);
  * } catch (error) {
- *   console.error(`ProtocolVersion.unsafeFromCborBytes failed: ${error.message}`);
+ *   console.error(`ProtocolVersion.fromCborBytesUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Constructors
+ * @category ConstructorsUnsafe
  */
-export const unsafeFromCborBytes = (cborBytes: Uint8Array) =>
+export const fromCborBytesUnsafe = (cborBytes: Uint8Array) =>
   Effect.runSync(fromCborBytes(cborBytes));
 
 /**
@@ -261,16 +278,16 @@ export const toCborHex = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = ProtocolVersion.unsafeToCborHex(instance);
+ *   const result = ProtocolVersion.toCborHexUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`ProtocolVersion.unsafeToCborHex failed: ${error.message}`);
+ *   console.error(`ProtocolVersion.toCborHexUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeToCborHex = (instance: CML.ProtocolVersion): string =>
+export const toCborHexUnsafe = (instance: CML.ProtocolVersion): string =>
   Effect.runSync(toCborHex(instance));
 
 /**
@@ -315,16 +332,16 @@ export const toCanonicalCborHex = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = ProtocolVersion.unsafeToCanonicalCborHex(instance);
+ *   const result = ProtocolVersion.toCanonicalCborHexUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`ProtocolVersion.unsafeToCanonicalCborHex failed: ${error.message}`);
+ *   console.error(`ProtocolVersion.toCanonicalCborHexUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeToCanonicalCborHex = (
+export const toCanonicalCborHexUnsafe = (
   instance: CML.ProtocolVersion,
 ): string => Effect.runSync(toCanonicalCborHex(instance));
 
@@ -365,16 +382,16 @@ export const fromCborHex = Effect.fn(function* (cborBytes: string) {
  *
  * // Using try/catch for error handling
  * try {
- *   const result = ProtocolVersion.unsafeFromCborHex( parameters );
+ *   const result = ProtocolVersion.fromCborHexUnsafe( parameters );
  *   console.log(result);
  * } catch (error) {
- *   console.error(`ProtocolVersion.unsafeFromCborHex failed: ${error.message}`);
+ *   console.error(`ProtocolVersion.fromCborHexUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Constructors
+ * @category ConstructorsUnsafe
  */
-export const unsafeFromCborHex = (cborBytes: string) =>
+export const fromCborHexUnsafe = (cborBytes: string) =>
   Effect.runSync(fromCborHex(cborBytes));
 
 /**
@@ -419,16 +436,16 @@ export const toJson = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = ProtocolVersion.unsafeToJson(instance);
+ *   const result = ProtocolVersion.toJsonUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`ProtocolVersion.unsafeToJson failed: ${error.message}`);
+ *   console.error(`ProtocolVersion.toJsonUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeToJson = (instance: CML.ProtocolVersion): string =>
+export const toJsonUnsafe = (instance: CML.ProtocolVersion): string =>
   Effect.runSync(toJson(instance));
 
 /**
@@ -471,16 +488,16 @@ export const toJsValue = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = ProtocolVersion.unsafeToJsValue(instance);
+ *   const result = ProtocolVersion.toJsValueUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`ProtocolVersion.unsafeToJsValue failed: ${error.message}`);
+ *   console.error(`ProtocolVersion.toJsValueUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeToJsValue = (instance: CML.ProtocolVersion): any =>
+export const toJsValueUnsafe = (instance: CML.ProtocolVersion): any =>
   Effect.runSync(toJsValue(instance));
 
 /**
@@ -520,16 +537,16 @@ export const fromJson = Effect.fn(function* (json: string) {
  *
  * // Using try/catch for error handling
  * try {
- *   const result = ProtocolVersion.unsafeFromJson( parameters );
+ *   const result = ProtocolVersion.fromJsonUnsafe( parameters );
  *   console.log(result);
  * } catch (error) {
- *   console.error(`ProtocolVersion.unsafeFromJson failed: ${error.message}`);
+ *   console.error(`ProtocolVersion.fromJsonUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Constructors
+ * @category ConstructorsUnsafe
  */
-export const unsafeFromJson = (json: string) => Effect.runSync(fromJson(json));
+export const fromJsonUnsafe = (json: string) => Effect.runSync(fromJson(json));
 
 /**
  * Method major of ProtocolVersion
@@ -573,16 +590,16 @@ export const major = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = ProtocolVersion.unsafeMajor(instance);
+ *   const result = ProtocolVersion.majorUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`ProtocolVersion.unsafeMajor failed: ${error.message}`);
+ *   console.error(`ProtocolVersion.majorUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeMajor = (instance: CML.ProtocolVersion): bigint =>
+export const majorUnsafe = (instance: CML.ProtocolVersion): bigint =>
   Effect.runSync(major(instance));
 
 /**
@@ -627,16 +644,16 @@ export const minor = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = ProtocolVersion.unsafeMinor(instance);
+ *   const result = ProtocolVersion.minorUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`ProtocolVersion.unsafeMinor failed: ${error.message}`);
+ *   console.error(`ProtocolVersion.minorUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeMinor = (instance: CML.ProtocolVersion): bigint =>
+export const minorUnsafe = (instance: CML.ProtocolVersion): bigint =>
   Effect.runSync(minor(instance));
 
 /**
@@ -676,14 +693,14 @@ export const _new = Effect.fn(function* (major: bigint, minor: bigint) {
  *
  * // Using try/catch for error handling
  * try {
- *   const result = ProtocolVersion.unsafe_new( parameters );
+ *   const result = ProtocolVersion._newUnsafe( parameters );
  *   console.log(result);
  * } catch (error) {
- *   console.error(`ProtocolVersion.unsafe_new failed: ${error.message}`);
+ *   console.error(`ProtocolVersion._newUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Constructors
+ * @category ConstructorsUnsafe
  */
-export const unsafe_new = (major: bigint, minor: bigint) =>
+export const _newUnsafe = (major: bigint, minor: bigint) =>
   Effect.runSync(_new(major, minor));

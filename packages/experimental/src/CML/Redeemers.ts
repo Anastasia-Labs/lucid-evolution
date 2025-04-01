@@ -1,8 +1,25 @@
+/**
+ * @since 2.0.0
+ */
 import { Data, Effect } from "effect";
 import * as CML from "@anastasia-labs/cardano-multiplatform-lib-nodejs";
 
+/**
+ * Type alias for the CML Redeemers class
+ *
+ * @since 2.0.0
+ * @category Types
+ */
 export type Redeemers = CML.Redeemers;
 
+/**
+ * Error class for Redeemers operations
+ *
+ * This error is thrown when operations on Redeemers instances fail.
+ *
+ * @since 2.0.0
+ * @category Errors
+ */
 export class RedeemersError extends Data.TaggedError("RedeemersError")<{
   message?: string;
 }> {}
@@ -47,16 +64,16 @@ export const free = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = Redeemers.unsafeFree(instance);
+ *   const result = Redeemers.freeUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`Redeemers.unsafeFree failed: ${error.message}`);
+ *   console.error(`Redeemers.freeUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeFree = (instance: CML.Redeemers): void =>
+export const freeUnsafe = (instance: CML.Redeemers): void =>
   Effect.runSync(free(instance));
 
 /**
@@ -101,16 +118,16 @@ export const toFlatFormat = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = Redeemers.unsafeToFlatFormat(instance);
+ *   const result = Redeemers.toFlatFormatUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`Redeemers.unsafeToFlatFormat failed: ${error.message}`);
+ *   console.error(`Redeemers.toFlatFormatUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeToFlatFormat = (
+export const toFlatFormatUnsafe = (
   instance: CML.Redeemers,
 ): CML.LegacyRedeemerList => Effect.runSync(toFlatFormat(instance));
 
@@ -154,16 +171,16 @@ export const toCborBytes = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = Redeemers.unsafeToCborBytes(instance);
+ *   const result = Redeemers.toCborBytesUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`Redeemers.unsafeToCborBytes failed: ${error.message}`);
+ *   console.error(`Redeemers.toCborBytesUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeToCborBytes = (instance: CML.Redeemers): Uint8Array =>
+export const toCborBytesUnsafe = (instance: CML.Redeemers): Uint8Array =>
   Effect.runSync(toCborBytes(instance));
 
 /**
@@ -206,16 +223,16 @@ export const toCanonicalCborBytes = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = Redeemers.unsafeToCanonicalCborBytes(instance);
+ *   const result = Redeemers.toCanonicalCborBytesUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`Redeemers.unsafeToCanonicalCborBytes failed: ${error.message}`);
+ *   console.error(`Redeemers.toCanonicalCborBytesUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeToCanonicalCborBytes = (
+export const toCanonicalCborBytesUnsafe = (
   instance: CML.Redeemers,
 ): Uint8Array => Effect.runSync(toCanonicalCborBytes(instance));
 
@@ -256,16 +273,16 @@ export const fromCborBytes = Effect.fn(function* (cborBytes: Uint8Array) {
  *
  * // Using try/catch for error handling
  * try {
- *   const result = Redeemers.unsafeFromCborBytes( parameters );
+ *   const result = Redeemers.fromCborBytesUnsafe( parameters );
  *   console.log(result);
  * } catch (error) {
- *   console.error(`Redeemers.unsafeFromCborBytes failed: ${error.message}`);
+ *   console.error(`Redeemers.fromCborBytesUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Constructors
+ * @category ConstructorsUnsafe
  */
-export const unsafeFromCborBytes = (cborBytes: Uint8Array) =>
+export const fromCborBytesUnsafe = (cborBytes: Uint8Array) =>
   Effect.runSync(fromCborBytes(cborBytes));
 
 /**
@@ -308,16 +325,16 @@ export const toCborHex = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = Redeemers.unsafeToCborHex(instance);
+ *   const result = Redeemers.toCborHexUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`Redeemers.unsafeToCborHex failed: ${error.message}`);
+ *   console.error(`Redeemers.toCborHexUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeToCborHex = (instance: CML.Redeemers): string =>
+export const toCborHexUnsafe = (instance: CML.Redeemers): string =>
   Effect.runSync(toCborHex(instance));
 
 /**
@@ -360,16 +377,16 @@ export const toCanonicalCborHex = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = Redeemers.unsafeToCanonicalCborHex(instance);
+ *   const result = Redeemers.toCanonicalCborHexUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`Redeemers.unsafeToCanonicalCborHex failed: ${error.message}`);
+ *   console.error(`Redeemers.toCanonicalCborHexUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeToCanonicalCborHex = (instance: CML.Redeemers): string =>
+export const toCanonicalCborHexUnsafe = (instance: CML.Redeemers): string =>
   Effect.runSync(toCanonicalCborHex(instance));
 
 /**
@@ -409,16 +426,16 @@ export const fromCborHex = Effect.fn(function* (cborBytes: string) {
  *
  * // Using try/catch for error handling
  * try {
- *   const result = Redeemers.unsafeFromCborHex( parameters );
+ *   const result = Redeemers.fromCborHexUnsafe( parameters );
  *   console.log(result);
  * } catch (error) {
- *   console.error(`Redeemers.unsafeFromCborHex failed: ${error.message}`);
+ *   console.error(`Redeemers.fromCborHexUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Constructors
+ * @category ConstructorsUnsafe
  */
-export const unsafeFromCborHex = (cborBytes: string) =>
+export const fromCborHexUnsafe = (cborBytes: string) =>
   Effect.runSync(fromCborHex(cborBytes));
 
 /**
@@ -461,16 +478,16 @@ export const toJson = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = Redeemers.unsafeToJson(instance);
+ *   const result = Redeemers.toJsonUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`Redeemers.unsafeToJson failed: ${error.message}`);
+ *   console.error(`Redeemers.toJsonUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeToJson = (instance: CML.Redeemers): string =>
+export const toJsonUnsafe = (instance: CML.Redeemers): string =>
   Effect.runSync(toJson(instance));
 
 /**
@@ -513,16 +530,16 @@ export const toJsValue = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = Redeemers.unsafeToJsValue(instance);
+ *   const result = Redeemers.toJsValueUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`Redeemers.unsafeToJsValue failed: ${error.message}`);
+ *   console.error(`Redeemers.toJsValueUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeToJsValue = (instance: CML.Redeemers): any =>
+export const toJsValueUnsafe = (instance: CML.Redeemers): any =>
   Effect.runSync(toJsValue(instance));
 
 /**
@@ -562,16 +579,16 @@ export const fromJson = Effect.fn(function* (json: string) {
  *
  * // Using try/catch for error handling
  * try {
- *   const result = Redeemers.unsafeFromJson( parameters );
+ *   const result = Redeemers.fromJsonUnsafe( parameters );
  *   console.log(result);
  * } catch (error) {
- *   console.error(`Redeemers.unsafeFromJson failed: ${error.message}`);
+ *   console.error(`Redeemers.fromJsonUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Constructors
+ * @category ConstructorsUnsafe
  */
-export const unsafeFromJson = (json: string) => Effect.runSync(fromJson(json));
+export const fromJsonUnsafe = (json: string) => Effect.runSync(fromJson(json));
 
 /**
  * Static method newArrLegacyRedeemer of Redeemers
@@ -612,16 +629,16 @@ export const newArrLegacyRedeemer = Effect.fn(function* (
  *
  * // Using try/catch for error handling
  * try {
- *   const result = Redeemers.unsafeNewArrLegacyRedeemer( parameters );
+ *   const result = Redeemers.newArrLegacyRedeemerUnsafe( parameters );
  *   console.log(result);
  * } catch (error) {
- *   console.error(`Redeemers.unsafeNewArrLegacyRedeemer failed: ${error.message}`);
+ *   console.error(`Redeemers.newArrLegacyRedeemerUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Constructors
+ * @category ConstructorsUnsafe
  */
-export const unsafeNewArrLegacyRedeemer = (
+export const newArrLegacyRedeemerUnsafe = (
   arrLegacyRedeemer: CML.LegacyRedeemerList,
 ) => Effect.runSync(newArrLegacyRedeemer(arrLegacyRedeemer));
 
@@ -667,16 +684,16 @@ export const newMapRedeemerKeyToRedeemerVal = Effect.fn(function* (
  *
  * // Using try/catch for error handling
  * try {
- *   const result = Redeemers.unsafeNewMapRedeemerKeyToRedeemerVal( parameters );
+ *   const result = Redeemers.newMapRedeemerKeyToRedeemerValUnsafe( parameters );
  *   console.log(result);
  * } catch (error) {
- *   console.error(`Redeemers.unsafeNewMapRedeemerKeyToRedeemerVal failed: ${error.message}`);
+ *   console.error(`Redeemers.newMapRedeemerKeyToRedeemerValUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Constructors
+ * @category ConstructorsUnsafe
  */
-export const unsafeNewMapRedeemerKeyToRedeemerVal = (
+export const newMapRedeemerKeyToRedeemerValUnsafe = (
   mapRedeemerKeyToRedeemerVal: CML.MapRedeemerKeyToRedeemerVal,
 ) =>
   Effect.runSync(newMapRedeemerKeyToRedeemerVal(mapRedeemerKeyToRedeemerVal));
@@ -721,16 +738,16 @@ export const kind = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = Redeemers.unsafeKind(instance);
+ *   const result = Redeemers.kindUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`Redeemers.unsafeKind failed: ${error.message}`);
+ *   console.error(`Redeemers.kindUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeKind = (instance: CML.Redeemers): CML.RedeemersKind =>
+export const kindUnsafe = (instance: CML.Redeemers): CML.RedeemersKind =>
   Effect.runSync(kind(instance));
 
 /**
@@ -775,16 +792,16 @@ export const asArrLegacyRedeemer = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = Redeemers.unsafeAsArrLegacyRedeemer(instance);
+ *   const result = Redeemers.asArrLegacyRedeemerUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`Redeemers.unsafeAsArrLegacyRedeemer failed: ${error.message}`);
+ *   console.error(`Redeemers.asArrLegacyRedeemerUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeAsArrLegacyRedeemer = (
+export const asArrLegacyRedeemerUnsafe = (
   instance: CML.Redeemers,
 ): CML.LegacyRedeemerList | undefined =>
   Effect.runSync(asArrLegacyRedeemer(instance));
@@ -834,16 +851,16 @@ export const asMapRedeemerKeyToRedeemerVal = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = Redeemers.unsafeAsMapRedeemerKeyToRedeemerVal(instance);
+ *   const result = Redeemers.asMapRedeemerKeyToRedeemerValUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`Redeemers.unsafeAsMapRedeemerKeyToRedeemerVal failed: ${error.message}`);
+ *   console.error(`Redeemers.asMapRedeemerKeyToRedeemerValUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeAsMapRedeemerKeyToRedeemerVal = (
+export const asMapRedeemerKeyToRedeemerValUnsafe = (
   instance: CML.Redeemers,
 ): CML.MapRedeemerKeyToRedeemerVal | undefined =>
   Effect.runSync(asMapRedeemerKeyToRedeemerVal(instance));

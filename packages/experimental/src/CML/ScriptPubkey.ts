@@ -1,8 +1,25 @@
+/**
+ * @since 2.0.0
+ */
 import { Data, Effect } from "effect";
 import * as CML from "@anastasia-labs/cardano-multiplatform-lib-nodejs";
 
+/**
+ * Type alias for the CML ScriptPubkey class
+ *
+ * @since 2.0.0
+ * @category Types
+ */
 export type ScriptPubkey = CML.ScriptPubkey;
 
+/**
+ * Error class for ScriptPubkey operations
+ *
+ * This error is thrown when operations on ScriptPubkey instances fail.
+ *
+ * @since 2.0.0
+ * @category Errors
+ */
 export class ScriptPubkeyError extends Data.TaggedError("ScriptPubkeyError")<{
   message?: string;
 }> {}
@@ -47,16 +64,16 @@ export const free = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = ScriptPubkey.unsafeFree(instance);
+ *   const result = ScriptPubkey.freeUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`ScriptPubkey.unsafeFree failed: ${error.message}`);
+ *   console.error(`ScriptPubkey.freeUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeFree = (instance: CML.ScriptPubkey): void =>
+export const freeUnsafe = (instance: CML.ScriptPubkey): void =>
   Effect.runSync(free(instance));
 
 /**
@@ -99,16 +116,16 @@ export const toCborBytes = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = ScriptPubkey.unsafeToCborBytes(instance);
+ *   const result = ScriptPubkey.toCborBytesUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`ScriptPubkey.unsafeToCborBytes failed: ${error.message}`);
+ *   console.error(`ScriptPubkey.toCborBytesUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeToCborBytes = (instance: CML.ScriptPubkey): Uint8Array =>
+export const toCborBytesUnsafe = (instance: CML.ScriptPubkey): Uint8Array =>
   Effect.runSync(toCborBytes(instance));
 
 /**
@@ -151,16 +168,16 @@ export const toCanonicalCborBytes = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = ScriptPubkey.unsafeToCanonicalCborBytes(instance);
+ *   const result = ScriptPubkey.toCanonicalCborBytesUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`ScriptPubkey.unsafeToCanonicalCborBytes failed: ${error.message}`);
+ *   console.error(`ScriptPubkey.toCanonicalCborBytesUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeToCanonicalCborBytes = (
+export const toCanonicalCborBytesUnsafe = (
   instance: CML.ScriptPubkey,
 ): Uint8Array => Effect.runSync(toCanonicalCborBytes(instance));
 
@@ -201,16 +218,16 @@ export const fromCborBytes = Effect.fn(function* (cborBytes: Uint8Array) {
  *
  * // Using try/catch for error handling
  * try {
- *   const result = ScriptPubkey.unsafeFromCborBytes( parameters );
+ *   const result = ScriptPubkey.fromCborBytesUnsafe( parameters );
  *   console.log(result);
  * } catch (error) {
- *   console.error(`ScriptPubkey.unsafeFromCborBytes failed: ${error.message}`);
+ *   console.error(`ScriptPubkey.fromCborBytesUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Constructors
+ * @category ConstructorsUnsafe
  */
-export const unsafeFromCborBytes = (cborBytes: Uint8Array) =>
+export const fromCborBytesUnsafe = (cborBytes: Uint8Array) =>
   Effect.runSync(fromCborBytes(cborBytes));
 
 /**
@@ -253,16 +270,16 @@ export const toCborHex = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = ScriptPubkey.unsafeToCborHex(instance);
+ *   const result = ScriptPubkey.toCborHexUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`ScriptPubkey.unsafeToCborHex failed: ${error.message}`);
+ *   console.error(`ScriptPubkey.toCborHexUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeToCborHex = (instance: CML.ScriptPubkey): string =>
+export const toCborHexUnsafe = (instance: CML.ScriptPubkey): string =>
   Effect.runSync(toCborHex(instance));
 
 /**
@@ -305,16 +322,16 @@ export const toCanonicalCborHex = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = ScriptPubkey.unsafeToCanonicalCborHex(instance);
+ *   const result = ScriptPubkey.toCanonicalCborHexUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`ScriptPubkey.unsafeToCanonicalCborHex failed: ${error.message}`);
+ *   console.error(`ScriptPubkey.toCanonicalCborHexUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeToCanonicalCborHex = (instance: CML.ScriptPubkey): string =>
+export const toCanonicalCborHexUnsafe = (instance: CML.ScriptPubkey): string =>
   Effect.runSync(toCanonicalCborHex(instance));
 
 /**
@@ -354,16 +371,16 @@ export const fromCborHex = Effect.fn(function* (cborBytes: string) {
  *
  * // Using try/catch for error handling
  * try {
- *   const result = ScriptPubkey.unsafeFromCborHex( parameters );
+ *   const result = ScriptPubkey.fromCborHexUnsafe( parameters );
  *   console.log(result);
  * } catch (error) {
- *   console.error(`ScriptPubkey.unsafeFromCborHex failed: ${error.message}`);
+ *   console.error(`ScriptPubkey.fromCborHexUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Constructors
+ * @category ConstructorsUnsafe
  */
-export const unsafeFromCborHex = (cborBytes: string) =>
+export const fromCborHexUnsafe = (cborBytes: string) =>
   Effect.runSync(fromCborHex(cborBytes));
 
 /**
@@ -406,16 +423,16 @@ export const toJson = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = ScriptPubkey.unsafeToJson(instance);
+ *   const result = ScriptPubkey.toJsonUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`ScriptPubkey.unsafeToJson failed: ${error.message}`);
+ *   console.error(`ScriptPubkey.toJsonUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeToJson = (instance: CML.ScriptPubkey): string =>
+export const toJsonUnsafe = (instance: CML.ScriptPubkey): string =>
   Effect.runSync(toJson(instance));
 
 /**
@@ -458,16 +475,16 @@ export const toJsValue = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = ScriptPubkey.unsafeToJsValue(instance);
+ *   const result = ScriptPubkey.toJsValueUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`ScriptPubkey.unsafeToJsValue failed: ${error.message}`);
+ *   console.error(`ScriptPubkey.toJsValueUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeToJsValue = (instance: CML.ScriptPubkey): any =>
+export const toJsValueUnsafe = (instance: CML.ScriptPubkey): any =>
   Effect.runSync(toJsValue(instance));
 
 /**
@@ -507,16 +524,16 @@ export const fromJson = Effect.fn(function* (json: string) {
  *
  * // Using try/catch for error handling
  * try {
- *   const result = ScriptPubkey.unsafeFromJson( parameters );
+ *   const result = ScriptPubkey.fromJsonUnsafe( parameters );
  *   console.log(result);
  * } catch (error) {
- *   console.error(`ScriptPubkey.unsafeFromJson failed: ${error.message}`);
+ *   console.error(`ScriptPubkey.fromJsonUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Constructors
+ * @category ConstructorsUnsafe
  */
-export const unsafeFromJson = (json: string) => Effect.runSync(fromJson(json));
+export const fromJsonUnsafe = (json: string) => Effect.runSync(fromJson(json));
 
 /**
  * Method ed25519KeyHash of ScriptPubkey
@@ -560,16 +577,16 @@ export const ed25519KeyHash = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = ScriptPubkey.unsafeEd25519KeyHash(instance);
+ *   const result = ScriptPubkey.ed25519KeyHashUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`ScriptPubkey.unsafeEd25519KeyHash failed: ${error.message}`);
+ *   console.error(`ScriptPubkey.ed25519KeyHashUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeEd25519KeyHash = (
+export const ed25519KeyHashUnsafe = (
   instance: CML.ScriptPubkey,
 ): CML.Ed25519KeyHash => Effect.runSync(ed25519KeyHash(instance));
 
@@ -610,14 +627,14 @@ export const _new = Effect.fn(function* (ed25519KeyHash: CML.Ed25519KeyHash) {
  *
  * // Using try/catch for error handling
  * try {
- *   const result = ScriptPubkey.unsafe_new( parameters );
+ *   const result = ScriptPubkey._newUnsafe( parameters );
  *   console.log(result);
  * } catch (error) {
- *   console.error(`ScriptPubkey.unsafe_new failed: ${error.message}`);
+ *   console.error(`ScriptPubkey._newUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Constructors
+ * @category ConstructorsUnsafe
  */
-export const unsafe_new = (ed25519KeyHash: CML.Ed25519KeyHash) =>
+export const _newUnsafe = (ed25519KeyHash: CML.Ed25519KeyHash) =>
   Effect.runSync(_new(ed25519KeyHash));

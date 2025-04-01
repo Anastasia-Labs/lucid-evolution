@@ -1,8 +1,25 @@
+/**
+ * @since 2.0.0
+ */
 import { Data, Effect } from "effect";
 import * as CML from "@anastasia-labs/cardano-multiplatform-lib-nodejs";
 
+/**
+ * Type alias for the CML Int class
+ *
+ * @since 2.0.0
+ * @category Types
+ */
 export type Int = CML.Int;
 
+/**
+ * Error class for Int operations
+ *
+ * This error is thrown when operations on Int instances fail.
+ *
+ * @since 2.0.0
+ * @category Errors
+ */
 export class IntError extends Data.TaggedError("IntError")<{
   message?: string;
 }> {}
@@ -47,16 +64,16 @@ export const free = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = Int.unsafeFree(instance);
+ *   const result = Int.freeUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`Int.unsafeFree failed: ${error.message}`);
+ *   console.error(`Int.freeUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeFree = (instance: CML.Int): void =>
+export const freeUnsafe = (instance: CML.Int): void =>
   Effect.runSync(free(instance));
 
 /**
@@ -99,16 +116,16 @@ export const toCborBytes = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = Int.unsafeToCborBytes(instance);
+ *   const result = Int.toCborBytesUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`Int.unsafeToCborBytes failed: ${error.message}`);
+ *   console.error(`Int.toCborBytesUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeToCborBytes = (instance: CML.Int): Uint8Array =>
+export const toCborBytesUnsafe = (instance: CML.Int): Uint8Array =>
   Effect.runSync(toCborBytes(instance));
 
 /**
@@ -148,16 +165,16 @@ export const fromCborBytes = Effect.fn(function* (cborBytes: Uint8Array) {
  *
  * // Using try/catch for error handling
  * try {
- *   const result = Int.unsafeFromCborBytes( parameters );
+ *   const result = Int.fromCborBytesUnsafe( parameters );
  *   console.log(result);
  * } catch (error) {
- *   console.error(`Int.unsafeFromCborBytes failed: ${error.message}`);
+ *   console.error(`Int.fromCborBytesUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Constructors
+ * @category ConstructorsUnsafe
  */
-export const unsafeFromCborBytes = (cborBytes: Uint8Array) =>
+export const fromCborBytesUnsafe = (cborBytes: Uint8Array) =>
   Effect.runSync(fromCborBytes(cborBytes));
 
 /**
@@ -200,16 +217,16 @@ export const toJson = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = Int.unsafeToJson(instance);
+ *   const result = Int.toJsonUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`Int.unsafeToJson failed: ${error.message}`);
+ *   console.error(`Int.toJsonUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeToJson = (instance: CML.Int): string =>
+export const toJsonUnsafe = (instance: CML.Int): string =>
   Effect.runSync(toJson(instance));
 
 /**
@@ -252,16 +269,16 @@ export const toJsonValue = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = Int.unsafeToJsonValue(instance);
+ *   const result = Int.toJsonValueUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`Int.unsafeToJsonValue failed: ${error.message}`);
+ *   console.error(`Int.toJsonValueUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeToJsonValue = (instance: CML.Int): any =>
+export const toJsonValueUnsafe = (instance: CML.Int): any =>
   Effect.runSync(toJsonValue(instance));
 
 /**
@@ -301,16 +318,16 @@ export const fromJson = Effect.fn(function* (json: string) {
  *
  * // Using try/catch for error handling
  * try {
- *   const result = Int.unsafeFromJson( parameters );
+ *   const result = Int.fromJsonUnsafe( parameters );
  *   console.log(result);
  * } catch (error) {
- *   console.error(`Int.unsafeFromJson failed: ${error.message}`);
+ *   console.error(`Int.fromJsonUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Constructors
+ * @category ConstructorsUnsafe
  */
-export const unsafeFromJson = (json: string) => Effect.runSync(fromJson(json));
+export const fromJsonUnsafe = (json: string) => Effect.runSync(fromJson(json));
 
 /**
  * Static method _new of Int
@@ -349,16 +366,16 @@ export const _new = Effect.fn(function* (x: bigint) {
  *
  * // Using try/catch for error handling
  * try {
- *   const result = Int.unsafe_new( parameters );
+ *   const result = Int._newUnsafe( parameters );
  *   console.log(result);
  * } catch (error) {
- *   console.error(`Int.unsafe_new failed: ${error.message}`);
+ *   console.error(`Int._newUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Constructors
+ * @category ConstructorsUnsafe
  */
-export const unsafe_new = (x: bigint) => Effect.runSync(_new(x));
+export const _newUnsafe = (x: bigint) => Effect.runSync(_new(x));
 
 /**
  * Method toStr of Int
@@ -400,16 +417,16 @@ export const toStr = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = Int.unsafeToStr(instance);
+ *   const result = Int.toStrUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`Int.unsafeToStr failed: ${error.message}`);
+ *   console.error(`Int.toStrUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeToStr = (instance: CML.Int): string =>
+export const toStrUnsafe = (instance: CML.Int): string =>
   Effect.runSync(toStr(instance));
 
 /**
@@ -449,14 +466,14 @@ export const fromStr = Effect.fn(function* (string: string) {
  *
  * // Using try/catch for error handling
  * try {
- *   const result = Int.unsafeFromStr( parameters );
+ *   const result = Int.fromStrUnsafe( parameters );
  *   console.log(result);
  * } catch (error) {
- *   console.error(`Int.unsafeFromStr failed: ${error.message}`);
+ *   console.error(`Int.fromStrUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Constructors
+ * @category ConstructorsUnsafe
  */
-export const unsafeFromStr = (string: string) =>
+export const fromStrUnsafe = (string: string) =>
   Effect.runSync(fromStr(string));

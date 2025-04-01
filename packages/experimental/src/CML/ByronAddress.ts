@@ -1,8 +1,25 @@
+/**
+ * @since 2.0.0
+ */
 import { Data, Effect } from "effect";
 import * as CML from "@anastasia-labs/cardano-multiplatform-lib-nodejs";
 
+/**
+ * Type alias for the CML ByronAddress class
+ *
+ * @since 2.0.0
+ * @category Types
+ */
 export type ByronAddress = CML.ByronAddress;
 
+/**
+ * Error class for ByronAddress operations
+ *
+ * This error is thrown when operations on ByronAddress instances fail.
+ *
+ * @since 2.0.0
+ * @category Errors
+ */
 export class ByronAddressError extends Data.TaggedError("ByronAddressError")<{
   message?: string;
 }> {}
@@ -47,16 +64,16 @@ export const free = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = ByronAddress.unsafeFree(instance);
+ *   const result = ByronAddress.freeUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`ByronAddress.unsafeFree failed: ${error.message}`);
+ *   console.error(`ByronAddress.freeUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeFree = (instance: CML.ByronAddress): void =>
+export const freeUnsafe = (instance: CML.ByronAddress): void =>
   Effect.runSync(free(instance));
 
 /**
@@ -99,16 +116,16 @@ export const toBase58 = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = ByronAddress.unsafeToBase58(instance);
+ *   const result = ByronAddress.toBase58Unsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`ByronAddress.unsafeToBase58 failed: ${error.message}`);
+ *   console.error(`ByronAddress.toBase58Unsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeToBase58 = (instance: CML.ByronAddress): string =>
+export const toBase58Unsafe = (instance: CML.ByronAddress): string =>
   Effect.runSync(toBase58(instance));
 
 /**
@@ -148,16 +165,16 @@ export const fromBase58 = Effect.fn(function* (s: string) {
  *
  * // Using try/catch for error handling
  * try {
- *   const result = ByronAddress.unsafeFromBase58( parameters );
+ *   const result = ByronAddress.fromBase58Unsafe( parameters );
  *   console.log(result);
  * } catch (error) {
- *   console.error(`ByronAddress.unsafeFromBase58 failed: ${error.message}`);
+ *   console.error(`ByronAddress.fromBase58Unsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Constructors
+ * @category ConstructorsUnsafe
  */
-export const unsafeFromBase58 = (s: string) => Effect.runSync(fromBase58(s));
+export const fromBase58Unsafe = (s: string) => Effect.runSync(fromBase58(s));
 
 /**
  * Static method isValid of ByronAddress
@@ -196,16 +213,16 @@ export const isValid = Effect.fn(function* (s: string) {
  *
  * // Using try/catch for error handling
  * try {
- *   const result = ByronAddress.unsafeIsValid( parameters );
+ *   const result = ByronAddress.isValidUnsafe( parameters );
  *   console.log(result);
  * } catch (error) {
- *   console.error(`ByronAddress.unsafeIsValid failed: ${error.message}`);
+ *   console.error(`ByronAddress.isValidUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Constructors
+ * @category ConstructorsUnsafe
  */
-export const unsafeIsValid = (s: string) => Effect.runSync(isValid(s));
+export const isValidUnsafe = (s: string) => Effect.runSync(isValid(s));
 
 /**
  * Method toAddress of ByronAddress
@@ -247,16 +264,16 @@ export const toAddress = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = ByronAddress.unsafeToAddress(instance);
+ *   const result = ByronAddress.toAddressUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`ByronAddress.unsafeToAddress failed: ${error.message}`);
+ *   console.error(`ByronAddress.toAddressUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeToAddress = (instance: CML.ByronAddress): CML.Address =>
+export const toAddressUnsafe = (instance: CML.ByronAddress): CML.Address =>
   Effect.runSync(toAddress(instance));
 
 /**
@@ -296,16 +313,16 @@ export const fromAddress = Effect.fn(function* (addr: CML.Address) {
  *
  * // Using try/catch for error handling
  * try {
- *   const result = ByronAddress.unsafeFromAddress( parameters );
+ *   const result = ByronAddress.fromAddressUnsafe( parameters );
  *   console.log(result);
  * } catch (error) {
- *   console.error(`ByronAddress.unsafeFromAddress failed: ${error.message}`);
+ *   console.error(`ByronAddress.fromAddressUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Constructors
+ * @category ConstructorsUnsafe
  */
-export const unsafeFromAddress = (addr: CML.Address) =>
+export const fromAddressUnsafe = (addr: CML.Address) =>
   Effect.runSync(fromAddress(addr));
 
 /**
@@ -347,16 +364,16 @@ export const fromAddressContent = Effect.fn(function* (
  *
  * // Using try/catch for error handling
  * try {
- *   const result = ByronAddress.unsafeFromAddressContent( parameters );
+ *   const result = ByronAddress.fromAddressContentUnsafe( parameters );
  *   console.log(result);
  * } catch (error) {
- *   console.error(`ByronAddress.unsafeFromAddressContent failed: ${error.message}`);
+ *   console.error(`ByronAddress.fromAddressContentUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Constructors
+ * @category ConstructorsUnsafe
  */
-export const unsafeFromAddressContent = (addressContent: CML.AddressContent) =>
+export const fromAddressContentUnsafe = (addressContent: CML.AddressContent) =>
   Effect.runSync(fromAddressContent(addressContent));
 
 /**
@@ -399,16 +416,16 @@ export const toCborBytes = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = ByronAddress.unsafeToCborBytes(instance);
+ *   const result = ByronAddress.toCborBytesUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`ByronAddress.unsafeToCborBytes failed: ${error.message}`);
+ *   console.error(`ByronAddress.toCborBytesUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeToCborBytes = (instance: CML.ByronAddress): Uint8Array =>
+export const toCborBytesUnsafe = (instance: CML.ByronAddress): Uint8Array =>
   Effect.runSync(toCborBytes(instance));
 
 /**
@@ -448,16 +465,16 @@ export const fromCborBytes = Effect.fn(function* (cborBytes: Uint8Array) {
  *
  * // Using try/catch for error handling
  * try {
- *   const result = ByronAddress.unsafeFromCborBytes( parameters );
+ *   const result = ByronAddress.fromCborBytesUnsafe( parameters );
  *   console.log(result);
  * } catch (error) {
- *   console.error(`ByronAddress.unsafeFromCborBytes failed: ${error.message}`);
+ *   console.error(`ByronAddress.fromCborBytesUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Constructors
+ * @category ConstructorsUnsafe
  */
-export const unsafeFromCborBytes = (cborBytes: Uint8Array) =>
+export const fromCborBytesUnsafe = (cborBytes: Uint8Array) =>
   Effect.runSync(fromCborBytes(cborBytes));
 
 /**
@@ -500,16 +517,16 @@ export const toCborHex = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = ByronAddress.unsafeToCborHex(instance);
+ *   const result = ByronAddress.toCborHexUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`ByronAddress.unsafeToCborHex failed: ${error.message}`);
+ *   console.error(`ByronAddress.toCborHexUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeToCborHex = (instance: CML.ByronAddress): string =>
+export const toCborHexUnsafe = (instance: CML.ByronAddress): string =>
   Effect.runSync(toCborHex(instance));
 
 /**
@@ -549,16 +566,16 @@ export const fromCborHex = Effect.fn(function* (cborBytes: string) {
  *
  * // Using try/catch for error handling
  * try {
- *   const result = ByronAddress.unsafeFromCborHex( parameters );
+ *   const result = ByronAddress.fromCborHexUnsafe( parameters );
  *   console.log(result);
  * } catch (error) {
- *   console.error(`ByronAddress.unsafeFromCborHex failed: ${error.message}`);
+ *   console.error(`ByronAddress.fromCborHexUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Constructors
+ * @category ConstructorsUnsafe
  */
-export const unsafeFromCborHex = (cborBytes: string) =>
+export const fromCborHexUnsafe = (cborBytes: string) =>
   Effect.runSync(fromCborHex(cborBytes));
 
 /**
@@ -603,16 +620,16 @@ export const content = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = ByronAddress.unsafeContent(instance);
+ *   const result = ByronAddress.contentUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`ByronAddress.unsafeContent failed: ${error.message}`);
+ *   console.error(`ByronAddress.contentUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeContent = (instance: CML.ByronAddress): CML.AddressContent =>
+export const contentUnsafe = (instance: CML.ByronAddress): CML.AddressContent =>
   Effect.runSync(content(instance));
 
 /**
@@ -655,16 +672,16 @@ export const crc = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = ByronAddress.unsafeCrc(instance);
+ *   const result = ByronAddress.crcUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`ByronAddress.unsafeCrc failed: ${error.message}`);
+ *   console.error(`ByronAddress.crcUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeCrc = (instance: CML.ByronAddress): CML.Crc32 =>
+export const crcUnsafe = (instance: CML.ByronAddress): CML.Crc32 =>
   Effect.runSync(crc(instance));
 
 /**
@@ -707,14 +724,14 @@ export const _new = Effect.fn(function* (
  *
  * // Using try/catch for error handling
  * try {
- *   const result = ByronAddress.unsafe_new( parameters );
+ *   const result = ByronAddress._newUnsafe( parameters );
  *   console.log(result);
  * } catch (error) {
- *   console.error(`ByronAddress.unsafe_new failed: ${error.message}`);
+ *   console.error(`ByronAddress._newUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Constructors
+ * @category ConstructorsUnsafe
  */
-export const unsafe_new = (content: CML.AddressContent, crc: CML.Crc32) =>
+export const _newUnsafe = (content: CML.AddressContent, crc: CML.Crc32) =>
   Effect.runSync(_new(content, crc));

@@ -1,8 +1,25 @@
+/**
+ * @since 2.0.0
+ */
 import { Data, Effect } from "effect";
 import * as CML from "@anastasia-labs/cardano-multiplatform-lib-nodejs";
 
+/**
+ * Type alias for the CML CIP36DeregistrationWitness class
+ *
+ * @since 2.0.0
+ * @category Types
+ */
 export type CIP36DeregistrationWitness = CML.CIP36DeregistrationWitness;
 
+/**
+ * Error class for CIP36DeregistrationWitness operations
+ *
+ * This error is thrown when operations on CIP36DeregistrationWitness instances fail.
+ *
+ * @since 2.0.0
+ * @category Errors
+ */
 export class CIP36DeregistrationWitnessError extends Data.TaggedError(
   "CIP36DeregistrationWitnessError",
 )<{
@@ -51,16 +68,16 @@ export const free = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = CIP36DeregistrationWitness.unsafeFree(instance);
+ *   const result = CIP36DeregistrationWitness.freeUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`CIP36DeregistrationWitness.unsafeFree failed: ${error.message}`);
+ *   console.error(`CIP36DeregistrationWitness.freeUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeFree = (instance: CML.CIP36DeregistrationWitness): void =>
+export const freeUnsafe = (instance: CML.CIP36DeregistrationWitness): void =>
   Effect.runSync(free(instance));
 
 /**
@@ -105,16 +122,16 @@ export const toCborBytes = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = CIP36DeregistrationWitness.unsafeToCborBytes(instance);
+ *   const result = CIP36DeregistrationWitness.toCborBytesUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`CIP36DeregistrationWitness.unsafeToCborBytes failed: ${error.message}`);
+ *   console.error(`CIP36DeregistrationWitness.toCborBytesUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeToCborBytes = (
+export const toCborBytesUnsafe = (
   instance: CML.CIP36DeregistrationWitness,
 ): Uint8Array => Effect.runSync(toCborBytes(instance));
 
@@ -160,16 +177,16 @@ export const toCanonicalCborBytes = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = CIP36DeregistrationWitness.unsafeToCanonicalCborBytes(instance);
+ *   const result = CIP36DeregistrationWitness.toCanonicalCborBytesUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`CIP36DeregistrationWitness.unsafeToCanonicalCborBytes failed: ${error.message}`);
+ *   console.error(`CIP36DeregistrationWitness.toCanonicalCborBytesUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeToCanonicalCborBytes = (
+export const toCanonicalCborBytesUnsafe = (
   instance: CML.CIP36DeregistrationWitness,
 ): Uint8Array => Effect.runSync(toCanonicalCborBytes(instance));
 
@@ -210,16 +227,16 @@ export const fromCborBytes = Effect.fn(function* (cborBytes: Uint8Array) {
  *
  * // Using try/catch for error handling
  * try {
- *   const result = CIP36DeregistrationWitness.unsafeFromCborBytes( parameters );
+ *   const result = CIP36DeregistrationWitness.fromCborBytesUnsafe( parameters );
  *   console.log(result);
  * } catch (error) {
- *   console.error(`CIP36DeregistrationWitness.unsafeFromCborBytes failed: ${error.message}`);
+ *   console.error(`CIP36DeregistrationWitness.fromCborBytesUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Constructors
+ * @category ConstructorsUnsafe
  */
-export const unsafeFromCborBytes = (cborBytes: Uint8Array) =>
+export const fromCborBytesUnsafe = (cborBytes: Uint8Array) =>
   Effect.runSync(fromCborBytes(cborBytes));
 
 /**
@@ -264,16 +281,16 @@ export const toCborHex = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = CIP36DeregistrationWitness.unsafeToCborHex(instance);
+ *   const result = CIP36DeregistrationWitness.toCborHexUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`CIP36DeregistrationWitness.unsafeToCborHex failed: ${error.message}`);
+ *   console.error(`CIP36DeregistrationWitness.toCborHexUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeToCborHex = (
+export const toCborHexUnsafe = (
   instance: CML.CIP36DeregistrationWitness,
 ): string => Effect.runSync(toCborHex(instance));
 
@@ -319,16 +336,16 @@ export const toCanonicalCborHex = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = CIP36DeregistrationWitness.unsafeToCanonicalCborHex(instance);
+ *   const result = CIP36DeregistrationWitness.toCanonicalCborHexUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`CIP36DeregistrationWitness.unsafeToCanonicalCborHex failed: ${error.message}`);
+ *   console.error(`CIP36DeregistrationWitness.toCanonicalCborHexUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeToCanonicalCborHex = (
+export const toCanonicalCborHexUnsafe = (
   instance: CML.CIP36DeregistrationWitness,
 ): string => Effect.runSync(toCanonicalCborHex(instance));
 
@@ -369,16 +386,16 @@ export const fromCborHex = Effect.fn(function* (cborBytes: string) {
  *
  * // Using try/catch for error handling
  * try {
- *   const result = CIP36DeregistrationWitness.unsafeFromCborHex( parameters );
+ *   const result = CIP36DeregistrationWitness.fromCborHexUnsafe( parameters );
  *   console.log(result);
  * } catch (error) {
- *   console.error(`CIP36DeregistrationWitness.unsafeFromCborHex failed: ${error.message}`);
+ *   console.error(`CIP36DeregistrationWitness.fromCborHexUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Constructors
+ * @category ConstructorsUnsafe
  */
-export const unsafeFromCborHex = (cborBytes: string) =>
+export const fromCborHexUnsafe = (cborBytes: string) =>
   Effect.runSync(fromCborHex(cborBytes));
 
 /**
@@ -423,16 +440,16 @@ export const toJson = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = CIP36DeregistrationWitness.unsafeToJson(instance);
+ *   const result = CIP36DeregistrationWitness.toJsonUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`CIP36DeregistrationWitness.unsafeToJson failed: ${error.message}`);
+ *   console.error(`CIP36DeregistrationWitness.toJsonUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeToJson = (
+export const toJsonUnsafe = (
   instance: CML.CIP36DeregistrationWitness,
 ): string => Effect.runSync(toJson(instance));
 
@@ -478,16 +495,16 @@ export const toJsValue = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = CIP36DeregistrationWitness.unsafeToJsValue(instance);
+ *   const result = CIP36DeregistrationWitness.toJsValueUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`CIP36DeregistrationWitness.unsafeToJsValue failed: ${error.message}`);
+ *   console.error(`CIP36DeregistrationWitness.toJsValueUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeToJsValue = (
+export const toJsValueUnsafe = (
   instance: CML.CIP36DeregistrationWitness,
 ): any => Effect.runSync(toJsValue(instance));
 
@@ -528,16 +545,16 @@ export const fromJson = Effect.fn(function* (json: string) {
  *
  * // Using try/catch for error handling
  * try {
- *   const result = CIP36DeregistrationWitness.unsafeFromJson( parameters );
+ *   const result = CIP36DeregistrationWitness.fromJsonUnsafe( parameters );
  *   console.log(result);
  * } catch (error) {
- *   console.error(`CIP36DeregistrationWitness.unsafeFromJson failed: ${error.message}`);
+ *   console.error(`CIP36DeregistrationWitness.fromJsonUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Constructors
+ * @category ConstructorsUnsafe
  */
-export const unsafeFromJson = (json: string) => Effect.runSync(fromJson(json));
+export const fromJsonUnsafe = (json: string) => Effect.runSync(fromJson(json));
 
 /**
  * Method stakeWitness of CIP36DeregistrationWitness
@@ -581,16 +598,16 @@ export const stakeWitness = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = CIP36DeregistrationWitness.unsafeStakeWitness(instance);
+ *   const result = CIP36DeregistrationWitness.stakeWitnessUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`CIP36DeregistrationWitness.unsafeStakeWitness failed: ${error.message}`);
+ *   console.error(`CIP36DeregistrationWitness.stakeWitnessUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeStakeWitness = (
+export const stakeWitnessUnsafe = (
   instance: CML.CIP36DeregistrationWitness,
 ): CML.Ed25519Signature => Effect.runSync(stakeWitness(instance));
 
@@ -631,14 +648,14 @@ export const _new = Effect.fn(function* (stakeWitness: CML.Ed25519Signature) {
  *
  * // Using try/catch for error handling
  * try {
- *   const result = CIP36DeregistrationWitness.unsafe_new( parameters );
+ *   const result = CIP36DeregistrationWitness._newUnsafe( parameters );
  *   console.log(result);
  * } catch (error) {
- *   console.error(`CIP36DeregistrationWitness.unsafe_new failed: ${error.message}`);
+ *   console.error(`CIP36DeregistrationWitness._newUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Constructors
+ * @category ConstructorsUnsafe
  */
-export const unsafe_new = (stakeWitness: CML.Ed25519Signature) =>
+export const _newUnsafe = (stakeWitness: CML.Ed25519Signature) =>
   Effect.runSync(_new(stakeWitness));

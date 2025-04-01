@@ -1,3 +1,6 @@
+/**
+ * @since 2.0.0
+ */
 // This file is auto-generated - do not modify
 // E
 export * from "./emip3_encrypt_with_password.js";

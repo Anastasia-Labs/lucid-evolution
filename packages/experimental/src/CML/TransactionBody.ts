@@ -1,8 +1,25 @@
+/**
+ * @since 2.0.0
+ */
 import { Data, Effect } from "effect";
 import * as CML from "@anastasia-labs/cardano-multiplatform-lib-nodejs";
 
+/**
+ * Type alias for the CML TransactionBody class
+ *
+ * @since 2.0.0
+ * @category Types
+ */
 export type TransactionBody = CML.TransactionBody;
 
+/**
+ * Error class for TransactionBody operations
+ *
+ * This error is thrown when operations on TransactionBody instances fail.
+ *
+ * @since 2.0.0
+ * @category Errors
+ */
 export class TransactionBodyError extends Data.TaggedError(
   "TransactionBodyError",
 )<{
@@ -49,16 +66,16 @@ export const free = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = TransactionBody.unsafeFree(instance);
+ *   const result = TransactionBody.freeUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`TransactionBody.unsafeFree failed: ${error.message}`);
+ *   console.error(`TransactionBody.freeUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeFree = (instance: CML.TransactionBody): void =>
+export const freeUnsafe = (instance: CML.TransactionBody): void =>
   Effect.runSync(free(instance));
 
 /**
@@ -103,16 +120,16 @@ export const toCborBytes = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = TransactionBody.unsafeToCborBytes(instance);
+ *   const result = TransactionBody.toCborBytesUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`TransactionBody.unsafeToCborBytes failed: ${error.message}`);
+ *   console.error(`TransactionBody.toCborBytesUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeToCborBytes = (instance: CML.TransactionBody): Uint8Array =>
+export const toCborBytesUnsafe = (instance: CML.TransactionBody): Uint8Array =>
   Effect.runSync(toCborBytes(instance));
 
 /**
@@ -157,16 +174,16 @@ export const toCanonicalCborBytes = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = TransactionBody.unsafeToCanonicalCborBytes(instance);
+ *   const result = TransactionBody.toCanonicalCborBytesUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`TransactionBody.unsafeToCanonicalCborBytes failed: ${error.message}`);
+ *   console.error(`TransactionBody.toCanonicalCborBytesUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeToCanonicalCborBytes = (
+export const toCanonicalCborBytesUnsafe = (
   instance: CML.TransactionBody,
 ): Uint8Array => Effect.runSync(toCanonicalCborBytes(instance));
 
@@ -207,16 +224,16 @@ export const fromCborBytes = Effect.fn(function* (cborBytes: Uint8Array) {
  *
  * // Using try/catch for error handling
  * try {
- *   const result = TransactionBody.unsafeFromCborBytes( parameters );
+ *   const result = TransactionBody.fromCborBytesUnsafe( parameters );
  *   console.log(result);
  * } catch (error) {
- *   console.error(`TransactionBody.unsafeFromCborBytes failed: ${error.message}`);
+ *   console.error(`TransactionBody.fromCborBytesUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Constructors
+ * @category ConstructorsUnsafe
  */
-export const unsafeFromCborBytes = (cborBytes: Uint8Array) =>
+export const fromCborBytesUnsafe = (cborBytes: Uint8Array) =>
   Effect.runSync(fromCborBytes(cborBytes));
 
 /**
@@ -261,16 +278,16 @@ export const toCborHex = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = TransactionBody.unsafeToCborHex(instance);
+ *   const result = TransactionBody.toCborHexUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`TransactionBody.unsafeToCborHex failed: ${error.message}`);
+ *   console.error(`TransactionBody.toCborHexUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeToCborHex = (instance: CML.TransactionBody): string =>
+export const toCborHexUnsafe = (instance: CML.TransactionBody): string =>
   Effect.runSync(toCborHex(instance));
 
 /**
@@ -315,16 +332,16 @@ export const toCanonicalCborHex = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = TransactionBody.unsafeToCanonicalCborHex(instance);
+ *   const result = TransactionBody.toCanonicalCborHexUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`TransactionBody.unsafeToCanonicalCborHex failed: ${error.message}`);
+ *   console.error(`TransactionBody.toCanonicalCborHexUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeToCanonicalCborHex = (
+export const toCanonicalCborHexUnsafe = (
   instance: CML.TransactionBody,
 ): string => Effect.runSync(toCanonicalCborHex(instance));
 
@@ -365,16 +382,16 @@ export const fromCborHex = Effect.fn(function* (cborBytes: string) {
  *
  * // Using try/catch for error handling
  * try {
- *   const result = TransactionBody.unsafeFromCborHex( parameters );
+ *   const result = TransactionBody.fromCborHexUnsafe( parameters );
  *   console.log(result);
  * } catch (error) {
- *   console.error(`TransactionBody.unsafeFromCborHex failed: ${error.message}`);
+ *   console.error(`TransactionBody.fromCborHexUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Constructors
+ * @category ConstructorsUnsafe
  */
-export const unsafeFromCborHex = (cborBytes: string) =>
+export const fromCborHexUnsafe = (cborBytes: string) =>
   Effect.runSync(fromCborHex(cborBytes));
 
 /**
@@ -419,16 +436,16 @@ export const toJson = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = TransactionBody.unsafeToJson(instance);
+ *   const result = TransactionBody.toJsonUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`TransactionBody.unsafeToJson failed: ${error.message}`);
+ *   console.error(`TransactionBody.toJsonUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeToJson = (instance: CML.TransactionBody): string =>
+export const toJsonUnsafe = (instance: CML.TransactionBody): string =>
   Effect.runSync(toJson(instance));
 
 /**
@@ -471,16 +488,16 @@ export const toJsValue = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = TransactionBody.unsafeToJsValue(instance);
+ *   const result = TransactionBody.toJsValueUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`TransactionBody.unsafeToJsValue failed: ${error.message}`);
+ *   console.error(`TransactionBody.toJsValueUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeToJsValue = (instance: CML.TransactionBody): any =>
+export const toJsValueUnsafe = (instance: CML.TransactionBody): any =>
   Effect.runSync(toJsValue(instance));
 
 /**
@@ -520,16 +537,16 @@ export const fromJson = Effect.fn(function* (json: string) {
  *
  * // Using try/catch for error handling
  * try {
- *   const result = TransactionBody.unsafeFromJson( parameters );
+ *   const result = TransactionBody.fromJsonUnsafe( parameters );
  *   console.log(result);
  * } catch (error) {
- *   console.error(`TransactionBody.unsafeFromJson failed: ${error.message}`);
+ *   console.error(`TransactionBody.fromJsonUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Constructors
+ * @category ConstructorsUnsafe
  */
-export const unsafeFromJson = (json: string) => Effect.runSync(fromJson(json));
+export const fromJsonUnsafe = (json: string) => Effect.runSync(fromJson(json));
 
 /**
  * Method inputs of TransactionBody
@@ -573,16 +590,16 @@ export const inputs = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = TransactionBody.unsafeInputs(instance);
+ *   const result = TransactionBody.inputsUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`TransactionBody.unsafeInputs failed: ${error.message}`);
+ *   console.error(`TransactionBody.inputsUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeInputs = (
+export const inputsUnsafe = (
   instance: CML.TransactionBody,
 ): CML.TransactionInputList => Effect.runSync(inputs(instance));
 
@@ -628,16 +645,16 @@ export const outputs = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = TransactionBody.unsafeOutputs(instance);
+ *   const result = TransactionBody.outputsUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`TransactionBody.unsafeOutputs failed: ${error.message}`);
+ *   console.error(`TransactionBody.outputsUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeOutputs = (
+export const outputsUnsafe = (
   instance: CML.TransactionBody,
 ): CML.TransactionOutputList => Effect.runSync(outputs(instance));
 
@@ -683,16 +700,16 @@ export const fee = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = TransactionBody.unsafeFee(instance);
+ *   const result = TransactionBody.feeUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`TransactionBody.unsafeFee failed: ${error.message}`);
+ *   console.error(`TransactionBody.feeUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeFee = (instance: CML.TransactionBody): bigint =>
+export const feeUnsafe = (instance: CML.TransactionBody): bigint =>
   Effect.runSync(fee(instance));
 
 /**
@@ -738,16 +755,16 @@ export const setTtl = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = TransactionBody.unsafeSetTtl(instance,  parameters );
+ *   const result = TransactionBody.setTtlUnsafe(instance,  parameters );
  *   console.log(result);
  * } catch (error) {
- *   console.error(`TransactionBody.unsafeSetTtl failed: ${error.message}`);
+ *   console.error(`TransactionBody.setTtlUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeSetTtl = (
+export const setTtlUnsafe = (
   instance: CML.TransactionBody,
   ttl: bigint,
 ): void => Effect.runSync(setTtl(instance, ttl));
@@ -794,16 +811,16 @@ export const ttl = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = TransactionBody.unsafeTtl(instance);
+ *   const result = TransactionBody.ttlUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`TransactionBody.unsafeTtl failed: ${error.message}`);
+ *   console.error(`TransactionBody.ttlUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeTtl = (instance: CML.TransactionBody): bigint | undefined =>
+export const ttlUnsafe = (instance: CML.TransactionBody): bigint | undefined =>
   Effect.runSync(ttl(instance));
 
 /**
@@ -849,16 +866,16 @@ export const setCerts = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = TransactionBody.unsafeSetCerts(instance,  parameters );
+ *   const result = TransactionBody.setCertsUnsafe(instance,  parameters );
  *   console.log(result);
  * } catch (error) {
- *   console.error(`TransactionBody.unsafeSetCerts failed: ${error.message}`);
+ *   console.error(`TransactionBody.setCertsUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeSetCerts = (
+export const setCertsUnsafe = (
   instance: CML.TransactionBody,
   certs: CML.CertificateList,
 ): void => Effect.runSync(setCerts(instance, certs));
@@ -905,16 +922,16 @@ export const certs = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = TransactionBody.unsafeCerts(instance);
+ *   const result = TransactionBody.certsUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`TransactionBody.unsafeCerts failed: ${error.message}`);
+ *   console.error(`TransactionBody.certsUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeCerts = (
+export const certsUnsafe = (
   instance: CML.TransactionBody,
 ): CML.CertificateList | undefined => Effect.runSync(certs(instance));
 
@@ -961,16 +978,16 @@ export const setWithdrawals = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = TransactionBody.unsafeSetWithdrawals(instance,  parameters );
+ *   const result = TransactionBody.setWithdrawalsUnsafe(instance,  parameters );
  *   console.log(result);
  * } catch (error) {
- *   console.error(`TransactionBody.unsafeSetWithdrawals failed: ${error.message}`);
+ *   console.error(`TransactionBody.setWithdrawalsUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeSetWithdrawals = (
+export const setWithdrawalsUnsafe = (
   instance: CML.TransactionBody,
   withdrawals: CML.MapRewardAccountToCoin,
 ): void => Effect.runSync(setWithdrawals(instance, withdrawals));
@@ -1020,16 +1037,16 @@ export const withdrawals = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = TransactionBody.unsafeWithdrawals(instance);
+ *   const result = TransactionBody.withdrawalsUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`TransactionBody.unsafeWithdrawals failed: ${error.message}`);
+ *   console.error(`TransactionBody.withdrawalsUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeWithdrawals = (
+export const withdrawalsUnsafe = (
   instance: CML.TransactionBody,
 ): CML.MapRewardAccountToCoin | undefined =>
   Effect.runSync(withdrawals(instance));
@@ -1077,16 +1094,16 @@ export const setAuxiliaryDataHash = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = TransactionBody.unsafeSetAuxiliaryDataHash(instance,  parameters );
+ *   const result = TransactionBody.setAuxiliaryDataHashUnsafe(instance,  parameters );
  *   console.log(result);
  * } catch (error) {
- *   console.error(`TransactionBody.unsafeSetAuxiliaryDataHash failed: ${error.message}`);
+ *   console.error(`TransactionBody.setAuxiliaryDataHashUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeSetAuxiliaryDataHash = (
+export const setAuxiliaryDataHashUnsafe = (
   instance: CML.TransactionBody,
   auxiliaryDataHash: CML.AuxiliaryDataHash,
 ): void => Effect.runSync(setAuxiliaryDataHash(instance, auxiliaryDataHash));
@@ -1133,16 +1150,16 @@ export const auxiliaryDataHash = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = TransactionBody.unsafeAuxiliaryDataHash(instance);
+ *   const result = TransactionBody.auxiliaryDataHashUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`TransactionBody.unsafeAuxiliaryDataHash failed: ${error.message}`);
+ *   console.error(`TransactionBody.auxiliaryDataHashUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeAuxiliaryDataHash = (
+export const auxiliaryDataHashUnsafe = (
   instance: CML.TransactionBody,
 ): CML.AuxiliaryDataHash | undefined =>
   Effect.runSync(auxiliaryDataHash(instance));
@@ -1190,16 +1207,16 @@ export const setValidityIntervalStart = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = TransactionBody.unsafeSetValidityIntervalStart(instance,  parameters );
+ *   const result = TransactionBody.setValidityIntervalStartUnsafe(instance,  parameters );
  *   console.log(result);
  * } catch (error) {
- *   console.error(`TransactionBody.unsafeSetValidityIntervalStart failed: ${error.message}`);
+ *   console.error(`TransactionBody.setValidityIntervalStartUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeSetValidityIntervalStart = (
+export const setValidityIntervalStartUnsafe = (
   instance: CML.TransactionBody,
   validityIntervalStart: bigint,
 ): void =>
@@ -1247,16 +1264,16 @@ export const validityIntervalStart = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = TransactionBody.unsafeValidityIntervalStart(instance);
+ *   const result = TransactionBody.validityIntervalStartUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`TransactionBody.unsafeValidityIntervalStart failed: ${error.message}`);
+ *   console.error(`TransactionBody.validityIntervalStartUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeValidityIntervalStart = (
+export const validityIntervalStartUnsafe = (
   instance: CML.TransactionBody,
 ): bigint | undefined => Effect.runSync(validityIntervalStart(instance));
 
@@ -1303,16 +1320,16 @@ export const setMint = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = TransactionBody.unsafeSetMint(instance,  parameters );
+ *   const result = TransactionBody.setMintUnsafe(instance,  parameters );
  *   console.log(result);
  * } catch (error) {
- *   console.error(`TransactionBody.unsafeSetMint failed: ${error.message}`);
+ *   console.error(`TransactionBody.setMintUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeSetMint = (
+export const setMintUnsafe = (
   instance: CML.TransactionBody,
   mint: CML.Mint,
 ): void => Effect.runSync(setMint(instance, mint));
@@ -1359,16 +1376,16 @@ export const mint = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = TransactionBody.unsafeMint(instance);
+ *   const result = TransactionBody.mintUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`TransactionBody.unsafeMint failed: ${error.message}`);
+ *   console.error(`TransactionBody.mintUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeMint = (
+export const mintUnsafe = (
   instance: CML.TransactionBody,
 ): CML.Mint | undefined => Effect.runSync(mint(instance));
 
@@ -1415,16 +1432,16 @@ export const setScriptDataHash = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = TransactionBody.unsafeSetScriptDataHash(instance,  parameters );
+ *   const result = TransactionBody.setScriptDataHashUnsafe(instance,  parameters );
  *   console.log(result);
  * } catch (error) {
- *   console.error(`TransactionBody.unsafeSetScriptDataHash failed: ${error.message}`);
+ *   console.error(`TransactionBody.setScriptDataHashUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeSetScriptDataHash = (
+export const setScriptDataHashUnsafe = (
   instance: CML.TransactionBody,
   scriptDataHash: CML.ScriptDataHash,
 ): void => Effect.runSync(setScriptDataHash(instance, scriptDataHash));
@@ -1471,16 +1488,16 @@ export const scriptDataHash = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = TransactionBody.unsafeScriptDataHash(instance);
+ *   const result = TransactionBody.scriptDataHashUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`TransactionBody.unsafeScriptDataHash failed: ${error.message}`);
+ *   console.error(`TransactionBody.scriptDataHashUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeScriptDataHash = (
+export const scriptDataHashUnsafe = (
   instance: CML.TransactionBody,
 ): CML.ScriptDataHash | undefined => Effect.runSync(scriptDataHash(instance));
 
@@ -1527,16 +1544,16 @@ export const setCollateralInputs = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = TransactionBody.unsafeSetCollateralInputs(instance,  parameters );
+ *   const result = TransactionBody.setCollateralInputsUnsafe(instance,  parameters );
  *   console.log(result);
  * } catch (error) {
- *   console.error(`TransactionBody.unsafeSetCollateralInputs failed: ${error.message}`);
+ *   console.error(`TransactionBody.setCollateralInputsUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeSetCollateralInputs = (
+export const setCollateralInputsUnsafe = (
   instance: CML.TransactionBody,
   collateralInputs: CML.TransactionInputList,
 ): void => Effect.runSync(setCollateralInputs(instance, collateralInputs));
@@ -1586,16 +1603,16 @@ export const collateralInputs = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = TransactionBody.unsafeCollateralInputs(instance);
+ *   const result = TransactionBody.collateralInputsUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`TransactionBody.unsafeCollateralInputs failed: ${error.message}`);
+ *   console.error(`TransactionBody.collateralInputsUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeCollateralInputs = (
+export const collateralInputsUnsafe = (
   instance: CML.TransactionBody,
 ): CML.TransactionInputList | undefined =>
   Effect.runSync(collateralInputs(instance));
@@ -1643,16 +1660,16 @@ export const setRequiredSigners = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = TransactionBody.unsafeSetRequiredSigners(instance,  parameters );
+ *   const result = TransactionBody.setRequiredSignersUnsafe(instance,  parameters );
  *   console.log(result);
  * } catch (error) {
- *   console.error(`TransactionBody.unsafeSetRequiredSigners failed: ${error.message}`);
+ *   console.error(`TransactionBody.setRequiredSignersUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeSetRequiredSigners = (
+export const setRequiredSignersUnsafe = (
   instance: CML.TransactionBody,
   requiredSigners: CML.Ed25519KeyHashList,
 ): void => Effect.runSync(setRequiredSigners(instance, requiredSigners));
@@ -1699,16 +1716,16 @@ export const requiredSigners = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = TransactionBody.unsafeRequiredSigners(instance);
+ *   const result = TransactionBody.requiredSignersUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`TransactionBody.unsafeRequiredSigners failed: ${error.message}`);
+ *   console.error(`TransactionBody.requiredSignersUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeRequiredSigners = (
+export const requiredSignersUnsafe = (
   instance: CML.TransactionBody,
 ): CML.Ed25519KeyHashList | undefined =>
   Effect.runSync(requiredSigners(instance));
@@ -1756,16 +1773,16 @@ export const setNetworkId = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = TransactionBody.unsafeSetNetworkId(instance,  parameters );
+ *   const result = TransactionBody.setNetworkIdUnsafe(instance,  parameters );
  *   console.log(result);
  * } catch (error) {
- *   console.error(`TransactionBody.unsafeSetNetworkId failed: ${error.message}`);
+ *   console.error(`TransactionBody.setNetworkIdUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeSetNetworkId = (
+export const setNetworkIdUnsafe = (
   instance: CML.TransactionBody,
   networkId: CML.NetworkId,
 ): void => Effect.runSync(setNetworkId(instance, networkId));
@@ -1812,16 +1829,16 @@ export const networkId = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = TransactionBody.unsafeNetworkId(instance);
+ *   const result = TransactionBody.networkIdUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`TransactionBody.unsafeNetworkId failed: ${error.message}`);
+ *   console.error(`TransactionBody.networkIdUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeNetworkId = (
+export const networkIdUnsafe = (
   instance: CML.TransactionBody,
 ): CML.NetworkId | undefined => Effect.runSync(networkId(instance));
 
@@ -1868,16 +1885,16 @@ export const setCollateralReturn = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = TransactionBody.unsafeSetCollateralReturn(instance,  parameters );
+ *   const result = TransactionBody.setCollateralReturnUnsafe(instance,  parameters );
  *   console.log(result);
  * } catch (error) {
- *   console.error(`TransactionBody.unsafeSetCollateralReturn failed: ${error.message}`);
+ *   console.error(`TransactionBody.setCollateralReturnUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeSetCollateralReturn = (
+export const setCollateralReturnUnsafe = (
   instance: CML.TransactionBody,
   collateralReturn: CML.TransactionOutput,
 ): void => Effect.runSync(setCollateralReturn(instance, collateralReturn));
@@ -1924,16 +1941,16 @@ export const collateralReturn = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = TransactionBody.unsafeCollateralReturn(instance);
+ *   const result = TransactionBody.collateralReturnUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`TransactionBody.unsafeCollateralReturn failed: ${error.message}`);
+ *   console.error(`TransactionBody.collateralReturnUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeCollateralReturn = (
+export const collateralReturnUnsafe = (
   instance: CML.TransactionBody,
 ): CML.TransactionOutput | undefined =>
   Effect.runSync(collateralReturn(instance));
@@ -1981,16 +1998,16 @@ export const setTotalCollateral = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = TransactionBody.unsafeSetTotalCollateral(instance,  parameters );
+ *   const result = TransactionBody.setTotalCollateralUnsafe(instance,  parameters );
  *   console.log(result);
  * } catch (error) {
- *   console.error(`TransactionBody.unsafeSetTotalCollateral failed: ${error.message}`);
+ *   console.error(`TransactionBody.setTotalCollateralUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeSetTotalCollateral = (
+export const setTotalCollateralUnsafe = (
   instance: CML.TransactionBody,
   totalCollateral: bigint,
 ): void => Effect.runSync(setTotalCollateral(instance, totalCollateral));
@@ -2037,16 +2054,16 @@ export const totalCollateral = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = TransactionBody.unsafeTotalCollateral(instance);
+ *   const result = TransactionBody.totalCollateralUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`TransactionBody.unsafeTotalCollateral failed: ${error.message}`);
+ *   console.error(`TransactionBody.totalCollateralUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeTotalCollateral = (
+export const totalCollateralUnsafe = (
   instance: CML.TransactionBody,
 ): bigint | undefined => Effect.runSync(totalCollateral(instance));
 
@@ -2093,16 +2110,16 @@ export const setReferenceInputs = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = TransactionBody.unsafeSetReferenceInputs(instance,  parameters );
+ *   const result = TransactionBody.setReferenceInputsUnsafe(instance,  parameters );
  *   console.log(result);
  * } catch (error) {
- *   console.error(`TransactionBody.unsafeSetReferenceInputs failed: ${error.message}`);
+ *   console.error(`TransactionBody.setReferenceInputsUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeSetReferenceInputs = (
+export const setReferenceInputsUnsafe = (
   instance: CML.TransactionBody,
   referenceInputs: CML.TransactionInputList,
 ): void => Effect.runSync(setReferenceInputs(instance, referenceInputs));
@@ -2152,16 +2169,16 @@ export const referenceInputs = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = TransactionBody.unsafeReferenceInputs(instance);
+ *   const result = TransactionBody.referenceInputsUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`TransactionBody.unsafeReferenceInputs failed: ${error.message}`);
+ *   console.error(`TransactionBody.referenceInputsUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeReferenceInputs = (
+export const referenceInputsUnsafe = (
   instance: CML.TransactionBody,
 ): CML.TransactionInputList | undefined =>
   Effect.runSync(referenceInputs(instance));
@@ -2209,16 +2226,16 @@ export const setVotingProcedures = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = TransactionBody.unsafeSetVotingProcedures(instance,  parameters );
+ *   const result = TransactionBody.setVotingProceduresUnsafe(instance,  parameters );
  *   console.log(result);
  * } catch (error) {
- *   console.error(`TransactionBody.unsafeSetVotingProcedures failed: ${error.message}`);
+ *   console.error(`TransactionBody.setVotingProceduresUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeSetVotingProcedures = (
+export const setVotingProceduresUnsafe = (
   instance: CML.TransactionBody,
   votingProcedures: CML.VotingProcedures,
 ): void => Effect.runSync(setVotingProcedures(instance, votingProcedures));
@@ -2265,16 +2282,16 @@ export const votingProcedures = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = TransactionBody.unsafeVotingProcedures(instance);
+ *   const result = TransactionBody.votingProceduresUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`TransactionBody.unsafeVotingProcedures failed: ${error.message}`);
+ *   console.error(`TransactionBody.votingProceduresUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeVotingProcedures = (
+export const votingProceduresUnsafe = (
   instance: CML.TransactionBody,
 ): CML.VotingProcedures | undefined =>
   Effect.runSync(votingProcedures(instance));
@@ -2322,16 +2339,16 @@ export const setProposalProcedures = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = TransactionBody.unsafeSetProposalProcedures(instance,  parameters );
+ *   const result = TransactionBody.setProposalProceduresUnsafe(instance,  parameters );
  *   console.log(result);
  * } catch (error) {
- *   console.error(`TransactionBody.unsafeSetProposalProcedures failed: ${error.message}`);
+ *   console.error(`TransactionBody.setProposalProceduresUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeSetProposalProcedures = (
+export const setProposalProceduresUnsafe = (
   instance: CML.TransactionBody,
   proposalProcedures: CML.ProposalProcedureList,
 ): void => Effect.runSync(setProposalProcedures(instance, proposalProcedures));
@@ -2381,16 +2398,16 @@ export const proposalProcedures = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = TransactionBody.unsafeProposalProcedures(instance);
+ *   const result = TransactionBody.proposalProceduresUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`TransactionBody.unsafeProposalProcedures failed: ${error.message}`);
+ *   console.error(`TransactionBody.proposalProceduresUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeProposalProcedures = (
+export const proposalProceduresUnsafe = (
   instance: CML.TransactionBody,
 ): CML.ProposalProcedureList | undefined =>
   Effect.runSync(proposalProcedures(instance));
@@ -2438,16 +2455,16 @@ export const setCurrentTreasuryValue = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = TransactionBody.unsafeSetCurrentTreasuryValue(instance,  parameters );
+ *   const result = TransactionBody.setCurrentTreasuryValueUnsafe(instance,  parameters );
  *   console.log(result);
  * } catch (error) {
- *   console.error(`TransactionBody.unsafeSetCurrentTreasuryValue failed: ${error.message}`);
+ *   console.error(`TransactionBody.setCurrentTreasuryValueUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeSetCurrentTreasuryValue = (
+export const setCurrentTreasuryValueUnsafe = (
   instance: CML.TransactionBody,
   currentTreasuryValue: bigint,
 ): void =>
@@ -2495,16 +2512,16 @@ export const currentTreasuryValue = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = TransactionBody.unsafeCurrentTreasuryValue(instance);
+ *   const result = TransactionBody.currentTreasuryValueUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`TransactionBody.unsafeCurrentTreasuryValue failed: ${error.message}`);
+ *   console.error(`TransactionBody.currentTreasuryValueUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeCurrentTreasuryValue = (
+export const currentTreasuryValueUnsafe = (
   instance: CML.TransactionBody,
 ): bigint | undefined => Effect.runSync(currentTreasuryValue(instance));
 
@@ -2551,16 +2568,16 @@ export const setDonation = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = TransactionBody.unsafeSetDonation(instance,  parameters );
+ *   const result = TransactionBody.setDonationUnsafe(instance,  parameters );
  *   console.log(result);
  * } catch (error) {
- *   console.error(`TransactionBody.unsafeSetDonation failed: ${error.message}`);
+ *   console.error(`TransactionBody.setDonationUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeSetDonation = (
+export const setDonationUnsafe = (
   instance: CML.TransactionBody,
   donation: bigint,
 ): void => Effect.runSync(setDonation(instance, donation));
@@ -2607,16 +2624,16 @@ export const donation = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = TransactionBody.unsafeDonation(instance);
+ *   const result = TransactionBody.donationUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`TransactionBody.unsafeDonation failed: ${error.message}`);
+ *   console.error(`TransactionBody.donationUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeDonation = (
+export const donationUnsafe = (
   instance: CML.TransactionBody,
 ): bigint | undefined => Effect.runSync(donation(instance));
 
@@ -2661,16 +2678,16 @@ export const _new = Effect.fn(function* (
  *
  * // Using try/catch for error handling
  * try {
- *   const result = TransactionBody.unsafe_new( parameters );
+ *   const result = TransactionBody._newUnsafe( parameters );
  *   console.log(result);
  * } catch (error) {
- *   console.error(`TransactionBody.unsafe_new failed: ${error.message}`);
+ *   console.error(`TransactionBody._newUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Constructors
+ * @category ConstructorsUnsafe
  */
-export const unsafe_new = (
+export const _newUnsafe = (
   inputs: CML.TransactionInputList,
   outputs: CML.TransactionOutputList,
   fee: bigint,

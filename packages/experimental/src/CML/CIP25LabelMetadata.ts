@@ -1,8 +1,25 @@
+/**
+ * @since 2.0.0
+ */
 import { Data, Effect } from "effect";
 import * as CML from "@anastasia-labs/cardano-multiplatform-lib-nodejs";
 
+/**
+ * Type alias for the CML CIP25LabelMetadata class
+ *
+ * @since 2.0.0
+ * @category Types
+ */
 export type CIP25LabelMetadata = CML.CIP25LabelMetadata;
 
+/**
+ * Error class for CIP25LabelMetadata operations
+ *
+ * This error is thrown when operations on CIP25LabelMetadata instances fail.
+ *
+ * @since 2.0.0
+ * @category Errors
+ */
 export class CIP25LabelMetadataError extends Data.TaggedError(
   "CIP25LabelMetadataError",
 )<{
@@ -51,16 +68,16 @@ export const free = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = CIP25LabelMetadata.unsafeFree(instance);
+ *   const result = CIP25LabelMetadata.freeUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`CIP25LabelMetadata.unsafeFree failed: ${error.message}`);
+ *   console.error(`CIP25LabelMetadata.freeUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeFree = (instance: CML.CIP25LabelMetadata): void =>
+export const freeUnsafe = (instance: CML.CIP25LabelMetadata): void =>
   Effect.runSync(free(instance));
 
 /**
@@ -105,16 +122,16 @@ export const toCborBytes = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = CIP25LabelMetadata.unsafeToCborBytes(instance);
+ *   const result = CIP25LabelMetadata.toCborBytesUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`CIP25LabelMetadata.unsafeToCborBytes failed: ${error.message}`);
+ *   console.error(`CIP25LabelMetadata.toCborBytesUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeToCborBytes = (
+export const toCborBytesUnsafe = (
   instance: CML.CIP25LabelMetadata,
 ): Uint8Array => Effect.runSync(toCborBytes(instance));
 
@@ -155,16 +172,16 @@ export const fromCborBytes = Effect.fn(function* (cborBytes: Uint8Array) {
  *
  * // Using try/catch for error handling
  * try {
- *   const result = CIP25LabelMetadata.unsafeFromCborBytes( parameters );
+ *   const result = CIP25LabelMetadata.fromCborBytesUnsafe( parameters );
  *   console.log(result);
  * } catch (error) {
- *   console.error(`CIP25LabelMetadata.unsafeFromCborBytes failed: ${error.message}`);
+ *   console.error(`CIP25LabelMetadata.fromCborBytesUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Constructors
+ * @category ConstructorsUnsafe
  */
-export const unsafeFromCborBytes = (cborBytes: Uint8Array) =>
+export const fromCborBytesUnsafe = (cborBytes: Uint8Array) =>
   Effect.runSync(fromCborBytes(cborBytes));
 
 /**
@@ -209,16 +226,16 @@ export const toCborHex = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = CIP25LabelMetadata.unsafeToCborHex(instance);
+ *   const result = CIP25LabelMetadata.toCborHexUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`CIP25LabelMetadata.unsafeToCborHex failed: ${error.message}`);
+ *   console.error(`CIP25LabelMetadata.toCborHexUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeToCborHex = (instance: CML.CIP25LabelMetadata): string =>
+export const toCborHexUnsafe = (instance: CML.CIP25LabelMetadata): string =>
   Effect.runSync(toCborHex(instance));
 
 /**
@@ -258,16 +275,16 @@ export const fromCborHex = Effect.fn(function* (cborBytes: string) {
  *
  * // Using try/catch for error handling
  * try {
- *   const result = CIP25LabelMetadata.unsafeFromCborHex( parameters );
+ *   const result = CIP25LabelMetadata.fromCborHexUnsafe( parameters );
  *   console.log(result);
  * } catch (error) {
- *   console.error(`CIP25LabelMetadata.unsafeFromCborHex failed: ${error.message}`);
+ *   console.error(`CIP25LabelMetadata.fromCborHexUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Constructors
+ * @category ConstructorsUnsafe
  */
-export const unsafeFromCborHex = (cborBytes: string) =>
+export const fromCborHexUnsafe = (cborBytes: string) =>
   Effect.runSync(fromCborHex(cborBytes));
 
 /**
@@ -312,16 +329,16 @@ export const toJson = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = CIP25LabelMetadata.unsafeToJson(instance);
+ *   const result = CIP25LabelMetadata.toJsonUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`CIP25LabelMetadata.unsafeToJson failed: ${error.message}`);
+ *   console.error(`CIP25LabelMetadata.toJsonUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeToJson = (instance: CML.CIP25LabelMetadata): string =>
+export const toJsonUnsafe = (instance: CML.CIP25LabelMetadata): string =>
   Effect.runSync(toJson(instance));
 
 /**
@@ -366,16 +383,16 @@ export const toJsValue = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = CIP25LabelMetadata.unsafeToJsValue(instance);
+ *   const result = CIP25LabelMetadata.toJsValueUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`CIP25LabelMetadata.unsafeToJsValue failed: ${error.message}`);
+ *   console.error(`CIP25LabelMetadata.toJsValueUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeToJsValue = (instance: CML.CIP25LabelMetadata): any =>
+export const toJsValueUnsafe = (instance: CML.CIP25LabelMetadata): any =>
   Effect.runSync(toJsValue(instance));
 
 /**
@@ -415,16 +432,16 @@ export const fromJson = Effect.fn(function* (json: string) {
  *
  * // Using try/catch for error handling
  * try {
- *   const result = CIP25LabelMetadata.unsafeFromJson( parameters );
+ *   const result = CIP25LabelMetadata.fromJsonUnsafe( parameters );
  *   console.log(result);
  * } catch (error) {
- *   console.error(`CIP25LabelMetadata.unsafeFromJson failed: ${error.message}`);
+ *   console.error(`CIP25LabelMetadata.fromJsonUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Constructors
+ * @category ConstructorsUnsafe
  */
-export const unsafeFromJson = (json: string) => Effect.runSync(fromJson(json));
+export const fromJsonUnsafe = (json: string) => Effect.runSync(fromJson(json));
 
 /**
  * Static method _new of CIP25LabelMetadata
@@ -463,16 +480,16 @@ export const _new = Effect.fn(function* (version: CML.CIP25Version) {
  *
  * // Using try/catch for error handling
  * try {
- *   const result = CIP25LabelMetadata.unsafe_new( parameters );
+ *   const result = CIP25LabelMetadata._newUnsafe( parameters );
  *   console.log(result);
  * } catch (error) {
- *   console.error(`CIP25LabelMetadata.unsafe_new failed: ${error.message}`);
+ *   console.error(`CIP25LabelMetadata._newUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Constructors
+ * @category ConstructorsUnsafe
  */
-export const unsafe_new = (version: CML.CIP25Version) =>
+export const _newUnsafe = (version: CML.CIP25Version) =>
   Effect.runSync(_new(version));
 
 /**
@@ -523,16 +540,16 @@ export const set = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = CIP25LabelMetadata.unsafeSet(instance,  parameters );
+ *   const result = CIP25LabelMetadata.setUnsafe(instance,  parameters );
  *   console.log(result);
  * } catch (error) {
- *   console.error(`CIP25LabelMetadata.unsafeSet failed: ${error.message}`);
+ *   console.error(`CIP25LabelMetadata.setUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeSet = (
+export const setUnsafe = (
   instance: CML.CIP25LabelMetadata,
   policyId: CML.ScriptHash,
   assetName: CML.AssetName,
@@ -587,16 +604,16 @@ export const get = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = CIP25LabelMetadata.unsafeGet(instance,  parameters );
+ *   const result = CIP25LabelMetadata.getUnsafe(instance,  parameters );
  *   console.log(result);
  * } catch (error) {
- *   console.error(`CIP25LabelMetadata.unsafeGet failed: ${error.message}`);
+ *   console.error(`CIP25LabelMetadata.getUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeGet = (
+export const getUnsafe = (
   instance: CML.CIP25LabelMetadata,
   policyId: CML.ScriptHash,
   assetName: CML.AssetName,
@@ -645,15 +662,15 @@ export const version = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = CIP25LabelMetadata.unsafeVersion(instance);
+ *   const result = CIP25LabelMetadata.versionUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`CIP25LabelMetadata.unsafeVersion failed: ${error.message}`);
+ *   console.error(`CIP25LabelMetadata.versionUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeVersion = (
+export const versionUnsafe = (
   instance: CML.CIP25LabelMetadata,
 ): CML.CIP25Version => Effect.runSync(version(instance));

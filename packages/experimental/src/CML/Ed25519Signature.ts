@@ -1,8 +1,25 @@
+/**
+ * @since 2.0.0
+ */
 import { Data, Effect } from "effect";
 import * as CML from "@anastasia-labs/cardano-multiplatform-lib-nodejs";
 
+/**
+ * Type alias for the CML Ed25519Signature class
+ *
+ * @since 2.0.0
+ * @category Types
+ */
 export type Ed25519Signature = CML.Ed25519Signature;
 
+/**
+ * Error class for Ed25519Signature operations
+ *
+ * This error is thrown when operations on Ed25519Signature instances fail.
+ *
+ * @since 2.0.0
+ * @category Errors
+ */
 export class Ed25519SignatureError extends Data.TaggedError(
   "Ed25519SignatureError",
 )<{
@@ -51,16 +68,16 @@ export const free = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = Ed25519Signature.unsafeFree(instance);
+ *   const result = Ed25519Signature.freeUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`Ed25519Signature.unsafeFree failed: ${error.message}`);
+ *   console.error(`Ed25519Signature.freeUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeFree = (instance: CML.Ed25519Signature): void =>
+export const freeUnsafe = (instance: CML.Ed25519Signature): void =>
   Effect.runSync(free(instance));
 
 /**
@@ -105,16 +122,16 @@ export const toBech32 = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = Ed25519Signature.unsafeToBech32(instance);
+ *   const result = Ed25519Signature.toBech32Unsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`Ed25519Signature.unsafeToBech32 failed: ${error.message}`);
+ *   console.error(`Ed25519Signature.toBech32Unsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeToBech32 = (instance: CML.Ed25519Signature): string =>
+export const toBech32Unsafe = (instance: CML.Ed25519Signature): string =>
   Effect.runSync(toBech32(instance));
 
 /**
@@ -154,16 +171,16 @@ export const fromBech32 = Effect.fn(function* (bech32Str: string) {
  *
  * // Using try/catch for error handling
  * try {
- *   const result = Ed25519Signature.unsafeFromBech32( parameters );
+ *   const result = Ed25519Signature.fromBech32Unsafe( parameters );
  *   console.log(result);
  * } catch (error) {
- *   console.error(`Ed25519Signature.unsafeFromBech32 failed: ${error.message}`);
+ *   console.error(`Ed25519Signature.fromBech32Unsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Constructors
+ * @category ConstructorsUnsafe
  */
-export const unsafeFromBech32 = (bech32Str: string) =>
+export const fromBech32Unsafe = (bech32Str: string) =>
   Effect.runSync(fromBech32(bech32Str));
 
 /**
@@ -208,16 +225,16 @@ export const toRawBytes = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = Ed25519Signature.unsafeToRawBytes(instance);
+ *   const result = Ed25519Signature.toRawBytesUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`Ed25519Signature.unsafeToRawBytes failed: ${error.message}`);
+ *   console.error(`Ed25519Signature.toRawBytesUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeToRawBytes = (instance: CML.Ed25519Signature): Uint8Array =>
+export const toRawBytesUnsafe = (instance: CML.Ed25519Signature): Uint8Array =>
   Effect.runSync(toRawBytes(instance));
 
 /**
@@ -257,16 +274,16 @@ export const fromRawBytes = Effect.fn(function* (bytes: Uint8Array) {
  *
  * // Using try/catch for error handling
  * try {
- *   const result = Ed25519Signature.unsafeFromRawBytes( parameters );
+ *   const result = Ed25519Signature.fromRawBytesUnsafe( parameters );
  *   console.log(result);
  * } catch (error) {
- *   console.error(`Ed25519Signature.unsafeFromRawBytes failed: ${error.message}`);
+ *   console.error(`Ed25519Signature.fromRawBytesUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Constructors
+ * @category ConstructorsUnsafe
  */
-export const unsafeFromRawBytes = (bytes: Uint8Array) =>
+export const fromRawBytesUnsafe = (bytes: Uint8Array) =>
   Effect.runSync(fromRawBytes(bytes));
 
 /**
@@ -311,16 +328,16 @@ export const toHex = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = Ed25519Signature.unsafeToHex(instance);
+ *   const result = Ed25519Signature.toHexUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`Ed25519Signature.unsafeToHex failed: ${error.message}`);
+ *   console.error(`Ed25519Signature.toHexUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeToHex = (instance: CML.Ed25519Signature): string =>
+export const toHexUnsafe = (instance: CML.Ed25519Signature): string =>
   Effect.runSync(toHex(instance));
 
 /**
@@ -360,13 +377,13 @@ export const fromHex = Effect.fn(function* (input: string) {
  *
  * // Using try/catch for error handling
  * try {
- *   const result = Ed25519Signature.unsafeFromHex( parameters );
+ *   const result = Ed25519Signature.fromHexUnsafe( parameters );
  *   console.log(result);
  * } catch (error) {
- *   console.error(`Ed25519Signature.unsafeFromHex failed: ${error.message}`);
+ *   console.error(`Ed25519Signature.fromHexUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Constructors
+ * @category ConstructorsUnsafe
  */
-export const unsafeFromHex = (input: string) => Effect.runSync(fromHex(input));
+export const fromHexUnsafe = (input: string) => Effect.runSync(fromHex(input));

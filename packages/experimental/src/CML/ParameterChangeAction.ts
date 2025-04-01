@@ -1,8 +1,25 @@
+/**
+ * @since 2.0.0
+ */
 import { Data, Effect } from "effect";
 import * as CML from "@anastasia-labs/cardano-multiplatform-lib-nodejs";
 
+/**
+ * Type alias for the CML ParameterChangeAction class
+ *
+ * @since 2.0.0
+ * @category Types
+ */
 export type ParameterChangeAction = CML.ParameterChangeAction;
 
+/**
+ * Error class for ParameterChangeAction operations
+ *
+ * This error is thrown when operations on ParameterChangeAction instances fail.
+ *
+ * @since 2.0.0
+ * @category Errors
+ */
 export class ParameterChangeActionError extends Data.TaggedError(
   "ParameterChangeActionError",
 )<{
@@ -51,16 +68,16 @@ export const free = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = ParameterChangeAction.unsafeFree(instance);
+ *   const result = ParameterChangeAction.freeUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`ParameterChangeAction.unsafeFree failed: ${error.message}`);
+ *   console.error(`ParameterChangeAction.freeUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeFree = (instance: CML.ParameterChangeAction): void =>
+export const freeUnsafe = (instance: CML.ParameterChangeAction): void =>
   Effect.runSync(free(instance));
 
 /**
@@ -105,16 +122,16 @@ export const toCborBytes = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = ParameterChangeAction.unsafeToCborBytes(instance);
+ *   const result = ParameterChangeAction.toCborBytesUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`ParameterChangeAction.unsafeToCborBytes failed: ${error.message}`);
+ *   console.error(`ParameterChangeAction.toCborBytesUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeToCborBytes = (
+export const toCborBytesUnsafe = (
   instance: CML.ParameterChangeAction,
 ): Uint8Array => Effect.runSync(toCborBytes(instance));
 
@@ -160,16 +177,16 @@ export const toCanonicalCborBytes = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = ParameterChangeAction.unsafeToCanonicalCborBytes(instance);
+ *   const result = ParameterChangeAction.toCanonicalCborBytesUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`ParameterChangeAction.unsafeToCanonicalCborBytes failed: ${error.message}`);
+ *   console.error(`ParameterChangeAction.toCanonicalCborBytesUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeToCanonicalCborBytes = (
+export const toCanonicalCborBytesUnsafe = (
   instance: CML.ParameterChangeAction,
 ): Uint8Array => Effect.runSync(toCanonicalCborBytes(instance));
 
@@ -210,16 +227,16 @@ export const fromCborBytes = Effect.fn(function* (cborBytes: Uint8Array) {
  *
  * // Using try/catch for error handling
  * try {
- *   const result = ParameterChangeAction.unsafeFromCborBytes( parameters );
+ *   const result = ParameterChangeAction.fromCborBytesUnsafe( parameters );
  *   console.log(result);
  * } catch (error) {
- *   console.error(`ParameterChangeAction.unsafeFromCborBytes failed: ${error.message}`);
+ *   console.error(`ParameterChangeAction.fromCborBytesUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Constructors
+ * @category ConstructorsUnsafe
  */
-export const unsafeFromCborBytes = (cborBytes: Uint8Array) =>
+export const fromCborBytesUnsafe = (cborBytes: Uint8Array) =>
   Effect.runSync(fromCborBytes(cborBytes));
 
 /**
@@ -264,16 +281,16 @@ export const toCborHex = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = ParameterChangeAction.unsafeToCborHex(instance);
+ *   const result = ParameterChangeAction.toCborHexUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`ParameterChangeAction.unsafeToCborHex failed: ${error.message}`);
+ *   console.error(`ParameterChangeAction.toCborHexUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeToCborHex = (instance: CML.ParameterChangeAction): string =>
+export const toCborHexUnsafe = (instance: CML.ParameterChangeAction): string =>
   Effect.runSync(toCborHex(instance));
 
 /**
@@ -318,16 +335,16 @@ export const toCanonicalCborHex = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = ParameterChangeAction.unsafeToCanonicalCborHex(instance);
+ *   const result = ParameterChangeAction.toCanonicalCborHexUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`ParameterChangeAction.unsafeToCanonicalCborHex failed: ${error.message}`);
+ *   console.error(`ParameterChangeAction.toCanonicalCborHexUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeToCanonicalCborHex = (
+export const toCanonicalCborHexUnsafe = (
   instance: CML.ParameterChangeAction,
 ): string => Effect.runSync(toCanonicalCborHex(instance));
 
@@ -368,16 +385,16 @@ export const fromCborHex = Effect.fn(function* (cborBytes: string) {
  *
  * // Using try/catch for error handling
  * try {
- *   const result = ParameterChangeAction.unsafeFromCborHex( parameters );
+ *   const result = ParameterChangeAction.fromCborHexUnsafe( parameters );
  *   console.log(result);
  * } catch (error) {
- *   console.error(`ParameterChangeAction.unsafeFromCborHex failed: ${error.message}`);
+ *   console.error(`ParameterChangeAction.fromCborHexUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Constructors
+ * @category ConstructorsUnsafe
  */
-export const unsafeFromCborHex = (cborBytes: string) =>
+export const fromCborHexUnsafe = (cborBytes: string) =>
   Effect.runSync(fromCborHex(cborBytes));
 
 /**
@@ -422,16 +439,16 @@ export const toJson = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = ParameterChangeAction.unsafeToJson(instance);
+ *   const result = ParameterChangeAction.toJsonUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`ParameterChangeAction.unsafeToJson failed: ${error.message}`);
+ *   console.error(`ParameterChangeAction.toJsonUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeToJson = (instance: CML.ParameterChangeAction): string =>
+export const toJsonUnsafe = (instance: CML.ParameterChangeAction): string =>
   Effect.runSync(toJson(instance));
 
 /**
@@ -476,16 +493,16 @@ export const toJsValue = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = ParameterChangeAction.unsafeToJsValue(instance);
+ *   const result = ParameterChangeAction.toJsValueUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`ParameterChangeAction.unsafeToJsValue failed: ${error.message}`);
+ *   console.error(`ParameterChangeAction.toJsValueUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeToJsValue = (instance: CML.ParameterChangeAction): any =>
+export const toJsValueUnsafe = (instance: CML.ParameterChangeAction): any =>
   Effect.runSync(toJsValue(instance));
 
 /**
@@ -525,16 +542,16 @@ export const fromJson = Effect.fn(function* (json: string) {
  *
  * // Using try/catch for error handling
  * try {
- *   const result = ParameterChangeAction.unsafeFromJson( parameters );
+ *   const result = ParameterChangeAction.fromJsonUnsafe( parameters );
  *   console.log(result);
  * } catch (error) {
- *   console.error(`ParameterChangeAction.unsafeFromJson failed: ${error.message}`);
+ *   console.error(`ParameterChangeAction.fromJsonUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Constructors
+ * @category ConstructorsUnsafe
  */
-export const unsafeFromJson = (json: string) => Effect.runSync(fromJson(json));
+export const fromJsonUnsafe = (json: string) => Effect.runSync(fromJson(json));
 
 /**
  * Method actionId of ParameterChangeAction
@@ -578,16 +595,16 @@ export const actionId = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = ParameterChangeAction.unsafeActionId(instance);
+ *   const result = ParameterChangeAction.actionIdUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`ParameterChangeAction.unsafeActionId failed: ${error.message}`);
+ *   console.error(`ParameterChangeAction.actionIdUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeActionId = (
+export const actionIdUnsafe = (
   instance: CML.ParameterChangeAction,
 ): CML.GovActionId | undefined => Effect.runSync(actionId(instance));
 
@@ -633,16 +650,16 @@ export const update = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = ParameterChangeAction.unsafeUpdate(instance);
+ *   const result = ParameterChangeAction.updateUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`ParameterChangeAction.unsafeUpdate failed: ${error.message}`);
+ *   console.error(`ParameterChangeAction.updateUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeUpdate = (
+export const updateUnsafe = (
   instance: CML.ParameterChangeAction,
 ): CML.ProtocolParamUpdate => Effect.runSync(update(instance));
 
@@ -688,16 +705,16 @@ export const policyHash = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = ParameterChangeAction.unsafePolicyHash(instance);
+ *   const result = ParameterChangeAction.policyHashUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`ParameterChangeAction.unsafePolicyHash failed: ${error.message}`);
+ *   console.error(`ParameterChangeAction.policyHashUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafePolicyHash = (
+export const policyHashUnsafe = (
   instance: CML.ParameterChangeAction,
 ): CML.ScriptHash | undefined => Effect.runSync(policyHash(instance));
 
@@ -742,16 +759,16 @@ export const _new = Effect.fn(function* (
  *
  * // Using try/catch for error handling
  * try {
- *   const result = ParameterChangeAction.unsafe_new( parameters );
+ *   const result = ParameterChangeAction._newUnsafe( parameters );
  *   console.log(result);
  * } catch (error) {
- *   console.error(`ParameterChangeAction.unsafe_new failed: ${error.message}`);
+ *   console.error(`ParameterChangeAction._newUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Constructors
+ * @category ConstructorsUnsafe
  */
-export const unsafe_new = (
+export const _newUnsafe = (
   actionId: CML.GovActionId | undefined,
   update: CML.ProtocolParamUpdate,
   policyHash: CML.ScriptHash,

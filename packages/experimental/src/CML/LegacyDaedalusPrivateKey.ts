@@ -1,8 +1,25 @@
+/**
+ * @since 2.0.0
+ */
 import { Data, Effect } from "effect";
 import * as CML from "@anastasia-labs/cardano-multiplatform-lib-nodejs";
 
+/**
+ * Type alias for the CML LegacyDaedalusPrivateKey class
+ *
+ * @since 2.0.0
+ * @category Types
+ */
 export type LegacyDaedalusPrivateKey = CML.LegacyDaedalusPrivateKey;
 
+/**
+ * Error class for LegacyDaedalusPrivateKey operations
+ *
+ * This error is thrown when operations on LegacyDaedalusPrivateKey instances fail.
+ *
+ * @since 2.0.0
+ * @category Errors
+ */
 export class LegacyDaedalusPrivateKeyError extends Data.TaggedError(
   "LegacyDaedalusPrivateKeyError",
 )<{
@@ -51,16 +68,16 @@ export const free = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = LegacyDaedalusPrivateKey.unsafeFree(instance);
+ *   const result = LegacyDaedalusPrivateKey.freeUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`LegacyDaedalusPrivateKey.unsafeFree failed: ${error.message}`);
+ *   console.error(`LegacyDaedalusPrivateKey.freeUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeFree = (instance: CML.LegacyDaedalusPrivateKey): void =>
+export const freeUnsafe = (instance: CML.LegacyDaedalusPrivateKey): void =>
   Effect.runSync(free(instance));
 
 /**
@@ -105,15 +122,15 @@ export const chaincode = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = LegacyDaedalusPrivateKey.unsafeChaincode(instance);
+ *   const result = LegacyDaedalusPrivateKey.chaincodeUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`LegacyDaedalusPrivateKey.unsafeChaincode failed: ${error.message}`);
+ *   console.error(`LegacyDaedalusPrivateKey.chaincodeUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeChaincode = (
+export const chaincodeUnsafe = (
   instance: CML.LegacyDaedalusPrivateKey,
 ): Uint8Array => Effect.runSync(chaincode(instance));

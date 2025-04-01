@@ -1,6 +1,17 @@
+/**
+ * @since 2.0.0
+ */
 import { Data, Effect } from "effect";
 import * as CML from "@anastasia-labs/cardano-multiplatform-lib-nodejs";
 
+/**
+ * Error class for encode_arbitrary_bytes_as_metadatum function
+ *
+ * This error is thrown when the encode_arbitrary_bytes_as_metadatum function fails.
+ *
+ * @since 2.0.0
+ * @category Errors
+ */
 export class EncodeArbitraryBytesAsMetadatumError extends Data.TaggedError(
   "EncodeArbitraryBytesAsMetadatumError",
 )<{
@@ -39,19 +50,19 @@ export const encodeArbitraryBytesAsMetadatum = Effect.fn(function* (
  * Unsafely calls encode_arbitrary_bytes_as_metadatum function without Effect wrapper
  *
  * @example
- * import { unsafeEncodeArbitraryBytesAsMetadatum } from "@lucid-evolution/experimental/CML/functions";
+ * import { encodeArbitraryBytesAsMetadatumUnsafe } from "@lucid-evolution/experimental/CML/functions";
  *
  * try {
- *   const result = unsafeEncodeArbitraryBytesAsMetadatum( appropriate value );
+ *   const result = encodeArbitraryBytesAsMetadatumUnsafe( appropriate value );
  *   console.log(result);
  * } catch (error) {
- *   console.error(`unsafeEncodeArbitraryBytesAsMetadatum failed: ${error.message}`);
+ *   console.error(`encodeArbitraryBytesAsMetadatumUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Functions
+ * @category FunctionsUnsafe
  */
-export const unsafeEncodeArbitraryBytesAsMetadatum = (
+export const encodeArbitraryBytesAsMetadatumUnsafe = (
   bytes: Uint8Array,
 ): CML.TransactionMetadatum =>
   Effect.runSync(encodeArbitraryBytesAsMetadatum(bytes));

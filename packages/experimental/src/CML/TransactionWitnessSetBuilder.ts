@@ -1,8 +1,25 @@
+/**
+ * @since 2.0.0
+ */
 import { Data, Effect } from "effect";
 import * as CML from "@anastasia-labs/cardano-multiplatform-lib-nodejs";
 
+/**
+ * Type alias for the CML TransactionWitnessSetBuilder class
+ *
+ * @since 2.0.0
+ * @category Types
+ */
 export type TransactionWitnessSetBuilder = CML.TransactionWitnessSetBuilder;
 
+/**
+ * Error class for TransactionWitnessSetBuilder operations
+ *
+ * This error is thrown when operations on TransactionWitnessSetBuilder instances fail.
+ *
+ * @since 2.0.0
+ * @category Errors
+ */
 export class TransactionWitnessSetBuilderError extends Data.TaggedError(
   "TransactionWitnessSetBuilderError",
 )<{
@@ -51,16 +68,16 @@ export const free = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = TransactionWitnessSetBuilder.unsafeFree(instance);
+ *   const result = TransactionWitnessSetBuilder.freeUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`TransactionWitnessSetBuilder.unsafeFree failed: ${error.message}`);
+ *   console.error(`TransactionWitnessSetBuilder.freeUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeFree = (instance: CML.TransactionWitnessSetBuilder): void =>
+export const freeUnsafe = (instance: CML.TransactionWitnessSetBuilder): void =>
   Effect.runSync(free(instance));
 
 /**
@@ -106,16 +123,16 @@ export const addVkey = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = TransactionWitnessSetBuilder.unsafeAddVkey(instance,  parameters );
+ *   const result = TransactionWitnessSetBuilder.addVkeyUnsafe(instance,  parameters );
  *   console.log(result);
  * } catch (error) {
- *   console.error(`TransactionWitnessSetBuilder.unsafeAddVkey failed: ${error.message}`);
+ *   console.error(`TransactionWitnessSetBuilder.addVkeyUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeAddVkey = (
+export const addVkeyUnsafe = (
   instance: CML.TransactionWitnessSetBuilder,
   vkeyWitness: CML.Vkeywitness,
 ): void => Effect.runSync(addVkey(instance, vkeyWitness));
@@ -163,16 +180,16 @@ export const addBootstrap = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = TransactionWitnessSetBuilder.unsafeAddBootstrap(instance,  parameters );
+ *   const result = TransactionWitnessSetBuilder.addBootstrapUnsafe(instance,  parameters );
  *   console.log(result);
  * } catch (error) {
- *   console.error(`TransactionWitnessSetBuilder.unsafeAddBootstrap failed: ${error.message}`);
+ *   console.error(`TransactionWitnessSetBuilder.addBootstrapUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeAddBootstrap = (
+export const addBootstrapUnsafe = (
   instance: CML.TransactionWitnessSetBuilder,
   bootstrap: CML.BootstrapWitness,
 ): void => Effect.runSync(addBootstrap(instance, bootstrap));
@@ -220,16 +237,16 @@ export const addScript = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = TransactionWitnessSetBuilder.unsafeAddScript(instance,  parameters );
+ *   const result = TransactionWitnessSetBuilder.addScriptUnsafe(instance,  parameters );
  *   console.log(result);
  * } catch (error) {
- *   console.error(`TransactionWitnessSetBuilder.unsafeAddScript failed: ${error.message}`);
+ *   console.error(`TransactionWitnessSetBuilder.addScriptUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeAddScript = (
+export const addScriptUnsafe = (
   instance: CML.TransactionWitnessSetBuilder,
   script: CML.Script,
 ): void => Effect.runSync(addScript(instance, script));
@@ -276,16 +293,16 @@ export const getNativeScript = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = TransactionWitnessSetBuilder.unsafeGetNativeScript(instance);
+ *   const result = TransactionWitnessSetBuilder.getNativeScriptUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`TransactionWitnessSetBuilder.unsafeGetNativeScript failed: ${error.message}`);
+ *   console.error(`TransactionWitnessSetBuilder.getNativeScriptUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeGetNativeScript = (
+export const getNativeScriptUnsafe = (
   instance: CML.TransactionWitnessSetBuilder,
 ): CML.NativeScriptList => Effect.runSync(getNativeScript(instance));
 
@@ -331,16 +348,16 @@ export const getPlutusV1Script = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = TransactionWitnessSetBuilder.unsafeGetPlutusV1Script(instance);
+ *   const result = TransactionWitnessSetBuilder.getPlutusV1ScriptUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`TransactionWitnessSetBuilder.unsafeGetPlutusV1Script failed: ${error.message}`);
+ *   console.error(`TransactionWitnessSetBuilder.getPlutusV1ScriptUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeGetPlutusV1Script = (
+export const getPlutusV1ScriptUnsafe = (
   instance: CML.TransactionWitnessSetBuilder,
 ): CML.PlutusV1ScriptList => Effect.runSync(getPlutusV1Script(instance));
 
@@ -386,16 +403,16 @@ export const getPlutusV2Script = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = TransactionWitnessSetBuilder.unsafeGetPlutusV2Script(instance);
+ *   const result = TransactionWitnessSetBuilder.getPlutusV2ScriptUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`TransactionWitnessSetBuilder.unsafeGetPlutusV2Script failed: ${error.message}`);
+ *   console.error(`TransactionWitnessSetBuilder.getPlutusV2ScriptUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeGetPlutusV2Script = (
+export const getPlutusV2ScriptUnsafe = (
   instance: CML.TransactionWitnessSetBuilder,
 ): CML.PlutusV2ScriptList => Effect.runSync(getPlutusV2Script(instance));
 
@@ -442,16 +459,16 @@ export const addPlutusDatum = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = TransactionWitnessSetBuilder.unsafeAddPlutusDatum(instance,  parameters );
+ *   const result = TransactionWitnessSetBuilder.addPlutusDatumUnsafe(instance,  parameters );
  *   console.log(result);
  * } catch (error) {
- *   console.error(`TransactionWitnessSetBuilder.unsafeAddPlutusDatum failed: ${error.message}`);
+ *   console.error(`TransactionWitnessSetBuilder.addPlutusDatumUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeAddPlutusDatum = (
+export const addPlutusDatumUnsafe = (
   instance: CML.TransactionWitnessSetBuilder,
   plutusDatum: CML.PlutusData,
 ): void => Effect.runSync(addPlutusDatum(instance, plutusDatum));
@@ -498,16 +515,16 @@ export const getPlutusDatum = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = TransactionWitnessSetBuilder.unsafeGetPlutusDatum(instance);
+ *   const result = TransactionWitnessSetBuilder.getPlutusDatumUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`TransactionWitnessSetBuilder.unsafeGetPlutusDatum failed: ${error.message}`);
+ *   console.error(`TransactionWitnessSetBuilder.getPlutusDatumUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeGetPlutusDatum = (
+export const getPlutusDatumUnsafe = (
   instance: CML.TransactionWitnessSetBuilder,
 ): CML.PlutusDataList => Effect.runSync(getPlutusDatum(instance));
 
@@ -554,16 +571,16 @@ export const addRedeemer = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = TransactionWitnessSetBuilder.unsafeAddRedeemer(instance,  parameters );
+ *   const result = TransactionWitnessSetBuilder.addRedeemerUnsafe(instance,  parameters );
  *   console.log(result);
  * } catch (error) {
- *   console.error(`TransactionWitnessSetBuilder.unsafeAddRedeemer failed: ${error.message}`);
+ *   console.error(`TransactionWitnessSetBuilder.addRedeemerUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeAddRedeemer = (
+export const addRedeemerUnsafe = (
   instance: CML.TransactionWitnessSetBuilder,
   redeemer: CML.LegacyRedeemer,
 ): void => Effect.runSync(addRedeemer(instance, redeemer));
@@ -610,16 +627,16 @@ export const getRedeemer = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = TransactionWitnessSetBuilder.unsafeGetRedeemer(instance);
+ *   const result = TransactionWitnessSetBuilder.getRedeemerUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`TransactionWitnessSetBuilder.unsafeGetRedeemer failed: ${error.message}`);
+ *   console.error(`TransactionWitnessSetBuilder.getRedeemerUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeGetRedeemer = (
+export const getRedeemerUnsafe = (
   instance: CML.TransactionWitnessSetBuilder,
 ): CML.LegacyRedeemerList => Effect.runSync(getRedeemer(instance));
 
@@ -666,16 +683,16 @@ export const addRequiredWits = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = TransactionWitnessSetBuilder.unsafeAddRequiredWits(instance,  parameters );
+ *   const result = TransactionWitnessSetBuilder.addRequiredWitsUnsafe(instance,  parameters );
  *   console.log(result);
  * } catch (error) {
- *   console.error(`TransactionWitnessSetBuilder.unsafeAddRequiredWits failed: ${error.message}`);
+ *   console.error(`TransactionWitnessSetBuilder.addRequiredWitsUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeAddRequiredWits = (
+export const addRequiredWitsUnsafe = (
   instance: CML.TransactionWitnessSetBuilder,
   requiredWits: CML.RequiredWitnessSet,
 ): void => Effect.runSync(addRequiredWits(instance, requiredWits));
@@ -717,16 +734,16 @@ export const _new = Effect.fn(function* () {
  *
  * // Using try/catch for error handling
  * try {
- *   const result = TransactionWitnessSetBuilder.unsafe_new();
+ *   const result = TransactionWitnessSetBuilder._newUnsafe();
  *   console.log(result);
  * } catch (error) {
- *   console.error(`TransactionWitnessSetBuilder.unsafe_new failed: ${error.message}`);
+ *   console.error(`TransactionWitnessSetBuilder._newUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Constructors
+ * @category ConstructorsUnsafe
  */
-export const unsafe_new = () => Effect.runSync(_new());
+export const _newUnsafe = () => Effect.runSync(_new());
 
 /**
  * Method addExisting of TransactionWitnessSetBuilder
@@ -771,16 +788,16 @@ export const addExisting = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = TransactionWitnessSetBuilder.unsafeAddExisting(instance,  parameters );
+ *   const result = TransactionWitnessSetBuilder.addExistingUnsafe(instance,  parameters );
  *   console.log(result);
  * } catch (error) {
- *   console.error(`TransactionWitnessSetBuilder.unsafeAddExisting failed: ${error.message}`);
+ *   console.error(`TransactionWitnessSetBuilder.addExistingUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeAddExisting = (
+export const addExistingUnsafe = (
   instance: CML.TransactionWitnessSetBuilder,
   witSet: CML.TransactionWitnessSet,
 ): void => Effect.runSync(addExisting(instance, witSet));
@@ -830,16 +847,16 @@ export const build = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = TransactionWitnessSetBuilder.unsafeBuild(instance);
+ *   const result = TransactionWitnessSetBuilder.buildUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`TransactionWitnessSetBuilder.unsafeBuild failed: ${error.message}`);
+ *   console.error(`TransactionWitnessSetBuilder.buildUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeBuild = (
+export const buildUnsafe = (
   instance: CML.TransactionWitnessSetBuilder,
 ): CML.TransactionWitnessSet => Effect.runSync(build(instance));
 
@@ -885,16 +902,16 @@ export const remainingWits = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = TransactionWitnessSetBuilder.unsafeRemainingWits(instance);
+ *   const result = TransactionWitnessSetBuilder.remainingWitsUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`TransactionWitnessSetBuilder.unsafeRemainingWits failed: ${error.message}`);
+ *   console.error(`TransactionWitnessSetBuilder.remainingWitsUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeRemainingWits = (
+export const remainingWitsUnsafe = (
   instance: CML.TransactionWitnessSetBuilder,
 ): CML.RequiredWitnessSet => Effect.runSync(remainingWits(instance));
 
@@ -943,16 +960,16 @@ export const tryBuild = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = TransactionWitnessSetBuilder.unsafeTryBuild(instance);
+ *   const result = TransactionWitnessSetBuilder.tryBuildUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`TransactionWitnessSetBuilder.unsafeTryBuild failed: ${error.message}`);
+ *   console.error(`TransactionWitnessSetBuilder.tryBuildUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeTryBuild = (
+export const tryBuildUnsafe = (
   instance: CML.TransactionWitnessSetBuilder,
 ): CML.TransactionWitnessSet => Effect.runSync(tryBuild(instance));
 
@@ -999,16 +1016,16 @@ export const mergeFakeWitness = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = TransactionWitnessSetBuilder.unsafeMergeFakeWitness(instance,  parameters );
+ *   const result = TransactionWitnessSetBuilder.mergeFakeWitnessUnsafe(instance,  parameters );
  *   console.log(result);
  * } catch (error) {
- *   console.error(`TransactionWitnessSetBuilder.unsafeMergeFakeWitness failed: ${error.message}`);
+ *   console.error(`TransactionWitnessSetBuilder.mergeFakeWitnessUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeMergeFakeWitness = (
+export const mergeFakeWitnessUnsafe = (
   instance: CML.TransactionWitnessSetBuilder,
   requiredWits: CML.RequiredWitnessSet,
 ): void => Effect.runSync(mergeFakeWitness(instance, requiredWits));

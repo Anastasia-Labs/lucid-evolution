@@ -1,8 +1,25 @@
+/**
+ * @since 2.0.0
+ */
 import { Data, Effect } from "effect";
 import * as CML from "@anastasia-labs/cardano-multiplatform-lib-nodejs";
 
+/**
+ * Type alias for the CML AssetNameList class
+ *
+ * @since 2.0.0
+ * @category Types
+ */
 export type AssetNameList = CML.AssetNameList;
 
+/**
+ * Error class for AssetNameList operations
+ *
+ * This error is thrown when operations on AssetNameList instances fail.
+ *
+ * @since 2.0.0
+ * @category Errors
+ */
 export class AssetNameListError extends Data.TaggedError("AssetNameListError")<{
   message?: string;
 }> {}
@@ -47,16 +64,16 @@ export const free = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = AssetNameList.unsafeFree(instance);
+ *   const result = AssetNameList.freeUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`AssetNameList.unsafeFree failed: ${error.message}`);
+ *   console.error(`AssetNameList.freeUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeFree = (instance: CML.AssetNameList): void =>
+export const freeUnsafe = (instance: CML.AssetNameList): void =>
   Effect.runSync(free(instance));
 
 /**
@@ -96,16 +113,16 @@ export const _new = Effect.fn(function* () {
  *
  * // Using try/catch for error handling
  * try {
- *   const result = AssetNameList.unsafe_new();
+ *   const result = AssetNameList._newUnsafe();
  *   console.log(result);
  * } catch (error) {
- *   console.error(`AssetNameList.unsafe_new failed: ${error.message}`);
+ *   console.error(`AssetNameList._newUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Constructors
+ * @category ConstructorsUnsafe
  */
-export const unsafe_new = () => Effect.runSync(_new());
+export const _newUnsafe = () => Effect.runSync(_new());
 
 /**
  * Method len of AssetNameList
@@ -147,16 +164,16 @@ export const len = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = AssetNameList.unsafeLen(instance);
+ *   const result = AssetNameList.lenUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`AssetNameList.unsafeLen failed: ${error.message}`);
+ *   console.error(`AssetNameList.lenUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeLen = (instance: CML.AssetNameList): number =>
+export const lenUnsafe = (instance: CML.AssetNameList): number =>
   Effect.runSync(len(instance));
 
 /**
@@ -202,16 +219,16 @@ export const get = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = AssetNameList.unsafeGet(instance,  parameters );
+ *   const result = AssetNameList.getUnsafe(instance,  parameters );
  *   console.log(result);
  * } catch (error) {
- *   console.error(`AssetNameList.unsafeGet failed: ${error.message}`);
+ *   console.error(`AssetNameList.getUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeGet = (
+export const getUnsafe = (
   instance: CML.AssetNameList,
   index: number,
 ): CML.AssetName => Effect.runSync(get(instance, index));
@@ -259,16 +276,16 @@ export const add = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = AssetNameList.unsafeAdd(instance,  parameters );
+ *   const result = AssetNameList.addUnsafe(instance,  parameters );
  *   console.log(result);
  * } catch (error) {
- *   console.error(`AssetNameList.unsafeAdd failed: ${error.message}`);
+ *   console.error(`AssetNameList.addUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeAdd = (
+export const addUnsafe = (
   instance: CML.AssetNameList,
   elem: CML.AssetName,
 ): void => Effect.runSync(add(instance, elem));

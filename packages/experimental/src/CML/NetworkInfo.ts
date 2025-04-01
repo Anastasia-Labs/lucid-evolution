@@ -1,8 +1,25 @@
+/**
+ * @since 2.0.0
+ */
 import { Data, Effect } from "effect";
 import * as CML from "@anastasia-labs/cardano-multiplatform-lib-nodejs";
 
+/**
+ * Type alias for the CML NetworkInfo class
+ *
+ * @since 2.0.0
+ * @category Types
+ */
 export type NetworkInfo = CML.NetworkInfo;
 
+/**
+ * Error class for NetworkInfo operations
+ *
+ * This error is thrown when operations on NetworkInfo instances fail.
+ *
+ * @since 2.0.0
+ * @category Errors
+ */
 export class NetworkInfoError extends Data.TaggedError("NetworkInfoError")<{
   message?: string;
 }> {}
@@ -47,16 +64,16 @@ export const free = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = NetworkInfo.unsafeFree(instance);
+ *   const result = NetworkInfo.freeUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`NetworkInfo.unsafeFree failed: ${error.message}`);
+ *   console.error(`NetworkInfo.freeUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeFree = (instance: CML.NetworkInfo): void =>
+export const freeUnsafe = (instance: CML.NetworkInfo): void =>
   Effect.runSync(free(instance));
 
 /**
@@ -99,16 +116,16 @@ export const _new = Effect.fn(function* (
  *
  * // Using try/catch for error handling
  * try {
- *   const result = NetworkInfo.unsafe_new( parameters );
+ *   const result = NetworkInfo._newUnsafe( parameters );
  *   console.log(result);
  * } catch (error) {
- *   console.error(`NetworkInfo.unsafe_new failed: ${error.message}`);
+ *   console.error(`NetworkInfo._newUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Constructors
+ * @category ConstructorsUnsafe
  */
-export const unsafe_new = (
+export const _newUnsafe = (
   networkId: number,
   protocolMagic: CML.ProtocolMagic,
 ) => Effect.runSync(_new(networkId, protocolMagic));
@@ -153,16 +170,16 @@ export const networkId = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = NetworkInfo.unsafeNetworkId(instance);
+ *   const result = NetworkInfo.networkIdUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`NetworkInfo.unsafeNetworkId failed: ${error.message}`);
+ *   console.error(`NetworkInfo.networkIdUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeNetworkId = (instance: CML.NetworkInfo): number =>
+export const networkIdUnsafe = (instance: CML.NetworkInfo): number =>
   Effect.runSync(networkId(instance));
 
 /**
@@ -207,16 +224,16 @@ export const protocolMagic = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = NetworkInfo.unsafeProtocolMagic(instance);
+ *   const result = NetworkInfo.protocolMagicUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`NetworkInfo.unsafeProtocolMagic failed: ${error.message}`);
+ *   console.error(`NetworkInfo.protocolMagicUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeProtocolMagic = (
+export const protocolMagicUnsafe = (
   instance: CML.NetworkInfo,
 ): CML.ProtocolMagic => Effect.runSync(protocolMagic(instance));
 
@@ -257,16 +274,16 @@ export const testnet = Effect.fn(function* () {
  *
  * // Using try/catch for error handling
  * try {
- *   const result = NetworkInfo.unsafeTestnet();
+ *   const result = NetworkInfo.testnetUnsafe();
  *   console.log(result);
  * } catch (error) {
- *   console.error(`NetworkInfo.unsafeTestnet failed: ${error.message}`);
+ *   console.error(`NetworkInfo.testnetUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Constructors
+ * @category ConstructorsUnsafe
  */
-export const unsafeTestnet = () => Effect.runSync(testnet());
+export const testnetUnsafe = () => Effect.runSync(testnet());
 
 /**
  * Static method mainnet of NetworkInfo
@@ -305,16 +322,16 @@ export const mainnet = Effect.fn(function* () {
  *
  * // Using try/catch for error handling
  * try {
- *   const result = NetworkInfo.unsafeMainnet();
+ *   const result = NetworkInfo.mainnetUnsafe();
  *   console.log(result);
  * } catch (error) {
- *   console.error(`NetworkInfo.unsafeMainnet failed: ${error.message}`);
+ *   console.error(`NetworkInfo.mainnetUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Constructors
+ * @category ConstructorsUnsafe
  */
-export const unsafeMainnet = () => Effect.runSync(mainnet());
+export const mainnetUnsafe = () => Effect.runSync(mainnet());
 
 /**
  * Static method preview of NetworkInfo
@@ -353,16 +370,16 @@ export const preview = Effect.fn(function* () {
  *
  * // Using try/catch for error handling
  * try {
- *   const result = NetworkInfo.unsafePreview();
+ *   const result = NetworkInfo.previewUnsafe();
  *   console.log(result);
  * } catch (error) {
- *   console.error(`NetworkInfo.unsafePreview failed: ${error.message}`);
+ *   console.error(`NetworkInfo.previewUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Constructors
+ * @category ConstructorsUnsafe
  */
-export const unsafePreview = () => Effect.runSync(preview());
+export const previewUnsafe = () => Effect.runSync(preview());
 
 /**
  * Static method preprod of NetworkInfo
@@ -401,16 +418,16 @@ export const preprod = Effect.fn(function* () {
  *
  * // Using try/catch for error handling
  * try {
- *   const result = NetworkInfo.unsafePreprod();
+ *   const result = NetworkInfo.preprodUnsafe();
  *   console.log(result);
  * } catch (error) {
- *   console.error(`NetworkInfo.unsafePreprod failed: ${error.message}`);
+ *   console.error(`NetworkInfo.preprodUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Constructors
+ * @category ConstructorsUnsafe
  */
-export const unsafePreprod = () => Effect.runSync(preprod());
+export const preprodUnsafe = () => Effect.runSync(preprod());
 
 /**
  * Static method sanchoTestnet of NetworkInfo
@@ -449,13 +466,13 @@ export const sanchoTestnet = Effect.fn(function* () {
  *
  * // Using try/catch for error handling
  * try {
- *   const result = NetworkInfo.unsafeSanchoTestnet();
+ *   const result = NetworkInfo.sanchoTestnetUnsafe();
  *   console.log(result);
  * } catch (error) {
- *   console.error(`NetworkInfo.unsafeSanchoTestnet failed: ${error.message}`);
+ *   console.error(`NetworkInfo.sanchoTestnetUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Constructors
+ * @category ConstructorsUnsafe
  */
-export const unsafeSanchoTestnet = () => Effect.runSync(sanchoTestnet());
+export const sanchoTestnetUnsafe = () => Effect.runSync(sanchoTestnet());

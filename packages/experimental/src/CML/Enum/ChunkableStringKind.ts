@@ -1,8 +1,40 @@
+/**
+ * @since 2.0.0
+ */
 import * as CML from "@anastasia-labs/cardano-multiplatform-lib-nodejs";
 
+/**
+ * Type alias for the CML ChunkableStringKind enum
+ *
+ * @since 2.0.0
+ * @category Types
+ */
 export type ChunkableStringKind = CML.ChunkableStringKind;
 
+/**
+ * Single variant of the ChunkableStringKind enum
+ *
+ * @example
+ * import { ChunkableStringKind } from "@lucid-evolution/experimental";
+ *
+ * const kind = ChunkableStringKind.Single;
+ *
+ * @since 2.0.0
+ * @category Variants
+ */
 export const Single = CML.ChunkableStringKind.Single;
+
+/**
+ * Chunked variant of the ChunkableStringKind enum
+ *
+ * @example
+ * import { ChunkableStringKind } from "@lucid-evolution/experimental";
+ *
+ * const kind = ChunkableStringKind.Chunked;
+ *
+ * @since 2.0.0
+ * @category Variants
+ */
 export const Chunked = CML.ChunkableStringKind.Chunked;
 
 /**

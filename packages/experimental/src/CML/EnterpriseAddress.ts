@@ -1,8 +1,25 @@
+/**
+ * @since 2.0.0
+ */
 import { Data, Effect } from "effect";
 import * as CML from "@anastasia-labs/cardano-multiplatform-lib-nodejs";
 
+/**
+ * Type alias for the CML EnterpriseAddress class
+ *
+ * @since 2.0.0
+ * @category Types
+ */
 export type EnterpriseAddress = CML.EnterpriseAddress;
 
+/**
+ * Error class for EnterpriseAddress operations
+ *
+ * This error is thrown when operations on EnterpriseAddress instances fail.
+ *
+ * @since 2.0.0
+ * @category Errors
+ */
 export class EnterpriseAddressError extends Data.TaggedError(
   "EnterpriseAddressError",
 )<{
@@ -51,16 +68,16 @@ export const free = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = EnterpriseAddress.unsafeFree(instance);
+ *   const result = EnterpriseAddress.freeUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`EnterpriseAddress.unsafeFree failed: ${error.message}`);
+ *   console.error(`EnterpriseAddress.freeUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeFree = (instance: CML.EnterpriseAddress): void =>
+export const freeUnsafe = (instance: CML.EnterpriseAddress): void =>
   Effect.runSync(free(instance));
 
 /**
@@ -103,16 +120,16 @@ export const _new = Effect.fn(function* (
  *
  * // Using try/catch for error handling
  * try {
- *   const result = EnterpriseAddress.unsafe_new( parameters );
+ *   const result = EnterpriseAddress._newUnsafe( parameters );
  *   console.log(result);
  * } catch (error) {
- *   console.error(`EnterpriseAddress.unsafe_new failed: ${error.message}`);
+ *   console.error(`EnterpriseAddress._newUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Constructors
+ * @category ConstructorsUnsafe
  */
-export const unsafe_new = (network: number, payment: CML.Credential) =>
+export const _newUnsafe = (network: number, payment: CML.Credential) =>
   Effect.runSync(_new(network, payment));
 
 /**
@@ -157,16 +174,16 @@ export const toAddress = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = EnterpriseAddress.unsafeToAddress(instance);
+ *   const result = EnterpriseAddress.toAddressUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`EnterpriseAddress.unsafeToAddress failed: ${error.message}`);
+ *   console.error(`EnterpriseAddress.toAddressUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeToAddress = (instance: CML.EnterpriseAddress): CML.Address =>
+export const toAddressUnsafe = (instance: CML.EnterpriseAddress): CML.Address =>
   Effect.runSync(toAddress(instance));
 
 /**
@@ -206,16 +223,16 @@ export const fromAddress = Effect.fn(function* (address: CML.Address) {
  *
  * // Using try/catch for error handling
  * try {
- *   const result = EnterpriseAddress.unsafeFromAddress( parameters );
+ *   const result = EnterpriseAddress.fromAddressUnsafe( parameters );
  *   console.log(result);
  * } catch (error) {
- *   console.error(`EnterpriseAddress.unsafeFromAddress failed: ${error.message}`);
+ *   console.error(`EnterpriseAddress.fromAddressUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Constructors
+ * @category ConstructorsUnsafe
  */
-export const unsafeFromAddress = (address: CML.Address) =>
+export const fromAddressUnsafe = (address: CML.Address) =>
   Effect.runSync(fromAddress(address));
 
 /**
@@ -260,16 +277,16 @@ export const networkId = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = EnterpriseAddress.unsafeNetworkId(instance);
+ *   const result = EnterpriseAddress.networkIdUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`EnterpriseAddress.unsafeNetworkId failed: ${error.message}`);
+ *   console.error(`EnterpriseAddress.networkIdUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeNetworkId = (instance: CML.EnterpriseAddress): number =>
+export const networkIdUnsafe = (instance: CML.EnterpriseAddress): number =>
   Effect.runSync(networkId(instance));
 
 /**
@@ -314,15 +331,15 @@ export const payment = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = EnterpriseAddress.unsafePayment(instance);
+ *   const result = EnterpriseAddress.paymentUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`EnterpriseAddress.unsafePayment failed: ${error.message}`);
+ *   console.error(`EnterpriseAddress.paymentUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafePayment = (
+export const paymentUnsafe = (
   instance: CML.EnterpriseAddress,
 ): CML.Credential => Effect.runSync(payment(instance));

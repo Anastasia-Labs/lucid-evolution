@@ -1,8 +1,25 @@
+/**
+ * @since 2.0.0
+ */
 import { Data, Effect } from "effect";
 import * as CML from "@anastasia-labs/cardano-multiplatform-lib-nodejs";
 
+/**
+ * Type alias for the CML VotingProcedure class
+ *
+ * @since 2.0.0
+ * @category Types
+ */
 export type VotingProcedure = CML.VotingProcedure;
 
+/**
+ * Error class for VotingProcedure operations
+ *
+ * This error is thrown when operations on VotingProcedure instances fail.
+ *
+ * @since 2.0.0
+ * @category Errors
+ */
 export class VotingProcedureError extends Data.TaggedError(
   "VotingProcedureError",
 )<{
@@ -49,16 +66,16 @@ export const free = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = VotingProcedure.unsafeFree(instance);
+ *   const result = VotingProcedure.freeUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`VotingProcedure.unsafeFree failed: ${error.message}`);
+ *   console.error(`VotingProcedure.freeUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeFree = (instance: CML.VotingProcedure): void =>
+export const freeUnsafe = (instance: CML.VotingProcedure): void =>
   Effect.runSync(free(instance));
 
 /**
@@ -103,16 +120,16 @@ export const toCborBytes = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = VotingProcedure.unsafeToCborBytes(instance);
+ *   const result = VotingProcedure.toCborBytesUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`VotingProcedure.unsafeToCborBytes failed: ${error.message}`);
+ *   console.error(`VotingProcedure.toCborBytesUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeToCborBytes = (instance: CML.VotingProcedure): Uint8Array =>
+export const toCborBytesUnsafe = (instance: CML.VotingProcedure): Uint8Array =>
   Effect.runSync(toCborBytes(instance));
 
 /**
@@ -157,16 +174,16 @@ export const toCanonicalCborBytes = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = VotingProcedure.unsafeToCanonicalCborBytes(instance);
+ *   const result = VotingProcedure.toCanonicalCborBytesUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`VotingProcedure.unsafeToCanonicalCborBytes failed: ${error.message}`);
+ *   console.error(`VotingProcedure.toCanonicalCborBytesUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeToCanonicalCborBytes = (
+export const toCanonicalCborBytesUnsafe = (
   instance: CML.VotingProcedure,
 ): Uint8Array => Effect.runSync(toCanonicalCborBytes(instance));
 
@@ -207,16 +224,16 @@ export const fromCborBytes = Effect.fn(function* (cborBytes: Uint8Array) {
  *
  * // Using try/catch for error handling
  * try {
- *   const result = VotingProcedure.unsafeFromCborBytes( parameters );
+ *   const result = VotingProcedure.fromCborBytesUnsafe( parameters );
  *   console.log(result);
  * } catch (error) {
- *   console.error(`VotingProcedure.unsafeFromCborBytes failed: ${error.message}`);
+ *   console.error(`VotingProcedure.fromCborBytesUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Constructors
+ * @category ConstructorsUnsafe
  */
-export const unsafeFromCborBytes = (cborBytes: Uint8Array) =>
+export const fromCborBytesUnsafe = (cborBytes: Uint8Array) =>
   Effect.runSync(fromCborBytes(cborBytes));
 
 /**
@@ -261,16 +278,16 @@ export const toCborHex = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = VotingProcedure.unsafeToCborHex(instance);
+ *   const result = VotingProcedure.toCborHexUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`VotingProcedure.unsafeToCborHex failed: ${error.message}`);
+ *   console.error(`VotingProcedure.toCborHexUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeToCborHex = (instance: CML.VotingProcedure): string =>
+export const toCborHexUnsafe = (instance: CML.VotingProcedure): string =>
   Effect.runSync(toCborHex(instance));
 
 /**
@@ -315,16 +332,16 @@ export const toCanonicalCborHex = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = VotingProcedure.unsafeToCanonicalCborHex(instance);
+ *   const result = VotingProcedure.toCanonicalCborHexUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`VotingProcedure.unsafeToCanonicalCborHex failed: ${error.message}`);
+ *   console.error(`VotingProcedure.toCanonicalCborHexUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeToCanonicalCborHex = (
+export const toCanonicalCborHexUnsafe = (
   instance: CML.VotingProcedure,
 ): string => Effect.runSync(toCanonicalCborHex(instance));
 
@@ -365,16 +382,16 @@ export const fromCborHex = Effect.fn(function* (cborBytes: string) {
  *
  * // Using try/catch for error handling
  * try {
- *   const result = VotingProcedure.unsafeFromCborHex( parameters );
+ *   const result = VotingProcedure.fromCborHexUnsafe( parameters );
  *   console.log(result);
  * } catch (error) {
- *   console.error(`VotingProcedure.unsafeFromCborHex failed: ${error.message}`);
+ *   console.error(`VotingProcedure.fromCborHexUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Constructors
+ * @category ConstructorsUnsafe
  */
-export const unsafeFromCborHex = (cborBytes: string) =>
+export const fromCborHexUnsafe = (cborBytes: string) =>
   Effect.runSync(fromCborHex(cborBytes));
 
 /**
@@ -419,16 +436,16 @@ export const toJson = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = VotingProcedure.unsafeToJson(instance);
+ *   const result = VotingProcedure.toJsonUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`VotingProcedure.unsafeToJson failed: ${error.message}`);
+ *   console.error(`VotingProcedure.toJsonUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeToJson = (instance: CML.VotingProcedure): string =>
+export const toJsonUnsafe = (instance: CML.VotingProcedure): string =>
   Effect.runSync(toJson(instance));
 
 /**
@@ -471,16 +488,16 @@ export const toJsValue = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = VotingProcedure.unsafeToJsValue(instance);
+ *   const result = VotingProcedure.toJsValueUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`VotingProcedure.unsafeToJsValue failed: ${error.message}`);
+ *   console.error(`VotingProcedure.toJsValueUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeToJsValue = (instance: CML.VotingProcedure): any =>
+export const toJsValueUnsafe = (instance: CML.VotingProcedure): any =>
   Effect.runSync(toJsValue(instance));
 
 /**
@@ -520,16 +537,16 @@ export const fromJson = Effect.fn(function* (json: string) {
  *
  * // Using try/catch for error handling
  * try {
- *   const result = VotingProcedure.unsafeFromJson( parameters );
+ *   const result = VotingProcedure.fromJsonUnsafe( parameters );
  *   console.log(result);
  * } catch (error) {
- *   console.error(`VotingProcedure.unsafeFromJson failed: ${error.message}`);
+ *   console.error(`VotingProcedure.fromJsonUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Constructors
+ * @category ConstructorsUnsafe
  */
-export const unsafeFromJson = (json: string) => Effect.runSync(fromJson(json));
+export const fromJsonUnsafe = (json: string) => Effect.runSync(fromJson(json));
 
 /**
  * Method vote of VotingProcedure
@@ -573,16 +590,16 @@ export const vote = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = VotingProcedure.unsafeVote(instance);
+ *   const result = VotingProcedure.voteUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`VotingProcedure.unsafeVote failed: ${error.message}`);
+ *   console.error(`VotingProcedure.voteUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeVote = (instance: CML.VotingProcedure): CML.Vote =>
+export const voteUnsafe = (instance: CML.VotingProcedure): CML.Vote =>
   Effect.runSync(vote(instance));
 
 /**
@@ -627,16 +644,16 @@ export const anchor = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = VotingProcedure.unsafeAnchor(instance);
+ *   const result = VotingProcedure.anchorUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`VotingProcedure.unsafeAnchor failed: ${error.message}`);
+ *   console.error(`VotingProcedure.anchorUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeAnchor = (
+export const anchorUnsafe = (
   instance: CML.VotingProcedure,
 ): CML.Anchor | undefined => Effect.runSync(anchor(instance));
 
@@ -677,14 +694,14 @@ export const _new = Effect.fn(function* (vote: CML.Vote, anchor: CML.Anchor) {
  *
  * // Using try/catch for error handling
  * try {
- *   const result = VotingProcedure.unsafe_new( parameters );
+ *   const result = VotingProcedure._newUnsafe( parameters );
  *   console.log(result);
  * } catch (error) {
- *   console.error(`VotingProcedure.unsafe_new failed: ${error.message}`);
+ *   console.error(`VotingProcedure._newUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Constructors
+ * @category ConstructorsUnsafe
  */
-export const unsafe_new = (vote: CML.Vote, anchor: CML.Anchor) =>
+export const _newUnsafe = (vote: CML.Vote, anchor: CML.Anchor) =>
   Effect.runSync(_new(vote, anchor));

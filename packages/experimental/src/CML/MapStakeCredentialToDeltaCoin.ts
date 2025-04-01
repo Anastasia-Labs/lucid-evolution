@@ -1,8 +1,25 @@
+/**
+ * @since 2.0.0
+ */
 import { Data, Effect } from "effect";
 import * as CML from "@anastasia-labs/cardano-multiplatform-lib-nodejs";
 
+/**
+ * Type alias for the CML MapStakeCredentialToDeltaCoin class
+ *
+ * @since 2.0.0
+ * @category Types
+ */
 export type MapStakeCredentialToDeltaCoin = CML.MapStakeCredentialToDeltaCoin;
 
+/**
+ * Error class for MapStakeCredentialToDeltaCoin operations
+ *
+ * This error is thrown when operations on MapStakeCredentialToDeltaCoin instances fail.
+ *
+ * @since 2.0.0
+ * @category Errors
+ */
 export class MapStakeCredentialToDeltaCoinError extends Data.TaggedError(
   "MapStakeCredentialToDeltaCoinError",
 )<{
@@ -51,16 +68,16 @@ export const free = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = MapStakeCredentialToDeltaCoin.unsafeFree(instance);
+ *   const result = MapStakeCredentialToDeltaCoin.freeUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`MapStakeCredentialToDeltaCoin.unsafeFree failed: ${error.message}`);
+ *   console.error(`MapStakeCredentialToDeltaCoin.freeUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeFree = (instance: CML.MapStakeCredentialToDeltaCoin): void =>
+export const freeUnsafe = (instance: CML.MapStakeCredentialToDeltaCoin): void =>
   Effect.runSync(free(instance));
 
 /**
@@ -100,16 +117,16 @@ export const _new = Effect.fn(function* () {
  *
  * // Using try/catch for error handling
  * try {
- *   const result = MapStakeCredentialToDeltaCoin.unsafe_new();
+ *   const result = MapStakeCredentialToDeltaCoin._newUnsafe();
  *   console.log(result);
  * } catch (error) {
- *   console.error(`MapStakeCredentialToDeltaCoin.unsafe_new failed: ${error.message}`);
+ *   console.error(`MapStakeCredentialToDeltaCoin._newUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Constructors
+ * @category ConstructorsUnsafe
  */
-export const unsafe_new = () => Effect.runSync(_new());
+export const _newUnsafe = () => Effect.runSync(_new());
 
 /**
  * Method len of MapStakeCredentialToDeltaCoin
@@ -153,16 +170,16 @@ export const len = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = MapStakeCredentialToDeltaCoin.unsafeLen(instance);
+ *   const result = MapStakeCredentialToDeltaCoin.lenUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`MapStakeCredentialToDeltaCoin.unsafeLen failed: ${error.message}`);
+ *   console.error(`MapStakeCredentialToDeltaCoin.lenUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeLen = (
+export const lenUnsafe = (
   instance: CML.MapStakeCredentialToDeltaCoin,
 ): number => Effect.runSync(len(instance));
 
@@ -210,16 +227,16 @@ export const insert = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = MapStakeCredentialToDeltaCoin.unsafeInsert(instance,  parameters );
+ *   const result = MapStakeCredentialToDeltaCoin.insertUnsafe(instance,  parameters );
  *   console.log(result);
  * } catch (error) {
- *   console.error(`MapStakeCredentialToDeltaCoin.unsafeInsert failed: ${error.message}`);
+ *   console.error(`MapStakeCredentialToDeltaCoin.insertUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeInsert = (
+export const insertUnsafe = (
   instance: CML.MapStakeCredentialToDeltaCoin,
   key: CML.Credential,
   value: CML.Int,
@@ -268,16 +285,16 @@ export const get = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = MapStakeCredentialToDeltaCoin.unsafeGet(instance,  parameters );
+ *   const result = MapStakeCredentialToDeltaCoin.getUnsafe(instance,  parameters );
  *   console.log(result);
  * } catch (error) {
- *   console.error(`MapStakeCredentialToDeltaCoin.unsafeGet failed: ${error.message}`);
+ *   console.error(`MapStakeCredentialToDeltaCoin.getUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeGet = (
+export const getUnsafe = (
   instance: CML.MapStakeCredentialToDeltaCoin,
   key: CML.Credential,
 ): CML.Int | undefined => Effect.runSync(get(instance, key));
@@ -327,15 +344,15 @@ export const keys = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = MapStakeCredentialToDeltaCoin.unsafeKeys(instance);
+ *   const result = MapStakeCredentialToDeltaCoin.keysUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`MapStakeCredentialToDeltaCoin.unsafeKeys failed: ${error.message}`);
+ *   console.error(`MapStakeCredentialToDeltaCoin.keysUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeKeys = (
+export const keysUnsafe = (
   instance: CML.MapStakeCredentialToDeltaCoin,
 ): CML.StakeCredentialList => Effect.runSync(keys(instance));

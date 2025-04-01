@@ -1,8 +1,25 @@
+/**
+ * @since 2.0.0
+ */
 import { Data, Effect } from "effect";
 import * as CML from "@anastasia-labs/cardano-multiplatform-lib-nodejs";
 
+/**
+ * Type alias for the CML SingleHostAddr class
+ *
+ * @since 2.0.0
+ * @category Types
+ */
 export type SingleHostAddr = CML.SingleHostAddr;
 
+/**
+ * Error class for SingleHostAddr operations
+ *
+ * This error is thrown when operations on SingleHostAddr instances fail.
+ *
+ * @since 2.0.0
+ * @category Errors
+ */
 export class SingleHostAddrError extends Data.TaggedError(
   "SingleHostAddrError",
 )<{
@@ -49,16 +66,16 @@ export const free = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = SingleHostAddr.unsafeFree(instance);
+ *   const result = SingleHostAddr.freeUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`SingleHostAddr.unsafeFree failed: ${error.message}`);
+ *   console.error(`SingleHostAddr.freeUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeFree = (instance: CML.SingleHostAddr): void =>
+export const freeUnsafe = (instance: CML.SingleHostAddr): void =>
   Effect.runSync(free(instance));
 
 /**
@@ -103,16 +120,16 @@ export const toCborBytes = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = SingleHostAddr.unsafeToCborBytes(instance);
+ *   const result = SingleHostAddr.toCborBytesUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`SingleHostAddr.unsafeToCborBytes failed: ${error.message}`);
+ *   console.error(`SingleHostAddr.toCborBytesUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeToCborBytes = (instance: CML.SingleHostAddr): Uint8Array =>
+export const toCborBytesUnsafe = (instance: CML.SingleHostAddr): Uint8Array =>
   Effect.runSync(toCborBytes(instance));
 
 /**
@@ -157,16 +174,16 @@ export const toCanonicalCborBytes = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = SingleHostAddr.unsafeToCanonicalCborBytes(instance);
+ *   const result = SingleHostAddr.toCanonicalCborBytesUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`SingleHostAddr.unsafeToCanonicalCborBytes failed: ${error.message}`);
+ *   console.error(`SingleHostAddr.toCanonicalCborBytesUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeToCanonicalCborBytes = (
+export const toCanonicalCborBytesUnsafe = (
   instance: CML.SingleHostAddr,
 ): Uint8Array => Effect.runSync(toCanonicalCborBytes(instance));
 
@@ -207,16 +224,16 @@ export const fromCborBytes = Effect.fn(function* (cborBytes: Uint8Array) {
  *
  * // Using try/catch for error handling
  * try {
- *   const result = SingleHostAddr.unsafeFromCborBytes( parameters );
+ *   const result = SingleHostAddr.fromCborBytesUnsafe( parameters );
  *   console.log(result);
  * } catch (error) {
- *   console.error(`SingleHostAddr.unsafeFromCborBytes failed: ${error.message}`);
+ *   console.error(`SingleHostAddr.fromCborBytesUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Constructors
+ * @category ConstructorsUnsafe
  */
-export const unsafeFromCborBytes = (cborBytes: Uint8Array) =>
+export const fromCborBytesUnsafe = (cborBytes: Uint8Array) =>
   Effect.runSync(fromCborBytes(cborBytes));
 
 /**
@@ -259,16 +276,16 @@ export const toCborHex = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = SingleHostAddr.unsafeToCborHex(instance);
+ *   const result = SingleHostAddr.toCborHexUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`SingleHostAddr.unsafeToCborHex failed: ${error.message}`);
+ *   console.error(`SingleHostAddr.toCborHexUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeToCborHex = (instance: CML.SingleHostAddr): string =>
+export const toCborHexUnsafe = (instance: CML.SingleHostAddr): string =>
   Effect.runSync(toCborHex(instance));
 
 /**
@@ -311,16 +328,16 @@ export const toCanonicalCborHex = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = SingleHostAddr.unsafeToCanonicalCborHex(instance);
+ *   const result = SingleHostAddr.toCanonicalCborHexUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`SingleHostAddr.unsafeToCanonicalCborHex failed: ${error.message}`);
+ *   console.error(`SingleHostAddr.toCanonicalCborHexUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeToCanonicalCborHex = (
+export const toCanonicalCborHexUnsafe = (
   instance: CML.SingleHostAddr,
 ): string => Effect.runSync(toCanonicalCborHex(instance));
 
@@ -361,16 +378,16 @@ export const fromCborHex = Effect.fn(function* (cborBytes: string) {
  *
  * // Using try/catch for error handling
  * try {
- *   const result = SingleHostAddr.unsafeFromCborHex( parameters );
+ *   const result = SingleHostAddr.fromCborHexUnsafe( parameters );
  *   console.log(result);
  * } catch (error) {
- *   console.error(`SingleHostAddr.unsafeFromCborHex failed: ${error.message}`);
+ *   console.error(`SingleHostAddr.fromCborHexUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Constructors
+ * @category ConstructorsUnsafe
  */
-export const unsafeFromCborHex = (cborBytes: string) =>
+export const fromCborHexUnsafe = (cborBytes: string) =>
   Effect.runSync(fromCborHex(cborBytes));
 
 /**
@@ -413,16 +430,16 @@ export const toJson = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = SingleHostAddr.unsafeToJson(instance);
+ *   const result = SingleHostAddr.toJsonUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`SingleHostAddr.unsafeToJson failed: ${error.message}`);
+ *   console.error(`SingleHostAddr.toJsonUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeToJson = (instance: CML.SingleHostAddr): string =>
+export const toJsonUnsafe = (instance: CML.SingleHostAddr): string =>
   Effect.runSync(toJson(instance));
 
 /**
@@ -465,16 +482,16 @@ export const toJsValue = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = SingleHostAddr.unsafeToJsValue(instance);
+ *   const result = SingleHostAddr.toJsValueUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`SingleHostAddr.unsafeToJsValue failed: ${error.message}`);
+ *   console.error(`SingleHostAddr.toJsValueUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeToJsValue = (instance: CML.SingleHostAddr): any =>
+export const toJsValueUnsafe = (instance: CML.SingleHostAddr): any =>
   Effect.runSync(toJsValue(instance));
 
 /**
@@ -514,16 +531,16 @@ export const fromJson = Effect.fn(function* (json: string) {
  *
  * // Using try/catch for error handling
  * try {
- *   const result = SingleHostAddr.unsafeFromJson( parameters );
+ *   const result = SingleHostAddr.fromJsonUnsafe( parameters );
  *   console.log(result);
  * } catch (error) {
- *   console.error(`SingleHostAddr.unsafeFromJson failed: ${error.message}`);
+ *   console.error(`SingleHostAddr.fromJsonUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Constructors
+ * @category ConstructorsUnsafe
  */
-export const unsafeFromJson = (json: string) => Effect.runSync(fromJson(json));
+export const fromJsonUnsafe = (json: string) => Effect.runSync(fromJson(json));
 
 /**
  * Method port of SingleHostAddr
@@ -567,16 +584,16 @@ export const port = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = SingleHostAddr.unsafePort(instance);
+ *   const result = SingleHostAddr.portUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`SingleHostAddr.unsafePort failed: ${error.message}`);
+ *   console.error(`SingleHostAddr.portUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafePort = (instance: CML.SingleHostAddr): number | undefined =>
+export const portUnsafe = (instance: CML.SingleHostAddr): number | undefined =>
   Effect.runSync(port(instance));
 
 /**
@@ -621,16 +638,16 @@ export const ipv4 = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = SingleHostAddr.unsafeIpv4(instance);
+ *   const result = SingleHostAddr.ipv4Unsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`SingleHostAddr.unsafeIpv4 failed: ${error.message}`);
+ *   console.error(`SingleHostAddr.ipv4Unsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeIpv4 = (
+export const ipv4Unsafe = (
   instance: CML.SingleHostAddr,
 ): CML.Ipv4 | undefined => Effect.runSync(ipv4(instance));
 
@@ -676,16 +693,16 @@ export const ipv6 = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = SingleHostAddr.unsafeIpv6(instance);
+ *   const result = SingleHostAddr.ipv6Unsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`SingleHostAddr.unsafeIpv6 failed: ${error.message}`);
+ *   console.error(`SingleHostAddr.ipv6Unsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeIpv6 = (
+export const ipv6Unsafe = (
   instance: CML.SingleHostAddr,
 ): CML.Ipv6 | undefined => Effect.runSync(ipv6(instance));
 
@@ -730,14 +747,14 @@ export const _new = Effect.fn(function* (
  *
  * // Using try/catch for error handling
  * try {
- *   const result = SingleHostAddr.unsafe_new( parameters );
+ *   const result = SingleHostAddr._newUnsafe( parameters );
  *   console.log(result);
  * } catch (error) {
- *   console.error(`SingleHostAddr.unsafe_new failed: ${error.message}`);
+ *   console.error(`SingleHostAddr._newUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Constructors
+ * @category ConstructorsUnsafe
  */
-export const unsafe_new = (port: number, ipv4: CML.Ipv4, ipv6: CML.Ipv6) =>
+export const _newUnsafe = (port: number, ipv4: CML.Ipv4, ipv6: CML.Ipv6) =>
   Effect.runSync(_new(port, ipv4, ipv6));

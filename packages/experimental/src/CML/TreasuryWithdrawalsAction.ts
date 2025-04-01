@@ -1,8 +1,25 @@
+/**
+ * @since 2.0.0
+ */
 import { Data, Effect } from "effect";
 import * as CML from "@anastasia-labs/cardano-multiplatform-lib-nodejs";
 
+/**
+ * Type alias for the CML TreasuryWithdrawalsAction class
+ *
+ * @since 2.0.0
+ * @category Types
+ */
 export type TreasuryWithdrawalsAction = CML.TreasuryWithdrawalsAction;
 
+/**
+ * Error class for TreasuryWithdrawalsAction operations
+ *
+ * This error is thrown when operations on TreasuryWithdrawalsAction instances fail.
+ *
+ * @since 2.0.0
+ * @category Errors
+ */
 export class TreasuryWithdrawalsActionError extends Data.TaggedError(
   "TreasuryWithdrawalsActionError",
 )<{
@@ -51,16 +68,16 @@ export const free = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = TreasuryWithdrawalsAction.unsafeFree(instance);
+ *   const result = TreasuryWithdrawalsAction.freeUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`TreasuryWithdrawalsAction.unsafeFree failed: ${error.message}`);
+ *   console.error(`TreasuryWithdrawalsAction.freeUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeFree = (instance: CML.TreasuryWithdrawalsAction): void =>
+export const freeUnsafe = (instance: CML.TreasuryWithdrawalsAction): void =>
   Effect.runSync(free(instance));
 
 /**
@@ -105,16 +122,16 @@ export const toCborBytes = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = TreasuryWithdrawalsAction.unsafeToCborBytes(instance);
+ *   const result = TreasuryWithdrawalsAction.toCborBytesUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`TreasuryWithdrawalsAction.unsafeToCborBytes failed: ${error.message}`);
+ *   console.error(`TreasuryWithdrawalsAction.toCborBytesUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeToCborBytes = (
+export const toCborBytesUnsafe = (
   instance: CML.TreasuryWithdrawalsAction,
 ): Uint8Array => Effect.runSync(toCborBytes(instance));
 
@@ -160,16 +177,16 @@ export const toCanonicalCborBytes = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = TreasuryWithdrawalsAction.unsafeToCanonicalCborBytes(instance);
+ *   const result = TreasuryWithdrawalsAction.toCanonicalCborBytesUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`TreasuryWithdrawalsAction.unsafeToCanonicalCborBytes failed: ${error.message}`);
+ *   console.error(`TreasuryWithdrawalsAction.toCanonicalCborBytesUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeToCanonicalCborBytes = (
+export const toCanonicalCborBytesUnsafe = (
   instance: CML.TreasuryWithdrawalsAction,
 ): Uint8Array => Effect.runSync(toCanonicalCborBytes(instance));
 
@@ -210,16 +227,16 @@ export const fromCborBytes = Effect.fn(function* (cborBytes: Uint8Array) {
  *
  * // Using try/catch for error handling
  * try {
- *   const result = TreasuryWithdrawalsAction.unsafeFromCborBytes( parameters );
+ *   const result = TreasuryWithdrawalsAction.fromCborBytesUnsafe( parameters );
  *   console.log(result);
  * } catch (error) {
- *   console.error(`TreasuryWithdrawalsAction.unsafeFromCborBytes failed: ${error.message}`);
+ *   console.error(`TreasuryWithdrawalsAction.fromCborBytesUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Constructors
+ * @category ConstructorsUnsafe
  */
-export const unsafeFromCborBytes = (cborBytes: Uint8Array) =>
+export const fromCborBytesUnsafe = (cborBytes: Uint8Array) =>
   Effect.runSync(fromCborBytes(cborBytes));
 
 /**
@@ -264,16 +281,16 @@ export const toCborHex = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = TreasuryWithdrawalsAction.unsafeToCborHex(instance);
+ *   const result = TreasuryWithdrawalsAction.toCborHexUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`TreasuryWithdrawalsAction.unsafeToCborHex failed: ${error.message}`);
+ *   console.error(`TreasuryWithdrawalsAction.toCborHexUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeToCborHex = (
+export const toCborHexUnsafe = (
   instance: CML.TreasuryWithdrawalsAction,
 ): string => Effect.runSync(toCborHex(instance));
 
@@ -319,16 +336,16 @@ export const toCanonicalCborHex = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = TreasuryWithdrawalsAction.unsafeToCanonicalCborHex(instance);
+ *   const result = TreasuryWithdrawalsAction.toCanonicalCborHexUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`TreasuryWithdrawalsAction.unsafeToCanonicalCborHex failed: ${error.message}`);
+ *   console.error(`TreasuryWithdrawalsAction.toCanonicalCborHexUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeToCanonicalCborHex = (
+export const toCanonicalCborHexUnsafe = (
   instance: CML.TreasuryWithdrawalsAction,
 ): string => Effect.runSync(toCanonicalCborHex(instance));
 
@@ -369,16 +386,16 @@ export const fromCborHex = Effect.fn(function* (cborBytes: string) {
  *
  * // Using try/catch for error handling
  * try {
- *   const result = TreasuryWithdrawalsAction.unsafeFromCborHex( parameters );
+ *   const result = TreasuryWithdrawalsAction.fromCborHexUnsafe( parameters );
  *   console.log(result);
  * } catch (error) {
- *   console.error(`TreasuryWithdrawalsAction.unsafeFromCborHex failed: ${error.message}`);
+ *   console.error(`TreasuryWithdrawalsAction.fromCborHexUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Constructors
+ * @category ConstructorsUnsafe
  */
-export const unsafeFromCborHex = (cborBytes: string) =>
+export const fromCborHexUnsafe = (cborBytes: string) =>
   Effect.runSync(fromCborHex(cborBytes));
 
 /**
@@ -423,16 +440,16 @@ export const toJson = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = TreasuryWithdrawalsAction.unsafeToJson(instance);
+ *   const result = TreasuryWithdrawalsAction.toJsonUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`TreasuryWithdrawalsAction.unsafeToJson failed: ${error.message}`);
+ *   console.error(`TreasuryWithdrawalsAction.toJsonUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeToJson = (instance: CML.TreasuryWithdrawalsAction): string =>
+export const toJsonUnsafe = (instance: CML.TreasuryWithdrawalsAction): string =>
   Effect.runSync(toJson(instance));
 
 /**
@@ -477,16 +494,16 @@ export const toJsValue = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = TreasuryWithdrawalsAction.unsafeToJsValue(instance);
+ *   const result = TreasuryWithdrawalsAction.toJsValueUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`TreasuryWithdrawalsAction.unsafeToJsValue failed: ${error.message}`);
+ *   console.error(`TreasuryWithdrawalsAction.toJsValueUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeToJsValue = (instance: CML.TreasuryWithdrawalsAction): any =>
+export const toJsValueUnsafe = (instance: CML.TreasuryWithdrawalsAction): any =>
   Effect.runSync(toJsValue(instance));
 
 /**
@@ -526,16 +543,16 @@ export const fromJson = Effect.fn(function* (json: string) {
  *
  * // Using try/catch for error handling
  * try {
- *   const result = TreasuryWithdrawalsAction.unsafeFromJson( parameters );
+ *   const result = TreasuryWithdrawalsAction.fromJsonUnsafe( parameters );
  *   console.log(result);
  * } catch (error) {
- *   console.error(`TreasuryWithdrawalsAction.unsafeFromJson failed: ${error.message}`);
+ *   console.error(`TreasuryWithdrawalsAction.fromJsonUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Constructors
+ * @category ConstructorsUnsafe
  */
-export const unsafeFromJson = (json: string) => Effect.runSync(fromJson(json));
+export const fromJsonUnsafe = (json: string) => Effect.runSync(fromJson(json));
 
 /**
  * Method withdrawal of TreasuryWithdrawalsAction
@@ -582,16 +599,16 @@ export const withdrawal = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = TreasuryWithdrawalsAction.unsafeWithdrawal(instance);
+ *   const result = TreasuryWithdrawalsAction.withdrawalUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`TreasuryWithdrawalsAction.unsafeWithdrawal failed: ${error.message}`);
+ *   console.error(`TreasuryWithdrawalsAction.withdrawalUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeWithdrawal = (
+export const withdrawalUnsafe = (
   instance: CML.TreasuryWithdrawalsAction,
 ): CML.MapRewardAccountToCoin => Effect.runSync(withdrawal(instance));
 
@@ -640,16 +657,16 @@ export const policyHash = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = TreasuryWithdrawalsAction.unsafePolicyHash(instance);
+ *   const result = TreasuryWithdrawalsAction.policyHashUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`TreasuryWithdrawalsAction.unsafePolicyHash failed: ${error.message}`);
+ *   console.error(`TreasuryWithdrawalsAction.policyHashUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafePolicyHash = (
+export const policyHashUnsafe = (
   instance: CML.TreasuryWithdrawalsAction,
 ): CML.ScriptHash | undefined => Effect.runSync(policyHash(instance));
 
@@ -693,16 +710,16 @@ export const _new = Effect.fn(function* (
  *
  * // Using try/catch for error handling
  * try {
- *   const result = TreasuryWithdrawalsAction.unsafe_new( parameters );
+ *   const result = TreasuryWithdrawalsAction._newUnsafe( parameters );
  *   console.log(result);
  * } catch (error) {
- *   console.error(`TreasuryWithdrawalsAction.unsafe_new failed: ${error.message}`);
+ *   console.error(`TreasuryWithdrawalsAction._newUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Constructors
+ * @category ConstructorsUnsafe
  */
-export const unsafe_new = (
+export const _newUnsafe = (
   withdrawal: CML.MapRewardAccountToCoin,
   policyHash: CML.ScriptHash,
 ) => Effect.runSync(_new(withdrawal, policyHash));

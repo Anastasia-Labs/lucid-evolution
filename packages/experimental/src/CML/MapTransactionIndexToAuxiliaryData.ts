@@ -1,9 +1,26 @@
+/**
+ * @since 2.0.0
+ */
 import { Data, Effect } from "effect";
 import * as CML from "@anastasia-labs/cardano-multiplatform-lib-nodejs";
 
+/**
+ * Type alias for the CML MapTransactionIndexToAuxiliaryData class
+ *
+ * @since 2.0.0
+ * @category Types
+ */
 export type MapTransactionIndexToAuxiliaryData =
   CML.MapTransactionIndexToAuxiliaryData;
 
+/**
+ * Error class for MapTransactionIndexToAuxiliaryData operations
+ *
+ * This error is thrown when operations on MapTransactionIndexToAuxiliaryData instances fail.
+ *
+ * @since 2.0.0
+ * @category Errors
+ */
 export class MapTransactionIndexToAuxiliaryDataError extends Data.TaggedError(
   "MapTransactionIndexToAuxiliaryDataError",
 )<{
@@ -52,16 +69,16 @@ export const free = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = MapTransactionIndexToAuxiliaryData.unsafeFree(instance);
+ *   const result = MapTransactionIndexToAuxiliaryData.freeUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`MapTransactionIndexToAuxiliaryData.unsafeFree failed: ${error.message}`);
+ *   console.error(`MapTransactionIndexToAuxiliaryData.freeUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeFree = (
+export const freeUnsafe = (
   instance: CML.MapTransactionIndexToAuxiliaryData,
 ): void => Effect.runSync(free(instance));
 
@@ -102,16 +119,16 @@ export const _new = Effect.fn(function* () {
  *
  * // Using try/catch for error handling
  * try {
- *   const result = MapTransactionIndexToAuxiliaryData.unsafe_new();
+ *   const result = MapTransactionIndexToAuxiliaryData._newUnsafe();
  *   console.log(result);
  * } catch (error) {
- *   console.error(`MapTransactionIndexToAuxiliaryData.unsafe_new failed: ${error.message}`);
+ *   console.error(`MapTransactionIndexToAuxiliaryData._newUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Constructors
+ * @category ConstructorsUnsafe
  */
-export const unsafe_new = () => Effect.runSync(_new());
+export const _newUnsafe = () => Effect.runSync(_new());
 
 /**
  * Method len of MapTransactionIndexToAuxiliaryData
@@ -155,16 +172,16 @@ export const len = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = MapTransactionIndexToAuxiliaryData.unsafeLen(instance);
+ *   const result = MapTransactionIndexToAuxiliaryData.lenUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`MapTransactionIndexToAuxiliaryData.unsafeLen failed: ${error.message}`);
+ *   console.error(`MapTransactionIndexToAuxiliaryData.lenUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeLen = (
+export const lenUnsafe = (
   instance: CML.MapTransactionIndexToAuxiliaryData,
 ): number => Effect.runSync(len(instance));
 
@@ -215,16 +232,16 @@ export const insert = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = MapTransactionIndexToAuxiliaryData.unsafeInsert(instance,  parameters );
+ *   const result = MapTransactionIndexToAuxiliaryData.insertUnsafe(instance,  parameters );
  *   console.log(result);
  * } catch (error) {
- *   console.error(`MapTransactionIndexToAuxiliaryData.unsafeInsert failed: ${error.message}`);
+ *   console.error(`MapTransactionIndexToAuxiliaryData.insertUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeInsert = (
+export const insertUnsafe = (
   instance: CML.MapTransactionIndexToAuxiliaryData,
   key: number,
   value: CML.AuxiliaryData,
@@ -277,16 +294,16 @@ export const get = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = MapTransactionIndexToAuxiliaryData.unsafeGet(instance,  parameters );
+ *   const result = MapTransactionIndexToAuxiliaryData.getUnsafe(instance,  parameters );
  *   console.log(result);
  * } catch (error) {
- *   console.error(`MapTransactionIndexToAuxiliaryData.unsafeGet failed: ${error.message}`);
+ *   console.error(`MapTransactionIndexToAuxiliaryData.getUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeGet = (
+export const getUnsafe = (
   instance: CML.MapTransactionIndexToAuxiliaryData,
   key: number,
 ): CML.AuxiliaryData | undefined => Effect.runSync(get(instance, key));
@@ -333,15 +350,15 @@ export const keys = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = MapTransactionIndexToAuxiliaryData.unsafeKeys(instance);
+ *   const result = MapTransactionIndexToAuxiliaryData.keysUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`MapTransactionIndexToAuxiliaryData.unsafeKeys failed: ${error.message}`);
+ *   console.error(`MapTransactionIndexToAuxiliaryData.keysUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeKeys = (
+export const keysUnsafe = (
   instance: CML.MapTransactionIndexToAuxiliaryData,
 ): Uint16Array => Effect.runSync(keys(instance));

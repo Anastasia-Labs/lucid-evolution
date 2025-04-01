@@ -1,8 +1,25 @@
+/**
+ * @since 2.0.0
+ */
 import { Data, Effect } from "effect";
 import * as CML from "@anastasia-labs/cardano-multiplatform-lib-nodejs";
 
+/**
+ * Type alias for the CML TransactionWitnessSet class
+ *
+ * @since 2.0.0
+ * @category Types
+ */
 export type TransactionWitnessSet = CML.TransactionWitnessSet;
 
+/**
+ * Error class for TransactionWitnessSet operations
+ *
+ * This error is thrown when operations on TransactionWitnessSet instances fail.
+ *
+ * @since 2.0.0
+ * @category Errors
+ */
 export class TransactionWitnessSetError extends Data.TaggedError(
   "TransactionWitnessSetError",
 )<{
@@ -51,16 +68,16 @@ export const free = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = TransactionWitnessSet.unsafeFree(instance);
+ *   const result = TransactionWitnessSet.freeUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`TransactionWitnessSet.unsafeFree failed: ${error.message}`);
+ *   console.error(`TransactionWitnessSet.freeUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeFree = (instance: CML.TransactionWitnessSet): void =>
+export const freeUnsafe = (instance: CML.TransactionWitnessSet): void =>
   Effect.runSync(free(instance));
 
 /**
@@ -106,16 +123,16 @@ export const addAllWitnesses = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = TransactionWitnessSet.unsafeAddAllWitnesses(instance,  parameters );
+ *   const result = TransactionWitnessSet.addAllWitnessesUnsafe(instance,  parameters );
  *   console.log(result);
  * } catch (error) {
- *   console.error(`TransactionWitnessSet.unsafeAddAllWitnesses failed: ${error.message}`);
+ *   console.error(`TransactionWitnessSet.addAllWitnessesUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeAddAllWitnesses = (
+export const addAllWitnessesUnsafe = (
   instance: CML.TransactionWitnessSet,
   other: CML.TransactionWitnessSet,
 ): void => Effect.runSync(addAllWitnesses(instance, other));
@@ -162,16 +179,16 @@ export const languages = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = TransactionWitnessSet.unsafeLanguages(instance);
+ *   const result = TransactionWitnessSet.languagesUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`TransactionWitnessSet.unsafeLanguages failed: ${error.message}`);
+ *   console.error(`TransactionWitnessSet.languagesUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeLanguages = (
+export const languagesUnsafe = (
   instance: CML.TransactionWitnessSet,
 ): CML.LanguageList => Effect.runSync(languages(instance));
 
@@ -217,16 +234,16 @@ export const toCborBytes = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = TransactionWitnessSet.unsafeToCborBytes(instance);
+ *   const result = TransactionWitnessSet.toCborBytesUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`TransactionWitnessSet.unsafeToCborBytes failed: ${error.message}`);
+ *   console.error(`TransactionWitnessSet.toCborBytesUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeToCborBytes = (
+export const toCborBytesUnsafe = (
   instance: CML.TransactionWitnessSet,
 ): Uint8Array => Effect.runSync(toCborBytes(instance));
 
@@ -272,16 +289,16 @@ export const toCanonicalCborBytes = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = TransactionWitnessSet.unsafeToCanonicalCborBytes(instance);
+ *   const result = TransactionWitnessSet.toCanonicalCborBytesUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`TransactionWitnessSet.unsafeToCanonicalCborBytes failed: ${error.message}`);
+ *   console.error(`TransactionWitnessSet.toCanonicalCborBytesUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeToCanonicalCborBytes = (
+export const toCanonicalCborBytesUnsafe = (
   instance: CML.TransactionWitnessSet,
 ): Uint8Array => Effect.runSync(toCanonicalCborBytes(instance));
 
@@ -322,16 +339,16 @@ export const fromCborBytes = Effect.fn(function* (cborBytes: Uint8Array) {
  *
  * // Using try/catch for error handling
  * try {
- *   const result = TransactionWitnessSet.unsafeFromCborBytes( parameters );
+ *   const result = TransactionWitnessSet.fromCborBytesUnsafe( parameters );
  *   console.log(result);
  * } catch (error) {
- *   console.error(`TransactionWitnessSet.unsafeFromCborBytes failed: ${error.message}`);
+ *   console.error(`TransactionWitnessSet.fromCborBytesUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Constructors
+ * @category ConstructorsUnsafe
  */
-export const unsafeFromCborBytes = (cborBytes: Uint8Array) =>
+export const fromCborBytesUnsafe = (cborBytes: Uint8Array) =>
   Effect.runSync(fromCborBytes(cborBytes));
 
 /**
@@ -376,16 +393,16 @@ export const toCborHex = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = TransactionWitnessSet.unsafeToCborHex(instance);
+ *   const result = TransactionWitnessSet.toCborHexUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`TransactionWitnessSet.unsafeToCborHex failed: ${error.message}`);
+ *   console.error(`TransactionWitnessSet.toCborHexUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeToCborHex = (instance: CML.TransactionWitnessSet): string =>
+export const toCborHexUnsafe = (instance: CML.TransactionWitnessSet): string =>
   Effect.runSync(toCborHex(instance));
 
 /**
@@ -430,16 +447,16 @@ export const toCanonicalCborHex = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = TransactionWitnessSet.unsafeToCanonicalCborHex(instance);
+ *   const result = TransactionWitnessSet.toCanonicalCborHexUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`TransactionWitnessSet.unsafeToCanonicalCborHex failed: ${error.message}`);
+ *   console.error(`TransactionWitnessSet.toCanonicalCborHexUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeToCanonicalCborHex = (
+export const toCanonicalCborHexUnsafe = (
   instance: CML.TransactionWitnessSet,
 ): string => Effect.runSync(toCanonicalCborHex(instance));
 
@@ -480,16 +497,16 @@ export const fromCborHex = Effect.fn(function* (cborBytes: string) {
  *
  * // Using try/catch for error handling
  * try {
- *   const result = TransactionWitnessSet.unsafeFromCborHex( parameters );
+ *   const result = TransactionWitnessSet.fromCborHexUnsafe( parameters );
  *   console.log(result);
  * } catch (error) {
- *   console.error(`TransactionWitnessSet.unsafeFromCborHex failed: ${error.message}`);
+ *   console.error(`TransactionWitnessSet.fromCborHexUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Constructors
+ * @category ConstructorsUnsafe
  */
-export const unsafeFromCborHex = (cborBytes: string) =>
+export const fromCborHexUnsafe = (cborBytes: string) =>
   Effect.runSync(fromCborHex(cborBytes));
 
 /**
@@ -534,16 +551,16 @@ export const toJson = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = TransactionWitnessSet.unsafeToJson(instance);
+ *   const result = TransactionWitnessSet.toJsonUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`TransactionWitnessSet.unsafeToJson failed: ${error.message}`);
+ *   console.error(`TransactionWitnessSet.toJsonUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeToJson = (instance: CML.TransactionWitnessSet): string =>
+export const toJsonUnsafe = (instance: CML.TransactionWitnessSet): string =>
   Effect.runSync(toJson(instance));
 
 /**
@@ -588,16 +605,16 @@ export const toJsValue = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = TransactionWitnessSet.unsafeToJsValue(instance);
+ *   const result = TransactionWitnessSet.toJsValueUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`TransactionWitnessSet.unsafeToJsValue failed: ${error.message}`);
+ *   console.error(`TransactionWitnessSet.toJsValueUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeToJsValue = (instance: CML.TransactionWitnessSet): any =>
+export const toJsValueUnsafe = (instance: CML.TransactionWitnessSet): any =>
   Effect.runSync(toJsValue(instance));
 
 /**
@@ -637,16 +654,16 @@ export const fromJson = Effect.fn(function* (json: string) {
  *
  * // Using try/catch for error handling
  * try {
- *   const result = TransactionWitnessSet.unsafeFromJson( parameters );
+ *   const result = TransactionWitnessSet.fromJsonUnsafe( parameters );
  *   console.log(result);
  * } catch (error) {
- *   console.error(`TransactionWitnessSet.unsafeFromJson failed: ${error.message}`);
+ *   console.error(`TransactionWitnessSet.fromJsonUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Constructors
+ * @category ConstructorsUnsafe
  */
-export const unsafeFromJson = (json: string) => Effect.runSync(fromJson(json));
+export const fromJsonUnsafe = (json: string) => Effect.runSync(fromJson(json));
 
 /**
  * Method setVkeywitnesses of TransactionWitnessSet
@@ -691,16 +708,16 @@ export const setVkeywitnesses = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = TransactionWitnessSet.unsafeSetVkeywitnesses(instance,  parameters );
+ *   const result = TransactionWitnessSet.setVkeywitnessesUnsafe(instance,  parameters );
  *   console.log(result);
  * } catch (error) {
- *   console.error(`TransactionWitnessSet.unsafeSetVkeywitnesses failed: ${error.message}`);
+ *   console.error(`TransactionWitnessSet.setVkeywitnessesUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeSetVkeywitnesses = (
+export const setVkeywitnessesUnsafe = (
   instance: CML.TransactionWitnessSet,
   vkeywitnesses: CML.VkeywitnessList,
 ): void => Effect.runSync(setVkeywitnesses(instance, vkeywitnesses));
@@ -750,16 +767,16 @@ export const vkeywitnesses = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = TransactionWitnessSet.unsafeVkeywitnesses(instance);
+ *   const result = TransactionWitnessSet.vkeywitnessesUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`TransactionWitnessSet.unsafeVkeywitnesses failed: ${error.message}`);
+ *   console.error(`TransactionWitnessSet.vkeywitnessesUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeVkeywitnesses = (
+export const vkeywitnessesUnsafe = (
   instance: CML.TransactionWitnessSet,
 ): CML.VkeywitnessList | undefined => Effect.runSync(vkeywitnesses(instance));
 
@@ -806,16 +823,16 @@ export const setNativeScripts = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = TransactionWitnessSet.unsafeSetNativeScripts(instance,  parameters );
+ *   const result = TransactionWitnessSet.setNativeScriptsUnsafe(instance,  parameters );
  *   console.log(result);
  * } catch (error) {
- *   console.error(`TransactionWitnessSet.unsafeSetNativeScripts failed: ${error.message}`);
+ *   console.error(`TransactionWitnessSet.setNativeScriptsUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeSetNativeScripts = (
+export const setNativeScriptsUnsafe = (
   instance: CML.TransactionWitnessSet,
   nativeScripts: CML.NativeScriptList,
 ): void => Effect.runSync(setNativeScripts(instance, nativeScripts));
@@ -865,16 +882,16 @@ export const nativeScripts = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = TransactionWitnessSet.unsafeNativeScripts(instance);
+ *   const result = TransactionWitnessSet.nativeScriptsUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`TransactionWitnessSet.unsafeNativeScripts failed: ${error.message}`);
+ *   console.error(`TransactionWitnessSet.nativeScriptsUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeNativeScripts = (
+export const nativeScriptsUnsafe = (
   instance: CML.TransactionWitnessSet,
 ): CML.NativeScriptList | undefined => Effect.runSync(nativeScripts(instance));
 
@@ -921,16 +938,16 @@ export const setBootstrapWitnesses = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = TransactionWitnessSet.unsafeSetBootstrapWitnesses(instance,  parameters );
+ *   const result = TransactionWitnessSet.setBootstrapWitnessesUnsafe(instance,  parameters );
  *   console.log(result);
  * } catch (error) {
- *   console.error(`TransactionWitnessSet.unsafeSetBootstrapWitnesses failed: ${error.message}`);
+ *   console.error(`TransactionWitnessSet.setBootstrapWitnessesUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeSetBootstrapWitnesses = (
+export const setBootstrapWitnessesUnsafe = (
   instance: CML.TransactionWitnessSet,
   bootstrapWitnesses: CML.BootstrapWitnessList,
 ): void => Effect.runSync(setBootstrapWitnesses(instance, bootstrapWitnesses));
@@ -980,16 +997,16 @@ export const bootstrapWitnesses = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = TransactionWitnessSet.unsafeBootstrapWitnesses(instance);
+ *   const result = TransactionWitnessSet.bootstrapWitnessesUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`TransactionWitnessSet.unsafeBootstrapWitnesses failed: ${error.message}`);
+ *   console.error(`TransactionWitnessSet.bootstrapWitnessesUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeBootstrapWitnesses = (
+export const bootstrapWitnessesUnsafe = (
   instance: CML.TransactionWitnessSet,
 ): CML.BootstrapWitnessList | undefined =>
   Effect.runSync(bootstrapWitnesses(instance));
@@ -1037,16 +1054,16 @@ export const setPlutusV1Scripts = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = TransactionWitnessSet.unsafeSetPlutusV1Scripts(instance,  parameters );
+ *   const result = TransactionWitnessSet.setPlutusV1ScriptsUnsafe(instance,  parameters );
  *   console.log(result);
  * } catch (error) {
- *   console.error(`TransactionWitnessSet.unsafeSetPlutusV1Scripts failed: ${error.message}`);
+ *   console.error(`TransactionWitnessSet.setPlutusV1ScriptsUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeSetPlutusV1Scripts = (
+export const setPlutusV1ScriptsUnsafe = (
   instance: CML.TransactionWitnessSet,
   plutusV1Scripts: CML.PlutusV1ScriptList,
 ): void => Effect.runSync(setPlutusV1Scripts(instance, plutusV1Scripts));
@@ -1096,16 +1113,16 @@ export const plutusV1Scripts = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = TransactionWitnessSet.unsafePlutusV1Scripts(instance);
+ *   const result = TransactionWitnessSet.plutusV1ScriptsUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`TransactionWitnessSet.unsafePlutusV1Scripts failed: ${error.message}`);
+ *   console.error(`TransactionWitnessSet.plutusV1ScriptsUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafePlutusV1Scripts = (
+export const plutusV1ScriptsUnsafe = (
   instance: CML.TransactionWitnessSet,
 ): CML.PlutusV1ScriptList | undefined =>
   Effect.runSync(plutusV1Scripts(instance));
@@ -1153,16 +1170,16 @@ export const setPlutusDatums = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = TransactionWitnessSet.unsafeSetPlutusDatums(instance,  parameters );
+ *   const result = TransactionWitnessSet.setPlutusDatumsUnsafe(instance,  parameters );
  *   console.log(result);
  * } catch (error) {
- *   console.error(`TransactionWitnessSet.unsafeSetPlutusDatums failed: ${error.message}`);
+ *   console.error(`TransactionWitnessSet.setPlutusDatumsUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeSetPlutusDatums = (
+export const setPlutusDatumsUnsafe = (
   instance: CML.TransactionWitnessSet,
   plutusDatums: CML.PlutusDataList,
 ): void => Effect.runSync(setPlutusDatums(instance, plutusDatums));
@@ -1212,16 +1229,16 @@ export const plutusDatums = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = TransactionWitnessSet.unsafePlutusDatums(instance);
+ *   const result = TransactionWitnessSet.plutusDatumsUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`TransactionWitnessSet.unsafePlutusDatums failed: ${error.message}`);
+ *   console.error(`TransactionWitnessSet.plutusDatumsUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafePlutusDatums = (
+export const plutusDatumsUnsafe = (
   instance: CML.TransactionWitnessSet,
 ): CML.PlutusDataList | undefined => Effect.runSync(plutusDatums(instance));
 
@@ -1268,16 +1285,16 @@ export const setRedeemers = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = TransactionWitnessSet.unsafeSetRedeemers(instance,  parameters );
+ *   const result = TransactionWitnessSet.setRedeemersUnsafe(instance,  parameters );
  *   console.log(result);
  * } catch (error) {
- *   console.error(`TransactionWitnessSet.unsafeSetRedeemers failed: ${error.message}`);
+ *   console.error(`TransactionWitnessSet.setRedeemersUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeSetRedeemers = (
+export const setRedeemersUnsafe = (
   instance: CML.TransactionWitnessSet,
   redeemers: CML.Redeemers,
 ): void => Effect.runSync(setRedeemers(instance, redeemers));
@@ -1324,16 +1341,16 @@ export const redeemers = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = TransactionWitnessSet.unsafeRedeemers(instance);
+ *   const result = TransactionWitnessSet.redeemersUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`TransactionWitnessSet.unsafeRedeemers failed: ${error.message}`);
+ *   console.error(`TransactionWitnessSet.redeemersUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeRedeemers = (
+export const redeemersUnsafe = (
   instance: CML.TransactionWitnessSet,
 ): CML.Redeemers | undefined => Effect.runSync(redeemers(instance));
 
@@ -1380,16 +1397,16 @@ export const setPlutusV2Scripts = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = TransactionWitnessSet.unsafeSetPlutusV2Scripts(instance,  parameters );
+ *   const result = TransactionWitnessSet.setPlutusV2ScriptsUnsafe(instance,  parameters );
  *   console.log(result);
  * } catch (error) {
- *   console.error(`TransactionWitnessSet.unsafeSetPlutusV2Scripts failed: ${error.message}`);
+ *   console.error(`TransactionWitnessSet.setPlutusV2ScriptsUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeSetPlutusV2Scripts = (
+export const setPlutusV2ScriptsUnsafe = (
   instance: CML.TransactionWitnessSet,
   plutusV2Scripts: CML.PlutusV2ScriptList,
 ): void => Effect.runSync(setPlutusV2Scripts(instance, plutusV2Scripts));
@@ -1439,16 +1456,16 @@ export const plutusV2Scripts = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = TransactionWitnessSet.unsafePlutusV2Scripts(instance);
+ *   const result = TransactionWitnessSet.plutusV2ScriptsUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`TransactionWitnessSet.unsafePlutusV2Scripts failed: ${error.message}`);
+ *   console.error(`TransactionWitnessSet.plutusV2ScriptsUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafePlutusV2Scripts = (
+export const plutusV2ScriptsUnsafe = (
   instance: CML.TransactionWitnessSet,
 ): CML.PlutusV2ScriptList | undefined =>
   Effect.runSync(plutusV2Scripts(instance));
@@ -1496,16 +1513,16 @@ export const setPlutusV3Scripts = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = TransactionWitnessSet.unsafeSetPlutusV3Scripts(instance,  parameters );
+ *   const result = TransactionWitnessSet.setPlutusV3ScriptsUnsafe(instance,  parameters );
  *   console.log(result);
  * } catch (error) {
- *   console.error(`TransactionWitnessSet.unsafeSetPlutusV3Scripts failed: ${error.message}`);
+ *   console.error(`TransactionWitnessSet.setPlutusV3ScriptsUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeSetPlutusV3Scripts = (
+export const setPlutusV3ScriptsUnsafe = (
   instance: CML.TransactionWitnessSet,
   plutusV3Scripts: CML.PlutusV3ScriptList,
 ): void => Effect.runSync(setPlutusV3Scripts(instance, plutusV3Scripts));
@@ -1555,16 +1572,16 @@ export const plutusV3Scripts = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = TransactionWitnessSet.unsafePlutusV3Scripts(instance);
+ *   const result = TransactionWitnessSet.plutusV3ScriptsUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`TransactionWitnessSet.unsafePlutusV3Scripts failed: ${error.message}`);
+ *   console.error(`TransactionWitnessSet.plutusV3ScriptsUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafePlutusV3Scripts = (
+export const plutusV3ScriptsUnsafe = (
   instance: CML.TransactionWitnessSet,
 ): CML.PlutusV3ScriptList | undefined =>
   Effect.runSync(plutusV3Scripts(instance));
@@ -1606,13 +1623,13 @@ export const _new = Effect.fn(function* () {
  *
  * // Using try/catch for error handling
  * try {
- *   const result = TransactionWitnessSet.unsafe_new();
+ *   const result = TransactionWitnessSet._newUnsafe();
  *   console.log(result);
  * } catch (error) {
- *   console.error(`TransactionWitnessSet.unsafe_new failed: ${error.message}`);
+ *   console.error(`TransactionWitnessSet._newUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Constructors
+ * @category ConstructorsUnsafe
  */
-export const unsafe_new = () => Effect.runSync(_new());
+export const _newUnsafe = () => Effect.runSync(_new());

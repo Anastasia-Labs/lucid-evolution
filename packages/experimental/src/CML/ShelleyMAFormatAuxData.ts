@@ -1,8 +1,25 @@
+/**
+ * @since 2.0.0
+ */
 import { Data, Effect } from "effect";
 import * as CML from "@anastasia-labs/cardano-multiplatform-lib-nodejs";
 
+/**
+ * Type alias for the CML ShelleyMAFormatAuxData class
+ *
+ * @since 2.0.0
+ * @category Types
+ */
 export type ShelleyMAFormatAuxData = CML.ShelleyMAFormatAuxData;
 
+/**
+ * Error class for ShelleyMAFormatAuxData operations
+ *
+ * This error is thrown when operations on ShelleyMAFormatAuxData instances fail.
+ *
+ * @since 2.0.0
+ * @category Errors
+ */
 export class ShelleyMAFormatAuxDataError extends Data.TaggedError(
   "ShelleyMAFormatAuxDataError",
 )<{
@@ -51,16 +68,16 @@ export const free = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = ShelleyMAFormatAuxData.unsafeFree(instance);
+ *   const result = ShelleyMAFormatAuxData.freeUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`ShelleyMAFormatAuxData.unsafeFree failed: ${error.message}`);
+ *   console.error(`ShelleyMAFormatAuxData.freeUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeFree = (instance: CML.ShelleyMAFormatAuxData): void =>
+export const freeUnsafe = (instance: CML.ShelleyMAFormatAuxData): void =>
   Effect.runSync(free(instance));
 
 /**
@@ -105,16 +122,16 @@ export const toCborBytes = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = ShelleyMAFormatAuxData.unsafeToCborBytes(instance);
+ *   const result = ShelleyMAFormatAuxData.toCborBytesUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`ShelleyMAFormatAuxData.unsafeToCborBytes failed: ${error.message}`);
+ *   console.error(`ShelleyMAFormatAuxData.toCborBytesUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeToCborBytes = (
+export const toCborBytesUnsafe = (
   instance: CML.ShelleyMAFormatAuxData,
 ): Uint8Array => Effect.runSync(toCborBytes(instance));
 
@@ -160,16 +177,16 @@ export const toCanonicalCborBytes = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = ShelleyMAFormatAuxData.unsafeToCanonicalCborBytes(instance);
+ *   const result = ShelleyMAFormatAuxData.toCanonicalCborBytesUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`ShelleyMAFormatAuxData.unsafeToCanonicalCborBytes failed: ${error.message}`);
+ *   console.error(`ShelleyMAFormatAuxData.toCanonicalCborBytesUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeToCanonicalCborBytes = (
+export const toCanonicalCborBytesUnsafe = (
   instance: CML.ShelleyMAFormatAuxData,
 ): Uint8Array => Effect.runSync(toCanonicalCborBytes(instance));
 
@@ -210,16 +227,16 @@ export const fromCborBytes = Effect.fn(function* (cborBytes: Uint8Array) {
  *
  * // Using try/catch for error handling
  * try {
- *   const result = ShelleyMAFormatAuxData.unsafeFromCborBytes( parameters );
+ *   const result = ShelleyMAFormatAuxData.fromCborBytesUnsafe( parameters );
  *   console.log(result);
  * } catch (error) {
- *   console.error(`ShelleyMAFormatAuxData.unsafeFromCborBytes failed: ${error.message}`);
+ *   console.error(`ShelleyMAFormatAuxData.fromCborBytesUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Constructors
+ * @category ConstructorsUnsafe
  */
-export const unsafeFromCborBytes = (cborBytes: Uint8Array) =>
+export const fromCborBytesUnsafe = (cborBytes: Uint8Array) =>
   Effect.runSync(fromCborBytes(cborBytes));
 
 /**
@@ -264,16 +281,16 @@ export const toCborHex = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = ShelleyMAFormatAuxData.unsafeToCborHex(instance);
+ *   const result = ShelleyMAFormatAuxData.toCborHexUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`ShelleyMAFormatAuxData.unsafeToCborHex failed: ${error.message}`);
+ *   console.error(`ShelleyMAFormatAuxData.toCborHexUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeToCborHex = (instance: CML.ShelleyMAFormatAuxData): string =>
+export const toCborHexUnsafe = (instance: CML.ShelleyMAFormatAuxData): string =>
   Effect.runSync(toCborHex(instance));
 
 /**
@@ -318,16 +335,16 @@ export const toCanonicalCborHex = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = ShelleyMAFormatAuxData.unsafeToCanonicalCborHex(instance);
+ *   const result = ShelleyMAFormatAuxData.toCanonicalCborHexUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`ShelleyMAFormatAuxData.unsafeToCanonicalCborHex failed: ${error.message}`);
+ *   console.error(`ShelleyMAFormatAuxData.toCanonicalCborHexUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeToCanonicalCborHex = (
+export const toCanonicalCborHexUnsafe = (
   instance: CML.ShelleyMAFormatAuxData,
 ): string => Effect.runSync(toCanonicalCborHex(instance));
 
@@ -368,16 +385,16 @@ export const fromCborHex = Effect.fn(function* (cborBytes: string) {
  *
  * // Using try/catch for error handling
  * try {
- *   const result = ShelleyMAFormatAuxData.unsafeFromCborHex( parameters );
+ *   const result = ShelleyMAFormatAuxData.fromCborHexUnsafe( parameters );
  *   console.log(result);
  * } catch (error) {
- *   console.error(`ShelleyMAFormatAuxData.unsafeFromCborHex failed: ${error.message}`);
+ *   console.error(`ShelleyMAFormatAuxData.fromCborHexUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Constructors
+ * @category ConstructorsUnsafe
  */
-export const unsafeFromCborHex = (cborBytes: string) =>
+export const fromCborHexUnsafe = (cborBytes: string) =>
   Effect.runSync(fromCborHex(cborBytes));
 
 /**
@@ -422,16 +439,16 @@ export const toJson = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = ShelleyMAFormatAuxData.unsafeToJson(instance);
+ *   const result = ShelleyMAFormatAuxData.toJsonUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`ShelleyMAFormatAuxData.unsafeToJson failed: ${error.message}`);
+ *   console.error(`ShelleyMAFormatAuxData.toJsonUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeToJson = (instance: CML.ShelleyMAFormatAuxData): string =>
+export const toJsonUnsafe = (instance: CML.ShelleyMAFormatAuxData): string =>
   Effect.runSync(toJson(instance));
 
 /**
@@ -476,16 +493,16 @@ export const toJsValue = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = ShelleyMAFormatAuxData.unsafeToJsValue(instance);
+ *   const result = ShelleyMAFormatAuxData.toJsValueUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`ShelleyMAFormatAuxData.unsafeToJsValue failed: ${error.message}`);
+ *   console.error(`ShelleyMAFormatAuxData.toJsValueUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeToJsValue = (instance: CML.ShelleyMAFormatAuxData): any =>
+export const toJsValueUnsafe = (instance: CML.ShelleyMAFormatAuxData): any =>
   Effect.runSync(toJsValue(instance));
 
 /**
@@ -525,16 +542,16 @@ export const fromJson = Effect.fn(function* (json: string) {
  *
  * // Using try/catch for error handling
  * try {
- *   const result = ShelleyMAFormatAuxData.unsafeFromJson( parameters );
+ *   const result = ShelleyMAFormatAuxData.fromJsonUnsafe( parameters );
  *   console.log(result);
  * } catch (error) {
- *   console.error(`ShelleyMAFormatAuxData.unsafeFromJson failed: ${error.message}`);
+ *   console.error(`ShelleyMAFormatAuxData.fromJsonUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Constructors
+ * @category ConstructorsUnsafe
  */
-export const unsafeFromJson = (json: string) => Effect.runSync(fromJson(json));
+export const fromJsonUnsafe = (json: string) => Effect.runSync(fromJson(json));
 
 /**
  * Method transactionMetadata of ShelleyMAFormatAuxData
@@ -578,16 +595,16 @@ export const transactionMetadata = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = ShelleyMAFormatAuxData.unsafeTransactionMetadata(instance);
+ *   const result = ShelleyMAFormatAuxData.transactionMetadataUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`ShelleyMAFormatAuxData.unsafeTransactionMetadata failed: ${error.message}`);
+ *   console.error(`ShelleyMAFormatAuxData.transactionMetadataUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeTransactionMetadata = (
+export const transactionMetadataUnsafe = (
   instance: CML.ShelleyMAFormatAuxData,
 ): CML.Metadata => Effect.runSync(transactionMetadata(instance));
 
@@ -633,16 +650,16 @@ export const auxiliaryScripts = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = ShelleyMAFormatAuxData.unsafeAuxiliaryScripts(instance);
+ *   const result = ShelleyMAFormatAuxData.auxiliaryScriptsUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`ShelleyMAFormatAuxData.unsafeAuxiliaryScripts failed: ${error.message}`);
+ *   console.error(`ShelleyMAFormatAuxData.auxiliaryScriptsUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeAuxiliaryScripts = (
+export const auxiliaryScriptsUnsafe = (
   instance: CML.ShelleyMAFormatAuxData,
 ): CML.NativeScriptList => Effect.runSync(auxiliaryScripts(instance));
 
@@ -687,16 +704,16 @@ export const _new = Effect.fn(function* (
  *
  * // Using try/catch for error handling
  * try {
- *   const result = ShelleyMAFormatAuxData.unsafe_new( parameters );
+ *   const result = ShelleyMAFormatAuxData._newUnsafe( parameters );
  *   console.log(result);
  * } catch (error) {
- *   console.error(`ShelleyMAFormatAuxData.unsafe_new failed: ${error.message}`);
+ *   console.error(`ShelleyMAFormatAuxData._newUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Constructors
+ * @category ConstructorsUnsafe
  */
-export const unsafe_new = (
+export const _newUnsafe = (
   transactionMetadata: CML.Metadata,
   auxiliaryScripts: CML.NativeScriptList,
 ) => Effect.runSync(_new(transactionMetadata, auxiliaryScripts));

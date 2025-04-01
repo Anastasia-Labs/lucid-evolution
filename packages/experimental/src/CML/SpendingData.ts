@@ -1,8 +1,25 @@
+/**
+ * @since 2.0.0
+ */
 import { Data, Effect } from "effect";
 import * as CML from "@anastasia-labs/cardano-multiplatform-lib-nodejs";
 
+/**
+ * Type alias for the CML SpendingData class
+ *
+ * @since 2.0.0
+ * @category Types
+ */
 export type SpendingData = CML.SpendingData;
 
+/**
+ * Error class for SpendingData operations
+ *
+ * This error is thrown when operations on SpendingData instances fail.
+ *
+ * @since 2.0.0
+ * @category Errors
+ */
 export class SpendingDataError extends Data.TaggedError("SpendingDataError")<{
   message?: string;
 }> {}
@@ -47,16 +64,16 @@ export const free = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = SpendingData.unsafeFree(instance);
+ *   const result = SpendingData.freeUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`SpendingData.unsafeFree failed: ${error.message}`);
+ *   console.error(`SpendingData.freeUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeFree = (instance: CML.SpendingData): void =>
+export const freeUnsafe = (instance: CML.SpendingData): void =>
   Effect.runSync(free(instance));
 
 /**
@@ -99,16 +116,16 @@ export const toCborBytes = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = SpendingData.unsafeToCborBytes(instance);
+ *   const result = SpendingData.toCborBytesUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`SpendingData.unsafeToCborBytes failed: ${error.message}`);
+ *   console.error(`SpendingData.toCborBytesUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeToCborBytes = (instance: CML.SpendingData): Uint8Array =>
+export const toCborBytesUnsafe = (instance: CML.SpendingData): Uint8Array =>
   Effect.runSync(toCborBytes(instance));
 
 /**
@@ -148,16 +165,16 @@ export const fromCborBytes = Effect.fn(function* (cborBytes: Uint8Array) {
  *
  * // Using try/catch for error handling
  * try {
- *   const result = SpendingData.unsafeFromCborBytes( parameters );
+ *   const result = SpendingData.fromCborBytesUnsafe( parameters );
  *   console.log(result);
  * } catch (error) {
- *   console.error(`SpendingData.unsafeFromCborBytes failed: ${error.message}`);
+ *   console.error(`SpendingData.fromCborBytesUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Constructors
+ * @category ConstructorsUnsafe
  */
-export const unsafeFromCborBytes = (cborBytes: Uint8Array) =>
+export const fromCborBytesUnsafe = (cborBytes: Uint8Array) =>
   Effect.runSync(fromCborBytes(cborBytes));
 
 /**
@@ -200,16 +217,16 @@ export const toCborHex = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = SpendingData.unsafeToCborHex(instance);
+ *   const result = SpendingData.toCborHexUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`SpendingData.unsafeToCborHex failed: ${error.message}`);
+ *   console.error(`SpendingData.toCborHexUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeToCborHex = (instance: CML.SpendingData): string =>
+export const toCborHexUnsafe = (instance: CML.SpendingData): string =>
   Effect.runSync(toCborHex(instance));
 
 /**
@@ -249,16 +266,16 @@ export const fromCborHex = Effect.fn(function* (cborBytes: string) {
  *
  * // Using try/catch for error handling
  * try {
- *   const result = SpendingData.unsafeFromCborHex( parameters );
+ *   const result = SpendingData.fromCborHexUnsafe( parameters );
  *   console.log(result);
  * } catch (error) {
- *   console.error(`SpendingData.unsafeFromCborHex failed: ${error.message}`);
+ *   console.error(`SpendingData.fromCborHexUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Constructors
+ * @category ConstructorsUnsafe
  */
-export const unsafeFromCborHex = (cborBytes: string) =>
+export const fromCborHexUnsafe = (cborBytes: string) =>
   Effect.runSync(fromCborHex(cborBytes));
 
 /**
@@ -300,16 +317,16 @@ export const newSpendingDataPubKey = Effect.fn(function* (
  *
  * // Using try/catch for error handling
  * try {
- *   const result = SpendingData.unsafeNewSpendingDataPubKey( parameters );
+ *   const result = SpendingData.newSpendingDataPubKeyUnsafe( parameters );
  *   console.log(result);
  * } catch (error) {
- *   console.error(`SpendingData.unsafeNewSpendingDataPubKey failed: ${error.message}`);
+ *   console.error(`SpendingData.newSpendingDataPubKeyUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Constructors
+ * @category ConstructorsUnsafe
  */
-export const unsafeNewSpendingDataPubKey = (pubkey: CML.Bip32PublicKey) =>
+export const newSpendingDataPubKeyUnsafe = (pubkey: CML.Bip32PublicKey) =>
   Effect.runSync(newSpendingDataPubKey(pubkey));
 
 /**
@@ -351,16 +368,16 @@ export const newSpendingDataScript = Effect.fn(function* (
  *
  * // Using try/catch for error handling
  * try {
- *   const result = SpendingData.unsafeNewSpendingDataScript( parameters );
+ *   const result = SpendingData.newSpendingDataScriptUnsafe( parameters );
  *   console.log(result);
  * } catch (error) {
- *   console.error(`SpendingData.unsafeNewSpendingDataScript failed: ${error.message}`);
+ *   console.error(`SpendingData.newSpendingDataScriptUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Constructors
+ * @category ConstructorsUnsafe
  */
-export const unsafeNewSpendingDataScript = (script: CML.ByronScript) =>
+export const newSpendingDataScriptUnsafe = (script: CML.ByronScript) =>
   Effect.runSync(newSpendingDataScript(script));
 
 /**
@@ -402,16 +419,16 @@ export const newSpendingDataRedeem = Effect.fn(function* (
  *
  * // Using try/catch for error handling
  * try {
- *   const result = SpendingData.unsafeNewSpendingDataRedeem( parameters );
+ *   const result = SpendingData.newSpendingDataRedeemUnsafe( parameters );
  *   console.log(result);
  * } catch (error) {
- *   console.error(`SpendingData.unsafeNewSpendingDataRedeem failed: ${error.message}`);
+ *   console.error(`SpendingData.newSpendingDataRedeemUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Constructors
+ * @category ConstructorsUnsafe
  */
-export const unsafeNewSpendingDataRedeem = (redeem: CML.PublicKey) =>
+export const newSpendingDataRedeemUnsafe = (redeem: CML.PublicKey) =>
   Effect.runSync(newSpendingDataRedeem(redeem));
 
 /**
@@ -456,16 +473,16 @@ export const kind = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = SpendingData.unsafeKind(instance);
+ *   const result = SpendingData.kindUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`SpendingData.unsafeKind failed: ${error.message}`);
+ *   console.error(`SpendingData.kindUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeKind = (instance: CML.SpendingData): CML.SpendingDataKind =>
+export const kindUnsafe = (instance: CML.SpendingData): CML.SpendingDataKind =>
   Effect.runSync(kind(instance));
 
 /**
@@ -510,16 +527,16 @@ export const asSpendingDataPubKey = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = SpendingData.unsafeAsSpendingDataPubKey(instance);
+ *   const result = SpendingData.asSpendingDataPubKeyUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`SpendingData.unsafeAsSpendingDataPubKey failed: ${error.message}`);
+ *   console.error(`SpendingData.asSpendingDataPubKeyUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeAsSpendingDataPubKey = (
+export const asSpendingDataPubKeyUnsafe = (
   instance: CML.SpendingData,
 ): CML.Bip32PublicKey | undefined =>
   Effect.runSync(asSpendingDataPubKey(instance));
@@ -566,16 +583,16 @@ export const asSpendingDataScript = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = SpendingData.unsafeAsSpendingDataScript(instance);
+ *   const result = SpendingData.asSpendingDataScriptUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`SpendingData.unsafeAsSpendingDataScript failed: ${error.message}`);
+ *   console.error(`SpendingData.asSpendingDataScriptUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeAsSpendingDataScript = (
+export const asSpendingDataScriptUnsafe = (
   instance: CML.SpendingData,
 ): CML.ByronScript | undefined =>
   Effect.runSync(asSpendingDataScript(instance));
@@ -622,15 +639,15 @@ export const asSpendingDataRedeem = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = SpendingData.unsafeAsSpendingDataRedeem(instance);
+ *   const result = SpendingData.asSpendingDataRedeemUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`SpendingData.unsafeAsSpendingDataRedeem failed: ${error.message}`);
+ *   console.error(`SpendingData.asSpendingDataRedeemUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeAsSpendingDataRedeem = (
+export const asSpendingDataRedeemUnsafe = (
   instance: CML.SpendingData,
 ): CML.PublicKey | undefined => Effect.runSync(asSpendingDataRedeem(instance));

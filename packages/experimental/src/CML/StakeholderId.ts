@@ -1,8 +1,25 @@
+/**
+ * @since 2.0.0
+ */
 import { Data, Effect } from "effect";
 import * as CML from "@anastasia-labs/cardano-multiplatform-lib-nodejs";
 
+/**
+ * Type alias for the CML StakeholderId class
+ *
+ * @since 2.0.0
+ * @category Types
+ */
 export type StakeholderId = CML.StakeholderId;
 
+/**
+ * Error class for StakeholderId operations
+ *
+ * This error is thrown when operations on StakeholderId instances fail.
+ *
+ * @since 2.0.0
+ * @category Errors
+ */
 export class StakeholderIdError extends Data.TaggedError("StakeholderIdError")<{
   message?: string;
 }> {}
@@ -47,16 +64,16 @@ export const free = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = StakeholderId.unsafeFree(instance);
+ *   const result = StakeholderId.freeUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`StakeholderId.unsafeFree failed: ${error.message}`);
+ *   console.error(`StakeholderId.freeUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeFree = (instance: CML.StakeholderId): void =>
+export const freeUnsafe = (instance: CML.StakeholderId): void =>
   Effect.runSync(free(instance));
 
 /**
@@ -102,16 +119,16 @@ export const toBech32 = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = StakeholderId.unsafeToBech32(instance,  parameters );
+ *   const result = StakeholderId.toBech32Unsafe(instance,  parameters );
  *   console.log(result);
  * } catch (error) {
- *   console.error(`StakeholderId.unsafeToBech32 failed: ${error.message}`);
+ *   console.error(`StakeholderId.toBech32Unsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeToBech32 = (
+export const toBech32Unsafe = (
   instance: CML.StakeholderId,
   prefix: string,
 ): string => Effect.runSync(toBech32(instance, prefix));
@@ -153,16 +170,16 @@ export const fromBech32 = Effect.fn(function* (bech32Str: string) {
  *
  * // Using try/catch for error handling
  * try {
- *   const result = StakeholderId.unsafeFromBech32( parameters );
+ *   const result = StakeholderId.fromBech32Unsafe( parameters );
  *   console.log(result);
  * } catch (error) {
- *   console.error(`StakeholderId.unsafeFromBech32 failed: ${error.message}`);
+ *   console.error(`StakeholderId.fromBech32Unsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Constructors
+ * @category ConstructorsUnsafe
  */
-export const unsafeFromBech32 = (bech32Str: string) =>
+export const fromBech32Unsafe = (bech32Str: string) =>
   Effect.runSync(fromBech32(bech32Str));
 
 /**
@@ -207,16 +224,16 @@ export const toRawBytes = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = StakeholderId.unsafeToRawBytes(instance);
+ *   const result = StakeholderId.toRawBytesUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`StakeholderId.unsafeToRawBytes failed: ${error.message}`);
+ *   console.error(`StakeholderId.toRawBytesUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeToRawBytes = (instance: CML.StakeholderId): Uint8Array =>
+export const toRawBytesUnsafe = (instance: CML.StakeholderId): Uint8Array =>
   Effect.runSync(toRawBytes(instance));
 
 /**
@@ -256,16 +273,16 @@ export const fromRawBytes = Effect.fn(function* (bytes: Uint8Array) {
  *
  * // Using try/catch for error handling
  * try {
- *   const result = StakeholderId.unsafeFromRawBytes( parameters );
+ *   const result = StakeholderId.fromRawBytesUnsafe( parameters );
  *   console.log(result);
  * } catch (error) {
- *   console.error(`StakeholderId.unsafeFromRawBytes failed: ${error.message}`);
+ *   console.error(`StakeholderId.fromRawBytesUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Constructors
+ * @category ConstructorsUnsafe
  */
-export const unsafeFromRawBytes = (bytes: Uint8Array) =>
+export const fromRawBytesUnsafe = (bytes: Uint8Array) =>
   Effect.runSync(fromRawBytes(bytes));
 
 /**
@@ -308,16 +325,16 @@ export const toHex = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = StakeholderId.unsafeToHex(instance);
+ *   const result = StakeholderId.toHexUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`StakeholderId.unsafeToHex failed: ${error.message}`);
+ *   console.error(`StakeholderId.toHexUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeToHex = (instance: CML.StakeholderId): string =>
+export const toHexUnsafe = (instance: CML.StakeholderId): string =>
   Effect.runSync(toHex(instance));
 
 /**
@@ -357,16 +374,16 @@ export const fromHex = Effect.fn(function* (input: string) {
  *
  * // Using try/catch for error handling
  * try {
- *   const result = StakeholderId.unsafeFromHex( parameters );
+ *   const result = StakeholderId.fromHexUnsafe( parameters );
  *   console.log(result);
  * } catch (error) {
- *   console.error(`StakeholderId.unsafeFromHex failed: ${error.message}`);
+ *   console.error(`StakeholderId.fromHexUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Constructors
+ * @category ConstructorsUnsafe
  */
-export const unsafeFromHex = (input: string) => Effect.runSync(fromHex(input));
+export const fromHexUnsafe = (input: string) => Effect.runSync(fromHex(input));
 
 /**
  * Static method _new of StakeholderId
@@ -405,14 +422,14 @@ export const _new = Effect.fn(function* (pubk: CML.Bip32PublicKey) {
  *
  * // Using try/catch for error handling
  * try {
- *   const result = StakeholderId.unsafe_new( parameters );
+ *   const result = StakeholderId._newUnsafe( parameters );
  *   console.log(result);
  * } catch (error) {
- *   console.error(`StakeholderId.unsafe_new failed: ${error.message}`);
+ *   console.error(`StakeholderId._newUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Constructors
+ * @category ConstructorsUnsafe
  */
-export const unsafe_new = (pubk: CML.Bip32PublicKey) =>
+export const _newUnsafe = (pubk: CML.Bip32PublicKey) =>
   Effect.runSync(_new(pubk));

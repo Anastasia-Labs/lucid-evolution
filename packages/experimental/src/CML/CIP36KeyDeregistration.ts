@@ -1,8 +1,25 @@
+/**
+ * @since 2.0.0
+ */
 import { Data, Effect } from "effect";
 import * as CML from "@anastasia-labs/cardano-multiplatform-lib-nodejs";
 
+/**
+ * Type alias for the CML CIP36KeyDeregistration class
+ *
+ * @since 2.0.0
+ * @category Types
+ */
 export type CIP36KeyDeregistration = CML.CIP36KeyDeregistration;
 
+/**
+ * Error class for CIP36KeyDeregistration operations
+ *
+ * This error is thrown when operations on CIP36KeyDeregistration instances fail.
+ *
+ * @since 2.0.0
+ * @category Errors
+ */
 export class CIP36KeyDeregistrationError extends Data.TaggedError(
   "CIP36KeyDeregistrationError",
 )<{
@@ -51,16 +68,16 @@ export const free = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = CIP36KeyDeregistration.unsafeFree(instance);
+ *   const result = CIP36KeyDeregistration.freeUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`CIP36KeyDeregistration.unsafeFree failed: ${error.message}`);
+ *   console.error(`CIP36KeyDeregistration.freeUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeFree = (instance: CML.CIP36KeyDeregistration): void =>
+export const freeUnsafe = (instance: CML.CIP36KeyDeregistration): void =>
   Effect.runSync(free(instance));
 
 /**
@@ -105,16 +122,16 @@ export const toCborBytes = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = CIP36KeyDeregistration.unsafeToCborBytes(instance);
+ *   const result = CIP36KeyDeregistration.toCborBytesUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`CIP36KeyDeregistration.unsafeToCborBytes failed: ${error.message}`);
+ *   console.error(`CIP36KeyDeregistration.toCborBytesUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeToCborBytes = (
+export const toCborBytesUnsafe = (
   instance: CML.CIP36KeyDeregistration,
 ): Uint8Array => Effect.runSync(toCborBytes(instance));
 
@@ -160,16 +177,16 @@ export const toCanonicalCborBytes = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = CIP36KeyDeregistration.unsafeToCanonicalCborBytes(instance);
+ *   const result = CIP36KeyDeregistration.toCanonicalCborBytesUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`CIP36KeyDeregistration.unsafeToCanonicalCborBytes failed: ${error.message}`);
+ *   console.error(`CIP36KeyDeregistration.toCanonicalCborBytesUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeToCanonicalCborBytes = (
+export const toCanonicalCborBytesUnsafe = (
   instance: CML.CIP36KeyDeregistration,
 ): Uint8Array => Effect.runSync(toCanonicalCborBytes(instance));
 
@@ -210,16 +227,16 @@ export const fromCborBytes = Effect.fn(function* (cborBytes: Uint8Array) {
  *
  * // Using try/catch for error handling
  * try {
- *   const result = CIP36KeyDeregistration.unsafeFromCborBytes( parameters );
+ *   const result = CIP36KeyDeregistration.fromCborBytesUnsafe( parameters );
  *   console.log(result);
  * } catch (error) {
- *   console.error(`CIP36KeyDeregistration.unsafeFromCborBytes failed: ${error.message}`);
+ *   console.error(`CIP36KeyDeregistration.fromCborBytesUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Constructors
+ * @category ConstructorsUnsafe
  */
-export const unsafeFromCborBytes = (cborBytes: Uint8Array) =>
+export const fromCborBytesUnsafe = (cborBytes: Uint8Array) =>
   Effect.runSync(fromCborBytes(cborBytes));
 
 /**
@@ -264,16 +281,16 @@ export const toCborHex = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = CIP36KeyDeregistration.unsafeToCborHex(instance);
+ *   const result = CIP36KeyDeregistration.toCborHexUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`CIP36KeyDeregistration.unsafeToCborHex failed: ${error.message}`);
+ *   console.error(`CIP36KeyDeregistration.toCborHexUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeToCborHex = (instance: CML.CIP36KeyDeregistration): string =>
+export const toCborHexUnsafe = (instance: CML.CIP36KeyDeregistration): string =>
   Effect.runSync(toCborHex(instance));
 
 /**
@@ -318,16 +335,16 @@ export const toCanonicalCborHex = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = CIP36KeyDeregistration.unsafeToCanonicalCborHex(instance);
+ *   const result = CIP36KeyDeregistration.toCanonicalCborHexUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`CIP36KeyDeregistration.unsafeToCanonicalCborHex failed: ${error.message}`);
+ *   console.error(`CIP36KeyDeregistration.toCanonicalCborHexUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeToCanonicalCborHex = (
+export const toCanonicalCborHexUnsafe = (
   instance: CML.CIP36KeyDeregistration,
 ): string => Effect.runSync(toCanonicalCborHex(instance));
 
@@ -368,16 +385,16 @@ export const fromCborHex = Effect.fn(function* (cborBytes: string) {
  *
  * // Using try/catch for error handling
  * try {
- *   const result = CIP36KeyDeregistration.unsafeFromCborHex( parameters );
+ *   const result = CIP36KeyDeregistration.fromCborHexUnsafe( parameters );
  *   console.log(result);
  * } catch (error) {
- *   console.error(`CIP36KeyDeregistration.unsafeFromCborHex failed: ${error.message}`);
+ *   console.error(`CIP36KeyDeregistration.fromCborHexUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Constructors
+ * @category ConstructorsUnsafe
  */
-export const unsafeFromCborHex = (cborBytes: string) =>
+export const fromCborHexUnsafe = (cborBytes: string) =>
   Effect.runSync(fromCborHex(cborBytes));
 
 /**
@@ -422,16 +439,16 @@ export const toJson = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = CIP36KeyDeregistration.unsafeToJson(instance);
+ *   const result = CIP36KeyDeregistration.toJsonUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`CIP36KeyDeregistration.unsafeToJson failed: ${error.message}`);
+ *   console.error(`CIP36KeyDeregistration.toJsonUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeToJson = (instance: CML.CIP36KeyDeregistration): string =>
+export const toJsonUnsafe = (instance: CML.CIP36KeyDeregistration): string =>
   Effect.runSync(toJson(instance));
 
 /**
@@ -476,16 +493,16 @@ export const toJsValue = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = CIP36KeyDeregistration.unsafeToJsValue(instance);
+ *   const result = CIP36KeyDeregistration.toJsValueUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`CIP36KeyDeregistration.unsafeToJsValue failed: ${error.message}`);
+ *   console.error(`CIP36KeyDeregistration.toJsValueUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeToJsValue = (instance: CML.CIP36KeyDeregistration): any =>
+export const toJsValueUnsafe = (instance: CML.CIP36KeyDeregistration): any =>
   Effect.runSync(toJsValue(instance));
 
 /**
@@ -525,16 +542,16 @@ export const fromJson = Effect.fn(function* (json: string) {
  *
  * // Using try/catch for error handling
  * try {
- *   const result = CIP36KeyDeregistration.unsafeFromJson( parameters );
+ *   const result = CIP36KeyDeregistration.fromJsonUnsafe( parameters );
  *   console.log(result);
  * } catch (error) {
- *   console.error(`CIP36KeyDeregistration.unsafeFromJson failed: ${error.message}`);
+ *   console.error(`CIP36KeyDeregistration.fromJsonUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Constructors
+ * @category ConstructorsUnsafe
  */
-export const unsafeFromJson = (json: string) => Effect.runSync(fromJson(json));
+export const fromJsonUnsafe = (json: string) => Effect.runSync(fromJson(json));
 
 /**
  * Method stakeCredential of CIP36KeyDeregistration
@@ -578,16 +595,16 @@ export const stakeCredential = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = CIP36KeyDeregistration.unsafeStakeCredential(instance);
+ *   const result = CIP36KeyDeregistration.stakeCredentialUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`CIP36KeyDeregistration.unsafeStakeCredential failed: ${error.message}`);
+ *   console.error(`CIP36KeyDeregistration.stakeCredentialUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeStakeCredential = (
+export const stakeCredentialUnsafe = (
   instance: CML.CIP36KeyDeregistration,
 ): CML.PublicKey => Effect.runSync(stakeCredential(instance));
 
@@ -633,16 +650,16 @@ export const nonce = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = CIP36KeyDeregistration.unsafeNonce(instance);
+ *   const result = CIP36KeyDeregistration.nonceUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`CIP36KeyDeregistration.unsafeNonce failed: ${error.message}`);
+ *   console.error(`CIP36KeyDeregistration.nonceUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeNonce = (instance: CML.CIP36KeyDeregistration): bigint =>
+export const nonceUnsafe = (instance: CML.CIP36KeyDeregistration): bigint =>
   Effect.runSync(nonce(instance));
 
 /**
@@ -688,16 +705,16 @@ export const setVotingPurpose = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = CIP36KeyDeregistration.unsafeSetVotingPurpose(instance,  parameters );
+ *   const result = CIP36KeyDeregistration.setVotingPurposeUnsafe(instance,  parameters );
  *   console.log(result);
  * } catch (error) {
- *   console.error(`CIP36KeyDeregistration.unsafeSetVotingPurpose failed: ${error.message}`);
+ *   console.error(`CIP36KeyDeregistration.setVotingPurposeUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeSetVotingPurpose = (
+export const setVotingPurposeUnsafe = (
   instance: CML.CIP36KeyDeregistration,
   votingPurpose: bigint,
 ): void => Effect.runSync(setVotingPurpose(instance, votingPurpose));
@@ -744,15 +761,15 @@ export const votingPurpose = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = CIP36KeyDeregistration.unsafeVotingPurpose(instance);
+ *   const result = CIP36KeyDeregistration.votingPurposeUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`CIP36KeyDeregistration.unsafeVotingPurpose failed: ${error.message}`);
+ *   console.error(`CIP36KeyDeregistration.votingPurposeUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeVotingPurpose = (
+export const votingPurposeUnsafe = (
   instance: CML.CIP36KeyDeregistration,
 ): bigint => Effect.runSync(votingPurpose(instance));

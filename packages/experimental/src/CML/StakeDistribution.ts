@@ -1,8 +1,25 @@
+/**
+ * @since 2.0.0
+ */
 import { Data, Effect } from "effect";
 import * as CML from "@anastasia-labs/cardano-multiplatform-lib-nodejs";
 
+/**
+ * Type alias for the CML StakeDistribution class
+ *
+ * @since 2.0.0
+ * @category Types
+ */
 export type StakeDistribution = CML.StakeDistribution;
 
+/**
+ * Error class for StakeDistribution operations
+ *
+ * This error is thrown when operations on StakeDistribution instances fail.
+ *
+ * @since 2.0.0
+ * @category Errors
+ */
 export class StakeDistributionError extends Data.TaggedError(
   "StakeDistributionError",
 )<{
@@ -51,16 +68,16 @@ export const free = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = StakeDistribution.unsafeFree(instance);
+ *   const result = StakeDistribution.freeUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`StakeDistribution.unsafeFree failed: ${error.message}`);
+ *   console.error(`StakeDistribution.freeUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeFree = (instance: CML.StakeDistribution): void =>
+export const freeUnsafe = (instance: CML.StakeDistribution): void =>
   Effect.runSync(free(instance));
 
 /**
@@ -105,16 +122,16 @@ export const toCborBytes = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = StakeDistribution.unsafeToCborBytes(instance);
+ *   const result = StakeDistribution.toCborBytesUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`StakeDistribution.unsafeToCborBytes failed: ${error.message}`);
+ *   console.error(`StakeDistribution.toCborBytesUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeToCborBytes = (
+export const toCborBytesUnsafe = (
   instance: CML.StakeDistribution,
 ): Uint8Array => Effect.runSync(toCborBytes(instance));
 
@@ -155,16 +172,16 @@ export const fromCborBytes = Effect.fn(function* (cborBytes: Uint8Array) {
  *
  * // Using try/catch for error handling
  * try {
- *   const result = StakeDistribution.unsafeFromCborBytes( parameters );
+ *   const result = StakeDistribution.fromCborBytesUnsafe( parameters );
  *   console.log(result);
  * } catch (error) {
- *   console.error(`StakeDistribution.unsafeFromCborBytes failed: ${error.message}`);
+ *   console.error(`StakeDistribution.fromCborBytesUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Constructors
+ * @category ConstructorsUnsafe
  */
-export const unsafeFromCborBytes = (cborBytes: Uint8Array) =>
+export const fromCborBytesUnsafe = (cborBytes: Uint8Array) =>
   Effect.runSync(fromCborBytes(cborBytes));
 
 /**
@@ -209,16 +226,16 @@ export const toCborHex = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = StakeDistribution.unsafeToCborHex(instance);
+ *   const result = StakeDistribution.toCborHexUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`StakeDistribution.unsafeToCborHex failed: ${error.message}`);
+ *   console.error(`StakeDistribution.toCborHexUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeToCborHex = (instance: CML.StakeDistribution): string =>
+export const toCborHexUnsafe = (instance: CML.StakeDistribution): string =>
   Effect.runSync(toCborHex(instance));
 
 /**
@@ -258,16 +275,16 @@ export const fromCborHex = Effect.fn(function* (cborBytes: string) {
  *
  * // Using try/catch for error handling
  * try {
- *   const result = StakeDistribution.unsafeFromCborHex( parameters );
+ *   const result = StakeDistribution.fromCborHexUnsafe( parameters );
  *   console.log(result);
  * } catch (error) {
- *   console.error(`StakeDistribution.unsafeFromCborHex failed: ${error.message}`);
+ *   console.error(`StakeDistribution.fromCborHexUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Constructors
+ * @category ConstructorsUnsafe
  */
-export const unsafeFromCborHex = (cborBytes: string) =>
+export const fromCborHexUnsafe = (cborBytes: string) =>
   Effect.runSync(fromCborHex(cborBytes));
 
 /**
@@ -309,16 +326,16 @@ export const newSingleKey = Effect.fn(function* (
  *
  * // Using try/catch for error handling
  * try {
- *   const result = StakeDistribution.unsafeNewSingleKey( parameters );
+ *   const result = StakeDistribution.newSingleKeyUnsafe( parameters );
  *   console.log(result);
  * } catch (error) {
- *   console.error(`StakeDistribution.unsafeNewSingleKey failed: ${error.message}`);
+ *   console.error(`StakeDistribution.newSingleKeyUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Constructors
+ * @category ConstructorsUnsafe
  */
-export const unsafeNewSingleKey = (stakeholderId: CML.StakeholderId) =>
+export const newSingleKeyUnsafe = (stakeholderId: CML.StakeholderId) =>
   Effect.runSync(newSingleKey(stakeholderId));
 
 /**
@@ -358,16 +375,16 @@ export const newBootstrapEra = Effect.fn(function* () {
  *
  * // Using try/catch for error handling
  * try {
- *   const result = StakeDistribution.unsafeNewBootstrapEra();
+ *   const result = StakeDistribution.newBootstrapEraUnsafe();
  *   console.log(result);
  * } catch (error) {
- *   console.error(`StakeDistribution.unsafeNewBootstrapEra failed: ${error.message}`);
+ *   console.error(`StakeDistribution.newBootstrapEraUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Constructors
+ * @category ConstructorsUnsafe
  */
-export const unsafeNewBootstrapEra = () => Effect.runSync(newBootstrapEra());
+export const newBootstrapEraUnsafe = () => Effect.runSync(newBootstrapEra());
 
 /**
  * Method kind of StakeDistribution
@@ -411,16 +428,16 @@ export const kind = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = StakeDistribution.unsafeKind(instance);
+ *   const result = StakeDistribution.kindUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`StakeDistribution.unsafeKind failed: ${error.message}`);
+ *   console.error(`StakeDistribution.kindUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeKind = (
+export const kindUnsafe = (
   instance: CML.StakeDistribution,
 ): CML.StakeDistributionKind => Effect.runSync(kind(instance));
 
@@ -466,15 +483,15 @@ export const asSingleKey = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = StakeDistribution.unsafeAsSingleKey(instance);
+ *   const result = StakeDistribution.asSingleKeyUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`StakeDistribution.unsafeAsSingleKey failed: ${error.message}`);
+ *   console.error(`StakeDistribution.asSingleKeyUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeAsSingleKey = (
+export const asSingleKeyUnsafe = (
   instance: CML.StakeDistribution,
 ): CML.StakeholderId | undefined => Effect.runSync(asSingleKey(instance));

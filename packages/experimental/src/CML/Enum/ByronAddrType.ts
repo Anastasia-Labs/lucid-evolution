@@ -1,9 +1,53 @@
+/**
+ * @since 2.0.0
+ */
 import * as CML from "@anastasia-labs/cardano-multiplatform-lib-nodejs";
 
+/**
+ * Type alias for the CML ByronAddrType enum
+ *
+ * @since 2.0.0
+ * @category Types
+ */
 export type ByronAddrType = CML.ByronAddrType;
 
+/**
+ * PublicKey variant of the ByronAddrType enum
+ *
+ * @example
+ * import { ByronAddrType } from "@lucid-evolution/experimental";
+ *
+ * const kind = ByronAddrType.PublicKey;
+ *
+ * @since 2.0.0
+ * @category Variants
+ */
 export const PublicKey = CML.ByronAddrType.PublicKey;
+
+/**
+ * Script variant of the ByronAddrType enum
+ *
+ * @example
+ * import { ByronAddrType } from "@lucid-evolution/experimental";
+ *
+ * const kind = ByronAddrType.Script;
+ *
+ * @since 2.0.0
+ * @category Variants
+ */
 export const Script = CML.ByronAddrType.Script;
+
+/**
+ * Redeem variant of the ByronAddrType enum
+ *
+ * @example
+ * import { ByronAddrType } from "@lucid-evolution/experimental";
+ *
+ * const kind = ByronAddrType.Redeem;
+ *
+ * @since 2.0.0
+ * @category Variants
+ */
 export const Redeem = CML.ByronAddrType.Redeem;
 
 /**

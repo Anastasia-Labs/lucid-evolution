@@ -1,8 +1,25 @@
+/**
+ * @since 2.0.0
+ */
 import { Data, Effect } from "effect";
 import * as CML from "@anastasia-labs/cardano-multiplatform-lib-nodejs";
 
+/**
+ * Type alias for the CML ExUnits class
+ *
+ * @since 2.0.0
+ * @category Types
+ */
 export type ExUnits = CML.ExUnits;
 
+/**
+ * Error class for ExUnits operations
+ *
+ * This error is thrown when operations on ExUnits instances fail.
+ *
+ * @since 2.0.0
+ * @category Errors
+ */
 export class ExUnitsError extends Data.TaggedError("ExUnitsError")<{
   message?: string;
 }> {}
@@ -47,16 +64,16 @@ export const free = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = ExUnits.unsafeFree(instance);
+ *   const result = ExUnits.freeUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`ExUnits.unsafeFree failed: ${error.message}`);
+ *   console.error(`ExUnits.freeUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeFree = (instance: CML.ExUnits): void =>
+export const freeUnsafe = (instance: CML.ExUnits): void =>
   Effect.runSync(free(instance));
 
 /**
@@ -102,16 +119,16 @@ export const checkedAdd = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = ExUnits.unsafeCheckedAdd(instance,  parameters );
+ *   const result = ExUnits.checkedAddUnsafe(instance,  parameters );
  *   console.log(result);
  * } catch (error) {
- *   console.error(`ExUnits.unsafeCheckedAdd failed: ${error.message}`);
+ *   console.error(`ExUnits.checkedAddUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeCheckedAdd = (
+export const checkedAddUnsafe = (
   instance: CML.ExUnits,
   other: CML.ExUnits,
 ): CML.ExUnits => Effect.runSync(checkedAdd(instance, other));
@@ -156,16 +173,16 @@ export const toCborBytes = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = ExUnits.unsafeToCborBytes(instance);
+ *   const result = ExUnits.toCborBytesUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`ExUnits.unsafeToCborBytes failed: ${error.message}`);
+ *   console.error(`ExUnits.toCborBytesUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeToCborBytes = (instance: CML.ExUnits): Uint8Array =>
+export const toCborBytesUnsafe = (instance: CML.ExUnits): Uint8Array =>
   Effect.runSync(toCborBytes(instance));
 
 /**
@@ -208,16 +225,16 @@ export const toCanonicalCborBytes = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = ExUnits.unsafeToCanonicalCborBytes(instance);
+ *   const result = ExUnits.toCanonicalCborBytesUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`ExUnits.unsafeToCanonicalCborBytes failed: ${error.message}`);
+ *   console.error(`ExUnits.toCanonicalCborBytesUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeToCanonicalCborBytes = (instance: CML.ExUnits): Uint8Array =>
+export const toCanonicalCborBytesUnsafe = (instance: CML.ExUnits): Uint8Array =>
   Effect.runSync(toCanonicalCborBytes(instance));
 
 /**
@@ -257,16 +274,16 @@ export const fromCborBytes = Effect.fn(function* (cborBytes: Uint8Array) {
  *
  * // Using try/catch for error handling
  * try {
- *   const result = ExUnits.unsafeFromCborBytes( parameters );
+ *   const result = ExUnits.fromCborBytesUnsafe( parameters );
  *   console.log(result);
  * } catch (error) {
- *   console.error(`ExUnits.unsafeFromCborBytes failed: ${error.message}`);
+ *   console.error(`ExUnits.fromCborBytesUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Constructors
+ * @category ConstructorsUnsafe
  */
-export const unsafeFromCborBytes = (cborBytes: Uint8Array) =>
+export const fromCborBytesUnsafe = (cborBytes: Uint8Array) =>
   Effect.runSync(fromCborBytes(cborBytes));
 
 /**
@@ -309,16 +326,16 @@ export const toCborHex = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = ExUnits.unsafeToCborHex(instance);
+ *   const result = ExUnits.toCborHexUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`ExUnits.unsafeToCborHex failed: ${error.message}`);
+ *   console.error(`ExUnits.toCborHexUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeToCborHex = (instance: CML.ExUnits): string =>
+export const toCborHexUnsafe = (instance: CML.ExUnits): string =>
   Effect.runSync(toCborHex(instance));
 
 /**
@@ -361,16 +378,16 @@ export const toCanonicalCborHex = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = ExUnits.unsafeToCanonicalCborHex(instance);
+ *   const result = ExUnits.toCanonicalCborHexUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`ExUnits.unsafeToCanonicalCborHex failed: ${error.message}`);
+ *   console.error(`ExUnits.toCanonicalCborHexUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeToCanonicalCborHex = (instance: CML.ExUnits): string =>
+export const toCanonicalCborHexUnsafe = (instance: CML.ExUnits): string =>
   Effect.runSync(toCanonicalCborHex(instance));
 
 /**
@@ -410,16 +427,16 @@ export const fromCborHex = Effect.fn(function* (cborBytes: string) {
  *
  * // Using try/catch for error handling
  * try {
- *   const result = ExUnits.unsafeFromCborHex( parameters );
+ *   const result = ExUnits.fromCborHexUnsafe( parameters );
  *   console.log(result);
  * } catch (error) {
- *   console.error(`ExUnits.unsafeFromCborHex failed: ${error.message}`);
+ *   console.error(`ExUnits.fromCborHexUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Constructors
+ * @category ConstructorsUnsafe
  */
-export const unsafeFromCborHex = (cborBytes: string) =>
+export const fromCborHexUnsafe = (cborBytes: string) =>
   Effect.runSync(fromCborHex(cborBytes));
 
 /**
@@ -462,16 +479,16 @@ export const toJson = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = ExUnits.unsafeToJson(instance);
+ *   const result = ExUnits.toJsonUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`ExUnits.unsafeToJson failed: ${error.message}`);
+ *   console.error(`ExUnits.toJsonUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeToJson = (instance: CML.ExUnits): string =>
+export const toJsonUnsafe = (instance: CML.ExUnits): string =>
   Effect.runSync(toJson(instance));
 
 /**
@@ -514,16 +531,16 @@ export const toJsValue = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = ExUnits.unsafeToJsValue(instance);
+ *   const result = ExUnits.toJsValueUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`ExUnits.unsafeToJsValue failed: ${error.message}`);
+ *   console.error(`ExUnits.toJsValueUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeToJsValue = (instance: CML.ExUnits): any =>
+export const toJsValueUnsafe = (instance: CML.ExUnits): any =>
   Effect.runSync(toJsValue(instance));
 
 /**
@@ -563,16 +580,16 @@ export const fromJson = Effect.fn(function* (json: string) {
  *
  * // Using try/catch for error handling
  * try {
- *   const result = ExUnits.unsafeFromJson( parameters );
+ *   const result = ExUnits.fromJsonUnsafe( parameters );
  *   console.log(result);
  * } catch (error) {
- *   console.error(`ExUnits.unsafeFromJson failed: ${error.message}`);
+ *   console.error(`ExUnits.fromJsonUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Constructors
+ * @category ConstructorsUnsafe
  */
-export const unsafeFromJson = (json: string) => Effect.runSync(fromJson(json));
+export const fromJsonUnsafe = (json: string) => Effect.runSync(fromJson(json));
 
 /**
  * Method mem of ExUnits
@@ -614,16 +631,16 @@ export const mem = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = ExUnits.unsafeMem(instance);
+ *   const result = ExUnits.memUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`ExUnits.unsafeMem failed: ${error.message}`);
+ *   console.error(`ExUnits.memUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeMem = (instance: CML.ExUnits): bigint =>
+export const memUnsafe = (instance: CML.ExUnits): bigint =>
   Effect.runSync(mem(instance));
 
 /**
@@ -666,16 +683,16 @@ export const steps = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = ExUnits.unsafeSteps(instance);
+ *   const result = ExUnits.stepsUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`ExUnits.unsafeSteps failed: ${error.message}`);
+ *   console.error(`ExUnits.stepsUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeSteps = (instance: CML.ExUnits): bigint =>
+export const stepsUnsafe = (instance: CML.ExUnits): bigint =>
   Effect.runSync(steps(instance));
 
 /**
@@ -715,14 +732,14 @@ export const _new = Effect.fn(function* (mem: bigint, steps: bigint) {
  *
  * // Using try/catch for error handling
  * try {
- *   const result = ExUnits.unsafe_new( parameters );
+ *   const result = ExUnits._newUnsafe( parameters );
  *   console.log(result);
  * } catch (error) {
- *   console.error(`ExUnits.unsafe_new failed: ${error.message}`);
+ *   console.error(`ExUnits._newUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Constructors
+ * @category ConstructorsUnsafe
  */
-export const unsafe_new = (mem: bigint, steps: bigint) =>
+export const _newUnsafe = (mem: bigint, steps: bigint) =>
   Effect.runSync(_new(mem, steps));

@@ -1,6 +1,17 @@
+/**
+ * @since 2.0.0
+ */
 import { Data, Effect } from "effect";
 import * as CML from "@anastasia-labs/cardano-multiplatform-lib-nodejs";
 
+/**
+ * Error class for make_vkey_witness function
+ *
+ * This error is thrown when the make_vkey_witness function fails.
+ *
+ * @since 2.0.0
+ * @category Errors
+ */
 export class MakeVkeyWitnessError extends Data.TaggedError(
   "MakeVkeyWitnessError",
 )<{
@@ -40,19 +51,19 @@ export const makeVkeyWitness = Effect.fn(function* (
  * Unsafely calls make_vkey_witness function without Effect wrapper
  *
  * @example
- * import { unsafeMakeVkeyWitness } from "@lucid-evolution/experimental/CML/functions";
+ * import { makeVkeyWitnessUnsafe } from "@lucid-evolution/experimental/CML/functions";
  *
  * try {
- *   const result = unsafeMakeVkeyWitness(TransactionHash instance , PrivateKey instance );
+ *   const result = makeVkeyWitnessUnsafe(TransactionHash instance , PrivateKey instance );
  *   console.log(result);
  * } catch (error) {
- *   console.error(`unsafeMakeVkeyWitness failed: ${error.message}`);
+ *   console.error(`makeVkeyWitnessUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Functions
+ * @category FunctionsUnsafe
  */
-export const unsafeMakeVkeyWitness = (
+export const makeVkeyWitnessUnsafe = (
   txBodyHash: CML.TransactionHash,
   sk: CML.PrivateKey,
 ): CML.Vkeywitness => Effect.runSync(makeVkeyWitness(txBodyHash, sk));

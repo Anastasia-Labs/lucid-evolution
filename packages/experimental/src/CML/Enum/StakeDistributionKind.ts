@@ -1,8 +1,40 @@
+/**
+ * @since 2.0.0
+ */
 import * as CML from "@anastasia-labs/cardano-multiplatform-lib-nodejs";
 
+/**
+ * Type alias for the CML StakeDistributionKind enum
+ *
+ * @since 2.0.0
+ * @category Types
+ */
 export type StakeDistributionKind = CML.StakeDistributionKind;
 
+/**
+ * SingleKey variant of the StakeDistributionKind enum
+ *
+ * @example
+ * import { StakeDistributionKind } from "@lucid-evolution/experimental";
+ *
+ * const kind = StakeDistributionKind.SingleKey;
+ *
+ * @since 2.0.0
+ * @category Variants
+ */
 export const SingleKey = CML.StakeDistributionKind.SingleKey;
+
+/**
+ * BootstrapEra variant of the StakeDistributionKind enum
+ *
+ * @example
+ * import { StakeDistributionKind } from "@lucid-evolution/experimental";
+ *
+ * const kind = StakeDistributionKind.BootstrapEra;
+ *
+ * @since 2.0.0
+ * @category Variants
+ */
 export const BootstrapEra = CML.StakeDistributionKind.BootstrapEra;
 
 /**

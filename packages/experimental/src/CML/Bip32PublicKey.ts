@@ -1,8 +1,25 @@
+/**
+ * @since 2.0.0
+ */
 import { Data, Effect } from "effect";
 import * as CML from "@anastasia-labs/cardano-multiplatform-lib-nodejs";
 
+/**
+ * Type alias for the CML Bip32PublicKey class
+ *
+ * @since 2.0.0
+ * @category Types
+ */
 export type Bip32PublicKey = CML.Bip32PublicKey;
 
+/**
+ * Error class for Bip32PublicKey operations
+ *
+ * This error is thrown when operations on Bip32PublicKey instances fail.
+ *
+ * @since 2.0.0
+ * @category Errors
+ */
 export class Bip32PublicKeyError extends Data.TaggedError(
   "Bip32PublicKeyError",
 )<{
@@ -49,16 +66,16 @@ export const free = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = Bip32PublicKey.unsafeFree(instance);
+ *   const result = Bip32PublicKey.freeUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`Bip32PublicKey.unsafeFree failed: ${error.message}`);
+ *   console.error(`Bip32PublicKey.freeUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeFree = (instance: CML.Bip32PublicKey): void =>
+export const freeUnsafe = (instance: CML.Bip32PublicKey): void =>
   Effect.runSync(free(instance));
 
 /**
@@ -104,16 +121,16 @@ export const derive = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = Bip32PublicKey.unsafeDerive(instance,  parameters );
+ *   const result = Bip32PublicKey.deriveUnsafe(instance,  parameters );
  *   console.log(result);
  * } catch (error) {
- *   console.error(`Bip32PublicKey.unsafeDerive failed: ${error.message}`);
+ *   console.error(`Bip32PublicKey.deriveUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeDerive = (
+export const deriveUnsafe = (
   instance: CML.Bip32PublicKey,
   index: number,
 ): CML.Bip32PublicKey => Effect.runSync(derive(instance, index));
@@ -160,16 +177,16 @@ export const toRawKey = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = Bip32PublicKey.unsafeToRawKey(instance);
+ *   const result = Bip32PublicKey.toRawKeyUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`Bip32PublicKey.unsafeToRawKey failed: ${error.message}`);
+ *   console.error(`Bip32PublicKey.toRawKeyUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeToRawKey = (instance: CML.Bip32PublicKey): CML.PublicKey =>
+export const toRawKeyUnsafe = (instance: CML.Bip32PublicKey): CML.PublicKey =>
   Effect.runSync(toRawKey(instance));
 
 /**
@@ -209,16 +226,16 @@ export const fromRawBytes = Effect.fn(function* (bytes: Uint8Array) {
  *
  * // Using try/catch for error handling
  * try {
- *   const result = Bip32PublicKey.unsafeFromRawBytes( parameters );
+ *   const result = Bip32PublicKey.fromRawBytesUnsafe( parameters );
  *   console.log(result);
  * } catch (error) {
- *   console.error(`Bip32PublicKey.unsafeFromRawBytes failed: ${error.message}`);
+ *   console.error(`Bip32PublicKey.fromRawBytesUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Constructors
+ * @category ConstructorsUnsafe
  */
-export const unsafeFromRawBytes = (bytes: Uint8Array) =>
+export const fromRawBytesUnsafe = (bytes: Uint8Array) =>
   Effect.runSync(fromRawBytes(bytes));
 
 /**
@@ -263,16 +280,16 @@ export const toRawBytes = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = Bip32PublicKey.unsafeToRawBytes(instance);
+ *   const result = Bip32PublicKey.toRawBytesUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`Bip32PublicKey.unsafeToRawBytes failed: ${error.message}`);
+ *   console.error(`Bip32PublicKey.toRawBytesUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeToRawBytes = (instance: CML.Bip32PublicKey): Uint8Array =>
+export const toRawBytesUnsafe = (instance: CML.Bip32PublicKey): Uint8Array =>
   Effect.runSync(toRawBytes(instance));
 
 /**
@@ -312,16 +329,16 @@ export const fromBech32 = Effect.fn(function* (bech32Str: string) {
  *
  * // Using try/catch for error handling
  * try {
- *   const result = Bip32PublicKey.unsafeFromBech32( parameters );
+ *   const result = Bip32PublicKey.fromBech32Unsafe( parameters );
  *   console.log(result);
  * } catch (error) {
- *   console.error(`Bip32PublicKey.unsafeFromBech32 failed: ${error.message}`);
+ *   console.error(`Bip32PublicKey.fromBech32Unsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Constructors
+ * @category ConstructorsUnsafe
  */
-export const unsafeFromBech32 = (bech32Str: string) =>
+export const fromBech32Unsafe = (bech32Str: string) =>
   Effect.runSync(fromBech32(bech32Str));
 
 /**
@@ -364,16 +381,16 @@ export const toBech32 = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = Bip32PublicKey.unsafeToBech32(instance);
+ *   const result = Bip32PublicKey.toBech32Unsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`Bip32PublicKey.unsafeToBech32 failed: ${error.message}`);
+ *   console.error(`Bip32PublicKey.toBech32Unsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeToBech32 = (instance: CML.Bip32PublicKey): string =>
+export const toBech32Unsafe = (instance: CML.Bip32PublicKey): string =>
   Effect.runSync(toBech32(instance));
 
 /**
@@ -418,14 +435,14 @@ export const chaincode = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = Bip32PublicKey.unsafeChaincode(instance);
+ *   const result = Bip32PublicKey.chaincodeUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`Bip32PublicKey.unsafeChaincode failed: ${error.message}`);
+ *   console.error(`Bip32PublicKey.chaincodeUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeChaincode = (instance: CML.Bip32PublicKey): Uint8Array =>
+export const chaincodeUnsafe = (instance: CML.Bip32PublicKey): Uint8Array =>
   Effect.runSync(chaincode(instance));

@@ -1,8 +1,25 @@
+/**
+ * @since 2.0.0
+ */
 import { Data, Effect } from "effect";
 import * as CML from "@anastasia-labs/cardano-multiplatform-lib-nodejs";
 
+/**
+ * Type alias for the CML AuthCommitteeHotCert class
+ *
+ * @since 2.0.0
+ * @category Types
+ */
 export type AuthCommitteeHotCert = CML.AuthCommitteeHotCert;
 
+/**
+ * Error class for AuthCommitteeHotCert operations
+ *
+ * This error is thrown when operations on AuthCommitteeHotCert instances fail.
+ *
+ * @since 2.0.0
+ * @category Errors
+ */
 export class AuthCommitteeHotCertError extends Data.TaggedError(
   "AuthCommitteeHotCertError",
 )<{
@@ -51,16 +68,16 @@ export const free = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = AuthCommitteeHotCert.unsafeFree(instance);
+ *   const result = AuthCommitteeHotCert.freeUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`AuthCommitteeHotCert.unsafeFree failed: ${error.message}`);
+ *   console.error(`AuthCommitteeHotCert.freeUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeFree = (instance: CML.AuthCommitteeHotCert): void =>
+export const freeUnsafe = (instance: CML.AuthCommitteeHotCert): void =>
   Effect.runSync(free(instance));
 
 /**
@@ -105,16 +122,16 @@ export const toCborBytes = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = AuthCommitteeHotCert.unsafeToCborBytes(instance);
+ *   const result = AuthCommitteeHotCert.toCborBytesUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`AuthCommitteeHotCert.unsafeToCborBytes failed: ${error.message}`);
+ *   console.error(`AuthCommitteeHotCert.toCborBytesUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeToCborBytes = (
+export const toCborBytesUnsafe = (
   instance: CML.AuthCommitteeHotCert,
 ): Uint8Array => Effect.runSync(toCborBytes(instance));
 
@@ -160,16 +177,16 @@ export const toCanonicalCborBytes = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = AuthCommitteeHotCert.unsafeToCanonicalCborBytes(instance);
+ *   const result = AuthCommitteeHotCert.toCanonicalCborBytesUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`AuthCommitteeHotCert.unsafeToCanonicalCborBytes failed: ${error.message}`);
+ *   console.error(`AuthCommitteeHotCert.toCanonicalCborBytesUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeToCanonicalCborBytes = (
+export const toCanonicalCborBytesUnsafe = (
   instance: CML.AuthCommitteeHotCert,
 ): Uint8Array => Effect.runSync(toCanonicalCborBytes(instance));
 
@@ -210,16 +227,16 @@ export const fromCborBytes = Effect.fn(function* (cborBytes: Uint8Array) {
  *
  * // Using try/catch for error handling
  * try {
- *   const result = AuthCommitteeHotCert.unsafeFromCborBytes( parameters );
+ *   const result = AuthCommitteeHotCert.fromCborBytesUnsafe( parameters );
  *   console.log(result);
  * } catch (error) {
- *   console.error(`AuthCommitteeHotCert.unsafeFromCborBytes failed: ${error.message}`);
+ *   console.error(`AuthCommitteeHotCert.fromCborBytesUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Constructors
+ * @category ConstructorsUnsafe
  */
-export const unsafeFromCborBytes = (cborBytes: Uint8Array) =>
+export const fromCborBytesUnsafe = (cborBytes: Uint8Array) =>
   Effect.runSync(fromCborBytes(cborBytes));
 
 /**
@@ -264,16 +281,16 @@ export const toCborHex = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = AuthCommitteeHotCert.unsafeToCborHex(instance);
+ *   const result = AuthCommitteeHotCert.toCborHexUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`AuthCommitteeHotCert.unsafeToCborHex failed: ${error.message}`);
+ *   console.error(`AuthCommitteeHotCert.toCborHexUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeToCborHex = (instance: CML.AuthCommitteeHotCert): string =>
+export const toCborHexUnsafe = (instance: CML.AuthCommitteeHotCert): string =>
   Effect.runSync(toCborHex(instance));
 
 /**
@@ -318,16 +335,16 @@ export const toCanonicalCborHex = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = AuthCommitteeHotCert.unsafeToCanonicalCborHex(instance);
+ *   const result = AuthCommitteeHotCert.toCanonicalCborHexUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`AuthCommitteeHotCert.unsafeToCanonicalCborHex failed: ${error.message}`);
+ *   console.error(`AuthCommitteeHotCert.toCanonicalCborHexUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeToCanonicalCborHex = (
+export const toCanonicalCborHexUnsafe = (
   instance: CML.AuthCommitteeHotCert,
 ): string => Effect.runSync(toCanonicalCborHex(instance));
 
@@ -368,16 +385,16 @@ export const fromCborHex = Effect.fn(function* (cborBytes: string) {
  *
  * // Using try/catch for error handling
  * try {
- *   const result = AuthCommitteeHotCert.unsafeFromCborHex( parameters );
+ *   const result = AuthCommitteeHotCert.fromCborHexUnsafe( parameters );
  *   console.log(result);
  * } catch (error) {
- *   console.error(`AuthCommitteeHotCert.unsafeFromCborHex failed: ${error.message}`);
+ *   console.error(`AuthCommitteeHotCert.fromCborHexUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Constructors
+ * @category ConstructorsUnsafe
  */
-export const unsafeFromCborHex = (cborBytes: string) =>
+export const fromCborHexUnsafe = (cborBytes: string) =>
   Effect.runSync(fromCborHex(cborBytes));
 
 /**
@@ -422,16 +439,16 @@ export const toJson = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = AuthCommitteeHotCert.unsafeToJson(instance);
+ *   const result = AuthCommitteeHotCert.toJsonUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`AuthCommitteeHotCert.unsafeToJson failed: ${error.message}`);
+ *   console.error(`AuthCommitteeHotCert.toJsonUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeToJson = (instance: CML.AuthCommitteeHotCert): string =>
+export const toJsonUnsafe = (instance: CML.AuthCommitteeHotCert): string =>
   Effect.runSync(toJson(instance));
 
 /**
@@ -476,16 +493,16 @@ export const toJsValue = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = AuthCommitteeHotCert.unsafeToJsValue(instance);
+ *   const result = AuthCommitteeHotCert.toJsValueUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`AuthCommitteeHotCert.unsafeToJsValue failed: ${error.message}`);
+ *   console.error(`AuthCommitteeHotCert.toJsValueUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeToJsValue = (instance: CML.AuthCommitteeHotCert): any =>
+export const toJsValueUnsafe = (instance: CML.AuthCommitteeHotCert): any =>
   Effect.runSync(toJsValue(instance));
 
 /**
@@ -525,16 +542,16 @@ export const fromJson = Effect.fn(function* (json: string) {
  *
  * // Using try/catch for error handling
  * try {
- *   const result = AuthCommitteeHotCert.unsafeFromJson( parameters );
+ *   const result = AuthCommitteeHotCert.fromJsonUnsafe( parameters );
  *   console.log(result);
  * } catch (error) {
- *   console.error(`AuthCommitteeHotCert.unsafeFromJson failed: ${error.message}`);
+ *   console.error(`AuthCommitteeHotCert.fromJsonUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Constructors
+ * @category ConstructorsUnsafe
  */
-export const unsafeFromJson = (json: string) => Effect.runSync(fromJson(json));
+export const fromJsonUnsafe = (json: string) => Effect.runSync(fromJson(json));
 
 /**
  * Method committeeColdCredential of AuthCommitteeHotCert
@@ -578,16 +595,16 @@ export const committeeColdCredential = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = AuthCommitteeHotCert.unsafeCommitteeColdCredential(instance);
+ *   const result = AuthCommitteeHotCert.committeeColdCredentialUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`AuthCommitteeHotCert.unsafeCommitteeColdCredential failed: ${error.message}`);
+ *   console.error(`AuthCommitteeHotCert.committeeColdCredentialUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeCommitteeColdCredential = (
+export const committeeColdCredentialUnsafe = (
   instance: CML.AuthCommitteeHotCert,
 ): CML.Credential => Effect.runSync(committeeColdCredential(instance));
 
@@ -633,16 +650,16 @@ export const committeeHotCredential = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = AuthCommitteeHotCert.unsafeCommitteeHotCredential(instance);
+ *   const result = AuthCommitteeHotCert.committeeHotCredentialUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`AuthCommitteeHotCert.unsafeCommitteeHotCredential failed: ${error.message}`);
+ *   console.error(`AuthCommitteeHotCert.committeeHotCredentialUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeCommitteeHotCredential = (
+export const committeeHotCredentialUnsafe = (
   instance: CML.AuthCommitteeHotCert,
 ): CML.Credential => Effect.runSync(committeeHotCredential(instance));
 
@@ -690,16 +707,16 @@ export const _new = Effect.fn(function* (
  *
  * // Using try/catch for error handling
  * try {
- *   const result = AuthCommitteeHotCert.unsafe_new( parameters );
+ *   const result = AuthCommitteeHotCert._newUnsafe( parameters );
  *   console.log(result);
  * } catch (error) {
- *   console.error(`AuthCommitteeHotCert.unsafe_new failed: ${error.message}`);
+ *   console.error(`AuthCommitteeHotCert._newUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Constructors
+ * @category ConstructorsUnsafe
  */
-export const unsafe_new = (
+export const _newUnsafe = (
   committeeColdCredential: CML.Credential,
   committeeHotCredential: CML.Credential,
 ) => Effect.runSync(_new(committeeColdCredential, committeeHotCredential));

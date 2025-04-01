@@ -1,8 +1,25 @@
+/**
+ * @since 2.0.0
+ */
 import { Data, Effect } from "effect";
 import * as CML from "@anastasia-labs/cardano-multiplatform-lib-nodejs";
 
+/**
+ * Type alias for the CML ConstrPlutusData class
+ *
+ * @since 2.0.0
+ * @category Types
+ */
 export type ConstrPlutusData = CML.ConstrPlutusData;
 
+/**
+ * Error class for ConstrPlutusData operations
+ *
+ * This error is thrown when operations on ConstrPlutusData instances fail.
+ *
+ * @since 2.0.0
+ * @category Errors
+ */
 export class ConstrPlutusDataError extends Data.TaggedError(
   "ConstrPlutusDataError",
 )<{
@@ -51,16 +68,16 @@ export const free = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = ConstrPlutusData.unsafeFree(instance);
+ *   const result = ConstrPlutusData.freeUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`ConstrPlutusData.unsafeFree failed: ${error.message}`);
+ *   console.error(`ConstrPlutusData.freeUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeFree = (instance: CML.ConstrPlutusData): void =>
+export const freeUnsafe = (instance: CML.ConstrPlutusData): void =>
   Effect.runSync(free(instance));
 
 /**
@@ -105,16 +122,16 @@ export const toCborBytes = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = ConstrPlutusData.unsafeToCborBytes(instance);
+ *   const result = ConstrPlutusData.toCborBytesUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`ConstrPlutusData.unsafeToCborBytes failed: ${error.message}`);
+ *   console.error(`ConstrPlutusData.toCborBytesUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeToCborBytes = (instance: CML.ConstrPlutusData): Uint8Array =>
+export const toCborBytesUnsafe = (instance: CML.ConstrPlutusData): Uint8Array =>
   Effect.runSync(toCborBytes(instance));
 
 /**
@@ -159,16 +176,16 @@ export const toCanonicalCborBytes = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = ConstrPlutusData.unsafeToCanonicalCborBytes(instance);
+ *   const result = ConstrPlutusData.toCanonicalCborBytesUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`ConstrPlutusData.unsafeToCanonicalCborBytes failed: ${error.message}`);
+ *   console.error(`ConstrPlutusData.toCanonicalCborBytesUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeToCanonicalCborBytes = (
+export const toCanonicalCborBytesUnsafe = (
   instance: CML.ConstrPlutusData,
 ): Uint8Array => Effect.runSync(toCanonicalCborBytes(instance));
 
@@ -209,16 +226,16 @@ export const fromCborBytes = Effect.fn(function* (cborBytes: Uint8Array) {
  *
  * // Using try/catch for error handling
  * try {
- *   const result = ConstrPlutusData.unsafeFromCborBytes( parameters );
+ *   const result = ConstrPlutusData.fromCborBytesUnsafe( parameters );
  *   console.log(result);
  * } catch (error) {
- *   console.error(`ConstrPlutusData.unsafeFromCborBytes failed: ${error.message}`);
+ *   console.error(`ConstrPlutusData.fromCborBytesUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Constructors
+ * @category ConstructorsUnsafe
  */
-export const unsafeFromCborBytes = (cborBytes: Uint8Array) =>
+export const fromCborBytesUnsafe = (cborBytes: Uint8Array) =>
   Effect.runSync(fromCborBytes(cborBytes));
 
 /**
@@ -263,16 +280,16 @@ export const toCborHex = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = ConstrPlutusData.unsafeToCborHex(instance);
+ *   const result = ConstrPlutusData.toCborHexUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`ConstrPlutusData.unsafeToCborHex failed: ${error.message}`);
+ *   console.error(`ConstrPlutusData.toCborHexUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeToCborHex = (instance: CML.ConstrPlutusData): string =>
+export const toCborHexUnsafe = (instance: CML.ConstrPlutusData): string =>
   Effect.runSync(toCborHex(instance));
 
 /**
@@ -317,16 +334,16 @@ export const toCanonicalCborHex = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = ConstrPlutusData.unsafeToCanonicalCborHex(instance);
+ *   const result = ConstrPlutusData.toCanonicalCborHexUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`ConstrPlutusData.unsafeToCanonicalCborHex failed: ${error.message}`);
+ *   console.error(`ConstrPlutusData.toCanonicalCborHexUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeToCanonicalCborHex = (
+export const toCanonicalCborHexUnsafe = (
   instance: CML.ConstrPlutusData,
 ): string => Effect.runSync(toCanonicalCborHex(instance));
 
@@ -367,16 +384,16 @@ export const fromCborHex = Effect.fn(function* (cborBytes: string) {
  *
  * // Using try/catch for error handling
  * try {
- *   const result = ConstrPlutusData.unsafeFromCborHex( parameters );
+ *   const result = ConstrPlutusData.fromCborHexUnsafe( parameters );
  *   console.log(result);
  * } catch (error) {
- *   console.error(`ConstrPlutusData.unsafeFromCborHex failed: ${error.message}`);
+ *   console.error(`ConstrPlutusData.fromCborHexUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Constructors
+ * @category ConstructorsUnsafe
  */
-export const unsafeFromCborHex = (cborBytes: string) =>
+export const fromCborHexUnsafe = (cborBytes: string) =>
   Effect.runSync(fromCborHex(cborBytes));
 
 /**
@@ -421,16 +438,16 @@ export const toJson = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = ConstrPlutusData.unsafeToJson(instance);
+ *   const result = ConstrPlutusData.toJsonUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`ConstrPlutusData.unsafeToJson failed: ${error.message}`);
+ *   console.error(`ConstrPlutusData.toJsonUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeToJson = (instance: CML.ConstrPlutusData): string =>
+export const toJsonUnsafe = (instance: CML.ConstrPlutusData): string =>
   Effect.runSync(toJson(instance));
 
 /**
@@ -473,16 +490,16 @@ export const toJsValue = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = ConstrPlutusData.unsafeToJsValue(instance);
+ *   const result = ConstrPlutusData.toJsValueUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`ConstrPlutusData.unsafeToJsValue failed: ${error.message}`);
+ *   console.error(`ConstrPlutusData.toJsValueUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeToJsValue = (instance: CML.ConstrPlutusData): any =>
+export const toJsValueUnsafe = (instance: CML.ConstrPlutusData): any =>
   Effect.runSync(toJsValue(instance));
 
 /**
@@ -522,16 +539,16 @@ export const fromJson = Effect.fn(function* (json: string) {
  *
  * // Using try/catch for error handling
  * try {
- *   const result = ConstrPlutusData.unsafeFromJson( parameters );
+ *   const result = ConstrPlutusData.fromJsonUnsafe( parameters );
  *   console.log(result);
  * } catch (error) {
- *   console.error(`ConstrPlutusData.unsafeFromJson failed: ${error.message}`);
+ *   console.error(`ConstrPlutusData.fromJsonUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Constructors
+ * @category ConstructorsUnsafe
  */
-export const unsafeFromJson = (json: string) => Effect.runSync(fromJson(json));
+export const fromJsonUnsafe = (json: string) => Effect.runSync(fromJson(json));
 
 /**
  * Method alternative of ConstrPlutusData
@@ -575,16 +592,16 @@ export const alternative = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = ConstrPlutusData.unsafeAlternative(instance);
+ *   const result = ConstrPlutusData.alternativeUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`ConstrPlutusData.unsafeAlternative failed: ${error.message}`);
+ *   console.error(`ConstrPlutusData.alternativeUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeAlternative = (instance: CML.ConstrPlutusData): bigint =>
+export const alternativeUnsafe = (instance: CML.ConstrPlutusData): bigint =>
   Effect.runSync(alternative(instance));
 
 /**
@@ -629,16 +646,16 @@ export const fields = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = ConstrPlutusData.unsafeFields(instance);
+ *   const result = ConstrPlutusData.fieldsUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`ConstrPlutusData.unsafeFields failed: ${error.message}`);
+ *   console.error(`ConstrPlutusData.fieldsUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeFields = (
+export const fieldsUnsafe = (
   instance: CML.ConstrPlutusData,
 ): CML.PlutusDataList => Effect.runSync(fields(instance));
 
@@ -682,14 +699,14 @@ export const _new = Effect.fn(function* (
  *
  * // Using try/catch for error handling
  * try {
- *   const result = ConstrPlutusData.unsafe_new( parameters );
+ *   const result = ConstrPlutusData._newUnsafe( parameters );
  *   console.log(result);
  * } catch (error) {
- *   console.error(`ConstrPlutusData.unsafe_new failed: ${error.message}`);
+ *   console.error(`ConstrPlutusData._newUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Constructors
+ * @category ConstructorsUnsafe
  */
-export const unsafe_new = (alternative: bigint, fields: CML.PlutusDataList) =>
+export const _newUnsafe = (alternative: bigint, fields: CML.PlutusDataList) =>
   Effect.runSync(_new(alternative, fields));

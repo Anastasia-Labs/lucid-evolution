@@ -1,8 +1,25 @@
+/**
+ * @since 2.0.0
+ */
 import { Data, Effect } from "effect";
 import * as CML from "@anastasia-labs/cardano-multiplatform-lib-nodejs";
 
+/**
+ * Type alias for the CML NewConstitution class
+ *
+ * @since 2.0.0
+ * @category Types
+ */
 export type NewConstitution = CML.NewConstitution;
 
+/**
+ * Error class for NewConstitution operations
+ *
+ * This error is thrown when operations on NewConstitution instances fail.
+ *
+ * @since 2.0.0
+ * @category Errors
+ */
 export class NewConstitutionError extends Data.TaggedError(
   "NewConstitutionError",
 )<{
@@ -49,16 +66,16 @@ export const free = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = NewConstitution.unsafeFree(instance);
+ *   const result = NewConstitution.freeUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`NewConstitution.unsafeFree failed: ${error.message}`);
+ *   console.error(`NewConstitution.freeUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeFree = (instance: CML.NewConstitution): void =>
+export const freeUnsafe = (instance: CML.NewConstitution): void =>
   Effect.runSync(free(instance));
 
 /**
@@ -103,16 +120,16 @@ export const toCborBytes = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = NewConstitution.unsafeToCborBytes(instance);
+ *   const result = NewConstitution.toCborBytesUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`NewConstitution.unsafeToCborBytes failed: ${error.message}`);
+ *   console.error(`NewConstitution.toCborBytesUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeToCborBytes = (instance: CML.NewConstitution): Uint8Array =>
+export const toCborBytesUnsafe = (instance: CML.NewConstitution): Uint8Array =>
   Effect.runSync(toCborBytes(instance));
 
 /**
@@ -157,16 +174,16 @@ export const toCanonicalCborBytes = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = NewConstitution.unsafeToCanonicalCborBytes(instance);
+ *   const result = NewConstitution.toCanonicalCborBytesUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`NewConstitution.unsafeToCanonicalCborBytes failed: ${error.message}`);
+ *   console.error(`NewConstitution.toCanonicalCborBytesUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeToCanonicalCborBytes = (
+export const toCanonicalCborBytesUnsafe = (
   instance: CML.NewConstitution,
 ): Uint8Array => Effect.runSync(toCanonicalCborBytes(instance));
 
@@ -207,16 +224,16 @@ export const fromCborBytes = Effect.fn(function* (cborBytes: Uint8Array) {
  *
  * // Using try/catch for error handling
  * try {
- *   const result = NewConstitution.unsafeFromCborBytes( parameters );
+ *   const result = NewConstitution.fromCborBytesUnsafe( parameters );
  *   console.log(result);
  * } catch (error) {
- *   console.error(`NewConstitution.unsafeFromCborBytes failed: ${error.message}`);
+ *   console.error(`NewConstitution.fromCborBytesUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Constructors
+ * @category ConstructorsUnsafe
  */
-export const unsafeFromCborBytes = (cborBytes: Uint8Array) =>
+export const fromCborBytesUnsafe = (cborBytes: Uint8Array) =>
   Effect.runSync(fromCborBytes(cborBytes));
 
 /**
@@ -261,16 +278,16 @@ export const toCborHex = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = NewConstitution.unsafeToCborHex(instance);
+ *   const result = NewConstitution.toCborHexUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`NewConstitution.unsafeToCborHex failed: ${error.message}`);
+ *   console.error(`NewConstitution.toCborHexUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeToCborHex = (instance: CML.NewConstitution): string =>
+export const toCborHexUnsafe = (instance: CML.NewConstitution): string =>
   Effect.runSync(toCborHex(instance));
 
 /**
@@ -315,16 +332,16 @@ export const toCanonicalCborHex = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = NewConstitution.unsafeToCanonicalCborHex(instance);
+ *   const result = NewConstitution.toCanonicalCborHexUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`NewConstitution.unsafeToCanonicalCborHex failed: ${error.message}`);
+ *   console.error(`NewConstitution.toCanonicalCborHexUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeToCanonicalCborHex = (
+export const toCanonicalCborHexUnsafe = (
   instance: CML.NewConstitution,
 ): string => Effect.runSync(toCanonicalCborHex(instance));
 
@@ -365,16 +382,16 @@ export const fromCborHex = Effect.fn(function* (cborBytes: string) {
  *
  * // Using try/catch for error handling
  * try {
- *   const result = NewConstitution.unsafeFromCborHex( parameters );
+ *   const result = NewConstitution.fromCborHexUnsafe( parameters );
  *   console.log(result);
  * } catch (error) {
- *   console.error(`NewConstitution.unsafeFromCborHex failed: ${error.message}`);
+ *   console.error(`NewConstitution.fromCborHexUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Constructors
+ * @category ConstructorsUnsafe
  */
-export const unsafeFromCborHex = (cborBytes: string) =>
+export const fromCborHexUnsafe = (cborBytes: string) =>
   Effect.runSync(fromCborHex(cborBytes));
 
 /**
@@ -419,16 +436,16 @@ export const toJson = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = NewConstitution.unsafeToJson(instance);
+ *   const result = NewConstitution.toJsonUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`NewConstitution.unsafeToJson failed: ${error.message}`);
+ *   console.error(`NewConstitution.toJsonUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeToJson = (instance: CML.NewConstitution): string =>
+export const toJsonUnsafe = (instance: CML.NewConstitution): string =>
   Effect.runSync(toJson(instance));
 
 /**
@@ -471,16 +488,16 @@ export const toJsValue = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = NewConstitution.unsafeToJsValue(instance);
+ *   const result = NewConstitution.toJsValueUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`NewConstitution.unsafeToJsValue failed: ${error.message}`);
+ *   console.error(`NewConstitution.toJsValueUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeToJsValue = (instance: CML.NewConstitution): any =>
+export const toJsValueUnsafe = (instance: CML.NewConstitution): any =>
   Effect.runSync(toJsValue(instance));
 
 /**
@@ -520,16 +537,16 @@ export const fromJson = Effect.fn(function* (json: string) {
  *
  * // Using try/catch for error handling
  * try {
- *   const result = NewConstitution.unsafeFromJson( parameters );
+ *   const result = NewConstitution.fromJsonUnsafe( parameters );
  *   console.log(result);
  * } catch (error) {
- *   console.error(`NewConstitution.unsafeFromJson failed: ${error.message}`);
+ *   console.error(`NewConstitution.fromJsonUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Constructors
+ * @category ConstructorsUnsafe
  */
-export const unsafeFromJson = (json: string) => Effect.runSync(fromJson(json));
+export const fromJsonUnsafe = (json: string) => Effect.runSync(fromJson(json));
 
 /**
  * Method actionId of NewConstitution
@@ -573,16 +590,16 @@ export const actionId = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = NewConstitution.unsafeActionId(instance);
+ *   const result = NewConstitution.actionIdUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`NewConstitution.unsafeActionId failed: ${error.message}`);
+ *   console.error(`NewConstitution.actionIdUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeActionId = (
+export const actionIdUnsafe = (
   instance: CML.NewConstitution,
 ): CML.GovActionId | undefined => Effect.runSync(actionId(instance));
 
@@ -628,16 +645,16 @@ export const constitution = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = NewConstitution.unsafeConstitution(instance);
+ *   const result = NewConstitution.constitutionUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`NewConstitution.unsafeConstitution failed: ${error.message}`);
+ *   console.error(`NewConstitution.constitutionUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeConstitution = (
+export const constitutionUnsafe = (
   instance: CML.NewConstitution,
 ): CML.Constitution => Effect.runSync(constitution(instance));
 
@@ -681,16 +698,16 @@ export const _new = Effect.fn(function* (
  *
  * // Using try/catch for error handling
  * try {
- *   const result = NewConstitution.unsafe_new( parameters );
+ *   const result = NewConstitution._newUnsafe( parameters );
  *   console.log(result);
  * } catch (error) {
- *   console.error(`NewConstitution.unsafe_new failed: ${error.message}`);
+ *   console.error(`NewConstitution._newUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Constructors
+ * @category ConstructorsUnsafe
  */
-export const unsafe_new = (
+export const _newUnsafe = (
   actionId: CML.GovActionId | undefined,
   constitution: CML.Constitution,
 ) => Effect.runSync(_new(actionId, constitution));

@@ -1,8 +1,25 @@
+/**
+ * @since 2.0.0
+ */
 import { Data, Effect } from "effect";
 import * as CML from "@anastasia-labs/cardano-multiplatform-lib-nodejs";
 
+/**
+ * Type alias for the CML HeaderBody class
+ *
+ * @since 2.0.0
+ * @category Types
+ */
 export type HeaderBody = CML.HeaderBody;
 
+/**
+ * Error class for HeaderBody operations
+ *
+ * This error is thrown when operations on HeaderBody instances fail.
+ *
+ * @since 2.0.0
+ * @category Errors
+ */
 export class HeaderBodyError extends Data.TaggedError("HeaderBodyError")<{
   message?: string;
 }> {}
@@ -47,16 +64,16 @@ export const free = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = HeaderBody.unsafeFree(instance);
+ *   const result = HeaderBody.freeUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`HeaderBody.unsafeFree failed: ${error.message}`);
+ *   console.error(`HeaderBody.freeUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeFree = (instance: CML.HeaderBody): void =>
+export const freeUnsafe = (instance: CML.HeaderBody): void =>
   Effect.runSync(free(instance));
 
 /**
@@ -99,16 +116,16 @@ export const toCborBytes = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = HeaderBody.unsafeToCborBytes(instance);
+ *   const result = HeaderBody.toCborBytesUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`HeaderBody.unsafeToCborBytes failed: ${error.message}`);
+ *   console.error(`HeaderBody.toCborBytesUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeToCborBytes = (instance: CML.HeaderBody): Uint8Array =>
+export const toCborBytesUnsafe = (instance: CML.HeaderBody): Uint8Array =>
   Effect.runSync(toCborBytes(instance));
 
 /**
@@ -151,16 +168,16 @@ export const toCanonicalCborBytes = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = HeaderBody.unsafeToCanonicalCborBytes(instance);
+ *   const result = HeaderBody.toCanonicalCborBytesUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`HeaderBody.unsafeToCanonicalCborBytes failed: ${error.message}`);
+ *   console.error(`HeaderBody.toCanonicalCborBytesUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeToCanonicalCborBytes = (
+export const toCanonicalCborBytesUnsafe = (
   instance: CML.HeaderBody,
 ): Uint8Array => Effect.runSync(toCanonicalCborBytes(instance));
 
@@ -201,16 +218,16 @@ export const fromCborBytes = Effect.fn(function* (cborBytes: Uint8Array) {
  *
  * // Using try/catch for error handling
  * try {
- *   const result = HeaderBody.unsafeFromCborBytes( parameters );
+ *   const result = HeaderBody.fromCborBytesUnsafe( parameters );
  *   console.log(result);
  * } catch (error) {
- *   console.error(`HeaderBody.unsafeFromCborBytes failed: ${error.message}`);
+ *   console.error(`HeaderBody.fromCborBytesUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Constructors
+ * @category ConstructorsUnsafe
  */
-export const unsafeFromCborBytes = (cborBytes: Uint8Array) =>
+export const fromCborBytesUnsafe = (cborBytes: Uint8Array) =>
   Effect.runSync(fromCborBytes(cborBytes));
 
 /**
@@ -253,16 +270,16 @@ export const toCborHex = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = HeaderBody.unsafeToCborHex(instance);
+ *   const result = HeaderBody.toCborHexUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`HeaderBody.unsafeToCborHex failed: ${error.message}`);
+ *   console.error(`HeaderBody.toCborHexUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeToCborHex = (instance: CML.HeaderBody): string =>
+export const toCborHexUnsafe = (instance: CML.HeaderBody): string =>
   Effect.runSync(toCborHex(instance));
 
 /**
@@ -305,16 +322,16 @@ export const toCanonicalCborHex = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = HeaderBody.unsafeToCanonicalCborHex(instance);
+ *   const result = HeaderBody.toCanonicalCborHexUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`HeaderBody.unsafeToCanonicalCborHex failed: ${error.message}`);
+ *   console.error(`HeaderBody.toCanonicalCborHexUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeToCanonicalCborHex = (instance: CML.HeaderBody): string =>
+export const toCanonicalCborHexUnsafe = (instance: CML.HeaderBody): string =>
   Effect.runSync(toCanonicalCborHex(instance));
 
 /**
@@ -354,16 +371,16 @@ export const fromCborHex = Effect.fn(function* (cborBytes: string) {
  *
  * // Using try/catch for error handling
  * try {
- *   const result = HeaderBody.unsafeFromCborHex( parameters );
+ *   const result = HeaderBody.fromCborHexUnsafe( parameters );
  *   console.log(result);
  * } catch (error) {
- *   console.error(`HeaderBody.unsafeFromCborHex failed: ${error.message}`);
+ *   console.error(`HeaderBody.fromCborHexUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Constructors
+ * @category ConstructorsUnsafe
  */
-export const unsafeFromCborHex = (cborBytes: string) =>
+export const fromCborHexUnsafe = (cborBytes: string) =>
   Effect.runSync(fromCborHex(cborBytes));
 
 /**
@@ -406,16 +423,16 @@ export const toJson = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = HeaderBody.unsafeToJson(instance);
+ *   const result = HeaderBody.toJsonUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`HeaderBody.unsafeToJson failed: ${error.message}`);
+ *   console.error(`HeaderBody.toJsonUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeToJson = (instance: CML.HeaderBody): string =>
+export const toJsonUnsafe = (instance: CML.HeaderBody): string =>
   Effect.runSync(toJson(instance));
 
 /**
@@ -458,16 +475,16 @@ export const toJsValue = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = HeaderBody.unsafeToJsValue(instance);
+ *   const result = HeaderBody.toJsValueUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`HeaderBody.unsafeToJsValue failed: ${error.message}`);
+ *   console.error(`HeaderBody.toJsValueUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeToJsValue = (instance: CML.HeaderBody): any =>
+export const toJsValueUnsafe = (instance: CML.HeaderBody): any =>
   Effect.runSync(toJsValue(instance));
 
 /**
@@ -507,16 +524,16 @@ export const fromJson = Effect.fn(function* (json: string) {
  *
  * // Using try/catch for error handling
  * try {
- *   const result = HeaderBody.unsafeFromJson( parameters );
+ *   const result = HeaderBody.fromJsonUnsafe( parameters );
  *   console.log(result);
  * } catch (error) {
- *   console.error(`HeaderBody.unsafeFromJson failed: ${error.message}`);
+ *   console.error(`HeaderBody.fromJsonUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Constructors
+ * @category ConstructorsUnsafe
  */
-export const unsafeFromJson = (json: string) => Effect.runSync(fromJson(json));
+export const fromJsonUnsafe = (json: string) => Effect.runSync(fromJson(json));
 
 /**
  * Method blockNumber of HeaderBody
@@ -558,16 +575,16 @@ export const blockNumber = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = HeaderBody.unsafeBlockNumber(instance);
+ *   const result = HeaderBody.blockNumberUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`HeaderBody.unsafeBlockNumber failed: ${error.message}`);
+ *   console.error(`HeaderBody.blockNumberUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeBlockNumber = (instance: CML.HeaderBody): bigint =>
+export const blockNumberUnsafe = (instance: CML.HeaderBody): bigint =>
   Effect.runSync(blockNumber(instance));
 
 /**
@@ -610,16 +627,16 @@ export const slot = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = HeaderBody.unsafeSlot(instance);
+ *   const result = HeaderBody.slotUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`HeaderBody.unsafeSlot failed: ${error.message}`);
+ *   console.error(`HeaderBody.slotUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeSlot = (instance: CML.HeaderBody): bigint =>
+export const slotUnsafe = (instance: CML.HeaderBody): bigint =>
   Effect.runSync(slot(instance));
 
 /**
@@ -664,16 +681,16 @@ export const prevHash = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = HeaderBody.unsafePrevHash(instance);
+ *   const result = HeaderBody.prevHashUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`HeaderBody.unsafePrevHash failed: ${error.message}`);
+ *   console.error(`HeaderBody.prevHashUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafePrevHash = (
+export const prevHashUnsafe = (
   instance: CML.HeaderBody,
 ): CML.BlockHeaderHash | undefined => Effect.runSync(prevHash(instance));
 
@@ -717,16 +734,16 @@ export const issuerVkey = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = HeaderBody.unsafeIssuerVkey(instance);
+ *   const result = HeaderBody.issuerVkeyUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`HeaderBody.unsafeIssuerVkey failed: ${error.message}`);
+ *   console.error(`HeaderBody.issuerVkeyUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeIssuerVkey = (instance: CML.HeaderBody): CML.PublicKey =>
+export const issuerVkeyUnsafe = (instance: CML.HeaderBody): CML.PublicKey =>
   Effect.runSync(issuerVkey(instance));
 
 /**
@@ -769,16 +786,16 @@ export const vrfVkey = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = HeaderBody.unsafeVrfVkey(instance);
+ *   const result = HeaderBody.vrfVkeyUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`HeaderBody.unsafeVrfVkey failed: ${error.message}`);
+ *   console.error(`HeaderBody.vrfVkeyUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeVrfVkey = (instance: CML.HeaderBody): CML.VRFVkey =>
+export const vrfVkeyUnsafe = (instance: CML.HeaderBody): CML.VRFVkey =>
   Effect.runSync(vrfVkey(instance));
 
 /**
@@ -821,16 +838,16 @@ export const vrfResult = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = HeaderBody.unsafeVrfResult(instance);
+ *   const result = HeaderBody.vrfResultUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`HeaderBody.unsafeVrfResult failed: ${error.message}`);
+ *   console.error(`HeaderBody.vrfResultUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeVrfResult = (instance: CML.HeaderBody): CML.VRFCert =>
+export const vrfResultUnsafe = (instance: CML.HeaderBody): CML.VRFCert =>
   Effect.runSync(vrfResult(instance));
 
 /**
@@ -873,16 +890,16 @@ export const blockBodySize = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = HeaderBody.unsafeBlockBodySize(instance);
+ *   const result = HeaderBody.blockBodySizeUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`HeaderBody.unsafeBlockBodySize failed: ${error.message}`);
+ *   console.error(`HeaderBody.blockBodySizeUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeBlockBodySize = (instance: CML.HeaderBody): bigint =>
+export const blockBodySizeUnsafe = (instance: CML.HeaderBody): bigint =>
   Effect.runSync(blockBodySize(instance));
 
 /**
@@ -927,16 +944,16 @@ export const blockBodyHash = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = HeaderBody.unsafeBlockBodyHash(instance);
+ *   const result = HeaderBody.blockBodyHashUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`HeaderBody.unsafeBlockBodyHash failed: ${error.message}`);
+ *   console.error(`HeaderBody.blockBodyHashUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeBlockBodyHash = (
+export const blockBodyHashUnsafe = (
   instance: CML.HeaderBody,
 ): CML.BlockBodyHash => Effect.runSync(blockBodyHash(instance));
 
@@ -982,16 +999,16 @@ export const operationalCert = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = HeaderBody.unsafeOperationalCert(instance);
+ *   const result = HeaderBody.operationalCertUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`HeaderBody.unsafeOperationalCert failed: ${error.message}`);
+ *   console.error(`HeaderBody.operationalCertUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeOperationalCert = (
+export const operationalCertUnsafe = (
   instance: CML.HeaderBody,
 ): CML.OperationalCert => Effect.runSync(operationalCert(instance));
 
@@ -1037,16 +1054,16 @@ export const protocolVersion = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = HeaderBody.unsafeProtocolVersion(instance);
+ *   const result = HeaderBody.protocolVersionUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`HeaderBody.unsafeProtocolVersion failed: ${error.message}`);
+ *   console.error(`HeaderBody.protocolVersionUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeProtocolVersion = (
+export const protocolVersionUnsafe = (
   instance: CML.HeaderBody,
 ): CML.ProtocolVersion => Effect.runSync(protocolVersion(instance));
 
@@ -1110,16 +1127,16 @@ export const _new = Effect.fn(function* (
  *
  * // Using try/catch for error handling
  * try {
- *   const result = HeaderBody.unsafe_new( parameters );
+ *   const result = HeaderBody._newUnsafe( parameters );
  *   console.log(result);
  * } catch (error) {
- *   console.error(`HeaderBody.unsafe_new failed: ${error.message}`);
+ *   console.error(`HeaderBody._newUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Constructors
+ * @category ConstructorsUnsafe
  */
-export const unsafe_new = (
+export const _newUnsafe = (
   blockNumber: bigint,
   slot: bigint,
   prevHash: CML.BlockHeaderHash | undefined,

@@ -1,8 +1,25 @@
+/**
+ * @since 2.0.0
+ */
 import { Data, Effect } from "effect";
 import * as CML from "@anastasia-labs/cardano-multiplatform-lib-nodejs";
 
+/**
+ * Type alias for the CML DNSName class
+ *
+ * @since 2.0.0
+ * @category Types
+ */
 export type DNSName = CML.DNSName;
 
+/**
+ * Error class for DNSName operations
+ *
+ * This error is thrown when operations on DNSName instances fail.
+ *
+ * @since 2.0.0
+ * @category Errors
+ */
 export class DNSNameError extends Data.TaggedError("DNSNameError")<{
   message?: string;
 }> {}
@@ -47,16 +64,16 @@ export const free = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = DNSName.unsafeFree(instance);
+ *   const result = DNSName.freeUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`DNSName.unsafeFree failed: ${error.message}`);
+ *   console.error(`DNSName.freeUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeFree = (instance: CML.DNSName): void =>
+export const freeUnsafe = (instance: CML.DNSName): void =>
   Effect.runSync(free(instance));
 
 /**
@@ -99,16 +116,16 @@ export const toCborBytes = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = DNSName.unsafeToCborBytes(instance);
+ *   const result = DNSName.toCborBytesUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`DNSName.unsafeToCborBytes failed: ${error.message}`);
+ *   console.error(`DNSName.toCborBytesUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeToCborBytes = (instance: CML.DNSName): Uint8Array =>
+export const toCborBytesUnsafe = (instance: CML.DNSName): Uint8Array =>
   Effect.runSync(toCborBytes(instance));
 
 /**
@@ -151,16 +168,16 @@ export const toCanonicalCborBytes = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = DNSName.unsafeToCanonicalCborBytes(instance);
+ *   const result = DNSName.toCanonicalCborBytesUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`DNSName.unsafeToCanonicalCborBytes failed: ${error.message}`);
+ *   console.error(`DNSName.toCanonicalCborBytesUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeToCanonicalCborBytes = (instance: CML.DNSName): Uint8Array =>
+export const toCanonicalCborBytesUnsafe = (instance: CML.DNSName): Uint8Array =>
   Effect.runSync(toCanonicalCborBytes(instance));
 
 /**
@@ -200,16 +217,16 @@ export const fromCborBytes = Effect.fn(function* (cborBytes: Uint8Array) {
  *
  * // Using try/catch for error handling
  * try {
- *   const result = DNSName.unsafeFromCborBytes( parameters );
+ *   const result = DNSName.fromCborBytesUnsafe( parameters );
  *   console.log(result);
  * } catch (error) {
- *   console.error(`DNSName.unsafeFromCborBytes failed: ${error.message}`);
+ *   console.error(`DNSName.fromCborBytesUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Constructors
+ * @category ConstructorsUnsafe
  */
-export const unsafeFromCborBytes = (cborBytes: Uint8Array) =>
+export const fromCborBytesUnsafe = (cborBytes: Uint8Array) =>
   Effect.runSync(fromCborBytes(cborBytes));
 
 /**
@@ -252,16 +269,16 @@ export const toCborHex = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = DNSName.unsafeToCborHex(instance);
+ *   const result = DNSName.toCborHexUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`DNSName.unsafeToCborHex failed: ${error.message}`);
+ *   console.error(`DNSName.toCborHexUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeToCborHex = (instance: CML.DNSName): string =>
+export const toCborHexUnsafe = (instance: CML.DNSName): string =>
   Effect.runSync(toCborHex(instance));
 
 /**
@@ -304,16 +321,16 @@ export const toCanonicalCborHex = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = DNSName.unsafeToCanonicalCborHex(instance);
+ *   const result = DNSName.toCanonicalCborHexUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`DNSName.unsafeToCanonicalCborHex failed: ${error.message}`);
+ *   console.error(`DNSName.toCanonicalCborHexUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeToCanonicalCborHex = (instance: CML.DNSName): string =>
+export const toCanonicalCborHexUnsafe = (instance: CML.DNSName): string =>
   Effect.runSync(toCanonicalCborHex(instance));
 
 /**
@@ -353,16 +370,16 @@ export const fromCborHex = Effect.fn(function* (cborBytes: string) {
  *
  * // Using try/catch for error handling
  * try {
- *   const result = DNSName.unsafeFromCborHex( parameters );
+ *   const result = DNSName.fromCborHexUnsafe( parameters );
  *   console.log(result);
  * } catch (error) {
- *   console.error(`DNSName.unsafeFromCborHex failed: ${error.message}`);
+ *   console.error(`DNSName.fromCborHexUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Constructors
+ * @category ConstructorsUnsafe
  */
-export const unsafeFromCborHex = (cborBytes: string) =>
+export const fromCborHexUnsafe = (cborBytes: string) =>
   Effect.runSync(fromCborHex(cborBytes));
 
 /**
@@ -405,16 +422,16 @@ export const toJson = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = DNSName.unsafeToJson(instance);
+ *   const result = DNSName.toJsonUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`DNSName.unsafeToJson failed: ${error.message}`);
+ *   console.error(`DNSName.toJsonUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeToJson = (instance: CML.DNSName): string =>
+export const toJsonUnsafe = (instance: CML.DNSName): string =>
   Effect.runSync(toJson(instance));
 
 /**
@@ -457,16 +474,16 @@ export const toJsValue = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = DNSName.unsafeToJsValue(instance);
+ *   const result = DNSName.toJsValueUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`DNSName.unsafeToJsValue failed: ${error.message}`);
+ *   console.error(`DNSName.toJsValueUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeToJsValue = (instance: CML.DNSName): any =>
+export const toJsValueUnsafe = (instance: CML.DNSName): any =>
   Effect.runSync(toJsValue(instance));
 
 /**
@@ -506,16 +523,16 @@ export const fromJson = Effect.fn(function* (json: string) {
  *
  * // Using try/catch for error handling
  * try {
- *   const result = DNSName.unsafeFromJson( parameters );
+ *   const result = DNSName.fromJsonUnsafe( parameters );
  *   console.log(result);
  * } catch (error) {
- *   console.error(`DNSName.unsafeFromJson failed: ${error.message}`);
+ *   console.error(`DNSName.fromJsonUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Constructors
+ * @category ConstructorsUnsafe
  */
-export const unsafeFromJson = (json: string) => Effect.runSync(fromJson(json));
+export const fromJsonUnsafe = (json: string) => Effect.runSync(fromJson(json));
 
 /**
  * Method get of DNSName
@@ -557,14 +574,14 @@ export const get = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = DNSName.unsafeGet(instance);
+ *   const result = DNSName.getUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`DNSName.unsafeGet failed: ${error.message}`);
+ *   console.error(`DNSName.getUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeGet = (instance: CML.DNSName): string =>
+export const getUnsafe = (instance: CML.DNSName): string =>
   Effect.runSync(get(instance));

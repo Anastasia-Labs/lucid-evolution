@@ -1,8 +1,25 @@
+/**
+ * @since 2.0.0
+ */
 import { Data, Effect } from "effect";
 import * as CML from "@anastasia-labs/cardano-multiplatform-lib-nodejs";
 
+/**
+ * Type alias for the CML HDAddressPayload class
+ *
+ * @since 2.0.0
+ * @category Types
+ */
 export type HDAddressPayload = CML.HDAddressPayload;
 
+/**
+ * Error class for HDAddressPayload operations
+ *
+ * This error is thrown when operations on HDAddressPayload instances fail.
+ *
+ * @since 2.0.0
+ * @category Errors
+ */
 export class HDAddressPayloadError extends Data.TaggedError(
   "HDAddressPayloadError",
 )<{
@@ -51,16 +68,16 @@ export const free = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = HDAddressPayload.unsafeFree(instance);
+ *   const result = HDAddressPayload.freeUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`HDAddressPayload.unsafeFree failed: ${error.message}`);
+ *   console.error(`HDAddressPayload.freeUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeFree = (instance: CML.HDAddressPayload): void =>
+export const freeUnsafe = (instance: CML.HDAddressPayload): void =>
   Effect.runSync(free(instance));
 
 /**
@@ -105,16 +122,16 @@ export const toCborBytes = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = HDAddressPayload.unsafeToCborBytes(instance);
+ *   const result = HDAddressPayload.toCborBytesUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`HDAddressPayload.unsafeToCborBytes failed: ${error.message}`);
+ *   console.error(`HDAddressPayload.toCborBytesUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeToCborBytes = (instance: CML.HDAddressPayload): Uint8Array =>
+export const toCborBytesUnsafe = (instance: CML.HDAddressPayload): Uint8Array =>
   Effect.runSync(toCborBytes(instance));
 
 /**
@@ -154,16 +171,16 @@ export const fromCborBytes = Effect.fn(function* (cborBytes: Uint8Array) {
  *
  * // Using try/catch for error handling
  * try {
- *   const result = HDAddressPayload.unsafeFromCborBytes( parameters );
+ *   const result = HDAddressPayload.fromCborBytesUnsafe( parameters );
  *   console.log(result);
  * } catch (error) {
- *   console.error(`HDAddressPayload.unsafeFromCborBytes failed: ${error.message}`);
+ *   console.error(`HDAddressPayload.fromCborBytesUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Constructors
+ * @category ConstructorsUnsafe
  */
-export const unsafeFromCborBytes = (cborBytes: Uint8Array) =>
+export const fromCborBytesUnsafe = (cborBytes: Uint8Array) =>
   Effect.runSync(fromCborBytes(cborBytes));
 
 /**
@@ -208,16 +225,16 @@ export const toCborHex = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = HDAddressPayload.unsafeToCborHex(instance);
+ *   const result = HDAddressPayload.toCborHexUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`HDAddressPayload.unsafeToCborHex failed: ${error.message}`);
+ *   console.error(`HDAddressPayload.toCborHexUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeToCborHex = (instance: CML.HDAddressPayload): string =>
+export const toCborHexUnsafe = (instance: CML.HDAddressPayload): string =>
   Effect.runSync(toCborHex(instance));
 
 /**
@@ -257,16 +274,16 @@ export const fromCborHex = Effect.fn(function* (cborBytes: string) {
  *
  * // Using try/catch for error handling
  * try {
- *   const result = HDAddressPayload.unsafeFromCborHex( parameters );
+ *   const result = HDAddressPayload.fromCborHexUnsafe( parameters );
  *   console.log(result);
  * } catch (error) {
- *   console.error(`HDAddressPayload.unsafeFromCborHex failed: ${error.message}`);
+ *   console.error(`HDAddressPayload.fromCborHexUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Constructors
+ * @category ConstructorsUnsafe
  */
-export const unsafeFromCborHex = (cborBytes: string) =>
+export const fromCborHexUnsafe = (cborBytes: string) =>
   Effect.runSync(fromCborHex(cborBytes));
 
 /**
@@ -311,14 +328,14 @@ export const get = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = HDAddressPayload.unsafeGet(instance);
+ *   const result = HDAddressPayload.getUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`HDAddressPayload.unsafeGet failed: ${error.message}`);
+ *   console.error(`HDAddressPayload.getUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeGet = (instance: CML.HDAddressPayload): Uint8Array =>
+export const getUnsafe = (instance: CML.HDAddressPayload): Uint8Array =>
   Effect.runSync(get(instance));

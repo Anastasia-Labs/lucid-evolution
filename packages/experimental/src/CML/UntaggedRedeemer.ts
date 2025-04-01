@@ -1,8 +1,25 @@
+/**
+ * @since 2.0.0
+ */
 import { Data, Effect } from "effect";
 import * as CML from "@anastasia-labs/cardano-multiplatform-lib-nodejs";
 
+/**
+ * Type alias for the CML UntaggedRedeemer class
+ *
+ * @since 2.0.0
+ * @category Types
+ */
 export type UntaggedRedeemer = CML.UntaggedRedeemer;
 
+/**
+ * Error class for UntaggedRedeemer operations
+ *
+ * This error is thrown when operations on UntaggedRedeemer instances fail.
+ *
+ * @since 2.0.0
+ * @category Errors
+ */
 export class UntaggedRedeemerError extends Data.TaggedError(
   "UntaggedRedeemerError",
 )<{
@@ -51,16 +68,16 @@ export const free = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = UntaggedRedeemer.unsafeFree(instance);
+ *   const result = UntaggedRedeemer.freeUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`UntaggedRedeemer.unsafeFree failed: ${error.message}`);
+ *   console.error(`UntaggedRedeemer.freeUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeFree = (instance: CML.UntaggedRedeemer): void =>
+export const freeUnsafe = (instance: CML.UntaggedRedeemer): void =>
   Effect.runSync(free(instance));
 
 /**
@@ -103,14 +120,14 @@ export const _new = Effect.fn(function* (
  *
  * // Using try/catch for error handling
  * try {
- *   const result = UntaggedRedeemer.unsafe_new( parameters );
+ *   const result = UntaggedRedeemer._newUnsafe( parameters );
  *   console.log(result);
  * } catch (error) {
- *   console.error(`UntaggedRedeemer.unsafe_new failed: ${error.message}`);
+ *   console.error(`UntaggedRedeemer._newUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Constructors
+ * @category ConstructorsUnsafe
  */
-export const unsafe_new = (data: CML.PlutusData, exUnits: CML.ExUnits) =>
+export const _newUnsafe = (data: CML.PlutusData, exUnits: CML.ExUnits) =>
   Effect.runSync(_new(data, exUnits));

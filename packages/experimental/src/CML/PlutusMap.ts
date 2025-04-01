@@ -1,8 +1,25 @@
+/**
+ * @since 2.0.0
+ */
 import { Data, Effect } from "effect";
 import * as CML from "@anastasia-labs/cardano-multiplatform-lib-nodejs";
 
+/**
+ * Type alias for the CML PlutusMap class
+ *
+ * @since 2.0.0
+ * @category Types
+ */
 export type PlutusMap = CML.PlutusMap;
 
+/**
+ * Error class for PlutusMap operations
+ *
+ * This error is thrown when operations on PlutusMap instances fail.
+ *
+ * @since 2.0.0
+ * @category Errors
+ */
 export class PlutusMapError extends Data.TaggedError("PlutusMapError")<{
   message?: string;
 }> {}
@@ -47,16 +64,16 @@ export const free = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = PlutusMap.unsafeFree(instance);
+ *   const result = PlutusMap.freeUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`PlutusMap.unsafeFree failed: ${error.message}`);
+ *   console.error(`PlutusMap.freeUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeFree = (instance: CML.PlutusMap): void =>
+export const freeUnsafe = (instance: CML.PlutusMap): void =>
   Effect.runSync(free(instance));
 
 /**
@@ -99,16 +116,16 @@ export const toCborBytes = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = PlutusMap.unsafeToCborBytes(instance);
+ *   const result = PlutusMap.toCborBytesUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`PlutusMap.unsafeToCborBytes failed: ${error.message}`);
+ *   console.error(`PlutusMap.toCborBytesUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeToCborBytes = (instance: CML.PlutusMap): Uint8Array =>
+export const toCborBytesUnsafe = (instance: CML.PlutusMap): Uint8Array =>
   Effect.runSync(toCborBytes(instance));
 
 /**
@@ -151,16 +168,16 @@ export const toCanonicalCborBytes = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = PlutusMap.unsafeToCanonicalCborBytes(instance);
+ *   const result = PlutusMap.toCanonicalCborBytesUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`PlutusMap.unsafeToCanonicalCborBytes failed: ${error.message}`);
+ *   console.error(`PlutusMap.toCanonicalCborBytesUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeToCanonicalCborBytes = (
+export const toCanonicalCborBytesUnsafe = (
   instance: CML.PlutusMap,
 ): Uint8Array => Effect.runSync(toCanonicalCborBytes(instance));
 
@@ -201,16 +218,16 @@ export const fromCborBytes = Effect.fn(function* (cborBytes: Uint8Array) {
  *
  * // Using try/catch for error handling
  * try {
- *   const result = PlutusMap.unsafeFromCborBytes( parameters );
+ *   const result = PlutusMap.fromCborBytesUnsafe( parameters );
  *   console.log(result);
  * } catch (error) {
- *   console.error(`PlutusMap.unsafeFromCborBytes failed: ${error.message}`);
+ *   console.error(`PlutusMap.fromCborBytesUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Constructors
+ * @category ConstructorsUnsafe
  */
-export const unsafeFromCborBytes = (cborBytes: Uint8Array) =>
+export const fromCborBytesUnsafe = (cborBytes: Uint8Array) =>
   Effect.runSync(fromCborBytes(cborBytes));
 
 /**
@@ -253,16 +270,16 @@ export const toCborHex = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = PlutusMap.unsafeToCborHex(instance);
+ *   const result = PlutusMap.toCborHexUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`PlutusMap.unsafeToCborHex failed: ${error.message}`);
+ *   console.error(`PlutusMap.toCborHexUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeToCborHex = (instance: CML.PlutusMap): string =>
+export const toCborHexUnsafe = (instance: CML.PlutusMap): string =>
   Effect.runSync(toCborHex(instance));
 
 /**
@@ -305,16 +322,16 @@ export const toCanonicalCborHex = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = PlutusMap.unsafeToCanonicalCborHex(instance);
+ *   const result = PlutusMap.toCanonicalCborHexUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`PlutusMap.unsafeToCanonicalCborHex failed: ${error.message}`);
+ *   console.error(`PlutusMap.toCanonicalCborHexUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeToCanonicalCborHex = (instance: CML.PlutusMap): string =>
+export const toCanonicalCborHexUnsafe = (instance: CML.PlutusMap): string =>
   Effect.runSync(toCanonicalCborHex(instance));
 
 /**
@@ -354,16 +371,16 @@ export const fromCborHex = Effect.fn(function* (cborBytes: string) {
  *
  * // Using try/catch for error handling
  * try {
- *   const result = PlutusMap.unsafeFromCborHex( parameters );
+ *   const result = PlutusMap.fromCborHexUnsafe( parameters );
  *   console.log(result);
  * } catch (error) {
- *   console.error(`PlutusMap.unsafeFromCborHex failed: ${error.message}`);
+ *   console.error(`PlutusMap.fromCborHexUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Constructors
+ * @category ConstructorsUnsafe
  */
-export const unsafeFromCborHex = (cborBytes: string) =>
+export const fromCborHexUnsafe = (cborBytes: string) =>
   Effect.runSync(fromCborHex(cborBytes));
 
 /**
@@ -403,16 +420,16 @@ export const _new = Effect.fn(function* () {
  *
  * // Using try/catch for error handling
  * try {
- *   const result = PlutusMap.unsafe_new();
+ *   const result = PlutusMap._newUnsafe();
  *   console.log(result);
  * } catch (error) {
- *   console.error(`PlutusMap.unsafe_new failed: ${error.message}`);
+ *   console.error(`PlutusMap._newUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Constructors
+ * @category ConstructorsUnsafe
  */
-export const unsafe_new = () => Effect.runSync(_new());
+export const _newUnsafe = () => Effect.runSync(_new());
 
 /**
  * Method len of PlutusMap
@@ -454,16 +471,16 @@ export const len = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = PlutusMap.unsafeLen(instance);
+ *   const result = PlutusMap.lenUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`PlutusMap.unsafeLen failed: ${error.message}`);
+ *   console.error(`PlutusMap.lenUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeLen = (instance: CML.PlutusMap): number =>
+export const lenUnsafe = (instance: CML.PlutusMap): number =>
   Effect.runSync(len(instance));
 
 /**
@@ -506,16 +523,16 @@ export const isEmpty = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = PlutusMap.unsafeIsEmpty(instance);
+ *   const result = PlutusMap.isEmptyUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`PlutusMap.unsafeIsEmpty failed: ${error.message}`);
+ *   console.error(`PlutusMap.isEmptyUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeIsEmpty = (instance: CML.PlutusMap): boolean =>
+export const isEmptyUnsafe = (instance: CML.PlutusMap): boolean =>
   Effect.runSync(isEmpty(instance));
 
 /**
@@ -562,16 +579,16 @@ export const set = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = PlutusMap.unsafeSet(instance,  parameters );
+ *   const result = PlutusMap.setUnsafe(instance,  parameters );
  *   console.log(result);
  * } catch (error) {
- *   console.error(`PlutusMap.unsafeSet failed: ${error.message}`);
+ *   console.error(`PlutusMap.setUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeSet = (
+export const setUnsafe = (
   instance: CML.PlutusMap,
   key: CML.PlutusData,
   value: CML.PlutusData,
@@ -620,16 +637,16 @@ export const get = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = PlutusMap.unsafeGet(instance,  parameters );
+ *   const result = PlutusMap.getUnsafe(instance,  parameters );
  *   console.log(result);
  * } catch (error) {
- *   console.error(`PlutusMap.unsafeGet failed: ${error.message}`);
+ *   console.error(`PlutusMap.getUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeGet = (
+export const getUnsafe = (
   instance: CML.PlutusMap,
   key: CML.PlutusData,
 ): CML.PlutusData | undefined => Effect.runSync(get(instance, key));
@@ -677,16 +694,16 @@ export const getAll = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = PlutusMap.unsafeGetAll(instance,  parameters );
+ *   const result = PlutusMap.getAllUnsafe(instance,  parameters );
  *   console.log(result);
  * } catch (error) {
- *   console.error(`PlutusMap.unsafeGetAll failed: ${error.message}`);
+ *   console.error(`PlutusMap.getAllUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeGetAll = (
+export const getAllUnsafe = (
   instance: CML.PlutusMap,
   key: CML.PlutusData,
 ): CML.PlutusDataList | undefined => Effect.runSync(getAll(instance, key));
@@ -733,14 +750,14 @@ export const keys = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = PlutusMap.unsafeKeys(instance);
+ *   const result = PlutusMap.keysUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`PlutusMap.unsafeKeys failed: ${error.message}`);
+ *   console.error(`PlutusMap.keysUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeKeys = (instance: CML.PlutusMap): CML.PlutusDataList =>
+export const keysUnsafe = (instance: CML.PlutusMap): CML.PlutusDataList =>
   Effect.runSync(keys(instance));

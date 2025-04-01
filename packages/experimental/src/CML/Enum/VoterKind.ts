@@ -1,13 +1,81 @@
+/**
+ * @since 2.0.0
+ */
 import * as CML from "@anastasia-labs/cardano-multiplatform-lib-nodejs";
 
+/**
+ * Type alias for the CML VoterKind enum
+ *
+ * @since 2.0.0
+ * @category Types
+ */
 export type VoterKind = CML.VoterKind;
 
+/**
+ * ConstitutionalCommitteeHotKeyHash variant of the VoterKind enum
+ *
+ * @example
+ * import { VoterKind } from "@lucid-evolution/experimental";
+ *
+ * const kind = VoterKind.ConstitutionalCommitteeHotKeyHash;
+ *
+ * @since 2.0.0
+ * @category Variants
+ */
 export const ConstitutionalCommitteeHotKeyHash =
   CML.VoterKind.ConstitutionalCommitteeHotKeyHash;
+
+/**
+ * ConstitutionalCommitteeHotScriptHash variant of the VoterKind enum
+ *
+ * @example
+ * import { VoterKind } from "@lucid-evolution/experimental";
+ *
+ * const kind = VoterKind.ConstitutionalCommitteeHotScriptHash;
+ *
+ * @since 2.0.0
+ * @category Variants
+ */
 export const ConstitutionalCommitteeHotScriptHash =
   CML.VoterKind.ConstitutionalCommitteeHotScriptHash;
+
+/**
+ * DRepKeyHash variant of the VoterKind enum
+ *
+ * @example
+ * import { VoterKind } from "@lucid-evolution/experimental";
+ *
+ * const kind = VoterKind.DRepKeyHash;
+ *
+ * @since 2.0.0
+ * @category Variants
+ */
 export const DRepKeyHash = CML.VoterKind.DRepKeyHash;
+
+/**
+ * DRepScriptHash variant of the VoterKind enum
+ *
+ * @example
+ * import { VoterKind } from "@lucid-evolution/experimental";
+ *
+ * const kind = VoterKind.DRepScriptHash;
+ *
+ * @since 2.0.0
+ * @category Variants
+ */
 export const DRepScriptHash = CML.VoterKind.DRepScriptHash;
+
+/**
+ * StakingPoolKeyHash variant of the VoterKind enum
+ *
+ * @example
+ * import { VoterKind } from "@lucid-evolution/experimental";
+ *
+ * const kind = VoterKind.StakingPoolKeyHash;
+ *
+ * @since 2.0.0
+ * @category Variants
+ */
 export const StakingPoolKeyHash = CML.VoterKind.StakingPoolKeyHash;
 
 /**

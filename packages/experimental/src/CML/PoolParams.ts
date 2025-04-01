@@ -1,8 +1,25 @@
+/**
+ * @since 2.0.0
+ */
 import { Data, Effect } from "effect";
 import * as CML from "@anastasia-labs/cardano-multiplatform-lib-nodejs";
 
+/**
+ * Type alias for the CML PoolParams class
+ *
+ * @since 2.0.0
+ * @category Types
+ */
 export type PoolParams = CML.PoolParams;
 
+/**
+ * Error class for PoolParams operations
+ *
+ * This error is thrown when operations on PoolParams instances fail.
+ *
+ * @since 2.0.0
+ * @category Errors
+ */
 export class PoolParamsError extends Data.TaggedError("PoolParamsError")<{
   message?: string;
 }> {}
@@ -47,16 +64,16 @@ export const free = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = PoolParams.unsafeFree(instance);
+ *   const result = PoolParams.freeUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`PoolParams.unsafeFree failed: ${error.message}`);
+ *   console.error(`PoolParams.freeUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeFree = (instance: CML.PoolParams): void =>
+export const freeUnsafe = (instance: CML.PoolParams): void =>
   Effect.runSync(free(instance));
 
 /**
@@ -99,16 +116,16 @@ export const toCborBytes = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = PoolParams.unsafeToCborBytes(instance);
+ *   const result = PoolParams.toCborBytesUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`PoolParams.unsafeToCborBytes failed: ${error.message}`);
+ *   console.error(`PoolParams.toCborBytesUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeToCborBytes = (instance: CML.PoolParams): Uint8Array =>
+export const toCborBytesUnsafe = (instance: CML.PoolParams): Uint8Array =>
   Effect.runSync(toCborBytes(instance));
 
 /**
@@ -151,16 +168,16 @@ export const toCanonicalCborBytes = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = PoolParams.unsafeToCanonicalCborBytes(instance);
+ *   const result = PoolParams.toCanonicalCborBytesUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`PoolParams.unsafeToCanonicalCborBytes failed: ${error.message}`);
+ *   console.error(`PoolParams.toCanonicalCborBytesUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeToCanonicalCborBytes = (
+export const toCanonicalCborBytesUnsafe = (
   instance: CML.PoolParams,
 ): Uint8Array => Effect.runSync(toCanonicalCborBytes(instance));
 
@@ -201,16 +218,16 @@ export const fromCborBytes = Effect.fn(function* (cborBytes: Uint8Array) {
  *
  * // Using try/catch for error handling
  * try {
- *   const result = PoolParams.unsafeFromCborBytes( parameters );
+ *   const result = PoolParams.fromCborBytesUnsafe( parameters );
  *   console.log(result);
  * } catch (error) {
- *   console.error(`PoolParams.unsafeFromCborBytes failed: ${error.message}`);
+ *   console.error(`PoolParams.fromCborBytesUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Constructors
+ * @category ConstructorsUnsafe
  */
-export const unsafeFromCborBytes = (cborBytes: Uint8Array) =>
+export const fromCborBytesUnsafe = (cborBytes: Uint8Array) =>
   Effect.runSync(fromCborBytes(cborBytes));
 
 /**
@@ -253,16 +270,16 @@ export const toCborHex = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = PoolParams.unsafeToCborHex(instance);
+ *   const result = PoolParams.toCborHexUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`PoolParams.unsafeToCborHex failed: ${error.message}`);
+ *   console.error(`PoolParams.toCborHexUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeToCborHex = (instance: CML.PoolParams): string =>
+export const toCborHexUnsafe = (instance: CML.PoolParams): string =>
   Effect.runSync(toCborHex(instance));
 
 /**
@@ -305,16 +322,16 @@ export const toCanonicalCborHex = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = PoolParams.unsafeToCanonicalCborHex(instance);
+ *   const result = PoolParams.toCanonicalCborHexUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`PoolParams.unsafeToCanonicalCborHex failed: ${error.message}`);
+ *   console.error(`PoolParams.toCanonicalCborHexUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeToCanonicalCborHex = (instance: CML.PoolParams): string =>
+export const toCanonicalCborHexUnsafe = (instance: CML.PoolParams): string =>
   Effect.runSync(toCanonicalCborHex(instance));
 
 /**
@@ -354,16 +371,16 @@ export const fromCborHex = Effect.fn(function* (cborBytes: string) {
  *
  * // Using try/catch for error handling
  * try {
- *   const result = PoolParams.unsafeFromCborHex( parameters );
+ *   const result = PoolParams.fromCborHexUnsafe( parameters );
  *   console.log(result);
  * } catch (error) {
- *   console.error(`PoolParams.unsafeFromCborHex failed: ${error.message}`);
+ *   console.error(`PoolParams.fromCborHexUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Constructors
+ * @category ConstructorsUnsafe
  */
-export const unsafeFromCborHex = (cborBytes: string) =>
+export const fromCborHexUnsafe = (cborBytes: string) =>
   Effect.runSync(fromCborHex(cborBytes));
 
 /**
@@ -406,16 +423,16 @@ export const toJson = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = PoolParams.unsafeToJson(instance);
+ *   const result = PoolParams.toJsonUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`PoolParams.unsafeToJson failed: ${error.message}`);
+ *   console.error(`PoolParams.toJsonUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeToJson = (instance: CML.PoolParams): string =>
+export const toJsonUnsafe = (instance: CML.PoolParams): string =>
   Effect.runSync(toJson(instance));
 
 /**
@@ -458,16 +475,16 @@ export const toJsValue = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = PoolParams.unsafeToJsValue(instance);
+ *   const result = PoolParams.toJsValueUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`PoolParams.unsafeToJsValue failed: ${error.message}`);
+ *   console.error(`PoolParams.toJsValueUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeToJsValue = (instance: CML.PoolParams): any =>
+export const toJsValueUnsafe = (instance: CML.PoolParams): any =>
   Effect.runSync(toJsValue(instance));
 
 /**
@@ -507,16 +524,16 @@ export const fromJson = Effect.fn(function* (json: string) {
  *
  * // Using try/catch for error handling
  * try {
- *   const result = PoolParams.unsafeFromJson( parameters );
+ *   const result = PoolParams.fromJsonUnsafe( parameters );
  *   console.log(result);
  * } catch (error) {
- *   console.error(`PoolParams.unsafeFromJson failed: ${error.message}`);
+ *   console.error(`PoolParams.fromJsonUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Constructors
+ * @category ConstructorsUnsafe
  */
-export const unsafeFromJson = (json: string) => Effect.runSync(fromJson(json));
+export const fromJsonUnsafe = (json: string) => Effect.runSync(fromJson(json));
 
 /**
  * Method operator of PoolParams
@@ -560,16 +577,16 @@ export const operator = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = PoolParams.unsafeOperator(instance);
+ *   const result = PoolParams.operatorUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`PoolParams.unsafeOperator failed: ${error.message}`);
+ *   console.error(`PoolParams.operatorUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeOperator = (instance: CML.PoolParams): CML.Ed25519KeyHash =>
+export const operatorUnsafe = (instance: CML.PoolParams): CML.Ed25519KeyHash =>
   Effect.runSync(operator(instance));
 
 /**
@@ -612,16 +629,16 @@ export const vrfKeyhash = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = PoolParams.unsafeVrfKeyhash(instance);
+ *   const result = PoolParams.vrfKeyhashUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`PoolParams.unsafeVrfKeyhash failed: ${error.message}`);
+ *   console.error(`PoolParams.vrfKeyhashUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeVrfKeyhash = (instance: CML.PoolParams): CML.VRFKeyHash =>
+export const vrfKeyhashUnsafe = (instance: CML.PoolParams): CML.VRFKeyHash =>
   Effect.runSync(vrfKeyhash(instance));
 
 /**
@@ -664,16 +681,16 @@ export const pledge = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = PoolParams.unsafePledge(instance);
+ *   const result = PoolParams.pledgeUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`PoolParams.unsafePledge failed: ${error.message}`);
+ *   console.error(`PoolParams.pledgeUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafePledge = (instance: CML.PoolParams): bigint =>
+export const pledgeUnsafe = (instance: CML.PoolParams): bigint =>
   Effect.runSync(pledge(instance));
 
 /**
@@ -716,16 +733,16 @@ export const cost = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = PoolParams.unsafeCost(instance);
+ *   const result = PoolParams.costUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`PoolParams.unsafeCost failed: ${error.message}`);
+ *   console.error(`PoolParams.costUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeCost = (instance: CML.PoolParams): bigint =>
+export const costUnsafe = (instance: CML.PoolParams): bigint =>
   Effect.runSync(cost(instance));
 
 /**
@@ -770,16 +787,16 @@ export const margin = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = PoolParams.unsafeMargin(instance);
+ *   const result = PoolParams.marginUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`PoolParams.unsafeMargin failed: ${error.message}`);
+ *   console.error(`PoolParams.marginUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeMargin = (instance: CML.PoolParams): CML.UnitInterval =>
+export const marginUnsafe = (instance: CML.PoolParams): CML.UnitInterval =>
   Effect.runSync(margin(instance));
 
 /**
@@ -824,16 +841,16 @@ export const rewardAccount = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = PoolParams.unsafeRewardAccount(instance);
+ *   const result = PoolParams.rewardAccountUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`PoolParams.unsafeRewardAccount failed: ${error.message}`);
+ *   console.error(`PoolParams.rewardAccountUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeRewardAccount = (
+export const rewardAccountUnsafe = (
   instance: CML.PoolParams,
 ): CML.RewardAddress => Effect.runSync(rewardAccount(instance));
 
@@ -879,16 +896,16 @@ export const poolOwners = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = PoolParams.unsafePoolOwners(instance);
+ *   const result = PoolParams.poolOwnersUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`PoolParams.unsafePoolOwners failed: ${error.message}`);
+ *   console.error(`PoolParams.poolOwnersUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafePoolOwners = (
+export const poolOwnersUnsafe = (
   instance: CML.PoolParams,
 ): CML.Ed25519KeyHashList => Effect.runSync(poolOwners(instance));
 
@@ -932,16 +949,16 @@ export const relays = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = PoolParams.unsafeRelays(instance);
+ *   const result = PoolParams.relaysUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`PoolParams.unsafeRelays failed: ${error.message}`);
+ *   console.error(`PoolParams.relaysUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeRelays = (instance: CML.PoolParams): CML.RelayList =>
+export const relaysUnsafe = (instance: CML.PoolParams): CML.RelayList =>
   Effect.runSync(relays(instance));
 
 /**
@@ -986,16 +1003,16 @@ export const poolMetadata = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = PoolParams.unsafePoolMetadata(instance);
+ *   const result = PoolParams.poolMetadataUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`PoolParams.unsafePoolMetadata failed: ${error.message}`);
+ *   console.error(`PoolParams.poolMetadataUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafePoolMetadata = (
+export const poolMetadataUnsafe = (
   instance: CML.PoolParams,
 ): CML.PoolMetadata | undefined => Effect.runSync(poolMetadata(instance));
 
@@ -1057,16 +1074,16 @@ export const _new = Effect.fn(function* (
  *
  * // Using try/catch for error handling
  * try {
- *   const result = PoolParams.unsafe_new( parameters );
+ *   const result = PoolParams._newUnsafe( parameters );
  *   console.log(result);
  * } catch (error) {
- *   console.error(`PoolParams.unsafe_new failed: ${error.message}`);
+ *   console.error(`PoolParams._newUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Constructors
+ * @category ConstructorsUnsafe
  */
-export const unsafe_new = (
+export const _newUnsafe = (
   operator: CML.Ed25519KeyHash,
   vrfKeyhash: CML.VRFKeyHash,
   pledge: bigint,

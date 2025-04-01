@@ -1,8 +1,25 @@
+/**
+ * @since 2.0.0
+ */
 import { Data, Effect } from "effect";
 import * as CML from "@anastasia-labs/cardano-multiplatform-lib-nodejs";
 
+/**
+ * Type alias for the CML DRep class
+ *
+ * @since 2.0.0
+ * @category Types
+ */
 export type DRep = CML.DRep;
 
+/**
+ * Error class for DRep operations
+ *
+ * This error is thrown when operations on DRep instances fail.
+ *
+ * @since 2.0.0
+ * @category Errors
+ */
 export class DRepError extends Data.TaggedError("DRepError")<{
   message?: string;
 }> {}
@@ -47,16 +64,16 @@ export const free = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = DRep.unsafeFree(instance);
+ *   const result = DRep.freeUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`DRep.unsafeFree failed: ${error.message}`);
+ *   console.error(`DRep.freeUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeFree = (instance: CML.DRep): void =>
+export const freeUnsafe = (instance: CML.DRep): void =>
   Effect.runSync(free(instance));
 
 /**
@@ -99,16 +116,16 @@ export const toCborBytes = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = DRep.unsafeToCborBytes(instance);
+ *   const result = DRep.toCborBytesUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`DRep.unsafeToCborBytes failed: ${error.message}`);
+ *   console.error(`DRep.toCborBytesUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeToCborBytes = (instance: CML.DRep): Uint8Array =>
+export const toCborBytesUnsafe = (instance: CML.DRep): Uint8Array =>
   Effect.runSync(toCborBytes(instance));
 
 /**
@@ -151,16 +168,16 @@ export const toCanonicalCborBytes = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = DRep.unsafeToCanonicalCborBytes(instance);
+ *   const result = DRep.toCanonicalCborBytesUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`DRep.unsafeToCanonicalCborBytes failed: ${error.message}`);
+ *   console.error(`DRep.toCanonicalCborBytesUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeToCanonicalCborBytes = (instance: CML.DRep): Uint8Array =>
+export const toCanonicalCborBytesUnsafe = (instance: CML.DRep): Uint8Array =>
   Effect.runSync(toCanonicalCborBytes(instance));
 
 /**
@@ -200,16 +217,16 @@ export const fromCborBytes = Effect.fn(function* (cborBytes: Uint8Array) {
  *
  * // Using try/catch for error handling
  * try {
- *   const result = DRep.unsafeFromCborBytes( parameters );
+ *   const result = DRep.fromCborBytesUnsafe( parameters );
  *   console.log(result);
  * } catch (error) {
- *   console.error(`DRep.unsafeFromCborBytes failed: ${error.message}`);
+ *   console.error(`DRep.fromCborBytesUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Constructors
+ * @category ConstructorsUnsafe
  */
-export const unsafeFromCborBytes = (cborBytes: Uint8Array) =>
+export const fromCborBytesUnsafe = (cborBytes: Uint8Array) =>
   Effect.runSync(fromCborBytes(cborBytes));
 
 /**
@@ -252,16 +269,16 @@ export const toCborHex = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = DRep.unsafeToCborHex(instance);
+ *   const result = DRep.toCborHexUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`DRep.unsafeToCborHex failed: ${error.message}`);
+ *   console.error(`DRep.toCborHexUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeToCborHex = (instance: CML.DRep): string =>
+export const toCborHexUnsafe = (instance: CML.DRep): string =>
   Effect.runSync(toCborHex(instance));
 
 /**
@@ -304,16 +321,16 @@ export const toCanonicalCborHex = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = DRep.unsafeToCanonicalCborHex(instance);
+ *   const result = DRep.toCanonicalCborHexUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`DRep.unsafeToCanonicalCborHex failed: ${error.message}`);
+ *   console.error(`DRep.toCanonicalCborHexUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeToCanonicalCborHex = (instance: CML.DRep): string =>
+export const toCanonicalCborHexUnsafe = (instance: CML.DRep): string =>
   Effect.runSync(toCanonicalCborHex(instance));
 
 /**
@@ -353,16 +370,16 @@ export const fromCborHex = Effect.fn(function* (cborBytes: string) {
  *
  * // Using try/catch for error handling
  * try {
- *   const result = DRep.unsafeFromCborHex( parameters );
+ *   const result = DRep.fromCborHexUnsafe( parameters );
  *   console.log(result);
  * } catch (error) {
- *   console.error(`DRep.unsafeFromCborHex failed: ${error.message}`);
+ *   console.error(`DRep.fromCborHexUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Constructors
+ * @category ConstructorsUnsafe
  */
-export const unsafeFromCborHex = (cborBytes: string) =>
+export const fromCborHexUnsafe = (cborBytes: string) =>
   Effect.runSync(fromCborHex(cborBytes));
 
 /**
@@ -405,16 +422,16 @@ export const toJson = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = DRep.unsafeToJson(instance);
+ *   const result = DRep.toJsonUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`DRep.unsafeToJson failed: ${error.message}`);
+ *   console.error(`DRep.toJsonUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeToJson = (instance: CML.DRep): string =>
+export const toJsonUnsafe = (instance: CML.DRep): string =>
   Effect.runSync(toJson(instance));
 
 /**
@@ -457,16 +474,16 @@ export const toJsValue = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = DRep.unsafeToJsValue(instance);
+ *   const result = DRep.toJsValueUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`DRep.unsafeToJsValue failed: ${error.message}`);
+ *   console.error(`DRep.toJsValueUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeToJsValue = (instance: CML.DRep): any =>
+export const toJsValueUnsafe = (instance: CML.DRep): any =>
   Effect.runSync(toJsValue(instance));
 
 /**
@@ -506,16 +523,16 @@ export const fromJson = Effect.fn(function* (json: string) {
  *
  * // Using try/catch for error handling
  * try {
- *   const result = DRep.unsafeFromJson( parameters );
+ *   const result = DRep.fromJsonUnsafe( parameters );
  *   console.log(result);
  * } catch (error) {
- *   console.error(`DRep.unsafeFromJson failed: ${error.message}`);
+ *   console.error(`DRep.fromJsonUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Constructors
+ * @category ConstructorsUnsafe
  */
-export const unsafeFromJson = (json: string) => Effect.runSync(fromJson(json));
+export const fromJsonUnsafe = (json: string) => Effect.runSync(fromJson(json));
 
 /**
  * Static method newKey of DRep
@@ -554,16 +571,16 @@ export const newKey = Effect.fn(function* (pool: CML.Ed25519KeyHash) {
  *
  * // Using try/catch for error handling
  * try {
- *   const result = DRep.unsafeNewKey( parameters );
+ *   const result = DRep.newKeyUnsafe( parameters );
  *   console.log(result);
  * } catch (error) {
- *   console.error(`DRep.unsafeNewKey failed: ${error.message}`);
+ *   console.error(`DRep.newKeyUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Constructors
+ * @category ConstructorsUnsafe
  */
-export const unsafeNewKey = (pool: CML.Ed25519KeyHash) =>
+export const newKeyUnsafe = (pool: CML.Ed25519KeyHash) =>
   Effect.runSync(newKey(pool));
 
 /**
@@ -603,16 +620,16 @@ export const newScript = Effect.fn(function* (scriptHash: CML.ScriptHash) {
  *
  * // Using try/catch for error handling
  * try {
- *   const result = DRep.unsafeNewScript( parameters );
+ *   const result = DRep.newScriptUnsafe( parameters );
  *   console.log(result);
  * } catch (error) {
- *   console.error(`DRep.unsafeNewScript failed: ${error.message}`);
+ *   console.error(`DRep.newScriptUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Constructors
+ * @category ConstructorsUnsafe
  */
-export const unsafeNewScript = (scriptHash: CML.ScriptHash) =>
+export const newScriptUnsafe = (scriptHash: CML.ScriptHash) =>
   Effect.runSync(newScript(scriptHash));
 
 /**
@@ -652,16 +669,16 @@ export const newAlwaysAbstain = Effect.fn(function* () {
  *
  * // Using try/catch for error handling
  * try {
- *   const result = DRep.unsafeNewAlwaysAbstain();
+ *   const result = DRep.newAlwaysAbstainUnsafe();
  *   console.log(result);
  * } catch (error) {
- *   console.error(`DRep.unsafeNewAlwaysAbstain failed: ${error.message}`);
+ *   console.error(`DRep.newAlwaysAbstainUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Constructors
+ * @category ConstructorsUnsafe
  */
-export const unsafeNewAlwaysAbstain = () => Effect.runSync(newAlwaysAbstain());
+export const newAlwaysAbstainUnsafe = () => Effect.runSync(newAlwaysAbstain());
 
 /**
  * Static method newAlwaysNoConfidence of DRep
@@ -700,16 +717,16 @@ export const newAlwaysNoConfidence = Effect.fn(function* () {
  *
  * // Using try/catch for error handling
  * try {
- *   const result = DRep.unsafeNewAlwaysNoConfidence();
+ *   const result = DRep.newAlwaysNoConfidenceUnsafe();
  *   console.log(result);
  * } catch (error) {
- *   console.error(`DRep.unsafeNewAlwaysNoConfidence failed: ${error.message}`);
+ *   console.error(`DRep.newAlwaysNoConfidenceUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Constructors
+ * @category ConstructorsUnsafe
  */
-export const unsafeNewAlwaysNoConfidence = () =>
+export const newAlwaysNoConfidenceUnsafe = () =>
   Effect.runSync(newAlwaysNoConfidence());
 
 /**
@@ -752,16 +769,16 @@ export const kind = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = DRep.unsafeKind(instance);
+ *   const result = DRep.kindUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`DRep.unsafeKind failed: ${error.message}`);
+ *   console.error(`DRep.kindUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeKind = (instance: CML.DRep): CML.DRepKind =>
+export const kindUnsafe = (instance: CML.DRep): CML.DRepKind =>
   Effect.runSync(kind(instance));
 
 /**
@@ -806,16 +823,16 @@ export const asKey = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = DRep.unsafeAsKey(instance);
+ *   const result = DRep.asKeyUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`DRep.unsafeAsKey failed: ${error.message}`);
+ *   console.error(`DRep.asKeyUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeAsKey = (
+export const asKeyUnsafe = (
   instance: CML.DRep,
 ): CML.Ed25519KeyHash | undefined => Effect.runSync(asKey(instance));
 
@@ -859,15 +876,15 @@ export const asScript = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = DRep.unsafeAsScript(instance);
+ *   const result = DRep.asScriptUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`DRep.unsafeAsScript failed: ${error.message}`);
+ *   console.error(`DRep.asScriptUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeAsScript = (
+export const asScriptUnsafe = (
   instance: CML.DRep,
 ): CML.ScriptHash | undefined => Effect.runSync(asScript(instance));

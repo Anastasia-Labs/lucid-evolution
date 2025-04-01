@@ -1,8 +1,25 @@
+/**
+ * @since 2.0.0
+ */
 import { Data, Effect } from "effect";
 import * as CML from "@anastasia-labs/cardano-multiplatform-lib-nodejs";
 
+/**
+ * Type alias for the CML SingleWithdrawalBuilder class
+ *
+ * @since 2.0.0
+ * @category Types
+ */
 export type SingleWithdrawalBuilder = CML.SingleWithdrawalBuilder;
 
+/**
+ * Error class for SingleWithdrawalBuilder operations
+ *
+ * This error is thrown when operations on SingleWithdrawalBuilder instances fail.
+ *
+ * @since 2.0.0
+ * @category Errors
+ */
 export class SingleWithdrawalBuilderError extends Data.TaggedError(
   "SingleWithdrawalBuilderError",
 )<{
@@ -51,16 +68,16 @@ export const free = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = SingleWithdrawalBuilder.unsafeFree(instance);
+ *   const result = SingleWithdrawalBuilder.freeUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`SingleWithdrawalBuilder.unsafeFree failed: ${error.message}`);
+ *   console.error(`SingleWithdrawalBuilder.freeUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeFree = (instance: CML.SingleWithdrawalBuilder): void =>
+export const freeUnsafe = (instance: CML.SingleWithdrawalBuilder): void =>
   Effect.runSync(free(instance));
 
 /**
@@ -103,16 +120,16 @@ export const _new = Effect.fn(function* (
  *
  * // Using try/catch for error handling
  * try {
- *   const result = SingleWithdrawalBuilder.unsafe_new( parameters );
+ *   const result = SingleWithdrawalBuilder._newUnsafe( parameters );
  *   console.log(result);
  * } catch (error) {
- *   console.error(`SingleWithdrawalBuilder.unsafe_new failed: ${error.message}`);
+ *   console.error(`SingleWithdrawalBuilder._newUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Constructors
+ * @category ConstructorsUnsafe
  */
-export const unsafe_new = (address: CML.RewardAddress, amount: bigint) =>
+export const _newUnsafe = (address: CML.RewardAddress, amount: bigint) =>
   Effect.runSync(_new(address, amount));
 
 /**
@@ -157,16 +174,16 @@ export const paymentKey = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = SingleWithdrawalBuilder.unsafePaymentKey(instance);
+ *   const result = SingleWithdrawalBuilder.paymentKeyUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`SingleWithdrawalBuilder.unsafePaymentKey failed: ${error.message}`);
+ *   console.error(`SingleWithdrawalBuilder.paymentKeyUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafePaymentKey = (
+export const paymentKeyUnsafe = (
   instance: CML.SingleWithdrawalBuilder,
 ): CML.WithdrawalBuilderResult => Effect.runSync(paymentKey(instance));
 
@@ -214,16 +231,16 @@ export const nativeScript = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = SingleWithdrawalBuilder.unsafeNativeScript(instance,  parameters );
+ *   const result = SingleWithdrawalBuilder.nativeScriptUnsafe(instance,  parameters );
  *   console.log(result);
  * } catch (error) {
- *   console.error(`SingleWithdrawalBuilder.unsafeNativeScript failed: ${error.message}`);
+ *   console.error(`SingleWithdrawalBuilder.nativeScriptUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeNativeScript = (
+export const nativeScriptUnsafe = (
   instance: CML.SingleWithdrawalBuilder,
   _nativeScript: CML.NativeScript,
   witnessInfo: CML.NativeScriptWitnessInfo,
@@ -274,16 +291,16 @@ export const plutusScript = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = SingleWithdrawalBuilder.unsafePlutusScript(instance,  parameters );
+ *   const result = SingleWithdrawalBuilder.plutusScriptUnsafe(instance,  parameters );
  *   console.log(result);
  * } catch (error) {
- *   console.error(`SingleWithdrawalBuilder.unsafePlutusScript failed: ${error.message}`);
+ *   console.error(`SingleWithdrawalBuilder.plutusScriptUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafePlutusScript = (
+export const plutusScriptUnsafe = (
   instance: CML.SingleWithdrawalBuilder,
   partialWitness: CML.PartialPlutusWitness,
   requiredSigners: CML.Ed25519KeyHashList,

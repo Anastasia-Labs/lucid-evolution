@@ -1,8 +1,25 @@
+/**
+ * @since 2.0.0
+ */
 import { Data, Effect } from "effect";
 import * as CML from "@anastasia-labs/cardano-multiplatform-lib-nodejs";
 
+/**
+ * Type alias for the CML CIP36RegistrationCbor class
+ *
+ * @since 2.0.0
+ * @category Types
+ */
 export type CIP36RegistrationCbor = CML.CIP36RegistrationCbor;
 
+/**
+ * Error class for CIP36RegistrationCbor operations
+ *
+ * This error is thrown when operations on CIP36RegistrationCbor instances fail.
+ *
+ * @since 2.0.0
+ * @category Errors
+ */
 export class CIP36RegistrationCborError extends Data.TaggedError(
   "CIP36RegistrationCborError",
 )<{
@@ -51,16 +68,16 @@ export const free = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = CIP36RegistrationCbor.unsafeFree(instance);
+ *   const result = CIP36RegistrationCbor.freeUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`CIP36RegistrationCbor.unsafeFree failed: ${error.message}`);
+ *   console.error(`CIP36RegistrationCbor.freeUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeFree = (instance: CML.CIP36RegistrationCbor): void =>
+export const freeUnsafe = (instance: CML.CIP36RegistrationCbor): void =>
   Effect.runSync(free(instance));
 
 /**
@@ -105,16 +122,16 @@ export const toJson = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = CIP36RegistrationCbor.unsafeToJson(instance);
+ *   const result = CIP36RegistrationCbor.toJsonUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`CIP36RegistrationCbor.unsafeToJson failed: ${error.message}`);
+ *   console.error(`CIP36RegistrationCbor.toJsonUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeToJson = (instance: CML.CIP36RegistrationCbor): string =>
+export const toJsonUnsafe = (instance: CML.CIP36RegistrationCbor): string =>
   Effect.runSync(toJson(instance));
 
 /**
@@ -159,16 +176,16 @@ export const toJsValue = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = CIP36RegistrationCbor.unsafeToJsValue(instance);
+ *   const result = CIP36RegistrationCbor.toJsValueUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`CIP36RegistrationCbor.unsafeToJsValue failed: ${error.message}`);
+ *   console.error(`CIP36RegistrationCbor.toJsValueUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeToJsValue = (instance: CML.CIP36RegistrationCbor): any =>
+export const toJsValueUnsafe = (instance: CML.CIP36RegistrationCbor): any =>
   Effect.runSync(toJsValue(instance));
 
 /**
@@ -208,16 +225,16 @@ export const fromJson = Effect.fn(function* (json: string) {
  *
  * // Using try/catch for error handling
  * try {
- *   const result = CIP36RegistrationCbor.unsafeFromJson( parameters );
+ *   const result = CIP36RegistrationCbor.fromJsonUnsafe( parameters );
  *   console.log(result);
  * } catch (error) {
- *   console.error(`CIP36RegistrationCbor.unsafeFromJson failed: ${error.message}`);
+ *   console.error(`CIP36RegistrationCbor.fromJsonUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Constructors
+ * @category ConstructorsUnsafe
  */
-export const unsafeFromJson = (json: string) => Effect.runSync(fromJson(json));
+export const fromJsonUnsafe = (json: string) => Effect.runSync(fromJson(json));
 
 /**
  * Method keyRegistration of CIP36RegistrationCbor
@@ -261,16 +278,16 @@ export const keyRegistration = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = CIP36RegistrationCbor.unsafeKeyRegistration(instance);
+ *   const result = CIP36RegistrationCbor.keyRegistrationUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`CIP36RegistrationCbor.unsafeKeyRegistration failed: ${error.message}`);
+ *   console.error(`CIP36RegistrationCbor.keyRegistrationUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeKeyRegistration = (
+export const keyRegistrationUnsafe = (
   instance: CML.CIP36RegistrationCbor,
 ): CML.CIP36KeyRegistration => Effect.runSync(keyRegistration(instance));
 
@@ -316,16 +333,16 @@ export const registrationWitness = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = CIP36RegistrationCbor.unsafeRegistrationWitness(instance);
+ *   const result = CIP36RegistrationCbor.registrationWitnessUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`CIP36RegistrationCbor.unsafeRegistrationWitness failed: ${error.message}`);
+ *   console.error(`CIP36RegistrationCbor.registrationWitnessUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeRegistrationWitness = (
+export const registrationWitnessUnsafe = (
   instance: CML.CIP36RegistrationCbor,
 ): CML.CIP36RegistrationWitness =>
   Effect.runSync(registrationWitness(instance));
@@ -371,16 +388,16 @@ export const _new = Effect.fn(function* (
  *
  * // Using try/catch for error handling
  * try {
- *   const result = CIP36RegistrationCbor.unsafe_new( parameters );
+ *   const result = CIP36RegistrationCbor._newUnsafe( parameters );
  *   console.log(result);
  * } catch (error) {
- *   console.error(`CIP36RegistrationCbor.unsafe_new failed: ${error.message}`);
+ *   console.error(`CIP36RegistrationCbor._newUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Constructors
+ * @category ConstructorsUnsafe
  */
-export const unsafe_new = (
+export const _newUnsafe = (
   keyRegistration: CML.CIP36KeyRegistration,
   registrationWitness: CML.CIP36RegistrationWitness,
 ) => Effect.runSync(_new(keyRegistration, registrationWitness));

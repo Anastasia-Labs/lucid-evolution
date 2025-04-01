@@ -1,9 +1,53 @@
+/**
+ * @since 2.0.0
+ */
 import * as CML from "@anastasia-labs/cardano-multiplatform-lib-nodejs";
 
+/**
+ * Type alias for the CML Language enum
+ *
+ * @since 2.0.0
+ * @category Types
+ */
 export type Language = CML.Language;
 
+/**
+ * PlutusV1 variant of the Language enum
+ *
+ * @example
+ * import { Language } from "@lucid-evolution/experimental";
+ *
+ * const kind = Language.PlutusV1;
+ *
+ * @since 2.0.0
+ * @category Variants
+ */
 export const PlutusV1 = CML.Language.PlutusV1;
+
+/**
+ * PlutusV2 variant of the Language enum
+ *
+ * @example
+ * import { Language } from "@lucid-evolution/experimental";
+ *
+ * const kind = Language.PlutusV2;
+ *
+ * @since 2.0.0
+ * @category Variants
+ */
 export const PlutusV2 = CML.Language.PlutusV2;
+
+/**
+ * PlutusV3 variant of the Language enum
+ *
+ * @example
+ * import { Language } from "@lucid-evolution/experimental";
+ *
+ * const kind = Language.PlutusV3;
+ *
+ * @since 2.0.0
+ * @category Variants
+ */
 export const PlutusV3 = CML.Language.PlutusV3;
 
 /**

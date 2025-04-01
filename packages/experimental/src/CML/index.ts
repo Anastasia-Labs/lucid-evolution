@@ -1,3 +1,6 @@
+/**
+ * @since 2.0.0
+ */
 // This file is auto-generated - do not modify
 export * as AddrAttributes from "./AddrAttributes.js";
 export * as Address from "./Address.js";

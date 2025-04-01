@@ -1,8 +1,25 @@
+/**
+ * @since 2.0.0
+ */
 import { Data, Effect } from "effect";
 import * as CML from "@anastasia-labs/cardano-multiplatform-lib-nodejs";
 
+/**
+ * Type alias for the CML AssetName class
+ *
+ * @since 2.0.0
+ * @category Types
+ */
 export type AssetName = CML.AssetName;
 
+/**
+ * Error class for AssetName operations
+ *
+ * This error is thrown when operations on AssetName instances fail.
+ *
+ * @since 2.0.0
+ * @category Errors
+ */
 export class AssetNameError extends Data.TaggedError("AssetNameError")<{
   message?: string;
 }> {}
@@ -47,16 +64,16 @@ export const free = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = AssetName.unsafeFree(instance);
+ *   const result = AssetName.freeUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`AssetName.unsafeFree failed: ${error.message}`);
+ *   console.error(`AssetName.freeUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeFree = (instance: CML.AssetName): void =>
+export const freeUnsafe = (instance: CML.AssetName): void =>
   Effect.runSync(free(instance));
 
 /**
@@ -99,16 +116,16 @@ export const toCborBytes = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = AssetName.unsafeToCborBytes(instance);
+ *   const result = AssetName.toCborBytesUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`AssetName.unsafeToCborBytes failed: ${error.message}`);
+ *   console.error(`AssetName.toCborBytesUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeToCborBytes = (instance: CML.AssetName): Uint8Array =>
+export const toCborBytesUnsafe = (instance: CML.AssetName): Uint8Array =>
   Effect.runSync(toCborBytes(instance));
 
 /**
@@ -151,16 +168,16 @@ export const toCanonicalCborBytes = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = AssetName.unsafeToCanonicalCborBytes(instance);
+ *   const result = AssetName.toCanonicalCborBytesUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`AssetName.unsafeToCanonicalCborBytes failed: ${error.message}`);
+ *   console.error(`AssetName.toCanonicalCborBytesUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeToCanonicalCborBytes = (
+export const toCanonicalCborBytesUnsafe = (
   instance: CML.AssetName,
 ): Uint8Array => Effect.runSync(toCanonicalCborBytes(instance));
 
@@ -201,16 +218,16 @@ export const fromCborBytes = Effect.fn(function* (cborBytes: Uint8Array) {
  *
  * // Using try/catch for error handling
  * try {
- *   const result = AssetName.unsafeFromCborBytes( parameters );
+ *   const result = AssetName.fromCborBytesUnsafe( parameters );
  *   console.log(result);
  * } catch (error) {
- *   console.error(`AssetName.unsafeFromCborBytes failed: ${error.message}`);
+ *   console.error(`AssetName.fromCborBytesUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Constructors
+ * @category ConstructorsUnsafe
  */
-export const unsafeFromCborBytes = (cborBytes: Uint8Array) =>
+export const fromCborBytesUnsafe = (cborBytes: Uint8Array) =>
   Effect.runSync(fromCborBytes(cborBytes));
 
 /**
@@ -253,16 +270,16 @@ export const toCborHex = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = AssetName.unsafeToCborHex(instance);
+ *   const result = AssetName.toCborHexUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`AssetName.unsafeToCborHex failed: ${error.message}`);
+ *   console.error(`AssetName.toCborHexUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeToCborHex = (instance: CML.AssetName): string =>
+export const toCborHexUnsafe = (instance: CML.AssetName): string =>
   Effect.runSync(toCborHex(instance));
 
 /**
@@ -305,16 +322,16 @@ export const toCanonicalCborHex = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = AssetName.unsafeToCanonicalCborHex(instance);
+ *   const result = AssetName.toCanonicalCborHexUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`AssetName.unsafeToCanonicalCborHex failed: ${error.message}`);
+ *   console.error(`AssetName.toCanonicalCborHexUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeToCanonicalCborHex = (instance: CML.AssetName): string =>
+export const toCanonicalCborHexUnsafe = (instance: CML.AssetName): string =>
   Effect.runSync(toCanonicalCborHex(instance));
 
 /**
@@ -354,16 +371,16 @@ export const fromCborHex = Effect.fn(function* (cborBytes: string) {
  *
  * // Using try/catch for error handling
  * try {
- *   const result = AssetName.unsafeFromCborHex( parameters );
+ *   const result = AssetName.fromCborHexUnsafe( parameters );
  *   console.log(result);
  * } catch (error) {
- *   console.error(`AssetName.unsafeFromCborHex failed: ${error.message}`);
+ *   console.error(`AssetName.fromCborHexUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Constructors
+ * @category ConstructorsUnsafe
  */
-export const unsafeFromCborHex = (cborBytes: string) =>
+export const fromCborHexUnsafe = (cborBytes: string) =>
   Effect.runSync(fromCborHex(cborBytes));
 
 /**
@@ -406,16 +423,16 @@ export const toJson = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = AssetName.unsafeToJson(instance);
+ *   const result = AssetName.toJsonUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`AssetName.unsafeToJson failed: ${error.message}`);
+ *   console.error(`AssetName.toJsonUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeToJson = (instance: CML.AssetName): string =>
+export const toJsonUnsafe = (instance: CML.AssetName): string =>
   Effect.runSync(toJson(instance));
 
 /**
@@ -458,16 +475,16 @@ export const toJsValue = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = AssetName.unsafeToJsValue(instance);
+ *   const result = AssetName.toJsValueUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`AssetName.unsafeToJsValue failed: ${error.message}`);
+ *   console.error(`AssetName.toJsValueUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeToJsValue = (instance: CML.AssetName): any =>
+export const toJsValueUnsafe = (instance: CML.AssetName): any =>
   Effect.runSync(toJsValue(instance));
 
 /**
@@ -507,16 +524,16 @@ export const fromJson = Effect.fn(function* (json: string) {
  *
  * // Using try/catch for error handling
  * try {
- *   const result = AssetName.unsafeFromJson( parameters );
+ *   const result = AssetName.fromJsonUnsafe( parameters );
  *   console.log(result);
  * } catch (error) {
- *   console.error(`AssetName.unsafeFromJson failed: ${error.message}`);
+ *   console.error(`AssetName.fromJsonUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Constructors
+ * @category ConstructorsUnsafe
  */
-export const unsafeFromJson = (json: string) => Effect.runSync(fromJson(json));
+export const fromJsonUnsafe = (json: string) => Effect.runSync(fromJson(json));
 
 /**
  * Static method fromStr of AssetName
@@ -555,16 +572,16 @@ export const fromStr = Effect.fn(function* (utf8Str: string) {
  *
  * // Using try/catch for error handling
  * try {
- *   const result = AssetName.unsafeFromStr( parameters );
+ *   const result = AssetName.fromStrUnsafe( parameters );
  *   console.log(result);
  * } catch (error) {
- *   console.error(`AssetName.unsafeFromStr failed: ${error.message}`);
+ *   console.error(`AssetName.fromStrUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Constructors
+ * @category ConstructorsUnsafe
  */
-export const unsafeFromStr = (utf8Str: string) =>
+export const fromStrUnsafe = (utf8Str: string) =>
   Effect.runSync(fromStr(utf8Str));
 
 /**
@@ -607,16 +624,16 @@ export const toStr = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = AssetName.unsafeToStr(instance);
+ *   const result = AssetName.toStrUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`AssetName.unsafeToStr failed: ${error.message}`);
+ *   console.error(`AssetName.toStrUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeToStr = (instance: CML.AssetName): string =>
+export const toStrUnsafe = (instance: CML.AssetName): string =>
   Effect.runSync(toStr(instance));
 
 /**
@@ -659,16 +676,16 @@ export const toRawBytes = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = AssetName.unsafeToRawBytes(instance);
+ *   const result = AssetName.toRawBytesUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`AssetName.unsafeToRawBytes failed: ${error.message}`);
+ *   console.error(`AssetName.toRawBytesUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeToRawBytes = (instance: CML.AssetName): Uint8Array =>
+export const toRawBytesUnsafe = (instance: CML.AssetName): Uint8Array =>
   Effect.runSync(toRawBytes(instance));
 
 /**
@@ -708,16 +725,16 @@ export const fromRawBytes = Effect.fn(function* (bytes: Uint8Array) {
  *
  * // Using try/catch for error handling
  * try {
- *   const result = AssetName.unsafeFromRawBytes( parameters );
+ *   const result = AssetName.fromRawBytesUnsafe( parameters );
  *   console.log(result);
  * } catch (error) {
- *   console.error(`AssetName.unsafeFromRawBytes failed: ${error.message}`);
+ *   console.error(`AssetName.fromRawBytesUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Constructors
+ * @category ConstructorsUnsafe
  */
-export const unsafeFromRawBytes = (bytes: Uint8Array) =>
+export const fromRawBytesUnsafe = (bytes: Uint8Array) =>
   Effect.runSync(fromRawBytes(bytes));
 
 /**
@@ -760,16 +777,16 @@ export const toHex = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = AssetName.unsafeToHex(instance);
+ *   const result = AssetName.toHexUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`AssetName.unsafeToHex failed: ${error.message}`);
+ *   console.error(`AssetName.toHexUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeToHex = (instance: CML.AssetName): string =>
+export const toHexUnsafe = (instance: CML.AssetName): string =>
   Effect.runSync(toHex(instance));
 
 /**
@@ -809,13 +826,13 @@ export const fromHex = Effect.fn(function* (input: string) {
  *
  * // Using try/catch for error handling
  * try {
- *   const result = AssetName.unsafeFromHex( parameters );
+ *   const result = AssetName.fromHexUnsafe( parameters );
  *   console.log(result);
  * } catch (error) {
- *   console.error(`AssetName.unsafeFromHex failed: ${error.message}`);
+ *   console.error(`AssetName.fromHexUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Constructors
+ * @category ConstructorsUnsafe
  */
-export const unsafeFromHex = (input: string) => Effect.runSync(fromHex(input));
+export const fromHexUnsafe = (input: string) => Effect.runSync(fromHex(input));

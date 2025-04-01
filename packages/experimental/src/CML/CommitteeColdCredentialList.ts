@@ -1,8 +1,25 @@
+/**
+ * @since 2.0.0
+ */
 import { Data, Effect } from "effect";
 import * as CML from "@anastasia-labs/cardano-multiplatform-lib-nodejs";
 
+/**
+ * Type alias for the CML CommitteeColdCredentialList class
+ *
+ * @since 2.0.0
+ * @category Types
+ */
 export type CommitteeColdCredentialList = CML.CommitteeColdCredentialList;
 
+/**
+ * Error class for CommitteeColdCredentialList operations
+ *
+ * This error is thrown when operations on CommitteeColdCredentialList instances fail.
+ *
+ * @since 2.0.0
+ * @category Errors
+ */
 export class CommitteeColdCredentialListError extends Data.TaggedError(
   "CommitteeColdCredentialListError",
 )<{
@@ -51,16 +68,16 @@ export const free = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = CommitteeColdCredentialList.unsafeFree(instance);
+ *   const result = CommitteeColdCredentialList.freeUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`CommitteeColdCredentialList.unsafeFree failed: ${error.message}`);
+ *   console.error(`CommitteeColdCredentialList.freeUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeFree = (instance: CML.CommitteeColdCredentialList): void =>
+export const freeUnsafe = (instance: CML.CommitteeColdCredentialList): void =>
   Effect.runSync(free(instance));
 
 /**
@@ -100,16 +117,16 @@ export const _new = Effect.fn(function* () {
  *
  * // Using try/catch for error handling
  * try {
- *   const result = CommitteeColdCredentialList.unsafe_new();
+ *   const result = CommitteeColdCredentialList._newUnsafe();
  *   console.log(result);
  * } catch (error) {
- *   console.error(`CommitteeColdCredentialList.unsafe_new failed: ${error.message}`);
+ *   console.error(`CommitteeColdCredentialList._newUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Constructors
+ * @category ConstructorsUnsafe
  */
-export const unsafe_new = () => Effect.runSync(_new());
+export const _newUnsafe = () => Effect.runSync(_new());
 
 /**
  * Method len of CommitteeColdCredentialList
@@ -153,16 +170,16 @@ export const len = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = CommitteeColdCredentialList.unsafeLen(instance);
+ *   const result = CommitteeColdCredentialList.lenUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`CommitteeColdCredentialList.unsafeLen failed: ${error.message}`);
+ *   console.error(`CommitteeColdCredentialList.lenUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeLen = (instance: CML.CommitteeColdCredentialList): number =>
+export const lenUnsafe = (instance: CML.CommitteeColdCredentialList): number =>
   Effect.runSync(len(instance));
 
 /**
@@ -208,16 +225,16 @@ export const get = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = CommitteeColdCredentialList.unsafeGet(instance,  parameters );
+ *   const result = CommitteeColdCredentialList.getUnsafe(instance,  parameters );
  *   console.log(result);
  * } catch (error) {
- *   console.error(`CommitteeColdCredentialList.unsafeGet failed: ${error.message}`);
+ *   console.error(`CommitteeColdCredentialList.getUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeGet = (
+export const getUnsafe = (
   instance: CML.CommitteeColdCredentialList,
   index: number,
 ): CML.Credential => Effect.runSync(get(instance, index));
@@ -265,16 +282,16 @@ export const add = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = CommitteeColdCredentialList.unsafeAdd(instance,  parameters );
+ *   const result = CommitteeColdCredentialList.addUnsafe(instance,  parameters );
  *   console.log(result);
  * } catch (error) {
- *   console.error(`CommitteeColdCredentialList.unsafeAdd failed: ${error.message}`);
+ *   console.error(`CommitteeColdCredentialList.addUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeAdd = (
+export const addUnsafe = (
   instance: CML.CommitteeColdCredentialList,
   elem: CML.Credential,
 ): void => Effect.runSync(add(instance, elem));

@@ -1,8 +1,25 @@
+/**
+ * @since 2.0.0
+ */
 import { Data, Effect } from "effect";
 import * as CML from "@anastasia-labs/cardano-multiplatform-lib-nodejs";
 
+/**
+ * Type alias for the CML SingleMintBuilder class
+ *
+ * @since 2.0.0
+ * @category Types
+ */
 export type SingleMintBuilder = CML.SingleMintBuilder;
 
+/**
+ * Error class for SingleMintBuilder operations
+ *
+ * This error is thrown when operations on SingleMintBuilder instances fail.
+ *
+ * @since 2.0.0
+ * @category Errors
+ */
 export class SingleMintBuilderError extends Data.TaggedError(
   "SingleMintBuilderError",
 )<{
@@ -51,16 +68,16 @@ export const free = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = SingleMintBuilder.unsafeFree(instance);
+ *   const result = SingleMintBuilder.freeUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`SingleMintBuilder.unsafeFree failed: ${error.message}`);
+ *   console.error(`SingleMintBuilder.freeUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeFree = (instance: CML.SingleMintBuilder): void =>
+export const freeUnsafe = (instance: CML.SingleMintBuilder): void =>
   Effect.runSync(free(instance));
 
 /**
@@ -102,16 +119,16 @@ export const _new = Effect.fn(function* (
  *
  * // Using try/catch for error handling
  * try {
- *   const result = SingleMintBuilder.unsafe_new( parameters );
+ *   const result = SingleMintBuilder._newUnsafe( parameters );
  *   console.log(result);
  * } catch (error) {
- *   console.error(`SingleMintBuilder.unsafe_new failed: ${error.message}`);
+ *   console.error(`SingleMintBuilder._newUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Constructors
+ * @category ConstructorsUnsafe
  */
-export const unsafe_new = (assets: CML.MapAssetNameToNonZeroInt64) =>
+export const _newUnsafe = (assets: CML.MapAssetNameToNonZeroInt64) =>
   Effect.runSync(_new(assets));
 
 /**
@@ -154,16 +171,16 @@ export const newSingleAsset = Effect.fn(function* (
  *
  * // Using try/catch for error handling
  * try {
- *   const result = SingleMintBuilder.unsafeNewSingleAsset( parameters );
+ *   const result = SingleMintBuilder.newSingleAssetUnsafe( parameters );
  *   console.log(result);
  * } catch (error) {
- *   console.error(`SingleMintBuilder.unsafeNewSingleAsset failed: ${error.message}`);
+ *   console.error(`SingleMintBuilder.newSingleAssetUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Constructors
+ * @category ConstructorsUnsafe
  */
-export const unsafeNewSingleAsset = (asset: CML.AssetName, amount: bigint) =>
+export const newSingleAssetUnsafe = (asset: CML.AssetName, amount: bigint) =>
   Effect.runSync(newSingleAsset(asset, amount));
 
 /**
@@ -210,16 +227,16 @@ export const nativeScript = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = SingleMintBuilder.unsafeNativeScript(instance,  parameters );
+ *   const result = SingleMintBuilder.nativeScriptUnsafe(instance,  parameters );
  *   console.log(result);
  * } catch (error) {
- *   console.error(`SingleMintBuilder.unsafeNativeScript failed: ${error.message}`);
+ *   console.error(`SingleMintBuilder.nativeScriptUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeNativeScript = (
+export const nativeScriptUnsafe = (
   instance: CML.SingleMintBuilder,
   _nativeScript: CML.NativeScript,
   witnessInfo: CML.NativeScriptWitnessInfo,
@@ -270,16 +287,16 @@ export const plutusScript = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = SingleMintBuilder.unsafePlutusScript(instance,  parameters );
+ *   const result = SingleMintBuilder.plutusScriptUnsafe(instance,  parameters );
  *   console.log(result);
  * } catch (error) {
- *   console.error(`SingleMintBuilder.unsafePlutusScript failed: ${error.message}`);
+ *   console.error(`SingleMintBuilder.plutusScriptUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafePlutusScript = (
+export const plutusScriptUnsafe = (
   instance: CML.SingleMintBuilder,
   partialWitness: CML.PartialPlutusWitness,
   requiredSigners: CML.Ed25519KeyHashList,

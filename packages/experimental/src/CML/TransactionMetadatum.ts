@@ -1,8 +1,25 @@
+/**
+ * @since 2.0.0
+ */
 import { Data, Effect } from "effect";
 import * as CML from "@anastasia-labs/cardano-multiplatform-lib-nodejs";
 
+/**
+ * Type alias for the CML TransactionMetadatum class
+ *
+ * @since 2.0.0
+ * @category Types
+ */
 export type TransactionMetadatum = CML.TransactionMetadatum;
 
+/**
+ * Error class for TransactionMetadatum operations
+ *
+ * This error is thrown when operations on TransactionMetadatum instances fail.
+ *
+ * @since 2.0.0
+ * @category Errors
+ */
 export class TransactionMetadatumError extends Data.TaggedError(
   "TransactionMetadatumError",
 )<{
@@ -51,16 +68,16 @@ export const free = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = TransactionMetadatum.unsafeFree(instance);
+ *   const result = TransactionMetadatum.freeUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`TransactionMetadatum.unsafeFree failed: ${error.message}`);
+ *   console.error(`TransactionMetadatum.freeUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeFree = (instance: CML.TransactionMetadatum): void =>
+export const freeUnsafe = (instance: CML.TransactionMetadatum): void =>
   Effect.runSync(free(instance));
 
 /**
@@ -105,16 +122,16 @@ export const toCborBytes = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = TransactionMetadatum.unsafeToCborBytes(instance);
+ *   const result = TransactionMetadatum.toCborBytesUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`TransactionMetadatum.unsafeToCborBytes failed: ${error.message}`);
+ *   console.error(`TransactionMetadatum.toCborBytesUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeToCborBytes = (
+export const toCborBytesUnsafe = (
   instance: CML.TransactionMetadatum,
 ): Uint8Array => Effect.runSync(toCborBytes(instance));
 
@@ -155,16 +172,16 @@ export const fromCborBytes = Effect.fn(function* (cborBytes: Uint8Array) {
  *
  * // Using try/catch for error handling
  * try {
- *   const result = TransactionMetadatum.unsafeFromCborBytes( parameters );
+ *   const result = TransactionMetadatum.fromCborBytesUnsafe( parameters );
  *   console.log(result);
  * } catch (error) {
- *   console.error(`TransactionMetadatum.unsafeFromCborBytes failed: ${error.message}`);
+ *   console.error(`TransactionMetadatum.fromCborBytesUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Constructors
+ * @category ConstructorsUnsafe
  */
-export const unsafeFromCborBytes = (cborBytes: Uint8Array) =>
+export const fromCborBytesUnsafe = (cborBytes: Uint8Array) =>
   Effect.runSync(fromCborBytes(cborBytes));
 
 /**
@@ -209,16 +226,16 @@ export const toJson = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = TransactionMetadatum.unsafeToJson(instance);
+ *   const result = TransactionMetadatum.toJsonUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`TransactionMetadatum.unsafeToJson failed: ${error.message}`);
+ *   console.error(`TransactionMetadatum.toJsonUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeToJson = (instance: CML.TransactionMetadatum): string =>
+export const toJsonUnsafe = (instance: CML.TransactionMetadatum): string =>
   Effect.runSync(toJson(instance));
 
 /**
@@ -263,16 +280,16 @@ export const toJsonValue = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = TransactionMetadatum.unsafeToJsonValue(instance);
+ *   const result = TransactionMetadatum.toJsonValueUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`TransactionMetadatum.unsafeToJsonValue failed: ${error.message}`);
+ *   console.error(`TransactionMetadatum.toJsonValueUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeToJsonValue = (instance: CML.TransactionMetadatum): any =>
+export const toJsonValueUnsafe = (instance: CML.TransactionMetadatum): any =>
   Effect.runSync(toJsonValue(instance));
 
 /**
@@ -312,16 +329,16 @@ export const fromJson = Effect.fn(function* (json: string) {
  *
  * // Using try/catch for error handling
  * try {
- *   const result = TransactionMetadatum.unsafeFromJson( parameters );
+ *   const result = TransactionMetadatum.fromJsonUnsafe( parameters );
  *   console.log(result);
  * } catch (error) {
- *   console.error(`TransactionMetadatum.unsafeFromJson failed: ${error.message}`);
+ *   console.error(`TransactionMetadatum.fromJsonUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Constructors
+ * @category ConstructorsUnsafe
  */
-export const unsafeFromJson = (json: string) => Effect.runSync(fromJson(json));
+export const fromJsonUnsafe = (json: string) => Effect.runSync(fromJson(json));
 
 /**
  * Static method newMap of TransactionMetadatum
@@ -360,16 +377,16 @@ export const newMap = Effect.fn(function* (map: CML.MetadatumMap) {
  *
  * // Using try/catch for error handling
  * try {
- *   const result = TransactionMetadatum.unsafeNewMap( parameters );
+ *   const result = TransactionMetadatum.newMapUnsafe( parameters );
  *   console.log(result);
  * } catch (error) {
- *   console.error(`TransactionMetadatum.unsafeNewMap failed: ${error.message}`);
+ *   console.error(`TransactionMetadatum.newMapUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Constructors
+ * @category ConstructorsUnsafe
  */
-export const unsafeNewMap = (map: CML.MetadatumMap) =>
+export const newMapUnsafe = (map: CML.MetadatumMap) =>
   Effect.runSync(newMap(map));
 
 /**
@@ -409,16 +426,16 @@ export const newList = Effect.fn(function* (elements: CML.MetadatumList) {
  *
  * // Using try/catch for error handling
  * try {
- *   const result = TransactionMetadatum.unsafeNewList( parameters );
+ *   const result = TransactionMetadatum.newListUnsafe( parameters );
  *   console.log(result);
  * } catch (error) {
- *   console.error(`TransactionMetadatum.unsafeNewList failed: ${error.message}`);
+ *   console.error(`TransactionMetadatum.newListUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Constructors
+ * @category ConstructorsUnsafe
  */
-export const unsafeNewList = (elements: CML.MetadatumList) =>
+export const newListUnsafe = (elements: CML.MetadatumList) =>
   Effect.runSync(newList(elements));
 
 /**
@@ -458,16 +475,16 @@ export const newInt = Effect.fn(function* (int: CML.Int) {
  *
  * // Using try/catch for error handling
  * try {
- *   const result = TransactionMetadatum.unsafeNewInt( parameters );
+ *   const result = TransactionMetadatum.newIntUnsafe( parameters );
  *   console.log(result);
  * } catch (error) {
- *   console.error(`TransactionMetadatum.unsafeNewInt failed: ${error.message}`);
+ *   console.error(`TransactionMetadatum.newIntUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Constructors
+ * @category ConstructorsUnsafe
  */
-export const unsafeNewInt = (int: CML.Int) => Effect.runSync(newInt(int));
+export const newIntUnsafe = (int: CML.Int) => Effect.runSync(newInt(int));
 
 /**
  * Static method newBytes of TransactionMetadatum
@@ -506,16 +523,16 @@ export const newBytes = Effect.fn(function* (bytes: Uint8Array) {
  *
  * // Using try/catch for error handling
  * try {
- *   const result = TransactionMetadatum.unsafeNewBytes( parameters );
+ *   const result = TransactionMetadatum.newBytesUnsafe( parameters );
  *   console.log(result);
  * } catch (error) {
- *   console.error(`TransactionMetadatum.unsafeNewBytes failed: ${error.message}`);
+ *   console.error(`TransactionMetadatum.newBytesUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Constructors
+ * @category ConstructorsUnsafe
  */
-export const unsafeNewBytes = (bytes: Uint8Array) =>
+export const newBytesUnsafe = (bytes: Uint8Array) =>
   Effect.runSync(newBytes(bytes));
 
 /**
@@ -555,16 +572,16 @@ export const newText = Effect.fn(function* (text: string) {
  *
  * // Using try/catch for error handling
  * try {
- *   const result = TransactionMetadatum.unsafeNewText( parameters );
+ *   const result = TransactionMetadatum.newTextUnsafe( parameters );
  *   console.log(result);
  * } catch (error) {
- *   console.error(`TransactionMetadatum.unsafeNewText failed: ${error.message}`);
+ *   console.error(`TransactionMetadatum.newTextUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Constructors
+ * @category ConstructorsUnsafe
  */
-export const unsafeNewText = (text: string) => Effect.runSync(newText(text));
+export const newTextUnsafe = (text: string) => Effect.runSync(newText(text));
 
 /**
  * Method kind of TransactionMetadatum
@@ -608,16 +625,16 @@ export const kind = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = TransactionMetadatum.unsafeKind(instance);
+ *   const result = TransactionMetadatum.kindUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`TransactionMetadatum.unsafeKind failed: ${error.message}`);
+ *   console.error(`TransactionMetadatum.kindUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeKind = (
+export const kindUnsafe = (
   instance: CML.TransactionMetadatum,
 ): CML.TransactionMetadatumKind => Effect.runSync(kind(instance));
 
@@ -663,16 +680,16 @@ export const asMap = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = TransactionMetadatum.unsafeAsMap(instance);
+ *   const result = TransactionMetadatum.asMapUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`TransactionMetadatum.unsafeAsMap failed: ${error.message}`);
+ *   console.error(`TransactionMetadatum.asMapUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeAsMap = (
+export const asMapUnsafe = (
   instance: CML.TransactionMetadatum,
 ): CML.MetadatumMap | undefined => Effect.runSync(asMap(instance));
 
@@ -718,16 +735,16 @@ export const asList = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = TransactionMetadatum.unsafeAsList(instance);
+ *   const result = TransactionMetadatum.asListUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`TransactionMetadatum.unsafeAsList failed: ${error.message}`);
+ *   console.error(`TransactionMetadatum.asListUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeAsList = (
+export const asListUnsafe = (
   instance: CML.TransactionMetadatum,
 ): CML.MetadatumList | undefined => Effect.runSync(asList(instance));
 
@@ -773,16 +790,16 @@ export const asInt = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = TransactionMetadatum.unsafeAsInt(instance);
+ *   const result = TransactionMetadatum.asIntUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`TransactionMetadatum.unsafeAsInt failed: ${error.message}`);
+ *   console.error(`TransactionMetadatum.asIntUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeAsInt = (
+export const asIntUnsafe = (
   instance: CML.TransactionMetadatum,
 ): CML.Int | undefined => Effect.runSync(asInt(instance));
 
@@ -828,16 +845,16 @@ export const asBytes = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = TransactionMetadatum.unsafeAsBytes(instance);
+ *   const result = TransactionMetadatum.asBytesUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`TransactionMetadatum.unsafeAsBytes failed: ${error.message}`);
+ *   console.error(`TransactionMetadatum.asBytesUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeAsBytes = (
+export const asBytesUnsafe = (
   instance: CML.TransactionMetadatum,
 ): Uint8Array | undefined => Effect.runSync(asBytes(instance));
 
@@ -883,15 +900,15 @@ export const asText = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = TransactionMetadatum.unsafeAsText(instance);
+ *   const result = TransactionMetadatum.asTextUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`TransactionMetadatum.unsafeAsText failed: ${error.message}`);
+ *   console.error(`TransactionMetadatum.asTextUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeAsText = (
+export const asTextUnsafe = (
   instance: CML.TransactionMetadatum,
 ): string | undefined => Effect.runSync(asText(instance));

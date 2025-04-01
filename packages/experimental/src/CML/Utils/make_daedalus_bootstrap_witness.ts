@@ -1,6 +1,17 @@
+/**
+ * @since 2.0.0
+ */
 import { Data, Effect } from "effect";
 import * as CML from "@anastasia-labs/cardano-multiplatform-lib-nodejs";
 
+/**
+ * Error class for make_daedalus_bootstrap_witness function
+ *
+ * This error is thrown when the make_daedalus_bootstrap_witness function fails.
+ *
+ * @since 2.0.0
+ * @category Errors
+ */
 export class MakeDaedalusBootstrapWitnessError extends Data.TaggedError(
   "MakeDaedalusBootstrapWitnessError",
 )<{
@@ -41,19 +52,19 @@ export const makeDaedalusBootstrapWitness = Effect.fn(function* (
  * Unsafely calls make_daedalus_bootstrap_witness function without Effect wrapper
  *
  * @example
- * import { unsafeMakeDaedalusBootstrapWitness } from "@lucid-evolution/experimental/CML/functions";
+ * import { makeDaedalusBootstrapWitnessUnsafe } from "@lucid-evolution/experimental/CML/functions";
  *
  * try {
- *   const result = unsafeMakeDaedalusBootstrapWitness(TransactionHash instance , ByronAddress instance , LegacyDaedalusPrivateKey instance );
+ *   const result = makeDaedalusBootstrapWitnessUnsafe(TransactionHash instance , ByronAddress instance , LegacyDaedalusPrivateKey instance );
  *   console.log(result);
  * } catch (error) {
- *   console.error(`unsafeMakeDaedalusBootstrapWitness failed: ${error.message}`);
+ *   console.error(`makeDaedalusBootstrapWitnessUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Functions
+ * @category FunctionsUnsafe
  */
-export const unsafeMakeDaedalusBootstrapWitness = (
+export const makeDaedalusBootstrapWitnessUnsafe = (
   txBodyHash: CML.TransactionHash,
   addr: CML.ByronAddress,
   key: CML.LegacyDaedalusPrivateKey,

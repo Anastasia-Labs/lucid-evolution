@@ -1,8 +1,25 @@
+/**
+ * @since 2.0.0
+ */
 import { Data, Effect } from "effect";
 import * as CML from "@anastasia-labs/cardano-multiplatform-lib-nodejs";
 
+/**
+ * Type alias for the CML CIP36DelegationDistribution class
+ *
+ * @since 2.0.0
+ * @category Types
+ */
 export type CIP36DelegationDistribution = CML.CIP36DelegationDistribution;
 
+/**
+ * Error class for CIP36DelegationDistribution operations
+ *
+ * This error is thrown when operations on CIP36DelegationDistribution instances fail.
+ *
+ * @since 2.0.0
+ * @category Errors
+ */
 export class CIP36DelegationDistributionError extends Data.TaggedError(
   "CIP36DelegationDistributionError",
 )<{
@@ -51,16 +68,16 @@ export const free = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = CIP36DelegationDistribution.unsafeFree(instance);
+ *   const result = CIP36DelegationDistribution.freeUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`CIP36DelegationDistribution.unsafeFree failed: ${error.message}`);
+ *   console.error(`CIP36DelegationDistribution.freeUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeFree = (instance: CML.CIP36DelegationDistribution): void =>
+export const freeUnsafe = (instance: CML.CIP36DelegationDistribution): void =>
   Effect.runSync(free(instance));
 
 /**
@@ -105,16 +122,16 @@ export const toCborBytes = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = CIP36DelegationDistribution.unsafeToCborBytes(instance);
+ *   const result = CIP36DelegationDistribution.toCborBytesUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`CIP36DelegationDistribution.unsafeToCborBytes failed: ${error.message}`);
+ *   console.error(`CIP36DelegationDistribution.toCborBytesUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeToCborBytes = (
+export const toCborBytesUnsafe = (
   instance: CML.CIP36DelegationDistribution,
 ): Uint8Array => Effect.runSync(toCborBytes(instance));
 
@@ -160,16 +177,16 @@ export const toCanonicalCborBytes = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = CIP36DelegationDistribution.unsafeToCanonicalCborBytes(instance);
+ *   const result = CIP36DelegationDistribution.toCanonicalCborBytesUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`CIP36DelegationDistribution.unsafeToCanonicalCborBytes failed: ${error.message}`);
+ *   console.error(`CIP36DelegationDistribution.toCanonicalCborBytesUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeToCanonicalCborBytes = (
+export const toCanonicalCborBytesUnsafe = (
   instance: CML.CIP36DelegationDistribution,
 ): Uint8Array => Effect.runSync(toCanonicalCborBytes(instance));
 
@@ -210,16 +227,16 @@ export const fromCborBytes = Effect.fn(function* (cborBytes: Uint8Array) {
  *
  * // Using try/catch for error handling
  * try {
- *   const result = CIP36DelegationDistribution.unsafeFromCborBytes( parameters );
+ *   const result = CIP36DelegationDistribution.fromCborBytesUnsafe( parameters );
  *   console.log(result);
  * } catch (error) {
- *   console.error(`CIP36DelegationDistribution.unsafeFromCborBytes failed: ${error.message}`);
+ *   console.error(`CIP36DelegationDistribution.fromCborBytesUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Constructors
+ * @category ConstructorsUnsafe
  */
-export const unsafeFromCborBytes = (cborBytes: Uint8Array) =>
+export const fromCborBytesUnsafe = (cborBytes: Uint8Array) =>
   Effect.runSync(fromCborBytes(cborBytes));
 
 /**
@@ -264,16 +281,16 @@ export const toCborHex = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = CIP36DelegationDistribution.unsafeToCborHex(instance);
+ *   const result = CIP36DelegationDistribution.toCborHexUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`CIP36DelegationDistribution.unsafeToCborHex failed: ${error.message}`);
+ *   console.error(`CIP36DelegationDistribution.toCborHexUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeToCborHex = (
+export const toCborHexUnsafe = (
   instance: CML.CIP36DelegationDistribution,
 ): string => Effect.runSync(toCborHex(instance));
 
@@ -319,16 +336,16 @@ export const toCanonicalCborHex = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = CIP36DelegationDistribution.unsafeToCanonicalCborHex(instance);
+ *   const result = CIP36DelegationDistribution.toCanonicalCborHexUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`CIP36DelegationDistribution.unsafeToCanonicalCborHex failed: ${error.message}`);
+ *   console.error(`CIP36DelegationDistribution.toCanonicalCborHexUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeToCanonicalCborHex = (
+export const toCanonicalCborHexUnsafe = (
   instance: CML.CIP36DelegationDistribution,
 ): string => Effect.runSync(toCanonicalCborHex(instance));
 
@@ -369,16 +386,16 @@ export const fromCborHex = Effect.fn(function* (cborBytes: string) {
  *
  * // Using try/catch for error handling
  * try {
- *   const result = CIP36DelegationDistribution.unsafeFromCborHex( parameters );
+ *   const result = CIP36DelegationDistribution.fromCborHexUnsafe( parameters );
  *   console.log(result);
  * } catch (error) {
- *   console.error(`CIP36DelegationDistribution.unsafeFromCborHex failed: ${error.message}`);
+ *   console.error(`CIP36DelegationDistribution.fromCborHexUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Constructors
+ * @category ConstructorsUnsafe
  */
-export const unsafeFromCborHex = (cborBytes: string) =>
+export const fromCborHexUnsafe = (cborBytes: string) =>
   Effect.runSync(fromCborHex(cborBytes));
 
 /**
@@ -423,16 +440,16 @@ export const toJson = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = CIP36DelegationDistribution.unsafeToJson(instance);
+ *   const result = CIP36DelegationDistribution.toJsonUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`CIP36DelegationDistribution.unsafeToJson failed: ${error.message}`);
+ *   console.error(`CIP36DelegationDistribution.toJsonUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeToJson = (
+export const toJsonUnsafe = (
   instance: CML.CIP36DelegationDistribution,
 ): string => Effect.runSync(toJson(instance));
 
@@ -478,16 +495,16 @@ export const toJsValue = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = CIP36DelegationDistribution.unsafeToJsValue(instance);
+ *   const result = CIP36DelegationDistribution.toJsValueUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`CIP36DelegationDistribution.unsafeToJsValue failed: ${error.message}`);
+ *   console.error(`CIP36DelegationDistribution.toJsValueUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeToJsValue = (
+export const toJsValueUnsafe = (
   instance: CML.CIP36DelegationDistribution,
 ): any => Effect.runSync(toJsValue(instance));
 
@@ -528,16 +545,16 @@ export const fromJson = Effect.fn(function* (json: string) {
  *
  * // Using try/catch for error handling
  * try {
- *   const result = CIP36DelegationDistribution.unsafeFromJson( parameters );
+ *   const result = CIP36DelegationDistribution.fromJsonUnsafe( parameters );
  *   console.log(result);
  * } catch (error) {
- *   console.error(`CIP36DelegationDistribution.unsafeFromJson failed: ${error.message}`);
+ *   console.error(`CIP36DelegationDistribution.fromJsonUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Constructors
+ * @category ConstructorsUnsafe
  */
-export const unsafeFromJson = (json: string) => Effect.runSync(fromJson(json));
+export const fromJsonUnsafe = (json: string) => Effect.runSync(fromJson(json));
 
 /**
  * Static method newWeighted of CIP36DelegationDistribution
@@ -578,16 +595,16 @@ export const newWeighted = Effect.fn(function* (
  *
  * // Using try/catch for error handling
  * try {
- *   const result = CIP36DelegationDistribution.unsafeNewWeighted( parameters );
+ *   const result = CIP36DelegationDistribution.newWeightedUnsafe( parameters );
  *   console.log(result);
  * } catch (error) {
- *   console.error(`CIP36DelegationDistribution.unsafeNewWeighted failed: ${error.message}`);
+ *   console.error(`CIP36DelegationDistribution.newWeightedUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Constructors
+ * @category ConstructorsUnsafe
  */
-export const unsafeNewWeighted = (delegations: CML.CIP36DelegationList) =>
+export const newWeightedUnsafe = (delegations: CML.CIP36DelegationList) =>
   Effect.runSync(newWeighted(delegations));
 
 /**
@@ -627,16 +644,16 @@ export const newLegacy = Effect.fn(function* (legacy: CML.PublicKey) {
  *
  * // Using try/catch for error handling
  * try {
- *   const result = CIP36DelegationDistribution.unsafeNewLegacy( parameters );
+ *   const result = CIP36DelegationDistribution.newLegacyUnsafe( parameters );
  *   console.log(result);
  * } catch (error) {
- *   console.error(`CIP36DelegationDistribution.unsafeNewLegacy failed: ${error.message}`);
+ *   console.error(`CIP36DelegationDistribution.newLegacyUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Constructors
+ * @category ConstructorsUnsafe
  */
-export const unsafeNewLegacy = (legacy: CML.PublicKey) =>
+export const newLegacyUnsafe = (legacy: CML.PublicKey) =>
   Effect.runSync(newLegacy(legacy));
 
 /**
@@ -684,16 +701,16 @@ export const kind = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = CIP36DelegationDistribution.unsafeKind(instance);
+ *   const result = CIP36DelegationDistribution.kindUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`CIP36DelegationDistribution.unsafeKind failed: ${error.message}`);
+ *   console.error(`CIP36DelegationDistribution.kindUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeKind = (
+export const kindUnsafe = (
   instance: CML.CIP36DelegationDistribution,
 ): CML.DelegationDistributionKind => Effect.runSync(kind(instance));
 
@@ -742,16 +759,16 @@ export const asWeighted = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = CIP36DelegationDistribution.unsafeAsWeighted(instance);
+ *   const result = CIP36DelegationDistribution.asWeightedUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`CIP36DelegationDistribution.unsafeAsWeighted failed: ${error.message}`);
+ *   console.error(`CIP36DelegationDistribution.asWeightedUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeAsWeighted = (
+export const asWeightedUnsafe = (
   instance: CML.CIP36DelegationDistribution,
 ): CML.CIP36DelegationList | undefined => Effect.runSync(asWeighted(instance));
 
@@ -800,15 +817,15 @@ export const asLegacy = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = CIP36DelegationDistribution.unsafeAsLegacy(instance);
+ *   const result = CIP36DelegationDistribution.asLegacyUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`CIP36DelegationDistribution.unsafeAsLegacy failed: ${error.message}`);
+ *   console.error(`CIP36DelegationDistribution.asLegacyUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeAsLegacy = (
+export const asLegacyUnsafe = (
   instance: CML.CIP36DelegationDistribution,
 ): CML.PublicKey | undefined => Effect.runSync(asLegacy(instance));

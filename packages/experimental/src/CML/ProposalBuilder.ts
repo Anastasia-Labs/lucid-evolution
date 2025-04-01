@@ -1,8 +1,25 @@
+/**
+ * @since 2.0.0
+ */
 import { Data, Effect } from "effect";
 import * as CML from "@anastasia-labs/cardano-multiplatform-lib-nodejs";
 
+/**
+ * Type alias for the CML ProposalBuilder class
+ *
+ * @since 2.0.0
+ * @category Types
+ */
 export type ProposalBuilder = CML.ProposalBuilder;
 
+/**
+ * Error class for ProposalBuilder operations
+ *
+ * This error is thrown when operations on ProposalBuilder instances fail.
+ *
+ * @since 2.0.0
+ * @category Errors
+ */
 export class ProposalBuilderError extends Data.TaggedError(
   "ProposalBuilderError",
 )<{
@@ -49,16 +66,16 @@ export const free = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = ProposalBuilder.unsafeFree(instance);
+ *   const result = ProposalBuilder.freeUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`ProposalBuilder.unsafeFree failed: ${error.message}`);
+ *   console.error(`ProposalBuilder.freeUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeFree = (instance: CML.ProposalBuilder): void =>
+export const freeUnsafe = (instance: CML.ProposalBuilder): void =>
   Effect.runSync(free(instance));
 
 /**
@@ -98,16 +115,16 @@ export const _new = Effect.fn(function* () {
  *
  * // Using try/catch for error handling
  * try {
- *   const result = ProposalBuilder.unsafe_new();
+ *   const result = ProposalBuilder._newUnsafe();
  *   console.log(result);
  * } catch (error) {
- *   console.error(`ProposalBuilder.unsafe_new failed: ${error.message}`);
+ *   console.error(`ProposalBuilder._newUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Constructors
+ * @category ConstructorsUnsafe
  */
-export const unsafe_new = () => Effect.runSync(_new());
+export const _newUnsafe = () => Effect.runSync(_new());
 
 /**
  * Method withProposal of ProposalBuilder
@@ -152,16 +169,16 @@ export const withProposal = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = ProposalBuilder.unsafeWithProposal(instance,  parameters );
+ *   const result = ProposalBuilder.withProposalUnsafe(instance,  parameters );
  *   console.log(result);
  * } catch (error) {
- *   console.error(`ProposalBuilder.unsafeWithProposal failed: ${error.message}`);
+ *   console.error(`ProposalBuilder.withProposalUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeWithProposal = (
+export const withProposalUnsafe = (
   instance: CML.ProposalBuilder,
   proposal: CML.ProposalProcedure,
 ): CML.ProposalBuilder => Effect.runSync(withProposal(instance, proposal));
@@ -216,16 +233,16 @@ export const withNativeScriptProposal = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = ProposalBuilder.unsafeWithNativeScriptProposal(instance,  parameters );
+ *   const result = ProposalBuilder.withNativeScriptProposalUnsafe(instance,  parameters );
  *   console.log(result);
  * } catch (error) {
- *   console.error(`ProposalBuilder.unsafeWithNativeScriptProposal failed: ${error.message}`);
+ *   console.error(`ProposalBuilder.withNativeScriptProposalUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeWithNativeScriptProposal = (
+export const withNativeScriptProposalUnsafe = (
   instance: CML.ProposalBuilder,
   proposal: CML.ProposalProcedure,
   nativeScript: CML.NativeScript,
@@ -287,16 +304,16 @@ export const withPlutusProposal = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = ProposalBuilder.unsafeWithPlutusProposal(instance,  parameters );
+ *   const result = ProposalBuilder.withPlutusProposalUnsafe(instance,  parameters );
  *   console.log(result);
  * } catch (error) {
- *   console.error(`ProposalBuilder.unsafeWithPlutusProposal failed: ${error.message}`);
+ *   console.error(`ProposalBuilder.withPlutusProposalUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeWithPlutusProposal = (
+export const withPlutusProposalUnsafe = (
   instance: CML.ProposalBuilder,
   proposal: CML.ProposalProcedure,
   partialWitness: CML.PartialPlutusWitness,
@@ -363,16 +380,16 @@ export const withPlutusProposalInlineDatum = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = ProposalBuilder.unsafeWithPlutusProposalInlineDatum(instance,  parameters );
+ *   const result = ProposalBuilder.withPlutusProposalInlineDatumUnsafe(instance,  parameters );
  *   console.log(result);
  * } catch (error) {
- *   console.error(`ProposalBuilder.unsafeWithPlutusProposalInlineDatum failed: ${error.message}`);
+ *   console.error(`ProposalBuilder.withPlutusProposalInlineDatumUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeWithPlutusProposalInlineDatum = (
+export const withPlutusProposalInlineDatumUnsafe = (
   instance: CML.ProposalBuilder,
   proposal: CML.ProposalProcedure,
   partialWitness: CML.PartialPlutusWitness,
@@ -429,15 +446,15 @@ export const build = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = ProposalBuilder.unsafeBuild(instance);
+ *   const result = ProposalBuilder.buildUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`ProposalBuilder.unsafeBuild failed: ${error.message}`);
+ *   console.error(`ProposalBuilder.buildUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeBuild = (
+export const buildUnsafe = (
   instance: CML.ProposalBuilder,
 ): CML.ProposalBuilderResult => Effect.runSync(build(instance));

@@ -1,8 +1,25 @@
+/**
+ * @since 2.0.0
+ */
 import { Data, Effect } from "effect";
 import * as CML from "@anastasia-labs/cardano-multiplatform-lib-nodejs";
 
+/**
+ * Type alias for the CML CIP36DeregistrationCbor class
+ *
+ * @since 2.0.0
+ * @category Types
+ */
 export type CIP36DeregistrationCbor = CML.CIP36DeregistrationCbor;
 
+/**
+ * Error class for CIP36DeregistrationCbor operations
+ *
+ * This error is thrown when operations on CIP36DeregistrationCbor instances fail.
+ *
+ * @since 2.0.0
+ * @category Errors
+ */
 export class CIP36DeregistrationCborError extends Data.TaggedError(
   "CIP36DeregistrationCborError",
 )<{
@@ -51,16 +68,16 @@ export const free = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = CIP36DeregistrationCbor.unsafeFree(instance);
+ *   const result = CIP36DeregistrationCbor.freeUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`CIP36DeregistrationCbor.unsafeFree failed: ${error.message}`);
+ *   console.error(`CIP36DeregistrationCbor.freeUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeFree = (instance: CML.CIP36DeregistrationCbor): void =>
+export const freeUnsafe = (instance: CML.CIP36DeregistrationCbor): void =>
   Effect.runSync(free(instance));
 
 /**
@@ -105,16 +122,16 @@ export const toJson = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = CIP36DeregistrationCbor.unsafeToJson(instance);
+ *   const result = CIP36DeregistrationCbor.toJsonUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`CIP36DeregistrationCbor.unsafeToJson failed: ${error.message}`);
+ *   console.error(`CIP36DeregistrationCbor.toJsonUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeToJson = (instance: CML.CIP36DeregistrationCbor): string =>
+export const toJsonUnsafe = (instance: CML.CIP36DeregistrationCbor): string =>
   Effect.runSync(toJson(instance));
 
 /**
@@ -159,16 +176,16 @@ export const toJsValue = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = CIP36DeregistrationCbor.unsafeToJsValue(instance);
+ *   const result = CIP36DeregistrationCbor.toJsValueUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`CIP36DeregistrationCbor.unsafeToJsValue failed: ${error.message}`);
+ *   console.error(`CIP36DeregistrationCbor.toJsValueUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeToJsValue = (instance: CML.CIP36DeregistrationCbor): any =>
+export const toJsValueUnsafe = (instance: CML.CIP36DeregistrationCbor): any =>
   Effect.runSync(toJsValue(instance));
 
 /**
@@ -208,16 +225,16 @@ export const fromJson = Effect.fn(function* (json: string) {
  *
  * // Using try/catch for error handling
  * try {
- *   const result = CIP36DeregistrationCbor.unsafeFromJson( parameters );
+ *   const result = CIP36DeregistrationCbor.fromJsonUnsafe( parameters );
  *   console.log(result);
  * } catch (error) {
- *   console.error(`CIP36DeregistrationCbor.unsafeFromJson failed: ${error.message}`);
+ *   console.error(`CIP36DeregistrationCbor.fromJsonUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Constructors
+ * @category ConstructorsUnsafe
  */
-export const unsafeFromJson = (json: string) => Effect.runSync(fromJson(json));
+export const fromJsonUnsafe = (json: string) => Effect.runSync(fromJson(json));
 
 /**
  * Method keyDeregistration of CIP36DeregistrationCbor
@@ -261,16 +278,16 @@ export const keyDeregistration = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = CIP36DeregistrationCbor.unsafeKeyDeregistration(instance);
+ *   const result = CIP36DeregistrationCbor.keyDeregistrationUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`CIP36DeregistrationCbor.unsafeKeyDeregistration failed: ${error.message}`);
+ *   console.error(`CIP36DeregistrationCbor.keyDeregistrationUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeKeyDeregistration = (
+export const keyDeregistrationUnsafe = (
   instance: CML.CIP36DeregistrationCbor,
 ): CML.CIP36KeyDeregistration => Effect.runSync(keyDeregistration(instance));
 
@@ -319,16 +336,16 @@ export const deregistrationWitness = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = CIP36DeregistrationCbor.unsafeDeregistrationWitness(instance);
+ *   const result = CIP36DeregistrationCbor.deregistrationWitnessUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`CIP36DeregistrationCbor.unsafeDeregistrationWitness failed: ${error.message}`);
+ *   console.error(`CIP36DeregistrationCbor.deregistrationWitnessUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeDeregistrationWitness = (
+export const deregistrationWitnessUnsafe = (
   instance: CML.CIP36DeregistrationCbor,
 ): CML.CIP36DeregistrationWitness =>
   Effect.runSync(deregistrationWitness(instance));
@@ -374,16 +391,16 @@ export const _new = Effect.fn(function* (
  *
  * // Using try/catch for error handling
  * try {
- *   const result = CIP36DeregistrationCbor.unsafe_new( parameters );
+ *   const result = CIP36DeregistrationCbor._newUnsafe( parameters );
  *   console.log(result);
  * } catch (error) {
- *   console.error(`CIP36DeregistrationCbor.unsafe_new failed: ${error.message}`);
+ *   console.error(`CIP36DeregistrationCbor._newUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Constructors
+ * @category ConstructorsUnsafe
  */
-export const unsafe_new = (
+export const _newUnsafe = (
   keyDeregistration: CML.CIP36KeyDeregistration,
   deregistrationWitness: CML.CIP36DeregistrationWitness,
 ) => Effect.runSync(_new(keyDeregistration, deregistrationWitness));

@@ -1,6 +1,17 @@
+/**
+ * @since 2.0.0
+ */
 import { Data, Effect } from "effect";
 import * as CML from "@anastasia-labs/cardano-multiplatform-lib-nodejs";
 
+/**
+ * Error class for hash_transaction function
+ *
+ * This error is thrown when the hash_transaction function fails.
+ *
+ * @since 2.0.0
+ * @category Errors
+ */
 export class HashTransactionError extends Data.TaggedError(
   "HashTransactionError",
 )<{
@@ -39,18 +50,18 @@ export const hashTransaction = Effect.fn(function* (
  * Unsafely calls hash_transaction function without Effect wrapper
  *
  * @example
- * import { unsafeHashTransaction } from "@lucid-evolution/experimental/CML/functions";
+ * import { hashTransactionUnsafe } from "@lucid-evolution/experimental/CML/functions";
  *
  * try {
- *   const result = unsafeHashTransaction(TransactionBody instance );
+ *   const result = hashTransactionUnsafe(TransactionBody instance );
  *   console.log(result);
  * } catch (error) {
- *   console.error(`unsafeHashTransaction failed: ${error.message}`);
+ *   console.error(`hashTransactionUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Functions
+ * @category FunctionsUnsafe
  */
-export const unsafeHashTransaction = (
+export const hashTransactionUnsafe = (
   txBody: CML.TransactionBody,
 ): CML.TransactionHash => Effect.runSync(hashTransaction(txBody));

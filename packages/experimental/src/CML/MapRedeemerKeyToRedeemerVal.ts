@@ -1,8 +1,25 @@
+/**
+ * @since 2.0.0
+ */
 import { Data, Effect } from "effect";
 import * as CML from "@anastasia-labs/cardano-multiplatform-lib-nodejs";
 
+/**
+ * Type alias for the CML MapRedeemerKeyToRedeemerVal class
+ *
+ * @since 2.0.0
+ * @category Types
+ */
 export type MapRedeemerKeyToRedeemerVal = CML.MapRedeemerKeyToRedeemerVal;
 
+/**
+ * Error class for MapRedeemerKeyToRedeemerVal operations
+ *
+ * This error is thrown when operations on MapRedeemerKeyToRedeemerVal instances fail.
+ *
+ * @since 2.0.0
+ * @category Errors
+ */
 export class MapRedeemerKeyToRedeemerValError extends Data.TaggedError(
   "MapRedeemerKeyToRedeemerValError",
 )<{
@@ -51,16 +68,16 @@ export const free = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = MapRedeemerKeyToRedeemerVal.unsafeFree(instance);
+ *   const result = MapRedeemerKeyToRedeemerVal.freeUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`MapRedeemerKeyToRedeemerVal.unsafeFree failed: ${error.message}`);
+ *   console.error(`MapRedeemerKeyToRedeemerVal.freeUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeFree = (instance: CML.MapRedeemerKeyToRedeemerVal): void =>
+export const freeUnsafe = (instance: CML.MapRedeemerKeyToRedeemerVal): void =>
   Effect.runSync(free(instance));
 
 /**
@@ -100,16 +117,16 @@ export const _new = Effect.fn(function* () {
  *
  * // Using try/catch for error handling
  * try {
- *   const result = MapRedeemerKeyToRedeemerVal.unsafe_new();
+ *   const result = MapRedeemerKeyToRedeemerVal._newUnsafe();
  *   console.log(result);
  * } catch (error) {
- *   console.error(`MapRedeemerKeyToRedeemerVal.unsafe_new failed: ${error.message}`);
+ *   console.error(`MapRedeemerKeyToRedeemerVal._newUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Constructors
+ * @category ConstructorsUnsafe
  */
-export const unsafe_new = () => Effect.runSync(_new());
+export const _newUnsafe = () => Effect.runSync(_new());
 
 /**
  * Method len of MapRedeemerKeyToRedeemerVal
@@ -153,16 +170,16 @@ export const len = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = MapRedeemerKeyToRedeemerVal.unsafeLen(instance);
+ *   const result = MapRedeemerKeyToRedeemerVal.lenUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`MapRedeemerKeyToRedeemerVal.unsafeLen failed: ${error.message}`);
+ *   console.error(`MapRedeemerKeyToRedeemerVal.lenUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeLen = (instance: CML.MapRedeemerKeyToRedeemerVal): number =>
+export const lenUnsafe = (instance: CML.MapRedeemerKeyToRedeemerVal): number =>
   Effect.runSync(len(instance));
 
 /**
@@ -212,16 +229,16 @@ export const insert = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = MapRedeemerKeyToRedeemerVal.unsafeInsert(instance,  parameters );
+ *   const result = MapRedeemerKeyToRedeemerVal.insertUnsafe(instance,  parameters );
  *   console.log(result);
  * } catch (error) {
- *   console.error(`MapRedeemerKeyToRedeemerVal.unsafeInsert failed: ${error.message}`);
+ *   console.error(`MapRedeemerKeyToRedeemerVal.insertUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeInsert = (
+export const insertUnsafe = (
   instance: CML.MapRedeemerKeyToRedeemerVal,
   key: CML.RedeemerKey,
   value: CML.RedeemerVal,
@@ -273,16 +290,16 @@ export const get = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = MapRedeemerKeyToRedeemerVal.unsafeGet(instance,  parameters );
+ *   const result = MapRedeemerKeyToRedeemerVal.getUnsafe(instance,  parameters );
  *   console.log(result);
  * } catch (error) {
- *   console.error(`MapRedeemerKeyToRedeemerVal.unsafeGet failed: ${error.message}`);
+ *   console.error(`MapRedeemerKeyToRedeemerVal.getUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeGet = (
+export const getUnsafe = (
   instance: CML.MapRedeemerKeyToRedeemerVal,
   key: CML.RedeemerKey,
 ): CML.RedeemerVal | undefined => Effect.runSync(get(instance, key));
@@ -329,15 +346,15 @@ export const keys = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = MapRedeemerKeyToRedeemerVal.unsafeKeys(instance);
+ *   const result = MapRedeemerKeyToRedeemerVal.keysUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`MapRedeemerKeyToRedeemerVal.unsafeKeys failed: ${error.message}`);
+ *   console.error(`MapRedeemerKeyToRedeemerVal.keysUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeKeys = (
+export const keysUnsafe = (
   instance: CML.MapRedeemerKeyToRedeemerVal,
 ): CML.RedeemerKeyList => Effect.runSync(keys(instance));

@@ -1,8 +1,25 @@
+/**
+ * @since 2.0.0
+ */
 import { Data, Effect } from "effect";
 import * as CML from "@anastasia-labs/cardano-multiplatform-lib-nodejs";
 
+/**
+ * Type alias for the CML RelayList class
+ *
+ * @since 2.0.0
+ * @category Types
+ */
 export type RelayList = CML.RelayList;
 
+/**
+ * Error class for RelayList operations
+ *
+ * This error is thrown when operations on RelayList instances fail.
+ *
+ * @since 2.0.0
+ * @category Errors
+ */
 export class RelayListError extends Data.TaggedError("RelayListError")<{
   message?: string;
 }> {}
@@ -47,16 +64,16 @@ export const free = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = RelayList.unsafeFree(instance);
+ *   const result = RelayList.freeUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`RelayList.unsafeFree failed: ${error.message}`);
+ *   console.error(`RelayList.freeUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeFree = (instance: CML.RelayList): void =>
+export const freeUnsafe = (instance: CML.RelayList): void =>
   Effect.runSync(free(instance));
 
 /**
@@ -96,16 +113,16 @@ export const _new = Effect.fn(function* () {
  *
  * // Using try/catch for error handling
  * try {
- *   const result = RelayList.unsafe_new();
+ *   const result = RelayList._newUnsafe();
  *   console.log(result);
  * } catch (error) {
- *   console.error(`RelayList.unsafe_new failed: ${error.message}`);
+ *   console.error(`RelayList._newUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Constructors
+ * @category ConstructorsUnsafe
  */
-export const unsafe_new = () => Effect.runSync(_new());
+export const _newUnsafe = () => Effect.runSync(_new());
 
 /**
  * Method len of RelayList
@@ -147,16 +164,16 @@ export const len = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = RelayList.unsafeLen(instance);
+ *   const result = RelayList.lenUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`RelayList.unsafeLen failed: ${error.message}`);
+ *   console.error(`RelayList.lenUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeLen = (instance: CML.RelayList): number =>
+export const lenUnsafe = (instance: CML.RelayList): number =>
   Effect.runSync(len(instance));
 
 /**
@@ -202,16 +219,16 @@ export const get = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = RelayList.unsafeGet(instance,  parameters );
+ *   const result = RelayList.getUnsafe(instance,  parameters );
  *   console.log(result);
  * } catch (error) {
- *   console.error(`RelayList.unsafeGet failed: ${error.message}`);
+ *   console.error(`RelayList.getUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeGet = (instance: CML.RelayList, index: number): CML.Relay =>
+export const getUnsafe = (instance: CML.RelayList, index: number): CML.Relay =>
   Effect.runSync(get(instance, index));
 
 /**
@@ -257,14 +274,14 @@ export const add = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = RelayList.unsafeAdd(instance,  parameters );
+ *   const result = RelayList.addUnsafe(instance,  parameters );
  *   console.log(result);
  * } catch (error) {
- *   console.error(`RelayList.unsafeAdd failed: ${error.message}`);
+ *   console.error(`RelayList.addUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeAdd = (instance: CML.RelayList, elem: CML.Relay): void =>
+export const addUnsafe = (instance: CML.RelayList, elem: CML.Relay): void =>
   Effect.runSync(add(instance, elem));

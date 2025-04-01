@@ -1,8 +1,25 @@
+/**
+ * @since 2.0.0
+ */
 import { Data, Effect } from "effect";
 import * as CML from "@anastasia-labs/cardano-multiplatform-lib-nodejs";
 
+/**
+ * Type alias for the CML TransactionOutputList class
+ *
+ * @since 2.0.0
+ * @category Types
+ */
 export type TransactionOutputList = CML.TransactionOutputList;
 
+/**
+ * Error class for TransactionOutputList operations
+ *
+ * This error is thrown when operations on TransactionOutputList instances fail.
+ *
+ * @since 2.0.0
+ * @category Errors
+ */
 export class TransactionOutputListError extends Data.TaggedError(
   "TransactionOutputListError",
 )<{
@@ -51,16 +68,16 @@ export const free = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = TransactionOutputList.unsafeFree(instance);
+ *   const result = TransactionOutputList.freeUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`TransactionOutputList.unsafeFree failed: ${error.message}`);
+ *   console.error(`TransactionOutputList.freeUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeFree = (instance: CML.TransactionOutputList): void =>
+export const freeUnsafe = (instance: CML.TransactionOutputList): void =>
   Effect.runSync(free(instance));
 
 /**
@@ -100,16 +117,16 @@ export const _new = Effect.fn(function* () {
  *
  * // Using try/catch for error handling
  * try {
- *   const result = TransactionOutputList.unsafe_new();
+ *   const result = TransactionOutputList._newUnsafe();
  *   console.log(result);
  * } catch (error) {
- *   console.error(`TransactionOutputList.unsafe_new failed: ${error.message}`);
+ *   console.error(`TransactionOutputList._newUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Constructors
+ * @category ConstructorsUnsafe
  */
-export const unsafe_new = () => Effect.runSync(_new());
+export const _newUnsafe = () => Effect.runSync(_new());
 
 /**
  * Method len of TransactionOutputList
@@ -153,16 +170,16 @@ export const len = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = TransactionOutputList.unsafeLen(instance);
+ *   const result = TransactionOutputList.lenUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`TransactionOutputList.unsafeLen failed: ${error.message}`);
+ *   console.error(`TransactionOutputList.lenUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeLen = (instance: CML.TransactionOutputList): number =>
+export const lenUnsafe = (instance: CML.TransactionOutputList): number =>
   Effect.runSync(len(instance));
 
 /**
@@ -208,16 +225,16 @@ export const get = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = TransactionOutputList.unsafeGet(instance,  parameters );
+ *   const result = TransactionOutputList.getUnsafe(instance,  parameters );
  *   console.log(result);
  * } catch (error) {
- *   console.error(`TransactionOutputList.unsafeGet failed: ${error.message}`);
+ *   console.error(`TransactionOutputList.getUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeGet = (
+export const getUnsafe = (
   instance: CML.TransactionOutputList,
   index: number,
 ): CML.TransactionOutput => Effect.runSync(get(instance, index));
@@ -265,16 +282,16 @@ export const add = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = TransactionOutputList.unsafeAdd(instance,  parameters );
+ *   const result = TransactionOutputList.addUnsafe(instance,  parameters );
  *   console.log(result);
  * } catch (error) {
- *   console.error(`TransactionOutputList.unsafeAdd failed: ${error.message}`);
+ *   console.error(`TransactionOutputList.addUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeAdd = (
+export const addUnsafe = (
   instance: CML.TransactionOutputList,
   elem: CML.TransactionOutput,
 ): void => Effect.runSync(add(instance, elem));

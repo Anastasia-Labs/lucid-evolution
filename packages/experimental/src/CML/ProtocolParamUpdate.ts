@@ -1,8 +1,25 @@
+/**
+ * @since 2.0.0
+ */
 import { Data, Effect } from "effect";
 import * as CML from "@anastasia-labs/cardano-multiplatform-lib-nodejs";
 
+/**
+ * Type alias for the CML ProtocolParamUpdate class
+ *
+ * @since 2.0.0
+ * @category Types
+ */
 export type ProtocolParamUpdate = CML.ProtocolParamUpdate;
 
+/**
+ * Error class for ProtocolParamUpdate operations
+ *
+ * This error is thrown when operations on ProtocolParamUpdate instances fail.
+ *
+ * @since 2.0.0
+ * @category Errors
+ */
 export class ProtocolParamUpdateError extends Data.TaggedError(
   "ProtocolParamUpdateError",
 )<{
@@ -51,16 +68,16 @@ export const free = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = ProtocolParamUpdate.unsafeFree(instance);
+ *   const result = ProtocolParamUpdate.freeUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`ProtocolParamUpdate.unsafeFree failed: ${error.message}`);
+ *   console.error(`ProtocolParamUpdate.freeUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeFree = (instance: CML.ProtocolParamUpdate): void =>
+export const freeUnsafe = (instance: CML.ProtocolParamUpdate): void =>
   Effect.runSync(free(instance));
 
 /**
@@ -105,16 +122,16 @@ export const toCborBytes = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = ProtocolParamUpdate.unsafeToCborBytes(instance);
+ *   const result = ProtocolParamUpdate.toCborBytesUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`ProtocolParamUpdate.unsafeToCborBytes failed: ${error.message}`);
+ *   console.error(`ProtocolParamUpdate.toCborBytesUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeToCborBytes = (
+export const toCborBytesUnsafe = (
   instance: CML.ProtocolParamUpdate,
 ): Uint8Array => Effect.runSync(toCborBytes(instance));
 
@@ -160,16 +177,16 @@ export const toCanonicalCborBytes = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = ProtocolParamUpdate.unsafeToCanonicalCborBytes(instance);
+ *   const result = ProtocolParamUpdate.toCanonicalCborBytesUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`ProtocolParamUpdate.unsafeToCanonicalCborBytes failed: ${error.message}`);
+ *   console.error(`ProtocolParamUpdate.toCanonicalCborBytesUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeToCanonicalCborBytes = (
+export const toCanonicalCborBytesUnsafe = (
   instance: CML.ProtocolParamUpdate,
 ): Uint8Array => Effect.runSync(toCanonicalCborBytes(instance));
 
@@ -210,16 +227,16 @@ export const fromCborBytes = Effect.fn(function* (cborBytes: Uint8Array) {
  *
  * // Using try/catch for error handling
  * try {
- *   const result = ProtocolParamUpdate.unsafeFromCborBytes( parameters );
+ *   const result = ProtocolParamUpdate.fromCborBytesUnsafe( parameters );
  *   console.log(result);
  * } catch (error) {
- *   console.error(`ProtocolParamUpdate.unsafeFromCborBytes failed: ${error.message}`);
+ *   console.error(`ProtocolParamUpdate.fromCborBytesUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Constructors
+ * @category ConstructorsUnsafe
  */
-export const unsafeFromCborBytes = (cborBytes: Uint8Array) =>
+export const fromCborBytesUnsafe = (cborBytes: Uint8Array) =>
   Effect.runSync(fromCborBytes(cborBytes));
 
 /**
@@ -264,16 +281,16 @@ export const toCborHex = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = ProtocolParamUpdate.unsafeToCborHex(instance);
+ *   const result = ProtocolParamUpdate.toCborHexUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`ProtocolParamUpdate.unsafeToCborHex failed: ${error.message}`);
+ *   console.error(`ProtocolParamUpdate.toCborHexUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeToCborHex = (instance: CML.ProtocolParamUpdate): string =>
+export const toCborHexUnsafe = (instance: CML.ProtocolParamUpdate): string =>
   Effect.runSync(toCborHex(instance));
 
 /**
@@ -318,16 +335,16 @@ export const toCanonicalCborHex = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = ProtocolParamUpdate.unsafeToCanonicalCborHex(instance);
+ *   const result = ProtocolParamUpdate.toCanonicalCborHexUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`ProtocolParamUpdate.unsafeToCanonicalCborHex failed: ${error.message}`);
+ *   console.error(`ProtocolParamUpdate.toCanonicalCborHexUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeToCanonicalCborHex = (
+export const toCanonicalCborHexUnsafe = (
   instance: CML.ProtocolParamUpdate,
 ): string => Effect.runSync(toCanonicalCborHex(instance));
 
@@ -368,16 +385,16 @@ export const fromCborHex = Effect.fn(function* (cborBytes: string) {
  *
  * // Using try/catch for error handling
  * try {
- *   const result = ProtocolParamUpdate.unsafeFromCborHex( parameters );
+ *   const result = ProtocolParamUpdate.fromCborHexUnsafe( parameters );
  *   console.log(result);
  * } catch (error) {
- *   console.error(`ProtocolParamUpdate.unsafeFromCborHex failed: ${error.message}`);
+ *   console.error(`ProtocolParamUpdate.fromCborHexUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Constructors
+ * @category ConstructorsUnsafe
  */
-export const unsafeFromCborHex = (cborBytes: string) =>
+export const fromCborHexUnsafe = (cborBytes: string) =>
   Effect.runSync(fromCborHex(cborBytes));
 
 /**
@@ -422,16 +439,16 @@ export const toJson = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = ProtocolParamUpdate.unsafeToJson(instance);
+ *   const result = ProtocolParamUpdate.toJsonUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`ProtocolParamUpdate.unsafeToJson failed: ${error.message}`);
+ *   console.error(`ProtocolParamUpdate.toJsonUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeToJson = (instance: CML.ProtocolParamUpdate): string =>
+export const toJsonUnsafe = (instance: CML.ProtocolParamUpdate): string =>
   Effect.runSync(toJson(instance));
 
 /**
@@ -476,16 +493,16 @@ export const toJsValue = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = ProtocolParamUpdate.unsafeToJsValue(instance);
+ *   const result = ProtocolParamUpdate.toJsValueUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`ProtocolParamUpdate.unsafeToJsValue failed: ${error.message}`);
+ *   console.error(`ProtocolParamUpdate.toJsValueUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeToJsValue = (instance: CML.ProtocolParamUpdate): any =>
+export const toJsValueUnsafe = (instance: CML.ProtocolParamUpdate): any =>
   Effect.runSync(toJsValue(instance));
 
 /**
@@ -525,16 +542,16 @@ export const fromJson = Effect.fn(function* (json: string) {
  *
  * // Using try/catch for error handling
  * try {
- *   const result = ProtocolParamUpdate.unsafeFromJson( parameters );
+ *   const result = ProtocolParamUpdate.fromJsonUnsafe( parameters );
  *   console.log(result);
  * } catch (error) {
- *   console.error(`ProtocolParamUpdate.unsafeFromJson failed: ${error.message}`);
+ *   console.error(`ProtocolParamUpdate.fromJsonUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Constructors
+ * @category ConstructorsUnsafe
  */
-export const unsafeFromJson = (json: string) => Effect.runSync(fromJson(json));
+export const fromJsonUnsafe = (json: string) => Effect.runSync(fromJson(json));
 
 /**
  * Method setMinfeeA of ProtocolParamUpdate
@@ -579,16 +596,16 @@ export const setMinfeeA = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = ProtocolParamUpdate.unsafeSetMinfeeA(instance,  parameters );
+ *   const result = ProtocolParamUpdate.setMinfeeAUnsafe(instance,  parameters );
  *   console.log(result);
  * } catch (error) {
- *   console.error(`ProtocolParamUpdate.unsafeSetMinfeeA failed: ${error.message}`);
+ *   console.error(`ProtocolParamUpdate.setMinfeeAUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeSetMinfeeA = (
+export const setMinfeeAUnsafe = (
   instance: CML.ProtocolParamUpdate,
   minfeeA: bigint,
 ): void => Effect.runSync(setMinfeeA(instance, minfeeA));
@@ -635,16 +652,16 @@ export const minfeeA = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = ProtocolParamUpdate.unsafeMinfeeA(instance);
+ *   const result = ProtocolParamUpdate.minfeeAUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`ProtocolParamUpdate.unsafeMinfeeA failed: ${error.message}`);
+ *   console.error(`ProtocolParamUpdate.minfeeAUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeMinfeeA = (
+export const minfeeAUnsafe = (
   instance: CML.ProtocolParamUpdate,
 ): bigint | undefined => Effect.runSync(minfeeA(instance));
 
@@ -691,16 +708,16 @@ export const setMinfeeB = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = ProtocolParamUpdate.unsafeSetMinfeeB(instance,  parameters );
+ *   const result = ProtocolParamUpdate.setMinfeeBUnsafe(instance,  parameters );
  *   console.log(result);
  * } catch (error) {
- *   console.error(`ProtocolParamUpdate.unsafeSetMinfeeB failed: ${error.message}`);
+ *   console.error(`ProtocolParamUpdate.setMinfeeBUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeSetMinfeeB = (
+export const setMinfeeBUnsafe = (
   instance: CML.ProtocolParamUpdate,
   minfeeB: bigint,
 ): void => Effect.runSync(setMinfeeB(instance, minfeeB));
@@ -747,16 +764,16 @@ export const minfeeB = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = ProtocolParamUpdate.unsafeMinfeeB(instance);
+ *   const result = ProtocolParamUpdate.minfeeBUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`ProtocolParamUpdate.unsafeMinfeeB failed: ${error.message}`);
+ *   console.error(`ProtocolParamUpdate.minfeeBUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeMinfeeB = (
+export const minfeeBUnsafe = (
   instance: CML.ProtocolParamUpdate,
 ): bigint | undefined => Effect.runSync(minfeeB(instance));
 
@@ -803,16 +820,16 @@ export const setMaxBlockBodySize = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = ProtocolParamUpdate.unsafeSetMaxBlockBodySize(instance,  parameters );
+ *   const result = ProtocolParamUpdate.setMaxBlockBodySizeUnsafe(instance,  parameters );
  *   console.log(result);
  * } catch (error) {
- *   console.error(`ProtocolParamUpdate.unsafeSetMaxBlockBodySize failed: ${error.message}`);
+ *   console.error(`ProtocolParamUpdate.setMaxBlockBodySizeUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeSetMaxBlockBodySize = (
+export const setMaxBlockBodySizeUnsafe = (
   instance: CML.ProtocolParamUpdate,
   maxBlockBodySize: bigint,
 ): void => Effect.runSync(setMaxBlockBodySize(instance, maxBlockBodySize));
@@ -859,16 +876,16 @@ export const maxBlockBodySize = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = ProtocolParamUpdate.unsafeMaxBlockBodySize(instance);
+ *   const result = ProtocolParamUpdate.maxBlockBodySizeUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`ProtocolParamUpdate.unsafeMaxBlockBodySize failed: ${error.message}`);
+ *   console.error(`ProtocolParamUpdate.maxBlockBodySizeUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeMaxBlockBodySize = (
+export const maxBlockBodySizeUnsafe = (
   instance: CML.ProtocolParamUpdate,
 ): bigint | undefined => Effect.runSync(maxBlockBodySize(instance));
 
@@ -915,16 +932,16 @@ export const setMaxTransactionSize = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = ProtocolParamUpdate.unsafeSetMaxTransactionSize(instance,  parameters );
+ *   const result = ProtocolParamUpdate.setMaxTransactionSizeUnsafe(instance,  parameters );
  *   console.log(result);
  * } catch (error) {
- *   console.error(`ProtocolParamUpdate.unsafeSetMaxTransactionSize failed: ${error.message}`);
+ *   console.error(`ProtocolParamUpdate.setMaxTransactionSizeUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeSetMaxTransactionSize = (
+export const setMaxTransactionSizeUnsafe = (
   instance: CML.ProtocolParamUpdate,
   maxTransactionSize: bigint,
 ): void => Effect.runSync(setMaxTransactionSize(instance, maxTransactionSize));
@@ -971,16 +988,16 @@ export const maxTransactionSize = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = ProtocolParamUpdate.unsafeMaxTransactionSize(instance);
+ *   const result = ProtocolParamUpdate.maxTransactionSizeUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`ProtocolParamUpdate.unsafeMaxTransactionSize failed: ${error.message}`);
+ *   console.error(`ProtocolParamUpdate.maxTransactionSizeUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeMaxTransactionSize = (
+export const maxTransactionSizeUnsafe = (
   instance: CML.ProtocolParamUpdate,
 ): bigint | undefined => Effect.runSync(maxTransactionSize(instance));
 
@@ -1027,16 +1044,16 @@ export const setMaxBlockHeaderSize = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = ProtocolParamUpdate.unsafeSetMaxBlockHeaderSize(instance,  parameters );
+ *   const result = ProtocolParamUpdate.setMaxBlockHeaderSizeUnsafe(instance,  parameters );
  *   console.log(result);
  * } catch (error) {
- *   console.error(`ProtocolParamUpdate.unsafeSetMaxBlockHeaderSize failed: ${error.message}`);
+ *   console.error(`ProtocolParamUpdate.setMaxBlockHeaderSizeUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeSetMaxBlockHeaderSize = (
+export const setMaxBlockHeaderSizeUnsafe = (
   instance: CML.ProtocolParamUpdate,
   maxBlockHeaderSize: bigint,
 ): void => Effect.runSync(setMaxBlockHeaderSize(instance, maxBlockHeaderSize));
@@ -1083,16 +1100,16 @@ export const maxBlockHeaderSize = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = ProtocolParamUpdate.unsafeMaxBlockHeaderSize(instance);
+ *   const result = ProtocolParamUpdate.maxBlockHeaderSizeUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`ProtocolParamUpdate.unsafeMaxBlockHeaderSize failed: ${error.message}`);
+ *   console.error(`ProtocolParamUpdate.maxBlockHeaderSizeUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeMaxBlockHeaderSize = (
+export const maxBlockHeaderSizeUnsafe = (
   instance: CML.ProtocolParamUpdate,
 ): bigint | undefined => Effect.runSync(maxBlockHeaderSize(instance));
 
@@ -1139,16 +1156,16 @@ export const setKeyDeposit = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = ProtocolParamUpdate.unsafeSetKeyDeposit(instance,  parameters );
+ *   const result = ProtocolParamUpdate.setKeyDepositUnsafe(instance,  parameters );
  *   console.log(result);
  * } catch (error) {
- *   console.error(`ProtocolParamUpdate.unsafeSetKeyDeposit failed: ${error.message}`);
+ *   console.error(`ProtocolParamUpdate.setKeyDepositUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeSetKeyDeposit = (
+export const setKeyDepositUnsafe = (
   instance: CML.ProtocolParamUpdate,
   keyDeposit: bigint,
 ): void => Effect.runSync(setKeyDeposit(instance, keyDeposit));
@@ -1195,16 +1212,16 @@ export const keyDeposit = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = ProtocolParamUpdate.unsafeKeyDeposit(instance);
+ *   const result = ProtocolParamUpdate.keyDepositUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`ProtocolParamUpdate.unsafeKeyDeposit failed: ${error.message}`);
+ *   console.error(`ProtocolParamUpdate.keyDepositUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeKeyDeposit = (
+export const keyDepositUnsafe = (
   instance: CML.ProtocolParamUpdate,
 ): bigint | undefined => Effect.runSync(keyDeposit(instance));
 
@@ -1251,16 +1268,16 @@ export const setPoolDeposit = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = ProtocolParamUpdate.unsafeSetPoolDeposit(instance,  parameters );
+ *   const result = ProtocolParamUpdate.setPoolDepositUnsafe(instance,  parameters );
  *   console.log(result);
  * } catch (error) {
- *   console.error(`ProtocolParamUpdate.unsafeSetPoolDeposit failed: ${error.message}`);
+ *   console.error(`ProtocolParamUpdate.setPoolDepositUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeSetPoolDeposit = (
+export const setPoolDepositUnsafe = (
   instance: CML.ProtocolParamUpdate,
   poolDeposit: bigint,
 ): void => Effect.runSync(setPoolDeposit(instance, poolDeposit));
@@ -1307,16 +1324,16 @@ export const poolDeposit = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = ProtocolParamUpdate.unsafePoolDeposit(instance);
+ *   const result = ProtocolParamUpdate.poolDepositUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`ProtocolParamUpdate.unsafePoolDeposit failed: ${error.message}`);
+ *   console.error(`ProtocolParamUpdate.poolDepositUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafePoolDeposit = (
+export const poolDepositUnsafe = (
   instance: CML.ProtocolParamUpdate,
 ): bigint | undefined => Effect.runSync(poolDeposit(instance));
 
@@ -1363,16 +1380,16 @@ export const setMaximumEpoch = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = ProtocolParamUpdate.unsafeSetMaximumEpoch(instance,  parameters );
+ *   const result = ProtocolParamUpdate.setMaximumEpochUnsafe(instance,  parameters );
  *   console.log(result);
  * } catch (error) {
- *   console.error(`ProtocolParamUpdate.unsafeSetMaximumEpoch failed: ${error.message}`);
+ *   console.error(`ProtocolParamUpdate.setMaximumEpochUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeSetMaximumEpoch = (
+export const setMaximumEpochUnsafe = (
   instance: CML.ProtocolParamUpdate,
   maximumEpoch: bigint,
 ): void => Effect.runSync(setMaximumEpoch(instance, maximumEpoch));
@@ -1419,16 +1436,16 @@ export const maximumEpoch = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = ProtocolParamUpdate.unsafeMaximumEpoch(instance);
+ *   const result = ProtocolParamUpdate.maximumEpochUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`ProtocolParamUpdate.unsafeMaximumEpoch failed: ${error.message}`);
+ *   console.error(`ProtocolParamUpdate.maximumEpochUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeMaximumEpoch = (
+export const maximumEpochUnsafe = (
   instance: CML.ProtocolParamUpdate,
 ): bigint | undefined => Effect.runSync(maximumEpoch(instance));
 
@@ -1475,16 +1492,16 @@ export const setNOpt = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = ProtocolParamUpdate.unsafeSetNOpt(instance,  parameters );
+ *   const result = ProtocolParamUpdate.setNOptUnsafe(instance,  parameters );
  *   console.log(result);
  * } catch (error) {
- *   console.error(`ProtocolParamUpdate.unsafeSetNOpt failed: ${error.message}`);
+ *   console.error(`ProtocolParamUpdate.setNOptUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeSetNOpt = (
+export const setNOptUnsafe = (
   instance: CML.ProtocolParamUpdate,
   nOpt: bigint,
 ): void => Effect.runSync(setNOpt(instance, nOpt));
@@ -1531,16 +1548,16 @@ export const nOpt = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = ProtocolParamUpdate.unsafeNOpt(instance);
+ *   const result = ProtocolParamUpdate.nOptUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`ProtocolParamUpdate.unsafeNOpt failed: ${error.message}`);
+ *   console.error(`ProtocolParamUpdate.nOptUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeNOpt = (
+export const nOptUnsafe = (
   instance: CML.ProtocolParamUpdate,
 ): bigint | undefined => Effect.runSync(nOpt(instance));
 
@@ -1587,16 +1604,16 @@ export const setPoolPledgeInfluence = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = ProtocolParamUpdate.unsafeSetPoolPledgeInfluence(instance,  parameters );
+ *   const result = ProtocolParamUpdate.setPoolPledgeInfluenceUnsafe(instance,  parameters );
  *   console.log(result);
  * } catch (error) {
- *   console.error(`ProtocolParamUpdate.unsafeSetPoolPledgeInfluence failed: ${error.message}`);
+ *   console.error(`ProtocolParamUpdate.setPoolPledgeInfluenceUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeSetPoolPledgeInfluence = (
+export const setPoolPledgeInfluenceUnsafe = (
   instance: CML.ProtocolParamUpdate,
   poolPledgeInfluence: CML.Rational,
 ): void =>
@@ -1644,16 +1661,16 @@ export const poolPledgeInfluence = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = ProtocolParamUpdate.unsafePoolPledgeInfluence(instance);
+ *   const result = ProtocolParamUpdate.poolPledgeInfluenceUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`ProtocolParamUpdate.unsafePoolPledgeInfluence failed: ${error.message}`);
+ *   console.error(`ProtocolParamUpdate.poolPledgeInfluenceUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafePoolPledgeInfluence = (
+export const poolPledgeInfluenceUnsafe = (
   instance: CML.ProtocolParamUpdate,
 ): CML.Rational | undefined => Effect.runSync(poolPledgeInfluence(instance));
 
@@ -1700,16 +1717,16 @@ export const setExpansionRate = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = ProtocolParamUpdate.unsafeSetExpansionRate(instance,  parameters );
+ *   const result = ProtocolParamUpdate.setExpansionRateUnsafe(instance,  parameters );
  *   console.log(result);
  * } catch (error) {
- *   console.error(`ProtocolParamUpdate.unsafeSetExpansionRate failed: ${error.message}`);
+ *   console.error(`ProtocolParamUpdate.setExpansionRateUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeSetExpansionRate = (
+export const setExpansionRateUnsafe = (
   instance: CML.ProtocolParamUpdate,
   expansionRate: CML.UnitInterval,
 ): void => Effect.runSync(setExpansionRate(instance, expansionRate));
@@ -1756,16 +1773,16 @@ export const expansionRate = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = ProtocolParamUpdate.unsafeExpansionRate(instance);
+ *   const result = ProtocolParamUpdate.expansionRateUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`ProtocolParamUpdate.unsafeExpansionRate failed: ${error.message}`);
+ *   console.error(`ProtocolParamUpdate.expansionRateUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeExpansionRate = (
+export const expansionRateUnsafe = (
   instance: CML.ProtocolParamUpdate,
 ): CML.UnitInterval | undefined => Effect.runSync(expansionRate(instance));
 
@@ -1812,16 +1829,16 @@ export const setTreasuryGrowthRate = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = ProtocolParamUpdate.unsafeSetTreasuryGrowthRate(instance,  parameters );
+ *   const result = ProtocolParamUpdate.setTreasuryGrowthRateUnsafe(instance,  parameters );
  *   console.log(result);
  * } catch (error) {
- *   console.error(`ProtocolParamUpdate.unsafeSetTreasuryGrowthRate failed: ${error.message}`);
+ *   console.error(`ProtocolParamUpdate.setTreasuryGrowthRateUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeSetTreasuryGrowthRate = (
+export const setTreasuryGrowthRateUnsafe = (
   instance: CML.ProtocolParamUpdate,
   treasuryGrowthRate: CML.UnitInterval,
 ): void => Effect.runSync(setTreasuryGrowthRate(instance, treasuryGrowthRate));
@@ -1868,16 +1885,16 @@ export const treasuryGrowthRate = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = ProtocolParamUpdate.unsafeTreasuryGrowthRate(instance);
+ *   const result = ProtocolParamUpdate.treasuryGrowthRateUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`ProtocolParamUpdate.unsafeTreasuryGrowthRate failed: ${error.message}`);
+ *   console.error(`ProtocolParamUpdate.treasuryGrowthRateUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeTreasuryGrowthRate = (
+export const treasuryGrowthRateUnsafe = (
   instance: CML.ProtocolParamUpdate,
 ): CML.UnitInterval | undefined => Effect.runSync(treasuryGrowthRate(instance));
 
@@ -1924,16 +1941,16 @@ export const setMinPoolCost = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = ProtocolParamUpdate.unsafeSetMinPoolCost(instance,  parameters );
+ *   const result = ProtocolParamUpdate.setMinPoolCostUnsafe(instance,  parameters );
  *   console.log(result);
  * } catch (error) {
- *   console.error(`ProtocolParamUpdate.unsafeSetMinPoolCost failed: ${error.message}`);
+ *   console.error(`ProtocolParamUpdate.setMinPoolCostUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeSetMinPoolCost = (
+export const setMinPoolCostUnsafe = (
   instance: CML.ProtocolParamUpdate,
   minPoolCost: bigint,
 ): void => Effect.runSync(setMinPoolCost(instance, minPoolCost));
@@ -1980,16 +1997,16 @@ export const minPoolCost = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = ProtocolParamUpdate.unsafeMinPoolCost(instance);
+ *   const result = ProtocolParamUpdate.minPoolCostUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`ProtocolParamUpdate.unsafeMinPoolCost failed: ${error.message}`);
+ *   console.error(`ProtocolParamUpdate.minPoolCostUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeMinPoolCost = (
+export const minPoolCostUnsafe = (
   instance: CML.ProtocolParamUpdate,
 ): bigint | undefined => Effect.runSync(minPoolCost(instance));
 
@@ -2036,16 +2053,16 @@ export const setAdaPerUtxoByte = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = ProtocolParamUpdate.unsafeSetAdaPerUtxoByte(instance,  parameters );
+ *   const result = ProtocolParamUpdate.setAdaPerUtxoByteUnsafe(instance,  parameters );
  *   console.log(result);
  * } catch (error) {
- *   console.error(`ProtocolParamUpdate.unsafeSetAdaPerUtxoByte failed: ${error.message}`);
+ *   console.error(`ProtocolParamUpdate.setAdaPerUtxoByteUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeSetAdaPerUtxoByte = (
+export const setAdaPerUtxoByteUnsafe = (
   instance: CML.ProtocolParamUpdate,
   adaPerUtxoByte: bigint,
 ): void => Effect.runSync(setAdaPerUtxoByte(instance, adaPerUtxoByte));
@@ -2092,16 +2109,16 @@ export const adaPerUtxoByte = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = ProtocolParamUpdate.unsafeAdaPerUtxoByte(instance);
+ *   const result = ProtocolParamUpdate.adaPerUtxoByteUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`ProtocolParamUpdate.unsafeAdaPerUtxoByte failed: ${error.message}`);
+ *   console.error(`ProtocolParamUpdate.adaPerUtxoByteUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeAdaPerUtxoByte = (
+export const adaPerUtxoByteUnsafe = (
   instance: CML.ProtocolParamUpdate,
 ): bigint | undefined => Effect.runSync(adaPerUtxoByte(instance));
 
@@ -2151,16 +2168,16 @@ export const setCostModelsForScriptLanguages = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = ProtocolParamUpdate.unsafeSetCostModelsForScriptLanguages(instance,  parameters );
+ *   const result = ProtocolParamUpdate.setCostModelsForScriptLanguagesUnsafe(instance,  parameters );
  *   console.log(result);
  * } catch (error) {
- *   console.error(`ProtocolParamUpdate.unsafeSetCostModelsForScriptLanguages failed: ${error.message}`);
+ *   console.error(`ProtocolParamUpdate.setCostModelsForScriptLanguagesUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeSetCostModelsForScriptLanguages = (
+export const setCostModelsForScriptLanguagesUnsafe = (
   instance: CML.ProtocolParamUpdate,
   costModelsForScriptLanguages: CML.CostModels,
 ): void =>
@@ -2210,16 +2227,16 @@ export const costModelsForScriptLanguages = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = ProtocolParamUpdate.unsafeCostModelsForScriptLanguages(instance);
+ *   const result = ProtocolParamUpdate.costModelsForScriptLanguagesUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`ProtocolParamUpdate.unsafeCostModelsForScriptLanguages failed: ${error.message}`);
+ *   console.error(`ProtocolParamUpdate.costModelsForScriptLanguagesUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeCostModelsForScriptLanguages = (
+export const costModelsForScriptLanguagesUnsafe = (
   instance: CML.ProtocolParamUpdate,
 ): CML.CostModels | undefined =>
   Effect.runSync(costModelsForScriptLanguages(instance));
@@ -2267,16 +2284,16 @@ export const setExecutionCosts = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = ProtocolParamUpdate.unsafeSetExecutionCosts(instance,  parameters );
+ *   const result = ProtocolParamUpdate.setExecutionCostsUnsafe(instance,  parameters );
  *   console.log(result);
  * } catch (error) {
- *   console.error(`ProtocolParamUpdate.unsafeSetExecutionCosts failed: ${error.message}`);
+ *   console.error(`ProtocolParamUpdate.setExecutionCostsUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeSetExecutionCosts = (
+export const setExecutionCostsUnsafe = (
   instance: CML.ProtocolParamUpdate,
   executionCosts: CML.ExUnitPrices,
 ): void => Effect.runSync(setExecutionCosts(instance, executionCosts));
@@ -2323,16 +2340,16 @@ export const executionCosts = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = ProtocolParamUpdate.unsafeExecutionCosts(instance);
+ *   const result = ProtocolParamUpdate.executionCostsUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`ProtocolParamUpdate.unsafeExecutionCosts failed: ${error.message}`);
+ *   console.error(`ProtocolParamUpdate.executionCostsUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeExecutionCosts = (
+export const executionCostsUnsafe = (
   instance: CML.ProtocolParamUpdate,
 ): CML.ExUnitPrices | undefined => Effect.runSync(executionCosts(instance));
 
@@ -2379,16 +2396,16 @@ export const setMaxTxExUnits = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = ProtocolParamUpdate.unsafeSetMaxTxExUnits(instance,  parameters );
+ *   const result = ProtocolParamUpdate.setMaxTxExUnitsUnsafe(instance,  parameters );
  *   console.log(result);
  * } catch (error) {
- *   console.error(`ProtocolParamUpdate.unsafeSetMaxTxExUnits failed: ${error.message}`);
+ *   console.error(`ProtocolParamUpdate.setMaxTxExUnitsUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeSetMaxTxExUnits = (
+export const setMaxTxExUnitsUnsafe = (
   instance: CML.ProtocolParamUpdate,
   maxTxExUnits: CML.ExUnits,
 ): void => Effect.runSync(setMaxTxExUnits(instance, maxTxExUnits));
@@ -2435,16 +2452,16 @@ export const maxTxExUnits = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = ProtocolParamUpdate.unsafeMaxTxExUnits(instance);
+ *   const result = ProtocolParamUpdate.maxTxExUnitsUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`ProtocolParamUpdate.unsafeMaxTxExUnits failed: ${error.message}`);
+ *   console.error(`ProtocolParamUpdate.maxTxExUnitsUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeMaxTxExUnits = (
+export const maxTxExUnitsUnsafe = (
   instance: CML.ProtocolParamUpdate,
 ): CML.ExUnits | undefined => Effect.runSync(maxTxExUnits(instance));
 
@@ -2491,16 +2508,16 @@ export const setMaxBlockExUnits = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = ProtocolParamUpdate.unsafeSetMaxBlockExUnits(instance,  parameters );
+ *   const result = ProtocolParamUpdate.setMaxBlockExUnitsUnsafe(instance,  parameters );
  *   console.log(result);
  * } catch (error) {
- *   console.error(`ProtocolParamUpdate.unsafeSetMaxBlockExUnits failed: ${error.message}`);
+ *   console.error(`ProtocolParamUpdate.setMaxBlockExUnitsUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeSetMaxBlockExUnits = (
+export const setMaxBlockExUnitsUnsafe = (
   instance: CML.ProtocolParamUpdate,
   maxBlockExUnits: CML.ExUnits,
 ): void => Effect.runSync(setMaxBlockExUnits(instance, maxBlockExUnits));
@@ -2547,16 +2564,16 @@ export const maxBlockExUnits = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = ProtocolParamUpdate.unsafeMaxBlockExUnits(instance);
+ *   const result = ProtocolParamUpdate.maxBlockExUnitsUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`ProtocolParamUpdate.unsafeMaxBlockExUnits failed: ${error.message}`);
+ *   console.error(`ProtocolParamUpdate.maxBlockExUnitsUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeMaxBlockExUnits = (
+export const maxBlockExUnitsUnsafe = (
   instance: CML.ProtocolParamUpdate,
 ): CML.ExUnits | undefined => Effect.runSync(maxBlockExUnits(instance));
 
@@ -2603,16 +2620,16 @@ export const setMaxValueSize = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = ProtocolParamUpdate.unsafeSetMaxValueSize(instance,  parameters );
+ *   const result = ProtocolParamUpdate.setMaxValueSizeUnsafe(instance,  parameters );
  *   console.log(result);
  * } catch (error) {
- *   console.error(`ProtocolParamUpdate.unsafeSetMaxValueSize failed: ${error.message}`);
+ *   console.error(`ProtocolParamUpdate.setMaxValueSizeUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeSetMaxValueSize = (
+export const setMaxValueSizeUnsafe = (
   instance: CML.ProtocolParamUpdate,
   maxValueSize: bigint,
 ): void => Effect.runSync(setMaxValueSize(instance, maxValueSize));
@@ -2659,16 +2676,16 @@ export const maxValueSize = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = ProtocolParamUpdate.unsafeMaxValueSize(instance);
+ *   const result = ProtocolParamUpdate.maxValueSizeUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`ProtocolParamUpdate.unsafeMaxValueSize failed: ${error.message}`);
+ *   console.error(`ProtocolParamUpdate.maxValueSizeUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeMaxValueSize = (
+export const maxValueSizeUnsafe = (
   instance: CML.ProtocolParamUpdate,
 ): bigint | undefined => Effect.runSync(maxValueSize(instance));
 
@@ -2715,16 +2732,16 @@ export const setCollateralPercentage = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = ProtocolParamUpdate.unsafeSetCollateralPercentage(instance,  parameters );
+ *   const result = ProtocolParamUpdate.setCollateralPercentageUnsafe(instance,  parameters );
  *   console.log(result);
  * } catch (error) {
- *   console.error(`ProtocolParamUpdate.unsafeSetCollateralPercentage failed: ${error.message}`);
+ *   console.error(`ProtocolParamUpdate.setCollateralPercentageUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeSetCollateralPercentage = (
+export const setCollateralPercentageUnsafe = (
   instance: CML.ProtocolParamUpdate,
   collateralPercentage: bigint,
 ): void =>
@@ -2772,16 +2789,16 @@ export const collateralPercentage = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = ProtocolParamUpdate.unsafeCollateralPercentage(instance);
+ *   const result = ProtocolParamUpdate.collateralPercentageUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`ProtocolParamUpdate.unsafeCollateralPercentage failed: ${error.message}`);
+ *   console.error(`ProtocolParamUpdate.collateralPercentageUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeCollateralPercentage = (
+export const collateralPercentageUnsafe = (
   instance: CML.ProtocolParamUpdate,
 ): bigint | undefined => Effect.runSync(collateralPercentage(instance));
 
@@ -2828,16 +2845,16 @@ export const setMaxCollateralInputs = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = ProtocolParamUpdate.unsafeSetMaxCollateralInputs(instance,  parameters );
+ *   const result = ProtocolParamUpdate.setMaxCollateralInputsUnsafe(instance,  parameters );
  *   console.log(result);
  * } catch (error) {
- *   console.error(`ProtocolParamUpdate.unsafeSetMaxCollateralInputs failed: ${error.message}`);
+ *   console.error(`ProtocolParamUpdate.setMaxCollateralInputsUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeSetMaxCollateralInputs = (
+export const setMaxCollateralInputsUnsafe = (
   instance: CML.ProtocolParamUpdate,
   maxCollateralInputs: bigint,
 ): void =>
@@ -2885,16 +2902,16 @@ export const maxCollateralInputs = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = ProtocolParamUpdate.unsafeMaxCollateralInputs(instance);
+ *   const result = ProtocolParamUpdate.maxCollateralInputsUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`ProtocolParamUpdate.unsafeMaxCollateralInputs failed: ${error.message}`);
+ *   console.error(`ProtocolParamUpdate.maxCollateralInputsUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeMaxCollateralInputs = (
+export const maxCollateralInputsUnsafe = (
   instance: CML.ProtocolParamUpdate,
 ): bigint | undefined => Effect.runSync(maxCollateralInputs(instance));
 
@@ -2941,16 +2958,16 @@ export const setPoolVotingThresholds = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = ProtocolParamUpdate.unsafeSetPoolVotingThresholds(instance,  parameters );
+ *   const result = ProtocolParamUpdate.setPoolVotingThresholdsUnsafe(instance,  parameters );
  *   console.log(result);
  * } catch (error) {
- *   console.error(`ProtocolParamUpdate.unsafeSetPoolVotingThresholds failed: ${error.message}`);
+ *   console.error(`ProtocolParamUpdate.setPoolVotingThresholdsUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeSetPoolVotingThresholds = (
+export const setPoolVotingThresholdsUnsafe = (
   instance: CML.ProtocolParamUpdate,
   poolVotingThresholds: CML.PoolVotingThresholds,
 ): void =>
@@ -3001,16 +3018,16 @@ export const poolVotingThresholds = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = ProtocolParamUpdate.unsafePoolVotingThresholds(instance);
+ *   const result = ProtocolParamUpdate.poolVotingThresholdsUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`ProtocolParamUpdate.unsafePoolVotingThresholds failed: ${error.message}`);
+ *   console.error(`ProtocolParamUpdate.poolVotingThresholdsUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafePoolVotingThresholds = (
+export const poolVotingThresholdsUnsafe = (
   instance: CML.ProtocolParamUpdate,
 ): CML.PoolVotingThresholds | undefined =>
   Effect.runSync(poolVotingThresholds(instance));
@@ -3058,16 +3075,16 @@ export const setDRepVotingThresholds = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = ProtocolParamUpdate.unsafeSetDRepVotingThresholds(instance,  parameters );
+ *   const result = ProtocolParamUpdate.setDRepVotingThresholdsUnsafe(instance,  parameters );
  *   console.log(result);
  * } catch (error) {
- *   console.error(`ProtocolParamUpdate.unsafeSetDRepVotingThresholds failed: ${error.message}`);
+ *   console.error(`ProtocolParamUpdate.setDRepVotingThresholdsUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeSetDRepVotingThresholds = (
+export const setDRepVotingThresholdsUnsafe = (
   instance: CML.ProtocolParamUpdate,
   dRepVotingThresholds: CML.DRepVotingThresholds,
 ): void =>
@@ -3118,16 +3135,16 @@ export const dRepVotingThresholds = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = ProtocolParamUpdate.unsafeDRepVotingThresholds(instance);
+ *   const result = ProtocolParamUpdate.dRepVotingThresholdsUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`ProtocolParamUpdate.unsafeDRepVotingThresholds failed: ${error.message}`);
+ *   console.error(`ProtocolParamUpdate.dRepVotingThresholdsUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeDRepVotingThresholds = (
+export const dRepVotingThresholdsUnsafe = (
   instance: CML.ProtocolParamUpdate,
 ): CML.DRepVotingThresholds | undefined =>
   Effect.runSync(dRepVotingThresholds(instance));
@@ -3175,16 +3192,16 @@ export const setMinCommitteeSize = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = ProtocolParamUpdate.unsafeSetMinCommitteeSize(instance,  parameters );
+ *   const result = ProtocolParamUpdate.setMinCommitteeSizeUnsafe(instance,  parameters );
  *   console.log(result);
  * } catch (error) {
- *   console.error(`ProtocolParamUpdate.unsafeSetMinCommitteeSize failed: ${error.message}`);
+ *   console.error(`ProtocolParamUpdate.setMinCommitteeSizeUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeSetMinCommitteeSize = (
+export const setMinCommitteeSizeUnsafe = (
   instance: CML.ProtocolParamUpdate,
   minCommitteeSize: bigint,
 ): void => Effect.runSync(setMinCommitteeSize(instance, minCommitteeSize));
@@ -3231,16 +3248,16 @@ export const minCommitteeSize = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = ProtocolParamUpdate.unsafeMinCommitteeSize(instance);
+ *   const result = ProtocolParamUpdate.minCommitteeSizeUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`ProtocolParamUpdate.unsafeMinCommitteeSize failed: ${error.message}`);
+ *   console.error(`ProtocolParamUpdate.minCommitteeSizeUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeMinCommitteeSize = (
+export const minCommitteeSizeUnsafe = (
   instance: CML.ProtocolParamUpdate,
 ): bigint | undefined => Effect.runSync(minCommitteeSize(instance));
 
@@ -3287,16 +3304,16 @@ export const setCommitteeTermLimit = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = ProtocolParamUpdate.unsafeSetCommitteeTermLimit(instance,  parameters );
+ *   const result = ProtocolParamUpdate.setCommitteeTermLimitUnsafe(instance,  parameters );
  *   console.log(result);
  * } catch (error) {
- *   console.error(`ProtocolParamUpdate.unsafeSetCommitteeTermLimit failed: ${error.message}`);
+ *   console.error(`ProtocolParamUpdate.setCommitteeTermLimitUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeSetCommitteeTermLimit = (
+export const setCommitteeTermLimitUnsafe = (
   instance: CML.ProtocolParamUpdate,
   committeeTermLimit: bigint,
 ): void => Effect.runSync(setCommitteeTermLimit(instance, committeeTermLimit));
@@ -3343,16 +3360,16 @@ export const committeeTermLimit = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = ProtocolParamUpdate.unsafeCommitteeTermLimit(instance);
+ *   const result = ProtocolParamUpdate.committeeTermLimitUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`ProtocolParamUpdate.unsafeCommitteeTermLimit failed: ${error.message}`);
+ *   console.error(`ProtocolParamUpdate.committeeTermLimitUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeCommitteeTermLimit = (
+export const committeeTermLimitUnsafe = (
   instance: CML.ProtocolParamUpdate,
 ): bigint | undefined => Effect.runSync(committeeTermLimit(instance));
 
@@ -3402,16 +3419,16 @@ export const setGovernanceActionValidityPeriod = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = ProtocolParamUpdate.unsafeSetGovernanceActionValidityPeriod(instance,  parameters );
+ *   const result = ProtocolParamUpdate.setGovernanceActionValidityPeriodUnsafe(instance,  parameters );
  *   console.log(result);
  * } catch (error) {
- *   console.error(`ProtocolParamUpdate.unsafeSetGovernanceActionValidityPeriod failed: ${error.message}`);
+ *   console.error(`ProtocolParamUpdate.setGovernanceActionValidityPeriodUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeSetGovernanceActionValidityPeriod = (
+export const setGovernanceActionValidityPeriodUnsafe = (
   instance: CML.ProtocolParamUpdate,
   governanceActionValidityPeriod: bigint,
 ): void =>
@@ -3461,16 +3478,16 @@ export const governanceActionValidityPeriod = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = ProtocolParamUpdate.unsafeGovernanceActionValidityPeriod(instance);
+ *   const result = ProtocolParamUpdate.governanceActionValidityPeriodUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`ProtocolParamUpdate.unsafeGovernanceActionValidityPeriod failed: ${error.message}`);
+ *   console.error(`ProtocolParamUpdate.governanceActionValidityPeriodUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeGovernanceActionValidityPeriod = (
+export const governanceActionValidityPeriodUnsafe = (
   instance: CML.ProtocolParamUpdate,
 ): bigint | undefined =>
   Effect.runSync(governanceActionValidityPeriod(instance));
@@ -3519,16 +3536,16 @@ export const setGovernanceActionDeposit = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = ProtocolParamUpdate.unsafeSetGovernanceActionDeposit(instance,  parameters );
+ *   const result = ProtocolParamUpdate.setGovernanceActionDepositUnsafe(instance,  parameters );
  *   console.log(result);
  * } catch (error) {
- *   console.error(`ProtocolParamUpdate.unsafeSetGovernanceActionDeposit failed: ${error.message}`);
+ *   console.error(`ProtocolParamUpdate.setGovernanceActionDepositUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeSetGovernanceActionDeposit = (
+export const setGovernanceActionDepositUnsafe = (
   instance: CML.ProtocolParamUpdate,
   governanceActionDeposit: bigint,
 ): void =>
@@ -3576,16 +3593,16 @@ export const governanceActionDeposit = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = ProtocolParamUpdate.unsafeGovernanceActionDeposit(instance);
+ *   const result = ProtocolParamUpdate.governanceActionDepositUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`ProtocolParamUpdate.unsafeGovernanceActionDeposit failed: ${error.message}`);
+ *   console.error(`ProtocolParamUpdate.governanceActionDepositUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeGovernanceActionDeposit = (
+export const governanceActionDepositUnsafe = (
   instance: CML.ProtocolParamUpdate,
 ): bigint | undefined => Effect.runSync(governanceActionDeposit(instance));
 
@@ -3632,16 +3649,16 @@ export const setDRepDeposit = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = ProtocolParamUpdate.unsafeSetDRepDeposit(instance,  parameters );
+ *   const result = ProtocolParamUpdate.setDRepDepositUnsafe(instance,  parameters );
  *   console.log(result);
  * } catch (error) {
- *   console.error(`ProtocolParamUpdate.unsafeSetDRepDeposit failed: ${error.message}`);
+ *   console.error(`ProtocolParamUpdate.setDRepDepositUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeSetDRepDeposit = (
+export const setDRepDepositUnsafe = (
   instance: CML.ProtocolParamUpdate,
   dRepDeposit: bigint,
 ): void => Effect.runSync(setDRepDeposit(instance, dRepDeposit));
@@ -3688,16 +3705,16 @@ export const dRepDeposit = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = ProtocolParamUpdate.unsafeDRepDeposit(instance);
+ *   const result = ProtocolParamUpdate.dRepDepositUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`ProtocolParamUpdate.unsafeDRepDeposit failed: ${error.message}`);
+ *   console.error(`ProtocolParamUpdate.dRepDepositUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeDRepDeposit = (
+export const dRepDepositUnsafe = (
   instance: CML.ProtocolParamUpdate,
 ): bigint | undefined => Effect.runSync(dRepDeposit(instance));
 
@@ -3744,16 +3761,16 @@ export const setDRepInactivityPeriod = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = ProtocolParamUpdate.unsafeSetDRepInactivityPeriod(instance,  parameters );
+ *   const result = ProtocolParamUpdate.setDRepInactivityPeriodUnsafe(instance,  parameters );
  *   console.log(result);
  * } catch (error) {
- *   console.error(`ProtocolParamUpdate.unsafeSetDRepInactivityPeriod failed: ${error.message}`);
+ *   console.error(`ProtocolParamUpdate.setDRepInactivityPeriodUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeSetDRepInactivityPeriod = (
+export const setDRepInactivityPeriodUnsafe = (
   instance: CML.ProtocolParamUpdate,
   dRepInactivityPeriod: bigint,
 ): void =>
@@ -3801,16 +3818,16 @@ export const dRepInactivityPeriod = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = ProtocolParamUpdate.unsafeDRepInactivityPeriod(instance);
+ *   const result = ProtocolParamUpdate.dRepInactivityPeriodUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`ProtocolParamUpdate.unsafeDRepInactivityPeriod failed: ${error.message}`);
+ *   console.error(`ProtocolParamUpdate.dRepInactivityPeriodUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeDRepInactivityPeriod = (
+export const dRepInactivityPeriodUnsafe = (
   instance: CML.ProtocolParamUpdate,
 ): bigint | undefined => Effect.runSync(dRepInactivityPeriod(instance));
 
@@ -3860,16 +3877,16 @@ export const setMinFeeRefScriptCostPerByte = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = ProtocolParamUpdate.unsafeSetMinFeeRefScriptCostPerByte(instance,  parameters );
+ *   const result = ProtocolParamUpdate.setMinFeeRefScriptCostPerByteUnsafe(instance,  parameters );
  *   console.log(result);
  * } catch (error) {
- *   console.error(`ProtocolParamUpdate.unsafeSetMinFeeRefScriptCostPerByte failed: ${error.message}`);
+ *   console.error(`ProtocolParamUpdate.setMinFeeRefScriptCostPerByteUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeSetMinFeeRefScriptCostPerByte = (
+export const setMinFeeRefScriptCostPerByteUnsafe = (
   instance: CML.ProtocolParamUpdate,
   minFeeRefScriptCostPerByte: CML.Rational,
 ): void =>
@@ -3919,16 +3936,16 @@ export const minFeeRefScriptCostPerByte = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = ProtocolParamUpdate.unsafeMinFeeRefScriptCostPerByte(instance);
+ *   const result = ProtocolParamUpdate.minFeeRefScriptCostPerByteUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`ProtocolParamUpdate.unsafeMinFeeRefScriptCostPerByte failed: ${error.message}`);
+ *   console.error(`ProtocolParamUpdate.minFeeRefScriptCostPerByteUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeMinFeeRefScriptCostPerByte = (
+export const minFeeRefScriptCostPerByteUnsafe = (
   instance: CML.ProtocolParamUpdate,
 ): CML.Rational | undefined =>
   Effect.runSync(minFeeRefScriptCostPerByte(instance));
@@ -3970,13 +3987,13 @@ export const _new = Effect.fn(function* () {
  *
  * // Using try/catch for error handling
  * try {
- *   const result = ProtocolParamUpdate.unsafe_new();
+ *   const result = ProtocolParamUpdate._newUnsafe();
  *   console.log(result);
  * } catch (error) {
- *   console.error(`ProtocolParamUpdate.unsafe_new failed: ${error.message}`);
+ *   console.error(`ProtocolParamUpdate._newUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Constructors
+ * @category ConstructorsUnsafe
  */
-export const unsafe_new = () => Effect.runSync(_new());
+export const _newUnsafe = () => Effect.runSync(_new());

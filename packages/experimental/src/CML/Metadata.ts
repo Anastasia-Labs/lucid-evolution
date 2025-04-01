@@ -1,8 +1,25 @@
+/**
+ * @since 2.0.0
+ */
 import { Data, Effect } from "effect";
 import * as CML from "@anastasia-labs/cardano-multiplatform-lib-nodejs";
 
+/**
+ * Type alias for the CML Metadata class
+ *
+ * @since 2.0.0
+ * @category Types
+ */
 export type Metadata = CML.Metadata;
 
+/**
+ * Error class for Metadata operations
+ *
+ * This error is thrown when operations on Metadata instances fail.
+ *
+ * @since 2.0.0
+ * @category Errors
+ */
 export class MetadataError extends Data.TaggedError("MetadataError")<{
   message?: string;
 }> {}
@@ -47,16 +64,16 @@ export const free = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = Metadata.unsafeFree(instance);
+ *   const result = Metadata.freeUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`Metadata.unsafeFree failed: ${error.message}`);
+ *   console.error(`Metadata.freeUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeFree = (instance: CML.Metadata): void =>
+export const freeUnsafe = (instance: CML.Metadata): void =>
   Effect.runSync(free(instance));
 
 /**
@@ -96,16 +113,16 @@ export const _new = Effect.fn(function* () {
  *
  * // Using try/catch for error handling
  * try {
- *   const result = Metadata.unsafe_new();
+ *   const result = Metadata._newUnsafe();
  *   console.log(result);
  * } catch (error) {
- *   console.error(`Metadata.unsafe_new failed: ${error.message}`);
+ *   console.error(`Metadata._newUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Constructors
+ * @category ConstructorsUnsafe
  */
-export const unsafe_new = () => Effect.runSync(_new());
+export const _newUnsafe = () => Effect.runSync(_new());
 
 /**
  * Method len of Metadata
@@ -147,16 +164,16 @@ export const len = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = Metadata.unsafeLen(instance);
+ *   const result = Metadata.lenUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`Metadata.unsafeLen failed: ${error.message}`);
+ *   console.error(`Metadata.lenUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeLen = (instance: CML.Metadata): number =>
+export const lenUnsafe = (instance: CML.Metadata): number =>
   Effect.runSync(len(instance));
 
 /**
@@ -203,16 +220,16 @@ export const set = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = Metadata.unsafeSet(instance,  parameters );
+ *   const result = Metadata.setUnsafe(instance,  parameters );
  *   console.log(result);
  * } catch (error) {
- *   console.error(`Metadata.unsafeSet failed: ${error.message}`);
+ *   console.error(`Metadata.setUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeSet = (
+export const setUnsafe = (
   instance: CML.Metadata,
   key: bigint,
   value: CML.TransactionMetadatum,
@@ -261,16 +278,16 @@ export const get = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = Metadata.unsafeGet(instance,  parameters );
+ *   const result = Metadata.getUnsafe(instance,  parameters );
  *   console.log(result);
  * } catch (error) {
- *   console.error(`Metadata.unsafeGet failed: ${error.message}`);
+ *   console.error(`Metadata.getUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeGet = (
+export const getUnsafe = (
   instance: CML.Metadata,
   label: bigint,
 ): CML.TransactionMetadatum | undefined => Effect.runSync(get(instance, label));
@@ -318,16 +335,16 @@ export const getAll = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = Metadata.unsafeGetAll(instance,  parameters );
+ *   const result = Metadata.getAllUnsafe(instance,  parameters );
  *   console.log(result);
  * } catch (error) {
- *   console.error(`Metadata.unsafeGetAll failed: ${error.message}`);
+ *   console.error(`Metadata.getAllUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeGetAll = (
+export const getAllUnsafe = (
   instance: CML.Metadata,
   label: bigint,
 ): CML.TransactionMetadatumList | undefined =>
@@ -375,15 +392,15 @@ export const labels = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = Metadata.unsafeLabels(instance);
+ *   const result = Metadata.labelsUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`Metadata.unsafeLabels failed: ${error.message}`);
+ *   console.error(`Metadata.labelsUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeLabels = (
+export const labelsUnsafe = (
   instance: CML.Metadata,
 ): CML.TransactionMetadatumLabels => Effect.runSync(labels(instance));

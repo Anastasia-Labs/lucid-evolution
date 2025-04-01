@@ -1,8 +1,25 @@
+/**
+ * @since 2.0.0
+ */
 import { Data, Effect } from "effect";
 import * as CML from "@anastasia-labs/cardano-multiplatform-lib-nodejs";
 
+/**
+ * Type alias for the CML ScriptAny class
+ *
+ * @since 2.0.0
+ * @category Types
+ */
 export type ScriptAny = CML.ScriptAny;
 
+/**
+ * Error class for ScriptAny operations
+ *
+ * This error is thrown when operations on ScriptAny instances fail.
+ *
+ * @since 2.0.0
+ * @category Errors
+ */
 export class ScriptAnyError extends Data.TaggedError("ScriptAnyError")<{
   message?: string;
 }> {}
@@ -47,16 +64,16 @@ export const free = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = ScriptAny.unsafeFree(instance);
+ *   const result = ScriptAny.freeUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`ScriptAny.unsafeFree failed: ${error.message}`);
+ *   console.error(`ScriptAny.freeUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeFree = (instance: CML.ScriptAny): void =>
+export const freeUnsafe = (instance: CML.ScriptAny): void =>
   Effect.runSync(free(instance));
 
 /**
@@ -99,16 +116,16 @@ export const toCborBytes = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = ScriptAny.unsafeToCborBytes(instance);
+ *   const result = ScriptAny.toCborBytesUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`ScriptAny.unsafeToCborBytes failed: ${error.message}`);
+ *   console.error(`ScriptAny.toCborBytesUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeToCborBytes = (instance: CML.ScriptAny): Uint8Array =>
+export const toCborBytesUnsafe = (instance: CML.ScriptAny): Uint8Array =>
   Effect.runSync(toCborBytes(instance));
 
 /**
@@ -151,16 +168,16 @@ export const toCanonicalCborBytes = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = ScriptAny.unsafeToCanonicalCborBytes(instance);
+ *   const result = ScriptAny.toCanonicalCborBytesUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`ScriptAny.unsafeToCanonicalCborBytes failed: ${error.message}`);
+ *   console.error(`ScriptAny.toCanonicalCborBytesUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeToCanonicalCborBytes = (
+export const toCanonicalCborBytesUnsafe = (
   instance: CML.ScriptAny,
 ): Uint8Array => Effect.runSync(toCanonicalCborBytes(instance));
 
@@ -201,16 +218,16 @@ export const fromCborBytes = Effect.fn(function* (cborBytes: Uint8Array) {
  *
  * // Using try/catch for error handling
  * try {
- *   const result = ScriptAny.unsafeFromCborBytes( parameters );
+ *   const result = ScriptAny.fromCborBytesUnsafe( parameters );
  *   console.log(result);
  * } catch (error) {
- *   console.error(`ScriptAny.unsafeFromCborBytes failed: ${error.message}`);
+ *   console.error(`ScriptAny.fromCborBytesUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Constructors
+ * @category ConstructorsUnsafe
  */
-export const unsafeFromCborBytes = (cborBytes: Uint8Array) =>
+export const fromCborBytesUnsafe = (cborBytes: Uint8Array) =>
   Effect.runSync(fromCborBytes(cborBytes));
 
 /**
@@ -253,16 +270,16 @@ export const toCborHex = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = ScriptAny.unsafeToCborHex(instance);
+ *   const result = ScriptAny.toCborHexUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`ScriptAny.unsafeToCborHex failed: ${error.message}`);
+ *   console.error(`ScriptAny.toCborHexUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeToCborHex = (instance: CML.ScriptAny): string =>
+export const toCborHexUnsafe = (instance: CML.ScriptAny): string =>
   Effect.runSync(toCborHex(instance));
 
 /**
@@ -305,16 +322,16 @@ export const toCanonicalCborHex = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = ScriptAny.unsafeToCanonicalCborHex(instance);
+ *   const result = ScriptAny.toCanonicalCborHexUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`ScriptAny.unsafeToCanonicalCborHex failed: ${error.message}`);
+ *   console.error(`ScriptAny.toCanonicalCborHexUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeToCanonicalCborHex = (instance: CML.ScriptAny): string =>
+export const toCanonicalCborHexUnsafe = (instance: CML.ScriptAny): string =>
   Effect.runSync(toCanonicalCborHex(instance));
 
 /**
@@ -354,16 +371,16 @@ export const fromCborHex = Effect.fn(function* (cborBytes: string) {
  *
  * // Using try/catch for error handling
  * try {
- *   const result = ScriptAny.unsafeFromCborHex( parameters );
+ *   const result = ScriptAny.fromCborHexUnsafe( parameters );
  *   console.log(result);
  * } catch (error) {
- *   console.error(`ScriptAny.unsafeFromCborHex failed: ${error.message}`);
+ *   console.error(`ScriptAny.fromCborHexUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Constructors
+ * @category ConstructorsUnsafe
  */
-export const unsafeFromCborHex = (cborBytes: string) =>
+export const fromCborHexUnsafe = (cborBytes: string) =>
   Effect.runSync(fromCborHex(cborBytes));
 
 /**
@@ -406,16 +423,16 @@ export const toJson = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = ScriptAny.unsafeToJson(instance);
+ *   const result = ScriptAny.toJsonUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`ScriptAny.unsafeToJson failed: ${error.message}`);
+ *   console.error(`ScriptAny.toJsonUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeToJson = (instance: CML.ScriptAny): string =>
+export const toJsonUnsafe = (instance: CML.ScriptAny): string =>
   Effect.runSync(toJson(instance));
 
 /**
@@ -458,16 +475,16 @@ export const toJsValue = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = ScriptAny.unsafeToJsValue(instance);
+ *   const result = ScriptAny.toJsValueUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`ScriptAny.unsafeToJsValue failed: ${error.message}`);
+ *   console.error(`ScriptAny.toJsValueUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeToJsValue = (instance: CML.ScriptAny): any =>
+export const toJsValueUnsafe = (instance: CML.ScriptAny): any =>
   Effect.runSync(toJsValue(instance));
 
 /**
@@ -507,16 +524,16 @@ export const fromJson = Effect.fn(function* (json: string) {
  *
  * // Using try/catch for error handling
  * try {
- *   const result = ScriptAny.unsafeFromJson( parameters );
+ *   const result = ScriptAny.fromJsonUnsafe( parameters );
  *   console.log(result);
  * } catch (error) {
- *   console.error(`ScriptAny.unsafeFromJson failed: ${error.message}`);
+ *   console.error(`ScriptAny.fromJsonUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Constructors
+ * @category ConstructorsUnsafe
  */
-export const unsafeFromJson = (json: string) => Effect.runSync(fromJson(json));
+export const fromJsonUnsafe = (json: string) => Effect.runSync(fromJson(json));
 
 /**
  * Method nativeScripts of ScriptAny
@@ -560,16 +577,16 @@ export const nativeScripts = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = ScriptAny.unsafeNativeScripts(instance);
+ *   const result = ScriptAny.nativeScriptsUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`ScriptAny.unsafeNativeScripts failed: ${error.message}`);
+ *   console.error(`ScriptAny.nativeScriptsUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeNativeScripts = (
+export const nativeScriptsUnsafe = (
   instance: CML.ScriptAny,
 ): CML.NativeScriptList => Effect.runSync(nativeScripts(instance));
 
@@ -610,14 +627,14 @@ export const _new = Effect.fn(function* (nativeScripts: CML.NativeScriptList) {
  *
  * // Using try/catch for error handling
  * try {
- *   const result = ScriptAny.unsafe_new( parameters );
+ *   const result = ScriptAny._newUnsafe( parameters );
  *   console.log(result);
  * } catch (error) {
- *   console.error(`ScriptAny.unsafe_new failed: ${error.message}`);
+ *   console.error(`ScriptAny._newUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Constructors
+ * @category ConstructorsUnsafe
  */
-export const unsafe_new = (nativeScripts: CML.NativeScriptList) =>
+export const _newUnsafe = (nativeScripts: CML.NativeScriptList) =>
   Effect.runSync(_new(nativeScripts));

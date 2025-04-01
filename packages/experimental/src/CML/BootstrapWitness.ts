@@ -1,8 +1,25 @@
+/**
+ * @since 2.0.0
+ */
 import { Data, Effect } from "effect";
 import * as CML from "@anastasia-labs/cardano-multiplatform-lib-nodejs";
 
+/**
+ * Type alias for the CML BootstrapWitness class
+ *
+ * @since 2.0.0
+ * @category Types
+ */
 export type BootstrapWitness = CML.BootstrapWitness;
 
+/**
+ * Error class for BootstrapWitness operations
+ *
+ * This error is thrown when operations on BootstrapWitness instances fail.
+ *
+ * @since 2.0.0
+ * @category Errors
+ */
 export class BootstrapWitnessError extends Data.TaggedError(
   "BootstrapWitnessError",
 )<{
@@ -51,16 +68,16 @@ export const free = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = BootstrapWitness.unsafeFree(instance);
+ *   const result = BootstrapWitness.freeUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`BootstrapWitness.unsafeFree failed: ${error.message}`);
+ *   console.error(`BootstrapWitness.freeUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeFree = (instance: CML.BootstrapWitness): void =>
+export const freeUnsafe = (instance: CML.BootstrapWitness): void =>
   Effect.runSync(free(instance));
 
 /**
@@ -105,16 +122,16 @@ export const toCborBytes = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = BootstrapWitness.unsafeToCborBytes(instance);
+ *   const result = BootstrapWitness.toCborBytesUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`BootstrapWitness.unsafeToCborBytes failed: ${error.message}`);
+ *   console.error(`BootstrapWitness.toCborBytesUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeToCborBytes = (instance: CML.BootstrapWitness): Uint8Array =>
+export const toCborBytesUnsafe = (instance: CML.BootstrapWitness): Uint8Array =>
   Effect.runSync(toCborBytes(instance));
 
 /**
@@ -159,16 +176,16 @@ export const toCanonicalCborBytes = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = BootstrapWitness.unsafeToCanonicalCborBytes(instance);
+ *   const result = BootstrapWitness.toCanonicalCborBytesUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`BootstrapWitness.unsafeToCanonicalCborBytes failed: ${error.message}`);
+ *   console.error(`BootstrapWitness.toCanonicalCborBytesUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeToCanonicalCborBytes = (
+export const toCanonicalCborBytesUnsafe = (
   instance: CML.BootstrapWitness,
 ): Uint8Array => Effect.runSync(toCanonicalCborBytes(instance));
 
@@ -209,16 +226,16 @@ export const fromCborBytes = Effect.fn(function* (cborBytes: Uint8Array) {
  *
  * // Using try/catch for error handling
  * try {
- *   const result = BootstrapWitness.unsafeFromCborBytes( parameters );
+ *   const result = BootstrapWitness.fromCborBytesUnsafe( parameters );
  *   console.log(result);
  * } catch (error) {
- *   console.error(`BootstrapWitness.unsafeFromCborBytes failed: ${error.message}`);
+ *   console.error(`BootstrapWitness.fromCborBytesUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Constructors
+ * @category ConstructorsUnsafe
  */
-export const unsafeFromCborBytes = (cborBytes: Uint8Array) =>
+export const fromCborBytesUnsafe = (cborBytes: Uint8Array) =>
   Effect.runSync(fromCborBytes(cborBytes));
 
 /**
@@ -263,16 +280,16 @@ export const toCborHex = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = BootstrapWitness.unsafeToCborHex(instance);
+ *   const result = BootstrapWitness.toCborHexUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`BootstrapWitness.unsafeToCborHex failed: ${error.message}`);
+ *   console.error(`BootstrapWitness.toCborHexUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeToCborHex = (instance: CML.BootstrapWitness): string =>
+export const toCborHexUnsafe = (instance: CML.BootstrapWitness): string =>
   Effect.runSync(toCborHex(instance));
 
 /**
@@ -317,16 +334,16 @@ export const toCanonicalCborHex = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = BootstrapWitness.unsafeToCanonicalCborHex(instance);
+ *   const result = BootstrapWitness.toCanonicalCborHexUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`BootstrapWitness.unsafeToCanonicalCborHex failed: ${error.message}`);
+ *   console.error(`BootstrapWitness.toCanonicalCborHexUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeToCanonicalCborHex = (
+export const toCanonicalCborHexUnsafe = (
   instance: CML.BootstrapWitness,
 ): string => Effect.runSync(toCanonicalCborHex(instance));
 
@@ -367,16 +384,16 @@ export const fromCborHex = Effect.fn(function* (cborBytes: string) {
  *
  * // Using try/catch for error handling
  * try {
- *   const result = BootstrapWitness.unsafeFromCborHex( parameters );
+ *   const result = BootstrapWitness.fromCborHexUnsafe( parameters );
  *   console.log(result);
  * } catch (error) {
- *   console.error(`BootstrapWitness.unsafeFromCborHex failed: ${error.message}`);
+ *   console.error(`BootstrapWitness.fromCborHexUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Constructors
+ * @category ConstructorsUnsafe
  */
-export const unsafeFromCborHex = (cborBytes: string) =>
+export const fromCborHexUnsafe = (cborBytes: string) =>
   Effect.runSync(fromCborHex(cborBytes));
 
 /**
@@ -421,16 +438,16 @@ export const toJson = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = BootstrapWitness.unsafeToJson(instance);
+ *   const result = BootstrapWitness.toJsonUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`BootstrapWitness.unsafeToJson failed: ${error.message}`);
+ *   console.error(`BootstrapWitness.toJsonUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeToJson = (instance: CML.BootstrapWitness): string =>
+export const toJsonUnsafe = (instance: CML.BootstrapWitness): string =>
   Effect.runSync(toJson(instance));
 
 /**
@@ -473,16 +490,16 @@ export const toJsValue = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = BootstrapWitness.unsafeToJsValue(instance);
+ *   const result = BootstrapWitness.toJsValueUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`BootstrapWitness.unsafeToJsValue failed: ${error.message}`);
+ *   console.error(`BootstrapWitness.toJsValueUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeToJsValue = (instance: CML.BootstrapWitness): any =>
+export const toJsValueUnsafe = (instance: CML.BootstrapWitness): any =>
   Effect.runSync(toJsValue(instance));
 
 /**
@@ -522,16 +539,16 @@ export const fromJson = Effect.fn(function* (json: string) {
  *
  * // Using try/catch for error handling
  * try {
- *   const result = BootstrapWitness.unsafeFromJson( parameters );
+ *   const result = BootstrapWitness.fromJsonUnsafe( parameters );
  *   console.log(result);
  * } catch (error) {
- *   console.error(`BootstrapWitness.unsafeFromJson failed: ${error.message}`);
+ *   console.error(`BootstrapWitness.fromJsonUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Constructors
+ * @category ConstructorsUnsafe
  */
-export const unsafeFromJson = (json: string) => Effect.runSync(fromJson(json));
+export const fromJsonUnsafe = (json: string) => Effect.runSync(fromJson(json));
 
 /**
  * Method publicKey of BootstrapWitness
@@ -575,16 +592,16 @@ export const publicKey = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = BootstrapWitness.unsafePublicKey(instance);
+ *   const result = BootstrapWitness.publicKeyUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`BootstrapWitness.unsafePublicKey failed: ${error.message}`);
+ *   console.error(`BootstrapWitness.publicKeyUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafePublicKey = (
+export const publicKeyUnsafe = (
   instance: CML.BootstrapWitness,
 ): CML.PublicKey => Effect.runSync(publicKey(instance));
 
@@ -630,16 +647,16 @@ export const signature = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = BootstrapWitness.unsafeSignature(instance);
+ *   const result = BootstrapWitness.signatureUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`BootstrapWitness.unsafeSignature failed: ${error.message}`);
+ *   console.error(`BootstrapWitness.signatureUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeSignature = (
+export const signatureUnsafe = (
   instance: CML.BootstrapWitness,
 ): CML.Ed25519Signature => Effect.runSync(signature(instance));
 
@@ -685,16 +702,16 @@ export const chainCode = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = BootstrapWitness.unsafeChainCode(instance);
+ *   const result = BootstrapWitness.chainCodeUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`BootstrapWitness.unsafeChainCode failed: ${error.message}`);
+ *   console.error(`BootstrapWitness.chainCodeUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeChainCode = (instance: CML.BootstrapWitness): Uint8Array =>
+export const chainCodeUnsafe = (instance: CML.BootstrapWitness): Uint8Array =>
   Effect.runSync(chainCode(instance));
 
 /**
@@ -739,16 +756,16 @@ export const attributes = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = BootstrapWitness.unsafeAttributes(instance);
+ *   const result = BootstrapWitness.attributesUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`BootstrapWitness.unsafeAttributes failed: ${error.message}`);
+ *   console.error(`BootstrapWitness.attributesUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeAttributes = (
+export const attributesUnsafe = (
   instance: CML.BootstrapWitness,
 ): CML.AddrAttributes => Effect.runSync(attributes(instance));
 
@@ -795,16 +812,16 @@ export const _new = Effect.fn(function* (
  *
  * // Using try/catch for error handling
  * try {
- *   const result = BootstrapWitness.unsafe_new( parameters );
+ *   const result = BootstrapWitness._newUnsafe( parameters );
  *   console.log(result);
  * } catch (error) {
- *   console.error(`BootstrapWitness.unsafe_new failed: ${error.message}`);
+ *   console.error(`BootstrapWitness._newUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Constructors
+ * @category ConstructorsUnsafe
  */
-export const unsafe_new = (
+export const _newUnsafe = (
   publicKey: CML.PublicKey,
   signature: CML.Ed25519Signature,
   chainCode: Uint8Array,
@@ -853,15 +870,15 @@ export const toAddress = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = BootstrapWitness.unsafeToAddress(instance);
+ *   const result = BootstrapWitness.toAddressUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`BootstrapWitness.unsafeToAddress failed: ${error.message}`);
+ *   console.error(`BootstrapWitness.toAddressUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeToAddress = (
+export const toAddressUnsafe = (
   instance: CML.BootstrapWitness,
 ): CML.AddressContent => Effect.runSync(toAddress(instance));

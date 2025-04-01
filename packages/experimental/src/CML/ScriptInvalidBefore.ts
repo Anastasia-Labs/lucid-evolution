@@ -1,8 +1,25 @@
+/**
+ * @since 2.0.0
+ */
 import { Data, Effect } from "effect";
 import * as CML from "@anastasia-labs/cardano-multiplatform-lib-nodejs";
 
+/**
+ * Type alias for the CML ScriptInvalidBefore class
+ *
+ * @since 2.0.0
+ * @category Types
+ */
 export type ScriptInvalidBefore = CML.ScriptInvalidBefore;
 
+/**
+ * Error class for ScriptInvalidBefore operations
+ *
+ * This error is thrown when operations on ScriptInvalidBefore instances fail.
+ *
+ * @since 2.0.0
+ * @category Errors
+ */
 export class ScriptInvalidBeforeError extends Data.TaggedError(
   "ScriptInvalidBeforeError",
 )<{
@@ -51,16 +68,16 @@ export const free = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = ScriptInvalidBefore.unsafeFree(instance);
+ *   const result = ScriptInvalidBefore.freeUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`ScriptInvalidBefore.unsafeFree failed: ${error.message}`);
+ *   console.error(`ScriptInvalidBefore.freeUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeFree = (instance: CML.ScriptInvalidBefore): void =>
+export const freeUnsafe = (instance: CML.ScriptInvalidBefore): void =>
   Effect.runSync(free(instance));
 
 /**
@@ -105,16 +122,16 @@ export const toCborBytes = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = ScriptInvalidBefore.unsafeToCborBytes(instance);
+ *   const result = ScriptInvalidBefore.toCborBytesUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`ScriptInvalidBefore.unsafeToCborBytes failed: ${error.message}`);
+ *   console.error(`ScriptInvalidBefore.toCborBytesUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeToCborBytes = (
+export const toCborBytesUnsafe = (
   instance: CML.ScriptInvalidBefore,
 ): Uint8Array => Effect.runSync(toCborBytes(instance));
 
@@ -160,16 +177,16 @@ export const toCanonicalCborBytes = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = ScriptInvalidBefore.unsafeToCanonicalCborBytes(instance);
+ *   const result = ScriptInvalidBefore.toCanonicalCborBytesUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`ScriptInvalidBefore.unsafeToCanonicalCborBytes failed: ${error.message}`);
+ *   console.error(`ScriptInvalidBefore.toCanonicalCborBytesUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeToCanonicalCborBytes = (
+export const toCanonicalCborBytesUnsafe = (
   instance: CML.ScriptInvalidBefore,
 ): Uint8Array => Effect.runSync(toCanonicalCborBytes(instance));
 
@@ -210,16 +227,16 @@ export const fromCborBytes = Effect.fn(function* (cborBytes: Uint8Array) {
  *
  * // Using try/catch for error handling
  * try {
- *   const result = ScriptInvalidBefore.unsafeFromCborBytes( parameters );
+ *   const result = ScriptInvalidBefore.fromCborBytesUnsafe( parameters );
  *   console.log(result);
  * } catch (error) {
- *   console.error(`ScriptInvalidBefore.unsafeFromCborBytes failed: ${error.message}`);
+ *   console.error(`ScriptInvalidBefore.fromCborBytesUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Constructors
+ * @category ConstructorsUnsafe
  */
-export const unsafeFromCborBytes = (cborBytes: Uint8Array) =>
+export const fromCborBytesUnsafe = (cborBytes: Uint8Array) =>
   Effect.runSync(fromCborBytes(cborBytes));
 
 /**
@@ -264,16 +281,16 @@ export const toCborHex = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = ScriptInvalidBefore.unsafeToCborHex(instance);
+ *   const result = ScriptInvalidBefore.toCborHexUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`ScriptInvalidBefore.unsafeToCborHex failed: ${error.message}`);
+ *   console.error(`ScriptInvalidBefore.toCborHexUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeToCborHex = (instance: CML.ScriptInvalidBefore): string =>
+export const toCborHexUnsafe = (instance: CML.ScriptInvalidBefore): string =>
   Effect.runSync(toCborHex(instance));
 
 /**
@@ -318,16 +335,16 @@ export const toCanonicalCborHex = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = ScriptInvalidBefore.unsafeToCanonicalCborHex(instance);
+ *   const result = ScriptInvalidBefore.toCanonicalCborHexUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`ScriptInvalidBefore.unsafeToCanonicalCborHex failed: ${error.message}`);
+ *   console.error(`ScriptInvalidBefore.toCanonicalCborHexUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeToCanonicalCborHex = (
+export const toCanonicalCborHexUnsafe = (
   instance: CML.ScriptInvalidBefore,
 ): string => Effect.runSync(toCanonicalCborHex(instance));
 
@@ -368,16 +385,16 @@ export const fromCborHex = Effect.fn(function* (cborBytes: string) {
  *
  * // Using try/catch for error handling
  * try {
- *   const result = ScriptInvalidBefore.unsafeFromCborHex( parameters );
+ *   const result = ScriptInvalidBefore.fromCborHexUnsafe( parameters );
  *   console.log(result);
  * } catch (error) {
- *   console.error(`ScriptInvalidBefore.unsafeFromCborHex failed: ${error.message}`);
+ *   console.error(`ScriptInvalidBefore.fromCborHexUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Constructors
+ * @category ConstructorsUnsafe
  */
-export const unsafeFromCborHex = (cborBytes: string) =>
+export const fromCborHexUnsafe = (cborBytes: string) =>
   Effect.runSync(fromCborHex(cborBytes));
 
 /**
@@ -422,16 +439,16 @@ export const toJson = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = ScriptInvalidBefore.unsafeToJson(instance);
+ *   const result = ScriptInvalidBefore.toJsonUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`ScriptInvalidBefore.unsafeToJson failed: ${error.message}`);
+ *   console.error(`ScriptInvalidBefore.toJsonUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeToJson = (instance: CML.ScriptInvalidBefore): string =>
+export const toJsonUnsafe = (instance: CML.ScriptInvalidBefore): string =>
   Effect.runSync(toJson(instance));
 
 /**
@@ -476,16 +493,16 @@ export const toJsValue = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = ScriptInvalidBefore.unsafeToJsValue(instance);
+ *   const result = ScriptInvalidBefore.toJsValueUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`ScriptInvalidBefore.unsafeToJsValue failed: ${error.message}`);
+ *   console.error(`ScriptInvalidBefore.toJsValueUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeToJsValue = (instance: CML.ScriptInvalidBefore): any =>
+export const toJsValueUnsafe = (instance: CML.ScriptInvalidBefore): any =>
   Effect.runSync(toJsValue(instance));
 
 /**
@@ -525,16 +542,16 @@ export const fromJson = Effect.fn(function* (json: string) {
  *
  * // Using try/catch for error handling
  * try {
- *   const result = ScriptInvalidBefore.unsafeFromJson( parameters );
+ *   const result = ScriptInvalidBefore.fromJsonUnsafe( parameters );
  *   console.log(result);
  * } catch (error) {
- *   console.error(`ScriptInvalidBefore.unsafeFromJson failed: ${error.message}`);
+ *   console.error(`ScriptInvalidBefore.fromJsonUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Constructors
+ * @category ConstructorsUnsafe
  */
-export const unsafeFromJson = (json: string) => Effect.runSync(fromJson(json));
+export const fromJsonUnsafe = (json: string) => Effect.runSync(fromJson(json));
 
 /**
  * Method before of ScriptInvalidBefore
@@ -578,16 +595,16 @@ export const before = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = ScriptInvalidBefore.unsafeBefore(instance);
+ *   const result = ScriptInvalidBefore.beforeUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`ScriptInvalidBefore.unsafeBefore failed: ${error.message}`);
+ *   console.error(`ScriptInvalidBefore.beforeUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeBefore = (instance: CML.ScriptInvalidBefore): bigint =>
+export const beforeUnsafe = (instance: CML.ScriptInvalidBefore): bigint =>
   Effect.runSync(before(instance));
 
 /**
@@ -627,13 +644,13 @@ export const _new = Effect.fn(function* (before: bigint) {
  *
  * // Using try/catch for error handling
  * try {
- *   const result = ScriptInvalidBefore.unsafe_new( parameters );
+ *   const result = ScriptInvalidBefore._newUnsafe( parameters );
  *   console.log(result);
  * } catch (error) {
- *   console.error(`ScriptInvalidBefore.unsafe_new failed: ${error.message}`);
+ *   console.error(`ScriptInvalidBefore._newUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Constructors
+ * @category ConstructorsUnsafe
  */
-export const unsafe_new = (before: bigint) => Effect.runSync(_new(before));
+export const _newUnsafe = (before: bigint) => Effect.runSync(_new(before));

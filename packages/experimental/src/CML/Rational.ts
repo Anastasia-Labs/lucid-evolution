@@ -1,8 +1,25 @@
+/**
+ * @since 2.0.0
+ */
 import { Data, Effect } from "effect";
 import * as CML from "@anastasia-labs/cardano-multiplatform-lib-nodejs";
 
+/**
+ * Type alias for the CML Rational class
+ *
+ * @since 2.0.0
+ * @category Types
+ */
 export type Rational = CML.Rational;
 
+/**
+ * Error class for Rational operations
+ *
+ * This error is thrown when operations on Rational instances fail.
+ *
+ * @since 2.0.0
+ * @category Errors
+ */
 export class RationalError extends Data.TaggedError("RationalError")<{
   message?: string;
 }> {}
@@ -47,16 +64,16 @@ export const free = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = Rational.unsafeFree(instance);
+ *   const result = Rational.freeUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`Rational.unsafeFree failed: ${error.message}`);
+ *   console.error(`Rational.freeUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeFree = (instance: CML.Rational): void =>
+export const freeUnsafe = (instance: CML.Rational): void =>
   Effect.runSync(free(instance));
 
 /**
@@ -99,16 +116,16 @@ export const toCborBytes = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = Rational.unsafeToCborBytes(instance);
+ *   const result = Rational.toCborBytesUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`Rational.unsafeToCborBytes failed: ${error.message}`);
+ *   console.error(`Rational.toCborBytesUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeToCborBytes = (instance: CML.Rational): Uint8Array =>
+export const toCborBytesUnsafe = (instance: CML.Rational): Uint8Array =>
   Effect.runSync(toCborBytes(instance));
 
 /**
@@ -151,16 +168,16 @@ export const toCanonicalCborBytes = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = Rational.unsafeToCanonicalCborBytes(instance);
+ *   const result = Rational.toCanonicalCborBytesUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`Rational.unsafeToCanonicalCborBytes failed: ${error.message}`);
+ *   console.error(`Rational.toCanonicalCborBytesUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeToCanonicalCborBytes = (
+export const toCanonicalCborBytesUnsafe = (
   instance: CML.Rational,
 ): Uint8Array => Effect.runSync(toCanonicalCborBytes(instance));
 
@@ -201,16 +218,16 @@ export const fromCborBytes = Effect.fn(function* (cborBytes: Uint8Array) {
  *
  * // Using try/catch for error handling
  * try {
- *   const result = Rational.unsafeFromCborBytes( parameters );
+ *   const result = Rational.fromCborBytesUnsafe( parameters );
  *   console.log(result);
  * } catch (error) {
- *   console.error(`Rational.unsafeFromCborBytes failed: ${error.message}`);
+ *   console.error(`Rational.fromCborBytesUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Constructors
+ * @category ConstructorsUnsafe
  */
-export const unsafeFromCborBytes = (cborBytes: Uint8Array) =>
+export const fromCborBytesUnsafe = (cborBytes: Uint8Array) =>
   Effect.runSync(fromCborBytes(cborBytes));
 
 /**
@@ -253,16 +270,16 @@ export const toCborHex = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = Rational.unsafeToCborHex(instance);
+ *   const result = Rational.toCborHexUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`Rational.unsafeToCborHex failed: ${error.message}`);
+ *   console.error(`Rational.toCborHexUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeToCborHex = (instance: CML.Rational): string =>
+export const toCborHexUnsafe = (instance: CML.Rational): string =>
   Effect.runSync(toCborHex(instance));
 
 /**
@@ -305,16 +322,16 @@ export const toCanonicalCborHex = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = Rational.unsafeToCanonicalCborHex(instance);
+ *   const result = Rational.toCanonicalCborHexUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`Rational.unsafeToCanonicalCborHex failed: ${error.message}`);
+ *   console.error(`Rational.toCanonicalCborHexUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeToCanonicalCborHex = (instance: CML.Rational): string =>
+export const toCanonicalCborHexUnsafe = (instance: CML.Rational): string =>
   Effect.runSync(toCanonicalCborHex(instance));
 
 /**
@@ -354,16 +371,16 @@ export const fromCborHex = Effect.fn(function* (cborBytes: string) {
  *
  * // Using try/catch for error handling
  * try {
- *   const result = Rational.unsafeFromCborHex( parameters );
+ *   const result = Rational.fromCborHexUnsafe( parameters );
  *   console.log(result);
  * } catch (error) {
- *   console.error(`Rational.unsafeFromCborHex failed: ${error.message}`);
+ *   console.error(`Rational.fromCborHexUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Constructors
+ * @category ConstructorsUnsafe
  */
-export const unsafeFromCborHex = (cborBytes: string) =>
+export const fromCborHexUnsafe = (cborBytes: string) =>
   Effect.runSync(fromCborHex(cborBytes));
 
 /**
@@ -406,16 +423,16 @@ export const toJson = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = Rational.unsafeToJson(instance);
+ *   const result = Rational.toJsonUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`Rational.unsafeToJson failed: ${error.message}`);
+ *   console.error(`Rational.toJsonUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeToJson = (instance: CML.Rational): string =>
+export const toJsonUnsafe = (instance: CML.Rational): string =>
   Effect.runSync(toJson(instance));
 
 /**
@@ -458,16 +475,16 @@ export const toJsValue = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = Rational.unsafeToJsValue(instance);
+ *   const result = Rational.toJsValueUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`Rational.unsafeToJsValue failed: ${error.message}`);
+ *   console.error(`Rational.toJsValueUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeToJsValue = (instance: CML.Rational): any =>
+export const toJsValueUnsafe = (instance: CML.Rational): any =>
   Effect.runSync(toJsValue(instance));
 
 /**
@@ -507,16 +524,16 @@ export const fromJson = Effect.fn(function* (json: string) {
  *
  * // Using try/catch for error handling
  * try {
- *   const result = Rational.unsafeFromJson( parameters );
+ *   const result = Rational.fromJsonUnsafe( parameters );
  *   console.log(result);
  * } catch (error) {
- *   console.error(`Rational.unsafeFromJson failed: ${error.message}`);
+ *   console.error(`Rational.fromJsonUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Constructors
+ * @category ConstructorsUnsafe
  */
-export const unsafeFromJson = (json: string) => Effect.runSync(fromJson(json));
+export const fromJsonUnsafe = (json: string) => Effect.runSync(fromJson(json));
 
 /**
  * Method numerator of Rational
@@ -558,16 +575,16 @@ export const numerator = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = Rational.unsafeNumerator(instance);
+ *   const result = Rational.numeratorUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`Rational.unsafeNumerator failed: ${error.message}`);
+ *   console.error(`Rational.numeratorUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeNumerator = (instance: CML.Rational): bigint =>
+export const numeratorUnsafe = (instance: CML.Rational): bigint =>
   Effect.runSync(numerator(instance));
 
 /**
@@ -610,16 +627,16 @@ export const denominator = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = Rational.unsafeDenominator(instance);
+ *   const result = Rational.denominatorUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`Rational.unsafeDenominator failed: ${error.message}`);
+ *   console.error(`Rational.denominatorUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeDenominator = (instance: CML.Rational): bigint =>
+export const denominatorUnsafe = (instance: CML.Rational): bigint =>
   Effect.runSync(denominator(instance));
 
 /**
@@ -662,14 +679,14 @@ export const _new = Effect.fn(function* (
  *
  * // Using try/catch for error handling
  * try {
- *   const result = Rational.unsafe_new( parameters );
+ *   const result = Rational._newUnsafe( parameters );
  *   console.log(result);
  * } catch (error) {
- *   console.error(`Rational.unsafe_new failed: ${error.message}`);
+ *   console.error(`Rational._newUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Constructors
+ * @category ConstructorsUnsafe
  */
-export const unsafe_new = (numerator: bigint, denominator: bigint) =>
+export const _newUnsafe = (numerator: bigint, denominator: bigint) =>
   Effect.runSync(_new(numerator, denominator));

@@ -1,8 +1,25 @@
+/**
+ * @since 2.0.0
+ */
 import { Data, Effect } from "effect";
 import * as CML from "@anastasia-labs/cardano-multiplatform-lib-nodejs";
 
+/**
+ * Type alias for the CML UpdateCommittee class
+ *
+ * @since 2.0.0
+ * @category Types
+ */
 export type UpdateCommittee = CML.UpdateCommittee;
 
+/**
+ * Error class for UpdateCommittee operations
+ *
+ * This error is thrown when operations on UpdateCommittee instances fail.
+ *
+ * @since 2.0.0
+ * @category Errors
+ */
 export class UpdateCommitteeError extends Data.TaggedError(
   "UpdateCommitteeError",
 )<{
@@ -49,16 +66,16 @@ export const free = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = UpdateCommittee.unsafeFree(instance);
+ *   const result = UpdateCommittee.freeUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`UpdateCommittee.unsafeFree failed: ${error.message}`);
+ *   console.error(`UpdateCommittee.freeUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeFree = (instance: CML.UpdateCommittee): void =>
+export const freeUnsafe = (instance: CML.UpdateCommittee): void =>
   Effect.runSync(free(instance));
 
 /**
@@ -103,16 +120,16 @@ export const toCborBytes = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = UpdateCommittee.unsafeToCborBytes(instance);
+ *   const result = UpdateCommittee.toCborBytesUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`UpdateCommittee.unsafeToCborBytes failed: ${error.message}`);
+ *   console.error(`UpdateCommittee.toCborBytesUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeToCborBytes = (instance: CML.UpdateCommittee): Uint8Array =>
+export const toCborBytesUnsafe = (instance: CML.UpdateCommittee): Uint8Array =>
   Effect.runSync(toCborBytes(instance));
 
 /**
@@ -157,16 +174,16 @@ export const toCanonicalCborBytes = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = UpdateCommittee.unsafeToCanonicalCborBytes(instance);
+ *   const result = UpdateCommittee.toCanonicalCborBytesUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`UpdateCommittee.unsafeToCanonicalCborBytes failed: ${error.message}`);
+ *   console.error(`UpdateCommittee.toCanonicalCborBytesUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeToCanonicalCborBytes = (
+export const toCanonicalCborBytesUnsafe = (
   instance: CML.UpdateCommittee,
 ): Uint8Array => Effect.runSync(toCanonicalCborBytes(instance));
 
@@ -207,16 +224,16 @@ export const fromCborBytes = Effect.fn(function* (cborBytes: Uint8Array) {
  *
  * // Using try/catch for error handling
  * try {
- *   const result = UpdateCommittee.unsafeFromCborBytes( parameters );
+ *   const result = UpdateCommittee.fromCborBytesUnsafe( parameters );
  *   console.log(result);
  * } catch (error) {
- *   console.error(`UpdateCommittee.unsafeFromCborBytes failed: ${error.message}`);
+ *   console.error(`UpdateCommittee.fromCborBytesUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Constructors
+ * @category ConstructorsUnsafe
  */
-export const unsafeFromCborBytes = (cborBytes: Uint8Array) =>
+export const fromCborBytesUnsafe = (cborBytes: Uint8Array) =>
   Effect.runSync(fromCborBytes(cborBytes));
 
 /**
@@ -261,16 +278,16 @@ export const toCborHex = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = UpdateCommittee.unsafeToCborHex(instance);
+ *   const result = UpdateCommittee.toCborHexUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`UpdateCommittee.unsafeToCborHex failed: ${error.message}`);
+ *   console.error(`UpdateCommittee.toCborHexUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeToCborHex = (instance: CML.UpdateCommittee): string =>
+export const toCborHexUnsafe = (instance: CML.UpdateCommittee): string =>
   Effect.runSync(toCborHex(instance));
 
 /**
@@ -315,16 +332,16 @@ export const toCanonicalCborHex = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = UpdateCommittee.unsafeToCanonicalCborHex(instance);
+ *   const result = UpdateCommittee.toCanonicalCborHexUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`UpdateCommittee.unsafeToCanonicalCborHex failed: ${error.message}`);
+ *   console.error(`UpdateCommittee.toCanonicalCborHexUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeToCanonicalCborHex = (
+export const toCanonicalCborHexUnsafe = (
   instance: CML.UpdateCommittee,
 ): string => Effect.runSync(toCanonicalCborHex(instance));
 
@@ -365,16 +382,16 @@ export const fromCborHex = Effect.fn(function* (cborBytes: string) {
  *
  * // Using try/catch for error handling
  * try {
- *   const result = UpdateCommittee.unsafeFromCborHex( parameters );
+ *   const result = UpdateCommittee.fromCborHexUnsafe( parameters );
  *   console.log(result);
  * } catch (error) {
- *   console.error(`UpdateCommittee.unsafeFromCborHex failed: ${error.message}`);
+ *   console.error(`UpdateCommittee.fromCborHexUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Constructors
+ * @category ConstructorsUnsafe
  */
-export const unsafeFromCborHex = (cborBytes: string) =>
+export const fromCborHexUnsafe = (cborBytes: string) =>
   Effect.runSync(fromCborHex(cborBytes));
 
 /**
@@ -419,16 +436,16 @@ export const toJson = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = UpdateCommittee.unsafeToJson(instance);
+ *   const result = UpdateCommittee.toJsonUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`UpdateCommittee.unsafeToJson failed: ${error.message}`);
+ *   console.error(`UpdateCommittee.toJsonUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeToJson = (instance: CML.UpdateCommittee): string =>
+export const toJsonUnsafe = (instance: CML.UpdateCommittee): string =>
   Effect.runSync(toJson(instance));
 
 /**
@@ -471,16 +488,16 @@ export const toJsValue = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = UpdateCommittee.unsafeToJsValue(instance);
+ *   const result = UpdateCommittee.toJsValueUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`UpdateCommittee.unsafeToJsValue failed: ${error.message}`);
+ *   console.error(`UpdateCommittee.toJsValueUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeToJsValue = (instance: CML.UpdateCommittee): any =>
+export const toJsValueUnsafe = (instance: CML.UpdateCommittee): any =>
   Effect.runSync(toJsValue(instance));
 
 /**
@@ -520,16 +537,16 @@ export const fromJson = Effect.fn(function* (json: string) {
  *
  * // Using try/catch for error handling
  * try {
- *   const result = UpdateCommittee.unsafeFromJson( parameters );
+ *   const result = UpdateCommittee.fromJsonUnsafe( parameters );
  *   console.log(result);
  * } catch (error) {
- *   console.error(`UpdateCommittee.unsafeFromJson failed: ${error.message}`);
+ *   console.error(`UpdateCommittee.fromJsonUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Constructors
+ * @category ConstructorsUnsafe
  */
-export const unsafeFromJson = (json: string) => Effect.runSync(fromJson(json));
+export const fromJsonUnsafe = (json: string) => Effect.runSync(fromJson(json));
 
 /**
  * Method actionId of UpdateCommittee
@@ -573,16 +590,16 @@ export const actionId = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = UpdateCommittee.unsafeActionId(instance);
+ *   const result = UpdateCommittee.actionIdUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`UpdateCommittee.unsafeActionId failed: ${error.message}`);
+ *   console.error(`UpdateCommittee.actionIdUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeActionId = (
+export const actionIdUnsafe = (
   instance: CML.UpdateCommittee,
 ): CML.GovActionId | undefined => Effect.runSync(actionId(instance));
 
@@ -628,16 +645,16 @@ export const coldCredentials = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = UpdateCommittee.unsafeColdCredentials(instance);
+ *   const result = UpdateCommittee.coldCredentialsUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`UpdateCommittee.unsafeColdCredentials failed: ${error.message}`);
+ *   console.error(`UpdateCommittee.coldCredentialsUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeColdCredentials = (
+export const coldCredentialsUnsafe = (
   instance: CML.UpdateCommittee,
 ): CML.CommitteeColdCredentialList => Effect.runSync(coldCredentials(instance));
 
@@ -686,16 +703,16 @@ export const credentials = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = UpdateCommittee.unsafeCredentials(instance);
+ *   const result = UpdateCommittee.credentialsUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`UpdateCommittee.unsafeCredentials failed: ${error.message}`);
+ *   console.error(`UpdateCommittee.credentialsUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeCredentials = (
+export const credentialsUnsafe = (
   instance: CML.UpdateCommittee,
 ): CML.MapCommitteeColdCredentialToEpoch =>
   Effect.runSync(credentials(instance));
@@ -742,16 +759,16 @@ export const unitInterval = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = UpdateCommittee.unsafeUnitInterval(instance);
+ *   const result = UpdateCommittee.unitIntervalUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`UpdateCommittee.unsafeUnitInterval failed: ${error.message}`);
+ *   console.error(`UpdateCommittee.unitIntervalUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeUnitInterval = (
+export const unitIntervalUnsafe = (
   instance: CML.UpdateCommittee,
 ): CML.UnitInterval => Effect.runSync(unitInterval(instance));
 
@@ -803,16 +820,16 @@ export const _new = Effect.fn(function* (
  *
  * // Using try/catch for error handling
  * try {
- *   const result = UpdateCommittee.unsafe_new( parameters );
+ *   const result = UpdateCommittee._newUnsafe( parameters );
  *   console.log(result);
  * } catch (error) {
- *   console.error(`UpdateCommittee.unsafe_new failed: ${error.message}`);
+ *   console.error(`UpdateCommittee._newUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Constructors
+ * @category ConstructorsUnsafe
  */
-export const unsafe_new = (
+export const _newUnsafe = (
   actionId: CML.GovActionId | undefined,
   coldCredentials: CML.CommitteeColdCredentialList,
   credentials: CML.MapCommitteeColdCredentialToEpoch,

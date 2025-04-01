@@ -1,9 +1,53 @@
+/**
+ * @since 2.0.0
+ */
 import * as CML from "@anastasia-labs/cardano-multiplatform-lib-nodejs";
 
+/**
+ * Type alias for the CML MetadataJsonSchema enum
+ *
+ * @since 2.0.0
+ * @category Types
+ */
 export type MetadataJsonSchema = CML.MetadataJsonSchema;
 
+/**
+ * NoConversions variant of the MetadataJsonSchema enum
+ *
+ * @example
+ * import { MetadataJsonSchema } from "@lucid-evolution/experimental";
+ *
+ * const kind = MetadataJsonSchema.NoConversions;
+ *
+ * @since 2.0.0
+ * @category Variants
+ */
 export const NoConversions = CML.MetadataJsonSchema.NoConversions;
+
+/**
+ * BasicConversions variant of the MetadataJsonSchema enum
+ *
+ * @example
+ * import { MetadataJsonSchema } from "@lucid-evolution/experimental";
+ *
+ * const kind = MetadataJsonSchema.BasicConversions;
+ *
+ * @since 2.0.0
+ * @category Variants
+ */
 export const BasicConversions = CML.MetadataJsonSchema.BasicConversions;
+
+/**
+ * DetailedSchema variant of the MetadataJsonSchema enum
+ *
+ * @example
+ * import { MetadataJsonSchema } from "@lucid-evolution/experimental";
+ *
+ * const kind = MetadataJsonSchema.DetailedSchema;
+ *
+ * @since 2.0.0
+ * @category Variants
+ */
 export const DetailedSchema = CML.MetadataJsonSchema.DetailedSchema;
 
 /**

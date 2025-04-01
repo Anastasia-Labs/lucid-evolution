@@ -1,8 +1,25 @@
+/**
+ * @since 2.0.0
+ */
 import { Data, Effect } from "effect";
 import * as CML from "@anastasia-labs/cardano-multiplatform-lib-nodejs";
 
+/**
+ * Type alias for the CML Address class
+ *
+ * @since 2.0.0
+ * @category Types
+ */
 export type Address = CML.Address;
 
+/**
+ * Error class for Address operations
+ *
+ * This error is thrown when operations on Address instances fail.
+ *
+ * @since 2.0.0
+ * @category Errors
+ */
 export class AddressError extends Data.TaggedError("AddressError")<{
   message?: string;
 }> {}
@@ -47,16 +64,16 @@ export const free = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = Address.unsafeFree(instance);
+ *   const result = Address.freeUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`Address.unsafeFree failed: ${error.message}`);
+ *   console.error(`Address.freeUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeFree = (instance: CML.Address): void =>
+export const freeUnsafe = (instance: CML.Address): void =>
   Effect.runSync(free(instance));
 
 /**
@@ -99,16 +116,16 @@ export const toJson = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = Address.unsafeToJson(instance);
+ *   const result = Address.toJsonUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`Address.unsafeToJson failed: ${error.message}`);
+ *   console.error(`Address.toJsonUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeToJson = (instance: CML.Address): string =>
+export const toJsonUnsafe = (instance: CML.Address): string =>
   Effect.runSync(toJson(instance));
 
 /**
@@ -151,16 +168,16 @@ export const toJsValue = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = Address.unsafeToJsValue(instance);
+ *   const result = Address.toJsValueUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`Address.unsafeToJsValue failed: ${error.message}`);
+ *   console.error(`Address.toJsValueUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeToJsValue = (instance: CML.Address): any =>
+export const toJsValueUnsafe = (instance: CML.Address): any =>
   Effect.runSync(toJsValue(instance));
 
 /**
@@ -200,16 +217,16 @@ export const fromJson = Effect.fn(function* (json: string) {
  *
  * // Using try/catch for error handling
  * try {
- *   const result = Address.unsafeFromJson( parameters );
+ *   const result = Address.fromJsonUnsafe( parameters );
  *   console.log(result);
  * } catch (error) {
- *   console.error(`Address.unsafeFromJson failed: ${error.message}`);
+ *   console.error(`Address.fromJsonUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Constructors
+ * @category ConstructorsUnsafe
  */
-export const unsafeFromJson = (json: string) => Effect.runSync(fromJson(json));
+export const fromJsonUnsafe = (json: string) => Effect.runSync(fromJson(json));
 
 /**
  * Method header of Address
@@ -251,16 +268,16 @@ export const header = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = Address.unsafeHeader(instance);
+ *   const result = Address.headerUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`Address.unsafeHeader failed: ${error.message}`);
+ *   console.error(`Address.headerUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeHeader = (instance: CML.Address): number =>
+export const headerUnsafe = (instance: CML.Address): number =>
   Effect.runSync(header(instance));
 
 /**
@@ -303,16 +320,16 @@ export const headerMatchesKind = Effect.fn(function* (
  *
  * // Using try/catch for error handling
  * try {
- *   const result = Address.unsafeHeaderMatchesKind( parameters );
+ *   const result = Address.headerMatchesKindUnsafe( parameters );
  *   console.log(result);
  * } catch (error) {
- *   console.error(`Address.unsafeHeaderMatchesKind failed: ${error.message}`);
+ *   console.error(`Address.headerMatchesKindUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Constructors
+ * @category ConstructorsUnsafe
  */
-export const unsafeHeaderMatchesKind = (
+export const headerMatchesKindUnsafe = (
   header: number,
   kind: CML.AddressHeaderKind,
 ) => Effect.runSync(headerMatchesKind(header, kind));
@@ -360,16 +377,16 @@ export const toBech32 = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = Address.unsafeToBech32(instance,  parameters );
+ *   const result = Address.toBech32Unsafe(instance,  parameters );
  *   console.log(result);
  * } catch (error) {
- *   console.error(`Address.unsafeToBech32 failed: ${error.message}`);
+ *   console.error(`Address.toBech32Unsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeToBech32 = (instance: CML.Address, prefix: string): string =>
+export const toBech32Unsafe = (instance: CML.Address, prefix: string): string =>
   Effect.runSync(toBech32(instance, prefix));
 
 /**
@@ -409,16 +426,16 @@ export const fromBech32 = Effect.fn(function* (bechStr: string) {
  *
  * // Using try/catch for error handling
  * try {
- *   const result = Address.unsafeFromBech32( parameters );
+ *   const result = Address.fromBech32Unsafe( parameters );
  *   console.log(result);
  * } catch (error) {
- *   console.error(`Address.unsafeFromBech32 failed: ${error.message}`);
+ *   console.error(`Address.fromBech32Unsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Constructors
+ * @category ConstructorsUnsafe
  */
-export const unsafeFromBech32 = (bechStr: string) =>
+export const fromBech32Unsafe = (bechStr: string) =>
   Effect.runSync(fromBech32(bechStr));
 
 /**
@@ -458,16 +475,16 @@ export const isValidBech32 = Effect.fn(function* (bechStr: string) {
  *
  * // Using try/catch for error handling
  * try {
- *   const result = Address.unsafeIsValidBech32( parameters );
+ *   const result = Address.isValidBech32Unsafe( parameters );
  *   console.log(result);
  * } catch (error) {
- *   console.error(`Address.unsafeIsValidBech32 failed: ${error.message}`);
+ *   console.error(`Address.isValidBech32Unsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Constructors
+ * @category ConstructorsUnsafe
  */
-export const unsafeIsValidBech32 = (bechStr: string) =>
+export const isValidBech32Unsafe = (bechStr: string) =>
   Effect.runSync(isValidBech32(bechStr));
 
 /**
@@ -507,16 +524,16 @@ export const isValid = Effect.fn(function* (bechStr: string) {
  *
  * // Using try/catch for error handling
  * try {
- *   const result = Address.unsafeIsValid( parameters );
+ *   const result = Address.isValidUnsafe( parameters );
  *   console.log(result);
  * } catch (error) {
- *   console.error(`Address.unsafeIsValid failed: ${error.message}`);
+ *   console.error(`Address.isValidUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Constructors
+ * @category ConstructorsUnsafe
  */
-export const unsafeIsValid = (bechStr: string) =>
+export const isValidUnsafe = (bechStr: string) =>
   Effect.runSync(isValid(bechStr));
 
 /**
@@ -559,16 +576,16 @@ export const networkId = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = Address.unsafeNetworkId(instance);
+ *   const result = Address.networkIdUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`Address.unsafeNetworkId failed: ${error.message}`);
+ *   console.error(`Address.networkIdUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeNetworkId = (instance: CML.Address): number =>
+export const networkIdUnsafe = (instance: CML.Address): number =>
   Effect.runSync(networkId(instance));
 
 /**
@@ -613,16 +630,16 @@ export const paymentCred = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = Address.unsafePaymentCred(instance);
+ *   const result = Address.paymentCredUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`Address.unsafePaymentCred failed: ${error.message}`);
+ *   console.error(`Address.paymentCredUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafePaymentCred = (
+export const paymentCredUnsafe = (
   instance: CML.Address,
 ): CML.Credential | undefined => Effect.runSync(paymentCred(instance));
 
@@ -668,16 +685,16 @@ export const stakingCred = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = Address.unsafeStakingCred(instance);
+ *   const result = Address.stakingCredUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`Address.unsafeStakingCred failed: ${error.message}`);
+ *   console.error(`Address.stakingCredUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeStakingCred = (
+export const stakingCredUnsafe = (
   instance: CML.Address,
 ): CML.Credential | undefined => Effect.runSync(stakingCred(instance));
 
@@ -721,16 +738,16 @@ export const kind = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = Address.unsafeKind(instance);
+ *   const result = Address.kindUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`Address.unsafeKind failed: ${error.message}`);
+ *   console.error(`Address.kindUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeKind = (instance: CML.Address): CML.AddressKind =>
+export const kindUnsafe = (instance: CML.Address): CML.AddressKind =>
   Effect.runSync(kind(instance));
 
 /**
@@ -773,16 +790,16 @@ export const toRawBytes = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = Address.unsafeToRawBytes(instance);
+ *   const result = Address.toRawBytesUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`Address.unsafeToRawBytes failed: ${error.message}`);
+ *   console.error(`Address.toRawBytesUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeToRawBytes = (instance: CML.Address): Uint8Array =>
+export const toRawBytesUnsafe = (instance: CML.Address): Uint8Array =>
   Effect.runSync(toRawBytes(instance));
 
 /**
@@ -822,16 +839,16 @@ export const fromRawBytes = Effect.fn(function* (data: Uint8Array) {
  *
  * // Using try/catch for error handling
  * try {
- *   const result = Address.unsafeFromRawBytes( parameters );
+ *   const result = Address.fromRawBytesUnsafe( parameters );
  *   console.log(result);
  * } catch (error) {
- *   console.error(`Address.unsafeFromRawBytes failed: ${error.message}`);
+ *   console.error(`Address.fromRawBytesUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Constructors
+ * @category ConstructorsUnsafe
  */
-export const unsafeFromRawBytes = (data: Uint8Array) =>
+export const fromRawBytesUnsafe = (data: Uint8Array) =>
   Effect.runSync(fromRawBytes(data));
 
 /**
@@ -874,16 +891,16 @@ export const toHex = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = Address.unsafeToHex(instance);
+ *   const result = Address.toHexUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`Address.unsafeToHex failed: ${error.message}`);
+ *   console.error(`Address.toHexUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeToHex = (instance: CML.Address): string =>
+export const toHexUnsafe = (instance: CML.Address): string =>
   Effect.runSync(toHex(instance));
 
 /**
@@ -923,13 +940,13 @@ export const fromHex = Effect.fn(function* (hex: string) {
  *
  * // Using try/catch for error handling
  * try {
- *   const result = Address.unsafeFromHex( parameters );
+ *   const result = Address.fromHexUnsafe( parameters );
  *   console.log(result);
  * } catch (error) {
- *   console.error(`Address.unsafeFromHex failed: ${error.message}`);
+ *   console.error(`Address.fromHexUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Constructors
+ * @category ConstructorsUnsafe
  */
-export const unsafeFromHex = (hex: string) => Effect.runSync(fromHex(hex));
+export const fromHexUnsafe = (hex: string) => Effect.runSync(fromHex(hex));

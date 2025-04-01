@@ -1,8 +1,25 @@
+/**
+ * @since 2.0.0
+ */
 import { Data, Effect } from "effect";
 import * as CML from "@anastasia-labs/cardano-multiplatform-lib-nodejs";
 
+/**
+ * Type alias for the CML PlutusDataList class
+ *
+ * @since 2.0.0
+ * @category Types
+ */
 export type PlutusDataList = CML.PlutusDataList;
 
+/**
+ * Error class for PlutusDataList operations
+ *
+ * This error is thrown when operations on PlutusDataList instances fail.
+ *
+ * @since 2.0.0
+ * @category Errors
+ */
 export class PlutusDataListError extends Data.TaggedError(
   "PlutusDataListError",
 )<{
@@ -49,16 +66,16 @@ export const free = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = PlutusDataList.unsafeFree(instance);
+ *   const result = PlutusDataList.freeUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`PlutusDataList.unsafeFree failed: ${error.message}`);
+ *   console.error(`PlutusDataList.freeUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeFree = (instance: CML.PlutusDataList): void =>
+export const freeUnsafe = (instance: CML.PlutusDataList): void =>
   Effect.runSync(free(instance));
 
 /**
@@ -98,16 +115,16 @@ export const _new = Effect.fn(function* () {
  *
  * // Using try/catch for error handling
  * try {
- *   const result = PlutusDataList.unsafe_new();
+ *   const result = PlutusDataList._newUnsafe();
  *   console.log(result);
  * } catch (error) {
- *   console.error(`PlutusDataList.unsafe_new failed: ${error.message}`);
+ *   console.error(`PlutusDataList._newUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Constructors
+ * @category ConstructorsUnsafe
  */
-export const unsafe_new = () => Effect.runSync(_new());
+export const _newUnsafe = () => Effect.runSync(_new());
 
 /**
  * Method len of PlutusDataList
@@ -149,16 +166,16 @@ export const len = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = PlutusDataList.unsafeLen(instance);
+ *   const result = PlutusDataList.lenUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`PlutusDataList.unsafeLen failed: ${error.message}`);
+ *   console.error(`PlutusDataList.lenUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeLen = (instance: CML.PlutusDataList): number =>
+export const lenUnsafe = (instance: CML.PlutusDataList): number =>
   Effect.runSync(len(instance));
 
 /**
@@ -204,16 +221,16 @@ export const get = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = PlutusDataList.unsafeGet(instance,  parameters );
+ *   const result = PlutusDataList.getUnsafe(instance,  parameters );
  *   console.log(result);
  * } catch (error) {
- *   console.error(`PlutusDataList.unsafeGet failed: ${error.message}`);
+ *   console.error(`PlutusDataList.getUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeGet = (
+export const getUnsafe = (
   instance: CML.PlutusDataList,
   index: number,
 ): CML.PlutusData => Effect.runSync(get(instance, index));
@@ -261,16 +278,16 @@ export const add = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = PlutusDataList.unsafeAdd(instance,  parameters );
+ *   const result = PlutusDataList.addUnsafe(instance,  parameters );
  *   console.log(result);
  * } catch (error) {
- *   console.error(`PlutusDataList.unsafeAdd failed: ${error.message}`);
+ *   console.error(`PlutusDataList.addUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeAdd = (
+export const addUnsafe = (
   instance: CML.PlutusDataList,
   elem: CML.PlutusData,
 ): void => Effect.runSync(add(instance, elem));

@@ -1,8 +1,25 @@
+/**
+ * @since 2.0.0
+ */
 import { Data, Effect } from "effect";
 import * as CML from "@anastasia-labs/cardano-multiplatform-lib-nodejs";
 
+/**
+ * Type alias for the CML MultiHostName class
+ *
+ * @since 2.0.0
+ * @category Types
+ */
 export type MultiHostName = CML.MultiHostName;
 
+/**
+ * Error class for MultiHostName operations
+ *
+ * This error is thrown when operations on MultiHostName instances fail.
+ *
+ * @since 2.0.0
+ * @category Errors
+ */
 export class MultiHostNameError extends Data.TaggedError("MultiHostNameError")<{
   message?: string;
 }> {}
@@ -47,16 +64,16 @@ export const free = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = MultiHostName.unsafeFree(instance);
+ *   const result = MultiHostName.freeUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`MultiHostName.unsafeFree failed: ${error.message}`);
+ *   console.error(`MultiHostName.freeUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeFree = (instance: CML.MultiHostName): void =>
+export const freeUnsafe = (instance: CML.MultiHostName): void =>
   Effect.runSync(free(instance));
 
 /**
@@ -101,16 +118,16 @@ export const toCborBytes = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = MultiHostName.unsafeToCborBytes(instance);
+ *   const result = MultiHostName.toCborBytesUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`MultiHostName.unsafeToCborBytes failed: ${error.message}`);
+ *   console.error(`MultiHostName.toCborBytesUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeToCborBytes = (instance: CML.MultiHostName): Uint8Array =>
+export const toCborBytesUnsafe = (instance: CML.MultiHostName): Uint8Array =>
   Effect.runSync(toCborBytes(instance));
 
 /**
@@ -155,16 +172,16 @@ export const toCanonicalCborBytes = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = MultiHostName.unsafeToCanonicalCborBytes(instance);
+ *   const result = MultiHostName.toCanonicalCborBytesUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`MultiHostName.unsafeToCanonicalCborBytes failed: ${error.message}`);
+ *   console.error(`MultiHostName.toCanonicalCborBytesUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeToCanonicalCborBytes = (
+export const toCanonicalCborBytesUnsafe = (
   instance: CML.MultiHostName,
 ): Uint8Array => Effect.runSync(toCanonicalCborBytes(instance));
 
@@ -205,16 +222,16 @@ export const fromCborBytes = Effect.fn(function* (cborBytes: Uint8Array) {
  *
  * // Using try/catch for error handling
  * try {
- *   const result = MultiHostName.unsafeFromCborBytes( parameters );
+ *   const result = MultiHostName.fromCborBytesUnsafe( parameters );
  *   console.log(result);
  * } catch (error) {
- *   console.error(`MultiHostName.unsafeFromCborBytes failed: ${error.message}`);
+ *   console.error(`MultiHostName.fromCborBytesUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Constructors
+ * @category ConstructorsUnsafe
  */
-export const unsafeFromCborBytes = (cborBytes: Uint8Array) =>
+export const fromCborBytesUnsafe = (cborBytes: Uint8Array) =>
   Effect.runSync(fromCborBytes(cborBytes));
 
 /**
@@ -257,16 +274,16 @@ export const toCborHex = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = MultiHostName.unsafeToCborHex(instance);
+ *   const result = MultiHostName.toCborHexUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`MultiHostName.unsafeToCborHex failed: ${error.message}`);
+ *   console.error(`MultiHostName.toCborHexUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeToCborHex = (instance: CML.MultiHostName): string =>
+export const toCborHexUnsafe = (instance: CML.MultiHostName): string =>
   Effect.runSync(toCborHex(instance));
 
 /**
@@ -309,16 +326,16 @@ export const toCanonicalCborHex = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = MultiHostName.unsafeToCanonicalCborHex(instance);
+ *   const result = MultiHostName.toCanonicalCborHexUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`MultiHostName.unsafeToCanonicalCborHex failed: ${error.message}`);
+ *   console.error(`MultiHostName.toCanonicalCborHexUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeToCanonicalCborHex = (instance: CML.MultiHostName): string =>
+export const toCanonicalCborHexUnsafe = (instance: CML.MultiHostName): string =>
   Effect.runSync(toCanonicalCborHex(instance));
 
 /**
@@ -358,16 +375,16 @@ export const fromCborHex = Effect.fn(function* (cborBytes: string) {
  *
  * // Using try/catch for error handling
  * try {
- *   const result = MultiHostName.unsafeFromCborHex( parameters );
+ *   const result = MultiHostName.fromCborHexUnsafe( parameters );
  *   console.log(result);
  * } catch (error) {
- *   console.error(`MultiHostName.unsafeFromCborHex failed: ${error.message}`);
+ *   console.error(`MultiHostName.fromCborHexUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Constructors
+ * @category ConstructorsUnsafe
  */
-export const unsafeFromCborHex = (cborBytes: string) =>
+export const fromCborHexUnsafe = (cborBytes: string) =>
   Effect.runSync(fromCborHex(cborBytes));
 
 /**
@@ -410,16 +427,16 @@ export const toJson = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = MultiHostName.unsafeToJson(instance);
+ *   const result = MultiHostName.toJsonUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`MultiHostName.unsafeToJson failed: ${error.message}`);
+ *   console.error(`MultiHostName.toJsonUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeToJson = (instance: CML.MultiHostName): string =>
+export const toJsonUnsafe = (instance: CML.MultiHostName): string =>
   Effect.runSync(toJson(instance));
 
 /**
@@ -462,16 +479,16 @@ export const toJsValue = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = MultiHostName.unsafeToJsValue(instance);
+ *   const result = MultiHostName.toJsValueUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`MultiHostName.unsafeToJsValue failed: ${error.message}`);
+ *   console.error(`MultiHostName.toJsValueUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeToJsValue = (instance: CML.MultiHostName): any =>
+export const toJsValueUnsafe = (instance: CML.MultiHostName): any =>
   Effect.runSync(toJsValue(instance));
 
 /**
@@ -511,16 +528,16 @@ export const fromJson = Effect.fn(function* (json: string) {
  *
  * // Using try/catch for error handling
  * try {
- *   const result = MultiHostName.unsafeFromJson( parameters );
+ *   const result = MultiHostName.fromJsonUnsafe( parameters );
  *   console.log(result);
  * } catch (error) {
- *   console.error(`MultiHostName.unsafeFromJson failed: ${error.message}`);
+ *   console.error(`MultiHostName.fromJsonUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Constructors
+ * @category ConstructorsUnsafe
  */
-export const unsafeFromJson = (json: string) => Effect.runSync(fromJson(json));
+export const fromJsonUnsafe = (json: string) => Effect.runSync(fromJson(json));
 
 /**
  * Method dnsName of MultiHostName
@@ -564,16 +581,16 @@ export const dnsName = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = MultiHostName.unsafeDnsName(instance);
+ *   const result = MultiHostName.dnsNameUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`MultiHostName.unsafeDnsName failed: ${error.message}`);
+ *   console.error(`MultiHostName.dnsNameUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeDnsName = (instance: CML.MultiHostName): CML.DNSName =>
+export const dnsNameUnsafe = (instance: CML.MultiHostName): CML.DNSName =>
   Effect.runSync(dnsName(instance));
 
 /**
@@ -613,14 +630,14 @@ export const _new = Effect.fn(function* (dnsName: CML.DNSName) {
  *
  * // Using try/catch for error handling
  * try {
- *   const result = MultiHostName.unsafe_new( parameters );
+ *   const result = MultiHostName._newUnsafe( parameters );
  *   console.log(result);
  * } catch (error) {
- *   console.error(`MultiHostName.unsafe_new failed: ${error.message}`);
+ *   console.error(`MultiHostName._newUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Constructors
+ * @category ConstructorsUnsafe
  */
-export const unsafe_new = (dnsName: CML.DNSName) =>
+export const _newUnsafe = (dnsName: CML.DNSName) =>
   Effect.runSync(_new(dnsName));

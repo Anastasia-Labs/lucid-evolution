@@ -1,8 +1,25 @@
+/**
+ * @since 2.0.0
+ */
 import { Data, Effect } from "effect";
 import * as CML from "@anastasia-labs/cardano-multiplatform-lib-nodejs";
 
+/**
+ * Type alias for the CML Ed25519KeyHash class
+ *
+ * @since 2.0.0
+ * @category Types
+ */
 export type Ed25519KeyHash = CML.Ed25519KeyHash;
 
+/**
+ * Error class for Ed25519KeyHash operations
+ *
+ * This error is thrown when operations on Ed25519KeyHash instances fail.
+ *
+ * @since 2.0.0
+ * @category Errors
+ */
 export class Ed25519KeyHashError extends Data.TaggedError(
   "Ed25519KeyHashError",
 )<{
@@ -49,16 +66,16 @@ export const free = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = Ed25519KeyHash.unsafeFree(instance);
+ *   const result = Ed25519KeyHash.freeUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`Ed25519KeyHash.unsafeFree failed: ${error.message}`);
+ *   console.error(`Ed25519KeyHash.freeUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeFree = (instance: CML.Ed25519KeyHash): void =>
+export const freeUnsafe = (instance: CML.Ed25519KeyHash): void =>
   Effect.runSync(free(instance));
 
 /**
@@ -104,16 +121,16 @@ export const toBech32 = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = Ed25519KeyHash.unsafeToBech32(instance,  parameters );
+ *   const result = Ed25519KeyHash.toBech32Unsafe(instance,  parameters );
  *   console.log(result);
  * } catch (error) {
- *   console.error(`Ed25519KeyHash.unsafeToBech32 failed: ${error.message}`);
+ *   console.error(`Ed25519KeyHash.toBech32Unsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeToBech32 = (
+export const toBech32Unsafe = (
   instance: CML.Ed25519KeyHash,
   prefix: string,
 ): string => Effect.runSync(toBech32(instance, prefix));
@@ -155,16 +172,16 @@ export const fromBech32 = Effect.fn(function* (bech32Str: string) {
  *
  * // Using try/catch for error handling
  * try {
- *   const result = Ed25519KeyHash.unsafeFromBech32( parameters );
+ *   const result = Ed25519KeyHash.fromBech32Unsafe( parameters );
  *   console.log(result);
  * } catch (error) {
- *   console.error(`Ed25519KeyHash.unsafeFromBech32 failed: ${error.message}`);
+ *   console.error(`Ed25519KeyHash.fromBech32Unsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Constructors
+ * @category ConstructorsUnsafe
  */
-export const unsafeFromBech32 = (bech32Str: string) =>
+export const fromBech32Unsafe = (bech32Str: string) =>
   Effect.runSync(fromBech32(bech32Str));
 
 /**
@@ -209,16 +226,16 @@ export const toRawBytes = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = Ed25519KeyHash.unsafeToRawBytes(instance);
+ *   const result = Ed25519KeyHash.toRawBytesUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`Ed25519KeyHash.unsafeToRawBytes failed: ${error.message}`);
+ *   console.error(`Ed25519KeyHash.toRawBytesUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeToRawBytes = (instance: CML.Ed25519KeyHash): Uint8Array =>
+export const toRawBytesUnsafe = (instance: CML.Ed25519KeyHash): Uint8Array =>
   Effect.runSync(toRawBytes(instance));
 
 /**
@@ -258,16 +275,16 @@ export const fromRawBytes = Effect.fn(function* (bytes: Uint8Array) {
  *
  * // Using try/catch for error handling
  * try {
- *   const result = Ed25519KeyHash.unsafeFromRawBytes( parameters );
+ *   const result = Ed25519KeyHash.fromRawBytesUnsafe( parameters );
  *   console.log(result);
  * } catch (error) {
- *   console.error(`Ed25519KeyHash.unsafeFromRawBytes failed: ${error.message}`);
+ *   console.error(`Ed25519KeyHash.fromRawBytesUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Constructors
+ * @category ConstructorsUnsafe
  */
-export const unsafeFromRawBytes = (bytes: Uint8Array) =>
+export const fromRawBytesUnsafe = (bytes: Uint8Array) =>
   Effect.runSync(fromRawBytes(bytes));
 
 /**
@@ -310,16 +327,16 @@ export const toHex = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = Ed25519KeyHash.unsafeToHex(instance);
+ *   const result = Ed25519KeyHash.toHexUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`Ed25519KeyHash.unsafeToHex failed: ${error.message}`);
+ *   console.error(`Ed25519KeyHash.toHexUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeToHex = (instance: CML.Ed25519KeyHash): string =>
+export const toHexUnsafe = (instance: CML.Ed25519KeyHash): string =>
   Effect.runSync(toHex(instance));
 
 /**
@@ -359,13 +376,13 @@ export const fromHex = Effect.fn(function* (input: string) {
  *
  * // Using try/catch for error handling
  * try {
- *   const result = Ed25519KeyHash.unsafeFromHex( parameters );
+ *   const result = Ed25519KeyHash.fromHexUnsafe( parameters );
  *   console.log(result);
  * } catch (error) {
- *   console.error(`Ed25519KeyHash.unsafeFromHex failed: ${error.message}`);
+ *   console.error(`Ed25519KeyHash.fromHexUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Constructors
+ * @category ConstructorsUnsafe
  */
-export const unsafeFromHex = (input: string) => Effect.runSync(fromHex(input));
+export const fromHexUnsafe = (input: string) => Effect.runSync(fromHex(input));

@@ -1,6 +1,17 @@
+/**
+ * @since 2.0.0
+ */
 import { Data, Effect } from "effect";
 import * as CML from "@anastasia-labs/cardano-multiplatform-lib-nodejs";
 
+/**
+ * Error class for hash_auxiliary_data function
+ *
+ * This error is thrown when the hash_auxiliary_data function fails.
+ *
+ * @since 2.0.0
+ * @category Errors
+ */
 export class HashAuxiliaryDataError extends Data.TaggedError(
   "HashAuxiliaryDataError",
 )<{
@@ -39,18 +50,18 @@ export const hashAuxiliaryData = Effect.fn(function* (
  * Unsafely calls hash_auxiliary_data function without Effect wrapper
  *
  * @example
- * import { unsafeHashAuxiliaryData } from "@lucid-evolution/experimental/CML/functions";
+ * import { hashAuxiliaryDataUnsafe } from "@lucid-evolution/experimental/CML/functions";
  *
  * try {
- *   const result = unsafeHashAuxiliaryData(AuxiliaryData instance );
+ *   const result = hashAuxiliaryDataUnsafe(AuxiliaryData instance );
  *   console.log(result);
  * } catch (error) {
- *   console.error(`unsafeHashAuxiliaryData failed: ${error.message}`);
+ *   console.error(`hashAuxiliaryDataUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Functions
+ * @category FunctionsUnsafe
  */
-export const unsafeHashAuxiliaryData = (
+export const hashAuxiliaryDataUnsafe = (
   auxiliaryData: CML.AuxiliaryData,
 ): CML.AuxiliaryDataHash => Effect.runSync(hashAuxiliaryData(auxiliaryData));

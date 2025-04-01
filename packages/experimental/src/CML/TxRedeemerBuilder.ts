@@ -1,8 +1,25 @@
+/**
+ * @since 2.0.0
+ */
 import { Data, Effect } from "effect";
 import * as CML from "@anastasia-labs/cardano-multiplatform-lib-nodejs";
 
+/**
+ * Type alias for the CML TxRedeemerBuilder class
+ *
+ * @since 2.0.0
+ * @category Types
+ */
 export type TxRedeemerBuilder = CML.TxRedeemerBuilder;
 
+/**
+ * Error class for TxRedeemerBuilder operations
+ *
+ * This error is thrown when operations on TxRedeemerBuilder instances fail.
+ *
+ * @since 2.0.0
+ * @category Errors
+ */
 export class TxRedeemerBuilderError extends Data.TaggedError(
   "TxRedeemerBuilderError",
 )<{
@@ -51,16 +68,16 @@ export const free = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = TxRedeemerBuilder.unsafeFree(instance);
+ *   const result = TxRedeemerBuilder.freeUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`TxRedeemerBuilder.unsafeFree failed: ${error.message}`);
+ *   console.error(`TxRedeemerBuilder.freeUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeFree = (instance: CML.TxRedeemerBuilder): void =>
+export const freeUnsafe = (instance: CML.TxRedeemerBuilder): void =>
   Effect.runSync(free(instance));
 
 /**
@@ -105,16 +122,16 @@ export const build = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = TxRedeemerBuilder.unsafeBuild(instance);
+ *   const result = TxRedeemerBuilder.buildUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`TxRedeemerBuilder.unsafeBuild failed: ${error.message}`);
+ *   console.error(`TxRedeemerBuilder.buildUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeBuild = (instance: CML.TxRedeemerBuilder): CML.Redeemers =>
+export const buildUnsafe = (instance: CML.TxRedeemerBuilder): CML.Redeemers =>
   Effect.runSync(build(instance));
 
 /**
@@ -161,16 +178,16 @@ export const setExunits = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = TxRedeemerBuilder.unsafeSetExunits(instance,  parameters );
+ *   const result = TxRedeemerBuilder.setExunitsUnsafe(instance,  parameters );
  *   console.log(result);
  * } catch (error) {
- *   console.error(`TxRedeemerBuilder.unsafeSetExunits failed: ${error.message}`);
+ *   console.error(`TxRedeemerBuilder.setExunitsUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeSetExunits = (
+export const setExunitsUnsafe = (
   instance: CML.TxRedeemerBuilder,
   redeemer: CML.RedeemerWitnessKey,
   exUnits: CML.ExUnits,
@@ -218,16 +235,16 @@ export const draftBody = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = TxRedeemerBuilder.unsafeDraftBody(instance);
+ *   const result = TxRedeemerBuilder.draftBodyUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`TxRedeemerBuilder.unsafeDraftBody failed: ${error.message}`);
+ *   console.error(`TxRedeemerBuilder.draftBodyUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeDraftBody = (
+export const draftBodyUnsafe = (
   instance: CML.TxRedeemerBuilder,
 ): CML.TransactionBody => Effect.runSync(draftBody(instance));
 
@@ -273,16 +290,16 @@ export const auxiliaryData = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = TxRedeemerBuilder.unsafeAuxiliaryData(instance);
+ *   const result = TxRedeemerBuilder.auxiliaryDataUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`TxRedeemerBuilder.unsafeAuxiliaryData failed: ${error.message}`);
+ *   console.error(`TxRedeemerBuilder.auxiliaryDataUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeAuxiliaryData = (
+export const auxiliaryDataUnsafe = (
   instance: CML.TxRedeemerBuilder,
 ): CML.AuxiliaryData | undefined => Effect.runSync(auxiliaryData(instance));
 
@@ -328,15 +345,15 @@ export const draftTx = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = TxRedeemerBuilder.unsafeDraftTx(instance);
+ *   const result = TxRedeemerBuilder.draftTxUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`TxRedeemerBuilder.unsafeDraftTx failed: ${error.message}`);
+ *   console.error(`TxRedeemerBuilder.draftTxUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeDraftTx = (
+export const draftTxUnsafe = (
   instance: CML.TxRedeemerBuilder,
 ): CML.Transaction => Effect.runSync(draftTx(instance));

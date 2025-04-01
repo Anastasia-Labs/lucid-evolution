@@ -1,8 +1,25 @@
+/**
+ * @since 2.0.0
+ */
 import { Data, Effect } from "effect";
 import * as CML from "@anastasia-labs/cardano-multiplatform-lib-nodejs";
 
+/**
+ * Type alias for the CML RequiredWitnessSet class
+ *
+ * @since 2.0.0
+ * @category Types
+ */
 export type RequiredWitnessSet = CML.RequiredWitnessSet;
 
+/**
+ * Error class for RequiredWitnessSet operations
+ *
+ * This error is thrown when operations on RequiredWitnessSet instances fail.
+ *
+ * @since 2.0.0
+ * @category Errors
+ */
 export class RequiredWitnessSetError extends Data.TaggedError(
   "RequiredWitnessSetError",
 )<{
@@ -51,16 +68,16 @@ export const free = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = RequiredWitnessSet.unsafeFree(instance);
+ *   const result = RequiredWitnessSet.freeUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`RequiredWitnessSet.unsafeFree failed: ${error.message}`);
+ *   console.error(`RequiredWitnessSet.freeUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeFree = (instance: CML.RequiredWitnessSet): void =>
+export const freeUnsafe = (instance: CML.RequiredWitnessSet): void =>
   Effect.runSync(free(instance));
 
 /**
@@ -106,16 +123,16 @@ export const addVkeyKeyHash = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = RequiredWitnessSet.unsafeAddVkeyKeyHash(instance,  parameters );
+ *   const result = RequiredWitnessSet.addVkeyKeyHashUnsafe(instance,  parameters );
  *   console.log(result);
  * } catch (error) {
- *   console.error(`RequiredWitnessSet.unsafeAddVkeyKeyHash failed: ${error.message}`);
+ *   console.error(`RequiredWitnessSet.addVkeyKeyHashUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeAddVkeyKeyHash = (
+export const addVkeyKeyHashUnsafe = (
   instance: CML.RequiredWitnessSet,
   hash: CML.Ed25519KeyHash,
 ): void => Effect.runSync(addVkeyKeyHash(instance, hash));
@@ -163,16 +180,16 @@ export const addBootstrap = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = RequiredWitnessSet.unsafeAddBootstrap(instance,  parameters );
+ *   const result = RequiredWitnessSet.addBootstrapUnsafe(instance,  parameters );
  *   console.log(result);
  * } catch (error) {
- *   console.error(`RequiredWitnessSet.unsafeAddBootstrap failed: ${error.message}`);
+ *   console.error(`RequiredWitnessSet.addBootstrapUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeAddBootstrap = (
+export const addBootstrapUnsafe = (
   instance: CML.RequiredWitnessSet,
   address: CML.ByronAddress,
 ): void => Effect.runSync(addBootstrap(instance, address));
@@ -220,16 +237,16 @@ export const addScriptRef = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = RequiredWitnessSet.unsafeAddScriptRef(instance,  parameters );
+ *   const result = RequiredWitnessSet.addScriptRefUnsafe(instance,  parameters );
  *   console.log(result);
  * } catch (error) {
- *   console.error(`RequiredWitnessSet.unsafeAddScriptRef failed: ${error.message}`);
+ *   console.error(`RequiredWitnessSet.addScriptRefUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeAddScriptRef = (
+export const addScriptRefUnsafe = (
   instance: CML.RequiredWitnessSet,
   scriptHash: CML.ScriptHash,
 ): void => Effect.runSync(addScriptRef(instance, scriptHash));
@@ -277,16 +294,16 @@ export const addScriptHash = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = RequiredWitnessSet.unsafeAddScriptHash(instance,  parameters );
+ *   const result = RequiredWitnessSet.addScriptHashUnsafe(instance,  parameters );
  *   console.log(result);
  * } catch (error) {
- *   console.error(`RequiredWitnessSet.unsafeAddScriptHash failed: ${error.message}`);
+ *   console.error(`RequiredWitnessSet.addScriptHashUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeAddScriptHash = (
+export const addScriptHashUnsafe = (
   instance: CML.RequiredWitnessSet,
   scriptHash: CML.ScriptHash,
 ): void => Effect.runSync(addScriptHash(instance, scriptHash));
@@ -334,16 +351,16 @@ export const addPlutusDatumHash = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = RequiredWitnessSet.unsafeAddPlutusDatumHash(instance,  parameters );
+ *   const result = RequiredWitnessSet.addPlutusDatumHashUnsafe(instance,  parameters );
  *   console.log(result);
  * } catch (error) {
- *   console.error(`RequiredWitnessSet.unsafeAddPlutusDatumHash failed: ${error.message}`);
+ *   console.error(`RequiredWitnessSet.addPlutusDatumHashUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeAddPlutusDatumHash = (
+export const addPlutusDatumHashUnsafe = (
   instance: CML.RequiredWitnessSet,
   plutusDatum: CML.DatumHash,
 ): void => Effect.runSync(addPlutusDatumHash(instance, plutusDatum));
@@ -391,16 +408,16 @@ export const addRedeemerTag = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = RequiredWitnessSet.unsafeAddRedeemerTag(instance,  parameters );
+ *   const result = RequiredWitnessSet.addRedeemerTagUnsafe(instance,  parameters );
  *   console.log(result);
  * } catch (error) {
- *   console.error(`RequiredWitnessSet.unsafeAddRedeemerTag failed: ${error.message}`);
+ *   console.error(`RequiredWitnessSet.addRedeemerTagUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeAddRedeemerTag = (
+export const addRedeemerTagUnsafe = (
   instance: CML.RequiredWitnessSet,
   redeemer: CML.RedeemerWitnessKey,
 ): void => Effect.runSync(addRedeemerTag(instance, redeemer));
@@ -448,16 +465,16 @@ export const addAll = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = RequiredWitnessSet.unsafeAddAll(instance,  parameters );
+ *   const result = RequiredWitnessSet.addAllUnsafe(instance,  parameters );
  *   console.log(result);
  * } catch (error) {
- *   console.error(`RequiredWitnessSet.unsafeAddAll failed: ${error.message}`);
+ *   console.error(`RequiredWitnessSet.addAllUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeAddAll = (
+export const addAllUnsafe = (
   instance: CML.RequiredWitnessSet,
   requirements: CML.RequiredWitnessSet,
 ): void => Effect.runSync(addAll(instance, requirements));
@@ -499,16 +516,16 @@ export const _new = Effect.fn(function* () {
  *
  * // Using try/catch for error handling
  * try {
- *   const result = RequiredWitnessSet.unsafe_new();
+ *   const result = RequiredWitnessSet._newUnsafe();
  *   console.log(result);
  * } catch (error) {
- *   console.error(`RequiredWitnessSet.unsafe_new failed: ${error.message}`);
+ *   console.error(`RequiredWitnessSet._newUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Constructors
+ * @category ConstructorsUnsafe
  */
-export const unsafe_new = () => Effect.runSync(_new());
+export const _newUnsafe = () => Effect.runSync(_new());
 
 /**
  * Method withdrawalRequiredWits of RequiredWitnessSet
@@ -553,16 +570,16 @@ export const withdrawalRequiredWits = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = RequiredWitnessSet.unsafeWithdrawalRequiredWits(instance,  parameters );
+ *   const result = RequiredWitnessSet.withdrawalRequiredWitsUnsafe(instance,  parameters );
  *   console.log(result);
  * } catch (error) {
- *   console.error(`RequiredWitnessSet.unsafeWithdrawalRequiredWits failed: ${error.message}`);
+ *   console.error(`RequiredWitnessSet.withdrawalRequiredWitsUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeWithdrawalRequiredWits = (
+export const withdrawalRequiredWitsUnsafe = (
   instance: CML.RequiredWitnessSet,
   address: CML.RewardAddress,
 ): void => Effect.runSync(withdrawalRequiredWits(instance, address));

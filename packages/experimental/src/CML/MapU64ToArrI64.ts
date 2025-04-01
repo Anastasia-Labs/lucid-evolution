@@ -1,8 +1,25 @@
+/**
+ * @since 2.0.0
+ */
 import { Data, Effect } from "effect";
 import * as CML from "@anastasia-labs/cardano-multiplatform-lib-nodejs";
 
+/**
+ * Type alias for the CML MapU64ToArrI64 class
+ *
+ * @since 2.0.0
+ * @category Types
+ */
 export type MapU64ToArrI64 = CML.MapU64ToArrI64;
 
+/**
+ * Error class for MapU64ToArrI64 operations
+ *
+ * This error is thrown when operations on MapU64ToArrI64 instances fail.
+ *
+ * @since 2.0.0
+ * @category Errors
+ */
 export class MapU64ToArrI64Error extends Data.TaggedError(
   "MapU64ToArrI64Error",
 )<{
@@ -49,16 +66,16 @@ export const free = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = MapU64ToArrI64.unsafeFree(instance);
+ *   const result = MapU64ToArrI64.freeUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`MapU64ToArrI64.unsafeFree failed: ${error.message}`);
+ *   console.error(`MapU64ToArrI64.freeUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeFree = (instance: CML.MapU64ToArrI64): void =>
+export const freeUnsafe = (instance: CML.MapU64ToArrI64): void =>
   Effect.runSync(free(instance));
 
 /**
@@ -104,16 +121,16 @@ export const get = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = MapU64ToArrI64.unsafeGet(instance,  parameters );
+ *   const result = MapU64ToArrI64.getUnsafe(instance,  parameters );
  *   console.log(result);
  * } catch (error) {
- *   console.error(`MapU64ToArrI64.unsafeGet failed: ${error.message}`);
+ *   console.error(`MapU64ToArrI64.getUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeGet = (
+export const getUnsafe = (
   instance: CML.MapU64ToArrI64,
   key: bigint,
 ): BigInt64Array | undefined => Effect.runSync(get(instance, key));
@@ -162,16 +179,16 @@ export const insert = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = MapU64ToArrI64.unsafeInsert(instance,  parameters );
+ *   const result = MapU64ToArrI64.insertUnsafe(instance,  parameters );
  *   console.log(result);
  * } catch (error) {
- *   console.error(`MapU64ToArrI64.unsafeInsert failed: ${error.message}`);
+ *   console.error(`MapU64ToArrI64.insertUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeInsert = (
+export const insertUnsafe = (
   instance: CML.MapU64ToArrI64,
   key: bigint,
   value: BigInt64Array,
@@ -214,16 +231,16 @@ export const _new = Effect.fn(function* () {
  *
  * // Using try/catch for error handling
  * try {
- *   const result = MapU64ToArrI64.unsafe_new();
+ *   const result = MapU64ToArrI64._newUnsafe();
  *   console.log(result);
  * } catch (error) {
- *   console.error(`MapU64ToArrI64.unsafe_new failed: ${error.message}`);
+ *   console.error(`MapU64ToArrI64._newUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Constructors
+ * @category ConstructorsUnsafe
  */
-export const unsafe_new = () => Effect.runSync(_new());
+export const _newUnsafe = () => Effect.runSync(_new());
 
 /**
  * Method len of MapU64ToArrI64
@@ -265,16 +282,16 @@ export const len = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = MapU64ToArrI64.unsafeLen(instance);
+ *   const result = MapU64ToArrI64.lenUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`MapU64ToArrI64.unsafeLen failed: ${error.message}`);
+ *   console.error(`MapU64ToArrI64.lenUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeLen = (instance: CML.MapU64ToArrI64): number =>
+export const lenUnsafe = (instance: CML.MapU64ToArrI64): number =>
   Effect.runSync(len(instance));
 
 /**
@@ -317,16 +334,16 @@ export const isEmpty = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = MapU64ToArrI64.unsafeIsEmpty(instance);
+ *   const result = MapU64ToArrI64.isEmptyUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`MapU64ToArrI64.unsafeIsEmpty failed: ${error.message}`);
+ *   console.error(`MapU64ToArrI64.isEmptyUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeIsEmpty = (instance: CML.MapU64ToArrI64): boolean =>
+export const isEmptyUnsafe = (instance: CML.MapU64ToArrI64): boolean =>
   Effect.runSync(isEmpty(instance));
 
 /**
@@ -371,14 +388,14 @@ export const keys = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = MapU64ToArrI64.unsafeKeys(instance);
+ *   const result = MapU64ToArrI64.keysUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`MapU64ToArrI64.unsafeKeys failed: ${error.message}`);
+ *   console.error(`MapU64ToArrI64.keysUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeKeys = (instance: CML.MapU64ToArrI64): BigUint64Array =>
+export const keysUnsafe = (instance: CML.MapU64ToArrI64): BigUint64Array =>
   Effect.runSync(keys(instance));

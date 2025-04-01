@@ -1,8 +1,25 @@
+/**
+ * @since 2.0.0
+ */
 import { Data, Effect } from "effect";
 import * as CML from "@anastasia-labs/cardano-multiplatform-lib-nodejs";
 
+/**
+ * Type alias for the CML ProposalProcedure class
+ *
+ * @since 2.0.0
+ * @category Types
+ */
 export type ProposalProcedure = CML.ProposalProcedure;
 
+/**
+ * Error class for ProposalProcedure operations
+ *
+ * This error is thrown when operations on ProposalProcedure instances fail.
+ *
+ * @since 2.0.0
+ * @category Errors
+ */
 export class ProposalProcedureError extends Data.TaggedError(
   "ProposalProcedureError",
 )<{
@@ -51,16 +68,16 @@ export const free = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = ProposalProcedure.unsafeFree(instance);
+ *   const result = ProposalProcedure.freeUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`ProposalProcedure.unsafeFree failed: ${error.message}`);
+ *   console.error(`ProposalProcedure.freeUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeFree = (instance: CML.ProposalProcedure): void =>
+export const freeUnsafe = (instance: CML.ProposalProcedure): void =>
   Effect.runSync(free(instance));
 
 /**
@@ -105,16 +122,16 @@ export const toCborBytes = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = ProposalProcedure.unsafeToCborBytes(instance);
+ *   const result = ProposalProcedure.toCborBytesUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`ProposalProcedure.unsafeToCborBytes failed: ${error.message}`);
+ *   console.error(`ProposalProcedure.toCborBytesUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeToCborBytes = (
+export const toCborBytesUnsafe = (
   instance: CML.ProposalProcedure,
 ): Uint8Array => Effect.runSync(toCborBytes(instance));
 
@@ -160,16 +177,16 @@ export const toCanonicalCborBytes = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = ProposalProcedure.unsafeToCanonicalCborBytes(instance);
+ *   const result = ProposalProcedure.toCanonicalCborBytesUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`ProposalProcedure.unsafeToCanonicalCborBytes failed: ${error.message}`);
+ *   console.error(`ProposalProcedure.toCanonicalCborBytesUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeToCanonicalCborBytes = (
+export const toCanonicalCborBytesUnsafe = (
   instance: CML.ProposalProcedure,
 ): Uint8Array => Effect.runSync(toCanonicalCborBytes(instance));
 
@@ -210,16 +227,16 @@ export const fromCborBytes = Effect.fn(function* (cborBytes: Uint8Array) {
  *
  * // Using try/catch for error handling
  * try {
- *   const result = ProposalProcedure.unsafeFromCborBytes( parameters );
+ *   const result = ProposalProcedure.fromCborBytesUnsafe( parameters );
  *   console.log(result);
  * } catch (error) {
- *   console.error(`ProposalProcedure.unsafeFromCborBytes failed: ${error.message}`);
+ *   console.error(`ProposalProcedure.fromCborBytesUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Constructors
+ * @category ConstructorsUnsafe
  */
-export const unsafeFromCborBytes = (cborBytes: Uint8Array) =>
+export const fromCborBytesUnsafe = (cborBytes: Uint8Array) =>
   Effect.runSync(fromCborBytes(cborBytes));
 
 /**
@@ -264,16 +281,16 @@ export const toCborHex = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = ProposalProcedure.unsafeToCborHex(instance);
+ *   const result = ProposalProcedure.toCborHexUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`ProposalProcedure.unsafeToCborHex failed: ${error.message}`);
+ *   console.error(`ProposalProcedure.toCborHexUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeToCborHex = (instance: CML.ProposalProcedure): string =>
+export const toCborHexUnsafe = (instance: CML.ProposalProcedure): string =>
   Effect.runSync(toCborHex(instance));
 
 /**
@@ -318,16 +335,16 @@ export const toCanonicalCborHex = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = ProposalProcedure.unsafeToCanonicalCborHex(instance);
+ *   const result = ProposalProcedure.toCanonicalCborHexUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`ProposalProcedure.unsafeToCanonicalCborHex failed: ${error.message}`);
+ *   console.error(`ProposalProcedure.toCanonicalCborHexUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeToCanonicalCborHex = (
+export const toCanonicalCborHexUnsafe = (
   instance: CML.ProposalProcedure,
 ): string => Effect.runSync(toCanonicalCborHex(instance));
 
@@ -368,16 +385,16 @@ export const fromCborHex = Effect.fn(function* (cborBytes: string) {
  *
  * // Using try/catch for error handling
  * try {
- *   const result = ProposalProcedure.unsafeFromCborHex( parameters );
+ *   const result = ProposalProcedure.fromCborHexUnsafe( parameters );
  *   console.log(result);
  * } catch (error) {
- *   console.error(`ProposalProcedure.unsafeFromCborHex failed: ${error.message}`);
+ *   console.error(`ProposalProcedure.fromCborHexUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Constructors
+ * @category ConstructorsUnsafe
  */
-export const unsafeFromCborHex = (cborBytes: string) =>
+export const fromCborHexUnsafe = (cborBytes: string) =>
   Effect.runSync(fromCborHex(cborBytes));
 
 /**
@@ -422,16 +439,16 @@ export const toJson = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = ProposalProcedure.unsafeToJson(instance);
+ *   const result = ProposalProcedure.toJsonUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`ProposalProcedure.unsafeToJson failed: ${error.message}`);
+ *   console.error(`ProposalProcedure.toJsonUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeToJson = (instance: CML.ProposalProcedure): string =>
+export const toJsonUnsafe = (instance: CML.ProposalProcedure): string =>
   Effect.runSync(toJson(instance));
 
 /**
@@ -476,16 +493,16 @@ export const toJsValue = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = ProposalProcedure.unsafeToJsValue(instance);
+ *   const result = ProposalProcedure.toJsValueUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`ProposalProcedure.unsafeToJsValue failed: ${error.message}`);
+ *   console.error(`ProposalProcedure.toJsValueUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeToJsValue = (instance: CML.ProposalProcedure): any =>
+export const toJsValueUnsafe = (instance: CML.ProposalProcedure): any =>
   Effect.runSync(toJsValue(instance));
 
 /**
@@ -525,16 +542,16 @@ export const fromJson = Effect.fn(function* (json: string) {
  *
  * // Using try/catch for error handling
  * try {
- *   const result = ProposalProcedure.unsafeFromJson( parameters );
+ *   const result = ProposalProcedure.fromJsonUnsafe( parameters );
  *   console.log(result);
  * } catch (error) {
- *   console.error(`ProposalProcedure.unsafeFromJson failed: ${error.message}`);
+ *   console.error(`ProposalProcedure.fromJsonUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Constructors
+ * @category ConstructorsUnsafe
  */
-export const unsafeFromJson = (json: string) => Effect.runSync(fromJson(json));
+export const fromJsonUnsafe = (json: string) => Effect.runSync(fromJson(json));
 
 /**
  * Method deposit of ProposalProcedure
@@ -578,16 +595,16 @@ export const deposit = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = ProposalProcedure.unsafeDeposit(instance);
+ *   const result = ProposalProcedure.depositUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`ProposalProcedure.unsafeDeposit failed: ${error.message}`);
+ *   console.error(`ProposalProcedure.depositUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeDeposit = (instance: CML.ProposalProcedure): bigint =>
+export const depositUnsafe = (instance: CML.ProposalProcedure): bigint =>
   Effect.runSync(deposit(instance));
 
 /**
@@ -632,16 +649,16 @@ export const rewardAccount = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = ProposalProcedure.unsafeRewardAccount(instance);
+ *   const result = ProposalProcedure.rewardAccountUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`ProposalProcedure.unsafeRewardAccount failed: ${error.message}`);
+ *   console.error(`ProposalProcedure.rewardAccountUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeRewardAccount = (
+export const rewardAccountUnsafe = (
   instance: CML.ProposalProcedure,
 ): CML.RewardAddress => Effect.runSync(rewardAccount(instance));
 
@@ -687,16 +704,16 @@ export const govAction = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = ProposalProcedure.unsafeGovAction(instance);
+ *   const result = ProposalProcedure.govActionUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`ProposalProcedure.unsafeGovAction failed: ${error.message}`);
+ *   console.error(`ProposalProcedure.govActionUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeGovAction = (
+export const govActionUnsafe = (
   instance: CML.ProposalProcedure,
 ): CML.GovAction => Effect.runSync(govAction(instance));
 
@@ -742,16 +759,16 @@ export const anchor = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = ProposalProcedure.unsafeAnchor(instance);
+ *   const result = ProposalProcedure.anchorUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`ProposalProcedure.unsafeAnchor failed: ${error.message}`);
+ *   console.error(`ProposalProcedure.anchorUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeAnchor = (instance: CML.ProposalProcedure): CML.Anchor =>
+export const anchorUnsafe = (instance: CML.ProposalProcedure): CML.Anchor =>
   Effect.runSync(anchor(instance));
 
 /**
@@ -797,16 +814,16 @@ export const _new = Effect.fn(function* (
  *
  * // Using try/catch for error handling
  * try {
- *   const result = ProposalProcedure.unsafe_new( parameters );
+ *   const result = ProposalProcedure._newUnsafe( parameters );
  *   console.log(result);
  * } catch (error) {
- *   console.error(`ProposalProcedure.unsafe_new failed: ${error.message}`);
+ *   console.error(`ProposalProcedure._newUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Constructors
+ * @category ConstructorsUnsafe
  */
-export const unsafe_new = (
+export const _newUnsafe = (
   deposit: bigint,
   rewardAccount: CML.RewardAddress,
   govAction: CML.GovAction,

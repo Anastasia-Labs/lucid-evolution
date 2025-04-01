@@ -1,8 +1,25 @@
+/**
+ * @since 2.0.0
+ */
 import { Data, Effect } from "effect";
 import * as CML from "@anastasia-labs/cardano-multiplatform-lib-nodejs";
 
+/**
+ * Type alias for the CML ScriptDataHash class
+ *
+ * @since 2.0.0
+ * @category Types
+ */
 export type ScriptDataHash = CML.ScriptDataHash;
 
+/**
+ * Error class for ScriptDataHash operations
+ *
+ * This error is thrown when operations on ScriptDataHash instances fail.
+ *
+ * @since 2.0.0
+ * @category Errors
+ */
 export class ScriptDataHashError extends Data.TaggedError(
   "ScriptDataHashError",
 )<{
@@ -49,16 +66,16 @@ export const free = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = ScriptDataHash.unsafeFree(instance);
+ *   const result = ScriptDataHash.freeUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`ScriptDataHash.unsafeFree failed: ${error.message}`);
+ *   console.error(`ScriptDataHash.freeUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeFree = (instance: CML.ScriptDataHash): void =>
+export const freeUnsafe = (instance: CML.ScriptDataHash): void =>
   Effect.runSync(free(instance));
 
 /**
@@ -104,16 +121,16 @@ export const toBech32 = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = ScriptDataHash.unsafeToBech32(instance,  parameters );
+ *   const result = ScriptDataHash.toBech32Unsafe(instance,  parameters );
  *   console.log(result);
  * } catch (error) {
- *   console.error(`ScriptDataHash.unsafeToBech32 failed: ${error.message}`);
+ *   console.error(`ScriptDataHash.toBech32Unsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeToBech32 = (
+export const toBech32Unsafe = (
   instance: CML.ScriptDataHash,
   prefix: string,
 ): string => Effect.runSync(toBech32(instance, prefix));
@@ -155,16 +172,16 @@ export const fromBech32 = Effect.fn(function* (bech32Str: string) {
  *
  * // Using try/catch for error handling
  * try {
- *   const result = ScriptDataHash.unsafeFromBech32( parameters );
+ *   const result = ScriptDataHash.fromBech32Unsafe( parameters );
  *   console.log(result);
  * } catch (error) {
- *   console.error(`ScriptDataHash.unsafeFromBech32 failed: ${error.message}`);
+ *   console.error(`ScriptDataHash.fromBech32Unsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Constructors
+ * @category ConstructorsUnsafe
  */
-export const unsafeFromBech32 = (bech32Str: string) =>
+export const fromBech32Unsafe = (bech32Str: string) =>
   Effect.runSync(fromBech32(bech32Str));
 
 /**
@@ -209,16 +226,16 @@ export const toRawBytes = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = ScriptDataHash.unsafeToRawBytes(instance);
+ *   const result = ScriptDataHash.toRawBytesUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`ScriptDataHash.unsafeToRawBytes failed: ${error.message}`);
+ *   console.error(`ScriptDataHash.toRawBytesUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeToRawBytes = (instance: CML.ScriptDataHash): Uint8Array =>
+export const toRawBytesUnsafe = (instance: CML.ScriptDataHash): Uint8Array =>
   Effect.runSync(toRawBytes(instance));
 
 /**
@@ -258,16 +275,16 @@ export const fromRawBytes = Effect.fn(function* (bytes: Uint8Array) {
  *
  * // Using try/catch for error handling
  * try {
- *   const result = ScriptDataHash.unsafeFromRawBytes( parameters );
+ *   const result = ScriptDataHash.fromRawBytesUnsafe( parameters );
  *   console.log(result);
  * } catch (error) {
- *   console.error(`ScriptDataHash.unsafeFromRawBytes failed: ${error.message}`);
+ *   console.error(`ScriptDataHash.fromRawBytesUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Constructors
+ * @category ConstructorsUnsafe
  */
-export const unsafeFromRawBytes = (bytes: Uint8Array) =>
+export const fromRawBytesUnsafe = (bytes: Uint8Array) =>
   Effect.runSync(fromRawBytes(bytes));
 
 /**
@@ -310,16 +327,16 @@ export const toHex = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = ScriptDataHash.unsafeToHex(instance);
+ *   const result = ScriptDataHash.toHexUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`ScriptDataHash.unsafeToHex failed: ${error.message}`);
+ *   console.error(`ScriptDataHash.toHexUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeToHex = (instance: CML.ScriptDataHash): string =>
+export const toHexUnsafe = (instance: CML.ScriptDataHash): string =>
   Effect.runSync(toHex(instance));
 
 /**
@@ -359,13 +376,13 @@ export const fromHex = Effect.fn(function* (input: string) {
  *
  * // Using try/catch for error handling
  * try {
- *   const result = ScriptDataHash.unsafeFromHex( parameters );
+ *   const result = ScriptDataHash.fromHexUnsafe( parameters );
  *   console.log(result);
  * } catch (error) {
- *   console.error(`ScriptDataHash.unsafeFromHex failed: ${error.message}`);
+ *   console.error(`ScriptDataHash.fromHexUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Constructors
+ * @category ConstructorsUnsafe
  */
-export const unsafeFromHex = (input: string) => Effect.runSync(fromHex(input));
+export const fromHexUnsafe = (input: string) => Effect.runSync(fromHex(input));

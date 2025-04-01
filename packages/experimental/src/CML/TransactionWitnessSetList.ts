@@ -1,8 +1,25 @@
+/**
+ * @since 2.0.0
+ */
 import { Data, Effect } from "effect";
 import * as CML from "@anastasia-labs/cardano-multiplatform-lib-nodejs";
 
+/**
+ * Type alias for the CML TransactionWitnessSetList class
+ *
+ * @since 2.0.0
+ * @category Types
+ */
 export type TransactionWitnessSetList = CML.TransactionWitnessSetList;
 
+/**
+ * Error class for TransactionWitnessSetList operations
+ *
+ * This error is thrown when operations on TransactionWitnessSetList instances fail.
+ *
+ * @since 2.0.0
+ * @category Errors
+ */
 export class TransactionWitnessSetListError extends Data.TaggedError(
   "TransactionWitnessSetListError",
 )<{
@@ -51,16 +68,16 @@ export const free = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = TransactionWitnessSetList.unsafeFree(instance);
+ *   const result = TransactionWitnessSetList.freeUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`TransactionWitnessSetList.unsafeFree failed: ${error.message}`);
+ *   console.error(`TransactionWitnessSetList.freeUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeFree = (instance: CML.TransactionWitnessSetList): void =>
+export const freeUnsafe = (instance: CML.TransactionWitnessSetList): void =>
   Effect.runSync(free(instance));
 
 /**
@@ -100,16 +117,16 @@ export const _new = Effect.fn(function* () {
  *
  * // Using try/catch for error handling
  * try {
- *   const result = TransactionWitnessSetList.unsafe_new();
+ *   const result = TransactionWitnessSetList._newUnsafe();
  *   console.log(result);
  * } catch (error) {
- *   console.error(`TransactionWitnessSetList.unsafe_new failed: ${error.message}`);
+ *   console.error(`TransactionWitnessSetList._newUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Constructors
+ * @category ConstructorsUnsafe
  */
-export const unsafe_new = () => Effect.runSync(_new());
+export const _newUnsafe = () => Effect.runSync(_new());
 
 /**
  * Method len of TransactionWitnessSetList
@@ -153,16 +170,16 @@ export const len = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = TransactionWitnessSetList.unsafeLen(instance);
+ *   const result = TransactionWitnessSetList.lenUnsafe(instance);
  *   console.log(result);
  * } catch (error) {
- *   console.error(`TransactionWitnessSetList.unsafeLen failed: ${error.message}`);
+ *   console.error(`TransactionWitnessSetList.lenUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeLen = (instance: CML.TransactionWitnessSetList): number =>
+export const lenUnsafe = (instance: CML.TransactionWitnessSetList): number =>
   Effect.runSync(len(instance));
 
 /**
@@ -208,16 +225,16 @@ export const get = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = TransactionWitnessSetList.unsafeGet(instance,  parameters );
+ *   const result = TransactionWitnessSetList.getUnsafe(instance,  parameters );
  *   console.log(result);
  * } catch (error) {
- *   console.error(`TransactionWitnessSetList.unsafeGet failed: ${error.message}`);
+ *   console.error(`TransactionWitnessSetList.getUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeGet = (
+export const getUnsafe = (
   instance: CML.TransactionWitnessSetList,
   index: number,
 ): CML.TransactionWitnessSet => Effect.runSync(get(instance, index));
@@ -265,16 +282,16 @@ export const add = Effect.fn(
  *
  * // Using try/catch for error handling
  * try {
- *   const result = TransactionWitnessSetList.unsafeAdd(instance,  parameters );
+ *   const result = TransactionWitnessSetList.addUnsafe(instance,  parameters );
  *   console.log(result);
  * } catch (error) {
- *   console.error(`TransactionWitnessSetList.unsafeAdd failed: ${error.message}`);
+ *   console.error(`TransactionWitnessSetList.addUnsafe failed: ${error.message}`);
  * }
  *
  * @since 2.0.0
- * @category Methods
+ * @category MethodsUnsafe
  */
-export const unsafeAdd = (
+export const addUnsafe = (
   instance: CML.TransactionWitnessSetList,
   elem: CML.TransactionWitnessSet,
 ): void => Effect.runSync(add(instance, elem));
