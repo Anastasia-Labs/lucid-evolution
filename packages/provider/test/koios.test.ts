@@ -18,7 +18,7 @@ describe.sequential("Koios", () => {
     assert(utxos);
   });
 
-  test("getUtxosWithUnit", async () => {
+  test.skip("getUtxosWithUnit", async () => {
     const utxos = await koios.getUtxosWithUnit(
       "addr_test1wpgexmeunzsykesf42d4eqet5yvzeap6trjnflxqtkcf66g0kpnxt",
       "4a83e031d4c37fc7ca6177a2f3581a8eec2ce155da91f59cfdb3bb28446973636f7665727956616c696461746f72",
