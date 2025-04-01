@@ -54,7 +54,9 @@ Static method fromCborBytes of CostModels
 **Signature**
 
 ```ts
-export declare const fromCborBytes: (cborBytes: Uint8Array) => Effect.Effect<CML.CostModels, CostModelsError>
+export declare const fromCborBytes: (
+  cborBytes: Uint8Array,
+) => Effect.Effect<CML.CostModels, CostModelsError>;
 ```
 
 Added in v2.0.0
@@ -66,7 +68,9 @@ Static method fromCborHex of CostModels
 **Signature**
 
 ```ts
-export declare const fromCborHex: (cborBytes: string) => Effect.Effect<CML.CostModels, CostModelsError>
+export declare const fromCborHex: (
+  cborBytes: string,
+) => Effect.Effect<CML.CostModels, CostModelsError>;
 ```
 
 Added in v2.0.0
@@ -78,7 +82,9 @@ Static method fromJson of CostModels
 **Signature**
 
 ```ts
-export declare const fromJson: (json: string) => Effect.Effect<CML.CostModels, CostModelsError>
+export declare const fromJson: (
+  json: string,
+) => Effect.Effect<CML.CostModels, CostModelsError>;
 ```
 
 Added in v2.0.0
@@ -92,7 +98,9 @@ Unsafely calls CostModels.fromCborBytes without Effect wrapper
 **Signature**
 
 ```ts
-export declare const fromCborBytesUnsafe: (cborBytes: Uint8Array) => CML.CostModels
+export declare const fromCborBytesUnsafe: (
+  cborBytes: Uint8Array,
+) => CML.CostModels;
 ```
 
 Added in v2.0.0
@@ -104,7 +112,7 @@ Unsafely calls CostModels.fromCborHex without Effect wrapper
 **Signature**
 
 ```ts
-export declare const fromCborHexUnsafe: (cborBytes: string) => CML.CostModels
+export declare const fromCborHexUnsafe: (cborBytes: string) => CML.CostModels;
 ```
 
 Added in v2.0.0
@@ -116,7 +124,7 @@ Unsafely calls CostModels.fromJson without Effect wrapper
 **Signature**
 
 ```ts
-export declare const fromJsonUnsafe: (json: string) => CML.CostModels
+export declare const fromJsonUnsafe: (json: string) => CML.CostModels;
 ```
 
 Added in v2.0.0
@@ -146,7 +154,9 @@ Method free of CostModels
 **Signature**
 
 ```ts
-export declare const free: (instance: CML.CostModels) => Effect.Effect<void, CostModelsError>
+export declare const free: (
+  instance: CML.CostModels,
+) => Effect.Effect<void, CostModelsError>;
 ```
 
 Added in v2.0.0
@@ -158,7 +168,9 @@ Method inner of CostModels
 **Signature**
 
 ```ts
-export declare const inner: (instance: CML.CostModels) => Effect.Effect<CML.MapU64ToArrI64, CostModelsError>
+export declare const inner: (
+  instance: CML.CostModels,
+) => Effect.Effect<CML.MapU64ToArrI64, CostModelsError>;
 ```
 
 Added in v2.0.0
@@ -170,7 +182,9 @@ Method toCanonicalCborBytes of CostModels
 **Signature**
 
 ```ts
-export declare const toCanonicalCborBytes: (instance: CML.CostModels) => Effect.Effect<Uint8Array, CostModelsError>
+export declare const toCanonicalCborBytes: (
+  instance: CML.CostModels,
+) => Effect.Effect<Uint8Array, CostModelsError>;
 ```
 
 Added in v2.0.0
@@ -182,7 +196,9 @@ Method toCanonicalCborHex of CostModels
 **Signature**
 
 ```ts
-export declare const toCanonicalCborHex: (instance: CML.CostModels) => Effect.Effect<string, CostModelsError>
+export declare const toCanonicalCborHex: (
+  instance: CML.CostModels,
+) => Effect.Effect<string, CostModelsError>;
 ```
 
 Added in v2.0.0
@@ -194,7 +210,9 @@ Method toCborBytes of CostModels
 **Signature**
 
 ```ts
-export declare const toCborBytes: (instance: CML.CostModels) => Effect.Effect<Uint8Array, CostModelsError>
+export declare const toCborBytes: (
+  instance: CML.CostModels,
+) => Effect.Effect<Uint8Array, CostModelsError>;
 ```
 
 Added in v2.0.0
@@ -206,7 +224,9 @@ Method toCborHex of CostModels
 **Signature**
 
 ```ts
-export declare const toCborHex: (instance: CML.CostModels) => Effect.Effect<string, CostModelsError>
+export declare const toCborHex: (
+  instance: CML.CostModels,
+) => Effect.Effect<string, CostModelsError>;
 ```
 
 Added in v2.0.0
@@ -218,7 +238,9 @@ Method toJsValue of CostModels
 **Signature**
 
 ```ts
-export declare const toJsValue: (instance: CML.CostModels) => Effect.Effect<any, CostModelsError>
+export declare const toJsValue: (
+  instance: CML.CostModels,
+) => Effect.Effect<any, CostModelsError>;
 ```
 
 Added in v2.0.0
@@ -230,7 +252,9 @@ Method toJson of CostModels
 **Signature**
 
 ```ts
-export declare const toJson: (instance: CML.CostModels) => Effect.Effect<string, CostModelsError>
+export declare const toJson: (
+  instance: CML.CostModels,
+) => Effect.Effect<string, CostModelsError>;
 ```
 
 Added in v2.0.0
@@ -244,7 +268,7 @@ Unsafely calls instance.free without Effect wrapper
 **Signature**
 
 ```ts
-export declare const freeUnsafe: (instance: CML.CostModels) => void
+export declare const freeUnsafe: (instance: CML.CostModels) => void;
 ```
 
 Added in v2.0.0
@@ -256,7 +280,9 @@ Unsafely calls instance.inner without Effect wrapper
 **Signature**
 
 ```ts
-export declare const innerUnsafe: (instance: CML.CostModels) => CML.MapU64ToArrI64
+export declare const innerUnsafe: (
+  instance: CML.CostModels,
+) => CML.MapU64ToArrI64;
 ```
 
 Added in v2.0.0
@@ -268,7 +294,9 @@ Unsafely calls instance.toCanonicalCborBytes without Effect wrapper
 **Signature**
 
 ```ts
-export declare const toCanonicalCborBytesUnsafe: (instance: CML.CostModels) => Uint8Array
+export declare const toCanonicalCborBytesUnsafe: (
+  instance: CML.CostModels,
+) => Uint8Array;
 ```
 
 Added in v2.0.0
@@ -280,7 +308,9 @@ Unsafely calls instance.toCanonicalCborHex without Effect wrapper
 **Signature**
 
 ```ts
-export declare const toCanonicalCborHexUnsafe: (instance: CML.CostModels) => string
+export declare const toCanonicalCborHexUnsafe: (
+  instance: CML.CostModels,
+) => string;
 ```
 
 Added in v2.0.0
@@ -292,7 +322,9 @@ Unsafely calls instance.toCborBytes without Effect wrapper
 **Signature**
 
 ```ts
-export declare const toCborBytesUnsafe: (instance: CML.CostModels) => Uint8Array
+export declare const toCborBytesUnsafe: (
+  instance: CML.CostModels,
+) => Uint8Array;
 ```
 
 Added in v2.0.0
@@ -304,7 +336,7 @@ Unsafely calls instance.toCborHex without Effect wrapper
 **Signature**
 
 ```ts
-export declare const toCborHexUnsafe: (instance: CML.CostModels) => string
+export declare const toCborHexUnsafe: (instance: CML.CostModels) => string;
 ```
 
 Added in v2.0.0
@@ -316,7 +348,7 @@ Unsafely calls instance.toJsValue without Effect wrapper
 **Signature**
 
 ```ts
-export declare const toJsValueUnsafe: (instance: CML.CostModels) => any
+export declare const toJsValueUnsafe: (instance: CML.CostModels) => any;
 ```
 
 Added in v2.0.0
@@ -328,7 +360,7 @@ Unsafely calls instance.toJson without Effect wrapper
 **Signature**
 
 ```ts
-export declare const toJsonUnsafe: (instance: CML.CostModels) => string
+export declare const toJsonUnsafe: (instance: CML.CostModels) => string;
 ```
 
 Added in v2.0.0
@@ -342,7 +374,7 @@ Type alias for the CML CostModels class
 **Signature**
 
 ```ts
-export type CostModels = CML.CostModels
+export type CostModels = CML.CostModels;
 ```
 
 Added in v2.0.0

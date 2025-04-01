@@ -49,8 +49,8 @@ Wrapper for the get_implicit_input function
 export declare const getImplicitInput: (
   txbody: CML.TransactionBody,
   poolDeposit: bigint,
-  keyDeposit: bigint
-) => Effect.Effect<CML.Value, GetImplicitInputError>
+  keyDeposit: bigint,
+) => Effect.Effect<CML.Value, GetImplicitInputError>;
 ```
 
 Added in v2.0.0
@@ -67,8 +67,8 @@ Unsafely calls get_implicit_input function without Effect wrapper
 export declare const getImplicitInputUnsafe: (
   txbody: CML.TransactionBody,
   poolDeposit: bigint,
-  keyDeposit: bigint
-) => CML.Value
+  keyDeposit: bigint,
+) => CML.Value;
 ```
 
 Added in v2.0.0

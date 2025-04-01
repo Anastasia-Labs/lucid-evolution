@@ -14,23 +14,27 @@ export type HDAddressPayload = CML.HDAddressPayload;
 
 /**
  * Error class for HDAddressPayload operations
- * 
+ *
  * This error is thrown when operations on HDAddressPayload instances fail.
  *
  * @since 2.0.0
  * @category Errors
  */
-export class HDAddressPayloadError extends Data.TaggedError("HDAddressPayloadError")<{
+export class HDAddressPayloadError extends Data.TaggedError(
+  "HDAddressPayloadError",
+)<{
   message?: string;
 }> {}
 
 /**
  * Method free of HDAddressPayload
- * 
+ *
  * @since 2.0.0
  * @category Methods
  */
-export const free: (instance: CML.HDAddressPayload) => Effect.Effect<void, HDAddressPayloadError> = Effect.fn(
+export const free: (
+  instance: CML.HDAddressPayload,
+) => Effect.Effect<void, HDAddressPayloadError> = Effect.fn(
   (instance: CML.HDAddressPayload) =>
     Effect.try({
       try: () => instance.free(),
@@ -38,12 +42,12 @@ export const free: (instance: CML.HDAddressPayload) => Effect.Effect<void, HDAdd
         new HDAddressPayloadError({
           message: `HDAddressPayload.free failed Hint: Check if you're calling free() more than once.`,
         }),
-    })
+    }),
 );
 
 /**
  * Unsafely calls instance.free without Effect wrapper
- * 
+ *
  * @since 2.0.0
  * @category MethodsUnsafe
  */
@@ -52,11 +56,13 @@ export const freeUnsafe = (instance: CML.HDAddressPayload): void =>
 
 /**
  * Method toCborBytes of HDAddressPayload
- * 
+ *
  * @since 2.0.0
  * @category Methods
  */
-export const toCborBytes: (instance: CML.HDAddressPayload) => Effect.Effect<Uint8Array, HDAddressPayloadError> = Effect.fn(
+export const toCborBytes: (
+  instance: CML.HDAddressPayload,
+) => Effect.Effect<Uint8Array, HDAddressPayloadError> = Effect.fn(
   (instance: CML.HDAddressPayload) =>
     Effect.try({
       try: () => instance.to_cbor_bytes(),
@@ -64,12 +70,12 @@ export const toCborBytes: (instance: CML.HDAddressPayload) => Effect.Effect<Uint
         new HDAddressPayloadError({
           message: `HDAddressPayload.toCborBytes failed HDAddressPayload is not valid for Uint8Array conversion. Hint: Check byte length and encoding.`,
         }),
-    })
+    }),
 );
 
 /**
  * Unsafely calls instance.toCborBytes without Effect wrapper
- * 
+ *
  * @since 2.0.0
  * @category MethodsUnsafe
  */
@@ -78,35 +84,43 @@ export const toCborBytesUnsafe = (instance: CML.HDAddressPayload): Uint8Array =>
 
 /**
  * Static method fromCborBytes of HDAddressPayload
- * 
+ *
  * @since 2.0.0
  * @category Constructors
  */
-export const fromCborBytes: (cborBytes: Uint8Array) => Effect.Effect<CML.HDAddressPayload, HDAddressPayloadError> = Effect.fn(function* (cborBytes: Uint8Array) {
-  return yield* Effect.try({
-    try: () => CML.HDAddressPayload.from_cbor_bytes(cborBytes),
-    catch: () => new HDAddressPayloadError({
-      message: `HDAddressPayload.fromCborBytes failed with parameters: ${cborBytes}. Hint: Check byte length and encoding.`,
-    }),
-  });
-});
+export const fromCborBytes: (
+  cborBytes: Uint8Array,
+) => Effect.Effect<CML.HDAddressPayload, HDAddressPayloadError> = Effect.fn(
+  function* (cborBytes: Uint8Array) {
+    return yield* Effect.try({
+      try: () => CML.HDAddressPayload.from_cbor_bytes(cborBytes),
+      catch: () =>
+        new HDAddressPayloadError({
+          message: `HDAddressPayload.fromCborBytes failed with parameters: ${cborBytes}. Hint: Check byte length and encoding.`,
+        }),
+    });
+  },
+);
 
 /**
  * Unsafely calls HDAddressPayload.fromCborBytes without Effect wrapper
- * 
+ *
  * @since 2.0.0
  * @category ConstructorsUnsafe
  */
-export const fromCborBytesUnsafe = (cborBytes: Uint8Array): CML.HDAddressPayload =>
-  Effect.runSync(fromCborBytes(cborBytes));
+export const fromCborBytesUnsafe = (
+  cborBytes: Uint8Array,
+): CML.HDAddressPayload => Effect.runSync(fromCborBytes(cborBytes));
 
 /**
  * Method toCborHex of HDAddressPayload
- * 
+ *
  * @since 2.0.0
  * @category Methods
  */
-export const toCborHex: (instance: CML.HDAddressPayload) => Effect.Effect<string, HDAddressPayloadError> = Effect.fn(
+export const toCborHex: (
+  instance: CML.HDAddressPayload,
+) => Effect.Effect<string, HDAddressPayloadError> = Effect.fn(
   (instance: CML.HDAddressPayload) =>
     Effect.try({
       try: () => instance.to_cbor_hex(),
@@ -114,12 +128,12 @@ export const toCborHex: (instance: CML.HDAddressPayload) => Effect.Effect<string
         new HDAddressPayloadError({
           message: `HDAddressPayload.toCborHex failed HDAddressPayload is not valid for string conversion. Hint: Make sure it's a valid hex string representing CBOR data.`,
         }),
-    })
+    }),
 );
 
 /**
  * Unsafely calls instance.toCborHex without Effect wrapper
- * 
+ *
  * @since 2.0.0
  * @category MethodsUnsafe
  */
@@ -128,22 +142,27 @@ export const toCborHexUnsafe = (instance: CML.HDAddressPayload): string =>
 
 /**
  * Static method fromCborHex of HDAddressPayload
- * 
+ *
  * @since 2.0.0
  * @category Constructors
  */
-export const fromCborHex: (cborBytes: string) => Effect.Effect<CML.HDAddressPayload, HDAddressPayloadError> = Effect.fn(function* (cborBytes: string) {
-  return yield* Effect.try({
-    try: () => CML.HDAddressPayload.from_cbor_hex(cborBytes),
-    catch: () => new HDAddressPayloadError({
-      message: `HDAddressPayload.fromCborHex failed with parameters: ${cborBytes}. Hint: Make sure it's a valid hex string representing CBOR data.`,
-    }),
-  });
-});
+export const fromCborHex: (
+  cborBytes: string,
+) => Effect.Effect<CML.HDAddressPayload, HDAddressPayloadError> = Effect.fn(
+  function* (cborBytes: string) {
+    return yield* Effect.try({
+      try: () => CML.HDAddressPayload.from_cbor_hex(cborBytes),
+      catch: () =>
+        new HDAddressPayloadError({
+          message: `HDAddressPayload.fromCborHex failed with parameters: ${cborBytes}. Hint: Make sure it's a valid hex string representing CBOR data.`,
+        }),
+    });
+  },
+);
 
 /**
  * Unsafely calls HDAddressPayload.fromCborHex without Effect wrapper
- * 
+ *
  * @since 2.0.0
  * @category ConstructorsUnsafe
  */
@@ -152,11 +171,13 @@ export const fromCborHexUnsafe = (cborBytes: string): CML.HDAddressPayload =>
 
 /**
  * Method get of HDAddressPayload
- * 
+ *
  * @since 2.0.0
  * @category Methods
  */
-export const get: (instance: CML.HDAddressPayload) => Effect.Effect<Uint8Array, HDAddressPayloadError> = Effect.fn(
+export const get: (
+  instance: CML.HDAddressPayload,
+) => Effect.Effect<Uint8Array, HDAddressPayloadError> = Effect.fn(
   (instance: CML.HDAddressPayload) =>
     Effect.try({
       try: () => instance.get(),
@@ -164,12 +185,12 @@ export const get: (instance: CML.HDAddressPayload) => Effect.Effect<Uint8Array, 
         new HDAddressPayloadError({
           message: `HDAddressPayload.get failed `,
         }),
-    })
+    }),
 );
 
 /**
  * Unsafely calls instance.get without Effect wrapper
- * 
+ *
  * @since 2.0.0
  * @category MethodsUnsafe
  */

@@ -74,7 +74,9 @@ Static method fromCborBytes of Script
 **Signature**
 
 ```ts
-export declare const fromCborBytes: (cborBytes: Uint8Array) => Effect.Effect<CML.Script, ScriptError>
+export declare const fromCborBytes: (
+  cborBytes: Uint8Array,
+) => Effect.Effect<CML.Script, ScriptError>;
 ```
 
 Added in v2.0.0
@@ -86,7 +88,9 @@ Static method fromCborHex of Script
 **Signature**
 
 ```ts
-export declare const fromCborHex: (cborBytes: string) => Effect.Effect<CML.Script, ScriptError>
+export declare const fromCborHex: (
+  cborBytes: string,
+) => Effect.Effect<CML.Script, ScriptError>;
 ```
 
 Added in v2.0.0
@@ -98,7 +102,9 @@ Static method fromJson of Script
 **Signature**
 
 ```ts
-export declare const fromJson: (json: string) => Effect.Effect<CML.Script, ScriptError>
+export declare const fromJson: (
+  json: string,
+) => Effect.Effect<CML.Script, ScriptError>;
 ```
 
 Added in v2.0.0
@@ -110,7 +116,9 @@ Static method newNative of Script
 **Signature**
 
 ```ts
-export declare const newNative: (script: CML.NativeScript) => Effect.Effect<CML.Script, ScriptError>
+export declare const newNative: (
+  script: CML.NativeScript,
+) => Effect.Effect<CML.Script, ScriptError>;
 ```
 
 Added in v2.0.0
@@ -122,7 +130,9 @@ Static method newPlutusV1 of Script
 **Signature**
 
 ```ts
-export declare const newPlutusV1: (script: CML.PlutusV1Script) => Effect.Effect<CML.Script, ScriptError>
+export declare const newPlutusV1: (
+  script: CML.PlutusV1Script,
+) => Effect.Effect<CML.Script, ScriptError>;
 ```
 
 Added in v2.0.0
@@ -134,7 +144,9 @@ Static method newPlutusV2 of Script
 **Signature**
 
 ```ts
-export declare const newPlutusV2: (script: CML.PlutusV2Script) => Effect.Effect<CML.Script, ScriptError>
+export declare const newPlutusV2: (
+  script: CML.PlutusV2Script,
+) => Effect.Effect<CML.Script, ScriptError>;
 ```
 
 Added in v2.0.0
@@ -146,7 +158,9 @@ Static method newPlutusV3 of Script
 **Signature**
 
 ```ts
-export declare const newPlutusV3: (script: CML.PlutusV3Script) => Effect.Effect<CML.Script, ScriptError>
+export declare const newPlutusV3: (
+  script: CML.PlutusV3Script,
+) => Effect.Effect<CML.Script, ScriptError>;
 ```
 
 Added in v2.0.0
@@ -160,7 +174,7 @@ Unsafely calls Script.fromCborBytes without Effect wrapper
 **Signature**
 
 ```ts
-export declare const fromCborBytesUnsafe: (cborBytes: Uint8Array) => CML.Script
+export declare const fromCborBytesUnsafe: (cborBytes: Uint8Array) => CML.Script;
 ```
 
 Added in v2.0.0
@@ -172,7 +186,7 @@ Unsafely calls Script.fromCborHex without Effect wrapper
 **Signature**
 
 ```ts
-export declare const fromCborHexUnsafe: (cborBytes: string) => CML.Script
+export declare const fromCborHexUnsafe: (cborBytes: string) => CML.Script;
 ```
 
 Added in v2.0.0
@@ -184,7 +198,7 @@ Unsafely calls Script.fromJson without Effect wrapper
 **Signature**
 
 ```ts
-export declare const fromJsonUnsafe: (json: string) => CML.Script
+export declare const fromJsonUnsafe: (json: string) => CML.Script;
 ```
 
 Added in v2.0.0
@@ -196,7 +210,7 @@ Unsafely calls Script.newNative without Effect wrapper
 **Signature**
 
 ```ts
-export declare const newNativeUnsafe: (script: CML.NativeScript) => CML.Script
+export declare const newNativeUnsafe: (script: CML.NativeScript) => CML.Script;
 ```
 
 Added in v2.0.0
@@ -208,7 +222,9 @@ Unsafely calls Script.newPlutusV1 without Effect wrapper
 **Signature**
 
 ```ts
-export declare const newPlutusV1Unsafe: (script: CML.PlutusV1Script) => CML.Script
+export declare const newPlutusV1Unsafe: (
+  script: CML.PlutusV1Script,
+) => CML.Script;
 ```
 
 Added in v2.0.0
@@ -220,7 +236,9 @@ Unsafely calls Script.newPlutusV2 without Effect wrapper
 **Signature**
 
 ```ts
-export declare const newPlutusV2Unsafe: (script: CML.PlutusV2Script) => CML.Script
+export declare const newPlutusV2Unsafe: (
+  script: CML.PlutusV2Script,
+) => CML.Script;
 ```
 
 Added in v2.0.0
@@ -232,7 +250,9 @@ Unsafely calls Script.newPlutusV3 without Effect wrapper
 **Signature**
 
 ```ts
-export declare const newPlutusV3Unsafe: (script: CML.PlutusV3Script) => CML.Script
+export declare const newPlutusV3Unsafe: (
+  script: CML.PlutusV3Script,
+) => CML.Script;
 ```
 
 Added in v2.0.0
@@ -262,7 +282,9 @@ Method asNative of Script
 **Signature**
 
 ```ts
-export declare const asNative: (instance: CML.Script) => Effect.Effect<CML.NativeScript | undefined, ScriptError>
+export declare const asNative: (
+  instance: CML.Script,
+) => Effect.Effect<CML.NativeScript | undefined, ScriptError>;
 ```
 
 Added in v2.0.0
@@ -274,7 +296,9 @@ Method asPlutusV1 of Script
 **Signature**
 
 ```ts
-export declare const asPlutusV1: (instance: CML.Script) => Effect.Effect<CML.PlutusV1Script | undefined, ScriptError>
+export declare const asPlutusV1: (
+  instance: CML.Script,
+) => Effect.Effect<CML.PlutusV1Script | undefined, ScriptError>;
 ```
 
 Added in v2.0.0
@@ -286,7 +310,9 @@ Method asPlutusV2 of Script
 **Signature**
 
 ```ts
-export declare const asPlutusV2: (instance: CML.Script) => Effect.Effect<CML.PlutusV2Script | undefined, ScriptError>
+export declare const asPlutusV2: (
+  instance: CML.Script,
+) => Effect.Effect<CML.PlutusV2Script | undefined, ScriptError>;
 ```
 
 Added in v2.0.0
@@ -298,7 +324,9 @@ Method asPlutusV3 of Script
 **Signature**
 
 ```ts
-export declare const asPlutusV3: (instance: CML.Script) => Effect.Effect<CML.PlutusV3Script | undefined, ScriptError>
+export declare const asPlutusV3: (
+  instance: CML.Script,
+) => Effect.Effect<CML.PlutusV3Script | undefined, ScriptError>;
 ```
 
 Added in v2.0.0
@@ -310,7 +338,9 @@ Method free of Script
 **Signature**
 
 ```ts
-export declare const free: (instance: CML.Script) => Effect.Effect<void, ScriptError>
+export declare const free: (
+  instance: CML.Script,
+) => Effect.Effect<void, ScriptError>;
 ```
 
 Added in v2.0.0
@@ -322,7 +352,9 @@ Method hash of Script
 **Signature**
 
 ```ts
-export declare const hash: (instance: CML.Script) => Effect.Effect<CML.ScriptHash, ScriptError>
+export declare const hash: (
+  instance: CML.Script,
+) => Effect.Effect<CML.ScriptHash, ScriptError>;
 ```
 
 Added in v2.0.0
@@ -334,7 +366,9 @@ Method kind of Script
 **Signature**
 
 ```ts
-export declare const kind: (instance: CML.Script) => Effect.Effect<CML.ScriptKind, ScriptError>
+export declare const kind: (
+  instance: CML.Script,
+) => Effect.Effect<CML.ScriptKind, ScriptError>;
 ```
 
 Added in v2.0.0
@@ -346,7 +380,9 @@ Method language of Script
 **Signature**
 
 ```ts
-export declare const language: (instance: CML.Script) => Effect.Effect<CML.Language | undefined, ScriptError>
+export declare const language: (
+  instance: CML.Script,
+) => Effect.Effect<CML.Language | undefined, ScriptError>;
 ```
 
 Added in v2.0.0
@@ -358,7 +394,9 @@ Method toCanonicalCborBytes of Script
 **Signature**
 
 ```ts
-export declare const toCanonicalCborBytes: (instance: CML.Script) => Effect.Effect<Uint8Array, ScriptError>
+export declare const toCanonicalCborBytes: (
+  instance: CML.Script,
+) => Effect.Effect<Uint8Array, ScriptError>;
 ```
 
 Added in v2.0.0
@@ -370,7 +408,9 @@ Method toCanonicalCborHex of Script
 **Signature**
 
 ```ts
-export declare const toCanonicalCborHex: (instance: CML.Script) => Effect.Effect<string, ScriptError>
+export declare const toCanonicalCborHex: (
+  instance: CML.Script,
+) => Effect.Effect<string, ScriptError>;
 ```
 
 Added in v2.0.0
@@ -382,7 +422,9 @@ Method toCborBytes of Script
 **Signature**
 
 ```ts
-export declare const toCborBytes: (instance: CML.Script) => Effect.Effect<Uint8Array, ScriptError>
+export declare const toCborBytes: (
+  instance: CML.Script,
+) => Effect.Effect<Uint8Array, ScriptError>;
 ```
 
 Added in v2.0.0
@@ -394,7 +436,9 @@ Method toCborHex of Script
 **Signature**
 
 ```ts
-export declare const toCborHex: (instance: CML.Script) => Effect.Effect<string, ScriptError>
+export declare const toCborHex: (
+  instance: CML.Script,
+) => Effect.Effect<string, ScriptError>;
 ```
 
 Added in v2.0.0
@@ -406,7 +450,9 @@ Method toJsValue of Script
 **Signature**
 
 ```ts
-export declare const toJsValue: (instance: CML.Script) => Effect.Effect<any, ScriptError>
+export declare const toJsValue: (
+  instance: CML.Script,
+) => Effect.Effect<any, ScriptError>;
 ```
 
 Added in v2.0.0
@@ -418,7 +464,9 @@ Method toJson of Script
 **Signature**
 
 ```ts
-export declare const toJson: (instance: CML.Script) => Effect.Effect<string, ScriptError>
+export declare const toJson: (
+  instance: CML.Script,
+) => Effect.Effect<string, ScriptError>;
 ```
 
 Added in v2.0.0
@@ -432,7 +480,9 @@ Unsafely calls instance.asNative without Effect wrapper
 **Signature**
 
 ```ts
-export declare const asNativeUnsafe: (instance: CML.Script) => CML.NativeScript | undefined
+export declare const asNativeUnsafe: (
+  instance: CML.Script,
+) => CML.NativeScript | undefined;
 ```
 
 Added in v2.0.0
@@ -444,7 +494,9 @@ Unsafely calls instance.asPlutusV1 without Effect wrapper
 **Signature**
 
 ```ts
-export declare const asPlutusV1Unsafe: (instance: CML.Script) => CML.PlutusV1Script | undefined
+export declare const asPlutusV1Unsafe: (
+  instance: CML.Script,
+) => CML.PlutusV1Script | undefined;
 ```
 
 Added in v2.0.0
@@ -456,7 +508,9 @@ Unsafely calls instance.asPlutusV2 without Effect wrapper
 **Signature**
 
 ```ts
-export declare const asPlutusV2Unsafe: (instance: CML.Script) => CML.PlutusV2Script | undefined
+export declare const asPlutusV2Unsafe: (
+  instance: CML.Script,
+) => CML.PlutusV2Script | undefined;
 ```
 
 Added in v2.0.0
@@ -468,7 +522,9 @@ Unsafely calls instance.asPlutusV3 without Effect wrapper
 **Signature**
 
 ```ts
-export declare const asPlutusV3Unsafe: (instance: CML.Script) => CML.PlutusV3Script | undefined
+export declare const asPlutusV3Unsafe: (
+  instance: CML.Script,
+) => CML.PlutusV3Script | undefined;
 ```
 
 Added in v2.0.0
@@ -480,7 +536,7 @@ Unsafely calls instance.free without Effect wrapper
 **Signature**
 
 ```ts
-export declare const freeUnsafe: (instance: CML.Script) => void
+export declare const freeUnsafe: (instance: CML.Script) => void;
 ```
 
 Added in v2.0.0
@@ -492,7 +548,7 @@ Unsafely calls instance.hash without Effect wrapper
 **Signature**
 
 ```ts
-export declare const hashUnsafe: (instance: CML.Script) => CML.ScriptHash
+export declare const hashUnsafe: (instance: CML.Script) => CML.ScriptHash;
 ```
 
 Added in v2.0.0
@@ -504,7 +560,7 @@ Unsafely calls instance.kind without Effect wrapper
 **Signature**
 
 ```ts
-export declare const kindUnsafe: (instance: CML.Script) => CML.ScriptKind
+export declare const kindUnsafe: (instance: CML.Script) => CML.ScriptKind;
 ```
 
 Added in v2.0.0
@@ -516,7 +572,9 @@ Unsafely calls instance.language without Effect wrapper
 **Signature**
 
 ```ts
-export declare const languageUnsafe: (instance: CML.Script) => CML.Language | undefined
+export declare const languageUnsafe: (
+  instance: CML.Script,
+) => CML.Language | undefined;
 ```
 
 Added in v2.0.0
@@ -528,7 +586,9 @@ Unsafely calls instance.toCanonicalCborBytes without Effect wrapper
 **Signature**
 
 ```ts
-export declare const toCanonicalCborBytesUnsafe: (instance: CML.Script) => Uint8Array
+export declare const toCanonicalCborBytesUnsafe: (
+  instance: CML.Script,
+) => Uint8Array;
 ```
 
 Added in v2.0.0
@@ -540,7 +600,7 @@ Unsafely calls instance.toCanonicalCborHex without Effect wrapper
 **Signature**
 
 ```ts
-export declare const toCanonicalCborHexUnsafe: (instance: CML.Script) => string
+export declare const toCanonicalCborHexUnsafe: (instance: CML.Script) => string;
 ```
 
 Added in v2.0.0
@@ -552,7 +612,7 @@ Unsafely calls instance.toCborBytes without Effect wrapper
 **Signature**
 
 ```ts
-export declare const toCborBytesUnsafe: (instance: CML.Script) => Uint8Array
+export declare const toCborBytesUnsafe: (instance: CML.Script) => Uint8Array;
 ```
 
 Added in v2.0.0
@@ -564,7 +624,7 @@ Unsafely calls instance.toCborHex without Effect wrapper
 **Signature**
 
 ```ts
-export declare const toCborHexUnsafe: (instance: CML.Script) => string
+export declare const toCborHexUnsafe: (instance: CML.Script) => string;
 ```
 
 Added in v2.0.0
@@ -576,7 +636,7 @@ Unsafely calls instance.toJsValue without Effect wrapper
 **Signature**
 
 ```ts
-export declare const toJsValueUnsafe: (instance: CML.Script) => any
+export declare const toJsValueUnsafe: (instance: CML.Script) => any;
 ```
 
 Added in v2.0.0
@@ -588,7 +648,7 @@ Unsafely calls instance.toJson without Effect wrapper
 **Signature**
 
 ```ts
-export declare const toJsonUnsafe: (instance: CML.Script) => string
+export declare const toJsonUnsafe: (instance: CML.Script) => string;
 ```
 
 Added in v2.0.0
@@ -602,7 +662,7 @@ Type alias for the CML Script class
 **Signature**
 
 ```ts
-export type Script = CML.Script
+export type Script = CML.Script;
 ```
 
 Added in v2.0.0

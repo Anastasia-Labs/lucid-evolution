@@ -14,7 +14,7 @@ export type UnregCert = CML.UnregCert;
 
 /**
  * Error class for UnregCert operations
- * 
+ *
  * This error is thrown when operations on UnregCert instances fail.
  *
  * @since 2.0.0
@@ -26,11 +26,13 @@ export class UnregCertError extends Data.TaggedError("UnregCertError")<{
 
 /**
  * Method free of UnregCert
- * 
+ *
  * @since 2.0.0
  * @category Methods
  */
-export const free: (instance: CML.UnregCert) => Effect.Effect<void, UnregCertError> = Effect.fn(
+export const free: (
+  instance: CML.UnregCert,
+) => Effect.Effect<void, UnregCertError> = Effect.fn(
   (instance: CML.UnregCert) =>
     Effect.try({
       try: () => instance.free(),
@@ -38,12 +40,12 @@ export const free: (instance: CML.UnregCert) => Effect.Effect<void, UnregCertErr
         new UnregCertError({
           message: `UnregCert.free failed Hint: Check if you're calling free() more than once.`,
         }),
-    })
+    }),
 );
 
 /**
  * Unsafely calls instance.free without Effect wrapper
- * 
+ *
  * @since 2.0.0
  * @category MethodsUnsafe
  */
@@ -52,11 +54,13 @@ export const freeUnsafe = (instance: CML.UnregCert): void =>
 
 /**
  * Method toCborBytes of UnregCert
- * 
+ *
  * @since 2.0.0
  * @category Methods
  */
-export const toCborBytes: (instance: CML.UnregCert) => Effect.Effect<Uint8Array, UnregCertError> = Effect.fn(
+export const toCborBytes: (
+  instance: CML.UnregCert,
+) => Effect.Effect<Uint8Array, UnregCertError> = Effect.fn(
   (instance: CML.UnregCert) =>
     Effect.try({
       try: () => instance.to_cbor_bytes(),
@@ -64,12 +68,12 @@ export const toCborBytes: (instance: CML.UnregCert) => Effect.Effect<Uint8Array,
         new UnregCertError({
           message: `UnregCert.toCborBytes failed UnregCert is not valid for Uint8Array conversion. Hint: Check byte length and encoding.`,
         }),
-    })
+    }),
 );
 
 /**
  * Unsafely calls instance.toCborBytes without Effect wrapper
- * 
+ *
  * @since 2.0.0
  * @category MethodsUnsafe
  */
@@ -78,11 +82,13 @@ export const toCborBytesUnsafe = (instance: CML.UnregCert): Uint8Array =>
 
 /**
  * Method toCanonicalCborBytes of UnregCert
- * 
+ *
  * @since 2.0.0
  * @category Methods
  */
-export const toCanonicalCborBytes: (instance: CML.UnregCert) => Effect.Effect<Uint8Array, UnregCertError> = Effect.fn(
+export const toCanonicalCborBytes: (
+  instance: CML.UnregCert,
+) => Effect.Effect<Uint8Array, UnregCertError> = Effect.fn(
   (instance: CML.UnregCert) =>
     Effect.try({
       try: () => instance.to_canonical_cbor_bytes(),
@@ -90,36 +96,42 @@ export const toCanonicalCborBytes: (instance: CML.UnregCert) => Effect.Effect<Ui
         new UnregCertError({
           message: `UnregCert.toCanonicalCborBytes failed UnregCert is not valid for Uint8Array conversion. Hint: Check byte length and encoding.`,
         }),
-    })
+    }),
 );
 
 /**
  * Unsafely calls instance.toCanonicalCborBytes without Effect wrapper
- * 
+ *
  * @since 2.0.0
  * @category MethodsUnsafe
  */
-export const toCanonicalCborBytesUnsafe = (instance: CML.UnregCert): Uint8Array =>
-  Effect.runSync(toCanonicalCborBytes(instance));
+export const toCanonicalCborBytesUnsafe = (
+  instance: CML.UnregCert,
+): Uint8Array => Effect.runSync(toCanonicalCborBytes(instance));
 
 /**
  * Static method fromCborBytes of UnregCert
- * 
+ *
  * @since 2.0.0
  * @category Constructors
  */
-export const fromCborBytes: (cborBytes: Uint8Array) => Effect.Effect<CML.UnregCert, UnregCertError> = Effect.fn(function* (cborBytes: Uint8Array) {
+export const fromCborBytes: (
+  cborBytes: Uint8Array,
+) => Effect.Effect<CML.UnregCert, UnregCertError> = Effect.fn(function* (
+  cborBytes: Uint8Array,
+) {
   return yield* Effect.try({
     try: () => CML.UnregCert.from_cbor_bytes(cborBytes),
-    catch: () => new UnregCertError({
-      message: `UnregCert.fromCborBytes failed with parameters: ${cborBytes}. Hint: Check byte length and encoding.`,
-    }),
+    catch: () =>
+      new UnregCertError({
+        message: `UnregCert.fromCborBytes failed with parameters: ${cborBytes}. Hint: Check byte length and encoding.`,
+      }),
   });
 });
 
 /**
  * Unsafely calls UnregCert.fromCborBytes without Effect wrapper
- * 
+ *
  * @since 2.0.0
  * @category ConstructorsUnsafe
  */
@@ -128,11 +140,13 @@ export const fromCborBytesUnsafe = (cborBytes: Uint8Array): CML.UnregCert =>
 
 /**
  * Method toCborHex of UnregCert
- * 
+ *
  * @since 2.0.0
  * @category Methods
  */
-export const toCborHex: (instance: CML.UnregCert) => Effect.Effect<string, UnregCertError> = Effect.fn(
+export const toCborHex: (
+  instance: CML.UnregCert,
+) => Effect.Effect<string, UnregCertError> = Effect.fn(
   (instance: CML.UnregCert) =>
     Effect.try({
       try: () => instance.to_cbor_hex(),
@@ -140,12 +154,12 @@ export const toCborHex: (instance: CML.UnregCert) => Effect.Effect<string, Unreg
         new UnregCertError({
           message: `UnregCert.toCborHex failed UnregCert is not valid for string conversion. Hint: Make sure it's a valid hex string representing CBOR data.`,
         }),
-    })
+    }),
 );
 
 /**
  * Unsafely calls instance.toCborHex without Effect wrapper
- * 
+ *
  * @since 2.0.0
  * @category MethodsUnsafe
  */
@@ -154,11 +168,13 @@ export const toCborHexUnsafe = (instance: CML.UnregCert): string =>
 
 /**
  * Method toCanonicalCborHex of UnregCert
- * 
+ *
  * @since 2.0.0
  * @category Methods
  */
-export const toCanonicalCborHex: (instance: CML.UnregCert) => Effect.Effect<string, UnregCertError> = Effect.fn(
+export const toCanonicalCborHex: (
+  instance: CML.UnregCert,
+) => Effect.Effect<string, UnregCertError> = Effect.fn(
   (instance: CML.UnregCert) =>
     Effect.try({
       try: () => instance.to_canonical_cbor_hex(),
@@ -166,12 +182,12 @@ export const toCanonicalCborHex: (instance: CML.UnregCert) => Effect.Effect<stri
         new UnregCertError({
           message: `UnregCert.toCanonicalCborHex failed UnregCert is not valid for string conversion. Hint: Make sure it's a valid hex string representing CBOR data.`,
         }),
-    })
+    }),
 );
 
 /**
  * Unsafely calls instance.toCanonicalCborHex without Effect wrapper
- * 
+ *
  * @since 2.0.0
  * @category MethodsUnsafe
  */
@@ -180,22 +196,27 @@ export const toCanonicalCborHexUnsafe = (instance: CML.UnregCert): string =>
 
 /**
  * Static method fromCborHex of UnregCert
- * 
+ *
  * @since 2.0.0
  * @category Constructors
  */
-export const fromCborHex: (cborBytes: string) => Effect.Effect<CML.UnregCert, UnregCertError> = Effect.fn(function* (cborBytes: string) {
+export const fromCborHex: (
+  cborBytes: string,
+) => Effect.Effect<CML.UnregCert, UnregCertError> = Effect.fn(function* (
+  cborBytes: string,
+) {
   return yield* Effect.try({
     try: () => CML.UnregCert.from_cbor_hex(cborBytes),
-    catch: () => new UnregCertError({
-      message: `UnregCert.fromCborHex failed with parameters: ${cborBytes}. Hint: Make sure it's a valid hex string representing CBOR data.`,
-    }),
+    catch: () =>
+      new UnregCertError({
+        message: `UnregCert.fromCborHex failed with parameters: ${cborBytes}. Hint: Make sure it's a valid hex string representing CBOR data.`,
+      }),
   });
 });
 
 /**
  * Unsafely calls UnregCert.fromCborHex without Effect wrapper
- * 
+ *
  * @since 2.0.0
  * @category ConstructorsUnsafe
  */
@@ -204,11 +225,13 @@ export const fromCborHexUnsafe = (cborBytes: string): CML.UnregCert =>
 
 /**
  * Method toJson of UnregCert
- * 
+ *
  * @since 2.0.0
  * @category Methods
  */
-export const toJson: (instance: CML.UnregCert) => Effect.Effect<string, UnregCertError> = Effect.fn(
+export const toJson: (
+  instance: CML.UnregCert,
+) => Effect.Effect<string, UnregCertError> = Effect.fn(
   (instance: CML.UnregCert) =>
     Effect.try({
       try: () => instance.to_json(),
@@ -216,12 +239,12 @@ export const toJson: (instance: CML.UnregCert) => Effect.Effect<string, UnregCer
         new UnregCertError({
           message: `UnregCert.toJson failed UnregCert is not valid for string conversion. Hint: Validate your JSON structure.`,
         }),
-    })
+    }),
 );
 
 /**
  * Unsafely calls instance.toJson without Effect wrapper
- * 
+ *
  * @since 2.0.0
  * @category MethodsUnsafe
  */
@@ -230,24 +253,25 @@ export const toJsonUnsafe = (instance: CML.UnregCert): string =>
 
 /**
  * Method toJsValue of UnregCert
- * 
+ *
  * @since 2.0.0
  * @category Methods
  */
-export const toJsValue: (instance: CML.UnregCert) => Effect.Effect<any, UnregCertError> = Effect.fn(
-  (instance: CML.UnregCert) =>
-    Effect.try({
-      try: () => instance.to_js_value(),
-      catch: () =>
-        new UnregCertError({
-          message: `UnregCert.toJsValue failed UnregCert is not valid for any conversion. `,
-        }),
-    })
+export const toJsValue: (
+  instance: CML.UnregCert,
+) => Effect.Effect<any, UnregCertError> = Effect.fn((instance: CML.UnregCert) =>
+  Effect.try({
+    try: () => instance.to_js_value(),
+    catch: () =>
+      new UnregCertError({
+        message: `UnregCert.toJsValue failed UnregCert is not valid for any conversion. `,
+      }),
+  }),
 );
 
 /**
  * Unsafely calls instance.toJsValue without Effect wrapper
- * 
+ *
  * @since 2.0.0
  * @category MethodsUnsafe
  */
@@ -256,22 +280,27 @@ export const toJsValueUnsafe = (instance: CML.UnregCert): any =>
 
 /**
  * Static method fromJson of UnregCert
- * 
+ *
  * @since 2.0.0
  * @category Constructors
  */
-export const fromJson: (json: string) => Effect.Effect<CML.UnregCert, UnregCertError> = Effect.fn(function* (json: string) {
+export const fromJson: (
+  json: string,
+) => Effect.Effect<CML.UnregCert, UnregCertError> = Effect.fn(function* (
+  json: string,
+) {
   return yield* Effect.try({
     try: () => CML.UnregCert.from_json(json),
-    catch: () => new UnregCertError({
-      message: `UnregCert.fromJson failed with parameters: ${json}. Hint: Validate your JSON structure.`,
-    }),
+    catch: () =>
+      new UnregCertError({
+        message: `UnregCert.fromJson failed with parameters: ${json}. Hint: Validate your JSON structure.`,
+      }),
   });
 });
 
 /**
  * Unsafely calls UnregCert.fromJson without Effect wrapper
- * 
+ *
  * @since 2.0.0
  * @category ConstructorsUnsafe
  */
@@ -280,11 +309,13 @@ export const fromJsonUnsafe = (json: string): CML.UnregCert =>
 
 /**
  * Method stakeCredential of UnregCert
- * 
+ *
  * @since 2.0.0
  * @category Methods
  */
-export const stakeCredential: (instance: CML.UnregCert) => Effect.Effect<CML.Credential, UnregCertError> = Effect.fn(
+export const stakeCredential: (
+  instance: CML.UnregCert,
+) => Effect.Effect<CML.Credential, UnregCertError> = Effect.fn(
   (instance: CML.UnregCert) =>
     Effect.try({
       try: () => instance.stake_credential(),
@@ -292,25 +323,28 @@ export const stakeCredential: (instance: CML.UnregCert) => Effect.Effect<CML.Cre
         new UnregCertError({
           message: `UnregCert.stakeCredential failed `,
         }),
-    })
+    }),
 );
 
 /**
  * Unsafely calls instance.stakeCredential without Effect wrapper
- * 
+ *
  * @since 2.0.0
  * @category MethodsUnsafe
  */
-export const stakeCredentialUnsafe = (instance: CML.UnregCert): CML.Credential =>
-  Effect.runSync(stakeCredential(instance));
+export const stakeCredentialUnsafe = (
+  instance: CML.UnregCert,
+): CML.Credential => Effect.runSync(stakeCredential(instance));
 
 /**
  * Method deposit of UnregCert
- * 
+ *
  * @since 2.0.0
  * @category Methods
  */
-export const deposit: (instance: CML.UnregCert) => Effect.Effect<bigint, UnregCertError> = Effect.fn(
+export const deposit: (
+  instance: CML.UnregCert,
+) => Effect.Effect<bigint, UnregCertError> = Effect.fn(
   (instance: CML.UnregCert) =>
     Effect.try({
       try: () => instance.deposit(),
@@ -318,12 +352,12 @@ export const deposit: (instance: CML.UnregCert) => Effect.Effect<bigint, UnregCe
         new UnregCertError({
           message: `UnregCert.deposit failed `,
         }),
-    })
+    }),
 );
 
 /**
  * Unsafely calls instance.deposit without Effect wrapper
- * 
+ *
  * @since 2.0.0
  * @category MethodsUnsafe
  */
@@ -332,24 +366,33 @@ export const depositUnsafe = (instance: CML.UnregCert): bigint =>
 
 /**
  * Static method _new of UnregCert
- * 
+ *
  * @since 2.0.0
  * @category Constructors
  */
-export const _new: (stakeCredential: CML.Credential, deposit: bigint) => Effect.Effect<CML.UnregCert, UnregCertError> = Effect.fn(function* (stakeCredential: CML.Credential, deposit: bigint) {
+export const _new: (
+  stakeCredential: CML.Credential,
+  deposit: bigint,
+) => Effect.Effect<CML.UnregCert, UnregCertError> = Effect.fn(function* (
+  stakeCredential: CML.Credential,
+  deposit: bigint,
+) {
   return yield* Effect.try({
     try: () => CML.UnregCert.new(stakeCredential, deposit),
-    catch: () => new UnregCertError({
-      message: `UnregCert._new failed with parameters: ${stakeCredential} (Credential), ${deposit}. `,
-    }),
+    catch: () =>
+      new UnregCertError({
+        message: `UnregCert._new failed with parameters: ${stakeCredential} (Credential), ${deposit}. `,
+      }),
   });
 });
 
 /**
  * Unsafely calls UnregCert._new without Effect wrapper
- * 
+ *
  * @since 2.0.0
  * @category ConstructorsUnsafe
  */
-export const _newUnsafe = (stakeCredential: CML.Credential, deposit: bigint): CML.UnregCert =>
-  Effect.runSync(_new(stakeCredential, deposit));
+export const _newUnsafe = (
+  stakeCredential: CML.Credential,
+  deposit: bigint,
+): CML.UnregCert => Effect.runSync(_new(stakeCredential, deposit));

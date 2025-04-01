@@ -69,8 +69,8 @@ export declare const _new: (
   committeeNormal: CML.UnitInterval,
   committeeNoConfidence: CML.UnitInterval,
   hardForkInitiation: CML.UnitInterval,
-  securityRelevantParameterVotingThreshold: CML.UnitInterval
-) => Effect.Effect<CML.PoolVotingThresholds, PoolVotingThresholdsError>
+  securityRelevantParameterVotingThreshold: CML.UnitInterval,
+) => Effect.Effect<CML.PoolVotingThresholds, PoolVotingThresholdsError>;
 ```
 
 Added in v2.0.0
@@ -83,8 +83,8 @@ Static method fromCborBytes of PoolVotingThresholds
 
 ```ts
 export declare const fromCborBytes: (
-  cborBytes: Uint8Array
-) => Effect.Effect<CML.PoolVotingThresholds, PoolVotingThresholdsError>
+  cborBytes: Uint8Array,
+) => Effect.Effect<CML.PoolVotingThresholds, PoolVotingThresholdsError>;
 ```
 
 Added in v2.0.0
@@ -97,8 +97,8 @@ Static method fromCborHex of PoolVotingThresholds
 
 ```ts
 export declare const fromCborHex: (
-  cborBytes: string
-) => Effect.Effect<CML.PoolVotingThresholds, PoolVotingThresholdsError>
+  cborBytes: string,
+) => Effect.Effect<CML.PoolVotingThresholds, PoolVotingThresholdsError>;
 ```
 
 Added in v2.0.0
@@ -110,7 +110,9 @@ Static method fromJson of PoolVotingThresholds
 **Signature**
 
 ```ts
-export declare const fromJson: (json: string) => Effect.Effect<CML.PoolVotingThresholds, PoolVotingThresholdsError>
+export declare const fromJson: (
+  json: string,
+) => Effect.Effect<CML.PoolVotingThresholds, PoolVotingThresholdsError>;
 ```
 
 Added in v2.0.0
@@ -129,8 +131,8 @@ export declare const _newUnsafe: (
   committeeNormal: CML.UnitInterval,
   committeeNoConfidence: CML.UnitInterval,
   hardForkInitiation: CML.UnitInterval,
-  securityRelevantParameterVotingThreshold: CML.UnitInterval
-) => CML.PoolVotingThresholds
+  securityRelevantParameterVotingThreshold: CML.UnitInterval,
+) => CML.PoolVotingThresholds;
 ```
 
 Added in v2.0.0
@@ -142,7 +144,9 @@ Unsafely calls PoolVotingThresholds.fromCborBytes without Effect wrapper
 **Signature**
 
 ```ts
-export declare const fromCborBytesUnsafe: (cborBytes: Uint8Array) => CML.PoolVotingThresholds
+export declare const fromCborBytesUnsafe: (
+  cborBytes: Uint8Array,
+) => CML.PoolVotingThresholds;
 ```
 
 Added in v2.0.0
@@ -154,7 +158,9 @@ Unsafely calls PoolVotingThresholds.fromCborHex without Effect wrapper
 **Signature**
 
 ```ts
-export declare const fromCborHexUnsafe: (cborBytes: string) => CML.PoolVotingThresholds
+export declare const fromCborHexUnsafe: (
+  cborBytes: string,
+) => CML.PoolVotingThresholds;
 ```
 
 Added in v2.0.0
@@ -166,7 +172,7 @@ Unsafely calls PoolVotingThresholds.fromJson without Effect wrapper
 **Signature**
 
 ```ts
-export declare const fromJsonUnsafe: (json: string) => CML.PoolVotingThresholds
+export declare const fromJsonUnsafe: (json: string) => CML.PoolVotingThresholds;
 ```
 
 Added in v2.0.0
@@ -197,8 +203,8 @@ Method committeeNoConfidence of PoolVotingThresholds
 
 ```ts
 export declare const committeeNoConfidence: (
-  instance: CML.PoolVotingThresholds
-) => Effect.Effect<CML.UnitInterval, PoolVotingThresholdsError>
+  instance: CML.PoolVotingThresholds,
+) => Effect.Effect<CML.UnitInterval, PoolVotingThresholdsError>;
 ```
 
 Added in v2.0.0
@@ -211,8 +217,8 @@ Method committeeNormal of PoolVotingThresholds
 
 ```ts
 export declare const committeeNormal: (
-  instance: CML.PoolVotingThresholds
-) => Effect.Effect<CML.UnitInterval, PoolVotingThresholdsError>
+  instance: CML.PoolVotingThresholds,
+) => Effect.Effect<CML.UnitInterval, PoolVotingThresholdsError>;
 ```
 
 Added in v2.0.0
@@ -224,7 +230,9 @@ Method free of PoolVotingThresholds
 **Signature**
 
 ```ts
-export declare const free: (instance: CML.PoolVotingThresholds) => Effect.Effect<void, PoolVotingThresholdsError>
+export declare const free: (
+  instance: CML.PoolVotingThresholds,
+) => Effect.Effect<void, PoolVotingThresholdsError>;
 ```
 
 Added in v2.0.0
@@ -237,8 +245,8 @@ Method hardForkInitiation of PoolVotingThresholds
 
 ```ts
 export declare const hardForkInitiation: (
-  instance: CML.PoolVotingThresholds
-) => Effect.Effect<CML.UnitInterval, PoolVotingThresholdsError>
+  instance: CML.PoolVotingThresholds,
+) => Effect.Effect<CML.UnitInterval, PoolVotingThresholdsError>;
 ```
 
 Added in v2.0.0
@@ -251,8 +259,8 @@ Method motionNoConfidence of PoolVotingThresholds
 
 ```ts
 export declare const motionNoConfidence: (
-  instance: CML.PoolVotingThresholds
-) => Effect.Effect<CML.UnitInterval, PoolVotingThresholdsError>
+  instance: CML.PoolVotingThresholds,
+) => Effect.Effect<CML.UnitInterval, PoolVotingThresholdsError>;
 ```
 
 Added in v2.0.0
@@ -265,8 +273,8 @@ Method securityRelevantParameterVotingThreshold of PoolVotingThresholds
 
 ```ts
 export declare const securityRelevantParameterVotingThreshold: (
-  instance: CML.PoolVotingThresholds
-) => Effect.Effect<CML.UnitInterval, PoolVotingThresholdsError>
+  instance: CML.PoolVotingThresholds,
+) => Effect.Effect<CML.UnitInterval, PoolVotingThresholdsError>;
 ```
 
 Added in v2.0.0
@@ -279,8 +287,8 @@ Method toCanonicalCborBytes of PoolVotingThresholds
 
 ```ts
 export declare const toCanonicalCborBytes: (
-  instance: CML.PoolVotingThresholds
-) => Effect.Effect<Uint8Array, PoolVotingThresholdsError>
+  instance: CML.PoolVotingThresholds,
+) => Effect.Effect<Uint8Array, PoolVotingThresholdsError>;
 ```
 
 Added in v2.0.0
@@ -293,8 +301,8 @@ Method toCanonicalCborHex of PoolVotingThresholds
 
 ```ts
 export declare const toCanonicalCborHex: (
-  instance: CML.PoolVotingThresholds
-) => Effect.Effect<string, PoolVotingThresholdsError>
+  instance: CML.PoolVotingThresholds,
+) => Effect.Effect<string, PoolVotingThresholdsError>;
 ```
 
 Added in v2.0.0
@@ -307,8 +315,8 @@ Method toCborBytes of PoolVotingThresholds
 
 ```ts
 export declare const toCborBytes: (
-  instance: CML.PoolVotingThresholds
-) => Effect.Effect<Uint8Array, PoolVotingThresholdsError>
+  instance: CML.PoolVotingThresholds,
+) => Effect.Effect<Uint8Array, PoolVotingThresholdsError>;
 ```
 
 Added in v2.0.0
@@ -320,7 +328,9 @@ Method toCborHex of PoolVotingThresholds
 **Signature**
 
 ```ts
-export declare const toCborHex: (instance: CML.PoolVotingThresholds) => Effect.Effect<string, PoolVotingThresholdsError>
+export declare const toCborHex: (
+  instance: CML.PoolVotingThresholds,
+) => Effect.Effect<string, PoolVotingThresholdsError>;
 ```
 
 Added in v2.0.0
@@ -332,7 +342,9 @@ Method toJsValue of PoolVotingThresholds
 **Signature**
 
 ```ts
-export declare const toJsValue: (instance: CML.PoolVotingThresholds) => Effect.Effect<any, PoolVotingThresholdsError>
+export declare const toJsValue: (
+  instance: CML.PoolVotingThresholds,
+) => Effect.Effect<any, PoolVotingThresholdsError>;
 ```
 
 Added in v2.0.0
@@ -344,7 +356,9 @@ Method toJson of PoolVotingThresholds
 **Signature**
 
 ```ts
-export declare const toJson: (instance: CML.PoolVotingThresholds) => Effect.Effect<string, PoolVotingThresholdsError>
+export declare const toJson: (
+  instance: CML.PoolVotingThresholds,
+) => Effect.Effect<string, PoolVotingThresholdsError>;
 ```
 
 Added in v2.0.0
@@ -358,7 +372,9 @@ Unsafely calls instance.committeeNoConfidence without Effect wrapper
 **Signature**
 
 ```ts
-export declare const committeeNoConfidenceUnsafe: (instance: CML.PoolVotingThresholds) => CML.UnitInterval
+export declare const committeeNoConfidenceUnsafe: (
+  instance: CML.PoolVotingThresholds,
+) => CML.UnitInterval;
 ```
 
 Added in v2.0.0
@@ -370,7 +386,9 @@ Unsafely calls instance.committeeNormal without Effect wrapper
 **Signature**
 
 ```ts
-export declare const committeeNormalUnsafe: (instance: CML.PoolVotingThresholds) => CML.UnitInterval
+export declare const committeeNormalUnsafe: (
+  instance: CML.PoolVotingThresholds,
+) => CML.UnitInterval;
 ```
 
 Added in v2.0.0
@@ -382,7 +400,7 @@ Unsafely calls instance.free without Effect wrapper
 **Signature**
 
 ```ts
-export declare const freeUnsafe: (instance: CML.PoolVotingThresholds) => void
+export declare const freeUnsafe: (instance: CML.PoolVotingThresholds) => void;
 ```
 
 Added in v2.0.0
@@ -394,7 +412,9 @@ Unsafely calls instance.hardForkInitiation without Effect wrapper
 **Signature**
 
 ```ts
-export declare const hardForkInitiationUnsafe: (instance: CML.PoolVotingThresholds) => CML.UnitInterval
+export declare const hardForkInitiationUnsafe: (
+  instance: CML.PoolVotingThresholds,
+) => CML.UnitInterval;
 ```
 
 Added in v2.0.0
@@ -406,7 +426,9 @@ Unsafely calls instance.motionNoConfidence without Effect wrapper
 **Signature**
 
 ```ts
-export declare const motionNoConfidenceUnsafe: (instance: CML.PoolVotingThresholds) => CML.UnitInterval
+export declare const motionNoConfidenceUnsafe: (
+  instance: CML.PoolVotingThresholds,
+) => CML.UnitInterval;
 ```
 
 Added in v2.0.0
@@ -419,8 +441,8 @@ Unsafely calls instance.securityRelevantParameterVotingThreshold without Effect 
 
 ```ts
 export declare const securityRelevantParameterVotingThresholdUnsafe: (
-  instance: CML.PoolVotingThresholds
-) => CML.UnitInterval
+  instance: CML.PoolVotingThresholds,
+) => CML.UnitInterval;
 ```
 
 Added in v2.0.0
@@ -432,7 +454,9 @@ Unsafely calls instance.toCanonicalCborBytes without Effect wrapper
 **Signature**
 
 ```ts
-export declare const toCanonicalCborBytesUnsafe: (instance: CML.PoolVotingThresholds) => Uint8Array
+export declare const toCanonicalCborBytesUnsafe: (
+  instance: CML.PoolVotingThresholds,
+) => Uint8Array;
 ```
 
 Added in v2.0.0
@@ -444,7 +468,9 @@ Unsafely calls instance.toCanonicalCborHex without Effect wrapper
 **Signature**
 
 ```ts
-export declare const toCanonicalCborHexUnsafe: (instance: CML.PoolVotingThresholds) => string
+export declare const toCanonicalCborHexUnsafe: (
+  instance: CML.PoolVotingThresholds,
+) => string;
 ```
 
 Added in v2.0.0
@@ -456,7 +482,9 @@ Unsafely calls instance.toCborBytes without Effect wrapper
 **Signature**
 
 ```ts
-export declare const toCborBytesUnsafe: (instance: CML.PoolVotingThresholds) => Uint8Array
+export declare const toCborBytesUnsafe: (
+  instance: CML.PoolVotingThresholds,
+) => Uint8Array;
 ```
 
 Added in v2.0.0
@@ -468,7 +496,9 @@ Unsafely calls instance.toCborHex without Effect wrapper
 **Signature**
 
 ```ts
-export declare const toCborHexUnsafe: (instance: CML.PoolVotingThresholds) => string
+export declare const toCborHexUnsafe: (
+  instance: CML.PoolVotingThresholds,
+) => string;
 ```
 
 Added in v2.0.0
@@ -480,7 +510,9 @@ Unsafely calls instance.toJsValue without Effect wrapper
 **Signature**
 
 ```ts
-export declare const toJsValueUnsafe: (instance: CML.PoolVotingThresholds) => any
+export declare const toJsValueUnsafe: (
+  instance: CML.PoolVotingThresholds,
+) => any;
 ```
 
 Added in v2.0.0
@@ -492,7 +524,9 @@ Unsafely calls instance.toJson without Effect wrapper
 **Signature**
 
 ```ts
-export declare const toJsonUnsafe: (instance: CML.PoolVotingThresholds) => string
+export declare const toJsonUnsafe: (
+  instance: CML.PoolVotingThresholds,
+) => string;
 ```
 
 Added in v2.0.0
@@ -506,7 +540,7 @@ Type alias for the CML PoolVotingThresholds class
 **Signature**
 
 ```ts
-export type PoolVotingThresholds = CML.PoolVotingThresholds
+export type PoolVotingThresholds = CML.PoolVotingThresholds;
 ```
 
 Added in v2.0.0

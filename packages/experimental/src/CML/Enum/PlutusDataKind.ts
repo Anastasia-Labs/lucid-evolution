@@ -13,7 +13,7 @@ export type PlutusDataKind = CML.PlutusDataKind;
 
 /**
  * ConstrPlutusData variant of the PlutusDataKind enum
- * 
+ *
  * @since 2.0.0
  * @category Variants
  */
@@ -21,7 +21,7 @@ export const ConstrPlutusData = CML.PlutusDataKind.ConstrPlutusData;
 
 /**
  * Map variant of the PlutusDataKind enum
- * 
+ *
  * @since 2.0.0
  * @category Variants
  */
@@ -29,7 +29,7 @@ export const Map = CML.PlutusDataKind.Map;
 
 /**
  * List variant of the PlutusDataKind enum
- * 
+ *
  * @since 2.0.0
  * @category Variants
  */
@@ -37,7 +37,7 @@ export const List = CML.PlutusDataKind.List;
 
 /**
  * Integer variant of the PlutusDataKind enum
- * 
+ *
  * @since 2.0.0
  * @category Variants
  */
@@ -45,16 +45,15 @@ export const Integer = CML.PlutusDataKind.Integer;
 
 /**
  * Bytes variant of the PlutusDataKind enum
- * 
+ *
  * @since 2.0.0
  * @category Variants
  */
 export const Bytes = CML.PlutusDataKind.Bytes;
 
-
 /**
  * Get all values of the PlutusDataKind enum
- * 
+ *
  * @since 2.0.0
  * @category Utils
  */
@@ -63,12 +62,12 @@ export const values = (): Array<CML.PlutusDataKind> => [
   CML.PlutusDataKind.Map,
   CML.PlutusDataKind.List,
   CML.PlutusDataKind.Integer,
-  CML.PlutusDataKind.Bytes
+  CML.PlutusDataKind.Bytes,
 ];
 
 /**
  * Convert PlutusDataKind enum value to string
- * 
+ *
  * @since 2.0.0
  * @category Utils
  */
@@ -91,7 +90,7 @@ export const toString = (value: CML.PlutusDataKind): string => {
 
 /**
  * Convert string to PlutusDataKind enum value
- * 
+ *
  * @since 2.0.0
  * @category Utils
  */

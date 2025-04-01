@@ -14,23 +14,27 @@ export type ScriptInvalidBefore = CML.ScriptInvalidBefore;
 
 /**
  * Error class for ScriptInvalidBefore operations
- * 
+ *
  * This error is thrown when operations on ScriptInvalidBefore instances fail.
  *
  * @since 2.0.0
  * @category Errors
  */
-export class ScriptInvalidBeforeError extends Data.TaggedError("ScriptInvalidBeforeError")<{
+export class ScriptInvalidBeforeError extends Data.TaggedError(
+  "ScriptInvalidBeforeError",
+)<{
   message?: string;
 }> {}
 
 /**
  * Method free of ScriptInvalidBefore
- * 
+ *
  * @since 2.0.0
  * @category Methods
  */
-export const free: (instance: CML.ScriptInvalidBefore) => Effect.Effect<void, ScriptInvalidBeforeError> = Effect.fn(
+export const free: (
+  instance: CML.ScriptInvalidBefore,
+) => Effect.Effect<void, ScriptInvalidBeforeError> = Effect.fn(
   (instance: CML.ScriptInvalidBefore) =>
     Effect.try({
       try: () => instance.free(),
@@ -38,12 +42,12 @@ export const free: (instance: CML.ScriptInvalidBefore) => Effect.Effect<void, Sc
         new ScriptInvalidBeforeError({
           message: `ScriptInvalidBefore.free failed Hint: Check if you're calling free() more than once.`,
         }),
-    })
+    }),
 );
 
 /**
  * Unsafely calls instance.free without Effect wrapper
- * 
+ *
  * @since 2.0.0
  * @category MethodsUnsafe
  */
@@ -52,11 +56,13 @@ export const freeUnsafe = (instance: CML.ScriptInvalidBefore): void =>
 
 /**
  * Method toCborBytes of ScriptInvalidBefore
- * 
+ *
  * @since 2.0.0
  * @category Methods
  */
-export const toCborBytes: (instance: CML.ScriptInvalidBefore) => Effect.Effect<Uint8Array, ScriptInvalidBeforeError> = Effect.fn(
+export const toCborBytes: (
+  instance: CML.ScriptInvalidBefore,
+) => Effect.Effect<Uint8Array, ScriptInvalidBeforeError> = Effect.fn(
   (instance: CML.ScriptInvalidBefore) =>
     Effect.try({
       try: () => instance.to_cbor_bytes(),
@@ -64,25 +70,28 @@ export const toCborBytes: (instance: CML.ScriptInvalidBefore) => Effect.Effect<U
         new ScriptInvalidBeforeError({
           message: `ScriptInvalidBefore.toCborBytes failed ScriptInvalidBefore is not valid for Uint8Array conversion. Hint: Check byte length and encoding.`,
         }),
-    })
+    }),
 );
 
 /**
  * Unsafely calls instance.toCborBytes without Effect wrapper
- * 
+ *
  * @since 2.0.0
  * @category MethodsUnsafe
  */
-export const toCborBytesUnsafe = (instance: CML.ScriptInvalidBefore): Uint8Array =>
-  Effect.runSync(toCborBytes(instance));
+export const toCborBytesUnsafe = (
+  instance: CML.ScriptInvalidBefore,
+): Uint8Array => Effect.runSync(toCborBytes(instance));
 
 /**
  * Method toCanonicalCborBytes of ScriptInvalidBefore
- * 
+ *
  * @since 2.0.0
  * @category Methods
  */
-export const toCanonicalCborBytes: (instance: CML.ScriptInvalidBefore) => Effect.Effect<Uint8Array, ScriptInvalidBeforeError> = Effect.fn(
+export const toCanonicalCborBytes: (
+  instance: CML.ScriptInvalidBefore,
+) => Effect.Effect<Uint8Array, ScriptInvalidBeforeError> = Effect.fn(
   (instance: CML.ScriptInvalidBefore) =>
     Effect.try({
       try: () => instance.to_canonical_cbor_bytes(),
@@ -90,49 +99,57 @@ export const toCanonicalCborBytes: (instance: CML.ScriptInvalidBefore) => Effect
         new ScriptInvalidBeforeError({
           message: `ScriptInvalidBefore.toCanonicalCborBytes failed ScriptInvalidBefore is not valid for Uint8Array conversion. Hint: Check byte length and encoding.`,
         }),
-    })
+    }),
 );
 
 /**
  * Unsafely calls instance.toCanonicalCborBytes without Effect wrapper
- * 
+ *
  * @since 2.0.0
  * @category MethodsUnsafe
  */
-export const toCanonicalCborBytesUnsafe = (instance: CML.ScriptInvalidBefore): Uint8Array =>
-  Effect.runSync(toCanonicalCborBytes(instance));
+export const toCanonicalCborBytesUnsafe = (
+  instance: CML.ScriptInvalidBefore,
+): Uint8Array => Effect.runSync(toCanonicalCborBytes(instance));
 
 /**
  * Static method fromCborBytes of ScriptInvalidBefore
- * 
+ *
  * @since 2.0.0
  * @category Constructors
  */
-export const fromCborBytes: (cborBytes: Uint8Array) => Effect.Effect<CML.ScriptInvalidBefore, ScriptInvalidBeforeError> = Effect.fn(function* (cborBytes: Uint8Array) {
-  return yield* Effect.try({
-    try: () => CML.ScriptInvalidBefore.from_cbor_bytes(cborBytes),
-    catch: () => new ScriptInvalidBeforeError({
-      message: `ScriptInvalidBefore.fromCborBytes failed with parameters: ${cborBytes}. Hint: Check byte length and encoding.`,
-    }),
+export const fromCborBytes: (
+  cborBytes: Uint8Array,
+) => Effect.Effect<CML.ScriptInvalidBefore, ScriptInvalidBeforeError> =
+  Effect.fn(function* (cborBytes: Uint8Array) {
+    return yield* Effect.try({
+      try: () => CML.ScriptInvalidBefore.from_cbor_bytes(cborBytes),
+      catch: () =>
+        new ScriptInvalidBeforeError({
+          message: `ScriptInvalidBefore.fromCborBytes failed with parameters: ${cborBytes}. Hint: Check byte length and encoding.`,
+        }),
+    });
   });
-});
 
 /**
  * Unsafely calls ScriptInvalidBefore.fromCborBytes without Effect wrapper
- * 
+ *
  * @since 2.0.0
  * @category ConstructorsUnsafe
  */
-export const fromCborBytesUnsafe = (cborBytes: Uint8Array): CML.ScriptInvalidBefore =>
-  Effect.runSync(fromCborBytes(cborBytes));
+export const fromCborBytesUnsafe = (
+  cborBytes: Uint8Array,
+): CML.ScriptInvalidBefore => Effect.runSync(fromCborBytes(cborBytes));
 
 /**
  * Method toCborHex of ScriptInvalidBefore
- * 
+ *
  * @since 2.0.0
  * @category Methods
  */
-export const toCborHex: (instance: CML.ScriptInvalidBefore) => Effect.Effect<string, ScriptInvalidBeforeError> = Effect.fn(
+export const toCborHex: (
+  instance: CML.ScriptInvalidBefore,
+) => Effect.Effect<string, ScriptInvalidBeforeError> = Effect.fn(
   (instance: CML.ScriptInvalidBefore) =>
     Effect.try({
       try: () => instance.to_cbor_hex(),
@@ -140,12 +157,12 @@ export const toCborHex: (instance: CML.ScriptInvalidBefore) => Effect.Effect<str
         new ScriptInvalidBeforeError({
           message: `ScriptInvalidBefore.toCborHex failed ScriptInvalidBefore is not valid for string conversion. Hint: Make sure it's a valid hex string representing CBOR data.`,
         }),
-    })
+    }),
 );
 
 /**
  * Unsafely calls instance.toCborHex without Effect wrapper
- * 
+ *
  * @since 2.0.0
  * @category MethodsUnsafe
  */
@@ -154,11 +171,13 @@ export const toCborHexUnsafe = (instance: CML.ScriptInvalidBefore): string =>
 
 /**
  * Method toCanonicalCborHex of ScriptInvalidBefore
- * 
+ *
  * @since 2.0.0
  * @category Methods
  */
-export const toCanonicalCborHex: (instance: CML.ScriptInvalidBefore) => Effect.Effect<string, ScriptInvalidBeforeError> = Effect.fn(
+export const toCanonicalCborHex: (
+  instance: CML.ScriptInvalidBefore,
+) => Effect.Effect<string, ScriptInvalidBeforeError> = Effect.fn(
   (instance: CML.ScriptInvalidBefore) =>
     Effect.try({
       try: () => instance.to_canonical_cbor_hex(),
@@ -166,36 +185,41 @@ export const toCanonicalCborHex: (instance: CML.ScriptInvalidBefore) => Effect.E
         new ScriptInvalidBeforeError({
           message: `ScriptInvalidBefore.toCanonicalCborHex failed ScriptInvalidBefore is not valid for string conversion. Hint: Make sure it's a valid hex string representing CBOR data.`,
         }),
-    })
+    }),
 );
 
 /**
  * Unsafely calls instance.toCanonicalCborHex without Effect wrapper
- * 
+ *
  * @since 2.0.0
  * @category MethodsUnsafe
  */
-export const toCanonicalCborHexUnsafe = (instance: CML.ScriptInvalidBefore): string =>
-  Effect.runSync(toCanonicalCborHex(instance));
+export const toCanonicalCborHexUnsafe = (
+  instance: CML.ScriptInvalidBefore,
+): string => Effect.runSync(toCanonicalCborHex(instance));
 
 /**
  * Static method fromCborHex of ScriptInvalidBefore
- * 
+ *
  * @since 2.0.0
  * @category Constructors
  */
-export const fromCborHex: (cborBytes: string) => Effect.Effect<CML.ScriptInvalidBefore, ScriptInvalidBeforeError> = Effect.fn(function* (cborBytes: string) {
-  return yield* Effect.try({
-    try: () => CML.ScriptInvalidBefore.from_cbor_hex(cborBytes),
-    catch: () => new ScriptInvalidBeforeError({
-      message: `ScriptInvalidBefore.fromCborHex failed with parameters: ${cborBytes}. Hint: Make sure it's a valid hex string representing CBOR data.`,
-    }),
+export const fromCborHex: (
+  cborBytes: string,
+) => Effect.Effect<CML.ScriptInvalidBefore, ScriptInvalidBeforeError> =
+  Effect.fn(function* (cborBytes: string) {
+    return yield* Effect.try({
+      try: () => CML.ScriptInvalidBefore.from_cbor_hex(cborBytes),
+      catch: () =>
+        new ScriptInvalidBeforeError({
+          message: `ScriptInvalidBefore.fromCborHex failed with parameters: ${cborBytes}. Hint: Make sure it's a valid hex string representing CBOR data.`,
+        }),
+    });
   });
-});
 
 /**
  * Unsafely calls ScriptInvalidBefore.fromCborHex without Effect wrapper
- * 
+ *
  * @since 2.0.0
  * @category ConstructorsUnsafe
  */
@@ -204,11 +228,13 @@ export const fromCborHexUnsafe = (cborBytes: string): CML.ScriptInvalidBefore =>
 
 /**
  * Method toJson of ScriptInvalidBefore
- * 
+ *
  * @since 2.0.0
  * @category Methods
  */
-export const toJson: (instance: CML.ScriptInvalidBefore) => Effect.Effect<string, ScriptInvalidBeforeError> = Effect.fn(
+export const toJson: (
+  instance: CML.ScriptInvalidBefore,
+) => Effect.Effect<string, ScriptInvalidBeforeError> = Effect.fn(
   (instance: CML.ScriptInvalidBefore) =>
     Effect.try({
       try: () => instance.to_json(),
@@ -216,12 +242,12 @@ export const toJson: (instance: CML.ScriptInvalidBefore) => Effect.Effect<string
         new ScriptInvalidBeforeError({
           message: `ScriptInvalidBefore.toJson failed ScriptInvalidBefore is not valid for string conversion. Hint: Validate your JSON structure.`,
         }),
-    })
+    }),
 );
 
 /**
  * Unsafely calls instance.toJson without Effect wrapper
- * 
+ *
  * @since 2.0.0
  * @category MethodsUnsafe
  */
@@ -230,11 +256,13 @@ export const toJsonUnsafe = (instance: CML.ScriptInvalidBefore): string =>
 
 /**
  * Method toJsValue of ScriptInvalidBefore
- * 
+ *
  * @since 2.0.0
  * @category Methods
  */
-export const toJsValue: (instance: CML.ScriptInvalidBefore) => Effect.Effect<any, ScriptInvalidBeforeError> = Effect.fn(
+export const toJsValue: (
+  instance: CML.ScriptInvalidBefore,
+) => Effect.Effect<any, ScriptInvalidBeforeError> = Effect.fn(
   (instance: CML.ScriptInvalidBefore) =>
     Effect.try({
       try: () => instance.to_js_value(),
@@ -242,12 +270,12 @@ export const toJsValue: (instance: CML.ScriptInvalidBefore) => Effect.Effect<any
         new ScriptInvalidBeforeError({
           message: `ScriptInvalidBefore.toJsValue failed ScriptInvalidBefore is not valid for any conversion. `,
         }),
-    })
+    }),
 );
 
 /**
  * Unsafely calls instance.toJsValue without Effect wrapper
- * 
+ *
  * @since 2.0.0
  * @category MethodsUnsafe
  */
@@ -256,22 +284,26 @@ export const toJsValueUnsafe = (instance: CML.ScriptInvalidBefore): any =>
 
 /**
  * Static method fromJson of ScriptInvalidBefore
- * 
+ *
  * @since 2.0.0
  * @category Constructors
  */
-export const fromJson: (json: string) => Effect.Effect<CML.ScriptInvalidBefore, ScriptInvalidBeforeError> = Effect.fn(function* (json: string) {
-  return yield* Effect.try({
-    try: () => CML.ScriptInvalidBefore.from_json(json),
-    catch: () => new ScriptInvalidBeforeError({
-      message: `ScriptInvalidBefore.fromJson failed with parameters: ${json}. Hint: Validate your JSON structure.`,
-    }),
+export const fromJson: (
+  json: string,
+) => Effect.Effect<CML.ScriptInvalidBefore, ScriptInvalidBeforeError> =
+  Effect.fn(function* (json: string) {
+    return yield* Effect.try({
+      try: () => CML.ScriptInvalidBefore.from_json(json),
+      catch: () =>
+        new ScriptInvalidBeforeError({
+          message: `ScriptInvalidBefore.fromJson failed with parameters: ${json}. Hint: Validate your JSON structure.`,
+        }),
+    });
   });
-});
 
 /**
  * Unsafely calls ScriptInvalidBefore.fromJson without Effect wrapper
- * 
+ *
  * @since 2.0.0
  * @category ConstructorsUnsafe
  */
@@ -280,11 +312,13 @@ export const fromJsonUnsafe = (json: string): CML.ScriptInvalidBefore =>
 
 /**
  * Method before of ScriptInvalidBefore
- * 
+ *
  * @since 2.0.0
  * @category Methods
  */
-export const before: (instance: CML.ScriptInvalidBefore) => Effect.Effect<bigint, ScriptInvalidBeforeError> = Effect.fn(
+export const before: (
+  instance: CML.ScriptInvalidBefore,
+) => Effect.Effect<bigint, ScriptInvalidBeforeError> = Effect.fn(
   (instance: CML.ScriptInvalidBefore) =>
     Effect.try({
       try: () => instance.before(),
@@ -292,12 +326,12 @@ export const before: (instance: CML.ScriptInvalidBefore) => Effect.Effect<bigint
         new ScriptInvalidBeforeError({
           message: `ScriptInvalidBefore.before failed `,
         }),
-    })
+    }),
 );
 
 /**
  * Unsafely calls instance.before without Effect wrapper
- * 
+ *
  * @since 2.0.0
  * @category MethodsUnsafe
  */
@@ -306,22 +340,26 @@ export const beforeUnsafe = (instance: CML.ScriptInvalidBefore): bigint =>
 
 /**
  * Static method _new of ScriptInvalidBefore
- * 
+ *
  * @since 2.0.0
  * @category Constructors
  */
-export const _new: (before: bigint) => Effect.Effect<CML.ScriptInvalidBefore, ScriptInvalidBeforeError> = Effect.fn(function* (before: bigint) {
-  return yield* Effect.try({
-    try: () => CML.ScriptInvalidBefore.new(before),
-    catch: () => new ScriptInvalidBeforeError({
-      message: `ScriptInvalidBefore._new failed with parameters: ${before}. `,
-    }),
+export const _new: (
+  before: bigint,
+) => Effect.Effect<CML.ScriptInvalidBefore, ScriptInvalidBeforeError> =
+  Effect.fn(function* (before: bigint) {
+    return yield* Effect.try({
+      try: () => CML.ScriptInvalidBefore.new(before),
+      catch: () =>
+        new ScriptInvalidBeforeError({
+          message: `ScriptInvalidBefore._new failed with parameters: ${before}. `,
+        }),
+    });
   });
-});
 
 /**
  * Unsafely calls ScriptInvalidBefore._new without Effect wrapper
- * 
+ *
  * @since 2.0.0
  * @category ConstructorsUnsafe
  */

@@ -60,7 +60,9 @@ Static method \_new of NetworkId
 **Signature**
 
 ```ts
-export declare const _new: (network: bigint) => Effect.Effect<CML.NetworkId, NetworkIdError>
+export declare const _new: (
+  network: bigint,
+) => Effect.Effect<CML.NetworkId, NetworkIdError>;
 ```
 
 Added in v2.0.0
@@ -72,7 +74,9 @@ Static method fromCborBytes of NetworkId
 **Signature**
 
 ```ts
-export declare const fromCborBytes: (cborBytes: Uint8Array) => Effect.Effect<CML.NetworkId, NetworkIdError>
+export declare const fromCborBytes: (
+  cborBytes: Uint8Array,
+) => Effect.Effect<CML.NetworkId, NetworkIdError>;
 ```
 
 Added in v2.0.0
@@ -84,7 +88,9 @@ Static method fromCborHex of NetworkId
 **Signature**
 
 ```ts
-export declare const fromCborHex: (cborBytes: string) => Effect.Effect<CML.NetworkId, NetworkIdError>
+export declare const fromCborHex: (
+  cborBytes: string,
+) => Effect.Effect<CML.NetworkId, NetworkIdError>;
 ```
 
 Added in v2.0.0
@@ -96,7 +102,9 @@ Static method fromJson of NetworkId
 **Signature**
 
 ```ts
-export declare const fromJson: (json: string) => Effect.Effect<CML.NetworkId, NetworkIdError>
+export declare const fromJson: (
+  json: string,
+) => Effect.Effect<CML.NetworkId, NetworkIdError>;
 ```
 
 Added in v2.0.0
@@ -108,7 +116,10 @@ Static method mainnet of NetworkId
 **Signature**
 
 ```ts
-export declare const mainnet: () => Effect.Effect<CML.NetworkId, NetworkIdError>
+export declare const mainnet: () => Effect.Effect<
+  CML.NetworkId,
+  NetworkIdError
+>;
 ```
 
 Added in v2.0.0
@@ -120,7 +131,10 @@ Static method testnet of NetworkId
 **Signature**
 
 ```ts
-export declare const testnet: () => Effect.Effect<CML.NetworkId, NetworkIdError>
+export declare const testnet: () => Effect.Effect<
+  CML.NetworkId,
+  NetworkIdError
+>;
 ```
 
 Added in v2.0.0
@@ -134,7 +148,7 @@ Unsafely calls NetworkId.\_new without Effect wrapper
 **Signature**
 
 ```ts
-export declare const _newUnsafe: (network: bigint) => CML.NetworkId
+export declare const _newUnsafe: (network: bigint) => CML.NetworkId;
 ```
 
 Added in v2.0.0
@@ -146,7 +160,9 @@ Unsafely calls NetworkId.fromCborBytes without Effect wrapper
 **Signature**
 
 ```ts
-export declare const fromCborBytesUnsafe: (cborBytes: Uint8Array) => CML.NetworkId
+export declare const fromCborBytesUnsafe: (
+  cborBytes: Uint8Array,
+) => CML.NetworkId;
 ```
 
 Added in v2.0.0
@@ -158,7 +174,7 @@ Unsafely calls NetworkId.fromCborHex without Effect wrapper
 **Signature**
 
 ```ts
-export declare const fromCborHexUnsafe: (cborBytes: string) => CML.NetworkId
+export declare const fromCborHexUnsafe: (cborBytes: string) => CML.NetworkId;
 ```
 
 Added in v2.0.0
@@ -170,7 +186,7 @@ Unsafely calls NetworkId.fromJson without Effect wrapper
 **Signature**
 
 ```ts
-export declare const fromJsonUnsafe: (json: string) => CML.NetworkId
+export declare const fromJsonUnsafe: (json: string) => CML.NetworkId;
 ```
 
 Added in v2.0.0
@@ -182,7 +198,7 @@ Unsafely calls NetworkId.mainnet without Effect wrapper
 **Signature**
 
 ```ts
-export declare const mainnetUnsafe: () => CML.NetworkId
+export declare const mainnetUnsafe: () => CML.NetworkId;
 ```
 
 Added in v2.0.0
@@ -194,7 +210,7 @@ Unsafely calls NetworkId.testnet without Effect wrapper
 **Signature**
 
 ```ts
-export declare const testnetUnsafe: () => CML.NetworkId
+export declare const testnetUnsafe: () => CML.NetworkId;
 ```
 
 Added in v2.0.0
@@ -224,7 +240,9 @@ Method free of NetworkId
 **Signature**
 
 ```ts
-export declare const free: (instance: CML.NetworkId) => Effect.Effect<void, NetworkIdError>
+export declare const free: (
+  instance: CML.NetworkId,
+) => Effect.Effect<void, NetworkIdError>;
 ```
 
 Added in v2.0.0
@@ -236,7 +254,9 @@ Method network of NetworkId
 **Signature**
 
 ```ts
-export declare const network: (instance: CML.NetworkId) => Effect.Effect<bigint, NetworkIdError>
+export declare const network: (
+  instance: CML.NetworkId,
+) => Effect.Effect<bigint, NetworkIdError>;
 ```
 
 Added in v2.0.0
@@ -248,7 +268,9 @@ Method toCanonicalCborBytes of NetworkId
 **Signature**
 
 ```ts
-export declare const toCanonicalCborBytes: (instance: CML.NetworkId) => Effect.Effect<Uint8Array, NetworkIdError>
+export declare const toCanonicalCborBytes: (
+  instance: CML.NetworkId,
+) => Effect.Effect<Uint8Array, NetworkIdError>;
 ```
 
 Added in v2.0.0
@@ -260,7 +282,9 @@ Method toCanonicalCborHex of NetworkId
 **Signature**
 
 ```ts
-export declare const toCanonicalCborHex: (instance: CML.NetworkId) => Effect.Effect<string, NetworkIdError>
+export declare const toCanonicalCborHex: (
+  instance: CML.NetworkId,
+) => Effect.Effect<string, NetworkIdError>;
 ```
 
 Added in v2.0.0
@@ -272,7 +296,9 @@ Method toCborBytes of NetworkId
 **Signature**
 
 ```ts
-export declare const toCborBytes: (instance: CML.NetworkId) => Effect.Effect<Uint8Array, NetworkIdError>
+export declare const toCborBytes: (
+  instance: CML.NetworkId,
+) => Effect.Effect<Uint8Array, NetworkIdError>;
 ```
 
 Added in v2.0.0
@@ -284,7 +310,9 @@ Method toCborHex of NetworkId
 **Signature**
 
 ```ts
-export declare const toCborHex: (instance: CML.NetworkId) => Effect.Effect<string, NetworkIdError>
+export declare const toCborHex: (
+  instance: CML.NetworkId,
+) => Effect.Effect<string, NetworkIdError>;
 ```
 
 Added in v2.0.0
@@ -296,7 +324,9 @@ Method toJsValue of NetworkId
 **Signature**
 
 ```ts
-export declare const toJsValue: (instance: CML.NetworkId) => Effect.Effect<any, NetworkIdError>
+export declare const toJsValue: (
+  instance: CML.NetworkId,
+) => Effect.Effect<any, NetworkIdError>;
 ```
 
 Added in v2.0.0
@@ -308,7 +338,9 @@ Method toJson of NetworkId
 **Signature**
 
 ```ts
-export declare const toJson: (instance: CML.NetworkId) => Effect.Effect<string, NetworkIdError>
+export declare const toJson: (
+  instance: CML.NetworkId,
+) => Effect.Effect<string, NetworkIdError>;
 ```
 
 Added in v2.0.0
@@ -322,7 +354,7 @@ Unsafely calls instance.free without Effect wrapper
 **Signature**
 
 ```ts
-export declare const freeUnsafe: (instance: CML.NetworkId) => void
+export declare const freeUnsafe: (instance: CML.NetworkId) => void;
 ```
 
 Added in v2.0.0
@@ -334,7 +366,7 @@ Unsafely calls instance.network without Effect wrapper
 **Signature**
 
 ```ts
-export declare const networkUnsafe: (instance: CML.NetworkId) => bigint
+export declare const networkUnsafe: (instance: CML.NetworkId) => bigint;
 ```
 
 Added in v2.0.0
@@ -346,7 +378,9 @@ Unsafely calls instance.toCanonicalCborBytes without Effect wrapper
 **Signature**
 
 ```ts
-export declare const toCanonicalCborBytesUnsafe: (instance: CML.NetworkId) => Uint8Array
+export declare const toCanonicalCborBytesUnsafe: (
+  instance: CML.NetworkId,
+) => Uint8Array;
 ```
 
 Added in v2.0.0
@@ -358,7 +392,9 @@ Unsafely calls instance.toCanonicalCborHex without Effect wrapper
 **Signature**
 
 ```ts
-export declare const toCanonicalCborHexUnsafe: (instance: CML.NetworkId) => string
+export declare const toCanonicalCborHexUnsafe: (
+  instance: CML.NetworkId,
+) => string;
 ```
 
 Added in v2.0.0
@@ -370,7 +406,7 @@ Unsafely calls instance.toCborBytes without Effect wrapper
 **Signature**
 
 ```ts
-export declare const toCborBytesUnsafe: (instance: CML.NetworkId) => Uint8Array
+export declare const toCborBytesUnsafe: (instance: CML.NetworkId) => Uint8Array;
 ```
 
 Added in v2.0.0
@@ -382,7 +418,7 @@ Unsafely calls instance.toCborHex without Effect wrapper
 **Signature**
 
 ```ts
-export declare const toCborHexUnsafe: (instance: CML.NetworkId) => string
+export declare const toCborHexUnsafe: (instance: CML.NetworkId) => string;
 ```
 
 Added in v2.0.0
@@ -394,7 +430,7 @@ Unsafely calls instance.toJsValue without Effect wrapper
 **Signature**
 
 ```ts
-export declare const toJsValueUnsafe: (instance: CML.NetworkId) => any
+export declare const toJsValueUnsafe: (instance: CML.NetworkId) => any;
 ```
 
 Added in v2.0.0
@@ -406,7 +442,7 @@ Unsafely calls instance.toJson without Effect wrapper
 **Signature**
 
 ```ts
-export declare const toJsonUnsafe: (instance: CML.NetworkId) => string
+export declare const toJsonUnsafe: (instance: CML.NetworkId) => string;
 ```
 
 Added in v2.0.0
@@ -420,7 +456,7 @@ Type alias for the CML NetworkId class
 **Signature**
 
 ```ts
-export type NetworkId = CML.NetworkId
+export type NetworkId = CML.NetworkId;
 ```
 
 Added in v2.0.0

@@ -66,8 +66,8 @@ export declare const _new: (
   actionId: CML.GovActionId | undefined,
   coldCredentials: CML.CommitteeColdCredentialList,
   credentials: CML.MapCommitteeColdCredentialToEpoch,
-  unitInterval: CML.UnitInterval
-) => Effect.Effect<CML.UpdateCommittee, UpdateCommitteeError>
+  unitInterval: CML.UnitInterval,
+) => Effect.Effect<CML.UpdateCommittee, UpdateCommitteeError>;
 ```
 
 Added in v2.0.0
@@ -79,7 +79,9 @@ Static method fromCborBytes of UpdateCommittee
 **Signature**
 
 ```ts
-export declare const fromCborBytes: (cborBytes: Uint8Array) => Effect.Effect<CML.UpdateCommittee, UpdateCommitteeError>
+export declare const fromCborBytes: (
+  cborBytes: Uint8Array,
+) => Effect.Effect<CML.UpdateCommittee, UpdateCommitteeError>;
 ```
 
 Added in v2.0.0
@@ -91,7 +93,9 @@ Static method fromCborHex of UpdateCommittee
 **Signature**
 
 ```ts
-export declare const fromCborHex: (cborBytes: string) => Effect.Effect<CML.UpdateCommittee, UpdateCommitteeError>
+export declare const fromCborHex: (
+  cborBytes: string,
+) => Effect.Effect<CML.UpdateCommittee, UpdateCommitteeError>;
 ```
 
 Added in v2.0.0
@@ -103,7 +107,9 @@ Static method fromJson of UpdateCommittee
 **Signature**
 
 ```ts
-export declare const fromJson: (json: string) => Effect.Effect<CML.UpdateCommittee, UpdateCommitteeError>
+export declare const fromJson: (
+  json: string,
+) => Effect.Effect<CML.UpdateCommittee, UpdateCommitteeError>;
 ```
 
 Added in v2.0.0
@@ -121,8 +127,8 @@ export declare const _newUnsafe: (
   actionId: CML.GovActionId | undefined,
   coldCredentials: CML.CommitteeColdCredentialList,
   credentials: CML.MapCommitteeColdCredentialToEpoch,
-  unitInterval: CML.UnitInterval
-) => CML.UpdateCommittee
+  unitInterval: CML.UnitInterval,
+) => CML.UpdateCommittee;
 ```
 
 Added in v2.0.0
@@ -134,7 +140,9 @@ Unsafely calls UpdateCommittee.fromCborBytes without Effect wrapper
 **Signature**
 
 ```ts
-export declare const fromCborBytesUnsafe: (cborBytes: Uint8Array) => CML.UpdateCommittee
+export declare const fromCborBytesUnsafe: (
+  cborBytes: Uint8Array,
+) => CML.UpdateCommittee;
 ```
 
 Added in v2.0.0
@@ -146,7 +154,9 @@ Unsafely calls UpdateCommittee.fromCborHex without Effect wrapper
 **Signature**
 
 ```ts
-export declare const fromCborHexUnsafe: (cborBytes: string) => CML.UpdateCommittee
+export declare const fromCborHexUnsafe: (
+  cborBytes: string,
+) => CML.UpdateCommittee;
 ```
 
 Added in v2.0.0
@@ -158,7 +168,7 @@ Unsafely calls UpdateCommittee.fromJson without Effect wrapper
 **Signature**
 
 ```ts
-export declare const fromJsonUnsafe: (json: string) => CML.UpdateCommittee
+export declare const fromJsonUnsafe: (json: string) => CML.UpdateCommittee;
 ```
 
 Added in v2.0.0
@@ -189,8 +199,8 @@ Method actionId of UpdateCommittee
 
 ```ts
 export declare const actionId: (
-  instance: CML.UpdateCommittee
-) => Effect.Effect<CML.GovActionId | undefined, UpdateCommitteeError>
+  instance: CML.UpdateCommittee,
+) => Effect.Effect<CML.GovActionId | undefined, UpdateCommitteeError>;
 ```
 
 Added in v2.0.0
@@ -203,8 +213,8 @@ Method coldCredentials of UpdateCommittee
 
 ```ts
 export declare const coldCredentials: (
-  instance: CML.UpdateCommittee
-) => Effect.Effect<CML.CommitteeColdCredentialList, UpdateCommitteeError>
+  instance: CML.UpdateCommittee,
+) => Effect.Effect<CML.CommitteeColdCredentialList, UpdateCommitteeError>;
 ```
 
 Added in v2.0.0
@@ -217,8 +227,8 @@ Method credentials of UpdateCommittee
 
 ```ts
 export declare const credentials: (
-  instance: CML.UpdateCommittee
-) => Effect.Effect<CML.MapCommitteeColdCredentialToEpoch, UpdateCommitteeError>
+  instance: CML.UpdateCommittee,
+) => Effect.Effect<CML.MapCommitteeColdCredentialToEpoch, UpdateCommitteeError>;
 ```
 
 Added in v2.0.0
@@ -230,7 +240,9 @@ Method free of UpdateCommittee
 **Signature**
 
 ```ts
-export declare const free: (instance: CML.UpdateCommittee) => Effect.Effect<void, UpdateCommitteeError>
+export declare const free: (
+  instance: CML.UpdateCommittee,
+) => Effect.Effect<void, UpdateCommitteeError>;
 ```
 
 Added in v2.0.0
@@ -243,8 +255,8 @@ Method toCanonicalCborBytes of UpdateCommittee
 
 ```ts
 export declare const toCanonicalCborBytes: (
-  instance: CML.UpdateCommittee
-) => Effect.Effect<Uint8Array, UpdateCommitteeError>
+  instance: CML.UpdateCommittee,
+) => Effect.Effect<Uint8Array, UpdateCommitteeError>;
 ```
 
 Added in v2.0.0
@@ -256,7 +268,9 @@ Method toCanonicalCborHex of UpdateCommittee
 **Signature**
 
 ```ts
-export declare const toCanonicalCborHex: (instance: CML.UpdateCommittee) => Effect.Effect<string, UpdateCommitteeError>
+export declare const toCanonicalCborHex: (
+  instance: CML.UpdateCommittee,
+) => Effect.Effect<string, UpdateCommitteeError>;
 ```
 
 Added in v2.0.0
@@ -268,7 +282,9 @@ Method toCborBytes of UpdateCommittee
 **Signature**
 
 ```ts
-export declare const toCborBytes: (instance: CML.UpdateCommittee) => Effect.Effect<Uint8Array, UpdateCommitteeError>
+export declare const toCborBytes: (
+  instance: CML.UpdateCommittee,
+) => Effect.Effect<Uint8Array, UpdateCommitteeError>;
 ```
 
 Added in v2.0.0
@@ -280,7 +296,9 @@ Method toCborHex of UpdateCommittee
 **Signature**
 
 ```ts
-export declare const toCborHex: (instance: CML.UpdateCommittee) => Effect.Effect<string, UpdateCommitteeError>
+export declare const toCborHex: (
+  instance: CML.UpdateCommittee,
+) => Effect.Effect<string, UpdateCommitteeError>;
 ```
 
 Added in v2.0.0
@@ -292,7 +310,9 @@ Method toJsValue of UpdateCommittee
 **Signature**
 
 ```ts
-export declare const toJsValue: (instance: CML.UpdateCommittee) => Effect.Effect<any, UpdateCommitteeError>
+export declare const toJsValue: (
+  instance: CML.UpdateCommittee,
+) => Effect.Effect<any, UpdateCommitteeError>;
 ```
 
 Added in v2.0.0
@@ -304,7 +324,9 @@ Method toJson of UpdateCommittee
 **Signature**
 
 ```ts
-export declare const toJson: (instance: CML.UpdateCommittee) => Effect.Effect<string, UpdateCommitteeError>
+export declare const toJson: (
+  instance: CML.UpdateCommittee,
+) => Effect.Effect<string, UpdateCommitteeError>;
 ```
 
 Added in v2.0.0
@@ -317,8 +339,8 @@ Method unitInterval of UpdateCommittee
 
 ```ts
 export declare const unitInterval: (
-  instance: CML.UpdateCommittee
-) => Effect.Effect<CML.UnitInterval, UpdateCommitteeError>
+  instance: CML.UpdateCommittee,
+) => Effect.Effect<CML.UnitInterval, UpdateCommitteeError>;
 ```
 
 Added in v2.0.0
@@ -332,7 +354,9 @@ Unsafely calls instance.actionId without Effect wrapper
 **Signature**
 
 ```ts
-export declare const actionIdUnsafe: (instance: CML.UpdateCommittee) => CML.GovActionId | undefined
+export declare const actionIdUnsafe: (
+  instance: CML.UpdateCommittee,
+) => CML.GovActionId | undefined;
 ```
 
 Added in v2.0.0
@@ -344,7 +368,9 @@ Unsafely calls instance.coldCredentials without Effect wrapper
 **Signature**
 
 ```ts
-export declare const coldCredentialsUnsafe: (instance: CML.UpdateCommittee) => CML.CommitteeColdCredentialList
+export declare const coldCredentialsUnsafe: (
+  instance: CML.UpdateCommittee,
+) => CML.CommitteeColdCredentialList;
 ```
 
 Added in v2.0.0
@@ -356,7 +382,9 @@ Unsafely calls instance.credentials without Effect wrapper
 **Signature**
 
 ```ts
-export declare const credentialsUnsafe: (instance: CML.UpdateCommittee) => CML.MapCommitteeColdCredentialToEpoch
+export declare const credentialsUnsafe: (
+  instance: CML.UpdateCommittee,
+) => CML.MapCommitteeColdCredentialToEpoch;
 ```
 
 Added in v2.0.0
@@ -368,7 +396,7 @@ Unsafely calls instance.free without Effect wrapper
 **Signature**
 
 ```ts
-export declare const freeUnsafe: (instance: CML.UpdateCommittee) => void
+export declare const freeUnsafe: (instance: CML.UpdateCommittee) => void;
 ```
 
 Added in v2.0.0
@@ -380,7 +408,9 @@ Unsafely calls instance.toCanonicalCborBytes without Effect wrapper
 **Signature**
 
 ```ts
-export declare const toCanonicalCborBytesUnsafe: (instance: CML.UpdateCommittee) => Uint8Array
+export declare const toCanonicalCborBytesUnsafe: (
+  instance: CML.UpdateCommittee,
+) => Uint8Array;
 ```
 
 Added in v2.0.0
@@ -392,7 +422,9 @@ Unsafely calls instance.toCanonicalCborHex without Effect wrapper
 **Signature**
 
 ```ts
-export declare const toCanonicalCborHexUnsafe: (instance: CML.UpdateCommittee) => string
+export declare const toCanonicalCborHexUnsafe: (
+  instance: CML.UpdateCommittee,
+) => string;
 ```
 
 Added in v2.0.0
@@ -404,7 +436,9 @@ Unsafely calls instance.toCborBytes without Effect wrapper
 **Signature**
 
 ```ts
-export declare const toCborBytesUnsafe: (instance: CML.UpdateCommittee) => Uint8Array
+export declare const toCborBytesUnsafe: (
+  instance: CML.UpdateCommittee,
+) => Uint8Array;
 ```
 
 Added in v2.0.0
@@ -416,7 +450,7 @@ Unsafely calls instance.toCborHex without Effect wrapper
 **Signature**
 
 ```ts
-export declare const toCborHexUnsafe: (instance: CML.UpdateCommittee) => string
+export declare const toCborHexUnsafe: (instance: CML.UpdateCommittee) => string;
 ```
 
 Added in v2.0.0
@@ -428,7 +462,7 @@ Unsafely calls instance.toJsValue without Effect wrapper
 **Signature**
 
 ```ts
-export declare const toJsValueUnsafe: (instance: CML.UpdateCommittee) => any
+export declare const toJsValueUnsafe: (instance: CML.UpdateCommittee) => any;
 ```
 
 Added in v2.0.0
@@ -440,7 +474,7 @@ Unsafely calls instance.toJson without Effect wrapper
 **Signature**
 
 ```ts
-export declare const toJsonUnsafe: (instance: CML.UpdateCommittee) => string
+export declare const toJsonUnsafe: (instance: CML.UpdateCommittee) => string;
 ```
 
 Added in v2.0.0
@@ -452,7 +486,9 @@ Unsafely calls instance.unitInterval without Effect wrapper
 **Signature**
 
 ```ts
-export declare const unitIntervalUnsafe: (instance: CML.UpdateCommittee) => CML.UnitInterval
+export declare const unitIntervalUnsafe: (
+  instance: CML.UpdateCommittee,
+) => CML.UnitInterval;
 ```
 
 Added in v2.0.0
@@ -466,7 +502,7 @@ Type alias for the CML UpdateCommittee class
 **Signature**
 
 ```ts
-export type UpdateCommittee = CML.UpdateCommittee
+export type UpdateCommittee = CML.UpdateCommittee;
 ```
 
 Added in v2.0.0

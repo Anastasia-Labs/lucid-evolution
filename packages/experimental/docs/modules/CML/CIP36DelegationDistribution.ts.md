@@ -63,8 +63,11 @@ Static method fromCborBytes of CIP36DelegationDistribution
 
 ```ts
 export declare const fromCborBytes: (
-  cborBytes: Uint8Array
-) => Effect.Effect<CML.CIP36DelegationDistribution, CIP36DelegationDistributionError>
+  cborBytes: Uint8Array,
+) => Effect.Effect<
+  CML.CIP36DelegationDistribution,
+  CIP36DelegationDistributionError
+>;
 ```
 
 Added in v2.0.0
@@ -77,8 +80,11 @@ Static method fromCborHex of CIP36DelegationDistribution
 
 ```ts
 export declare const fromCborHex: (
-  cborBytes: string
-) => Effect.Effect<CML.CIP36DelegationDistribution, CIP36DelegationDistributionError>
+  cborBytes: string,
+) => Effect.Effect<
+  CML.CIP36DelegationDistribution,
+  CIP36DelegationDistributionError
+>;
 ```
 
 Added in v2.0.0
@@ -91,8 +97,11 @@ Static method fromJson of CIP36DelegationDistribution
 
 ```ts
 export declare const fromJson: (
-  json: string
-) => Effect.Effect<CML.CIP36DelegationDistribution, CIP36DelegationDistributionError>
+  json: string,
+) => Effect.Effect<
+  CML.CIP36DelegationDistribution,
+  CIP36DelegationDistributionError
+>;
 ```
 
 Added in v2.0.0
@@ -105,8 +114,11 @@ Static method newLegacy of CIP36DelegationDistribution
 
 ```ts
 export declare const newLegacy: (
-  legacy: CML.PublicKey
-) => Effect.Effect<CML.CIP36DelegationDistribution, CIP36DelegationDistributionError>
+  legacy: CML.PublicKey,
+) => Effect.Effect<
+  CML.CIP36DelegationDistribution,
+  CIP36DelegationDistributionError
+>;
 ```
 
 Added in v2.0.0
@@ -119,8 +131,11 @@ Static method newWeighted of CIP36DelegationDistribution
 
 ```ts
 export declare const newWeighted: (
-  delegations: CML.CIP36DelegationList
-) => Effect.Effect<CML.CIP36DelegationDistribution, CIP36DelegationDistributionError>
+  delegations: CML.CIP36DelegationList,
+) => Effect.Effect<
+  CML.CIP36DelegationDistribution,
+  CIP36DelegationDistributionError
+>;
 ```
 
 Added in v2.0.0
@@ -134,7 +149,9 @@ Unsafely calls CIP36DelegationDistribution.fromCborBytes without Effect wrapper
 **Signature**
 
 ```ts
-export declare const fromCborBytesUnsafe: (cborBytes: Uint8Array) => CML.CIP36DelegationDistribution
+export declare const fromCborBytesUnsafe: (
+  cborBytes: Uint8Array,
+) => CML.CIP36DelegationDistribution;
 ```
 
 Added in v2.0.0
@@ -146,7 +163,9 @@ Unsafely calls CIP36DelegationDistribution.fromCborHex without Effect wrapper
 **Signature**
 
 ```ts
-export declare const fromCborHexUnsafe: (cborBytes: string) => CML.CIP36DelegationDistribution
+export declare const fromCborHexUnsafe: (
+  cborBytes: string,
+) => CML.CIP36DelegationDistribution;
 ```
 
 Added in v2.0.0
@@ -158,7 +177,9 @@ Unsafely calls CIP36DelegationDistribution.fromJson without Effect wrapper
 **Signature**
 
 ```ts
-export declare const fromJsonUnsafe: (json: string) => CML.CIP36DelegationDistribution
+export declare const fromJsonUnsafe: (
+  json: string,
+) => CML.CIP36DelegationDistribution;
 ```
 
 Added in v2.0.0
@@ -170,7 +191,9 @@ Unsafely calls CIP36DelegationDistribution.newLegacy without Effect wrapper
 **Signature**
 
 ```ts
-export declare const newLegacyUnsafe: (legacy: CML.PublicKey) => CML.CIP36DelegationDistribution
+export declare const newLegacyUnsafe: (
+  legacy: CML.PublicKey,
+) => CML.CIP36DelegationDistribution;
 ```
 
 Added in v2.0.0
@@ -182,7 +205,9 @@ Unsafely calls CIP36DelegationDistribution.newWeighted without Effect wrapper
 **Signature**
 
 ```ts
-export declare const newWeightedUnsafe: (delegations: CML.CIP36DelegationList) => CML.CIP36DelegationDistribution
+export declare const newWeightedUnsafe: (
+  delegations: CML.CIP36DelegationList,
+) => CML.CIP36DelegationDistribution;
 ```
 
 Added in v2.0.0
@@ -213,8 +238,8 @@ Method asLegacy of CIP36DelegationDistribution
 
 ```ts
 export declare const asLegacy: (
-  instance: CML.CIP36DelegationDistribution
-) => Effect.Effect<CML.PublicKey | undefined, CIP36DelegationDistributionError>
+  instance: CML.CIP36DelegationDistribution,
+) => Effect.Effect<CML.PublicKey | undefined, CIP36DelegationDistributionError>;
 ```
 
 Added in v2.0.0
@@ -227,8 +252,11 @@ Method asWeighted of CIP36DelegationDistribution
 
 ```ts
 export declare const asWeighted: (
-  instance: CML.CIP36DelegationDistribution
-) => Effect.Effect<CML.CIP36DelegationList | undefined, CIP36DelegationDistributionError>
+  instance: CML.CIP36DelegationDistribution,
+) => Effect.Effect<
+  CML.CIP36DelegationList | undefined,
+  CIP36DelegationDistributionError
+>;
 ```
 
 Added in v2.0.0
@@ -241,8 +269,8 @@ Method free of CIP36DelegationDistribution
 
 ```ts
 export declare const free: (
-  instance: CML.CIP36DelegationDistribution
-) => Effect.Effect<void, CIP36DelegationDistributionError>
+  instance: CML.CIP36DelegationDistribution,
+) => Effect.Effect<void, CIP36DelegationDistributionError>;
 ```
 
 Added in v2.0.0
@@ -255,8 +283,11 @@ Method kind of CIP36DelegationDistribution
 
 ```ts
 export declare const kind: (
-  instance: CML.CIP36DelegationDistribution
-) => Effect.Effect<CML.DelegationDistributionKind, CIP36DelegationDistributionError>
+  instance: CML.CIP36DelegationDistribution,
+) => Effect.Effect<
+  CML.DelegationDistributionKind,
+  CIP36DelegationDistributionError
+>;
 ```
 
 Added in v2.0.0
@@ -269,8 +300,8 @@ Method toCanonicalCborBytes of CIP36DelegationDistribution
 
 ```ts
 export declare const toCanonicalCborBytes: (
-  instance: CML.CIP36DelegationDistribution
-) => Effect.Effect<Uint8Array, CIP36DelegationDistributionError>
+  instance: CML.CIP36DelegationDistribution,
+) => Effect.Effect<Uint8Array, CIP36DelegationDistributionError>;
 ```
 
 Added in v2.0.0
@@ -283,8 +314,8 @@ Method toCanonicalCborHex of CIP36DelegationDistribution
 
 ```ts
 export declare const toCanonicalCborHex: (
-  instance: CML.CIP36DelegationDistribution
-) => Effect.Effect<string, CIP36DelegationDistributionError>
+  instance: CML.CIP36DelegationDistribution,
+) => Effect.Effect<string, CIP36DelegationDistributionError>;
 ```
 
 Added in v2.0.0
@@ -297,8 +328,8 @@ Method toCborBytes of CIP36DelegationDistribution
 
 ```ts
 export declare const toCborBytes: (
-  instance: CML.CIP36DelegationDistribution
-) => Effect.Effect<Uint8Array, CIP36DelegationDistributionError>
+  instance: CML.CIP36DelegationDistribution,
+) => Effect.Effect<Uint8Array, CIP36DelegationDistributionError>;
 ```
 
 Added in v2.0.0
@@ -311,8 +342,8 @@ Method toCborHex of CIP36DelegationDistribution
 
 ```ts
 export declare const toCborHex: (
-  instance: CML.CIP36DelegationDistribution
-) => Effect.Effect<string, CIP36DelegationDistributionError>
+  instance: CML.CIP36DelegationDistribution,
+) => Effect.Effect<string, CIP36DelegationDistributionError>;
 ```
 
 Added in v2.0.0
@@ -325,8 +356,8 @@ Method toJsValue of CIP36DelegationDistribution
 
 ```ts
 export declare const toJsValue: (
-  instance: CML.CIP36DelegationDistribution
-) => Effect.Effect<any, CIP36DelegationDistributionError>
+  instance: CML.CIP36DelegationDistribution,
+) => Effect.Effect<any, CIP36DelegationDistributionError>;
 ```
 
 Added in v2.0.0
@@ -339,8 +370,8 @@ Method toJson of CIP36DelegationDistribution
 
 ```ts
 export declare const toJson: (
-  instance: CML.CIP36DelegationDistribution
-) => Effect.Effect<string, CIP36DelegationDistributionError>
+  instance: CML.CIP36DelegationDistribution,
+) => Effect.Effect<string, CIP36DelegationDistributionError>;
 ```
 
 Added in v2.0.0
@@ -354,7 +385,9 @@ Unsafely calls instance.asLegacy without Effect wrapper
 **Signature**
 
 ```ts
-export declare const asLegacyUnsafe: (instance: CML.CIP36DelegationDistribution) => CML.PublicKey | undefined
+export declare const asLegacyUnsafe: (
+  instance: CML.CIP36DelegationDistribution,
+) => CML.PublicKey | undefined;
 ```
 
 Added in v2.0.0
@@ -367,8 +400,8 @@ Unsafely calls instance.asWeighted without Effect wrapper
 
 ```ts
 export declare const asWeightedUnsafe: (
-  instance: CML.CIP36DelegationDistribution
-) => CML.CIP36DelegationList | undefined
+  instance: CML.CIP36DelegationDistribution,
+) => CML.CIP36DelegationList | undefined;
 ```
 
 Added in v2.0.0
@@ -380,7 +413,9 @@ Unsafely calls instance.free without Effect wrapper
 **Signature**
 
 ```ts
-export declare const freeUnsafe: (instance: CML.CIP36DelegationDistribution) => void
+export declare const freeUnsafe: (
+  instance: CML.CIP36DelegationDistribution,
+) => void;
 ```
 
 Added in v2.0.0
@@ -392,7 +427,9 @@ Unsafely calls instance.kind without Effect wrapper
 **Signature**
 
 ```ts
-export declare const kindUnsafe: (instance: CML.CIP36DelegationDistribution) => CML.DelegationDistributionKind
+export declare const kindUnsafe: (
+  instance: CML.CIP36DelegationDistribution,
+) => CML.DelegationDistributionKind;
 ```
 
 Added in v2.0.0
@@ -404,7 +441,9 @@ Unsafely calls instance.toCanonicalCborBytes without Effect wrapper
 **Signature**
 
 ```ts
-export declare const toCanonicalCborBytesUnsafe: (instance: CML.CIP36DelegationDistribution) => Uint8Array
+export declare const toCanonicalCborBytesUnsafe: (
+  instance: CML.CIP36DelegationDistribution,
+) => Uint8Array;
 ```
 
 Added in v2.0.0
@@ -416,7 +455,9 @@ Unsafely calls instance.toCanonicalCborHex without Effect wrapper
 **Signature**
 
 ```ts
-export declare const toCanonicalCborHexUnsafe: (instance: CML.CIP36DelegationDistribution) => string
+export declare const toCanonicalCborHexUnsafe: (
+  instance: CML.CIP36DelegationDistribution,
+) => string;
 ```
 
 Added in v2.0.0
@@ -428,7 +469,9 @@ Unsafely calls instance.toCborBytes without Effect wrapper
 **Signature**
 
 ```ts
-export declare const toCborBytesUnsafe: (instance: CML.CIP36DelegationDistribution) => Uint8Array
+export declare const toCborBytesUnsafe: (
+  instance: CML.CIP36DelegationDistribution,
+) => Uint8Array;
 ```
 
 Added in v2.0.0
@@ -440,7 +483,9 @@ Unsafely calls instance.toCborHex without Effect wrapper
 **Signature**
 
 ```ts
-export declare const toCborHexUnsafe: (instance: CML.CIP36DelegationDistribution) => string
+export declare const toCborHexUnsafe: (
+  instance: CML.CIP36DelegationDistribution,
+) => string;
 ```
 
 Added in v2.0.0
@@ -452,7 +497,9 @@ Unsafely calls instance.toJsValue without Effect wrapper
 **Signature**
 
 ```ts
-export declare const toJsValueUnsafe: (instance: CML.CIP36DelegationDistribution) => any
+export declare const toJsValueUnsafe: (
+  instance: CML.CIP36DelegationDistribution,
+) => any;
 ```
 
 Added in v2.0.0
@@ -464,7 +511,9 @@ Unsafely calls instance.toJson without Effect wrapper
 **Signature**
 
 ```ts
-export declare const toJsonUnsafe: (instance: CML.CIP36DelegationDistribution) => string
+export declare const toJsonUnsafe: (
+  instance: CML.CIP36DelegationDistribution,
+) => string;
 ```
 
 Added in v2.0.0
@@ -478,7 +527,7 @@ Type alias for the CML CIP36DelegationDistribution class
 **Signature**
 
 ```ts
-export type CIP36DelegationDistribution = CML.CIP36DelegationDistribution
+export type CIP36DelegationDistribution = CML.CIP36DelegationDistribution;
 ```
 
 Added in v2.0.0

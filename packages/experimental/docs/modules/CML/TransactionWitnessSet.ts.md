@@ -90,7 +90,10 @@ Static method \_new of TransactionWitnessSet
 **Signature**
 
 ```ts
-export declare const _new: () => Effect.Effect<CML.TransactionWitnessSet, TransactionWitnessSetError>
+export declare const _new: () => Effect.Effect<
+  CML.TransactionWitnessSet,
+  TransactionWitnessSetError
+>;
 ```
 
 Added in v2.0.0
@@ -103,8 +106,8 @@ Static method fromCborBytes of TransactionWitnessSet
 
 ```ts
 export declare const fromCborBytes: (
-  cborBytes: Uint8Array
-) => Effect.Effect<CML.TransactionWitnessSet, TransactionWitnessSetError>
+  cborBytes: Uint8Array,
+) => Effect.Effect<CML.TransactionWitnessSet, TransactionWitnessSetError>;
 ```
 
 Added in v2.0.0
@@ -117,8 +120,8 @@ Static method fromCborHex of TransactionWitnessSet
 
 ```ts
 export declare const fromCborHex: (
-  cborBytes: string
-) => Effect.Effect<CML.TransactionWitnessSet, TransactionWitnessSetError>
+  cborBytes: string,
+) => Effect.Effect<CML.TransactionWitnessSet, TransactionWitnessSetError>;
 ```
 
 Added in v2.0.0
@@ -130,7 +133,9 @@ Static method fromJson of TransactionWitnessSet
 **Signature**
 
 ```ts
-export declare const fromJson: (json: string) => Effect.Effect<CML.TransactionWitnessSet, TransactionWitnessSetError>
+export declare const fromJson: (
+  json: string,
+) => Effect.Effect<CML.TransactionWitnessSet, TransactionWitnessSetError>;
 ```
 
 Added in v2.0.0
@@ -144,7 +149,7 @@ Unsafely calls TransactionWitnessSet.\_new without Effect wrapper
 **Signature**
 
 ```ts
-export declare const _newUnsafe: () => CML.TransactionWitnessSet
+export declare const _newUnsafe: () => CML.TransactionWitnessSet;
 ```
 
 Added in v2.0.0
@@ -156,7 +161,9 @@ Unsafely calls TransactionWitnessSet.fromCborBytes without Effect wrapper
 **Signature**
 
 ```ts
-export declare const fromCborBytesUnsafe: (cborBytes: Uint8Array) => CML.TransactionWitnessSet
+export declare const fromCborBytesUnsafe: (
+  cborBytes: Uint8Array,
+) => CML.TransactionWitnessSet;
 ```
 
 Added in v2.0.0
@@ -168,7 +175,9 @@ Unsafely calls TransactionWitnessSet.fromCborHex without Effect wrapper
 **Signature**
 
 ```ts
-export declare const fromCborHexUnsafe: (cborBytes: string) => CML.TransactionWitnessSet
+export declare const fromCborHexUnsafe: (
+  cborBytes: string,
+) => CML.TransactionWitnessSet;
 ```
 
 Added in v2.0.0
@@ -180,7 +189,9 @@ Unsafely calls TransactionWitnessSet.fromJson without Effect wrapper
 **Signature**
 
 ```ts
-export declare const fromJsonUnsafe: (json: string) => CML.TransactionWitnessSet
+export declare const fromJsonUnsafe: (
+  json: string,
+) => CML.TransactionWitnessSet;
 ```
 
 Added in v2.0.0
@@ -212,8 +223,8 @@ Method addAllWitnesses of TransactionWitnessSet
 ```ts
 export declare const addAllWitnesses: (
   instance: CML.TransactionWitnessSet,
-  other: CML.TransactionWitnessSet
-) => Effect.Effect<void, TransactionWitnessSetError>
+  other: CML.TransactionWitnessSet,
+) => Effect.Effect<void, TransactionWitnessSetError>;
 ```
 
 Added in v2.0.0
@@ -226,8 +237,11 @@ Method bootstrapWitnesses of TransactionWitnessSet
 
 ```ts
 export declare const bootstrapWitnesses: (
-  instance: CML.TransactionWitnessSet
-) => Effect.Effect<CML.BootstrapWitnessList | undefined, TransactionWitnessSetError>
+  instance: CML.TransactionWitnessSet,
+) => Effect.Effect<
+  CML.BootstrapWitnessList | undefined,
+  TransactionWitnessSetError
+>;
 ```
 
 Added in v2.0.0
@@ -239,7 +253,9 @@ Method free of TransactionWitnessSet
 **Signature**
 
 ```ts
-export declare const free: (instance: CML.TransactionWitnessSet) => Effect.Effect<void, TransactionWitnessSetError>
+export declare const free: (
+  instance: CML.TransactionWitnessSet,
+) => Effect.Effect<void, TransactionWitnessSetError>;
 ```
 
 Added in v2.0.0
@@ -252,8 +268,8 @@ Method languages of TransactionWitnessSet
 
 ```ts
 export declare const languages: (
-  instance: CML.TransactionWitnessSet
-) => Effect.Effect<CML.LanguageList, TransactionWitnessSetError>
+  instance: CML.TransactionWitnessSet,
+) => Effect.Effect<CML.LanguageList, TransactionWitnessSetError>;
 ```
 
 Added in v2.0.0
@@ -266,8 +282,11 @@ Method nativeScripts of TransactionWitnessSet
 
 ```ts
 export declare const nativeScripts: (
-  instance: CML.TransactionWitnessSet
-) => Effect.Effect<CML.NativeScriptList | undefined, TransactionWitnessSetError>
+  instance: CML.TransactionWitnessSet,
+) => Effect.Effect<
+  CML.NativeScriptList | undefined,
+  TransactionWitnessSetError
+>;
 ```
 
 Added in v2.0.0
@@ -280,8 +299,8 @@ Method plutusDatums of TransactionWitnessSet
 
 ```ts
 export declare const plutusDatums: (
-  instance: CML.TransactionWitnessSet
-) => Effect.Effect<CML.PlutusDataList | undefined, TransactionWitnessSetError>
+  instance: CML.TransactionWitnessSet,
+) => Effect.Effect<CML.PlutusDataList | undefined, TransactionWitnessSetError>;
 ```
 
 Added in v2.0.0
@@ -294,8 +313,11 @@ Method plutusV1Scripts of TransactionWitnessSet
 
 ```ts
 export declare const plutusV1Scripts: (
-  instance: CML.TransactionWitnessSet
-) => Effect.Effect<CML.PlutusV1ScriptList | undefined, TransactionWitnessSetError>
+  instance: CML.TransactionWitnessSet,
+) => Effect.Effect<
+  CML.PlutusV1ScriptList | undefined,
+  TransactionWitnessSetError
+>;
 ```
 
 Added in v2.0.0
@@ -308,8 +330,11 @@ Method plutusV2Scripts of TransactionWitnessSet
 
 ```ts
 export declare const plutusV2Scripts: (
-  instance: CML.TransactionWitnessSet
-) => Effect.Effect<CML.PlutusV2ScriptList | undefined, TransactionWitnessSetError>
+  instance: CML.TransactionWitnessSet,
+) => Effect.Effect<
+  CML.PlutusV2ScriptList | undefined,
+  TransactionWitnessSetError
+>;
 ```
 
 Added in v2.0.0
@@ -322,8 +347,11 @@ Method plutusV3Scripts of TransactionWitnessSet
 
 ```ts
 export declare const plutusV3Scripts: (
-  instance: CML.TransactionWitnessSet
-) => Effect.Effect<CML.PlutusV3ScriptList | undefined, TransactionWitnessSetError>
+  instance: CML.TransactionWitnessSet,
+) => Effect.Effect<
+  CML.PlutusV3ScriptList | undefined,
+  TransactionWitnessSetError
+>;
 ```
 
 Added in v2.0.0
@@ -336,8 +364,8 @@ Method redeemers of TransactionWitnessSet
 
 ```ts
 export declare const redeemers: (
-  instance: CML.TransactionWitnessSet
-) => Effect.Effect<CML.Redeemers | undefined, TransactionWitnessSetError>
+  instance: CML.TransactionWitnessSet,
+) => Effect.Effect<CML.Redeemers | undefined, TransactionWitnessSetError>;
 ```
 
 Added in v2.0.0
@@ -351,8 +379,8 @@ Method setBootstrapWitnesses of TransactionWitnessSet
 ```ts
 export declare const setBootstrapWitnesses: (
   instance: CML.TransactionWitnessSet,
-  bootstrapWitnesses: CML.BootstrapWitnessList
-) => Effect.Effect<void, TransactionWitnessSetError>
+  bootstrapWitnesses: CML.BootstrapWitnessList,
+) => Effect.Effect<void, TransactionWitnessSetError>;
 ```
 
 Added in v2.0.0
@@ -366,8 +394,8 @@ Method setNativeScripts of TransactionWitnessSet
 ```ts
 export declare const setNativeScripts: (
   instance: CML.TransactionWitnessSet,
-  nativeScripts: CML.NativeScriptList
-) => Effect.Effect<void, TransactionWitnessSetError>
+  nativeScripts: CML.NativeScriptList,
+) => Effect.Effect<void, TransactionWitnessSetError>;
 ```
 
 Added in v2.0.0
@@ -381,8 +409,8 @@ Method setPlutusDatums of TransactionWitnessSet
 ```ts
 export declare const setPlutusDatums: (
   instance: CML.TransactionWitnessSet,
-  plutusDatums: CML.PlutusDataList
-) => Effect.Effect<void, TransactionWitnessSetError>
+  plutusDatums: CML.PlutusDataList,
+) => Effect.Effect<void, TransactionWitnessSetError>;
 ```
 
 Added in v2.0.0
@@ -396,8 +424,8 @@ Method setPlutusV1Scripts of TransactionWitnessSet
 ```ts
 export declare const setPlutusV1Scripts: (
   instance: CML.TransactionWitnessSet,
-  plutusV1Scripts: CML.PlutusV1ScriptList
-) => Effect.Effect<void, TransactionWitnessSetError>
+  plutusV1Scripts: CML.PlutusV1ScriptList,
+) => Effect.Effect<void, TransactionWitnessSetError>;
 ```
 
 Added in v2.0.0
@@ -411,8 +439,8 @@ Method setPlutusV2Scripts of TransactionWitnessSet
 ```ts
 export declare const setPlutusV2Scripts: (
   instance: CML.TransactionWitnessSet,
-  plutusV2Scripts: CML.PlutusV2ScriptList
-) => Effect.Effect<void, TransactionWitnessSetError>
+  plutusV2Scripts: CML.PlutusV2ScriptList,
+) => Effect.Effect<void, TransactionWitnessSetError>;
 ```
 
 Added in v2.0.0
@@ -426,8 +454,8 @@ Method setPlutusV3Scripts of TransactionWitnessSet
 ```ts
 export declare const setPlutusV3Scripts: (
   instance: CML.TransactionWitnessSet,
-  plutusV3Scripts: CML.PlutusV3ScriptList
-) => Effect.Effect<void, TransactionWitnessSetError>
+  plutusV3Scripts: CML.PlutusV3ScriptList,
+) => Effect.Effect<void, TransactionWitnessSetError>;
 ```
 
 Added in v2.0.0
@@ -441,8 +469,8 @@ Method setRedeemers of TransactionWitnessSet
 ```ts
 export declare const setRedeemers: (
   instance: CML.TransactionWitnessSet,
-  redeemers: CML.Redeemers
-) => Effect.Effect<void, TransactionWitnessSetError>
+  redeemers: CML.Redeemers,
+) => Effect.Effect<void, TransactionWitnessSetError>;
 ```
 
 Added in v2.0.0
@@ -456,8 +484,8 @@ Method setVkeywitnesses of TransactionWitnessSet
 ```ts
 export declare const setVkeywitnesses: (
   instance: CML.TransactionWitnessSet,
-  vkeywitnesses: CML.VkeywitnessList
-) => Effect.Effect<void, TransactionWitnessSetError>
+  vkeywitnesses: CML.VkeywitnessList,
+) => Effect.Effect<void, TransactionWitnessSetError>;
 ```
 
 Added in v2.0.0
@@ -470,8 +498,8 @@ Method toCanonicalCborBytes of TransactionWitnessSet
 
 ```ts
 export declare const toCanonicalCborBytes: (
-  instance: CML.TransactionWitnessSet
-) => Effect.Effect<Uint8Array, TransactionWitnessSetError>
+  instance: CML.TransactionWitnessSet,
+) => Effect.Effect<Uint8Array, TransactionWitnessSetError>;
 ```
 
 Added in v2.0.0
@@ -484,8 +512,8 @@ Method toCanonicalCborHex of TransactionWitnessSet
 
 ```ts
 export declare const toCanonicalCborHex: (
-  instance: CML.TransactionWitnessSet
-) => Effect.Effect<string, TransactionWitnessSetError>
+  instance: CML.TransactionWitnessSet,
+) => Effect.Effect<string, TransactionWitnessSetError>;
 ```
 
 Added in v2.0.0
@@ -498,8 +526,8 @@ Method toCborBytes of TransactionWitnessSet
 
 ```ts
 export declare const toCborBytes: (
-  instance: CML.TransactionWitnessSet
-) => Effect.Effect<Uint8Array, TransactionWitnessSetError>
+  instance: CML.TransactionWitnessSet,
+) => Effect.Effect<Uint8Array, TransactionWitnessSetError>;
 ```
 
 Added in v2.0.0
@@ -512,8 +540,8 @@ Method toCborHex of TransactionWitnessSet
 
 ```ts
 export declare const toCborHex: (
-  instance: CML.TransactionWitnessSet
-) => Effect.Effect<string, TransactionWitnessSetError>
+  instance: CML.TransactionWitnessSet,
+) => Effect.Effect<string, TransactionWitnessSetError>;
 ```
 
 Added in v2.0.0
@@ -525,7 +553,9 @@ Method toJsValue of TransactionWitnessSet
 **Signature**
 
 ```ts
-export declare const toJsValue: (instance: CML.TransactionWitnessSet) => Effect.Effect<any, TransactionWitnessSetError>
+export declare const toJsValue: (
+  instance: CML.TransactionWitnessSet,
+) => Effect.Effect<any, TransactionWitnessSetError>;
 ```
 
 Added in v2.0.0
@@ -537,7 +567,9 @@ Method toJson of TransactionWitnessSet
 **Signature**
 
 ```ts
-export declare const toJson: (instance: CML.TransactionWitnessSet) => Effect.Effect<string, TransactionWitnessSetError>
+export declare const toJson: (
+  instance: CML.TransactionWitnessSet,
+) => Effect.Effect<string, TransactionWitnessSetError>;
 ```
 
 Added in v2.0.0
@@ -550,8 +582,8 @@ Method vkeywitnesses of TransactionWitnessSet
 
 ```ts
 export declare const vkeywitnesses: (
-  instance: CML.TransactionWitnessSet
-) => Effect.Effect<CML.VkeywitnessList | undefined, TransactionWitnessSetError>
+  instance: CML.TransactionWitnessSet,
+) => Effect.Effect<CML.VkeywitnessList | undefined, TransactionWitnessSetError>;
 ```
 
 Added in v2.0.0
@@ -567,8 +599,8 @@ Unsafely calls instance.addAllWitnesses without Effect wrapper
 ```ts
 export declare const addAllWitnessesUnsafe: (
   instance: CML.TransactionWitnessSet,
-  other: CML.TransactionWitnessSet
-) => void
+  other: CML.TransactionWitnessSet,
+) => void;
 ```
 
 Added in v2.0.0
@@ -581,8 +613,8 @@ Unsafely calls instance.bootstrapWitnesses without Effect wrapper
 
 ```ts
 export declare const bootstrapWitnessesUnsafe: (
-  instance: CML.TransactionWitnessSet
-) => CML.BootstrapWitnessList | undefined
+  instance: CML.TransactionWitnessSet,
+) => CML.BootstrapWitnessList | undefined;
 ```
 
 Added in v2.0.0
@@ -594,7 +626,7 @@ Unsafely calls instance.free without Effect wrapper
 **Signature**
 
 ```ts
-export declare const freeUnsafe: (instance: CML.TransactionWitnessSet) => void
+export declare const freeUnsafe: (instance: CML.TransactionWitnessSet) => void;
 ```
 
 Added in v2.0.0
@@ -606,7 +638,9 @@ Unsafely calls instance.languages without Effect wrapper
 **Signature**
 
 ```ts
-export declare const languagesUnsafe: (instance: CML.TransactionWitnessSet) => CML.LanguageList
+export declare const languagesUnsafe: (
+  instance: CML.TransactionWitnessSet,
+) => CML.LanguageList;
 ```
 
 Added in v2.0.0
@@ -618,7 +652,9 @@ Unsafely calls instance.nativeScripts without Effect wrapper
 **Signature**
 
 ```ts
-export declare const nativeScriptsUnsafe: (instance: CML.TransactionWitnessSet) => CML.NativeScriptList | undefined
+export declare const nativeScriptsUnsafe: (
+  instance: CML.TransactionWitnessSet,
+) => CML.NativeScriptList | undefined;
 ```
 
 Added in v2.0.0
@@ -630,7 +666,9 @@ Unsafely calls instance.plutusDatums without Effect wrapper
 **Signature**
 
 ```ts
-export declare const plutusDatumsUnsafe: (instance: CML.TransactionWitnessSet) => CML.PlutusDataList | undefined
+export declare const plutusDatumsUnsafe: (
+  instance: CML.TransactionWitnessSet,
+) => CML.PlutusDataList | undefined;
 ```
 
 Added in v2.0.0
@@ -642,7 +680,9 @@ Unsafely calls instance.plutusV1Scripts without Effect wrapper
 **Signature**
 
 ```ts
-export declare const plutusV1ScriptsUnsafe: (instance: CML.TransactionWitnessSet) => CML.PlutusV1ScriptList | undefined
+export declare const plutusV1ScriptsUnsafe: (
+  instance: CML.TransactionWitnessSet,
+) => CML.PlutusV1ScriptList | undefined;
 ```
 
 Added in v2.0.0
@@ -654,7 +694,9 @@ Unsafely calls instance.plutusV2Scripts without Effect wrapper
 **Signature**
 
 ```ts
-export declare const plutusV2ScriptsUnsafe: (instance: CML.TransactionWitnessSet) => CML.PlutusV2ScriptList | undefined
+export declare const plutusV2ScriptsUnsafe: (
+  instance: CML.TransactionWitnessSet,
+) => CML.PlutusV2ScriptList | undefined;
 ```
 
 Added in v2.0.0
@@ -666,7 +708,9 @@ Unsafely calls instance.plutusV3Scripts without Effect wrapper
 **Signature**
 
 ```ts
-export declare const plutusV3ScriptsUnsafe: (instance: CML.TransactionWitnessSet) => CML.PlutusV3ScriptList | undefined
+export declare const plutusV3ScriptsUnsafe: (
+  instance: CML.TransactionWitnessSet,
+) => CML.PlutusV3ScriptList | undefined;
 ```
 
 Added in v2.0.0
@@ -678,7 +722,9 @@ Unsafely calls instance.redeemers without Effect wrapper
 **Signature**
 
 ```ts
-export declare const redeemersUnsafe: (instance: CML.TransactionWitnessSet) => CML.Redeemers | undefined
+export declare const redeemersUnsafe: (
+  instance: CML.TransactionWitnessSet,
+) => CML.Redeemers | undefined;
 ```
 
 Added in v2.0.0
@@ -692,8 +738,8 @@ Unsafely calls instance.setBootstrapWitnesses without Effect wrapper
 ```ts
 export declare const setBootstrapWitnessesUnsafe: (
   instance: CML.TransactionWitnessSet,
-  bootstrapWitnesses: CML.BootstrapWitnessList
-) => void
+  bootstrapWitnesses: CML.BootstrapWitnessList,
+) => void;
 ```
 
 Added in v2.0.0
@@ -707,8 +753,8 @@ Unsafely calls instance.setNativeScripts without Effect wrapper
 ```ts
 export declare const setNativeScriptsUnsafe: (
   instance: CML.TransactionWitnessSet,
-  nativeScripts: CML.NativeScriptList
-) => void
+  nativeScripts: CML.NativeScriptList,
+) => void;
 ```
 
 Added in v2.0.0
@@ -722,8 +768,8 @@ Unsafely calls instance.setPlutusDatums without Effect wrapper
 ```ts
 export declare const setPlutusDatumsUnsafe: (
   instance: CML.TransactionWitnessSet,
-  plutusDatums: CML.PlutusDataList
-) => void
+  plutusDatums: CML.PlutusDataList,
+) => void;
 ```
 
 Added in v2.0.0
@@ -737,8 +783,8 @@ Unsafely calls instance.setPlutusV1Scripts without Effect wrapper
 ```ts
 export declare const setPlutusV1ScriptsUnsafe: (
   instance: CML.TransactionWitnessSet,
-  plutusV1Scripts: CML.PlutusV1ScriptList
-) => void
+  plutusV1Scripts: CML.PlutusV1ScriptList,
+) => void;
 ```
 
 Added in v2.0.0
@@ -752,8 +798,8 @@ Unsafely calls instance.setPlutusV2Scripts without Effect wrapper
 ```ts
 export declare const setPlutusV2ScriptsUnsafe: (
   instance: CML.TransactionWitnessSet,
-  plutusV2Scripts: CML.PlutusV2ScriptList
-) => void
+  plutusV2Scripts: CML.PlutusV2ScriptList,
+) => void;
 ```
 
 Added in v2.0.0
@@ -767,8 +813,8 @@ Unsafely calls instance.setPlutusV3Scripts without Effect wrapper
 ```ts
 export declare const setPlutusV3ScriptsUnsafe: (
   instance: CML.TransactionWitnessSet,
-  plutusV3Scripts: CML.PlutusV3ScriptList
-) => void
+  plutusV3Scripts: CML.PlutusV3ScriptList,
+) => void;
 ```
 
 Added in v2.0.0
@@ -780,7 +826,10 @@ Unsafely calls instance.setRedeemers without Effect wrapper
 **Signature**
 
 ```ts
-export declare const setRedeemersUnsafe: (instance: CML.TransactionWitnessSet, redeemers: CML.Redeemers) => void
+export declare const setRedeemersUnsafe: (
+  instance: CML.TransactionWitnessSet,
+  redeemers: CML.Redeemers,
+) => void;
 ```
 
 Added in v2.0.0
@@ -794,8 +843,8 @@ Unsafely calls instance.setVkeywitnesses without Effect wrapper
 ```ts
 export declare const setVkeywitnessesUnsafe: (
   instance: CML.TransactionWitnessSet,
-  vkeywitnesses: CML.VkeywitnessList
-) => void
+  vkeywitnesses: CML.VkeywitnessList,
+) => void;
 ```
 
 Added in v2.0.0
@@ -807,7 +856,9 @@ Unsafely calls instance.toCanonicalCborBytes without Effect wrapper
 **Signature**
 
 ```ts
-export declare const toCanonicalCborBytesUnsafe: (instance: CML.TransactionWitnessSet) => Uint8Array
+export declare const toCanonicalCborBytesUnsafe: (
+  instance: CML.TransactionWitnessSet,
+) => Uint8Array;
 ```
 
 Added in v2.0.0
@@ -819,7 +870,9 @@ Unsafely calls instance.toCanonicalCborHex without Effect wrapper
 **Signature**
 
 ```ts
-export declare const toCanonicalCborHexUnsafe: (instance: CML.TransactionWitnessSet) => string
+export declare const toCanonicalCborHexUnsafe: (
+  instance: CML.TransactionWitnessSet,
+) => string;
 ```
 
 Added in v2.0.0
@@ -831,7 +884,9 @@ Unsafely calls instance.toCborBytes without Effect wrapper
 **Signature**
 
 ```ts
-export declare const toCborBytesUnsafe: (instance: CML.TransactionWitnessSet) => Uint8Array
+export declare const toCborBytesUnsafe: (
+  instance: CML.TransactionWitnessSet,
+) => Uint8Array;
 ```
 
 Added in v2.0.0
@@ -843,7 +898,9 @@ Unsafely calls instance.toCborHex without Effect wrapper
 **Signature**
 
 ```ts
-export declare const toCborHexUnsafe: (instance: CML.TransactionWitnessSet) => string
+export declare const toCborHexUnsafe: (
+  instance: CML.TransactionWitnessSet,
+) => string;
 ```
 
 Added in v2.0.0
@@ -855,7 +912,9 @@ Unsafely calls instance.toJsValue without Effect wrapper
 **Signature**
 
 ```ts
-export declare const toJsValueUnsafe: (instance: CML.TransactionWitnessSet) => any
+export declare const toJsValueUnsafe: (
+  instance: CML.TransactionWitnessSet,
+) => any;
 ```
 
 Added in v2.0.0
@@ -867,7 +926,9 @@ Unsafely calls instance.toJson without Effect wrapper
 **Signature**
 
 ```ts
-export declare const toJsonUnsafe: (instance: CML.TransactionWitnessSet) => string
+export declare const toJsonUnsafe: (
+  instance: CML.TransactionWitnessSet,
+) => string;
 ```
 
 Added in v2.0.0
@@ -879,7 +940,9 @@ Unsafely calls instance.vkeywitnesses without Effect wrapper
 **Signature**
 
 ```ts
-export declare const vkeywitnessesUnsafe: (instance: CML.TransactionWitnessSet) => CML.VkeywitnessList | undefined
+export declare const vkeywitnessesUnsafe: (
+  instance: CML.TransactionWitnessSet,
+) => CML.VkeywitnessList | undefined;
 ```
 
 Added in v2.0.0
@@ -893,7 +956,7 @@ Type alias for the CML TransactionWitnessSet class
 **Signature**
 
 ```ts
-export type TransactionWitnessSet = CML.TransactionWitnessSet
+export type TransactionWitnessSet = CML.TransactionWitnessSet;
 ```
 
 Added in v2.0.0

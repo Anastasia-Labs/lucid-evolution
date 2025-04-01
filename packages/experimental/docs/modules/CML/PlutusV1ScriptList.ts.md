@@ -42,7 +42,10 @@ Static method \_new of PlutusV1ScriptList
 **Signature**
 
 ```ts
-export declare const _new: () => Effect.Effect<CML.PlutusV1ScriptList, PlutusV1ScriptListError>
+export declare const _new: () => Effect.Effect<
+  CML.PlutusV1ScriptList,
+  PlutusV1ScriptListError
+>;
 ```
 
 Added in v2.0.0
@@ -56,7 +59,7 @@ Unsafely calls PlutusV1ScriptList.\_new without Effect wrapper
 **Signature**
 
 ```ts
-export declare const _newUnsafe: () => CML.PlutusV1ScriptList
+export declare const _newUnsafe: () => CML.PlutusV1ScriptList;
 ```
 
 Added in v2.0.0
@@ -88,8 +91,8 @@ Method add of PlutusV1ScriptList
 ```ts
 export declare const add: (
   instance: CML.PlutusV1ScriptList,
-  elem: CML.PlutusV1Script
-) => Effect.Effect<void, PlutusV1ScriptListError>
+  elem: CML.PlutusV1Script,
+) => Effect.Effect<void, PlutusV1ScriptListError>;
 ```
 
 Added in v2.0.0
@@ -101,7 +104,9 @@ Method free of PlutusV1ScriptList
 **Signature**
 
 ```ts
-export declare const free: (instance: CML.PlutusV1ScriptList) => Effect.Effect<void, PlutusV1ScriptListError>
+export declare const free: (
+  instance: CML.PlutusV1ScriptList,
+) => Effect.Effect<void, PlutusV1ScriptListError>;
 ```
 
 Added in v2.0.0
@@ -115,8 +120,8 @@ Method get of PlutusV1ScriptList
 ```ts
 export declare const get: (
   instance: CML.PlutusV1ScriptList,
-  index: number
-) => Effect.Effect<CML.PlutusV1Script, PlutusV1ScriptListError>
+  index: number,
+) => Effect.Effect<CML.PlutusV1Script, PlutusV1ScriptListError>;
 ```
 
 Added in v2.0.0
@@ -128,7 +133,9 @@ Method len of PlutusV1ScriptList
 **Signature**
 
 ```ts
-export declare const len: (instance: CML.PlutusV1ScriptList) => Effect.Effect<number, PlutusV1ScriptListError>
+export declare const len: (
+  instance: CML.PlutusV1ScriptList,
+) => Effect.Effect<number, PlutusV1ScriptListError>;
 ```
 
 Added in v2.0.0
@@ -142,7 +149,10 @@ Unsafely calls instance.add without Effect wrapper
 **Signature**
 
 ```ts
-export declare const addUnsafe: (instance: CML.PlutusV1ScriptList, elem: CML.PlutusV1Script) => void
+export declare const addUnsafe: (
+  instance: CML.PlutusV1ScriptList,
+  elem: CML.PlutusV1Script,
+) => void;
 ```
 
 Added in v2.0.0
@@ -154,7 +164,7 @@ Unsafely calls instance.free without Effect wrapper
 **Signature**
 
 ```ts
-export declare const freeUnsafe: (instance: CML.PlutusV1ScriptList) => void
+export declare const freeUnsafe: (instance: CML.PlutusV1ScriptList) => void;
 ```
 
 Added in v2.0.0
@@ -166,7 +176,10 @@ Unsafely calls instance.get without Effect wrapper
 **Signature**
 
 ```ts
-export declare const getUnsafe: (instance: CML.PlutusV1ScriptList, index: number) => CML.PlutusV1Script
+export declare const getUnsafe: (
+  instance: CML.PlutusV1ScriptList,
+  index: number,
+) => CML.PlutusV1Script;
 ```
 
 Added in v2.0.0
@@ -178,7 +191,7 @@ Unsafely calls instance.len without Effect wrapper
 **Signature**
 
 ```ts
-export declare const lenUnsafe: (instance: CML.PlutusV1ScriptList) => number
+export declare const lenUnsafe: (instance: CML.PlutusV1ScriptList) => number;
 ```
 
 Added in v2.0.0
@@ -192,7 +205,7 @@ Type alias for the CML PlutusV1ScriptList class
 **Signature**
 
 ```ts
-export type PlutusV1ScriptList = CML.PlutusV1ScriptList
+export type PlutusV1ScriptList = CML.PlutusV1ScriptList;
 ```
 
 Added in v2.0.0

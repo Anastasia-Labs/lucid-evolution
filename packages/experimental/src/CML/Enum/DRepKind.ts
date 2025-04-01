@@ -13,7 +13,7 @@ export type DRepKind = CML.DRepKind;
 
 /**
  * Key variant of the DRepKind enum
- * 
+ *
  * @since 2.0.0
  * @category Variants
  */
@@ -21,7 +21,7 @@ export const Key = CML.DRepKind.Key;
 
 /**
  * Script variant of the DRepKind enum
- * 
+ *
  * @since 2.0.0
  * @category Variants
  */
@@ -29,7 +29,7 @@ export const Script = CML.DRepKind.Script;
 
 /**
  * AlwaysAbstain variant of the DRepKind enum
- * 
+ *
  * @since 2.0.0
  * @category Variants
  */
@@ -37,16 +37,15 @@ export const AlwaysAbstain = CML.DRepKind.AlwaysAbstain;
 
 /**
  * AlwaysNoConfidence variant of the DRepKind enum
- * 
+ *
  * @since 2.0.0
  * @category Variants
  */
 export const AlwaysNoConfidence = CML.DRepKind.AlwaysNoConfidence;
 
-
 /**
  * Get all values of the DRepKind enum
- * 
+ *
  * @since 2.0.0
  * @category Utils
  */
@@ -54,12 +53,12 @@ export const values = (): Array<CML.DRepKind> => [
   CML.DRepKind.Key,
   CML.DRepKind.Script,
   CML.DRepKind.AlwaysAbstain,
-  CML.DRepKind.AlwaysNoConfidence
+  CML.DRepKind.AlwaysNoConfidence,
 ];
 
 /**
  * Convert DRepKind enum value to string
- * 
+ *
  * @since 2.0.0
  * @category Utils
  */
@@ -80,7 +79,7 @@ export const toString = (value: CML.DRepKind): string => {
 
 /**
  * Convert string to DRepKind enum value
- * 
+ *
  * @since 2.0.0
  * @category Utils
  */

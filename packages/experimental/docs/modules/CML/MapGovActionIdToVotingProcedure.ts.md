@@ -47,7 +47,7 @@ Static method \_new of MapGovActionIdToVotingProcedure
 export declare const _new: () => Effect.Effect<
   CML.MapGovActionIdToVotingProcedure,
   MapGovActionIdToVotingProcedureError
->
+>;
 ```
 
 Added in v2.0.0
@@ -61,7 +61,7 @@ Unsafely calls MapGovActionIdToVotingProcedure.\_new without Effect wrapper
 **Signature**
 
 ```ts
-export declare const _newUnsafe: () => CML.MapGovActionIdToVotingProcedure
+export declare const _newUnsafe: () => CML.MapGovActionIdToVotingProcedure;
 ```
 
 Added in v2.0.0
@@ -92,8 +92,8 @@ Method free of MapGovActionIdToVotingProcedure
 
 ```ts
 export declare const free: (
-  instance: CML.MapGovActionIdToVotingProcedure
-) => Effect.Effect<void, MapGovActionIdToVotingProcedureError>
+  instance: CML.MapGovActionIdToVotingProcedure,
+) => Effect.Effect<void, MapGovActionIdToVotingProcedureError>;
 ```
 
 Added in v2.0.0
@@ -107,8 +107,11 @@ Method get of MapGovActionIdToVotingProcedure
 ```ts
 export declare const get: (
   instance: CML.MapGovActionIdToVotingProcedure,
-  key: CML.GovActionId
-) => Effect.Effect<CML.VotingProcedure | undefined, MapGovActionIdToVotingProcedureError>
+  key: CML.GovActionId,
+) => Effect.Effect<
+  CML.VotingProcedure | undefined,
+  MapGovActionIdToVotingProcedureError
+>;
 ```
 
 Added in v2.0.0
@@ -123,8 +126,11 @@ Method insert of MapGovActionIdToVotingProcedure
 export declare const insert: (
   instance: CML.MapGovActionIdToVotingProcedure,
   key: CML.GovActionId,
-  value: CML.VotingProcedure
-) => Effect.Effect<CML.VotingProcedure | undefined, MapGovActionIdToVotingProcedureError>
+  value: CML.VotingProcedure,
+) => Effect.Effect<
+  CML.VotingProcedure | undefined,
+  MapGovActionIdToVotingProcedureError
+>;
 ```
 
 Added in v2.0.0
@@ -137,8 +143,8 @@ Method keys of MapGovActionIdToVotingProcedure
 
 ```ts
 export declare const keys: (
-  instance: CML.MapGovActionIdToVotingProcedure
-) => Effect.Effect<CML.GovActionIdList, MapGovActionIdToVotingProcedureError>
+  instance: CML.MapGovActionIdToVotingProcedure,
+) => Effect.Effect<CML.GovActionIdList, MapGovActionIdToVotingProcedureError>;
 ```
 
 Added in v2.0.0
@@ -151,8 +157,8 @@ Method len of MapGovActionIdToVotingProcedure
 
 ```ts
 export declare const len: (
-  instance: CML.MapGovActionIdToVotingProcedure
-) => Effect.Effect<number, MapGovActionIdToVotingProcedureError>
+  instance: CML.MapGovActionIdToVotingProcedure,
+) => Effect.Effect<number, MapGovActionIdToVotingProcedureError>;
 ```
 
 Added in v2.0.0
@@ -166,7 +172,9 @@ Unsafely calls instance.free without Effect wrapper
 **Signature**
 
 ```ts
-export declare const freeUnsafe: (instance: CML.MapGovActionIdToVotingProcedure) => void
+export declare const freeUnsafe: (
+  instance: CML.MapGovActionIdToVotingProcedure,
+) => void;
 ```
 
 Added in v2.0.0
@@ -180,8 +188,8 @@ Unsafely calls instance.get without Effect wrapper
 ```ts
 export declare const getUnsafe: (
   instance: CML.MapGovActionIdToVotingProcedure,
-  key: CML.GovActionId
-) => CML.VotingProcedure | undefined
+  key: CML.GovActionId,
+) => CML.VotingProcedure | undefined;
 ```
 
 Added in v2.0.0
@@ -196,8 +204,8 @@ Unsafely calls instance.insert without Effect wrapper
 export declare const insertUnsafe: (
   instance: CML.MapGovActionIdToVotingProcedure,
   key: CML.GovActionId,
-  value: CML.VotingProcedure
-) => CML.VotingProcedure | undefined
+  value: CML.VotingProcedure,
+) => CML.VotingProcedure | undefined;
 ```
 
 Added in v2.0.0
@@ -209,7 +217,9 @@ Unsafely calls instance.keys without Effect wrapper
 **Signature**
 
 ```ts
-export declare const keysUnsafe: (instance: CML.MapGovActionIdToVotingProcedure) => CML.GovActionIdList
+export declare const keysUnsafe: (
+  instance: CML.MapGovActionIdToVotingProcedure,
+) => CML.GovActionIdList;
 ```
 
 Added in v2.0.0
@@ -221,7 +231,9 @@ Unsafely calls instance.len without Effect wrapper
 **Signature**
 
 ```ts
-export declare const lenUnsafe: (instance: CML.MapGovActionIdToVotingProcedure) => number
+export declare const lenUnsafe: (
+  instance: CML.MapGovActionIdToVotingProcedure,
+) => number;
 ```
 
 Added in v2.0.0
@@ -235,7 +247,8 @@ Type alias for the CML MapGovActionIdToVotingProcedure class
 **Signature**
 
 ```ts
-export type MapGovActionIdToVotingProcedure = CML.MapGovActionIdToVotingProcedure
+export type MapGovActionIdToVotingProcedure =
+  CML.MapGovActionIdToVotingProcedure;
 ```
 
 Added in v2.0.0

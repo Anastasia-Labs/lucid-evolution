@@ -57,8 +57,11 @@ Static method \_new of CIP36DeregistrationWitness
 
 ```ts
 export declare const _new: (
-  stakeWitness: CML.Ed25519Signature
-) => Effect.Effect<CML.CIP36DeregistrationWitness, CIP36DeregistrationWitnessError>
+  stakeWitness: CML.Ed25519Signature,
+) => Effect.Effect<
+  CML.CIP36DeregistrationWitness,
+  CIP36DeregistrationWitnessError
+>;
 ```
 
 Added in v2.0.0
@@ -71,8 +74,11 @@ Static method fromCborBytes of CIP36DeregistrationWitness
 
 ```ts
 export declare const fromCborBytes: (
-  cborBytes: Uint8Array
-) => Effect.Effect<CML.CIP36DeregistrationWitness, CIP36DeregistrationWitnessError>
+  cborBytes: Uint8Array,
+) => Effect.Effect<
+  CML.CIP36DeregistrationWitness,
+  CIP36DeregistrationWitnessError
+>;
 ```
 
 Added in v2.0.0
@@ -85,8 +91,11 @@ Static method fromCborHex of CIP36DeregistrationWitness
 
 ```ts
 export declare const fromCborHex: (
-  cborBytes: string
-) => Effect.Effect<CML.CIP36DeregistrationWitness, CIP36DeregistrationWitnessError>
+  cborBytes: string,
+) => Effect.Effect<
+  CML.CIP36DeregistrationWitness,
+  CIP36DeregistrationWitnessError
+>;
 ```
 
 Added in v2.0.0
@@ -99,8 +108,11 @@ Static method fromJson of CIP36DeregistrationWitness
 
 ```ts
 export declare const fromJson: (
-  json: string
-) => Effect.Effect<CML.CIP36DeregistrationWitness, CIP36DeregistrationWitnessError>
+  json: string,
+) => Effect.Effect<
+  CML.CIP36DeregistrationWitness,
+  CIP36DeregistrationWitnessError
+>;
 ```
 
 Added in v2.0.0
@@ -114,7 +126,9 @@ Unsafely calls CIP36DeregistrationWitness.\_new without Effect wrapper
 **Signature**
 
 ```ts
-export declare const _newUnsafe: (stakeWitness: CML.Ed25519Signature) => CML.CIP36DeregistrationWitness
+export declare const _newUnsafe: (
+  stakeWitness: CML.Ed25519Signature,
+) => CML.CIP36DeregistrationWitness;
 ```
 
 Added in v2.0.0
@@ -126,7 +140,9 @@ Unsafely calls CIP36DeregistrationWitness.fromCborBytes without Effect wrapper
 **Signature**
 
 ```ts
-export declare const fromCborBytesUnsafe: (cborBytes: Uint8Array) => CML.CIP36DeregistrationWitness
+export declare const fromCborBytesUnsafe: (
+  cborBytes: Uint8Array,
+) => CML.CIP36DeregistrationWitness;
 ```
 
 Added in v2.0.0
@@ -138,7 +154,9 @@ Unsafely calls CIP36DeregistrationWitness.fromCborHex without Effect wrapper
 **Signature**
 
 ```ts
-export declare const fromCborHexUnsafe: (cborBytes: string) => CML.CIP36DeregistrationWitness
+export declare const fromCborHexUnsafe: (
+  cborBytes: string,
+) => CML.CIP36DeregistrationWitness;
 ```
 
 Added in v2.0.0
@@ -150,7 +168,9 @@ Unsafely calls CIP36DeregistrationWitness.fromJson without Effect wrapper
 **Signature**
 
 ```ts
-export declare const fromJsonUnsafe: (json: string) => CML.CIP36DeregistrationWitness
+export declare const fromJsonUnsafe: (
+  json: string,
+) => CML.CIP36DeregistrationWitness;
 ```
 
 Added in v2.0.0
@@ -181,8 +201,8 @@ Method free of CIP36DeregistrationWitness
 
 ```ts
 export declare const free: (
-  instance: CML.CIP36DeregistrationWitness
-) => Effect.Effect<void, CIP36DeregistrationWitnessError>
+  instance: CML.CIP36DeregistrationWitness,
+) => Effect.Effect<void, CIP36DeregistrationWitnessError>;
 ```
 
 Added in v2.0.0
@@ -195,8 +215,8 @@ Method stakeWitness of CIP36DeregistrationWitness
 
 ```ts
 export declare const stakeWitness: (
-  instance: CML.CIP36DeregistrationWitness
-) => Effect.Effect<CML.Ed25519Signature, CIP36DeregistrationWitnessError>
+  instance: CML.CIP36DeregistrationWitness,
+) => Effect.Effect<CML.Ed25519Signature, CIP36DeregistrationWitnessError>;
 ```
 
 Added in v2.0.0
@@ -209,8 +229,8 @@ Method toCanonicalCborBytes of CIP36DeregistrationWitness
 
 ```ts
 export declare const toCanonicalCborBytes: (
-  instance: CML.CIP36DeregistrationWitness
-) => Effect.Effect<Uint8Array, CIP36DeregistrationWitnessError>
+  instance: CML.CIP36DeregistrationWitness,
+) => Effect.Effect<Uint8Array, CIP36DeregistrationWitnessError>;
 ```
 
 Added in v2.0.0
@@ -223,8 +243,8 @@ Method toCanonicalCborHex of CIP36DeregistrationWitness
 
 ```ts
 export declare const toCanonicalCborHex: (
-  instance: CML.CIP36DeregistrationWitness
-) => Effect.Effect<string, CIP36DeregistrationWitnessError>
+  instance: CML.CIP36DeregistrationWitness,
+) => Effect.Effect<string, CIP36DeregistrationWitnessError>;
 ```
 
 Added in v2.0.0
@@ -237,8 +257,8 @@ Method toCborBytes of CIP36DeregistrationWitness
 
 ```ts
 export declare const toCborBytes: (
-  instance: CML.CIP36DeregistrationWitness
-) => Effect.Effect<Uint8Array, CIP36DeregistrationWitnessError>
+  instance: CML.CIP36DeregistrationWitness,
+) => Effect.Effect<Uint8Array, CIP36DeregistrationWitnessError>;
 ```
 
 Added in v2.0.0
@@ -251,8 +271,8 @@ Method toCborHex of CIP36DeregistrationWitness
 
 ```ts
 export declare const toCborHex: (
-  instance: CML.CIP36DeregistrationWitness
-) => Effect.Effect<string, CIP36DeregistrationWitnessError>
+  instance: CML.CIP36DeregistrationWitness,
+) => Effect.Effect<string, CIP36DeregistrationWitnessError>;
 ```
 
 Added in v2.0.0
@@ -265,8 +285,8 @@ Method toJsValue of CIP36DeregistrationWitness
 
 ```ts
 export declare const toJsValue: (
-  instance: CML.CIP36DeregistrationWitness
-) => Effect.Effect<any, CIP36DeregistrationWitnessError>
+  instance: CML.CIP36DeregistrationWitness,
+) => Effect.Effect<any, CIP36DeregistrationWitnessError>;
 ```
 
 Added in v2.0.0
@@ -279,8 +299,8 @@ Method toJson of CIP36DeregistrationWitness
 
 ```ts
 export declare const toJson: (
-  instance: CML.CIP36DeregistrationWitness
-) => Effect.Effect<string, CIP36DeregistrationWitnessError>
+  instance: CML.CIP36DeregistrationWitness,
+) => Effect.Effect<string, CIP36DeregistrationWitnessError>;
 ```
 
 Added in v2.0.0
@@ -294,7 +314,9 @@ Unsafely calls instance.free without Effect wrapper
 **Signature**
 
 ```ts
-export declare const freeUnsafe: (instance: CML.CIP36DeregistrationWitness) => void
+export declare const freeUnsafe: (
+  instance: CML.CIP36DeregistrationWitness,
+) => void;
 ```
 
 Added in v2.0.0
@@ -306,7 +328,9 @@ Unsafely calls instance.stakeWitness without Effect wrapper
 **Signature**
 
 ```ts
-export declare const stakeWitnessUnsafe: (instance: CML.CIP36DeregistrationWitness) => CML.Ed25519Signature
+export declare const stakeWitnessUnsafe: (
+  instance: CML.CIP36DeregistrationWitness,
+) => CML.Ed25519Signature;
 ```
 
 Added in v2.0.0
@@ -318,7 +342,9 @@ Unsafely calls instance.toCanonicalCborBytes without Effect wrapper
 **Signature**
 
 ```ts
-export declare const toCanonicalCborBytesUnsafe: (instance: CML.CIP36DeregistrationWitness) => Uint8Array
+export declare const toCanonicalCborBytesUnsafe: (
+  instance: CML.CIP36DeregistrationWitness,
+) => Uint8Array;
 ```
 
 Added in v2.0.0
@@ -330,7 +356,9 @@ Unsafely calls instance.toCanonicalCborHex without Effect wrapper
 **Signature**
 
 ```ts
-export declare const toCanonicalCborHexUnsafe: (instance: CML.CIP36DeregistrationWitness) => string
+export declare const toCanonicalCborHexUnsafe: (
+  instance: CML.CIP36DeregistrationWitness,
+) => string;
 ```
 
 Added in v2.0.0
@@ -342,7 +370,9 @@ Unsafely calls instance.toCborBytes without Effect wrapper
 **Signature**
 
 ```ts
-export declare const toCborBytesUnsafe: (instance: CML.CIP36DeregistrationWitness) => Uint8Array
+export declare const toCborBytesUnsafe: (
+  instance: CML.CIP36DeregistrationWitness,
+) => Uint8Array;
 ```
 
 Added in v2.0.0
@@ -354,7 +384,9 @@ Unsafely calls instance.toCborHex without Effect wrapper
 **Signature**
 
 ```ts
-export declare const toCborHexUnsafe: (instance: CML.CIP36DeregistrationWitness) => string
+export declare const toCborHexUnsafe: (
+  instance: CML.CIP36DeregistrationWitness,
+) => string;
 ```
 
 Added in v2.0.0
@@ -366,7 +398,9 @@ Unsafely calls instance.toJsValue without Effect wrapper
 **Signature**
 
 ```ts
-export declare const toJsValueUnsafe: (instance: CML.CIP36DeregistrationWitness) => any
+export declare const toJsValueUnsafe: (
+  instance: CML.CIP36DeregistrationWitness,
+) => any;
 ```
 
 Added in v2.0.0
@@ -378,7 +412,9 @@ Unsafely calls instance.toJson without Effect wrapper
 **Signature**
 
 ```ts
-export declare const toJsonUnsafe: (instance: CML.CIP36DeregistrationWitness) => string
+export declare const toJsonUnsafe: (
+  instance: CML.CIP36DeregistrationWitness,
+) => string;
 ```
 
 Added in v2.0.0
@@ -392,7 +428,7 @@ Type alias for the CML CIP36DeregistrationWitness class
 **Signature**
 
 ```ts
-export type CIP36DeregistrationWitness = CML.CIP36DeregistrationWitness
+export type CIP36DeregistrationWitness = CML.CIP36DeregistrationWitness;
 ```
 
 Added in v2.0.0

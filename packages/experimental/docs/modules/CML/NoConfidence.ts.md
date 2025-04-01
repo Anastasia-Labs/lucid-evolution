@@ -56,7 +56,9 @@ Static method \_new of NoConfidence
 **Signature**
 
 ```ts
-export declare const _new: (actionId: CML.GovActionId) => Effect.Effect<CML.NoConfidence, NoConfidenceError>
+export declare const _new: (
+  actionId: CML.GovActionId,
+) => Effect.Effect<CML.NoConfidence, NoConfidenceError>;
 ```
 
 Added in v2.0.0
@@ -68,7 +70,9 @@ Static method fromCborBytes of NoConfidence
 **Signature**
 
 ```ts
-export declare const fromCborBytes: (cborBytes: Uint8Array) => Effect.Effect<CML.NoConfidence, NoConfidenceError>
+export declare const fromCborBytes: (
+  cborBytes: Uint8Array,
+) => Effect.Effect<CML.NoConfidence, NoConfidenceError>;
 ```
 
 Added in v2.0.0
@@ -80,7 +84,9 @@ Static method fromCborHex of NoConfidence
 **Signature**
 
 ```ts
-export declare const fromCborHex: (cborBytes: string) => Effect.Effect<CML.NoConfidence, NoConfidenceError>
+export declare const fromCborHex: (
+  cborBytes: string,
+) => Effect.Effect<CML.NoConfidence, NoConfidenceError>;
 ```
 
 Added in v2.0.0
@@ -92,7 +98,9 @@ Static method fromJson of NoConfidence
 **Signature**
 
 ```ts
-export declare const fromJson: (json: string) => Effect.Effect<CML.NoConfidence, NoConfidenceError>
+export declare const fromJson: (
+  json: string,
+) => Effect.Effect<CML.NoConfidence, NoConfidenceError>;
 ```
 
 Added in v2.0.0
@@ -106,7 +114,9 @@ Unsafely calls NoConfidence.\_new without Effect wrapper
 **Signature**
 
 ```ts
-export declare const _newUnsafe: (actionId: CML.GovActionId) => CML.NoConfidence
+export declare const _newUnsafe: (
+  actionId: CML.GovActionId,
+) => CML.NoConfidence;
 ```
 
 Added in v2.0.0
@@ -118,7 +128,9 @@ Unsafely calls NoConfidence.fromCborBytes without Effect wrapper
 **Signature**
 
 ```ts
-export declare const fromCborBytesUnsafe: (cborBytes: Uint8Array) => CML.NoConfidence
+export declare const fromCborBytesUnsafe: (
+  cborBytes: Uint8Array,
+) => CML.NoConfidence;
 ```
 
 Added in v2.0.0
@@ -130,7 +142,7 @@ Unsafely calls NoConfidence.fromCborHex without Effect wrapper
 **Signature**
 
 ```ts
-export declare const fromCborHexUnsafe: (cborBytes: string) => CML.NoConfidence
+export declare const fromCborHexUnsafe: (cborBytes: string) => CML.NoConfidence;
 ```
 
 Added in v2.0.0
@@ -142,7 +154,7 @@ Unsafely calls NoConfidence.fromJson without Effect wrapper
 **Signature**
 
 ```ts
-export declare const fromJsonUnsafe: (json: string) => CML.NoConfidence
+export declare const fromJsonUnsafe: (json: string) => CML.NoConfidence;
 ```
 
 Added in v2.0.0
@@ -173,8 +185,8 @@ Method actionId of NoConfidence
 
 ```ts
 export declare const actionId: (
-  instance: CML.NoConfidence
-) => Effect.Effect<CML.GovActionId | undefined, NoConfidenceError>
+  instance: CML.NoConfidence,
+) => Effect.Effect<CML.GovActionId | undefined, NoConfidenceError>;
 ```
 
 Added in v2.0.0
@@ -186,7 +198,9 @@ Method free of NoConfidence
 **Signature**
 
 ```ts
-export declare const free: (instance: CML.NoConfidence) => Effect.Effect<void, NoConfidenceError>
+export declare const free: (
+  instance: CML.NoConfidence,
+) => Effect.Effect<void, NoConfidenceError>;
 ```
 
 Added in v2.0.0
@@ -198,7 +212,9 @@ Method toCanonicalCborBytes of NoConfidence
 **Signature**
 
 ```ts
-export declare const toCanonicalCborBytes: (instance: CML.NoConfidence) => Effect.Effect<Uint8Array, NoConfidenceError>
+export declare const toCanonicalCborBytes: (
+  instance: CML.NoConfidence,
+) => Effect.Effect<Uint8Array, NoConfidenceError>;
 ```
 
 Added in v2.0.0
@@ -210,7 +226,9 @@ Method toCanonicalCborHex of NoConfidence
 **Signature**
 
 ```ts
-export declare const toCanonicalCborHex: (instance: CML.NoConfidence) => Effect.Effect<string, NoConfidenceError>
+export declare const toCanonicalCborHex: (
+  instance: CML.NoConfidence,
+) => Effect.Effect<string, NoConfidenceError>;
 ```
 
 Added in v2.0.0
@@ -222,7 +240,9 @@ Method toCborBytes of NoConfidence
 **Signature**
 
 ```ts
-export declare const toCborBytes: (instance: CML.NoConfidence) => Effect.Effect<Uint8Array, NoConfidenceError>
+export declare const toCborBytes: (
+  instance: CML.NoConfidence,
+) => Effect.Effect<Uint8Array, NoConfidenceError>;
 ```
 
 Added in v2.0.0
@@ -234,7 +254,9 @@ Method toCborHex of NoConfidence
 **Signature**
 
 ```ts
-export declare const toCborHex: (instance: CML.NoConfidence) => Effect.Effect<string, NoConfidenceError>
+export declare const toCborHex: (
+  instance: CML.NoConfidence,
+) => Effect.Effect<string, NoConfidenceError>;
 ```
 
 Added in v2.0.0
@@ -246,7 +268,9 @@ Method toJsValue of NoConfidence
 **Signature**
 
 ```ts
-export declare const toJsValue: (instance: CML.NoConfidence) => Effect.Effect<any, NoConfidenceError>
+export declare const toJsValue: (
+  instance: CML.NoConfidence,
+) => Effect.Effect<any, NoConfidenceError>;
 ```
 
 Added in v2.0.0
@@ -258,7 +282,9 @@ Method toJson of NoConfidence
 **Signature**
 
 ```ts
-export declare const toJson: (instance: CML.NoConfidence) => Effect.Effect<string, NoConfidenceError>
+export declare const toJson: (
+  instance: CML.NoConfidence,
+) => Effect.Effect<string, NoConfidenceError>;
 ```
 
 Added in v2.0.0
@@ -272,7 +298,9 @@ Unsafely calls instance.actionId without Effect wrapper
 **Signature**
 
 ```ts
-export declare const actionIdUnsafe: (instance: CML.NoConfidence) => CML.GovActionId | undefined
+export declare const actionIdUnsafe: (
+  instance: CML.NoConfidence,
+) => CML.GovActionId | undefined;
 ```
 
 Added in v2.0.0
@@ -284,7 +312,7 @@ Unsafely calls instance.free without Effect wrapper
 **Signature**
 
 ```ts
-export declare const freeUnsafe: (instance: CML.NoConfidence) => void
+export declare const freeUnsafe: (instance: CML.NoConfidence) => void;
 ```
 
 Added in v2.0.0
@@ -296,7 +324,9 @@ Unsafely calls instance.toCanonicalCborBytes without Effect wrapper
 **Signature**
 
 ```ts
-export declare const toCanonicalCborBytesUnsafe: (instance: CML.NoConfidence) => Uint8Array
+export declare const toCanonicalCborBytesUnsafe: (
+  instance: CML.NoConfidence,
+) => Uint8Array;
 ```
 
 Added in v2.0.0
@@ -308,7 +338,9 @@ Unsafely calls instance.toCanonicalCborHex without Effect wrapper
 **Signature**
 
 ```ts
-export declare const toCanonicalCborHexUnsafe: (instance: CML.NoConfidence) => string
+export declare const toCanonicalCborHexUnsafe: (
+  instance: CML.NoConfidence,
+) => string;
 ```
 
 Added in v2.0.0
@@ -320,7 +352,9 @@ Unsafely calls instance.toCborBytes without Effect wrapper
 **Signature**
 
 ```ts
-export declare const toCborBytesUnsafe: (instance: CML.NoConfidence) => Uint8Array
+export declare const toCborBytesUnsafe: (
+  instance: CML.NoConfidence,
+) => Uint8Array;
 ```
 
 Added in v2.0.0
@@ -332,7 +366,7 @@ Unsafely calls instance.toCborHex without Effect wrapper
 **Signature**
 
 ```ts
-export declare const toCborHexUnsafe: (instance: CML.NoConfidence) => string
+export declare const toCborHexUnsafe: (instance: CML.NoConfidence) => string;
 ```
 
 Added in v2.0.0
@@ -344,7 +378,7 @@ Unsafely calls instance.toJsValue without Effect wrapper
 **Signature**
 
 ```ts
-export declare const toJsValueUnsafe: (instance: CML.NoConfidence) => any
+export declare const toJsValueUnsafe: (instance: CML.NoConfidence) => any;
 ```
 
 Added in v2.0.0
@@ -356,7 +390,7 @@ Unsafely calls instance.toJson without Effect wrapper
 **Signature**
 
 ```ts
-export declare const toJsonUnsafe: (instance: CML.NoConfidence) => string
+export declare const toJsonUnsafe: (instance: CML.NoConfidence) => string;
 ```
 
 Added in v2.0.0
@@ -370,7 +404,7 @@ Type alias for the CML NoConfidence class
 **Signature**
 
 ```ts
-export type NoConfidence = CML.NoConfidence
+export type NoConfidence = CML.NoConfidence;
 ```
 
 Added in v2.0.0

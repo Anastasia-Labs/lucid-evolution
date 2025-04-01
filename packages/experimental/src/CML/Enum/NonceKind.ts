@@ -13,7 +13,7 @@ export type NonceKind = CML.NonceKind;
 
 /**
  * Identity variant of the NonceKind enum
- * 
+ *
  * @since 2.0.0
  * @category Variants
  */
@@ -21,27 +21,26 @@ export const Identity = CML.NonceKind.Identity;
 
 /**
  * Hash variant of the NonceKind enum
- * 
+ *
  * @since 2.0.0
  * @category Variants
  */
 export const Hash = CML.NonceKind.Hash;
 
-
 /**
  * Get all values of the NonceKind enum
- * 
+ *
  * @since 2.0.0
  * @category Utils
  */
 export const values = (): Array<CML.NonceKind> => [
   CML.NonceKind.Identity,
-  CML.NonceKind.Hash
+  CML.NonceKind.Hash,
 ];
 
 /**
  * Convert NonceKind enum value to string
- * 
+ *
  * @since 2.0.0
  * @category Utils
  */
@@ -58,7 +57,7 @@ export const toString = (value: CML.NonceKind): string => {
 
 /**
  * Convert string to NonceKind enum value
- * 
+ *
  * @since 2.0.0
  * @category Utils
  */

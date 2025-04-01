@@ -48,7 +48,9 @@ Method free of Pointer
 **Signature**
 
 ```ts
-export declare const free: (instance: CML.Pointer) => Effect.Effect<void, PointerError>
+export declare const free: (
+  instance: CML.Pointer,
+) => Effect.Effect<void, PointerError>;
 ```
 
 Added in v2.0.0
@@ -62,7 +64,7 @@ Unsafely calls instance.free without Effect wrapper
 **Signature**
 
 ```ts
-export declare const freeUnsafe: (instance: CML.Pointer) => void
+export declare const freeUnsafe: (instance: CML.Pointer) => void;
 ```
 
 Added in v2.0.0
@@ -76,7 +78,7 @@ Type alias for the CML Pointer class
 **Signature**
 
 ```ts
-export type Pointer = CML.Pointer
+export type Pointer = CML.Pointer;
 ```
 
 Added in v2.0.0

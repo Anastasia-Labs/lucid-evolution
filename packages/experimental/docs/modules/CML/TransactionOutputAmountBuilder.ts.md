@@ -55,8 +55,11 @@ Method build of TransactionOutputAmountBuilder
 
 ```ts
 export declare const build: (
-  instance: CML.TransactionOutputAmountBuilder
-) => Effect.Effect<CML.SingleOutputBuilderResult, TransactionOutputAmountBuilderError>
+  instance: CML.TransactionOutputAmountBuilder,
+) => Effect.Effect<
+  CML.SingleOutputBuilderResult,
+  TransactionOutputAmountBuilderError
+>;
 ```
 
 Added in v2.0.0
@@ -69,8 +72,8 @@ Method free of TransactionOutputAmountBuilder
 
 ```ts
 export declare const free: (
-  instance: CML.TransactionOutputAmountBuilder
-) => Effect.Effect<void, TransactionOutputAmountBuilderError>
+  instance: CML.TransactionOutputAmountBuilder,
+) => Effect.Effect<void, TransactionOutputAmountBuilderError>;
 ```
 
 Added in v2.0.0
@@ -85,8 +88,11 @@ Method withAssetAndMinRequiredCoin of TransactionOutputAmountBuilder
 export declare const withAssetAndMinRequiredCoin: (
   instance: CML.TransactionOutputAmountBuilder,
   multiasset: CML.MultiAsset,
-  coinsPerUtxoByte: bigint
-) => Effect.Effect<CML.TransactionOutputAmountBuilder, TransactionOutputAmountBuilderError>
+  coinsPerUtxoByte: bigint,
+) => Effect.Effect<
+  CML.TransactionOutputAmountBuilder,
+  TransactionOutputAmountBuilderError
+>;
 ```
 
 Added in v2.0.0
@@ -100,8 +106,11 @@ Method withValue of TransactionOutputAmountBuilder
 ```ts
 export declare const withValue: (
   instance: CML.TransactionOutputAmountBuilder,
-  amount: CML.Value
-) => Effect.Effect<CML.TransactionOutputAmountBuilder, TransactionOutputAmountBuilderError>
+  amount: CML.Value,
+) => Effect.Effect<
+  CML.TransactionOutputAmountBuilder,
+  TransactionOutputAmountBuilderError
+>;
 ```
 
 Added in v2.0.0
@@ -115,7 +124,9 @@ Unsafely calls instance.build without Effect wrapper
 **Signature**
 
 ```ts
-export declare const buildUnsafe: (instance: CML.TransactionOutputAmountBuilder) => CML.SingleOutputBuilderResult
+export declare const buildUnsafe: (
+  instance: CML.TransactionOutputAmountBuilder,
+) => CML.SingleOutputBuilderResult;
 ```
 
 Added in v2.0.0
@@ -127,7 +138,9 @@ Unsafely calls instance.free without Effect wrapper
 **Signature**
 
 ```ts
-export declare const freeUnsafe: (instance: CML.TransactionOutputAmountBuilder) => void
+export declare const freeUnsafe: (
+  instance: CML.TransactionOutputAmountBuilder,
+) => void;
 ```
 
 Added in v2.0.0
@@ -142,8 +155,8 @@ Unsafely calls instance.withAssetAndMinRequiredCoin without Effect wrapper
 export declare const withAssetAndMinRequiredCoinUnsafe: (
   instance: CML.TransactionOutputAmountBuilder,
   multiasset: CML.MultiAsset,
-  coinsPerUtxoByte: bigint
-) => CML.TransactionOutputAmountBuilder
+  coinsPerUtxoByte: bigint,
+) => CML.TransactionOutputAmountBuilder;
 ```
 
 Added in v2.0.0
@@ -157,8 +170,8 @@ Unsafely calls instance.withValue without Effect wrapper
 ```ts
 export declare const withValueUnsafe: (
   instance: CML.TransactionOutputAmountBuilder,
-  amount: CML.Value
-) => CML.TransactionOutputAmountBuilder
+  amount: CML.Value,
+) => CML.TransactionOutputAmountBuilder;
 ```
 
 Added in v2.0.0
@@ -172,7 +185,7 @@ Type alias for the CML TransactionOutputAmountBuilder class
 **Signature**
 
 ```ts
-export type TransactionOutputAmountBuilder = CML.TransactionOutputAmountBuilder
+export type TransactionOutputAmountBuilder = CML.TransactionOutputAmountBuilder;
 ```
 
 Added in v2.0.0

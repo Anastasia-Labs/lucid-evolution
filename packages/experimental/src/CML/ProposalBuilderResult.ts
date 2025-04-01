@@ -14,23 +14,27 @@ export type ProposalBuilderResult = CML.ProposalBuilderResult;
 
 /**
  * Error class for ProposalBuilderResult operations
- * 
+ *
  * This error is thrown when operations on ProposalBuilderResult instances fail.
  *
  * @since 2.0.0
  * @category Errors
  */
-export class ProposalBuilderResultError extends Data.TaggedError("ProposalBuilderResultError")<{
+export class ProposalBuilderResultError extends Data.TaggedError(
+  "ProposalBuilderResultError",
+)<{
   message?: string;
 }> {}
 
 /**
  * Method free of ProposalBuilderResult
- * 
+ *
  * @since 2.0.0
  * @category Methods
  */
-export const free: (instance: CML.ProposalBuilderResult) => Effect.Effect<void, ProposalBuilderResultError> = Effect.fn(
+export const free: (
+  instance: CML.ProposalBuilderResult,
+) => Effect.Effect<void, ProposalBuilderResultError> = Effect.fn(
   (instance: CML.ProposalBuilderResult) =>
     Effect.try({
       try: () => instance.free(),
@@ -38,12 +42,12 @@ export const free: (instance: CML.ProposalBuilderResult) => Effect.Effect<void, 
         new ProposalBuilderResultError({
           message: `ProposalBuilderResult.free failed Hint: Check if you're calling free() more than once.`,
         }),
-    })
+    }),
 );
 
 /**
  * Unsafely calls instance.free without Effect wrapper
- * 
+ *
  * @since 2.0.0
  * @category MethodsUnsafe
  */

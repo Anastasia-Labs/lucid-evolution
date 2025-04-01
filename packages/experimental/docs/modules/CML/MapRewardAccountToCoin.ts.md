@@ -44,7 +44,10 @@ Static method \_new of MapRewardAccountToCoin
 **Signature**
 
 ```ts
-export declare const _new: () => Effect.Effect<CML.MapRewardAccountToCoin, MapRewardAccountToCoinError>
+export declare const _new: () => Effect.Effect<
+  CML.MapRewardAccountToCoin,
+  MapRewardAccountToCoinError
+>;
 ```
 
 Added in v2.0.0
@@ -58,7 +61,7 @@ Unsafely calls MapRewardAccountToCoin.\_new without Effect wrapper
 **Signature**
 
 ```ts
-export declare const _newUnsafe: () => CML.MapRewardAccountToCoin
+export declare const _newUnsafe: () => CML.MapRewardAccountToCoin;
 ```
 
 Added in v2.0.0
@@ -88,7 +91,9 @@ Method free of MapRewardAccountToCoin
 **Signature**
 
 ```ts
-export declare const free: (instance: CML.MapRewardAccountToCoin) => Effect.Effect<void, MapRewardAccountToCoinError>
+export declare const free: (
+  instance: CML.MapRewardAccountToCoin,
+) => Effect.Effect<void, MapRewardAccountToCoinError>;
 ```
 
 Added in v2.0.0
@@ -102,8 +107,8 @@ Method get of MapRewardAccountToCoin
 ```ts
 export declare const get: (
   instance: CML.MapRewardAccountToCoin,
-  key: CML.RewardAddress
-) => Effect.Effect<bigint | undefined, MapRewardAccountToCoinError>
+  key: CML.RewardAddress,
+) => Effect.Effect<bigint | undefined, MapRewardAccountToCoinError>;
 ```
 
 Added in v2.0.0
@@ -118,8 +123,8 @@ Method insert of MapRewardAccountToCoin
 export declare const insert: (
   instance: CML.MapRewardAccountToCoin,
   key: CML.RewardAddress,
-  value: bigint
-) => Effect.Effect<bigint | undefined, MapRewardAccountToCoinError>
+  value: bigint,
+) => Effect.Effect<bigint | undefined, MapRewardAccountToCoinError>;
 ```
 
 Added in v2.0.0
@@ -132,8 +137,8 @@ Method keys of MapRewardAccountToCoin
 
 ```ts
 export declare const keys: (
-  instance: CML.MapRewardAccountToCoin
-) => Effect.Effect<CML.RewardAccountList, MapRewardAccountToCoinError>
+  instance: CML.MapRewardAccountToCoin,
+) => Effect.Effect<CML.RewardAccountList, MapRewardAccountToCoinError>;
 ```
 
 Added in v2.0.0
@@ -145,7 +150,9 @@ Method len of MapRewardAccountToCoin
 **Signature**
 
 ```ts
-export declare const len: (instance: CML.MapRewardAccountToCoin) => Effect.Effect<number, MapRewardAccountToCoinError>
+export declare const len: (
+  instance: CML.MapRewardAccountToCoin,
+) => Effect.Effect<number, MapRewardAccountToCoinError>;
 ```
 
 Added in v2.0.0
@@ -159,7 +166,7 @@ Unsafely calls instance.free without Effect wrapper
 **Signature**
 
 ```ts
-export declare const freeUnsafe: (instance: CML.MapRewardAccountToCoin) => void
+export declare const freeUnsafe: (instance: CML.MapRewardAccountToCoin) => void;
 ```
 
 Added in v2.0.0
@@ -171,7 +178,10 @@ Unsafely calls instance.get without Effect wrapper
 **Signature**
 
 ```ts
-export declare const getUnsafe: (instance: CML.MapRewardAccountToCoin, key: CML.RewardAddress) => bigint | undefined
+export declare const getUnsafe: (
+  instance: CML.MapRewardAccountToCoin,
+  key: CML.RewardAddress,
+) => bigint | undefined;
 ```
 
 Added in v2.0.0
@@ -186,8 +196,8 @@ Unsafely calls instance.insert without Effect wrapper
 export declare const insertUnsafe: (
   instance: CML.MapRewardAccountToCoin,
   key: CML.RewardAddress,
-  value: bigint
-) => bigint | undefined
+  value: bigint,
+) => bigint | undefined;
 ```
 
 Added in v2.0.0
@@ -199,7 +209,9 @@ Unsafely calls instance.keys without Effect wrapper
 **Signature**
 
 ```ts
-export declare const keysUnsafe: (instance: CML.MapRewardAccountToCoin) => CML.RewardAccountList
+export declare const keysUnsafe: (
+  instance: CML.MapRewardAccountToCoin,
+) => CML.RewardAccountList;
 ```
 
 Added in v2.0.0
@@ -211,7 +223,9 @@ Unsafely calls instance.len without Effect wrapper
 **Signature**
 
 ```ts
-export declare const lenUnsafe: (instance: CML.MapRewardAccountToCoin) => number
+export declare const lenUnsafe: (
+  instance: CML.MapRewardAccountToCoin,
+) => number;
 ```
 
 Added in v2.0.0
@@ -225,7 +239,7 @@ Type alias for the CML MapRewardAccountToCoin class
 **Signature**
 
 ```ts
-export type MapRewardAccountToCoin = CML.MapRewardAccountToCoin
+export type MapRewardAccountToCoin = CML.MapRewardAccountToCoin;
 ```
 
 Added in v2.0.0

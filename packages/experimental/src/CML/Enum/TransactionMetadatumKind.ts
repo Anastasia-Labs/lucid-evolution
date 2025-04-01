@@ -13,7 +13,7 @@ export type TransactionMetadatumKind = CML.TransactionMetadatumKind;
 
 /**
  * Map variant of the TransactionMetadatumKind enum
- * 
+ *
  * @since 2.0.0
  * @category Variants
  */
@@ -21,7 +21,7 @@ export const Map = CML.TransactionMetadatumKind.Map;
 
 /**
  * List variant of the TransactionMetadatumKind enum
- * 
+ *
  * @since 2.0.0
  * @category Variants
  */
@@ -29,7 +29,7 @@ export const List = CML.TransactionMetadatumKind.List;
 
 /**
  * Int variant of the TransactionMetadatumKind enum
- * 
+ *
  * @since 2.0.0
  * @category Variants
  */
@@ -37,7 +37,7 @@ export const Int = CML.TransactionMetadatumKind.Int;
 
 /**
  * Bytes variant of the TransactionMetadatumKind enum
- * 
+ *
  * @since 2.0.0
  * @category Variants
  */
@@ -45,16 +45,15 @@ export const Bytes = CML.TransactionMetadatumKind.Bytes;
 
 /**
  * Text variant of the TransactionMetadatumKind enum
- * 
+ *
  * @since 2.0.0
  * @category Variants
  */
 export const Text = CML.TransactionMetadatumKind.Text;
 
-
 /**
  * Get all values of the TransactionMetadatumKind enum
- * 
+ *
  * @since 2.0.0
  * @category Utils
  */
@@ -63,12 +62,12 @@ export const values = (): Array<CML.TransactionMetadatumKind> => [
   CML.TransactionMetadatumKind.List,
   CML.TransactionMetadatumKind.Int,
   CML.TransactionMetadatumKind.Bytes,
-  CML.TransactionMetadatumKind.Text
+  CML.TransactionMetadatumKind.Text,
 ];
 
 /**
  * Convert TransactionMetadatumKind enum value to string
- * 
+ *
  * @since 2.0.0
  * @category Utils
  */
@@ -91,11 +90,13 @@ export const toString = (value: CML.TransactionMetadatumKind): string => {
 
 /**
  * Convert string to TransactionMetadatumKind enum value
- * 
+ *
  * @since 2.0.0
  * @category Utils
  */
-export const fromString = (str: string): CML.TransactionMetadatumKind | undefined => {
+export const fromString = (
+  str: string,
+): CML.TransactionMetadatumKind | undefined => {
   switch (str) {
     case "Map":
       return CML.TransactionMetadatumKind.Map;

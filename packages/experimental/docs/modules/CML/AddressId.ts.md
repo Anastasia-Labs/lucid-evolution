@@ -51,8 +51,8 @@ Static method \_new of AddressId
 export declare const _new: (
   addrType: CML.ByronAddrType,
   spendingData: CML.SpendingData,
-  attrs: CML.AddrAttributes
-) => Effect.Effect<CML.AddressId, AddressIdError>
+  attrs: CML.AddrAttributes,
+) => Effect.Effect<CML.AddressId, AddressIdError>;
 ```
 
 Added in v2.0.0
@@ -64,7 +64,9 @@ Static method fromBech32 of AddressId
 **Signature**
 
 ```ts
-export declare const fromBech32: (bech32Str: string) => Effect.Effect<CML.AddressId, AddressIdError>
+export declare const fromBech32: (
+  bech32Str: string,
+) => Effect.Effect<CML.AddressId, AddressIdError>;
 ```
 
 Added in v2.0.0
@@ -76,7 +78,9 @@ Static method fromHex of AddressId
 **Signature**
 
 ```ts
-export declare const fromHex: (input: string) => Effect.Effect<CML.AddressId, AddressIdError>
+export declare const fromHex: (
+  input: string,
+) => Effect.Effect<CML.AddressId, AddressIdError>;
 ```
 
 Added in v2.0.0
@@ -88,7 +92,9 @@ Static method fromRawBytes of AddressId
 **Signature**
 
 ```ts
-export declare const fromRawBytes: (bytes: Uint8Array) => Effect.Effect<CML.AddressId, AddressIdError>
+export declare const fromRawBytes: (
+  bytes: Uint8Array,
+) => Effect.Effect<CML.AddressId, AddressIdError>;
 ```
 
 Added in v2.0.0
@@ -105,8 +111,8 @@ Unsafely calls AddressId.\_new without Effect wrapper
 export declare const _newUnsafe: (
   addrType: CML.ByronAddrType,
   spendingData: CML.SpendingData,
-  attrs: CML.AddrAttributes
-) => CML.AddressId
+  attrs: CML.AddrAttributes,
+) => CML.AddressId;
 ```
 
 Added in v2.0.0
@@ -118,7 +124,7 @@ Unsafely calls AddressId.fromBech32 without Effect wrapper
 **Signature**
 
 ```ts
-export declare const fromBech32Unsafe: (bech32Str: string) => CML.AddressId
+export declare const fromBech32Unsafe: (bech32Str: string) => CML.AddressId;
 ```
 
 Added in v2.0.0
@@ -130,7 +136,7 @@ Unsafely calls AddressId.fromHex without Effect wrapper
 **Signature**
 
 ```ts
-export declare const fromHexUnsafe: (input: string) => CML.AddressId
+export declare const fromHexUnsafe: (input: string) => CML.AddressId;
 ```
 
 Added in v2.0.0
@@ -142,7 +148,7 @@ Unsafely calls AddressId.fromRawBytes without Effect wrapper
 **Signature**
 
 ```ts
-export declare const fromRawBytesUnsafe: (bytes: Uint8Array) => CML.AddressId
+export declare const fromRawBytesUnsafe: (bytes: Uint8Array) => CML.AddressId;
 ```
 
 Added in v2.0.0
@@ -172,7 +178,9 @@ Method free of AddressId
 **Signature**
 
 ```ts
-export declare const free: (instance: CML.AddressId) => Effect.Effect<void, AddressIdError>
+export declare const free: (
+  instance: CML.AddressId,
+) => Effect.Effect<void, AddressIdError>;
 ```
 
 Added in v2.0.0
@@ -184,7 +192,10 @@ Method toBech32 of AddressId
 **Signature**
 
 ```ts
-export declare const toBech32: (instance: CML.AddressId, prefix: string) => Effect.Effect<string, AddressIdError>
+export declare const toBech32: (
+  instance: CML.AddressId,
+  prefix: string,
+) => Effect.Effect<string, AddressIdError>;
 ```
 
 Added in v2.0.0
@@ -196,7 +207,9 @@ Method toHex of AddressId
 **Signature**
 
 ```ts
-export declare const toHex: (instance: CML.AddressId) => Effect.Effect<string, AddressIdError>
+export declare const toHex: (
+  instance: CML.AddressId,
+) => Effect.Effect<string, AddressIdError>;
 ```
 
 Added in v2.0.0
@@ -208,7 +221,9 @@ Method toRawBytes of AddressId
 **Signature**
 
 ```ts
-export declare const toRawBytes: (instance: CML.AddressId) => Effect.Effect<Uint8Array, AddressIdError>
+export declare const toRawBytes: (
+  instance: CML.AddressId,
+) => Effect.Effect<Uint8Array, AddressIdError>;
 ```
 
 Added in v2.0.0
@@ -222,7 +237,7 @@ Unsafely calls instance.free without Effect wrapper
 **Signature**
 
 ```ts
-export declare const freeUnsafe: (instance: CML.AddressId) => void
+export declare const freeUnsafe: (instance: CML.AddressId) => void;
 ```
 
 Added in v2.0.0
@@ -234,7 +249,10 @@ Unsafely calls instance.toBech32 without Effect wrapper
 **Signature**
 
 ```ts
-export declare const toBech32Unsafe: (instance: CML.AddressId, prefix: string) => string
+export declare const toBech32Unsafe: (
+  instance: CML.AddressId,
+  prefix: string,
+) => string;
 ```
 
 Added in v2.0.0
@@ -246,7 +264,7 @@ Unsafely calls instance.toHex without Effect wrapper
 **Signature**
 
 ```ts
-export declare const toHexUnsafe: (instance: CML.AddressId) => string
+export declare const toHexUnsafe: (instance: CML.AddressId) => string;
 ```
 
 Added in v2.0.0
@@ -258,7 +276,7 @@ Unsafely calls instance.toRawBytes without Effect wrapper
 **Signature**
 
 ```ts
-export declare const toRawBytesUnsafe: (instance: CML.AddressId) => Uint8Array
+export declare const toRawBytesUnsafe: (instance: CML.AddressId) => Uint8Array;
 ```
 
 Added in v2.0.0
@@ -272,7 +290,7 @@ Type alias for the CML AddressId class
 **Signature**
 
 ```ts
-export type AddressId = CML.AddressId
+export type AddressId = CML.AddressId;
 ```
 
 Added in v2.0.0

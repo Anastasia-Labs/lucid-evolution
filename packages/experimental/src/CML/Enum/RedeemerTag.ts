@@ -13,7 +13,7 @@ export type RedeemerTag = CML.RedeemerTag;
 
 /**
  * Spend variant of the RedeemerTag enum
- * 
+ *
  * @since 2.0.0
  * @category Variants
  */
@@ -21,7 +21,7 @@ export const Spend = CML.RedeemerTag.Spend;
 
 /**
  * Mint variant of the RedeemerTag enum
- * 
+ *
  * @since 2.0.0
  * @category Variants
  */
@@ -29,7 +29,7 @@ export const Mint = CML.RedeemerTag.Mint;
 
 /**
  * Cert variant of the RedeemerTag enum
- * 
+ *
  * @since 2.0.0
  * @category Variants
  */
@@ -37,7 +37,7 @@ export const Cert = CML.RedeemerTag.Cert;
 
 /**
  * Reward variant of the RedeemerTag enum
- * 
+ *
  * @since 2.0.0
  * @category Variants
  */
@@ -45,7 +45,7 @@ export const Reward = CML.RedeemerTag.Reward;
 
 /**
  * Voting variant of the RedeemerTag enum
- * 
+ *
  * @since 2.0.0
  * @category Variants
  */
@@ -53,16 +53,15 @@ export const Voting = CML.RedeemerTag.Voting;
 
 /**
  * Proposing variant of the RedeemerTag enum
- * 
+ *
  * @since 2.0.0
  * @category Variants
  */
 export const Proposing = CML.RedeemerTag.Proposing;
 
-
 /**
  * Get all values of the RedeemerTag enum
- * 
+ *
  * @since 2.0.0
  * @category Utils
  */
@@ -72,12 +71,12 @@ export const values = (): Array<CML.RedeemerTag> => [
   CML.RedeemerTag.Cert,
   CML.RedeemerTag.Reward,
   CML.RedeemerTag.Voting,
-  CML.RedeemerTag.Proposing
+  CML.RedeemerTag.Proposing,
 ];
 
 /**
  * Convert RedeemerTag enum value to string
- * 
+ *
  * @since 2.0.0
  * @category Utils
  */
@@ -102,7 +101,7 @@ export const toString = (value: CML.RedeemerTag): string => {
 
 /**
  * Convert string to RedeemerTag enum value
- * 
+ *
  * @since 2.0.0
  * @category Utils
  */

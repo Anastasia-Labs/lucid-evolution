@@ -42,7 +42,10 @@ Static method \_new of TransactionMetadatumList
 **Signature**
 
 ```ts
-export declare const _new: () => Effect.Effect<CML.TransactionMetadatumList, TransactionMetadatumListError>
+export declare const _new: () => Effect.Effect<
+  CML.TransactionMetadatumList,
+  TransactionMetadatumListError
+>;
 ```
 
 Added in v2.0.0
@@ -56,7 +59,7 @@ Unsafely calls TransactionMetadatumList.\_new without Effect wrapper
 **Signature**
 
 ```ts
-export declare const _newUnsafe: () => CML.TransactionMetadatumList
+export declare const _newUnsafe: () => CML.TransactionMetadatumList;
 ```
 
 Added in v2.0.0
@@ -88,8 +91,8 @@ Method add of TransactionMetadatumList
 ```ts
 export declare const add: (
   instance: CML.TransactionMetadatumList,
-  elem: CML.TransactionMetadatum
-) => Effect.Effect<void, TransactionMetadatumListError>
+  elem: CML.TransactionMetadatum,
+) => Effect.Effect<void, TransactionMetadatumListError>;
 ```
 
 Added in v2.0.0
@@ -102,8 +105,8 @@ Method free of TransactionMetadatumList
 
 ```ts
 export declare const free: (
-  instance: CML.TransactionMetadatumList
-) => Effect.Effect<void, TransactionMetadatumListError>
+  instance: CML.TransactionMetadatumList,
+) => Effect.Effect<void, TransactionMetadatumListError>;
 ```
 
 Added in v2.0.0
@@ -117,8 +120,8 @@ Method get of TransactionMetadatumList
 ```ts
 export declare const get: (
   instance: CML.TransactionMetadatumList,
-  index: number
-) => Effect.Effect<CML.TransactionMetadatum, TransactionMetadatumListError>
+  index: number,
+) => Effect.Effect<CML.TransactionMetadatum, TransactionMetadatumListError>;
 ```
 
 Added in v2.0.0
@@ -131,8 +134,8 @@ Method len of TransactionMetadatumList
 
 ```ts
 export declare const len: (
-  instance: CML.TransactionMetadatumList
-) => Effect.Effect<number, TransactionMetadatumListError>
+  instance: CML.TransactionMetadatumList,
+) => Effect.Effect<number, TransactionMetadatumListError>;
 ```
 
 Added in v2.0.0
@@ -146,7 +149,10 @@ Unsafely calls instance.add without Effect wrapper
 **Signature**
 
 ```ts
-export declare const addUnsafe: (instance: CML.TransactionMetadatumList, elem: CML.TransactionMetadatum) => void
+export declare const addUnsafe: (
+  instance: CML.TransactionMetadatumList,
+  elem: CML.TransactionMetadatum,
+) => void;
 ```
 
 Added in v2.0.0
@@ -158,7 +164,9 @@ Unsafely calls instance.free without Effect wrapper
 **Signature**
 
 ```ts
-export declare const freeUnsafe: (instance: CML.TransactionMetadatumList) => void
+export declare const freeUnsafe: (
+  instance: CML.TransactionMetadatumList,
+) => void;
 ```
 
 Added in v2.0.0
@@ -170,7 +178,10 @@ Unsafely calls instance.get without Effect wrapper
 **Signature**
 
 ```ts
-export declare const getUnsafe: (instance: CML.TransactionMetadatumList, index: number) => CML.TransactionMetadatum
+export declare const getUnsafe: (
+  instance: CML.TransactionMetadatumList,
+  index: number,
+) => CML.TransactionMetadatum;
 ```
 
 Added in v2.0.0
@@ -182,7 +193,9 @@ Unsafely calls instance.len without Effect wrapper
 **Signature**
 
 ```ts
-export declare const lenUnsafe: (instance: CML.TransactionMetadatumList) => number
+export declare const lenUnsafe: (
+  instance: CML.TransactionMetadatumList,
+) => number;
 ```
 
 Added in v2.0.0
@@ -196,7 +209,7 @@ Type alias for the CML TransactionMetadatumList class
 **Signature**
 
 ```ts
-export type TransactionMetadatumList = CML.TransactionMetadatumList
+export type TransactionMetadatumList = CML.TransactionMetadatumList;
 ```
 
 Added in v2.0.0

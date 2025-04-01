@@ -14,7 +14,7 @@ export type ExUnitPrices = CML.ExUnitPrices;
 
 /**
  * Error class for ExUnitPrices operations
- * 
+ *
  * This error is thrown when operations on ExUnitPrices instances fail.
  *
  * @since 2.0.0
@@ -26,11 +26,13 @@ export class ExUnitPricesError extends Data.TaggedError("ExUnitPricesError")<{
 
 /**
  * Method free of ExUnitPrices
- * 
+ *
  * @since 2.0.0
  * @category Methods
  */
-export const free: (instance: CML.ExUnitPrices) => Effect.Effect<void, ExUnitPricesError> = Effect.fn(
+export const free: (
+  instance: CML.ExUnitPrices,
+) => Effect.Effect<void, ExUnitPricesError> = Effect.fn(
   (instance: CML.ExUnitPrices) =>
     Effect.try({
       try: () => instance.free(),
@@ -38,12 +40,12 @@ export const free: (instance: CML.ExUnitPrices) => Effect.Effect<void, ExUnitPri
         new ExUnitPricesError({
           message: `ExUnitPrices.free failed Hint: Check if you're calling free() more than once.`,
         }),
-    })
+    }),
 );
 
 /**
  * Unsafely calls instance.free without Effect wrapper
- * 
+ *
  * @since 2.0.0
  * @category MethodsUnsafe
  */
@@ -52,11 +54,13 @@ export const freeUnsafe = (instance: CML.ExUnitPrices): void =>
 
 /**
  * Method toCborBytes of ExUnitPrices
- * 
+ *
  * @since 2.0.0
  * @category Methods
  */
-export const toCborBytes: (instance: CML.ExUnitPrices) => Effect.Effect<Uint8Array, ExUnitPricesError> = Effect.fn(
+export const toCborBytes: (
+  instance: CML.ExUnitPrices,
+) => Effect.Effect<Uint8Array, ExUnitPricesError> = Effect.fn(
   (instance: CML.ExUnitPrices) =>
     Effect.try({
       try: () => instance.to_cbor_bytes(),
@@ -64,12 +68,12 @@ export const toCborBytes: (instance: CML.ExUnitPrices) => Effect.Effect<Uint8Arr
         new ExUnitPricesError({
           message: `ExUnitPrices.toCborBytes failed ExUnitPrices is not valid for Uint8Array conversion. Hint: Check byte length and encoding.`,
         }),
-    })
+    }),
 );
 
 /**
  * Unsafely calls instance.toCborBytes without Effect wrapper
- * 
+ *
  * @since 2.0.0
  * @category MethodsUnsafe
  */
@@ -78,11 +82,13 @@ export const toCborBytesUnsafe = (instance: CML.ExUnitPrices): Uint8Array =>
 
 /**
  * Method toCanonicalCborBytes of ExUnitPrices
- * 
+ *
  * @since 2.0.0
  * @category Methods
  */
-export const toCanonicalCborBytes: (instance: CML.ExUnitPrices) => Effect.Effect<Uint8Array, ExUnitPricesError> = Effect.fn(
+export const toCanonicalCborBytes: (
+  instance: CML.ExUnitPrices,
+) => Effect.Effect<Uint8Array, ExUnitPricesError> = Effect.fn(
   (instance: CML.ExUnitPrices) =>
     Effect.try({
       try: () => instance.to_canonical_cbor_bytes(),
@@ -90,36 +96,42 @@ export const toCanonicalCborBytes: (instance: CML.ExUnitPrices) => Effect.Effect
         new ExUnitPricesError({
           message: `ExUnitPrices.toCanonicalCborBytes failed ExUnitPrices is not valid for Uint8Array conversion. Hint: Check byte length and encoding.`,
         }),
-    })
+    }),
 );
 
 /**
  * Unsafely calls instance.toCanonicalCborBytes without Effect wrapper
- * 
+ *
  * @since 2.0.0
  * @category MethodsUnsafe
  */
-export const toCanonicalCborBytesUnsafe = (instance: CML.ExUnitPrices): Uint8Array =>
-  Effect.runSync(toCanonicalCborBytes(instance));
+export const toCanonicalCborBytesUnsafe = (
+  instance: CML.ExUnitPrices,
+): Uint8Array => Effect.runSync(toCanonicalCborBytes(instance));
 
 /**
  * Static method fromCborBytes of ExUnitPrices
- * 
+ *
  * @since 2.0.0
  * @category Constructors
  */
-export const fromCborBytes: (cborBytes: Uint8Array) => Effect.Effect<CML.ExUnitPrices, ExUnitPricesError> = Effect.fn(function* (cborBytes: Uint8Array) {
+export const fromCborBytes: (
+  cborBytes: Uint8Array,
+) => Effect.Effect<CML.ExUnitPrices, ExUnitPricesError> = Effect.fn(function* (
+  cborBytes: Uint8Array,
+) {
   return yield* Effect.try({
     try: () => CML.ExUnitPrices.from_cbor_bytes(cborBytes),
-    catch: () => new ExUnitPricesError({
-      message: `ExUnitPrices.fromCborBytes failed with parameters: ${cborBytes}. Hint: Check byte length and encoding.`,
-    }),
+    catch: () =>
+      new ExUnitPricesError({
+        message: `ExUnitPrices.fromCborBytes failed with parameters: ${cborBytes}. Hint: Check byte length and encoding.`,
+      }),
   });
 });
 
 /**
  * Unsafely calls ExUnitPrices.fromCborBytes without Effect wrapper
- * 
+ *
  * @since 2.0.0
  * @category ConstructorsUnsafe
  */
@@ -128,11 +140,13 @@ export const fromCborBytesUnsafe = (cborBytes: Uint8Array): CML.ExUnitPrices =>
 
 /**
  * Method toCborHex of ExUnitPrices
- * 
+ *
  * @since 2.0.0
  * @category Methods
  */
-export const toCborHex: (instance: CML.ExUnitPrices) => Effect.Effect<string, ExUnitPricesError> = Effect.fn(
+export const toCborHex: (
+  instance: CML.ExUnitPrices,
+) => Effect.Effect<string, ExUnitPricesError> = Effect.fn(
   (instance: CML.ExUnitPrices) =>
     Effect.try({
       try: () => instance.to_cbor_hex(),
@@ -140,12 +154,12 @@ export const toCborHex: (instance: CML.ExUnitPrices) => Effect.Effect<string, Ex
         new ExUnitPricesError({
           message: `ExUnitPrices.toCborHex failed ExUnitPrices is not valid for string conversion. Hint: Make sure it's a valid hex string representing CBOR data.`,
         }),
-    })
+    }),
 );
 
 /**
  * Unsafely calls instance.toCborHex without Effect wrapper
- * 
+ *
  * @since 2.0.0
  * @category MethodsUnsafe
  */
@@ -154,11 +168,13 @@ export const toCborHexUnsafe = (instance: CML.ExUnitPrices): string =>
 
 /**
  * Method toCanonicalCborHex of ExUnitPrices
- * 
+ *
  * @since 2.0.0
  * @category Methods
  */
-export const toCanonicalCborHex: (instance: CML.ExUnitPrices) => Effect.Effect<string, ExUnitPricesError> = Effect.fn(
+export const toCanonicalCborHex: (
+  instance: CML.ExUnitPrices,
+) => Effect.Effect<string, ExUnitPricesError> = Effect.fn(
   (instance: CML.ExUnitPrices) =>
     Effect.try({
       try: () => instance.to_canonical_cbor_hex(),
@@ -166,12 +182,12 @@ export const toCanonicalCborHex: (instance: CML.ExUnitPrices) => Effect.Effect<s
         new ExUnitPricesError({
           message: `ExUnitPrices.toCanonicalCborHex failed ExUnitPrices is not valid for string conversion. Hint: Make sure it's a valid hex string representing CBOR data.`,
         }),
-    })
+    }),
 );
 
 /**
  * Unsafely calls instance.toCanonicalCborHex without Effect wrapper
- * 
+ *
  * @since 2.0.0
  * @category MethodsUnsafe
  */
@@ -180,22 +196,27 @@ export const toCanonicalCborHexUnsafe = (instance: CML.ExUnitPrices): string =>
 
 /**
  * Static method fromCborHex of ExUnitPrices
- * 
+ *
  * @since 2.0.0
  * @category Constructors
  */
-export const fromCborHex: (cborBytes: string) => Effect.Effect<CML.ExUnitPrices, ExUnitPricesError> = Effect.fn(function* (cborBytes: string) {
+export const fromCborHex: (
+  cborBytes: string,
+) => Effect.Effect<CML.ExUnitPrices, ExUnitPricesError> = Effect.fn(function* (
+  cborBytes: string,
+) {
   return yield* Effect.try({
     try: () => CML.ExUnitPrices.from_cbor_hex(cborBytes),
-    catch: () => new ExUnitPricesError({
-      message: `ExUnitPrices.fromCborHex failed with parameters: ${cborBytes}. Hint: Make sure it's a valid hex string representing CBOR data.`,
-    }),
+    catch: () =>
+      new ExUnitPricesError({
+        message: `ExUnitPrices.fromCborHex failed with parameters: ${cborBytes}. Hint: Make sure it's a valid hex string representing CBOR data.`,
+      }),
   });
 });
 
 /**
  * Unsafely calls ExUnitPrices.fromCborHex without Effect wrapper
- * 
+ *
  * @since 2.0.0
  * @category ConstructorsUnsafe
  */
@@ -204,11 +225,13 @@ export const fromCborHexUnsafe = (cborBytes: string): CML.ExUnitPrices =>
 
 /**
  * Method toJson of ExUnitPrices
- * 
+ *
  * @since 2.0.0
  * @category Methods
  */
-export const toJson: (instance: CML.ExUnitPrices) => Effect.Effect<string, ExUnitPricesError> = Effect.fn(
+export const toJson: (
+  instance: CML.ExUnitPrices,
+) => Effect.Effect<string, ExUnitPricesError> = Effect.fn(
   (instance: CML.ExUnitPrices) =>
     Effect.try({
       try: () => instance.to_json(),
@@ -216,12 +239,12 @@ export const toJson: (instance: CML.ExUnitPrices) => Effect.Effect<string, ExUni
         new ExUnitPricesError({
           message: `ExUnitPrices.toJson failed ExUnitPrices is not valid for string conversion. Hint: Validate your JSON structure.`,
         }),
-    })
+    }),
 );
 
 /**
  * Unsafely calls instance.toJson without Effect wrapper
- * 
+ *
  * @since 2.0.0
  * @category MethodsUnsafe
  */
@@ -230,11 +253,13 @@ export const toJsonUnsafe = (instance: CML.ExUnitPrices): string =>
 
 /**
  * Method toJsValue of ExUnitPrices
- * 
+ *
  * @since 2.0.0
  * @category Methods
  */
-export const toJsValue: (instance: CML.ExUnitPrices) => Effect.Effect<any, ExUnitPricesError> = Effect.fn(
+export const toJsValue: (
+  instance: CML.ExUnitPrices,
+) => Effect.Effect<any, ExUnitPricesError> = Effect.fn(
   (instance: CML.ExUnitPrices) =>
     Effect.try({
       try: () => instance.to_js_value(),
@@ -242,12 +267,12 @@ export const toJsValue: (instance: CML.ExUnitPrices) => Effect.Effect<any, ExUni
         new ExUnitPricesError({
           message: `ExUnitPrices.toJsValue failed ExUnitPrices is not valid for any conversion. `,
         }),
-    })
+    }),
 );
 
 /**
  * Unsafely calls instance.toJsValue without Effect wrapper
- * 
+ *
  * @since 2.0.0
  * @category MethodsUnsafe
  */
@@ -256,22 +281,27 @@ export const toJsValueUnsafe = (instance: CML.ExUnitPrices): any =>
 
 /**
  * Static method fromJson of ExUnitPrices
- * 
+ *
  * @since 2.0.0
  * @category Constructors
  */
-export const fromJson: (json: string) => Effect.Effect<CML.ExUnitPrices, ExUnitPricesError> = Effect.fn(function* (json: string) {
+export const fromJson: (
+  json: string,
+) => Effect.Effect<CML.ExUnitPrices, ExUnitPricesError> = Effect.fn(function* (
+  json: string,
+) {
   return yield* Effect.try({
     try: () => CML.ExUnitPrices.from_json(json),
-    catch: () => new ExUnitPricesError({
-      message: `ExUnitPrices.fromJson failed with parameters: ${json}. Hint: Validate your JSON structure.`,
-    }),
+    catch: () =>
+      new ExUnitPricesError({
+        message: `ExUnitPrices.fromJson failed with parameters: ${json}. Hint: Validate your JSON structure.`,
+      }),
   });
 });
 
 /**
  * Unsafely calls ExUnitPrices.fromJson without Effect wrapper
- * 
+ *
  * @since 2.0.0
  * @category ConstructorsUnsafe
  */
@@ -280,11 +310,13 @@ export const fromJsonUnsafe = (json: string): CML.ExUnitPrices =>
 
 /**
  * Method memPrice of ExUnitPrices
- * 
+ *
  * @since 2.0.0
  * @category Methods
  */
-export const memPrice: (instance: CML.ExUnitPrices) => Effect.Effect<CML.Rational, ExUnitPricesError> = Effect.fn(
+export const memPrice: (
+  instance: CML.ExUnitPrices,
+) => Effect.Effect<CML.Rational, ExUnitPricesError> = Effect.fn(
   (instance: CML.ExUnitPrices) =>
     Effect.try({
       try: () => instance.mem_price(),
@@ -292,12 +324,12 @@ export const memPrice: (instance: CML.ExUnitPrices) => Effect.Effect<CML.Rationa
         new ExUnitPricesError({
           message: `ExUnitPrices.memPrice failed `,
         }),
-    })
+    }),
 );
 
 /**
  * Unsafely calls instance.memPrice without Effect wrapper
- * 
+ *
  * @since 2.0.0
  * @category MethodsUnsafe
  */
@@ -306,11 +338,13 @@ export const memPriceUnsafe = (instance: CML.ExUnitPrices): CML.Rational =>
 
 /**
  * Method stepPrice of ExUnitPrices
- * 
+ *
  * @since 2.0.0
  * @category Methods
  */
-export const stepPrice: (instance: CML.ExUnitPrices) => Effect.Effect<CML.Rational, ExUnitPricesError> = Effect.fn(
+export const stepPrice: (
+  instance: CML.ExUnitPrices,
+) => Effect.Effect<CML.Rational, ExUnitPricesError> = Effect.fn(
   (instance: CML.ExUnitPrices) =>
     Effect.try({
       try: () => instance.step_price(),
@@ -318,12 +352,12 @@ export const stepPrice: (instance: CML.ExUnitPrices) => Effect.Effect<CML.Ration
         new ExUnitPricesError({
           message: `ExUnitPrices.stepPrice failed `,
         }),
-    })
+    }),
 );
 
 /**
  * Unsafely calls instance.stepPrice without Effect wrapper
- * 
+ *
  * @since 2.0.0
  * @category MethodsUnsafe
  */
@@ -332,24 +366,33 @@ export const stepPriceUnsafe = (instance: CML.ExUnitPrices): CML.Rational =>
 
 /**
  * Static method _new of ExUnitPrices
- * 
+ *
  * @since 2.0.0
  * @category Constructors
  */
-export const _new: (memPrice: CML.Rational, stepPrice: CML.Rational) => Effect.Effect<CML.ExUnitPrices, ExUnitPricesError> = Effect.fn(function* (memPrice: CML.Rational, stepPrice: CML.Rational) {
+export const _new: (
+  memPrice: CML.Rational,
+  stepPrice: CML.Rational,
+) => Effect.Effect<CML.ExUnitPrices, ExUnitPricesError> = Effect.fn(function* (
+  memPrice: CML.Rational,
+  stepPrice: CML.Rational,
+) {
   return yield* Effect.try({
     try: () => CML.ExUnitPrices.new(memPrice, stepPrice),
-    catch: () => new ExUnitPricesError({
-      message: `ExUnitPrices._new failed with parameters: ${memPrice} (Rational), ${stepPrice} (Rational). `,
-    }),
+    catch: () =>
+      new ExUnitPricesError({
+        message: `ExUnitPrices._new failed with parameters: ${memPrice} (Rational), ${stepPrice} (Rational). `,
+      }),
   });
 });
 
 /**
  * Unsafely calls ExUnitPrices._new without Effect wrapper
- * 
+ *
  * @since 2.0.0
  * @category ConstructorsUnsafe
  */
-export const _newUnsafe = (memPrice: CML.Rational, stepPrice: CML.Rational): CML.ExUnitPrices =>
-  Effect.runSync(_new(memPrice, stepPrice));
+export const _newUnsafe = (
+  memPrice: CML.Rational,
+  stepPrice: CML.Rational,
+): CML.ExUnitPrices => Effect.runSync(_new(memPrice, stepPrice));

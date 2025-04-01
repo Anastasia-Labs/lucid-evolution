@@ -14,7 +14,7 @@ export type BaseAddress = CML.BaseAddress;
 
 /**
  * Error class for BaseAddress operations
- * 
+ *
  * This error is thrown when operations on BaseAddress instances fail.
  *
  * @since 2.0.0
@@ -26,11 +26,13 @@ export class BaseAddressError extends Data.TaggedError("BaseAddressError")<{
 
 /**
  * Method free of BaseAddress
- * 
+ *
  * @since 2.0.0
  * @category Methods
  */
-export const free: (instance: CML.BaseAddress) => Effect.Effect<void, BaseAddressError> = Effect.fn(
+export const free: (
+  instance: CML.BaseAddress,
+) => Effect.Effect<void, BaseAddressError> = Effect.fn(
   (instance: CML.BaseAddress) =>
     Effect.try({
       try: () => instance.free(),
@@ -38,12 +40,12 @@ export const free: (instance: CML.BaseAddress) => Effect.Effect<void, BaseAddres
         new BaseAddressError({
           message: `BaseAddress.free failed Hint: Check if you're calling free() more than once.`,
         }),
-    })
+    }),
 );
 
 /**
  * Unsafely calls instance.free without Effect wrapper
- * 
+ *
  * @since 2.0.0
  * @category MethodsUnsafe
  */
@@ -52,35 +54,49 @@ export const freeUnsafe = (instance: CML.BaseAddress): void =>
 
 /**
  * Static method _new of BaseAddress
- * 
+ *
  * @since 2.0.0
  * @category Constructors
  */
-export const _new: (network: number, payment: CML.Credential, stake: CML.Credential) => Effect.Effect<CML.BaseAddress, BaseAddressError> = Effect.fn(function* (network: number, payment: CML.Credential, stake: CML.Credential) {
+export const _new: (
+  network: number,
+  payment: CML.Credential,
+  stake: CML.Credential,
+) => Effect.Effect<CML.BaseAddress, BaseAddressError> = Effect.fn(function* (
+  network: number,
+  payment: CML.Credential,
+  stake: CML.Credential,
+) {
   return yield* Effect.try({
     try: () => CML.BaseAddress.new(network, payment, stake),
-    catch: () => new BaseAddressError({
-      message: `BaseAddress._new failed with parameters: ${network}, ${payment} (Credential), ${stake} (Credential). `,
-    }),
+    catch: () =>
+      new BaseAddressError({
+        message: `BaseAddress._new failed with parameters: ${network}, ${payment} (Credential), ${stake} (Credential). `,
+      }),
   });
 });
 
 /**
  * Unsafely calls BaseAddress._new without Effect wrapper
- * 
+ *
  * @since 2.0.0
  * @category ConstructorsUnsafe
  */
-export const _newUnsafe = (network: number, payment: CML.Credential, stake: CML.Credential): CML.BaseAddress =>
-  Effect.runSync(_new(network, payment, stake));
+export const _newUnsafe = (
+  network: number,
+  payment: CML.Credential,
+  stake: CML.Credential,
+): CML.BaseAddress => Effect.runSync(_new(network, payment, stake));
 
 /**
  * Method toAddress of BaseAddress
- * 
+ *
  * @since 2.0.0
  * @category Methods
  */
-export const toAddress: (instance: CML.BaseAddress) => Effect.Effect<CML.Address, BaseAddressError> = Effect.fn(
+export const toAddress: (
+  instance: CML.BaseAddress,
+) => Effect.Effect<CML.Address, BaseAddressError> = Effect.fn(
   (instance: CML.BaseAddress) =>
     Effect.try({
       try: () => instance.to_address(),
@@ -88,12 +104,12 @@ export const toAddress: (instance: CML.BaseAddress) => Effect.Effect<CML.Address
         new BaseAddressError({
           message: `BaseAddress.toAddress failed BaseAddress is not valid for Address conversion. `,
         }),
-    })
+    }),
 );
 
 /**
  * Unsafely calls instance.toAddress without Effect wrapper
- * 
+ *
  * @since 2.0.0
  * @category MethodsUnsafe
  */
@@ -102,35 +118,43 @@ export const toAddressUnsafe = (instance: CML.BaseAddress): CML.Address =>
 
 /**
  * Static method fromAddress of BaseAddress
- * 
+ *
  * @since 2.0.0
  * @category Constructors
  */
-export const fromAddress: (address: CML.Address) => Effect.Effect<CML.BaseAddress | undefined, BaseAddressError> = Effect.fn(function* (address: CML.Address) {
-  return yield* Effect.try({
-    try: () => CML.BaseAddress.from_address(address),
-    catch: () => new BaseAddressError({
-      message: `BaseAddress.fromAddress failed with parameters: ${address} (Address). `,
-    }),
-  });
-});
+export const fromAddress: (
+  address: CML.Address,
+) => Effect.Effect<CML.BaseAddress | undefined, BaseAddressError> = Effect.fn(
+  function* (address: CML.Address) {
+    return yield* Effect.try({
+      try: () => CML.BaseAddress.from_address(address),
+      catch: () =>
+        new BaseAddressError({
+          message: `BaseAddress.fromAddress failed with parameters: ${address} (Address). `,
+        }),
+    });
+  },
+);
 
 /**
  * Unsafely calls BaseAddress.fromAddress without Effect wrapper
- * 
+ *
  * @since 2.0.0
  * @category ConstructorsUnsafe
  */
-export const fromAddressUnsafe = (address: CML.Address): CML.BaseAddress | undefined =>
-  Effect.runSync(fromAddress(address));
+export const fromAddressUnsafe = (
+  address: CML.Address,
+): CML.BaseAddress | undefined => Effect.runSync(fromAddress(address));
 
 /**
  * Method networkId of BaseAddress
- * 
+ *
  * @since 2.0.0
  * @category Methods
  */
-export const networkId: (instance: CML.BaseAddress) => Effect.Effect<number, BaseAddressError> = Effect.fn(
+export const networkId: (
+  instance: CML.BaseAddress,
+) => Effect.Effect<number, BaseAddressError> = Effect.fn(
   (instance: CML.BaseAddress) =>
     Effect.try({
       try: () => instance.network_id(),
@@ -138,12 +162,12 @@ export const networkId: (instance: CML.BaseAddress) => Effect.Effect<number, Bas
         new BaseAddressError({
           message: `BaseAddress.networkId failed `,
         }),
-    })
+    }),
 );
 
 /**
  * Unsafely calls instance.networkId without Effect wrapper
- * 
+ *
  * @since 2.0.0
  * @category MethodsUnsafe
  */
@@ -152,11 +176,13 @@ export const networkIdUnsafe = (instance: CML.BaseAddress): number =>
 
 /**
  * Method payment of BaseAddress
- * 
+ *
  * @since 2.0.0
  * @category Methods
  */
-export const payment: (instance: CML.BaseAddress) => Effect.Effect<CML.Credential, BaseAddressError> = Effect.fn(
+export const payment: (
+  instance: CML.BaseAddress,
+) => Effect.Effect<CML.Credential, BaseAddressError> = Effect.fn(
   (instance: CML.BaseAddress) =>
     Effect.try({
       try: () => instance.payment(),
@@ -164,12 +190,12 @@ export const payment: (instance: CML.BaseAddress) => Effect.Effect<CML.Credentia
         new BaseAddressError({
           message: `BaseAddress.payment failed `,
         }),
-    })
+    }),
 );
 
 /**
  * Unsafely calls instance.payment without Effect wrapper
- * 
+ *
  * @since 2.0.0
  * @category MethodsUnsafe
  */
@@ -178,11 +204,13 @@ export const paymentUnsafe = (instance: CML.BaseAddress): CML.Credential =>
 
 /**
  * Method stake of BaseAddress
- * 
+ *
  * @since 2.0.0
  * @category Methods
  */
-export const stake: (instance: CML.BaseAddress) => Effect.Effect<CML.Credential, BaseAddressError> = Effect.fn(
+export const stake: (
+  instance: CML.BaseAddress,
+) => Effect.Effect<CML.Credential, BaseAddressError> = Effect.fn(
   (instance: CML.BaseAddress) =>
     Effect.try({
       try: () => instance.stake(),
@@ -190,12 +218,12 @@ export const stake: (instance: CML.BaseAddress) => Effect.Effect<CML.Credential,
         new BaseAddressError({
           message: `BaseAddress.stake failed `,
         }),
-    })
+    }),
 );
 
 /**
  * Unsafely calls instance.stake without Effect wrapper
- * 
+ *
  * @since 2.0.0
  * @category MethodsUnsafe
  */

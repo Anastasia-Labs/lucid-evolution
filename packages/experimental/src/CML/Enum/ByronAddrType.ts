@@ -13,7 +13,7 @@ export type ByronAddrType = CML.ByronAddrType;
 
 /**
  * PublicKey variant of the ByronAddrType enum
- * 
+ *
  * @since 2.0.0
  * @category Variants
  */
@@ -21,7 +21,7 @@ export const PublicKey = CML.ByronAddrType.PublicKey;
 
 /**
  * Script variant of the ByronAddrType enum
- * 
+ *
  * @since 2.0.0
  * @category Variants
  */
@@ -29,28 +29,27 @@ export const Script = CML.ByronAddrType.Script;
 
 /**
  * Redeem variant of the ByronAddrType enum
- * 
+ *
  * @since 2.0.0
  * @category Variants
  */
 export const Redeem = CML.ByronAddrType.Redeem;
 
-
 /**
  * Get all values of the ByronAddrType enum
- * 
+ *
  * @since 2.0.0
  * @category Utils
  */
 export const values = (): Array<CML.ByronAddrType> => [
   CML.ByronAddrType.PublicKey,
   CML.ByronAddrType.Script,
-  CML.ByronAddrType.Redeem
+  CML.ByronAddrType.Redeem,
 ];
 
 /**
  * Convert ByronAddrType enum value to string
- * 
+ *
  * @since 2.0.0
  * @category Utils
  */
@@ -69,7 +68,7 @@ export const toString = (value: CML.ByronAddrType): string => {
 
 /**
  * Convert string to ByronAddrType enum value
- * 
+ *
  * @since 2.0.0
  * @category Utils
  */

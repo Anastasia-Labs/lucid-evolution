@@ -49,8 +49,8 @@ Static method \_new of PointerAddress
 export declare const _new: (
   network: number,
   payment: CML.Credential,
-  stake: CML.Pointer
-) => Effect.Effect<CML.PointerAddress, PointerAddressError>
+  stake: CML.Pointer,
+) => Effect.Effect<CML.PointerAddress, PointerAddressError>;
 ```
 
 Added in v2.0.0
@@ -63,8 +63,8 @@ Static method fromAddress of PointerAddress
 
 ```ts
 export declare const fromAddress: (
-  address: CML.Address
-) => Effect.Effect<CML.PointerAddress | undefined, PointerAddressError>
+  address: CML.Address,
+) => Effect.Effect<CML.PointerAddress | undefined, PointerAddressError>;
 ```
 
 Added in v2.0.0
@@ -78,7 +78,11 @@ Unsafely calls PointerAddress.\_new without Effect wrapper
 **Signature**
 
 ```ts
-export declare const _newUnsafe: (network: number, payment: CML.Credential, stake: CML.Pointer) => CML.PointerAddress
+export declare const _newUnsafe: (
+  network: number,
+  payment: CML.Credential,
+  stake: CML.Pointer,
+) => CML.PointerAddress;
 ```
 
 Added in v2.0.0
@@ -90,7 +94,9 @@ Unsafely calls PointerAddress.fromAddress without Effect wrapper
 **Signature**
 
 ```ts
-export declare const fromAddressUnsafe: (address: CML.Address) => CML.PointerAddress | undefined
+export declare const fromAddressUnsafe: (
+  address: CML.Address,
+) => CML.PointerAddress | undefined;
 ```
 
 Added in v2.0.0
@@ -120,7 +126,9 @@ Method free of PointerAddress
 **Signature**
 
 ```ts
-export declare const free: (instance: CML.PointerAddress) => Effect.Effect<void, PointerAddressError>
+export declare const free: (
+  instance: CML.PointerAddress,
+) => Effect.Effect<void, PointerAddressError>;
 ```
 
 Added in v2.0.0
@@ -132,7 +140,9 @@ Method networkId of PointerAddress
 **Signature**
 
 ```ts
-export declare const networkId: (instance: CML.PointerAddress) => Effect.Effect<number, PointerAddressError>
+export declare const networkId: (
+  instance: CML.PointerAddress,
+) => Effect.Effect<number, PointerAddressError>;
 ```
 
 Added in v2.0.0
@@ -144,7 +154,9 @@ Method payment of PointerAddress
 **Signature**
 
 ```ts
-export declare const payment: (instance: CML.PointerAddress) => Effect.Effect<CML.Credential, PointerAddressError>
+export declare const payment: (
+  instance: CML.PointerAddress,
+) => Effect.Effect<CML.Credential, PointerAddressError>;
 ```
 
 Added in v2.0.0
@@ -156,7 +168,9 @@ Method stake of PointerAddress
 **Signature**
 
 ```ts
-export declare const stake: (instance: CML.PointerAddress) => Effect.Effect<CML.Pointer, PointerAddressError>
+export declare const stake: (
+  instance: CML.PointerAddress,
+) => Effect.Effect<CML.Pointer, PointerAddressError>;
 ```
 
 Added in v2.0.0
@@ -168,7 +182,9 @@ Method toAddress of PointerAddress
 **Signature**
 
 ```ts
-export declare const toAddress: (instance: CML.PointerAddress) => Effect.Effect<CML.Address, PointerAddressError>
+export declare const toAddress: (
+  instance: CML.PointerAddress,
+) => Effect.Effect<CML.Address, PointerAddressError>;
 ```
 
 Added in v2.0.0
@@ -182,7 +198,7 @@ Unsafely calls instance.free without Effect wrapper
 **Signature**
 
 ```ts
-export declare const freeUnsafe: (instance: CML.PointerAddress) => void
+export declare const freeUnsafe: (instance: CML.PointerAddress) => void;
 ```
 
 Added in v2.0.0
@@ -194,7 +210,7 @@ Unsafely calls instance.networkId without Effect wrapper
 **Signature**
 
 ```ts
-export declare const networkIdUnsafe: (instance: CML.PointerAddress) => number
+export declare const networkIdUnsafe: (instance: CML.PointerAddress) => number;
 ```
 
 Added in v2.0.0
@@ -206,7 +222,9 @@ Unsafely calls instance.payment without Effect wrapper
 **Signature**
 
 ```ts
-export declare const paymentUnsafe: (instance: CML.PointerAddress) => CML.Credential
+export declare const paymentUnsafe: (
+  instance: CML.PointerAddress,
+) => CML.Credential;
 ```
 
 Added in v2.0.0
@@ -218,7 +236,7 @@ Unsafely calls instance.stake without Effect wrapper
 **Signature**
 
 ```ts
-export declare const stakeUnsafe: (instance: CML.PointerAddress) => CML.Pointer
+export declare const stakeUnsafe: (instance: CML.PointerAddress) => CML.Pointer;
 ```
 
 Added in v2.0.0
@@ -230,7 +248,9 @@ Unsafely calls instance.toAddress without Effect wrapper
 **Signature**
 
 ```ts
-export declare const toAddressUnsafe: (instance: CML.PointerAddress) => CML.Address
+export declare const toAddressUnsafe: (
+  instance: CML.PointerAddress,
+) => CML.Address;
 ```
 
 Added in v2.0.0
@@ -244,7 +264,7 @@ Type alias for the CML PointerAddress class
 **Signature**
 
 ```ts
-export type PointerAddress = CML.PointerAddress
+export type PointerAddress = CML.PointerAddress;
 ```
 
 Added in v2.0.0

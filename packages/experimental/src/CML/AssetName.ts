@@ -14,7 +14,7 @@ export type AssetName = CML.AssetName;
 
 /**
  * Error class for AssetName operations
- * 
+ *
  * This error is thrown when operations on AssetName instances fail.
  *
  * @since 2.0.0
@@ -26,11 +26,13 @@ export class AssetNameError extends Data.TaggedError("AssetNameError")<{
 
 /**
  * Method free of AssetName
- * 
+ *
  * @since 2.0.0
  * @category Methods
  */
-export const free: (instance: CML.AssetName) => Effect.Effect<void, AssetNameError> = Effect.fn(
+export const free: (
+  instance: CML.AssetName,
+) => Effect.Effect<void, AssetNameError> = Effect.fn(
   (instance: CML.AssetName) =>
     Effect.try({
       try: () => instance.free(),
@@ -38,12 +40,12 @@ export const free: (instance: CML.AssetName) => Effect.Effect<void, AssetNameErr
         new AssetNameError({
           message: `AssetName.free failed Hint: Check if you're calling free() more than once.`,
         }),
-    })
+    }),
 );
 
 /**
  * Unsafely calls instance.free without Effect wrapper
- * 
+ *
  * @since 2.0.0
  * @category MethodsUnsafe
  */
@@ -52,11 +54,13 @@ export const freeUnsafe = (instance: CML.AssetName): void =>
 
 /**
  * Method toCborBytes of AssetName
- * 
+ *
  * @since 2.0.0
  * @category Methods
  */
-export const toCborBytes: (instance: CML.AssetName) => Effect.Effect<Uint8Array, AssetNameError> = Effect.fn(
+export const toCborBytes: (
+  instance: CML.AssetName,
+) => Effect.Effect<Uint8Array, AssetNameError> = Effect.fn(
   (instance: CML.AssetName) =>
     Effect.try({
       try: () => instance.to_cbor_bytes(),
@@ -64,12 +68,12 @@ export const toCborBytes: (instance: CML.AssetName) => Effect.Effect<Uint8Array,
         new AssetNameError({
           message: `AssetName.toCborBytes failed AssetName is not valid for Uint8Array conversion. Hint: Check byte length and encoding.`,
         }),
-    })
+    }),
 );
 
 /**
  * Unsafely calls instance.toCborBytes without Effect wrapper
- * 
+ *
  * @since 2.0.0
  * @category MethodsUnsafe
  */
@@ -78,11 +82,13 @@ export const toCborBytesUnsafe = (instance: CML.AssetName): Uint8Array =>
 
 /**
  * Method toCanonicalCborBytes of AssetName
- * 
+ *
  * @since 2.0.0
  * @category Methods
  */
-export const toCanonicalCborBytes: (instance: CML.AssetName) => Effect.Effect<Uint8Array, AssetNameError> = Effect.fn(
+export const toCanonicalCborBytes: (
+  instance: CML.AssetName,
+) => Effect.Effect<Uint8Array, AssetNameError> = Effect.fn(
   (instance: CML.AssetName) =>
     Effect.try({
       try: () => instance.to_canonical_cbor_bytes(),
@@ -90,36 +96,42 @@ export const toCanonicalCborBytes: (instance: CML.AssetName) => Effect.Effect<Ui
         new AssetNameError({
           message: `AssetName.toCanonicalCborBytes failed AssetName is not valid for Uint8Array conversion. Hint: Check byte length and encoding.`,
         }),
-    })
+    }),
 );
 
 /**
  * Unsafely calls instance.toCanonicalCborBytes without Effect wrapper
- * 
+ *
  * @since 2.0.0
  * @category MethodsUnsafe
  */
-export const toCanonicalCborBytesUnsafe = (instance: CML.AssetName): Uint8Array =>
-  Effect.runSync(toCanonicalCborBytes(instance));
+export const toCanonicalCborBytesUnsafe = (
+  instance: CML.AssetName,
+): Uint8Array => Effect.runSync(toCanonicalCborBytes(instance));
 
 /**
  * Static method fromCborBytes of AssetName
- * 
+ *
  * @since 2.0.0
  * @category Constructors
  */
-export const fromCborBytes: (cborBytes: Uint8Array) => Effect.Effect<CML.AssetName, AssetNameError> = Effect.fn(function* (cborBytes: Uint8Array) {
+export const fromCborBytes: (
+  cborBytes: Uint8Array,
+) => Effect.Effect<CML.AssetName, AssetNameError> = Effect.fn(function* (
+  cborBytes: Uint8Array,
+) {
   return yield* Effect.try({
     try: () => CML.AssetName.from_cbor_bytes(cborBytes),
-    catch: () => new AssetNameError({
-      message: `AssetName.fromCborBytes failed with parameters: ${cborBytes}. Hint: Check byte length and encoding.`,
-    }),
+    catch: () =>
+      new AssetNameError({
+        message: `AssetName.fromCborBytes failed with parameters: ${cborBytes}. Hint: Check byte length and encoding.`,
+      }),
   });
 });
 
 /**
  * Unsafely calls AssetName.fromCborBytes without Effect wrapper
- * 
+ *
  * @since 2.0.0
  * @category ConstructorsUnsafe
  */
@@ -128,11 +140,13 @@ export const fromCborBytesUnsafe = (cborBytes: Uint8Array): CML.AssetName =>
 
 /**
  * Method toCborHex of AssetName
- * 
+ *
  * @since 2.0.0
  * @category Methods
  */
-export const toCborHex: (instance: CML.AssetName) => Effect.Effect<string, AssetNameError> = Effect.fn(
+export const toCborHex: (
+  instance: CML.AssetName,
+) => Effect.Effect<string, AssetNameError> = Effect.fn(
   (instance: CML.AssetName) =>
     Effect.try({
       try: () => instance.to_cbor_hex(),
@@ -140,12 +154,12 @@ export const toCborHex: (instance: CML.AssetName) => Effect.Effect<string, Asset
         new AssetNameError({
           message: `AssetName.toCborHex failed AssetName is not valid for string conversion. Hint: Make sure it's a valid hex string representing CBOR data.`,
         }),
-    })
+    }),
 );
 
 /**
  * Unsafely calls instance.toCborHex without Effect wrapper
- * 
+ *
  * @since 2.0.0
  * @category MethodsUnsafe
  */
@@ -154,11 +168,13 @@ export const toCborHexUnsafe = (instance: CML.AssetName): string =>
 
 /**
  * Method toCanonicalCborHex of AssetName
- * 
+ *
  * @since 2.0.0
  * @category Methods
  */
-export const toCanonicalCborHex: (instance: CML.AssetName) => Effect.Effect<string, AssetNameError> = Effect.fn(
+export const toCanonicalCborHex: (
+  instance: CML.AssetName,
+) => Effect.Effect<string, AssetNameError> = Effect.fn(
   (instance: CML.AssetName) =>
     Effect.try({
       try: () => instance.to_canonical_cbor_hex(),
@@ -166,12 +182,12 @@ export const toCanonicalCborHex: (instance: CML.AssetName) => Effect.Effect<stri
         new AssetNameError({
           message: `AssetName.toCanonicalCborHex failed AssetName is not valid for string conversion. Hint: Make sure it's a valid hex string representing CBOR data.`,
         }),
-    })
+    }),
 );
 
 /**
  * Unsafely calls instance.toCanonicalCborHex without Effect wrapper
- * 
+ *
  * @since 2.0.0
  * @category MethodsUnsafe
  */
@@ -180,22 +196,27 @@ export const toCanonicalCborHexUnsafe = (instance: CML.AssetName): string =>
 
 /**
  * Static method fromCborHex of AssetName
- * 
+ *
  * @since 2.0.0
  * @category Constructors
  */
-export const fromCborHex: (cborBytes: string) => Effect.Effect<CML.AssetName, AssetNameError> = Effect.fn(function* (cborBytes: string) {
+export const fromCborHex: (
+  cborBytes: string,
+) => Effect.Effect<CML.AssetName, AssetNameError> = Effect.fn(function* (
+  cborBytes: string,
+) {
   return yield* Effect.try({
     try: () => CML.AssetName.from_cbor_hex(cborBytes),
-    catch: () => new AssetNameError({
-      message: `AssetName.fromCborHex failed with parameters: ${cborBytes}. Hint: Make sure it's a valid hex string representing CBOR data.`,
-    }),
+    catch: () =>
+      new AssetNameError({
+        message: `AssetName.fromCborHex failed with parameters: ${cborBytes}. Hint: Make sure it's a valid hex string representing CBOR data.`,
+      }),
   });
 });
 
 /**
  * Unsafely calls AssetName.fromCborHex without Effect wrapper
- * 
+ *
  * @since 2.0.0
  * @category ConstructorsUnsafe
  */
@@ -204,11 +225,13 @@ export const fromCborHexUnsafe = (cborBytes: string): CML.AssetName =>
 
 /**
  * Method toJson of AssetName
- * 
+ *
  * @since 2.0.0
  * @category Methods
  */
-export const toJson: (instance: CML.AssetName) => Effect.Effect<string, AssetNameError> = Effect.fn(
+export const toJson: (
+  instance: CML.AssetName,
+) => Effect.Effect<string, AssetNameError> = Effect.fn(
   (instance: CML.AssetName) =>
     Effect.try({
       try: () => instance.to_json(),
@@ -216,12 +239,12 @@ export const toJson: (instance: CML.AssetName) => Effect.Effect<string, AssetNam
         new AssetNameError({
           message: `AssetName.toJson failed AssetName is not valid for string conversion. Hint: Validate your JSON structure.`,
         }),
-    })
+    }),
 );
 
 /**
  * Unsafely calls instance.toJson without Effect wrapper
- * 
+ *
  * @since 2.0.0
  * @category MethodsUnsafe
  */
@@ -230,24 +253,25 @@ export const toJsonUnsafe = (instance: CML.AssetName): string =>
 
 /**
  * Method toJsValue of AssetName
- * 
+ *
  * @since 2.0.0
  * @category Methods
  */
-export const toJsValue: (instance: CML.AssetName) => Effect.Effect<any, AssetNameError> = Effect.fn(
-  (instance: CML.AssetName) =>
-    Effect.try({
-      try: () => instance.to_js_value(),
-      catch: () =>
-        new AssetNameError({
-          message: `AssetName.toJsValue failed AssetName is not valid for any conversion. `,
-        }),
-    })
+export const toJsValue: (
+  instance: CML.AssetName,
+) => Effect.Effect<any, AssetNameError> = Effect.fn((instance: CML.AssetName) =>
+  Effect.try({
+    try: () => instance.to_js_value(),
+    catch: () =>
+      new AssetNameError({
+        message: `AssetName.toJsValue failed AssetName is not valid for any conversion. `,
+      }),
+  }),
 );
 
 /**
  * Unsafely calls instance.toJsValue without Effect wrapper
- * 
+ *
  * @since 2.0.0
  * @category MethodsUnsafe
  */
@@ -256,22 +280,27 @@ export const toJsValueUnsafe = (instance: CML.AssetName): any =>
 
 /**
  * Static method fromJson of AssetName
- * 
+ *
  * @since 2.0.0
  * @category Constructors
  */
-export const fromJson: (json: string) => Effect.Effect<CML.AssetName, AssetNameError> = Effect.fn(function* (json: string) {
+export const fromJson: (
+  json: string,
+) => Effect.Effect<CML.AssetName, AssetNameError> = Effect.fn(function* (
+  json: string,
+) {
   return yield* Effect.try({
     try: () => CML.AssetName.from_json(json),
-    catch: () => new AssetNameError({
-      message: `AssetName.fromJson failed with parameters: ${json}. Hint: Validate your JSON structure.`,
-    }),
+    catch: () =>
+      new AssetNameError({
+        message: `AssetName.fromJson failed with parameters: ${json}. Hint: Validate your JSON structure.`,
+      }),
   });
 });
 
 /**
  * Unsafely calls AssetName.fromJson without Effect wrapper
- * 
+ *
  * @since 2.0.0
  * @category ConstructorsUnsafe
  */
@@ -280,22 +309,27 @@ export const fromJsonUnsafe = (json: string): CML.AssetName =>
 
 /**
  * Static method fromStr of AssetName
- * 
+ *
  * @since 2.0.0
  * @category Constructors
  */
-export const fromStr: (utf8Str: string) => Effect.Effect<CML.AssetName, AssetNameError> = Effect.fn(function* (utf8Str: string) {
+export const fromStr: (
+  utf8Str: string,
+) => Effect.Effect<CML.AssetName, AssetNameError> = Effect.fn(function* (
+  utf8Str: string,
+) {
   return yield* Effect.try({
     try: () => CML.AssetName.from_str(utf8Str),
-    catch: () => new AssetNameError({
-      message: `AssetName.fromStr failed with parameters: ${utf8Str}. Hint: Not all AssetName instances can be stringified.`,
-    }),
+    catch: () =>
+      new AssetNameError({
+        message: `AssetName.fromStr failed with parameters: ${utf8Str}. Hint: Not all AssetName instances can be stringified.`,
+      }),
   });
 });
 
 /**
  * Unsafely calls AssetName.fromStr without Effect wrapper
- * 
+ *
  * @since 2.0.0
  * @category ConstructorsUnsafe
  */
@@ -304,11 +338,13 @@ export const fromStrUnsafe = (utf8Str: string): CML.AssetName =>
 
 /**
  * Method toStr of AssetName
- * 
+ *
  * @since 2.0.0
  * @category Methods
  */
-export const toStr: (instance: CML.AssetName) => Effect.Effect<string, AssetNameError> = Effect.fn(
+export const toStr: (
+  instance: CML.AssetName,
+) => Effect.Effect<string, AssetNameError> = Effect.fn(
   (instance: CML.AssetName) =>
     Effect.try({
       try: () => instance.to_str(),
@@ -316,12 +352,12 @@ export const toStr: (instance: CML.AssetName) => Effect.Effect<string, AssetName
         new AssetNameError({
           message: `AssetName.toStr failed AssetName is not valid for string conversion. Hint: Not all AssetName instances can be stringified.`,
         }),
-    })
+    }),
 );
 
 /**
  * Unsafely calls instance.toStr without Effect wrapper
- * 
+ *
  * @since 2.0.0
  * @category MethodsUnsafe
  */
@@ -330,11 +366,13 @@ export const toStrUnsafe = (instance: CML.AssetName): string =>
 
 /**
  * Method toRawBytes of AssetName
- * 
+ *
  * @since 2.0.0
  * @category Methods
  */
-export const toRawBytes: (instance: CML.AssetName) => Effect.Effect<Uint8Array, AssetNameError> = Effect.fn(
+export const toRawBytes: (
+  instance: CML.AssetName,
+) => Effect.Effect<Uint8Array, AssetNameError> = Effect.fn(
   (instance: CML.AssetName) =>
     Effect.try({
       try: () => instance.to_raw_bytes(),
@@ -342,12 +380,12 @@ export const toRawBytes: (instance: CML.AssetName) => Effect.Effect<Uint8Array, 
         new AssetNameError({
           message: `AssetName.toRawBytes failed AssetName is not valid for Uint8Array conversion. Hint: Check byte length and encoding.`,
         }),
-    })
+    }),
 );
 
 /**
  * Unsafely calls instance.toRawBytes without Effect wrapper
- * 
+ *
  * @since 2.0.0
  * @category MethodsUnsafe
  */
@@ -356,22 +394,27 @@ export const toRawBytesUnsafe = (instance: CML.AssetName): Uint8Array =>
 
 /**
  * Static method fromRawBytes of AssetName
- * 
+ *
  * @since 2.0.0
  * @category Constructors
  */
-export const fromRawBytes: (bytes: Uint8Array) => Effect.Effect<CML.AssetName, AssetNameError> = Effect.fn(function* (bytes: Uint8Array) {
+export const fromRawBytes: (
+  bytes: Uint8Array,
+) => Effect.Effect<CML.AssetName, AssetNameError> = Effect.fn(function* (
+  bytes: Uint8Array,
+) {
   return yield* Effect.try({
     try: () => CML.AssetName.from_raw_bytes(bytes),
-    catch: () => new AssetNameError({
-      message: `AssetName.fromRawBytes failed with parameters: ${bytes}. Hint: Check byte length and encoding.`,
-    }),
+    catch: () =>
+      new AssetNameError({
+        message: `AssetName.fromRawBytes failed with parameters: ${bytes}. Hint: Check byte length and encoding.`,
+      }),
   });
 });
 
 /**
  * Unsafely calls AssetName.fromRawBytes without Effect wrapper
- * 
+ *
  * @since 2.0.0
  * @category ConstructorsUnsafe
  */
@@ -380,11 +423,13 @@ export const fromRawBytesUnsafe = (bytes: Uint8Array): CML.AssetName =>
 
 /**
  * Method toHex of AssetName
- * 
+ *
  * @since 2.0.0
  * @category Methods
  */
-export const toHex: (instance: CML.AssetName) => Effect.Effect<string, AssetNameError> = Effect.fn(
+export const toHex: (
+  instance: CML.AssetName,
+) => Effect.Effect<string, AssetNameError> = Effect.fn(
   (instance: CML.AssetName) =>
     Effect.try({
       try: () => instance.to_hex(),
@@ -392,12 +437,12 @@ export const toHex: (instance: CML.AssetName) => Effect.Effect<string, AssetName
         new AssetNameError({
           message: `AssetName.toHex failed AssetName is not valid for string conversion. Hint: Ensure hex string has valid characters and length.`,
         }),
-    })
+    }),
 );
 
 /**
  * Unsafely calls instance.toHex without Effect wrapper
- * 
+ *
  * @since 2.0.0
  * @category MethodsUnsafe
  */
@@ -406,22 +451,27 @@ export const toHexUnsafe = (instance: CML.AssetName): string =>
 
 /**
  * Static method fromHex of AssetName
- * 
+ *
  * @since 2.0.0
  * @category Constructors
  */
-export const fromHex: (input: string) => Effect.Effect<CML.AssetName, AssetNameError> = Effect.fn(function* (input: string) {
+export const fromHex: (
+  input: string,
+) => Effect.Effect<CML.AssetName, AssetNameError> = Effect.fn(function* (
+  input: string,
+) {
   return yield* Effect.try({
     try: () => CML.AssetName.from_hex(input),
-    catch: () => new AssetNameError({
-      message: `AssetName.fromHex failed with parameters: ${input}. Hint: Ensure hex string has valid characters and length.`,
-    }),
+    catch: () =>
+      new AssetNameError({
+        message: `AssetName.fromHex failed with parameters: ${input}. Hint: Ensure hex string has valid characters and length.`,
+      }),
   });
 });
 
 /**
  * Unsafely calls AssetName.fromHex without Effect wrapper
- * 
+ *
  * @since 2.0.0
  * @category ConstructorsUnsafe
  */

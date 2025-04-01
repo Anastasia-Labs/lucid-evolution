@@ -52,7 +52,9 @@ Static method fromBech32 of PrivateKey
 **Signature**
 
 ```ts
-export declare const fromBech32: (bech32Str: string) => Effect.Effect<CML.PrivateKey, PrivateKeyError>
+export declare const fromBech32: (
+  bech32Str: string,
+) => Effect.Effect<CML.PrivateKey, PrivateKeyError>;
 ```
 
 Added in v2.0.0
@@ -64,7 +66,9 @@ Static method fromExtendedBytes of PrivateKey
 **Signature**
 
 ```ts
-export declare const fromExtendedBytes: (bytes: Uint8Array) => Effect.Effect<CML.PrivateKey, PrivateKeyError>
+export declare const fromExtendedBytes: (
+  bytes: Uint8Array,
+) => Effect.Effect<CML.PrivateKey, PrivateKeyError>;
 ```
 
 Added in v2.0.0
@@ -76,7 +80,9 @@ Static method fromNormalBytes of PrivateKey
 **Signature**
 
 ```ts
-export declare const fromNormalBytes: (bytes: Uint8Array) => Effect.Effect<CML.PrivateKey, PrivateKeyError>
+export declare const fromNormalBytes: (
+  bytes: Uint8Array,
+) => Effect.Effect<CML.PrivateKey, PrivateKeyError>;
 ```
 
 Added in v2.0.0
@@ -88,7 +94,10 @@ Static method generateEd25519 of PrivateKey
 **Signature**
 
 ```ts
-export declare const generateEd25519: () => Effect.Effect<CML.PrivateKey, PrivateKeyError>
+export declare const generateEd25519: () => Effect.Effect<
+  CML.PrivateKey,
+  PrivateKeyError
+>;
 ```
 
 Added in v2.0.0
@@ -100,7 +109,10 @@ Static method generateEd25519extended of PrivateKey
 **Signature**
 
 ```ts
-export declare const generateEd25519extended: () => Effect.Effect<CML.PrivateKey, PrivateKeyError>
+export declare const generateEd25519extended: () => Effect.Effect<
+  CML.PrivateKey,
+  PrivateKeyError
+>;
 ```
 
 Added in v2.0.0
@@ -114,7 +126,7 @@ Unsafely calls PrivateKey.fromBech32 without Effect wrapper
 **Signature**
 
 ```ts
-export declare const fromBech32Unsafe: (bech32Str: string) => CML.PrivateKey
+export declare const fromBech32Unsafe: (bech32Str: string) => CML.PrivateKey;
 ```
 
 Added in v2.0.0
@@ -126,7 +138,9 @@ Unsafely calls PrivateKey.fromExtendedBytes without Effect wrapper
 **Signature**
 
 ```ts
-export declare const fromExtendedBytesUnsafe: (bytes: Uint8Array) => CML.PrivateKey
+export declare const fromExtendedBytesUnsafe: (
+  bytes: Uint8Array,
+) => CML.PrivateKey;
 ```
 
 Added in v2.0.0
@@ -138,7 +152,9 @@ Unsafely calls PrivateKey.fromNormalBytes without Effect wrapper
 **Signature**
 
 ```ts
-export declare const fromNormalBytesUnsafe: (bytes: Uint8Array) => CML.PrivateKey
+export declare const fromNormalBytesUnsafe: (
+  bytes: Uint8Array,
+) => CML.PrivateKey;
 ```
 
 Added in v2.0.0
@@ -150,7 +166,7 @@ Unsafely calls PrivateKey.generateEd25519 without Effect wrapper
 **Signature**
 
 ```ts
-export declare const generateEd25519Unsafe: () => CML.PrivateKey
+export declare const generateEd25519Unsafe: () => CML.PrivateKey;
 ```
 
 Added in v2.0.0
@@ -162,7 +178,7 @@ Unsafely calls PrivateKey.generateEd25519extended without Effect wrapper
 **Signature**
 
 ```ts
-export declare const generateEd25519extendedUnsafe: () => CML.PrivateKey
+export declare const generateEd25519extendedUnsafe: () => CML.PrivateKey;
 ```
 
 Added in v2.0.0
@@ -192,7 +208,9 @@ Method free of PrivateKey
 **Signature**
 
 ```ts
-export declare const free: (instance: CML.PrivateKey) => Effect.Effect<void, PrivateKeyError>
+export declare const free: (
+  instance: CML.PrivateKey,
+) => Effect.Effect<void, PrivateKeyError>;
 ```
 
 Added in v2.0.0
@@ -206,8 +224,8 @@ Method sign of PrivateKey
 ```ts
 export declare const sign: (
   instance: CML.PrivateKey,
-  message: Uint8Array
-) => Effect.Effect<CML.Ed25519Signature, PrivateKeyError>
+  message: Uint8Array,
+) => Effect.Effect<CML.Ed25519Signature, PrivateKeyError>;
 ```
 
 Added in v2.0.0
@@ -219,7 +237,9 @@ Method toBech32 of PrivateKey
 **Signature**
 
 ```ts
-export declare const toBech32: (instance: CML.PrivateKey) => Effect.Effect<string, PrivateKeyError>
+export declare const toBech32: (
+  instance: CML.PrivateKey,
+) => Effect.Effect<string, PrivateKeyError>;
 ```
 
 Added in v2.0.0
@@ -231,7 +251,9 @@ Method toPublic of PrivateKey
 **Signature**
 
 ```ts
-export declare const toPublic: (instance: CML.PrivateKey) => Effect.Effect<CML.PublicKey, PrivateKeyError>
+export declare const toPublic: (
+  instance: CML.PrivateKey,
+) => Effect.Effect<CML.PublicKey, PrivateKeyError>;
 ```
 
 Added in v2.0.0
@@ -243,7 +265,9 @@ Method toRawBytes of PrivateKey
 **Signature**
 
 ```ts
-export declare const toRawBytes: (instance: CML.PrivateKey) => Effect.Effect<Uint8Array, PrivateKeyError>
+export declare const toRawBytes: (
+  instance: CML.PrivateKey,
+) => Effect.Effect<Uint8Array, PrivateKeyError>;
 ```
 
 Added in v2.0.0
@@ -257,7 +281,7 @@ Unsafely calls instance.free without Effect wrapper
 **Signature**
 
 ```ts
-export declare const freeUnsafe: (instance: CML.PrivateKey) => void
+export declare const freeUnsafe: (instance: CML.PrivateKey) => void;
 ```
 
 Added in v2.0.0
@@ -269,7 +293,10 @@ Unsafely calls instance.sign without Effect wrapper
 **Signature**
 
 ```ts
-export declare const signUnsafe: (instance: CML.PrivateKey, message: Uint8Array) => CML.Ed25519Signature
+export declare const signUnsafe: (
+  instance: CML.PrivateKey,
+  message: Uint8Array,
+) => CML.Ed25519Signature;
 ```
 
 Added in v2.0.0
@@ -281,7 +308,7 @@ Unsafely calls instance.toBech32 without Effect wrapper
 **Signature**
 
 ```ts
-export declare const toBech32Unsafe: (instance: CML.PrivateKey) => string
+export declare const toBech32Unsafe: (instance: CML.PrivateKey) => string;
 ```
 
 Added in v2.0.0
@@ -293,7 +320,9 @@ Unsafely calls instance.toPublic without Effect wrapper
 **Signature**
 
 ```ts
-export declare const toPublicUnsafe: (instance: CML.PrivateKey) => CML.PublicKey
+export declare const toPublicUnsafe: (
+  instance: CML.PrivateKey,
+) => CML.PublicKey;
 ```
 
 Added in v2.0.0
@@ -305,7 +334,7 @@ Unsafely calls instance.toRawBytes without Effect wrapper
 **Signature**
 
 ```ts
-export declare const toRawBytesUnsafe: (instance: CML.PrivateKey) => Uint8Array
+export declare const toRawBytesUnsafe: (instance: CML.PrivateKey) => Uint8Array;
 ```
 
 Added in v2.0.0
@@ -319,7 +348,7 @@ Type alias for the CML PrivateKey class
 **Signature**
 
 ```ts
-export type PrivateKey = CML.PrivateKey
+export type PrivateKey = CML.PrivateKey;
 ```
 
 Added in v2.0.0

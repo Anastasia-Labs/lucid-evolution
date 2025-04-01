@@ -14,7 +14,7 @@ export type ProtocolMagic = CML.ProtocolMagic;
 
 /**
  * Error class for ProtocolMagic operations
- * 
+ *
  * This error is thrown when operations on ProtocolMagic instances fail.
  *
  * @since 2.0.0
@@ -26,11 +26,13 @@ export class ProtocolMagicError extends Data.TaggedError("ProtocolMagicError")<{
 
 /**
  * Method free of ProtocolMagic
- * 
+ *
  * @since 2.0.0
  * @category Methods
  */
-export const free: (instance: CML.ProtocolMagic) => Effect.Effect<void, ProtocolMagicError> = Effect.fn(
+export const free: (
+  instance: CML.ProtocolMagic,
+) => Effect.Effect<void, ProtocolMagicError> = Effect.fn(
   (instance: CML.ProtocolMagic) =>
     Effect.try({
       try: () => instance.free(),
@@ -38,12 +40,12 @@ export const free: (instance: CML.ProtocolMagic) => Effect.Effect<void, Protocol
         new ProtocolMagicError({
           message: `ProtocolMagic.free failed Hint: Check if you're calling free() more than once.`,
         }),
-    })
+    }),
 );
 
 /**
  * Unsafely calls instance.free without Effect wrapper
- * 
+ *
  * @since 2.0.0
  * @category MethodsUnsafe
  */
@@ -52,22 +54,27 @@ export const freeUnsafe = (instance: CML.ProtocolMagic): void =>
 
 /**
  * Static method _new of ProtocolMagic
- * 
+ *
  * @since 2.0.0
  * @category Constructors
  */
-export const _new: (pm: number) => Effect.Effect<CML.ProtocolMagic, ProtocolMagicError> = Effect.fn(function* (pm: number) {
-  return yield* Effect.try({
-    try: () => CML.ProtocolMagic.new(pm),
-    catch: () => new ProtocolMagicError({
-      message: `ProtocolMagic._new failed with parameters: ${pm}. `,
-    }),
-  });
-});
+export const _new: (
+  pm: number,
+) => Effect.Effect<CML.ProtocolMagic, ProtocolMagicError> = Effect.fn(
+  function* (pm: number) {
+    return yield* Effect.try({
+      try: () => CML.ProtocolMagic.new(pm),
+      catch: () =>
+        new ProtocolMagicError({
+          message: `ProtocolMagic._new failed with parameters: ${pm}. `,
+        }),
+    });
+  },
+);
 
 /**
  * Unsafely calls ProtocolMagic._new without Effect wrapper
- * 
+ *
  * @since 2.0.0
  * @category ConstructorsUnsafe
  */
@@ -76,11 +83,13 @@ export const _newUnsafe = (pm: number): CML.ProtocolMagic =>
 
 /**
  * Method toInt of ProtocolMagic
- * 
+ *
  * @since 2.0.0
  * @category Methods
  */
-export const toInt: (instance: CML.ProtocolMagic) => Effect.Effect<number, ProtocolMagicError> = Effect.fn(
+export const toInt: (
+  instance: CML.ProtocolMagic,
+) => Effect.Effect<number, ProtocolMagicError> = Effect.fn(
   (instance: CML.ProtocolMagic) =>
     Effect.try({
       try: () => instance.to_int(),
@@ -88,12 +97,12 @@ export const toInt: (instance: CML.ProtocolMagic) => Effect.Effect<number, Proto
         new ProtocolMagicError({
           message: `ProtocolMagic.toInt failed ProtocolMagic is not valid for number conversion. `,
         }),
-    })
+    }),
 );
 
 /**
  * Unsafely calls instance.toInt without Effect wrapper
- * 
+ *
  * @since 2.0.0
  * @category MethodsUnsafe
  */

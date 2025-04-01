@@ -14,7 +14,7 @@ export type VoteDelegCert = CML.VoteDelegCert;
 
 /**
  * Error class for VoteDelegCert operations
- * 
+ *
  * This error is thrown when operations on VoteDelegCert instances fail.
  *
  * @since 2.0.0
@@ -26,11 +26,13 @@ export class VoteDelegCertError extends Data.TaggedError("VoteDelegCertError")<{
 
 /**
  * Method free of VoteDelegCert
- * 
+ *
  * @since 2.0.0
  * @category Methods
  */
-export const free: (instance: CML.VoteDelegCert) => Effect.Effect<void, VoteDelegCertError> = Effect.fn(
+export const free: (
+  instance: CML.VoteDelegCert,
+) => Effect.Effect<void, VoteDelegCertError> = Effect.fn(
   (instance: CML.VoteDelegCert) =>
     Effect.try({
       try: () => instance.free(),
@@ -38,12 +40,12 @@ export const free: (instance: CML.VoteDelegCert) => Effect.Effect<void, VoteDele
         new VoteDelegCertError({
           message: `VoteDelegCert.free failed Hint: Check if you're calling free() more than once.`,
         }),
-    })
+    }),
 );
 
 /**
  * Unsafely calls instance.free without Effect wrapper
- * 
+ *
  * @since 2.0.0
  * @category MethodsUnsafe
  */
@@ -52,11 +54,13 @@ export const freeUnsafe = (instance: CML.VoteDelegCert): void =>
 
 /**
  * Method toCborBytes of VoteDelegCert
- * 
+ *
  * @since 2.0.0
  * @category Methods
  */
-export const toCborBytes: (instance: CML.VoteDelegCert) => Effect.Effect<Uint8Array, VoteDelegCertError> = Effect.fn(
+export const toCborBytes: (
+  instance: CML.VoteDelegCert,
+) => Effect.Effect<Uint8Array, VoteDelegCertError> = Effect.fn(
   (instance: CML.VoteDelegCert) =>
     Effect.try({
       try: () => instance.to_cbor_bytes(),
@@ -64,12 +68,12 @@ export const toCborBytes: (instance: CML.VoteDelegCert) => Effect.Effect<Uint8Ar
         new VoteDelegCertError({
           message: `VoteDelegCert.toCborBytes failed VoteDelegCert is not valid for Uint8Array conversion. Hint: Check byte length and encoding.`,
         }),
-    })
+    }),
 );
 
 /**
  * Unsafely calls instance.toCborBytes without Effect wrapper
- * 
+ *
  * @since 2.0.0
  * @category MethodsUnsafe
  */
@@ -78,11 +82,13 @@ export const toCborBytesUnsafe = (instance: CML.VoteDelegCert): Uint8Array =>
 
 /**
  * Method toCanonicalCborBytes of VoteDelegCert
- * 
+ *
  * @since 2.0.0
  * @category Methods
  */
-export const toCanonicalCborBytes: (instance: CML.VoteDelegCert) => Effect.Effect<Uint8Array, VoteDelegCertError> = Effect.fn(
+export const toCanonicalCborBytes: (
+  instance: CML.VoteDelegCert,
+) => Effect.Effect<Uint8Array, VoteDelegCertError> = Effect.fn(
   (instance: CML.VoteDelegCert) =>
     Effect.try({
       try: () => instance.to_canonical_cbor_bytes(),
@@ -90,36 +96,42 @@ export const toCanonicalCborBytes: (instance: CML.VoteDelegCert) => Effect.Effec
         new VoteDelegCertError({
           message: `VoteDelegCert.toCanonicalCborBytes failed VoteDelegCert is not valid for Uint8Array conversion. Hint: Check byte length and encoding.`,
         }),
-    })
+    }),
 );
 
 /**
  * Unsafely calls instance.toCanonicalCborBytes without Effect wrapper
- * 
+ *
  * @since 2.0.0
  * @category MethodsUnsafe
  */
-export const toCanonicalCborBytesUnsafe = (instance: CML.VoteDelegCert): Uint8Array =>
-  Effect.runSync(toCanonicalCborBytes(instance));
+export const toCanonicalCborBytesUnsafe = (
+  instance: CML.VoteDelegCert,
+): Uint8Array => Effect.runSync(toCanonicalCborBytes(instance));
 
 /**
  * Static method fromCborBytes of VoteDelegCert
- * 
+ *
  * @since 2.0.0
  * @category Constructors
  */
-export const fromCborBytes: (cborBytes: Uint8Array) => Effect.Effect<CML.VoteDelegCert, VoteDelegCertError> = Effect.fn(function* (cborBytes: Uint8Array) {
-  return yield* Effect.try({
-    try: () => CML.VoteDelegCert.from_cbor_bytes(cborBytes),
-    catch: () => new VoteDelegCertError({
-      message: `VoteDelegCert.fromCborBytes failed with parameters: ${cborBytes}. Hint: Check byte length and encoding.`,
-    }),
-  });
-});
+export const fromCborBytes: (
+  cborBytes: Uint8Array,
+) => Effect.Effect<CML.VoteDelegCert, VoteDelegCertError> = Effect.fn(
+  function* (cborBytes: Uint8Array) {
+    return yield* Effect.try({
+      try: () => CML.VoteDelegCert.from_cbor_bytes(cborBytes),
+      catch: () =>
+        new VoteDelegCertError({
+          message: `VoteDelegCert.fromCborBytes failed with parameters: ${cborBytes}. Hint: Check byte length and encoding.`,
+        }),
+    });
+  },
+);
 
 /**
  * Unsafely calls VoteDelegCert.fromCborBytes without Effect wrapper
- * 
+ *
  * @since 2.0.0
  * @category ConstructorsUnsafe
  */
@@ -128,11 +140,13 @@ export const fromCborBytesUnsafe = (cborBytes: Uint8Array): CML.VoteDelegCert =>
 
 /**
  * Method toCborHex of VoteDelegCert
- * 
+ *
  * @since 2.0.0
  * @category Methods
  */
-export const toCborHex: (instance: CML.VoteDelegCert) => Effect.Effect<string, VoteDelegCertError> = Effect.fn(
+export const toCborHex: (
+  instance: CML.VoteDelegCert,
+) => Effect.Effect<string, VoteDelegCertError> = Effect.fn(
   (instance: CML.VoteDelegCert) =>
     Effect.try({
       try: () => instance.to_cbor_hex(),
@@ -140,12 +154,12 @@ export const toCborHex: (instance: CML.VoteDelegCert) => Effect.Effect<string, V
         new VoteDelegCertError({
           message: `VoteDelegCert.toCborHex failed VoteDelegCert is not valid for string conversion. Hint: Make sure it's a valid hex string representing CBOR data.`,
         }),
-    })
+    }),
 );
 
 /**
  * Unsafely calls instance.toCborHex without Effect wrapper
- * 
+ *
  * @since 2.0.0
  * @category MethodsUnsafe
  */
@@ -154,11 +168,13 @@ export const toCborHexUnsafe = (instance: CML.VoteDelegCert): string =>
 
 /**
  * Method toCanonicalCborHex of VoteDelegCert
- * 
+ *
  * @since 2.0.0
  * @category Methods
  */
-export const toCanonicalCborHex: (instance: CML.VoteDelegCert) => Effect.Effect<string, VoteDelegCertError> = Effect.fn(
+export const toCanonicalCborHex: (
+  instance: CML.VoteDelegCert,
+) => Effect.Effect<string, VoteDelegCertError> = Effect.fn(
   (instance: CML.VoteDelegCert) =>
     Effect.try({
       try: () => instance.to_canonical_cbor_hex(),
@@ -166,12 +182,12 @@ export const toCanonicalCborHex: (instance: CML.VoteDelegCert) => Effect.Effect<
         new VoteDelegCertError({
           message: `VoteDelegCert.toCanonicalCborHex failed VoteDelegCert is not valid for string conversion. Hint: Make sure it's a valid hex string representing CBOR data.`,
         }),
-    })
+    }),
 );
 
 /**
  * Unsafely calls instance.toCanonicalCborHex without Effect wrapper
- * 
+ *
  * @since 2.0.0
  * @category MethodsUnsafe
  */
@@ -180,22 +196,27 @@ export const toCanonicalCborHexUnsafe = (instance: CML.VoteDelegCert): string =>
 
 /**
  * Static method fromCborHex of VoteDelegCert
- * 
+ *
  * @since 2.0.0
  * @category Constructors
  */
-export const fromCborHex: (cborBytes: string) => Effect.Effect<CML.VoteDelegCert, VoteDelegCertError> = Effect.fn(function* (cborBytes: string) {
-  return yield* Effect.try({
-    try: () => CML.VoteDelegCert.from_cbor_hex(cborBytes),
-    catch: () => new VoteDelegCertError({
-      message: `VoteDelegCert.fromCborHex failed with parameters: ${cborBytes}. Hint: Make sure it's a valid hex string representing CBOR data.`,
-    }),
-  });
-});
+export const fromCborHex: (
+  cborBytes: string,
+) => Effect.Effect<CML.VoteDelegCert, VoteDelegCertError> = Effect.fn(
+  function* (cborBytes: string) {
+    return yield* Effect.try({
+      try: () => CML.VoteDelegCert.from_cbor_hex(cborBytes),
+      catch: () =>
+        new VoteDelegCertError({
+          message: `VoteDelegCert.fromCborHex failed with parameters: ${cborBytes}. Hint: Make sure it's a valid hex string representing CBOR data.`,
+        }),
+    });
+  },
+);
 
 /**
  * Unsafely calls VoteDelegCert.fromCborHex without Effect wrapper
- * 
+ *
  * @since 2.0.0
  * @category ConstructorsUnsafe
  */
@@ -204,11 +225,13 @@ export const fromCborHexUnsafe = (cborBytes: string): CML.VoteDelegCert =>
 
 /**
  * Method toJson of VoteDelegCert
- * 
+ *
  * @since 2.0.0
  * @category Methods
  */
-export const toJson: (instance: CML.VoteDelegCert) => Effect.Effect<string, VoteDelegCertError> = Effect.fn(
+export const toJson: (
+  instance: CML.VoteDelegCert,
+) => Effect.Effect<string, VoteDelegCertError> = Effect.fn(
   (instance: CML.VoteDelegCert) =>
     Effect.try({
       try: () => instance.to_json(),
@@ -216,12 +239,12 @@ export const toJson: (instance: CML.VoteDelegCert) => Effect.Effect<string, Vote
         new VoteDelegCertError({
           message: `VoteDelegCert.toJson failed VoteDelegCert is not valid for string conversion. Hint: Validate your JSON structure.`,
         }),
-    })
+    }),
 );
 
 /**
  * Unsafely calls instance.toJson without Effect wrapper
- * 
+ *
  * @since 2.0.0
  * @category MethodsUnsafe
  */
@@ -230,11 +253,13 @@ export const toJsonUnsafe = (instance: CML.VoteDelegCert): string =>
 
 /**
  * Method toJsValue of VoteDelegCert
- * 
+ *
  * @since 2.0.0
  * @category Methods
  */
-export const toJsValue: (instance: CML.VoteDelegCert) => Effect.Effect<any, VoteDelegCertError> = Effect.fn(
+export const toJsValue: (
+  instance: CML.VoteDelegCert,
+) => Effect.Effect<any, VoteDelegCertError> = Effect.fn(
   (instance: CML.VoteDelegCert) =>
     Effect.try({
       try: () => instance.to_js_value(),
@@ -242,12 +267,12 @@ export const toJsValue: (instance: CML.VoteDelegCert) => Effect.Effect<any, Vote
         new VoteDelegCertError({
           message: `VoteDelegCert.toJsValue failed VoteDelegCert is not valid for any conversion. `,
         }),
-    })
+    }),
 );
 
 /**
  * Unsafely calls instance.toJsValue without Effect wrapper
- * 
+ *
  * @since 2.0.0
  * @category MethodsUnsafe
  */
@@ -256,22 +281,27 @@ export const toJsValueUnsafe = (instance: CML.VoteDelegCert): any =>
 
 /**
  * Static method fromJson of VoteDelegCert
- * 
+ *
  * @since 2.0.0
  * @category Constructors
  */
-export const fromJson: (json: string) => Effect.Effect<CML.VoteDelegCert, VoteDelegCertError> = Effect.fn(function* (json: string) {
-  return yield* Effect.try({
-    try: () => CML.VoteDelegCert.from_json(json),
-    catch: () => new VoteDelegCertError({
-      message: `VoteDelegCert.fromJson failed with parameters: ${json}. Hint: Validate your JSON structure.`,
-    }),
-  });
-});
+export const fromJson: (
+  json: string,
+) => Effect.Effect<CML.VoteDelegCert, VoteDelegCertError> = Effect.fn(
+  function* (json: string) {
+    return yield* Effect.try({
+      try: () => CML.VoteDelegCert.from_json(json),
+      catch: () =>
+        new VoteDelegCertError({
+          message: `VoteDelegCert.fromJson failed with parameters: ${json}. Hint: Validate your JSON structure.`,
+        }),
+    });
+  },
+);
 
 /**
  * Unsafely calls VoteDelegCert.fromJson without Effect wrapper
- * 
+ *
  * @since 2.0.0
  * @category ConstructorsUnsafe
  */
@@ -280,11 +310,13 @@ export const fromJsonUnsafe = (json: string): CML.VoteDelegCert =>
 
 /**
  * Method stakeCredential of VoteDelegCert
- * 
+ *
  * @since 2.0.0
  * @category Methods
  */
-export const stakeCredential: (instance: CML.VoteDelegCert) => Effect.Effect<CML.Credential, VoteDelegCertError> = Effect.fn(
+export const stakeCredential: (
+  instance: CML.VoteDelegCert,
+) => Effect.Effect<CML.Credential, VoteDelegCertError> = Effect.fn(
   (instance: CML.VoteDelegCert) =>
     Effect.try({
       try: () => instance.stake_credential(),
@@ -292,25 +324,28 @@ export const stakeCredential: (instance: CML.VoteDelegCert) => Effect.Effect<CML
         new VoteDelegCertError({
           message: `VoteDelegCert.stakeCredential failed `,
         }),
-    })
+    }),
 );
 
 /**
  * Unsafely calls instance.stakeCredential without Effect wrapper
- * 
+ *
  * @since 2.0.0
  * @category MethodsUnsafe
  */
-export const stakeCredentialUnsafe = (instance: CML.VoteDelegCert): CML.Credential =>
-  Effect.runSync(stakeCredential(instance));
+export const stakeCredentialUnsafe = (
+  instance: CML.VoteDelegCert,
+): CML.Credential => Effect.runSync(stakeCredential(instance));
 
 /**
  * Method dRep of VoteDelegCert
- * 
+ *
  * @since 2.0.0
  * @category Methods
  */
-export const dRep: (instance: CML.VoteDelegCert) => Effect.Effect<CML.DRep, VoteDelegCertError> = Effect.fn(
+export const dRep: (
+  instance: CML.VoteDelegCert,
+) => Effect.Effect<CML.DRep, VoteDelegCertError> = Effect.fn(
   (instance: CML.VoteDelegCert) =>
     Effect.try({
       try: () => instance.d_rep(),
@@ -318,12 +353,12 @@ export const dRep: (instance: CML.VoteDelegCert) => Effect.Effect<CML.DRep, Vote
         new VoteDelegCertError({
           message: `VoteDelegCert.dRep failed `,
         }),
-    })
+    }),
 );
 
 /**
  * Unsafely calls instance.dRep without Effect wrapper
- * 
+ *
  * @since 2.0.0
  * @category MethodsUnsafe
  */
@@ -332,24 +367,32 @@ export const dRepUnsafe = (instance: CML.VoteDelegCert): CML.DRep =>
 
 /**
  * Static method _new of VoteDelegCert
- * 
+ *
  * @since 2.0.0
  * @category Constructors
  */
-export const _new: (stakeCredential: CML.Credential, dRep: CML.DRep) => Effect.Effect<CML.VoteDelegCert, VoteDelegCertError> = Effect.fn(function* (stakeCredential: CML.Credential, dRep: CML.DRep) {
-  return yield* Effect.try({
-    try: () => CML.VoteDelegCert.new(stakeCredential, dRep),
-    catch: () => new VoteDelegCertError({
-      message: `VoteDelegCert._new failed with parameters: ${stakeCredential} (Credential), ${dRep} (DRep). `,
-    }),
-  });
-});
+export const _new: (
+  stakeCredential: CML.Credential,
+  dRep: CML.DRep,
+) => Effect.Effect<CML.VoteDelegCert, VoteDelegCertError> = Effect.fn(
+  function* (stakeCredential: CML.Credential, dRep: CML.DRep) {
+    return yield* Effect.try({
+      try: () => CML.VoteDelegCert.new(stakeCredential, dRep),
+      catch: () =>
+        new VoteDelegCertError({
+          message: `VoteDelegCert._new failed with parameters: ${stakeCredential} (Credential), ${dRep} (DRep). `,
+        }),
+    });
+  },
+);
 
 /**
  * Unsafely calls VoteDelegCert._new without Effect wrapper
- * 
+ *
  * @since 2.0.0
  * @category ConstructorsUnsafe
  */
-export const _newUnsafe = (stakeCredential: CML.Credential, dRep: CML.DRep): CML.VoteDelegCert =>
-  Effect.runSync(_new(stakeCredential, dRep));
+export const _newUnsafe = (
+  stakeCredential: CML.Credential,
+  dRep: CML.DRep,
+): CML.VoteDelegCert => Effect.runSync(_new(stakeCredential, dRep));

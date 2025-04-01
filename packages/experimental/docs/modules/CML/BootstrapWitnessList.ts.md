@@ -42,7 +42,10 @@ Static method \_new of BootstrapWitnessList
 **Signature**
 
 ```ts
-export declare const _new: () => Effect.Effect<CML.BootstrapWitnessList, BootstrapWitnessListError>
+export declare const _new: () => Effect.Effect<
+  CML.BootstrapWitnessList,
+  BootstrapWitnessListError
+>;
 ```
 
 Added in v2.0.0
@@ -56,7 +59,7 @@ Unsafely calls BootstrapWitnessList.\_new without Effect wrapper
 **Signature**
 
 ```ts
-export declare const _newUnsafe: () => CML.BootstrapWitnessList
+export declare const _newUnsafe: () => CML.BootstrapWitnessList;
 ```
 
 Added in v2.0.0
@@ -88,8 +91,8 @@ Method add of BootstrapWitnessList
 ```ts
 export declare const add: (
   instance: CML.BootstrapWitnessList,
-  elem: CML.BootstrapWitness
-) => Effect.Effect<void, BootstrapWitnessListError>
+  elem: CML.BootstrapWitness,
+) => Effect.Effect<void, BootstrapWitnessListError>;
 ```
 
 Added in v2.0.0
@@ -101,7 +104,9 @@ Method free of BootstrapWitnessList
 **Signature**
 
 ```ts
-export declare const free: (instance: CML.BootstrapWitnessList) => Effect.Effect<void, BootstrapWitnessListError>
+export declare const free: (
+  instance: CML.BootstrapWitnessList,
+) => Effect.Effect<void, BootstrapWitnessListError>;
 ```
 
 Added in v2.0.0
@@ -115,8 +120,8 @@ Method get of BootstrapWitnessList
 ```ts
 export declare const get: (
   instance: CML.BootstrapWitnessList,
-  index: number
-) => Effect.Effect<CML.BootstrapWitness, BootstrapWitnessListError>
+  index: number,
+) => Effect.Effect<CML.BootstrapWitness, BootstrapWitnessListError>;
 ```
 
 Added in v2.0.0
@@ -128,7 +133,9 @@ Method len of BootstrapWitnessList
 **Signature**
 
 ```ts
-export declare const len: (instance: CML.BootstrapWitnessList) => Effect.Effect<number, BootstrapWitnessListError>
+export declare const len: (
+  instance: CML.BootstrapWitnessList,
+) => Effect.Effect<number, BootstrapWitnessListError>;
 ```
 
 Added in v2.0.0
@@ -142,7 +149,10 @@ Unsafely calls instance.add without Effect wrapper
 **Signature**
 
 ```ts
-export declare const addUnsafe: (instance: CML.BootstrapWitnessList, elem: CML.BootstrapWitness) => void
+export declare const addUnsafe: (
+  instance: CML.BootstrapWitnessList,
+  elem: CML.BootstrapWitness,
+) => void;
 ```
 
 Added in v2.0.0
@@ -154,7 +164,7 @@ Unsafely calls instance.free without Effect wrapper
 **Signature**
 
 ```ts
-export declare const freeUnsafe: (instance: CML.BootstrapWitnessList) => void
+export declare const freeUnsafe: (instance: CML.BootstrapWitnessList) => void;
 ```
 
 Added in v2.0.0
@@ -166,7 +176,10 @@ Unsafely calls instance.get without Effect wrapper
 **Signature**
 
 ```ts
-export declare const getUnsafe: (instance: CML.BootstrapWitnessList, index: number) => CML.BootstrapWitness
+export declare const getUnsafe: (
+  instance: CML.BootstrapWitnessList,
+  index: number,
+) => CML.BootstrapWitness;
 ```
 
 Added in v2.0.0
@@ -178,7 +191,7 @@ Unsafely calls instance.len without Effect wrapper
 **Signature**
 
 ```ts
-export declare const lenUnsafe: (instance: CML.BootstrapWitnessList) => number
+export declare const lenUnsafe: (instance: CML.BootstrapWitnessList) => number;
 ```
 
 Added in v2.0.0
@@ -192,7 +205,7 @@ Type alias for the CML BootstrapWitnessList class
 **Signature**
 
 ```ts
-export type BootstrapWitnessList = CML.BootstrapWitnessList
+export type BootstrapWitnessList = CML.BootstrapWitnessList;
 ```
 
 Added in v2.0.0

@@ -41,8 +41,11 @@ Static method \_new of SingleOutputBuilderResult
 
 ```ts
 export declare const _new: (
-  output: CML.TransactionOutput
-) => Effect.Effect<CML.SingleOutputBuilderResult, SingleOutputBuilderResultError>
+  output: CML.TransactionOutput,
+) => Effect.Effect<
+  CML.SingleOutputBuilderResult,
+  SingleOutputBuilderResultError
+>;
 ```
 
 Added in v2.0.0
@@ -56,7 +59,9 @@ Unsafely calls SingleOutputBuilderResult.\_new without Effect wrapper
 **Signature**
 
 ```ts
-export declare const _newUnsafe: (output: CML.TransactionOutput) => CML.SingleOutputBuilderResult
+export declare const _newUnsafe: (
+  output: CML.TransactionOutput,
+) => CML.SingleOutputBuilderResult;
 ```
 
 Added in v2.0.0
@@ -87,8 +92,8 @@ Method communicationDatum of SingleOutputBuilderResult
 
 ```ts
 export declare const communicationDatum: (
-  instance: CML.SingleOutputBuilderResult
-) => Effect.Effect<CML.PlutusData | undefined, SingleOutputBuilderResultError>
+  instance: CML.SingleOutputBuilderResult,
+) => Effect.Effect<CML.PlutusData | undefined, SingleOutputBuilderResultError>;
 ```
 
 Added in v2.0.0
@@ -101,8 +106,8 @@ Method free of SingleOutputBuilderResult
 
 ```ts
 export declare const free: (
-  instance: CML.SingleOutputBuilderResult
-) => Effect.Effect<void, SingleOutputBuilderResultError>
+  instance: CML.SingleOutputBuilderResult,
+) => Effect.Effect<void, SingleOutputBuilderResultError>;
 ```
 
 Added in v2.0.0
@@ -115,8 +120,8 @@ Method output of SingleOutputBuilderResult
 
 ```ts
 export declare const output: (
-  instance: CML.SingleOutputBuilderResult
-) => Effect.Effect<CML.TransactionOutput, SingleOutputBuilderResultError>
+  instance: CML.SingleOutputBuilderResult,
+) => Effect.Effect<CML.TransactionOutput, SingleOutputBuilderResultError>;
 ```
 
 Added in v2.0.0
@@ -130,7 +135,9 @@ Unsafely calls instance.communicationDatum without Effect wrapper
 **Signature**
 
 ```ts
-export declare const communicationDatumUnsafe: (instance: CML.SingleOutputBuilderResult) => CML.PlutusData | undefined
+export declare const communicationDatumUnsafe: (
+  instance: CML.SingleOutputBuilderResult,
+) => CML.PlutusData | undefined;
 ```
 
 Added in v2.0.0
@@ -142,7 +149,9 @@ Unsafely calls instance.free without Effect wrapper
 **Signature**
 
 ```ts
-export declare const freeUnsafe: (instance: CML.SingleOutputBuilderResult) => void
+export declare const freeUnsafe: (
+  instance: CML.SingleOutputBuilderResult,
+) => void;
 ```
 
 Added in v2.0.0
@@ -154,7 +163,9 @@ Unsafely calls instance.output without Effect wrapper
 **Signature**
 
 ```ts
-export declare const outputUnsafe: (instance: CML.SingleOutputBuilderResult) => CML.TransactionOutput
+export declare const outputUnsafe: (
+  instance: CML.SingleOutputBuilderResult,
+) => CML.TransactionOutput;
 ```
 
 Added in v2.0.0
@@ -168,7 +179,7 @@ Type alias for the CML SingleOutputBuilderResult class
 **Signature**
 
 ```ts
-export type SingleOutputBuilderResult = CML.SingleOutputBuilderResult
+export type SingleOutputBuilderResult = CML.SingleOutputBuilderResult;
 ```
 
 Added in v2.0.0

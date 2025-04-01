@@ -46,7 +46,7 @@ Static method \_new of Metadata
 **Signature**
 
 ```ts
-export declare const _new: () => Effect.Effect<CML.Metadata, MetadataError>
+export declare const _new: () => Effect.Effect<CML.Metadata, MetadataError>;
 ```
 
 Added in v2.0.0
@@ -60,7 +60,7 @@ Unsafely calls Metadata.\_new without Effect wrapper
 **Signature**
 
 ```ts
-export declare const _newUnsafe: () => CML.Metadata
+export declare const _newUnsafe: () => CML.Metadata;
 ```
 
 Added in v2.0.0
@@ -90,7 +90,9 @@ Method free of Metadata
 **Signature**
 
 ```ts
-export declare const free: (instance: CML.Metadata) => Effect.Effect<void, MetadataError>
+export declare const free: (
+  instance: CML.Metadata,
+) => Effect.Effect<void, MetadataError>;
 ```
 
 Added in v2.0.0
@@ -104,8 +106,8 @@ Method get of Metadata
 ```ts
 export declare const get: (
   instance: CML.Metadata,
-  label: bigint
-) => Effect.Effect<CML.TransactionMetadatum | undefined, MetadataError>
+  label: bigint,
+) => Effect.Effect<CML.TransactionMetadatum | undefined, MetadataError>;
 ```
 
 Added in v2.0.0
@@ -119,8 +121,8 @@ Method getAll of Metadata
 ```ts
 export declare const getAll: (
   instance: CML.Metadata,
-  label: bigint
-) => Effect.Effect<CML.TransactionMetadatumList | undefined, MetadataError>
+  label: bigint,
+) => Effect.Effect<CML.TransactionMetadatumList | undefined, MetadataError>;
 ```
 
 Added in v2.0.0
@@ -132,7 +134,9 @@ Method labels of Metadata
 **Signature**
 
 ```ts
-export declare const labels: (instance: CML.Metadata) => Effect.Effect<CML.TransactionMetadatumLabels, MetadataError>
+export declare const labels: (
+  instance: CML.Metadata,
+) => Effect.Effect<CML.TransactionMetadatumLabels, MetadataError>;
 ```
 
 Added in v2.0.0
@@ -144,7 +148,9 @@ Method len of Metadata
 **Signature**
 
 ```ts
-export declare const len: (instance: CML.Metadata) => Effect.Effect<number, MetadataError>
+export declare const len: (
+  instance: CML.Metadata,
+) => Effect.Effect<number, MetadataError>;
 ```
 
 Added in v2.0.0
@@ -159,8 +165,8 @@ Method set of Metadata
 export declare const set: (
   instance: CML.Metadata,
   key: bigint,
-  value: CML.TransactionMetadatum
-) => Effect.Effect<void, MetadataError>
+  value: CML.TransactionMetadatum,
+) => Effect.Effect<void, MetadataError>;
 ```
 
 Added in v2.0.0
@@ -174,7 +180,7 @@ Unsafely calls instance.free without Effect wrapper
 **Signature**
 
 ```ts
-export declare const freeUnsafe: (instance: CML.Metadata) => void
+export declare const freeUnsafe: (instance: CML.Metadata) => void;
 ```
 
 Added in v2.0.0
@@ -186,7 +192,10 @@ Unsafely calls instance.getAll without Effect wrapper
 **Signature**
 
 ```ts
-export declare const getAllUnsafe: (instance: CML.Metadata, label: bigint) => CML.TransactionMetadatumList | undefined
+export declare const getAllUnsafe: (
+  instance: CML.Metadata,
+  label: bigint,
+) => CML.TransactionMetadatumList | undefined;
 ```
 
 Added in v2.0.0
@@ -198,7 +207,10 @@ Unsafely calls instance.get without Effect wrapper
 **Signature**
 
 ```ts
-export declare const getUnsafe: (instance: CML.Metadata, label: bigint) => CML.TransactionMetadatum | undefined
+export declare const getUnsafe: (
+  instance: CML.Metadata,
+  label: bigint,
+) => CML.TransactionMetadatum | undefined;
 ```
 
 Added in v2.0.0
@@ -210,7 +222,9 @@ Unsafely calls instance.labels without Effect wrapper
 **Signature**
 
 ```ts
-export declare const labelsUnsafe: (instance: CML.Metadata) => CML.TransactionMetadatumLabels
+export declare const labelsUnsafe: (
+  instance: CML.Metadata,
+) => CML.TransactionMetadatumLabels;
 ```
 
 Added in v2.0.0
@@ -222,7 +236,7 @@ Unsafely calls instance.len without Effect wrapper
 **Signature**
 
 ```ts
-export declare const lenUnsafe: (instance: CML.Metadata) => number
+export declare const lenUnsafe: (instance: CML.Metadata) => number;
 ```
 
 Added in v2.0.0
@@ -234,7 +248,11 @@ Unsafely calls instance.set without Effect wrapper
 **Signature**
 
 ```ts
-export declare const setUnsafe: (instance: CML.Metadata, key: bigint, value: CML.TransactionMetadatum) => void
+export declare const setUnsafe: (
+  instance: CML.Metadata,
+  key: bigint,
+  value: CML.TransactionMetadatum,
+) => void;
 ```
 
 Added in v2.0.0
@@ -248,7 +266,7 @@ Type alias for the CML Metadata class
 **Signature**
 
 ```ts
-export type Metadata = CML.Metadata
+export type Metadata = CML.Metadata;
 ```
 
 Added in v2.0.0

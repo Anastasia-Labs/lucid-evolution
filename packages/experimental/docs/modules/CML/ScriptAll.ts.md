@@ -56,7 +56,9 @@ Static method \_new of ScriptAll
 **Signature**
 
 ```ts
-export declare const _new: (nativeScripts: CML.NativeScriptList) => Effect.Effect<CML.ScriptAll, ScriptAllError>
+export declare const _new: (
+  nativeScripts: CML.NativeScriptList,
+) => Effect.Effect<CML.ScriptAll, ScriptAllError>;
 ```
 
 Added in v2.0.0
@@ -68,7 +70,9 @@ Static method fromCborBytes of ScriptAll
 **Signature**
 
 ```ts
-export declare const fromCborBytes: (cborBytes: Uint8Array) => Effect.Effect<CML.ScriptAll, ScriptAllError>
+export declare const fromCborBytes: (
+  cborBytes: Uint8Array,
+) => Effect.Effect<CML.ScriptAll, ScriptAllError>;
 ```
 
 Added in v2.0.0
@@ -80,7 +84,9 @@ Static method fromCborHex of ScriptAll
 **Signature**
 
 ```ts
-export declare const fromCborHex: (cborBytes: string) => Effect.Effect<CML.ScriptAll, ScriptAllError>
+export declare const fromCborHex: (
+  cborBytes: string,
+) => Effect.Effect<CML.ScriptAll, ScriptAllError>;
 ```
 
 Added in v2.0.0
@@ -92,7 +98,9 @@ Static method fromJson of ScriptAll
 **Signature**
 
 ```ts
-export declare const fromJson: (json: string) => Effect.Effect<CML.ScriptAll, ScriptAllError>
+export declare const fromJson: (
+  json: string,
+) => Effect.Effect<CML.ScriptAll, ScriptAllError>;
 ```
 
 Added in v2.0.0
@@ -106,7 +114,9 @@ Unsafely calls ScriptAll.\_new without Effect wrapper
 **Signature**
 
 ```ts
-export declare const _newUnsafe: (nativeScripts: CML.NativeScriptList) => CML.ScriptAll
+export declare const _newUnsafe: (
+  nativeScripts: CML.NativeScriptList,
+) => CML.ScriptAll;
 ```
 
 Added in v2.0.0
@@ -118,7 +128,9 @@ Unsafely calls ScriptAll.fromCborBytes without Effect wrapper
 **Signature**
 
 ```ts
-export declare const fromCborBytesUnsafe: (cborBytes: Uint8Array) => CML.ScriptAll
+export declare const fromCborBytesUnsafe: (
+  cborBytes: Uint8Array,
+) => CML.ScriptAll;
 ```
 
 Added in v2.0.0
@@ -130,7 +142,7 @@ Unsafely calls ScriptAll.fromCborHex without Effect wrapper
 **Signature**
 
 ```ts
-export declare const fromCborHexUnsafe: (cborBytes: string) => CML.ScriptAll
+export declare const fromCborHexUnsafe: (cborBytes: string) => CML.ScriptAll;
 ```
 
 Added in v2.0.0
@@ -142,7 +154,7 @@ Unsafely calls ScriptAll.fromJson without Effect wrapper
 **Signature**
 
 ```ts
-export declare const fromJsonUnsafe: (json: string) => CML.ScriptAll
+export declare const fromJsonUnsafe: (json: string) => CML.ScriptAll;
 ```
 
 Added in v2.0.0
@@ -172,7 +184,9 @@ Method free of ScriptAll
 **Signature**
 
 ```ts
-export declare const free: (instance: CML.ScriptAll) => Effect.Effect<void, ScriptAllError>
+export declare const free: (
+  instance: CML.ScriptAll,
+) => Effect.Effect<void, ScriptAllError>;
 ```
 
 Added in v2.0.0
@@ -184,7 +198,9 @@ Method nativeScripts of ScriptAll
 **Signature**
 
 ```ts
-export declare const nativeScripts: (instance: CML.ScriptAll) => Effect.Effect<CML.NativeScriptList, ScriptAllError>
+export declare const nativeScripts: (
+  instance: CML.ScriptAll,
+) => Effect.Effect<CML.NativeScriptList, ScriptAllError>;
 ```
 
 Added in v2.0.0
@@ -196,7 +212,9 @@ Method toCanonicalCborBytes of ScriptAll
 **Signature**
 
 ```ts
-export declare const toCanonicalCborBytes: (instance: CML.ScriptAll) => Effect.Effect<Uint8Array, ScriptAllError>
+export declare const toCanonicalCborBytes: (
+  instance: CML.ScriptAll,
+) => Effect.Effect<Uint8Array, ScriptAllError>;
 ```
 
 Added in v2.0.0
@@ -208,7 +226,9 @@ Method toCanonicalCborHex of ScriptAll
 **Signature**
 
 ```ts
-export declare const toCanonicalCborHex: (instance: CML.ScriptAll) => Effect.Effect<string, ScriptAllError>
+export declare const toCanonicalCborHex: (
+  instance: CML.ScriptAll,
+) => Effect.Effect<string, ScriptAllError>;
 ```
 
 Added in v2.0.0
@@ -220,7 +240,9 @@ Method toCborBytes of ScriptAll
 **Signature**
 
 ```ts
-export declare const toCborBytes: (instance: CML.ScriptAll) => Effect.Effect<Uint8Array, ScriptAllError>
+export declare const toCborBytes: (
+  instance: CML.ScriptAll,
+) => Effect.Effect<Uint8Array, ScriptAllError>;
 ```
 
 Added in v2.0.0
@@ -232,7 +254,9 @@ Method toCborHex of ScriptAll
 **Signature**
 
 ```ts
-export declare const toCborHex: (instance: CML.ScriptAll) => Effect.Effect<string, ScriptAllError>
+export declare const toCborHex: (
+  instance: CML.ScriptAll,
+) => Effect.Effect<string, ScriptAllError>;
 ```
 
 Added in v2.0.0
@@ -244,7 +268,9 @@ Method toJsValue of ScriptAll
 **Signature**
 
 ```ts
-export declare const toJsValue: (instance: CML.ScriptAll) => Effect.Effect<any, ScriptAllError>
+export declare const toJsValue: (
+  instance: CML.ScriptAll,
+) => Effect.Effect<any, ScriptAllError>;
 ```
 
 Added in v2.0.0
@@ -256,7 +282,9 @@ Method toJson of ScriptAll
 **Signature**
 
 ```ts
-export declare const toJson: (instance: CML.ScriptAll) => Effect.Effect<string, ScriptAllError>
+export declare const toJson: (
+  instance: CML.ScriptAll,
+) => Effect.Effect<string, ScriptAllError>;
 ```
 
 Added in v2.0.0
@@ -270,7 +298,7 @@ Unsafely calls instance.free without Effect wrapper
 **Signature**
 
 ```ts
-export declare const freeUnsafe: (instance: CML.ScriptAll) => void
+export declare const freeUnsafe: (instance: CML.ScriptAll) => void;
 ```
 
 Added in v2.0.0
@@ -282,7 +310,9 @@ Unsafely calls instance.nativeScripts without Effect wrapper
 **Signature**
 
 ```ts
-export declare const nativeScriptsUnsafe: (instance: CML.ScriptAll) => CML.NativeScriptList
+export declare const nativeScriptsUnsafe: (
+  instance: CML.ScriptAll,
+) => CML.NativeScriptList;
 ```
 
 Added in v2.0.0
@@ -294,7 +324,9 @@ Unsafely calls instance.toCanonicalCborBytes without Effect wrapper
 **Signature**
 
 ```ts
-export declare const toCanonicalCborBytesUnsafe: (instance: CML.ScriptAll) => Uint8Array
+export declare const toCanonicalCborBytesUnsafe: (
+  instance: CML.ScriptAll,
+) => Uint8Array;
 ```
 
 Added in v2.0.0
@@ -306,7 +338,9 @@ Unsafely calls instance.toCanonicalCborHex without Effect wrapper
 **Signature**
 
 ```ts
-export declare const toCanonicalCborHexUnsafe: (instance: CML.ScriptAll) => string
+export declare const toCanonicalCborHexUnsafe: (
+  instance: CML.ScriptAll,
+) => string;
 ```
 
 Added in v2.0.0
@@ -318,7 +352,7 @@ Unsafely calls instance.toCborBytes without Effect wrapper
 **Signature**
 
 ```ts
-export declare const toCborBytesUnsafe: (instance: CML.ScriptAll) => Uint8Array
+export declare const toCborBytesUnsafe: (instance: CML.ScriptAll) => Uint8Array;
 ```
 
 Added in v2.0.0
@@ -330,7 +364,7 @@ Unsafely calls instance.toCborHex without Effect wrapper
 **Signature**
 
 ```ts
-export declare const toCborHexUnsafe: (instance: CML.ScriptAll) => string
+export declare const toCborHexUnsafe: (instance: CML.ScriptAll) => string;
 ```
 
 Added in v2.0.0
@@ -342,7 +376,7 @@ Unsafely calls instance.toJsValue without Effect wrapper
 **Signature**
 
 ```ts
-export declare const toJsValueUnsafe: (instance: CML.ScriptAll) => any
+export declare const toJsValueUnsafe: (instance: CML.ScriptAll) => any;
 ```
 
 Added in v2.0.0
@@ -354,7 +388,7 @@ Unsafely calls instance.toJson without Effect wrapper
 **Signature**
 
 ```ts
-export declare const toJsonUnsafe: (instance: CML.ScriptAll) => string
+export declare const toJsonUnsafe: (instance: CML.ScriptAll) => string;
 ```
 
 Added in v2.0.0
@@ -368,7 +402,7 @@ Type alias for the CML ScriptAll class
 **Signature**
 
 ```ts
-export type ScriptAll = CML.ScriptAll
+export type ScriptAll = CML.ScriptAll;
 ```
 
 Added in v2.0.0

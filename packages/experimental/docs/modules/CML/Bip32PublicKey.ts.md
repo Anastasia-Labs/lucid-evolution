@@ -48,7 +48,9 @@ Static method fromBech32 of Bip32PublicKey
 **Signature**
 
 ```ts
-export declare const fromBech32: (bech32Str: string) => Effect.Effect<CML.Bip32PublicKey, Bip32PublicKeyError>
+export declare const fromBech32: (
+  bech32Str: string,
+) => Effect.Effect<CML.Bip32PublicKey, Bip32PublicKeyError>;
 ```
 
 Added in v2.0.0
@@ -60,7 +62,9 @@ Static method fromRawBytes of Bip32PublicKey
 **Signature**
 
 ```ts
-export declare const fromRawBytes: (bytes: Uint8Array) => Effect.Effect<CML.Bip32PublicKey, Bip32PublicKeyError>
+export declare const fromRawBytes: (
+  bytes: Uint8Array,
+) => Effect.Effect<CML.Bip32PublicKey, Bip32PublicKeyError>;
 ```
 
 Added in v2.0.0
@@ -74,7 +78,9 @@ Unsafely calls Bip32PublicKey.fromBech32 without Effect wrapper
 **Signature**
 
 ```ts
-export declare const fromBech32Unsafe: (bech32Str: string) => CML.Bip32PublicKey
+export declare const fromBech32Unsafe: (
+  bech32Str: string,
+) => CML.Bip32PublicKey;
 ```
 
 Added in v2.0.0
@@ -86,7 +92,9 @@ Unsafely calls Bip32PublicKey.fromRawBytes without Effect wrapper
 **Signature**
 
 ```ts
-export declare const fromRawBytesUnsafe: (bytes: Uint8Array) => CML.Bip32PublicKey
+export declare const fromRawBytesUnsafe: (
+  bytes: Uint8Array,
+) => CML.Bip32PublicKey;
 ```
 
 Added in v2.0.0
@@ -116,7 +124,9 @@ Method chaincode of Bip32PublicKey
 **Signature**
 
 ```ts
-export declare const chaincode: (instance: CML.Bip32PublicKey) => Effect.Effect<Uint8Array, Bip32PublicKeyError>
+export declare const chaincode: (
+  instance: CML.Bip32PublicKey,
+) => Effect.Effect<Uint8Array, Bip32PublicKeyError>;
 ```
 
 Added in v2.0.0
@@ -130,8 +140,8 @@ Method derive of Bip32PublicKey
 ```ts
 export declare const derive: (
   instance: CML.Bip32PublicKey,
-  index: number
-) => Effect.Effect<CML.Bip32PublicKey, Bip32PublicKeyError>
+  index: number,
+) => Effect.Effect<CML.Bip32PublicKey, Bip32PublicKeyError>;
 ```
 
 Added in v2.0.0
@@ -143,7 +153,9 @@ Method free of Bip32PublicKey
 **Signature**
 
 ```ts
-export declare const free: (instance: CML.Bip32PublicKey) => Effect.Effect<void, Bip32PublicKeyError>
+export declare const free: (
+  instance: CML.Bip32PublicKey,
+) => Effect.Effect<void, Bip32PublicKeyError>;
 ```
 
 Added in v2.0.0
@@ -155,7 +167,9 @@ Method toBech32 of Bip32PublicKey
 **Signature**
 
 ```ts
-export declare const toBech32: (instance: CML.Bip32PublicKey) => Effect.Effect<string, Bip32PublicKeyError>
+export declare const toBech32: (
+  instance: CML.Bip32PublicKey,
+) => Effect.Effect<string, Bip32PublicKeyError>;
 ```
 
 Added in v2.0.0
@@ -167,7 +181,9 @@ Method toRawBytes of Bip32PublicKey
 **Signature**
 
 ```ts
-export declare const toRawBytes: (instance: CML.Bip32PublicKey) => Effect.Effect<Uint8Array, Bip32PublicKeyError>
+export declare const toRawBytes: (
+  instance: CML.Bip32PublicKey,
+) => Effect.Effect<Uint8Array, Bip32PublicKeyError>;
 ```
 
 Added in v2.0.0
@@ -179,7 +195,9 @@ Method toRawKey of Bip32PublicKey
 **Signature**
 
 ```ts
-export declare const toRawKey: (instance: CML.Bip32PublicKey) => Effect.Effect<CML.PublicKey, Bip32PublicKeyError>
+export declare const toRawKey: (
+  instance: CML.Bip32PublicKey,
+) => Effect.Effect<CML.PublicKey, Bip32PublicKeyError>;
 ```
 
 Added in v2.0.0
@@ -193,7 +211,9 @@ Unsafely calls instance.chaincode without Effect wrapper
 **Signature**
 
 ```ts
-export declare const chaincodeUnsafe: (instance: CML.Bip32PublicKey) => Uint8Array
+export declare const chaincodeUnsafe: (
+  instance: CML.Bip32PublicKey,
+) => Uint8Array;
 ```
 
 Added in v2.0.0
@@ -205,7 +225,10 @@ Unsafely calls instance.derive without Effect wrapper
 **Signature**
 
 ```ts
-export declare const deriveUnsafe: (instance: CML.Bip32PublicKey, index: number) => CML.Bip32PublicKey
+export declare const deriveUnsafe: (
+  instance: CML.Bip32PublicKey,
+  index: number,
+) => CML.Bip32PublicKey;
 ```
 
 Added in v2.0.0
@@ -217,7 +240,7 @@ Unsafely calls instance.free without Effect wrapper
 **Signature**
 
 ```ts
-export declare const freeUnsafe: (instance: CML.Bip32PublicKey) => void
+export declare const freeUnsafe: (instance: CML.Bip32PublicKey) => void;
 ```
 
 Added in v2.0.0
@@ -229,7 +252,7 @@ Unsafely calls instance.toBech32 without Effect wrapper
 **Signature**
 
 ```ts
-export declare const toBech32Unsafe: (instance: CML.Bip32PublicKey) => string
+export declare const toBech32Unsafe: (instance: CML.Bip32PublicKey) => string;
 ```
 
 Added in v2.0.0
@@ -241,7 +264,9 @@ Unsafely calls instance.toRawBytes without Effect wrapper
 **Signature**
 
 ```ts
-export declare const toRawBytesUnsafe: (instance: CML.Bip32PublicKey) => Uint8Array
+export declare const toRawBytesUnsafe: (
+  instance: CML.Bip32PublicKey,
+) => Uint8Array;
 ```
 
 Added in v2.0.0
@@ -253,7 +278,9 @@ Unsafely calls instance.toRawKey without Effect wrapper
 **Signature**
 
 ```ts
-export declare const toRawKeyUnsafe: (instance: CML.Bip32PublicKey) => CML.PublicKey
+export declare const toRawKeyUnsafe: (
+  instance: CML.Bip32PublicKey,
+) => CML.PublicKey;
 ```
 
 Added in v2.0.0
@@ -267,7 +294,7 @@ Type alias for the CML Bip32PublicKey class
 **Signature**
 
 ```ts
-export type Bip32PublicKey = CML.Bip32PublicKey
+export type Bip32PublicKey = CML.Bip32PublicKey;
 ```
 
 Added in v2.0.0

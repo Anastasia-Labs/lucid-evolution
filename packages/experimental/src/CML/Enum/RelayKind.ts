@@ -13,7 +13,7 @@ export type RelayKind = CML.RelayKind;
 
 /**
  * SingleHostAddr variant of the RelayKind enum
- * 
+ *
  * @since 2.0.0
  * @category Variants
  */
@@ -21,7 +21,7 @@ export const SingleHostAddr = CML.RelayKind.SingleHostAddr;
 
 /**
  * SingleHostName variant of the RelayKind enum
- * 
+ *
  * @since 2.0.0
  * @category Variants
  */
@@ -29,28 +29,27 @@ export const SingleHostName = CML.RelayKind.SingleHostName;
 
 /**
  * MultiHostName variant of the RelayKind enum
- * 
+ *
  * @since 2.0.0
  * @category Variants
  */
 export const MultiHostName = CML.RelayKind.MultiHostName;
 
-
 /**
  * Get all values of the RelayKind enum
- * 
+ *
  * @since 2.0.0
  * @category Utils
  */
 export const values = (): Array<CML.RelayKind> => [
   CML.RelayKind.SingleHostAddr,
   CML.RelayKind.SingleHostName,
-  CML.RelayKind.MultiHostName
+  CML.RelayKind.MultiHostName,
 ];
 
 /**
  * Convert RelayKind enum value to string
- * 
+ *
  * @since 2.0.0
  * @category Utils
  */
@@ -69,7 +68,7 @@ export const toString = (value: CML.RelayKind): string => {
 
 /**
  * Convert string to RelayKind enum value
- * 
+ *
  * @since 2.0.0
  * @category Utils
  */

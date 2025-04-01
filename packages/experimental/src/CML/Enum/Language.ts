@@ -13,7 +13,7 @@ export type Language = CML.Language;
 
 /**
  * PlutusV1 variant of the Language enum
- * 
+ *
  * @since 2.0.0
  * @category Variants
  */
@@ -21,7 +21,7 @@ export const PlutusV1 = CML.Language.PlutusV1;
 
 /**
  * PlutusV2 variant of the Language enum
- * 
+ *
  * @since 2.0.0
  * @category Variants
  */
@@ -29,28 +29,27 @@ export const PlutusV2 = CML.Language.PlutusV2;
 
 /**
  * PlutusV3 variant of the Language enum
- * 
+ *
  * @since 2.0.0
  * @category Variants
  */
 export const PlutusV3 = CML.Language.PlutusV3;
 
-
 /**
  * Get all values of the Language enum
- * 
+ *
  * @since 2.0.0
  * @category Utils
  */
 export const values = (): Array<CML.Language> => [
   CML.Language.PlutusV1,
   CML.Language.PlutusV2,
-  CML.Language.PlutusV3
+  CML.Language.PlutusV3,
 ];
 
 /**
  * Convert Language enum value to string
- * 
+ *
  * @since 2.0.0
  * @category Utils
  */
@@ -69,7 +68,7 @@ export const toString = (value: CML.Language): string => {
 
 /**
  * Convert string to Language enum value
- * 
+ *
  * @since 2.0.0
  * @category Utils
  */

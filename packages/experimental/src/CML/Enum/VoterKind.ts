@@ -13,23 +13,25 @@ export type VoterKind = CML.VoterKind;
 
 /**
  * ConstitutionalCommitteeHotKeyHash variant of the VoterKind enum
- * 
+ *
  * @since 2.0.0
  * @category Variants
  */
-export const ConstitutionalCommitteeHotKeyHash = CML.VoterKind.ConstitutionalCommitteeHotKeyHash;
+export const ConstitutionalCommitteeHotKeyHash =
+  CML.VoterKind.ConstitutionalCommitteeHotKeyHash;
 
 /**
  * ConstitutionalCommitteeHotScriptHash variant of the VoterKind enum
- * 
+ *
  * @since 2.0.0
  * @category Variants
  */
-export const ConstitutionalCommitteeHotScriptHash = CML.VoterKind.ConstitutionalCommitteeHotScriptHash;
+export const ConstitutionalCommitteeHotScriptHash =
+  CML.VoterKind.ConstitutionalCommitteeHotScriptHash;
 
 /**
  * DRepKeyHash variant of the VoterKind enum
- * 
+ *
  * @since 2.0.0
  * @category Variants
  */
@@ -37,7 +39,7 @@ export const DRepKeyHash = CML.VoterKind.DRepKeyHash;
 
 /**
  * DRepScriptHash variant of the VoterKind enum
- * 
+ *
  * @since 2.0.0
  * @category Variants
  */
@@ -45,16 +47,15 @@ export const DRepScriptHash = CML.VoterKind.DRepScriptHash;
 
 /**
  * StakingPoolKeyHash variant of the VoterKind enum
- * 
+ *
  * @since 2.0.0
  * @category Variants
  */
 export const StakingPoolKeyHash = CML.VoterKind.StakingPoolKeyHash;
 
-
 /**
  * Get all values of the VoterKind enum
- * 
+ *
  * @since 2.0.0
  * @category Utils
  */
@@ -63,12 +64,12 @@ export const values = (): Array<CML.VoterKind> => [
   CML.VoterKind.ConstitutionalCommitteeHotScriptHash,
   CML.VoterKind.DRepKeyHash,
   CML.VoterKind.DRepScriptHash,
-  CML.VoterKind.StakingPoolKeyHash
+  CML.VoterKind.StakingPoolKeyHash,
 ];
 
 /**
  * Convert VoterKind enum value to string
- * 
+ *
  * @since 2.0.0
  * @category Utils
  */
@@ -91,7 +92,7 @@ export const toString = (value: CML.VoterKind): string => {
 
 /**
  * Convert string to VoterKind enum value
- * 
+ *
  * @since 2.0.0
  * @category Utils
  */

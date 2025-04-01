@@ -13,7 +13,7 @@ export type Vote = CML.Vote;
 
 /**
  * No variant of the Vote enum
- * 
+ *
  * @since 2.0.0
  * @category Variants
  */
@@ -21,7 +21,7 @@ export const No = CML.Vote.No;
 
 /**
  * Yes variant of the Vote enum
- * 
+ *
  * @since 2.0.0
  * @category Variants
  */
@@ -29,28 +29,27 @@ export const Yes = CML.Vote.Yes;
 
 /**
  * Abstain variant of the Vote enum
- * 
+ *
  * @since 2.0.0
  * @category Variants
  */
 export const Abstain = CML.Vote.Abstain;
 
-
 /**
  * Get all values of the Vote enum
- * 
+ *
  * @since 2.0.0
  * @category Utils
  */
 export const values = (): Array<CML.Vote> => [
   CML.Vote.No,
   CML.Vote.Yes,
-  CML.Vote.Abstain
+  CML.Vote.Abstain,
 ];
 
 /**
  * Convert Vote enum value to string
- * 
+ *
  * @since 2.0.0
  * @category Utils
  */
@@ -69,7 +68,7 @@ export const toString = (value: CML.Vote): string => {
 
 /**
  * Convert string to Vote enum value
- * 
+ *
  * @since 2.0.0
  * @category Utils
  */

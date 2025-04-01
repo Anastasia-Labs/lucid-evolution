@@ -13,7 +13,7 @@ export type DelegationDistributionKind = CML.DelegationDistributionKind;
 
 /**
  * Weighted variant of the DelegationDistributionKind enum
- * 
+ *
  * @since 2.0.0
  * @category Variants
  */
@@ -21,27 +21,26 @@ export const Weighted = CML.DelegationDistributionKind.Weighted;
 
 /**
  * Legacy variant of the DelegationDistributionKind enum
- * 
+ *
  * @since 2.0.0
  * @category Variants
  */
 export const Legacy = CML.DelegationDistributionKind.Legacy;
 
-
 /**
  * Get all values of the DelegationDistributionKind enum
- * 
+ *
  * @since 2.0.0
  * @category Utils
  */
 export const values = (): Array<CML.DelegationDistributionKind> => [
   CML.DelegationDistributionKind.Weighted,
-  CML.DelegationDistributionKind.Legacy
+  CML.DelegationDistributionKind.Legacy,
 ];
 
 /**
  * Convert DelegationDistributionKind enum value to string
- * 
+ *
  * @since 2.0.0
  * @category Utils
  */
@@ -58,11 +57,13 @@ export const toString = (value: CML.DelegationDistributionKind): string => {
 
 /**
  * Convert string to DelegationDistributionKind enum value
- * 
+ *
  * @since 2.0.0
  * @category Utils
  */
-export const fromString = (str: string): CML.DelegationDistributionKind | undefined => {
+export const fromString = (
+  str: string,
+): CML.DelegationDistributionKind | undefined => {
   switch (str) {
     case "Weighted":
       return CML.DelegationDistributionKind.Weighted;

@@ -13,7 +13,7 @@ export type TransactionOutputKind = CML.TransactionOutputKind;
 
 /**
  * AlonzoFormatTxOut variant of the TransactionOutputKind enum
- * 
+ *
  * @since 2.0.0
  * @category Variants
  */
@@ -21,27 +21,26 @@ export const AlonzoFormatTxOut = CML.TransactionOutputKind.AlonzoFormatTxOut;
 
 /**
  * ConwayFormatTxOut variant of the TransactionOutputKind enum
- * 
+ *
  * @since 2.0.0
  * @category Variants
  */
 export const ConwayFormatTxOut = CML.TransactionOutputKind.ConwayFormatTxOut;
 
-
 /**
  * Get all values of the TransactionOutputKind enum
- * 
+ *
  * @since 2.0.0
  * @category Utils
  */
 export const values = (): Array<CML.TransactionOutputKind> => [
   CML.TransactionOutputKind.AlonzoFormatTxOut,
-  CML.TransactionOutputKind.ConwayFormatTxOut
+  CML.TransactionOutputKind.ConwayFormatTxOut,
 ];
 
 /**
  * Convert TransactionOutputKind enum value to string
- * 
+ *
  * @since 2.0.0
  * @category Utils
  */
@@ -58,11 +57,13 @@ export const toString = (value: CML.TransactionOutputKind): string => {
 
 /**
  * Convert string to TransactionOutputKind enum value
- * 
+ *
  * @since 2.0.0
  * @category Utils
  */
-export const fromString = (str: string): CML.TransactionOutputKind | undefined => {
+export const fromString = (
+  str: string,
+): CML.TransactionOutputKind | undefined => {
   switch (str) {
     case "AlonzoFormatTxOut":
       return CML.TransactionOutputKind.AlonzoFormatTxOut;

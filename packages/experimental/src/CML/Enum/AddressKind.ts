@@ -13,7 +13,7 @@ export type AddressKind = CML.AddressKind;
 
 /**
  * Base variant of the AddressKind enum
- * 
+ *
  * @since 2.0.0
  * @category Variants
  */
@@ -21,7 +21,7 @@ export const Base = CML.AddressKind.Base;
 
 /**
  * Ptr variant of the AddressKind enum
- * 
+ *
  * @since 2.0.0
  * @category Variants
  */
@@ -29,7 +29,7 @@ export const Ptr = CML.AddressKind.Ptr;
 
 /**
  * Enterprise variant of the AddressKind enum
- * 
+ *
  * @since 2.0.0
  * @category Variants
  */
@@ -37,7 +37,7 @@ export const Enterprise = CML.AddressKind.Enterprise;
 
 /**
  * Reward variant of the AddressKind enum
- * 
+ *
  * @since 2.0.0
  * @category Variants
  */
@@ -45,16 +45,15 @@ export const Reward = CML.AddressKind.Reward;
 
 /**
  * Byron variant of the AddressKind enum
- * 
+ *
  * @since 2.0.0
  * @category Variants
  */
 export const Byron = CML.AddressKind.Byron;
 
-
 /**
  * Get all values of the AddressKind enum
- * 
+ *
  * @since 2.0.0
  * @category Utils
  */
@@ -63,12 +62,12 @@ export const values = (): Array<CML.AddressKind> => [
   CML.AddressKind.Ptr,
   CML.AddressKind.Enterprise,
   CML.AddressKind.Reward,
-  CML.AddressKind.Byron
+  CML.AddressKind.Byron,
 ];
 
 /**
  * Convert AddressKind enum value to string
- * 
+ *
  * @since 2.0.0
  * @category Utils
  */
@@ -91,7 +90,7 @@ export const toString = (value: CML.AddressKind): string => {
 
 /**
  * Convert string to AddressKind enum value
- * 
+ *
  * @since 2.0.0
  * @category Utils
  */

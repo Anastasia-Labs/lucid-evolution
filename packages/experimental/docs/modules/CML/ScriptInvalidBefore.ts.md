@@ -56,7 +56,9 @@ Static method \_new of ScriptInvalidBefore
 **Signature**
 
 ```ts
-export declare const _new: (before: bigint) => Effect.Effect<CML.ScriptInvalidBefore, ScriptInvalidBeforeError>
+export declare const _new: (
+  before: bigint,
+) => Effect.Effect<CML.ScriptInvalidBefore, ScriptInvalidBeforeError>;
 ```
 
 Added in v2.0.0
@@ -69,8 +71,8 @@ Static method fromCborBytes of ScriptInvalidBefore
 
 ```ts
 export declare const fromCborBytes: (
-  cborBytes: Uint8Array
-) => Effect.Effect<CML.ScriptInvalidBefore, ScriptInvalidBeforeError>
+  cborBytes: Uint8Array,
+) => Effect.Effect<CML.ScriptInvalidBefore, ScriptInvalidBeforeError>;
 ```
 
 Added in v2.0.0
@@ -83,8 +85,8 @@ Static method fromCborHex of ScriptInvalidBefore
 
 ```ts
 export declare const fromCborHex: (
-  cborBytes: string
-) => Effect.Effect<CML.ScriptInvalidBefore, ScriptInvalidBeforeError>
+  cborBytes: string,
+) => Effect.Effect<CML.ScriptInvalidBefore, ScriptInvalidBeforeError>;
 ```
 
 Added in v2.0.0
@@ -96,7 +98,9 @@ Static method fromJson of ScriptInvalidBefore
 **Signature**
 
 ```ts
-export declare const fromJson: (json: string) => Effect.Effect<CML.ScriptInvalidBefore, ScriptInvalidBeforeError>
+export declare const fromJson: (
+  json: string,
+) => Effect.Effect<CML.ScriptInvalidBefore, ScriptInvalidBeforeError>;
 ```
 
 Added in v2.0.0
@@ -110,7 +114,7 @@ Unsafely calls ScriptInvalidBefore.\_new without Effect wrapper
 **Signature**
 
 ```ts
-export declare const _newUnsafe: (before: bigint) => CML.ScriptInvalidBefore
+export declare const _newUnsafe: (before: bigint) => CML.ScriptInvalidBefore;
 ```
 
 Added in v2.0.0
@@ -122,7 +126,9 @@ Unsafely calls ScriptInvalidBefore.fromCborBytes without Effect wrapper
 **Signature**
 
 ```ts
-export declare const fromCborBytesUnsafe: (cborBytes: Uint8Array) => CML.ScriptInvalidBefore
+export declare const fromCborBytesUnsafe: (
+  cborBytes: Uint8Array,
+) => CML.ScriptInvalidBefore;
 ```
 
 Added in v2.0.0
@@ -134,7 +140,9 @@ Unsafely calls ScriptInvalidBefore.fromCborHex without Effect wrapper
 **Signature**
 
 ```ts
-export declare const fromCborHexUnsafe: (cborBytes: string) => CML.ScriptInvalidBefore
+export declare const fromCborHexUnsafe: (
+  cborBytes: string,
+) => CML.ScriptInvalidBefore;
 ```
 
 Added in v2.0.0
@@ -146,7 +154,7 @@ Unsafely calls ScriptInvalidBefore.fromJson without Effect wrapper
 **Signature**
 
 ```ts
-export declare const fromJsonUnsafe: (json: string) => CML.ScriptInvalidBefore
+export declare const fromJsonUnsafe: (json: string) => CML.ScriptInvalidBefore;
 ```
 
 Added in v2.0.0
@@ -176,7 +184,9 @@ Method before of ScriptInvalidBefore
 **Signature**
 
 ```ts
-export declare const before: (instance: CML.ScriptInvalidBefore) => Effect.Effect<bigint, ScriptInvalidBeforeError>
+export declare const before: (
+  instance: CML.ScriptInvalidBefore,
+) => Effect.Effect<bigint, ScriptInvalidBeforeError>;
 ```
 
 Added in v2.0.0
@@ -188,7 +198,9 @@ Method free of ScriptInvalidBefore
 **Signature**
 
 ```ts
-export declare const free: (instance: CML.ScriptInvalidBefore) => Effect.Effect<void, ScriptInvalidBeforeError>
+export declare const free: (
+  instance: CML.ScriptInvalidBefore,
+) => Effect.Effect<void, ScriptInvalidBeforeError>;
 ```
 
 Added in v2.0.0
@@ -201,8 +213,8 @@ Method toCanonicalCborBytes of ScriptInvalidBefore
 
 ```ts
 export declare const toCanonicalCborBytes: (
-  instance: CML.ScriptInvalidBefore
-) => Effect.Effect<Uint8Array, ScriptInvalidBeforeError>
+  instance: CML.ScriptInvalidBefore,
+) => Effect.Effect<Uint8Array, ScriptInvalidBeforeError>;
 ```
 
 Added in v2.0.0
@@ -215,8 +227,8 @@ Method toCanonicalCborHex of ScriptInvalidBefore
 
 ```ts
 export declare const toCanonicalCborHex: (
-  instance: CML.ScriptInvalidBefore
-) => Effect.Effect<string, ScriptInvalidBeforeError>
+  instance: CML.ScriptInvalidBefore,
+) => Effect.Effect<string, ScriptInvalidBeforeError>;
 ```
 
 Added in v2.0.0
@@ -229,8 +241,8 @@ Method toCborBytes of ScriptInvalidBefore
 
 ```ts
 export declare const toCborBytes: (
-  instance: CML.ScriptInvalidBefore
-) => Effect.Effect<Uint8Array, ScriptInvalidBeforeError>
+  instance: CML.ScriptInvalidBefore,
+) => Effect.Effect<Uint8Array, ScriptInvalidBeforeError>;
 ```
 
 Added in v2.0.0
@@ -242,7 +254,9 @@ Method toCborHex of ScriptInvalidBefore
 **Signature**
 
 ```ts
-export declare const toCborHex: (instance: CML.ScriptInvalidBefore) => Effect.Effect<string, ScriptInvalidBeforeError>
+export declare const toCborHex: (
+  instance: CML.ScriptInvalidBefore,
+) => Effect.Effect<string, ScriptInvalidBeforeError>;
 ```
 
 Added in v2.0.0
@@ -254,7 +268,9 @@ Method toJsValue of ScriptInvalidBefore
 **Signature**
 
 ```ts
-export declare const toJsValue: (instance: CML.ScriptInvalidBefore) => Effect.Effect<any, ScriptInvalidBeforeError>
+export declare const toJsValue: (
+  instance: CML.ScriptInvalidBefore,
+) => Effect.Effect<any, ScriptInvalidBeforeError>;
 ```
 
 Added in v2.0.0
@@ -266,7 +282,9 @@ Method toJson of ScriptInvalidBefore
 **Signature**
 
 ```ts
-export declare const toJson: (instance: CML.ScriptInvalidBefore) => Effect.Effect<string, ScriptInvalidBeforeError>
+export declare const toJson: (
+  instance: CML.ScriptInvalidBefore,
+) => Effect.Effect<string, ScriptInvalidBeforeError>;
 ```
 
 Added in v2.0.0
@@ -280,7 +298,9 @@ Unsafely calls instance.before without Effect wrapper
 **Signature**
 
 ```ts
-export declare const beforeUnsafe: (instance: CML.ScriptInvalidBefore) => bigint
+export declare const beforeUnsafe: (
+  instance: CML.ScriptInvalidBefore,
+) => bigint;
 ```
 
 Added in v2.0.0
@@ -292,7 +312,7 @@ Unsafely calls instance.free without Effect wrapper
 **Signature**
 
 ```ts
-export declare const freeUnsafe: (instance: CML.ScriptInvalidBefore) => void
+export declare const freeUnsafe: (instance: CML.ScriptInvalidBefore) => void;
 ```
 
 Added in v2.0.0
@@ -304,7 +324,9 @@ Unsafely calls instance.toCanonicalCborBytes without Effect wrapper
 **Signature**
 
 ```ts
-export declare const toCanonicalCborBytesUnsafe: (instance: CML.ScriptInvalidBefore) => Uint8Array
+export declare const toCanonicalCborBytesUnsafe: (
+  instance: CML.ScriptInvalidBefore,
+) => Uint8Array;
 ```
 
 Added in v2.0.0
@@ -316,7 +338,9 @@ Unsafely calls instance.toCanonicalCborHex without Effect wrapper
 **Signature**
 
 ```ts
-export declare const toCanonicalCborHexUnsafe: (instance: CML.ScriptInvalidBefore) => string
+export declare const toCanonicalCborHexUnsafe: (
+  instance: CML.ScriptInvalidBefore,
+) => string;
 ```
 
 Added in v2.0.0
@@ -328,7 +352,9 @@ Unsafely calls instance.toCborBytes without Effect wrapper
 **Signature**
 
 ```ts
-export declare const toCborBytesUnsafe: (instance: CML.ScriptInvalidBefore) => Uint8Array
+export declare const toCborBytesUnsafe: (
+  instance: CML.ScriptInvalidBefore,
+) => Uint8Array;
 ```
 
 Added in v2.0.0
@@ -340,7 +366,9 @@ Unsafely calls instance.toCborHex without Effect wrapper
 **Signature**
 
 ```ts
-export declare const toCborHexUnsafe: (instance: CML.ScriptInvalidBefore) => string
+export declare const toCborHexUnsafe: (
+  instance: CML.ScriptInvalidBefore,
+) => string;
 ```
 
 Added in v2.0.0
@@ -352,7 +380,9 @@ Unsafely calls instance.toJsValue without Effect wrapper
 **Signature**
 
 ```ts
-export declare const toJsValueUnsafe: (instance: CML.ScriptInvalidBefore) => any
+export declare const toJsValueUnsafe: (
+  instance: CML.ScriptInvalidBefore,
+) => any;
 ```
 
 Added in v2.0.0
@@ -364,7 +394,9 @@ Unsafely calls instance.toJson without Effect wrapper
 **Signature**
 
 ```ts
-export declare const toJsonUnsafe: (instance: CML.ScriptInvalidBefore) => string
+export declare const toJsonUnsafe: (
+  instance: CML.ScriptInvalidBefore,
+) => string;
 ```
 
 Added in v2.0.0
@@ -378,7 +410,7 @@ Type alias for the CML ScriptInvalidBefore class
 **Signature**
 
 ```ts
-export type ScriptInvalidBefore = CML.ScriptInvalidBefore
+export type ScriptInvalidBefore = CML.ScriptInvalidBefore;
 ```
 
 Added in v2.0.0

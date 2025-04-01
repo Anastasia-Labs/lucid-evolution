@@ -14,7 +14,7 @@ export type Block = CML.Block;
 
 /**
  * Error class for Block operations
- * 
+ *
  * This error is thrown when operations on Block instances fail.
  *
  * @since 2.0.0
@@ -26,24 +26,24 @@ export class BlockError extends Data.TaggedError("BlockError")<{
 
 /**
  * Method free of Block
- * 
+ *
  * @since 2.0.0
  * @category Methods
  */
-export const free: (instance: CML.Block) => Effect.Effect<void, BlockError> = Effect.fn(
-  (instance: CML.Block) =>
+export const free: (instance: CML.Block) => Effect.Effect<void, BlockError> =
+  Effect.fn((instance: CML.Block) =>
     Effect.try({
       try: () => instance.free(),
       catch: () =>
         new BlockError({
           message: `Block.free failed Hint: Check if you're calling free() more than once.`,
         }),
-    })
-);
+    }),
+  );
 
 /**
  * Unsafely calls instance.free without Effect wrapper
- * 
+ *
  * @since 2.0.0
  * @category MethodsUnsafe
  */
@@ -52,24 +52,25 @@ export const freeUnsafe = (instance: CML.Block): void =>
 
 /**
  * Method toCborBytes of Block
- * 
+ *
  * @since 2.0.0
  * @category Methods
  */
-export const toCborBytes: (instance: CML.Block) => Effect.Effect<Uint8Array, BlockError> = Effect.fn(
-  (instance: CML.Block) =>
-    Effect.try({
-      try: () => instance.to_cbor_bytes(),
-      catch: () =>
-        new BlockError({
-          message: `Block.toCborBytes failed Block is not valid for Uint8Array conversion. Hint: Check byte length and encoding.`,
-        }),
-    })
+export const toCborBytes: (
+  instance: CML.Block,
+) => Effect.Effect<Uint8Array, BlockError> = Effect.fn((instance: CML.Block) =>
+  Effect.try({
+    try: () => instance.to_cbor_bytes(),
+    catch: () =>
+      new BlockError({
+        message: `Block.toCborBytes failed Block is not valid for Uint8Array conversion. Hint: Check byte length and encoding.`,
+      }),
+  }),
 );
 
 /**
  * Unsafely calls instance.toCborBytes without Effect wrapper
- * 
+ *
  * @since 2.0.0
  * @category MethodsUnsafe
  */
@@ -78,24 +79,25 @@ export const toCborBytesUnsafe = (instance: CML.Block): Uint8Array =>
 
 /**
  * Method toCanonicalCborBytes of Block
- * 
+ *
  * @since 2.0.0
  * @category Methods
  */
-export const toCanonicalCborBytes: (instance: CML.Block) => Effect.Effect<Uint8Array, BlockError> = Effect.fn(
-  (instance: CML.Block) =>
-    Effect.try({
-      try: () => instance.to_canonical_cbor_bytes(),
-      catch: () =>
-        new BlockError({
-          message: `Block.toCanonicalCborBytes failed Block is not valid for Uint8Array conversion. Hint: Check byte length and encoding.`,
-        }),
-    })
+export const toCanonicalCborBytes: (
+  instance: CML.Block,
+) => Effect.Effect<Uint8Array, BlockError> = Effect.fn((instance: CML.Block) =>
+  Effect.try({
+    try: () => instance.to_canonical_cbor_bytes(),
+    catch: () =>
+      new BlockError({
+        message: `Block.toCanonicalCborBytes failed Block is not valid for Uint8Array conversion. Hint: Check byte length and encoding.`,
+      }),
+  }),
 );
 
 /**
  * Unsafely calls instance.toCanonicalCborBytes without Effect wrapper
- * 
+ *
  * @since 2.0.0
  * @category MethodsUnsafe
  */
@@ -104,22 +106,27 @@ export const toCanonicalCborBytesUnsafe = (instance: CML.Block): Uint8Array =>
 
 /**
  * Static method fromCborBytes of Block
- * 
+ *
  * @since 2.0.0
  * @category Constructors
  */
-export const fromCborBytes: (cborBytes: Uint8Array) => Effect.Effect<CML.Block, BlockError> = Effect.fn(function* (cborBytes: Uint8Array) {
+export const fromCborBytes: (
+  cborBytes: Uint8Array,
+) => Effect.Effect<CML.Block, BlockError> = Effect.fn(function* (
+  cborBytes: Uint8Array,
+) {
   return yield* Effect.try({
     try: () => CML.Block.from_cbor_bytes(cborBytes),
-    catch: () => new BlockError({
-      message: `Block.fromCborBytes failed with parameters: ${cborBytes}. Hint: Check byte length and encoding.`,
-    }),
+    catch: () =>
+      new BlockError({
+        message: `Block.fromCborBytes failed with parameters: ${cborBytes}. Hint: Check byte length and encoding.`,
+      }),
   });
 });
 
 /**
  * Unsafely calls Block.fromCborBytes without Effect wrapper
- * 
+ *
  * @since 2.0.0
  * @category ConstructorsUnsafe
  */
@@ -128,24 +135,25 @@ export const fromCborBytesUnsafe = (cborBytes: Uint8Array): CML.Block =>
 
 /**
  * Method toCborHex of Block
- * 
+ *
  * @since 2.0.0
  * @category Methods
  */
-export const toCborHex: (instance: CML.Block) => Effect.Effect<string, BlockError> = Effect.fn(
-  (instance: CML.Block) =>
-    Effect.try({
-      try: () => instance.to_cbor_hex(),
-      catch: () =>
-        new BlockError({
-          message: `Block.toCborHex failed Block is not valid for string conversion. Hint: Make sure it's a valid hex string representing CBOR data.`,
-        }),
-    })
+export const toCborHex: (
+  instance: CML.Block,
+) => Effect.Effect<string, BlockError> = Effect.fn((instance: CML.Block) =>
+  Effect.try({
+    try: () => instance.to_cbor_hex(),
+    catch: () =>
+      new BlockError({
+        message: `Block.toCborHex failed Block is not valid for string conversion. Hint: Make sure it's a valid hex string representing CBOR data.`,
+      }),
+  }),
 );
 
 /**
  * Unsafely calls instance.toCborHex without Effect wrapper
- * 
+ *
  * @since 2.0.0
  * @category MethodsUnsafe
  */
@@ -154,24 +162,25 @@ export const toCborHexUnsafe = (instance: CML.Block): string =>
 
 /**
  * Method toCanonicalCborHex of Block
- * 
+ *
  * @since 2.0.0
  * @category Methods
  */
-export const toCanonicalCborHex: (instance: CML.Block) => Effect.Effect<string, BlockError> = Effect.fn(
-  (instance: CML.Block) =>
-    Effect.try({
-      try: () => instance.to_canonical_cbor_hex(),
-      catch: () =>
-        new BlockError({
-          message: `Block.toCanonicalCborHex failed Block is not valid for string conversion. Hint: Make sure it's a valid hex string representing CBOR data.`,
-        }),
-    })
+export const toCanonicalCborHex: (
+  instance: CML.Block,
+) => Effect.Effect<string, BlockError> = Effect.fn((instance: CML.Block) =>
+  Effect.try({
+    try: () => instance.to_canonical_cbor_hex(),
+    catch: () =>
+      new BlockError({
+        message: `Block.toCanonicalCborHex failed Block is not valid for string conversion. Hint: Make sure it's a valid hex string representing CBOR data.`,
+      }),
+  }),
 );
 
 /**
  * Unsafely calls instance.toCanonicalCborHex without Effect wrapper
- * 
+ *
  * @since 2.0.0
  * @category MethodsUnsafe
  */
@@ -180,22 +189,27 @@ export const toCanonicalCborHexUnsafe = (instance: CML.Block): string =>
 
 /**
  * Static method fromCborHex of Block
- * 
+ *
  * @since 2.0.0
  * @category Constructors
  */
-export const fromCborHex: (cborBytes: string) => Effect.Effect<CML.Block, BlockError> = Effect.fn(function* (cborBytes: string) {
+export const fromCborHex: (
+  cborBytes: string,
+) => Effect.Effect<CML.Block, BlockError> = Effect.fn(function* (
+  cborBytes: string,
+) {
   return yield* Effect.try({
     try: () => CML.Block.from_cbor_hex(cborBytes),
-    catch: () => new BlockError({
-      message: `Block.fromCborHex failed with parameters: ${cborBytes}. Hint: Make sure it's a valid hex string representing CBOR data.`,
-    }),
+    catch: () =>
+      new BlockError({
+        message: `Block.fromCborHex failed with parameters: ${cborBytes}. Hint: Make sure it's a valid hex string representing CBOR data.`,
+      }),
   });
 });
 
 /**
  * Unsafely calls Block.fromCborHex without Effect wrapper
- * 
+ *
  * @since 2.0.0
  * @category ConstructorsUnsafe
  */
@@ -204,24 +218,25 @@ export const fromCborHexUnsafe = (cborBytes: string): CML.Block =>
 
 /**
  * Method toJson of Block
- * 
+ *
  * @since 2.0.0
  * @category Methods
  */
-export const toJson: (instance: CML.Block) => Effect.Effect<string, BlockError> = Effect.fn(
-  (instance: CML.Block) =>
-    Effect.try({
-      try: () => instance.to_json(),
-      catch: () =>
-        new BlockError({
-          message: `Block.toJson failed Block is not valid for string conversion. Hint: Validate your JSON structure.`,
-        }),
-    })
+export const toJson: (
+  instance: CML.Block,
+) => Effect.Effect<string, BlockError> = Effect.fn((instance: CML.Block) =>
+  Effect.try({
+    try: () => instance.to_json(),
+    catch: () =>
+      new BlockError({
+        message: `Block.toJson failed Block is not valid for string conversion. Hint: Validate your JSON structure.`,
+      }),
+  }),
 );
 
 /**
  * Unsafely calls instance.toJson without Effect wrapper
- * 
+ *
  * @since 2.0.0
  * @category MethodsUnsafe
  */
@@ -230,24 +245,25 @@ export const toJsonUnsafe = (instance: CML.Block): string =>
 
 /**
  * Method toJsValue of Block
- * 
+ *
  * @since 2.0.0
  * @category Methods
  */
-export const toJsValue: (instance: CML.Block) => Effect.Effect<any, BlockError> = Effect.fn(
-  (instance: CML.Block) =>
-    Effect.try({
-      try: () => instance.to_js_value(),
-      catch: () =>
-        new BlockError({
-          message: `Block.toJsValue failed Block is not valid for any conversion. `,
-        }),
-    })
+export const toJsValue: (
+  instance: CML.Block,
+) => Effect.Effect<any, BlockError> = Effect.fn((instance: CML.Block) =>
+  Effect.try({
+    try: () => instance.to_js_value(),
+    catch: () =>
+      new BlockError({
+        message: `Block.toJsValue failed Block is not valid for any conversion. `,
+      }),
+  }),
 );
 
 /**
  * Unsafely calls instance.toJsValue without Effect wrapper
- * 
+ *
  * @since 2.0.0
  * @category MethodsUnsafe
  */
@@ -256,22 +272,24 @@ export const toJsValueUnsafe = (instance: CML.Block): any =>
 
 /**
  * Static method fromJson of Block
- * 
+ *
  * @since 2.0.0
  * @category Constructors
  */
-export const fromJson: (json: string) => Effect.Effect<CML.Block, BlockError> = Effect.fn(function* (json: string) {
-  return yield* Effect.try({
-    try: () => CML.Block.from_json(json),
-    catch: () => new BlockError({
-      message: `Block.fromJson failed with parameters: ${json}. Hint: Validate your JSON structure.`,
-    }),
+export const fromJson: (json: string) => Effect.Effect<CML.Block, BlockError> =
+  Effect.fn(function* (json: string) {
+    return yield* Effect.try({
+      try: () => CML.Block.from_json(json),
+      catch: () =>
+        new BlockError({
+          message: `Block.fromJson failed with parameters: ${json}. Hint: Validate your JSON structure.`,
+        }),
+    });
   });
-});
 
 /**
  * Unsafely calls Block.fromJson without Effect wrapper
- * 
+ *
  * @since 2.0.0
  * @category ConstructorsUnsafe
  */
@@ -280,24 +298,25 @@ export const fromJsonUnsafe = (json: string): CML.Block =>
 
 /**
  * Method header of Block
- * 
+ *
  * @since 2.0.0
  * @category Methods
  */
-export const header: (instance: CML.Block) => Effect.Effect<CML.Header, BlockError> = Effect.fn(
-  (instance: CML.Block) =>
-    Effect.try({
-      try: () => instance.header(),
-      catch: () =>
-        new BlockError({
-          message: `Block.header failed `,
-        }),
-    })
+export const header: (
+  instance: CML.Block,
+) => Effect.Effect<CML.Header, BlockError> = Effect.fn((instance: CML.Block) =>
+  Effect.try({
+    try: () => instance.header(),
+    catch: () =>
+      new BlockError({
+        message: `Block.header failed `,
+      }),
+  }),
 );
 
 /**
  * Unsafely calls instance.header without Effect wrapper
- * 
+ *
  * @since 2.0.0
  * @category MethodsUnsafe
  */
@@ -306,11 +325,13 @@ export const headerUnsafe = (instance: CML.Block): CML.Header =>
 
 /**
  * Method transactionBodies of Block
- * 
+ *
  * @since 2.0.0
  * @category Methods
  */
-export const transactionBodies: (instance: CML.Block) => Effect.Effect<CML.TransactionBodyList, BlockError> = Effect.fn(
+export const transactionBodies: (
+  instance: CML.Block,
+) => Effect.Effect<CML.TransactionBodyList, BlockError> = Effect.fn(
   (instance: CML.Block) =>
     Effect.try({
       try: () => instance.transaction_bodies(),
@@ -318,25 +339,28 @@ export const transactionBodies: (instance: CML.Block) => Effect.Effect<CML.Trans
         new BlockError({
           message: `Block.transactionBodies failed `,
         }),
-    })
+    }),
 );
 
 /**
  * Unsafely calls instance.transactionBodies without Effect wrapper
- * 
+ *
  * @since 2.0.0
  * @category MethodsUnsafe
  */
-export const transactionBodiesUnsafe = (instance: CML.Block): CML.TransactionBodyList =>
-  Effect.runSync(transactionBodies(instance));
+export const transactionBodiesUnsafe = (
+  instance: CML.Block,
+): CML.TransactionBodyList => Effect.runSync(transactionBodies(instance));
 
 /**
  * Method transactionWitnessSets of Block
- * 
+ *
  * @since 2.0.0
  * @category Methods
  */
-export const transactionWitnessSets: (instance: CML.Block) => Effect.Effect<CML.TransactionWitnessSetList, BlockError> = Effect.fn(
+export const transactionWitnessSets: (
+  instance: CML.Block,
+) => Effect.Effect<CML.TransactionWitnessSetList, BlockError> = Effect.fn(
   (instance: CML.Block) =>
     Effect.try({
       try: () => instance.transaction_witness_sets(),
@@ -344,64 +368,71 @@ export const transactionWitnessSets: (instance: CML.Block) => Effect.Effect<CML.
         new BlockError({
           message: `Block.transactionWitnessSets failed `,
         }),
-    })
+    }),
 );
 
 /**
  * Unsafely calls instance.transactionWitnessSets without Effect wrapper
- * 
+ *
  * @since 2.0.0
  * @category MethodsUnsafe
  */
-export const transactionWitnessSetsUnsafe = (instance: CML.Block): CML.TransactionWitnessSetList =>
+export const transactionWitnessSetsUnsafe = (
+  instance: CML.Block,
+): CML.TransactionWitnessSetList =>
   Effect.runSync(transactionWitnessSets(instance));
 
 /**
  * Method auxiliaryDataSet of Block
- * 
+ *
  * @since 2.0.0
  * @category Methods
  */
-export const auxiliaryDataSet: (instance: CML.Block) => Effect.Effect<CML.MapTransactionIndexToAuxiliaryData, BlockError> = Effect.fn(
-  (instance: CML.Block) =>
+export const auxiliaryDataSet: (
+  instance: CML.Block,
+) => Effect.Effect<CML.MapTransactionIndexToAuxiliaryData, BlockError> =
+  Effect.fn((instance: CML.Block) =>
     Effect.try({
       try: () => instance.auxiliary_data_set(),
       catch: () =>
         new BlockError({
           message: `Block.auxiliaryDataSet failed `,
         }),
-    })
-);
+    }),
+  );
 
 /**
  * Unsafely calls instance.auxiliaryDataSet without Effect wrapper
- * 
+ *
  * @since 2.0.0
  * @category MethodsUnsafe
  */
-export const auxiliaryDataSetUnsafe = (instance: CML.Block): CML.MapTransactionIndexToAuxiliaryData =>
+export const auxiliaryDataSetUnsafe = (
+  instance: CML.Block,
+): CML.MapTransactionIndexToAuxiliaryData =>
   Effect.runSync(auxiliaryDataSet(instance));
 
 /**
  * Method invalidTransactions of Block
- * 
+ *
  * @since 2.0.0
  * @category Methods
  */
-export const invalidTransactions: (instance: CML.Block) => Effect.Effect<Uint16Array, BlockError> = Effect.fn(
-  (instance: CML.Block) =>
-    Effect.try({
-      try: () => instance.invalid_transactions(),
-      catch: () =>
-        new BlockError({
-          message: `Block.invalidTransactions failed `,
-        }),
-    })
+export const invalidTransactions: (
+  instance: CML.Block,
+) => Effect.Effect<Uint16Array, BlockError> = Effect.fn((instance: CML.Block) =>
+  Effect.try({
+    try: () => instance.invalid_transactions(),
+    catch: () =>
+      new BlockError({
+        message: `Block.invalidTransactions failed `,
+      }),
+  }),
 );
 
 /**
  * Unsafely calls instance.invalidTransactions without Effect wrapper
- * 
+ *
  * @since 2.0.0
  * @category MethodsUnsafe
  */
@@ -410,24 +441,58 @@ export const invalidTransactionsUnsafe = (instance: CML.Block): Uint16Array =>
 
 /**
  * Static method _new of Block
- * 
+ *
  * @since 2.0.0
  * @category Constructors
  */
-export const _new: (header: CML.Header, transactionBodies: CML.TransactionBodyList, transactionWitnessSets: CML.TransactionWitnessSetList, auxiliaryDataSet: CML.MapTransactionIndexToAuxiliaryData, invalidTransactions: Uint16Array) => Effect.Effect<CML.Block, BlockError> = Effect.fn(function* (header: CML.Header, transactionBodies: CML.TransactionBodyList, transactionWitnessSets: CML.TransactionWitnessSetList, auxiliaryDataSet: CML.MapTransactionIndexToAuxiliaryData, invalidTransactions: Uint16Array) {
+export const _new: (
+  header: CML.Header,
+  transactionBodies: CML.TransactionBodyList,
+  transactionWitnessSets: CML.TransactionWitnessSetList,
+  auxiliaryDataSet: CML.MapTransactionIndexToAuxiliaryData,
+  invalidTransactions: Uint16Array,
+) => Effect.Effect<CML.Block, BlockError> = Effect.fn(function* (
+  header: CML.Header,
+  transactionBodies: CML.TransactionBodyList,
+  transactionWitnessSets: CML.TransactionWitnessSetList,
+  auxiliaryDataSet: CML.MapTransactionIndexToAuxiliaryData,
+  invalidTransactions: Uint16Array,
+) {
   return yield* Effect.try({
-    try: () => CML.Block.new(header, transactionBodies, transactionWitnessSets, auxiliaryDataSet, invalidTransactions),
-    catch: () => new BlockError({
-      message: `Block._new failed with parameters: ${header} (Header), ${transactionBodies} (TransactionBodyList), ${transactionWitnessSets} (TransactionWitnessSetList), ${auxiliaryDataSet} (MapTransactionIndexToAuxiliaryData), ${invalidTransactions}. `,
-    }),
+    try: () =>
+      CML.Block.new(
+        header,
+        transactionBodies,
+        transactionWitnessSets,
+        auxiliaryDataSet,
+        invalidTransactions,
+      ),
+    catch: () =>
+      new BlockError({
+        message: `Block._new failed with parameters: ${header} (Header), ${transactionBodies} (TransactionBodyList), ${transactionWitnessSets} (TransactionWitnessSetList), ${auxiliaryDataSet} (MapTransactionIndexToAuxiliaryData), ${invalidTransactions}. `,
+      }),
   });
 });
 
 /**
  * Unsafely calls Block._new without Effect wrapper
- * 
+ *
  * @since 2.0.0
  * @category ConstructorsUnsafe
  */
-export const _newUnsafe = (header: CML.Header, transactionBodies: CML.TransactionBodyList, transactionWitnessSets: CML.TransactionWitnessSetList, auxiliaryDataSet: CML.MapTransactionIndexToAuxiliaryData, invalidTransactions: Uint16Array): CML.Block =>
-  Effect.runSync(_new(header, transactionBodies, transactionWitnessSets, auxiliaryDataSet, invalidTransactions));
+export const _newUnsafe = (
+  header: CML.Header,
+  transactionBodies: CML.TransactionBodyList,
+  transactionWitnessSets: CML.TransactionWitnessSetList,
+  auxiliaryDataSet: CML.MapTransactionIndexToAuxiliaryData,
+  invalidTransactions: Uint16Array,
+): CML.Block =>
+  Effect.runSync(
+    _new(
+      header,
+      transactionBodies,
+      transactionWitnessSets,
+      auxiliaryDataSet,
+      invalidTransactions,
+    ),
+  );

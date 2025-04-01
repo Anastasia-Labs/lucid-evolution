@@ -13,7 +13,7 @@ export type StakeDistributionKind = CML.StakeDistributionKind;
 
 /**
  * SingleKey variant of the StakeDistributionKind enum
- * 
+ *
  * @since 2.0.0
  * @category Variants
  */
@@ -21,27 +21,26 @@ export const SingleKey = CML.StakeDistributionKind.SingleKey;
 
 /**
  * BootstrapEra variant of the StakeDistributionKind enum
- * 
+ *
  * @since 2.0.0
  * @category Variants
  */
 export const BootstrapEra = CML.StakeDistributionKind.BootstrapEra;
 
-
 /**
  * Get all values of the StakeDistributionKind enum
- * 
+ *
  * @since 2.0.0
  * @category Utils
  */
 export const values = (): Array<CML.StakeDistributionKind> => [
   CML.StakeDistributionKind.SingleKey,
-  CML.StakeDistributionKind.BootstrapEra
+  CML.StakeDistributionKind.BootstrapEra,
 ];
 
 /**
  * Convert StakeDistributionKind enum value to string
- * 
+ *
  * @since 2.0.0
  * @category Utils
  */
@@ -58,11 +57,13 @@ export const toString = (value: CML.StakeDistributionKind): string => {
 
 /**
  * Convert string to StakeDistributionKind enum value
- * 
+ *
  * @since 2.0.0
  * @category Utils
  */
-export const fromString = (str: string): CML.StakeDistributionKind | undefined => {
+export const fromString = (
+  str: string,
+): CML.StakeDistributionKind | undefined => {
   switch (str) {
     case "SingleKey":
       return CML.StakeDistributionKind.SingleKey;

@@ -13,7 +13,7 @@ export type MetadataJsonSchema = CML.MetadataJsonSchema;
 
 /**
  * NoConversions variant of the MetadataJsonSchema enum
- * 
+ *
  * @since 2.0.0
  * @category Variants
  */
@@ -21,7 +21,7 @@ export const NoConversions = CML.MetadataJsonSchema.NoConversions;
 
 /**
  * BasicConversions variant of the MetadataJsonSchema enum
- * 
+ *
  * @since 2.0.0
  * @category Variants
  */
@@ -29,28 +29,27 @@ export const BasicConversions = CML.MetadataJsonSchema.BasicConversions;
 
 /**
  * DetailedSchema variant of the MetadataJsonSchema enum
- * 
+ *
  * @since 2.0.0
  * @category Variants
  */
 export const DetailedSchema = CML.MetadataJsonSchema.DetailedSchema;
 
-
 /**
  * Get all values of the MetadataJsonSchema enum
- * 
+ *
  * @since 2.0.0
  * @category Utils
  */
 export const values = (): Array<CML.MetadataJsonSchema> => [
   CML.MetadataJsonSchema.NoConversions,
   CML.MetadataJsonSchema.BasicConversions,
-  CML.MetadataJsonSchema.DetailedSchema
+  CML.MetadataJsonSchema.DetailedSchema,
 ];
 
 /**
  * Convert MetadataJsonSchema enum value to string
- * 
+ *
  * @since 2.0.0
  * @category Utils
  */
@@ -69,7 +68,7 @@ export const toString = (value: CML.MetadataJsonSchema): string => {
 
 /**
  * Convert string to MetadataJsonSchema enum value
- * 
+ *
  * @since 2.0.0
  * @category Utils
  */

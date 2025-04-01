@@ -48,7 +48,9 @@ Static method \_new of StakeholderId
 **Signature**
 
 ```ts
-export declare const _new: (pubk: CML.Bip32PublicKey) => Effect.Effect<CML.StakeholderId, StakeholderIdError>
+export declare const _new: (
+  pubk: CML.Bip32PublicKey,
+) => Effect.Effect<CML.StakeholderId, StakeholderIdError>;
 ```
 
 Added in v2.0.0
@@ -60,7 +62,9 @@ Static method fromBech32 of StakeholderId
 **Signature**
 
 ```ts
-export declare const fromBech32: (bech32Str: string) => Effect.Effect<CML.StakeholderId, StakeholderIdError>
+export declare const fromBech32: (
+  bech32Str: string,
+) => Effect.Effect<CML.StakeholderId, StakeholderIdError>;
 ```
 
 Added in v2.0.0
@@ -72,7 +76,9 @@ Static method fromHex of StakeholderId
 **Signature**
 
 ```ts
-export declare const fromHex: (input: string) => Effect.Effect<CML.StakeholderId, StakeholderIdError>
+export declare const fromHex: (
+  input: string,
+) => Effect.Effect<CML.StakeholderId, StakeholderIdError>;
 ```
 
 Added in v2.0.0
@@ -84,7 +90,9 @@ Static method fromRawBytes of StakeholderId
 **Signature**
 
 ```ts
-export declare const fromRawBytes: (bytes: Uint8Array) => Effect.Effect<CML.StakeholderId, StakeholderIdError>
+export declare const fromRawBytes: (
+  bytes: Uint8Array,
+) => Effect.Effect<CML.StakeholderId, StakeholderIdError>;
 ```
 
 Added in v2.0.0
@@ -98,7 +106,9 @@ Unsafely calls StakeholderId.\_new without Effect wrapper
 **Signature**
 
 ```ts
-export declare const _newUnsafe: (pubk: CML.Bip32PublicKey) => CML.StakeholderId
+export declare const _newUnsafe: (
+  pubk: CML.Bip32PublicKey,
+) => CML.StakeholderId;
 ```
 
 Added in v2.0.0
@@ -110,7 +120,7 @@ Unsafely calls StakeholderId.fromBech32 without Effect wrapper
 **Signature**
 
 ```ts
-export declare const fromBech32Unsafe: (bech32Str: string) => CML.StakeholderId
+export declare const fromBech32Unsafe: (bech32Str: string) => CML.StakeholderId;
 ```
 
 Added in v2.0.0
@@ -122,7 +132,7 @@ Unsafely calls StakeholderId.fromHex without Effect wrapper
 **Signature**
 
 ```ts
-export declare const fromHexUnsafe: (input: string) => CML.StakeholderId
+export declare const fromHexUnsafe: (input: string) => CML.StakeholderId;
 ```
 
 Added in v2.0.0
@@ -134,7 +144,9 @@ Unsafely calls StakeholderId.fromRawBytes without Effect wrapper
 **Signature**
 
 ```ts
-export declare const fromRawBytesUnsafe: (bytes: Uint8Array) => CML.StakeholderId
+export declare const fromRawBytesUnsafe: (
+  bytes: Uint8Array,
+) => CML.StakeholderId;
 ```
 
 Added in v2.0.0
@@ -164,7 +176,9 @@ Method free of StakeholderId
 **Signature**
 
 ```ts
-export declare const free: (instance: CML.StakeholderId) => Effect.Effect<void, StakeholderIdError>
+export declare const free: (
+  instance: CML.StakeholderId,
+) => Effect.Effect<void, StakeholderIdError>;
 ```
 
 Added in v2.0.0
@@ -178,8 +192,8 @@ Method toBech32 of StakeholderId
 ```ts
 export declare const toBech32: (
   instance: CML.StakeholderId,
-  prefix: string
-) => Effect.Effect<string, StakeholderIdError>
+  prefix: string,
+) => Effect.Effect<string, StakeholderIdError>;
 ```
 
 Added in v2.0.0
@@ -191,7 +205,9 @@ Method toHex of StakeholderId
 **Signature**
 
 ```ts
-export declare const toHex: (instance: CML.StakeholderId) => Effect.Effect<string, StakeholderIdError>
+export declare const toHex: (
+  instance: CML.StakeholderId,
+) => Effect.Effect<string, StakeholderIdError>;
 ```
 
 Added in v2.0.0
@@ -203,7 +219,9 @@ Method toRawBytes of StakeholderId
 **Signature**
 
 ```ts
-export declare const toRawBytes: (instance: CML.StakeholderId) => Effect.Effect<Uint8Array, StakeholderIdError>
+export declare const toRawBytes: (
+  instance: CML.StakeholderId,
+) => Effect.Effect<Uint8Array, StakeholderIdError>;
 ```
 
 Added in v2.0.0
@@ -217,7 +235,7 @@ Unsafely calls instance.free without Effect wrapper
 **Signature**
 
 ```ts
-export declare const freeUnsafe: (instance: CML.StakeholderId) => void
+export declare const freeUnsafe: (instance: CML.StakeholderId) => void;
 ```
 
 Added in v2.0.0
@@ -229,7 +247,10 @@ Unsafely calls instance.toBech32 without Effect wrapper
 **Signature**
 
 ```ts
-export declare const toBech32Unsafe: (instance: CML.StakeholderId, prefix: string) => string
+export declare const toBech32Unsafe: (
+  instance: CML.StakeholderId,
+  prefix: string,
+) => string;
 ```
 
 Added in v2.0.0
@@ -241,7 +262,7 @@ Unsafely calls instance.toHex without Effect wrapper
 **Signature**
 
 ```ts
-export declare const toHexUnsafe: (instance: CML.StakeholderId) => string
+export declare const toHexUnsafe: (instance: CML.StakeholderId) => string;
 ```
 
 Added in v2.0.0
@@ -253,7 +274,9 @@ Unsafely calls instance.toRawBytes without Effect wrapper
 **Signature**
 
 ```ts
-export declare const toRawBytesUnsafe: (instance: CML.StakeholderId) => Uint8Array
+export declare const toRawBytesUnsafe: (
+  instance: CML.StakeholderId,
+) => Uint8Array;
 ```
 
 Added in v2.0.0
@@ -267,7 +290,7 @@ Type alias for the CML StakeholderId class
 **Signature**
 
 ```ts
-export type StakeholderId = CML.StakeholderId
+export type StakeholderId = CML.StakeholderId;
 ```
 
 Added in v2.0.0

@@ -54,7 +54,9 @@ Static method fromCborBytes of Ipv4
 **Signature**
 
 ```ts
-export declare const fromCborBytes: (cborBytes: Uint8Array) => Effect.Effect<CML.Ipv4, Ipv4Error>
+export declare const fromCborBytes: (
+  cborBytes: Uint8Array,
+) => Effect.Effect<CML.Ipv4, Ipv4Error>;
 ```
 
 Added in v2.0.0
@@ -66,7 +68,9 @@ Static method fromCborHex of Ipv4
 **Signature**
 
 ```ts
-export declare const fromCborHex: (cborBytes: string) => Effect.Effect<CML.Ipv4, Ipv4Error>
+export declare const fromCborHex: (
+  cborBytes: string,
+) => Effect.Effect<CML.Ipv4, Ipv4Error>;
 ```
 
 Added in v2.0.0
@@ -78,7 +82,9 @@ Static method fromJson of Ipv4
 **Signature**
 
 ```ts
-export declare const fromJson: (json: string) => Effect.Effect<CML.Ipv4, Ipv4Error>
+export declare const fromJson: (
+  json: string,
+) => Effect.Effect<CML.Ipv4, Ipv4Error>;
 ```
 
 Added in v2.0.0
@@ -92,7 +98,7 @@ Unsafely calls Ipv4.fromCborBytes without Effect wrapper
 **Signature**
 
 ```ts
-export declare const fromCborBytesUnsafe: (cborBytes: Uint8Array) => CML.Ipv4
+export declare const fromCborBytesUnsafe: (cborBytes: Uint8Array) => CML.Ipv4;
 ```
 
 Added in v2.0.0
@@ -104,7 +110,7 @@ Unsafely calls Ipv4.fromCborHex without Effect wrapper
 **Signature**
 
 ```ts
-export declare const fromCborHexUnsafe: (cborBytes: string) => CML.Ipv4
+export declare const fromCborHexUnsafe: (cborBytes: string) => CML.Ipv4;
 ```
 
 Added in v2.0.0
@@ -116,7 +122,7 @@ Unsafely calls Ipv4.fromJson without Effect wrapper
 **Signature**
 
 ```ts
-export declare const fromJsonUnsafe: (json: string) => CML.Ipv4
+export declare const fromJsonUnsafe: (json: string) => CML.Ipv4;
 ```
 
 Added in v2.0.0
@@ -146,7 +152,9 @@ Method free of Ipv4
 **Signature**
 
 ```ts
-export declare const free: (instance: CML.Ipv4) => Effect.Effect<void, Ipv4Error>
+export declare const free: (
+  instance: CML.Ipv4,
+) => Effect.Effect<void, Ipv4Error>;
 ```
 
 Added in v2.0.0
@@ -158,7 +166,9 @@ Method get of Ipv4
 **Signature**
 
 ```ts
-export declare const get: (instance: CML.Ipv4) => Effect.Effect<Uint8Array, Ipv4Error>
+export declare const get: (
+  instance: CML.Ipv4,
+) => Effect.Effect<Uint8Array, Ipv4Error>;
 ```
 
 Added in v2.0.0
@@ -170,7 +180,9 @@ Method toCanonicalCborBytes of Ipv4
 **Signature**
 
 ```ts
-export declare const toCanonicalCborBytes: (instance: CML.Ipv4) => Effect.Effect<Uint8Array, Ipv4Error>
+export declare const toCanonicalCborBytes: (
+  instance: CML.Ipv4,
+) => Effect.Effect<Uint8Array, Ipv4Error>;
 ```
 
 Added in v2.0.0
@@ -182,7 +194,9 @@ Method toCanonicalCborHex of Ipv4
 **Signature**
 
 ```ts
-export declare const toCanonicalCborHex: (instance: CML.Ipv4) => Effect.Effect<string, Ipv4Error>
+export declare const toCanonicalCborHex: (
+  instance: CML.Ipv4,
+) => Effect.Effect<string, Ipv4Error>;
 ```
 
 Added in v2.0.0
@@ -194,7 +208,9 @@ Method toCborBytes of Ipv4
 **Signature**
 
 ```ts
-export declare const toCborBytes: (instance: CML.Ipv4) => Effect.Effect<Uint8Array, Ipv4Error>
+export declare const toCborBytes: (
+  instance: CML.Ipv4,
+) => Effect.Effect<Uint8Array, Ipv4Error>;
 ```
 
 Added in v2.0.0
@@ -206,7 +222,9 @@ Method toCborHex of Ipv4
 **Signature**
 
 ```ts
-export declare const toCborHex: (instance: CML.Ipv4) => Effect.Effect<string, Ipv4Error>
+export declare const toCborHex: (
+  instance: CML.Ipv4,
+) => Effect.Effect<string, Ipv4Error>;
 ```
 
 Added in v2.0.0
@@ -218,7 +236,9 @@ Method toJsValue of Ipv4
 **Signature**
 
 ```ts
-export declare const toJsValue: (instance: CML.Ipv4) => Effect.Effect<any, Ipv4Error>
+export declare const toJsValue: (
+  instance: CML.Ipv4,
+) => Effect.Effect<any, Ipv4Error>;
 ```
 
 Added in v2.0.0
@@ -230,7 +250,9 @@ Method toJson of Ipv4
 **Signature**
 
 ```ts
-export declare const toJson: (instance: CML.Ipv4) => Effect.Effect<string, Ipv4Error>
+export declare const toJson: (
+  instance: CML.Ipv4,
+) => Effect.Effect<string, Ipv4Error>;
 ```
 
 Added in v2.0.0
@@ -244,7 +266,7 @@ Unsafely calls instance.free without Effect wrapper
 **Signature**
 
 ```ts
-export declare const freeUnsafe: (instance: CML.Ipv4) => void
+export declare const freeUnsafe: (instance: CML.Ipv4) => void;
 ```
 
 Added in v2.0.0
@@ -256,7 +278,7 @@ Unsafely calls instance.get without Effect wrapper
 **Signature**
 
 ```ts
-export declare const getUnsafe: (instance: CML.Ipv4) => Uint8Array
+export declare const getUnsafe: (instance: CML.Ipv4) => Uint8Array;
 ```
 
 Added in v2.0.0
@@ -268,7 +290,9 @@ Unsafely calls instance.toCanonicalCborBytes without Effect wrapper
 **Signature**
 
 ```ts
-export declare const toCanonicalCborBytesUnsafe: (instance: CML.Ipv4) => Uint8Array
+export declare const toCanonicalCborBytesUnsafe: (
+  instance: CML.Ipv4,
+) => Uint8Array;
 ```
 
 Added in v2.0.0
@@ -280,7 +304,7 @@ Unsafely calls instance.toCanonicalCborHex without Effect wrapper
 **Signature**
 
 ```ts
-export declare const toCanonicalCborHexUnsafe: (instance: CML.Ipv4) => string
+export declare const toCanonicalCborHexUnsafe: (instance: CML.Ipv4) => string;
 ```
 
 Added in v2.0.0
@@ -292,7 +316,7 @@ Unsafely calls instance.toCborBytes without Effect wrapper
 **Signature**
 
 ```ts
-export declare const toCborBytesUnsafe: (instance: CML.Ipv4) => Uint8Array
+export declare const toCborBytesUnsafe: (instance: CML.Ipv4) => Uint8Array;
 ```
 
 Added in v2.0.0
@@ -304,7 +328,7 @@ Unsafely calls instance.toCborHex without Effect wrapper
 **Signature**
 
 ```ts
-export declare const toCborHexUnsafe: (instance: CML.Ipv4) => string
+export declare const toCborHexUnsafe: (instance: CML.Ipv4) => string;
 ```
 
 Added in v2.0.0
@@ -316,7 +340,7 @@ Unsafely calls instance.toJsValue without Effect wrapper
 **Signature**
 
 ```ts
-export declare const toJsValueUnsafe: (instance: CML.Ipv4) => any
+export declare const toJsValueUnsafe: (instance: CML.Ipv4) => any;
 ```
 
 Added in v2.0.0
@@ -328,7 +352,7 @@ Unsafely calls instance.toJson without Effect wrapper
 **Signature**
 
 ```ts
-export declare const toJsonUnsafe: (instance: CML.Ipv4) => string
+export declare const toJsonUnsafe: (instance: CML.Ipv4) => string;
 ```
 
 Added in v2.0.0
@@ -342,7 +366,7 @@ Type alias for the CML Ipv4 class
 **Signature**
 
 ```ts
-export type Ipv4 = CML.Ipv4
+export type Ipv4 = CML.Ipv4;
 ```
 
 Added in v2.0.0

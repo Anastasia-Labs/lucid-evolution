@@ -33,7 +33,7 @@ Type alias for the CML RedeemersKind enum
 **Signature**
 
 ```ts
-export type RedeemersKind = CML.RedeemersKind
+export type RedeemersKind = CML.RedeemersKind;
 ```
 
 Added in v2.0.0
@@ -47,7 +47,7 @@ Convert string to RedeemersKind enum value
 **Signature**
 
 ```ts
-export declare const fromString: (str: string) => CML.RedeemersKind | undefined
+export declare const fromString: (str: string) => CML.RedeemersKind | undefined;
 ```
 
 Added in v2.0.0
@@ -59,7 +59,7 @@ Convert RedeemersKind enum value to string
 **Signature**
 
 ```ts
-export declare const toString: (value: CML.RedeemersKind) => string
+export declare const toString: (value: CML.RedeemersKind) => string;
 ```
 
 Added in v2.0.0
@@ -71,7 +71,7 @@ Get all values of the RedeemersKind enum
 **Signature**
 
 ```ts
-export declare const values: () => Array<CML.RedeemersKind>
+export declare const values: () => Array<CML.RedeemersKind>;
 ```
 
 Added in v2.0.0
@@ -85,7 +85,7 @@ ArrLegacyRedeemer variant of the RedeemersKind enum
 **Signature**
 
 ```ts
-export declare const ArrLegacyRedeemer: CML.RedeemersKind.ArrLegacyRedeemer
+export declare const ArrLegacyRedeemer: CML.RedeemersKind.ArrLegacyRedeemer;
 ```
 
 Added in v2.0.0
@@ -97,7 +97,7 @@ MapRedeemerKeyToRedeemerVal variant of the RedeemersKind enum
 **Signature**
 
 ```ts
-export declare const MapRedeemerKeyToRedeemerVal: CML.RedeemersKind.MapRedeemerKeyToRedeemerVal
+export declare const MapRedeemerKeyToRedeemerVal: CML.RedeemersKind.MapRedeemerKeyToRedeemerVal;
 ```
 
 Added in v2.0.0

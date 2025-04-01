@@ -14,23 +14,27 @@ export type VkeywitnessList = CML.VkeywitnessList;
 
 /**
  * Error class for VkeywitnessList operations
- * 
+ *
  * This error is thrown when operations on VkeywitnessList instances fail.
  *
  * @since 2.0.0
  * @category Errors
  */
-export class VkeywitnessListError extends Data.TaggedError("VkeywitnessListError")<{
+export class VkeywitnessListError extends Data.TaggedError(
+  "VkeywitnessListError",
+)<{
   message?: string;
 }> {}
 
 /**
  * Method free of VkeywitnessList
- * 
+ *
  * @since 2.0.0
  * @category Methods
  */
-export const free: (instance: CML.VkeywitnessList) => Effect.Effect<void, VkeywitnessListError> = Effect.fn(
+export const free: (
+  instance: CML.VkeywitnessList,
+) => Effect.Effect<void, VkeywitnessListError> = Effect.fn(
   (instance: CML.VkeywitnessList) =>
     Effect.try({
       try: () => instance.free(),
@@ -38,12 +42,12 @@ export const free: (instance: CML.VkeywitnessList) => Effect.Effect<void, Vkeywi
         new VkeywitnessListError({
           message: `VkeywitnessList.free failed Hint: Check if you're calling free() more than once.`,
         }),
-    })
+    }),
 );
 
 /**
  * Unsafely calls instance.free without Effect wrapper
- * 
+ *
  * @since 2.0.0
  * @category MethodsUnsafe
  */
@@ -52,35 +56,40 @@ export const freeUnsafe = (instance: CML.VkeywitnessList): void =>
 
 /**
  * Static method _new of VkeywitnessList
- * 
+ *
  * @since 2.0.0
  * @category Constructors
  */
-export const _new: () => Effect.Effect<CML.VkeywitnessList, VkeywitnessListError> = Effect.fn(function* () {
+export const _new: () => Effect.Effect<
+  CML.VkeywitnessList,
+  VkeywitnessListError
+> = Effect.fn(function* () {
   return yield* Effect.try({
     try: () => CML.VkeywitnessList.new(),
-    catch: () => new VkeywitnessListError({
-      message: `VkeywitnessList._new failed `,
-    }),
+    catch: () =>
+      new VkeywitnessListError({
+        message: `VkeywitnessList._new failed `,
+      }),
   });
 });
 
 /**
  * Unsafely calls VkeywitnessList._new without Effect wrapper
- * 
+ *
  * @since 2.0.0
  * @category ConstructorsUnsafe
  */
-export const _newUnsafe = (): CML.VkeywitnessList =>
-  Effect.runSync(_new());
+export const _newUnsafe = (): CML.VkeywitnessList => Effect.runSync(_new());
 
 /**
  * Method len of VkeywitnessList
- * 
+ *
  * @since 2.0.0
  * @category Methods
  */
-export const len: (instance: CML.VkeywitnessList) => Effect.Effect<number, VkeywitnessListError> = Effect.fn(
+export const len: (
+  instance: CML.VkeywitnessList,
+) => Effect.Effect<number, VkeywitnessListError> = Effect.fn(
   (instance: CML.VkeywitnessList) =>
     Effect.try({
       try: () => instance.len(),
@@ -88,12 +97,12 @@ export const len: (instance: CML.VkeywitnessList) => Effect.Effect<number, Vkeyw
         new VkeywitnessListError({
           message: `VkeywitnessList.len failed `,
         }),
-    })
+    }),
 );
 
 /**
  * Unsafely calls instance.len without Effect wrapper
- * 
+ *
  * @since 2.0.0
  * @category MethodsUnsafe
  */
@@ -102,11 +111,14 @@ export const lenUnsafe = (instance: CML.VkeywitnessList): number =>
 
 /**
  * Method get of VkeywitnessList
- * 
+ *
  * @since 2.0.0
  * @category Methods
  */
-export const get: (instance: CML.VkeywitnessList, index: number) => Effect.Effect<CML.Vkeywitness, VkeywitnessListError> = Effect.fn(
+export const get: (
+  instance: CML.VkeywitnessList,
+  index: number,
+) => Effect.Effect<CML.Vkeywitness, VkeywitnessListError> = Effect.fn(
   (instance: CML.VkeywitnessList, index: number) =>
     Effect.try({
       try: () => instance.get(index),
@@ -114,25 +126,30 @@ export const get: (instance: CML.VkeywitnessList, index: number) => Effect.Effec
         new VkeywitnessListError({
           message: `VkeywitnessList.get failed with parameters: ${index}. `,
         }),
-    })
+    }),
 );
 
 /**
  * Unsafely calls instance.get without Effect wrapper
- * 
+ *
  * @since 2.0.0
  * @category MethodsUnsafe
  */
-export const getUnsafe = (instance: CML.VkeywitnessList, index: number): CML.Vkeywitness =>
-  Effect.runSync(get(instance, index));
+export const getUnsafe = (
+  instance: CML.VkeywitnessList,
+  index: number,
+): CML.Vkeywitness => Effect.runSync(get(instance, index));
 
 /**
  * Method add of VkeywitnessList
- * 
+ *
  * @since 2.0.0
  * @category Methods
  */
-export const add: (instance: CML.VkeywitnessList, elem: CML.Vkeywitness) => Effect.Effect<void, VkeywitnessListError> = Effect.fn(
+export const add: (
+  instance: CML.VkeywitnessList,
+  elem: CML.Vkeywitness,
+) => Effect.Effect<void, VkeywitnessListError> = Effect.fn(
   (instance: CML.VkeywitnessList, elem: CML.Vkeywitness) =>
     Effect.try({
       try: () => instance.add(elem),
@@ -140,14 +157,16 @@ export const add: (instance: CML.VkeywitnessList, elem: CML.Vkeywitness) => Effe
         new VkeywitnessListError({
           message: `VkeywitnessList.add failed with parameters: ${elem} (Vkeywitness). `,
         }),
-    })
+    }),
 );
 
 /**
  * Unsafely calls instance.add without Effect wrapper
- * 
+ *
  * @since 2.0.0
  * @category MethodsUnsafe
  */
-export const addUnsafe = (instance: CML.VkeywitnessList, elem: CML.Vkeywitness): void =>
-  Effect.runSync(add(instance, elem));
+export const addUnsafe = (
+  instance: CML.VkeywitnessList,
+  elem: CML.Vkeywitness,
+): void => Effect.runSync(add(instance, elem));

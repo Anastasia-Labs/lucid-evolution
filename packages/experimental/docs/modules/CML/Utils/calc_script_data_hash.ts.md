@@ -50,8 +50,8 @@ export declare const calcScriptDataHash: (
   redeemers: CML.Redeemers,
   datums: CML.PlutusDataList,
   costModels: CML.CostModels,
-  usedLangs: CML.LanguageList
-) => Effect.Effect<CML.ScriptDataHash | undefined, CalcScriptDataHashError>
+  usedLangs: CML.LanguageList,
+) => Effect.Effect<CML.ScriptDataHash | undefined, CalcScriptDataHashError>;
 ```
 
 Added in v2.0.0
@@ -69,8 +69,8 @@ export declare const calcScriptDataHashUnsafe: (
   redeemers: CML.Redeemers,
   datums: CML.PlutusDataList,
   costModels: CML.CostModels,
-  usedLangs: CML.LanguageList
-) => CML.ScriptDataHash | undefined
+  usedLangs: CML.LanguageList,
+) => CML.ScriptDataHash | undefined;
 ```
 
 Added in v2.0.0

@@ -42,7 +42,10 @@ Static method \_new of RedeemerKeyList
 **Signature**
 
 ```ts
-export declare const _new: () => Effect.Effect<CML.RedeemerKeyList, RedeemerKeyListError>
+export declare const _new: () => Effect.Effect<
+  CML.RedeemerKeyList,
+  RedeemerKeyListError
+>;
 ```
 
 Added in v2.0.0
@@ -56,7 +59,7 @@ Unsafely calls RedeemerKeyList.\_new without Effect wrapper
 **Signature**
 
 ```ts
-export declare const _newUnsafe: () => CML.RedeemerKeyList
+export declare const _newUnsafe: () => CML.RedeemerKeyList;
 ```
 
 Added in v2.0.0
@@ -88,8 +91,8 @@ Method add of RedeemerKeyList
 ```ts
 export declare const add: (
   instance: CML.RedeemerKeyList,
-  elem: CML.RedeemerKey
-) => Effect.Effect<void, RedeemerKeyListError>
+  elem: CML.RedeemerKey,
+) => Effect.Effect<void, RedeemerKeyListError>;
 ```
 
 Added in v2.0.0
@@ -101,7 +104,9 @@ Method free of RedeemerKeyList
 **Signature**
 
 ```ts
-export declare const free: (instance: CML.RedeemerKeyList) => Effect.Effect<void, RedeemerKeyListError>
+export declare const free: (
+  instance: CML.RedeemerKeyList,
+) => Effect.Effect<void, RedeemerKeyListError>;
 ```
 
 Added in v2.0.0
@@ -115,8 +120,8 @@ Method get of RedeemerKeyList
 ```ts
 export declare const get: (
   instance: CML.RedeemerKeyList,
-  index: number
-) => Effect.Effect<CML.RedeemerKey, RedeemerKeyListError>
+  index: number,
+) => Effect.Effect<CML.RedeemerKey, RedeemerKeyListError>;
 ```
 
 Added in v2.0.0
@@ -128,7 +133,9 @@ Method len of RedeemerKeyList
 **Signature**
 
 ```ts
-export declare const len: (instance: CML.RedeemerKeyList) => Effect.Effect<number, RedeemerKeyListError>
+export declare const len: (
+  instance: CML.RedeemerKeyList,
+) => Effect.Effect<number, RedeemerKeyListError>;
 ```
 
 Added in v2.0.0
@@ -142,7 +149,10 @@ Unsafely calls instance.add without Effect wrapper
 **Signature**
 
 ```ts
-export declare const addUnsafe: (instance: CML.RedeemerKeyList, elem: CML.RedeemerKey) => void
+export declare const addUnsafe: (
+  instance: CML.RedeemerKeyList,
+  elem: CML.RedeemerKey,
+) => void;
 ```
 
 Added in v2.0.0
@@ -154,7 +164,7 @@ Unsafely calls instance.free without Effect wrapper
 **Signature**
 
 ```ts
-export declare const freeUnsafe: (instance: CML.RedeemerKeyList) => void
+export declare const freeUnsafe: (instance: CML.RedeemerKeyList) => void;
 ```
 
 Added in v2.0.0
@@ -166,7 +176,10 @@ Unsafely calls instance.get without Effect wrapper
 **Signature**
 
 ```ts
-export declare const getUnsafe: (instance: CML.RedeemerKeyList, index: number) => CML.RedeemerKey
+export declare const getUnsafe: (
+  instance: CML.RedeemerKeyList,
+  index: number,
+) => CML.RedeemerKey;
 ```
 
 Added in v2.0.0
@@ -178,7 +191,7 @@ Unsafely calls instance.len without Effect wrapper
 **Signature**
 
 ```ts
-export declare const lenUnsafe: (instance: CML.RedeemerKeyList) => number
+export declare const lenUnsafe: (instance: CML.RedeemerKeyList) => number;
 ```
 
 Added in v2.0.0
@@ -192,7 +205,7 @@ Type alias for the CML RedeemerKeyList class
 **Signature**
 
 ```ts
-export type RedeemerKeyList = CML.RedeemerKeyList
+export type RedeemerKeyList = CML.RedeemerKeyList;
 ```
 
 Added in v2.0.0

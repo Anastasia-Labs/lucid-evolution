@@ -60,8 +60,8 @@ Static method \_new of HardForkInitiationAction
 ```ts
 export declare const _new: (
   actionId: CML.GovActionId | undefined,
-  version: CML.ProtocolVersion
-) => Effect.Effect<CML.HardForkInitiationAction, HardForkInitiationActionError>
+  version: CML.ProtocolVersion,
+) => Effect.Effect<CML.HardForkInitiationAction, HardForkInitiationActionError>;
 ```
 
 Added in v2.0.0
@@ -74,8 +74,8 @@ Static method fromCborBytes of HardForkInitiationAction
 
 ```ts
 export declare const fromCborBytes: (
-  cborBytes: Uint8Array
-) => Effect.Effect<CML.HardForkInitiationAction, HardForkInitiationActionError>
+  cborBytes: Uint8Array,
+) => Effect.Effect<CML.HardForkInitiationAction, HardForkInitiationActionError>;
 ```
 
 Added in v2.0.0
@@ -88,8 +88,8 @@ Static method fromCborHex of HardForkInitiationAction
 
 ```ts
 export declare const fromCborHex: (
-  cborBytes: string
-) => Effect.Effect<CML.HardForkInitiationAction, HardForkInitiationActionError>
+  cborBytes: string,
+) => Effect.Effect<CML.HardForkInitiationAction, HardForkInitiationActionError>;
 ```
 
 Added in v2.0.0
@@ -102,8 +102,8 @@ Static method fromJson of HardForkInitiationAction
 
 ```ts
 export declare const fromJson: (
-  json: string
-) => Effect.Effect<CML.HardForkInitiationAction, HardForkInitiationActionError>
+  json: string,
+) => Effect.Effect<CML.HardForkInitiationAction, HardForkInitiationActionError>;
 ```
 
 Added in v2.0.0
@@ -119,8 +119,8 @@ Unsafely calls HardForkInitiationAction.\_new without Effect wrapper
 ```ts
 export declare const _newUnsafe: (
   actionId: CML.GovActionId | undefined,
-  version: CML.ProtocolVersion
-) => CML.HardForkInitiationAction
+  version: CML.ProtocolVersion,
+) => CML.HardForkInitiationAction;
 ```
 
 Added in v2.0.0
@@ -132,7 +132,9 @@ Unsafely calls HardForkInitiationAction.fromCborBytes without Effect wrapper
 **Signature**
 
 ```ts
-export declare const fromCborBytesUnsafe: (cborBytes: Uint8Array) => CML.HardForkInitiationAction
+export declare const fromCborBytesUnsafe: (
+  cborBytes: Uint8Array,
+) => CML.HardForkInitiationAction;
 ```
 
 Added in v2.0.0
@@ -144,7 +146,9 @@ Unsafely calls HardForkInitiationAction.fromCborHex without Effect wrapper
 **Signature**
 
 ```ts
-export declare const fromCborHexUnsafe: (cborBytes: string) => CML.HardForkInitiationAction
+export declare const fromCborHexUnsafe: (
+  cborBytes: string,
+) => CML.HardForkInitiationAction;
 ```
 
 Added in v2.0.0
@@ -156,7 +160,9 @@ Unsafely calls HardForkInitiationAction.fromJson without Effect wrapper
 **Signature**
 
 ```ts
-export declare const fromJsonUnsafe: (json: string) => CML.HardForkInitiationAction
+export declare const fromJsonUnsafe: (
+  json: string,
+) => CML.HardForkInitiationAction;
 ```
 
 Added in v2.0.0
@@ -187,8 +193,8 @@ Method actionId of HardForkInitiationAction
 
 ```ts
 export declare const actionId: (
-  instance: CML.HardForkInitiationAction
-) => Effect.Effect<CML.GovActionId | undefined, HardForkInitiationActionError>
+  instance: CML.HardForkInitiationAction,
+) => Effect.Effect<CML.GovActionId | undefined, HardForkInitiationActionError>;
 ```
 
 Added in v2.0.0
@@ -201,8 +207,8 @@ Method free of HardForkInitiationAction
 
 ```ts
 export declare const free: (
-  instance: CML.HardForkInitiationAction
-) => Effect.Effect<void, HardForkInitiationActionError>
+  instance: CML.HardForkInitiationAction,
+) => Effect.Effect<void, HardForkInitiationActionError>;
 ```
 
 Added in v2.0.0
@@ -215,8 +221,8 @@ Method toCanonicalCborBytes of HardForkInitiationAction
 
 ```ts
 export declare const toCanonicalCborBytes: (
-  instance: CML.HardForkInitiationAction
-) => Effect.Effect<Uint8Array, HardForkInitiationActionError>
+  instance: CML.HardForkInitiationAction,
+) => Effect.Effect<Uint8Array, HardForkInitiationActionError>;
 ```
 
 Added in v2.0.0
@@ -229,8 +235,8 @@ Method toCanonicalCborHex of HardForkInitiationAction
 
 ```ts
 export declare const toCanonicalCborHex: (
-  instance: CML.HardForkInitiationAction
-) => Effect.Effect<string, HardForkInitiationActionError>
+  instance: CML.HardForkInitiationAction,
+) => Effect.Effect<string, HardForkInitiationActionError>;
 ```
 
 Added in v2.0.0
@@ -243,8 +249,8 @@ Method toCborBytes of HardForkInitiationAction
 
 ```ts
 export declare const toCborBytes: (
-  instance: CML.HardForkInitiationAction
-) => Effect.Effect<Uint8Array, HardForkInitiationActionError>
+  instance: CML.HardForkInitiationAction,
+) => Effect.Effect<Uint8Array, HardForkInitiationActionError>;
 ```
 
 Added in v2.0.0
@@ -257,8 +263,8 @@ Method toCborHex of HardForkInitiationAction
 
 ```ts
 export declare const toCborHex: (
-  instance: CML.HardForkInitiationAction
-) => Effect.Effect<string, HardForkInitiationActionError>
+  instance: CML.HardForkInitiationAction,
+) => Effect.Effect<string, HardForkInitiationActionError>;
 ```
 
 Added in v2.0.0
@@ -271,8 +277,8 @@ Method toJsValue of HardForkInitiationAction
 
 ```ts
 export declare const toJsValue: (
-  instance: CML.HardForkInitiationAction
-) => Effect.Effect<any, HardForkInitiationActionError>
+  instance: CML.HardForkInitiationAction,
+) => Effect.Effect<any, HardForkInitiationActionError>;
 ```
 
 Added in v2.0.0
@@ -285,8 +291,8 @@ Method toJson of HardForkInitiationAction
 
 ```ts
 export declare const toJson: (
-  instance: CML.HardForkInitiationAction
-) => Effect.Effect<string, HardForkInitiationActionError>
+  instance: CML.HardForkInitiationAction,
+) => Effect.Effect<string, HardForkInitiationActionError>;
 ```
 
 Added in v2.0.0
@@ -299,8 +305,8 @@ Method version of HardForkInitiationAction
 
 ```ts
 export declare const version: (
-  instance: CML.HardForkInitiationAction
-) => Effect.Effect<CML.ProtocolVersion, HardForkInitiationActionError>
+  instance: CML.HardForkInitiationAction,
+) => Effect.Effect<CML.ProtocolVersion, HardForkInitiationActionError>;
 ```
 
 Added in v2.0.0
@@ -314,7 +320,9 @@ Unsafely calls instance.actionId without Effect wrapper
 **Signature**
 
 ```ts
-export declare const actionIdUnsafe: (instance: CML.HardForkInitiationAction) => CML.GovActionId | undefined
+export declare const actionIdUnsafe: (
+  instance: CML.HardForkInitiationAction,
+) => CML.GovActionId | undefined;
 ```
 
 Added in v2.0.0
@@ -326,7 +334,9 @@ Unsafely calls instance.free without Effect wrapper
 **Signature**
 
 ```ts
-export declare const freeUnsafe: (instance: CML.HardForkInitiationAction) => void
+export declare const freeUnsafe: (
+  instance: CML.HardForkInitiationAction,
+) => void;
 ```
 
 Added in v2.0.0
@@ -338,7 +348,9 @@ Unsafely calls instance.toCanonicalCborBytes without Effect wrapper
 **Signature**
 
 ```ts
-export declare const toCanonicalCborBytesUnsafe: (instance: CML.HardForkInitiationAction) => Uint8Array
+export declare const toCanonicalCborBytesUnsafe: (
+  instance: CML.HardForkInitiationAction,
+) => Uint8Array;
 ```
 
 Added in v2.0.0
@@ -350,7 +362,9 @@ Unsafely calls instance.toCanonicalCborHex without Effect wrapper
 **Signature**
 
 ```ts
-export declare const toCanonicalCborHexUnsafe: (instance: CML.HardForkInitiationAction) => string
+export declare const toCanonicalCborHexUnsafe: (
+  instance: CML.HardForkInitiationAction,
+) => string;
 ```
 
 Added in v2.0.0
@@ -362,7 +376,9 @@ Unsafely calls instance.toCborBytes without Effect wrapper
 **Signature**
 
 ```ts
-export declare const toCborBytesUnsafe: (instance: CML.HardForkInitiationAction) => Uint8Array
+export declare const toCborBytesUnsafe: (
+  instance: CML.HardForkInitiationAction,
+) => Uint8Array;
 ```
 
 Added in v2.0.0
@@ -374,7 +390,9 @@ Unsafely calls instance.toCborHex without Effect wrapper
 **Signature**
 
 ```ts
-export declare const toCborHexUnsafe: (instance: CML.HardForkInitiationAction) => string
+export declare const toCborHexUnsafe: (
+  instance: CML.HardForkInitiationAction,
+) => string;
 ```
 
 Added in v2.0.0
@@ -386,7 +404,9 @@ Unsafely calls instance.toJsValue without Effect wrapper
 **Signature**
 
 ```ts
-export declare const toJsValueUnsafe: (instance: CML.HardForkInitiationAction) => any
+export declare const toJsValueUnsafe: (
+  instance: CML.HardForkInitiationAction,
+) => any;
 ```
 
 Added in v2.0.0
@@ -398,7 +418,9 @@ Unsafely calls instance.toJson without Effect wrapper
 **Signature**
 
 ```ts
-export declare const toJsonUnsafe: (instance: CML.HardForkInitiationAction) => string
+export declare const toJsonUnsafe: (
+  instance: CML.HardForkInitiationAction,
+) => string;
 ```
 
 Added in v2.0.0
@@ -410,7 +432,9 @@ Unsafely calls instance.version without Effect wrapper
 **Signature**
 
 ```ts
-export declare const versionUnsafe: (instance: CML.HardForkInitiationAction) => CML.ProtocolVersion
+export declare const versionUnsafe: (
+  instance: CML.HardForkInitiationAction,
+) => CML.ProtocolVersion;
 ```
 
 Added in v2.0.0
@@ -424,7 +448,7 @@ Type alias for the CML HardForkInitiationAction class
 **Signature**
 
 ```ts
-export type HardForkInitiationAction = CML.HardForkInitiationAction
+export type HardForkInitiationAction = CML.HardForkInitiationAction;
 ```
 
 Added in v2.0.0

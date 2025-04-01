@@ -34,7 +34,7 @@ Type alias for the CML Language enum
 **Signature**
 
 ```ts
-export type Language = CML.Language
+export type Language = CML.Language;
 ```
 
 Added in v2.0.0
@@ -48,7 +48,7 @@ Convert string to Language enum value
 **Signature**
 
 ```ts
-export declare const fromString: (str: string) => CML.Language | undefined
+export declare const fromString: (str: string) => CML.Language | undefined;
 ```
 
 Added in v2.0.0
@@ -60,7 +60,7 @@ Convert Language enum value to string
 **Signature**
 
 ```ts
-export declare const toString: (value: CML.Language) => string
+export declare const toString: (value: CML.Language) => string;
 ```
 
 Added in v2.0.0
@@ -72,7 +72,7 @@ Get all values of the Language enum
 **Signature**
 
 ```ts
-export declare const values: () => Array<CML.Language>
+export declare const values: () => Array<CML.Language>;
 ```
 
 Added in v2.0.0
@@ -86,7 +86,7 @@ PlutusV1 variant of the Language enum
 **Signature**
 
 ```ts
-export declare const PlutusV1: CML.Language.PlutusV1
+export declare const PlutusV1: CML.Language.PlutusV1;
 ```
 
 Added in v2.0.0
@@ -98,7 +98,7 @@ PlutusV2 variant of the Language enum
 **Signature**
 
 ```ts
-export declare const PlutusV2: CML.Language.PlutusV2
+export declare const PlutusV2: CML.Language.PlutusV2;
 ```
 
 Added in v2.0.0
@@ -110,7 +110,7 @@ PlutusV3 variant of the Language enum
 **Signature**
 
 ```ts
-export declare const PlutusV3: CML.Language.PlutusV3
+export declare const PlutusV3: CML.Language.PlutusV3;
 ```
 
 Added in v2.0.0

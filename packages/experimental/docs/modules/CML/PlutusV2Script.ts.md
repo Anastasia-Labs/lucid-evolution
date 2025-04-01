@@ -62,7 +62,9 @@ Static method fromCborBytes of PlutusV2Script
 **Signature**
 
 ```ts
-export declare const fromCborBytes: (cborBytes: Uint8Array) => Effect.Effect<CML.PlutusV2Script, PlutusV2ScriptError>
+export declare const fromCborBytes: (
+  cborBytes: Uint8Array,
+) => Effect.Effect<CML.PlutusV2Script, PlutusV2ScriptError>;
 ```
 
 Added in v2.0.0
@@ -74,7 +76,9 @@ Static method fromCborHex of PlutusV2Script
 **Signature**
 
 ```ts
-export declare const fromCborHex: (cborBytes: string) => Effect.Effect<CML.PlutusV2Script, PlutusV2ScriptError>
+export declare const fromCborHex: (
+  cborBytes: string,
+) => Effect.Effect<CML.PlutusV2Script, PlutusV2ScriptError>;
 ```
 
 Added in v2.0.0
@@ -86,7 +90,9 @@ Static method fromHex of PlutusV2Script
 **Signature**
 
 ```ts
-export declare const fromHex: (input: string) => Effect.Effect<CML.PlutusV2Script, PlutusV2ScriptError>
+export declare const fromHex: (
+  input: string,
+) => Effect.Effect<CML.PlutusV2Script, PlutusV2ScriptError>;
 ```
 
 Added in v2.0.0
@@ -98,7 +104,9 @@ Static method fromJson of PlutusV2Script
 **Signature**
 
 ```ts
-export declare const fromJson: (json: string) => Effect.Effect<CML.PlutusV2Script, PlutusV2ScriptError>
+export declare const fromJson: (
+  json: string,
+) => Effect.Effect<CML.PlutusV2Script, PlutusV2ScriptError>;
 ```
 
 Added in v2.0.0
@@ -110,7 +118,9 @@ Static method fromRawBytes of PlutusV2Script
 **Signature**
 
 ```ts
-export declare const fromRawBytes: (bytes: Uint8Array) => Effect.Effect<CML.PlutusV2Script, PlutusV2ScriptError>
+export declare const fromRawBytes: (
+  bytes: Uint8Array,
+) => Effect.Effect<CML.PlutusV2Script, PlutusV2ScriptError>;
 ```
 
 Added in v2.0.0
@@ -124,7 +134,9 @@ Unsafely calls PlutusV2Script.fromCborBytes without Effect wrapper
 **Signature**
 
 ```ts
-export declare const fromCborBytesUnsafe: (cborBytes: Uint8Array) => CML.PlutusV2Script
+export declare const fromCborBytesUnsafe: (
+  cborBytes: Uint8Array,
+) => CML.PlutusV2Script;
 ```
 
 Added in v2.0.0
@@ -136,7 +148,9 @@ Unsafely calls PlutusV2Script.fromCborHex without Effect wrapper
 **Signature**
 
 ```ts
-export declare const fromCborHexUnsafe: (cborBytes: string) => CML.PlutusV2Script
+export declare const fromCborHexUnsafe: (
+  cborBytes: string,
+) => CML.PlutusV2Script;
 ```
 
 Added in v2.0.0
@@ -148,7 +162,7 @@ Unsafely calls PlutusV2Script.fromHex without Effect wrapper
 **Signature**
 
 ```ts
-export declare const fromHexUnsafe: (input: string) => CML.PlutusV2Script
+export declare const fromHexUnsafe: (input: string) => CML.PlutusV2Script;
 ```
 
 Added in v2.0.0
@@ -160,7 +174,7 @@ Unsafely calls PlutusV2Script.fromJson without Effect wrapper
 **Signature**
 
 ```ts
-export declare const fromJsonUnsafe: (json: string) => CML.PlutusV2Script
+export declare const fromJsonUnsafe: (json: string) => CML.PlutusV2Script;
 ```
 
 Added in v2.0.0
@@ -172,7 +186,9 @@ Unsafely calls PlutusV2Script.fromRawBytes without Effect wrapper
 **Signature**
 
 ```ts
-export declare const fromRawBytesUnsafe: (bytes: Uint8Array) => CML.PlutusV2Script
+export declare const fromRawBytesUnsafe: (
+  bytes: Uint8Array,
+) => CML.PlutusV2Script;
 ```
 
 Added in v2.0.0
@@ -202,7 +218,9 @@ Method free of PlutusV2Script
 **Signature**
 
 ```ts
-export declare const free: (instance: CML.PlutusV2Script) => Effect.Effect<void, PlutusV2ScriptError>
+export declare const free: (
+  instance: CML.PlutusV2Script,
+) => Effect.Effect<void, PlutusV2ScriptError>;
 ```
 
 Added in v2.0.0
@@ -214,7 +232,9 @@ Method hash of PlutusV2Script
 **Signature**
 
 ```ts
-export declare const hash: (instance: CML.PlutusV2Script) => Effect.Effect<CML.ScriptHash, PlutusV2ScriptError>
+export declare const hash: (
+  instance: CML.PlutusV2Script,
+) => Effect.Effect<CML.ScriptHash, PlutusV2ScriptError>;
 ```
 
 Added in v2.0.0
@@ -227,8 +247,8 @@ Method toCanonicalCborBytes of PlutusV2Script
 
 ```ts
 export declare const toCanonicalCborBytes: (
-  instance: CML.PlutusV2Script
-) => Effect.Effect<Uint8Array, PlutusV2ScriptError>
+  instance: CML.PlutusV2Script,
+) => Effect.Effect<Uint8Array, PlutusV2ScriptError>;
 ```
 
 Added in v2.0.0
@@ -240,7 +260,9 @@ Method toCanonicalCborHex of PlutusV2Script
 **Signature**
 
 ```ts
-export declare const toCanonicalCborHex: (instance: CML.PlutusV2Script) => Effect.Effect<string, PlutusV2ScriptError>
+export declare const toCanonicalCborHex: (
+  instance: CML.PlutusV2Script,
+) => Effect.Effect<string, PlutusV2ScriptError>;
 ```
 
 Added in v2.0.0
@@ -252,7 +274,9 @@ Method toCborBytes of PlutusV2Script
 **Signature**
 
 ```ts
-export declare const toCborBytes: (instance: CML.PlutusV2Script) => Effect.Effect<Uint8Array, PlutusV2ScriptError>
+export declare const toCborBytes: (
+  instance: CML.PlutusV2Script,
+) => Effect.Effect<Uint8Array, PlutusV2ScriptError>;
 ```
 
 Added in v2.0.0
@@ -264,7 +288,9 @@ Method toCborHex of PlutusV2Script
 **Signature**
 
 ```ts
-export declare const toCborHex: (instance: CML.PlutusV2Script) => Effect.Effect<string, PlutusV2ScriptError>
+export declare const toCborHex: (
+  instance: CML.PlutusV2Script,
+) => Effect.Effect<string, PlutusV2ScriptError>;
 ```
 
 Added in v2.0.0
@@ -276,7 +302,9 @@ Method toHex of PlutusV2Script
 **Signature**
 
 ```ts
-export declare const toHex: (instance: CML.PlutusV2Script) => Effect.Effect<string, PlutusV2ScriptError>
+export declare const toHex: (
+  instance: CML.PlutusV2Script,
+) => Effect.Effect<string, PlutusV2ScriptError>;
 ```
 
 Added in v2.0.0
@@ -288,7 +316,9 @@ Method toJsValue of PlutusV2Script
 **Signature**
 
 ```ts
-export declare const toJsValue: (instance: CML.PlutusV2Script) => Effect.Effect<any, PlutusV2ScriptError>
+export declare const toJsValue: (
+  instance: CML.PlutusV2Script,
+) => Effect.Effect<any, PlutusV2ScriptError>;
 ```
 
 Added in v2.0.0
@@ -300,7 +330,9 @@ Method toJson of PlutusV2Script
 **Signature**
 
 ```ts
-export declare const toJson: (instance: CML.PlutusV2Script) => Effect.Effect<string, PlutusV2ScriptError>
+export declare const toJson: (
+  instance: CML.PlutusV2Script,
+) => Effect.Effect<string, PlutusV2ScriptError>;
 ```
 
 Added in v2.0.0
@@ -312,7 +344,9 @@ Method toRawBytes of PlutusV2Script
 **Signature**
 
 ```ts
-export declare const toRawBytes: (instance: CML.PlutusV2Script) => Effect.Effect<Uint8Array, PlutusV2ScriptError>
+export declare const toRawBytes: (
+  instance: CML.PlutusV2Script,
+) => Effect.Effect<Uint8Array, PlutusV2ScriptError>;
 ```
 
 Added in v2.0.0
@@ -326,7 +360,7 @@ Unsafely calls instance.free without Effect wrapper
 **Signature**
 
 ```ts
-export declare const freeUnsafe: (instance: CML.PlutusV2Script) => void
+export declare const freeUnsafe: (instance: CML.PlutusV2Script) => void;
 ```
 
 Added in v2.0.0
@@ -338,7 +372,9 @@ Unsafely calls instance.hash without Effect wrapper
 **Signature**
 
 ```ts
-export declare const hashUnsafe: (instance: CML.PlutusV2Script) => CML.ScriptHash
+export declare const hashUnsafe: (
+  instance: CML.PlutusV2Script,
+) => CML.ScriptHash;
 ```
 
 Added in v2.0.0
@@ -350,7 +386,9 @@ Unsafely calls instance.toCanonicalCborBytes without Effect wrapper
 **Signature**
 
 ```ts
-export declare const toCanonicalCborBytesUnsafe: (instance: CML.PlutusV2Script) => Uint8Array
+export declare const toCanonicalCborBytesUnsafe: (
+  instance: CML.PlutusV2Script,
+) => Uint8Array;
 ```
 
 Added in v2.0.0
@@ -362,7 +400,9 @@ Unsafely calls instance.toCanonicalCborHex without Effect wrapper
 **Signature**
 
 ```ts
-export declare const toCanonicalCborHexUnsafe: (instance: CML.PlutusV2Script) => string
+export declare const toCanonicalCborHexUnsafe: (
+  instance: CML.PlutusV2Script,
+) => string;
 ```
 
 Added in v2.0.0
@@ -374,7 +414,9 @@ Unsafely calls instance.toCborBytes without Effect wrapper
 **Signature**
 
 ```ts
-export declare const toCborBytesUnsafe: (instance: CML.PlutusV2Script) => Uint8Array
+export declare const toCborBytesUnsafe: (
+  instance: CML.PlutusV2Script,
+) => Uint8Array;
 ```
 
 Added in v2.0.0
@@ -386,7 +428,7 @@ Unsafely calls instance.toCborHex without Effect wrapper
 **Signature**
 
 ```ts
-export declare const toCborHexUnsafe: (instance: CML.PlutusV2Script) => string
+export declare const toCborHexUnsafe: (instance: CML.PlutusV2Script) => string;
 ```
 
 Added in v2.0.0
@@ -398,7 +440,7 @@ Unsafely calls instance.toHex without Effect wrapper
 **Signature**
 
 ```ts
-export declare const toHexUnsafe: (instance: CML.PlutusV2Script) => string
+export declare const toHexUnsafe: (instance: CML.PlutusV2Script) => string;
 ```
 
 Added in v2.0.0
@@ -410,7 +452,7 @@ Unsafely calls instance.toJsValue without Effect wrapper
 **Signature**
 
 ```ts
-export declare const toJsValueUnsafe: (instance: CML.PlutusV2Script) => any
+export declare const toJsValueUnsafe: (instance: CML.PlutusV2Script) => any;
 ```
 
 Added in v2.0.0
@@ -422,7 +464,7 @@ Unsafely calls instance.toJson without Effect wrapper
 **Signature**
 
 ```ts
-export declare const toJsonUnsafe: (instance: CML.PlutusV2Script) => string
+export declare const toJsonUnsafe: (instance: CML.PlutusV2Script) => string;
 ```
 
 Added in v2.0.0
@@ -434,7 +476,9 @@ Unsafely calls instance.toRawBytes without Effect wrapper
 **Signature**
 
 ```ts
-export declare const toRawBytesUnsafe: (instance: CML.PlutusV2Script) => Uint8Array
+export declare const toRawBytesUnsafe: (
+  instance: CML.PlutusV2Script,
+) => Uint8Array;
 ```
 
 Added in v2.0.0
@@ -448,7 +492,7 @@ Type alias for the CML PlutusV2Script class
 **Signature**
 
 ```ts
-export type PlutusV2Script = CML.PlutusV2Script
+export type PlutusV2Script = CML.PlutusV2Script;
 ```
 
 Added in v2.0.0

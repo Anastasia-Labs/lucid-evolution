@@ -45,8 +45,8 @@ Static method \_new of SingleCertificateBuilder
 
 ```ts
 export declare const _new: (
-  cert: CML.Certificate
-) => Effect.Effect<CML.SingleCertificateBuilder, SingleCertificateBuilderError>
+  cert: CML.Certificate,
+) => Effect.Effect<CML.SingleCertificateBuilder, SingleCertificateBuilderError>;
 ```
 
 Added in v2.0.0
@@ -60,7 +60,9 @@ Unsafely calls SingleCertificateBuilder.\_new without Effect wrapper
 **Signature**
 
 ```ts
-export declare const _newUnsafe: (cert: CML.Certificate) => CML.SingleCertificateBuilder
+export declare const _newUnsafe: (
+  cert: CML.Certificate,
+) => CML.SingleCertificateBuilder;
 ```
 
 Added in v2.0.0
@@ -91,8 +93,8 @@ Method free of SingleCertificateBuilder
 
 ```ts
 export declare const free: (
-  instance: CML.SingleCertificateBuilder
-) => Effect.Effect<void, SingleCertificateBuilderError>
+  instance: CML.SingleCertificateBuilder,
+) => Effect.Effect<void, SingleCertificateBuilderError>;
 ```
 
 Added in v2.0.0
@@ -107,8 +109,8 @@ Method nativeScript of SingleCertificateBuilder
 export declare const nativeScript: (
   instance: CML.SingleCertificateBuilder,
   _nativeScript: CML.NativeScript,
-  witnessInfo: CML.NativeScriptWitnessInfo
-) => Effect.Effect<CML.CertificateBuilderResult, SingleCertificateBuilderError>
+  witnessInfo: CML.NativeScriptWitnessInfo,
+) => Effect.Effect<CML.CertificateBuilderResult, SingleCertificateBuilderError>;
 ```
 
 Added in v2.0.0
@@ -121,8 +123,8 @@ Method paymentKey of SingleCertificateBuilder
 
 ```ts
 export declare const paymentKey: (
-  instance: CML.SingleCertificateBuilder
-) => Effect.Effect<CML.CertificateBuilderResult, SingleCertificateBuilderError>
+  instance: CML.SingleCertificateBuilder,
+) => Effect.Effect<CML.CertificateBuilderResult, SingleCertificateBuilderError>;
 ```
 
 Added in v2.0.0
@@ -137,8 +139,8 @@ Method plutusScript of SingleCertificateBuilder
 export declare const plutusScript: (
   instance: CML.SingleCertificateBuilder,
   partialWitness: CML.PartialPlutusWitness,
-  requiredSigners: CML.Ed25519KeyHashList
-) => Effect.Effect<CML.CertificateBuilderResult, SingleCertificateBuilderError>
+  requiredSigners: CML.Ed25519KeyHashList,
+) => Effect.Effect<CML.CertificateBuilderResult, SingleCertificateBuilderError>;
 ```
 
 Added in v2.0.0
@@ -151,8 +153,8 @@ Method skipWitness of SingleCertificateBuilder
 
 ```ts
 export declare const skipWitness: (
-  instance: CML.SingleCertificateBuilder
-) => Effect.Effect<CML.CertificateBuilderResult, SingleCertificateBuilderError>
+  instance: CML.SingleCertificateBuilder,
+) => Effect.Effect<CML.CertificateBuilderResult, SingleCertificateBuilderError>;
 ```
 
 Added in v2.0.0
@@ -166,7 +168,9 @@ Unsafely calls instance.free without Effect wrapper
 **Signature**
 
 ```ts
-export declare const freeUnsafe: (instance: CML.SingleCertificateBuilder) => void
+export declare const freeUnsafe: (
+  instance: CML.SingleCertificateBuilder,
+) => void;
 ```
 
 Added in v2.0.0
@@ -181,8 +185,8 @@ Unsafely calls instance.nativeScript without Effect wrapper
 export declare const nativeScriptUnsafe: (
   instance: CML.SingleCertificateBuilder,
   _nativeScript: CML.NativeScript,
-  witnessInfo: CML.NativeScriptWitnessInfo
-) => CML.CertificateBuilderResult
+  witnessInfo: CML.NativeScriptWitnessInfo,
+) => CML.CertificateBuilderResult;
 ```
 
 Added in v2.0.0
@@ -194,7 +198,9 @@ Unsafely calls instance.paymentKey without Effect wrapper
 **Signature**
 
 ```ts
-export declare const paymentKeyUnsafe: (instance: CML.SingleCertificateBuilder) => CML.CertificateBuilderResult
+export declare const paymentKeyUnsafe: (
+  instance: CML.SingleCertificateBuilder,
+) => CML.CertificateBuilderResult;
 ```
 
 Added in v2.0.0
@@ -209,8 +215,8 @@ Unsafely calls instance.plutusScript without Effect wrapper
 export declare const plutusScriptUnsafe: (
   instance: CML.SingleCertificateBuilder,
   partialWitness: CML.PartialPlutusWitness,
-  requiredSigners: CML.Ed25519KeyHashList
-) => CML.CertificateBuilderResult
+  requiredSigners: CML.Ed25519KeyHashList,
+) => CML.CertificateBuilderResult;
 ```
 
 Added in v2.0.0
@@ -222,7 +228,9 @@ Unsafely calls instance.skipWitness without Effect wrapper
 **Signature**
 
 ```ts
-export declare const skipWitnessUnsafe: (instance: CML.SingleCertificateBuilder) => CML.CertificateBuilderResult
+export declare const skipWitnessUnsafe: (
+  instance: CML.SingleCertificateBuilder,
+) => CML.CertificateBuilderResult;
 ```
 
 Added in v2.0.0
@@ -236,7 +244,7 @@ Type alias for the CML SingleCertificateBuilder class
 **Signature**
 
 ```ts
-export type SingleCertificateBuilder = CML.SingleCertificateBuilder
+export type SingleCertificateBuilder = CML.SingleCertificateBuilder;
 ```
 
 Added in v2.0.0

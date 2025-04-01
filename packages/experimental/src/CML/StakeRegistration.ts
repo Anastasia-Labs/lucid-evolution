@@ -14,23 +14,27 @@ export type StakeRegistration = CML.StakeRegistration;
 
 /**
  * Error class for StakeRegistration operations
- * 
+ *
  * This error is thrown when operations on StakeRegistration instances fail.
  *
  * @since 2.0.0
  * @category Errors
  */
-export class StakeRegistrationError extends Data.TaggedError("StakeRegistrationError")<{
+export class StakeRegistrationError extends Data.TaggedError(
+  "StakeRegistrationError",
+)<{
   message?: string;
 }> {}
 
 /**
  * Method free of StakeRegistration
- * 
+ *
  * @since 2.0.0
  * @category Methods
  */
-export const free: (instance: CML.StakeRegistration) => Effect.Effect<void, StakeRegistrationError> = Effect.fn(
+export const free: (
+  instance: CML.StakeRegistration,
+) => Effect.Effect<void, StakeRegistrationError> = Effect.fn(
   (instance: CML.StakeRegistration) =>
     Effect.try({
       try: () => instance.free(),
@@ -38,12 +42,12 @@ export const free: (instance: CML.StakeRegistration) => Effect.Effect<void, Stak
         new StakeRegistrationError({
           message: `StakeRegistration.free failed Hint: Check if you're calling free() more than once.`,
         }),
-    })
+    }),
 );
 
 /**
  * Unsafely calls instance.free without Effect wrapper
- * 
+ *
  * @since 2.0.0
  * @category MethodsUnsafe
  */
@@ -52,11 +56,13 @@ export const freeUnsafe = (instance: CML.StakeRegistration): void =>
 
 /**
  * Method toCborBytes of StakeRegistration
- * 
+ *
  * @since 2.0.0
  * @category Methods
  */
-export const toCborBytes: (instance: CML.StakeRegistration) => Effect.Effect<Uint8Array, StakeRegistrationError> = Effect.fn(
+export const toCborBytes: (
+  instance: CML.StakeRegistration,
+) => Effect.Effect<Uint8Array, StakeRegistrationError> = Effect.fn(
   (instance: CML.StakeRegistration) =>
     Effect.try({
       try: () => instance.to_cbor_bytes(),
@@ -64,25 +70,28 @@ export const toCborBytes: (instance: CML.StakeRegistration) => Effect.Effect<Uin
         new StakeRegistrationError({
           message: `StakeRegistration.toCborBytes failed StakeRegistration is not valid for Uint8Array conversion. Hint: Check byte length and encoding.`,
         }),
-    })
+    }),
 );
 
 /**
  * Unsafely calls instance.toCborBytes without Effect wrapper
- * 
+ *
  * @since 2.0.0
  * @category MethodsUnsafe
  */
-export const toCborBytesUnsafe = (instance: CML.StakeRegistration): Uint8Array =>
-  Effect.runSync(toCborBytes(instance));
+export const toCborBytesUnsafe = (
+  instance: CML.StakeRegistration,
+): Uint8Array => Effect.runSync(toCborBytes(instance));
 
 /**
  * Method toCanonicalCborBytes of StakeRegistration
- * 
+ *
  * @since 2.0.0
  * @category Methods
  */
-export const toCanonicalCborBytes: (instance: CML.StakeRegistration) => Effect.Effect<Uint8Array, StakeRegistrationError> = Effect.fn(
+export const toCanonicalCborBytes: (
+  instance: CML.StakeRegistration,
+) => Effect.Effect<Uint8Array, StakeRegistrationError> = Effect.fn(
   (instance: CML.StakeRegistration) =>
     Effect.try({
       try: () => instance.to_canonical_cbor_bytes(),
@@ -90,49 +99,58 @@ export const toCanonicalCborBytes: (instance: CML.StakeRegistration) => Effect.E
         new StakeRegistrationError({
           message: `StakeRegistration.toCanonicalCborBytes failed StakeRegistration is not valid for Uint8Array conversion. Hint: Check byte length and encoding.`,
         }),
-    })
+    }),
 );
 
 /**
  * Unsafely calls instance.toCanonicalCborBytes without Effect wrapper
- * 
+ *
  * @since 2.0.0
  * @category MethodsUnsafe
  */
-export const toCanonicalCborBytesUnsafe = (instance: CML.StakeRegistration): Uint8Array =>
-  Effect.runSync(toCanonicalCborBytes(instance));
+export const toCanonicalCborBytesUnsafe = (
+  instance: CML.StakeRegistration,
+): Uint8Array => Effect.runSync(toCanonicalCborBytes(instance));
 
 /**
  * Static method fromCborBytes of StakeRegistration
- * 
+ *
  * @since 2.0.0
  * @category Constructors
  */
-export const fromCborBytes: (cborBytes: Uint8Array) => Effect.Effect<CML.StakeRegistration, StakeRegistrationError> = Effect.fn(function* (cborBytes: Uint8Array) {
-  return yield* Effect.try({
-    try: () => CML.StakeRegistration.from_cbor_bytes(cborBytes),
-    catch: () => new StakeRegistrationError({
-      message: `StakeRegistration.fromCborBytes failed with parameters: ${cborBytes}. Hint: Check byte length and encoding.`,
-    }),
-  });
-});
+export const fromCborBytes: (
+  cborBytes: Uint8Array,
+) => Effect.Effect<CML.StakeRegistration, StakeRegistrationError> = Effect.fn(
+  function* (cborBytes: Uint8Array) {
+    return yield* Effect.try({
+      try: () => CML.StakeRegistration.from_cbor_bytes(cborBytes),
+      catch: () =>
+        new StakeRegistrationError({
+          message: `StakeRegistration.fromCborBytes failed with parameters: ${cborBytes}. Hint: Check byte length and encoding.`,
+        }),
+    });
+  },
+);
 
 /**
  * Unsafely calls StakeRegistration.fromCborBytes without Effect wrapper
- * 
+ *
  * @since 2.0.0
  * @category ConstructorsUnsafe
  */
-export const fromCborBytesUnsafe = (cborBytes: Uint8Array): CML.StakeRegistration =>
-  Effect.runSync(fromCborBytes(cborBytes));
+export const fromCborBytesUnsafe = (
+  cborBytes: Uint8Array,
+): CML.StakeRegistration => Effect.runSync(fromCborBytes(cborBytes));
 
 /**
  * Method toCborHex of StakeRegistration
- * 
+ *
  * @since 2.0.0
  * @category Methods
  */
-export const toCborHex: (instance: CML.StakeRegistration) => Effect.Effect<string, StakeRegistrationError> = Effect.fn(
+export const toCborHex: (
+  instance: CML.StakeRegistration,
+) => Effect.Effect<string, StakeRegistrationError> = Effect.fn(
   (instance: CML.StakeRegistration) =>
     Effect.try({
       try: () => instance.to_cbor_hex(),
@@ -140,12 +158,12 @@ export const toCborHex: (instance: CML.StakeRegistration) => Effect.Effect<strin
         new StakeRegistrationError({
           message: `StakeRegistration.toCborHex failed StakeRegistration is not valid for string conversion. Hint: Make sure it's a valid hex string representing CBOR data.`,
         }),
-    })
+    }),
 );
 
 /**
  * Unsafely calls instance.toCborHex without Effect wrapper
- * 
+ *
  * @since 2.0.0
  * @category MethodsUnsafe
  */
@@ -154,11 +172,13 @@ export const toCborHexUnsafe = (instance: CML.StakeRegistration): string =>
 
 /**
  * Method toCanonicalCborHex of StakeRegistration
- * 
+ *
  * @since 2.0.0
  * @category Methods
  */
-export const toCanonicalCborHex: (instance: CML.StakeRegistration) => Effect.Effect<string, StakeRegistrationError> = Effect.fn(
+export const toCanonicalCborHex: (
+  instance: CML.StakeRegistration,
+) => Effect.Effect<string, StakeRegistrationError> = Effect.fn(
   (instance: CML.StakeRegistration) =>
     Effect.try({
       try: () => instance.to_canonical_cbor_hex(),
@@ -166,36 +186,42 @@ export const toCanonicalCborHex: (instance: CML.StakeRegistration) => Effect.Eff
         new StakeRegistrationError({
           message: `StakeRegistration.toCanonicalCborHex failed StakeRegistration is not valid for string conversion. Hint: Make sure it's a valid hex string representing CBOR data.`,
         }),
-    })
+    }),
 );
 
 /**
  * Unsafely calls instance.toCanonicalCborHex without Effect wrapper
- * 
+ *
  * @since 2.0.0
  * @category MethodsUnsafe
  */
-export const toCanonicalCborHexUnsafe = (instance: CML.StakeRegistration): string =>
-  Effect.runSync(toCanonicalCborHex(instance));
+export const toCanonicalCborHexUnsafe = (
+  instance: CML.StakeRegistration,
+): string => Effect.runSync(toCanonicalCborHex(instance));
 
 /**
  * Static method fromCborHex of StakeRegistration
- * 
+ *
  * @since 2.0.0
  * @category Constructors
  */
-export const fromCborHex: (cborBytes: string) => Effect.Effect<CML.StakeRegistration, StakeRegistrationError> = Effect.fn(function* (cborBytes: string) {
-  return yield* Effect.try({
-    try: () => CML.StakeRegistration.from_cbor_hex(cborBytes),
-    catch: () => new StakeRegistrationError({
-      message: `StakeRegistration.fromCborHex failed with parameters: ${cborBytes}. Hint: Make sure it's a valid hex string representing CBOR data.`,
-    }),
-  });
-});
+export const fromCborHex: (
+  cborBytes: string,
+) => Effect.Effect<CML.StakeRegistration, StakeRegistrationError> = Effect.fn(
+  function* (cborBytes: string) {
+    return yield* Effect.try({
+      try: () => CML.StakeRegistration.from_cbor_hex(cborBytes),
+      catch: () =>
+        new StakeRegistrationError({
+          message: `StakeRegistration.fromCborHex failed with parameters: ${cborBytes}. Hint: Make sure it's a valid hex string representing CBOR data.`,
+        }),
+    });
+  },
+);
 
 /**
  * Unsafely calls StakeRegistration.fromCborHex without Effect wrapper
- * 
+ *
  * @since 2.0.0
  * @category ConstructorsUnsafe
  */
@@ -204,11 +230,13 @@ export const fromCborHexUnsafe = (cborBytes: string): CML.StakeRegistration =>
 
 /**
  * Method toJson of StakeRegistration
- * 
+ *
  * @since 2.0.0
  * @category Methods
  */
-export const toJson: (instance: CML.StakeRegistration) => Effect.Effect<string, StakeRegistrationError> = Effect.fn(
+export const toJson: (
+  instance: CML.StakeRegistration,
+) => Effect.Effect<string, StakeRegistrationError> = Effect.fn(
   (instance: CML.StakeRegistration) =>
     Effect.try({
       try: () => instance.to_json(),
@@ -216,12 +244,12 @@ export const toJson: (instance: CML.StakeRegistration) => Effect.Effect<string, 
         new StakeRegistrationError({
           message: `StakeRegistration.toJson failed StakeRegistration is not valid for string conversion. Hint: Validate your JSON structure.`,
         }),
-    })
+    }),
 );
 
 /**
  * Unsafely calls instance.toJson without Effect wrapper
- * 
+ *
  * @since 2.0.0
  * @category MethodsUnsafe
  */
@@ -230,11 +258,13 @@ export const toJsonUnsafe = (instance: CML.StakeRegistration): string =>
 
 /**
  * Method toJsValue of StakeRegistration
- * 
+ *
  * @since 2.0.0
  * @category Methods
  */
-export const toJsValue: (instance: CML.StakeRegistration) => Effect.Effect<any, StakeRegistrationError> = Effect.fn(
+export const toJsValue: (
+  instance: CML.StakeRegistration,
+) => Effect.Effect<any, StakeRegistrationError> = Effect.fn(
   (instance: CML.StakeRegistration) =>
     Effect.try({
       try: () => instance.to_js_value(),
@@ -242,12 +272,12 @@ export const toJsValue: (instance: CML.StakeRegistration) => Effect.Effect<any, 
         new StakeRegistrationError({
           message: `StakeRegistration.toJsValue failed StakeRegistration is not valid for any conversion. `,
         }),
-    })
+    }),
 );
 
 /**
  * Unsafely calls instance.toJsValue without Effect wrapper
- * 
+ *
  * @since 2.0.0
  * @category MethodsUnsafe
  */
@@ -256,22 +286,27 @@ export const toJsValueUnsafe = (instance: CML.StakeRegistration): any =>
 
 /**
  * Static method fromJson of StakeRegistration
- * 
+ *
  * @since 2.0.0
  * @category Constructors
  */
-export const fromJson: (json: string) => Effect.Effect<CML.StakeRegistration, StakeRegistrationError> = Effect.fn(function* (json: string) {
-  return yield* Effect.try({
-    try: () => CML.StakeRegistration.from_json(json),
-    catch: () => new StakeRegistrationError({
-      message: `StakeRegistration.fromJson failed with parameters: ${json}. Hint: Validate your JSON structure.`,
-    }),
-  });
-});
+export const fromJson: (
+  json: string,
+) => Effect.Effect<CML.StakeRegistration, StakeRegistrationError> = Effect.fn(
+  function* (json: string) {
+    return yield* Effect.try({
+      try: () => CML.StakeRegistration.from_json(json),
+      catch: () =>
+        new StakeRegistrationError({
+          message: `StakeRegistration.fromJson failed with parameters: ${json}. Hint: Validate your JSON structure.`,
+        }),
+    });
+  },
+);
 
 /**
  * Unsafely calls StakeRegistration.fromJson without Effect wrapper
- * 
+ *
  * @since 2.0.0
  * @category ConstructorsUnsafe
  */
@@ -280,11 +315,13 @@ export const fromJsonUnsafe = (json: string): CML.StakeRegistration =>
 
 /**
  * Method stakeCredential of StakeRegistration
- * 
+ *
  * @since 2.0.0
  * @category Methods
  */
-export const stakeCredential: (instance: CML.StakeRegistration) => Effect.Effect<CML.Credential, StakeRegistrationError> = Effect.fn(
+export const stakeCredential: (
+  instance: CML.StakeRegistration,
+) => Effect.Effect<CML.Credential, StakeRegistrationError> = Effect.fn(
   (instance: CML.StakeRegistration) =>
     Effect.try({
       try: () => instance.stake_credential(),
@@ -292,38 +329,45 @@ export const stakeCredential: (instance: CML.StakeRegistration) => Effect.Effect
         new StakeRegistrationError({
           message: `StakeRegistration.stakeCredential failed `,
         }),
-    })
+    }),
 );
 
 /**
  * Unsafely calls instance.stakeCredential without Effect wrapper
- * 
+ *
  * @since 2.0.0
  * @category MethodsUnsafe
  */
-export const stakeCredentialUnsafe = (instance: CML.StakeRegistration): CML.Credential =>
-  Effect.runSync(stakeCredential(instance));
+export const stakeCredentialUnsafe = (
+  instance: CML.StakeRegistration,
+): CML.Credential => Effect.runSync(stakeCredential(instance));
 
 /**
  * Static method _new of StakeRegistration
- * 
+ *
  * @since 2.0.0
  * @category Constructors
  */
-export const _new: (stakeCredential: CML.Credential) => Effect.Effect<CML.StakeRegistration, StakeRegistrationError> = Effect.fn(function* (stakeCredential: CML.Credential) {
-  return yield* Effect.try({
-    try: () => CML.StakeRegistration.new(stakeCredential),
-    catch: () => new StakeRegistrationError({
-      message: `StakeRegistration._new failed with parameters: ${stakeCredential} (Credential). `,
-    }),
-  });
-});
+export const _new: (
+  stakeCredential: CML.Credential,
+) => Effect.Effect<CML.StakeRegistration, StakeRegistrationError> = Effect.fn(
+  function* (stakeCredential: CML.Credential) {
+    return yield* Effect.try({
+      try: () => CML.StakeRegistration.new(stakeCredential),
+      catch: () =>
+        new StakeRegistrationError({
+          message: `StakeRegistration._new failed with parameters: ${stakeCredential} (Credential). `,
+        }),
+    });
+  },
+);
 
 /**
  * Unsafely calls StakeRegistration._new without Effect wrapper
- * 
+ *
  * @since 2.0.0
  * @category ConstructorsUnsafe
  */
-export const _newUnsafe = (stakeCredential: CML.Credential): CML.StakeRegistration =>
-  Effect.runSync(_new(stakeCredential));
+export const _newUnsafe = (
+  stakeCredential: CML.Credential,
+): CML.StakeRegistration => Effect.runSync(_new(stakeCredential));

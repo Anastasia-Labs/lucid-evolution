@@ -13,7 +13,7 @@ export type RedeemersKind = CML.RedeemersKind;
 
 /**
  * ArrLegacyRedeemer variant of the RedeemersKind enum
- * 
+ *
  * @since 2.0.0
  * @category Variants
  */
@@ -21,27 +21,27 @@ export const ArrLegacyRedeemer = CML.RedeemersKind.ArrLegacyRedeemer;
 
 /**
  * MapRedeemerKeyToRedeemerVal variant of the RedeemersKind enum
- * 
+ *
  * @since 2.0.0
  * @category Variants
  */
-export const MapRedeemerKeyToRedeemerVal = CML.RedeemersKind.MapRedeemerKeyToRedeemerVal;
-
+export const MapRedeemerKeyToRedeemerVal =
+  CML.RedeemersKind.MapRedeemerKeyToRedeemerVal;
 
 /**
  * Get all values of the RedeemersKind enum
- * 
+ *
  * @since 2.0.0
  * @category Utils
  */
 export const values = (): Array<CML.RedeemersKind> => [
   CML.RedeemersKind.ArrLegacyRedeemer,
-  CML.RedeemersKind.MapRedeemerKeyToRedeemerVal
+  CML.RedeemersKind.MapRedeemerKeyToRedeemerVal,
 ];
 
 /**
  * Convert RedeemersKind enum value to string
- * 
+ *
  * @since 2.0.0
  * @category Utils
  */
@@ -58,7 +58,7 @@ export const toString = (value: CML.RedeemersKind): string => {
 
 /**
  * Convert string to RedeemersKind enum value
- * 
+ *
  * @since 2.0.0
  * @category Utils
  */

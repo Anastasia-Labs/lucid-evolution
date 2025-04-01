@@ -60,8 +60,8 @@ Static method \_new of UnregCert
 ```ts
 export declare const _new: (
   stakeCredential: CML.Credential,
-  deposit: bigint
-) => Effect.Effect<CML.UnregCert, UnregCertError>
+  deposit: bigint,
+) => Effect.Effect<CML.UnregCert, UnregCertError>;
 ```
 
 Added in v2.0.0
@@ -73,7 +73,9 @@ Static method fromCborBytes of UnregCert
 **Signature**
 
 ```ts
-export declare const fromCborBytes: (cborBytes: Uint8Array) => Effect.Effect<CML.UnregCert, UnregCertError>
+export declare const fromCborBytes: (
+  cborBytes: Uint8Array,
+) => Effect.Effect<CML.UnregCert, UnregCertError>;
 ```
 
 Added in v2.0.0
@@ -85,7 +87,9 @@ Static method fromCborHex of UnregCert
 **Signature**
 
 ```ts
-export declare const fromCborHex: (cborBytes: string) => Effect.Effect<CML.UnregCert, UnregCertError>
+export declare const fromCborHex: (
+  cborBytes: string,
+) => Effect.Effect<CML.UnregCert, UnregCertError>;
 ```
 
 Added in v2.0.0
@@ -97,7 +101,9 @@ Static method fromJson of UnregCert
 **Signature**
 
 ```ts
-export declare const fromJson: (json: string) => Effect.Effect<CML.UnregCert, UnregCertError>
+export declare const fromJson: (
+  json: string,
+) => Effect.Effect<CML.UnregCert, UnregCertError>;
 ```
 
 Added in v2.0.0
@@ -111,7 +117,10 @@ Unsafely calls UnregCert.\_new without Effect wrapper
 **Signature**
 
 ```ts
-export declare const _newUnsafe: (stakeCredential: CML.Credential, deposit: bigint) => CML.UnregCert
+export declare const _newUnsafe: (
+  stakeCredential: CML.Credential,
+  deposit: bigint,
+) => CML.UnregCert;
 ```
 
 Added in v2.0.0
@@ -123,7 +132,9 @@ Unsafely calls UnregCert.fromCborBytes without Effect wrapper
 **Signature**
 
 ```ts
-export declare const fromCborBytesUnsafe: (cborBytes: Uint8Array) => CML.UnregCert
+export declare const fromCborBytesUnsafe: (
+  cborBytes: Uint8Array,
+) => CML.UnregCert;
 ```
 
 Added in v2.0.0
@@ -135,7 +146,7 @@ Unsafely calls UnregCert.fromCborHex without Effect wrapper
 **Signature**
 
 ```ts
-export declare const fromCborHexUnsafe: (cborBytes: string) => CML.UnregCert
+export declare const fromCborHexUnsafe: (cborBytes: string) => CML.UnregCert;
 ```
 
 Added in v2.0.0
@@ -147,7 +158,7 @@ Unsafely calls UnregCert.fromJson without Effect wrapper
 **Signature**
 
 ```ts
-export declare const fromJsonUnsafe: (json: string) => CML.UnregCert
+export declare const fromJsonUnsafe: (json: string) => CML.UnregCert;
 ```
 
 Added in v2.0.0
@@ -177,7 +188,9 @@ Method deposit of UnregCert
 **Signature**
 
 ```ts
-export declare const deposit: (instance: CML.UnregCert) => Effect.Effect<bigint, UnregCertError>
+export declare const deposit: (
+  instance: CML.UnregCert,
+) => Effect.Effect<bigint, UnregCertError>;
 ```
 
 Added in v2.0.0
@@ -189,7 +202,9 @@ Method free of UnregCert
 **Signature**
 
 ```ts
-export declare const free: (instance: CML.UnregCert) => Effect.Effect<void, UnregCertError>
+export declare const free: (
+  instance: CML.UnregCert,
+) => Effect.Effect<void, UnregCertError>;
 ```
 
 Added in v2.0.0
@@ -201,7 +216,9 @@ Method stakeCredential of UnregCert
 **Signature**
 
 ```ts
-export declare const stakeCredential: (instance: CML.UnregCert) => Effect.Effect<CML.Credential, UnregCertError>
+export declare const stakeCredential: (
+  instance: CML.UnregCert,
+) => Effect.Effect<CML.Credential, UnregCertError>;
 ```
 
 Added in v2.0.0
@@ -213,7 +230,9 @@ Method toCanonicalCborBytes of UnregCert
 **Signature**
 
 ```ts
-export declare const toCanonicalCborBytes: (instance: CML.UnregCert) => Effect.Effect<Uint8Array, UnregCertError>
+export declare const toCanonicalCborBytes: (
+  instance: CML.UnregCert,
+) => Effect.Effect<Uint8Array, UnregCertError>;
 ```
 
 Added in v2.0.0
@@ -225,7 +244,9 @@ Method toCanonicalCborHex of UnregCert
 **Signature**
 
 ```ts
-export declare const toCanonicalCborHex: (instance: CML.UnregCert) => Effect.Effect<string, UnregCertError>
+export declare const toCanonicalCborHex: (
+  instance: CML.UnregCert,
+) => Effect.Effect<string, UnregCertError>;
 ```
 
 Added in v2.0.0
@@ -237,7 +258,9 @@ Method toCborBytes of UnregCert
 **Signature**
 
 ```ts
-export declare const toCborBytes: (instance: CML.UnregCert) => Effect.Effect<Uint8Array, UnregCertError>
+export declare const toCborBytes: (
+  instance: CML.UnregCert,
+) => Effect.Effect<Uint8Array, UnregCertError>;
 ```
 
 Added in v2.0.0
@@ -249,7 +272,9 @@ Method toCborHex of UnregCert
 **Signature**
 
 ```ts
-export declare const toCborHex: (instance: CML.UnregCert) => Effect.Effect<string, UnregCertError>
+export declare const toCborHex: (
+  instance: CML.UnregCert,
+) => Effect.Effect<string, UnregCertError>;
 ```
 
 Added in v2.0.0
@@ -261,7 +286,9 @@ Method toJsValue of UnregCert
 **Signature**
 
 ```ts
-export declare const toJsValue: (instance: CML.UnregCert) => Effect.Effect<any, UnregCertError>
+export declare const toJsValue: (
+  instance: CML.UnregCert,
+) => Effect.Effect<any, UnregCertError>;
 ```
 
 Added in v2.0.0
@@ -273,7 +300,9 @@ Method toJson of UnregCert
 **Signature**
 
 ```ts
-export declare const toJson: (instance: CML.UnregCert) => Effect.Effect<string, UnregCertError>
+export declare const toJson: (
+  instance: CML.UnregCert,
+) => Effect.Effect<string, UnregCertError>;
 ```
 
 Added in v2.0.0
@@ -287,7 +316,7 @@ Unsafely calls instance.deposit without Effect wrapper
 **Signature**
 
 ```ts
-export declare const depositUnsafe: (instance: CML.UnregCert) => bigint
+export declare const depositUnsafe: (instance: CML.UnregCert) => bigint;
 ```
 
 Added in v2.0.0
@@ -299,7 +328,7 @@ Unsafely calls instance.free without Effect wrapper
 **Signature**
 
 ```ts
-export declare const freeUnsafe: (instance: CML.UnregCert) => void
+export declare const freeUnsafe: (instance: CML.UnregCert) => void;
 ```
 
 Added in v2.0.0
@@ -311,7 +340,9 @@ Unsafely calls instance.stakeCredential without Effect wrapper
 **Signature**
 
 ```ts
-export declare const stakeCredentialUnsafe: (instance: CML.UnregCert) => CML.Credential
+export declare const stakeCredentialUnsafe: (
+  instance: CML.UnregCert,
+) => CML.Credential;
 ```
 
 Added in v2.0.0
@@ -323,7 +354,9 @@ Unsafely calls instance.toCanonicalCborBytes without Effect wrapper
 **Signature**
 
 ```ts
-export declare const toCanonicalCborBytesUnsafe: (instance: CML.UnregCert) => Uint8Array
+export declare const toCanonicalCborBytesUnsafe: (
+  instance: CML.UnregCert,
+) => Uint8Array;
 ```
 
 Added in v2.0.0
@@ -335,7 +368,9 @@ Unsafely calls instance.toCanonicalCborHex without Effect wrapper
 **Signature**
 
 ```ts
-export declare const toCanonicalCborHexUnsafe: (instance: CML.UnregCert) => string
+export declare const toCanonicalCborHexUnsafe: (
+  instance: CML.UnregCert,
+) => string;
 ```
 
 Added in v2.0.0
@@ -347,7 +382,7 @@ Unsafely calls instance.toCborBytes without Effect wrapper
 **Signature**
 
 ```ts
-export declare const toCborBytesUnsafe: (instance: CML.UnregCert) => Uint8Array
+export declare const toCborBytesUnsafe: (instance: CML.UnregCert) => Uint8Array;
 ```
 
 Added in v2.0.0
@@ -359,7 +394,7 @@ Unsafely calls instance.toCborHex without Effect wrapper
 **Signature**
 
 ```ts
-export declare const toCborHexUnsafe: (instance: CML.UnregCert) => string
+export declare const toCborHexUnsafe: (instance: CML.UnregCert) => string;
 ```
 
 Added in v2.0.0
@@ -371,7 +406,7 @@ Unsafely calls instance.toJsValue without Effect wrapper
 **Signature**
 
 ```ts
-export declare const toJsValueUnsafe: (instance: CML.UnregCert) => any
+export declare const toJsValueUnsafe: (instance: CML.UnregCert) => any;
 ```
 
 Added in v2.0.0
@@ -383,7 +418,7 @@ Unsafely calls instance.toJson without Effect wrapper
 **Signature**
 
 ```ts
-export declare const toJsonUnsafe: (instance: CML.UnregCert) => string
+export declare const toJsonUnsafe: (instance: CML.UnregCert) => string;
 ```
 
 Added in v2.0.0
@@ -397,7 +432,7 @@ Type alias for the CML UnregCert class
 **Signature**
 
 ```ts
-export type UnregCert = CML.UnregCert
+export type UnregCert = CML.UnregCert;
 ```
 
 Added in v2.0.0

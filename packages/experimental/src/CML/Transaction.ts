@@ -14,7 +14,7 @@ export type Transaction = CML.Transaction;
 
 /**
  * Error class for Transaction operations
- * 
+ *
  * This error is thrown when operations on Transaction instances fail.
  *
  * @since 2.0.0
@@ -26,11 +26,13 @@ export class TransactionError extends Data.TaggedError("TransactionError")<{
 
 /**
  * Method free of Transaction
- * 
+ *
  * @since 2.0.0
  * @category Methods
  */
-export const free: (instance: CML.Transaction) => Effect.Effect<void, TransactionError> = Effect.fn(
+export const free: (
+  instance: CML.Transaction,
+) => Effect.Effect<void, TransactionError> = Effect.fn(
   (instance: CML.Transaction) =>
     Effect.try({
       try: () => instance.free(),
@@ -38,12 +40,12 @@ export const free: (instance: CML.Transaction) => Effect.Effect<void, Transactio
         new TransactionError({
           message: `Transaction.free failed Hint: Check if you're calling free() more than once.`,
         }),
-    })
+    }),
 );
 
 /**
  * Unsafely calls instance.free without Effect wrapper
- * 
+ *
  * @since 2.0.0
  * @category MethodsUnsafe
  */
@@ -52,11 +54,13 @@ export const freeUnsafe = (instance: CML.Transaction): void =>
 
 /**
  * Method toCborBytes of Transaction
- * 
+ *
  * @since 2.0.0
  * @category Methods
  */
-export const toCborBytes: (instance: CML.Transaction) => Effect.Effect<Uint8Array, TransactionError> = Effect.fn(
+export const toCborBytes: (
+  instance: CML.Transaction,
+) => Effect.Effect<Uint8Array, TransactionError> = Effect.fn(
   (instance: CML.Transaction) =>
     Effect.try({
       try: () => instance.to_cbor_bytes(),
@@ -64,12 +68,12 @@ export const toCborBytes: (instance: CML.Transaction) => Effect.Effect<Uint8Arra
         new TransactionError({
           message: `Transaction.toCborBytes failed Transaction is not valid for Uint8Array conversion. Hint: Check byte length and encoding.`,
         }),
-    })
+    }),
 );
 
 /**
  * Unsafely calls instance.toCborBytes without Effect wrapper
- * 
+ *
  * @since 2.0.0
  * @category MethodsUnsafe
  */
@@ -78,11 +82,13 @@ export const toCborBytesUnsafe = (instance: CML.Transaction): Uint8Array =>
 
 /**
  * Method toCanonicalCborBytes of Transaction
- * 
+ *
  * @since 2.0.0
  * @category Methods
  */
-export const toCanonicalCborBytes: (instance: CML.Transaction) => Effect.Effect<Uint8Array, TransactionError> = Effect.fn(
+export const toCanonicalCborBytes: (
+  instance: CML.Transaction,
+) => Effect.Effect<Uint8Array, TransactionError> = Effect.fn(
   (instance: CML.Transaction) =>
     Effect.try({
       try: () => instance.to_canonical_cbor_bytes(),
@@ -90,36 +96,42 @@ export const toCanonicalCborBytes: (instance: CML.Transaction) => Effect.Effect<
         new TransactionError({
           message: `Transaction.toCanonicalCborBytes failed Transaction is not valid for Uint8Array conversion. Hint: Check byte length and encoding.`,
         }),
-    })
+    }),
 );
 
 /**
  * Unsafely calls instance.toCanonicalCborBytes without Effect wrapper
- * 
+ *
  * @since 2.0.0
  * @category MethodsUnsafe
  */
-export const toCanonicalCborBytesUnsafe = (instance: CML.Transaction): Uint8Array =>
-  Effect.runSync(toCanonicalCborBytes(instance));
+export const toCanonicalCborBytesUnsafe = (
+  instance: CML.Transaction,
+): Uint8Array => Effect.runSync(toCanonicalCborBytes(instance));
 
 /**
  * Static method fromCborBytes of Transaction
- * 
+ *
  * @since 2.0.0
  * @category Constructors
  */
-export const fromCborBytes: (cborBytes: Uint8Array) => Effect.Effect<CML.Transaction, TransactionError> = Effect.fn(function* (cborBytes: Uint8Array) {
+export const fromCborBytes: (
+  cborBytes: Uint8Array,
+) => Effect.Effect<CML.Transaction, TransactionError> = Effect.fn(function* (
+  cborBytes: Uint8Array,
+) {
   return yield* Effect.try({
     try: () => CML.Transaction.from_cbor_bytes(cborBytes),
-    catch: () => new TransactionError({
-      message: `Transaction.fromCborBytes failed with parameters: ${cborBytes}. Hint: Check byte length and encoding.`,
-    }),
+    catch: () =>
+      new TransactionError({
+        message: `Transaction.fromCborBytes failed with parameters: ${cborBytes}. Hint: Check byte length and encoding.`,
+      }),
   });
 });
 
 /**
  * Unsafely calls Transaction.fromCborBytes without Effect wrapper
- * 
+ *
  * @since 2.0.0
  * @category ConstructorsUnsafe
  */
@@ -128,11 +140,13 @@ export const fromCborBytesUnsafe = (cborBytes: Uint8Array): CML.Transaction =>
 
 /**
  * Method toCborHex of Transaction
- * 
+ *
  * @since 2.0.0
  * @category Methods
  */
-export const toCborHex: (instance: CML.Transaction) => Effect.Effect<string, TransactionError> = Effect.fn(
+export const toCborHex: (
+  instance: CML.Transaction,
+) => Effect.Effect<string, TransactionError> = Effect.fn(
   (instance: CML.Transaction) =>
     Effect.try({
       try: () => instance.to_cbor_hex(),
@@ -140,12 +154,12 @@ export const toCborHex: (instance: CML.Transaction) => Effect.Effect<string, Tra
         new TransactionError({
           message: `Transaction.toCborHex failed Transaction is not valid for string conversion. Hint: Make sure it's a valid hex string representing CBOR data.`,
         }),
-    })
+    }),
 );
 
 /**
  * Unsafely calls instance.toCborHex without Effect wrapper
- * 
+ *
  * @since 2.0.0
  * @category MethodsUnsafe
  */
@@ -154,11 +168,13 @@ export const toCborHexUnsafe = (instance: CML.Transaction): string =>
 
 /**
  * Method toCanonicalCborHex of Transaction
- * 
+ *
  * @since 2.0.0
  * @category Methods
  */
-export const toCanonicalCborHex: (instance: CML.Transaction) => Effect.Effect<string, TransactionError> = Effect.fn(
+export const toCanonicalCborHex: (
+  instance: CML.Transaction,
+) => Effect.Effect<string, TransactionError> = Effect.fn(
   (instance: CML.Transaction) =>
     Effect.try({
       try: () => instance.to_canonical_cbor_hex(),
@@ -166,12 +182,12 @@ export const toCanonicalCborHex: (instance: CML.Transaction) => Effect.Effect<st
         new TransactionError({
           message: `Transaction.toCanonicalCborHex failed Transaction is not valid for string conversion. Hint: Make sure it's a valid hex string representing CBOR data.`,
         }),
-    })
+    }),
 );
 
 /**
  * Unsafely calls instance.toCanonicalCborHex without Effect wrapper
- * 
+ *
  * @since 2.0.0
  * @category MethodsUnsafe
  */
@@ -180,22 +196,27 @@ export const toCanonicalCborHexUnsafe = (instance: CML.Transaction): string =>
 
 /**
  * Static method fromCborHex of Transaction
- * 
+ *
  * @since 2.0.0
  * @category Constructors
  */
-export const fromCborHex: (cborBytes: string) => Effect.Effect<CML.Transaction, TransactionError> = Effect.fn(function* (cborBytes: string) {
+export const fromCborHex: (
+  cborBytes: string,
+) => Effect.Effect<CML.Transaction, TransactionError> = Effect.fn(function* (
+  cborBytes: string,
+) {
   return yield* Effect.try({
     try: () => CML.Transaction.from_cbor_hex(cborBytes),
-    catch: () => new TransactionError({
-      message: `Transaction.fromCborHex failed with parameters: ${cborBytes}. Hint: Make sure it's a valid hex string representing CBOR data.`,
-    }),
+    catch: () =>
+      new TransactionError({
+        message: `Transaction.fromCborHex failed with parameters: ${cborBytes}. Hint: Make sure it's a valid hex string representing CBOR data.`,
+      }),
   });
 });
 
 /**
  * Unsafely calls Transaction.fromCborHex without Effect wrapper
- * 
+ *
  * @since 2.0.0
  * @category ConstructorsUnsafe
  */
@@ -204,11 +225,13 @@ export const fromCborHexUnsafe = (cborBytes: string): CML.Transaction =>
 
 /**
  * Method toJson of Transaction
- * 
+ *
  * @since 2.0.0
  * @category Methods
  */
-export const toJson: (instance: CML.Transaction) => Effect.Effect<string, TransactionError> = Effect.fn(
+export const toJson: (
+  instance: CML.Transaction,
+) => Effect.Effect<string, TransactionError> = Effect.fn(
   (instance: CML.Transaction) =>
     Effect.try({
       try: () => instance.to_json(),
@@ -216,12 +239,12 @@ export const toJson: (instance: CML.Transaction) => Effect.Effect<string, Transa
         new TransactionError({
           message: `Transaction.toJson failed Transaction is not valid for string conversion. Hint: Validate your JSON structure.`,
         }),
-    })
+    }),
 );
 
 /**
  * Unsafely calls instance.toJson without Effect wrapper
- * 
+ *
  * @since 2.0.0
  * @category MethodsUnsafe
  */
@@ -230,11 +253,13 @@ export const toJsonUnsafe = (instance: CML.Transaction): string =>
 
 /**
  * Method toJsValue of Transaction
- * 
+ *
  * @since 2.0.0
  * @category Methods
  */
-export const toJsValue: (instance: CML.Transaction) => Effect.Effect<any, TransactionError> = Effect.fn(
+export const toJsValue: (
+  instance: CML.Transaction,
+) => Effect.Effect<any, TransactionError> = Effect.fn(
   (instance: CML.Transaction) =>
     Effect.try({
       try: () => instance.to_js_value(),
@@ -242,12 +267,12 @@ export const toJsValue: (instance: CML.Transaction) => Effect.Effect<any, Transa
         new TransactionError({
           message: `Transaction.toJsValue failed Transaction is not valid for any conversion. `,
         }),
-    })
+    }),
 );
 
 /**
  * Unsafely calls instance.toJsValue without Effect wrapper
- * 
+ *
  * @since 2.0.0
  * @category MethodsUnsafe
  */
@@ -256,22 +281,27 @@ export const toJsValueUnsafe = (instance: CML.Transaction): any =>
 
 /**
  * Static method fromJson of Transaction
- * 
+ *
  * @since 2.0.0
  * @category Constructors
  */
-export const fromJson: (json: string) => Effect.Effect<CML.Transaction, TransactionError> = Effect.fn(function* (json: string) {
+export const fromJson: (
+  json: string,
+) => Effect.Effect<CML.Transaction, TransactionError> = Effect.fn(function* (
+  json: string,
+) {
   return yield* Effect.try({
     try: () => CML.Transaction.from_json(json),
-    catch: () => new TransactionError({
-      message: `Transaction.fromJson failed with parameters: ${json}. Hint: Validate your JSON structure.`,
-    }),
+    catch: () =>
+      new TransactionError({
+        message: `Transaction.fromJson failed with parameters: ${json}. Hint: Validate your JSON structure.`,
+      }),
   });
 });
 
 /**
  * Unsafely calls Transaction.fromJson without Effect wrapper
- * 
+ *
  * @since 2.0.0
  * @category ConstructorsUnsafe
  */
@@ -280,11 +310,13 @@ export const fromJsonUnsafe = (json: string): CML.Transaction =>
 
 /**
  * Method body of Transaction
- * 
+ *
  * @since 2.0.0
  * @category Methods
  */
-export const body: (instance: CML.Transaction) => Effect.Effect<CML.TransactionBody, TransactionError> = Effect.fn(
+export const body: (
+  instance: CML.Transaction,
+) => Effect.Effect<CML.TransactionBody, TransactionError> = Effect.fn(
   (instance: CML.Transaction) =>
     Effect.try({
       try: () => instance.body(),
@@ -292,12 +324,12 @@ export const body: (instance: CML.Transaction) => Effect.Effect<CML.TransactionB
         new TransactionError({
           message: `Transaction.body failed `,
         }),
-    })
+    }),
 );
 
 /**
  * Unsafely calls instance.body without Effect wrapper
- * 
+ *
  * @since 2.0.0
  * @category MethodsUnsafe
  */
@@ -306,11 +338,13 @@ export const bodyUnsafe = (instance: CML.Transaction): CML.TransactionBody =>
 
 /**
  * Method witnessSet of Transaction
- * 
+ *
  * @since 2.0.0
  * @category Methods
  */
-export const witnessSet: (instance: CML.Transaction) => Effect.Effect<CML.TransactionWitnessSet, TransactionError> = Effect.fn(
+export const witnessSet: (
+  instance: CML.Transaction,
+) => Effect.Effect<CML.TransactionWitnessSet, TransactionError> = Effect.fn(
   (instance: CML.Transaction) =>
     Effect.try({
       try: () => instance.witness_set(),
@@ -318,25 +352,28 @@ export const witnessSet: (instance: CML.Transaction) => Effect.Effect<CML.Transa
         new TransactionError({
           message: `Transaction.witnessSet failed `,
         }),
-    })
+    }),
 );
 
 /**
  * Unsafely calls instance.witnessSet without Effect wrapper
- * 
+ *
  * @since 2.0.0
  * @category MethodsUnsafe
  */
-export const witnessSetUnsafe = (instance: CML.Transaction): CML.TransactionWitnessSet =>
-  Effect.runSync(witnessSet(instance));
+export const witnessSetUnsafe = (
+  instance: CML.Transaction,
+): CML.TransactionWitnessSet => Effect.runSync(witnessSet(instance));
 
 /**
  * Method isValid of Transaction
- * 
+ *
  * @since 2.0.0
  * @category Methods
  */
-export const isValid: (instance: CML.Transaction) => Effect.Effect<boolean, TransactionError> = Effect.fn(
+export const isValid: (
+  instance: CML.Transaction,
+) => Effect.Effect<boolean, TransactionError> = Effect.fn(
   (instance: CML.Transaction) =>
     Effect.try({
       try: () => instance.is_valid(),
@@ -344,12 +381,12 @@ export const isValid: (instance: CML.Transaction) => Effect.Effect<boolean, Tran
         new TransactionError({
           message: `Transaction.isValid failed `,
         }),
-    })
+    }),
 );
 
 /**
  * Unsafely calls instance.isValid without Effect wrapper
- * 
+ *
  * @since 2.0.0
  * @category MethodsUnsafe
  */
@@ -358,11 +395,13 @@ export const isValidUnsafe = (instance: CML.Transaction): boolean =>
 
 /**
  * Method auxiliaryData of Transaction
- * 
+ *
  * @since 2.0.0
  * @category Methods
  */
-export const auxiliaryData: (instance: CML.Transaction) => Effect.Effect<CML.AuxiliaryData | undefined, TransactionError> = Effect.fn(
+export const auxiliaryData: (
+  instance: CML.Transaction,
+) => Effect.Effect<CML.AuxiliaryData | undefined, TransactionError> = Effect.fn(
   (instance: CML.Transaction) =>
     Effect.try({
       try: () => instance.auxiliary_data(),
@@ -370,38 +409,55 @@ export const auxiliaryData: (instance: CML.Transaction) => Effect.Effect<CML.Aux
         new TransactionError({
           message: `Transaction.auxiliaryData failed `,
         }),
-    })
+    }),
 );
 
 /**
  * Unsafely calls instance.auxiliaryData without Effect wrapper
- * 
+ *
  * @since 2.0.0
  * @category MethodsUnsafe
  */
-export const auxiliaryDataUnsafe = (instance: CML.Transaction): CML.AuxiliaryData | undefined =>
-  Effect.runSync(auxiliaryData(instance));
+export const auxiliaryDataUnsafe = (
+  instance: CML.Transaction,
+): CML.AuxiliaryData | undefined => Effect.runSync(auxiliaryData(instance));
 
 /**
  * Static method _new of Transaction
- * 
+ *
  * @since 2.0.0
  * @category Constructors
  */
-export const _new: (body: CML.TransactionBody, witnessSet: CML.TransactionWitnessSet, isValid: boolean, auxiliaryData: CML.AuxiliaryData) => Effect.Effect<CML.Transaction, TransactionError> = Effect.fn(function* (body: CML.TransactionBody, witnessSet: CML.TransactionWitnessSet, isValid: boolean, auxiliaryData: CML.AuxiliaryData) {
+export const _new: (
+  body: CML.TransactionBody,
+  witnessSet: CML.TransactionWitnessSet,
+  isValid: boolean,
+  auxiliaryData: CML.AuxiliaryData,
+) => Effect.Effect<CML.Transaction, TransactionError> = Effect.fn(function* (
+  body: CML.TransactionBody,
+  witnessSet: CML.TransactionWitnessSet,
+  isValid: boolean,
+  auxiliaryData: CML.AuxiliaryData,
+) {
   return yield* Effect.try({
     try: () => CML.Transaction.new(body, witnessSet, isValid, auxiliaryData),
-    catch: () => new TransactionError({
-      message: `Transaction._new failed with parameters: ${body} (TransactionBody), ${witnessSet} (TransactionWitnessSet), ${isValid}, ${auxiliaryData} (AuxiliaryData). `,
-    }),
+    catch: () =>
+      new TransactionError({
+        message: `Transaction._new failed with parameters: ${body} (TransactionBody), ${witnessSet} (TransactionWitnessSet), ${isValid}, ${auxiliaryData} (AuxiliaryData). `,
+      }),
   });
 });
 
 /**
  * Unsafely calls Transaction._new without Effect wrapper
- * 
+ *
  * @since 2.0.0
  * @category ConstructorsUnsafe
  */
-export const _newUnsafe = (body: CML.TransactionBody, witnessSet: CML.TransactionWitnessSet, isValid: boolean, auxiliaryData: CML.AuxiliaryData): CML.Transaction =>
+export const _newUnsafe = (
+  body: CML.TransactionBody,
+  witnessSet: CML.TransactionWitnessSet,
+  isValid: boolean,
+  auxiliaryData: CML.AuxiliaryData,
+): CML.Transaction =>
   Effect.runSync(_new(body, witnessSet, isValid, auxiliaryData));

@@ -13,7 +13,7 @@ export type SpendingDataKind = CML.SpendingDataKind;
 
 /**
  * SpendingDataPubKey variant of the SpendingDataKind enum
- * 
+ *
  * @since 2.0.0
  * @category Variants
  */
@@ -21,7 +21,7 @@ export const SpendingDataPubKey = CML.SpendingDataKind.SpendingDataPubKey;
 
 /**
  * SpendingDataScript variant of the SpendingDataKind enum
- * 
+ *
  * @since 2.0.0
  * @category Variants
  */
@@ -29,28 +29,27 @@ export const SpendingDataScript = CML.SpendingDataKind.SpendingDataScript;
 
 /**
  * SpendingDataRedeem variant of the SpendingDataKind enum
- * 
+ *
  * @since 2.0.0
  * @category Variants
  */
 export const SpendingDataRedeem = CML.SpendingDataKind.SpendingDataRedeem;
 
-
 /**
  * Get all values of the SpendingDataKind enum
- * 
+ *
  * @since 2.0.0
  * @category Utils
  */
 export const values = (): Array<CML.SpendingDataKind> => [
   CML.SpendingDataKind.SpendingDataPubKey,
   CML.SpendingDataKind.SpendingDataScript,
-  CML.SpendingDataKind.SpendingDataRedeem
+  CML.SpendingDataKind.SpendingDataRedeem,
 ];
 
 /**
  * Convert SpendingDataKind enum value to string
- * 
+ *
  * @since 2.0.0
  * @category Utils
  */
@@ -69,7 +68,7 @@ export const toString = (value: CML.SpendingDataKind): string => {
 
 /**
  * Convert string to SpendingDataKind enum value
- * 
+ *
  * @since 2.0.0
  * @category Utils
  */

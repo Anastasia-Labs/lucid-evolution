@@ -14,7 +14,7 @@ export type RegCert = CML.RegCert;
 
 /**
  * Error class for RegCert operations
- * 
+ *
  * This error is thrown when operations on RegCert instances fail.
  *
  * @since 2.0.0
@@ -26,24 +26,25 @@ export class RegCertError extends Data.TaggedError("RegCertError")<{
 
 /**
  * Method free of RegCert
- * 
+ *
  * @since 2.0.0
  * @category Methods
  */
-export const free: (instance: CML.RegCert) => Effect.Effect<void, RegCertError> = Effect.fn(
-  (instance: CML.RegCert) =>
-    Effect.try({
-      try: () => instance.free(),
-      catch: () =>
-        new RegCertError({
-          message: `RegCert.free failed Hint: Check if you're calling free() more than once.`,
-        }),
-    })
+export const free: (
+  instance: CML.RegCert,
+) => Effect.Effect<void, RegCertError> = Effect.fn((instance: CML.RegCert) =>
+  Effect.try({
+    try: () => instance.free(),
+    catch: () =>
+      new RegCertError({
+        message: `RegCert.free failed Hint: Check if you're calling free() more than once.`,
+      }),
+  }),
 );
 
 /**
  * Unsafely calls instance.free without Effect wrapper
- * 
+ *
  * @since 2.0.0
  * @category MethodsUnsafe
  */
@@ -52,11 +53,13 @@ export const freeUnsafe = (instance: CML.RegCert): void =>
 
 /**
  * Method toCborBytes of RegCert
- * 
+ *
  * @since 2.0.0
  * @category Methods
  */
-export const toCborBytes: (instance: CML.RegCert) => Effect.Effect<Uint8Array, RegCertError> = Effect.fn(
+export const toCborBytes: (
+  instance: CML.RegCert,
+) => Effect.Effect<Uint8Array, RegCertError> = Effect.fn(
   (instance: CML.RegCert) =>
     Effect.try({
       try: () => instance.to_cbor_bytes(),
@@ -64,12 +67,12 @@ export const toCborBytes: (instance: CML.RegCert) => Effect.Effect<Uint8Array, R
         new RegCertError({
           message: `RegCert.toCborBytes failed RegCert is not valid for Uint8Array conversion. Hint: Check byte length and encoding.`,
         }),
-    })
+    }),
 );
 
 /**
  * Unsafely calls instance.toCborBytes without Effect wrapper
- * 
+ *
  * @since 2.0.0
  * @category MethodsUnsafe
  */
@@ -78,11 +81,13 @@ export const toCborBytesUnsafe = (instance: CML.RegCert): Uint8Array =>
 
 /**
  * Method toCanonicalCborBytes of RegCert
- * 
+ *
  * @since 2.0.0
  * @category Methods
  */
-export const toCanonicalCborBytes: (instance: CML.RegCert) => Effect.Effect<Uint8Array, RegCertError> = Effect.fn(
+export const toCanonicalCborBytes: (
+  instance: CML.RegCert,
+) => Effect.Effect<Uint8Array, RegCertError> = Effect.fn(
   (instance: CML.RegCert) =>
     Effect.try({
       try: () => instance.to_canonical_cbor_bytes(),
@@ -90,12 +95,12 @@ export const toCanonicalCborBytes: (instance: CML.RegCert) => Effect.Effect<Uint
         new RegCertError({
           message: `RegCert.toCanonicalCborBytes failed RegCert is not valid for Uint8Array conversion. Hint: Check byte length and encoding.`,
         }),
-    })
+    }),
 );
 
 /**
  * Unsafely calls instance.toCanonicalCborBytes without Effect wrapper
- * 
+ *
  * @since 2.0.0
  * @category MethodsUnsafe
  */
@@ -104,22 +109,27 @@ export const toCanonicalCborBytesUnsafe = (instance: CML.RegCert): Uint8Array =>
 
 /**
  * Static method fromCborBytes of RegCert
- * 
+ *
  * @since 2.0.0
  * @category Constructors
  */
-export const fromCborBytes: (cborBytes: Uint8Array) => Effect.Effect<CML.RegCert, RegCertError> = Effect.fn(function* (cborBytes: Uint8Array) {
+export const fromCborBytes: (
+  cborBytes: Uint8Array,
+) => Effect.Effect<CML.RegCert, RegCertError> = Effect.fn(function* (
+  cborBytes: Uint8Array,
+) {
   return yield* Effect.try({
     try: () => CML.RegCert.from_cbor_bytes(cborBytes),
-    catch: () => new RegCertError({
-      message: `RegCert.fromCborBytes failed with parameters: ${cborBytes}. Hint: Check byte length and encoding.`,
-    }),
+    catch: () =>
+      new RegCertError({
+        message: `RegCert.fromCborBytes failed with parameters: ${cborBytes}. Hint: Check byte length and encoding.`,
+      }),
   });
 });
 
 /**
  * Unsafely calls RegCert.fromCborBytes without Effect wrapper
- * 
+ *
  * @since 2.0.0
  * @category ConstructorsUnsafe
  */
@@ -128,24 +138,25 @@ export const fromCborBytesUnsafe = (cborBytes: Uint8Array): CML.RegCert =>
 
 /**
  * Method toCborHex of RegCert
- * 
+ *
  * @since 2.0.0
  * @category Methods
  */
-export const toCborHex: (instance: CML.RegCert) => Effect.Effect<string, RegCertError> = Effect.fn(
-  (instance: CML.RegCert) =>
-    Effect.try({
-      try: () => instance.to_cbor_hex(),
-      catch: () =>
-        new RegCertError({
-          message: `RegCert.toCborHex failed RegCert is not valid for string conversion. Hint: Make sure it's a valid hex string representing CBOR data.`,
-        }),
-    })
+export const toCborHex: (
+  instance: CML.RegCert,
+) => Effect.Effect<string, RegCertError> = Effect.fn((instance: CML.RegCert) =>
+  Effect.try({
+    try: () => instance.to_cbor_hex(),
+    catch: () =>
+      new RegCertError({
+        message: `RegCert.toCborHex failed RegCert is not valid for string conversion. Hint: Make sure it's a valid hex string representing CBOR data.`,
+      }),
+  }),
 );
 
 /**
  * Unsafely calls instance.toCborHex without Effect wrapper
- * 
+ *
  * @since 2.0.0
  * @category MethodsUnsafe
  */
@@ -154,24 +165,25 @@ export const toCborHexUnsafe = (instance: CML.RegCert): string =>
 
 /**
  * Method toCanonicalCborHex of RegCert
- * 
+ *
  * @since 2.0.0
  * @category Methods
  */
-export const toCanonicalCborHex: (instance: CML.RegCert) => Effect.Effect<string, RegCertError> = Effect.fn(
-  (instance: CML.RegCert) =>
-    Effect.try({
-      try: () => instance.to_canonical_cbor_hex(),
-      catch: () =>
-        new RegCertError({
-          message: `RegCert.toCanonicalCborHex failed RegCert is not valid for string conversion. Hint: Make sure it's a valid hex string representing CBOR data.`,
-        }),
-    })
+export const toCanonicalCborHex: (
+  instance: CML.RegCert,
+) => Effect.Effect<string, RegCertError> = Effect.fn((instance: CML.RegCert) =>
+  Effect.try({
+    try: () => instance.to_canonical_cbor_hex(),
+    catch: () =>
+      new RegCertError({
+        message: `RegCert.toCanonicalCborHex failed RegCert is not valid for string conversion. Hint: Make sure it's a valid hex string representing CBOR data.`,
+      }),
+  }),
 );
 
 /**
  * Unsafely calls instance.toCanonicalCborHex without Effect wrapper
- * 
+ *
  * @since 2.0.0
  * @category MethodsUnsafe
  */
@@ -180,22 +192,27 @@ export const toCanonicalCborHexUnsafe = (instance: CML.RegCert): string =>
 
 /**
  * Static method fromCborHex of RegCert
- * 
+ *
  * @since 2.0.0
  * @category Constructors
  */
-export const fromCborHex: (cborBytes: string) => Effect.Effect<CML.RegCert, RegCertError> = Effect.fn(function* (cborBytes: string) {
+export const fromCborHex: (
+  cborBytes: string,
+) => Effect.Effect<CML.RegCert, RegCertError> = Effect.fn(function* (
+  cborBytes: string,
+) {
   return yield* Effect.try({
     try: () => CML.RegCert.from_cbor_hex(cborBytes),
-    catch: () => new RegCertError({
-      message: `RegCert.fromCborHex failed with parameters: ${cborBytes}. Hint: Make sure it's a valid hex string representing CBOR data.`,
-    }),
+    catch: () =>
+      new RegCertError({
+        message: `RegCert.fromCborHex failed with parameters: ${cborBytes}. Hint: Make sure it's a valid hex string representing CBOR data.`,
+      }),
   });
 });
 
 /**
  * Unsafely calls RegCert.fromCborHex without Effect wrapper
- * 
+ *
  * @since 2.0.0
  * @category ConstructorsUnsafe
  */
@@ -204,24 +221,25 @@ export const fromCborHexUnsafe = (cborBytes: string): CML.RegCert =>
 
 /**
  * Method toJson of RegCert
- * 
+ *
  * @since 2.0.0
  * @category Methods
  */
-export const toJson: (instance: CML.RegCert) => Effect.Effect<string, RegCertError> = Effect.fn(
-  (instance: CML.RegCert) =>
-    Effect.try({
-      try: () => instance.to_json(),
-      catch: () =>
-        new RegCertError({
-          message: `RegCert.toJson failed RegCert is not valid for string conversion. Hint: Validate your JSON structure.`,
-        }),
-    })
+export const toJson: (
+  instance: CML.RegCert,
+) => Effect.Effect<string, RegCertError> = Effect.fn((instance: CML.RegCert) =>
+  Effect.try({
+    try: () => instance.to_json(),
+    catch: () =>
+      new RegCertError({
+        message: `RegCert.toJson failed RegCert is not valid for string conversion. Hint: Validate your JSON structure.`,
+      }),
+  }),
 );
 
 /**
  * Unsafely calls instance.toJson without Effect wrapper
- * 
+ *
  * @since 2.0.0
  * @category MethodsUnsafe
  */
@@ -230,24 +248,25 @@ export const toJsonUnsafe = (instance: CML.RegCert): string =>
 
 /**
  * Method toJsValue of RegCert
- * 
+ *
  * @since 2.0.0
  * @category Methods
  */
-export const toJsValue: (instance: CML.RegCert) => Effect.Effect<any, RegCertError> = Effect.fn(
-  (instance: CML.RegCert) =>
-    Effect.try({
-      try: () => instance.to_js_value(),
-      catch: () =>
-        new RegCertError({
-          message: `RegCert.toJsValue failed RegCert is not valid for any conversion. `,
-        }),
-    })
+export const toJsValue: (
+  instance: CML.RegCert,
+) => Effect.Effect<any, RegCertError> = Effect.fn((instance: CML.RegCert) =>
+  Effect.try({
+    try: () => instance.to_js_value(),
+    catch: () =>
+      new RegCertError({
+        message: `RegCert.toJsValue failed RegCert is not valid for any conversion. `,
+      }),
+  }),
 );
 
 /**
  * Unsafely calls instance.toJsValue without Effect wrapper
- * 
+ *
  * @since 2.0.0
  * @category MethodsUnsafe
  */
@@ -256,22 +275,27 @@ export const toJsValueUnsafe = (instance: CML.RegCert): any =>
 
 /**
  * Static method fromJson of RegCert
- * 
+ *
  * @since 2.0.0
  * @category Constructors
  */
-export const fromJson: (json: string) => Effect.Effect<CML.RegCert, RegCertError> = Effect.fn(function* (json: string) {
+export const fromJson: (
+  json: string,
+) => Effect.Effect<CML.RegCert, RegCertError> = Effect.fn(function* (
+  json: string,
+) {
   return yield* Effect.try({
     try: () => CML.RegCert.from_json(json),
-    catch: () => new RegCertError({
-      message: `RegCert.fromJson failed with parameters: ${json}. Hint: Validate your JSON structure.`,
-    }),
+    catch: () =>
+      new RegCertError({
+        message: `RegCert.fromJson failed with parameters: ${json}. Hint: Validate your JSON structure.`,
+      }),
   });
 });
 
 /**
  * Unsafely calls RegCert.fromJson without Effect wrapper
- * 
+ *
  * @since 2.0.0
  * @category ConstructorsUnsafe
  */
@@ -280,11 +304,13 @@ export const fromJsonUnsafe = (json: string): CML.RegCert =>
 
 /**
  * Method stakeCredential of RegCert
- * 
+ *
  * @since 2.0.0
  * @category Methods
  */
-export const stakeCredential: (instance: CML.RegCert) => Effect.Effect<CML.Credential, RegCertError> = Effect.fn(
+export const stakeCredential: (
+  instance: CML.RegCert,
+) => Effect.Effect<CML.Credential, RegCertError> = Effect.fn(
   (instance: CML.RegCert) =>
     Effect.try({
       try: () => instance.stake_credential(),
@@ -292,12 +318,12 @@ export const stakeCredential: (instance: CML.RegCert) => Effect.Effect<CML.Crede
         new RegCertError({
           message: `RegCert.stakeCredential failed `,
         }),
-    })
+    }),
 );
 
 /**
  * Unsafely calls instance.stakeCredential without Effect wrapper
- * 
+ *
  * @since 2.0.0
  * @category MethodsUnsafe
  */
@@ -306,24 +332,25 @@ export const stakeCredentialUnsafe = (instance: CML.RegCert): CML.Credential =>
 
 /**
  * Method deposit of RegCert
- * 
+ *
  * @since 2.0.0
  * @category Methods
  */
-export const deposit: (instance: CML.RegCert) => Effect.Effect<bigint, RegCertError> = Effect.fn(
-  (instance: CML.RegCert) =>
-    Effect.try({
-      try: () => instance.deposit(),
-      catch: () =>
-        new RegCertError({
-          message: `RegCert.deposit failed `,
-        }),
-    })
+export const deposit: (
+  instance: CML.RegCert,
+) => Effect.Effect<bigint, RegCertError> = Effect.fn((instance: CML.RegCert) =>
+  Effect.try({
+    try: () => instance.deposit(),
+    catch: () =>
+      new RegCertError({
+        message: `RegCert.deposit failed `,
+      }),
+  }),
 );
 
 /**
  * Unsafely calls instance.deposit without Effect wrapper
- * 
+ *
  * @since 2.0.0
  * @category MethodsUnsafe
  */
@@ -332,24 +359,33 @@ export const depositUnsafe = (instance: CML.RegCert): bigint =>
 
 /**
  * Static method _new of RegCert
- * 
+ *
  * @since 2.0.0
  * @category Constructors
  */
-export const _new: (stakeCredential: CML.Credential, deposit: bigint) => Effect.Effect<CML.RegCert, RegCertError> = Effect.fn(function* (stakeCredential: CML.Credential, deposit: bigint) {
+export const _new: (
+  stakeCredential: CML.Credential,
+  deposit: bigint,
+) => Effect.Effect<CML.RegCert, RegCertError> = Effect.fn(function* (
+  stakeCredential: CML.Credential,
+  deposit: bigint,
+) {
   return yield* Effect.try({
     try: () => CML.RegCert.new(stakeCredential, deposit),
-    catch: () => new RegCertError({
-      message: `RegCert._new failed with parameters: ${stakeCredential} (Credential), ${deposit}. `,
-    }),
+    catch: () =>
+      new RegCertError({
+        message: `RegCert._new failed with parameters: ${stakeCredential} (Credential), ${deposit}. `,
+      }),
   });
 });
 
 /**
  * Unsafely calls RegCert._new without Effect wrapper
- * 
+ *
  * @since 2.0.0
  * @category ConstructorsUnsafe
  */
-export const _newUnsafe = (stakeCredential: CML.Credential, deposit: bigint): CML.RegCert =>
-  Effect.runSync(_new(stakeCredential, deposit));
+export const _newUnsafe = (
+  stakeCredential: CML.Credential,
+  deposit: bigint,
+): CML.RegCert => Effect.runSync(_new(stakeCredential, deposit));

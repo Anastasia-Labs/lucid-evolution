@@ -13,7 +13,7 @@ export type ScriptKind = CML.ScriptKind;
 
 /**
  * Native variant of the ScriptKind enum
- * 
+ *
  * @since 2.0.0
  * @category Variants
  */
@@ -21,7 +21,7 @@ export const Native = CML.ScriptKind.Native;
 
 /**
  * PlutusV1 variant of the ScriptKind enum
- * 
+ *
  * @since 2.0.0
  * @category Variants
  */
@@ -29,7 +29,7 @@ export const PlutusV1 = CML.ScriptKind.PlutusV1;
 
 /**
  * PlutusV2 variant of the ScriptKind enum
- * 
+ *
  * @since 2.0.0
  * @category Variants
  */
@@ -37,16 +37,15 @@ export const PlutusV2 = CML.ScriptKind.PlutusV2;
 
 /**
  * PlutusV3 variant of the ScriptKind enum
- * 
+ *
  * @since 2.0.0
  * @category Variants
  */
 export const PlutusV3 = CML.ScriptKind.PlutusV3;
 
-
 /**
  * Get all values of the ScriptKind enum
- * 
+ *
  * @since 2.0.0
  * @category Utils
  */
@@ -54,12 +53,12 @@ export const values = (): Array<CML.ScriptKind> => [
   CML.ScriptKind.Native,
   CML.ScriptKind.PlutusV1,
   CML.ScriptKind.PlutusV2,
-  CML.ScriptKind.PlutusV3
+  CML.ScriptKind.PlutusV3,
 ];
 
 /**
  * Convert ScriptKind enum value to string
- * 
+ *
  * @since 2.0.0
  * @category Utils
  */
@@ -80,7 +79,7 @@ export const toString = (value: CML.ScriptKind): string => {
 
 /**
  * Convert string to ScriptKind enum value
- * 
+ *
  * @since 2.0.0
  * @category Utils
  */
