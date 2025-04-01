@@ -29,25 +29,13 @@ export class TransactionInputListError extends Data.TaggedError(
 /**
  * Method free of TransactionInputList
  *
- * @example
- * import { TransactionInputList } from "@lucid-evolution/experimental";
- * import { Effect } from "effect";
- *
- * // Using Effect for safe execution with error handling
- * Effect.gen(function*() {
- * // Assume we have a TransactionInputList instance
- * const instance = ... ;
- *   const result = yield* TransactionInputList.free(instance);
- *   console.log(result);
- * });
- *
  * @since 2.0.0
  * @category Methods
  */
-export const free = Effect.fn(
-  (
-    instance: CML.TransactionInputList,
-  ): Effect.Effect<void, TransactionInputListError> =>
+export const free: (
+  instance: CML.TransactionInputList,
+) => Effect.Effect<void, TransactionInputListError> = Effect.fn(
+  (instance: CML.TransactionInputList) =>
     Effect.try({
       try: () => instance.free(),
       catch: () =>
@@ -60,20 +48,6 @@ export const free = Effect.fn(
 /**
  * Unsafely calls instance.free without Effect wrapper
  *
- * @example
- * import { TransactionInputList } from "@lucid-evolution/experimental";
- *
- * // Assume we have a TransactionInputList instance
- * const instance = ... ;
- *
- * // Using try/catch for error handling
- * try {
- *   const result = TransactionInputList.freeUnsafe(instance);
- *   console.log(result);
- * } catch (error) {
- *   console.error(`TransactionInputList.freeUnsafe failed: ${error.message}`);
- * }
- *
  * @since 2.0.0
  * @category MethodsUnsafe
  */
@@ -83,21 +57,13 @@ export const freeUnsafe = (instance: CML.TransactionInputList): void =>
 /**
  * Static method _new of TransactionInputList
  *
- * @example
- * import { TransactionInputList } from "@lucid-evolution/experimental";
- * import { Effect } from "effect";
- *
- * // Using Effect for safe execution with error handling
- * Effect.gen(function*() {
- *
- *   const result = yield* TransactionInputList._new();
- *   console.log(result);
- * });
- *
  * @since 2.0.0
  * @category Constructors
  */
-export const _new = Effect.fn(function* () {
+export const _new: () => Effect.Effect<
+  CML.TransactionInputList,
+  TransactionInputListError
+> = Effect.fn(function* () {
   return yield* Effect.try({
     try: () => CML.TransactionInputList.new(),
     catch: () =>
@@ -110,46 +76,22 @@ export const _new = Effect.fn(function* () {
 /**
  * Unsafely calls TransactionInputList._new without Effect wrapper
  *
- * @example
- * import { TransactionInputList } from "@lucid-evolution/experimental";
- *
- *
- *
- * // Using try/catch for error handling
- * try {
- *   const result = TransactionInputList._newUnsafe();
- *   console.log(result);
- * } catch (error) {
- *   console.error(`TransactionInputList._newUnsafe failed: ${error.message}`);
- * }
- *
  * @since 2.0.0
  * @category ConstructorsUnsafe
  */
-export const _newUnsafe = () => Effect.runSync(_new());
+export const _newUnsafe = (): CML.TransactionInputList =>
+  Effect.runSync(_new());
 
 /**
  * Method len of TransactionInputList
  *
- * @example
- * import { TransactionInputList } from "@lucid-evolution/experimental";
- * import { Effect } from "effect";
- *
- * // Using Effect for safe execution with error handling
- * Effect.gen(function*() {
- * // Assume we have a TransactionInputList instance
- * const instance = ... ;
- *   const result = yield* TransactionInputList.len(instance);
- *   console.log(result);
- * });
- *
  * @since 2.0.0
  * @category Methods
  */
-export const len = Effect.fn(
-  (
-    instance: CML.TransactionInputList,
-  ): Effect.Effect<number, TransactionInputListError> =>
+export const len: (
+  instance: CML.TransactionInputList,
+) => Effect.Effect<number, TransactionInputListError> = Effect.fn(
+  (instance: CML.TransactionInputList) =>
     Effect.try({
       try: () => instance.len(),
       catch: () =>
@@ -162,20 +104,6 @@ export const len = Effect.fn(
 /**
  * Unsafely calls instance.len without Effect wrapper
  *
- * @example
- * import { TransactionInputList } from "@lucid-evolution/experimental";
- *
- * // Assume we have a TransactionInputList instance
- * const instance = ... ;
- *
- * // Using try/catch for error handling
- * try {
- *   const result = TransactionInputList.lenUnsafe(instance);
- *   console.log(result);
- * } catch (error) {
- *   console.error(`TransactionInputList.lenUnsafe failed: ${error.message}`);
- * }
- *
  * @since 2.0.0
  * @category MethodsUnsafe
  */
@@ -185,26 +113,14 @@ export const lenUnsafe = (instance: CML.TransactionInputList): number =>
 /**
  * Method get of TransactionInputList
  *
- * @example
- * import { TransactionInputList } from "@lucid-evolution/experimental";
- * import { Effect } from "effect";
- *
- * // Using Effect for safe execution with error handling
- * Effect.gen(function*() {
- * // Assume we have a TransactionInputList instance
- * const instance = ... ;
- *   const result = yield* TransactionInputList.get(instance,  parameters );
- *   console.log(result);
- * });
- *
  * @since 2.0.0
  * @category Methods
  */
-export const get = Effect.fn(
-  (
-    instance: CML.TransactionInputList,
-    index: number,
-  ): Effect.Effect<CML.TransactionInput, TransactionInputListError> =>
+export const get: (
+  instance: CML.TransactionInputList,
+  index: number,
+) => Effect.Effect<CML.TransactionInput, TransactionInputListError> = Effect.fn(
+  (instance: CML.TransactionInputList, index: number) =>
     Effect.try({
       try: () => instance.get(index),
       catch: () =>
@@ -217,20 +133,6 @@ export const get = Effect.fn(
 /**
  * Unsafely calls instance.get without Effect wrapper
  *
- * @example
- * import { TransactionInputList } from "@lucid-evolution/experimental";
- *
- * // Assume we have a TransactionInputList instance
- * const instance = ... ;
- *
- * // Using try/catch for error handling
- * try {
- *   const result = TransactionInputList.getUnsafe(instance,  parameters );
- *   console.log(result);
- * } catch (error) {
- *   console.error(`TransactionInputList.getUnsafe failed: ${error.message}`);
- * }
- *
  * @since 2.0.0
  * @category MethodsUnsafe
  */
@@ -242,26 +144,14 @@ export const getUnsafe = (
 /**
  * Method add of TransactionInputList
  *
- * @example
- * import { TransactionInputList } from "@lucid-evolution/experimental";
- * import { Effect } from "effect";
- *
- * // Using Effect for safe execution with error handling
- * Effect.gen(function*() {
- * // Assume we have a TransactionInputList instance
- * const instance = ... ;
- *   const result = yield* TransactionInputList.add(instance,  parameters );
- *   console.log(result);
- * });
- *
  * @since 2.0.0
  * @category Methods
  */
-export const add = Effect.fn(
-  (
-    instance: CML.TransactionInputList,
-    elem: CML.TransactionInput,
-  ): Effect.Effect<void, TransactionInputListError> =>
+export const add: (
+  instance: CML.TransactionInputList,
+  elem: CML.TransactionInput,
+) => Effect.Effect<void, TransactionInputListError> = Effect.fn(
+  (instance: CML.TransactionInputList, elem: CML.TransactionInput) =>
     Effect.try({
       try: () => instance.add(elem),
       catch: () =>
@@ -273,20 +163,6 @@ export const add = Effect.fn(
 
 /**
  * Unsafely calls instance.add without Effect wrapper
- *
- * @example
- * import { TransactionInputList } from "@lucid-evolution/experimental";
- *
- * // Assume we have a TransactionInputList instance
- * const instance = ... ;
- *
- * // Using try/catch for error handling
- * try {
- *   const result = TransactionInputList.addUnsafe(instance,  parameters );
- *   console.log(result);
- * } catch (error) {
- *   console.error(`TransactionInputList.addUnsafe failed: ${error.message}`);
- * }
  *
  * @since 2.0.0
  * @category MethodsUnsafe

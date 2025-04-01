@@ -21,20 +21,14 @@ export class GetImplicitInputError extends Data.TaggedError(
 /**
  * Wrapper for the get_implicit_input function
  *
- * @example
- * import { getImplicitInput } from "@lucid-evolution/experimental/CML/functions";
- * import { Effect } from "effect";
- *
- * // Using Effect for safe execution with error handling
- * Effect.gen(function*() {
- *   const result = yield* getImplicitInput(TransactionBody instance ,  appropriate value ,  appropriate value );
- *   console.log(result);
- * });
- *
  * @since 2.0.0
  * @category Functions
  */
-export const getImplicitInput = Effect.fn(function* (
+export const getImplicitInput: (
+  txbody: CML.TransactionBody,
+  poolDeposit: bigint,
+  keyDeposit: bigint,
+) => Effect.Effect<CML.Value, GetImplicitInputError> = Effect.fn(function* (
   txbody: CML.TransactionBody,
   poolDeposit: bigint,
   keyDeposit: bigint,
@@ -50,16 +44,6 @@ export const getImplicitInput = Effect.fn(function* (
 
 /**
  * Unsafely calls get_implicit_input function without Effect wrapper
- *
- * @example
- * import { getImplicitInputUnsafe } from "@lucid-evolution/experimental/CML/functions";
- *
- * try {
- *   const result = getImplicitInputUnsafe(TransactionBody instance ,  appropriate value ,  appropriate value );
- *   console.log(result);
- * } catch (error) {
- *   console.error(`getImplicitInputUnsafe failed: ${error.message}`);
- * }
  *
  * @since 2.0.0
  * @category FunctionsUnsafe

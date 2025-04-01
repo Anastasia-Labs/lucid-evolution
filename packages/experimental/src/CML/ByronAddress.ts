@@ -27,23 +27,13 @@ export class ByronAddressError extends Data.TaggedError("ByronAddressError")<{
 /**
  * Method free of ByronAddress
  *
- * @example
- * import { ByronAddress } from "@lucid-evolution/experimental";
- * import { Effect } from "effect";
- *
- * // Using Effect for safe execution with error handling
- * Effect.gen(function*() {
- * // Assume we have a ByronAddress instance
- * const instance = ... ;
- *   const result = yield* ByronAddress.free(instance);
- *   console.log(result);
- * });
- *
  * @since 2.0.0
  * @category Methods
  */
-export const free = Effect.fn(
-  (instance: CML.ByronAddress): Effect.Effect<void, ByronAddressError> =>
+export const free: (
+  instance: CML.ByronAddress,
+) => Effect.Effect<void, ByronAddressError> = Effect.fn(
+  (instance: CML.ByronAddress) =>
     Effect.try({
       try: () => instance.free(),
       catch: () =>
@@ -56,20 +46,6 @@ export const free = Effect.fn(
 /**
  * Unsafely calls instance.free without Effect wrapper
  *
- * @example
- * import { ByronAddress } from "@lucid-evolution/experimental";
- *
- * // Assume we have a ByronAddress instance
- * const instance = ... ;
- *
- * // Using try/catch for error handling
- * try {
- *   const result = ByronAddress.freeUnsafe(instance);
- *   console.log(result);
- * } catch (error) {
- *   console.error(`ByronAddress.freeUnsafe failed: ${error.message}`);
- * }
- *
  * @since 2.0.0
  * @category MethodsUnsafe
  */
@@ -79,23 +55,13 @@ export const freeUnsafe = (instance: CML.ByronAddress): void =>
 /**
  * Method toBase58 of ByronAddress
  *
- * @example
- * import { ByronAddress } from "@lucid-evolution/experimental";
- * import { Effect } from "effect";
- *
- * // Using Effect for safe execution with error handling
- * Effect.gen(function*() {
- * // Assume we have a ByronAddress instance
- * const instance = ... ;
- *   const result = yield* ByronAddress.toBase58(instance);
- *   console.log(result);
- * });
- *
  * @since 2.0.0
  * @category Methods
  */
-export const toBase58 = Effect.fn(
-  (instance: CML.ByronAddress): Effect.Effect<string, ByronAddressError> =>
+export const toBase58: (
+  instance: CML.ByronAddress,
+) => Effect.Effect<string, ByronAddressError> = Effect.fn(
+  (instance: CML.ByronAddress) =>
     Effect.try({
       try: () => instance.to_base58(),
       catch: () =>
@@ -108,20 +74,6 @@ export const toBase58 = Effect.fn(
 /**
  * Unsafely calls instance.toBase58 without Effect wrapper
  *
- * @example
- * import { ByronAddress } from "@lucid-evolution/experimental";
- *
- * // Assume we have a ByronAddress instance
- * const instance = ... ;
- *
- * // Using try/catch for error handling
- * try {
- *   const result = ByronAddress.toBase58Unsafe(instance);
- *   console.log(result);
- * } catch (error) {
- *   console.error(`ByronAddress.toBase58Unsafe failed: ${error.message}`);
- * }
- *
  * @since 2.0.0
  * @category MethodsUnsafe
  */
@@ -131,21 +83,14 @@ export const toBase58Unsafe = (instance: CML.ByronAddress): string =>
 /**
  * Static method fromBase58 of ByronAddress
  *
- * @example
- * import { ByronAddress } from "@lucid-evolution/experimental";
- * import { Effect } from "effect";
- *
- * // Using Effect for safe execution with error handling
- * Effect.gen(function*() {
- *
- *   const result = yield* ByronAddress.fromBase58( parameters );
- *   console.log(result);
- * });
- *
  * @since 2.0.0
  * @category Constructors
  */
-export const fromBase58 = Effect.fn(function* (s: string) {
+export const fromBase58: (
+  s: string,
+) => Effect.Effect<CML.ByronAddress, ByronAddressError> = Effect.fn(function* (
+  s: string,
+) {
   return yield* Effect.try({
     try: () => CML.ByronAddress.from_base58(s),
     catch: () =>
@@ -158,92 +103,47 @@ export const fromBase58 = Effect.fn(function* (s: string) {
 /**
  * Unsafely calls ByronAddress.fromBase58 without Effect wrapper
  *
- * @example
- * import { ByronAddress } from "@lucid-evolution/experimental";
- *
- *
- *
- * // Using try/catch for error handling
- * try {
- *   const result = ByronAddress.fromBase58Unsafe( parameters );
- *   console.log(result);
- * } catch (error) {
- *   console.error(`ByronAddress.fromBase58Unsafe failed: ${error.message}`);
- * }
- *
  * @since 2.0.0
  * @category ConstructorsUnsafe
  */
-export const fromBase58Unsafe = (s: string) => Effect.runSync(fromBase58(s));
+export const fromBase58Unsafe = (s: string): CML.ByronAddress =>
+  Effect.runSync(fromBase58(s));
 
 /**
  * Static method isValid of ByronAddress
  *
- * @example
- * import { ByronAddress } from "@lucid-evolution/experimental";
- * import { Effect } from "effect";
- *
- * // Using Effect for safe execution with error handling
- * Effect.gen(function*() {
- *
- *   const result = yield* ByronAddress.isValid( parameters );
- *   console.log(result);
- * });
- *
  * @since 2.0.0
  * @category Constructors
  */
-export const isValid = Effect.fn(function* (s: string) {
-  return yield* Effect.try({
-    try: () => CML.ByronAddress.is_valid(s),
-    catch: () =>
-      new ByronAddressError({
-        message: `ByronAddress.isValid failed with parameters: ${s}. `,
-      }),
+export const isValid: (s: string) => Effect.Effect<boolean, ByronAddressError> =
+  Effect.fn(function* (s: string) {
+    return yield* Effect.try({
+      try: () => CML.ByronAddress.is_valid(s),
+      catch: () =>
+        new ByronAddressError({
+          message: `ByronAddress.isValid failed with parameters: ${s}. `,
+        }),
+    });
   });
-});
 
 /**
  * Unsafely calls ByronAddress.isValid without Effect wrapper
  *
- * @example
- * import { ByronAddress } from "@lucid-evolution/experimental";
- *
- *
- *
- * // Using try/catch for error handling
- * try {
- *   const result = ByronAddress.isValidUnsafe( parameters );
- *   console.log(result);
- * } catch (error) {
- *   console.error(`ByronAddress.isValidUnsafe failed: ${error.message}`);
- * }
- *
  * @since 2.0.0
  * @category ConstructorsUnsafe
  */
-export const isValidUnsafe = (s: string) => Effect.runSync(isValid(s));
+export const isValidUnsafe = (s: string): boolean => Effect.runSync(isValid(s));
 
 /**
  * Method toAddress of ByronAddress
  *
- * @example
- * import { ByronAddress } from "@lucid-evolution/experimental";
- * import { Effect } from "effect";
- *
- * // Using Effect for safe execution with error handling
- * Effect.gen(function*() {
- * // Assume we have a ByronAddress instance
- * const instance = ... ;
- *   const result = yield* ByronAddress.toAddress(instance);
- *   console.log(result);
- * });
- *
  * @since 2.0.0
  * @category Methods
  */
-export const toAddress = Effect.fn(
-  (instance: CML.ByronAddress): Effect.Effect<CML.Address, ByronAddressError> =>
+export const toAddress: (
+  instance: CML.ByronAddress,
+) => Effect.Effect<CML.Address, ByronAddressError> = Effect.fn(
+  (instance: CML.ByronAddress) =>
     Effect.try({
       try: () => instance.to_address(),
       catch: () =>
@@ -256,20 +156,6 @@ export const toAddress = Effect.fn(
 /**
  * Unsafely calls instance.toAddress without Effect wrapper
  *
- * @example
- * import { ByronAddress } from "@lucid-evolution/experimental";
- *
- * // Assume we have a ByronAddress instance
- * const instance = ... ;
- *
- * // Using try/catch for error handling
- * try {
- *   const result = ByronAddress.toAddressUnsafe(instance);
- *   console.log(result);
- * } catch (error) {
- *   console.error(`ByronAddress.toAddressUnsafe failed: ${error.message}`);
- * }
- *
  * @since 2.0.0
  * @category MethodsUnsafe
  */
@@ -279,70 +165,42 @@ export const toAddressUnsafe = (instance: CML.ByronAddress): CML.Address =>
 /**
  * Static method fromAddress of ByronAddress
  *
- * @example
- * import { ByronAddress } from "@lucid-evolution/experimental";
- * import { Effect } from "effect";
- *
- * // Using Effect for safe execution with error handling
- * Effect.gen(function*() {
- *
- *   const result = yield* ByronAddress.fromAddress( parameters );
- *   console.log(result);
- * });
- *
  * @since 2.0.0
  * @category Constructors
  */
-export const fromAddress = Effect.fn(function* (addr: CML.Address) {
-  return yield* Effect.try({
-    try: () => CML.ByronAddress.from_address(addr),
-    catch: () =>
-      new ByronAddressError({
-        message: `ByronAddress.fromAddress failed with parameters: ${addr} (Address). `,
-      }),
-  });
-});
+export const fromAddress: (
+  addr: CML.Address,
+) => Effect.Effect<CML.ByronAddress | undefined, ByronAddressError> = Effect.fn(
+  function* (addr: CML.Address) {
+    return yield* Effect.try({
+      try: () => CML.ByronAddress.from_address(addr),
+      catch: () =>
+        new ByronAddressError({
+          message: `ByronAddress.fromAddress failed with parameters: ${addr} (Address). `,
+        }),
+    });
+  },
+);
 
 /**
  * Unsafely calls ByronAddress.fromAddress without Effect wrapper
  *
- * @example
- * import { ByronAddress } from "@lucid-evolution/experimental";
- *
- *
- *
- * // Using try/catch for error handling
- * try {
- *   const result = ByronAddress.fromAddressUnsafe( parameters );
- *   console.log(result);
- * } catch (error) {
- *   console.error(`ByronAddress.fromAddressUnsafe failed: ${error.message}`);
- * }
- *
  * @since 2.0.0
  * @category ConstructorsUnsafe
  */
-export const fromAddressUnsafe = (addr: CML.Address) =>
-  Effect.runSync(fromAddress(addr));
+export const fromAddressUnsafe = (
+  addr: CML.Address,
+): CML.ByronAddress | undefined => Effect.runSync(fromAddress(addr));
 
 /**
  * Static method fromAddressContent of ByronAddress
  *
- * @example
- * import { ByronAddress } from "@lucid-evolution/experimental";
- * import { Effect } from "effect";
- *
- * // Using Effect for safe execution with error handling
- * Effect.gen(function*() {
- *
- *   const result = yield* ByronAddress.fromAddressContent( parameters );
- *   console.log(result);
- * });
- *
  * @since 2.0.0
  * @category Constructors
  */
-export const fromAddressContent = Effect.fn(function* (
+export const fromAddressContent: (
+  addressContent: CML.AddressContent,
+) => Effect.Effect<CML.ByronAddress, ByronAddressError> = Effect.fn(function* (
   addressContent: CML.AddressContent,
 ) {
   return yield* Effect.try({
@@ -357,45 +215,23 @@ export const fromAddressContent = Effect.fn(function* (
 /**
  * Unsafely calls ByronAddress.fromAddressContent without Effect wrapper
  *
- * @example
- * import { ByronAddress } from "@lucid-evolution/experimental";
- *
- *
- *
- * // Using try/catch for error handling
- * try {
- *   const result = ByronAddress.fromAddressContentUnsafe( parameters );
- *   console.log(result);
- * } catch (error) {
- *   console.error(`ByronAddress.fromAddressContentUnsafe failed: ${error.message}`);
- * }
- *
  * @since 2.0.0
  * @category ConstructorsUnsafe
  */
-export const fromAddressContentUnsafe = (addressContent: CML.AddressContent) =>
-  Effect.runSync(fromAddressContent(addressContent));
+export const fromAddressContentUnsafe = (
+  addressContent: CML.AddressContent,
+): CML.ByronAddress => Effect.runSync(fromAddressContent(addressContent));
 
 /**
  * Method toCborBytes of ByronAddress
  *
- * @example
- * import { ByronAddress } from "@lucid-evolution/experimental";
- * import { Effect } from "effect";
- *
- * // Using Effect for safe execution with error handling
- * Effect.gen(function*() {
- * // Assume we have a ByronAddress instance
- * const instance = ... ;
- *   const result = yield* ByronAddress.toCborBytes(instance);
- *   console.log(result);
- * });
- *
  * @since 2.0.0
  * @category Methods
  */
-export const toCborBytes = Effect.fn(
-  (instance: CML.ByronAddress): Effect.Effect<Uint8Array, ByronAddressError> =>
+export const toCborBytes: (
+  instance: CML.ByronAddress,
+) => Effect.Effect<Uint8Array, ByronAddressError> = Effect.fn(
+  (instance: CML.ByronAddress) =>
     Effect.try({
       try: () => instance.to_cbor_bytes(),
       catch: () =>
@@ -408,20 +244,6 @@ export const toCborBytes = Effect.fn(
 /**
  * Unsafely calls instance.toCborBytes without Effect wrapper
  *
- * @example
- * import { ByronAddress } from "@lucid-evolution/experimental";
- *
- * // Assume we have a ByronAddress instance
- * const instance = ... ;
- *
- * // Using try/catch for error handling
- * try {
- *   const result = ByronAddress.toCborBytesUnsafe(instance);
- *   console.log(result);
- * } catch (error) {
- *   console.error(`ByronAddress.toCborBytesUnsafe failed: ${error.message}`);
- * }
- *
  * @since 2.0.0
  * @category MethodsUnsafe
  */
@@ -431,21 +253,14 @@ export const toCborBytesUnsafe = (instance: CML.ByronAddress): Uint8Array =>
 /**
  * Static method fromCborBytes of ByronAddress
  *
- * @example
- * import { ByronAddress } from "@lucid-evolution/experimental";
- * import { Effect } from "effect";
- *
- * // Using Effect for safe execution with error handling
- * Effect.gen(function*() {
- *
- *   const result = yield* ByronAddress.fromCborBytes( parameters );
- *   console.log(result);
- * });
- *
  * @since 2.0.0
  * @category Constructors
  */
-export const fromCborBytes = Effect.fn(function* (cborBytes: Uint8Array) {
+export const fromCborBytes: (
+  cborBytes: Uint8Array,
+) => Effect.Effect<CML.ByronAddress, ByronAddressError> = Effect.fn(function* (
+  cborBytes: Uint8Array,
+) {
   return yield* Effect.try({
     try: () => CML.ByronAddress.from_cbor_bytes(cborBytes),
     catch: () =>
@@ -458,45 +273,22 @@ export const fromCborBytes = Effect.fn(function* (cborBytes: Uint8Array) {
 /**
  * Unsafely calls ByronAddress.fromCborBytes without Effect wrapper
  *
- * @example
- * import { ByronAddress } from "@lucid-evolution/experimental";
- *
- *
- *
- * // Using try/catch for error handling
- * try {
- *   const result = ByronAddress.fromCborBytesUnsafe( parameters );
- *   console.log(result);
- * } catch (error) {
- *   console.error(`ByronAddress.fromCborBytesUnsafe failed: ${error.message}`);
- * }
- *
  * @since 2.0.0
  * @category ConstructorsUnsafe
  */
-export const fromCborBytesUnsafe = (cborBytes: Uint8Array) =>
+export const fromCborBytesUnsafe = (cborBytes: Uint8Array): CML.ByronAddress =>
   Effect.runSync(fromCborBytes(cborBytes));
 
 /**
  * Method toCborHex of ByronAddress
  *
- * @example
- * import { ByronAddress } from "@lucid-evolution/experimental";
- * import { Effect } from "effect";
- *
- * // Using Effect for safe execution with error handling
- * Effect.gen(function*() {
- * // Assume we have a ByronAddress instance
- * const instance = ... ;
- *   const result = yield* ByronAddress.toCborHex(instance);
- *   console.log(result);
- * });
- *
  * @since 2.0.0
  * @category Methods
  */
-export const toCborHex = Effect.fn(
-  (instance: CML.ByronAddress): Effect.Effect<string, ByronAddressError> =>
+export const toCborHex: (
+  instance: CML.ByronAddress,
+) => Effect.Effect<string, ByronAddressError> = Effect.fn(
+  (instance: CML.ByronAddress) =>
     Effect.try({
       try: () => instance.to_cbor_hex(),
       catch: () =>
@@ -509,20 +301,6 @@ export const toCborHex = Effect.fn(
 /**
  * Unsafely calls instance.toCborHex without Effect wrapper
  *
- * @example
- * import { ByronAddress } from "@lucid-evolution/experimental";
- *
- * // Assume we have a ByronAddress instance
- * const instance = ... ;
- *
- * // Using try/catch for error handling
- * try {
- *   const result = ByronAddress.toCborHexUnsafe(instance);
- *   console.log(result);
- * } catch (error) {
- *   console.error(`ByronAddress.toCborHexUnsafe failed: ${error.message}`);
- * }
- *
  * @since 2.0.0
  * @category MethodsUnsafe
  */
@@ -532,21 +310,14 @@ export const toCborHexUnsafe = (instance: CML.ByronAddress): string =>
 /**
  * Static method fromCborHex of ByronAddress
  *
- * @example
- * import { ByronAddress } from "@lucid-evolution/experimental";
- * import { Effect } from "effect";
- *
- * // Using Effect for safe execution with error handling
- * Effect.gen(function*() {
- *
- *   const result = yield* ByronAddress.fromCborHex( parameters );
- *   console.log(result);
- * });
- *
  * @since 2.0.0
  * @category Constructors
  */
-export const fromCborHex = Effect.fn(function* (cborBytes: string) {
+export const fromCborHex: (
+  cborBytes: string,
+) => Effect.Effect<CML.ByronAddress, ByronAddressError> = Effect.fn(function* (
+  cborBytes: string,
+) {
   return yield* Effect.try({
     try: () => CML.ByronAddress.from_cbor_hex(cborBytes),
     catch: () =>
@@ -559,47 +330,22 @@ export const fromCborHex = Effect.fn(function* (cborBytes: string) {
 /**
  * Unsafely calls ByronAddress.fromCborHex without Effect wrapper
  *
- * @example
- * import { ByronAddress } from "@lucid-evolution/experimental";
- *
- *
- *
- * // Using try/catch for error handling
- * try {
- *   const result = ByronAddress.fromCborHexUnsafe( parameters );
- *   console.log(result);
- * } catch (error) {
- *   console.error(`ByronAddress.fromCborHexUnsafe failed: ${error.message}`);
- * }
- *
  * @since 2.0.0
  * @category ConstructorsUnsafe
  */
-export const fromCborHexUnsafe = (cborBytes: string) =>
+export const fromCborHexUnsafe = (cborBytes: string): CML.ByronAddress =>
   Effect.runSync(fromCborHex(cborBytes));
 
 /**
  * Method content of ByronAddress
  *
- * @example
- * import { ByronAddress } from "@lucid-evolution/experimental";
- * import { Effect } from "effect";
- *
- * // Using Effect for safe execution with error handling
- * Effect.gen(function*() {
- * // Assume we have a ByronAddress instance
- * const instance = ... ;
- *   const result = yield* ByronAddress.content(instance);
- *   console.log(result);
- * });
- *
  * @since 2.0.0
  * @category Methods
  */
-export const content = Effect.fn(
-  (
-    instance: CML.ByronAddress,
-  ): Effect.Effect<CML.AddressContent, ByronAddressError> =>
+export const content: (
+  instance: CML.ByronAddress,
+) => Effect.Effect<CML.AddressContent, ByronAddressError> = Effect.fn(
+  (instance: CML.ByronAddress) =>
     Effect.try({
       try: () => instance.content(),
       catch: () =>
@@ -612,20 +358,6 @@ export const content = Effect.fn(
 /**
  * Unsafely calls instance.content without Effect wrapper
  *
- * @example
- * import { ByronAddress } from "@lucid-evolution/experimental";
- *
- * // Assume we have a ByronAddress instance
- * const instance = ... ;
- *
- * // Using try/catch for error handling
- * try {
- *   const result = ByronAddress.contentUnsafe(instance);
- *   console.log(result);
- * } catch (error) {
- *   console.error(`ByronAddress.contentUnsafe failed: ${error.message}`);
- * }
- *
  * @since 2.0.0
  * @category MethodsUnsafe
  */
@@ -635,23 +367,13 @@ export const contentUnsafe = (instance: CML.ByronAddress): CML.AddressContent =>
 /**
  * Method crc of ByronAddress
  *
- * @example
- * import { ByronAddress } from "@lucid-evolution/experimental";
- * import { Effect } from "effect";
- *
- * // Using Effect for safe execution with error handling
- * Effect.gen(function*() {
- * // Assume we have a ByronAddress instance
- * const instance = ... ;
- *   const result = yield* ByronAddress.crc(instance);
- *   console.log(result);
- * });
- *
  * @since 2.0.0
  * @category Methods
  */
-export const crc = Effect.fn(
-  (instance: CML.ByronAddress): Effect.Effect<CML.Crc32, ByronAddressError> =>
+export const crc: (
+  instance: CML.ByronAddress,
+) => Effect.Effect<CML.Crc32, ByronAddressError> = Effect.fn(
+  (instance: CML.ByronAddress) =>
     Effect.try({
       try: () => instance.crc(),
       catch: () =>
@@ -664,20 +386,6 @@ export const crc = Effect.fn(
 /**
  * Unsafely calls instance.crc without Effect wrapper
  *
- * @example
- * import { ByronAddress } from "@lucid-evolution/experimental";
- *
- * // Assume we have a ByronAddress instance
- * const instance = ... ;
- *
- * // Using try/catch for error handling
- * try {
- *   const result = ByronAddress.crcUnsafe(instance);
- *   console.log(result);
- * } catch (error) {
- *   console.error(`ByronAddress.crcUnsafe failed: ${error.message}`);
- * }
- *
  * @since 2.0.0
  * @category MethodsUnsafe
  */
@@ -687,21 +395,13 @@ export const crcUnsafe = (instance: CML.ByronAddress): CML.Crc32 =>
 /**
  * Static method _new of ByronAddress
  *
- * @example
- * import { ByronAddress } from "@lucid-evolution/experimental";
- * import { Effect } from "effect";
- *
- * // Using Effect for safe execution with error handling
- * Effect.gen(function*() {
- *
- *   const result = yield* ByronAddress._new( parameters );
- *   console.log(result);
- * });
- *
  * @since 2.0.0
  * @category Constructors
  */
-export const _new = Effect.fn(function* (
+export const _new: (
+  content: CML.AddressContent,
+  crc: CML.Crc32,
+) => Effect.Effect<CML.ByronAddress, ByronAddressError> = Effect.fn(function* (
   content: CML.AddressContent,
   crc: CML.Crc32,
 ) {
@@ -717,21 +417,10 @@ export const _new = Effect.fn(function* (
 /**
  * Unsafely calls ByronAddress._new without Effect wrapper
  *
- * @example
- * import { ByronAddress } from "@lucid-evolution/experimental";
- *
- *
- *
- * // Using try/catch for error handling
- * try {
- *   const result = ByronAddress._newUnsafe( parameters );
- *   console.log(result);
- * } catch (error) {
- *   console.error(`ByronAddress._newUnsafe failed: ${error.message}`);
- * }
- *
  * @since 2.0.0
  * @category ConstructorsUnsafe
  */
-export const _newUnsafe = (content: CML.AddressContent, crc: CML.Crc32) =>
-  Effect.runSync(_new(content, crc));
+export const _newUnsafe = (
+  content: CML.AddressContent,
+  crc: CML.Crc32,
+): CML.ByronAddress => Effect.runSync(_new(content, crc));

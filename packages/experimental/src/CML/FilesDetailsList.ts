@@ -29,25 +29,13 @@ export class FilesDetailsListError extends Data.TaggedError(
 /**
  * Method free of FilesDetailsList
  *
- * @example
- * import { FilesDetailsList } from "@lucid-evolution/experimental";
- * import { Effect } from "effect";
- *
- * // Using Effect for safe execution with error handling
- * Effect.gen(function*() {
- * // Assume we have a FilesDetailsList instance
- * const instance = ... ;
- *   const result = yield* FilesDetailsList.free(instance);
- *   console.log(result);
- * });
- *
  * @since 2.0.0
  * @category Methods
  */
-export const free = Effect.fn(
-  (
-    instance: CML.FilesDetailsList,
-  ): Effect.Effect<void, FilesDetailsListError> =>
+export const free: (
+  instance: CML.FilesDetailsList,
+) => Effect.Effect<void, FilesDetailsListError> = Effect.fn(
+  (instance: CML.FilesDetailsList) =>
     Effect.try({
       try: () => instance.free(),
       catch: () =>
@@ -60,20 +48,6 @@ export const free = Effect.fn(
 /**
  * Unsafely calls instance.free without Effect wrapper
  *
- * @example
- * import { FilesDetailsList } from "@lucid-evolution/experimental";
- *
- * // Assume we have a FilesDetailsList instance
- * const instance = ... ;
- *
- * // Using try/catch for error handling
- * try {
- *   const result = FilesDetailsList.freeUnsafe(instance);
- *   console.log(result);
- * } catch (error) {
- *   console.error(`FilesDetailsList.freeUnsafe failed: ${error.message}`);
- * }
- *
  * @since 2.0.0
  * @category MethodsUnsafe
  */
@@ -83,21 +57,13 @@ export const freeUnsafe = (instance: CML.FilesDetailsList): void =>
 /**
  * Static method _new of FilesDetailsList
  *
- * @example
- * import { FilesDetailsList } from "@lucid-evolution/experimental";
- * import { Effect } from "effect";
- *
- * // Using Effect for safe execution with error handling
- * Effect.gen(function*() {
- *
- *   const result = yield* FilesDetailsList._new();
- *   console.log(result);
- * });
- *
  * @since 2.0.0
  * @category Constructors
  */
-export const _new = Effect.fn(function* () {
+export const _new: () => Effect.Effect<
+  CML.FilesDetailsList,
+  FilesDetailsListError
+> = Effect.fn(function* () {
   return yield* Effect.try({
     try: () => CML.FilesDetailsList.new(),
     catch: () =>
@@ -110,46 +76,21 @@ export const _new = Effect.fn(function* () {
 /**
  * Unsafely calls FilesDetailsList._new without Effect wrapper
  *
- * @example
- * import { FilesDetailsList } from "@lucid-evolution/experimental";
- *
- *
- *
- * // Using try/catch for error handling
- * try {
- *   const result = FilesDetailsList._newUnsafe();
- *   console.log(result);
- * } catch (error) {
- *   console.error(`FilesDetailsList._newUnsafe failed: ${error.message}`);
- * }
- *
  * @since 2.0.0
  * @category ConstructorsUnsafe
  */
-export const _newUnsafe = () => Effect.runSync(_new());
+export const _newUnsafe = (): CML.FilesDetailsList => Effect.runSync(_new());
 
 /**
  * Method len of FilesDetailsList
  *
- * @example
- * import { FilesDetailsList } from "@lucid-evolution/experimental";
- * import { Effect } from "effect";
- *
- * // Using Effect for safe execution with error handling
- * Effect.gen(function*() {
- * // Assume we have a FilesDetailsList instance
- * const instance = ... ;
- *   const result = yield* FilesDetailsList.len(instance);
- *   console.log(result);
- * });
- *
  * @since 2.0.0
  * @category Methods
  */
-export const len = Effect.fn(
-  (
-    instance: CML.FilesDetailsList,
-  ): Effect.Effect<number, FilesDetailsListError> =>
+export const len: (
+  instance: CML.FilesDetailsList,
+) => Effect.Effect<number, FilesDetailsListError> = Effect.fn(
+  (instance: CML.FilesDetailsList) =>
     Effect.try({
       try: () => instance.len(),
       catch: () =>
@@ -162,20 +103,6 @@ export const len = Effect.fn(
 /**
  * Unsafely calls instance.len without Effect wrapper
  *
- * @example
- * import { FilesDetailsList } from "@lucid-evolution/experimental";
- *
- * // Assume we have a FilesDetailsList instance
- * const instance = ... ;
- *
- * // Using try/catch for error handling
- * try {
- *   const result = FilesDetailsList.lenUnsafe(instance);
- *   console.log(result);
- * } catch (error) {
- *   console.error(`FilesDetailsList.lenUnsafe failed: ${error.message}`);
- * }
- *
  * @since 2.0.0
  * @category MethodsUnsafe
  */
@@ -185,26 +112,14 @@ export const lenUnsafe = (instance: CML.FilesDetailsList): number =>
 /**
  * Method get of FilesDetailsList
  *
- * @example
- * import { FilesDetailsList } from "@lucid-evolution/experimental";
- * import { Effect } from "effect";
- *
- * // Using Effect for safe execution with error handling
- * Effect.gen(function*() {
- * // Assume we have a FilesDetailsList instance
- * const instance = ... ;
- *   const result = yield* FilesDetailsList.get(instance,  parameters );
- *   console.log(result);
- * });
- *
  * @since 2.0.0
  * @category Methods
  */
-export const get = Effect.fn(
-  (
-    instance: CML.FilesDetailsList,
-    index: number,
-  ): Effect.Effect<CML.CIP25FilesDetails, FilesDetailsListError> =>
+export const get: (
+  instance: CML.FilesDetailsList,
+  index: number,
+) => Effect.Effect<CML.CIP25FilesDetails, FilesDetailsListError> = Effect.fn(
+  (instance: CML.FilesDetailsList, index: number) =>
     Effect.try({
       try: () => instance.get(index),
       catch: () =>
@@ -217,20 +132,6 @@ export const get = Effect.fn(
 /**
  * Unsafely calls instance.get without Effect wrapper
  *
- * @example
- * import { FilesDetailsList } from "@lucid-evolution/experimental";
- *
- * // Assume we have a FilesDetailsList instance
- * const instance = ... ;
- *
- * // Using try/catch for error handling
- * try {
- *   const result = FilesDetailsList.getUnsafe(instance,  parameters );
- *   console.log(result);
- * } catch (error) {
- *   console.error(`FilesDetailsList.getUnsafe failed: ${error.message}`);
- * }
- *
  * @since 2.0.0
  * @category MethodsUnsafe
  */
@@ -242,26 +143,14 @@ export const getUnsafe = (
 /**
  * Method add of FilesDetailsList
  *
- * @example
- * import { FilesDetailsList } from "@lucid-evolution/experimental";
- * import { Effect } from "effect";
- *
- * // Using Effect for safe execution with error handling
- * Effect.gen(function*() {
- * // Assume we have a FilesDetailsList instance
- * const instance = ... ;
- *   const result = yield* FilesDetailsList.add(instance,  parameters );
- *   console.log(result);
- * });
- *
  * @since 2.0.0
  * @category Methods
  */
-export const add = Effect.fn(
-  (
-    instance: CML.FilesDetailsList,
-    elem: CML.CIP25FilesDetails,
-  ): Effect.Effect<void, FilesDetailsListError> =>
+export const add: (
+  instance: CML.FilesDetailsList,
+  elem: CML.CIP25FilesDetails,
+) => Effect.Effect<void, FilesDetailsListError> = Effect.fn(
+  (instance: CML.FilesDetailsList, elem: CML.CIP25FilesDetails) =>
     Effect.try({
       try: () => instance.add(elem),
       catch: () =>
@@ -273,20 +162,6 @@ export const add = Effect.fn(
 
 /**
  * Unsafely calls instance.add without Effect wrapper
- *
- * @example
- * import { FilesDetailsList } from "@lucid-evolution/experimental";
- *
- * // Assume we have a FilesDetailsList instance
- * const instance = ... ;
- *
- * // Using try/catch for error handling
- * try {
- *   const result = FilesDetailsList.addUnsafe(instance,  parameters );
- *   console.log(result);
- * } catch (error) {
- *   console.error(`FilesDetailsList.addUnsafe failed: ${error.message}`);
- * }
  *
  * @since 2.0.0
  * @category MethodsUnsafe

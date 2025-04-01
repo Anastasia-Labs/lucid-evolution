@@ -570,52 +570,17 @@ export class ${className}Error extends Data.TaggedError("${className}Error")<{
         type: processTypeName(p.type),
       }));
 
-      // Instance variable placeholder for non-static methods
-      const instanceExample = !isStatic
-        ? `// Assume we have a ${className} instance
- * const instance = ... ;`
-        : "";
-
-      // Use parameter name as placeholder instead of trying to guess values
-      const paramPlaceholders = processedParameters
-        .map((p) => p.name)
-        .join(", ");
-
-      // Improved JSDoc with realistic examples for effect-based function
+      // Improved JSDoc for effect-based function
       const jsDoc = `/**
  * ${isStatic ? `Static method ${name} of ${className}` : `Method ${name} of ${className}`}
- * 
- * @example
- * import { ${className} } from "@${config.packageName}";
- * import { Effect } from "effect";
- * 
- * // Using Effect for safe execution with error handling
- * Effect.gen(function*() {
- * ${instanceExample}
- *   const result = yield* ${className}.${name}(${!isStatic ? "instance" : ""}${!isStatic && parameters.length ? ", " : ""}${parameters.length ? " parameters " : ""});
- *   console.log(result);
- * });
  * 
  * @since ${config.version}
  * @category ${isStatic ? "Constructors" : "Methods"}
  */`;
 
-      // Improved JSDoc with realistic examples for unsafe function
+      // Improved JSDoc for unsafe function
       const unsafeJsDoc = `/**
  * Unsafely calls ${isStatic ? `${className}.${name}` : `instance.${name}`} without Effect wrapper
- * 
- * @example
- * import { ${className} } from "@${config.packageName}";
- * 
- * ${instanceExample}
- * 
- * // Using try/catch for error handling
- * try {
- *   const result = ${className}.${unsafeName}(${!isStatic ? "instance" : ""}${!isStatic && parameters.length ? ", " : ""}${parameters.length ? " parameters " : ""});
- *   console.log(result);
- * } catch (error) {
- *   console.error(\`${className}.${unsafeName} failed: \${error.message}\`);
- * }
  * 
  * @since ${config.version}
  * @category ${isStatic ? "Constructors" : "Methods"}Unsafe
@@ -641,7 +606,7 @@ export class ${className}Error extends Data.TaggedError("${className}Error")<{
         );
 
         return `${jsDoc}
-export const ${name} = Effect.fn(function* (${paramsList}) {
+export const ${name}: (${paramsList}) => Effect.Effect<${processedReturnType}, ${className}Error> = Effect.fn(function* (${paramsList}) {
   return yield* Effect.try({
     try: () => CML.${className}.${originalMethodName}(${paramsCall}),
     catch: () => new ${className}Error({
@@ -651,7 +616,7 @@ export const ${name} = Effect.fn(function* (${paramsList}) {
 });
 
 ${unsafeJsDoc}
-export const ${unsafeName} = (${paramsList}) =>
+export const ${unsafeName} = (${paramsList}): ${processedReturnType} =>
   Effect.runSync(${name}(${processedParameters.map((p) => p.name).join(", ")}));`;
       } else {
         // Instance method - updated with simpler error handling
@@ -677,8 +642,8 @@ export const ${unsafeName} = (${paramsList}) =>
 
         // For instance methods, we need to create a function that calls the method on the instance
         return `${jsDoc}
-export const ${name} = Effect.fn(
-  (${paramsList}): Effect.Effect<${processedReturnType}, ${className}Error> =>
+export const ${name}: (${paramsList}) => Effect.Effect<${processedReturnType}, ${className}Error> = Effect.fn(
+  (${paramsList}) =>
     Effect.try({
       try: () => instance.${originalMethodName}(${paramsCall}),
       catch: () =>
@@ -727,11 +692,6 @@ export type ${enumName} = CML.${enumName};`;
       (member) => `/**
  * ${member} variant of the ${enumName} enum
  * 
- * @example
- * import { ${enumName} } from "@${config.packageName}";
- * 
- * const kind = ${enumName}.${member};
- * 
  * @since ${config.version}
  * @category Variants
  */
@@ -744,12 +704,6 @@ export const ${member} = CML.${enumName}.${member};`,
 /**
  * Get all values of the ${enumName} enum
  * 
- * @example
- * import { ${enumName} } from "@${config.packageName}";
- * 
- * const allValues = ${enumName}.values();
- * console.log(allValues);
- * 
  * @since ${config.version}
  * @category Utils
  */
@@ -759,12 +713,6 @@ export const values = (): Array<CML.${enumName}> => [
 
 /**
  * Convert ${enumName} enum value to string
- * 
- * @example
- * import { ${enumName} } from "@${config.packageName}";
- * 
- * const name = ${enumName}.toString(CML.${enumName}.${members[0]});
- * console.log(name); // "${members[0]}"
  * 
  * @since ${config.version}
  * @category Utils
@@ -779,12 +727,6 @@ export const toString = (value: CML.${enumName}): string => {
 
 /**
  * Convert string to ${enumName} enum value
- * 
- * @example
- * import { ${enumName} } from "@${config.packageName}";
- * 
- * const value = ${enumName}.fromString("${members[0]}");
- * console.log(value); // Some(CML.${enumName}.${members[0]})
  * 
  * @since ${config.version}
  * @category Utils
@@ -853,50 +795,17 @@ const generateFunctionWrapper = (
  * @category Errors
  */`;
 
-  // Create example parameter values for documentation based on parameter types
-  const paramExamples = processedParameters.map((p) => {
-    const paramType = p.type.toLowerCase();
-    if (paramType.includes("string")) return `"example"`;
-    if (paramType.includes("number")) return "42";
-    if (paramType.includes("boolean")) return "true";
-    if (paramType.includes("cml.")) {
-      const typeName = p.type.replace("CML.", "");
-      return `${typeName} instance `;
-    }
-    return " appropriate value ";
-  });
-
-  // JSDoc for Effect-based function with realistic parameters
+  // JSDoc for Effect-based function
   const jsDoc = `/**
  * Wrapper for the ${originalFunctionName} function
- * 
- * @example
- * import { ${name} } from "@${config.packageName}/CML/functions";
- * import { Effect } from "effect";
- * 
- * // Using Effect for safe execution with error handling
- * Effect.gen(function*() {
- *   const result = yield* ${name}(${parameters.length ? paramExamples.join(", ") : ""});
- *   console.log(result);
- * });
  * 
  * @since ${config.version}
  * @category Functions
  */`;
 
-  // JSDoc for unsafe function variant with realistic parameters
+  // JSDoc for unsafe function variant
   const unsafeJsDoc = `/**
  * Unsafely calls ${originalFunctionName} function without Effect wrapper
- * 
- * @example
- * import { ${unsafeName} } from "@${config.packageName}/CML/functions";
- * 
- * try {
- *   const result = ${unsafeName}(${parameters.length ? paramExamples.join(", ") : ""});
- *   console.log(result);
- * } catch (error) {
- *   console.error(\`${unsafeName} failed: \${error.message}\`);
- * }
  * 
  * @since ${config.version}
  * @category FunctionsUnsafe
@@ -911,7 +820,7 @@ export class ${errorClassName} extends Data.TaggedError("${errorClassName}")<{
 }> {}
 
 ${jsDoc}
-export const ${name} = Effect.fn(function* (${paramsList}) {
+export const ${name}: (${paramsList}) => Effect.Effect<${processedReturnType}, ${errorClassName}> = Effect.fn(function* (${paramsList}) {
   return yield* Effect.try({
     try: () => CML.${originalFunctionName}(${paramsCall}),
     catch: () => new ${errorClassName}({

@@ -27,23 +27,13 @@ export class VoteBuilderError extends Data.TaggedError("VoteBuilderError")<{
 /**
  * Method free of VoteBuilder
  *
- * @example
- * import { VoteBuilder } from "@lucid-evolution/experimental";
- * import { Effect } from "effect";
- *
- * // Using Effect for safe execution with error handling
- * Effect.gen(function*() {
- * // Assume we have a VoteBuilder instance
- * const instance = ... ;
- *   const result = yield* VoteBuilder.free(instance);
- *   console.log(result);
- * });
- *
  * @since 2.0.0
  * @category Methods
  */
-export const free = Effect.fn(
-  (instance: CML.VoteBuilder): Effect.Effect<void, VoteBuilderError> =>
+export const free: (
+  instance: CML.VoteBuilder,
+) => Effect.Effect<void, VoteBuilderError> = Effect.fn(
+  (instance: CML.VoteBuilder) =>
     Effect.try({
       try: () => instance.free(),
       catch: () =>
@@ -56,20 +46,6 @@ export const free = Effect.fn(
 /**
  * Unsafely calls instance.free without Effect wrapper
  *
- * @example
- * import { VoteBuilder } from "@lucid-evolution/experimental";
- *
- * // Assume we have a VoteBuilder instance
- * const instance = ... ;
- *
- * // Using try/catch for error handling
- * try {
- *   const result = VoteBuilder.freeUnsafe(instance);
- *   console.log(result);
- * } catch (error) {
- *   console.error(`VoteBuilder.freeUnsafe failed: ${error.message}`);
- * }
- *
  * @since 2.0.0
  * @category MethodsUnsafe
  */
@@ -79,76 +55,46 @@ export const freeUnsafe = (instance: CML.VoteBuilder): void =>
 /**
  * Static method _new of VoteBuilder
  *
- * @example
- * import { VoteBuilder } from "@lucid-evolution/experimental";
- * import { Effect } from "effect";
- *
- * // Using Effect for safe execution with error handling
- * Effect.gen(function*() {
- *
- *   const result = yield* VoteBuilder._new();
- *   console.log(result);
- * });
- *
  * @since 2.0.0
  * @category Constructors
  */
-export const _new = Effect.fn(function* () {
-  return yield* Effect.try({
-    try: () => CML.VoteBuilder.new(),
-    catch: () =>
-      new VoteBuilderError({
-        message: `VoteBuilder._new failed `,
-      }),
+export const _new: () => Effect.Effect<CML.VoteBuilder, VoteBuilderError> =
+  Effect.fn(function* () {
+    return yield* Effect.try({
+      try: () => CML.VoteBuilder.new(),
+      catch: () =>
+        new VoteBuilderError({
+          message: `VoteBuilder._new failed `,
+        }),
+    });
   });
-});
 
 /**
  * Unsafely calls VoteBuilder._new without Effect wrapper
  *
- * @example
- * import { VoteBuilder } from "@lucid-evolution/experimental";
- *
- *
- *
- * // Using try/catch for error handling
- * try {
- *   const result = VoteBuilder._newUnsafe();
- *   console.log(result);
- * } catch (error) {
- *   console.error(`VoteBuilder._newUnsafe failed: ${error.message}`);
- * }
- *
  * @since 2.0.0
  * @category ConstructorsUnsafe
  */
-export const _newUnsafe = () => Effect.runSync(_new());
+export const _newUnsafe = (): CML.VoteBuilder => Effect.runSync(_new());
 
 /**
  * Method withVote of VoteBuilder
  *
- * @example
- * import { VoteBuilder } from "@lucid-evolution/experimental";
- * import { Effect } from "effect";
- *
- * // Using Effect for safe execution with error handling
- * Effect.gen(function*() {
- * // Assume we have a VoteBuilder instance
- * const instance = ... ;
- *   const result = yield* VoteBuilder.withVote(instance,  parameters );
- *   console.log(result);
- * });
- *
  * @since 2.0.0
  * @category Methods
  */
-export const withVote = Effect.fn(
+export const withVote: (
+  instance: CML.VoteBuilder,
+  voter: CML.Voter,
+  govActionId: CML.GovActionId,
+  procedure: CML.VotingProcedure,
+) => Effect.Effect<CML.VoteBuilder, VoteBuilderError> = Effect.fn(
   (
     instance: CML.VoteBuilder,
     voter: CML.Voter,
     govActionId: CML.GovActionId,
     procedure: CML.VotingProcedure,
-  ): Effect.Effect<CML.VoteBuilder, VoteBuilderError> =>
+  ) =>
     Effect.try({
       try: () => instance.with_vote(voter, govActionId, procedure),
       catch: () =>
@@ -160,20 +106,6 @@ export const withVote = Effect.fn(
 
 /**
  * Unsafely calls instance.withVote without Effect wrapper
- *
- * @example
- * import { VoteBuilder } from "@lucid-evolution/experimental";
- *
- * // Assume we have a VoteBuilder instance
- * const instance = ... ;
- *
- * // Using try/catch for error handling
- * try {
- *   const result = VoteBuilder.withVoteUnsafe(instance,  parameters );
- *   console.log(result);
- * } catch (error) {
- *   console.error(`VoteBuilder.withVoteUnsafe failed: ${error.message}`);
- * }
  *
  * @since 2.0.0
  * @category MethodsUnsafe
@@ -189,22 +121,17 @@ export const withVoteUnsafe = (
 /**
  * Method withNativeScriptVote of VoteBuilder
  *
- * @example
- * import { VoteBuilder } from "@lucid-evolution/experimental";
- * import { Effect } from "effect";
- *
- * // Using Effect for safe execution with error handling
- * Effect.gen(function*() {
- * // Assume we have a VoteBuilder instance
- * const instance = ... ;
- *   const result = yield* VoteBuilder.withNativeScriptVote(instance,  parameters );
- *   console.log(result);
- * });
- *
  * @since 2.0.0
  * @category Methods
  */
-export const withNativeScriptVote = Effect.fn(
+export const withNativeScriptVote: (
+  instance: CML.VoteBuilder,
+  voter: CML.Voter,
+  govActionId: CML.GovActionId,
+  procedure: CML.VotingProcedure,
+  nativeScript: CML.NativeScript,
+  witnessInfo: CML.NativeScriptWitnessInfo,
+) => Effect.Effect<CML.VoteBuilder, VoteBuilderError> = Effect.fn(
   (
     instance: CML.VoteBuilder,
     voter: CML.Voter,
@@ -212,7 +139,7 @@ export const withNativeScriptVote = Effect.fn(
     procedure: CML.VotingProcedure,
     nativeScript: CML.NativeScript,
     witnessInfo: CML.NativeScriptWitnessInfo,
-  ): Effect.Effect<CML.VoteBuilder, VoteBuilderError> =>
+  ) =>
     Effect.try({
       try: () =>
         instance.with_native_script_vote(
@@ -231,20 +158,6 @@ export const withNativeScriptVote = Effect.fn(
 
 /**
  * Unsafely calls instance.withNativeScriptVote without Effect wrapper
- *
- * @example
- * import { VoteBuilder } from "@lucid-evolution/experimental";
- *
- * // Assume we have a VoteBuilder instance
- * const instance = ... ;
- *
- * // Using try/catch for error handling
- * try {
- *   const result = VoteBuilder.withNativeScriptVoteUnsafe(instance,  parameters );
- *   console.log(result);
- * } catch (error) {
- *   console.error(`VoteBuilder.withNativeScriptVoteUnsafe failed: ${error.message}`);
- * }
  *
  * @since 2.0.0
  * @category MethodsUnsafe
@@ -271,22 +184,18 @@ export const withNativeScriptVoteUnsafe = (
 /**
  * Method withPlutusVote of VoteBuilder
  *
- * @example
- * import { VoteBuilder } from "@lucid-evolution/experimental";
- * import { Effect } from "effect";
- *
- * // Using Effect for safe execution with error handling
- * Effect.gen(function*() {
- * // Assume we have a VoteBuilder instance
- * const instance = ... ;
- *   const result = yield* VoteBuilder.withPlutusVote(instance,  parameters );
- *   console.log(result);
- * });
- *
  * @since 2.0.0
  * @category Methods
  */
-export const withPlutusVote = Effect.fn(
+export const withPlutusVote: (
+  instance: CML.VoteBuilder,
+  voter: CML.Voter,
+  govActionId: CML.GovActionId,
+  procedure: CML.VotingProcedure,
+  partialWitness: CML.PartialPlutusWitness,
+  requiredSigners: CML.Ed25519KeyHashList,
+  datum: CML.PlutusData,
+) => Effect.Effect<CML.VoteBuilder, VoteBuilderError> = Effect.fn(
   (
     instance: CML.VoteBuilder,
     voter: CML.Voter,
@@ -295,7 +204,7 @@ export const withPlutusVote = Effect.fn(
     partialWitness: CML.PartialPlutusWitness,
     requiredSigners: CML.Ed25519KeyHashList,
     datum: CML.PlutusData,
-  ): Effect.Effect<CML.VoteBuilder, VoteBuilderError> =>
+  ) =>
     Effect.try({
       try: () =>
         instance.with_plutus_vote(
@@ -315,20 +224,6 @@ export const withPlutusVote = Effect.fn(
 
 /**
  * Unsafely calls instance.withPlutusVote without Effect wrapper
- *
- * @example
- * import { VoteBuilder } from "@lucid-evolution/experimental";
- *
- * // Assume we have a VoteBuilder instance
- * const instance = ... ;
- *
- * // Using try/catch for error handling
- * try {
- *   const result = VoteBuilder.withPlutusVoteUnsafe(instance,  parameters );
- *   console.log(result);
- * } catch (error) {
- *   console.error(`VoteBuilder.withPlutusVoteUnsafe failed: ${error.message}`);
- * }
  *
  * @since 2.0.0
  * @category MethodsUnsafe
@@ -357,22 +252,17 @@ export const withPlutusVoteUnsafe = (
 /**
  * Method withPlutusVoteInlineDatum of VoteBuilder
  *
- * @example
- * import { VoteBuilder } from "@lucid-evolution/experimental";
- * import { Effect } from "effect";
- *
- * // Using Effect for safe execution with error handling
- * Effect.gen(function*() {
- * // Assume we have a VoteBuilder instance
- * const instance = ... ;
- *   const result = yield* VoteBuilder.withPlutusVoteInlineDatum(instance,  parameters );
- *   console.log(result);
- * });
- *
  * @since 2.0.0
  * @category Methods
  */
-export const withPlutusVoteInlineDatum = Effect.fn(
+export const withPlutusVoteInlineDatum: (
+  instance: CML.VoteBuilder,
+  voter: CML.Voter,
+  govActionId: CML.GovActionId,
+  procedure: CML.VotingProcedure,
+  partialWitness: CML.PartialPlutusWitness,
+  requiredSigners: CML.Ed25519KeyHashList,
+) => Effect.Effect<CML.VoteBuilder, VoteBuilderError> = Effect.fn(
   (
     instance: CML.VoteBuilder,
     voter: CML.Voter,
@@ -380,7 +270,7 @@ export const withPlutusVoteInlineDatum = Effect.fn(
     procedure: CML.VotingProcedure,
     partialWitness: CML.PartialPlutusWitness,
     requiredSigners: CML.Ed25519KeyHashList,
-  ): Effect.Effect<CML.VoteBuilder, VoteBuilderError> =>
+  ) =>
     Effect.try({
       try: () =>
         instance.with_plutus_vote_inline_datum(
@@ -399,20 +289,6 @@ export const withPlutusVoteInlineDatum = Effect.fn(
 
 /**
  * Unsafely calls instance.withPlutusVoteInlineDatum without Effect wrapper
- *
- * @example
- * import { VoteBuilder } from "@lucid-evolution/experimental";
- *
- * // Assume we have a VoteBuilder instance
- * const instance = ... ;
- *
- * // Using try/catch for error handling
- * try {
- *   const result = VoteBuilder.withPlutusVoteInlineDatumUnsafe(instance,  parameters );
- *   console.log(result);
- * } catch (error) {
- *   console.error(`VoteBuilder.withPlutusVoteInlineDatumUnsafe failed: ${error.message}`);
- * }
  *
  * @since 2.0.0
  * @category MethodsUnsafe
@@ -439,25 +315,13 @@ export const withPlutusVoteInlineDatumUnsafe = (
 /**
  * Method build of VoteBuilder
  *
- * @example
- * import { VoteBuilder } from "@lucid-evolution/experimental";
- * import { Effect } from "effect";
- *
- * // Using Effect for safe execution with error handling
- * Effect.gen(function*() {
- * // Assume we have a VoteBuilder instance
- * const instance = ... ;
- *   const result = yield* VoteBuilder.build(instance);
- *   console.log(result);
- * });
- *
  * @since 2.0.0
  * @category Methods
  */
-export const build = Effect.fn(
-  (
-    instance: CML.VoteBuilder,
-  ): Effect.Effect<CML.VoteBuilderResult, VoteBuilderError> =>
+export const build: (
+  instance: CML.VoteBuilder,
+) => Effect.Effect<CML.VoteBuilderResult, VoteBuilderError> = Effect.fn(
+  (instance: CML.VoteBuilder) =>
     Effect.try({
       try: () => instance.build(),
       catch: () =>
@@ -469,20 +333,6 @@ export const build = Effect.fn(
 
 /**
  * Unsafely calls instance.build without Effect wrapper
- *
- * @example
- * import { VoteBuilder } from "@lucid-evolution/experimental";
- *
- * // Assume we have a VoteBuilder instance
- * const instance = ... ;
- *
- * // Using try/catch for error handling
- * try {
- *   const result = VoteBuilder.buildUnsafe(instance);
- *   console.log(result);
- * } catch (error) {
- *   console.error(`VoteBuilder.buildUnsafe failed: ${error.message}`);
- * }
  *
  * @since 2.0.0
  * @category MethodsUnsafe

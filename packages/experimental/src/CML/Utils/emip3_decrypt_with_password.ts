@@ -21,44 +21,26 @@ export class Emip3DecryptWithPasswordError extends Data.TaggedError(
 /**
  * Wrapper for the emip3_decrypt_with_password function
  *
- * @example
- * import { emip3DecryptWithPassword } from "@lucid-evolution/experimental/CML/functions";
- * import { Effect } from "effect";
- *
- * // Using Effect for safe execution with error handling
- * Effect.gen(function*() {
- *   const result = yield* emip3DecryptWithPassword("example", "example");
- *   console.log(result);
- * });
- *
  * @since 2.0.0
  * @category Functions
  */
-export const emip3DecryptWithPassword = Effect.fn(function* (
+export const emip3DecryptWithPassword: (
   password: string,
   data: string,
-) {
-  return yield* Effect.try({
-    try: () => CML.emip3_decrypt_with_password(password, data),
-    catch: () =>
-      new Emip3DecryptWithPasswordError({
-        message: `emip3_decrypt_with_password failed with parameters: ${password}, ${data}.`,
-      }),
-  });
-});
+) => Effect.Effect<string, Emip3DecryptWithPasswordError> = Effect.fn(
+  function* (password: string, data: string) {
+    return yield* Effect.try({
+      try: () => CML.emip3_decrypt_with_password(password, data),
+      catch: () =>
+        new Emip3DecryptWithPasswordError({
+          message: `emip3_decrypt_with_password failed with parameters: ${password}, ${data}.`,
+        }),
+    });
+  },
+);
 
 /**
  * Unsafely calls emip3_decrypt_with_password function without Effect wrapper
- *
- * @example
- * import { emip3DecryptWithPasswordUnsafe } from "@lucid-evolution/experimental/CML/functions";
- *
- * try {
- *   const result = emip3DecryptWithPasswordUnsafe("example", "example");
- *   console.log(result);
- * } catch (error) {
- *   console.error(`emip3DecryptWithPasswordUnsafe failed: ${error.message}`);
- * }
  *
  * @since 2.0.0
  * @category FunctionsUnsafe

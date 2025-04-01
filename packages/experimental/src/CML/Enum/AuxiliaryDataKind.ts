@@ -14,11 +14,6 @@ export type AuxiliaryDataKind = CML.AuxiliaryDataKind;
 /**
  * Shelley variant of the AuxiliaryDataKind enum
  *
- * @example
- * import { AuxiliaryDataKind } from "@lucid-evolution/experimental";
- *
- * const kind = AuxiliaryDataKind.Shelley;
- *
  * @since 2.0.0
  * @category Variants
  */
@@ -26,11 +21,6 @@ export const Shelley = CML.AuxiliaryDataKind.Shelley;
 
 /**
  * ShelleyMA variant of the AuxiliaryDataKind enum
- *
- * @example
- * import { AuxiliaryDataKind } from "@lucid-evolution/experimental";
- *
- * const kind = AuxiliaryDataKind.ShelleyMA;
  *
  * @since 2.0.0
  * @category Variants
@@ -40,11 +30,6 @@ export const ShelleyMA = CML.AuxiliaryDataKind.ShelleyMA;
 /**
  * Conway variant of the AuxiliaryDataKind enum
  *
- * @example
- * import { AuxiliaryDataKind } from "@lucid-evolution/experimental";
- *
- * const kind = AuxiliaryDataKind.Conway;
- *
  * @since 2.0.0
  * @category Variants
  */
@@ -52,12 +37,6 @@ export const Conway = CML.AuxiliaryDataKind.Conway;
 
 /**
  * Get all values of the AuxiliaryDataKind enum
- *
- * @example
- * import { AuxiliaryDataKind } from "@lucid-evolution/experimental";
- *
- * const allValues = AuxiliaryDataKind.values();
- * console.log(allValues);
  *
  * @since 2.0.0
  * @category Utils
@@ -70,12 +49,6 @@ export const values = (): Array<CML.AuxiliaryDataKind> => [
 
 /**
  * Convert AuxiliaryDataKind enum value to string
- *
- * @example
- * import { AuxiliaryDataKind } from "@lucid-evolution/experimental";
- *
- * const name = AuxiliaryDataKind.toString(CML.AuxiliaryDataKind.Shelley);
- * console.log(name); // "Shelley"
  *
  * @since 2.0.0
  * @category Utils
@@ -95,12 +68,6 @@ export const toString = (value: CML.AuxiliaryDataKind): string => {
 
 /**
  * Convert string to AuxiliaryDataKind enum value
- *
- * @example
- * import { AuxiliaryDataKind } from "@lucid-evolution/experimental";
- *
- * const value = AuxiliaryDataKind.fromString("Shelley");
- * console.log(value); // Some(CML.AuxiliaryDataKind.Shelley)
  *
  * @since 2.0.0
  * @category Utils

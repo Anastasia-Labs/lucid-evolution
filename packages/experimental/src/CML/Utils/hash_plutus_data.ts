@@ -21,20 +21,14 @@ export class HashPlutusDataError extends Data.TaggedError(
 /**
  * Wrapper for the hash_plutus_data function
  *
- * @example
- * import { hashPlutusData } from "@lucid-evolution/experimental/CML/functions";
- * import { Effect } from "effect";
- *
- * // Using Effect for safe execution with error handling
- * Effect.gen(function*() {
- *   const result = yield* hashPlutusData(PlutusData instance );
- *   console.log(result);
- * });
- *
  * @since 2.0.0
  * @category Functions
  */
-export const hashPlutusData = Effect.fn(function* (plutusData: CML.PlutusData) {
+export const hashPlutusData: (
+  plutusData: CML.PlutusData,
+) => Effect.Effect<CML.DatumHash, HashPlutusDataError> = Effect.fn(function* (
+  plutusData: CML.PlutusData,
+) {
   return yield* Effect.try({
     try: () => CML.hash_plutus_data(plutusData),
     catch: () =>
@@ -46,16 +40,6 @@ export const hashPlutusData = Effect.fn(function* (plutusData: CML.PlutusData) {
 
 /**
  * Unsafely calls hash_plutus_data function without Effect wrapper
- *
- * @example
- * import { hashPlutusDataUnsafe } from "@lucid-evolution/experimental/CML/functions";
- *
- * try {
- *   const result = hashPlutusDataUnsafe(PlutusData instance );
- *   console.log(result);
- * } catch (error) {
- *   console.error(`hashPlutusDataUnsafe failed: ${error.message}`);
- * }
  *
  * @since 2.0.0
  * @category FunctionsUnsafe

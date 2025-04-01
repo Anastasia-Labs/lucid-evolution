@@ -29,25 +29,13 @@ export class WithdrawalBuilderResultError extends Data.TaggedError(
 /**
  * Method free of WithdrawalBuilderResult
  *
- * @example
- * import { WithdrawalBuilderResult } from "@lucid-evolution/experimental";
- * import { Effect } from "effect";
- *
- * // Using Effect for safe execution with error handling
- * Effect.gen(function*() {
- * // Assume we have a WithdrawalBuilderResult instance
- * const instance = ... ;
- *   const result = yield* WithdrawalBuilderResult.free(instance);
- *   console.log(result);
- * });
- *
  * @since 2.0.0
  * @category Methods
  */
-export const free = Effect.fn(
-  (
-    instance: CML.WithdrawalBuilderResult,
-  ): Effect.Effect<void, WithdrawalBuilderResultError> =>
+export const free: (
+  instance: CML.WithdrawalBuilderResult,
+) => Effect.Effect<void, WithdrawalBuilderResultError> = Effect.fn(
+  (instance: CML.WithdrawalBuilderResult) =>
     Effect.try({
       try: () => instance.free(),
       catch: () =>
@@ -59,20 +47,6 @@ export const free = Effect.fn(
 
 /**
  * Unsafely calls instance.free without Effect wrapper
- *
- * @example
- * import { WithdrawalBuilderResult } from "@lucid-evolution/experimental";
- *
- * // Assume we have a WithdrawalBuilderResult instance
- * const instance = ... ;
- *
- * // Using try/catch for error handling
- * try {
- *   const result = WithdrawalBuilderResult.freeUnsafe(instance);
- *   console.log(result);
- * } catch (error) {
- *   console.error(`WithdrawalBuilderResult.freeUnsafe failed: ${error.message}`);
- * }
  *
  * @since 2.0.0
  * @category MethodsUnsafe

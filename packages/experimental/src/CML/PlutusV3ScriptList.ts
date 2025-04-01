@@ -29,25 +29,13 @@ export class PlutusV3ScriptListError extends Data.TaggedError(
 /**
  * Method free of PlutusV3ScriptList
  *
- * @example
- * import { PlutusV3ScriptList } from "@lucid-evolution/experimental";
- * import { Effect } from "effect";
- *
- * // Using Effect for safe execution with error handling
- * Effect.gen(function*() {
- * // Assume we have a PlutusV3ScriptList instance
- * const instance = ... ;
- *   const result = yield* PlutusV3ScriptList.free(instance);
- *   console.log(result);
- * });
- *
  * @since 2.0.0
  * @category Methods
  */
-export const free = Effect.fn(
-  (
-    instance: CML.PlutusV3ScriptList,
-  ): Effect.Effect<void, PlutusV3ScriptListError> =>
+export const free: (
+  instance: CML.PlutusV3ScriptList,
+) => Effect.Effect<void, PlutusV3ScriptListError> = Effect.fn(
+  (instance: CML.PlutusV3ScriptList) =>
     Effect.try({
       try: () => instance.free(),
       catch: () =>
@@ -60,20 +48,6 @@ export const free = Effect.fn(
 /**
  * Unsafely calls instance.free without Effect wrapper
  *
- * @example
- * import { PlutusV3ScriptList } from "@lucid-evolution/experimental";
- *
- * // Assume we have a PlutusV3ScriptList instance
- * const instance = ... ;
- *
- * // Using try/catch for error handling
- * try {
- *   const result = PlutusV3ScriptList.freeUnsafe(instance);
- *   console.log(result);
- * } catch (error) {
- *   console.error(`PlutusV3ScriptList.freeUnsafe failed: ${error.message}`);
- * }
- *
  * @since 2.0.0
  * @category MethodsUnsafe
  */
@@ -83,21 +57,13 @@ export const freeUnsafe = (instance: CML.PlutusV3ScriptList): void =>
 /**
  * Static method _new of PlutusV3ScriptList
  *
- * @example
- * import { PlutusV3ScriptList } from "@lucid-evolution/experimental";
- * import { Effect } from "effect";
- *
- * // Using Effect for safe execution with error handling
- * Effect.gen(function*() {
- *
- *   const result = yield* PlutusV3ScriptList._new();
- *   console.log(result);
- * });
- *
  * @since 2.0.0
  * @category Constructors
  */
-export const _new = Effect.fn(function* () {
+export const _new: () => Effect.Effect<
+  CML.PlutusV3ScriptList,
+  PlutusV3ScriptListError
+> = Effect.fn(function* () {
   return yield* Effect.try({
     try: () => CML.PlutusV3ScriptList.new(),
     catch: () =>
@@ -110,46 +76,21 @@ export const _new = Effect.fn(function* () {
 /**
  * Unsafely calls PlutusV3ScriptList._new without Effect wrapper
  *
- * @example
- * import { PlutusV3ScriptList } from "@lucid-evolution/experimental";
- *
- *
- *
- * // Using try/catch for error handling
- * try {
- *   const result = PlutusV3ScriptList._newUnsafe();
- *   console.log(result);
- * } catch (error) {
- *   console.error(`PlutusV3ScriptList._newUnsafe failed: ${error.message}`);
- * }
- *
  * @since 2.0.0
  * @category ConstructorsUnsafe
  */
-export const _newUnsafe = () => Effect.runSync(_new());
+export const _newUnsafe = (): CML.PlutusV3ScriptList => Effect.runSync(_new());
 
 /**
  * Method len of PlutusV3ScriptList
  *
- * @example
- * import { PlutusV3ScriptList } from "@lucid-evolution/experimental";
- * import { Effect } from "effect";
- *
- * // Using Effect for safe execution with error handling
- * Effect.gen(function*() {
- * // Assume we have a PlutusV3ScriptList instance
- * const instance = ... ;
- *   const result = yield* PlutusV3ScriptList.len(instance);
- *   console.log(result);
- * });
- *
  * @since 2.0.0
  * @category Methods
  */
-export const len = Effect.fn(
-  (
-    instance: CML.PlutusV3ScriptList,
-  ): Effect.Effect<number, PlutusV3ScriptListError> =>
+export const len: (
+  instance: CML.PlutusV3ScriptList,
+) => Effect.Effect<number, PlutusV3ScriptListError> = Effect.fn(
+  (instance: CML.PlutusV3ScriptList) =>
     Effect.try({
       try: () => instance.len(),
       catch: () =>
@@ -162,20 +103,6 @@ export const len = Effect.fn(
 /**
  * Unsafely calls instance.len without Effect wrapper
  *
- * @example
- * import { PlutusV3ScriptList } from "@lucid-evolution/experimental";
- *
- * // Assume we have a PlutusV3ScriptList instance
- * const instance = ... ;
- *
- * // Using try/catch for error handling
- * try {
- *   const result = PlutusV3ScriptList.lenUnsafe(instance);
- *   console.log(result);
- * } catch (error) {
- *   console.error(`PlutusV3ScriptList.lenUnsafe failed: ${error.message}`);
- * }
- *
  * @since 2.0.0
  * @category MethodsUnsafe
  */
@@ -185,26 +112,14 @@ export const lenUnsafe = (instance: CML.PlutusV3ScriptList): number =>
 /**
  * Method get of PlutusV3ScriptList
  *
- * @example
- * import { PlutusV3ScriptList } from "@lucid-evolution/experimental";
- * import { Effect } from "effect";
- *
- * // Using Effect for safe execution with error handling
- * Effect.gen(function*() {
- * // Assume we have a PlutusV3ScriptList instance
- * const instance = ... ;
- *   const result = yield* PlutusV3ScriptList.get(instance,  parameters );
- *   console.log(result);
- * });
- *
  * @since 2.0.0
  * @category Methods
  */
-export const get = Effect.fn(
-  (
-    instance: CML.PlutusV3ScriptList,
-    index: number,
-  ): Effect.Effect<CML.PlutusV3Script, PlutusV3ScriptListError> =>
+export const get: (
+  instance: CML.PlutusV3ScriptList,
+  index: number,
+) => Effect.Effect<CML.PlutusV3Script, PlutusV3ScriptListError> = Effect.fn(
+  (instance: CML.PlutusV3ScriptList, index: number) =>
     Effect.try({
       try: () => instance.get(index),
       catch: () =>
@@ -217,20 +132,6 @@ export const get = Effect.fn(
 /**
  * Unsafely calls instance.get without Effect wrapper
  *
- * @example
- * import { PlutusV3ScriptList } from "@lucid-evolution/experimental";
- *
- * // Assume we have a PlutusV3ScriptList instance
- * const instance = ... ;
- *
- * // Using try/catch for error handling
- * try {
- *   const result = PlutusV3ScriptList.getUnsafe(instance,  parameters );
- *   console.log(result);
- * } catch (error) {
- *   console.error(`PlutusV3ScriptList.getUnsafe failed: ${error.message}`);
- * }
- *
  * @since 2.0.0
  * @category MethodsUnsafe
  */
@@ -242,26 +143,14 @@ export const getUnsafe = (
 /**
  * Method add of PlutusV3ScriptList
  *
- * @example
- * import { PlutusV3ScriptList } from "@lucid-evolution/experimental";
- * import { Effect } from "effect";
- *
- * // Using Effect for safe execution with error handling
- * Effect.gen(function*() {
- * // Assume we have a PlutusV3ScriptList instance
- * const instance = ... ;
- *   const result = yield* PlutusV3ScriptList.add(instance,  parameters );
- *   console.log(result);
- * });
- *
  * @since 2.0.0
  * @category Methods
  */
-export const add = Effect.fn(
-  (
-    instance: CML.PlutusV3ScriptList,
-    elem: CML.PlutusV3Script,
-  ): Effect.Effect<void, PlutusV3ScriptListError> =>
+export const add: (
+  instance: CML.PlutusV3ScriptList,
+  elem: CML.PlutusV3Script,
+) => Effect.Effect<void, PlutusV3ScriptListError> = Effect.fn(
+  (instance: CML.PlutusV3ScriptList, elem: CML.PlutusV3Script) =>
     Effect.try({
       try: () => instance.add(elem),
       catch: () =>
@@ -273,20 +162,6 @@ export const add = Effect.fn(
 
 /**
  * Unsafely calls instance.add without Effect wrapper
- *
- * @example
- * import { PlutusV3ScriptList } from "@lucid-evolution/experimental";
- *
- * // Assume we have a PlutusV3ScriptList instance
- * const instance = ... ;
- *
- * // Using try/catch for error handling
- * try {
- *   const result = PlutusV3ScriptList.addUnsafe(instance,  parameters );
- *   console.log(result);
- * } catch (error) {
- *   console.error(`PlutusV3ScriptList.addUnsafe failed: ${error.message}`);
- * }
  *
  * @since 2.0.0
  * @category MethodsUnsafe

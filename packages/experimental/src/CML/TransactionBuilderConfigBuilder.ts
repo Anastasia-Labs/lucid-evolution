@@ -30,25 +30,13 @@ export class TransactionBuilderConfigBuilderError extends Data.TaggedError(
 /**
  * Method free of TransactionBuilderConfigBuilder
  *
- * @example
- * import { TransactionBuilderConfigBuilder } from "@lucid-evolution/experimental";
- * import { Effect } from "effect";
- *
- * // Using Effect for safe execution with error handling
- * Effect.gen(function*() {
- * // Assume we have a TransactionBuilderConfigBuilder instance
- * const instance = ... ;
- *   const result = yield* TransactionBuilderConfigBuilder.free(instance);
- *   console.log(result);
- * });
- *
  * @since 2.0.0
  * @category Methods
  */
-export const free = Effect.fn(
-  (
-    instance: CML.TransactionBuilderConfigBuilder,
-  ): Effect.Effect<void, TransactionBuilderConfigBuilderError> =>
+export const free: (
+  instance: CML.TransactionBuilderConfigBuilder,
+) => Effect.Effect<void, TransactionBuilderConfigBuilderError> = Effect.fn(
+  (instance: CML.TransactionBuilderConfigBuilder) =>
     Effect.try({
       try: () => instance.free(),
       catch: () =>
@@ -61,20 +49,6 @@ export const free = Effect.fn(
 /**
  * Unsafely calls instance.free without Effect wrapper
  *
- * @example
- * import { TransactionBuilderConfigBuilder } from "@lucid-evolution/experimental";
- *
- * // Assume we have a TransactionBuilderConfigBuilder instance
- * const instance = ... ;
- *
- * // Using try/catch for error handling
- * try {
- *   const result = TransactionBuilderConfigBuilder.freeUnsafe(instance);
- *   console.log(result);
- * } catch (error) {
- *   console.error(`TransactionBuilderConfigBuilder.freeUnsafe failed: ${error.message}`);
- * }
- *
  * @since 2.0.0
  * @category MethodsUnsafe
  */
@@ -85,21 +59,13 @@ export const freeUnsafe = (
 /**
  * Static method _new of TransactionBuilderConfigBuilder
  *
- * @example
- * import { TransactionBuilderConfigBuilder } from "@lucid-evolution/experimental";
- * import { Effect } from "effect";
- *
- * // Using Effect for safe execution with error handling
- * Effect.gen(function*() {
- *
- *   const result = yield* TransactionBuilderConfigBuilder._new();
- *   console.log(result);
- * });
- *
  * @since 2.0.0
  * @category Constructors
  */
-export const _new = Effect.fn(function* () {
+export const _new: () => Effect.Effect<
+  CML.TransactionBuilderConfigBuilder,
+  TransactionBuilderConfigBuilderError
+> = Effect.fn(function* () {
   return yield* Effect.try({
     try: () => CML.TransactionBuilderConfigBuilder.new(),
     catch: () =>
@@ -112,50 +78,26 @@ export const _new = Effect.fn(function* () {
 /**
  * Unsafely calls TransactionBuilderConfigBuilder._new without Effect wrapper
  *
- * @example
- * import { TransactionBuilderConfigBuilder } from "@lucid-evolution/experimental";
- *
- *
- *
- * // Using try/catch for error handling
- * try {
- *   const result = TransactionBuilderConfigBuilder._newUnsafe();
- *   console.log(result);
- * } catch (error) {
- *   console.error(`TransactionBuilderConfigBuilder._newUnsafe failed: ${error.message}`);
- * }
- *
  * @since 2.0.0
  * @category ConstructorsUnsafe
  */
-export const _newUnsafe = () => Effect.runSync(_new());
+export const _newUnsafe = (): CML.TransactionBuilderConfigBuilder =>
+  Effect.runSync(_new());
 
 /**
  * Method feeAlgo of TransactionBuilderConfigBuilder
  *
- * @example
- * import { TransactionBuilderConfigBuilder } from "@lucid-evolution/experimental";
- * import { Effect } from "effect";
- *
- * // Using Effect for safe execution with error handling
- * Effect.gen(function*() {
- * // Assume we have a TransactionBuilderConfigBuilder instance
- * const instance = ... ;
- *   const result = yield* TransactionBuilderConfigBuilder.feeAlgo(instance,  parameters );
- *   console.log(result);
- * });
- *
  * @since 2.0.0
  * @category Methods
  */
-export const feeAlgo = Effect.fn(
-  (
-    instance: CML.TransactionBuilderConfigBuilder,
-    _feeAlgo: CML.LinearFee,
-  ): Effect.Effect<
-    CML.TransactionBuilderConfigBuilder,
-    TransactionBuilderConfigBuilderError
-  > =>
+export const feeAlgo: (
+  instance: CML.TransactionBuilderConfigBuilder,
+  _feeAlgo: CML.LinearFee,
+) => Effect.Effect<
+  CML.TransactionBuilderConfigBuilder,
+  TransactionBuilderConfigBuilderError
+> = Effect.fn(
+  (instance: CML.TransactionBuilderConfigBuilder, _feeAlgo: CML.LinearFee) =>
     Effect.try({
       try: () => instance.fee_algo(_feeAlgo),
       catch: () =>
@@ -167,20 +109,6 @@ export const feeAlgo = Effect.fn(
 
 /**
  * Unsafely calls instance.feeAlgo without Effect wrapper
- *
- * @example
- * import { TransactionBuilderConfigBuilder } from "@lucid-evolution/experimental";
- *
- * // Assume we have a TransactionBuilderConfigBuilder instance
- * const instance = ... ;
- *
- * // Using try/catch for error handling
- * try {
- *   const result = TransactionBuilderConfigBuilder.feeAlgoUnsafe(instance,  parameters );
- *   console.log(result);
- * } catch (error) {
- *   console.error(`TransactionBuilderConfigBuilder.feeAlgoUnsafe failed: ${error.message}`);
- * }
  *
  * @since 2.0.0
  * @category MethodsUnsafe
@@ -194,29 +122,17 @@ export const feeAlgoUnsafe = (
 /**
  * Method coinsPerUtxoByte of TransactionBuilderConfigBuilder
  *
- * @example
- * import { TransactionBuilderConfigBuilder } from "@lucid-evolution/experimental";
- * import { Effect } from "effect";
- *
- * // Using Effect for safe execution with error handling
- * Effect.gen(function*() {
- * // Assume we have a TransactionBuilderConfigBuilder instance
- * const instance = ... ;
- *   const result = yield* TransactionBuilderConfigBuilder.coinsPerUtxoByte(instance,  parameters );
- *   console.log(result);
- * });
- *
  * @since 2.0.0
  * @category Methods
  */
-export const coinsPerUtxoByte = Effect.fn(
-  (
-    instance: CML.TransactionBuilderConfigBuilder,
-    _coinsPerUtxoByte: bigint,
-  ): Effect.Effect<
-    CML.TransactionBuilderConfigBuilder,
-    TransactionBuilderConfigBuilderError
-  > =>
+export const coinsPerUtxoByte: (
+  instance: CML.TransactionBuilderConfigBuilder,
+  _coinsPerUtxoByte: bigint,
+) => Effect.Effect<
+  CML.TransactionBuilderConfigBuilder,
+  TransactionBuilderConfigBuilderError
+> = Effect.fn(
+  (instance: CML.TransactionBuilderConfigBuilder, _coinsPerUtxoByte: bigint) =>
     Effect.try({
       try: () => instance.coins_per_utxo_byte(_coinsPerUtxoByte),
       catch: () =>
@@ -228,20 +144,6 @@ export const coinsPerUtxoByte = Effect.fn(
 
 /**
  * Unsafely calls instance.coinsPerUtxoByte without Effect wrapper
- *
- * @example
- * import { TransactionBuilderConfigBuilder } from "@lucid-evolution/experimental";
- *
- * // Assume we have a TransactionBuilderConfigBuilder instance
- * const instance = ... ;
- *
- * // Using try/catch for error handling
- * try {
- *   const result = TransactionBuilderConfigBuilder.coinsPerUtxoByteUnsafe(instance,  parameters );
- *   console.log(result);
- * } catch (error) {
- *   console.error(`TransactionBuilderConfigBuilder.coinsPerUtxoByteUnsafe failed: ${error.message}`);
- * }
  *
  * @since 2.0.0
  * @category MethodsUnsafe
@@ -255,29 +157,17 @@ export const coinsPerUtxoByteUnsafe = (
 /**
  * Method poolDeposit of TransactionBuilderConfigBuilder
  *
- * @example
- * import { TransactionBuilderConfigBuilder } from "@lucid-evolution/experimental";
- * import { Effect } from "effect";
- *
- * // Using Effect for safe execution with error handling
- * Effect.gen(function*() {
- * // Assume we have a TransactionBuilderConfigBuilder instance
- * const instance = ... ;
- *   const result = yield* TransactionBuilderConfigBuilder.poolDeposit(instance,  parameters );
- *   console.log(result);
- * });
- *
  * @since 2.0.0
  * @category Methods
  */
-export const poolDeposit = Effect.fn(
-  (
-    instance: CML.TransactionBuilderConfigBuilder,
-    _poolDeposit: bigint,
-  ): Effect.Effect<
-    CML.TransactionBuilderConfigBuilder,
-    TransactionBuilderConfigBuilderError
-  > =>
+export const poolDeposit: (
+  instance: CML.TransactionBuilderConfigBuilder,
+  _poolDeposit: bigint,
+) => Effect.Effect<
+  CML.TransactionBuilderConfigBuilder,
+  TransactionBuilderConfigBuilderError
+> = Effect.fn(
+  (instance: CML.TransactionBuilderConfigBuilder, _poolDeposit: bigint) =>
     Effect.try({
       try: () => instance.pool_deposit(_poolDeposit),
       catch: () =>
@@ -289,20 +179,6 @@ export const poolDeposit = Effect.fn(
 
 /**
  * Unsafely calls instance.poolDeposit without Effect wrapper
- *
- * @example
- * import { TransactionBuilderConfigBuilder } from "@lucid-evolution/experimental";
- *
- * // Assume we have a TransactionBuilderConfigBuilder instance
- * const instance = ... ;
- *
- * // Using try/catch for error handling
- * try {
- *   const result = TransactionBuilderConfigBuilder.poolDepositUnsafe(instance,  parameters );
- *   console.log(result);
- * } catch (error) {
- *   console.error(`TransactionBuilderConfigBuilder.poolDepositUnsafe failed: ${error.message}`);
- * }
  *
  * @since 2.0.0
  * @category MethodsUnsafe
@@ -316,29 +192,17 @@ export const poolDepositUnsafe = (
 /**
  * Method keyDeposit of TransactionBuilderConfigBuilder
  *
- * @example
- * import { TransactionBuilderConfigBuilder } from "@lucid-evolution/experimental";
- * import { Effect } from "effect";
- *
- * // Using Effect for safe execution with error handling
- * Effect.gen(function*() {
- * // Assume we have a TransactionBuilderConfigBuilder instance
- * const instance = ... ;
- *   const result = yield* TransactionBuilderConfigBuilder.keyDeposit(instance,  parameters );
- *   console.log(result);
- * });
- *
  * @since 2.0.0
  * @category Methods
  */
-export const keyDeposit = Effect.fn(
-  (
-    instance: CML.TransactionBuilderConfigBuilder,
-    _keyDeposit: bigint,
-  ): Effect.Effect<
-    CML.TransactionBuilderConfigBuilder,
-    TransactionBuilderConfigBuilderError
-  > =>
+export const keyDeposit: (
+  instance: CML.TransactionBuilderConfigBuilder,
+  _keyDeposit: bigint,
+) => Effect.Effect<
+  CML.TransactionBuilderConfigBuilder,
+  TransactionBuilderConfigBuilderError
+> = Effect.fn(
+  (instance: CML.TransactionBuilderConfigBuilder, _keyDeposit: bigint) =>
     Effect.try({
       try: () => instance.key_deposit(_keyDeposit),
       catch: () =>
@@ -350,20 +214,6 @@ export const keyDeposit = Effect.fn(
 
 /**
  * Unsafely calls instance.keyDeposit without Effect wrapper
- *
- * @example
- * import { TransactionBuilderConfigBuilder } from "@lucid-evolution/experimental";
- *
- * // Assume we have a TransactionBuilderConfigBuilder instance
- * const instance = ... ;
- *
- * // Using try/catch for error handling
- * try {
- *   const result = TransactionBuilderConfigBuilder.keyDepositUnsafe(instance,  parameters );
- *   console.log(result);
- * } catch (error) {
- *   console.error(`TransactionBuilderConfigBuilder.keyDepositUnsafe failed: ${error.message}`);
- * }
  *
  * @since 2.0.0
  * @category MethodsUnsafe
@@ -377,29 +227,17 @@ export const keyDepositUnsafe = (
 /**
  * Method maxValueSize of TransactionBuilderConfigBuilder
  *
- * @example
- * import { TransactionBuilderConfigBuilder } from "@lucid-evolution/experimental";
- * import { Effect } from "effect";
- *
- * // Using Effect for safe execution with error handling
- * Effect.gen(function*() {
- * // Assume we have a TransactionBuilderConfigBuilder instance
- * const instance = ... ;
- *   const result = yield* TransactionBuilderConfigBuilder.maxValueSize(instance,  parameters );
- *   console.log(result);
- * });
- *
  * @since 2.0.0
  * @category Methods
  */
-export const maxValueSize = Effect.fn(
-  (
-    instance: CML.TransactionBuilderConfigBuilder,
-    _maxValueSize: number,
-  ): Effect.Effect<
-    CML.TransactionBuilderConfigBuilder,
-    TransactionBuilderConfigBuilderError
-  > =>
+export const maxValueSize: (
+  instance: CML.TransactionBuilderConfigBuilder,
+  _maxValueSize: number,
+) => Effect.Effect<
+  CML.TransactionBuilderConfigBuilder,
+  TransactionBuilderConfigBuilderError
+> = Effect.fn(
+  (instance: CML.TransactionBuilderConfigBuilder, _maxValueSize: number) =>
     Effect.try({
       try: () => instance.max_value_size(_maxValueSize),
       catch: () =>
@@ -411,20 +249,6 @@ export const maxValueSize = Effect.fn(
 
 /**
  * Unsafely calls instance.maxValueSize without Effect wrapper
- *
- * @example
- * import { TransactionBuilderConfigBuilder } from "@lucid-evolution/experimental";
- *
- * // Assume we have a TransactionBuilderConfigBuilder instance
- * const instance = ... ;
- *
- * // Using try/catch for error handling
- * try {
- *   const result = TransactionBuilderConfigBuilder.maxValueSizeUnsafe(instance,  parameters );
- *   console.log(result);
- * } catch (error) {
- *   console.error(`TransactionBuilderConfigBuilder.maxValueSizeUnsafe failed: ${error.message}`);
- * }
  *
  * @since 2.0.0
  * @category MethodsUnsafe
@@ -438,29 +262,17 @@ export const maxValueSizeUnsafe = (
 /**
  * Method maxTxSize of TransactionBuilderConfigBuilder
  *
- * @example
- * import { TransactionBuilderConfigBuilder } from "@lucid-evolution/experimental";
- * import { Effect } from "effect";
- *
- * // Using Effect for safe execution with error handling
- * Effect.gen(function*() {
- * // Assume we have a TransactionBuilderConfigBuilder instance
- * const instance = ... ;
- *   const result = yield* TransactionBuilderConfigBuilder.maxTxSize(instance,  parameters );
- *   console.log(result);
- * });
- *
  * @since 2.0.0
  * @category Methods
  */
-export const maxTxSize = Effect.fn(
-  (
-    instance: CML.TransactionBuilderConfigBuilder,
-    _maxTxSize: number,
-  ): Effect.Effect<
-    CML.TransactionBuilderConfigBuilder,
-    TransactionBuilderConfigBuilderError
-  > =>
+export const maxTxSize: (
+  instance: CML.TransactionBuilderConfigBuilder,
+  _maxTxSize: number,
+) => Effect.Effect<
+  CML.TransactionBuilderConfigBuilder,
+  TransactionBuilderConfigBuilderError
+> = Effect.fn(
+  (instance: CML.TransactionBuilderConfigBuilder, _maxTxSize: number) =>
     Effect.try({
       try: () => instance.max_tx_size(_maxTxSize),
       catch: () =>
@@ -472,20 +284,6 @@ export const maxTxSize = Effect.fn(
 
 /**
  * Unsafely calls instance.maxTxSize without Effect wrapper
- *
- * @example
- * import { TransactionBuilderConfigBuilder } from "@lucid-evolution/experimental";
- *
- * // Assume we have a TransactionBuilderConfigBuilder instance
- * const instance = ... ;
- *
- * // Using try/catch for error handling
- * try {
- *   const result = TransactionBuilderConfigBuilder.maxTxSizeUnsafe(instance,  parameters );
- *   console.log(result);
- * } catch (error) {
- *   console.error(`TransactionBuilderConfigBuilder.maxTxSizeUnsafe failed: ${error.message}`);
- * }
  *
  * @since 2.0.0
  * @category MethodsUnsafe
@@ -499,29 +297,17 @@ export const maxTxSizeUnsafe = (
 /**
  * Method preferPureChange of TransactionBuilderConfigBuilder
  *
- * @example
- * import { TransactionBuilderConfigBuilder } from "@lucid-evolution/experimental";
- * import { Effect } from "effect";
- *
- * // Using Effect for safe execution with error handling
- * Effect.gen(function*() {
- * // Assume we have a TransactionBuilderConfigBuilder instance
- * const instance = ... ;
- *   const result = yield* TransactionBuilderConfigBuilder.preferPureChange(instance,  parameters );
- *   console.log(result);
- * });
- *
  * @since 2.0.0
  * @category Methods
  */
-export const preferPureChange = Effect.fn(
-  (
-    instance: CML.TransactionBuilderConfigBuilder,
-    _preferPureChange: boolean,
-  ): Effect.Effect<
-    CML.TransactionBuilderConfigBuilder,
-    TransactionBuilderConfigBuilderError
-  > =>
+export const preferPureChange: (
+  instance: CML.TransactionBuilderConfigBuilder,
+  _preferPureChange: boolean,
+) => Effect.Effect<
+  CML.TransactionBuilderConfigBuilder,
+  TransactionBuilderConfigBuilderError
+> = Effect.fn(
+  (instance: CML.TransactionBuilderConfigBuilder, _preferPureChange: boolean) =>
     Effect.try({
       try: () => instance.prefer_pure_change(_preferPureChange),
       catch: () =>
@@ -533,20 +319,6 @@ export const preferPureChange = Effect.fn(
 
 /**
  * Unsafely calls instance.preferPureChange without Effect wrapper
- *
- * @example
- * import { TransactionBuilderConfigBuilder } from "@lucid-evolution/experimental";
- *
- * // Assume we have a TransactionBuilderConfigBuilder instance
- * const instance = ... ;
- *
- * // Using try/catch for error handling
- * try {
- *   const result = TransactionBuilderConfigBuilder.preferPureChangeUnsafe(instance,  parameters );
- *   console.log(result);
- * } catch (error) {
- *   console.error(`TransactionBuilderConfigBuilder.preferPureChangeUnsafe failed: ${error.message}`);
- * }
  *
  * @since 2.0.0
  * @category MethodsUnsafe
@@ -560,29 +332,20 @@ export const preferPureChangeUnsafe = (
 /**
  * Method exUnitPrices of TransactionBuilderConfigBuilder
  *
- * @example
- * import { TransactionBuilderConfigBuilder } from "@lucid-evolution/experimental";
- * import { Effect } from "effect";
- *
- * // Using Effect for safe execution with error handling
- * Effect.gen(function*() {
- * // Assume we have a TransactionBuilderConfigBuilder instance
- * const instance = ... ;
- *   const result = yield* TransactionBuilderConfigBuilder.exUnitPrices(instance,  parameters );
- *   console.log(result);
- * });
- *
  * @since 2.0.0
  * @category Methods
  */
-export const exUnitPrices = Effect.fn(
+export const exUnitPrices: (
+  instance: CML.TransactionBuilderConfigBuilder,
+  _exUnitPrices: CML.ExUnitPrices,
+) => Effect.Effect<
+  CML.TransactionBuilderConfigBuilder,
+  TransactionBuilderConfigBuilderError
+> = Effect.fn(
   (
     instance: CML.TransactionBuilderConfigBuilder,
     _exUnitPrices: CML.ExUnitPrices,
-  ): Effect.Effect<
-    CML.TransactionBuilderConfigBuilder,
-    TransactionBuilderConfigBuilderError
-  > =>
+  ) =>
     Effect.try({
       try: () => instance.ex_unit_prices(_exUnitPrices),
       catch: () =>
@@ -594,20 +357,6 @@ export const exUnitPrices = Effect.fn(
 
 /**
  * Unsafely calls instance.exUnitPrices without Effect wrapper
- *
- * @example
- * import { TransactionBuilderConfigBuilder } from "@lucid-evolution/experimental";
- *
- * // Assume we have a TransactionBuilderConfigBuilder instance
- * const instance = ... ;
- *
- * // Using try/catch for error handling
- * try {
- *   const result = TransactionBuilderConfigBuilder.exUnitPricesUnsafe(instance,  parameters );
- *   console.log(result);
- * } catch (error) {
- *   console.error(`TransactionBuilderConfigBuilder.exUnitPricesUnsafe failed: ${error.message}`);
- * }
  *
  * @since 2.0.0
  * @category MethodsUnsafe
@@ -621,29 +370,20 @@ export const exUnitPricesUnsafe = (
 /**
  * Method costModels of TransactionBuilderConfigBuilder
  *
- * @example
- * import { TransactionBuilderConfigBuilder } from "@lucid-evolution/experimental";
- * import { Effect } from "effect";
- *
- * // Using Effect for safe execution with error handling
- * Effect.gen(function*() {
- * // Assume we have a TransactionBuilderConfigBuilder instance
- * const instance = ... ;
- *   const result = yield* TransactionBuilderConfigBuilder.costModels(instance,  parameters );
- *   console.log(result);
- * });
- *
  * @since 2.0.0
  * @category Methods
  */
-export const costModels = Effect.fn(
+export const costModels: (
+  instance: CML.TransactionBuilderConfigBuilder,
+  _costModels: CML.CostModels,
+) => Effect.Effect<
+  CML.TransactionBuilderConfigBuilder,
+  TransactionBuilderConfigBuilderError
+> = Effect.fn(
   (
     instance: CML.TransactionBuilderConfigBuilder,
     _costModels: CML.CostModels,
-  ): Effect.Effect<
-    CML.TransactionBuilderConfigBuilder,
-    TransactionBuilderConfigBuilderError
-  > =>
+  ) =>
     Effect.try({
       try: () => instance.cost_models(_costModels),
       catch: () =>
@@ -655,20 +395,6 @@ export const costModels = Effect.fn(
 
 /**
  * Unsafely calls instance.costModels without Effect wrapper
- *
- * @example
- * import { TransactionBuilderConfigBuilder } from "@lucid-evolution/experimental";
- *
- * // Assume we have a TransactionBuilderConfigBuilder instance
- * const instance = ... ;
- *
- * // Using try/catch for error handling
- * try {
- *   const result = TransactionBuilderConfigBuilder.costModelsUnsafe(instance,  parameters );
- *   console.log(result);
- * } catch (error) {
- *   console.error(`TransactionBuilderConfigBuilder.costModelsUnsafe failed: ${error.message}`);
- * }
  *
  * @since 2.0.0
  * @category MethodsUnsafe
@@ -682,29 +408,20 @@ export const costModelsUnsafe = (
 /**
  * Method collateralPercentage of TransactionBuilderConfigBuilder
  *
- * @example
- * import { TransactionBuilderConfigBuilder } from "@lucid-evolution/experimental";
- * import { Effect } from "effect";
- *
- * // Using Effect for safe execution with error handling
- * Effect.gen(function*() {
- * // Assume we have a TransactionBuilderConfigBuilder instance
- * const instance = ... ;
- *   const result = yield* TransactionBuilderConfigBuilder.collateralPercentage(instance,  parameters );
- *   console.log(result);
- * });
- *
  * @since 2.0.0
  * @category Methods
  */
-export const collateralPercentage = Effect.fn(
+export const collateralPercentage: (
+  instance: CML.TransactionBuilderConfigBuilder,
+  _collateralPercentage: number,
+) => Effect.Effect<
+  CML.TransactionBuilderConfigBuilder,
+  TransactionBuilderConfigBuilderError
+> = Effect.fn(
   (
     instance: CML.TransactionBuilderConfigBuilder,
     _collateralPercentage: number,
-  ): Effect.Effect<
-    CML.TransactionBuilderConfigBuilder,
-    TransactionBuilderConfigBuilderError
-  > =>
+  ) =>
     Effect.try({
       try: () => instance.collateral_percentage(_collateralPercentage),
       catch: () =>
@@ -716,20 +433,6 @@ export const collateralPercentage = Effect.fn(
 
 /**
  * Unsafely calls instance.collateralPercentage without Effect wrapper
- *
- * @example
- * import { TransactionBuilderConfigBuilder } from "@lucid-evolution/experimental";
- *
- * // Assume we have a TransactionBuilderConfigBuilder instance
- * const instance = ... ;
- *
- * // Using try/catch for error handling
- * try {
- *   const result = TransactionBuilderConfigBuilder.collateralPercentageUnsafe(instance,  parameters );
- *   console.log(result);
- * } catch (error) {
- *   console.error(`TransactionBuilderConfigBuilder.collateralPercentageUnsafe failed: ${error.message}`);
- * }
  *
  * @since 2.0.0
  * @category MethodsUnsafe
@@ -743,29 +446,20 @@ export const collateralPercentageUnsafe = (
 /**
  * Method maxCollateralInputs of TransactionBuilderConfigBuilder
  *
- * @example
- * import { TransactionBuilderConfigBuilder } from "@lucid-evolution/experimental";
- * import { Effect } from "effect";
- *
- * // Using Effect for safe execution with error handling
- * Effect.gen(function*() {
- * // Assume we have a TransactionBuilderConfigBuilder instance
- * const instance = ... ;
- *   const result = yield* TransactionBuilderConfigBuilder.maxCollateralInputs(instance,  parameters );
- *   console.log(result);
- * });
- *
  * @since 2.0.0
  * @category Methods
  */
-export const maxCollateralInputs = Effect.fn(
+export const maxCollateralInputs: (
+  instance: CML.TransactionBuilderConfigBuilder,
+  _maxCollateralInputs: number,
+) => Effect.Effect<
+  CML.TransactionBuilderConfigBuilder,
+  TransactionBuilderConfigBuilderError
+> = Effect.fn(
   (
     instance: CML.TransactionBuilderConfigBuilder,
     _maxCollateralInputs: number,
-  ): Effect.Effect<
-    CML.TransactionBuilderConfigBuilder,
-    TransactionBuilderConfigBuilderError
-  > =>
+  ) =>
     Effect.try({
       try: () => instance.max_collateral_inputs(_maxCollateralInputs),
       catch: () =>
@@ -777,20 +471,6 @@ export const maxCollateralInputs = Effect.fn(
 
 /**
  * Unsafely calls instance.maxCollateralInputs without Effect wrapper
- *
- * @example
- * import { TransactionBuilderConfigBuilder } from "@lucid-evolution/experimental";
- *
- * // Assume we have a TransactionBuilderConfigBuilder instance
- * const instance = ... ;
- *
- * // Using try/catch for error handling
- * try {
- *   const result = TransactionBuilderConfigBuilder.maxCollateralInputsUnsafe(instance,  parameters );
- *   console.log(result);
- * } catch (error) {
- *   console.error(`TransactionBuilderConfigBuilder.maxCollateralInputsUnsafe failed: ${error.message}`);
- * }
  *
  * @since 2.0.0
  * @category MethodsUnsafe
@@ -804,53 +484,26 @@ export const maxCollateralInputsUnsafe = (
 /**
  * Method build of TransactionBuilderConfigBuilder
  *
- * @example
- * import { TransactionBuilderConfigBuilder } from "@lucid-evolution/experimental";
- * import { Effect } from "effect";
- *
- * // Using Effect for safe execution with error handling
- * Effect.gen(function*() {
- * // Assume we have a TransactionBuilderConfigBuilder instance
- * const instance = ... ;
- *   const result = yield* TransactionBuilderConfigBuilder.build(instance);
- *   console.log(result);
- * });
- *
  * @since 2.0.0
  * @category Methods
  */
-export const build = Effect.fn(
-  (
-    instance: CML.TransactionBuilderConfigBuilder,
-  ): Effect.Effect<
-    CML.TransactionBuilderConfig,
-    TransactionBuilderConfigBuilderError
-  > =>
-    Effect.try({
-      try: () => instance.build(),
-      catch: () =>
-        new TransactionBuilderConfigBuilderError({
-          message: `TransactionBuilderConfigBuilder.build failed `,
-        }),
-    }),
+export const build: (
+  instance: CML.TransactionBuilderConfigBuilder,
+) => Effect.Effect<
+  CML.TransactionBuilderConfig,
+  TransactionBuilderConfigBuilderError
+> = Effect.fn((instance: CML.TransactionBuilderConfigBuilder) =>
+  Effect.try({
+    try: () => instance.build(),
+    catch: () =>
+      new TransactionBuilderConfigBuilderError({
+        message: `TransactionBuilderConfigBuilder.build failed `,
+      }),
+  }),
 );
 
 /**
  * Unsafely calls instance.build without Effect wrapper
- *
- * @example
- * import { TransactionBuilderConfigBuilder } from "@lucid-evolution/experimental";
- *
- * // Assume we have a TransactionBuilderConfigBuilder instance
- * const instance = ... ;
- *
- * // Using try/catch for error handling
- * try {
- *   const result = TransactionBuilderConfigBuilder.buildUnsafe(instance);
- *   console.log(result);
- * } catch (error) {
- *   console.error(`TransactionBuilderConfigBuilder.buildUnsafe failed: ${error.message}`);
- * }
  *
  * @since 2.0.0
  * @category MethodsUnsafe

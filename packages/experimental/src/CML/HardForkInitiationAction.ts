@@ -29,25 +29,13 @@ export class HardForkInitiationActionError extends Data.TaggedError(
 /**
  * Method free of HardForkInitiationAction
  *
- * @example
- * import { HardForkInitiationAction } from "@lucid-evolution/experimental";
- * import { Effect } from "effect";
- *
- * // Using Effect for safe execution with error handling
- * Effect.gen(function*() {
- * // Assume we have a HardForkInitiationAction instance
- * const instance = ... ;
- *   const result = yield* HardForkInitiationAction.free(instance);
- *   console.log(result);
- * });
- *
  * @since 2.0.0
  * @category Methods
  */
-export const free = Effect.fn(
-  (
-    instance: CML.HardForkInitiationAction,
-  ): Effect.Effect<void, HardForkInitiationActionError> =>
+export const free: (
+  instance: CML.HardForkInitiationAction,
+) => Effect.Effect<void, HardForkInitiationActionError> = Effect.fn(
+  (instance: CML.HardForkInitiationAction) =>
     Effect.try({
       try: () => instance.free(),
       catch: () =>
@@ -60,20 +48,6 @@ export const free = Effect.fn(
 /**
  * Unsafely calls instance.free without Effect wrapper
  *
- * @example
- * import { HardForkInitiationAction } from "@lucid-evolution/experimental";
- *
- * // Assume we have a HardForkInitiationAction instance
- * const instance = ... ;
- *
- * // Using try/catch for error handling
- * try {
- *   const result = HardForkInitiationAction.freeUnsafe(instance);
- *   console.log(result);
- * } catch (error) {
- *   console.error(`HardForkInitiationAction.freeUnsafe failed: ${error.message}`);
- * }
- *
  * @since 2.0.0
  * @category MethodsUnsafe
  */
@@ -83,25 +57,13 @@ export const freeUnsafe = (instance: CML.HardForkInitiationAction): void =>
 /**
  * Method toCborBytes of HardForkInitiationAction
  *
- * @example
- * import { HardForkInitiationAction } from "@lucid-evolution/experimental";
- * import { Effect } from "effect";
- *
- * // Using Effect for safe execution with error handling
- * Effect.gen(function*() {
- * // Assume we have a HardForkInitiationAction instance
- * const instance = ... ;
- *   const result = yield* HardForkInitiationAction.toCborBytes(instance);
- *   console.log(result);
- * });
- *
  * @since 2.0.0
  * @category Methods
  */
-export const toCborBytes = Effect.fn(
-  (
-    instance: CML.HardForkInitiationAction,
-  ): Effect.Effect<Uint8Array, HardForkInitiationActionError> =>
+export const toCborBytes: (
+  instance: CML.HardForkInitiationAction,
+) => Effect.Effect<Uint8Array, HardForkInitiationActionError> = Effect.fn(
+  (instance: CML.HardForkInitiationAction) =>
     Effect.try({
       try: () => instance.to_cbor_bytes(),
       catch: () =>
@@ -114,20 +76,6 @@ export const toCborBytes = Effect.fn(
 /**
  * Unsafely calls instance.toCborBytes without Effect wrapper
  *
- * @example
- * import { HardForkInitiationAction } from "@lucid-evolution/experimental";
- *
- * // Assume we have a HardForkInitiationAction instance
- * const instance = ... ;
- *
- * // Using try/catch for error handling
- * try {
- *   const result = HardForkInitiationAction.toCborBytesUnsafe(instance);
- *   console.log(result);
- * } catch (error) {
- *   console.error(`HardForkInitiationAction.toCborBytesUnsafe failed: ${error.message}`);
- * }
- *
  * @since 2.0.0
  * @category MethodsUnsafe
  */
@@ -138,25 +86,13 @@ export const toCborBytesUnsafe = (
 /**
  * Method toCanonicalCborBytes of HardForkInitiationAction
  *
- * @example
- * import { HardForkInitiationAction } from "@lucid-evolution/experimental";
- * import { Effect } from "effect";
- *
- * // Using Effect for safe execution with error handling
- * Effect.gen(function*() {
- * // Assume we have a HardForkInitiationAction instance
- * const instance = ... ;
- *   const result = yield* HardForkInitiationAction.toCanonicalCborBytes(instance);
- *   console.log(result);
- * });
- *
  * @since 2.0.0
  * @category Methods
  */
-export const toCanonicalCborBytes = Effect.fn(
-  (
-    instance: CML.HardForkInitiationAction,
-  ): Effect.Effect<Uint8Array, HardForkInitiationActionError> =>
+export const toCanonicalCborBytes: (
+  instance: CML.HardForkInitiationAction,
+) => Effect.Effect<Uint8Array, HardForkInitiationActionError> = Effect.fn(
+  (instance: CML.HardForkInitiationAction) =>
     Effect.try({
       try: () => instance.to_canonical_cbor_bytes(),
       catch: () =>
@@ -169,20 +105,6 @@ export const toCanonicalCborBytes = Effect.fn(
 /**
  * Unsafely calls instance.toCanonicalCborBytes without Effect wrapper
  *
- * @example
- * import { HardForkInitiationAction } from "@lucid-evolution/experimental";
- *
- * // Assume we have a HardForkInitiationAction instance
- * const instance = ... ;
- *
- * // Using try/catch for error handling
- * try {
- *   const result = HardForkInitiationAction.toCanonicalCborBytesUnsafe(instance);
- *   console.log(result);
- * } catch (error) {
- *   console.error(`HardForkInitiationAction.toCanonicalCborBytesUnsafe failed: ${error.message}`);
- * }
- *
  * @since 2.0.0
  * @category MethodsUnsafe
  */
@@ -193,21 +115,15 @@ export const toCanonicalCborBytesUnsafe = (
 /**
  * Static method fromCborBytes of HardForkInitiationAction
  *
- * @example
- * import { HardForkInitiationAction } from "@lucid-evolution/experimental";
- * import { Effect } from "effect";
- *
- * // Using Effect for safe execution with error handling
- * Effect.gen(function*() {
- *
- *   const result = yield* HardForkInitiationAction.fromCborBytes( parameters );
- *   console.log(result);
- * });
- *
  * @since 2.0.0
  * @category Constructors
  */
-export const fromCborBytes = Effect.fn(function* (cborBytes: Uint8Array) {
+export const fromCborBytes: (
+  cborBytes: Uint8Array,
+) => Effect.Effect<
+  CML.HardForkInitiationAction,
+  HardForkInitiationActionError
+> = Effect.fn(function* (cborBytes: Uint8Array) {
   return yield* Effect.try({
     try: () => CML.HardForkInitiationAction.from_cbor_bytes(cborBytes),
     catch: () =>
@@ -220,47 +136,23 @@ export const fromCborBytes = Effect.fn(function* (cborBytes: Uint8Array) {
 /**
  * Unsafely calls HardForkInitiationAction.fromCborBytes without Effect wrapper
  *
- * @example
- * import { HardForkInitiationAction } from "@lucid-evolution/experimental";
- *
- *
- *
- * // Using try/catch for error handling
- * try {
- *   const result = HardForkInitiationAction.fromCborBytesUnsafe( parameters );
- *   console.log(result);
- * } catch (error) {
- *   console.error(`HardForkInitiationAction.fromCborBytesUnsafe failed: ${error.message}`);
- * }
- *
  * @since 2.0.0
  * @category ConstructorsUnsafe
  */
-export const fromCborBytesUnsafe = (cborBytes: Uint8Array) =>
-  Effect.runSync(fromCborBytes(cborBytes));
+export const fromCborBytesUnsafe = (
+  cborBytes: Uint8Array,
+): CML.HardForkInitiationAction => Effect.runSync(fromCborBytes(cborBytes));
 
 /**
  * Method toCborHex of HardForkInitiationAction
  *
- * @example
- * import { HardForkInitiationAction } from "@lucid-evolution/experimental";
- * import { Effect } from "effect";
- *
- * // Using Effect for safe execution with error handling
- * Effect.gen(function*() {
- * // Assume we have a HardForkInitiationAction instance
- * const instance = ... ;
- *   const result = yield* HardForkInitiationAction.toCborHex(instance);
- *   console.log(result);
- * });
- *
  * @since 2.0.0
  * @category Methods
  */
-export const toCborHex = Effect.fn(
-  (
-    instance: CML.HardForkInitiationAction,
-  ): Effect.Effect<string, HardForkInitiationActionError> =>
+export const toCborHex: (
+  instance: CML.HardForkInitiationAction,
+) => Effect.Effect<string, HardForkInitiationActionError> = Effect.fn(
+  (instance: CML.HardForkInitiationAction) =>
     Effect.try({
       try: () => instance.to_cbor_hex(),
       catch: () =>
@@ -273,20 +165,6 @@ export const toCborHex = Effect.fn(
 /**
  * Unsafely calls instance.toCborHex without Effect wrapper
  *
- * @example
- * import { HardForkInitiationAction } from "@lucid-evolution/experimental";
- *
- * // Assume we have a HardForkInitiationAction instance
- * const instance = ... ;
- *
- * // Using try/catch for error handling
- * try {
- *   const result = HardForkInitiationAction.toCborHexUnsafe(instance);
- *   console.log(result);
- * } catch (error) {
- *   console.error(`HardForkInitiationAction.toCborHexUnsafe failed: ${error.message}`);
- * }
- *
  * @since 2.0.0
  * @category MethodsUnsafe
  */
@@ -297,25 +175,13 @@ export const toCborHexUnsafe = (
 /**
  * Method toCanonicalCborHex of HardForkInitiationAction
  *
- * @example
- * import { HardForkInitiationAction } from "@lucid-evolution/experimental";
- * import { Effect } from "effect";
- *
- * // Using Effect for safe execution with error handling
- * Effect.gen(function*() {
- * // Assume we have a HardForkInitiationAction instance
- * const instance = ... ;
- *   const result = yield* HardForkInitiationAction.toCanonicalCborHex(instance);
- *   console.log(result);
- * });
- *
  * @since 2.0.0
  * @category Methods
  */
-export const toCanonicalCborHex = Effect.fn(
-  (
-    instance: CML.HardForkInitiationAction,
-  ): Effect.Effect<string, HardForkInitiationActionError> =>
+export const toCanonicalCborHex: (
+  instance: CML.HardForkInitiationAction,
+) => Effect.Effect<string, HardForkInitiationActionError> = Effect.fn(
+  (instance: CML.HardForkInitiationAction) =>
     Effect.try({
       try: () => instance.to_canonical_cbor_hex(),
       catch: () =>
@@ -328,20 +194,6 @@ export const toCanonicalCborHex = Effect.fn(
 /**
  * Unsafely calls instance.toCanonicalCborHex without Effect wrapper
  *
- * @example
- * import { HardForkInitiationAction } from "@lucid-evolution/experimental";
- *
- * // Assume we have a HardForkInitiationAction instance
- * const instance = ... ;
- *
- * // Using try/catch for error handling
- * try {
- *   const result = HardForkInitiationAction.toCanonicalCborHexUnsafe(instance);
- *   console.log(result);
- * } catch (error) {
- *   console.error(`HardForkInitiationAction.toCanonicalCborHexUnsafe failed: ${error.message}`);
- * }
- *
  * @since 2.0.0
  * @category MethodsUnsafe
  */
@@ -352,21 +204,15 @@ export const toCanonicalCborHexUnsafe = (
 /**
  * Static method fromCborHex of HardForkInitiationAction
  *
- * @example
- * import { HardForkInitiationAction } from "@lucid-evolution/experimental";
- * import { Effect } from "effect";
- *
- * // Using Effect for safe execution with error handling
- * Effect.gen(function*() {
- *
- *   const result = yield* HardForkInitiationAction.fromCborHex( parameters );
- *   console.log(result);
- * });
- *
  * @since 2.0.0
  * @category Constructors
  */
-export const fromCborHex = Effect.fn(function* (cborBytes: string) {
+export const fromCborHex: (
+  cborBytes: string,
+) => Effect.Effect<
+  CML.HardForkInitiationAction,
+  HardForkInitiationActionError
+> = Effect.fn(function* (cborBytes: string) {
   return yield* Effect.try({
     try: () => CML.HardForkInitiationAction.from_cbor_hex(cborBytes),
     catch: () =>
@@ -379,47 +225,23 @@ export const fromCborHex = Effect.fn(function* (cborBytes: string) {
 /**
  * Unsafely calls HardForkInitiationAction.fromCborHex without Effect wrapper
  *
- * @example
- * import { HardForkInitiationAction } from "@lucid-evolution/experimental";
- *
- *
- *
- * // Using try/catch for error handling
- * try {
- *   const result = HardForkInitiationAction.fromCborHexUnsafe( parameters );
- *   console.log(result);
- * } catch (error) {
- *   console.error(`HardForkInitiationAction.fromCborHexUnsafe failed: ${error.message}`);
- * }
- *
  * @since 2.0.0
  * @category ConstructorsUnsafe
  */
-export const fromCborHexUnsafe = (cborBytes: string) =>
-  Effect.runSync(fromCborHex(cborBytes));
+export const fromCborHexUnsafe = (
+  cborBytes: string,
+): CML.HardForkInitiationAction => Effect.runSync(fromCborHex(cborBytes));
 
 /**
  * Method toJson of HardForkInitiationAction
  *
- * @example
- * import { HardForkInitiationAction } from "@lucid-evolution/experimental";
- * import { Effect } from "effect";
- *
- * // Using Effect for safe execution with error handling
- * Effect.gen(function*() {
- * // Assume we have a HardForkInitiationAction instance
- * const instance = ... ;
- *   const result = yield* HardForkInitiationAction.toJson(instance);
- *   console.log(result);
- * });
- *
  * @since 2.0.0
  * @category Methods
  */
-export const toJson = Effect.fn(
-  (
-    instance: CML.HardForkInitiationAction,
-  ): Effect.Effect<string, HardForkInitiationActionError> =>
+export const toJson: (
+  instance: CML.HardForkInitiationAction,
+) => Effect.Effect<string, HardForkInitiationActionError> = Effect.fn(
+  (instance: CML.HardForkInitiationAction) =>
     Effect.try({
       try: () => instance.to_json(),
       catch: () =>
@@ -432,20 +254,6 @@ export const toJson = Effect.fn(
 /**
  * Unsafely calls instance.toJson without Effect wrapper
  *
- * @example
- * import { HardForkInitiationAction } from "@lucid-evolution/experimental";
- *
- * // Assume we have a HardForkInitiationAction instance
- * const instance = ... ;
- *
- * // Using try/catch for error handling
- * try {
- *   const result = HardForkInitiationAction.toJsonUnsafe(instance);
- *   console.log(result);
- * } catch (error) {
- *   console.error(`HardForkInitiationAction.toJsonUnsafe failed: ${error.message}`);
- * }
- *
  * @since 2.0.0
  * @category MethodsUnsafe
  */
@@ -455,25 +263,13 @@ export const toJsonUnsafe = (instance: CML.HardForkInitiationAction): string =>
 /**
  * Method toJsValue of HardForkInitiationAction
  *
- * @example
- * import { HardForkInitiationAction } from "@lucid-evolution/experimental";
- * import { Effect } from "effect";
- *
- * // Using Effect for safe execution with error handling
- * Effect.gen(function*() {
- * // Assume we have a HardForkInitiationAction instance
- * const instance = ... ;
- *   const result = yield* HardForkInitiationAction.toJsValue(instance);
- *   console.log(result);
- * });
- *
  * @since 2.0.0
  * @category Methods
  */
-export const toJsValue = Effect.fn(
-  (
-    instance: CML.HardForkInitiationAction,
-  ): Effect.Effect<any, HardForkInitiationActionError> =>
+export const toJsValue: (
+  instance: CML.HardForkInitiationAction,
+) => Effect.Effect<any, HardForkInitiationActionError> = Effect.fn(
+  (instance: CML.HardForkInitiationAction) =>
     Effect.try({
       try: () => instance.to_js_value(),
       catch: () =>
@@ -486,20 +282,6 @@ export const toJsValue = Effect.fn(
 /**
  * Unsafely calls instance.toJsValue without Effect wrapper
  *
- * @example
- * import { HardForkInitiationAction } from "@lucid-evolution/experimental";
- *
- * // Assume we have a HardForkInitiationAction instance
- * const instance = ... ;
- *
- * // Using try/catch for error handling
- * try {
- *   const result = HardForkInitiationAction.toJsValueUnsafe(instance);
- *   console.log(result);
- * } catch (error) {
- *   console.error(`HardForkInitiationAction.toJsValueUnsafe failed: ${error.message}`);
- * }
- *
  * @since 2.0.0
  * @category MethodsUnsafe
  */
@@ -509,21 +291,15 @@ export const toJsValueUnsafe = (instance: CML.HardForkInitiationAction): any =>
 /**
  * Static method fromJson of HardForkInitiationAction
  *
- * @example
- * import { HardForkInitiationAction } from "@lucid-evolution/experimental";
- * import { Effect } from "effect";
- *
- * // Using Effect for safe execution with error handling
- * Effect.gen(function*() {
- *
- *   const result = yield* HardForkInitiationAction.fromJson( parameters );
- *   console.log(result);
- * });
- *
  * @since 2.0.0
  * @category Constructors
  */
-export const fromJson = Effect.fn(function* (json: string) {
+export const fromJson: (
+  json: string,
+) => Effect.Effect<
+  CML.HardForkInitiationAction,
+  HardForkInitiationActionError
+> = Effect.fn(function* (json: string) {
   return yield* Effect.try({
     try: () => CML.HardForkInitiationAction.from_json(json),
     catch: () =>
@@ -536,49 +312,22 @@ export const fromJson = Effect.fn(function* (json: string) {
 /**
  * Unsafely calls HardForkInitiationAction.fromJson without Effect wrapper
  *
- * @example
- * import { HardForkInitiationAction } from "@lucid-evolution/experimental";
- *
- *
- *
- * // Using try/catch for error handling
- * try {
- *   const result = HardForkInitiationAction.fromJsonUnsafe( parameters );
- *   console.log(result);
- * } catch (error) {
- *   console.error(`HardForkInitiationAction.fromJsonUnsafe failed: ${error.message}`);
- * }
- *
  * @since 2.0.0
  * @category ConstructorsUnsafe
  */
-export const fromJsonUnsafe = (json: string) => Effect.runSync(fromJson(json));
+export const fromJsonUnsafe = (json: string): CML.HardForkInitiationAction =>
+  Effect.runSync(fromJson(json));
 
 /**
  * Method actionId of HardForkInitiationAction
  *
- * @example
- * import { HardForkInitiationAction } from "@lucid-evolution/experimental";
- * import { Effect } from "effect";
- *
- * // Using Effect for safe execution with error handling
- * Effect.gen(function*() {
- * // Assume we have a HardForkInitiationAction instance
- * const instance = ... ;
- *   const result = yield* HardForkInitiationAction.actionId(instance);
- *   console.log(result);
- * });
- *
  * @since 2.0.0
  * @category Methods
  */
-export const actionId = Effect.fn(
-  (
-    instance: CML.HardForkInitiationAction,
-  ): Effect.Effect<
-    CML.GovActionId | undefined,
-    HardForkInitiationActionError
-  > =>
+export const actionId: (
+  instance: CML.HardForkInitiationAction,
+) => Effect.Effect<CML.GovActionId | undefined, HardForkInitiationActionError> =
+  Effect.fn((instance: CML.HardForkInitiationAction) =>
     Effect.try({
       try: () => instance.action_id(),
       catch: () =>
@@ -586,24 +335,10 @@ export const actionId = Effect.fn(
           message: `HardForkInitiationAction.actionId failed `,
         }),
     }),
-);
+  );
 
 /**
  * Unsafely calls instance.actionId without Effect wrapper
- *
- * @example
- * import { HardForkInitiationAction } from "@lucid-evolution/experimental";
- *
- * // Assume we have a HardForkInitiationAction instance
- * const instance = ... ;
- *
- * // Using try/catch for error handling
- * try {
- *   const result = HardForkInitiationAction.actionIdUnsafe(instance);
- *   console.log(result);
- * } catch (error) {
- *   console.error(`HardForkInitiationAction.actionIdUnsafe failed: ${error.message}`);
- * }
  *
  * @since 2.0.0
  * @category MethodsUnsafe
@@ -615,25 +350,13 @@ export const actionIdUnsafe = (
 /**
  * Method version of HardForkInitiationAction
  *
- * @example
- * import { HardForkInitiationAction } from "@lucid-evolution/experimental";
- * import { Effect } from "effect";
- *
- * // Using Effect for safe execution with error handling
- * Effect.gen(function*() {
- * // Assume we have a HardForkInitiationAction instance
- * const instance = ... ;
- *   const result = yield* HardForkInitiationAction.version(instance);
- *   console.log(result);
- * });
- *
  * @since 2.0.0
  * @category Methods
  */
-export const version = Effect.fn(
-  (
-    instance: CML.HardForkInitiationAction,
-  ): Effect.Effect<CML.ProtocolVersion, HardForkInitiationActionError> =>
+export const version: (
+  instance: CML.HardForkInitiationAction,
+) => Effect.Effect<CML.ProtocolVersion, HardForkInitiationActionError> =
+  Effect.fn((instance: CML.HardForkInitiationAction) =>
     Effect.try({
       try: () => instance.version(),
       catch: () =>
@@ -641,24 +364,10 @@ export const version = Effect.fn(
           message: `HardForkInitiationAction.version failed `,
         }),
     }),
-);
+  );
 
 /**
  * Unsafely calls instance.version without Effect wrapper
- *
- * @example
- * import { HardForkInitiationAction } from "@lucid-evolution/experimental";
- *
- * // Assume we have a HardForkInitiationAction instance
- * const instance = ... ;
- *
- * // Using try/catch for error handling
- * try {
- *   const result = HardForkInitiationAction.versionUnsafe(instance);
- *   console.log(result);
- * } catch (error) {
- *   console.error(`HardForkInitiationAction.versionUnsafe failed: ${error.message}`);
- * }
  *
  * @since 2.0.0
  * @category MethodsUnsafe
@@ -670,21 +379,16 @@ export const versionUnsafe = (
 /**
  * Static method _new of HardForkInitiationAction
  *
- * @example
- * import { HardForkInitiationAction } from "@lucid-evolution/experimental";
- * import { Effect } from "effect";
- *
- * // Using Effect for safe execution with error handling
- * Effect.gen(function*() {
- *
- *   const result = yield* HardForkInitiationAction._new( parameters );
- *   console.log(result);
- * });
- *
  * @since 2.0.0
  * @category Constructors
  */
-export const _new = Effect.fn(function* (
+export const _new: (
+  actionId: CML.GovActionId | undefined,
+  version: CML.ProtocolVersion,
+) => Effect.Effect<
+  CML.HardForkInitiationAction,
+  HardForkInitiationActionError
+> = Effect.fn(function* (
   actionId: CML.GovActionId | undefined,
   version: CML.ProtocolVersion,
 ) {
@@ -700,23 +404,10 @@ export const _new = Effect.fn(function* (
 /**
  * Unsafely calls HardForkInitiationAction._new without Effect wrapper
  *
- * @example
- * import { HardForkInitiationAction } from "@lucid-evolution/experimental";
- *
- *
- *
- * // Using try/catch for error handling
- * try {
- *   const result = HardForkInitiationAction._newUnsafe( parameters );
- *   console.log(result);
- * } catch (error) {
- *   console.error(`HardForkInitiationAction._newUnsafe failed: ${error.message}`);
- * }
- *
  * @since 2.0.0
  * @category ConstructorsUnsafe
  */
 export const _newUnsafe = (
   actionId: CML.GovActionId | undefined,
   version: CML.ProtocolVersion,
-) => Effect.runSync(_new(actionId, version));
+): CML.HardForkInitiationAction => Effect.runSync(_new(actionId, version));

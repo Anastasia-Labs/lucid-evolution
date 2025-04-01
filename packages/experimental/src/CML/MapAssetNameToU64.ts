@@ -29,25 +29,13 @@ export class MapAssetNameToU64Error extends Data.TaggedError(
 /**
  * Method free of MapAssetNameToU64
  *
- * @example
- * import { MapAssetNameToU64 } from "@lucid-evolution/experimental";
- * import { Effect } from "effect";
- *
- * // Using Effect for safe execution with error handling
- * Effect.gen(function*() {
- * // Assume we have a MapAssetNameToU64 instance
- * const instance = ... ;
- *   const result = yield* MapAssetNameToU64.free(instance);
- *   console.log(result);
- * });
- *
  * @since 2.0.0
  * @category Methods
  */
-export const free = Effect.fn(
-  (
-    instance: CML.MapAssetNameToU64,
-  ): Effect.Effect<void, MapAssetNameToU64Error> =>
+export const free: (
+  instance: CML.MapAssetNameToU64,
+) => Effect.Effect<void, MapAssetNameToU64Error> = Effect.fn(
+  (instance: CML.MapAssetNameToU64) =>
     Effect.try({
       try: () => instance.free(),
       catch: () =>
@@ -60,20 +48,6 @@ export const free = Effect.fn(
 /**
  * Unsafely calls instance.free without Effect wrapper
  *
- * @example
- * import { MapAssetNameToU64 } from "@lucid-evolution/experimental";
- *
- * // Assume we have a MapAssetNameToU64 instance
- * const instance = ... ;
- *
- * // Using try/catch for error handling
- * try {
- *   const result = MapAssetNameToU64.freeUnsafe(instance);
- *   console.log(result);
- * } catch (error) {
- *   console.error(`MapAssetNameToU64.freeUnsafe failed: ${error.message}`);
- * }
- *
  * @since 2.0.0
  * @category MethodsUnsafe
  */
@@ -83,21 +57,13 @@ export const freeUnsafe = (instance: CML.MapAssetNameToU64): void =>
 /**
  * Static method _new of MapAssetNameToU64
  *
- * @example
- * import { MapAssetNameToU64 } from "@lucid-evolution/experimental";
- * import { Effect } from "effect";
- *
- * // Using Effect for safe execution with error handling
- * Effect.gen(function*() {
- *
- *   const result = yield* MapAssetNameToU64._new();
- *   console.log(result);
- * });
- *
  * @since 2.0.0
  * @category Constructors
  */
-export const _new = Effect.fn(function* () {
+export const _new: () => Effect.Effect<
+  CML.MapAssetNameToU64,
+  MapAssetNameToU64Error
+> = Effect.fn(function* () {
   return yield* Effect.try({
     try: () => CML.MapAssetNameToU64.new(),
     catch: () =>
@@ -110,46 +76,21 @@ export const _new = Effect.fn(function* () {
 /**
  * Unsafely calls MapAssetNameToU64._new without Effect wrapper
  *
- * @example
- * import { MapAssetNameToU64 } from "@lucid-evolution/experimental";
- *
- *
- *
- * // Using try/catch for error handling
- * try {
- *   const result = MapAssetNameToU64._newUnsafe();
- *   console.log(result);
- * } catch (error) {
- *   console.error(`MapAssetNameToU64._newUnsafe failed: ${error.message}`);
- * }
- *
  * @since 2.0.0
  * @category ConstructorsUnsafe
  */
-export const _newUnsafe = () => Effect.runSync(_new());
+export const _newUnsafe = (): CML.MapAssetNameToU64 => Effect.runSync(_new());
 
 /**
  * Method len of MapAssetNameToU64
  *
- * @example
- * import { MapAssetNameToU64 } from "@lucid-evolution/experimental";
- * import { Effect } from "effect";
- *
- * // Using Effect for safe execution with error handling
- * Effect.gen(function*() {
- * // Assume we have a MapAssetNameToU64 instance
- * const instance = ... ;
- *   const result = yield* MapAssetNameToU64.len(instance);
- *   console.log(result);
- * });
- *
  * @since 2.0.0
  * @category Methods
  */
-export const len = Effect.fn(
-  (
-    instance: CML.MapAssetNameToU64,
-  ): Effect.Effect<number, MapAssetNameToU64Error> =>
+export const len: (
+  instance: CML.MapAssetNameToU64,
+) => Effect.Effect<number, MapAssetNameToU64Error> = Effect.fn(
+  (instance: CML.MapAssetNameToU64) =>
     Effect.try({
       try: () => instance.len(),
       catch: () =>
@@ -162,20 +103,6 @@ export const len = Effect.fn(
 /**
  * Unsafely calls instance.len without Effect wrapper
  *
- * @example
- * import { MapAssetNameToU64 } from "@lucid-evolution/experimental";
- *
- * // Assume we have a MapAssetNameToU64 instance
- * const instance = ... ;
- *
- * // Using try/catch for error handling
- * try {
- *   const result = MapAssetNameToU64.lenUnsafe(instance);
- *   console.log(result);
- * } catch (error) {
- *   console.error(`MapAssetNameToU64.lenUnsafe failed: ${error.message}`);
- * }
- *
  * @since 2.0.0
  * @category MethodsUnsafe
  */
@@ -185,27 +112,15 @@ export const lenUnsafe = (instance: CML.MapAssetNameToU64): number =>
 /**
  * Method insert of MapAssetNameToU64
  *
- * @example
- * import { MapAssetNameToU64 } from "@lucid-evolution/experimental";
- * import { Effect } from "effect";
- *
- * // Using Effect for safe execution with error handling
- * Effect.gen(function*() {
- * // Assume we have a MapAssetNameToU64 instance
- * const instance = ... ;
- *   const result = yield* MapAssetNameToU64.insert(instance,  parameters );
- *   console.log(result);
- * });
- *
  * @since 2.0.0
  * @category Methods
  */
-export const insert = Effect.fn(
-  (
-    instance: CML.MapAssetNameToU64,
-    key: CML.AssetName,
-    value: bigint,
-  ): Effect.Effect<bigint | undefined, MapAssetNameToU64Error> =>
+export const insert: (
+  instance: CML.MapAssetNameToU64,
+  key: CML.AssetName,
+  value: bigint,
+) => Effect.Effect<bigint | undefined, MapAssetNameToU64Error> = Effect.fn(
+  (instance: CML.MapAssetNameToU64, key: CML.AssetName, value: bigint) =>
     Effect.try({
       try: () => instance.insert(key, value),
       catch: () =>
@@ -217,20 +132,6 @@ export const insert = Effect.fn(
 
 /**
  * Unsafely calls instance.insert without Effect wrapper
- *
- * @example
- * import { MapAssetNameToU64 } from "@lucid-evolution/experimental";
- *
- * // Assume we have a MapAssetNameToU64 instance
- * const instance = ... ;
- *
- * // Using try/catch for error handling
- * try {
- *   const result = MapAssetNameToU64.insertUnsafe(instance,  parameters );
- *   console.log(result);
- * } catch (error) {
- *   console.error(`MapAssetNameToU64.insertUnsafe failed: ${error.message}`);
- * }
  *
  * @since 2.0.0
  * @category MethodsUnsafe
@@ -244,26 +145,14 @@ export const insertUnsafe = (
 /**
  * Method get of MapAssetNameToU64
  *
- * @example
- * import { MapAssetNameToU64 } from "@lucid-evolution/experimental";
- * import { Effect } from "effect";
- *
- * // Using Effect for safe execution with error handling
- * Effect.gen(function*() {
- * // Assume we have a MapAssetNameToU64 instance
- * const instance = ... ;
- *   const result = yield* MapAssetNameToU64.get(instance,  parameters );
- *   console.log(result);
- * });
- *
  * @since 2.0.0
  * @category Methods
  */
-export const get = Effect.fn(
-  (
-    instance: CML.MapAssetNameToU64,
-    key: CML.AssetName,
-  ): Effect.Effect<bigint | undefined, MapAssetNameToU64Error> =>
+export const get: (
+  instance: CML.MapAssetNameToU64,
+  key: CML.AssetName,
+) => Effect.Effect<bigint | undefined, MapAssetNameToU64Error> = Effect.fn(
+  (instance: CML.MapAssetNameToU64, key: CML.AssetName) =>
     Effect.try({
       try: () => instance.get(key),
       catch: () =>
@@ -276,20 +165,6 @@ export const get = Effect.fn(
 /**
  * Unsafely calls instance.get without Effect wrapper
  *
- * @example
- * import { MapAssetNameToU64 } from "@lucid-evolution/experimental";
- *
- * // Assume we have a MapAssetNameToU64 instance
- * const instance = ... ;
- *
- * // Using try/catch for error handling
- * try {
- *   const result = MapAssetNameToU64.getUnsafe(instance,  parameters );
- *   console.log(result);
- * } catch (error) {
- *   console.error(`MapAssetNameToU64.getUnsafe failed: ${error.message}`);
- * }
- *
  * @since 2.0.0
  * @category MethodsUnsafe
  */
@@ -301,25 +176,13 @@ export const getUnsafe = (
 /**
  * Method keys of MapAssetNameToU64
  *
- * @example
- * import { MapAssetNameToU64 } from "@lucid-evolution/experimental";
- * import { Effect } from "effect";
- *
- * // Using Effect for safe execution with error handling
- * Effect.gen(function*() {
- * // Assume we have a MapAssetNameToU64 instance
- * const instance = ... ;
- *   const result = yield* MapAssetNameToU64.keys(instance);
- *   console.log(result);
- * });
- *
  * @since 2.0.0
  * @category Methods
  */
-export const keys = Effect.fn(
-  (
-    instance: CML.MapAssetNameToU64,
-  ): Effect.Effect<CML.AssetNameList, MapAssetNameToU64Error> =>
+export const keys: (
+  instance: CML.MapAssetNameToU64,
+) => Effect.Effect<CML.AssetNameList, MapAssetNameToU64Error> = Effect.fn(
+  (instance: CML.MapAssetNameToU64) =>
     Effect.try({
       try: () => instance.keys(),
       catch: () =>
@@ -331,20 +194,6 @@ export const keys = Effect.fn(
 
 /**
  * Unsafely calls instance.keys without Effect wrapper
- *
- * @example
- * import { MapAssetNameToU64 } from "@lucid-evolution/experimental";
- *
- * // Assume we have a MapAssetNameToU64 instance
- * const instance = ... ;
- *
- * // Using try/catch for error handling
- * try {
- *   const result = MapAssetNameToU64.keysUnsafe(instance);
- *   console.log(result);
- * } catch (error) {
- *   console.error(`MapAssetNameToU64.keysUnsafe failed: ${error.message}`);
- * }
  *
  * @since 2.0.0
  * @category MethodsUnsafe

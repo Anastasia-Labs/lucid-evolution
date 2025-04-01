@@ -14,11 +14,6 @@ export type CredentialKind = CML.CredentialKind;
 /**
  * PubKey variant of the CredentialKind enum
  *
- * @example
- * import { CredentialKind } from "@lucid-evolution/experimental";
- *
- * const kind = CredentialKind.PubKey;
- *
  * @since 2.0.0
  * @category Variants
  */
@@ -27,11 +22,6 @@ export const PubKey = CML.CredentialKind.PubKey;
 /**
  * Script variant of the CredentialKind enum
  *
- * @example
- * import { CredentialKind } from "@lucid-evolution/experimental";
- *
- * const kind = CredentialKind.Script;
- *
  * @since 2.0.0
  * @category Variants
  */
@@ -39,12 +29,6 @@ export const Script = CML.CredentialKind.Script;
 
 /**
  * Get all values of the CredentialKind enum
- *
- * @example
- * import { CredentialKind } from "@lucid-evolution/experimental";
- *
- * const allValues = CredentialKind.values();
- * console.log(allValues);
  *
  * @since 2.0.0
  * @category Utils
@@ -56,12 +40,6 @@ export const values = (): Array<CML.CredentialKind> => [
 
 /**
  * Convert CredentialKind enum value to string
- *
- * @example
- * import { CredentialKind } from "@lucid-evolution/experimental";
- *
- * const name = CredentialKind.toString(CML.CredentialKind.PubKey);
- * console.log(name); // "PubKey"
  *
  * @since 2.0.0
  * @category Utils
@@ -79,12 +57,6 @@ export const toString = (value: CML.CredentialKind): string => {
 
 /**
  * Convert string to CredentialKind enum value
- *
- * @example
- * import { CredentialKind } from "@lucid-evolution/experimental";
- *
- * const value = CredentialKind.fromString("PubKey");
- * console.log(value); // Some(CML.CredentialKind.PubKey)
  *
  * @since 2.0.0
  * @category Utils

@@ -29,25 +29,13 @@ export class TransactionMetadatumListError extends Data.TaggedError(
 /**
  * Method free of TransactionMetadatumList
  *
- * @example
- * import { TransactionMetadatumList } from "@lucid-evolution/experimental";
- * import { Effect } from "effect";
- *
- * // Using Effect for safe execution with error handling
- * Effect.gen(function*() {
- * // Assume we have a TransactionMetadatumList instance
- * const instance = ... ;
- *   const result = yield* TransactionMetadatumList.free(instance);
- *   console.log(result);
- * });
- *
  * @since 2.0.0
  * @category Methods
  */
-export const free = Effect.fn(
-  (
-    instance: CML.TransactionMetadatumList,
-  ): Effect.Effect<void, TransactionMetadatumListError> =>
+export const free: (
+  instance: CML.TransactionMetadatumList,
+) => Effect.Effect<void, TransactionMetadatumListError> = Effect.fn(
+  (instance: CML.TransactionMetadatumList) =>
     Effect.try({
       try: () => instance.free(),
       catch: () =>
@@ -60,20 +48,6 @@ export const free = Effect.fn(
 /**
  * Unsafely calls instance.free without Effect wrapper
  *
- * @example
- * import { TransactionMetadatumList } from "@lucid-evolution/experimental";
- *
- * // Assume we have a TransactionMetadatumList instance
- * const instance = ... ;
- *
- * // Using try/catch for error handling
- * try {
- *   const result = TransactionMetadatumList.freeUnsafe(instance);
- *   console.log(result);
- * } catch (error) {
- *   console.error(`TransactionMetadatumList.freeUnsafe failed: ${error.message}`);
- * }
- *
  * @since 2.0.0
  * @category MethodsUnsafe
  */
@@ -83,21 +57,13 @@ export const freeUnsafe = (instance: CML.TransactionMetadatumList): void =>
 /**
  * Static method _new of TransactionMetadatumList
  *
- * @example
- * import { TransactionMetadatumList } from "@lucid-evolution/experimental";
- * import { Effect } from "effect";
- *
- * // Using Effect for safe execution with error handling
- * Effect.gen(function*() {
- *
- *   const result = yield* TransactionMetadatumList._new();
- *   console.log(result);
- * });
- *
  * @since 2.0.0
  * @category Constructors
  */
-export const _new = Effect.fn(function* () {
+export const _new: () => Effect.Effect<
+  CML.TransactionMetadatumList,
+  TransactionMetadatumListError
+> = Effect.fn(function* () {
   return yield* Effect.try({
     try: () => CML.TransactionMetadatumList.new(),
     catch: () =>
@@ -110,46 +76,22 @@ export const _new = Effect.fn(function* () {
 /**
  * Unsafely calls TransactionMetadatumList._new without Effect wrapper
  *
- * @example
- * import { TransactionMetadatumList } from "@lucid-evolution/experimental";
- *
- *
- *
- * // Using try/catch for error handling
- * try {
- *   const result = TransactionMetadatumList._newUnsafe();
- *   console.log(result);
- * } catch (error) {
- *   console.error(`TransactionMetadatumList._newUnsafe failed: ${error.message}`);
- * }
- *
  * @since 2.0.0
  * @category ConstructorsUnsafe
  */
-export const _newUnsafe = () => Effect.runSync(_new());
+export const _newUnsafe = (): CML.TransactionMetadatumList =>
+  Effect.runSync(_new());
 
 /**
  * Method len of TransactionMetadatumList
  *
- * @example
- * import { TransactionMetadatumList } from "@lucid-evolution/experimental";
- * import { Effect } from "effect";
- *
- * // Using Effect for safe execution with error handling
- * Effect.gen(function*() {
- * // Assume we have a TransactionMetadatumList instance
- * const instance = ... ;
- *   const result = yield* TransactionMetadatumList.len(instance);
- *   console.log(result);
- * });
- *
  * @since 2.0.0
  * @category Methods
  */
-export const len = Effect.fn(
-  (
-    instance: CML.TransactionMetadatumList,
-  ): Effect.Effect<number, TransactionMetadatumListError> =>
+export const len: (
+  instance: CML.TransactionMetadatumList,
+) => Effect.Effect<number, TransactionMetadatumListError> = Effect.fn(
+  (instance: CML.TransactionMetadatumList) =>
     Effect.try({
       try: () => instance.len(),
       catch: () =>
@@ -162,20 +104,6 @@ export const len = Effect.fn(
 /**
  * Unsafely calls instance.len without Effect wrapper
  *
- * @example
- * import { TransactionMetadatumList } from "@lucid-evolution/experimental";
- *
- * // Assume we have a TransactionMetadatumList instance
- * const instance = ... ;
- *
- * // Using try/catch for error handling
- * try {
- *   const result = TransactionMetadatumList.lenUnsafe(instance);
- *   console.log(result);
- * } catch (error) {
- *   console.error(`TransactionMetadatumList.lenUnsafe failed: ${error.message}`);
- * }
- *
  * @since 2.0.0
  * @category MethodsUnsafe
  */
@@ -185,26 +113,14 @@ export const lenUnsafe = (instance: CML.TransactionMetadatumList): number =>
 /**
  * Method get of TransactionMetadatumList
  *
- * @example
- * import { TransactionMetadatumList } from "@lucid-evolution/experimental";
- * import { Effect } from "effect";
- *
- * // Using Effect for safe execution with error handling
- * Effect.gen(function*() {
- * // Assume we have a TransactionMetadatumList instance
- * const instance = ... ;
- *   const result = yield* TransactionMetadatumList.get(instance,  parameters );
- *   console.log(result);
- * });
- *
  * @since 2.0.0
  * @category Methods
  */
-export const get = Effect.fn(
-  (
-    instance: CML.TransactionMetadatumList,
-    index: number,
-  ): Effect.Effect<CML.TransactionMetadatum, TransactionMetadatumListError> =>
+export const get: (
+  instance: CML.TransactionMetadatumList,
+  index: number,
+) => Effect.Effect<CML.TransactionMetadatum, TransactionMetadatumListError> =
+  Effect.fn((instance: CML.TransactionMetadatumList, index: number) =>
     Effect.try({
       try: () => instance.get(index),
       catch: () =>
@@ -212,24 +128,10 @@ export const get = Effect.fn(
           message: `TransactionMetadatumList.get failed with parameters: ${index}. `,
         }),
     }),
-);
+  );
 
 /**
  * Unsafely calls instance.get without Effect wrapper
- *
- * @example
- * import { TransactionMetadatumList } from "@lucid-evolution/experimental";
- *
- * // Assume we have a TransactionMetadatumList instance
- * const instance = ... ;
- *
- * // Using try/catch for error handling
- * try {
- *   const result = TransactionMetadatumList.getUnsafe(instance,  parameters );
- *   console.log(result);
- * } catch (error) {
- *   console.error(`TransactionMetadatumList.getUnsafe failed: ${error.message}`);
- * }
  *
  * @since 2.0.0
  * @category MethodsUnsafe
@@ -242,26 +144,14 @@ export const getUnsafe = (
 /**
  * Method add of TransactionMetadatumList
  *
- * @example
- * import { TransactionMetadatumList } from "@lucid-evolution/experimental";
- * import { Effect } from "effect";
- *
- * // Using Effect for safe execution with error handling
- * Effect.gen(function*() {
- * // Assume we have a TransactionMetadatumList instance
- * const instance = ... ;
- *   const result = yield* TransactionMetadatumList.add(instance,  parameters );
- *   console.log(result);
- * });
- *
  * @since 2.0.0
  * @category Methods
  */
-export const add = Effect.fn(
-  (
-    instance: CML.TransactionMetadatumList,
-    elem: CML.TransactionMetadatum,
-  ): Effect.Effect<void, TransactionMetadatumListError> =>
+export const add: (
+  instance: CML.TransactionMetadatumList,
+  elem: CML.TransactionMetadatum,
+) => Effect.Effect<void, TransactionMetadatumListError> = Effect.fn(
+  (instance: CML.TransactionMetadatumList, elem: CML.TransactionMetadatum) =>
     Effect.try({
       try: () => instance.add(elem),
       catch: () =>
@@ -273,20 +163,6 @@ export const add = Effect.fn(
 
 /**
  * Unsafely calls instance.add without Effect wrapper
- *
- * @example
- * import { TransactionMetadatumList } from "@lucid-evolution/experimental";
- *
- * // Assume we have a TransactionMetadatumList instance
- * const instance = ... ;
- *
- * // Using try/catch for error handling
- * try {
- *   const result = TransactionMetadatumList.addUnsafe(instance,  parameters );
- *   console.log(result);
- * } catch (error) {
- *   console.error(`TransactionMetadatumList.addUnsafe failed: ${error.message}`);
- * }
  *
  * @since 2.0.0
  * @category MethodsUnsafe

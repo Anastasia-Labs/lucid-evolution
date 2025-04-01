@@ -27,23 +27,11 @@ export class AnchorError extends Data.TaggedError("AnchorError")<{
 /**
  * Method free of Anchor
  *
- * @example
- * import { Anchor } from "@lucid-evolution/experimental";
- * import { Effect } from "effect";
- *
- * // Using Effect for safe execution with error handling
- * Effect.gen(function*() {
- * // Assume we have a Anchor instance
- * const instance = ... ;
- *   const result = yield* Anchor.free(instance);
- *   console.log(result);
- * });
- *
  * @since 2.0.0
  * @category Methods
  */
-export const free = Effect.fn(
-  (instance: CML.Anchor): Effect.Effect<void, AnchorError> =>
+export const free: (instance: CML.Anchor) => Effect.Effect<void, AnchorError> =
+  Effect.fn((instance: CML.Anchor) =>
     Effect.try({
       try: () => instance.free(),
       catch: () =>
@@ -51,24 +39,10 @@ export const free = Effect.fn(
           message: `Anchor.free failed Hint: Check if you're calling free() more than once.`,
         }),
     }),
-);
+  );
 
 /**
  * Unsafely calls instance.free without Effect wrapper
- *
- * @example
- * import { Anchor } from "@lucid-evolution/experimental";
- *
- * // Assume we have a Anchor instance
- * const instance = ... ;
- *
- * // Using try/catch for error handling
- * try {
- *   const result = Anchor.freeUnsafe(instance);
- *   console.log(result);
- * } catch (error) {
- *   console.error(`Anchor.freeUnsafe failed: ${error.message}`);
- * }
  *
  * @since 2.0.0
  * @category MethodsUnsafe
@@ -79,23 +53,13 @@ export const freeUnsafe = (instance: CML.Anchor): void =>
 /**
  * Method toCborBytes of Anchor
  *
- * @example
- * import { Anchor } from "@lucid-evolution/experimental";
- * import { Effect } from "effect";
- *
- * // Using Effect for safe execution with error handling
- * Effect.gen(function*() {
- * // Assume we have a Anchor instance
- * const instance = ... ;
- *   const result = yield* Anchor.toCborBytes(instance);
- *   console.log(result);
- * });
- *
  * @since 2.0.0
  * @category Methods
  */
-export const toCborBytes = Effect.fn(
-  (instance: CML.Anchor): Effect.Effect<Uint8Array, AnchorError> =>
+export const toCborBytes: (
+  instance: CML.Anchor,
+) => Effect.Effect<Uint8Array, AnchorError> = Effect.fn(
+  (instance: CML.Anchor) =>
     Effect.try({
       try: () => instance.to_cbor_bytes(),
       catch: () =>
@@ -108,20 +72,6 @@ export const toCborBytes = Effect.fn(
 /**
  * Unsafely calls instance.toCborBytes without Effect wrapper
  *
- * @example
- * import { Anchor } from "@lucid-evolution/experimental";
- *
- * // Assume we have a Anchor instance
- * const instance = ... ;
- *
- * // Using try/catch for error handling
- * try {
- *   const result = Anchor.toCborBytesUnsafe(instance);
- *   console.log(result);
- * } catch (error) {
- *   console.error(`Anchor.toCborBytesUnsafe failed: ${error.message}`);
- * }
- *
  * @since 2.0.0
  * @category MethodsUnsafe
  */
@@ -131,23 +81,13 @@ export const toCborBytesUnsafe = (instance: CML.Anchor): Uint8Array =>
 /**
  * Method toCanonicalCborBytes of Anchor
  *
- * @example
- * import { Anchor } from "@lucid-evolution/experimental";
- * import { Effect } from "effect";
- *
- * // Using Effect for safe execution with error handling
- * Effect.gen(function*() {
- * // Assume we have a Anchor instance
- * const instance = ... ;
- *   const result = yield* Anchor.toCanonicalCborBytes(instance);
- *   console.log(result);
- * });
- *
  * @since 2.0.0
  * @category Methods
  */
-export const toCanonicalCborBytes = Effect.fn(
-  (instance: CML.Anchor): Effect.Effect<Uint8Array, AnchorError> =>
+export const toCanonicalCborBytes: (
+  instance: CML.Anchor,
+) => Effect.Effect<Uint8Array, AnchorError> = Effect.fn(
+  (instance: CML.Anchor) =>
     Effect.try({
       try: () => instance.to_canonical_cbor_bytes(),
       catch: () =>
@@ -160,20 +100,6 @@ export const toCanonicalCborBytes = Effect.fn(
 /**
  * Unsafely calls instance.toCanonicalCborBytes without Effect wrapper
  *
- * @example
- * import { Anchor } from "@lucid-evolution/experimental";
- *
- * // Assume we have a Anchor instance
- * const instance = ... ;
- *
- * // Using try/catch for error handling
- * try {
- *   const result = Anchor.toCanonicalCborBytesUnsafe(instance);
- *   console.log(result);
- * } catch (error) {
- *   console.error(`Anchor.toCanonicalCborBytesUnsafe failed: ${error.message}`);
- * }
- *
  * @since 2.0.0
  * @category MethodsUnsafe
  */
@@ -183,21 +109,14 @@ export const toCanonicalCborBytesUnsafe = (instance: CML.Anchor): Uint8Array =>
 /**
  * Static method fromCborBytes of Anchor
  *
- * @example
- * import { Anchor } from "@lucid-evolution/experimental";
- * import { Effect } from "effect";
- *
- * // Using Effect for safe execution with error handling
- * Effect.gen(function*() {
- *
- *   const result = yield* Anchor.fromCborBytes( parameters );
- *   console.log(result);
- * });
- *
  * @since 2.0.0
  * @category Constructors
  */
-export const fromCborBytes = Effect.fn(function* (cborBytes: Uint8Array) {
+export const fromCborBytes: (
+  cborBytes: Uint8Array,
+) => Effect.Effect<CML.Anchor, AnchorError> = Effect.fn(function* (
+  cborBytes: Uint8Array,
+) {
   return yield* Effect.try({
     try: () => CML.Anchor.from_cbor_bytes(cborBytes),
     catch: () =>
@@ -210,70 +129,32 @@ export const fromCborBytes = Effect.fn(function* (cborBytes: Uint8Array) {
 /**
  * Unsafely calls Anchor.fromCborBytes without Effect wrapper
  *
- * @example
- * import { Anchor } from "@lucid-evolution/experimental";
- *
- *
- *
- * // Using try/catch for error handling
- * try {
- *   const result = Anchor.fromCborBytesUnsafe( parameters );
- *   console.log(result);
- * } catch (error) {
- *   console.error(`Anchor.fromCborBytesUnsafe failed: ${error.message}`);
- * }
- *
  * @since 2.0.0
  * @category ConstructorsUnsafe
  */
-export const fromCborBytesUnsafe = (cborBytes: Uint8Array) =>
+export const fromCborBytesUnsafe = (cborBytes: Uint8Array): CML.Anchor =>
   Effect.runSync(fromCborBytes(cborBytes));
 
 /**
  * Method toCborHex of Anchor
  *
- * @example
- * import { Anchor } from "@lucid-evolution/experimental";
- * import { Effect } from "effect";
- *
- * // Using Effect for safe execution with error handling
- * Effect.gen(function*() {
- * // Assume we have a Anchor instance
- * const instance = ... ;
- *   const result = yield* Anchor.toCborHex(instance);
- *   console.log(result);
- * });
- *
  * @since 2.0.0
  * @category Methods
  */
-export const toCborHex = Effect.fn(
-  (instance: CML.Anchor): Effect.Effect<string, AnchorError> =>
-    Effect.try({
-      try: () => instance.to_cbor_hex(),
-      catch: () =>
-        new AnchorError({
-          message: `Anchor.toCborHex failed Anchor is not valid for string conversion. Hint: Make sure it's a valid hex string representing CBOR data.`,
-        }),
-    }),
+export const toCborHex: (
+  instance: CML.Anchor,
+) => Effect.Effect<string, AnchorError> = Effect.fn((instance: CML.Anchor) =>
+  Effect.try({
+    try: () => instance.to_cbor_hex(),
+    catch: () =>
+      new AnchorError({
+        message: `Anchor.toCborHex failed Anchor is not valid for string conversion. Hint: Make sure it's a valid hex string representing CBOR data.`,
+      }),
+  }),
 );
 
 /**
  * Unsafely calls instance.toCborHex without Effect wrapper
- *
- * @example
- * import { Anchor } from "@lucid-evolution/experimental";
- *
- * // Assume we have a Anchor instance
- * const instance = ... ;
- *
- * // Using try/catch for error handling
- * try {
- *   const result = Anchor.toCborHexUnsafe(instance);
- *   console.log(result);
- * } catch (error) {
- *   console.error(`Anchor.toCborHexUnsafe failed: ${error.message}`);
- * }
  *
  * @since 2.0.0
  * @category MethodsUnsafe
@@ -284,48 +165,23 @@ export const toCborHexUnsafe = (instance: CML.Anchor): string =>
 /**
  * Method toCanonicalCborHex of Anchor
  *
- * @example
- * import { Anchor } from "@lucid-evolution/experimental";
- * import { Effect } from "effect";
- *
- * // Using Effect for safe execution with error handling
- * Effect.gen(function*() {
- * // Assume we have a Anchor instance
- * const instance = ... ;
- *   const result = yield* Anchor.toCanonicalCborHex(instance);
- *   console.log(result);
- * });
- *
  * @since 2.0.0
  * @category Methods
  */
-export const toCanonicalCborHex = Effect.fn(
-  (instance: CML.Anchor): Effect.Effect<string, AnchorError> =>
-    Effect.try({
-      try: () => instance.to_canonical_cbor_hex(),
-      catch: () =>
-        new AnchorError({
-          message: `Anchor.toCanonicalCborHex failed Anchor is not valid for string conversion. Hint: Make sure it's a valid hex string representing CBOR data.`,
-        }),
-    }),
+export const toCanonicalCborHex: (
+  instance: CML.Anchor,
+) => Effect.Effect<string, AnchorError> = Effect.fn((instance: CML.Anchor) =>
+  Effect.try({
+    try: () => instance.to_canonical_cbor_hex(),
+    catch: () =>
+      new AnchorError({
+        message: `Anchor.toCanonicalCborHex failed Anchor is not valid for string conversion. Hint: Make sure it's a valid hex string representing CBOR data.`,
+      }),
+  }),
 );
 
 /**
  * Unsafely calls instance.toCanonicalCborHex without Effect wrapper
- *
- * @example
- * import { Anchor } from "@lucid-evolution/experimental";
- *
- * // Assume we have a Anchor instance
- * const instance = ... ;
- *
- * // Using try/catch for error handling
- * try {
- *   const result = Anchor.toCanonicalCborHexUnsafe(instance);
- *   console.log(result);
- * } catch (error) {
- *   console.error(`Anchor.toCanonicalCborHexUnsafe failed: ${error.message}`);
- * }
  *
  * @since 2.0.0
  * @category MethodsUnsafe
@@ -336,21 +192,14 @@ export const toCanonicalCborHexUnsafe = (instance: CML.Anchor): string =>
 /**
  * Static method fromCborHex of Anchor
  *
- * @example
- * import { Anchor } from "@lucid-evolution/experimental";
- * import { Effect } from "effect";
- *
- * // Using Effect for safe execution with error handling
- * Effect.gen(function*() {
- *
- *   const result = yield* Anchor.fromCborHex( parameters );
- *   console.log(result);
- * });
- *
  * @since 2.0.0
  * @category Constructors
  */
-export const fromCborHex = Effect.fn(function* (cborBytes: string) {
+export const fromCborHex: (
+  cborBytes: string,
+) => Effect.Effect<CML.Anchor, AnchorError> = Effect.fn(function* (
+  cborBytes: string,
+) {
   return yield* Effect.try({
     try: () => CML.Anchor.from_cbor_hex(cborBytes),
     catch: () =>
@@ -363,70 +212,32 @@ export const fromCborHex = Effect.fn(function* (cborBytes: string) {
 /**
  * Unsafely calls Anchor.fromCborHex without Effect wrapper
  *
- * @example
- * import { Anchor } from "@lucid-evolution/experimental";
- *
- *
- *
- * // Using try/catch for error handling
- * try {
- *   const result = Anchor.fromCborHexUnsafe( parameters );
- *   console.log(result);
- * } catch (error) {
- *   console.error(`Anchor.fromCborHexUnsafe failed: ${error.message}`);
- * }
- *
  * @since 2.0.0
  * @category ConstructorsUnsafe
  */
-export const fromCborHexUnsafe = (cborBytes: string) =>
+export const fromCborHexUnsafe = (cborBytes: string): CML.Anchor =>
   Effect.runSync(fromCborHex(cborBytes));
 
 /**
  * Method toJson of Anchor
  *
- * @example
- * import { Anchor } from "@lucid-evolution/experimental";
- * import { Effect } from "effect";
- *
- * // Using Effect for safe execution with error handling
- * Effect.gen(function*() {
- * // Assume we have a Anchor instance
- * const instance = ... ;
- *   const result = yield* Anchor.toJson(instance);
- *   console.log(result);
- * });
- *
  * @since 2.0.0
  * @category Methods
  */
-export const toJson = Effect.fn(
-  (instance: CML.Anchor): Effect.Effect<string, AnchorError> =>
-    Effect.try({
-      try: () => instance.to_json(),
-      catch: () =>
-        new AnchorError({
-          message: `Anchor.toJson failed Anchor is not valid for string conversion. Hint: Validate your JSON structure.`,
-        }),
-    }),
+export const toJson: (
+  instance: CML.Anchor,
+) => Effect.Effect<string, AnchorError> = Effect.fn((instance: CML.Anchor) =>
+  Effect.try({
+    try: () => instance.to_json(),
+    catch: () =>
+      new AnchorError({
+        message: `Anchor.toJson failed Anchor is not valid for string conversion. Hint: Validate your JSON structure.`,
+      }),
+  }),
 );
 
 /**
  * Unsafely calls instance.toJson without Effect wrapper
- *
- * @example
- * import { Anchor } from "@lucid-evolution/experimental";
- *
- * // Assume we have a Anchor instance
- * const instance = ... ;
- *
- * // Using try/catch for error handling
- * try {
- *   const result = Anchor.toJsonUnsafe(instance);
- *   console.log(result);
- * } catch (error) {
- *   console.error(`Anchor.toJsonUnsafe failed: ${error.message}`);
- * }
  *
  * @since 2.0.0
  * @category MethodsUnsafe
@@ -437,48 +248,23 @@ export const toJsonUnsafe = (instance: CML.Anchor): string =>
 /**
  * Method toJsValue of Anchor
  *
- * @example
- * import { Anchor } from "@lucid-evolution/experimental";
- * import { Effect } from "effect";
- *
- * // Using Effect for safe execution with error handling
- * Effect.gen(function*() {
- * // Assume we have a Anchor instance
- * const instance = ... ;
- *   const result = yield* Anchor.toJsValue(instance);
- *   console.log(result);
- * });
- *
  * @since 2.0.0
  * @category Methods
  */
-export const toJsValue = Effect.fn(
-  (instance: CML.Anchor): Effect.Effect<any, AnchorError> =>
-    Effect.try({
-      try: () => instance.to_js_value(),
-      catch: () =>
-        new AnchorError({
-          message: `Anchor.toJsValue failed Anchor is not valid for any conversion. `,
-        }),
-    }),
+export const toJsValue: (
+  instance: CML.Anchor,
+) => Effect.Effect<any, AnchorError> = Effect.fn((instance: CML.Anchor) =>
+  Effect.try({
+    try: () => instance.to_js_value(),
+    catch: () =>
+      new AnchorError({
+        message: `Anchor.toJsValue failed Anchor is not valid for any conversion. `,
+      }),
+  }),
 );
 
 /**
  * Unsafely calls instance.toJsValue without Effect wrapper
- *
- * @example
- * import { Anchor } from "@lucid-evolution/experimental";
- *
- * // Assume we have a Anchor instance
- * const instance = ... ;
- *
- * // Using try/catch for error handling
- * try {
- *   const result = Anchor.toJsValueUnsafe(instance);
- *   console.log(result);
- * } catch (error) {
- *   console.error(`Anchor.toJsValueUnsafe failed: ${error.message}`);
- * }
  *
  * @since 2.0.0
  * @category MethodsUnsafe
@@ -489,21 +275,14 @@ export const toJsValueUnsafe = (instance: CML.Anchor): any =>
 /**
  * Static method fromJson of Anchor
  *
- * @example
- * import { Anchor } from "@lucid-evolution/experimental";
- * import { Effect } from "effect";
- *
- * // Using Effect for safe execution with error handling
- * Effect.gen(function*() {
- *
- *   const result = yield* Anchor.fromJson( parameters );
- *   console.log(result);
- * });
- *
  * @since 2.0.0
  * @category Constructors
  */
-export const fromJson = Effect.fn(function* (json: string) {
+export const fromJson: (
+  json: string,
+) => Effect.Effect<CML.Anchor, AnchorError> = Effect.fn(function* (
+  json: string,
+) {
   return yield* Effect.try({
     try: () => CML.Anchor.from_json(json),
     catch: () =>
@@ -516,69 +295,32 @@ export const fromJson = Effect.fn(function* (json: string) {
 /**
  * Unsafely calls Anchor.fromJson without Effect wrapper
  *
- * @example
- * import { Anchor } from "@lucid-evolution/experimental";
- *
- *
- *
- * // Using try/catch for error handling
- * try {
- *   const result = Anchor.fromJsonUnsafe( parameters );
- *   console.log(result);
- * } catch (error) {
- *   console.error(`Anchor.fromJsonUnsafe failed: ${error.message}`);
- * }
- *
  * @since 2.0.0
  * @category ConstructorsUnsafe
  */
-export const fromJsonUnsafe = (json: string) => Effect.runSync(fromJson(json));
+export const fromJsonUnsafe = (json: string): CML.Anchor =>
+  Effect.runSync(fromJson(json));
 
 /**
  * Method anchorUrl of Anchor
  *
- * @example
- * import { Anchor } from "@lucid-evolution/experimental";
- * import { Effect } from "effect";
- *
- * // Using Effect for safe execution with error handling
- * Effect.gen(function*() {
- * // Assume we have a Anchor instance
- * const instance = ... ;
- *   const result = yield* Anchor.anchorUrl(instance);
- *   console.log(result);
- * });
- *
  * @since 2.0.0
  * @category Methods
  */
-export const anchorUrl = Effect.fn(
-  (instance: CML.Anchor): Effect.Effect<CML.Url, AnchorError> =>
-    Effect.try({
-      try: () => instance.anchor_url(),
-      catch: () =>
-        new AnchorError({
-          message: `Anchor.anchorUrl failed `,
-        }),
-    }),
+export const anchorUrl: (
+  instance: CML.Anchor,
+) => Effect.Effect<CML.Url, AnchorError> = Effect.fn((instance: CML.Anchor) =>
+  Effect.try({
+    try: () => instance.anchor_url(),
+    catch: () =>
+      new AnchorError({
+        message: `Anchor.anchorUrl failed `,
+      }),
+  }),
 );
 
 /**
  * Unsafely calls instance.anchorUrl without Effect wrapper
- *
- * @example
- * import { Anchor } from "@lucid-evolution/experimental";
- *
- * // Assume we have a Anchor instance
- * const instance = ... ;
- *
- * // Using try/catch for error handling
- * try {
- *   const result = Anchor.anchorUrlUnsafe(instance);
- *   console.log(result);
- * } catch (error) {
- *   console.error(`Anchor.anchorUrlUnsafe failed: ${error.message}`);
- * }
  *
  * @since 2.0.0
  * @category MethodsUnsafe
@@ -589,23 +331,13 @@ export const anchorUrlUnsafe = (instance: CML.Anchor): CML.Url =>
 /**
  * Method anchorDocHash of Anchor
  *
- * @example
- * import { Anchor } from "@lucid-evolution/experimental";
- * import { Effect } from "effect";
- *
- * // Using Effect for safe execution with error handling
- * Effect.gen(function*() {
- * // Assume we have a Anchor instance
- * const instance = ... ;
- *   const result = yield* Anchor.anchorDocHash(instance);
- *   console.log(result);
- * });
- *
  * @since 2.0.0
  * @category Methods
  */
-export const anchorDocHash = Effect.fn(
-  (instance: CML.Anchor): Effect.Effect<CML.AnchorDocHash, AnchorError> =>
+export const anchorDocHash: (
+  instance: CML.Anchor,
+) => Effect.Effect<CML.AnchorDocHash, AnchorError> = Effect.fn(
+  (instance: CML.Anchor) =>
     Effect.try({
       try: () => instance.anchor_doc_hash(),
       catch: () =>
@@ -618,20 +350,6 @@ export const anchorDocHash = Effect.fn(
 /**
  * Unsafely calls instance.anchorDocHash without Effect wrapper
  *
- * @example
- * import { Anchor } from "@lucid-evolution/experimental";
- *
- * // Assume we have a Anchor instance
- * const instance = ... ;
- *
- * // Using try/catch for error handling
- * try {
- *   const result = Anchor.anchorDocHashUnsafe(instance);
- *   console.log(result);
- * } catch (error) {
- *   console.error(`Anchor.anchorDocHashUnsafe failed: ${error.message}`);
- * }
- *
  * @since 2.0.0
  * @category MethodsUnsafe
  */
@@ -641,21 +359,13 @@ export const anchorDocHashUnsafe = (instance: CML.Anchor): CML.AnchorDocHash =>
 /**
  * Static method _new of Anchor
  *
- * @example
- * import { Anchor } from "@lucid-evolution/experimental";
- * import { Effect } from "effect";
- *
- * // Using Effect for safe execution with error handling
- * Effect.gen(function*() {
- *
- *   const result = yield* Anchor._new( parameters );
- *   console.log(result);
- * });
- *
  * @since 2.0.0
  * @category Constructors
  */
-export const _new = Effect.fn(function* (
+export const _new: (
+  anchorUrl: CML.Url,
+  anchorDocHash: CML.AnchorDocHash,
+) => Effect.Effect<CML.Anchor, AnchorError> = Effect.fn(function* (
   anchorUrl: CML.Url,
   anchorDocHash: CML.AnchorDocHash,
 ) {
@@ -671,23 +381,10 @@ export const _new = Effect.fn(function* (
 /**
  * Unsafely calls Anchor._new without Effect wrapper
  *
- * @example
- * import { Anchor } from "@lucid-evolution/experimental";
- *
- *
- *
- * // Using try/catch for error handling
- * try {
- *   const result = Anchor._newUnsafe( parameters );
- *   console.log(result);
- * } catch (error) {
- *   console.error(`Anchor._newUnsafe failed: ${error.message}`);
- * }
- *
  * @since 2.0.0
  * @category ConstructorsUnsafe
  */
 export const _newUnsafe = (
   anchorUrl: CML.Url,
   anchorDocHash: CML.AnchorDocHash,
-) => Effect.runSync(_new(anchorUrl, anchorDocHash));
+): CML.Anchor => Effect.runSync(_new(anchorUrl, anchorDocHash));

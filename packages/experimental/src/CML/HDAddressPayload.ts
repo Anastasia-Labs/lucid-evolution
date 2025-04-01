@@ -29,25 +29,13 @@ export class HDAddressPayloadError extends Data.TaggedError(
 /**
  * Method free of HDAddressPayload
  *
- * @example
- * import { HDAddressPayload } from "@lucid-evolution/experimental";
- * import { Effect } from "effect";
- *
- * // Using Effect for safe execution with error handling
- * Effect.gen(function*() {
- * // Assume we have a HDAddressPayload instance
- * const instance = ... ;
- *   const result = yield* HDAddressPayload.free(instance);
- *   console.log(result);
- * });
- *
  * @since 2.0.0
  * @category Methods
  */
-export const free = Effect.fn(
-  (
-    instance: CML.HDAddressPayload,
-  ): Effect.Effect<void, HDAddressPayloadError> =>
+export const free: (
+  instance: CML.HDAddressPayload,
+) => Effect.Effect<void, HDAddressPayloadError> = Effect.fn(
+  (instance: CML.HDAddressPayload) =>
     Effect.try({
       try: () => instance.free(),
       catch: () =>
@@ -60,20 +48,6 @@ export const free = Effect.fn(
 /**
  * Unsafely calls instance.free without Effect wrapper
  *
- * @example
- * import { HDAddressPayload } from "@lucid-evolution/experimental";
- *
- * // Assume we have a HDAddressPayload instance
- * const instance = ... ;
- *
- * // Using try/catch for error handling
- * try {
- *   const result = HDAddressPayload.freeUnsafe(instance);
- *   console.log(result);
- * } catch (error) {
- *   console.error(`HDAddressPayload.freeUnsafe failed: ${error.message}`);
- * }
- *
  * @since 2.0.0
  * @category MethodsUnsafe
  */
@@ -83,25 +57,13 @@ export const freeUnsafe = (instance: CML.HDAddressPayload): void =>
 /**
  * Method toCborBytes of HDAddressPayload
  *
- * @example
- * import { HDAddressPayload } from "@lucid-evolution/experimental";
- * import { Effect } from "effect";
- *
- * // Using Effect for safe execution with error handling
- * Effect.gen(function*() {
- * // Assume we have a HDAddressPayload instance
- * const instance = ... ;
- *   const result = yield* HDAddressPayload.toCborBytes(instance);
- *   console.log(result);
- * });
- *
  * @since 2.0.0
  * @category Methods
  */
-export const toCborBytes = Effect.fn(
-  (
-    instance: CML.HDAddressPayload,
-  ): Effect.Effect<Uint8Array, HDAddressPayloadError> =>
+export const toCborBytes: (
+  instance: CML.HDAddressPayload,
+) => Effect.Effect<Uint8Array, HDAddressPayloadError> = Effect.fn(
+  (instance: CML.HDAddressPayload) =>
     Effect.try({
       try: () => instance.to_cbor_bytes(),
       catch: () =>
@@ -114,20 +76,6 @@ export const toCborBytes = Effect.fn(
 /**
  * Unsafely calls instance.toCborBytes without Effect wrapper
  *
- * @example
- * import { HDAddressPayload } from "@lucid-evolution/experimental";
- *
- * // Assume we have a HDAddressPayload instance
- * const instance = ... ;
- *
- * // Using try/catch for error handling
- * try {
- *   const result = HDAddressPayload.toCborBytesUnsafe(instance);
- *   console.log(result);
- * } catch (error) {
- *   console.error(`HDAddressPayload.toCborBytesUnsafe failed: ${error.message}`);
- * }
- *
  * @since 2.0.0
  * @category MethodsUnsafe
  */
@@ -137,74 +85,43 @@ export const toCborBytesUnsafe = (instance: CML.HDAddressPayload): Uint8Array =>
 /**
  * Static method fromCborBytes of HDAddressPayload
  *
- * @example
- * import { HDAddressPayload } from "@lucid-evolution/experimental";
- * import { Effect } from "effect";
- *
- * // Using Effect for safe execution with error handling
- * Effect.gen(function*() {
- *
- *   const result = yield* HDAddressPayload.fromCborBytes( parameters );
- *   console.log(result);
- * });
- *
  * @since 2.0.0
  * @category Constructors
  */
-export const fromCborBytes = Effect.fn(function* (cborBytes: Uint8Array) {
-  return yield* Effect.try({
-    try: () => CML.HDAddressPayload.from_cbor_bytes(cborBytes),
-    catch: () =>
-      new HDAddressPayloadError({
-        message: `HDAddressPayload.fromCborBytes failed with parameters: ${cborBytes}. Hint: Check byte length and encoding.`,
-      }),
-  });
-});
+export const fromCborBytes: (
+  cborBytes: Uint8Array,
+) => Effect.Effect<CML.HDAddressPayload, HDAddressPayloadError> = Effect.fn(
+  function* (cborBytes: Uint8Array) {
+    return yield* Effect.try({
+      try: () => CML.HDAddressPayload.from_cbor_bytes(cborBytes),
+      catch: () =>
+        new HDAddressPayloadError({
+          message: `HDAddressPayload.fromCborBytes failed with parameters: ${cborBytes}. Hint: Check byte length and encoding.`,
+        }),
+    });
+  },
+);
 
 /**
  * Unsafely calls HDAddressPayload.fromCborBytes without Effect wrapper
  *
- * @example
- * import { HDAddressPayload } from "@lucid-evolution/experimental";
- *
- *
- *
- * // Using try/catch for error handling
- * try {
- *   const result = HDAddressPayload.fromCborBytesUnsafe( parameters );
- *   console.log(result);
- * } catch (error) {
- *   console.error(`HDAddressPayload.fromCborBytesUnsafe failed: ${error.message}`);
- * }
- *
  * @since 2.0.0
  * @category ConstructorsUnsafe
  */
-export const fromCborBytesUnsafe = (cborBytes: Uint8Array) =>
-  Effect.runSync(fromCborBytes(cborBytes));
+export const fromCborBytesUnsafe = (
+  cborBytes: Uint8Array,
+): CML.HDAddressPayload => Effect.runSync(fromCborBytes(cborBytes));
 
 /**
  * Method toCborHex of HDAddressPayload
  *
- * @example
- * import { HDAddressPayload } from "@lucid-evolution/experimental";
- * import { Effect } from "effect";
- *
- * // Using Effect for safe execution with error handling
- * Effect.gen(function*() {
- * // Assume we have a HDAddressPayload instance
- * const instance = ... ;
- *   const result = yield* HDAddressPayload.toCborHex(instance);
- *   console.log(result);
- * });
- *
  * @since 2.0.0
  * @category Methods
  */
-export const toCborHex = Effect.fn(
-  (
-    instance: CML.HDAddressPayload,
-  ): Effect.Effect<string, HDAddressPayloadError> =>
+export const toCborHex: (
+  instance: CML.HDAddressPayload,
+) => Effect.Effect<string, HDAddressPayloadError> = Effect.fn(
+  (instance: CML.HDAddressPayload) =>
     Effect.try({
       try: () => instance.to_cbor_hex(),
       catch: () =>
@@ -217,20 +134,6 @@ export const toCborHex = Effect.fn(
 /**
  * Unsafely calls instance.toCborHex without Effect wrapper
  *
- * @example
- * import { HDAddressPayload } from "@lucid-evolution/experimental";
- *
- * // Assume we have a HDAddressPayload instance
- * const instance = ... ;
- *
- * // Using try/catch for error handling
- * try {
- *   const result = HDAddressPayload.toCborHexUnsafe(instance);
- *   console.log(result);
- * } catch (error) {
- *   console.error(`HDAddressPayload.toCborHexUnsafe failed: ${error.message}`);
- * }
- *
  * @since 2.0.0
  * @category MethodsUnsafe
  */
@@ -240,74 +143,42 @@ export const toCborHexUnsafe = (instance: CML.HDAddressPayload): string =>
 /**
  * Static method fromCborHex of HDAddressPayload
  *
- * @example
- * import { HDAddressPayload } from "@lucid-evolution/experimental";
- * import { Effect } from "effect";
- *
- * // Using Effect for safe execution with error handling
- * Effect.gen(function*() {
- *
- *   const result = yield* HDAddressPayload.fromCborHex( parameters );
- *   console.log(result);
- * });
- *
  * @since 2.0.0
  * @category Constructors
  */
-export const fromCborHex = Effect.fn(function* (cborBytes: string) {
-  return yield* Effect.try({
-    try: () => CML.HDAddressPayload.from_cbor_hex(cborBytes),
-    catch: () =>
-      new HDAddressPayloadError({
-        message: `HDAddressPayload.fromCborHex failed with parameters: ${cborBytes}. Hint: Make sure it's a valid hex string representing CBOR data.`,
-      }),
-  });
-});
+export const fromCborHex: (
+  cborBytes: string,
+) => Effect.Effect<CML.HDAddressPayload, HDAddressPayloadError> = Effect.fn(
+  function* (cborBytes: string) {
+    return yield* Effect.try({
+      try: () => CML.HDAddressPayload.from_cbor_hex(cborBytes),
+      catch: () =>
+        new HDAddressPayloadError({
+          message: `HDAddressPayload.fromCborHex failed with parameters: ${cborBytes}. Hint: Make sure it's a valid hex string representing CBOR data.`,
+        }),
+    });
+  },
+);
 
 /**
  * Unsafely calls HDAddressPayload.fromCborHex without Effect wrapper
  *
- * @example
- * import { HDAddressPayload } from "@lucid-evolution/experimental";
- *
- *
- *
- * // Using try/catch for error handling
- * try {
- *   const result = HDAddressPayload.fromCborHexUnsafe( parameters );
- *   console.log(result);
- * } catch (error) {
- *   console.error(`HDAddressPayload.fromCborHexUnsafe failed: ${error.message}`);
- * }
- *
  * @since 2.0.0
  * @category ConstructorsUnsafe
  */
-export const fromCborHexUnsafe = (cborBytes: string) =>
+export const fromCborHexUnsafe = (cborBytes: string): CML.HDAddressPayload =>
   Effect.runSync(fromCborHex(cborBytes));
 
 /**
  * Method get of HDAddressPayload
  *
- * @example
- * import { HDAddressPayload } from "@lucid-evolution/experimental";
- * import { Effect } from "effect";
- *
- * // Using Effect for safe execution with error handling
- * Effect.gen(function*() {
- * // Assume we have a HDAddressPayload instance
- * const instance = ... ;
- *   const result = yield* HDAddressPayload.get(instance);
- *   console.log(result);
- * });
- *
  * @since 2.0.0
  * @category Methods
  */
-export const get = Effect.fn(
-  (
-    instance: CML.HDAddressPayload,
-  ): Effect.Effect<Uint8Array, HDAddressPayloadError> =>
+export const get: (
+  instance: CML.HDAddressPayload,
+) => Effect.Effect<Uint8Array, HDAddressPayloadError> = Effect.fn(
+  (instance: CML.HDAddressPayload) =>
     Effect.try({
       try: () => instance.get(),
       catch: () =>
@@ -319,20 +190,6 @@ export const get = Effect.fn(
 
 /**
  * Unsafely calls instance.get without Effect wrapper
- *
- * @example
- * import { HDAddressPayload } from "@lucid-evolution/experimental";
- *
- * // Assume we have a HDAddressPayload instance
- * const instance = ... ;
- *
- * // Using try/catch for error handling
- * try {
- *   const result = HDAddressPayload.getUnsafe(instance);
- *   console.log(result);
- * } catch (error) {
- *   console.error(`HDAddressPayload.getUnsafe failed: ${error.message}`);
- * }
  *
  * @since 2.0.0
  * @category MethodsUnsafe

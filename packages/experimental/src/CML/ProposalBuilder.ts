@@ -29,23 +29,13 @@ export class ProposalBuilderError extends Data.TaggedError(
 /**
  * Method free of ProposalBuilder
  *
- * @example
- * import { ProposalBuilder } from "@lucid-evolution/experimental";
- * import { Effect } from "effect";
- *
- * // Using Effect for safe execution with error handling
- * Effect.gen(function*() {
- * // Assume we have a ProposalBuilder instance
- * const instance = ... ;
- *   const result = yield* ProposalBuilder.free(instance);
- *   console.log(result);
- * });
- *
  * @since 2.0.0
  * @category Methods
  */
-export const free = Effect.fn(
-  (instance: CML.ProposalBuilder): Effect.Effect<void, ProposalBuilderError> =>
+export const free: (
+  instance: CML.ProposalBuilder,
+) => Effect.Effect<void, ProposalBuilderError> = Effect.fn(
+  (instance: CML.ProposalBuilder) =>
     Effect.try({
       try: () => instance.free(),
       catch: () =>
@@ -58,20 +48,6 @@ export const free = Effect.fn(
 /**
  * Unsafely calls instance.free without Effect wrapper
  *
- * @example
- * import { ProposalBuilder } from "@lucid-evolution/experimental";
- *
- * // Assume we have a ProposalBuilder instance
- * const instance = ... ;
- *
- * // Using try/catch for error handling
- * try {
- *   const result = ProposalBuilder.freeUnsafe(instance);
- *   console.log(result);
- * } catch (error) {
- *   console.error(`ProposalBuilder.freeUnsafe failed: ${error.message}`);
- * }
- *
  * @since 2.0.0
  * @category MethodsUnsafe
  */
@@ -81,21 +57,13 @@ export const freeUnsafe = (instance: CML.ProposalBuilder): void =>
 /**
  * Static method _new of ProposalBuilder
  *
- * @example
- * import { ProposalBuilder } from "@lucid-evolution/experimental";
- * import { Effect } from "effect";
- *
- * // Using Effect for safe execution with error handling
- * Effect.gen(function*() {
- *
- *   const result = yield* ProposalBuilder._new();
- *   console.log(result);
- * });
- *
  * @since 2.0.0
  * @category Constructors
  */
-export const _new = Effect.fn(function* () {
+export const _new: () => Effect.Effect<
+  CML.ProposalBuilder,
+  ProposalBuilderError
+> = Effect.fn(function* () {
   return yield* Effect.try({
     try: () => CML.ProposalBuilder.new(),
     catch: () =>
@@ -108,47 +76,22 @@ export const _new = Effect.fn(function* () {
 /**
  * Unsafely calls ProposalBuilder._new without Effect wrapper
  *
- * @example
- * import { ProposalBuilder } from "@lucid-evolution/experimental";
- *
- *
- *
- * // Using try/catch for error handling
- * try {
- *   const result = ProposalBuilder._newUnsafe();
- *   console.log(result);
- * } catch (error) {
- *   console.error(`ProposalBuilder._newUnsafe failed: ${error.message}`);
- * }
- *
  * @since 2.0.0
  * @category ConstructorsUnsafe
  */
-export const _newUnsafe = () => Effect.runSync(_new());
+export const _newUnsafe = (): CML.ProposalBuilder => Effect.runSync(_new());
 
 /**
  * Method withProposal of ProposalBuilder
  *
- * @example
- * import { ProposalBuilder } from "@lucid-evolution/experimental";
- * import { Effect } from "effect";
- *
- * // Using Effect for safe execution with error handling
- * Effect.gen(function*() {
- * // Assume we have a ProposalBuilder instance
- * const instance = ... ;
- *   const result = yield* ProposalBuilder.withProposal(instance,  parameters );
- *   console.log(result);
- * });
- *
  * @since 2.0.0
  * @category Methods
  */
-export const withProposal = Effect.fn(
-  (
-    instance: CML.ProposalBuilder,
-    proposal: CML.ProposalProcedure,
-  ): Effect.Effect<CML.ProposalBuilder, ProposalBuilderError> =>
+export const withProposal: (
+  instance: CML.ProposalBuilder,
+  proposal: CML.ProposalProcedure,
+) => Effect.Effect<CML.ProposalBuilder, ProposalBuilderError> = Effect.fn(
+  (instance: CML.ProposalBuilder, proposal: CML.ProposalProcedure) =>
     Effect.try({
       try: () => instance.with_proposal(proposal),
       catch: () =>
@@ -161,20 +104,6 @@ export const withProposal = Effect.fn(
 /**
  * Unsafely calls instance.withProposal without Effect wrapper
  *
- * @example
- * import { ProposalBuilder } from "@lucid-evolution/experimental";
- *
- * // Assume we have a ProposalBuilder instance
- * const instance = ... ;
- *
- * // Using try/catch for error handling
- * try {
- *   const result = ProposalBuilder.withProposalUnsafe(instance,  parameters );
- *   console.log(result);
- * } catch (error) {
- *   console.error(`ProposalBuilder.withProposalUnsafe failed: ${error.message}`);
- * }
- *
  * @since 2.0.0
  * @category MethodsUnsafe
  */
@@ -186,28 +115,21 @@ export const withProposalUnsafe = (
 /**
  * Method withNativeScriptProposal of ProposalBuilder
  *
- * @example
- * import { ProposalBuilder } from "@lucid-evolution/experimental";
- * import { Effect } from "effect";
- *
- * // Using Effect for safe execution with error handling
- * Effect.gen(function*() {
- * // Assume we have a ProposalBuilder instance
- * const instance = ... ;
- *   const result = yield* ProposalBuilder.withNativeScriptProposal(instance,  parameters );
- *   console.log(result);
- * });
- *
  * @since 2.0.0
  * @category Methods
  */
-export const withNativeScriptProposal = Effect.fn(
+export const withNativeScriptProposal: (
+  instance: CML.ProposalBuilder,
+  proposal: CML.ProposalProcedure,
+  nativeScript: CML.NativeScript,
+  witnessInfo: CML.NativeScriptWitnessInfo,
+) => Effect.Effect<CML.ProposalBuilder, ProposalBuilderError> = Effect.fn(
   (
     instance: CML.ProposalBuilder,
     proposal: CML.ProposalProcedure,
     nativeScript: CML.NativeScript,
     witnessInfo: CML.NativeScriptWitnessInfo,
-  ): Effect.Effect<CML.ProposalBuilder, ProposalBuilderError> =>
+  ) =>
     Effect.try({
       try: () =>
         instance.with_native_script_proposal(
@@ -225,20 +147,6 @@ export const withNativeScriptProposal = Effect.fn(
 /**
  * Unsafely calls instance.withNativeScriptProposal without Effect wrapper
  *
- * @example
- * import { ProposalBuilder } from "@lucid-evolution/experimental";
- *
- * // Assume we have a ProposalBuilder instance
- * const instance = ... ;
- *
- * // Using try/catch for error handling
- * try {
- *   const result = ProposalBuilder.withNativeScriptProposalUnsafe(instance,  parameters );
- *   console.log(result);
- * } catch (error) {
- *   console.error(`ProposalBuilder.withNativeScriptProposalUnsafe failed: ${error.message}`);
- * }
- *
  * @since 2.0.0
  * @category MethodsUnsafe
  */
@@ -255,29 +163,23 @@ export const withNativeScriptProposalUnsafe = (
 /**
  * Method withPlutusProposal of ProposalBuilder
  *
- * @example
- * import { ProposalBuilder } from "@lucid-evolution/experimental";
- * import { Effect } from "effect";
- *
- * // Using Effect for safe execution with error handling
- * Effect.gen(function*() {
- * // Assume we have a ProposalBuilder instance
- * const instance = ... ;
- *   const result = yield* ProposalBuilder.withPlutusProposal(instance,  parameters );
- *   console.log(result);
- * });
- *
  * @since 2.0.0
  * @category Methods
  */
-export const withPlutusProposal = Effect.fn(
+export const withPlutusProposal: (
+  instance: CML.ProposalBuilder,
+  proposal: CML.ProposalProcedure,
+  partialWitness: CML.PartialPlutusWitness,
+  requiredSigners: CML.Ed25519KeyHashList,
+  datum: CML.PlutusData,
+) => Effect.Effect<CML.ProposalBuilder, ProposalBuilderError> = Effect.fn(
   (
     instance: CML.ProposalBuilder,
     proposal: CML.ProposalProcedure,
     partialWitness: CML.PartialPlutusWitness,
     requiredSigners: CML.Ed25519KeyHashList,
     datum: CML.PlutusData,
-  ): Effect.Effect<CML.ProposalBuilder, ProposalBuilderError> =>
+  ) =>
     Effect.try({
       try: () =>
         instance.with_plutus_proposal(
@@ -295,20 +197,6 @@ export const withPlutusProposal = Effect.fn(
 
 /**
  * Unsafely calls instance.withPlutusProposal without Effect wrapper
- *
- * @example
- * import { ProposalBuilder } from "@lucid-evolution/experimental";
- *
- * // Assume we have a ProposalBuilder instance
- * const instance = ... ;
- *
- * // Using try/catch for error handling
- * try {
- *   const result = ProposalBuilder.withPlutusProposalUnsafe(instance,  parameters );
- *   console.log(result);
- * } catch (error) {
- *   console.error(`ProposalBuilder.withPlutusProposalUnsafe failed: ${error.message}`);
- * }
  *
  * @since 2.0.0
  * @category MethodsUnsafe
@@ -333,28 +221,21 @@ export const withPlutusProposalUnsafe = (
 /**
  * Method withPlutusProposalInlineDatum of ProposalBuilder
  *
- * @example
- * import { ProposalBuilder } from "@lucid-evolution/experimental";
- * import { Effect } from "effect";
- *
- * // Using Effect for safe execution with error handling
- * Effect.gen(function*() {
- * // Assume we have a ProposalBuilder instance
- * const instance = ... ;
- *   const result = yield* ProposalBuilder.withPlutusProposalInlineDatum(instance,  parameters );
- *   console.log(result);
- * });
- *
  * @since 2.0.0
  * @category Methods
  */
-export const withPlutusProposalInlineDatum = Effect.fn(
+export const withPlutusProposalInlineDatum: (
+  instance: CML.ProposalBuilder,
+  proposal: CML.ProposalProcedure,
+  partialWitness: CML.PartialPlutusWitness,
+  requiredSigners: CML.Ed25519KeyHashList,
+) => Effect.Effect<CML.ProposalBuilder, ProposalBuilderError> = Effect.fn(
   (
     instance: CML.ProposalBuilder,
     proposal: CML.ProposalProcedure,
     partialWitness: CML.PartialPlutusWitness,
     requiredSigners: CML.Ed25519KeyHashList,
-  ): Effect.Effect<CML.ProposalBuilder, ProposalBuilderError> =>
+  ) =>
     Effect.try({
       try: () =>
         instance.with_plutus_proposal_inline_datum(
@@ -371,20 +252,6 @@ export const withPlutusProposalInlineDatum = Effect.fn(
 
 /**
  * Unsafely calls instance.withPlutusProposalInlineDatum without Effect wrapper
- *
- * @example
- * import { ProposalBuilder } from "@lucid-evolution/experimental";
- *
- * // Assume we have a ProposalBuilder instance
- * const instance = ... ;
- *
- * // Using try/catch for error handling
- * try {
- *   const result = ProposalBuilder.withPlutusProposalInlineDatumUnsafe(instance,  parameters );
- *   console.log(result);
- * } catch (error) {
- *   console.error(`ProposalBuilder.withPlutusProposalInlineDatumUnsafe failed: ${error.message}`);
- * }
  *
  * @since 2.0.0
  * @category MethodsUnsafe
@@ -407,25 +274,13 @@ export const withPlutusProposalInlineDatumUnsafe = (
 /**
  * Method build of ProposalBuilder
  *
- * @example
- * import { ProposalBuilder } from "@lucid-evolution/experimental";
- * import { Effect } from "effect";
- *
- * // Using Effect for safe execution with error handling
- * Effect.gen(function*() {
- * // Assume we have a ProposalBuilder instance
- * const instance = ... ;
- *   const result = yield* ProposalBuilder.build(instance);
- *   console.log(result);
- * });
- *
  * @since 2.0.0
  * @category Methods
  */
-export const build = Effect.fn(
-  (
-    instance: CML.ProposalBuilder,
-  ): Effect.Effect<CML.ProposalBuilderResult, ProposalBuilderError> =>
+export const build: (
+  instance: CML.ProposalBuilder,
+) => Effect.Effect<CML.ProposalBuilderResult, ProposalBuilderError> = Effect.fn(
+  (instance: CML.ProposalBuilder) =>
     Effect.try({
       try: () => instance.build(),
       catch: () =>
@@ -437,20 +292,6 @@ export const build = Effect.fn(
 
 /**
  * Unsafely calls instance.build without Effect wrapper
- *
- * @example
- * import { ProposalBuilder } from "@lucid-evolution/experimental";
- *
- * // Assume we have a ProposalBuilder instance
- * const instance = ... ;
- *
- * // Using try/catch for error handling
- * try {
- *   const result = ProposalBuilder.buildUnsafe(instance);
- *   console.log(result);
- * } catch (error) {
- *   console.error(`ProposalBuilder.buildUnsafe failed: ${error.message}`);
- * }
  *
  * @since 2.0.0
  * @category MethodsUnsafe

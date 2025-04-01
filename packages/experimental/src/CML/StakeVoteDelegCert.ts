@@ -29,25 +29,13 @@ export class StakeVoteDelegCertError extends Data.TaggedError(
 /**
  * Method free of StakeVoteDelegCert
  *
- * @example
- * import { StakeVoteDelegCert } from "@lucid-evolution/experimental";
- * import { Effect } from "effect";
- *
- * // Using Effect for safe execution with error handling
- * Effect.gen(function*() {
- * // Assume we have a StakeVoteDelegCert instance
- * const instance = ... ;
- *   const result = yield* StakeVoteDelegCert.free(instance);
- *   console.log(result);
- * });
- *
  * @since 2.0.0
  * @category Methods
  */
-export const free = Effect.fn(
-  (
-    instance: CML.StakeVoteDelegCert,
-  ): Effect.Effect<void, StakeVoteDelegCertError> =>
+export const free: (
+  instance: CML.StakeVoteDelegCert,
+) => Effect.Effect<void, StakeVoteDelegCertError> = Effect.fn(
+  (instance: CML.StakeVoteDelegCert) =>
     Effect.try({
       try: () => instance.free(),
       catch: () =>
@@ -60,20 +48,6 @@ export const free = Effect.fn(
 /**
  * Unsafely calls instance.free without Effect wrapper
  *
- * @example
- * import { StakeVoteDelegCert } from "@lucid-evolution/experimental";
- *
- * // Assume we have a StakeVoteDelegCert instance
- * const instance = ... ;
- *
- * // Using try/catch for error handling
- * try {
- *   const result = StakeVoteDelegCert.freeUnsafe(instance);
- *   console.log(result);
- * } catch (error) {
- *   console.error(`StakeVoteDelegCert.freeUnsafe failed: ${error.message}`);
- * }
- *
  * @since 2.0.0
  * @category MethodsUnsafe
  */
@@ -83,25 +57,13 @@ export const freeUnsafe = (instance: CML.StakeVoteDelegCert): void =>
 /**
  * Method toCborBytes of StakeVoteDelegCert
  *
- * @example
- * import { StakeVoteDelegCert } from "@lucid-evolution/experimental";
- * import { Effect } from "effect";
- *
- * // Using Effect for safe execution with error handling
- * Effect.gen(function*() {
- * // Assume we have a StakeVoteDelegCert instance
- * const instance = ... ;
- *   const result = yield* StakeVoteDelegCert.toCborBytes(instance);
- *   console.log(result);
- * });
- *
  * @since 2.0.0
  * @category Methods
  */
-export const toCborBytes = Effect.fn(
-  (
-    instance: CML.StakeVoteDelegCert,
-  ): Effect.Effect<Uint8Array, StakeVoteDelegCertError> =>
+export const toCborBytes: (
+  instance: CML.StakeVoteDelegCert,
+) => Effect.Effect<Uint8Array, StakeVoteDelegCertError> = Effect.fn(
+  (instance: CML.StakeVoteDelegCert) =>
     Effect.try({
       try: () => instance.to_cbor_bytes(),
       catch: () =>
@@ -114,20 +76,6 @@ export const toCborBytes = Effect.fn(
 /**
  * Unsafely calls instance.toCborBytes without Effect wrapper
  *
- * @example
- * import { StakeVoteDelegCert } from "@lucid-evolution/experimental";
- *
- * // Assume we have a StakeVoteDelegCert instance
- * const instance = ... ;
- *
- * // Using try/catch for error handling
- * try {
- *   const result = StakeVoteDelegCert.toCborBytesUnsafe(instance);
- *   console.log(result);
- * } catch (error) {
- *   console.error(`StakeVoteDelegCert.toCborBytesUnsafe failed: ${error.message}`);
- * }
- *
  * @since 2.0.0
  * @category MethodsUnsafe
  */
@@ -138,25 +86,13 @@ export const toCborBytesUnsafe = (
 /**
  * Method toCanonicalCborBytes of StakeVoteDelegCert
  *
- * @example
- * import { StakeVoteDelegCert } from "@lucid-evolution/experimental";
- * import { Effect } from "effect";
- *
- * // Using Effect for safe execution with error handling
- * Effect.gen(function*() {
- * // Assume we have a StakeVoteDelegCert instance
- * const instance = ... ;
- *   const result = yield* StakeVoteDelegCert.toCanonicalCborBytes(instance);
- *   console.log(result);
- * });
- *
  * @since 2.0.0
  * @category Methods
  */
-export const toCanonicalCborBytes = Effect.fn(
-  (
-    instance: CML.StakeVoteDelegCert,
-  ): Effect.Effect<Uint8Array, StakeVoteDelegCertError> =>
+export const toCanonicalCborBytes: (
+  instance: CML.StakeVoteDelegCert,
+) => Effect.Effect<Uint8Array, StakeVoteDelegCertError> = Effect.fn(
+  (instance: CML.StakeVoteDelegCert) =>
     Effect.try({
       try: () => instance.to_canonical_cbor_bytes(),
       catch: () =>
@@ -169,20 +105,6 @@ export const toCanonicalCborBytes = Effect.fn(
 /**
  * Unsafely calls instance.toCanonicalCborBytes without Effect wrapper
  *
- * @example
- * import { StakeVoteDelegCert } from "@lucid-evolution/experimental";
- *
- * // Assume we have a StakeVoteDelegCert instance
- * const instance = ... ;
- *
- * // Using try/catch for error handling
- * try {
- *   const result = StakeVoteDelegCert.toCanonicalCborBytesUnsafe(instance);
- *   console.log(result);
- * } catch (error) {
- *   console.error(`StakeVoteDelegCert.toCanonicalCborBytesUnsafe failed: ${error.message}`);
- * }
- *
  * @since 2.0.0
  * @category MethodsUnsafe
  */
@@ -193,74 +115,43 @@ export const toCanonicalCborBytesUnsafe = (
 /**
  * Static method fromCborBytes of StakeVoteDelegCert
  *
- * @example
- * import { StakeVoteDelegCert } from "@lucid-evolution/experimental";
- * import { Effect } from "effect";
- *
- * // Using Effect for safe execution with error handling
- * Effect.gen(function*() {
- *
- *   const result = yield* StakeVoteDelegCert.fromCborBytes( parameters );
- *   console.log(result);
- * });
- *
  * @since 2.0.0
  * @category Constructors
  */
-export const fromCborBytes = Effect.fn(function* (cborBytes: Uint8Array) {
-  return yield* Effect.try({
-    try: () => CML.StakeVoteDelegCert.from_cbor_bytes(cborBytes),
-    catch: () =>
-      new StakeVoteDelegCertError({
-        message: `StakeVoteDelegCert.fromCborBytes failed with parameters: ${cborBytes}. Hint: Check byte length and encoding.`,
-      }),
-  });
-});
+export const fromCborBytes: (
+  cborBytes: Uint8Array,
+) => Effect.Effect<CML.StakeVoteDelegCert, StakeVoteDelegCertError> = Effect.fn(
+  function* (cborBytes: Uint8Array) {
+    return yield* Effect.try({
+      try: () => CML.StakeVoteDelegCert.from_cbor_bytes(cborBytes),
+      catch: () =>
+        new StakeVoteDelegCertError({
+          message: `StakeVoteDelegCert.fromCborBytes failed with parameters: ${cborBytes}. Hint: Check byte length and encoding.`,
+        }),
+    });
+  },
+);
 
 /**
  * Unsafely calls StakeVoteDelegCert.fromCborBytes without Effect wrapper
  *
- * @example
- * import { StakeVoteDelegCert } from "@lucid-evolution/experimental";
- *
- *
- *
- * // Using try/catch for error handling
- * try {
- *   const result = StakeVoteDelegCert.fromCborBytesUnsafe( parameters );
- *   console.log(result);
- * } catch (error) {
- *   console.error(`StakeVoteDelegCert.fromCborBytesUnsafe failed: ${error.message}`);
- * }
- *
  * @since 2.0.0
  * @category ConstructorsUnsafe
  */
-export const fromCborBytesUnsafe = (cborBytes: Uint8Array) =>
-  Effect.runSync(fromCborBytes(cborBytes));
+export const fromCborBytesUnsafe = (
+  cborBytes: Uint8Array,
+): CML.StakeVoteDelegCert => Effect.runSync(fromCborBytes(cborBytes));
 
 /**
  * Method toCborHex of StakeVoteDelegCert
  *
- * @example
- * import { StakeVoteDelegCert } from "@lucid-evolution/experimental";
- * import { Effect } from "effect";
- *
- * // Using Effect for safe execution with error handling
- * Effect.gen(function*() {
- * // Assume we have a StakeVoteDelegCert instance
- * const instance = ... ;
- *   const result = yield* StakeVoteDelegCert.toCborHex(instance);
- *   console.log(result);
- * });
- *
  * @since 2.0.0
  * @category Methods
  */
-export const toCborHex = Effect.fn(
-  (
-    instance: CML.StakeVoteDelegCert,
-  ): Effect.Effect<string, StakeVoteDelegCertError> =>
+export const toCborHex: (
+  instance: CML.StakeVoteDelegCert,
+) => Effect.Effect<string, StakeVoteDelegCertError> = Effect.fn(
+  (instance: CML.StakeVoteDelegCert) =>
     Effect.try({
       try: () => instance.to_cbor_hex(),
       catch: () =>
@@ -273,20 +164,6 @@ export const toCborHex = Effect.fn(
 /**
  * Unsafely calls instance.toCborHex without Effect wrapper
  *
- * @example
- * import { StakeVoteDelegCert } from "@lucid-evolution/experimental";
- *
- * // Assume we have a StakeVoteDelegCert instance
- * const instance = ... ;
- *
- * // Using try/catch for error handling
- * try {
- *   const result = StakeVoteDelegCert.toCborHexUnsafe(instance);
- *   console.log(result);
- * } catch (error) {
- *   console.error(`StakeVoteDelegCert.toCborHexUnsafe failed: ${error.message}`);
- * }
- *
  * @since 2.0.0
  * @category MethodsUnsafe
  */
@@ -296,25 +173,13 @@ export const toCborHexUnsafe = (instance: CML.StakeVoteDelegCert): string =>
 /**
  * Method toCanonicalCborHex of StakeVoteDelegCert
  *
- * @example
- * import { StakeVoteDelegCert } from "@lucid-evolution/experimental";
- * import { Effect } from "effect";
- *
- * // Using Effect for safe execution with error handling
- * Effect.gen(function*() {
- * // Assume we have a StakeVoteDelegCert instance
- * const instance = ... ;
- *   const result = yield* StakeVoteDelegCert.toCanonicalCborHex(instance);
- *   console.log(result);
- * });
- *
  * @since 2.0.0
  * @category Methods
  */
-export const toCanonicalCborHex = Effect.fn(
-  (
-    instance: CML.StakeVoteDelegCert,
-  ): Effect.Effect<string, StakeVoteDelegCertError> =>
+export const toCanonicalCborHex: (
+  instance: CML.StakeVoteDelegCert,
+) => Effect.Effect<string, StakeVoteDelegCertError> = Effect.fn(
+  (instance: CML.StakeVoteDelegCert) =>
     Effect.try({
       try: () => instance.to_canonical_cbor_hex(),
       catch: () =>
@@ -327,20 +192,6 @@ export const toCanonicalCborHex = Effect.fn(
 /**
  * Unsafely calls instance.toCanonicalCborHex without Effect wrapper
  *
- * @example
- * import { StakeVoteDelegCert } from "@lucid-evolution/experimental";
- *
- * // Assume we have a StakeVoteDelegCert instance
- * const instance = ... ;
- *
- * // Using try/catch for error handling
- * try {
- *   const result = StakeVoteDelegCert.toCanonicalCborHexUnsafe(instance);
- *   console.log(result);
- * } catch (error) {
- *   console.error(`StakeVoteDelegCert.toCanonicalCborHexUnsafe failed: ${error.message}`);
- * }
- *
  * @since 2.0.0
  * @category MethodsUnsafe
  */
@@ -351,74 +202,42 @@ export const toCanonicalCborHexUnsafe = (
 /**
  * Static method fromCborHex of StakeVoteDelegCert
  *
- * @example
- * import { StakeVoteDelegCert } from "@lucid-evolution/experimental";
- * import { Effect } from "effect";
- *
- * // Using Effect for safe execution with error handling
- * Effect.gen(function*() {
- *
- *   const result = yield* StakeVoteDelegCert.fromCborHex( parameters );
- *   console.log(result);
- * });
- *
  * @since 2.0.0
  * @category Constructors
  */
-export const fromCborHex = Effect.fn(function* (cborBytes: string) {
-  return yield* Effect.try({
-    try: () => CML.StakeVoteDelegCert.from_cbor_hex(cborBytes),
-    catch: () =>
-      new StakeVoteDelegCertError({
-        message: `StakeVoteDelegCert.fromCborHex failed with parameters: ${cborBytes}. Hint: Make sure it's a valid hex string representing CBOR data.`,
-      }),
-  });
-});
+export const fromCborHex: (
+  cborBytes: string,
+) => Effect.Effect<CML.StakeVoteDelegCert, StakeVoteDelegCertError> = Effect.fn(
+  function* (cborBytes: string) {
+    return yield* Effect.try({
+      try: () => CML.StakeVoteDelegCert.from_cbor_hex(cborBytes),
+      catch: () =>
+        new StakeVoteDelegCertError({
+          message: `StakeVoteDelegCert.fromCborHex failed with parameters: ${cborBytes}. Hint: Make sure it's a valid hex string representing CBOR data.`,
+        }),
+    });
+  },
+);
 
 /**
  * Unsafely calls StakeVoteDelegCert.fromCborHex without Effect wrapper
  *
- * @example
- * import { StakeVoteDelegCert } from "@lucid-evolution/experimental";
- *
- *
- *
- * // Using try/catch for error handling
- * try {
- *   const result = StakeVoteDelegCert.fromCborHexUnsafe( parameters );
- *   console.log(result);
- * } catch (error) {
- *   console.error(`StakeVoteDelegCert.fromCborHexUnsafe failed: ${error.message}`);
- * }
- *
  * @since 2.0.0
  * @category ConstructorsUnsafe
  */
-export const fromCborHexUnsafe = (cborBytes: string) =>
+export const fromCborHexUnsafe = (cborBytes: string): CML.StakeVoteDelegCert =>
   Effect.runSync(fromCborHex(cborBytes));
 
 /**
  * Method toJson of StakeVoteDelegCert
  *
- * @example
- * import { StakeVoteDelegCert } from "@lucid-evolution/experimental";
- * import { Effect } from "effect";
- *
- * // Using Effect for safe execution with error handling
- * Effect.gen(function*() {
- * // Assume we have a StakeVoteDelegCert instance
- * const instance = ... ;
- *   const result = yield* StakeVoteDelegCert.toJson(instance);
- *   console.log(result);
- * });
- *
  * @since 2.0.0
  * @category Methods
  */
-export const toJson = Effect.fn(
-  (
-    instance: CML.StakeVoteDelegCert,
-  ): Effect.Effect<string, StakeVoteDelegCertError> =>
+export const toJson: (
+  instance: CML.StakeVoteDelegCert,
+) => Effect.Effect<string, StakeVoteDelegCertError> = Effect.fn(
+  (instance: CML.StakeVoteDelegCert) =>
     Effect.try({
       try: () => instance.to_json(),
       catch: () =>
@@ -431,20 +250,6 @@ export const toJson = Effect.fn(
 /**
  * Unsafely calls instance.toJson without Effect wrapper
  *
- * @example
- * import { StakeVoteDelegCert } from "@lucid-evolution/experimental";
- *
- * // Assume we have a StakeVoteDelegCert instance
- * const instance = ... ;
- *
- * // Using try/catch for error handling
- * try {
- *   const result = StakeVoteDelegCert.toJsonUnsafe(instance);
- *   console.log(result);
- * } catch (error) {
- *   console.error(`StakeVoteDelegCert.toJsonUnsafe failed: ${error.message}`);
- * }
- *
  * @since 2.0.0
  * @category MethodsUnsafe
  */
@@ -454,25 +259,13 @@ export const toJsonUnsafe = (instance: CML.StakeVoteDelegCert): string =>
 /**
  * Method toJsValue of StakeVoteDelegCert
  *
- * @example
- * import { StakeVoteDelegCert } from "@lucid-evolution/experimental";
- * import { Effect } from "effect";
- *
- * // Using Effect for safe execution with error handling
- * Effect.gen(function*() {
- * // Assume we have a StakeVoteDelegCert instance
- * const instance = ... ;
- *   const result = yield* StakeVoteDelegCert.toJsValue(instance);
- *   console.log(result);
- * });
- *
  * @since 2.0.0
  * @category Methods
  */
-export const toJsValue = Effect.fn(
-  (
-    instance: CML.StakeVoteDelegCert,
-  ): Effect.Effect<any, StakeVoteDelegCertError> =>
+export const toJsValue: (
+  instance: CML.StakeVoteDelegCert,
+) => Effect.Effect<any, StakeVoteDelegCertError> = Effect.fn(
+  (instance: CML.StakeVoteDelegCert) =>
     Effect.try({
       try: () => instance.to_js_value(),
       catch: () =>
@@ -485,20 +278,6 @@ export const toJsValue = Effect.fn(
 /**
  * Unsafely calls instance.toJsValue without Effect wrapper
  *
- * @example
- * import { StakeVoteDelegCert } from "@lucid-evolution/experimental";
- *
- * // Assume we have a StakeVoteDelegCert instance
- * const instance = ... ;
- *
- * // Using try/catch for error handling
- * try {
- *   const result = StakeVoteDelegCert.toJsValueUnsafe(instance);
- *   console.log(result);
- * } catch (error) {
- *   console.error(`StakeVoteDelegCert.toJsValueUnsafe failed: ${error.message}`);
- * }
- *
  * @since 2.0.0
  * @category MethodsUnsafe
  */
@@ -508,73 +287,42 @@ export const toJsValueUnsafe = (instance: CML.StakeVoteDelegCert): any =>
 /**
  * Static method fromJson of StakeVoteDelegCert
  *
- * @example
- * import { StakeVoteDelegCert } from "@lucid-evolution/experimental";
- * import { Effect } from "effect";
- *
- * // Using Effect for safe execution with error handling
- * Effect.gen(function*() {
- *
- *   const result = yield* StakeVoteDelegCert.fromJson( parameters );
- *   console.log(result);
- * });
- *
  * @since 2.0.0
  * @category Constructors
  */
-export const fromJson = Effect.fn(function* (json: string) {
-  return yield* Effect.try({
-    try: () => CML.StakeVoteDelegCert.from_json(json),
-    catch: () =>
-      new StakeVoteDelegCertError({
-        message: `StakeVoteDelegCert.fromJson failed with parameters: ${json}. Hint: Validate your JSON structure.`,
-      }),
-  });
-});
+export const fromJson: (
+  json: string,
+) => Effect.Effect<CML.StakeVoteDelegCert, StakeVoteDelegCertError> = Effect.fn(
+  function* (json: string) {
+    return yield* Effect.try({
+      try: () => CML.StakeVoteDelegCert.from_json(json),
+      catch: () =>
+        new StakeVoteDelegCertError({
+          message: `StakeVoteDelegCert.fromJson failed with parameters: ${json}. Hint: Validate your JSON structure.`,
+        }),
+    });
+  },
+);
 
 /**
  * Unsafely calls StakeVoteDelegCert.fromJson without Effect wrapper
  *
- * @example
- * import { StakeVoteDelegCert } from "@lucid-evolution/experimental";
- *
- *
- *
- * // Using try/catch for error handling
- * try {
- *   const result = StakeVoteDelegCert.fromJsonUnsafe( parameters );
- *   console.log(result);
- * } catch (error) {
- *   console.error(`StakeVoteDelegCert.fromJsonUnsafe failed: ${error.message}`);
- * }
- *
  * @since 2.0.0
  * @category ConstructorsUnsafe
  */
-export const fromJsonUnsafe = (json: string) => Effect.runSync(fromJson(json));
+export const fromJsonUnsafe = (json: string): CML.StakeVoteDelegCert =>
+  Effect.runSync(fromJson(json));
 
 /**
  * Method stakeCredential of StakeVoteDelegCert
  *
- * @example
- * import { StakeVoteDelegCert } from "@lucid-evolution/experimental";
- * import { Effect } from "effect";
- *
- * // Using Effect for safe execution with error handling
- * Effect.gen(function*() {
- * // Assume we have a StakeVoteDelegCert instance
- * const instance = ... ;
- *   const result = yield* StakeVoteDelegCert.stakeCredential(instance);
- *   console.log(result);
- * });
- *
  * @since 2.0.0
  * @category Methods
  */
-export const stakeCredential = Effect.fn(
-  (
-    instance: CML.StakeVoteDelegCert,
-  ): Effect.Effect<CML.Credential, StakeVoteDelegCertError> =>
+export const stakeCredential: (
+  instance: CML.StakeVoteDelegCert,
+) => Effect.Effect<CML.Credential, StakeVoteDelegCertError> = Effect.fn(
+  (instance: CML.StakeVoteDelegCert) =>
     Effect.try({
       try: () => instance.stake_credential(),
       catch: () =>
@@ -587,20 +335,6 @@ export const stakeCredential = Effect.fn(
 /**
  * Unsafely calls instance.stakeCredential without Effect wrapper
  *
- * @example
- * import { StakeVoteDelegCert } from "@lucid-evolution/experimental";
- *
- * // Assume we have a StakeVoteDelegCert instance
- * const instance = ... ;
- *
- * // Using try/catch for error handling
- * try {
- *   const result = StakeVoteDelegCert.stakeCredentialUnsafe(instance);
- *   console.log(result);
- * } catch (error) {
- *   console.error(`StakeVoteDelegCert.stakeCredentialUnsafe failed: ${error.message}`);
- * }
- *
  * @since 2.0.0
  * @category MethodsUnsafe
  */
@@ -611,25 +345,13 @@ export const stakeCredentialUnsafe = (
 /**
  * Method pool of StakeVoteDelegCert
  *
- * @example
- * import { StakeVoteDelegCert } from "@lucid-evolution/experimental";
- * import { Effect } from "effect";
- *
- * // Using Effect for safe execution with error handling
- * Effect.gen(function*() {
- * // Assume we have a StakeVoteDelegCert instance
- * const instance = ... ;
- *   const result = yield* StakeVoteDelegCert.pool(instance);
- *   console.log(result);
- * });
- *
  * @since 2.0.0
  * @category Methods
  */
-export const pool = Effect.fn(
-  (
-    instance: CML.StakeVoteDelegCert,
-  ): Effect.Effect<CML.Ed25519KeyHash, StakeVoteDelegCertError> =>
+export const pool: (
+  instance: CML.StakeVoteDelegCert,
+) => Effect.Effect<CML.Ed25519KeyHash, StakeVoteDelegCertError> = Effect.fn(
+  (instance: CML.StakeVoteDelegCert) =>
     Effect.try({
       try: () => instance.pool(),
       catch: () =>
@@ -642,20 +364,6 @@ export const pool = Effect.fn(
 /**
  * Unsafely calls instance.pool without Effect wrapper
  *
- * @example
- * import { StakeVoteDelegCert } from "@lucid-evolution/experimental";
- *
- * // Assume we have a StakeVoteDelegCert instance
- * const instance = ... ;
- *
- * // Using try/catch for error handling
- * try {
- *   const result = StakeVoteDelegCert.poolUnsafe(instance);
- *   console.log(result);
- * } catch (error) {
- *   console.error(`StakeVoteDelegCert.poolUnsafe failed: ${error.message}`);
- * }
- *
  * @since 2.0.0
  * @category MethodsUnsafe
  */
@@ -666,25 +374,13 @@ export const poolUnsafe = (
 /**
  * Method dRep of StakeVoteDelegCert
  *
- * @example
- * import { StakeVoteDelegCert } from "@lucid-evolution/experimental";
- * import { Effect } from "effect";
- *
- * // Using Effect for safe execution with error handling
- * Effect.gen(function*() {
- * // Assume we have a StakeVoteDelegCert instance
- * const instance = ... ;
- *   const result = yield* StakeVoteDelegCert.dRep(instance);
- *   console.log(result);
- * });
- *
  * @since 2.0.0
  * @category Methods
  */
-export const dRep = Effect.fn(
-  (
-    instance: CML.StakeVoteDelegCert,
-  ): Effect.Effect<CML.DRep, StakeVoteDelegCertError> =>
+export const dRep: (
+  instance: CML.StakeVoteDelegCert,
+) => Effect.Effect<CML.DRep, StakeVoteDelegCertError> = Effect.fn(
+  (instance: CML.StakeVoteDelegCert) =>
     Effect.try({
       try: () => instance.d_rep(),
       catch: () =>
@@ -697,20 +393,6 @@ export const dRep = Effect.fn(
 /**
  * Unsafely calls instance.dRep without Effect wrapper
  *
- * @example
- * import { StakeVoteDelegCert } from "@lucid-evolution/experimental";
- *
- * // Assume we have a StakeVoteDelegCert instance
- * const instance = ... ;
- *
- * // Using try/catch for error handling
- * try {
- *   const result = StakeVoteDelegCert.dRepUnsafe(instance);
- *   console.log(result);
- * } catch (error) {
- *   console.error(`StakeVoteDelegCert.dRepUnsafe failed: ${error.message}`);
- * }
- *
  * @since 2.0.0
  * @category MethodsUnsafe
  */
@@ -720,49 +402,31 @@ export const dRepUnsafe = (instance: CML.StakeVoteDelegCert): CML.DRep =>
 /**
  * Static method _new of StakeVoteDelegCert
  *
- * @example
- * import { StakeVoteDelegCert } from "@lucid-evolution/experimental";
- * import { Effect } from "effect";
- *
- * // Using Effect for safe execution with error handling
- * Effect.gen(function*() {
- *
- *   const result = yield* StakeVoteDelegCert._new( parameters );
- *   console.log(result);
- * });
- *
  * @since 2.0.0
  * @category Constructors
  */
-export const _new = Effect.fn(function* (
+export const _new: (
   stakeCredential: CML.Credential,
   pool: CML.Ed25519KeyHash,
   dRep: CML.DRep,
-) {
-  return yield* Effect.try({
-    try: () => CML.StakeVoteDelegCert.new(stakeCredential, pool, dRep),
-    catch: () =>
-      new StakeVoteDelegCertError({
-        message: `StakeVoteDelegCert._new failed with parameters: ${stakeCredential} (Credential), ${pool} (Ed25519KeyHash), ${dRep} (DRep). `,
-      }),
-  });
-});
+) => Effect.Effect<CML.StakeVoteDelegCert, StakeVoteDelegCertError> = Effect.fn(
+  function* (
+    stakeCredential: CML.Credential,
+    pool: CML.Ed25519KeyHash,
+    dRep: CML.DRep,
+  ) {
+    return yield* Effect.try({
+      try: () => CML.StakeVoteDelegCert.new(stakeCredential, pool, dRep),
+      catch: () =>
+        new StakeVoteDelegCertError({
+          message: `StakeVoteDelegCert._new failed with parameters: ${stakeCredential} (Credential), ${pool} (Ed25519KeyHash), ${dRep} (DRep). `,
+        }),
+    });
+  },
+);
 
 /**
  * Unsafely calls StakeVoteDelegCert._new without Effect wrapper
- *
- * @example
- * import { StakeVoteDelegCert } from "@lucid-evolution/experimental";
- *
- *
- *
- * // Using try/catch for error handling
- * try {
- *   const result = StakeVoteDelegCert._newUnsafe( parameters );
- *   console.log(result);
- * } catch (error) {
- *   console.error(`StakeVoteDelegCert._newUnsafe failed: ${error.message}`);
- * }
  *
  * @since 2.0.0
  * @category ConstructorsUnsafe
@@ -771,4 +435,4 @@ export const _newUnsafe = (
   stakeCredential: CML.Credential,
   pool: CML.Ed25519KeyHash,
   dRep: CML.DRep,
-) => Effect.runSync(_new(stakeCredential, pool, dRep));
+): CML.StakeVoteDelegCert => Effect.runSync(_new(stakeCredential, pool, dRep));

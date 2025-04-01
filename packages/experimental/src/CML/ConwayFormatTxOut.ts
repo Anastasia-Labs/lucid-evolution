@@ -29,25 +29,13 @@ export class ConwayFormatTxOutError extends Data.TaggedError(
 /**
  * Method free of ConwayFormatTxOut
  *
- * @example
- * import { ConwayFormatTxOut } from "@lucid-evolution/experimental";
- * import { Effect } from "effect";
- *
- * // Using Effect for safe execution with error handling
- * Effect.gen(function*() {
- * // Assume we have a ConwayFormatTxOut instance
- * const instance = ... ;
- *   const result = yield* ConwayFormatTxOut.free(instance);
- *   console.log(result);
- * });
- *
  * @since 2.0.0
  * @category Methods
  */
-export const free = Effect.fn(
-  (
-    instance: CML.ConwayFormatTxOut,
-  ): Effect.Effect<void, ConwayFormatTxOutError> =>
+export const free: (
+  instance: CML.ConwayFormatTxOut,
+) => Effect.Effect<void, ConwayFormatTxOutError> = Effect.fn(
+  (instance: CML.ConwayFormatTxOut) =>
     Effect.try({
       try: () => instance.free(),
       catch: () =>
@@ -60,20 +48,6 @@ export const free = Effect.fn(
 /**
  * Unsafely calls instance.free without Effect wrapper
  *
- * @example
- * import { ConwayFormatTxOut } from "@lucid-evolution/experimental";
- *
- * // Assume we have a ConwayFormatTxOut instance
- * const instance = ... ;
- *
- * // Using try/catch for error handling
- * try {
- *   const result = ConwayFormatTxOut.freeUnsafe(instance);
- *   console.log(result);
- * } catch (error) {
- *   console.error(`ConwayFormatTxOut.freeUnsafe failed: ${error.message}`);
- * }
- *
  * @since 2.0.0
  * @category MethodsUnsafe
  */
@@ -83,25 +57,13 @@ export const freeUnsafe = (instance: CML.ConwayFormatTxOut): void =>
 /**
  * Method toCborBytes of ConwayFormatTxOut
  *
- * @example
- * import { ConwayFormatTxOut } from "@lucid-evolution/experimental";
- * import { Effect } from "effect";
- *
- * // Using Effect for safe execution with error handling
- * Effect.gen(function*() {
- * // Assume we have a ConwayFormatTxOut instance
- * const instance = ... ;
- *   const result = yield* ConwayFormatTxOut.toCborBytes(instance);
- *   console.log(result);
- * });
- *
  * @since 2.0.0
  * @category Methods
  */
-export const toCborBytes = Effect.fn(
-  (
-    instance: CML.ConwayFormatTxOut,
-  ): Effect.Effect<Uint8Array, ConwayFormatTxOutError> =>
+export const toCborBytes: (
+  instance: CML.ConwayFormatTxOut,
+) => Effect.Effect<Uint8Array, ConwayFormatTxOutError> = Effect.fn(
+  (instance: CML.ConwayFormatTxOut) =>
     Effect.try({
       try: () => instance.to_cbor_bytes(),
       catch: () =>
@@ -114,20 +76,6 @@ export const toCborBytes = Effect.fn(
 /**
  * Unsafely calls instance.toCborBytes without Effect wrapper
  *
- * @example
- * import { ConwayFormatTxOut } from "@lucid-evolution/experimental";
- *
- * // Assume we have a ConwayFormatTxOut instance
- * const instance = ... ;
- *
- * // Using try/catch for error handling
- * try {
- *   const result = ConwayFormatTxOut.toCborBytesUnsafe(instance);
- *   console.log(result);
- * } catch (error) {
- *   console.error(`ConwayFormatTxOut.toCborBytesUnsafe failed: ${error.message}`);
- * }
- *
  * @since 2.0.0
  * @category MethodsUnsafe
  */
@@ -138,25 +86,13 @@ export const toCborBytesUnsafe = (
 /**
  * Method toCanonicalCborBytes of ConwayFormatTxOut
  *
- * @example
- * import { ConwayFormatTxOut } from "@lucid-evolution/experimental";
- * import { Effect } from "effect";
- *
- * // Using Effect for safe execution with error handling
- * Effect.gen(function*() {
- * // Assume we have a ConwayFormatTxOut instance
- * const instance = ... ;
- *   const result = yield* ConwayFormatTxOut.toCanonicalCborBytes(instance);
- *   console.log(result);
- * });
- *
  * @since 2.0.0
  * @category Methods
  */
-export const toCanonicalCborBytes = Effect.fn(
-  (
-    instance: CML.ConwayFormatTxOut,
-  ): Effect.Effect<Uint8Array, ConwayFormatTxOutError> =>
+export const toCanonicalCborBytes: (
+  instance: CML.ConwayFormatTxOut,
+) => Effect.Effect<Uint8Array, ConwayFormatTxOutError> = Effect.fn(
+  (instance: CML.ConwayFormatTxOut) =>
     Effect.try({
       try: () => instance.to_canonical_cbor_bytes(),
       catch: () =>
@@ -169,20 +105,6 @@ export const toCanonicalCborBytes = Effect.fn(
 /**
  * Unsafely calls instance.toCanonicalCborBytes without Effect wrapper
  *
- * @example
- * import { ConwayFormatTxOut } from "@lucid-evolution/experimental";
- *
- * // Assume we have a ConwayFormatTxOut instance
- * const instance = ... ;
- *
- * // Using try/catch for error handling
- * try {
- *   const result = ConwayFormatTxOut.toCanonicalCborBytesUnsafe(instance);
- *   console.log(result);
- * } catch (error) {
- *   console.error(`ConwayFormatTxOut.toCanonicalCborBytesUnsafe failed: ${error.message}`);
- * }
- *
  * @since 2.0.0
  * @category MethodsUnsafe
  */
@@ -193,74 +115,43 @@ export const toCanonicalCborBytesUnsafe = (
 /**
  * Static method fromCborBytes of ConwayFormatTxOut
  *
- * @example
- * import { ConwayFormatTxOut } from "@lucid-evolution/experimental";
- * import { Effect } from "effect";
- *
- * // Using Effect for safe execution with error handling
- * Effect.gen(function*() {
- *
- *   const result = yield* ConwayFormatTxOut.fromCborBytes( parameters );
- *   console.log(result);
- * });
- *
  * @since 2.0.0
  * @category Constructors
  */
-export const fromCborBytes = Effect.fn(function* (cborBytes: Uint8Array) {
-  return yield* Effect.try({
-    try: () => CML.ConwayFormatTxOut.from_cbor_bytes(cborBytes),
-    catch: () =>
-      new ConwayFormatTxOutError({
-        message: `ConwayFormatTxOut.fromCborBytes failed with parameters: ${cborBytes}. Hint: Check byte length and encoding.`,
-      }),
-  });
-});
+export const fromCborBytes: (
+  cborBytes: Uint8Array,
+) => Effect.Effect<CML.ConwayFormatTxOut, ConwayFormatTxOutError> = Effect.fn(
+  function* (cborBytes: Uint8Array) {
+    return yield* Effect.try({
+      try: () => CML.ConwayFormatTxOut.from_cbor_bytes(cborBytes),
+      catch: () =>
+        new ConwayFormatTxOutError({
+          message: `ConwayFormatTxOut.fromCborBytes failed with parameters: ${cborBytes}. Hint: Check byte length and encoding.`,
+        }),
+    });
+  },
+);
 
 /**
  * Unsafely calls ConwayFormatTxOut.fromCborBytes without Effect wrapper
  *
- * @example
- * import { ConwayFormatTxOut } from "@lucid-evolution/experimental";
- *
- *
- *
- * // Using try/catch for error handling
- * try {
- *   const result = ConwayFormatTxOut.fromCborBytesUnsafe( parameters );
- *   console.log(result);
- * } catch (error) {
- *   console.error(`ConwayFormatTxOut.fromCborBytesUnsafe failed: ${error.message}`);
- * }
- *
  * @since 2.0.0
  * @category ConstructorsUnsafe
  */
-export const fromCborBytesUnsafe = (cborBytes: Uint8Array) =>
-  Effect.runSync(fromCborBytes(cborBytes));
+export const fromCborBytesUnsafe = (
+  cborBytes: Uint8Array,
+): CML.ConwayFormatTxOut => Effect.runSync(fromCborBytes(cborBytes));
 
 /**
  * Method toCborHex of ConwayFormatTxOut
  *
- * @example
- * import { ConwayFormatTxOut } from "@lucid-evolution/experimental";
- * import { Effect } from "effect";
- *
- * // Using Effect for safe execution with error handling
- * Effect.gen(function*() {
- * // Assume we have a ConwayFormatTxOut instance
- * const instance = ... ;
- *   const result = yield* ConwayFormatTxOut.toCborHex(instance);
- *   console.log(result);
- * });
- *
  * @since 2.0.0
  * @category Methods
  */
-export const toCborHex = Effect.fn(
-  (
-    instance: CML.ConwayFormatTxOut,
-  ): Effect.Effect<string, ConwayFormatTxOutError> =>
+export const toCborHex: (
+  instance: CML.ConwayFormatTxOut,
+) => Effect.Effect<string, ConwayFormatTxOutError> = Effect.fn(
+  (instance: CML.ConwayFormatTxOut) =>
     Effect.try({
       try: () => instance.to_cbor_hex(),
       catch: () =>
@@ -273,20 +164,6 @@ export const toCborHex = Effect.fn(
 /**
  * Unsafely calls instance.toCborHex without Effect wrapper
  *
- * @example
- * import { ConwayFormatTxOut } from "@lucid-evolution/experimental";
- *
- * // Assume we have a ConwayFormatTxOut instance
- * const instance = ... ;
- *
- * // Using try/catch for error handling
- * try {
- *   const result = ConwayFormatTxOut.toCborHexUnsafe(instance);
- *   console.log(result);
- * } catch (error) {
- *   console.error(`ConwayFormatTxOut.toCborHexUnsafe failed: ${error.message}`);
- * }
- *
  * @since 2.0.0
  * @category MethodsUnsafe
  */
@@ -296,25 +173,13 @@ export const toCborHexUnsafe = (instance: CML.ConwayFormatTxOut): string =>
 /**
  * Method toCanonicalCborHex of ConwayFormatTxOut
  *
- * @example
- * import { ConwayFormatTxOut } from "@lucid-evolution/experimental";
- * import { Effect } from "effect";
- *
- * // Using Effect for safe execution with error handling
- * Effect.gen(function*() {
- * // Assume we have a ConwayFormatTxOut instance
- * const instance = ... ;
- *   const result = yield* ConwayFormatTxOut.toCanonicalCborHex(instance);
- *   console.log(result);
- * });
- *
  * @since 2.0.0
  * @category Methods
  */
-export const toCanonicalCborHex = Effect.fn(
-  (
-    instance: CML.ConwayFormatTxOut,
-  ): Effect.Effect<string, ConwayFormatTxOutError> =>
+export const toCanonicalCborHex: (
+  instance: CML.ConwayFormatTxOut,
+) => Effect.Effect<string, ConwayFormatTxOutError> = Effect.fn(
+  (instance: CML.ConwayFormatTxOut) =>
     Effect.try({
       try: () => instance.to_canonical_cbor_hex(),
       catch: () =>
@@ -327,20 +192,6 @@ export const toCanonicalCborHex = Effect.fn(
 /**
  * Unsafely calls instance.toCanonicalCborHex without Effect wrapper
  *
- * @example
- * import { ConwayFormatTxOut } from "@lucid-evolution/experimental";
- *
- * // Assume we have a ConwayFormatTxOut instance
- * const instance = ... ;
- *
- * // Using try/catch for error handling
- * try {
- *   const result = ConwayFormatTxOut.toCanonicalCborHexUnsafe(instance);
- *   console.log(result);
- * } catch (error) {
- *   console.error(`ConwayFormatTxOut.toCanonicalCborHexUnsafe failed: ${error.message}`);
- * }
- *
  * @since 2.0.0
  * @category MethodsUnsafe
  */
@@ -351,74 +202,42 @@ export const toCanonicalCborHexUnsafe = (
 /**
  * Static method fromCborHex of ConwayFormatTxOut
  *
- * @example
- * import { ConwayFormatTxOut } from "@lucid-evolution/experimental";
- * import { Effect } from "effect";
- *
- * // Using Effect for safe execution with error handling
- * Effect.gen(function*() {
- *
- *   const result = yield* ConwayFormatTxOut.fromCborHex( parameters );
- *   console.log(result);
- * });
- *
  * @since 2.0.0
  * @category Constructors
  */
-export const fromCborHex = Effect.fn(function* (cborBytes: string) {
-  return yield* Effect.try({
-    try: () => CML.ConwayFormatTxOut.from_cbor_hex(cborBytes),
-    catch: () =>
-      new ConwayFormatTxOutError({
-        message: `ConwayFormatTxOut.fromCborHex failed with parameters: ${cborBytes}. Hint: Make sure it's a valid hex string representing CBOR data.`,
-      }),
-  });
-});
+export const fromCborHex: (
+  cborBytes: string,
+) => Effect.Effect<CML.ConwayFormatTxOut, ConwayFormatTxOutError> = Effect.fn(
+  function* (cborBytes: string) {
+    return yield* Effect.try({
+      try: () => CML.ConwayFormatTxOut.from_cbor_hex(cborBytes),
+      catch: () =>
+        new ConwayFormatTxOutError({
+          message: `ConwayFormatTxOut.fromCborHex failed with parameters: ${cborBytes}. Hint: Make sure it's a valid hex string representing CBOR data.`,
+        }),
+    });
+  },
+);
 
 /**
  * Unsafely calls ConwayFormatTxOut.fromCborHex without Effect wrapper
  *
- * @example
- * import { ConwayFormatTxOut } from "@lucid-evolution/experimental";
- *
- *
- *
- * // Using try/catch for error handling
- * try {
- *   const result = ConwayFormatTxOut.fromCborHexUnsafe( parameters );
- *   console.log(result);
- * } catch (error) {
- *   console.error(`ConwayFormatTxOut.fromCborHexUnsafe failed: ${error.message}`);
- * }
- *
  * @since 2.0.0
  * @category ConstructorsUnsafe
  */
-export const fromCborHexUnsafe = (cborBytes: string) =>
+export const fromCborHexUnsafe = (cborBytes: string): CML.ConwayFormatTxOut =>
   Effect.runSync(fromCborHex(cborBytes));
 
 /**
  * Method toJson of ConwayFormatTxOut
  *
- * @example
- * import { ConwayFormatTxOut } from "@lucid-evolution/experimental";
- * import { Effect } from "effect";
- *
- * // Using Effect for safe execution with error handling
- * Effect.gen(function*() {
- * // Assume we have a ConwayFormatTxOut instance
- * const instance = ... ;
- *   const result = yield* ConwayFormatTxOut.toJson(instance);
- *   console.log(result);
- * });
- *
  * @since 2.0.0
  * @category Methods
  */
-export const toJson = Effect.fn(
-  (
-    instance: CML.ConwayFormatTxOut,
-  ): Effect.Effect<string, ConwayFormatTxOutError> =>
+export const toJson: (
+  instance: CML.ConwayFormatTxOut,
+) => Effect.Effect<string, ConwayFormatTxOutError> = Effect.fn(
+  (instance: CML.ConwayFormatTxOut) =>
     Effect.try({
       try: () => instance.to_json(),
       catch: () =>
@@ -431,20 +250,6 @@ export const toJson = Effect.fn(
 /**
  * Unsafely calls instance.toJson without Effect wrapper
  *
- * @example
- * import { ConwayFormatTxOut } from "@lucid-evolution/experimental";
- *
- * // Assume we have a ConwayFormatTxOut instance
- * const instance = ... ;
- *
- * // Using try/catch for error handling
- * try {
- *   const result = ConwayFormatTxOut.toJsonUnsafe(instance);
- *   console.log(result);
- * } catch (error) {
- *   console.error(`ConwayFormatTxOut.toJsonUnsafe failed: ${error.message}`);
- * }
- *
  * @since 2.0.0
  * @category MethodsUnsafe
  */
@@ -454,25 +259,13 @@ export const toJsonUnsafe = (instance: CML.ConwayFormatTxOut): string =>
 /**
  * Method toJsValue of ConwayFormatTxOut
  *
- * @example
- * import { ConwayFormatTxOut } from "@lucid-evolution/experimental";
- * import { Effect } from "effect";
- *
- * // Using Effect for safe execution with error handling
- * Effect.gen(function*() {
- * // Assume we have a ConwayFormatTxOut instance
- * const instance = ... ;
- *   const result = yield* ConwayFormatTxOut.toJsValue(instance);
- *   console.log(result);
- * });
- *
  * @since 2.0.0
  * @category Methods
  */
-export const toJsValue = Effect.fn(
-  (
-    instance: CML.ConwayFormatTxOut,
-  ): Effect.Effect<any, ConwayFormatTxOutError> =>
+export const toJsValue: (
+  instance: CML.ConwayFormatTxOut,
+) => Effect.Effect<any, ConwayFormatTxOutError> = Effect.fn(
+  (instance: CML.ConwayFormatTxOut) =>
     Effect.try({
       try: () => instance.to_js_value(),
       catch: () =>
@@ -485,20 +278,6 @@ export const toJsValue = Effect.fn(
 /**
  * Unsafely calls instance.toJsValue without Effect wrapper
  *
- * @example
- * import { ConwayFormatTxOut } from "@lucid-evolution/experimental";
- *
- * // Assume we have a ConwayFormatTxOut instance
- * const instance = ... ;
- *
- * // Using try/catch for error handling
- * try {
- *   const result = ConwayFormatTxOut.toJsValueUnsafe(instance);
- *   console.log(result);
- * } catch (error) {
- *   console.error(`ConwayFormatTxOut.toJsValueUnsafe failed: ${error.message}`);
- * }
- *
  * @since 2.0.0
  * @category MethodsUnsafe
  */
@@ -508,73 +287,42 @@ export const toJsValueUnsafe = (instance: CML.ConwayFormatTxOut): any =>
 /**
  * Static method fromJson of ConwayFormatTxOut
  *
- * @example
- * import { ConwayFormatTxOut } from "@lucid-evolution/experimental";
- * import { Effect } from "effect";
- *
- * // Using Effect for safe execution with error handling
- * Effect.gen(function*() {
- *
- *   const result = yield* ConwayFormatTxOut.fromJson( parameters );
- *   console.log(result);
- * });
- *
  * @since 2.0.0
  * @category Constructors
  */
-export const fromJson = Effect.fn(function* (json: string) {
-  return yield* Effect.try({
-    try: () => CML.ConwayFormatTxOut.from_json(json),
-    catch: () =>
-      new ConwayFormatTxOutError({
-        message: `ConwayFormatTxOut.fromJson failed with parameters: ${json}. Hint: Validate your JSON structure.`,
-      }),
-  });
-});
+export const fromJson: (
+  json: string,
+) => Effect.Effect<CML.ConwayFormatTxOut, ConwayFormatTxOutError> = Effect.fn(
+  function* (json: string) {
+    return yield* Effect.try({
+      try: () => CML.ConwayFormatTxOut.from_json(json),
+      catch: () =>
+        new ConwayFormatTxOutError({
+          message: `ConwayFormatTxOut.fromJson failed with parameters: ${json}. Hint: Validate your JSON structure.`,
+        }),
+    });
+  },
+);
 
 /**
  * Unsafely calls ConwayFormatTxOut.fromJson without Effect wrapper
  *
- * @example
- * import { ConwayFormatTxOut } from "@lucid-evolution/experimental";
- *
- *
- *
- * // Using try/catch for error handling
- * try {
- *   const result = ConwayFormatTxOut.fromJsonUnsafe( parameters );
- *   console.log(result);
- * } catch (error) {
- *   console.error(`ConwayFormatTxOut.fromJsonUnsafe failed: ${error.message}`);
- * }
- *
  * @since 2.0.0
  * @category ConstructorsUnsafe
  */
-export const fromJsonUnsafe = (json: string) => Effect.runSync(fromJson(json));
+export const fromJsonUnsafe = (json: string): CML.ConwayFormatTxOut =>
+  Effect.runSync(fromJson(json));
 
 /**
  * Method address of ConwayFormatTxOut
  *
- * @example
- * import { ConwayFormatTxOut } from "@lucid-evolution/experimental";
- * import { Effect } from "effect";
- *
- * // Using Effect for safe execution with error handling
- * Effect.gen(function*() {
- * // Assume we have a ConwayFormatTxOut instance
- * const instance = ... ;
- *   const result = yield* ConwayFormatTxOut.address(instance);
- *   console.log(result);
- * });
- *
  * @since 2.0.0
  * @category Methods
  */
-export const address = Effect.fn(
-  (
-    instance: CML.ConwayFormatTxOut,
-  ): Effect.Effect<CML.Address, ConwayFormatTxOutError> =>
+export const address: (
+  instance: CML.ConwayFormatTxOut,
+) => Effect.Effect<CML.Address, ConwayFormatTxOutError> = Effect.fn(
+  (instance: CML.ConwayFormatTxOut) =>
     Effect.try({
       try: () => instance.address(),
       catch: () =>
@@ -587,20 +335,6 @@ export const address = Effect.fn(
 /**
  * Unsafely calls instance.address without Effect wrapper
  *
- * @example
- * import { ConwayFormatTxOut } from "@lucid-evolution/experimental";
- *
- * // Assume we have a ConwayFormatTxOut instance
- * const instance = ... ;
- *
- * // Using try/catch for error handling
- * try {
- *   const result = ConwayFormatTxOut.addressUnsafe(instance);
- *   console.log(result);
- * } catch (error) {
- *   console.error(`ConwayFormatTxOut.addressUnsafe failed: ${error.message}`);
- * }
- *
  * @since 2.0.0
  * @category MethodsUnsafe
  */
@@ -610,25 +344,13 @@ export const addressUnsafe = (instance: CML.ConwayFormatTxOut): CML.Address =>
 /**
  * Method amount of ConwayFormatTxOut
  *
- * @example
- * import { ConwayFormatTxOut } from "@lucid-evolution/experimental";
- * import { Effect } from "effect";
- *
- * // Using Effect for safe execution with error handling
- * Effect.gen(function*() {
- * // Assume we have a ConwayFormatTxOut instance
- * const instance = ... ;
- *   const result = yield* ConwayFormatTxOut.amount(instance);
- *   console.log(result);
- * });
- *
  * @since 2.0.0
  * @category Methods
  */
-export const amount = Effect.fn(
-  (
-    instance: CML.ConwayFormatTxOut,
-  ): Effect.Effect<CML.Value, ConwayFormatTxOutError> =>
+export const amount: (
+  instance: CML.ConwayFormatTxOut,
+) => Effect.Effect<CML.Value, ConwayFormatTxOutError> = Effect.fn(
+  (instance: CML.ConwayFormatTxOut) =>
     Effect.try({
       try: () => instance.amount(),
       catch: () =>
@@ -641,20 +363,6 @@ export const amount = Effect.fn(
 /**
  * Unsafely calls instance.amount without Effect wrapper
  *
- * @example
- * import { ConwayFormatTxOut } from "@lucid-evolution/experimental";
- *
- * // Assume we have a ConwayFormatTxOut instance
- * const instance = ... ;
- *
- * // Using try/catch for error handling
- * try {
- *   const result = ConwayFormatTxOut.amountUnsafe(instance);
- *   console.log(result);
- * } catch (error) {
- *   console.error(`ConwayFormatTxOut.amountUnsafe failed: ${error.message}`);
- * }
- *
  * @since 2.0.0
  * @category MethodsUnsafe
  */
@@ -664,26 +372,14 @@ export const amountUnsafe = (instance: CML.ConwayFormatTxOut): CML.Value =>
 /**
  * Method setDatumOption of ConwayFormatTxOut
  *
- * @example
- * import { ConwayFormatTxOut } from "@lucid-evolution/experimental";
- * import { Effect } from "effect";
- *
- * // Using Effect for safe execution with error handling
- * Effect.gen(function*() {
- * // Assume we have a ConwayFormatTxOut instance
- * const instance = ... ;
- *   const result = yield* ConwayFormatTxOut.setDatumOption(instance,  parameters );
- *   console.log(result);
- * });
- *
  * @since 2.0.0
  * @category Methods
  */
-export const setDatumOption = Effect.fn(
-  (
-    instance: CML.ConwayFormatTxOut,
-    datumOption: CML.DatumOption,
-  ): Effect.Effect<void, ConwayFormatTxOutError> =>
+export const setDatumOption: (
+  instance: CML.ConwayFormatTxOut,
+  datumOption: CML.DatumOption,
+) => Effect.Effect<void, ConwayFormatTxOutError> = Effect.fn(
+  (instance: CML.ConwayFormatTxOut, datumOption: CML.DatumOption) =>
     Effect.try({
       try: () => instance.set_datum_option(datumOption),
       catch: () =>
@@ -696,20 +392,6 @@ export const setDatumOption = Effect.fn(
 /**
  * Unsafely calls instance.setDatumOption without Effect wrapper
  *
- * @example
- * import { ConwayFormatTxOut } from "@lucid-evolution/experimental";
- *
- * // Assume we have a ConwayFormatTxOut instance
- * const instance = ... ;
- *
- * // Using try/catch for error handling
- * try {
- *   const result = ConwayFormatTxOut.setDatumOptionUnsafe(instance,  parameters );
- *   console.log(result);
- * } catch (error) {
- *   console.error(`ConwayFormatTxOut.setDatumOptionUnsafe failed: ${error.message}`);
- * }
- *
  * @since 2.0.0
  * @category MethodsUnsafe
  */
@@ -721,25 +403,13 @@ export const setDatumOptionUnsafe = (
 /**
  * Method datumOption of ConwayFormatTxOut
  *
- * @example
- * import { ConwayFormatTxOut } from "@lucid-evolution/experimental";
- * import { Effect } from "effect";
- *
- * // Using Effect for safe execution with error handling
- * Effect.gen(function*() {
- * // Assume we have a ConwayFormatTxOut instance
- * const instance = ... ;
- *   const result = yield* ConwayFormatTxOut.datumOption(instance);
- *   console.log(result);
- * });
- *
  * @since 2.0.0
  * @category Methods
  */
-export const datumOption = Effect.fn(
-  (
-    instance: CML.ConwayFormatTxOut,
-  ): Effect.Effect<CML.DatumOption | undefined, ConwayFormatTxOutError> =>
+export const datumOption: (
+  instance: CML.ConwayFormatTxOut,
+) => Effect.Effect<CML.DatumOption | undefined, ConwayFormatTxOutError> =
+  Effect.fn((instance: CML.ConwayFormatTxOut) =>
     Effect.try({
       try: () => instance.datum_option(),
       catch: () =>
@@ -747,24 +417,10 @@ export const datumOption = Effect.fn(
           message: `ConwayFormatTxOut.datumOption failed `,
         }),
     }),
-);
+  );
 
 /**
  * Unsafely calls instance.datumOption without Effect wrapper
- *
- * @example
- * import { ConwayFormatTxOut } from "@lucid-evolution/experimental";
- *
- * // Assume we have a ConwayFormatTxOut instance
- * const instance = ... ;
- *
- * // Using try/catch for error handling
- * try {
- *   const result = ConwayFormatTxOut.datumOptionUnsafe(instance);
- *   console.log(result);
- * } catch (error) {
- *   console.error(`ConwayFormatTxOut.datumOptionUnsafe failed: ${error.message}`);
- * }
  *
  * @since 2.0.0
  * @category MethodsUnsafe
@@ -776,26 +432,14 @@ export const datumOptionUnsafe = (
 /**
  * Method setScriptReference of ConwayFormatTxOut
  *
- * @example
- * import { ConwayFormatTxOut } from "@lucid-evolution/experimental";
- * import { Effect } from "effect";
- *
- * // Using Effect for safe execution with error handling
- * Effect.gen(function*() {
- * // Assume we have a ConwayFormatTxOut instance
- * const instance = ... ;
- *   const result = yield* ConwayFormatTxOut.setScriptReference(instance,  parameters );
- *   console.log(result);
- * });
- *
  * @since 2.0.0
  * @category Methods
  */
-export const setScriptReference = Effect.fn(
-  (
-    instance: CML.ConwayFormatTxOut,
-    scriptReference: CML.Script,
-  ): Effect.Effect<void, ConwayFormatTxOutError> =>
+export const setScriptReference: (
+  instance: CML.ConwayFormatTxOut,
+  scriptReference: CML.Script,
+) => Effect.Effect<void, ConwayFormatTxOutError> = Effect.fn(
+  (instance: CML.ConwayFormatTxOut, scriptReference: CML.Script) =>
     Effect.try({
       try: () => instance.set_script_reference(scriptReference),
       catch: () =>
@@ -808,20 +452,6 @@ export const setScriptReference = Effect.fn(
 /**
  * Unsafely calls instance.setScriptReference without Effect wrapper
  *
- * @example
- * import { ConwayFormatTxOut } from "@lucid-evolution/experimental";
- *
- * // Assume we have a ConwayFormatTxOut instance
- * const instance = ... ;
- *
- * // Using try/catch for error handling
- * try {
- *   const result = ConwayFormatTxOut.setScriptReferenceUnsafe(instance,  parameters );
- *   console.log(result);
- * } catch (error) {
- *   console.error(`ConwayFormatTxOut.setScriptReferenceUnsafe failed: ${error.message}`);
- * }
- *
  * @since 2.0.0
  * @category MethodsUnsafe
  */
@@ -833,25 +463,13 @@ export const setScriptReferenceUnsafe = (
 /**
  * Method scriptReference of ConwayFormatTxOut
  *
- * @example
- * import { ConwayFormatTxOut } from "@lucid-evolution/experimental";
- * import { Effect } from "effect";
- *
- * // Using Effect for safe execution with error handling
- * Effect.gen(function*() {
- * // Assume we have a ConwayFormatTxOut instance
- * const instance = ... ;
- *   const result = yield* ConwayFormatTxOut.scriptReference(instance);
- *   console.log(result);
- * });
- *
  * @since 2.0.0
  * @category Methods
  */
-export const scriptReference = Effect.fn(
-  (
-    instance: CML.ConwayFormatTxOut,
-  ): Effect.Effect<CML.Script | undefined, ConwayFormatTxOutError> =>
+export const scriptReference: (
+  instance: CML.ConwayFormatTxOut,
+) => Effect.Effect<CML.Script | undefined, ConwayFormatTxOutError> = Effect.fn(
+  (instance: CML.ConwayFormatTxOut) =>
     Effect.try({
       try: () => instance.script_reference(),
       catch: () =>
@@ -864,20 +482,6 @@ export const scriptReference = Effect.fn(
 /**
  * Unsafely calls instance.scriptReference without Effect wrapper
  *
- * @example
- * import { ConwayFormatTxOut } from "@lucid-evolution/experimental";
- *
- * // Assume we have a ConwayFormatTxOut instance
- * const instance = ... ;
- *
- * // Using try/catch for error handling
- * try {
- *   const result = ConwayFormatTxOut.scriptReferenceUnsafe(instance);
- *   console.log(result);
- * } catch (error) {
- *   console.error(`ConwayFormatTxOut.scriptReferenceUnsafe failed: ${error.message}`);
- * }
- *
  * @since 2.0.0
  * @category MethodsUnsafe
  */
@@ -888,51 +492,31 @@ export const scriptReferenceUnsafe = (
 /**
  * Static method _new of ConwayFormatTxOut
  *
- * @example
- * import { ConwayFormatTxOut } from "@lucid-evolution/experimental";
- * import { Effect } from "effect";
- *
- * // Using Effect for safe execution with error handling
- * Effect.gen(function*() {
- *
- *   const result = yield* ConwayFormatTxOut._new( parameters );
- *   console.log(result);
- * });
- *
  * @since 2.0.0
  * @category Constructors
  */
-export const _new = Effect.fn(function* (
+export const _new: (
   address: CML.Address,
   amount: CML.Value,
-) {
-  return yield* Effect.try({
-    try: () => CML.ConwayFormatTxOut.new(address, amount),
-    catch: () =>
-      new ConwayFormatTxOutError({
-        message: `ConwayFormatTxOut._new failed with parameters: ${address} (Address), ${amount} (Value). `,
-      }),
-  });
-});
+) => Effect.Effect<CML.ConwayFormatTxOut, ConwayFormatTxOutError> = Effect.fn(
+  function* (address: CML.Address, amount: CML.Value) {
+    return yield* Effect.try({
+      try: () => CML.ConwayFormatTxOut.new(address, amount),
+      catch: () =>
+        new ConwayFormatTxOutError({
+          message: `ConwayFormatTxOut._new failed with parameters: ${address} (Address), ${amount} (Value). `,
+        }),
+    });
+  },
+);
 
 /**
  * Unsafely calls ConwayFormatTxOut._new without Effect wrapper
  *
- * @example
- * import { ConwayFormatTxOut } from "@lucid-evolution/experimental";
- *
- *
- *
- * // Using try/catch for error handling
- * try {
- *   const result = ConwayFormatTxOut._newUnsafe( parameters );
- *   console.log(result);
- * } catch (error) {
- *   console.error(`ConwayFormatTxOut._newUnsafe failed: ${error.message}`);
- * }
- *
  * @since 2.0.0
  * @category ConstructorsUnsafe
  */
-export const _newUnsafe = (address: CML.Address, amount: CML.Value) =>
-  Effect.runSync(_new(address, amount));
+export const _newUnsafe = (
+  address: CML.Address,
+  amount: CML.Value,
+): CML.ConwayFormatTxOut => Effect.runSync(_new(address, amount));

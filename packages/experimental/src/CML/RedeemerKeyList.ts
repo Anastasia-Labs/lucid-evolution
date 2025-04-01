@@ -29,23 +29,13 @@ export class RedeemerKeyListError extends Data.TaggedError(
 /**
  * Method free of RedeemerKeyList
  *
- * @example
- * import { RedeemerKeyList } from "@lucid-evolution/experimental";
- * import { Effect } from "effect";
- *
- * // Using Effect for safe execution with error handling
- * Effect.gen(function*() {
- * // Assume we have a RedeemerKeyList instance
- * const instance = ... ;
- *   const result = yield* RedeemerKeyList.free(instance);
- *   console.log(result);
- * });
- *
  * @since 2.0.0
  * @category Methods
  */
-export const free = Effect.fn(
-  (instance: CML.RedeemerKeyList): Effect.Effect<void, RedeemerKeyListError> =>
+export const free: (
+  instance: CML.RedeemerKeyList,
+) => Effect.Effect<void, RedeemerKeyListError> = Effect.fn(
+  (instance: CML.RedeemerKeyList) =>
     Effect.try({
       try: () => instance.free(),
       catch: () =>
@@ -58,20 +48,6 @@ export const free = Effect.fn(
 /**
  * Unsafely calls instance.free without Effect wrapper
  *
- * @example
- * import { RedeemerKeyList } from "@lucid-evolution/experimental";
- *
- * // Assume we have a RedeemerKeyList instance
- * const instance = ... ;
- *
- * // Using try/catch for error handling
- * try {
- *   const result = RedeemerKeyList.freeUnsafe(instance);
- *   console.log(result);
- * } catch (error) {
- *   console.error(`RedeemerKeyList.freeUnsafe failed: ${error.message}`);
- * }
- *
  * @since 2.0.0
  * @category MethodsUnsafe
  */
@@ -81,21 +57,13 @@ export const freeUnsafe = (instance: CML.RedeemerKeyList): void =>
 /**
  * Static method _new of RedeemerKeyList
  *
- * @example
- * import { RedeemerKeyList } from "@lucid-evolution/experimental";
- * import { Effect } from "effect";
- *
- * // Using Effect for safe execution with error handling
- * Effect.gen(function*() {
- *
- *   const result = yield* RedeemerKeyList._new();
- *   console.log(result);
- * });
- *
  * @since 2.0.0
  * @category Constructors
  */
-export const _new = Effect.fn(function* () {
+export const _new: () => Effect.Effect<
+  CML.RedeemerKeyList,
+  RedeemerKeyListError
+> = Effect.fn(function* () {
   return yield* Effect.try({
     try: () => CML.RedeemerKeyList.new(),
     catch: () =>
@@ -108,46 +76,21 @@ export const _new = Effect.fn(function* () {
 /**
  * Unsafely calls RedeemerKeyList._new without Effect wrapper
  *
- * @example
- * import { RedeemerKeyList } from "@lucid-evolution/experimental";
- *
- *
- *
- * // Using try/catch for error handling
- * try {
- *   const result = RedeemerKeyList._newUnsafe();
- *   console.log(result);
- * } catch (error) {
- *   console.error(`RedeemerKeyList._newUnsafe failed: ${error.message}`);
- * }
- *
  * @since 2.0.0
  * @category ConstructorsUnsafe
  */
-export const _newUnsafe = () => Effect.runSync(_new());
+export const _newUnsafe = (): CML.RedeemerKeyList => Effect.runSync(_new());
 
 /**
  * Method len of RedeemerKeyList
  *
- * @example
- * import { RedeemerKeyList } from "@lucid-evolution/experimental";
- * import { Effect } from "effect";
- *
- * // Using Effect for safe execution with error handling
- * Effect.gen(function*() {
- * // Assume we have a RedeemerKeyList instance
- * const instance = ... ;
- *   const result = yield* RedeemerKeyList.len(instance);
- *   console.log(result);
- * });
- *
  * @since 2.0.0
  * @category Methods
  */
-export const len = Effect.fn(
-  (
-    instance: CML.RedeemerKeyList,
-  ): Effect.Effect<number, RedeemerKeyListError> =>
+export const len: (
+  instance: CML.RedeemerKeyList,
+) => Effect.Effect<number, RedeemerKeyListError> = Effect.fn(
+  (instance: CML.RedeemerKeyList) =>
     Effect.try({
       try: () => instance.len(),
       catch: () =>
@@ -160,20 +103,6 @@ export const len = Effect.fn(
 /**
  * Unsafely calls instance.len without Effect wrapper
  *
- * @example
- * import { RedeemerKeyList } from "@lucid-evolution/experimental";
- *
- * // Assume we have a RedeemerKeyList instance
- * const instance = ... ;
- *
- * // Using try/catch for error handling
- * try {
- *   const result = RedeemerKeyList.lenUnsafe(instance);
- *   console.log(result);
- * } catch (error) {
- *   console.error(`RedeemerKeyList.lenUnsafe failed: ${error.message}`);
- * }
- *
  * @since 2.0.0
  * @category MethodsUnsafe
  */
@@ -183,26 +112,14 @@ export const lenUnsafe = (instance: CML.RedeemerKeyList): number =>
 /**
  * Method get of RedeemerKeyList
  *
- * @example
- * import { RedeemerKeyList } from "@lucid-evolution/experimental";
- * import { Effect } from "effect";
- *
- * // Using Effect for safe execution with error handling
- * Effect.gen(function*() {
- * // Assume we have a RedeemerKeyList instance
- * const instance = ... ;
- *   const result = yield* RedeemerKeyList.get(instance,  parameters );
- *   console.log(result);
- * });
- *
  * @since 2.0.0
  * @category Methods
  */
-export const get = Effect.fn(
-  (
-    instance: CML.RedeemerKeyList,
-    index: number,
-  ): Effect.Effect<CML.RedeemerKey, RedeemerKeyListError> =>
+export const get: (
+  instance: CML.RedeemerKeyList,
+  index: number,
+) => Effect.Effect<CML.RedeemerKey, RedeemerKeyListError> = Effect.fn(
+  (instance: CML.RedeemerKeyList, index: number) =>
     Effect.try({
       try: () => instance.get(index),
       catch: () =>
@@ -215,20 +132,6 @@ export const get = Effect.fn(
 /**
  * Unsafely calls instance.get without Effect wrapper
  *
- * @example
- * import { RedeemerKeyList } from "@lucid-evolution/experimental";
- *
- * // Assume we have a RedeemerKeyList instance
- * const instance = ... ;
- *
- * // Using try/catch for error handling
- * try {
- *   const result = RedeemerKeyList.getUnsafe(instance,  parameters );
- *   console.log(result);
- * } catch (error) {
- *   console.error(`RedeemerKeyList.getUnsafe failed: ${error.message}`);
- * }
- *
  * @since 2.0.0
  * @category MethodsUnsafe
  */
@@ -240,26 +143,14 @@ export const getUnsafe = (
 /**
  * Method add of RedeemerKeyList
  *
- * @example
- * import { RedeemerKeyList } from "@lucid-evolution/experimental";
- * import { Effect } from "effect";
- *
- * // Using Effect for safe execution with error handling
- * Effect.gen(function*() {
- * // Assume we have a RedeemerKeyList instance
- * const instance = ... ;
- *   const result = yield* RedeemerKeyList.add(instance,  parameters );
- *   console.log(result);
- * });
- *
  * @since 2.0.0
  * @category Methods
  */
-export const add = Effect.fn(
-  (
-    instance: CML.RedeemerKeyList,
-    elem: CML.RedeemerKey,
-  ): Effect.Effect<void, RedeemerKeyListError> =>
+export const add: (
+  instance: CML.RedeemerKeyList,
+  elem: CML.RedeemerKey,
+) => Effect.Effect<void, RedeemerKeyListError> = Effect.fn(
+  (instance: CML.RedeemerKeyList, elem: CML.RedeemerKey) =>
     Effect.try({
       try: () => instance.add(elem),
       catch: () =>
@@ -271,20 +162,6 @@ export const add = Effect.fn(
 
 /**
  * Unsafely calls instance.add without Effect wrapper
- *
- * @example
- * import { RedeemerKeyList } from "@lucid-evolution/experimental";
- *
- * // Assume we have a RedeemerKeyList instance
- * const instance = ... ;
- *
- * // Using try/catch for error handling
- * try {
- *   const result = RedeemerKeyList.addUnsafe(instance,  parameters );
- *   console.log(result);
- * } catch (error) {
- *   console.error(`RedeemerKeyList.addUnsafe failed: ${error.message}`);
- * }
  *
  * @since 2.0.0
  * @category MethodsUnsafe

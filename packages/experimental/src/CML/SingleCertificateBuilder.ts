@@ -29,25 +29,13 @@ export class SingleCertificateBuilderError extends Data.TaggedError(
 /**
  * Method free of SingleCertificateBuilder
  *
- * @example
- * import { SingleCertificateBuilder } from "@lucid-evolution/experimental";
- * import { Effect } from "effect";
- *
- * // Using Effect for safe execution with error handling
- * Effect.gen(function*() {
- * // Assume we have a SingleCertificateBuilder instance
- * const instance = ... ;
- *   const result = yield* SingleCertificateBuilder.free(instance);
- *   console.log(result);
- * });
- *
  * @since 2.0.0
  * @category Methods
  */
-export const free = Effect.fn(
-  (
-    instance: CML.SingleCertificateBuilder,
-  ): Effect.Effect<void, SingleCertificateBuilderError> =>
+export const free: (
+  instance: CML.SingleCertificateBuilder,
+) => Effect.Effect<void, SingleCertificateBuilderError> = Effect.fn(
+  (instance: CML.SingleCertificateBuilder) =>
     Effect.try({
       try: () => instance.free(),
       catch: () =>
@@ -60,20 +48,6 @@ export const free = Effect.fn(
 /**
  * Unsafely calls instance.free without Effect wrapper
  *
- * @example
- * import { SingleCertificateBuilder } from "@lucid-evolution/experimental";
- *
- * // Assume we have a SingleCertificateBuilder instance
- * const instance = ... ;
- *
- * // Using try/catch for error handling
- * try {
- *   const result = SingleCertificateBuilder.freeUnsafe(instance);
- *   console.log(result);
- * } catch (error) {
- *   console.error(`SingleCertificateBuilder.freeUnsafe failed: ${error.message}`);
- * }
- *
  * @since 2.0.0
  * @category MethodsUnsafe
  */
@@ -83,21 +57,15 @@ export const freeUnsafe = (instance: CML.SingleCertificateBuilder): void =>
 /**
  * Static method _new of SingleCertificateBuilder
  *
- * @example
- * import { SingleCertificateBuilder } from "@lucid-evolution/experimental";
- * import { Effect } from "effect";
- *
- * // Using Effect for safe execution with error handling
- * Effect.gen(function*() {
- *
- *   const result = yield* SingleCertificateBuilder._new( parameters );
- *   console.log(result);
- * });
- *
  * @since 2.0.0
  * @category Constructors
  */
-export const _new = Effect.fn(function* (cert: CML.Certificate) {
+export const _new: (
+  cert: CML.Certificate,
+) => Effect.Effect<
+  CML.SingleCertificateBuilder,
+  SingleCertificateBuilderError
+> = Effect.fn(function* (cert: CML.Certificate) {
   return yield* Effect.try({
     try: () => CML.SingleCertificateBuilder.new(cert),
     catch: () =>
@@ -110,74 +78,36 @@ export const _new = Effect.fn(function* (cert: CML.Certificate) {
 /**
  * Unsafely calls SingleCertificateBuilder._new without Effect wrapper
  *
- * @example
- * import { SingleCertificateBuilder } from "@lucid-evolution/experimental";
- *
- *
- *
- * // Using try/catch for error handling
- * try {
- *   const result = SingleCertificateBuilder._newUnsafe( parameters );
- *   console.log(result);
- * } catch (error) {
- *   console.error(`SingleCertificateBuilder._newUnsafe failed: ${error.message}`);
- * }
- *
  * @since 2.0.0
  * @category ConstructorsUnsafe
  */
-export const _newUnsafe = (cert: CML.Certificate) => Effect.runSync(_new(cert));
+export const _newUnsafe = (
+  cert: CML.Certificate,
+): CML.SingleCertificateBuilder => Effect.runSync(_new(cert));
 
 /**
  * Method skipWitness of SingleCertificateBuilder
  *
- * @example
- * import { SingleCertificateBuilder } from "@lucid-evolution/experimental";
- * import { Effect } from "effect";
- *
- * // Using Effect for safe execution with error handling
- * Effect.gen(function*() {
- * // Assume we have a SingleCertificateBuilder instance
- * const instance = ... ;
- *   const result = yield* SingleCertificateBuilder.skipWitness(instance);
- *   console.log(result);
- * });
- *
  * @since 2.0.0
  * @category Methods
  */
-export const skipWitness = Effect.fn(
-  (
-    instance: CML.SingleCertificateBuilder,
-  ): Effect.Effect<
-    CML.CertificateBuilderResult,
-    SingleCertificateBuilderError
-  > =>
-    Effect.try({
-      try: () => instance.skip_witness(),
-      catch: () =>
-        new SingleCertificateBuilderError({
-          message: `SingleCertificateBuilder.skipWitness failed `,
-        }),
-    }),
+export const skipWitness: (
+  instance: CML.SingleCertificateBuilder,
+) => Effect.Effect<
+  CML.CertificateBuilderResult,
+  SingleCertificateBuilderError
+> = Effect.fn((instance: CML.SingleCertificateBuilder) =>
+  Effect.try({
+    try: () => instance.skip_witness(),
+    catch: () =>
+      new SingleCertificateBuilderError({
+        message: `SingleCertificateBuilder.skipWitness failed `,
+      }),
+  }),
 );
 
 /**
  * Unsafely calls instance.skipWitness without Effect wrapper
- *
- * @example
- * import { SingleCertificateBuilder } from "@lucid-evolution/experimental";
- *
- * // Assume we have a SingleCertificateBuilder instance
- * const instance = ... ;
- *
- * // Using try/catch for error handling
- * try {
- *   const result = SingleCertificateBuilder.skipWitnessUnsafe(instance);
- *   console.log(result);
- * } catch (error) {
- *   console.error(`SingleCertificateBuilder.skipWitnessUnsafe failed: ${error.message}`);
- * }
  *
  * @since 2.0.0
  * @category MethodsUnsafe
@@ -189,53 +119,26 @@ export const skipWitnessUnsafe = (
 /**
  * Method paymentKey of SingleCertificateBuilder
  *
- * @example
- * import { SingleCertificateBuilder } from "@lucid-evolution/experimental";
- * import { Effect } from "effect";
- *
- * // Using Effect for safe execution with error handling
- * Effect.gen(function*() {
- * // Assume we have a SingleCertificateBuilder instance
- * const instance = ... ;
- *   const result = yield* SingleCertificateBuilder.paymentKey(instance);
- *   console.log(result);
- * });
- *
  * @since 2.0.0
  * @category Methods
  */
-export const paymentKey = Effect.fn(
-  (
-    instance: CML.SingleCertificateBuilder,
-  ): Effect.Effect<
-    CML.CertificateBuilderResult,
-    SingleCertificateBuilderError
-  > =>
-    Effect.try({
-      try: () => instance.payment_key(),
-      catch: () =>
-        new SingleCertificateBuilderError({
-          message: `SingleCertificateBuilder.paymentKey failed `,
-        }),
-    }),
+export const paymentKey: (
+  instance: CML.SingleCertificateBuilder,
+) => Effect.Effect<
+  CML.CertificateBuilderResult,
+  SingleCertificateBuilderError
+> = Effect.fn((instance: CML.SingleCertificateBuilder) =>
+  Effect.try({
+    try: () => instance.payment_key(),
+    catch: () =>
+      new SingleCertificateBuilderError({
+        message: `SingleCertificateBuilder.paymentKey failed `,
+      }),
+  }),
 );
 
 /**
  * Unsafely calls instance.paymentKey without Effect wrapper
- *
- * @example
- * import { SingleCertificateBuilder } from "@lucid-evolution/experimental";
- *
- * // Assume we have a SingleCertificateBuilder instance
- * const instance = ... ;
- *
- * // Using try/catch for error handling
- * try {
- *   const result = SingleCertificateBuilder.paymentKeyUnsafe(instance);
- *   console.log(result);
- * } catch (error) {
- *   console.error(`SingleCertificateBuilder.paymentKeyUnsafe failed: ${error.message}`);
- * }
  *
  * @since 2.0.0
  * @category MethodsUnsafe
@@ -247,30 +150,22 @@ export const paymentKeyUnsafe = (
 /**
  * Method nativeScript of SingleCertificateBuilder
  *
- * @example
- * import { SingleCertificateBuilder } from "@lucid-evolution/experimental";
- * import { Effect } from "effect";
- *
- * // Using Effect for safe execution with error handling
- * Effect.gen(function*() {
- * // Assume we have a SingleCertificateBuilder instance
- * const instance = ... ;
- *   const result = yield* SingleCertificateBuilder.nativeScript(instance,  parameters );
- *   console.log(result);
- * });
- *
  * @since 2.0.0
  * @category Methods
  */
-export const nativeScript = Effect.fn(
+export const nativeScript: (
+  instance: CML.SingleCertificateBuilder,
+  _nativeScript: CML.NativeScript,
+  witnessInfo: CML.NativeScriptWitnessInfo,
+) => Effect.Effect<
+  CML.CertificateBuilderResult,
+  SingleCertificateBuilderError
+> = Effect.fn(
   (
     instance: CML.SingleCertificateBuilder,
     _nativeScript: CML.NativeScript,
     witnessInfo: CML.NativeScriptWitnessInfo,
-  ): Effect.Effect<
-    CML.CertificateBuilderResult,
-    SingleCertificateBuilderError
-  > =>
+  ) =>
     Effect.try({
       try: () => instance.native_script(_nativeScript, witnessInfo),
       catch: () =>
@@ -282,20 +177,6 @@ export const nativeScript = Effect.fn(
 
 /**
  * Unsafely calls instance.nativeScript without Effect wrapper
- *
- * @example
- * import { SingleCertificateBuilder } from "@lucid-evolution/experimental";
- *
- * // Assume we have a SingleCertificateBuilder instance
- * const instance = ... ;
- *
- * // Using try/catch for error handling
- * try {
- *   const result = SingleCertificateBuilder.nativeScriptUnsafe(instance,  parameters );
- *   console.log(result);
- * } catch (error) {
- *   console.error(`SingleCertificateBuilder.nativeScriptUnsafe failed: ${error.message}`);
- * }
  *
  * @since 2.0.0
  * @category MethodsUnsafe
@@ -310,30 +191,22 @@ export const nativeScriptUnsafe = (
 /**
  * Method plutusScript of SingleCertificateBuilder
  *
- * @example
- * import { SingleCertificateBuilder } from "@lucid-evolution/experimental";
- * import { Effect } from "effect";
- *
- * // Using Effect for safe execution with error handling
- * Effect.gen(function*() {
- * // Assume we have a SingleCertificateBuilder instance
- * const instance = ... ;
- *   const result = yield* SingleCertificateBuilder.plutusScript(instance,  parameters );
- *   console.log(result);
- * });
- *
  * @since 2.0.0
  * @category Methods
  */
-export const plutusScript = Effect.fn(
+export const plutusScript: (
+  instance: CML.SingleCertificateBuilder,
+  partialWitness: CML.PartialPlutusWitness,
+  requiredSigners: CML.Ed25519KeyHashList,
+) => Effect.Effect<
+  CML.CertificateBuilderResult,
+  SingleCertificateBuilderError
+> = Effect.fn(
   (
     instance: CML.SingleCertificateBuilder,
     partialWitness: CML.PartialPlutusWitness,
     requiredSigners: CML.Ed25519KeyHashList,
-  ): Effect.Effect<
-    CML.CertificateBuilderResult,
-    SingleCertificateBuilderError
-  > =>
+  ) =>
     Effect.try({
       try: () => instance.plutus_script(partialWitness, requiredSigners),
       catch: () =>
@@ -345,20 +218,6 @@ export const plutusScript = Effect.fn(
 
 /**
  * Unsafely calls instance.plutusScript without Effect wrapper
- *
- * @example
- * import { SingleCertificateBuilder } from "@lucid-evolution/experimental";
- *
- * // Assume we have a SingleCertificateBuilder instance
- * const instance = ... ;
- *
- * // Using try/catch for error handling
- * try {
- *   const result = SingleCertificateBuilder.plutusScriptUnsafe(instance,  parameters );
- *   console.log(result);
- * } catch (error) {
- *   console.error(`SingleCertificateBuilder.plutusScriptUnsafe failed: ${error.message}`);
- * }
  *
  * @since 2.0.0
  * @category MethodsUnsafe

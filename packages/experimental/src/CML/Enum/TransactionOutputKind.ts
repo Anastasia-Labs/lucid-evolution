@@ -14,11 +14,6 @@ export type TransactionOutputKind = CML.TransactionOutputKind;
 /**
  * AlonzoFormatTxOut variant of the TransactionOutputKind enum
  *
- * @example
- * import { TransactionOutputKind } from "@lucid-evolution/experimental";
- *
- * const kind = TransactionOutputKind.AlonzoFormatTxOut;
- *
  * @since 2.0.0
  * @category Variants
  */
@@ -27,11 +22,6 @@ export const AlonzoFormatTxOut = CML.TransactionOutputKind.AlonzoFormatTxOut;
 /**
  * ConwayFormatTxOut variant of the TransactionOutputKind enum
  *
- * @example
- * import { TransactionOutputKind } from "@lucid-evolution/experimental";
- *
- * const kind = TransactionOutputKind.ConwayFormatTxOut;
- *
  * @since 2.0.0
  * @category Variants
  */
@@ -39,12 +29,6 @@ export const ConwayFormatTxOut = CML.TransactionOutputKind.ConwayFormatTxOut;
 
 /**
  * Get all values of the TransactionOutputKind enum
- *
- * @example
- * import { TransactionOutputKind } from "@lucid-evolution/experimental";
- *
- * const allValues = TransactionOutputKind.values();
- * console.log(allValues);
  *
  * @since 2.0.0
  * @category Utils
@@ -56,12 +40,6 @@ export const values = (): Array<CML.TransactionOutputKind> => [
 
 /**
  * Convert TransactionOutputKind enum value to string
- *
- * @example
- * import { TransactionOutputKind } from "@lucid-evolution/experimental";
- *
- * const name = TransactionOutputKind.toString(CML.TransactionOutputKind.AlonzoFormatTxOut);
- * console.log(name); // "AlonzoFormatTxOut"
  *
  * @since 2.0.0
  * @category Utils
@@ -79,12 +57,6 @@ export const toString = (value: CML.TransactionOutputKind): string => {
 
 /**
  * Convert string to TransactionOutputKind enum value
- *
- * @example
- * import { TransactionOutputKind } from "@lucid-evolution/experimental";
- *
- * const value = TransactionOutputKind.fromString("AlonzoFormatTxOut");
- * console.log(value); // Some(CML.TransactionOutputKind.AlonzoFormatTxOut)
  *
  * @since 2.0.0
  * @category Utils

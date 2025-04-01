@@ -14,11 +14,6 @@ export type CertificateKind = CML.CertificateKind;
 /**
  * StakeRegistration variant of the CertificateKind enum
  *
- * @example
- * import { CertificateKind } from "@lucid-evolution/experimental";
- *
- * const kind = CertificateKind.StakeRegistration;
- *
  * @since 2.0.0
  * @category Variants
  */
@@ -26,11 +21,6 @@ export const StakeRegistration = CML.CertificateKind.StakeRegistration;
 
 /**
  * StakeDeregistration variant of the CertificateKind enum
- *
- * @example
- * import { CertificateKind } from "@lucid-evolution/experimental";
- *
- * const kind = CertificateKind.StakeDeregistration;
  *
  * @since 2.0.0
  * @category Variants
@@ -40,11 +30,6 @@ export const StakeDeregistration = CML.CertificateKind.StakeDeregistration;
 /**
  * StakeDelegation variant of the CertificateKind enum
  *
- * @example
- * import { CertificateKind } from "@lucid-evolution/experimental";
- *
- * const kind = CertificateKind.StakeDelegation;
- *
  * @since 2.0.0
  * @category Variants
  */
@@ -52,11 +37,6 @@ export const StakeDelegation = CML.CertificateKind.StakeDelegation;
 
 /**
  * PoolRegistration variant of the CertificateKind enum
- *
- * @example
- * import { CertificateKind } from "@lucid-evolution/experimental";
- *
- * const kind = CertificateKind.PoolRegistration;
  *
  * @since 2.0.0
  * @category Variants
@@ -66,11 +46,6 @@ export const PoolRegistration = CML.CertificateKind.PoolRegistration;
 /**
  * PoolRetirement variant of the CertificateKind enum
  *
- * @example
- * import { CertificateKind } from "@lucid-evolution/experimental";
- *
- * const kind = CertificateKind.PoolRetirement;
- *
  * @since 2.0.0
  * @category Variants
  */
@@ -78,11 +53,6 @@ export const PoolRetirement = CML.CertificateKind.PoolRetirement;
 
 /**
  * RegCert variant of the CertificateKind enum
- *
- * @example
- * import { CertificateKind } from "@lucid-evolution/experimental";
- *
- * const kind = CertificateKind.RegCert;
  *
  * @since 2.0.0
  * @category Variants
@@ -92,11 +62,6 @@ export const RegCert = CML.CertificateKind.RegCert;
 /**
  * UnregCert variant of the CertificateKind enum
  *
- * @example
- * import { CertificateKind } from "@lucid-evolution/experimental";
- *
- * const kind = CertificateKind.UnregCert;
- *
  * @since 2.0.0
  * @category Variants
  */
@@ -104,11 +69,6 @@ export const UnregCert = CML.CertificateKind.UnregCert;
 
 /**
  * VoteDelegCert variant of the CertificateKind enum
- *
- * @example
- * import { CertificateKind } from "@lucid-evolution/experimental";
- *
- * const kind = CertificateKind.VoteDelegCert;
  *
  * @since 2.0.0
  * @category Variants
@@ -118,11 +78,6 @@ export const VoteDelegCert = CML.CertificateKind.VoteDelegCert;
 /**
  * StakeVoteDelegCert variant of the CertificateKind enum
  *
- * @example
- * import { CertificateKind } from "@lucid-evolution/experimental";
- *
- * const kind = CertificateKind.StakeVoteDelegCert;
- *
  * @since 2.0.0
  * @category Variants
  */
@@ -130,11 +85,6 @@ export const StakeVoteDelegCert = CML.CertificateKind.StakeVoteDelegCert;
 
 /**
  * StakeRegDelegCert variant of the CertificateKind enum
- *
- * @example
- * import { CertificateKind } from "@lucid-evolution/experimental";
- *
- * const kind = CertificateKind.StakeRegDelegCert;
  *
  * @since 2.0.0
  * @category Variants
@@ -144,11 +94,6 @@ export const StakeRegDelegCert = CML.CertificateKind.StakeRegDelegCert;
 /**
  * VoteRegDelegCert variant of the CertificateKind enum
  *
- * @example
- * import { CertificateKind } from "@lucid-evolution/experimental";
- *
- * const kind = CertificateKind.VoteRegDelegCert;
- *
  * @since 2.0.0
  * @category Variants
  */
@@ -156,11 +101,6 @@ export const VoteRegDelegCert = CML.CertificateKind.VoteRegDelegCert;
 
 /**
  * StakeVoteRegDelegCert variant of the CertificateKind enum
- *
- * @example
- * import { CertificateKind } from "@lucid-evolution/experimental";
- *
- * const kind = CertificateKind.StakeVoteRegDelegCert;
  *
  * @since 2.0.0
  * @category Variants
@@ -170,11 +110,6 @@ export const StakeVoteRegDelegCert = CML.CertificateKind.StakeVoteRegDelegCert;
 /**
  * AuthCommitteeHotCert variant of the CertificateKind enum
  *
- * @example
- * import { CertificateKind } from "@lucid-evolution/experimental";
- *
- * const kind = CertificateKind.AuthCommitteeHotCert;
- *
  * @since 2.0.0
  * @category Variants
  */
@@ -182,11 +117,6 @@ export const AuthCommitteeHotCert = CML.CertificateKind.AuthCommitteeHotCert;
 
 /**
  * ResignCommitteeColdCert variant of the CertificateKind enum
- *
- * @example
- * import { CertificateKind } from "@lucid-evolution/experimental";
- *
- * const kind = CertificateKind.ResignCommitteeColdCert;
  *
  * @since 2.0.0
  * @category Variants
@@ -197,11 +127,6 @@ export const ResignCommitteeColdCert =
 /**
  * RegDrepCert variant of the CertificateKind enum
  *
- * @example
- * import { CertificateKind } from "@lucid-evolution/experimental";
- *
- * const kind = CertificateKind.RegDrepCert;
- *
  * @since 2.0.0
  * @category Variants
  */
@@ -209,11 +134,6 @@ export const RegDrepCert = CML.CertificateKind.RegDrepCert;
 
 /**
  * UnregDrepCert variant of the CertificateKind enum
- *
- * @example
- * import { CertificateKind } from "@lucid-evolution/experimental";
- *
- * const kind = CertificateKind.UnregDrepCert;
  *
  * @since 2.0.0
  * @category Variants
@@ -223,11 +143,6 @@ export const UnregDrepCert = CML.CertificateKind.UnregDrepCert;
 /**
  * UpdateDrepCert variant of the CertificateKind enum
  *
- * @example
- * import { CertificateKind } from "@lucid-evolution/experimental";
- *
- * const kind = CertificateKind.UpdateDrepCert;
- *
  * @since 2.0.0
  * @category Variants
  */
@@ -235,12 +150,6 @@ export const UpdateDrepCert = CML.CertificateKind.UpdateDrepCert;
 
 /**
  * Get all values of the CertificateKind enum
- *
- * @example
- * import { CertificateKind } from "@lucid-evolution/experimental";
- *
- * const allValues = CertificateKind.values();
- * console.log(allValues);
  *
  * @since 2.0.0
  * @category Utils
@@ -267,12 +176,6 @@ export const values = (): Array<CML.CertificateKind> => [
 
 /**
  * Convert CertificateKind enum value to string
- *
- * @example
- * import { CertificateKind } from "@lucid-evolution/experimental";
- *
- * const name = CertificateKind.toString(CML.CertificateKind.StakeRegistration);
- * console.log(name); // "StakeRegistration"
  *
  * @since 2.0.0
  * @category Utils
@@ -320,12 +223,6 @@ export const toString = (value: CML.CertificateKind): string => {
 
 /**
  * Convert string to CertificateKind enum value
- *
- * @example
- * import { CertificateKind } from "@lucid-evolution/experimental";
- *
- * const value = CertificateKind.fromString("StakeRegistration");
- * console.log(value); // Some(CML.CertificateKind.StakeRegistration)
  *
  * @since 2.0.0
  * @category Utils

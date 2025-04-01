@@ -29,25 +29,13 @@ export class AuthCommitteeHotCertError extends Data.TaggedError(
 /**
  * Method free of AuthCommitteeHotCert
  *
- * @example
- * import { AuthCommitteeHotCert } from "@lucid-evolution/experimental";
- * import { Effect } from "effect";
- *
- * // Using Effect for safe execution with error handling
- * Effect.gen(function*() {
- * // Assume we have a AuthCommitteeHotCert instance
- * const instance = ... ;
- *   const result = yield* AuthCommitteeHotCert.free(instance);
- *   console.log(result);
- * });
- *
  * @since 2.0.0
  * @category Methods
  */
-export const free = Effect.fn(
-  (
-    instance: CML.AuthCommitteeHotCert,
-  ): Effect.Effect<void, AuthCommitteeHotCertError> =>
+export const free: (
+  instance: CML.AuthCommitteeHotCert,
+) => Effect.Effect<void, AuthCommitteeHotCertError> = Effect.fn(
+  (instance: CML.AuthCommitteeHotCert) =>
     Effect.try({
       try: () => instance.free(),
       catch: () =>
@@ -60,20 +48,6 @@ export const free = Effect.fn(
 /**
  * Unsafely calls instance.free without Effect wrapper
  *
- * @example
- * import { AuthCommitteeHotCert } from "@lucid-evolution/experimental";
- *
- * // Assume we have a AuthCommitteeHotCert instance
- * const instance = ... ;
- *
- * // Using try/catch for error handling
- * try {
- *   const result = AuthCommitteeHotCert.freeUnsafe(instance);
- *   console.log(result);
- * } catch (error) {
- *   console.error(`AuthCommitteeHotCert.freeUnsafe failed: ${error.message}`);
- * }
- *
  * @since 2.0.0
  * @category MethodsUnsafe
  */
@@ -83,25 +57,13 @@ export const freeUnsafe = (instance: CML.AuthCommitteeHotCert): void =>
 /**
  * Method toCborBytes of AuthCommitteeHotCert
  *
- * @example
- * import { AuthCommitteeHotCert } from "@lucid-evolution/experimental";
- * import { Effect } from "effect";
- *
- * // Using Effect for safe execution with error handling
- * Effect.gen(function*() {
- * // Assume we have a AuthCommitteeHotCert instance
- * const instance = ... ;
- *   const result = yield* AuthCommitteeHotCert.toCborBytes(instance);
- *   console.log(result);
- * });
- *
  * @since 2.0.0
  * @category Methods
  */
-export const toCborBytes = Effect.fn(
-  (
-    instance: CML.AuthCommitteeHotCert,
-  ): Effect.Effect<Uint8Array, AuthCommitteeHotCertError> =>
+export const toCborBytes: (
+  instance: CML.AuthCommitteeHotCert,
+) => Effect.Effect<Uint8Array, AuthCommitteeHotCertError> = Effect.fn(
+  (instance: CML.AuthCommitteeHotCert) =>
     Effect.try({
       try: () => instance.to_cbor_bytes(),
       catch: () =>
@@ -114,20 +76,6 @@ export const toCborBytes = Effect.fn(
 /**
  * Unsafely calls instance.toCborBytes without Effect wrapper
  *
- * @example
- * import { AuthCommitteeHotCert } from "@lucid-evolution/experimental";
- *
- * // Assume we have a AuthCommitteeHotCert instance
- * const instance = ... ;
- *
- * // Using try/catch for error handling
- * try {
- *   const result = AuthCommitteeHotCert.toCborBytesUnsafe(instance);
- *   console.log(result);
- * } catch (error) {
- *   console.error(`AuthCommitteeHotCert.toCborBytesUnsafe failed: ${error.message}`);
- * }
- *
  * @since 2.0.0
  * @category MethodsUnsafe
  */
@@ -138,25 +86,13 @@ export const toCborBytesUnsafe = (
 /**
  * Method toCanonicalCborBytes of AuthCommitteeHotCert
  *
- * @example
- * import { AuthCommitteeHotCert } from "@lucid-evolution/experimental";
- * import { Effect } from "effect";
- *
- * // Using Effect for safe execution with error handling
- * Effect.gen(function*() {
- * // Assume we have a AuthCommitteeHotCert instance
- * const instance = ... ;
- *   const result = yield* AuthCommitteeHotCert.toCanonicalCborBytes(instance);
- *   console.log(result);
- * });
- *
  * @since 2.0.0
  * @category Methods
  */
-export const toCanonicalCborBytes = Effect.fn(
-  (
-    instance: CML.AuthCommitteeHotCert,
-  ): Effect.Effect<Uint8Array, AuthCommitteeHotCertError> =>
+export const toCanonicalCborBytes: (
+  instance: CML.AuthCommitteeHotCert,
+) => Effect.Effect<Uint8Array, AuthCommitteeHotCertError> = Effect.fn(
+  (instance: CML.AuthCommitteeHotCert) =>
     Effect.try({
       try: () => instance.to_canonical_cbor_bytes(),
       catch: () =>
@@ -169,20 +105,6 @@ export const toCanonicalCborBytes = Effect.fn(
 /**
  * Unsafely calls instance.toCanonicalCborBytes without Effect wrapper
  *
- * @example
- * import { AuthCommitteeHotCert } from "@lucid-evolution/experimental";
- *
- * // Assume we have a AuthCommitteeHotCert instance
- * const instance = ... ;
- *
- * // Using try/catch for error handling
- * try {
- *   const result = AuthCommitteeHotCert.toCanonicalCborBytesUnsafe(instance);
- *   console.log(result);
- * } catch (error) {
- *   console.error(`AuthCommitteeHotCert.toCanonicalCborBytesUnsafe failed: ${error.message}`);
- * }
- *
  * @since 2.0.0
  * @category MethodsUnsafe
  */
@@ -193,74 +115,42 @@ export const toCanonicalCborBytesUnsafe = (
 /**
  * Static method fromCborBytes of AuthCommitteeHotCert
  *
- * @example
- * import { AuthCommitteeHotCert } from "@lucid-evolution/experimental";
- * import { Effect } from "effect";
- *
- * // Using Effect for safe execution with error handling
- * Effect.gen(function*() {
- *
- *   const result = yield* AuthCommitteeHotCert.fromCborBytes( parameters );
- *   console.log(result);
- * });
- *
  * @since 2.0.0
  * @category Constructors
  */
-export const fromCborBytes = Effect.fn(function* (cborBytes: Uint8Array) {
-  return yield* Effect.try({
-    try: () => CML.AuthCommitteeHotCert.from_cbor_bytes(cborBytes),
-    catch: () =>
-      new AuthCommitteeHotCertError({
-        message: `AuthCommitteeHotCert.fromCborBytes failed with parameters: ${cborBytes}. Hint: Check byte length and encoding.`,
-      }),
+export const fromCborBytes: (
+  cborBytes: Uint8Array,
+) => Effect.Effect<CML.AuthCommitteeHotCert, AuthCommitteeHotCertError> =
+  Effect.fn(function* (cborBytes: Uint8Array) {
+    return yield* Effect.try({
+      try: () => CML.AuthCommitteeHotCert.from_cbor_bytes(cborBytes),
+      catch: () =>
+        new AuthCommitteeHotCertError({
+          message: `AuthCommitteeHotCert.fromCborBytes failed with parameters: ${cborBytes}. Hint: Check byte length and encoding.`,
+        }),
+    });
   });
-});
 
 /**
  * Unsafely calls AuthCommitteeHotCert.fromCborBytes without Effect wrapper
  *
- * @example
- * import { AuthCommitteeHotCert } from "@lucid-evolution/experimental";
- *
- *
- *
- * // Using try/catch for error handling
- * try {
- *   const result = AuthCommitteeHotCert.fromCborBytesUnsafe( parameters );
- *   console.log(result);
- * } catch (error) {
- *   console.error(`AuthCommitteeHotCert.fromCborBytesUnsafe failed: ${error.message}`);
- * }
- *
  * @since 2.0.0
  * @category ConstructorsUnsafe
  */
-export const fromCborBytesUnsafe = (cborBytes: Uint8Array) =>
-  Effect.runSync(fromCborBytes(cborBytes));
+export const fromCborBytesUnsafe = (
+  cborBytes: Uint8Array,
+): CML.AuthCommitteeHotCert => Effect.runSync(fromCborBytes(cborBytes));
 
 /**
  * Method toCborHex of AuthCommitteeHotCert
  *
- * @example
- * import { AuthCommitteeHotCert } from "@lucid-evolution/experimental";
- * import { Effect } from "effect";
- *
- * // Using Effect for safe execution with error handling
- * Effect.gen(function*() {
- * // Assume we have a AuthCommitteeHotCert instance
- * const instance = ... ;
- *   const result = yield* AuthCommitteeHotCert.toCborHex(instance);
- *   console.log(result);
- * });
- *
  * @since 2.0.0
  * @category Methods
  */
-export const toCborHex = Effect.fn(
-  (
-    instance: CML.AuthCommitteeHotCert,
-  ): Effect.Effect<string, AuthCommitteeHotCertError> =>
+export const toCborHex: (
+  instance: CML.AuthCommitteeHotCert,
+) => Effect.Effect<string, AuthCommitteeHotCertError> = Effect.fn(
+  (instance: CML.AuthCommitteeHotCert) =>
     Effect.try({
       try: () => instance.to_cbor_hex(),
       catch: () =>
@@ -273,20 +163,6 @@ export const toCborHex = Effect.fn(
 /**
  * Unsafely calls instance.toCborHex without Effect wrapper
  *
- * @example
- * import { AuthCommitteeHotCert } from "@lucid-evolution/experimental";
- *
- * // Assume we have a AuthCommitteeHotCert instance
- * const instance = ... ;
- *
- * // Using try/catch for error handling
- * try {
- *   const result = AuthCommitteeHotCert.toCborHexUnsafe(instance);
- *   console.log(result);
- * } catch (error) {
- *   console.error(`AuthCommitteeHotCert.toCborHexUnsafe failed: ${error.message}`);
- * }
- *
  * @since 2.0.0
  * @category MethodsUnsafe
  */
@@ -296,25 +172,13 @@ export const toCborHexUnsafe = (instance: CML.AuthCommitteeHotCert): string =>
 /**
  * Method toCanonicalCborHex of AuthCommitteeHotCert
  *
- * @example
- * import { AuthCommitteeHotCert } from "@lucid-evolution/experimental";
- * import { Effect } from "effect";
- *
- * // Using Effect for safe execution with error handling
- * Effect.gen(function*() {
- * // Assume we have a AuthCommitteeHotCert instance
- * const instance = ... ;
- *   const result = yield* AuthCommitteeHotCert.toCanonicalCborHex(instance);
- *   console.log(result);
- * });
- *
  * @since 2.0.0
  * @category Methods
  */
-export const toCanonicalCborHex = Effect.fn(
-  (
-    instance: CML.AuthCommitteeHotCert,
-  ): Effect.Effect<string, AuthCommitteeHotCertError> =>
+export const toCanonicalCborHex: (
+  instance: CML.AuthCommitteeHotCert,
+) => Effect.Effect<string, AuthCommitteeHotCertError> = Effect.fn(
+  (instance: CML.AuthCommitteeHotCert) =>
     Effect.try({
       try: () => instance.to_canonical_cbor_hex(),
       catch: () =>
@@ -327,20 +191,6 @@ export const toCanonicalCborHex = Effect.fn(
 /**
  * Unsafely calls instance.toCanonicalCborHex without Effect wrapper
  *
- * @example
- * import { AuthCommitteeHotCert } from "@lucid-evolution/experimental";
- *
- * // Assume we have a AuthCommitteeHotCert instance
- * const instance = ... ;
- *
- * // Using try/catch for error handling
- * try {
- *   const result = AuthCommitteeHotCert.toCanonicalCborHexUnsafe(instance);
- *   console.log(result);
- * } catch (error) {
- *   console.error(`AuthCommitteeHotCert.toCanonicalCborHexUnsafe failed: ${error.message}`);
- * }
- *
  * @since 2.0.0
  * @category MethodsUnsafe
  */
@@ -351,74 +201,42 @@ export const toCanonicalCborHexUnsafe = (
 /**
  * Static method fromCborHex of AuthCommitteeHotCert
  *
- * @example
- * import { AuthCommitteeHotCert } from "@lucid-evolution/experimental";
- * import { Effect } from "effect";
- *
- * // Using Effect for safe execution with error handling
- * Effect.gen(function*() {
- *
- *   const result = yield* AuthCommitteeHotCert.fromCborHex( parameters );
- *   console.log(result);
- * });
- *
  * @since 2.0.0
  * @category Constructors
  */
-export const fromCborHex = Effect.fn(function* (cborBytes: string) {
-  return yield* Effect.try({
-    try: () => CML.AuthCommitteeHotCert.from_cbor_hex(cborBytes),
-    catch: () =>
-      new AuthCommitteeHotCertError({
-        message: `AuthCommitteeHotCert.fromCborHex failed with parameters: ${cborBytes}. Hint: Make sure it's a valid hex string representing CBOR data.`,
-      }),
+export const fromCborHex: (
+  cborBytes: string,
+) => Effect.Effect<CML.AuthCommitteeHotCert, AuthCommitteeHotCertError> =
+  Effect.fn(function* (cborBytes: string) {
+    return yield* Effect.try({
+      try: () => CML.AuthCommitteeHotCert.from_cbor_hex(cborBytes),
+      catch: () =>
+        new AuthCommitteeHotCertError({
+          message: `AuthCommitteeHotCert.fromCborHex failed with parameters: ${cborBytes}. Hint: Make sure it's a valid hex string representing CBOR data.`,
+        }),
+    });
   });
-});
 
 /**
  * Unsafely calls AuthCommitteeHotCert.fromCborHex without Effect wrapper
  *
- * @example
- * import { AuthCommitteeHotCert } from "@lucid-evolution/experimental";
- *
- *
- *
- * // Using try/catch for error handling
- * try {
- *   const result = AuthCommitteeHotCert.fromCborHexUnsafe( parameters );
- *   console.log(result);
- * } catch (error) {
- *   console.error(`AuthCommitteeHotCert.fromCborHexUnsafe failed: ${error.message}`);
- * }
- *
  * @since 2.0.0
  * @category ConstructorsUnsafe
  */
-export const fromCborHexUnsafe = (cborBytes: string) =>
-  Effect.runSync(fromCborHex(cborBytes));
+export const fromCborHexUnsafe = (
+  cborBytes: string,
+): CML.AuthCommitteeHotCert => Effect.runSync(fromCborHex(cborBytes));
 
 /**
  * Method toJson of AuthCommitteeHotCert
  *
- * @example
- * import { AuthCommitteeHotCert } from "@lucid-evolution/experimental";
- * import { Effect } from "effect";
- *
- * // Using Effect for safe execution with error handling
- * Effect.gen(function*() {
- * // Assume we have a AuthCommitteeHotCert instance
- * const instance = ... ;
- *   const result = yield* AuthCommitteeHotCert.toJson(instance);
- *   console.log(result);
- * });
- *
  * @since 2.0.0
  * @category Methods
  */
-export const toJson = Effect.fn(
-  (
-    instance: CML.AuthCommitteeHotCert,
-  ): Effect.Effect<string, AuthCommitteeHotCertError> =>
+export const toJson: (
+  instance: CML.AuthCommitteeHotCert,
+) => Effect.Effect<string, AuthCommitteeHotCertError> = Effect.fn(
+  (instance: CML.AuthCommitteeHotCert) =>
     Effect.try({
       try: () => instance.to_json(),
       catch: () =>
@@ -431,20 +249,6 @@ export const toJson = Effect.fn(
 /**
  * Unsafely calls instance.toJson without Effect wrapper
  *
- * @example
- * import { AuthCommitteeHotCert } from "@lucid-evolution/experimental";
- *
- * // Assume we have a AuthCommitteeHotCert instance
- * const instance = ... ;
- *
- * // Using try/catch for error handling
- * try {
- *   const result = AuthCommitteeHotCert.toJsonUnsafe(instance);
- *   console.log(result);
- * } catch (error) {
- *   console.error(`AuthCommitteeHotCert.toJsonUnsafe failed: ${error.message}`);
- * }
- *
  * @since 2.0.0
  * @category MethodsUnsafe
  */
@@ -454,25 +258,13 @@ export const toJsonUnsafe = (instance: CML.AuthCommitteeHotCert): string =>
 /**
  * Method toJsValue of AuthCommitteeHotCert
  *
- * @example
- * import { AuthCommitteeHotCert } from "@lucid-evolution/experimental";
- * import { Effect } from "effect";
- *
- * // Using Effect for safe execution with error handling
- * Effect.gen(function*() {
- * // Assume we have a AuthCommitteeHotCert instance
- * const instance = ... ;
- *   const result = yield* AuthCommitteeHotCert.toJsValue(instance);
- *   console.log(result);
- * });
- *
  * @since 2.0.0
  * @category Methods
  */
-export const toJsValue = Effect.fn(
-  (
-    instance: CML.AuthCommitteeHotCert,
-  ): Effect.Effect<any, AuthCommitteeHotCertError> =>
+export const toJsValue: (
+  instance: CML.AuthCommitteeHotCert,
+) => Effect.Effect<any, AuthCommitteeHotCertError> = Effect.fn(
+  (instance: CML.AuthCommitteeHotCert) =>
     Effect.try({
       try: () => instance.to_js_value(),
       catch: () =>
@@ -485,20 +277,6 @@ export const toJsValue = Effect.fn(
 /**
  * Unsafely calls instance.toJsValue without Effect wrapper
  *
- * @example
- * import { AuthCommitteeHotCert } from "@lucid-evolution/experimental";
- *
- * // Assume we have a AuthCommitteeHotCert instance
- * const instance = ... ;
- *
- * // Using try/catch for error handling
- * try {
- *   const result = AuthCommitteeHotCert.toJsValueUnsafe(instance);
- *   console.log(result);
- * } catch (error) {
- *   console.error(`AuthCommitteeHotCert.toJsValueUnsafe failed: ${error.message}`);
- * }
- *
  * @since 2.0.0
  * @category MethodsUnsafe
  */
@@ -508,73 +286,41 @@ export const toJsValueUnsafe = (instance: CML.AuthCommitteeHotCert): any =>
 /**
  * Static method fromJson of AuthCommitteeHotCert
  *
- * @example
- * import { AuthCommitteeHotCert } from "@lucid-evolution/experimental";
- * import { Effect } from "effect";
- *
- * // Using Effect for safe execution with error handling
- * Effect.gen(function*() {
- *
- *   const result = yield* AuthCommitteeHotCert.fromJson( parameters );
- *   console.log(result);
- * });
- *
  * @since 2.0.0
  * @category Constructors
  */
-export const fromJson = Effect.fn(function* (json: string) {
-  return yield* Effect.try({
-    try: () => CML.AuthCommitteeHotCert.from_json(json),
-    catch: () =>
-      new AuthCommitteeHotCertError({
-        message: `AuthCommitteeHotCert.fromJson failed with parameters: ${json}. Hint: Validate your JSON structure.`,
-      }),
+export const fromJson: (
+  json: string,
+) => Effect.Effect<CML.AuthCommitteeHotCert, AuthCommitteeHotCertError> =
+  Effect.fn(function* (json: string) {
+    return yield* Effect.try({
+      try: () => CML.AuthCommitteeHotCert.from_json(json),
+      catch: () =>
+        new AuthCommitteeHotCertError({
+          message: `AuthCommitteeHotCert.fromJson failed with parameters: ${json}. Hint: Validate your JSON structure.`,
+        }),
+    });
   });
-});
 
 /**
  * Unsafely calls AuthCommitteeHotCert.fromJson without Effect wrapper
  *
- * @example
- * import { AuthCommitteeHotCert } from "@lucid-evolution/experimental";
- *
- *
- *
- * // Using try/catch for error handling
- * try {
- *   const result = AuthCommitteeHotCert.fromJsonUnsafe( parameters );
- *   console.log(result);
- * } catch (error) {
- *   console.error(`AuthCommitteeHotCert.fromJsonUnsafe failed: ${error.message}`);
- * }
- *
  * @since 2.0.0
  * @category ConstructorsUnsafe
  */
-export const fromJsonUnsafe = (json: string) => Effect.runSync(fromJson(json));
+export const fromJsonUnsafe = (json: string): CML.AuthCommitteeHotCert =>
+  Effect.runSync(fromJson(json));
 
 /**
  * Method committeeColdCredential of AuthCommitteeHotCert
  *
- * @example
- * import { AuthCommitteeHotCert } from "@lucid-evolution/experimental";
- * import { Effect } from "effect";
- *
- * // Using Effect for safe execution with error handling
- * Effect.gen(function*() {
- * // Assume we have a AuthCommitteeHotCert instance
- * const instance = ... ;
- *   const result = yield* AuthCommitteeHotCert.committeeColdCredential(instance);
- *   console.log(result);
- * });
- *
  * @since 2.0.0
  * @category Methods
  */
-export const committeeColdCredential = Effect.fn(
-  (
-    instance: CML.AuthCommitteeHotCert,
-  ): Effect.Effect<CML.Credential, AuthCommitteeHotCertError> =>
+export const committeeColdCredential: (
+  instance: CML.AuthCommitteeHotCert,
+) => Effect.Effect<CML.Credential, AuthCommitteeHotCertError> = Effect.fn(
+  (instance: CML.AuthCommitteeHotCert) =>
     Effect.try({
       try: () => instance.committee_cold_credential(),
       catch: () =>
@@ -587,20 +333,6 @@ export const committeeColdCredential = Effect.fn(
 /**
  * Unsafely calls instance.committeeColdCredential without Effect wrapper
  *
- * @example
- * import { AuthCommitteeHotCert } from "@lucid-evolution/experimental";
- *
- * // Assume we have a AuthCommitteeHotCert instance
- * const instance = ... ;
- *
- * // Using try/catch for error handling
- * try {
- *   const result = AuthCommitteeHotCert.committeeColdCredentialUnsafe(instance);
- *   console.log(result);
- * } catch (error) {
- *   console.error(`AuthCommitteeHotCert.committeeColdCredentialUnsafe failed: ${error.message}`);
- * }
- *
  * @since 2.0.0
  * @category MethodsUnsafe
  */
@@ -611,25 +343,13 @@ export const committeeColdCredentialUnsafe = (
 /**
  * Method committeeHotCredential of AuthCommitteeHotCert
  *
- * @example
- * import { AuthCommitteeHotCert } from "@lucid-evolution/experimental";
- * import { Effect } from "effect";
- *
- * // Using Effect for safe execution with error handling
- * Effect.gen(function*() {
- * // Assume we have a AuthCommitteeHotCert instance
- * const instance = ... ;
- *   const result = yield* AuthCommitteeHotCert.committeeHotCredential(instance);
- *   console.log(result);
- * });
- *
  * @since 2.0.0
  * @category Methods
  */
-export const committeeHotCredential = Effect.fn(
-  (
-    instance: CML.AuthCommitteeHotCert,
-  ): Effect.Effect<CML.Credential, AuthCommitteeHotCertError> =>
+export const committeeHotCredential: (
+  instance: CML.AuthCommitteeHotCert,
+) => Effect.Effect<CML.Credential, AuthCommitteeHotCertError> = Effect.fn(
+  (instance: CML.AuthCommitteeHotCert) =>
     Effect.try({
       try: () => instance.committee_hot_credential(),
       catch: () =>
@@ -642,20 +362,6 @@ export const committeeHotCredential = Effect.fn(
 /**
  * Unsafely calls instance.committeeHotCredential without Effect wrapper
  *
- * @example
- * import { AuthCommitteeHotCert } from "@lucid-evolution/experimental";
- *
- * // Assume we have a AuthCommitteeHotCert instance
- * const instance = ... ;
- *
- * // Using try/catch for error handling
- * try {
- *   const result = AuthCommitteeHotCert.committeeHotCredentialUnsafe(instance);
- *   console.log(result);
- * } catch (error) {
- *   console.error(`AuthCommitteeHotCert.committeeHotCredentialUnsafe failed: ${error.message}`);
- * }
- *
  * @since 2.0.0
  * @category MethodsUnsafe
  */
@@ -666,52 +372,32 @@ export const committeeHotCredentialUnsafe = (
 /**
  * Static method _new of AuthCommitteeHotCert
  *
- * @example
- * import { AuthCommitteeHotCert } from "@lucid-evolution/experimental";
- * import { Effect } from "effect";
- *
- * // Using Effect for safe execution with error handling
- * Effect.gen(function*() {
- *
- *   const result = yield* AuthCommitteeHotCert._new( parameters );
- *   console.log(result);
- * });
- *
  * @since 2.0.0
  * @category Constructors
  */
-export const _new = Effect.fn(function* (
+export const _new: (
   committeeColdCredential: CML.Credential,
   committeeHotCredential: CML.Credential,
-) {
-  return yield* Effect.try({
-    try: () =>
-      CML.AuthCommitteeHotCert.new(
-        committeeColdCredential,
-        committeeHotCredential,
-      ),
-    catch: () =>
-      new AuthCommitteeHotCertError({
-        message: `AuthCommitteeHotCert._new failed with parameters: ${committeeColdCredential} (Credential), ${committeeHotCredential} (Credential). `,
-      }),
+) => Effect.Effect<CML.AuthCommitteeHotCert, AuthCommitteeHotCertError> =
+  Effect.fn(function* (
+    committeeColdCredential: CML.Credential,
+    committeeHotCredential: CML.Credential,
+  ) {
+    return yield* Effect.try({
+      try: () =>
+        CML.AuthCommitteeHotCert.new(
+          committeeColdCredential,
+          committeeHotCredential,
+        ),
+      catch: () =>
+        new AuthCommitteeHotCertError({
+          message: `AuthCommitteeHotCert._new failed with parameters: ${committeeColdCredential} (Credential), ${committeeHotCredential} (Credential). `,
+        }),
+    });
   });
-});
 
 /**
  * Unsafely calls AuthCommitteeHotCert._new without Effect wrapper
- *
- * @example
- * import { AuthCommitteeHotCert } from "@lucid-evolution/experimental";
- *
- *
- *
- * // Using try/catch for error handling
- * try {
- *   const result = AuthCommitteeHotCert._newUnsafe( parameters );
- *   console.log(result);
- * } catch (error) {
- *   console.error(`AuthCommitteeHotCert._newUnsafe failed: ${error.message}`);
- * }
  *
  * @since 2.0.0
  * @category ConstructorsUnsafe
@@ -719,4 +405,5 @@ export const _new = Effect.fn(function* (
 export const _newUnsafe = (
   committeeColdCredential: CML.Credential,
   committeeHotCredential: CML.Credential,
-) => Effect.runSync(_new(committeeColdCredential, committeeHotCredential));
+): CML.AuthCommitteeHotCert =>
+  Effect.runSync(_new(committeeColdCredential, committeeHotCredential));

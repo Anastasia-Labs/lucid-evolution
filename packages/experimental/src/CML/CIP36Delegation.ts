@@ -29,23 +29,13 @@ export class CIP36DelegationError extends Data.TaggedError(
 /**
  * Method free of CIP36Delegation
  *
- * @example
- * import { CIP36Delegation } from "@lucid-evolution/experimental";
- * import { Effect } from "effect";
- *
- * // Using Effect for safe execution with error handling
- * Effect.gen(function*() {
- * // Assume we have a CIP36Delegation instance
- * const instance = ... ;
- *   const result = yield* CIP36Delegation.free(instance);
- *   console.log(result);
- * });
- *
  * @since 2.0.0
  * @category Methods
  */
-export const free = Effect.fn(
-  (instance: CML.CIP36Delegation): Effect.Effect<void, CIP36DelegationError> =>
+export const free: (
+  instance: CML.CIP36Delegation,
+) => Effect.Effect<void, CIP36DelegationError> = Effect.fn(
+  (instance: CML.CIP36Delegation) =>
     Effect.try({
       try: () => instance.free(),
       catch: () =>
@@ -58,20 +48,6 @@ export const free = Effect.fn(
 /**
  * Unsafely calls instance.free without Effect wrapper
  *
- * @example
- * import { CIP36Delegation } from "@lucid-evolution/experimental";
- *
- * // Assume we have a CIP36Delegation instance
- * const instance = ... ;
- *
- * // Using try/catch for error handling
- * try {
- *   const result = CIP36Delegation.freeUnsafe(instance);
- *   console.log(result);
- * } catch (error) {
- *   console.error(`CIP36Delegation.freeUnsafe failed: ${error.message}`);
- * }
- *
  * @since 2.0.0
  * @category MethodsUnsafe
  */
@@ -81,25 +57,13 @@ export const freeUnsafe = (instance: CML.CIP36Delegation): void =>
 /**
  * Method toCborBytes of CIP36Delegation
  *
- * @example
- * import { CIP36Delegation } from "@lucid-evolution/experimental";
- * import { Effect } from "effect";
- *
- * // Using Effect for safe execution with error handling
- * Effect.gen(function*() {
- * // Assume we have a CIP36Delegation instance
- * const instance = ... ;
- *   const result = yield* CIP36Delegation.toCborBytes(instance);
- *   console.log(result);
- * });
- *
  * @since 2.0.0
  * @category Methods
  */
-export const toCborBytes = Effect.fn(
-  (
-    instance: CML.CIP36Delegation,
-  ): Effect.Effect<Uint8Array, CIP36DelegationError> =>
+export const toCborBytes: (
+  instance: CML.CIP36Delegation,
+) => Effect.Effect<Uint8Array, CIP36DelegationError> = Effect.fn(
+  (instance: CML.CIP36Delegation) =>
     Effect.try({
       try: () => instance.to_cbor_bytes(),
       catch: () =>
@@ -112,20 +76,6 @@ export const toCborBytes = Effect.fn(
 /**
  * Unsafely calls instance.toCborBytes without Effect wrapper
  *
- * @example
- * import { CIP36Delegation } from "@lucid-evolution/experimental";
- *
- * // Assume we have a CIP36Delegation instance
- * const instance = ... ;
- *
- * // Using try/catch for error handling
- * try {
- *   const result = CIP36Delegation.toCborBytesUnsafe(instance);
- *   console.log(result);
- * } catch (error) {
- *   console.error(`CIP36Delegation.toCborBytesUnsafe failed: ${error.message}`);
- * }
- *
  * @since 2.0.0
  * @category MethodsUnsafe
  */
@@ -135,25 +85,13 @@ export const toCborBytesUnsafe = (instance: CML.CIP36Delegation): Uint8Array =>
 /**
  * Method toCanonicalCborBytes of CIP36Delegation
  *
- * @example
- * import { CIP36Delegation } from "@lucid-evolution/experimental";
- * import { Effect } from "effect";
- *
- * // Using Effect for safe execution with error handling
- * Effect.gen(function*() {
- * // Assume we have a CIP36Delegation instance
- * const instance = ... ;
- *   const result = yield* CIP36Delegation.toCanonicalCborBytes(instance);
- *   console.log(result);
- * });
- *
  * @since 2.0.0
  * @category Methods
  */
-export const toCanonicalCborBytes = Effect.fn(
-  (
-    instance: CML.CIP36Delegation,
-  ): Effect.Effect<Uint8Array, CIP36DelegationError> =>
+export const toCanonicalCborBytes: (
+  instance: CML.CIP36Delegation,
+) => Effect.Effect<Uint8Array, CIP36DelegationError> = Effect.fn(
+  (instance: CML.CIP36Delegation) =>
     Effect.try({
       try: () => instance.to_canonical_cbor_bytes(),
       catch: () =>
@@ -166,20 +104,6 @@ export const toCanonicalCborBytes = Effect.fn(
 /**
  * Unsafely calls instance.toCanonicalCborBytes without Effect wrapper
  *
- * @example
- * import { CIP36Delegation } from "@lucid-evolution/experimental";
- *
- * // Assume we have a CIP36Delegation instance
- * const instance = ... ;
- *
- * // Using try/catch for error handling
- * try {
- *   const result = CIP36Delegation.toCanonicalCborBytesUnsafe(instance);
- *   console.log(result);
- * } catch (error) {
- *   console.error(`CIP36Delegation.toCanonicalCborBytesUnsafe failed: ${error.message}`);
- * }
- *
  * @since 2.0.0
  * @category MethodsUnsafe
  */
@@ -190,74 +114,43 @@ export const toCanonicalCborBytesUnsafe = (
 /**
  * Static method fromCborBytes of CIP36Delegation
  *
- * @example
- * import { CIP36Delegation } from "@lucid-evolution/experimental";
- * import { Effect } from "effect";
- *
- * // Using Effect for safe execution with error handling
- * Effect.gen(function*() {
- *
- *   const result = yield* CIP36Delegation.fromCborBytes( parameters );
- *   console.log(result);
- * });
- *
  * @since 2.0.0
  * @category Constructors
  */
-export const fromCborBytes = Effect.fn(function* (cborBytes: Uint8Array) {
-  return yield* Effect.try({
-    try: () => CML.CIP36Delegation.from_cbor_bytes(cborBytes),
-    catch: () =>
-      new CIP36DelegationError({
-        message: `CIP36Delegation.fromCborBytes failed with parameters: ${cborBytes}. Hint: Check byte length and encoding.`,
-      }),
-  });
-});
+export const fromCborBytes: (
+  cborBytes: Uint8Array,
+) => Effect.Effect<CML.CIP36Delegation, CIP36DelegationError> = Effect.fn(
+  function* (cborBytes: Uint8Array) {
+    return yield* Effect.try({
+      try: () => CML.CIP36Delegation.from_cbor_bytes(cborBytes),
+      catch: () =>
+        new CIP36DelegationError({
+          message: `CIP36Delegation.fromCborBytes failed with parameters: ${cborBytes}. Hint: Check byte length and encoding.`,
+        }),
+    });
+  },
+);
 
 /**
  * Unsafely calls CIP36Delegation.fromCborBytes without Effect wrapper
  *
- * @example
- * import { CIP36Delegation } from "@lucid-evolution/experimental";
- *
- *
- *
- * // Using try/catch for error handling
- * try {
- *   const result = CIP36Delegation.fromCborBytesUnsafe( parameters );
- *   console.log(result);
- * } catch (error) {
- *   console.error(`CIP36Delegation.fromCborBytesUnsafe failed: ${error.message}`);
- * }
- *
  * @since 2.0.0
  * @category ConstructorsUnsafe
  */
-export const fromCborBytesUnsafe = (cborBytes: Uint8Array) =>
-  Effect.runSync(fromCborBytes(cborBytes));
+export const fromCborBytesUnsafe = (
+  cborBytes: Uint8Array,
+): CML.CIP36Delegation => Effect.runSync(fromCborBytes(cborBytes));
 
 /**
  * Method toCborHex of CIP36Delegation
  *
- * @example
- * import { CIP36Delegation } from "@lucid-evolution/experimental";
- * import { Effect } from "effect";
- *
- * // Using Effect for safe execution with error handling
- * Effect.gen(function*() {
- * // Assume we have a CIP36Delegation instance
- * const instance = ... ;
- *   const result = yield* CIP36Delegation.toCborHex(instance);
- *   console.log(result);
- * });
- *
  * @since 2.0.0
  * @category Methods
  */
-export const toCborHex = Effect.fn(
-  (
-    instance: CML.CIP36Delegation,
-  ): Effect.Effect<string, CIP36DelegationError> =>
+export const toCborHex: (
+  instance: CML.CIP36Delegation,
+) => Effect.Effect<string, CIP36DelegationError> = Effect.fn(
+  (instance: CML.CIP36Delegation) =>
     Effect.try({
       try: () => instance.to_cbor_hex(),
       catch: () =>
@@ -270,20 +163,6 @@ export const toCborHex = Effect.fn(
 /**
  * Unsafely calls instance.toCborHex without Effect wrapper
  *
- * @example
- * import { CIP36Delegation } from "@lucid-evolution/experimental";
- *
- * // Assume we have a CIP36Delegation instance
- * const instance = ... ;
- *
- * // Using try/catch for error handling
- * try {
- *   const result = CIP36Delegation.toCborHexUnsafe(instance);
- *   console.log(result);
- * } catch (error) {
- *   console.error(`CIP36Delegation.toCborHexUnsafe failed: ${error.message}`);
- * }
- *
  * @since 2.0.0
  * @category MethodsUnsafe
  */
@@ -293,25 +172,13 @@ export const toCborHexUnsafe = (instance: CML.CIP36Delegation): string =>
 /**
  * Method toCanonicalCborHex of CIP36Delegation
  *
- * @example
- * import { CIP36Delegation } from "@lucid-evolution/experimental";
- * import { Effect } from "effect";
- *
- * // Using Effect for safe execution with error handling
- * Effect.gen(function*() {
- * // Assume we have a CIP36Delegation instance
- * const instance = ... ;
- *   const result = yield* CIP36Delegation.toCanonicalCborHex(instance);
- *   console.log(result);
- * });
- *
  * @since 2.0.0
  * @category Methods
  */
-export const toCanonicalCborHex = Effect.fn(
-  (
-    instance: CML.CIP36Delegation,
-  ): Effect.Effect<string, CIP36DelegationError> =>
+export const toCanonicalCborHex: (
+  instance: CML.CIP36Delegation,
+) => Effect.Effect<string, CIP36DelegationError> = Effect.fn(
+  (instance: CML.CIP36Delegation) =>
     Effect.try({
       try: () => instance.to_canonical_cbor_hex(),
       catch: () =>
@@ -324,20 +191,6 @@ export const toCanonicalCborHex = Effect.fn(
 /**
  * Unsafely calls instance.toCanonicalCborHex without Effect wrapper
  *
- * @example
- * import { CIP36Delegation } from "@lucid-evolution/experimental";
- *
- * // Assume we have a CIP36Delegation instance
- * const instance = ... ;
- *
- * // Using try/catch for error handling
- * try {
- *   const result = CIP36Delegation.toCanonicalCborHexUnsafe(instance);
- *   console.log(result);
- * } catch (error) {
- *   console.error(`CIP36Delegation.toCanonicalCborHexUnsafe failed: ${error.message}`);
- * }
- *
  * @since 2.0.0
  * @category MethodsUnsafe
  */
@@ -348,74 +201,42 @@ export const toCanonicalCborHexUnsafe = (
 /**
  * Static method fromCborHex of CIP36Delegation
  *
- * @example
- * import { CIP36Delegation } from "@lucid-evolution/experimental";
- * import { Effect } from "effect";
- *
- * // Using Effect for safe execution with error handling
- * Effect.gen(function*() {
- *
- *   const result = yield* CIP36Delegation.fromCborHex( parameters );
- *   console.log(result);
- * });
- *
  * @since 2.0.0
  * @category Constructors
  */
-export const fromCborHex = Effect.fn(function* (cborBytes: string) {
-  return yield* Effect.try({
-    try: () => CML.CIP36Delegation.from_cbor_hex(cborBytes),
-    catch: () =>
-      new CIP36DelegationError({
-        message: `CIP36Delegation.fromCborHex failed with parameters: ${cborBytes}. Hint: Make sure it's a valid hex string representing CBOR data.`,
-      }),
-  });
-});
+export const fromCborHex: (
+  cborBytes: string,
+) => Effect.Effect<CML.CIP36Delegation, CIP36DelegationError> = Effect.fn(
+  function* (cborBytes: string) {
+    return yield* Effect.try({
+      try: () => CML.CIP36Delegation.from_cbor_hex(cborBytes),
+      catch: () =>
+        new CIP36DelegationError({
+          message: `CIP36Delegation.fromCborHex failed with parameters: ${cborBytes}. Hint: Make sure it's a valid hex string representing CBOR data.`,
+        }),
+    });
+  },
+);
 
 /**
  * Unsafely calls CIP36Delegation.fromCborHex without Effect wrapper
  *
- * @example
- * import { CIP36Delegation } from "@lucid-evolution/experimental";
- *
- *
- *
- * // Using try/catch for error handling
- * try {
- *   const result = CIP36Delegation.fromCborHexUnsafe( parameters );
- *   console.log(result);
- * } catch (error) {
- *   console.error(`CIP36Delegation.fromCborHexUnsafe failed: ${error.message}`);
- * }
- *
  * @since 2.0.0
  * @category ConstructorsUnsafe
  */
-export const fromCborHexUnsafe = (cborBytes: string) =>
+export const fromCborHexUnsafe = (cborBytes: string): CML.CIP36Delegation =>
   Effect.runSync(fromCborHex(cborBytes));
 
 /**
  * Method toJson of CIP36Delegation
  *
- * @example
- * import { CIP36Delegation } from "@lucid-evolution/experimental";
- * import { Effect } from "effect";
- *
- * // Using Effect for safe execution with error handling
- * Effect.gen(function*() {
- * // Assume we have a CIP36Delegation instance
- * const instance = ... ;
- *   const result = yield* CIP36Delegation.toJson(instance);
- *   console.log(result);
- * });
- *
  * @since 2.0.0
  * @category Methods
  */
-export const toJson = Effect.fn(
-  (
-    instance: CML.CIP36Delegation,
-  ): Effect.Effect<string, CIP36DelegationError> =>
+export const toJson: (
+  instance: CML.CIP36Delegation,
+) => Effect.Effect<string, CIP36DelegationError> = Effect.fn(
+  (instance: CML.CIP36Delegation) =>
     Effect.try({
       try: () => instance.to_json(),
       catch: () =>
@@ -428,20 +249,6 @@ export const toJson = Effect.fn(
 /**
  * Unsafely calls instance.toJson without Effect wrapper
  *
- * @example
- * import { CIP36Delegation } from "@lucid-evolution/experimental";
- *
- * // Assume we have a CIP36Delegation instance
- * const instance = ... ;
- *
- * // Using try/catch for error handling
- * try {
- *   const result = CIP36Delegation.toJsonUnsafe(instance);
- *   console.log(result);
- * } catch (error) {
- *   console.error(`CIP36Delegation.toJsonUnsafe failed: ${error.message}`);
- * }
- *
  * @since 2.0.0
  * @category MethodsUnsafe
  */
@@ -451,23 +258,13 @@ export const toJsonUnsafe = (instance: CML.CIP36Delegation): string =>
 /**
  * Method toJsValue of CIP36Delegation
  *
- * @example
- * import { CIP36Delegation } from "@lucid-evolution/experimental";
- * import { Effect } from "effect";
- *
- * // Using Effect for safe execution with error handling
- * Effect.gen(function*() {
- * // Assume we have a CIP36Delegation instance
- * const instance = ... ;
- *   const result = yield* CIP36Delegation.toJsValue(instance);
- *   console.log(result);
- * });
- *
  * @since 2.0.0
  * @category Methods
  */
-export const toJsValue = Effect.fn(
-  (instance: CML.CIP36Delegation): Effect.Effect<any, CIP36DelegationError> =>
+export const toJsValue: (
+  instance: CML.CIP36Delegation,
+) => Effect.Effect<any, CIP36DelegationError> = Effect.fn(
+  (instance: CML.CIP36Delegation) =>
     Effect.try({
       try: () => instance.to_js_value(),
       catch: () =>
@@ -480,20 +277,6 @@ export const toJsValue = Effect.fn(
 /**
  * Unsafely calls instance.toJsValue without Effect wrapper
  *
- * @example
- * import { CIP36Delegation } from "@lucid-evolution/experimental";
- *
- * // Assume we have a CIP36Delegation instance
- * const instance = ... ;
- *
- * // Using try/catch for error handling
- * try {
- *   const result = CIP36Delegation.toJsValueUnsafe(instance);
- *   console.log(result);
- * } catch (error) {
- *   console.error(`CIP36Delegation.toJsValueUnsafe failed: ${error.message}`);
- * }
- *
  * @since 2.0.0
  * @category MethodsUnsafe
  */
@@ -503,73 +286,42 @@ export const toJsValueUnsafe = (instance: CML.CIP36Delegation): any =>
 /**
  * Static method fromJson of CIP36Delegation
  *
- * @example
- * import { CIP36Delegation } from "@lucid-evolution/experimental";
- * import { Effect } from "effect";
- *
- * // Using Effect for safe execution with error handling
- * Effect.gen(function*() {
- *
- *   const result = yield* CIP36Delegation.fromJson( parameters );
- *   console.log(result);
- * });
- *
  * @since 2.0.0
  * @category Constructors
  */
-export const fromJson = Effect.fn(function* (json: string) {
-  return yield* Effect.try({
-    try: () => CML.CIP36Delegation.from_json(json),
-    catch: () =>
-      new CIP36DelegationError({
-        message: `CIP36Delegation.fromJson failed with parameters: ${json}. Hint: Validate your JSON structure.`,
-      }),
-  });
-});
+export const fromJson: (
+  json: string,
+) => Effect.Effect<CML.CIP36Delegation, CIP36DelegationError> = Effect.fn(
+  function* (json: string) {
+    return yield* Effect.try({
+      try: () => CML.CIP36Delegation.from_json(json),
+      catch: () =>
+        new CIP36DelegationError({
+          message: `CIP36Delegation.fromJson failed with parameters: ${json}. Hint: Validate your JSON structure.`,
+        }),
+    });
+  },
+);
 
 /**
  * Unsafely calls CIP36Delegation.fromJson without Effect wrapper
  *
- * @example
- * import { CIP36Delegation } from "@lucid-evolution/experimental";
- *
- *
- *
- * // Using try/catch for error handling
- * try {
- *   const result = CIP36Delegation.fromJsonUnsafe( parameters );
- *   console.log(result);
- * } catch (error) {
- *   console.error(`CIP36Delegation.fromJsonUnsafe failed: ${error.message}`);
- * }
- *
  * @since 2.0.0
  * @category ConstructorsUnsafe
  */
-export const fromJsonUnsafe = (json: string) => Effect.runSync(fromJson(json));
+export const fromJsonUnsafe = (json: string): CML.CIP36Delegation =>
+  Effect.runSync(fromJson(json));
 
 /**
  * Method votingPubKey of CIP36Delegation
  *
- * @example
- * import { CIP36Delegation } from "@lucid-evolution/experimental";
- * import { Effect } from "effect";
- *
- * // Using Effect for safe execution with error handling
- * Effect.gen(function*() {
- * // Assume we have a CIP36Delegation instance
- * const instance = ... ;
- *   const result = yield* CIP36Delegation.votingPubKey(instance);
- *   console.log(result);
- * });
- *
  * @since 2.0.0
  * @category Methods
  */
-export const votingPubKey = Effect.fn(
-  (
-    instance: CML.CIP36Delegation,
-  ): Effect.Effect<CML.PublicKey, CIP36DelegationError> =>
+export const votingPubKey: (
+  instance: CML.CIP36Delegation,
+) => Effect.Effect<CML.PublicKey, CIP36DelegationError> = Effect.fn(
+  (instance: CML.CIP36Delegation) =>
     Effect.try({
       try: () => instance.voting_pub_key(),
       catch: () =>
@@ -582,20 +334,6 @@ export const votingPubKey = Effect.fn(
 /**
  * Unsafely calls instance.votingPubKey without Effect wrapper
  *
- * @example
- * import { CIP36Delegation } from "@lucid-evolution/experimental";
- *
- * // Assume we have a CIP36Delegation instance
- * const instance = ... ;
- *
- * // Using try/catch for error handling
- * try {
- *   const result = CIP36Delegation.votingPubKeyUnsafe(instance);
- *   console.log(result);
- * } catch (error) {
- *   console.error(`CIP36Delegation.votingPubKeyUnsafe failed: ${error.message}`);
- * }
- *
  * @since 2.0.0
  * @category MethodsUnsafe
  */
@@ -606,25 +344,13 @@ export const votingPubKeyUnsafe = (
 /**
  * Method weight of CIP36Delegation
  *
- * @example
- * import { CIP36Delegation } from "@lucid-evolution/experimental";
- * import { Effect } from "effect";
- *
- * // Using Effect for safe execution with error handling
- * Effect.gen(function*() {
- * // Assume we have a CIP36Delegation instance
- * const instance = ... ;
- *   const result = yield* CIP36Delegation.weight(instance);
- *   console.log(result);
- * });
- *
  * @since 2.0.0
  * @category Methods
  */
-export const weight = Effect.fn(
-  (
-    instance: CML.CIP36Delegation,
-  ): Effect.Effect<number, CIP36DelegationError> =>
+export const weight: (
+  instance: CML.CIP36Delegation,
+) => Effect.Effect<number, CIP36DelegationError> = Effect.fn(
+  (instance: CML.CIP36Delegation) =>
     Effect.try({
       try: () => instance.weight(),
       catch: () =>
@@ -637,20 +363,6 @@ export const weight = Effect.fn(
 /**
  * Unsafely calls instance.weight without Effect wrapper
  *
- * @example
- * import { CIP36Delegation } from "@lucid-evolution/experimental";
- *
- * // Assume we have a CIP36Delegation instance
- * const instance = ... ;
- *
- * // Using try/catch for error handling
- * try {
- *   const result = CIP36Delegation.weightUnsafe(instance);
- *   console.log(result);
- * } catch (error) {
- *   console.error(`CIP36Delegation.weightUnsafe failed: ${error.message}`);
- * }
- *
  * @since 2.0.0
  * @category MethodsUnsafe
  */
@@ -660,51 +372,31 @@ export const weightUnsafe = (instance: CML.CIP36Delegation): number =>
 /**
  * Static method _new of CIP36Delegation
  *
- * @example
- * import { CIP36Delegation } from "@lucid-evolution/experimental";
- * import { Effect } from "effect";
- *
- * // Using Effect for safe execution with error handling
- * Effect.gen(function*() {
- *
- *   const result = yield* CIP36Delegation._new( parameters );
- *   console.log(result);
- * });
- *
  * @since 2.0.0
  * @category Constructors
  */
-export const _new = Effect.fn(function* (
+export const _new: (
   votingPubKey: CML.PublicKey,
   weight: number,
-) {
-  return yield* Effect.try({
-    try: () => CML.CIP36Delegation.new(votingPubKey, weight),
-    catch: () =>
-      new CIP36DelegationError({
-        message: `CIP36Delegation._new failed with parameters: ${votingPubKey} (PublicKey), ${weight}. `,
-      }),
-  });
-});
+) => Effect.Effect<CML.CIP36Delegation, CIP36DelegationError> = Effect.fn(
+  function* (votingPubKey: CML.PublicKey, weight: number) {
+    return yield* Effect.try({
+      try: () => CML.CIP36Delegation.new(votingPubKey, weight),
+      catch: () =>
+        new CIP36DelegationError({
+          message: `CIP36Delegation._new failed with parameters: ${votingPubKey} (PublicKey), ${weight}. `,
+        }),
+    });
+  },
+);
 
 /**
  * Unsafely calls CIP36Delegation._new without Effect wrapper
  *
- * @example
- * import { CIP36Delegation } from "@lucid-evolution/experimental";
- *
- *
- *
- * // Using try/catch for error handling
- * try {
- *   const result = CIP36Delegation._newUnsafe( parameters );
- *   console.log(result);
- * } catch (error) {
- *   console.error(`CIP36Delegation._newUnsafe failed: ${error.message}`);
- * }
- *
  * @since 2.0.0
  * @category ConstructorsUnsafe
  */
-export const _newUnsafe = (votingPubKey: CML.PublicKey, weight: number) =>
-  Effect.runSync(_new(votingPubKey, weight));
+export const _newUnsafe = (
+  votingPubKey: CML.PublicKey,
+  weight: number,
+): CML.CIP36Delegation => Effect.runSync(_new(votingPubKey, weight));

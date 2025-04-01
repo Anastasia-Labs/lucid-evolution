@@ -30,25 +30,13 @@ export class MapTransactionIndexToAuxiliaryDataError extends Data.TaggedError(
 /**
  * Method free of MapTransactionIndexToAuxiliaryData
  *
- * @example
- * import { MapTransactionIndexToAuxiliaryData } from "@lucid-evolution/experimental";
- * import { Effect } from "effect";
- *
- * // Using Effect for safe execution with error handling
- * Effect.gen(function*() {
- * // Assume we have a MapTransactionIndexToAuxiliaryData instance
- * const instance = ... ;
- *   const result = yield* MapTransactionIndexToAuxiliaryData.free(instance);
- *   console.log(result);
- * });
- *
  * @since 2.0.0
  * @category Methods
  */
-export const free = Effect.fn(
-  (
-    instance: CML.MapTransactionIndexToAuxiliaryData,
-  ): Effect.Effect<void, MapTransactionIndexToAuxiliaryDataError> =>
+export const free: (
+  instance: CML.MapTransactionIndexToAuxiliaryData,
+) => Effect.Effect<void, MapTransactionIndexToAuxiliaryDataError> = Effect.fn(
+  (instance: CML.MapTransactionIndexToAuxiliaryData) =>
     Effect.try({
       try: () => instance.free(),
       catch: () =>
@@ -61,20 +49,6 @@ export const free = Effect.fn(
 /**
  * Unsafely calls instance.free without Effect wrapper
  *
- * @example
- * import { MapTransactionIndexToAuxiliaryData } from "@lucid-evolution/experimental";
- *
- * // Assume we have a MapTransactionIndexToAuxiliaryData instance
- * const instance = ... ;
- *
- * // Using try/catch for error handling
- * try {
- *   const result = MapTransactionIndexToAuxiliaryData.freeUnsafe(instance);
- *   console.log(result);
- * } catch (error) {
- *   console.error(`MapTransactionIndexToAuxiliaryData.freeUnsafe failed: ${error.message}`);
- * }
- *
  * @since 2.0.0
  * @category MethodsUnsafe
  */
@@ -85,21 +59,13 @@ export const freeUnsafe = (
 /**
  * Static method _new of MapTransactionIndexToAuxiliaryData
  *
- * @example
- * import { MapTransactionIndexToAuxiliaryData } from "@lucid-evolution/experimental";
- * import { Effect } from "effect";
- *
- * // Using Effect for safe execution with error handling
- * Effect.gen(function*() {
- *
- *   const result = yield* MapTransactionIndexToAuxiliaryData._new();
- *   console.log(result);
- * });
- *
  * @since 2.0.0
  * @category Constructors
  */
-export const _new = Effect.fn(function* () {
+export const _new: () => Effect.Effect<
+  CML.MapTransactionIndexToAuxiliaryData,
+  MapTransactionIndexToAuxiliaryDataError
+> = Effect.fn(function* () {
   return yield* Effect.try({
     try: () => CML.MapTransactionIndexToAuxiliaryData.new(),
     catch: () =>
@@ -112,46 +78,22 @@ export const _new = Effect.fn(function* () {
 /**
  * Unsafely calls MapTransactionIndexToAuxiliaryData._new without Effect wrapper
  *
- * @example
- * import { MapTransactionIndexToAuxiliaryData } from "@lucid-evolution/experimental";
- *
- *
- *
- * // Using try/catch for error handling
- * try {
- *   const result = MapTransactionIndexToAuxiliaryData._newUnsafe();
- *   console.log(result);
- * } catch (error) {
- *   console.error(`MapTransactionIndexToAuxiliaryData._newUnsafe failed: ${error.message}`);
- * }
- *
  * @since 2.0.0
  * @category ConstructorsUnsafe
  */
-export const _newUnsafe = () => Effect.runSync(_new());
+export const _newUnsafe = (): CML.MapTransactionIndexToAuxiliaryData =>
+  Effect.runSync(_new());
 
 /**
  * Method len of MapTransactionIndexToAuxiliaryData
  *
- * @example
- * import { MapTransactionIndexToAuxiliaryData } from "@lucid-evolution/experimental";
- * import { Effect } from "effect";
- *
- * // Using Effect for safe execution with error handling
- * Effect.gen(function*() {
- * // Assume we have a MapTransactionIndexToAuxiliaryData instance
- * const instance = ... ;
- *   const result = yield* MapTransactionIndexToAuxiliaryData.len(instance);
- *   console.log(result);
- * });
- *
  * @since 2.0.0
  * @category Methods
  */
-export const len = Effect.fn(
-  (
-    instance: CML.MapTransactionIndexToAuxiliaryData,
-  ): Effect.Effect<number, MapTransactionIndexToAuxiliaryDataError> =>
+export const len: (
+  instance: CML.MapTransactionIndexToAuxiliaryData,
+) => Effect.Effect<number, MapTransactionIndexToAuxiliaryDataError> = Effect.fn(
+  (instance: CML.MapTransactionIndexToAuxiliaryData) =>
     Effect.try({
       try: () => instance.len(),
       catch: () =>
@@ -164,20 +106,6 @@ export const len = Effect.fn(
 /**
  * Unsafely calls instance.len without Effect wrapper
  *
- * @example
- * import { MapTransactionIndexToAuxiliaryData } from "@lucid-evolution/experimental";
- *
- * // Assume we have a MapTransactionIndexToAuxiliaryData instance
- * const instance = ... ;
- *
- * // Using try/catch for error handling
- * try {
- *   const result = MapTransactionIndexToAuxiliaryData.lenUnsafe(instance);
- *   console.log(result);
- * } catch (error) {
- *   console.error(`MapTransactionIndexToAuxiliaryData.lenUnsafe failed: ${error.message}`);
- * }
- *
  * @since 2.0.0
  * @category MethodsUnsafe
  */
@@ -188,30 +116,22 @@ export const lenUnsafe = (
 /**
  * Method insert of MapTransactionIndexToAuxiliaryData
  *
- * @example
- * import { MapTransactionIndexToAuxiliaryData } from "@lucid-evolution/experimental";
- * import { Effect } from "effect";
- *
- * // Using Effect for safe execution with error handling
- * Effect.gen(function*() {
- * // Assume we have a MapTransactionIndexToAuxiliaryData instance
- * const instance = ... ;
- *   const result = yield* MapTransactionIndexToAuxiliaryData.insert(instance,  parameters );
- *   console.log(result);
- * });
- *
  * @since 2.0.0
  * @category Methods
  */
-export const insert = Effect.fn(
+export const insert: (
+  instance: CML.MapTransactionIndexToAuxiliaryData,
+  key: number,
+  value: CML.AuxiliaryData,
+) => Effect.Effect<
+  CML.AuxiliaryData | undefined,
+  MapTransactionIndexToAuxiliaryDataError
+> = Effect.fn(
   (
     instance: CML.MapTransactionIndexToAuxiliaryData,
     key: number,
     value: CML.AuxiliaryData,
-  ): Effect.Effect<
-    CML.AuxiliaryData | undefined,
-    MapTransactionIndexToAuxiliaryDataError
-  > =>
+  ) =>
     Effect.try({
       try: () => instance.insert(key, value),
       catch: () =>
@@ -223,20 +143,6 @@ export const insert = Effect.fn(
 
 /**
  * Unsafely calls instance.insert without Effect wrapper
- *
- * @example
- * import { MapTransactionIndexToAuxiliaryData } from "@lucid-evolution/experimental";
- *
- * // Assume we have a MapTransactionIndexToAuxiliaryData instance
- * const instance = ... ;
- *
- * // Using try/catch for error handling
- * try {
- *   const result = MapTransactionIndexToAuxiliaryData.insertUnsafe(instance,  parameters );
- *   console.log(result);
- * } catch (error) {
- *   console.error(`MapTransactionIndexToAuxiliaryData.insertUnsafe failed: ${error.message}`);
- * }
  *
  * @since 2.0.0
  * @category MethodsUnsafe
@@ -251,54 +157,27 @@ export const insertUnsafe = (
 /**
  * Method get of MapTransactionIndexToAuxiliaryData
  *
- * @example
- * import { MapTransactionIndexToAuxiliaryData } from "@lucid-evolution/experimental";
- * import { Effect } from "effect";
- *
- * // Using Effect for safe execution with error handling
- * Effect.gen(function*() {
- * // Assume we have a MapTransactionIndexToAuxiliaryData instance
- * const instance = ... ;
- *   const result = yield* MapTransactionIndexToAuxiliaryData.get(instance,  parameters );
- *   console.log(result);
- * });
- *
  * @since 2.0.0
  * @category Methods
  */
-export const get = Effect.fn(
-  (
-    instance: CML.MapTransactionIndexToAuxiliaryData,
-    key: number,
-  ): Effect.Effect<
-    CML.AuxiliaryData | undefined,
-    MapTransactionIndexToAuxiliaryDataError
-  > =>
-    Effect.try({
-      try: () => instance.get(key),
-      catch: () =>
-        new MapTransactionIndexToAuxiliaryDataError({
-          message: `MapTransactionIndexToAuxiliaryData.get failed with parameters: ${key}. `,
-        }),
-    }),
+export const get: (
+  instance: CML.MapTransactionIndexToAuxiliaryData,
+  key: number,
+) => Effect.Effect<
+  CML.AuxiliaryData | undefined,
+  MapTransactionIndexToAuxiliaryDataError
+> = Effect.fn((instance: CML.MapTransactionIndexToAuxiliaryData, key: number) =>
+  Effect.try({
+    try: () => instance.get(key),
+    catch: () =>
+      new MapTransactionIndexToAuxiliaryDataError({
+        message: `MapTransactionIndexToAuxiliaryData.get failed with parameters: ${key}. `,
+      }),
+  }),
 );
 
 /**
  * Unsafely calls instance.get without Effect wrapper
- *
- * @example
- * import { MapTransactionIndexToAuxiliaryData } from "@lucid-evolution/experimental";
- *
- * // Assume we have a MapTransactionIndexToAuxiliaryData instance
- * const instance = ... ;
- *
- * // Using try/catch for error handling
- * try {
- *   const result = MapTransactionIndexToAuxiliaryData.getUnsafe(instance,  parameters );
- *   console.log(result);
- * } catch (error) {
- *   console.error(`MapTransactionIndexToAuxiliaryData.getUnsafe failed: ${error.message}`);
- * }
  *
  * @since 2.0.0
  * @category MethodsUnsafe
@@ -311,25 +190,13 @@ export const getUnsafe = (
 /**
  * Method keys of MapTransactionIndexToAuxiliaryData
  *
- * @example
- * import { MapTransactionIndexToAuxiliaryData } from "@lucid-evolution/experimental";
- * import { Effect } from "effect";
- *
- * // Using Effect for safe execution with error handling
- * Effect.gen(function*() {
- * // Assume we have a MapTransactionIndexToAuxiliaryData instance
- * const instance = ... ;
- *   const result = yield* MapTransactionIndexToAuxiliaryData.keys(instance);
- *   console.log(result);
- * });
- *
  * @since 2.0.0
  * @category Methods
  */
-export const keys = Effect.fn(
-  (
-    instance: CML.MapTransactionIndexToAuxiliaryData,
-  ): Effect.Effect<Uint16Array, MapTransactionIndexToAuxiliaryDataError> =>
+export const keys: (
+  instance: CML.MapTransactionIndexToAuxiliaryData,
+) => Effect.Effect<Uint16Array, MapTransactionIndexToAuxiliaryDataError> =
+  Effect.fn((instance: CML.MapTransactionIndexToAuxiliaryData) =>
     Effect.try({
       try: () => instance.keys(),
       catch: () =>
@@ -337,24 +204,10 @@ export const keys = Effect.fn(
           message: `MapTransactionIndexToAuxiliaryData.keys failed `,
         }),
     }),
-);
+  );
 
 /**
  * Unsafely calls instance.keys without Effect wrapper
- *
- * @example
- * import { MapTransactionIndexToAuxiliaryData } from "@lucid-evolution/experimental";
- *
- * // Assume we have a MapTransactionIndexToAuxiliaryData instance
- * const instance = ... ;
- *
- * // Using try/catch for error handling
- * try {
- *   const result = MapTransactionIndexToAuxiliaryData.keysUnsafe(instance);
- *   console.log(result);
- * } catch (error) {
- *   console.error(`MapTransactionIndexToAuxiliaryData.keysUnsafe failed: ${error.message}`);
- * }
  *
  * @since 2.0.0
  * @category MethodsUnsafe

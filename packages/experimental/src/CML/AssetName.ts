@@ -27,23 +27,13 @@ export class AssetNameError extends Data.TaggedError("AssetNameError")<{
 /**
  * Method free of AssetName
  *
- * @example
- * import { AssetName } from "@lucid-evolution/experimental";
- * import { Effect } from "effect";
- *
- * // Using Effect for safe execution with error handling
- * Effect.gen(function*() {
- * // Assume we have a AssetName instance
- * const instance = ... ;
- *   const result = yield* AssetName.free(instance);
- *   console.log(result);
- * });
- *
  * @since 2.0.0
  * @category Methods
  */
-export const free = Effect.fn(
-  (instance: CML.AssetName): Effect.Effect<void, AssetNameError> =>
+export const free: (
+  instance: CML.AssetName,
+) => Effect.Effect<void, AssetNameError> = Effect.fn(
+  (instance: CML.AssetName) =>
     Effect.try({
       try: () => instance.free(),
       catch: () =>
@@ -56,20 +46,6 @@ export const free = Effect.fn(
 /**
  * Unsafely calls instance.free without Effect wrapper
  *
- * @example
- * import { AssetName } from "@lucid-evolution/experimental";
- *
- * // Assume we have a AssetName instance
- * const instance = ... ;
- *
- * // Using try/catch for error handling
- * try {
- *   const result = AssetName.freeUnsafe(instance);
- *   console.log(result);
- * } catch (error) {
- *   console.error(`AssetName.freeUnsafe failed: ${error.message}`);
- * }
- *
  * @since 2.0.0
  * @category MethodsUnsafe
  */
@@ -79,23 +55,13 @@ export const freeUnsafe = (instance: CML.AssetName): void =>
 /**
  * Method toCborBytes of AssetName
  *
- * @example
- * import { AssetName } from "@lucid-evolution/experimental";
- * import { Effect } from "effect";
- *
- * // Using Effect for safe execution with error handling
- * Effect.gen(function*() {
- * // Assume we have a AssetName instance
- * const instance = ... ;
- *   const result = yield* AssetName.toCborBytes(instance);
- *   console.log(result);
- * });
- *
  * @since 2.0.0
  * @category Methods
  */
-export const toCborBytes = Effect.fn(
-  (instance: CML.AssetName): Effect.Effect<Uint8Array, AssetNameError> =>
+export const toCborBytes: (
+  instance: CML.AssetName,
+) => Effect.Effect<Uint8Array, AssetNameError> = Effect.fn(
+  (instance: CML.AssetName) =>
     Effect.try({
       try: () => instance.to_cbor_bytes(),
       catch: () =>
@@ -108,20 +74,6 @@ export const toCborBytes = Effect.fn(
 /**
  * Unsafely calls instance.toCborBytes without Effect wrapper
  *
- * @example
- * import { AssetName } from "@lucid-evolution/experimental";
- *
- * // Assume we have a AssetName instance
- * const instance = ... ;
- *
- * // Using try/catch for error handling
- * try {
- *   const result = AssetName.toCborBytesUnsafe(instance);
- *   console.log(result);
- * } catch (error) {
- *   console.error(`AssetName.toCborBytesUnsafe failed: ${error.message}`);
- * }
- *
  * @since 2.0.0
  * @category MethodsUnsafe
  */
@@ -131,23 +83,13 @@ export const toCborBytesUnsafe = (instance: CML.AssetName): Uint8Array =>
 /**
  * Method toCanonicalCborBytes of AssetName
  *
- * @example
- * import { AssetName } from "@lucid-evolution/experimental";
- * import { Effect } from "effect";
- *
- * // Using Effect for safe execution with error handling
- * Effect.gen(function*() {
- * // Assume we have a AssetName instance
- * const instance = ... ;
- *   const result = yield* AssetName.toCanonicalCborBytes(instance);
- *   console.log(result);
- * });
- *
  * @since 2.0.0
  * @category Methods
  */
-export const toCanonicalCborBytes = Effect.fn(
-  (instance: CML.AssetName): Effect.Effect<Uint8Array, AssetNameError> =>
+export const toCanonicalCborBytes: (
+  instance: CML.AssetName,
+) => Effect.Effect<Uint8Array, AssetNameError> = Effect.fn(
+  (instance: CML.AssetName) =>
     Effect.try({
       try: () => instance.to_canonical_cbor_bytes(),
       catch: () =>
@@ -160,20 +102,6 @@ export const toCanonicalCborBytes = Effect.fn(
 /**
  * Unsafely calls instance.toCanonicalCborBytes without Effect wrapper
  *
- * @example
- * import { AssetName } from "@lucid-evolution/experimental";
- *
- * // Assume we have a AssetName instance
- * const instance = ... ;
- *
- * // Using try/catch for error handling
- * try {
- *   const result = AssetName.toCanonicalCborBytesUnsafe(instance);
- *   console.log(result);
- * } catch (error) {
- *   console.error(`AssetName.toCanonicalCborBytesUnsafe failed: ${error.message}`);
- * }
- *
  * @since 2.0.0
  * @category MethodsUnsafe
  */
@@ -184,21 +112,14 @@ export const toCanonicalCborBytesUnsafe = (
 /**
  * Static method fromCborBytes of AssetName
  *
- * @example
- * import { AssetName } from "@lucid-evolution/experimental";
- * import { Effect } from "effect";
- *
- * // Using Effect for safe execution with error handling
- * Effect.gen(function*() {
- *
- *   const result = yield* AssetName.fromCborBytes( parameters );
- *   console.log(result);
- * });
- *
  * @since 2.0.0
  * @category Constructors
  */
-export const fromCborBytes = Effect.fn(function* (cborBytes: Uint8Array) {
+export const fromCborBytes: (
+  cborBytes: Uint8Array,
+) => Effect.Effect<CML.AssetName, AssetNameError> = Effect.fn(function* (
+  cborBytes: Uint8Array,
+) {
   return yield* Effect.try({
     try: () => CML.AssetName.from_cbor_bytes(cborBytes),
     catch: () =>
@@ -211,45 +132,22 @@ export const fromCborBytes = Effect.fn(function* (cborBytes: Uint8Array) {
 /**
  * Unsafely calls AssetName.fromCborBytes without Effect wrapper
  *
- * @example
- * import { AssetName } from "@lucid-evolution/experimental";
- *
- *
- *
- * // Using try/catch for error handling
- * try {
- *   const result = AssetName.fromCborBytesUnsafe( parameters );
- *   console.log(result);
- * } catch (error) {
- *   console.error(`AssetName.fromCborBytesUnsafe failed: ${error.message}`);
- * }
- *
  * @since 2.0.0
  * @category ConstructorsUnsafe
  */
-export const fromCborBytesUnsafe = (cborBytes: Uint8Array) =>
+export const fromCborBytesUnsafe = (cborBytes: Uint8Array): CML.AssetName =>
   Effect.runSync(fromCborBytes(cborBytes));
 
 /**
  * Method toCborHex of AssetName
  *
- * @example
- * import { AssetName } from "@lucid-evolution/experimental";
- * import { Effect } from "effect";
- *
- * // Using Effect for safe execution with error handling
- * Effect.gen(function*() {
- * // Assume we have a AssetName instance
- * const instance = ... ;
- *   const result = yield* AssetName.toCborHex(instance);
- *   console.log(result);
- * });
- *
  * @since 2.0.0
  * @category Methods
  */
-export const toCborHex = Effect.fn(
-  (instance: CML.AssetName): Effect.Effect<string, AssetNameError> =>
+export const toCborHex: (
+  instance: CML.AssetName,
+) => Effect.Effect<string, AssetNameError> = Effect.fn(
+  (instance: CML.AssetName) =>
     Effect.try({
       try: () => instance.to_cbor_hex(),
       catch: () =>
@@ -262,20 +160,6 @@ export const toCborHex = Effect.fn(
 /**
  * Unsafely calls instance.toCborHex without Effect wrapper
  *
- * @example
- * import { AssetName } from "@lucid-evolution/experimental";
- *
- * // Assume we have a AssetName instance
- * const instance = ... ;
- *
- * // Using try/catch for error handling
- * try {
- *   const result = AssetName.toCborHexUnsafe(instance);
- *   console.log(result);
- * } catch (error) {
- *   console.error(`AssetName.toCborHexUnsafe failed: ${error.message}`);
- * }
- *
  * @since 2.0.0
  * @category MethodsUnsafe
  */
@@ -285,23 +169,13 @@ export const toCborHexUnsafe = (instance: CML.AssetName): string =>
 /**
  * Method toCanonicalCborHex of AssetName
  *
- * @example
- * import { AssetName } from "@lucid-evolution/experimental";
- * import { Effect } from "effect";
- *
- * // Using Effect for safe execution with error handling
- * Effect.gen(function*() {
- * // Assume we have a AssetName instance
- * const instance = ... ;
- *   const result = yield* AssetName.toCanonicalCborHex(instance);
- *   console.log(result);
- * });
- *
  * @since 2.0.0
  * @category Methods
  */
-export const toCanonicalCborHex = Effect.fn(
-  (instance: CML.AssetName): Effect.Effect<string, AssetNameError> =>
+export const toCanonicalCborHex: (
+  instance: CML.AssetName,
+) => Effect.Effect<string, AssetNameError> = Effect.fn(
+  (instance: CML.AssetName) =>
     Effect.try({
       try: () => instance.to_canonical_cbor_hex(),
       catch: () =>
@@ -314,20 +188,6 @@ export const toCanonicalCborHex = Effect.fn(
 /**
  * Unsafely calls instance.toCanonicalCborHex without Effect wrapper
  *
- * @example
- * import { AssetName } from "@lucid-evolution/experimental";
- *
- * // Assume we have a AssetName instance
- * const instance = ... ;
- *
- * // Using try/catch for error handling
- * try {
- *   const result = AssetName.toCanonicalCborHexUnsafe(instance);
- *   console.log(result);
- * } catch (error) {
- *   console.error(`AssetName.toCanonicalCborHexUnsafe failed: ${error.message}`);
- * }
- *
  * @since 2.0.0
  * @category MethodsUnsafe
  */
@@ -337,21 +197,14 @@ export const toCanonicalCborHexUnsafe = (instance: CML.AssetName): string =>
 /**
  * Static method fromCborHex of AssetName
  *
- * @example
- * import { AssetName } from "@lucid-evolution/experimental";
- * import { Effect } from "effect";
- *
- * // Using Effect for safe execution with error handling
- * Effect.gen(function*() {
- *
- *   const result = yield* AssetName.fromCborHex( parameters );
- *   console.log(result);
- * });
- *
  * @since 2.0.0
  * @category Constructors
  */
-export const fromCborHex = Effect.fn(function* (cborBytes: string) {
+export const fromCborHex: (
+  cborBytes: string,
+) => Effect.Effect<CML.AssetName, AssetNameError> = Effect.fn(function* (
+  cborBytes: string,
+) {
   return yield* Effect.try({
     try: () => CML.AssetName.from_cbor_hex(cborBytes),
     catch: () =>
@@ -364,45 +217,22 @@ export const fromCborHex = Effect.fn(function* (cborBytes: string) {
 /**
  * Unsafely calls AssetName.fromCborHex without Effect wrapper
  *
- * @example
- * import { AssetName } from "@lucid-evolution/experimental";
- *
- *
- *
- * // Using try/catch for error handling
- * try {
- *   const result = AssetName.fromCborHexUnsafe( parameters );
- *   console.log(result);
- * } catch (error) {
- *   console.error(`AssetName.fromCborHexUnsafe failed: ${error.message}`);
- * }
- *
  * @since 2.0.0
  * @category ConstructorsUnsafe
  */
-export const fromCborHexUnsafe = (cborBytes: string) =>
+export const fromCborHexUnsafe = (cborBytes: string): CML.AssetName =>
   Effect.runSync(fromCborHex(cborBytes));
 
 /**
  * Method toJson of AssetName
  *
- * @example
- * import { AssetName } from "@lucid-evolution/experimental";
- * import { Effect } from "effect";
- *
- * // Using Effect for safe execution with error handling
- * Effect.gen(function*() {
- * // Assume we have a AssetName instance
- * const instance = ... ;
- *   const result = yield* AssetName.toJson(instance);
- *   console.log(result);
- * });
- *
  * @since 2.0.0
  * @category Methods
  */
-export const toJson = Effect.fn(
-  (instance: CML.AssetName): Effect.Effect<string, AssetNameError> =>
+export const toJson: (
+  instance: CML.AssetName,
+) => Effect.Effect<string, AssetNameError> = Effect.fn(
+  (instance: CML.AssetName) =>
     Effect.try({
       try: () => instance.to_json(),
       catch: () =>
@@ -415,20 +245,6 @@ export const toJson = Effect.fn(
 /**
  * Unsafely calls instance.toJson without Effect wrapper
  *
- * @example
- * import { AssetName } from "@lucid-evolution/experimental";
- *
- * // Assume we have a AssetName instance
- * const instance = ... ;
- *
- * // Using try/catch for error handling
- * try {
- *   const result = AssetName.toJsonUnsafe(instance);
- *   console.log(result);
- * } catch (error) {
- *   console.error(`AssetName.toJsonUnsafe failed: ${error.message}`);
- * }
- *
  * @since 2.0.0
  * @category MethodsUnsafe
  */
@@ -438,48 +254,23 @@ export const toJsonUnsafe = (instance: CML.AssetName): string =>
 /**
  * Method toJsValue of AssetName
  *
- * @example
- * import { AssetName } from "@lucid-evolution/experimental";
- * import { Effect } from "effect";
- *
- * // Using Effect for safe execution with error handling
- * Effect.gen(function*() {
- * // Assume we have a AssetName instance
- * const instance = ... ;
- *   const result = yield* AssetName.toJsValue(instance);
- *   console.log(result);
- * });
- *
  * @since 2.0.0
  * @category Methods
  */
-export const toJsValue = Effect.fn(
-  (instance: CML.AssetName): Effect.Effect<any, AssetNameError> =>
-    Effect.try({
-      try: () => instance.to_js_value(),
-      catch: () =>
-        new AssetNameError({
-          message: `AssetName.toJsValue failed AssetName is not valid for any conversion. `,
-        }),
-    }),
+export const toJsValue: (
+  instance: CML.AssetName,
+) => Effect.Effect<any, AssetNameError> = Effect.fn((instance: CML.AssetName) =>
+  Effect.try({
+    try: () => instance.to_js_value(),
+    catch: () =>
+      new AssetNameError({
+        message: `AssetName.toJsValue failed AssetName is not valid for any conversion. `,
+      }),
+  }),
 );
 
 /**
  * Unsafely calls instance.toJsValue without Effect wrapper
- *
- * @example
- * import { AssetName } from "@lucid-evolution/experimental";
- *
- * // Assume we have a AssetName instance
- * const instance = ... ;
- *
- * // Using try/catch for error handling
- * try {
- *   const result = AssetName.toJsValueUnsafe(instance);
- *   console.log(result);
- * } catch (error) {
- *   console.error(`AssetName.toJsValueUnsafe failed: ${error.message}`);
- * }
  *
  * @since 2.0.0
  * @category MethodsUnsafe
@@ -490,21 +281,14 @@ export const toJsValueUnsafe = (instance: CML.AssetName): any =>
 /**
  * Static method fromJson of AssetName
  *
- * @example
- * import { AssetName } from "@lucid-evolution/experimental";
- * import { Effect } from "effect";
- *
- * // Using Effect for safe execution with error handling
- * Effect.gen(function*() {
- *
- *   const result = yield* AssetName.fromJson( parameters );
- *   console.log(result);
- * });
- *
  * @since 2.0.0
  * @category Constructors
  */
-export const fromJson = Effect.fn(function* (json: string) {
+export const fromJson: (
+  json: string,
+) => Effect.Effect<CML.AssetName, AssetNameError> = Effect.fn(function* (
+  json: string,
+) {
   return yield* Effect.try({
     try: () => CML.AssetName.from_json(json),
     catch: () =>
@@ -517,42 +301,23 @@ export const fromJson = Effect.fn(function* (json: string) {
 /**
  * Unsafely calls AssetName.fromJson without Effect wrapper
  *
- * @example
- * import { AssetName } from "@lucid-evolution/experimental";
- *
- *
- *
- * // Using try/catch for error handling
- * try {
- *   const result = AssetName.fromJsonUnsafe( parameters );
- *   console.log(result);
- * } catch (error) {
- *   console.error(`AssetName.fromJsonUnsafe failed: ${error.message}`);
- * }
- *
  * @since 2.0.0
  * @category ConstructorsUnsafe
  */
-export const fromJsonUnsafe = (json: string) => Effect.runSync(fromJson(json));
+export const fromJsonUnsafe = (json: string): CML.AssetName =>
+  Effect.runSync(fromJson(json));
 
 /**
  * Static method fromStr of AssetName
  *
- * @example
- * import { AssetName } from "@lucid-evolution/experimental";
- * import { Effect } from "effect";
- *
- * // Using Effect for safe execution with error handling
- * Effect.gen(function*() {
- *
- *   const result = yield* AssetName.fromStr( parameters );
- *   console.log(result);
- * });
- *
  * @since 2.0.0
  * @category Constructors
  */
-export const fromStr = Effect.fn(function* (utf8Str: string) {
+export const fromStr: (
+  utf8Str: string,
+) => Effect.Effect<CML.AssetName, AssetNameError> = Effect.fn(function* (
+  utf8Str: string,
+) {
   return yield* Effect.try({
     try: () => CML.AssetName.from_str(utf8Str),
     catch: () =>
@@ -565,45 +330,22 @@ export const fromStr = Effect.fn(function* (utf8Str: string) {
 /**
  * Unsafely calls AssetName.fromStr without Effect wrapper
  *
- * @example
- * import { AssetName } from "@lucid-evolution/experimental";
- *
- *
- *
- * // Using try/catch for error handling
- * try {
- *   const result = AssetName.fromStrUnsafe( parameters );
- *   console.log(result);
- * } catch (error) {
- *   console.error(`AssetName.fromStrUnsafe failed: ${error.message}`);
- * }
- *
  * @since 2.0.0
  * @category ConstructorsUnsafe
  */
-export const fromStrUnsafe = (utf8Str: string) =>
+export const fromStrUnsafe = (utf8Str: string): CML.AssetName =>
   Effect.runSync(fromStr(utf8Str));
 
 /**
  * Method toStr of AssetName
  *
- * @example
- * import { AssetName } from "@lucid-evolution/experimental";
- * import { Effect } from "effect";
- *
- * // Using Effect for safe execution with error handling
- * Effect.gen(function*() {
- * // Assume we have a AssetName instance
- * const instance = ... ;
- *   const result = yield* AssetName.toStr(instance);
- *   console.log(result);
- * });
- *
  * @since 2.0.0
  * @category Methods
  */
-export const toStr = Effect.fn(
-  (instance: CML.AssetName): Effect.Effect<string, AssetNameError> =>
+export const toStr: (
+  instance: CML.AssetName,
+) => Effect.Effect<string, AssetNameError> = Effect.fn(
+  (instance: CML.AssetName) =>
     Effect.try({
       try: () => instance.to_str(),
       catch: () =>
@@ -616,20 +358,6 @@ export const toStr = Effect.fn(
 /**
  * Unsafely calls instance.toStr without Effect wrapper
  *
- * @example
- * import { AssetName } from "@lucid-evolution/experimental";
- *
- * // Assume we have a AssetName instance
- * const instance = ... ;
- *
- * // Using try/catch for error handling
- * try {
- *   const result = AssetName.toStrUnsafe(instance);
- *   console.log(result);
- * } catch (error) {
- *   console.error(`AssetName.toStrUnsafe failed: ${error.message}`);
- * }
- *
  * @since 2.0.0
  * @category MethodsUnsafe
  */
@@ -639,23 +367,13 @@ export const toStrUnsafe = (instance: CML.AssetName): string =>
 /**
  * Method toRawBytes of AssetName
  *
- * @example
- * import { AssetName } from "@lucid-evolution/experimental";
- * import { Effect } from "effect";
- *
- * // Using Effect for safe execution with error handling
- * Effect.gen(function*() {
- * // Assume we have a AssetName instance
- * const instance = ... ;
- *   const result = yield* AssetName.toRawBytes(instance);
- *   console.log(result);
- * });
- *
  * @since 2.0.0
  * @category Methods
  */
-export const toRawBytes = Effect.fn(
-  (instance: CML.AssetName): Effect.Effect<Uint8Array, AssetNameError> =>
+export const toRawBytes: (
+  instance: CML.AssetName,
+) => Effect.Effect<Uint8Array, AssetNameError> = Effect.fn(
+  (instance: CML.AssetName) =>
     Effect.try({
       try: () => instance.to_raw_bytes(),
       catch: () =>
@@ -668,20 +386,6 @@ export const toRawBytes = Effect.fn(
 /**
  * Unsafely calls instance.toRawBytes without Effect wrapper
  *
- * @example
- * import { AssetName } from "@lucid-evolution/experimental";
- *
- * // Assume we have a AssetName instance
- * const instance = ... ;
- *
- * // Using try/catch for error handling
- * try {
- *   const result = AssetName.toRawBytesUnsafe(instance);
- *   console.log(result);
- * } catch (error) {
- *   console.error(`AssetName.toRawBytesUnsafe failed: ${error.message}`);
- * }
- *
  * @since 2.0.0
  * @category MethodsUnsafe
  */
@@ -691,21 +395,14 @@ export const toRawBytesUnsafe = (instance: CML.AssetName): Uint8Array =>
 /**
  * Static method fromRawBytes of AssetName
  *
- * @example
- * import { AssetName } from "@lucid-evolution/experimental";
- * import { Effect } from "effect";
- *
- * // Using Effect for safe execution with error handling
- * Effect.gen(function*() {
- *
- *   const result = yield* AssetName.fromRawBytes( parameters );
- *   console.log(result);
- * });
- *
  * @since 2.0.0
  * @category Constructors
  */
-export const fromRawBytes = Effect.fn(function* (bytes: Uint8Array) {
+export const fromRawBytes: (
+  bytes: Uint8Array,
+) => Effect.Effect<CML.AssetName, AssetNameError> = Effect.fn(function* (
+  bytes: Uint8Array,
+) {
   return yield* Effect.try({
     try: () => CML.AssetName.from_raw_bytes(bytes),
     catch: () =>
@@ -718,45 +415,22 @@ export const fromRawBytes = Effect.fn(function* (bytes: Uint8Array) {
 /**
  * Unsafely calls AssetName.fromRawBytes without Effect wrapper
  *
- * @example
- * import { AssetName } from "@lucid-evolution/experimental";
- *
- *
- *
- * // Using try/catch for error handling
- * try {
- *   const result = AssetName.fromRawBytesUnsafe( parameters );
- *   console.log(result);
- * } catch (error) {
- *   console.error(`AssetName.fromRawBytesUnsafe failed: ${error.message}`);
- * }
- *
  * @since 2.0.0
  * @category ConstructorsUnsafe
  */
-export const fromRawBytesUnsafe = (bytes: Uint8Array) =>
+export const fromRawBytesUnsafe = (bytes: Uint8Array): CML.AssetName =>
   Effect.runSync(fromRawBytes(bytes));
 
 /**
  * Method toHex of AssetName
  *
- * @example
- * import { AssetName } from "@lucid-evolution/experimental";
- * import { Effect } from "effect";
- *
- * // Using Effect for safe execution with error handling
- * Effect.gen(function*() {
- * // Assume we have a AssetName instance
- * const instance = ... ;
- *   const result = yield* AssetName.toHex(instance);
- *   console.log(result);
- * });
- *
  * @since 2.0.0
  * @category Methods
  */
-export const toHex = Effect.fn(
-  (instance: CML.AssetName): Effect.Effect<string, AssetNameError> =>
+export const toHex: (
+  instance: CML.AssetName,
+) => Effect.Effect<string, AssetNameError> = Effect.fn(
+  (instance: CML.AssetName) =>
     Effect.try({
       try: () => instance.to_hex(),
       catch: () =>
@@ -769,20 +443,6 @@ export const toHex = Effect.fn(
 /**
  * Unsafely calls instance.toHex without Effect wrapper
  *
- * @example
- * import { AssetName } from "@lucid-evolution/experimental";
- *
- * // Assume we have a AssetName instance
- * const instance = ... ;
- *
- * // Using try/catch for error handling
- * try {
- *   const result = AssetName.toHexUnsafe(instance);
- *   console.log(result);
- * } catch (error) {
- *   console.error(`AssetName.toHexUnsafe failed: ${error.message}`);
- * }
- *
  * @since 2.0.0
  * @category MethodsUnsafe
  */
@@ -792,21 +452,14 @@ export const toHexUnsafe = (instance: CML.AssetName): string =>
 /**
  * Static method fromHex of AssetName
  *
- * @example
- * import { AssetName } from "@lucid-evolution/experimental";
- * import { Effect } from "effect";
- *
- * // Using Effect for safe execution with error handling
- * Effect.gen(function*() {
- *
- *   const result = yield* AssetName.fromHex( parameters );
- *   console.log(result);
- * });
- *
  * @since 2.0.0
  * @category Constructors
  */
-export const fromHex = Effect.fn(function* (input: string) {
+export const fromHex: (
+  input: string,
+) => Effect.Effect<CML.AssetName, AssetNameError> = Effect.fn(function* (
+  input: string,
+) {
   return yield* Effect.try({
     try: () => CML.AssetName.from_hex(input),
     catch: () =>
@@ -819,20 +472,8 @@ export const fromHex = Effect.fn(function* (input: string) {
 /**
  * Unsafely calls AssetName.fromHex without Effect wrapper
  *
- * @example
- * import { AssetName } from "@lucid-evolution/experimental";
- *
- *
- *
- * // Using try/catch for error handling
- * try {
- *   const result = AssetName.fromHexUnsafe( parameters );
- *   console.log(result);
- * } catch (error) {
- *   console.error(`AssetName.fromHexUnsafe failed: ${error.message}`);
- * }
- *
  * @since 2.0.0
  * @category ConstructorsUnsafe
  */
-export const fromHexUnsafe = (input: string) => Effect.runSync(fromHex(input));
+export const fromHexUnsafe = (input: string): CML.AssetName =>
+  Effect.runSync(fromHex(input));

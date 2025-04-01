@@ -29,25 +29,13 @@ export class TransactionOutputBuilderError extends Data.TaggedError(
 /**
  * Method free of TransactionOutputBuilder
  *
- * @example
- * import { TransactionOutputBuilder } from "@lucid-evolution/experimental";
- * import { Effect } from "effect";
- *
- * // Using Effect for safe execution with error handling
- * Effect.gen(function*() {
- * // Assume we have a TransactionOutputBuilder instance
- * const instance = ... ;
- *   const result = yield* TransactionOutputBuilder.free(instance);
- *   console.log(result);
- * });
- *
  * @since 2.0.0
  * @category Methods
  */
-export const free = Effect.fn(
-  (
-    instance: CML.TransactionOutputBuilder,
-  ): Effect.Effect<void, TransactionOutputBuilderError> =>
+export const free: (
+  instance: CML.TransactionOutputBuilder,
+) => Effect.Effect<void, TransactionOutputBuilderError> = Effect.fn(
+  (instance: CML.TransactionOutputBuilder) =>
     Effect.try({
       try: () => instance.free(),
       catch: () =>
@@ -60,20 +48,6 @@ export const free = Effect.fn(
 /**
  * Unsafely calls instance.free without Effect wrapper
  *
- * @example
- * import { TransactionOutputBuilder } from "@lucid-evolution/experimental";
- *
- * // Assume we have a TransactionOutputBuilder instance
- * const instance = ... ;
- *
- * // Using try/catch for error handling
- * try {
- *   const result = TransactionOutputBuilder.freeUnsafe(instance);
- *   console.log(result);
- * } catch (error) {
- *   console.error(`TransactionOutputBuilder.freeUnsafe failed: ${error.message}`);
- * }
- *
  * @since 2.0.0
  * @category MethodsUnsafe
  */
@@ -83,21 +57,13 @@ export const freeUnsafe = (instance: CML.TransactionOutputBuilder): void =>
 /**
  * Static method _new of TransactionOutputBuilder
  *
- * @example
- * import { TransactionOutputBuilder } from "@lucid-evolution/experimental";
- * import { Effect } from "effect";
- *
- * // Using Effect for safe execution with error handling
- * Effect.gen(function*() {
- *
- *   const result = yield* TransactionOutputBuilder._new();
- *   console.log(result);
- * });
- *
  * @since 2.0.0
  * @category Constructors
  */
-export const _new = Effect.fn(function* () {
+export const _new: () => Effect.Effect<
+  CML.TransactionOutputBuilder,
+  TransactionOutputBuilderError
+> = Effect.fn(function* () {
   return yield* Effect.try({
     try: () => CML.TransactionOutputBuilder.new(),
     catch: () =>
@@ -110,75 +76,36 @@ export const _new = Effect.fn(function* () {
 /**
  * Unsafely calls TransactionOutputBuilder._new without Effect wrapper
  *
- * @example
- * import { TransactionOutputBuilder } from "@lucid-evolution/experimental";
- *
- *
- *
- * // Using try/catch for error handling
- * try {
- *   const result = TransactionOutputBuilder._newUnsafe();
- *   console.log(result);
- * } catch (error) {
- *   console.error(`TransactionOutputBuilder._newUnsafe failed: ${error.message}`);
- * }
- *
  * @since 2.0.0
  * @category ConstructorsUnsafe
  */
-export const _newUnsafe = () => Effect.runSync(_new());
+export const _newUnsafe = (): CML.TransactionOutputBuilder =>
+  Effect.runSync(_new());
 
 /**
  * Method withAddress of TransactionOutputBuilder
  *
- * @example
- * import { TransactionOutputBuilder } from "@lucid-evolution/experimental";
- * import { Effect } from "effect";
- *
- * // Using Effect for safe execution with error handling
- * Effect.gen(function*() {
- * // Assume we have a TransactionOutputBuilder instance
- * const instance = ... ;
- *   const result = yield* TransactionOutputBuilder.withAddress(instance,  parameters );
- *   console.log(result);
- * });
- *
  * @since 2.0.0
  * @category Methods
  */
-export const withAddress = Effect.fn(
-  (
-    instance: CML.TransactionOutputBuilder,
-    address: CML.Address,
-  ): Effect.Effect<
-    CML.TransactionOutputBuilder,
-    TransactionOutputBuilderError
-  > =>
-    Effect.try({
-      try: () => instance.with_address(address),
-      catch: () =>
-        new TransactionOutputBuilderError({
-          message: `TransactionOutputBuilder.withAddress failed with parameters: ${address} (Address). `,
-        }),
-    }),
+export const withAddress: (
+  instance: CML.TransactionOutputBuilder,
+  address: CML.Address,
+) => Effect.Effect<
+  CML.TransactionOutputBuilder,
+  TransactionOutputBuilderError
+> = Effect.fn((instance: CML.TransactionOutputBuilder, address: CML.Address) =>
+  Effect.try({
+    try: () => instance.with_address(address),
+    catch: () =>
+      new TransactionOutputBuilderError({
+        message: `TransactionOutputBuilder.withAddress failed with parameters: ${address} (Address). `,
+      }),
+  }),
 );
 
 /**
  * Unsafely calls instance.withAddress without Effect wrapper
- *
- * @example
- * import { TransactionOutputBuilder } from "@lucid-evolution/experimental";
- *
- * // Assume we have a TransactionOutputBuilder instance
- * const instance = ... ;
- *
- * // Using try/catch for error handling
- * try {
- *   const result = TransactionOutputBuilder.withAddressUnsafe(instance,  parameters );
- *   console.log(result);
- * } catch (error) {
- *   console.error(`TransactionOutputBuilder.withAddressUnsafe failed: ${error.message}`);
- * }
  *
  * @since 2.0.0
  * @category MethodsUnsafe
@@ -192,54 +119,27 @@ export const withAddressUnsafe = (
 /**
  * Method withCommunicationData of TransactionOutputBuilder
  *
- * @example
- * import { TransactionOutputBuilder } from "@lucid-evolution/experimental";
- * import { Effect } from "effect";
- *
- * // Using Effect for safe execution with error handling
- * Effect.gen(function*() {
- * // Assume we have a TransactionOutputBuilder instance
- * const instance = ... ;
- *   const result = yield* TransactionOutputBuilder.withCommunicationData(instance,  parameters );
- *   console.log(result);
- * });
- *
  * @since 2.0.0
  * @category Methods
  */
-export const withCommunicationData = Effect.fn(
-  (
-    instance: CML.TransactionOutputBuilder,
-    datum: CML.PlutusData,
-  ): Effect.Effect<
-    CML.TransactionOutputBuilder,
-    TransactionOutputBuilderError
-  > =>
-    Effect.try({
-      try: () => instance.with_communication_data(datum),
-      catch: () =>
-        new TransactionOutputBuilderError({
-          message: `TransactionOutputBuilder.withCommunicationData failed with parameters: ${datum} (PlutusData). `,
-        }),
-    }),
+export const withCommunicationData: (
+  instance: CML.TransactionOutputBuilder,
+  datum: CML.PlutusData,
+) => Effect.Effect<
+  CML.TransactionOutputBuilder,
+  TransactionOutputBuilderError
+> = Effect.fn((instance: CML.TransactionOutputBuilder, datum: CML.PlutusData) =>
+  Effect.try({
+    try: () => instance.with_communication_data(datum),
+    catch: () =>
+      new TransactionOutputBuilderError({
+        message: `TransactionOutputBuilder.withCommunicationData failed with parameters: ${datum} (PlutusData). `,
+      }),
+  }),
 );
 
 /**
  * Unsafely calls instance.withCommunicationData without Effect wrapper
- *
- * @example
- * import { TransactionOutputBuilder } from "@lucid-evolution/experimental";
- *
- * // Assume we have a TransactionOutputBuilder instance
- * const instance = ... ;
- *
- * // Using try/catch for error handling
- * try {
- *   const result = TransactionOutputBuilder.withCommunicationDataUnsafe(instance,  parameters );
- *   console.log(result);
- * } catch (error) {
- *   console.error(`TransactionOutputBuilder.withCommunicationDataUnsafe failed: ${error.message}`);
- * }
  *
  * @since 2.0.0
  * @category MethodsUnsafe
@@ -253,29 +153,17 @@ export const withCommunicationDataUnsafe = (
 /**
  * Method withData of TransactionOutputBuilder
  *
- * @example
- * import { TransactionOutputBuilder } from "@lucid-evolution/experimental";
- * import { Effect } from "effect";
- *
- * // Using Effect for safe execution with error handling
- * Effect.gen(function*() {
- * // Assume we have a TransactionOutputBuilder instance
- * const instance = ... ;
- *   const result = yield* TransactionOutputBuilder.withData(instance,  parameters );
- *   console.log(result);
- * });
- *
  * @since 2.0.0
  * @category Methods
  */
-export const withData = Effect.fn(
-  (
-    instance: CML.TransactionOutputBuilder,
-    datum: CML.DatumOption,
-  ): Effect.Effect<
-    CML.TransactionOutputBuilder,
-    TransactionOutputBuilderError
-  > =>
+export const withData: (
+  instance: CML.TransactionOutputBuilder,
+  datum: CML.DatumOption,
+) => Effect.Effect<
+  CML.TransactionOutputBuilder,
+  TransactionOutputBuilderError
+> = Effect.fn(
+  (instance: CML.TransactionOutputBuilder, datum: CML.DatumOption) =>
     Effect.try({
       try: () => instance.with_data(datum),
       catch: () =>
@@ -288,20 +176,6 @@ export const withData = Effect.fn(
 /**
  * Unsafely calls instance.withData without Effect wrapper
  *
- * @example
- * import { TransactionOutputBuilder } from "@lucid-evolution/experimental";
- *
- * // Assume we have a TransactionOutputBuilder instance
- * const instance = ... ;
- *
- * // Using try/catch for error handling
- * try {
- *   const result = TransactionOutputBuilder.withDataUnsafe(instance,  parameters );
- *   console.log(result);
- * } catch (error) {
- *   console.error(`TransactionOutputBuilder.withDataUnsafe failed: ${error.message}`);
- * }
- *
  * @since 2.0.0
  * @category MethodsUnsafe
  */
@@ -313,54 +187,27 @@ export const withDataUnsafe = (
 /**
  * Method withReferenceScript of TransactionOutputBuilder
  *
- * @example
- * import { TransactionOutputBuilder } from "@lucid-evolution/experimental";
- * import { Effect } from "effect";
- *
- * // Using Effect for safe execution with error handling
- * Effect.gen(function*() {
- * // Assume we have a TransactionOutputBuilder instance
- * const instance = ... ;
- *   const result = yield* TransactionOutputBuilder.withReferenceScript(instance,  parameters );
- *   console.log(result);
- * });
- *
  * @since 2.0.0
  * @category Methods
  */
-export const withReferenceScript = Effect.fn(
-  (
-    instance: CML.TransactionOutputBuilder,
-    scriptRef: CML.Script,
-  ): Effect.Effect<
-    CML.TransactionOutputBuilder,
-    TransactionOutputBuilderError
-  > =>
-    Effect.try({
-      try: () => instance.with_reference_script(scriptRef),
-      catch: () =>
-        new TransactionOutputBuilderError({
-          message: `TransactionOutputBuilder.withReferenceScript failed with parameters: ${scriptRef} (Script). `,
-        }),
-    }),
+export const withReferenceScript: (
+  instance: CML.TransactionOutputBuilder,
+  scriptRef: CML.Script,
+) => Effect.Effect<
+  CML.TransactionOutputBuilder,
+  TransactionOutputBuilderError
+> = Effect.fn((instance: CML.TransactionOutputBuilder, scriptRef: CML.Script) =>
+  Effect.try({
+    try: () => instance.with_reference_script(scriptRef),
+    catch: () =>
+      new TransactionOutputBuilderError({
+        message: `TransactionOutputBuilder.withReferenceScript failed with parameters: ${scriptRef} (Script). `,
+      }),
+  }),
 );
 
 /**
  * Unsafely calls instance.withReferenceScript without Effect wrapper
- *
- * @example
- * import { TransactionOutputBuilder } from "@lucid-evolution/experimental";
- *
- * // Assume we have a TransactionOutputBuilder instance
- * const instance = ... ;
- *
- * // Using try/catch for error handling
- * try {
- *   const result = TransactionOutputBuilder.withReferenceScriptUnsafe(instance,  parameters );
- *   console.log(result);
- * } catch (error) {
- *   console.error(`TransactionOutputBuilder.withReferenceScriptUnsafe failed: ${error.message}`);
- * }
  *
  * @since 2.0.0
  * @category MethodsUnsafe
@@ -374,53 +221,26 @@ export const withReferenceScriptUnsafe = (
 /**
  * Method next of TransactionOutputBuilder
  *
- * @example
- * import { TransactionOutputBuilder } from "@lucid-evolution/experimental";
- * import { Effect } from "effect";
- *
- * // Using Effect for safe execution with error handling
- * Effect.gen(function*() {
- * // Assume we have a TransactionOutputBuilder instance
- * const instance = ... ;
- *   const result = yield* TransactionOutputBuilder.next(instance);
- *   console.log(result);
- * });
- *
  * @since 2.0.0
  * @category Methods
  */
-export const next = Effect.fn(
-  (
-    instance: CML.TransactionOutputBuilder,
-  ): Effect.Effect<
-    CML.TransactionOutputAmountBuilder,
-    TransactionOutputBuilderError
-  > =>
-    Effect.try({
-      try: () => instance.next(),
-      catch: () =>
-        new TransactionOutputBuilderError({
-          message: `TransactionOutputBuilder.next failed `,
-        }),
-    }),
+export const next: (
+  instance: CML.TransactionOutputBuilder,
+) => Effect.Effect<
+  CML.TransactionOutputAmountBuilder,
+  TransactionOutputBuilderError
+> = Effect.fn((instance: CML.TransactionOutputBuilder) =>
+  Effect.try({
+    try: () => instance.next(),
+    catch: () =>
+      new TransactionOutputBuilderError({
+        message: `TransactionOutputBuilder.next failed `,
+      }),
+  }),
 );
 
 /**
  * Unsafely calls instance.next without Effect wrapper
- *
- * @example
- * import { TransactionOutputBuilder } from "@lucid-evolution/experimental";
- *
- * // Assume we have a TransactionOutputBuilder instance
- * const instance = ... ;
- *
- * // Using try/catch for error handling
- * try {
- *   const result = TransactionOutputBuilder.nextUnsafe(instance);
- *   console.log(result);
- * } catch (error) {
- *   console.error(`TransactionOutputBuilder.nextUnsafe failed: ${error.message}`);
- * }
  *
  * @since 2.0.0
  * @category MethodsUnsafe

@@ -19,20 +19,13 @@ export class MinScriptFeeError extends Data.TaggedError("MinScriptFeeError")<{
 /**
  * Wrapper for the min_script_fee function
  *
- * @example
- * import { minScriptFee } from "@lucid-evolution/experimental/CML/functions";
- * import { Effect } from "effect";
- *
- * // Using Effect for safe execution with error handling
- * Effect.gen(function*() {
- *   const result = yield* minScriptFee(Transaction instance , ExUnitPrices instance );
- *   console.log(result);
- * });
- *
  * @since 2.0.0
  * @category Functions
  */
-export const minScriptFee = Effect.fn(function* (
+export const minScriptFee: (
+  tx: CML.Transaction,
+  exUnitPrices: CML.ExUnitPrices,
+) => Effect.Effect<bigint, MinScriptFeeError> = Effect.fn(function* (
   tx: CML.Transaction,
   exUnitPrices: CML.ExUnitPrices,
 ) {
@@ -47,16 +40,6 @@ export const minScriptFee = Effect.fn(function* (
 
 /**
  * Unsafely calls min_script_fee function without Effect wrapper
- *
- * @example
- * import { minScriptFeeUnsafe } from "@lucid-evolution/experimental/CML/functions";
- *
- * try {
- *   const result = minScriptFeeUnsafe(Transaction instance , ExUnitPrices instance );
- *   console.log(result);
- * } catch (error) {
- *   console.error(`minScriptFeeUnsafe failed: ${error.message}`);
- * }
  *
  * @since 2.0.0
  * @category FunctionsUnsafe

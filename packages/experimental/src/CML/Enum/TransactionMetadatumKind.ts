@@ -14,11 +14,6 @@ export type TransactionMetadatumKind = CML.TransactionMetadatumKind;
 /**
  * Map variant of the TransactionMetadatumKind enum
  *
- * @example
- * import { TransactionMetadatumKind } from "@lucid-evolution/experimental";
- *
- * const kind = TransactionMetadatumKind.Map;
- *
  * @since 2.0.0
  * @category Variants
  */
@@ -26,11 +21,6 @@ export const Map = CML.TransactionMetadatumKind.Map;
 
 /**
  * List variant of the TransactionMetadatumKind enum
- *
- * @example
- * import { TransactionMetadatumKind } from "@lucid-evolution/experimental";
- *
- * const kind = TransactionMetadatumKind.List;
  *
  * @since 2.0.0
  * @category Variants
@@ -40,11 +30,6 @@ export const List = CML.TransactionMetadatumKind.List;
 /**
  * Int variant of the TransactionMetadatumKind enum
  *
- * @example
- * import { TransactionMetadatumKind } from "@lucid-evolution/experimental";
- *
- * const kind = TransactionMetadatumKind.Int;
- *
  * @since 2.0.0
  * @category Variants
  */
@@ -52,11 +37,6 @@ export const Int = CML.TransactionMetadatumKind.Int;
 
 /**
  * Bytes variant of the TransactionMetadatumKind enum
- *
- * @example
- * import { TransactionMetadatumKind } from "@lucid-evolution/experimental";
- *
- * const kind = TransactionMetadatumKind.Bytes;
  *
  * @since 2.0.0
  * @category Variants
@@ -66,11 +46,6 @@ export const Bytes = CML.TransactionMetadatumKind.Bytes;
 /**
  * Text variant of the TransactionMetadatumKind enum
  *
- * @example
- * import { TransactionMetadatumKind } from "@lucid-evolution/experimental";
- *
- * const kind = TransactionMetadatumKind.Text;
- *
  * @since 2.0.0
  * @category Variants
  */
@@ -78,12 +53,6 @@ export const Text = CML.TransactionMetadatumKind.Text;
 
 /**
  * Get all values of the TransactionMetadatumKind enum
- *
- * @example
- * import { TransactionMetadatumKind } from "@lucid-evolution/experimental";
- *
- * const allValues = TransactionMetadatumKind.values();
- * console.log(allValues);
  *
  * @since 2.0.0
  * @category Utils
@@ -98,12 +67,6 @@ export const values = (): Array<CML.TransactionMetadatumKind> => [
 
 /**
  * Convert TransactionMetadatumKind enum value to string
- *
- * @example
- * import { TransactionMetadatumKind } from "@lucid-evolution/experimental";
- *
- * const name = TransactionMetadatumKind.toString(CML.TransactionMetadatumKind.Map);
- * console.log(name); // "Map"
  *
  * @since 2.0.0
  * @category Utils
@@ -127,12 +90,6 @@ export const toString = (value: CML.TransactionMetadatumKind): string => {
 
 /**
  * Convert string to TransactionMetadatumKind enum value
- *
- * @example
- * import { TransactionMetadatumKind } from "@lucid-evolution/experimental";
- *
- * const value = TransactionMetadatumKind.fromString("Map");
- * console.log(value); // Some(CML.TransactionMetadatumKind.Map)
  *
  * @since 2.0.0
  * @category Utils

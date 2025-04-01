@@ -29,25 +29,13 @@ export class Ed25519KeyHashListError extends Data.TaggedError(
 /**
  * Method free of Ed25519KeyHashList
  *
- * @example
- * import { Ed25519KeyHashList } from "@lucid-evolution/experimental";
- * import { Effect } from "effect";
- *
- * // Using Effect for safe execution with error handling
- * Effect.gen(function*() {
- * // Assume we have a Ed25519KeyHashList instance
- * const instance = ... ;
- *   const result = yield* Ed25519KeyHashList.free(instance);
- *   console.log(result);
- * });
- *
  * @since 2.0.0
  * @category Methods
  */
-export const free = Effect.fn(
-  (
-    instance: CML.Ed25519KeyHashList,
-  ): Effect.Effect<void, Ed25519KeyHashListError> =>
+export const free: (
+  instance: CML.Ed25519KeyHashList,
+) => Effect.Effect<void, Ed25519KeyHashListError> = Effect.fn(
+  (instance: CML.Ed25519KeyHashList) =>
     Effect.try({
       try: () => instance.free(),
       catch: () =>
@@ -60,20 +48,6 @@ export const free = Effect.fn(
 /**
  * Unsafely calls instance.free without Effect wrapper
  *
- * @example
- * import { Ed25519KeyHashList } from "@lucid-evolution/experimental";
- *
- * // Assume we have a Ed25519KeyHashList instance
- * const instance = ... ;
- *
- * // Using try/catch for error handling
- * try {
- *   const result = Ed25519KeyHashList.freeUnsafe(instance);
- *   console.log(result);
- * } catch (error) {
- *   console.error(`Ed25519KeyHashList.freeUnsafe failed: ${error.message}`);
- * }
- *
  * @since 2.0.0
  * @category MethodsUnsafe
  */
@@ -83,21 +57,13 @@ export const freeUnsafe = (instance: CML.Ed25519KeyHashList): void =>
 /**
  * Static method _new of Ed25519KeyHashList
  *
- * @example
- * import { Ed25519KeyHashList } from "@lucid-evolution/experimental";
- * import { Effect } from "effect";
- *
- * // Using Effect for safe execution with error handling
- * Effect.gen(function*() {
- *
- *   const result = yield* Ed25519KeyHashList._new();
- *   console.log(result);
- * });
- *
  * @since 2.0.0
  * @category Constructors
  */
-export const _new = Effect.fn(function* () {
+export const _new: () => Effect.Effect<
+  CML.Ed25519KeyHashList,
+  Ed25519KeyHashListError
+> = Effect.fn(function* () {
   return yield* Effect.try({
     try: () => CML.Ed25519KeyHashList.new(),
     catch: () =>
@@ -110,46 +76,21 @@ export const _new = Effect.fn(function* () {
 /**
  * Unsafely calls Ed25519KeyHashList._new without Effect wrapper
  *
- * @example
- * import { Ed25519KeyHashList } from "@lucid-evolution/experimental";
- *
- *
- *
- * // Using try/catch for error handling
- * try {
- *   const result = Ed25519KeyHashList._newUnsafe();
- *   console.log(result);
- * } catch (error) {
- *   console.error(`Ed25519KeyHashList._newUnsafe failed: ${error.message}`);
- * }
- *
  * @since 2.0.0
  * @category ConstructorsUnsafe
  */
-export const _newUnsafe = () => Effect.runSync(_new());
+export const _newUnsafe = (): CML.Ed25519KeyHashList => Effect.runSync(_new());
 
 /**
  * Method len of Ed25519KeyHashList
  *
- * @example
- * import { Ed25519KeyHashList } from "@lucid-evolution/experimental";
- * import { Effect } from "effect";
- *
- * // Using Effect for safe execution with error handling
- * Effect.gen(function*() {
- * // Assume we have a Ed25519KeyHashList instance
- * const instance = ... ;
- *   const result = yield* Ed25519KeyHashList.len(instance);
- *   console.log(result);
- * });
- *
  * @since 2.0.0
  * @category Methods
  */
-export const len = Effect.fn(
-  (
-    instance: CML.Ed25519KeyHashList,
-  ): Effect.Effect<number, Ed25519KeyHashListError> =>
+export const len: (
+  instance: CML.Ed25519KeyHashList,
+) => Effect.Effect<number, Ed25519KeyHashListError> = Effect.fn(
+  (instance: CML.Ed25519KeyHashList) =>
     Effect.try({
       try: () => instance.len(),
       catch: () =>
@@ -162,20 +103,6 @@ export const len = Effect.fn(
 /**
  * Unsafely calls instance.len without Effect wrapper
  *
- * @example
- * import { Ed25519KeyHashList } from "@lucid-evolution/experimental";
- *
- * // Assume we have a Ed25519KeyHashList instance
- * const instance = ... ;
- *
- * // Using try/catch for error handling
- * try {
- *   const result = Ed25519KeyHashList.lenUnsafe(instance);
- *   console.log(result);
- * } catch (error) {
- *   console.error(`Ed25519KeyHashList.lenUnsafe failed: ${error.message}`);
- * }
- *
  * @since 2.0.0
  * @category MethodsUnsafe
  */
@@ -185,26 +112,14 @@ export const lenUnsafe = (instance: CML.Ed25519KeyHashList): number =>
 /**
  * Method get of Ed25519KeyHashList
  *
- * @example
- * import { Ed25519KeyHashList } from "@lucid-evolution/experimental";
- * import { Effect } from "effect";
- *
- * // Using Effect for safe execution with error handling
- * Effect.gen(function*() {
- * // Assume we have a Ed25519KeyHashList instance
- * const instance = ... ;
- *   const result = yield* Ed25519KeyHashList.get(instance,  parameters );
- *   console.log(result);
- * });
- *
  * @since 2.0.0
  * @category Methods
  */
-export const get = Effect.fn(
-  (
-    instance: CML.Ed25519KeyHashList,
-    index: number,
-  ): Effect.Effect<CML.Ed25519KeyHash, Ed25519KeyHashListError> =>
+export const get: (
+  instance: CML.Ed25519KeyHashList,
+  index: number,
+) => Effect.Effect<CML.Ed25519KeyHash, Ed25519KeyHashListError> = Effect.fn(
+  (instance: CML.Ed25519KeyHashList, index: number) =>
     Effect.try({
       try: () => instance.get(index),
       catch: () =>
@@ -217,20 +132,6 @@ export const get = Effect.fn(
 /**
  * Unsafely calls instance.get without Effect wrapper
  *
- * @example
- * import { Ed25519KeyHashList } from "@lucid-evolution/experimental";
- *
- * // Assume we have a Ed25519KeyHashList instance
- * const instance = ... ;
- *
- * // Using try/catch for error handling
- * try {
- *   const result = Ed25519KeyHashList.getUnsafe(instance,  parameters );
- *   console.log(result);
- * } catch (error) {
- *   console.error(`Ed25519KeyHashList.getUnsafe failed: ${error.message}`);
- * }
- *
  * @since 2.0.0
  * @category MethodsUnsafe
  */
@@ -242,26 +143,14 @@ export const getUnsafe = (
 /**
  * Method add of Ed25519KeyHashList
  *
- * @example
- * import { Ed25519KeyHashList } from "@lucid-evolution/experimental";
- * import { Effect } from "effect";
- *
- * // Using Effect for safe execution with error handling
- * Effect.gen(function*() {
- * // Assume we have a Ed25519KeyHashList instance
- * const instance = ... ;
- *   const result = yield* Ed25519KeyHashList.add(instance,  parameters );
- *   console.log(result);
- * });
- *
  * @since 2.0.0
  * @category Methods
  */
-export const add = Effect.fn(
-  (
-    instance: CML.Ed25519KeyHashList,
-    elem: CML.Ed25519KeyHash,
-  ): Effect.Effect<void, Ed25519KeyHashListError> =>
+export const add: (
+  instance: CML.Ed25519KeyHashList,
+  elem: CML.Ed25519KeyHash,
+) => Effect.Effect<void, Ed25519KeyHashListError> = Effect.fn(
+  (instance: CML.Ed25519KeyHashList, elem: CML.Ed25519KeyHash) =>
     Effect.try({
       try: () => instance.add(elem),
       catch: () =>
@@ -273,20 +162,6 @@ export const add = Effect.fn(
 
 /**
  * Unsafely calls instance.add without Effect wrapper
- *
- * @example
- * import { Ed25519KeyHashList } from "@lucid-evolution/experimental";
- *
- * // Assume we have a Ed25519KeyHashList instance
- * const instance = ... ;
- *
- * // Using try/catch for error handling
- * try {
- *   const result = Ed25519KeyHashList.addUnsafe(instance,  parameters );
- *   console.log(result);
- * } catch (error) {
- *   console.error(`Ed25519KeyHashList.addUnsafe failed: ${error.message}`);
- * }
  *
  * @since 2.0.0
  * @category MethodsUnsafe

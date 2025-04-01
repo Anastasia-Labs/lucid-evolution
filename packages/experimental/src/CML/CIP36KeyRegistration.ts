@@ -29,25 +29,13 @@ export class CIP36KeyRegistrationError extends Data.TaggedError(
 /**
  * Method free of CIP36KeyRegistration
  *
- * @example
- * import { CIP36KeyRegistration } from "@lucid-evolution/experimental";
- * import { Effect } from "effect";
- *
- * // Using Effect for safe execution with error handling
- * Effect.gen(function*() {
- * // Assume we have a CIP36KeyRegistration instance
- * const instance = ... ;
- *   const result = yield* CIP36KeyRegistration.free(instance);
- *   console.log(result);
- * });
- *
  * @since 2.0.0
  * @category Methods
  */
-export const free = Effect.fn(
-  (
-    instance: CML.CIP36KeyRegistration,
-  ): Effect.Effect<void, CIP36KeyRegistrationError> =>
+export const free: (
+  instance: CML.CIP36KeyRegistration,
+) => Effect.Effect<void, CIP36KeyRegistrationError> = Effect.fn(
+  (instance: CML.CIP36KeyRegistration) =>
     Effect.try({
       try: () => instance.free(),
       catch: () =>
@@ -60,20 +48,6 @@ export const free = Effect.fn(
 /**
  * Unsafely calls instance.free without Effect wrapper
  *
- * @example
- * import { CIP36KeyRegistration } from "@lucid-evolution/experimental";
- *
- * // Assume we have a CIP36KeyRegistration instance
- * const instance = ... ;
- *
- * // Using try/catch for error handling
- * try {
- *   const result = CIP36KeyRegistration.freeUnsafe(instance);
- *   console.log(result);
- * } catch (error) {
- *   console.error(`CIP36KeyRegistration.freeUnsafe failed: ${error.message}`);
- * }
- *
  * @since 2.0.0
  * @category MethodsUnsafe
  */
@@ -83,25 +57,13 @@ export const freeUnsafe = (instance: CML.CIP36KeyRegistration): void =>
 /**
  * Method toCborBytes of CIP36KeyRegistration
  *
- * @example
- * import { CIP36KeyRegistration } from "@lucid-evolution/experimental";
- * import { Effect } from "effect";
- *
- * // Using Effect for safe execution with error handling
- * Effect.gen(function*() {
- * // Assume we have a CIP36KeyRegistration instance
- * const instance = ... ;
- *   const result = yield* CIP36KeyRegistration.toCborBytes(instance);
- *   console.log(result);
- * });
- *
  * @since 2.0.0
  * @category Methods
  */
-export const toCborBytes = Effect.fn(
-  (
-    instance: CML.CIP36KeyRegistration,
-  ): Effect.Effect<Uint8Array, CIP36KeyRegistrationError> =>
+export const toCborBytes: (
+  instance: CML.CIP36KeyRegistration,
+) => Effect.Effect<Uint8Array, CIP36KeyRegistrationError> = Effect.fn(
+  (instance: CML.CIP36KeyRegistration) =>
     Effect.try({
       try: () => instance.to_cbor_bytes(),
       catch: () =>
@@ -114,20 +76,6 @@ export const toCborBytes = Effect.fn(
 /**
  * Unsafely calls instance.toCborBytes without Effect wrapper
  *
- * @example
- * import { CIP36KeyRegistration } from "@lucid-evolution/experimental";
- *
- * // Assume we have a CIP36KeyRegistration instance
- * const instance = ... ;
- *
- * // Using try/catch for error handling
- * try {
- *   const result = CIP36KeyRegistration.toCborBytesUnsafe(instance);
- *   console.log(result);
- * } catch (error) {
- *   console.error(`CIP36KeyRegistration.toCborBytesUnsafe failed: ${error.message}`);
- * }
- *
  * @since 2.0.0
  * @category MethodsUnsafe
  */
@@ -138,25 +86,13 @@ export const toCborBytesUnsafe = (
 /**
  * Method toCanonicalCborBytes of CIP36KeyRegistration
  *
- * @example
- * import { CIP36KeyRegistration } from "@lucid-evolution/experimental";
- * import { Effect } from "effect";
- *
- * // Using Effect for safe execution with error handling
- * Effect.gen(function*() {
- * // Assume we have a CIP36KeyRegistration instance
- * const instance = ... ;
- *   const result = yield* CIP36KeyRegistration.toCanonicalCborBytes(instance);
- *   console.log(result);
- * });
- *
  * @since 2.0.0
  * @category Methods
  */
-export const toCanonicalCborBytes = Effect.fn(
-  (
-    instance: CML.CIP36KeyRegistration,
-  ): Effect.Effect<Uint8Array, CIP36KeyRegistrationError> =>
+export const toCanonicalCborBytes: (
+  instance: CML.CIP36KeyRegistration,
+) => Effect.Effect<Uint8Array, CIP36KeyRegistrationError> = Effect.fn(
+  (instance: CML.CIP36KeyRegistration) =>
     Effect.try({
       try: () => instance.to_canonical_cbor_bytes(),
       catch: () =>
@@ -169,20 +105,6 @@ export const toCanonicalCborBytes = Effect.fn(
 /**
  * Unsafely calls instance.toCanonicalCborBytes without Effect wrapper
  *
- * @example
- * import { CIP36KeyRegistration } from "@lucid-evolution/experimental";
- *
- * // Assume we have a CIP36KeyRegistration instance
- * const instance = ... ;
- *
- * // Using try/catch for error handling
- * try {
- *   const result = CIP36KeyRegistration.toCanonicalCborBytesUnsafe(instance);
- *   console.log(result);
- * } catch (error) {
- *   console.error(`CIP36KeyRegistration.toCanonicalCborBytesUnsafe failed: ${error.message}`);
- * }
- *
  * @since 2.0.0
  * @category MethodsUnsafe
  */
@@ -193,74 +115,42 @@ export const toCanonicalCborBytesUnsafe = (
 /**
  * Static method fromCborBytes of CIP36KeyRegistration
  *
- * @example
- * import { CIP36KeyRegistration } from "@lucid-evolution/experimental";
- * import { Effect } from "effect";
- *
- * // Using Effect for safe execution with error handling
- * Effect.gen(function*() {
- *
- *   const result = yield* CIP36KeyRegistration.fromCborBytes( parameters );
- *   console.log(result);
- * });
- *
  * @since 2.0.0
  * @category Constructors
  */
-export const fromCborBytes = Effect.fn(function* (cborBytes: Uint8Array) {
-  return yield* Effect.try({
-    try: () => CML.CIP36KeyRegistration.from_cbor_bytes(cborBytes),
-    catch: () =>
-      new CIP36KeyRegistrationError({
-        message: `CIP36KeyRegistration.fromCborBytes failed with parameters: ${cborBytes}. Hint: Check byte length and encoding.`,
-      }),
+export const fromCborBytes: (
+  cborBytes: Uint8Array,
+) => Effect.Effect<CML.CIP36KeyRegistration, CIP36KeyRegistrationError> =
+  Effect.fn(function* (cborBytes: Uint8Array) {
+    return yield* Effect.try({
+      try: () => CML.CIP36KeyRegistration.from_cbor_bytes(cborBytes),
+      catch: () =>
+        new CIP36KeyRegistrationError({
+          message: `CIP36KeyRegistration.fromCborBytes failed with parameters: ${cborBytes}. Hint: Check byte length and encoding.`,
+        }),
+    });
   });
-});
 
 /**
  * Unsafely calls CIP36KeyRegistration.fromCborBytes without Effect wrapper
  *
- * @example
- * import { CIP36KeyRegistration } from "@lucid-evolution/experimental";
- *
- *
- *
- * // Using try/catch for error handling
- * try {
- *   const result = CIP36KeyRegistration.fromCborBytesUnsafe( parameters );
- *   console.log(result);
- * } catch (error) {
- *   console.error(`CIP36KeyRegistration.fromCborBytesUnsafe failed: ${error.message}`);
- * }
- *
  * @since 2.0.0
  * @category ConstructorsUnsafe
  */
-export const fromCborBytesUnsafe = (cborBytes: Uint8Array) =>
-  Effect.runSync(fromCborBytes(cborBytes));
+export const fromCborBytesUnsafe = (
+  cborBytes: Uint8Array,
+): CML.CIP36KeyRegistration => Effect.runSync(fromCborBytes(cborBytes));
 
 /**
  * Method toCborHex of CIP36KeyRegistration
  *
- * @example
- * import { CIP36KeyRegistration } from "@lucid-evolution/experimental";
- * import { Effect } from "effect";
- *
- * // Using Effect for safe execution with error handling
- * Effect.gen(function*() {
- * // Assume we have a CIP36KeyRegistration instance
- * const instance = ... ;
- *   const result = yield* CIP36KeyRegistration.toCborHex(instance);
- *   console.log(result);
- * });
- *
  * @since 2.0.0
  * @category Methods
  */
-export const toCborHex = Effect.fn(
-  (
-    instance: CML.CIP36KeyRegistration,
-  ): Effect.Effect<string, CIP36KeyRegistrationError> =>
+export const toCborHex: (
+  instance: CML.CIP36KeyRegistration,
+) => Effect.Effect<string, CIP36KeyRegistrationError> = Effect.fn(
+  (instance: CML.CIP36KeyRegistration) =>
     Effect.try({
       try: () => instance.to_cbor_hex(),
       catch: () =>
@@ -273,20 +163,6 @@ export const toCborHex = Effect.fn(
 /**
  * Unsafely calls instance.toCborHex without Effect wrapper
  *
- * @example
- * import { CIP36KeyRegistration } from "@lucid-evolution/experimental";
- *
- * // Assume we have a CIP36KeyRegistration instance
- * const instance = ... ;
- *
- * // Using try/catch for error handling
- * try {
- *   const result = CIP36KeyRegistration.toCborHexUnsafe(instance);
- *   console.log(result);
- * } catch (error) {
- *   console.error(`CIP36KeyRegistration.toCborHexUnsafe failed: ${error.message}`);
- * }
- *
  * @since 2.0.0
  * @category MethodsUnsafe
  */
@@ -296,25 +172,13 @@ export const toCborHexUnsafe = (instance: CML.CIP36KeyRegistration): string =>
 /**
  * Method toCanonicalCborHex of CIP36KeyRegistration
  *
- * @example
- * import { CIP36KeyRegistration } from "@lucid-evolution/experimental";
- * import { Effect } from "effect";
- *
- * // Using Effect for safe execution with error handling
- * Effect.gen(function*() {
- * // Assume we have a CIP36KeyRegistration instance
- * const instance = ... ;
- *   const result = yield* CIP36KeyRegistration.toCanonicalCborHex(instance);
- *   console.log(result);
- * });
- *
  * @since 2.0.0
  * @category Methods
  */
-export const toCanonicalCborHex = Effect.fn(
-  (
-    instance: CML.CIP36KeyRegistration,
-  ): Effect.Effect<string, CIP36KeyRegistrationError> =>
+export const toCanonicalCborHex: (
+  instance: CML.CIP36KeyRegistration,
+) => Effect.Effect<string, CIP36KeyRegistrationError> = Effect.fn(
+  (instance: CML.CIP36KeyRegistration) =>
     Effect.try({
       try: () => instance.to_canonical_cbor_hex(),
       catch: () =>
@@ -327,20 +191,6 @@ export const toCanonicalCborHex = Effect.fn(
 /**
  * Unsafely calls instance.toCanonicalCborHex without Effect wrapper
  *
- * @example
- * import { CIP36KeyRegistration } from "@lucid-evolution/experimental";
- *
- * // Assume we have a CIP36KeyRegistration instance
- * const instance = ... ;
- *
- * // Using try/catch for error handling
- * try {
- *   const result = CIP36KeyRegistration.toCanonicalCborHexUnsafe(instance);
- *   console.log(result);
- * } catch (error) {
- *   console.error(`CIP36KeyRegistration.toCanonicalCborHexUnsafe failed: ${error.message}`);
- * }
- *
  * @since 2.0.0
  * @category MethodsUnsafe
  */
@@ -351,74 +201,42 @@ export const toCanonicalCborHexUnsafe = (
 /**
  * Static method fromCborHex of CIP36KeyRegistration
  *
- * @example
- * import { CIP36KeyRegistration } from "@lucid-evolution/experimental";
- * import { Effect } from "effect";
- *
- * // Using Effect for safe execution with error handling
- * Effect.gen(function*() {
- *
- *   const result = yield* CIP36KeyRegistration.fromCborHex( parameters );
- *   console.log(result);
- * });
- *
  * @since 2.0.0
  * @category Constructors
  */
-export const fromCborHex = Effect.fn(function* (cborBytes: string) {
-  return yield* Effect.try({
-    try: () => CML.CIP36KeyRegistration.from_cbor_hex(cborBytes),
-    catch: () =>
-      new CIP36KeyRegistrationError({
-        message: `CIP36KeyRegistration.fromCborHex failed with parameters: ${cborBytes}. Hint: Make sure it's a valid hex string representing CBOR data.`,
-      }),
+export const fromCborHex: (
+  cborBytes: string,
+) => Effect.Effect<CML.CIP36KeyRegistration, CIP36KeyRegistrationError> =
+  Effect.fn(function* (cborBytes: string) {
+    return yield* Effect.try({
+      try: () => CML.CIP36KeyRegistration.from_cbor_hex(cborBytes),
+      catch: () =>
+        new CIP36KeyRegistrationError({
+          message: `CIP36KeyRegistration.fromCborHex failed with parameters: ${cborBytes}. Hint: Make sure it's a valid hex string representing CBOR data.`,
+        }),
+    });
   });
-});
 
 /**
  * Unsafely calls CIP36KeyRegistration.fromCborHex without Effect wrapper
  *
- * @example
- * import { CIP36KeyRegistration } from "@lucid-evolution/experimental";
- *
- *
- *
- * // Using try/catch for error handling
- * try {
- *   const result = CIP36KeyRegistration.fromCborHexUnsafe( parameters );
- *   console.log(result);
- * } catch (error) {
- *   console.error(`CIP36KeyRegistration.fromCborHexUnsafe failed: ${error.message}`);
- * }
- *
  * @since 2.0.0
  * @category ConstructorsUnsafe
  */
-export const fromCborHexUnsafe = (cborBytes: string) =>
-  Effect.runSync(fromCborHex(cborBytes));
+export const fromCborHexUnsafe = (
+  cborBytes: string,
+): CML.CIP36KeyRegistration => Effect.runSync(fromCborHex(cborBytes));
 
 /**
  * Method toJson of CIP36KeyRegistration
  *
- * @example
- * import { CIP36KeyRegistration } from "@lucid-evolution/experimental";
- * import { Effect } from "effect";
- *
- * // Using Effect for safe execution with error handling
- * Effect.gen(function*() {
- * // Assume we have a CIP36KeyRegistration instance
- * const instance = ... ;
- *   const result = yield* CIP36KeyRegistration.toJson(instance);
- *   console.log(result);
- * });
- *
  * @since 2.0.0
  * @category Methods
  */
-export const toJson = Effect.fn(
-  (
-    instance: CML.CIP36KeyRegistration,
-  ): Effect.Effect<string, CIP36KeyRegistrationError> =>
+export const toJson: (
+  instance: CML.CIP36KeyRegistration,
+) => Effect.Effect<string, CIP36KeyRegistrationError> = Effect.fn(
+  (instance: CML.CIP36KeyRegistration) =>
     Effect.try({
       try: () => instance.to_json(),
       catch: () =>
@@ -431,20 +249,6 @@ export const toJson = Effect.fn(
 /**
  * Unsafely calls instance.toJson without Effect wrapper
  *
- * @example
- * import { CIP36KeyRegistration } from "@lucid-evolution/experimental";
- *
- * // Assume we have a CIP36KeyRegistration instance
- * const instance = ... ;
- *
- * // Using try/catch for error handling
- * try {
- *   const result = CIP36KeyRegistration.toJsonUnsafe(instance);
- *   console.log(result);
- * } catch (error) {
- *   console.error(`CIP36KeyRegistration.toJsonUnsafe failed: ${error.message}`);
- * }
- *
  * @since 2.0.0
  * @category MethodsUnsafe
  */
@@ -454,25 +258,13 @@ export const toJsonUnsafe = (instance: CML.CIP36KeyRegistration): string =>
 /**
  * Method toJsValue of CIP36KeyRegistration
  *
- * @example
- * import { CIP36KeyRegistration } from "@lucid-evolution/experimental";
- * import { Effect } from "effect";
- *
- * // Using Effect for safe execution with error handling
- * Effect.gen(function*() {
- * // Assume we have a CIP36KeyRegistration instance
- * const instance = ... ;
- *   const result = yield* CIP36KeyRegistration.toJsValue(instance);
- *   console.log(result);
- * });
- *
  * @since 2.0.0
  * @category Methods
  */
-export const toJsValue = Effect.fn(
-  (
-    instance: CML.CIP36KeyRegistration,
-  ): Effect.Effect<any, CIP36KeyRegistrationError> =>
+export const toJsValue: (
+  instance: CML.CIP36KeyRegistration,
+) => Effect.Effect<any, CIP36KeyRegistrationError> = Effect.fn(
+  (instance: CML.CIP36KeyRegistration) =>
     Effect.try({
       try: () => instance.to_js_value(),
       catch: () =>
@@ -485,20 +277,6 @@ export const toJsValue = Effect.fn(
 /**
  * Unsafely calls instance.toJsValue without Effect wrapper
  *
- * @example
- * import { CIP36KeyRegistration } from "@lucid-evolution/experimental";
- *
- * // Assume we have a CIP36KeyRegistration instance
- * const instance = ... ;
- *
- * // Using try/catch for error handling
- * try {
- *   const result = CIP36KeyRegistration.toJsValueUnsafe(instance);
- *   console.log(result);
- * } catch (error) {
- *   console.error(`CIP36KeyRegistration.toJsValueUnsafe failed: ${error.message}`);
- * }
- *
  * @since 2.0.0
  * @category MethodsUnsafe
  */
@@ -508,76 +286,41 @@ export const toJsValueUnsafe = (instance: CML.CIP36KeyRegistration): any =>
 /**
  * Static method fromJson of CIP36KeyRegistration
  *
- * @example
- * import { CIP36KeyRegistration } from "@lucid-evolution/experimental";
- * import { Effect } from "effect";
- *
- * // Using Effect for safe execution with error handling
- * Effect.gen(function*() {
- *
- *   const result = yield* CIP36KeyRegistration.fromJson( parameters );
- *   console.log(result);
- * });
- *
  * @since 2.0.0
  * @category Constructors
  */
-export const fromJson = Effect.fn(function* (json: string) {
-  return yield* Effect.try({
-    try: () => CML.CIP36KeyRegistration.from_json(json),
-    catch: () =>
-      new CIP36KeyRegistrationError({
-        message: `CIP36KeyRegistration.fromJson failed with parameters: ${json}. Hint: Validate your JSON structure.`,
-      }),
+export const fromJson: (
+  json: string,
+) => Effect.Effect<CML.CIP36KeyRegistration, CIP36KeyRegistrationError> =
+  Effect.fn(function* (json: string) {
+    return yield* Effect.try({
+      try: () => CML.CIP36KeyRegistration.from_json(json),
+      catch: () =>
+        new CIP36KeyRegistrationError({
+          message: `CIP36KeyRegistration.fromJson failed with parameters: ${json}. Hint: Validate your JSON structure.`,
+        }),
+    });
   });
-});
 
 /**
  * Unsafely calls CIP36KeyRegistration.fromJson without Effect wrapper
  *
- * @example
- * import { CIP36KeyRegistration } from "@lucid-evolution/experimental";
- *
- *
- *
- * // Using try/catch for error handling
- * try {
- *   const result = CIP36KeyRegistration.fromJsonUnsafe( parameters );
- *   console.log(result);
- * } catch (error) {
- *   console.error(`CIP36KeyRegistration.fromJsonUnsafe failed: ${error.message}`);
- * }
- *
  * @since 2.0.0
  * @category ConstructorsUnsafe
  */
-export const fromJsonUnsafe = (json: string) => Effect.runSync(fromJson(json));
+export const fromJsonUnsafe = (json: string): CML.CIP36KeyRegistration =>
+  Effect.runSync(fromJson(json));
 
 /**
  * Method delegation of CIP36KeyRegistration
  *
- * @example
- * import { CIP36KeyRegistration } from "@lucid-evolution/experimental";
- * import { Effect } from "effect";
- *
- * // Using Effect for safe execution with error handling
- * Effect.gen(function*() {
- * // Assume we have a CIP36KeyRegistration instance
- * const instance = ... ;
- *   const result = yield* CIP36KeyRegistration.delegation(instance);
- *   console.log(result);
- * });
- *
  * @since 2.0.0
  * @category Methods
  */
-export const delegation = Effect.fn(
-  (
-    instance: CML.CIP36KeyRegistration,
-  ): Effect.Effect<
-    CML.CIP36DelegationDistribution,
-    CIP36KeyRegistrationError
-  > =>
+export const delegation: (
+  instance: CML.CIP36KeyRegistration,
+) => Effect.Effect<CML.CIP36DelegationDistribution, CIP36KeyRegistrationError> =
+  Effect.fn((instance: CML.CIP36KeyRegistration) =>
     Effect.try({
       try: () => instance.delegation(),
       catch: () =>
@@ -585,24 +328,10 @@ export const delegation = Effect.fn(
           message: `CIP36KeyRegistration.delegation failed `,
         }),
     }),
-);
+  );
 
 /**
  * Unsafely calls instance.delegation without Effect wrapper
- *
- * @example
- * import { CIP36KeyRegistration } from "@lucid-evolution/experimental";
- *
- * // Assume we have a CIP36KeyRegistration instance
- * const instance = ... ;
- *
- * // Using try/catch for error handling
- * try {
- *   const result = CIP36KeyRegistration.delegationUnsafe(instance);
- *   console.log(result);
- * } catch (error) {
- *   console.error(`CIP36KeyRegistration.delegationUnsafe failed: ${error.message}`);
- * }
  *
  * @since 2.0.0
  * @category MethodsUnsafe
@@ -614,25 +343,13 @@ export const delegationUnsafe = (
 /**
  * Method stakeCredential of CIP36KeyRegistration
  *
- * @example
- * import { CIP36KeyRegistration } from "@lucid-evolution/experimental";
- * import { Effect } from "effect";
- *
- * // Using Effect for safe execution with error handling
- * Effect.gen(function*() {
- * // Assume we have a CIP36KeyRegistration instance
- * const instance = ... ;
- *   const result = yield* CIP36KeyRegistration.stakeCredential(instance);
- *   console.log(result);
- * });
- *
  * @since 2.0.0
  * @category Methods
  */
-export const stakeCredential = Effect.fn(
-  (
-    instance: CML.CIP36KeyRegistration,
-  ): Effect.Effect<CML.PublicKey, CIP36KeyRegistrationError> =>
+export const stakeCredential: (
+  instance: CML.CIP36KeyRegistration,
+) => Effect.Effect<CML.PublicKey, CIP36KeyRegistrationError> = Effect.fn(
+  (instance: CML.CIP36KeyRegistration) =>
     Effect.try({
       try: () => instance.stake_credential(),
       catch: () =>
@@ -645,20 +362,6 @@ export const stakeCredential = Effect.fn(
 /**
  * Unsafely calls instance.stakeCredential without Effect wrapper
  *
- * @example
- * import { CIP36KeyRegistration } from "@lucid-evolution/experimental";
- *
- * // Assume we have a CIP36KeyRegistration instance
- * const instance = ... ;
- *
- * // Using try/catch for error handling
- * try {
- *   const result = CIP36KeyRegistration.stakeCredentialUnsafe(instance);
- *   console.log(result);
- * } catch (error) {
- *   console.error(`CIP36KeyRegistration.stakeCredentialUnsafe failed: ${error.message}`);
- * }
- *
  * @since 2.0.0
  * @category MethodsUnsafe
  */
@@ -669,25 +372,13 @@ export const stakeCredentialUnsafe = (
 /**
  * Method paymentAddress of CIP36KeyRegistration
  *
- * @example
- * import { CIP36KeyRegistration } from "@lucid-evolution/experimental";
- * import { Effect } from "effect";
- *
- * // Using Effect for safe execution with error handling
- * Effect.gen(function*() {
- * // Assume we have a CIP36KeyRegistration instance
- * const instance = ... ;
- *   const result = yield* CIP36KeyRegistration.paymentAddress(instance);
- *   console.log(result);
- * });
- *
  * @since 2.0.0
  * @category Methods
  */
-export const paymentAddress = Effect.fn(
-  (
-    instance: CML.CIP36KeyRegistration,
-  ): Effect.Effect<CML.Address, CIP36KeyRegistrationError> =>
+export const paymentAddress: (
+  instance: CML.CIP36KeyRegistration,
+) => Effect.Effect<CML.Address, CIP36KeyRegistrationError> = Effect.fn(
+  (instance: CML.CIP36KeyRegistration) =>
     Effect.try({
       try: () => instance.payment_address(),
       catch: () =>
@@ -700,20 +391,6 @@ export const paymentAddress = Effect.fn(
 /**
  * Unsafely calls instance.paymentAddress without Effect wrapper
  *
- * @example
- * import { CIP36KeyRegistration } from "@lucid-evolution/experimental";
- *
- * // Assume we have a CIP36KeyRegistration instance
- * const instance = ... ;
- *
- * // Using try/catch for error handling
- * try {
- *   const result = CIP36KeyRegistration.paymentAddressUnsafe(instance);
- *   console.log(result);
- * } catch (error) {
- *   console.error(`CIP36KeyRegistration.paymentAddressUnsafe failed: ${error.message}`);
- * }
- *
  * @since 2.0.0
  * @category MethodsUnsafe
  */
@@ -724,25 +401,13 @@ export const paymentAddressUnsafe = (
 /**
  * Method nonce of CIP36KeyRegistration
  *
- * @example
- * import { CIP36KeyRegistration } from "@lucid-evolution/experimental";
- * import { Effect } from "effect";
- *
- * // Using Effect for safe execution with error handling
- * Effect.gen(function*() {
- * // Assume we have a CIP36KeyRegistration instance
- * const instance = ... ;
- *   const result = yield* CIP36KeyRegistration.nonce(instance);
- *   console.log(result);
- * });
- *
  * @since 2.0.0
  * @category Methods
  */
-export const nonce = Effect.fn(
-  (
-    instance: CML.CIP36KeyRegistration,
-  ): Effect.Effect<bigint, CIP36KeyRegistrationError> =>
+export const nonce: (
+  instance: CML.CIP36KeyRegistration,
+) => Effect.Effect<bigint, CIP36KeyRegistrationError> = Effect.fn(
+  (instance: CML.CIP36KeyRegistration) =>
     Effect.try({
       try: () => instance.nonce(),
       catch: () =>
@@ -755,20 +420,6 @@ export const nonce = Effect.fn(
 /**
  * Unsafely calls instance.nonce without Effect wrapper
  *
- * @example
- * import { CIP36KeyRegistration } from "@lucid-evolution/experimental";
- *
- * // Assume we have a CIP36KeyRegistration instance
- * const instance = ... ;
- *
- * // Using try/catch for error handling
- * try {
- *   const result = CIP36KeyRegistration.nonceUnsafe(instance);
- *   console.log(result);
- * } catch (error) {
- *   console.error(`CIP36KeyRegistration.nonceUnsafe failed: ${error.message}`);
- * }
- *
  * @since 2.0.0
  * @category MethodsUnsafe
  */
@@ -778,26 +429,14 @@ export const nonceUnsafe = (instance: CML.CIP36KeyRegistration): bigint =>
 /**
  * Method setVotingPurpose of CIP36KeyRegistration
  *
- * @example
- * import { CIP36KeyRegistration } from "@lucid-evolution/experimental";
- * import { Effect } from "effect";
- *
- * // Using Effect for safe execution with error handling
- * Effect.gen(function*() {
- * // Assume we have a CIP36KeyRegistration instance
- * const instance = ... ;
- *   const result = yield* CIP36KeyRegistration.setVotingPurpose(instance,  parameters );
- *   console.log(result);
- * });
- *
  * @since 2.0.0
  * @category Methods
  */
-export const setVotingPurpose = Effect.fn(
-  (
-    instance: CML.CIP36KeyRegistration,
-    votingPurpose: bigint,
-  ): Effect.Effect<void, CIP36KeyRegistrationError> =>
+export const setVotingPurpose: (
+  instance: CML.CIP36KeyRegistration,
+  votingPurpose: bigint,
+) => Effect.Effect<void, CIP36KeyRegistrationError> = Effect.fn(
+  (instance: CML.CIP36KeyRegistration, votingPurpose: bigint) =>
     Effect.try({
       try: () => instance.set_voting_purpose(votingPurpose),
       catch: () =>
@@ -810,20 +449,6 @@ export const setVotingPurpose = Effect.fn(
 /**
  * Unsafely calls instance.setVotingPurpose without Effect wrapper
  *
- * @example
- * import { CIP36KeyRegistration } from "@lucid-evolution/experimental";
- *
- * // Assume we have a CIP36KeyRegistration instance
- * const instance = ... ;
- *
- * // Using try/catch for error handling
- * try {
- *   const result = CIP36KeyRegistration.setVotingPurposeUnsafe(instance,  parameters );
- *   console.log(result);
- * } catch (error) {
- *   console.error(`CIP36KeyRegistration.setVotingPurposeUnsafe failed: ${error.message}`);
- * }
- *
  * @since 2.0.0
  * @category MethodsUnsafe
  */
@@ -835,25 +460,13 @@ export const setVotingPurposeUnsafe = (
 /**
  * Method votingPurpose of CIP36KeyRegistration
  *
- * @example
- * import { CIP36KeyRegistration } from "@lucid-evolution/experimental";
- * import { Effect } from "effect";
- *
- * // Using Effect for safe execution with error handling
- * Effect.gen(function*() {
- * // Assume we have a CIP36KeyRegistration instance
- * const instance = ... ;
- *   const result = yield* CIP36KeyRegistration.votingPurpose(instance);
- *   console.log(result);
- * });
- *
  * @since 2.0.0
  * @category Methods
  */
-export const votingPurpose = Effect.fn(
-  (
-    instance: CML.CIP36KeyRegistration,
-  ): Effect.Effect<bigint, CIP36KeyRegistrationError> =>
+export const votingPurpose: (
+  instance: CML.CIP36KeyRegistration,
+) => Effect.Effect<bigint, CIP36KeyRegistrationError> = Effect.fn(
+  (instance: CML.CIP36KeyRegistration) =>
     Effect.try({
       try: () => instance.voting_purpose(),
       catch: () =>
@@ -865,20 +478,6 @@ export const votingPurpose = Effect.fn(
 
 /**
  * Unsafely calls instance.votingPurpose without Effect wrapper
- *
- * @example
- * import { CIP36KeyRegistration } from "@lucid-evolution/experimental";
- *
- * // Assume we have a CIP36KeyRegistration instance
- * const instance = ... ;
- *
- * // Using try/catch for error handling
- * try {
- *   const result = CIP36KeyRegistration.votingPurposeUnsafe(instance);
- *   console.log(result);
- * } catch (error) {
- *   console.error(`CIP36KeyRegistration.votingPurposeUnsafe failed: ${error.message}`);
- * }
  *
  * @since 2.0.0
  * @category MethodsUnsafe

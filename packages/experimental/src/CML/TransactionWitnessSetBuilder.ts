@@ -29,25 +29,13 @@ export class TransactionWitnessSetBuilderError extends Data.TaggedError(
 /**
  * Method free of TransactionWitnessSetBuilder
  *
- * @example
- * import { TransactionWitnessSetBuilder } from "@lucid-evolution/experimental";
- * import { Effect } from "effect";
- *
- * // Using Effect for safe execution with error handling
- * Effect.gen(function*() {
- * // Assume we have a TransactionWitnessSetBuilder instance
- * const instance = ... ;
- *   const result = yield* TransactionWitnessSetBuilder.free(instance);
- *   console.log(result);
- * });
- *
  * @since 2.0.0
  * @category Methods
  */
-export const free = Effect.fn(
-  (
-    instance: CML.TransactionWitnessSetBuilder,
-  ): Effect.Effect<void, TransactionWitnessSetBuilderError> =>
+export const free: (
+  instance: CML.TransactionWitnessSetBuilder,
+) => Effect.Effect<void, TransactionWitnessSetBuilderError> = Effect.fn(
+  (instance: CML.TransactionWitnessSetBuilder) =>
     Effect.try({
       try: () => instance.free(),
       catch: () =>
@@ -60,20 +48,6 @@ export const free = Effect.fn(
 /**
  * Unsafely calls instance.free without Effect wrapper
  *
- * @example
- * import { TransactionWitnessSetBuilder } from "@lucid-evolution/experimental";
- *
- * // Assume we have a TransactionWitnessSetBuilder instance
- * const instance = ... ;
- *
- * // Using try/catch for error handling
- * try {
- *   const result = TransactionWitnessSetBuilder.freeUnsafe(instance);
- *   console.log(result);
- * } catch (error) {
- *   console.error(`TransactionWitnessSetBuilder.freeUnsafe failed: ${error.message}`);
- * }
- *
  * @since 2.0.0
  * @category MethodsUnsafe
  */
@@ -83,26 +57,14 @@ export const freeUnsafe = (instance: CML.TransactionWitnessSetBuilder): void =>
 /**
  * Method addVkey of TransactionWitnessSetBuilder
  *
- * @example
- * import { TransactionWitnessSetBuilder } from "@lucid-evolution/experimental";
- * import { Effect } from "effect";
- *
- * // Using Effect for safe execution with error handling
- * Effect.gen(function*() {
- * // Assume we have a TransactionWitnessSetBuilder instance
- * const instance = ... ;
- *   const result = yield* TransactionWitnessSetBuilder.addVkey(instance,  parameters );
- *   console.log(result);
- * });
- *
  * @since 2.0.0
  * @category Methods
  */
-export const addVkey = Effect.fn(
-  (
-    instance: CML.TransactionWitnessSetBuilder,
-    vkeyWitness: CML.Vkeywitness,
-  ): Effect.Effect<void, TransactionWitnessSetBuilderError> =>
+export const addVkey: (
+  instance: CML.TransactionWitnessSetBuilder,
+  vkeyWitness: CML.Vkeywitness,
+) => Effect.Effect<void, TransactionWitnessSetBuilderError> = Effect.fn(
+  (instance: CML.TransactionWitnessSetBuilder, vkeyWitness: CML.Vkeywitness) =>
     Effect.try({
       try: () => instance.add_vkey(vkeyWitness),
       catch: () =>
@@ -115,20 +77,6 @@ export const addVkey = Effect.fn(
 /**
  * Unsafely calls instance.addVkey without Effect wrapper
  *
- * @example
- * import { TransactionWitnessSetBuilder } from "@lucid-evolution/experimental";
- *
- * // Assume we have a TransactionWitnessSetBuilder instance
- * const instance = ... ;
- *
- * // Using try/catch for error handling
- * try {
- *   const result = TransactionWitnessSetBuilder.addVkeyUnsafe(instance,  parameters );
- *   console.log(result);
- * } catch (error) {
- *   console.error(`TransactionWitnessSetBuilder.addVkeyUnsafe failed: ${error.message}`);
- * }
- *
  * @since 2.0.0
  * @category MethodsUnsafe
  */
@@ -140,26 +88,17 @@ export const addVkeyUnsafe = (
 /**
  * Method addBootstrap of TransactionWitnessSetBuilder
  *
- * @example
- * import { TransactionWitnessSetBuilder } from "@lucid-evolution/experimental";
- * import { Effect } from "effect";
- *
- * // Using Effect for safe execution with error handling
- * Effect.gen(function*() {
- * // Assume we have a TransactionWitnessSetBuilder instance
- * const instance = ... ;
- *   const result = yield* TransactionWitnessSetBuilder.addBootstrap(instance,  parameters );
- *   console.log(result);
- * });
- *
  * @since 2.0.0
  * @category Methods
  */
-export const addBootstrap = Effect.fn(
+export const addBootstrap: (
+  instance: CML.TransactionWitnessSetBuilder,
+  bootstrap: CML.BootstrapWitness,
+) => Effect.Effect<void, TransactionWitnessSetBuilderError> = Effect.fn(
   (
     instance: CML.TransactionWitnessSetBuilder,
     bootstrap: CML.BootstrapWitness,
-  ): Effect.Effect<void, TransactionWitnessSetBuilderError> =>
+  ) =>
     Effect.try({
       try: () => instance.add_bootstrap(bootstrap),
       catch: () =>
@@ -172,20 +111,6 @@ export const addBootstrap = Effect.fn(
 /**
  * Unsafely calls instance.addBootstrap without Effect wrapper
  *
- * @example
- * import { TransactionWitnessSetBuilder } from "@lucid-evolution/experimental";
- *
- * // Assume we have a TransactionWitnessSetBuilder instance
- * const instance = ... ;
- *
- * // Using try/catch for error handling
- * try {
- *   const result = TransactionWitnessSetBuilder.addBootstrapUnsafe(instance,  parameters );
- *   console.log(result);
- * } catch (error) {
- *   console.error(`TransactionWitnessSetBuilder.addBootstrapUnsafe failed: ${error.message}`);
- * }
- *
  * @since 2.0.0
  * @category MethodsUnsafe
  */
@@ -197,26 +122,14 @@ export const addBootstrapUnsafe = (
 /**
  * Method addScript of TransactionWitnessSetBuilder
  *
- * @example
- * import { TransactionWitnessSetBuilder } from "@lucid-evolution/experimental";
- * import { Effect } from "effect";
- *
- * // Using Effect for safe execution with error handling
- * Effect.gen(function*() {
- * // Assume we have a TransactionWitnessSetBuilder instance
- * const instance = ... ;
- *   const result = yield* TransactionWitnessSetBuilder.addScript(instance,  parameters );
- *   console.log(result);
- * });
- *
  * @since 2.0.0
  * @category Methods
  */
-export const addScript = Effect.fn(
-  (
-    instance: CML.TransactionWitnessSetBuilder,
-    script: CML.Script,
-  ): Effect.Effect<void, TransactionWitnessSetBuilderError> =>
+export const addScript: (
+  instance: CML.TransactionWitnessSetBuilder,
+  script: CML.Script,
+) => Effect.Effect<void, TransactionWitnessSetBuilderError> = Effect.fn(
+  (instance: CML.TransactionWitnessSetBuilder, script: CML.Script) =>
     Effect.try({
       try: () => instance.add_script(script),
       catch: () =>
@@ -229,20 +142,6 @@ export const addScript = Effect.fn(
 /**
  * Unsafely calls instance.addScript without Effect wrapper
  *
- * @example
- * import { TransactionWitnessSetBuilder } from "@lucid-evolution/experimental";
- *
- * // Assume we have a TransactionWitnessSetBuilder instance
- * const instance = ... ;
- *
- * // Using try/catch for error handling
- * try {
- *   const result = TransactionWitnessSetBuilder.addScriptUnsafe(instance,  parameters );
- *   console.log(result);
- * } catch (error) {
- *   console.error(`TransactionWitnessSetBuilder.addScriptUnsafe failed: ${error.message}`);
- * }
- *
  * @since 2.0.0
  * @category MethodsUnsafe
  */
@@ -254,25 +153,13 @@ export const addScriptUnsafe = (
 /**
  * Method getNativeScript of TransactionWitnessSetBuilder
  *
- * @example
- * import { TransactionWitnessSetBuilder } from "@lucid-evolution/experimental";
- * import { Effect } from "effect";
- *
- * // Using Effect for safe execution with error handling
- * Effect.gen(function*() {
- * // Assume we have a TransactionWitnessSetBuilder instance
- * const instance = ... ;
- *   const result = yield* TransactionWitnessSetBuilder.getNativeScript(instance);
- *   console.log(result);
- * });
- *
  * @since 2.0.0
  * @category Methods
  */
-export const getNativeScript = Effect.fn(
-  (
-    instance: CML.TransactionWitnessSetBuilder,
-  ): Effect.Effect<CML.NativeScriptList, TransactionWitnessSetBuilderError> =>
+export const getNativeScript: (
+  instance: CML.TransactionWitnessSetBuilder,
+) => Effect.Effect<CML.NativeScriptList, TransactionWitnessSetBuilderError> =
+  Effect.fn((instance: CML.TransactionWitnessSetBuilder) =>
     Effect.try({
       try: () => instance.get_native_script(),
       catch: () =>
@@ -280,24 +167,10 @@ export const getNativeScript = Effect.fn(
           message: `TransactionWitnessSetBuilder.getNativeScript failed `,
         }),
     }),
-);
+  );
 
 /**
  * Unsafely calls instance.getNativeScript without Effect wrapper
- *
- * @example
- * import { TransactionWitnessSetBuilder } from "@lucid-evolution/experimental";
- *
- * // Assume we have a TransactionWitnessSetBuilder instance
- * const instance = ... ;
- *
- * // Using try/catch for error handling
- * try {
- *   const result = TransactionWitnessSetBuilder.getNativeScriptUnsafe(instance);
- *   console.log(result);
- * } catch (error) {
- *   console.error(`TransactionWitnessSetBuilder.getNativeScriptUnsafe failed: ${error.message}`);
- * }
  *
  * @since 2.0.0
  * @category MethodsUnsafe
@@ -309,25 +182,13 @@ export const getNativeScriptUnsafe = (
 /**
  * Method getPlutusV1Script of TransactionWitnessSetBuilder
  *
- * @example
- * import { TransactionWitnessSetBuilder } from "@lucid-evolution/experimental";
- * import { Effect } from "effect";
- *
- * // Using Effect for safe execution with error handling
- * Effect.gen(function*() {
- * // Assume we have a TransactionWitnessSetBuilder instance
- * const instance = ... ;
- *   const result = yield* TransactionWitnessSetBuilder.getPlutusV1Script(instance);
- *   console.log(result);
- * });
- *
  * @since 2.0.0
  * @category Methods
  */
-export const getPlutusV1Script = Effect.fn(
-  (
-    instance: CML.TransactionWitnessSetBuilder,
-  ): Effect.Effect<CML.PlutusV1ScriptList, TransactionWitnessSetBuilderError> =>
+export const getPlutusV1Script: (
+  instance: CML.TransactionWitnessSetBuilder,
+) => Effect.Effect<CML.PlutusV1ScriptList, TransactionWitnessSetBuilderError> =
+  Effect.fn((instance: CML.TransactionWitnessSetBuilder) =>
     Effect.try({
       try: () => instance.get_plutus_v1_script(),
       catch: () =>
@@ -335,24 +196,10 @@ export const getPlutusV1Script = Effect.fn(
           message: `TransactionWitnessSetBuilder.getPlutusV1Script failed `,
         }),
     }),
-);
+  );
 
 /**
  * Unsafely calls instance.getPlutusV1Script without Effect wrapper
- *
- * @example
- * import { TransactionWitnessSetBuilder } from "@lucid-evolution/experimental";
- *
- * // Assume we have a TransactionWitnessSetBuilder instance
- * const instance = ... ;
- *
- * // Using try/catch for error handling
- * try {
- *   const result = TransactionWitnessSetBuilder.getPlutusV1ScriptUnsafe(instance);
- *   console.log(result);
- * } catch (error) {
- *   console.error(`TransactionWitnessSetBuilder.getPlutusV1ScriptUnsafe failed: ${error.message}`);
- * }
  *
  * @since 2.0.0
  * @category MethodsUnsafe
@@ -364,25 +211,13 @@ export const getPlutusV1ScriptUnsafe = (
 /**
  * Method getPlutusV2Script of TransactionWitnessSetBuilder
  *
- * @example
- * import { TransactionWitnessSetBuilder } from "@lucid-evolution/experimental";
- * import { Effect } from "effect";
- *
- * // Using Effect for safe execution with error handling
- * Effect.gen(function*() {
- * // Assume we have a TransactionWitnessSetBuilder instance
- * const instance = ... ;
- *   const result = yield* TransactionWitnessSetBuilder.getPlutusV2Script(instance);
- *   console.log(result);
- * });
- *
  * @since 2.0.0
  * @category Methods
  */
-export const getPlutusV2Script = Effect.fn(
-  (
-    instance: CML.TransactionWitnessSetBuilder,
-  ): Effect.Effect<CML.PlutusV2ScriptList, TransactionWitnessSetBuilderError> =>
+export const getPlutusV2Script: (
+  instance: CML.TransactionWitnessSetBuilder,
+) => Effect.Effect<CML.PlutusV2ScriptList, TransactionWitnessSetBuilderError> =
+  Effect.fn((instance: CML.TransactionWitnessSetBuilder) =>
     Effect.try({
       try: () => instance.get_plutus_v2_script(),
       catch: () =>
@@ -390,24 +225,10 @@ export const getPlutusV2Script = Effect.fn(
           message: `TransactionWitnessSetBuilder.getPlutusV2Script failed `,
         }),
     }),
-);
+  );
 
 /**
  * Unsafely calls instance.getPlutusV2Script without Effect wrapper
- *
- * @example
- * import { TransactionWitnessSetBuilder } from "@lucid-evolution/experimental";
- *
- * // Assume we have a TransactionWitnessSetBuilder instance
- * const instance = ... ;
- *
- * // Using try/catch for error handling
- * try {
- *   const result = TransactionWitnessSetBuilder.getPlutusV2ScriptUnsafe(instance);
- *   console.log(result);
- * } catch (error) {
- *   console.error(`TransactionWitnessSetBuilder.getPlutusV2ScriptUnsafe failed: ${error.message}`);
- * }
  *
  * @since 2.0.0
  * @category MethodsUnsafe
@@ -419,26 +240,14 @@ export const getPlutusV2ScriptUnsafe = (
 /**
  * Method addPlutusDatum of TransactionWitnessSetBuilder
  *
- * @example
- * import { TransactionWitnessSetBuilder } from "@lucid-evolution/experimental";
- * import { Effect } from "effect";
- *
- * // Using Effect for safe execution with error handling
- * Effect.gen(function*() {
- * // Assume we have a TransactionWitnessSetBuilder instance
- * const instance = ... ;
- *   const result = yield* TransactionWitnessSetBuilder.addPlutusDatum(instance,  parameters );
- *   console.log(result);
- * });
- *
  * @since 2.0.0
  * @category Methods
  */
-export const addPlutusDatum = Effect.fn(
-  (
-    instance: CML.TransactionWitnessSetBuilder,
-    plutusDatum: CML.PlutusData,
-  ): Effect.Effect<void, TransactionWitnessSetBuilderError> =>
+export const addPlutusDatum: (
+  instance: CML.TransactionWitnessSetBuilder,
+  plutusDatum: CML.PlutusData,
+) => Effect.Effect<void, TransactionWitnessSetBuilderError> = Effect.fn(
+  (instance: CML.TransactionWitnessSetBuilder, plutusDatum: CML.PlutusData) =>
     Effect.try({
       try: () => instance.add_plutus_datum(plutusDatum),
       catch: () =>
@@ -451,20 +260,6 @@ export const addPlutusDatum = Effect.fn(
 /**
  * Unsafely calls instance.addPlutusDatum without Effect wrapper
  *
- * @example
- * import { TransactionWitnessSetBuilder } from "@lucid-evolution/experimental";
- *
- * // Assume we have a TransactionWitnessSetBuilder instance
- * const instance = ... ;
- *
- * // Using try/catch for error handling
- * try {
- *   const result = TransactionWitnessSetBuilder.addPlutusDatumUnsafe(instance,  parameters );
- *   console.log(result);
- * } catch (error) {
- *   console.error(`TransactionWitnessSetBuilder.addPlutusDatumUnsafe failed: ${error.message}`);
- * }
- *
  * @since 2.0.0
  * @category MethodsUnsafe
  */
@@ -476,25 +271,13 @@ export const addPlutusDatumUnsafe = (
 /**
  * Method getPlutusDatum of TransactionWitnessSetBuilder
  *
- * @example
- * import { TransactionWitnessSetBuilder } from "@lucid-evolution/experimental";
- * import { Effect } from "effect";
- *
- * // Using Effect for safe execution with error handling
- * Effect.gen(function*() {
- * // Assume we have a TransactionWitnessSetBuilder instance
- * const instance = ... ;
- *   const result = yield* TransactionWitnessSetBuilder.getPlutusDatum(instance);
- *   console.log(result);
- * });
- *
  * @since 2.0.0
  * @category Methods
  */
-export const getPlutusDatum = Effect.fn(
-  (
-    instance: CML.TransactionWitnessSetBuilder,
-  ): Effect.Effect<CML.PlutusDataList, TransactionWitnessSetBuilderError> =>
+export const getPlutusDatum: (
+  instance: CML.TransactionWitnessSetBuilder,
+) => Effect.Effect<CML.PlutusDataList, TransactionWitnessSetBuilderError> =
+  Effect.fn((instance: CML.TransactionWitnessSetBuilder) =>
     Effect.try({
       try: () => instance.get_plutus_datum(),
       catch: () =>
@@ -502,24 +285,10 @@ export const getPlutusDatum = Effect.fn(
           message: `TransactionWitnessSetBuilder.getPlutusDatum failed `,
         }),
     }),
-);
+  );
 
 /**
  * Unsafely calls instance.getPlutusDatum without Effect wrapper
- *
- * @example
- * import { TransactionWitnessSetBuilder } from "@lucid-evolution/experimental";
- *
- * // Assume we have a TransactionWitnessSetBuilder instance
- * const instance = ... ;
- *
- * // Using try/catch for error handling
- * try {
- *   const result = TransactionWitnessSetBuilder.getPlutusDatumUnsafe(instance);
- *   console.log(result);
- * } catch (error) {
- *   console.error(`TransactionWitnessSetBuilder.getPlutusDatumUnsafe failed: ${error.message}`);
- * }
  *
  * @since 2.0.0
  * @category MethodsUnsafe
@@ -531,26 +300,14 @@ export const getPlutusDatumUnsafe = (
 /**
  * Method addRedeemer of TransactionWitnessSetBuilder
  *
- * @example
- * import { TransactionWitnessSetBuilder } from "@lucid-evolution/experimental";
- * import { Effect } from "effect";
- *
- * // Using Effect for safe execution with error handling
- * Effect.gen(function*() {
- * // Assume we have a TransactionWitnessSetBuilder instance
- * const instance = ... ;
- *   const result = yield* TransactionWitnessSetBuilder.addRedeemer(instance,  parameters );
- *   console.log(result);
- * });
- *
  * @since 2.0.0
  * @category Methods
  */
-export const addRedeemer = Effect.fn(
-  (
-    instance: CML.TransactionWitnessSetBuilder,
-    redeemer: CML.LegacyRedeemer,
-  ): Effect.Effect<void, TransactionWitnessSetBuilderError> =>
+export const addRedeemer: (
+  instance: CML.TransactionWitnessSetBuilder,
+  redeemer: CML.LegacyRedeemer,
+) => Effect.Effect<void, TransactionWitnessSetBuilderError> = Effect.fn(
+  (instance: CML.TransactionWitnessSetBuilder, redeemer: CML.LegacyRedeemer) =>
     Effect.try({
       try: () => instance.add_redeemer(redeemer),
       catch: () =>
@@ -563,20 +320,6 @@ export const addRedeemer = Effect.fn(
 /**
  * Unsafely calls instance.addRedeemer without Effect wrapper
  *
- * @example
- * import { TransactionWitnessSetBuilder } from "@lucid-evolution/experimental";
- *
- * // Assume we have a TransactionWitnessSetBuilder instance
- * const instance = ... ;
- *
- * // Using try/catch for error handling
- * try {
- *   const result = TransactionWitnessSetBuilder.addRedeemerUnsafe(instance,  parameters );
- *   console.log(result);
- * } catch (error) {
- *   console.error(`TransactionWitnessSetBuilder.addRedeemerUnsafe failed: ${error.message}`);
- * }
- *
  * @since 2.0.0
  * @category MethodsUnsafe
  */
@@ -588,25 +331,13 @@ export const addRedeemerUnsafe = (
 /**
  * Method getRedeemer of TransactionWitnessSetBuilder
  *
- * @example
- * import { TransactionWitnessSetBuilder } from "@lucid-evolution/experimental";
- * import { Effect } from "effect";
- *
- * // Using Effect for safe execution with error handling
- * Effect.gen(function*() {
- * // Assume we have a TransactionWitnessSetBuilder instance
- * const instance = ... ;
- *   const result = yield* TransactionWitnessSetBuilder.getRedeemer(instance);
- *   console.log(result);
- * });
- *
  * @since 2.0.0
  * @category Methods
  */
-export const getRedeemer = Effect.fn(
-  (
-    instance: CML.TransactionWitnessSetBuilder,
-  ): Effect.Effect<CML.LegacyRedeemerList, TransactionWitnessSetBuilderError> =>
+export const getRedeemer: (
+  instance: CML.TransactionWitnessSetBuilder,
+) => Effect.Effect<CML.LegacyRedeemerList, TransactionWitnessSetBuilderError> =
+  Effect.fn((instance: CML.TransactionWitnessSetBuilder) =>
     Effect.try({
       try: () => instance.get_redeemer(),
       catch: () =>
@@ -614,24 +345,10 @@ export const getRedeemer = Effect.fn(
           message: `TransactionWitnessSetBuilder.getRedeemer failed `,
         }),
     }),
-);
+  );
 
 /**
  * Unsafely calls instance.getRedeemer without Effect wrapper
- *
- * @example
- * import { TransactionWitnessSetBuilder } from "@lucid-evolution/experimental";
- *
- * // Assume we have a TransactionWitnessSetBuilder instance
- * const instance = ... ;
- *
- * // Using try/catch for error handling
- * try {
- *   const result = TransactionWitnessSetBuilder.getRedeemerUnsafe(instance);
- *   console.log(result);
- * } catch (error) {
- *   console.error(`TransactionWitnessSetBuilder.getRedeemerUnsafe failed: ${error.message}`);
- * }
  *
  * @since 2.0.0
  * @category MethodsUnsafe
@@ -643,26 +360,17 @@ export const getRedeemerUnsafe = (
 /**
  * Method addRequiredWits of TransactionWitnessSetBuilder
  *
- * @example
- * import { TransactionWitnessSetBuilder } from "@lucid-evolution/experimental";
- * import { Effect } from "effect";
- *
- * // Using Effect for safe execution with error handling
- * Effect.gen(function*() {
- * // Assume we have a TransactionWitnessSetBuilder instance
- * const instance = ... ;
- *   const result = yield* TransactionWitnessSetBuilder.addRequiredWits(instance,  parameters );
- *   console.log(result);
- * });
- *
  * @since 2.0.0
  * @category Methods
  */
-export const addRequiredWits = Effect.fn(
+export const addRequiredWits: (
+  instance: CML.TransactionWitnessSetBuilder,
+  requiredWits: CML.RequiredWitnessSet,
+) => Effect.Effect<void, TransactionWitnessSetBuilderError> = Effect.fn(
   (
     instance: CML.TransactionWitnessSetBuilder,
     requiredWits: CML.RequiredWitnessSet,
-  ): Effect.Effect<void, TransactionWitnessSetBuilderError> =>
+  ) =>
     Effect.try({
       try: () => instance.add_required_wits(requiredWits),
       catch: () =>
@@ -675,20 +383,6 @@ export const addRequiredWits = Effect.fn(
 /**
  * Unsafely calls instance.addRequiredWits without Effect wrapper
  *
- * @example
- * import { TransactionWitnessSetBuilder } from "@lucid-evolution/experimental";
- *
- * // Assume we have a TransactionWitnessSetBuilder instance
- * const instance = ... ;
- *
- * // Using try/catch for error handling
- * try {
- *   const result = TransactionWitnessSetBuilder.addRequiredWitsUnsafe(instance,  parameters );
- *   console.log(result);
- * } catch (error) {
- *   console.error(`TransactionWitnessSetBuilder.addRequiredWitsUnsafe failed: ${error.message}`);
- * }
- *
  * @since 2.0.0
  * @category MethodsUnsafe
  */
@@ -700,21 +394,13 @@ export const addRequiredWitsUnsafe = (
 /**
  * Static method _new of TransactionWitnessSetBuilder
  *
- * @example
- * import { TransactionWitnessSetBuilder } from "@lucid-evolution/experimental";
- * import { Effect } from "effect";
- *
- * // Using Effect for safe execution with error handling
- * Effect.gen(function*() {
- *
- *   const result = yield* TransactionWitnessSetBuilder._new();
- *   console.log(result);
- * });
- *
  * @since 2.0.0
  * @category Constructors
  */
-export const _new = Effect.fn(function* () {
+export const _new: () => Effect.Effect<
+  CML.TransactionWitnessSetBuilder,
+  TransactionWitnessSetBuilderError
+> = Effect.fn(function* () {
   return yield* Effect.try({
     try: () => CML.TransactionWitnessSetBuilder.new(),
     catch: () =>
@@ -727,47 +413,26 @@ export const _new = Effect.fn(function* () {
 /**
  * Unsafely calls TransactionWitnessSetBuilder._new without Effect wrapper
  *
- * @example
- * import { TransactionWitnessSetBuilder } from "@lucid-evolution/experimental";
- *
- *
- *
- * // Using try/catch for error handling
- * try {
- *   const result = TransactionWitnessSetBuilder._newUnsafe();
- *   console.log(result);
- * } catch (error) {
- *   console.error(`TransactionWitnessSetBuilder._newUnsafe failed: ${error.message}`);
- * }
- *
  * @since 2.0.0
  * @category ConstructorsUnsafe
  */
-export const _newUnsafe = () => Effect.runSync(_new());
+export const _newUnsafe = (): CML.TransactionWitnessSetBuilder =>
+  Effect.runSync(_new());
 
 /**
  * Method addExisting of TransactionWitnessSetBuilder
  *
- * @example
- * import { TransactionWitnessSetBuilder } from "@lucid-evolution/experimental";
- * import { Effect } from "effect";
- *
- * // Using Effect for safe execution with error handling
- * Effect.gen(function*() {
- * // Assume we have a TransactionWitnessSetBuilder instance
- * const instance = ... ;
- *   const result = yield* TransactionWitnessSetBuilder.addExisting(instance,  parameters );
- *   console.log(result);
- * });
- *
  * @since 2.0.0
  * @category Methods
  */
-export const addExisting = Effect.fn(
+export const addExisting: (
+  instance: CML.TransactionWitnessSetBuilder,
+  witSet: CML.TransactionWitnessSet,
+) => Effect.Effect<void, TransactionWitnessSetBuilderError> = Effect.fn(
   (
     instance: CML.TransactionWitnessSetBuilder,
     witSet: CML.TransactionWitnessSet,
-  ): Effect.Effect<void, TransactionWitnessSetBuilderError> =>
+  ) =>
     Effect.try({
       try: () => instance.add_existing(witSet),
       catch: () =>
@@ -780,20 +445,6 @@ export const addExisting = Effect.fn(
 /**
  * Unsafely calls instance.addExisting without Effect wrapper
  *
- * @example
- * import { TransactionWitnessSetBuilder } from "@lucid-evolution/experimental";
- *
- * // Assume we have a TransactionWitnessSetBuilder instance
- * const instance = ... ;
- *
- * // Using try/catch for error handling
- * try {
- *   const result = TransactionWitnessSetBuilder.addExistingUnsafe(instance,  parameters );
- *   console.log(result);
- * } catch (error) {
- *   console.error(`TransactionWitnessSetBuilder.addExistingUnsafe failed: ${error.message}`);
- * }
- *
  * @since 2.0.0
  * @category MethodsUnsafe
  */
@@ -805,53 +456,26 @@ export const addExistingUnsafe = (
 /**
  * Method build of TransactionWitnessSetBuilder
  *
- * @example
- * import { TransactionWitnessSetBuilder } from "@lucid-evolution/experimental";
- * import { Effect } from "effect";
- *
- * // Using Effect for safe execution with error handling
- * Effect.gen(function*() {
- * // Assume we have a TransactionWitnessSetBuilder instance
- * const instance = ... ;
- *   const result = yield* TransactionWitnessSetBuilder.build(instance);
- *   console.log(result);
- * });
- *
  * @since 2.0.0
  * @category Methods
  */
-export const build = Effect.fn(
-  (
-    instance: CML.TransactionWitnessSetBuilder,
-  ): Effect.Effect<
-    CML.TransactionWitnessSet,
-    TransactionWitnessSetBuilderError
-  > =>
-    Effect.try({
-      try: () => instance.build(),
-      catch: () =>
-        new TransactionWitnessSetBuilderError({
-          message: `TransactionWitnessSetBuilder.build failed `,
-        }),
-    }),
+export const build: (
+  instance: CML.TransactionWitnessSetBuilder,
+) => Effect.Effect<
+  CML.TransactionWitnessSet,
+  TransactionWitnessSetBuilderError
+> = Effect.fn((instance: CML.TransactionWitnessSetBuilder) =>
+  Effect.try({
+    try: () => instance.build(),
+    catch: () =>
+      new TransactionWitnessSetBuilderError({
+        message: `TransactionWitnessSetBuilder.build failed `,
+      }),
+  }),
 );
 
 /**
  * Unsafely calls instance.build without Effect wrapper
- *
- * @example
- * import { TransactionWitnessSetBuilder } from "@lucid-evolution/experimental";
- *
- * // Assume we have a TransactionWitnessSetBuilder instance
- * const instance = ... ;
- *
- * // Using try/catch for error handling
- * try {
- *   const result = TransactionWitnessSetBuilder.buildUnsafe(instance);
- *   console.log(result);
- * } catch (error) {
- *   console.error(`TransactionWitnessSetBuilder.buildUnsafe failed: ${error.message}`);
- * }
  *
  * @since 2.0.0
  * @category MethodsUnsafe
@@ -863,25 +487,13 @@ export const buildUnsafe = (
 /**
  * Method remainingWits of TransactionWitnessSetBuilder
  *
- * @example
- * import { TransactionWitnessSetBuilder } from "@lucid-evolution/experimental";
- * import { Effect } from "effect";
- *
- * // Using Effect for safe execution with error handling
- * Effect.gen(function*() {
- * // Assume we have a TransactionWitnessSetBuilder instance
- * const instance = ... ;
- *   const result = yield* TransactionWitnessSetBuilder.remainingWits(instance);
- *   console.log(result);
- * });
- *
  * @since 2.0.0
  * @category Methods
  */
-export const remainingWits = Effect.fn(
-  (
-    instance: CML.TransactionWitnessSetBuilder,
-  ): Effect.Effect<CML.RequiredWitnessSet, TransactionWitnessSetBuilderError> =>
+export const remainingWits: (
+  instance: CML.TransactionWitnessSetBuilder,
+) => Effect.Effect<CML.RequiredWitnessSet, TransactionWitnessSetBuilderError> =
+  Effect.fn((instance: CML.TransactionWitnessSetBuilder) =>
     Effect.try({
       try: () => instance.remaining_wits(),
       catch: () =>
@@ -889,24 +501,10 @@ export const remainingWits = Effect.fn(
           message: `TransactionWitnessSetBuilder.remainingWits failed `,
         }),
     }),
-);
+  );
 
 /**
  * Unsafely calls instance.remainingWits without Effect wrapper
- *
- * @example
- * import { TransactionWitnessSetBuilder } from "@lucid-evolution/experimental";
- *
- * // Assume we have a TransactionWitnessSetBuilder instance
- * const instance = ... ;
- *
- * // Using try/catch for error handling
- * try {
- *   const result = TransactionWitnessSetBuilder.remainingWitsUnsafe(instance);
- *   console.log(result);
- * } catch (error) {
- *   console.error(`TransactionWitnessSetBuilder.remainingWitsUnsafe failed: ${error.message}`);
- * }
  *
  * @since 2.0.0
  * @category MethodsUnsafe
@@ -918,53 +516,26 @@ export const remainingWitsUnsafe = (
 /**
  * Method tryBuild of TransactionWitnessSetBuilder
  *
- * @example
- * import { TransactionWitnessSetBuilder } from "@lucid-evolution/experimental";
- * import { Effect } from "effect";
- *
- * // Using Effect for safe execution with error handling
- * Effect.gen(function*() {
- * // Assume we have a TransactionWitnessSetBuilder instance
- * const instance = ... ;
- *   const result = yield* TransactionWitnessSetBuilder.tryBuild(instance);
- *   console.log(result);
- * });
- *
  * @since 2.0.0
  * @category Methods
  */
-export const tryBuild = Effect.fn(
-  (
-    instance: CML.TransactionWitnessSetBuilder,
-  ): Effect.Effect<
-    CML.TransactionWitnessSet,
-    TransactionWitnessSetBuilderError
-  > =>
-    Effect.try({
-      try: () => instance.try_build(),
-      catch: () =>
-        new TransactionWitnessSetBuilderError({
-          message: `TransactionWitnessSetBuilder.tryBuild failed `,
-        }),
-    }),
+export const tryBuild: (
+  instance: CML.TransactionWitnessSetBuilder,
+) => Effect.Effect<
+  CML.TransactionWitnessSet,
+  TransactionWitnessSetBuilderError
+> = Effect.fn((instance: CML.TransactionWitnessSetBuilder) =>
+  Effect.try({
+    try: () => instance.try_build(),
+    catch: () =>
+      new TransactionWitnessSetBuilderError({
+        message: `TransactionWitnessSetBuilder.tryBuild failed `,
+      }),
+  }),
 );
 
 /**
  * Unsafely calls instance.tryBuild without Effect wrapper
- *
- * @example
- * import { TransactionWitnessSetBuilder } from "@lucid-evolution/experimental";
- *
- * // Assume we have a TransactionWitnessSetBuilder instance
- * const instance = ... ;
- *
- * // Using try/catch for error handling
- * try {
- *   const result = TransactionWitnessSetBuilder.tryBuildUnsafe(instance);
- *   console.log(result);
- * } catch (error) {
- *   console.error(`TransactionWitnessSetBuilder.tryBuildUnsafe failed: ${error.message}`);
- * }
  *
  * @since 2.0.0
  * @category MethodsUnsafe
@@ -976,26 +547,17 @@ export const tryBuildUnsafe = (
 /**
  * Method mergeFakeWitness of TransactionWitnessSetBuilder
  *
- * @example
- * import { TransactionWitnessSetBuilder } from "@lucid-evolution/experimental";
- * import { Effect } from "effect";
- *
- * // Using Effect for safe execution with error handling
- * Effect.gen(function*() {
- * // Assume we have a TransactionWitnessSetBuilder instance
- * const instance = ... ;
- *   const result = yield* TransactionWitnessSetBuilder.mergeFakeWitness(instance,  parameters );
- *   console.log(result);
- * });
- *
  * @since 2.0.0
  * @category Methods
  */
-export const mergeFakeWitness = Effect.fn(
+export const mergeFakeWitness: (
+  instance: CML.TransactionWitnessSetBuilder,
+  requiredWits: CML.RequiredWitnessSet,
+) => Effect.Effect<void, TransactionWitnessSetBuilderError> = Effect.fn(
   (
     instance: CML.TransactionWitnessSetBuilder,
     requiredWits: CML.RequiredWitnessSet,
-  ): Effect.Effect<void, TransactionWitnessSetBuilderError> =>
+  ) =>
     Effect.try({
       try: () => instance.merge_fake_witness(requiredWits),
       catch: () =>
@@ -1007,20 +569,6 @@ export const mergeFakeWitness = Effect.fn(
 
 /**
  * Unsafely calls instance.mergeFakeWitness without Effect wrapper
- *
- * @example
- * import { TransactionWitnessSetBuilder } from "@lucid-evolution/experimental";
- *
- * // Assume we have a TransactionWitnessSetBuilder instance
- * const instance = ... ;
- *
- * // Using try/catch for error handling
- * try {
- *   const result = TransactionWitnessSetBuilder.mergeFakeWitnessUnsafe(instance,  parameters );
- *   console.log(result);
- * } catch (error) {
- *   console.error(`TransactionWitnessSetBuilder.mergeFakeWitnessUnsafe failed: ${error.message}`);
- * }
  *
  * @since 2.0.0
  * @category MethodsUnsafe

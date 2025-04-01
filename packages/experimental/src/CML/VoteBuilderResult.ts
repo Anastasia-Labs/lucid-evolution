@@ -29,25 +29,13 @@ export class VoteBuilderResultError extends Data.TaggedError(
 /**
  * Method free of VoteBuilderResult
  *
- * @example
- * import { VoteBuilderResult } from "@lucid-evolution/experimental";
- * import { Effect } from "effect";
- *
- * // Using Effect for safe execution with error handling
- * Effect.gen(function*() {
- * // Assume we have a VoteBuilderResult instance
- * const instance = ... ;
- *   const result = yield* VoteBuilderResult.free(instance);
- *   console.log(result);
- * });
- *
  * @since 2.0.0
  * @category Methods
  */
-export const free = Effect.fn(
-  (
-    instance: CML.VoteBuilderResult,
-  ): Effect.Effect<void, VoteBuilderResultError> =>
+export const free: (
+  instance: CML.VoteBuilderResult,
+) => Effect.Effect<void, VoteBuilderResultError> = Effect.fn(
+  (instance: CML.VoteBuilderResult) =>
     Effect.try({
       try: () => instance.free(),
       catch: () =>
@@ -59,20 +47,6 @@ export const free = Effect.fn(
 
 /**
  * Unsafely calls instance.free without Effect wrapper
- *
- * @example
- * import { VoteBuilderResult } from "@lucid-evolution/experimental";
- *
- * // Assume we have a VoteBuilderResult instance
- * const instance = ... ;
- *
- * // Using try/catch for error handling
- * try {
- *   const result = VoteBuilderResult.freeUnsafe(instance);
- *   console.log(result);
- * } catch (error) {
- *   console.error(`VoteBuilderResult.freeUnsafe failed: ${error.message}`);
- * }
  *
  * @since 2.0.0
  * @category MethodsUnsafe

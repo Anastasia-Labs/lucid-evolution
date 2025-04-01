@@ -30,25 +30,13 @@ export class MapCommitteeColdCredentialToEpochError extends Data.TaggedError(
 /**
  * Method free of MapCommitteeColdCredentialToEpoch
  *
- * @example
- * import { MapCommitteeColdCredentialToEpoch } from "@lucid-evolution/experimental";
- * import { Effect } from "effect";
- *
- * // Using Effect for safe execution with error handling
- * Effect.gen(function*() {
- * // Assume we have a MapCommitteeColdCredentialToEpoch instance
- * const instance = ... ;
- *   const result = yield* MapCommitteeColdCredentialToEpoch.free(instance);
- *   console.log(result);
- * });
- *
  * @since 2.0.0
  * @category Methods
  */
-export const free = Effect.fn(
-  (
-    instance: CML.MapCommitteeColdCredentialToEpoch,
-  ): Effect.Effect<void, MapCommitteeColdCredentialToEpochError> =>
+export const free: (
+  instance: CML.MapCommitteeColdCredentialToEpoch,
+) => Effect.Effect<void, MapCommitteeColdCredentialToEpochError> = Effect.fn(
+  (instance: CML.MapCommitteeColdCredentialToEpoch) =>
     Effect.try({
       try: () => instance.free(),
       catch: () =>
@@ -61,20 +49,6 @@ export const free = Effect.fn(
 /**
  * Unsafely calls instance.free without Effect wrapper
  *
- * @example
- * import { MapCommitteeColdCredentialToEpoch } from "@lucid-evolution/experimental";
- *
- * // Assume we have a MapCommitteeColdCredentialToEpoch instance
- * const instance = ... ;
- *
- * // Using try/catch for error handling
- * try {
- *   const result = MapCommitteeColdCredentialToEpoch.freeUnsafe(instance);
- *   console.log(result);
- * } catch (error) {
- *   console.error(`MapCommitteeColdCredentialToEpoch.freeUnsafe failed: ${error.message}`);
- * }
- *
  * @since 2.0.0
  * @category MethodsUnsafe
  */
@@ -85,21 +59,13 @@ export const freeUnsafe = (
 /**
  * Static method _new of MapCommitteeColdCredentialToEpoch
  *
- * @example
- * import { MapCommitteeColdCredentialToEpoch } from "@lucid-evolution/experimental";
- * import { Effect } from "effect";
- *
- * // Using Effect for safe execution with error handling
- * Effect.gen(function*() {
- *
- *   const result = yield* MapCommitteeColdCredentialToEpoch._new();
- *   console.log(result);
- * });
- *
  * @since 2.0.0
  * @category Constructors
  */
-export const _new = Effect.fn(function* () {
+export const _new: () => Effect.Effect<
+  CML.MapCommitteeColdCredentialToEpoch,
+  MapCommitteeColdCredentialToEpochError
+> = Effect.fn(function* () {
   return yield* Effect.try({
     try: () => CML.MapCommitteeColdCredentialToEpoch.new(),
     catch: () =>
@@ -112,46 +78,22 @@ export const _new = Effect.fn(function* () {
 /**
  * Unsafely calls MapCommitteeColdCredentialToEpoch._new without Effect wrapper
  *
- * @example
- * import { MapCommitteeColdCredentialToEpoch } from "@lucid-evolution/experimental";
- *
- *
- *
- * // Using try/catch for error handling
- * try {
- *   const result = MapCommitteeColdCredentialToEpoch._newUnsafe();
- *   console.log(result);
- * } catch (error) {
- *   console.error(`MapCommitteeColdCredentialToEpoch._newUnsafe failed: ${error.message}`);
- * }
- *
  * @since 2.0.0
  * @category ConstructorsUnsafe
  */
-export const _newUnsafe = () => Effect.runSync(_new());
+export const _newUnsafe = (): CML.MapCommitteeColdCredentialToEpoch =>
+  Effect.runSync(_new());
 
 /**
  * Method len of MapCommitteeColdCredentialToEpoch
  *
- * @example
- * import { MapCommitteeColdCredentialToEpoch } from "@lucid-evolution/experimental";
- * import { Effect } from "effect";
- *
- * // Using Effect for safe execution with error handling
- * Effect.gen(function*() {
- * // Assume we have a MapCommitteeColdCredentialToEpoch instance
- * const instance = ... ;
- *   const result = yield* MapCommitteeColdCredentialToEpoch.len(instance);
- *   console.log(result);
- * });
- *
  * @since 2.0.0
  * @category Methods
  */
-export const len = Effect.fn(
-  (
-    instance: CML.MapCommitteeColdCredentialToEpoch,
-  ): Effect.Effect<number, MapCommitteeColdCredentialToEpochError> =>
+export const len: (
+  instance: CML.MapCommitteeColdCredentialToEpoch,
+) => Effect.Effect<number, MapCommitteeColdCredentialToEpochError> = Effect.fn(
+  (instance: CML.MapCommitteeColdCredentialToEpoch) =>
     Effect.try({
       try: () => instance.len(),
       catch: () =>
@@ -164,20 +106,6 @@ export const len = Effect.fn(
 /**
  * Unsafely calls instance.len without Effect wrapper
  *
- * @example
- * import { MapCommitteeColdCredentialToEpoch } from "@lucid-evolution/experimental";
- *
- * // Assume we have a MapCommitteeColdCredentialToEpoch instance
- * const instance = ... ;
- *
- * // Using try/catch for error handling
- * try {
- *   const result = MapCommitteeColdCredentialToEpoch.lenUnsafe(instance);
- *   console.log(result);
- * } catch (error) {
- *   console.error(`MapCommitteeColdCredentialToEpoch.lenUnsafe failed: ${error.message}`);
- * }
- *
  * @since 2.0.0
  * @category MethodsUnsafe
  */
@@ -188,55 +116,31 @@ export const lenUnsafe = (
 /**
  * Method insert of MapCommitteeColdCredentialToEpoch
  *
- * @example
- * import { MapCommitteeColdCredentialToEpoch } from "@lucid-evolution/experimental";
- * import { Effect } from "effect";
- *
- * // Using Effect for safe execution with error handling
- * Effect.gen(function*() {
- * // Assume we have a MapCommitteeColdCredentialToEpoch instance
- * const instance = ... ;
- *   const result = yield* MapCommitteeColdCredentialToEpoch.insert(instance,  parameters );
- *   console.log(result);
- * });
- *
  * @since 2.0.0
  * @category Methods
  */
-export const insert = Effect.fn(
-  (
-    instance: CML.MapCommitteeColdCredentialToEpoch,
-    key: CML.Credential,
-    value: bigint,
-  ): Effect.Effect<
-    bigint | undefined,
-    MapCommitteeColdCredentialToEpochError
-  > =>
-    Effect.try({
-      try: () => instance.insert(key, value),
-      catch: () =>
-        new MapCommitteeColdCredentialToEpochError({
-          message: `MapCommitteeColdCredentialToEpoch.insert failed with parameters: ${key} (Credential), ${value}. `,
-        }),
-    }),
-);
+export const insert: (
+  instance: CML.MapCommitteeColdCredentialToEpoch,
+  key: CML.Credential,
+  value: bigint,
+) => Effect.Effect<bigint | undefined, MapCommitteeColdCredentialToEpochError> =
+  Effect.fn(
+    (
+      instance: CML.MapCommitteeColdCredentialToEpoch,
+      key: CML.Credential,
+      value: bigint,
+    ) =>
+      Effect.try({
+        try: () => instance.insert(key, value),
+        catch: () =>
+          new MapCommitteeColdCredentialToEpochError({
+            message: `MapCommitteeColdCredentialToEpoch.insert failed with parameters: ${key} (Credential), ${value}. `,
+          }),
+      }),
+  );
 
 /**
  * Unsafely calls instance.insert without Effect wrapper
- *
- * @example
- * import { MapCommitteeColdCredentialToEpoch } from "@lucid-evolution/experimental";
- *
- * // Assume we have a MapCommitteeColdCredentialToEpoch instance
- * const instance = ... ;
- *
- * // Using try/catch for error handling
- * try {
- *   const result = MapCommitteeColdCredentialToEpoch.insertUnsafe(instance,  parameters );
- *   console.log(result);
- * } catch (error) {
- *   console.error(`MapCommitteeColdCredentialToEpoch.insertUnsafe failed: ${error.message}`);
- * }
  *
  * @since 2.0.0
  * @category MethodsUnsafe
@@ -250,54 +154,26 @@ export const insertUnsafe = (
 /**
  * Method get of MapCommitteeColdCredentialToEpoch
  *
- * @example
- * import { MapCommitteeColdCredentialToEpoch } from "@lucid-evolution/experimental";
- * import { Effect } from "effect";
- *
- * // Using Effect for safe execution with error handling
- * Effect.gen(function*() {
- * // Assume we have a MapCommitteeColdCredentialToEpoch instance
- * const instance = ... ;
- *   const result = yield* MapCommitteeColdCredentialToEpoch.get(instance,  parameters );
- *   console.log(result);
- * });
- *
  * @since 2.0.0
  * @category Methods
  */
-export const get = Effect.fn(
-  (
-    instance: CML.MapCommitteeColdCredentialToEpoch,
-    key: CML.Credential,
-  ): Effect.Effect<
-    bigint | undefined,
-    MapCommitteeColdCredentialToEpochError
-  > =>
-    Effect.try({
-      try: () => instance.get(key),
-      catch: () =>
-        new MapCommitteeColdCredentialToEpochError({
-          message: `MapCommitteeColdCredentialToEpoch.get failed with parameters: ${key} (Credential). `,
-        }),
-    }),
-);
+export const get: (
+  instance: CML.MapCommitteeColdCredentialToEpoch,
+  key: CML.Credential,
+) => Effect.Effect<bigint | undefined, MapCommitteeColdCredentialToEpochError> =
+  Effect.fn(
+    (instance: CML.MapCommitteeColdCredentialToEpoch, key: CML.Credential) =>
+      Effect.try({
+        try: () => instance.get(key),
+        catch: () =>
+          new MapCommitteeColdCredentialToEpochError({
+            message: `MapCommitteeColdCredentialToEpoch.get failed with parameters: ${key} (Credential). `,
+          }),
+      }),
+  );
 
 /**
  * Unsafely calls instance.get without Effect wrapper
- *
- * @example
- * import { MapCommitteeColdCredentialToEpoch } from "@lucid-evolution/experimental";
- *
- * // Assume we have a MapCommitteeColdCredentialToEpoch instance
- * const instance = ... ;
- *
- * // Using try/catch for error handling
- * try {
- *   const result = MapCommitteeColdCredentialToEpoch.getUnsafe(instance,  parameters );
- *   console.log(result);
- * } catch (error) {
- *   console.error(`MapCommitteeColdCredentialToEpoch.getUnsafe failed: ${error.message}`);
- * }
  *
  * @since 2.0.0
  * @category MethodsUnsafe
@@ -310,53 +186,26 @@ export const getUnsafe = (
 /**
  * Method keys of MapCommitteeColdCredentialToEpoch
  *
- * @example
- * import { MapCommitteeColdCredentialToEpoch } from "@lucid-evolution/experimental";
- * import { Effect } from "effect";
- *
- * // Using Effect for safe execution with error handling
- * Effect.gen(function*() {
- * // Assume we have a MapCommitteeColdCredentialToEpoch instance
- * const instance = ... ;
- *   const result = yield* MapCommitteeColdCredentialToEpoch.keys(instance);
- *   console.log(result);
- * });
- *
  * @since 2.0.0
  * @category Methods
  */
-export const keys = Effect.fn(
-  (
-    instance: CML.MapCommitteeColdCredentialToEpoch,
-  ): Effect.Effect<
-    CML.CommitteeColdCredentialList,
-    MapCommitteeColdCredentialToEpochError
-  > =>
-    Effect.try({
-      try: () => instance.keys(),
-      catch: () =>
-        new MapCommitteeColdCredentialToEpochError({
-          message: `MapCommitteeColdCredentialToEpoch.keys failed `,
-        }),
-    }),
+export const keys: (
+  instance: CML.MapCommitteeColdCredentialToEpoch,
+) => Effect.Effect<
+  CML.CommitteeColdCredentialList,
+  MapCommitteeColdCredentialToEpochError
+> = Effect.fn((instance: CML.MapCommitteeColdCredentialToEpoch) =>
+  Effect.try({
+    try: () => instance.keys(),
+    catch: () =>
+      new MapCommitteeColdCredentialToEpochError({
+        message: `MapCommitteeColdCredentialToEpoch.keys failed `,
+      }),
+  }),
 );
 
 /**
  * Unsafely calls instance.keys without Effect wrapper
- *
- * @example
- * import { MapCommitteeColdCredentialToEpoch } from "@lucid-evolution/experimental";
- *
- * // Assume we have a MapCommitteeColdCredentialToEpoch instance
- * const instance = ... ;
- *
- * // Using try/catch for error handling
- * try {
- *   const result = MapCommitteeColdCredentialToEpoch.keysUnsafe(instance);
- *   console.log(result);
- * } catch (error) {
- *   console.error(`MapCommitteeColdCredentialToEpoch.keysUnsafe failed: ${error.message}`);
- * }
  *
  * @since 2.0.0
  * @category MethodsUnsafe

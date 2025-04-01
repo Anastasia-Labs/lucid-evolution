@@ -27,23 +27,13 @@ export class VRFKeyHashError extends Data.TaggedError("VRFKeyHashError")<{
 /**
  * Method free of VRFKeyHash
  *
- * @example
- * import { VRFKeyHash } from "@lucid-evolution/experimental";
- * import { Effect } from "effect";
- *
- * // Using Effect for safe execution with error handling
- * Effect.gen(function*() {
- * // Assume we have a VRFKeyHash instance
- * const instance = ... ;
- *   const result = yield* VRFKeyHash.free(instance);
- *   console.log(result);
- * });
- *
  * @since 2.0.0
  * @category Methods
  */
-export const free = Effect.fn(
-  (instance: CML.VRFKeyHash): Effect.Effect<void, VRFKeyHashError> =>
+export const free: (
+  instance: CML.VRFKeyHash,
+) => Effect.Effect<void, VRFKeyHashError> = Effect.fn(
+  (instance: CML.VRFKeyHash) =>
     Effect.try({
       try: () => instance.free(),
       catch: () =>
@@ -56,20 +46,6 @@ export const free = Effect.fn(
 /**
  * Unsafely calls instance.free without Effect wrapper
  *
- * @example
- * import { VRFKeyHash } from "@lucid-evolution/experimental";
- *
- * // Assume we have a VRFKeyHash instance
- * const instance = ... ;
- *
- * // Using try/catch for error handling
- * try {
- *   const result = VRFKeyHash.freeUnsafe(instance);
- *   console.log(result);
- * } catch (error) {
- *   console.error(`VRFKeyHash.freeUnsafe failed: ${error.message}`);
- * }
- *
  * @since 2.0.0
  * @category MethodsUnsafe
  */
@@ -79,26 +55,14 @@ export const freeUnsafe = (instance: CML.VRFKeyHash): void =>
 /**
  * Method toBech32 of VRFKeyHash
  *
- * @example
- * import { VRFKeyHash } from "@lucid-evolution/experimental";
- * import { Effect } from "effect";
- *
- * // Using Effect for safe execution with error handling
- * Effect.gen(function*() {
- * // Assume we have a VRFKeyHash instance
- * const instance = ... ;
- *   const result = yield* VRFKeyHash.toBech32(instance,  parameters );
- *   console.log(result);
- * });
- *
  * @since 2.0.0
  * @category Methods
  */
-export const toBech32 = Effect.fn(
-  (
-    instance: CML.VRFKeyHash,
-    prefix: string,
-  ): Effect.Effect<string, VRFKeyHashError> =>
+export const toBech32: (
+  instance: CML.VRFKeyHash,
+  prefix: string,
+) => Effect.Effect<string, VRFKeyHashError> = Effect.fn(
+  (instance: CML.VRFKeyHash, prefix: string) =>
     Effect.try({
       try: () => instance.to_bech32(prefix),
       catch: () =>
@@ -111,20 +75,6 @@ export const toBech32 = Effect.fn(
 /**
  * Unsafely calls instance.toBech32 without Effect wrapper
  *
- * @example
- * import { VRFKeyHash } from "@lucid-evolution/experimental";
- *
- * // Assume we have a VRFKeyHash instance
- * const instance = ... ;
- *
- * // Using try/catch for error handling
- * try {
- *   const result = VRFKeyHash.toBech32Unsafe(instance,  parameters );
- *   console.log(result);
- * } catch (error) {
- *   console.error(`VRFKeyHash.toBech32Unsafe failed: ${error.message}`);
- * }
- *
  * @since 2.0.0
  * @category MethodsUnsafe
  */
@@ -136,21 +86,14 @@ export const toBech32Unsafe = (
 /**
  * Static method fromBech32 of VRFKeyHash
  *
- * @example
- * import { VRFKeyHash } from "@lucid-evolution/experimental";
- * import { Effect } from "effect";
- *
- * // Using Effect for safe execution with error handling
- * Effect.gen(function*() {
- *
- *   const result = yield* VRFKeyHash.fromBech32( parameters );
- *   console.log(result);
- * });
- *
  * @since 2.0.0
  * @category Constructors
  */
-export const fromBech32 = Effect.fn(function* (bech32Str: string) {
+export const fromBech32: (
+  bech32Str: string,
+) => Effect.Effect<CML.VRFKeyHash, VRFKeyHashError> = Effect.fn(function* (
+  bech32Str: string,
+) {
   return yield* Effect.try({
     try: () => CML.VRFKeyHash.from_bech32(bech32Str),
     catch: () =>
@@ -163,45 +106,22 @@ export const fromBech32 = Effect.fn(function* (bech32Str: string) {
 /**
  * Unsafely calls VRFKeyHash.fromBech32 without Effect wrapper
  *
- * @example
- * import { VRFKeyHash } from "@lucid-evolution/experimental";
- *
- *
- *
- * // Using try/catch for error handling
- * try {
- *   const result = VRFKeyHash.fromBech32Unsafe( parameters );
- *   console.log(result);
- * } catch (error) {
- *   console.error(`VRFKeyHash.fromBech32Unsafe failed: ${error.message}`);
- * }
- *
  * @since 2.0.0
  * @category ConstructorsUnsafe
  */
-export const fromBech32Unsafe = (bech32Str: string) =>
+export const fromBech32Unsafe = (bech32Str: string): CML.VRFKeyHash =>
   Effect.runSync(fromBech32(bech32Str));
 
 /**
  * Method toRawBytes of VRFKeyHash
  *
- * @example
- * import { VRFKeyHash } from "@lucid-evolution/experimental";
- * import { Effect } from "effect";
- *
- * // Using Effect for safe execution with error handling
- * Effect.gen(function*() {
- * // Assume we have a VRFKeyHash instance
- * const instance = ... ;
- *   const result = yield* VRFKeyHash.toRawBytes(instance);
- *   console.log(result);
- * });
- *
  * @since 2.0.0
  * @category Methods
  */
-export const toRawBytes = Effect.fn(
-  (instance: CML.VRFKeyHash): Effect.Effect<Uint8Array, VRFKeyHashError> =>
+export const toRawBytes: (
+  instance: CML.VRFKeyHash,
+) => Effect.Effect<Uint8Array, VRFKeyHashError> = Effect.fn(
+  (instance: CML.VRFKeyHash) =>
     Effect.try({
       try: () => instance.to_raw_bytes(),
       catch: () =>
@@ -214,20 +134,6 @@ export const toRawBytes = Effect.fn(
 /**
  * Unsafely calls instance.toRawBytes without Effect wrapper
  *
- * @example
- * import { VRFKeyHash } from "@lucid-evolution/experimental";
- *
- * // Assume we have a VRFKeyHash instance
- * const instance = ... ;
- *
- * // Using try/catch for error handling
- * try {
- *   const result = VRFKeyHash.toRawBytesUnsafe(instance);
- *   console.log(result);
- * } catch (error) {
- *   console.error(`VRFKeyHash.toRawBytesUnsafe failed: ${error.message}`);
- * }
- *
  * @since 2.0.0
  * @category MethodsUnsafe
  */
@@ -237,21 +143,14 @@ export const toRawBytesUnsafe = (instance: CML.VRFKeyHash): Uint8Array =>
 /**
  * Static method fromRawBytes of VRFKeyHash
  *
- * @example
- * import { VRFKeyHash } from "@lucid-evolution/experimental";
- * import { Effect } from "effect";
- *
- * // Using Effect for safe execution with error handling
- * Effect.gen(function*() {
- *
- *   const result = yield* VRFKeyHash.fromRawBytes( parameters );
- *   console.log(result);
- * });
- *
  * @since 2.0.0
  * @category Constructors
  */
-export const fromRawBytes = Effect.fn(function* (bytes: Uint8Array) {
+export const fromRawBytes: (
+  bytes: Uint8Array,
+) => Effect.Effect<CML.VRFKeyHash, VRFKeyHashError> = Effect.fn(function* (
+  bytes: Uint8Array,
+) {
   return yield* Effect.try({
     try: () => CML.VRFKeyHash.from_raw_bytes(bytes),
     catch: () =>
@@ -264,45 +163,22 @@ export const fromRawBytes = Effect.fn(function* (bytes: Uint8Array) {
 /**
  * Unsafely calls VRFKeyHash.fromRawBytes without Effect wrapper
  *
- * @example
- * import { VRFKeyHash } from "@lucid-evolution/experimental";
- *
- *
- *
- * // Using try/catch for error handling
- * try {
- *   const result = VRFKeyHash.fromRawBytesUnsafe( parameters );
- *   console.log(result);
- * } catch (error) {
- *   console.error(`VRFKeyHash.fromRawBytesUnsafe failed: ${error.message}`);
- * }
- *
  * @since 2.0.0
  * @category ConstructorsUnsafe
  */
-export const fromRawBytesUnsafe = (bytes: Uint8Array) =>
+export const fromRawBytesUnsafe = (bytes: Uint8Array): CML.VRFKeyHash =>
   Effect.runSync(fromRawBytes(bytes));
 
 /**
  * Method toHex of VRFKeyHash
  *
- * @example
- * import { VRFKeyHash } from "@lucid-evolution/experimental";
- * import { Effect } from "effect";
- *
- * // Using Effect for safe execution with error handling
- * Effect.gen(function*() {
- * // Assume we have a VRFKeyHash instance
- * const instance = ... ;
- *   const result = yield* VRFKeyHash.toHex(instance);
- *   console.log(result);
- * });
- *
  * @since 2.0.0
  * @category Methods
  */
-export const toHex = Effect.fn(
-  (instance: CML.VRFKeyHash): Effect.Effect<string, VRFKeyHashError> =>
+export const toHex: (
+  instance: CML.VRFKeyHash,
+) => Effect.Effect<string, VRFKeyHashError> = Effect.fn(
+  (instance: CML.VRFKeyHash) =>
     Effect.try({
       try: () => instance.to_hex(),
       catch: () =>
@@ -315,20 +191,6 @@ export const toHex = Effect.fn(
 /**
  * Unsafely calls instance.toHex without Effect wrapper
  *
- * @example
- * import { VRFKeyHash } from "@lucid-evolution/experimental";
- *
- * // Assume we have a VRFKeyHash instance
- * const instance = ... ;
- *
- * // Using try/catch for error handling
- * try {
- *   const result = VRFKeyHash.toHexUnsafe(instance);
- *   console.log(result);
- * } catch (error) {
- *   console.error(`VRFKeyHash.toHexUnsafe failed: ${error.message}`);
- * }
- *
  * @since 2.0.0
  * @category MethodsUnsafe
  */
@@ -338,21 +200,14 @@ export const toHexUnsafe = (instance: CML.VRFKeyHash): string =>
 /**
  * Static method fromHex of VRFKeyHash
  *
- * @example
- * import { VRFKeyHash } from "@lucid-evolution/experimental";
- * import { Effect } from "effect";
- *
- * // Using Effect for safe execution with error handling
- * Effect.gen(function*() {
- *
- *   const result = yield* VRFKeyHash.fromHex( parameters );
- *   console.log(result);
- * });
- *
  * @since 2.0.0
  * @category Constructors
  */
-export const fromHex = Effect.fn(function* (input: string) {
+export const fromHex: (
+  input: string,
+) => Effect.Effect<CML.VRFKeyHash, VRFKeyHashError> = Effect.fn(function* (
+  input: string,
+) {
   return yield* Effect.try({
     try: () => CML.VRFKeyHash.from_hex(input),
     catch: () =>
@@ -365,20 +220,8 @@ export const fromHex = Effect.fn(function* (input: string) {
 /**
  * Unsafely calls VRFKeyHash.fromHex without Effect wrapper
  *
- * @example
- * import { VRFKeyHash } from "@lucid-evolution/experimental";
- *
- *
- *
- * // Using try/catch for error handling
- * try {
- *   const result = VRFKeyHash.fromHexUnsafe( parameters );
- *   console.log(result);
- * } catch (error) {
- *   console.error(`VRFKeyHash.fromHexUnsafe failed: ${error.message}`);
- * }
- *
  * @since 2.0.0
  * @category ConstructorsUnsafe
  */
-export const fromHexUnsafe = (input: string) => Effect.runSync(fromHex(input));
+export const fromHexUnsafe = (input: string): CML.VRFKeyHash =>
+  Effect.runSync(fromHex(input));

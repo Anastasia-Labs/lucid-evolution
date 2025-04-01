@@ -29,25 +29,13 @@ export class SingleOutputBuilderResultError extends Data.TaggedError(
 /**
  * Method free of SingleOutputBuilderResult
  *
- * @example
- * import { SingleOutputBuilderResult } from "@lucid-evolution/experimental";
- * import { Effect } from "effect";
- *
- * // Using Effect for safe execution with error handling
- * Effect.gen(function*() {
- * // Assume we have a SingleOutputBuilderResult instance
- * const instance = ... ;
- *   const result = yield* SingleOutputBuilderResult.free(instance);
- *   console.log(result);
- * });
- *
  * @since 2.0.0
  * @category Methods
  */
-export const free = Effect.fn(
-  (
-    instance: CML.SingleOutputBuilderResult,
-  ): Effect.Effect<void, SingleOutputBuilderResultError> =>
+export const free: (
+  instance: CML.SingleOutputBuilderResult,
+) => Effect.Effect<void, SingleOutputBuilderResultError> = Effect.fn(
+  (instance: CML.SingleOutputBuilderResult) =>
     Effect.try({
       try: () => instance.free(),
       catch: () =>
@@ -60,20 +48,6 @@ export const free = Effect.fn(
 /**
  * Unsafely calls instance.free without Effect wrapper
  *
- * @example
- * import { SingleOutputBuilderResult } from "@lucid-evolution/experimental";
- *
- * // Assume we have a SingleOutputBuilderResult instance
- * const instance = ... ;
- *
- * // Using try/catch for error handling
- * try {
- *   const result = SingleOutputBuilderResult.freeUnsafe(instance);
- *   console.log(result);
- * } catch (error) {
- *   console.error(`SingleOutputBuilderResult.freeUnsafe failed: ${error.message}`);
- * }
- *
  * @since 2.0.0
  * @category MethodsUnsafe
  */
@@ -83,21 +57,15 @@ export const freeUnsafe = (instance: CML.SingleOutputBuilderResult): void =>
 /**
  * Static method _new of SingleOutputBuilderResult
  *
- * @example
- * import { SingleOutputBuilderResult } from "@lucid-evolution/experimental";
- * import { Effect } from "effect";
- *
- * // Using Effect for safe execution with error handling
- * Effect.gen(function*() {
- *
- *   const result = yield* SingleOutputBuilderResult._new( parameters );
- *   console.log(result);
- * });
- *
  * @since 2.0.0
  * @category Constructors
  */
-export const _new = Effect.fn(function* (output: CML.TransactionOutput) {
+export const _new: (
+  output: CML.TransactionOutput,
+) => Effect.Effect<
+  CML.SingleOutputBuilderResult,
+  SingleOutputBuilderResultError
+> = Effect.fn(function* (output: CML.TransactionOutput) {
   return yield* Effect.try({
     try: () => CML.SingleOutputBuilderResult.new(output),
     catch: () =>
@@ -110,47 +78,23 @@ export const _new = Effect.fn(function* (output: CML.TransactionOutput) {
 /**
  * Unsafely calls SingleOutputBuilderResult._new without Effect wrapper
  *
- * @example
- * import { SingleOutputBuilderResult } from "@lucid-evolution/experimental";
- *
- *
- *
- * // Using try/catch for error handling
- * try {
- *   const result = SingleOutputBuilderResult._newUnsafe( parameters );
- *   console.log(result);
- * } catch (error) {
- *   console.error(`SingleOutputBuilderResult._newUnsafe failed: ${error.message}`);
- * }
- *
  * @since 2.0.0
  * @category ConstructorsUnsafe
  */
-export const _newUnsafe = (output: CML.TransactionOutput) =>
-  Effect.runSync(_new(output));
+export const _newUnsafe = (
+  output: CML.TransactionOutput,
+): CML.SingleOutputBuilderResult => Effect.runSync(_new(output));
 
 /**
  * Method output of SingleOutputBuilderResult
  *
- * @example
- * import { SingleOutputBuilderResult } from "@lucid-evolution/experimental";
- * import { Effect } from "effect";
- *
- * // Using Effect for safe execution with error handling
- * Effect.gen(function*() {
- * // Assume we have a SingleOutputBuilderResult instance
- * const instance = ... ;
- *   const result = yield* SingleOutputBuilderResult.output(instance);
- *   console.log(result);
- * });
- *
  * @since 2.0.0
  * @category Methods
  */
-export const output = Effect.fn(
-  (
-    instance: CML.SingleOutputBuilderResult,
-  ): Effect.Effect<CML.TransactionOutput, SingleOutputBuilderResultError> =>
+export const output: (
+  instance: CML.SingleOutputBuilderResult,
+) => Effect.Effect<CML.TransactionOutput, SingleOutputBuilderResultError> =
+  Effect.fn((instance: CML.SingleOutputBuilderResult) =>
     Effect.try({
       try: () => instance.output(),
       catch: () =>
@@ -158,24 +102,10 @@ export const output = Effect.fn(
           message: `SingleOutputBuilderResult.output failed `,
         }),
     }),
-);
+  );
 
 /**
  * Unsafely calls instance.output without Effect wrapper
- *
- * @example
- * import { SingleOutputBuilderResult } from "@lucid-evolution/experimental";
- *
- * // Assume we have a SingleOutputBuilderResult instance
- * const instance = ... ;
- *
- * // Using try/catch for error handling
- * try {
- *   const result = SingleOutputBuilderResult.outputUnsafe(instance);
- *   console.log(result);
- * } catch (error) {
- *   console.error(`SingleOutputBuilderResult.outputUnsafe failed: ${error.message}`);
- * }
  *
  * @since 2.0.0
  * @category MethodsUnsafe
@@ -187,28 +117,13 @@ export const outputUnsafe = (
 /**
  * Method communicationDatum of SingleOutputBuilderResult
  *
- * @example
- * import { SingleOutputBuilderResult } from "@lucid-evolution/experimental";
- * import { Effect } from "effect";
- *
- * // Using Effect for safe execution with error handling
- * Effect.gen(function*() {
- * // Assume we have a SingleOutputBuilderResult instance
- * const instance = ... ;
- *   const result = yield* SingleOutputBuilderResult.communicationDatum(instance);
- *   console.log(result);
- * });
- *
  * @since 2.0.0
  * @category Methods
  */
-export const communicationDatum = Effect.fn(
-  (
-    instance: CML.SingleOutputBuilderResult,
-  ): Effect.Effect<
-    CML.PlutusData | undefined,
-    SingleOutputBuilderResultError
-  > =>
+export const communicationDatum: (
+  instance: CML.SingleOutputBuilderResult,
+) => Effect.Effect<CML.PlutusData | undefined, SingleOutputBuilderResultError> =
+  Effect.fn((instance: CML.SingleOutputBuilderResult) =>
     Effect.try({
       try: () => instance.communication_datum(),
       catch: () =>
@@ -216,24 +131,10 @@ export const communicationDatum = Effect.fn(
           message: `SingleOutputBuilderResult.communicationDatum failed `,
         }),
     }),
-);
+  );
 
 /**
  * Unsafely calls instance.communicationDatum without Effect wrapper
- *
- * @example
- * import { SingleOutputBuilderResult } from "@lucid-evolution/experimental";
- *
- * // Assume we have a SingleOutputBuilderResult instance
- * const instance = ... ;
- *
- * // Using try/catch for error handling
- * try {
- *   const result = SingleOutputBuilderResult.communicationDatumUnsafe(instance);
- *   console.log(result);
- * } catch (error) {
- *   console.error(`SingleOutputBuilderResult.communicationDatumUnsafe failed: ${error.message}`);
- * }
  *
  * @since 2.0.0
  * @category MethodsUnsafe

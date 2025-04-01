@@ -27,23 +27,11 @@ export class BlockError extends Data.TaggedError("BlockError")<{
 /**
  * Method free of Block
  *
- * @example
- * import { Block } from "@lucid-evolution/experimental";
- * import { Effect } from "effect";
- *
- * // Using Effect for safe execution with error handling
- * Effect.gen(function*() {
- * // Assume we have a Block instance
- * const instance = ... ;
- *   const result = yield* Block.free(instance);
- *   console.log(result);
- * });
- *
  * @since 2.0.0
  * @category Methods
  */
-export const free = Effect.fn(
-  (instance: CML.Block): Effect.Effect<void, BlockError> =>
+export const free: (instance: CML.Block) => Effect.Effect<void, BlockError> =
+  Effect.fn((instance: CML.Block) =>
     Effect.try({
       try: () => instance.free(),
       catch: () =>
@@ -51,24 +39,10 @@ export const free = Effect.fn(
           message: `Block.free failed Hint: Check if you're calling free() more than once.`,
         }),
     }),
-);
+  );
 
 /**
  * Unsafely calls instance.free without Effect wrapper
- *
- * @example
- * import { Block } from "@lucid-evolution/experimental";
- *
- * // Assume we have a Block instance
- * const instance = ... ;
- *
- * // Using try/catch for error handling
- * try {
- *   const result = Block.freeUnsafe(instance);
- *   console.log(result);
- * } catch (error) {
- *   console.error(`Block.freeUnsafe failed: ${error.message}`);
- * }
  *
  * @since 2.0.0
  * @category MethodsUnsafe
@@ -79,48 +53,23 @@ export const freeUnsafe = (instance: CML.Block): void =>
 /**
  * Method toCborBytes of Block
  *
- * @example
- * import { Block } from "@lucid-evolution/experimental";
- * import { Effect } from "effect";
- *
- * // Using Effect for safe execution with error handling
- * Effect.gen(function*() {
- * // Assume we have a Block instance
- * const instance = ... ;
- *   const result = yield* Block.toCborBytes(instance);
- *   console.log(result);
- * });
- *
  * @since 2.0.0
  * @category Methods
  */
-export const toCborBytes = Effect.fn(
-  (instance: CML.Block): Effect.Effect<Uint8Array, BlockError> =>
-    Effect.try({
-      try: () => instance.to_cbor_bytes(),
-      catch: () =>
-        new BlockError({
-          message: `Block.toCborBytes failed Block is not valid for Uint8Array conversion. Hint: Check byte length and encoding.`,
-        }),
-    }),
+export const toCborBytes: (
+  instance: CML.Block,
+) => Effect.Effect<Uint8Array, BlockError> = Effect.fn((instance: CML.Block) =>
+  Effect.try({
+    try: () => instance.to_cbor_bytes(),
+    catch: () =>
+      new BlockError({
+        message: `Block.toCborBytes failed Block is not valid for Uint8Array conversion. Hint: Check byte length and encoding.`,
+      }),
+  }),
 );
 
 /**
  * Unsafely calls instance.toCborBytes without Effect wrapper
- *
- * @example
- * import { Block } from "@lucid-evolution/experimental";
- *
- * // Assume we have a Block instance
- * const instance = ... ;
- *
- * // Using try/catch for error handling
- * try {
- *   const result = Block.toCborBytesUnsafe(instance);
- *   console.log(result);
- * } catch (error) {
- *   console.error(`Block.toCborBytesUnsafe failed: ${error.message}`);
- * }
  *
  * @since 2.0.0
  * @category MethodsUnsafe
@@ -131,48 +80,23 @@ export const toCborBytesUnsafe = (instance: CML.Block): Uint8Array =>
 /**
  * Method toCanonicalCborBytes of Block
  *
- * @example
- * import { Block } from "@lucid-evolution/experimental";
- * import { Effect } from "effect";
- *
- * // Using Effect for safe execution with error handling
- * Effect.gen(function*() {
- * // Assume we have a Block instance
- * const instance = ... ;
- *   const result = yield* Block.toCanonicalCborBytes(instance);
- *   console.log(result);
- * });
- *
  * @since 2.0.0
  * @category Methods
  */
-export const toCanonicalCborBytes = Effect.fn(
-  (instance: CML.Block): Effect.Effect<Uint8Array, BlockError> =>
-    Effect.try({
-      try: () => instance.to_canonical_cbor_bytes(),
-      catch: () =>
-        new BlockError({
-          message: `Block.toCanonicalCborBytes failed Block is not valid for Uint8Array conversion. Hint: Check byte length and encoding.`,
-        }),
-    }),
+export const toCanonicalCborBytes: (
+  instance: CML.Block,
+) => Effect.Effect<Uint8Array, BlockError> = Effect.fn((instance: CML.Block) =>
+  Effect.try({
+    try: () => instance.to_canonical_cbor_bytes(),
+    catch: () =>
+      new BlockError({
+        message: `Block.toCanonicalCborBytes failed Block is not valid for Uint8Array conversion. Hint: Check byte length and encoding.`,
+      }),
+  }),
 );
 
 /**
  * Unsafely calls instance.toCanonicalCborBytes without Effect wrapper
- *
- * @example
- * import { Block } from "@lucid-evolution/experimental";
- *
- * // Assume we have a Block instance
- * const instance = ... ;
- *
- * // Using try/catch for error handling
- * try {
- *   const result = Block.toCanonicalCborBytesUnsafe(instance);
- *   console.log(result);
- * } catch (error) {
- *   console.error(`Block.toCanonicalCborBytesUnsafe failed: ${error.message}`);
- * }
  *
  * @since 2.0.0
  * @category MethodsUnsafe
@@ -183,21 +107,14 @@ export const toCanonicalCborBytesUnsafe = (instance: CML.Block): Uint8Array =>
 /**
  * Static method fromCborBytes of Block
  *
- * @example
- * import { Block } from "@lucid-evolution/experimental";
- * import { Effect } from "effect";
- *
- * // Using Effect for safe execution with error handling
- * Effect.gen(function*() {
- *
- *   const result = yield* Block.fromCborBytes( parameters );
- *   console.log(result);
- * });
- *
  * @since 2.0.0
  * @category Constructors
  */
-export const fromCborBytes = Effect.fn(function* (cborBytes: Uint8Array) {
+export const fromCborBytes: (
+  cborBytes: Uint8Array,
+) => Effect.Effect<CML.Block, BlockError> = Effect.fn(function* (
+  cborBytes: Uint8Array,
+) {
   return yield* Effect.try({
     try: () => CML.Block.from_cbor_bytes(cborBytes),
     catch: () =>
@@ -210,70 +127,32 @@ export const fromCborBytes = Effect.fn(function* (cborBytes: Uint8Array) {
 /**
  * Unsafely calls Block.fromCborBytes without Effect wrapper
  *
- * @example
- * import { Block } from "@lucid-evolution/experimental";
- *
- *
- *
- * // Using try/catch for error handling
- * try {
- *   const result = Block.fromCborBytesUnsafe( parameters );
- *   console.log(result);
- * } catch (error) {
- *   console.error(`Block.fromCborBytesUnsafe failed: ${error.message}`);
- * }
- *
  * @since 2.0.0
  * @category ConstructorsUnsafe
  */
-export const fromCborBytesUnsafe = (cborBytes: Uint8Array) =>
+export const fromCborBytesUnsafe = (cborBytes: Uint8Array): CML.Block =>
   Effect.runSync(fromCborBytes(cborBytes));
 
 /**
  * Method toCborHex of Block
  *
- * @example
- * import { Block } from "@lucid-evolution/experimental";
- * import { Effect } from "effect";
- *
- * // Using Effect for safe execution with error handling
- * Effect.gen(function*() {
- * // Assume we have a Block instance
- * const instance = ... ;
- *   const result = yield* Block.toCborHex(instance);
- *   console.log(result);
- * });
- *
  * @since 2.0.0
  * @category Methods
  */
-export const toCborHex = Effect.fn(
-  (instance: CML.Block): Effect.Effect<string, BlockError> =>
-    Effect.try({
-      try: () => instance.to_cbor_hex(),
-      catch: () =>
-        new BlockError({
-          message: `Block.toCborHex failed Block is not valid for string conversion. Hint: Make sure it's a valid hex string representing CBOR data.`,
-        }),
-    }),
+export const toCborHex: (
+  instance: CML.Block,
+) => Effect.Effect<string, BlockError> = Effect.fn((instance: CML.Block) =>
+  Effect.try({
+    try: () => instance.to_cbor_hex(),
+    catch: () =>
+      new BlockError({
+        message: `Block.toCborHex failed Block is not valid for string conversion. Hint: Make sure it's a valid hex string representing CBOR data.`,
+      }),
+  }),
 );
 
 /**
  * Unsafely calls instance.toCborHex without Effect wrapper
- *
- * @example
- * import { Block } from "@lucid-evolution/experimental";
- *
- * // Assume we have a Block instance
- * const instance = ... ;
- *
- * // Using try/catch for error handling
- * try {
- *   const result = Block.toCborHexUnsafe(instance);
- *   console.log(result);
- * } catch (error) {
- *   console.error(`Block.toCborHexUnsafe failed: ${error.message}`);
- * }
  *
  * @since 2.0.0
  * @category MethodsUnsafe
@@ -284,48 +163,23 @@ export const toCborHexUnsafe = (instance: CML.Block): string =>
 /**
  * Method toCanonicalCborHex of Block
  *
- * @example
- * import { Block } from "@lucid-evolution/experimental";
- * import { Effect } from "effect";
- *
- * // Using Effect for safe execution with error handling
- * Effect.gen(function*() {
- * // Assume we have a Block instance
- * const instance = ... ;
- *   const result = yield* Block.toCanonicalCborHex(instance);
- *   console.log(result);
- * });
- *
  * @since 2.0.0
  * @category Methods
  */
-export const toCanonicalCborHex = Effect.fn(
-  (instance: CML.Block): Effect.Effect<string, BlockError> =>
-    Effect.try({
-      try: () => instance.to_canonical_cbor_hex(),
-      catch: () =>
-        new BlockError({
-          message: `Block.toCanonicalCborHex failed Block is not valid for string conversion. Hint: Make sure it's a valid hex string representing CBOR data.`,
-        }),
-    }),
+export const toCanonicalCborHex: (
+  instance: CML.Block,
+) => Effect.Effect<string, BlockError> = Effect.fn((instance: CML.Block) =>
+  Effect.try({
+    try: () => instance.to_canonical_cbor_hex(),
+    catch: () =>
+      new BlockError({
+        message: `Block.toCanonicalCborHex failed Block is not valid for string conversion. Hint: Make sure it's a valid hex string representing CBOR data.`,
+      }),
+  }),
 );
 
 /**
  * Unsafely calls instance.toCanonicalCborHex without Effect wrapper
- *
- * @example
- * import { Block } from "@lucid-evolution/experimental";
- *
- * // Assume we have a Block instance
- * const instance = ... ;
- *
- * // Using try/catch for error handling
- * try {
- *   const result = Block.toCanonicalCborHexUnsafe(instance);
- *   console.log(result);
- * } catch (error) {
- *   console.error(`Block.toCanonicalCborHexUnsafe failed: ${error.message}`);
- * }
  *
  * @since 2.0.0
  * @category MethodsUnsafe
@@ -336,21 +190,14 @@ export const toCanonicalCborHexUnsafe = (instance: CML.Block): string =>
 /**
  * Static method fromCborHex of Block
  *
- * @example
- * import { Block } from "@lucid-evolution/experimental";
- * import { Effect } from "effect";
- *
- * // Using Effect for safe execution with error handling
- * Effect.gen(function*() {
- *
- *   const result = yield* Block.fromCborHex( parameters );
- *   console.log(result);
- * });
- *
  * @since 2.0.0
  * @category Constructors
  */
-export const fromCborHex = Effect.fn(function* (cborBytes: string) {
+export const fromCborHex: (
+  cborBytes: string,
+) => Effect.Effect<CML.Block, BlockError> = Effect.fn(function* (
+  cborBytes: string,
+) {
   return yield* Effect.try({
     try: () => CML.Block.from_cbor_hex(cborBytes),
     catch: () =>
@@ -363,70 +210,32 @@ export const fromCborHex = Effect.fn(function* (cborBytes: string) {
 /**
  * Unsafely calls Block.fromCborHex without Effect wrapper
  *
- * @example
- * import { Block } from "@lucid-evolution/experimental";
- *
- *
- *
- * // Using try/catch for error handling
- * try {
- *   const result = Block.fromCborHexUnsafe( parameters );
- *   console.log(result);
- * } catch (error) {
- *   console.error(`Block.fromCborHexUnsafe failed: ${error.message}`);
- * }
- *
  * @since 2.0.0
  * @category ConstructorsUnsafe
  */
-export const fromCborHexUnsafe = (cborBytes: string) =>
+export const fromCborHexUnsafe = (cborBytes: string): CML.Block =>
   Effect.runSync(fromCborHex(cborBytes));
 
 /**
  * Method toJson of Block
  *
- * @example
- * import { Block } from "@lucid-evolution/experimental";
- * import { Effect } from "effect";
- *
- * // Using Effect for safe execution with error handling
- * Effect.gen(function*() {
- * // Assume we have a Block instance
- * const instance = ... ;
- *   const result = yield* Block.toJson(instance);
- *   console.log(result);
- * });
- *
  * @since 2.0.0
  * @category Methods
  */
-export const toJson = Effect.fn(
-  (instance: CML.Block): Effect.Effect<string, BlockError> =>
-    Effect.try({
-      try: () => instance.to_json(),
-      catch: () =>
-        new BlockError({
-          message: `Block.toJson failed Block is not valid for string conversion. Hint: Validate your JSON structure.`,
-        }),
-    }),
+export const toJson: (
+  instance: CML.Block,
+) => Effect.Effect<string, BlockError> = Effect.fn((instance: CML.Block) =>
+  Effect.try({
+    try: () => instance.to_json(),
+    catch: () =>
+      new BlockError({
+        message: `Block.toJson failed Block is not valid for string conversion. Hint: Validate your JSON structure.`,
+      }),
+  }),
 );
 
 /**
  * Unsafely calls instance.toJson without Effect wrapper
- *
- * @example
- * import { Block } from "@lucid-evolution/experimental";
- *
- * // Assume we have a Block instance
- * const instance = ... ;
- *
- * // Using try/catch for error handling
- * try {
- *   const result = Block.toJsonUnsafe(instance);
- *   console.log(result);
- * } catch (error) {
- *   console.error(`Block.toJsonUnsafe failed: ${error.message}`);
- * }
  *
  * @since 2.0.0
  * @category MethodsUnsafe
@@ -437,48 +246,23 @@ export const toJsonUnsafe = (instance: CML.Block): string =>
 /**
  * Method toJsValue of Block
  *
- * @example
- * import { Block } from "@lucid-evolution/experimental";
- * import { Effect } from "effect";
- *
- * // Using Effect for safe execution with error handling
- * Effect.gen(function*() {
- * // Assume we have a Block instance
- * const instance = ... ;
- *   const result = yield* Block.toJsValue(instance);
- *   console.log(result);
- * });
- *
  * @since 2.0.0
  * @category Methods
  */
-export const toJsValue = Effect.fn(
-  (instance: CML.Block): Effect.Effect<any, BlockError> =>
-    Effect.try({
-      try: () => instance.to_js_value(),
-      catch: () =>
-        new BlockError({
-          message: `Block.toJsValue failed Block is not valid for any conversion. `,
-        }),
-    }),
+export const toJsValue: (
+  instance: CML.Block,
+) => Effect.Effect<any, BlockError> = Effect.fn((instance: CML.Block) =>
+  Effect.try({
+    try: () => instance.to_js_value(),
+    catch: () =>
+      new BlockError({
+        message: `Block.toJsValue failed Block is not valid for any conversion. `,
+      }),
+  }),
 );
 
 /**
  * Unsafely calls instance.toJsValue without Effect wrapper
- *
- * @example
- * import { Block } from "@lucid-evolution/experimental";
- *
- * // Assume we have a Block instance
- * const instance = ... ;
- *
- * // Using try/catch for error handling
- * try {
- *   const result = Block.toJsValueUnsafe(instance);
- *   console.log(result);
- * } catch (error) {
- *   console.error(`Block.toJsValueUnsafe failed: ${error.message}`);
- * }
  *
  * @since 2.0.0
  * @category MethodsUnsafe
@@ -489,96 +273,49 @@ export const toJsValueUnsafe = (instance: CML.Block): any =>
 /**
  * Static method fromJson of Block
  *
- * @example
- * import { Block } from "@lucid-evolution/experimental";
- * import { Effect } from "effect";
- *
- * // Using Effect for safe execution with error handling
- * Effect.gen(function*() {
- *
- *   const result = yield* Block.fromJson( parameters );
- *   console.log(result);
- * });
- *
  * @since 2.0.0
  * @category Constructors
  */
-export const fromJson = Effect.fn(function* (json: string) {
-  return yield* Effect.try({
-    try: () => CML.Block.from_json(json),
-    catch: () =>
-      new BlockError({
-        message: `Block.fromJson failed with parameters: ${json}. Hint: Validate your JSON structure.`,
-      }),
+export const fromJson: (json: string) => Effect.Effect<CML.Block, BlockError> =
+  Effect.fn(function* (json: string) {
+    return yield* Effect.try({
+      try: () => CML.Block.from_json(json),
+      catch: () =>
+        new BlockError({
+          message: `Block.fromJson failed with parameters: ${json}. Hint: Validate your JSON structure.`,
+        }),
+    });
   });
-});
 
 /**
  * Unsafely calls Block.fromJson without Effect wrapper
  *
- * @example
- * import { Block } from "@lucid-evolution/experimental";
- *
- *
- *
- * // Using try/catch for error handling
- * try {
- *   const result = Block.fromJsonUnsafe( parameters );
- *   console.log(result);
- * } catch (error) {
- *   console.error(`Block.fromJsonUnsafe failed: ${error.message}`);
- * }
- *
  * @since 2.0.0
  * @category ConstructorsUnsafe
  */
-export const fromJsonUnsafe = (json: string) => Effect.runSync(fromJson(json));
+export const fromJsonUnsafe = (json: string): CML.Block =>
+  Effect.runSync(fromJson(json));
 
 /**
  * Method header of Block
  *
- * @example
- * import { Block } from "@lucid-evolution/experimental";
- * import { Effect } from "effect";
- *
- * // Using Effect for safe execution with error handling
- * Effect.gen(function*() {
- * // Assume we have a Block instance
- * const instance = ... ;
- *   const result = yield* Block.header(instance);
- *   console.log(result);
- * });
- *
  * @since 2.0.0
  * @category Methods
  */
-export const header = Effect.fn(
-  (instance: CML.Block): Effect.Effect<CML.Header, BlockError> =>
-    Effect.try({
-      try: () => instance.header(),
-      catch: () =>
-        new BlockError({
-          message: `Block.header failed `,
-        }),
-    }),
+export const header: (
+  instance: CML.Block,
+) => Effect.Effect<CML.Header, BlockError> = Effect.fn((instance: CML.Block) =>
+  Effect.try({
+    try: () => instance.header(),
+    catch: () =>
+      new BlockError({
+        message: `Block.header failed `,
+      }),
+  }),
 );
 
 /**
  * Unsafely calls instance.header without Effect wrapper
- *
- * @example
- * import { Block } from "@lucid-evolution/experimental";
- *
- * // Assume we have a Block instance
- * const instance = ... ;
- *
- * // Using try/catch for error handling
- * try {
- *   const result = Block.headerUnsafe(instance);
- *   console.log(result);
- * } catch (error) {
- *   console.error(`Block.headerUnsafe failed: ${error.message}`);
- * }
  *
  * @since 2.0.0
  * @category MethodsUnsafe
@@ -589,23 +326,13 @@ export const headerUnsafe = (instance: CML.Block): CML.Header =>
 /**
  * Method transactionBodies of Block
  *
- * @example
- * import { Block } from "@lucid-evolution/experimental";
- * import { Effect } from "effect";
- *
- * // Using Effect for safe execution with error handling
- * Effect.gen(function*() {
- * // Assume we have a Block instance
- * const instance = ... ;
- *   const result = yield* Block.transactionBodies(instance);
- *   console.log(result);
- * });
- *
  * @since 2.0.0
  * @category Methods
  */
-export const transactionBodies = Effect.fn(
-  (instance: CML.Block): Effect.Effect<CML.TransactionBodyList, BlockError> =>
+export const transactionBodies: (
+  instance: CML.Block,
+) => Effect.Effect<CML.TransactionBodyList, BlockError> = Effect.fn(
+  (instance: CML.Block) =>
     Effect.try({
       try: () => instance.transaction_bodies(),
       catch: () =>
@@ -618,20 +345,6 @@ export const transactionBodies = Effect.fn(
 /**
  * Unsafely calls instance.transactionBodies without Effect wrapper
  *
- * @example
- * import { Block } from "@lucid-evolution/experimental";
- *
- * // Assume we have a Block instance
- * const instance = ... ;
- *
- * // Using try/catch for error handling
- * try {
- *   const result = Block.transactionBodiesUnsafe(instance);
- *   console.log(result);
- * } catch (error) {
- *   console.error(`Block.transactionBodiesUnsafe failed: ${error.message}`);
- * }
- *
  * @since 2.0.0
  * @category MethodsUnsafe
  */
@@ -642,25 +355,13 @@ export const transactionBodiesUnsafe = (
 /**
  * Method transactionWitnessSets of Block
  *
- * @example
- * import { Block } from "@lucid-evolution/experimental";
- * import { Effect } from "effect";
- *
- * // Using Effect for safe execution with error handling
- * Effect.gen(function*() {
- * // Assume we have a Block instance
- * const instance = ... ;
- *   const result = yield* Block.transactionWitnessSets(instance);
- *   console.log(result);
- * });
- *
  * @since 2.0.0
  * @category Methods
  */
-export const transactionWitnessSets = Effect.fn(
-  (
-    instance: CML.Block,
-  ): Effect.Effect<CML.TransactionWitnessSetList, BlockError> =>
+export const transactionWitnessSets: (
+  instance: CML.Block,
+) => Effect.Effect<CML.TransactionWitnessSetList, BlockError> = Effect.fn(
+  (instance: CML.Block) =>
     Effect.try({
       try: () => instance.transaction_witness_sets(),
       catch: () =>
@@ -673,20 +374,6 @@ export const transactionWitnessSets = Effect.fn(
 /**
  * Unsafely calls instance.transactionWitnessSets without Effect wrapper
  *
- * @example
- * import { Block } from "@lucid-evolution/experimental";
- *
- * // Assume we have a Block instance
- * const instance = ... ;
- *
- * // Using try/catch for error handling
- * try {
- *   const result = Block.transactionWitnessSetsUnsafe(instance);
- *   console.log(result);
- * } catch (error) {
- *   console.error(`Block.transactionWitnessSetsUnsafe failed: ${error.message}`);
- * }
- *
  * @since 2.0.0
  * @category MethodsUnsafe
  */
@@ -698,25 +385,13 @@ export const transactionWitnessSetsUnsafe = (
 /**
  * Method auxiliaryDataSet of Block
  *
- * @example
- * import { Block } from "@lucid-evolution/experimental";
- * import { Effect } from "effect";
- *
- * // Using Effect for safe execution with error handling
- * Effect.gen(function*() {
- * // Assume we have a Block instance
- * const instance = ... ;
- *   const result = yield* Block.auxiliaryDataSet(instance);
- *   console.log(result);
- * });
- *
  * @since 2.0.0
  * @category Methods
  */
-export const auxiliaryDataSet = Effect.fn(
-  (
-    instance: CML.Block,
-  ): Effect.Effect<CML.MapTransactionIndexToAuxiliaryData, BlockError> =>
+export const auxiliaryDataSet: (
+  instance: CML.Block,
+) => Effect.Effect<CML.MapTransactionIndexToAuxiliaryData, BlockError> =
+  Effect.fn((instance: CML.Block) =>
     Effect.try({
       try: () => instance.auxiliary_data_set(),
       catch: () =>
@@ -724,24 +399,10 @@ export const auxiliaryDataSet = Effect.fn(
           message: `Block.auxiliaryDataSet failed `,
         }),
     }),
-);
+  );
 
 /**
  * Unsafely calls instance.auxiliaryDataSet without Effect wrapper
- *
- * @example
- * import { Block } from "@lucid-evolution/experimental";
- *
- * // Assume we have a Block instance
- * const instance = ... ;
- *
- * // Using try/catch for error handling
- * try {
- *   const result = Block.auxiliaryDataSetUnsafe(instance);
- *   console.log(result);
- * } catch (error) {
- *   console.error(`Block.auxiliaryDataSetUnsafe failed: ${error.message}`);
- * }
  *
  * @since 2.0.0
  * @category MethodsUnsafe
@@ -754,48 +415,23 @@ export const auxiliaryDataSetUnsafe = (
 /**
  * Method invalidTransactions of Block
  *
- * @example
- * import { Block } from "@lucid-evolution/experimental";
- * import { Effect } from "effect";
- *
- * // Using Effect for safe execution with error handling
- * Effect.gen(function*() {
- * // Assume we have a Block instance
- * const instance = ... ;
- *   const result = yield* Block.invalidTransactions(instance);
- *   console.log(result);
- * });
- *
  * @since 2.0.0
  * @category Methods
  */
-export const invalidTransactions = Effect.fn(
-  (instance: CML.Block): Effect.Effect<Uint16Array, BlockError> =>
-    Effect.try({
-      try: () => instance.invalid_transactions(),
-      catch: () =>
-        new BlockError({
-          message: `Block.invalidTransactions failed `,
-        }),
-    }),
+export const invalidTransactions: (
+  instance: CML.Block,
+) => Effect.Effect<Uint16Array, BlockError> = Effect.fn((instance: CML.Block) =>
+  Effect.try({
+    try: () => instance.invalid_transactions(),
+    catch: () =>
+      new BlockError({
+        message: `Block.invalidTransactions failed `,
+      }),
+  }),
 );
 
 /**
  * Unsafely calls instance.invalidTransactions without Effect wrapper
- *
- * @example
- * import { Block } from "@lucid-evolution/experimental";
- *
- * // Assume we have a Block instance
- * const instance = ... ;
- *
- * // Using try/catch for error handling
- * try {
- *   const result = Block.invalidTransactionsUnsafe(instance);
- *   console.log(result);
- * } catch (error) {
- *   console.error(`Block.invalidTransactionsUnsafe failed: ${error.message}`);
- * }
  *
  * @since 2.0.0
  * @category MethodsUnsafe
@@ -806,21 +442,16 @@ export const invalidTransactionsUnsafe = (instance: CML.Block): Uint16Array =>
 /**
  * Static method _new of Block
  *
- * @example
- * import { Block } from "@lucid-evolution/experimental";
- * import { Effect } from "effect";
- *
- * // Using Effect for safe execution with error handling
- * Effect.gen(function*() {
- *
- *   const result = yield* Block._new( parameters );
- *   console.log(result);
- * });
- *
  * @since 2.0.0
  * @category Constructors
  */
-export const _new = Effect.fn(function* (
+export const _new: (
+  header: CML.Header,
+  transactionBodies: CML.TransactionBodyList,
+  transactionWitnessSets: CML.TransactionWitnessSetList,
+  auxiliaryDataSet: CML.MapTransactionIndexToAuxiliaryData,
+  invalidTransactions: Uint16Array,
+) => Effect.Effect<CML.Block, BlockError> = Effect.fn(function* (
   header: CML.Header,
   transactionBodies: CML.TransactionBodyList,
   transactionWitnessSets: CML.TransactionWitnessSetList,
@@ -846,19 +477,6 @@ export const _new = Effect.fn(function* (
 /**
  * Unsafely calls Block._new without Effect wrapper
  *
- * @example
- * import { Block } from "@lucid-evolution/experimental";
- *
- *
- *
- * // Using try/catch for error handling
- * try {
- *   const result = Block._newUnsafe( parameters );
- *   console.log(result);
- * } catch (error) {
- *   console.error(`Block._newUnsafe failed: ${error.message}`);
- * }
- *
  * @since 2.0.0
  * @category ConstructorsUnsafe
  */
@@ -868,7 +486,7 @@ export const _newUnsafe = (
   transactionWitnessSets: CML.TransactionWitnessSetList,
   auxiliaryDataSet: CML.MapTransactionIndexToAuxiliaryData,
   invalidTransactions: Uint16Array,
-) =>
+): CML.Block =>
   Effect.runSync(
     _new(
       header,

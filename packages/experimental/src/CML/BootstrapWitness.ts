@@ -29,25 +29,13 @@ export class BootstrapWitnessError extends Data.TaggedError(
 /**
  * Method free of BootstrapWitness
  *
- * @example
- * import { BootstrapWitness } from "@lucid-evolution/experimental";
- * import { Effect } from "effect";
- *
- * // Using Effect for safe execution with error handling
- * Effect.gen(function*() {
- * // Assume we have a BootstrapWitness instance
- * const instance = ... ;
- *   const result = yield* BootstrapWitness.free(instance);
- *   console.log(result);
- * });
- *
  * @since 2.0.0
  * @category Methods
  */
-export const free = Effect.fn(
-  (
-    instance: CML.BootstrapWitness,
-  ): Effect.Effect<void, BootstrapWitnessError> =>
+export const free: (
+  instance: CML.BootstrapWitness,
+) => Effect.Effect<void, BootstrapWitnessError> = Effect.fn(
+  (instance: CML.BootstrapWitness) =>
     Effect.try({
       try: () => instance.free(),
       catch: () =>
@@ -60,20 +48,6 @@ export const free = Effect.fn(
 /**
  * Unsafely calls instance.free without Effect wrapper
  *
- * @example
- * import { BootstrapWitness } from "@lucid-evolution/experimental";
- *
- * // Assume we have a BootstrapWitness instance
- * const instance = ... ;
- *
- * // Using try/catch for error handling
- * try {
- *   const result = BootstrapWitness.freeUnsafe(instance);
- *   console.log(result);
- * } catch (error) {
- *   console.error(`BootstrapWitness.freeUnsafe failed: ${error.message}`);
- * }
- *
  * @since 2.0.0
  * @category MethodsUnsafe
  */
@@ -83,25 +57,13 @@ export const freeUnsafe = (instance: CML.BootstrapWitness): void =>
 /**
  * Method toCborBytes of BootstrapWitness
  *
- * @example
- * import { BootstrapWitness } from "@lucid-evolution/experimental";
- * import { Effect } from "effect";
- *
- * // Using Effect for safe execution with error handling
- * Effect.gen(function*() {
- * // Assume we have a BootstrapWitness instance
- * const instance = ... ;
- *   const result = yield* BootstrapWitness.toCborBytes(instance);
- *   console.log(result);
- * });
- *
  * @since 2.0.0
  * @category Methods
  */
-export const toCborBytes = Effect.fn(
-  (
-    instance: CML.BootstrapWitness,
-  ): Effect.Effect<Uint8Array, BootstrapWitnessError> =>
+export const toCborBytes: (
+  instance: CML.BootstrapWitness,
+) => Effect.Effect<Uint8Array, BootstrapWitnessError> = Effect.fn(
+  (instance: CML.BootstrapWitness) =>
     Effect.try({
       try: () => instance.to_cbor_bytes(),
       catch: () =>
@@ -114,20 +76,6 @@ export const toCborBytes = Effect.fn(
 /**
  * Unsafely calls instance.toCborBytes without Effect wrapper
  *
- * @example
- * import { BootstrapWitness } from "@lucid-evolution/experimental";
- *
- * // Assume we have a BootstrapWitness instance
- * const instance = ... ;
- *
- * // Using try/catch for error handling
- * try {
- *   const result = BootstrapWitness.toCborBytesUnsafe(instance);
- *   console.log(result);
- * } catch (error) {
- *   console.error(`BootstrapWitness.toCborBytesUnsafe failed: ${error.message}`);
- * }
- *
  * @since 2.0.0
  * @category MethodsUnsafe
  */
@@ -137,25 +85,13 @@ export const toCborBytesUnsafe = (instance: CML.BootstrapWitness): Uint8Array =>
 /**
  * Method toCanonicalCborBytes of BootstrapWitness
  *
- * @example
- * import { BootstrapWitness } from "@lucid-evolution/experimental";
- * import { Effect } from "effect";
- *
- * // Using Effect for safe execution with error handling
- * Effect.gen(function*() {
- * // Assume we have a BootstrapWitness instance
- * const instance = ... ;
- *   const result = yield* BootstrapWitness.toCanonicalCborBytes(instance);
- *   console.log(result);
- * });
- *
  * @since 2.0.0
  * @category Methods
  */
-export const toCanonicalCborBytes = Effect.fn(
-  (
-    instance: CML.BootstrapWitness,
-  ): Effect.Effect<Uint8Array, BootstrapWitnessError> =>
+export const toCanonicalCborBytes: (
+  instance: CML.BootstrapWitness,
+) => Effect.Effect<Uint8Array, BootstrapWitnessError> = Effect.fn(
+  (instance: CML.BootstrapWitness) =>
     Effect.try({
       try: () => instance.to_canonical_cbor_bytes(),
       catch: () =>
@@ -168,20 +104,6 @@ export const toCanonicalCborBytes = Effect.fn(
 /**
  * Unsafely calls instance.toCanonicalCborBytes without Effect wrapper
  *
- * @example
- * import { BootstrapWitness } from "@lucid-evolution/experimental";
- *
- * // Assume we have a BootstrapWitness instance
- * const instance = ... ;
- *
- * // Using try/catch for error handling
- * try {
- *   const result = BootstrapWitness.toCanonicalCborBytesUnsafe(instance);
- *   console.log(result);
- * } catch (error) {
- *   console.error(`BootstrapWitness.toCanonicalCborBytesUnsafe failed: ${error.message}`);
- * }
- *
  * @since 2.0.0
  * @category MethodsUnsafe
  */
@@ -192,74 +114,43 @@ export const toCanonicalCborBytesUnsafe = (
 /**
  * Static method fromCborBytes of BootstrapWitness
  *
- * @example
- * import { BootstrapWitness } from "@lucid-evolution/experimental";
- * import { Effect } from "effect";
- *
- * // Using Effect for safe execution with error handling
- * Effect.gen(function*() {
- *
- *   const result = yield* BootstrapWitness.fromCborBytes( parameters );
- *   console.log(result);
- * });
- *
  * @since 2.0.0
  * @category Constructors
  */
-export const fromCborBytes = Effect.fn(function* (cborBytes: Uint8Array) {
-  return yield* Effect.try({
-    try: () => CML.BootstrapWitness.from_cbor_bytes(cborBytes),
-    catch: () =>
-      new BootstrapWitnessError({
-        message: `BootstrapWitness.fromCborBytes failed with parameters: ${cborBytes}. Hint: Check byte length and encoding.`,
-      }),
-  });
-});
+export const fromCborBytes: (
+  cborBytes: Uint8Array,
+) => Effect.Effect<CML.BootstrapWitness, BootstrapWitnessError> = Effect.fn(
+  function* (cborBytes: Uint8Array) {
+    return yield* Effect.try({
+      try: () => CML.BootstrapWitness.from_cbor_bytes(cborBytes),
+      catch: () =>
+        new BootstrapWitnessError({
+          message: `BootstrapWitness.fromCborBytes failed with parameters: ${cborBytes}. Hint: Check byte length and encoding.`,
+        }),
+    });
+  },
+);
 
 /**
  * Unsafely calls BootstrapWitness.fromCborBytes without Effect wrapper
  *
- * @example
- * import { BootstrapWitness } from "@lucid-evolution/experimental";
- *
- *
- *
- * // Using try/catch for error handling
- * try {
- *   const result = BootstrapWitness.fromCborBytesUnsafe( parameters );
- *   console.log(result);
- * } catch (error) {
- *   console.error(`BootstrapWitness.fromCborBytesUnsafe failed: ${error.message}`);
- * }
- *
  * @since 2.0.0
  * @category ConstructorsUnsafe
  */
-export const fromCborBytesUnsafe = (cborBytes: Uint8Array) =>
-  Effect.runSync(fromCborBytes(cborBytes));
+export const fromCborBytesUnsafe = (
+  cborBytes: Uint8Array,
+): CML.BootstrapWitness => Effect.runSync(fromCborBytes(cborBytes));
 
 /**
  * Method toCborHex of BootstrapWitness
  *
- * @example
- * import { BootstrapWitness } from "@lucid-evolution/experimental";
- * import { Effect } from "effect";
- *
- * // Using Effect for safe execution with error handling
- * Effect.gen(function*() {
- * // Assume we have a BootstrapWitness instance
- * const instance = ... ;
- *   const result = yield* BootstrapWitness.toCborHex(instance);
- *   console.log(result);
- * });
- *
  * @since 2.0.0
  * @category Methods
  */
-export const toCborHex = Effect.fn(
-  (
-    instance: CML.BootstrapWitness,
-  ): Effect.Effect<string, BootstrapWitnessError> =>
+export const toCborHex: (
+  instance: CML.BootstrapWitness,
+) => Effect.Effect<string, BootstrapWitnessError> = Effect.fn(
+  (instance: CML.BootstrapWitness) =>
     Effect.try({
       try: () => instance.to_cbor_hex(),
       catch: () =>
@@ -272,20 +163,6 @@ export const toCborHex = Effect.fn(
 /**
  * Unsafely calls instance.toCborHex without Effect wrapper
  *
- * @example
- * import { BootstrapWitness } from "@lucid-evolution/experimental";
- *
- * // Assume we have a BootstrapWitness instance
- * const instance = ... ;
- *
- * // Using try/catch for error handling
- * try {
- *   const result = BootstrapWitness.toCborHexUnsafe(instance);
- *   console.log(result);
- * } catch (error) {
- *   console.error(`BootstrapWitness.toCborHexUnsafe failed: ${error.message}`);
- * }
- *
  * @since 2.0.0
  * @category MethodsUnsafe
  */
@@ -295,25 +172,13 @@ export const toCborHexUnsafe = (instance: CML.BootstrapWitness): string =>
 /**
  * Method toCanonicalCborHex of BootstrapWitness
  *
- * @example
- * import { BootstrapWitness } from "@lucid-evolution/experimental";
- * import { Effect } from "effect";
- *
- * // Using Effect for safe execution with error handling
- * Effect.gen(function*() {
- * // Assume we have a BootstrapWitness instance
- * const instance = ... ;
- *   const result = yield* BootstrapWitness.toCanonicalCborHex(instance);
- *   console.log(result);
- * });
- *
  * @since 2.0.0
  * @category Methods
  */
-export const toCanonicalCborHex = Effect.fn(
-  (
-    instance: CML.BootstrapWitness,
-  ): Effect.Effect<string, BootstrapWitnessError> =>
+export const toCanonicalCborHex: (
+  instance: CML.BootstrapWitness,
+) => Effect.Effect<string, BootstrapWitnessError> = Effect.fn(
+  (instance: CML.BootstrapWitness) =>
     Effect.try({
       try: () => instance.to_canonical_cbor_hex(),
       catch: () =>
@@ -326,20 +191,6 @@ export const toCanonicalCborHex = Effect.fn(
 /**
  * Unsafely calls instance.toCanonicalCborHex without Effect wrapper
  *
- * @example
- * import { BootstrapWitness } from "@lucid-evolution/experimental";
- *
- * // Assume we have a BootstrapWitness instance
- * const instance = ... ;
- *
- * // Using try/catch for error handling
- * try {
- *   const result = BootstrapWitness.toCanonicalCborHexUnsafe(instance);
- *   console.log(result);
- * } catch (error) {
- *   console.error(`BootstrapWitness.toCanonicalCborHexUnsafe failed: ${error.message}`);
- * }
- *
  * @since 2.0.0
  * @category MethodsUnsafe
  */
@@ -350,74 +201,42 @@ export const toCanonicalCborHexUnsafe = (
 /**
  * Static method fromCborHex of BootstrapWitness
  *
- * @example
- * import { BootstrapWitness } from "@lucid-evolution/experimental";
- * import { Effect } from "effect";
- *
- * // Using Effect for safe execution with error handling
- * Effect.gen(function*() {
- *
- *   const result = yield* BootstrapWitness.fromCborHex( parameters );
- *   console.log(result);
- * });
- *
  * @since 2.0.0
  * @category Constructors
  */
-export const fromCborHex = Effect.fn(function* (cborBytes: string) {
-  return yield* Effect.try({
-    try: () => CML.BootstrapWitness.from_cbor_hex(cborBytes),
-    catch: () =>
-      new BootstrapWitnessError({
-        message: `BootstrapWitness.fromCborHex failed with parameters: ${cborBytes}. Hint: Make sure it's a valid hex string representing CBOR data.`,
-      }),
-  });
-});
+export const fromCborHex: (
+  cborBytes: string,
+) => Effect.Effect<CML.BootstrapWitness, BootstrapWitnessError> = Effect.fn(
+  function* (cborBytes: string) {
+    return yield* Effect.try({
+      try: () => CML.BootstrapWitness.from_cbor_hex(cborBytes),
+      catch: () =>
+        new BootstrapWitnessError({
+          message: `BootstrapWitness.fromCborHex failed with parameters: ${cborBytes}. Hint: Make sure it's a valid hex string representing CBOR data.`,
+        }),
+    });
+  },
+);
 
 /**
  * Unsafely calls BootstrapWitness.fromCborHex without Effect wrapper
  *
- * @example
- * import { BootstrapWitness } from "@lucid-evolution/experimental";
- *
- *
- *
- * // Using try/catch for error handling
- * try {
- *   const result = BootstrapWitness.fromCborHexUnsafe( parameters );
- *   console.log(result);
- * } catch (error) {
- *   console.error(`BootstrapWitness.fromCborHexUnsafe failed: ${error.message}`);
- * }
- *
  * @since 2.0.0
  * @category ConstructorsUnsafe
  */
-export const fromCborHexUnsafe = (cborBytes: string) =>
+export const fromCborHexUnsafe = (cborBytes: string): CML.BootstrapWitness =>
   Effect.runSync(fromCborHex(cborBytes));
 
 /**
  * Method toJson of BootstrapWitness
  *
- * @example
- * import { BootstrapWitness } from "@lucid-evolution/experimental";
- * import { Effect } from "effect";
- *
- * // Using Effect for safe execution with error handling
- * Effect.gen(function*() {
- * // Assume we have a BootstrapWitness instance
- * const instance = ... ;
- *   const result = yield* BootstrapWitness.toJson(instance);
- *   console.log(result);
- * });
- *
  * @since 2.0.0
  * @category Methods
  */
-export const toJson = Effect.fn(
-  (
-    instance: CML.BootstrapWitness,
-  ): Effect.Effect<string, BootstrapWitnessError> =>
+export const toJson: (
+  instance: CML.BootstrapWitness,
+) => Effect.Effect<string, BootstrapWitnessError> = Effect.fn(
+  (instance: CML.BootstrapWitness) =>
     Effect.try({
       try: () => instance.to_json(),
       catch: () =>
@@ -430,20 +249,6 @@ export const toJson = Effect.fn(
 /**
  * Unsafely calls instance.toJson without Effect wrapper
  *
- * @example
- * import { BootstrapWitness } from "@lucid-evolution/experimental";
- *
- * // Assume we have a BootstrapWitness instance
- * const instance = ... ;
- *
- * // Using try/catch for error handling
- * try {
- *   const result = BootstrapWitness.toJsonUnsafe(instance);
- *   console.log(result);
- * } catch (error) {
- *   console.error(`BootstrapWitness.toJsonUnsafe failed: ${error.message}`);
- * }
- *
  * @since 2.0.0
  * @category MethodsUnsafe
  */
@@ -453,23 +258,13 @@ export const toJsonUnsafe = (instance: CML.BootstrapWitness): string =>
 /**
  * Method toJsValue of BootstrapWitness
  *
- * @example
- * import { BootstrapWitness } from "@lucid-evolution/experimental";
- * import { Effect } from "effect";
- *
- * // Using Effect for safe execution with error handling
- * Effect.gen(function*() {
- * // Assume we have a BootstrapWitness instance
- * const instance = ... ;
- *   const result = yield* BootstrapWitness.toJsValue(instance);
- *   console.log(result);
- * });
- *
  * @since 2.0.0
  * @category Methods
  */
-export const toJsValue = Effect.fn(
-  (instance: CML.BootstrapWitness): Effect.Effect<any, BootstrapWitnessError> =>
+export const toJsValue: (
+  instance: CML.BootstrapWitness,
+) => Effect.Effect<any, BootstrapWitnessError> = Effect.fn(
+  (instance: CML.BootstrapWitness) =>
     Effect.try({
       try: () => instance.to_js_value(),
       catch: () =>
@@ -482,20 +277,6 @@ export const toJsValue = Effect.fn(
 /**
  * Unsafely calls instance.toJsValue without Effect wrapper
  *
- * @example
- * import { BootstrapWitness } from "@lucid-evolution/experimental";
- *
- * // Assume we have a BootstrapWitness instance
- * const instance = ... ;
- *
- * // Using try/catch for error handling
- * try {
- *   const result = BootstrapWitness.toJsValueUnsafe(instance);
- *   console.log(result);
- * } catch (error) {
- *   console.error(`BootstrapWitness.toJsValueUnsafe failed: ${error.message}`);
- * }
- *
  * @since 2.0.0
  * @category MethodsUnsafe
  */
@@ -505,73 +286,42 @@ export const toJsValueUnsafe = (instance: CML.BootstrapWitness): any =>
 /**
  * Static method fromJson of BootstrapWitness
  *
- * @example
- * import { BootstrapWitness } from "@lucid-evolution/experimental";
- * import { Effect } from "effect";
- *
- * // Using Effect for safe execution with error handling
- * Effect.gen(function*() {
- *
- *   const result = yield* BootstrapWitness.fromJson( parameters );
- *   console.log(result);
- * });
- *
  * @since 2.0.0
  * @category Constructors
  */
-export const fromJson = Effect.fn(function* (json: string) {
-  return yield* Effect.try({
-    try: () => CML.BootstrapWitness.from_json(json),
-    catch: () =>
-      new BootstrapWitnessError({
-        message: `BootstrapWitness.fromJson failed with parameters: ${json}. Hint: Validate your JSON structure.`,
-      }),
-  });
-});
+export const fromJson: (
+  json: string,
+) => Effect.Effect<CML.BootstrapWitness, BootstrapWitnessError> = Effect.fn(
+  function* (json: string) {
+    return yield* Effect.try({
+      try: () => CML.BootstrapWitness.from_json(json),
+      catch: () =>
+        new BootstrapWitnessError({
+          message: `BootstrapWitness.fromJson failed with parameters: ${json}. Hint: Validate your JSON structure.`,
+        }),
+    });
+  },
+);
 
 /**
  * Unsafely calls BootstrapWitness.fromJson without Effect wrapper
  *
- * @example
- * import { BootstrapWitness } from "@lucid-evolution/experimental";
- *
- *
- *
- * // Using try/catch for error handling
- * try {
- *   const result = BootstrapWitness.fromJsonUnsafe( parameters );
- *   console.log(result);
- * } catch (error) {
- *   console.error(`BootstrapWitness.fromJsonUnsafe failed: ${error.message}`);
- * }
- *
  * @since 2.0.0
  * @category ConstructorsUnsafe
  */
-export const fromJsonUnsafe = (json: string) => Effect.runSync(fromJson(json));
+export const fromJsonUnsafe = (json: string): CML.BootstrapWitness =>
+  Effect.runSync(fromJson(json));
 
 /**
  * Method publicKey of BootstrapWitness
  *
- * @example
- * import { BootstrapWitness } from "@lucid-evolution/experimental";
- * import { Effect } from "effect";
- *
- * // Using Effect for safe execution with error handling
- * Effect.gen(function*() {
- * // Assume we have a BootstrapWitness instance
- * const instance = ... ;
- *   const result = yield* BootstrapWitness.publicKey(instance);
- *   console.log(result);
- * });
- *
  * @since 2.0.0
  * @category Methods
  */
-export const publicKey = Effect.fn(
-  (
-    instance: CML.BootstrapWitness,
-  ): Effect.Effect<CML.PublicKey, BootstrapWitnessError> =>
+export const publicKey: (
+  instance: CML.BootstrapWitness,
+) => Effect.Effect<CML.PublicKey, BootstrapWitnessError> = Effect.fn(
+  (instance: CML.BootstrapWitness) =>
     Effect.try({
       try: () => instance.public_key(),
       catch: () =>
@@ -584,20 +334,6 @@ export const publicKey = Effect.fn(
 /**
  * Unsafely calls instance.publicKey without Effect wrapper
  *
- * @example
- * import { BootstrapWitness } from "@lucid-evolution/experimental";
- *
- * // Assume we have a BootstrapWitness instance
- * const instance = ... ;
- *
- * // Using try/catch for error handling
- * try {
- *   const result = BootstrapWitness.publicKeyUnsafe(instance);
- *   console.log(result);
- * } catch (error) {
- *   console.error(`BootstrapWitness.publicKeyUnsafe failed: ${error.message}`);
- * }
- *
  * @since 2.0.0
  * @category MethodsUnsafe
  */
@@ -608,25 +344,13 @@ export const publicKeyUnsafe = (
 /**
  * Method signature of BootstrapWitness
  *
- * @example
- * import { BootstrapWitness } from "@lucid-evolution/experimental";
- * import { Effect } from "effect";
- *
- * // Using Effect for safe execution with error handling
- * Effect.gen(function*() {
- * // Assume we have a BootstrapWitness instance
- * const instance = ... ;
- *   const result = yield* BootstrapWitness.signature(instance);
- *   console.log(result);
- * });
- *
  * @since 2.0.0
  * @category Methods
  */
-export const signature = Effect.fn(
-  (
-    instance: CML.BootstrapWitness,
-  ): Effect.Effect<CML.Ed25519Signature, BootstrapWitnessError> =>
+export const signature: (
+  instance: CML.BootstrapWitness,
+) => Effect.Effect<CML.Ed25519Signature, BootstrapWitnessError> = Effect.fn(
+  (instance: CML.BootstrapWitness) =>
     Effect.try({
       try: () => instance.signature(),
       catch: () =>
@@ -639,20 +363,6 @@ export const signature = Effect.fn(
 /**
  * Unsafely calls instance.signature without Effect wrapper
  *
- * @example
- * import { BootstrapWitness } from "@lucid-evolution/experimental";
- *
- * // Assume we have a BootstrapWitness instance
- * const instance = ... ;
- *
- * // Using try/catch for error handling
- * try {
- *   const result = BootstrapWitness.signatureUnsafe(instance);
- *   console.log(result);
- * } catch (error) {
- *   console.error(`BootstrapWitness.signatureUnsafe failed: ${error.message}`);
- * }
- *
  * @since 2.0.0
  * @category MethodsUnsafe
  */
@@ -663,25 +373,13 @@ export const signatureUnsafe = (
 /**
  * Method chainCode of BootstrapWitness
  *
- * @example
- * import { BootstrapWitness } from "@lucid-evolution/experimental";
- * import { Effect } from "effect";
- *
- * // Using Effect for safe execution with error handling
- * Effect.gen(function*() {
- * // Assume we have a BootstrapWitness instance
- * const instance = ... ;
- *   const result = yield* BootstrapWitness.chainCode(instance);
- *   console.log(result);
- * });
- *
  * @since 2.0.0
  * @category Methods
  */
-export const chainCode = Effect.fn(
-  (
-    instance: CML.BootstrapWitness,
-  ): Effect.Effect<Uint8Array, BootstrapWitnessError> =>
+export const chainCode: (
+  instance: CML.BootstrapWitness,
+) => Effect.Effect<Uint8Array, BootstrapWitnessError> = Effect.fn(
+  (instance: CML.BootstrapWitness) =>
     Effect.try({
       try: () => instance.chain_code(),
       catch: () =>
@@ -694,20 +392,6 @@ export const chainCode = Effect.fn(
 /**
  * Unsafely calls instance.chainCode without Effect wrapper
  *
- * @example
- * import { BootstrapWitness } from "@lucid-evolution/experimental";
- *
- * // Assume we have a BootstrapWitness instance
- * const instance = ... ;
- *
- * // Using try/catch for error handling
- * try {
- *   const result = BootstrapWitness.chainCodeUnsafe(instance);
- *   console.log(result);
- * } catch (error) {
- *   console.error(`BootstrapWitness.chainCodeUnsafe failed: ${error.message}`);
- * }
- *
  * @since 2.0.0
  * @category MethodsUnsafe
  */
@@ -717,25 +401,13 @@ export const chainCodeUnsafe = (instance: CML.BootstrapWitness): Uint8Array =>
 /**
  * Method attributes of BootstrapWitness
  *
- * @example
- * import { BootstrapWitness } from "@lucid-evolution/experimental";
- * import { Effect } from "effect";
- *
- * // Using Effect for safe execution with error handling
- * Effect.gen(function*() {
- * // Assume we have a BootstrapWitness instance
- * const instance = ... ;
- *   const result = yield* BootstrapWitness.attributes(instance);
- *   console.log(result);
- * });
- *
  * @since 2.0.0
  * @category Methods
  */
-export const attributes = Effect.fn(
-  (
-    instance: CML.BootstrapWitness,
-  ): Effect.Effect<CML.AddrAttributes, BootstrapWitnessError> =>
+export const attributes: (
+  instance: CML.BootstrapWitness,
+) => Effect.Effect<CML.AddrAttributes, BootstrapWitnessError> = Effect.fn(
+  (instance: CML.BootstrapWitness) =>
     Effect.try({
       try: () => instance.attributes(),
       catch: () =>
@@ -748,20 +420,6 @@ export const attributes = Effect.fn(
 /**
  * Unsafely calls instance.attributes without Effect wrapper
  *
- * @example
- * import { BootstrapWitness } from "@lucid-evolution/experimental";
- *
- * // Assume we have a BootstrapWitness instance
- * const instance = ... ;
- *
- * // Using try/catch for error handling
- * try {
- *   const result = BootstrapWitness.attributesUnsafe(instance);
- *   console.log(result);
- * } catch (error) {
- *   console.error(`BootstrapWitness.attributesUnsafe failed: ${error.message}`);
- * }
- *
  * @since 2.0.0
  * @category MethodsUnsafe
  */
@@ -772,51 +430,34 @@ export const attributesUnsafe = (
 /**
  * Static method _new of BootstrapWitness
  *
- * @example
- * import { BootstrapWitness } from "@lucid-evolution/experimental";
- * import { Effect } from "effect";
- *
- * // Using Effect for safe execution with error handling
- * Effect.gen(function*() {
- *
- *   const result = yield* BootstrapWitness._new( parameters );
- *   console.log(result);
- * });
- *
  * @since 2.0.0
  * @category Constructors
  */
-export const _new = Effect.fn(function* (
+export const _new: (
   publicKey: CML.PublicKey,
   signature: CML.Ed25519Signature,
   chainCode: Uint8Array,
   attributes: CML.AddrAttributes,
-) {
-  return yield* Effect.try({
-    try: () =>
-      CML.BootstrapWitness.new(publicKey, signature, chainCode, attributes),
-    catch: () =>
-      new BootstrapWitnessError({
-        message: `BootstrapWitness._new failed with parameters: ${publicKey} (PublicKey), ${signature} (Ed25519Signature), ${chainCode}, ${attributes} (AddrAttributes). `,
-      }),
-  });
-});
+) => Effect.Effect<CML.BootstrapWitness, BootstrapWitnessError> = Effect.fn(
+  function* (
+    publicKey: CML.PublicKey,
+    signature: CML.Ed25519Signature,
+    chainCode: Uint8Array,
+    attributes: CML.AddrAttributes,
+  ) {
+    return yield* Effect.try({
+      try: () =>
+        CML.BootstrapWitness.new(publicKey, signature, chainCode, attributes),
+      catch: () =>
+        new BootstrapWitnessError({
+          message: `BootstrapWitness._new failed with parameters: ${publicKey} (PublicKey), ${signature} (Ed25519Signature), ${chainCode}, ${attributes} (AddrAttributes). `,
+        }),
+    });
+  },
+);
 
 /**
  * Unsafely calls BootstrapWitness._new without Effect wrapper
- *
- * @example
- * import { BootstrapWitness } from "@lucid-evolution/experimental";
- *
- *
- *
- * // Using try/catch for error handling
- * try {
- *   const result = BootstrapWitness._newUnsafe( parameters );
- *   console.log(result);
- * } catch (error) {
- *   console.error(`BootstrapWitness._newUnsafe failed: ${error.message}`);
- * }
  *
  * @since 2.0.0
  * @category ConstructorsUnsafe
@@ -826,30 +467,19 @@ export const _newUnsafe = (
   signature: CML.Ed25519Signature,
   chainCode: Uint8Array,
   attributes: CML.AddrAttributes,
-) => Effect.runSync(_new(publicKey, signature, chainCode, attributes));
+): CML.BootstrapWitness =>
+  Effect.runSync(_new(publicKey, signature, chainCode, attributes));
 
 /**
  * Method toAddress of BootstrapWitness
  *
- * @example
- * import { BootstrapWitness } from "@lucid-evolution/experimental";
- * import { Effect } from "effect";
- *
- * // Using Effect for safe execution with error handling
- * Effect.gen(function*() {
- * // Assume we have a BootstrapWitness instance
- * const instance = ... ;
- *   const result = yield* BootstrapWitness.toAddress(instance);
- *   console.log(result);
- * });
- *
  * @since 2.0.0
  * @category Methods
  */
-export const toAddress = Effect.fn(
-  (
-    instance: CML.BootstrapWitness,
-  ): Effect.Effect<CML.AddressContent, BootstrapWitnessError> =>
+export const toAddress: (
+  instance: CML.BootstrapWitness,
+) => Effect.Effect<CML.AddressContent, BootstrapWitnessError> = Effect.fn(
+  (instance: CML.BootstrapWitness) =>
     Effect.try({
       try: () => instance.to_address(),
       catch: () =>
@@ -861,20 +491,6 @@ export const toAddress = Effect.fn(
 
 /**
  * Unsafely calls instance.toAddress without Effect wrapper
- *
- * @example
- * import { BootstrapWitness } from "@lucid-evolution/experimental";
- *
- * // Assume we have a BootstrapWitness instance
- * const instance = ... ;
- *
- * // Using try/catch for error handling
- * try {
- *   const result = BootstrapWitness.toAddressUnsafe(instance);
- *   console.log(result);
- * } catch (error) {
- *   console.error(`BootstrapWitness.toAddressUnsafe failed: ${error.message}`);
- * }
  *
  * @since 2.0.0
  * @category MethodsUnsafe

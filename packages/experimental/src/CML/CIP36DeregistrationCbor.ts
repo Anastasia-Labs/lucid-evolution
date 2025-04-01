@@ -29,25 +29,13 @@ export class CIP36DeregistrationCborError extends Data.TaggedError(
 /**
  * Method free of CIP36DeregistrationCbor
  *
- * @example
- * import { CIP36DeregistrationCbor } from "@lucid-evolution/experimental";
- * import { Effect } from "effect";
- *
- * // Using Effect for safe execution with error handling
- * Effect.gen(function*() {
- * // Assume we have a CIP36DeregistrationCbor instance
- * const instance = ... ;
- *   const result = yield* CIP36DeregistrationCbor.free(instance);
- *   console.log(result);
- * });
- *
  * @since 2.0.0
  * @category Methods
  */
-export const free = Effect.fn(
-  (
-    instance: CML.CIP36DeregistrationCbor,
-  ): Effect.Effect<void, CIP36DeregistrationCborError> =>
+export const free: (
+  instance: CML.CIP36DeregistrationCbor,
+) => Effect.Effect<void, CIP36DeregistrationCborError> = Effect.fn(
+  (instance: CML.CIP36DeregistrationCbor) =>
     Effect.try({
       try: () => instance.free(),
       catch: () =>
@@ -60,20 +48,6 @@ export const free = Effect.fn(
 /**
  * Unsafely calls instance.free without Effect wrapper
  *
- * @example
- * import { CIP36DeregistrationCbor } from "@lucid-evolution/experimental";
- *
- * // Assume we have a CIP36DeregistrationCbor instance
- * const instance = ... ;
- *
- * // Using try/catch for error handling
- * try {
- *   const result = CIP36DeregistrationCbor.freeUnsafe(instance);
- *   console.log(result);
- * } catch (error) {
- *   console.error(`CIP36DeregistrationCbor.freeUnsafe failed: ${error.message}`);
- * }
- *
  * @since 2.0.0
  * @category MethodsUnsafe
  */
@@ -83,25 +57,13 @@ export const freeUnsafe = (instance: CML.CIP36DeregistrationCbor): void =>
 /**
  * Method toJson of CIP36DeregistrationCbor
  *
- * @example
- * import { CIP36DeregistrationCbor } from "@lucid-evolution/experimental";
- * import { Effect } from "effect";
- *
- * // Using Effect for safe execution with error handling
- * Effect.gen(function*() {
- * // Assume we have a CIP36DeregistrationCbor instance
- * const instance = ... ;
- *   const result = yield* CIP36DeregistrationCbor.toJson(instance);
- *   console.log(result);
- * });
- *
  * @since 2.0.0
  * @category Methods
  */
-export const toJson = Effect.fn(
-  (
-    instance: CML.CIP36DeregistrationCbor,
-  ): Effect.Effect<string, CIP36DeregistrationCborError> =>
+export const toJson: (
+  instance: CML.CIP36DeregistrationCbor,
+) => Effect.Effect<string, CIP36DeregistrationCborError> = Effect.fn(
+  (instance: CML.CIP36DeregistrationCbor) =>
     Effect.try({
       try: () => instance.to_json(),
       catch: () =>
@@ -114,20 +76,6 @@ export const toJson = Effect.fn(
 /**
  * Unsafely calls instance.toJson without Effect wrapper
  *
- * @example
- * import { CIP36DeregistrationCbor } from "@lucid-evolution/experimental";
- *
- * // Assume we have a CIP36DeregistrationCbor instance
- * const instance = ... ;
- *
- * // Using try/catch for error handling
- * try {
- *   const result = CIP36DeregistrationCbor.toJsonUnsafe(instance);
- *   console.log(result);
- * } catch (error) {
- *   console.error(`CIP36DeregistrationCbor.toJsonUnsafe failed: ${error.message}`);
- * }
- *
  * @since 2.0.0
  * @category MethodsUnsafe
  */
@@ -137,25 +85,13 @@ export const toJsonUnsafe = (instance: CML.CIP36DeregistrationCbor): string =>
 /**
  * Method toJsValue of CIP36DeregistrationCbor
  *
- * @example
- * import { CIP36DeregistrationCbor } from "@lucid-evolution/experimental";
- * import { Effect } from "effect";
- *
- * // Using Effect for safe execution with error handling
- * Effect.gen(function*() {
- * // Assume we have a CIP36DeregistrationCbor instance
- * const instance = ... ;
- *   const result = yield* CIP36DeregistrationCbor.toJsValue(instance);
- *   console.log(result);
- * });
- *
  * @since 2.0.0
  * @category Methods
  */
-export const toJsValue = Effect.fn(
-  (
-    instance: CML.CIP36DeregistrationCbor,
-  ): Effect.Effect<any, CIP36DeregistrationCborError> =>
+export const toJsValue: (
+  instance: CML.CIP36DeregistrationCbor,
+) => Effect.Effect<any, CIP36DeregistrationCborError> = Effect.fn(
+  (instance: CML.CIP36DeregistrationCbor) =>
     Effect.try({
       try: () => instance.to_js_value(),
       catch: () =>
@@ -168,20 +104,6 @@ export const toJsValue = Effect.fn(
 /**
  * Unsafely calls instance.toJsValue without Effect wrapper
  *
- * @example
- * import { CIP36DeregistrationCbor } from "@lucid-evolution/experimental";
- *
- * // Assume we have a CIP36DeregistrationCbor instance
- * const instance = ... ;
- *
- * // Using try/catch for error handling
- * try {
- *   const result = CIP36DeregistrationCbor.toJsValueUnsafe(instance);
- *   console.log(result);
- * } catch (error) {
- *   console.error(`CIP36DeregistrationCbor.toJsValueUnsafe failed: ${error.message}`);
- * }
- *
  * @since 2.0.0
  * @category MethodsUnsafe
  */
@@ -191,73 +113,41 @@ export const toJsValueUnsafe = (instance: CML.CIP36DeregistrationCbor): any =>
 /**
  * Static method fromJson of CIP36DeregistrationCbor
  *
- * @example
- * import { CIP36DeregistrationCbor } from "@lucid-evolution/experimental";
- * import { Effect } from "effect";
- *
- * // Using Effect for safe execution with error handling
- * Effect.gen(function*() {
- *
- *   const result = yield* CIP36DeregistrationCbor.fromJson( parameters );
- *   console.log(result);
- * });
- *
  * @since 2.0.0
  * @category Constructors
  */
-export const fromJson = Effect.fn(function* (json: string) {
-  return yield* Effect.try({
-    try: () => CML.CIP36DeregistrationCbor.from_json(json),
-    catch: () =>
-      new CIP36DeregistrationCborError({
-        message: `CIP36DeregistrationCbor.fromJson failed with parameters: ${json}. Hint: Validate your JSON structure.`,
-      }),
+export const fromJson: (
+  json: string,
+) => Effect.Effect<CML.CIP36DeregistrationCbor, CIP36DeregistrationCborError> =
+  Effect.fn(function* (json: string) {
+    return yield* Effect.try({
+      try: () => CML.CIP36DeregistrationCbor.from_json(json),
+      catch: () =>
+        new CIP36DeregistrationCborError({
+          message: `CIP36DeregistrationCbor.fromJson failed with parameters: ${json}. Hint: Validate your JSON structure.`,
+        }),
+    });
   });
-});
 
 /**
  * Unsafely calls CIP36DeregistrationCbor.fromJson without Effect wrapper
  *
- * @example
- * import { CIP36DeregistrationCbor } from "@lucid-evolution/experimental";
- *
- *
- *
- * // Using try/catch for error handling
- * try {
- *   const result = CIP36DeregistrationCbor.fromJsonUnsafe( parameters );
- *   console.log(result);
- * } catch (error) {
- *   console.error(`CIP36DeregistrationCbor.fromJsonUnsafe failed: ${error.message}`);
- * }
- *
  * @since 2.0.0
  * @category ConstructorsUnsafe
  */
-export const fromJsonUnsafe = (json: string) => Effect.runSync(fromJson(json));
+export const fromJsonUnsafe = (json: string): CML.CIP36DeregistrationCbor =>
+  Effect.runSync(fromJson(json));
 
 /**
  * Method keyDeregistration of CIP36DeregistrationCbor
  *
- * @example
- * import { CIP36DeregistrationCbor } from "@lucid-evolution/experimental";
- * import { Effect } from "effect";
- *
- * // Using Effect for safe execution with error handling
- * Effect.gen(function*() {
- * // Assume we have a CIP36DeregistrationCbor instance
- * const instance = ... ;
- *   const result = yield* CIP36DeregistrationCbor.keyDeregistration(instance);
- *   console.log(result);
- * });
- *
  * @since 2.0.0
  * @category Methods
  */
-export const keyDeregistration = Effect.fn(
-  (
-    instance: CML.CIP36DeregistrationCbor,
-  ): Effect.Effect<CML.CIP36KeyDeregistration, CIP36DeregistrationCborError> =>
+export const keyDeregistration: (
+  instance: CML.CIP36DeregistrationCbor,
+) => Effect.Effect<CML.CIP36KeyDeregistration, CIP36DeregistrationCborError> =
+  Effect.fn((instance: CML.CIP36DeregistrationCbor) =>
     Effect.try({
       try: () => instance.key_deregistration(),
       catch: () =>
@@ -265,24 +155,10 @@ export const keyDeregistration = Effect.fn(
           message: `CIP36DeregistrationCbor.keyDeregistration failed Hint: Not all CIP36DeregistrationCbor instances can be stringified.`,
         }),
     }),
-);
+  );
 
 /**
  * Unsafely calls instance.keyDeregistration without Effect wrapper
- *
- * @example
- * import { CIP36DeregistrationCbor } from "@lucid-evolution/experimental";
- *
- * // Assume we have a CIP36DeregistrationCbor instance
- * const instance = ... ;
- *
- * // Using try/catch for error handling
- * try {
- *   const result = CIP36DeregistrationCbor.keyDeregistrationUnsafe(instance);
- *   console.log(result);
- * } catch (error) {
- *   console.error(`CIP36DeregistrationCbor.keyDeregistrationUnsafe failed: ${error.message}`);
- * }
  *
  * @since 2.0.0
  * @category MethodsUnsafe
@@ -294,53 +170,26 @@ export const keyDeregistrationUnsafe = (
 /**
  * Method deregistrationWitness of CIP36DeregistrationCbor
  *
- * @example
- * import { CIP36DeregistrationCbor } from "@lucid-evolution/experimental";
- * import { Effect } from "effect";
- *
- * // Using Effect for safe execution with error handling
- * Effect.gen(function*() {
- * // Assume we have a CIP36DeregistrationCbor instance
- * const instance = ... ;
- *   const result = yield* CIP36DeregistrationCbor.deregistrationWitness(instance);
- *   console.log(result);
- * });
- *
  * @since 2.0.0
  * @category Methods
  */
-export const deregistrationWitness = Effect.fn(
-  (
-    instance: CML.CIP36DeregistrationCbor,
-  ): Effect.Effect<
-    CML.CIP36DeregistrationWitness,
-    CIP36DeregistrationCborError
-  > =>
-    Effect.try({
-      try: () => instance.deregistration_witness(),
-      catch: () =>
-        new CIP36DeregistrationCborError({
-          message: `CIP36DeregistrationCbor.deregistrationWitness failed Hint: Not all CIP36DeregistrationCbor instances can be stringified.`,
-        }),
-    }),
+export const deregistrationWitness: (
+  instance: CML.CIP36DeregistrationCbor,
+) => Effect.Effect<
+  CML.CIP36DeregistrationWitness,
+  CIP36DeregistrationCborError
+> = Effect.fn((instance: CML.CIP36DeregistrationCbor) =>
+  Effect.try({
+    try: () => instance.deregistration_witness(),
+    catch: () =>
+      new CIP36DeregistrationCborError({
+        message: `CIP36DeregistrationCbor.deregistrationWitness failed Hint: Not all CIP36DeregistrationCbor instances can be stringified.`,
+      }),
+  }),
 );
 
 /**
  * Unsafely calls instance.deregistrationWitness without Effect wrapper
- *
- * @example
- * import { CIP36DeregistrationCbor } from "@lucid-evolution/experimental";
- *
- * // Assume we have a CIP36DeregistrationCbor instance
- * const instance = ... ;
- *
- * // Using try/catch for error handling
- * try {
- *   const result = CIP36DeregistrationCbor.deregistrationWitnessUnsafe(instance);
- *   console.log(result);
- * } catch (error) {
- *   console.error(`CIP36DeregistrationCbor.deregistrationWitnessUnsafe failed: ${error.message}`);
- * }
  *
  * @since 2.0.0
  * @category MethodsUnsafe
@@ -353,49 +202,32 @@ export const deregistrationWitnessUnsafe = (
 /**
  * Static method _new of CIP36DeregistrationCbor
  *
- * @example
- * import { CIP36DeregistrationCbor } from "@lucid-evolution/experimental";
- * import { Effect } from "effect";
- *
- * // Using Effect for safe execution with error handling
- * Effect.gen(function*() {
- *
- *   const result = yield* CIP36DeregistrationCbor._new( parameters );
- *   console.log(result);
- * });
- *
  * @since 2.0.0
  * @category Constructors
  */
-export const _new = Effect.fn(function* (
+export const _new: (
   keyDeregistration: CML.CIP36KeyDeregistration,
   deregistrationWitness: CML.CIP36DeregistrationWitness,
-) {
-  return yield* Effect.try({
-    try: () =>
-      CML.CIP36DeregistrationCbor.new(keyDeregistration, deregistrationWitness),
-    catch: () =>
-      new CIP36DeregistrationCborError({
-        message: `CIP36DeregistrationCbor._new failed with parameters: ${keyDeregistration} (CIP36KeyDeregistration), ${deregistrationWitness} (CIP36DeregistrationWitness). `,
-      }),
+) => Effect.Effect<CML.CIP36DeregistrationCbor, CIP36DeregistrationCborError> =
+  Effect.fn(function* (
+    keyDeregistration: CML.CIP36KeyDeregistration,
+    deregistrationWitness: CML.CIP36DeregistrationWitness,
+  ) {
+    return yield* Effect.try({
+      try: () =>
+        CML.CIP36DeregistrationCbor.new(
+          keyDeregistration,
+          deregistrationWitness,
+        ),
+      catch: () =>
+        new CIP36DeregistrationCborError({
+          message: `CIP36DeregistrationCbor._new failed with parameters: ${keyDeregistration} (CIP36KeyDeregistration), ${deregistrationWitness} (CIP36DeregistrationWitness). `,
+        }),
+    });
   });
-});
 
 /**
  * Unsafely calls CIP36DeregistrationCbor._new without Effect wrapper
- *
- * @example
- * import { CIP36DeregistrationCbor } from "@lucid-evolution/experimental";
- *
- *
- *
- * // Using try/catch for error handling
- * try {
- *   const result = CIP36DeregistrationCbor._newUnsafe( parameters );
- *   console.log(result);
- * } catch (error) {
- *   console.error(`CIP36DeregistrationCbor._newUnsafe failed: ${error.message}`);
- * }
  *
  * @since 2.0.0
  * @category ConstructorsUnsafe
@@ -403,4 +235,5 @@ export const _new = Effect.fn(function* (
 export const _newUnsafe = (
   keyDeregistration: CML.CIP36KeyDeregistration,
   deregistrationWitness: CML.CIP36DeregistrationWitness,
-) => Effect.runSync(_new(keyDeregistration, deregistrationWitness));
+): CML.CIP36DeregistrationCbor =>
+  Effect.runSync(_new(keyDeregistration, deregistrationWitness));

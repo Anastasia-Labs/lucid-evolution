@@ -27,23 +27,13 @@ export class MetadatumMapError extends Data.TaggedError("MetadatumMapError")<{
 /**
  * Method free of MetadatumMap
  *
- * @example
- * import { MetadatumMap } from "@lucid-evolution/experimental";
- * import { Effect } from "effect";
- *
- * // Using Effect for safe execution with error handling
- * Effect.gen(function*() {
- * // Assume we have a MetadatumMap instance
- * const instance = ... ;
- *   const result = yield* MetadatumMap.free(instance);
- *   console.log(result);
- * });
- *
  * @since 2.0.0
  * @category Methods
  */
-export const free = Effect.fn(
-  (instance: CML.MetadatumMap): Effect.Effect<void, MetadatumMapError> =>
+export const free: (
+  instance: CML.MetadatumMap,
+) => Effect.Effect<void, MetadatumMapError> = Effect.fn(
+  (instance: CML.MetadatumMap) =>
     Effect.try({
       try: () => instance.free(),
       catch: () =>
@@ -56,20 +46,6 @@ export const free = Effect.fn(
 /**
  * Unsafely calls instance.free without Effect wrapper
  *
- * @example
- * import { MetadatumMap } from "@lucid-evolution/experimental";
- *
- * // Assume we have a MetadatumMap instance
- * const instance = ... ;
- *
- * // Using try/catch for error handling
- * try {
- *   const result = MetadatumMap.freeUnsafe(instance);
- *   console.log(result);
- * } catch (error) {
- *   console.error(`MetadatumMap.freeUnsafe failed: ${error.message}`);
- * }
- *
  * @since 2.0.0
  * @category MethodsUnsafe
  */
@@ -79,71 +55,38 @@ export const freeUnsafe = (instance: CML.MetadatumMap): void =>
 /**
  * Static method _new of MetadatumMap
  *
- * @example
- * import { MetadatumMap } from "@lucid-evolution/experimental";
- * import { Effect } from "effect";
- *
- * // Using Effect for safe execution with error handling
- * Effect.gen(function*() {
- *
- *   const result = yield* MetadatumMap._new();
- *   console.log(result);
- * });
- *
  * @since 2.0.0
  * @category Constructors
  */
-export const _new = Effect.fn(function* () {
-  return yield* Effect.try({
-    try: () => CML.MetadatumMap.new(),
-    catch: () =>
-      new MetadatumMapError({
-        message: `MetadatumMap._new failed `,
-      }),
+export const _new: () => Effect.Effect<CML.MetadatumMap, MetadatumMapError> =
+  Effect.fn(function* () {
+    return yield* Effect.try({
+      try: () => CML.MetadatumMap.new(),
+      catch: () =>
+        new MetadatumMapError({
+          message: `MetadatumMap._new failed `,
+        }),
+    });
   });
-});
 
 /**
  * Unsafely calls MetadatumMap._new without Effect wrapper
  *
- * @example
- * import { MetadatumMap } from "@lucid-evolution/experimental";
- *
- *
- *
- * // Using try/catch for error handling
- * try {
- *   const result = MetadatumMap._newUnsafe();
- *   console.log(result);
- * } catch (error) {
- *   console.error(`MetadatumMap._newUnsafe failed: ${error.message}`);
- * }
- *
  * @since 2.0.0
  * @category ConstructorsUnsafe
  */
-export const _newUnsafe = () => Effect.runSync(_new());
+export const _newUnsafe = (): CML.MetadatumMap => Effect.runSync(_new());
 
 /**
  * Method len of MetadatumMap
  *
- * @example
- * import { MetadatumMap } from "@lucid-evolution/experimental";
- * import { Effect } from "effect";
- *
- * // Using Effect for safe execution with error handling
- * Effect.gen(function*() {
- * // Assume we have a MetadatumMap instance
- * const instance = ... ;
- *   const result = yield* MetadatumMap.len(instance);
- *   console.log(result);
- * });
- *
  * @since 2.0.0
  * @category Methods
  */
-export const len = Effect.fn(
-  (instance: CML.MetadatumMap): Effect.Effect<number, MetadatumMapError> =>
+export const len: (
+  instance: CML.MetadatumMap,
+) => Effect.Effect<number, MetadatumMapError> = Effect.fn(
+  (instance: CML.MetadatumMap) =>
     Effect.try({
       try: () => instance.len(),
       catch: () =>
@@ -156,20 +99,6 @@ export const len = Effect.fn(
 /**
  * Unsafely calls instance.len without Effect wrapper
  *
- * @example
- * import { MetadatumMap } from "@lucid-evolution/experimental";
- *
- * // Assume we have a MetadatumMap instance
- * const instance = ... ;
- *
- * // Using try/catch for error handling
- * try {
- *   const result = MetadatumMap.lenUnsafe(instance);
- *   console.log(result);
- * } catch (error) {
- *   console.error(`MetadatumMap.lenUnsafe failed: ${error.message}`);
- * }
- *
  * @since 2.0.0
  * @category MethodsUnsafe
  */
@@ -179,27 +108,19 @@ export const lenUnsafe = (instance: CML.MetadatumMap): number =>
 /**
  * Method set of MetadatumMap
  *
- * @example
- * import { MetadatumMap } from "@lucid-evolution/experimental";
- * import { Effect } from "effect";
- *
- * // Using Effect for safe execution with error handling
- * Effect.gen(function*() {
- * // Assume we have a MetadatumMap instance
- * const instance = ... ;
- *   const result = yield* MetadatumMap.set(instance,  parameters );
- *   console.log(result);
- * });
- *
  * @since 2.0.0
  * @category Methods
  */
-export const set = Effect.fn(
+export const set: (
+  instance: CML.MetadatumMap,
+  key: CML.TransactionMetadatum,
+  value: CML.TransactionMetadatum,
+) => Effect.Effect<void, MetadatumMapError> = Effect.fn(
   (
     instance: CML.MetadatumMap,
     key: CML.TransactionMetadatum,
     value: CML.TransactionMetadatum,
-  ): Effect.Effect<void, MetadatumMapError> =>
+  ) =>
     Effect.try({
       try: () => instance.set(key, value),
       catch: () =>
@@ -211,20 +132,6 @@ export const set = Effect.fn(
 
 /**
  * Unsafely calls instance.set without Effect wrapper
- *
- * @example
- * import { MetadatumMap } from "@lucid-evolution/experimental";
- *
- * // Assume we have a MetadatumMap instance
- * const instance = ... ;
- *
- * // Using try/catch for error handling
- * try {
- *   const result = MetadatumMap.setUnsafe(instance,  parameters );
- *   console.log(result);
- * } catch (error) {
- *   console.error(`MetadatumMap.setUnsafe failed: ${error.message}`);
- * }
  *
  * @since 2.0.0
  * @category MethodsUnsafe
@@ -238,26 +145,14 @@ export const setUnsafe = (
 /**
  * Method get of MetadatumMap
  *
- * @example
- * import { MetadatumMap } from "@lucid-evolution/experimental";
- * import { Effect } from "effect";
- *
- * // Using Effect for safe execution with error handling
- * Effect.gen(function*() {
- * // Assume we have a MetadatumMap instance
- * const instance = ... ;
- *   const result = yield* MetadatumMap.get(instance,  parameters );
- *   console.log(result);
- * });
- *
  * @since 2.0.0
  * @category Methods
  */
-export const get = Effect.fn(
-  (
-    instance: CML.MetadatumMap,
-    key: CML.TransactionMetadatum,
-  ): Effect.Effect<CML.TransactionMetadatum | undefined, MetadatumMapError> =>
+export const get: (
+  instance: CML.MetadatumMap,
+  key: CML.TransactionMetadatum,
+) => Effect.Effect<CML.TransactionMetadatum | undefined, MetadatumMapError> =
+  Effect.fn((instance: CML.MetadatumMap, key: CML.TransactionMetadatum) =>
     Effect.try({
       try: () => instance.get(key),
       catch: () =>
@@ -265,24 +160,10 @@ export const get = Effect.fn(
           message: `MetadatumMap.get failed with parameters: ${key} (TransactionMetadatum). `,
         }),
     }),
-);
+  );
 
 /**
  * Unsafely calls instance.get without Effect wrapper
- *
- * @example
- * import { MetadatumMap } from "@lucid-evolution/experimental";
- *
- * // Assume we have a MetadatumMap instance
- * const instance = ... ;
- *
- * // Using try/catch for error handling
- * try {
- *   const result = MetadatumMap.getUnsafe(instance,  parameters );
- *   console.log(result);
- * } catch (error) {
- *   console.error(`MetadatumMap.getUnsafe failed: ${error.message}`);
- * }
  *
  * @since 2.0.0
  * @category MethodsUnsafe
@@ -295,54 +176,27 @@ export const getUnsafe = (
 /**
  * Method getAll of MetadatumMap
  *
- * @example
- * import { MetadatumMap } from "@lucid-evolution/experimental";
- * import { Effect } from "effect";
- *
- * // Using Effect for safe execution with error handling
- * Effect.gen(function*() {
- * // Assume we have a MetadatumMap instance
- * const instance = ... ;
- *   const result = yield* MetadatumMap.getAll(instance,  parameters );
- *   console.log(result);
- * });
- *
  * @since 2.0.0
  * @category Methods
  */
-export const getAll = Effect.fn(
-  (
-    instance: CML.MetadatumMap,
-    key: CML.TransactionMetadatum,
-  ): Effect.Effect<
-    CML.TransactionMetadatumList | undefined,
-    MetadatumMapError
-  > =>
-    Effect.try({
-      try: () => instance.get_all(key),
-      catch: () =>
-        new MetadatumMapError({
-          message: `MetadatumMap.getAll failed with parameters: ${key} (TransactionMetadatum). `,
-        }),
-    }),
+export const getAll: (
+  instance: CML.MetadatumMap,
+  key: CML.TransactionMetadatum,
+) => Effect.Effect<
+  CML.TransactionMetadatumList | undefined,
+  MetadatumMapError
+> = Effect.fn((instance: CML.MetadatumMap, key: CML.TransactionMetadatum) =>
+  Effect.try({
+    try: () => instance.get_all(key),
+    catch: () =>
+      new MetadatumMapError({
+        message: `MetadatumMap.getAll failed with parameters: ${key} (TransactionMetadatum). `,
+      }),
+  }),
 );
 
 /**
  * Unsafely calls instance.getAll without Effect wrapper
- *
- * @example
- * import { MetadatumMap } from "@lucid-evolution/experimental";
- *
- * // Assume we have a MetadatumMap instance
- * const instance = ... ;
- *
- * // Using try/catch for error handling
- * try {
- *   const result = MetadatumMap.getAllUnsafe(instance,  parameters );
- *   console.log(result);
- * } catch (error) {
- *   console.error(`MetadatumMap.getAllUnsafe failed: ${error.message}`);
- * }
  *
  * @since 2.0.0
  * @category MethodsUnsafe
@@ -356,25 +210,13 @@ export const getAllUnsafe = (
 /**
  * Method keys of MetadatumMap
  *
- * @example
- * import { MetadatumMap } from "@lucid-evolution/experimental";
- * import { Effect } from "effect";
- *
- * // Using Effect for safe execution with error handling
- * Effect.gen(function*() {
- * // Assume we have a MetadatumMap instance
- * const instance = ... ;
- *   const result = yield* MetadatumMap.keys(instance);
- *   console.log(result);
- * });
- *
  * @since 2.0.0
  * @category Methods
  */
-export const keys = Effect.fn(
-  (
-    instance: CML.MetadatumMap,
-  ): Effect.Effect<CML.MetadatumList, MetadatumMapError> =>
+export const keys: (
+  instance: CML.MetadatumMap,
+) => Effect.Effect<CML.MetadatumList, MetadatumMapError> = Effect.fn(
+  (instance: CML.MetadatumMap) =>
     Effect.try({
       try: () => instance.keys(),
       catch: () =>
@@ -386,20 +228,6 @@ export const keys = Effect.fn(
 
 /**
  * Unsafely calls instance.keys without Effect wrapper
- *
- * @example
- * import { MetadatumMap } from "@lucid-evolution/experimental";
- *
- * // Assume we have a MetadatumMap instance
- * const instance = ... ;
- *
- * // Using try/catch for error handling
- * try {
- *   const result = MetadatumMap.keysUnsafe(instance);
- *   console.log(result);
- * } catch (error) {
- *   console.error(`MetadatumMap.keysUnsafe failed: ${error.message}`);
- * }
  *
  * @since 2.0.0
  * @category MethodsUnsafe

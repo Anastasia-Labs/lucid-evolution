@@ -27,23 +27,13 @@ export class SpendingDataError extends Data.TaggedError("SpendingDataError")<{
 /**
  * Method free of SpendingData
  *
- * @example
- * import { SpendingData } from "@lucid-evolution/experimental";
- * import { Effect } from "effect";
- *
- * // Using Effect for safe execution with error handling
- * Effect.gen(function*() {
- * // Assume we have a SpendingData instance
- * const instance = ... ;
- *   const result = yield* SpendingData.free(instance);
- *   console.log(result);
- * });
- *
  * @since 2.0.0
  * @category Methods
  */
-export const free = Effect.fn(
-  (instance: CML.SpendingData): Effect.Effect<void, SpendingDataError> =>
+export const free: (
+  instance: CML.SpendingData,
+) => Effect.Effect<void, SpendingDataError> = Effect.fn(
+  (instance: CML.SpendingData) =>
     Effect.try({
       try: () => instance.free(),
       catch: () =>
@@ -56,20 +46,6 @@ export const free = Effect.fn(
 /**
  * Unsafely calls instance.free without Effect wrapper
  *
- * @example
- * import { SpendingData } from "@lucid-evolution/experimental";
- *
- * // Assume we have a SpendingData instance
- * const instance = ... ;
- *
- * // Using try/catch for error handling
- * try {
- *   const result = SpendingData.freeUnsafe(instance);
- *   console.log(result);
- * } catch (error) {
- *   console.error(`SpendingData.freeUnsafe failed: ${error.message}`);
- * }
- *
  * @since 2.0.0
  * @category MethodsUnsafe
  */
@@ -79,23 +55,13 @@ export const freeUnsafe = (instance: CML.SpendingData): void =>
 /**
  * Method toCborBytes of SpendingData
  *
- * @example
- * import { SpendingData } from "@lucid-evolution/experimental";
- * import { Effect } from "effect";
- *
- * // Using Effect for safe execution with error handling
- * Effect.gen(function*() {
- * // Assume we have a SpendingData instance
- * const instance = ... ;
- *   const result = yield* SpendingData.toCborBytes(instance);
- *   console.log(result);
- * });
- *
  * @since 2.0.0
  * @category Methods
  */
-export const toCborBytes = Effect.fn(
-  (instance: CML.SpendingData): Effect.Effect<Uint8Array, SpendingDataError> =>
+export const toCborBytes: (
+  instance: CML.SpendingData,
+) => Effect.Effect<Uint8Array, SpendingDataError> = Effect.fn(
+  (instance: CML.SpendingData) =>
     Effect.try({
       try: () => instance.to_cbor_bytes(),
       catch: () =>
@@ -108,20 +74,6 @@ export const toCborBytes = Effect.fn(
 /**
  * Unsafely calls instance.toCborBytes without Effect wrapper
  *
- * @example
- * import { SpendingData } from "@lucid-evolution/experimental";
- *
- * // Assume we have a SpendingData instance
- * const instance = ... ;
- *
- * // Using try/catch for error handling
- * try {
- *   const result = SpendingData.toCborBytesUnsafe(instance);
- *   console.log(result);
- * } catch (error) {
- *   console.error(`SpendingData.toCborBytesUnsafe failed: ${error.message}`);
- * }
- *
  * @since 2.0.0
  * @category MethodsUnsafe
  */
@@ -131,21 +83,14 @@ export const toCborBytesUnsafe = (instance: CML.SpendingData): Uint8Array =>
 /**
  * Static method fromCborBytes of SpendingData
  *
- * @example
- * import { SpendingData } from "@lucid-evolution/experimental";
- * import { Effect } from "effect";
- *
- * // Using Effect for safe execution with error handling
- * Effect.gen(function*() {
- *
- *   const result = yield* SpendingData.fromCborBytes( parameters );
- *   console.log(result);
- * });
- *
  * @since 2.0.0
  * @category Constructors
  */
-export const fromCborBytes = Effect.fn(function* (cborBytes: Uint8Array) {
+export const fromCborBytes: (
+  cborBytes: Uint8Array,
+) => Effect.Effect<CML.SpendingData, SpendingDataError> = Effect.fn(function* (
+  cborBytes: Uint8Array,
+) {
   return yield* Effect.try({
     try: () => CML.SpendingData.from_cbor_bytes(cborBytes),
     catch: () =>
@@ -158,45 +103,22 @@ export const fromCborBytes = Effect.fn(function* (cborBytes: Uint8Array) {
 /**
  * Unsafely calls SpendingData.fromCborBytes without Effect wrapper
  *
- * @example
- * import { SpendingData } from "@lucid-evolution/experimental";
- *
- *
- *
- * // Using try/catch for error handling
- * try {
- *   const result = SpendingData.fromCborBytesUnsafe( parameters );
- *   console.log(result);
- * } catch (error) {
- *   console.error(`SpendingData.fromCborBytesUnsafe failed: ${error.message}`);
- * }
- *
  * @since 2.0.0
  * @category ConstructorsUnsafe
  */
-export const fromCborBytesUnsafe = (cborBytes: Uint8Array) =>
+export const fromCborBytesUnsafe = (cborBytes: Uint8Array): CML.SpendingData =>
   Effect.runSync(fromCborBytes(cborBytes));
 
 /**
  * Method toCborHex of SpendingData
  *
- * @example
- * import { SpendingData } from "@lucid-evolution/experimental";
- * import { Effect } from "effect";
- *
- * // Using Effect for safe execution with error handling
- * Effect.gen(function*() {
- * // Assume we have a SpendingData instance
- * const instance = ... ;
- *   const result = yield* SpendingData.toCborHex(instance);
- *   console.log(result);
- * });
- *
  * @since 2.0.0
  * @category Methods
  */
-export const toCborHex = Effect.fn(
-  (instance: CML.SpendingData): Effect.Effect<string, SpendingDataError> =>
+export const toCborHex: (
+  instance: CML.SpendingData,
+) => Effect.Effect<string, SpendingDataError> = Effect.fn(
+  (instance: CML.SpendingData) =>
     Effect.try({
       try: () => instance.to_cbor_hex(),
       catch: () =>
@@ -209,20 +131,6 @@ export const toCborHex = Effect.fn(
 /**
  * Unsafely calls instance.toCborHex without Effect wrapper
  *
- * @example
- * import { SpendingData } from "@lucid-evolution/experimental";
- *
- * // Assume we have a SpendingData instance
- * const instance = ... ;
- *
- * // Using try/catch for error handling
- * try {
- *   const result = SpendingData.toCborHexUnsafe(instance);
- *   console.log(result);
- * } catch (error) {
- *   console.error(`SpendingData.toCborHexUnsafe failed: ${error.message}`);
- * }
- *
  * @since 2.0.0
  * @category MethodsUnsafe
  */
@@ -232,21 +140,14 @@ export const toCborHexUnsafe = (instance: CML.SpendingData): string =>
 /**
  * Static method fromCborHex of SpendingData
  *
- * @example
- * import { SpendingData } from "@lucid-evolution/experimental";
- * import { Effect } from "effect";
- *
- * // Using Effect for safe execution with error handling
- * Effect.gen(function*() {
- *
- *   const result = yield* SpendingData.fromCborHex( parameters );
- *   console.log(result);
- * });
- *
  * @since 2.0.0
  * @category Constructors
  */
-export const fromCborHex = Effect.fn(function* (cborBytes: string) {
+export const fromCborHex: (
+  cborBytes: string,
+) => Effect.Effect<CML.SpendingData, SpendingDataError> = Effect.fn(function* (
+  cborBytes: string,
+) {
   return yield* Effect.try({
     try: () => CML.SpendingData.from_cbor_hex(cborBytes),
     catch: () =>
@@ -259,43 +160,21 @@ export const fromCborHex = Effect.fn(function* (cborBytes: string) {
 /**
  * Unsafely calls SpendingData.fromCborHex without Effect wrapper
  *
- * @example
- * import { SpendingData } from "@lucid-evolution/experimental";
- *
- *
- *
- * // Using try/catch for error handling
- * try {
- *   const result = SpendingData.fromCborHexUnsafe( parameters );
- *   console.log(result);
- * } catch (error) {
- *   console.error(`SpendingData.fromCborHexUnsafe failed: ${error.message}`);
- * }
- *
  * @since 2.0.0
  * @category ConstructorsUnsafe
  */
-export const fromCborHexUnsafe = (cborBytes: string) =>
+export const fromCborHexUnsafe = (cborBytes: string): CML.SpendingData =>
   Effect.runSync(fromCborHex(cborBytes));
 
 /**
  * Static method newSpendingDataPubKey of SpendingData
  *
- * @example
- * import { SpendingData } from "@lucid-evolution/experimental";
- * import { Effect } from "effect";
- *
- * // Using Effect for safe execution with error handling
- * Effect.gen(function*() {
- *
- *   const result = yield* SpendingData.newSpendingDataPubKey( parameters );
- *   console.log(result);
- * });
- *
  * @since 2.0.0
  * @category Constructors
  */
-export const newSpendingDataPubKey = Effect.fn(function* (
+export const newSpendingDataPubKey: (
+  pubkey: CML.Bip32PublicKey,
+) => Effect.Effect<CML.SpendingData, SpendingDataError> = Effect.fn(function* (
   pubkey: CML.Bip32PublicKey,
 ) {
   return yield* Effect.try({
@@ -310,43 +189,22 @@ export const newSpendingDataPubKey = Effect.fn(function* (
 /**
  * Unsafely calls SpendingData.newSpendingDataPubKey without Effect wrapper
  *
- * @example
- * import { SpendingData } from "@lucid-evolution/experimental";
- *
- *
- *
- * // Using try/catch for error handling
- * try {
- *   const result = SpendingData.newSpendingDataPubKeyUnsafe( parameters );
- *   console.log(result);
- * } catch (error) {
- *   console.error(`SpendingData.newSpendingDataPubKeyUnsafe failed: ${error.message}`);
- * }
- *
  * @since 2.0.0
  * @category ConstructorsUnsafe
  */
-export const newSpendingDataPubKeyUnsafe = (pubkey: CML.Bip32PublicKey) =>
-  Effect.runSync(newSpendingDataPubKey(pubkey));
+export const newSpendingDataPubKeyUnsafe = (
+  pubkey: CML.Bip32PublicKey,
+): CML.SpendingData => Effect.runSync(newSpendingDataPubKey(pubkey));
 
 /**
  * Static method newSpendingDataScript of SpendingData
  *
- * @example
- * import { SpendingData } from "@lucid-evolution/experimental";
- * import { Effect } from "effect";
- *
- * // Using Effect for safe execution with error handling
- * Effect.gen(function*() {
- *
- *   const result = yield* SpendingData.newSpendingDataScript( parameters );
- *   console.log(result);
- * });
- *
  * @since 2.0.0
  * @category Constructors
  */
-export const newSpendingDataScript = Effect.fn(function* (
+export const newSpendingDataScript: (
+  script: CML.ByronScript,
+) => Effect.Effect<CML.SpendingData, SpendingDataError> = Effect.fn(function* (
   script: CML.ByronScript,
 ) {
   return yield* Effect.try({
@@ -361,43 +219,22 @@ export const newSpendingDataScript = Effect.fn(function* (
 /**
  * Unsafely calls SpendingData.newSpendingDataScript without Effect wrapper
  *
- * @example
- * import { SpendingData } from "@lucid-evolution/experimental";
- *
- *
- *
- * // Using try/catch for error handling
- * try {
- *   const result = SpendingData.newSpendingDataScriptUnsafe( parameters );
- *   console.log(result);
- * } catch (error) {
- *   console.error(`SpendingData.newSpendingDataScriptUnsafe failed: ${error.message}`);
- * }
- *
  * @since 2.0.0
  * @category ConstructorsUnsafe
  */
-export const newSpendingDataScriptUnsafe = (script: CML.ByronScript) =>
-  Effect.runSync(newSpendingDataScript(script));
+export const newSpendingDataScriptUnsafe = (
+  script: CML.ByronScript,
+): CML.SpendingData => Effect.runSync(newSpendingDataScript(script));
 
 /**
  * Static method newSpendingDataRedeem of SpendingData
  *
- * @example
- * import { SpendingData } from "@lucid-evolution/experimental";
- * import { Effect } from "effect";
- *
- * // Using Effect for safe execution with error handling
- * Effect.gen(function*() {
- *
- *   const result = yield* SpendingData.newSpendingDataRedeem( parameters );
- *   console.log(result);
- * });
- *
  * @since 2.0.0
  * @category Constructors
  */
-export const newSpendingDataRedeem = Effect.fn(function* (
+export const newSpendingDataRedeem: (
+  redeem: CML.PublicKey,
+) => Effect.Effect<CML.SpendingData, SpendingDataError> = Effect.fn(function* (
   redeem: CML.PublicKey,
 ) {
   return yield* Effect.try({
@@ -412,47 +249,23 @@ export const newSpendingDataRedeem = Effect.fn(function* (
 /**
  * Unsafely calls SpendingData.newSpendingDataRedeem without Effect wrapper
  *
- * @example
- * import { SpendingData } from "@lucid-evolution/experimental";
- *
- *
- *
- * // Using try/catch for error handling
- * try {
- *   const result = SpendingData.newSpendingDataRedeemUnsafe( parameters );
- *   console.log(result);
- * } catch (error) {
- *   console.error(`SpendingData.newSpendingDataRedeemUnsafe failed: ${error.message}`);
- * }
- *
  * @since 2.0.0
  * @category ConstructorsUnsafe
  */
-export const newSpendingDataRedeemUnsafe = (redeem: CML.PublicKey) =>
-  Effect.runSync(newSpendingDataRedeem(redeem));
+export const newSpendingDataRedeemUnsafe = (
+  redeem: CML.PublicKey,
+): CML.SpendingData => Effect.runSync(newSpendingDataRedeem(redeem));
 
 /**
  * Method kind of SpendingData
  *
- * @example
- * import { SpendingData } from "@lucid-evolution/experimental";
- * import { Effect } from "effect";
- *
- * // Using Effect for safe execution with error handling
- * Effect.gen(function*() {
- * // Assume we have a SpendingData instance
- * const instance = ... ;
- *   const result = yield* SpendingData.kind(instance);
- *   console.log(result);
- * });
- *
  * @since 2.0.0
  * @category Methods
  */
-export const kind = Effect.fn(
-  (
-    instance: CML.SpendingData,
-  ): Effect.Effect<CML.SpendingDataKind, SpendingDataError> =>
+export const kind: (
+  instance: CML.SpendingData,
+) => Effect.Effect<CML.SpendingDataKind, SpendingDataError> = Effect.fn(
+  (instance: CML.SpendingData) =>
     Effect.try({
       try: () => instance.kind(),
       catch: () =>
@@ -465,20 +278,6 @@ export const kind = Effect.fn(
 /**
  * Unsafely calls instance.kind without Effect wrapper
  *
- * @example
- * import { SpendingData } from "@lucid-evolution/experimental";
- *
- * // Assume we have a SpendingData instance
- * const instance = ... ;
- *
- * // Using try/catch for error handling
- * try {
- *   const result = SpendingData.kindUnsafe(instance);
- *   console.log(result);
- * } catch (error) {
- *   console.error(`SpendingData.kindUnsafe failed: ${error.message}`);
- * }
- *
  * @since 2.0.0
  * @category MethodsUnsafe
  */
@@ -488,25 +287,13 @@ export const kindUnsafe = (instance: CML.SpendingData): CML.SpendingDataKind =>
 /**
  * Method asSpendingDataPubKey of SpendingData
  *
- * @example
- * import { SpendingData } from "@lucid-evolution/experimental";
- * import { Effect } from "effect";
- *
- * // Using Effect for safe execution with error handling
- * Effect.gen(function*() {
- * // Assume we have a SpendingData instance
- * const instance = ... ;
- *   const result = yield* SpendingData.asSpendingDataPubKey(instance);
- *   console.log(result);
- * });
- *
  * @since 2.0.0
  * @category Methods
  */
-export const asSpendingDataPubKey = Effect.fn(
-  (
-    instance: CML.SpendingData,
-  ): Effect.Effect<CML.Bip32PublicKey | undefined, SpendingDataError> =>
+export const asSpendingDataPubKey: (
+  instance: CML.SpendingData,
+) => Effect.Effect<CML.Bip32PublicKey | undefined, SpendingDataError> =
+  Effect.fn((instance: CML.SpendingData) =>
     Effect.try({
       try: () => instance.as_spending_data_pub_key(),
       catch: () =>
@@ -514,24 +301,10 @@ export const asSpendingDataPubKey = Effect.fn(
           message: `SpendingData.asSpendingDataPubKey failed `,
         }),
     }),
-);
+  );
 
 /**
  * Unsafely calls instance.asSpendingDataPubKey without Effect wrapper
- *
- * @example
- * import { SpendingData } from "@lucid-evolution/experimental";
- *
- * // Assume we have a SpendingData instance
- * const instance = ... ;
- *
- * // Using try/catch for error handling
- * try {
- *   const result = SpendingData.asSpendingDataPubKeyUnsafe(instance);
- *   console.log(result);
- * } catch (error) {
- *   console.error(`SpendingData.asSpendingDataPubKeyUnsafe failed: ${error.message}`);
- * }
  *
  * @since 2.0.0
  * @category MethodsUnsafe
@@ -544,25 +317,13 @@ export const asSpendingDataPubKeyUnsafe = (
 /**
  * Method asSpendingDataScript of SpendingData
  *
- * @example
- * import { SpendingData } from "@lucid-evolution/experimental";
- * import { Effect } from "effect";
- *
- * // Using Effect for safe execution with error handling
- * Effect.gen(function*() {
- * // Assume we have a SpendingData instance
- * const instance = ... ;
- *   const result = yield* SpendingData.asSpendingDataScript(instance);
- *   console.log(result);
- * });
- *
  * @since 2.0.0
  * @category Methods
  */
-export const asSpendingDataScript = Effect.fn(
-  (
-    instance: CML.SpendingData,
-  ): Effect.Effect<CML.ByronScript | undefined, SpendingDataError> =>
+export const asSpendingDataScript: (
+  instance: CML.SpendingData,
+) => Effect.Effect<CML.ByronScript | undefined, SpendingDataError> = Effect.fn(
+  (instance: CML.SpendingData) =>
     Effect.try({
       try: () => instance.as_spending_data_script(),
       catch: () =>
@@ -575,20 +336,6 @@ export const asSpendingDataScript = Effect.fn(
 /**
  * Unsafely calls instance.asSpendingDataScript without Effect wrapper
  *
- * @example
- * import { SpendingData } from "@lucid-evolution/experimental";
- *
- * // Assume we have a SpendingData instance
- * const instance = ... ;
- *
- * // Using try/catch for error handling
- * try {
- *   const result = SpendingData.asSpendingDataScriptUnsafe(instance);
- *   console.log(result);
- * } catch (error) {
- *   console.error(`SpendingData.asSpendingDataScriptUnsafe failed: ${error.message}`);
- * }
- *
  * @since 2.0.0
  * @category MethodsUnsafe
  */
@@ -600,25 +347,13 @@ export const asSpendingDataScriptUnsafe = (
 /**
  * Method asSpendingDataRedeem of SpendingData
  *
- * @example
- * import { SpendingData } from "@lucid-evolution/experimental";
- * import { Effect } from "effect";
- *
- * // Using Effect for safe execution with error handling
- * Effect.gen(function*() {
- * // Assume we have a SpendingData instance
- * const instance = ... ;
- *   const result = yield* SpendingData.asSpendingDataRedeem(instance);
- *   console.log(result);
- * });
- *
  * @since 2.0.0
  * @category Methods
  */
-export const asSpendingDataRedeem = Effect.fn(
-  (
-    instance: CML.SpendingData,
-  ): Effect.Effect<CML.PublicKey | undefined, SpendingDataError> =>
+export const asSpendingDataRedeem: (
+  instance: CML.SpendingData,
+) => Effect.Effect<CML.PublicKey | undefined, SpendingDataError> = Effect.fn(
+  (instance: CML.SpendingData) =>
     Effect.try({
       try: () => instance.as_spending_data_redeem(),
       catch: () =>
@@ -630,20 +365,6 @@ export const asSpendingDataRedeem = Effect.fn(
 
 /**
  * Unsafely calls instance.asSpendingDataRedeem without Effect wrapper
- *
- * @example
- * import { SpendingData } from "@lucid-evolution/experimental";
- *
- * // Assume we have a SpendingData instance
- * const instance = ... ;
- *
- * // Using try/catch for error handling
- * try {
- *   const result = SpendingData.asSpendingDataRedeemUnsafe(instance);
- *   console.log(result);
- * } catch (error) {
- *   console.error(`SpendingData.asSpendingDataRedeemUnsafe failed: ${error.message}`);
- * }
  *
  * @since 2.0.0
  * @category MethodsUnsafe

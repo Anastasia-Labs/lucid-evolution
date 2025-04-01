@@ -27,23 +27,13 @@ export class ByronTxOutError extends Data.TaggedError("ByronTxOutError")<{
 /**
  * Method free of ByronTxOut
  *
- * @example
- * import { ByronTxOut } from "@lucid-evolution/experimental";
- * import { Effect } from "effect";
- *
- * // Using Effect for safe execution with error handling
- * Effect.gen(function*() {
- * // Assume we have a ByronTxOut instance
- * const instance = ... ;
- *   const result = yield* ByronTxOut.free(instance);
- *   console.log(result);
- * });
- *
  * @since 2.0.0
  * @category Methods
  */
-export const free = Effect.fn(
-  (instance: CML.ByronTxOut): Effect.Effect<void, ByronTxOutError> =>
+export const free: (
+  instance: CML.ByronTxOut,
+) => Effect.Effect<void, ByronTxOutError> = Effect.fn(
+  (instance: CML.ByronTxOut) =>
     Effect.try({
       try: () => instance.free(),
       catch: () =>
@@ -56,20 +46,6 @@ export const free = Effect.fn(
 /**
  * Unsafely calls instance.free without Effect wrapper
  *
- * @example
- * import { ByronTxOut } from "@lucid-evolution/experimental";
- *
- * // Assume we have a ByronTxOut instance
- * const instance = ... ;
- *
- * // Using try/catch for error handling
- * try {
- *   const result = ByronTxOut.freeUnsafe(instance);
- *   console.log(result);
- * } catch (error) {
- *   console.error(`ByronTxOut.freeUnsafe failed: ${error.message}`);
- * }
- *
  * @since 2.0.0
  * @category MethodsUnsafe
  */
@@ -79,23 +55,13 @@ export const freeUnsafe = (instance: CML.ByronTxOut): void =>
 /**
  * Method toCborBytes of ByronTxOut
  *
- * @example
- * import { ByronTxOut } from "@lucid-evolution/experimental";
- * import { Effect } from "effect";
- *
- * // Using Effect for safe execution with error handling
- * Effect.gen(function*() {
- * // Assume we have a ByronTxOut instance
- * const instance = ... ;
- *   const result = yield* ByronTxOut.toCborBytes(instance);
- *   console.log(result);
- * });
- *
  * @since 2.0.0
  * @category Methods
  */
-export const toCborBytes = Effect.fn(
-  (instance: CML.ByronTxOut): Effect.Effect<Uint8Array, ByronTxOutError> =>
+export const toCborBytes: (
+  instance: CML.ByronTxOut,
+) => Effect.Effect<Uint8Array, ByronTxOutError> = Effect.fn(
+  (instance: CML.ByronTxOut) =>
     Effect.try({
       try: () => instance.to_cbor_bytes(),
       catch: () =>
@@ -108,20 +74,6 @@ export const toCborBytes = Effect.fn(
 /**
  * Unsafely calls instance.toCborBytes without Effect wrapper
  *
- * @example
- * import { ByronTxOut } from "@lucid-evolution/experimental";
- *
- * // Assume we have a ByronTxOut instance
- * const instance = ... ;
- *
- * // Using try/catch for error handling
- * try {
- *   const result = ByronTxOut.toCborBytesUnsafe(instance);
- *   console.log(result);
- * } catch (error) {
- *   console.error(`ByronTxOut.toCborBytesUnsafe failed: ${error.message}`);
- * }
- *
  * @since 2.0.0
  * @category MethodsUnsafe
  */
@@ -131,21 +83,14 @@ export const toCborBytesUnsafe = (instance: CML.ByronTxOut): Uint8Array =>
 /**
  * Static method fromCborBytes of ByronTxOut
  *
- * @example
- * import { ByronTxOut } from "@lucid-evolution/experimental";
- * import { Effect } from "effect";
- *
- * // Using Effect for safe execution with error handling
- * Effect.gen(function*() {
- *
- *   const result = yield* ByronTxOut.fromCborBytes( parameters );
- *   console.log(result);
- * });
- *
  * @since 2.0.0
  * @category Constructors
  */
-export const fromCborBytes = Effect.fn(function* (cborBytes: Uint8Array) {
+export const fromCborBytes: (
+  cborBytes: Uint8Array,
+) => Effect.Effect<CML.ByronTxOut, ByronTxOutError> = Effect.fn(function* (
+  cborBytes: Uint8Array,
+) {
   return yield* Effect.try({
     try: () => CML.ByronTxOut.from_cbor_bytes(cborBytes),
     catch: () =>
@@ -158,45 +103,22 @@ export const fromCborBytes = Effect.fn(function* (cborBytes: Uint8Array) {
 /**
  * Unsafely calls ByronTxOut.fromCborBytes without Effect wrapper
  *
- * @example
- * import { ByronTxOut } from "@lucid-evolution/experimental";
- *
- *
- *
- * // Using try/catch for error handling
- * try {
- *   const result = ByronTxOut.fromCborBytesUnsafe( parameters );
- *   console.log(result);
- * } catch (error) {
- *   console.error(`ByronTxOut.fromCborBytesUnsafe failed: ${error.message}`);
- * }
- *
  * @since 2.0.0
  * @category ConstructorsUnsafe
  */
-export const fromCborBytesUnsafe = (cborBytes: Uint8Array) =>
+export const fromCborBytesUnsafe = (cborBytes: Uint8Array): CML.ByronTxOut =>
   Effect.runSync(fromCborBytes(cborBytes));
 
 /**
  * Method toCborHex of ByronTxOut
  *
- * @example
- * import { ByronTxOut } from "@lucid-evolution/experimental";
- * import { Effect } from "effect";
- *
- * // Using Effect for safe execution with error handling
- * Effect.gen(function*() {
- * // Assume we have a ByronTxOut instance
- * const instance = ... ;
- *   const result = yield* ByronTxOut.toCborHex(instance);
- *   console.log(result);
- * });
- *
  * @since 2.0.0
  * @category Methods
  */
-export const toCborHex = Effect.fn(
-  (instance: CML.ByronTxOut): Effect.Effect<string, ByronTxOutError> =>
+export const toCborHex: (
+  instance: CML.ByronTxOut,
+) => Effect.Effect<string, ByronTxOutError> = Effect.fn(
+  (instance: CML.ByronTxOut) =>
     Effect.try({
       try: () => instance.to_cbor_hex(),
       catch: () =>
@@ -209,20 +131,6 @@ export const toCborHex = Effect.fn(
 /**
  * Unsafely calls instance.toCborHex without Effect wrapper
  *
- * @example
- * import { ByronTxOut } from "@lucid-evolution/experimental";
- *
- * // Assume we have a ByronTxOut instance
- * const instance = ... ;
- *
- * // Using try/catch for error handling
- * try {
- *   const result = ByronTxOut.toCborHexUnsafe(instance);
- *   console.log(result);
- * } catch (error) {
- *   console.error(`ByronTxOut.toCborHexUnsafe failed: ${error.message}`);
- * }
- *
  * @since 2.0.0
  * @category MethodsUnsafe
  */
@@ -232,21 +140,14 @@ export const toCborHexUnsafe = (instance: CML.ByronTxOut): string =>
 /**
  * Static method fromCborHex of ByronTxOut
  *
- * @example
- * import { ByronTxOut } from "@lucid-evolution/experimental";
- * import { Effect } from "effect";
- *
- * // Using Effect for safe execution with error handling
- * Effect.gen(function*() {
- *
- *   const result = yield* ByronTxOut.fromCborHex( parameters );
- *   console.log(result);
- * });
- *
  * @since 2.0.0
  * @category Constructors
  */
-export const fromCborHex = Effect.fn(function* (cborBytes: string) {
+export const fromCborHex: (
+  cborBytes: string,
+) => Effect.Effect<CML.ByronTxOut, ByronTxOutError> = Effect.fn(function* (
+  cborBytes: string,
+) {
   return yield* Effect.try({
     try: () => CML.ByronTxOut.from_cbor_hex(cborBytes),
     catch: () =>
@@ -259,47 +160,22 @@ export const fromCborHex = Effect.fn(function* (cborBytes: string) {
 /**
  * Unsafely calls ByronTxOut.fromCborHex without Effect wrapper
  *
- * @example
- * import { ByronTxOut } from "@lucid-evolution/experimental";
- *
- *
- *
- * // Using try/catch for error handling
- * try {
- *   const result = ByronTxOut.fromCborHexUnsafe( parameters );
- *   console.log(result);
- * } catch (error) {
- *   console.error(`ByronTxOut.fromCborHexUnsafe failed: ${error.message}`);
- * }
- *
  * @since 2.0.0
  * @category ConstructorsUnsafe
  */
-export const fromCborHexUnsafe = (cborBytes: string) =>
+export const fromCborHexUnsafe = (cborBytes: string): CML.ByronTxOut =>
   Effect.runSync(fromCborHex(cborBytes));
 
 /**
  * Method address of ByronTxOut
  *
- * @example
- * import { ByronTxOut } from "@lucid-evolution/experimental";
- * import { Effect } from "effect";
- *
- * // Using Effect for safe execution with error handling
- * Effect.gen(function*() {
- * // Assume we have a ByronTxOut instance
- * const instance = ... ;
- *   const result = yield* ByronTxOut.address(instance);
- *   console.log(result);
- * });
- *
  * @since 2.0.0
  * @category Methods
  */
-export const address = Effect.fn(
-  (
-    instance: CML.ByronTxOut,
-  ): Effect.Effect<CML.ByronAddress, ByronTxOutError> =>
+export const address: (
+  instance: CML.ByronTxOut,
+) => Effect.Effect<CML.ByronAddress, ByronTxOutError> = Effect.fn(
+  (instance: CML.ByronTxOut) =>
     Effect.try({
       try: () => instance.address(),
       catch: () =>
@@ -312,20 +188,6 @@ export const address = Effect.fn(
 /**
  * Unsafely calls instance.address without Effect wrapper
  *
- * @example
- * import { ByronTxOut } from "@lucid-evolution/experimental";
- *
- * // Assume we have a ByronTxOut instance
- * const instance = ... ;
- *
- * // Using try/catch for error handling
- * try {
- *   const result = ByronTxOut.addressUnsafe(instance);
- *   console.log(result);
- * } catch (error) {
- *   console.error(`ByronTxOut.addressUnsafe failed: ${error.message}`);
- * }
- *
  * @since 2.0.0
  * @category MethodsUnsafe
  */
@@ -335,23 +197,13 @@ export const addressUnsafe = (instance: CML.ByronTxOut): CML.ByronAddress =>
 /**
  * Method amount of ByronTxOut
  *
- * @example
- * import { ByronTxOut } from "@lucid-evolution/experimental";
- * import { Effect } from "effect";
- *
- * // Using Effect for safe execution with error handling
- * Effect.gen(function*() {
- * // Assume we have a ByronTxOut instance
- * const instance = ... ;
- *   const result = yield* ByronTxOut.amount(instance);
- *   console.log(result);
- * });
- *
  * @since 2.0.0
  * @category Methods
  */
-export const amount = Effect.fn(
-  (instance: CML.ByronTxOut): Effect.Effect<bigint, ByronTxOutError> =>
+export const amount: (
+  instance: CML.ByronTxOut,
+) => Effect.Effect<bigint, ByronTxOutError> = Effect.fn(
+  (instance: CML.ByronTxOut) =>
     Effect.try({
       try: () => instance.amount(),
       catch: () =>
@@ -364,20 +216,6 @@ export const amount = Effect.fn(
 /**
  * Unsafely calls instance.amount without Effect wrapper
  *
- * @example
- * import { ByronTxOut } from "@lucid-evolution/experimental";
- *
- * // Assume we have a ByronTxOut instance
- * const instance = ... ;
- *
- * // Using try/catch for error handling
- * try {
- *   const result = ByronTxOut.amountUnsafe(instance);
- *   console.log(result);
- * } catch (error) {
- *   console.error(`ByronTxOut.amountUnsafe failed: ${error.message}`);
- * }
- *
  * @since 2.0.0
  * @category MethodsUnsafe
  */
@@ -387,21 +225,13 @@ export const amountUnsafe = (instance: CML.ByronTxOut): bigint =>
 /**
  * Static method _new of ByronTxOut
  *
- * @example
- * import { ByronTxOut } from "@lucid-evolution/experimental";
- * import { Effect } from "effect";
- *
- * // Using Effect for safe execution with error handling
- * Effect.gen(function*() {
- *
- *   const result = yield* ByronTxOut._new( parameters );
- *   console.log(result);
- * });
- *
  * @since 2.0.0
  * @category Constructors
  */
-export const _new = Effect.fn(function* (
+export const _new: (
+  address: CML.ByronAddress,
+  amount: bigint,
+) => Effect.Effect<CML.ByronTxOut, ByronTxOutError> = Effect.fn(function* (
   address: CML.ByronAddress,
   amount: bigint,
 ) {
@@ -417,21 +247,10 @@ export const _new = Effect.fn(function* (
 /**
  * Unsafely calls ByronTxOut._new without Effect wrapper
  *
- * @example
- * import { ByronTxOut } from "@lucid-evolution/experimental";
- *
- *
- *
- * // Using try/catch for error handling
- * try {
- *   const result = ByronTxOut._newUnsafe( parameters );
- *   console.log(result);
- * } catch (error) {
- *   console.error(`ByronTxOut._newUnsafe failed: ${error.message}`);
- * }
- *
  * @since 2.0.0
  * @category ConstructorsUnsafe
  */
-export const _newUnsafe = (address: CML.ByronAddress, amount: bigint) =>
-  Effect.runSync(_new(address, amount));
+export const _newUnsafe = (
+  address: CML.ByronAddress,
+  amount: bigint,
+): CML.ByronTxOut => Effect.runSync(_new(address, amount));

@@ -21,43 +21,25 @@ export class HashAuxiliaryDataError extends Data.TaggedError(
 /**
  * Wrapper for the hash_auxiliary_data function
  *
- * @example
- * import { hashAuxiliaryData } from "@lucid-evolution/experimental/CML/functions";
- * import { Effect } from "effect";
- *
- * // Using Effect for safe execution with error handling
- * Effect.gen(function*() {
- *   const result = yield* hashAuxiliaryData(AuxiliaryData instance );
- *   console.log(result);
- * });
- *
  * @since 2.0.0
  * @category Functions
  */
-export const hashAuxiliaryData = Effect.fn(function* (
+export const hashAuxiliaryData: (
   auxiliaryData: CML.AuxiliaryData,
-) {
-  return yield* Effect.try({
-    try: () => CML.hash_auxiliary_data(auxiliaryData),
-    catch: () =>
-      new HashAuxiliaryDataError({
-        message: `hash_auxiliary_data failed with parameters: auxiliaryData (AuxiliaryData instance). Hint: Verify input data is valid for hashing.`,
-      }),
-  });
-});
+) => Effect.Effect<CML.AuxiliaryDataHash, HashAuxiliaryDataError> = Effect.fn(
+  function* (auxiliaryData: CML.AuxiliaryData) {
+    return yield* Effect.try({
+      try: () => CML.hash_auxiliary_data(auxiliaryData),
+      catch: () =>
+        new HashAuxiliaryDataError({
+          message: `hash_auxiliary_data failed with parameters: auxiliaryData (AuxiliaryData instance). Hint: Verify input data is valid for hashing.`,
+        }),
+    });
+  },
+);
 
 /**
  * Unsafely calls hash_auxiliary_data function without Effect wrapper
- *
- * @example
- * import { hashAuxiliaryDataUnsafe } from "@lucid-evolution/experimental/CML/functions";
- *
- * try {
- *   const result = hashAuxiliaryDataUnsafe(AuxiliaryData instance );
- *   console.log(result);
- * } catch (error) {
- *   console.error(`hashAuxiliaryDataUnsafe failed: ${error.message}`);
- * }
  *
  * @since 2.0.0
  * @category FunctionsUnsafe

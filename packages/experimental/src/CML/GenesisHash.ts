@@ -27,23 +27,13 @@ export class GenesisHashError extends Data.TaggedError("GenesisHashError")<{
 /**
  * Method free of GenesisHash
  *
- * @example
- * import { GenesisHash } from "@lucid-evolution/experimental";
- * import { Effect } from "effect";
- *
- * // Using Effect for safe execution with error handling
- * Effect.gen(function*() {
- * // Assume we have a GenesisHash instance
- * const instance = ... ;
- *   const result = yield* GenesisHash.free(instance);
- *   console.log(result);
- * });
- *
  * @since 2.0.0
  * @category Methods
  */
-export const free = Effect.fn(
-  (instance: CML.GenesisHash): Effect.Effect<void, GenesisHashError> =>
+export const free: (
+  instance: CML.GenesisHash,
+) => Effect.Effect<void, GenesisHashError> = Effect.fn(
+  (instance: CML.GenesisHash) =>
     Effect.try({
       try: () => instance.free(),
       catch: () =>
@@ -56,20 +46,6 @@ export const free = Effect.fn(
 /**
  * Unsafely calls instance.free without Effect wrapper
  *
- * @example
- * import { GenesisHash } from "@lucid-evolution/experimental";
- *
- * // Assume we have a GenesisHash instance
- * const instance = ... ;
- *
- * // Using try/catch for error handling
- * try {
- *   const result = GenesisHash.freeUnsafe(instance);
- *   console.log(result);
- * } catch (error) {
- *   console.error(`GenesisHash.freeUnsafe failed: ${error.message}`);
- * }
- *
  * @since 2.0.0
  * @category MethodsUnsafe
  */
@@ -79,26 +55,14 @@ export const freeUnsafe = (instance: CML.GenesisHash): void =>
 /**
  * Method toBech32 of GenesisHash
  *
- * @example
- * import { GenesisHash } from "@lucid-evolution/experimental";
- * import { Effect } from "effect";
- *
- * // Using Effect for safe execution with error handling
- * Effect.gen(function*() {
- * // Assume we have a GenesisHash instance
- * const instance = ... ;
- *   const result = yield* GenesisHash.toBech32(instance,  parameters );
- *   console.log(result);
- * });
- *
  * @since 2.0.0
  * @category Methods
  */
-export const toBech32 = Effect.fn(
-  (
-    instance: CML.GenesisHash,
-    prefix: string,
-  ): Effect.Effect<string, GenesisHashError> =>
+export const toBech32: (
+  instance: CML.GenesisHash,
+  prefix: string,
+) => Effect.Effect<string, GenesisHashError> = Effect.fn(
+  (instance: CML.GenesisHash, prefix: string) =>
     Effect.try({
       try: () => instance.to_bech32(prefix),
       catch: () =>
@@ -111,20 +75,6 @@ export const toBech32 = Effect.fn(
 /**
  * Unsafely calls instance.toBech32 without Effect wrapper
  *
- * @example
- * import { GenesisHash } from "@lucid-evolution/experimental";
- *
- * // Assume we have a GenesisHash instance
- * const instance = ... ;
- *
- * // Using try/catch for error handling
- * try {
- *   const result = GenesisHash.toBech32Unsafe(instance,  parameters );
- *   console.log(result);
- * } catch (error) {
- *   console.error(`GenesisHash.toBech32Unsafe failed: ${error.message}`);
- * }
- *
  * @since 2.0.0
  * @category MethodsUnsafe
  */
@@ -136,21 +86,14 @@ export const toBech32Unsafe = (
 /**
  * Static method fromBech32 of GenesisHash
  *
- * @example
- * import { GenesisHash } from "@lucid-evolution/experimental";
- * import { Effect } from "effect";
- *
- * // Using Effect for safe execution with error handling
- * Effect.gen(function*() {
- *
- *   const result = yield* GenesisHash.fromBech32( parameters );
- *   console.log(result);
- * });
- *
  * @since 2.0.0
  * @category Constructors
  */
-export const fromBech32 = Effect.fn(function* (bech32Str: string) {
+export const fromBech32: (
+  bech32Str: string,
+) => Effect.Effect<CML.GenesisHash, GenesisHashError> = Effect.fn(function* (
+  bech32Str: string,
+) {
   return yield* Effect.try({
     try: () => CML.GenesisHash.from_bech32(bech32Str),
     catch: () =>
@@ -163,45 +106,22 @@ export const fromBech32 = Effect.fn(function* (bech32Str: string) {
 /**
  * Unsafely calls GenesisHash.fromBech32 without Effect wrapper
  *
- * @example
- * import { GenesisHash } from "@lucid-evolution/experimental";
- *
- *
- *
- * // Using try/catch for error handling
- * try {
- *   const result = GenesisHash.fromBech32Unsafe( parameters );
- *   console.log(result);
- * } catch (error) {
- *   console.error(`GenesisHash.fromBech32Unsafe failed: ${error.message}`);
- * }
- *
  * @since 2.0.0
  * @category ConstructorsUnsafe
  */
-export const fromBech32Unsafe = (bech32Str: string) =>
+export const fromBech32Unsafe = (bech32Str: string): CML.GenesisHash =>
   Effect.runSync(fromBech32(bech32Str));
 
 /**
  * Method toRawBytes of GenesisHash
  *
- * @example
- * import { GenesisHash } from "@lucid-evolution/experimental";
- * import { Effect } from "effect";
- *
- * // Using Effect for safe execution with error handling
- * Effect.gen(function*() {
- * // Assume we have a GenesisHash instance
- * const instance = ... ;
- *   const result = yield* GenesisHash.toRawBytes(instance);
- *   console.log(result);
- * });
- *
  * @since 2.0.0
  * @category Methods
  */
-export const toRawBytes = Effect.fn(
-  (instance: CML.GenesisHash): Effect.Effect<Uint8Array, GenesisHashError> =>
+export const toRawBytes: (
+  instance: CML.GenesisHash,
+) => Effect.Effect<Uint8Array, GenesisHashError> = Effect.fn(
+  (instance: CML.GenesisHash) =>
     Effect.try({
       try: () => instance.to_raw_bytes(),
       catch: () =>
@@ -214,20 +134,6 @@ export const toRawBytes = Effect.fn(
 /**
  * Unsafely calls instance.toRawBytes without Effect wrapper
  *
- * @example
- * import { GenesisHash } from "@lucid-evolution/experimental";
- *
- * // Assume we have a GenesisHash instance
- * const instance = ... ;
- *
- * // Using try/catch for error handling
- * try {
- *   const result = GenesisHash.toRawBytesUnsafe(instance);
- *   console.log(result);
- * } catch (error) {
- *   console.error(`GenesisHash.toRawBytesUnsafe failed: ${error.message}`);
- * }
- *
  * @since 2.0.0
  * @category MethodsUnsafe
  */
@@ -237,21 +143,14 @@ export const toRawBytesUnsafe = (instance: CML.GenesisHash): Uint8Array =>
 /**
  * Static method fromRawBytes of GenesisHash
  *
- * @example
- * import { GenesisHash } from "@lucid-evolution/experimental";
- * import { Effect } from "effect";
- *
- * // Using Effect for safe execution with error handling
- * Effect.gen(function*() {
- *
- *   const result = yield* GenesisHash.fromRawBytes( parameters );
- *   console.log(result);
- * });
- *
  * @since 2.0.0
  * @category Constructors
  */
-export const fromRawBytes = Effect.fn(function* (bytes: Uint8Array) {
+export const fromRawBytes: (
+  bytes: Uint8Array,
+) => Effect.Effect<CML.GenesisHash, GenesisHashError> = Effect.fn(function* (
+  bytes: Uint8Array,
+) {
   return yield* Effect.try({
     try: () => CML.GenesisHash.from_raw_bytes(bytes),
     catch: () =>
@@ -264,45 +163,22 @@ export const fromRawBytes = Effect.fn(function* (bytes: Uint8Array) {
 /**
  * Unsafely calls GenesisHash.fromRawBytes without Effect wrapper
  *
- * @example
- * import { GenesisHash } from "@lucid-evolution/experimental";
- *
- *
- *
- * // Using try/catch for error handling
- * try {
- *   const result = GenesisHash.fromRawBytesUnsafe( parameters );
- *   console.log(result);
- * } catch (error) {
- *   console.error(`GenesisHash.fromRawBytesUnsafe failed: ${error.message}`);
- * }
- *
  * @since 2.0.0
  * @category ConstructorsUnsafe
  */
-export const fromRawBytesUnsafe = (bytes: Uint8Array) =>
+export const fromRawBytesUnsafe = (bytes: Uint8Array): CML.GenesisHash =>
   Effect.runSync(fromRawBytes(bytes));
 
 /**
  * Method toHex of GenesisHash
  *
- * @example
- * import { GenesisHash } from "@lucid-evolution/experimental";
- * import { Effect } from "effect";
- *
- * // Using Effect for safe execution with error handling
- * Effect.gen(function*() {
- * // Assume we have a GenesisHash instance
- * const instance = ... ;
- *   const result = yield* GenesisHash.toHex(instance);
- *   console.log(result);
- * });
- *
  * @since 2.0.0
  * @category Methods
  */
-export const toHex = Effect.fn(
-  (instance: CML.GenesisHash): Effect.Effect<string, GenesisHashError> =>
+export const toHex: (
+  instance: CML.GenesisHash,
+) => Effect.Effect<string, GenesisHashError> = Effect.fn(
+  (instance: CML.GenesisHash) =>
     Effect.try({
       try: () => instance.to_hex(),
       catch: () =>
@@ -315,20 +191,6 @@ export const toHex = Effect.fn(
 /**
  * Unsafely calls instance.toHex without Effect wrapper
  *
- * @example
- * import { GenesisHash } from "@lucid-evolution/experimental";
- *
- * // Assume we have a GenesisHash instance
- * const instance = ... ;
- *
- * // Using try/catch for error handling
- * try {
- *   const result = GenesisHash.toHexUnsafe(instance);
- *   console.log(result);
- * } catch (error) {
- *   console.error(`GenesisHash.toHexUnsafe failed: ${error.message}`);
- * }
- *
  * @since 2.0.0
  * @category MethodsUnsafe
  */
@@ -338,21 +200,14 @@ export const toHexUnsafe = (instance: CML.GenesisHash): string =>
 /**
  * Static method fromHex of GenesisHash
  *
- * @example
- * import { GenesisHash } from "@lucid-evolution/experimental";
- * import { Effect } from "effect";
- *
- * // Using Effect for safe execution with error handling
- * Effect.gen(function*() {
- *
- *   const result = yield* GenesisHash.fromHex( parameters );
- *   console.log(result);
- * });
- *
  * @since 2.0.0
  * @category Constructors
  */
-export const fromHex = Effect.fn(function* (input: string) {
+export const fromHex: (
+  input: string,
+) => Effect.Effect<CML.GenesisHash, GenesisHashError> = Effect.fn(function* (
+  input: string,
+) {
   return yield* Effect.try({
     try: () => CML.GenesisHash.from_hex(input),
     catch: () =>
@@ -365,20 +220,8 @@ export const fromHex = Effect.fn(function* (input: string) {
 /**
  * Unsafely calls GenesisHash.fromHex without Effect wrapper
  *
- * @example
- * import { GenesisHash } from "@lucid-evolution/experimental";
- *
- *
- *
- * // Using try/catch for error handling
- * try {
- *   const result = GenesisHash.fromHexUnsafe( parameters );
- *   console.log(result);
- * } catch (error) {
- *   console.error(`GenesisHash.fromHexUnsafe failed: ${error.message}`);
- * }
- *
  * @since 2.0.0
  * @category ConstructorsUnsafe
  */
-export const fromHexUnsafe = (input: string) => Effect.runSync(fromHex(input));
+export const fromHexUnsafe = (input: string): CML.GenesisHash =>
+  Effect.runSync(fromHex(input));

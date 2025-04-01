@@ -29,25 +29,13 @@ export class TreasuryWithdrawalsActionError extends Data.TaggedError(
 /**
  * Method free of TreasuryWithdrawalsAction
  *
- * @example
- * import { TreasuryWithdrawalsAction } from "@lucid-evolution/experimental";
- * import { Effect } from "effect";
- *
- * // Using Effect for safe execution with error handling
- * Effect.gen(function*() {
- * // Assume we have a TreasuryWithdrawalsAction instance
- * const instance = ... ;
- *   const result = yield* TreasuryWithdrawalsAction.free(instance);
- *   console.log(result);
- * });
- *
  * @since 2.0.0
  * @category Methods
  */
-export const free = Effect.fn(
-  (
-    instance: CML.TreasuryWithdrawalsAction,
-  ): Effect.Effect<void, TreasuryWithdrawalsActionError> =>
+export const free: (
+  instance: CML.TreasuryWithdrawalsAction,
+) => Effect.Effect<void, TreasuryWithdrawalsActionError> = Effect.fn(
+  (instance: CML.TreasuryWithdrawalsAction) =>
     Effect.try({
       try: () => instance.free(),
       catch: () =>
@@ -60,20 +48,6 @@ export const free = Effect.fn(
 /**
  * Unsafely calls instance.free without Effect wrapper
  *
- * @example
- * import { TreasuryWithdrawalsAction } from "@lucid-evolution/experimental";
- *
- * // Assume we have a TreasuryWithdrawalsAction instance
- * const instance = ... ;
- *
- * // Using try/catch for error handling
- * try {
- *   const result = TreasuryWithdrawalsAction.freeUnsafe(instance);
- *   console.log(result);
- * } catch (error) {
- *   console.error(`TreasuryWithdrawalsAction.freeUnsafe failed: ${error.message}`);
- * }
- *
  * @since 2.0.0
  * @category MethodsUnsafe
  */
@@ -83,25 +57,13 @@ export const freeUnsafe = (instance: CML.TreasuryWithdrawalsAction): void =>
 /**
  * Method toCborBytes of TreasuryWithdrawalsAction
  *
- * @example
- * import { TreasuryWithdrawalsAction } from "@lucid-evolution/experimental";
- * import { Effect } from "effect";
- *
- * // Using Effect for safe execution with error handling
- * Effect.gen(function*() {
- * // Assume we have a TreasuryWithdrawalsAction instance
- * const instance = ... ;
- *   const result = yield* TreasuryWithdrawalsAction.toCborBytes(instance);
- *   console.log(result);
- * });
- *
  * @since 2.0.0
  * @category Methods
  */
-export const toCborBytes = Effect.fn(
-  (
-    instance: CML.TreasuryWithdrawalsAction,
-  ): Effect.Effect<Uint8Array, TreasuryWithdrawalsActionError> =>
+export const toCborBytes: (
+  instance: CML.TreasuryWithdrawalsAction,
+) => Effect.Effect<Uint8Array, TreasuryWithdrawalsActionError> = Effect.fn(
+  (instance: CML.TreasuryWithdrawalsAction) =>
     Effect.try({
       try: () => instance.to_cbor_bytes(),
       catch: () =>
@@ -114,20 +76,6 @@ export const toCborBytes = Effect.fn(
 /**
  * Unsafely calls instance.toCborBytes without Effect wrapper
  *
- * @example
- * import { TreasuryWithdrawalsAction } from "@lucid-evolution/experimental";
- *
- * // Assume we have a TreasuryWithdrawalsAction instance
- * const instance = ... ;
- *
- * // Using try/catch for error handling
- * try {
- *   const result = TreasuryWithdrawalsAction.toCborBytesUnsafe(instance);
- *   console.log(result);
- * } catch (error) {
- *   console.error(`TreasuryWithdrawalsAction.toCborBytesUnsafe failed: ${error.message}`);
- * }
- *
  * @since 2.0.0
  * @category MethodsUnsafe
  */
@@ -138,25 +86,13 @@ export const toCborBytesUnsafe = (
 /**
  * Method toCanonicalCborBytes of TreasuryWithdrawalsAction
  *
- * @example
- * import { TreasuryWithdrawalsAction } from "@lucid-evolution/experimental";
- * import { Effect } from "effect";
- *
- * // Using Effect for safe execution with error handling
- * Effect.gen(function*() {
- * // Assume we have a TreasuryWithdrawalsAction instance
- * const instance = ... ;
- *   const result = yield* TreasuryWithdrawalsAction.toCanonicalCborBytes(instance);
- *   console.log(result);
- * });
- *
  * @since 2.0.0
  * @category Methods
  */
-export const toCanonicalCborBytes = Effect.fn(
-  (
-    instance: CML.TreasuryWithdrawalsAction,
-  ): Effect.Effect<Uint8Array, TreasuryWithdrawalsActionError> =>
+export const toCanonicalCborBytes: (
+  instance: CML.TreasuryWithdrawalsAction,
+) => Effect.Effect<Uint8Array, TreasuryWithdrawalsActionError> = Effect.fn(
+  (instance: CML.TreasuryWithdrawalsAction) =>
     Effect.try({
       try: () => instance.to_canonical_cbor_bytes(),
       catch: () =>
@@ -169,20 +105,6 @@ export const toCanonicalCborBytes = Effect.fn(
 /**
  * Unsafely calls instance.toCanonicalCborBytes without Effect wrapper
  *
- * @example
- * import { TreasuryWithdrawalsAction } from "@lucid-evolution/experimental";
- *
- * // Assume we have a TreasuryWithdrawalsAction instance
- * const instance = ... ;
- *
- * // Using try/catch for error handling
- * try {
- *   const result = TreasuryWithdrawalsAction.toCanonicalCborBytesUnsafe(instance);
- *   console.log(result);
- * } catch (error) {
- *   console.error(`TreasuryWithdrawalsAction.toCanonicalCborBytesUnsafe failed: ${error.message}`);
- * }
- *
  * @since 2.0.0
  * @category MethodsUnsafe
  */
@@ -193,21 +115,15 @@ export const toCanonicalCborBytesUnsafe = (
 /**
  * Static method fromCborBytes of TreasuryWithdrawalsAction
  *
- * @example
- * import { TreasuryWithdrawalsAction } from "@lucid-evolution/experimental";
- * import { Effect } from "effect";
- *
- * // Using Effect for safe execution with error handling
- * Effect.gen(function*() {
- *
- *   const result = yield* TreasuryWithdrawalsAction.fromCborBytes( parameters );
- *   console.log(result);
- * });
- *
  * @since 2.0.0
  * @category Constructors
  */
-export const fromCborBytes = Effect.fn(function* (cborBytes: Uint8Array) {
+export const fromCborBytes: (
+  cborBytes: Uint8Array,
+) => Effect.Effect<
+  CML.TreasuryWithdrawalsAction,
+  TreasuryWithdrawalsActionError
+> = Effect.fn(function* (cborBytes: Uint8Array) {
   return yield* Effect.try({
     try: () => CML.TreasuryWithdrawalsAction.from_cbor_bytes(cborBytes),
     catch: () =>
@@ -220,47 +136,23 @@ export const fromCborBytes = Effect.fn(function* (cborBytes: Uint8Array) {
 /**
  * Unsafely calls TreasuryWithdrawalsAction.fromCborBytes without Effect wrapper
  *
- * @example
- * import { TreasuryWithdrawalsAction } from "@lucid-evolution/experimental";
- *
- *
- *
- * // Using try/catch for error handling
- * try {
- *   const result = TreasuryWithdrawalsAction.fromCborBytesUnsafe( parameters );
- *   console.log(result);
- * } catch (error) {
- *   console.error(`TreasuryWithdrawalsAction.fromCborBytesUnsafe failed: ${error.message}`);
- * }
- *
  * @since 2.0.0
  * @category ConstructorsUnsafe
  */
-export const fromCborBytesUnsafe = (cborBytes: Uint8Array) =>
-  Effect.runSync(fromCborBytes(cborBytes));
+export const fromCborBytesUnsafe = (
+  cborBytes: Uint8Array,
+): CML.TreasuryWithdrawalsAction => Effect.runSync(fromCborBytes(cborBytes));
 
 /**
  * Method toCborHex of TreasuryWithdrawalsAction
  *
- * @example
- * import { TreasuryWithdrawalsAction } from "@lucid-evolution/experimental";
- * import { Effect } from "effect";
- *
- * // Using Effect for safe execution with error handling
- * Effect.gen(function*() {
- * // Assume we have a TreasuryWithdrawalsAction instance
- * const instance = ... ;
- *   const result = yield* TreasuryWithdrawalsAction.toCborHex(instance);
- *   console.log(result);
- * });
- *
  * @since 2.0.0
  * @category Methods
  */
-export const toCborHex = Effect.fn(
-  (
-    instance: CML.TreasuryWithdrawalsAction,
-  ): Effect.Effect<string, TreasuryWithdrawalsActionError> =>
+export const toCborHex: (
+  instance: CML.TreasuryWithdrawalsAction,
+) => Effect.Effect<string, TreasuryWithdrawalsActionError> = Effect.fn(
+  (instance: CML.TreasuryWithdrawalsAction) =>
     Effect.try({
       try: () => instance.to_cbor_hex(),
       catch: () =>
@@ -273,20 +165,6 @@ export const toCborHex = Effect.fn(
 /**
  * Unsafely calls instance.toCborHex without Effect wrapper
  *
- * @example
- * import { TreasuryWithdrawalsAction } from "@lucid-evolution/experimental";
- *
- * // Assume we have a TreasuryWithdrawalsAction instance
- * const instance = ... ;
- *
- * // Using try/catch for error handling
- * try {
- *   const result = TreasuryWithdrawalsAction.toCborHexUnsafe(instance);
- *   console.log(result);
- * } catch (error) {
- *   console.error(`TreasuryWithdrawalsAction.toCborHexUnsafe failed: ${error.message}`);
- * }
- *
  * @since 2.0.0
  * @category MethodsUnsafe
  */
@@ -297,25 +175,13 @@ export const toCborHexUnsafe = (
 /**
  * Method toCanonicalCborHex of TreasuryWithdrawalsAction
  *
- * @example
- * import { TreasuryWithdrawalsAction } from "@lucid-evolution/experimental";
- * import { Effect } from "effect";
- *
- * // Using Effect for safe execution with error handling
- * Effect.gen(function*() {
- * // Assume we have a TreasuryWithdrawalsAction instance
- * const instance = ... ;
- *   const result = yield* TreasuryWithdrawalsAction.toCanonicalCborHex(instance);
- *   console.log(result);
- * });
- *
  * @since 2.0.0
  * @category Methods
  */
-export const toCanonicalCborHex = Effect.fn(
-  (
-    instance: CML.TreasuryWithdrawalsAction,
-  ): Effect.Effect<string, TreasuryWithdrawalsActionError> =>
+export const toCanonicalCborHex: (
+  instance: CML.TreasuryWithdrawalsAction,
+) => Effect.Effect<string, TreasuryWithdrawalsActionError> = Effect.fn(
+  (instance: CML.TreasuryWithdrawalsAction) =>
     Effect.try({
       try: () => instance.to_canonical_cbor_hex(),
       catch: () =>
@@ -328,20 +194,6 @@ export const toCanonicalCborHex = Effect.fn(
 /**
  * Unsafely calls instance.toCanonicalCborHex without Effect wrapper
  *
- * @example
- * import { TreasuryWithdrawalsAction } from "@lucid-evolution/experimental";
- *
- * // Assume we have a TreasuryWithdrawalsAction instance
- * const instance = ... ;
- *
- * // Using try/catch for error handling
- * try {
- *   const result = TreasuryWithdrawalsAction.toCanonicalCborHexUnsafe(instance);
- *   console.log(result);
- * } catch (error) {
- *   console.error(`TreasuryWithdrawalsAction.toCanonicalCborHexUnsafe failed: ${error.message}`);
- * }
- *
  * @since 2.0.0
  * @category MethodsUnsafe
  */
@@ -352,21 +204,15 @@ export const toCanonicalCborHexUnsafe = (
 /**
  * Static method fromCborHex of TreasuryWithdrawalsAction
  *
- * @example
- * import { TreasuryWithdrawalsAction } from "@lucid-evolution/experimental";
- * import { Effect } from "effect";
- *
- * // Using Effect for safe execution with error handling
- * Effect.gen(function*() {
- *
- *   const result = yield* TreasuryWithdrawalsAction.fromCborHex( parameters );
- *   console.log(result);
- * });
- *
  * @since 2.0.0
  * @category Constructors
  */
-export const fromCborHex = Effect.fn(function* (cborBytes: string) {
+export const fromCborHex: (
+  cborBytes: string,
+) => Effect.Effect<
+  CML.TreasuryWithdrawalsAction,
+  TreasuryWithdrawalsActionError
+> = Effect.fn(function* (cborBytes: string) {
   return yield* Effect.try({
     try: () => CML.TreasuryWithdrawalsAction.from_cbor_hex(cborBytes),
     catch: () =>
@@ -379,47 +225,23 @@ export const fromCborHex = Effect.fn(function* (cborBytes: string) {
 /**
  * Unsafely calls TreasuryWithdrawalsAction.fromCborHex without Effect wrapper
  *
- * @example
- * import { TreasuryWithdrawalsAction } from "@lucid-evolution/experimental";
- *
- *
- *
- * // Using try/catch for error handling
- * try {
- *   const result = TreasuryWithdrawalsAction.fromCborHexUnsafe( parameters );
- *   console.log(result);
- * } catch (error) {
- *   console.error(`TreasuryWithdrawalsAction.fromCborHexUnsafe failed: ${error.message}`);
- * }
- *
  * @since 2.0.0
  * @category ConstructorsUnsafe
  */
-export const fromCborHexUnsafe = (cborBytes: string) =>
-  Effect.runSync(fromCborHex(cborBytes));
+export const fromCborHexUnsafe = (
+  cborBytes: string,
+): CML.TreasuryWithdrawalsAction => Effect.runSync(fromCborHex(cborBytes));
 
 /**
  * Method toJson of TreasuryWithdrawalsAction
  *
- * @example
- * import { TreasuryWithdrawalsAction } from "@lucid-evolution/experimental";
- * import { Effect } from "effect";
- *
- * // Using Effect for safe execution with error handling
- * Effect.gen(function*() {
- * // Assume we have a TreasuryWithdrawalsAction instance
- * const instance = ... ;
- *   const result = yield* TreasuryWithdrawalsAction.toJson(instance);
- *   console.log(result);
- * });
- *
  * @since 2.0.0
  * @category Methods
  */
-export const toJson = Effect.fn(
-  (
-    instance: CML.TreasuryWithdrawalsAction,
-  ): Effect.Effect<string, TreasuryWithdrawalsActionError> =>
+export const toJson: (
+  instance: CML.TreasuryWithdrawalsAction,
+) => Effect.Effect<string, TreasuryWithdrawalsActionError> = Effect.fn(
+  (instance: CML.TreasuryWithdrawalsAction) =>
     Effect.try({
       try: () => instance.to_json(),
       catch: () =>
@@ -432,20 +254,6 @@ export const toJson = Effect.fn(
 /**
  * Unsafely calls instance.toJson without Effect wrapper
  *
- * @example
- * import { TreasuryWithdrawalsAction } from "@lucid-evolution/experimental";
- *
- * // Assume we have a TreasuryWithdrawalsAction instance
- * const instance = ... ;
- *
- * // Using try/catch for error handling
- * try {
- *   const result = TreasuryWithdrawalsAction.toJsonUnsafe(instance);
- *   console.log(result);
- * } catch (error) {
- *   console.error(`TreasuryWithdrawalsAction.toJsonUnsafe failed: ${error.message}`);
- * }
- *
  * @since 2.0.0
  * @category MethodsUnsafe
  */
@@ -455,25 +263,13 @@ export const toJsonUnsafe = (instance: CML.TreasuryWithdrawalsAction): string =>
 /**
  * Method toJsValue of TreasuryWithdrawalsAction
  *
- * @example
- * import { TreasuryWithdrawalsAction } from "@lucid-evolution/experimental";
- * import { Effect } from "effect";
- *
- * // Using Effect for safe execution with error handling
- * Effect.gen(function*() {
- * // Assume we have a TreasuryWithdrawalsAction instance
- * const instance = ... ;
- *   const result = yield* TreasuryWithdrawalsAction.toJsValue(instance);
- *   console.log(result);
- * });
- *
  * @since 2.0.0
  * @category Methods
  */
-export const toJsValue = Effect.fn(
-  (
-    instance: CML.TreasuryWithdrawalsAction,
-  ): Effect.Effect<any, TreasuryWithdrawalsActionError> =>
+export const toJsValue: (
+  instance: CML.TreasuryWithdrawalsAction,
+) => Effect.Effect<any, TreasuryWithdrawalsActionError> = Effect.fn(
+  (instance: CML.TreasuryWithdrawalsAction) =>
     Effect.try({
       try: () => instance.to_js_value(),
       catch: () =>
@@ -486,20 +282,6 @@ export const toJsValue = Effect.fn(
 /**
  * Unsafely calls instance.toJsValue without Effect wrapper
  *
- * @example
- * import { TreasuryWithdrawalsAction } from "@lucid-evolution/experimental";
- *
- * // Assume we have a TreasuryWithdrawalsAction instance
- * const instance = ... ;
- *
- * // Using try/catch for error handling
- * try {
- *   const result = TreasuryWithdrawalsAction.toJsValueUnsafe(instance);
- *   console.log(result);
- * } catch (error) {
- *   console.error(`TreasuryWithdrawalsAction.toJsValueUnsafe failed: ${error.message}`);
- * }
- *
  * @since 2.0.0
  * @category MethodsUnsafe
  */
@@ -509,21 +291,15 @@ export const toJsValueUnsafe = (instance: CML.TreasuryWithdrawalsAction): any =>
 /**
  * Static method fromJson of TreasuryWithdrawalsAction
  *
- * @example
- * import { TreasuryWithdrawalsAction } from "@lucid-evolution/experimental";
- * import { Effect } from "effect";
- *
- * // Using Effect for safe execution with error handling
- * Effect.gen(function*() {
- *
- *   const result = yield* TreasuryWithdrawalsAction.fromJson( parameters );
- *   console.log(result);
- * });
- *
  * @since 2.0.0
  * @category Constructors
  */
-export const fromJson = Effect.fn(function* (json: string) {
+export const fromJson: (
+  json: string,
+) => Effect.Effect<
+  CML.TreasuryWithdrawalsAction,
+  TreasuryWithdrawalsActionError
+> = Effect.fn(function* (json: string) {
   return yield* Effect.try({
     try: () => CML.TreasuryWithdrawalsAction.from_json(json),
     catch: () =>
@@ -536,49 +312,22 @@ export const fromJson = Effect.fn(function* (json: string) {
 /**
  * Unsafely calls TreasuryWithdrawalsAction.fromJson without Effect wrapper
  *
- * @example
- * import { TreasuryWithdrawalsAction } from "@lucid-evolution/experimental";
- *
- *
- *
- * // Using try/catch for error handling
- * try {
- *   const result = TreasuryWithdrawalsAction.fromJsonUnsafe( parameters );
- *   console.log(result);
- * } catch (error) {
- *   console.error(`TreasuryWithdrawalsAction.fromJsonUnsafe failed: ${error.message}`);
- * }
- *
  * @since 2.0.0
  * @category ConstructorsUnsafe
  */
-export const fromJsonUnsafe = (json: string) => Effect.runSync(fromJson(json));
+export const fromJsonUnsafe = (json: string): CML.TreasuryWithdrawalsAction =>
+  Effect.runSync(fromJson(json));
 
 /**
  * Method withdrawal of TreasuryWithdrawalsAction
  *
- * @example
- * import { TreasuryWithdrawalsAction } from "@lucid-evolution/experimental";
- * import { Effect } from "effect";
- *
- * // Using Effect for safe execution with error handling
- * Effect.gen(function*() {
- * // Assume we have a TreasuryWithdrawalsAction instance
- * const instance = ... ;
- *   const result = yield* TreasuryWithdrawalsAction.withdrawal(instance);
- *   console.log(result);
- * });
- *
  * @since 2.0.0
  * @category Methods
  */
-export const withdrawal = Effect.fn(
-  (
-    instance: CML.TreasuryWithdrawalsAction,
-  ): Effect.Effect<
-    CML.MapRewardAccountToCoin,
-    TreasuryWithdrawalsActionError
-  > =>
+export const withdrawal: (
+  instance: CML.TreasuryWithdrawalsAction,
+) => Effect.Effect<CML.MapRewardAccountToCoin, TreasuryWithdrawalsActionError> =
+  Effect.fn((instance: CML.TreasuryWithdrawalsAction) =>
     Effect.try({
       try: () => instance.withdrawal(),
       catch: () =>
@@ -586,24 +335,10 @@ export const withdrawal = Effect.fn(
           message: `TreasuryWithdrawalsAction.withdrawal failed `,
         }),
     }),
-);
+  );
 
 /**
  * Unsafely calls instance.withdrawal without Effect wrapper
- *
- * @example
- * import { TreasuryWithdrawalsAction } from "@lucid-evolution/experimental";
- *
- * // Assume we have a TreasuryWithdrawalsAction instance
- * const instance = ... ;
- *
- * // Using try/catch for error handling
- * try {
- *   const result = TreasuryWithdrawalsAction.withdrawalUnsafe(instance);
- *   console.log(result);
- * } catch (error) {
- *   console.error(`TreasuryWithdrawalsAction.withdrawalUnsafe failed: ${error.message}`);
- * }
  *
  * @since 2.0.0
  * @category MethodsUnsafe
@@ -615,28 +350,13 @@ export const withdrawalUnsafe = (
 /**
  * Method policyHash of TreasuryWithdrawalsAction
  *
- * @example
- * import { TreasuryWithdrawalsAction } from "@lucid-evolution/experimental";
- * import { Effect } from "effect";
- *
- * // Using Effect for safe execution with error handling
- * Effect.gen(function*() {
- * // Assume we have a TreasuryWithdrawalsAction instance
- * const instance = ... ;
- *   const result = yield* TreasuryWithdrawalsAction.policyHash(instance);
- *   console.log(result);
- * });
- *
  * @since 2.0.0
  * @category Methods
  */
-export const policyHash = Effect.fn(
-  (
-    instance: CML.TreasuryWithdrawalsAction,
-  ): Effect.Effect<
-    CML.ScriptHash | undefined,
-    TreasuryWithdrawalsActionError
-  > =>
+export const policyHash: (
+  instance: CML.TreasuryWithdrawalsAction,
+) => Effect.Effect<CML.ScriptHash | undefined, TreasuryWithdrawalsActionError> =
+  Effect.fn((instance: CML.TreasuryWithdrawalsAction) =>
     Effect.try({
       try: () => instance.policy_hash(),
       catch: () =>
@@ -644,24 +364,10 @@ export const policyHash = Effect.fn(
           message: `TreasuryWithdrawalsAction.policyHash failed `,
         }),
     }),
-);
+  );
 
 /**
  * Unsafely calls instance.policyHash without Effect wrapper
- *
- * @example
- * import { TreasuryWithdrawalsAction } from "@lucid-evolution/experimental";
- *
- * // Assume we have a TreasuryWithdrawalsAction instance
- * const instance = ... ;
- *
- * // Using try/catch for error handling
- * try {
- *   const result = TreasuryWithdrawalsAction.policyHashUnsafe(instance);
- *   console.log(result);
- * } catch (error) {
- *   console.error(`TreasuryWithdrawalsAction.policyHashUnsafe failed: ${error.message}`);
- * }
  *
  * @since 2.0.0
  * @category MethodsUnsafe
@@ -673,21 +379,16 @@ export const policyHashUnsafe = (
 /**
  * Static method _new of TreasuryWithdrawalsAction
  *
- * @example
- * import { TreasuryWithdrawalsAction } from "@lucid-evolution/experimental";
- * import { Effect } from "effect";
- *
- * // Using Effect for safe execution with error handling
- * Effect.gen(function*() {
- *
- *   const result = yield* TreasuryWithdrawalsAction._new( parameters );
- *   console.log(result);
- * });
- *
  * @since 2.0.0
  * @category Constructors
  */
-export const _new = Effect.fn(function* (
+export const _new: (
+  withdrawal: CML.MapRewardAccountToCoin,
+  policyHash: CML.ScriptHash,
+) => Effect.Effect<
+  CML.TreasuryWithdrawalsAction,
+  TreasuryWithdrawalsActionError
+> = Effect.fn(function* (
   withdrawal: CML.MapRewardAccountToCoin,
   policyHash: CML.ScriptHash,
 ) {
@@ -703,23 +404,11 @@ export const _new = Effect.fn(function* (
 /**
  * Unsafely calls TreasuryWithdrawalsAction._new without Effect wrapper
  *
- * @example
- * import { TreasuryWithdrawalsAction } from "@lucid-evolution/experimental";
- *
- *
- *
- * // Using try/catch for error handling
- * try {
- *   const result = TreasuryWithdrawalsAction._newUnsafe( parameters );
- *   console.log(result);
- * } catch (error) {
- *   console.error(`TreasuryWithdrawalsAction._newUnsafe failed: ${error.message}`);
- * }
- *
  * @since 2.0.0
  * @category ConstructorsUnsafe
  */
 export const _newUnsafe = (
   withdrawal: CML.MapRewardAccountToCoin,
   policyHash: CML.ScriptHash,
-) => Effect.runSync(_new(withdrawal, policyHash));
+): CML.TreasuryWithdrawalsAction =>
+  Effect.runSync(_new(withdrawal, policyHash));

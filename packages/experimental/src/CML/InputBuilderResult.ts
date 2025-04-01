@@ -29,25 +29,13 @@ export class InputBuilderResultError extends Data.TaggedError(
 /**
  * Method free of InputBuilderResult
  *
- * @example
- * import { InputBuilderResult } from "@lucid-evolution/experimental";
- * import { Effect } from "effect";
- *
- * // Using Effect for safe execution with error handling
- * Effect.gen(function*() {
- * // Assume we have a InputBuilderResult instance
- * const instance = ... ;
- *   const result = yield* InputBuilderResult.free(instance);
- *   console.log(result);
- * });
- *
  * @since 2.0.0
  * @category Methods
  */
-export const free = Effect.fn(
-  (
-    instance: CML.InputBuilderResult,
-  ): Effect.Effect<void, InputBuilderResultError> =>
+export const free: (
+  instance: CML.InputBuilderResult,
+) => Effect.Effect<void, InputBuilderResultError> = Effect.fn(
+  (instance: CML.InputBuilderResult) =>
     Effect.try({
       try: () => instance.free(),
       catch: () =>
@@ -59,20 +47,6 @@ export const free = Effect.fn(
 
 /**
  * Unsafely calls instance.free without Effect wrapper
- *
- * @example
- * import { InputBuilderResult } from "@lucid-evolution/experimental";
- *
- * // Assume we have a InputBuilderResult instance
- * const instance = ... ;
- *
- * // Using try/catch for error handling
- * try {
- *   const result = InputBuilderResult.freeUnsafe(instance);
- *   console.log(result);
- * } catch (error) {
- *   console.error(`InputBuilderResult.freeUnsafe failed: ${error.message}`);
- * }
  *
  * @since 2.0.0
  * @category MethodsUnsafe

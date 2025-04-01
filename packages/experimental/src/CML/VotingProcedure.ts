@@ -29,23 +29,13 @@ export class VotingProcedureError extends Data.TaggedError(
 /**
  * Method free of VotingProcedure
  *
- * @example
- * import { VotingProcedure } from "@lucid-evolution/experimental";
- * import { Effect } from "effect";
- *
- * // Using Effect for safe execution with error handling
- * Effect.gen(function*() {
- * // Assume we have a VotingProcedure instance
- * const instance = ... ;
- *   const result = yield* VotingProcedure.free(instance);
- *   console.log(result);
- * });
- *
  * @since 2.0.0
  * @category Methods
  */
-export const free = Effect.fn(
-  (instance: CML.VotingProcedure): Effect.Effect<void, VotingProcedureError> =>
+export const free: (
+  instance: CML.VotingProcedure,
+) => Effect.Effect<void, VotingProcedureError> = Effect.fn(
+  (instance: CML.VotingProcedure) =>
     Effect.try({
       try: () => instance.free(),
       catch: () =>
@@ -58,20 +48,6 @@ export const free = Effect.fn(
 /**
  * Unsafely calls instance.free without Effect wrapper
  *
- * @example
- * import { VotingProcedure } from "@lucid-evolution/experimental";
- *
- * // Assume we have a VotingProcedure instance
- * const instance = ... ;
- *
- * // Using try/catch for error handling
- * try {
- *   const result = VotingProcedure.freeUnsafe(instance);
- *   console.log(result);
- * } catch (error) {
- *   console.error(`VotingProcedure.freeUnsafe failed: ${error.message}`);
- * }
- *
  * @since 2.0.0
  * @category MethodsUnsafe
  */
@@ -81,25 +57,13 @@ export const freeUnsafe = (instance: CML.VotingProcedure): void =>
 /**
  * Method toCborBytes of VotingProcedure
  *
- * @example
- * import { VotingProcedure } from "@lucid-evolution/experimental";
- * import { Effect } from "effect";
- *
- * // Using Effect for safe execution with error handling
- * Effect.gen(function*() {
- * // Assume we have a VotingProcedure instance
- * const instance = ... ;
- *   const result = yield* VotingProcedure.toCborBytes(instance);
- *   console.log(result);
- * });
- *
  * @since 2.0.0
  * @category Methods
  */
-export const toCborBytes = Effect.fn(
-  (
-    instance: CML.VotingProcedure,
-  ): Effect.Effect<Uint8Array, VotingProcedureError> =>
+export const toCborBytes: (
+  instance: CML.VotingProcedure,
+) => Effect.Effect<Uint8Array, VotingProcedureError> = Effect.fn(
+  (instance: CML.VotingProcedure) =>
     Effect.try({
       try: () => instance.to_cbor_bytes(),
       catch: () =>
@@ -112,20 +76,6 @@ export const toCborBytes = Effect.fn(
 /**
  * Unsafely calls instance.toCborBytes without Effect wrapper
  *
- * @example
- * import { VotingProcedure } from "@lucid-evolution/experimental";
- *
- * // Assume we have a VotingProcedure instance
- * const instance = ... ;
- *
- * // Using try/catch for error handling
- * try {
- *   const result = VotingProcedure.toCborBytesUnsafe(instance);
- *   console.log(result);
- * } catch (error) {
- *   console.error(`VotingProcedure.toCborBytesUnsafe failed: ${error.message}`);
- * }
- *
  * @since 2.0.0
  * @category MethodsUnsafe
  */
@@ -135,25 +85,13 @@ export const toCborBytesUnsafe = (instance: CML.VotingProcedure): Uint8Array =>
 /**
  * Method toCanonicalCborBytes of VotingProcedure
  *
- * @example
- * import { VotingProcedure } from "@lucid-evolution/experimental";
- * import { Effect } from "effect";
- *
- * // Using Effect for safe execution with error handling
- * Effect.gen(function*() {
- * // Assume we have a VotingProcedure instance
- * const instance = ... ;
- *   const result = yield* VotingProcedure.toCanonicalCborBytes(instance);
- *   console.log(result);
- * });
- *
  * @since 2.0.0
  * @category Methods
  */
-export const toCanonicalCborBytes = Effect.fn(
-  (
-    instance: CML.VotingProcedure,
-  ): Effect.Effect<Uint8Array, VotingProcedureError> =>
+export const toCanonicalCborBytes: (
+  instance: CML.VotingProcedure,
+) => Effect.Effect<Uint8Array, VotingProcedureError> = Effect.fn(
+  (instance: CML.VotingProcedure) =>
     Effect.try({
       try: () => instance.to_canonical_cbor_bytes(),
       catch: () =>
@@ -166,20 +104,6 @@ export const toCanonicalCborBytes = Effect.fn(
 /**
  * Unsafely calls instance.toCanonicalCborBytes without Effect wrapper
  *
- * @example
- * import { VotingProcedure } from "@lucid-evolution/experimental";
- *
- * // Assume we have a VotingProcedure instance
- * const instance = ... ;
- *
- * // Using try/catch for error handling
- * try {
- *   const result = VotingProcedure.toCanonicalCborBytesUnsafe(instance);
- *   console.log(result);
- * } catch (error) {
- *   console.error(`VotingProcedure.toCanonicalCborBytesUnsafe failed: ${error.message}`);
- * }
- *
  * @since 2.0.0
  * @category MethodsUnsafe
  */
@@ -190,74 +114,43 @@ export const toCanonicalCborBytesUnsafe = (
 /**
  * Static method fromCborBytes of VotingProcedure
  *
- * @example
- * import { VotingProcedure } from "@lucid-evolution/experimental";
- * import { Effect } from "effect";
- *
- * // Using Effect for safe execution with error handling
- * Effect.gen(function*() {
- *
- *   const result = yield* VotingProcedure.fromCborBytes( parameters );
- *   console.log(result);
- * });
- *
  * @since 2.0.0
  * @category Constructors
  */
-export const fromCborBytes = Effect.fn(function* (cborBytes: Uint8Array) {
-  return yield* Effect.try({
-    try: () => CML.VotingProcedure.from_cbor_bytes(cborBytes),
-    catch: () =>
-      new VotingProcedureError({
-        message: `VotingProcedure.fromCborBytes failed with parameters: ${cborBytes}. Hint: Check byte length and encoding.`,
-      }),
-  });
-});
+export const fromCborBytes: (
+  cborBytes: Uint8Array,
+) => Effect.Effect<CML.VotingProcedure, VotingProcedureError> = Effect.fn(
+  function* (cborBytes: Uint8Array) {
+    return yield* Effect.try({
+      try: () => CML.VotingProcedure.from_cbor_bytes(cborBytes),
+      catch: () =>
+        new VotingProcedureError({
+          message: `VotingProcedure.fromCborBytes failed with parameters: ${cborBytes}. Hint: Check byte length and encoding.`,
+        }),
+    });
+  },
+);
 
 /**
  * Unsafely calls VotingProcedure.fromCborBytes without Effect wrapper
  *
- * @example
- * import { VotingProcedure } from "@lucid-evolution/experimental";
- *
- *
- *
- * // Using try/catch for error handling
- * try {
- *   const result = VotingProcedure.fromCborBytesUnsafe( parameters );
- *   console.log(result);
- * } catch (error) {
- *   console.error(`VotingProcedure.fromCborBytesUnsafe failed: ${error.message}`);
- * }
- *
  * @since 2.0.0
  * @category ConstructorsUnsafe
  */
-export const fromCborBytesUnsafe = (cborBytes: Uint8Array) =>
-  Effect.runSync(fromCborBytes(cborBytes));
+export const fromCborBytesUnsafe = (
+  cborBytes: Uint8Array,
+): CML.VotingProcedure => Effect.runSync(fromCborBytes(cborBytes));
 
 /**
  * Method toCborHex of VotingProcedure
  *
- * @example
- * import { VotingProcedure } from "@lucid-evolution/experimental";
- * import { Effect } from "effect";
- *
- * // Using Effect for safe execution with error handling
- * Effect.gen(function*() {
- * // Assume we have a VotingProcedure instance
- * const instance = ... ;
- *   const result = yield* VotingProcedure.toCborHex(instance);
- *   console.log(result);
- * });
- *
  * @since 2.0.0
  * @category Methods
  */
-export const toCborHex = Effect.fn(
-  (
-    instance: CML.VotingProcedure,
-  ): Effect.Effect<string, VotingProcedureError> =>
+export const toCborHex: (
+  instance: CML.VotingProcedure,
+) => Effect.Effect<string, VotingProcedureError> = Effect.fn(
+  (instance: CML.VotingProcedure) =>
     Effect.try({
       try: () => instance.to_cbor_hex(),
       catch: () =>
@@ -270,20 +163,6 @@ export const toCborHex = Effect.fn(
 /**
  * Unsafely calls instance.toCborHex without Effect wrapper
  *
- * @example
- * import { VotingProcedure } from "@lucid-evolution/experimental";
- *
- * // Assume we have a VotingProcedure instance
- * const instance = ... ;
- *
- * // Using try/catch for error handling
- * try {
- *   const result = VotingProcedure.toCborHexUnsafe(instance);
- *   console.log(result);
- * } catch (error) {
- *   console.error(`VotingProcedure.toCborHexUnsafe failed: ${error.message}`);
- * }
- *
  * @since 2.0.0
  * @category MethodsUnsafe
  */
@@ -293,25 +172,13 @@ export const toCborHexUnsafe = (instance: CML.VotingProcedure): string =>
 /**
  * Method toCanonicalCborHex of VotingProcedure
  *
- * @example
- * import { VotingProcedure } from "@lucid-evolution/experimental";
- * import { Effect } from "effect";
- *
- * // Using Effect for safe execution with error handling
- * Effect.gen(function*() {
- * // Assume we have a VotingProcedure instance
- * const instance = ... ;
- *   const result = yield* VotingProcedure.toCanonicalCborHex(instance);
- *   console.log(result);
- * });
- *
  * @since 2.0.0
  * @category Methods
  */
-export const toCanonicalCborHex = Effect.fn(
-  (
-    instance: CML.VotingProcedure,
-  ): Effect.Effect<string, VotingProcedureError> =>
+export const toCanonicalCborHex: (
+  instance: CML.VotingProcedure,
+) => Effect.Effect<string, VotingProcedureError> = Effect.fn(
+  (instance: CML.VotingProcedure) =>
     Effect.try({
       try: () => instance.to_canonical_cbor_hex(),
       catch: () =>
@@ -324,20 +191,6 @@ export const toCanonicalCborHex = Effect.fn(
 /**
  * Unsafely calls instance.toCanonicalCborHex without Effect wrapper
  *
- * @example
- * import { VotingProcedure } from "@lucid-evolution/experimental";
- *
- * // Assume we have a VotingProcedure instance
- * const instance = ... ;
- *
- * // Using try/catch for error handling
- * try {
- *   const result = VotingProcedure.toCanonicalCborHexUnsafe(instance);
- *   console.log(result);
- * } catch (error) {
- *   console.error(`VotingProcedure.toCanonicalCborHexUnsafe failed: ${error.message}`);
- * }
- *
  * @since 2.0.0
  * @category MethodsUnsafe
  */
@@ -348,74 +201,42 @@ export const toCanonicalCborHexUnsafe = (
 /**
  * Static method fromCborHex of VotingProcedure
  *
- * @example
- * import { VotingProcedure } from "@lucid-evolution/experimental";
- * import { Effect } from "effect";
- *
- * // Using Effect for safe execution with error handling
- * Effect.gen(function*() {
- *
- *   const result = yield* VotingProcedure.fromCborHex( parameters );
- *   console.log(result);
- * });
- *
  * @since 2.0.0
  * @category Constructors
  */
-export const fromCborHex = Effect.fn(function* (cborBytes: string) {
-  return yield* Effect.try({
-    try: () => CML.VotingProcedure.from_cbor_hex(cborBytes),
-    catch: () =>
-      new VotingProcedureError({
-        message: `VotingProcedure.fromCborHex failed with parameters: ${cborBytes}. Hint: Make sure it's a valid hex string representing CBOR data.`,
-      }),
-  });
-});
+export const fromCborHex: (
+  cborBytes: string,
+) => Effect.Effect<CML.VotingProcedure, VotingProcedureError> = Effect.fn(
+  function* (cborBytes: string) {
+    return yield* Effect.try({
+      try: () => CML.VotingProcedure.from_cbor_hex(cborBytes),
+      catch: () =>
+        new VotingProcedureError({
+          message: `VotingProcedure.fromCborHex failed with parameters: ${cborBytes}. Hint: Make sure it's a valid hex string representing CBOR data.`,
+        }),
+    });
+  },
+);
 
 /**
  * Unsafely calls VotingProcedure.fromCborHex without Effect wrapper
  *
- * @example
- * import { VotingProcedure } from "@lucid-evolution/experimental";
- *
- *
- *
- * // Using try/catch for error handling
- * try {
- *   const result = VotingProcedure.fromCborHexUnsafe( parameters );
- *   console.log(result);
- * } catch (error) {
- *   console.error(`VotingProcedure.fromCborHexUnsafe failed: ${error.message}`);
- * }
- *
  * @since 2.0.0
  * @category ConstructorsUnsafe
  */
-export const fromCborHexUnsafe = (cborBytes: string) =>
+export const fromCborHexUnsafe = (cborBytes: string): CML.VotingProcedure =>
   Effect.runSync(fromCborHex(cborBytes));
 
 /**
  * Method toJson of VotingProcedure
  *
- * @example
- * import { VotingProcedure } from "@lucid-evolution/experimental";
- * import { Effect } from "effect";
- *
- * // Using Effect for safe execution with error handling
- * Effect.gen(function*() {
- * // Assume we have a VotingProcedure instance
- * const instance = ... ;
- *   const result = yield* VotingProcedure.toJson(instance);
- *   console.log(result);
- * });
- *
  * @since 2.0.0
  * @category Methods
  */
-export const toJson = Effect.fn(
-  (
-    instance: CML.VotingProcedure,
-  ): Effect.Effect<string, VotingProcedureError> =>
+export const toJson: (
+  instance: CML.VotingProcedure,
+) => Effect.Effect<string, VotingProcedureError> = Effect.fn(
+  (instance: CML.VotingProcedure) =>
     Effect.try({
       try: () => instance.to_json(),
       catch: () =>
@@ -428,20 +249,6 @@ export const toJson = Effect.fn(
 /**
  * Unsafely calls instance.toJson without Effect wrapper
  *
- * @example
- * import { VotingProcedure } from "@lucid-evolution/experimental";
- *
- * // Assume we have a VotingProcedure instance
- * const instance = ... ;
- *
- * // Using try/catch for error handling
- * try {
- *   const result = VotingProcedure.toJsonUnsafe(instance);
- *   console.log(result);
- * } catch (error) {
- *   console.error(`VotingProcedure.toJsonUnsafe failed: ${error.message}`);
- * }
- *
  * @since 2.0.0
  * @category MethodsUnsafe
  */
@@ -451,23 +258,13 @@ export const toJsonUnsafe = (instance: CML.VotingProcedure): string =>
 /**
  * Method toJsValue of VotingProcedure
  *
- * @example
- * import { VotingProcedure } from "@lucid-evolution/experimental";
- * import { Effect } from "effect";
- *
- * // Using Effect for safe execution with error handling
- * Effect.gen(function*() {
- * // Assume we have a VotingProcedure instance
- * const instance = ... ;
- *   const result = yield* VotingProcedure.toJsValue(instance);
- *   console.log(result);
- * });
- *
  * @since 2.0.0
  * @category Methods
  */
-export const toJsValue = Effect.fn(
-  (instance: CML.VotingProcedure): Effect.Effect<any, VotingProcedureError> =>
+export const toJsValue: (
+  instance: CML.VotingProcedure,
+) => Effect.Effect<any, VotingProcedureError> = Effect.fn(
+  (instance: CML.VotingProcedure) =>
     Effect.try({
       try: () => instance.to_js_value(),
       catch: () =>
@@ -480,20 +277,6 @@ export const toJsValue = Effect.fn(
 /**
  * Unsafely calls instance.toJsValue without Effect wrapper
  *
- * @example
- * import { VotingProcedure } from "@lucid-evolution/experimental";
- *
- * // Assume we have a VotingProcedure instance
- * const instance = ... ;
- *
- * // Using try/catch for error handling
- * try {
- *   const result = VotingProcedure.toJsValueUnsafe(instance);
- *   console.log(result);
- * } catch (error) {
- *   console.error(`VotingProcedure.toJsValueUnsafe failed: ${error.message}`);
- * }
- *
  * @since 2.0.0
  * @category MethodsUnsafe
  */
@@ -503,73 +286,42 @@ export const toJsValueUnsafe = (instance: CML.VotingProcedure): any =>
 /**
  * Static method fromJson of VotingProcedure
  *
- * @example
- * import { VotingProcedure } from "@lucid-evolution/experimental";
- * import { Effect } from "effect";
- *
- * // Using Effect for safe execution with error handling
- * Effect.gen(function*() {
- *
- *   const result = yield* VotingProcedure.fromJson( parameters );
- *   console.log(result);
- * });
- *
  * @since 2.0.0
  * @category Constructors
  */
-export const fromJson = Effect.fn(function* (json: string) {
-  return yield* Effect.try({
-    try: () => CML.VotingProcedure.from_json(json),
-    catch: () =>
-      new VotingProcedureError({
-        message: `VotingProcedure.fromJson failed with parameters: ${json}. Hint: Validate your JSON structure.`,
-      }),
-  });
-});
+export const fromJson: (
+  json: string,
+) => Effect.Effect<CML.VotingProcedure, VotingProcedureError> = Effect.fn(
+  function* (json: string) {
+    return yield* Effect.try({
+      try: () => CML.VotingProcedure.from_json(json),
+      catch: () =>
+        new VotingProcedureError({
+          message: `VotingProcedure.fromJson failed with parameters: ${json}. Hint: Validate your JSON structure.`,
+        }),
+    });
+  },
+);
 
 /**
  * Unsafely calls VotingProcedure.fromJson without Effect wrapper
  *
- * @example
- * import { VotingProcedure } from "@lucid-evolution/experimental";
- *
- *
- *
- * // Using try/catch for error handling
- * try {
- *   const result = VotingProcedure.fromJsonUnsafe( parameters );
- *   console.log(result);
- * } catch (error) {
- *   console.error(`VotingProcedure.fromJsonUnsafe failed: ${error.message}`);
- * }
- *
  * @since 2.0.0
  * @category ConstructorsUnsafe
  */
-export const fromJsonUnsafe = (json: string) => Effect.runSync(fromJson(json));
+export const fromJsonUnsafe = (json: string): CML.VotingProcedure =>
+  Effect.runSync(fromJson(json));
 
 /**
  * Method vote of VotingProcedure
  *
- * @example
- * import { VotingProcedure } from "@lucid-evolution/experimental";
- * import { Effect } from "effect";
- *
- * // Using Effect for safe execution with error handling
- * Effect.gen(function*() {
- * // Assume we have a VotingProcedure instance
- * const instance = ... ;
- *   const result = yield* VotingProcedure.vote(instance);
- *   console.log(result);
- * });
- *
  * @since 2.0.0
  * @category Methods
  */
-export const vote = Effect.fn(
-  (
-    instance: CML.VotingProcedure,
-  ): Effect.Effect<CML.Vote, VotingProcedureError> =>
+export const vote: (
+  instance: CML.VotingProcedure,
+) => Effect.Effect<CML.Vote, VotingProcedureError> = Effect.fn(
+  (instance: CML.VotingProcedure) =>
     Effect.try({
       try: () => instance.vote(),
       catch: () =>
@@ -582,20 +334,6 @@ export const vote = Effect.fn(
 /**
  * Unsafely calls instance.vote without Effect wrapper
  *
- * @example
- * import { VotingProcedure } from "@lucid-evolution/experimental";
- *
- * // Assume we have a VotingProcedure instance
- * const instance = ... ;
- *
- * // Using try/catch for error handling
- * try {
- *   const result = VotingProcedure.voteUnsafe(instance);
- *   console.log(result);
- * } catch (error) {
- *   console.error(`VotingProcedure.voteUnsafe failed: ${error.message}`);
- * }
- *
  * @since 2.0.0
  * @category MethodsUnsafe
  */
@@ -605,25 +343,13 @@ export const voteUnsafe = (instance: CML.VotingProcedure): CML.Vote =>
 /**
  * Method anchor of VotingProcedure
  *
- * @example
- * import { VotingProcedure } from "@lucid-evolution/experimental";
- * import { Effect } from "effect";
- *
- * // Using Effect for safe execution with error handling
- * Effect.gen(function*() {
- * // Assume we have a VotingProcedure instance
- * const instance = ... ;
- *   const result = yield* VotingProcedure.anchor(instance);
- *   console.log(result);
- * });
- *
  * @since 2.0.0
  * @category Methods
  */
-export const anchor = Effect.fn(
-  (
-    instance: CML.VotingProcedure,
-  ): Effect.Effect<CML.Anchor | undefined, VotingProcedureError> =>
+export const anchor: (
+  instance: CML.VotingProcedure,
+) => Effect.Effect<CML.Anchor | undefined, VotingProcedureError> = Effect.fn(
+  (instance: CML.VotingProcedure) =>
     Effect.try({
       try: () => instance.anchor(),
       catch: () =>
@@ -636,20 +362,6 @@ export const anchor = Effect.fn(
 /**
  * Unsafely calls instance.anchor without Effect wrapper
  *
- * @example
- * import { VotingProcedure } from "@lucid-evolution/experimental";
- *
- * // Assume we have a VotingProcedure instance
- * const instance = ... ;
- *
- * // Using try/catch for error handling
- * try {
- *   const result = VotingProcedure.anchorUnsafe(instance);
- *   console.log(result);
- * } catch (error) {
- *   console.error(`VotingProcedure.anchorUnsafe failed: ${error.message}`);
- * }
- *
  * @since 2.0.0
  * @category MethodsUnsafe
  */
@@ -660,48 +372,31 @@ export const anchorUnsafe = (
 /**
  * Static method _new of VotingProcedure
  *
- * @example
- * import { VotingProcedure } from "@lucid-evolution/experimental";
- * import { Effect } from "effect";
- *
- * // Using Effect for safe execution with error handling
- * Effect.gen(function*() {
- *
- *   const result = yield* VotingProcedure._new( parameters );
- *   console.log(result);
- * });
- *
  * @since 2.0.0
  * @category Constructors
  */
-export const _new = Effect.fn(function* (vote: CML.Vote, anchor: CML.Anchor) {
-  return yield* Effect.try({
-    try: () => CML.VotingProcedure.new(vote, anchor),
-    catch: () =>
-      new VotingProcedureError({
-        message: `VotingProcedure._new failed with parameters: ${vote} (Vote), ${anchor} (Anchor). `,
-      }),
-  });
-});
+export const _new: (
+  vote: CML.Vote,
+  anchor: CML.Anchor,
+) => Effect.Effect<CML.VotingProcedure, VotingProcedureError> = Effect.fn(
+  function* (vote: CML.Vote, anchor: CML.Anchor) {
+    return yield* Effect.try({
+      try: () => CML.VotingProcedure.new(vote, anchor),
+      catch: () =>
+        new VotingProcedureError({
+          message: `VotingProcedure._new failed with parameters: ${vote} (Vote), ${anchor} (Anchor). `,
+        }),
+    });
+  },
+);
 
 /**
  * Unsafely calls VotingProcedure._new without Effect wrapper
  *
- * @example
- * import { VotingProcedure } from "@lucid-evolution/experimental";
- *
- *
- *
- * // Using try/catch for error handling
- * try {
- *   const result = VotingProcedure._newUnsafe( parameters );
- *   console.log(result);
- * } catch (error) {
- *   console.error(`VotingProcedure._newUnsafe failed: ${error.message}`);
- * }
- *
  * @since 2.0.0
  * @category ConstructorsUnsafe
  */
-export const _newUnsafe = (vote: CML.Vote, anchor: CML.Anchor) =>
-  Effect.runSync(_new(vote, anchor));
+export const _newUnsafe = (
+  vote: CML.Vote,
+  anchor: CML.Anchor,
+): CML.VotingProcedure => Effect.runSync(_new(vote, anchor));

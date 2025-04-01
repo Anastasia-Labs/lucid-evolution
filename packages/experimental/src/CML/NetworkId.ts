@@ -27,23 +27,13 @@ export class NetworkIdError extends Data.TaggedError("NetworkIdError")<{
 /**
  * Method free of NetworkId
  *
- * @example
- * import { NetworkId } from "@lucid-evolution/experimental";
- * import { Effect } from "effect";
- *
- * // Using Effect for safe execution with error handling
- * Effect.gen(function*() {
- * // Assume we have a NetworkId instance
- * const instance = ... ;
- *   const result = yield* NetworkId.free(instance);
- *   console.log(result);
- * });
- *
  * @since 2.0.0
  * @category Methods
  */
-export const free = Effect.fn(
-  (instance: CML.NetworkId): Effect.Effect<void, NetworkIdError> =>
+export const free: (
+  instance: CML.NetworkId,
+) => Effect.Effect<void, NetworkIdError> = Effect.fn(
+  (instance: CML.NetworkId) =>
     Effect.try({
       try: () => instance.free(),
       catch: () =>
@@ -56,20 +46,6 @@ export const free = Effect.fn(
 /**
  * Unsafely calls instance.free without Effect wrapper
  *
- * @example
- * import { NetworkId } from "@lucid-evolution/experimental";
- *
- * // Assume we have a NetworkId instance
- * const instance = ... ;
- *
- * // Using try/catch for error handling
- * try {
- *   const result = NetworkId.freeUnsafe(instance);
- *   console.log(result);
- * } catch (error) {
- *   console.error(`NetworkId.freeUnsafe failed: ${error.message}`);
- * }
- *
  * @since 2.0.0
  * @category MethodsUnsafe
  */
@@ -79,23 +55,13 @@ export const freeUnsafe = (instance: CML.NetworkId): void =>
 /**
  * Method toCborBytes of NetworkId
  *
- * @example
- * import { NetworkId } from "@lucid-evolution/experimental";
- * import { Effect } from "effect";
- *
- * // Using Effect for safe execution with error handling
- * Effect.gen(function*() {
- * // Assume we have a NetworkId instance
- * const instance = ... ;
- *   const result = yield* NetworkId.toCborBytes(instance);
- *   console.log(result);
- * });
- *
  * @since 2.0.0
  * @category Methods
  */
-export const toCborBytes = Effect.fn(
-  (instance: CML.NetworkId): Effect.Effect<Uint8Array, NetworkIdError> =>
+export const toCborBytes: (
+  instance: CML.NetworkId,
+) => Effect.Effect<Uint8Array, NetworkIdError> = Effect.fn(
+  (instance: CML.NetworkId) =>
     Effect.try({
       try: () => instance.to_cbor_bytes(),
       catch: () =>
@@ -108,20 +74,6 @@ export const toCborBytes = Effect.fn(
 /**
  * Unsafely calls instance.toCborBytes without Effect wrapper
  *
- * @example
- * import { NetworkId } from "@lucid-evolution/experimental";
- *
- * // Assume we have a NetworkId instance
- * const instance = ... ;
- *
- * // Using try/catch for error handling
- * try {
- *   const result = NetworkId.toCborBytesUnsafe(instance);
- *   console.log(result);
- * } catch (error) {
- *   console.error(`NetworkId.toCborBytesUnsafe failed: ${error.message}`);
- * }
- *
  * @since 2.0.0
  * @category MethodsUnsafe
  */
@@ -131,23 +83,13 @@ export const toCborBytesUnsafe = (instance: CML.NetworkId): Uint8Array =>
 /**
  * Method toCanonicalCborBytes of NetworkId
  *
- * @example
- * import { NetworkId } from "@lucid-evolution/experimental";
- * import { Effect } from "effect";
- *
- * // Using Effect for safe execution with error handling
- * Effect.gen(function*() {
- * // Assume we have a NetworkId instance
- * const instance = ... ;
- *   const result = yield* NetworkId.toCanonicalCborBytes(instance);
- *   console.log(result);
- * });
- *
  * @since 2.0.0
  * @category Methods
  */
-export const toCanonicalCborBytes = Effect.fn(
-  (instance: CML.NetworkId): Effect.Effect<Uint8Array, NetworkIdError> =>
+export const toCanonicalCborBytes: (
+  instance: CML.NetworkId,
+) => Effect.Effect<Uint8Array, NetworkIdError> = Effect.fn(
+  (instance: CML.NetworkId) =>
     Effect.try({
       try: () => instance.to_canonical_cbor_bytes(),
       catch: () =>
@@ -160,20 +102,6 @@ export const toCanonicalCborBytes = Effect.fn(
 /**
  * Unsafely calls instance.toCanonicalCborBytes without Effect wrapper
  *
- * @example
- * import { NetworkId } from "@lucid-evolution/experimental";
- *
- * // Assume we have a NetworkId instance
- * const instance = ... ;
- *
- * // Using try/catch for error handling
- * try {
- *   const result = NetworkId.toCanonicalCborBytesUnsafe(instance);
- *   console.log(result);
- * } catch (error) {
- *   console.error(`NetworkId.toCanonicalCborBytesUnsafe failed: ${error.message}`);
- * }
- *
  * @since 2.0.0
  * @category MethodsUnsafe
  */
@@ -184,21 +112,14 @@ export const toCanonicalCborBytesUnsafe = (
 /**
  * Static method fromCborBytes of NetworkId
  *
- * @example
- * import { NetworkId } from "@lucid-evolution/experimental";
- * import { Effect } from "effect";
- *
- * // Using Effect for safe execution with error handling
- * Effect.gen(function*() {
- *
- *   const result = yield* NetworkId.fromCborBytes( parameters );
- *   console.log(result);
- * });
- *
  * @since 2.0.0
  * @category Constructors
  */
-export const fromCborBytes = Effect.fn(function* (cborBytes: Uint8Array) {
+export const fromCborBytes: (
+  cborBytes: Uint8Array,
+) => Effect.Effect<CML.NetworkId, NetworkIdError> = Effect.fn(function* (
+  cborBytes: Uint8Array,
+) {
   return yield* Effect.try({
     try: () => CML.NetworkId.from_cbor_bytes(cborBytes),
     catch: () =>
@@ -211,45 +132,22 @@ export const fromCborBytes = Effect.fn(function* (cborBytes: Uint8Array) {
 /**
  * Unsafely calls NetworkId.fromCborBytes without Effect wrapper
  *
- * @example
- * import { NetworkId } from "@lucid-evolution/experimental";
- *
- *
- *
- * // Using try/catch for error handling
- * try {
- *   const result = NetworkId.fromCborBytesUnsafe( parameters );
- *   console.log(result);
- * } catch (error) {
- *   console.error(`NetworkId.fromCborBytesUnsafe failed: ${error.message}`);
- * }
- *
  * @since 2.0.0
  * @category ConstructorsUnsafe
  */
-export const fromCborBytesUnsafe = (cborBytes: Uint8Array) =>
+export const fromCborBytesUnsafe = (cborBytes: Uint8Array): CML.NetworkId =>
   Effect.runSync(fromCborBytes(cborBytes));
 
 /**
  * Method toCborHex of NetworkId
  *
- * @example
- * import { NetworkId } from "@lucid-evolution/experimental";
- * import { Effect } from "effect";
- *
- * // Using Effect for safe execution with error handling
- * Effect.gen(function*() {
- * // Assume we have a NetworkId instance
- * const instance = ... ;
- *   const result = yield* NetworkId.toCborHex(instance);
- *   console.log(result);
- * });
- *
  * @since 2.0.0
  * @category Methods
  */
-export const toCborHex = Effect.fn(
-  (instance: CML.NetworkId): Effect.Effect<string, NetworkIdError> =>
+export const toCborHex: (
+  instance: CML.NetworkId,
+) => Effect.Effect<string, NetworkIdError> = Effect.fn(
+  (instance: CML.NetworkId) =>
     Effect.try({
       try: () => instance.to_cbor_hex(),
       catch: () =>
@@ -262,20 +160,6 @@ export const toCborHex = Effect.fn(
 /**
  * Unsafely calls instance.toCborHex without Effect wrapper
  *
- * @example
- * import { NetworkId } from "@lucid-evolution/experimental";
- *
- * // Assume we have a NetworkId instance
- * const instance = ... ;
- *
- * // Using try/catch for error handling
- * try {
- *   const result = NetworkId.toCborHexUnsafe(instance);
- *   console.log(result);
- * } catch (error) {
- *   console.error(`NetworkId.toCborHexUnsafe failed: ${error.message}`);
- * }
- *
  * @since 2.0.0
  * @category MethodsUnsafe
  */
@@ -285,23 +169,13 @@ export const toCborHexUnsafe = (instance: CML.NetworkId): string =>
 /**
  * Method toCanonicalCborHex of NetworkId
  *
- * @example
- * import { NetworkId } from "@lucid-evolution/experimental";
- * import { Effect } from "effect";
- *
- * // Using Effect for safe execution with error handling
- * Effect.gen(function*() {
- * // Assume we have a NetworkId instance
- * const instance = ... ;
- *   const result = yield* NetworkId.toCanonicalCborHex(instance);
- *   console.log(result);
- * });
- *
  * @since 2.0.0
  * @category Methods
  */
-export const toCanonicalCborHex = Effect.fn(
-  (instance: CML.NetworkId): Effect.Effect<string, NetworkIdError> =>
+export const toCanonicalCborHex: (
+  instance: CML.NetworkId,
+) => Effect.Effect<string, NetworkIdError> = Effect.fn(
+  (instance: CML.NetworkId) =>
     Effect.try({
       try: () => instance.to_canonical_cbor_hex(),
       catch: () =>
@@ -314,20 +188,6 @@ export const toCanonicalCborHex = Effect.fn(
 /**
  * Unsafely calls instance.toCanonicalCborHex without Effect wrapper
  *
- * @example
- * import { NetworkId } from "@lucid-evolution/experimental";
- *
- * // Assume we have a NetworkId instance
- * const instance = ... ;
- *
- * // Using try/catch for error handling
- * try {
- *   const result = NetworkId.toCanonicalCborHexUnsafe(instance);
- *   console.log(result);
- * } catch (error) {
- *   console.error(`NetworkId.toCanonicalCborHexUnsafe failed: ${error.message}`);
- * }
- *
  * @since 2.0.0
  * @category MethodsUnsafe
  */
@@ -337,21 +197,14 @@ export const toCanonicalCborHexUnsafe = (instance: CML.NetworkId): string =>
 /**
  * Static method fromCborHex of NetworkId
  *
- * @example
- * import { NetworkId } from "@lucid-evolution/experimental";
- * import { Effect } from "effect";
- *
- * // Using Effect for safe execution with error handling
- * Effect.gen(function*() {
- *
- *   const result = yield* NetworkId.fromCborHex( parameters );
- *   console.log(result);
- * });
- *
  * @since 2.0.0
  * @category Constructors
  */
-export const fromCborHex = Effect.fn(function* (cborBytes: string) {
+export const fromCborHex: (
+  cborBytes: string,
+) => Effect.Effect<CML.NetworkId, NetworkIdError> = Effect.fn(function* (
+  cborBytes: string,
+) {
   return yield* Effect.try({
     try: () => CML.NetworkId.from_cbor_hex(cborBytes),
     catch: () =>
@@ -364,45 +217,22 @@ export const fromCborHex = Effect.fn(function* (cborBytes: string) {
 /**
  * Unsafely calls NetworkId.fromCborHex without Effect wrapper
  *
- * @example
- * import { NetworkId } from "@lucid-evolution/experimental";
- *
- *
- *
- * // Using try/catch for error handling
- * try {
- *   const result = NetworkId.fromCborHexUnsafe( parameters );
- *   console.log(result);
- * } catch (error) {
- *   console.error(`NetworkId.fromCborHexUnsafe failed: ${error.message}`);
- * }
- *
  * @since 2.0.0
  * @category ConstructorsUnsafe
  */
-export const fromCborHexUnsafe = (cborBytes: string) =>
+export const fromCborHexUnsafe = (cborBytes: string): CML.NetworkId =>
   Effect.runSync(fromCborHex(cborBytes));
 
 /**
  * Method toJson of NetworkId
  *
- * @example
- * import { NetworkId } from "@lucid-evolution/experimental";
- * import { Effect } from "effect";
- *
- * // Using Effect for safe execution with error handling
- * Effect.gen(function*() {
- * // Assume we have a NetworkId instance
- * const instance = ... ;
- *   const result = yield* NetworkId.toJson(instance);
- *   console.log(result);
- * });
- *
  * @since 2.0.0
  * @category Methods
  */
-export const toJson = Effect.fn(
-  (instance: CML.NetworkId): Effect.Effect<string, NetworkIdError> =>
+export const toJson: (
+  instance: CML.NetworkId,
+) => Effect.Effect<string, NetworkIdError> = Effect.fn(
+  (instance: CML.NetworkId) =>
     Effect.try({
       try: () => instance.to_json(),
       catch: () =>
@@ -415,20 +245,6 @@ export const toJson = Effect.fn(
 /**
  * Unsafely calls instance.toJson without Effect wrapper
  *
- * @example
- * import { NetworkId } from "@lucid-evolution/experimental";
- *
- * // Assume we have a NetworkId instance
- * const instance = ... ;
- *
- * // Using try/catch for error handling
- * try {
- *   const result = NetworkId.toJsonUnsafe(instance);
- *   console.log(result);
- * } catch (error) {
- *   console.error(`NetworkId.toJsonUnsafe failed: ${error.message}`);
- * }
- *
  * @since 2.0.0
  * @category MethodsUnsafe
  */
@@ -438,48 +254,23 @@ export const toJsonUnsafe = (instance: CML.NetworkId): string =>
 /**
  * Method toJsValue of NetworkId
  *
- * @example
- * import { NetworkId } from "@lucid-evolution/experimental";
- * import { Effect } from "effect";
- *
- * // Using Effect for safe execution with error handling
- * Effect.gen(function*() {
- * // Assume we have a NetworkId instance
- * const instance = ... ;
- *   const result = yield* NetworkId.toJsValue(instance);
- *   console.log(result);
- * });
- *
  * @since 2.0.0
  * @category Methods
  */
-export const toJsValue = Effect.fn(
-  (instance: CML.NetworkId): Effect.Effect<any, NetworkIdError> =>
-    Effect.try({
-      try: () => instance.to_js_value(),
-      catch: () =>
-        new NetworkIdError({
-          message: `NetworkId.toJsValue failed NetworkId is not valid for any conversion. `,
-        }),
-    }),
+export const toJsValue: (
+  instance: CML.NetworkId,
+) => Effect.Effect<any, NetworkIdError> = Effect.fn((instance: CML.NetworkId) =>
+  Effect.try({
+    try: () => instance.to_js_value(),
+    catch: () =>
+      new NetworkIdError({
+        message: `NetworkId.toJsValue failed NetworkId is not valid for any conversion. `,
+      }),
+  }),
 );
 
 /**
  * Unsafely calls instance.toJsValue without Effect wrapper
- *
- * @example
- * import { NetworkId } from "@lucid-evolution/experimental";
- *
- * // Assume we have a NetworkId instance
- * const instance = ... ;
- *
- * // Using try/catch for error handling
- * try {
- *   const result = NetworkId.toJsValueUnsafe(instance);
- *   console.log(result);
- * } catch (error) {
- *   console.error(`NetworkId.toJsValueUnsafe failed: ${error.message}`);
- * }
  *
  * @since 2.0.0
  * @category MethodsUnsafe
@@ -490,21 +281,14 @@ export const toJsValueUnsafe = (instance: CML.NetworkId): any =>
 /**
  * Static method fromJson of NetworkId
  *
- * @example
- * import { NetworkId } from "@lucid-evolution/experimental";
- * import { Effect } from "effect";
- *
- * // Using Effect for safe execution with error handling
- * Effect.gen(function*() {
- *
- *   const result = yield* NetworkId.fromJson( parameters );
- *   console.log(result);
- * });
- *
  * @since 2.0.0
  * @category Constructors
  */
-export const fromJson = Effect.fn(function* (json: string) {
+export const fromJson: (
+  json: string,
+) => Effect.Effect<CML.NetworkId, NetworkIdError> = Effect.fn(function* (
+  json: string,
+) {
   return yield* Effect.try({
     try: () => CML.NetworkId.from_json(json),
     catch: () =>
@@ -517,42 +301,23 @@ export const fromJson = Effect.fn(function* (json: string) {
 /**
  * Unsafely calls NetworkId.fromJson without Effect wrapper
  *
- * @example
- * import { NetworkId } from "@lucid-evolution/experimental";
- *
- *
- *
- * // Using try/catch for error handling
- * try {
- *   const result = NetworkId.fromJsonUnsafe( parameters );
- *   console.log(result);
- * } catch (error) {
- *   console.error(`NetworkId.fromJsonUnsafe failed: ${error.message}`);
- * }
- *
  * @since 2.0.0
  * @category ConstructorsUnsafe
  */
-export const fromJsonUnsafe = (json: string) => Effect.runSync(fromJson(json));
+export const fromJsonUnsafe = (json: string): CML.NetworkId =>
+  Effect.runSync(fromJson(json));
 
 /**
  * Static method _new of NetworkId
  *
- * @example
- * import { NetworkId } from "@lucid-evolution/experimental";
- * import { Effect } from "effect";
- *
- * // Using Effect for safe execution with error handling
- * Effect.gen(function*() {
- *
- *   const result = yield* NetworkId._new( parameters );
- *   console.log(result);
- * });
- *
  * @since 2.0.0
  * @category Constructors
  */
-export const _new = Effect.fn(function* (network: bigint) {
+export const _new: (
+  network: bigint,
+) => Effect.Effect<CML.NetworkId, NetworkIdError> = Effect.fn(function* (
+  network: bigint,
+) {
   return yield* Effect.try({
     try: () => CML.NetworkId.new(network),
     catch: () =>
@@ -565,140 +330,72 @@ export const _new = Effect.fn(function* (network: bigint) {
 /**
  * Unsafely calls NetworkId._new without Effect wrapper
  *
- * @example
- * import { NetworkId } from "@lucid-evolution/experimental";
- *
- *
- *
- * // Using try/catch for error handling
- * try {
- *   const result = NetworkId._newUnsafe( parameters );
- *   console.log(result);
- * } catch (error) {
- *   console.error(`NetworkId._newUnsafe failed: ${error.message}`);
- * }
- *
  * @since 2.0.0
  * @category ConstructorsUnsafe
  */
-export const _newUnsafe = (network: bigint) => Effect.runSync(_new(network));
+export const _newUnsafe = (network: bigint): CML.NetworkId =>
+  Effect.runSync(_new(network));
 
 /**
  * Static method mainnet of NetworkId
  *
- * @example
- * import { NetworkId } from "@lucid-evolution/experimental";
- * import { Effect } from "effect";
- *
- * // Using Effect for safe execution with error handling
- * Effect.gen(function*() {
- *
- *   const result = yield* NetworkId.mainnet();
- *   console.log(result);
- * });
- *
  * @since 2.0.0
  * @category Constructors
  */
-export const mainnet = Effect.fn(function* () {
-  return yield* Effect.try({
-    try: () => CML.NetworkId.mainnet(),
-    catch: () =>
-      new NetworkIdError({
-        message: `NetworkId.mainnet failed `,
-      }),
+export const mainnet: () => Effect.Effect<CML.NetworkId, NetworkIdError> =
+  Effect.fn(function* () {
+    return yield* Effect.try({
+      try: () => CML.NetworkId.mainnet(),
+      catch: () =>
+        new NetworkIdError({
+          message: `NetworkId.mainnet failed `,
+        }),
+    });
   });
-});
 
 /**
  * Unsafely calls NetworkId.mainnet without Effect wrapper
  *
- * @example
- * import { NetworkId } from "@lucid-evolution/experimental";
- *
- *
- *
- * // Using try/catch for error handling
- * try {
- *   const result = NetworkId.mainnetUnsafe();
- *   console.log(result);
- * } catch (error) {
- *   console.error(`NetworkId.mainnetUnsafe failed: ${error.message}`);
- * }
- *
  * @since 2.0.0
  * @category ConstructorsUnsafe
  */
-export const mainnetUnsafe = () => Effect.runSync(mainnet());
+export const mainnetUnsafe = (): CML.NetworkId => Effect.runSync(mainnet());
 
 /**
  * Static method testnet of NetworkId
  *
- * @example
- * import { NetworkId } from "@lucid-evolution/experimental";
- * import { Effect } from "effect";
- *
- * // Using Effect for safe execution with error handling
- * Effect.gen(function*() {
- *
- *   const result = yield* NetworkId.testnet();
- *   console.log(result);
- * });
- *
  * @since 2.0.0
  * @category Constructors
  */
-export const testnet = Effect.fn(function* () {
-  return yield* Effect.try({
-    try: () => CML.NetworkId.testnet(),
-    catch: () =>
-      new NetworkIdError({
-        message: `NetworkId.testnet failed `,
-      }),
+export const testnet: () => Effect.Effect<CML.NetworkId, NetworkIdError> =
+  Effect.fn(function* () {
+    return yield* Effect.try({
+      try: () => CML.NetworkId.testnet(),
+      catch: () =>
+        new NetworkIdError({
+          message: `NetworkId.testnet failed `,
+        }),
+    });
   });
-});
 
 /**
  * Unsafely calls NetworkId.testnet without Effect wrapper
  *
- * @example
- * import { NetworkId } from "@lucid-evolution/experimental";
- *
- *
- *
- * // Using try/catch for error handling
- * try {
- *   const result = NetworkId.testnetUnsafe();
- *   console.log(result);
- * } catch (error) {
- *   console.error(`NetworkId.testnetUnsafe failed: ${error.message}`);
- * }
- *
  * @since 2.0.0
  * @category ConstructorsUnsafe
  */
-export const testnetUnsafe = () => Effect.runSync(testnet());
+export const testnetUnsafe = (): CML.NetworkId => Effect.runSync(testnet());
 
 /**
  * Method network of NetworkId
  *
- * @example
- * import { NetworkId } from "@lucid-evolution/experimental";
- * import { Effect } from "effect";
- *
- * // Using Effect for safe execution with error handling
- * Effect.gen(function*() {
- * // Assume we have a NetworkId instance
- * const instance = ... ;
- *   const result = yield* NetworkId.network(instance);
- *   console.log(result);
- * });
- *
  * @since 2.0.0
  * @category Methods
  */
-export const network = Effect.fn(
-  (instance: CML.NetworkId): Effect.Effect<bigint, NetworkIdError> =>
+export const network: (
+  instance: CML.NetworkId,
+) => Effect.Effect<bigint, NetworkIdError> = Effect.fn(
+  (instance: CML.NetworkId) =>
     Effect.try({
       try: () => instance.network(),
       catch: () =>
@@ -710,20 +407,6 @@ export const network = Effect.fn(
 
 /**
  * Unsafely calls instance.network without Effect wrapper
- *
- * @example
- * import { NetworkId } from "@lucid-evolution/experimental";
- *
- * // Assume we have a NetworkId instance
- * const instance = ... ;
- *
- * // Using try/catch for error handling
- * try {
- *   const result = NetworkId.networkUnsafe(instance);
- *   console.log(result);
- * } catch (error) {
- *   console.error(`NetworkId.networkUnsafe failed: ${error.message}`);
- * }
  *
  * @since 2.0.0
  * @category MethodsUnsafe

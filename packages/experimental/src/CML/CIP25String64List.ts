@@ -29,25 +29,13 @@ export class CIP25String64ListError extends Data.TaggedError(
 /**
  * Method free of CIP25String64List
  *
- * @example
- * import { CIP25String64List } from "@lucid-evolution/experimental";
- * import { Effect } from "effect";
- *
- * // Using Effect for safe execution with error handling
- * Effect.gen(function*() {
- * // Assume we have a CIP25String64List instance
- * const instance = ... ;
- *   const result = yield* CIP25String64List.free(instance);
- *   console.log(result);
- * });
- *
  * @since 2.0.0
  * @category Methods
  */
-export const free = Effect.fn(
-  (
-    instance: CML.CIP25String64List,
-  ): Effect.Effect<void, CIP25String64ListError> =>
+export const free: (
+  instance: CML.CIP25String64List,
+) => Effect.Effect<void, CIP25String64ListError> = Effect.fn(
+  (instance: CML.CIP25String64List) =>
     Effect.try({
       try: () => instance.free(),
       catch: () =>
@@ -60,20 +48,6 @@ export const free = Effect.fn(
 /**
  * Unsafely calls instance.free without Effect wrapper
  *
- * @example
- * import { CIP25String64List } from "@lucid-evolution/experimental";
- *
- * // Assume we have a CIP25String64List instance
- * const instance = ... ;
- *
- * // Using try/catch for error handling
- * try {
- *   const result = CIP25String64List.freeUnsafe(instance);
- *   console.log(result);
- * } catch (error) {
- *   console.error(`CIP25String64List.freeUnsafe failed: ${error.message}`);
- * }
- *
  * @since 2.0.0
  * @category MethodsUnsafe
  */
@@ -83,21 +57,13 @@ export const freeUnsafe = (instance: CML.CIP25String64List): void =>
 /**
  * Static method _new of CIP25String64List
  *
- * @example
- * import { CIP25String64List } from "@lucid-evolution/experimental";
- * import { Effect } from "effect";
- *
- * // Using Effect for safe execution with error handling
- * Effect.gen(function*() {
- *
- *   const result = yield* CIP25String64List._new();
- *   console.log(result);
- * });
- *
  * @since 2.0.0
  * @category Constructors
  */
-export const _new = Effect.fn(function* () {
+export const _new: () => Effect.Effect<
+  CML.CIP25String64List,
+  CIP25String64ListError
+> = Effect.fn(function* () {
   return yield* Effect.try({
     try: () => CML.CIP25String64List.new(),
     catch: () =>
@@ -110,46 +76,21 @@ export const _new = Effect.fn(function* () {
 /**
  * Unsafely calls CIP25String64List._new without Effect wrapper
  *
- * @example
- * import { CIP25String64List } from "@lucid-evolution/experimental";
- *
- *
- *
- * // Using try/catch for error handling
- * try {
- *   const result = CIP25String64List._newUnsafe();
- *   console.log(result);
- * } catch (error) {
- *   console.error(`CIP25String64List._newUnsafe failed: ${error.message}`);
- * }
- *
  * @since 2.0.0
  * @category ConstructorsUnsafe
  */
-export const _newUnsafe = () => Effect.runSync(_new());
+export const _newUnsafe = (): CML.CIP25String64List => Effect.runSync(_new());
 
 /**
  * Method len of CIP25String64List
  *
- * @example
- * import { CIP25String64List } from "@lucid-evolution/experimental";
- * import { Effect } from "effect";
- *
- * // Using Effect for safe execution with error handling
- * Effect.gen(function*() {
- * // Assume we have a CIP25String64List instance
- * const instance = ... ;
- *   const result = yield* CIP25String64List.len(instance);
- *   console.log(result);
- * });
- *
  * @since 2.0.0
  * @category Methods
  */
-export const len = Effect.fn(
-  (
-    instance: CML.CIP25String64List,
-  ): Effect.Effect<number, CIP25String64ListError> =>
+export const len: (
+  instance: CML.CIP25String64List,
+) => Effect.Effect<number, CIP25String64ListError> = Effect.fn(
+  (instance: CML.CIP25String64List) =>
     Effect.try({
       try: () => instance.len(),
       catch: () =>
@@ -162,20 +103,6 @@ export const len = Effect.fn(
 /**
  * Unsafely calls instance.len without Effect wrapper
  *
- * @example
- * import { CIP25String64List } from "@lucid-evolution/experimental";
- *
- * // Assume we have a CIP25String64List instance
- * const instance = ... ;
- *
- * // Using try/catch for error handling
- * try {
- *   const result = CIP25String64List.lenUnsafe(instance);
- *   console.log(result);
- * } catch (error) {
- *   console.error(`CIP25String64List.lenUnsafe failed: ${error.message}`);
- * }
- *
  * @since 2.0.0
  * @category MethodsUnsafe
  */
@@ -185,26 +112,14 @@ export const lenUnsafe = (instance: CML.CIP25String64List): number =>
 /**
  * Method get of CIP25String64List
  *
- * @example
- * import { CIP25String64List } from "@lucid-evolution/experimental";
- * import { Effect } from "effect";
- *
- * // Using Effect for safe execution with error handling
- * Effect.gen(function*() {
- * // Assume we have a CIP25String64List instance
- * const instance = ... ;
- *   const result = yield* CIP25String64List.get(instance,  parameters );
- *   console.log(result);
- * });
- *
  * @since 2.0.0
  * @category Methods
  */
-export const get = Effect.fn(
-  (
-    instance: CML.CIP25String64List,
-    index: number,
-  ): Effect.Effect<CML.CIP25String64, CIP25String64ListError> =>
+export const get: (
+  instance: CML.CIP25String64List,
+  index: number,
+) => Effect.Effect<CML.CIP25String64, CIP25String64ListError> = Effect.fn(
+  (instance: CML.CIP25String64List, index: number) =>
     Effect.try({
       try: () => instance.get(index),
       catch: () =>
@@ -217,20 +132,6 @@ export const get = Effect.fn(
 /**
  * Unsafely calls instance.get without Effect wrapper
  *
- * @example
- * import { CIP25String64List } from "@lucid-evolution/experimental";
- *
- * // Assume we have a CIP25String64List instance
- * const instance = ... ;
- *
- * // Using try/catch for error handling
- * try {
- *   const result = CIP25String64List.getUnsafe(instance,  parameters );
- *   console.log(result);
- * } catch (error) {
- *   console.error(`CIP25String64List.getUnsafe failed: ${error.message}`);
- * }
- *
  * @since 2.0.0
  * @category MethodsUnsafe
  */
@@ -242,26 +143,14 @@ export const getUnsafe = (
 /**
  * Method add of CIP25String64List
  *
- * @example
- * import { CIP25String64List } from "@lucid-evolution/experimental";
- * import { Effect } from "effect";
- *
- * // Using Effect for safe execution with error handling
- * Effect.gen(function*() {
- * // Assume we have a CIP25String64List instance
- * const instance = ... ;
- *   const result = yield* CIP25String64List.add(instance,  parameters );
- *   console.log(result);
- * });
- *
  * @since 2.0.0
  * @category Methods
  */
-export const add = Effect.fn(
-  (
-    instance: CML.CIP25String64List,
-    elem: CML.CIP25String64,
-  ): Effect.Effect<void, CIP25String64ListError> =>
+export const add: (
+  instance: CML.CIP25String64List,
+  elem: CML.CIP25String64,
+) => Effect.Effect<void, CIP25String64ListError> = Effect.fn(
+  (instance: CML.CIP25String64List, elem: CML.CIP25String64) =>
     Effect.try({
       try: () => instance.add(elem),
       catch: () =>
@@ -273,20 +162,6 @@ export const add = Effect.fn(
 
 /**
  * Unsafely calls instance.add without Effect wrapper
- *
- * @example
- * import { CIP25String64List } from "@lucid-evolution/experimental";
- *
- * // Assume we have a CIP25String64List instance
- * const instance = ... ;
- *
- * // Using try/catch for error handling
- * try {
- *   const result = CIP25String64List.addUnsafe(instance,  parameters );
- *   console.log(result);
- * } catch (error) {
- *   console.error(`CIP25String64List.addUnsafe failed: ${error.message}`);
- * }
  *
  * @since 2.0.0
  * @category MethodsUnsafe

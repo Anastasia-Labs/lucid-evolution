@@ -19,20 +19,14 @@ export class GetDepositError extends Data.TaggedError("GetDepositError")<{
 /**
  * Wrapper for the get_deposit function
  *
- * @example
- * import { getDeposit } from "@lucid-evolution/experimental/CML/functions";
- * import { Effect } from "effect";
- *
- * // Using Effect for safe execution with error handling
- * Effect.gen(function*() {
- *   const result = yield* getDeposit(TransactionBody instance ,  appropriate value ,  appropriate value );
- *   console.log(result);
- * });
- *
  * @since 2.0.0
  * @category Functions
  */
-export const getDeposit = Effect.fn(function* (
+export const getDeposit: (
+  txbody: CML.TransactionBody,
+  poolDeposit: bigint,
+  keyDeposit: bigint,
+) => Effect.Effect<bigint, GetDepositError> = Effect.fn(function* (
   txbody: CML.TransactionBody,
   poolDeposit: bigint,
   keyDeposit: bigint,
@@ -48,16 +42,6 @@ export const getDeposit = Effect.fn(function* (
 
 /**
  * Unsafely calls get_deposit function without Effect wrapper
- *
- * @example
- * import { getDepositUnsafe } from "@lucid-evolution/experimental/CML/functions";
- *
- * try {
- *   const result = getDepositUnsafe(TransactionBody instance ,  appropriate value ,  appropriate value );
- *   console.log(result);
- * } catch (error) {
- *   console.error(`getDepositUnsafe failed: ${error.message}`);
- * }
  *
  * @since 2.0.0
  * @category FunctionsUnsafe

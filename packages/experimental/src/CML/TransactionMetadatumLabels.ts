@@ -29,25 +29,13 @@ export class TransactionMetadatumLabelsError extends Data.TaggedError(
 /**
  * Method free of TransactionMetadatumLabels
  *
- * @example
- * import { TransactionMetadatumLabels } from "@lucid-evolution/experimental";
- * import { Effect } from "effect";
- *
- * // Using Effect for safe execution with error handling
- * Effect.gen(function*() {
- * // Assume we have a TransactionMetadatumLabels instance
- * const instance = ... ;
- *   const result = yield* TransactionMetadatumLabels.free(instance);
- *   console.log(result);
- * });
- *
  * @since 2.0.0
  * @category Methods
  */
-export const free = Effect.fn(
-  (
-    instance: CML.TransactionMetadatumLabels,
-  ): Effect.Effect<void, TransactionMetadatumLabelsError> =>
+export const free: (
+  instance: CML.TransactionMetadatumLabels,
+) => Effect.Effect<void, TransactionMetadatumLabelsError> = Effect.fn(
+  (instance: CML.TransactionMetadatumLabels) =>
     Effect.try({
       try: () => instance.free(),
       catch: () =>
@@ -60,20 +48,6 @@ export const free = Effect.fn(
 /**
  * Unsafely calls instance.free without Effect wrapper
  *
- * @example
- * import { TransactionMetadatumLabels } from "@lucid-evolution/experimental";
- *
- * // Assume we have a TransactionMetadatumLabels instance
- * const instance = ... ;
- *
- * // Using try/catch for error handling
- * try {
- *   const result = TransactionMetadatumLabels.freeUnsafe(instance);
- *   console.log(result);
- * } catch (error) {
- *   console.error(`TransactionMetadatumLabels.freeUnsafe failed: ${error.message}`);
- * }
- *
  * @since 2.0.0
  * @category MethodsUnsafe
  */
@@ -83,21 +57,13 @@ export const freeUnsafe = (instance: CML.TransactionMetadatumLabels): void =>
 /**
  * Static method _new of TransactionMetadatumLabels
  *
- * @example
- * import { TransactionMetadatumLabels } from "@lucid-evolution/experimental";
- * import { Effect } from "effect";
- *
- * // Using Effect for safe execution with error handling
- * Effect.gen(function*() {
- *
- *   const result = yield* TransactionMetadatumLabels._new();
- *   console.log(result);
- * });
- *
  * @since 2.0.0
  * @category Constructors
  */
-export const _new = Effect.fn(function* () {
+export const _new: () => Effect.Effect<
+  CML.TransactionMetadatumLabels,
+  TransactionMetadatumLabelsError
+> = Effect.fn(function* () {
   return yield* Effect.try({
     try: () => CML.TransactionMetadatumLabels.new(),
     catch: () =>
@@ -110,46 +76,22 @@ export const _new = Effect.fn(function* () {
 /**
  * Unsafely calls TransactionMetadatumLabels._new without Effect wrapper
  *
- * @example
- * import { TransactionMetadatumLabels } from "@lucid-evolution/experimental";
- *
- *
- *
- * // Using try/catch for error handling
- * try {
- *   const result = TransactionMetadatumLabels._newUnsafe();
- *   console.log(result);
- * } catch (error) {
- *   console.error(`TransactionMetadatumLabels._newUnsafe failed: ${error.message}`);
- * }
- *
  * @since 2.0.0
  * @category ConstructorsUnsafe
  */
-export const _newUnsafe = () => Effect.runSync(_new());
+export const _newUnsafe = (): CML.TransactionMetadatumLabels =>
+  Effect.runSync(_new());
 
 /**
  * Method len of TransactionMetadatumLabels
  *
- * @example
- * import { TransactionMetadatumLabels } from "@lucid-evolution/experimental";
- * import { Effect } from "effect";
- *
- * // Using Effect for safe execution with error handling
- * Effect.gen(function*() {
- * // Assume we have a TransactionMetadatumLabels instance
- * const instance = ... ;
- *   const result = yield* TransactionMetadatumLabels.len(instance);
- *   console.log(result);
- * });
- *
  * @since 2.0.0
  * @category Methods
  */
-export const len = Effect.fn(
-  (
-    instance: CML.TransactionMetadatumLabels,
-  ): Effect.Effect<number, TransactionMetadatumLabelsError> =>
+export const len: (
+  instance: CML.TransactionMetadatumLabels,
+) => Effect.Effect<number, TransactionMetadatumLabelsError> = Effect.fn(
+  (instance: CML.TransactionMetadatumLabels) =>
     Effect.try({
       try: () => instance.len(),
       catch: () =>
@@ -162,20 +104,6 @@ export const len = Effect.fn(
 /**
  * Unsafely calls instance.len without Effect wrapper
  *
- * @example
- * import { TransactionMetadatumLabels } from "@lucid-evolution/experimental";
- *
- * // Assume we have a TransactionMetadatumLabels instance
- * const instance = ... ;
- *
- * // Using try/catch for error handling
- * try {
- *   const result = TransactionMetadatumLabels.lenUnsafe(instance);
- *   console.log(result);
- * } catch (error) {
- *   console.error(`TransactionMetadatumLabels.lenUnsafe failed: ${error.message}`);
- * }
- *
  * @since 2.0.0
  * @category MethodsUnsafe
  */
@@ -185,26 +113,14 @@ export const lenUnsafe = (instance: CML.TransactionMetadatumLabels): number =>
 /**
  * Method get of TransactionMetadatumLabels
  *
- * @example
- * import { TransactionMetadatumLabels } from "@lucid-evolution/experimental";
- * import { Effect } from "effect";
- *
- * // Using Effect for safe execution with error handling
- * Effect.gen(function*() {
- * // Assume we have a TransactionMetadatumLabels instance
- * const instance = ... ;
- *   const result = yield* TransactionMetadatumLabels.get(instance,  parameters );
- *   console.log(result);
- * });
- *
  * @since 2.0.0
  * @category Methods
  */
-export const get = Effect.fn(
-  (
-    instance: CML.TransactionMetadatumLabels,
-    index: number,
-  ): Effect.Effect<bigint, TransactionMetadatumLabelsError> =>
+export const get: (
+  instance: CML.TransactionMetadatumLabels,
+  index: number,
+) => Effect.Effect<bigint, TransactionMetadatumLabelsError> = Effect.fn(
+  (instance: CML.TransactionMetadatumLabels, index: number) =>
     Effect.try({
       try: () => instance.get(index),
       catch: () =>
@@ -217,20 +133,6 @@ export const get = Effect.fn(
 /**
  * Unsafely calls instance.get without Effect wrapper
  *
- * @example
- * import { TransactionMetadatumLabels } from "@lucid-evolution/experimental";
- *
- * // Assume we have a TransactionMetadatumLabels instance
- * const instance = ... ;
- *
- * // Using try/catch for error handling
- * try {
- *   const result = TransactionMetadatumLabels.getUnsafe(instance,  parameters );
- *   console.log(result);
- * } catch (error) {
- *   console.error(`TransactionMetadatumLabels.getUnsafe failed: ${error.message}`);
- * }
- *
  * @since 2.0.0
  * @category MethodsUnsafe
  */
@@ -242,26 +144,14 @@ export const getUnsafe = (
 /**
  * Method add of TransactionMetadatumLabels
  *
- * @example
- * import { TransactionMetadatumLabels } from "@lucid-evolution/experimental";
- * import { Effect } from "effect";
- *
- * // Using Effect for safe execution with error handling
- * Effect.gen(function*() {
- * // Assume we have a TransactionMetadatumLabels instance
- * const instance = ... ;
- *   const result = yield* TransactionMetadatumLabels.add(instance,  parameters );
- *   console.log(result);
- * });
- *
  * @since 2.0.0
  * @category Methods
  */
-export const add = Effect.fn(
-  (
-    instance: CML.TransactionMetadatumLabels,
-    elem: bigint,
-  ): Effect.Effect<void, TransactionMetadatumLabelsError> =>
+export const add: (
+  instance: CML.TransactionMetadatumLabels,
+  elem: bigint,
+) => Effect.Effect<void, TransactionMetadatumLabelsError> = Effect.fn(
+  (instance: CML.TransactionMetadatumLabels, elem: bigint) =>
     Effect.try({
       try: () => instance.add(elem),
       catch: () =>
@@ -273,20 +163,6 @@ export const add = Effect.fn(
 
 /**
  * Unsafely calls instance.add without Effect wrapper
- *
- * @example
- * import { TransactionMetadatumLabels } from "@lucid-evolution/experimental";
- *
- * // Assume we have a TransactionMetadatumLabels instance
- * const instance = ... ;
- *
- * // Using try/catch for error handling
- * try {
- *   const result = TransactionMetadatumLabels.addUnsafe(instance,  parameters );
- *   console.log(result);
- * } catch (error) {
- *   console.error(`TransactionMetadatumLabels.addUnsafe failed: ${error.message}`);
- * }
  *
  * @since 2.0.0
  * @category MethodsUnsafe

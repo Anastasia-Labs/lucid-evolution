@@ -29,23 +29,13 @@ export class MapU64ToArrI64Error extends Data.TaggedError(
 /**
  * Method free of MapU64ToArrI64
  *
- * @example
- * import { MapU64ToArrI64 } from "@lucid-evolution/experimental";
- * import { Effect } from "effect";
- *
- * // Using Effect for safe execution with error handling
- * Effect.gen(function*() {
- * // Assume we have a MapU64ToArrI64 instance
- * const instance = ... ;
- *   const result = yield* MapU64ToArrI64.free(instance);
- *   console.log(result);
- * });
- *
  * @since 2.0.0
  * @category Methods
  */
-export const free = Effect.fn(
-  (instance: CML.MapU64ToArrI64): Effect.Effect<void, MapU64ToArrI64Error> =>
+export const free: (
+  instance: CML.MapU64ToArrI64,
+) => Effect.Effect<void, MapU64ToArrI64Error> = Effect.fn(
+  (instance: CML.MapU64ToArrI64) =>
     Effect.try({
       try: () => instance.free(),
       catch: () =>
@@ -58,20 +48,6 @@ export const free = Effect.fn(
 /**
  * Unsafely calls instance.free without Effect wrapper
  *
- * @example
- * import { MapU64ToArrI64 } from "@lucid-evolution/experimental";
- *
- * // Assume we have a MapU64ToArrI64 instance
- * const instance = ... ;
- *
- * // Using try/catch for error handling
- * try {
- *   const result = MapU64ToArrI64.freeUnsafe(instance);
- *   console.log(result);
- * } catch (error) {
- *   console.error(`MapU64ToArrI64.freeUnsafe failed: ${error.message}`);
- * }
- *
  * @since 2.0.0
  * @category MethodsUnsafe
  */
@@ -81,26 +57,14 @@ export const freeUnsafe = (instance: CML.MapU64ToArrI64): void =>
 /**
  * Method get of MapU64ToArrI64
  *
- * @example
- * import { MapU64ToArrI64 } from "@lucid-evolution/experimental";
- * import { Effect } from "effect";
- *
- * // Using Effect for safe execution with error handling
- * Effect.gen(function*() {
- * // Assume we have a MapU64ToArrI64 instance
- * const instance = ... ;
- *   const result = yield* MapU64ToArrI64.get(instance,  parameters );
- *   console.log(result);
- * });
- *
  * @since 2.0.0
  * @category Methods
  */
-export const get = Effect.fn(
-  (
-    instance: CML.MapU64ToArrI64,
-    key: bigint,
-  ): Effect.Effect<BigInt64Array | undefined, MapU64ToArrI64Error> =>
+export const get: (
+  instance: CML.MapU64ToArrI64,
+  key: bigint,
+) => Effect.Effect<BigInt64Array | undefined, MapU64ToArrI64Error> = Effect.fn(
+  (instance: CML.MapU64ToArrI64, key: bigint) =>
     Effect.try({
       try: () => instance.get(key),
       catch: () =>
@@ -113,20 +77,6 @@ export const get = Effect.fn(
 /**
  * Unsafely calls instance.get without Effect wrapper
  *
- * @example
- * import { MapU64ToArrI64 } from "@lucid-evolution/experimental";
- *
- * // Assume we have a MapU64ToArrI64 instance
- * const instance = ... ;
- *
- * // Using try/catch for error handling
- * try {
- *   const result = MapU64ToArrI64.getUnsafe(instance,  parameters );
- *   console.log(result);
- * } catch (error) {
- *   console.error(`MapU64ToArrI64.getUnsafe failed: ${error.message}`);
- * }
- *
  * @since 2.0.0
  * @category MethodsUnsafe
  */
@@ -138,27 +88,15 @@ export const getUnsafe = (
 /**
  * Method insert of MapU64ToArrI64
  *
- * @example
- * import { MapU64ToArrI64 } from "@lucid-evolution/experimental";
- * import { Effect } from "effect";
- *
- * // Using Effect for safe execution with error handling
- * Effect.gen(function*() {
- * // Assume we have a MapU64ToArrI64 instance
- * const instance = ... ;
- *   const result = yield* MapU64ToArrI64.insert(instance,  parameters );
- *   console.log(result);
- * });
- *
  * @since 2.0.0
  * @category Methods
  */
-export const insert = Effect.fn(
-  (
-    instance: CML.MapU64ToArrI64,
-    key: bigint,
-    value: BigInt64Array,
-  ): Effect.Effect<BigInt64Array | undefined, MapU64ToArrI64Error> =>
+export const insert: (
+  instance: CML.MapU64ToArrI64,
+  key: bigint,
+  value: BigInt64Array,
+) => Effect.Effect<BigInt64Array | undefined, MapU64ToArrI64Error> = Effect.fn(
+  (instance: CML.MapU64ToArrI64, key: bigint, value: BigInt64Array) =>
     Effect.try({
       try: () => instance.insert(key, value),
       catch: () =>
@@ -170,20 +108,6 @@ export const insert = Effect.fn(
 
 /**
  * Unsafely calls instance.insert without Effect wrapper
- *
- * @example
- * import { MapU64ToArrI64 } from "@lucid-evolution/experimental";
- *
- * // Assume we have a MapU64ToArrI64 instance
- * const instance = ... ;
- *
- * // Using try/catch for error handling
- * try {
- *   const result = MapU64ToArrI64.insertUnsafe(instance,  parameters );
- *   console.log(result);
- * } catch (error) {
- *   console.error(`MapU64ToArrI64.insertUnsafe failed: ${error.message}`);
- * }
  *
  * @since 2.0.0
  * @category MethodsUnsafe
@@ -197,21 +121,13 @@ export const insertUnsafe = (
 /**
  * Static method _new of MapU64ToArrI64
  *
- * @example
- * import { MapU64ToArrI64 } from "@lucid-evolution/experimental";
- * import { Effect } from "effect";
- *
- * // Using Effect for safe execution with error handling
- * Effect.gen(function*() {
- *
- *   const result = yield* MapU64ToArrI64._new();
- *   console.log(result);
- * });
- *
  * @since 2.0.0
  * @category Constructors
  */
-export const _new = Effect.fn(function* () {
+export const _new: () => Effect.Effect<
+  CML.MapU64ToArrI64,
+  MapU64ToArrI64Error
+> = Effect.fn(function* () {
   return yield* Effect.try({
     try: () => CML.MapU64ToArrI64.new(),
     catch: () =>
@@ -224,44 +140,21 @@ export const _new = Effect.fn(function* () {
 /**
  * Unsafely calls MapU64ToArrI64._new without Effect wrapper
  *
- * @example
- * import { MapU64ToArrI64 } from "@lucid-evolution/experimental";
- *
- *
- *
- * // Using try/catch for error handling
- * try {
- *   const result = MapU64ToArrI64._newUnsafe();
- *   console.log(result);
- * } catch (error) {
- *   console.error(`MapU64ToArrI64._newUnsafe failed: ${error.message}`);
- * }
- *
  * @since 2.0.0
  * @category ConstructorsUnsafe
  */
-export const _newUnsafe = () => Effect.runSync(_new());
+export const _newUnsafe = (): CML.MapU64ToArrI64 => Effect.runSync(_new());
 
 /**
  * Method len of MapU64ToArrI64
  *
- * @example
- * import { MapU64ToArrI64 } from "@lucid-evolution/experimental";
- * import { Effect } from "effect";
- *
- * // Using Effect for safe execution with error handling
- * Effect.gen(function*() {
- * // Assume we have a MapU64ToArrI64 instance
- * const instance = ... ;
- *   const result = yield* MapU64ToArrI64.len(instance);
- *   console.log(result);
- * });
- *
  * @since 2.0.0
  * @category Methods
  */
-export const len = Effect.fn(
-  (instance: CML.MapU64ToArrI64): Effect.Effect<number, MapU64ToArrI64Error> =>
+export const len: (
+  instance: CML.MapU64ToArrI64,
+) => Effect.Effect<number, MapU64ToArrI64Error> = Effect.fn(
+  (instance: CML.MapU64ToArrI64) =>
     Effect.try({
       try: () => instance.len(),
       catch: () =>
@@ -274,20 +167,6 @@ export const len = Effect.fn(
 /**
  * Unsafely calls instance.len without Effect wrapper
  *
- * @example
- * import { MapU64ToArrI64 } from "@lucid-evolution/experimental";
- *
- * // Assume we have a MapU64ToArrI64 instance
- * const instance = ... ;
- *
- * // Using try/catch for error handling
- * try {
- *   const result = MapU64ToArrI64.lenUnsafe(instance);
- *   console.log(result);
- * } catch (error) {
- *   console.error(`MapU64ToArrI64.lenUnsafe failed: ${error.message}`);
- * }
- *
  * @since 2.0.0
  * @category MethodsUnsafe
  */
@@ -297,23 +176,13 @@ export const lenUnsafe = (instance: CML.MapU64ToArrI64): number =>
 /**
  * Method isEmpty of MapU64ToArrI64
  *
- * @example
- * import { MapU64ToArrI64 } from "@lucid-evolution/experimental";
- * import { Effect } from "effect";
- *
- * // Using Effect for safe execution with error handling
- * Effect.gen(function*() {
- * // Assume we have a MapU64ToArrI64 instance
- * const instance = ... ;
- *   const result = yield* MapU64ToArrI64.isEmpty(instance);
- *   console.log(result);
- * });
- *
  * @since 2.0.0
  * @category Methods
  */
-export const isEmpty = Effect.fn(
-  (instance: CML.MapU64ToArrI64): Effect.Effect<boolean, MapU64ToArrI64Error> =>
+export const isEmpty: (
+  instance: CML.MapU64ToArrI64,
+) => Effect.Effect<boolean, MapU64ToArrI64Error> = Effect.fn(
+  (instance: CML.MapU64ToArrI64) =>
     Effect.try({
       try: () => instance.is_empty(),
       catch: () =>
@@ -326,20 +195,6 @@ export const isEmpty = Effect.fn(
 /**
  * Unsafely calls instance.isEmpty without Effect wrapper
  *
- * @example
- * import { MapU64ToArrI64 } from "@lucid-evolution/experimental";
- *
- * // Assume we have a MapU64ToArrI64 instance
- * const instance = ... ;
- *
- * // Using try/catch for error handling
- * try {
- *   const result = MapU64ToArrI64.isEmptyUnsafe(instance);
- *   console.log(result);
- * } catch (error) {
- *   console.error(`MapU64ToArrI64.isEmptyUnsafe failed: ${error.message}`);
- * }
- *
  * @since 2.0.0
  * @category MethodsUnsafe
  */
@@ -349,25 +204,13 @@ export const isEmptyUnsafe = (instance: CML.MapU64ToArrI64): boolean =>
 /**
  * Method keys of MapU64ToArrI64
  *
- * @example
- * import { MapU64ToArrI64 } from "@lucid-evolution/experimental";
- * import { Effect } from "effect";
- *
- * // Using Effect for safe execution with error handling
- * Effect.gen(function*() {
- * // Assume we have a MapU64ToArrI64 instance
- * const instance = ... ;
- *   const result = yield* MapU64ToArrI64.keys(instance);
- *   console.log(result);
- * });
- *
  * @since 2.0.0
  * @category Methods
  */
-export const keys = Effect.fn(
-  (
-    instance: CML.MapU64ToArrI64,
-  ): Effect.Effect<BigUint64Array, MapU64ToArrI64Error> =>
+export const keys: (
+  instance: CML.MapU64ToArrI64,
+) => Effect.Effect<BigUint64Array, MapU64ToArrI64Error> = Effect.fn(
+  (instance: CML.MapU64ToArrI64) =>
     Effect.try({
       try: () => instance.keys(),
       catch: () =>
@@ -379,20 +222,6 @@ export const keys = Effect.fn(
 
 /**
  * Unsafely calls instance.keys without Effect wrapper
- *
- * @example
- * import { MapU64ToArrI64 } from "@lucid-evolution/experimental";
- *
- * // Assume we have a MapU64ToArrI64 instance
- * const instance = ... ;
- *
- * // Using try/catch for error handling
- * try {
- *   const result = MapU64ToArrI64.keysUnsafe(instance);
- *   console.log(result);
- * } catch (error) {
- *   console.error(`MapU64ToArrI64.keysUnsafe failed: ${error.message}`);
- * }
  *
  * @since 2.0.0
  * @category MethodsUnsafe

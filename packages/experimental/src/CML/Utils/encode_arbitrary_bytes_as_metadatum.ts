@@ -21,22 +21,15 @@ export class EncodeArbitraryBytesAsMetadatumError extends Data.TaggedError(
 /**
  * Wrapper for the encode_arbitrary_bytes_as_metadatum function
  *
- * @example
- * import { encodeArbitraryBytesAsMetadatum } from "@lucid-evolution/experimental/CML/functions";
- * import { Effect } from "effect";
- *
- * // Using Effect for safe execution with error handling
- * Effect.gen(function*() {
- *   const result = yield* encodeArbitraryBytesAsMetadatum( appropriate value );
- *   console.log(result);
- * });
- *
  * @since 2.0.0
  * @category Functions
  */
-export const encodeArbitraryBytesAsMetadatum = Effect.fn(function* (
+export const encodeArbitraryBytesAsMetadatum: (
   bytes: Uint8Array,
-) {
+) => Effect.Effect<
+  CML.TransactionMetadatum,
+  EncodeArbitraryBytesAsMetadatumError
+> = Effect.fn(function* (bytes: Uint8Array) {
   return yield* Effect.try({
     try: () => CML.encode_arbitrary_bytes_as_metadatum(bytes),
     catch: () =>
@@ -48,16 +41,6 @@ export const encodeArbitraryBytesAsMetadatum = Effect.fn(function* (
 
 /**
  * Unsafely calls encode_arbitrary_bytes_as_metadatum function without Effect wrapper
- *
- * @example
- * import { encodeArbitraryBytesAsMetadatumUnsafe } from "@lucid-evolution/experimental/CML/functions";
- *
- * try {
- *   const result = encodeArbitraryBytesAsMetadatumUnsafe( appropriate value );
- *   console.log(result);
- * } catch (error) {
- *   console.error(`encodeArbitraryBytesAsMetadatumUnsafe failed: ${error.message}`);
- * }
  *
  * @since 2.0.0
  * @category FunctionsUnsafe

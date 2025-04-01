@@ -29,23 +29,13 @@ export class UpdateDrepCertError extends Data.TaggedError(
 /**
  * Method free of UpdateDrepCert
  *
- * @example
- * import { UpdateDrepCert } from "@lucid-evolution/experimental";
- * import { Effect } from "effect";
- *
- * // Using Effect for safe execution with error handling
- * Effect.gen(function*() {
- * // Assume we have a UpdateDrepCert instance
- * const instance = ... ;
- *   const result = yield* UpdateDrepCert.free(instance);
- *   console.log(result);
- * });
- *
  * @since 2.0.0
  * @category Methods
  */
-export const free = Effect.fn(
-  (instance: CML.UpdateDrepCert): Effect.Effect<void, UpdateDrepCertError> =>
+export const free: (
+  instance: CML.UpdateDrepCert,
+) => Effect.Effect<void, UpdateDrepCertError> = Effect.fn(
+  (instance: CML.UpdateDrepCert) =>
     Effect.try({
       try: () => instance.free(),
       catch: () =>
@@ -58,20 +48,6 @@ export const free = Effect.fn(
 /**
  * Unsafely calls instance.free without Effect wrapper
  *
- * @example
- * import { UpdateDrepCert } from "@lucid-evolution/experimental";
- *
- * // Assume we have a UpdateDrepCert instance
- * const instance = ... ;
- *
- * // Using try/catch for error handling
- * try {
- *   const result = UpdateDrepCert.freeUnsafe(instance);
- *   console.log(result);
- * } catch (error) {
- *   console.error(`UpdateDrepCert.freeUnsafe failed: ${error.message}`);
- * }
- *
  * @since 2.0.0
  * @category MethodsUnsafe
  */
@@ -81,25 +57,13 @@ export const freeUnsafe = (instance: CML.UpdateDrepCert): void =>
 /**
  * Method toCborBytes of UpdateDrepCert
  *
- * @example
- * import { UpdateDrepCert } from "@lucid-evolution/experimental";
- * import { Effect } from "effect";
- *
- * // Using Effect for safe execution with error handling
- * Effect.gen(function*() {
- * // Assume we have a UpdateDrepCert instance
- * const instance = ... ;
- *   const result = yield* UpdateDrepCert.toCborBytes(instance);
- *   console.log(result);
- * });
- *
  * @since 2.0.0
  * @category Methods
  */
-export const toCborBytes = Effect.fn(
-  (
-    instance: CML.UpdateDrepCert,
-  ): Effect.Effect<Uint8Array, UpdateDrepCertError> =>
+export const toCborBytes: (
+  instance: CML.UpdateDrepCert,
+) => Effect.Effect<Uint8Array, UpdateDrepCertError> = Effect.fn(
+  (instance: CML.UpdateDrepCert) =>
     Effect.try({
       try: () => instance.to_cbor_bytes(),
       catch: () =>
@@ -112,20 +76,6 @@ export const toCborBytes = Effect.fn(
 /**
  * Unsafely calls instance.toCborBytes without Effect wrapper
  *
- * @example
- * import { UpdateDrepCert } from "@lucid-evolution/experimental";
- *
- * // Assume we have a UpdateDrepCert instance
- * const instance = ... ;
- *
- * // Using try/catch for error handling
- * try {
- *   const result = UpdateDrepCert.toCborBytesUnsafe(instance);
- *   console.log(result);
- * } catch (error) {
- *   console.error(`UpdateDrepCert.toCborBytesUnsafe failed: ${error.message}`);
- * }
- *
  * @since 2.0.0
  * @category MethodsUnsafe
  */
@@ -135,25 +85,13 @@ export const toCborBytesUnsafe = (instance: CML.UpdateDrepCert): Uint8Array =>
 /**
  * Method toCanonicalCborBytes of UpdateDrepCert
  *
- * @example
- * import { UpdateDrepCert } from "@lucid-evolution/experimental";
- * import { Effect } from "effect";
- *
- * // Using Effect for safe execution with error handling
- * Effect.gen(function*() {
- * // Assume we have a UpdateDrepCert instance
- * const instance = ... ;
- *   const result = yield* UpdateDrepCert.toCanonicalCborBytes(instance);
- *   console.log(result);
- * });
- *
  * @since 2.0.0
  * @category Methods
  */
-export const toCanonicalCborBytes = Effect.fn(
-  (
-    instance: CML.UpdateDrepCert,
-  ): Effect.Effect<Uint8Array, UpdateDrepCertError> =>
+export const toCanonicalCborBytes: (
+  instance: CML.UpdateDrepCert,
+) => Effect.Effect<Uint8Array, UpdateDrepCertError> = Effect.fn(
+  (instance: CML.UpdateDrepCert) =>
     Effect.try({
       try: () => instance.to_canonical_cbor_bytes(),
       catch: () =>
@@ -166,20 +104,6 @@ export const toCanonicalCborBytes = Effect.fn(
 /**
  * Unsafely calls instance.toCanonicalCborBytes without Effect wrapper
  *
- * @example
- * import { UpdateDrepCert } from "@lucid-evolution/experimental";
- *
- * // Assume we have a UpdateDrepCert instance
- * const instance = ... ;
- *
- * // Using try/catch for error handling
- * try {
- *   const result = UpdateDrepCert.toCanonicalCborBytesUnsafe(instance);
- *   console.log(result);
- * } catch (error) {
- *   console.error(`UpdateDrepCert.toCanonicalCborBytesUnsafe failed: ${error.message}`);
- * }
- *
  * @since 2.0.0
  * @category MethodsUnsafe
  */
@@ -190,72 +114,43 @@ export const toCanonicalCborBytesUnsafe = (
 /**
  * Static method fromCborBytes of UpdateDrepCert
  *
- * @example
- * import { UpdateDrepCert } from "@lucid-evolution/experimental";
- * import { Effect } from "effect";
- *
- * // Using Effect for safe execution with error handling
- * Effect.gen(function*() {
- *
- *   const result = yield* UpdateDrepCert.fromCborBytes( parameters );
- *   console.log(result);
- * });
- *
  * @since 2.0.0
  * @category Constructors
  */
-export const fromCborBytes = Effect.fn(function* (cborBytes: Uint8Array) {
-  return yield* Effect.try({
-    try: () => CML.UpdateDrepCert.from_cbor_bytes(cborBytes),
-    catch: () =>
-      new UpdateDrepCertError({
-        message: `UpdateDrepCert.fromCborBytes failed with parameters: ${cborBytes}. Hint: Check byte length and encoding.`,
-      }),
-  });
-});
+export const fromCborBytes: (
+  cborBytes: Uint8Array,
+) => Effect.Effect<CML.UpdateDrepCert, UpdateDrepCertError> = Effect.fn(
+  function* (cborBytes: Uint8Array) {
+    return yield* Effect.try({
+      try: () => CML.UpdateDrepCert.from_cbor_bytes(cborBytes),
+      catch: () =>
+        new UpdateDrepCertError({
+          message: `UpdateDrepCert.fromCborBytes failed with parameters: ${cborBytes}. Hint: Check byte length and encoding.`,
+        }),
+    });
+  },
+);
 
 /**
  * Unsafely calls UpdateDrepCert.fromCborBytes without Effect wrapper
  *
- * @example
- * import { UpdateDrepCert } from "@lucid-evolution/experimental";
- *
- *
- *
- * // Using try/catch for error handling
- * try {
- *   const result = UpdateDrepCert.fromCborBytesUnsafe( parameters );
- *   console.log(result);
- * } catch (error) {
- *   console.error(`UpdateDrepCert.fromCborBytesUnsafe failed: ${error.message}`);
- * }
- *
  * @since 2.0.0
  * @category ConstructorsUnsafe
  */
-export const fromCborBytesUnsafe = (cborBytes: Uint8Array) =>
-  Effect.runSync(fromCborBytes(cborBytes));
+export const fromCborBytesUnsafe = (
+  cborBytes: Uint8Array,
+): CML.UpdateDrepCert => Effect.runSync(fromCborBytes(cborBytes));
 
 /**
  * Method toCborHex of UpdateDrepCert
  *
- * @example
- * import { UpdateDrepCert } from "@lucid-evolution/experimental";
- * import { Effect } from "effect";
- *
- * // Using Effect for safe execution with error handling
- * Effect.gen(function*() {
- * // Assume we have a UpdateDrepCert instance
- * const instance = ... ;
- *   const result = yield* UpdateDrepCert.toCborHex(instance);
- *   console.log(result);
- * });
- *
  * @since 2.0.0
  * @category Methods
  */
-export const toCborHex = Effect.fn(
-  (instance: CML.UpdateDrepCert): Effect.Effect<string, UpdateDrepCertError> =>
+export const toCborHex: (
+  instance: CML.UpdateDrepCert,
+) => Effect.Effect<string, UpdateDrepCertError> = Effect.fn(
+  (instance: CML.UpdateDrepCert) =>
     Effect.try({
       try: () => instance.to_cbor_hex(),
       catch: () =>
@@ -268,20 +163,6 @@ export const toCborHex = Effect.fn(
 /**
  * Unsafely calls instance.toCborHex without Effect wrapper
  *
- * @example
- * import { UpdateDrepCert } from "@lucid-evolution/experimental";
- *
- * // Assume we have a UpdateDrepCert instance
- * const instance = ... ;
- *
- * // Using try/catch for error handling
- * try {
- *   const result = UpdateDrepCert.toCborHexUnsafe(instance);
- *   console.log(result);
- * } catch (error) {
- *   console.error(`UpdateDrepCert.toCborHexUnsafe failed: ${error.message}`);
- * }
- *
  * @since 2.0.0
  * @category MethodsUnsafe
  */
@@ -291,23 +172,13 @@ export const toCborHexUnsafe = (instance: CML.UpdateDrepCert): string =>
 /**
  * Method toCanonicalCborHex of UpdateDrepCert
  *
- * @example
- * import { UpdateDrepCert } from "@lucid-evolution/experimental";
- * import { Effect } from "effect";
- *
- * // Using Effect for safe execution with error handling
- * Effect.gen(function*() {
- * // Assume we have a UpdateDrepCert instance
- * const instance = ... ;
- *   const result = yield* UpdateDrepCert.toCanonicalCborHex(instance);
- *   console.log(result);
- * });
- *
  * @since 2.0.0
  * @category Methods
  */
-export const toCanonicalCborHex = Effect.fn(
-  (instance: CML.UpdateDrepCert): Effect.Effect<string, UpdateDrepCertError> =>
+export const toCanonicalCborHex: (
+  instance: CML.UpdateDrepCert,
+) => Effect.Effect<string, UpdateDrepCertError> = Effect.fn(
+  (instance: CML.UpdateDrepCert) =>
     Effect.try({
       try: () => instance.to_canonical_cbor_hex(),
       catch: () =>
@@ -320,20 +191,6 @@ export const toCanonicalCborHex = Effect.fn(
 /**
  * Unsafely calls instance.toCanonicalCborHex without Effect wrapper
  *
- * @example
- * import { UpdateDrepCert } from "@lucid-evolution/experimental";
- *
- * // Assume we have a UpdateDrepCert instance
- * const instance = ... ;
- *
- * // Using try/catch for error handling
- * try {
- *   const result = UpdateDrepCert.toCanonicalCborHexUnsafe(instance);
- *   console.log(result);
- * } catch (error) {
- *   console.error(`UpdateDrepCert.toCanonicalCborHexUnsafe failed: ${error.message}`);
- * }
- *
  * @since 2.0.0
  * @category MethodsUnsafe
  */
@@ -344,72 +201,42 @@ export const toCanonicalCborHexUnsafe = (
 /**
  * Static method fromCborHex of UpdateDrepCert
  *
- * @example
- * import { UpdateDrepCert } from "@lucid-evolution/experimental";
- * import { Effect } from "effect";
- *
- * // Using Effect for safe execution with error handling
- * Effect.gen(function*() {
- *
- *   const result = yield* UpdateDrepCert.fromCborHex( parameters );
- *   console.log(result);
- * });
- *
  * @since 2.0.0
  * @category Constructors
  */
-export const fromCborHex = Effect.fn(function* (cborBytes: string) {
-  return yield* Effect.try({
-    try: () => CML.UpdateDrepCert.from_cbor_hex(cborBytes),
-    catch: () =>
-      new UpdateDrepCertError({
-        message: `UpdateDrepCert.fromCborHex failed with parameters: ${cborBytes}. Hint: Make sure it's a valid hex string representing CBOR data.`,
-      }),
-  });
-});
+export const fromCborHex: (
+  cborBytes: string,
+) => Effect.Effect<CML.UpdateDrepCert, UpdateDrepCertError> = Effect.fn(
+  function* (cborBytes: string) {
+    return yield* Effect.try({
+      try: () => CML.UpdateDrepCert.from_cbor_hex(cborBytes),
+      catch: () =>
+        new UpdateDrepCertError({
+          message: `UpdateDrepCert.fromCborHex failed with parameters: ${cborBytes}. Hint: Make sure it's a valid hex string representing CBOR data.`,
+        }),
+    });
+  },
+);
 
 /**
  * Unsafely calls UpdateDrepCert.fromCborHex without Effect wrapper
  *
- * @example
- * import { UpdateDrepCert } from "@lucid-evolution/experimental";
- *
- *
- *
- * // Using try/catch for error handling
- * try {
- *   const result = UpdateDrepCert.fromCborHexUnsafe( parameters );
- *   console.log(result);
- * } catch (error) {
- *   console.error(`UpdateDrepCert.fromCborHexUnsafe failed: ${error.message}`);
- * }
- *
  * @since 2.0.0
  * @category ConstructorsUnsafe
  */
-export const fromCborHexUnsafe = (cborBytes: string) =>
+export const fromCborHexUnsafe = (cborBytes: string): CML.UpdateDrepCert =>
   Effect.runSync(fromCborHex(cborBytes));
 
 /**
  * Method toJson of UpdateDrepCert
  *
- * @example
- * import { UpdateDrepCert } from "@lucid-evolution/experimental";
- * import { Effect } from "effect";
- *
- * // Using Effect for safe execution with error handling
- * Effect.gen(function*() {
- * // Assume we have a UpdateDrepCert instance
- * const instance = ... ;
- *   const result = yield* UpdateDrepCert.toJson(instance);
- *   console.log(result);
- * });
- *
  * @since 2.0.0
  * @category Methods
  */
-export const toJson = Effect.fn(
-  (instance: CML.UpdateDrepCert): Effect.Effect<string, UpdateDrepCertError> =>
+export const toJson: (
+  instance: CML.UpdateDrepCert,
+) => Effect.Effect<string, UpdateDrepCertError> = Effect.fn(
+  (instance: CML.UpdateDrepCert) =>
     Effect.try({
       try: () => instance.to_json(),
       catch: () =>
@@ -422,20 +249,6 @@ export const toJson = Effect.fn(
 /**
  * Unsafely calls instance.toJson without Effect wrapper
  *
- * @example
- * import { UpdateDrepCert } from "@lucid-evolution/experimental";
- *
- * // Assume we have a UpdateDrepCert instance
- * const instance = ... ;
- *
- * // Using try/catch for error handling
- * try {
- *   const result = UpdateDrepCert.toJsonUnsafe(instance);
- *   console.log(result);
- * } catch (error) {
- *   console.error(`UpdateDrepCert.toJsonUnsafe failed: ${error.message}`);
- * }
- *
  * @since 2.0.0
  * @category MethodsUnsafe
  */
@@ -445,23 +258,13 @@ export const toJsonUnsafe = (instance: CML.UpdateDrepCert): string =>
 /**
  * Method toJsValue of UpdateDrepCert
  *
- * @example
- * import { UpdateDrepCert } from "@lucid-evolution/experimental";
- * import { Effect } from "effect";
- *
- * // Using Effect for safe execution with error handling
- * Effect.gen(function*() {
- * // Assume we have a UpdateDrepCert instance
- * const instance = ... ;
- *   const result = yield* UpdateDrepCert.toJsValue(instance);
- *   console.log(result);
- * });
- *
  * @since 2.0.0
  * @category Methods
  */
-export const toJsValue = Effect.fn(
-  (instance: CML.UpdateDrepCert): Effect.Effect<any, UpdateDrepCertError> =>
+export const toJsValue: (
+  instance: CML.UpdateDrepCert,
+) => Effect.Effect<any, UpdateDrepCertError> = Effect.fn(
+  (instance: CML.UpdateDrepCert) =>
     Effect.try({
       try: () => instance.to_js_value(),
       catch: () =>
@@ -474,20 +277,6 @@ export const toJsValue = Effect.fn(
 /**
  * Unsafely calls instance.toJsValue without Effect wrapper
  *
- * @example
- * import { UpdateDrepCert } from "@lucid-evolution/experimental";
- *
- * // Assume we have a UpdateDrepCert instance
- * const instance = ... ;
- *
- * // Using try/catch for error handling
- * try {
- *   const result = UpdateDrepCert.toJsValueUnsafe(instance);
- *   console.log(result);
- * } catch (error) {
- *   console.error(`UpdateDrepCert.toJsValueUnsafe failed: ${error.message}`);
- * }
- *
  * @since 2.0.0
  * @category MethodsUnsafe
  */
@@ -497,73 +286,42 @@ export const toJsValueUnsafe = (instance: CML.UpdateDrepCert): any =>
 /**
  * Static method fromJson of UpdateDrepCert
  *
- * @example
- * import { UpdateDrepCert } from "@lucid-evolution/experimental";
- * import { Effect } from "effect";
- *
- * // Using Effect for safe execution with error handling
- * Effect.gen(function*() {
- *
- *   const result = yield* UpdateDrepCert.fromJson( parameters );
- *   console.log(result);
- * });
- *
  * @since 2.0.0
  * @category Constructors
  */
-export const fromJson = Effect.fn(function* (json: string) {
-  return yield* Effect.try({
-    try: () => CML.UpdateDrepCert.from_json(json),
-    catch: () =>
-      new UpdateDrepCertError({
-        message: `UpdateDrepCert.fromJson failed with parameters: ${json}. Hint: Validate your JSON structure.`,
-      }),
-  });
-});
+export const fromJson: (
+  json: string,
+) => Effect.Effect<CML.UpdateDrepCert, UpdateDrepCertError> = Effect.fn(
+  function* (json: string) {
+    return yield* Effect.try({
+      try: () => CML.UpdateDrepCert.from_json(json),
+      catch: () =>
+        new UpdateDrepCertError({
+          message: `UpdateDrepCert.fromJson failed with parameters: ${json}. Hint: Validate your JSON structure.`,
+        }),
+    });
+  },
+);
 
 /**
  * Unsafely calls UpdateDrepCert.fromJson without Effect wrapper
  *
- * @example
- * import { UpdateDrepCert } from "@lucid-evolution/experimental";
- *
- *
- *
- * // Using try/catch for error handling
- * try {
- *   const result = UpdateDrepCert.fromJsonUnsafe( parameters );
- *   console.log(result);
- * } catch (error) {
- *   console.error(`UpdateDrepCert.fromJsonUnsafe failed: ${error.message}`);
- * }
- *
  * @since 2.0.0
  * @category ConstructorsUnsafe
  */
-export const fromJsonUnsafe = (json: string) => Effect.runSync(fromJson(json));
+export const fromJsonUnsafe = (json: string): CML.UpdateDrepCert =>
+  Effect.runSync(fromJson(json));
 
 /**
  * Method drepCredential of UpdateDrepCert
  *
- * @example
- * import { UpdateDrepCert } from "@lucid-evolution/experimental";
- * import { Effect } from "effect";
- *
- * // Using Effect for safe execution with error handling
- * Effect.gen(function*() {
- * // Assume we have a UpdateDrepCert instance
- * const instance = ... ;
- *   const result = yield* UpdateDrepCert.drepCredential(instance);
- *   console.log(result);
- * });
- *
  * @since 2.0.0
  * @category Methods
  */
-export const drepCredential = Effect.fn(
-  (
-    instance: CML.UpdateDrepCert,
-  ): Effect.Effect<CML.Credential, UpdateDrepCertError> =>
+export const drepCredential: (
+  instance: CML.UpdateDrepCert,
+) => Effect.Effect<CML.Credential, UpdateDrepCertError> = Effect.fn(
+  (instance: CML.UpdateDrepCert) =>
     Effect.try({
       try: () => instance.drep_credential(),
       catch: () =>
@@ -576,20 +334,6 @@ export const drepCredential = Effect.fn(
 /**
  * Unsafely calls instance.drepCredential without Effect wrapper
  *
- * @example
- * import { UpdateDrepCert } from "@lucid-evolution/experimental";
- *
- * // Assume we have a UpdateDrepCert instance
- * const instance = ... ;
- *
- * // Using try/catch for error handling
- * try {
- *   const result = UpdateDrepCert.drepCredentialUnsafe(instance);
- *   console.log(result);
- * } catch (error) {
- *   console.error(`UpdateDrepCert.drepCredentialUnsafe failed: ${error.message}`);
- * }
- *
  * @since 2.0.0
  * @category MethodsUnsafe
  */
@@ -600,25 +344,13 @@ export const drepCredentialUnsafe = (
 /**
  * Method anchor of UpdateDrepCert
  *
- * @example
- * import { UpdateDrepCert } from "@lucid-evolution/experimental";
- * import { Effect } from "effect";
- *
- * // Using Effect for safe execution with error handling
- * Effect.gen(function*() {
- * // Assume we have a UpdateDrepCert instance
- * const instance = ... ;
- *   const result = yield* UpdateDrepCert.anchor(instance);
- *   console.log(result);
- * });
- *
  * @since 2.0.0
  * @category Methods
  */
-export const anchor = Effect.fn(
-  (
-    instance: CML.UpdateDrepCert,
-  ): Effect.Effect<CML.Anchor | undefined, UpdateDrepCertError> =>
+export const anchor: (
+  instance: CML.UpdateDrepCert,
+) => Effect.Effect<CML.Anchor | undefined, UpdateDrepCertError> = Effect.fn(
+  (instance: CML.UpdateDrepCert) =>
     Effect.try({
       try: () => instance.anchor(),
       catch: () =>
@@ -631,20 +363,6 @@ export const anchor = Effect.fn(
 /**
  * Unsafely calls instance.anchor without Effect wrapper
  *
- * @example
- * import { UpdateDrepCert } from "@lucid-evolution/experimental";
- *
- * // Assume we have a UpdateDrepCert instance
- * const instance = ... ;
- *
- * // Using try/catch for error handling
- * try {
- *   const result = UpdateDrepCert.anchorUnsafe(instance);
- *   console.log(result);
- * } catch (error) {
- *   console.error(`UpdateDrepCert.anchorUnsafe failed: ${error.message}`);
- * }
- *
  * @since 2.0.0
  * @category MethodsUnsafe
  */
@@ -655,48 +373,26 @@ export const anchorUnsafe = (
 /**
  * Static method _new of UpdateDrepCert
  *
- * @example
- * import { UpdateDrepCert } from "@lucid-evolution/experimental";
- * import { Effect } from "effect";
- *
- * // Using Effect for safe execution with error handling
- * Effect.gen(function*() {
- *
- *   const result = yield* UpdateDrepCert._new( parameters );
- *   console.log(result);
- * });
- *
  * @since 2.0.0
  * @category Constructors
  */
-export const _new = Effect.fn(function* (
+export const _new: (
   drepCredential: CML.Credential,
   anchor: CML.Anchor,
-) {
-  return yield* Effect.try({
-    try: () => CML.UpdateDrepCert.new(drepCredential, anchor),
-    catch: () =>
-      new UpdateDrepCertError({
-        message: `UpdateDrepCert._new failed with parameters: ${drepCredential} (Credential), ${anchor} (Anchor). `,
-      }),
-  });
-});
+) => Effect.Effect<CML.UpdateDrepCert, UpdateDrepCertError> = Effect.fn(
+  function* (drepCredential: CML.Credential, anchor: CML.Anchor) {
+    return yield* Effect.try({
+      try: () => CML.UpdateDrepCert.new(drepCredential, anchor),
+      catch: () =>
+        new UpdateDrepCertError({
+          message: `UpdateDrepCert._new failed with parameters: ${drepCredential} (Credential), ${anchor} (Anchor). `,
+        }),
+    });
+  },
+);
 
 /**
  * Unsafely calls UpdateDrepCert._new without Effect wrapper
- *
- * @example
- * import { UpdateDrepCert } from "@lucid-evolution/experimental";
- *
- *
- *
- * // Using try/catch for error handling
- * try {
- *   const result = UpdateDrepCert._newUnsafe( parameters );
- *   console.log(result);
- * } catch (error) {
- *   console.error(`UpdateDrepCert._newUnsafe failed: ${error.message}`);
- * }
  *
  * @since 2.0.0
  * @category ConstructorsUnsafe
@@ -704,4 +400,4 @@ export const _new = Effect.fn(function* (
 export const _newUnsafe = (
   drepCredential: CML.Credential,
   anchor: CML.Anchor,
-) => Effect.runSync(_new(drepCredential, anchor));
+): CML.UpdateDrepCert => Effect.runSync(_new(drepCredential, anchor));

@@ -29,25 +29,13 @@ export class LegacyDaedalusPrivateKeyError extends Data.TaggedError(
 /**
  * Method free of LegacyDaedalusPrivateKey
  *
- * @example
- * import { LegacyDaedalusPrivateKey } from "@lucid-evolution/experimental";
- * import { Effect } from "effect";
- *
- * // Using Effect for safe execution with error handling
- * Effect.gen(function*() {
- * // Assume we have a LegacyDaedalusPrivateKey instance
- * const instance = ... ;
- *   const result = yield* LegacyDaedalusPrivateKey.free(instance);
- *   console.log(result);
- * });
- *
  * @since 2.0.0
  * @category Methods
  */
-export const free = Effect.fn(
-  (
-    instance: CML.LegacyDaedalusPrivateKey,
-  ): Effect.Effect<void, LegacyDaedalusPrivateKeyError> =>
+export const free: (
+  instance: CML.LegacyDaedalusPrivateKey,
+) => Effect.Effect<void, LegacyDaedalusPrivateKeyError> = Effect.fn(
+  (instance: CML.LegacyDaedalusPrivateKey) =>
     Effect.try({
       try: () => instance.free(),
       catch: () =>
@@ -60,20 +48,6 @@ export const free = Effect.fn(
 /**
  * Unsafely calls instance.free without Effect wrapper
  *
- * @example
- * import { LegacyDaedalusPrivateKey } from "@lucid-evolution/experimental";
- *
- * // Assume we have a LegacyDaedalusPrivateKey instance
- * const instance = ... ;
- *
- * // Using try/catch for error handling
- * try {
- *   const result = LegacyDaedalusPrivateKey.freeUnsafe(instance);
- *   console.log(result);
- * } catch (error) {
- *   console.error(`LegacyDaedalusPrivateKey.freeUnsafe failed: ${error.message}`);
- * }
- *
  * @since 2.0.0
  * @category MethodsUnsafe
  */
@@ -83,25 +57,13 @@ export const freeUnsafe = (instance: CML.LegacyDaedalusPrivateKey): void =>
 /**
  * Method chaincode of LegacyDaedalusPrivateKey
  *
- * @example
- * import { LegacyDaedalusPrivateKey } from "@lucid-evolution/experimental";
- * import { Effect } from "effect";
- *
- * // Using Effect for safe execution with error handling
- * Effect.gen(function*() {
- * // Assume we have a LegacyDaedalusPrivateKey instance
- * const instance = ... ;
- *   const result = yield* LegacyDaedalusPrivateKey.chaincode(instance);
- *   console.log(result);
- * });
- *
  * @since 2.0.0
  * @category Methods
  */
-export const chaincode = Effect.fn(
-  (
-    instance: CML.LegacyDaedalusPrivateKey,
-  ): Effect.Effect<Uint8Array, LegacyDaedalusPrivateKeyError> =>
+export const chaincode: (
+  instance: CML.LegacyDaedalusPrivateKey,
+) => Effect.Effect<Uint8Array, LegacyDaedalusPrivateKeyError> = Effect.fn(
+  (instance: CML.LegacyDaedalusPrivateKey) =>
     Effect.try({
       try: () => instance.chaincode(),
       catch: () =>
@@ -113,20 +75,6 @@ export const chaincode = Effect.fn(
 
 /**
  * Unsafely calls instance.chaincode without Effect wrapper
- *
- * @example
- * import { LegacyDaedalusPrivateKey } from "@lucid-evolution/experimental";
- *
- * // Assume we have a LegacyDaedalusPrivateKey instance
- * const instance = ... ;
- *
- * // Using try/catch for error handling
- * try {
- *   const result = LegacyDaedalusPrivateKey.chaincodeUnsafe(instance);
- *   console.log(result);
- * } catch (error) {
- *   console.error(`LegacyDaedalusPrivateKey.chaincodeUnsafe failed: ${error.message}`);
- * }
  *
  * @since 2.0.0
  * @category MethodsUnsafe

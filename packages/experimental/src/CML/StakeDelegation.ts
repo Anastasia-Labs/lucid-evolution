@@ -29,23 +29,13 @@ export class StakeDelegationError extends Data.TaggedError(
 /**
  * Method free of StakeDelegation
  *
- * @example
- * import { StakeDelegation } from "@lucid-evolution/experimental";
- * import { Effect } from "effect";
- *
- * // Using Effect for safe execution with error handling
- * Effect.gen(function*() {
- * // Assume we have a StakeDelegation instance
- * const instance = ... ;
- *   const result = yield* StakeDelegation.free(instance);
- *   console.log(result);
- * });
- *
  * @since 2.0.0
  * @category Methods
  */
-export const free = Effect.fn(
-  (instance: CML.StakeDelegation): Effect.Effect<void, StakeDelegationError> =>
+export const free: (
+  instance: CML.StakeDelegation,
+) => Effect.Effect<void, StakeDelegationError> = Effect.fn(
+  (instance: CML.StakeDelegation) =>
     Effect.try({
       try: () => instance.free(),
       catch: () =>
@@ -58,20 +48,6 @@ export const free = Effect.fn(
 /**
  * Unsafely calls instance.free without Effect wrapper
  *
- * @example
- * import { StakeDelegation } from "@lucid-evolution/experimental";
- *
- * // Assume we have a StakeDelegation instance
- * const instance = ... ;
- *
- * // Using try/catch for error handling
- * try {
- *   const result = StakeDelegation.freeUnsafe(instance);
- *   console.log(result);
- * } catch (error) {
- *   console.error(`StakeDelegation.freeUnsafe failed: ${error.message}`);
- * }
- *
  * @since 2.0.0
  * @category MethodsUnsafe
  */
@@ -81,25 +57,13 @@ export const freeUnsafe = (instance: CML.StakeDelegation): void =>
 /**
  * Method toCborBytes of StakeDelegation
  *
- * @example
- * import { StakeDelegation } from "@lucid-evolution/experimental";
- * import { Effect } from "effect";
- *
- * // Using Effect for safe execution with error handling
- * Effect.gen(function*() {
- * // Assume we have a StakeDelegation instance
- * const instance = ... ;
- *   const result = yield* StakeDelegation.toCborBytes(instance);
- *   console.log(result);
- * });
- *
  * @since 2.0.0
  * @category Methods
  */
-export const toCborBytes = Effect.fn(
-  (
-    instance: CML.StakeDelegation,
-  ): Effect.Effect<Uint8Array, StakeDelegationError> =>
+export const toCborBytes: (
+  instance: CML.StakeDelegation,
+) => Effect.Effect<Uint8Array, StakeDelegationError> = Effect.fn(
+  (instance: CML.StakeDelegation) =>
     Effect.try({
       try: () => instance.to_cbor_bytes(),
       catch: () =>
@@ -112,20 +76,6 @@ export const toCborBytes = Effect.fn(
 /**
  * Unsafely calls instance.toCborBytes without Effect wrapper
  *
- * @example
- * import { StakeDelegation } from "@lucid-evolution/experimental";
- *
- * // Assume we have a StakeDelegation instance
- * const instance = ... ;
- *
- * // Using try/catch for error handling
- * try {
- *   const result = StakeDelegation.toCborBytesUnsafe(instance);
- *   console.log(result);
- * } catch (error) {
- *   console.error(`StakeDelegation.toCborBytesUnsafe failed: ${error.message}`);
- * }
- *
  * @since 2.0.0
  * @category MethodsUnsafe
  */
@@ -135,25 +85,13 @@ export const toCborBytesUnsafe = (instance: CML.StakeDelegation): Uint8Array =>
 /**
  * Method toCanonicalCborBytes of StakeDelegation
  *
- * @example
- * import { StakeDelegation } from "@lucid-evolution/experimental";
- * import { Effect } from "effect";
- *
- * // Using Effect for safe execution with error handling
- * Effect.gen(function*() {
- * // Assume we have a StakeDelegation instance
- * const instance = ... ;
- *   const result = yield* StakeDelegation.toCanonicalCborBytes(instance);
- *   console.log(result);
- * });
- *
  * @since 2.0.0
  * @category Methods
  */
-export const toCanonicalCborBytes = Effect.fn(
-  (
-    instance: CML.StakeDelegation,
-  ): Effect.Effect<Uint8Array, StakeDelegationError> =>
+export const toCanonicalCborBytes: (
+  instance: CML.StakeDelegation,
+) => Effect.Effect<Uint8Array, StakeDelegationError> = Effect.fn(
+  (instance: CML.StakeDelegation) =>
     Effect.try({
       try: () => instance.to_canonical_cbor_bytes(),
       catch: () =>
@@ -166,20 +104,6 @@ export const toCanonicalCborBytes = Effect.fn(
 /**
  * Unsafely calls instance.toCanonicalCborBytes without Effect wrapper
  *
- * @example
- * import { StakeDelegation } from "@lucid-evolution/experimental";
- *
- * // Assume we have a StakeDelegation instance
- * const instance = ... ;
- *
- * // Using try/catch for error handling
- * try {
- *   const result = StakeDelegation.toCanonicalCborBytesUnsafe(instance);
- *   console.log(result);
- * } catch (error) {
- *   console.error(`StakeDelegation.toCanonicalCborBytesUnsafe failed: ${error.message}`);
- * }
- *
  * @since 2.0.0
  * @category MethodsUnsafe
  */
@@ -190,74 +114,43 @@ export const toCanonicalCborBytesUnsafe = (
 /**
  * Static method fromCborBytes of StakeDelegation
  *
- * @example
- * import { StakeDelegation } from "@lucid-evolution/experimental";
- * import { Effect } from "effect";
- *
- * // Using Effect for safe execution with error handling
- * Effect.gen(function*() {
- *
- *   const result = yield* StakeDelegation.fromCborBytes( parameters );
- *   console.log(result);
- * });
- *
  * @since 2.0.0
  * @category Constructors
  */
-export const fromCborBytes = Effect.fn(function* (cborBytes: Uint8Array) {
-  return yield* Effect.try({
-    try: () => CML.StakeDelegation.from_cbor_bytes(cborBytes),
-    catch: () =>
-      new StakeDelegationError({
-        message: `StakeDelegation.fromCborBytes failed with parameters: ${cborBytes}. Hint: Check byte length and encoding.`,
-      }),
-  });
-});
+export const fromCborBytes: (
+  cborBytes: Uint8Array,
+) => Effect.Effect<CML.StakeDelegation, StakeDelegationError> = Effect.fn(
+  function* (cborBytes: Uint8Array) {
+    return yield* Effect.try({
+      try: () => CML.StakeDelegation.from_cbor_bytes(cborBytes),
+      catch: () =>
+        new StakeDelegationError({
+          message: `StakeDelegation.fromCborBytes failed with parameters: ${cborBytes}. Hint: Check byte length and encoding.`,
+        }),
+    });
+  },
+);
 
 /**
  * Unsafely calls StakeDelegation.fromCborBytes without Effect wrapper
  *
- * @example
- * import { StakeDelegation } from "@lucid-evolution/experimental";
- *
- *
- *
- * // Using try/catch for error handling
- * try {
- *   const result = StakeDelegation.fromCborBytesUnsafe( parameters );
- *   console.log(result);
- * } catch (error) {
- *   console.error(`StakeDelegation.fromCborBytesUnsafe failed: ${error.message}`);
- * }
- *
  * @since 2.0.0
  * @category ConstructorsUnsafe
  */
-export const fromCborBytesUnsafe = (cborBytes: Uint8Array) =>
-  Effect.runSync(fromCborBytes(cborBytes));
+export const fromCborBytesUnsafe = (
+  cborBytes: Uint8Array,
+): CML.StakeDelegation => Effect.runSync(fromCborBytes(cborBytes));
 
 /**
  * Method toCborHex of StakeDelegation
  *
- * @example
- * import { StakeDelegation } from "@lucid-evolution/experimental";
- * import { Effect } from "effect";
- *
- * // Using Effect for safe execution with error handling
- * Effect.gen(function*() {
- * // Assume we have a StakeDelegation instance
- * const instance = ... ;
- *   const result = yield* StakeDelegation.toCborHex(instance);
- *   console.log(result);
- * });
- *
  * @since 2.0.0
  * @category Methods
  */
-export const toCborHex = Effect.fn(
-  (
-    instance: CML.StakeDelegation,
-  ): Effect.Effect<string, StakeDelegationError> =>
+export const toCborHex: (
+  instance: CML.StakeDelegation,
+) => Effect.Effect<string, StakeDelegationError> = Effect.fn(
+  (instance: CML.StakeDelegation) =>
     Effect.try({
       try: () => instance.to_cbor_hex(),
       catch: () =>
@@ -270,20 +163,6 @@ export const toCborHex = Effect.fn(
 /**
  * Unsafely calls instance.toCborHex without Effect wrapper
  *
- * @example
- * import { StakeDelegation } from "@lucid-evolution/experimental";
- *
- * // Assume we have a StakeDelegation instance
- * const instance = ... ;
- *
- * // Using try/catch for error handling
- * try {
- *   const result = StakeDelegation.toCborHexUnsafe(instance);
- *   console.log(result);
- * } catch (error) {
- *   console.error(`StakeDelegation.toCborHexUnsafe failed: ${error.message}`);
- * }
- *
  * @since 2.0.0
  * @category MethodsUnsafe
  */
@@ -293,25 +172,13 @@ export const toCborHexUnsafe = (instance: CML.StakeDelegation): string =>
 /**
  * Method toCanonicalCborHex of StakeDelegation
  *
- * @example
- * import { StakeDelegation } from "@lucid-evolution/experimental";
- * import { Effect } from "effect";
- *
- * // Using Effect for safe execution with error handling
- * Effect.gen(function*() {
- * // Assume we have a StakeDelegation instance
- * const instance = ... ;
- *   const result = yield* StakeDelegation.toCanonicalCborHex(instance);
- *   console.log(result);
- * });
- *
  * @since 2.0.0
  * @category Methods
  */
-export const toCanonicalCborHex = Effect.fn(
-  (
-    instance: CML.StakeDelegation,
-  ): Effect.Effect<string, StakeDelegationError> =>
+export const toCanonicalCborHex: (
+  instance: CML.StakeDelegation,
+) => Effect.Effect<string, StakeDelegationError> = Effect.fn(
+  (instance: CML.StakeDelegation) =>
     Effect.try({
       try: () => instance.to_canonical_cbor_hex(),
       catch: () =>
@@ -324,20 +191,6 @@ export const toCanonicalCborHex = Effect.fn(
 /**
  * Unsafely calls instance.toCanonicalCborHex without Effect wrapper
  *
- * @example
- * import { StakeDelegation } from "@lucid-evolution/experimental";
- *
- * // Assume we have a StakeDelegation instance
- * const instance = ... ;
- *
- * // Using try/catch for error handling
- * try {
- *   const result = StakeDelegation.toCanonicalCborHexUnsafe(instance);
- *   console.log(result);
- * } catch (error) {
- *   console.error(`StakeDelegation.toCanonicalCborHexUnsafe failed: ${error.message}`);
- * }
- *
  * @since 2.0.0
  * @category MethodsUnsafe
  */
@@ -348,74 +201,42 @@ export const toCanonicalCborHexUnsafe = (
 /**
  * Static method fromCborHex of StakeDelegation
  *
- * @example
- * import { StakeDelegation } from "@lucid-evolution/experimental";
- * import { Effect } from "effect";
- *
- * // Using Effect for safe execution with error handling
- * Effect.gen(function*() {
- *
- *   const result = yield* StakeDelegation.fromCborHex( parameters );
- *   console.log(result);
- * });
- *
  * @since 2.0.0
  * @category Constructors
  */
-export const fromCborHex = Effect.fn(function* (cborBytes: string) {
-  return yield* Effect.try({
-    try: () => CML.StakeDelegation.from_cbor_hex(cborBytes),
-    catch: () =>
-      new StakeDelegationError({
-        message: `StakeDelegation.fromCborHex failed with parameters: ${cborBytes}. Hint: Make sure it's a valid hex string representing CBOR data.`,
-      }),
-  });
-});
+export const fromCborHex: (
+  cborBytes: string,
+) => Effect.Effect<CML.StakeDelegation, StakeDelegationError> = Effect.fn(
+  function* (cborBytes: string) {
+    return yield* Effect.try({
+      try: () => CML.StakeDelegation.from_cbor_hex(cborBytes),
+      catch: () =>
+        new StakeDelegationError({
+          message: `StakeDelegation.fromCborHex failed with parameters: ${cborBytes}. Hint: Make sure it's a valid hex string representing CBOR data.`,
+        }),
+    });
+  },
+);
 
 /**
  * Unsafely calls StakeDelegation.fromCborHex without Effect wrapper
  *
- * @example
- * import { StakeDelegation } from "@lucid-evolution/experimental";
- *
- *
- *
- * // Using try/catch for error handling
- * try {
- *   const result = StakeDelegation.fromCborHexUnsafe( parameters );
- *   console.log(result);
- * } catch (error) {
- *   console.error(`StakeDelegation.fromCborHexUnsafe failed: ${error.message}`);
- * }
- *
  * @since 2.0.0
  * @category ConstructorsUnsafe
  */
-export const fromCborHexUnsafe = (cborBytes: string) =>
+export const fromCborHexUnsafe = (cborBytes: string): CML.StakeDelegation =>
   Effect.runSync(fromCborHex(cborBytes));
 
 /**
  * Method toJson of StakeDelegation
  *
- * @example
- * import { StakeDelegation } from "@lucid-evolution/experimental";
- * import { Effect } from "effect";
- *
- * // Using Effect for safe execution with error handling
- * Effect.gen(function*() {
- * // Assume we have a StakeDelegation instance
- * const instance = ... ;
- *   const result = yield* StakeDelegation.toJson(instance);
- *   console.log(result);
- * });
- *
  * @since 2.0.0
  * @category Methods
  */
-export const toJson = Effect.fn(
-  (
-    instance: CML.StakeDelegation,
-  ): Effect.Effect<string, StakeDelegationError> =>
+export const toJson: (
+  instance: CML.StakeDelegation,
+) => Effect.Effect<string, StakeDelegationError> = Effect.fn(
+  (instance: CML.StakeDelegation) =>
     Effect.try({
       try: () => instance.to_json(),
       catch: () =>
@@ -428,20 +249,6 @@ export const toJson = Effect.fn(
 /**
  * Unsafely calls instance.toJson without Effect wrapper
  *
- * @example
- * import { StakeDelegation } from "@lucid-evolution/experimental";
- *
- * // Assume we have a StakeDelegation instance
- * const instance = ... ;
- *
- * // Using try/catch for error handling
- * try {
- *   const result = StakeDelegation.toJsonUnsafe(instance);
- *   console.log(result);
- * } catch (error) {
- *   console.error(`StakeDelegation.toJsonUnsafe failed: ${error.message}`);
- * }
- *
  * @since 2.0.0
  * @category MethodsUnsafe
  */
@@ -451,23 +258,13 @@ export const toJsonUnsafe = (instance: CML.StakeDelegation): string =>
 /**
  * Method toJsValue of StakeDelegation
  *
- * @example
- * import { StakeDelegation } from "@lucid-evolution/experimental";
- * import { Effect } from "effect";
- *
- * // Using Effect for safe execution with error handling
- * Effect.gen(function*() {
- * // Assume we have a StakeDelegation instance
- * const instance = ... ;
- *   const result = yield* StakeDelegation.toJsValue(instance);
- *   console.log(result);
- * });
- *
  * @since 2.0.0
  * @category Methods
  */
-export const toJsValue = Effect.fn(
-  (instance: CML.StakeDelegation): Effect.Effect<any, StakeDelegationError> =>
+export const toJsValue: (
+  instance: CML.StakeDelegation,
+) => Effect.Effect<any, StakeDelegationError> = Effect.fn(
+  (instance: CML.StakeDelegation) =>
     Effect.try({
       try: () => instance.to_js_value(),
       catch: () =>
@@ -480,20 +277,6 @@ export const toJsValue = Effect.fn(
 /**
  * Unsafely calls instance.toJsValue without Effect wrapper
  *
- * @example
- * import { StakeDelegation } from "@lucid-evolution/experimental";
- *
- * // Assume we have a StakeDelegation instance
- * const instance = ... ;
- *
- * // Using try/catch for error handling
- * try {
- *   const result = StakeDelegation.toJsValueUnsafe(instance);
- *   console.log(result);
- * } catch (error) {
- *   console.error(`StakeDelegation.toJsValueUnsafe failed: ${error.message}`);
- * }
- *
  * @since 2.0.0
  * @category MethodsUnsafe
  */
@@ -503,73 +286,42 @@ export const toJsValueUnsafe = (instance: CML.StakeDelegation): any =>
 /**
  * Static method fromJson of StakeDelegation
  *
- * @example
- * import { StakeDelegation } from "@lucid-evolution/experimental";
- * import { Effect } from "effect";
- *
- * // Using Effect for safe execution with error handling
- * Effect.gen(function*() {
- *
- *   const result = yield* StakeDelegation.fromJson( parameters );
- *   console.log(result);
- * });
- *
  * @since 2.0.0
  * @category Constructors
  */
-export const fromJson = Effect.fn(function* (json: string) {
-  return yield* Effect.try({
-    try: () => CML.StakeDelegation.from_json(json),
-    catch: () =>
-      new StakeDelegationError({
-        message: `StakeDelegation.fromJson failed with parameters: ${json}. Hint: Validate your JSON structure.`,
-      }),
-  });
-});
+export const fromJson: (
+  json: string,
+) => Effect.Effect<CML.StakeDelegation, StakeDelegationError> = Effect.fn(
+  function* (json: string) {
+    return yield* Effect.try({
+      try: () => CML.StakeDelegation.from_json(json),
+      catch: () =>
+        new StakeDelegationError({
+          message: `StakeDelegation.fromJson failed with parameters: ${json}. Hint: Validate your JSON structure.`,
+        }),
+    });
+  },
+);
 
 /**
  * Unsafely calls StakeDelegation.fromJson without Effect wrapper
  *
- * @example
- * import { StakeDelegation } from "@lucid-evolution/experimental";
- *
- *
- *
- * // Using try/catch for error handling
- * try {
- *   const result = StakeDelegation.fromJsonUnsafe( parameters );
- *   console.log(result);
- * } catch (error) {
- *   console.error(`StakeDelegation.fromJsonUnsafe failed: ${error.message}`);
- * }
- *
  * @since 2.0.0
  * @category ConstructorsUnsafe
  */
-export const fromJsonUnsafe = (json: string) => Effect.runSync(fromJson(json));
+export const fromJsonUnsafe = (json: string): CML.StakeDelegation =>
+  Effect.runSync(fromJson(json));
 
 /**
  * Method stakeCredential of StakeDelegation
  *
- * @example
- * import { StakeDelegation } from "@lucid-evolution/experimental";
- * import { Effect } from "effect";
- *
- * // Using Effect for safe execution with error handling
- * Effect.gen(function*() {
- * // Assume we have a StakeDelegation instance
- * const instance = ... ;
- *   const result = yield* StakeDelegation.stakeCredential(instance);
- *   console.log(result);
- * });
- *
  * @since 2.0.0
  * @category Methods
  */
-export const stakeCredential = Effect.fn(
-  (
-    instance: CML.StakeDelegation,
-  ): Effect.Effect<CML.Credential, StakeDelegationError> =>
+export const stakeCredential: (
+  instance: CML.StakeDelegation,
+) => Effect.Effect<CML.Credential, StakeDelegationError> = Effect.fn(
+  (instance: CML.StakeDelegation) =>
     Effect.try({
       try: () => instance.stake_credential(),
       catch: () =>
@@ -582,20 +334,6 @@ export const stakeCredential = Effect.fn(
 /**
  * Unsafely calls instance.stakeCredential without Effect wrapper
  *
- * @example
- * import { StakeDelegation } from "@lucid-evolution/experimental";
- *
- * // Assume we have a StakeDelegation instance
- * const instance = ... ;
- *
- * // Using try/catch for error handling
- * try {
- *   const result = StakeDelegation.stakeCredentialUnsafe(instance);
- *   console.log(result);
- * } catch (error) {
- *   console.error(`StakeDelegation.stakeCredentialUnsafe failed: ${error.message}`);
- * }
- *
  * @since 2.0.0
  * @category MethodsUnsafe
  */
@@ -606,25 +344,13 @@ export const stakeCredentialUnsafe = (
 /**
  * Method pool of StakeDelegation
  *
- * @example
- * import { StakeDelegation } from "@lucid-evolution/experimental";
- * import { Effect } from "effect";
- *
- * // Using Effect for safe execution with error handling
- * Effect.gen(function*() {
- * // Assume we have a StakeDelegation instance
- * const instance = ... ;
- *   const result = yield* StakeDelegation.pool(instance);
- *   console.log(result);
- * });
- *
  * @since 2.0.0
  * @category Methods
  */
-export const pool = Effect.fn(
-  (
-    instance: CML.StakeDelegation,
-  ): Effect.Effect<CML.Ed25519KeyHash, StakeDelegationError> =>
+export const pool: (
+  instance: CML.StakeDelegation,
+) => Effect.Effect<CML.Ed25519KeyHash, StakeDelegationError> = Effect.fn(
+  (instance: CML.StakeDelegation) =>
     Effect.try({
       try: () => instance.pool(),
       catch: () =>
@@ -637,20 +363,6 @@ export const pool = Effect.fn(
 /**
  * Unsafely calls instance.pool without Effect wrapper
  *
- * @example
- * import { StakeDelegation } from "@lucid-evolution/experimental";
- *
- * // Assume we have a StakeDelegation instance
- * const instance = ... ;
- *
- * // Using try/catch for error handling
- * try {
- *   const result = StakeDelegation.poolUnsafe(instance);
- *   console.log(result);
- * } catch (error) {
- *   console.error(`StakeDelegation.poolUnsafe failed: ${error.message}`);
- * }
- *
  * @since 2.0.0
  * @category MethodsUnsafe
  */
@@ -660,48 +372,26 @@ export const poolUnsafe = (instance: CML.StakeDelegation): CML.Ed25519KeyHash =>
 /**
  * Static method _new of StakeDelegation
  *
- * @example
- * import { StakeDelegation } from "@lucid-evolution/experimental";
- * import { Effect } from "effect";
- *
- * // Using Effect for safe execution with error handling
- * Effect.gen(function*() {
- *
- *   const result = yield* StakeDelegation._new( parameters );
- *   console.log(result);
- * });
- *
  * @since 2.0.0
  * @category Constructors
  */
-export const _new = Effect.fn(function* (
+export const _new: (
   stakeCredential: CML.Credential,
   pool: CML.Ed25519KeyHash,
-) {
-  return yield* Effect.try({
-    try: () => CML.StakeDelegation.new(stakeCredential, pool),
-    catch: () =>
-      new StakeDelegationError({
-        message: `StakeDelegation._new failed with parameters: ${stakeCredential} (Credential), ${pool} (Ed25519KeyHash). `,
-      }),
-  });
-});
+) => Effect.Effect<CML.StakeDelegation, StakeDelegationError> = Effect.fn(
+  function* (stakeCredential: CML.Credential, pool: CML.Ed25519KeyHash) {
+    return yield* Effect.try({
+      try: () => CML.StakeDelegation.new(stakeCredential, pool),
+      catch: () =>
+        new StakeDelegationError({
+          message: `StakeDelegation._new failed with parameters: ${stakeCredential} (Credential), ${pool} (Ed25519KeyHash). `,
+        }),
+    });
+  },
+);
 
 /**
  * Unsafely calls StakeDelegation._new without Effect wrapper
- *
- * @example
- * import { StakeDelegation } from "@lucid-evolution/experimental";
- *
- *
- *
- * // Using try/catch for error handling
- * try {
- *   const result = StakeDelegation._newUnsafe( parameters );
- *   console.log(result);
- * } catch (error) {
- *   console.error(`StakeDelegation._newUnsafe failed: ${error.message}`);
- * }
  *
  * @since 2.0.0
  * @category ConstructorsUnsafe
@@ -709,4 +399,4 @@ export const _new = Effect.fn(function* (
 export const _newUnsafe = (
   stakeCredential: CML.Credential,
   pool: CML.Ed25519KeyHash,
-) => Effect.runSync(_new(stakeCredential, pool));
+): CML.StakeDelegation => Effect.runSync(_new(stakeCredential, pool));

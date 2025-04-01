@@ -21,45 +21,30 @@ export class MakeIcarusBootstrapWitnessError extends Data.TaggedError(
 /**
  * Wrapper for the make_icarus_bootstrap_witness function
  *
- * @example
- * import { makeIcarusBootstrapWitness } from "@lucid-evolution/experimental/CML/functions";
- * import { Effect } from "effect";
- *
- * // Using Effect for safe execution with error handling
- * Effect.gen(function*() {
- *   const result = yield* makeIcarusBootstrapWitness(TransactionHash instance , ByronAddress instance , Bip32PrivateKey instance );
- *   console.log(result);
- * });
- *
  * @since 2.0.0
  * @category Functions
  */
-export const makeIcarusBootstrapWitness = Effect.fn(function* (
+export const makeIcarusBootstrapWitness: (
   txBodyHash: CML.TransactionHash,
   addr: CML.ByronAddress,
   key: CML.Bip32PrivateKey,
-) {
-  return yield* Effect.try({
-    try: () => CML.make_icarus_bootstrap_witness(txBodyHash, addr, key),
-    catch: () =>
-      new MakeIcarusBootstrapWitnessError({
-        message: `make_icarus_bootstrap_witness failed with parameters: txBodyHash (TransactionHash instance), addr (ByronAddress instance), key (Bip32PrivateKey instance).`,
-      }),
+) => Effect.Effect<CML.BootstrapWitness, MakeIcarusBootstrapWitnessError> =
+  Effect.fn(function* (
+    txBodyHash: CML.TransactionHash,
+    addr: CML.ByronAddress,
+    key: CML.Bip32PrivateKey,
+  ) {
+    return yield* Effect.try({
+      try: () => CML.make_icarus_bootstrap_witness(txBodyHash, addr, key),
+      catch: () =>
+        new MakeIcarusBootstrapWitnessError({
+          message: `make_icarus_bootstrap_witness failed with parameters: txBodyHash (TransactionHash instance), addr (ByronAddress instance), key (Bip32PrivateKey instance).`,
+        }),
+    });
   });
-});
 
 /**
  * Unsafely calls make_icarus_bootstrap_witness function without Effect wrapper
- *
- * @example
- * import { makeIcarusBootstrapWitnessUnsafe } from "@lucid-evolution/experimental/CML/functions";
- *
- * try {
- *   const result = makeIcarusBootstrapWitnessUnsafe(TransactionHash instance , ByronAddress instance , Bip32PrivateKey instance );
- *   console.log(result);
- * } catch (error) {
- *   console.error(`makeIcarusBootstrapWitnessUnsafe failed: ${error.message}`);
- * }
  *
  * @since 2.0.0
  * @category FunctionsUnsafe

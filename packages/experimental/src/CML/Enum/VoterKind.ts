@@ -14,11 +14,6 @@ export type VoterKind = CML.VoterKind;
 /**
  * ConstitutionalCommitteeHotKeyHash variant of the VoterKind enum
  *
- * @example
- * import { VoterKind } from "@lucid-evolution/experimental";
- *
- * const kind = VoterKind.ConstitutionalCommitteeHotKeyHash;
- *
  * @since 2.0.0
  * @category Variants
  */
@@ -27,11 +22,6 @@ export const ConstitutionalCommitteeHotKeyHash =
 
 /**
  * ConstitutionalCommitteeHotScriptHash variant of the VoterKind enum
- *
- * @example
- * import { VoterKind } from "@lucid-evolution/experimental";
- *
- * const kind = VoterKind.ConstitutionalCommitteeHotScriptHash;
  *
  * @since 2.0.0
  * @category Variants
@@ -42,11 +32,6 @@ export const ConstitutionalCommitteeHotScriptHash =
 /**
  * DRepKeyHash variant of the VoterKind enum
  *
- * @example
- * import { VoterKind } from "@lucid-evolution/experimental";
- *
- * const kind = VoterKind.DRepKeyHash;
- *
  * @since 2.0.0
  * @category Variants
  */
@@ -54,11 +39,6 @@ export const DRepKeyHash = CML.VoterKind.DRepKeyHash;
 
 /**
  * DRepScriptHash variant of the VoterKind enum
- *
- * @example
- * import { VoterKind } from "@lucid-evolution/experimental";
- *
- * const kind = VoterKind.DRepScriptHash;
  *
  * @since 2.0.0
  * @category Variants
@@ -68,11 +48,6 @@ export const DRepScriptHash = CML.VoterKind.DRepScriptHash;
 /**
  * StakingPoolKeyHash variant of the VoterKind enum
  *
- * @example
- * import { VoterKind } from "@lucid-evolution/experimental";
- *
- * const kind = VoterKind.StakingPoolKeyHash;
- *
  * @since 2.0.0
  * @category Variants
  */
@@ -80,12 +55,6 @@ export const StakingPoolKeyHash = CML.VoterKind.StakingPoolKeyHash;
 
 /**
  * Get all values of the VoterKind enum
- *
- * @example
- * import { VoterKind } from "@lucid-evolution/experimental";
- *
- * const allValues = VoterKind.values();
- * console.log(allValues);
  *
  * @since 2.0.0
  * @category Utils
@@ -100,12 +69,6 @@ export const values = (): Array<CML.VoterKind> => [
 
 /**
  * Convert VoterKind enum value to string
- *
- * @example
- * import { VoterKind } from "@lucid-evolution/experimental";
- *
- * const name = VoterKind.toString(CML.VoterKind.ConstitutionalCommitteeHotKeyHash);
- * console.log(name); // "ConstitutionalCommitteeHotKeyHash"
  *
  * @since 2.0.0
  * @category Utils
@@ -129,12 +92,6 @@ export const toString = (value: CML.VoterKind): string => {
 
 /**
  * Convert string to VoterKind enum value
- *
- * @example
- * import { VoterKind } from "@lucid-evolution/experimental";
- *
- * const value = VoterKind.fromString("ConstitutionalCommitteeHotKeyHash");
- * console.log(value); // Some(CML.VoterKind.ConstitutionalCommitteeHotKeyHash)
  *
  * @since 2.0.0
  * @category Utils

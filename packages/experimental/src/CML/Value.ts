@@ -27,23 +27,11 @@ export class ValueError extends Data.TaggedError("ValueError")<{
 /**
  * Method free of Value
  *
- * @example
- * import { Value } from "@lucid-evolution/experimental";
- * import { Effect } from "effect";
- *
- * // Using Effect for safe execution with error handling
- * Effect.gen(function*() {
- * // Assume we have a Value instance
- * const instance = ... ;
- *   const result = yield* Value.free(instance);
- *   console.log(result);
- * });
- *
  * @since 2.0.0
  * @category Methods
  */
-export const free = Effect.fn(
-  (instance: CML.Value): Effect.Effect<void, ValueError> =>
+export const free: (instance: CML.Value) => Effect.Effect<void, ValueError> =
+  Effect.fn((instance: CML.Value) =>
     Effect.try({
       try: () => instance.free(),
       catch: () =>
@@ -51,24 +39,10 @@ export const free = Effect.fn(
           message: `Value.free failed Hint: Check if you're calling free() more than once.`,
         }),
     }),
-);
+  );
 
 /**
  * Unsafely calls instance.free without Effect wrapper
- *
- * @example
- * import { Value } from "@lucid-evolution/experimental";
- *
- * // Assume we have a Value instance
- * const instance = ... ;
- *
- * // Using try/catch for error handling
- * try {
- *   const result = Value.freeUnsafe(instance);
- *   console.log(result);
- * } catch (error) {
- *   console.error(`Value.freeUnsafe failed: ${error.message}`);
- * }
  *
  * @since 2.0.0
  * @category MethodsUnsafe
@@ -79,48 +53,23 @@ export const freeUnsafe = (instance: CML.Value): void =>
 /**
  * Method toCborBytes of Value
  *
- * @example
- * import { Value } from "@lucid-evolution/experimental";
- * import { Effect } from "effect";
- *
- * // Using Effect for safe execution with error handling
- * Effect.gen(function*() {
- * // Assume we have a Value instance
- * const instance = ... ;
- *   const result = yield* Value.toCborBytes(instance);
- *   console.log(result);
- * });
- *
  * @since 2.0.0
  * @category Methods
  */
-export const toCborBytes = Effect.fn(
-  (instance: CML.Value): Effect.Effect<Uint8Array, ValueError> =>
-    Effect.try({
-      try: () => instance.to_cbor_bytes(),
-      catch: () =>
-        new ValueError({
-          message: `Value.toCborBytes failed Value is not valid for Uint8Array conversion. Hint: Check byte length and encoding.`,
-        }),
-    }),
+export const toCborBytes: (
+  instance: CML.Value,
+) => Effect.Effect<Uint8Array, ValueError> = Effect.fn((instance: CML.Value) =>
+  Effect.try({
+    try: () => instance.to_cbor_bytes(),
+    catch: () =>
+      new ValueError({
+        message: `Value.toCborBytes failed Value is not valid for Uint8Array conversion. Hint: Check byte length and encoding.`,
+      }),
+  }),
 );
 
 /**
  * Unsafely calls instance.toCborBytes without Effect wrapper
- *
- * @example
- * import { Value } from "@lucid-evolution/experimental";
- *
- * // Assume we have a Value instance
- * const instance = ... ;
- *
- * // Using try/catch for error handling
- * try {
- *   const result = Value.toCborBytesUnsafe(instance);
- *   console.log(result);
- * } catch (error) {
- *   console.error(`Value.toCborBytesUnsafe failed: ${error.message}`);
- * }
  *
  * @since 2.0.0
  * @category MethodsUnsafe
@@ -131,48 +80,23 @@ export const toCborBytesUnsafe = (instance: CML.Value): Uint8Array =>
 /**
  * Method toCanonicalCborBytes of Value
  *
- * @example
- * import { Value } from "@lucid-evolution/experimental";
- * import { Effect } from "effect";
- *
- * // Using Effect for safe execution with error handling
- * Effect.gen(function*() {
- * // Assume we have a Value instance
- * const instance = ... ;
- *   const result = yield* Value.toCanonicalCborBytes(instance);
- *   console.log(result);
- * });
- *
  * @since 2.0.0
  * @category Methods
  */
-export const toCanonicalCborBytes = Effect.fn(
-  (instance: CML.Value): Effect.Effect<Uint8Array, ValueError> =>
-    Effect.try({
-      try: () => instance.to_canonical_cbor_bytes(),
-      catch: () =>
-        new ValueError({
-          message: `Value.toCanonicalCborBytes failed Value is not valid for Uint8Array conversion. Hint: Check byte length and encoding.`,
-        }),
-    }),
+export const toCanonicalCborBytes: (
+  instance: CML.Value,
+) => Effect.Effect<Uint8Array, ValueError> = Effect.fn((instance: CML.Value) =>
+  Effect.try({
+    try: () => instance.to_canonical_cbor_bytes(),
+    catch: () =>
+      new ValueError({
+        message: `Value.toCanonicalCborBytes failed Value is not valid for Uint8Array conversion. Hint: Check byte length and encoding.`,
+      }),
+  }),
 );
 
 /**
  * Unsafely calls instance.toCanonicalCborBytes without Effect wrapper
- *
- * @example
- * import { Value } from "@lucid-evolution/experimental";
- *
- * // Assume we have a Value instance
- * const instance = ... ;
- *
- * // Using try/catch for error handling
- * try {
- *   const result = Value.toCanonicalCborBytesUnsafe(instance);
- *   console.log(result);
- * } catch (error) {
- *   console.error(`Value.toCanonicalCborBytesUnsafe failed: ${error.message}`);
- * }
  *
  * @since 2.0.0
  * @category MethodsUnsafe
@@ -183,21 +107,14 @@ export const toCanonicalCborBytesUnsafe = (instance: CML.Value): Uint8Array =>
 /**
  * Static method fromCborBytes of Value
  *
- * @example
- * import { Value } from "@lucid-evolution/experimental";
- * import { Effect } from "effect";
- *
- * // Using Effect for safe execution with error handling
- * Effect.gen(function*() {
- *
- *   const result = yield* Value.fromCborBytes( parameters );
- *   console.log(result);
- * });
- *
  * @since 2.0.0
  * @category Constructors
  */
-export const fromCborBytes = Effect.fn(function* (cborBytes: Uint8Array) {
+export const fromCborBytes: (
+  cborBytes: Uint8Array,
+) => Effect.Effect<CML.Value, ValueError> = Effect.fn(function* (
+  cborBytes: Uint8Array,
+) {
   return yield* Effect.try({
     try: () => CML.Value.from_cbor_bytes(cborBytes),
     catch: () =>
@@ -210,70 +127,32 @@ export const fromCborBytes = Effect.fn(function* (cborBytes: Uint8Array) {
 /**
  * Unsafely calls Value.fromCborBytes without Effect wrapper
  *
- * @example
- * import { Value } from "@lucid-evolution/experimental";
- *
- *
- *
- * // Using try/catch for error handling
- * try {
- *   const result = Value.fromCborBytesUnsafe( parameters );
- *   console.log(result);
- * } catch (error) {
- *   console.error(`Value.fromCborBytesUnsafe failed: ${error.message}`);
- * }
- *
  * @since 2.0.0
  * @category ConstructorsUnsafe
  */
-export const fromCborBytesUnsafe = (cborBytes: Uint8Array) =>
+export const fromCborBytesUnsafe = (cborBytes: Uint8Array): CML.Value =>
   Effect.runSync(fromCborBytes(cborBytes));
 
 /**
  * Method toCborHex of Value
  *
- * @example
- * import { Value } from "@lucid-evolution/experimental";
- * import { Effect } from "effect";
- *
- * // Using Effect for safe execution with error handling
- * Effect.gen(function*() {
- * // Assume we have a Value instance
- * const instance = ... ;
- *   const result = yield* Value.toCborHex(instance);
- *   console.log(result);
- * });
- *
  * @since 2.0.0
  * @category Methods
  */
-export const toCborHex = Effect.fn(
-  (instance: CML.Value): Effect.Effect<string, ValueError> =>
-    Effect.try({
-      try: () => instance.to_cbor_hex(),
-      catch: () =>
-        new ValueError({
-          message: `Value.toCborHex failed Value is not valid for string conversion. Hint: Make sure it's a valid hex string representing CBOR data.`,
-        }),
-    }),
+export const toCborHex: (
+  instance: CML.Value,
+) => Effect.Effect<string, ValueError> = Effect.fn((instance: CML.Value) =>
+  Effect.try({
+    try: () => instance.to_cbor_hex(),
+    catch: () =>
+      new ValueError({
+        message: `Value.toCborHex failed Value is not valid for string conversion. Hint: Make sure it's a valid hex string representing CBOR data.`,
+      }),
+  }),
 );
 
 /**
  * Unsafely calls instance.toCborHex without Effect wrapper
- *
- * @example
- * import { Value } from "@lucid-evolution/experimental";
- *
- * // Assume we have a Value instance
- * const instance = ... ;
- *
- * // Using try/catch for error handling
- * try {
- *   const result = Value.toCborHexUnsafe(instance);
- *   console.log(result);
- * } catch (error) {
- *   console.error(`Value.toCborHexUnsafe failed: ${error.message}`);
- * }
  *
  * @since 2.0.0
  * @category MethodsUnsafe
@@ -284,48 +163,23 @@ export const toCborHexUnsafe = (instance: CML.Value): string =>
 /**
  * Method toCanonicalCborHex of Value
  *
- * @example
- * import { Value } from "@lucid-evolution/experimental";
- * import { Effect } from "effect";
- *
- * // Using Effect for safe execution with error handling
- * Effect.gen(function*() {
- * // Assume we have a Value instance
- * const instance = ... ;
- *   const result = yield* Value.toCanonicalCborHex(instance);
- *   console.log(result);
- * });
- *
  * @since 2.0.0
  * @category Methods
  */
-export const toCanonicalCborHex = Effect.fn(
-  (instance: CML.Value): Effect.Effect<string, ValueError> =>
-    Effect.try({
-      try: () => instance.to_canonical_cbor_hex(),
-      catch: () =>
-        new ValueError({
-          message: `Value.toCanonicalCborHex failed Value is not valid for string conversion. Hint: Make sure it's a valid hex string representing CBOR data.`,
-        }),
-    }),
+export const toCanonicalCborHex: (
+  instance: CML.Value,
+) => Effect.Effect<string, ValueError> = Effect.fn((instance: CML.Value) =>
+  Effect.try({
+    try: () => instance.to_canonical_cbor_hex(),
+    catch: () =>
+      new ValueError({
+        message: `Value.toCanonicalCborHex failed Value is not valid for string conversion. Hint: Make sure it's a valid hex string representing CBOR data.`,
+      }),
+  }),
 );
 
 /**
  * Unsafely calls instance.toCanonicalCborHex without Effect wrapper
- *
- * @example
- * import { Value } from "@lucid-evolution/experimental";
- *
- * // Assume we have a Value instance
- * const instance = ... ;
- *
- * // Using try/catch for error handling
- * try {
- *   const result = Value.toCanonicalCborHexUnsafe(instance);
- *   console.log(result);
- * } catch (error) {
- *   console.error(`Value.toCanonicalCborHexUnsafe failed: ${error.message}`);
- * }
  *
  * @since 2.0.0
  * @category MethodsUnsafe
@@ -336,21 +190,14 @@ export const toCanonicalCborHexUnsafe = (instance: CML.Value): string =>
 /**
  * Static method fromCborHex of Value
  *
- * @example
- * import { Value } from "@lucid-evolution/experimental";
- * import { Effect } from "effect";
- *
- * // Using Effect for safe execution with error handling
- * Effect.gen(function*() {
- *
- *   const result = yield* Value.fromCborHex( parameters );
- *   console.log(result);
- * });
- *
  * @since 2.0.0
  * @category Constructors
  */
-export const fromCborHex = Effect.fn(function* (cborBytes: string) {
+export const fromCborHex: (
+  cborBytes: string,
+) => Effect.Effect<CML.Value, ValueError> = Effect.fn(function* (
+  cborBytes: string,
+) {
   return yield* Effect.try({
     try: () => CML.Value.from_cbor_hex(cborBytes),
     catch: () =>
@@ -363,70 +210,32 @@ export const fromCborHex = Effect.fn(function* (cborBytes: string) {
 /**
  * Unsafely calls Value.fromCborHex without Effect wrapper
  *
- * @example
- * import { Value } from "@lucid-evolution/experimental";
- *
- *
- *
- * // Using try/catch for error handling
- * try {
- *   const result = Value.fromCborHexUnsafe( parameters );
- *   console.log(result);
- * } catch (error) {
- *   console.error(`Value.fromCborHexUnsafe failed: ${error.message}`);
- * }
- *
  * @since 2.0.0
  * @category ConstructorsUnsafe
  */
-export const fromCborHexUnsafe = (cborBytes: string) =>
+export const fromCborHexUnsafe = (cborBytes: string): CML.Value =>
   Effect.runSync(fromCborHex(cborBytes));
 
 /**
  * Method toJson of Value
  *
- * @example
- * import { Value } from "@lucid-evolution/experimental";
- * import { Effect } from "effect";
- *
- * // Using Effect for safe execution with error handling
- * Effect.gen(function*() {
- * // Assume we have a Value instance
- * const instance = ... ;
- *   const result = yield* Value.toJson(instance);
- *   console.log(result);
- * });
- *
  * @since 2.0.0
  * @category Methods
  */
-export const toJson = Effect.fn(
-  (instance: CML.Value): Effect.Effect<string, ValueError> =>
-    Effect.try({
-      try: () => instance.to_json(),
-      catch: () =>
-        new ValueError({
-          message: `Value.toJson failed Value is not valid for string conversion. Hint: Validate your JSON structure.`,
-        }),
-    }),
+export const toJson: (
+  instance: CML.Value,
+) => Effect.Effect<string, ValueError> = Effect.fn((instance: CML.Value) =>
+  Effect.try({
+    try: () => instance.to_json(),
+    catch: () =>
+      new ValueError({
+        message: `Value.toJson failed Value is not valid for string conversion. Hint: Validate your JSON structure.`,
+      }),
+  }),
 );
 
 /**
  * Unsafely calls instance.toJson without Effect wrapper
- *
- * @example
- * import { Value } from "@lucid-evolution/experimental";
- *
- * // Assume we have a Value instance
- * const instance = ... ;
- *
- * // Using try/catch for error handling
- * try {
- *   const result = Value.toJsonUnsafe(instance);
- *   console.log(result);
- * } catch (error) {
- *   console.error(`Value.toJsonUnsafe failed: ${error.message}`);
- * }
  *
  * @since 2.0.0
  * @category MethodsUnsafe
@@ -437,48 +246,23 @@ export const toJsonUnsafe = (instance: CML.Value): string =>
 /**
  * Method toJsValue of Value
  *
- * @example
- * import { Value } from "@lucid-evolution/experimental";
- * import { Effect } from "effect";
- *
- * // Using Effect for safe execution with error handling
- * Effect.gen(function*() {
- * // Assume we have a Value instance
- * const instance = ... ;
- *   const result = yield* Value.toJsValue(instance);
- *   console.log(result);
- * });
- *
  * @since 2.0.0
  * @category Methods
  */
-export const toJsValue = Effect.fn(
-  (instance: CML.Value): Effect.Effect<any, ValueError> =>
-    Effect.try({
-      try: () => instance.to_js_value(),
-      catch: () =>
-        new ValueError({
-          message: `Value.toJsValue failed Value is not valid for any conversion. `,
-        }),
-    }),
+export const toJsValue: (
+  instance: CML.Value,
+) => Effect.Effect<any, ValueError> = Effect.fn((instance: CML.Value) =>
+  Effect.try({
+    try: () => instance.to_js_value(),
+    catch: () =>
+      new ValueError({
+        message: `Value.toJsValue failed Value is not valid for any conversion. `,
+      }),
+  }),
 );
 
 /**
  * Unsafely calls instance.toJsValue without Effect wrapper
- *
- * @example
- * import { Value } from "@lucid-evolution/experimental";
- *
- * // Assume we have a Value instance
- * const instance = ... ;
- *
- * // Using try/catch for error handling
- * try {
- *   const result = Value.toJsValueUnsafe(instance);
- *   console.log(result);
- * } catch (error) {
- *   console.error(`Value.toJsValueUnsafe failed: ${error.message}`);
- * }
  *
  * @since 2.0.0
  * @category MethodsUnsafe
@@ -489,117 +273,65 @@ export const toJsValueUnsafe = (instance: CML.Value): any =>
 /**
  * Static method fromJson of Value
  *
- * @example
- * import { Value } from "@lucid-evolution/experimental";
- * import { Effect } from "effect";
- *
- * // Using Effect for safe execution with error handling
- * Effect.gen(function*() {
- *
- *   const result = yield* Value.fromJson( parameters );
- *   console.log(result);
- * });
- *
  * @since 2.0.0
  * @category Constructors
  */
-export const fromJson = Effect.fn(function* (json: string) {
-  return yield* Effect.try({
-    try: () => CML.Value.from_json(json),
-    catch: () =>
-      new ValueError({
-        message: `Value.fromJson failed with parameters: ${json}. Hint: Validate your JSON structure.`,
-      }),
+export const fromJson: (json: string) => Effect.Effect<CML.Value, ValueError> =
+  Effect.fn(function* (json: string) {
+    return yield* Effect.try({
+      try: () => CML.Value.from_json(json),
+      catch: () =>
+        new ValueError({
+          message: `Value.fromJson failed with parameters: ${json}. Hint: Validate your JSON structure.`,
+        }),
+    });
   });
-});
 
 /**
  * Unsafely calls Value.fromJson without Effect wrapper
  *
- * @example
- * import { Value } from "@lucid-evolution/experimental";
- *
- *
- *
- * // Using try/catch for error handling
- * try {
- *   const result = Value.fromJsonUnsafe( parameters );
- *   console.log(result);
- * } catch (error) {
- *   console.error(`Value.fromJsonUnsafe failed: ${error.message}`);
- * }
- *
  * @since 2.0.0
  * @category ConstructorsUnsafe
  */
-export const fromJsonUnsafe = (json: string) => Effect.runSync(fromJson(json));
+export const fromJsonUnsafe = (json: string): CML.Value =>
+  Effect.runSync(fromJson(json));
 
 /**
  * Static method fromCoin of Value
  *
- * @example
- * import { Value } from "@lucid-evolution/experimental";
- * import { Effect } from "effect";
- *
- * // Using Effect for safe execution with error handling
- * Effect.gen(function*() {
- *
- *   const result = yield* Value.fromCoin( parameters );
- *   console.log(result);
- * });
- *
  * @since 2.0.0
  * @category Constructors
  */
-export const fromCoin = Effect.fn(function* (coin: bigint) {
-  return yield* Effect.try({
-    try: () => CML.Value.from_coin(coin),
-    catch: () =>
-      new ValueError({
-        message: `Value.fromCoin failed with parameters: ${coin}. `,
-      }),
+export const fromCoin: (coin: bigint) => Effect.Effect<CML.Value, ValueError> =
+  Effect.fn(function* (coin: bigint) {
+    return yield* Effect.try({
+      try: () => CML.Value.from_coin(coin),
+      catch: () =>
+        new ValueError({
+          message: `Value.fromCoin failed with parameters: ${coin}. `,
+        }),
+    });
   });
-});
 
 /**
  * Unsafely calls Value.fromCoin without Effect wrapper
  *
- * @example
- * import { Value } from "@lucid-evolution/experimental";
- *
- *
- *
- * // Using try/catch for error handling
- * try {
- *   const result = Value.fromCoinUnsafe( parameters );
- *   console.log(result);
- * } catch (error) {
- *   console.error(`Value.fromCoinUnsafe failed: ${error.message}`);
- * }
- *
  * @since 2.0.0
  * @category ConstructorsUnsafe
  */
-export const fromCoinUnsafe = (coin: bigint) => Effect.runSync(fromCoin(coin));
+export const fromCoinUnsafe = (coin: bigint): CML.Value =>
+  Effect.runSync(fromCoin(coin));
 
 /**
  * Static method _new of Value
  *
- * @example
- * import { Value } from "@lucid-evolution/experimental";
- * import { Effect } from "effect";
- *
- * // Using Effect for safe execution with error handling
- * Effect.gen(function*() {
- *
- *   const result = yield* Value._new( parameters );
- *   console.log(result);
- * });
- *
  * @since 2.0.0
  * @category Constructors
  */
-export const _new = Effect.fn(function* (
+export const _new: (
+  coin: bigint,
+  multiasset: CML.MultiAsset,
+) => Effect.Effect<CML.Value, ValueError> = Effect.fn(function* (
   coin: bigint,
   multiasset: CML.MultiAsset,
 ) {
@@ -615,45 +347,22 @@ export const _new = Effect.fn(function* (
 /**
  * Unsafely calls Value._new without Effect wrapper
  *
- * @example
- * import { Value } from "@lucid-evolution/experimental";
- *
- *
- *
- * // Using try/catch for error handling
- * try {
- *   const result = Value._newUnsafe( parameters );
- *   console.log(result);
- * } catch (error) {
- *   console.error(`Value._newUnsafe failed: ${error.message}`);
- * }
- *
  * @since 2.0.0
  * @category ConstructorsUnsafe
  */
-export const _newUnsafe = (coin: bigint, multiasset: CML.MultiAsset) =>
-  Effect.runSync(_new(coin, multiasset));
+export const _newUnsafe = (
+  coin: bigint,
+  multiasset: CML.MultiAsset,
+): CML.Value => Effect.runSync(_new(coin, multiasset));
 
 /**
  * Method coin of Value
  *
- * @example
- * import { Value } from "@lucid-evolution/experimental";
- * import { Effect } from "effect";
- *
- * // Using Effect for safe execution with error handling
- * Effect.gen(function*() {
- * // Assume we have a Value instance
- * const instance = ... ;
- *   const result = yield* Value.coin(instance);
- *   console.log(result);
- * });
- *
  * @since 2.0.0
  * @category Methods
  */
-export const coin = Effect.fn(
-  (instance: CML.Value): Effect.Effect<bigint, ValueError> =>
+export const coin: (instance: CML.Value) => Effect.Effect<bigint, ValueError> =
+  Effect.fn((instance: CML.Value) =>
     Effect.try({
       try: () => instance.coin(),
       catch: () =>
@@ -661,24 +370,10 @@ export const coin = Effect.fn(
           message: `Value.coin failed `,
         }),
     }),
-);
+  );
 
 /**
  * Unsafely calls instance.coin without Effect wrapper
- *
- * @example
- * import { Value } from "@lucid-evolution/experimental";
- *
- * // Assume we have a Value instance
- * const instance = ... ;
- *
- * // Using try/catch for error handling
- * try {
- *   const result = Value.coinUnsafe(instance);
- *   console.log(result);
- * } catch (error) {
- *   console.error(`Value.coinUnsafe failed: ${error.message}`);
- * }
  *
  * @since 2.0.0
  * @category MethodsUnsafe
@@ -689,23 +384,13 @@ export const coinUnsafe = (instance: CML.Value): bigint =>
 /**
  * Method multiAsset of Value
  *
- * @example
- * import { Value } from "@lucid-evolution/experimental";
- * import { Effect } from "effect";
- *
- * // Using Effect for safe execution with error handling
- * Effect.gen(function*() {
- * // Assume we have a Value instance
- * const instance = ... ;
- *   const result = yield* Value.multiAsset(instance);
- *   console.log(result);
- * });
- *
  * @since 2.0.0
  * @category Methods
  */
-export const multiAsset = Effect.fn(
-  (instance: CML.Value): Effect.Effect<CML.MultiAsset, ValueError> =>
+export const multiAsset: (
+  instance: CML.Value,
+) => Effect.Effect<CML.MultiAsset, ValueError> = Effect.fn(
+  (instance: CML.Value) =>
     Effect.try({
       try: () => instance.multi_asset(),
       catch: () =>
@@ -718,20 +403,6 @@ export const multiAsset = Effect.fn(
 /**
  * Unsafely calls instance.multiAsset without Effect wrapper
  *
- * @example
- * import { Value } from "@lucid-evolution/experimental";
- *
- * // Assume we have a Value instance
- * const instance = ... ;
- *
- * // Using try/catch for error handling
- * try {
- *   const result = Value.multiAssetUnsafe(instance);
- *   console.log(result);
- * } catch (error) {
- *   console.error(`Value.multiAssetUnsafe failed: ${error.message}`);
- * }
- *
  * @since 2.0.0
  * @category MethodsUnsafe
  */
@@ -741,96 +412,49 @@ export const multiAssetUnsafe = (instance: CML.Value): CML.MultiAsset =>
 /**
  * Static method zero of Value
  *
- * @example
- * import { Value } from "@lucid-evolution/experimental";
- * import { Effect } from "effect";
- *
- * // Using Effect for safe execution with error handling
- * Effect.gen(function*() {
- *
- *   const result = yield* Value.zero();
- *   console.log(result);
- * });
- *
  * @since 2.0.0
  * @category Constructors
  */
-export const zero = Effect.fn(function* () {
-  return yield* Effect.try({
-    try: () => CML.Value.zero(),
-    catch: () =>
-      new ValueError({
-        message: `Value.zero failed `,
-      }),
-  });
-});
+export const zero: () => Effect.Effect<CML.Value, ValueError> = Effect.fn(
+  function* () {
+    return yield* Effect.try({
+      try: () => CML.Value.zero(),
+      catch: () =>
+        new ValueError({
+          message: `Value.zero failed `,
+        }),
+    });
+  },
+);
 
 /**
  * Unsafely calls Value.zero without Effect wrapper
  *
- * @example
- * import { Value } from "@lucid-evolution/experimental";
- *
- *
- *
- * // Using try/catch for error handling
- * try {
- *   const result = Value.zeroUnsafe();
- *   console.log(result);
- * } catch (error) {
- *   console.error(`Value.zeroUnsafe failed: ${error.message}`);
- * }
- *
  * @since 2.0.0
  * @category ConstructorsUnsafe
  */
-export const zeroUnsafe = () => Effect.runSync(zero());
+export const zeroUnsafe = (): CML.Value => Effect.runSync(zero());
 
 /**
  * Method isZero of Value
  *
- * @example
- * import { Value } from "@lucid-evolution/experimental";
- * import { Effect } from "effect";
- *
- * // Using Effect for safe execution with error handling
- * Effect.gen(function*() {
- * // Assume we have a Value instance
- * const instance = ... ;
- *   const result = yield* Value.isZero(instance);
- *   console.log(result);
- * });
- *
  * @since 2.0.0
  * @category Methods
  */
-export const isZero = Effect.fn(
-  (instance: CML.Value): Effect.Effect<boolean, ValueError> =>
-    Effect.try({
-      try: () => instance.is_zero(),
-      catch: () =>
-        new ValueError({
-          message: `Value.isZero failed `,
-        }),
-    }),
+export const isZero: (
+  instance: CML.Value,
+) => Effect.Effect<boolean, ValueError> = Effect.fn((instance: CML.Value) =>
+  Effect.try({
+    try: () => instance.is_zero(),
+    catch: () =>
+      new ValueError({
+        message: `Value.isZero failed `,
+      }),
+  }),
 );
 
 /**
  * Unsafely calls instance.isZero without Effect wrapper
- *
- * @example
- * import { Value } from "@lucid-evolution/experimental";
- *
- * // Assume we have a Value instance
- * const instance = ... ;
- *
- * // Using try/catch for error handling
- * try {
- *   const result = Value.isZeroUnsafe(instance);
- *   console.log(result);
- * } catch (error) {
- *   console.error(`Value.isZeroUnsafe failed: ${error.message}`);
- * }
  *
  * @since 2.0.0
  * @category MethodsUnsafe
@@ -841,48 +465,23 @@ export const isZeroUnsafe = (instance: CML.Value): boolean =>
 /**
  * Method hasMultiassets of Value
  *
- * @example
- * import { Value } from "@lucid-evolution/experimental";
- * import { Effect } from "effect";
- *
- * // Using Effect for safe execution with error handling
- * Effect.gen(function*() {
- * // Assume we have a Value instance
- * const instance = ... ;
- *   const result = yield* Value.hasMultiassets(instance);
- *   console.log(result);
- * });
- *
  * @since 2.0.0
  * @category Methods
  */
-export const hasMultiassets = Effect.fn(
-  (instance: CML.Value): Effect.Effect<boolean, ValueError> =>
-    Effect.try({
-      try: () => instance.has_multiassets(),
-      catch: () =>
-        new ValueError({
-          message: `Value.hasMultiassets failed `,
-        }),
-    }),
+export const hasMultiassets: (
+  instance: CML.Value,
+) => Effect.Effect<boolean, ValueError> = Effect.fn((instance: CML.Value) =>
+  Effect.try({
+    try: () => instance.has_multiassets(),
+    catch: () =>
+      new ValueError({
+        message: `Value.hasMultiassets failed `,
+      }),
+  }),
 );
 
 /**
  * Unsafely calls instance.hasMultiassets without Effect wrapper
- *
- * @example
- * import { Value } from "@lucid-evolution/experimental";
- *
- * // Assume we have a Value instance
- * const instance = ... ;
- *
- * // Using try/catch for error handling
- * try {
- *   const result = Value.hasMultiassetsUnsafe(instance);
- *   console.log(result);
- * } catch (error) {
- *   console.error(`Value.hasMultiassetsUnsafe failed: ${error.message}`);
- * }
  *
  * @since 2.0.0
  * @category MethodsUnsafe
@@ -893,23 +492,14 @@ export const hasMultiassetsUnsafe = (instance: CML.Value): boolean =>
 /**
  * Method checkedAdd of Value
  *
- * @example
- * import { Value } from "@lucid-evolution/experimental";
- * import { Effect } from "effect";
- *
- * // Using Effect for safe execution with error handling
- * Effect.gen(function*() {
- * // Assume we have a Value instance
- * const instance = ... ;
- *   const result = yield* Value.checkedAdd(instance,  parameters );
- *   console.log(result);
- * });
- *
  * @since 2.0.0
  * @category Methods
  */
-export const checkedAdd = Effect.fn(
-  (instance: CML.Value, rhs: CML.Value): Effect.Effect<CML.Value, ValueError> =>
+export const checkedAdd: (
+  instance: CML.Value,
+  rhs: CML.Value,
+) => Effect.Effect<CML.Value, ValueError> = Effect.fn(
+  (instance: CML.Value, rhs: CML.Value) =>
     Effect.try({
       try: () => instance.checked_add(rhs),
       catch: () =>
@@ -922,20 +512,6 @@ export const checkedAdd = Effect.fn(
 /**
  * Unsafely calls instance.checkedAdd without Effect wrapper
  *
- * @example
- * import { Value } from "@lucid-evolution/experimental";
- *
- * // Assume we have a Value instance
- * const instance = ... ;
- *
- * // Using try/catch for error handling
- * try {
- *   const result = Value.checkedAddUnsafe(instance,  parameters );
- *   console.log(result);
- * } catch (error) {
- *   console.error(`Value.checkedAddUnsafe failed: ${error.message}`);
- * }
- *
  * @since 2.0.0
  * @category MethodsUnsafe
  */
@@ -947,23 +523,14 @@ export const checkedAddUnsafe = (
 /**
  * Method checkedSub of Value
  *
- * @example
- * import { Value } from "@lucid-evolution/experimental";
- * import { Effect } from "effect";
- *
- * // Using Effect for safe execution with error handling
- * Effect.gen(function*() {
- * // Assume we have a Value instance
- * const instance = ... ;
- *   const result = yield* Value.checkedSub(instance,  parameters );
- *   console.log(result);
- * });
- *
  * @since 2.0.0
  * @category Methods
  */
-export const checkedSub = Effect.fn(
-  (instance: CML.Value, rhs: CML.Value): Effect.Effect<CML.Value, ValueError> =>
+export const checkedSub: (
+  instance: CML.Value,
+  rhs: CML.Value,
+) => Effect.Effect<CML.Value, ValueError> = Effect.fn(
+  (instance: CML.Value, rhs: CML.Value) =>
     Effect.try({
       try: () => instance.checked_sub(rhs),
       catch: () =>
@@ -976,20 +543,6 @@ export const checkedSub = Effect.fn(
 /**
  * Unsafely calls instance.checkedSub without Effect wrapper
  *
- * @example
- * import { Value } from "@lucid-evolution/experimental";
- *
- * // Assume we have a Value instance
- * const instance = ... ;
- *
- * // Using try/catch for error handling
- * try {
- *   const result = Value.checkedSubUnsafe(instance,  parameters );
- *   console.log(result);
- * } catch (error) {
- *   console.error(`Value.checkedSubUnsafe failed: ${error.message}`);
- * }
- *
  * @since 2.0.0
  * @category MethodsUnsafe
  */
@@ -1001,23 +554,14 @@ export const checkedSubUnsafe = (
 /**
  * Method clampedSub of Value
  *
- * @example
- * import { Value } from "@lucid-evolution/experimental";
- * import { Effect } from "effect";
- *
- * // Using Effect for safe execution with error handling
- * Effect.gen(function*() {
- * // Assume we have a Value instance
- * const instance = ... ;
- *   const result = yield* Value.clampedSub(instance,  parameters );
- *   console.log(result);
- * });
- *
  * @since 2.0.0
  * @category Methods
  */
-export const clampedSub = Effect.fn(
-  (instance: CML.Value, rhs: CML.Value): Effect.Effect<CML.Value, ValueError> =>
+export const clampedSub: (
+  instance: CML.Value,
+  rhs: CML.Value,
+) => Effect.Effect<CML.Value, ValueError> = Effect.fn(
+  (instance: CML.Value, rhs: CML.Value) =>
     Effect.try({
       try: () => instance.clamped_sub(rhs),
       catch: () =>
@@ -1029,20 +573,6 @@ export const clampedSub = Effect.fn(
 
 /**
  * Unsafely calls instance.clampedSub without Effect wrapper
- *
- * @example
- * import { Value } from "@lucid-evolution/experimental";
- *
- * // Assume we have a Value instance
- * const instance = ... ;
- *
- * // Using try/catch for error handling
- * try {
- *   const result = Value.clampedSubUnsafe(instance,  parameters );
- *   console.log(result);
- * } catch (error) {
- *   console.error(`Value.clampedSubUnsafe failed: ${error.message}`);
- * }
  *
  * @since 2.0.0
  * @category MethodsUnsafe

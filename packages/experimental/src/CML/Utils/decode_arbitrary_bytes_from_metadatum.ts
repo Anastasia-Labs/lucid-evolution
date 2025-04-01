@@ -21,22 +21,15 @@ export class DecodeArbitraryBytesFromMetadatumError extends Data.TaggedError(
 /**
  * Wrapper for the decode_arbitrary_bytes_from_metadatum function
  *
- * @example
- * import { decodeArbitraryBytesFromMetadatum } from "@lucid-evolution/experimental/CML/functions";
- * import { Effect } from "effect";
- *
- * // Using Effect for safe execution with error handling
- * Effect.gen(function*() {
- *   const result = yield* decodeArbitraryBytesFromMetadatum(TransactionMetadatum instance );
- *   console.log(result);
- * });
- *
  * @since 2.0.0
  * @category Functions
  */
-export const decodeArbitraryBytesFromMetadatum = Effect.fn(function* (
+export const decodeArbitraryBytesFromMetadatum: (
   metadata: CML.TransactionMetadatum,
-) {
+) => Effect.Effect<
+  Uint8Array | undefined,
+  DecodeArbitraryBytesFromMetadatumError
+> = Effect.fn(function* (metadata: CML.TransactionMetadatum) {
   return yield* Effect.try({
     try: () => CML.decode_arbitrary_bytes_from_metadatum(metadata),
     catch: () =>
@@ -48,16 +41,6 @@ export const decodeArbitraryBytesFromMetadatum = Effect.fn(function* (
 
 /**
  * Unsafely calls decode_arbitrary_bytes_from_metadatum function without Effect wrapper
- *
- * @example
- * import { decodeArbitraryBytesFromMetadatumUnsafe } from "@lucid-evolution/experimental/CML/functions";
- *
- * try {
- *   const result = decodeArbitraryBytesFromMetadatumUnsafe(TransactionMetadatum instance );
- *   console.log(result);
- * } catch (error) {
- *   console.error(`decodeArbitraryBytesFromMetadatumUnsafe failed: ${error.message}`);
- * }
  *
  * @since 2.0.0
  * @category FunctionsUnsafe
