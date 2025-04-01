@@ -49,4 +49,4 @@ jobs:
       - run: pnpm run build
       - run: pnpm run lint
       - run: pnpm run format-check
-      - run: pnpm test --env-mode=loose
+      - run: pnpm turbo run test --env-mode=loose
