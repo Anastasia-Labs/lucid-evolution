@@ -11,6 +11,7 @@ jobs:
   build:
     runs-on: ubuntu-latest
     env:
+      TURBO_SCM_BASE: ${{ github.event_name == 'pull_request' && github.event.pull_request.base.sha || github.event.before }}
       VITE_BLOCKFROST_KEY: ${{ secrets.VITE_BLOCKFROST_KEY }}
       VITE_MAESTRO_KEY: ${{ secrets.VITE_MAESTRO_KEY }}
       VITE_MAESTRO_KEY_PREPROD: ${{ secrets.VITE_MAESTRO_KEY_PREPROD }}
