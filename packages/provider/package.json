@@ -38,12 +38,14 @@
     "@lucid-evolution/core-utils": "workspace:*",
     "@lucid-evolution/utils": "workspace:*",
     "@lucid-evolution/wallet": "workspace:*",
-    "effect": "^3.11.7"
+    "effect": "^3.11.7",
+    "ws": "^8.18.1"
   },
   "devDependencies": {
     "@types/node": "^20.12.8",
     "tsup": "^8.0.2",
     "typescript": "^5.4.5",
-    "vitest": "^2.0.4"
+    "vitest": "^2.0.4",
+    "@types/ws": "^8.18.0"
   }
 }
