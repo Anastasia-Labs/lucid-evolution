@@ -26,16 +26,24 @@ import * as _Blockfrost from "./internal/blockfrost.js";
 
 export class Blockfrost implements Provider {
   url: string;
-  projectId: string;
+  defaultHeaders: {
+    project_id: string;
+    lucid: string;
+    "User-Agent": string;
+  };
 
-  constructor(url: string, projectId?: string) {
+  constructor(url: string, projectId?: string, userAgent?: string) {
     this.url = url;
-    this.projectId = projectId || "";
+    this.defaultHeaders = {
+      project_id: projectId || "",
+      lucid,
+      "User-Agent": userAgent || "lucid-evolution-sdk",
+    };
   }
 
   async getProtocolParameters(): Promise<ProtocolParameters> {
     const result = await fetch(`${this.url}/epochs/latest/parameters`, {
-      headers: { project_id: this.projectId, lucid },
+      headers: this.defaultHeaders,
     }).then((res) => res.json());
     return {
       minFeeA: parseInt(result.min_fee_a),
@@ -79,7 +87,7 @@ export class Blockfrost implements Provider {
       const pageResult: BlockfrostUtxoResult | BlockfrostUtxoError =
         await fetch(
           `${this.url}/addresses/${queryPredicate}/utxos?page=${page}`,
-          { headers: { project_id: this.projectId, lucid } },
+          { headers: this.defaultHeaders },
         ).then((res) => res.json());
       if ((pageResult as BlockfrostUtxoError).error) {
         if ((pageResult as BlockfrostUtxoError).status_code === 404) {
@@ -118,7 +126,7 @@ export class Blockfrost implements Provider {
       const pageResult: BlockfrostUtxoResult | BlockfrostUtxoError =
         await fetch(
           `${this.url}/addresses/${queryPredicate}/utxos/${unit}?page=${page}`,
-          { headers: { project_id: this.projectId, lucid } },
+          { headers: this.defaultHeaders },
         ).then((res) => res.json());
       if ((pageResult as BlockfrostUtxoError).error) {
         if ((pageResult as BlockfrostUtxoError).status_code === 404) {
@@ -138,7 +146,7 @@ export class Blockfrost implements Provider {
   async getUtxoByUnit(unit: Unit): Promise<UTxO> {
     const addresses = await fetch(
       `${this.url}/assets/${unit}/addresses?count=2`,
-      { headers: { project_id: this.projectId, lucid } },
+      { headers: this.defaultHeaders },
     ).then((res) => res.json());
 
     if (!addresses || addresses.error) {
@@ -165,7 +173,7 @@ export class Blockfrost implements Provider {
     const utxos = await Promise.all(
       queryHashes.map(async (txHash) => {
         const result = await fetch(`${this.url}/txs/${txHash}/utxos`, {
-          headers: { project_id: this.projectId, lucid },
+          headers: this.defaultHeaders,
         }).then((res) => res.json());
         if (!result || result.error) {
           return [];
@@ -196,7 +204,7 @@ export class Blockfrost implements Provider {
 
   async getDelegation(rewardAddress: RewardAddress): Promise<Delegation> {
     const result = await fetch(`${this.url}/accounts/${rewardAddress}`, {
-      headers: { project_id: this.projectId, lucid },
+      headers: this.defaultHeaders,
     }).then((res) => res.json());
     if (!result || result.error) {
       return { poolId: null, rewards: 0n };
@@ -209,7 +217,7 @@ export class Blockfrost implements Provider {
 
   async getDatum(datumHash: DatumHash): Promise<Datum> {
     const datum = await fetch(`${this.url}/scripts/datum/${datumHash}/cbor`, {
-      headers: { project_id: this.projectId, lucid },
+      headers: this.defaultHeaders,
     })
       .then((res) => res.json())
       .then((res) => res.cbor);
@@ -223,7 +231,7 @@ export class Blockfrost implements Provider {
     return new Promise((res) => {
       const confirmation = setInterval(async () => {
         const isConfirmed = await fetch(`${this.url}/txs/${txHash}`, {
-          headers: { project_id: this.projectId, lucid },
+          headers: this.defaultHeaders,
         }).then((res) => res.json());
         if (isConfirmed && !isConfirmed.error) {
           clearInterval(confirmation);
@@ -238,9 +246,8 @@ export class Blockfrost implements Provider {
     const result = await fetch(`${this.url}/tx/submit`, {
       method: "POST",
       headers: {
+        ...this.defaultHeaders,
         "Content-Type": "application/cbor",
-        project_id: this.projectId,
-        lucid,
       },
       body: fromHex(tx),
     }).then((res) => res.json());
@@ -278,19 +285,19 @@ export class Blockfrost implements Provider {
                   const { type } = await fetch(
                     `${this.url}/scripts/${r.reference_script_hash}`,
                     {
-                      headers: { project_id: this.projectId, lucid },
+                      headers: this.defaultHeaders,
                     },
                   ).then((res) => res.json());
 
                   const { cbor: script } = await fetch(
                     `${this.url}/scripts/${r.reference_script_hash}/cbor`,
-                    { headers: { project_id: this.projectId, lucid } },
+                    { headers: this.defaultHeaders },
                   ).then((res) => res.json());
                   switch (type) {
                     case "timelock":
                       const { json: native } = await fetch(
                         `${this.url}/scripts/${r.reference_script_hash}/json`,
-                        { headers: { project_id: this.projectId, lucid } },
+                        { headers: this.defaultHeaders },
                       ).then((res) => res.json());
                       return scriptFromNative(native);
                     case "plutusV1":
@@ -333,9 +340,8 @@ export class Blockfrost implements Provider {
     const res = await fetch(`${this.url}/utils/txs/evaluate/utxos`, {
       method: "POST",
       headers: {
+        ...this.defaultHeaders,
         "Content-Type": "application/json",
-        project_id: this.projectId,
-        lucid,
       },
       body: JSON.stringify(payload),
     }).then((res) => res.json());
