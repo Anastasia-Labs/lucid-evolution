@@ -3,7 +3,10 @@
   "exclude": [
     "src/internal/**/*.ts",
     "src/**/index.ts",
-    "src/*.ts",
-    "src/CardanoJS/**/*.ts"
-  ]
+    "src/CardanoJS/**/*.ts",
+    "src/!(Data).ts"
+  ],
+  "enforceDescriptions": false,
+  "enforceExamples": false,
+  "enforceVersion": false
 }
