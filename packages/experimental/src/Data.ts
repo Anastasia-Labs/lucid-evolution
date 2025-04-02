@@ -14,12 +14,16 @@ import * as Combinator from "./Combinator.js";
 /**
  * Data type representing Plutus data for encoding/decoding
  *
+ * @category model
+ *
  * @since 2.0.0
  */
 export type Data = Integer | ByteArray | List | Map | Constr;
 
 /**
  * List data type for Plutus Data
+ *
+ * @category model
  *
  * @since 2.0.0
  */
@@ -30,6 +34,8 @@ export interface List<T extends Data = Data> {
 
 /**
  * Map data type for Plutus Data
+ *
+ * @category model
  *
  * @since 2.0.0
  */
@@ -46,6 +52,8 @@ export interface Map<
 /**
  * Constructor data type for Plutus Data
  *
+ * @category model
+ *
  * @since 2.0.0
  */
 export interface Constr<
@@ -60,6 +68,8 @@ export interface Constr<
 /**
  * Integer data type for Plutus Data
  *
+ * @category model
+ *
  * @since 2.0.0
  */
 export interface Integer<T extends bigint = bigint> {
@@ -70,6 +80,8 @@ export interface Integer<T extends bigint = bigint> {
 /**
  * ByteArray data type for Plutus Data
  *
+ * @category model
+ *
  * @since 2.0.0
  */
 export interface ByteArray<T extends string = string> {
@@ -79,6 +91,8 @@ export interface ByteArray<T extends string = string> {
 
 /**
  * Schema for Integer data type
+ *
+ * @category schemas
  *
  * @since 2.0.0
  */
@@ -94,6 +108,8 @@ export interface Integer$
 /**
  * Schema for the Integer data type
  *
+ * @category schemas
+ *
  * @since 2.0.0
  */
 export const Integer: Integer$ = Schema.TaggedStruct("Integer", {
@@ -104,6 +120,8 @@ export const Integer: Integer$ = Schema.TaggedStruct("Integer", {
 
 /**
  * Schema for ByteArray data type
+ *
+ * @category schemas
  *
  * @since 2.0.0
  */
@@ -119,6 +137,8 @@ export interface ByteArray$
 /**
  * Schema for the ByteArray data type
  *
+ * @category schemas
+ *
  * @since 2.0.0
  */
 export const ByteArray: ByteArray$ = Schema.TaggedStruct("ByteArray", {
@@ -129,6 +149,8 @@ export const ByteArray: ByteArray$ = Schema.TaggedStruct("ByteArray", {
 
 /**
  * Schema for List data type
+ *
+ * @category schemas
  *
  * @since 2.0.0
  */
@@ -144,6 +166,8 @@ export interface List$
 /**
  * Schema for the List data type
  *
+ * @category schemas
+ *
  * @since 2.0.0
  */
 export const List: List$ = Schema.TaggedStruct("List", {
@@ -158,6 +182,8 @@ export const List: List$ = Schema.TaggedStruct("List", {
 
 /**
  * Filter to ensure uniqueness by first item in entries
+ *
+ * @category utilities
  *
  * @since 2.0.0
  */
@@ -178,6 +204,8 @@ export const uniqueByFirst = (
 
 /**
  * Schema for Map data type
+ *
+ * @category schemas
  *
  * @since 2.0.0
  */
@@ -204,6 +232,8 @@ export interface Map$
 /**
  * Schema for the Map data type
  *
+ * @category schemas
+ *
  * @since 2.0.0
  */
 export const Map: Map$ = Schema.TaggedStruct("Map", {
@@ -222,6 +252,8 @@ export const Map: Map$ = Schema.TaggedStruct("Map", {
 /**
  * Schema for Constr data type
  *
+ * @category schemas
+ *
  * @since 2.0.0
  */
 export interface Constr$
@@ -236,6 +268,8 @@ export interface Constr$
 
 /**
  * Schema for the Constr data type
+ *
+ * @category schemas
  *
  * @since 2.0.0
  */
@@ -253,6 +287,8 @@ export const Constr: Constr$ = Schema.TaggedStruct("Constr", {
 /**
  * Combined schema for Data type
  *
+ * @category schemas
+ *
  * @since 2.0.0
  */
 export const Data: Schema.Schema<Data> = Schema.Union(
@@ -265,6 +301,8 @@ export const Data: Schema.Schema<Data> = Schema.Union(
 
 /**
  * Type guard to check if a value is a Data.Integer
+ *
+ * @category predicates
  *
  * @example
  * import { Data } from "@lucid-evolution/experimental";
@@ -279,6 +317,8 @@ export const isByteArray = Schema.is(ByteArray);
 /**
  * Type guard to check if a value is a Data.Integer
  *
+ * @category predicates
+ *
  * @example
  * import { Data } from "@lucid-evolution/experimental";
  *
@@ -292,6 +332,8 @@ export const isInteger = Schema.is(Integer);
 /**
  * Type guard to check if a value is a Data.List
  *
+ * @category predicates
+ *
  * @example
  * import { Data } from "@lucid-evolution/experimental";
  *
@@ -304,6 +346,8 @@ export const isList = Schema.is(List);
 
 /**
  * Type guard to check if a value is a Data.Map
+ *
+ * @category predicates
  *
  * @example
  * import { Data } from "@lucid-evolution/experimental";
@@ -321,6 +365,8 @@ export const isMap = Schema.is(Map);
 /**
  * Type guard to check if a value is a Data.Constr
  *
+ * @category predicates
+ *
  * @example
  * import { Data } from "@lucid-evolution/experimental";
  *
@@ -333,6 +379,8 @@ export const isConstr = Schema.is(Constr);
 
 /**
  * Converts TypeScript data into CBOR hex string
+ *
+ * @category encoding/decoding
  *
  * @example
  * import { Data, TSchema } from "@lucid-evolution/experimental"
@@ -408,6 +456,8 @@ export const encodeCBORUnsafe = <Source, Target extends Data>(
 /**
  * Decodes a CBOR hex string to a TypeScript type
  *
+ * @category encoding/decoding
+ *
  * @example
  * import { TSchema , Data } from "@lucid-evolution/experimental";
  *
@@ -452,6 +502,8 @@ export function decodeCBORUnsafe<Source, Target extends Data>(
 
 /**
  * Resolves a CBOR hex string to a Plutus Data structure
+ *
+ * @category transformation
  *
  * @since 2.0.0
  */
@@ -510,6 +562,8 @@ export const resolveCBORUnsafe = (input: string): Data => {
  *
  * @throws {ParseError} If the input value does not match the schema
  *
+ * @category encoding/decoding
+ *
  * @example
  * import { Data, TSchema } from "@lucid-evolution/experimental";
  *
@@ -539,6 +593,8 @@ export const decodeDataUnsafe = <Source, Target extends Data>(
 /**
  * Safely decodes data using Either for error handling
  *
+ * @category encoding/decoding
+ *
  * @since 2.0.0
  */
 export const decodeDataSafe = <Source, Target extends Data>(
@@ -552,6 +608,8 @@ export const decodeDataSafe = <Source, Target extends Data>(
  * Encodes a TypeScript value to Plutus Data Constructor
  *
  * @throws {ParseError} If the input value does not match the schema
+ *
+ * @category encoding/decoding
  *
  * @example
  * import { Data , TSchema } from "@lucid-evolution/experimental";
@@ -582,6 +640,8 @@ export const encodeDataUnsafe = <Source, Target extends Data>(
 /**
  * Safely encodes data using Either for error handling
  *
+ * @category encoding/decoding
+ *
  * @since 2.0.0
  */
 export const encodeDataSafe = <Source, Target extends Data>(
@@ -593,6 +653,8 @@ export const encodeDataSafe = <Source, Target extends Data>(
 
 /**
  * Creates a Plutus Data List type from an array of Data elements
+ *
+ * @category constructors
  *
  * @example
  * import { Data } from "@lucid-evolution/experimental";
@@ -620,6 +682,8 @@ export const mkList = <const T extends Data>(list: readonly T[]) =>
 /**
  * Creates a Plutus Data Integer type from a bigint value
  *
+ * @category constructors
+ *
  * @example
  * import { Data } from "@lucid-evolution/experimental";
  *
@@ -633,6 +697,8 @@ export const mkInt = <const T extends bigint = bigint>(integer: T) =>
 /**
  * Creates a Plutus Data ByteArray type from a hex string
  *
+ * @category constructors
+ *
  * @example
  * import { Data } from "@lucid-evolution/experimental";
  *
@@ -645,6 +711,8 @@ export const mkByte = <const T extends string>(bytearray: T) =>
 
 /**
  * Creates a Plutus Data Map type from an array of key-value tuples
+ *
+ * @category constructors
  *
  * @example
  * import { Data } from "@lucid-evolution/experimental";
@@ -662,6 +730,8 @@ export const mkMap = <const Pairs extends ReadonlyArray<{ k: Data; v: Data }>>(
 
 /**
  * Creates a Plutus Data Constr type (constructor) with the given index and fields
+ *
+ * @category constructors
  *
  * @example
  * import { Data } from "@lucid-evolution/experimental";
@@ -685,6 +755,8 @@ export const mkConstr = <
 /**
  * JSON replacer function for handling BigInt serialization
  *
+ * @category utilities
+ *
  * @since 2.0.0
  */
 const replacer = (key: string, value: any) => {
@@ -697,6 +769,8 @@ const replacer = (key: string, value: any) => {
 /**
  * JSON reviver function for parsing BigInt values
  *
+ * @category utilities
+ *
  * @since 2.0.0
  */
 const reviver = (key: string, value: any) => {
@@ -708,6 +782,8 @@ const reviver = (key: string, value: any) => {
 
 /**
  * Converts a Data value to a JSON string
+ *
+ * @category transformation
  *
  * @example
  * import { Data } from "@lucid-evolution/experimental";
@@ -724,6 +800,8 @@ export const toJSONUnsafe = (data: Data): string => {
 
 /**
  * Parses a JSON string to a Data value
+ *
+ * @category transformation
  *
  * @example
  * import { Data } from "@lucid-evolution/experimental";
@@ -746,6 +824,8 @@ export const fromJSONUnsafe = (json: string): Data => {
 
 /**
  * Compares two Data values for equality
+ *
+ * @category equality
  *
  * @example
  * import { Data } from "@lucid-evolution/experimental";
@@ -803,12 +883,15 @@ export const isEqual = (a: Data, b: Data): boolean => {
 /**
  * Compares two Data values according to CBOR canonical ordering rules
  *
+ * @category ordering
+ *
  * @example
  * import { Data } from "@lucid-evolution/experimental";
+ * import assert from "assert"
  *
  * Data.compare(Data.mkInt(1n), Data.mkInt(2n)); // -1
  * Data.compare(Data.mkInt(2n), Data.mkInt(2n)); // 0
- * Data.compare(Data.mkByte("cafe"), Data.mkByte("deadbeef")); // -1
+ * assert(Data.compare(Data.mkByte("cafe"), Data.mkByte("deadbeef")) === -1); // -1
  *
  * @since 2.0.0
  */
@@ -906,6 +989,8 @@ export const compare = (a: Data, b: Data): number => {
 /**
  * Creates an arbitrary that generates Data.Data values with controlled depth
  *
+ * @category generators
+ *
  * @example
  * import { Data } from "@lucid-evolution/experimental";
  * import { FastCheck } from "effect"
@@ -934,6 +1019,8 @@ export const genData = (depth: number = 3): FastCheck.Arbitrary<Data> => {
 /**
  * Creates an arbitrary that generates Data.ByteArray values
  *
+ * @category generators
+ *
  * @since 2.0.0
  */
 export const genByteArray = (): FastCheck.Arbitrary<ByteArray> =>
@@ -945,6 +1032,8 @@ export const genByteArray = (): FastCheck.Arbitrary<ByteArray> =>
 /**
  * Creates an arbitrary that generates Data.Integer values
  *
+ * @category generators
+ *
  * @since 2.0.0
  */
 export const genInteger = (): FastCheck.Arbitrary<Integer> =>
@@ -952,6 +1041,8 @@ export const genInteger = (): FastCheck.Arbitrary<Integer> =>
 
 /**
  * Creates an arbitrary that generates Data.List values
+ *
+ * @category generators
  *
  * @since 2.0.0
  */
@@ -963,6 +1054,8 @@ export const genList = (depth: number): FastCheck.Arbitrary<List> =>
 
 /**
  * Creates an arbitrary that generates Data.Constr values
+ *
+ * @category generators
  *
  * @since 2.0.0
  */
@@ -981,6 +1074,8 @@ export const genConstr = (depth: number): FastCheck.Arbitrary<Constr> =>
  * - 60% ByteArray keys
  * - 30% Integer keys
  * - 10% Complex keys
+ *
+ * @category generators
  *
  * @example
  * import { Data } from "@lucid-evolution/experimental";
@@ -1030,6 +1125,8 @@ export const genMap = (depth: number): FastCheck.Arbitrary<Map> => {
 
 /**
  * Sorts a Data value in canonical order
+ *
+ * @category ordering
  *
  * @example
  * import { Data } from "@lucid-evolution/experimental";
