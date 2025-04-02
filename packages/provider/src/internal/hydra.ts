@@ -338,7 +338,7 @@ export class Node extends EventEmitter {
     });
   }
 
-  async awaitTx(txHash: string, checkInterval: number = 1000) {
+  async awaitTx(txHash: string, checkInterval: number = 3000) {
     return new Promise<boolean>((resolve) => {
       const interval = setInterval(async () => {
         if (this.txCircularBuffer.getBuffer().includes(txHash)) {
