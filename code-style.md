@@ -336,6 +336,7 @@ Each function must contain the following:
 1. A concise description of the function's purpose
 2. An example of function usage with @example tag. The example must include the import statement
 3. The version when the function was introduced using @since tag
+4. A category tag `constructors`, `encoding/decoding`, `equality`, `generators`, `model`, `ordering`, `predicates`, `schemas`, `transformation`, `utilities`
 
 ```ts
 /**
