@@ -25,7 +25,9 @@ import {
   getTestWallets,
   HydraConfiguration,
   publishHydraScripts,
+  signCommitTransaction,
   startHydraNode,
+  TestWallets,
 } from "./internal/hydra.js";
 import { Hydra } from "../src/hydra.js";
 
@@ -39,6 +41,7 @@ type TestContext = {
   config: HydraConfiguration;
   abortController: AbortController;
   hydraProvider: Hydra;
+  wallets: TestWallets;
 };
 
 beforeAll(async () => {
@@ -66,15 +69,18 @@ beforeEach<TestContext>(async (meta) => {
   meta.abortController = await startHydraNode(hydraScriptTxIds, meta.config);
   meta.hydraProvider = new Hydra(`ws://localhost:${meta.config.alicePort}`);
 
-  const wallets = getTestWallets(
+  meta.wallets = await getTestWallets(
     cardanoProvider,
     meta.hydraProvider,
     meta.config
   );
 
   const tx = lucid.newTx();
-  for (const walletKey in wallets.cardano) {
-    const wallet = wallets.cardano[walletKey as keyof typeof wallets.cardano];
+  for (const walletKey in meta.wallets.cardano) {
+    const wallet =
+      meta.wallets.cardano[
+        walletKey as keyof typeof meta.wallets.cardano
+      ].wallet();
     for (const adaAmount of [5, 10, 15, 20, 25, 50]) {
       tx.pay.ToAddress(await wallet.address(), {
         lovelace: BigInt(adaAmount * 1000000),
@@ -98,27 +104,20 @@ describe("Hydra", async () => {
     expect(provider.status()).toEqual("INITIALIZING");
   });
 
-  /*it("should be able to open the Hydra node", async (context) => {
-    const { node1Port, node2Port, controller } = await startHydraNode();
+  it<TestContext>("should be able to open the Hydra node", async (context) => {
+    const { alicePort: node1Port, bobPort: node2Port } = context.config;
     const providerNode1 = new Hydra(`ws://localhost:${node1Port}`);
     await providerNode1.initialize();
     const providerNode2 = new Hydra(`ws://localhost:${node2Port}`);
-
-    const privateKeyAlice = CML.PrivateKey.from_normal_bytes(
-      Buffer.from(aliceFundsSK.cborHex.substring(4), "hex")
-    );
 
     const cardanoProvider = new Kupmios(
       "http://localhost:1442",
       "http://localhost:1337"
     );
-    const lucidCardano = await Lucid(cardanoProvider, "Preprod");
-    lucidCardano.selectWallet.fromPrivateKey(privateKeyAlice.to_bech32());
 
-    const lucidNode1 = await Lucid(providerNode1, "Preprod");
-    lucidNode1.selectWallet.fromPrivateKey(privateKeyAlice.to_bech32());
+    const wallets = context.wallets;
 
-    const firstUTxO = (await lucidCardano.wallet().getUtxos())[0];
+    const firstUTxO = (await wallets.cardano.aliceFunds.wallet().getUtxos())[0];
 
     if (!firstUTxO) {
       throw new Error("No UTxO found");
@@ -128,28 +127,29 @@ describe("Hydra", async () => {
 
     const signedTxNode1 = await signCommitTransaction(
       cardanoTxNode1,
-      lucidNode1
+      wallets.cardano.aliceFunds
     );
 
     const txHashNode1 = await providerNode1.submitL1Transaction(signedTxNode1);
-    await cardanoProvider.awaitTx(txHashNode1);
-
-    const privateKeyBob = CML.PrivateKey.from_normal_bytes(
-      Buffer.from(bobFundsSK.cborHex.substring(4), "hex")
-    );
-
-    const lucidNode2 = await Lucid(providerNode2, "Preprod");
-    lucidNode2.selectWallet.fromPrivateKey(privateKeyBob.to_bech32());
+    await cardanoProvider.awaitTx(txHashNode1, 100);
 
     const cardanoTxNode2 = await providerNode2.commit();
     const txHashNode2 = await providerNode2.submitL1Transaction(cardanoTxNode2);
-    await cardanoProvider.awaitTx(txHashNode2);
+    await cardanoProvider.awaitTx(txHashNode2, 100);
 
-    await sleep(4000);
+    let tryCount = 0;
+
+    while (tryCount < 10) {
+      if (providerNode1.status() === "OPEN") {
+        break;
+      } else {
+        tryCount++;
+        await new Promise((resolve) => setTimeout(resolve, 1000));
+      }
+    }
 
     expect(providerNode1.status()).toEqual("OPEN");
-    controller.abort();
-  });*/
+  });
 });
 
 afterEach<TestContext>(async (context) => {
@@ -161,23 +161,3 @@ afterAll(async () => {
     yaciProcess.kill();
   }
 });
-
-async function signCommitTransaction(
-  unwitnessedTransaction: Transaction,
-  lucid: LucidEvolution
-) {
-  const unsignedTx = CML.Transaction.from_cbor_hex(unwitnessedTransaction);
-
-  const witnessSet = unsignedTx.witness_set();
-
-  witnessSet.add_all_witnesses(await lucid.wallet().signTx(unsignedTx));
-
-  const signedTx = CML.Transaction.new(
-    unsignedTx.body(),
-    witnessSet,
-    true,
-    unsignedTx.auxiliary_data()
-  );
-
-  return signedTx.to_cbor_hex() as Transaction;
-}

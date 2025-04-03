@@ -4,8 +4,9 @@ import fs from "fs";
 import { sleep } from "@lucid-evolution/core-utils";
 import { exec } from "child_process";
 import { Node } from "../../src/internal/hydra.js";
-import { Provider, Wallet } from "@lucid-evolution/core-types";
+import { Provider, Transaction, Wallet } from "@lucid-evolution/core-types";
 import { makeWalletFromPrivateKey } from "@lucid-evolution/wallet";
+import { Lucid, LucidEvolution } from "../../../lucid/src/index.js";
 
 export type HydraConfiguration = {
   tmpdir: string;
@@ -23,14 +24,14 @@ export type HydraConfiguration = {
 
 export type TestWallets = {
   cardano: {
-    aliceNode: Wallet;
-    aliceFunds: Wallet;
-    bobNode: Wallet;
-    bobFunds: Wallet;
+    aliceNode: LucidEvolution;
+    aliceFunds: LucidEvolution;
+    bobNode: LucidEvolution;
+    bobFunds: LucidEvolution;
   };
   hydra: {
-    aliceFunds: Wallet;
-    bobFunds: Wallet;
+    aliceFunds: LucidEvolution;
+    bobFunds: LucidEvolution;
   };
 };
 
@@ -180,47 +181,66 @@ export async function publishHydraScripts(faucetSk: string) {
   );
 }
 
-export function getTestWallets(
+export async function getTestWallets(
   cardanoProvider: Provider,
   hydraProvider: Provider,
   config: HydraConfiguration
-): TestWallets {
+): Promise<TestWallets> {
+  const createLucid = async (provider: Provider, key: string) => {
+    const lucid = await Lucid(provider, "Preprod");
+    lucid.selectWallet.fromPrivateKey(key);
+    return lucid;
+  };
   return {
     cardano: {
-      aliceNode: makeWalletFromPrivateKey(
+      aliceNode: await createLucid(
         cardanoProvider,
-        "Custom",
         config.participantKeys.aliceNode
       ),
-      aliceFunds: makeWalletFromPrivateKey(
+      aliceFunds: await createLucid(
         cardanoProvider,
-        "Custom",
         config.participantKeys.aliceFunds
       ),
-      bobNode: makeWalletFromPrivateKey(
+      bobNode: await createLucid(
         cardanoProvider,
-        "Custom",
         config.participantKeys.bobNode
       ),
-      bobFunds: makeWalletFromPrivateKey(
+      bobFunds: await createLucid(
         cardanoProvider,
-        "Custom",
         config.participantKeys.bobFunds
       ),
     },
     hydra: {
-      aliceFunds: makeWalletFromPrivateKey(
+      aliceFunds: await createLucid(
         hydraProvider,
-        "Custom",
         config.participantKeys.aliceFunds
       ),
-      bobFunds: makeWalletFromPrivateKey(
+      bobFunds: await createLucid(
         hydraProvider,
-        "Custom",
         config.participantKeys.bobFunds
       ),
     },
   };
+}
+
+export async function signCommitTransaction(
+  unwitnessedTransaction: Transaction,
+  lucid: LucidEvolution
+) {
+  const unsignedTx = CML.Transaction.from_cbor_hex(unwitnessedTransaction);
+
+  const witnessSet = unsignedTx.witness_set();
+
+  witnessSet.add_all_witnesses(await lucid.wallet().signTx(unsignedTx));
+
+  const signedTx = CML.Transaction.new(
+    unsignedTx.body(),
+    witnessSet,
+    true,
+    unsignedTx.auxiliary_data()
+  );
+
+  return signedTx.to_cbor_hex() as Transaction;
 }
 
 const protocolParameters = {
