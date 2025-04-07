@@ -4,21 +4,6 @@ import { Callout, Tabs } from "nextra/components";
 
 Transaction chaining lets you build sequential transactions that depend on outputs from previous transactions without waiting for on-chain confirmation.
 
-## How It Works
-
-The `chain()` method returns three essential pieces:
-
-```typescript
-const [newWalletUTxOs, derivedOutputs, txSignBuilder] = await lucid
-  .newTx()
-  .pay.ToAddress(recipientAddress, { lovelace: 5_000_000n })
-  .chain();
-```
-
-- **`newWalletUTxOs`**: Updated wallet UTXOs (unspent + change outputs)
-- **`derivedOutputs`**: All outputs created by the transaction
-- **`txSignBuilder`**: Ready for signing and submission
-
 ## Basic Example
 
 ```typescript
@@ -49,9 +34,9 @@ await signedTx2.submit();
 lucid.overrideUTxOs(newWalletUTxOs2);
 ```
 
-## Interactions
+### Example Interactions
 
-<Tabs items={['Deposit & Collect', 'Multiple Outputs', 'Resource Management']}>
+<Tabs items={['Deposit & Collect', 'Multiple Outputs']}>
   <Tabs.Tab>
     ```typescript
     // Deposit to contract
@@ -123,40 +108,30 @@ lucid.overrideUTxOs(newWalletUTxOs2);
     lucid.overrideUTxOs(newWalletUTxOs2);
     ```
   </Tabs.Tab>
-  <Tabs.Tab>
-    ```typescript
-    // Build transaction
-    const txBuilder = lucid.newTx()
-      .pay.ToAddress(recipientAddress, { lovelace: 5_000_000n });
-      
-    // Chain, sign and submit
-    const [newWalletUTxOs, derivedOutputs, txSignBuilder] = await txBuilder.chain();
-    const signedTx = await txSignBuilder.sign.withWallet().complete();
-    await signedTx.submit();
-    
-    // Update wallet state
-    lucid.overrideUTxOs(newWalletUTxOs);
-    
-    // Free resources to manage memory
-    txBuilder.rawConfig().txBuilder.free();
-    txSignBuilder.toTransaction().free();
-    signedTx.toTransaction().free();
-    ```
-  </Tabs.Tab>
 </Tabs>
 
-## Important Notes
+## How It Works
 
-1. Each transaction in a chain must be individually signed and submitted.
+The `chain()` method returns three essential pieces:
 
-2. You call `overrideUTxOs()` after each transaction to update the wallet's UTxO state.
+```typescript
+const [newWalletUTxOs, derivedOutputs, txSignBuilder] = await lucid
+  .newTx()
+  .pay.ToAddress(recipientAddress, { lovelace: 5_000_000n })
+  .chain();
+```
 
-3. If one transaction fails to confirm on-chain, all subsequent transactions that depend on its outputs will also fail.
+- **`newWalletUTxOs`**: Updated wallet UTXOs (unspent + change outputs)
+- **`derivedOutputs`**: All outputs created by the transaction
+- **`txSignBuilder`**: Ready for signing and submission
 
-4. In memory-intensive applications, free resources after use:
 
-   ```typescript
-   txBuilder.rawConfig().txBuilder.free();
-   txSignBuilder.toTransaction().free();
-   signedTx.toTransaction().free();
-   ```
+<Callout>
+
+- Each transaction in a chain must be individually signed and submitted.
+
+- You call `overrideUTxOs()` after each transaction to update the wallet's UTxO state.
+
+- If one transaction fails to confirm on-chain, all subsequent transactions that depend on its outputs will also fail.
+
+</Callout>
