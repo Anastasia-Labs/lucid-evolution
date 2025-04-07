@@ -5,7 +5,6 @@ import { sleep } from "@lucid-evolution/core-utils";
 import { exec } from "child_process";
 import { Node } from "../../src/internal/hydra.js";
 import { Provider, Transaction, Wallet } from "@lucid-evolution/core-types";
-import { makeWalletFromPrivateKey } from "@lucid-evolution/wallet";
 import { Lucid, LucidEvolution } from "../../../lucid/src/index.js";
 
 export type HydraConfiguration = {
