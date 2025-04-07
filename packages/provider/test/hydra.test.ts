@@ -1,20 +1,10 @@
 import { ChildProcess } from "child_process";
-import {
-  afterAll,
-  afterEach,
-  beforeAll,
-  beforeEach,
-  describe,
-  expect,
-  it,
-} from "vitest";
+import { afterEach, beforeAll, beforeEach, describe, expect, it } from "vitest";
 import {
   Kupmios,
   Lucid,
-  LucidEvolution,
   makeWalletFromPrivateKey,
   Provider,
-  Transaction,
   Wallet,
 } from "../../lucid/src/index.js";
 import { CML } from "../src/core.js";
@@ -30,7 +20,6 @@ import {
   TestWallets,
 } from "./internal/hydra.js";
 import { Hydra } from "../src/hydra.js";
-import { set } from "effect/HashMap";
 
 let yaciProcess: ChildProcess | undefined;
 const faucetSk = CML.PrivateKey.generate_ed25519().to_bech32();
@@ -46,6 +35,12 @@ type TestContext = {
 };
 
 beforeAll(async () => {
+  // Start Yaci
+  // Due to a problem with Yaci you'll need to run the node during 10 minutes
+  // until the Conway hard fork is activated. You can run the test for the
+  // first time and wait 10 minutes to rerun it.
+  // It will create a folder in the tmp directory with the name yaci
+  // and the config file inside it.
   if (!(await isYaciRunning(0))) {
     yaciProcess = await startYaci();
     await isYaciRunning();
@@ -167,12 +162,6 @@ describe("Hydra manager", async () => {
 afterEach<TestContext>(async (context) => {
   context.abortController.abort();
 }, 30000);
-
-afterAll(async () => {
-  if (yaciProcess) {
-    yaciProcess.kill();
-  }
-});
 
 function expectNewState(
   node: Hydra,

@@ -19,7 +19,7 @@ export async function startYaci() {
         yaci.store.mode=native
         bp.create.enabled=true
         conwayHardForkAtEpoch=1
-        shiftStartTimeBehind=true
+        shiftStartTimeBehind=false
     `
   );
 
