@@ -121,7 +121,8 @@ export async function startHydraNode(
             --persistence-dir ${node1Dir} \\
             --ledger-protocol-parameters ${tempDir}/protocol-parameters.json \\
             --testnet-magic 42 \\
-            --node-socket ~/.yaci-cli/local-clusters/default/node/node.sock &`,
+            --node-socket ~/.yaci-cli/local-clusters/default/node/node.sock \\
+            --contestation-period 3 &`,
     { signal }
   );
 
@@ -139,7 +140,8 @@ export async function startHydraNode(
             --persistence-dir ${node2Dir} \\
             --ledger-protocol-parameters ${tempDir}/protocol-parameters.json \\
             --testnet-magic 42 \\
-            --node-socket ~/.yaci-cli/local-clusters/default/node/node.sock &`,
+            --node-socket ~/.yaci-cli/local-clusters/default/node/node.sock \\
+            --contestation-period 3 &`,
     { signal }
   );
 

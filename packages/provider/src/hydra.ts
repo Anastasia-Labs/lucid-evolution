@@ -144,6 +144,10 @@ export class Hydra implements Provider {
   async close() {
     return this._node.close();
   }
+
+  async fanout() {
+    return this._node.fanout();
+  }
 }
 
 const STATUS = {

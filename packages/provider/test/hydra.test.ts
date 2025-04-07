@@ -30,6 +30,7 @@ import {
   TestWallets,
 } from "./internal/hydra.js";
 import { Hydra } from "../src/hydra.js";
+import { set } from "effect/HashMap";
 
 let yaciProcess: ChildProcess | undefined;
 const faucetSk = CML.PrivateKey.generate_ed25519().to_bech32();
@@ -94,42 +95,31 @@ beforeEach<TestContext>(async (meta) => {
   await lucid.awaitTx(txHash, 100);
 }, 30000);
 
-describe("Hydra", async () => {
-  it<TestContext>("should be able to create a new Hydra node", async (context) => {
-    const { alicePort: node1Port } = context.config;
-
-    const provider = new Hydra(`ws://localhost:${node1Port}`);
-    await provider.initialize();
-
-    expect(provider.status()).toEqual("INITIALIZING");
-  });
-
-  it<TestContext>("should be able to open the Hydra node", async (context) => {
+describe("Hydra manager", async () => {
+  it<TestContext>("should complete the whole lifecycle", async (context) => {
     const { alicePort: node1Port, bobPort: node2Port } = context.config;
-    const providerNode1 = new Hydra(`ws://localhost:${node1Port}`);
-    await providerNode1.initialize();
-    const providerNode2 = new Hydra(`ws://localhost:${node2Port}`);
+    const wallets = context.wallets;
 
+    const providerNode1 = new Hydra(`ws://localhost:${node1Port}`);
+    const providerNode2 = new Hydra(`ws://localhost:${node2Port}`);
     const cardanoProvider = new Kupmios(
       "http://localhost:1442",
       "http://localhost:1337"
     );
 
-    const wallets = context.wallets;
+    // Initialize the node
+    await providerNode1.initialize();
+    expect(await expectNewState(providerNode1, "INITIALIZING")).toEqual(true);
 
+    // Commit to the head
     const firstUTxO = (await wallets.cardano.aliceFunds.wallet().getUtxos())[0];
-
-    if (!firstUTxO) {
-      throw new Error("No UTxO found");
-    }
+    expect(firstUTxO).toBeDefined();
 
     const cardanoTxNode1 = await providerNode1.commit([firstUTxO]);
-
     const signedTxNode1 = await signCommitTransaction(
       cardanoTxNode1,
       wallets.cardano.aliceFunds
     );
-
     const txHashNode1 = await providerNode1.submitL1Transaction(signedTxNode1);
     await cardanoProvider.awaitTx(txHashNode1, 100);
 
@@ -137,18 +127,40 @@ describe("Hydra", async () => {
     const txHashNode2 = await providerNode2.submitL1Transaction(cardanoTxNode2);
     await cardanoProvider.awaitTx(txHashNode2, 100);
 
-    let tryCount = 0;
+    // Await for the head to be open
+    expect(await expectNewState(providerNode1, "OPEN")).toEqual(true);
 
-    while (tryCount < 10) {
-      if (providerNode1.status() === "OPEN") {
-        break;
-      } else {
-        tryCount++;
-        await new Promise((resolve) => setTimeout(resolve, 1000));
-      }
-    }
+    // Check the UTxO is inside the head
+    const removeFalsyValues = (obj: Object) => {
+      return Object.fromEntries(
+        Object.entries(obj).filter(([_, value]) => Boolean(value))
+      );
+    };
+    const headUTxO = (await providerNode1.getUtxos(firstUTxO.address))[0];
+    expect(removeFalsyValues(headUTxO)).toEqual(removeFalsyValues(firstUTxO));
 
-    expect(providerNode1.status()).toEqual("OPEN");
+    // Close the head
+    await providerNode1.close();
+    expect(await expectNewState(providerNode1, "CLOSED")).toEqual(true);
+
+    // Wait to fun out
+    expect(await expectNewState(providerNode1, "FANOUT_POSSIBLE")).toEqual(
+      true
+    );
+
+    // Fan out funds
+    await providerNode1.fanout();
+    expect(await expectNewState(providerNode1, "FINAL")).toEqual(true);
+
+    // Check the UTxO is inside the head
+    const newUTxOs = await wallets.cardano.aliceFunds.wallet().getUtxos();
+    expect(
+      newUTxOs.some(
+        (utxo) =>
+          utxo.address === firstUTxO.address &&
+          utxo.assets["lovelace"] === firstUTxO.assets["lovelace"]
+      )
+    ).toBeTruthy();
   });
 });
 
@@ -161,3 +173,27 @@ afterAll(async () => {
     yaciProcess.kill();
   }
 });
+
+function expectNewState(
+  node: Hydra,
+  state: string | Array<string>,
+  timeout: number = 10000
+): Promise<boolean> {
+  return new Promise((resolve) => {
+    const timeoutId = setTimeout(() => {
+      resolve(false);
+    }, timeout);
+
+    const checkIntervalId = setInterval(async () => {
+      const status = node.status();
+      if (
+        status === state ||
+        (Array.isArray(state) && state.includes(status))
+      ) {
+        clearTimeout(timeoutId);
+        clearInterval(checkIntervalId);
+        resolve(true);
+      }
+    }, 1000);
+  });
+}
