@@ -3,7 +3,7 @@
   "version": "0.4.25",
   "license": "MIT",
   "author": "",
-  "description": "Next-generation transaction builder for highly scalable dApps on Cardano",
+  "description": "A highly scalable, production-ready transaction builder and off-chain framework for dApps and developers on Cardano",
   "homepage": "https://anastasia-labs.github.io/lucid-evolution",
   "repository": {
     "type": "git",
