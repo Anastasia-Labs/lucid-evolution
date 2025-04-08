@@ -49,14 +49,18 @@
     "@effect/platform-node": "^0.73.6",
     "@harmoniclabs/plutus-data": "^1.2.4",
     "@harmoniclabs/uplc": "^1.2.4",
+    "@lucid-evolution/core-types": "workspace:*",
+    "@lucid-evolution/utils": "workspace:*",
     "cbor-x": "^1.6.0",
-    "effect": "^3.14.1"
+    "effect": "^3.14.1",
+    "ws": "^8.18.1"
   },
   "devDependencies": {
     "@effect/docgen": "^0.5.2",
     "@effect/vitest": "^0.16.0",
     "@microsoft/api-extractor": "^7.49.0",
     "@types/node": "^22.13.11",
+    "@types/ws": "^8.18.0",
     "tsup": "^8.0.2",
     "typescript": "^5.8.2",
     "vitest": "^2.0.5"

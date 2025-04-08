@@ -167,12 +167,21 @@ importers:
       '@harmoniclabs/uplc':
         specifier: ^1.2.4
         version: 1.4.1(@harmoniclabs/bytestring@1.0.0)(@harmoniclabs/cbor@1.6.6)(@harmoniclabs/crypto@0.2.5)(@harmoniclabs/pair@1.0.0)(@harmoniclabs/plutus-data@1.2.4(@harmoniclabs/bytestring@1.0.0)(@harmoniclabs/cbor@1.6.6))
+      '@lucid-evolution/core-types':
+        specifier: workspace:*
+        version: link:../core-types
+      '@lucid-evolution/utils':
+        specifier: workspace:*
+        version: link:../utils
       cbor-x:
         specifier: ^1.6.0
         version: 1.6.0
       effect:
         specifier: ^3.14.1
         version: 3.14.6
+      ws:
+        specifier: ^8.18.1
+        version: 8.18.1
     devDependencies:
       '@effect/docgen':
         specifier: ^0.5.2
@@ -186,6 +195,9 @@ importers:
       '@types/node':
         specifier: ^22.13.11
         version: 22.14.0
+      '@types/ws':
+        specifier: ^8.18.0
+        version: 8.18.1
       tsup:
         specifier: ^8.0.2
         version: 8.4.0(@microsoft/api-extractor@7.52.3(@types/node@22.14.0))(postcss@8.5.3)(tsx@4.19.3)(typescript@5.8.3)
@@ -323,16 +335,10 @@ importers:
       effect:
         specifier: ^3.11.7
         version: 3.14.6
-      ws:
-        specifier: ^8.18.1
-        version: 8.18.1
     devDependencies:
       '@types/node':
         specifier: ^20.12.8
         version: 20.17.30
-      '@types/ws':
-        specifier: ^8.18.0
-        version: 8.18.1
       tsup:
         specifier: ^8.0.2
         version: 8.4.0(@microsoft/api-extractor@7.52.3(@types/node@20.17.30))(postcss@8.5.3)(tsx@4.19.3)(typescript@5.8.3)
