@@ -1,0 +1,12 @@
+{
+  "$schema": "node_modules/@effect/docgen/schema.json",
+  "exclude": [
+    "src/internal/**/*.ts",
+    "src/**/index.ts",
+    "src/CardanoJS/**/*.ts",
+    "src/!(Data).ts"
+  ],
+  "enforceDescriptions": false,
+  "enforceExamples": false,
+  "enforceVersion": false
+}

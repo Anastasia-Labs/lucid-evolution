@@ -28,35 +28,5 @@
   "documentation": {
     "title": "Documentation",
     "type": "page"
-  },
-
-  "showcase": {
-    "type": "page",
-    "title": "Showcase",
-    "theme": {
-      "typesetting": "article",
-      "layout": "default"
-    }
-  },
-  
-  "information": {
-    "title": "Information",
-    "type": "menu",
-    "items": {
-      "evolution": {
-        "title": "Evolution",
-        "href": "/information/evolution"
-      },
-
-      "license": {
-        "title": "License",
-        "href": "/information/license"
-      },
-
-      "contact": {
-        "title": "Contact",
-        "href": "/information/contact"
-      }
-    }
   }
 }

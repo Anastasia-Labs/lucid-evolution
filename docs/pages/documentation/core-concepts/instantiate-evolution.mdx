@@ -1,29 +1,40 @@
 import { Callout, Steps, Tabs } from "nextra/components";
 
-# Instantiate Lucid
+## Instantiating Lucid Evolution
 
-Lucid Evolution is a library for transaction building and designing the way you want to frame your off-chain. It can be used with or without a provider or a certain network for different purposes. The library supports the `Mainnet`, `Preprod`, `Preview` and `Custom` networks
+Lucid Evolution is a transaction building framework for Cardano which provides flexible off-chain development patterns. The library is designed with modularity in mind, allowing you to:
 
-To be able to query UTxOs, datums, and protocol parameters, you need to choose a provider and a provider is a service that allows Lucid Evolution to interact with the Cardano blockchain.
+- Build and simulate transactions
+- Work with different Cardano networks (Mainnet, Preprod, Preview, or Custom networks)
+- Choose from multiple provider options for blockchain interaction
 
-## Provider selection
+## Provider
+
+To interact with the Cardano blockchain (querying UTxOs, datums, or protocol parameters), you'll need to configure a provider. Providers are chain indexing services that offer API access to blockchain data. Lucid Evolution supports several providers:
+
+<Callout type="info">
+  While a provider is required for blockchain queries, you can still use Lucid Evolution's transaction building features without one.
+</Callout>
+
+### Provider selection
 
 You can choose one of the following providers to use with Lucid Evolution
 
-### Blockfrost
+<Tabs items={['Blockfrost', 'Kupmios', 'Maestro', 'Koios', 'YACI DevKit', 'UTxORPC']}>
+  <Tabs.Tab>
 
 ```typescript
 import { Lucid, Blockfrost } from "@lucid-evolution/lucid";
 
 const lucid = await Lucid(
-  new Blockfrost("https://cardano-preprod.blockfrost.io/api/v0", "<projectId>"),
+  new Blockfrost("https://cardano-preprod.blockfrost.io/api/v0", "<blockfrost-api-key>"),
   "Preprod"
 );
 ```
 
----
+</Tabs.Tab>
 
-### Kupmios
+<Tabs.Tab>
 
 ```typescript
 import { Lucid, Kupmios } from "@lucid-evolution/lucid";
@@ -37,29 +48,29 @@ const lucid = await Lucid(
 );
 ```
 
-**with API keys**
+<Callout type="info">
+  **If you have API keys**
 
-```typescript
-const lucid = await Lucid(
-  new Kupmios(
-    "http://localhost:1442",
-    "http://localhost:1337",
-    {
-      kupoHeader: { "priv-api-key": "<kupo-api-key>" }, // for example: "dmtr-api-key": "<kupo-api-key>" 
-      ogmiosHeader: { "priv-api-key": "<ogmios-api-key>" }
-    }
-  ),
+  ```typescript
+  const lucid = await Lucid(
+  new Kupmios("http://localhost:1442", "http://localhost:1337", {
+    kupoHeader: { "priv-api-key": "<kupo-api-key>" }, // for example: "dmtr-api-key": "<kupo-api-key>"
+    ogmiosHeader: { "priv-api-key": "<ogmios-api-key>" },
+  }),
   "Preview"
 );
 ```
 
-<Callout type="info">
-Kupmios is a mix of [Ogmios](https://ogmios.dev/) and [Kupo](https://cardanosolutions.github.io/kupo/).
 </Callout>
 
----
+<Callout type="info">
+  Kupmios is a mix of [Ogmios](https://ogmios.dev/) and
+  [Kupo](https://cardanosolutions.github.io/kupo/).
+</Callout>
 
-### Maestro
+</Tabs.Tab>
+
+<Tabs.Tab>
 
 ```typescript
 import { Lucid, Maestro } from "@lucid-evolution/lucid";
@@ -74,9 +85,9 @@ const lucid = await Lucid(
 );
 ```
 
----
+</Tabs.Tab>
 
-### Koios
+<Tabs.Tab>
 
 ```typescript
 import { Lucid, Koios } from "@lucid-evolution/lucid";
@@ -87,120 +98,107 @@ const lucid = await Lucid(
 );
 ```
 
-**with bearer token**
+<Callout type="info">
+  **If you have a bearer token**
 
-```typescript
+  ```typescript
 const lucid = await Lucid(
-  new Koios(
-    "<koios-api-url>",
-    "<koios-bearer-token>"
-  ),
+  new Koios("<koios-api-url>", "<koios-bearer-token>"),
   "Preprod"
 );
-``` 
+```
 
----
+</Callout>
 
-### YACI DevKit
+</Tabs.Tab>
+
+<Tabs.Tab>
 
 YACI DevKit provides a local development environment with configurable block times and network parameters. For detailed setup instructions, visit the [YACI DevKit documentation](https://devkit.yaci.xyz/tutorials/lucid-evolution/overview).
+
 ```typescript
 // Configure custom network slot settings for YACI DevKit
-SLOT_CONFIG_NETWORK['Custom'] = {
+SLOT_CONFIG_NETWORK["Custom"] = {
   zeroTime: 1664060800000, // Unix timestamp in milliseconds
   zeroSlot: 0,
   slotLength: 1000,
 };
 
 const lucid = await Lucid(
-  new Kupmios(
-    "http://localhost:1442",
-    "http://localhost:1337" 
-  ),
+  new Kupmios("http://localhost:1442", "http://localhost:1337"),
   "Custom" // Use custom network type for DevKit
 );
 ```
 
----
+</Tabs.Tab>
 
-### UTxORPC
-```typescript
-//TODO: https://github.com/utxorpc/lucid-evolution-provider
-```
-
-## Query the provider
-
-By querying the provider you are essentially asking "what's on the blockchain?", this way you can query any on-chain data.
-
-The `provider` in `lucid.provider` is the provider instance you passed to `Lucid()` when selecting your provider (Blockfrost, Kupmios, Maestro, Koios, etc.).
-
-### UTxOs
-
-UTxOs (Unspent Transaction Outputs) are the fundamental building blocks in Cardano's eUTxO model. One of its differentiator from account-based models is that your wallet's balance is the sum of all UTxOs at your address.
-
-**Using provider**
+<Tabs.Tab>
 
 ```typescript
-const utxos = await lucid.provider.getUtxos("addr_test...");
+https://github.com/utxorpc/lucid-evolution-provider
 ```
 
-**or using convenience method**
+</Tabs.Tab>
 
-```typescript
-const utxos = await lucid.utxosAt("addr_test...");
-```
+</Tabs>
 
-<Callout type="info">
-This convenience method internally uses `lucid.provider.getUtxos()`.
-</Callout>
+## Common Queries
 
----
+By abstracting away the provider calls, Evolution library provides different methods to query on-chain data:
 
-### Datums
+<Tabs items={['UTxOs', 'Datums', 'Protocol Parameters']}>
+  <Tabs.Tab>
+    UTxOs (Unspent Transaction Outputs) are building blocks of Cardano's eUTxO model. A nuance from account-based models is that your wallet's balance is the sum of all UTxOs at your address.
 
-In Cardano, datums are pieces of data attached to UTxOs. Lets get some terminology out of the way.
+    <Tabs items={['Convenience method', 'Provider call']}>
+      <Tabs.Tab>
+        ```typescript
+        const utxos = await lucid.utxosAt("addr_test...");
+        ```
+      </Tabs.Tab>
+      <Tabs.Tab>
+        ```typescript
+        const utxos = await lucid.provider.getUtxos("addr_test...");
+        ```
+      </Tabs.Tab>
+    </Tabs>
 
-- *Inline datums*: When the complete datum is stored directly in the UTxO
-- *Datum hashes*: When only a hash of the datum is stored on-chain
+  </Tabs.Tab>
 
-**Using Provider**
+  <Tabs.Tab>
+    Datums are pieces of data attached to UTxOs.
 
-```typescript
-const datum = await lucid.provider.getDatum("<datum_hash>");
-```
+    <Tabs items={['Convenience method', 'Provider call', 'Script UTxOs']}>
+      <Tabs.Tab>
+        ```typescript
+        const datum = await lucid.datumOf("<datum_hash>");
+        ```
+      </Tabs.Tab>
+      <Tabs.Tab>
+        ```typescript
+        const datum = await lucid.provider.getDatum("<datum_hash>");
+        ```
+      </Tabs.Tab>
+      <Tabs.Tab>
+        ```typescript
+        const [scriptUtxo] = await lucid.utxosAt("addr_test...");
+        const datum = await lucid.datumOf(scriptUtxo);
+        ```
+      </Tabs.Tab>
+    </Tabs>
 
-**or using convenience method**
+  </Tabs.Tab>
 
-```typescript
-const datum = await lucid.datumOf("<datum_hash>");
-```
+  <Tabs.Tab>
+    Protocol parameters define the rules and constraints of the Cardano network like tx fees, max block size, max tx size, plutus execution costs, minimum UTxO ada value
 
-**or querying a datum from a scriptUTxO**
+    ```typescript
+    const protocolParameters = await lucid.provider.getProtocolParameters();
+    ```
 
-```typescript
-const [scriptUtxo] = await lucid.utxosAt("addr_test...");
-const datum = await lucid.datumOf(scriptUtxo);
-```
+    <Callout type="info">
+      Remember that you can switch providers using the `switchProvider` method if needed.
+    </Callout>
 
-<Callout type="info">
-`lucid.datumOf(utxo)` is a convenience method that handles both inline datums and datum hashes:
-
-1. For UTxOs with inline datums → returns the datum directly
-2. For UTxOs with datum hashes → fetches the full datum using `provider.getDatum()`
-
-Once fetched, the datum is cached in the UTxO object for subsequent queries, avoiding additional network requests.
-</Callout>
-
-### Protocol Parameters
-
-Protocol parameters define the rules and constraints of the Cardano network like tx fees, max block size, max tx size, plutus execution costs, minimum UTxO ada value
-
-**Using the provider directly:**
-
-```typescript
-const protocolParameters = await lucid.provider.getProtocolParameters();
-```
-
-<Callout type="info">
-Remember that you can switch providers using the `switchProvider` method if needed.
-</Callout>
+  </Tabs.Tab>
+</Tabs>

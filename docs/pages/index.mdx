@@ -33,7 +33,7 @@ import React, { useState, useEffect } from "react";
       code={`import { Lucid, Blockfrost } from "@lucid-evolution/lucid";
 
 const lucid = await Lucid(
-new Blockfrost("https://cardano-preprod.blockfrost.io/api/v0", "<projectId>"),
+new Blockfrost("https://cardano-preprod.blockfrost.io/api/v0", "<blockfrost-api-key>"),
 "Preprod"
 );
 
@@ -124,7 +124,7 @@ Initialize a new `TypeScript` project
 <Cards>
   <Cards.Card
     title="Core Concept 2: Choose wallet"
-    href="/documentation/core-concepts/choose-wallet"
+    href="/documentation/core-concepts/wallet-management"
   />
 </Cards>
 
@@ -143,7 +143,7 @@ Initialize a new `TypeScript` project
   <Cards.Card
     icon = "🥽"
     title = " Deep Dive Series"
-    href = "/documentation/deep-dives/make-payments"
+    href = "/documentation/deep-dives/pay-methods"
   />
 </Cards>
 </Steps>

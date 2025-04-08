@@ -176,7 +176,7 @@ export const composeDepositFundsLockRefScriptAndRegisterDrep = Effect.gen(
 ).pipe(Effect.flatMap(handleSignSubmit), withLogRetry, Effect.orDie);
 
 export const composeCollectFundsReadFromAndDeregisterDrep = Effect.gen(
-  function* ($) {
+  function* () {
     const { user } = yield* User;
 
     const { contractAddress } = yield* HelloContract;

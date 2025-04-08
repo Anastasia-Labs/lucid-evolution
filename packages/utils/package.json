@@ -1,6 +1,6 @@
 {
   "name": "@lucid-evolution/utils",
-  "version": "0.1.64",
+  "version": "0.1.65",
   "description": "",
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
@@ -34,6 +34,7 @@
   "dependencies": {
     "@anastasia-labs/cardano-multiplatform-lib-browser": "6.0.2-3",
     "@anastasia-labs/cardano-multiplatform-lib-nodejs": "6.0.2-3",
+    "@cardano-sdk/core": "^0.45.1",
     "@effect/schema": "^0.68.16",
     "@harmoniclabs/plutus-data": "^1.2.4",
     "@harmoniclabs/uplc": "^1.2.4",
