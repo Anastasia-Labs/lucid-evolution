@@ -116,38 +116,7 @@ export class Hydra implements Provider {
     _additionalUTxOs?: Array<UTxO>
   ): Promise<Array<EvalRedeemer>> {
     throw new Error("Method not implemented.");
-  }
-
-  status(): Status {
-    return this._node.status;
-  }
-
-  initialize(): Promise<void> {
-    return this._node.init();
-  }
-
-  async commit(utxos: Array<UTxO> = [], blueprintTx?: string) {
-    return (await this._node.commit(utxos, blueprintTx)).cborHex as Transaction;
-  }
-
-  async submitL1Transaction(tx: Transaction): Promise<TxHash> {
-    await this._node.cardanoTransaction({
-      description: "",
-      type: "Tx ConwayEra",
-      cborHex: tx,
-    });
-
-    const transaction = CML.Transaction.from_cbor_hex(tx);
-    return CML.hash_transaction(transaction.body()).to_hex();
-  }
-
-  async close() {
-    return this._node.close();
-  }
-
-  async fanout() {
-    return this._node.fanout();
-  }
+  } 
 }
 
 const STATUS = {

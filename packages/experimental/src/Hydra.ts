@@ -1,5 +1,6 @@
 
 import {
+  Transaction,
   type ProtocolParameters,
   type UTxO,
 } from "@lucid-evolution/core-types";
@@ -95,7 +96,7 @@ export class Node extends EventEmitter {
     }
   }
 
-  async init() {
+  async initialize() {
     this.connection.send(JSON.stringify({ tag: "Init" }));
 
     return new Promise<void>((resolve, reject) => {
@@ -194,7 +195,9 @@ export class Node extends EventEmitter {
       body: bodyRequest,
     });
 
-    return (await this.handleHttpResponse(body)) as TransactionRequest;
+    const txRequest =  (await this.handleHttpResponse(body)) as TransactionRequest;
+
+    return txRequest.cborHex as Transaction;
   }
 
   async cardanoTransaction(transaction: TransactionRequest) {
@@ -403,11 +406,11 @@ export class Node extends EventEmitter {
     });
   }
 
-  get status() {
+  getStatus() {
     return this._status;
   }
 
-  get url() {
+  getUrl() {
     return this._url;
   }
 

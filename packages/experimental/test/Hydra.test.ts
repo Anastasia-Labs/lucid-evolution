@@ -20,6 +20,7 @@ import {
   TestWallets,
 } from "./internal/hydra.js";
 import { Hydra } from "../src/Provider/Hydra.js";
+import { Node } from "../src/Hydra.js";
 
 let yaciProcess: ChildProcess | undefined;
 const faucetSk = CML.PrivateKey.generate_ed25519().to_bech32();
@@ -95,35 +96,38 @@ describe("Hydra manager", async () => {
     const { alicePort: node1Port, bobPort: node2Port } = context.config;
     const wallets = context.wallets;
 
-    const providerNode1 = new Hydra(`ws://localhost:${node1Port}`);
-    const providerNode2 = new Hydra(`ws://localhost:${node2Port}`);
-    const cardanoProvider = new Kupmios(
+    const node1 = new Node(`ws://localhost:${node1Port}`);
+    const node2 = new Node(`ws://localhost:${node2Port}`);
+    await node1.connect();
+    await node2.connect();
+    const providerNode1 = new Hydra(node1.getUrl(), "Custom");
+    const cardanoProvider = new Kupmios(  
       "http://localhost:1442",
       "http://localhost:1337"
     );
 
     // Initialize the node
-    await providerNode1.initialize();
-    expect(await expectNewState(providerNode1, "INITIALIZING")).toEqual(true);
+    await node1.initialize();
+    expect(await expectNewState(node1, "INITIALIZING")).toEqual(true);
 
     // Commit to the head
     const firstUTxO = (await wallets.cardano.aliceFunds.wallet().getUtxos())[0];
     expect(firstUTxO).toBeDefined();
 
-    const cardanoTxNode1 = await providerNode1.commit([firstUTxO]);
+    const cardanoTxNode1 = await node1.commit([firstUTxO]);
     const signedTxNode1 = await signCommitTransaction(
       cardanoTxNode1,
       wallets.cardano.aliceFunds
     );
-    const txHashNode1 = await providerNode1.submitL1Transaction(signedTxNode1);
+    const txHashNode1 = await cardanoProvider.submitTx(signedTxNode1);
     await cardanoProvider.awaitTx(txHashNode1, 100);
 
-    const cardanoTxNode2 = await providerNode2.commit();
-    const txHashNode2 = await providerNode2.submitL1Transaction(cardanoTxNode2);
+    const cardanoTxNode2 = await node2.commit();
+    const txHashNode2 = await cardanoProvider.submitTx(cardanoTxNode2);
     await cardanoProvider.awaitTx(txHashNode2, 100);
 
     // Await for the head to be open
-    expect(await expectNewState(providerNode1, "OPEN")).toEqual(true);
+    expect(await expectNewState(node1, "OPEN")).toEqual(true);
 
     // Check the UTxO is inside the head
     const removeFalsyValues = (obj: Object) => {
@@ -135,17 +139,17 @@ describe("Hydra manager", async () => {
     expect(removeFalsyValues(headUTxO)).toEqual(removeFalsyValues(firstUTxO));
 
     // Close the head
-    await providerNode1.close();
-    expect(await expectNewState(providerNode1, "CLOSED")).toEqual(true);
+    await node1.close();
+    expect(await expectNewState(node1, "CLOSED")).toEqual(true);
 
     // Wait to fun out
-    expect(await expectNewState(providerNode1, "FANOUT_POSSIBLE")).toEqual(
+    expect(await expectNewState(node1, "FANOUT_POSSIBLE")).toEqual(
       true
     );
 
     // Fan out funds
-    await providerNode1.fanout();
-    expect(await expectNewState(providerNode1, "FINAL")).toEqual(true);
+    await node1.fanout();
+    expect(await expectNewState(node1, "FINAL")).toEqual(true);
 
     // Check the UTxO is inside the head
     const newUTxOs = await wallets.cardano.aliceFunds.wallet().getUtxos();
@@ -164,7 +168,7 @@ afterEach<TestContext>(async (context) => {
 }, 30000);
 
 function expectNewState(
-  node: Hydra,
+  node: Node,
   state: string | Array<string>,
   timeout: number = 10000
 ): Promise<boolean> {
@@ -174,7 +178,7 @@ function expectNewState(
     }, timeout);
 
     const checkIntervalId = setInterval(async () => {
-      const status = node.status();
+      const status = node.getStatus();
       if (
         status === state ||
         (Array.isArray(state) && state.includes(status))

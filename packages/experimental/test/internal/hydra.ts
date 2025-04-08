@@ -152,7 +152,7 @@ export async function startHydraNode(
   // Check if the nodes are running
   const node = new Node(`ws://localhost:${node1Port}`);
   await node.connect();
-  while (node.status !== "IDLE") {
+  while (node.getStatus() !== "IDLE") {
     await sleep(100);
   }
 
