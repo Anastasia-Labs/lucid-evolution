@@ -1,6 +1,6 @@
 ---
 title: CML/Utils/min_fee.ts
-nav_order: 270
+nav_order: 271
 parent: Modules
 ---
 

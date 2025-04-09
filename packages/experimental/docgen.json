@@ -4,7 +4,7 @@
     "src/internal/**/*.ts",
     "src/**/index.ts",
     "src/CardanoJS/**/*.ts",
-    "src/!(Data).ts"
+    "src/!(Data|Address).ts"
   ],
   "enforceDescriptions": false,
   "enforceExamples": false,

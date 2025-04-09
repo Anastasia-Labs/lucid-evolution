@@ -1,6 +1,6 @@
 ---
 title: CML/Utils/encode_arbitrary_bytes_as_metadatum.ts
-nav_order: 257
+nav_order: 258
 parent: Modules
 ---
 

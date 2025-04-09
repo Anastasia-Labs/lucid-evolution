@@ -1,7 +1,7 @@
 import * as UTXO from "./UTXO.js";
 import * as OutRef from "./OutRef.js";
-import * as Address from "./Address.js";
-import * as RewardAddress from "./Address.js";
+import * as Address from "./Address_old.js";
+import * as RewardAddress from "./Address_old.js";
 import * as CML from "@anastasia-labs/cardano-multiplatform-lib-nodejs";
 import * as Delegation from "./Delegation.js";
 import * as Transaction from "./Transaction.js";

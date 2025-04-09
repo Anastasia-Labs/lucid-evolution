@@ -1,4 +1,4 @@
-import * as Address from "./Address.js";
+import * as Address from "./Address_old.js";
 import * as UTXO from "./UTXO.js";
 /**
  * A wallet that can be constructed from external data e.g utxos and an address.

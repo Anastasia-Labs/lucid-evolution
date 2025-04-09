@@ -7,7 +7,7 @@ import { dataFromCbor } from "@harmoniclabs/plutus-data";
 import { Schema } from "effect";
 import * as ScriptHash from "./ScriptHash.js";
 import * as Network from "./Network.js";
-import * as Address from "./Address.js";
+import * as Address from "./Address_old.js";
 import * as Credential from "./Credential.js";
 import * as Policy from "./Policy.js";
 
