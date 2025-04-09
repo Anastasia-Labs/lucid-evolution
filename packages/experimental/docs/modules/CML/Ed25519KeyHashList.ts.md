@@ -1,6 +1,6 @@
 ---
 title: CML/Ed25519KeyHashList.ts
-nav_order: 59
+nav_order: 60
 parent: Modules
 ---
 

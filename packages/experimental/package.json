@@ -49,8 +49,10 @@
     "@effect/platform-node": "^0.73.6",
     "@harmoniclabs/plutus-data": "^1.2.4",
     "@harmoniclabs/uplc": "^1.2.4",
+    "@scure/base": "^1.2.4",
     "cbor-x": "^1.6.0",
-    "effect": "^3.14.1"
+    "effect": "^3.14.1",
+    "tinybench": "^4.0.1"
   },
   "devDependencies": {
     "@effect/docgen": "^0.5.2",

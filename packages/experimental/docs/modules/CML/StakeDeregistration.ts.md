@@ -1,6 +1,6 @@
 ---
 title: CML/StakeDeregistration.ts
-nav_order: 213
+nav_order: 214
 parent: Modules
 ---
 

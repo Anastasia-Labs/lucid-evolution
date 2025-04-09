@@ -1,6 +1,6 @@
 ---
 title: CML/Utils/encode_json_str_to_plutus_datum.ts
-nav_order: 259
+nav_order: 260
 parent: Modules
 ---
 
