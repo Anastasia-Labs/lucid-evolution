@@ -286,7 +286,8 @@ export const headerFromBech32 = (
   Effect.map(bytesFromBech32(bech32Address), (bytes) => bytes[0]);
 
 /**
- * Parse an address kind from header
+ * Get address tag from header byte
+ * Shifts the header byte to the right by 4 bits to isolate the address type
  *
  * @example
  * import { Address } from "@lucid-evolution/experimental";
@@ -318,7 +319,7 @@ export const addressTagFromHeader = (header: number): AddressTag => {
       return "Reward";
     default:
       throw new AddressError({
-        message: `Unknown address kind: ${header}`,
+        message: `Unknown address header: ${header}`,
       });
   }
 };
@@ -851,24 +852,28 @@ export const toBech32: (
   function* (address) {
     switch (address._tag) {
       case "BaseAddress":
-        return bech32.encodeFromBytes(
+        return bech32.encode(
           address.networkId === 0 ? "addr_test" : "addr",
-          yield* toBytes(address),
+          bech32.toWords(yield* toBytes(address)),
+          false,
         );
       case "EnterpriseAddress":
-        return bech32.encodeFromBytes(
+        return bech32.encode(
           address.networkId === 0 ? "addr_test" : "addr",
-          yield* toBytes(address),
+          bech32.toWords(yield* toBytes(address)),
+          false,
         );
       case "PointerAddress":
-        return bech32.encodeFromBytes(
+        return bech32.encode(
           address.networkId === 0 ? "addr_test" : "addr",
-          yield* toBytes(address),
+          bech32.toWords(yield* toBytes(address)),
+          false,
         );
       case "RewardAccount":
-        return bech32.encodeFromBytes(
+        return bech32.encode(
           address.networkId === 0 ? "stake_test" : "stake",
-          yield* toBytes(address),
+          bech32.toWords(yield* toBytes(address)),
+          false,
         );
       case "ByronAddress":
         return yield* new AddressError({
