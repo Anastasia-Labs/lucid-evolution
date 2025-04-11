@@ -238,7 +238,7 @@ export class Kupmios implements Provider {
   }
 
   async awaitTx(txHash: TxHash, checkInterval = 20000): Promise<boolean> {
-    const pattern = `${this.kupoUrl}/matches/*@${txHash}`;
+    const pattern = `${this.kupoUrl}/matches/*@${txHash}?unspent`;
     const schema = S.Array(Kupo.UTxOSchema).annotations({
       identifier: "Array<KupmiosSchema.KupoUTxO>",
     });
