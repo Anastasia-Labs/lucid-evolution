@@ -10,65 +10,177 @@ parent: Modules
 
 <h2 class="text-delta">Table of contents</h2>
 
+- [constructors](#constructors)
+  - [addressDetailsFromBech32](#addressdetailsfrombech32)
+  - [addressDetailsFromHex](#addressdetailsfromhex)
+  - [addressDetailsFromString](#addressdetailsfromstring)
 - [encoding/decoding](#encodingdecoding)
+  - [bytesFromBech32](#bytesfrombech32)
   - [decodeVariableLength](#decodevariablelength)
   - [encodeVariableLength](#encodevariablelength)
+  - [fromBech32](#frombech32)
   - [fromBytes](#frombytes)
   - [paymentAddressToJson](#paymentaddresstojson)
   - [toBech32](#tobech32)
   - [toBytes](#tobytes)
+  - [toCBOR](#tocbor)
   - [toHex](#tohex)
 - [model](#model)
   - [Address (type alias)](#address-type-alias)
+  - [AddressDetails (type alias)](#addressdetails-type-alias)
   - [AddressError (class)](#addresserror-class)
   - [AddressTag (type alias)](#addresstag-type-alias)
-  - [Credential](#credential)
+  - [BaseAddress (interface)](#baseaddress-interface)
+  - [ByronAddress (interface)](#byronaddress-interface)
+  - [EnterpriseAddress (interface)](#enterpriseaddress-interface)
   - [NetworkId (type alias)](#networkid-type-alias)
+  - [PaymentAddress (type alias)](#paymentaddress-type-alias)
+  - [Pointer (type alias)](#pointer-type-alias)
+  - [PointerAddress (interface)](#pointeraddress-interface)
+  - [RewardAccount (interface)](#rewardaccount-interface)
+  - [RewardAddress (type alias)](#rewardaddress-type-alias)
+  - [StakeReference (type alias)](#stakereference-type-alias)
+- [predicates](#predicates)
+  - [isPaymentAddress](#ispaymentaddress)
+  - [isPointer](#ispointer)
+  - [isRewardAddress](#isrewardaddress)
 - [schemas](#schemas)
   - [Address](#address)
   - [BaseAddress](#baseaddress)
   - [ByronAddress](#byronaddress)
   - [EnterpriseAddress](#enterpriseaddress)
-  - [KeyHash](#keyhash)
   - [PaymentAddress](#paymentaddress)
+  - [Pointer](#pointer)
   - [PointerAddress](#pointeraddress)
   - [RewardAccount](#rewardaccount)
   - [RewardAddress](#rewardaddress)
-- [utilities](#utilities)
-  - [addressDetailsFromBech32](#addressdetailsfrombech32)
-  - [addressDetailsFromHex](#addressdetailsfromhex)
-  - [addressDetailsFromString](#addressdetailsfromstring)
+  - [StakeReference](#stakereference)
+- [transformation](#transformation)
   - [addressTagFromBech32](#addresstagfrombech32)
   - [addressTagFromHeader](#addresstagfromheader)
-  - [bytesFromBech32](#bytesfrombech32)
-  - [fromBech32](#frombech32)
   - [headerFromBech32](#headerfrombech32)
   - [networkIdFromBech32](#networkidfrombech32)
-- [utils](#utils)
-  - [AddressDetails (type alias)](#addressdetails-type-alias)
-  - [BaseAddress (interface)](#baseaddress-interface)
-  - [ByronAddressInfo (interface)](#byronaddressinfo-interface)
-  - [Credential (type alias)](#credential-type-alias)
-  - [EnterpriseAddress (interface)](#enterpriseaddress-interface)
-  - [KeyHash (type alias)](#keyhash-type-alias)
-  - [PaymentAddress (type alias)](#paymentaddress-type-alias)
-  - [Pointer](#pointer)
-  - [Pointer (type alias)](#pointer-type-alias)
-  - [PointerAddress (interface)](#pointeraddress-interface)
-  - [RewardAccount (interface)](#rewardaccount-interface)
-  - [RewardAddress (type alias)](#rewardaddress-type-alias)
-  - [ScriptHash](#scripthash)
-  - [ScriptHash (type alias)](#scripthash-type-alias)
-  - [StakeReference](#stakereference)
-  - [StakeReference (type alias)](#stakereference-type-alias)
-  - [isCredential](#iscredential)
-  - [isPaymentAddress](#ispaymentaddress)
-  - [isPointer](#ispointer)
-  - [isRewardAddress](#isrewardaddress)
 
 ---
 
+# constructors
+
+## addressDetailsFromBech32
+
+Extract detailed information from a bech32 address
+
+**Signature**
+
+```ts
+export declare const addressDetailsFromBech32: (
+  bech32Address: string,
+) => Effect.Effect<AddressDetails, AddressError>;
+```
+
+**Example**
+
+```ts
+import { Address } from "@lucid-evolution/experimental";
+import { Effect } from "effect";
+
+const effect = Address.addressDetailsFromBech32(
+  "addr1qx2fxv2umyhttkxyxp8x0dlpdt3k6cwng5pxj3jhsydzer3n0d3vllmyqwsx5wktcd8cc3sq835lu7drv2xwl2wywfgse35a3x",
+);
+const details = Effect.runSync(effect);
+// Returns object with network ID, credentials, and encoding details
+```
+
+Added in v2.0.0
+
+## addressDetailsFromHex
+
+Extract detailed information from a hex-encoded address
+
+**Signature**
+
+```ts
+export declare const addressDetailsFromHex: (
+  hexAddress: string,
+) => Effect.Effect<AddressDetails, AddressError>;
+```
+
+**Example**
+
+```ts
+import { Address } from "@lucid-evolution/experimental";
+import { Effect } from "effect";
+
+const effect = Address.addressDetailsFromHex(
+  "01af2ff48c27324dae7fb3116381e6d7b11f1e7ef37adce1d5e07fdde614800e78e7849bfbb5c4ad414498d57ae5ecad",
+);
+const details = Effect.runSync(effect);
+// Returns object with network ID, credentials, and encoding details
+```
+
+Added in v2.0.0
+
+## addressDetailsFromString
+
+Extract address details from a string (auto-detects bech32 or hex format)
+
+**Signature**
+
+```ts
+export declare const addressDetailsFromString: (
+  stringAddress: string,
+) => Effect.Effect<AddressDetails, AddressError>;
+```
+
+**Example**
+
+```ts
+import { Address } from "@lucid-evolution/experimental";
+import { Effect } from "effect";
+
+// From bech32
+const bech32Effect = Address.addressDetailsFromString(
+  "addr1qx2fxv2umyhttkxyxp8x0dlpdt3k6cwng5pxj3jhsydzer3n0d3vllmyqwsx5wktcd8cc3sq835lu7drv2xwl2wywfgse35a3x",
+);
+
+// From hex
+const hexEffect = Address.addressDetailsFromString(
+  "01af2ff48c27324dae7fb3116381e6d7b11f1e7ef37adce1d5e07fdde614800e78e7849bfbb5c4ad414498d57ae5ecad",
+);
+
+const details = Effect.runSync(bech32Effect);
+// Returns complete address details regardless of input format
+```
+
+Added in v2.0.0
+
 # encoding/decoding
+
+## bytesFromBech32
+
+Get raw bytes from address string (either format)
+
+**Signature**
+
+```ts
+export declare const bytesFromBech32: (
+  bech32Address: string,
+) => Effect.Effect<Uint8Array, AddressError>;
+```
+
+**Example**
+
+```ts
+import { Address } from "@lucid-evolution/experimental";
+import { Effect } from "effect";
+
+const effect = Address.bytesFromBech32(
+  "addr1qx2fxv2umyhttkxyxp8x0dlpdt3k6cwng5pxj3jhsydzer3n0d3vllmyqwsx5wktcd8cc3sq835lu7drv2xwl2wywfgse35a3x",
+);
+const bytes = Effect.runSync(effect);
+// Returns Uint8Array representing the binary address
+```
+
+Added in v2.0.0
 
 ## decodeVariableLength
 
@@ -129,6 +241,47 @@ const smallBytes = Effect.runSync(smallEffect);
 
 Added in v2.0.0
 
+## fromBech32
+
+Parse the complete address structure into a typed representation
+This decodes the address format according to CIP-0019 specification
+
+**Signature**
+
+```ts
+export declare const fromBech32: (
+  bech32Address: string,
+) => Effect.Effect<
+  | ByronAddress
+  | BaseAddress
+  | EnterpriseAddress
+  | PointerAddress
+  | RewardAccount,
+  AddressError
+>;
+```
+
+**Example**
+
+```ts
+import { Address } from "@lucid-evolution/experimental";
+import { Effect } from "effect";
+
+const effect = Address.fromBech32(
+  "addr1qx2fxv2umyhttkxyxp8x0dlpdt3k6cwng5pxj3jhsydzer3n0d3vllmyqwsx5wktcd8cc3sq835lu7drv2xwl2wywfgse35a3x",
+);
+const address = Effect.runSync(effect);
+// Returns a structured Address object with _tag: "BaseAddress"
+
+const stakeEffect = Address.fromBech32(
+  "stake1uyehkck0lajq8gr28t9uxnuvgcqrc6070x3k9r8048z8y5gh6ffgw",
+);
+const stakeAddress = Effect.runSync(stakeEffect);
+// Returns a structured Address object with _tag: "RewardAccount"
+```
+
+Added in v2.0.0
+
 ## fromBytes
 
 Convert bytes to an address structure
@@ -143,7 +296,7 @@ export declare const fromBytes: (
   | EnterpriseAddress
   | PointerAddress
   | RewardAccount
-  | ByronAddressInfo,
+  | ByronAddress,
   AddressError
 >;
 ```
@@ -252,6 +405,34 @@ const bytes = Effect.runSync(addressEffect);
 
 Added in v2.0.0
 
+## toCBOR
+
+Encode a Cardano address to CBOR format
+
+**Signature**
+
+```ts
+export declare const toCBOR: (
+  address: Address,
+) => Effect.Effect<string, AddressError, never>;
+```
+
+**Example**
+
+```ts
+import { Address } from "@lucid-evolution/experimental";
+import { Effect } from "effect";
+
+const effect = Address.fromBech32(
+  "addr1qx2fxv2umyhttkxyxp8x0dlpdt3k6cwng5pxj3jhsydzer3n0d3vllmyqwsx5wktcd8cc3sq835lu7drv2xwl2wywfgse35a3x",
+).pipe(Effect.flatMap(Address.toCBOR));
+
+const cborHex = Effect.runSync(effect);
+// Returns hex string of the CBOR-encoded address
+```
+
+Added in v2.0.0
+
 ## toHex
 
 Convert address to hex string
@@ -297,7 +478,25 @@ export type Address =
   | EnterpriseAddress
   | PointerAddress
   | RewardAccount
-  | ByronAddressInfo;
+  | ByronAddress;
+```
+
+Added in v2.0.0
+
+## AddressDetails (type alias)
+
+Extended address information with both structured data and serialized formats
+Contains the address structure and its serialized representations
+
+**Signature**
+
+```ts
+export type AddressDetails = Address & {
+  address: {
+    bech32: string;
+    hex: string;
+  };
+};
 ```
 
 Added in v2.0.0
@@ -327,25 +526,39 @@ export type AddressTag = "Base" | "Enterprise" | "Pointer" | "Reward" | "Byron";
 
 Added in v2.0.0
 
-## Credential
+## BaseAddress (interface)
 
-Credential used within addresses, as specified in CIP-0019
+Type representing a base address with payment and stake credentials
 
 **Signature**
 
 ```ts
-export declare const Credential: Schema.Union<
-  [
-    Schema.TaggedStruct<
-      "KeyHash",
-      { hash: Schema.filter<Schema.Schema<string, string, never>> }
-    >,
-    Schema.TaggedStruct<
-      "ScriptHash",
-      { hash: Schema.filter<Schema.Schema<string, string, never>> }
-    >,
-  ]
->;
+export interface BaseAddress extends Schema.Schema.Type<typeof BaseAddress> {}
+```
+
+Added in v2.0.0
+
+## ByronAddress (interface)
+
+Type representing a Byron legacy address
+
+**Signature**
+
+```ts
+export interface ByronAddress extends Schema.Schema.Type<typeof ByronAddress> {}
+```
+
+Added in v2.0.0
+
+## EnterpriseAddress (interface)
+
+Type representing an enterprise address with only payment credential
+
+**Signature**
+
+```ts
+export interface EnterpriseAddress
+  extends Schema.Schema.Type<typeof EnterpriseAddress> {}
 ```
 
 Added in v2.0.0
@@ -359,6 +572,165 @@ As defined in CIP-0019
 
 ```ts
 export type NetworkId = 0 | 1 | number;
+```
+
+Added in v2.0.0
+
+## PaymentAddress (type alias)
+
+Type representing a payment address string in bech32 format
+
+**Signature**
+
+```ts
+export type PaymentAddress = Schema.Schema.Type<typeof PaymentAddress>;
+```
+
+Added in v2.0.0
+
+## Pointer (type alias)
+
+Type representing a pointer to a stake registration
+
+**Signature**
+
+```ts
+export type Pointer = Schema.Schema.Type<typeof Pointer>;
+```
+
+Added in v2.0.0
+
+## PointerAddress (interface)
+
+Type representing a pointer address with payment credential and pointer
+
+**Signature**
+
+```ts
+export interface PointerAddress
+  extends Schema.Schema.Type<typeof PointerAddress> {}
+```
+
+Added in v2.0.0
+
+## RewardAccount (interface)
+
+Type representing a reward/stake address with only staking credential
+
+**Signature**
+
+```ts
+export interface RewardAccount
+  extends Schema.Schema.Type<typeof RewardAccount> {}
+```
+
+Added in v2.0.0
+
+## RewardAddress (type alias)
+
+Type representing a reward/stake address string in bech32 format
+
+**Signature**
+
+```ts
+export type RewardAddress = Schema.Schema.Type<typeof RewardAddress>;
+```
+
+Added in v2.0.0
+
+## StakeReference (type alias)
+
+Type representing a reference to staking information
+Can be a credential (key hash or script hash) or a pointer
+
+**Signature**
+
+```ts
+export type StakeReference = Schema.Schema.Type<typeof StakeReference>;
+```
+
+Added in v2.0.0
+
+# predicates
+
+## isPaymentAddress
+
+Check if the given value is a valid PaymentAddress
+
+**Signature**
+
+```ts
+export declare const isPaymentAddress: (
+  u: unknown,
+  overrideOptions?: ParseOptions | number,
+) => u is string & Brand<"PaymentAddress">;
+```
+
+**Example**
+
+```ts
+import { Address } from "@lucid-evolution/experimental";
+
+const isValid = Address.isPaymentAddress(
+  "addr1qx2fxv2umyhttkxyxp8x0dlpdt3k6cwng5pxj3jhsydzer3n0d3vllmyqwsx5wktcd8cc3sq835lu7drv2xwl2wywfgse35a3x",
+);
+// Returns true if address is a valid payment address
+```
+
+Added in v2.0.0
+
+## isPointer
+
+Check if the given value is a valid Pointer
+
+**Signature**
+
+```ts
+export declare const isPointer: (
+  u: unknown,
+  overrideOptions?: ParseOptions | number,
+) => u is {
+  readonly _tag: "Pointer";
+  readonly slot: number;
+  readonly txIndex: number;
+  readonly certIndex: number;
+};
+```
+
+**Example**
+
+```ts
+import { Address } from "@lucid-evolution/experimental";
+
+const pointer = { _tag: "Pointer", slot: 1, txIndex: 2, certIndex: 3 };
+const isValid = Address.isPointer(pointer);
+// Returns true if pointer is valid
+```
+
+Added in v2.0.0
+
+## isRewardAddress
+
+Check if the given value is a valid RewardAddress
+
+**Signature**
+
+```ts
+export declare const isRewardAddress: (
+  u: unknown,
+  overrideOptions?: ParseOptions | number,
+) => u is string & Brand<"RewardAddress">;
+```
+
+**Example**
+
+```ts
+import { Address } from "@lucid-evolution/experimental";
+
+const isValid = Address.isRewardAddress(
+  "stake1uyehkck0lajq8gr28t9uxnuvgcqrc6070x3k9r8048z8y5gh6ffgw",
+);
+// Returns true if address is a valid reward address
 ```
 
 Added in v2.0.0
@@ -562,22 +934,6 @@ export declare const EnterpriseAddress: Schema.TaggedStruct<
 
 Added in v2.0.0
 
-## KeyHash
-
-Hex address format schema (raw/binary format encoded as hex)
-Following CIP-0019 binary representation
-
-**Signature**
-
-```ts
-export declare const KeyHash: Schema.TaggedStruct<
-  "KeyHash",
-  { hash: Schema.filter<Schema.Schema<string, string, never>> }
->;
-```
-
-Added in v2.0.0
-
 ## PaymentAddress
 
 Bech32 address format schema (human-readable addresses)
@@ -589,6 +945,26 @@ Following CIP-0019 encoding requirements
 export declare const PaymentAddress: Schema.brand<
   Schema.filter<typeof Schema.String>,
   "PaymentAddress"
+>;
+```
+
+Added in v2.0.0
+
+## Pointer
+
+Schema for pointer to a stake registration certificate
+Contains slot, transaction index, and certificate index information
+
+**Signature**
+
+```ts
+export declare const Pointer: Schema.TaggedStruct<
+  "Pointer",
+  {
+    slot: typeof Schema.Number;
+    txIndex: typeof Schema.Number;
+    certIndex: typeof Schema.Number;
+  }
 >;
 ```
 
@@ -676,95 +1052,44 @@ export declare const RewardAddress: Schema.brand<
 
 Added in v2.0.0
 
-# utilities
+## StakeReference
 
-## addressDetailsFromBech32
-
-Extract detailed information from a bech32 address
+Schema for stake reference that can be either a credential or a pointer
 
 **Signature**
 
 ```ts
-export declare const addressDetailsFromBech32: (
-  bech32Address: string,
-) => Effect.Effect<AddressDetails, AddressError>;
-```
-
-**Example**
-
-```ts
-import { Address } from "@lucid-evolution/experimental";
-import { Effect } from "effect";
-
-const effect = Address.addressDetailsFromBech32(
-  "addr1qx2fxv2umyhttkxyxp8x0dlpdt3k6cwng5pxj3jhsydzer3n0d3vllmyqwsx5wktcd8cc3sq835lu7drv2xwl2wywfgse35a3x",
-);
-const details = Effect.runSync(effect);
-// Returns object with network ID, credentials, and encoding details
-```
-
-Added in v2.0.0
-
-## addressDetailsFromHex
-
-Extract detailed information from a hex-encoded address
-
-**Signature**
-
-```ts
-export declare const addressDetailsFromHex: (
-  hexAddress: string,
-) => Effect.Effect<AddressDetails, AddressError>;
-```
-
-**Example**
-
-```ts
-import { Address } from "@lucid-evolution/experimental";
-import { Effect } from "effect";
-
-const effect = Address.addressDetailsFromHex(
-  "01af2ff48c27324dae7fb3116381e6d7b11f1e7ef37adce1d5e07fdde614800e78e7849bfbb5c4ad414498d57ae5ecad",
-);
-const details = Effect.runSync(effect);
-// Returns object with network ID, credentials, and encoding details
+export declare const StakeReference: Schema.UndefinedOr<
+  Schema.Union<
+    [
+      Schema.Union<
+        [
+          Schema.TaggedStruct<
+            "KeyHash",
+            { hash: Schema.filter<Schema.Schema<string, string, never>> }
+          >,
+          Schema.TaggedStruct<
+            "ScriptHash",
+            { hash: Schema.filter<Schema.Schema<string, string, never>> }
+          >,
+        ]
+      >,
+      Schema.TaggedStruct<
+        "Pointer",
+        {
+          slot: typeof Schema.Number;
+          txIndex: typeof Schema.Number;
+          certIndex: typeof Schema.Number;
+        }
+      >,
+    ]
+  >
+>;
 ```
 
 Added in v2.0.0
 
-## addressDetailsFromString
-
-Extract address details from a string (auto-detects bech32 or hex format)
-
-**Signature**
-
-```ts
-export declare const addressDetailsFromString: (
-  stringAddress: string,
-) => Effect.Effect<AddressDetails, AddressError>;
-```
-
-**Example**
-
-```ts
-import { Address } from "@lucid-evolution/experimental";
-import { Effect } from "effect";
-
-// From bech32
-const bech32Effect = Address.addressDetailsFromString(
-  "addr1qx2fxv2umyhttkxyxp8x0dlpdt3k6cwng5pxj3jhsydzer3n0d3vllmyqwsx5wktcd8cc3sq835lu7drv2xwl2wywfgse35a3x",
-);
-
-// From hex
-const hexEffect = Address.addressDetailsFromString(
-  "01af2ff48c27324dae7fb3116381e6d7b11f1e7ef37adce1d5e07fdde614800e78e7849bfbb5c4ad414498d57ae5ecad",
-);
-
-const details = Effect.runSync(bech32Effect);
-// Returns complete address details regardless of input format
-```
-
-Added in v2.0.0
+# transformation
 
 ## addressTagFromBech32
 
@@ -795,7 +1120,8 @@ Added in v2.0.0
 
 ## addressTagFromHeader
 
-Parse an address kind from header
+Get address tag from header byte
+Shifts the header byte to the right by 4 bits to isolate the address type
 
 **Signature**
 
@@ -810,67 +1136,6 @@ import { Address } from "@lucid-evolution/experimental";
 
 const tag = Address.addressTagFromHeader(0);
 // Returns "Base"
-```
-
-Added in v2.0.0
-
-## bytesFromBech32
-
-Get raw bytes from address string (either format)
-
-**Signature**
-
-```ts
-export declare const bytesFromBech32: (
-  bech32Address: string,
-) => Effect.Effect<Uint8Array, AddressError>;
-```
-
-**Example**
-
-```ts
-import { Address } from "@lucid-evolution/experimental";
-import { Effect } from "effect";
-
-const effect = Address.bytesFromBech32(
-  "addr1qx2fxv2umyhttkxyxp8x0dlpdt3k6cwng5pxj3jhsydzer3n0d3vllmyqwsx5wktcd8cc3sq835lu7drv2xwl2wywfgse35a3x",
-);
-const bytes = Effect.runSync(effect);
-// Returns Uint8Array representing the binary address
-```
-
-Added in v2.0.0
-
-## fromBech32
-
-Parse the complete address structure into a typed representation
-This decodes the address format according to CIP-0019 specification
-
-**Signature**
-
-```ts
-export declare const fromBech32: (
-  bech32Address: string,
-) => Effect.Effect<Address, AddressError>;
-```
-
-**Example**
-
-```ts
-import { Address } from "@lucid-evolution/experimental";
-import { Effect } from "effect";
-
-const effect = Address.fromBech32(
-  "addr1qx2fxv2umyhttkxyxp8x0dlpdt3k6cwng5pxj3jhsydzer3n0d3vllmyqwsx5wktcd8cc3sq835lu7drv2xwl2wywfgse35a3x",
-);
-const address = Effect.runSync(effect);
-// Returns a structured Address object with _tag: "BaseAddress"
-
-const stakeEffect = Address.fromBech32(
-  "stake1uyehkck0lajq8gr28t9uxnuvgcqrc6070x3k9r8048z8y5gh6ffgw",
-);
-const stakeAddress = Effect.runSync(stakeEffect);
-// Returns a structured Address object with _tag: "RewardAccount"
 ```
 
 Added in v2.0.0
@@ -936,228 +1201,3 @@ const testnetId = Effect.runSync(testnetEffect);
 ```
 
 Added in v2.0.0
-
-# utils
-
-## AddressDetails (type alias)
-
-**Signature**
-
-```ts
-export type AddressDetails = Address & {
-  address: {
-    bech32: string;
-    hex: string;
-  };
-};
-```
-
-## BaseAddress (interface)
-
-**Signature**
-
-```ts
-export interface BaseAddress extends Schema.Schema.Type<typeof BaseAddress> {}
-```
-
-## ByronAddressInfo (interface)
-
-**Signature**
-
-```ts
-export interface ByronAddressInfo
-  extends Schema.Schema.Type<typeof ByronAddress> {}
-```
-
-## Credential (type alias)
-
-**Signature**
-
-```ts
-export type Credential = typeof Credential.Type;
-```
-
-## EnterpriseAddress (interface)
-
-**Signature**
-
-```ts
-export interface EnterpriseAddress
-  extends Schema.Schema.Type<typeof EnterpriseAddress> {}
-```
-
-## KeyHash (type alias)
-
-**Signature**
-
-```ts
-export type KeyHash = typeof KeyHash.Type;
-```
-
-## PaymentAddress (type alias)
-
-**Signature**
-
-```ts
-export type PaymentAddress = typeof PaymentAddress.Type;
-```
-
-## Pointer
-
-**Signature**
-
-```ts
-export declare const Pointer: Schema.TaggedStruct<
-  "Pointer",
-  {
-    slot: typeof Schema.Number;
-    txIndex: typeof Schema.Number;
-    certIndex: typeof Schema.Number;
-  }
->;
-```
-
-## Pointer (type alias)
-
-**Signature**
-
-```ts
-export type Pointer = typeof Pointer.Type;
-```
-
-## PointerAddress (interface)
-
-**Signature**
-
-```ts
-export interface PointerAddress
-  extends Schema.Schema.Type<typeof PointerAddress> {}
-```
-
-## RewardAccount (interface)
-
-**Signature**
-
-```ts
-export interface RewardAccount
-  extends Schema.Schema.Type<typeof RewardAccount> {}
-```
-
-## RewardAddress (type alias)
-
-**Signature**
-
-```ts
-export type RewardAddress = typeof RewardAddress.Type;
-```
-
-## ScriptHash
-
-**Signature**
-
-```ts
-export declare const ScriptHash: Schema.TaggedStruct<
-  "ScriptHash",
-  { hash: Schema.filter<Schema.Schema<string, string, never>> }
->;
-```
-
-## ScriptHash (type alias)
-
-**Signature**
-
-```ts
-export type ScriptHash = typeof ScriptHash.Type;
-```
-
-## StakeReference
-
-**Signature**
-
-```ts
-export declare const StakeReference: Schema.UndefinedOr<
-  Schema.Union<
-    [
-      Schema.Union<
-        [
-          Schema.TaggedStruct<
-            "KeyHash",
-            { hash: Schema.filter<Schema.Schema<string, string, never>> }
-          >,
-          Schema.TaggedStruct<
-            "ScriptHash",
-            { hash: Schema.filter<Schema.Schema<string, string, never>> }
-          >,
-        ]
-      >,
-      Schema.TaggedStruct<
-        "Pointer",
-        {
-          slot: typeof Schema.Number;
-          txIndex: typeof Schema.Number;
-          certIndex: typeof Schema.Number;
-        }
-      >,
-    ]
-  >
->;
-```
-
-## StakeReference (type alias)
-
-**Signature**
-
-```ts
-export type StakeReference = typeof StakeReference.Type;
-```
-
-## isCredential
-
-**Signature**
-
-```ts
-export declare const isCredential: (
-  u: unknown,
-  overrideOptions?: ParseOptions | number,
-) => u is
-  | { readonly _tag: "KeyHash"; readonly hash: string }
-  | { readonly _tag: "ScriptHash"; readonly hash: string };
-```
-
-## isPaymentAddress
-
-**Signature**
-
-```ts
-export declare const isPaymentAddress: (
-  u: unknown,
-  overrideOptions?: ParseOptions | number,
-) => u is string & Brand<"PaymentAddress">;
-```
-
-## isPointer
-
-**Signature**
-
-```ts
-export declare const isPointer: (
-  u: unknown,
-  overrideOptions?: ParseOptions | number,
-) => u is {
-  readonly _tag: "Pointer";
-  readonly slot: number;
-  readonly txIndex: number;
-  readonly certIndex: number;
-};
-```
-
-## isRewardAddress
-
-**Signature**
-
-```ts
-export declare const isRewardAddress: (
-  u: unknown,
-  overrideOptions?: ParseOptions | number,
-) => u is string & Brand<"RewardAddress">;
-```

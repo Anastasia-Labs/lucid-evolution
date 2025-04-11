@@ -2,6 +2,8 @@ import { Schema, Effect, Data } from "effect";
 import { HexString } from "./Combinator.js";
 import { bech32 } from "@scure/base";
 import * as Bytes from "./Bytes.js";
+import * as CBOR from "cbor-x";
+import * as Credential from "./Credential.js";
 
 /**
  * CDDL specs
@@ -67,44 +69,39 @@ export class AddressError extends Data.TaggedError("AddressError")<{
 }> {}
 
 /**
- * Hex address format schema (raw/binary format encoded as hex)
- * Following CIP-0019 binary representation
+ * Schema for pointer to a stake registration certificate
+ * Contains slot, transaction index, and certificate index information
  *
  * @since 2.0.0
  * @category schemas
  */
-export const KeyHash = Schema.TaggedStruct("KeyHash", {
-  hash: Schema.String.pipe(HexString),
-});
-
-export type KeyHash = typeof KeyHash.Type;
-
-export const ScriptHash = Schema.TaggedStruct("ScriptHash", {
-  hash: Schema.String.pipe(HexString),
-});
-
-export type ScriptHash = typeof ScriptHash.Type;
-
-/**
- * Credential used within addresses, as specified in CIP-0019
- *
- * @since 2.0.0
- * @category model
- */
-export const Credential = Schema.Union(KeyHash, ScriptHash);
-
-export type Credential = typeof Credential.Type;
-
-export const isCredential = Schema.is(Credential);
-
 export const Pointer = Schema.TaggedStruct("Pointer", {
   slot: Schema.Number,
   txIndex: Schema.Number,
   certIndex: Schema.Number,
 });
 
-export type Pointer = typeof Pointer.Type;
+/**
+ * Type representing a pointer to a stake registration
+ *
+ * @since 2.0.0
+ * @category model
+ */
+export type Pointer = Schema.Schema.Type<typeof Pointer>;
 
+/**
+ * Check if the given value is a valid Pointer
+ *
+ * @example
+ * import { Address } from "@lucid-evolution/experimental";
+ *
+ * const pointer = { _tag: "Pointer", slot: 1, txIndex: 2, certIndex: 3 };
+ * const isValid = Address.isPointer(pointer);
+ * // Returns true if pointer is valid
+ *
+ * @since 2.0.0
+ * @category predicates
+ */
 export const isPointer = Schema.is(Pointer);
 
 /**
@@ -118,8 +115,26 @@ export const PaymentAddress = Schema.String.pipe(
   Schema.pattern(/^(addr|addr_test)[1][a-z0-9]+$/i),
 ).pipe(Schema.brand("PaymentAddress"));
 
-export type PaymentAddress = typeof PaymentAddress.Type;
+/**
+ * Type representing a payment address string in bech32 format
+ *
+ * @since 2.0.0
+ * @category model
+ */
+export type PaymentAddress = Schema.Schema.Type<typeof PaymentAddress>;
 
+/**
+ * Check if the given value is a valid PaymentAddress
+ *
+ * @example
+ * import { Address } from "@lucid-evolution/experimental";
+ *
+ * const isValid = Address.isPaymentAddress("addr1qx2fxv2umyhttkxyxp8x0dlpdt3k6cwng5pxj3jhsydzer3n0d3vllmyqwsx5wktcd8cc3sq835lu7drv2xwl2wywfgse35a3x");
+ * // Returns true if address is a valid payment address
+ *
+ * @since 2.0.0
+ * @category predicates
+ */
 export const isPaymentAddress = Schema.is(PaymentAddress);
 
 /**
@@ -133,15 +148,46 @@ export const RewardAddress = Schema.String.pipe(
   Schema.pattern(/^(stake|stake_test)[1][a-z0-9]+$/i),
 ).pipe(Schema.brand("RewardAddress"));
 
-export type RewardAddress = typeof RewardAddress.Type;
+/**
+ * Type representing a reward/stake address string in bech32 format
+ *
+ * @since 2.0.0
+ * @category model
+ */
+export type RewardAddress = Schema.Schema.Type<typeof RewardAddress>;
 
+/**
+ * Check if the given value is a valid RewardAddress
+ *
+ * @example
+ * import { Address } from "@lucid-evolution/experimental";
+ *
+ * const isValid = Address.isRewardAddress("stake1uyehkck0lajq8gr28t9uxnuvgcqrc6070x3k9r8048z8y5gh6ffgw");
+ * // Returns true if address is a valid reward address
+ *
+ * @since 2.0.0
+ * @category predicates
+ */
 export const isRewardAddress = Schema.is(RewardAddress);
 
+/**
+ * Schema for stake reference that can be either a credential or a pointer
+ *
+ * @since 2.0.0
+ * @category schemas
+ */
 export const StakeReference = Schema.UndefinedOr(
-  Schema.Union(Credential, Pointer),
+  Schema.Union(Credential.Credential, Pointer),
 );
 
-export type StakeReference = typeof StakeReference.Type;
+/**
+ * Type representing a reference to staking information
+ * Can be a credential (key hash or script hash) or a pointer
+ *
+ * @since 2.0.0
+ * @category model
+ */
+export type StakeReference = Schema.Schema.Type<typeof StakeReference>;
 
 /**
  * Base address with both payment and staking credentials
@@ -151,10 +197,16 @@ export type StakeReference = typeof StakeReference.Type;
  */
 export const BaseAddress = Schema.TaggedStruct("BaseAddress", {
   networkId: Schema.Number,
-  paymentCredential: Credential,
-  stakeCredential: Credential,
+  paymentCredential: Credential.Credential,
+  stakeCredential: Credential.Credential,
 });
 
+/**
+ * Type representing a base address with payment and stake credentials
+ *
+ * @since 2.0.0
+ * @category model
+ */
 export interface BaseAddress extends Schema.Schema.Type<typeof BaseAddress> {}
 
 /**
@@ -165,9 +217,15 @@ export interface BaseAddress extends Schema.Schema.Type<typeof BaseAddress> {}
  */
 export const EnterpriseAddress = Schema.TaggedStruct("EnterpriseAddress", {
   networkId: Schema.Number,
-  paymentCredential: Credential,
+  paymentCredential: Credential.Credential,
 });
 
+/**
+ * Type representing an enterprise address with only payment credential
+ *
+ * @since 2.0.0
+ * @category model
+ */
 export interface EnterpriseAddress
   extends Schema.Schema.Type<typeof EnterpriseAddress> {}
 
@@ -179,10 +237,16 @@ export interface EnterpriseAddress
  */
 export const PointerAddress = Schema.TaggedStruct("PointerAddress", {
   networkId: Schema.Number,
-  paymentCredential: Credential,
+  paymentCredential: Credential.Credential,
   pointer: Pointer,
 });
 
+/**
+ * Type representing a pointer address with payment credential and pointer
+ *
+ * @since 2.0.0
+ * @category model
+ */
 export interface PointerAddress
   extends Schema.Schema.Type<typeof PointerAddress> {}
 
@@ -194,9 +258,15 @@ export interface PointerAddress
  */
 export const RewardAccount = Schema.TaggedStruct("RewardAccount", {
   networkId: Schema.Number,
-  stakeCredential: Credential,
+  stakeCredential: Credential.Credential,
 });
 
+/**
+ * Type representing a reward/stake address with only staking credential
+ *
+ * @since 2.0.0
+ * @category model
+ */
 export interface RewardAccount
   extends Schema.Schema.Type<typeof RewardAccount> {}
 
@@ -210,8 +280,13 @@ export const ByronAddress = Schema.TaggedStruct("ByronAddress", {
   bytes: Schema.String.pipe(HexString),
 });
 
-export interface ByronAddressInfo
-  extends Schema.Schema.Type<typeof ByronAddress> {}
+/**
+ * Type representing a Byron legacy address
+ *
+ * @since 2.0.0
+ * @category model
+ */
+export interface ByronAddress extends Schema.Schema.Type<typeof ByronAddress> {}
 
 /**
  * Union schema representing all possible address formats
@@ -239,7 +314,7 @@ export type Address =
   | EnterpriseAddress
   | PointerAddress
   | RewardAccount
-  | ByronAddressInfo;
+  | ByronAddress;
 
 /**
  * Get raw bytes from address string (either format)
@@ -253,7 +328,7 @@ export type Address =
  * // Returns Uint8Array representing the binary address
  *
  * @since 2.0.0
- * @category utilities
+ * @category encoding/decoding
  */
 export const bytesFromBech32 = (
   bech32Address: string,
@@ -278,7 +353,7 @@ export const bytesFromBech32 = (
  * // Returns a number (e.g., 0) representing the header byte
  *
  * @since 2.0.0
- * @category utilities
+ * @category transformation
  */
 export const headerFromBech32 = (
   bech32Address: string,
@@ -296,7 +371,7 @@ export const headerFromBech32 = (
  * // Returns "Base"
  *
  * @since 2.0.0
- * @category utilities
+ * @category transformation
  */
 export const addressTagFromHeader = (header: number): AddressTag => {
   const addressType = header >> 4;
@@ -336,7 +411,7 @@ export const addressTagFromHeader = (header: number): AddressTag => {
  * // Returns "Base"
  *
  * @since 2.0.0
- * @category utilities
+ * @category transformation
  */
 export const addressTagFromBech32 = (
   bech32Address: string,
@@ -363,7 +438,7 @@ export const addressTagFromBech32 = (
  * // Returns 0 for testnet
  *
  * @since 2.0.0
- * @category utilities
+ * @category transformation
  */
 export const networkIdFromBech32 = (
   bech32Address: string,
@@ -523,7 +598,7 @@ export const fromBytes: (
   | EnterpriseAddress
   | PointerAddress
   | RewardAccount
-  | ByronAddressInfo,
+  | ByronAddress,
   AddressError
 > = Effect.fnUntraced(function* (bytes) {
   const header = bytes[0];
@@ -540,64 +615,57 @@ export const fromBytes: (
     case 0b0000: // Key payment, Key stake
     case 0b0001: // Script payment, Key stake
     case 0b0010: // Key payment, Script stake
-    case 0b0011: // Script payment, Script stake
-      return {
+    case 0b0011: {
+      // Script payment, Script stake
+      const isPaymentKey = (addressType & 0b0001) === 0;
+      const paymentCredential: Credential.Credential = {
+        _tag: isPaymentKey ? "KeyHash" : "ScriptHash",
+        hash: Bytes.toHex(bytes.slice(1, 29)), // Payment credential hash (28 bytes)
+      };
+      const isStakeKey = (addressType & 0b0010) === 0;
+      const stakeCredential: Credential.Credential = {
+        _tag: isStakeKey ? "KeyHash" : "ScriptHash",
+        hash: Bytes.toHex(bytes.slice(29, 57)), // Stake credential hash (28 bytes)
+      };
+      const baseAddress: BaseAddress = {
         _tag: "BaseAddress",
         networkId,
-        paymentCredential:
-          // Check bit 0 of address type (bit 4 in header)
-          // 0 = Key credential, 1 = Script credential
-          (addressType & 0b0001) === 0
-            ? KeyHash.make({
-                hash: Bytes.toHex(bytes.slice(1, 29)), // Payment credential hash (28 bytes)
-              })
-            : ScriptHash.make({
-                hash: Bytes.toHex(bytes.slice(1, 29)), // Payment credential hash (28 bytes)
-              }),
-        stakeCredential:
-          // Check bit 1 of address type (bit 5 in header)
-          // 0 = Key credential, 1 = Script credential
-          (addressType & 0b0010) === 0
-            ? KeyHash.make({
-                hash: Bytes.toHex(bytes.slice(29, 57)), // Stake credential hash (28 bytes)
-              })
-            : ScriptHash.make({
-                hash: Bytes.toHex(bytes.slice(29, 57)), // Stake credential hash (28 bytes)
-              }),
-      } as BaseAddress;
+        paymentCredential,
+        stakeCredential,
+      };
+      return baseAddress;
+    }
 
     // Enterprise address types (0110, 0111)
     // Format: [payment credential only]
     case 0b0110: // Key payment
-    case 0b0111: // Script payment
-      return {
+    case 0b0111: {
+      // Script payment
+      const isPaymentKey = (addressType & 0b0001) === 0;
+      const paymentCredential: Credential.Credential = {
+        _tag: isPaymentKey ? "KeyHash" : "ScriptHash",
+        hash: Bytes.toHex(bytes.slice(1, 29)), // Payment credential hash (28 bytes)
+      };
+      const enterpriseAddress: EnterpriseAddress = {
         _tag: "EnterpriseAddress",
         networkId,
-        paymentCredential:
-          (addressType & 0b0001) === 0 // Check bit 0 of address type (bit 4 in header)
-            ? // 0 = Key credential, 1 = Script credential
-              KeyHash.make({
-                hash: Bytes.toHex(bytes.slice(1, 29)), // Payment credential hash (28 bytes)
-              })
-            : ScriptHash.make({
-                hash: Bytes.toHex(bytes.slice(1, 29)), // Payment credential hash (28 bytes)
-              }),
-      } as EnterpriseAddress;
+        paymentCredential,
+      };
+      return enterpriseAddress;
+    }
 
     // Pointer address types (0100, 0101)
     // Format: [payment credential, variable length integers for slot, txIndex, certIndex]
     case 0b0100: // Key payment with pointer
-    case 0b0101: // Script payment with pointer
+    case 0b0101: {
+      // Script payment with pointer
       // Check if the address is a pointer address
+      const isPaymentKey = (addressType & 0b0001) === 0;
       // Payment credential is in bytes 1-29 (28 bytes)
-      const paymentCred =
-        (addressType & 0b0001) === 0
-          ? KeyHash.make({
-              hash: Bytes.toHex(bytes.slice(1, 29)),
-            })
-          : ScriptHash.make({
-              hash: Bytes.toHex(bytes.slice(1, 29)),
-            });
+      const paymentCredential: Credential.Credential = {
+        _tag: isPaymentKey ? "KeyHash" : "ScriptHash",
+        hash: Bytes.toHex(bytes.slice(1, 29)), // Payment credential hash (28 bytes)
+      };
 
       // After the credential, we have 3 variable-length integers
       let offset = 29;
@@ -613,38 +681,44 @@ export const fromBytes: (
       offset += txIndexBytesRead;
 
       const [certIndex, _] = yield* decodeVariableLength(bytes, offset);
+      const pointer: Pointer = {
+        _tag: "Pointer",
+        slot,
+        txIndex,
+        certIndex,
+      };
 
-      return {
+      const pointerAddress: PointerAddress = {
         _tag: "PointerAddress",
         networkId,
-        paymentCredential: paymentCred,
-        pointer: Pointer.make({
-          slot,
-          txIndex,
-          certIndex,
-        }),
-      } as PointerAddress;
+        paymentCredential,
+        pointer,
+      };
+
+      return pointerAddress;
+    }
 
     case 0b1110:
-    case 0b1111:
-      return {
+    case 0b1111: {
+      const isStakeKey = (addressType & 0b0001) === 0;
+      const stakeCredential: Credential.Credential = {
+        _tag: isStakeKey ? "KeyHash" : "ScriptHash",
+        hash: Bytes.toHex(bytes.slice(1, 29)), // Staking credential hash (28 bytes)
+      };
+      const rewardAccount: RewardAccount = {
         _tag: "RewardAccount",
         networkId,
-        stakeCredential:
-          (addressType & 0b0001) === 0
-            ? KeyHash.make({
-                hash: Bytes.toHex(bytes.slice(1, 29)), // Staking credential hash (28 bytes)
-              })
-            : ScriptHash.make({
-                hash: Bytes.toHex(bytes.slice(1, 29)), // Staking credential hash (28 bytes)
-              }),
-      } as RewardAccount;
+        stakeCredential,
+      };
+      return rewardAccount;
+    }
 
-    case 0b1000:
+    case 0b1000: {
       return {
         _tag: "ByronAddress",
         bytes: Bytes.toHex(bytes), // Byron address (hex format)
-      } as ByronAddressInfo;
+      } satisfies ByronAddress;
+    }
 
     default:
       return yield* new AddressError({
@@ -670,16 +744,21 @@ export const fromBytes: (
  * // Returns a structured Address object with _tag: "RewardAccount"
  *
  * @since 2.0.0
- * @category utilities
+ * @category encoding/decoding
  */
 export const fromBech32: (
   bech32Address: string,
-) => Effect.Effect<Address, AddressError> = Effect.fnUntraced(
-  function* (bech32Address) {
-    const bytes = yield* bytesFromBech32(bech32Address);
-    return yield* fromBytes(bytes);
-  },
-);
+) => Effect.Effect<
+  | ByronAddress
+  | BaseAddress
+  | EnterpriseAddress
+  | PointerAddress
+  | RewardAccount,
+  AddressError
+> = Effect.fnUntraced(function* (bech32Address) {
+  const bytes = yield* bytesFromBech32(bech32Address);
+  return yield* fromBytes(bytes);
+});
 
 /**
  * Serialize a PaymentAddress to JSON format
@@ -722,6 +801,8 @@ export const toBytes: (
   Effect.fnUntraced(function* (address) {
     switch (address._tag) {
       case "BaseAddress": {
+        // Preallocate array of exact size ( 1 byte header + 28 bytes payment credential + 28 bytes stake credential )
+        const result = new Uint8Array(57);
         const paymentBit = address.paymentCredential._tag === "KeyHash" ? 0 : 1;
         const stakeBit = address.stakeCredential._tag === "KeyHash" ? 0 : 1;
         const header =
@@ -730,14 +811,22 @@ export const toBytes: (
           (paymentBit << 4) |
           (address.networkId & 0b00001111);
 
-        return new Uint8Array([
-          header,
-          ...Bytes.fromHex(address.paymentCredential.hash),
-          ...Bytes.fromHex(address.stakeCredential.hash),
-        ]);
+        result[0] = header;
+        const paymentCredentialBytes = Bytes.fromHex(
+          address.paymentCredential.hash,
+        );
+        result.set(paymentCredentialBytes, 1);
+        const stakeCredentialBytes = Bytes.fromHex(
+          address.stakeCredential.hash,
+        );
+        result.set(stakeCredentialBytes, 29);
+
+        return result;
       }
 
       case "EnterpriseAddress": {
+        // Prea-allocate array of exact size ( 1 byte header + 28 bytes payment credential )
+        const result = new Uint8Array(29);
         const paymentBit = address.paymentCredential._tag === "KeyHash" ? 0 : 1;
         const header =
           (0b01 << 6) |
@@ -745,10 +834,14 @@ export const toBytes: (
           (paymentBit << 4) |
           (address.networkId & 0b00001111);
 
-        return new Uint8Array([
-          header,
-          ...Bytes.fromHex(address.paymentCredential.hash),
-        ]);
+        result[0] = header;
+
+        const paymentCredentialBytes = Bytes.fromHex(
+          address.paymentCredential.hash,
+        );
+        result.set(paymentCredentialBytes, 1);
+
+        return result;
       }
 
       case "PointerAddress": {
@@ -768,13 +861,14 @@ export const toBytes: (
         );
 
         // Combine everything
-        const result = new Uint8Array(
+        const totalSize =
           1 + // header
-            28 + // payment credential
-            slotBytes.length +
-            txIndexBytes.length +
-            certIndexBytes.length,
-        );
+          28 + // payment credential
+          slotBytes.length +
+          txIndexBytes.length +
+          certIndexBytes.length;
+
+        const result = new Uint8Array(totalSize);
 
         result[0] = header;
         result.set(Bytes.fromHex(address.paymentCredential.hash), 1);
@@ -792,14 +886,19 @@ export const toBytes: (
       }
 
       case "RewardAccount": {
+        // Preallocate array of exact size ( 1 byte header + 28 bytes stake credential )
+        const result = new Uint8Array(29);
         const stakingBit = address.stakeCredential._tag === "KeyHash" ? 0 : 1;
         const header =
           (0b111 << 5) | (stakingBit << 4) | (address.networkId & 0b00001111);
 
-        return new Uint8Array([
-          header,
-          ...Bytes.fromHex(address.stakeCredential.hash),
-        ]);
+        result[0] = header;
+        const stakeCredentialBytes = Bytes.fromHex(
+          address.stakeCredential.hash,
+        );
+        result.set(stakeCredentialBytes, 1);
+
+        return result;
       }
       case "ByronAddress":
         return Bytes.fromHex(address.bytes);
@@ -850,39 +949,34 @@ export const toBech32: (
   address: Address,
 ) => Effect.Effect<string, AddressError, never> = Effect.fnUntraced(
   function* (address) {
+    const bytes = yield* toBytes(address);
+    let prefix: string;
     switch (address._tag) {
       case "BaseAddress":
-        return bech32.encode(
-          address.networkId === 0 ? "addr_test" : "addr",
-          bech32.toWords(yield* toBytes(address)),
-          false,
-        );
       case "EnterpriseAddress":
-        return bech32.encode(
-          address.networkId === 0 ? "addr_test" : "addr",
-          bech32.toWords(yield* toBytes(address)),
-          false,
-        );
       case "PointerAddress":
-        return bech32.encode(
-          address.networkId === 0 ? "addr_test" : "addr",
-          bech32.toWords(yield* toBytes(address)),
-          false,
-        );
+        prefix = address.networkId === 0 ? "addr_test" : "addr";
+        break;
       case "RewardAccount":
-        return bech32.encode(
-          address.networkId === 0 ? "stake_test" : "stake",
-          bech32.toWords(yield* toBytes(address)),
-          false,
-        );
+        prefix = address.networkId === 0 ? "stake_test" : "stake";
+        break;
       case "ByronAddress":
         return yield* new AddressError({
           message: `Byron address is not supported for bech32 conversion`,
         });
     }
+    const words = bech32.toWords(bytes);
+    return bech32.encode(prefix, words, false);
   },
 );
 
+/**
+ * Extended address information with both structured data and serialized formats
+ * Contains the address structure and its serialized representations
+ *
+ * @since 2.0.0
+ * @category model
+ */
 export type AddressDetails = Address & {
   address: {
     bech32: string;
@@ -902,7 +996,7 @@ export type AddressDetails = Address & {
  * // Returns object with network ID, credentials, and encoding details
  *
  * @since 2.0.0
- * @category utilities
+ * @category constructors
  */
 export const addressDetailsFromBech32: (
   bech32Address: string,
@@ -932,7 +1026,7 @@ export const addressDetailsFromBech32: (
  * // Returns object with network ID, credentials, and encoding details
  *
  * @since 2.0.0
- * @category utilities
+ * @category constructors
  */
 export const addressDetailsFromHex: (
   hexAddress: string,
@@ -967,7 +1061,7 @@ export const addressDetailsFromHex: (
  * // Returns complete address details regardless of input format
  *
  * @since 2.0.0
- * @category utilities
+ * @category constructors
  */
 export const addressDetailsFromString: (
   stringAddress: string,
@@ -982,3 +1076,22 @@ export const addressDetailsFromString: (
     }
   },
 );
+
+/**
+ * Encode a Cardano address to CBOR format
+ *
+ * @example
+ * import { Address } from "@lucid-evolution/experimental";
+ * import { Effect } from "effect";
+ *
+ * const effect = Address.fromBech32("addr1qx2fxv2umyhttkxyxp8x0dlpdt3k6cwng5pxj3jhsydzer3n0d3vllmyqwsx5wktcd8cc3sq835lu7drv2xwl2wywfgse35a3x")
+ *   .pipe(Effect.flatMap(Address.toCBOR));
+ *
+ * const cborHex = Effect.runSync(effect);
+ * // Returns hex string of the CBOR-encoded address
+ *
+ * @since 2.0.0
+ * @category encoding/decoding
+ */
+export const toCBOR = (address: Address) =>
+  Effect.map(toBytes(address), (bytes) => Bytes.toHex(CBOR.encode(bytes)));

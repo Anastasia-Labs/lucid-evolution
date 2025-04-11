@@ -5,10 +5,10 @@ import * as Bytes from "./Bytes.js";
 import * as CBORX from "cbor-x";
 import { dataFromCbor } from "@harmoniclabs/plutus-data";
 import { Schema } from "effect";
-import * as ScriptHash from "./ScriptHash.js";
+import * as ScriptHash from "./ScriptHash_old.js";
 import * as Network from "./Network.js";
 import * as Address from "./Address_old.js";
-import * as Credential from "./Credential.js";
+import * as Credential from "./Credential_old.js";
 import * as Policy from "./Policy.js";
 
 export type Minting = Script;
