@@ -1,7 +1,10 @@
-import { Effect } from "effect";
+import { Effect, Micro } from "effect";
 import * as AddressNew from "../src/Address.js";
 import * as Address from "../src/Address_old.js";
+import { CML } from "../src/index.js";
+import * as CMLOld from "@anastasia-labs/cardano-multiplatform-lib-nodejs";
 import { Bench } from "tinybench";
+import { address } from "../src/CML/AlonzoFormatTxOut.js";
 
 // Sample addresses for testing - organized by network and type
 // MAINNET ADDRESSES
@@ -73,15 +76,53 @@ const runBenchmarks = async () => {
   ];
 
   // Add benchmark tasks for each function across all test addresses
-  bench.add("getAddressType - all addresses", () => {
+  bench.add("addressDetailsFromBech32 - all addresses", () => {
     for (const addr of testAddresses) {
-      Effect.runSync(AddressNew.fromBech32(addr as AddressNew.PaymentAddress));
+      Effect.runSync(AddressNew.addressDetailsFromBech32(addr));
     }
   });
 
   bench.add("getAddressDetails - all addresses", () => {
     for (const addr of testAddresses) {
       Address.getAddressDetails(addr);
+    }
+  });
+
+  // Add benchmarks comparing Address and CML address encoding/decoding
+  bench.add("Address encoding - all addresses", () => {
+    for (const addr of testAddresses.slice(0, 6)) {
+      // Skip stake addresses
+      const addressInfo = AddressNew.fromBech32(addr).pipe(
+        Effect.flatMap((address) => AddressNew.toBech32(address)),
+      );
+      Effect.runSync(addressInfo);
+    }
+  });
+
+  bench.add("CML encoding - all addresses", () => {
+    for (const addr of testAddresses.slice(0, 6)) {
+      // Skip stake addresses
+      const cmlAddress = CML.Address.fromBech32(addr).pipe(
+        Effect.map((address) => address.to_bech32()),
+      );
+      Effect.runSync(cmlAddress);
+    }
+  });
+
+  bench.add("Address roundtrip - all addresses", () => {
+    for (const addr of testAddresses.slice(0, 6)) {
+      // Skip stake addresses - Using pipe for cleaner effect composition
+      const addressInfo = AddressNew.fromBech32(addr).pipe(
+        Effect.flatMap((address) => AddressNew.toBech32(address)),
+      );
+      Effect.runSync(addressInfo);
+    }
+  });
+
+  bench.add("CML.Address roundtrip - all addresses", () => {
+    for (const addr of testAddresses.slice(0, 6)) {
+      // Skip stake addresses - Using direct CML API with non-Effect based approach
+      CMLOld.Address.from_bech32(addr).to_bech32();
     }
   });
 
@@ -92,17 +133,9 @@ const runBenchmarks = async () => {
     const mainnetAddr = getAddressByType(type, "mainnet");
     const testnetAddr = getAddressByType(type, "testnet");
 
-    bench.add(`getAddressType - ${type} address`, () => {
-      Effect.runSync(
-        AddressNew.addressDetailsFromBech32(
-          mainnetAddr as AddressNew.PaymentAddress,
-        ),
-      );
-      Effect.runSync(
-        AddressNew.addressDetailsFromBech32(
-          testnetAddr as AddressNew.PaymentAddress,
-        ),
-      );
+    bench.add(`addressDetailsFromBech32 - ${type} address`, () => {
+      Effect.runSync(AddressNew.addressDetailsFromBech32(mainnetAddr));
+      Effect.runSync(AddressNew.addressDetailsFromBech32(testnetAddr));
     });
 
     bench.add(`getAddressDetails - ${type} address`, () => {
@@ -119,14 +152,14 @@ const runBenchmarks = async () => {
 
   // Print comparison between the two main functions
   const addressTypeResult = bench.tasks.find(
-    (t) => t.name === "getAddressType - all addresses",
+    (t) => t.name === "addressDetailsFromBech32 - all addresses",
   )!.result;
   const addressDetailsResult = bench.tasks.find(
     (t) => t.name === "getAddressDetails - all addresses",
   )!.result;
 
   if (addressTypeResult && addressDetailsResult) {
-    console.log(`\nPerformance comparison:`);
+    console.log(`\nAddress parsing performance comparison:`);
 
     // Use throughput.mean which is the correct metric (operations per second)
     if (
@@ -136,14 +169,75 @@ const runBenchmarks = async () => {
         addressTypeResult.throughput.mean /
         addressDetailsResult.throughput.mean;
       console.log(
-        `getAddressType is ${speedup.toFixed(2)}x faster than getAddressDetails`,
+        `addressDetailsFromString is ${speedup.toFixed(2)}x faster than getAddressDetails`,
       );
     } else {
       const speedup =
         addressDetailsResult.throughput.mean /
         addressTypeResult.throughput.mean;
       console.log(
-        `getAddressDetails is ${speedup.toFixed(2)}x faster than getAddressType`,
+        `getAddressDetails is ${speedup.toFixed(2)}x faster than addressDetailsFromString`,
+      );
+    }
+  }
+
+  // Print comparison between Address and CML encoding
+  const addressEncodingResult = bench.tasks.find(
+    (t) => t.name === "Address encoding - all addresses",
+  )!.result;
+  const cmlEncodingResult = bench.tasks.find(
+    (t) => t.name === "CML encoding - all addresses",
+  )!.result;
+
+  if (addressEncodingResult && cmlEncodingResult) {
+    console.log(`\nAddress encoding performance comparison:`);
+
+    if (
+      addressEncodingResult.throughput.mean > cmlEncodingResult.throughput.mean
+    ) {
+      const speedup =
+        addressEncodingResult.throughput.mean /
+        cmlEncodingResult.throughput.mean;
+      console.log(
+        `Address encoding is ${speedup.toFixed(2)}x faster than CML encoding`,
+      );
+    } else {
+      const speedup =
+        cmlEncodingResult.throughput.mean /
+        addressEncodingResult.throughput.mean;
+      console.log(
+        `CML encoding is ${speedup.toFixed(2)}x faster than Address encoding`,
+      );
+    }
+  }
+
+  // Print comparison between Address and CML roundtrip
+  const addressRoundtripResult = bench.tasks.find(
+    (t) => t.name === "Address roundtrip - all addresses",
+  )!.result;
+  const cmlRoundtripResult = bench.tasks.find(
+    (t) => t.name === "CML.Address roundtrip - all addresses",
+  )!.result;
+
+  if (addressRoundtripResult && cmlRoundtripResult) {
+    console.log(`\nAddress roundtrip performance comparison:`);
+
+    if (
+      addressRoundtripResult.throughput.mean >
+      cmlRoundtripResult.throughput.mean
+    ) {
+      const speedup =
+        addressRoundtripResult.throughput.mean /
+        cmlRoundtripResult.throughput.mean;
+      console.log(
+        `Address roundtrip is ${speedup.toFixed(2)}x faster than CML roundtrip`,
+      );
+    } else {
+      const speedup =
+        cmlRoundtripResult.throughput.mean /
+        addressRoundtripResult.throughput.mean;
+      console.log(
+        `CML roundtrip is ${speedup.toFixed(2)}x faster than Address roundtrip`,
       );
     }
   }
