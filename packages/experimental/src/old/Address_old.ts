@@ -1,6 +1,6 @@
-import * as Network from "./Network.js";
+import * as Network from "../Network.js";
 import * as Script from "./Script.js";
-import * as CML from "./CML/index.js";
+import * as CML from "../CML/index.js";
 import * as Credential from "./Credential_old.js";
 
 /** Bech32 */

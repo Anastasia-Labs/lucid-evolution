@@ -32,7 +32,7 @@ interface ByteArray
  */
 export const ByteArray: ByteArray = Schema.transform(
   Data.ByteArray,
-  Schema.String.pipe(Combinator.HexString),
+  Schema.String.pipe(Combinator.HexStringFilter),
   {
     strict: true,
     encode: (value) => Data.mkByte(value),

@@ -1,12 +1,12 @@
 import * as CML from "@anastasia-labs/cardano-multiplatform-lib-nodejs";
-import * as Data from "./Data.js";
+import * as Data from "../Data.js";
 import * as UPLC from "@harmoniclabs/uplc";
-import * as Bytes from "./Bytes.js";
+import * as Bytes from "../Bytes.js";
 import * as CBORX from "cbor-x";
 import { dataFromCbor } from "@harmoniclabs/plutus-data";
 import { Schema } from "effect";
 import * as ScriptHash from "./ScriptHash_old.js";
-import * as Network from "./Network.js";
+import * as Network from "../Network.js";
 import * as Address from "./Address_old.js";
 import * as Credential from "./Credential_old.js";
 import * as Policy from "./Policy.js";
@@ -97,7 +97,7 @@ export function applyParamsToScript<
 ): string {
   const program = UPLC.parseUPLC(
     CBORX.decode(
-      CBORX.decode(Bytes.fromHex(applyDoubleCborEncoding(plutusScript))),
+      CBORX.decode(Bytes.fromHexOrThrow(applyDoubleCborEncoding(plutusScript))),
     ),
     "flat",
   );
@@ -113,7 +113,7 @@ export function applyParamsToScript<
   }, program.body);
 
   return applyDoubleCborEncoding(
-    Bytes.toHex(
+    Bytes.toHexOrThrow(
       UPLC.encodeUPLC(
         new UPLC.UPLCProgram(program.version, appliedProgram),
       ).toBuffer().buffer,
@@ -128,18 +128,18 @@ export function applyParamsToScript<
 // Apply double bytestring enconding of type `major type 2`
 export const applyDoubleCborEncoding = (script: string): string => {
   try {
-    CBORX.decode(CBORX.decode(Bytes.fromHex(script)));
+    CBORX.decode(CBORX.decode(Bytes.fromHexOrThrow(script)));
     return script;
   } catch (error) {
     try {
-      CBORX.decode(Bytes.fromHex(script));
-      return Bytes.toHex(
-        Uint8Array.from(CBORX.encode(Bytes.fromHex(script).buffer)),
+      CBORX.decode(Bytes.fromHexOrThrow(script));
+      return Bytes.toHexOrThrow(
+        Uint8Array.from(CBORX.encode(Bytes.fromHexOrThrow(script).buffer)),
       );
     } catch (error) {
-      return Bytes.toHex(
+      return Bytes.toHexOrThrow(
         Uint8Array.from(
-          CBORX.encode(CBORX.encode(Bytes.fromHex(script).buffer)),
+          CBORX.encode(CBORX.encode(Bytes.fromHexOrThrow(script).buffer)),
         ),
       );
     }
@@ -148,15 +148,15 @@ export const applyDoubleCborEncoding = (script: string): string => {
 
 export const applySingleCborEncoding = (script: string): string => {
   try {
-    CBORX.decode(CBORX.decode(Bytes.fromHex(script)));
-    return Bytes.toHex(CBORX.decode(Bytes.fromHex(script)));
+    CBORX.decode(CBORX.decode(Bytes.fromHexOrThrow(script)));
+    return Bytes.toHexOrThrow(CBORX.decode(Bytes.fromHexOrThrow(script)));
   } catch (error) {
     try {
-      CBORX.decode(Bytes.fromHex(script));
+      CBORX.decode(Bytes.fromHexOrThrow(script));
       return script;
     } catch (error) {
-      return Bytes.toHex(
-        Uint8Array.from(CBORX.encode(Bytes.fromHex(script).buffer)),
+      return Bytes.toHexOrThrow(
+        Uint8Array.from(CBORX.encode(Bytes.fromHexOrThrow(script).buffer)),
       );
     }
   }
@@ -164,11 +164,11 @@ export const applySingleCborEncoding = (script: string): string => {
 
 export const CBOREncodingLevel = (script: string): "double" | "single" => {
   try {
-    CBORX.decode(CBORX.decode(Bytes.fromHex(script)));
+    CBORX.decode(CBORX.decode(Bytes.fromHexOrThrow(script)));
     return "double" as const;
   } catch (error) {
     try {
-      CBORX.decode(Bytes.fromHex(script));
+      CBORX.decode(Bytes.fromHexOrThrow(script));
       return "single" as const;
     } catch (error) {
       throw new Error("Script is not CBOR-encoded or invalid format.");

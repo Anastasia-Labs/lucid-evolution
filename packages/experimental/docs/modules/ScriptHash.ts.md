@@ -37,7 +37,25 @@ Create a ScriptHash directly from bytes
 **Signature**
 
 ```ts
-export declare const fromBytes: (bytes: Uint8Array) => ScriptHash;
+export declare const fromBytes: (
+  bytes: Uint8Array,
+) => Effect.Effect<
+  { _tag: string; hash: string },
+  [YieldWrap<Effect.Effect<string, Bytes.BytesError, never>>] extends [never]
+    ? never
+    : [YieldWrap<Effect.Effect<string, Bytes.BytesError, never>>] extends [
+          YieldWrap<Effect.Effect<infer _A, infer E, infer _R>>,
+        ]
+      ? E
+      : never,
+  [YieldWrap<Effect.Effect<string, Bytes.BytesError, never>>] extends [never]
+    ? never
+    : [YieldWrap<Effect.Effect<string, Bytes.BytesError, never>>] extends [
+          YieldWrap<Effect.Effect<infer _A, infer _E, infer R>>,
+        ]
+      ? R
+      : never
+>;
 ```
 
 **Example**
@@ -45,7 +63,7 @@ export declare const fromBytes: (bytes: Uint8Array) => ScriptHash;
 ```ts
 import { ScriptHash, Bytes } from "@lucid-evolution/experimental";
 
-const bytes = Bytes.fromHex(
+const bytes = Bytes.fromHexOrThrow(
   "c37b1b5dc0669f1d3c61a6fddb2e8fde96be87b881c60bce8e8d542f",
 );
 const scriptHash = ScriptHash.fromBytes(bytes);
@@ -65,7 +83,11 @@ Create a ScriptHash from a CBOR hex string
 ```ts
 export declare const fromCBOR: (
   hex: string,
-) => Effect.Effect<ScriptHash, CBOR.CBORError | ParseError>;
+) => Effect.Effect<
+  { readonly hash: string; readonly _tag: "ScriptHash" },
+  CBOR.CBORError | Bytes.BytesError | ParseError,
+  never
+>;
 ```
 
 **Example**
@@ -90,8 +112,60 @@ Create a ScriptHash from CBOR bytes
 
 ```ts
 export declare const fromCBORBytes: (
-  bytes: Uint8Array,
-) => Effect.Effect<ScriptHash, CBOR.CBORError | ParseError>;
+  bytes: any,
+) => Effect.Effect<
+  { readonly hash: string; readonly _tag: "ScriptHash" },
+  [
+    | YieldWrap<Effect.Effect<any, CBOR.CBORError, never>>
+    | YieldWrap<Effect.Effect<string, Bytes.BytesError, never>>
+    | YieldWrap<
+        Effect.Effect<
+          { readonly hash: string; readonly _tag: "ScriptHash" },
+          ParseError,
+          never
+        >
+      >,
+  ] extends [never]
+    ? never
+    : [
+          | YieldWrap<Effect.Effect<any, CBOR.CBORError, never>>
+          | YieldWrap<Effect.Effect<string, Bytes.BytesError, never>>
+          | YieldWrap<
+              Effect.Effect<
+                { readonly hash: string; readonly _tag: "ScriptHash" },
+                ParseError,
+                never
+              >
+            >,
+        ] extends [YieldWrap<Effect.Effect<infer _A, infer E, infer _R>>]
+      ? E
+      : never,
+  [
+    | YieldWrap<Effect.Effect<any, CBOR.CBORError, never>>
+    | YieldWrap<Effect.Effect<string, Bytes.BytesError, never>>
+    | YieldWrap<
+        Effect.Effect<
+          { readonly hash: string; readonly _tag: "ScriptHash" },
+          ParseError,
+          never
+        >
+      >,
+  ] extends [never]
+    ? never
+    : [
+          | YieldWrap<Effect.Effect<any, CBOR.CBORError, never>>
+          | YieldWrap<Effect.Effect<string, Bytes.BytesError, never>>
+          | YieldWrap<
+              Effect.Effect<
+                { readonly hash: string; readonly _tag: "ScriptHash" },
+                ParseError,
+                never
+              >
+            >,
+        ] extends [YieldWrap<Effect.Effect<infer _A, infer _E, infer R>>]
+      ? R
+      : never
+>;
 ```
 
 **Example**
@@ -100,7 +174,7 @@ export declare const fromCBORBytes: (
 import { ScriptHash, Bytes } from "@lucid-evolution/experimental";
 import { Effect } from "effect";
 
-const bytes = Bytes.fromHex(
+const bytes = Bytes.fromHexOrThrow(
   "581cc37b1b5dc0669f1d3c61a6fddb2e8fde96be87b881c60bce8e8d542f",
 );
 const scriptHashEffect = ScriptHash.fromCBORBytes(bytes);
@@ -119,7 +193,11 @@ Convert a ScriptHash to CBOR hex string
 ```ts
 export declare const toCBOR: (
   scriptHash: ScriptHash,
-) => Effect.Effect<string, CBOR.CBORError>;
+) => Effect.Effect<
+  Effect.Effect<string, Bytes.BytesError, never>,
+  CBOR.CBORError,
+  never
+>;
 ```
 
 **Example**
@@ -210,7 +288,7 @@ Following CIP-0019 binary representation
 ```ts
 export declare const ScriptHash: Schema.TaggedStruct<
   "ScriptHash",
-  { hash: Schema.filter<Schema.Schema<string, string, never>> }
+  { hash: Schema.refine<string, Schema.Schema<string, string, never>> }
 >;
 ```
 

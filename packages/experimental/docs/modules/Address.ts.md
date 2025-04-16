@@ -73,8 +73,121 @@ Extract detailed information from a bech32 address
 
 ```ts
 export declare const addressDetailsFromBech32: (
-  bech32Address: string,
-) => Effect.Effect<AddressDetails, AddressError>;
+  bech32Address: any,
+) => Effect.Effect<
+  | {
+      address: { bech32: any; hex: string };
+      _tag: "BaseAddress";
+      networkId: number;
+      paymentCredential:
+        | { readonly hash: string; readonly _tag: "ScriptHash" }
+        | KeyHash.KeyHash;
+      stakeCredential:
+        | { readonly hash: string; readonly _tag: "ScriptHash" }
+        | KeyHash.KeyHash;
+    }
+  | {
+      address: { bech32: any; hex: string };
+      _tag: "EnterpriseAddress";
+      networkId: number;
+      paymentCredential:
+        | { readonly hash: string; readonly _tag: "ScriptHash" }
+        | KeyHash.KeyHash;
+    }
+  | {
+      address: { bech32: any; hex: string };
+      _tag: "PointerAddress";
+      networkId: number;
+      paymentCredential:
+        | { readonly hash: string; readonly _tag: "ScriptHash" }
+        | KeyHash.KeyHash;
+      pointer: {
+        readonly _tag: "Pointer";
+        readonly slot: number;
+        readonly txIndex: number;
+        readonly certIndex: number;
+      };
+    }
+  | {
+      address: { bech32: any; hex: string };
+      _tag: "RewardAccount";
+      networkId: number;
+      stakeCredential:
+        | { readonly hash: string; readonly _tag: "ScriptHash" }
+        | KeyHash.KeyHash;
+    }
+  | {
+      address: { bech32: any; hex: string };
+      _tag: "ByronAddress";
+      bytes: string;
+    },
+  [
+    | YieldWrap<
+        Effect.Effect<
+          | BaseAddress
+          | EnterpriseAddress
+          | PointerAddress
+          | RewardAccount
+          | ByronAddress,
+          Bytes.BytesError | KeyHash.KeyHashError | AddressError,
+          never
+        >
+      >
+    | YieldWrap<Effect.Effect<string, Bytes.BytesError | AddressError, never>>,
+  ] extends [never]
+    ? never
+    : [
+          | YieldWrap<
+              Effect.Effect<
+                | BaseAddress
+                | EnterpriseAddress
+                | PointerAddress
+                | RewardAccount
+                | ByronAddress,
+                Bytes.BytesError | KeyHash.KeyHashError | AddressError,
+                never
+              >
+            >
+          | YieldWrap<
+              Effect.Effect<string, Bytes.BytesError | AddressError, never>
+            >,
+        ] extends [YieldWrap<Effect.Effect<infer _A, infer E, infer _R>>]
+      ? E
+      : never,
+  [
+    | YieldWrap<
+        Effect.Effect<
+          | BaseAddress
+          | EnterpriseAddress
+          | PointerAddress
+          | RewardAccount
+          | ByronAddress,
+          Bytes.BytesError | KeyHash.KeyHashError | AddressError,
+          never
+        >
+      >
+    | YieldWrap<Effect.Effect<string, Bytes.BytesError | AddressError, never>>,
+  ] extends [never]
+    ? never
+    : [
+          | YieldWrap<
+              Effect.Effect<
+                | BaseAddress
+                | EnterpriseAddress
+                | PointerAddress
+                | RewardAccount
+                | ByronAddress,
+                Bytes.BytesError | KeyHash.KeyHashError | AddressError,
+                never
+              >
+            >
+          | YieldWrap<
+              Effect.Effect<string, Bytes.BytesError | AddressError, never>
+            >,
+        ] extends [YieldWrap<Effect.Effect<infer _A, infer _E, infer R>>]
+      ? R
+      : never
+>;
 ```
 
 **Example**
@@ -99,9 +212,116 @@ Extract detailed information from a hex-encoded address
 **Signature**
 
 ```ts
-export declare const addressDetailsFromHex: (
-  hexAddress: string,
-) => Effect.Effect<AddressDetails, AddressError>;
+export declare const addressDetailsFromHex: (hexAddress: any) => Effect.Effect<
+  | {
+      address: { bech32: string; hex: any };
+      _tag: "BaseAddress";
+      networkId: number;
+      paymentCredential:
+        | { readonly hash: string; readonly _tag: "ScriptHash" }
+        | KeyHash.KeyHash;
+      stakeCredential:
+        | { readonly hash: string; readonly _tag: "ScriptHash" }
+        | KeyHash.KeyHash;
+    }
+  | {
+      address: { bech32: string; hex: any };
+      _tag: "EnterpriseAddress";
+      networkId: number;
+      paymentCredential:
+        | { readonly hash: string; readonly _tag: "ScriptHash" }
+        | KeyHash.KeyHash;
+    }
+  | {
+      address: { bech32: string; hex: any };
+      _tag: "PointerAddress";
+      networkId: number;
+      paymentCredential:
+        | { readonly hash: string; readonly _tag: "ScriptHash" }
+        | KeyHash.KeyHash;
+      pointer: {
+        readonly _tag: "Pointer";
+        readonly slot: number;
+        readonly txIndex: number;
+        readonly certIndex: number;
+      };
+    }
+  | {
+      address: { bech32: string; hex: any };
+      _tag: "RewardAccount";
+      networkId: number;
+      stakeCredential:
+        | { readonly hash: string; readonly _tag: "ScriptHash" }
+        | KeyHash.KeyHash;
+    }
+  | {
+      address: { bech32: string; hex: any };
+      _tag: "ByronAddress";
+      bytes: string;
+    },
+  [
+    | YieldWrap<
+        Effect.Effect<
+          | BaseAddress
+          | EnterpriseAddress
+          | PointerAddress
+          | RewardAccount
+          | ByronAddress,
+          Bytes.BytesError | KeyHash.KeyHashError | AddressError,
+          never
+        >
+      >
+    | YieldWrap<Effect.Effect<string, AddressError, never>>,
+  ] extends [never]
+    ? never
+    : [
+          | YieldWrap<
+              Effect.Effect<
+                | BaseAddress
+                | EnterpriseAddress
+                | PointerAddress
+                | RewardAccount
+                | ByronAddress,
+                Bytes.BytesError | KeyHash.KeyHashError | AddressError,
+                never
+              >
+            >
+          | YieldWrap<Effect.Effect<string, AddressError, never>>,
+        ] extends [YieldWrap<Effect.Effect<infer _A, infer E, infer _R>>]
+      ? E
+      : never,
+  [
+    | YieldWrap<
+        Effect.Effect<
+          | BaseAddress
+          | EnterpriseAddress
+          | PointerAddress
+          | RewardAccount
+          | ByronAddress,
+          Bytes.BytesError | KeyHash.KeyHashError | AddressError,
+          never
+        >
+      >
+    | YieldWrap<Effect.Effect<string, AddressError, never>>,
+  ] extends [never]
+    ? never
+    : [
+          | YieldWrap<
+              Effect.Effect<
+                | BaseAddress
+                | EnterpriseAddress
+                | PointerAddress
+                | RewardAccount
+                | ByronAddress,
+                Bytes.BytesError | KeyHash.KeyHashError | AddressError,
+                never
+              >
+            >
+          | YieldWrap<Effect.Effect<string, AddressError, never>>,
+        ] extends [YieldWrap<Effect.Effect<infer _A, infer _E, infer R>>]
+      ? R
+      : never
+>;
 ```
 
 **Example**
@@ -111,7 +331,7 @@ import { Address } from "@lucid-evolution/experimental";
 import { Effect } from "effect";
 
 const effect = Address.addressDetailsFromHex(
-  "01af2ff48c27324dae7fb3116381e6d7b11f1e7ef37adce1d5e07fdde614800e78e7849bfbb5c4ad414498d57ae5ecad",
+  "019493315cd92eb5d8c4304e67b7e16ae36d61d34502694657811a2c8e337b62cfff6403a06a3acbc34f8c46003c69fe79a3628cefa9c47251",
 );
 const details = Effect.runSync(effect);
 // Returns object with network ID, credentials, and encoding details
@@ -127,8 +347,531 @@ Extract address details from a string (auto-detects bech32 or hex format)
 
 ```ts
 export declare const addressDetailsFromString: (
-  stringAddress: string,
-) => Effect.Effect<AddressDetails, AddressError>;
+  stringAddress: any,
+) => Effect.Effect<
+  | {
+      address: { bech32: any; hex: string };
+      _tag: "BaseAddress";
+      networkId: number;
+      paymentCredential:
+        | { readonly hash: string; readonly _tag: "ScriptHash" }
+        | KeyHash.KeyHash;
+      stakeCredential:
+        | { readonly hash: string; readonly _tag: "ScriptHash" }
+        | KeyHash.KeyHash;
+    }
+  | {
+      address: { bech32: any; hex: string };
+      _tag: "EnterpriseAddress";
+      networkId: number;
+      paymentCredential:
+        | { readonly hash: string; readonly _tag: "ScriptHash" }
+        | KeyHash.KeyHash;
+    }
+  | {
+      address: { bech32: any; hex: string };
+      _tag: "PointerAddress";
+      networkId: number;
+      paymentCredential:
+        | { readonly hash: string; readonly _tag: "ScriptHash" }
+        | KeyHash.KeyHash;
+      pointer: {
+        readonly _tag: "Pointer";
+        readonly slot: number;
+        readonly txIndex: number;
+        readonly certIndex: number;
+      };
+    }
+  | {
+      address: { bech32: any; hex: string };
+      _tag: "RewardAccount";
+      networkId: number;
+      stakeCredential:
+        | { readonly hash: string; readonly _tag: "ScriptHash" }
+        | KeyHash.KeyHash;
+    }
+  | {
+      address: { bech32: any; hex: string };
+      _tag: "ByronAddress";
+      bytes: string;
+    }
+  | {
+      address: { bech32: string; hex: any };
+      _tag: "BaseAddress";
+      networkId: number;
+      paymentCredential:
+        | { readonly hash: string; readonly _tag: "ScriptHash" }
+        | KeyHash.KeyHash;
+      stakeCredential:
+        | { readonly hash: string; readonly _tag: "ScriptHash" }
+        | KeyHash.KeyHash;
+    }
+  | {
+      address: { bech32: string; hex: any };
+      _tag: "EnterpriseAddress";
+      networkId: number;
+      paymentCredential:
+        | { readonly hash: string; readonly _tag: "ScriptHash" }
+        | KeyHash.KeyHash;
+    }
+  | {
+      address: { bech32: string; hex: any };
+      _tag: "PointerAddress";
+      networkId: number;
+      paymentCredential:
+        | { readonly hash: string; readonly _tag: "ScriptHash" }
+        | KeyHash.KeyHash;
+      pointer: {
+        readonly _tag: "Pointer";
+        readonly slot: number;
+        readonly txIndex: number;
+        readonly certIndex: number;
+      };
+    }
+  | {
+      address: { bech32: string; hex: any };
+      _tag: "RewardAccount";
+      networkId: number;
+      stakeCredential:
+        | { readonly hash: string; readonly _tag: "ScriptHash" }
+        | KeyHash.KeyHash;
+    }
+  | {
+      address: { bech32: string; hex: any };
+      _tag: "ByronAddress";
+      bytes: string;
+    },
+  [
+    | YieldWrap<
+        Effect.Effect<
+          | {
+              address: { bech32: any; hex: string };
+              _tag: "BaseAddress";
+              networkId: number;
+              paymentCredential:
+                | { readonly hash: string; readonly _tag: "ScriptHash" }
+                | KeyHash.KeyHash;
+              stakeCredential:
+                | { readonly hash: string; readonly _tag: "ScriptHash" }
+                | KeyHash.KeyHash;
+            }
+          | {
+              address: { bech32: any; hex: string };
+              _tag: "EnterpriseAddress";
+              networkId: number;
+              paymentCredential:
+                | { readonly hash: string; readonly _tag: "ScriptHash" }
+                | KeyHash.KeyHash;
+            }
+          | {
+              address: { bech32: any; hex: string };
+              _tag: "PointerAddress";
+              networkId: number;
+              paymentCredential:
+                | { readonly hash: string; readonly _tag: "ScriptHash" }
+                | KeyHash.KeyHash;
+              pointer: {
+                readonly _tag: "Pointer";
+                readonly slot: number;
+                readonly txIndex: number;
+                readonly certIndex: number;
+              };
+            }
+          | {
+              address: { bech32: any; hex: string };
+              _tag: "RewardAccount";
+              networkId: number;
+              stakeCredential:
+                | { readonly hash: string; readonly _tag: "ScriptHash" }
+                | KeyHash.KeyHash;
+            }
+          | {
+              address: { bech32: any; hex: string };
+              _tag: "ByronAddress";
+              bytes: string;
+            },
+          Bytes.BytesError | KeyHash.KeyHashError | AddressError,
+          never
+        >
+      >
+    | YieldWrap<
+        Effect.Effect<
+          | {
+              address: { bech32: string; hex: any };
+              _tag: "BaseAddress";
+              networkId: number;
+              paymentCredential:
+                | { readonly hash: string; readonly _tag: "ScriptHash" }
+                | KeyHash.KeyHash;
+              stakeCredential:
+                | { readonly hash: string; readonly _tag: "ScriptHash" }
+                | KeyHash.KeyHash;
+            }
+          | {
+              address: { bech32: string; hex: any };
+              _tag: "EnterpriseAddress";
+              networkId: number;
+              paymentCredential:
+                | { readonly hash: string; readonly _tag: "ScriptHash" }
+                | KeyHash.KeyHash;
+            }
+          | {
+              address: { bech32: string; hex: any };
+              _tag: "PointerAddress";
+              networkId: number;
+              paymentCredential:
+                | { readonly hash: string; readonly _tag: "ScriptHash" }
+                | KeyHash.KeyHash;
+              pointer: {
+                readonly _tag: "Pointer";
+                readonly slot: number;
+                readonly txIndex: number;
+                readonly certIndex: number;
+              };
+            }
+          | {
+              address: { bech32: string; hex: any };
+              _tag: "RewardAccount";
+              networkId: number;
+              stakeCredential:
+                | { readonly hash: string; readonly _tag: "ScriptHash" }
+                | KeyHash.KeyHash;
+            }
+          | {
+              address: { bech32: string; hex: any };
+              _tag: "ByronAddress";
+              bytes: string;
+            },
+          Bytes.BytesError | KeyHash.KeyHashError | AddressError,
+          never
+        >
+      >,
+  ] extends [never]
+    ? never
+    : [
+          | YieldWrap<
+              Effect.Effect<
+                | {
+                    address: { bech32: any; hex: string };
+                    _tag: "BaseAddress";
+                    networkId: number;
+                    paymentCredential:
+                      | { readonly hash: string; readonly _tag: "ScriptHash" }
+                      | KeyHash.KeyHash;
+                    stakeCredential:
+                      | { readonly hash: string; readonly _tag: "ScriptHash" }
+                      | KeyHash.KeyHash;
+                  }
+                | {
+                    address: { bech32: any; hex: string };
+                    _tag: "EnterpriseAddress";
+                    networkId: number;
+                    paymentCredential:
+                      | { readonly hash: string; readonly _tag: "ScriptHash" }
+                      | KeyHash.KeyHash;
+                  }
+                | {
+                    address: { bech32: any; hex: string };
+                    _tag: "PointerAddress";
+                    networkId: number;
+                    paymentCredential:
+                      | { readonly hash: string; readonly _tag: "ScriptHash" }
+                      | KeyHash.KeyHash;
+                    pointer: {
+                      readonly _tag: "Pointer";
+                      readonly slot: number;
+                      readonly txIndex: number;
+                      readonly certIndex: number;
+                    };
+                  }
+                | {
+                    address: { bech32: any; hex: string };
+                    _tag: "RewardAccount";
+                    networkId: number;
+                    stakeCredential:
+                      | { readonly hash: string; readonly _tag: "ScriptHash" }
+                      | KeyHash.KeyHash;
+                  }
+                | {
+                    address: { bech32: any; hex: string };
+                    _tag: "ByronAddress";
+                    bytes: string;
+                  },
+                Bytes.BytesError | KeyHash.KeyHashError | AddressError,
+                never
+              >
+            >
+          | YieldWrap<
+              Effect.Effect<
+                | {
+                    address: { bech32: string; hex: any };
+                    _tag: "BaseAddress";
+                    networkId: number;
+                    paymentCredential:
+                      | { readonly hash: string; readonly _tag: "ScriptHash" }
+                      | KeyHash.KeyHash;
+                    stakeCredential:
+                      | { readonly hash: string; readonly _tag: "ScriptHash" }
+                      | KeyHash.KeyHash;
+                  }
+                | {
+                    address: { bech32: string; hex: any };
+                    _tag: "EnterpriseAddress";
+                    networkId: number;
+                    paymentCredential:
+                      | { readonly hash: string; readonly _tag: "ScriptHash" }
+                      | KeyHash.KeyHash;
+                  }
+                | {
+                    address: { bech32: string; hex: any };
+                    _tag: "PointerAddress";
+                    networkId: number;
+                    paymentCredential:
+                      | { readonly hash: string; readonly _tag: "ScriptHash" }
+                      | KeyHash.KeyHash;
+                    pointer: {
+                      readonly _tag: "Pointer";
+                      readonly slot: number;
+                      readonly txIndex: number;
+                      readonly certIndex: number;
+                    };
+                  }
+                | {
+                    address: { bech32: string; hex: any };
+                    _tag: "RewardAccount";
+                    networkId: number;
+                    stakeCredential:
+                      | { readonly hash: string; readonly _tag: "ScriptHash" }
+                      | KeyHash.KeyHash;
+                  }
+                | {
+                    address: { bech32: string; hex: any };
+                    _tag: "ByronAddress";
+                    bytes: string;
+                  },
+                Bytes.BytesError | KeyHash.KeyHashError | AddressError,
+                never
+              >
+            >,
+        ] extends [YieldWrap<Effect.Effect<infer _A, infer E, infer _R>>]
+      ? E
+      : never,
+  [
+    | YieldWrap<
+        Effect.Effect<
+          | {
+              address: { bech32: any; hex: string };
+              _tag: "BaseAddress";
+              networkId: number;
+              paymentCredential:
+                | { readonly hash: string; readonly _tag: "ScriptHash" }
+                | KeyHash.KeyHash;
+              stakeCredential:
+                | { readonly hash: string; readonly _tag: "ScriptHash" }
+                | KeyHash.KeyHash;
+            }
+          | {
+              address: { bech32: any; hex: string };
+              _tag: "EnterpriseAddress";
+              networkId: number;
+              paymentCredential:
+                | { readonly hash: string; readonly _tag: "ScriptHash" }
+                | KeyHash.KeyHash;
+            }
+          | {
+              address: { bech32: any; hex: string };
+              _tag: "PointerAddress";
+              networkId: number;
+              paymentCredential:
+                | { readonly hash: string; readonly _tag: "ScriptHash" }
+                | KeyHash.KeyHash;
+              pointer: {
+                readonly _tag: "Pointer";
+                readonly slot: number;
+                readonly txIndex: number;
+                readonly certIndex: number;
+              };
+            }
+          | {
+              address: { bech32: any; hex: string };
+              _tag: "RewardAccount";
+              networkId: number;
+              stakeCredential:
+                | { readonly hash: string; readonly _tag: "ScriptHash" }
+                | KeyHash.KeyHash;
+            }
+          | {
+              address: { bech32: any; hex: string };
+              _tag: "ByronAddress";
+              bytes: string;
+            },
+          Bytes.BytesError | KeyHash.KeyHashError | AddressError,
+          never
+        >
+      >
+    | YieldWrap<
+        Effect.Effect<
+          | {
+              address: { bech32: string; hex: any };
+              _tag: "BaseAddress";
+              networkId: number;
+              paymentCredential:
+                | { readonly hash: string; readonly _tag: "ScriptHash" }
+                | KeyHash.KeyHash;
+              stakeCredential:
+                | { readonly hash: string; readonly _tag: "ScriptHash" }
+                | KeyHash.KeyHash;
+            }
+          | {
+              address: { bech32: string; hex: any };
+              _tag: "EnterpriseAddress";
+              networkId: number;
+              paymentCredential:
+                | { readonly hash: string; readonly _tag: "ScriptHash" }
+                | KeyHash.KeyHash;
+            }
+          | {
+              address: { bech32: string; hex: any };
+              _tag: "PointerAddress";
+              networkId: number;
+              paymentCredential:
+                | { readonly hash: string; readonly _tag: "ScriptHash" }
+                | KeyHash.KeyHash;
+              pointer: {
+                readonly _tag: "Pointer";
+                readonly slot: number;
+                readonly txIndex: number;
+                readonly certIndex: number;
+              };
+            }
+          | {
+              address: { bech32: string; hex: any };
+              _tag: "RewardAccount";
+              networkId: number;
+              stakeCredential:
+                | { readonly hash: string; readonly _tag: "ScriptHash" }
+                | KeyHash.KeyHash;
+            }
+          | {
+              address: { bech32: string; hex: any };
+              _tag: "ByronAddress";
+              bytes: string;
+            },
+          Bytes.BytesError | KeyHash.KeyHashError | AddressError,
+          never
+        >
+      >,
+  ] extends [never]
+    ? never
+    : [
+          | YieldWrap<
+              Effect.Effect<
+                | {
+                    address: { bech32: any; hex: string };
+                    _tag: "BaseAddress";
+                    networkId: number;
+                    paymentCredential:
+                      | { readonly hash: string; readonly _tag: "ScriptHash" }
+                      | KeyHash.KeyHash;
+                    stakeCredential:
+                      | { readonly hash: string; readonly _tag: "ScriptHash" }
+                      | KeyHash.KeyHash;
+                  }
+                | {
+                    address: { bech32: any; hex: string };
+                    _tag: "EnterpriseAddress";
+                    networkId: number;
+                    paymentCredential:
+                      | { readonly hash: string; readonly _tag: "ScriptHash" }
+                      | KeyHash.KeyHash;
+                  }
+                | {
+                    address: { bech32: any; hex: string };
+                    _tag: "PointerAddress";
+                    networkId: number;
+                    paymentCredential:
+                      | { readonly hash: string; readonly _tag: "ScriptHash" }
+                      | KeyHash.KeyHash;
+                    pointer: {
+                      readonly _tag: "Pointer";
+                      readonly slot: number;
+                      readonly txIndex: number;
+                      readonly certIndex: number;
+                    };
+                  }
+                | {
+                    address: { bech32: any; hex: string };
+                    _tag: "RewardAccount";
+                    networkId: number;
+                    stakeCredential:
+                      | { readonly hash: string; readonly _tag: "ScriptHash" }
+                      | KeyHash.KeyHash;
+                  }
+                | {
+                    address: { bech32: any; hex: string };
+                    _tag: "ByronAddress";
+                    bytes: string;
+                  },
+                Bytes.BytesError | KeyHash.KeyHashError | AddressError,
+                never
+              >
+            >
+          | YieldWrap<
+              Effect.Effect<
+                | {
+                    address: { bech32: string; hex: any };
+                    _tag: "BaseAddress";
+                    networkId: number;
+                    paymentCredential:
+                      | { readonly hash: string; readonly _tag: "ScriptHash" }
+                      | KeyHash.KeyHash;
+                    stakeCredential:
+                      | { readonly hash: string; readonly _tag: "ScriptHash" }
+                      | KeyHash.KeyHash;
+                  }
+                | {
+                    address: { bech32: string; hex: any };
+                    _tag: "EnterpriseAddress";
+                    networkId: number;
+                    paymentCredential:
+                      | { readonly hash: string; readonly _tag: "ScriptHash" }
+                      | KeyHash.KeyHash;
+                  }
+                | {
+                    address: { bech32: string; hex: any };
+                    _tag: "PointerAddress";
+                    networkId: number;
+                    paymentCredential:
+                      | { readonly hash: string; readonly _tag: "ScriptHash" }
+                      | KeyHash.KeyHash;
+                    pointer: {
+                      readonly _tag: "Pointer";
+                      readonly slot: number;
+                      readonly txIndex: number;
+                      readonly certIndex: number;
+                    };
+                  }
+                | {
+                    address: { bech32: string; hex: any };
+                    _tag: "RewardAccount";
+                    networkId: number;
+                    stakeCredential:
+                      | { readonly hash: string; readonly _tag: "ScriptHash" }
+                      | KeyHash.KeyHash;
+                  }
+                | {
+                    address: { bech32: string; hex: any };
+                    _tag: "ByronAddress";
+                    bytes: string;
+                  },
+                Bytes.BytesError | KeyHash.KeyHashError | AddressError,
+                never
+              >
+            >,
+        ] extends [YieldWrap<Effect.Effect<infer _A, infer _E, infer R>>]
+      ? R
+      : never
+>;
 ```
 
 **Example**
@@ -144,7 +887,7 @@ const bech32Effect = Address.addressDetailsFromString(
 
 // From hex
 const hexEffect = Address.addressDetailsFromString(
-  "01af2ff48c27324dae7fb3116381e6d7b11f1e7ef37adce1d5e07fdde614800e78e7849bfbb5c4ad414498d57ae5ecad",
+  "019493315cd92eb5d8c4304e67b7e16ae36d61d34502694657811a2c8e337b62cfff6403a06a3acbc34f8c46003c69fe79a3628cefa9c47251",
 );
 
 const details = Effect.runSync(bech32Effect);
@@ -250,14 +993,75 @@ This decodes the address format according to CIP-0019 specification
 
 ```ts
 export declare const fromBech32: (
-  bech32Address: string,
+  bech32Address: any,
 ) => Effect.Effect<
-  | ByronAddress
   | BaseAddress
   | EnterpriseAddress
   | PointerAddress
-  | RewardAccount,
-  AddressError
+  | RewardAccount
+  | ByronAddress,
+  [
+    | YieldWrap<Effect.Effect<Uint8Array, AddressError, never>>
+    | YieldWrap<
+        Effect.Effect<
+          | BaseAddress
+          | EnterpriseAddress
+          | PointerAddress
+          | RewardAccount
+          | ByronAddress,
+          Bytes.BytesError | KeyHash.KeyHashError | AddressError,
+          never
+        >
+      >,
+  ] extends [never]
+    ? never
+    : [
+          | YieldWrap<Effect.Effect<Uint8Array, AddressError, never>>
+          | YieldWrap<
+              Effect.Effect<
+                | BaseAddress
+                | EnterpriseAddress
+                | PointerAddress
+                | RewardAccount
+                | ByronAddress,
+                Bytes.BytesError | KeyHash.KeyHashError | AddressError,
+                never
+              >
+            >,
+        ] extends [YieldWrap<Effect.Effect<infer _A, infer E, infer _R>>]
+      ? E
+      : never,
+  [
+    | YieldWrap<Effect.Effect<Uint8Array, AddressError, never>>
+    | YieldWrap<
+        Effect.Effect<
+          | BaseAddress
+          | EnterpriseAddress
+          | PointerAddress
+          | RewardAccount
+          | ByronAddress,
+          Bytes.BytesError | KeyHash.KeyHashError | AddressError,
+          never
+        >
+      >,
+  ] extends [never]
+    ? never
+    : [
+          | YieldWrap<Effect.Effect<Uint8Array, AddressError, never>>
+          | YieldWrap<
+              Effect.Effect<
+                | BaseAddress
+                | EnterpriseAddress
+                | PointerAddress
+                | RewardAccount
+                | ByronAddress,
+                Bytes.BytesError | KeyHash.KeyHashError | AddressError,
+                never
+              >
+            >,
+        ] extends [YieldWrap<Effect.Effect<infer _A, infer _E, infer R>>]
+      ? R
+      : never
 >;
 ```
 
@@ -290,14 +1094,43 @@ Convert bytes to an address structure
 
 ```ts
 export declare const fromBytes: (
-  bytes: Uint8Array<ArrayBufferLike>,
+  bytes: Uint8Array,
 ) => Effect.Effect<
   | BaseAddress
   | EnterpriseAddress
   | PointerAddress
   | RewardAccount
   | ByronAddress,
-  AddressError
+  [
+    | YieldWrap<Effect.Effect<string, Bytes.BytesError, never>>
+    | YieldWrap<Effect.Effect<KeyHash.KeyHash, KeyHash.KeyHashError, never>>
+    | YieldWrap<Effect.Effect<number[], AddressError, never>>,
+  ] extends [never]
+    ? never
+    : [
+          | YieldWrap<Effect.Effect<string, Bytes.BytesError, never>>
+          | YieldWrap<
+              Effect.Effect<KeyHash.KeyHash, KeyHash.KeyHashError, never>
+            >
+          | YieldWrap<Effect.Effect<number[], AddressError, never>>,
+        ] extends [YieldWrap<Effect.Effect<infer _A, infer E, infer _R>>]
+      ? E
+      : never,
+  [
+    | YieldWrap<Effect.Effect<string, Bytes.BytesError, never>>
+    | YieldWrap<Effect.Effect<KeyHash.KeyHash, KeyHash.KeyHashError, never>>
+    | YieldWrap<Effect.Effect<number[], AddressError, never>>,
+  ] extends [never]
+    ? never
+    : [
+          | YieldWrap<Effect.Effect<string, Bytes.BytesError, never>>
+          | YieldWrap<
+              Effect.Effect<KeyHash.KeyHash, KeyHash.KeyHashError, never>
+            >
+          | YieldWrap<Effect.Effect<number[], AddressError, never>>,
+        ] extends [YieldWrap<Effect.Effect<infer _A, infer _E, infer R>>]
+      ? R
+      : never
 >;
 ```
 
@@ -307,11 +1140,11 @@ export declare const fromBytes: (
 import { Address, Bytes } from "@lucid-evolution/experimental";
 import { Effect } from "effect";
 
-const addressBytes = Bytes.fromHex(
-  "01af2ff48c27324dae7fb3116381e6d7b11f1e7ef37adce1d5e07fdde614800e78e7849bfbb5c4ad414498d57ae5ecad",
+const addressBytes = Bytes.fromHexOrThrow(
+  "019493315cd92eb5d8c4304e67b7e16ae36d61d34502694657811a2c8e337b62cfff6403a06a3acbc34f8c46003c69fe79a3628cefa9c47251",
 );
-const effect = Address.fromBytes(addressBytes);
-const address = Effect.runSync(effect);
+// const effect = Address.fromBytes(addressBytes);
+// const address = Effect.runSync(effect);
 // Returns a structured Address object
 ```
 
@@ -361,8 +1194,8 @@ import { Effect, pipe } from "effect";
 // First create an address from bytes
 const bytesEffect = pipe(
   Address.fromBytes(
-    Bytes.fromHex(
-      "01af2ff48c27324dae7fb3116381e6d7b11f1e7ef37adce1d5e07fdde614800e78e7849bfbb5c4ad414498d57ae5ecad",
+    Bytes.fromHexOrThrow(
+      "019493315cd92eb5d8c4304e67b7e16ae36d61d34502694657811a2c8e337b62cfff6403a06a3acbc34f8c46003c69fe79a3628cefa9c47251",
     ),
   ),
   Effect.flatMap(Address.toBech32),
@@ -383,7 +1216,23 @@ Convert address to bytes
 ```ts
 export declare const toBytes: (
   address: Address,
-) => Effect.Effect<Uint8Array<ArrayBufferLike>, AddressError>;
+) => Effect.Effect<
+  Uint8Array,
+  [YieldWrap<Effect.Effect<any, AddressError, never>>] extends [never]
+    ? never
+    : [YieldWrap<Effect.Effect<any, AddressError, never>>] extends [
+          YieldWrap<Effect.Effect<infer _A, infer E, infer _R>>,
+        ]
+      ? E
+      : never,
+  [YieldWrap<Effect.Effect<any, AddressError, never>>] extends [never]
+    ? never
+    : [YieldWrap<Effect.Effect<any, AddressError, never>>] extends [
+          YieldWrap<Effect.Effect<infer _A, infer _E, infer R>>,
+        ]
+      ? R
+      : never
+>;
 ```
 
 **Example**
@@ -414,7 +1263,11 @@ Encode a Cardano address to CBOR format
 ```ts
 export declare const toCBOR: (
   address: Address,
-) => Effect.Effect<string, AddressError, never>;
+) => Effect.Effect<
+  Effect.Effect<string, Bytes.BytesError, never>,
+  AddressError,
+  never
+>;
 ```
 
 **Example**
@@ -442,7 +1295,7 @@ Convert address to hex string
 ```ts
 export declare const toHex: (
   address: Address,
-) => Effect.Effect<string, AddressError>;
+) => Effect.Effect<string, Bytes.BytesError | AddressError, never>;
 ```
 
 **Example**
@@ -753,25 +1606,29 @@ export declare const Address: Schema.Union<
         networkId: typeof Schema.Number;
         paymentCredential: Schema.Union<
           [
-            Schema.TaggedStruct<
-              "KeyHash",
-              { hash: Schema.filter<Schema.Schema<string, string, never>> }
-            >,
+            typeof KeyHash.KeyHash,
             Schema.TaggedStruct<
               "ScriptHash",
-              { hash: Schema.filter<Schema.Schema<string, string, never>> }
+              {
+                hash: Schema.refine<
+                  string,
+                  Schema.Schema<string, string, never>
+                >;
+              }
             >,
           ]
         >;
         stakeCredential: Schema.Union<
           [
-            Schema.TaggedStruct<
-              "KeyHash",
-              { hash: Schema.filter<Schema.Schema<string, string, never>> }
-            >,
+            typeof KeyHash.KeyHash,
             Schema.TaggedStruct<
               "ScriptHash",
-              { hash: Schema.filter<Schema.Schema<string, string, never>> }
+              {
+                hash: Schema.refine<
+                  string,
+                  Schema.Schema<string, string, never>
+                >;
+              }
             >,
           ]
         >;
@@ -783,13 +1640,15 @@ export declare const Address: Schema.Union<
         networkId: typeof Schema.Number;
         paymentCredential: Schema.Union<
           [
-            Schema.TaggedStruct<
-              "KeyHash",
-              { hash: Schema.filter<Schema.Schema<string, string, never>> }
-            >,
+            typeof KeyHash.KeyHash,
             Schema.TaggedStruct<
               "ScriptHash",
-              { hash: Schema.filter<Schema.Schema<string, string, never>> }
+              {
+                hash: Schema.refine<
+                  string,
+                  Schema.Schema<string, string, never>
+                >;
+              }
             >,
           ]
         >;
@@ -801,13 +1660,15 @@ export declare const Address: Schema.Union<
         networkId: typeof Schema.Number;
         paymentCredential: Schema.Union<
           [
-            Schema.TaggedStruct<
-              "KeyHash",
-              { hash: Schema.filter<Schema.Schema<string, string, never>> }
-            >,
+            typeof KeyHash.KeyHash,
             Schema.TaggedStruct<
               "ScriptHash",
-              { hash: Schema.filter<Schema.Schema<string, string, never>> }
+              {
+                hash: Schema.refine<
+                  string,
+                  Schema.Schema<string, string, never>
+                >;
+              }
             >,
           ]
         >;
@@ -827,13 +1688,15 @@ export declare const Address: Schema.Union<
         networkId: typeof Schema.Number;
         stakeCredential: Schema.Union<
           [
-            Schema.TaggedStruct<
-              "KeyHash",
-              { hash: Schema.filter<Schema.Schema<string, string, never>> }
-            >,
+            typeof KeyHash.KeyHash,
             Schema.TaggedStruct<
               "ScriptHash",
-              { hash: Schema.filter<Schema.Schema<string, string, never>> }
+              {
+                hash: Schema.refine<
+                  string,
+                  Schema.Schema<string, string, never>
+                >;
+              }
             >,
           ]
         >;
@@ -841,7 +1704,7 @@ export declare const Address: Schema.Union<
     >,
     Schema.TaggedStruct<
       "ByronAddress",
-      { bytes: Schema.filter<Schema.Schema<string, string, never>> }
+      { bytes: Schema.refine<string, Schema.Schema<string, string, never>> }
     >,
   ]
 >;
@@ -862,25 +1725,19 @@ export declare const BaseAddress: Schema.TaggedStruct<
     networkId: typeof Schema.Number;
     paymentCredential: Schema.Union<
       [
-        Schema.TaggedStruct<
-          "KeyHash",
-          { hash: Schema.filter<Schema.Schema<string, string, never>> }
-        >,
+        typeof KeyHash.KeyHash,
         Schema.TaggedStruct<
           "ScriptHash",
-          { hash: Schema.filter<Schema.Schema<string, string, never>> }
+          { hash: Schema.refine<string, Schema.Schema<string, string, never>> }
         >,
       ]
     >;
     stakeCredential: Schema.Union<
       [
-        Schema.TaggedStruct<
-          "KeyHash",
-          { hash: Schema.filter<Schema.Schema<string, string, never>> }
-        >,
+        typeof KeyHash.KeyHash,
         Schema.TaggedStruct<
           "ScriptHash",
-          { hash: Schema.filter<Schema.Schema<string, string, never>> }
+          { hash: Schema.refine<string, Schema.Schema<string, string, never>> }
         >,
       ]
     >;
@@ -899,7 +1756,7 @@ Byron legacy address format
 ```ts
 export declare const ByronAddress: Schema.TaggedStruct<
   "ByronAddress",
-  { bytes: Schema.filter<Schema.Schema<string, string, never>> }
+  { bytes: Schema.refine<string, Schema.Schema<string, string, never>> }
 >;
 ```
 
@@ -918,13 +1775,10 @@ export declare const EnterpriseAddress: Schema.TaggedStruct<
     networkId: typeof Schema.Number;
     paymentCredential: Schema.Union<
       [
-        Schema.TaggedStruct<
-          "KeyHash",
-          { hash: Schema.filter<Schema.Schema<string, string, never>> }
-        >,
+        typeof KeyHash.KeyHash,
         Schema.TaggedStruct<
           "ScriptHash",
-          { hash: Schema.filter<Schema.Schema<string, string, never>> }
+          { hash: Schema.refine<string, Schema.Schema<string, string, never>> }
         >,
       ]
     >;
@@ -983,13 +1837,10 @@ export declare const PointerAddress: Schema.TaggedStruct<
     networkId: typeof Schema.Number;
     paymentCredential: Schema.Union<
       [
-        Schema.TaggedStruct<
-          "KeyHash",
-          { hash: Schema.filter<Schema.Schema<string, string, never>> }
-        >,
+        typeof KeyHash.KeyHash,
         Schema.TaggedStruct<
           "ScriptHash",
-          { hash: Schema.filter<Schema.Schema<string, string, never>> }
+          { hash: Schema.refine<string, Schema.Schema<string, string, never>> }
         >,
       ]
     >;
@@ -1020,13 +1871,10 @@ export declare const RewardAccount: Schema.TaggedStruct<
     networkId: typeof Schema.Number;
     stakeCredential: Schema.Union<
       [
-        Schema.TaggedStruct<
-          "KeyHash",
-          { hash: Schema.filter<Schema.Schema<string, string, never>> }
-        >,
+        typeof KeyHash.KeyHash,
         Schema.TaggedStruct<
           "ScriptHash",
-          { hash: Schema.filter<Schema.Schema<string, string, never>> }
+          { hash: Schema.refine<string, Schema.Schema<string, string, never>> }
         >,
       ]
     >;
@@ -1064,13 +1912,12 @@ export declare const StakeReference: Schema.UndefinedOr<
     [
       Schema.Union<
         [
-          Schema.TaggedStruct<
-            "KeyHash",
-            { hash: Schema.filter<Schema.Schema<string, string, never>> }
-          >,
+          typeof KeyHash.KeyHash,
           Schema.TaggedStruct<
             "ScriptHash",
-            { hash: Schema.filter<Schema.Schema<string, string, never>> }
+            {
+              hash: Schema.refine<string, Schema.Schema<string, string, never>>;
+            }
           >,
         ]
       >,

@@ -151,10 +151,11 @@ describe("Address Conversion", () => {
         // Skip reward addresses for this test
         const addressInfo = yield* Address.fromBech32(address);
         const hex = yield* Address.toHex(addressInfo);
+        console.log("Hex:", hex);
         expect(hex).toMatch(/^[0-9a-f]+$/i);
 
         // Convert back from hex
-        const fromHex = yield* Address.fromBytes(Bytes.fromHex(hex));
+        const fromHex = yield* Address.fromBytes(Bytes.fromHexOrThrow(hex));
         const backToBech32 = yield* Address.toBech32(fromHex);
         expect(backToBech32).toBe(address);
       }

@@ -5,13 +5,121 @@
 // with browser environments. The original source can be found here:
 // https://github.com/paulmillr/noble-hashes/blob/main/src/utils.ts
 
-function assert_bytes(b: Uint8Array | undefined, ...lengths: number[]) {
+import { Data, Effect } from "effect";
+
+export class BytesError extends Data.TaggedError("BytesError")<{
+  message: string;
+  cause?: unknown;
+}> {}
+
+/**
+ * Asserts that the input is a Uint8Array and, if a length constraint is provided, that its length matches.
+ * The length constraint can be:
+ *   - a single number (exact length)
+ *   - an array [min, max] (inclusive range)
+ *   - an object { min?: number; max?: number }
+ * Throws an Error if the assertion fails.
+ *
+ * @example
+ * import { assert_bytes_unsafe } from "@lucid-evolution/experimental/Bytes";
+ * assert_bytes_unsafe(new Uint8Array([1,2,3]), 3); // passes
+ * assert_bytes_unsafe(new Uint8Array([1,2,3]), [2,4]); // passes
+ * assert_bytes_unsafe(new Uint8Array([1,2,3]), { min: 2, max: 3 }); // passes
+ * assert_bytes_unsafe(new Uint8Array([1,2,3]), { min: 4 }); // throws
+ *
+ * @since 1.0.0
+ * @category predicates
+ */
+export const assert_bytes_or_throw = (
+  b: Uint8Array | undefined,
+  length?: number | [number, number] | { min?: number; max?: number },
+): void => {
   if (!isBytes(b)) throw new Error("Uint8Array expected");
-  if (lengths.length > 0 && !lengths.includes(b.length))
-    throw new Error(
-      `Uint8Array expected of length ${lengths}, not of length=${b.length}`,
-    );
-}
+  if (length !== undefined) {
+    const len = b.length;
+    if (typeof length === "number") {
+      if (len !== length)
+        throw new Error(
+          `Uint8Array expected of length ${length}, not of length=${len}`,
+        );
+    } else if (Array.isArray(length)) {
+      const [min, max] = length;
+      if (len < min || len > max)
+        throw new Error(
+          `Uint8Array expected of length in [${min},${max}], not of length=${len}`,
+        );
+    } else if (typeof length === "object") {
+      if (
+        (length.min !== undefined && len < length.min) ||
+        (length.max !== undefined && len > length.max)
+      ) {
+        throw new Error(
+          `Uint8Array expected of length` +
+            (length.min !== undefined ? ` >= ${length.min}` : "") +
+            (length.max !== undefined ? ` <= ${length.max}` : "") +
+            `, not of length=${len}`,
+        );
+      }
+    }
+  }
+};
+
+/**
+ * Asserts that the input is a Uint8Array and, if a length constraint is provided, that its length matches.
+ * The length constraint can be:
+ *   - a single number (exact length)
+ *   - an array [min, max] (inclusive range)
+ *   - an object { min?: number; max?: number }
+ * Fails with BytesError if the assertion fails.
+ *
+ * @example
+ * import { assert_bytes } from "@lucid-evolution/experimental/Bytes";
+ * yield* assert_bytes(new Uint8Array([1,2,3]), 3); // passes
+ * yield* assert_bytes(new Uint8Array([1,2,3]), [2,4]); // passes
+ * yield* assert_bytes(new Uint8Array([1,2,3]), { min: 2, max: 3 }); // passes
+ * yield* assert_bytes(new Uint8Array([1,2,3]), { min: 4 }); // fails
+ *
+ * @since 1.0.0
+ * @category predicates
+ */
+export const assert_bytes = Effect.fn(function* (
+  b: Uint8Array | undefined,
+  length?: number | [number, number] | { min?: number; max?: number },
+) {
+  if (!isBytes(b)) {
+    yield* new BytesError({ message: "Uint8Array expected" });
+  }
+  if (length !== undefined) {
+    const len = b!.length;
+    if (typeof length === "number") {
+      if (len !== length) {
+        yield* new BytesError({
+          message: `Uint8Array expected of length ${length}, not of length=${len}`,
+        });
+      }
+    } else if (Array.isArray(length)) {
+      const [min, max] = length;
+      if (len < min || len > max) {
+        yield* new BytesError({
+          message: `Uint8Array expected of length in [${min},${max}], not of length=${len}`,
+        });
+      }
+    } else if (typeof length === "object") {
+      if (
+        (length.min !== undefined && len < length.min) ||
+        (length.max !== undefined && len > length.max)
+      ) {
+        yield* new BytesError({
+          message:
+            `Uint8Array expected of length` +
+            (length.min !== undefined ? ` >= ${length.min}` : "") +
+            (length.max !== undefined ? ` <= ${length.max}` : "") +
+            `, not of length=${len}`,
+        });
+      }
+    }
+  }
+});
 
 export function isBytes(a: unknown): a is Uint8Array {
   return (
@@ -37,7 +145,7 @@ const hexes = /* @__PURE__ */ Array.from({ length: 256 }, (_, i) =>
 /**
  * @example fromHex('cafe0123') -> Uint8Array.from([0xca, 0xfe, 0x01, 0x23])
  */
-export function fromHex(hex: string): Uint8Array {
+export function fromHexOrThrow(hex: string): Uint8Array {
   if (typeof hex !== "string")
     throw new Error("hex string expected, got " + typeof hex);
   const hl = hex.length;
@@ -67,11 +175,41 @@ export function fromHex(hex: string): Uint8Array {
   return array;
 }
 
+export const fromHex = Effect.fn(function* (hex: string) {
+  if (typeof hex !== "string")
+    yield* new BytesError({
+      message: "hex string expected, got " + typeof hex,
+    });
+  const hl = hex.length;
+  const al = hl / 2;
+  if (hl % 2)
+    yield* new BytesError({
+      message: "padded hex string expected, got unpadded hex of length " + hl,
+    });
+  const array = new Uint8Array(al);
+  for (let ai = 0, hi = 0; ai < al; ai++, hi += 2) {
+    const n1 = asciiToBase16(hex.charCodeAt(hi));
+    const n2 = asciiToBase16(hex.charCodeAt(hi + 1));
+    if (n1 === undefined || n2 === undefined) {
+      const char = hex[hi] + hex[hi + 1];
+      yield* new BytesError({
+        message:
+          'hex string expected, got non-hex character "' +
+          char +
+          '" at index ' +
+          hi,
+      });
+    }
+    array[ai] = n1! * 16 + n2!;
+  }
+  return array;
+});
+
 /**
  * @example toHex(Uint8Array.from([0xca, 0xfe, 0x01, 0x23])) -> 'cafe0123'
  */
-export function toHex(bytes: Uint8Array): string {
-  assert_bytes(bytes);
+export function toHexOrThrow(bytes: Uint8Array, ...length: number[]): string {
+  assert_bytes_or_throw(bytes, ...length);
   // pre-caching improves the speed 6x
   let hex = "";
   for (let i = 0; i < bytes.length; i++) {
@@ -80,30 +218,46 @@ export function toHex(bytes: Uint8Array): string {
   return hex;
 }
 
+export const toHex = Effect.fnUntraced(function* (
+  bytes: Uint8Array,
+  ...lengths: number[]
+) {
+  yield* assert_bytes(bytes, ...lengths);
+  // pre-caching improves the speed 6x
+  let hex = "";
+  for (let i = 0; i < bytes.length; i++) {
+    hex += hexes[bytes[i]];
+  }
+  return hex;
+});
+
 /** Convert a Hex encoded string to a Utf-8 encoded string.
  * @example toText("6d79746f6b656e") -> 'mytoken'
  */
-export function toText(hex: string): string {
-  return new TextDecoder().decode(fromHex(hex)).toString();
+export function unsafeToText(hex: string): string {
+  return new TextDecoder().decode(fromHexOrThrow(hex)).toString();
 }
 
 /** Convert a Utf-8 encoded string to a Hex encoded string.
  * @example fromText("mytoken") -> 6d79746f6b656e
  */
-export function fromText(text: string): string {
-  return toHex(new TextEncoder().encode(text));
+export function fromTextUnsafe(text: string): string {
+  return toHexOrThrow(new TextEncoder().encode(text));
 }
 
 /**
- * Checks if the provided value is a valid hexadecimal string.
+ * Checks if a string is a valid hexadecimal string (lowercase, even length).
  *
  * @example
- * isHex("cafe0123") // returns true
- * isHex("cafe012")  // returns false because of odd length
+ * import { isHex } from "@lucid-evolution/experimental/Bytes";
+ * isHex("deadbeef"); // true
+ * isHex("DEADBEEF"); // false
+ * isHex("abc"); // false
  *
  * @since 1.0.0
+ * @category predicates
  */
-export const isHex = (value: string): boolean =>
-  typeof value === "string" &&
-  /^[0-9a-fA-F]+$/.test(value) &&
-  value.length % 2 === 0;
+export const isHex = (input: string): boolean =>
+  typeof input === "string" &&
+  input.length % 2 === 0 &&
+  /^[0-9a-f]*$/.test(input);
