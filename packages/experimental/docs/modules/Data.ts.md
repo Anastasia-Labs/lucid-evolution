@@ -719,8 +719,8 @@ export declare const isConstr: (
   u: unknown,
   overrideOptions?: SchemaAST.ParseOptions | number,
 ) => u is {
-  readonly _tag: "Constr";
   readonly fields: readonly Data[];
+  readonly _tag: "Constr";
   readonly index: bigint;
 };
 ```

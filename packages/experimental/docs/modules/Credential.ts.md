@@ -13,6 +13,8 @@ parent: Modules
 - [encoding/decoding](#encodingdecoding)
   - [fromCBOR](#fromcbor)
   - [fromCBORBytes](#fromcborbytes)
+  - [fromCBORBytesOrThrow](#fromcborbytesorthrow)
+  - [fromCBOROrThrow](#fromcbororthrow)
   - [toCBOR](#tocbor)
 - [errors](#errors)
   - [CredentialError (class)](#credentialerror-class)
@@ -34,13 +36,13 @@ Decode a CBOR hex string to a Credential
 **Signature**
 
 ```ts
-export declare const fromCBOR: (
-  cborHex: string,
-) => Effect.Effect<
-  | Effect.Effect<{ _tag: string; hash: string }, Bytes.BytesError, never>
-  | KeyHash.KeyHash,
-  CBOR.CBORError | KeyHash.KeyHashError | CredentialError,
-  never
+export declare const fromCBOR: SerdeImpl.FromCBOR<
+  ScriptHash.ScriptHash | KeyHash.KeyHash,
+  | CBOR.CBORError
+  | ScriptHash.ScriptHashError
+  | Bytes.BytesError
+  | KeyHash.KeyHashError
+  | CredentialError
 >;
 ```
 
@@ -49,12 +51,17 @@ export declare const fromCBOR: (
 ```ts
 import { Credential } from "@lucid-evolution/experimental";
 import { Effect } from "effect";
+import assert from "assert";
 
 const cborHex =
   "8200581cc37b1b5dc0669f1d3c61a6fddb2e8fde96be87b881c60bce8e8d542f";
 const credentialEffect = Credential.fromCBOR(cborHex);
 const credential = Effect.runSync(credentialEffect);
-// Returns a KeyHash credential
+assert(credential._tag === "KeyHash");
+assert(
+  credential.hash ===
+    "c37b1b5dc0669f1d3c61a6fddb2e8fde96be87b881c60bce8e8d542f",
+);
 ```
 
 Added in v2.0.0
@@ -67,41 +74,12 @@ Internal helper function used by fromCBOR
 **Signature**
 
 ```ts
-export declare const fromCBORBytes: (
-  bytes: any,
-) => Effect.Effect<
-  | Effect.Effect<{ _tag: string; hash: string }, Bytes.BytesError, never>
-  | KeyHash.KeyHash,
-  [
-    | YieldWrap<Effect.Effect<any, CBOR.CBORError, never>>
-    | YieldWrap<Effect.Effect<KeyHash.KeyHash, KeyHash.KeyHashError, never>>
-    | YieldWrap<Effect.Effect<never, CredentialError, never>>,
-  ] extends [never]
-    ? never
-    : [
-          | YieldWrap<Effect.Effect<any, CBOR.CBORError, never>>
-          | YieldWrap<
-              Effect.Effect<KeyHash.KeyHash, KeyHash.KeyHashError, never>
-            >
-          | YieldWrap<Effect.Effect<never, CredentialError, never>>,
-        ] extends [YieldWrap<Effect.Effect<infer _A, infer E, infer _R>>]
-      ? E
-      : never,
-  [
-    | YieldWrap<Effect.Effect<any, CBOR.CBORError, never>>
-    | YieldWrap<Effect.Effect<KeyHash.KeyHash, KeyHash.KeyHashError, never>>
-    | YieldWrap<Effect.Effect<never, CredentialError, never>>,
-  ] extends [never]
-    ? never
-    : [
-          | YieldWrap<Effect.Effect<any, CBOR.CBORError, never>>
-          | YieldWrap<
-              Effect.Effect<KeyHash.KeyHash, KeyHash.KeyHashError, never>
-            >
-          | YieldWrap<Effect.Effect<never, CredentialError, never>>,
-        ] extends [YieldWrap<Effect.Effect<infer _A, infer _E, infer R>>]
-      ? R
-      : never
+export declare const fromCBORBytes: SerdeImpl.FromCBORBytes<
+  ScriptHash.ScriptHash | KeyHash.KeyHash,
+  | CBOR.CBORError
+  | ScriptHash.ScriptHashError
+  | KeyHash.KeyHashError
+  | CredentialError
 >;
 ```
 
@@ -110,13 +88,79 @@ export declare const fromCBORBytes: (
 ```ts
 import { Credential, Bytes } from "@lucid-evolution/experimental";
 import { Effect } from "effect";
+import assert from "assert";
 
 const bytes = Bytes.fromHexOrThrow(
   "8201581cc37b1b5dc0669f1d3c61a6fddb2e8fde96be87b881c60bce8e8d542f",
 );
 const credentialEffect = Credential.fromCBORBytes(bytes);
 const credential = Effect.runSync(credentialEffect);
-// Returns a KeyHash credential
+assert(credential._tag === "ScriptHash");
+assert(
+  credential.hash ===
+    "c37b1b5dc0669f1d3c61a6fddb2e8fde96be87b881c60bce8e8d542f",
+);
+```
+
+Added in v2.0.0
+
+## fromCBORBytesOrThrow
+
+Decode CBOR bytes to a Credential, throws on error.
+
+**Signature**
+
+```ts
+export declare const fromCBORBytesOrThrow: SerdeImpl.FromCBORBytesOrThrow<
+  ScriptHash.ScriptHash | KeyHash.KeyHash
+>;
+```
+
+**Example**
+
+```ts
+import { Credential, Bytes } from "@lucid-evolution/experimental";
+import assert from "assert";
+
+const bytes = Bytes.fromHexOrThrow(
+  "8201581cc37b1b5dc0669f1d3c61a6fddb2e8fde96be87b881c60bce8e8d542f",
+);
+const credential = Credential.fromCBORBytesOrThrow(bytes);
+assert(credential._tag === "ScriptHash");
+assert(
+  credential.hash ===
+    "c37b1b5dc0669f1d3c61a6fddb2e8fde96be87b881c60bce8e8d542f",
+);
+```
+
+Added in v2.0.0
+
+## fromCBOROrThrow
+
+Decode a CBOR hex string to a Credential, throws on error.
+
+**Signature**
+
+```ts
+export declare const fromCBOROrThrow: SerdeImpl.FromCBOROrThrow<
+  ScriptHash.ScriptHash | KeyHash.KeyHash
+>;
+```
+
+**Example**
+
+```ts
+import { Credential } from "@lucid-evolution/experimental";
+import assert from "assert";
+
+const cborHex =
+  "8200581cc37b1b5dc0669f1d3c61a6fddb2e8fde96be87b881c60bce8e8d542f";
+const credential = Credential.fromCBOROrThrow(cborHex);
+assert(credential._tag === "KeyHash");
+assert(
+  credential.hash ===
+    "c37b1b5dc0669f1d3c61a6fddb2e8fde96be87b881c60bce8e8d542f",
+);
 ```
 
 Added in v2.0.0
@@ -138,29 +182,24 @@ Uses a pre-configured CBOR encoder for better performance
 **Signature**
 
 ```ts
-export declare const toCBOR: (
-  credential: Credential,
-) => Effect.Effect<
-  Effect.Effect<string, Bytes.BytesError, never>,
-  CBOR.CBORError,
-  never
+export declare const toCBOR: SerdeImpl.ToCBOR<
+  ScriptHash.ScriptHash | KeyHash.KeyHash
 >;
 ```
 
 **Example**
 
 ```ts
-import { Credential } from "@lucid-evolution/experimental";
-import { Effect } from "effect";
+import { Credential, ScriptHash } from "@lucid-evolution/experimental";
+import assert from "assert";
 
-const scriptHashCredential = {
-  _tag: "ScriptHash",
-  hash: "c37b1b5dc0669f1d3c61a6fddb2e8fde96be87b881c60bce8e8d542f",
-} as const;
-
-const cborHexEffect = Credential.toCBOR(scriptHashCredential);
-const cborHex = Effect.runSync(cborHexEffect);
-// Returns "8201581cc37b1b5dc0669f1d3c61a6fddb2e8fde96be87b881c60bce8e8d542f"
+const scriptHashCredential = ScriptHash.makeOrThrow(
+  "c37b1b5dc0669f1d3c61a6fddb2e8fde96be87b881c60bce8e8d542f",
+);
+const cbor = Credential.toCBOR(scriptHashCredential);
+assert(
+  cbor === "8201581cc37b1b5dc0669f1d3c61a6fddb2e8fde96be87b881c60bce8e8d542f",
+);
 ```
 
 Added in v2.0.0
@@ -206,22 +245,20 @@ Check if the given value is a valid Credential
 export declare const isCredential: (
   u: unknown,
   overrideOptions?: ParseOptions | number,
-) => u is
-  | { readonly hash: string; readonly _tag: "ScriptHash" }
-  | KeyHash.KeyHash;
+) => u is ScriptHash.ScriptHash | KeyHash.KeyHash;
 ```
 
 **Example**
 
 ```ts
-import { Credential } from "@lucid-evolution/experimental";
+import { Credential, KeyHash } from "@lucid-evolution/experimental";
+import assert from "assert";
 
-const credential = {
-  _tag: "KeyHash",
-  hash: "c37b1b5dc0669f1d3c61a6fddb2e8fde96be87b881c60bce8e8d542f",
-};
+const credential = KeyHash.makeOrThrow(
+  "c37b1b5dc0669f1d3c61a6fddb2e8fde96be87b881c60bce8e8d542f",
+);
 const isValid = Credential.isCredential(credential);
-// Returns true if credential is valid
+assert(isValid === true);
 ```
 
 Added in v2.0.0
@@ -237,13 +274,7 @@ Used to identify ownership of addresses or stake rights
 
 ```ts
 export declare const Credential: Schema.Union<
-  [
-    typeof KeyHash.KeyHash,
-    Schema.TaggedStruct<
-      "ScriptHash",
-      { hash: Schema.refine<string, Schema.Schema<string, string, never>> }
-    >,
-  ]
+  [typeof KeyHash.KeyHash, typeof ScriptHash.ScriptHash]
 >;
 ```
 

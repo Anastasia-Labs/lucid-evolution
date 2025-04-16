@@ -10,3 +10,4 @@ export * as Credential from "./Credential.js";
 export * as KeyHash from "./KeyHash.js";
 export * as ScriptHash from "./ScriptHash.js";
 export * as CBOR from "./CBOR.js";
+export * as Positive from "./Positive.js";

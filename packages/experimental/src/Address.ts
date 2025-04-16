@@ -2,9 +2,13 @@ import { Schema, Effect, Data } from "effect";
 import { HexStringFilter } from "./Combinator.js";
 import { bech32 } from "@scure/base";
 import * as Bytes from "./Bytes.js";
-import * as CBOR from "cbor-x";
+import * as CBOR from "./CBOR.js";
 import * as Credential from "./Credential.js";
 import * as KeyHash from "./KeyHash.js";
+import * as ScriptHash from "./ScriptHash.js";
+import * as Positive from "./Positive.js";
+import * as SerdeImpl from "./SerdeImpl.js";
+import { ParseError } from "effect/ParseResult";
 
 /**
  * CDDL specs
@@ -76,29 +80,26 @@ export class AddressError extends Data.TaggedError("AddressError")<{
  * @since 2.0.0
  * @category schemas
  */
-export const Pointer = Schema.TaggedStruct("Pointer", {
-  slot: Schema.Number,
-  txIndex: Schema.Number,
-  certIndex: Schema.Number,
-});
-
-/**
- * Type representing a pointer to a stake registration
- *
- * @since 2.0.0
- * @category model
- */
-export type Pointer = Schema.Schema.Type<typeof Pointer>;
+export class Pointer extends Schema.TaggedClass<Pointer>("Pointer")("Pointer", {
+  slot: Positive.Positive,
+  txIndex: Positive.Positive,
+  certIndex: Positive.Positive,
+}) {}
 
 /**
  * Check if the given value is a valid Pointer
  *
  * @example
- * import { Address } from "@lucid-evolution/experimental";
+ * import { Address , Positive } from "@lucid-evolution/experimental";
+ * import assert from "assert";
  *
- * const pointer = { _tag: "Pointer", slot: 1, txIndex: 2, certIndex: 3 };
+ * const pointer = Address.Pointer.make({
+ *   slot: Positive.makeOrThrow(1),
+ *   txIndex: Positive.makeOrThrow(2),
+ *   certIndex: Positive.makeOrThrow(3),
+ * });
  * const isValid = Address.isPointer(pointer);
- * // Returns true if pointer is valid
+ * assert(isValid === true);
  *
  * @since 2.0.0
  * @category predicates
@@ -129,9 +130,10 @@ export type PaymentAddress = Schema.Schema.Type<typeof PaymentAddress>;
  *
  * @example
  * import { Address } from "@lucid-evolution/experimental";
+ * import assert from "assert";
  *
  * const isValid = Address.isPaymentAddress("addr1qx2fxv2umyhttkxyxp8x0dlpdt3k6cwng5pxj3jhsydzer3n0d3vllmyqwsx5wktcd8cc3sq835lu7drv2xwl2wywfgse35a3x");
- * // Returns true if address is a valid payment address
+ * assert(isValid === true);
  *
  * @since 2.0.0
  * @category predicates
@@ -162,9 +164,10 @@ export type RewardAddress = Schema.Schema.Type<typeof RewardAddress>;
  *
  * @example
  * import { Address } from "@lucid-evolution/experimental";
+ * import assert from "assert";
  *
  * const isValid = Address.isRewardAddress("stake1uyehkck0lajq8gr28t9uxnuvgcqrc6070x3k9r8048z8y5gh6ffgw");
- * // Returns true if address is a valid reward address
+ * assert(isValid === true);
  *
  * @since 2.0.0
  * @category predicates
@@ -196,19 +199,14 @@ export type StakeReference = Schema.Schema.Type<typeof StakeReference>;
  * @since 2.0.0
  * @category schemas
  */
-export const BaseAddress = Schema.TaggedStruct("BaseAddress", {
-  networkId: Schema.Number,
-  paymentCredential: Credential.Credential,
-  stakeCredential: Credential.Credential,
-});
-
-/**
- * Type representing a base address with payment and stake credentials
- *
- * @since 2.0.0
- * @category model
- */
-export interface BaseAddress extends Schema.Schema.Type<typeof BaseAddress> {}
+export class BaseAddress extends Schema.TaggedClass<BaseAddress>("BaseAddress")(
+  "BaseAddress",
+  {
+    networkId: Schema.Number,
+    paymentCredential: Credential.Credential,
+    stakeCredential: Credential.Credential,
+  },
+) {}
 
 /**
  * Enterprise address with only payment credential
@@ -216,19 +214,12 @@ export interface BaseAddress extends Schema.Schema.Type<typeof BaseAddress> {}
  * @since 2.0.0
  * @category schemas
  */
-export const EnterpriseAddress = Schema.TaggedStruct("EnterpriseAddress", {
+export class EnterpriseAddress extends Schema.TaggedClass<EnterpriseAddress>(
+  "EnterpriseAddress",
+)("EnterpriseAddress", {
   networkId: Schema.Number,
   paymentCredential: Credential.Credential,
-});
-
-/**
- * Type representing an enterprise address with only payment credential
- *
- * @since 2.0.0
- * @category model
- */
-export interface EnterpriseAddress
-  extends Schema.Schema.Type<typeof EnterpriseAddress> {}
+}) {}
 
 /**
  * Pointer address with payment credential and pointer to stake registration
@@ -236,20 +227,13 @@ export interface EnterpriseAddress
  * @since 2.0.0
  * @category schemas
  */
-export const PointerAddress = Schema.TaggedStruct("PointerAddress", {
+export class PointerAddress extends Schema.TaggedClass<PointerAddress>(
+  "PointerAddress",
+)("PointerAddress", {
   networkId: Schema.Number,
   paymentCredential: Credential.Credential,
   pointer: Pointer,
-});
-
-/**
- * Type representing a pointer address with payment credential and pointer
- *
- * @since 2.0.0
- * @category model
- */
-export interface PointerAddress
-  extends Schema.Schema.Type<typeof PointerAddress> {}
+}) {}
 
 /**
  * Reward/stake address with only staking credential
@@ -257,19 +241,12 @@ export interface PointerAddress
  * @since 2.0.0
  * @category schemas
  */
-export const RewardAccount = Schema.TaggedStruct("RewardAccount", {
+export class RewardAccount extends Schema.TaggedClass<RewardAccount>(
+  "RewardAccount",
+)("RewardAccount", {
   networkId: Schema.Number,
   stakeCredential: Credential.Credential,
-});
-
-/**
- * Type representing a reward/stake address with only staking credential
- *
- * @since 2.0.0
- * @category model
- */
-export interface RewardAccount
-  extends Schema.Schema.Type<typeof RewardAccount> {}
+}) {}
 
 /**
  * Byron legacy address format
@@ -277,17 +254,11 @@ export interface RewardAccount
  * @since 2.0.0
  * @category schemas
  */
-export const ByronAddress = Schema.TaggedStruct("ByronAddress", {
+export class ByronAddress extends Schema.TaggedClass<ByronAddress>(
+  "ByronAddress",
+)("ByronAddress", {
   bytes: Schema.String.pipe(HexStringFilter),
-});
-
-/**
- * Type representing a Byron legacy address
- *
- * @since 2.0.0
- * @category model
- */
-export interface ByronAddress extends Schema.Schema.Type<typeof ByronAddress> {}
+}) {}
 
 /**
  * Union schema representing all possible address formats
@@ -323,10 +294,12 @@ export type Address =
  * @example
  * import { Address } from "@lucid-evolution/experimental";
  * import { Effect } from "effect";
+ * import assert from "assert";
  *
  * const effect = Address.bytesFromBech32("addr1qx2fxv2umyhttkxyxp8x0dlpdt3k6cwng5pxj3jhsydzer3n0d3vllmyqwsx5wktcd8cc3sq835lu7drv2xwl2wywfgse35a3x");
  * const bytes = Effect.runSync(effect);
- * // Returns Uint8Array representing the binary address
+ * assert(bytes instanceof Uint8Array);
+ * assert(bytes.length > 0);
  *
  * @since 2.0.0
  * @category encoding/decoding
@@ -348,10 +321,12 @@ export const bytesFromBech32 = (
  * @example
  * import { Address } from "@lucid-evolution/experimental";
  * import { Effect } from "effect";
+ * import assert from "assert";
  *
  * const effect = Address.headerFromBech32("addr1qx2fxv2umyhttkxyxp8x0dlpdt3k6cwng5pxj3jhsydzer3n0d3vllmyqwsx5wktcd8cc3sq835lu7drv2xwl2wywfgse35a3x");
  * const header = Effect.runSync(effect);
- * // Returns a number (e.g., 0) representing the header byte
+ * assert(typeof header === "number");
+ * assert(header === 0 || header === 1); // typically 0 for testnet, 1 for mainnet
  *
  * @since 2.0.0
  * @category transformation
@@ -367,9 +342,10 @@ export const headerFromBech32 = (
  *
  * @example
  * import { Address } from "@lucid-evolution/experimental";
+ * import assert from "assert";
  *
  * const tag = Address.addressTagFromHeader(0);
- * // Returns "Base"
+ * assert(tag === "Base");
  *
  * @since 2.0.0
  * @category transformation
@@ -406,10 +382,11 @@ export const addressTagFromHeader = (header: number): AddressTag => {
  * @example
  * import { Address } from "@lucid-evolution/experimental";
  * import { Effect } from "effect";
+ * import assert from "assert";
  *
  * const effect = Address.addressTagFromBech32("addr1qx2fxv2umyhttkxyxp8x0dlpdt3k6cwng5pxj3jhsydzer3n0d3vllmyqwsx5wktcd8cc3sq835lu7drv2xwl2wywfgse35a3x");
  * const tag = Effect.runSync(effect);
- * // Returns "Base"
+ * assert(tag === "Base");
  *
  * @since 2.0.0
  * @category transformation
@@ -428,15 +405,16 @@ export const addressTagFromBech32 = (
  * @example
  * import { Address } from "@lucid-evolution/experimental";
  * import { Effect } from "effect";
+ * import assert from "assert";
  *
  * const effect = Address.networkIdFromBech32("addr1qx2fxv2umyhttkxyxp8x0dlpdt3k6cwng5pxj3jhsydzer3n0d3vllmyqwsx5wktcd8cc3sq835lu7drv2xwl2wywfgse35a3x");
  * const networkId = Effect.runSync(effect);
- * // Returns 1 for mainnet
+ * assert(networkId === 1); // 1 for mainnet
  *
  * // For testnet addresses:
  * const testnetEffect = Address.networkIdFromBech32("addr_test1qz2fxv2umyhttkxyxp8x0dlpdt3k6cwng5pxj3jhsydzer3n0d3vllmyqwsx5wktcd8cc3sq835lu7drv2xwl2wywfgs68faae");
  * const testnetId = Effect.runSync(testnetEffect);
- * // Returns 0 for testnet
+ * assert(testnetId === 0); // 0 for testnet
  *
  * @since 2.0.0
  * @category transformation
@@ -455,127 +433,120 @@ export const networkIdFromBech32 = (
  * @example
  * import { Address } from "@lucid-evolution/experimental";
  * import { Effect } from "effect";
+ * import assert from "assert";
  *
  * // Create a buffer that encodes the value 128
  * const buffer = new Uint8Array([0x80, 0x01]);
  *
  * const effect = Address.decodeVariableLength(buffer, 0);
- * const [value, bytesRead] = Effect.runSync(effect);
- * // Returns [128, 2]
+ * const [positive, bytesRead] = Effect.runSync(effect);
+ * assert(positive.number === 128);
+ * assert(bytesRead === 2);
  *
  * @since 2.0.0
  * @category encoding/decoding
  */
 export const decodeVariableLength: (
-  bytes: Uint8Array<ArrayBufferLike>,
+  bytes: Uint8Array,
   offset?: number | undefined,
-) => Effect.Effect<number[], AddressError> = Effect.fnUntraced(function* (
-  bytes,
-  offset = 0,
-) {
-  // The accumulated decoded value
-  let value = 0;
+) => Effect.Effect<[Positive.Positive, number], AddressError | ParseError> =
+  Effect.fnUntraced(function* (bytes, offset = 0) {
+    // The accumulated decoded value
+    let number = 0;
 
-  // Count of bytes processed so far
-  let bytesRead = 0;
+    // Count of bytes processed so far
+    let bytesRead = 0;
 
-  // Multiplier for the current byte position (increases by powers of 128)
-  // Starts at 1 because the first 7 bits are multiplied by 1
-  let multiplier = 1;
+    // Multiplier for the current byte position (increases by powers of 128)
+    // Starts at 1 because the first 7 bits are multiplied by 1
+    let multiplier = 1;
 
-  while (true) {
-    // Check if we've reached the end of the buffer without finding a complete value
-    // This is a safeguard against buffer overruns
-    if (offset + bytesRead >= bytes.length) {
-      yield* new AddressError({
-        message: `Buffer overflow: not enough bytes to decode variable length integer at offset ${offset}`,
-      });
+    while (true) {
+      // Check if we've reached the end of the buffer without finding a complete value
+      // This is a safeguard against buffer overruns
+      if (offset + bytesRead >= bytes.length) {
+        yield* new AddressError({
+          message: `Buffer overflow: not enough bytes to decode variable length integer at offset ${offset}`,
+        });
+      }
+
+      // Read the current byte
+      const b = bytes[offset + bytesRead];
+      bytesRead++;
+
+      // Extract value bits by masking with 0x7F (binary 01111111)
+      // This removes the high continuation bit and keeps only the 7 value bits
+      // Then multiply by the current position multiplier and add to accumulated value
+      number += (b & 0x7f) * multiplier;
+
+      // Check if this is the last byte by testing the high bit (0x80, binary 10000000)
+      // If the high bit is 0, we've reached the end of the encoded integer
+      if ((b & 0x80) === 0) {
+        // Return the decoded value and the count of bytes read
+        const value = yield* Schema.decode(Positive.Positive)({ number });
+        return [value, bytesRead] as const;
+      }
+
+      // If the high bit is 1, we need to read more bytes
+      // Increase the multiplier for the next byte position (each position is worth 128 times more)
+      // This is because each byte holds 7 bits of value information
+      multiplier *= 128;
+
+      // Continue reading bytes until we find one with the high bit set to 0
     }
-
-    // Read the current byte
-    const b = bytes[offset + bytesRead];
-    bytesRead++;
-
-    // Extract value bits by masking with 0x7F (binary 01111111)
-    // This removes the high continuation bit and keeps only the 7 value bits
-    // Then multiply by the current position multiplier and add to accumulated value
-    value += (b & 0x7f) * multiplier;
-
-    // Check if this is the last byte by testing the high bit (0x80, binary 10000000)
-    // If the high bit is 0, we've reached the end of the encoded integer
-    if ((b & 0x80) === 0) {
-      // Return the decoded value and the count of bytes read
-      return [value, bytesRead];
-    }
-
-    // If the high bit is 1, we need to read more bytes
-    // Increase the multiplier for the next byte position (each position is worth 128 times more)
-    // This is because each byte holds 7 bits of value information
-    multiplier *= 128;
-
-    // Continue reading bytes until we find one with the high bit set to 0
-  }
-});
+  });
 
 /**
  * Encode a number as a variable length integer following the Cardano ledger specification
  *
  * @example
- * import { Address } from "@lucid-evolution/experimental";
+ * import { Address , Positive } from "@lucid-evolution/experimental";
  * import { Effect } from "effect";
+ * import assert from "assert";
  *
- * const effect = Address.encodeVariableLength(128);
- * const bytes = Effect.runSync(effect);
- * // Returns Uint8Array([0x80, 0x01])
+ * const bytes = Address.encodeVariableLength(Positive.makeOrThrow(128));
+ * assert(bytes instanceof Uint8Array);
+ * assert(bytes.length === 2);
+ * assert(bytes[0] === 0x80);
+ * assert(bytes[1] === 0x01);
  *
- * const smallEffect = Address.encodeVariableLength(42);
- * const smallBytes = Effect.runSync(smallEffect);
- * // Returns Uint8Array([42])
+ * const smallBytes = Address.encodeVariableLength(Positive.makeOrThrow(42));
+ * assert(smallBytes instanceof Uint8Array);
+ * assert(smallBytes.length === 1);
+ * assert(smallBytes[0] === 42);
  *
  * @since 2.0.0
  * @category encoding/decoding
  */
-export const encodeVariableLength: (
-  value: number,
-) => Effect.Effect<Uint8Array<ArrayBuffer>, AddressError> = Effect.fnUntraced(
-  function* (value) {
-    // Variable length integers cannot represent negative numbers
-    // Throw an error if a negative value is provided
-    if (value < 0) {
-      yield* new AddressError({
-        message: `Cannot encode negative number as variable length integer: ${value}`,
-      });
-    }
+export const encodeVariableLength = (positive: Positive.Positive) => {
+  // Handle the simple case: values less than 128 (0x80, binary 10000000) fit in a single byte
+  // with no continuation bit needed
+  if (positive.number < 128) {
+    return new Uint8Array([positive.number]);
+  }
 
-    // Handle the simple case: values less than 128 (0x80, binary 10000000) fit in a single byte
-    // with no continuation bit needed
-    if (value < 128) {
-      return new Uint8Array([value]);
-    }
+  // For larger values, we need to split the number into 7-bit chunks
+  const result: number[] = [];
+  let remaining = positive.number;
 
-    // For larger values, we need to split the number into 7-bit chunks
-    const result: number[] = [];
-    let remaining = value;
+  // Loop until all bits of the number have been processed
+  while (remaining >= 128) {
+    // Take the least significant 7 bits (value & 0x7F, binary 01111111)
+    // and set the high bit (| 0x80, binary 10000000) to indicate more bytes follow
+    result.push((remaining & 0x7f) | 0x80);
 
-    // Loop until all bits of the number have been processed
-    while (remaining >= 128) {
-      // Take the least significant 7 bits (value & 0x7F, binary 01111111)
-      // and set the high bit (| 0x80, binary 10000000) to indicate more bytes follow
-      result.push((remaining & 0x7f) | 0x80);
+    // Shift right by 7 bits (divide by 128) to process the next chunk
+    remaining = Math.floor(remaining / 128);
+  }
 
-      // Shift right by 7 bits (divide by 128) to process the next chunk
-      remaining = Math.floor(remaining / 128);
-    }
+  // Push the final byte (the most significant bits)
+  // without setting the high bit, indicating this is the last byte
+  result.push(remaining & 0x7f); // Binary: 0xxxxxxx where x are bits from the value
 
-    // Push the final byte (the most significant bits)
-    // without setting the high bit, indicating this is the last byte
-    result.push(remaining & 0x7f); // Binary: 0xxxxxxx where x are bits from the value
-
-    // Convert the array of bytes to a Uint8Array
-    // The bytes are already in little-endian order (least significant byte first)
-    return new Uint8Array(result);
-  },
-);
+  // Convert the array of bytes to a Uint8Array
+  // The bytes are already in little-endian order (least significant byte first)
+  return new Uint8Array(result);
+};
 
 /**
  * Convert bytes to an address structure
@@ -583,185 +554,158 @@ export const encodeVariableLength: (
  * @example
  * import { Address, Bytes } from "@lucid-evolution/experimental";
  * import { Effect } from "effect";
+ * import assert from "assert";
  *
  * const addressBytes = Bytes.fromHexOrThrow("019493315cd92eb5d8c4304e67b7e16ae36d61d34502694657811a2c8e337b62cfff6403a06a3acbc34f8c46003c69fe79a3628cefa9c47251");
- * // const effect = Address.fromBytes(addressBytes);
- * // const address = Effect.runSync(effect);
- * // Returns a structured Address object
+ * const effect = Address.fromBytes(addressBytes);
+ * const address = Effect.runSync(effect);
+ * assert(address._tag === "BaseAddress");
+ * assert(address.networkId === 1);
  *
  * @since 2.0.0
  * @category encoding/decoding
  */
-export const fromBytes =
-  // : (
-  //   bytes: Uint8Array<ArrayBufferLike>
-  // ) => Effect.Effect<
-  //   | BaseAddress
-  //   | EnterpriseAddress
-  //   | PointerAddress
-  //   | RewardAccount
-  //   | ByronAddress,
-  //   AddressError
-  // > =
-  Effect.fnUntraced(function* (bytes: Uint8Array) {
-    const header = bytes[0];
+export const fromBytes: SerdeImpl.FromBytes<
+  Address,
+  | AddressError
+  | KeyHash.KeyHashError
+  | ScriptHash.ScriptHashError
+  | Bytes.BytesError
+  | ParseError
+> = Effect.fnUntraced(function* (bytes: Uint8Array) {
+  const header = bytes[0];
 
-    // Extract network ID from the lower 4 bits
-    const networkId = header & 0b00001111;
+  // Extract network ID from the lower 4 bits
+  const networkId = header & 0b00001111;
 
-    // Extract address type from the upper 4 bits (bits 4-7)
-    const addressType = header >> 4;
+  // Extract address type from the upper 4 bits (bits 4-7)
+  const addressType = header >> 4;
 
-    switch (addressType) {
-      // Base address types (0000, 0001, 0010, 0011)
-      // Format: [payment credential, stake credential]
-      case 0b0000: // Key payment, Key stake
-      case 0b0001: // Script payment, Key stake
-      case 0b0010: // Key payment, Script stake
-      case 0b0011: {
-        // Script payment, Script stake
-        const isPaymentKey = (addressType & 0b0001) === 0;
-        const paymentCredential: Credential.Credential = isPaymentKey
-          ? yield* KeyHash.fromBytes(bytes.slice(1, 29))
-          : {
-              _tag: "ScriptHash",
-              hash: yield* Bytes.toHex!(bytes.slice(1, 29)), // Payment credential hash (28 bytes)
-            };
-        // {
-        //   _tag: isPaymentKey ? "KeyHash" : "ScriptHash",
-        //   hash: Bytes.toHex!(bytes.slice(1, 29)), // Payment credential hash (28 bytes)
-        // };
-        const isStakeKey = (addressType & 0b0010) === 0;
-        const stakeCredential: Credential.Credential = isStakeKey
-          ? yield* KeyHash.fromBytes(bytes.slice(29, 57))
-          : {
-              _tag: "ScriptHash",
-              hash: yield* Bytes.toHex!(bytes.slice(29, 57)), // Stake credential hash (28 bytes)
-            };
-        // {
-        //   _tag: isStakeKey ? "KeyHash" : "ScriptHash",
-        //   hash: Bytes.toHex!(bytes.slice(29, 57)), // Stake credential hash (28 bytes)
-        // };
-        const baseAddress: BaseAddress = {
-          _tag: "BaseAddress",
+  switch (addressType) {
+    // Base address types (0000, 0001, 0010, 0011)
+    // Format: [payment credential, stake credential]
+    case 0b0000: // Key payment, Key stake
+    case 0b0001: // Script payment, Key stake
+    case 0b0010: // Key payment, Script stake
+    case 0b0011: {
+      // Script payment, Script stake
+      const isPaymentKey = (addressType & 0b0001) === 0;
+      const paymentCredential: Credential.Credential = isPaymentKey
+        ? yield* KeyHash.fromBytes(bytes.slice(1, 29))
+        : yield* ScriptHash.fromBytes(bytes.slice(1, 29));
+      const isStakeKey = (addressType & 0b0010) === 0;
+      const stakeCredential: Credential.Credential = isStakeKey
+        ? yield* KeyHash.fromBytes(bytes.slice(29, 57))
+        : yield* ScriptHash.fromBytes(bytes.slice(29, 57));
+      const baseAddress: BaseAddress = BaseAddress.make(
+        {
           networkId,
           paymentCredential,
           stakeCredential,
-        };
-        return baseAddress;
-      }
+        },
+        {
+          disableValidation: true,
+        },
+      );
+      return baseAddress;
+    }
 
-      // Enterprise address types (0110, 0111)
-      // Format: [payment credential only]
-      case 0b0110: // Key payment
-      case 0b0111: {
-        // Script payment
-        const isPaymentKey = (addressType & 0b0001) === 0;
-        const paymentCredential: Credential.Credential = isPaymentKey
-          ? yield* KeyHash.fromBytes(bytes.slice(1, 29))
-          : {
-              _tag: "ScriptHash",
-              hash: yield* Bytes.toHex!(bytes.slice(1, 29)), // Payment credential hash (28 bytes)
-            };
-        // {
-        //   _tag: isPaymentKey ? "KeyHash" : "ScriptHash",
-        //   hash: Bytes.toHex!(bytes.slice(1, 29)), // Payment credential hash (28 bytes)
-        // };
-        const enterpriseAddress: EnterpriseAddress = {
-          _tag: "EnterpriseAddress",
+    // Enterprise address types (0110, 0111)
+    // Format: [payment credential only]
+    case 0b0110: // Key payment
+    case 0b0111: {
+      // Script payment
+      const isPaymentKey = (addressType & 0b0001) === 0;
+      const paymentCredential: Credential.Credential = isPaymentKey
+        ? yield* KeyHash.fromBytes(bytes.slice(1, 29))
+        : yield* ScriptHash.fromBytes(bytes.slice(1, 29));
+      const enterpriseAddress: EnterpriseAddress = EnterpriseAddress.make(
+        {
           networkId,
           paymentCredential,
-        };
-        return enterpriseAddress;
-      }
+        },
+        {
+          disableValidation: true,
+        },
+      );
+      return enterpriseAddress;
+    }
 
-      // Pointer address types (0100, 0101)
-      // Format: [payment credential, variable length integers for slot, txIndex, certIndex]
-      case 0b0100: // Key payment with pointer
-      case 0b0101: {
-        // Script payment with pointer
-        // Check if the address is a pointer address
-        const isPaymentKey = (addressType & 0b0001) === 0;
-        // Payment credential is in bytes 1-29 (28 bytes)
-        const paymentCredential: Credential.Credential = isPaymentKey
-          ? yield* KeyHash.fromBytes(bytes.slice(1, 29))
-          : {
-              _tag: "ScriptHash",
-              hash: yield* Bytes.toHex!(bytes.slice(1, 29)), // Payment credential hash (28 bytes)
-            };
-        //  {
-        //   _tag: isPaymentKey ? "KeyHash" : "ScriptHash",
-        //   hash: Bytes.toHex!(bytes.slice(1, 29)), // Payment credential hash (28 bytes)
-        // };
+    // Pointer address types (0100, 0101)
+    // Format: [payment credential, variable length integers for slot, txIndex, certIndex]
+    case 0b0100: // Key payment with pointer
+    case 0b0101: {
+      // Script payment with pointer
+      // Check if the address is a pointer address
+      const isPaymentKey = (addressType & 0b0001) === 0;
+      const paymentCredential: Credential.Credential = isPaymentKey
+        ? yield* KeyHash.fromBytes(bytes.slice(1, 29))
+        : yield* ScriptHash.fromBytes(bytes.slice(1, 29));
 
-        // After the credential, we have 3 variable-length integers
-        let offset = 29;
+      // After the credential, we have 3 variable-length integers
+      let offset = 29;
 
-        // Decode the slot, txIndex, and certIndex as variable length integers
-        const [slot, slotBytesRead] = yield* decodeVariableLength(
-          bytes,
-          offset,
-        );
-        offset += slotBytesRead;
+      // Decode the slot, txIndex, and certIndex as variable length integers
+      const [slot, slotBytesRead] = yield* decodeVariableLength(bytes, offset);
+      offset += slotBytesRead;
 
-        const [txIndex, txIndexBytesRead] = yield* decodeVariableLength(
-          bytes,
-          offset,
-        );
-        offset += txIndexBytesRead;
+      const [txIndex, txIndexBytesRead] = yield* decodeVariableLength(
+        bytes,
+        offset,
+      );
+      offset += txIndexBytesRead;
 
-        const [certIndex, _] = yield* decodeVariableLength(bytes, offset);
-        const pointer: Pointer = {
-          _tag: "Pointer",
-          slot,
-          txIndex,
-          certIndex,
-        };
+      const [certIndex, _] = yield* decodeVariableLength(bytes, offset);
+      const pointer: Pointer = Pointer.make(
+        { slot, txIndex, certIndex },
+        { disableValidation: true },
+      );
 
-        const pointerAddress: PointerAddress = {
-          _tag: "PointerAddress",
+      const pointerAddress: PointerAddress = PointerAddress.make(
+        {
           networkId,
           paymentCredential,
           pointer,
-        };
+        },
+        { disableValidation: true },
+      );
 
-        return pointerAddress;
-      }
+      return pointerAddress;
+    }
 
-      case 0b1110:
-      case 0b1111: {
-        const isStakeKey = (addressType & 0b0001) === 0;
-        const stakeCredential: Credential.Credential = isStakeKey
-          ? yield* KeyHash.fromBytes(bytes.slice(1, 29))
-          : {
-              _tag: "ScriptHash",
-              hash: yield* Bytes.toHex!(bytes.slice(1, 29)), // Staking credential hash (28 bytes)
-            };
-        // {
-        //   _tag: isStakeKey ? "KeyHash" : "ScriptHash",
-        //   hash: Bytes.toHex!(bytes.slice(1, 29)), // Staking credential hash (28 bytes)
-        // };
-        const rewardAccount: RewardAccount = {
-          _tag: "RewardAccount",
+    case 0b1110:
+    case 0b1111: {
+      const isStakeKey = (addressType & 0b0001) === 0;
+      const stakeCredential: Credential.Credential = isStakeKey
+        ? yield* KeyHash.fromBytes(bytes.slice(1, 29))
+        : yield* ScriptHash.fromBytes(bytes.slice(1, 29));
+      const rewardAccount: RewardAccount = RewardAccount.make(
+        {
           networkId,
           stakeCredential,
-        };
-        return rewardAccount;
-      }
-
-      case 0b1000: {
-        return {
-          _tag: "ByronAddress",
-          bytes: yield* Bytes.toHex!(bytes), // Byron address (hex format)
-        } as ByronAddress;
-      }
-
-      default:
-        return yield* new AddressError({
-          message: `Unknown address type: ${addressType}`,
-        });
+        },
+        {
+          disableValidation: true,
+        },
+      );
+      return rewardAccount;
     }
-  });
+
+    case 0b1000: {
+      return ByronAddress.make(
+        {
+          bytes: yield* Bytes.toHex(bytes),
+        },
+        { disableValidation: true },
+      );
+    }
+
+    default:
+      return yield* new AddressError({
+        message: `Unknown address type: ${addressType}`,
+      });
+  }
+});
 
 /**
  * Parse the complete address structure into a typed representation
@@ -770,43 +714,42 @@ export const fromBytes =
  * @example
  * import { Address } from "@lucid-evolution/experimental";
  * import { Effect } from "effect";
+ * import assert from "assert";
  *
  * const effect = Address.fromBech32("addr1qx2fxv2umyhttkxyxp8x0dlpdt3k6cwng5pxj3jhsydzer3n0d3vllmyqwsx5wktcd8cc3sq835lu7drv2xwl2wywfgse35a3x");
  * const address = Effect.runSync(effect);
- * // Returns a structured Address object with _tag: "BaseAddress"
+ * assert(address._tag === "BaseAddress");
+ * assert(address.networkId === 1);
  *
  * const stakeEffect = Address.fromBech32("stake1uyehkck0lajq8gr28t9uxnuvgcqrc6070x3k9r8048z8y5gh6ffgw");
  * const stakeAddress = Effect.runSync(stakeEffect);
- * // Returns a structured Address object with _tag: "RewardAccount"
+ * assert(stakeAddress._tag === "RewardAccount");
  *
  * @since 2.0.0
  * @category encoding/decoding
  */
-export const fromBech32 =
-  // : (
-  //   bech32Address: string
-  // )
-  // => Effect.Effect<
-  //   | ByronAddress
-  //   | BaseAddress
-  //   | EnterpriseAddress
-  //   | PointerAddress
-  //   | RewardAccount,
-  //   AddressError
-  // > =
-  Effect.fnUntraced(function* (bech32Address) {
-    const bytes = yield* bytesFromBech32(bech32Address);
-    return yield* fromBytes(bytes);
-  });
+export const fromBech32: SerdeImpl.FromBech32<
+  Address,
+  | KeyHash.KeyHashError
+  | ScriptHash.ScriptHashError
+  | Bytes.BytesError
+  | AddressError
+  | ParseError
+> = Effect.fnUntraced(function* (bech32Address) {
+  const bytes = yield* bytesFromBech32(bech32Address);
+  return yield* fromBytes(bytes);
+});
 
 /**
  * Serialize a PaymentAddress to JSON format
  *
  * @example
  * import { Address } from "@lucid-evolution/experimental";
+ * import assert from "assert";
  *
  * const json = Address.paymentAddressToJson("addr1qx2fxv2umyhttkxyxp8x0dlpdt3k6cwng5pxj3jhsydzer3n0d3vllmyqwsx5wktcd8cc3sq835lu7drv2xwl2wywfgse35a3x");
- * // Returns '{"address":"addr1qx2fxv2umyhttkxyxp8x0dlpdt3k6cwng5pxj3jhsydzer3n0d3vllmyqwsx5wktcd8cc3sq835lu7drv2xwl2wywfgse35a3x"}'
+ * assert(typeof json === "string");
+ * assert(JSON.parse(json).address === "addr1qx2fxv2umyhttkxyxp8x0dlpdt3k6cwng5pxj3jhsydzer3n0d3vllmyqwsx5wktcd8cc3sq835lu7drv2xwl2wywfgse35a3x");
  *
  * @since 2.0.0
  * @category encoding/decoding
@@ -821,195 +764,187 @@ export const paymentAddressToJson = (address: string): string =>
  *
  * @example
  * import { Address } from "@lucid-evolution/experimental";
- * import { Effect , pipe } from "effect";
+ * import { Effect, pipe } from "effect";
+ * import assert from "assert";
  *
  * const addressEffect = pipe(
  *   Address.fromBech32("addr1qx2fxv2umyhttkxyxp8x0dlpdt3k6cwng5pxj3jhsydzer3n0d3vllmyqwsx5wktcd8cc3sq835lu7drv2xwl2wywfgse35a3x"),
- *   Effect.flatMap(Address.toBytes)
+ *   Effect.map(Address.toBytes)
  * );
  *
  * const bytes = Effect.runSync(addressEffect);
- * // Returns Uint8Array of the binary address representation
+ * assert(bytes instanceof Uint8Array);
+ * assert(bytes.length > 0);
  *
  * @since 2.0.0
  * @category encoding/decoding
  */
-export const toBytes =
-  // : (
-  //   address: Address
-  // ) => Effect.Effect<Uint8Array<ArrayBufferLike>, AddressError> =
-  Effect.fnUntraced(function* (address: Address) {
-    switch (address._tag) {
-      case "BaseAddress": {
-        // Preallocate array of exact size ( 1 byte header + 28 bytes payment credential + 28 bytes stake credential )
-        const result = new Uint8Array(57);
-        const paymentBit = address.paymentCredential._tag === "KeyHash" ? 0 : 1;
-        const stakeBit = address.stakeCredential._tag === "KeyHash" ? 0 : 1;
-        const header =
-          (0b00 << 6) |
-          (stakeBit << 5) |
-          (paymentBit << 4) |
-          (address.networkId & 0b00001111);
+export const toBytes = (address: Address) => {
+  switch (address._tag) {
+    case "BaseAddress": {
+      // Preallocate array of exact size ( 1 byte header + 28 bytes payment credential + 28 bytes stake credential )
+      const result = new Uint8Array(57);
+      const paymentBit = address.paymentCredential._tag === "KeyHash" ? 0 : 1;
+      const stakeBit = address.stakeCredential._tag === "KeyHash" ? 0 : 1;
+      const header =
+        (0b00 << 6) |
+        (stakeBit << 5) |
+        (paymentBit << 4) |
+        (address.networkId & 0b00001111);
 
-        result[0] = header;
-        const paymentCredentialBytes = Bytes.fromHexOrThrow(
-          address.paymentCredential.hash,
-        );
-        result.set(paymentCredentialBytes, 1);
-        const stakeCredentialBytes = Bytes.fromHexOrThrow(
-          address.stakeCredential.hash,
-        );
-        result.set(stakeCredentialBytes, 29);
+      result[0] = header;
+      const paymentCredentialBytes = Bytes.fromHexOrThrow(
+        address.paymentCredential.hash,
+      );
+      result.set(paymentCredentialBytes, 1);
+      const stakeCredentialBytes = Bytes.fromHexOrThrow(
+        address.stakeCredential.hash,
+      );
+      result.set(stakeCredentialBytes, 29);
 
-        return result;
-      }
-
-      case "EnterpriseAddress": {
-        // Prea-allocate array of exact size ( 1 byte header + 28 bytes payment credential )
-        const result = new Uint8Array(29);
-        const paymentBit = address.paymentCredential._tag === "KeyHash" ? 0 : 1;
-        const header =
-          (0b01 << 6) |
-          (0b1 << 5) |
-          (paymentBit << 4) |
-          (address.networkId & 0b00001111);
-
-        result[0] = header;
-
-        const paymentCredentialBytes = Bytes.fromHexOrThrow(
-          address.paymentCredential.hash,
-        );
-        result.set(paymentCredentialBytes, 1);
-
-        return result;
-      }
-
-      case "PointerAddress": {
-        const paymentBit = address.paymentCredential._tag === "KeyHash" ? 0 : 1;
-        const header =
-          (0b01 << 6) |
-          (0b0 << 5) |
-          (paymentBit << 4) |
-          (address.networkId & 0b00001111);
-
-        const slotBytes = yield* encodeVariableLength(address.pointer.slot);
-        const txIndexBytes = yield* encodeVariableLength(
-          address.pointer.txIndex,
-        );
-        const certIndexBytes = yield* encodeVariableLength(
-          address.pointer.certIndex,
-        );
-
-        // Combine everything
-        const totalSize =
-          1 + // header
-          28 + // payment credential
-          slotBytes.length +
-          txIndexBytes.length +
-          certIndexBytes.length;
-
-        const result = new Uint8Array(totalSize);
-
-        result[0] = header;
-        result.set(Bytes.fromHexOrThrow(address.paymentCredential.hash), 1);
-
-        let offset = 29;
-        result.set(slotBytes, offset);
-        offset += slotBytes.length;
-
-        result.set(txIndexBytes, offset);
-        offset += txIndexBytes.length;
-
-        result.set(certIndexBytes, offset);
-
-        return result;
-      }
-
-      case "RewardAccount": {
-        // Preallocate array of exact size ( 1 byte header + 28 bytes stake credential )
-        const result = new Uint8Array(29);
-        const stakingBit = address.stakeCredential._tag === "KeyHash" ? 0 : 1;
-        const header =
-          (0b111 << 5) | (stakingBit << 4) | (address.networkId & 0b00001111);
-
-        result[0] = header;
-        const stakeCredentialBytes = Bytes.fromHexOrThrow(
-          address.stakeCredential.hash,
-        );
-        result.set(stakeCredentialBytes, 1);
-
-        return result;
-      }
-      case "ByronAddress":
-        return Bytes.fromHexOrThrow(address.bytes);
+      return result;
     }
-  });
+
+    case "EnterpriseAddress": {
+      // Prea-allocate array of exact size ( 1 byte header + 28 bytes payment credential )
+      const result = new Uint8Array(29);
+      const paymentBit = address.paymentCredential._tag === "KeyHash" ? 0 : 1;
+      const header =
+        (0b01 << 6) |
+        (0b1 << 5) |
+        (paymentBit << 4) |
+        (address.networkId & 0b00001111);
+
+      result[0] = header;
+
+      const paymentCredentialBytes = Bytes.fromHexOrThrow(
+        address.paymentCredential.hash,
+      );
+      result.set(paymentCredentialBytes, 1);
+
+      return result;
+    }
+
+    case "PointerAddress": {
+      const paymentBit = address.paymentCredential._tag === "KeyHash" ? 0 : 1;
+      const header =
+        (0b01 << 6) |
+        (0b0 << 5) |
+        (paymentBit << 4) |
+        (address.networkId & 0b00001111);
+
+      const slotBytes = encodeVariableLength(address.pointer.slot);
+      const txIndexBytes = encodeVariableLength(address.pointer.txIndex);
+      const certIndexBytes = encodeVariableLength(address.pointer.certIndex);
+
+      // Combine everything
+      const totalSize =
+        1 + // header
+        28 + // payment credential
+        slotBytes.length +
+        txIndexBytes.length +
+        certIndexBytes.length;
+
+      const result = new Uint8Array(totalSize);
+
+      result[0] = header;
+      result.set(Bytes.fromHexOrThrow(address.paymentCredential.hash), 1);
+
+      let offset = 29;
+      result.set(slotBytes, offset);
+      offset += slotBytes.length;
+
+      result.set(txIndexBytes, offset);
+      offset += txIndexBytes.length;
+
+      result.set(certIndexBytes, offset);
+
+      return result;
+    }
+
+    case "RewardAccount": {
+      // Preallocate array of exact size ( 1 byte header + 28 bytes stake credential )
+      const result = new Uint8Array(29);
+      const stakingBit = address.stakeCredential._tag === "KeyHash" ? 0 : 1;
+      const header =
+        (0b111 << 5) | (stakingBit << 4) | (address.networkId & 0b00001111);
+
+      result[0] = header;
+      const stakeCredentialBytes = Bytes.fromHexOrThrow(
+        address.stakeCredential.hash,
+      );
+      result.set(stakeCredentialBytes, 1);
+
+      return result;
+    }
+    case "ByronAddress":
+      return Bytes.fromHexOrThrow(address.bytes);
+  }
+};
 
 /**
  * Convert address to hex string
  *
  * @example
  * import { Address } from "@lucid-evolution/experimental";
- * import { Effect , pipe } from "effect";
+ * import { Effect, pipe } from "effect";
+ * import assert from "assert";
  *
  * const effect = pipe(
  *   Address.fromBech32("addr1qx2fxv2umyhttkxyxp8x0dlpdt3k6cwng5pxj3jhsydzer3n0d3vllmyqwsx5wktcd8cc3sq835lu7drv2xwl2wywfgse35a3x"),
- *   Effect.flatMap(Address.toHex)
+ *   Effect.map(Address.toHex)
  * );
  *
  * const hex = Effect.runSync(effect);
- * // Returns hex string like "01af2f..."
+ * assert(typeof hex === "string");
+ * assert(hex.length > 0);
+ * assert(/^[0-9a-f]+$/i.test(hex));
  *
  * @since 2.0.0
  * @category encoding/decoding
  */
-export const toHex = (address: Address) =>
-  // = (address: Address): Effect.Effect<string, AddressError> =>
-  Effect.flatMap(toBytes(address), (bytes) => Bytes.toHex(bytes));
+export const toHex = (address: Address) => Bytes.toHexOrThrow(toBytes(address));
 
 /**
  * Convert address to bech32 format
  *
  * @example
  * import { Address, Bytes } from "@lucid-evolution/experimental";
- * import { Effect , pipe } from "effect";
+ * import { Effect, pipe } from "effect";
+ * import assert from "assert";
  *
  * // First create an address from bytes
  * const bytesEffect = pipe(
  *   Address.fromBytes(Bytes.fromHexOrThrow("019493315cd92eb5d8c4304e67b7e16ae36d61d34502694657811a2c8e337b62cfff6403a06a3acbc34f8c46003c69fe79a3628cefa9c47251")),
- *   Effect.flatMap(Address.toBech32)
+ *   Effect.map(Address.toBech32)
  * );
  *
  * const bech32 = Effect.runSync(bytesEffect);
- * // Returns bech32 encoded address like "addr1..."
+ * assert(typeof bech32 === "string");
+ * assert(bech32.startsWith("addr1"));
  *
  * @since 2.0.0
  * @category encoding/decoding
  */
-export const toBech32: (
-  address: Address,
-) => Effect.Effect<string, AddressError, never> = Effect.fnUntraced(
-  function* (address) {
-    const bytes = yield* toBytes(address);
-    let prefix: string;
-    switch (address._tag) {
-      case "BaseAddress":
-      case "EnterpriseAddress":
-      case "PointerAddress":
-        prefix = address.networkId === 0 ? "addr_test" : "addr";
-        break;
-      case "RewardAccount":
-        prefix = address.networkId === 0 ? "stake_test" : "stake";
-        break;
-      case "ByronAddress":
-        return yield* new AddressError({
-          message: `Byron address is not supported for bech32 conversion`,
-        });
-    }
-    const words = bech32.toWords(bytes);
-    return bech32.encode(prefix, words, false);
-  },
-);
+export const toBech32 = (address: Address): string => {
+  const bytes = toBytes(address);
+  let prefix: string;
+  switch (address._tag) {
+    case "BaseAddress":
+    case "EnterpriseAddress":
+    case "PointerAddress":
+      prefix = address.networkId === 0 ? "addr_test" : "addr";
+      break;
+    case "RewardAccount":
+      prefix = address.networkId === 0 ? "stake_test" : "stake";
+      break;
+    case "ByronAddress":
+      prefix = "";
+      break;
+  }
+  const words = bech32.toWords(bytes);
+  return bech32.encode(prefix, words, false);
+};
 
 /**
  * Extended address information with both structured data and serialized formats
@@ -1031,29 +966,36 @@ export type AddressDetails = Address & {
  * @example
  * import { Address } from "@lucid-evolution/experimental";
  * import { Effect } from "effect";
+ * import assert from "assert";
  *
  * const effect = Address.addressDetailsFromBech32("addr1qx2fxv2umyhttkxyxp8x0dlpdt3k6cwng5pxj3jhsydzer3n0d3vllmyqwsx5wktcd8cc3sq835lu7drv2xwl2wywfgse35a3x");
  * const details = Effect.runSync(effect);
- * // Returns object with network ID, credentials, and encoding details
+ * assert(details._tag === "BaseAddress");
+ * assert(details.networkId === 1);
+ * assert(details.address.bech32 === "addr1qx2fxv2umyhttkxyxp8x0dlpdt3k6cwng5pxj3jhsydzer3n0d3vllmyqwsx5wktcd8cc3sq835lu7drv2xwl2wywfgse35a3x");
+ * assert(typeof details.address.hex === "string");
  *
  * @since 2.0.0
  * @category constructors
  */
-export const addressDetailsFromBech32 =
-  // : (
-  //   bech32Address: string
-  // ) => Effect.Effect<AddressDetails, AddressError> =
-  Effect.fnUntraced(function* (bech32Address) {
-    const decodedAddress = yield* fromBech32(bech32Address);
-    const hex = yield* toHex(decodedAddress);
-    return {
-      ...decodedAddress,
-      address: {
-        bech32: bech32Address,
-        hex,
-      },
-    };
-  });
+export const addressDetailsFromBech32: SerdeImpl.FromBech32<
+  AddressDetails,
+  | Bytes.BytesError
+  | AddressError
+  | KeyHash.KeyHashError
+  | ScriptHash.ScriptHashError
+  | ParseError
+> = Effect.fnUntraced(function* (bech32Address) {
+  const decodedAddress = yield* fromBech32(bech32Address);
+  const hex = toHex(decodedAddress);
+  return {
+    ...decodedAddress,
+    address: {
+      bech32: bech32Address,
+      hex,
+    },
+  };
+});
 
 /**
  * Extract detailed information from a hex-encoded address
@@ -1061,29 +1003,37 @@ export const addressDetailsFromBech32 =
  * @example
  * import { Address } from "@lucid-evolution/experimental";
  * import { Effect } from "effect";
+ * import assert from "assert";
  *
  * const effect = Address.addressDetailsFromHex("019493315cd92eb5d8c4304e67b7e16ae36d61d34502694657811a2c8e337b62cfff6403a06a3acbc34f8c46003c69fe79a3628cefa9c47251");
  * const details = Effect.runSync(effect);
- * // Returns object with network ID, credentials, and encoding details
+ * assert(details._tag === "BaseAddress");
+ * assert(details.networkId === 1);
+ * assert(typeof details.address.bech32 === "string");
+ * assert(details.address.hex === "019493315cd92eb5d8c4304e67b7e16ae36d61d34502694657811a2c8e337b62cfff6403a06a3acbc34f8c46003c69fe79a3628cefa9c47251");
  *
  * @since 2.0.0
  * @category constructors
  */
-export const addressDetailsFromHex =
-  // : (
-  //   hexAddress: string
-  // ) => Effect.Effect<AddressDetails, AddressError> =
-  Effect.fnUntraced(function* (hexAddress) {
-    const decodedAddress = yield* fromBytes(Bytes.fromHexOrThrow(hexAddress));
-    const bech32 = yield* toBech32(decodedAddress);
-    return {
-      ...decodedAddress,
-      address: {
-        bech32,
-        hex: hexAddress,
-      },
-    };
-  });
+export const addressDetailsFromHex: SerdeImpl.FromHex<
+  AddressDetails,
+  | Bytes.BytesError
+  | AddressError
+  | KeyHash.KeyHashError
+  | ScriptHash.ScriptHashError
+  | ParseError
+> = Effect.fnUntraced(function* (hexAddress) {
+  const hex = yield* Bytes.fromHex(hexAddress);
+  const decodedAddress = yield* fromBytes(hex);
+  const bech32 = toBech32(decodedAddress);
+  return {
+    ...decodedAddress,
+    address: {
+      bech32,
+      hex: hexAddress,
+    },
+  };
+});
 
 /**
  * Extract address details from a string (auto-detects bech32 or hex format)
@@ -1091,32 +1041,32 @@ export const addressDetailsFromHex =
  * @example
  * import { Address } from "@lucid-evolution/experimental";
  * import { Effect } from "effect";
+ * import assert from "assert";
  *
  * // From bech32
  * const bech32Effect = Address.addressDetailsFromString("addr1qx2fxv2umyhttkxyxp8x0dlpdt3k6cwng5pxj3jhsydzer3n0d3vllmyqwsx5wktcd8cc3sq835lu7drv2xwl2wywfgse35a3x");
+ * const bech32Details = Effect.runSync(bech32Effect);
+ * assert(bech32Details._tag === "BaseAddress");
  *
  * // From hex
  * const hexEffect = Address.addressDetailsFromString("019493315cd92eb5d8c4304e67b7e16ae36d61d34502694657811a2c8e337b62cfff6403a06a3acbc34f8c46003c69fe79a3628cefa9c47251");
- *
- * const details = Effect.runSync(bech32Effect);
- * // Returns complete address details regardless of input format
+ * const hexDetails = Effect.runSync(hexEffect);
+ * assert(hexDetails._tag === "BaseAddress");
  *
  * @since 2.0.0
  * @category constructors
  */
-export const addressDetailsFromString =
-  // : (
-  //   stringAddress: string
-  // ) => Effect.Effect<AddressDetails, AddressError> =
-  Effect.fnUntraced(function* (stringAddress) {
-    const isBech32 =
-      isPaymentAddress(stringAddress) || isRewardAddress(stringAddress);
-    if (isBech32) {
-      return yield* addressDetailsFromBech32(stringAddress);
-    } else {
-      return yield* addressDetailsFromHex(stringAddress);
-    }
-  });
+export const addressDetailsFromString = Effect.fnUntraced(function* (
+  stringAddress: string,
+) {
+  const isBech32 =
+    isPaymentAddress(stringAddress) || isRewardAddress(stringAddress);
+  if (isBech32) {
+    return yield* addressDetailsFromBech32(stringAddress);
+  } else {
+    return yield* addressDetailsFromHex(stringAddress);
+  }
+});
 
 /**
  * Encode a Cardano address to CBOR format
@@ -1124,15 +1074,17 @@ export const addressDetailsFromString =
  * @example
  * import { Address } from "@lucid-evolution/experimental";
  * import { Effect } from "effect";
+ * import assert from "assert";
  *
  * const effect = Address.fromBech32("addr1qx2fxv2umyhttkxyxp8x0dlpdt3k6cwng5pxj3jhsydzer3n0d3vllmyqwsx5wktcd8cc3sq835lu7drv2xwl2wywfgse35a3x")
- *   .pipe(Effect.flatMap(Address.toCBOR));
+ *   .pipe(Effect.map(Address.toCBOR));
  *
  * const cborHex = Effect.runSync(effect);
- * // Returns hex string of the CBOR-encoded address
+ * assert(typeof cborHex === "string");
+ * assert(cborHex.length > 0);
  *
  * @since 2.0.0
  * @category encoding/decoding
  */
 export const toCBOR = (address: Address) =>
-  Effect.map(toBytes(address), (bytes) => Bytes.toHex!(CBOR.encode(bytes)));
+  Bytes.toHexOrThrow(CBOR.encodeOrThrow(toBytes(address)));
