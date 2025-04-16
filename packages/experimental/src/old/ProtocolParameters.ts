@@ -1,4 +1,4 @@
-import * as CostModels from "./CostModel.js";
+import * as CostModels from "../CostModel.js";
 
 export type ProtocolParameters = {
   minFeeA: number;

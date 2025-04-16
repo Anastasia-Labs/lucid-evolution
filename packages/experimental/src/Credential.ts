@@ -71,9 +71,9 @@ const toCBORBytes: (
   function* (credential) {
     switch (credential._tag) {
       case "KeyHash":
-        return yield* CBOR.encode([0, Bytes.fromHex(credential.hash)]);
+        return yield* CBOR.encode([0, Bytes.fromHexOrThrow(credential.hash)]);
       case "ScriptHash":
-        return yield* CBOR.encode([1, Bytes.fromHex(credential.hash)]);
+        return yield* CBOR.encode([1, Bytes.fromHexOrThrow(credential.hash)]);
     }
   },
 );
@@ -107,10 +107,12 @@ const toCBORBytes: (
  * @since 2.0.0
  * @category encoding/decoding
  */
-export const toCBOR: (
-  credential: Credential,
-) => Effect.Effect<string, CBOR.CBORError> = (credential) =>
-  Effect.map(toCBORBytes(credential), (bytes) => Bytes.toHex(bytes));
+export const toCBOR =
+  // : (
+  //   credential: Credential,
+  // ) => Effect.Effect<string, CBOR.CBORError> =
+  (credential: Credential) =>
+    Effect.map(toCBORBytes(credential), (bytes) => Bytes.toHex!(bytes));
 
 /**
  * Decode CBOR bytes to a Credential
@@ -123,7 +125,7 @@ export const toCBOR: (
  * import { Credential, Bytes } from "@lucid-evolution/experimental";
  * import { Effect } from "effect";
  *
- * const bytes = Bytes.fromHex("8200581cc37b1b5dc0669f1d3c61a6fddb2e8fde96be87b881c60bce8e8d542f");
+ * const bytes = Bytes.fromHexOrThrow("8201581cc37b1b5dc0669f1d3c61a6fddb2e8fde96be87b881c60bce8e8d542f");
  * const credentialEffect = Credential.fromCBORBytes(bytes);
  * const credential = Effect.runSync(credentialEffect);
  * // Returns a KeyHash credential
@@ -131,14 +133,15 @@ export const toCBOR: (
  * @since 2.0.0
  * @category encoding/decoding
  */
-export const fromCBORBytes: (
-  bytes: Uint8Array,
-) => Effect.Effect<Credential, CBOR.CBORError | CredentialError> =
+export const fromCBORBytes =
+  // : (
+  //   bytes: Uint8Array
+  // ) => Effect.Effect<Credential, CBOR.CBORError | CredentialError>
   Effect.fnUntraced(function* (bytes) {
     const [tag, bytesDecoded]: [number, Uint8Array] = yield* CBOR.decode(bytes);
     switch (tag) {
       case 0:
-        return KeyHash.fromBytes(bytesDecoded);
+        return yield* KeyHash.fromBytes(bytesDecoded);
       case 1:
         return ScriptHash.fromBytes(bytesDecoded);
       default:
@@ -166,7 +169,8 @@ export const fromCBORBytes: (
  * @since 2.0.0
  * @category encoding/decoding
  */
-export const fromCBOR: (
-  cborHex: string,
-) => Effect.Effect<Credential, CBOR.CBORError | CredentialError> = (cborHex) =>
-  fromCBORBytes(Bytes.fromHex(cborHex));
+export const fromCBOR =
+  // : (
+  //   cborHex: string
+  // ) => Effect.Effect<Credential, CBOR.CBORError | CredentialError> =
+  (cborHex: string) => fromCBORBytes(Bytes.fromHexOrThrow(cborHex));

@@ -182,7 +182,10 @@ importers:
     devDependencies:
       '@effect/docgen':
         specifier: ^0.5.2
-        version: 0.5.2(tsx@4.19.3)(typescript@5.8.2)
+        version: 0.5.2(tsx@4.19.3)(typescript@5.8.3)
+      '@effect/language-service':
+        specifier: ^0.6.1
+        version: 0.6.1
       '@effect/vitest':
         specifier: ^0.16.0
         version: 0.16.3(effect@3.14.7)(vitest@2.1.9(@types/node@22.13.14))
@@ -194,10 +197,10 @@ importers:
         version: 22.13.14
       tsup:
         specifier: ^8.0.2
-        version: 8.4.0(@microsoft/api-extractor@7.52.2(@types/node@22.13.14))(postcss@8.5.3)(tsx@4.19.3)(typescript@5.8.2)
+        version: 8.4.0(@microsoft/api-extractor@7.52.2(@types/node@22.13.14))(postcss@8.5.3)(tsx@4.19.3)(typescript@5.8.3)
       typescript:
-        specifier: ^5.8.2
-        version: 5.8.2
+        specifier: ^5.8.3
+        version: 5.8.3
       vitest:
         specifier: ^2.0.5
         version: 2.1.9(@types/node@22.13.14)
@@ -730,6 +733,9 @@ packages:
         optional: true
       lmdb:
         optional: true
+
+  '@effect/language-service@0.6.1':
+    resolution: {integrity: sha512-M7o39uXXrtDPCZw3vCicojC5XpPRraAXK9T+MeqYtRnCSvbmN6yznsf3AHWV81qa1dicPeQh0PNI7MQ1giCRNA==}
 
   '@effect/markdown-toc@0.1.0':
     resolution: {integrity: sha512-IRfvvwqQLabVTIw9hhIj4scOGIYPfa13QuEFv+dBWE6p47R+RR0J8jQvfDINFf0Vn80XXVjNRtZxkZpkKXLx2A==}
@@ -1947,6 +1953,9 @@ packages:
 
   '@types/node@22.13.14':
     resolution: {integrity: sha512-Zs/Ollc1SJ8nKUAgc7ivOEdIBM8JAKgrqqUYi2J997JuKO7/tpQC+WCetQ1sypiKCQWHdvdg9wBNpUPEWZae7w==}
+
+  '@types/node@22.14.1':
+    resolution: {integrity: sha512-u0HuPQwe/dHrItgHHpmw3N2fYCR6x4ivMNbPHRkBVP4CvN+kiRrKHWk3i8tXiO/joPwXLMYvF9TTF0eqgHIuOw==}
 
   '@types/normalize-package-data@2.4.4':
     resolution: {integrity: sha512-37i+OaWTh9qeK4LSHPsyRC7NahnGotNuZvjLSgcPzblpHB3rrCJxAOgI5gCdKm7coonsaX1Of0ILiTcnZjbfxA==}
@@ -5529,6 +5538,11 @@ packages:
     engines: {node: '>=14.17'}
     hasBin: true
 
+  typescript@5.8.3:
+    resolution: {integrity: sha512-p1diW6TqL9L07nNxvRMM7hMMw4c5XOo/1ibL4aAIGmSAt9slTE1Xgw5KWuof2uTOvCg9BY7ZRi+GaF+7sfgPeQ==}
+    engines: {node: '>=14.17'}
+    hasBin: true
+
   ufo@1.5.4:
     resolution: {integrity: sha512-UsUk3byDzKd04EyoZ7U4DOlxQaD14JUKQl6/P7wiX4FNvUfm3XL246n9W5AmqwW5RSFJ27NAuM0iLscAOYUiGQ==}
 
@@ -5550,6 +5564,9 @@ packages:
 
   undici-types@6.20.0:
     resolution: {integrity: sha512-Ny6QZ2Nju20vw1SRHe3d9jVu6gJ+4e3+MMpqu7pqE5HT6WsTSlce++GQmK5UXS8mzV8DSYHrQH+Xrf2jVcuKNg==}
+
+  undici-types@6.21.0:
+    resolution: {integrity: sha512-iwDZqg0QAGrg9Rav5H4n0M64c3mkR59cJ6wQp+7C4nI0gsmExaedaYLNO44eT4AtBBwjbTiGPMlt2Md0T9H9JQ==}
 
   undici@7.6.0:
     resolution: {integrity: sha512-gaFsbThjrDGvAaD670r81RZro/s6H2PVZF640Qn0p5kZK+/rim7/mmyfp2W7VB5vOMaFM8vuFBJUaMlaZTYHlA==}
@@ -6277,20 +6294,22 @@ snapshots:
       '@effect/sql': 0.33.7(@effect/experimental@0.44.7(@effect/platform@0.80.7(effect@3.14.7))(effect@3.14.7))(@effect/platform@0.80.7(effect@3.14.7))(effect@3.14.7)
       effect: 3.14.7
 
-  '@effect/docgen@0.5.2(tsx@4.19.3)(typescript@5.8.2)':
+  '@effect/docgen@0.5.2(tsx@4.19.3)(typescript@5.8.3)':
     dependencies:
       '@effect/markdown-toc': 0.1.0
       doctrine: 3.0.0
       glob: 10.4.5
       prettier: 3.5.3
       tsx: 4.19.3
-      typescript: 5.8.2
+      typescript: 5.8.3
 
   '@effect/experimental@0.44.7(@effect/platform@0.80.7(effect@3.14.7))(effect@3.14.7)':
     dependencies:
       '@effect/platform': 0.80.7(effect@3.14.7)
       effect: 3.14.7
       uuid: 11.1.0
+
+  '@effect/language-service@0.6.1': {}
 
   '@effect/markdown-toc@0.1.0':
     dependencies:
@@ -7282,7 +7301,7 @@ snapshots:
 
   '@types/dns-packet@5.6.5':
     dependencies:
-      '@types/node': 20.17.28
+      '@types/node': 22.14.1
 
   '@types/eslint@8.56.12':
     dependencies:
@@ -7334,6 +7353,10 @@ snapshots:
   '@types/node@22.13.14':
     dependencies:
       undici-types: 6.20.0
+
+  '@types/node@22.14.1':
+    dependencies:
+      undici-types: 6.21.0
 
   '@types/normalize-package-data@2.4.4': {}
 
@@ -11509,7 +11532,7 @@ snapshots:
       - tsx
       - yaml
 
-  tsup@8.4.0(@microsoft/api-extractor@7.52.2(@types/node@22.13.14))(postcss@8.5.3)(tsx@4.19.3)(typescript@5.8.2):
+  tsup@8.4.0(@microsoft/api-extractor@7.52.2(@types/node@22.13.14))(postcss@8.5.3)(tsx@4.19.3)(typescript@5.8.3):
     dependencies:
       bundle-require: 5.1.0(esbuild@0.25.1)
       cac: 6.7.14
@@ -11530,7 +11553,7 @@ snapshots:
     optionalDependencies:
       '@microsoft/api-extractor': 7.52.2(@types/node@22.13.14)
       postcss: 8.5.3
-      typescript: 5.8.2
+      typescript: 5.8.3
     transitivePeerDependencies:
       - jiti
       - supports-color
@@ -11631,6 +11654,8 @@ snapshots:
 
   typescript@5.8.2: {}
 
+  typescript@5.8.3: {}
+
   ufo@1.5.4: {}
 
   uint8-varint@2.0.4:
@@ -11656,6 +11681,8 @@ snapshots:
   undici-types@6.19.8: {}
 
   undici-types@6.20.0: {}
+
+  undici-types@6.21.0: {}
 
   undici@7.6.0: {}
 

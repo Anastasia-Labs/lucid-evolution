@@ -14,36 +14,43 @@ const encoder = new CBOR.Encoder({
   mapsAsObjects: false,
 });
 
+export const encodeOrThrow = (value: any): Uint8Array =>
+  new Uint8Array(encoder.encode(value));
+
 export const encode = Effect.fnUntraced(function* (value: any) {
   return yield* Effect.try({
     try: () => encoder.encode(value),
-    catch: (error) =>
+    catch: () =>
       new CBORError({
         message: "CBOR encoding failed",
-        cause: error,
       }),
   });
 });
 
-export const decode = Effect.fnUntraced(function* (buffer: Uint8Array) {
+export const decode = Effect.fn(function* (buffer: Uint8Array) {
   return yield* Effect.try({
     try: () => CBOR.decode(buffer),
-    catch: (error) =>
+    catch: () =>
       new CBORError({
-        message: `Oops! Couldn't decode your cbor. Here's the hex if it helps: ${Bytes.toHex(buffer)}`,
-        cause: error,
+        message: `Oops! I Couldn't decode your cbor bytes: ${buffer}.`,
       }),
   });
 });
 
+export const decodeOrThrow = (buffer: Uint8Array): any => CBOR.decode(buffer);
+
 export const decodeHex = Effect.fnUntraced(function* (hex: string) {
-  const bytes = Bytes.fromHex(hex);
+  const bytes = yield* Bytes.fromHex(hex);
   return yield* Effect.try({
     try: () => CBOR.decode(bytes),
-    catch: (error) =>
+    catch: () =>
       new CBORError({
-        message: `Oops! Couldn't decode that hex as CBOR: ${hex}`,
-        cause: error,
+        message: `Oops! I Couldn't decode you cbor hex : ${hex}`,
       }),
   });
 });
+
+export const decodeHexOrThrow = (hex: string): any => {
+  const bytes = Bytes.fromHexOrThrow(hex);
+  return CBOR.decode(bytes);
+};

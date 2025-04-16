@@ -382,10 +382,11 @@ describe("divide handles zero division", () => {
 
 ### Error Messages
 
-- Provide clear error messages (`message` field)
-- Consider adding helpful context:
-  - Input values that caused the error
-  - Potential solutions or remediation steps
+- Say what happened (e.g., "Cannot parse input")
+- Provide reassurance (e.g., "Check if the input is valid JSON")
+- Say why it happened (e.g., "Cannot parse input")
+- Help them fix it (e.g., "Check if the input is valid JSON")
+- Give them a way out (e.g., "Maybe you meant to use a different function?")
 
 ```ts
 import { Data, Effect } from "effect";

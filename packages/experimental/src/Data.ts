@@ -142,7 +142,7 @@ export interface ByteArray$
  * @since 2.0.0
  */
 export const ByteArray: ByteArray$ = Schema.TaggedStruct("ByteArray", {
-  bytearray: Schema.String.pipe(Schema.lowercased(), Combinator.HexString),
+  bytearray: Combinator.HexStringSchema,
 }).annotations({
   identifier: "ByteArray",
 });
@@ -418,7 +418,7 @@ export const encodeCBORUnsafe = <Source, Target extends Data>(
           CML.BigInteger.from_str(data.integer.toString()),
         );
       case "ByteArray":
-        return CML.PlutusData.new_bytes(Bytes.fromHex(data.bytearray));
+        return CML.PlutusData.new_bytes(Bytes.fromHexOrThrow(data.bytearray));
       case "List": {
         const list = CML.PlutusDataList.new();
         data.list.forEach((item) => list.add(toCMLPlutusData(item)));
@@ -519,7 +519,7 @@ export const resolveCBORUnsafe = (input: string): Data => {
       return Integer.make({ integer: BigInt(data.as_integer()!.to_str()) });
     case CML.PlutusDataKind.Bytes:
       return ByteArray.make({
-        bytearray: Bytes.toHex(data.as_bytes()!),
+        bytearray: Bytes.toHexOrThrow!(data.as_bytes()!),
       });
     case CML.PlutusDataKind.List: {
       const list = data.as_list()!;
@@ -1027,7 +1027,7 @@ export const genByteArray = (): FastCheck.Arbitrary<ByteArray> =>
   FastCheck.string({
     minLength: 0,
     maxLength: 64,
-  }).map((value) => mkByte(Bytes.fromText(value)));
+  }).map((value) => mkByte(Bytes.fromTextUnsafe(value)));
 
 /**
  * Creates an arbitrary that generates Data.Integer values

@@ -1,5 +1,5 @@
 import { Effect, Schema, Data } from "effect";
-import { HexString } from "./Combinator.js";
+import { HexStringFilter } from "./Combinator.js";
 import * as CBOR from "./CBOR.js";
 import * as Bytes from "./Bytes.js";
 import { ParseError } from "effect/ParseResult";
@@ -24,7 +24,7 @@ export class ScriptHashError extends Data.TaggedError("ScriptHashError")<{
  * @category schemas
  */
 export const ScriptHash = Schema.TaggedStruct("ScriptHash", {
-  hash: Schema.String.pipe(HexString),
+  hash: Schema.String.pipe(HexStringFilter),
 });
 
 /**
@@ -80,10 +80,12 @@ export const toCBORBytes: (
  * @since 2.0.0
  * @category encoding/decoding
  */
-export const toCBOR: (
-  scriptHash: ScriptHash,
-) => Effect.Effect<string, CBOR.CBORError> = (scriptHash) =>
-  Effect.map(toCBORBytes(scriptHash), (bytes) => Bytes.toHex(bytes));
+export const toCBOR =
+  // : (
+  //   scriptHash: ScriptHash
+  // ) => Effect.Effect<string, CBOR.CBORError> =
+  (scriptHash: ScriptHash) =>
+    Effect.map(toCBORBytes(scriptHash), (bytes) => Bytes.toHex!(bytes));
 
 /**
  * Create a ScriptHash from CBOR bytes
@@ -92,7 +94,7 @@ export const toCBOR: (
  * import { ScriptHash, Bytes } from "@lucid-evolution/experimental";
  * import { Effect } from "effect";
  *
- * const bytes = Bytes.fromHex("581cc37b1b5dc0669f1d3c61a6fddb2e8fde96be87b881c60bce8e8d542f");
+ * const bytes = Bytes.fromHexOrThrow("581cc37b1b5dc0669f1d3c61a6fddb2e8fde96be87b881c60bce8e8d542f");
  * const scriptHashEffect = ScriptHash.fromCBORBytes(bytes);
  * const scriptHash = Effect.runSync(scriptHashEffect);
  * // Returns a ScriptHash object
@@ -100,17 +102,17 @@ export const toCBOR: (
  * @since 2.0.0
  * @category encoding/decoding
  */
-export const fromCBORBytes: (
-  bytes: Uint8Array,
-) => Effect.Effect<ScriptHash, CBOR.CBORError | ParseError> = Effect.fnUntraced(
-  function* (bytes) {
+export const fromCBORBytes =
+  // : (
+  //   bytes: Uint8Array,
+  // ) => Effect.Effect<ScriptHash, CBOR.CBORError | ParseError> =
+  Effect.fnUntraced(function* (bytes) {
     const decoded = yield* CBOR.decode(bytes);
     return yield* Schema.encode(ScriptHash)({
       _tag: "ScriptHash",
-      hash: Bytes.toHex(decoded),
+      hash: yield* Bytes.toHex(decoded),
     });
-  },
-);
+  });
 
 /**
  * Create a ScriptHash from a CBOR hex string
@@ -127,10 +129,11 @@ export const fromCBORBytes: (
  * @since 2.0.0
  * @category encoding/decoding
  */
-export const fromCBOR: (
-  hex: string,
-) => Effect.Effect<ScriptHash, CBOR.CBORError | ParseError> = (hex) =>
-  fromCBORBytes(Bytes.fromHex(hex));
+export const fromCBOR =
+  // : (
+  //   hex: string
+  // ) => Effect.Effect<ScriptHash, CBOR.CBORError | ParseError> =
+  (hex: string) => fromCBORBytes(Bytes.fromHexOrThrow(hex));
 
 /**
  * Create a ScriptHash directly from bytes
@@ -138,19 +141,20 @@ export const fromCBOR: (
  * @example
  * import { ScriptHash, Bytes } from "@lucid-evolution/experimental";
  *
- * const bytes = Bytes.fromHex("c37b1b5dc0669f1d3c61a6fddb2e8fde96be87b881c60bce8e8d542f");
+ * const bytes = Bytes.fromHexOrThrow("c37b1b5dc0669f1d3c61a6fddb2e8fde96be87b881c60bce8e8d542f");
  * const scriptHash = ScriptHash.fromBytes(bytes);
  * // Returns { _tag: "ScriptHash", hash: "c37b1b5dc0669f1d3c61a6fddb2e8fde96be87b881c60bce8e8d542f" }
  *
  * @since 2.0.0
  * @category constructors
  */
-export const fromBytes = (bytes: Uint8Array): ScriptHash => {
+export const fromBytes = Effect.fn(function* (bytes: Uint8Array) {
+  const hash = yield* Bytes.toHex(bytes);
   return {
     _tag: "ScriptHash",
-    hash: Bytes.toHex(bytes),
+    hash,
   };
-};
+});
 
 /**
  * Convert a ScriptHash to bytes
@@ -169,5 +173,5 @@ export const fromBytes = (bytes: Uint8Array): ScriptHash => {
  * @category transformation
  */
 export const toBytes = (scriptHash: ScriptHash): Uint8Array => {
-  return Bytes.fromHex(scriptHash.hash);
+  return Bytes.fromHexOrThrow(scriptHash.hash);
 };

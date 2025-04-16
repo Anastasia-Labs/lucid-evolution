@@ -720,8 +720,8 @@ export declare const isConstr: (
   overrideOptions?: SchemaAST.ParseOptions | number,
 ) => u is {
   readonly _tag: "Constr";
-  readonly index: bigint;
   readonly fields: readonly Data[];
+  readonly index: bigint;
 };
 ```
 

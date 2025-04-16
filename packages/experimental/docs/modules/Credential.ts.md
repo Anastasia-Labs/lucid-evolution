@@ -36,7 +36,12 @@ Decode a CBOR hex string to a Credential
 ```ts
 export declare const fromCBOR: (
   cborHex: string,
-) => Effect.Effect<Credential, CBOR.CBORError | CredentialError>;
+) => Effect.Effect<
+  | Effect.Effect<{ _tag: string; hash: string }, Bytes.BytesError, never>
+  | KeyHash.KeyHash,
+  CBOR.CBORError | KeyHash.KeyHashError | CredentialError,
+  never
+>;
 ```
 
 **Example**
@@ -63,8 +68,41 @@ Internal helper function used by fromCBOR
 
 ```ts
 export declare const fromCBORBytes: (
-  bytes: Uint8Array,
-) => Effect.Effect<Credential, CBOR.CBORError | CredentialError>;
+  bytes: any,
+) => Effect.Effect<
+  | Effect.Effect<{ _tag: string; hash: string }, Bytes.BytesError, never>
+  | KeyHash.KeyHash,
+  [
+    | YieldWrap<Effect.Effect<any, CBOR.CBORError, never>>
+    | YieldWrap<Effect.Effect<KeyHash.KeyHash, KeyHash.KeyHashError, never>>
+    | YieldWrap<Effect.Effect<never, CredentialError, never>>,
+  ] extends [never]
+    ? never
+    : [
+          | YieldWrap<Effect.Effect<any, CBOR.CBORError, never>>
+          | YieldWrap<
+              Effect.Effect<KeyHash.KeyHash, KeyHash.KeyHashError, never>
+            >
+          | YieldWrap<Effect.Effect<never, CredentialError, never>>,
+        ] extends [YieldWrap<Effect.Effect<infer _A, infer E, infer _R>>]
+      ? E
+      : never,
+  [
+    | YieldWrap<Effect.Effect<any, CBOR.CBORError, never>>
+    | YieldWrap<Effect.Effect<KeyHash.KeyHash, KeyHash.KeyHashError, never>>
+    | YieldWrap<Effect.Effect<never, CredentialError, never>>,
+  ] extends [never]
+    ? never
+    : [
+          | YieldWrap<Effect.Effect<any, CBOR.CBORError, never>>
+          | YieldWrap<
+              Effect.Effect<KeyHash.KeyHash, KeyHash.KeyHashError, never>
+            >
+          | YieldWrap<Effect.Effect<never, CredentialError, never>>,
+        ] extends [YieldWrap<Effect.Effect<infer _A, infer _E, infer R>>]
+      ? R
+      : never
+>;
 ```
 
 **Example**
@@ -73,8 +111,8 @@ export declare const fromCBORBytes: (
 import { Credential, Bytes } from "@lucid-evolution/experimental";
 import { Effect } from "effect";
 
-const bytes = Bytes.fromHex(
-  "8200581cc37b1b5dc0669f1d3c61a6fddb2e8fde96be87b881c60bce8e8d542f",
+const bytes = Bytes.fromHexOrThrow(
+  "8201581cc37b1b5dc0669f1d3c61a6fddb2e8fde96be87b881c60bce8e8d542f",
 );
 const credentialEffect = Credential.fromCBORBytes(bytes);
 const credential = Effect.runSync(credentialEffect);
@@ -102,7 +140,11 @@ Uses a pre-configured CBOR encoder for better performance
 ```ts
 export declare const toCBOR: (
   credential: Credential,
-) => Effect.Effect<string, CBOR.CBORError>;
+) => Effect.Effect<
+  Effect.Effect<string, Bytes.BytesError, never>,
+  CBOR.CBORError,
+  never
+>;
 ```
 
 **Example**
@@ -166,7 +208,7 @@ export declare const isCredential: (
   overrideOptions?: ParseOptions | number,
 ) => u is
   | { readonly hash: string; readonly _tag: "ScriptHash" }
-  | { readonly hash: string; readonly _tag: "KeyHash" };
+  | KeyHash.KeyHash;
 ```
 
 **Example**
@@ -196,13 +238,10 @@ Used to identify ownership of addresses or stake rights
 ```ts
 export declare const Credential: Schema.Union<
   [
-    Schema.TaggedStruct<
-      "KeyHash",
-      { hash: Schema.filter<Schema.Schema<string, string, never>> }
-    >,
+    typeof KeyHash.KeyHash,
     Schema.TaggedStruct<
       "ScriptHash",
-      { hash: Schema.filter<Schema.Schema<string, string, never>> }
+      { hash: Schema.refine<string, Schema.Schema<string, string, never>> }
     >,
   ]
 >;
