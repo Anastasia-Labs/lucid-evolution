@@ -10,51 +10,68 @@ parent: Modules
 
 <h2 class="text-delta">Table of contents</h2>
 
+- [constants](#constants)
+  - [SCRIPTHASH_BYTES_LENGTH](#scripthash_bytes_length)
+  - [SCRIPTHASH_HEX_LENGTH](#scripthash_hex_length)
 - [constructors](#constructors)
   - [fromBytes](#frombytes)
+  - [fromBytesOrThrow](#frombytesorthrow)
+  - [make](#make)
+  - [makeOrThrow](#makeorthrow)
 - [encoding/decoding](#encodingdecoding)
   - [fromCBOR](#fromcbor)
   - [fromCBORBytes](#fromcborbytes)
+  - [fromCBORBytesOrThrow](#fromcborbytesorthrow)
+  - [fromCBOROrThrow](#fromcbororthrow)
   - [toCBOR](#tocbor)
   - [toCBORBytes](#tocborbytes)
 - [errors](#errors)
   - [ScriptHashError (class)](#scripthasherror-class)
-- [model](#model)
-  - [ScriptHash (type alias)](#scripthash-type-alias)
 - [schemas](#schemas)
-  - [ScriptHash](#scripthash)
+  - [ScriptHash (class)](#scripthash-class)
 - [transformation](#transformation)
   - [toBytes](#tobytes)
 
 ---
 
-# constructors
+# constants
 
-## fromBytes
+## SCRIPTHASH_BYTES_LENGTH
 
-Create a ScriptHash directly from bytes
+The length in bytes of a ScriptHash.
 
 **Signature**
 
 ```ts
-export declare const fromBytes: (
-  bytes: Uint8Array,
-) => Effect.Effect<
-  { _tag: string; hash: string },
-  [YieldWrap<Effect.Effect<string, Bytes.BytesError, never>>] extends [never]
-    ? never
-    : [YieldWrap<Effect.Effect<string, Bytes.BytesError, never>>] extends [
-          YieldWrap<Effect.Effect<infer _A, infer E, infer _R>>,
-        ]
-      ? E
-      : never,
-  [YieldWrap<Effect.Effect<string, Bytes.BytesError, never>>] extends [never]
-    ? never
-    : [YieldWrap<Effect.Effect<string, Bytes.BytesError, never>>] extends [
-          YieldWrap<Effect.Effect<infer _A, infer _E, infer R>>,
-        ]
-      ? R
-      : never
+export declare const SCRIPTHASH_BYTES_LENGTH: 28;
+```
+
+Added in v2.0.0
+
+## SCRIPTHASH_HEX_LENGTH
+
+The length in hex characters of a ScriptHash.
+
+**Signature**
+
+```ts
+export declare const SCRIPTHASH_HEX_LENGTH: 56;
+```
+
+Added in v2.0.0
+
+# constructors
+
+## fromBytes
+
+Create a ScriptHash directly from bytes.
+
+**Signature**
+
+```ts
+export declare const fromBytes: SerdeImpl.FromBytes<
+  ScriptHash,
+  ScriptHashError
 >;
 ```
 
@@ -62,12 +79,98 @@ export declare const fromBytes: (
 
 ```ts
 import { ScriptHash, Bytes } from "@lucid-evolution/experimental";
+import { Effect } from "effect";
+import assert from "assert";
 
 const bytes = Bytes.fromHexOrThrow(
   "c37b1b5dc0669f1d3c61a6fddb2e8fde96be87b881c60bce8e8d542f",
 );
-const scriptHash = ScriptHash.fromBytes(bytes);
-// Returns { _tag: "ScriptHash", hash: "c37b1b5dc0669f1d3c61a6fddb2e8fde96be87b881c60bce8e8d542f" }
+const scriptHashEffect = ScriptHash.fromBytes(bytes);
+const scriptHash = Effect.runSync(scriptHashEffect);
+assert(scriptHash._tag === "ScriptHash");
+assert(
+  scriptHash.hash ===
+    "c37b1b5dc0669f1d3c61a6fddb2e8fde96be87b881c60bce8e8d542f",
+);
+```
+
+Added in v2.0.0
+
+## fromBytesOrThrow
+
+Create a ScriptHash directly from bytes, throws on error.
+
+**Signature**
+
+```ts
+export declare const fromBytesOrThrow: (bytes: Uint8Array) => ScriptHash;
+```
+
+**Example**
+
+```ts
+import { ScriptHash, Bytes } from "@lucid-evolution/experimental";
+import assert from "assert";
+
+const bytes = Bytes.fromHexOrThrow(
+  "c37b1b5dc0669f1d3c61a6fddb2e8fde96be87b881c60bce8e8d542f",
+);
+const scriptHash = ScriptHash.fromBytesOrThrow(bytes);
+assert(scriptHash._tag === "ScriptHash");
+assert(
+  scriptHash.hash ===
+    "c37b1b5dc0669f1d3c61a6fddb2e8fde96be87b881c60bce8e8d542f",
+);
+```
+
+Added in v2.0.0
+
+## make
+
+Construct a ScriptHash from a hex string.
+
+**Signature**
+
+```ts
+export declare const make: SerdeImpl.Make<ScriptHash, ScriptHashError>;
+```
+
+**Example**
+
+```ts
+import { ScriptHash } from "@lucid-evolution/experimental";
+import { Effect } from "effect";
+import assert from "assert";
+
+const hash = "c37b1b5dc0669f1d3c61a6fddb2e8fde96be87b881c60bce8e8d542f";
+const scriptHashEffect = ScriptHash.make(hash);
+const scriptHash = Effect.runSync(scriptHashEffect);
+assert(scriptHash._tag === "ScriptHash");
+assert(scriptHash.hash === hash);
+```
+
+Added in v2.0.0
+
+## makeOrThrow
+
+Construct a ScriptHash from a hex string, throws on error.
+
+**Signature**
+
+```ts
+export declare const makeOrThrow: SerdeImpl.MakeOrThrow<ScriptHash>;
+```
+
+**Example**
+
+```ts
+import { ScriptHash } from "@lucid-evolution/experimental";
+import assert from "assert";
+
+const hash = "c37b1b5dc0669f1d3c61a6fddb2e8fde96be87b881c60bce8e8d542f";
+const scriptHash = ScriptHash.makeOrThrow(hash);
+assert(scriptHash._tag === "ScriptHash");
+assert(scriptHash.hash === hash);
 ```
 
 Added in v2.0.0
@@ -76,17 +179,14 @@ Added in v2.0.0
 
 ## fromCBOR
 
-Create a ScriptHash from a CBOR hex string
+Create a ScriptHash from a CBOR hex string.
 
 **Signature**
 
 ```ts
-export declare const fromCBOR: (
-  hex: string,
-) => Effect.Effect<
-  { readonly hash: string; readonly _tag: "ScriptHash" },
-  CBOR.CBORError | Bytes.BytesError | ParseError,
-  never
+export declare const fromCBOR: SerdeImpl.FromCBOR<
+  ScriptHash,
+  CBOR.CBORError | ScriptHashError | Bytes.BytesError
 >;
 ```
 
@@ -95,76 +195,30 @@ export declare const fromCBOR: (
 ```ts
 import { ScriptHash } from "@lucid-evolution/experimental";
 import { Effect } from "effect";
+import assert from "assert";
 
 const cborHex = "581cc37b1b5dc0669f1d3c61a6fddb2e8fde96be87b881c60bce8e8d542f";
 const scriptHashEffect = ScriptHash.fromCBOR(cborHex);
 const scriptHash = Effect.runSync(scriptHashEffect);
-// Returns a ScriptHash object
+assert(scriptHash._tag === "ScriptHash");
+assert(
+  scriptHash.hash ===
+    "c37b1b5dc0669f1d3c61a6fddb2e8fde96be87b881c60bce8e8d542f",
+);
 ```
 
 Added in v2.0.0
 
 ## fromCBORBytes
 
-Create a ScriptHash from CBOR bytes
+Create a ScriptHash from CBOR bytes.
 
 **Signature**
 
 ```ts
-export declare const fromCBORBytes: (
-  bytes: any,
-) => Effect.Effect<
-  { readonly hash: string; readonly _tag: "ScriptHash" },
-  [
-    | YieldWrap<Effect.Effect<any, CBOR.CBORError, never>>
-    | YieldWrap<Effect.Effect<string, Bytes.BytesError, never>>
-    | YieldWrap<
-        Effect.Effect<
-          { readonly hash: string; readonly _tag: "ScriptHash" },
-          ParseError,
-          never
-        >
-      >,
-  ] extends [never]
-    ? never
-    : [
-          | YieldWrap<Effect.Effect<any, CBOR.CBORError, never>>
-          | YieldWrap<Effect.Effect<string, Bytes.BytesError, never>>
-          | YieldWrap<
-              Effect.Effect<
-                { readonly hash: string; readonly _tag: "ScriptHash" },
-                ParseError,
-                never
-              >
-            >,
-        ] extends [YieldWrap<Effect.Effect<infer _A, infer E, infer _R>>]
-      ? E
-      : never,
-  [
-    | YieldWrap<Effect.Effect<any, CBOR.CBORError, never>>
-    | YieldWrap<Effect.Effect<string, Bytes.BytesError, never>>
-    | YieldWrap<
-        Effect.Effect<
-          { readonly hash: string; readonly _tag: "ScriptHash" },
-          ParseError,
-          never
-        >
-      >,
-  ] extends [never]
-    ? never
-    : [
-          | YieldWrap<Effect.Effect<any, CBOR.CBORError, never>>
-          | YieldWrap<Effect.Effect<string, Bytes.BytesError, never>>
-          | YieldWrap<
-              Effect.Effect<
-                { readonly hash: string; readonly _tag: "ScriptHash" },
-                ParseError,
-                never
-              >
-            >,
-        ] extends [YieldWrap<Effect.Effect<infer _A, infer _E, infer R>>]
-      ? R
-      : never
+export declare const fromCBORBytes: SerdeImpl.FromCBORBytes<
+  ScriptHash,
+  CBOR.CBORError | ScriptHashError
 >;
 ```
 
@@ -173,75 +227,128 @@ export declare const fromCBORBytes: (
 ```ts
 import { ScriptHash, Bytes } from "@lucid-evolution/experimental";
 import { Effect } from "effect";
+import assert from "assert";
 
 const bytes = Bytes.fromHexOrThrow(
   "581cc37b1b5dc0669f1d3c61a6fddb2e8fde96be87b881c60bce8e8d542f",
 );
 const scriptHashEffect = ScriptHash.fromCBORBytes(bytes);
 const scriptHash = Effect.runSync(scriptHashEffect);
-// Returns a ScriptHash object
+assert(scriptHash._tag === "ScriptHash");
+assert(
+  scriptHash.hash ===
+    "c37b1b5dc0669f1d3c61a6fddb2e8fde96be87b881c60bce8e8d542f",
+);
+```
+
+Added in v2.0.0
+
+## fromCBORBytesOrThrow
+
+Create a ScriptHash from CBOR bytes, throws on error.
+
+**Signature**
+
+```ts
+export declare const fromCBORBytesOrThrow: (bytes: Uint8Array) => ScriptHash;
+```
+
+**Example**
+
+```ts
+import { ScriptHash, Bytes } from "@lucid-evolution/experimental";
+import assert from "assert";
+
+const bytes = Bytes.fromHexOrThrow(
+  "581cc37b1b5dc0669f1d3c61a6fddb2e8fde96be87b881c60bce8e8d542f",
+);
+const scriptHash = ScriptHash.fromCBORBytesOrThrow(bytes);
+assert(scriptHash._tag === "ScriptHash");
+assert(
+  scriptHash.hash ===
+    "c37b1b5dc0669f1d3c61a6fddb2e8fde96be87b881c60bce8e8d542f",
+);
+```
+
+Added in v2.0.0
+
+## fromCBOROrThrow
+
+Create a ScriptHash from a CBOR hex string, throws on error.
+
+**Signature**
+
+```ts
+export declare const fromCBOROrThrow: (cborHex: string) => ScriptHash;
+```
+
+**Example**
+
+```ts
+import { ScriptHash } from "@lucid-evolution/experimental";
+import assert from "assert";
+
+const scriptHash = ScriptHash.fromCBOROrThrow(
+  "581cc37b1b5dc0669f1d3c61a6fddb2e8fde96be87b881c60bce8e8d542f",
+);
+assert(scriptHash._tag === "ScriptHash");
+assert(
+  scriptHash.hash ===
+    "c37b1b5dc0669f1d3c61a6fddb2e8fde96be87b881c60bce8e8d542f",
+);
 ```
 
 Added in v2.0.0
 
 ## toCBOR
 
-Convert a ScriptHash to CBOR hex string
+Convert a ScriptHash to CBOR hex string.
 
 **Signature**
 
 ```ts
-export declare const toCBOR: (
-  scriptHash: ScriptHash,
-) => Effect.Effect<
-  Effect.Effect<string, Bytes.BytesError, never>,
-  CBOR.CBORError,
-  never
->;
+export declare const toCBOR: SerdeImpl.ToCBOR<ScriptHash>;
 ```
 
 **Example**
 
 ```ts
 import { ScriptHash } from "@lucid-evolution/experimental";
-import { Effect } from "effect";
+import assert from "assert";
 
-const scriptHash = {
-  _tag: "ScriptHash",
-  hash: "c37b1b5dc0669f1d3c61a6fddb2e8fde96be87b881c60bce8e8d542f",
-} as const;
-const hexEffect = ScriptHash.toCBOR(scriptHash);
-const hex = Effect.runSync(hexEffect);
-// Returns a CBOR hex string representation
+const scriptHash = ScriptHash.makeOrThrow(
+  "c37b1b5dc0669f1d3c61a6fddb2e8fde96be87b881c60bce8e8d542f",
+);
+const hex = ScriptHash.toCBOR(scriptHash);
+assert(hex.startsWith("581c"));
+assert(
+  hex.includes("c37b1b5dc0669f1d3c61a6fddb2e8fde96be87b881c60bce8e8d542f"),
+);
 ```
 
 Added in v2.0.0
 
 ## toCBORBytes
 
-Convert a ScriptHash to CBOR bytes
+Convert a ScriptHash to CBOR bytes.
 
 **Signature**
 
 ```ts
-export declare const toCBORBytes: (
-  scriptHash: ScriptHash,
-) => Effect.Effect<Uint8Array, CBOR.CBORError>;
+export declare const toCBORBytes: SerdeImpl.ToCBORBytes<ScriptHash>;
 ```
 
 **Example**
 
 ```ts
-import { ScriptHash } from "@lucid-evolution/experimental";
-import { Effect } from "effect";
+import { ScriptHash, Bytes } from "@lucid-evolution/experimental";
+import assert from "assert";
 
-const scriptHash = {
-  _tag: "ScriptHash",
-  hash: "c37b1b5dc0669f1d3c61a6fddb2e8fde96be87b881c60bce8e8d542f",
-} as const;
-const bytesEffect = ScriptHash.toCBORBytes(scriptHash);
-const bytes = Effect.runSync(bytesEffect);
-// Returns Uint8Array containing CBOR encoded bytes
+const scriptHash = ScriptHash.makeOrThrow(
+  "c37b1b5dc0669f1d3c61a6fddb2e8fde96be87b881c60bce8e8d542f",
+);
+const bytes = ScriptHash.toCBORBytes(scriptHash);
+assert(bytes instanceof Uint8Array);
 ```
 
 Added in v2.0.0
@@ -259,37 +366,31 @@ Extends TaggedError for better error handling and categorization
 export declare class ScriptHashError
 ```
 
-Added in v2.0.0
-
-# model
-
-## ScriptHash (type alias)
-
-Type representing a script hash credential
-Used in addresses to identify script ownership
-
-**Signature**
+**Example**
 
 ```ts
-export type ScriptHash = Schema.Schema.Type<typeof ScriptHash>;
+import { ScriptHash } from "@lucid-evolution/experimental";
+import assert from "assert";
+
+const error = new ScriptHash.ScriptHashError({
+  message: "Invalid script hash",
+});
+assert(error.message === "Invalid script hash");
 ```
 
 Added in v2.0.0
 
 # schemas
 
-## ScriptHash
+## ScriptHash (class)
 
-Schema for script hash credential
-Following CIP-0019 binary representation
+Schema for ScriptHash representing a script hash credential.
+Follows CIP-0019 binary representation.
 
 **Signature**
 
 ```ts
-export declare const ScriptHash: Schema.TaggedStruct<
-  "ScriptHash",
-  { hash: Schema.refine<string, Schema.Schema<string, string, never>> }
->;
+export declare class ScriptHash
 ```
 
 Added in v2.0.0
@@ -298,25 +399,30 @@ Added in v2.0.0
 
 ## toBytes
 
-Convert a ScriptHash to bytes
+Convert a ScriptHash to bytes.
 
 **Signature**
 
 ```ts
-export declare const toBytes: (scriptHash: ScriptHash) => Uint8Array;
+export declare const toBytes: SerdeImpl.ToBytes<ScriptHash>;
 ```
 
 **Example**
 
 ```ts
-import { ScriptHash } from "@lucid-evolution/experimental";
+import { ScriptHash, Bytes } from "@lucid-evolution/experimental";
+import assert from "assert";
 
-const scriptHash = {
-  _tag: "ScriptHash",
-  hash: "c37b1b5dc0669f1d3c61a6fddb2e8fde96be87b881c60bce8e8d542f",
-} as const;
+const scriptHash = ScriptHash.makeOrThrow(
+  "c37b1b5dc0669f1d3c61a6fddb2e8fde96be87b881c60bce8e8d542f",
+);
 const bytes = ScriptHash.toBytes(scriptHash);
-// Returns Uint8Array containing the hash bytes
+assert(bytes instanceof Uint8Array);
+assert(bytes.length === 28);
+assert(
+  Bytes.toHexOrThrow(bytes) ===
+    "c37b1b5dc0669f1d3c61a6fddb2e8fde96be87b881c60bce8e8d542f",
+);
 ```
 
 Added in v2.0.0

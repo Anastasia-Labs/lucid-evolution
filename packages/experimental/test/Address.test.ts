@@ -2,6 +2,8 @@ import { expect, describe, it } from "@effect/vitest";
 import { Effect } from "effect";
 import * as Address from "../src/Address.js";
 import * as Bytes from "../src/Bytes.js";
+import * as Positive from "../src/Positive.js";
+import { UnknownException } from "effect/Cause";
 
 // Sample addresses for testing - organized by network and type as arrays with comments
 // MAINNET ADDRESSES
@@ -150,13 +152,12 @@ describe("Address Conversion", () => {
       for (const address of ALL_ADDRESSES.slice(0, 8)) {
         // Skip reward addresses for this test
         const addressInfo = yield* Address.fromBech32(address);
-        const hex = yield* Address.toHex(addressInfo);
-        console.log("Hex:", hex);
+        const hex = Address.toHex(addressInfo);
         expect(hex).toMatch(/^[0-9a-f]+$/i);
 
         // Convert back from hex
         const fromHex = yield* Address.fromBytes(Bytes.fromHexOrThrow(hex));
-        const backToBech32 = yield* Address.toBech32(fromHex);
+        const backToBech32 = Address.toBech32(fromHex);
         expect(backToBech32).toBe(address);
       }
     }),
@@ -315,8 +316,10 @@ describe("Error Handling", () => {
     "should properly handle variable length integer encoding errors",
     () =>
       Effect.gen(function* () {
-        const result = yield* Effect.flip(Address.encodeVariableLength(-1));
-        expect(result).toBeInstanceOf(Address.AddressError);
+        const result = yield* Effect.try(() =>
+          Address.encodeVariableLength(Positive.makeOrThrow(-1)),
+        ).pipe(Effect.flip);
+        expect(result).toBeInstanceOf(UnknownException);
       }),
   );
 

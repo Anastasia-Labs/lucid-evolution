@@ -3,6 +3,7 @@ import * as KeyHash from "./KeyHash.js";
 import * as ScriptHash from "./ScriptHash.js";
 import * as CBOR from "./CBOR.js";
 import * as Bytes from "./Bytes.js";
+import * as SerdeImpl from "./SerdeImpl.js";
 
 /**
  * Extends TaggedError for better error handling and categorization
@@ -38,11 +39,12 @@ export type Credential = typeof Credential.Type;
  * Check if the given value is a valid Credential
  *
  * @example
- * import { Credential } from "@lucid-evolution/experimental";
+ * import { Credential , KeyHash } from "@lucid-evolution/experimental";
+ * import assert from "assert";
  *
- * const credential = { _tag: "KeyHash", hash: "c37b1b5dc0669f1d3c61a6fddb2e8fde96be87b881c60bce8e8d542f" };
+ * const credential = KeyHash.makeOrThrow("c37b1b5dc0669f1d3c61a6fddb2e8fde96be87b881c60bce8e8d542f")
  * const isValid = Credential.isCredential(credential);
- * // Returns true if credential is valid
+ * assert(isValid === true);
  *
  * @since 2.0.0
  * @category predicates
@@ -54,29 +56,28 @@ export const isCredential = Schema.is(Credential);
  * Internal helper function used by toCBOR
  *
  * @example
- * import { Credential, Bytes } from "@lucid-evolution/experimental";
+ * import { Credential, Bytes, KeyHash } from "@lucid-evolution/experimental";
  * import { Effect } from "effect";
+ * import assert from "assert";
  *
- * const credential = { _tag: "KeyHash", hash: "c37b1b5dc0669f1d3c61a6fddb2e8fde96be87b881c60bce8e8d542f" };
- * const cborBytesEffect = Credential.toCBORBytes(credential);
- * const cborBytes = Effect.runSync(cborBytesEffect);
- * // Returns Uint8Array representing the CBOR encoding of the credential
+ * const keyHash = KeyHash.makeOrThrow("c37b1b5dc0669f1d3c61a6fddb2e8fde96be87b881c60bce8e8d542f");
+ * const cborBytes = Credential.toCBORBytes(keyHash);
+ * // Verify the bytes are correct by converting back to hex
+ * const hexString = Bytes.toHexOrThrow(cborBytes);
+ * assert(hexString.startsWith("82"));  // Array of 2 elements in CBOR
+ * assert(hexString.includes("c37b1b5dc0669f1d3c61a6fddb2e8fde96be87b881c60bce8e8d542f"));
  *
  * @since 2.0.0
  * @category encoding/decoding
  */
-const toCBORBytes: (
-  credential: Credential,
-) => Effect.Effect<Uint8Array, CBOR.CBORError> = Effect.fnUntraced(
-  function* (credential) {
-    switch (credential._tag) {
-      case "KeyHash":
-        return yield* CBOR.encode([0, Bytes.fromHexOrThrow(credential.hash)]);
-      case "ScriptHash":
-        return yield* CBOR.encode([1, Bytes.fromHexOrThrow(credential.hash)]);
-    }
-  },
-);
+const toCBORBytes: SerdeImpl.ToCBORBytes<Credential> = (credential) => {
+  switch (credential._tag) {
+    case "KeyHash":
+      return CBOR.encodeOrThrow([0, Bytes.fromHexOrThrow(credential.hash)]);
+    case "ScriptHash":
+      return CBOR.encodeOrThrow([1, Bytes.fromHexOrThrow(credential.hash)]);
+  }
+};
 
 /**
  * CBOR diagnostic notation for Credential:
@@ -92,85 +93,123 @@ const toCBORBytes: (
  * Uses a pre-configured CBOR encoder for better performance
  *
  * @example
- * import { Credential } from "@lucid-evolution/experimental";
- * import { Effect } from "effect";
+ * import { Credential, ScriptHash } from "@lucid-evolution/experimental";
+ * import assert from "assert";
  *
- * const scriptHashCredential = {
- *   _tag: "ScriptHash",
- *   hash: "c37b1b5dc0669f1d3c61a6fddb2e8fde96be87b881c60bce8e8d542f"
- * } as const;
- *
- * const cborHexEffect = Credential.toCBOR(scriptHashCredential);
- * const cborHex = Effect.runSync(cborHexEffect);
- * // Returns "8201581cc37b1b5dc0669f1d3c61a6fddb2e8fde96be87b881c60bce8e8d542f"
+ * const scriptHashCredential = ScriptHash.makeOrThrow("c37b1b5dc0669f1d3c61a6fddb2e8fde96be87b881c60bce8e8d542f");
+ * const cbor = Credential.toCBOR(scriptHashCredential);
+ * assert(cbor === "8201581cc37b1b5dc0669f1d3c61a6fddb2e8fde96be87b881c60bce8e8d542f");
  *
  * @since 2.0.0
  * @category encoding/decoding
  */
-export const toCBOR =
-  // : (
-  //   credential: Credential,
-  // ) => Effect.Effect<string, CBOR.CBORError> =
-  (credential: Credential) =>
-    Effect.map(toCBORBytes(credential), (bytes) => Bytes.toHex!(bytes));
+export const toCBOR: SerdeImpl.ToCBOR<Credential> = (credential) =>
+  Bytes.toHexOrThrow(toCBORBytes(credential));
 
 /**
  * Decode CBOR bytes to a Credential
  * Internal helper function used by fromCBOR
  *
- * @param bytes - The CBOR bytes to decode
- * @returns The decoded Credential or an error
- *
  * @example
  * import { Credential, Bytes } from "@lucid-evolution/experimental";
  * import { Effect } from "effect";
+ * import assert from "assert";
  *
  * const bytes = Bytes.fromHexOrThrow("8201581cc37b1b5dc0669f1d3c61a6fddb2e8fde96be87b881c60bce8e8d542f");
  * const credentialEffect = Credential.fromCBORBytes(bytes);
  * const credential = Effect.runSync(credentialEffect);
- * // Returns a KeyHash credential
+ * assert(credential._tag === "ScriptHash");
+ * assert(credential.hash === "c37b1b5dc0669f1d3c61a6fddb2e8fde96be87b881c60bce8e8d542f");
  *
  * @since 2.0.0
  * @category encoding/decoding
  */
-export const fromCBORBytes =
-  // : (
-  //   bytes: Uint8Array
-  // ) => Effect.Effect<Credential, CBOR.CBORError | CredentialError>
-  Effect.fnUntraced(function* (bytes) {
-    const [tag, bytesDecoded]: [number, Uint8Array] = yield* CBOR.decode(bytes);
-    switch (tag) {
-      case 0:
-        return yield* KeyHash.fromBytes(bytesDecoded);
-      case 1:
-        return ScriptHash.fromBytes(bytesDecoded);
-      default:
-        return yield* new CredentialError({
-          message: `Invalid credential tag: ${tag}`,
-        });
-    }
-  });
+export const fromCBORBytes: SerdeImpl.FromCBORBytes<
+  Credential,
+  | CBOR.CBORError
+  | ScriptHash.ScriptHashError
+  | KeyHash.KeyHashError
+  | CredentialError
+> = Effect.fnUntraced(function* (bytes) {
+  const [tag, bytesDecoded]: [number, Uint8Array] = yield* CBOR.decode(bytes);
+  switch (tag) {
+    case 0:
+      return yield* KeyHash.fromBytes(bytesDecoded);
+    case 1:
+      return yield* ScriptHash.fromBytes(bytesDecoded);
+    default:
+      return yield* new CredentialError({
+        message: `Invalid credential tag: ${tag}`,
+      });
+  }
+});
 
 /**
  * Decode a CBOR hex string to a Credential
  *
- * @param cborHex - The CBOR hex string to decode
- * @returns The decoded Credential or an error
- *
  * @example
  * import { Credential } from "@lucid-evolution/experimental";
  * import { Effect } from "effect";
+ * import assert from "assert";
  *
  * const cborHex = "8200581cc37b1b5dc0669f1d3c61a6fddb2e8fde96be87b881c60bce8e8d542f";
  * const credentialEffect = Credential.fromCBOR(cborHex);
  * const credential = Effect.runSync(credentialEffect);
- * // Returns a KeyHash credential
+ * assert(credential._tag === "KeyHash");
+ * assert(credential.hash === "c37b1b5dc0669f1d3c61a6fddb2e8fde96be87b881c60bce8e8d542f");
  *
  * @since 2.0.0
  * @category encoding/decoding
  */
-export const fromCBOR =
-  // : (
-  //   cborHex: string
-  // ) => Effect.Effect<Credential, CBOR.CBORError | CredentialError> =
-  (cborHex: string) => fromCBORBytes(Bytes.fromHexOrThrow(cborHex));
+export const fromCBOR: SerdeImpl.FromCBOR<
+  Credential,
+  | CBOR.CBORError
+  | ScriptHash.ScriptHashError
+  | KeyHash.KeyHashError
+  | CredentialError
+  | Bytes.BytesError
+> = Effect.fn(function* (cborHex) {
+  const bytes = yield* Bytes.fromHex(cborHex);
+  return yield* fromCBORBytes(bytes);
+});
+
+/**
+ * Decode a CBOR hex string to a Credential, throws on error.
+ *
+ * @example
+ * import { Credential } from "@lucid-evolution/experimental";
+ * import assert from "assert";
+ *
+ * const cborHex = "8200581cc37b1b5dc0669f1d3c61a6fddb2e8fde96be87b881c60bce8e8d542f";
+ * const credential = Credential.fromCBOROrThrow(cborHex);
+ * assert(credential._tag === "KeyHash");
+ * assert(credential.hash === "c37b1b5dc0669f1d3c61a6fddb2e8fde96be87b881c60bce8e8d542f");
+ *
+ * @since 2.0.0
+ * @category encoding/decoding
+ */
+export const fromCBOROrThrow: SerdeImpl.FromCBOROrThrow<Credential> = (
+  cborHex: string,
+) => {
+  const bytes = Bytes.fromHexOrThrow(cborHex);
+  return fromCBORBytesOrThrow(bytes);
+};
+
+/**
+ * Decode CBOR bytes to a Credential, throws on error.
+ *
+ * @example
+ * import { Credential, Bytes } from "@lucid-evolution/experimental";
+ * import assert from "assert";
+ *
+ * const bytes = Bytes.fromHexOrThrow("8201581cc37b1b5dc0669f1d3c61a6fddb2e8fde96be87b881c60bce8e8d542f");
+ * const credential = Credential.fromCBORBytesOrThrow(bytes);
+ * assert(credential._tag === "ScriptHash");
+ * assert(credential.hash === "c37b1b5dc0669f1d3c61a6fddb2e8fde96be87b881c60bce8e8d542f");
+ *
+ * @since 2.0.0
+ * @category encoding/decoding
+ */
+export const fromCBORBytesOrThrow: SerdeImpl.FromCBORBytesOrThrow<
+  Credential
+> = (bytes) => Effect.runSync(fromCBORBytes(bytes));

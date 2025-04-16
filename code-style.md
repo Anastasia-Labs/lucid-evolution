@@ -328,6 +328,13 @@ export const toId = <T extends Network>(network: T): 0 | 1 => {
 
 Formatting is handled by Prettier CLI.
 
+## Constructors
+
+- Use Schema.TaggedClass for constructors, Classes can be both constructors and types
+- A Class constructor is responsible to validate the input parameters and create an instance of the class (e.g., `new Person("John", 30)`, where `Person` is a class constructor that takes a name and age as input parameters, age should be a valid positive integer)
+- Functions that have the class constructor has input should be considered non throwable, meaning that it should not be wrapped in an Effect
+- When using a class constructor in a serialization function, it should be safe to use without wrapping it in an Effect, and it is ok to use unsafe functions inside
+
 ## Function Comments
 
 Comments should be the foundation of library documentation.
@@ -336,7 +343,7 @@ Each function must contain the following:
 1. A concise description of the function's purpose
 2. An example of function usage with @example tag. The example must include the import statement
 3. The version when the function was introduced using @since tag
-4. A category tag `constructors`, `encoding/decoding`, `equality`, `generators`, `model`, `ordering`, `predicates`, `schemas`, `transformation`, `utilities`
+4. A category tag `constructors`, `encoding/decoding`, `equality`, `generators`, `model`, `ordering`, `predicates`, `schemas`, `transformation` .
 
 ```ts
 /**

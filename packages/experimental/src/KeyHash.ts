@@ -2,6 +2,7 @@ import { Effect, Schema, Data } from "effect";
 import * as CBOR from "./CBOR.js";
 import * as Bytes from "./Bytes.js";
 import { HexStringSchema } from "./Combinator.js";
+import * as SerdeImpl from "./SerdeImpl.js";
 
 /**
  * The length in bytes of a KeyHash.
@@ -23,8 +24,11 @@ export const KEYHASH_HEX_LENGTH = 56;
  * Error class for KeyHash related operations.
  *
  * @example
- * import { KeyHash} from "@lucid-evolution/experimental";
+ * import { KeyHash } from "@lucid-evolution/experimental";
+ * import assert from "assert";
+ *
  * const error = new KeyHash.KeyHashError({ message: "Invalid key hash" });
+ * assert(error.message === "Invalid key hash");
  *
  * @since 2.0.0
  * @category errors
@@ -51,12 +55,6 @@ const KeyHashHexString = HexStringSchema.pipe(
  * Schema for KeyHash representing a verification key hash.
  * Follows CIP-0019 binary representation.
  *
- * @example
- * import { KeyHash } from "@lucid-evolution/experimental";
- * const keyHash = KeyHash.makeOrThrow({
- *   hash: "c37b1b5dc0669f1d3c61a6fddb2e8fde96be87b881c60bce8e8d542f"
- * });
- *
  * @since 2.0.0
  * @category schemas
  */
@@ -64,45 +62,45 @@ export class KeyHash extends Schema.TaggedClass<KeyHash>()("KeyHash", {
   hash: KeyHashHexString,
 }) {}
 
-type ToCBORBytes<T> = (value: T) => Uint8Array;
-
 /**
  * Convert a KeyHash to CBOR bytes.
  *
  * @example
- * import { KeyHash } from "@lucid-evolution/experimental";
+ * import { KeyHash, Bytes } from "@lucid-evolution/experimental";
+ * import assert from "assert";
+ *
  * const keyHash = KeyHash.makeOrThrow("c37b1b5dc0669f1d3c61a6fddb2e8fde96be87b881c60bce8e8d542f");
  * const bytes = KeyHash.toCBORBytes(keyHash);
+ * assert(bytes instanceof Uint8Array);
+ * assert(bytes.length > 0);
  *
  * @since 2.0.0
  * @category encoding/decoding
  */
-export const toCBORBytes: ToCBORBytes<KeyHash> = (keyHash) => {
+export const toCBORBytes: SerdeImpl.ToCBORBytes<KeyHash> = (keyHash) => {
   const hashBytes = Bytes.fromHexOrThrow(keyHash.hash);
   return CBOR.encodeOrThrow(hashBytes);
 };
-
-type ToCBOR<T> = (value: T) => string;
 
 /**
  * Convert a KeyHash to CBOR hex string.
  *
  * @example
  * import { KeyHash } from "@lucid-evolution/experimental";
+ * import assert from "assert";
+ *
  * const keyHash = KeyHash.makeOrThrow("c37b1b5dc0669f1d3c61a6fddb2e8fde96be87b881c60bce8e8d542f");
  * const hex = KeyHash.toCBOR(keyHash);
+ * assert(hex.startsWith("581c"));
+ * assert(hex.includes("c37b1b5dc0669f1d3c61a6fddb2e8fde96be87b881c60bce8e8d542f"));
  *
  * @since 2.0.0
  * @category encoding/decoding
  */
-export const toCBOR: ToCBOR<KeyHash> = (keyHash) => {
+export const toCBOR: SerdeImpl.ToCBOR<KeyHash> = (keyHash) => {
   const bytes = toCBORBytes(keyHash);
   return Bytes.toHexOrThrow(bytes);
 };
-
-type FromCBOR<Output, Error> = (
-  cborHex: string,
-) => Effect.Effect<Output, Error>;
 
 /**
  * Create a KeyHash from a CBOR hex string.
@@ -110,13 +108,18 @@ type FromCBOR<Output, Error> = (
  * @example
  * import { KeyHash } from "@lucid-evolution/experimental";
  * import { Effect } from "effect";
+ * import assert from "assert";
+ *
  * const cborHex = "581cc37b1b5dc0669f1d3c61a6fddb2e8fde96be87b881c60bce8e8d542f";
- * const keyHash = Effect.runSync(KeyHash.fromCBOR(cborHex));
+ * const keyHashEffect = KeyHash.fromCBOR(cborHex);
+ * const keyHash = Effect.runSync(keyHashEffect);
+ * assert(keyHash._tag === "KeyHash");
+ * assert(keyHash.hash === "c37b1b5dc0669f1d3c61a6fddb2e8fde96be87b881c60bce8e8d542f");
  *
  * @since 2.0.0
  * @category encoding/decoding
  */
-export const fromCBOR: FromCBOR<
+export const fromCBOR: SerdeImpl.FromCBOR<
   KeyHash,
   CBOR.CBORError | Bytes.BytesError | KeyHashError
 > = Effect.fn(function* (cborHex) {
@@ -129,7 +132,11 @@ export const fromCBOR: FromCBOR<
  *
  * @example
  * import { KeyHash } from "@lucid-evolution/experimental";
+ * import assert from "assert";
+ *
  * const keyHash = KeyHash.fromCBOROrThrow("581cc37b1b5dc0669f1d3c61a6fddb2e8fde96be87b881c60bce8e8d542f");
+ * assert(keyHash._tag === "KeyHash");
+ * assert(keyHash.hash === "c37b1b5dc0669f1d3c61a6fddb2e8fde96be87b881c60bce8e8d542f");
  *
  * @since 2.0.0
  * @category encoding/decoding
@@ -139,23 +146,24 @@ export const fromCBOROrThrow = (cborHex: string) => {
   return fromBytesOrThrow(bytes);
 };
 
-type FromCBORBytes<Output, Error> = (
-  cborBytes: Uint8Array,
-) => Effect.Effect<Output, Error>;
-
 /**
  * Create a KeyHash from CBOR bytes.
  *
  * @example
  * import { KeyHash, Bytes } from "@lucid-evolution/experimental";
  * import { Effect } from "effect";
+ * import assert from "assert";
+ *
  * const bytes = Bytes.fromHexOrThrow("581cc37b1b5dc0669f1d3c61a6fddb2e8fde96be87b881c60bce8e8d542f");
- * const keyHash = Effect.runSync(KeyHash.fromCBORBytes(bytes));
+ * const keyHashEffect = KeyHash.fromCBORBytes(bytes);
+ * const keyHash = Effect.runSync(keyHashEffect);
+ * assert(keyHash._tag === "KeyHash");
+ * assert(keyHash.hash === "c37b1b5dc0669f1d3c61a6fddb2e8fde96be87b881c60bce8e8d542f");
  *
  * @since 2.0.0
  * @category encoding/decoding
  */
-export const fromCBORBytes: FromCBORBytes<
+export const fromCBORBytes: SerdeImpl.FromCBORBytes<
   KeyHash,
   CBOR.CBORError | KeyHashError
 > = Effect.fn(function* (cborBytes) {
@@ -168,8 +176,12 @@ export const fromCBORBytes: FromCBORBytes<
  *
  * @example
  * import { KeyHash, Bytes } from "@lucid-evolution/experimental";
+ * import assert from "assert";
+ *
  * const bytes = Bytes.fromHexOrThrow("581cc37b1b5dc0669f1d3c61a6fddb2e8fde96be87b881c60bce8e8d542f");
  * const keyHash = KeyHash.fromCBORBytesOrThrow(bytes);
+ * assert(keyHash._tag === "KeyHash");
+ * assert(keyHash.hash === "c37b1b5dc0669f1d3c61a6fddb2e8fde96be87b881c60bce8e8d542f");
  *
  * @since 2.0.0
  * @category encoding/decoding
@@ -177,24 +189,25 @@ export const fromCBORBytes: FromCBORBytes<
 export const fromCBORBytesOrThrow = (bytes: Uint8Array) =>
   Effect.runSync(fromCBORBytes(bytes));
 
-type FromBytes<Output, Error> = (
-  bytes: Uint8Array,
-) => Effect.Effect<Output, Error>;
-
 /**
  * Create a KeyHash directly from bytes.
  *
  * @example
  * import { KeyHash, Bytes } from "@lucid-evolution/experimental";
  * import { Effect } from "effect";
+ * import assert from "assert";
+ *
  * const bytes = Bytes.fromHexOrThrow("c37b1b5dc0669f1d3c61a6fddb2e8fde96be87b881c60bce8e8d542f");
- * const keyHash = Effect.runSync(KeyHash.fromBytes(bytes));
+ * const keyHashEffect = KeyHash.fromBytes(bytes);
+ * const keyHash = Effect.runSync(keyHashEffect);
+ * assert(keyHash._tag === "KeyHash");
+ * assert(keyHash.hash === "c37b1b5dc0669f1d3c61a6fddb2e8fde96be87b881c60bce8e8d542f");
  *
  * @since 2.0.0
  * @category constructors
  */
-export const fromBytes: FromBytes<KeyHash, KeyHashError> = Effect.fn(
-  function* (bytes) {
+export const fromBytes: SerdeImpl.FromBytes<KeyHash, KeyHashError> =
+  Effect.fnUntraced(function* (bytes) {
     if (bytes.length !== KEYHASH_BYTES_LENGTH) {
       return yield* new KeyHashError({
         message: `KeyHash must be ${KEYHASH_BYTES_LENGTH} bytes long, got: ${bytes.length}.`,
@@ -202,16 +215,20 @@ export const fromBytes: FromBytes<KeyHash, KeyHashError> = Effect.fn(
     }
     const hash = Bytes.toHexOrThrow(bytes);
     return new KeyHash({ hash }, { disableValidation: true });
-  },
-);
+  });
 
 /**
  * Create a KeyHash directly from bytes, throws on error.
  *
  * @example
- * import { KeyHash , Bytes } from "@lucid-evolution/experimental";
+ * import { KeyHash, Bytes } from "@lucid-evolution/experimental";
+ * import assert from "assert";
+ *
  * const bytes = Bytes.fromHexOrThrow("c37b1b5dc0669f1d3c61a6fddb2e8fde96be87b881c60bce8e8d542f");
+ * assert(bytes.length === 28);
  * const keyHash = KeyHash.fromBytesOrThrow(bytes);
+ * assert(keyHash._tag === "KeyHash");
+ * assert(keyHash.hash === "c37b1b5dc0669f1d3c61a6fddb2e8fde96be87b881c60bce8e8d542f");
  *
  * @since 2.0.0
  * @category constructors
@@ -226,23 +243,24 @@ export const fromBytesOrThrow = (bytes: Uint8Array) => {
   return new KeyHash({ hash }, { disableValidation: true });
 };
 
-type ToBytes<T> = (value: T) => Uint8Array;
-
 /**
  * Convert a KeyHash to bytes.
  *
  * @example
- * import { KeyHash } from "@lucid-evolution/experimental";
+ * import { KeyHash, Bytes } from "@lucid-evolution/experimental";
+ * import assert from "assert";
+ *
  * const keyHash = KeyHash.makeOrThrow("c37b1b5dc0669f1d3c61a6fddb2e8fde96be87b881c60bce8e8d542f");
  * const bytes = KeyHash.toBytes(keyHash);
+ * assert(bytes instanceof Uint8Array);
+ * assert(bytes.length === 28);
+ * assert(Bytes.toHexOrThrow(bytes) === "c37b1b5dc0669f1d3c61a6fddb2e8fde96be87b881c60bce8e8d542f");
  *
  * @since 2.0.0
  * @category transformation
  */
-export const toBytes: ToBytes<KeyHash> = (keyHash) =>
+export const toBytes: SerdeImpl.ToBytes<KeyHash> = (keyHash) =>
   Bytes.fromHexOrThrow(keyHash.hash);
-
-type Make<Output, Error> = (hash: string) => Effect.Effect<Output, Error>;
 
 /**
  * Construct a KeyHash from a hex string.
@@ -250,12 +268,18 @@ type Make<Output, Error> = (hash: string) => Effect.Effect<Output, Error>;
  * @example
  * import { KeyHash } from "@lucid-evolution/experimental";
  * import { Effect } from "effect";
- * const keyHash = Effect.runSync(KeyHash.make("c37b1b5dc0669f1d3c61a6fddb2e8fde96be87b881c60bce8e8d542f"));
+ * import assert from "assert";
+ *
+ * const hash = "c37b1b5dc0669f1d3c61a6fddb2e8fde96be87b881c60bce8e8d542f";
+ * const keyHashEffect = KeyHash.make(hash);
+ * const keyHash = Effect.runSync(keyHashEffect);
+ * assert(keyHash._tag === "KeyHash");
+ * assert(keyHash.hash === hash);
  *
  * @since 2.0.0
  * @category constructors
  */
-export const make: Make<KeyHash, KeyHashError> = Effect.fnUntraced(
+export const make: SerdeImpl.Make<KeyHash, KeyHashError> = Effect.fnUntraced(
   function* (hash) {
     if (hash.length !== KEYHASH_HEX_LENGTH) {
       return yield* new KeyHashError({
@@ -271,18 +295,22 @@ export const make: Make<KeyHash, KeyHashError> = Effect.fnUntraced(
   },
 );
 
-type MakeOrThrow<T> = (hash: string) => T;
 /**
  * Construct a KeyHash from a hex string, throws on error.
  *
  * @example
  * import { KeyHash } from "@lucid-evolution/experimental";
- * const keyHash = KeyHash.makeOrThrow("c37b1b5dc0669f1d3c61a6fddb2e8fde96be87b881c60bce8e8d542f");
+ * import assert from "assert";
+ *
+ * const hash = "c37b1b5dc0669f1d3c61a6fddb2e8fde96be87b881c60bce8e8d542f";
+ * const keyHash = KeyHash.makeOrThrow(hash);
+ * assert(keyHash._tag === "KeyHash");
+ * assert(keyHash.hash === hash);
  *
  * @since 2.0.0
  * @category constructors
  */
-export const makeOrThrow: MakeOrThrow<KeyHash> = (hash: string) => {
+export const makeOrThrow: SerdeImpl.MakeOrThrow<KeyHash> = (hash: string) => {
   if (!Bytes.isHex(hash)) {
     throw new KeyHashError({
       message: `KeyHash must be a valid hex string.`,
