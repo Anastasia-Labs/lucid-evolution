@@ -66,6 +66,12 @@ parent: Modules
   - [toJSON](#tojson)
 - [utilities](#utilities)
   - [uniqueByFirst](#uniquebyfirst)
+- [utils](#utils)
+  - [decodeCBOR](#decodecbor)
+  - [decodeData](#decodedata)
+  - [encodeCBOR](#encodecbor)
+  - [encodeData](#encodedata)
+  - [resolveCBOR](#resolvecbor)
 
 ---
 
@@ -1068,3 +1074,263 @@ export declare const uniqueByFirst: (
 ```
 
 Added in v2.0.0
+
+# utils
+
+## decodeCBOR
+
+**Signature**
+
+```ts
+export declare const decodeCBOR: <Source, Target extends Data>(
+  input: string,
+  schema?: Schema.Schema<Source, Target, never> | undefined,
+) => Effect.Effect<
+  | { readonly _tag: "List"; readonly list: readonly Data[] }
+  | { readonly _tag: "Integer"; readonly integer: bigint }
+  | { readonly _tag: "ByteArray"; readonly bytearray: string }
+  | {
+      readonly _tag: "Map";
+      readonly entries: readonly { readonly k: Data; readonly v: Data }[];
+    }
+  | {
+      readonly fields: readonly Data[];
+      readonly _tag: "Constr";
+      readonly index: bigint;
+    }
+  | Source,
+  [
+    | YieldWrap<
+        Effect.Effect<
+          | { readonly _tag: "List"; readonly list: readonly Data[] }
+          | { readonly _tag: "Integer"; readonly integer: bigint }
+          | { readonly _tag: "ByteArray"; readonly bytearray: string }
+          | {
+              readonly _tag: "Map";
+              readonly entries: readonly {
+                readonly k: Data;
+                readonly v: Data;
+              }[];
+            }
+          | {
+              readonly fields: readonly Data[];
+              readonly _tag: "Constr";
+              readonly index: bigint;
+            },
+          CML.PlutusData.PlutusDataError,
+          never
+        >
+      >
+    | YieldWrap<Effect.Effect<Source, ParseError, never>>,
+  ] extends [never]
+    ? never
+    : [
+          | YieldWrap<
+              Effect.Effect<
+                | { readonly _tag: "List"; readonly list: readonly Data[] }
+                | { readonly _tag: "Integer"; readonly integer: bigint }
+                | { readonly _tag: "ByteArray"; readonly bytearray: string }
+                | {
+                    readonly _tag: "Map";
+                    readonly entries: readonly {
+                      readonly k: Data;
+                      readonly v: Data;
+                    }[];
+                  }
+                | {
+                    readonly fields: readonly Data[];
+                    readonly _tag: "Constr";
+                    readonly index: bigint;
+                  },
+                CML.PlutusData.PlutusDataError,
+                never
+              >
+            >
+          | YieldWrap<Effect.Effect<Source, ParseError, never>>,
+        ] extends [YieldWrap<Effect.Effect<infer _A, infer E, infer _R>>]
+      ? E
+      : never,
+  [
+    | YieldWrap<
+        Effect.Effect<
+          | { readonly _tag: "List"; readonly list: readonly Data[] }
+          | { readonly _tag: "Integer"; readonly integer: bigint }
+          | { readonly _tag: "ByteArray"; readonly bytearray: string }
+          | {
+              readonly _tag: "Map";
+              readonly entries: readonly {
+                readonly k: Data;
+                readonly v: Data;
+              }[];
+            }
+          | {
+              readonly fields: readonly Data[];
+              readonly _tag: "Constr";
+              readonly index: bigint;
+            },
+          CML.PlutusData.PlutusDataError,
+          never
+        >
+      >
+    | YieldWrap<Effect.Effect<Source, ParseError, never>>,
+  ] extends [never]
+    ? never
+    : [
+          | YieldWrap<
+              Effect.Effect<
+                | { readonly _tag: "List"; readonly list: readonly Data[] }
+                | { readonly _tag: "Integer"; readonly integer: bigint }
+                | { readonly _tag: "ByteArray"; readonly bytearray: string }
+                | {
+                    readonly _tag: "Map";
+                    readonly entries: readonly {
+                      readonly k: Data;
+                      readonly v: Data;
+                    }[];
+                  }
+                | {
+                    readonly fields: readonly Data[];
+                    readonly _tag: "Constr";
+                    readonly index: bigint;
+                  },
+                CML.PlutusData.PlutusDataError,
+                never
+              >
+            >
+          | YieldWrap<Effect.Effect<Source, ParseError, never>>,
+        ] extends [YieldWrap<Effect.Effect<infer _A, infer _E, infer R>>]
+      ? R
+      : never
+>;
+```
+
+## decodeData
+
+**Signature**
+
+```ts
+export declare const decodeData: <Source, Target extends Data>(
+  input: unknown,
+  schema: Schema.Schema<Source, Target, never>,
+  options?: SchemaAST.ParseOptions | undefined,
+) => Effect.Effect<
+  Source,
+  [YieldWrap<Effect.Effect<Source, ParseError, never>>] extends [never]
+    ? never
+    : [YieldWrap<Effect.Effect<Source, ParseError, never>>] extends [
+          YieldWrap<Effect.Effect<infer _A, infer E, infer _R>>,
+        ]
+      ? E
+      : never,
+  [YieldWrap<Effect.Effect<Source, ParseError, never>>] extends [never]
+    ? never
+    : [YieldWrap<Effect.Effect<Source, ParseError, never>>] extends [
+          YieldWrap<Effect.Effect<infer _A, infer _E, infer R>>,
+        ]
+      ? R
+      : never
+>;
+```
+
+## encodeCBOR
+
+**Signature**
+
+```ts
+export declare const encodeCBOR: <Source, Target extends Data>(
+  input: unknown,
+  schema?: Schema.Schema<Source, Target, never> | undefined,
+  options?:
+    | { canonical?: boolean; parseOptions?: SchemaAST.ParseOptions }
+    | undefined,
+) => Effect.Effect<
+  string,
+  [YieldWrap<Effect.Effect<Data, ParseError, never>>] extends [never]
+    ? never
+    : [YieldWrap<Effect.Effect<Data, ParseError, never>>] extends [
+          YieldWrap<Effect.Effect<infer _A, infer E, infer _R>>,
+        ]
+      ? E
+      : never,
+  [YieldWrap<Effect.Effect<Data, ParseError, never>>] extends [never]
+    ? never
+    : [YieldWrap<Effect.Effect<Data, ParseError, never>>] extends [
+          YieldWrap<Effect.Effect<infer _A, infer _E, infer R>>,
+        ]
+      ? R
+      : never
+>;
+```
+
+## encodeData
+
+**Signature**
+
+```ts
+export declare const encodeData: <Source, Target extends Data>(
+  input: unknown,
+  schema: Schema.Schema<Source, Target, never>,
+  options?: SchemaAST.ParseOptions | undefined,
+) => Effect.Effect<
+  Target,
+  [YieldWrap<Effect.Effect<Target, ParseError, never>>] extends [never]
+    ? never
+    : [YieldWrap<Effect.Effect<Target, ParseError, never>>] extends [
+          YieldWrap<Effect.Effect<infer _A, infer E, infer _R>>,
+        ]
+      ? E
+      : never,
+  [YieldWrap<Effect.Effect<Target, ParseError, never>>] extends [never]
+    ? never
+    : [YieldWrap<Effect.Effect<Target, ParseError, never>>] extends [
+          YieldWrap<Effect.Effect<infer _A, infer _E, infer R>>,
+        ]
+      ? R
+      : never
+>;
+```
+
+## resolveCBOR
+
+**Signature**
+
+```ts
+export declare const resolveCBOR: (
+  input: string,
+) => Effect.Effect<
+  | { readonly _tag: "List"; readonly list: readonly Data[] }
+  | { readonly _tag: "Integer"; readonly integer: bigint }
+  | { readonly _tag: "ByteArray"; readonly bytearray: string }
+  | {
+      readonly _tag: "Map";
+      readonly entries: readonly { readonly k: Data; readonly v: Data }[];
+    }
+  | {
+      readonly fields: readonly Data[];
+      readonly _tag: "Constr";
+      readonly index: bigint;
+    },
+  [
+    YieldWrap<Effect.Effect<PlutusData, CML.PlutusData.PlutusDataError, never>>,
+  ] extends [never]
+    ? never
+    : [
+          YieldWrap<
+            Effect.Effect<PlutusData, CML.PlutusData.PlutusDataError, never>
+          >,
+        ] extends [YieldWrap<Effect.Effect<infer _A, infer E, infer _R>>]
+      ? E
+      : never,
+  [
+    YieldWrap<Effect.Effect<PlutusData, CML.PlutusData.PlutusDataError, never>>,
+  ] extends [never]
+    ? never
+    : [
+          YieldWrap<
+            Effect.Effect<PlutusData, CML.PlutusData.PlutusDataError, never>
+          >,
+        ] extends [YieldWrap<Effect.Effect<infer _A, infer _E, infer R>>]
+      ? R
+      : never
+>;
+```
