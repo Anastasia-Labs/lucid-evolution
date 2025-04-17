@@ -1,13 +1,14 @@
 import {
   Array as _Array,
   Arbitrary,
+  Effect,
   Either,
   FastCheck,
   Schema,
   SchemaAST,
 } from "effect";
 import * as Bytes from "./Bytes.js";
-import * as CML from "@anastasia-labs/cardano-multiplatform-lib-nodejs";
+import * as CML from "./CML/index.js";
 import { ParseError } from "effect/ParseResult";
 import * as Combinator from "./Combinator.js";
 
@@ -411,39 +412,6 @@ export const encodeCBOROrThrow = <Source, Target extends Data>(
   } = {},
 ): string => {
   const { canonical = false } = options;
-  const toCMLPlutusData = (data: Data): CML.PlutusData => {
-    switch (data._tag) {
-      case "Integer":
-        return CML.PlutusData.new_integer(
-          CML.BigInteger.from_str(data.integer.toString()),
-        );
-      case "ByteArray":
-        return CML.PlutusData.new_bytes(Bytes.fromHexOrThrow(data.bytearray));
-      case "List": {
-        const list = CML.PlutusDataList.new();
-        data.list.forEach((item) => list.add(toCMLPlutusData(item)));
-        return CML.PlutusData.new_list(list);
-      }
-      case "Map": {
-        const map = CML.PlutusMap.new();
-        data.entries.forEach(({ k, v }) => {
-          const plutusKey = toCMLPlutusData(k);
-          map.set(plutusKey, toCMLPlutusData(v));
-        });
-        return CML.PlutusData.new_map(map);
-      }
-      case "Constr": {
-        const fields = CML.PlutusDataList.new();
-        data.fields.forEach((item) => fields.add(toCMLPlutusData(item)));
-        return CML.PlutusData.new_constr_plutus_data(
-          CML.ConstrPlutusData.new(data.index, fields),
-        );
-      }
-      default:
-        throw new Error(`Unsupported data type: ${(data as any)._tag}`);
-    }
-  };
-
   const data: Data = schema
     ? encodeDataOrThrow(input, schema, options.parseOptions)
     : encodeDataOrThrow(input, Data);
@@ -451,6 +419,59 @@ export const encodeCBOROrThrow = <Source, Target extends Data>(
   return canonical
     ? cmlPlutusData.to_canonical_cbor_hex()
     : cmlPlutusData.to_cardano_node_format().to_cbor_hex();
+};
+
+export const encodeCBOR = Effect.fn(function* <Source, Target extends Data>(
+  input: unknown,
+  schema?: Schema.Schema<Source, Target>,
+  options: {
+    canonical?: boolean;
+    parseOptions?: SchemaAST.ParseOptions;
+  } = {},
+) {
+  const { canonical = false } = options;
+  const data: Data = schema
+    ? yield* encodeData(input, schema, options.parseOptions)
+    : yield* encodeData(input, Data);
+  const cmlPlutusData = toCMLPlutusData(data);
+  return canonical
+    ? cmlPlutusData.to_canonical_cbor_hex()
+    : cmlPlutusData.to_cardano_node_format().to_cbor_hex();
+});
+
+const toCMLPlutusData = (data: Data): CML.PlutusData.PlutusData => {
+  switch (data._tag) {
+    case "Integer":
+      return CML.PlutusData.newIntegerUnsafe(
+        CML.BigInteger.fromStrUnsafe(data.integer.toString()),
+      );
+    case "ByteArray":
+      return CML.PlutusData.newBytesUnsafe(
+        Bytes.fromHexOrThrow(data.bytearray),
+      );
+    case "List": {
+      const list = CML.PlutusDataList._newUnsafe();
+      data.list.forEach((item) => list.add(toCMLPlutusData(item)));
+      return CML.PlutusData.newListUnsafe(list);
+    }
+    case "Map": {
+      const map = CML.PlutusMap._newUnsafe();
+      data.entries.forEach(({ k, v }) => {
+        const plutusKey = toCMLPlutusData(k);
+        map.set(plutusKey, toCMLPlutusData(v));
+      });
+      return CML.PlutusData.newMapUnsafe(map);
+    }
+    case "Constr": {
+      const fields = CML.PlutusDataList._newUnsafe();
+      data.fields.forEach((item) => fields.add(toCMLPlutusData(item)));
+      return CML.PlutusData.newConstrPlutusDataUnsafe(
+        CML.ConstrPlutusData._newUnsafe(data.index, fields),
+      );
+    }
+    default:
+      throw new Error(`Unsupported data type: ${(data as any)._tag}`);
+  }
 };
 
 /**
@@ -500,6 +521,14 @@ export function decodeCBOROrThrow<Source, Target extends Data>(
   return schema ? decodeDataOrThrow(data, schema) : data;
 }
 
+export const decodeCBOR = Effect.fn(function* <Source, Target extends Data>(
+  input: string,
+  schema?: Schema.Schema<Source, Target>,
+) {
+  const data = yield* resolveCBOR(input);
+  return schema ? yield* decodeData(data, schema) : data;
+});
+
 /**
  * Resolves a CBOR hex string to a Plutus Data structure
  *
@@ -508,9 +537,9 @@ export function decodeCBOROrThrow<Source, Target extends Data>(
  * @since 2.0.0
  */
 export const resolveCBOROrThrow = (input: string): Data => {
-  let data: CML.PlutusData;
+  let data: CML.PlutusData.PlutusData;
   try {
-    data = CML.PlutusData.from_cbor_hex(input);
+    data = CML.PlutusData.fromCborHexUnsafe(input);
   } catch (error) {
     throw new Error(`Failed to resolve CBOR input: ${input}`);
   }
@@ -557,6 +586,59 @@ export const resolveCBOROrThrow = (input: string): Data => {
   }
 };
 
+export const resolveCBOR = Effect.fn(function* (input: string) {
+  let data: CML.PlutusData.PlutusData;
+  data = yield* CML.PlutusData.fromCborHex(input);
+  switch (data.kind()) {
+    case CML.PlutusDataKind.Integer:
+      return Integer.make(
+        { integer: BigInt(data.as_integer()!.to_str()) },
+        { disableValidation: true },
+      );
+    case CML.PlutusDataKind.Bytes:
+      return ByteArray.make(
+        {
+          bytearray: Bytes.toHexOrThrow!(data.as_bytes()!),
+        },
+        { disableValidation: true },
+      );
+    case CML.PlutusDataKind.List: {
+      const list = data.as_list()!;
+      const array = [];
+      for (let i = 0; i < list.len(); i++) {
+        array.push(resolveCBOROrThrow(list.get(i).to_cbor_hex()));
+      }
+      return List.make({ list: array }, { disableValidation: true });
+    }
+    case CML.PlutusDataKind.Map: {
+      const plutusMap = data.as_map()!;
+      const tuples: { k: Data; v: Data }[] = [];
+      const keys = plutusMap.keys();
+      for (let i = 0; i < keys.len(); i++) {
+        const k = resolveCBOROrThrow(keys.get(i).to_cbor_hex());
+        const v = resolveCBOROrThrow(plutusMap.get(keys.get(i))!.to_cbor_hex());
+        tuples.push({ k, v });
+      }
+      return Map.make({ entries: tuples }, { disableValidation: true });
+    }
+    case CML.PlutusDataKind.ConstrPlutusData: {
+      const constrData = data.as_constr_plutus_data()!;
+      const fields = [];
+      const list = constrData.fields();
+      for (let i = 0; i < list.len(); i++) {
+        fields.push(resolveCBOROrThrow(list.get(i).to_cbor_hex()));
+      }
+      return Constr.make(
+        {
+          index: BigInt(constrData.alternative()),
+          fields,
+        },
+        { disableValidation: true },
+      );
+    }
+  }
+});
+
 /**
  * Decodes an unknown value from Plutus Data Constructor to a TypeScript type
  *
@@ -589,6 +671,14 @@ export const decodeDataOrThrow = <Source, Target extends Data>(
   schema: Schema.Schema<Source, Target>,
   options: SchemaAST.ParseOptions = {},
 ): Source => Schema.decodeUnknownSync(schema, options)(input);
+
+export const decodeData = Effect.fn(function* <Source, Target extends Data>(
+  input: unknown,
+  schema: Schema.Schema<Source, Target>,
+  options: SchemaAST.ParseOptions = {},
+) {
+  return yield* Schema.decodeUnknown(schema, options)(input);
+});
 
 /**
  * Safely decodes data using Either for error handling
@@ -636,6 +726,14 @@ export const encodeDataOrThrow = <Source, Target extends Data>(
   schema: Schema.Schema<Source, Target>,
   options?: SchemaAST.ParseOptions,
 ): Target => Schema.encodeUnknownSync(schema, options)(input);
+
+export const encodeData = Effect.fn(function* <Source, Target extends Data>(
+  input: unknown,
+  schema: Schema.Schema<Source, Target>,
+  options?: SchemaAST.ParseOptions,
+) {
+  return yield* Schema.encodeUnknown(schema, options)(input);
+});
 
 /**
  * Safely encodes data using Either for error handling
