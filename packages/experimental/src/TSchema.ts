@@ -28,18 +28,18 @@ interface ByteArray
  * const Token = TSchema.ByteArray;
  * type TokenType = typeof Token.Type; // string
  *
- * const encoded = Data.encodeDataUnsafe("deadbeef", Token);
+ * const encoded = Data.encodeDataOrThrow("deadbeef", Token);
  * assert(encoded._tag === "ByteArray");
  * assert(encoded.bytearray === "deadbeef");
  *
- * const decoded = Data.decodeDataUnsafe(encoded, Token);
+ * const decoded = Data.decodeDataOrThrow(encoded, Token);
  * assert(decoded === "deadbeef");
  *
  * // CBOR encoding and decoding
- * const cborHex = Data.encodeCBORUnsafe("deadbeef", Token);
+ * const cborHex = Data.encodeCBOROrThrow("deadbeef", Token);
  * assert(cborHex === "44deadbeef");
  *
- * const decodedFromCBOR = Data.decodeCBORUnsafe(cborHex, Token);
+ * const decodedFromCBOR = Data.decodeCBOROrThrow(cborHex, Token);
  * assert(decodedFromCBOR === "deadbeef");
  *
  * @since 2.0.0
@@ -68,18 +68,18 @@ interface Integer
  * const Token = TSchema.Integer;
  * type TokenType = typeof Token.Type; // bigint
  *
- * const encoded = Data.encodeDataUnsafe( 1000n, Token );
+ * const encoded = Data.encodeDataOrThrow( 1000n, Token );
  * assert(encoded._tag === "Integer");
  * assert(encoded.integer === 1000n);
  *
- * const decoded = Data.decodeDataUnsafe( encoded, Token );
+ * const decoded = Data.decodeDataOrThrow( encoded, Token );
  * assert(decoded === 1000n);
  *
  * // CBOR encoding and decoding
- * const cborHex = Data.encodeCBORUnsafe(1000n, Token);
+ * const cborHex = Data.encodeCBOROrThrow(1000n, Token);
  * assert(cborHex === "1903e8");
  *
- * const decodedFromCBOR = Data.decodeCBORUnsafe(cborHex, Token);
+ * const decodedFromCBOR = Data.decodeCBOROrThrow(cborHex, Token);
  * assert(decodedFromCBOR === 1000n);
  *
  * @since 2.0.0
@@ -110,18 +110,18 @@ interface Literal<
  * const RedeemAction = TSchema.Literal("spend", "mint", "withdraw");
  * type RedeemActionType = typeof RedeemAction.Type; // "spend" | "mint" | "withdraw"
  *
- * const encoded = Data.encodeDataUnsafe( "spend", RedeemAction );
+ * const encoded = Data.encodeDataOrThrow( "spend", RedeemAction );
  * assert(encoded.index === 0n);
  * assert(encoded.fields.length === 0);
  *
- * const decoded = Data.decodeDataUnsafe( encoded, RedeemAction );
+ * const decoded = Data.decodeDataOrThrow( encoded, RedeemAction );
  * assert(decoded === "spend");
  *
  * // CBOR encoding and decoding
- * const cborHex = Data.encodeCBORUnsafe("spend", RedeemAction);
+ * const cborHex = Data.encodeCBOROrThrow("spend", RedeemAction);
  * assert(cborHex === "d87980");
  *
- * const decodedFromCBOR = Data.decodeCBORUnsafe(cborHex, RedeemAction);
+ * const decodedFromCBOR = Data.decodeCBOROrThrow(cborHex, RedeemAction);
  * assert(decodedFromCBOR === "spend");
  *
  * @since 2.0.0
@@ -183,23 +183,23 @@ interface Array<S extends Schema.Schema.Any>
  * const TokenList = TSchema.Array( TSchema.ByteArray );
  * type TokenListType = typeof TokenList.Type; // string[]
  *
- * const encoded = Data.encodeDataUnsafe( ["deadbeef", "cafe"], TokenList );
+ * const encoded = Data.encodeDataOrThrow( ["deadbeef", "cafe"], TokenList );
  * assert(encoded._tag === "List");
  * assert(encoded.list.length === 2);
  * assert(Data.isEqual(encoded.list[0], Data.mkByte("deadbeef")));
  * assert(Data.isEqual(encoded.list[1], Data.mkByte("cafe")));
  *
- * const decoded = Data.decodeDataUnsafe( encoded, TokenList );
+ * const decoded = Data.decodeDataOrThrow( encoded, TokenList );
  * assert(Array.isArray(decoded));
  * assert(decoded.length === 2);
  * assert(decoded[0] === "deadbeef");
  * assert(decoded[1] === "cafe");
  *
  * // CBOR encoding and decoding
- * const cborHex = Data.encodeCBORUnsafe(["deadbeef", "cafe"], TokenList);
+ * const cborHex = Data.encodeCBOROrThrow(["deadbeef", "cafe"], TokenList);
  * assert(cborHex === "9f44deadbeef42cafeff");
  *
- * const decodedFromCBOR = Data.decodeCBORUnsafe(cborHex, TokenList);
+ * const decodedFromCBOR = Data.decodeCBOROrThrow(cborHex, TokenList);
  * assert(decodedFromCBOR[0] === "deadbeef");
  * assert(decodedFromCBOR[1] === "cafe");
  *
@@ -235,7 +235,7 @@ interface Map<K extends Schema.Schema.Any, V extends Schema.Schema.Any>
  *   ["cafe", 2n],
  * ]);
  *
- * const encoded = Data.encodeDataUnsafe(input, TokenMap);
+ * const encoded = Data.encodeDataOrThrow(input, TokenMap);
  * assert(encoded._tag === "Map");
  * assert(encoded.entries.length === 2);
  * assert(Data.isEqual(encoded.entries[0].k, Data.mkByte("deadbeef")));
@@ -243,17 +243,17 @@ interface Map<K extends Schema.Schema.Any, V extends Schema.Schema.Any>
  * assert(Data.isEqual(encoded.entries[1].k, Data.mkByte("cafe")));
  * assert(Data.isEqual(encoded.entries[1].v, Data.mkInt(2n)));
  *
- * const decoded = Data.decodeDataUnsafe(encoded, TokenMap);
+ * const decoded = Data.decodeDataOrThrow(encoded, TokenMap);
  * assert(decoded instanceof Map);
  * assert(decoded.size === 2);
  * assert(decoded.get("deadbeef") === 1n);
  * assert(decoded.get("cafe") === 2n);
  *
  * // CBOR encoding and decoding
- * const cborHex = Data.encodeCBORUnsafe(input, TokenMap);
+ * const cborHex = Data.encodeCBOROrThrow(input, TokenMap);
  * assert(cborHex === "bf42cafe0244deadbeef01ff");
  *
- * const decodedFromCBOR = Data.decodeCBORUnsafe(cborHex, TokenMap);
+ * const decodedFromCBOR = Data.decodeCBOROrThrow(cborHex, TokenMap);
  * assert(decodedFromCBOR instanceof Map);
  * assert(decodedFromCBOR.get("deadbeef") === 1n);
  * assert(decodedFromCBOR.get("cafe") === 2n);
@@ -301,32 +301,32 @@ interface NullOr<S extends Schema.Schema.All>
  * const MaybeDeadline = TSchema.NullOr(TSchema.Integer);
  * type MaybeDeadlineType = typeof MaybeDeadline.Type; // bigint | null
  *
- * const just = Data.encodeDataUnsafe( 1000n, MaybeDeadline );
+ * const just = Data.encodeDataOrThrow( 1000n, MaybeDeadline );
  * assert(just.index === 0n);
  * assert(just.fields.length === 1);
  * assert(Data.isEqual(just.fields[0], Data.mkInt(1000n)));
  *
- * const nothing = Data.encodeDataUnsafe( null, MaybeDeadline );
+ * const nothing = Data.encodeDataOrThrow( null, MaybeDeadline );
  * assert(nothing.index === 1n);
  * assert(nothing.fields.length === 0);
  *
- * const justDecoded = Data.decodeDataUnsafe( just, MaybeDeadline );
+ * const justDecoded = Data.decodeDataOrThrow( just, MaybeDeadline );
  * assert(justDecoded === 1000n);
  *
- * const nothingDecoded = Data.decodeDataUnsafe( nothing, MaybeDeadline );
+ * const nothingDecoded = Data.decodeDataOrThrow( nothing, MaybeDeadline );
  * assert(nothingDecoded === null);
  *
  * // CBOR encoding and decoding
- * const justCbor = Data.encodeCBORUnsafe(1000n, MaybeDeadline);
+ * const justCbor = Data.encodeCBOROrThrow(1000n, MaybeDeadline);
  * assert(justCbor === "d8799f1903e8ff");
  *
- * const nothingCbor = Data.encodeCBORUnsafe(null, MaybeDeadline);
+ * const nothingCbor = Data.encodeCBOROrThrow(null, MaybeDeadline);
  * assert(nothingCbor === "d87a80");
  *
- * const justFromCBOR = Data.decodeCBORUnsafe(justCbor, MaybeDeadline);
+ * const justFromCBOR = Data.decodeCBOROrThrow(justCbor, MaybeDeadline);
  * assert(justFromCBOR === 1000n);
  *
- * const nothingFromCBOR = Data.decodeCBORUnsafe(nothingCbor, MaybeDeadline);
+ * const nothingFromCBOR = Data.decodeCBOROrThrow(nothingCbor, MaybeDeadline);
  * assert(nothingFromCBOR === null);
  *
  * @since 2.0.0
@@ -362,32 +362,32 @@ interface UndefineOr<S extends Schema.Schema.Any>
  * const MaybeDeadline = TSchema.UndefinedOr(TSchema.Integer);
  * type MaybeDeadlineType = typeof MaybeDeadline.Type; // bigint | undefined
  *
- * const just = Data.encodeDataUnsafe( 1000n, MaybeDeadline );
+ * const just = Data.encodeDataOrThrow( 1000n, MaybeDeadline );
  * assert(just.index === 0n);
  * assert(just.fields.length === 1);
  * assert(Data.isEqual(just.fields[0], Data.mkInt(1000n)));
  *
- * const nothing = Data.encodeDataUnsafe( undefined, MaybeDeadline );
+ * const nothing = Data.encodeDataOrThrow( undefined, MaybeDeadline );
  * assert(nothing.index === 1n);
  * assert(nothing.fields.length === 0);
  *
- * const justDecoded = Data.decodeDataUnsafe( just, MaybeDeadline );
+ * const justDecoded = Data.decodeDataOrThrow( just, MaybeDeadline );
  * assert(justDecoded === 1000n);
  *
- * const nothingDecoded = Data.decodeDataUnsafe( nothing, MaybeDeadline );
+ * const nothingDecoded = Data.decodeDataOrThrow( nothing, MaybeDeadline );
  * assert(nothingDecoded === undefined);
  *
  * // CBOR encoding and decoding
- * const justCbor = Data.encodeCBORUnsafe(1000n, MaybeDeadline);
+ * const justCbor = Data.encodeCBOROrThrow(1000n, MaybeDeadline);
  * assert(justCbor === "d8799f1903e8ff");
  *
- * const nothingCbor = Data.encodeCBORUnsafe(undefined, MaybeDeadline);
+ * const nothingCbor = Data.encodeCBOROrThrow(undefined, MaybeDeadline);
  * assert(nothingCbor === "d87a80");
  *
- * const justFromCBOR = Data.decodeCBORUnsafe(justCbor, MaybeDeadline);
+ * const justFromCBOR = Data.decodeCBOROrThrow(justCbor, MaybeDeadline);
  * assert(justFromCBOR === 1000n);
  *
- * const nothingFromCBOR = Data.decodeCBORUnsafe(nothingCbor, MaybeDeadline);
+ * const nothingFromCBOR = Data.decodeCBOROrThrow(nothingCbor, MaybeDeadline);
  * assert(nothingFromCBOR === undefined);
  *
  * @since 2.0.0
@@ -423,31 +423,31 @@ interface Boolean
  * const BoolSchema = TSchema.Boolean;
  * type BoolType = typeof BoolSchema.Type; // boolean
  *
- * const encoded = Data.encodeDataUnsafe(true, BoolSchema);
+ * const encoded = Data.encodeDataOrThrow(true, BoolSchema);
  * assert(encoded.index === 1n);
  * assert(encoded.fields.length === 0);
  *
- * const decoded = Data.decodeDataUnsafe(encoded, BoolSchema);
+ * const decoded = Data.decodeDataOrThrow(encoded, BoolSchema);
  * assert(decoded === true);
  *
- * const falseEncoded = Data.encodeDataUnsafe(false, BoolSchema);
+ * const falseEncoded = Data.encodeDataOrThrow(false, BoolSchema);
  * assert(falseEncoded.index === 0n);
  * assert(falseEncoded.fields.length === 0);
  *
- * const falseDecoded = Data.decodeDataUnsafe(falseEncoded, BoolSchema);
+ * const falseDecoded = Data.decodeDataOrThrow(falseEncoded, BoolSchema);
  * assert(falseDecoded === false);
  *
  * // CBOR encoding and decoding
- * const trueCbor = Data.encodeCBORUnsafe(true, BoolSchema);
+ * const trueCbor = Data.encodeCBOROrThrow(true, BoolSchema);
  * assert(trueCbor === "d87a80");
  *
- * const falseCbor = Data.encodeCBORUnsafe(false, BoolSchema);
+ * const falseCbor = Data.encodeCBOROrThrow(false, BoolSchema);
  * assert(falseCbor === "d87980");
  *
- * const trueFromCBOR = Data.decodeCBORUnsafe(trueCbor, BoolSchema);
+ * const trueFromCBOR = Data.decodeCBOROrThrow(trueCbor, BoolSchema);
  * assert(trueFromCBOR === true);
  *
- * const falseFromCBOR = Data.decodeCBORUnsafe(falseCbor, BoolSchema);
+ * const falseFromCBOR = Data.decodeCBOROrThrow(falseCbor, BoolSchema);
  * assert(falseFromCBOR === false);
  *
  * @since 2.0.0
@@ -510,23 +510,23 @@ interface Struct<Fields extends Schema.Struct.Fields>
  *   amount: 1000n
  * };
  *
- * const encoded = Data.encodeDataUnsafe(input, Token );
+ * const encoded = Data.encodeDataOrThrow(input, Token );
  * assert(encoded.index === 0n);
  * assert(encoded.fields.length === 3);
  * assert(Data.isEqual(encoded.fields[0], Data.mkByte("deadbeef")));
  * assert(Data.isEqual(encoded.fields[1], Data.mkByte("cafe")));
  * assert(Data.isEqual(encoded.fields[2], Data.mkInt(1000n)));
  *
- * const decoded = Data.decodeDataUnsafe(encoded, Token);
+ * const decoded = Data.decodeDataOrThrow(encoded, Token);
  * assert(decoded.policyId === "deadbeef");
  * assert(decoded.assetName === "cafe");
  * assert(decoded.amount === 1000n);
  *
  * // CBOR encoding and decoding
- * const cborHex = Data.encodeCBORUnsafe(input, Token);
+ * const cborHex = Data.encodeCBOROrThrow(input, Token);
  * assert(cborHex === "d8799f44deadbeef42cafe1903e8ff");
  *
- * const decodedFromCBOR = Data.decodeCBORUnsafe(cborHex, Token);
+ * const decodedFromCBOR = Data.decodeCBOROrThrow(cborHex, Token);
  * assert(decodedFromCBOR.policyId === "deadbeef");
  * assert(decodedFromCBOR.assetName === "cafe");
  * assert(decodedFromCBOR.amount === 1000n);
@@ -599,7 +599,7 @@ interface Union<Members extends ReadonlyArray<Schema.Schema.Any>>
  *   assetName: "cafe",
  *   amount: 1000n,
  * };
- * const mintEncoded = Data.encodeDataUnsafe(mintInput, RedeemAction);
+ * const mintEncoded = Data.encodeDataOrThrow(mintInput, RedeemAction);
  * assert(mintEncoded.index === 0n);
  * assert(mintEncoded.fields.length === 1);
  * assert(Data.isEqual(mintEncoded.fields[0], Data.mkConstr(0n, [
@@ -608,7 +608,7 @@ interface Union<Members extends ReadonlyArray<Schema.Schema.Any>>
  *  Data.mkInt(1000n),
  * ])));
  *
- * const mintDecoded = Data.decodeDataUnsafe(mintEncoded, RedeemAction);
+ * const mintDecoded = Data.decodeDataOrThrow(mintEncoded, RedeemAction);
  * if (isMintRedeem(mintDecoded)) {
  *   assert(mintDecoded.policyId === "deadbeef");
  *   assert(mintDecoded.assetName === "cafe");
@@ -619,7 +619,7 @@ interface Union<Members extends ReadonlyArray<Schema.Schema.Any>>
  *   address: "cafe0123",
  *   amount: 500n,
  * };
- * const spendEncoded = Data.encodeDataUnsafe(spendInput, RedeemAction);
+ * const spendEncoded = Data.encodeDataOrThrow(spendInput, RedeemAction);
  * assert(
  *  Data.isEqual(
  *     spendEncoded,
@@ -630,20 +630,20 @@ interface Union<Members extends ReadonlyArray<Schema.Schema.Any>>
  * );
  *
  * // CBOR encoding and decoding
- * const mintCborHex = Data.encodeCBORUnsafe(mintInput, RedeemAction);
+ * const mintCborHex = Data.encodeCBOROrThrow(mintInput, RedeemAction);
  * assert(mintCborHex === "d8799fd8799f44deadbeef42cafe1903e8ffff");
  *
- * const mintDecodedFromCBOR = Data.decodeCBORUnsafe(mintCborHex, RedeemAction);
+ * const mintDecodedFromCBOR = Data.decodeCBOROrThrow(mintCborHex, RedeemAction);
  * if (isMintRedeem(mintDecodedFromCBOR)) {
  *   assert(mintDecodedFromCBOR.policyId === "deadbeef");
  *   assert(mintDecodedFromCBOR.assetName === "cafe");
  *   assert(mintDecodedFromCBOR.amount === 1000n);
  * }
  *
- * const spendCborHex = Data.encodeCBORUnsafe(spendInput, RedeemAction);
+ * const spendCborHex = Data.encodeCBOROrThrow(spendInput, RedeemAction);
  * assert(spendCborHex === "d87a9fd8799f44cafe01231901f4ffff");
  *
- * const spendDecodedFromCBOR = Data.decodeCBORUnsafe(spendCborHex, RedeemAction);
+ * const spendDecodedFromCBOR = Data.decodeCBOROrThrow(spendCborHex, RedeemAction);
  * if (isSpendRedeem(spendDecodedFromCBOR)) {
  *   assert(spendDecodedFromCBOR.address === "cafe0123");
  *   assert(spendDecodedFromCBOR.amount === 500n);
@@ -710,14 +710,14 @@ interface Tuple<Elements extends Schema.TupleType.Elements>
  * type TokenType = typeof Token.Type; // [string, bigint, boolean]
  *
  * const input = ["deadbeef", 1000n, true];
- * const encoded = Data.encodeDataUnsafe(input, Token);
+ * const encoded = Data.encodeDataOrThrow(input, Token);
  * assert(encoded._tag === "List");
  * assert(encoded.list.length === 3);
  * assert(Data.isEqual(encoded.list[0], Data.mkByte("deadbeef")));
  * assert(Data.isEqual(encoded.list[1], Data.mkInt(1000n)));
  * assert(Data.isEqual(encoded.list[2], Data.mkConstr(1n, [])));
  *
- * const decoded = Data.decodeDataUnsafe(encoded, Token);
+ * const decoded = Data.decodeDataOrThrow(encoded, Token);
  * assert(Array.isArray(decoded));
  * assert(decoded.length === 3);
  * assert(decoded[0] === "deadbeef");
@@ -725,10 +725,10 @@ interface Tuple<Elements extends Schema.TupleType.Elements>
  * assert(decoded[2] === true);
  *
  * // CBOR encoding and decoding
- * const cborHex = Data.encodeCBORUnsafe(input, Token);
+ * const cborHex = Data.encodeCBOROrThrow(input, Token);
  * assert(cborHex === "9f44deadbeef1903e8d87a80ff");
  *
- * const decodedFromCBOR = Data.decodeCBORUnsafe(cborHex, Token);
+ * const decodedFromCBOR = Data.decodeCBOROrThrow(cborHex, Token);
  * assert(Array.isArray(decodedFromCBOR));
  * assert(decodedFromCBOR.length === 3);
  * assert(decodedFromCBOR[0] === "deadbeef");
