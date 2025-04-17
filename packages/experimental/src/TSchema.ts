@@ -23,10 +23,17 @@ interface ByteArray
  *
  * @example
  * import { TSchema , Data } from "@lucid-evolution/experimental";
+ * import assert from "assert";
  *
  * const Token = TSchema.ByteArray;
- * const encoded = Data.encodeDataUnsafe(Token, "deadbeef"); // { _tag : "ByteArray", bytes: "deadbeef" }
- * const decoded = Data.decodeDataUnsafe(Token, encoded); // "deadbeef"
+ * type TokenType = typeof Token.Type; // string
+ *
+ * const encoded = Data.encodeDataUnsafe( "deadbeef", Token );
+ * assert(encoded._tag === "ByteArray");
+ * assert(encoded.bytearray === "deadbeef");
+ *
+ * const decoded = Data.decodeDataUnsafe( encoded, Token );
+ * assert(decoded === "deadbeef");
  *
  * @since 2.0.0
  */
@@ -48,11 +55,18 @@ interface Integer
  * The integer is represented as a BigInt
  *
  * @example
- * import { TSchema } from "@lucid-evolution/experimental";
+ * import { TSchema, Data } from "@lucid-evolution/experimental";
+ * import assert from "assert";
  *
  * const Token = TSchema.Integer;
- * const encoded = Data.encodeDataUnsafe(Token, 1000n); // { _tag : "Integer", integer: 1000n }
- * const decoded = Data.decodeDataUnsafe(Token, encoded); // 1000n
+ * type TokenType = typeof Token.Type; // bigint
+ *
+ * const encoded = Data.encodeDataUnsafe( 1000n, Token );
+ * assert(encoded._tag === "Integer");
+ * assert(encoded.integer === 1000n);
+ *
+ * const decoded = Data.decodeDataUnsafe( encoded, Token );
+ * assert(decoded === 1000n);
  *
  * @since 2.0.0
  */
@@ -76,11 +90,18 @@ interface Literal<
  * Creates a schema for literal types with Plutus Data Constructor transformation
  *
  * @example
- * import { TSchema } from "@lucid-evolution/experimental";
+ * import { TSchema , Data } from "@lucid-evolution/experimental";
+ * import assert from "assert";
  *
  * const RedeemAction = TSchema.Literal("spend", "mint", "withdraw");
- * const encoded = Data.encodeDataUnsafe(RedeemAction, "spend"); // { index: 0n, fields: [] }
- * const decoded = Data.decodeDataUnsafe(RedeemAction, encoded); // "spend"
+ * type RedeemActionType = typeof RedeemAction.Type; // "spend" | "mint" | "withdraw"
+ *
+ * const encoded = Data.encodeDataUnsafe( "spend", RedeemAction );
+ * assert(encoded.index === 0n);
+ * assert(encoded.fields.length === 0);
+ *
+ * const decoded = Data.decodeDataUnsafe( encoded, RedeemAction );
+ * assert(decoded === "spend");
  *
  * @since 2.0.0
  */
@@ -135,10 +156,23 @@ interface Array<S extends Schema.Schema.Any>
  * Creates a schema for arrays with Plutus list type annotation
  *
  * @example
- * import { TSchema } from "@lucid-evolution/experimental";
+ * import { TSchema, Data } from "@lucid-evolution/experimental";
+ * import assert from "assert";
  *
- * const TokenList = TSchema.Array(TSchema.ByteArray);
- * const result = Data.encodeDataUnsafe(TokenList, ["deadbeef", "cafe"]); // { _tag : "List", list: ["deadbeef", "cafe"] }
+ * const TokenList = TSchema.Array( TSchema.ByteArray );
+ * type TokenListType = typeof TokenList.Type; // string[]
+ *
+ * const encoded = Data.encodeDataUnsafe( ["deadbeef", "cafe"], TokenList );
+ * assert(encoded._tag === "List");
+ * assert(encoded.list.length === 2);
+ * assert(Data.isEqual(encoded.list[0], Data.mkByte("deadbeef")));
+ * assert(Data.isEqual(encoded.list[1], Data.mkByte("cafe")));
+ *
+ * const decoded = Data.decodeDataUnsafe( encoded, TokenList );
+ * assert(Array.isArray(decoded));
+ * assert(decoded.length === 2);
+ * assert(decoded[0] === "deadbeef");
+ * assert(decoded[1] === "cafe");
  *
  * @since 1.0.0
  */
@@ -161,15 +195,30 @@ interface Map<K extends Schema.Schema.Any, V extends Schema.Schema.Any>
  * Maps are represented as a constructor with index 0 and fields as an array of key-value pairs
  *
  * @example
- * import { TSchema } from "@lucid-evolution/experimental";
+ * import { TSchema, Data } from "@lucid-evolution/experimental";
+ * import assert from "assert";
  *
- *  const TokenMap = TSchema.Map(TSchema.ByteArray, TSchema.Integer);
- *  const input = new Map([
- *    ["deadbeef", 1n],
- *    ["cafe", 2n],
- *  ]);
+ * const TokenMap = TSchema.Map(TSchema.ByteArray, TSchema.Integer);
+ * type TokenMapType = typeof TokenMap.Type; // Map<string, bigint>
  *
- *  const encoded = Data.unsafeEncodeData(input, TokenMap); // { _tag: "Map", map: [{ k: "deadbeef", v: 1n }, { k: "cafe", v: 2n }] }
+ * const input = new Map([
+ *   ["deadbeef", 1n],
+ *   ["cafe", 2n],
+ * ]);
+ *
+ * const encoded = Data.encodeDataUnsafe(input, TokenMap);
+ * assert(encoded._tag === "Map");
+ * assert(encoded.entries.length === 2);
+ * assert(Data.isEqual(encoded.entries[0].k, Data.mkByte("deadbeef")));
+ * assert(Data.isEqual(encoded.entries[0].v, Data.mkInt(1n)));
+ * assert(Data.isEqual(encoded.entries[1].k, Data.mkByte("cafe")));
+ * assert(Data.isEqual(encoded.entries[1].v, Data.mkInt(2n)));
+ *
+ * const decoded = Data.decodeDataUnsafe(encoded, TokenMap);
+ * assert(decoded instanceof Map);
+ * assert(decoded.size === 2);
+ * assert(decoded.get("deadbeef") === 1n);
+ * assert(decoded.get("cafe") === 2n);
  *
  * @since 2.0.0
  */
@@ -208,11 +257,26 @@ interface NullOr<S extends Schema.Schema.All>
  * - Nothing with index 1
  *
  * @example
- * import { TSchema } from "@lucid-evolution/experimental";
+ * import { TSchema, Data } from "@lucid-evolution/experimental";
+ * import assert from "assert";
  *
  * const MaybeDeadline = TSchema.NullOr(TSchema.Integer);
- * const just = Data.encodeDataUnsafe(MaybeDeadline, 1000n); // { index: 0n, fields: [1000n] }
- * const nothing = Data.encodeDataUnsafe(MaybeDeadline, null); // { index: 1n, fields: [] }
+ * type MaybeDeadlineType = typeof MaybeDeadline.Type; // bigint | null
+ *
+ * const just = Data.encodeDataUnsafe( 1000n, MaybeDeadline );
+ * assert(just.index === 0n);
+ * assert(just.fields.length === 1);
+ * assert(Data.isEqual(just.fields[0], Data.mkInt(1000n)));
+ *
+ * const nothing = Data.encodeDataUnsafe( null, MaybeDeadline );
+ * assert(nothing.index === 1n);
+ * assert(nothing.fields.length === 0);
+ *
+ * const justDecoded = Data.decodeDataUnsafe( just, MaybeDeadline );
+ * assert(justDecoded === 1000n);
+ *
+ * const nothingDecoded = Data.decodeDataUnsafe( nothing, MaybeDeadline );
+ * assert(nothingDecoded === null);
  *
  * @since 2.0.0
  */
@@ -241,11 +305,26 @@ interface UndefineOr<S extends Schema.Schema.Any>
  * - Nothing with index 1
  *
  * @example
- * import { TSchema } from "@lucid-evolution/experimental";
+ * import { TSchema, Data } from "@lucid-evolution/experimental";
+ * import assert from "assert";
  *
  * const MaybeDeadline = TSchema.UndefinedOr(TSchema.Integer);
- * const just = Data.encodeDataUnsafe(MaybeDeadline, 1000n); // { index: 0n, fields: [1000n] }
- * const nothing = Data.encodeDataUnsafe(MaybeDeadline, undefined); // { index: 1n, fields: [] }
+ * type MaybeDeadlineType = typeof MaybeDeadline.Type; // bigint | undefined
+ *
+ * const just = Data.encodeDataUnsafe( 1000n, MaybeDeadline );
+ * assert(just.index === 0n);
+ * assert(just.fields.length === 1);
+ * assert(Data.isEqual(just.fields[0], Data.mkInt(1000n)));
+ *
+ * const nothing = Data.encodeDataUnsafe( undefined, MaybeDeadline );
+ * assert(nothing.index === 1n);
+ * assert(nothing.fields.length === 0);
+ *
+ * const justDecoded = Data.decodeDataUnsafe( just, MaybeDeadline );
+ * assert(justDecoded === 1000n);
+ *
+ * const nothingDecoded = Data.decodeDataUnsafe( nothing, MaybeDeadline );
+ * assert(nothingDecoded === undefined);
  *
  * @since 2.0.0
  */
@@ -274,10 +353,25 @@ interface Boolean
  * - True with index 1
  *
  * @example
- * import { TSchema } from "@lucid-evolution/experimental";
+ * import { TSchema , Data } from "@lucid-evolution/experimental";
+ * import assert from "assert";
  *
- * const isLocked = Data.encodeDataUnsafe(TSchema.Boolean, true); // { index: 1n, fields: [] }
- * const decoded = Data.decodeDataUnsafe(TSchema.Boolean, isLocked); // true
+ * const BoolSchema = TSchema.Boolean;
+ * type BoolType = typeof BoolSchema.Type; // boolean
+ *
+ * const encoded = Data.encodeDataUnsafe(true, BoolSchema);
+ * assert(encoded.index === 1n);
+ * assert(encoded.fields.length === 0);
+ *
+ * const decoded = Data.decodeDataUnsafe(encoded, BoolSchema);
+ * assert(decoded === true);
+ *
+ * const falseEncoded = Data.encodeDataUnsafe(false, BoolSchema);
+ * assert(falseEncoded.index === 0n);
+ * assert(falseEncoded.fields.length === 0);
+ *
+ * const falseDecoded = Data.decodeDataUnsafe(falseEncoded, BoolSchema);
+ * assert(falseDecoded === false);
  *
  * @since 2.0.0
  */
@@ -322,7 +416,8 @@ interface Struct<Fields extends Schema.Struct.Fields>
  * Objects are represented as a constructor with index 0 and fields as an array
  *
  * @example
- * import { TSchema } from "@lucid-evolution/experimental";
+ * import { TSchema , Data } from "@lucid-evolution/experimental";
+ * import assert from "assert";
  *
  * const Token = TSchema.Struct({
  *   policyId: TSchema.ByteArray,
@@ -330,11 +425,25 @@ interface Struct<Fields extends Schema.Struct.Fields>
  *   amount: TSchema.Integer
  * });
  *
- * const encoded = Data.encodeDataUnsafe(Token, {
+ * type TokenType = typeof Token.Type; // { policyId: string; assetName: string; amount: bigint }
+ *
+ * const input = {
  *   policyId: "deadbeef",
  *   assetName: "cafe",
  *   amount: 1000n
- * }); // { index: 0n, fields: ["deadbeef", "cafe", 1000n] }
+ * };
+ *
+ * const encoded = Data.encodeDataUnsafe(input, Token );
+ * assert(encoded.index === 0n);
+ * assert(encoded.fields.length === 3);
+ * assert(Data.isEqual(encoded.fields[0], Data.mkByte("deadbeef")));
+ * assert(Data.isEqual(encoded.fields[1], Data.mkByte("cafe")));
+ * assert(Data.isEqual(encoded.fields[2], Data.mkInt(1000n)));
+ *
+ * const decoded = Data.decodeDataUnsafe(encoded, Token);
+ * assert(decoded.policyId === "deadbeef");
+ * assert(decoded.assetName === "cafe");
+ * assert(decoded.amount === 1000n);
  *
  * @since 2.0.0
  */
@@ -380,27 +489,59 @@ interface Union<Members extends ReadonlyArray<Schema.Schema.Any>>
  * Unions are represented as a constructor with index 0 and fields as an array
  *
  * @example
- * import { TSchema } from "@lucid-evolution/experimental";
+ * import { TSchema, Data } from "@lucid-evolution/experimental";
+ * import assert from "assert";
  *
  * const MintRedeem = TSchema.Struct({
  *   policyId: TSchema.ByteArray,
  *   assetName: TSchema.ByteArray,
  *   amount: TSchema.Integer,
  * });
+ * const isMintRedeem = TSchema.is(MintRedeem);
+ *
  * const SpendRedeem = TSchema.Struct({
  *   address: TSchema.ByteArray,
  *   amount: TSchema.Integer,
  * });
+ * const isSpendRedeem = TSchema.is(SpendRedeem);
  *
  * const RedeemAction = TSchema.Union(MintRedeem, SpendRedeem);
+ * type RedeemActionType = typeof RedeemAction.Type; // { policyId: string; assetName: string; amount: bigint } | { address: string; amount: bigint }
  *
  * const mintInput = {
  *   policyId: "deadbeef",
  *   assetName: "cafe",
  *   amount: 1000n,
  * };
- * const mintEncoded = Data.unsafeEncodeData(mintInput, RedeemAction); // { index: 0n, fields: ["deadbeef", "cafe", 1000n] }
- * const mintDecoded = Data.unsafeDecodeData(mintEncoded, RedeemAction); // { policyId: "deadbeef", assetName: "cafe", amount: 1000n }
+ * const mintEncoded = Data.encodeDataUnsafe(mintInput, RedeemAction);
+ * assert(mintEncoded.index === 0n);
+ * assert(mintEncoded.fields.length === 1);
+ * assert(Data.isEqual(mintEncoded.fields[0], Data.mkConstr(0n, [
+ *  Data.mkByte("deadbeef"),
+ *  Data.mkByte("cafe"),
+ *  Data.mkInt(1000n),
+ * ])));
+ *
+ * const mintDecoded = Data.decodeDataUnsafe(mintEncoded, RedeemAction);
+ * if (isMintRedeem(mintDecoded)) {
+ *   assert(mintDecoded.policyId === "deadbeef");
+ *   assert(mintDecoded.assetName === "cafe");
+ *   assert(mintDecoded.amount === 1000n);
+ * }
+ *
+ * const spendInput = {
+ *   address: "cafe0123",
+ *   amount: 500n,
+ * };
+ * const spendEncoded = Data.encodeDataUnsafe(spendInput, RedeemAction);
+ * assert(
+ *  Data.isEqual(
+ *     spendEncoded,
+ *     Data.mkConstr(1n, [
+ *       Data.mkConstr(0n, [Data.mkByte("cafe0123"), Data.mkInt(500n)]),
+ *     ])
+ *   )
+ * );
  *
  * @since 2.0.0
  */
@@ -452,19 +593,30 @@ interface Tuple<Elements extends Schema.TupleType.Elements>
  * Tuples are represented as a constructor with index 0 and fields as an array
  *
  * @example
- * import { TSchema } from "@lucid-evolution/experimental";
+ * import { TSchema , Data } from "@lucid-evolution/experimental";
+ * import assert from "assert";
  *
- * const Token = TSchema.Tuple(
+ * const Token = TSchema.Tuple([
  *   TSchema.ByteArray,
  *   TSchema.Integer,
- *   TSchema.Boolean
+ *   TSchema.Boolean ]
  * );
- * const encoded = Data.encodeDataUnsafe(Token, [
- *   "deadbeef",
- *   1000n,
- *   true,
- * ]); // { index: 0n, fields: ["deadbeef", 1000n, true] }
- * const decoded = Data.decodeDataUnsafe(Token, encoded); // ["deadbeef", 1000n, true]
+ * type TokenType = typeof Token.Type; // [string, bigint, boolean]
+ *
+ * const input = ["deadbeef", 1000n, true];
+ * const encoded = Data.encodeDataUnsafe(input, Token);
+ * assert(encoded._tag === "List");
+ * assert(encoded.list.length === 3);
+ * assert(Data.isEqual(encoded.list[0], Data.mkByte("deadbeef")));
+ * assert(Data.isEqual(encoded.list[1], Data.mkInt(1000n)));
+ * assert(Data.isEqual(encoded.list[2], Data.mkConstr(1n, [])));
+ *
+ * const decoded = Data.decodeDataUnsafe(encoded, Token);
+ * assert(Array.isArray(decoded));
+ * assert(decoded.length === 3);
+ * assert(decoded[0] === "deadbeef");
+ * assert(decoded[1] === 1000n);
+ * assert(decoded[2] === true);
  *
  * @since 2.0.0
  */
@@ -488,3 +640,5 @@ export const Tuple = <Elements extends Schema.TupleType.Elements>(
 export const compose = Schema.compose;
 
 export const filter = Schema.filter;
+
+export const is = Schema.is;
