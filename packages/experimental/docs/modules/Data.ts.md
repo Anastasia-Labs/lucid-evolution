@@ -17,12 +17,12 @@ parent: Modules
   - [mkList](#mklist)
   - [mkMap](#mkmap)
 - [encoding/decoding](#encodingdecoding)
-  - [decodeCBORUnsafe](#decodecborunsafe)
-  - [decodeDataSafe](#decodedatasafe)
-  - [decodeDataUnsafe](#decodedataunsafe)
-  - [encodeCBORUnsafe](#encodecborunsafe)
-  - [encodeDataSafe](#encodedatasafe)
-  - [encodeDataUnsafe](#encodedataunsafe)
+  - [decodeCBOROrThrow](#decodecbororthrow)
+  - [decodeDataEither](#decodedataeither)
+  - [decodeDataOrThrow](#decodedataorthrow)
+  - [encodeCBOROrThrow](#encodecbororthrow)
+  - [encodeDataEither](#encodedataeither)
+  - [encodeDataOrThrow](#encodedataorthrow)
 - [equality](#equality)
   - [isEqual](#isequal)
 - [generators](#generators)
@@ -61,9 +61,9 @@ parent: Modules
   - [Map](#map)
   - [Map$ (interface)](#map-interface)
 - [transformation](#transformation)
-  - [fromJSONUnsafe](#fromjsonunsafe)
-  - [resolveCBORUnsafe](#resolvecborunsafe)
-  - [toJSONUnsafe](#tojsonunsafe)
+  - [fromJSONOrThrow](#fromjsonorthrow)
+  - [resolveCBOROrThrow](#resolvecbororthrow)
+  - [toJSON](#tojson)
 - [utilities](#utilities)
   - [uniqueByFirst](#uniquebyfirst)
 
@@ -203,15 +203,15 @@ Added in v2.0.0
 
 # encoding/decoding
 
-## decodeCBORUnsafe
+## decodeCBOROrThrow
 
 Decodes a CBOR hex string to a TypeScript type
 
 **Signature**
 
 ```ts
-export declare function decodeCBORUnsafe(input: string): Data;
-export declare function decodeCBORUnsafe<Source, Target extends Data>(
+export declare function decodeCBOROrThrow(input: string): Data;
+export declare function decodeCBOROrThrow<Source, Target extends Data>(
   input: string,
   schema: Schema.Schema<Source, Target>,
 ): Source;
@@ -231,11 +231,11 @@ const Token = TSchema.Struct({
 const cbor = "d8799f44deadbeef42cafe1903e8ff";
 
 // Decode from CBOR
-const token = Data.decodeCBORUnsafe(cbor, Token);
+const token = Data.decodeCBOROrThrow(cbor, Token);
 // { policyId: "deadbeef", assetName: "cafe", amount: 1000n }
 
 // Decode without schema
-const data = Data.decodeCBORUnsafe(cbor);
+const data = Data.decodeCBOROrThrow(cbor);
 // {
 //   _tag: 'Constr',
 //   index: 0n,
@@ -249,14 +249,14 @@ const data = Data.decodeCBORUnsafe(cbor);
 
 Added in v2.0.0
 
-## decodeDataSafe
+## decodeDataEither
 
 Safely decodes data using Either for error handling
 
 **Signature**
 
 ```ts
-export declare const decodeDataSafe: <Source, Target extends Data>(
+export declare const decodeDataEither: <Source, Target extends Data>(
   input: unknown,
   schema: Schema.Schema<Source, Target>,
   options?: SchemaAST.ParseOptions,
@@ -265,14 +265,14 @@ export declare const decodeDataSafe: <Source, Target extends Data>(
 
 Added in v2.0.0
 
-## decodeDataUnsafe
+## decodeDataOrThrow
 
 Decodes an unknown value from Plutus Data Constructor to a TypeScript type
 
 **Signature**
 
 ```ts
-export declare const decodeDataUnsafe: <Source, Target extends Data>(
+export declare const decodeDataOrThrow: <Source, Target extends Data>(
   input: unknown,
   schema: Schema.Schema<Source, Target>,
   options?: SchemaAST.ParseOptions,
@@ -296,20 +296,20 @@ const plutusData = Data.mkConstr(0n, [
   Data.mkInt(1000n),
 ]);
 
-const token = Data.decodeDataUnsafe(plutusData, Token);
+const token = Data.decodeDataOrThrow(plutusData, Token);
 // { policyId: "deadbeef", assetName: "cafe", amount: 1000n }
 ```
 
 Added in v2.0.0
 
-## encodeCBORUnsafe
+## encodeCBOROrThrow
 
 Converts TypeScript data into CBOR hex string
 
 **Signature**
 
 ```ts
-export declare const encodeCBORUnsafe: <Source, Target extends Data>(
+export declare const encodeCBOROrThrow: <Source, Target extends Data>(
   input: unknown,
   schema?: Schema.Schema<Source, Target>,
   options?: { canonical?: boolean; parseOptions?: SchemaAST.ParseOptions },
@@ -334,19 +334,19 @@ const token = {
 };
 
 // Convert to canonical CBOR
-const cbor = Data.encodeCBORUnsafe(token, Token, { canonical: true });
+const cbor = Data.encodeCBOROrThrow(token, Token, { canonical: true });
 ```
 
 Added in v2.0.0
 
-## encodeDataSafe
+## encodeDataEither
 
 Safely encodes data using Either for error handling
 
 **Signature**
 
 ```ts
-export declare const encodeDataSafe: <Source, Target extends Data>(
+export declare const encodeDataEither: <Source, Target extends Data>(
   input: unknown,
   schema: Schema.Schema<Source, Target>,
   options?: SchemaAST.ParseOptions,
@@ -355,14 +355,14 @@ export declare const encodeDataSafe: <Source, Target extends Data>(
 
 Added in v2.0.0
 
-## encodeDataUnsafe
+## encodeDataOrThrow
 
 Encodes a TypeScript value to Plutus Data Constructor
 
 **Signature**
 
 ```ts
-export declare const encodeDataUnsafe: <Source, Target extends Data>(
+export declare const encodeDataOrThrow: <Source, Target extends Data>(
   input: unknown,
   schema: Schema.Schema<Source, Target>,
   options?: SchemaAST.ParseOptions,
@@ -386,7 +386,7 @@ const Token = TSchema.Struct({
   amount: TSchema.Integer,
 });
 
-const data = Data.encodeDataUnsafe(token, Token);
+const data = Data.encodeDataOrThrow(token, Token);
 // { index: 0n, fields: ["deadbeef", "cafe", 1000n] }
 ```
 
@@ -997,14 +997,14 @@ Added in v2.0.0
 
 # transformation
 
-## fromJSONUnsafe
+## fromJSONOrThrow
 
 Parses a JSON string to a Data value
 
 **Signature**
 
 ```ts
-export declare const fromJSONUnsafe: (json: string) => Data;
+export declare const fromJSONOrThrow: (json: string) => Data;
 ```
 
 **Example**
@@ -1015,26 +1015,26 @@ import { Data } from "@lucid-evolution/experimental";
 
 Added in v2.0.0
 
-## resolveCBORUnsafe
+## resolveCBOROrThrow
 
 Resolves a CBOR hex string to a Plutus Data structure
 
 **Signature**
 
 ```ts
-export declare const resolveCBORUnsafe: (input: string) => Data;
+export declare const resolveCBOROrThrow: (input: string) => Data;
 ```
 
 Added in v2.0.0
 
-## toJSONUnsafe
+## toJSON
 
 Converts a Data value to a JSON string
 
 **Signature**
 
 ```ts
-export declare const toJSONUnsafe: (data: Data) => string;
+export declare const toJSON: (data: Data) => string;
 ```
 
 **Example**
@@ -1043,7 +1043,7 @@ export declare const toJSONUnsafe: (data: Data) => string;
 import { Data } from "@lucid-evolution/experimental";
 
 const data = Data.mkInt(42n);
-const json = Data.toJSONUnsafe(data);
+const json = Data.toJSON(data);
 // '{"_tag":"Integer","integer":"42n"}'
 ```
 
