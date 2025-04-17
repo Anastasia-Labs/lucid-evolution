@@ -1,5 +1,11 @@
 # @lucid-evolution/experimental
 
+## 0.0.4
+
+### Patch Changes
+
+- [#588](https://github.com/Anastasia-Labs/lucid-evolution/pull/588) [`fa2fd1d`](https://github.com/Anastasia-Labs/lucid-evolution/commit/fa2fd1dcceb88fdc83a70d4042d2b6e6f8f2e393) Thanks [@solidsnakedev](https://github.com/solidsnakedev)! - update data dependency; add missing fn
+
 ## 0.0.3
 
 ### Patch Changes
