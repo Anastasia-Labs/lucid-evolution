@@ -1,6 +1,6 @@
 ---
 title: CML/Enum/TransactionMetadatumKind.ts
-nav_order: 89
+nav_order: 94
 parent: Modules
 ---
 

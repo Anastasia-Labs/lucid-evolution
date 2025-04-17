@@ -1,6 +1,6 @@
 ---
 title: CML/DatumHash.ts
-nav_order: 54
+nav_order: 59
 parent: Modules
 ---
 

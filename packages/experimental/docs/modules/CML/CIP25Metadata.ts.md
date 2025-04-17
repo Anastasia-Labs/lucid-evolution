@@ -1,6 +1,6 @@
 ---
 title: CML/CIP25Metadata.ts
-nav_order: 32
+nav_order: 37
 parent: Modules
 ---
 

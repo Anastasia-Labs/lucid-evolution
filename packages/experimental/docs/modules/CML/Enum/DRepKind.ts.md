@@ -1,6 +1,6 @@
 ---
 title: CML/Enum/DRepKind.ts
-nav_order: 76
+nav_order: 81
 parent: Modules
 ---
 

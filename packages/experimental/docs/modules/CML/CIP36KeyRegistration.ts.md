@@ -1,6 +1,6 @@
 ---
 title: CML/CIP36KeyRegistration.ts
-nav_order: 43
+nav_order: 48
 parent: Modules
 ---
 

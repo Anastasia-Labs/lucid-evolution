@@ -1,6 +1,6 @@
 ---
 title: CML/Enum/GovActionKind.ts
-nav_order: 77
+nav_order: 82
 parent: Modules
 ---
 

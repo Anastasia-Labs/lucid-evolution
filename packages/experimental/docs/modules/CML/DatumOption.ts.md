@@ -1,6 +1,6 @@
 ---
 title: CML/DatumOption.ts
-nav_order: 55
+nav_order: 60
 parent: Modules
 ---
 

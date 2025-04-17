@@ -1,6 +1,6 @@
 ---
 title: CML/Enum/PlutusDataKind.ts
-nav_order: 82
+nav_order: 87
 parent: Modules
 ---
 

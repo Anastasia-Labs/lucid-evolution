@@ -1,6 +1,6 @@
 ---
 title: CML/GenesisDelegateHash.ts
-nav_order: 96
+nav_order: 101
 parent: Modules
 ---
 

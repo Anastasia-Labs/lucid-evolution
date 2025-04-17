@@ -1,6 +1,6 @@
 ---
 title: CML/ConwayFormatTxOut.ts
-nav_order: 50
+nav_order: 55
 parent: Modules
 ---
 

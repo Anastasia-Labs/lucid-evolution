@@ -1,6 +1,6 @@
 ---
 title: CML/PoolRegistration.ts
-nav_order: 166
+nav_order: 171
 parent: Modules
 ---
 

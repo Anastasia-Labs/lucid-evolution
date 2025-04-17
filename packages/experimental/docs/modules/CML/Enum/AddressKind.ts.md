@@ -1,6 +1,6 @@
 ---
 title: CML/Enum/AddressKind.ts
-nav_order: 64
+nav_order: 69
 parent: Modules
 ---
 

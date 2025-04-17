@@ -1,5 +1,6 @@
 import { Effect } from "effect";
 import * as Address from "../src/Address.js";
+import * as AddressDetails from "../src/AddressDetails.js";
 import * as AddressOld from "../src/old/Address_old.js";
 import { Bench } from "tinybench";
 
@@ -63,8 +64,8 @@ for (const type of addressTypes) {
   const testnetAddr = getAddressByType(type, "testnet");
 
   bench.add(`addressDetailsFromBech32 - ${type} address`, () => {
-    Effect.runSync(Address.addressDetailsFromBech32(mainnetAddr));
-    Effect.runSync(Address.addressDetailsFromBech32(testnetAddr));
+    Effect.runSync(AddressDetails.fromBech32(mainnetAddr));
+    Effect.runSync(AddressDetails.fromBech32(testnetAddr));
   });
 
   bench.add(`getAddressDetails - ${type} address`, () => {

@@ -1,6 +1,6 @@
 ---
 title: CML/Enum/RedeemerTag.ts
-nav_order: 84
+nav_order: 89
 parent: Modules
 ---
 
