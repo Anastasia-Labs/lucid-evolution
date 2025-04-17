@@ -1,6 +1,6 @@
 {
   "name": "@lucid-evolution/experimental",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "description": "",
   "homepage": "https://github.com/anastasia-labs/lucid-evolution",
   "main": "./dist/esm/index.js",
@@ -61,7 +61,6 @@
     "@microsoft/api-extractor": "^7.49.0",
     "@types/node": "^22.13.11",
     "tsup": "^8.0.2",
-
     "typescript": "^5.8.3",
     "vitest": "^2.0.5"
   }
