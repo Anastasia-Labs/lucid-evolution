@@ -1,6 +1,6 @@
 ---
 title: CML/Enum/ByronAddrType.ts
-nav_order: 66
+nav_order: 71
 parent: Modules
 ---
 

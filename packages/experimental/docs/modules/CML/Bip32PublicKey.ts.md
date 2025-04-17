@@ -1,6 +1,6 @@
 ---
 title: CML/Bip32PublicKey.ts
-nav_order: 17
+nav_order: 22
 parent: Modules
 ---
 

@@ -1,6 +1,6 @@
 ---
 title: CML/VoteRegDelegCert.ts
-nav_order: 281
+nav_order: 286
 parent: Modules
 ---
 

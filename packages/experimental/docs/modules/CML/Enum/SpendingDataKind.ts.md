@@ -1,6 +1,6 @@
 ---
 title: CML/Enum/SpendingDataKind.ts
-nav_order: 87
+nav_order: 92
 parent: Modules
 ---
 

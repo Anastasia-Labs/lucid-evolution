@@ -1,6 +1,6 @@
 ---
 title: CML/Enum/DatumOptionKind.ts
-nav_order: 74
+nav_order: 79
 parent: Modules
 ---
 

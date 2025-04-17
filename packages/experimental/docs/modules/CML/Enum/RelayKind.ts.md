@@ -1,6 +1,6 @@
 ---
 title: CML/Enum/RelayKind.ts
-nav_order: 85
+nav_order: 90
 parent: Modules
 ---
 

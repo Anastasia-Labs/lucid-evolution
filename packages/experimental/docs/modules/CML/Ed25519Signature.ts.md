@@ -1,6 +1,6 @@
 ---
 title: CML/Ed25519Signature.ts
-nav_order: 61
+nav_order: 66
 parent: Modules
 ---
 

@@ -1,6 +1,6 @@
 ---
 title: CML/Enum/DelegationDistributionKind.ts
-nav_order: 75
+nav_order: 80
 parent: Modules
 ---
 

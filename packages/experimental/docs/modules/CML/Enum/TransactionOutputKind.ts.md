@@ -1,6 +1,6 @@
 ---
 title: CML/Enum/TransactionOutputKind.ts
-nav_order: 90
+nav_order: 95
 parent: Modules
 ---
 

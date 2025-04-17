@@ -1,6 +1,6 @@
 ---
 title: CML/TransactionBuilderConfig.ts
-nav_order: 225
+nav_order: 230
 parent: Modules
 ---
 

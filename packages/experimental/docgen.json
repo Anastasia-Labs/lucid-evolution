@@ -5,7 +5,7 @@
     "src/**/index.ts",
     "src/CardanoJS/**/*.ts",
     "src/old/**/*.ts",
-    "src/!(Data|Address|Credential|KeyHash|ScriptHash).ts"
+    "src/!(Data|Address|AddressDetails|AddressTag|BaseAddress|Bech32|ByronAddress|EnterpriseAddress|Header|PaymentAddress|PointerAddress|Credential|KeyHash|ScriptHash).ts"
   ],
   "enforceDescriptions": false,
   "enforceExamples": false,
