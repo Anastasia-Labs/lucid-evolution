@@ -151,7 +151,7 @@ export default {
             <div className="footer-content">
               <div className="footer-section logo-section">
                 <img
-                  src="https://anastasialabs.com/assets/img/logo/logo.png"
+                  src="/lucid-evolution/al-logo.png"
                   alt="Anastasia Labs Logo"
                   className="footer-logo"
                 />
@@ -202,7 +202,8 @@ export default {
             background-color: #1a1515;
             color: #b0b0b0;
             padding: 2rem 0 1rem;
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+            font-family:
+              -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
               "Helvetica Neue", Arial, sans-serif;
           }
           .container {
