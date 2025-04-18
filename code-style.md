@@ -1,6 +1,7 @@
 # Code Style Guide
 
 ## Table of Contents
+
 - [Code Style Guide](#code-style-guide)
   - [Table of Contents](#table-of-contents)
   - [Package Structure](#package-structure)
@@ -51,6 +52,7 @@
     - [Semantic Versioning](#semantic-versioning)
 
 ## Package Structure
+
 - Each package should have a single, well-defined responsibility.
 - Common logic, utilities, and types should be isolated in dedicated shared packages for reuse.
 - Functionality tied to a specific platform or library should be isolated in its own package.
@@ -277,7 +279,7 @@ Example:
 // Effect-based version
 export const fromBytes: SerdeImpl.FromBytes<KeyHash, KeyHashError> = /* ... */;
 
-// Throwing version 
+// Throwing version
 export const fromBytesOrThrow = (bytes: Uint8Array) => /* ... */;
 ```
 
@@ -401,20 +403,24 @@ const calculate = (value: Array<number>, options: ModeOptions = {}) => {
 Use the Effect Schema library consistently for defining types:
 
 1. Create constants for validation constraints:
+
 ```ts
 export const KEY_LENGTH = 28;
 ```
 
 2. Define schemas using these constants:
+
 ```ts
 const KeyHashHexString = HexStringSchema.pipe(
   Schema.length(KEYHASH_HEX_LENGTH),
 ).annotations({
-  message: (issue) => `must be ${KEYHASH_HEX_LENGTH} characters, got: ${issue.actual}.`,
+  message: (issue) =>
+    `must be ${KEYHASH_HEX_LENGTH} characters, got: ${issue.actual}.`,
 });
 ```
 
 3. Define classes using Schema.TaggedClass:
+
 ```ts
 export class KeyHash extends Schema.TaggedClass<KeyHash>()("KeyHash", {
   hash: KeyHashHexString,
@@ -502,7 +508,7 @@ export class KeyHash extends Schema.TaggedClass<KeyHash>()("KeyHash", {
   hash: KeyHashHexString, // Will be validated as a hex string of correct length
 }) {}
 
-// Usage: 
+// Usage:
 // Creating an instance will automatically validate the input
 // const keyHash = new KeyHash({ hash: "validHexString..." }); // Valid - creates instance
 // const invalid = new KeyHash({ hash: "tooShort" }); // Error - fails validation
@@ -513,6 +519,7 @@ export class KeyHash extends Schema.TaggedClass<KeyHash>()("KeyHash", {
 Follow these patterns for constructors:
 
 1. **Effect-based factory functions** - Named with `make` or `from*` prefix:
+
    - Return `Effect.Effect<T, E>` for error handling
    - Use descriptive error types
    - Add comprehensive JSDoc with examples
@@ -678,7 +685,7 @@ Provide both Effect-based and throwing versions of functions:
 
 ```ts
 // Effect-based version that returns errors in the Effect channel
-export const operation: SerdeImpl.Operation<Result, ErrorType> = 
+export const operation: SerdeImpl.Operation<Result, ErrorType> =
   Effect.fnUntraced(function* (input) {
     // implementation that yields errors
   });
@@ -734,17 +741,18 @@ When designing your error handling strategy, choose between these complementary 
 #### Guidelines for Choosing Error Types
 
 - Use generic module-level errors when:
+
   - A single error type is sufficient for most user needs
   - The specific error reason can be determined from the error message
   - The error handling strategy is typically the same for all error cases
-  
+
   ```ts
   // Generic module error example
   export class KeyHashError extends Data.TaggedError("KeyHashError")<{
     message: string;
     cause?: unknown;
   }> {}
-  
+
   // Usage - different error scenarios use the same type with descriptive messages
   export const fromBytes: SerdeImpl.FromBytes<KeyHash, KeyHashError> =
     Effect.fnUntraced(function* (bytes) {
@@ -758,6 +766,7 @@ When designing your error handling strategy, choose between these complementary 
   ```
 
 - Use domain-specific errors when:
+
   - Different errors require different handling strategies
   - The calling code needs to distinguish between error cases
   - You need to provide specific recovery paths for different error types
@@ -765,33 +774,39 @@ When designing your error handling strategy, choose between these complementary 
 
   ```ts
   import { Data, Effect } from "effect";
-  
+
   // Domain-specific error types with relevant contextual information
-  export class InsufficientFundsError extends Data.TaggedError("InsufficientFundsError")<{
+  export class InsufficientFundsError extends Data.TaggedError(
+    "InsufficientFundsError",
+  )<{
     available: bigint;
     required: bigint;
     walletId: string;
   }> {}
-  
-  export class InvalidAddressError extends Data.TaggedError("InvalidAddressError")<{
+
+  export class InvalidAddressError extends Data.TaggedError(
+    "InvalidAddressError",
+  )<{
     address: string;
     reason: "wrong_network" | "invalid_format" | "checksum_mismatch";
   }> {}
-  
-  export class TransactionExpiredError extends Data.TaggedError("TransactionExpiredError")<{
+
+  export class TransactionExpiredError extends Data.TaggedError(
+    "TransactionExpiredError",
+  )<{
     expiresAt: Date;
     currentTime: Date;
   }> {}
-  
+
   // Union type for all possible transaction errors
-  export type TransactionError = 
-    | InsufficientFundsError 
-    | InvalidAddressError 
+  export type TransactionError =
+    | InsufficientFundsError
+    | InvalidAddressError
     | TransactionExpiredError;
-  
+
   // Function that uses domain-specific errors
   export const sendTransaction = (
-    tx: Transaction
+    tx: Transaction,
   ): Effect.Effect<TransactionId, TransactionError> =>
     Effect.fnUntraced(function* () {
       // Check for sufficient funds
@@ -799,39 +814,41 @@ When designing your error handling strategy, choose between these complementary 
         return yield* new InsufficientFundsError({
           available: tx.wallet.balance,
           required: tx.amount,
-          walletId: tx.wallet.id
+          walletId: tx.wallet.id,
         });
       }
-      
+
       // Validate address
       if (!isValidAddress(tx.recipientAddress)) {
         return yield* new InvalidAddressError({
           address: tx.recipientAddress,
-          reason: getAddressInvalidReason(tx.recipientAddress)
+          reason: getAddressInvalidReason(tx.recipientAddress),
         });
       }
-      
+
       // Check expiration
       if (tx.expiresAt < new Date()) {
         return yield* new TransactionExpiredError({
           expiresAt: tx.expiresAt,
-          currentTime: new Date()
+          currentTime: new Date(),
         });
       }
-      
+
       // Process transaction...
       return yield* Effect.succeed(generateTransactionId());
     });
-  
+
   // Client code can handle specific error types through pattern matching
   const handleTransaction = (tx: Transaction) =>
     Effect.catchTags(sendTransaction(tx), {
-      InsufficientFundsError: (e) => 
-        Effect.logError(`Not enough funds. Available: ${e.available}, Required: ${e.required}`),
-      InvalidAddressError: (e) => 
+      InsufficientFundsError: (e) =>
+        Effect.logError(
+          `Not enough funds. Available: ${e.available}, Required: ${e.required}`,
+        ),
+      InvalidAddressError: (e) =>
         Effect.logError(`Invalid address: ${e.address}. Reason: ${e.reason}`),
       TransactionExpiredError: (e) =>
-        Effect.logError(`Transaction expired at ${e.expiresAt.toISOString()}`)
+        Effect.logError(`Transaction expired at ${e.expiresAt.toISOString()}`),
     });
   ```
 
@@ -904,6 +921,7 @@ export const sum = (self: number, that: number): number => self + that;
 Every exported function must include comprehensive JSDoc with the following sections:
 
 Categories should be consistently used across the codebase and include:
+
 - `constructors` - For functions that create new instances
 - `encoding/decoding` - For serialization/deserialization functions
 - `equality` - For comparison functions
@@ -936,7 +954,7 @@ export interface ToBytes<T> {
 }
 
 // Implementation for KeyHash
-export const fromBytes: SerdeImpl.FromBytes<KeyHash, KeyHashError> = 
+export const fromBytes: SerdeImpl.FromBytes<KeyHash, KeyHashError> =
   Effect.fnUntraced(function* (bytes) {
     if (bytes.length !== KEYHASH_BYTES_LENGTH) {
       return yield* new KeyHashError({
@@ -947,21 +965,20 @@ export const fromBytes: SerdeImpl.FromBytes<KeyHash, KeyHashError> =
     return new KeyHash({ hash }, { disableValidation: true });
   });
 
-export const toBytes: SerdeImpl.ToBytes<KeyHash> = (keyHash) => 
+export const toBytes: SerdeImpl.ToBytes<KeyHash> = (keyHash) =>
   Bytes.fromHexOrThrow(keyHash.hash);
 
 // Implementation for PublicKey
-export const fromBytes: SerdeImpl.FromBytes<PublicKey, PublicKeyError> = 
+export const fromBytes: SerdeImpl.FromBytes<PublicKey, PublicKeyError> =
   Effect.fnUntraced(function* (bytes) {
     // PublicKey-specific implementation
   });
 
 // Generic function using the interfaces
 const deserialize = <T, E>(
-  bytes: Uint8Array, 
-  fromBytes: SerdeImpl.FromBytes<T, E>
-): Effect.Effect<T, E> => 
-  fromBytes(bytes);
+  bytes: Uint8Array,
+  fromBytes: SerdeImpl.FromBytes<T, E>,
+): Effect.Effect<T, E> => fromBytes(bytes);
 ```
 
 ## Dependencies
