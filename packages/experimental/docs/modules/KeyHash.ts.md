@@ -27,8 +27,12 @@ parent: Modules
   - [toCBORBytes](#tocborbytes)
 - [errors](#errors)
   - [KeyHashError (class)](#keyhasherror-class)
+- [model](#model)
+  - [TypeId](#typeid)
+  - [TypeId (type alias)](#typeid-type-alias)
 - [schemas](#schemas)
   - [KeyHash (class)](#keyhash-class)
+    - [[TypeId] (property)](#typeid-property)
 - [transformation](#transformation)
   - [toBytes](#tobytes)
 
@@ -370,6 +374,30 @@ assert(error.message === "Invalid key hash");
 
 Added in v2.0.0
 
+# model
+
+## TypeId
+
+Symbol indentifier
+
+**Signature**
+
+```ts
+export declare const TypeId: typeof TypeId;
+```
+
+Added in v2.0.0
+
+## TypeId (type alias)
+
+**Signature**
+
+```ts
+export type TypeId = typeof TypeId;
+```
+
+Added in v2.0.0
+
 # schemas
 
 ## KeyHash (class)
@@ -384,6 +412,14 @@ export declare class KeyHash
 ```
 
 Added in v2.0.0
+
+### [TypeId] (property)
+
+**Signature**
+
+```ts
+readonly [TypeId]: typeof TypeId
+```
 
 # transformation
 
