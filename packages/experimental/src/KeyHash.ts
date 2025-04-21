@@ -52,6 +52,22 @@ const KeyHashHexString = HexStringSchema.pipe(
 });
 
 /**
+ * Symbol indentifier
+ *
+ * @since 2.0.0
+ * @category model
+ */
+export const TypeId: unique symbol = Symbol.for(
+  "@lucid-evolution/experimental/KeyHash",
+);
+
+/**
+ * @since 2.0.0
+ * @category model
+ */
+export type TypeId = typeof TypeId;
+
+/**
  * Schema for KeyHash representing a verification key hash.
  * Follows CIP-0019 binary representation.
  *
@@ -60,7 +76,9 @@ const KeyHashHexString = HexStringSchema.pipe(
  */
 export class KeyHash extends Schema.TaggedClass<KeyHash>()("KeyHash", {
   hash: KeyHashHexString,
-}) {}
+}) {
+  readonly [TypeId]: TypeId = TypeId;
+}
 
 /**
  * Convert a KeyHash to CBOR bytes.
