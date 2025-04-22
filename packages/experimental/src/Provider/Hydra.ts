@@ -17,7 +17,7 @@ import type {
 } from "@lucid-evolution/core-types";
 import { credentialToAddress } from "@lucid-evolution/utils";
 import { Node } from "../Hydra.js";
-import  * as CML from "@anastasia-labs/cardano-multiplatform-lib-nodejs";
+import * as CML from "@anastasia-labs/cardano-multiplatform-lib-nodejs";
 
 export class Hydra implements Provider {
   private readonly _node: Node;
@@ -34,7 +34,7 @@ export class Hydra implements Provider {
   }
 
   async getUtxos(
-    addressOrCredential: Address | Credential
+    addressOrCredential: Address | Credential,
   ): Promise<Array<UTxO>> {
     let address: Address;
 
@@ -45,13 +45,13 @@ export class Hydra implements Provider {
     }
 
     return (await this._node.snapshotUTxO()).filter(
-      (utxo) => utxo.address === address
+      (utxo) => utxo.address === address,
     );
   }
 
   async getUtxosWithUnit(
     addressOrCredential: Address | Credential,
-    unit: Unit
+    unit: Unit,
   ): Promise<Array<UTxO>> {
     let address: Address;
 
@@ -63,13 +63,13 @@ export class Hydra implements Provider {
 
     return (await this._node.snapshotUTxO()).filter(
       (utxo) =>
-        utxo.address === address && Object.keys(utxo.assets).includes(unit)
+        utxo.address === address && Object.keys(utxo.assets).includes(unit),
     );
   }
 
   async getUtxoByUnit(unit: Unit): Promise<UTxO> {
     const utxo = (await this._node.snapshotUTxO()).filter((utxo) =>
-      Object.keys(utxo.assets).includes(unit)
+      Object.keys(utxo.assets).includes(unit),
     );
 
     if (utxo === undefined) {
@@ -86,8 +86,8 @@ export class Hydra implements Provider {
       outRefs.some(
         (outRef) =>
           utxo.txHash === outRef.txHash &&
-          utxo.outputIndex === outRef.outputIndex
-      )
+          utxo.outputIndex === outRef.outputIndex,
+      ),
     );
   }
 
@@ -113,10 +113,10 @@ export class Hydra implements Provider {
 
   evaluateTx(
     _tx: Transaction,
-    _additionalUTxOs?: Array<UTxO>
+    _additionalUTxOs?: Array<UTxO>,
   ): Promise<Array<EvalRedeemer>> {
     throw new Error("Method not implemented.");
-  } 
+  }
 }
 
 const STATUS = {
