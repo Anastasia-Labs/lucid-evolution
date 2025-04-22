@@ -1,6 +1,6 @@
 ---
 title: CML/Enum/RedeemersKind.ts
-nav_order: 82
+nav_order: 88
 parent: Modules
 ---
 

@@ -1,6 +1,6 @@
 ---
 title: CML/StakeRegistration.ts
-nav_order: 217
+nav_order: 223
 parent: Modules
 ---
 

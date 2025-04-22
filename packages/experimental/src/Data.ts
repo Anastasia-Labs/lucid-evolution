@@ -1,13 +1,14 @@
 import {
   Array as _Array,
   Arbitrary,
+  Effect,
   Either,
   FastCheck,
   Schema,
   SchemaAST,
 } from "effect";
 import * as Bytes from "./Bytes.js";
-import * as CML from "@anastasia-labs/cardano-multiplatform-lib-nodejs";
+import * as CML from "./CML/index.js";
 import { ParseError } from "effect/ParseResult";
 import * as Combinator from "./Combinator.js";
 
@@ -142,7 +143,7 @@ export interface ByteArray$
  * @since 2.0.0
  */
 export const ByteArray: ByteArray$ = Schema.TaggedStruct("ByteArray", {
-  bytearray: Schema.String.pipe(Schema.lowercased(), Combinator.HexString),
+  bytearray: Combinator.HexStringSchema,
 }).annotations({
   identifier: "ByteArray",
 });
@@ -398,11 +399,11 @@ export const isConstr = Schema.is(Constr);
  * }
  *
  * // Convert to canonical CBOR
- * const cbor = Data.encodeCBORUnsafe(token, Token, { canonical: true })
+ * const cbor = Data.encodeCBOROrThrow(token, Token, { canonical: true })
  *
  * @since 2.0.0
  */
-export const encodeCBORUnsafe = <Source, Target extends Data>(
+export const encodeCBOROrThrow = <Source, Target extends Data>(
   input: unknown,
   schema?: Schema.Schema<Source, Target>,
   options: {
@@ -411,46 +412,66 @@ export const encodeCBORUnsafe = <Source, Target extends Data>(
   } = {},
 ): string => {
   const { canonical = false } = options;
-  const toCMLPlutusData = (data: Data): CML.PlutusData => {
-    switch (data._tag) {
-      case "Integer":
-        return CML.PlutusData.new_integer(
-          CML.BigInteger.from_str(data.integer.toString()),
-        );
-      case "ByteArray":
-        return CML.PlutusData.new_bytes(Bytes.fromHex(data.bytearray));
-      case "List": {
-        const list = CML.PlutusDataList.new();
-        data.list.forEach((item) => list.add(toCMLPlutusData(item)));
-        return CML.PlutusData.new_list(list);
-      }
-      case "Map": {
-        const map = CML.PlutusMap.new();
-        data.entries.forEach(({ k, v }) => {
-          const plutusKey = toCMLPlutusData(k);
-          map.set(plutusKey, toCMLPlutusData(v));
-        });
-        return CML.PlutusData.new_map(map);
-      }
-      case "Constr": {
-        const fields = CML.PlutusDataList.new();
-        data.fields.forEach((item) => fields.add(toCMLPlutusData(item)));
-        return CML.PlutusData.new_constr_plutus_data(
-          CML.ConstrPlutusData.new(data.index, fields),
-        );
-      }
-      default:
-        throw new Error(`Unsupported data type: ${(data as any)._tag}`);
-    }
-  };
-
   const data: Data = schema
-    ? encodeDataUnsafe(input, schema, options.parseOptions)
-    : encodeDataUnsafe(input, Data);
+    ? encodeDataOrThrow(input, schema, options.parseOptions)
+    : encodeDataOrThrow(input, Data);
   const cmlPlutusData = toCMLPlutusData(data);
   return canonical
     ? cmlPlutusData.to_canonical_cbor_hex()
     : cmlPlutusData.to_cardano_node_format().to_cbor_hex();
+};
+
+export const encodeCBOR = Effect.fn(function* <Source, Target extends Data>(
+  input: unknown,
+  schema?: Schema.Schema<Source, Target>,
+  options: {
+    canonical?: boolean;
+    parseOptions?: SchemaAST.ParseOptions;
+  } = {},
+) {
+  const { canonical = false } = options;
+  const data: Data = schema
+    ? yield* encodeData(input, schema, options.parseOptions)
+    : yield* encodeData(input, Data);
+  const cmlPlutusData = toCMLPlutusData(data);
+  return canonical
+    ? cmlPlutusData.to_canonical_cbor_hex()
+    : cmlPlutusData.to_cardano_node_format().to_cbor_hex();
+});
+
+const toCMLPlutusData = (data: Data): CML.PlutusData.PlutusData => {
+  switch (data._tag) {
+    case "Integer":
+      return CML.PlutusData.newIntegerUnsafe(
+        CML.BigInteger.fromStrUnsafe(data.integer.toString()),
+      );
+    case "ByteArray":
+      return CML.PlutusData.newBytesUnsafe(
+        Bytes.fromHexOrThrow(data.bytearray),
+      );
+    case "List": {
+      const list = CML.PlutusDataList._newUnsafe();
+      data.list.forEach((item) => list.add(toCMLPlutusData(item)));
+      return CML.PlutusData.newListUnsafe(list);
+    }
+    case "Map": {
+      const map = CML.PlutusMap._newUnsafe();
+      data.entries.forEach(({ k, v }) => {
+        const plutusKey = toCMLPlutusData(k);
+        map.set(plutusKey, toCMLPlutusData(v));
+      });
+      return CML.PlutusData.newMapUnsafe(map);
+    }
+    case "Constr": {
+      const fields = CML.PlutusDataList._newUnsafe();
+      data.fields.forEach((item) => fields.add(toCMLPlutusData(item)));
+      return CML.PlutusData.newConstrPlutusDataUnsafe(
+        CML.ConstrPlutusData._newUnsafe(data.index, fields),
+      );
+    }
+    default:
+      throw new Error(`Unsupported data type: ${(data as any)._tag}`);
+  }
 };
 
 /**
@@ -470,11 +491,11 @@ export const encodeCBORUnsafe = <Source, Target extends Data>(
  * const cbor = "d8799f44deadbeef42cafe1903e8ff"
  *
  * // Decode from CBOR
- * const token = Data.decodeCBORUnsafe(cbor, Token)
+ * const token = Data.decodeCBOROrThrow(cbor, Token)
  * // { policyId: "deadbeef", assetName: "cafe", amount: 1000n }
  *
  * // Decode without schema
- * const data = Data.decodeCBORUnsafe(cbor)
+ * const data = Data.decodeCBOROrThrow(cbor)
  * // {
  * //   _tag: 'Constr',
  * //   index: 0n,
@@ -487,18 +508,26 @@ export const encodeCBORUnsafe = <Source, Target extends Data>(
  *
  * @since 2.0.0
  */
-export function decodeCBORUnsafe(input: string): Data;
-export function decodeCBORUnsafe<Source, Target extends Data>(
+export function decodeCBOROrThrow(input: string): Data;
+export function decodeCBOROrThrow<Source, Target extends Data>(
   input: string,
   schema: Schema.Schema<Source, Target>,
 ): Source;
-export function decodeCBORUnsafe<Source, Target extends Data>(
+export function decodeCBOROrThrow<Source, Target extends Data>(
   input: string,
   schema?: Schema.Schema<Source, Target>,
 ): Source | Data {
-  const data = resolveCBORUnsafe(input);
-  return schema ? decodeDataUnsafe(data, schema) : data;
+  const data = resolveCBOROrThrow(input);
+  return schema ? decodeDataOrThrow(data, schema) : data;
 }
+
+export const decodeCBOR = Effect.fn(function* <Source, Target extends Data>(
+  input: string,
+  schema?: Schema.Schema<Source, Target>,
+) {
+  const data = yield* resolveCBOR(input);
+  return schema ? yield* decodeData(data, schema) : data;
+});
 
 /**
  * Resolves a CBOR hex string to a Plutus Data structure
@@ -507,10 +536,10 @@ export function decodeCBORUnsafe<Source, Target extends Data>(
  *
  * @since 2.0.0
  */
-export const resolveCBORUnsafe = (input: string): Data => {
-  let data: CML.PlutusData;
+export const resolveCBOROrThrow = (input: string): Data => {
+  let data: CML.PlutusData.PlutusData;
   try {
-    data = CML.PlutusData.from_cbor_hex(input);
+    data = CML.PlutusData.fromCborHexUnsafe(input);
   } catch (error) {
     throw new Error(`Failed to resolve CBOR input: ${input}`);
   }
@@ -519,13 +548,13 @@ export const resolveCBORUnsafe = (input: string): Data => {
       return Integer.make({ integer: BigInt(data.as_integer()!.to_str()) });
     case CML.PlutusDataKind.Bytes:
       return ByteArray.make({
-        bytearray: Bytes.toHex(data.as_bytes()!),
+        bytearray: Bytes.toHexOrThrow!(data.as_bytes()!),
       });
     case CML.PlutusDataKind.List: {
       const list = data.as_list()!;
       const array = [];
       for (let i = 0; i < list.len(); i++) {
-        array.push(resolveCBORUnsafe(list.get(i).to_cbor_hex()));
+        array.push(resolveCBOROrThrow(list.get(i).to_cbor_hex()));
       }
       return List.make({ list: array });
     }
@@ -534,8 +563,8 @@ export const resolveCBORUnsafe = (input: string): Data => {
       const tuples: { k: Data; v: Data }[] = [];
       const keys = plutusMap.keys();
       for (let i = 0; i < keys.len(); i++) {
-        const k = resolveCBORUnsafe(keys.get(i).to_cbor_hex());
-        const v = resolveCBORUnsafe(plutusMap.get(keys.get(i))!.to_cbor_hex());
+        const k = resolveCBOROrThrow(keys.get(i).to_cbor_hex());
+        const v = resolveCBOROrThrow(plutusMap.get(keys.get(i))!.to_cbor_hex());
         tuples.push({ k, v });
       }
       return Map.make({ entries: tuples });
@@ -545,7 +574,7 @@ export const resolveCBORUnsafe = (input: string): Data => {
       const fields = [];
       const list = constrData.fields();
       for (let i = 0; i < list.len(); i++) {
-        fields.push(resolveCBORUnsafe(list.get(i).to_cbor_hex()));
+        fields.push(resolveCBOROrThrow(list.get(i).to_cbor_hex()));
       }
       return Constr.make({
         index: BigInt(constrData.alternative()),
@@ -556,6 +585,59 @@ export const resolveCBORUnsafe = (input: string): Data => {
       throw new Error(`Unsupported type: ${data.kind()}`);
   }
 };
+
+export const resolveCBOR = Effect.fn(function* (input: string) {
+  let data: CML.PlutusData.PlutusData;
+  data = yield* CML.PlutusData.fromCborHex(input);
+  switch (data.kind()) {
+    case CML.PlutusDataKind.Integer:
+      return Integer.make(
+        { integer: BigInt(data.as_integer()!.to_str()) },
+        { disableValidation: true },
+      );
+    case CML.PlutusDataKind.Bytes:
+      return ByteArray.make(
+        {
+          bytearray: Bytes.toHexOrThrow!(data.as_bytes()!),
+        },
+        { disableValidation: true },
+      );
+    case CML.PlutusDataKind.List: {
+      const list = data.as_list()!;
+      const array = [];
+      for (let i = 0; i < list.len(); i++) {
+        array.push(resolveCBOROrThrow(list.get(i).to_cbor_hex()));
+      }
+      return List.make({ list: array }, { disableValidation: true });
+    }
+    case CML.PlutusDataKind.Map: {
+      const plutusMap = data.as_map()!;
+      const tuples: { k: Data; v: Data }[] = [];
+      const keys = plutusMap.keys();
+      for (let i = 0; i < keys.len(); i++) {
+        const k = resolveCBOROrThrow(keys.get(i).to_cbor_hex());
+        const v = resolveCBOROrThrow(plutusMap.get(keys.get(i))!.to_cbor_hex());
+        tuples.push({ k, v });
+      }
+      return Map.make({ entries: tuples }, { disableValidation: true });
+    }
+    case CML.PlutusDataKind.ConstrPlutusData: {
+      const constrData = data.as_constr_plutus_data()!;
+      const fields = [];
+      const list = constrData.fields();
+      for (let i = 0; i < list.len(); i++) {
+        fields.push(resolveCBOROrThrow(list.get(i).to_cbor_hex()));
+      }
+      return Constr.make(
+        {
+          index: BigInt(constrData.alternative()),
+          fields,
+        },
+        { disableValidation: true },
+      );
+    }
+  }
+});
 
 /**
  * Decodes an unknown value from Plutus Data Constructor to a TypeScript type
@@ -579,16 +661,24 @@ export const resolveCBORUnsafe = (input: string): Data => {
  *   Data.mkInt(1000n)
  * ]);
  *
- * const token = Data.decodeDataUnsafe(plutusData, Token);
+ * const token = Data.decodeDataOrThrow(plutusData, Token);
  * // { policyId: "deadbeef", assetName: "cafe", amount: 1000n }
  *
  * @since 2.0.0
  */
-export const decodeDataUnsafe = <Source, Target extends Data>(
+export const decodeDataOrThrow = <Source, Target extends Data>(
   input: unknown,
   schema: Schema.Schema<Source, Target>,
   options: SchemaAST.ParseOptions = {},
 ): Source => Schema.decodeUnknownSync(schema, options)(input);
+
+export const decodeData = Effect.fn(function* <Source, Target extends Data>(
+  input: unknown,
+  schema: Schema.Schema<Source, Target>,
+  options: SchemaAST.ParseOptions = {},
+) {
+  return yield* Schema.decodeUnknown(schema, options)(input);
+});
 
 /**
  * Safely decodes data using Either for error handling
@@ -597,7 +687,7 @@ export const decodeDataUnsafe = <Source, Target extends Data>(
  *
  * @since 2.0.0
  */
-export const decodeDataSafe = <Source, Target extends Data>(
+export const decodeDataEither = <Source, Target extends Data>(
   input: unknown,
   schema: Schema.Schema<Source, Target>,
   options: SchemaAST.ParseOptions = {},
@@ -626,16 +716,24 @@ export const decodeDataSafe = <Source, Target extends Data>(
  *   amount: TSchema.Integer
  * });
  *
- * const data = Data.encodeDataUnsafe(token, Token);
+ * const data = Data.encodeDataOrThrow(token, Token);
  * // { index: 0n, fields: ["deadbeef", "cafe", 1000n] }
  *
  * @since 2.0.0
  */
-export const encodeDataUnsafe = <Source, Target extends Data>(
+export const encodeDataOrThrow = <Source, Target extends Data>(
   input: unknown,
   schema: Schema.Schema<Source, Target>,
   options?: SchemaAST.ParseOptions,
 ): Target => Schema.encodeUnknownSync(schema, options)(input);
+
+export const encodeData = Effect.fn(function* <Source, Target extends Data>(
+  input: unknown,
+  schema: Schema.Schema<Source, Target>,
+  options?: SchemaAST.ParseOptions,
+) {
+  return yield* Schema.encodeUnknown(schema, options)(input);
+});
 
 /**
  * Safely encodes data using Either for error handling
@@ -644,7 +742,7 @@ export const encodeDataUnsafe = <Source, Target extends Data>(
  *
  * @since 2.0.0
  */
-export const encodeDataSafe = <Source, Target extends Data>(
+export const encodeDataEither = <Source, Target extends Data>(
   input: unknown,
   schema: Schema.Schema<Source, Target>,
   options?: SchemaAST.ParseOptions,
@@ -789,12 +887,12 @@ const reviver = (key: string, value: any) => {
  * import { Data } from "@lucid-evolution/experimental";
  *
  * const data = Data.mkInt(42n);
- * const json = Data.toJSONUnsafe(data);
+ * const json = Data.toJSON(data);
  * // '{"_tag":"Integer","integer":"42n"}'
  *
  * @since 2.0.0
  */
-export const toJSONUnsafe = (data: Data): string => {
+export const toJSON = (data: Data): string => {
   return JSON.stringify(data, replacer, 2);
 };
 
@@ -814,7 +912,7 @@ export const toJSONUnsafe = (data: Data): string => {
  *
  * @since 2.0.0
  */
-export const fromJSONUnsafe = (json: string): Data => {
+export const fromJSONOrThrow = (json: string): Data => {
   const parsed = JSON.parse(json, reviver);
   if (parsed._tag === undefined) {
     throw new Error("Invalid data format");
@@ -1027,7 +1125,7 @@ export const genByteArray = (): FastCheck.Arbitrary<ByteArray> =>
   FastCheck.string({
     minLength: 0,
     maxLength: 64,
-  }).map((value) => mkByte(Bytes.fromText(value)));
+  }).map((value) => mkByte(Bytes.fromTextUnsafe(value)));
 
 /**
  * Creates an arbitrary that generates Data.Integer values
@@ -1098,7 +1196,7 @@ export const genMap = (depth: number): FastCheck.Arbitrary<Map> => {
         minLength: 0,
         maxLength: maxSize * 2, // Generate more than needed to increase chance of unique keys
         selector: (pair) => {
-          const keyStr = toJSONUnsafe(pair[0]);
+          const keyStr = toJSON(pair[0]);
           return keyStr;
         },
       },

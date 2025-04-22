@@ -1,6 +1,6 @@
 ---
 title: CML/Utils/decode_arbitrary_bytes_from_metadatum.ts
-nav_order: 252
+nav_order: 258
 parent: Modules
 ---
 

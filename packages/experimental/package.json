@@ -1,6 +1,6 @@
 {
   "name": "@lucid-evolution/experimental",
-  "version": "0.0.1",
+  "version": "0.0.4",
   "description": "",
   "homepage": "https://github.com/anastasia-labs/lucid-evolution",
   "main": "./dist/esm/index.js",
@@ -46,23 +46,26 @@
   "dependencies": {
     "@anastasia-labs/cardano-multiplatform-lib-browser": "6.0.2-3",
     "@anastasia-labs/cardano-multiplatform-lib-nodejs": "6.0.2-3",
-    "@effect/platform-node": "^0.73.6",
+    "@effect/platform-node": "^0.76.12",
     "@harmoniclabs/plutus-data": "^1.2.4",
     "@harmoniclabs/uplc": "^1.2.4",
     "@lucid-evolution/core-types": "workspace:*",
     "@lucid-evolution/utils": "workspace:*",
+    "ws": "^8.18.1",
+    "@scure/base": "^1.2.4",
     "cbor-x": "^1.6.0",
-    "effect": "^3.14.1",
-    "ws": "^8.18.1"
+    "effect": "^3.14.7",
+    "tinybench": "^4.0.1"
   },
   "devDependencies": {
     "@effect/docgen": "^0.5.2",
+    "@effect/language-service": "^0.6.1",
     "@effect/vitest": "^0.16.0",
     "@microsoft/api-extractor": "^7.49.0",
     "@types/node": "^22.13.11",
     "@types/ws": "^8.18.0",
     "tsup": "^8.0.2",
-    "typescript": "^5.8.2",
+    "typescript": "^5.8.3",
     "vitest": "^2.0.5"
   }
 }

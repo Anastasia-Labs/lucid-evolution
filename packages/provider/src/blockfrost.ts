@@ -222,7 +222,7 @@ export class Blockfrost implements Provider {
   awaitTx(txHash: TxHash, checkInterval = 3000): Promise<boolean> {
     return new Promise((res) => {
       const confirmation = setInterval(async () => {
-        const isConfirmed = await fetch(`${this.url}/txs/${txHash}`, {
+        const isConfirmed = await fetch(`${this.url}/txs/${txHash}/cbor`, {
           headers: { project_id: this.projectId, lucid },
         }).then((res) => res.json());
         if (isConfirmed && !isConfirmed.error) {

@@ -22,7 +22,8 @@
           packages = with pkgs; [
             bun
             pnpm
-            nodejs_22
+            nodejs_23
+            deno
             typescript-language-server
           ];
         };

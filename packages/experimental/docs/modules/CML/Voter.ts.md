@@ -1,6 +1,6 @@
 ---
 title: CML/Voter.ts
-nav_order: 279
+nav_order: 285
 parent: Modules
 ---
 

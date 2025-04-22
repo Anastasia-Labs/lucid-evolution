@@ -1,5 +1,18 @@
 # @lucid-evolution/lucid
 
+## 0.4.27
+
+### Patch Changes
+
+- [#577](https://github.com/Anastasia-Labs/lucid-evolution/pull/577) [`129c5aa`](https://github.com/Anastasia-Labs/lucid-evolution/commit/129c5aa3e2bcdaa3e03485b8d8f60e928246fa91) Thanks [@solidsnakedev](https://github.com/solidsnakedev)! - feat: add credential, keyhash, scripthash effects
+
+## 0.4.26
+
+### Patch Changes
+
+- Updated dependencies [[`dc6ab2e`](https://github.com/Anastasia-Labs/lucid-evolution/commit/dc6ab2e2be80f4774f621a2cc5f7b99e4b4d46de)]:
+  - @lucid-evolution/provider@0.1.89
+
 ## 0.4.25
 
 ### Patch Changes

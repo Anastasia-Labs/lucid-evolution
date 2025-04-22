@@ -185,15 +185,15 @@ describe("Data Module Tests", () => {
   describe("CBOR Serialization", () => {
     it("should serialize and deserialize ByteArray", () => {
       const byteArray = Data.mkByte("deadbeef");
-      const cbor = Data.encodeCBORUnsafe(byteArray);
-      const deserialized = Data.decodeCBORUnsafe(cbor);
+      const cbor = Data.encodeCBOROrThrow(byteArray);
+      const deserialized = Data.decodeCBOROrThrow(cbor);
       expect(deserialized).toEqual(byteArray);
     });
 
     it("should serialize and deserialize Integer", () => {
       const integer = Data.mkInt(42n);
-      const cbor = Data.encodeCBORUnsafe(integer);
-      const deserialized = Data.decodeCBORUnsafe(cbor);
+      const cbor = Data.encodeCBOROrThrow(integer);
+      const deserialized = Data.decodeCBOROrThrow(cbor);
       expect(deserialized).toEqual(integer);
     });
 
@@ -207,8 +207,8 @@ describe("Data Module Tests", () => {
         ]),
       ]);
 
-      const cbor = Data.encodeCBORUnsafe(nested);
-      const deserialized = Data.decodeCBORUnsafe(cbor);
+      const cbor = Data.encodeCBOROrThrow(nested);
+      const deserialized = Data.decodeCBOROrThrow(cbor);
 
       // Deep equality check
       expect(Data.isEqual(nested, deserialized)).toBe(true);
@@ -217,26 +217,26 @@ describe("Data Module Tests", () => {
     it("should handle edge cases", () => {
       // Empty structures
       const emptyList = Data.mkList([]);
-      expect(Data.decodeCBORUnsafe(Data.encodeCBORUnsafe(emptyList))).toEqual(
+      expect(Data.decodeCBOROrThrow(Data.encodeCBOROrThrow(emptyList))).toEqual(
         emptyList,
       );
 
       const emptyMap = Data.mkMap([]);
-      expect(Data.decodeCBORUnsafe(Data.encodeCBORUnsafe(emptyMap))).toEqual(
+      expect(Data.decodeCBOROrThrow(Data.encodeCBOROrThrow(emptyMap))).toEqual(
         emptyMap,
       );
 
       // Very large numbers
       const largeNumber = Data.mkInt(2n ** 100n);
-      expect(Data.decodeCBORUnsafe(Data.encodeCBORUnsafe(largeNumber))).toEqual(
-        largeNumber,
-      );
+      expect(
+        Data.decodeCBOROrThrow(Data.encodeCBOROrThrow(largeNumber)),
+      ).toEqual(largeNumber);
     });
   });
 
   describe("Error Handling", () => {
     it("should handle invalid CBOR data", () => {
-      expect(() => Data.decodeCBORUnsafe("invalid-cbor")).toThrow();
+      expect(() => Data.decodeCBOROrThrow("invalid-cbor")).toThrow();
     });
   });
 });
@@ -245,8 +245,8 @@ describe("TypeTaggedSchema", () => {
   describe("ByteArray Schema", () => {
     it("should encode/decode ByteArray", () => {
       const input = "deadbeef";
-      const encoded = Data.encodeDataUnsafe(input, TSchema.ByteArray);
-      const decoded = Data.decodeDataUnsafe(encoded, TSchema.ByteArray);
+      const encoded = Data.encodeDataOrThrow(input, TSchema.ByteArray);
+      const decoded = Data.decodeDataOrThrow(encoded, TSchema.ByteArray);
 
       expect(encoded).toEqual(Data.mkByte("deadbeef"));
       expect(decoded).toEqual("deadbeef");
@@ -254,7 +254,7 @@ describe("TypeTaggedSchema", () => {
 
     it("should fail on invalid hex string", () => {
       expect(() =>
-        Data.encodeDataUnsafe("not-hex", TSchema.ByteArray),
+        Data.encodeDataOrThrow("not-hex", TSchema.ByteArray),
       ).toThrow();
     });
   });
@@ -262,8 +262,8 @@ describe("TypeTaggedSchema", () => {
   describe("Integer Schema", () => {
     it("should encode/decode Integer", () => {
       const input = 42n;
-      const encoded = Data.encodeDataUnsafe(input, TSchema.Integer);
-      const decoded = Data.decodeDataUnsafe(encoded, TSchema.Integer);
+      const encoded = Data.encodeDataOrThrow(input, TSchema.Integer);
+      const decoded = Data.decodeDataOrThrow(encoded, TSchema.Integer);
 
       expect(encoded).toEqual(Data.mkInt(42n));
       expect(decoded).toEqual(42n);
@@ -272,7 +272,7 @@ describe("TypeTaggedSchema", () => {
     it("should fail on non-bigint", () => {
       expect(() =>
         //@ts-ignore
-        Data.encodeDataUnsafe(42, TSchema.Integer),
+        Data.encodeDataOrThrow(42, TSchema.Integer),
       ).toThrow();
     });
   });
@@ -280,8 +280,8 @@ describe("TypeTaggedSchema", () => {
   describe("Boolean Schema", () => {
     it("should encode/decode true", () => {
       const input = true;
-      const encoded = Data.encodeDataUnsafe(input, TSchema.Boolean);
-      const decoded = Data.decodeDataUnsafe(encoded, TSchema.Boolean);
+      const encoded = Data.encodeDataOrThrow(input, TSchema.Boolean);
+      const decoded = Data.decodeDataOrThrow(encoded, TSchema.Boolean);
 
       expect(encoded).toEqual(Data.mkConstr(1n, []));
       expect(decoded).toEqual(true);
@@ -289,8 +289,8 @@ describe("TypeTaggedSchema", () => {
 
     it("should encode/decode false", () => {
       const input = false;
-      const encoded = Data.encodeDataUnsafe(input, TSchema.Boolean);
-      const decoded = Data.decodeDataUnsafe(encoded, TSchema.Boolean);
+      const encoded = Data.encodeDataOrThrow(input, TSchema.Boolean);
+      const decoded = Data.decodeDataOrThrow(encoded, TSchema.Boolean);
 
       expect(encoded).toEqual(Data.mkConstr(0n, []));
       expect(decoded).toEqual(false);
@@ -299,7 +299,7 @@ describe("TypeTaggedSchema", () => {
     it("should fail on invalid format", () => {
       const invalidInput = Data.mkConstr(0n, [Data.mkInt(1n)]);
       expect(() =>
-        Data.decodeDataUnsafe(invalidInput, TSchema.Boolean),
+        Data.decodeDataOrThrow(invalidInput, TSchema.Boolean),
       ).toThrow();
     });
   });
@@ -309,15 +309,15 @@ describe("TypeTaggedSchema", () => {
       const Action = TSchema.Literal("mint", "burn", "transfer");
 
       const input = "mint";
-      const encoded = Data.encodeDataUnsafe(input, Action);
-      const decoded = Data.decodeDataUnsafe(encoded, Action);
+      const encoded = Data.encodeDataOrThrow(input, Action);
+      const decoded = Data.decodeDataOrThrow(encoded, Action);
 
       expect(encoded).toEqual(Data.mkConstr(0n, []));
       expect(decoded).toEqual("mint");
 
       const input2 = "burn";
-      const encoded2 = Data.encodeDataUnsafe(input2, Action);
-      const decoded2 = Data.decodeDataUnsafe(encoded2, Action);
+      const encoded2 = Data.encodeDataOrThrow(input2, Action);
+      const decoded2 = Data.decodeDataOrThrow(encoded2, Action);
 
       expect(encoded2).toEqual(Data.mkConstr(1n, []));
       expect(decoded2).toEqual("burn");
@@ -327,7 +327,7 @@ describe("TypeTaggedSchema", () => {
       const Action = TSchema.Literal("mint", "burn");
       expect(() =>
         //@ts-ignore
-        Data.encodeDataUnsafe("invalid", Action),
+        Data.encodeDataOrThrow("invalid", Action),
       ).toThrow();
     });
   });
@@ -337,8 +337,8 @@ describe("TypeTaggedSchema", () => {
       const IntArray = TSchema.Array(TSchema.Integer);
 
       const input = [1n, 2n, 3n];
-      const encoded = Data.encodeDataUnsafe(input, IntArray);
-      const decoded = Data.decodeDataUnsafe(encoded, IntArray);
+      const encoded = Data.encodeDataOrThrow(input, IntArray);
+      const decoded = Data.decodeDataOrThrow(encoded, IntArray);
 
       expect(encoded).toEqual(
         Data.mkList([Data.mkInt(1n), Data.mkInt(2n), Data.mkInt(3n)]),
@@ -350,8 +350,8 @@ describe("TypeTaggedSchema", () => {
       const IntArray = TSchema.Array(TSchema.Integer);
 
       const input: bigint[] = [];
-      const encoded = Data.encodeDataUnsafe(input, IntArray);
-      const decoded = Data.decodeDataUnsafe(encoded, IntArray);
+      const encoded = Data.encodeDataOrThrow(input, IntArray);
+      const decoded = Data.decodeDataOrThrow(encoded, IntArray);
 
       expect(encoded).toEqual(Data.mkList([]));
       expect(decoded).toEqual([]);
@@ -367,8 +367,8 @@ describe("TypeTaggedSchema", () => {
         ["cafe", 2n],
       ]);
 
-      const encoded = Data.encodeDataUnsafe(input, TokenMap);
-      const decoded = Data.decodeDataUnsafe(encoded, TokenMap);
+      const encoded = Data.encodeDataOrThrow(input, TokenMap);
+      const decoded = Data.decodeDataOrThrow(encoded, TokenMap);
 
       expect(encoded).toEqual(
         Data.mkMap([
@@ -383,8 +383,8 @@ describe("TypeTaggedSchema", () => {
       const TokenMap = TSchema.Map(TSchema.ByteArray, TSchema.Integer);
 
       const input = new Map();
-      const encoded = Data.encodeDataUnsafe(input, TokenMap);
-      const decoded = Data.decodeDataUnsafe(encoded, TokenMap);
+      const encoded = Data.encodeDataOrThrow(input, TokenMap);
+      const decoded = Data.decodeDataOrThrow(encoded, TokenMap);
 
       expect(encoded).toEqual(Data.mkMap([]));
       expect(decoded).toEqual(input);
@@ -396,8 +396,8 @@ describe("TypeTaggedSchema", () => {
       const MaybeInt = TSchema.NullOr(TSchema.Integer);
 
       const input = 42n;
-      const encoded = Data.encodeDataUnsafe(input, MaybeInt);
-      const decoded = Data.decodeDataUnsafe(encoded, MaybeInt);
+      const encoded = Data.encodeDataOrThrow(input, MaybeInt);
+      const decoded = Data.decodeDataOrThrow(encoded, MaybeInt);
 
       expect(encoded).toEqual(Data.mkConstr(0n, [Data.mkInt(42n)]));
       expect(decoded).toEqual(42n);
@@ -407,8 +407,8 @@ describe("TypeTaggedSchema", () => {
       const MaybeInt = TSchema.NullOr(TSchema.Integer);
 
       const input = null;
-      const encoded = Data.encodeDataUnsafe(input, MaybeInt);
-      const decoded = Data.decodeDataUnsafe(encoded, MaybeInt);
+      const encoded = Data.encodeDataOrThrow(input, MaybeInt);
+      const decoded = Data.decodeDataOrThrow(encoded, MaybeInt);
 
       expect(encoded).toEqual(Data.mkConstr(1n, []));
       expect(decoded).toBeNull();
@@ -429,9 +429,9 @@ describe("TypeTaggedSchema", () => {
         amount: 1000n,
       };
 
-      const encoded = Data.encodeDataUnsafe(input, Token);
-      const decoded = Data.decodeDataUnsafe(encoded, Token);
-      const cbor = Data.encodeCBORUnsafe(encoded);
+      const encoded = Data.encodeDataOrThrow(input, Token);
+      const decoded = Data.decodeDataOrThrow(encoded, Token);
+      const cbor = Data.encodeCBOROrThrow(encoded);
 
       expect(encoded).toEqual(
         Data.mkConstr(0n, [
@@ -463,8 +463,8 @@ describe("TypeTaggedSchema", () => {
         amount: 1000n,
       };
 
-      const encoded = Data.encodeDataUnsafe(input, Token);
-      const decoded = Data.decodeDataUnsafe(encoded, Token);
+      const encoded = Data.encodeDataOrThrow(input, Token);
+      const decoded = Data.decodeDataOrThrow(encoded, Token);
 
       const assetEncoded = Data.mkConstr(0n, [
         Data.mkByte("deadbeef"),
@@ -504,8 +504,8 @@ describe("TypeTaggedSchema", () => {
         amount: 1000n,
       };
 
-      const mintEncoded = Data.encodeDataUnsafe(mintInput, RedeemAction);
-      const mintDecoded = Data.decodeDataUnsafe(mintEncoded, RedeemAction);
+      const mintEncoded = Data.encodeDataOrThrow(mintInput, RedeemAction);
+      const mintDecoded = Data.decodeDataOrThrow(mintEncoded, RedeemAction);
 
       expect(mintEncoded.index).toBe(0n);
       expect(mintDecoded).toEqual(mintInput);
@@ -516,16 +516,16 @@ describe("TypeTaggedSchema", () => {
         amount: 500n,
       };
 
-      const spendEncoded = Data.encodeDataUnsafe(spendInput, RedeemAction);
-      const spendDecoded = Data.decodeDataUnsafe(spendEncoded, RedeemAction);
+      const spendEncoded = Data.encodeDataOrThrow(spendInput, RedeemAction);
+      const spendDecoded = Data.decodeDataOrThrow(spendEncoded, RedeemAction);
 
       expect(spendEncoded.index).toBe(1n);
       expect(spendDecoded).toEqual(spendInput);
 
       // Test Integer
       const intInput = 42n;
-      const intEncoded = Data.encodeDataUnsafe(intInput, RedeemAction);
-      const intDecoded = Data.decodeDataUnsafe(intEncoded, RedeemAction);
+      const intEncoded = Data.encodeDataOrThrow(intInput, RedeemAction);
+      const intDecoded = Data.decodeDataOrThrow(intEncoded, RedeemAction);
 
       expect(intEncoded.index).toBe(2n);
       expect(intDecoded).toEqual(intInput);
@@ -563,8 +563,8 @@ describe("TypeTaggedSchema", () => {
         ]),
       };
 
-      const encoded = Data.encodeDataUnsafe(input, Wallet);
-      const decoded = Data.decodeDataUnsafe(encoded, Wallet);
+      const encoded = Data.encodeDataOrThrow(input, Wallet);
+      const decoded = Data.decodeDataOrThrow(encoded, Wallet);
 
       expect(decoded).toEqual(input);
     });
@@ -575,8 +575,8 @@ describe("TypeTaggedSchema", () => {
       const AssetPair = TSchema.Tuple([TSchema.ByteArray, TSchema.Integer]);
 
       const input = ["deadbeef", 1000n] as const;
-      const encoded = Data.encodeDataUnsafe(input, AssetPair);
-      const decoded = Data.decodeDataUnsafe(encoded, AssetPair);
+      const encoded = Data.encodeDataOrThrow(input, AssetPair);
+      const decoded = Data.decodeDataOrThrow(encoded, AssetPair);
 
       expect(encoded).toEqual(
         Data.mkList([Data.mkByte("deadbeef"), Data.mkInt(1000n)]),
@@ -592,8 +592,8 @@ describe("TypeTaggedSchema", () => {
       ]);
 
       const input = ["deadbeef", 1000n, true] as const;
-      const encoded = Data.encodeDataUnsafe(input, Mixed);
-      const decoded = Data.decodeDataUnsafe(encoded, Mixed);
+      const encoded = Data.encodeDataOrThrow(input, Mixed);
+      const decoded = Data.decodeDataOrThrow(encoded, Mixed);
 
       expect(decoded).toEqual(input);
     });
@@ -610,7 +610,7 @@ describe("TypeTaggedSchema", () => {
       );
 
       expect(() =>
-        Data.decodeDataUnsafe(invalidConstr, TestUnion),
+        Data.decodeDataOrThrow(invalidConstr, TestUnion),
       ).toThrowError();
     });
   });
@@ -631,7 +631,7 @@ describe("TypeTaggedSchema", () => {
       ]);
 
       // Using more idiomatic toThrow with error message pattern
-      expect(() => Data.decodeDataUnsafe(invalidData, TestStruct)).toThrow(
+      expect(() => Data.decodeDataOrThrow(invalidData, TestStruct)).toThrow(
         /field2/,
       );
     });
@@ -641,12 +641,12 @@ describe("TypeTaggedSchema", () => {
       const IntegerData = Data.mkInt(42n);
 
       // Cleaner approach with specific error assertions
-      expect(() => Data.decodeDataUnsafe(IntegerData, StringSchema)).toThrow();
+      expect(() => Data.decodeDataOrThrow(IntegerData, StringSchema)).toThrow();
 
       // Additional test for a different schema mismatch
       const BooleanData = Data.mkConstr(0n, []);
       expect(() =>
-        Data.decodeDataUnsafe(BooleanData, TSchema.Integer),
+        Data.decodeDataOrThrow(BooleanData, TSchema.Integer),
       ).toThrow();
     });
 
@@ -655,7 +655,7 @@ describe("TypeTaggedSchema", () => {
       const invalidConstr = Data.mkConstr(10n, []);
 
       expect(() =>
-        Data.decodeDataUnsafe(invalidConstr, TSchema.Boolean),
+        Data.decodeDataOrThrow(invalidConstr, TSchema.Boolean),
       ).toThrow();
     });
   });

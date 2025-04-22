@@ -1,6 +1,6 @@
 ---
 title: CML/Enum/CoinSelectionStrategyCIP2.ts
-nav_order: 71
+nav_order: 77
 parent: Modules
 ---
 

@@ -13,8 +13,8 @@ describe("Data Property Tests", () => {
       it("should generate valid ByteArray data and roundtrip", () => {
         FastCheck.assert(
           FastCheck.property(Data.genByteArray(), (value) => {
-            const cbor = Data.encodeCBORUnsafe(value);
-            const decoded = Data.decodeCBORUnsafe(cbor);
+            const cbor = Data.encodeCBOROrThrow(value);
+            const decoded = Data.decodeCBOROrThrow(cbor);
             expect(Data.isByteArray(value)).toBe(true);
             expect(value).toEqual(decoded);
           }),
@@ -24,8 +24,8 @@ describe("Data Property Tests", () => {
       it("should generate valid Integer data and roundtrip", () => {
         FastCheck.assert(
           FastCheck.property(Data.genInteger(), (value) => {
-            const cbor = Data.encodeCBORUnsafe(value);
-            const decoded = Data.decodeCBORUnsafe(cbor);
+            const cbor = Data.encodeCBOROrThrow(value);
+            const decoded = Data.decodeCBOROrThrow(cbor);
             expect(Data.isInteger(value)).toBe(true);
             expect(value).toEqual(decoded);
           }),
@@ -36,8 +36,8 @@ describe("Data Property Tests", () => {
         // Limit runs for complex structures
         FastCheck.assert(
           FastCheck.property(Data.genConstr(2), (value) => {
-            const cbor = Data.encodeCBORUnsafe(value);
-            const decoded = Data.decodeCBORUnsafe(cbor);
+            const cbor = Data.encodeCBOROrThrow(value);
+            const decoded = Data.decodeCBOROrThrow(cbor);
             expect(Data.isConstr(value)).toBe(true);
             expect(value).toStrictEqual(decoded);
           }),
@@ -47,8 +47,8 @@ describe("Data Property Tests", () => {
       it("should generate valid List data and roundtrip", () => {
         FastCheck.assert(
           FastCheck.property(Data.genList(2), (value) => {
-            const cbor = Data.encodeCBORUnsafe(value);
-            const decoded = Data.decodeCBORUnsafe(cbor);
+            const cbor = Data.encodeCBOROrThrow(value);
+            const decoded = Data.decodeCBOROrThrow(cbor);
             expect(Data.isList(value)).toBe(true);
             expect(value).toEqual(decoded);
           }),
@@ -58,8 +58,8 @@ describe("Data Property Tests", () => {
       it("should generate valid Map data and roundtrip", () => {
         FastCheck.assert(
           FastCheck.property(Data.genMap(2), (value) => {
-            const cbor = Data.encodeCBORUnsafe(value);
-            const decoded = Data.decodeCBORUnsafe(cbor);
+            const cbor = Data.encodeCBOROrThrow(value);
+            const decoded = Data.decodeCBOROrThrow(cbor);
             expect(Data.isMap(value)).toBe(true);
             expect(value).toEqual(decoded);
           }),
@@ -75,8 +75,8 @@ describe("Data Property Tests", () => {
 
         FastCheck.assert(
           FastCheck.property(byteArrayArb, (value) => {
-            const encoded = Data.encodeDataUnsafe(value, TSchema.ByteArray);
-            const decoded = Data.decodeDataUnsafe(encoded, TSchema.ByteArray);
+            const encoded = Data.encodeDataOrThrow(value, TSchema.ByteArray);
+            const decoded = Data.decodeDataOrThrow(encoded, TSchema.ByteArray);
             expect(decoded).toEqual(value);
           }),
         );
@@ -87,8 +87,8 @@ describe("Data Property Tests", () => {
 
         FastCheck.assert(
           FastCheck.property(integerArb, (value) => {
-            const encoded = Data.encodeDataUnsafe(value, TSchema.Integer);
-            const decoded = Data.decodeDataUnsafe(encoded, TSchema.Integer);
+            const encoded = Data.encodeDataOrThrow(value, TSchema.Integer);
+            const decoded = Data.decodeDataOrThrow(encoded, TSchema.Integer);
             expect(decoded).toEqual(value);
           }),
         );
@@ -99,8 +99,8 @@ describe("Data Property Tests", () => {
 
         FastCheck.assert(
           FastCheck.property(booleanArb, (value) => {
-            const encoded = Data.encodeDataUnsafe(value, TSchema.Boolean);
-            const decoded = Data.decodeDataUnsafe(encoded, TSchema.Boolean);
+            const encoded = Data.encodeDataOrThrow(value, TSchema.Boolean);
+            const decoded = Data.decodeDataOrThrow(encoded, TSchema.Boolean);
             expect(decoded).toEqual(value);
           }),
         );
@@ -121,8 +121,8 @@ describe("Data Property Tests", () => {
 
         FastCheck.assert(
           FastCheck.property(tokenArb, (value) => {
-            const encoded = Data.encodeDataUnsafe(value, Token);
-            const decoded = Data.decodeDataUnsafe(encoded, Token);
+            const encoded = Data.encodeDataOrThrow(value, Token);
+            const decoded = Data.decodeDataOrThrow(encoded, Token);
 
             expect(decoded.policyId).toEqual(value.policyId);
             expect(decoded.assetName).toEqual(value.assetName);
@@ -151,10 +151,10 @@ describe("Data Property Tests", () => {
         FastCheck.assert(
           FastCheck.property(walletArb, (value) => {
             // Full roundtrip including CBOR serialization
-            const encoded = Data.encodeDataUnsafe(value, Wallet);
-            const cbor = Data.encodeCBORUnsafe(encoded);
-            const fromCbor = Data.decodeCBORUnsafe(cbor);
-            const decoded = Data.decodeDataUnsafe(fromCbor, Wallet);
+            const encoded = Data.encodeDataOrThrow(value, Wallet);
+            const cbor = Data.encodeCBOROrThrow(encoded);
+            const fromCbor = Data.decodeCBOROrThrow(cbor);
+            const decoded = Data.decodeDataOrThrow(fromCbor, Wallet);
 
             // Deep equality check
             expect(decoded).toEqual(value);
@@ -178,16 +178,16 @@ describe("Data Property Tests", () => {
         FastCheck.assert(
           FastCheck.property(assetArb, (value) => {
             // Encode to Data format
-            const encoded = Data.encodeDataUnsafe(value, Asset);
+            const encoded = Data.encodeDataOrThrow(value, Asset);
 
             // Convert to CBOR
-            const cbor = Data.encodeCBORUnsafe(encoded);
+            const cbor = Data.encodeCBOROrThrow(encoded);
 
             // Decode from CBOR
-            const fromCbor = Data.decodeCBORUnsafe(cbor);
+            const fromCbor = Data.decodeCBOROrThrow(cbor);
 
             // Decode to original format
-            const decoded = Data.decodeDataUnsafe(fromCbor, Asset);
+            const decoded = Data.decodeDataOrThrow(fromCbor, Asset);
 
             // Check equality using expect
             expect(decoded.policyId).toEqual(value.policyId);
@@ -208,8 +208,8 @@ describe("Data Property Tests", () => {
 
         FastCheck.assert(
           FastCheck.property(intArrayArb, (value) => {
-            const encoded = Data.encodeDataUnsafe(value, IntArray);
-            const decoded = Data.decodeDataUnsafe(encoded, IntArray);
+            const encoded = Data.encodeDataOrThrow(value, IntArray);
+            const decoded = Data.decodeDataOrThrow(encoded, IntArray);
 
             expect(decoded.length).toEqual(value.length);
 
@@ -239,12 +239,12 @@ describe("Data Property Tests", () => {
           ]);
 
           // Encode both maps
-          const encoded1 = Data.encodeDataUnsafe(map1, TokenMap);
-          const encoded2 = Data.encodeDataUnsafe(map2, TokenMap);
+          const encoded1 = Data.encodeDataOrThrow(map1, TokenMap);
+          const encoded2 = Data.encodeDataOrThrow(map2, TokenMap);
 
           // Convert to CBOR
-          const cbor1 = Data.encodeCBORUnsafe(encoded1);
-          const cbor2 = Data.encodeCBORUnsafe(encoded2);
+          const cbor1 = Data.encodeCBOROrThrow(encoded1);
+          const cbor2 = Data.encodeCBOROrThrow(encoded2);
 
           // The CBOR outputs should be identical if sorting is working correctly
           expect(cbor1).toEqual(cbor2);
@@ -274,10 +274,10 @@ describe("Data Property Tests", () => {
           FastCheck.assert(
             FastCheck.property(sortedArb, (value) => {
               // Roundtrip
-              const encoded = Data.encodeDataUnsafe(value, MetadataAsset);
-              const cbor = Data.encodeCBORUnsafe(encoded);
-              const decoded = Data.decodeCBORUnsafe(cbor);
-              const result = Data.decodeDataUnsafe(decoded, MetadataAsset);
+              const encoded = Data.encodeDataOrThrow(value, MetadataAsset);
+              const cbor = Data.encodeCBOROrThrow(encoded);
+              const decoded = Data.decodeCBOROrThrow(cbor);
+              const result = Data.decodeDataOrThrow(decoded, MetadataAsset);
 
               // Verify the original value is preserved through the roundtrip
               expect(result).toEqual(value);
@@ -324,10 +324,10 @@ describe("Data Property Tests", () => {
           FastCheck.property(assetArb, (value) => {
             // Handle null vs undefined
 
-            const encoded = Data.encodeDataUnsafe(value, Asset);
-            const cbor = Data.encodeCBORUnsafe(encoded);
-            const decoded = Data.decodeCBORUnsafe(cbor);
-            const result = Data.decodeDataUnsafe(decoded, Asset);
+            const encoded = Data.encodeDataOrThrow(value, Asset);
+            const cbor = Data.encodeCBOROrThrow(encoded);
+            const decoded = Data.decodeCBOROrThrow(cbor);
+            const result = Data.decodeDataOrThrow(decoded, Asset);
 
             // Use expect with JSON.stringify for complex object comparison
             expect(result).toEqual(value);
@@ -368,10 +368,10 @@ describe("Data Property Tests", () => {
 
         FastCheck.assert(
           FastCheck.property(actionArb, (value) => {
-            const encoded = Data.encodeDataUnsafe(value, Action);
-            const cbor = Data.encodeCBORUnsafe(encoded);
-            const decoded = Data.decodeCBORUnsafe(cbor);
-            const result = Data.decodeDataUnsafe(decoded, Action);
+            const encoded = Data.encodeDataOrThrow(value, Action);
+            const cbor = Data.encodeCBOROrThrow(encoded);
+            const decoded = Data.decodeCBOROrThrow(cbor);
+            const result = Data.decodeDataOrThrow(decoded, Action);
             expect(result).toEqual(value);
           }),
         );
@@ -390,10 +390,10 @@ describe("Data Property Tests", () => {
 
         FastCheck.assert(
           FastCheck.property(tupleArb, (value) => {
-            const encoded = Data.encodeDataUnsafe(value, AssetTuple);
-            const cbor = Data.encodeCBORUnsafe(encoded);
-            const decoded = Data.decodeCBORUnsafe(cbor);
-            const result = Data.decodeDataUnsafe(decoded, AssetTuple);
+            const encoded = Data.encodeDataOrThrow(value, AssetTuple);
+            const cbor = Data.encodeCBOROrThrow(encoded);
+            const decoded = Data.decodeCBOROrThrow(cbor);
+            const result = Data.decodeDataOrThrow(decoded, AssetTuple);
 
             expect(result[0]).toEqual(value[0]);
             expect(result[1]).toEqual(value[1]);
@@ -430,10 +430,10 @@ describe("Data Property Tests", () => {
         const directionArb = Arbitrary.make(Coordinate);
         FastCheck.assert(
           FastCheck.property(directionArb, (value) => {
-            const encoded = Data.encodeDataUnsafe(value, Coordinate);
-            const cbor = Data.encodeCBORUnsafe(encoded);
-            const decoded = Data.decodeCBORUnsafe(cbor);
-            const result = Data.decodeDataUnsafe(decoded, Coordinate);
+            const encoded = Data.encodeDataOrThrow(value, Coordinate);
+            const cbor = Data.encodeCBOROrThrow(encoded);
+            const decoded = Data.decodeCBOROrThrow(cbor);
+            const result = Data.decodeDataOrThrow(decoded, Coordinate);
             expect(result).toEqual(value);
           }),
         );
@@ -451,10 +451,10 @@ describe("Data Property Tests", () => {
         const assetArrayArb = Arbitrary.make(AssetArray);
         FastCheck.assert(
           FastCheck.property(assetArrayArb, (value) => {
-            const encoded = Data.encodeDataUnsafe(value, AssetArray);
-            const cbor = Data.encodeCBORUnsafe(encoded);
-            const decoded = Data.decodeCBORUnsafe(cbor);
-            const result = Data.decodeDataUnsafe(decoded, AssetArray);
+            const encoded = Data.encodeDataOrThrow(value, AssetArray);
+            const cbor = Data.encodeCBOROrThrow(encoded);
+            const decoded = Data.decodeCBOROrThrow(cbor);
+            const result = Data.decodeDataOrThrow(decoded, AssetArray);
             expect(result.length).toEqual(value.length);
             for (let i = 0; i < value.length; i++) {
               expect(result[i].policyId).toEqual(value[i].policyId);
@@ -478,10 +478,10 @@ describe("Data Property Tests", () => {
         const nullableArb = Arbitrary.make(NullableSchema);
         FastCheck.assert(
           FastCheck.property(nullableArb, (value) => {
-            const encoded = Data.encodeDataUnsafe(value, NullableSchema);
-            const cbor = Data.encodeCBORUnsafe(encoded);
-            const decoded = Data.decodeCBORUnsafe(cbor);
-            const result = Data.decodeDataUnsafe(decoded, NullableSchema);
+            const encoded = Data.encodeDataOrThrow(value, NullableSchema);
+            const cbor = Data.encodeCBOROrThrow(encoded);
+            const decoded = Data.decodeCBOROrThrow(cbor);
+            const result = Data.decodeDataOrThrow(decoded, NullableSchema);
             expect(result).toEqual(value);
           }),
         );
@@ -500,10 +500,10 @@ describe("Data Property Tests", () => {
         const optionalArb = Arbitrary.make(OptionalSchema);
         FastCheck.assert(
           FastCheck.property(optionalArb, (value) => {
-            const encoded = Data.encodeDataUnsafe(value, OptionalSchema);
-            const cbor = Data.encodeCBORUnsafe(encoded);
-            const decoded = Data.decodeCBORUnsafe(cbor);
-            const result = Data.decodeDataUnsafe(decoded, OptionalSchema);
+            const encoded = Data.encodeDataOrThrow(value, OptionalSchema);
+            const cbor = Data.encodeCBOROrThrow(encoded);
+            const decoded = Data.decodeCBOROrThrow(cbor);
+            const result = Data.decodeDataOrThrow(decoded, OptionalSchema);
             expect(result).toEqual(value);
           }),
         );
@@ -518,10 +518,10 @@ describe("Data Property Tests", () => {
         const positiveIntArb = Arbitrary.make(PositiveInt);
         FastCheck.assert(
           FastCheck.property(positiveIntArb, (value) => {
-            const encoded = Data.encodeDataUnsafe(value, PositiveInt);
-            const cbor = Data.encodeCBORUnsafe(encoded);
-            const decoded = Data.decodeCBORUnsafe(cbor);
-            const result = Data.decodeDataUnsafe(decoded, PositiveInt);
+            const encoded = Data.encodeDataOrThrow(value, PositiveInt);
+            const cbor = Data.encodeCBOROrThrow(encoded);
+            const decoded = Data.decodeCBOROrThrow(cbor);
+            const result = Data.decodeDataOrThrow(decoded, PositiveInt);
             expect(result).toEqual(value);
             expect(result > 0n).toBe(true);
           }),

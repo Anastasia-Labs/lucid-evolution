@@ -1,6 +1,6 @@
 ---
 title: CML/Bip32PrivateKey.ts
-nav_order: 15
+nav_order: 21
 parent: Modules
 ---
 

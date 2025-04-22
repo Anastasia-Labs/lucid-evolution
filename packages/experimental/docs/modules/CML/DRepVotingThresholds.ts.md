@@ -1,6 +1,6 @@
 ---
 title: CML/DRepVotingThresholds.ts
-nav_order: 57
+nav_order: 63
 parent: Modules
 ---
 

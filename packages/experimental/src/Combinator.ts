@@ -1,4 +1,6 @@
 import { pipe, Schema } from "effect";
+import * as Bytes from "./Bytes.js";
+import { bytes } from "@scure/base";
 
 /**
  * Regular expression that matches valid hexadecimal strings.
@@ -9,6 +11,25 @@ import { pipe, Schema } from "effect";
  */
 export const HEX_REGEX = /^(?:[0-9a-f]{2})*$/;
 
-export const HexString = <Source extends string, Target>(
+export const HexStringFilter = <Source extends string, Target>(
   self: Schema.Schema<Source, Target>,
-) => pipe(self, Schema.pattern(HEX_REGEX));
+) =>
+  pipe(self, Schema.pattern(HEX_REGEX)).annotations({
+    message: () => `must be a hex string`,
+    identifier: "HexString",
+  });
+
+export const HexStringSchema = Schema.String.pipe(
+  Schema.filter((a) => Bytes.isHex(a)),
+).annotations({
+  message: () => `must be a hex string`,
+  identifier: "HexString",
+});
+
+export const Uint8ArraySchema = Schema.declare(
+  (input: unknown): input is Uint8Array => input instanceof Uint8ArraySchema,
+  {
+    identifier: "Uint8Array",
+    message: () => `Expected Uint8Array`,
+  },
+);

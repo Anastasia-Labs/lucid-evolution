@@ -1,6 +1,6 @@
 ---
 title: CML/Enum/Vote.ts
-nav_order: 90
+nav_order: 96
 parent: Modules
 ---
 
