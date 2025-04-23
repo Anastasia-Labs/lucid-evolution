@@ -25,16 +25,19 @@ parent: Modules
   - [fromCBOROrThrow](#fromcbororthrow)
   - [toCBOR](#tocbor)
   - [toCBORBytes](#tocborbytes)
+- [equality](#equality)
+  - [equals](#equals)
 - [errors](#errors)
   - [KeyHashError (class)](#keyhasherror-class)
-- [model](#model)
-  - [TypeId](#typeid)
-  - [TypeId (type alias)](#typeid-type-alias)
+- [generators](#generators)
+  - [generator](#generator)
 - [schemas](#schemas)
   - [KeyHash (class)](#keyhash-class)
-    - [[TypeId] (property)](#typeid-property)
+    - [[Inspectable.NodeInspectSymbol] (method)](#inspectablenodeinspectsymbol-method)
 - [transformation](#transformation)
   - [toBytes](#tobytes)
+- [utils](#utils)
+  - [KeyHash (interface)](#keyhash-interface)
 
 ---
 
@@ -350,6 +353,40 @@ assert(bytes.length > 0);
 
 Added in v2.0.0
 
+# equality
+
+## equals
+
+Check if two KeyHash instances are equal.
+
+**Signature**
+
+```ts
+export declare const equals: (a: KeyHash, b: KeyHash) => boolean;
+```
+
+**Example**
+
+```ts
+import { KeyHash } from "@lucid-evolution/experimental";
+import assert from "assert";
+
+const keyHash1 = KeyHash.makeOrThrow(
+  "c37b1b5dc0669f1d3c61a6fddb2e8fde96be87b881c60bce8e8d542f",
+);
+const keyHash2 = KeyHash.makeOrThrow(
+  "c37b1b5dc0669f1d3c61a6fddb2e8fde96be87b881c60bce8e8d542f",
+);
+const keyHash3 = KeyHash.makeOrThrow(
+  "530245ff0704032c031302cf01fb06010521a7fd024404010004f814",
+);
+
+assert(KeyHash.equals(keyHash1, keyHash2) === true);
+assert(KeyHash.equals(keyHash1, keyHash3) === false);
+```
+
+Added in v2.0.0
+
 # errors
 
 ## KeyHashError (class)
@@ -374,26 +411,29 @@ assert(error.message === "Invalid key hash");
 
 Added in v2.0.0
 
-# model
+# generators
 
-## TypeId
+## generator
 
-Symbol indentifier
+Generate a random KeyHash.
 
 **Signature**
 
 ```ts
-export declare const TypeId: typeof TypeId;
+export declare const generator: FastCheck.Arbitrary<KeyHash>;
 ```
 
-Added in v2.0.0
-
-## TypeId (type alias)
-
-**Signature**
+**Example**
 
 ```ts
-export type TypeId = typeof TypeId;
+import { KeyHash } from "@lucid-evolution/experimental";
+import { FastCheck } from "effect";
+import assert from "assert";
+
+const randomSamples = FastCheck.sample(KeyHash.generator, 20);
+randomSamples.forEach((keyHash) => {
+  assert(keyHash.hash.length === 56);
+});
 ```
 
 Added in v2.0.0
@@ -413,12 +453,12 @@ export declare class KeyHash
 
 Added in v2.0.0
 
-### [TypeId] (property)
+### [Inspectable.NodeInspectSymbol] (method)
 
 **Signature**
 
 ```ts
-readonly [TypeId]: typeof TypeId
+[Inspectable.NodeInspectSymbol]();
 ```
 
 # transformation
@@ -452,3 +492,15 @@ assert(
 ```
 
 Added in v2.0.0
+
+# utils
+
+## KeyHash (interface)
+
+**Signature**
+
+```ts
+export interface KeyHash {
+  readonly [NominalType]: unique symbol;
+}
+```

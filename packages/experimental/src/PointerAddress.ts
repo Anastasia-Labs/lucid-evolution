@@ -1,8 +1,10 @@
-import { Data, Effect, Schema } from "effect";
-import * as Positive from "./Positive.js";
+import { Data, Effect, FastCheck, Inspectable, Schema } from "effect";
+import * as Natural from "./Natural.js";
 import * as Credential from "./Credential.js";
 import * as KeyHash from "./KeyHash.js";
+import * as Pointer from "./Pointer.js";
 import * as ScriptHash from "./ScriptHash.js";
+import * as Network from "./Network.js";
 import * as SerdeImpl from "./SerdeImpl.js";
 import { ParseError } from "effect/ParseResult";
 import * as Bytes from "./Bytes.js";
@@ -20,38 +22,25 @@ export class PointerAddressError extends Data.TaggedError(
   cause?: unknown;
 }> {}
 
-/**
- * Schema for pointer to a stake registration certificate
- * Contains slot, transaction index, and certificate index information
- *
- * @since 2.0.0
- * @category schemas
- */
-export class Pointer extends Schema.TaggedClass<Pointer>("Pointer")("Pointer", {
-  slot: Positive.Positive,
-  txIndex: Positive.Positive,
-  certIndex: Positive.Positive,
-}) {}
+// /**
+//  * Phantom symbol for nominal type
+//  *
+//  * @since 2.0.0
+//  * @category model
+//  */
+// export const NominalType: unique symbol = Symbol.for(
+//   "@lucid-evolution/experimental/PointerAddress"
+// );
 
-/**
- * Check if the given value is a valid Pointer
- *
- * @example
- * import { PointerAddress , Positive } from "@lucid-evolution/experimental";
- * import assert from "assert";
- *
- * const pointer = PointerAddress.Pointer.make({
- *   slot: Positive.makeOrThrow(1),
- *   txIndex: Positive.makeOrThrow(2),
- *   certIndex: Positive.makeOrThrow(3),
- * });
- * const isValid = PointerAddress.isPointer(pointer);
- * assert(isValid === true);
- *
- * @since 2.0.0
- * @category predicates
- */
-export const isPointer = Schema.is(Pointer);
+// /**
+//  * @since 2.0.0
+//  */
+// export type NominalType = typeof NominalType;
+
+export declare const NominalType: unique symbol;
+export interface PointerAddress {
+  readonly [NominalType]: unique symbol;
+}
 
 /**
  * Pointer address with payment credential and pointer to stake registration
@@ -64,9 +53,35 @@ export class PointerAddress extends Schema.TaggedClass<PointerAddress>(
 )("PointerAddress", {
   networkId: Schema.Number,
   paymentCredential: Credential.Credential,
-  pointer: Pointer,
-}) {}
+  pointer: Pointer.Pointer,
+}) {
+  [Inspectable.NodeInspectSymbol]() {
+    return {
+      _tag: "PointerAddress",
+      networkId: this.networkId,
+      paymentCredential: this.paymentCredential,
+      pointer: this.pointer,
+    };
+  }
+}
 
+/**
+ * Create a PointerAddress from bytes.
+ *
+ * @example
+ * import { PointerAddress, Bytes } from "@lucid-evolution/experimental";
+ * import { Effect } from "effect";
+ * import assert from "assert";
+ *
+ * // Sample pointer address bytes - this is a placeholder example
+ * const bytes = Bytes.fromHexOrThrow("4059f801786707f961faf991fd73036405431a3f5d3a97fc03eefcad05a6a685bbcb848908a2f1be9397eabf0998d2c0cde9c1e206");
+ * const addressEffect = PointerAddress.fromBytes(bytes);
+ * const address = Effect.runSync(addressEffect);
+ * assert(address._tag === "PointerAddress");
+ *
+ * @since 2.0.0
+ * @category constructors
+ */
 export const fromBytes = Effect.fn(function* (bytes: Uint8Array) {
   const header = bytes[0];
   // Extract network ID from the lower 4 bits
@@ -111,17 +126,17 @@ export const fromBytes = Effect.fn(function* (bytes: Uint8Array) {
  * Encode a number as a variable length integer following the Cardano ledger specification
  *
  * @example
- * import { PointerAddress , Positive } from "@lucid-evolution/experimental";
+ * import { PointerAddress , Natural } from "@lucid-evolution/experimental";
  * import { Effect } from "effect";
  * import assert from "assert";
  *
- * const bytes = PointerAddress.encodeVariableLength(Positive.makeOrThrow(128));
+ * const bytes = PointerAddress.encodeVariableLength(Natural.makeOrThrow(128));
  * assert(bytes instanceof Uint8Array);
  * assert(bytes.length === 2);
  * assert(bytes[0] === 0x80);
  * assert(bytes[1] === 0x01);
  *
- * const smallBytes = PointerAddress.encodeVariableLength(Positive.makeOrThrow(42));
+ * const smallBytes = PointerAddress.encodeVariableLength(Natural.makeOrThrow(42));
  * assert(smallBytes instanceof Uint8Array);
  * assert(smallBytes.length === 1);
  * assert(smallBytes[0] === 42);
@@ -129,16 +144,16 @@ export const fromBytes = Effect.fn(function* (bytes: Uint8Array) {
  * @since 2.0.0
  * @category encoding/decoding
  */
-export const encodeVariableLength = (positive: Positive.Positive) => {
+export const encodeVariableLength = (natural: Natural.Natural) => {
   // Handle the simple case: values less than 128 (0x80, binary 10000000) fit in a single byte
   // with no continuation bit needed
-  if (positive.number < 128) {
-    return new Uint8Array([positive.number]);
+  if (natural.number < 128) {
+    return new Uint8Array([natural.number]);
   }
 
   // For larger values, we need to split the number into 7-bit chunks
   const result: number[] = [];
-  let remaining = positive.number;
+  let remaining = natural.number;
 
   // Loop until all bits of the number have been processed
   while (remaining >= 128) {
@@ -172,8 +187,8 @@ export const encodeVariableLength = (positive: Positive.Positive) => {
  * const buffer = new Uint8Array([0x80, 0x01]);
  *
  * const effect = PointerAddress.decodeVariableLength(buffer, 0);
- * const [positive, bytesRead] = Effect.runSync(effect);
- * assert(positive.number === 128);
+ * const [natural, bytesRead] = Effect.runSync(effect);
+ * assert(natural.number === 128);
  * assert(bytesRead === 2);
  *
  * @since 2.0.0
@@ -183,7 +198,7 @@ export const decodeVariableLength: (
   bytes: Uint8Array,
   offset?: number | undefined,
 ) => Effect.Effect<
-  [Positive.Positive, number],
+  [Natural.Natural, number],
   PointerAddressError | ParseError
 > = Effect.fnUntraced(function* (bytes, offset = 0) {
   // The accumulated decoded value
@@ -218,7 +233,7 @@ export const decodeVariableLength: (
     // If the high bit is 0, we've reached the end of the encoded integer
     if ((b & 0x80) === 0) {
       // Return the decoded value and the count of bytes read
-      const value = yield* Schema.decode(Positive.Positive)({ number });
+      const value = yield* Schema.decode(Natural.Natural)({ number });
       return [value, bytesRead] as const;
     }
 
@@ -231,6 +246,30 @@ export const decodeVariableLength: (
   }
 });
 
+/**
+ * Convert a PointerAddress to bytes.
+ *
+ * @example
+ * import { PointerAddress, KeyHash, Natural } from "@lucid-evolution/experimental";
+ * import assert from "assert";
+ *
+ * // Create payment credential
+ * const paymentKeyHash = KeyHash.makeOrThrow("c37b1b5dc0669f1d3c61a6fddb2e8fde96be87b881c60bce8e8d542f");
+ *
+ * // Create pointer address
+ * const address = PointerAddress.makeOrThrow(
+ *   0,
+ *   paymentKeyHash,
+ *   Natural.makeOrThrow(1),
+ *   Natural.makeOrThrow(2),
+ *   Natural.makeOrThrow(3)
+ * );
+ * const bytes = PointerAddress.toBytes(address);
+ * assert(bytes instanceof Uint8Array);
+ *
+ * @since 2.0.0
+ * @category transformation
+ */
 export const toBytes = (address: PointerAddress) => {
   const paymentBit = address.paymentCredential._tag === "KeyHash" ? 0 : 1;
   const header =
@@ -268,18 +307,45 @@ export const toBytes = (address: PointerAddress) => {
   return result;
 };
 
+/**
+ * Create a PointerAddress from components, throws on error.
+ *
+ * @example
+ * import { PointerAddress, KeyHash, Natural } from "@lucid-evolution/experimental";
+ * import assert from "assert";
+ *
+ * // Create payment credential
+ * const paymentKeyHash = KeyHash.makeOrThrow("c37b1b5dc0669f1d3c61a6fddb2e8fde96be87b881c60bce8e8d542f");
+ *
+ * // Create pointer address
+ * const address = PointerAddress.makeOrThrow(
+ *   0,
+ *   paymentKeyHash,
+ *   Natural.makeOrThrow(1),
+ *   Natural.makeOrThrow(2),
+ *   Natural.makeOrThrow(3)
+ * );
+ * assert(address._tag === "PointerAddress");
+ * assert(address.networkId === 0);
+ * assert(address.pointer.slot.number === 1);
+ * assert(address.pointer.txIndex.number === 2);
+ * assert(address.pointer.certIndex.number === 3);
+ *
+ * @since 2.0.0
+ * @category constructors
+ */
 export const makeOrThrow = (
   networkId: number,
   paymentCredential: Credential.Credential,
-  slot: Positive.Positive,
-  txIndex: Positive.Positive,
-  certIndex: Positive.Positive,
+  slot: Natural.Natural,
+  txIndex: Natural.Natural,
+  certIndex: Natural.Natural,
 ): PointerAddress =>
   PointerAddress.make(
     {
       networkId,
       paymentCredential,
-      pointer: Pointer.make(
+      pointer: Pointer.Pointer.make(
         {
           slot: slot,
           txIndex: txIndex,
@@ -294,3 +360,83 @@ export const makeOrThrow = (
       disableValidation: true,
     },
   );
+
+/**
+ * Check if two PointerAddress instances are equal.
+ *
+ * @example
+ * import { PointerAddress, KeyHash, Natural } from "@lucid-evolution/experimental";
+ * import assert from "assert";
+ *
+ * // Create credential
+ * const paymentKeyHash = KeyHash.makeOrThrow("c37b1b5dc0669f1d3c61a6fddb2e8fde96be87b881c60bce8e8d542f");
+ *
+ * // Create two identical addresses
+ * const address1 = PointerAddress.makeOrThrow(
+ *   0,
+ *   paymentKeyHash,
+ *   Natural.makeOrThrow(1),
+ *   Natural.makeOrThrow(2),
+ *   Natural.makeOrThrow(3)
+ * );
+ * const address2 = PointerAddress.makeOrThrow(
+ *   0,
+ *   paymentKeyHash,
+ *   Natural.makeOrThrow(1),
+ *   Natural.makeOrThrow(2),
+ *   Natural.makeOrThrow(3)
+ * );
+ * const address3 = PointerAddress.makeOrThrow(
+ *   1,
+ *   paymentKeyHash,
+ *   Natural.makeOrThrow(1),
+ *   Natural.makeOrThrow(2),
+ *   Natural.makeOrThrow(3)
+ * );
+ *
+ * assert(PointerAddress.equals(address1, address2) === true);
+ * assert(PointerAddress.equals(address1, address3) === false);
+ *
+ * @since 2.0.0
+ * @category equality
+ */
+export const equals = (a: PointerAddress, b: PointerAddress): boolean => {
+  return (
+    a.networkId === b.networkId &&
+    a.paymentCredential._tag === b.paymentCredential._tag &&
+    a.pointer.slot.number === b.pointer.slot.number &&
+    a.pointer.txIndex.number === b.pointer.txIndex.number &&
+    a.pointer.certIndex.number === b.pointer.certIndex.number &&
+    a.paymentCredential.hash === b.paymentCredential.hash
+  );
+};
+
+/**
+ * Generate a random PointerAddress.
+ *
+ * @example
+ * import { PointerAddress } from "@lucid-evolution/experimental";
+ * import { FastCheck } from "effect";
+ * import assert from "assert";
+ *
+ * const randomSamples = FastCheck.sample(PointerAddress.generator, 20);
+ * randomSamples.forEach((address) => {
+ *   assert(address._tag === "PointerAddress");
+ *   assert(typeof address.networkId === "number");
+ *   assert(address.pointer.slot.number > 0);
+ *   assert(address.pointer.txIndex.number > 0);
+ *   assert(address.pointer.certIndex.number > 0);
+ * });
+ *
+ * @since 2.0.0
+ * @category generators
+ */
+export const generator = FastCheck.tuple(
+  Network.generator,
+  Credential.generator,
+  Natural.generator,
+  Natural.generator,
+  Natural.generator,
+).map(([networkId, paymentCredential, slot, txIndex, certIndex]) =>
+  makeOrThrow(networkId, paymentCredential, slot, txIndex, certIndex),
+);

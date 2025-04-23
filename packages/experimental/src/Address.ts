@@ -1,4 +1,4 @@
-import { Schema, Effect, Data } from "effect";
+import { Effect, Data, FastCheck } from "effect";
 import { bech32 } from "@scure/base";
 import * as Bytes from "./Bytes.js";
 import * as CBOR from "./CBOR.js";
@@ -59,22 +59,7 @@ export class AddressError extends Data.TaggedError("AddressError")<{
 }> {}
 
 /**
- * Union schema representing all possible address formats
- * Discriminated by the 'kind' field
- *
- * @since 2.0.0
- * @category schemas
- */
-export const Address = Schema.Union(
-  BaseAddress.BaseAddress,
-  EnterpriseAddress.EnterpriseAddress,
-  PointerAddress.PointerAddress,
-  RewardAccount.RewardAccount,
-  ByronAddress.ByronAddress,
-);
-
-/**
- * Type inferred from the AddressInfo schema
+ * Union type representing all possible address types
  *
  * @since 2.0.0
  * @category model
@@ -324,3 +309,31 @@ export const toBech32 = (address: Address): string => {
  */
 export const toCBOR = (address: Address) =>
   Bytes.toHexOrThrow(CBOR.encodeOrThrow(toBytes(address)));
+
+export const equals = (a: Address, b: Address): boolean => {
+  if (a._tag !== b._tag) {
+    return false;
+  }
+  switch (a._tag) {
+    case "BaseAddress":
+      return BaseAddress.equals(a, b as BaseAddress.BaseAddress);
+    case "EnterpriseAddress":
+      return EnterpriseAddress.equals(
+        a,
+        b as EnterpriseAddress.EnterpriseAddress,
+      );
+    case "PointerAddress":
+      return PointerAddress.equals(a, b as PointerAddress.PointerAddress);
+    case "RewardAccount":
+      return RewardAccount.equals(a, b as RewardAccount.RewardAccount);
+    case "ByronAddress":
+      return false;
+  }
+};
+
+export const generator = FastCheck.oneof(
+  BaseAddress.generator,
+  EnterpriseAddress.generator,
+  PointerAddress.generator,
+  RewardAccount.generator,
+);

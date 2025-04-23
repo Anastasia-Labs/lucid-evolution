@@ -12,7 +12,9 @@ parent: Modules
 
 - [schemas](#schemas)
   - [ByronAddress (class)](#byronaddress-class)
+    - [[Inspectable.NodeInspectSymbol] (method)](#inspectablenodeinspectsymbol-method)
 - [utils](#utils)
+  - [ByronAddress (interface)](#byronaddress-interface)
   - [fromBytes](#frombytes)
 
 ---
@@ -31,7 +33,25 @@ export declare class ByronAddress
 
 Added in v2.0.0
 
+### [Inspectable.NodeInspectSymbol] (method)
+
+**Signature**
+
+```ts
+[Inspectable.NodeInspectSymbol]();
+```
+
 # utils
+
+## ByronAddress (interface)
+
+**Signature**
+
+```ts
+export interface ByronAddress {
+  readonly [NominalType]: unique symbol;
+}
+```
 
 ## fromBytes
 

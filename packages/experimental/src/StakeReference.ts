@@ -1,6 +1,6 @@
 import { Schema } from "effect";
 import * as Credential from "./Credential.js";
-import * as PointerAddress from "./PointerAddress.js";
+import * as Pointer from "./Pointer.js";
 
 /**
  * Schema for stake reference that can be either a credential or a pointer
@@ -9,7 +9,7 @@ import * as PointerAddress from "./PointerAddress.js";
  * @category schemas
  */
 export const StakeReference = Schema.UndefinedOr(
-  Schema.Union(Credential.Credential, PointerAddress.Pointer),
+  Schema.Union(Credential.Credential, Pointer.Pointer),
 );
 
 /**

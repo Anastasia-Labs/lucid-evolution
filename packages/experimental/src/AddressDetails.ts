@@ -60,7 +60,7 @@ export const fromBech32: SerdeImpl.FromBech32<
       bech32: bech32Address,
       hex,
     },
-  };
+  } as AddressDetails;
 });
 
 /**
@@ -99,7 +99,7 @@ export const fromHex: SerdeImpl.FromHex<
       bech32,
       hex: hexAddress,
     },
-  };
+  } as AddressDetails;
 });
 
 /**
