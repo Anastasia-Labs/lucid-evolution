@@ -1,4 +1,4 @@
-import { Effect, Schema, Data } from "effect";
+import { Effect, Schema, Data, FastCheck, Inspectable } from "effect";
 import * as CBOR from "./CBOR.js";
 import * as Bytes from "./Bytes.js";
 import { HexStringSchema } from "./Combinator.js";
@@ -52,6 +52,11 @@ const ScriptHashHexString = HexStringSchema.pipe(
     `must be ${SCRIPTHASH_HEX_LENGTH} characters, got: ${issue.actual}.`,
 });
 
+export declare const NominalType: unique symbol;
+export interface ScriptHash {
+  readonly [NominalType]: unique symbol;
+}
+
 /**
  * Schema for ScriptHash representing a script hash credential.
  * Follows CIP-0019 binary representation.
@@ -61,7 +66,14 @@ const ScriptHashHexString = HexStringSchema.pipe(
  */
 export class ScriptHash extends Schema.TaggedClass<ScriptHash>()("ScriptHash", {
   hash: ScriptHashHexString,
-}) {}
+}) {
+  [Inspectable.NodeInspectSymbol]() {
+    return {
+      _tag: "ScriptHash",
+      hash: this.hash,
+    };
+  }
+}
 
 /**
  * Convert a ScriptHash to CBOR bytes.
@@ -323,3 +335,46 @@ export const makeOrThrow: SerdeImpl.MakeOrThrow<ScriptHash> = (
   }
   return new ScriptHash({ hash }, { disableValidation: true });
 };
+
+/**
+ * Check if two ScriptHashes are equal.
+ *
+ * @example
+ * import { ScriptHash } from "@lucid-evolution/experimental";
+ * import assert from "assert";
+ *
+ * const hash1 = ScriptHash.makeOrThrow("c37b1b5dc0669f1d3c61a6fddb2e8fde96be87b881c60bce8e8d542f");
+ * const hash2 = ScriptHash.makeOrThrow("c37b1b5dc0669f1d3c61a6fddb2e8fde96be87b881c60bce8e8d542f");
+ * const hash3 = ScriptHash.makeOrThrow("2cc106ddd406fe57fd1ec4025f5a03a3fd0701bd0204fc3c00bef952");
+ *
+ * assert(ScriptHash.equals(hash1, hash2) === true);
+ * assert(ScriptHash.equals(hash1, hash3) === false);
+ *
+ * @since 2.0.0
+ * @category equality
+ */
+export const equals = (a: ScriptHash, b: ScriptHash): boolean =>
+  a.hash === b.hash;
+
+/**
+ * Generate a random ScriptHash using FastCheck.
+ *
+ * This is useful for testing purposes.
+ *
+ * @example
+ * import { ScriptHash } from "@lucid-evolution/experimental";
+ * import { FastCheck } from "effect";
+ * import assert from "assert";
+ *
+ * const randomSamples = FastCheck.sample(ScriptHash.generator, 20);
+ * randomSamples.forEach((scriptHash) => {
+ *  assert(scriptHash.hash.length === 56);
+ * });
+ *
+ * @since 2.0.0
+ * @category generators
+ */
+export const generator = FastCheck.uint8Array({
+  minLength: SCRIPTHASH_BYTES_LENGTH,
+  maxLength: SCRIPTHASH_BYTES_LENGTH,
+}).map((bytes) => fromBytesOrThrow(bytes));

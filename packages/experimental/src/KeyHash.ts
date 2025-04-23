@@ -1,4 +1,4 @@
-import { Effect, Schema, Data } from "effect";
+import { Effect, Schema, Data, FastCheck, Inspectable } from "effect";
 import * as CBOR from "./CBOR.js";
 import * as Bytes from "./Bytes.js";
 import { HexStringSchema } from "./Combinator.js";
@@ -51,21 +51,10 @@ const KeyHashHexString = HexStringSchema.pipe(
     `must be ${KEYHASH_HEX_LENGTH} characters, got: ${issue.actual}.`,
 });
 
-/**
- * Symbol indentifier
- *
- * @since 2.0.0
- * @category model
- */
-export const TypeId: unique symbol = Symbol.for(
-  "@lucid-evolution/experimental/KeyHash",
-);
-
-/**
- * @since 2.0.0
- * @category model
- */
-export type TypeId = typeof TypeId;
+export declare const NominalType: unique symbol;
+export interface KeyHash {
+  readonly [NominalType]: unique symbol;
+}
 
 /**
  * Schema for KeyHash representing a verification key hash.
@@ -77,7 +66,12 @@ export type TypeId = typeof TypeId;
 export class KeyHash extends Schema.TaggedClass<KeyHash>()("KeyHash", {
   hash: KeyHashHexString,
 }) {
-  readonly [TypeId]: TypeId = TypeId;
+  [Inspectable.NodeInspectSymbol]() {
+    return {
+      _tag: "KeyHash",
+      hash: this.hash,
+    };
+  }
 }
 
 /**
@@ -341,3 +335,43 @@ export const makeOrThrow: SerdeImpl.MakeOrThrow<KeyHash> = (hash: string) => {
   }
   return new KeyHash({ hash }, { disableValidation: true });
 };
+
+/**
+ * Check if two KeyHash instances are equal.
+ *
+ * @example
+ * import { KeyHash } from "@lucid-evolution/experimental";
+ * import assert from "assert";
+ *
+ * const keyHash1 = KeyHash.makeOrThrow("c37b1b5dc0669f1d3c61a6fddb2e8fde96be87b881c60bce8e8d542f");
+ * const keyHash2 = KeyHash.makeOrThrow("c37b1b5dc0669f1d3c61a6fddb2e8fde96be87b881c60bce8e8d542f");
+ * const keyHash3 = KeyHash.makeOrThrow("530245ff0704032c031302cf01fb06010521a7fd024404010004f814");
+ *
+ * assert(KeyHash.equals(keyHash1, keyHash2) === true);
+ * assert(KeyHash.equals(keyHash1, keyHash3) === false);
+ *
+ * @since 2.0.0
+ * @category equality
+ */
+export const equals = (a: KeyHash, b: KeyHash): boolean => a.hash === b.hash;
+
+/**
+ * Generate a random KeyHash.
+ *
+ * @example
+ * import { KeyHash } from "@lucid-evolution/experimental";
+ * import { FastCheck } from "effect";
+ * import assert from "assert";
+ *
+ * const randomSamples = FastCheck.sample(KeyHash.generator, 20);
+ * randomSamples.forEach((keyHash) => {
+ *  assert(keyHash.hash.length === 56);
+ * });
+ *
+ * @since 2.0.0
+ * @category generators
+ */
+export const generator = FastCheck.uint8Array({
+  minLength: KEYHASH_BYTES_LENGTH,
+  maxLength: KEYHASH_BYTES_LENGTH,
+}).map((bytes) => fromBytesOrThrow(bytes));

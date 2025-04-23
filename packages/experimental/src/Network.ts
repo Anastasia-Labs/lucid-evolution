@@ -1,4 +1,4 @@
-import { Effect } from "effect";
+import { Effect, FastCheck } from "effect";
 import * as Bech32 from "./Bech32.js";
 
 /**
@@ -92,3 +92,8 @@ export const fromBech32 = (
   // Apply bit mask 0b00001111 (0x0F) to extract only the last 4 bits
   // representing the network ID (0 for testnet, 1 for mainnet)
   Effect.map(Bech32.toBytes(bech32Address), (bytes) => bytes[0] & 0b00001111);
+
+export const generator = FastCheck.integer({
+  min: 0,
+  max: 1,
+});
