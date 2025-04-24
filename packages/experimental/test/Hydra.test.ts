@@ -99,10 +99,6 @@ describe("Hydra manager", async () => {
     yaciProcess = await startYaci();
 
     yaciRunning = await isYaciRunning();
-
-    if (!yaciRunning) {
-      return;
-    }
   }
 
   it.runIf(yaciRunning)<TestContext>(

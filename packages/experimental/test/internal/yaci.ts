@@ -24,12 +24,18 @@ export async function startYaci() {
   );
 
   // Start devkit
-  return spawn(`yaci-cli`, ["create-node", "-o", "--start"], {
+  const handler = spawn(`yaci-cli`, ["create-node", "-o", "--start"], {
     env: {
       ...process.env,
     },
     cwd: tempDir,
   });
+
+  handler.on("error", (error) => {
+    console.error("Error starting Yaci:", error);
+  });
+
+  return handler;
 }
 
 export async function isYaciRunning(maxTries = 20) {
