@@ -8,7 +8,7 @@ import {
   Wallet,
 } from "../../lucid/src/index.js";
 import { CML } from "../../provider/src/core.js";
-import { isYaciRunning, startYaci, topup } from "./internal/yaci.js";
+import { isInConwayEra, isYaciRunning, startYaci, topup } from "./internal/yaci.js";
 import {
   createHydraConfigurationFiles,
   generateRandomHydraConfiguration,
@@ -35,6 +35,8 @@ type TestContext = {
   wallets: TestWallets;
 };
 
+let yaciRunning = false;
+
 beforeAll(async () => {
   // Start Yaci
   // Due to a problem with Yaci you'll need to run the node during 10 minutes
@@ -44,8 +46,15 @@ beforeAll(async () => {
   // and the config file inside it.
   if (!(await isYaciRunning(0))) {
     yaciProcess = await startYaci();
-    await isYaciRunning();
+
+    yaciRunning = await isYaciRunning();
+
+    if (!yaciRunning) {
+      return;
+    }
   }
+
+  await isInConwayEra();
   cardanoProvider = new Kupmios(
     "http://localhost:1442",
     "http://localhost:1337",
@@ -55,7 +64,7 @@ beforeAll(async () => {
   await topup(await faucetWallet.address(), 1000000);
 
   hydraScriptTxIds = await publishHydraScripts(faucetSk);
-}, 0);
+}, 720_000);
 
 beforeEach<TestContext>(async (meta) => {
   const lucid = await Lucid(cardanoProvider, "Preprod");
@@ -91,7 +100,7 @@ beforeEach<TestContext>(async (meta) => {
   await lucid.awaitTx(txHash, 100);
 }, 30000);
 
-describe("Hydra manager", async () => {
+describe.runIf(yaciRunning)("Hydra manager", async () => {
   it<TestContext>("should complete the whole lifecycle", async (context) => {
     const { alicePort: node1Port, bobPort: node2Port } = context.config;
     const wallets = context.wallets;
