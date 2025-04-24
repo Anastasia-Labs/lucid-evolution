@@ -41,6 +41,8 @@ type TestContext = {
 };
 
 beforeAll(async () => {
+  // We need to wait for the Conway hard fork to be activated
+  // before running the tests. This is done by checking if the Yaci node
   await isInConwayEra();
   cardanoProvider = new Kupmios(
     "http://localhost:1442",

@@ -17,7 +17,6 @@ import type {
 } from "@lucid-evolution/core-types";
 import { credentialToAddress } from "@lucid-evolution/utils";
 import { Node } from "../Hydra.js";
-import * as CML from "@anastasia-labs/cardano-multiplatform-lib-nodejs";
 
 export class Hydra implements Provider {
   private readonly _node: Node;
