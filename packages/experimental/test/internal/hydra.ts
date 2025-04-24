@@ -168,17 +168,18 @@ export async function publishHydraScripts(faucetSk: string) {
       cborHex: `5820${Buffer.from(CML.PrivateKey.from_bech32(faucetSk).to_raw_bytes()).toString("hex")}`,
     }),
   );
-  return new Promise<string>((resolve) =>
-    exec(`hydra-node publish-scripts \\
+  return new Promise<string>((resolve) => {
+    const handler = exec(`hydra-node publish-scripts \\
             --testnet-magic 42 \\
             --node-socket ~/.yaci-cli/local-clusters/default/node/node.sock \\
-            --cardano-signing-key ${os.tmpdir()}/faucetSk.json`).stdout!.on(
-      "data",
-      (data) => {
-        resolve(data.trim() as string);
-      },
-    ),
-  );
+            --cardano-signing-key ${os.tmpdir()}/faucetSk.json`);
+    handler.stdout!.on("data", (data) => {
+      resolve(data.trim() as string);
+    });
+    handler.stderr!.on("data", (data) => {
+      console.error(`stderr: ${data}`);
+    });
+  });
 }
 
 export async function getTestWallets(

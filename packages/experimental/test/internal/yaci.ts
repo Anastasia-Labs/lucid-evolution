@@ -29,7 +29,7 @@ export async function startYaci() {
       ...process.env,
     },
     cwd: tempDir,
-  })
+  });
 }
 
 export async function isYaciRunning(maxTries = 20) {
@@ -73,7 +73,7 @@ export async function isInConwayEra(maxTries = 900) {
       );
       const epoch = await response.json();
 
-      if (epoch.epoch >= 2) {
+      if (epoch.epoch >= 1) {
         return true;
       }
     } catch {
@@ -84,7 +84,6 @@ export async function isInConwayEra(maxTries = 900) {
     }
   }
   return false;
-
 }
 
 export async function createYaci() {
