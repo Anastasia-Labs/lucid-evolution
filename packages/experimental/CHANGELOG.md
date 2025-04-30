@@ -1,5 +1,11 @@
 # @lucid-evolution/experimental
 
+## 0.0.5
+
+### Patch Changes
+
+- [#596](https://github.com/Anastasia-Labs/lucid-evolution/pull/596) [`304f923`](https://github.com/Anastasia-Labs/lucid-evolution/commit/304f92323f27d2a9098897681182eb16e25b843c) Thanks [@solidsnakedev](https://github.com/solidsnakedev)! - add nominal type to keyhash
+
 ## 0.0.4
 
 ### Patch Changes

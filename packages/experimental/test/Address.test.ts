@@ -9,7 +9,7 @@ import * as AddressTag from "../src/AddressTag.js";
 import * as Header from "../src/Header.js";
 import * as Bech32 from "../src/Bech32.js";
 import * as Bytes from "../src/Bytes.js";
-import * as Positive from "../src/Positive.js";
+import * as Positive from "../src/Natural.js";
 import { UnknownException } from "effect/Cause";
 import { PointerAddress } from "../src/index.js";
 

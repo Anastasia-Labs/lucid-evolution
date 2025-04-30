@@ -21,8 +21,9 @@ parent: Modules
 - [model](#model)
   - [Address (type alias)](#address-type-alias)
   - [AddressError (class)](#addresserror-class)
-- [schemas](#schemas)
-  - [Address](#address)
+- [utils](#utils)
+  - [equals](#equals)
+  - [generator](#generator)
 
 ---
 
@@ -264,7 +265,7 @@ Added in v2.0.0
 
 ## Address (type alias)
 
-Type inferred from the AddressInfo schema
+Union type representing all possible address types
 
 **Signature**
 
@@ -291,25 +292,25 @@ export declare class AddressError
 
 Added in v2.0.0
 
-# schemas
+# utils
 
-## Address
-
-Union schema representing all possible address formats
-Discriminated by the 'kind' field
+## equals
 
 **Signature**
 
 ```ts
-export declare const Address: Schema.Union<
-  [
-    typeof BaseAddress.BaseAddress,
-    typeof EnterpriseAddress.EnterpriseAddress,
-    typeof PointerAddress.PointerAddress,
-    typeof RewardAccount.RewardAccount,
-    typeof ByronAddress.ByronAddress,
-  ]
->;
+export declare const equals: (a: Address, b: Address) => boolean;
 ```
 
-Added in v2.0.0
+## generator
+
+**Signature**
+
+```ts
+export declare const generator: FastCheck.Arbitrary<
+  | PointerAddress.PointerAddress
+  | EnterpriseAddress.EnterpriseAddress
+  | BaseAddress.BaseAddress
+  | RewardAccount.RewardAccount
+>;
+```

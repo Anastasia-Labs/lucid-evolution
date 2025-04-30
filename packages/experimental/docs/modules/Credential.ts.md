@@ -16,8 +16,12 @@ parent: Modules
   - [fromCBORBytesOrThrow](#fromcborbytesorthrow)
   - [fromCBOROrThrow](#fromcbororthrow)
   - [toCBOR](#tocbor)
+- [equality](#equality)
+  - [equals](#equals)
 - [errors](#errors)
   - [CredentialError (class)](#credentialerror-class)
+- [generators](#generators)
+  - [generator](#generator)
 - [model](#model)
   - [Credential (type alias)](#credential-type-alias)
 - [predicates](#predicates)
@@ -204,6 +208,40 @@ assert(
 
 Added in v2.0.0
 
+# equality
+
+## equals
+
+Check if two Credential instances are equal.
+
+**Signature**
+
+```ts
+export declare const equals: (a: Credential, b: Credential) => boolean;
+```
+
+**Example**
+
+```ts
+import { Credential, KeyHash, ScriptHash } from "@lucid-evolution/experimental";
+import assert from "assert";
+
+const keyHash = KeyHash.makeOrThrow(
+  "c37b1b5dc0669f1d3c61a6fddb2e8fde96be87b881c60bce8e8d542f",
+);
+const sameKeyHash = KeyHash.makeOrThrow(
+  "c37b1b5dc0669f1d3c61a6fddb2e8fde96be87b881c60bce8e8d542f",
+);
+const scriptHash = ScriptHash.makeOrThrow(
+  "c37b1b5dc0669f1d3c61a6fddb2e8fde96be87b881c60bce8e8d542f",
+);
+
+assert(Credential.equals(keyHash, sameKeyHash) === true);
+assert(Credential.equals(keyHash, scriptHash) === false);
+```
+
+Added in v2.0.0
+
 # errors
 
 ## CredentialError (class)
@@ -214,6 +252,37 @@ Extends TaggedError for better error handling and categorization
 
 ```ts
 export declare class CredentialError
+```
+
+Added in v2.0.0
+
+# generators
+
+## generator
+
+Generate a random Credential.
+Randomly selects between generating a KeyHash or ScriptHash credential.
+
+**Signature**
+
+```ts
+export declare const generator: FastCheck.Arbitrary<
+  ScriptHash.ScriptHash | KeyHash.KeyHash
+>;
+```
+
+**Example**
+
+```ts
+import { Credential } from "@lucid-evolution/experimental";
+import { FastCheck } from "effect";
+import assert from "assert";
+
+const randomSamples = FastCheck.sample(Credential.generator, 20);
+randomSamples.forEach((credential) => {
+  assert(credential._tag === "KeyHash" || credential._tag === "ScriptHash");
+  assert(credential.hash.length === 56);
+});
 ```
 
 Added in v2.0.0
