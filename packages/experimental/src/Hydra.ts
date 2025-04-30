@@ -1,12 +1,23 @@
-import {
-  Transaction,
-  type ProtocolParameters,
-  type UTxO,
-} from "@lucid-evolution/core-types";
 import * as CML from "@anastasia-labs/cardano-multiplatform-lib-nodejs";
 import { EventEmitter } from "node:events";
 import { WebSocket } from "ws";
-import { Status } from "./Provider/Hydra.js";
+import { UTxO } from "./old/UTXO.js";
+import { ProtocolParameters } from "./old/ProtocolParameters.js";
+import { Transaction } from "./old/Transaction.js";
+
+const STATUS = {
+  IDLE: "IDLE",
+  DISCONNECTED: "DISCONNECTED",
+  CONNECTING: "CONNECTING",
+  CONNECTED: "CONNECTED",
+  INITIALIZING: "INITIALIZING",
+  OPEN: "OPEN",
+  CLOSED: "CLOSED",
+  FANOUT_POSSIBLE: "FANOUT_POSSIBLE",
+  FINAL: "FINAL",
+} as const;
+
+export type Status = (typeof STATUS)[keyof typeof STATUS];
 
 type TransactionRequest = {
   type: string;

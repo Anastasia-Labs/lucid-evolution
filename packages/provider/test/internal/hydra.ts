@@ -2,8 +2,8 @@ import * as CML from "@anastasia-labs/cardano-multiplatform-lib-nodejs";
 import os from "os";
 import fs from "fs";
 import { exec } from "child_process";
-import { Node } from "../../src/Hydra.js";
-import { Provider, Transaction, Wallet } from "@lucid-evolution/core-types";
+import { Provider, Transaction } from "@lucid-evolution/core-types";
+import { Hydra } from "@lucid-evolution/experimental";
 import { Lucid, LucidEvolution } from "../../../lucid/src/index.js";
 
 export type HydraConfiguration = {
@@ -150,7 +150,7 @@ export async function startHydraNode(
   });
 
   // Check if the nodes are running
-  const node = new Node(`ws://localhost:${node1Port}`);
+  const node = new Hydra.Node(`ws://localhost:${node1Port}`);
   await node.connect();
   while (node.getStatus() !== "IDLE") {
     await sleep(100);

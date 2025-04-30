@@ -16,14 +16,14 @@ import type {
   UTxO,
 } from "@lucid-evolution/core-types";
 import { credentialToAddress } from "@lucid-evolution/utils";
-import { Node } from "../Hydra.js";
+import { Hydra as HydraNode } from "@lucid-evolution/experimental";
 
 export class Hydra implements Provider {
-  private readonly _node: Node;
+  private readonly _node: HydraNode.Node;
   private readonly _network: Network;
 
   constructor(url: string, network?: Network) {
-    this._node = new Node(url);
+    this._node = new HydraNode.Node(url);
     this._node.connect();
     this._network = network ?? "Preprod";
   }
@@ -117,17 +117,3 @@ export class Hydra implements Provider {
     throw new Error("Method not implemented.");
   }
 }
-
-const STATUS = {
-  IDLE: "IDLE",
-  DISCONNECTED: "DISCONNECTED",
-  CONNECTING: "CONNECTING",
-  CONNECTED: "CONNECTED",
-  INITIALIZING: "INITIALIZING",
-  OPEN: "OPEN",
-  CLOSED: "CLOSED",
-  FANOUT_POSSIBLE: "FANOUT_POSSIBLE",
-  FINAL: "FINAL",
-} as const;
-
-export type Status = (typeof STATUS)[keyof typeof STATUS];

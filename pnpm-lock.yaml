@@ -167,12 +167,6 @@ importers:
       '@harmoniclabs/uplc':
         specifier: ^1.2.4
         version: 1.4.1(@harmoniclabs/bytestring@1.0.0)(@harmoniclabs/cbor@1.6.6)(@harmoniclabs/crypto@0.2.5)(@harmoniclabs/pair@1.0.0)(@harmoniclabs/plutus-data@1.2.6(@harmoniclabs/bytestring@1.0.0)(@harmoniclabs/cbor@1.6.6))
-      '@lucid-evolution/core-types':
-        specifier: workspace:*
-        version: link:../core-types
-      '@lucid-evolution/utils':
-        specifier: workspace:*
-        version: link:../utils
       '@scure/base':
         specifier: ^1.2.4
         version: 1.2.4
@@ -335,6 +329,9 @@ importers:
       '@lucid-evolution/core-utils':
         specifier: workspace:*
         version: link:../core-utils
+      '@lucid-evolution/experimental':
+        specifier: workspace:*
+        version: link:../experimental
       '@lucid-evolution/utils':
         specifier: workspace:*
         version: link:../utils

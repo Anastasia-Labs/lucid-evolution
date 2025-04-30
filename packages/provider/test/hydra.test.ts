@@ -1,13 +1,5 @@
-import { ChildProcess } from "child_process";
 import { afterEach, beforeAll, beforeEach, describe, expect, it } from "vitest";
-import {
-  Kupmios,
-  Lucid,
-  makeWalletFromPrivateKey,
-  Provider,
-  Wallet,
-} from "../../lucid/src/index.js";
-import { CML } from "../../provider/src/core.js";
+import { CML } from "../src/core.js";
 import {
   isInConwayEra,
   isYaciRunning,
@@ -24,10 +16,13 @@ import {
   startHydraNode,
   TestWallets,
 } from "./internal/hydra.js";
-import { Hydra } from "../src/Provider/Hydra.js";
-import { Node } from "../src/Hydra.js";
+import { Hydra } from "../src/hydra.js";
+import { Kupmios } from "../src/index.js";
+import { Hydra as HydraNode } from "@lucid-evolution/experimental";
+import { Provider, Wallet } from "@lucid-evolution/core-types";
+import { makeWalletFromPrivateKey } from "@lucid-evolution/wallet";
+import { Lucid } from "../../lucid/src/index.js";
 
-let yaciProcess: ChildProcess | undefined;
 const faucetSk = CML.PrivateKey.generate_ed25519().to_bech32();
 let cardanoProvider: Provider;
 let faucetWallet: Wallet;
@@ -98,7 +93,7 @@ describe("Hydra manager", async () => {
   // and the config file inside it.
   let yaciRunning = await isYaciRunning(0);
   if (!yaciRunning) {
-    yaciProcess = await startYaci();
+    await startYaci();
 
     yaciRunning = await isYaciRunning();
   }
@@ -109,8 +104,8 @@ describe("Hydra manager", async () => {
       const { alicePort: node1Port, bobPort: node2Port } = context.config;
       const wallets = context.wallets;
 
-      const node1 = new Node(`ws://localhost:${node1Port}`);
-      const node2 = new Node(`ws://localhost:${node2Port}`);
+      const node1 = new HydraNode.Node(`ws://localhost:${node1Port}`);
+      const node2 = new HydraNode.Node(`ws://localhost:${node2Port}`);
       await node1.connect();
       await node2.connect();
       const providerNode1 = new Hydra(node1.getUrl(), "Custom");
@@ -182,7 +177,7 @@ afterEach<TestContext>(async (context) => {
 }, 30000);
 
 function expectNewState(
-  node: Node,
+  node: HydraNode.Node,
   state: string | Array<string>,
   timeout: number = 10000,
 ): Promise<boolean> {
