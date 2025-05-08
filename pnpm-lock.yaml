@@ -231,6 +231,9 @@ importers:
       '@lucid-evolution/core-utils':
         specifier: workspace:*
         version: link:../core-utils
+      '@lucid-evolution/experimental':
+        specifier: workspace:*
+        version: link:../experimental
       '@lucid-evolution/plutus':
         specifier: workspace:*
         version: link:../plutus

@@ -1,6 +1,6 @@
-import os from "os";
 import { spawn } from "child_process";
 import fs from "fs";
+import os from "os";
 
 export async function startYaci() {
   const tempDir = `${os.tmpdir()}/yaci`;
@@ -20,7 +20,7 @@ export async function startYaci() {
         bp.create.enabled=true
         conwayHardForkAtEpoch=1
         shiftStartTimeBehind=false
-    `,
+    `
   );
 
   // Start devkit
@@ -44,7 +44,7 @@ export async function isYaciRunning(maxTries = 20) {
   while (tries <= maxTries) {
     try {
       let response = await fetch(
-        "http://localhost:10000/local-cluster/api/admin/devnet/status",
+        "http://localhost:10000/local-cluster/api/admin/devnet/status"
       );
       const yaciStatus = await response.text();
       response = await fetch("http://localhost:1337/health");
@@ -75,7 +75,7 @@ export async function isInConwayEra(maxTries = 900) {
   while (tries <= maxTries) {
     try {
       let response = await fetch(
-        "http://localhost:10000/local-cluster/api/epochs/latest",
+        "http://localhost:10000/local-cluster/api/epochs/latest"
       );
       const epoch = await response.json();
 
@@ -105,7 +105,7 @@ export async function createYaci() {
           "kupo.enabled": true,
           "yaci.store.enabled": true,
         }),
-      },
+      }
     );
     const status = await response.text();
     return status === "done";
@@ -120,7 +120,7 @@ export async function resetYaci() {
       "http://localhost:10000/local-cluster/api/admin/devnet/reset",
       {
         method: "POST",
-      },
+      }
     );
     const status = await response.text();
     return status === "done";
@@ -142,7 +142,7 @@ export async function topup(address: string, adaAmount: number) {
           address,
           adaAmount,
         }),
-      },
+      }
     );
     const body = await response.json();
     return body.status === true;

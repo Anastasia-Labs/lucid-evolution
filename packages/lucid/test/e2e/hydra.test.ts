@@ -1,11 +1,13 @@
-import { afterEach, beforeAll, beforeEach, describe, expect, it } from "vitest";
-import { CML } from "../src/core.js";
+import { Hydra as HydraNode } from "@lucid-evolution/experimental";
 import {
-  isInConwayEra,
-  isYaciRunning,
-  startYaci,
-  topup,
-} from "./internal/yaci.js";
+  CML,
+  Lucid,
+  makeWalletFromPrivateKey,
+  Provider,
+  Wallet,
+} from "@lucid-evolution/lucid";
+import { Hydra, Kupmios } from "@lucid-evolution/provider";
+import { afterEach, beforeAll, beforeEach, describe, expect, it } from "vitest";
 import {
   createHydraConfigurationFiles,
   generateRandomHydraConfiguration,
@@ -16,12 +18,12 @@ import {
   startHydraNode,
   TestWallets,
 } from "./internal/hydra.js";
-import { Hydra } from "../src/hydra.js";
-import { Kupmios } from "../src/index.js";
-import { Hydra as HydraNode } from "@lucid-evolution/experimental";
-import { Provider, Wallet } from "@lucid-evolution/core-types";
-import { makeWalletFromPrivateKey } from "@lucid-evolution/wallet";
-import { Lucid } from "../../lucid/src/index.js";
+import {
+  isInConwayEra,
+  isYaciRunning,
+  startYaci,
+  topup,
+} from "./internal/yaci.js";
 
 const faucetSk = CML.PrivateKey.generate_ed25519().to_bech32();
 let cardanoProvider: Provider;
@@ -41,7 +43,7 @@ beforeAll(async () => {
   await isInConwayEra();
   cardanoProvider = new Kupmios(
     "http://localhost:1442",
-    "http://localhost:1337",
+    "http://localhost:1337"
   );
   faucetWallet = makeWalletFromPrivateKey(cardanoProvider, "Custom", faucetSk);
 
@@ -62,7 +64,7 @@ beforeEach<TestContext>(async (meta) => {
   meta.wallets = await getTestWallets(
     cardanoProvider,
     meta.hydraProvider,
-    meta.config,
+    meta.config
   );
 
   const tx = lucid.newTx();
@@ -111,7 +113,7 @@ describe("Hydra manager", async () => {
       const providerNode1 = new Hydra(node1.getUrl(), "Custom");
       const cardanoProvider = new Kupmios(
         "http://localhost:1442",
-        "http://localhost:1337",
+        "http://localhost:1337"
       );
 
       // Initialize the node
@@ -127,7 +129,7 @@ describe("Hydra manager", async () => {
       const cardanoTxNode1 = await node1.commit([firstUTxO]);
       const signedTxNode1 = await signCommitTransaction(
         cardanoTxNode1,
-        wallets.cardano.aliceFunds,
+        wallets.cardano.aliceFunds
       );
       const txHashNode1 = await cardanoProvider.submitTx(signedTxNode1);
       await cardanoProvider.awaitTx(txHashNode1, 100);
@@ -142,7 +144,7 @@ describe("Hydra manager", async () => {
       // Check the UTxO is inside the head
       const removeFalsyValues = (obj: Object) => {
         return Object.fromEntries(
-          Object.entries(obj).filter(([_, value]) => Boolean(value)),
+          Object.entries(obj).filter(([_, value]) => Boolean(value))
         );
       };
       const headUTxO = (await providerNode1.getUtxos(firstUTxO.address))[0];
@@ -165,10 +167,10 @@ describe("Hydra manager", async () => {
         newUTxOs.some(
           (utxo) =>
             utxo.address === firstUTxO.address &&
-            utxo.assets["lovelace"] === firstUTxO.assets["lovelace"],
-        ),
+            utxo.assets["lovelace"] === firstUTxO.assets["lovelace"]
+        )
       ).toBeTruthy();
-    },
+    }
   );
 }, 120_000);
 
@@ -179,7 +181,7 @@ afterEach<TestContext>(async (context) => {
 function expectNewState(
   node: HydraNode.Node,
   state: string | Array<string>,
-  timeout: number = 10000,
+  timeout: number = 10000
 ): Promise<boolean> {
   return new Promise((resolve) => {
     const timeoutId = setTimeout(() => {
