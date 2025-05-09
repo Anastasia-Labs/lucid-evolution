@@ -74,7 +74,7 @@ export function createHydraConfigurationFiles(config: HydraConfiguration) {
           : "PaymentSigningKeyShelley_ed25519",
         description: "",
         cborHex: `5820${Buffer.from(privateKey.to_raw_bytes()).toString("hex")}`,
-      })
+      }),
     );
     fs.writeFileSync(
       `${config.tmpdir}/${participant}VK.json`,
@@ -84,18 +84,18 @@ export function createHydraConfigurationFiles(config: HydraConfiguration) {
           : "PaymentVerificationKeyShelley_ed25519",
         description: "",
         cborHex: `5820${Buffer.from(publicKey.to_raw_bytes()).toString("hex")}`,
-      })
+      }),
     );
   }
   fs.writeFileSync(
     `${config.tmpdir}/protocol-parameters.json`,
-    JSON.stringify(protocolParameters)
+    JSON.stringify(protocolParameters),
   );
 }
 
 export async function startHydraNode(
   hydraScriptTxIds: string,
-  config: HydraConfiguration
+  config: HydraConfiguration,
 ) {
   const controller = new AbortController();
   const { signal } = controller;
@@ -125,7 +125,7 @@ export async function startHydraNode(
             --testnet-magic 42 \\
             --node-socket ~/.yaci-cli/local-clusters/default/node/node.sock \\
             --contestation-period 3 &`,
-    { signal }
+    { signal },
   );
 
   // Start Hydra node 2
@@ -144,7 +144,7 @@ export async function startHydraNode(
             --testnet-magic 42 \\
             --node-socket ~/.yaci-cli/local-clusters/default/node/node.sock \\
             --contestation-period 3 &`,
-    { signal }
+    { signal },
   );
 
   // On exit remove the temporary directory
@@ -170,7 +170,7 @@ export async function publishHydraScripts(faucetSk: string) {
       type: "PaymentSigningKeyShelley_ed25519",
       description: "",
       cborHex: `5820${Buffer.from(CML.PrivateKey.from_bech32(faucetSk).to_raw_bytes()).toString("hex")}`,
-    })
+    }),
   );
   return new Promise<string>((resolve) => {
     const handler = exec(`hydra-node publish-scripts \\
@@ -189,7 +189,7 @@ export async function publishHydraScripts(faucetSk: string) {
 export async function getTestWallets(
   cardanoProvider: Provider,
   hydraProvider: Provider,
-  config: HydraConfiguration
+  config: HydraConfiguration,
 ): Promise<TestWallets> {
   const createLucid = async (provider: Provider, key: string) => {
     const lucid = await Lucid(provider, "Preprod");
@@ -200,29 +200,29 @@ export async function getTestWallets(
     cardano: {
       aliceNode: await createLucid(
         cardanoProvider,
-        config.participantKeys.aliceNode
+        config.participantKeys.aliceNode,
       ),
       aliceFunds: await createLucid(
         cardanoProvider,
-        config.participantKeys.aliceFunds
+        config.participantKeys.aliceFunds,
       ),
       bobNode: await createLucid(
         cardanoProvider,
-        config.participantKeys.bobNode
+        config.participantKeys.bobNode,
       ),
       bobFunds: await createLucid(
         cardanoProvider,
-        config.participantKeys.bobFunds
+        config.participantKeys.bobFunds,
       ),
     },
     hydra: {
       aliceFunds: await createLucid(
         hydraProvider,
-        config.participantKeys.aliceFunds
+        config.participantKeys.aliceFunds,
       ),
       bobFunds: await createLucid(
         hydraProvider,
-        config.participantKeys.bobFunds
+        config.participantKeys.bobFunds,
       ),
     },
   };
@@ -230,7 +230,7 @@ export async function getTestWallets(
 
 export async function signCommitTransaction(
   unwitnessedTransaction: Transaction,
-  lucid: LucidEvolution
+  lucid: LucidEvolution,
 ) {
   const unsignedTx = CML.Transaction.from_cbor_hex(unwitnessedTransaction);
 
@@ -242,7 +242,7 @@ export async function signCommitTransaction(
     unsignedTx.body(),
     witnessSet,
     true,
-    unsignedTx.auxiliary_data()
+    unsignedTx.auxiliary_data(),
   );
 
   return signedTx.to_cbor_hex() as Transaction;

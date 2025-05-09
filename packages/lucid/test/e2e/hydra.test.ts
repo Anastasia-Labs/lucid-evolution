@@ -43,7 +43,7 @@ beforeAll(async () => {
   await isInConwayEra();
   cardanoProvider = new Kupmios(
     "http://localhost:1442",
-    "http://localhost:1337"
+    "http://localhost:1337",
   );
   faucetWallet = makeWalletFromPrivateKey(cardanoProvider, "Custom", faucetSk);
 
@@ -64,7 +64,7 @@ beforeEach<TestContext>(async (meta) => {
   meta.wallets = await getTestWallets(
     cardanoProvider,
     meta.hydraProvider,
-    meta.config
+    meta.config,
   );
 
   const tx = lucid.newTx();
@@ -113,7 +113,7 @@ describe("Hydra manager", async () => {
       const providerNode1 = new Hydra(node1.getUrl(), "Custom");
       const cardanoProvider = new Kupmios(
         "http://localhost:1442",
-        "http://localhost:1337"
+        "http://localhost:1337",
       );
 
       // Initialize the node
@@ -129,7 +129,7 @@ describe("Hydra manager", async () => {
       const cardanoTxNode1 = await node1.commit([firstUTxO]);
       const signedTxNode1 = await signCommitTransaction(
         cardanoTxNode1,
-        wallets.cardano.aliceFunds
+        wallets.cardano.aliceFunds,
       );
       const txHashNode1 = await cardanoProvider.submitTx(signedTxNode1);
       await cardanoProvider.awaitTx(txHashNode1, 100);
@@ -144,7 +144,7 @@ describe("Hydra manager", async () => {
       // Check the UTxO is inside the head
       const removeFalsyValues = (obj: Object) => {
         return Object.fromEntries(
-          Object.entries(obj).filter(([_, value]) => Boolean(value))
+          Object.entries(obj).filter(([_, value]) => Boolean(value)),
         );
       };
       const headUTxO = (await providerNode1.getUtxos(firstUTxO.address))[0];
@@ -167,10 +167,10 @@ describe("Hydra manager", async () => {
         newUTxOs.some(
           (utxo) =>
             utxo.address === firstUTxO.address &&
-            utxo.assets["lovelace"] === firstUTxO.assets["lovelace"]
-        )
+            utxo.assets["lovelace"] === firstUTxO.assets["lovelace"],
+        ),
       ).toBeTruthy();
-    }
+    },
   );
 }, 120_000);
 
@@ -181,7 +181,7 @@ afterEach<TestContext>(async (context) => {
 function expectNewState(
   node: HydraNode.Node,
   state: string | Array<string>,
-  timeout: number = 10000
+  timeout: number = 10000,
 ): Promise<boolean> {
   return new Promise((resolve) => {
     const timeoutId = setTimeout(() => {
