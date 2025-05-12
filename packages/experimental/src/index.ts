@@ -18,6 +18,8 @@ export * as Header from "./Header.js";
 export * as Credential from "./Credential.js";
 export * as KeyHash from "./KeyHash.js";
 export * as ScriptHash from "./ScriptHash.js";
+export * as TransactionHash from "./TransactionHash.js";
+export * as TransactionInput from "./TransactionInput.js";
 export * as CBOR from "./CBOR.js";
 export * as Bech32 from "./Bech32.js";
 export * as Natural from "./Natural.js";

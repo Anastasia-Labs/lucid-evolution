@@ -30,8 +30,8 @@ Extract detailed information from a bech32 address
 ```ts
 export declare const fromBech32: SerdeImpl.FromBech32<
   AddressDetails,
-  | ScriptHash.ScriptHashError
   | Bytes.BytesError
+  | ScriptHash.ScriptHashError
   | KeyHash.KeyHashError
   | PointerAddress.PointerAddressError
   | ParseError
@@ -71,8 +71,8 @@ Extract detailed information from a hex-encoded address
 ```ts
 export declare const fromHex: SerdeImpl.FromHex<
   AddressDetails,
-  | ScriptHash.ScriptHashError
   | Bytes.BytesError
+  | ScriptHash.ScriptHashError
   | KeyHash.KeyHashError
   | PointerAddress.PointerAddressError
   | ParseError
@@ -117,8 +117,8 @@ export declare const fromString: (
     YieldWrap<
       Effect.Effect<
         AddressDetails,
-        | ScriptHash.ScriptHashError
         | Bytes.BytesError
+        | ScriptHash.ScriptHashError
         | KeyHash.KeyHashError
         | PointerAddress.PointerAddressError
         | ParseError
@@ -133,8 +133,8 @@ export declare const fromString: (
           YieldWrap<
             Effect.Effect<
               AddressDetails,
-              | ScriptHash.ScriptHashError
               | Bytes.BytesError
+              | ScriptHash.ScriptHashError
               | KeyHash.KeyHashError
               | PointerAddress.PointerAddressError
               | ParseError
@@ -150,8 +150,8 @@ export declare const fromString: (
     YieldWrap<
       Effect.Effect<
         AddressDetails,
-        | ScriptHash.ScriptHashError
         | Bytes.BytesError
+        | ScriptHash.ScriptHashError
         | KeyHash.KeyHashError
         | PointerAddress.PointerAddressError
         | ParseError
@@ -166,8 +166,8 @@ export declare const fromString: (
           YieldWrap<
             Effect.Effect<
               AddressDetails,
-              | ScriptHash.ScriptHashError
               | Bytes.BytesError
+              | ScriptHash.ScriptHashError
               | KeyHash.KeyHashError
               | PointerAddress.PointerAddressError
               | ParseError

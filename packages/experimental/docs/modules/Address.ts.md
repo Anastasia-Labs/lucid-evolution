@@ -39,8 +39,8 @@ This decodes the address format according to CIP-0019 specification
 ```ts
 export declare const fromBech32: SerdeImpl.FromBech32<
   Address,
-  | ScriptHash.ScriptHashError
   | Bytes.BytesError
+  | ScriptHash.ScriptHashError
   | KeyHash.KeyHashError
   | PointerAddress.PointerAddressError
   | ParseError
@@ -81,8 +81,8 @@ Convert bytes to an address structure
 ```ts
 export declare const fromBytes: SerdeImpl.FromBytes<
   Address,
-  | ScriptHash.ScriptHashError
   | Bytes.BytesError
+  | ScriptHash.ScriptHashError
   | KeyHash.KeyHashError
   | PointerAddress.PointerAddressError
   | ParseError
