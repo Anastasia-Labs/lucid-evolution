@@ -47,10 +47,11 @@ export class TransactionInputError extends Data.TaggedError(
  * Check if the given value is a valid TransactionInput
  *
  * @example
- * import { TransactionInput } from "@lucid-evolution/experimental";
+ * import { TransactionHash, TransactionInput } from "@lucid-evolution/experimental";
  * import assert from "assert";
  *
- * const transactionInput = TransactionInput.makeOrThrow(0, "cefd2fcf657e5e5d6c35975f4e052f427819391b153ebb16ad8aa107ba5a3819")
+ * const transactionId = TransactionHash.makeOrThrow("cefd2fcf657e5e5d6c35975f4e052f427819391b153ebb16ad8aa107ba5a3819");
+ * const transactionInput = TransactionInput.makeOrThrow(transactionId, 0)
  * const isValid = TransactionInput.isTransactionInput(transactionInput);
  * assert(isValid === true);
  *
@@ -68,10 +69,10 @@ export const isTransactionInput = Schema.is(TransactionInput);
  * import { Effect } from "effect";
  * import assert from "assert";
  *
- * const bytes = Bytes.fromHexOrThrow("TODO");
+ * const bytes = Bytes.fromHexOrThrow("82005820cefd2fcf657e5e5d6c35975f4e052f427819391b153ebb16ad8aa107ba5a3819");
  * const transactionInputEffect = TransactionInput.fromCBORBytes(bytes);
  * const transactionInput = Effect.runSync(transactionInputEffect);
- * assert(transactionInput.transactionId === "TODO");
+ * assert(transactionInput.transactionId.hash === "cefd2fcf657e5e5d6c35975f4e052f427819391b153ebb16ad8aa107ba5a3819");
  * assert(transactionInput.index === 0);
  *
  * @since 2.0.0
@@ -81,7 +82,7 @@ export const fromCBORBytes: SerdeImpl.FromCBORBytes<
   TransactionInput,
   CBOR.CBORError | TransactionHash.TransactionHashError | TransactionInputError
 > = Effect.fnUntraced(function* (bytes) {
-  const [txHashBytes, index]: [Uint8Array, number] = yield* CBOR.decode(bytes);
+  const [index, txHashBytes]: [number, Uint8Array] = yield* CBOR.decode(bytes);
 
   const transactionId = yield* TransactionHash.fromBytes(txHashBytes);
 
@@ -102,10 +103,10 @@ export const fromCBORBytes: SerdeImpl.FromCBORBytes<
  * import { Effect } from "effect";
  * import assert from "assert";
  *
- * const cborHex = "TODO";
+ * const cborHex = "82005820cefd2fcf657e5e5d6c35975f4e052f427819391b153ebb16ad8aa107ba5a3819";
  * const transactionInputEffect = TransactionInput.fromCBOR(cborHex);
  * const transactionInput = Effect.runSync(transactionInputEffect);
- * assert(transactionInput.transactionId === "TODO");
+ * assert(transactionInput.transactionId.hash === "cefd2fcf657e5e5d6c35975f4e052f427819391b153ebb16ad8aa107ba5a3819");
  * assert(transactionInput.index === 0);
  *
  * @since 2.0.0
@@ -129,9 +130,9 @@ export const fromCBOR: SerdeImpl.FromCBOR<
  * import { TransactionInput, Bytes } from "@lucid-evolution/experimental";
  * import assert from "assert";
  *
- * const bytes = Bytes.fromHexOrThrow("TODO");
+ * const bytes = Bytes.fromHexOrThrow("82005820cefd2fcf657e5e5d6c35975f4e052f427819391b153ebb16ad8aa107ba5a3819");
  * const transactionInput = TransactionInput.fromCBORBytesOrThrow(bytes);
- * assert(transactionInput.transactionId === "TODO");
+ * assert(transactionInput.transactionId.hash === "cefd2fcf657e5e5d6c35975f4e052f427819391b153ebb16ad8aa107ba5a3819");
  * assert(transactionInput.index === 0);
  *
  * @since 2.0.0
@@ -148,9 +149,9 @@ export const fromCBORBytesOrThrow: SerdeImpl.FromCBORBytesOrThrow<
  * import { TransactionInput } from "@lucid-evolution/experimental";
  * import assert from "assert";
  *
- * const cborHex = "TODO";
+ * const cborHex = "82005820cefd2fcf657e5e5d6c35975f4e052f427819391b153ebb16ad8aa107ba5a3819";
  * const transactionInput = TransactionInput.fromCBOROrThrow(cborHex);
- * assert(transactionInput.transactionId === "TODO");
+ * assert(transactionInput.transactionId.hash === "cefd2fcf657e5e5d6c35975f4e052f427819391b153ebb16ad8aa107ba5a3819");
  * assert(transactionInput.index === 0);
  *
  * @since 2.0.0
@@ -167,14 +168,15 @@ export const fromCBOROrThrow: SerdeImpl.FromCBOROrThrow<TransactionInput> = (
  * Check if two TransactionInput instances are equal.
  *
  * @example
- * import { TransactionInput } from "@lucid-evolution/experimental";
+ * import { TransactionHash, TransactionInput } from "@lucid-evolution/experimental";
  * import assert from "assert";
  *
- * const transactionInput = TransactionInput.makeOrThrow(0, "cefd2fcf657e5e5d6c35975f4e052f427819391b153ebb16ad8aa107ba5a3819");
- * const sameTransactionInput = TransactionInput.makeOrThrow(0, "cefd2fcf657e5e5d6c35975f4e052f427819391b153ebb16ad8aa107ba5a3819");
- * const differentTransactionInput1 = TransactionInput.makeOrThrow(1, "cefd2fcf657e5e5d6c35975f4e052f427819391b153ebb16ad8aa107ba5a3819");
- * const differentTransactionInput2 = TransactionInput.makeOrThrow(0, "dddd2fcf657e5e5d6c35975f4e052f427819391b153ebb16ad8aa107ba5a3819");
- *
+ * const transactionId1 = TransactionHash.makeOrThrow("cefd2fcf657e5e5d6c35975f4e052f427819391b153ebb16ad8aa107ba5a3819");
+ * const transactionId2 = TransactionHash.makeOrThrow("dddd2fcf657e5e5d6c35975f4e052f427819391b153ebb16ad8aa107ba5a3819");
+ * const transactionInput = TransactionInput.makeOrThrow(transactionId1, 0);
+ * const sameTransactionInput = TransactionInput.makeOrThrow(transactionId1, 0);
+ * const differentTransactionInput1 = TransactionInput.makeOrThrow(transactionId1, 1);
+ * const differentTransactionInput2 = TransactionInput.makeOrThrow(transactionId2, 0);
  * assert(TransactionInput.equals(transactionInput, sameTransactionInput) === true);
  * assert(TransactionInput.equals(transactionInput, differentTransactionInput1) === false);
  * assert(TransactionInput.equals(transactionInput, differentTransactionInput2) === false);
@@ -195,21 +197,23 @@ export const equals = (a: TransactionInput, b: TransactionInput): boolean => {
  * Internal helper function used by toCBOR
  *
  * @example
- * import { TransactionInput, Bytes } from "@lucid-evolution/experimental";
+ * import { Bytes, TransactionHash, TransactionInput } from "@lucid-evolution/experimental";
  * import { Effect } from "effect";
  * import assert from "assert";
  *
- * const transactionInput = TransactionInput.makeOrThrow("cefd2fcf657e5e5d6c35975f4e052f427819391b153ebb16ad8aa107ba5a3819");
- * const cborBytes = TransactionInput.toCBORBytes(transactionInput);
- * // Verify the bytes are correct by converting back to hex
- * const hexString = Bytes.toHexOrThrow(cborBytes);
- * assert(hexString.startsWith("82"));  // Array of 2 elements in CBOR
- * assert(hexString.includes("cefd2fcf657e5e5d6c35975f4e052f427819391b153ebb16ad8aa107ba5a3819"));
+    const transactionId = TransactionHash.makeOrThrow("cefd2fcf657e5e5d6c35975f4e052f427819391b153ebb16ad8aa107ba5a3819");
+    const transactionInput = TransactionInput.makeOrThrow(transactionId, 0)
+    const cborBytes = TransactionInput.toCBORBytes(transactionInput);
+    // Verify the bytes are correct by converting back to hex
+    const hexString = Bytes.toHexOrThrow(cborBytes);
+    // 82005820cefd2fcf657e5e5d6c35975f4e052f427819391b153ebb16ad8aa107ba5a3819
+    assert(hexString.startsWith("82"));  // Array of 2 elements in CBOR
+    assert(hexString.includes("cefd2fcf657e5e5d6c35975f4e052f427819391b153ebb16ad8aa107ba5a3819"));
  *
  * @since 2.0.0
  * @category encoding/decoding
  */
-const toCBORBytes: SerdeImpl.ToCBORBytes<TransactionInput> = (
+export const toCBORBytes: SerdeImpl.ToCBORBytes<TransactionInput> = (
   transactionInput,
 ) => {
   return CBOR.encodeOrThrow([
@@ -220,7 +224,7 @@ const toCBORBytes: SerdeImpl.ToCBORBytes<TransactionInput> = (
 
 /**
  * CBOR diagnostic notation for TransactionInput:
- * transactionInput = [transactionId, index]
+ * transactionInput = [index, transactionId]
  *
  * CBOR hex for TransactionInput:
  * [ 0, h'cefd2fcf657e5e5d6c35975f4e052f427819391b153ebb16ad8aa107ba5a3819' ]
@@ -229,15 +233,53 @@ const toCBORBytes: SerdeImpl.ToCBORBytes<TransactionInput> = (
  * Uses a pre-configured CBOR encoder for better performance
  *
  * @example
- * import { TransactionInput } from "@lucid-evolution/experimental";
+ * import { TransactionHash, TransactionInput } from "@lucid-evolution/experimental";
  * import assert from "assert";
  *
- * const transactioninput = TransactionInput.makeOrThrow(0, "cefd2fcf657e5e5d6c35975f4e052f427819391b153ebb16ad8aa107ba5a3819");
- * const cbor = TransactionInput.toCBOR(transactioninput);
- * assert(cbor === "TODO");
+ * const transactionId = TransactionHash.makeOrThrow("cefd2fcf657e5e5d6c35975f4e052f427819391b153ebb16ad8aa107ba5a3819");
+ * const transactionInput = TransactionInput.makeOrThrow(transactionId, 0);
+ * const cbor = TransactionInput.toCBOR(transactionInput);
+ * assert(cbor === "82005820cefd2fcf657e5e5d6c35975f4e052f427819391b153ebb16ad8aa107ba5a3819");
  *
  * @since 2.0.0
  * @category encoding/decoding
  */
 export const toCBOR: SerdeImpl.ToCBOR<TransactionInput> = (transactionInput) =>
   Bytes.toHexOrThrow(toCBORBytes(transactionInput));
+
+/**
+ * Construct a TransactionInput, throws on error.
+ *
+ * @example
+ * import { TransactionHash, TransactionInput } from "@lucid-evolution/experimental";
+ * import assert from "assert";
+ *
+ * const transactionHash = "cefd2fcf657e5e5d6c35975f4e052f427819391b153ebb16ad8aa107ba5a3819"
+ * const transactionId = TransactionHash.makeOrThrow(transactionHash);
+ * const transactionInput = TransactionInput.makeOrThrow(transactionId, 0);
+ * assert(transactionInput._tag === "TransactionInput");
+ * assert(transactionInput.transactionId.hash === transactionHash);
+ * assert(transactionInput.index === 0);
+ *
+ * @since 2.0.0
+ * @category constructors
+ */
+export const makeOrThrow = (
+  transactionId: TransactionHash.TransactionHash,
+  index: number,
+): TransactionInput => {
+  if (!Number.isInteger(index) || index < 0) {
+    throw new TransactionInputError({
+      message: `TransactionInput index must be a non-negative integer, got: ${index}`,
+    });
+  }
+  if (index > 65535) {
+    throw new TransactionInputError({
+      message: `TransactionInput index is not a 2 byte number, got: ${index}`,
+    });
+  }
+  return new TransactionInput(
+    { transactionId, index },
+    { disableValidation: true },
+  );
+};

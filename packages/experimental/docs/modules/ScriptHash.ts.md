@@ -193,7 +193,7 @@ Create a ScriptHash from a CBOR hex string.
 ```ts
 export declare const fromCBOR: SerdeImpl.FromCBOR<
   ScriptHash,
-  CBOR.CBORError | ScriptHashError | Bytes.BytesError
+  CBOR.CBORError | Bytes.BytesError | ScriptHashError
 >;
 ```
 

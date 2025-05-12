@@ -109,7 +109,7 @@ export const toCBORBytes: SerdeImpl.ToCBORBytes<TransactionHash> = (
  *
  * const transactionHash = TransactionHash.makeOrThrow("cefd2fcf657e5e5d6c35975f4e052f427819391b153ebb16ad8aa107ba5a3819");
  * const hex = TransactionHash.toCBOR(transactionHash);
- * assert(hex.startsWith("581c"));
+ * assert(hex.startsWith("5820"));
  * assert(hex.includes("cefd2fcf657e5e5d6c35975f4e052f427819391b153ebb16ad8aa107ba5a3819"));
  *
  * @since 2.0.0
@@ -128,7 +128,7 @@ export const toCBOR: SerdeImpl.ToCBOR<TransactionHash> = (transactionHash) => {
  * import { Effect } from "effect";
  * import assert from "assert";
  *
- * const cborHex = "581cc37b1b5dc0669f1d3c61a6fddb2e8fde96be87b881c60bce8e8d542f";
+ * const cborHex = "5820cefd2fcf657e5e5d6c35975f4e052f427819391b153ebb16ad8aa107ba5a3819";
  * const transactionHashEffect = TransactionHash.fromCBOR(cborHex);
  * const transactionHash = Effect.runSync(transactionHashEffect);
  * assert(transactionHash._tag === "TransactionHash");
@@ -152,7 +152,7 @@ export const fromCBOR: SerdeImpl.FromCBOR<
  * import { TransactionHash } from "@lucid-evolution/experimental";
  * import assert from "assert";
  *
- * const transactionHash = TransactionHash.fromCBOROrThrow("581cc37b1b5dc0669f1d3c61a6fddb2e8fde96be87b881c60bce8e8d542f");
+ * const transactionHash = TransactionHash.fromCBOROrThrow("5820cefd2fcf657e5e5d6c35975f4e052f427819391b153ebb16ad8aa107ba5a3819");
  * assert(transactionHash._tag === "TransactionHash");
  * assert(transactionHash.hash === "cefd2fcf657e5e5d6c35975f4e052f427819391b153ebb16ad8aa107ba5a3819");
  *
@@ -172,7 +172,7 @@ export const fromCBOROrThrow = (cborHex: string) => {
  * import { Effect } from "effect";
  * import assert from "assert";
  *
- * const bytes = Bytes.fromHexOrThrow("581cc37b1b5dc0669f1d3c61a6fddb2e8fde96be87b881c60bce8e8d542f");
+ * const bytes = Bytes.fromHexOrThrow("5820cefd2fcf657e5e5d6c35975f4e052f427819391b153ebb16ad8aa107ba5a3819");
  * const transactionHashEffect = TransactionHash.fromCBORBytes(bytes);
  * const transactionHash = Effect.runSync(transactionHashEffect);
  * assert(transactionHash._tag === "TransactionHash");
@@ -196,7 +196,7 @@ export const fromCBORBytes: SerdeImpl.FromCBORBytes<
  * import { TransactionHash, Bytes } from "@lucid-evolution/experimental";
  * import assert from "assert";
  *
- * const bytes = Bytes.fromHexOrThrow("581cc37b1b5dc0669f1d3c61a6fddb2e8fde96be87b881c60bce8e8d542f");
+ * const bytes = Bytes.fromHexOrThrow("5820cefd2fcf657e5e5d6c35975f4e052f427819391b153ebb16ad8aa107ba5a3819");
  * const transactionHash = TransactionHash.fromCBORBytesOrThrow(bytes);
  * assert(transactionHash._tag === "TransactionHash");
  * assert(transactionHash.hash === "cefd2fcf657e5e5d6c35975f4e052f427819391b153ebb16ad8aa107ba5a3819");
@@ -300,14 +300,14 @@ export const toBytes: SerdeImpl.ToBytes<TransactionHash> = (transactionHash) =>
  */
 export const make: SerdeImpl.Make<TransactionHash, TransactionHashError> =
   Effect.fnUntraced(function* (hash) {
-    if (hash.length !== TRANSACTIONHASH_HEX_LENGTH) {
-      return yield* new TransactionHashError({
-        message: `TransactionHash must be ${TRANSACTIONHASH_HEX_LENGTH} characters long.`,
-      });
-    }
     if (!Bytes.isHex(hash)) {
       return yield* new TransactionHashError({
         message: `TransactionHash must be a valid hex string.`,
+      });
+    }
+    if (hash.length !== TRANSACTIONHASH_HEX_LENGTH) {
+      return yield* new TransactionHashError({
+        message: `TransactionHash must be ${TRANSACTIONHASH_HEX_LENGTH} characters long.`,
       });
     }
     return new TransactionHash({ hash }, { disableValidation: true });
