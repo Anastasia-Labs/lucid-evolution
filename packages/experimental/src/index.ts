@@ -22,4 +22,5 @@ export * as TransactionHash from "./TransactionHash.js";
 export * as TransactionInput from "./TransactionInput.js";
 export * as CBOR from "./CBOR.js";
 export * as Bech32 from "./Bech32.js";
+export * as Hydra from "./Hydra.js";
 export * as Natural from "./Natural.js";

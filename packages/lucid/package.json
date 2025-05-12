@@ -65,6 +65,7 @@
     "@lucid-evolution/uplc": "workspace:*",
     "@lucid-evolution/utils": "workspace:*",
     "@lucid-evolution/wallet": "workspace:*",
+    "@lucid-evolution/experimental": "workspace:*",
     "effect": "^3.12.7"
   },
   "devDependencies": {
