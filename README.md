@@ -181,7 +181,6 @@ For comprehensive documentation including API references, examples, and guides, 
 - 🧠 [Deep Dives](https://anastasia-labs.github.io/lucid-evolution/documentation/deep-dives/pay-methods)
 - ⚙️ [Under the Hood](https://anastasia-labs.github.io/lucid-evolution/documentation/under-the-hood)
 
-
 ## 👥 Community and Support
 
 - [Discord Community](https://discord.gg/s89P9gpEff): Join for discussions, support, and updates
