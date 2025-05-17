@@ -35,7 +35,7 @@ const tx = await lucid
   .complete();
 ```
 
-<Callout type="info">
+<Callout>
 You can combine both registration and delegation into a single transaction:
 
 ```typescript
@@ -59,6 +59,13 @@ const tx = await lucid
   .withdraw(rewardAddress, delegation.rewards)
   .complete();
 ```
+
+<Callout type="info">
+  With updates to on-chain governance model of Cardano, staking rewards are only withdrawable if your wallet
+  is delegated to a DRep (Delegated Representative). For more information about
+  DReps and governance delegation, see the [Governance
+  documentation](/documentation/deep-dives/governance).
+</Callout>
 
 </Steps>
 </Tabs.Tab>
