@@ -9,7 +9,7 @@ import React, { useState, useEffect } from "react";
 <div className="fade-in">
   <Hero
     title="Lucid Evolution"
-    subtitle="Highly scalable, production-ready transaction builder & off-chain framework for users and dApps on Cardano"
+    subtitle="A highly scalable transaction building framework for Cardano"
     ctaText="Start here"
     ctaLink="/install"
     ctaText2="Learn more"
@@ -30,24 +30,26 @@ import React, { useState, useEffect } from "react";
         boxShadow: '0 20px 40px rgba(0,0,0,0.1)',
         marginBottom: '2rem'  
       }} 
-      code={`import { Lucid, Blockfrost } from "@lucid-evolution/lucid";
-
+      code={`import { Lucid, Koios, generateSeedPhrase } from "@lucid-evolution/lucid";
+ 
 const lucid = await Lucid(
-new Blockfrost("https://cardano-preprod.blockfrost.io/api/v0", "<blockfrost-api-key>"),
-"Preprod"
+  new Koios("https://preprod.koios.rest/api/v1"),
+  "Preprod"
 );
-
-lucid.selectWallet.fromPrivateKey(privateKey);
-
-const paymentTx = await lucid
-.newTx()
-.pay.ToAddress("addr_testa...", { lovelace: 5000000n })
-.pay.ToAddress("addr_testb...", { lovelace: 5000000n })
-.complete();
-
-const signedPaymentTx = await paymentTx.sign.withWallet().complete();
-const paymentTxHash = await signedPaymentTx.submit();
-console.log("Tx Hash:", paymentTxHash);`}
+ 
+const seedPhrase = generateSeedPhrase();
+lucid.selectWallet.fromSeed(seedPhrase);
+ 
+const tx = await lucid
+  .newTx()
+  .pay.ToAddress("addr_testa...", { lovelace: 5000000n })
+  .pay.ToAddress("addr_testb...", { lovelace: 5000000n })
+  .complete();
+ 
+const signedTx = await tx.sign.withWallet().complete();
+const txHash = await signedTx.submit();
+ 
+console.log("Transaction Submitted:", txHash);`}
 />
 
 <div>
@@ -59,31 +61,28 @@ Why <span style={{ color: '#8b0000' }}>Evolution</span>?
   Our interfaces are enhanced for better developer experience and function calls
   streamlined for common operations. Through the Evolution library, you take
   advantage of built-in support for popular features, reducing the need for
-  external dependencies
+  external dependencies.
 </FAQBox>
 
-    <FAQBox title="Enhanced Error Handling">
-      Error management just got better and a lot smoother with our integration of
-      the Effect library. Debug quicker with detailed, context-rich error messages.
-      Handle exceptions easily with our structured error types
-    </FAQBox>
+<FAQBox title="Enhanced Error Handling">
+  Error management just got better and a lot smoother with our integration of
+  the Effect library. Debug quicker with detailed, context-rich error messages.
+  Handle exceptions easily with our structured error types.
+</FAQBox>
 
-    <FAQBox title="Refined Structure">
-      We use a modular architecture, separating functionality into distinct packages. We will be able to add new
-      features as independent modules within the existing architecture
-    </FAQBox>
+<FAQBox title="Refined Structure">
+  We use a modular architecture, separating functionality into distinct packages. We will be able to add new features as independent modules within the existing architecture
+</FAQBox>
 
-    <FAQBox title="Latest CML">
-      We are keeping up with the latest version of the [Cardano Multi-platform Library
-      (CML)](https://dcspark.github.io/cardano-multiplatform-lib/)
-    </FAQBox>
+<FAQBox title="Latest CML">
+  We are keeping up with the latest version of the [Cardano Multi-platform Library (CML)](https://dcspark.github.io/cardano-multiplatform-lib/).
+</FAQBox>
 
-    <FAQBox title="Developer-Centric">
-      Our goal is to enrich the developer experience via code examples for various use
-      cases. We publish regular updates to add features and improve the library
-      You can get support for your questions through our dedicated [Discord
-      channel](https://discord.gg/s89P9gpEff)
-    </FAQBox>
+<FAQBox title="Developer-Centric">
+  Our goal is to enrich the developer experience via code examples for various use cases. We publish regular updates to add features and improve the library. 
+  
+  You can get support for your questions through our dedicated [Discord](https://discord.gg/s89P9gpEff) channel.
+</FAQBox>
 
   </div>
 </ResponsiveContainer>
@@ -111,7 +110,7 @@ Initialize a new `TypeScript` project
 ---
 
 <Steps>
-<span style={{color: '#AD1F1E'}}>→</span> **Instantiate** **<span style={{color: '#AD1F1E'}}>Lucid Evolution</span>** and choose a provider
+<span style={{color: '#AD1F1E'}}>→</span> <span style={{color: '#AD1F1E'}}>**Instantiate**</span> Lucid Evolution and choose a provider
 <Cards>
   <Cards.Card
     title = "Core Concept 1: Instantiation"
@@ -119,7 +118,7 @@ Initialize a new `TypeScript` project
   />
 </Cards>
 
-<span style={{color: '#AD1F1E'}}>→</span>  **<span style={{color: '#AD1F1E'}}>Choose</span>** **a wallet** and select it
+<span style={{color: '#AD1F1E'}}>→</span>  <span style={{color: '#AD1F1E'}}>**Choose**</span> a wallet and select it
 
 <Cards>
   <Cards.Card
@@ -128,7 +127,7 @@ Initialize a new `TypeScript` project
   />
 </Cards>
 
-<span style={{color: '#AD1F1E'}}>→</span>  **Build your <span style={{color: '#AD1F1E'}}>first transaction</span>** and submit it
+<span style={{color: '#AD1F1E'}}>→</span>  <span style={{color: '#AD1F1E'}}>**Build**</span> your first transaction and submit it
 
 <Cards>
   <Cards.Card
@@ -137,7 +136,7 @@ Initialize a new `TypeScript` project
   />
 </Cards>
 
-<span style={{color: '#AD1F1E'}}>→</span> **<span style={{color: '#AD1F1E'}}>Learn more</span>** about advanced concepts and start building
+<span style={{color: '#AD1F1E'}}>→</span> <span style={{color: '#AD1F1E'}}>**Learn more**</span> about advanced concepts and start building
 
 <Cards>
   <Cards.Card

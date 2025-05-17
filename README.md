@@ -181,20 +181,17 @@ For comprehensive documentation including API references, examples, and guides, 
 - 🧠 [Deep Dives](https://anastasia-labs.github.io/lucid-evolution/documentation/deep-dives/pay-methods)
 - ⚙️ [Under the Hood](https://anastasia-labs.github.io/lucid-evolution/documentation/under-the-hood)
 
----
 
 ## 👥 Community and Support
 
 - [Discord Community](https://discord.gg/s89P9gpEff): Join for discussions, support, and updates
 - [GitHub Issues](https://github.com/Anastasia-Labs/lucid-evolution/issues): Report bugs or request features
 
----
-
 ## 🤝 Contributing
 
 We welcome contributions to Lucid Evolution! Please check our [CONTRIBUTING.md](./CONTRIBUTING.md) guide for more information.
 
-### ⚒️ Getting Started
+### Getting Started
 
 ```bash
 git clone https://github.com/Anastasia-Labs/lucid-evolution.git
@@ -204,8 +201,6 @@ git clone https://github.com/Anastasia-Labs/lucid-evolution.git
 cd lucid-evolution
 pnpm install
 ```
-
-##### Build all packages
 
 ```bash
 pnpm build
@@ -311,7 +306,7 @@ pnpm --filter @lucid-evolution/lucid test
 pnpm dev
 ```
 
-> Visit http://localhost:3000/lucid-evolution
+> Visit http://localhost:3000/lucid-evolution.
 
 ---
 
