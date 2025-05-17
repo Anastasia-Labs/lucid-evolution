@@ -151,7 +151,7 @@ export default {
             <div className="footer-content">
               <div className="footer-section logo-section">
                 <img
-                  src="https://anastasialabs.com/assets/img/logo/logo.png"
+                  src="/lucid-evolution/al-logo.png"
                   alt="Anastasia Labs Logo"
                   className="footer-logo"
                 />
