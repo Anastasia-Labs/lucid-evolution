@@ -33,7 +33,7 @@ Type alias for the CML CredentialKind enum
 **Signature**
 
 ```ts
-export type CredentialKind = CML.CredentialKind;
+export type CredentialKind = CML.CredentialKind
 ```
 
 Added in v2.0.0
@@ -47,9 +47,7 @@ Convert string to CredentialKind enum value
 **Signature**
 
 ```ts
-export declare const fromString: (
-  str: string,
-) => CML.CredentialKind | undefined;
+export declare const fromString: (str: string) => CML.CredentialKind | undefined
 ```
 
 Added in v2.0.0
@@ -61,7 +59,7 @@ Convert CredentialKind enum value to string
 **Signature**
 
 ```ts
-export declare const toString: (value: CML.CredentialKind) => string;
+export declare const toString: (value: CML.CredentialKind) => string
 ```
 
 Added in v2.0.0
@@ -73,7 +71,7 @@ Get all values of the CredentialKind enum
 **Signature**
 
 ```ts
-export declare const values: () => Array<CML.CredentialKind>;
+export declare const values: () => Array<CML.CredentialKind>
 ```
 
 Added in v2.0.0
@@ -87,7 +85,7 @@ PubKey variant of the CredentialKind enum
 **Signature**
 
 ```ts
-export declare const PubKey: CML.CredentialKind.PubKey;
+export declare const PubKey: CML.CredentialKind.PubKey
 ```
 
 Added in v2.0.0
@@ -99,7 +97,7 @@ Script variant of the CredentialKind enum
 **Signature**
 
 ```ts
-export declare const Script: CML.CredentialKind.Script;
+export declare const Script: CML.CredentialKind.Script
 ```
 
 Added in v2.0.0

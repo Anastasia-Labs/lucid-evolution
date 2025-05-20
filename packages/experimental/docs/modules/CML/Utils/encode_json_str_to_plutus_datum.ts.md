@@ -48,8 +48,8 @@ Wrapper for the encode_json_str_to_plutus_datum function
 ```ts
 export declare const encodeJsonStrToPlutusDatum: (
   json: string,
-  schema: CML.CardanoNodePlutusDatumSchema,
-) => Effect.Effect<CML.PlutusData, EncodeJsonStrToPlutusDatumError>;
+  schema: CML.CardanoNodePlutusDatumSchema
+) => Effect.Effect<CML.PlutusData, EncodeJsonStrToPlutusDatumError>
 ```
 
 Added in v2.0.0
@@ -65,8 +65,8 @@ Unsafely calls encode_json_str_to_plutus_datum function without Effect wrapper
 ```ts
 export declare const encodeJsonStrToPlutusDatumUnsafe: (
   json: string,
-  schema: CML.CardanoNodePlutusDatumSchema,
-) => CML.PlutusData;
+  schema: CML.CardanoNodePlutusDatumSchema
+) => CML.PlutusData
 ```
 
 Added in v2.0.0

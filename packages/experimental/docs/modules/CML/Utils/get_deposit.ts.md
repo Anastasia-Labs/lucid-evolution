@@ -49,8 +49,8 @@ Wrapper for the get_deposit function
 export declare const getDeposit: (
   txbody: CML.TransactionBody,
   poolDeposit: bigint,
-  keyDeposit: bigint,
-) => Effect.Effect<bigint, GetDepositError>;
+  keyDeposit: bigint
+) => Effect.Effect<bigint, GetDepositError>
 ```
 
 Added in v2.0.0
@@ -64,11 +64,7 @@ Unsafely calls get_deposit function without Effect wrapper
 **Signature**
 
 ```ts
-export declare const getDepositUnsafe: (
-  txbody: CML.TransactionBody,
-  poolDeposit: bigint,
-  keyDeposit: bigint,
-) => bigint;
+export declare const getDepositUnsafe: (txbody: CML.TransactionBody, poolDeposit: bigint, keyDeposit: bigint) => bigint
 ```
 
 Added in v2.0.0

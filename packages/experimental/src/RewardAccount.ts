@@ -57,8 +57,8 @@ export const fromBytes = Effect.fn(function* (bytes: Uint8Array) {
 
   const isStakeKey = (addressType & 0b0001) === 0;
   const stakeCredential: Credential.Credential = isStakeKey
-    ? yield* KeyHash.fromBytes(bytes.slice(1, 29))
-    : yield* ScriptHash.fromBytes(bytes.slice(1, 29));
+    ? yield* KeyHash.decodeBytes(bytes.slice(1, 29))
+    : yield* ScriptHash.decodeBytes(bytes.slice(1, 29));
   const rewardAccount: RewardAccount = makeOrThrow(networkId, stakeCredential);
   return rewardAccount;
 });
@@ -71,7 +71,7 @@ export const fromBytes = Effect.fn(function* (bytes: Uint8Array) {
  * import assert from "assert";
  *
  * // Create stake credential
- * const stakeKeyHash = KeyHash.makeOrThrow("c37b1b5dc0669f1d3c61a6fddb2e8fde96be87b881c60bce8e8d542f");
+ * const stakeKeyHash = KeyHash.decodeHexOrThrow("c37b1b5dc0669f1d3c61a6fddb2e8fde96be87b881c60bce8e8d542f");
  *
  * // Create reward account
  * const account = RewardAccount.makeOrThrow(0, stakeKeyHash);
@@ -106,7 +106,7 @@ export const toBytes = (address: RewardAccount): Uint8Array => {
  * import assert from "assert";
  *
  * // Create stake credential
- * const stakeKeyHash = KeyHash.makeOrThrow("c37b1b5dc0669f1d3c61a6fddb2e8fde96be87b881c60bce8e8d542f");
+ * const stakeKeyHash = KeyHash.decodeHexOrThrow("c37b1b5dc0669f1d3c61a6fddb2e8fde96be87b881c60bce8e8d542f");
  *
  * // Create reward account
  * const account = RewardAccount.makeOrThrow(0, stakeKeyHash);
@@ -138,7 +138,7 @@ export const makeOrThrow = (
  * import assert from "assert";
  *
  * // Create credential
- * const stakeKeyHash = KeyHash.makeOrThrow("c37b1b5dc0669f1d3c61a6fddb2e8fde96be87b881c60bce8e8d542f");
+ * const stakeKeyHash = KeyHash.decodeHexOrThrow("c37b1b5dc0669f1d3c61a6fddb2e8fde96be87b881c60bce8e8d542f");
  *
  * // Create two identical accounts
  * const account1 = RewardAccount.makeOrThrow(0, stakeKeyHash);

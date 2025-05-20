@@ -56,9 +56,7 @@ Static method fromCborBytes of SpendingData
 **Signature**
 
 ```ts
-export declare const fromCborBytes: (
-  cborBytes: Uint8Array,
-) => Effect.Effect<CML.SpendingData, SpendingDataError>;
+export declare const fromCborBytes: (cborBytes: Uint8Array) => Effect.Effect<CML.SpendingData, SpendingDataError>
 ```
 
 Added in v2.0.0
@@ -70,9 +68,7 @@ Static method fromCborHex of SpendingData
 **Signature**
 
 ```ts
-export declare const fromCborHex: (
-  cborBytes: string,
-) => Effect.Effect<CML.SpendingData, SpendingDataError>;
+export declare const fromCborHex: (cborBytes: string) => Effect.Effect<CML.SpendingData, SpendingDataError>
 ```
 
 Added in v2.0.0
@@ -85,8 +81,8 @@ Static method newSpendingDataPubKey of SpendingData
 
 ```ts
 export declare const newSpendingDataPubKey: (
-  pubkey: CML.Bip32PublicKey,
-) => Effect.Effect<CML.SpendingData, SpendingDataError>;
+  pubkey: CML.Bip32PublicKey
+) => Effect.Effect<CML.SpendingData, SpendingDataError>
 ```
 
 Added in v2.0.0
@@ -99,8 +95,8 @@ Static method newSpendingDataRedeem of SpendingData
 
 ```ts
 export declare const newSpendingDataRedeem: (
-  redeem: CML.PublicKey,
-) => Effect.Effect<CML.SpendingData, SpendingDataError>;
+  redeem: CML.PublicKey
+) => Effect.Effect<CML.SpendingData, SpendingDataError>
 ```
 
 Added in v2.0.0
@@ -113,8 +109,8 @@ Static method newSpendingDataScript of SpendingData
 
 ```ts
 export declare const newSpendingDataScript: (
-  script: CML.ByronScript,
-) => Effect.Effect<CML.SpendingData, SpendingDataError>;
+  script: CML.ByronScript
+) => Effect.Effect<CML.SpendingData, SpendingDataError>
 ```
 
 Added in v2.0.0
@@ -128,9 +124,7 @@ Unsafely calls SpendingData.fromCborBytes without Effect wrapper
 **Signature**
 
 ```ts
-export declare const fromCborBytesUnsafe: (
-  cborBytes: Uint8Array,
-) => CML.SpendingData;
+export declare const fromCborBytesUnsafe: (cborBytes: Uint8Array) => CML.SpendingData
 ```
 
 Added in v2.0.0
@@ -142,7 +136,7 @@ Unsafely calls SpendingData.fromCborHex without Effect wrapper
 **Signature**
 
 ```ts
-export declare const fromCborHexUnsafe: (cborBytes: string) => CML.SpendingData;
+export declare const fromCborHexUnsafe: (cborBytes: string) => CML.SpendingData
 ```
 
 Added in v2.0.0
@@ -154,9 +148,7 @@ Unsafely calls SpendingData.newSpendingDataPubKey without Effect wrapper
 **Signature**
 
 ```ts
-export declare const newSpendingDataPubKeyUnsafe: (
-  pubkey: CML.Bip32PublicKey,
-) => CML.SpendingData;
+export declare const newSpendingDataPubKeyUnsafe: (pubkey: CML.Bip32PublicKey) => CML.SpendingData
 ```
 
 Added in v2.0.0
@@ -168,9 +160,7 @@ Unsafely calls SpendingData.newSpendingDataRedeem without Effect wrapper
 **Signature**
 
 ```ts
-export declare const newSpendingDataRedeemUnsafe: (
-  redeem: CML.PublicKey,
-) => CML.SpendingData;
+export declare const newSpendingDataRedeemUnsafe: (redeem: CML.PublicKey) => CML.SpendingData
 ```
 
 Added in v2.0.0
@@ -182,9 +172,7 @@ Unsafely calls SpendingData.newSpendingDataScript without Effect wrapper
 **Signature**
 
 ```ts
-export declare const newSpendingDataScriptUnsafe: (
-  script: CML.ByronScript,
-) => CML.SpendingData;
+export declare const newSpendingDataScriptUnsafe: (script: CML.ByronScript) => CML.SpendingData
 ```
 
 Added in v2.0.0
@@ -215,8 +203,8 @@ Method asSpendingDataPubKey of SpendingData
 
 ```ts
 export declare const asSpendingDataPubKey: (
-  instance: CML.SpendingData,
-) => Effect.Effect<CML.Bip32PublicKey | undefined, SpendingDataError>;
+  instance: CML.SpendingData
+) => Effect.Effect<CML.Bip32PublicKey | undefined, SpendingDataError>
 ```
 
 Added in v2.0.0
@@ -229,8 +217,8 @@ Method asSpendingDataRedeem of SpendingData
 
 ```ts
 export declare const asSpendingDataRedeem: (
-  instance: CML.SpendingData,
-) => Effect.Effect<CML.PublicKey | undefined, SpendingDataError>;
+  instance: CML.SpendingData
+) => Effect.Effect<CML.PublicKey | undefined, SpendingDataError>
 ```
 
 Added in v2.0.0
@@ -243,8 +231,8 @@ Method asSpendingDataScript of SpendingData
 
 ```ts
 export declare const asSpendingDataScript: (
-  instance: CML.SpendingData,
-) => Effect.Effect<CML.ByronScript | undefined, SpendingDataError>;
+  instance: CML.SpendingData
+) => Effect.Effect<CML.ByronScript | undefined, SpendingDataError>
 ```
 
 Added in v2.0.0
@@ -256,9 +244,7 @@ Method free of SpendingData
 **Signature**
 
 ```ts
-export declare const free: (
-  instance: CML.SpendingData,
-) => Effect.Effect<void, SpendingDataError>;
+export declare const free: (instance: CML.SpendingData) => Effect.Effect<void, SpendingDataError>
 ```
 
 Added in v2.0.0
@@ -270,9 +256,7 @@ Method kind of SpendingData
 **Signature**
 
 ```ts
-export declare const kind: (
-  instance: CML.SpendingData,
-) => Effect.Effect<CML.SpendingDataKind, SpendingDataError>;
+export declare const kind: (instance: CML.SpendingData) => Effect.Effect<CML.SpendingDataKind, SpendingDataError>
 ```
 
 Added in v2.0.0
@@ -284,9 +268,7 @@ Method toCborBytes of SpendingData
 **Signature**
 
 ```ts
-export declare const toCborBytes: (
-  instance: CML.SpendingData,
-) => Effect.Effect<Uint8Array, SpendingDataError>;
+export declare const toCborBytes: (instance: CML.SpendingData) => Effect.Effect<Uint8Array, SpendingDataError>
 ```
 
 Added in v2.0.0
@@ -298,9 +280,7 @@ Method toCborHex of SpendingData
 **Signature**
 
 ```ts
-export declare const toCborHex: (
-  instance: CML.SpendingData,
-) => Effect.Effect<string, SpendingDataError>;
+export declare const toCborHex: (instance: CML.SpendingData) => Effect.Effect<string, SpendingDataError>
 ```
 
 Added in v2.0.0
@@ -314,9 +294,7 @@ Unsafely calls instance.asSpendingDataPubKey without Effect wrapper
 **Signature**
 
 ```ts
-export declare const asSpendingDataPubKeyUnsafe: (
-  instance: CML.SpendingData,
-) => CML.Bip32PublicKey | undefined;
+export declare const asSpendingDataPubKeyUnsafe: (instance: CML.SpendingData) => CML.Bip32PublicKey | undefined
 ```
 
 Added in v2.0.0
@@ -328,9 +306,7 @@ Unsafely calls instance.asSpendingDataRedeem without Effect wrapper
 **Signature**
 
 ```ts
-export declare const asSpendingDataRedeemUnsafe: (
-  instance: CML.SpendingData,
-) => CML.PublicKey | undefined;
+export declare const asSpendingDataRedeemUnsafe: (instance: CML.SpendingData) => CML.PublicKey | undefined
 ```
 
 Added in v2.0.0
@@ -342,9 +318,7 @@ Unsafely calls instance.asSpendingDataScript without Effect wrapper
 **Signature**
 
 ```ts
-export declare const asSpendingDataScriptUnsafe: (
-  instance: CML.SpendingData,
-) => CML.ByronScript | undefined;
+export declare const asSpendingDataScriptUnsafe: (instance: CML.SpendingData) => CML.ByronScript | undefined
 ```
 
 Added in v2.0.0
@@ -356,7 +330,7 @@ Unsafely calls instance.free without Effect wrapper
 **Signature**
 
 ```ts
-export declare const freeUnsafe: (instance: CML.SpendingData) => void;
+export declare const freeUnsafe: (instance: CML.SpendingData) => void
 ```
 
 Added in v2.0.0
@@ -368,9 +342,7 @@ Unsafely calls instance.kind without Effect wrapper
 **Signature**
 
 ```ts
-export declare const kindUnsafe: (
-  instance: CML.SpendingData,
-) => CML.SpendingDataKind;
+export declare const kindUnsafe: (instance: CML.SpendingData) => CML.SpendingDataKind
 ```
 
 Added in v2.0.0
@@ -382,9 +354,7 @@ Unsafely calls instance.toCborBytes without Effect wrapper
 **Signature**
 
 ```ts
-export declare const toCborBytesUnsafe: (
-  instance: CML.SpendingData,
-) => Uint8Array;
+export declare const toCborBytesUnsafe: (instance: CML.SpendingData) => Uint8Array
 ```
 
 Added in v2.0.0
@@ -396,7 +366,7 @@ Unsafely calls instance.toCborHex without Effect wrapper
 **Signature**
 
 ```ts
-export declare const toCborHexUnsafe: (instance: CML.SpendingData) => string;
+export declare const toCborHexUnsafe: (instance: CML.SpendingData) => string
 ```
 
 Added in v2.0.0
@@ -410,7 +380,7 @@ Type alias for the CML SpendingData class
 **Signature**
 
 ```ts
-export type SpendingData = CML.SpendingData;
+export type SpendingData = CML.SpendingData
 ```
 
 Added in v2.0.0

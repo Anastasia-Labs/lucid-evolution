@@ -68,9 +68,7 @@ Static method fromBech32 of Address
 **Signature**
 
 ```ts
-export declare const fromBech32: (
-  bechStr: string,
-) => Effect.Effect<CML.Address, AddressError>;
+export declare const fromBech32: (bechStr: string) => Effect.Effect<CML.Address, AddressError>
 ```
 
 Added in v2.0.0
@@ -82,9 +80,7 @@ Static method fromHex of Address
 **Signature**
 
 ```ts
-export declare const fromHex: (
-  hex: string,
-) => Effect.Effect<CML.Address, AddressError>;
+export declare const fromHex: (hex: string) => Effect.Effect<CML.Address, AddressError>
 ```
 
 Added in v2.0.0
@@ -96,9 +92,7 @@ Static method fromJson of Address
 **Signature**
 
 ```ts
-export declare const fromJson: (
-  json: string,
-) => Effect.Effect<CML.Address, AddressError>;
+export declare const fromJson: (json: string) => Effect.Effect<CML.Address, AddressError>
 ```
 
 Added in v2.0.0
@@ -110,9 +104,7 @@ Static method fromRawBytes of Address
 **Signature**
 
 ```ts
-export declare const fromRawBytes: (
-  data: Uint8Array,
-) => Effect.Effect<CML.Address, AddressError>;
+export declare const fromRawBytes: (data: Uint8Array) => Effect.Effect<CML.Address, AddressError>
 ```
 
 Added in v2.0.0
@@ -126,8 +118,8 @@ Static method headerMatchesKind of Address
 ```ts
 export declare const headerMatchesKind: (
   header: number,
-  kind: CML.AddressHeaderKind,
-) => Effect.Effect<boolean, AddressError>;
+  kind: CML.AddressHeaderKind
+) => Effect.Effect<boolean, AddressError>
 ```
 
 Added in v2.0.0
@@ -139,9 +131,7 @@ Static method isValid of Address
 **Signature**
 
 ```ts
-export declare const isValid: (
-  bechStr: string,
-) => Effect.Effect<boolean, AddressError>;
+export declare const isValid: (bechStr: string) => Effect.Effect<boolean, AddressError>
 ```
 
 Added in v2.0.0
@@ -153,9 +143,7 @@ Static method isValidBech32 of Address
 **Signature**
 
 ```ts
-export declare const isValidBech32: (
-  bechStr: string,
-) => Effect.Effect<boolean, AddressError>;
+export declare const isValidBech32: (bechStr: string) => Effect.Effect<boolean, AddressError>
 ```
 
 Added in v2.0.0
@@ -169,7 +157,7 @@ Unsafely calls Address.fromBech32 without Effect wrapper
 **Signature**
 
 ```ts
-export declare const fromBech32Unsafe: (bechStr: string) => CML.Address;
+export declare const fromBech32Unsafe: (bechStr: string) => CML.Address
 ```
 
 Added in v2.0.0
@@ -181,7 +169,7 @@ Unsafely calls Address.fromHex without Effect wrapper
 **Signature**
 
 ```ts
-export declare const fromHexUnsafe: (hex: string) => CML.Address;
+export declare const fromHexUnsafe: (hex: string) => CML.Address
 ```
 
 Added in v2.0.0
@@ -193,7 +181,7 @@ Unsafely calls Address.fromJson without Effect wrapper
 **Signature**
 
 ```ts
-export declare const fromJsonUnsafe: (json: string) => CML.Address;
+export declare const fromJsonUnsafe: (json: string) => CML.Address
 ```
 
 Added in v2.0.0
@@ -205,7 +193,7 @@ Unsafely calls Address.fromRawBytes without Effect wrapper
 **Signature**
 
 ```ts
-export declare const fromRawBytesUnsafe: (data: Uint8Array) => CML.Address;
+export declare const fromRawBytesUnsafe: (data: Uint8Array) => CML.Address
 ```
 
 Added in v2.0.0
@@ -217,10 +205,7 @@ Unsafely calls Address.headerMatchesKind without Effect wrapper
 **Signature**
 
 ```ts
-export declare const headerMatchesKindUnsafe: (
-  header: number,
-  kind: CML.AddressHeaderKind,
-) => boolean;
+export declare const headerMatchesKindUnsafe: (header: number, kind: CML.AddressHeaderKind) => boolean
 ```
 
 Added in v2.0.0
@@ -232,7 +217,7 @@ Unsafely calls Address.isValidBech32 without Effect wrapper
 **Signature**
 
 ```ts
-export declare const isValidBech32Unsafe: (bechStr: string) => boolean;
+export declare const isValidBech32Unsafe: (bechStr: string) => boolean
 ```
 
 Added in v2.0.0
@@ -244,7 +229,7 @@ Unsafely calls Address.isValid without Effect wrapper
 **Signature**
 
 ```ts
-export declare const isValidUnsafe: (bechStr: string) => boolean;
+export declare const isValidUnsafe: (bechStr: string) => boolean
 ```
 
 Added in v2.0.0
@@ -274,9 +259,7 @@ Method free of Address
 **Signature**
 
 ```ts
-export declare const free: (
-  instance: CML.Address,
-) => Effect.Effect<void, AddressError>;
+export declare const free: (instance: CML.Address) => Effect.Effect<void, AddressError>
 ```
 
 Added in v2.0.0
@@ -288,9 +271,7 @@ Method header of Address
 **Signature**
 
 ```ts
-export declare const header: (
-  instance: CML.Address,
-) => Effect.Effect<number, AddressError>;
+export declare const header: (instance: CML.Address) => Effect.Effect<number, AddressError>
 ```
 
 Added in v2.0.0
@@ -302,9 +283,7 @@ Method kind of Address
 **Signature**
 
 ```ts
-export declare const kind: (
-  instance: CML.Address,
-) => Effect.Effect<CML.AddressKind, AddressError>;
+export declare const kind: (instance: CML.Address) => Effect.Effect<CML.AddressKind, AddressError>
 ```
 
 Added in v2.0.0
@@ -316,9 +295,7 @@ Method networkId of Address
 **Signature**
 
 ```ts
-export declare const networkId: (
-  instance: CML.Address,
-) => Effect.Effect<number, AddressError>;
+export declare const networkId: (instance: CML.Address) => Effect.Effect<number, AddressError>
 ```
 
 Added in v2.0.0
@@ -330,9 +307,7 @@ Method paymentCred of Address
 **Signature**
 
 ```ts
-export declare const paymentCred: (
-  instance: CML.Address,
-) => Effect.Effect<CML.Credential | undefined, AddressError>;
+export declare const paymentCred: (instance: CML.Address) => Effect.Effect<CML.Credential | undefined, AddressError>
 ```
 
 Added in v2.0.0
@@ -344,9 +319,7 @@ Method stakingCred of Address
 **Signature**
 
 ```ts
-export declare const stakingCred: (
-  instance: CML.Address,
-) => Effect.Effect<CML.Credential | undefined, AddressError>;
+export declare const stakingCred: (instance: CML.Address) => Effect.Effect<CML.Credential | undefined, AddressError>
 ```
 
 Added in v2.0.0
@@ -358,10 +331,7 @@ Method toBech32 of Address
 **Signature**
 
 ```ts
-export declare const toBech32: (
-  instance: CML.Address,
-  prefix: string,
-) => Effect.Effect<string, AddressError>;
+export declare const toBech32: (instance: CML.Address, prefix: string) => Effect.Effect<string, AddressError>
 ```
 
 Added in v2.0.0
@@ -373,9 +343,7 @@ Method toHex of Address
 **Signature**
 
 ```ts
-export declare const toHex: (
-  instance: CML.Address,
-) => Effect.Effect<string, AddressError>;
+export declare const toHex: (instance: CML.Address) => Effect.Effect<string, AddressError>
 ```
 
 Added in v2.0.0
@@ -387,9 +355,7 @@ Method toJsValue of Address
 **Signature**
 
 ```ts
-export declare const toJsValue: (
-  instance: CML.Address,
-) => Effect.Effect<any, AddressError>;
+export declare const toJsValue: (instance: CML.Address) => Effect.Effect<any, AddressError>
 ```
 
 Added in v2.0.0
@@ -401,9 +367,7 @@ Method toJson of Address
 **Signature**
 
 ```ts
-export declare const toJson: (
-  instance: CML.Address,
-) => Effect.Effect<string, AddressError>;
+export declare const toJson: (instance: CML.Address) => Effect.Effect<string, AddressError>
 ```
 
 Added in v2.0.0
@@ -415,9 +379,7 @@ Method toRawBytes of Address
 **Signature**
 
 ```ts
-export declare const toRawBytes: (
-  instance: CML.Address,
-) => Effect.Effect<Uint8Array, AddressError>;
+export declare const toRawBytes: (instance: CML.Address) => Effect.Effect<Uint8Array, AddressError>
 ```
 
 Added in v2.0.0
@@ -431,7 +393,7 @@ Unsafely calls instance.free without Effect wrapper
 **Signature**
 
 ```ts
-export declare const freeUnsafe: (instance: CML.Address) => void;
+export declare const freeUnsafe: (instance: CML.Address) => void
 ```
 
 Added in v2.0.0
@@ -443,7 +405,7 @@ Unsafely calls instance.header without Effect wrapper
 **Signature**
 
 ```ts
-export declare const headerUnsafe: (instance: CML.Address) => number;
+export declare const headerUnsafe: (instance: CML.Address) => number
 ```
 
 Added in v2.0.0
@@ -455,7 +417,7 @@ Unsafely calls instance.kind without Effect wrapper
 **Signature**
 
 ```ts
-export declare const kindUnsafe: (instance: CML.Address) => CML.AddressKind;
+export declare const kindUnsafe: (instance: CML.Address) => CML.AddressKind
 ```
 
 Added in v2.0.0
@@ -467,7 +429,7 @@ Unsafely calls instance.networkId without Effect wrapper
 **Signature**
 
 ```ts
-export declare const networkIdUnsafe: (instance: CML.Address) => number;
+export declare const networkIdUnsafe: (instance: CML.Address) => number
 ```
 
 Added in v2.0.0
@@ -479,9 +441,7 @@ Unsafely calls instance.paymentCred without Effect wrapper
 **Signature**
 
 ```ts
-export declare const paymentCredUnsafe: (
-  instance: CML.Address,
-) => CML.Credential | undefined;
+export declare const paymentCredUnsafe: (instance: CML.Address) => CML.Credential | undefined
 ```
 
 Added in v2.0.0
@@ -493,9 +453,7 @@ Unsafely calls instance.stakingCred without Effect wrapper
 **Signature**
 
 ```ts
-export declare const stakingCredUnsafe: (
-  instance: CML.Address,
-) => CML.Credential | undefined;
+export declare const stakingCredUnsafe: (instance: CML.Address) => CML.Credential | undefined
 ```
 
 Added in v2.0.0
@@ -507,10 +465,7 @@ Unsafely calls instance.toBech32 without Effect wrapper
 **Signature**
 
 ```ts
-export declare const toBech32Unsafe: (
-  instance: CML.Address,
-  prefix: string,
-) => string;
+export declare const toBech32Unsafe: (instance: CML.Address, prefix: string) => string
 ```
 
 Added in v2.0.0
@@ -522,7 +477,7 @@ Unsafely calls instance.toHex without Effect wrapper
 **Signature**
 
 ```ts
-export declare const toHexUnsafe: (instance: CML.Address) => string;
+export declare const toHexUnsafe: (instance: CML.Address) => string
 ```
 
 Added in v2.0.0
@@ -534,7 +489,7 @@ Unsafely calls instance.toJsValue without Effect wrapper
 **Signature**
 
 ```ts
-export declare const toJsValueUnsafe: (instance: CML.Address) => any;
+export declare const toJsValueUnsafe: (instance: CML.Address) => any
 ```
 
 Added in v2.0.0
@@ -546,7 +501,7 @@ Unsafely calls instance.toJson without Effect wrapper
 **Signature**
 
 ```ts
-export declare const toJsonUnsafe: (instance: CML.Address) => string;
+export declare const toJsonUnsafe: (instance: CML.Address) => string
 ```
 
 Added in v2.0.0
@@ -558,7 +513,7 @@ Unsafely calls instance.toRawBytes without Effect wrapper
 **Signature**
 
 ```ts
-export declare const toRawBytesUnsafe: (instance: CML.Address) => Uint8Array;
+export declare const toRawBytesUnsafe: (instance: CML.Address) => Uint8Array
 ```
 
 Added in v2.0.0
@@ -572,7 +527,7 @@ Type alias for the CML Address class
 **Signature**
 
 ```ts
-export type Address = CML.Address;
+export type Address = CML.Address
 ```
 
 Added in v2.0.0

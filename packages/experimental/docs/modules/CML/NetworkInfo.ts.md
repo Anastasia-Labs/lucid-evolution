@@ -52,8 +52,8 @@ Static method \_new of NetworkInfo
 ```ts
 export declare const _new: (
   networkId: number,
-  protocolMagic: CML.ProtocolMagic,
-) => Effect.Effect<CML.NetworkInfo, NetworkInfoError>;
+  protocolMagic: CML.ProtocolMagic
+) => Effect.Effect<CML.NetworkInfo, NetworkInfoError>
 ```
 
 Added in v2.0.0
@@ -65,10 +65,7 @@ Static method mainnet of NetworkInfo
 **Signature**
 
 ```ts
-export declare const mainnet: () => Effect.Effect<
-  CML.NetworkInfo,
-  NetworkInfoError
->;
+export declare const mainnet: () => Effect.Effect<CML.NetworkInfo, NetworkInfoError>
 ```
 
 Added in v2.0.0
@@ -80,10 +77,7 @@ Static method preprod of NetworkInfo
 **Signature**
 
 ```ts
-export declare const preprod: () => Effect.Effect<
-  CML.NetworkInfo,
-  NetworkInfoError
->;
+export declare const preprod: () => Effect.Effect<CML.NetworkInfo, NetworkInfoError>
 ```
 
 Added in v2.0.0
@@ -95,10 +89,7 @@ Static method preview of NetworkInfo
 **Signature**
 
 ```ts
-export declare const preview: () => Effect.Effect<
-  CML.NetworkInfo,
-  NetworkInfoError
->;
+export declare const preview: () => Effect.Effect<CML.NetworkInfo, NetworkInfoError>
 ```
 
 Added in v2.0.0
@@ -110,10 +101,7 @@ Static method sanchoTestnet of NetworkInfo
 **Signature**
 
 ```ts
-export declare const sanchoTestnet: () => Effect.Effect<
-  CML.NetworkInfo,
-  NetworkInfoError
->;
+export declare const sanchoTestnet: () => Effect.Effect<CML.NetworkInfo, NetworkInfoError>
 ```
 
 Added in v2.0.0
@@ -125,10 +113,7 @@ Static method testnet of NetworkInfo
 **Signature**
 
 ```ts
-export declare const testnet: () => Effect.Effect<
-  CML.NetworkInfo,
-  NetworkInfoError
->;
+export declare const testnet: () => Effect.Effect<CML.NetworkInfo, NetworkInfoError>
 ```
 
 Added in v2.0.0
@@ -142,10 +127,7 @@ Unsafely calls NetworkInfo.\_new without Effect wrapper
 **Signature**
 
 ```ts
-export declare const _newUnsafe: (
-  networkId: number,
-  protocolMagic: CML.ProtocolMagic,
-) => CML.NetworkInfo;
+export declare const _newUnsafe: (networkId: number, protocolMagic: CML.ProtocolMagic) => CML.NetworkInfo
 ```
 
 Added in v2.0.0
@@ -157,7 +139,7 @@ Unsafely calls NetworkInfo.mainnet without Effect wrapper
 **Signature**
 
 ```ts
-export declare const mainnetUnsafe: () => CML.NetworkInfo;
+export declare const mainnetUnsafe: () => CML.NetworkInfo
 ```
 
 Added in v2.0.0
@@ -169,7 +151,7 @@ Unsafely calls NetworkInfo.preprod without Effect wrapper
 **Signature**
 
 ```ts
-export declare const preprodUnsafe: () => CML.NetworkInfo;
+export declare const preprodUnsafe: () => CML.NetworkInfo
 ```
 
 Added in v2.0.0
@@ -181,7 +163,7 @@ Unsafely calls NetworkInfo.preview without Effect wrapper
 **Signature**
 
 ```ts
-export declare const previewUnsafe: () => CML.NetworkInfo;
+export declare const previewUnsafe: () => CML.NetworkInfo
 ```
 
 Added in v2.0.0
@@ -193,7 +175,7 @@ Unsafely calls NetworkInfo.sanchoTestnet without Effect wrapper
 **Signature**
 
 ```ts
-export declare const sanchoTestnetUnsafe: () => CML.NetworkInfo;
+export declare const sanchoTestnetUnsafe: () => CML.NetworkInfo
 ```
 
 Added in v2.0.0
@@ -205,7 +187,7 @@ Unsafely calls NetworkInfo.testnet without Effect wrapper
 **Signature**
 
 ```ts
-export declare const testnetUnsafe: () => CML.NetworkInfo;
+export declare const testnetUnsafe: () => CML.NetworkInfo
 ```
 
 Added in v2.0.0
@@ -235,9 +217,7 @@ Method free of NetworkInfo
 **Signature**
 
 ```ts
-export declare const free: (
-  instance: CML.NetworkInfo,
-) => Effect.Effect<void, NetworkInfoError>;
+export declare const free: (instance: CML.NetworkInfo) => Effect.Effect<void, NetworkInfoError>
 ```
 
 Added in v2.0.0
@@ -249,9 +229,7 @@ Method networkId of NetworkInfo
 **Signature**
 
 ```ts
-export declare const networkId: (
-  instance: CML.NetworkInfo,
-) => Effect.Effect<number, NetworkInfoError>;
+export declare const networkId: (instance: CML.NetworkInfo) => Effect.Effect<number, NetworkInfoError>
 ```
 
 Added in v2.0.0
@@ -263,9 +241,7 @@ Method protocolMagic of NetworkInfo
 **Signature**
 
 ```ts
-export declare const protocolMagic: (
-  instance: CML.NetworkInfo,
-) => Effect.Effect<CML.ProtocolMagic, NetworkInfoError>;
+export declare const protocolMagic: (instance: CML.NetworkInfo) => Effect.Effect<CML.ProtocolMagic, NetworkInfoError>
 ```
 
 Added in v2.0.0
@@ -279,7 +255,7 @@ Unsafely calls instance.free without Effect wrapper
 **Signature**
 
 ```ts
-export declare const freeUnsafe: (instance: CML.NetworkInfo) => void;
+export declare const freeUnsafe: (instance: CML.NetworkInfo) => void
 ```
 
 Added in v2.0.0
@@ -291,7 +267,7 @@ Unsafely calls instance.networkId without Effect wrapper
 **Signature**
 
 ```ts
-export declare const networkIdUnsafe: (instance: CML.NetworkInfo) => number;
+export declare const networkIdUnsafe: (instance: CML.NetworkInfo) => number
 ```
 
 Added in v2.0.0
@@ -303,9 +279,7 @@ Unsafely calls instance.protocolMagic without Effect wrapper
 **Signature**
 
 ```ts
-export declare const protocolMagicUnsafe: (
-  instance: CML.NetworkInfo,
-) => CML.ProtocolMagic;
+export declare const protocolMagicUnsafe: (instance: CML.NetworkInfo) => CML.ProtocolMagic
 ```
 
 Added in v2.0.0
@@ -319,7 +293,7 @@ Type alias for the CML NetworkInfo class
 **Signature**
 
 ```ts
-export type NetworkInfo = CML.NetworkInfo;
+export type NetworkInfo = CML.NetworkInfo
 ```
 
 Added in v2.0.0

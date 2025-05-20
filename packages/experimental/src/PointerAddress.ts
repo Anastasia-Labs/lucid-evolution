@@ -94,8 +94,8 @@ export const fromBytes = Effect.fn(function* (bytes: Uint8Array) {
   // Check if the address is a pointer address
   const isPaymentKey = (addressType & 0b0001) === 0;
   const paymentCredential: Credential.Credential = isPaymentKey
-    ? yield* KeyHash.fromBytes(bytes.slice(1, 29))
-    : yield* ScriptHash.fromBytes(bytes.slice(1, 29));
+    ? yield* KeyHash.decodeBytes(bytes.slice(1, 29))
+    : yield* ScriptHash.decodeBytes(bytes.slice(1, 29));
 
   // After the credential, we have 3 variable-length integers
   let offset = 29;
@@ -189,7 +189,7 @@ export const encodeVariableLength = (natural: Natural.Natural) => {
  *
  * const effect = PointerAddress.decodeVariableLength(buffer, 0);
  * const [natural, bytesRead] = Effect.runSync(effect);
- * assert(natural.number === 128);
+ * assert(natural === 128);
  * assert(bytesRead === 2);
  *
  * @since 2.0.0
@@ -252,15 +252,15 @@ export const decodeVariableLength: (
  * Convert a PointerAddress to bytes.
  *
  * @example
- * import { PointerAddress, KeyHash, Natural } from "@lucid-evolution/experimental";
+ * import { PointerAddress, KeyHash, Natural, NetworkId } from "@lucid-evolution/experimental";
  * import assert from "assert";
  *
  * // Create payment credential
  * const paymentKeyHash = KeyHash.makeOrThrow("c37b1b5dc0669f1d3c61a6fddb2e8fde96be87b881c60bce8e8d542f");
  *
  * // Create pointer address
- * const address = PointerAddress.makeOrThrow(
- *   0,
+ * const address = PointerAddress.make(
+ *   NetworkId.makeOrThrow(0),
  *   paymentKeyHash,
  *   Natural.makeOrThrow(1),
  *   Natural.makeOrThrow(2),
@@ -313,15 +313,15 @@ export const toBytes = (address: PointerAddress) => {
  * Create a PointerAddress from components, throws on error.
  *
  * @example
- * import { PointerAddress, KeyHash, Natural } from "@lucid-evolution/experimental";
+ * import { PointerAddress, KeyHash, Natural, NetworkId } from "@lucid-evolution/experimental";
  * import assert from "assert";
  *
  * // Create payment credential
  * const paymentKeyHash = KeyHash.makeOrThrow("c37b1b5dc0669f1d3c61a6fddb2e8fde96be87b881c60bce8e8d542f");
  *
  * // Create pointer address
- * const address = PointerAddress.makeOrThrow(
- *   0,
+ * const address = PointerAddress.make(
+ *   NetworkId.makeOrThrow(0),
  *   paymentKeyHash,
  *   Natural.makeOrThrow(1),
  *   Natural.makeOrThrow(2),
@@ -329,9 +329,9 @@ export const toBytes = (address: PointerAddress) => {
  * );
  * assert(address._tag === "PointerAddress");
  * assert(address.networkId === 0);
- * assert(address.pointer.slot.number === 1);
- * assert(address.pointer.txIndex.number === 2);
- * assert(address.pointer.certIndex.number === 3);
+ * assert(address.pointer.slot === 1);
+ * assert(address.pointer.txIndex === 2);
+ * assert(address.pointer.certIndex === 3);
  *
  * @since 2.0.0
  * @category constructors
@@ -358,29 +358,29 @@ export const make = (
  * Check if two PointerAddress instances are equal.
  *
  * @example
- * import { PointerAddress, KeyHash, Natural } from "@lucid-evolution/experimental";
+ * import { PointerAddress, KeyHash, Natural , NetworkId } from "@lucid-evolution/experimental";
  * import assert from "assert";
  *
  * // Create credential
  * const paymentKeyHash = KeyHash.makeOrThrow("c37b1b5dc0669f1d3c61a6fddb2e8fde96be87b881c60bce8e8d542f");
  *
  * // Create two identical addresses
- * const address1 = PointerAddress.makeOrThrow(
- *   0,
+ * const address1 = PointerAddress.make(
+ *   NetworkId.makeOrThrow(0),
  *   paymentKeyHash,
  *   Natural.makeOrThrow(1),
  *   Natural.makeOrThrow(2),
  *   Natural.makeOrThrow(3)
  * );
- * const address2 = PointerAddress.makeOrThrow(
- *   0,
+ * const address2 = PointerAddress.make(
+ *   NetworkId.makeOrThrow(0),
  *   paymentKeyHash,
  *   Natural.makeOrThrow(1),
  *   Natural.makeOrThrow(2),
  *   Natural.makeOrThrow(3)
  * );
- * const address3 = PointerAddress.makeOrThrow(
- *   1,
+ * const address3 = PointerAddress.make(
+ *   NetworkId.makeOrThrow(1),
  *   paymentKeyHash,
  *   Natural.makeOrThrow(1),
  *   Natural.makeOrThrow(2),
@@ -416,9 +416,9 @@ export const equals = (a: PointerAddress, b: PointerAddress): boolean => {
  * randomSamples.forEach((address) => {
  *   assert(address._tag === "PointerAddress");
  *   assert(typeof address.networkId === "number");
- *   assert(address.pointer.slot.number > 0);
- *   assert(address.pointer.txIndex.number > 0);
- *   assert(address.pointer.certIndex.number > 0);
+ *   assert(address.pointer.slot > 0);
+ *   assert(address.pointer.txIndex > 0);
+ *   assert(address.pointer.certIndex > 0);
  * });
  *
  * @since 2.0.0

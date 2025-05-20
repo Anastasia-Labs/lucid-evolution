@@ -63,8 +63,8 @@ Static method \_new of ParameterChangeAction
 export declare const _new: (
   actionId: CML.GovActionId | undefined,
   update: CML.ProtocolParamUpdate,
-  policyHash: CML.ScriptHash,
-) => Effect.Effect<CML.ParameterChangeAction, ParameterChangeActionError>;
+  policyHash: CML.ScriptHash
+) => Effect.Effect<CML.ParameterChangeAction, ParameterChangeActionError>
 ```
 
 Added in v2.0.0
@@ -77,8 +77,8 @@ Static method fromCborBytes of ParameterChangeAction
 
 ```ts
 export declare const fromCborBytes: (
-  cborBytes: Uint8Array,
-) => Effect.Effect<CML.ParameterChangeAction, ParameterChangeActionError>;
+  cborBytes: Uint8Array
+) => Effect.Effect<CML.ParameterChangeAction, ParameterChangeActionError>
 ```
 
 Added in v2.0.0
@@ -91,8 +91,8 @@ Static method fromCborHex of ParameterChangeAction
 
 ```ts
 export declare const fromCborHex: (
-  cborBytes: string,
-) => Effect.Effect<CML.ParameterChangeAction, ParameterChangeActionError>;
+  cborBytes: string
+) => Effect.Effect<CML.ParameterChangeAction, ParameterChangeActionError>
 ```
 
 Added in v2.0.0
@@ -104,9 +104,7 @@ Static method fromJson of ParameterChangeAction
 **Signature**
 
 ```ts
-export declare const fromJson: (
-  json: string,
-) => Effect.Effect<CML.ParameterChangeAction, ParameterChangeActionError>;
+export declare const fromJson: (json: string) => Effect.Effect<CML.ParameterChangeAction, ParameterChangeActionError>
 ```
 
 Added in v2.0.0
@@ -123,8 +121,8 @@ Unsafely calls ParameterChangeAction.\_new without Effect wrapper
 export declare const _newUnsafe: (
   actionId: CML.GovActionId | undefined,
   update: CML.ProtocolParamUpdate,
-  policyHash: CML.ScriptHash,
-) => CML.ParameterChangeAction;
+  policyHash: CML.ScriptHash
+) => CML.ParameterChangeAction
 ```
 
 Added in v2.0.0
@@ -136,9 +134,7 @@ Unsafely calls ParameterChangeAction.fromCborBytes without Effect wrapper
 **Signature**
 
 ```ts
-export declare const fromCborBytesUnsafe: (
-  cborBytes: Uint8Array,
-) => CML.ParameterChangeAction;
+export declare const fromCborBytesUnsafe: (cborBytes: Uint8Array) => CML.ParameterChangeAction
 ```
 
 Added in v2.0.0
@@ -150,9 +146,7 @@ Unsafely calls ParameterChangeAction.fromCborHex without Effect wrapper
 **Signature**
 
 ```ts
-export declare const fromCborHexUnsafe: (
-  cborBytes: string,
-) => CML.ParameterChangeAction;
+export declare const fromCborHexUnsafe: (cborBytes: string) => CML.ParameterChangeAction
 ```
 
 Added in v2.0.0
@@ -164,9 +158,7 @@ Unsafely calls ParameterChangeAction.fromJson without Effect wrapper
 **Signature**
 
 ```ts
-export declare const fromJsonUnsafe: (
-  json: string,
-) => CML.ParameterChangeAction;
+export declare const fromJsonUnsafe: (json: string) => CML.ParameterChangeAction
 ```
 
 Added in v2.0.0
@@ -197,8 +189,8 @@ Method actionId of ParameterChangeAction
 
 ```ts
 export declare const actionId: (
-  instance: CML.ParameterChangeAction,
-) => Effect.Effect<CML.GovActionId | undefined, ParameterChangeActionError>;
+  instance: CML.ParameterChangeAction
+) => Effect.Effect<CML.GovActionId | undefined, ParameterChangeActionError>
 ```
 
 Added in v2.0.0
@@ -210,9 +202,7 @@ Method free of ParameterChangeAction
 **Signature**
 
 ```ts
-export declare const free: (
-  instance: CML.ParameterChangeAction,
-) => Effect.Effect<void, ParameterChangeActionError>;
+export declare const free: (instance: CML.ParameterChangeAction) => Effect.Effect<void, ParameterChangeActionError>
 ```
 
 Added in v2.0.0
@@ -225,8 +215,8 @@ Method policyHash of ParameterChangeAction
 
 ```ts
 export declare const policyHash: (
-  instance: CML.ParameterChangeAction,
-) => Effect.Effect<CML.ScriptHash | undefined, ParameterChangeActionError>;
+  instance: CML.ParameterChangeAction
+) => Effect.Effect<CML.ScriptHash | undefined, ParameterChangeActionError>
 ```
 
 Added in v2.0.0
@@ -239,8 +229,8 @@ Method toCanonicalCborBytes of ParameterChangeAction
 
 ```ts
 export declare const toCanonicalCborBytes: (
-  instance: CML.ParameterChangeAction,
-) => Effect.Effect<Uint8Array, ParameterChangeActionError>;
+  instance: CML.ParameterChangeAction
+) => Effect.Effect<Uint8Array, ParameterChangeActionError>
 ```
 
 Added in v2.0.0
@@ -253,8 +243,8 @@ Method toCanonicalCborHex of ParameterChangeAction
 
 ```ts
 export declare const toCanonicalCborHex: (
-  instance: CML.ParameterChangeAction,
-) => Effect.Effect<string, ParameterChangeActionError>;
+  instance: CML.ParameterChangeAction
+) => Effect.Effect<string, ParameterChangeActionError>
 ```
 
 Added in v2.0.0
@@ -267,8 +257,8 @@ Method toCborBytes of ParameterChangeAction
 
 ```ts
 export declare const toCborBytes: (
-  instance: CML.ParameterChangeAction,
-) => Effect.Effect<Uint8Array, ParameterChangeActionError>;
+  instance: CML.ParameterChangeAction
+) => Effect.Effect<Uint8Array, ParameterChangeActionError>
 ```
 
 Added in v2.0.0
@@ -281,8 +271,8 @@ Method toCborHex of ParameterChangeAction
 
 ```ts
 export declare const toCborHex: (
-  instance: CML.ParameterChangeAction,
-) => Effect.Effect<string, ParameterChangeActionError>;
+  instance: CML.ParameterChangeAction
+) => Effect.Effect<string, ParameterChangeActionError>
 ```
 
 Added in v2.0.0
@@ -294,9 +284,7 @@ Method toJsValue of ParameterChangeAction
 **Signature**
 
 ```ts
-export declare const toJsValue: (
-  instance: CML.ParameterChangeAction,
-) => Effect.Effect<any, ParameterChangeActionError>;
+export declare const toJsValue: (instance: CML.ParameterChangeAction) => Effect.Effect<any, ParameterChangeActionError>
 ```
 
 Added in v2.0.0
@@ -308,9 +296,7 @@ Method toJson of ParameterChangeAction
 **Signature**
 
 ```ts
-export declare const toJson: (
-  instance: CML.ParameterChangeAction,
-) => Effect.Effect<string, ParameterChangeActionError>;
+export declare const toJson: (instance: CML.ParameterChangeAction) => Effect.Effect<string, ParameterChangeActionError>
 ```
 
 Added in v2.0.0
@@ -323,8 +309,8 @@ Method update of ParameterChangeAction
 
 ```ts
 export declare const update: (
-  instance: CML.ParameterChangeAction,
-) => Effect.Effect<CML.ProtocolParamUpdate, ParameterChangeActionError>;
+  instance: CML.ParameterChangeAction
+) => Effect.Effect<CML.ProtocolParamUpdate, ParameterChangeActionError>
 ```
 
 Added in v2.0.0
@@ -338,9 +324,7 @@ Unsafely calls instance.actionId without Effect wrapper
 **Signature**
 
 ```ts
-export declare const actionIdUnsafe: (
-  instance: CML.ParameterChangeAction,
-) => CML.GovActionId | undefined;
+export declare const actionIdUnsafe: (instance: CML.ParameterChangeAction) => CML.GovActionId | undefined
 ```
 
 Added in v2.0.0
@@ -352,7 +336,7 @@ Unsafely calls instance.free without Effect wrapper
 **Signature**
 
 ```ts
-export declare const freeUnsafe: (instance: CML.ParameterChangeAction) => void;
+export declare const freeUnsafe: (instance: CML.ParameterChangeAction) => void
 ```
 
 Added in v2.0.0
@@ -364,9 +348,7 @@ Unsafely calls instance.policyHash without Effect wrapper
 **Signature**
 
 ```ts
-export declare const policyHashUnsafe: (
-  instance: CML.ParameterChangeAction,
-) => CML.ScriptHash | undefined;
+export declare const policyHashUnsafe: (instance: CML.ParameterChangeAction) => CML.ScriptHash | undefined
 ```
 
 Added in v2.0.0
@@ -378,9 +360,7 @@ Unsafely calls instance.toCanonicalCborBytes without Effect wrapper
 **Signature**
 
 ```ts
-export declare const toCanonicalCborBytesUnsafe: (
-  instance: CML.ParameterChangeAction,
-) => Uint8Array;
+export declare const toCanonicalCborBytesUnsafe: (instance: CML.ParameterChangeAction) => Uint8Array
 ```
 
 Added in v2.0.0
@@ -392,9 +372,7 @@ Unsafely calls instance.toCanonicalCborHex without Effect wrapper
 **Signature**
 
 ```ts
-export declare const toCanonicalCborHexUnsafe: (
-  instance: CML.ParameterChangeAction,
-) => string;
+export declare const toCanonicalCborHexUnsafe: (instance: CML.ParameterChangeAction) => string
 ```
 
 Added in v2.0.0
@@ -406,9 +384,7 @@ Unsafely calls instance.toCborBytes without Effect wrapper
 **Signature**
 
 ```ts
-export declare const toCborBytesUnsafe: (
-  instance: CML.ParameterChangeAction,
-) => Uint8Array;
+export declare const toCborBytesUnsafe: (instance: CML.ParameterChangeAction) => Uint8Array
 ```
 
 Added in v2.0.0
@@ -420,9 +396,7 @@ Unsafely calls instance.toCborHex without Effect wrapper
 **Signature**
 
 ```ts
-export declare const toCborHexUnsafe: (
-  instance: CML.ParameterChangeAction,
-) => string;
+export declare const toCborHexUnsafe: (instance: CML.ParameterChangeAction) => string
 ```
 
 Added in v2.0.0
@@ -434,9 +408,7 @@ Unsafely calls instance.toJsValue without Effect wrapper
 **Signature**
 
 ```ts
-export declare const toJsValueUnsafe: (
-  instance: CML.ParameterChangeAction,
-) => any;
+export declare const toJsValueUnsafe: (instance: CML.ParameterChangeAction) => any
 ```
 
 Added in v2.0.0
@@ -448,9 +420,7 @@ Unsafely calls instance.toJson without Effect wrapper
 **Signature**
 
 ```ts
-export declare const toJsonUnsafe: (
-  instance: CML.ParameterChangeAction,
-) => string;
+export declare const toJsonUnsafe: (instance: CML.ParameterChangeAction) => string
 ```
 
 Added in v2.0.0
@@ -462,9 +432,7 @@ Unsafely calls instance.update without Effect wrapper
 **Signature**
 
 ```ts
-export declare const updateUnsafe: (
-  instance: CML.ParameterChangeAction,
-) => CML.ProtocolParamUpdate;
+export declare const updateUnsafe: (instance: CML.ParameterChangeAction) => CML.ProtocolParamUpdate
 ```
 
 Added in v2.0.0
@@ -478,7 +446,7 @@ Type alias for the CML ParameterChangeAction class
 **Signature**
 
 ```ts
-export type ParameterChangeAction = CML.ParameterChangeAction;
+export type ParameterChangeAction = CML.ParameterChangeAction
 ```
 
 Added in v2.0.0

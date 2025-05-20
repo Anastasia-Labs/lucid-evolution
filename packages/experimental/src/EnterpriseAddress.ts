@@ -41,8 +41,8 @@ export const fromBytes = Effect.fn(function* (bytes: Uint8Array) {
   // Script payment
   const isPaymentKey = (addressType & 0b0001) === 0;
   const paymentCredential: Credential.Credential = isPaymentKey
-    ? yield* KeyHash.fromBytes(bytes.slice(1, 29))
-    : yield* ScriptHash.fromBytes(bytes.slice(1, 29));
+    ? yield* KeyHash.decodeBytes(bytes.slice(1, 29))
+    : yield* ScriptHash.decodeBytes(bytes.slice(1, 29));
   const enterpriseAddress: EnterpriseAddress = makeOrThrow(
     networkId,
     paymentCredential,

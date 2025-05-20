@@ -64,8 +64,8 @@ Static method \_new of AlonzoFormatTxOut
 ```ts
 export declare const _new: (
   address: CML.Address,
-  amount: CML.Value,
-) => Effect.Effect<CML.AlonzoFormatTxOut, AlonzoFormatTxOutError>;
+  amount: CML.Value
+) => Effect.Effect<CML.AlonzoFormatTxOut, AlonzoFormatTxOutError>
 ```
 
 Added in v2.0.0
@@ -78,8 +78,8 @@ Static method fromCborBytes of AlonzoFormatTxOut
 
 ```ts
 export declare const fromCborBytes: (
-  cborBytes: Uint8Array,
-) => Effect.Effect<CML.AlonzoFormatTxOut, AlonzoFormatTxOutError>;
+  cborBytes: Uint8Array
+) => Effect.Effect<CML.AlonzoFormatTxOut, AlonzoFormatTxOutError>
 ```
 
 Added in v2.0.0
@@ -91,9 +91,7 @@ Static method fromCborHex of AlonzoFormatTxOut
 **Signature**
 
 ```ts
-export declare const fromCborHex: (
-  cborBytes: string,
-) => Effect.Effect<CML.AlonzoFormatTxOut, AlonzoFormatTxOutError>;
+export declare const fromCborHex: (cborBytes: string) => Effect.Effect<CML.AlonzoFormatTxOut, AlonzoFormatTxOutError>
 ```
 
 Added in v2.0.0
@@ -105,9 +103,7 @@ Static method fromJson of AlonzoFormatTxOut
 **Signature**
 
 ```ts
-export declare const fromJson: (
-  json: string,
-) => Effect.Effect<CML.AlonzoFormatTxOut, AlonzoFormatTxOutError>;
+export declare const fromJson: (json: string) => Effect.Effect<CML.AlonzoFormatTxOut, AlonzoFormatTxOutError>
 ```
 
 Added in v2.0.0
@@ -121,10 +117,7 @@ Unsafely calls AlonzoFormatTxOut.\_new without Effect wrapper
 **Signature**
 
 ```ts
-export declare const _newUnsafe: (
-  address: CML.Address,
-  amount: CML.Value,
-) => CML.AlonzoFormatTxOut;
+export declare const _newUnsafe: (address: CML.Address, amount: CML.Value) => CML.AlonzoFormatTxOut
 ```
 
 Added in v2.0.0
@@ -136,9 +129,7 @@ Unsafely calls AlonzoFormatTxOut.fromCborBytes without Effect wrapper
 **Signature**
 
 ```ts
-export declare const fromCborBytesUnsafe: (
-  cborBytes: Uint8Array,
-) => CML.AlonzoFormatTxOut;
+export declare const fromCborBytesUnsafe: (cborBytes: Uint8Array) => CML.AlonzoFormatTxOut
 ```
 
 Added in v2.0.0
@@ -150,9 +141,7 @@ Unsafely calls AlonzoFormatTxOut.fromCborHex without Effect wrapper
 **Signature**
 
 ```ts
-export declare const fromCborHexUnsafe: (
-  cborBytes: string,
-) => CML.AlonzoFormatTxOut;
+export declare const fromCborHexUnsafe: (cborBytes: string) => CML.AlonzoFormatTxOut
 ```
 
 Added in v2.0.0
@@ -164,7 +153,7 @@ Unsafely calls AlonzoFormatTxOut.fromJson without Effect wrapper
 **Signature**
 
 ```ts
-export declare const fromJsonUnsafe: (json: string) => CML.AlonzoFormatTxOut;
+export declare const fromJsonUnsafe: (json: string) => CML.AlonzoFormatTxOut
 ```
 
 Added in v2.0.0
@@ -194,9 +183,7 @@ Method address of AlonzoFormatTxOut
 **Signature**
 
 ```ts
-export declare const address: (
-  instance: CML.AlonzoFormatTxOut,
-) => Effect.Effect<CML.Address, AlonzoFormatTxOutError>;
+export declare const address: (instance: CML.AlonzoFormatTxOut) => Effect.Effect<CML.Address, AlonzoFormatTxOutError>
 ```
 
 Added in v2.0.0
@@ -208,9 +195,7 @@ Method amount of AlonzoFormatTxOut
 **Signature**
 
 ```ts
-export declare const amount: (
-  instance: CML.AlonzoFormatTxOut,
-) => Effect.Effect<CML.Value, AlonzoFormatTxOutError>;
+export declare const amount: (instance: CML.AlonzoFormatTxOut) => Effect.Effect<CML.Value, AlonzoFormatTxOutError>
 ```
 
 Added in v2.0.0
@@ -223,8 +208,8 @@ Method datumHash of AlonzoFormatTxOut
 
 ```ts
 export declare const datumHash: (
-  instance: CML.AlonzoFormatTxOut,
-) => Effect.Effect<CML.DatumHash | undefined, AlonzoFormatTxOutError>;
+  instance: CML.AlonzoFormatTxOut
+) => Effect.Effect<CML.DatumHash | undefined, AlonzoFormatTxOutError>
 ```
 
 Added in v2.0.0
@@ -236,9 +221,7 @@ Method free of AlonzoFormatTxOut
 **Signature**
 
 ```ts
-export declare const free: (
-  instance: CML.AlonzoFormatTxOut,
-) => Effect.Effect<void, AlonzoFormatTxOutError>;
+export declare const free: (instance: CML.AlonzoFormatTxOut) => Effect.Effect<void, AlonzoFormatTxOutError>
 ```
 
 Added in v2.0.0
@@ -252,8 +235,8 @@ Method setDatumHash of AlonzoFormatTxOut
 ```ts
 export declare const setDatumHash: (
   instance: CML.AlonzoFormatTxOut,
-  datumHash: CML.DatumHash,
-) => Effect.Effect<void, AlonzoFormatTxOutError>;
+  datumHash: CML.DatumHash
+) => Effect.Effect<void, AlonzoFormatTxOutError>
 ```
 
 Added in v2.0.0
@@ -266,8 +249,8 @@ Method toCanonicalCborBytes of AlonzoFormatTxOut
 
 ```ts
 export declare const toCanonicalCborBytes: (
-  instance: CML.AlonzoFormatTxOut,
-) => Effect.Effect<Uint8Array, AlonzoFormatTxOutError>;
+  instance: CML.AlonzoFormatTxOut
+) => Effect.Effect<Uint8Array, AlonzoFormatTxOutError>
 ```
 
 Added in v2.0.0
@@ -280,8 +263,8 @@ Method toCanonicalCborHex of AlonzoFormatTxOut
 
 ```ts
 export declare const toCanonicalCborHex: (
-  instance: CML.AlonzoFormatTxOut,
-) => Effect.Effect<string, AlonzoFormatTxOutError>;
+  instance: CML.AlonzoFormatTxOut
+) => Effect.Effect<string, AlonzoFormatTxOutError>
 ```
 
 Added in v2.0.0
@@ -293,9 +276,7 @@ Method toCborBytes of AlonzoFormatTxOut
 **Signature**
 
 ```ts
-export declare const toCborBytes: (
-  instance: CML.AlonzoFormatTxOut,
-) => Effect.Effect<Uint8Array, AlonzoFormatTxOutError>;
+export declare const toCborBytes: (instance: CML.AlonzoFormatTxOut) => Effect.Effect<Uint8Array, AlonzoFormatTxOutError>
 ```
 
 Added in v2.0.0
@@ -307,9 +288,7 @@ Method toCborHex of AlonzoFormatTxOut
 **Signature**
 
 ```ts
-export declare const toCborHex: (
-  instance: CML.AlonzoFormatTxOut,
-) => Effect.Effect<string, AlonzoFormatTxOutError>;
+export declare const toCborHex: (instance: CML.AlonzoFormatTxOut) => Effect.Effect<string, AlonzoFormatTxOutError>
 ```
 
 Added in v2.0.0
@@ -321,9 +300,7 @@ Method toJsValue of AlonzoFormatTxOut
 **Signature**
 
 ```ts
-export declare const toJsValue: (
-  instance: CML.AlonzoFormatTxOut,
-) => Effect.Effect<any, AlonzoFormatTxOutError>;
+export declare const toJsValue: (instance: CML.AlonzoFormatTxOut) => Effect.Effect<any, AlonzoFormatTxOutError>
 ```
 
 Added in v2.0.0
@@ -335,9 +312,7 @@ Method toJson of AlonzoFormatTxOut
 **Signature**
 
 ```ts
-export declare const toJson: (
-  instance: CML.AlonzoFormatTxOut,
-) => Effect.Effect<string, AlonzoFormatTxOutError>;
+export declare const toJson: (instance: CML.AlonzoFormatTxOut) => Effect.Effect<string, AlonzoFormatTxOutError>
 ```
 
 Added in v2.0.0
@@ -351,9 +326,7 @@ Unsafely calls instance.address without Effect wrapper
 **Signature**
 
 ```ts
-export declare const addressUnsafe: (
-  instance: CML.AlonzoFormatTxOut,
-) => CML.Address;
+export declare const addressUnsafe: (instance: CML.AlonzoFormatTxOut) => CML.Address
 ```
 
 Added in v2.0.0
@@ -365,9 +338,7 @@ Unsafely calls instance.amount without Effect wrapper
 **Signature**
 
 ```ts
-export declare const amountUnsafe: (
-  instance: CML.AlonzoFormatTxOut,
-) => CML.Value;
+export declare const amountUnsafe: (instance: CML.AlonzoFormatTxOut) => CML.Value
 ```
 
 Added in v2.0.0
@@ -379,9 +350,7 @@ Unsafely calls instance.datumHash without Effect wrapper
 **Signature**
 
 ```ts
-export declare const datumHashUnsafe: (
-  instance: CML.AlonzoFormatTxOut,
-) => CML.DatumHash | undefined;
+export declare const datumHashUnsafe: (instance: CML.AlonzoFormatTxOut) => CML.DatumHash | undefined
 ```
 
 Added in v2.0.0
@@ -393,7 +362,7 @@ Unsafely calls instance.free without Effect wrapper
 **Signature**
 
 ```ts
-export declare const freeUnsafe: (instance: CML.AlonzoFormatTxOut) => void;
+export declare const freeUnsafe: (instance: CML.AlonzoFormatTxOut) => void
 ```
 
 Added in v2.0.0
@@ -405,10 +374,7 @@ Unsafely calls instance.setDatumHash without Effect wrapper
 **Signature**
 
 ```ts
-export declare const setDatumHashUnsafe: (
-  instance: CML.AlonzoFormatTxOut,
-  datumHash: CML.DatumHash,
-) => void;
+export declare const setDatumHashUnsafe: (instance: CML.AlonzoFormatTxOut, datumHash: CML.DatumHash) => void
 ```
 
 Added in v2.0.0
@@ -420,9 +386,7 @@ Unsafely calls instance.toCanonicalCborBytes without Effect wrapper
 **Signature**
 
 ```ts
-export declare const toCanonicalCborBytesUnsafe: (
-  instance: CML.AlonzoFormatTxOut,
-) => Uint8Array;
+export declare const toCanonicalCborBytesUnsafe: (instance: CML.AlonzoFormatTxOut) => Uint8Array
 ```
 
 Added in v2.0.0
@@ -434,9 +398,7 @@ Unsafely calls instance.toCanonicalCborHex without Effect wrapper
 **Signature**
 
 ```ts
-export declare const toCanonicalCborHexUnsafe: (
-  instance: CML.AlonzoFormatTxOut,
-) => string;
+export declare const toCanonicalCborHexUnsafe: (instance: CML.AlonzoFormatTxOut) => string
 ```
 
 Added in v2.0.0
@@ -448,9 +410,7 @@ Unsafely calls instance.toCborBytes without Effect wrapper
 **Signature**
 
 ```ts
-export declare const toCborBytesUnsafe: (
-  instance: CML.AlonzoFormatTxOut,
-) => Uint8Array;
+export declare const toCborBytesUnsafe: (instance: CML.AlonzoFormatTxOut) => Uint8Array
 ```
 
 Added in v2.0.0
@@ -462,9 +422,7 @@ Unsafely calls instance.toCborHex without Effect wrapper
 **Signature**
 
 ```ts
-export declare const toCborHexUnsafe: (
-  instance: CML.AlonzoFormatTxOut,
-) => string;
+export declare const toCborHexUnsafe: (instance: CML.AlonzoFormatTxOut) => string
 ```
 
 Added in v2.0.0
@@ -476,7 +434,7 @@ Unsafely calls instance.toJsValue without Effect wrapper
 **Signature**
 
 ```ts
-export declare const toJsValueUnsafe: (instance: CML.AlonzoFormatTxOut) => any;
+export declare const toJsValueUnsafe: (instance: CML.AlonzoFormatTxOut) => any
 ```
 
 Added in v2.0.0
@@ -488,7 +446,7 @@ Unsafely calls instance.toJson without Effect wrapper
 **Signature**
 
 ```ts
-export declare const toJsonUnsafe: (instance: CML.AlonzoFormatTxOut) => string;
+export declare const toJsonUnsafe: (instance: CML.AlonzoFormatTxOut) => string
 ```
 
 Added in v2.0.0
@@ -502,7 +460,7 @@ Type alias for the CML AlonzoFormatTxOut class
 **Signature**
 
 ```ts
-export type AlonzoFormatTxOut = CML.AlonzoFormatTxOut;
+export type AlonzoFormatTxOut = CML.AlonzoFormatTxOut
 ```
 
 Added in v2.0.0

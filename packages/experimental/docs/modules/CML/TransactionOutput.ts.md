@@ -80,8 +80,8 @@ export declare const _new: (
   address: CML.Address,
   amount: CML.Value,
   datumOption: CML.DatumOption,
-  scriptReference: CML.Script,
-) => Effect.Effect<CML.TransactionOutput, TransactionOutputError>;
+  scriptReference: CML.Script
+) => Effect.Effect<CML.TransactionOutput, TransactionOutputError>
 ```
 
 Added in v2.0.0
@@ -94,8 +94,8 @@ Static method fromCborBytes of TransactionOutput
 
 ```ts
 export declare const fromCborBytes: (
-  cborBytes: Uint8Array,
-) => Effect.Effect<CML.TransactionOutput, TransactionOutputError>;
+  cborBytes: Uint8Array
+) => Effect.Effect<CML.TransactionOutput, TransactionOutputError>
 ```
 
 Added in v2.0.0
@@ -107,9 +107,7 @@ Static method fromCborHex of TransactionOutput
 **Signature**
 
 ```ts
-export declare const fromCborHex: (
-  cborBytes: string,
-) => Effect.Effect<CML.TransactionOutput, TransactionOutputError>;
+export declare const fromCborHex: (cborBytes: string) => Effect.Effect<CML.TransactionOutput, TransactionOutputError>
 ```
 
 Added in v2.0.0
@@ -121,9 +119,7 @@ Static method fromJson of TransactionOutput
 **Signature**
 
 ```ts
-export declare const fromJson: (
-  json: string,
-) => Effect.Effect<CML.TransactionOutput, TransactionOutputError>;
+export declare const fromJson: (json: string) => Effect.Effect<CML.TransactionOutput, TransactionOutputError>
 ```
 
 Added in v2.0.0
@@ -136,8 +132,8 @@ Static method newAlonzoFormatTxOut of TransactionOutput
 
 ```ts
 export declare const newAlonzoFormatTxOut: (
-  alonzoFormatTxOut: CML.AlonzoFormatTxOut,
-) => Effect.Effect<CML.TransactionOutput, TransactionOutputError>;
+  alonzoFormatTxOut: CML.AlonzoFormatTxOut
+) => Effect.Effect<CML.TransactionOutput, TransactionOutputError>
 ```
 
 Added in v2.0.0
@@ -150,8 +146,8 @@ Static method newConwayFormatTxOut of TransactionOutput
 
 ```ts
 export declare const newConwayFormatTxOut: (
-  conwayFormatTxOut: CML.ConwayFormatTxOut,
-) => Effect.Effect<CML.TransactionOutput, TransactionOutputError>;
+  conwayFormatTxOut: CML.ConwayFormatTxOut
+) => Effect.Effect<CML.TransactionOutput, TransactionOutputError>
 ```
 
 Added in v2.0.0
@@ -169,8 +165,8 @@ export declare const _newUnsafe: (
   address: CML.Address,
   amount: CML.Value,
   datumOption: CML.DatumOption,
-  scriptReference: CML.Script,
-) => CML.TransactionOutput;
+  scriptReference: CML.Script
+) => CML.TransactionOutput
 ```
 
 Added in v2.0.0
@@ -182,9 +178,7 @@ Unsafely calls TransactionOutput.fromCborBytes without Effect wrapper
 **Signature**
 
 ```ts
-export declare const fromCborBytesUnsafe: (
-  cborBytes: Uint8Array,
-) => CML.TransactionOutput;
+export declare const fromCborBytesUnsafe: (cborBytes: Uint8Array) => CML.TransactionOutput
 ```
 
 Added in v2.0.0
@@ -196,9 +190,7 @@ Unsafely calls TransactionOutput.fromCborHex without Effect wrapper
 **Signature**
 
 ```ts
-export declare const fromCborHexUnsafe: (
-  cborBytes: string,
-) => CML.TransactionOutput;
+export declare const fromCborHexUnsafe: (cborBytes: string) => CML.TransactionOutput
 ```
 
 Added in v2.0.0
@@ -210,7 +202,7 @@ Unsafely calls TransactionOutput.fromJson without Effect wrapper
 **Signature**
 
 ```ts
-export declare const fromJsonUnsafe: (json: string) => CML.TransactionOutput;
+export declare const fromJsonUnsafe: (json: string) => CML.TransactionOutput
 ```
 
 Added in v2.0.0
@@ -222,9 +214,7 @@ Unsafely calls TransactionOutput.newAlonzoFormatTxOut without Effect wrapper
 **Signature**
 
 ```ts
-export declare const newAlonzoFormatTxOutUnsafe: (
-  alonzoFormatTxOut: CML.AlonzoFormatTxOut,
-) => CML.TransactionOutput;
+export declare const newAlonzoFormatTxOutUnsafe: (alonzoFormatTxOut: CML.AlonzoFormatTxOut) => CML.TransactionOutput
 ```
 
 Added in v2.0.0
@@ -236,9 +226,7 @@ Unsafely calls TransactionOutput.newConwayFormatTxOut without Effect wrapper
 **Signature**
 
 ```ts
-export declare const newConwayFormatTxOutUnsafe: (
-  conwayFormatTxOut: CML.ConwayFormatTxOut,
-) => CML.TransactionOutput;
+export declare const newConwayFormatTxOutUnsafe: (conwayFormatTxOut: CML.ConwayFormatTxOut) => CML.TransactionOutput
 ```
 
 Added in v2.0.0
@@ -268,9 +256,7 @@ Method address of TransactionOutput
 **Signature**
 
 ```ts
-export declare const address: (
-  instance: CML.TransactionOutput,
-) => Effect.Effect<CML.Address, TransactionOutputError>;
+export declare const address: (instance: CML.TransactionOutput) => Effect.Effect<CML.Address, TransactionOutputError>
 ```
 
 Added in v2.0.0
@@ -282,9 +268,7 @@ Method amount of TransactionOutput
 **Signature**
 
 ```ts
-export declare const amount: (
-  instance: CML.TransactionOutput,
-) => Effect.Effect<CML.Value, TransactionOutputError>;
+export declare const amount: (instance: CML.TransactionOutput) => Effect.Effect<CML.Value, TransactionOutputError>
 ```
 
 Added in v2.0.0
@@ -297,8 +281,8 @@ Method asAlonzoFormatTxOut of TransactionOutput
 
 ```ts
 export declare const asAlonzoFormatTxOut: (
-  instance: CML.TransactionOutput,
-) => Effect.Effect<CML.AlonzoFormatTxOut | undefined, TransactionOutputError>;
+  instance: CML.TransactionOutput
+) => Effect.Effect<CML.AlonzoFormatTxOut | undefined, TransactionOutputError>
 ```
 
 Added in v2.0.0
@@ -311,8 +295,8 @@ Method asConwayFormatTxOut of TransactionOutput
 
 ```ts
 export declare const asConwayFormatTxOut: (
-  instance: CML.TransactionOutput,
-) => Effect.Effect<CML.ConwayFormatTxOut | undefined, TransactionOutputError>;
+  instance: CML.TransactionOutput
+) => Effect.Effect<CML.ConwayFormatTxOut | undefined, TransactionOutputError>
 ```
 
 Added in v2.0.0
@@ -325,8 +309,8 @@ Method datum of TransactionOutput
 
 ```ts
 export declare const datum: (
-  instance: CML.TransactionOutput,
-) => Effect.Effect<CML.DatumOption | undefined, TransactionOutputError>;
+  instance: CML.TransactionOutput
+) => Effect.Effect<CML.DatumOption | undefined, TransactionOutputError>
 ```
 
 Added in v2.0.0
@@ -339,8 +323,8 @@ Method datumHash of TransactionOutput
 
 ```ts
 export declare const datumHash: (
-  instance: CML.TransactionOutput,
-) => Effect.Effect<CML.DatumHash | undefined, TransactionOutputError>;
+  instance: CML.TransactionOutput
+) => Effect.Effect<CML.DatumHash | undefined, TransactionOutputError>
 ```
 
 Added in v2.0.0
@@ -352,9 +336,7 @@ Method free of TransactionOutput
 **Signature**
 
 ```ts
-export declare const free: (
-  instance: CML.TransactionOutput,
-) => Effect.Effect<void, TransactionOutputError>;
+export declare const free: (instance: CML.TransactionOutput) => Effect.Effect<void, TransactionOutputError>
 ```
 
 Added in v2.0.0
@@ -367,8 +349,8 @@ Method kind of TransactionOutput
 
 ```ts
 export declare const kind: (
-  instance: CML.TransactionOutput,
-) => Effect.Effect<CML.TransactionOutputKind, TransactionOutputError>;
+  instance: CML.TransactionOutput
+) => Effect.Effect<CML.TransactionOutputKind, TransactionOutputError>
 ```
 
 Added in v2.0.0
@@ -381,8 +363,8 @@ Method scriptRef of TransactionOutput
 
 ```ts
 export declare const scriptRef: (
-  instance: CML.TransactionOutput,
-) => Effect.Effect<CML.Script | undefined, TransactionOutputError>;
+  instance: CML.TransactionOutput
+) => Effect.Effect<CML.Script | undefined, TransactionOutputError>
 ```
 
 Added in v2.0.0
@@ -396,8 +378,8 @@ Method setAmount of TransactionOutput
 ```ts
 export declare const setAmount: (
   instance: CML.TransactionOutput,
-  amount: CML.Value,
-) => Effect.Effect<void, TransactionOutputError>;
+  amount: CML.Value
+) => Effect.Effect<void, TransactionOutputError>
 ```
 
 Added in v2.0.0
@@ -410,8 +392,8 @@ Method toCanonicalCborBytes of TransactionOutput
 
 ```ts
 export declare const toCanonicalCborBytes: (
-  instance: CML.TransactionOutput,
-) => Effect.Effect<Uint8Array, TransactionOutputError>;
+  instance: CML.TransactionOutput
+) => Effect.Effect<Uint8Array, TransactionOutputError>
 ```
 
 Added in v2.0.0
@@ -424,8 +406,8 @@ Method toCanonicalCborHex of TransactionOutput
 
 ```ts
 export declare const toCanonicalCborHex: (
-  instance: CML.TransactionOutput,
-) => Effect.Effect<string, TransactionOutputError>;
+  instance: CML.TransactionOutput
+) => Effect.Effect<string, TransactionOutputError>
 ```
 
 Added in v2.0.0
@@ -437,9 +419,7 @@ Method toCborBytes of TransactionOutput
 **Signature**
 
 ```ts
-export declare const toCborBytes: (
-  instance: CML.TransactionOutput,
-) => Effect.Effect<Uint8Array, TransactionOutputError>;
+export declare const toCborBytes: (instance: CML.TransactionOutput) => Effect.Effect<Uint8Array, TransactionOutputError>
 ```
 
 Added in v2.0.0
@@ -451,9 +431,7 @@ Method toCborHex of TransactionOutput
 **Signature**
 
 ```ts
-export declare const toCborHex: (
-  instance: CML.TransactionOutput,
-) => Effect.Effect<string, TransactionOutputError>;
+export declare const toCborHex: (instance: CML.TransactionOutput) => Effect.Effect<string, TransactionOutputError>
 ```
 
 Added in v2.0.0
@@ -465,9 +443,7 @@ Method toJsValue of TransactionOutput
 **Signature**
 
 ```ts
-export declare const toJsValue: (
-  instance: CML.TransactionOutput,
-) => Effect.Effect<any, TransactionOutputError>;
+export declare const toJsValue: (instance: CML.TransactionOutput) => Effect.Effect<any, TransactionOutputError>
 ```
 
 Added in v2.0.0
@@ -479,9 +455,7 @@ Method toJson of TransactionOutput
 **Signature**
 
 ```ts
-export declare const toJson: (
-  instance: CML.TransactionOutput,
-) => Effect.Effect<string, TransactionOutputError>;
+export declare const toJson: (instance: CML.TransactionOutput) => Effect.Effect<string, TransactionOutputError>
 ```
 
 Added in v2.0.0
@@ -495,9 +469,7 @@ Unsafely calls instance.address without Effect wrapper
 **Signature**
 
 ```ts
-export declare const addressUnsafe: (
-  instance: CML.TransactionOutput,
-) => CML.Address;
+export declare const addressUnsafe: (instance: CML.TransactionOutput) => CML.Address
 ```
 
 Added in v2.0.0
@@ -509,9 +481,7 @@ Unsafely calls instance.amount without Effect wrapper
 **Signature**
 
 ```ts
-export declare const amountUnsafe: (
-  instance: CML.TransactionOutput,
-) => CML.Value;
+export declare const amountUnsafe: (instance: CML.TransactionOutput) => CML.Value
 ```
 
 Added in v2.0.0
@@ -523,9 +493,7 @@ Unsafely calls instance.asAlonzoFormatTxOut without Effect wrapper
 **Signature**
 
 ```ts
-export declare const asAlonzoFormatTxOutUnsafe: (
-  instance: CML.TransactionOutput,
-) => CML.AlonzoFormatTxOut | undefined;
+export declare const asAlonzoFormatTxOutUnsafe: (instance: CML.TransactionOutput) => CML.AlonzoFormatTxOut | undefined
 ```
 
 Added in v2.0.0
@@ -537,9 +505,7 @@ Unsafely calls instance.asConwayFormatTxOut without Effect wrapper
 **Signature**
 
 ```ts
-export declare const asConwayFormatTxOutUnsafe: (
-  instance: CML.TransactionOutput,
-) => CML.ConwayFormatTxOut | undefined;
+export declare const asConwayFormatTxOutUnsafe: (instance: CML.TransactionOutput) => CML.ConwayFormatTxOut | undefined
 ```
 
 Added in v2.0.0
@@ -551,9 +517,7 @@ Unsafely calls instance.datumHash without Effect wrapper
 **Signature**
 
 ```ts
-export declare const datumHashUnsafe: (
-  instance: CML.TransactionOutput,
-) => CML.DatumHash | undefined;
+export declare const datumHashUnsafe: (instance: CML.TransactionOutput) => CML.DatumHash | undefined
 ```
 
 Added in v2.0.0
@@ -565,9 +529,7 @@ Unsafely calls instance.datum without Effect wrapper
 **Signature**
 
 ```ts
-export declare const datumUnsafe: (
-  instance: CML.TransactionOutput,
-) => CML.DatumOption | undefined;
+export declare const datumUnsafe: (instance: CML.TransactionOutput) => CML.DatumOption | undefined
 ```
 
 Added in v2.0.0
@@ -579,7 +541,7 @@ Unsafely calls instance.free without Effect wrapper
 **Signature**
 
 ```ts
-export declare const freeUnsafe: (instance: CML.TransactionOutput) => void;
+export declare const freeUnsafe: (instance: CML.TransactionOutput) => void
 ```
 
 Added in v2.0.0
@@ -591,9 +553,7 @@ Unsafely calls instance.kind without Effect wrapper
 **Signature**
 
 ```ts
-export declare const kindUnsafe: (
-  instance: CML.TransactionOutput,
-) => CML.TransactionOutputKind;
+export declare const kindUnsafe: (instance: CML.TransactionOutput) => CML.TransactionOutputKind
 ```
 
 Added in v2.0.0
@@ -605,9 +565,7 @@ Unsafely calls instance.scriptRef without Effect wrapper
 **Signature**
 
 ```ts
-export declare const scriptRefUnsafe: (
-  instance: CML.TransactionOutput,
-) => CML.Script | undefined;
+export declare const scriptRefUnsafe: (instance: CML.TransactionOutput) => CML.Script | undefined
 ```
 
 Added in v2.0.0
@@ -619,10 +577,7 @@ Unsafely calls instance.setAmount without Effect wrapper
 **Signature**
 
 ```ts
-export declare const setAmountUnsafe: (
-  instance: CML.TransactionOutput,
-  amount: CML.Value,
-) => void;
+export declare const setAmountUnsafe: (instance: CML.TransactionOutput, amount: CML.Value) => void
 ```
 
 Added in v2.0.0
@@ -634,9 +589,7 @@ Unsafely calls instance.toCanonicalCborBytes without Effect wrapper
 **Signature**
 
 ```ts
-export declare const toCanonicalCborBytesUnsafe: (
-  instance: CML.TransactionOutput,
-) => Uint8Array;
+export declare const toCanonicalCborBytesUnsafe: (instance: CML.TransactionOutput) => Uint8Array
 ```
 
 Added in v2.0.0
@@ -648,9 +601,7 @@ Unsafely calls instance.toCanonicalCborHex without Effect wrapper
 **Signature**
 
 ```ts
-export declare const toCanonicalCborHexUnsafe: (
-  instance: CML.TransactionOutput,
-) => string;
+export declare const toCanonicalCborHexUnsafe: (instance: CML.TransactionOutput) => string
 ```
 
 Added in v2.0.0
@@ -662,9 +613,7 @@ Unsafely calls instance.toCborBytes without Effect wrapper
 **Signature**
 
 ```ts
-export declare const toCborBytesUnsafe: (
-  instance: CML.TransactionOutput,
-) => Uint8Array;
+export declare const toCborBytesUnsafe: (instance: CML.TransactionOutput) => Uint8Array
 ```
 
 Added in v2.0.0
@@ -676,9 +625,7 @@ Unsafely calls instance.toCborHex without Effect wrapper
 **Signature**
 
 ```ts
-export declare const toCborHexUnsafe: (
-  instance: CML.TransactionOutput,
-) => string;
+export declare const toCborHexUnsafe: (instance: CML.TransactionOutput) => string
 ```
 
 Added in v2.0.0
@@ -690,7 +637,7 @@ Unsafely calls instance.toJsValue without Effect wrapper
 **Signature**
 
 ```ts
-export declare const toJsValueUnsafe: (instance: CML.TransactionOutput) => any;
+export declare const toJsValueUnsafe: (instance: CML.TransactionOutput) => any
 ```
 
 Added in v2.0.0
@@ -702,7 +649,7 @@ Unsafely calls instance.toJson without Effect wrapper
 **Signature**
 
 ```ts
-export declare const toJsonUnsafe: (instance: CML.TransactionOutput) => string;
+export declare const toJsonUnsafe: (instance: CML.TransactionOutput) => string
 ```
 
 Added in v2.0.0
@@ -716,7 +663,7 @@ Type alias for the CML TransactionOutput class
 **Signature**
 
 ```ts
-export type TransactionOutput = CML.TransactionOutput;
+export type TransactionOutput = CML.TransactionOutput
 ```
 
 Added in v2.0.0

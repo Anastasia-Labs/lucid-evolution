@@ -47,7 +47,7 @@ Static method \_new of MapTransactionIndexToAuxiliaryData
 export declare const _new: () => Effect.Effect<
   CML.MapTransactionIndexToAuxiliaryData,
   MapTransactionIndexToAuxiliaryDataError
->;
+>
 ```
 
 Added in v2.0.0
@@ -61,7 +61,7 @@ Unsafely calls MapTransactionIndexToAuxiliaryData.\_new without Effect wrapper
 **Signature**
 
 ```ts
-export declare const _newUnsafe: () => CML.MapTransactionIndexToAuxiliaryData;
+export declare const _newUnsafe: () => CML.MapTransactionIndexToAuxiliaryData
 ```
 
 Added in v2.0.0
@@ -92,8 +92,8 @@ Method free of MapTransactionIndexToAuxiliaryData
 
 ```ts
 export declare const free: (
-  instance: CML.MapTransactionIndexToAuxiliaryData,
-) => Effect.Effect<void, MapTransactionIndexToAuxiliaryDataError>;
+  instance: CML.MapTransactionIndexToAuxiliaryData
+) => Effect.Effect<void, MapTransactionIndexToAuxiliaryDataError>
 ```
 
 Added in v2.0.0
@@ -107,11 +107,8 @@ Method get of MapTransactionIndexToAuxiliaryData
 ```ts
 export declare const get: (
   instance: CML.MapTransactionIndexToAuxiliaryData,
-  key: number,
-) => Effect.Effect<
-  CML.AuxiliaryData | undefined,
-  MapTransactionIndexToAuxiliaryDataError
->;
+  key: number
+) => Effect.Effect<CML.AuxiliaryData | undefined, MapTransactionIndexToAuxiliaryDataError>
 ```
 
 Added in v2.0.0
@@ -126,11 +123,8 @@ Method insert of MapTransactionIndexToAuxiliaryData
 export declare const insert: (
   instance: CML.MapTransactionIndexToAuxiliaryData,
   key: number,
-  value: CML.AuxiliaryData,
-) => Effect.Effect<
-  CML.AuxiliaryData | undefined,
-  MapTransactionIndexToAuxiliaryDataError
->;
+  value: CML.AuxiliaryData
+) => Effect.Effect<CML.AuxiliaryData | undefined, MapTransactionIndexToAuxiliaryDataError>
 ```
 
 Added in v2.0.0
@@ -143,8 +137,8 @@ Method keys of MapTransactionIndexToAuxiliaryData
 
 ```ts
 export declare const keys: (
-  instance: CML.MapTransactionIndexToAuxiliaryData,
-) => Effect.Effect<Uint16Array, MapTransactionIndexToAuxiliaryDataError>;
+  instance: CML.MapTransactionIndexToAuxiliaryData
+) => Effect.Effect<Uint16Array, MapTransactionIndexToAuxiliaryDataError>
 ```
 
 Added in v2.0.0
@@ -157,8 +151,8 @@ Method len of MapTransactionIndexToAuxiliaryData
 
 ```ts
 export declare const len: (
-  instance: CML.MapTransactionIndexToAuxiliaryData,
-) => Effect.Effect<number, MapTransactionIndexToAuxiliaryDataError>;
+  instance: CML.MapTransactionIndexToAuxiliaryData
+) => Effect.Effect<number, MapTransactionIndexToAuxiliaryDataError>
 ```
 
 Added in v2.0.0
@@ -172,9 +166,7 @@ Unsafely calls instance.free without Effect wrapper
 **Signature**
 
 ```ts
-export declare const freeUnsafe: (
-  instance: CML.MapTransactionIndexToAuxiliaryData,
-) => void;
+export declare const freeUnsafe: (instance: CML.MapTransactionIndexToAuxiliaryData) => void
 ```
 
 Added in v2.0.0
@@ -188,8 +180,8 @@ Unsafely calls instance.get without Effect wrapper
 ```ts
 export declare const getUnsafe: (
   instance: CML.MapTransactionIndexToAuxiliaryData,
-  key: number,
-) => CML.AuxiliaryData | undefined;
+  key: number
+) => CML.AuxiliaryData | undefined
 ```
 
 Added in v2.0.0
@@ -204,8 +196,8 @@ Unsafely calls instance.insert without Effect wrapper
 export declare const insertUnsafe: (
   instance: CML.MapTransactionIndexToAuxiliaryData,
   key: number,
-  value: CML.AuxiliaryData,
-) => CML.AuxiliaryData | undefined;
+  value: CML.AuxiliaryData
+) => CML.AuxiliaryData | undefined
 ```
 
 Added in v2.0.0
@@ -217,9 +209,7 @@ Unsafely calls instance.keys without Effect wrapper
 **Signature**
 
 ```ts
-export declare const keysUnsafe: (
-  instance: CML.MapTransactionIndexToAuxiliaryData,
-) => Uint16Array;
+export declare const keysUnsafe: (instance: CML.MapTransactionIndexToAuxiliaryData) => Uint16Array
 ```
 
 Added in v2.0.0
@@ -231,9 +221,7 @@ Unsafely calls instance.len without Effect wrapper
 **Signature**
 
 ```ts
-export declare const lenUnsafe: (
-  instance: CML.MapTransactionIndexToAuxiliaryData,
-) => number;
+export declare const lenUnsafe: (instance: CML.MapTransactionIndexToAuxiliaryData) => number
 ```
 
 Added in v2.0.0
@@ -247,8 +235,7 @@ Type alias for the CML MapTransactionIndexToAuxiliaryData class
 **Signature**
 
 ```ts
-export type MapTransactionIndexToAuxiliaryData =
-  CML.MapTransactionIndexToAuxiliaryData;
+export type MapTransactionIndexToAuxiliaryData = CML.MapTransactionIndexToAuxiliaryData
 ```
 
 Added in v2.0.0

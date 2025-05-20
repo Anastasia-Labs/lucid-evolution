@@ -54,9 +54,7 @@ Static method fromCborBytes of Url
 **Signature**
 
 ```ts
-export declare const fromCborBytes: (
-  cborBytes: Uint8Array,
-) => Effect.Effect<CML.Url, UrlError>;
+export declare const fromCborBytes: (cborBytes: Uint8Array) => Effect.Effect<CML.Url, UrlError>
 ```
 
 Added in v2.0.0
@@ -68,9 +66,7 @@ Static method fromCborHex of Url
 **Signature**
 
 ```ts
-export declare const fromCborHex: (
-  cborBytes: string,
-) => Effect.Effect<CML.Url, UrlError>;
+export declare const fromCborHex: (cborBytes: string) => Effect.Effect<CML.Url, UrlError>
 ```
 
 Added in v2.0.0
@@ -82,9 +78,7 @@ Static method fromJson of Url
 **Signature**
 
 ```ts
-export declare const fromJson: (
-  json: string,
-) => Effect.Effect<CML.Url, UrlError>;
+export declare const fromJson: (json: string) => Effect.Effect<CML.Url, UrlError>
 ```
 
 Added in v2.0.0
@@ -98,7 +92,7 @@ Unsafely calls Url.fromCborBytes without Effect wrapper
 **Signature**
 
 ```ts
-export declare const fromCborBytesUnsafe: (cborBytes: Uint8Array) => CML.Url;
+export declare const fromCborBytesUnsafe: (cborBytes: Uint8Array) => CML.Url
 ```
 
 Added in v2.0.0
@@ -110,7 +104,7 @@ Unsafely calls Url.fromCborHex without Effect wrapper
 **Signature**
 
 ```ts
-export declare const fromCborHexUnsafe: (cborBytes: string) => CML.Url;
+export declare const fromCborHexUnsafe: (cborBytes: string) => CML.Url
 ```
 
 Added in v2.0.0
@@ -122,7 +116,7 @@ Unsafely calls Url.fromJson without Effect wrapper
 **Signature**
 
 ```ts
-export declare const fromJsonUnsafe: (json: string) => CML.Url;
+export declare const fromJsonUnsafe: (json: string) => CML.Url
 ```
 
 Added in v2.0.0
@@ -152,7 +146,7 @@ Method free of Url
 **Signature**
 
 ```ts
-export declare const free: (instance: CML.Url) => Effect.Effect<void, UrlError>;
+export declare const free: (instance: CML.Url) => Effect.Effect<void, UrlError>
 ```
 
 Added in v2.0.0
@@ -164,9 +158,7 @@ Method get of Url
 **Signature**
 
 ```ts
-export declare const get: (
-  instance: CML.Url,
-) => Effect.Effect<string, UrlError>;
+export declare const get: (instance: CML.Url) => Effect.Effect<string, UrlError>
 ```
 
 Added in v2.0.0
@@ -178,9 +170,7 @@ Method toCanonicalCborBytes of Url
 **Signature**
 
 ```ts
-export declare const toCanonicalCborBytes: (
-  instance: CML.Url,
-) => Effect.Effect<Uint8Array, UrlError>;
+export declare const toCanonicalCborBytes: (instance: CML.Url) => Effect.Effect<Uint8Array, UrlError>
 ```
 
 Added in v2.0.0
@@ -192,9 +182,7 @@ Method toCanonicalCborHex of Url
 **Signature**
 
 ```ts
-export declare const toCanonicalCborHex: (
-  instance: CML.Url,
-) => Effect.Effect<string, UrlError>;
+export declare const toCanonicalCborHex: (instance: CML.Url) => Effect.Effect<string, UrlError>
 ```
 
 Added in v2.0.0
@@ -206,9 +194,7 @@ Method toCborBytes of Url
 **Signature**
 
 ```ts
-export declare const toCborBytes: (
-  instance: CML.Url,
-) => Effect.Effect<Uint8Array, UrlError>;
+export declare const toCborBytes: (instance: CML.Url) => Effect.Effect<Uint8Array, UrlError>
 ```
 
 Added in v2.0.0
@@ -220,9 +206,7 @@ Method toCborHex of Url
 **Signature**
 
 ```ts
-export declare const toCborHex: (
-  instance: CML.Url,
-) => Effect.Effect<string, UrlError>;
+export declare const toCborHex: (instance: CML.Url) => Effect.Effect<string, UrlError>
 ```
 
 Added in v2.0.0
@@ -234,9 +218,7 @@ Method toJsValue of Url
 **Signature**
 
 ```ts
-export declare const toJsValue: (
-  instance: CML.Url,
-) => Effect.Effect<any, UrlError>;
+export declare const toJsValue: (instance: CML.Url) => Effect.Effect<any, UrlError>
 ```
 
 Added in v2.0.0
@@ -248,9 +230,7 @@ Method toJson of Url
 **Signature**
 
 ```ts
-export declare const toJson: (
-  instance: CML.Url,
-) => Effect.Effect<string, UrlError>;
+export declare const toJson: (instance: CML.Url) => Effect.Effect<string, UrlError>
 ```
 
 Added in v2.0.0
@@ -264,7 +244,7 @@ Unsafely calls instance.free without Effect wrapper
 **Signature**
 
 ```ts
-export declare const freeUnsafe: (instance: CML.Url) => void;
+export declare const freeUnsafe: (instance: CML.Url) => void
 ```
 
 Added in v2.0.0
@@ -276,7 +256,7 @@ Unsafely calls instance.get without Effect wrapper
 **Signature**
 
 ```ts
-export declare const getUnsafe: (instance: CML.Url) => string;
+export declare const getUnsafe: (instance: CML.Url) => string
 ```
 
 Added in v2.0.0
@@ -288,9 +268,7 @@ Unsafely calls instance.toCanonicalCborBytes without Effect wrapper
 **Signature**
 
 ```ts
-export declare const toCanonicalCborBytesUnsafe: (
-  instance: CML.Url,
-) => Uint8Array;
+export declare const toCanonicalCborBytesUnsafe: (instance: CML.Url) => Uint8Array
 ```
 
 Added in v2.0.0
@@ -302,7 +280,7 @@ Unsafely calls instance.toCanonicalCborHex without Effect wrapper
 **Signature**
 
 ```ts
-export declare const toCanonicalCborHexUnsafe: (instance: CML.Url) => string;
+export declare const toCanonicalCborHexUnsafe: (instance: CML.Url) => string
 ```
 
 Added in v2.0.0
@@ -314,7 +292,7 @@ Unsafely calls instance.toCborBytes without Effect wrapper
 **Signature**
 
 ```ts
-export declare const toCborBytesUnsafe: (instance: CML.Url) => Uint8Array;
+export declare const toCborBytesUnsafe: (instance: CML.Url) => Uint8Array
 ```
 
 Added in v2.0.0
@@ -326,7 +304,7 @@ Unsafely calls instance.toCborHex without Effect wrapper
 **Signature**
 
 ```ts
-export declare const toCborHexUnsafe: (instance: CML.Url) => string;
+export declare const toCborHexUnsafe: (instance: CML.Url) => string
 ```
 
 Added in v2.0.0
@@ -338,7 +316,7 @@ Unsafely calls instance.toJsValue without Effect wrapper
 **Signature**
 
 ```ts
-export declare const toJsValueUnsafe: (instance: CML.Url) => any;
+export declare const toJsValueUnsafe: (instance: CML.Url) => any
 ```
 
 Added in v2.0.0
@@ -350,7 +328,7 @@ Unsafely calls instance.toJson without Effect wrapper
 **Signature**
 
 ```ts
-export declare const toJsonUnsafe: (instance: CML.Url) => string;
+export declare const toJsonUnsafe: (instance: CML.Url) => string
 ```
 
 Added in v2.0.0
@@ -364,7 +342,7 @@ Type alias for the CML Url class
 **Signature**
 
 ```ts
-export type Url = CML.Url;
+export type Url = CML.Url
 ```
 
 Added in v2.0.0

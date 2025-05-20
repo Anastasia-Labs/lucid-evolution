@@ -36,7 +36,7 @@ Type alias for the CML VoterKind enum
 **Signature**
 
 ```ts
-export type VoterKind = CML.VoterKind;
+export type VoterKind = CML.VoterKind
 ```
 
 Added in v2.0.0
@@ -50,7 +50,7 @@ Convert string to VoterKind enum value
 **Signature**
 
 ```ts
-export declare const fromString: (str: string) => CML.VoterKind | undefined;
+export declare const fromString: (str: string) => CML.VoterKind | undefined
 ```
 
 Added in v2.0.0
@@ -62,7 +62,7 @@ Convert VoterKind enum value to string
 **Signature**
 
 ```ts
-export declare const toString: (value: CML.VoterKind) => string;
+export declare const toString: (value: CML.VoterKind) => string
 ```
 
 Added in v2.0.0
@@ -74,7 +74,7 @@ Get all values of the VoterKind enum
 **Signature**
 
 ```ts
-export declare const values: () => Array<CML.VoterKind>;
+export declare const values: () => Array<CML.VoterKind>
 ```
 
 Added in v2.0.0
@@ -88,7 +88,7 @@ ConstitutionalCommitteeHotKeyHash variant of the VoterKind enum
 **Signature**
 
 ```ts
-export declare const ConstitutionalCommitteeHotKeyHash: CML.VoterKind.ConstitutionalCommitteeHotKeyHash;
+export declare const ConstitutionalCommitteeHotKeyHash: CML.VoterKind.ConstitutionalCommitteeHotKeyHash
 ```
 
 Added in v2.0.0
@@ -100,7 +100,7 @@ ConstitutionalCommitteeHotScriptHash variant of the VoterKind enum
 **Signature**
 
 ```ts
-export declare const ConstitutionalCommitteeHotScriptHash: CML.VoterKind.ConstitutionalCommitteeHotScriptHash;
+export declare const ConstitutionalCommitteeHotScriptHash: CML.VoterKind.ConstitutionalCommitteeHotScriptHash
 ```
 
 Added in v2.0.0
@@ -112,7 +112,7 @@ DRepKeyHash variant of the VoterKind enum
 **Signature**
 
 ```ts
-export declare const DRepKeyHash: CML.VoterKind.DRepKeyHash;
+export declare const DRepKeyHash: CML.VoterKind.DRepKeyHash
 ```
 
 Added in v2.0.0
@@ -124,7 +124,7 @@ DRepScriptHash variant of the VoterKind enum
 **Signature**
 
 ```ts
-export declare const DRepScriptHash: CML.VoterKind.DRepScriptHash;
+export declare const DRepScriptHash: CML.VoterKind.DRepScriptHash
 ```
 
 Added in v2.0.0
@@ -136,7 +136,7 @@ StakingPoolKeyHash variant of the VoterKind enum
 **Signature**
 
 ```ts
-export declare const StakingPoolKeyHash: CML.VoterKind.StakingPoolKeyHash;
+export declare const StakingPoolKeyHash: CML.VoterKind.StakingPoolKeyHash
 ```
 
 Added in v2.0.0

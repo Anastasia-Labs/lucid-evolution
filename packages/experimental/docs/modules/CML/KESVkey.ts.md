@@ -46,9 +46,7 @@ Static method fromBech32 of KESVkey
 **Signature**
 
 ```ts
-export declare const fromBech32: (
-  bech32Str: string,
-) => Effect.Effect<CML.KESVkey, KESVkeyError>;
+export declare const fromBech32: (bech32Str: string) => Effect.Effect<CML.KESVkey, KESVkeyError>
 ```
 
 Added in v2.0.0
@@ -60,9 +58,7 @@ Static method fromHex of KESVkey
 **Signature**
 
 ```ts
-export declare const fromHex: (
-  input: string,
-) => Effect.Effect<CML.KESVkey, KESVkeyError>;
+export declare const fromHex: (input: string) => Effect.Effect<CML.KESVkey, KESVkeyError>
 ```
 
 Added in v2.0.0
@@ -74,9 +70,7 @@ Static method fromRawBytes of KESVkey
 **Signature**
 
 ```ts
-export declare const fromRawBytes: (
-  bytes: Uint8Array,
-) => Effect.Effect<CML.KESVkey, KESVkeyError>;
+export declare const fromRawBytes: (bytes: Uint8Array) => Effect.Effect<CML.KESVkey, KESVkeyError>
 ```
 
 Added in v2.0.0
@@ -90,7 +84,7 @@ Unsafely calls KESVkey.fromBech32 without Effect wrapper
 **Signature**
 
 ```ts
-export declare const fromBech32Unsafe: (bech32Str: string) => CML.KESVkey;
+export declare const fromBech32Unsafe: (bech32Str: string) => CML.KESVkey
 ```
 
 Added in v2.0.0
@@ -102,7 +96,7 @@ Unsafely calls KESVkey.fromHex without Effect wrapper
 **Signature**
 
 ```ts
-export declare const fromHexUnsafe: (input: string) => CML.KESVkey;
+export declare const fromHexUnsafe: (input: string) => CML.KESVkey
 ```
 
 Added in v2.0.0
@@ -114,7 +108,7 @@ Unsafely calls KESVkey.fromRawBytes without Effect wrapper
 **Signature**
 
 ```ts
-export declare const fromRawBytesUnsafe: (bytes: Uint8Array) => CML.KESVkey;
+export declare const fromRawBytesUnsafe: (bytes: Uint8Array) => CML.KESVkey
 ```
 
 Added in v2.0.0
@@ -144,9 +138,7 @@ Method free of KESVkey
 **Signature**
 
 ```ts
-export declare const free: (
-  instance: CML.KESVkey,
-) => Effect.Effect<void, KESVkeyError>;
+export declare const free: (instance: CML.KESVkey) => Effect.Effect<void, KESVkeyError>
 ```
 
 Added in v2.0.0
@@ -158,10 +150,7 @@ Method toBech32 of KESVkey
 **Signature**
 
 ```ts
-export declare const toBech32: (
-  instance: CML.KESVkey,
-  prefix: string,
-) => Effect.Effect<string, KESVkeyError>;
+export declare const toBech32: (instance: CML.KESVkey, prefix: string) => Effect.Effect<string, KESVkeyError>
 ```
 
 Added in v2.0.0
@@ -173,9 +162,7 @@ Method toHex of KESVkey
 **Signature**
 
 ```ts
-export declare const toHex: (
-  instance: CML.KESVkey,
-) => Effect.Effect<string, KESVkeyError>;
+export declare const toHex: (instance: CML.KESVkey) => Effect.Effect<string, KESVkeyError>
 ```
 
 Added in v2.0.0
@@ -187,9 +174,7 @@ Method toRawBytes of KESVkey
 **Signature**
 
 ```ts
-export declare const toRawBytes: (
-  instance: CML.KESVkey,
-) => Effect.Effect<Uint8Array, KESVkeyError>;
+export declare const toRawBytes: (instance: CML.KESVkey) => Effect.Effect<Uint8Array, KESVkeyError>
 ```
 
 Added in v2.0.0
@@ -203,7 +188,7 @@ Unsafely calls instance.free without Effect wrapper
 **Signature**
 
 ```ts
-export declare const freeUnsafe: (instance: CML.KESVkey) => void;
+export declare const freeUnsafe: (instance: CML.KESVkey) => void
 ```
 
 Added in v2.0.0
@@ -215,10 +200,7 @@ Unsafely calls instance.toBech32 without Effect wrapper
 **Signature**
 
 ```ts
-export declare const toBech32Unsafe: (
-  instance: CML.KESVkey,
-  prefix: string,
-) => string;
+export declare const toBech32Unsafe: (instance: CML.KESVkey, prefix: string) => string
 ```
 
 Added in v2.0.0
@@ -230,7 +212,7 @@ Unsafely calls instance.toHex without Effect wrapper
 **Signature**
 
 ```ts
-export declare const toHexUnsafe: (instance: CML.KESVkey) => string;
+export declare const toHexUnsafe: (instance: CML.KESVkey) => string
 ```
 
 Added in v2.0.0
@@ -242,7 +224,7 @@ Unsafely calls instance.toRawBytes without Effect wrapper
 **Signature**
 
 ```ts
-export declare const toRawBytesUnsafe: (instance: CML.KESVkey) => Uint8Array;
+export declare const toRawBytesUnsafe: (instance: CML.KESVkey) => Uint8Array
 ```
 
 Added in v2.0.0
@@ -256,7 +238,7 @@ Type alias for the CML KESVkey class
 **Signature**
 
 ```ts
-export type KESVkey = CML.KESVkey;
+export type KESVkey = CML.KESVkey
 ```
 
 Added in v2.0.0

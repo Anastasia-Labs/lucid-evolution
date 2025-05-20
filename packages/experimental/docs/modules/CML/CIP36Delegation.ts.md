@@ -60,8 +60,8 @@ Static method \_new of CIP36Delegation
 ```ts
 export declare const _new: (
   votingPubKey: CML.PublicKey,
-  weight: number,
-) => Effect.Effect<CML.CIP36Delegation, CIP36DelegationError>;
+  weight: number
+) => Effect.Effect<CML.CIP36Delegation, CIP36DelegationError>
 ```
 
 Added in v2.0.0
@@ -73,9 +73,7 @@ Static method fromCborBytes of CIP36Delegation
 **Signature**
 
 ```ts
-export declare const fromCborBytes: (
-  cborBytes: Uint8Array,
-) => Effect.Effect<CML.CIP36Delegation, CIP36DelegationError>;
+export declare const fromCborBytes: (cborBytes: Uint8Array) => Effect.Effect<CML.CIP36Delegation, CIP36DelegationError>
 ```
 
 Added in v2.0.0
@@ -87,9 +85,7 @@ Static method fromCborHex of CIP36Delegation
 **Signature**
 
 ```ts
-export declare const fromCborHex: (
-  cborBytes: string,
-) => Effect.Effect<CML.CIP36Delegation, CIP36DelegationError>;
+export declare const fromCborHex: (cborBytes: string) => Effect.Effect<CML.CIP36Delegation, CIP36DelegationError>
 ```
 
 Added in v2.0.0
@@ -101,9 +97,7 @@ Static method fromJson of CIP36Delegation
 **Signature**
 
 ```ts
-export declare const fromJson: (
-  json: string,
-) => Effect.Effect<CML.CIP36Delegation, CIP36DelegationError>;
+export declare const fromJson: (json: string) => Effect.Effect<CML.CIP36Delegation, CIP36DelegationError>
 ```
 
 Added in v2.0.0
@@ -117,10 +111,7 @@ Unsafely calls CIP36Delegation.\_new without Effect wrapper
 **Signature**
 
 ```ts
-export declare const _newUnsafe: (
-  votingPubKey: CML.PublicKey,
-  weight: number,
-) => CML.CIP36Delegation;
+export declare const _newUnsafe: (votingPubKey: CML.PublicKey, weight: number) => CML.CIP36Delegation
 ```
 
 Added in v2.0.0
@@ -132,9 +123,7 @@ Unsafely calls CIP36Delegation.fromCborBytes without Effect wrapper
 **Signature**
 
 ```ts
-export declare const fromCborBytesUnsafe: (
-  cborBytes: Uint8Array,
-) => CML.CIP36Delegation;
+export declare const fromCborBytesUnsafe: (cborBytes: Uint8Array) => CML.CIP36Delegation
 ```
 
 Added in v2.0.0
@@ -146,9 +135,7 @@ Unsafely calls CIP36Delegation.fromCborHex without Effect wrapper
 **Signature**
 
 ```ts
-export declare const fromCborHexUnsafe: (
-  cborBytes: string,
-) => CML.CIP36Delegation;
+export declare const fromCborHexUnsafe: (cborBytes: string) => CML.CIP36Delegation
 ```
 
 Added in v2.0.0
@@ -160,7 +147,7 @@ Unsafely calls CIP36Delegation.fromJson without Effect wrapper
 **Signature**
 
 ```ts
-export declare const fromJsonUnsafe: (json: string) => CML.CIP36Delegation;
+export declare const fromJsonUnsafe: (json: string) => CML.CIP36Delegation
 ```
 
 Added in v2.0.0
@@ -190,9 +177,7 @@ Method free of CIP36Delegation
 **Signature**
 
 ```ts
-export declare const free: (
-  instance: CML.CIP36Delegation,
-) => Effect.Effect<void, CIP36DelegationError>;
+export declare const free: (instance: CML.CIP36Delegation) => Effect.Effect<void, CIP36DelegationError>
 ```
 
 Added in v2.0.0
@@ -205,8 +190,8 @@ Method toCanonicalCborBytes of CIP36Delegation
 
 ```ts
 export declare const toCanonicalCborBytes: (
-  instance: CML.CIP36Delegation,
-) => Effect.Effect<Uint8Array, CIP36DelegationError>;
+  instance: CML.CIP36Delegation
+) => Effect.Effect<Uint8Array, CIP36DelegationError>
 ```
 
 Added in v2.0.0
@@ -218,9 +203,7 @@ Method toCanonicalCborHex of CIP36Delegation
 **Signature**
 
 ```ts
-export declare const toCanonicalCborHex: (
-  instance: CML.CIP36Delegation,
-) => Effect.Effect<string, CIP36DelegationError>;
+export declare const toCanonicalCborHex: (instance: CML.CIP36Delegation) => Effect.Effect<string, CIP36DelegationError>
 ```
 
 Added in v2.0.0
@@ -232,9 +215,7 @@ Method toCborBytes of CIP36Delegation
 **Signature**
 
 ```ts
-export declare const toCborBytes: (
-  instance: CML.CIP36Delegation,
-) => Effect.Effect<Uint8Array, CIP36DelegationError>;
+export declare const toCborBytes: (instance: CML.CIP36Delegation) => Effect.Effect<Uint8Array, CIP36DelegationError>
 ```
 
 Added in v2.0.0
@@ -246,9 +227,7 @@ Method toCborHex of CIP36Delegation
 **Signature**
 
 ```ts
-export declare const toCborHex: (
-  instance: CML.CIP36Delegation,
-) => Effect.Effect<string, CIP36DelegationError>;
+export declare const toCborHex: (instance: CML.CIP36Delegation) => Effect.Effect<string, CIP36DelegationError>
 ```
 
 Added in v2.0.0
@@ -260,9 +239,7 @@ Method toJsValue of CIP36Delegation
 **Signature**
 
 ```ts
-export declare const toJsValue: (
-  instance: CML.CIP36Delegation,
-) => Effect.Effect<any, CIP36DelegationError>;
+export declare const toJsValue: (instance: CML.CIP36Delegation) => Effect.Effect<any, CIP36DelegationError>
 ```
 
 Added in v2.0.0
@@ -274,9 +251,7 @@ Method toJson of CIP36Delegation
 **Signature**
 
 ```ts
-export declare const toJson: (
-  instance: CML.CIP36Delegation,
-) => Effect.Effect<string, CIP36DelegationError>;
+export declare const toJson: (instance: CML.CIP36Delegation) => Effect.Effect<string, CIP36DelegationError>
 ```
 
 Added in v2.0.0
@@ -288,9 +263,7 @@ Method votingPubKey of CIP36Delegation
 **Signature**
 
 ```ts
-export declare const votingPubKey: (
-  instance: CML.CIP36Delegation,
-) => Effect.Effect<CML.PublicKey, CIP36DelegationError>;
+export declare const votingPubKey: (instance: CML.CIP36Delegation) => Effect.Effect<CML.PublicKey, CIP36DelegationError>
 ```
 
 Added in v2.0.0
@@ -302,9 +275,7 @@ Method weight of CIP36Delegation
 **Signature**
 
 ```ts
-export declare const weight: (
-  instance: CML.CIP36Delegation,
-) => Effect.Effect<number, CIP36DelegationError>;
+export declare const weight: (instance: CML.CIP36Delegation) => Effect.Effect<number, CIP36DelegationError>
 ```
 
 Added in v2.0.0
@@ -318,7 +289,7 @@ Unsafely calls instance.free without Effect wrapper
 **Signature**
 
 ```ts
-export declare const freeUnsafe: (instance: CML.CIP36Delegation) => void;
+export declare const freeUnsafe: (instance: CML.CIP36Delegation) => void
 ```
 
 Added in v2.0.0
@@ -330,9 +301,7 @@ Unsafely calls instance.toCanonicalCborBytes without Effect wrapper
 **Signature**
 
 ```ts
-export declare const toCanonicalCborBytesUnsafe: (
-  instance: CML.CIP36Delegation,
-) => Uint8Array;
+export declare const toCanonicalCborBytesUnsafe: (instance: CML.CIP36Delegation) => Uint8Array
 ```
 
 Added in v2.0.0
@@ -344,9 +313,7 @@ Unsafely calls instance.toCanonicalCborHex without Effect wrapper
 **Signature**
 
 ```ts
-export declare const toCanonicalCborHexUnsafe: (
-  instance: CML.CIP36Delegation,
-) => string;
+export declare const toCanonicalCborHexUnsafe: (instance: CML.CIP36Delegation) => string
 ```
 
 Added in v2.0.0
@@ -358,9 +325,7 @@ Unsafely calls instance.toCborBytes without Effect wrapper
 **Signature**
 
 ```ts
-export declare const toCborBytesUnsafe: (
-  instance: CML.CIP36Delegation,
-) => Uint8Array;
+export declare const toCborBytesUnsafe: (instance: CML.CIP36Delegation) => Uint8Array
 ```
 
 Added in v2.0.0
@@ -372,7 +337,7 @@ Unsafely calls instance.toCborHex without Effect wrapper
 **Signature**
 
 ```ts
-export declare const toCborHexUnsafe: (instance: CML.CIP36Delegation) => string;
+export declare const toCborHexUnsafe: (instance: CML.CIP36Delegation) => string
 ```
 
 Added in v2.0.0
@@ -384,7 +349,7 @@ Unsafely calls instance.toJsValue without Effect wrapper
 **Signature**
 
 ```ts
-export declare const toJsValueUnsafe: (instance: CML.CIP36Delegation) => any;
+export declare const toJsValueUnsafe: (instance: CML.CIP36Delegation) => any
 ```
 
 Added in v2.0.0
@@ -396,7 +361,7 @@ Unsafely calls instance.toJson without Effect wrapper
 **Signature**
 
 ```ts
-export declare const toJsonUnsafe: (instance: CML.CIP36Delegation) => string;
+export declare const toJsonUnsafe: (instance: CML.CIP36Delegation) => string
 ```
 
 Added in v2.0.0
@@ -408,9 +373,7 @@ Unsafely calls instance.votingPubKey without Effect wrapper
 **Signature**
 
 ```ts
-export declare const votingPubKeyUnsafe: (
-  instance: CML.CIP36Delegation,
-) => CML.PublicKey;
+export declare const votingPubKeyUnsafe: (instance: CML.CIP36Delegation) => CML.PublicKey
 ```
 
 Added in v2.0.0
@@ -422,7 +385,7 @@ Unsafely calls instance.weight without Effect wrapper
 **Signature**
 
 ```ts
-export declare const weightUnsafe: (instance: CML.CIP36Delegation) => number;
+export declare const weightUnsafe: (instance: CML.CIP36Delegation) => number
 ```
 
 Added in v2.0.0
@@ -436,7 +399,7 @@ Type alias for the CML CIP36Delegation class
 **Signature**
 
 ```ts
-export type CIP36Delegation = CML.CIP36Delegation;
+export type CIP36Delegation = CML.CIP36Delegation
 ```
 
 Added in v2.0.0

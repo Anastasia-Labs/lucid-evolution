@@ -60,9 +60,7 @@ Static method fromCborBytes of Nonce
 **Signature**
 
 ```ts
-export declare const fromCborBytes: (
-  cborBytes: Uint8Array,
-) => Effect.Effect<CML.Nonce, NonceError>;
+export declare const fromCborBytes: (cborBytes: Uint8Array) => Effect.Effect<CML.Nonce, NonceError>
 ```
 
 Added in v2.0.0
@@ -74,9 +72,7 @@ Static method fromCborHex of Nonce
 **Signature**
 
 ```ts
-export declare const fromCborHex: (
-  cborBytes: string,
-) => Effect.Effect<CML.Nonce, NonceError>;
+export declare const fromCborHex: (cborBytes: string) => Effect.Effect<CML.Nonce, NonceError>
 ```
 
 Added in v2.0.0
@@ -88,9 +84,7 @@ Static method fromJson of Nonce
 **Signature**
 
 ```ts
-export declare const fromJson: (
-  json: string,
-) => Effect.Effect<CML.Nonce, NonceError>;
+export declare const fromJson: (json: string) => Effect.Effect<CML.Nonce, NonceError>
 ```
 
 Added in v2.0.0
@@ -102,9 +96,7 @@ Static method newHash of Nonce
 **Signature**
 
 ```ts
-export declare const newHash: (
-  hash: CML.NonceHash,
-) => Effect.Effect<CML.Nonce, NonceError>;
+export declare const newHash: (hash: CML.NonceHash) => Effect.Effect<CML.Nonce, NonceError>
 ```
 
 Added in v2.0.0
@@ -116,7 +108,7 @@ Static method newIdentity of Nonce
 **Signature**
 
 ```ts
-export declare const newIdentity: () => Effect.Effect<CML.Nonce, NonceError>;
+export declare const newIdentity: () => Effect.Effect<CML.Nonce, NonceError>
 ```
 
 Added in v2.0.0
@@ -130,7 +122,7 @@ Unsafely calls Nonce.fromCborBytes without Effect wrapper
 **Signature**
 
 ```ts
-export declare const fromCborBytesUnsafe: (cborBytes: Uint8Array) => CML.Nonce;
+export declare const fromCborBytesUnsafe: (cborBytes: Uint8Array) => CML.Nonce
 ```
 
 Added in v2.0.0
@@ -142,7 +134,7 @@ Unsafely calls Nonce.fromCborHex without Effect wrapper
 **Signature**
 
 ```ts
-export declare const fromCborHexUnsafe: (cborBytes: string) => CML.Nonce;
+export declare const fromCborHexUnsafe: (cborBytes: string) => CML.Nonce
 ```
 
 Added in v2.0.0
@@ -154,7 +146,7 @@ Unsafely calls Nonce.fromJson without Effect wrapper
 **Signature**
 
 ```ts
-export declare const fromJsonUnsafe: (json: string) => CML.Nonce;
+export declare const fromJsonUnsafe: (json: string) => CML.Nonce
 ```
 
 Added in v2.0.0
@@ -166,7 +158,7 @@ Unsafely calls Nonce.newHash without Effect wrapper
 **Signature**
 
 ```ts
-export declare const newHashUnsafe: (hash: CML.NonceHash) => CML.Nonce;
+export declare const newHashUnsafe: (hash: CML.NonceHash) => CML.Nonce
 ```
 
 Added in v2.0.0
@@ -178,7 +170,7 @@ Unsafely calls Nonce.newIdentity without Effect wrapper
 **Signature**
 
 ```ts
-export declare const newIdentityUnsafe: () => CML.Nonce;
+export declare const newIdentityUnsafe: () => CML.Nonce
 ```
 
 Added in v2.0.0
@@ -208,9 +200,7 @@ Method asHash of Nonce
 **Signature**
 
 ```ts
-export declare const asHash: (
-  instance: CML.Nonce,
-) => Effect.Effect<CML.NonceHash | undefined, NonceError>;
+export declare const asHash: (instance: CML.Nonce) => Effect.Effect<CML.NonceHash | undefined, NonceError>
 ```
 
 Added in v2.0.0
@@ -222,9 +212,7 @@ Method free of Nonce
 **Signature**
 
 ```ts
-export declare const free: (
-  instance: CML.Nonce,
-) => Effect.Effect<void, NonceError>;
+export declare const free: (instance: CML.Nonce) => Effect.Effect<void, NonceError>
 ```
 
 Added in v2.0.0
@@ -236,9 +224,7 @@ Method kind of Nonce
 **Signature**
 
 ```ts
-export declare const kind: (
-  instance: CML.Nonce,
-) => Effect.Effect<CML.NonceKind, NonceError>;
+export declare const kind: (instance: CML.Nonce) => Effect.Effect<CML.NonceKind, NonceError>
 ```
 
 Added in v2.0.0
@@ -250,9 +236,7 @@ Method toCanonicalCborBytes of Nonce
 **Signature**
 
 ```ts
-export declare const toCanonicalCborBytes: (
-  instance: CML.Nonce,
-) => Effect.Effect<Uint8Array, NonceError>;
+export declare const toCanonicalCborBytes: (instance: CML.Nonce) => Effect.Effect<Uint8Array, NonceError>
 ```
 
 Added in v2.0.0
@@ -264,9 +248,7 @@ Method toCanonicalCborHex of Nonce
 **Signature**
 
 ```ts
-export declare const toCanonicalCborHex: (
-  instance: CML.Nonce,
-) => Effect.Effect<string, NonceError>;
+export declare const toCanonicalCborHex: (instance: CML.Nonce) => Effect.Effect<string, NonceError>
 ```
 
 Added in v2.0.0
@@ -278,9 +260,7 @@ Method toCborBytes of Nonce
 **Signature**
 
 ```ts
-export declare const toCborBytes: (
-  instance: CML.Nonce,
-) => Effect.Effect<Uint8Array, NonceError>;
+export declare const toCborBytes: (instance: CML.Nonce) => Effect.Effect<Uint8Array, NonceError>
 ```
 
 Added in v2.0.0
@@ -292,9 +272,7 @@ Method toCborHex of Nonce
 **Signature**
 
 ```ts
-export declare const toCborHex: (
-  instance: CML.Nonce,
-) => Effect.Effect<string, NonceError>;
+export declare const toCborHex: (instance: CML.Nonce) => Effect.Effect<string, NonceError>
 ```
 
 Added in v2.0.0
@@ -306,9 +284,7 @@ Method toJsValue of Nonce
 **Signature**
 
 ```ts
-export declare const toJsValue: (
-  instance: CML.Nonce,
-) => Effect.Effect<any, NonceError>;
+export declare const toJsValue: (instance: CML.Nonce) => Effect.Effect<any, NonceError>
 ```
 
 Added in v2.0.0
@@ -320,9 +296,7 @@ Method toJson of Nonce
 **Signature**
 
 ```ts
-export declare const toJson: (
-  instance: CML.Nonce,
-) => Effect.Effect<string, NonceError>;
+export declare const toJson: (instance: CML.Nonce) => Effect.Effect<string, NonceError>
 ```
 
 Added in v2.0.0
@@ -336,9 +310,7 @@ Unsafely calls instance.asHash without Effect wrapper
 **Signature**
 
 ```ts
-export declare const asHashUnsafe: (
-  instance: CML.Nonce,
-) => CML.NonceHash | undefined;
+export declare const asHashUnsafe: (instance: CML.Nonce) => CML.NonceHash | undefined
 ```
 
 Added in v2.0.0
@@ -350,7 +322,7 @@ Unsafely calls instance.free without Effect wrapper
 **Signature**
 
 ```ts
-export declare const freeUnsafe: (instance: CML.Nonce) => void;
+export declare const freeUnsafe: (instance: CML.Nonce) => void
 ```
 
 Added in v2.0.0
@@ -362,7 +334,7 @@ Unsafely calls instance.kind without Effect wrapper
 **Signature**
 
 ```ts
-export declare const kindUnsafe: (instance: CML.Nonce) => CML.NonceKind;
+export declare const kindUnsafe: (instance: CML.Nonce) => CML.NonceKind
 ```
 
 Added in v2.0.0
@@ -374,9 +346,7 @@ Unsafely calls instance.toCanonicalCborBytes without Effect wrapper
 **Signature**
 
 ```ts
-export declare const toCanonicalCborBytesUnsafe: (
-  instance: CML.Nonce,
-) => Uint8Array;
+export declare const toCanonicalCborBytesUnsafe: (instance: CML.Nonce) => Uint8Array
 ```
 
 Added in v2.0.0
@@ -388,7 +358,7 @@ Unsafely calls instance.toCanonicalCborHex without Effect wrapper
 **Signature**
 
 ```ts
-export declare const toCanonicalCborHexUnsafe: (instance: CML.Nonce) => string;
+export declare const toCanonicalCborHexUnsafe: (instance: CML.Nonce) => string
 ```
 
 Added in v2.0.0
@@ -400,7 +370,7 @@ Unsafely calls instance.toCborBytes without Effect wrapper
 **Signature**
 
 ```ts
-export declare const toCborBytesUnsafe: (instance: CML.Nonce) => Uint8Array;
+export declare const toCborBytesUnsafe: (instance: CML.Nonce) => Uint8Array
 ```
 
 Added in v2.0.0
@@ -412,7 +382,7 @@ Unsafely calls instance.toCborHex without Effect wrapper
 **Signature**
 
 ```ts
-export declare const toCborHexUnsafe: (instance: CML.Nonce) => string;
+export declare const toCborHexUnsafe: (instance: CML.Nonce) => string
 ```
 
 Added in v2.0.0
@@ -424,7 +394,7 @@ Unsafely calls instance.toJsValue without Effect wrapper
 **Signature**
 
 ```ts
-export declare const toJsValueUnsafe: (instance: CML.Nonce) => any;
+export declare const toJsValueUnsafe: (instance: CML.Nonce) => any
 ```
 
 Added in v2.0.0
@@ -436,7 +406,7 @@ Unsafely calls instance.toJson without Effect wrapper
 **Signature**
 
 ```ts
-export declare const toJsonUnsafe: (instance: CML.Nonce) => string;
+export declare const toJsonUnsafe: (instance: CML.Nonce) => string
 ```
 
 Added in v2.0.0
@@ -450,7 +420,7 @@ Type alias for the CML Nonce class
 **Signature**
 
 ```ts
-export type Nonce = CML.Nonce;
+export type Nonce = CML.Nonce
 ```
 
 Added in v2.0.0

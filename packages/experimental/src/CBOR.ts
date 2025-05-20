@@ -13,6 +13,8 @@ export class CBORError extends Data.TaggedError("CBORError")<{
   cause?: unknown;
 }> {}
 
+export type CBORHex<T> = Hex.HexString & T;
+
 // Create a singleton encoder with the correct options for Cardano CBOR encoding
 const encoder = new CBORX.Encoder({
   tagUint8Array: false,
@@ -65,10 +67,10 @@ export const encodeAsBytesOrThrow = (value: unknown) =>
  * @since 2.0.0
  * @category encoding/decoding
  */
-export const encodeAsHex = (value: unknown) =>
+export const encodeAsCBORHex = (value: unknown) =>
   pipe(
     encodeAsBytes(value),
-    Effect.map((bytes) => Hex.fromBytes(bytes)),
+    Effect.map((bytes) => Hex.fromBytes(bytes))
   );
 
 /**
@@ -83,8 +85,8 @@ export const encodeAsHex = (value: unknown) =>
  * @since 2.0.0
  * @category encoding/decoding
  */
-export const encodeAsHexOrThrow = (value: unknown) =>
-  Effect.runSync(encodeAsHex(value));
+export const encodeAsCBORHexOrThrow = (value: unknown) =>
+  Effect.runSync(encodeAsCBORHex(value));
 
 /**
  * Decodes CBOR bytes to a value
@@ -144,7 +146,7 @@ export const decodeBytesOrThrow = (bytes: Uint8Array) =>
  * @since 2.0.0
  * @category encoding/decoding
  */
-export const decodeHex = (hex: Hex.HexString) => decodeBytes(Hex.toBytes(hex));
+export const decodeHex = <T>(hex: CBORHex<T>) => decodeBytes(Hex.toBytes(hex));
 
 /**
  * Decodes a CBOR hex string to a value, throws on error
@@ -159,5 +161,5 @@ export const decodeHex = (hex: Hex.HexString) => decodeBytes(Hex.toBytes(hex));
  * @since 2.0.0
  * @category encoding/decoding
  */
-export const decodeHexOrThrow = (hex: Hex.HexString) =>
+export const decodeHexOrThrow = <T>(hex: CBORHex<T>) =>
   Effect.runSync(decodeHex(hex));

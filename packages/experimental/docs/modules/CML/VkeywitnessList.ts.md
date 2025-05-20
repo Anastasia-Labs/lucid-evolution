@@ -42,10 +42,7 @@ Static method \_new of VkeywitnessList
 **Signature**
 
 ```ts
-export declare const _new: () => Effect.Effect<
-  CML.VkeywitnessList,
-  VkeywitnessListError
->;
+export declare const _new: () => Effect.Effect<CML.VkeywitnessList, VkeywitnessListError>
 ```
 
 Added in v2.0.0
@@ -59,7 +56,7 @@ Unsafely calls VkeywitnessList.\_new without Effect wrapper
 **Signature**
 
 ```ts
-export declare const _newUnsafe: () => CML.VkeywitnessList;
+export declare const _newUnsafe: () => CML.VkeywitnessList
 ```
 
 Added in v2.0.0
@@ -91,8 +88,8 @@ Method add of VkeywitnessList
 ```ts
 export declare const add: (
   instance: CML.VkeywitnessList,
-  elem: CML.Vkeywitness,
-) => Effect.Effect<void, VkeywitnessListError>;
+  elem: CML.Vkeywitness
+) => Effect.Effect<void, VkeywitnessListError>
 ```
 
 Added in v2.0.0
@@ -104,9 +101,7 @@ Method free of VkeywitnessList
 **Signature**
 
 ```ts
-export declare const free: (
-  instance: CML.VkeywitnessList,
-) => Effect.Effect<void, VkeywitnessListError>;
+export declare const free: (instance: CML.VkeywitnessList) => Effect.Effect<void, VkeywitnessListError>
 ```
 
 Added in v2.0.0
@@ -120,8 +115,8 @@ Method get of VkeywitnessList
 ```ts
 export declare const get: (
   instance: CML.VkeywitnessList,
-  index: number,
-) => Effect.Effect<CML.Vkeywitness, VkeywitnessListError>;
+  index: number
+) => Effect.Effect<CML.Vkeywitness, VkeywitnessListError>
 ```
 
 Added in v2.0.0
@@ -133,9 +128,7 @@ Method len of VkeywitnessList
 **Signature**
 
 ```ts
-export declare const len: (
-  instance: CML.VkeywitnessList,
-) => Effect.Effect<number, VkeywitnessListError>;
+export declare const len: (instance: CML.VkeywitnessList) => Effect.Effect<number, VkeywitnessListError>
 ```
 
 Added in v2.0.0
@@ -149,10 +142,7 @@ Unsafely calls instance.add without Effect wrapper
 **Signature**
 
 ```ts
-export declare const addUnsafe: (
-  instance: CML.VkeywitnessList,
-  elem: CML.Vkeywitness,
-) => void;
+export declare const addUnsafe: (instance: CML.VkeywitnessList, elem: CML.Vkeywitness) => void
 ```
 
 Added in v2.0.0
@@ -164,7 +154,7 @@ Unsafely calls instance.free without Effect wrapper
 **Signature**
 
 ```ts
-export declare const freeUnsafe: (instance: CML.VkeywitnessList) => void;
+export declare const freeUnsafe: (instance: CML.VkeywitnessList) => void
 ```
 
 Added in v2.0.0
@@ -176,10 +166,7 @@ Unsafely calls instance.get without Effect wrapper
 **Signature**
 
 ```ts
-export declare const getUnsafe: (
-  instance: CML.VkeywitnessList,
-  index: number,
-) => CML.Vkeywitness;
+export declare const getUnsafe: (instance: CML.VkeywitnessList, index: number) => CML.Vkeywitness
 ```
 
 Added in v2.0.0
@@ -191,7 +178,7 @@ Unsafely calls instance.len without Effect wrapper
 **Signature**
 
 ```ts
-export declare const lenUnsafe: (instance: CML.VkeywitnessList) => number;
+export declare const lenUnsafe: (instance: CML.VkeywitnessList) => number
 ```
 
 Added in v2.0.0
@@ -205,7 +192,7 @@ Type alias for the CML VkeywitnessList class
 **Signature**
 
 ```ts
-export type VkeywitnessList = CML.VkeywitnessList;
+export type VkeywitnessList = CML.VkeywitnessList
 ```
 
 Added in v2.0.0

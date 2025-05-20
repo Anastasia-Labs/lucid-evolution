@@ -67,8 +67,8 @@ Static method fromCborBytes of TransactionMetadatum
 
 ```ts
 export declare const fromCborBytes: (
-  cborBytes: Uint8Array,
-) => Effect.Effect<CML.TransactionMetadatum, TransactionMetadatumError>;
+  cborBytes: Uint8Array
+) => Effect.Effect<CML.TransactionMetadatum, TransactionMetadatumError>
 ```
 
 Added in v2.0.0
@@ -80,9 +80,7 @@ Static method fromJson of TransactionMetadatum
 **Signature**
 
 ```ts
-export declare const fromJson: (
-  json: string,
-) => Effect.Effect<CML.TransactionMetadatum, TransactionMetadatumError>;
+export declare const fromJson: (json: string) => Effect.Effect<CML.TransactionMetadatum, TransactionMetadatumError>
 ```
 
 Added in v2.0.0
@@ -94,9 +92,7 @@ Static method newBytes of TransactionMetadatum
 **Signature**
 
 ```ts
-export declare const newBytes: (
-  bytes: Uint8Array,
-) => Effect.Effect<CML.TransactionMetadatum, TransactionMetadatumError>;
+export declare const newBytes: (bytes: Uint8Array) => Effect.Effect<CML.TransactionMetadatum, TransactionMetadatumError>
 ```
 
 Added in v2.0.0
@@ -108,9 +104,7 @@ Static method newInt of TransactionMetadatum
 **Signature**
 
 ```ts
-export declare const newInt: (
-  int: CML.Int,
-) => Effect.Effect<CML.TransactionMetadatum, TransactionMetadatumError>;
+export declare const newInt: (int: CML.Int) => Effect.Effect<CML.TransactionMetadatum, TransactionMetadatumError>
 ```
 
 Added in v2.0.0
@@ -123,8 +117,8 @@ Static method newList of TransactionMetadatum
 
 ```ts
 export declare const newList: (
-  elements: CML.MetadatumList,
-) => Effect.Effect<CML.TransactionMetadatum, TransactionMetadatumError>;
+  elements: CML.MetadatumList
+) => Effect.Effect<CML.TransactionMetadatum, TransactionMetadatumError>
 ```
 
 Added in v2.0.0
@@ -137,8 +131,8 @@ Static method newMap of TransactionMetadatum
 
 ```ts
 export declare const newMap: (
-  map: CML.MetadatumMap,
-) => Effect.Effect<CML.TransactionMetadatum, TransactionMetadatumError>;
+  map: CML.MetadatumMap
+) => Effect.Effect<CML.TransactionMetadatum, TransactionMetadatumError>
 ```
 
 Added in v2.0.0
@@ -150,9 +144,7 @@ Static method newText of TransactionMetadatum
 **Signature**
 
 ```ts
-export declare const newText: (
-  text: string,
-) => Effect.Effect<CML.TransactionMetadatum, TransactionMetadatumError>;
+export declare const newText: (text: string) => Effect.Effect<CML.TransactionMetadatum, TransactionMetadatumError>
 ```
 
 Added in v2.0.0
@@ -166,9 +158,7 @@ Unsafely calls TransactionMetadatum.fromCborBytes without Effect wrapper
 **Signature**
 
 ```ts
-export declare const fromCborBytesUnsafe: (
-  cborBytes: Uint8Array,
-) => CML.TransactionMetadatum;
+export declare const fromCborBytesUnsafe: (cborBytes: Uint8Array) => CML.TransactionMetadatum
 ```
 
 Added in v2.0.0
@@ -180,7 +170,7 @@ Unsafely calls TransactionMetadatum.fromJson without Effect wrapper
 **Signature**
 
 ```ts
-export declare const fromJsonUnsafe: (json: string) => CML.TransactionMetadatum;
+export declare const fromJsonUnsafe: (json: string) => CML.TransactionMetadatum
 ```
 
 Added in v2.0.0
@@ -192,9 +182,7 @@ Unsafely calls TransactionMetadatum.newBytes without Effect wrapper
 **Signature**
 
 ```ts
-export declare const newBytesUnsafe: (
-  bytes: Uint8Array,
-) => CML.TransactionMetadatum;
+export declare const newBytesUnsafe: (bytes: Uint8Array) => CML.TransactionMetadatum
 ```
 
 Added in v2.0.0
@@ -206,7 +194,7 @@ Unsafely calls TransactionMetadatum.newInt without Effect wrapper
 **Signature**
 
 ```ts
-export declare const newIntUnsafe: (int: CML.Int) => CML.TransactionMetadatum;
+export declare const newIntUnsafe: (int: CML.Int) => CML.TransactionMetadatum
 ```
 
 Added in v2.0.0
@@ -218,9 +206,7 @@ Unsafely calls TransactionMetadatum.newList without Effect wrapper
 **Signature**
 
 ```ts
-export declare const newListUnsafe: (
-  elements: CML.MetadatumList,
-) => CML.TransactionMetadatum;
+export declare const newListUnsafe: (elements: CML.MetadatumList) => CML.TransactionMetadatum
 ```
 
 Added in v2.0.0
@@ -232,9 +218,7 @@ Unsafely calls TransactionMetadatum.newMap without Effect wrapper
 **Signature**
 
 ```ts
-export declare const newMapUnsafe: (
-  map: CML.MetadatumMap,
-) => CML.TransactionMetadatum;
+export declare const newMapUnsafe: (map: CML.MetadatumMap) => CML.TransactionMetadatum
 ```
 
 Added in v2.0.0
@@ -246,7 +230,7 @@ Unsafely calls TransactionMetadatum.newText without Effect wrapper
 **Signature**
 
 ```ts
-export declare const newTextUnsafe: (text: string) => CML.TransactionMetadatum;
+export declare const newTextUnsafe: (text: string) => CML.TransactionMetadatum
 ```
 
 Added in v2.0.0
@@ -277,8 +261,8 @@ Method asBytes of TransactionMetadatum
 
 ```ts
 export declare const asBytes: (
-  instance: CML.TransactionMetadatum,
-) => Effect.Effect<Uint8Array | undefined, TransactionMetadatumError>;
+  instance: CML.TransactionMetadatum
+) => Effect.Effect<Uint8Array | undefined, TransactionMetadatumError>
 ```
 
 Added in v2.0.0
@@ -291,8 +275,8 @@ Method asInt of TransactionMetadatum
 
 ```ts
 export declare const asInt: (
-  instance: CML.TransactionMetadatum,
-) => Effect.Effect<CML.Int | undefined, TransactionMetadatumError>;
+  instance: CML.TransactionMetadatum
+) => Effect.Effect<CML.Int | undefined, TransactionMetadatumError>
 ```
 
 Added in v2.0.0
@@ -305,8 +289,8 @@ Method asList of TransactionMetadatum
 
 ```ts
 export declare const asList: (
-  instance: CML.TransactionMetadatum,
-) => Effect.Effect<CML.MetadatumList | undefined, TransactionMetadatumError>;
+  instance: CML.TransactionMetadatum
+) => Effect.Effect<CML.MetadatumList | undefined, TransactionMetadatumError>
 ```
 
 Added in v2.0.0
@@ -319,8 +303,8 @@ Method asMap of TransactionMetadatum
 
 ```ts
 export declare const asMap: (
-  instance: CML.TransactionMetadatum,
-) => Effect.Effect<CML.MetadatumMap | undefined, TransactionMetadatumError>;
+  instance: CML.TransactionMetadatum
+) => Effect.Effect<CML.MetadatumMap | undefined, TransactionMetadatumError>
 ```
 
 Added in v2.0.0
@@ -333,8 +317,8 @@ Method asText of TransactionMetadatum
 
 ```ts
 export declare const asText: (
-  instance: CML.TransactionMetadatum,
-) => Effect.Effect<string | undefined, TransactionMetadatumError>;
+  instance: CML.TransactionMetadatum
+) => Effect.Effect<string | undefined, TransactionMetadatumError>
 ```
 
 Added in v2.0.0
@@ -346,9 +330,7 @@ Method free of TransactionMetadatum
 **Signature**
 
 ```ts
-export declare const free: (
-  instance: CML.TransactionMetadatum,
-) => Effect.Effect<void, TransactionMetadatumError>;
+export declare const free: (instance: CML.TransactionMetadatum) => Effect.Effect<void, TransactionMetadatumError>
 ```
 
 Added in v2.0.0
@@ -361,8 +343,8 @@ Method kind of TransactionMetadatum
 
 ```ts
 export declare const kind: (
-  instance: CML.TransactionMetadatum,
-) => Effect.Effect<CML.TransactionMetadatumKind, TransactionMetadatumError>;
+  instance: CML.TransactionMetadatum
+) => Effect.Effect<CML.TransactionMetadatumKind, TransactionMetadatumError>
 ```
 
 Added in v2.0.0
@@ -375,8 +357,8 @@ Method toCborBytes of TransactionMetadatum
 
 ```ts
 export declare const toCborBytes: (
-  instance: CML.TransactionMetadatum,
-) => Effect.Effect<Uint8Array, TransactionMetadatumError>;
+  instance: CML.TransactionMetadatum
+) => Effect.Effect<Uint8Array, TransactionMetadatumError>
 ```
 
 Added in v2.0.0
@@ -388,9 +370,7 @@ Method toJson of TransactionMetadatum
 **Signature**
 
 ```ts
-export declare const toJson: (
-  instance: CML.TransactionMetadatum,
-) => Effect.Effect<string, TransactionMetadatumError>;
+export declare const toJson: (instance: CML.TransactionMetadatum) => Effect.Effect<string, TransactionMetadatumError>
 ```
 
 Added in v2.0.0
@@ -402,9 +382,7 @@ Method toJsonValue of TransactionMetadatum
 **Signature**
 
 ```ts
-export declare const toJsonValue: (
-  instance: CML.TransactionMetadatum,
-) => Effect.Effect<any, TransactionMetadatumError>;
+export declare const toJsonValue: (instance: CML.TransactionMetadatum) => Effect.Effect<any, TransactionMetadatumError>
 ```
 
 Added in v2.0.0
@@ -418,9 +396,7 @@ Unsafely calls instance.asBytes without Effect wrapper
 **Signature**
 
 ```ts
-export declare const asBytesUnsafe: (
-  instance: CML.TransactionMetadatum,
-) => Uint8Array | undefined;
+export declare const asBytesUnsafe: (instance: CML.TransactionMetadatum) => Uint8Array | undefined
 ```
 
 Added in v2.0.0
@@ -432,9 +408,7 @@ Unsafely calls instance.asInt without Effect wrapper
 **Signature**
 
 ```ts
-export declare const asIntUnsafe: (
-  instance: CML.TransactionMetadatum,
-) => CML.Int | undefined;
+export declare const asIntUnsafe: (instance: CML.TransactionMetadatum) => CML.Int | undefined
 ```
 
 Added in v2.0.0
@@ -446,9 +420,7 @@ Unsafely calls instance.asList without Effect wrapper
 **Signature**
 
 ```ts
-export declare const asListUnsafe: (
-  instance: CML.TransactionMetadatum,
-) => CML.MetadatumList | undefined;
+export declare const asListUnsafe: (instance: CML.TransactionMetadatum) => CML.MetadatumList | undefined
 ```
 
 Added in v2.0.0
@@ -460,9 +432,7 @@ Unsafely calls instance.asMap without Effect wrapper
 **Signature**
 
 ```ts
-export declare const asMapUnsafe: (
-  instance: CML.TransactionMetadatum,
-) => CML.MetadatumMap | undefined;
+export declare const asMapUnsafe: (instance: CML.TransactionMetadatum) => CML.MetadatumMap | undefined
 ```
 
 Added in v2.0.0
@@ -474,9 +444,7 @@ Unsafely calls instance.asText without Effect wrapper
 **Signature**
 
 ```ts
-export declare const asTextUnsafe: (
-  instance: CML.TransactionMetadatum,
-) => string | undefined;
+export declare const asTextUnsafe: (instance: CML.TransactionMetadatum) => string | undefined
 ```
 
 Added in v2.0.0
@@ -488,7 +456,7 @@ Unsafely calls instance.free without Effect wrapper
 **Signature**
 
 ```ts
-export declare const freeUnsafe: (instance: CML.TransactionMetadatum) => void;
+export declare const freeUnsafe: (instance: CML.TransactionMetadatum) => void
 ```
 
 Added in v2.0.0
@@ -500,9 +468,7 @@ Unsafely calls instance.kind without Effect wrapper
 **Signature**
 
 ```ts
-export declare const kindUnsafe: (
-  instance: CML.TransactionMetadatum,
-) => CML.TransactionMetadatumKind;
+export declare const kindUnsafe: (instance: CML.TransactionMetadatum) => CML.TransactionMetadatumKind
 ```
 
 Added in v2.0.0
@@ -514,9 +480,7 @@ Unsafely calls instance.toCborBytes without Effect wrapper
 **Signature**
 
 ```ts
-export declare const toCborBytesUnsafe: (
-  instance: CML.TransactionMetadatum,
-) => Uint8Array;
+export declare const toCborBytesUnsafe: (instance: CML.TransactionMetadatum) => Uint8Array
 ```
 
 Added in v2.0.0
@@ -528,9 +492,7 @@ Unsafely calls instance.toJson without Effect wrapper
 **Signature**
 
 ```ts
-export declare const toJsonUnsafe: (
-  instance: CML.TransactionMetadatum,
-) => string;
+export declare const toJsonUnsafe: (instance: CML.TransactionMetadatum) => string
 ```
 
 Added in v2.0.0
@@ -542,9 +504,7 @@ Unsafely calls instance.toJsonValue without Effect wrapper
 **Signature**
 
 ```ts
-export declare const toJsonValueUnsafe: (
-  instance: CML.TransactionMetadatum,
-) => any;
+export declare const toJsonValueUnsafe: (instance: CML.TransactionMetadatum) => any
 ```
 
 Added in v2.0.0
@@ -558,7 +518,7 @@ Type alias for the CML TransactionMetadatum class
 **Signature**
 
 ```ts
-export type TransactionMetadatum = CML.TransactionMetadatum;
+export type TransactionMetadatum = CML.TransactionMetadatum
 ```
 
 Added in v2.0.0

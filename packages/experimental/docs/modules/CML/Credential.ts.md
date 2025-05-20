@@ -62,9 +62,7 @@ Static method fromCborBytes of Credential
 **Signature**
 
 ```ts
-export declare const fromCborBytes: (
-  cborBytes: Uint8Array,
-) => Effect.Effect<CML.Credential, CredentialError>;
+export declare const fromCborBytes: (cborBytes: Uint8Array) => Effect.Effect<CML.Credential, CredentialError>
 ```
 
 Added in v2.0.0
@@ -76,9 +74,7 @@ Static method fromCborHex of Credential
 **Signature**
 
 ```ts
-export declare const fromCborHex: (
-  cborBytes: string,
-) => Effect.Effect<CML.Credential, CredentialError>;
+export declare const fromCborHex: (cborBytes: string) => Effect.Effect<CML.Credential, CredentialError>
 ```
 
 Added in v2.0.0
@@ -90,9 +86,7 @@ Static method fromJson of Credential
 **Signature**
 
 ```ts
-export declare const fromJson: (
-  json: string,
-) => Effect.Effect<CML.Credential, CredentialError>;
+export declare const fromJson: (json: string) => Effect.Effect<CML.Credential, CredentialError>
 ```
 
 Added in v2.0.0
@@ -104,9 +98,7 @@ Static method newPubKey of Credential
 **Signature**
 
 ```ts
-export declare const newPubKey: (
-  hash: CML.Ed25519KeyHash,
-) => Effect.Effect<CML.Credential, CredentialError>;
+export declare const newPubKey: (hash: CML.Ed25519KeyHash) => Effect.Effect<CML.Credential, CredentialError>
 ```
 
 Added in v2.0.0
@@ -118,9 +110,7 @@ Static method newScript of Credential
 **Signature**
 
 ```ts
-export declare const newScript: (
-  hash: CML.ScriptHash,
-) => Effect.Effect<CML.Credential, CredentialError>;
+export declare const newScript: (hash: CML.ScriptHash) => Effect.Effect<CML.Credential, CredentialError>
 ```
 
 Added in v2.0.0
@@ -129,14 +119,12 @@ Added in v2.0.0
 
 ## fromCborBytesUnsafe
 
-Unsafely calls Credential.fromCborBytes without Effect wrapper
+Unsafely calls Credential.decodeCBORBytes without Effect wrapper
 
 **Signature**
 
 ```ts
-export declare const fromCborBytesUnsafe: (
-  cborBytes: Uint8Array,
-) => CML.Credential;
+export declare const fromCborBytesUnsafe: (cborBytes: Uint8Array) => CML.Credential
 ```
 
 Added in v2.0.0
@@ -148,7 +136,7 @@ Unsafely calls Credential.fromCborHex without Effect wrapper
 **Signature**
 
 ```ts
-export declare const fromCborHexUnsafe: (cborBytes: string) => CML.Credential;
+export declare const fromCborHexUnsafe: (cborBytes: string) => CML.Credential
 ```
 
 Added in v2.0.0
@@ -160,7 +148,7 @@ Unsafely calls Credential.fromJson without Effect wrapper
 **Signature**
 
 ```ts
-export declare const fromJsonUnsafe: (json: string) => CML.Credential;
+export declare const fromJsonUnsafe: (json: string) => CML.Credential
 ```
 
 Added in v2.0.0
@@ -172,9 +160,7 @@ Unsafely calls Credential.newPubKey without Effect wrapper
 **Signature**
 
 ```ts
-export declare const newPubKeyUnsafe: (
-  hash: CML.Ed25519KeyHash,
-) => CML.Credential;
+export declare const newPubKeyUnsafe: (hash: CML.Ed25519KeyHash) => CML.Credential
 ```
 
 Added in v2.0.0
@@ -186,7 +172,7 @@ Unsafely calls Credential.newScript without Effect wrapper
 **Signature**
 
 ```ts
-export declare const newScriptUnsafe: (hash: CML.ScriptHash) => CML.Credential;
+export declare const newScriptUnsafe: (hash: CML.ScriptHash) => CML.Credential
 ```
 
 Added in v2.0.0
@@ -217,8 +203,8 @@ Method asPubKey of Credential
 
 ```ts
 export declare const asPubKey: (
-  instance: CML.Credential,
-) => Effect.Effect<CML.Ed25519KeyHash | undefined, CredentialError>;
+  instance: CML.Credential
+) => Effect.Effect<CML.Ed25519KeyHash | undefined, CredentialError>
 ```
 
 Added in v2.0.0
@@ -230,9 +216,7 @@ Method asScript of Credential
 **Signature**
 
 ```ts
-export declare const asScript: (
-  instance: CML.Credential,
-) => Effect.Effect<CML.ScriptHash | undefined, CredentialError>;
+export declare const asScript: (instance: CML.Credential) => Effect.Effect<CML.ScriptHash | undefined, CredentialError>
 ```
 
 Added in v2.0.0
@@ -244,9 +228,7 @@ Method free of Credential
 **Signature**
 
 ```ts
-export declare const free: (
-  instance: CML.Credential,
-) => Effect.Effect<void, CredentialError>;
+export declare const free: (instance: CML.Credential) => Effect.Effect<void, CredentialError>
 ```
 
 Added in v2.0.0
@@ -258,9 +240,7 @@ Method kind of Credential
 **Signature**
 
 ```ts
-export declare const kind: (
-  instance: CML.Credential,
-) => Effect.Effect<CML.CredentialKind, CredentialError>;
+export declare const kind: (instance: CML.Credential) => Effect.Effect<CML.CredentialKind, CredentialError>
 ```
 
 Added in v2.0.0
@@ -272,9 +252,7 @@ Method toCanonicalCborBytes of Credential
 **Signature**
 
 ```ts
-export declare const toCanonicalCborBytes: (
-  instance: CML.Credential,
-) => Effect.Effect<Uint8Array, CredentialError>;
+export declare const toCanonicalCborBytes: (instance: CML.Credential) => Effect.Effect<Uint8Array, CredentialError>
 ```
 
 Added in v2.0.0
@@ -286,9 +264,7 @@ Method toCanonicalCborHex of Credential
 **Signature**
 
 ```ts
-export declare const toCanonicalCborHex: (
-  instance: CML.Credential,
-) => Effect.Effect<string, CredentialError>;
+export declare const toCanonicalCborHex: (instance: CML.Credential) => Effect.Effect<string, CredentialError>
 ```
 
 Added in v2.0.0
@@ -300,9 +276,7 @@ Method toCborBytes of Credential
 **Signature**
 
 ```ts
-export declare const toCborBytes: (
-  instance: CML.Credential,
-) => Effect.Effect<Uint8Array, CredentialError>;
+export declare const toCborBytes: (instance: CML.Credential) => Effect.Effect<Uint8Array, CredentialError>
 ```
 
 Added in v2.0.0
@@ -314,9 +288,7 @@ Method toCborHex of Credential
 **Signature**
 
 ```ts
-export declare const toCborHex: (
-  instance: CML.Credential,
-) => Effect.Effect<string, CredentialError>;
+export declare const toCborHex: (instance: CML.Credential) => Effect.Effect<string, CredentialError>
 ```
 
 Added in v2.0.0
@@ -328,9 +300,7 @@ Method toJsValue of Credential
 **Signature**
 
 ```ts
-export declare const toJsValue: (
-  instance: CML.Credential,
-) => Effect.Effect<any, CredentialError>;
+export declare const toJsValue: (instance: CML.Credential) => Effect.Effect<any, CredentialError>
 ```
 
 Added in v2.0.0
@@ -342,9 +312,7 @@ Method toJson of Credential
 **Signature**
 
 ```ts
-export declare const toJson: (
-  instance: CML.Credential,
-) => Effect.Effect<string, CredentialError>;
+export declare const toJson: (instance: CML.Credential) => Effect.Effect<string, CredentialError>
 ```
 
 Added in v2.0.0
@@ -358,9 +326,7 @@ Unsafely calls instance.asPubKey without Effect wrapper
 **Signature**
 
 ```ts
-export declare const asPubKeyUnsafe: (
-  instance: CML.Credential,
-) => CML.Ed25519KeyHash | undefined;
+export declare const asPubKeyUnsafe: (instance: CML.Credential) => CML.Ed25519KeyHash | undefined
 ```
 
 Added in v2.0.0
@@ -372,9 +338,7 @@ Unsafely calls instance.asScript without Effect wrapper
 **Signature**
 
 ```ts
-export declare const asScriptUnsafe: (
-  instance: CML.Credential,
-) => CML.ScriptHash | undefined;
+export declare const asScriptUnsafe: (instance: CML.Credential) => CML.ScriptHash | undefined
 ```
 
 Added in v2.0.0
@@ -386,7 +350,7 @@ Unsafely calls instance.free without Effect wrapper
 **Signature**
 
 ```ts
-export declare const freeUnsafe: (instance: CML.Credential) => void;
+export declare const freeUnsafe: (instance: CML.Credential) => void
 ```
 
 Added in v2.0.0
@@ -398,9 +362,7 @@ Unsafely calls instance.kind without Effect wrapper
 **Signature**
 
 ```ts
-export declare const kindUnsafe: (
-  instance: CML.Credential,
-) => CML.CredentialKind;
+export declare const kindUnsafe: (instance: CML.Credential) => CML.CredentialKind
 ```
 
 Added in v2.0.0
@@ -412,9 +374,7 @@ Unsafely calls instance.toCanonicalCborBytes without Effect wrapper
 **Signature**
 
 ```ts
-export declare const toCanonicalCborBytesUnsafe: (
-  instance: CML.Credential,
-) => Uint8Array;
+export declare const toCanonicalCborBytesUnsafe: (instance: CML.Credential) => Uint8Array
 ```
 
 Added in v2.0.0
@@ -426,9 +386,7 @@ Unsafely calls instance.toCanonicalCborHex without Effect wrapper
 **Signature**
 
 ```ts
-export declare const toCanonicalCborHexUnsafe: (
-  instance: CML.Credential,
-) => string;
+export declare const toCanonicalCborHexUnsafe: (instance: CML.Credential) => string
 ```
 
 Added in v2.0.0
@@ -440,9 +398,7 @@ Unsafely calls instance.toCborBytes without Effect wrapper
 **Signature**
 
 ```ts
-export declare const toCborBytesUnsafe: (
-  instance: CML.Credential,
-) => Uint8Array;
+export declare const toCborBytesUnsafe: (instance: CML.Credential) => Uint8Array
 ```
 
 Added in v2.0.0
@@ -454,7 +410,7 @@ Unsafely calls instance.toCborHex without Effect wrapper
 **Signature**
 
 ```ts
-export declare const toCborHexUnsafe: (instance: CML.Credential) => string;
+export declare const toCborHexUnsafe: (instance: CML.Credential) => string
 ```
 
 Added in v2.0.0
@@ -466,7 +422,7 @@ Unsafely calls instance.toJsValue without Effect wrapper
 **Signature**
 
 ```ts
-export declare const toJsValueUnsafe: (instance: CML.Credential) => any;
+export declare const toJsValueUnsafe: (instance: CML.Credential) => any
 ```
 
 Added in v2.0.0
@@ -478,7 +434,7 @@ Unsafely calls instance.toJson without Effect wrapper
 **Signature**
 
 ```ts
-export declare const toJsonUnsafe: (instance: CML.Credential) => string;
+export declare const toJsonUnsafe: (instance: CML.Credential) => string
 ```
 
 Added in v2.0.0
@@ -492,7 +448,7 @@ Type alias for the CML Credential class
 **Signature**
 
 ```ts
-export type Credential = CML.Credential;
+export type Credential = CML.Credential
 ```
 
 Added in v2.0.0

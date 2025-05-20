@@ -58,10 +58,7 @@ Static method \_new of VRFCert
 **Signature**
 
 ```ts
-export declare const _new: (
-  output: Uint8Array,
-  proof: Uint8Array,
-) => Effect.Effect<CML.VRFCert, VRFCertError>;
+export declare const _new: (output: Uint8Array, proof: Uint8Array) => Effect.Effect<CML.VRFCert, VRFCertError>
 ```
 
 Added in v2.0.0
@@ -73,9 +70,7 @@ Static method fromCborBytes of VRFCert
 **Signature**
 
 ```ts
-export declare const fromCborBytes: (
-  cborBytes: Uint8Array,
-) => Effect.Effect<CML.VRFCert, VRFCertError>;
+export declare const fromCborBytes: (cborBytes: Uint8Array) => Effect.Effect<CML.VRFCert, VRFCertError>
 ```
 
 Added in v2.0.0
@@ -87,9 +82,7 @@ Static method fromCborHex of VRFCert
 **Signature**
 
 ```ts
-export declare const fromCborHex: (
-  cborBytes: string,
-) => Effect.Effect<CML.VRFCert, VRFCertError>;
+export declare const fromCborHex: (cborBytes: string) => Effect.Effect<CML.VRFCert, VRFCertError>
 ```
 
 Added in v2.0.0
@@ -101,9 +94,7 @@ Static method fromJson of VRFCert
 **Signature**
 
 ```ts
-export declare const fromJson: (
-  json: string,
-) => Effect.Effect<CML.VRFCert, VRFCertError>;
+export declare const fromJson: (json: string) => Effect.Effect<CML.VRFCert, VRFCertError>
 ```
 
 Added in v2.0.0
@@ -117,10 +108,7 @@ Unsafely calls VRFCert.\_new without Effect wrapper
 **Signature**
 
 ```ts
-export declare const _newUnsafe: (
-  output: Uint8Array,
-  proof: Uint8Array,
-) => CML.VRFCert;
+export declare const _newUnsafe: (output: Uint8Array, proof: Uint8Array) => CML.VRFCert
 ```
 
 Added in v2.0.0
@@ -132,9 +120,7 @@ Unsafely calls VRFCert.fromCborBytes without Effect wrapper
 **Signature**
 
 ```ts
-export declare const fromCborBytesUnsafe: (
-  cborBytes: Uint8Array,
-) => CML.VRFCert;
+export declare const fromCborBytesUnsafe: (cborBytes: Uint8Array) => CML.VRFCert
 ```
 
 Added in v2.0.0
@@ -146,7 +132,7 @@ Unsafely calls VRFCert.fromCborHex without Effect wrapper
 **Signature**
 
 ```ts
-export declare const fromCborHexUnsafe: (cborBytes: string) => CML.VRFCert;
+export declare const fromCborHexUnsafe: (cborBytes: string) => CML.VRFCert
 ```
 
 Added in v2.0.0
@@ -158,7 +144,7 @@ Unsafely calls VRFCert.fromJson without Effect wrapper
 **Signature**
 
 ```ts
-export declare const fromJsonUnsafe: (json: string) => CML.VRFCert;
+export declare const fromJsonUnsafe: (json: string) => CML.VRFCert
 ```
 
 Added in v2.0.0
@@ -188,9 +174,7 @@ Method free of VRFCert
 **Signature**
 
 ```ts
-export declare const free: (
-  instance: CML.VRFCert,
-) => Effect.Effect<void, VRFCertError>;
+export declare const free: (instance: CML.VRFCert) => Effect.Effect<void, VRFCertError>
 ```
 
 Added in v2.0.0
@@ -202,9 +186,7 @@ Method output of VRFCert
 **Signature**
 
 ```ts
-export declare const output: (
-  instance: CML.VRFCert,
-) => Effect.Effect<Uint8Array, VRFCertError>;
+export declare const output: (instance: CML.VRFCert) => Effect.Effect<Uint8Array, VRFCertError>
 ```
 
 Added in v2.0.0
@@ -216,9 +198,7 @@ Method proof of VRFCert
 **Signature**
 
 ```ts
-export declare const proof: (
-  instance: CML.VRFCert,
-) => Effect.Effect<Uint8Array, VRFCertError>;
+export declare const proof: (instance: CML.VRFCert) => Effect.Effect<Uint8Array, VRFCertError>
 ```
 
 Added in v2.0.0
@@ -230,9 +210,7 @@ Method toCanonicalCborBytes of VRFCert
 **Signature**
 
 ```ts
-export declare const toCanonicalCborBytes: (
-  instance: CML.VRFCert,
-) => Effect.Effect<Uint8Array, VRFCertError>;
+export declare const toCanonicalCborBytes: (instance: CML.VRFCert) => Effect.Effect<Uint8Array, VRFCertError>
 ```
 
 Added in v2.0.0
@@ -244,9 +222,7 @@ Method toCanonicalCborHex of VRFCert
 **Signature**
 
 ```ts
-export declare const toCanonicalCborHex: (
-  instance: CML.VRFCert,
-) => Effect.Effect<string, VRFCertError>;
+export declare const toCanonicalCborHex: (instance: CML.VRFCert) => Effect.Effect<string, VRFCertError>
 ```
 
 Added in v2.0.0
@@ -258,9 +234,7 @@ Method toCborBytes of VRFCert
 **Signature**
 
 ```ts
-export declare const toCborBytes: (
-  instance: CML.VRFCert,
-) => Effect.Effect<Uint8Array, VRFCertError>;
+export declare const toCborBytes: (instance: CML.VRFCert) => Effect.Effect<Uint8Array, VRFCertError>
 ```
 
 Added in v2.0.0
@@ -272,9 +246,7 @@ Method toCborHex of VRFCert
 **Signature**
 
 ```ts
-export declare const toCborHex: (
-  instance: CML.VRFCert,
-) => Effect.Effect<string, VRFCertError>;
+export declare const toCborHex: (instance: CML.VRFCert) => Effect.Effect<string, VRFCertError>
 ```
 
 Added in v2.0.0
@@ -286,9 +258,7 @@ Method toJsValue of VRFCert
 **Signature**
 
 ```ts
-export declare const toJsValue: (
-  instance: CML.VRFCert,
-) => Effect.Effect<any, VRFCertError>;
+export declare const toJsValue: (instance: CML.VRFCert) => Effect.Effect<any, VRFCertError>
 ```
 
 Added in v2.0.0
@@ -300,9 +270,7 @@ Method toJson of VRFCert
 **Signature**
 
 ```ts
-export declare const toJson: (
-  instance: CML.VRFCert,
-) => Effect.Effect<string, VRFCertError>;
+export declare const toJson: (instance: CML.VRFCert) => Effect.Effect<string, VRFCertError>
 ```
 
 Added in v2.0.0
@@ -316,7 +284,7 @@ Unsafely calls instance.free without Effect wrapper
 **Signature**
 
 ```ts
-export declare const freeUnsafe: (instance: CML.VRFCert) => void;
+export declare const freeUnsafe: (instance: CML.VRFCert) => void
 ```
 
 Added in v2.0.0
@@ -328,7 +296,7 @@ Unsafely calls instance.output without Effect wrapper
 **Signature**
 
 ```ts
-export declare const outputUnsafe: (instance: CML.VRFCert) => Uint8Array;
+export declare const outputUnsafe: (instance: CML.VRFCert) => Uint8Array
 ```
 
 Added in v2.0.0
@@ -340,7 +308,7 @@ Unsafely calls instance.proof without Effect wrapper
 **Signature**
 
 ```ts
-export declare const proofUnsafe: (instance: CML.VRFCert) => Uint8Array;
+export declare const proofUnsafe: (instance: CML.VRFCert) => Uint8Array
 ```
 
 Added in v2.0.0
@@ -352,9 +320,7 @@ Unsafely calls instance.toCanonicalCborBytes without Effect wrapper
 **Signature**
 
 ```ts
-export declare const toCanonicalCborBytesUnsafe: (
-  instance: CML.VRFCert,
-) => Uint8Array;
+export declare const toCanonicalCborBytesUnsafe: (instance: CML.VRFCert) => Uint8Array
 ```
 
 Added in v2.0.0
@@ -366,9 +332,7 @@ Unsafely calls instance.toCanonicalCborHex without Effect wrapper
 **Signature**
 
 ```ts
-export declare const toCanonicalCborHexUnsafe: (
-  instance: CML.VRFCert,
-) => string;
+export declare const toCanonicalCborHexUnsafe: (instance: CML.VRFCert) => string
 ```
 
 Added in v2.0.0
@@ -380,7 +344,7 @@ Unsafely calls instance.toCborBytes without Effect wrapper
 **Signature**
 
 ```ts
-export declare const toCborBytesUnsafe: (instance: CML.VRFCert) => Uint8Array;
+export declare const toCborBytesUnsafe: (instance: CML.VRFCert) => Uint8Array
 ```
 
 Added in v2.0.0
@@ -392,7 +356,7 @@ Unsafely calls instance.toCborHex without Effect wrapper
 **Signature**
 
 ```ts
-export declare const toCborHexUnsafe: (instance: CML.VRFCert) => string;
+export declare const toCborHexUnsafe: (instance: CML.VRFCert) => string
 ```
 
 Added in v2.0.0
@@ -404,7 +368,7 @@ Unsafely calls instance.toJsValue without Effect wrapper
 **Signature**
 
 ```ts
-export declare const toJsValueUnsafe: (instance: CML.VRFCert) => any;
+export declare const toJsValueUnsafe: (instance: CML.VRFCert) => any
 ```
 
 Added in v2.0.0
@@ -416,7 +380,7 @@ Unsafely calls instance.toJson without Effect wrapper
 **Signature**
 
 ```ts
-export declare const toJsonUnsafe: (instance: CML.VRFCert) => string;
+export declare const toJsonUnsafe: (instance: CML.VRFCert) => string
 ```
 
 Added in v2.0.0
@@ -430,7 +394,7 @@ Type alias for the CML VRFCert class
 **Signature**
 
 ```ts
-export type VRFCert = CML.VRFCert;
+export type VRFCert = CML.VRFCert
 ```
 
 Added in v2.0.0

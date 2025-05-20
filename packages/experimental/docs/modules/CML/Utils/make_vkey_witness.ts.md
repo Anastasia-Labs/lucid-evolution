@@ -48,8 +48,8 @@ Wrapper for the make_vkey_witness function
 ```ts
 export declare const makeVkeyWitness: (
   txBodyHash: CML.TransactionHash,
-  sk: CML.PrivateKey,
-) => Effect.Effect<CML.Vkeywitness, MakeVkeyWitnessError>;
+  sk: CML.PrivateKey
+) => Effect.Effect<CML.Vkeywitness, MakeVkeyWitnessError>
 ```
 
 Added in v2.0.0
@@ -63,10 +63,7 @@ Unsafely calls make_vkey_witness function without Effect wrapper
 **Signature**
 
 ```ts
-export declare const makeVkeyWitnessUnsafe: (
-  txBodyHash: CML.TransactionHash,
-  sk: CML.PrivateKey,
-) => CML.Vkeywitness;
+export declare const makeVkeyWitnessUnsafe: (txBodyHash: CML.TransactionHash, sk: CML.PrivateKey) => CML.Vkeywitness
 ```
 
 Added in v2.0.0

@@ -47,11 +47,8 @@ Wrapper for the decode_arbitrary_bytes_from_metadatum function
 
 ```ts
 export declare const decodeArbitraryBytesFromMetadatum: (
-  metadata: CML.TransactionMetadatum,
-) => Effect.Effect<
-  Uint8Array | undefined,
-  DecodeArbitraryBytesFromMetadatumError
->;
+  metadata: CML.TransactionMetadatum
+) => Effect.Effect<Uint8Array | undefined, DecodeArbitraryBytesFromMetadatumError>
 ```
 
 Added in v2.0.0
@@ -66,8 +63,8 @@ Unsafely calls decode_arbitrary_bytes_from_metadatum function without Effect wra
 
 ```ts
 export declare const decodeArbitraryBytesFromMetadatumUnsafe: (
-  metadata: CML.TransactionMetadatum,
-) => Uint8Array | undefined;
+  metadata: CML.TransactionMetadatum
+) => Uint8Array | undefined
 ```
 
 Added in v2.0.0

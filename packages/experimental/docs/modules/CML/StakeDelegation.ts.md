@@ -60,8 +60,8 @@ Static method \_new of StakeDelegation
 ```ts
 export declare const _new: (
   stakeCredential: CML.Credential,
-  pool: CML.Ed25519KeyHash,
-) => Effect.Effect<CML.StakeDelegation, StakeDelegationError>;
+  pool: CML.Ed25519KeyHash
+) => Effect.Effect<CML.StakeDelegation, StakeDelegationError>
 ```
 
 Added in v2.0.0
@@ -73,9 +73,7 @@ Static method fromCborBytes of StakeDelegation
 **Signature**
 
 ```ts
-export declare const fromCborBytes: (
-  cborBytes: Uint8Array,
-) => Effect.Effect<CML.StakeDelegation, StakeDelegationError>;
+export declare const fromCborBytes: (cborBytes: Uint8Array) => Effect.Effect<CML.StakeDelegation, StakeDelegationError>
 ```
 
 Added in v2.0.0
@@ -87,9 +85,7 @@ Static method fromCborHex of StakeDelegation
 **Signature**
 
 ```ts
-export declare const fromCborHex: (
-  cborBytes: string,
-) => Effect.Effect<CML.StakeDelegation, StakeDelegationError>;
+export declare const fromCborHex: (cborBytes: string) => Effect.Effect<CML.StakeDelegation, StakeDelegationError>
 ```
 
 Added in v2.0.0
@@ -101,9 +97,7 @@ Static method fromJson of StakeDelegation
 **Signature**
 
 ```ts
-export declare const fromJson: (
-  json: string,
-) => Effect.Effect<CML.StakeDelegation, StakeDelegationError>;
+export declare const fromJson: (json: string) => Effect.Effect<CML.StakeDelegation, StakeDelegationError>
 ```
 
 Added in v2.0.0
@@ -117,10 +111,7 @@ Unsafely calls StakeDelegation.\_new without Effect wrapper
 **Signature**
 
 ```ts
-export declare const _newUnsafe: (
-  stakeCredential: CML.Credential,
-  pool: CML.Ed25519KeyHash,
-) => CML.StakeDelegation;
+export declare const _newUnsafe: (stakeCredential: CML.Credential, pool: CML.Ed25519KeyHash) => CML.StakeDelegation
 ```
 
 Added in v2.0.0
@@ -132,9 +123,7 @@ Unsafely calls StakeDelegation.fromCborBytes without Effect wrapper
 **Signature**
 
 ```ts
-export declare const fromCborBytesUnsafe: (
-  cborBytes: Uint8Array,
-) => CML.StakeDelegation;
+export declare const fromCborBytesUnsafe: (cborBytes: Uint8Array) => CML.StakeDelegation
 ```
 
 Added in v2.0.0
@@ -146,9 +135,7 @@ Unsafely calls StakeDelegation.fromCborHex without Effect wrapper
 **Signature**
 
 ```ts
-export declare const fromCborHexUnsafe: (
-  cborBytes: string,
-) => CML.StakeDelegation;
+export declare const fromCborHexUnsafe: (cborBytes: string) => CML.StakeDelegation
 ```
 
 Added in v2.0.0
@@ -160,7 +147,7 @@ Unsafely calls StakeDelegation.fromJson without Effect wrapper
 **Signature**
 
 ```ts
-export declare const fromJsonUnsafe: (json: string) => CML.StakeDelegation;
+export declare const fromJsonUnsafe: (json: string) => CML.StakeDelegation
 ```
 
 Added in v2.0.0
@@ -190,9 +177,7 @@ Method free of StakeDelegation
 **Signature**
 
 ```ts
-export declare const free: (
-  instance: CML.StakeDelegation,
-) => Effect.Effect<void, StakeDelegationError>;
+export declare const free: (instance: CML.StakeDelegation) => Effect.Effect<void, StakeDelegationError>
 ```
 
 Added in v2.0.0
@@ -204,9 +189,7 @@ Method pool of StakeDelegation
 **Signature**
 
 ```ts
-export declare const pool: (
-  instance: CML.StakeDelegation,
-) => Effect.Effect<CML.Ed25519KeyHash, StakeDelegationError>;
+export declare const pool: (instance: CML.StakeDelegation) => Effect.Effect<CML.Ed25519KeyHash, StakeDelegationError>
 ```
 
 Added in v2.0.0
@@ -219,8 +202,8 @@ Method stakeCredential of StakeDelegation
 
 ```ts
 export declare const stakeCredential: (
-  instance: CML.StakeDelegation,
-) => Effect.Effect<CML.Credential, StakeDelegationError>;
+  instance: CML.StakeDelegation
+) => Effect.Effect<CML.Credential, StakeDelegationError>
 ```
 
 Added in v2.0.0
@@ -233,8 +216,8 @@ Method toCanonicalCborBytes of StakeDelegation
 
 ```ts
 export declare const toCanonicalCborBytes: (
-  instance: CML.StakeDelegation,
-) => Effect.Effect<Uint8Array, StakeDelegationError>;
+  instance: CML.StakeDelegation
+) => Effect.Effect<Uint8Array, StakeDelegationError>
 ```
 
 Added in v2.0.0
@@ -246,9 +229,7 @@ Method toCanonicalCborHex of StakeDelegation
 **Signature**
 
 ```ts
-export declare const toCanonicalCborHex: (
-  instance: CML.StakeDelegation,
-) => Effect.Effect<string, StakeDelegationError>;
+export declare const toCanonicalCborHex: (instance: CML.StakeDelegation) => Effect.Effect<string, StakeDelegationError>
 ```
 
 Added in v2.0.0
@@ -260,9 +241,7 @@ Method toCborBytes of StakeDelegation
 **Signature**
 
 ```ts
-export declare const toCborBytes: (
-  instance: CML.StakeDelegation,
-) => Effect.Effect<Uint8Array, StakeDelegationError>;
+export declare const toCborBytes: (instance: CML.StakeDelegation) => Effect.Effect<Uint8Array, StakeDelegationError>
 ```
 
 Added in v2.0.0
@@ -274,9 +253,7 @@ Method toCborHex of StakeDelegation
 **Signature**
 
 ```ts
-export declare const toCborHex: (
-  instance: CML.StakeDelegation,
-) => Effect.Effect<string, StakeDelegationError>;
+export declare const toCborHex: (instance: CML.StakeDelegation) => Effect.Effect<string, StakeDelegationError>
 ```
 
 Added in v2.0.0
@@ -288,9 +265,7 @@ Method toJsValue of StakeDelegation
 **Signature**
 
 ```ts
-export declare const toJsValue: (
-  instance: CML.StakeDelegation,
-) => Effect.Effect<any, StakeDelegationError>;
+export declare const toJsValue: (instance: CML.StakeDelegation) => Effect.Effect<any, StakeDelegationError>
 ```
 
 Added in v2.0.0
@@ -302,9 +277,7 @@ Method toJson of StakeDelegation
 **Signature**
 
 ```ts
-export declare const toJson: (
-  instance: CML.StakeDelegation,
-) => Effect.Effect<string, StakeDelegationError>;
+export declare const toJson: (instance: CML.StakeDelegation) => Effect.Effect<string, StakeDelegationError>
 ```
 
 Added in v2.0.0
@@ -318,7 +291,7 @@ Unsafely calls instance.free without Effect wrapper
 **Signature**
 
 ```ts
-export declare const freeUnsafe: (instance: CML.StakeDelegation) => void;
+export declare const freeUnsafe: (instance: CML.StakeDelegation) => void
 ```
 
 Added in v2.0.0
@@ -330,9 +303,7 @@ Unsafely calls instance.pool without Effect wrapper
 **Signature**
 
 ```ts
-export declare const poolUnsafe: (
-  instance: CML.StakeDelegation,
-) => CML.Ed25519KeyHash;
+export declare const poolUnsafe: (instance: CML.StakeDelegation) => CML.Ed25519KeyHash
 ```
 
 Added in v2.0.0
@@ -344,9 +315,7 @@ Unsafely calls instance.stakeCredential without Effect wrapper
 **Signature**
 
 ```ts
-export declare const stakeCredentialUnsafe: (
-  instance: CML.StakeDelegation,
-) => CML.Credential;
+export declare const stakeCredentialUnsafe: (instance: CML.StakeDelegation) => CML.Credential
 ```
 
 Added in v2.0.0
@@ -358,9 +327,7 @@ Unsafely calls instance.toCanonicalCborBytes without Effect wrapper
 **Signature**
 
 ```ts
-export declare const toCanonicalCborBytesUnsafe: (
-  instance: CML.StakeDelegation,
-) => Uint8Array;
+export declare const toCanonicalCborBytesUnsafe: (instance: CML.StakeDelegation) => Uint8Array
 ```
 
 Added in v2.0.0
@@ -372,9 +339,7 @@ Unsafely calls instance.toCanonicalCborHex without Effect wrapper
 **Signature**
 
 ```ts
-export declare const toCanonicalCborHexUnsafe: (
-  instance: CML.StakeDelegation,
-) => string;
+export declare const toCanonicalCborHexUnsafe: (instance: CML.StakeDelegation) => string
 ```
 
 Added in v2.0.0
@@ -386,9 +351,7 @@ Unsafely calls instance.toCborBytes without Effect wrapper
 **Signature**
 
 ```ts
-export declare const toCborBytesUnsafe: (
-  instance: CML.StakeDelegation,
-) => Uint8Array;
+export declare const toCborBytesUnsafe: (instance: CML.StakeDelegation) => Uint8Array
 ```
 
 Added in v2.0.0
@@ -400,7 +363,7 @@ Unsafely calls instance.toCborHex without Effect wrapper
 **Signature**
 
 ```ts
-export declare const toCborHexUnsafe: (instance: CML.StakeDelegation) => string;
+export declare const toCborHexUnsafe: (instance: CML.StakeDelegation) => string
 ```
 
 Added in v2.0.0
@@ -412,7 +375,7 @@ Unsafely calls instance.toJsValue without Effect wrapper
 **Signature**
 
 ```ts
-export declare const toJsValueUnsafe: (instance: CML.StakeDelegation) => any;
+export declare const toJsValueUnsafe: (instance: CML.StakeDelegation) => any
 ```
 
 Added in v2.0.0
@@ -424,7 +387,7 @@ Unsafely calls instance.toJson without Effect wrapper
 **Signature**
 
 ```ts
-export declare const toJsonUnsafe: (instance: CML.StakeDelegation) => string;
+export declare const toJsonUnsafe: (instance: CML.StakeDelegation) => string
 ```
 
 Added in v2.0.0
@@ -438,7 +401,7 @@ Type alias for the CML StakeDelegation class
 **Signature**
 
 ```ts
-export type StakeDelegation = CML.StakeDelegation;
+export type StakeDelegation = CML.StakeDelegation
 ```
 
 Added in v2.0.0

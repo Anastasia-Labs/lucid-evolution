@@ -48,10 +48,7 @@ Static method \_new of ByronTxOut
 **Signature**
 
 ```ts
-export declare const _new: (
-  address: CML.ByronAddress,
-  amount: bigint,
-) => Effect.Effect<CML.ByronTxOut, ByronTxOutError>;
+export declare const _new: (address: CML.ByronAddress, amount: bigint) => Effect.Effect<CML.ByronTxOut, ByronTxOutError>
 ```
 
 Added in v2.0.0
@@ -63,9 +60,7 @@ Static method fromCborBytes of ByronTxOut
 **Signature**
 
 ```ts
-export declare const fromCborBytes: (
-  cborBytes: Uint8Array,
-) => Effect.Effect<CML.ByronTxOut, ByronTxOutError>;
+export declare const fromCborBytes: (cborBytes: Uint8Array) => Effect.Effect<CML.ByronTxOut, ByronTxOutError>
 ```
 
 Added in v2.0.0
@@ -77,9 +72,7 @@ Static method fromCborHex of ByronTxOut
 **Signature**
 
 ```ts
-export declare const fromCborHex: (
-  cborBytes: string,
-) => Effect.Effect<CML.ByronTxOut, ByronTxOutError>;
+export declare const fromCborHex: (cborBytes: string) => Effect.Effect<CML.ByronTxOut, ByronTxOutError>
 ```
 
 Added in v2.0.0
@@ -93,10 +86,7 @@ Unsafely calls ByronTxOut.\_new without Effect wrapper
 **Signature**
 
 ```ts
-export declare const _newUnsafe: (
-  address: CML.ByronAddress,
-  amount: bigint,
-) => CML.ByronTxOut;
+export declare const _newUnsafe: (address: CML.ByronAddress, amount: bigint) => CML.ByronTxOut
 ```
 
 Added in v2.0.0
@@ -108,9 +98,7 @@ Unsafely calls ByronTxOut.fromCborBytes without Effect wrapper
 **Signature**
 
 ```ts
-export declare const fromCborBytesUnsafe: (
-  cborBytes: Uint8Array,
-) => CML.ByronTxOut;
+export declare const fromCborBytesUnsafe: (cborBytes: Uint8Array) => CML.ByronTxOut
 ```
 
 Added in v2.0.0
@@ -122,7 +110,7 @@ Unsafely calls ByronTxOut.fromCborHex without Effect wrapper
 **Signature**
 
 ```ts
-export declare const fromCborHexUnsafe: (cborBytes: string) => CML.ByronTxOut;
+export declare const fromCborHexUnsafe: (cborBytes: string) => CML.ByronTxOut
 ```
 
 Added in v2.0.0
@@ -152,9 +140,7 @@ Method address of ByronTxOut
 **Signature**
 
 ```ts
-export declare const address: (
-  instance: CML.ByronTxOut,
-) => Effect.Effect<CML.ByronAddress, ByronTxOutError>;
+export declare const address: (instance: CML.ByronTxOut) => Effect.Effect<CML.ByronAddress, ByronTxOutError>
 ```
 
 Added in v2.0.0
@@ -166,9 +152,7 @@ Method amount of ByronTxOut
 **Signature**
 
 ```ts
-export declare const amount: (
-  instance: CML.ByronTxOut,
-) => Effect.Effect<bigint, ByronTxOutError>;
+export declare const amount: (instance: CML.ByronTxOut) => Effect.Effect<bigint, ByronTxOutError>
 ```
 
 Added in v2.0.0
@@ -180,9 +164,7 @@ Method free of ByronTxOut
 **Signature**
 
 ```ts
-export declare const free: (
-  instance: CML.ByronTxOut,
-) => Effect.Effect<void, ByronTxOutError>;
+export declare const free: (instance: CML.ByronTxOut) => Effect.Effect<void, ByronTxOutError>
 ```
 
 Added in v2.0.0
@@ -194,9 +176,7 @@ Method toCborBytes of ByronTxOut
 **Signature**
 
 ```ts
-export declare const toCborBytes: (
-  instance: CML.ByronTxOut,
-) => Effect.Effect<Uint8Array, ByronTxOutError>;
+export declare const toCborBytes: (instance: CML.ByronTxOut) => Effect.Effect<Uint8Array, ByronTxOutError>
 ```
 
 Added in v2.0.0
@@ -208,9 +188,7 @@ Method toCborHex of ByronTxOut
 **Signature**
 
 ```ts
-export declare const toCborHex: (
-  instance: CML.ByronTxOut,
-) => Effect.Effect<string, ByronTxOutError>;
+export declare const toCborHex: (instance: CML.ByronTxOut) => Effect.Effect<string, ByronTxOutError>
 ```
 
 Added in v2.0.0
@@ -224,9 +202,7 @@ Unsafely calls instance.address without Effect wrapper
 **Signature**
 
 ```ts
-export declare const addressUnsafe: (
-  instance: CML.ByronTxOut,
-) => CML.ByronAddress;
+export declare const addressUnsafe: (instance: CML.ByronTxOut) => CML.ByronAddress
 ```
 
 Added in v2.0.0
@@ -238,7 +214,7 @@ Unsafely calls instance.amount without Effect wrapper
 **Signature**
 
 ```ts
-export declare const amountUnsafe: (instance: CML.ByronTxOut) => bigint;
+export declare const amountUnsafe: (instance: CML.ByronTxOut) => bigint
 ```
 
 Added in v2.0.0
@@ -250,7 +226,7 @@ Unsafely calls instance.free without Effect wrapper
 **Signature**
 
 ```ts
-export declare const freeUnsafe: (instance: CML.ByronTxOut) => void;
+export declare const freeUnsafe: (instance: CML.ByronTxOut) => void
 ```
 
 Added in v2.0.0
@@ -262,9 +238,7 @@ Unsafely calls instance.toCborBytes without Effect wrapper
 **Signature**
 
 ```ts
-export declare const toCborBytesUnsafe: (
-  instance: CML.ByronTxOut,
-) => Uint8Array;
+export declare const toCborBytesUnsafe: (instance: CML.ByronTxOut) => Uint8Array
 ```
 
 Added in v2.0.0
@@ -276,7 +250,7 @@ Unsafely calls instance.toCborHex without Effect wrapper
 **Signature**
 
 ```ts
-export declare const toCborHexUnsafe: (instance: CML.ByronTxOut) => string;
+export declare const toCborHexUnsafe: (instance: CML.ByronTxOut) => string
 ```
 
 Added in v2.0.0
@@ -290,7 +264,7 @@ Type alias for the CML ByronTxOut class
 **Signature**
 
 ```ts
-export type ByronTxOut = CML.ByronTxOut;
+export type ByronTxOut = CML.ByronTxOut
 ```
 
 Added in v2.0.0

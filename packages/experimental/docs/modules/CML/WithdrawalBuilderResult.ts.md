@@ -48,9 +48,7 @@ Method free of WithdrawalBuilderResult
 **Signature**
 
 ```ts
-export declare const free: (
-  instance: CML.WithdrawalBuilderResult,
-) => Effect.Effect<void, WithdrawalBuilderResultError>;
+export declare const free: (instance: CML.WithdrawalBuilderResult) => Effect.Effect<void, WithdrawalBuilderResultError>
 ```
 
 Added in v2.0.0
@@ -64,9 +62,7 @@ Unsafely calls instance.free without Effect wrapper
 **Signature**
 
 ```ts
-export declare const freeUnsafe: (
-  instance: CML.WithdrawalBuilderResult,
-) => void;
+export declare const freeUnsafe: (instance: CML.WithdrawalBuilderResult) => void
 ```
 
 Added in v2.0.0
@@ -80,7 +76,7 @@ Type alias for the CML WithdrawalBuilderResult class
 **Signature**
 
 ```ts
-export type WithdrawalBuilderResult = CML.WithdrawalBuilderResult;
+export type WithdrawalBuilderResult = CML.WithdrawalBuilderResult
 ```
 
 Added in v2.0.0

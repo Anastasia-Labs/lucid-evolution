@@ -48,8 +48,8 @@ Static method \_new of SingleInputBuilder
 ```ts
 export declare const _new: (
   input: CML.TransactionInput,
-  utxoInfo: CML.TransactionOutput,
-) => Effect.Effect<CML.SingleInputBuilder, SingleInputBuilderError>;
+  utxoInfo: CML.TransactionOutput
+) => Effect.Effect<CML.SingleInputBuilder, SingleInputBuilderError>
 ```
 
 Added in v2.0.0
@@ -62,8 +62,8 @@ Static method fromTransactionUnspentOutput of SingleInputBuilder
 
 ```ts
 export declare const fromTransactionUnspentOutput: (
-  utxo: CML.TransactionUnspentOutput,
-) => Effect.Effect<CML.SingleInputBuilder, SingleInputBuilderError>;
+  utxo: CML.TransactionUnspentOutput
+) => Effect.Effect<CML.SingleInputBuilder, SingleInputBuilderError>
 ```
 
 Added in v2.0.0
@@ -79,8 +79,8 @@ Unsafely calls SingleInputBuilder.\_new without Effect wrapper
 ```ts
 export declare const _newUnsafe: (
   input: CML.TransactionInput,
-  utxoInfo: CML.TransactionOutput,
-) => CML.SingleInputBuilder;
+  utxoInfo: CML.TransactionOutput
+) => CML.SingleInputBuilder
 ```
 
 Added in v2.0.0
@@ -92,9 +92,7 @@ Unsafely calls SingleInputBuilder.fromTransactionUnspentOutput without Effect wr
 **Signature**
 
 ```ts
-export declare const fromTransactionUnspentOutputUnsafe: (
-  utxo: CML.TransactionUnspentOutput,
-) => CML.SingleInputBuilder;
+export declare const fromTransactionUnspentOutputUnsafe: (utxo: CML.TransactionUnspentOutput) => CML.SingleInputBuilder
 ```
 
 Added in v2.0.0
@@ -124,9 +122,7 @@ Method free of SingleInputBuilder
 **Signature**
 
 ```ts
-export declare const free: (
-  instance: CML.SingleInputBuilder,
-) => Effect.Effect<void, SingleInputBuilderError>;
+export declare const free: (instance: CML.SingleInputBuilder) => Effect.Effect<void, SingleInputBuilderError>
 ```
 
 Added in v2.0.0
@@ -141,8 +137,8 @@ Method nativeScript of SingleInputBuilder
 export declare const nativeScript: (
   instance: CML.SingleInputBuilder,
   _nativeScript: CML.NativeScript,
-  witnessInfo: CML.NativeScriptWitnessInfo,
-) => Effect.Effect<CML.InputBuilderResult, SingleInputBuilderError>;
+  witnessInfo: CML.NativeScriptWitnessInfo
+) => Effect.Effect<CML.InputBuilderResult, SingleInputBuilderError>
 ```
 
 Added in v2.0.0
@@ -155,8 +151,8 @@ Method paymentKey of SingleInputBuilder
 
 ```ts
 export declare const paymentKey: (
-  instance: CML.SingleInputBuilder,
-) => Effect.Effect<CML.InputBuilderResult, SingleInputBuilderError>;
+  instance: CML.SingleInputBuilder
+) => Effect.Effect<CML.InputBuilderResult, SingleInputBuilderError>
 ```
 
 Added in v2.0.0
@@ -172,8 +168,8 @@ export declare const plutusScript: (
   instance: CML.SingleInputBuilder,
   partialWitness: CML.PartialPlutusWitness,
   requiredSigners: CML.Ed25519KeyHashList,
-  datum: CML.PlutusData,
-) => Effect.Effect<CML.InputBuilderResult, SingleInputBuilderError>;
+  datum: CML.PlutusData
+) => Effect.Effect<CML.InputBuilderResult, SingleInputBuilderError>
 ```
 
 Added in v2.0.0
@@ -188,8 +184,8 @@ Method plutusScriptInlineDatum of SingleInputBuilder
 export declare const plutusScriptInlineDatum: (
   instance: CML.SingleInputBuilder,
   partialWitness: CML.PartialPlutusWitness,
-  requiredSigners: CML.Ed25519KeyHashList,
-) => Effect.Effect<CML.InputBuilderResult, SingleInputBuilderError>;
+  requiredSigners: CML.Ed25519KeyHashList
+) => Effect.Effect<CML.InputBuilderResult, SingleInputBuilderError>
 ```
 
 Added in v2.0.0
@@ -203,7 +199,7 @@ Unsafely calls instance.free without Effect wrapper
 **Signature**
 
 ```ts
-export declare const freeUnsafe: (instance: CML.SingleInputBuilder) => void;
+export declare const freeUnsafe: (instance: CML.SingleInputBuilder) => void
 ```
 
 Added in v2.0.0
@@ -218,8 +214,8 @@ Unsafely calls instance.nativeScript without Effect wrapper
 export declare const nativeScriptUnsafe: (
   instance: CML.SingleInputBuilder,
   _nativeScript: CML.NativeScript,
-  witnessInfo: CML.NativeScriptWitnessInfo,
-) => CML.InputBuilderResult;
+  witnessInfo: CML.NativeScriptWitnessInfo
+) => CML.InputBuilderResult
 ```
 
 Added in v2.0.0
@@ -231,9 +227,7 @@ Unsafely calls instance.paymentKey without Effect wrapper
 **Signature**
 
 ```ts
-export declare const paymentKeyUnsafe: (
-  instance: CML.SingleInputBuilder,
-) => CML.InputBuilderResult;
+export declare const paymentKeyUnsafe: (instance: CML.SingleInputBuilder) => CML.InputBuilderResult
 ```
 
 Added in v2.0.0
@@ -248,8 +242,8 @@ Unsafely calls instance.plutusScriptInlineDatum without Effect wrapper
 export declare const plutusScriptInlineDatumUnsafe: (
   instance: CML.SingleInputBuilder,
   partialWitness: CML.PartialPlutusWitness,
-  requiredSigners: CML.Ed25519KeyHashList,
-) => CML.InputBuilderResult;
+  requiredSigners: CML.Ed25519KeyHashList
+) => CML.InputBuilderResult
 ```
 
 Added in v2.0.0
@@ -265,8 +259,8 @@ export declare const plutusScriptUnsafe: (
   instance: CML.SingleInputBuilder,
   partialWitness: CML.PartialPlutusWitness,
   requiredSigners: CML.Ed25519KeyHashList,
-  datum: CML.PlutusData,
-) => CML.InputBuilderResult;
+  datum: CML.PlutusData
+) => CML.InputBuilderResult
 ```
 
 Added in v2.0.0
@@ -280,7 +274,7 @@ Type alias for the CML SingleInputBuilder class
 **Signature**
 
 ```ts
-export type SingleInputBuilder = CML.SingleInputBuilder;
+export type SingleInputBuilder = CML.SingleInputBuilder
 ```
 
 Added in v2.0.0

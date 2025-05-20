@@ -42,10 +42,7 @@ Static method \_new of CIP36DelegationList
 **Signature**
 
 ```ts
-export declare const _new: () => Effect.Effect<
-  CML.CIP36DelegationList,
-  CIP36DelegationListError
->;
+export declare const _new: () => Effect.Effect<CML.CIP36DelegationList, CIP36DelegationListError>
 ```
 
 Added in v2.0.0
@@ -59,7 +56,7 @@ Unsafely calls CIP36DelegationList.\_new without Effect wrapper
 **Signature**
 
 ```ts
-export declare const _newUnsafe: () => CML.CIP36DelegationList;
+export declare const _newUnsafe: () => CML.CIP36DelegationList
 ```
 
 Added in v2.0.0
@@ -91,8 +88,8 @@ Method add of CIP36DelegationList
 ```ts
 export declare const add: (
   instance: CML.CIP36DelegationList,
-  elem: CML.CIP36Delegation,
-) => Effect.Effect<void, CIP36DelegationListError>;
+  elem: CML.CIP36Delegation
+) => Effect.Effect<void, CIP36DelegationListError>
 ```
 
 Added in v2.0.0
@@ -104,9 +101,7 @@ Method free of CIP36DelegationList
 **Signature**
 
 ```ts
-export declare const free: (
-  instance: CML.CIP36DelegationList,
-) => Effect.Effect<void, CIP36DelegationListError>;
+export declare const free: (instance: CML.CIP36DelegationList) => Effect.Effect<void, CIP36DelegationListError>
 ```
 
 Added in v2.0.0
@@ -120,8 +115,8 @@ Method get of CIP36DelegationList
 ```ts
 export declare const get: (
   instance: CML.CIP36DelegationList,
-  index: number,
-) => Effect.Effect<CML.CIP36Delegation, CIP36DelegationListError>;
+  index: number
+) => Effect.Effect<CML.CIP36Delegation, CIP36DelegationListError>
 ```
 
 Added in v2.0.0
@@ -133,9 +128,7 @@ Method len of CIP36DelegationList
 **Signature**
 
 ```ts
-export declare const len: (
-  instance: CML.CIP36DelegationList,
-) => Effect.Effect<number, CIP36DelegationListError>;
+export declare const len: (instance: CML.CIP36DelegationList) => Effect.Effect<number, CIP36DelegationListError>
 ```
 
 Added in v2.0.0
@@ -149,10 +142,7 @@ Unsafely calls instance.add without Effect wrapper
 **Signature**
 
 ```ts
-export declare const addUnsafe: (
-  instance: CML.CIP36DelegationList,
-  elem: CML.CIP36Delegation,
-) => void;
+export declare const addUnsafe: (instance: CML.CIP36DelegationList, elem: CML.CIP36Delegation) => void
 ```
 
 Added in v2.0.0
@@ -164,7 +154,7 @@ Unsafely calls instance.free without Effect wrapper
 **Signature**
 
 ```ts
-export declare const freeUnsafe: (instance: CML.CIP36DelegationList) => void;
+export declare const freeUnsafe: (instance: CML.CIP36DelegationList) => void
 ```
 
 Added in v2.0.0
@@ -176,10 +166,7 @@ Unsafely calls instance.get without Effect wrapper
 **Signature**
 
 ```ts
-export declare const getUnsafe: (
-  instance: CML.CIP36DelegationList,
-  index: number,
-) => CML.CIP36Delegation;
+export declare const getUnsafe: (instance: CML.CIP36DelegationList, index: number) => CML.CIP36Delegation
 ```
 
 Added in v2.0.0
@@ -191,7 +178,7 @@ Unsafely calls instance.len without Effect wrapper
 **Signature**
 
 ```ts
-export declare const lenUnsafe: (instance: CML.CIP36DelegationList) => number;
+export declare const lenUnsafe: (instance: CML.CIP36DelegationList) => number
 ```
 
 Added in v2.0.0
@@ -205,7 +192,7 @@ Type alias for the CML CIP36DelegationList class
 **Signature**
 
 ```ts
-export type CIP36DelegationList = CML.CIP36DelegationList;
+export type CIP36DelegationList = CML.CIP36DelegationList
 ```
 
 Added in v2.0.0

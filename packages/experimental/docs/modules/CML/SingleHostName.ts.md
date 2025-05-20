@@ -60,8 +60,8 @@ Static method \_new of SingleHostName
 ```ts
 export declare const _new: (
   port: number | undefined,
-  dnsName: CML.DNSName,
-) => Effect.Effect<CML.SingleHostName, SingleHostNameError>;
+  dnsName: CML.DNSName
+) => Effect.Effect<CML.SingleHostName, SingleHostNameError>
 ```
 
 Added in v2.0.0
@@ -73,9 +73,7 @@ Static method fromCborBytes of SingleHostName
 **Signature**
 
 ```ts
-export declare const fromCborBytes: (
-  cborBytes: Uint8Array,
-) => Effect.Effect<CML.SingleHostName, SingleHostNameError>;
+export declare const fromCborBytes: (cborBytes: Uint8Array) => Effect.Effect<CML.SingleHostName, SingleHostNameError>
 ```
 
 Added in v2.0.0
@@ -87,9 +85,7 @@ Static method fromCborHex of SingleHostName
 **Signature**
 
 ```ts
-export declare const fromCborHex: (
-  cborBytes: string,
-) => Effect.Effect<CML.SingleHostName, SingleHostNameError>;
+export declare const fromCborHex: (cborBytes: string) => Effect.Effect<CML.SingleHostName, SingleHostNameError>
 ```
 
 Added in v2.0.0
@@ -101,9 +97,7 @@ Static method fromJson of SingleHostName
 **Signature**
 
 ```ts
-export declare const fromJson: (
-  json: string,
-) => Effect.Effect<CML.SingleHostName, SingleHostNameError>;
+export declare const fromJson: (json: string) => Effect.Effect<CML.SingleHostName, SingleHostNameError>
 ```
 
 Added in v2.0.0
@@ -117,10 +111,7 @@ Unsafely calls SingleHostName.\_new without Effect wrapper
 **Signature**
 
 ```ts
-export declare const _newUnsafe: (
-  port: number | undefined,
-  dnsName: CML.DNSName,
-) => CML.SingleHostName;
+export declare const _newUnsafe: (port: number | undefined, dnsName: CML.DNSName) => CML.SingleHostName
 ```
 
 Added in v2.0.0
@@ -132,9 +123,7 @@ Unsafely calls SingleHostName.fromCborBytes without Effect wrapper
 **Signature**
 
 ```ts
-export declare const fromCborBytesUnsafe: (
-  cborBytes: Uint8Array,
-) => CML.SingleHostName;
+export declare const fromCborBytesUnsafe: (cborBytes: Uint8Array) => CML.SingleHostName
 ```
 
 Added in v2.0.0
@@ -146,9 +135,7 @@ Unsafely calls SingleHostName.fromCborHex without Effect wrapper
 **Signature**
 
 ```ts
-export declare const fromCborHexUnsafe: (
-  cborBytes: string,
-) => CML.SingleHostName;
+export declare const fromCborHexUnsafe: (cborBytes: string) => CML.SingleHostName
 ```
 
 Added in v2.0.0
@@ -160,7 +147,7 @@ Unsafely calls SingleHostName.fromJson without Effect wrapper
 **Signature**
 
 ```ts
-export declare const fromJsonUnsafe: (json: string) => CML.SingleHostName;
+export declare const fromJsonUnsafe: (json: string) => CML.SingleHostName
 ```
 
 Added in v2.0.0
@@ -190,9 +177,7 @@ Method dnsName of SingleHostName
 **Signature**
 
 ```ts
-export declare const dnsName: (
-  instance: CML.SingleHostName,
-) => Effect.Effect<CML.DNSName, SingleHostNameError>;
+export declare const dnsName: (instance: CML.SingleHostName) => Effect.Effect<CML.DNSName, SingleHostNameError>
 ```
 
 Added in v2.0.0
@@ -204,9 +189,7 @@ Method free of SingleHostName
 **Signature**
 
 ```ts
-export declare const free: (
-  instance: CML.SingleHostName,
-) => Effect.Effect<void, SingleHostNameError>;
+export declare const free: (instance: CML.SingleHostName) => Effect.Effect<void, SingleHostNameError>
 ```
 
 Added in v2.0.0
@@ -218,9 +201,7 @@ Method port of SingleHostName
 **Signature**
 
 ```ts
-export declare const port: (
-  instance: CML.SingleHostName,
-) => Effect.Effect<number | undefined, SingleHostNameError>;
+export declare const port: (instance: CML.SingleHostName) => Effect.Effect<number | undefined, SingleHostNameError>
 ```
 
 Added in v2.0.0
@@ -233,8 +214,8 @@ Method toCanonicalCborBytes of SingleHostName
 
 ```ts
 export declare const toCanonicalCborBytes: (
-  instance: CML.SingleHostName,
-) => Effect.Effect<Uint8Array, SingleHostNameError>;
+  instance: CML.SingleHostName
+) => Effect.Effect<Uint8Array, SingleHostNameError>
 ```
 
 Added in v2.0.0
@@ -246,9 +227,7 @@ Method toCanonicalCborHex of SingleHostName
 **Signature**
 
 ```ts
-export declare const toCanonicalCborHex: (
-  instance: CML.SingleHostName,
-) => Effect.Effect<string, SingleHostNameError>;
+export declare const toCanonicalCborHex: (instance: CML.SingleHostName) => Effect.Effect<string, SingleHostNameError>
 ```
 
 Added in v2.0.0
@@ -260,9 +239,7 @@ Method toCborBytes of SingleHostName
 **Signature**
 
 ```ts
-export declare const toCborBytes: (
-  instance: CML.SingleHostName,
-) => Effect.Effect<Uint8Array, SingleHostNameError>;
+export declare const toCborBytes: (instance: CML.SingleHostName) => Effect.Effect<Uint8Array, SingleHostNameError>
 ```
 
 Added in v2.0.0
@@ -274,9 +251,7 @@ Method toCborHex of SingleHostName
 **Signature**
 
 ```ts
-export declare const toCborHex: (
-  instance: CML.SingleHostName,
-) => Effect.Effect<string, SingleHostNameError>;
+export declare const toCborHex: (instance: CML.SingleHostName) => Effect.Effect<string, SingleHostNameError>
 ```
 
 Added in v2.0.0
@@ -288,9 +263,7 @@ Method toJsValue of SingleHostName
 **Signature**
 
 ```ts
-export declare const toJsValue: (
-  instance: CML.SingleHostName,
-) => Effect.Effect<any, SingleHostNameError>;
+export declare const toJsValue: (instance: CML.SingleHostName) => Effect.Effect<any, SingleHostNameError>
 ```
 
 Added in v2.0.0
@@ -302,9 +275,7 @@ Method toJson of SingleHostName
 **Signature**
 
 ```ts
-export declare const toJson: (
-  instance: CML.SingleHostName,
-) => Effect.Effect<string, SingleHostNameError>;
+export declare const toJson: (instance: CML.SingleHostName) => Effect.Effect<string, SingleHostNameError>
 ```
 
 Added in v2.0.0
@@ -318,9 +289,7 @@ Unsafely calls instance.dnsName without Effect wrapper
 **Signature**
 
 ```ts
-export declare const dnsNameUnsafe: (
-  instance: CML.SingleHostName,
-) => CML.DNSName;
+export declare const dnsNameUnsafe: (instance: CML.SingleHostName) => CML.DNSName
 ```
 
 Added in v2.0.0
@@ -332,7 +301,7 @@ Unsafely calls instance.free without Effect wrapper
 **Signature**
 
 ```ts
-export declare const freeUnsafe: (instance: CML.SingleHostName) => void;
+export declare const freeUnsafe: (instance: CML.SingleHostName) => void
 ```
 
 Added in v2.0.0
@@ -344,9 +313,7 @@ Unsafely calls instance.port without Effect wrapper
 **Signature**
 
 ```ts
-export declare const portUnsafe: (
-  instance: CML.SingleHostName,
-) => number | undefined;
+export declare const portUnsafe: (instance: CML.SingleHostName) => number | undefined
 ```
 
 Added in v2.0.0
@@ -358,9 +325,7 @@ Unsafely calls instance.toCanonicalCborBytes without Effect wrapper
 **Signature**
 
 ```ts
-export declare const toCanonicalCborBytesUnsafe: (
-  instance: CML.SingleHostName,
-) => Uint8Array;
+export declare const toCanonicalCborBytesUnsafe: (instance: CML.SingleHostName) => Uint8Array
 ```
 
 Added in v2.0.0
@@ -372,9 +337,7 @@ Unsafely calls instance.toCanonicalCborHex without Effect wrapper
 **Signature**
 
 ```ts
-export declare const toCanonicalCborHexUnsafe: (
-  instance: CML.SingleHostName,
-) => string;
+export declare const toCanonicalCborHexUnsafe: (instance: CML.SingleHostName) => string
 ```
 
 Added in v2.0.0
@@ -386,9 +349,7 @@ Unsafely calls instance.toCborBytes without Effect wrapper
 **Signature**
 
 ```ts
-export declare const toCborBytesUnsafe: (
-  instance: CML.SingleHostName,
-) => Uint8Array;
+export declare const toCborBytesUnsafe: (instance: CML.SingleHostName) => Uint8Array
 ```
 
 Added in v2.0.0
@@ -400,7 +361,7 @@ Unsafely calls instance.toCborHex without Effect wrapper
 **Signature**
 
 ```ts
-export declare const toCborHexUnsafe: (instance: CML.SingleHostName) => string;
+export declare const toCborHexUnsafe: (instance: CML.SingleHostName) => string
 ```
 
 Added in v2.0.0
@@ -412,7 +373,7 @@ Unsafely calls instance.toJsValue without Effect wrapper
 **Signature**
 
 ```ts
-export declare const toJsValueUnsafe: (instance: CML.SingleHostName) => any;
+export declare const toJsValueUnsafe: (instance: CML.SingleHostName) => any
 ```
 
 Added in v2.0.0
@@ -424,7 +385,7 @@ Unsafely calls instance.toJson without Effect wrapper
 **Signature**
 
 ```ts
-export declare const toJsonUnsafe: (instance: CML.SingleHostName) => string;
+export declare const toJsonUnsafe: (instance: CML.SingleHostName) => string
 ```
 
 Added in v2.0.0
@@ -438,7 +399,7 @@ Type alias for the CML SingleHostName class
 **Signature**
 
 ```ts
-export type SingleHostName = CML.SingleHostName;
+export type SingleHostName = CML.SingleHostName
 ```
 
 Added in v2.0.0

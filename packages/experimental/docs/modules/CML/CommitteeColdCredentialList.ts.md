@@ -42,10 +42,7 @@ Static method \_new of CommitteeColdCredentialList
 **Signature**
 
 ```ts
-export declare const _new: () => Effect.Effect<
-  CML.CommitteeColdCredentialList,
-  CommitteeColdCredentialListError
->;
+export declare const _new: () => Effect.Effect<CML.CommitteeColdCredentialList, CommitteeColdCredentialListError>
 ```
 
 Added in v2.0.0
@@ -59,7 +56,7 @@ Unsafely calls CommitteeColdCredentialList.\_new without Effect wrapper
 **Signature**
 
 ```ts
-export declare const _newUnsafe: () => CML.CommitteeColdCredentialList;
+export declare const _newUnsafe: () => CML.CommitteeColdCredentialList
 ```
 
 Added in v2.0.0
@@ -91,8 +88,8 @@ Method add of CommitteeColdCredentialList
 ```ts
 export declare const add: (
   instance: CML.CommitteeColdCredentialList,
-  elem: CML.Credential,
-) => Effect.Effect<void, CommitteeColdCredentialListError>;
+  elem: CML.Credential
+) => Effect.Effect<void, CommitteeColdCredentialListError>
 ```
 
 Added in v2.0.0
@@ -105,8 +102,8 @@ Method free of CommitteeColdCredentialList
 
 ```ts
 export declare const free: (
-  instance: CML.CommitteeColdCredentialList,
-) => Effect.Effect<void, CommitteeColdCredentialListError>;
+  instance: CML.CommitteeColdCredentialList
+) => Effect.Effect<void, CommitteeColdCredentialListError>
 ```
 
 Added in v2.0.0
@@ -120,8 +117,8 @@ Method get of CommitteeColdCredentialList
 ```ts
 export declare const get: (
   instance: CML.CommitteeColdCredentialList,
-  index: number,
-) => Effect.Effect<CML.Credential, CommitteeColdCredentialListError>;
+  index: number
+) => Effect.Effect<CML.Credential, CommitteeColdCredentialListError>
 ```
 
 Added in v2.0.0
@@ -134,8 +131,8 @@ Method len of CommitteeColdCredentialList
 
 ```ts
 export declare const len: (
-  instance: CML.CommitteeColdCredentialList,
-) => Effect.Effect<number, CommitteeColdCredentialListError>;
+  instance: CML.CommitteeColdCredentialList
+) => Effect.Effect<number, CommitteeColdCredentialListError>
 ```
 
 Added in v2.0.0
@@ -149,10 +146,7 @@ Unsafely calls instance.add without Effect wrapper
 **Signature**
 
 ```ts
-export declare const addUnsafe: (
-  instance: CML.CommitteeColdCredentialList,
-  elem: CML.Credential,
-) => void;
+export declare const addUnsafe: (instance: CML.CommitteeColdCredentialList, elem: CML.Credential) => void
 ```
 
 Added in v2.0.0
@@ -164,9 +158,7 @@ Unsafely calls instance.free without Effect wrapper
 **Signature**
 
 ```ts
-export declare const freeUnsafe: (
-  instance: CML.CommitteeColdCredentialList,
-) => void;
+export declare const freeUnsafe: (instance: CML.CommitteeColdCredentialList) => void
 ```
 
 Added in v2.0.0
@@ -178,10 +170,7 @@ Unsafely calls instance.get without Effect wrapper
 **Signature**
 
 ```ts
-export declare const getUnsafe: (
-  instance: CML.CommitteeColdCredentialList,
-  index: number,
-) => CML.Credential;
+export declare const getUnsafe: (instance: CML.CommitteeColdCredentialList, index: number) => CML.Credential
 ```
 
 Added in v2.0.0
@@ -193,9 +182,7 @@ Unsafely calls instance.len without Effect wrapper
 **Signature**
 
 ```ts
-export declare const lenUnsafe: (
-  instance: CML.CommitteeColdCredentialList,
-) => number;
+export declare const lenUnsafe: (instance: CML.CommitteeColdCredentialList) => number
 ```
 
 Added in v2.0.0
@@ -209,7 +196,7 @@ Type alias for the CML CommitteeColdCredentialList class
 **Signature**
 
 ```ts
-export type CommitteeColdCredentialList = CML.CommitteeColdCredentialList;
+export type CommitteeColdCredentialList = CML.CommitteeColdCredentialList
 ```
 
 Added in v2.0.0

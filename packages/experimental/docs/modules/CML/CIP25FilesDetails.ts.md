@@ -59,8 +59,8 @@ Static method \_new of CIP25FilesDetails
 export declare const _new: (
   name: CML.CIP25String64,
   mediaType: CML.CIP25String64,
-  src: CML.CIP25ChunkableString,
-) => Effect.Effect<CML.CIP25FilesDetails, CIP25FilesDetailsError>;
+  src: CML.CIP25ChunkableString
+) => Effect.Effect<CML.CIP25FilesDetails, CIP25FilesDetailsError>
 ```
 
 Added in v2.0.0
@@ -73,8 +73,8 @@ Static method fromCborBytes of CIP25FilesDetails
 
 ```ts
 export declare const fromCborBytes: (
-  cborBytes: Uint8Array,
-) => Effect.Effect<CML.CIP25FilesDetails, CIP25FilesDetailsError>;
+  cborBytes: Uint8Array
+) => Effect.Effect<CML.CIP25FilesDetails, CIP25FilesDetailsError>
 ```
 
 Added in v2.0.0
@@ -86,9 +86,7 @@ Static method fromCborHex of CIP25FilesDetails
 **Signature**
 
 ```ts
-export declare const fromCborHex: (
-  cborBytes: string,
-) => Effect.Effect<CML.CIP25FilesDetails, CIP25FilesDetailsError>;
+export declare const fromCborHex: (cborBytes: string) => Effect.Effect<CML.CIP25FilesDetails, CIP25FilesDetailsError>
 ```
 
 Added in v2.0.0
@@ -100,9 +98,7 @@ Static method fromJson of CIP25FilesDetails
 **Signature**
 
 ```ts
-export declare const fromJson: (
-  json: string,
-) => Effect.Effect<CML.CIP25FilesDetails, CIP25FilesDetailsError>;
+export declare const fromJson: (json: string) => Effect.Effect<CML.CIP25FilesDetails, CIP25FilesDetailsError>
 ```
 
 Added in v2.0.0
@@ -119,8 +115,8 @@ Unsafely calls CIP25FilesDetails.\_new without Effect wrapper
 export declare const _newUnsafe: (
   name: CML.CIP25String64,
   mediaType: CML.CIP25String64,
-  src: CML.CIP25ChunkableString,
-) => CML.CIP25FilesDetails;
+  src: CML.CIP25ChunkableString
+) => CML.CIP25FilesDetails
 ```
 
 Added in v2.0.0
@@ -132,9 +128,7 @@ Unsafely calls CIP25FilesDetails.fromCborBytes without Effect wrapper
 **Signature**
 
 ```ts
-export declare const fromCborBytesUnsafe: (
-  cborBytes: Uint8Array,
-) => CML.CIP25FilesDetails;
+export declare const fromCborBytesUnsafe: (cborBytes: Uint8Array) => CML.CIP25FilesDetails
 ```
 
 Added in v2.0.0
@@ -146,9 +140,7 @@ Unsafely calls CIP25FilesDetails.fromCborHex without Effect wrapper
 **Signature**
 
 ```ts
-export declare const fromCborHexUnsafe: (
-  cborBytes: string,
-) => CML.CIP25FilesDetails;
+export declare const fromCborHexUnsafe: (cborBytes: string) => CML.CIP25FilesDetails
 ```
 
 Added in v2.0.0
@@ -160,7 +152,7 @@ Unsafely calls CIP25FilesDetails.fromJson without Effect wrapper
 **Signature**
 
 ```ts
-export declare const fromJsonUnsafe: (json: string) => CML.CIP25FilesDetails;
+export declare const fromJsonUnsafe: (json: string) => CML.CIP25FilesDetails
 ```
 
 Added in v2.0.0
@@ -190,9 +182,7 @@ Method free of CIP25FilesDetails
 **Signature**
 
 ```ts
-export declare const free: (
-  instance: CML.CIP25FilesDetails,
-) => Effect.Effect<void, CIP25FilesDetailsError>;
+export declare const free: (instance: CML.CIP25FilesDetails) => Effect.Effect<void, CIP25FilesDetailsError>
 ```
 
 Added in v2.0.0
@@ -205,8 +195,8 @@ Method mediaType of CIP25FilesDetails
 
 ```ts
 export declare const mediaType: (
-  instance: CML.CIP25FilesDetails,
-) => Effect.Effect<CML.CIP25String64, CIP25FilesDetailsError>;
+  instance: CML.CIP25FilesDetails
+) => Effect.Effect<CML.CIP25String64, CIP25FilesDetailsError>
 ```
 
 Added in v2.0.0
@@ -218,9 +208,7 @@ Method name of CIP25FilesDetails
 **Signature**
 
 ```ts
-export declare const name: (
-  instance: CML.CIP25FilesDetails,
-) => Effect.Effect<CML.CIP25String64, CIP25FilesDetailsError>;
+export declare const name: (instance: CML.CIP25FilesDetails) => Effect.Effect<CML.CIP25String64, CIP25FilesDetailsError>
 ```
 
 Added in v2.0.0
@@ -233,8 +221,8 @@ Method src of CIP25FilesDetails
 
 ```ts
 export declare const src: (
-  instance: CML.CIP25FilesDetails,
-) => Effect.Effect<CML.CIP25ChunkableString, CIP25FilesDetailsError>;
+  instance: CML.CIP25FilesDetails
+) => Effect.Effect<CML.CIP25ChunkableString, CIP25FilesDetailsError>
 ```
 
 Added in v2.0.0
@@ -246,9 +234,7 @@ Method toCborBytes of CIP25FilesDetails
 **Signature**
 
 ```ts
-export declare const toCborBytes: (
-  instance: CML.CIP25FilesDetails,
-) => Effect.Effect<Uint8Array, CIP25FilesDetailsError>;
+export declare const toCborBytes: (instance: CML.CIP25FilesDetails) => Effect.Effect<Uint8Array, CIP25FilesDetailsError>
 ```
 
 Added in v2.0.0
@@ -260,9 +246,7 @@ Method toCborHex of CIP25FilesDetails
 **Signature**
 
 ```ts
-export declare const toCborHex: (
-  instance: CML.CIP25FilesDetails,
-) => Effect.Effect<string, CIP25FilesDetailsError>;
+export declare const toCborHex: (instance: CML.CIP25FilesDetails) => Effect.Effect<string, CIP25FilesDetailsError>
 ```
 
 Added in v2.0.0
@@ -274,9 +258,7 @@ Method toJsValue of CIP25FilesDetails
 **Signature**
 
 ```ts
-export declare const toJsValue: (
-  instance: CML.CIP25FilesDetails,
-) => Effect.Effect<any, CIP25FilesDetailsError>;
+export declare const toJsValue: (instance: CML.CIP25FilesDetails) => Effect.Effect<any, CIP25FilesDetailsError>
 ```
 
 Added in v2.0.0
@@ -288,9 +270,7 @@ Method toJson of CIP25FilesDetails
 **Signature**
 
 ```ts
-export declare const toJson: (
-  instance: CML.CIP25FilesDetails,
-) => Effect.Effect<string, CIP25FilesDetailsError>;
+export declare const toJson: (instance: CML.CIP25FilesDetails) => Effect.Effect<string, CIP25FilesDetailsError>
 ```
 
 Added in v2.0.0
@@ -304,7 +284,7 @@ Unsafely calls instance.free without Effect wrapper
 **Signature**
 
 ```ts
-export declare const freeUnsafe: (instance: CML.CIP25FilesDetails) => void;
+export declare const freeUnsafe: (instance: CML.CIP25FilesDetails) => void
 ```
 
 Added in v2.0.0
@@ -316,9 +296,7 @@ Unsafely calls instance.mediaType without Effect wrapper
 **Signature**
 
 ```ts
-export declare const mediaTypeUnsafe: (
-  instance: CML.CIP25FilesDetails,
-) => CML.CIP25String64;
+export declare const mediaTypeUnsafe: (instance: CML.CIP25FilesDetails) => CML.CIP25String64
 ```
 
 Added in v2.0.0
@@ -330,9 +308,7 @@ Unsafely calls instance.name without Effect wrapper
 **Signature**
 
 ```ts
-export declare const nameUnsafe: (
-  instance: CML.CIP25FilesDetails,
-) => CML.CIP25String64;
+export declare const nameUnsafe: (instance: CML.CIP25FilesDetails) => CML.CIP25String64
 ```
 
 Added in v2.0.0
@@ -344,9 +320,7 @@ Unsafely calls instance.src without Effect wrapper
 **Signature**
 
 ```ts
-export declare const srcUnsafe: (
-  instance: CML.CIP25FilesDetails,
-) => CML.CIP25ChunkableString;
+export declare const srcUnsafe: (instance: CML.CIP25FilesDetails) => CML.CIP25ChunkableString
 ```
 
 Added in v2.0.0
@@ -358,9 +332,7 @@ Unsafely calls instance.toCborBytes without Effect wrapper
 **Signature**
 
 ```ts
-export declare const toCborBytesUnsafe: (
-  instance: CML.CIP25FilesDetails,
-) => Uint8Array;
+export declare const toCborBytesUnsafe: (instance: CML.CIP25FilesDetails) => Uint8Array
 ```
 
 Added in v2.0.0
@@ -372,9 +344,7 @@ Unsafely calls instance.toCborHex without Effect wrapper
 **Signature**
 
 ```ts
-export declare const toCborHexUnsafe: (
-  instance: CML.CIP25FilesDetails,
-) => string;
+export declare const toCborHexUnsafe: (instance: CML.CIP25FilesDetails) => string
 ```
 
 Added in v2.0.0
@@ -386,7 +356,7 @@ Unsafely calls instance.toJsValue without Effect wrapper
 **Signature**
 
 ```ts
-export declare const toJsValueUnsafe: (instance: CML.CIP25FilesDetails) => any;
+export declare const toJsValueUnsafe: (instance: CML.CIP25FilesDetails) => any
 ```
 
 Added in v2.0.0
@@ -398,7 +368,7 @@ Unsafely calls instance.toJson without Effect wrapper
 **Signature**
 
 ```ts
-export declare const toJsonUnsafe: (instance: CML.CIP25FilesDetails) => string;
+export declare const toJsonUnsafe: (instance: CML.CIP25FilesDetails) => string
 ```
 
 Added in v2.0.0
@@ -412,7 +382,7 @@ Type alias for the CML CIP25FilesDetails class
 **Signature**
 
 ```ts
-export type CIP25FilesDetails = CML.CIP25FilesDetails;
+export type CIP25FilesDetails = CML.CIP25FilesDetails
 ```
 
 Added in v2.0.0

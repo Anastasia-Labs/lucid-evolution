@@ -68,8 +68,8 @@ export declare const _new: (
   publicKey: CML.PublicKey,
   signature: CML.Ed25519Signature,
   chainCode: Uint8Array,
-  attributes: CML.AddrAttributes,
-) => Effect.Effect<CML.BootstrapWitness, BootstrapWitnessError>;
+  attributes: CML.AddrAttributes
+) => Effect.Effect<CML.BootstrapWitness, BootstrapWitnessError>
 ```
 
 Added in v2.0.0
@@ -82,8 +82,8 @@ Static method fromCborBytes of BootstrapWitness
 
 ```ts
 export declare const fromCborBytes: (
-  cborBytes: Uint8Array,
-) => Effect.Effect<CML.BootstrapWitness, BootstrapWitnessError>;
+  cborBytes: Uint8Array
+) => Effect.Effect<CML.BootstrapWitness, BootstrapWitnessError>
 ```
 
 Added in v2.0.0
@@ -95,9 +95,7 @@ Static method fromCborHex of BootstrapWitness
 **Signature**
 
 ```ts
-export declare const fromCborHex: (
-  cborBytes: string,
-) => Effect.Effect<CML.BootstrapWitness, BootstrapWitnessError>;
+export declare const fromCborHex: (cborBytes: string) => Effect.Effect<CML.BootstrapWitness, BootstrapWitnessError>
 ```
 
 Added in v2.0.0
@@ -109,9 +107,7 @@ Static method fromJson of BootstrapWitness
 **Signature**
 
 ```ts
-export declare const fromJson: (
-  json: string,
-) => Effect.Effect<CML.BootstrapWitness, BootstrapWitnessError>;
+export declare const fromJson: (json: string) => Effect.Effect<CML.BootstrapWitness, BootstrapWitnessError>
 ```
 
 Added in v2.0.0
@@ -129,8 +125,8 @@ export declare const _newUnsafe: (
   publicKey: CML.PublicKey,
   signature: CML.Ed25519Signature,
   chainCode: Uint8Array,
-  attributes: CML.AddrAttributes,
-) => CML.BootstrapWitness;
+  attributes: CML.AddrAttributes
+) => CML.BootstrapWitness
 ```
 
 Added in v2.0.0
@@ -142,9 +138,7 @@ Unsafely calls BootstrapWitness.fromCborBytes without Effect wrapper
 **Signature**
 
 ```ts
-export declare const fromCborBytesUnsafe: (
-  cborBytes: Uint8Array,
-) => CML.BootstrapWitness;
+export declare const fromCborBytesUnsafe: (cborBytes: Uint8Array) => CML.BootstrapWitness
 ```
 
 Added in v2.0.0
@@ -156,9 +150,7 @@ Unsafely calls BootstrapWitness.fromCborHex without Effect wrapper
 **Signature**
 
 ```ts
-export declare const fromCborHexUnsafe: (
-  cborBytes: string,
-) => CML.BootstrapWitness;
+export declare const fromCborHexUnsafe: (cborBytes: string) => CML.BootstrapWitness
 ```
 
 Added in v2.0.0
@@ -170,7 +162,7 @@ Unsafely calls BootstrapWitness.fromJson without Effect wrapper
 **Signature**
 
 ```ts
-export declare const fromJsonUnsafe: (json: string) => CML.BootstrapWitness;
+export declare const fromJsonUnsafe: (json: string) => CML.BootstrapWitness
 ```
 
 Added in v2.0.0
@@ -201,8 +193,8 @@ Method attributes of BootstrapWitness
 
 ```ts
 export declare const attributes: (
-  instance: CML.BootstrapWitness,
-) => Effect.Effect<CML.AddrAttributes, BootstrapWitnessError>;
+  instance: CML.BootstrapWitness
+) => Effect.Effect<CML.AddrAttributes, BootstrapWitnessError>
 ```
 
 Added in v2.0.0
@@ -214,9 +206,7 @@ Method chainCode of BootstrapWitness
 **Signature**
 
 ```ts
-export declare const chainCode: (
-  instance: CML.BootstrapWitness,
-) => Effect.Effect<Uint8Array, BootstrapWitnessError>;
+export declare const chainCode: (instance: CML.BootstrapWitness) => Effect.Effect<Uint8Array, BootstrapWitnessError>
 ```
 
 Added in v2.0.0
@@ -228,9 +218,7 @@ Method free of BootstrapWitness
 **Signature**
 
 ```ts
-export declare const free: (
-  instance: CML.BootstrapWitness,
-) => Effect.Effect<void, BootstrapWitnessError>;
+export declare const free: (instance: CML.BootstrapWitness) => Effect.Effect<void, BootstrapWitnessError>
 ```
 
 Added in v2.0.0
@@ -242,9 +230,7 @@ Method publicKey of BootstrapWitness
 **Signature**
 
 ```ts
-export declare const publicKey: (
-  instance: CML.BootstrapWitness,
-) => Effect.Effect<CML.PublicKey, BootstrapWitnessError>;
+export declare const publicKey: (instance: CML.BootstrapWitness) => Effect.Effect<CML.PublicKey, BootstrapWitnessError>
 ```
 
 Added in v2.0.0
@@ -257,8 +243,8 @@ Method signature of BootstrapWitness
 
 ```ts
 export declare const signature: (
-  instance: CML.BootstrapWitness,
-) => Effect.Effect<CML.Ed25519Signature, BootstrapWitnessError>;
+  instance: CML.BootstrapWitness
+) => Effect.Effect<CML.Ed25519Signature, BootstrapWitnessError>
 ```
 
 Added in v2.0.0
@@ -271,8 +257,8 @@ Method toAddress of BootstrapWitness
 
 ```ts
 export declare const toAddress: (
-  instance: CML.BootstrapWitness,
-) => Effect.Effect<CML.AddressContent, BootstrapWitnessError>;
+  instance: CML.BootstrapWitness
+) => Effect.Effect<CML.AddressContent, BootstrapWitnessError>
 ```
 
 Added in v2.0.0
@@ -285,8 +271,8 @@ Method toCanonicalCborBytes of BootstrapWitness
 
 ```ts
 export declare const toCanonicalCborBytes: (
-  instance: CML.BootstrapWitness,
-) => Effect.Effect<Uint8Array, BootstrapWitnessError>;
+  instance: CML.BootstrapWitness
+) => Effect.Effect<Uint8Array, BootstrapWitnessError>
 ```
 
 Added in v2.0.0
@@ -299,8 +285,8 @@ Method toCanonicalCborHex of BootstrapWitness
 
 ```ts
 export declare const toCanonicalCborHex: (
-  instance: CML.BootstrapWitness,
-) => Effect.Effect<string, BootstrapWitnessError>;
+  instance: CML.BootstrapWitness
+) => Effect.Effect<string, BootstrapWitnessError>
 ```
 
 Added in v2.0.0
@@ -312,9 +298,7 @@ Method toCborBytes of BootstrapWitness
 **Signature**
 
 ```ts
-export declare const toCborBytes: (
-  instance: CML.BootstrapWitness,
-) => Effect.Effect<Uint8Array, BootstrapWitnessError>;
+export declare const toCborBytes: (instance: CML.BootstrapWitness) => Effect.Effect<Uint8Array, BootstrapWitnessError>
 ```
 
 Added in v2.0.0
@@ -326,9 +310,7 @@ Method toCborHex of BootstrapWitness
 **Signature**
 
 ```ts
-export declare const toCborHex: (
-  instance: CML.BootstrapWitness,
-) => Effect.Effect<string, BootstrapWitnessError>;
+export declare const toCborHex: (instance: CML.BootstrapWitness) => Effect.Effect<string, BootstrapWitnessError>
 ```
 
 Added in v2.0.0
@@ -340,9 +322,7 @@ Method toJsValue of BootstrapWitness
 **Signature**
 
 ```ts
-export declare const toJsValue: (
-  instance: CML.BootstrapWitness,
-) => Effect.Effect<any, BootstrapWitnessError>;
+export declare const toJsValue: (instance: CML.BootstrapWitness) => Effect.Effect<any, BootstrapWitnessError>
 ```
 
 Added in v2.0.0
@@ -354,9 +334,7 @@ Method toJson of BootstrapWitness
 **Signature**
 
 ```ts
-export declare const toJson: (
-  instance: CML.BootstrapWitness,
-) => Effect.Effect<string, BootstrapWitnessError>;
+export declare const toJson: (instance: CML.BootstrapWitness) => Effect.Effect<string, BootstrapWitnessError>
 ```
 
 Added in v2.0.0
@@ -370,9 +348,7 @@ Unsafely calls instance.attributes without Effect wrapper
 **Signature**
 
 ```ts
-export declare const attributesUnsafe: (
-  instance: CML.BootstrapWitness,
-) => CML.AddrAttributes;
+export declare const attributesUnsafe: (instance: CML.BootstrapWitness) => CML.AddrAttributes
 ```
 
 Added in v2.0.0
@@ -384,9 +360,7 @@ Unsafely calls instance.chainCode without Effect wrapper
 **Signature**
 
 ```ts
-export declare const chainCodeUnsafe: (
-  instance: CML.BootstrapWitness,
-) => Uint8Array;
+export declare const chainCodeUnsafe: (instance: CML.BootstrapWitness) => Uint8Array
 ```
 
 Added in v2.0.0
@@ -398,7 +372,7 @@ Unsafely calls instance.free without Effect wrapper
 **Signature**
 
 ```ts
-export declare const freeUnsafe: (instance: CML.BootstrapWitness) => void;
+export declare const freeUnsafe: (instance: CML.BootstrapWitness) => void
 ```
 
 Added in v2.0.0
@@ -410,9 +384,7 @@ Unsafely calls instance.publicKey without Effect wrapper
 **Signature**
 
 ```ts
-export declare const publicKeyUnsafe: (
-  instance: CML.BootstrapWitness,
-) => CML.PublicKey;
+export declare const publicKeyUnsafe: (instance: CML.BootstrapWitness) => CML.PublicKey
 ```
 
 Added in v2.0.0
@@ -424,9 +396,7 @@ Unsafely calls instance.signature without Effect wrapper
 **Signature**
 
 ```ts
-export declare const signatureUnsafe: (
-  instance: CML.BootstrapWitness,
-) => CML.Ed25519Signature;
+export declare const signatureUnsafe: (instance: CML.BootstrapWitness) => CML.Ed25519Signature
 ```
 
 Added in v2.0.0
@@ -438,9 +408,7 @@ Unsafely calls instance.toAddress without Effect wrapper
 **Signature**
 
 ```ts
-export declare const toAddressUnsafe: (
-  instance: CML.BootstrapWitness,
-) => CML.AddressContent;
+export declare const toAddressUnsafe: (instance: CML.BootstrapWitness) => CML.AddressContent
 ```
 
 Added in v2.0.0
@@ -452,9 +420,7 @@ Unsafely calls instance.toCanonicalCborBytes without Effect wrapper
 **Signature**
 
 ```ts
-export declare const toCanonicalCborBytesUnsafe: (
-  instance: CML.BootstrapWitness,
-) => Uint8Array;
+export declare const toCanonicalCborBytesUnsafe: (instance: CML.BootstrapWitness) => Uint8Array
 ```
 
 Added in v2.0.0
@@ -466,9 +432,7 @@ Unsafely calls instance.toCanonicalCborHex without Effect wrapper
 **Signature**
 
 ```ts
-export declare const toCanonicalCborHexUnsafe: (
-  instance: CML.BootstrapWitness,
-) => string;
+export declare const toCanonicalCborHexUnsafe: (instance: CML.BootstrapWitness) => string
 ```
 
 Added in v2.0.0
@@ -480,9 +444,7 @@ Unsafely calls instance.toCborBytes without Effect wrapper
 **Signature**
 
 ```ts
-export declare const toCborBytesUnsafe: (
-  instance: CML.BootstrapWitness,
-) => Uint8Array;
+export declare const toCborBytesUnsafe: (instance: CML.BootstrapWitness) => Uint8Array
 ```
 
 Added in v2.0.0
@@ -494,9 +456,7 @@ Unsafely calls instance.toCborHex without Effect wrapper
 **Signature**
 
 ```ts
-export declare const toCborHexUnsafe: (
-  instance: CML.BootstrapWitness,
-) => string;
+export declare const toCborHexUnsafe: (instance: CML.BootstrapWitness) => string
 ```
 
 Added in v2.0.0
@@ -508,7 +468,7 @@ Unsafely calls instance.toJsValue without Effect wrapper
 **Signature**
 
 ```ts
-export declare const toJsValueUnsafe: (instance: CML.BootstrapWitness) => any;
+export declare const toJsValueUnsafe: (instance: CML.BootstrapWitness) => any
 ```
 
 Added in v2.0.0
@@ -520,7 +480,7 @@ Unsafely calls instance.toJson without Effect wrapper
 **Signature**
 
 ```ts
-export declare const toJsonUnsafe: (instance: CML.BootstrapWitness) => string;
+export declare const toJsonUnsafe: (instance: CML.BootstrapWitness) => string
 ```
 
 Added in v2.0.0
@@ -534,7 +494,7 @@ Type alias for the CML BootstrapWitness class
 **Signature**
 
 ```ts
-export type BootstrapWitness = CML.BootstrapWitness;
+export type BootstrapWitness = CML.BootstrapWitness
 ```
 
 Added in v2.0.0

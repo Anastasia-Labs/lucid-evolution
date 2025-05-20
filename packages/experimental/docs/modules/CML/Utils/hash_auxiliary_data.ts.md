@@ -47,8 +47,8 @@ Wrapper for the hash_auxiliary_data function
 
 ```ts
 export declare const hashAuxiliaryData: (
-  auxiliaryData: CML.AuxiliaryData,
-) => Effect.Effect<CML.AuxiliaryDataHash, HashAuxiliaryDataError>;
+  auxiliaryData: CML.AuxiliaryData
+) => Effect.Effect<CML.AuxiliaryDataHash, HashAuxiliaryDataError>
 ```
 
 Added in v2.0.0
@@ -62,9 +62,7 @@ Unsafely calls hash_auxiliary_data function without Effect wrapper
 **Signature**
 
 ```ts
-export declare const hashAuxiliaryDataUnsafe: (
-  auxiliaryData: CML.AuxiliaryData,
-) => CML.AuxiliaryDataHash;
+export declare const hashAuxiliaryDataUnsafe: (auxiliaryData: CML.AuxiliaryData) => CML.AuxiliaryDataHash
 ```
 
 Added in v2.0.0

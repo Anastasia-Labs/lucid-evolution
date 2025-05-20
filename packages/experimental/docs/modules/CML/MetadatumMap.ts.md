@@ -46,10 +46,7 @@ Static method \_new of MetadatumMap
 **Signature**
 
 ```ts
-export declare const _new: () => Effect.Effect<
-  CML.MetadatumMap,
-  MetadatumMapError
->;
+export declare const _new: () => Effect.Effect<CML.MetadatumMap, MetadatumMapError>
 ```
 
 Added in v2.0.0
@@ -63,7 +60,7 @@ Unsafely calls MetadatumMap.\_new without Effect wrapper
 **Signature**
 
 ```ts
-export declare const _newUnsafe: () => CML.MetadatumMap;
+export declare const _newUnsafe: () => CML.MetadatumMap
 ```
 
 Added in v2.0.0
@@ -93,9 +90,7 @@ Method free of MetadatumMap
 **Signature**
 
 ```ts
-export declare const free: (
-  instance: CML.MetadatumMap,
-) => Effect.Effect<void, MetadatumMapError>;
+export declare const free: (instance: CML.MetadatumMap) => Effect.Effect<void, MetadatumMapError>
 ```
 
 Added in v2.0.0
@@ -109,8 +104,8 @@ Method get of MetadatumMap
 ```ts
 export declare const get: (
   instance: CML.MetadatumMap,
-  key: CML.TransactionMetadatum,
-) => Effect.Effect<CML.TransactionMetadatum | undefined, MetadatumMapError>;
+  key: CML.TransactionMetadatum
+) => Effect.Effect<CML.TransactionMetadatum | undefined, MetadatumMapError>
 ```
 
 Added in v2.0.0
@@ -124,8 +119,8 @@ Method getAll of MetadatumMap
 ```ts
 export declare const getAll: (
   instance: CML.MetadatumMap,
-  key: CML.TransactionMetadatum,
-) => Effect.Effect<CML.TransactionMetadatumList | undefined, MetadatumMapError>;
+  key: CML.TransactionMetadatum
+) => Effect.Effect<CML.TransactionMetadatumList | undefined, MetadatumMapError>
 ```
 
 Added in v2.0.0
@@ -137,9 +132,7 @@ Method keys of MetadatumMap
 **Signature**
 
 ```ts
-export declare const keys: (
-  instance: CML.MetadatumMap,
-) => Effect.Effect<CML.MetadatumList, MetadatumMapError>;
+export declare const keys: (instance: CML.MetadatumMap) => Effect.Effect<CML.MetadatumList, MetadatumMapError>
 ```
 
 Added in v2.0.0
@@ -151,9 +144,7 @@ Method len of MetadatumMap
 **Signature**
 
 ```ts
-export declare const len: (
-  instance: CML.MetadatumMap,
-) => Effect.Effect<number, MetadatumMapError>;
+export declare const len: (instance: CML.MetadatumMap) => Effect.Effect<number, MetadatumMapError>
 ```
 
 Added in v2.0.0
@@ -168,8 +159,8 @@ Method set of MetadatumMap
 export declare const set: (
   instance: CML.MetadatumMap,
   key: CML.TransactionMetadatum,
-  value: CML.TransactionMetadatum,
-) => Effect.Effect<void, MetadatumMapError>;
+  value: CML.TransactionMetadatum
+) => Effect.Effect<void, MetadatumMapError>
 ```
 
 Added in v2.0.0
@@ -183,7 +174,7 @@ Unsafely calls instance.free without Effect wrapper
 **Signature**
 
 ```ts
-export declare const freeUnsafe: (instance: CML.MetadatumMap) => void;
+export declare const freeUnsafe: (instance: CML.MetadatumMap) => void
 ```
 
 Added in v2.0.0
@@ -197,8 +188,8 @@ Unsafely calls instance.getAll without Effect wrapper
 ```ts
 export declare const getAllUnsafe: (
   instance: CML.MetadatumMap,
-  key: CML.TransactionMetadatum,
-) => CML.TransactionMetadatumList | undefined;
+  key: CML.TransactionMetadatum
+) => CML.TransactionMetadatumList | undefined
 ```
 
 Added in v2.0.0
@@ -212,8 +203,8 @@ Unsafely calls instance.get without Effect wrapper
 ```ts
 export declare const getUnsafe: (
   instance: CML.MetadatumMap,
-  key: CML.TransactionMetadatum,
-) => CML.TransactionMetadatum | undefined;
+  key: CML.TransactionMetadatum
+) => CML.TransactionMetadatum | undefined
 ```
 
 Added in v2.0.0
@@ -225,9 +216,7 @@ Unsafely calls instance.keys without Effect wrapper
 **Signature**
 
 ```ts
-export declare const keysUnsafe: (
-  instance: CML.MetadatumMap,
-) => CML.MetadatumList;
+export declare const keysUnsafe: (instance: CML.MetadatumMap) => CML.MetadatumList
 ```
 
 Added in v2.0.0
@@ -239,7 +228,7 @@ Unsafely calls instance.len without Effect wrapper
 **Signature**
 
 ```ts
-export declare const lenUnsafe: (instance: CML.MetadatumMap) => number;
+export declare const lenUnsafe: (instance: CML.MetadatumMap) => number
 ```
 
 Added in v2.0.0
@@ -254,8 +243,8 @@ Unsafely calls instance.set without Effect wrapper
 export declare const setUnsafe: (
   instance: CML.MetadatumMap,
   key: CML.TransactionMetadatum,
-  value: CML.TransactionMetadatum,
-) => void;
+  value: CML.TransactionMetadatum
+) => void
 ```
 
 Added in v2.0.0
@@ -269,7 +258,7 @@ Type alias for the CML MetadatumMap class
 **Signature**
 
 ```ts
-export type MetadatumMap = CML.MetadatumMap;
+export type MetadatumMap = CML.MetadatumMap
 ```
 
 Added in v2.0.0

@@ -60,8 +60,8 @@ Static method \_new of ResignCommitteeColdCert
 ```ts
 export declare const _new: (
   committeeColdCredential: CML.Credential,
-  anchor: CML.Anchor,
-) => Effect.Effect<CML.ResignCommitteeColdCert, ResignCommitteeColdCertError>;
+  anchor: CML.Anchor
+) => Effect.Effect<CML.ResignCommitteeColdCert, ResignCommitteeColdCertError>
 ```
 
 Added in v2.0.0
@@ -74,8 +74,8 @@ Static method fromCborBytes of ResignCommitteeColdCert
 
 ```ts
 export declare const fromCborBytes: (
-  cborBytes: Uint8Array,
-) => Effect.Effect<CML.ResignCommitteeColdCert, ResignCommitteeColdCertError>;
+  cborBytes: Uint8Array
+) => Effect.Effect<CML.ResignCommitteeColdCert, ResignCommitteeColdCertError>
 ```
 
 Added in v2.0.0
@@ -88,8 +88,8 @@ Static method fromCborHex of ResignCommitteeColdCert
 
 ```ts
 export declare const fromCborHex: (
-  cborBytes: string,
-) => Effect.Effect<CML.ResignCommitteeColdCert, ResignCommitteeColdCertError>;
+  cborBytes: string
+) => Effect.Effect<CML.ResignCommitteeColdCert, ResignCommitteeColdCertError>
 ```
 
 Added in v2.0.0
@@ -102,8 +102,8 @@ Static method fromJson of ResignCommitteeColdCert
 
 ```ts
 export declare const fromJson: (
-  json: string,
-) => Effect.Effect<CML.ResignCommitteeColdCert, ResignCommitteeColdCertError>;
+  json: string
+) => Effect.Effect<CML.ResignCommitteeColdCert, ResignCommitteeColdCertError>
 ```
 
 Added in v2.0.0
@@ -119,8 +119,8 @@ Unsafely calls ResignCommitteeColdCert.\_new without Effect wrapper
 ```ts
 export declare const _newUnsafe: (
   committeeColdCredential: CML.Credential,
-  anchor: CML.Anchor,
-) => CML.ResignCommitteeColdCert;
+  anchor: CML.Anchor
+) => CML.ResignCommitteeColdCert
 ```
 
 Added in v2.0.0
@@ -132,9 +132,7 @@ Unsafely calls ResignCommitteeColdCert.fromCborBytes without Effect wrapper
 **Signature**
 
 ```ts
-export declare const fromCborBytesUnsafe: (
-  cborBytes: Uint8Array,
-) => CML.ResignCommitteeColdCert;
+export declare const fromCborBytesUnsafe: (cborBytes: Uint8Array) => CML.ResignCommitteeColdCert
 ```
 
 Added in v2.0.0
@@ -146,9 +144,7 @@ Unsafely calls ResignCommitteeColdCert.fromCborHex without Effect wrapper
 **Signature**
 
 ```ts
-export declare const fromCborHexUnsafe: (
-  cborBytes: string,
-) => CML.ResignCommitteeColdCert;
+export declare const fromCborHexUnsafe: (cborBytes: string) => CML.ResignCommitteeColdCert
 ```
 
 Added in v2.0.0
@@ -160,9 +156,7 @@ Unsafely calls ResignCommitteeColdCert.fromJson without Effect wrapper
 **Signature**
 
 ```ts
-export declare const fromJsonUnsafe: (
-  json: string,
-) => CML.ResignCommitteeColdCert;
+export declare const fromJsonUnsafe: (json: string) => CML.ResignCommitteeColdCert
 ```
 
 Added in v2.0.0
@@ -193,8 +187,8 @@ Method anchor of ResignCommitteeColdCert
 
 ```ts
 export declare const anchor: (
-  instance: CML.ResignCommitteeColdCert,
-) => Effect.Effect<CML.Anchor | undefined, ResignCommitteeColdCertError>;
+  instance: CML.ResignCommitteeColdCert
+) => Effect.Effect<CML.Anchor | undefined, ResignCommitteeColdCertError>
 ```
 
 Added in v2.0.0
@@ -207,8 +201,8 @@ Method committeeColdCredential of ResignCommitteeColdCert
 
 ```ts
 export declare const committeeColdCredential: (
-  instance: CML.ResignCommitteeColdCert,
-) => Effect.Effect<CML.Credential, ResignCommitteeColdCertError>;
+  instance: CML.ResignCommitteeColdCert
+) => Effect.Effect<CML.Credential, ResignCommitteeColdCertError>
 ```
 
 Added in v2.0.0
@@ -220,9 +214,7 @@ Method free of ResignCommitteeColdCert
 **Signature**
 
 ```ts
-export declare const free: (
-  instance: CML.ResignCommitteeColdCert,
-) => Effect.Effect<void, ResignCommitteeColdCertError>;
+export declare const free: (instance: CML.ResignCommitteeColdCert) => Effect.Effect<void, ResignCommitteeColdCertError>
 ```
 
 Added in v2.0.0
@@ -235,8 +227,8 @@ Method toCanonicalCborBytes of ResignCommitteeColdCert
 
 ```ts
 export declare const toCanonicalCborBytes: (
-  instance: CML.ResignCommitteeColdCert,
-) => Effect.Effect<Uint8Array, ResignCommitteeColdCertError>;
+  instance: CML.ResignCommitteeColdCert
+) => Effect.Effect<Uint8Array, ResignCommitteeColdCertError>
 ```
 
 Added in v2.0.0
@@ -249,8 +241,8 @@ Method toCanonicalCborHex of ResignCommitteeColdCert
 
 ```ts
 export declare const toCanonicalCborHex: (
-  instance: CML.ResignCommitteeColdCert,
-) => Effect.Effect<string, ResignCommitteeColdCertError>;
+  instance: CML.ResignCommitteeColdCert
+) => Effect.Effect<string, ResignCommitteeColdCertError>
 ```
 
 Added in v2.0.0
@@ -263,8 +255,8 @@ Method toCborBytes of ResignCommitteeColdCert
 
 ```ts
 export declare const toCborBytes: (
-  instance: CML.ResignCommitteeColdCert,
-) => Effect.Effect<Uint8Array, ResignCommitteeColdCertError>;
+  instance: CML.ResignCommitteeColdCert
+) => Effect.Effect<Uint8Array, ResignCommitteeColdCertError>
 ```
 
 Added in v2.0.0
@@ -277,8 +269,8 @@ Method toCborHex of ResignCommitteeColdCert
 
 ```ts
 export declare const toCborHex: (
-  instance: CML.ResignCommitteeColdCert,
-) => Effect.Effect<string, ResignCommitteeColdCertError>;
+  instance: CML.ResignCommitteeColdCert
+) => Effect.Effect<string, ResignCommitteeColdCertError>
 ```
 
 Added in v2.0.0
@@ -291,8 +283,8 @@ Method toJsValue of ResignCommitteeColdCert
 
 ```ts
 export declare const toJsValue: (
-  instance: CML.ResignCommitteeColdCert,
-) => Effect.Effect<any, ResignCommitteeColdCertError>;
+  instance: CML.ResignCommitteeColdCert
+) => Effect.Effect<any, ResignCommitteeColdCertError>
 ```
 
 Added in v2.0.0
@@ -305,8 +297,8 @@ Method toJson of ResignCommitteeColdCert
 
 ```ts
 export declare const toJson: (
-  instance: CML.ResignCommitteeColdCert,
-) => Effect.Effect<string, ResignCommitteeColdCertError>;
+  instance: CML.ResignCommitteeColdCert
+) => Effect.Effect<string, ResignCommitteeColdCertError>
 ```
 
 Added in v2.0.0
@@ -320,9 +312,7 @@ Unsafely calls instance.anchor without Effect wrapper
 **Signature**
 
 ```ts
-export declare const anchorUnsafe: (
-  instance: CML.ResignCommitteeColdCert,
-) => CML.Anchor | undefined;
+export declare const anchorUnsafe: (instance: CML.ResignCommitteeColdCert) => CML.Anchor | undefined
 ```
 
 Added in v2.0.0
@@ -334,9 +324,7 @@ Unsafely calls instance.committeeColdCredential without Effect wrapper
 **Signature**
 
 ```ts
-export declare const committeeColdCredentialUnsafe: (
-  instance: CML.ResignCommitteeColdCert,
-) => CML.Credential;
+export declare const committeeColdCredentialUnsafe: (instance: CML.ResignCommitteeColdCert) => CML.Credential
 ```
 
 Added in v2.0.0
@@ -348,9 +336,7 @@ Unsafely calls instance.free without Effect wrapper
 **Signature**
 
 ```ts
-export declare const freeUnsafe: (
-  instance: CML.ResignCommitteeColdCert,
-) => void;
+export declare const freeUnsafe: (instance: CML.ResignCommitteeColdCert) => void
 ```
 
 Added in v2.0.0
@@ -362,9 +348,7 @@ Unsafely calls instance.toCanonicalCborBytes without Effect wrapper
 **Signature**
 
 ```ts
-export declare const toCanonicalCborBytesUnsafe: (
-  instance: CML.ResignCommitteeColdCert,
-) => Uint8Array;
+export declare const toCanonicalCborBytesUnsafe: (instance: CML.ResignCommitteeColdCert) => Uint8Array
 ```
 
 Added in v2.0.0
@@ -376,9 +360,7 @@ Unsafely calls instance.toCanonicalCborHex without Effect wrapper
 **Signature**
 
 ```ts
-export declare const toCanonicalCborHexUnsafe: (
-  instance: CML.ResignCommitteeColdCert,
-) => string;
+export declare const toCanonicalCborHexUnsafe: (instance: CML.ResignCommitteeColdCert) => string
 ```
 
 Added in v2.0.0
@@ -390,9 +372,7 @@ Unsafely calls instance.toCborBytes without Effect wrapper
 **Signature**
 
 ```ts
-export declare const toCborBytesUnsafe: (
-  instance: CML.ResignCommitteeColdCert,
-) => Uint8Array;
+export declare const toCborBytesUnsafe: (instance: CML.ResignCommitteeColdCert) => Uint8Array
 ```
 
 Added in v2.0.0
@@ -404,9 +384,7 @@ Unsafely calls instance.toCborHex without Effect wrapper
 **Signature**
 
 ```ts
-export declare const toCborHexUnsafe: (
-  instance: CML.ResignCommitteeColdCert,
-) => string;
+export declare const toCborHexUnsafe: (instance: CML.ResignCommitteeColdCert) => string
 ```
 
 Added in v2.0.0
@@ -418,9 +396,7 @@ Unsafely calls instance.toJsValue without Effect wrapper
 **Signature**
 
 ```ts
-export declare const toJsValueUnsafe: (
-  instance: CML.ResignCommitteeColdCert,
-) => any;
+export declare const toJsValueUnsafe: (instance: CML.ResignCommitteeColdCert) => any
 ```
 
 Added in v2.0.0
@@ -432,9 +408,7 @@ Unsafely calls instance.toJson without Effect wrapper
 **Signature**
 
 ```ts
-export declare const toJsonUnsafe: (
-  instance: CML.ResignCommitteeColdCert,
-) => string;
+export declare const toJsonUnsafe: (instance: CML.ResignCommitteeColdCert) => string
 ```
 
 Added in v2.0.0
@@ -448,7 +422,7 @@ Type alias for the CML ResignCommitteeColdCert class
 **Signature**
 
 ```ts
-export type ResignCommitteeColdCert = CML.ResignCommitteeColdCert;
+export type ResignCommitteeColdCert = CML.ResignCommitteeColdCert
 ```
 
 Added in v2.0.0

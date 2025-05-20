@@ -50,8 +50,8 @@ export declare const emip3EncryptWithPassword: (
   password: string,
   salt: string,
   nonce: string,
-  data: string,
-) => Effect.Effect<string, Emip3EncryptWithPasswordError>;
+  data: string
+) => Effect.Effect<string, Emip3EncryptWithPasswordError>
 ```
 
 Added in v2.0.0
@@ -69,8 +69,8 @@ export declare const emip3EncryptWithPasswordUnsafe: (
   password: string,
   salt: string,
   nonce: string,
-  data: string,
-) => string;
+  data: string
+) => string
 ```
 
 Added in v2.0.0

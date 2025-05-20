@@ -42,10 +42,7 @@ Static method \_new of RewardAccountList
 **Signature**
 
 ```ts
-export declare const _new: () => Effect.Effect<
-  CML.RewardAccountList,
-  RewardAccountListError
->;
+export declare const _new: () => Effect.Effect<CML.RewardAccountList, RewardAccountListError>
 ```
 
 Added in v2.0.0
@@ -59,7 +56,7 @@ Unsafely calls RewardAccountList.\_new without Effect wrapper
 **Signature**
 
 ```ts
-export declare const _newUnsafe: () => CML.RewardAccountList;
+export declare const _newUnsafe: () => CML.RewardAccountList
 ```
 
 Added in v2.0.0
@@ -91,8 +88,8 @@ Method add of RewardAccountList
 ```ts
 export declare const add: (
   instance: CML.RewardAccountList,
-  elem: CML.RewardAddress,
-) => Effect.Effect<void, RewardAccountListError>;
+  elem: CML.RewardAddress
+) => Effect.Effect<void, RewardAccountListError>
 ```
 
 Added in v2.0.0
@@ -104,9 +101,7 @@ Method free of RewardAccountList
 **Signature**
 
 ```ts
-export declare const free: (
-  instance: CML.RewardAccountList,
-) => Effect.Effect<void, RewardAccountListError>;
+export declare const free: (instance: CML.RewardAccountList) => Effect.Effect<void, RewardAccountListError>
 ```
 
 Added in v2.0.0
@@ -120,8 +115,8 @@ Method get of RewardAccountList
 ```ts
 export declare const get: (
   instance: CML.RewardAccountList,
-  index: number,
-) => Effect.Effect<CML.RewardAddress, RewardAccountListError>;
+  index: number
+) => Effect.Effect<CML.RewardAddress, RewardAccountListError>
 ```
 
 Added in v2.0.0
@@ -133,9 +128,7 @@ Method len of RewardAccountList
 **Signature**
 
 ```ts
-export declare const len: (
-  instance: CML.RewardAccountList,
-) => Effect.Effect<number, RewardAccountListError>;
+export declare const len: (instance: CML.RewardAccountList) => Effect.Effect<number, RewardAccountListError>
 ```
 
 Added in v2.0.0
@@ -149,10 +142,7 @@ Unsafely calls instance.add without Effect wrapper
 **Signature**
 
 ```ts
-export declare const addUnsafe: (
-  instance: CML.RewardAccountList,
-  elem: CML.RewardAddress,
-) => void;
+export declare const addUnsafe: (instance: CML.RewardAccountList, elem: CML.RewardAddress) => void
 ```
 
 Added in v2.0.0
@@ -164,7 +154,7 @@ Unsafely calls instance.free without Effect wrapper
 **Signature**
 
 ```ts
-export declare const freeUnsafe: (instance: CML.RewardAccountList) => void;
+export declare const freeUnsafe: (instance: CML.RewardAccountList) => void
 ```
 
 Added in v2.0.0
@@ -176,10 +166,7 @@ Unsafely calls instance.get without Effect wrapper
 **Signature**
 
 ```ts
-export declare const getUnsafe: (
-  instance: CML.RewardAccountList,
-  index: number,
-) => CML.RewardAddress;
+export declare const getUnsafe: (instance: CML.RewardAccountList, index: number) => CML.RewardAddress
 ```
 
 Added in v2.0.0
@@ -191,7 +178,7 @@ Unsafely calls instance.len without Effect wrapper
 **Signature**
 
 ```ts
-export declare const lenUnsafe: (instance: CML.RewardAccountList) => number;
+export declare const lenUnsafe: (instance: CML.RewardAccountList) => number
 ```
 
 Added in v2.0.0
@@ -205,7 +192,7 @@ Type alias for the CML RewardAccountList class
 **Signature**
 
 ```ts
-export type RewardAccountList = CML.RewardAccountList;
+export type RewardAccountList = CML.RewardAccountList
 ```
 
 Added in v2.0.0

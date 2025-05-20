@@ -48,8 +48,8 @@ Wrapper for the encode_json_str_to_metadatum function
 ```ts
 export declare const encodeJsonStrToMetadatum: (
   json: string,
-  schema: CML.MetadataJsonSchema,
-) => Effect.Effect<CML.TransactionMetadatum, EncodeJsonStrToMetadatumError>;
+  schema: CML.MetadataJsonSchema
+) => Effect.Effect<CML.TransactionMetadatum, EncodeJsonStrToMetadatumError>
 ```
 
 Added in v2.0.0
@@ -65,8 +65,8 @@ Unsafely calls encode_json_str_to_metadatum function without Effect wrapper
 ```ts
 export declare const encodeJsonStrToMetadatumUnsafe: (
   json: string,
-  schema: CML.MetadataJsonSchema,
-) => CML.TransactionMetadatum;
+  schema: CML.MetadataJsonSchema
+) => CML.TransactionMetadatum
 ```
 
 Added in v2.0.0

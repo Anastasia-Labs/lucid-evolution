@@ -14,9 +14,9 @@ const bench = new Bench({ time: 1000 });
 
 bench.add("Evolution 2.0 - KeyHash", () => {
   const maybeHex = "c37b1b5dc0669f1d3c61a6fddb2e8fde96be87b881c60bce8e8d542f";
-  const a = KeyHash.makeOrThrow(maybeHex);
+  const a = KeyHash.decodeHexOrThrow(maybeHex);
   const b = KeyHash.toBytes(a);
-  const c = KeyHash.fromBytesOrThrow(b);
+  const c = KeyHash.decodeBytesOrThrow(b);
   const d = c.hash;
 });
 
@@ -31,9 +31,9 @@ bench.add("CML - Ed25519KeyHash", () => {
 bench.add("Evolution 2.0 - KeyHash Effect ", () => {
   const hex = "c37b1b5dc0669f1d3c61a6fddb2e8fde96be87b881c60bce8e8d542f";
   pipe(
-    KeyHash.make(hex),
+    KeyHash.decodeHex(hex),
     Effect.map((a) => KeyHash.toBytes(a)),
-    Effect.map((b) => KeyHash.fromBytes(b)),
+    Effect.flatMap((b) => KeyHash.decodeBytes(b)),
     Effect.runSync,
   );
 });
@@ -48,7 +48,7 @@ for (const task of bench.tasks) {
 }
 
 // console.log(
-//   KeyHash.makeOrThrow(
+//   KeyHash.decodeHexOrThrow(
 //     "c37b1b5dc0669f1d3c61a6fddb2e8fde96be87b881c60bce8e8d542f"
 //   )
 // );
@@ -64,10 +64,10 @@ try {
   //   "c37b1b5dc0669f1d3c61a6fddb2e8fde96be87b881c60bce8e8d542f"
   // );
   // console.log(hash);
-  // console.log(KeyHash.makeOrThrow(hash));
+  // console.log(KeyHash.decodeHexOrThrow(hash));
   // console.log(
   //   KeyHash.toBytes(
-  //     KeyHash.makeOrThrow(
+  //     KeyHash.decodeHexOrThrow(
   //       "c37b1b5dc0669f1d3c61a6fddb2e8fde96be87b881c60bce8e8d542f"
   //     )
   //   )

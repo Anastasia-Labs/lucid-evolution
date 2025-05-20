@@ -62,9 +62,7 @@ Static method fromCborBytes of DatumOption
 **Signature**
 
 ```ts
-export declare const fromCborBytes: (
-  cborBytes: Uint8Array,
-) => Effect.Effect<CML.DatumOption, DatumOptionError>;
+export declare const fromCborBytes: (cborBytes: Uint8Array) => Effect.Effect<CML.DatumOption, DatumOptionError>
 ```
 
 Added in v2.0.0
@@ -76,9 +74,7 @@ Static method fromCborHex of DatumOption
 **Signature**
 
 ```ts
-export declare const fromCborHex: (
-  cborBytes: string,
-) => Effect.Effect<CML.DatumOption, DatumOptionError>;
+export declare const fromCborHex: (cborBytes: string) => Effect.Effect<CML.DatumOption, DatumOptionError>
 ```
 
 Added in v2.0.0
@@ -90,9 +86,7 @@ Static method fromJson of DatumOption
 **Signature**
 
 ```ts
-export declare const fromJson: (
-  json: string,
-) => Effect.Effect<CML.DatumOption, DatumOptionError>;
+export declare const fromJson: (json: string) => Effect.Effect<CML.DatumOption, DatumOptionError>
 ```
 
 Added in v2.0.0
@@ -104,9 +98,7 @@ Static method newDatum of DatumOption
 **Signature**
 
 ```ts
-export declare const newDatum: (
-  datum: CML.PlutusData,
-) => Effect.Effect<CML.DatumOption, DatumOptionError>;
+export declare const newDatum: (datum: CML.PlutusData) => Effect.Effect<CML.DatumOption, DatumOptionError>
 ```
 
 Added in v2.0.0
@@ -118,9 +110,7 @@ Static method newHash of DatumOption
 **Signature**
 
 ```ts
-export declare const newHash: (
-  datumHash: CML.DatumHash,
-) => Effect.Effect<CML.DatumOption, DatumOptionError>;
+export declare const newHash: (datumHash: CML.DatumHash) => Effect.Effect<CML.DatumOption, DatumOptionError>
 ```
 
 Added in v2.0.0
@@ -134,9 +124,7 @@ Unsafely calls DatumOption.fromCborBytes without Effect wrapper
 **Signature**
 
 ```ts
-export declare const fromCborBytesUnsafe: (
-  cborBytes: Uint8Array,
-) => CML.DatumOption;
+export declare const fromCborBytesUnsafe: (cborBytes: Uint8Array) => CML.DatumOption
 ```
 
 Added in v2.0.0
@@ -148,7 +136,7 @@ Unsafely calls DatumOption.fromCborHex without Effect wrapper
 **Signature**
 
 ```ts
-export declare const fromCborHexUnsafe: (cborBytes: string) => CML.DatumOption;
+export declare const fromCborHexUnsafe: (cborBytes: string) => CML.DatumOption
 ```
 
 Added in v2.0.0
@@ -160,7 +148,7 @@ Unsafely calls DatumOption.fromJson without Effect wrapper
 **Signature**
 
 ```ts
-export declare const fromJsonUnsafe: (json: string) => CML.DatumOption;
+export declare const fromJsonUnsafe: (json: string) => CML.DatumOption
 ```
 
 Added in v2.0.0
@@ -172,7 +160,7 @@ Unsafely calls DatumOption.newDatum without Effect wrapper
 **Signature**
 
 ```ts
-export declare const newDatumUnsafe: (datum: CML.PlutusData) => CML.DatumOption;
+export declare const newDatumUnsafe: (datum: CML.PlutusData) => CML.DatumOption
 ```
 
 Added in v2.0.0
@@ -184,9 +172,7 @@ Unsafely calls DatumOption.newHash without Effect wrapper
 **Signature**
 
 ```ts
-export declare const newHashUnsafe: (
-  datumHash: CML.DatumHash,
-) => CML.DatumOption;
+export declare const newHashUnsafe: (datumHash: CML.DatumHash) => CML.DatumOption
 ```
 
 Added in v2.0.0
@@ -216,9 +202,7 @@ Method asDatum of DatumOption
 **Signature**
 
 ```ts
-export declare const asDatum: (
-  instance: CML.DatumOption,
-) => Effect.Effect<CML.PlutusData | undefined, DatumOptionError>;
+export declare const asDatum: (instance: CML.DatumOption) => Effect.Effect<CML.PlutusData | undefined, DatumOptionError>
 ```
 
 Added in v2.0.0
@@ -230,9 +214,7 @@ Method asHash of DatumOption
 **Signature**
 
 ```ts
-export declare const asHash: (
-  instance: CML.DatumOption,
-) => Effect.Effect<CML.DatumHash | undefined, DatumOptionError>;
+export declare const asHash: (instance: CML.DatumOption) => Effect.Effect<CML.DatumHash | undefined, DatumOptionError>
 ```
 
 Added in v2.0.0
@@ -244,9 +226,7 @@ Method free of DatumOption
 **Signature**
 
 ```ts
-export declare const free: (
-  instance: CML.DatumOption,
-) => Effect.Effect<void, DatumOptionError>;
+export declare const free: (instance: CML.DatumOption) => Effect.Effect<void, DatumOptionError>
 ```
 
 Added in v2.0.0
@@ -258,9 +238,7 @@ Method kind of DatumOption
 **Signature**
 
 ```ts
-export declare const kind: (
-  instance: CML.DatumOption,
-) => Effect.Effect<CML.DatumOptionKind, DatumOptionError>;
+export declare const kind: (instance: CML.DatumOption) => Effect.Effect<CML.DatumOptionKind, DatumOptionError>
 ```
 
 Added in v2.0.0
@@ -272,9 +250,7 @@ Method toCanonicalCborBytes of DatumOption
 **Signature**
 
 ```ts
-export declare const toCanonicalCborBytes: (
-  instance: CML.DatumOption,
-) => Effect.Effect<Uint8Array, DatumOptionError>;
+export declare const toCanonicalCborBytes: (instance: CML.DatumOption) => Effect.Effect<Uint8Array, DatumOptionError>
 ```
 
 Added in v2.0.0
@@ -286,9 +262,7 @@ Method toCanonicalCborHex of DatumOption
 **Signature**
 
 ```ts
-export declare const toCanonicalCborHex: (
-  instance: CML.DatumOption,
-) => Effect.Effect<string, DatumOptionError>;
+export declare const toCanonicalCborHex: (instance: CML.DatumOption) => Effect.Effect<string, DatumOptionError>
 ```
 
 Added in v2.0.0
@@ -300,9 +274,7 @@ Method toCborBytes of DatumOption
 **Signature**
 
 ```ts
-export declare const toCborBytes: (
-  instance: CML.DatumOption,
-) => Effect.Effect<Uint8Array, DatumOptionError>;
+export declare const toCborBytes: (instance: CML.DatumOption) => Effect.Effect<Uint8Array, DatumOptionError>
 ```
 
 Added in v2.0.0
@@ -314,9 +286,7 @@ Method toCborHex of DatumOption
 **Signature**
 
 ```ts
-export declare const toCborHex: (
-  instance: CML.DatumOption,
-) => Effect.Effect<string, DatumOptionError>;
+export declare const toCborHex: (instance: CML.DatumOption) => Effect.Effect<string, DatumOptionError>
 ```
 
 Added in v2.0.0
@@ -328,9 +298,7 @@ Method toJsValue of DatumOption
 **Signature**
 
 ```ts
-export declare const toJsValue: (
-  instance: CML.DatumOption,
-) => Effect.Effect<any, DatumOptionError>;
+export declare const toJsValue: (instance: CML.DatumOption) => Effect.Effect<any, DatumOptionError>
 ```
 
 Added in v2.0.0
@@ -342,9 +310,7 @@ Method toJson of DatumOption
 **Signature**
 
 ```ts
-export declare const toJson: (
-  instance: CML.DatumOption,
-) => Effect.Effect<string, DatumOptionError>;
+export declare const toJson: (instance: CML.DatumOption) => Effect.Effect<string, DatumOptionError>
 ```
 
 Added in v2.0.0
@@ -358,9 +324,7 @@ Unsafely calls instance.asDatum without Effect wrapper
 **Signature**
 
 ```ts
-export declare const asDatumUnsafe: (
-  instance: CML.DatumOption,
-) => CML.PlutusData | undefined;
+export declare const asDatumUnsafe: (instance: CML.DatumOption) => CML.PlutusData | undefined
 ```
 
 Added in v2.0.0
@@ -372,9 +336,7 @@ Unsafely calls instance.asHash without Effect wrapper
 **Signature**
 
 ```ts
-export declare const asHashUnsafe: (
-  instance: CML.DatumOption,
-) => CML.DatumHash | undefined;
+export declare const asHashUnsafe: (instance: CML.DatumOption) => CML.DatumHash | undefined
 ```
 
 Added in v2.0.0
@@ -386,7 +348,7 @@ Unsafely calls instance.free without Effect wrapper
 **Signature**
 
 ```ts
-export declare const freeUnsafe: (instance: CML.DatumOption) => void;
+export declare const freeUnsafe: (instance: CML.DatumOption) => void
 ```
 
 Added in v2.0.0
@@ -398,9 +360,7 @@ Unsafely calls instance.kind without Effect wrapper
 **Signature**
 
 ```ts
-export declare const kindUnsafe: (
-  instance: CML.DatumOption,
-) => CML.DatumOptionKind;
+export declare const kindUnsafe: (instance: CML.DatumOption) => CML.DatumOptionKind
 ```
 
 Added in v2.0.0
@@ -412,9 +372,7 @@ Unsafely calls instance.toCanonicalCborBytes without Effect wrapper
 **Signature**
 
 ```ts
-export declare const toCanonicalCborBytesUnsafe: (
-  instance: CML.DatumOption,
-) => Uint8Array;
+export declare const toCanonicalCborBytesUnsafe: (instance: CML.DatumOption) => Uint8Array
 ```
 
 Added in v2.0.0
@@ -426,9 +384,7 @@ Unsafely calls instance.toCanonicalCborHex without Effect wrapper
 **Signature**
 
 ```ts
-export declare const toCanonicalCborHexUnsafe: (
-  instance: CML.DatumOption,
-) => string;
+export declare const toCanonicalCborHexUnsafe: (instance: CML.DatumOption) => string
 ```
 
 Added in v2.0.0
@@ -440,9 +396,7 @@ Unsafely calls instance.toCborBytes without Effect wrapper
 **Signature**
 
 ```ts
-export declare const toCborBytesUnsafe: (
-  instance: CML.DatumOption,
-) => Uint8Array;
+export declare const toCborBytesUnsafe: (instance: CML.DatumOption) => Uint8Array
 ```
 
 Added in v2.0.0
@@ -454,7 +408,7 @@ Unsafely calls instance.toCborHex without Effect wrapper
 **Signature**
 
 ```ts
-export declare const toCborHexUnsafe: (instance: CML.DatumOption) => string;
+export declare const toCborHexUnsafe: (instance: CML.DatumOption) => string
 ```
 
 Added in v2.0.0
@@ -466,7 +420,7 @@ Unsafely calls instance.toJsValue without Effect wrapper
 **Signature**
 
 ```ts
-export declare const toJsValueUnsafe: (instance: CML.DatumOption) => any;
+export declare const toJsValueUnsafe: (instance: CML.DatumOption) => any
 ```
 
 Added in v2.0.0
@@ -478,7 +432,7 @@ Unsafely calls instance.toJson without Effect wrapper
 **Signature**
 
 ```ts
-export declare const toJsonUnsafe: (instance: CML.DatumOption) => string;
+export declare const toJsonUnsafe: (instance: CML.DatumOption) => string
 ```
 
 Added in v2.0.0
@@ -492,7 +446,7 @@ Type alias for the CML DatumOption class
 **Signature**
 
 ```ts
-export type DatumOption = CML.DatumOption;
+export type DatumOption = CML.DatumOption
 ```
 
 Added in v2.0.0

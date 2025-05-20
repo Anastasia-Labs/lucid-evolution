@@ -56,9 +56,7 @@ Static method \_new of ScriptInvalidHereafter
 **Signature**
 
 ```ts
-export declare const _new: (
-  after: bigint,
-) => Effect.Effect<CML.ScriptInvalidHereafter, ScriptInvalidHereafterError>;
+export declare const _new: (after: bigint) => Effect.Effect<CML.ScriptInvalidHereafter, ScriptInvalidHereafterError>
 ```
 
 Added in v2.0.0
@@ -71,8 +69,8 @@ Static method fromCborBytes of ScriptInvalidHereafter
 
 ```ts
 export declare const fromCborBytes: (
-  cborBytes: Uint8Array,
-) => Effect.Effect<CML.ScriptInvalidHereafter, ScriptInvalidHereafterError>;
+  cborBytes: Uint8Array
+) => Effect.Effect<CML.ScriptInvalidHereafter, ScriptInvalidHereafterError>
 ```
 
 Added in v2.0.0
@@ -85,8 +83,8 @@ Static method fromCborHex of ScriptInvalidHereafter
 
 ```ts
 export declare const fromCborHex: (
-  cborBytes: string,
-) => Effect.Effect<CML.ScriptInvalidHereafter, ScriptInvalidHereafterError>;
+  cborBytes: string
+) => Effect.Effect<CML.ScriptInvalidHereafter, ScriptInvalidHereafterError>
 ```
 
 Added in v2.0.0
@@ -98,9 +96,7 @@ Static method fromJson of ScriptInvalidHereafter
 **Signature**
 
 ```ts
-export declare const fromJson: (
-  json: string,
-) => Effect.Effect<CML.ScriptInvalidHereafter, ScriptInvalidHereafterError>;
+export declare const fromJson: (json: string) => Effect.Effect<CML.ScriptInvalidHereafter, ScriptInvalidHereafterError>
 ```
 
 Added in v2.0.0
@@ -114,7 +110,7 @@ Unsafely calls ScriptInvalidHereafter.\_new without Effect wrapper
 **Signature**
 
 ```ts
-export declare const _newUnsafe: (after: bigint) => CML.ScriptInvalidHereafter;
+export declare const _newUnsafe: (after: bigint) => CML.ScriptInvalidHereafter
 ```
 
 Added in v2.0.0
@@ -126,9 +122,7 @@ Unsafely calls ScriptInvalidHereafter.fromCborBytes without Effect wrapper
 **Signature**
 
 ```ts
-export declare const fromCborBytesUnsafe: (
-  cborBytes: Uint8Array,
-) => CML.ScriptInvalidHereafter;
+export declare const fromCborBytesUnsafe: (cborBytes: Uint8Array) => CML.ScriptInvalidHereafter
 ```
 
 Added in v2.0.0
@@ -140,9 +134,7 @@ Unsafely calls ScriptInvalidHereafter.fromCborHex without Effect wrapper
 **Signature**
 
 ```ts
-export declare const fromCborHexUnsafe: (
-  cborBytes: string,
-) => CML.ScriptInvalidHereafter;
+export declare const fromCborHexUnsafe: (cborBytes: string) => CML.ScriptInvalidHereafter
 ```
 
 Added in v2.0.0
@@ -154,9 +146,7 @@ Unsafely calls ScriptInvalidHereafter.fromJson without Effect wrapper
 **Signature**
 
 ```ts
-export declare const fromJsonUnsafe: (
-  json: string,
-) => CML.ScriptInvalidHereafter;
+export declare const fromJsonUnsafe: (json: string) => CML.ScriptInvalidHereafter
 ```
 
 Added in v2.0.0
@@ -186,9 +176,7 @@ Method after of ScriptInvalidHereafter
 **Signature**
 
 ```ts
-export declare const after: (
-  instance: CML.ScriptInvalidHereafter,
-) => Effect.Effect<bigint, ScriptInvalidHereafterError>;
+export declare const after: (instance: CML.ScriptInvalidHereafter) => Effect.Effect<bigint, ScriptInvalidHereafterError>
 ```
 
 Added in v2.0.0
@@ -200,9 +188,7 @@ Method free of ScriptInvalidHereafter
 **Signature**
 
 ```ts
-export declare const free: (
-  instance: CML.ScriptInvalidHereafter,
-) => Effect.Effect<void, ScriptInvalidHereafterError>;
+export declare const free: (instance: CML.ScriptInvalidHereafter) => Effect.Effect<void, ScriptInvalidHereafterError>
 ```
 
 Added in v2.0.0
@@ -215,8 +201,8 @@ Method toCanonicalCborBytes of ScriptInvalidHereafter
 
 ```ts
 export declare const toCanonicalCborBytes: (
-  instance: CML.ScriptInvalidHereafter,
-) => Effect.Effect<Uint8Array, ScriptInvalidHereafterError>;
+  instance: CML.ScriptInvalidHereafter
+) => Effect.Effect<Uint8Array, ScriptInvalidHereafterError>
 ```
 
 Added in v2.0.0
@@ -229,8 +215,8 @@ Method toCanonicalCborHex of ScriptInvalidHereafter
 
 ```ts
 export declare const toCanonicalCborHex: (
-  instance: CML.ScriptInvalidHereafter,
-) => Effect.Effect<string, ScriptInvalidHereafterError>;
+  instance: CML.ScriptInvalidHereafter
+) => Effect.Effect<string, ScriptInvalidHereafterError>
 ```
 
 Added in v2.0.0
@@ -243,8 +229,8 @@ Method toCborBytes of ScriptInvalidHereafter
 
 ```ts
 export declare const toCborBytes: (
-  instance: CML.ScriptInvalidHereafter,
-) => Effect.Effect<Uint8Array, ScriptInvalidHereafterError>;
+  instance: CML.ScriptInvalidHereafter
+) => Effect.Effect<Uint8Array, ScriptInvalidHereafterError>
 ```
 
 Added in v2.0.0
@@ -257,8 +243,8 @@ Method toCborHex of ScriptInvalidHereafter
 
 ```ts
 export declare const toCborHex: (
-  instance: CML.ScriptInvalidHereafter,
-) => Effect.Effect<string, ScriptInvalidHereafterError>;
+  instance: CML.ScriptInvalidHereafter
+) => Effect.Effect<string, ScriptInvalidHereafterError>
 ```
 
 Added in v2.0.0
@@ -271,8 +257,8 @@ Method toJsValue of ScriptInvalidHereafter
 
 ```ts
 export declare const toJsValue: (
-  instance: CML.ScriptInvalidHereafter,
-) => Effect.Effect<any, ScriptInvalidHereafterError>;
+  instance: CML.ScriptInvalidHereafter
+) => Effect.Effect<any, ScriptInvalidHereafterError>
 ```
 
 Added in v2.0.0
@@ -285,8 +271,8 @@ Method toJson of ScriptInvalidHereafter
 
 ```ts
 export declare const toJson: (
-  instance: CML.ScriptInvalidHereafter,
-) => Effect.Effect<string, ScriptInvalidHereafterError>;
+  instance: CML.ScriptInvalidHereafter
+) => Effect.Effect<string, ScriptInvalidHereafterError>
 ```
 
 Added in v2.0.0
@@ -300,9 +286,7 @@ Unsafely calls instance.after without Effect wrapper
 **Signature**
 
 ```ts
-export declare const afterUnsafe: (
-  instance: CML.ScriptInvalidHereafter,
-) => bigint;
+export declare const afterUnsafe: (instance: CML.ScriptInvalidHereafter) => bigint
 ```
 
 Added in v2.0.0
@@ -314,7 +298,7 @@ Unsafely calls instance.free without Effect wrapper
 **Signature**
 
 ```ts
-export declare const freeUnsafe: (instance: CML.ScriptInvalidHereafter) => void;
+export declare const freeUnsafe: (instance: CML.ScriptInvalidHereafter) => void
 ```
 
 Added in v2.0.0
@@ -326,9 +310,7 @@ Unsafely calls instance.toCanonicalCborBytes without Effect wrapper
 **Signature**
 
 ```ts
-export declare const toCanonicalCborBytesUnsafe: (
-  instance: CML.ScriptInvalidHereafter,
-) => Uint8Array;
+export declare const toCanonicalCborBytesUnsafe: (instance: CML.ScriptInvalidHereafter) => Uint8Array
 ```
 
 Added in v2.0.0
@@ -340,9 +322,7 @@ Unsafely calls instance.toCanonicalCborHex without Effect wrapper
 **Signature**
 
 ```ts
-export declare const toCanonicalCborHexUnsafe: (
-  instance: CML.ScriptInvalidHereafter,
-) => string;
+export declare const toCanonicalCborHexUnsafe: (instance: CML.ScriptInvalidHereafter) => string
 ```
 
 Added in v2.0.0
@@ -354,9 +334,7 @@ Unsafely calls instance.toCborBytes without Effect wrapper
 **Signature**
 
 ```ts
-export declare const toCborBytesUnsafe: (
-  instance: CML.ScriptInvalidHereafter,
-) => Uint8Array;
+export declare const toCborBytesUnsafe: (instance: CML.ScriptInvalidHereafter) => Uint8Array
 ```
 
 Added in v2.0.0
@@ -368,9 +346,7 @@ Unsafely calls instance.toCborHex without Effect wrapper
 **Signature**
 
 ```ts
-export declare const toCborHexUnsafe: (
-  instance: CML.ScriptInvalidHereafter,
-) => string;
+export declare const toCborHexUnsafe: (instance: CML.ScriptInvalidHereafter) => string
 ```
 
 Added in v2.0.0
@@ -382,9 +358,7 @@ Unsafely calls instance.toJsValue without Effect wrapper
 **Signature**
 
 ```ts
-export declare const toJsValueUnsafe: (
-  instance: CML.ScriptInvalidHereafter,
-) => any;
+export declare const toJsValueUnsafe: (instance: CML.ScriptInvalidHereafter) => any
 ```
 
 Added in v2.0.0
@@ -396,9 +370,7 @@ Unsafely calls instance.toJson without Effect wrapper
 **Signature**
 
 ```ts
-export declare const toJsonUnsafe: (
-  instance: CML.ScriptInvalidHereafter,
-) => string;
+export declare const toJsonUnsafe: (instance: CML.ScriptInvalidHereafter) => string
 ```
 
 Added in v2.0.0
@@ -412,7 +384,7 @@ Type alias for the CML ScriptInvalidHereafter class
 **Signature**
 
 ```ts
-export type ScriptInvalidHereafter = CML.ScriptInvalidHereafter;
+export type ScriptInvalidHereafter = CML.ScriptInvalidHereafter
 ```
 
 Added in v2.0.0

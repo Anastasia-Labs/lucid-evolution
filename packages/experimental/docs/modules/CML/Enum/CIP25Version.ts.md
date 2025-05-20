@@ -33,7 +33,7 @@ Type alias for the CML CIP25Version enum
 **Signature**
 
 ```ts
-export type CIP25Version = CML.CIP25Version;
+export type CIP25Version = CML.CIP25Version
 ```
 
 Added in v2.0.0
@@ -47,7 +47,7 @@ Convert string to CIP25Version enum value
 **Signature**
 
 ```ts
-export declare const fromString: (str: string) => CML.CIP25Version | undefined;
+export declare const fromString: (str: string) => CML.CIP25Version | undefined
 ```
 
 Added in v2.0.0
@@ -59,7 +59,7 @@ Convert CIP25Version enum value to string
 **Signature**
 
 ```ts
-export declare const toString: (value: CML.CIP25Version) => string;
+export declare const toString: (value: CML.CIP25Version) => string
 ```
 
 Added in v2.0.0
@@ -71,7 +71,7 @@ Get all values of the CIP25Version enum
 **Signature**
 
 ```ts
-export declare const values: () => Array<CML.CIP25Version>;
+export declare const values: () => Array<CML.CIP25Version>
 ```
 
 Added in v2.0.0
@@ -85,7 +85,7 @@ V1 variant of the CIP25Version enum
 **Signature**
 
 ```ts
-export declare const V1: CML.CIP25Version.V1;
+export declare const V1: CML.CIP25Version.V1
 ```
 
 Added in v2.0.0
@@ -97,7 +97,7 @@ V2 variant of the CIP25Version enum
 **Signature**
 
 ```ts
-export declare const V2: CML.CIP25Version.V2;
+export declare const V2: CML.CIP25Version.V2
 ```
 
 Added in v2.0.0

@@ -86,10 +86,7 @@ Static method \_new of AuxiliaryData
 **Signature**
 
 ```ts
-export declare const _new: () => Effect.Effect<
-  CML.AuxiliaryData,
-  AuxiliaryDataError
->;
+export declare const _new: () => Effect.Effect<CML.AuxiliaryData, AuxiliaryDataError>
 ```
 
 Added in v2.0.0
@@ -101,9 +98,7 @@ Static method fromCborBytes of AuxiliaryData
 **Signature**
 
 ```ts
-export declare const fromCborBytes: (
-  cborBytes: Uint8Array,
-) => Effect.Effect<CML.AuxiliaryData, AuxiliaryDataError>;
+export declare const fromCborBytes: (cborBytes: Uint8Array) => Effect.Effect<CML.AuxiliaryData, AuxiliaryDataError>
 ```
 
 Added in v2.0.0
@@ -115,9 +110,7 @@ Static method fromCborHex of AuxiliaryData
 **Signature**
 
 ```ts
-export declare const fromCborHex: (
-  cborBytes: string,
-) => Effect.Effect<CML.AuxiliaryData, AuxiliaryDataError>;
+export declare const fromCborHex: (cborBytes: string) => Effect.Effect<CML.AuxiliaryData, AuxiliaryDataError>
 ```
 
 Added in v2.0.0
@@ -129,9 +122,7 @@ Static method fromJson of AuxiliaryData
 **Signature**
 
 ```ts
-export declare const fromJson: (
-  json: string,
-) => Effect.Effect<CML.AuxiliaryData, AuxiliaryDataError>;
+export declare const fromJson: (json: string) => Effect.Effect<CML.AuxiliaryData, AuxiliaryDataError>
 ```
 
 Added in v2.0.0
@@ -144,8 +135,8 @@ Static method newConway of AuxiliaryData
 
 ```ts
 export declare const newConway: (
-  conway: CML.ConwayFormatAuxData,
-) => Effect.Effect<CML.AuxiliaryData, AuxiliaryDataError>;
+  conway: CML.ConwayFormatAuxData
+) => Effect.Effect<CML.AuxiliaryData, AuxiliaryDataError>
 ```
 
 Added in v2.0.0
@@ -157,9 +148,7 @@ Static method newShelley of AuxiliaryData
 **Signature**
 
 ```ts
-export declare const newShelley: (
-  shelley: CML.Metadata,
-) => Effect.Effect<CML.AuxiliaryData, AuxiliaryDataError>;
+export declare const newShelley: (shelley: CML.Metadata) => Effect.Effect<CML.AuxiliaryData, AuxiliaryDataError>
 ```
 
 Added in v2.0.0
@@ -172,8 +161,8 @@ Static method newShelleyMa of AuxiliaryData
 
 ```ts
 export declare const newShelleyMa: (
-  shelleyMa: CML.ShelleyMAFormatAuxData,
-) => Effect.Effect<CML.AuxiliaryData, AuxiliaryDataError>;
+  shelleyMa: CML.ShelleyMAFormatAuxData
+) => Effect.Effect<CML.AuxiliaryData, AuxiliaryDataError>
 ```
 
 Added in v2.0.0
@@ -187,7 +176,7 @@ Unsafely calls AuxiliaryData.\_new without Effect wrapper
 **Signature**
 
 ```ts
-export declare const _newUnsafe: () => CML.AuxiliaryData;
+export declare const _newUnsafe: () => CML.AuxiliaryData
 ```
 
 Added in v2.0.0
@@ -199,9 +188,7 @@ Unsafely calls AuxiliaryData.fromCborBytes without Effect wrapper
 **Signature**
 
 ```ts
-export declare const fromCborBytesUnsafe: (
-  cborBytes: Uint8Array,
-) => CML.AuxiliaryData;
+export declare const fromCborBytesUnsafe: (cborBytes: Uint8Array) => CML.AuxiliaryData
 ```
 
 Added in v2.0.0
@@ -213,9 +200,7 @@ Unsafely calls AuxiliaryData.fromCborHex without Effect wrapper
 **Signature**
 
 ```ts
-export declare const fromCborHexUnsafe: (
-  cborBytes: string,
-) => CML.AuxiliaryData;
+export declare const fromCborHexUnsafe: (cborBytes: string) => CML.AuxiliaryData
 ```
 
 Added in v2.0.0
@@ -227,7 +212,7 @@ Unsafely calls AuxiliaryData.fromJson without Effect wrapper
 **Signature**
 
 ```ts
-export declare const fromJsonUnsafe: (json: string) => CML.AuxiliaryData;
+export declare const fromJsonUnsafe: (json: string) => CML.AuxiliaryData
 ```
 
 Added in v2.0.0
@@ -239,9 +224,7 @@ Unsafely calls AuxiliaryData.newConway without Effect wrapper
 **Signature**
 
 ```ts
-export declare const newConwayUnsafe: (
-  conway: CML.ConwayFormatAuxData,
-) => CML.AuxiliaryData;
+export declare const newConwayUnsafe: (conway: CML.ConwayFormatAuxData) => CML.AuxiliaryData
 ```
 
 Added in v2.0.0
@@ -253,9 +236,7 @@ Unsafely calls AuxiliaryData.newShelleyMa without Effect wrapper
 **Signature**
 
 ```ts
-export declare const newShelleyMaUnsafe: (
-  shelleyMa: CML.ShelleyMAFormatAuxData,
-) => CML.AuxiliaryData;
+export declare const newShelleyMaUnsafe: (shelleyMa: CML.ShelleyMAFormatAuxData) => CML.AuxiliaryData
 ```
 
 Added in v2.0.0
@@ -267,9 +248,7 @@ Unsafely calls AuxiliaryData.newShelley without Effect wrapper
 **Signature**
 
 ```ts
-export declare const newShelleyUnsafe: (
-  shelley: CML.Metadata,
-) => CML.AuxiliaryData;
+export declare const newShelleyUnsafe: (shelley: CML.Metadata) => CML.AuxiliaryData
 ```
 
 Added in v2.0.0
@@ -301,8 +280,8 @@ Method add of AuxiliaryData
 ```ts
 export declare const add: (
   instance: CML.AuxiliaryData,
-  other: CML.AuxiliaryData,
-) => Effect.Effect<void, AuxiliaryDataError>;
+  other: CML.AuxiliaryData
+) => Effect.Effect<void, AuxiliaryDataError>
 ```
 
 Added in v2.0.0
@@ -316,8 +295,8 @@ Method addMetadata of AuxiliaryData
 ```ts
 export declare const addMetadata: (
   instance: CML.AuxiliaryData,
-  other: CML.Metadata,
-) => Effect.Effect<void, AuxiliaryDataError>;
+  other: CML.Metadata
+) => Effect.Effect<void, AuxiliaryDataError>
 ```
 
 Added in v2.0.0
@@ -331,8 +310,8 @@ Method addNativeScripts of AuxiliaryData
 ```ts
 export declare const addNativeScripts: (
   instance: CML.AuxiliaryData,
-  scripts: CML.NativeScriptList,
-) => Effect.Effect<void, AuxiliaryDataError>;
+  scripts: CML.NativeScriptList
+) => Effect.Effect<void, AuxiliaryDataError>
 ```
 
 Added in v2.0.0
@@ -346,8 +325,8 @@ Method addPlutusV1Scripts of AuxiliaryData
 ```ts
 export declare const addPlutusV1Scripts: (
   instance: CML.AuxiliaryData,
-  scripts: CML.PlutusV1ScriptList,
-) => Effect.Effect<void, AuxiliaryDataError>;
+  scripts: CML.PlutusV1ScriptList
+) => Effect.Effect<void, AuxiliaryDataError>
 ```
 
 Added in v2.0.0
@@ -361,8 +340,8 @@ Method addPlutusV2Scripts of AuxiliaryData
 ```ts
 export declare const addPlutusV2Scripts: (
   instance: CML.AuxiliaryData,
-  scripts: CML.PlutusV2ScriptList,
-) => Effect.Effect<void, AuxiliaryDataError>;
+  scripts: CML.PlutusV2ScriptList
+) => Effect.Effect<void, AuxiliaryDataError>
 ```
 
 Added in v2.0.0
@@ -375,8 +354,8 @@ Method asConway of AuxiliaryData
 
 ```ts
 export declare const asConway: (
-  instance: CML.AuxiliaryData,
-) => Effect.Effect<CML.ConwayFormatAuxData | undefined, AuxiliaryDataError>;
+  instance: CML.AuxiliaryData
+) => Effect.Effect<CML.ConwayFormatAuxData | undefined, AuxiliaryDataError>
 ```
 
 Added in v2.0.0
@@ -389,8 +368,8 @@ Method asShelley of AuxiliaryData
 
 ```ts
 export declare const asShelley: (
-  instance: CML.AuxiliaryData,
-) => Effect.Effect<CML.Metadata | undefined, AuxiliaryDataError>;
+  instance: CML.AuxiliaryData
+) => Effect.Effect<CML.Metadata | undefined, AuxiliaryDataError>
 ```
 
 Added in v2.0.0
@@ -403,8 +382,8 @@ Method asShelleyMa of AuxiliaryData
 
 ```ts
 export declare const asShelleyMa: (
-  instance: CML.AuxiliaryData,
-) => Effect.Effect<CML.ShelleyMAFormatAuxData | undefined, AuxiliaryDataError>;
+  instance: CML.AuxiliaryData
+) => Effect.Effect<CML.ShelleyMAFormatAuxData | undefined, AuxiliaryDataError>
 ```
 
 Added in v2.0.0
@@ -416,9 +395,7 @@ Method free of AuxiliaryData
 **Signature**
 
 ```ts
-export declare const free: (
-  instance: CML.AuxiliaryData,
-) => Effect.Effect<void, AuxiliaryDataError>;
+export declare const free: (instance: CML.AuxiliaryData) => Effect.Effect<void, AuxiliaryDataError>
 ```
 
 Added in v2.0.0
@@ -430,9 +407,7 @@ Method kind of AuxiliaryData
 **Signature**
 
 ```ts
-export declare const kind: (
-  instance: CML.AuxiliaryData,
-) => Effect.Effect<CML.AuxiliaryDataKind, AuxiliaryDataError>;
+export declare const kind: (instance: CML.AuxiliaryData) => Effect.Effect<CML.AuxiliaryDataKind, AuxiliaryDataError>
 ```
 
 Added in v2.0.0
@@ -445,8 +420,8 @@ Method metadata of AuxiliaryData
 
 ```ts
 export declare const metadata: (
-  instance: CML.AuxiliaryData,
-) => Effect.Effect<CML.Metadata | undefined, AuxiliaryDataError>;
+  instance: CML.AuxiliaryData
+) => Effect.Effect<CML.Metadata | undefined, AuxiliaryDataError>
 ```
 
 Added in v2.0.0
@@ -459,8 +434,8 @@ Method nativeScripts of AuxiliaryData
 
 ```ts
 export declare const nativeScripts: (
-  instance: CML.AuxiliaryData,
-) => Effect.Effect<CML.NativeScriptList | undefined, AuxiliaryDataError>;
+  instance: CML.AuxiliaryData
+) => Effect.Effect<CML.NativeScriptList | undefined, AuxiliaryDataError>
 ```
 
 Added in v2.0.0
@@ -473,8 +448,8 @@ Method plutusV1Scripts of AuxiliaryData
 
 ```ts
 export declare const plutusV1Scripts: (
-  instance: CML.AuxiliaryData,
-) => Effect.Effect<CML.PlutusV1ScriptList | undefined, AuxiliaryDataError>;
+  instance: CML.AuxiliaryData
+) => Effect.Effect<CML.PlutusV1ScriptList | undefined, AuxiliaryDataError>
 ```
 
 Added in v2.0.0
@@ -487,8 +462,8 @@ Method plutusV2Scripts of AuxiliaryData
 
 ```ts
 export declare const plutusV2Scripts: (
-  instance: CML.AuxiliaryData,
-) => Effect.Effect<CML.PlutusV2ScriptList | undefined, AuxiliaryDataError>;
+  instance: CML.AuxiliaryData
+) => Effect.Effect<CML.PlutusV2ScriptList | undefined, AuxiliaryDataError>
 ```
 
 Added in v2.0.0
@@ -501,8 +476,8 @@ Method toCanonicalCborBytes of AuxiliaryData
 
 ```ts
 export declare const toCanonicalCborBytes: (
-  instance: CML.AuxiliaryData,
-) => Effect.Effect<Uint8Array, AuxiliaryDataError>;
+  instance: CML.AuxiliaryData
+) => Effect.Effect<Uint8Array, AuxiliaryDataError>
 ```
 
 Added in v2.0.0
@@ -514,9 +489,7 @@ Method toCanonicalCborHex of AuxiliaryData
 **Signature**
 
 ```ts
-export declare const toCanonicalCborHex: (
-  instance: CML.AuxiliaryData,
-) => Effect.Effect<string, AuxiliaryDataError>;
+export declare const toCanonicalCborHex: (instance: CML.AuxiliaryData) => Effect.Effect<string, AuxiliaryDataError>
 ```
 
 Added in v2.0.0
@@ -528,9 +501,7 @@ Method toCborBytes of AuxiliaryData
 **Signature**
 
 ```ts
-export declare const toCborBytes: (
-  instance: CML.AuxiliaryData,
-) => Effect.Effect<Uint8Array, AuxiliaryDataError>;
+export declare const toCborBytes: (instance: CML.AuxiliaryData) => Effect.Effect<Uint8Array, AuxiliaryDataError>
 ```
 
 Added in v2.0.0
@@ -542,9 +513,7 @@ Method toCborHex of AuxiliaryData
 **Signature**
 
 ```ts
-export declare const toCborHex: (
-  instance: CML.AuxiliaryData,
-) => Effect.Effect<string, AuxiliaryDataError>;
+export declare const toCborHex: (instance: CML.AuxiliaryData) => Effect.Effect<string, AuxiliaryDataError>
 ```
 
 Added in v2.0.0
@@ -556,9 +525,7 @@ Method toJsValue of AuxiliaryData
 **Signature**
 
 ```ts
-export declare const toJsValue: (
-  instance: CML.AuxiliaryData,
-) => Effect.Effect<any, AuxiliaryDataError>;
+export declare const toJsValue: (instance: CML.AuxiliaryData) => Effect.Effect<any, AuxiliaryDataError>
 ```
 
 Added in v2.0.0
@@ -570,9 +537,7 @@ Method toJson of AuxiliaryData
 **Signature**
 
 ```ts
-export declare const toJson: (
-  instance: CML.AuxiliaryData,
-) => Effect.Effect<string, AuxiliaryDataError>;
+export declare const toJson: (instance: CML.AuxiliaryData) => Effect.Effect<string, AuxiliaryDataError>
 ```
 
 Added in v2.0.0
@@ -586,10 +551,7 @@ Unsafely calls instance.addMetadata without Effect wrapper
 **Signature**
 
 ```ts
-export declare const addMetadataUnsafe: (
-  instance: CML.AuxiliaryData,
-  other: CML.Metadata,
-) => void;
+export declare const addMetadataUnsafe: (instance: CML.AuxiliaryData, other: CML.Metadata) => void
 ```
 
 Added in v2.0.0
@@ -601,10 +563,7 @@ Unsafely calls instance.addNativeScripts without Effect wrapper
 **Signature**
 
 ```ts
-export declare const addNativeScriptsUnsafe: (
-  instance: CML.AuxiliaryData,
-  scripts: CML.NativeScriptList,
-) => void;
+export declare const addNativeScriptsUnsafe: (instance: CML.AuxiliaryData, scripts: CML.NativeScriptList) => void
 ```
 
 Added in v2.0.0
@@ -616,10 +575,7 @@ Unsafely calls instance.addPlutusV1Scripts without Effect wrapper
 **Signature**
 
 ```ts
-export declare const addPlutusV1ScriptsUnsafe: (
-  instance: CML.AuxiliaryData,
-  scripts: CML.PlutusV1ScriptList,
-) => void;
+export declare const addPlutusV1ScriptsUnsafe: (instance: CML.AuxiliaryData, scripts: CML.PlutusV1ScriptList) => void
 ```
 
 Added in v2.0.0
@@ -631,10 +587,7 @@ Unsafely calls instance.addPlutusV2Scripts without Effect wrapper
 **Signature**
 
 ```ts
-export declare const addPlutusV2ScriptsUnsafe: (
-  instance: CML.AuxiliaryData,
-  scripts: CML.PlutusV2ScriptList,
-) => void;
+export declare const addPlutusV2ScriptsUnsafe: (instance: CML.AuxiliaryData, scripts: CML.PlutusV2ScriptList) => void
 ```
 
 Added in v2.0.0
@@ -646,10 +599,7 @@ Unsafely calls instance.add without Effect wrapper
 **Signature**
 
 ```ts
-export declare const addUnsafe: (
-  instance: CML.AuxiliaryData,
-  other: CML.AuxiliaryData,
-) => void;
+export declare const addUnsafe: (instance: CML.AuxiliaryData, other: CML.AuxiliaryData) => void
 ```
 
 Added in v2.0.0
@@ -661,9 +611,7 @@ Unsafely calls instance.asConway without Effect wrapper
 **Signature**
 
 ```ts
-export declare const asConwayUnsafe: (
-  instance: CML.AuxiliaryData,
-) => CML.ConwayFormatAuxData | undefined;
+export declare const asConwayUnsafe: (instance: CML.AuxiliaryData) => CML.ConwayFormatAuxData | undefined
 ```
 
 Added in v2.0.0
@@ -675,9 +623,7 @@ Unsafely calls instance.asShelleyMa without Effect wrapper
 **Signature**
 
 ```ts
-export declare const asShelleyMaUnsafe: (
-  instance: CML.AuxiliaryData,
-) => CML.ShelleyMAFormatAuxData | undefined;
+export declare const asShelleyMaUnsafe: (instance: CML.AuxiliaryData) => CML.ShelleyMAFormatAuxData | undefined
 ```
 
 Added in v2.0.0
@@ -689,9 +635,7 @@ Unsafely calls instance.asShelley without Effect wrapper
 **Signature**
 
 ```ts
-export declare const asShelleyUnsafe: (
-  instance: CML.AuxiliaryData,
-) => CML.Metadata | undefined;
+export declare const asShelleyUnsafe: (instance: CML.AuxiliaryData) => CML.Metadata | undefined
 ```
 
 Added in v2.0.0
@@ -703,7 +647,7 @@ Unsafely calls instance.free without Effect wrapper
 **Signature**
 
 ```ts
-export declare const freeUnsafe: (instance: CML.AuxiliaryData) => void;
+export declare const freeUnsafe: (instance: CML.AuxiliaryData) => void
 ```
 
 Added in v2.0.0
@@ -715,9 +659,7 @@ Unsafely calls instance.kind without Effect wrapper
 **Signature**
 
 ```ts
-export declare const kindUnsafe: (
-  instance: CML.AuxiliaryData,
-) => CML.AuxiliaryDataKind;
+export declare const kindUnsafe: (instance: CML.AuxiliaryData) => CML.AuxiliaryDataKind
 ```
 
 Added in v2.0.0
@@ -729,9 +671,7 @@ Unsafely calls instance.metadata without Effect wrapper
 **Signature**
 
 ```ts
-export declare const metadataUnsafe: (
-  instance: CML.AuxiliaryData,
-) => CML.Metadata | undefined;
+export declare const metadataUnsafe: (instance: CML.AuxiliaryData) => CML.Metadata | undefined
 ```
 
 Added in v2.0.0
@@ -743,9 +683,7 @@ Unsafely calls instance.nativeScripts without Effect wrapper
 **Signature**
 
 ```ts
-export declare const nativeScriptsUnsafe: (
-  instance: CML.AuxiliaryData,
-) => CML.NativeScriptList | undefined;
+export declare const nativeScriptsUnsafe: (instance: CML.AuxiliaryData) => CML.NativeScriptList | undefined
 ```
 
 Added in v2.0.0
@@ -757,9 +695,7 @@ Unsafely calls instance.plutusV1Scripts without Effect wrapper
 **Signature**
 
 ```ts
-export declare const plutusV1ScriptsUnsafe: (
-  instance: CML.AuxiliaryData,
-) => CML.PlutusV1ScriptList | undefined;
+export declare const plutusV1ScriptsUnsafe: (instance: CML.AuxiliaryData) => CML.PlutusV1ScriptList | undefined
 ```
 
 Added in v2.0.0
@@ -771,9 +707,7 @@ Unsafely calls instance.plutusV2Scripts without Effect wrapper
 **Signature**
 
 ```ts
-export declare const plutusV2ScriptsUnsafe: (
-  instance: CML.AuxiliaryData,
-) => CML.PlutusV2ScriptList | undefined;
+export declare const plutusV2ScriptsUnsafe: (instance: CML.AuxiliaryData) => CML.PlutusV2ScriptList | undefined
 ```
 
 Added in v2.0.0
@@ -785,9 +719,7 @@ Unsafely calls instance.toCanonicalCborBytes without Effect wrapper
 **Signature**
 
 ```ts
-export declare const toCanonicalCborBytesUnsafe: (
-  instance: CML.AuxiliaryData,
-) => Uint8Array;
+export declare const toCanonicalCborBytesUnsafe: (instance: CML.AuxiliaryData) => Uint8Array
 ```
 
 Added in v2.0.0
@@ -799,9 +731,7 @@ Unsafely calls instance.toCanonicalCborHex without Effect wrapper
 **Signature**
 
 ```ts
-export declare const toCanonicalCborHexUnsafe: (
-  instance: CML.AuxiliaryData,
-) => string;
+export declare const toCanonicalCborHexUnsafe: (instance: CML.AuxiliaryData) => string
 ```
 
 Added in v2.0.0
@@ -813,9 +743,7 @@ Unsafely calls instance.toCborBytes without Effect wrapper
 **Signature**
 
 ```ts
-export declare const toCborBytesUnsafe: (
-  instance: CML.AuxiliaryData,
-) => Uint8Array;
+export declare const toCborBytesUnsafe: (instance: CML.AuxiliaryData) => Uint8Array
 ```
 
 Added in v2.0.0
@@ -827,7 +755,7 @@ Unsafely calls instance.toCborHex without Effect wrapper
 **Signature**
 
 ```ts
-export declare const toCborHexUnsafe: (instance: CML.AuxiliaryData) => string;
+export declare const toCborHexUnsafe: (instance: CML.AuxiliaryData) => string
 ```
 
 Added in v2.0.0
@@ -839,7 +767,7 @@ Unsafely calls instance.toJsValue without Effect wrapper
 **Signature**
 
 ```ts
-export declare const toJsValueUnsafe: (instance: CML.AuxiliaryData) => any;
+export declare const toJsValueUnsafe: (instance: CML.AuxiliaryData) => any
 ```
 
 Added in v2.0.0
@@ -851,7 +779,7 @@ Unsafely calls instance.toJson without Effect wrapper
 **Signature**
 
 ```ts
-export declare const toJsonUnsafe: (instance: CML.AuxiliaryData) => string;
+export declare const toJsonUnsafe: (instance: CML.AuxiliaryData) => string
 ```
 
 Added in v2.0.0
@@ -865,7 +793,7 @@ Type alias for the CML AuxiliaryData class
 **Signature**
 
 ```ts
-export type AuxiliaryData = CML.AuxiliaryData;
+export type AuxiliaryData = CML.AuxiliaryData
 ```
 
 Added in v2.0.0

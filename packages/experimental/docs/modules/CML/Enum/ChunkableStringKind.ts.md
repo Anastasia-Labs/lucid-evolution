@@ -33,7 +33,7 @@ Type alias for the CML ChunkableStringKind enum
 **Signature**
 
 ```ts
-export type ChunkableStringKind = CML.ChunkableStringKind;
+export type ChunkableStringKind = CML.ChunkableStringKind
 ```
 
 Added in v2.0.0
@@ -47,9 +47,7 @@ Convert string to ChunkableStringKind enum value
 **Signature**
 
 ```ts
-export declare const fromString: (
-  str: string,
-) => CML.ChunkableStringKind | undefined;
+export declare const fromString: (str: string) => CML.ChunkableStringKind | undefined
 ```
 
 Added in v2.0.0
@@ -61,7 +59,7 @@ Convert ChunkableStringKind enum value to string
 **Signature**
 
 ```ts
-export declare const toString: (value: CML.ChunkableStringKind) => string;
+export declare const toString: (value: CML.ChunkableStringKind) => string
 ```
 
 Added in v2.0.0
@@ -73,7 +71,7 @@ Get all values of the ChunkableStringKind enum
 **Signature**
 
 ```ts
-export declare const values: () => Array<CML.ChunkableStringKind>;
+export declare const values: () => Array<CML.ChunkableStringKind>
 ```
 
 Added in v2.0.0
@@ -87,7 +85,7 @@ Chunked variant of the ChunkableStringKind enum
 **Signature**
 
 ```ts
-export declare const Chunked: CML.ChunkableStringKind.Chunked;
+export declare const Chunked: CML.ChunkableStringKind.Chunked
 ```
 
 Added in v2.0.0
@@ -99,7 +97,7 @@ Single variant of the ChunkableStringKind enum
 **Signature**
 
 ```ts
-export declare const Single: CML.ChunkableStringKind.Single;
+export declare const Single: CML.ChunkableStringKind.Single
 ```
 
 Added in v2.0.0

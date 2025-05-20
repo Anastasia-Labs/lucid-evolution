@@ -26,24 +26,22 @@ Get raw bytes from address string (either format)
 **Signature**
 
 ```ts
-export declare const toBytes: (
-  bech32Address: string,
-) => Effect.Effect<Uint8Array, Bech32Error>;
+export declare const toBytes: (bech32Address: string) => Effect.Effect<Uint8Array, Bech32Error>
 ```
 
 **Example**
 
 ```ts
-import { Bech32 } from "@lucid-evolution/experimental";
-import { Effect } from "effect";
-import assert from "assert";
+import { Bech32 } from "@lucid-evolution/experimental"
+import { Effect } from "effect"
+import assert from "assert"
 
 const effect = Bech32.toBytes(
-  "addr1qx2fxv2umyhttkxyxp8x0dlpdt3k6cwng5pxj3jhsydzer3n0d3vllmyqwsx5wktcd8cc3sq835lu7drv2xwl2wywfgse35a3x",
-);
-const bytes = Effect.runSync(effect);
-assert(bytes instanceof Uint8Array);
-assert(bytes.length > 0);
+  "addr1qx2fxv2umyhttkxyxp8x0dlpdt3k6cwng5pxj3jhsydzer3n0d3vllmyqwsx5wktcd8cc3sq835lu7drv2xwl2wywfgse35a3x"
+)
+const bytes = Effect.runSync(effect)
+assert(bytes instanceof Uint8Array)
+assert(bytes.length > 0)
 ```
 
 Added in v2.0.0

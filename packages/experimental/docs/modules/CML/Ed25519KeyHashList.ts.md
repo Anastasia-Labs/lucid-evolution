@@ -42,10 +42,7 @@ Static method \_new of Ed25519KeyHashList
 **Signature**
 
 ```ts
-export declare const _new: () => Effect.Effect<
-  CML.Ed25519KeyHashList,
-  Ed25519KeyHashListError
->;
+export declare const _new: () => Effect.Effect<CML.Ed25519KeyHashList, Ed25519KeyHashListError>
 ```
 
 Added in v2.0.0
@@ -59,7 +56,7 @@ Unsafely calls Ed25519KeyHashList.\_new without Effect wrapper
 **Signature**
 
 ```ts
-export declare const _newUnsafe: () => CML.Ed25519KeyHashList;
+export declare const _newUnsafe: () => CML.Ed25519KeyHashList
 ```
 
 Added in v2.0.0
@@ -91,8 +88,8 @@ Method add of Ed25519KeyHashList
 ```ts
 export declare const add: (
   instance: CML.Ed25519KeyHashList,
-  elem: CML.Ed25519KeyHash,
-) => Effect.Effect<void, Ed25519KeyHashListError>;
+  elem: CML.Ed25519KeyHash
+) => Effect.Effect<void, Ed25519KeyHashListError>
 ```
 
 Added in v2.0.0
@@ -104,9 +101,7 @@ Method free of Ed25519KeyHashList
 **Signature**
 
 ```ts
-export declare const free: (
-  instance: CML.Ed25519KeyHashList,
-) => Effect.Effect<void, Ed25519KeyHashListError>;
+export declare const free: (instance: CML.Ed25519KeyHashList) => Effect.Effect<void, Ed25519KeyHashListError>
 ```
 
 Added in v2.0.0
@@ -120,8 +115,8 @@ Method get of Ed25519KeyHashList
 ```ts
 export declare const get: (
   instance: CML.Ed25519KeyHashList,
-  index: number,
-) => Effect.Effect<CML.Ed25519KeyHash, Ed25519KeyHashListError>;
+  index: number
+) => Effect.Effect<CML.Ed25519KeyHash, Ed25519KeyHashListError>
 ```
 
 Added in v2.0.0
@@ -133,9 +128,7 @@ Method len of Ed25519KeyHashList
 **Signature**
 
 ```ts
-export declare const len: (
-  instance: CML.Ed25519KeyHashList,
-) => Effect.Effect<number, Ed25519KeyHashListError>;
+export declare const len: (instance: CML.Ed25519KeyHashList) => Effect.Effect<number, Ed25519KeyHashListError>
 ```
 
 Added in v2.0.0
@@ -149,10 +142,7 @@ Unsafely calls instance.add without Effect wrapper
 **Signature**
 
 ```ts
-export declare const addUnsafe: (
-  instance: CML.Ed25519KeyHashList,
-  elem: CML.Ed25519KeyHash,
-) => void;
+export declare const addUnsafe: (instance: CML.Ed25519KeyHashList, elem: CML.Ed25519KeyHash) => void
 ```
 
 Added in v2.0.0
@@ -164,7 +154,7 @@ Unsafely calls instance.free without Effect wrapper
 **Signature**
 
 ```ts
-export declare const freeUnsafe: (instance: CML.Ed25519KeyHashList) => void;
+export declare const freeUnsafe: (instance: CML.Ed25519KeyHashList) => void
 ```
 
 Added in v2.0.0
@@ -176,10 +166,7 @@ Unsafely calls instance.get without Effect wrapper
 **Signature**
 
 ```ts
-export declare const getUnsafe: (
-  instance: CML.Ed25519KeyHashList,
-  index: number,
-) => CML.Ed25519KeyHash;
+export declare const getUnsafe: (instance: CML.Ed25519KeyHashList, index: number) => CML.Ed25519KeyHash
 ```
 
 Added in v2.0.0
@@ -191,7 +178,7 @@ Unsafely calls instance.len without Effect wrapper
 **Signature**
 
 ```ts
-export declare const lenUnsafe: (instance: CML.Ed25519KeyHashList) => number;
+export declare const lenUnsafe: (instance: CML.Ed25519KeyHashList) => number
 ```
 
 Added in v2.0.0
@@ -205,7 +192,7 @@ Type alias for the CML Ed25519KeyHashList class
 **Signature**
 
 ```ts
-export type Ed25519KeyHashList = CML.Ed25519KeyHashList;
+export type Ed25519KeyHashList = CML.Ed25519KeyHashList
 ```
 
 Added in v2.0.0

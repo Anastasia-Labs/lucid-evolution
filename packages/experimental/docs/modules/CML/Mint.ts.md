@@ -56,7 +56,7 @@ Static method \_new of Mint
 **Signature**
 
 ```ts
-export declare const _new: () => Effect.Effect<CML.Mint, MintError>;
+export declare const _new: () => Effect.Effect<CML.Mint, MintError>
 ```
 
 Added in v2.0.0
@@ -70,7 +70,7 @@ Unsafely calls Mint.\_new without Effect wrapper
 **Signature**
 
 ```ts
-export declare const _newUnsafe: () => CML.Mint;
+export declare const _newUnsafe: () => CML.Mint
 ```
 
 Added in v2.0.0
@@ -100,9 +100,7 @@ Method asNegativeMultiasset of Mint
 **Signature**
 
 ```ts
-export declare const asNegativeMultiasset: (
-  instance: CML.Mint,
-) => Effect.Effect<CML.MultiAsset, MintError>;
+export declare const asNegativeMultiasset: (instance: CML.Mint) => Effect.Effect<CML.MultiAsset, MintError>
 ```
 
 Added in v2.0.0
@@ -114,9 +112,7 @@ Method asPositiveMultiasset of Mint
 **Signature**
 
 ```ts
-export declare const asPositiveMultiasset: (
-  instance: CML.Mint,
-) => Effect.Effect<CML.MultiAsset, MintError>;
+export declare const asPositiveMultiasset: (instance: CML.Mint) => Effect.Effect<CML.MultiAsset, MintError>
 ```
 
 Added in v2.0.0
@@ -128,10 +124,7 @@ Method checkedAdd of Mint
 **Signature**
 
 ```ts
-export declare const checkedAdd: (
-  instance: CML.Mint,
-  rhs: CML.Mint,
-) => Effect.Effect<CML.Mint, MintError>;
+export declare const checkedAdd: (instance: CML.Mint, rhs: CML.Mint) => Effect.Effect<CML.Mint, MintError>
 ```
 
 Added in v2.0.0
@@ -143,10 +136,7 @@ Method checkedSub of Mint
 **Signature**
 
 ```ts
-export declare const checkedSub: (
-  instance: CML.Mint,
-  rhs: CML.Mint,
-) => Effect.Effect<CML.Mint, MintError>;
+export declare const checkedSub: (instance: CML.Mint, rhs: CML.Mint) => Effect.Effect<CML.Mint, MintError>
 ```
 
 Added in v2.0.0
@@ -158,9 +148,7 @@ Method free of Mint
 **Signature**
 
 ```ts
-export declare const free: (
-  instance: CML.Mint,
-) => Effect.Effect<void, MintError>;
+export declare const free: (instance: CML.Mint) => Effect.Effect<void, MintError>
 ```
 
 Added in v2.0.0
@@ -175,8 +163,8 @@ Method get of Mint
 export declare const get: (
   instance: CML.Mint,
   policyId: CML.ScriptHash,
-  asset: CML.AssetName,
-) => Effect.Effect<bigint | undefined, MintError>;
+  asset: CML.AssetName
+) => Effect.Effect<bigint | undefined, MintError>
 ```
 
 Added in v2.0.0
@@ -190,8 +178,8 @@ Method getAssets of Mint
 ```ts
 export declare const getAssets: (
   instance: CML.Mint,
-  key: CML.ScriptHash,
-) => Effect.Effect<CML.MapAssetNameToNonZeroInt64 | undefined, MintError>;
+  key: CML.ScriptHash
+) => Effect.Effect<CML.MapAssetNameToNonZeroInt64 | undefined, MintError>
 ```
 
 Added in v2.0.0
@@ -206,8 +194,8 @@ Method insertAssets of Mint
 export declare const insertAssets: (
   instance: CML.Mint,
   policyId: CML.ScriptHash,
-  assets: CML.MapAssetNameToNonZeroInt64,
-) => Effect.Effect<CML.MapAssetNameToNonZeroInt64 | undefined, MintError>;
+  assets: CML.MapAssetNameToNonZeroInt64
+) => Effect.Effect<CML.MapAssetNameToNonZeroInt64 | undefined, MintError>
 ```
 
 Added in v2.0.0
@@ -219,9 +207,7 @@ Method keys of Mint
 **Signature**
 
 ```ts
-export declare const keys: (
-  instance: CML.Mint,
-) => Effect.Effect<CML.PolicyIdList, MintError>;
+export declare const keys: (instance: CML.Mint) => Effect.Effect<CML.PolicyIdList, MintError>
 ```
 
 Added in v2.0.0
@@ -233,9 +219,7 @@ Method policyCount of Mint
 **Signature**
 
 ```ts
-export declare const policyCount: (
-  instance: CML.Mint,
-) => Effect.Effect<number, MintError>;
+export declare const policyCount: (instance: CML.Mint) => Effect.Effect<number, MintError>
 ```
 
 Added in v2.0.0
@@ -251,8 +235,8 @@ export declare const set: (
   instance: CML.Mint,
   policyId: CML.ScriptHash,
   asset: CML.AssetName,
-  value: bigint,
-) => Effect.Effect<bigint | undefined, MintError>;
+  value: bigint
+) => Effect.Effect<bigint | undefined, MintError>
 ```
 
 Added in v2.0.0
@@ -266,9 +250,7 @@ Unsafely calls instance.asNegativeMultiasset without Effect wrapper
 **Signature**
 
 ```ts
-export declare const asNegativeMultiassetUnsafe: (
-  instance: CML.Mint,
-) => CML.MultiAsset;
+export declare const asNegativeMultiassetUnsafe: (instance: CML.Mint) => CML.MultiAsset
 ```
 
 Added in v2.0.0
@@ -280,9 +262,7 @@ Unsafely calls instance.asPositiveMultiasset without Effect wrapper
 **Signature**
 
 ```ts
-export declare const asPositiveMultiassetUnsafe: (
-  instance: CML.Mint,
-) => CML.MultiAsset;
+export declare const asPositiveMultiassetUnsafe: (instance: CML.Mint) => CML.MultiAsset
 ```
 
 Added in v2.0.0
@@ -294,10 +274,7 @@ Unsafely calls instance.checkedAdd without Effect wrapper
 **Signature**
 
 ```ts
-export declare const checkedAddUnsafe: (
-  instance: CML.Mint,
-  rhs: CML.Mint,
-) => CML.Mint;
+export declare const checkedAddUnsafe: (instance: CML.Mint, rhs: CML.Mint) => CML.Mint
 ```
 
 Added in v2.0.0
@@ -309,10 +286,7 @@ Unsafely calls instance.checkedSub without Effect wrapper
 **Signature**
 
 ```ts
-export declare const checkedSubUnsafe: (
-  instance: CML.Mint,
-  rhs: CML.Mint,
-) => CML.Mint;
+export declare const checkedSubUnsafe: (instance: CML.Mint, rhs: CML.Mint) => CML.Mint
 ```
 
 Added in v2.0.0
@@ -324,7 +298,7 @@ Unsafely calls instance.free without Effect wrapper
 **Signature**
 
 ```ts
-export declare const freeUnsafe: (instance: CML.Mint) => void;
+export declare const freeUnsafe: (instance: CML.Mint) => void
 ```
 
 Added in v2.0.0
@@ -338,8 +312,8 @@ Unsafely calls instance.getAssets without Effect wrapper
 ```ts
 export declare const getAssetsUnsafe: (
   instance: CML.Mint,
-  key: CML.ScriptHash,
-) => CML.MapAssetNameToNonZeroInt64 | undefined;
+  key: CML.ScriptHash
+) => CML.MapAssetNameToNonZeroInt64 | undefined
 ```
 
 Added in v2.0.0
@@ -354,8 +328,8 @@ Unsafely calls instance.get without Effect wrapper
 export declare const getUnsafe: (
   instance: CML.Mint,
   policyId: CML.ScriptHash,
-  asset: CML.AssetName,
-) => bigint | undefined;
+  asset: CML.AssetName
+) => bigint | undefined
 ```
 
 Added in v2.0.0
@@ -370,8 +344,8 @@ Unsafely calls instance.insertAssets without Effect wrapper
 export declare const insertAssetsUnsafe: (
   instance: CML.Mint,
   policyId: CML.ScriptHash,
-  assets: CML.MapAssetNameToNonZeroInt64,
-) => CML.MapAssetNameToNonZeroInt64 | undefined;
+  assets: CML.MapAssetNameToNonZeroInt64
+) => CML.MapAssetNameToNonZeroInt64 | undefined
 ```
 
 Added in v2.0.0
@@ -383,7 +357,7 @@ Unsafely calls instance.keys without Effect wrapper
 **Signature**
 
 ```ts
-export declare const keysUnsafe: (instance: CML.Mint) => CML.PolicyIdList;
+export declare const keysUnsafe: (instance: CML.Mint) => CML.PolicyIdList
 ```
 
 Added in v2.0.0
@@ -395,7 +369,7 @@ Unsafely calls instance.policyCount without Effect wrapper
 **Signature**
 
 ```ts
-export declare const policyCountUnsafe: (instance: CML.Mint) => number;
+export declare const policyCountUnsafe: (instance: CML.Mint) => number
 ```
 
 Added in v2.0.0
@@ -411,8 +385,8 @@ export declare const setUnsafe: (
   instance: CML.Mint,
   policyId: CML.ScriptHash,
   asset: CML.AssetName,
-  value: bigint,
-) => bigint | undefined;
+  value: bigint
+) => bigint | undefined
 ```
 
 Added in v2.0.0
@@ -426,7 +400,7 @@ Type alias for the CML Mint class
 **Signature**
 
 ```ts
-export type Mint = CML.Mint;
+export type Mint = CML.Mint
 ```
 
 Added in v2.0.0

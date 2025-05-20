@@ -47,8 +47,8 @@ Wrapper for the compute_total_ex_units function
 
 ```ts
 export declare const computeTotalExUnits: (
-  redeemers: CML.Redeemers,
-) => Effect.Effect<CML.ExUnits, ComputeTotalExUnitsError>;
+  redeemers: CML.Redeemers
+) => Effect.Effect<CML.ExUnits, ComputeTotalExUnitsError>
 ```
 
 Added in v2.0.0
@@ -62,9 +62,7 @@ Unsafely calls compute_total_ex_units function without Effect wrapper
 **Signature**
 
 ```ts
-export declare const computeTotalExUnitsUnsafe: (
-  redeemers: CML.Redeemers,
-) => CML.ExUnits;
+export declare const computeTotalExUnitsUnsafe: (redeemers: CML.Redeemers) => CML.ExUnits
 ```
 
 Added in v2.0.0

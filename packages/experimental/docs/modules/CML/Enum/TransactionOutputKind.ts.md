@@ -33,7 +33,7 @@ Type alias for the CML TransactionOutputKind enum
 **Signature**
 
 ```ts
-export type TransactionOutputKind = CML.TransactionOutputKind;
+export type TransactionOutputKind = CML.TransactionOutputKind
 ```
 
 Added in v2.0.0
@@ -47,9 +47,7 @@ Convert string to TransactionOutputKind enum value
 **Signature**
 
 ```ts
-export declare const fromString: (
-  str: string,
-) => CML.TransactionOutputKind | undefined;
+export declare const fromString: (str: string) => CML.TransactionOutputKind | undefined
 ```
 
 Added in v2.0.0
@@ -61,7 +59,7 @@ Convert TransactionOutputKind enum value to string
 **Signature**
 
 ```ts
-export declare const toString: (value: CML.TransactionOutputKind) => string;
+export declare const toString: (value: CML.TransactionOutputKind) => string
 ```
 
 Added in v2.0.0
@@ -73,7 +71,7 @@ Get all values of the TransactionOutputKind enum
 **Signature**
 
 ```ts
-export declare const values: () => Array<CML.TransactionOutputKind>;
+export declare const values: () => Array<CML.TransactionOutputKind>
 ```
 
 Added in v2.0.0
@@ -87,7 +85,7 @@ AlonzoFormatTxOut variant of the TransactionOutputKind enum
 **Signature**
 
 ```ts
-export declare const AlonzoFormatTxOut: CML.TransactionOutputKind.AlonzoFormatTxOut;
+export declare const AlonzoFormatTxOut: CML.TransactionOutputKind.AlonzoFormatTxOut
 ```
 
 Added in v2.0.0
@@ -99,7 +97,7 @@ ConwayFormatTxOut variant of the TransactionOutputKind enum
 **Signature**
 
 ```ts
-export declare const ConwayFormatTxOut: CML.TransactionOutputKind.ConwayFormatTxOut;
+export declare const ConwayFormatTxOut: CML.TransactionOutputKind.ConwayFormatTxOut
 ```
 
 Added in v2.0.0

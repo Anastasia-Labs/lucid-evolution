@@ -29,25 +29,17 @@ Create a new Pointer instance
 **Signature**
 
 ```ts
-export declare const make: (
-  slot: Natural.Natural,
-  txIndex: Natural.Natural,
-  certIndex: Natural.Natural,
-) => Pointer;
+export declare const make: (slot: Natural.Natural, txIndex: Natural.Natural, certIndex: Natural.Natural) => Pointer
 ```
 
 **Example**
 
 ```ts
-import { Pointer, Natural } from "@lucid-evolution/experimental";
-import assert from "assert";
+import { Pointer, Natural } from "@lucid-evolution/experimental"
+import assert from "assert"
 
-const pointer = Pointer.make(
-  Natural.makeOrThrow(1),
-  Natural.makeOrThrow(2),
-  Natural.makeOrThrow(3),
-);
-assert(pointer instanceof Pointer.Pointer);
+const pointer = Pointer.make(Natural.makeOrThrow(1), Natural.makeOrThrow(2), Natural.makeOrThrow(3))
+assert(pointer instanceof Pointer.Pointer)
 ```
 
 Added in v2.0.0
@@ -61,25 +53,18 @@ Check if the given value is a valid Pointer
 **Signature**
 
 ```ts
-export declare const isPointer: (
-  u: unknown,
-  overrideOptions?: ParseOptions | number,
-) => u is Pointer;
+export declare const isPointer: (u: unknown, overrideOptions?: ParseOptions | number) => u is Pointer
 ```
 
 **Example**
 
 ```ts
-import { Pointer, Natural } from "@lucid-evolution/experimental";
-import assert from "assert";
+import { Pointer, Natural } from "@lucid-evolution/experimental"
+import assert from "assert"
 
-const pointer = Pointer.make(
-  Natural.makeOrThrow(1),
-  Natural.makeOrThrow(2),
-  Natural.makeOrThrow(3),
-);
-const isValid = Pointer.isPointer(pointer);
-assert(isValid === true);
+const pointer = Pointer.make(Natural.makeOrThrow(1), Natural.makeOrThrow(2), Natural.makeOrThrow(3))
+const isValid = Pointer.isPointer(pointer)
+assert(isValid === true)
 ```
 
 Added in v2.0.0
@@ -104,5 +89,5 @@ Added in v2.0.0
 **Signature**
 
 ```ts
-[Inspectable.NodeInspectSymbol]();
+;[Inspectable.NodeInspectSymbol]()
 ```

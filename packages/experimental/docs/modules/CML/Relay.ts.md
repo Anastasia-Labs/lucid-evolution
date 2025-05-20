@@ -66,9 +66,7 @@ Static method fromCborBytes of Relay
 **Signature**
 
 ```ts
-export declare const fromCborBytes: (
-  cborBytes: Uint8Array,
-) => Effect.Effect<CML.Relay, RelayError>;
+export declare const fromCborBytes: (cborBytes: Uint8Array) => Effect.Effect<CML.Relay, RelayError>
 ```
 
 Added in v2.0.0
@@ -80,9 +78,7 @@ Static method fromCborHex of Relay
 **Signature**
 
 ```ts
-export declare const fromCborHex: (
-  cborBytes: string,
-) => Effect.Effect<CML.Relay, RelayError>;
+export declare const fromCborHex: (cborBytes: string) => Effect.Effect<CML.Relay, RelayError>
 ```
 
 Added in v2.0.0
@@ -94,9 +90,7 @@ Static method fromJson of Relay
 **Signature**
 
 ```ts
-export declare const fromJson: (
-  json: string,
-) => Effect.Effect<CML.Relay, RelayError>;
+export declare const fromJson: (json: string) => Effect.Effect<CML.Relay, RelayError>
 ```
 
 Added in v2.0.0
@@ -108,9 +102,7 @@ Static method newMultiHostName of Relay
 **Signature**
 
 ```ts
-export declare const newMultiHostName: (
-  dnsName: CML.DNSName,
-) => Effect.Effect<CML.Relay, RelayError>;
+export declare const newMultiHostName: (dnsName: CML.DNSName) => Effect.Effect<CML.Relay, RelayError>
 ```
 
 Added in v2.0.0
@@ -125,8 +117,8 @@ Static method newSingleHostAddr of Relay
 export declare const newSingleHostAddr: (
   port: number,
   ipv4: CML.Ipv4,
-  ipv6: CML.Ipv6,
-) => Effect.Effect<CML.Relay, RelayError>;
+  ipv6: CML.Ipv6
+) => Effect.Effect<CML.Relay, RelayError>
 ```
 
 Added in v2.0.0
@@ -140,8 +132,8 @@ Static method newSingleHostName of Relay
 ```ts
 export declare const newSingleHostName: (
   port: number | undefined,
-  dnsName: CML.DNSName,
-) => Effect.Effect<CML.Relay, RelayError>;
+  dnsName: CML.DNSName
+) => Effect.Effect<CML.Relay, RelayError>
 ```
 
 Added in v2.0.0
@@ -155,7 +147,7 @@ Unsafely calls Relay.fromCborBytes without Effect wrapper
 **Signature**
 
 ```ts
-export declare const fromCborBytesUnsafe: (cborBytes: Uint8Array) => CML.Relay;
+export declare const fromCborBytesUnsafe: (cborBytes: Uint8Array) => CML.Relay
 ```
 
 Added in v2.0.0
@@ -167,7 +159,7 @@ Unsafely calls Relay.fromCborHex without Effect wrapper
 **Signature**
 
 ```ts
-export declare const fromCborHexUnsafe: (cborBytes: string) => CML.Relay;
+export declare const fromCborHexUnsafe: (cborBytes: string) => CML.Relay
 ```
 
 Added in v2.0.0
@@ -179,7 +171,7 @@ Unsafely calls Relay.fromJson without Effect wrapper
 **Signature**
 
 ```ts
-export declare const fromJsonUnsafe: (json: string) => CML.Relay;
+export declare const fromJsonUnsafe: (json: string) => CML.Relay
 ```
 
 Added in v2.0.0
@@ -191,9 +183,7 @@ Unsafely calls Relay.newMultiHostName without Effect wrapper
 **Signature**
 
 ```ts
-export declare const newMultiHostNameUnsafe: (
-  dnsName: CML.DNSName,
-) => CML.Relay;
+export declare const newMultiHostNameUnsafe: (dnsName: CML.DNSName) => CML.Relay
 ```
 
 Added in v2.0.0
@@ -205,11 +195,7 @@ Unsafely calls Relay.newSingleHostAddr without Effect wrapper
 **Signature**
 
 ```ts
-export declare const newSingleHostAddrUnsafe: (
-  port: number,
-  ipv4: CML.Ipv4,
-  ipv6: CML.Ipv6,
-) => CML.Relay;
+export declare const newSingleHostAddrUnsafe: (port: number, ipv4: CML.Ipv4, ipv6: CML.Ipv6) => CML.Relay
 ```
 
 Added in v2.0.0
@@ -221,10 +207,7 @@ Unsafely calls Relay.newSingleHostName without Effect wrapper
 **Signature**
 
 ```ts
-export declare const newSingleHostNameUnsafe: (
-  port: number | undefined,
-  dnsName: CML.DNSName,
-) => CML.Relay;
+export declare const newSingleHostNameUnsafe: (port: number | undefined, dnsName: CML.DNSName) => CML.Relay
 ```
 
 Added in v2.0.0
@@ -254,9 +237,7 @@ Method asMultiHostName of Relay
 **Signature**
 
 ```ts
-export declare const asMultiHostName: (
-  instance: CML.Relay,
-) => Effect.Effect<CML.MultiHostName | undefined, RelayError>;
+export declare const asMultiHostName: (instance: CML.Relay) => Effect.Effect<CML.MultiHostName | undefined, RelayError>
 ```
 
 Added in v2.0.0
@@ -269,8 +250,8 @@ Method asSingleHostAddr of Relay
 
 ```ts
 export declare const asSingleHostAddr: (
-  instance: CML.Relay,
-) => Effect.Effect<CML.SingleHostAddr | undefined, RelayError>;
+  instance: CML.Relay
+) => Effect.Effect<CML.SingleHostAddr | undefined, RelayError>
 ```
 
 Added in v2.0.0
@@ -283,8 +264,8 @@ Method asSingleHostName of Relay
 
 ```ts
 export declare const asSingleHostName: (
-  instance: CML.Relay,
-) => Effect.Effect<CML.SingleHostName | undefined, RelayError>;
+  instance: CML.Relay
+) => Effect.Effect<CML.SingleHostName | undefined, RelayError>
 ```
 
 Added in v2.0.0
@@ -296,9 +277,7 @@ Method free of Relay
 **Signature**
 
 ```ts
-export declare const free: (
-  instance: CML.Relay,
-) => Effect.Effect<void, RelayError>;
+export declare const free: (instance: CML.Relay) => Effect.Effect<void, RelayError>
 ```
 
 Added in v2.0.0
@@ -310,9 +289,7 @@ Method kind of Relay
 **Signature**
 
 ```ts
-export declare const kind: (
-  instance: CML.Relay,
-) => Effect.Effect<CML.RelayKind, RelayError>;
+export declare const kind: (instance: CML.Relay) => Effect.Effect<CML.RelayKind, RelayError>
 ```
 
 Added in v2.0.0
@@ -324,9 +301,7 @@ Method toCanonicalCborBytes of Relay
 **Signature**
 
 ```ts
-export declare const toCanonicalCborBytes: (
-  instance: CML.Relay,
-) => Effect.Effect<Uint8Array, RelayError>;
+export declare const toCanonicalCborBytes: (instance: CML.Relay) => Effect.Effect<Uint8Array, RelayError>
 ```
 
 Added in v2.0.0
@@ -338,9 +313,7 @@ Method toCanonicalCborHex of Relay
 **Signature**
 
 ```ts
-export declare const toCanonicalCborHex: (
-  instance: CML.Relay,
-) => Effect.Effect<string, RelayError>;
+export declare const toCanonicalCborHex: (instance: CML.Relay) => Effect.Effect<string, RelayError>
 ```
 
 Added in v2.0.0
@@ -352,9 +325,7 @@ Method toCborBytes of Relay
 **Signature**
 
 ```ts
-export declare const toCborBytes: (
-  instance: CML.Relay,
-) => Effect.Effect<Uint8Array, RelayError>;
+export declare const toCborBytes: (instance: CML.Relay) => Effect.Effect<Uint8Array, RelayError>
 ```
 
 Added in v2.0.0
@@ -366,9 +337,7 @@ Method toCborHex of Relay
 **Signature**
 
 ```ts
-export declare const toCborHex: (
-  instance: CML.Relay,
-) => Effect.Effect<string, RelayError>;
+export declare const toCborHex: (instance: CML.Relay) => Effect.Effect<string, RelayError>
 ```
 
 Added in v2.0.0
@@ -380,9 +349,7 @@ Method toJsValue of Relay
 **Signature**
 
 ```ts
-export declare const toJsValue: (
-  instance: CML.Relay,
-) => Effect.Effect<any, RelayError>;
+export declare const toJsValue: (instance: CML.Relay) => Effect.Effect<any, RelayError>
 ```
 
 Added in v2.0.0
@@ -394,9 +361,7 @@ Method toJson of Relay
 **Signature**
 
 ```ts
-export declare const toJson: (
-  instance: CML.Relay,
-) => Effect.Effect<string, RelayError>;
+export declare const toJson: (instance: CML.Relay) => Effect.Effect<string, RelayError>
 ```
 
 Added in v2.0.0
@@ -410,9 +375,7 @@ Unsafely calls instance.asMultiHostName without Effect wrapper
 **Signature**
 
 ```ts
-export declare const asMultiHostNameUnsafe: (
-  instance: CML.Relay,
-) => CML.MultiHostName | undefined;
+export declare const asMultiHostNameUnsafe: (instance: CML.Relay) => CML.MultiHostName | undefined
 ```
 
 Added in v2.0.0
@@ -424,9 +387,7 @@ Unsafely calls instance.asSingleHostAddr without Effect wrapper
 **Signature**
 
 ```ts
-export declare const asSingleHostAddrUnsafe: (
-  instance: CML.Relay,
-) => CML.SingleHostAddr | undefined;
+export declare const asSingleHostAddrUnsafe: (instance: CML.Relay) => CML.SingleHostAddr | undefined
 ```
 
 Added in v2.0.0
@@ -438,9 +399,7 @@ Unsafely calls instance.asSingleHostName without Effect wrapper
 **Signature**
 
 ```ts
-export declare const asSingleHostNameUnsafe: (
-  instance: CML.Relay,
-) => CML.SingleHostName | undefined;
+export declare const asSingleHostNameUnsafe: (instance: CML.Relay) => CML.SingleHostName | undefined
 ```
 
 Added in v2.0.0
@@ -452,7 +411,7 @@ Unsafely calls instance.free without Effect wrapper
 **Signature**
 
 ```ts
-export declare const freeUnsafe: (instance: CML.Relay) => void;
+export declare const freeUnsafe: (instance: CML.Relay) => void
 ```
 
 Added in v2.0.0
@@ -464,7 +423,7 @@ Unsafely calls instance.kind without Effect wrapper
 **Signature**
 
 ```ts
-export declare const kindUnsafe: (instance: CML.Relay) => CML.RelayKind;
+export declare const kindUnsafe: (instance: CML.Relay) => CML.RelayKind
 ```
 
 Added in v2.0.0
@@ -476,9 +435,7 @@ Unsafely calls instance.toCanonicalCborBytes without Effect wrapper
 **Signature**
 
 ```ts
-export declare const toCanonicalCborBytesUnsafe: (
-  instance: CML.Relay,
-) => Uint8Array;
+export declare const toCanonicalCborBytesUnsafe: (instance: CML.Relay) => Uint8Array
 ```
 
 Added in v2.0.0
@@ -490,7 +447,7 @@ Unsafely calls instance.toCanonicalCborHex without Effect wrapper
 **Signature**
 
 ```ts
-export declare const toCanonicalCborHexUnsafe: (instance: CML.Relay) => string;
+export declare const toCanonicalCborHexUnsafe: (instance: CML.Relay) => string
 ```
 
 Added in v2.0.0
@@ -502,7 +459,7 @@ Unsafely calls instance.toCborBytes without Effect wrapper
 **Signature**
 
 ```ts
-export declare const toCborBytesUnsafe: (instance: CML.Relay) => Uint8Array;
+export declare const toCborBytesUnsafe: (instance: CML.Relay) => Uint8Array
 ```
 
 Added in v2.0.0
@@ -514,7 +471,7 @@ Unsafely calls instance.toCborHex without Effect wrapper
 **Signature**
 
 ```ts
-export declare const toCborHexUnsafe: (instance: CML.Relay) => string;
+export declare const toCborHexUnsafe: (instance: CML.Relay) => string
 ```
 
 Added in v2.0.0
@@ -526,7 +483,7 @@ Unsafely calls instance.toJsValue without Effect wrapper
 **Signature**
 
 ```ts
-export declare const toJsValueUnsafe: (instance: CML.Relay) => any;
+export declare const toJsValueUnsafe: (instance: CML.Relay) => any
 ```
 
 Added in v2.0.0
@@ -538,7 +495,7 @@ Unsafely calls instance.toJson without Effect wrapper
 **Signature**
 
 ```ts
-export declare const toJsonUnsafe: (instance: CML.Relay) => string;
+export declare const toJsonUnsafe: (instance: CML.Relay) => string
 ```
 
 Added in v2.0.0
@@ -552,7 +509,7 @@ Type alias for the CML Relay class
 **Signature**
 
 ```ts
-export type Relay = CML.Relay;
+export type Relay = CML.Relay
 ```
 
 Added in v2.0.0

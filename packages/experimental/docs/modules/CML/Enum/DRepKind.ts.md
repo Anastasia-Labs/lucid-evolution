@@ -35,7 +35,7 @@ Type alias for the CML DRepKind enum
 **Signature**
 
 ```ts
-export type DRepKind = CML.DRepKind;
+export type DRepKind = CML.DRepKind
 ```
 
 Added in v2.0.0
@@ -49,7 +49,7 @@ Convert string to DRepKind enum value
 **Signature**
 
 ```ts
-export declare const fromString: (str: string) => CML.DRepKind | undefined;
+export declare const fromString: (str: string) => CML.DRepKind | undefined
 ```
 
 Added in v2.0.0
@@ -61,7 +61,7 @@ Convert DRepKind enum value to string
 **Signature**
 
 ```ts
-export declare const toString: (value: CML.DRepKind) => string;
+export declare const toString: (value: CML.DRepKind) => string
 ```
 
 Added in v2.0.0
@@ -73,7 +73,7 @@ Get all values of the DRepKind enum
 **Signature**
 
 ```ts
-export declare const values: () => Array<CML.DRepKind>;
+export declare const values: () => Array<CML.DRepKind>
 ```
 
 Added in v2.0.0
@@ -87,7 +87,7 @@ AlwaysAbstain variant of the DRepKind enum
 **Signature**
 
 ```ts
-export declare const AlwaysAbstain: CML.DRepKind.AlwaysAbstain;
+export declare const AlwaysAbstain: CML.DRepKind.AlwaysAbstain
 ```
 
 Added in v2.0.0
@@ -99,7 +99,7 @@ AlwaysNoConfidence variant of the DRepKind enum
 **Signature**
 
 ```ts
-export declare const AlwaysNoConfidence: CML.DRepKind.AlwaysNoConfidence;
+export declare const AlwaysNoConfidence: CML.DRepKind.AlwaysNoConfidence
 ```
 
 Added in v2.0.0
@@ -111,7 +111,7 @@ Key variant of the DRepKind enum
 **Signature**
 
 ```ts
-export declare const Key: CML.DRepKind.Key;
+export declare const Key: CML.DRepKind.Key
 ```
 
 Added in v2.0.0
@@ -123,7 +123,7 @@ Script variant of the DRepKind enum
 **Signature**
 
 ```ts
-export declare const Script: CML.DRepKind.Script;
+export declare const Script: CML.DRepKind.Script
 ```
 
 Added in v2.0.0

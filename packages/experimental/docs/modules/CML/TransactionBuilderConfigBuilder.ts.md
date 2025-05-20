@@ -63,7 +63,7 @@ Static method \_new of TransactionBuilderConfigBuilder
 export declare const _new: () => Effect.Effect<
   CML.TransactionBuilderConfigBuilder,
   TransactionBuilderConfigBuilderError
->;
+>
 ```
 
 Added in v2.0.0
@@ -77,7 +77,7 @@ Unsafely calls TransactionBuilderConfigBuilder.\_new without Effect wrapper
 **Signature**
 
 ```ts
-export declare const _newUnsafe: () => CML.TransactionBuilderConfigBuilder;
+export declare const _newUnsafe: () => CML.TransactionBuilderConfigBuilder
 ```
 
 Added in v2.0.0
@@ -108,11 +108,8 @@ Method build of TransactionBuilderConfigBuilder
 
 ```ts
 export declare const build: (
-  instance: CML.TransactionBuilderConfigBuilder,
-) => Effect.Effect<
-  CML.TransactionBuilderConfig,
-  TransactionBuilderConfigBuilderError
->;
+  instance: CML.TransactionBuilderConfigBuilder
+) => Effect.Effect<CML.TransactionBuilderConfig, TransactionBuilderConfigBuilderError>
 ```
 
 Added in v2.0.0
@@ -126,11 +123,8 @@ Method coinsPerUtxoByte of TransactionBuilderConfigBuilder
 ```ts
 export declare const coinsPerUtxoByte: (
   instance: CML.TransactionBuilderConfigBuilder,
-  _coinsPerUtxoByte: bigint,
-) => Effect.Effect<
-  CML.TransactionBuilderConfigBuilder,
-  TransactionBuilderConfigBuilderError
->;
+  _coinsPerUtxoByte: bigint
+) => Effect.Effect<CML.TransactionBuilderConfigBuilder, TransactionBuilderConfigBuilderError>
 ```
 
 Added in v2.0.0
@@ -144,11 +138,8 @@ Method collateralPercentage of TransactionBuilderConfigBuilder
 ```ts
 export declare const collateralPercentage: (
   instance: CML.TransactionBuilderConfigBuilder,
-  _collateralPercentage: number,
-) => Effect.Effect<
-  CML.TransactionBuilderConfigBuilder,
-  TransactionBuilderConfigBuilderError
->;
+  _collateralPercentage: number
+) => Effect.Effect<CML.TransactionBuilderConfigBuilder, TransactionBuilderConfigBuilderError>
 ```
 
 Added in v2.0.0
@@ -162,11 +153,8 @@ Method costModels of TransactionBuilderConfigBuilder
 ```ts
 export declare const costModels: (
   instance: CML.TransactionBuilderConfigBuilder,
-  _costModels: CML.CostModels,
-) => Effect.Effect<
-  CML.TransactionBuilderConfigBuilder,
-  TransactionBuilderConfigBuilderError
->;
+  _costModels: CML.CostModels
+) => Effect.Effect<CML.TransactionBuilderConfigBuilder, TransactionBuilderConfigBuilderError>
 ```
 
 Added in v2.0.0
@@ -180,11 +168,8 @@ Method exUnitPrices of TransactionBuilderConfigBuilder
 ```ts
 export declare const exUnitPrices: (
   instance: CML.TransactionBuilderConfigBuilder,
-  _exUnitPrices: CML.ExUnitPrices,
-) => Effect.Effect<
-  CML.TransactionBuilderConfigBuilder,
-  TransactionBuilderConfigBuilderError
->;
+  _exUnitPrices: CML.ExUnitPrices
+) => Effect.Effect<CML.TransactionBuilderConfigBuilder, TransactionBuilderConfigBuilderError>
 ```
 
 Added in v2.0.0
@@ -198,11 +183,8 @@ Method feeAlgo of TransactionBuilderConfigBuilder
 ```ts
 export declare const feeAlgo: (
   instance: CML.TransactionBuilderConfigBuilder,
-  _feeAlgo: CML.LinearFee,
-) => Effect.Effect<
-  CML.TransactionBuilderConfigBuilder,
-  TransactionBuilderConfigBuilderError
->;
+  _feeAlgo: CML.LinearFee
+) => Effect.Effect<CML.TransactionBuilderConfigBuilder, TransactionBuilderConfigBuilderError>
 ```
 
 Added in v2.0.0
@@ -215,8 +197,8 @@ Method free of TransactionBuilderConfigBuilder
 
 ```ts
 export declare const free: (
-  instance: CML.TransactionBuilderConfigBuilder,
-) => Effect.Effect<void, TransactionBuilderConfigBuilderError>;
+  instance: CML.TransactionBuilderConfigBuilder
+) => Effect.Effect<void, TransactionBuilderConfigBuilderError>
 ```
 
 Added in v2.0.0
@@ -230,11 +212,8 @@ Method keyDeposit of TransactionBuilderConfigBuilder
 ```ts
 export declare const keyDeposit: (
   instance: CML.TransactionBuilderConfigBuilder,
-  _keyDeposit: bigint,
-) => Effect.Effect<
-  CML.TransactionBuilderConfigBuilder,
-  TransactionBuilderConfigBuilderError
->;
+  _keyDeposit: bigint
+) => Effect.Effect<CML.TransactionBuilderConfigBuilder, TransactionBuilderConfigBuilderError>
 ```
 
 Added in v2.0.0
@@ -248,11 +227,8 @@ Method maxCollateralInputs of TransactionBuilderConfigBuilder
 ```ts
 export declare const maxCollateralInputs: (
   instance: CML.TransactionBuilderConfigBuilder,
-  _maxCollateralInputs: number,
-) => Effect.Effect<
-  CML.TransactionBuilderConfigBuilder,
-  TransactionBuilderConfigBuilderError
->;
+  _maxCollateralInputs: number
+) => Effect.Effect<CML.TransactionBuilderConfigBuilder, TransactionBuilderConfigBuilderError>
 ```
 
 Added in v2.0.0
@@ -266,11 +242,8 @@ Method maxTxSize of TransactionBuilderConfigBuilder
 ```ts
 export declare const maxTxSize: (
   instance: CML.TransactionBuilderConfigBuilder,
-  _maxTxSize: number,
-) => Effect.Effect<
-  CML.TransactionBuilderConfigBuilder,
-  TransactionBuilderConfigBuilderError
->;
+  _maxTxSize: number
+) => Effect.Effect<CML.TransactionBuilderConfigBuilder, TransactionBuilderConfigBuilderError>
 ```
 
 Added in v2.0.0
@@ -284,11 +257,8 @@ Method maxValueSize of TransactionBuilderConfigBuilder
 ```ts
 export declare const maxValueSize: (
   instance: CML.TransactionBuilderConfigBuilder,
-  _maxValueSize: number,
-) => Effect.Effect<
-  CML.TransactionBuilderConfigBuilder,
-  TransactionBuilderConfigBuilderError
->;
+  _maxValueSize: number
+) => Effect.Effect<CML.TransactionBuilderConfigBuilder, TransactionBuilderConfigBuilderError>
 ```
 
 Added in v2.0.0
@@ -302,11 +272,8 @@ Method poolDeposit of TransactionBuilderConfigBuilder
 ```ts
 export declare const poolDeposit: (
   instance: CML.TransactionBuilderConfigBuilder,
-  _poolDeposit: bigint,
-) => Effect.Effect<
-  CML.TransactionBuilderConfigBuilder,
-  TransactionBuilderConfigBuilderError
->;
+  _poolDeposit: bigint
+) => Effect.Effect<CML.TransactionBuilderConfigBuilder, TransactionBuilderConfigBuilderError>
 ```
 
 Added in v2.0.0
@@ -320,11 +287,8 @@ Method preferPureChange of TransactionBuilderConfigBuilder
 ```ts
 export declare const preferPureChange: (
   instance: CML.TransactionBuilderConfigBuilder,
-  _preferPureChange: boolean,
-) => Effect.Effect<
-  CML.TransactionBuilderConfigBuilder,
-  TransactionBuilderConfigBuilderError
->;
+  _preferPureChange: boolean
+) => Effect.Effect<CML.TransactionBuilderConfigBuilder, TransactionBuilderConfigBuilderError>
 ```
 
 Added in v2.0.0
@@ -338,9 +302,7 @@ Unsafely calls instance.build without Effect wrapper
 **Signature**
 
 ```ts
-export declare const buildUnsafe: (
-  instance: CML.TransactionBuilderConfigBuilder,
-) => CML.TransactionBuilderConfig;
+export declare const buildUnsafe: (instance: CML.TransactionBuilderConfigBuilder) => CML.TransactionBuilderConfig
 ```
 
 Added in v2.0.0
@@ -354,8 +316,8 @@ Unsafely calls instance.coinsPerUtxoByte without Effect wrapper
 ```ts
 export declare const coinsPerUtxoByteUnsafe: (
   instance: CML.TransactionBuilderConfigBuilder,
-  _coinsPerUtxoByte: bigint,
-) => CML.TransactionBuilderConfigBuilder;
+  _coinsPerUtxoByte: bigint
+) => CML.TransactionBuilderConfigBuilder
 ```
 
 Added in v2.0.0
@@ -369,8 +331,8 @@ Unsafely calls instance.collateralPercentage without Effect wrapper
 ```ts
 export declare const collateralPercentageUnsafe: (
   instance: CML.TransactionBuilderConfigBuilder,
-  _collateralPercentage: number,
-) => CML.TransactionBuilderConfigBuilder;
+  _collateralPercentage: number
+) => CML.TransactionBuilderConfigBuilder
 ```
 
 Added in v2.0.0
@@ -384,8 +346,8 @@ Unsafely calls instance.costModels without Effect wrapper
 ```ts
 export declare const costModelsUnsafe: (
   instance: CML.TransactionBuilderConfigBuilder,
-  _costModels: CML.CostModels,
-) => CML.TransactionBuilderConfigBuilder;
+  _costModels: CML.CostModels
+) => CML.TransactionBuilderConfigBuilder
 ```
 
 Added in v2.0.0
@@ -399,8 +361,8 @@ Unsafely calls instance.exUnitPrices without Effect wrapper
 ```ts
 export declare const exUnitPricesUnsafe: (
   instance: CML.TransactionBuilderConfigBuilder,
-  _exUnitPrices: CML.ExUnitPrices,
-) => CML.TransactionBuilderConfigBuilder;
+  _exUnitPrices: CML.ExUnitPrices
+) => CML.TransactionBuilderConfigBuilder
 ```
 
 Added in v2.0.0
@@ -414,8 +376,8 @@ Unsafely calls instance.feeAlgo without Effect wrapper
 ```ts
 export declare const feeAlgoUnsafe: (
   instance: CML.TransactionBuilderConfigBuilder,
-  _feeAlgo: CML.LinearFee,
-) => CML.TransactionBuilderConfigBuilder;
+  _feeAlgo: CML.LinearFee
+) => CML.TransactionBuilderConfigBuilder
 ```
 
 Added in v2.0.0
@@ -427,9 +389,7 @@ Unsafely calls instance.free without Effect wrapper
 **Signature**
 
 ```ts
-export declare const freeUnsafe: (
-  instance: CML.TransactionBuilderConfigBuilder,
-) => void;
+export declare const freeUnsafe: (instance: CML.TransactionBuilderConfigBuilder) => void
 ```
 
 Added in v2.0.0
@@ -443,8 +403,8 @@ Unsafely calls instance.keyDeposit without Effect wrapper
 ```ts
 export declare const keyDepositUnsafe: (
   instance: CML.TransactionBuilderConfigBuilder,
-  _keyDeposit: bigint,
-) => CML.TransactionBuilderConfigBuilder;
+  _keyDeposit: bigint
+) => CML.TransactionBuilderConfigBuilder
 ```
 
 Added in v2.0.0
@@ -458,8 +418,8 @@ Unsafely calls instance.maxCollateralInputs without Effect wrapper
 ```ts
 export declare const maxCollateralInputsUnsafe: (
   instance: CML.TransactionBuilderConfigBuilder,
-  _maxCollateralInputs: number,
-) => CML.TransactionBuilderConfigBuilder;
+  _maxCollateralInputs: number
+) => CML.TransactionBuilderConfigBuilder
 ```
 
 Added in v2.0.0
@@ -473,8 +433,8 @@ Unsafely calls instance.maxTxSize without Effect wrapper
 ```ts
 export declare const maxTxSizeUnsafe: (
   instance: CML.TransactionBuilderConfigBuilder,
-  _maxTxSize: number,
-) => CML.TransactionBuilderConfigBuilder;
+  _maxTxSize: number
+) => CML.TransactionBuilderConfigBuilder
 ```
 
 Added in v2.0.0
@@ -488,8 +448,8 @@ Unsafely calls instance.maxValueSize without Effect wrapper
 ```ts
 export declare const maxValueSizeUnsafe: (
   instance: CML.TransactionBuilderConfigBuilder,
-  _maxValueSize: number,
-) => CML.TransactionBuilderConfigBuilder;
+  _maxValueSize: number
+) => CML.TransactionBuilderConfigBuilder
 ```
 
 Added in v2.0.0
@@ -503,8 +463,8 @@ Unsafely calls instance.poolDeposit without Effect wrapper
 ```ts
 export declare const poolDepositUnsafe: (
   instance: CML.TransactionBuilderConfigBuilder,
-  _poolDeposit: bigint,
-) => CML.TransactionBuilderConfigBuilder;
+  _poolDeposit: bigint
+) => CML.TransactionBuilderConfigBuilder
 ```
 
 Added in v2.0.0
@@ -518,8 +478,8 @@ Unsafely calls instance.preferPureChange without Effect wrapper
 ```ts
 export declare const preferPureChangeUnsafe: (
   instance: CML.TransactionBuilderConfigBuilder,
-  _preferPureChange: boolean,
-) => CML.TransactionBuilderConfigBuilder;
+  _preferPureChange: boolean
+) => CML.TransactionBuilderConfigBuilder
 ```
 
 Added in v2.0.0
@@ -533,8 +493,7 @@ Type alias for the CML TransactionBuilderConfigBuilder class
 **Signature**
 
 ```ts
-export type TransactionBuilderConfigBuilder =
-  CML.TransactionBuilderConfigBuilder;
+export type TransactionBuilderConfigBuilder = CML.TransactionBuilderConfigBuilder
 ```
 
 Added in v2.0.0

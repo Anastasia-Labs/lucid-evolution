@@ -1,4 +1,4 @@
-import { Data, Either, pipe, Schema } from "effect";
+import { Data, Effect, pipe, Schema } from "effect";
 
 export class HexError extends Data.TaggedError("HexError")<{
   message?: string;
@@ -36,16 +36,16 @@ export const HexString = Schema.String.pipe(Schema.filter((a) => isHex(a)))
 export type HexString = typeof HexString.Type;
 
 const hexes = /* @__PURE__ */ Array.from({ length: 256 }, (_, i) =>
-  i.toString(16).padStart(2, "0"),
+  i.toString(16).padStart(2, "0")
 );
 
-export const fromBytes = (bytes: Uint8Array) => {
+export const fromBytes = <T>(bytes: Uint8Array) => {
   // pre-caching improves the speed 6x
   let hex = "";
   for (let i = 0; i < bytes.length; i++) {
     hex += hexes[bytes[i]];
   }
-  return hex as HexString;
+  return hex as T;
 };
 
 // We use optimized technique to convert hex string to byte array
@@ -85,11 +85,10 @@ export const toBytes = (hex: HexString): Uint8Array => {
   return array;
 };
 
-export const make = (rawHex: string) =>
+export const decode = (maybeHex: string) =>
   pipe(
-    Schema.validateEither(HexString)(rawHex),
-    Either.mapLeft((e) => new HexError({ message: `${e.message}` })),
+    Schema.validate(HexString)(maybeHex),
+    Effect.mapError((e) => new HexError({ message: `${e.message}` }))
   );
 
-export const makeOrThrow = (rawHex: string) =>
-  Either.getOrThrowWith(make(rawHex), (_) => _);
+export const decodeOrThrow = (rawHex: string) => Effect.runSync(decode(rawHex));

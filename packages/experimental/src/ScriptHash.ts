@@ -68,19 +68,17 @@ export class ScriptHash extends Schema.TaggedClass<ScriptHash>()("ScriptHash", {
  *
  * @example
  * import { ScriptHash, Bytes } from "@lucid-evolution/experimental";
- * import { Effect } from "effect";
  * import assert from "assert";
  *
  * const bytes = Bytes.fromHexOrThrow("c37b1b5dc0669f1d3c61a6fddb2e8fde96be87b881c60bce8e8d542f");
- * const scriptHashEffect = ScriptHash.fromBytes(bytes);
- * const scriptHash = Effect.runSync(scriptHashEffect);
+ * const scriptHash = ScriptHash.decodeBytesOrThrow(bytes);
  * assert(scriptHash._tag === "ScriptHash");
  * assert(scriptHash.hash === "c37b1b5dc0669f1d3c61a6fddb2e8fde96be87b881c60bce8e8d542f");
  *
  * @since 2.0.0
  * @category constructors
  */
-export const fromBytes: Serialization.FromBytes<ScriptHash, ScriptHashError> = (
+export const decodeBytes: Serialization.FromBytes<ScriptHash, ScriptHashError> = (
   bytes: Uint8Array,
 ) =>
   pipe(
@@ -111,15 +109,15 @@ export const fromBytes: Serialization.FromBytes<ScriptHash, ScriptHashError> = (
  *
  * const bytes = Bytes.fromHexOrThrow("c37b1b5dc0669f1d3c61a6fddb2e8fde96be87b881c60bce8e8d542f");
  * assert(bytes.length === 28);
- * const scriptHash = ScriptHash.fromBytesOrThrow(bytes);
+ * const scriptHash = ScriptHash.decodeBytesOrThrow(bytes);
  * assert(scriptHash._tag === "ScriptHash");
  * assert(scriptHash.hash === "c37b1b5dc0669f1d3c61a6fddb2e8fde96be87b881c60bce8e8d542f");
  *
  * @since 2.0.0
  * @category constructors
  */
-export const fromBytesOrThrow = (bytes: Uint8Array) =>
-  Effect.runSync(fromBytes(bytes));
+export const decodeBytesOrThrow = (bytes: Uint8Array) =>
+  Effect.runSync(decodeBytes(bytes));
 
 /**
  * Convert a ScriptHash to bytes.
@@ -146,12 +144,10 @@ export const toBytes: Serialization.ToBytes<ScriptHash> = (
  *
  * @example
  * import { ScriptHash } from "@lucid-evolution/experimental";
- * import { Effect } from "effect";
  * import assert from "assert";
  *
  * const hash = "c37b1b5dc0669f1d3c61a6fddb2e8fde96be87b881c60bce8e8d542f";
- * const scriptHashEffect = ScriptHash.make(hash);
- * const scriptHash = Effect.runSync(scriptHashEffect);
+ * const scriptHash = ScriptHash.makeOrThrow(hash);
  * assert(scriptHash._tag === "ScriptHash");
  * assert(scriptHash.hash === hash);
  *
@@ -159,14 +155,14 @@ export const toBytes: Serialization.ToBytes<ScriptHash> = (
  * @category constructors
  */
 export const make: Serialization.Make<ScriptHash, ScriptHashError> = (
-  input: string,
+  maybeHex: string,
 ) =>
   pipe(
-    Hex.make(input),
+    Hex.decode(maybeHex),
     Effect.mapError(
       () =>
         new ScriptHashError({
-          message: `ScriptHash hex string must be a valid hex string. Got ${input}.`,
+          message: `ScriptHash hex string must be a valid hex string. Got ${maybeHex}.`,
           reason: "InvalidHexFormat",
         }),
     ),
@@ -241,4 +237,4 @@ export const equals = (a: ScriptHash, b: ScriptHash): boolean =>
 export const generator = FastCheck.uint8Array({
   minLength: SCRIPTHASH_BYTES_LENGTH,
   maxLength: SCRIPTHASH_BYTES_LENGTH,
-}).map((bytes) => fromBytesOrThrow(bytes));
+}).map((bytes) => decodeBytesOrThrow(bytes));

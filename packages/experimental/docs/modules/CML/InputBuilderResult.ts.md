@@ -48,9 +48,7 @@ Method free of InputBuilderResult
 **Signature**
 
 ```ts
-export declare const free: (
-  instance: CML.InputBuilderResult,
-) => Effect.Effect<void, InputBuilderResultError>;
+export declare const free: (instance: CML.InputBuilderResult) => Effect.Effect<void, InputBuilderResultError>
 ```
 
 Added in v2.0.0
@@ -64,7 +62,7 @@ Unsafely calls instance.free without Effect wrapper
 **Signature**
 
 ```ts
-export declare const freeUnsafe: (instance: CML.InputBuilderResult) => void;
+export declare const freeUnsafe: (instance: CML.InputBuilderResult) => void
 ```
 
 Added in v2.0.0
@@ -78,7 +76,7 @@ Type alias for the CML InputBuilderResult class
 **Signature**
 
 ```ts
-export type InputBuilderResult = CML.InputBuilderResult;
+export type InputBuilderResult = CML.InputBuilderResult
 ```
 
 Added in v2.0.0

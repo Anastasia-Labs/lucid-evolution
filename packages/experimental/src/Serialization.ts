@@ -44,7 +44,7 @@ export type ToCBORBytes<T> = SerializationFnSync<T, Uint8Array>;
  * @since 1.0.0
  * @category encoding/decoding
  */
-export type ToCBOR<T> = SerializationFnSync<T, Hex.HexString>;
+export type ToCBOR<T> = SerializationFnSync<T, Hex.HexString>
 
 /**
  * Creates a value from its CBOR hex string representation
@@ -52,8 +52,8 @@ export type ToCBOR<T> = SerializationFnSync<T, Hex.HexString>;
  * @since 1.0.0
  * @category constructors
  */
-export type FromCBOR<Output, Error = never> = SerializationFn<
-  Hex.HexString,
+export type FromCBOR<Input,Output, Error = never> = SerializationFn<
+  Input,
   Output,
   Error
 >;

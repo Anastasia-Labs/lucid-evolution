@@ -60,8 +60,8 @@ Static method \_new of Vkeywitness
 ```ts
 export declare const _new: (
   vkey: CML.PublicKey,
-  ed25519Signature: CML.Ed25519Signature,
-) => Effect.Effect<CML.Vkeywitness, VkeywitnessError>;
+  ed25519Signature: CML.Ed25519Signature
+) => Effect.Effect<CML.Vkeywitness, VkeywitnessError>
 ```
 
 Added in v2.0.0
@@ -73,9 +73,7 @@ Static method fromCborBytes of Vkeywitness
 **Signature**
 
 ```ts
-export declare const fromCborBytes: (
-  cborBytes: Uint8Array,
-) => Effect.Effect<CML.Vkeywitness, VkeywitnessError>;
+export declare const fromCborBytes: (cborBytes: Uint8Array) => Effect.Effect<CML.Vkeywitness, VkeywitnessError>
 ```
 
 Added in v2.0.0
@@ -87,9 +85,7 @@ Static method fromCborHex of Vkeywitness
 **Signature**
 
 ```ts
-export declare const fromCborHex: (
-  cborBytes: string,
-) => Effect.Effect<CML.Vkeywitness, VkeywitnessError>;
+export declare const fromCborHex: (cborBytes: string) => Effect.Effect<CML.Vkeywitness, VkeywitnessError>
 ```
 
 Added in v2.0.0
@@ -101,9 +97,7 @@ Static method fromJson of Vkeywitness
 **Signature**
 
 ```ts
-export declare const fromJson: (
-  json: string,
-) => Effect.Effect<CML.Vkeywitness, VkeywitnessError>;
+export declare const fromJson: (json: string) => Effect.Effect<CML.Vkeywitness, VkeywitnessError>
 ```
 
 Added in v2.0.0
@@ -117,10 +111,7 @@ Unsafely calls Vkeywitness.\_new without Effect wrapper
 **Signature**
 
 ```ts
-export declare const _newUnsafe: (
-  vkey: CML.PublicKey,
-  ed25519Signature: CML.Ed25519Signature,
-) => CML.Vkeywitness;
+export declare const _newUnsafe: (vkey: CML.PublicKey, ed25519Signature: CML.Ed25519Signature) => CML.Vkeywitness
 ```
 
 Added in v2.0.0
@@ -132,9 +123,7 @@ Unsafely calls Vkeywitness.fromCborBytes without Effect wrapper
 **Signature**
 
 ```ts
-export declare const fromCborBytesUnsafe: (
-  cborBytes: Uint8Array,
-) => CML.Vkeywitness;
+export declare const fromCborBytesUnsafe: (cborBytes: Uint8Array) => CML.Vkeywitness
 ```
 
 Added in v2.0.0
@@ -146,7 +135,7 @@ Unsafely calls Vkeywitness.fromCborHex without Effect wrapper
 **Signature**
 
 ```ts
-export declare const fromCborHexUnsafe: (cborBytes: string) => CML.Vkeywitness;
+export declare const fromCborHexUnsafe: (cborBytes: string) => CML.Vkeywitness
 ```
 
 Added in v2.0.0
@@ -158,7 +147,7 @@ Unsafely calls Vkeywitness.fromJson without Effect wrapper
 **Signature**
 
 ```ts
-export declare const fromJsonUnsafe: (json: string) => CML.Vkeywitness;
+export declare const fromJsonUnsafe: (json: string) => CML.Vkeywitness
 ```
 
 Added in v2.0.0
@@ -189,8 +178,8 @@ Method ed25519Signature of Vkeywitness
 
 ```ts
 export declare const ed25519Signature: (
-  instance: CML.Vkeywitness,
-) => Effect.Effect<CML.Ed25519Signature, VkeywitnessError>;
+  instance: CML.Vkeywitness
+) => Effect.Effect<CML.Ed25519Signature, VkeywitnessError>
 ```
 
 Added in v2.0.0
@@ -202,9 +191,7 @@ Method free of Vkeywitness
 **Signature**
 
 ```ts
-export declare const free: (
-  instance: CML.Vkeywitness,
-) => Effect.Effect<void, VkeywitnessError>;
+export declare const free: (instance: CML.Vkeywitness) => Effect.Effect<void, VkeywitnessError>
 ```
 
 Added in v2.0.0
@@ -216,9 +203,7 @@ Method toCanonicalCborBytes of Vkeywitness
 **Signature**
 
 ```ts
-export declare const toCanonicalCborBytes: (
-  instance: CML.Vkeywitness,
-) => Effect.Effect<Uint8Array, VkeywitnessError>;
+export declare const toCanonicalCborBytes: (instance: CML.Vkeywitness) => Effect.Effect<Uint8Array, VkeywitnessError>
 ```
 
 Added in v2.0.0
@@ -230,9 +215,7 @@ Method toCanonicalCborHex of Vkeywitness
 **Signature**
 
 ```ts
-export declare const toCanonicalCborHex: (
-  instance: CML.Vkeywitness,
-) => Effect.Effect<string, VkeywitnessError>;
+export declare const toCanonicalCborHex: (instance: CML.Vkeywitness) => Effect.Effect<string, VkeywitnessError>
 ```
 
 Added in v2.0.0
@@ -244,9 +227,7 @@ Method toCborBytes of Vkeywitness
 **Signature**
 
 ```ts
-export declare const toCborBytes: (
-  instance: CML.Vkeywitness,
-) => Effect.Effect<Uint8Array, VkeywitnessError>;
+export declare const toCborBytes: (instance: CML.Vkeywitness) => Effect.Effect<Uint8Array, VkeywitnessError>
 ```
 
 Added in v2.0.0
@@ -258,9 +239,7 @@ Method toCborHex of Vkeywitness
 **Signature**
 
 ```ts
-export declare const toCborHex: (
-  instance: CML.Vkeywitness,
-) => Effect.Effect<string, VkeywitnessError>;
+export declare const toCborHex: (instance: CML.Vkeywitness) => Effect.Effect<string, VkeywitnessError>
 ```
 
 Added in v2.0.0
@@ -272,9 +251,7 @@ Method toJsValue of Vkeywitness
 **Signature**
 
 ```ts
-export declare const toJsValue: (
-  instance: CML.Vkeywitness,
-) => Effect.Effect<any, VkeywitnessError>;
+export declare const toJsValue: (instance: CML.Vkeywitness) => Effect.Effect<any, VkeywitnessError>
 ```
 
 Added in v2.0.0
@@ -286,9 +263,7 @@ Method toJson of Vkeywitness
 **Signature**
 
 ```ts
-export declare const toJson: (
-  instance: CML.Vkeywitness,
-) => Effect.Effect<string, VkeywitnessError>;
+export declare const toJson: (instance: CML.Vkeywitness) => Effect.Effect<string, VkeywitnessError>
 ```
 
 Added in v2.0.0
@@ -300,9 +275,7 @@ Method vkey of Vkeywitness
 **Signature**
 
 ```ts
-export declare const vkey: (
-  instance: CML.Vkeywitness,
-) => Effect.Effect<CML.PublicKey, VkeywitnessError>;
+export declare const vkey: (instance: CML.Vkeywitness) => Effect.Effect<CML.PublicKey, VkeywitnessError>
 ```
 
 Added in v2.0.0
@@ -316,9 +289,7 @@ Unsafely calls instance.ed25519Signature without Effect wrapper
 **Signature**
 
 ```ts
-export declare const ed25519SignatureUnsafe: (
-  instance: CML.Vkeywitness,
-) => CML.Ed25519Signature;
+export declare const ed25519SignatureUnsafe: (instance: CML.Vkeywitness) => CML.Ed25519Signature
 ```
 
 Added in v2.0.0
@@ -330,7 +301,7 @@ Unsafely calls instance.free without Effect wrapper
 **Signature**
 
 ```ts
-export declare const freeUnsafe: (instance: CML.Vkeywitness) => void;
+export declare const freeUnsafe: (instance: CML.Vkeywitness) => void
 ```
 
 Added in v2.0.0
@@ -342,9 +313,7 @@ Unsafely calls instance.toCanonicalCborBytes without Effect wrapper
 **Signature**
 
 ```ts
-export declare const toCanonicalCborBytesUnsafe: (
-  instance: CML.Vkeywitness,
-) => Uint8Array;
+export declare const toCanonicalCborBytesUnsafe: (instance: CML.Vkeywitness) => Uint8Array
 ```
 
 Added in v2.0.0
@@ -356,9 +325,7 @@ Unsafely calls instance.toCanonicalCborHex without Effect wrapper
 **Signature**
 
 ```ts
-export declare const toCanonicalCborHexUnsafe: (
-  instance: CML.Vkeywitness,
-) => string;
+export declare const toCanonicalCborHexUnsafe: (instance: CML.Vkeywitness) => string
 ```
 
 Added in v2.0.0
@@ -370,9 +337,7 @@ Unsafely calls instance.toCborBytes without Effect wrapper
 **Signature**
 
 ```ts
-export declare const toCborBytesUnsafe: (
-  instance: CML.Vkeywitness,
-) => Uint8Array;
+export declare const toCborBytesUnsafe: (instance: CML.Vkeywitness) => Uint8Array
 ```
 
 Added in v2.0.0
@@ -384,7 +349,7 @@ Unsafely calls instance.toCborHex without Effect wrapper
 **Signature**
 
 ```ts
-export declare const toCborHexUnsafe: (instance: CML.Vkeywitness) => string;
+export declare const toCborHexUnsafe: (instance: CML.Vkeywitness) => string
 ```
 
 Added in v2.0.0
@@ -396,7 +361,7 @@ Unsafely calls instance.toJsValue without Effect wrapper
 **Signature**
 
 ```ts
-export declare const toJsValueUnsafe: (instance: CML.Vkeywitness) => any;
+export declare const toJsValueUnsafe: (instance: CML.Vkeywitness) => any
 ```
 
 Added in v2.0.0
@@ -408,7 +373,7 @@ Unsafely calls instance.toJson without Effect wrapper
 **Signature**
 
 ```ts
-export declare const toJsonUnsafe: (instance: CML.Vkeywitness) => string;
+export declare const toJsonUnsafe: (instance: CML.Vkeywitness) => string
 ```
 
 Added in v2.0.0
@@ -420,7 +385,7 @@ Unsafely calls instance.vkey without Effect wrapper
 **Signature**
 
 ```ts
-export declare const vkeyUnsafe: (instance: CML.Vkeywitness) => CML.PublicKey;
+export declare const vkeyUnsafe: (instance: CML.Vkeywitness) => CML.PublicKey
 ```
 
 Added in v2.0.0
@@ -434,7 +399,7 @@ Type alias for the CML Vkeywitness class
 **Signature**
 
 ```ts
-export type Vkeywitness = CML.Vkeywitness;
+export type Vkeywitness = CML.Vkeywitness
 ```
 
 Added in v2.0.0

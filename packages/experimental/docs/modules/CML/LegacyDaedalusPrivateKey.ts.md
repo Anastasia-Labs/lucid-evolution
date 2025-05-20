@@ -51,8 +51,8 @@ Method chaincode of LegacyDaedalusPrivateKey
 
 ```ts
 export declare const chaincode: (
-  instance: CML.LegacyDaedalusPrivateKey,
-) => Effect.Effect<Uint8Array, LegacyDaedalusPrivateKeyError>;
+  instance: CML.LegacyDaedalusPrivateKey
+) => Effect.Effect<Uint8Array, LegacyDaedalusPrivateKeyError>
 ```
 
 Added in v2.0.0
@@ -65,8 +65,8 @@ Method free of LegacyDaedalusPrivateKey
 
 ```ts
 export declare const free: (
-  instance: CML.LegacyDaedalusPrivateKey,
-) => Effect.Effect<void, LegacyDaedalusPrivateKeyError>;
+  instance: CML.LegacyDaedalusPrivateKey
+) => Effect.Effect<void, LegacyDaedalusPrivateKeyError>
 ```
 
 Added in v2.0.0
@@ -80,9 +80,7 @@ Unsafely calls instance.chaincode without Effect wrapper
 **Signature**
 
 ```ts
-export declare const chaincodeUnsafe: (
-  instance: CML.LegacyDaedalusPrivateKey,
-) => Uint8Array;
+export declare const chaincodeUnsafe: (instance: CML.LegacyDaedalusPrivateKey) => Uint8Array
 ```
 
 Added in v2.0.0
@@ -94,9 +92,7 @@ Unsafely calls instance.free without Effect wrapper
 **Signature**
 
 ```ts
-export declare const freeUnsafe: (
-  instance: CML.LegacyDaedalusPrivateKey,
-) => void;
+export declare const freeUnsafe: (instance: CML.LegacyDaedalusPrivateKey) => void
 ```
 
 Added in v2.0.0
@@ -110,7 +106,7 @@ Type alias for the CML LegacyDaedalusPrivateKey class
 **Signature**
 
 ```ts
-export type LegacyDaedalusPrivateKey = CML.LegacyDaedalusPrivateKey;
+export type LegacyDaedalusPrivateKey = CML.LegacyDaedalusPrivateKey
 ```
 
 Added in v2.0.0

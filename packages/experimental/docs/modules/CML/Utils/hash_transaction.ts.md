@@ -47,8 +47,8 @@ Wrapper for the hash_transaction function
 
 ```ts
 export declare const hashTransaction: (
-  txBody: CML.TransactionBody,
-) => Effect.Effect<CML.TransactionHash, HashTransactionError>;
+  txBody: CML.TransactionBody
+) => Effect.Effect<CML.TransactionHash, HashTransactionError>
 ```
 
 Added in v2.0.0
@@ -62,9 +62,7 @@ Unsafely calls hash_transaction function without Effect wrapper
 **Signature**
 
 ```ts
-export declare const hashTransactionUnsafe: (
-  txBody: CML.TransactionBody,
-) => CML.TransactionHash;
+export declare const hashTransactionUnsafe: (txBody: CML.TransactionBody) => CML.TransactionHash
 ```
 
 Added in v2.0.0

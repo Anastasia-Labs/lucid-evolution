@@ -45,8 +45,8 @@ Static method fromCborBytes of HDAddressPayload
 
 ```ts
 export declare const fromCborBytes: (
-  cborBytes: Uint8Array,
-) => Effect.Effect<CML.HDAddressPayload, HDAddressPayloadError>;
+  cborBytes: Uint8Array
+) => Effect.Effect<CML.HDAddressPayload, HDAddressPayloadError>
 ```
 
 Added in v2.0.0
@@ -58,9 +58,7 @@ Static method fromCborHex of HDAddressPayload
 **Signature**
 
 ```ts
-export declare const fromCborHex: (
-  cborBytes: string,
-) => Effect.Effect<CML.HDAddressPayload, HDAddressPayloadError>;
+export declare const fromCborHex: (cborBytes: string) => Effect.Effect<CML.HDAddressPayload, HDAddressPayloadError>
 ```
 
 Added in v2.0.0
@@ -74,9 +72,7 @@ Unsafely calls HDAddressPayload.fromCborBytes without Effect wrapper
 **Signature**
 
 ```ts
-export declare const fromCborBytesUnsafe: (
-  cborBytes: Uint8Array,
-) => CML.HDAddressPayload;
+export declare const fromCborBytesUnsafe: (cborBytes: Uint8Array) => CML.HDAddressPayload
 ```
 
 Added in v2.0.0
@@ -88,9 +84,7 @@ Unsafely calls HDAddressPayload.fromCborHex without Effect wrapper
 **Signature**
 
 ```ts
-export declare const fromCborHexUnsafe: (
-  cborBytes: string,
-) => CML.HDAddressPayload;
+export declare const fromCborHexUnsafe: (cborBytes: string) => CML.HDAddressPayload
 ```
 
 Added in v2.0.0
@@ -120,9 +114,7 @@ Method free of HDAddressPayload
 **Signature**
 
 ```ts
-export declare const free: (
-  instance: CML.HDAddressPayload,
-) => Effect.Effect<void, HDAddressPayloadError>;
+export declare const free: (instance: CML.HDAddressPayload) => Effect.Effect<void, HDAddressPayloadError>
 ```
 
 Added in v2.0.0
@@ -134,9 +126,7 @@ Method get of HDAddressPayload
 **Signature**
 
 ```ts
-export declare const get: (
-  instance: CML.HDAddressPayload,
-) => Effect.Effect<Uint8Array, HDAddressPayloadError>;
+export declare const get: (instance: CML.HDAddressPayload) => Effect.Effect<Uint8Array, HDAddressPayloadError>
 ```
 
 Added in v2.0.0
@@ -148,9 +138,7 @@ Method toCborBytes of HDAddressPayload
 **Signature**
 
 ```ts
-export declare const toCborBytes: (
-  instance: CML.HDAddressPayload,
-) => Effect.Effect<Uint8Array, HDAddressPayloadError>;
+export declare const toCborBytes: (instance: CML.HDAddressPayload) => Effect.Effect<Uint8Array, HDAddressPayloadError>
 ```
 
 Added in v2.0.0
@@ -162,9 +150,7 @@ Method toCborHex of HDAddressPayload
 **Signature**
 
 ```ts
-export declare const toCborHex: (
-  instance: CML.HDAddressPayload,
-) => Effect.Effect<string, HDAddressPayloadError>;
+export declare const toCborHex: (instance: CML.HDAddressPayload) => Effect.Effect<string, HDAddressPayloadError>
 ```
 
 Added in v2.0.0
@@ -178,7 +164,7 @@ Unsafely calls instance.free without Effect wrapper
 **Signature**
 
 ```ts
-export declare const freeUnsafe: (instance: CML.HDAddressPayload) => void;
+export declare const freeUnsafe: (instance: CML.HDAddressPayload) => void
 ```
 
 Added in v2.0.0
@@ -190,7 +176,7 @@ Unsafely calls instance.get without Effect wrapper
 **Signature**
 
 ```ts
-export declare const getUnsafe: (instance: CML.HDAddressPayload) => Uint8Array;
+export declare const getUnsafe: (instance: CML.HDAddressPayload) => Uint8Array
 ```
 
 Added in v2.0.0
@@ -202,9 +188,7 @@ Unsafely calls instance.toCborBytes without Effect wrapper
 **Signature**
 
 ```ts
-export declare const toCborBytesUnsafe: (
-  instance: CML.HDAddressPayload,
-) => Uint8Array;
+export declare const toCborBytesUnsafe: (instance: CML.HDAddressPayload) => Uint8Array
 ```
 
 Added in v2.0.0
@@ -216,9 +200,7 @@ Unsafely calls instance.toCborHex without Effect wrapper
 **Signature**
 
 ```ts
-export declare const toCborHexUnsafe: (
-  instance: CML.HDAddressPayload,
-) => string;
+export declare const toCborHexUnsafe: (instance: CML.HDAddressPayload) => string
 ```
 
 Added in v2.0.0
@@ -232,7 +214,7 @@ Type alias for the CML HDAddressPayload class
 **Signature**
 
 ```ts
-export type HDAddressPayload = CML.HDAddressPayload;
+export type HDAddressPayload = CML.HDAddressPayload
 ```
 
 Added in v2.0.0

@@ -131,8 +131,8 @@ Static method \_new of TransactionBody
 export declare const _new: (
   inputs: CML.TransactionInputList,
   outputs: CML.TransactionOutputList,
-  fee: bigint,
-) => Effect.Effect<CML.TransactionBody, TransactionBodyError>;
+  fee: bigint
+) => Effect.Effect<CML.TransactionBody, TransactionBodyError>
 ```
 
 Added in v2.0.0
@@ -144,9 +144,7 @@ Static method fromCborBytes of TransactionBody
 **Signature**
 
 ```ts
-export declare const fromCborBytes: (
-  cborBytes: Uint8Array,
-) => Effect.Effect<CML.TransactionBody, TransactionBodyError>;
+export declare const fromCborBytes: (cborBytes: Uint8Array) => Effect.Effect<CML.TransactionBody, TransactionBodyError>
 ```
 
 Added in v2.0.0
@@ -158,9 +156,7 @@ Static method fromCborHex of TransactionBody
 **Signature**
 
 ```ts
-export declare const fromCborHex: (
-  cborBytes: string,
-) => Effect.Effect<CML.TransactionBody, TransactionBodyError>;
+export declare const fromCborHex: (cborBytes: string) => Effect.Effect<CML.TransactionBody, TransactionBodyError>
 ```
 
 Added in v2.0.0
@@ -172,9 +168,7 @@ Static method fromJson of TransactionBody
 **Signature**
 
 ```ts
-export declare const fromJson: (
-  json: string,
-) => Effect.Effect<CML.TransactionBody, TransactionBodyError>;
+export declare const fromJson: (json: string) => Effect.Effect<CML.TransactionBody, TransactionBodyError>
 ```
 
 Added in v2.0.0
@@ -191,8 +185,8 @@ Unsafely calls TransactionBody.\_new without Effect wrapper
 export declare const _newUnsafe: (
   inputs: CML.TransactionInputList,
   outputs: CML.TransactionOutputList,
-  fee: bigint,
-) => CML.TransactionBody;
+  fee: bigint
+) => CML.TransactionBody
 ```
 
 Added in v2.0.0
@@ -204,9 +198,7 @@ Unsafely calls TransactionBody.fromCborBytes without Effect wrapper
 **Signature**
 
 ```ts
-export declare const fromCborBytesUnsafe: (
-  cborBytes: Uint8Array,
-) => CML.TransactionBody;
+export declare const fromCborBytesUnsafe: (cborBytes: Uint8Array) => CML.TransactionBody
 ```
 
 Added in v2.0.0
@@ -218,9 +210,7 @@ Unsafely calls TransactionBody.fromCborHex without Effect wrapper
 **Signature**
 
 ```ts
-export declare const fromCborHexUnsafe: (
-  cborBytes: string,
-) => CML.TransactionBody;
+export declare const fromCborHexUnsafe: (cborBytes: string) => CML.TransactionBody
 ```
 
 Added in v2.0.0
@@ -232,7 +222,7 @@ Unsafely calls TransactionBody.fromJson without Effect wrapper
 **Signature**
 
 ```ts
-export declare const fromJsonUnsafe: (json: string) => CML.TransactionBody;
+export declare const fromJsonUnsafe: (json: string) => CML.TransactionBody
 ```
 
 Added in v2.0.0
@@ -263,8 +253,8 @@ Method auxiliaryDataHash of TransactionBody
 
 ```ts
 export declare const auxiliaryDataHash: (
-  instance: CML.TransactionBody,
-) => Effect.Effect<CML.AuxiliaryDataHash | undefined, TransactionBodyError>;
+  instance: CML.TransactionBody
+) => Effect.Effect<CML.AuxiliaryDataHash | undefined, TransactionBodyError>
 ```
 
 Added in v2.0.0
@@ -277,8 +267,8 @@ Method certs of TransactionBody
 
 ```ts
 export declare const certs: (
-  instance: CML.TransactionBody,
-) => Effect.Effect<CML.CertificateList | undefined, TransactionBodyError>;
+  instance: CML.TransactionBody
+) => Effect.Effect<CML.CertificateList | undefined, TransactionBodyError>
 ```
 
 Added in v2.0.0
@@ -291,8 +281,8 @@ Method collateralInputs of TransactionBody
 
 ```ts
 export declare const collateralInputs: (
-  instance: CML.TransactionBody,
-) => Effect.Effect<CML.TransactionInputList | undefined, TransactionBodyError>;
+  instance: CML.TransactionBody
+) => Effect.Effect<CML.TransactionInputList | undefined, TransactionBodyError>
 ```
 
 Added in v2.0.0
@@ -305,8 +295,8 @@ Method collateralReturn of TransactionBody
 
 ```ts
 export declare const collateralReturn: (
-  instance: CML.TransactionBody,
-) => Effect.Effect<CML.TransactionOutput | undefined, TransactionBodyError>;
+  instance: CML.TransactionBody
+) => Effect.Effect<CML.TransactionOutput | undefined, TransactionBodyError>
 ```
 
 Added in v2.0.0
@@ -319,8 +309,8 @@ Method currentTreasuryValue of TransactionBody
 
 ```ts
 export declare const currentTreasuryValue: (
-  instance: CML.TransactionBody,
-) => Effect.Effect<bigint | undefined, TransactionBodyError>;
+  instance: CML.TransactionBody
+) => Effect.Effect<bigint | undefined, TransactionBodyError>
 ```
 
 Added in v2.0.0
@@ -333,8 +323,8 @@ Method donation of TransactionBody
 
 ```ts
 export declare const donation: (
-  instance: CML.TransactionBody,
-) => Effect.Effect<bigint | undefined, TransactionBodyError>;
+  instance: CML.TransactionBody
+) => Effect.Effect<bigint | undefined, TransactionBodyError>
 ```
 
 Added in v2.0.0
@@ -346,9 +336,7 @@ Method fee of TransactionBody
 **Signature**
 
 ```ts
-export declare const fee: (
-  instance: CML.TransactionBody,
-) => Effect.Effect<bigint, TransactionBodyError>;
+export declare const fee: (instance: CML.TransactionBody) => Effect.Effect<bigint, TransactionBodyError>
 ```
 
 Added in v2.0.0
@@ -360,9 +348,7 @@ Method free of TransactionBody
 **Signature**
 
 ```ts
-export declare const free: (
-  instance: CML.TransactionBody,
-) => Effect.Effect<void, TransactionBodyError>;
+export declare const free: (instance: CML.TransactionBody) => Effect.Effect<void, TransactionBodyError>
 ```
 
 Added in v2.0.0
@@ -375,8 +361,8 @@ Method inputs of TransactionBody
 
 ```ts
 export declare const inputs: (
-  instance: CML.TransactionBody,
-) => Effect.Effect<CML.TransactionInputList, TransactionBodyError>;
+  instance: CML.TransactionBody
+) => Effect.Effect<CML.TransactionInputList, TransactionBodyError>
 ```
 
 Added in v2.0.0
@@ -388,9 +374,7 @@ Method mint of TransactionBody
 **Signature**
 
 ```ts
-export declare const mint: (
-  instance: CML.TransactionBody,
-) => Effect.Effect<CML.Mint | undefined, TransactionBodyError>;
+export declare const mint: (instance: CML.TransactionBody) => Effect.Effect<CML.Mint | undefined, TransactionBodyError>
 ```
 
 Added in v2.0.0
@@ -403,8 +387,8 @@ Method networkId of TransactionBody
 
 ```ts
 export declare const networkId: (
-  instance: CML.TransactionBody,
-) => Effect.Effect<CML.NetworkId | undefined, TransactionBodyError>;
+  instance: CML.TransactionBody
+) => Effect.Effect<CML.NetworkId | undefined, TransactionBodyError>
 ```
 
 Added in v2.0.0
@@ -417,8 +401,8 @@ Method outputs of TransactionBody
 
 ```ts
 export declare const outputs: (
-  instance: CML.TransactionBody,
-) => Effect.Effect<CML.TransactionOutputList, TransactionBodyError>;
+  instance: CML.TransactionBody
+) => Effect.Effect<CML.TransactionOutputList, TransactionBodyError>
 ```
 
 Added in v2.0.0
@@ -431,8 +415,8 @@ Method proposalProcedures of TransactionBody
 
 ```ts
 export declare const proposalProcedures: (
-  instance: CML.TransactionBody,
-) => Effect.Effect<CML.ProposalProcedureList | undefined, TransactionBodyError>;
+  instance: CML.TransactionBody
+) => Effect.Effect<CML.ProposalProcedureList | undefined, TransactionBodyError>
 ```
 
 Added in v2.0.0
@@ -445,8 +429,8 @@ Method referenceInputs of TransactionBody
 
 ```ts
 export declare const referenceInputs: (
-  instance: CML.TransactionBody,
-) => Effect.Effect<CML.TransactionInputList | undefined, TransactionBodyError>;
+  instance: CML.TransactionBody
+) => Effect.Effect<CML.TransactionInputList | undefined, TransactionBodyError>
 ```
 
 Added in v2.0.0
@@ -459,8 +443,8 @@ Method requiredSigners of TransactionBody
 
 ```ts
 export declare const requiredSigners: (
-  instance: CML.TransactionBody,
-) => Effect.Effect<CML.Ed25519KeyHashList | undefined, TransactionBodyError>;
+  instance: CML.TransactionBody
+) => Effect.Effect<CML.Ed25519KeyHashList | undefined, TransactionBodyError>
 ```
 
 Added in v2.0.0
@@ -473,8 +457,8 @@ Method scriptDataHash of TransactionBody
 
 ```ts
 export declare const scriptDataHash: (
-  instance: CML.TransactionBody,
-) => Effect.Effect<CML.ScriptDataHash | undefined, TransactionBodyError>;
+  instance: CML.TransactionBody
+) => Effect.Effect<CML.ScriptDataHash | undefined, TransactionBodyError>
 ```
 
 Added in v2.0.0
@@ -488,8 +472,8 @@ Method setAuxiliaryDataHash of TransactionBody
 ```ts
 export declare const setAuxiliaryDataHash: (
   instance: CML.TransactionBody,
-  auxiliaryDataHash: CML.AuxiliaryDataHash,
-) => Effect.Effect<void, TransactionBodyError>;
+  auxiliaryDataHash: CML.AuxiliaryDataHash
+) => Effect.Effect<void, TransactionBodyError>
 ```
 
 Added in v2.0.0
@@ -503,8 +487,8 @@ Method setCerts of TransactionBody
 ```ts
 export declare const setCerts: (
   instance: CML.TransactionBody,
-  certs: CML.CertificateList,
-) => Effect.Effect<void, TransactionBodyError>;
+  certs: CML.CertificateList
+) => Effect.Effect<void, TransactionBodyError>
 ```
 
 Added in v2.0.0
@@ -518,8 +502,8 @@ Method setCollateralInputs of TransactionBody
 ```ts
 export declare const setCollateralInputs: (
   instance: CML.TransactionBody,
-  collateralInputs: CML.TransactionInputList,
-) => Effect.Effect<void, TransactionBodyError>;
+  collateralInputs: CML.TransactionInputList
+) => Effect.Effect<void, TransactionBodyError>
 ```
 
 Added in v2.0.0
@@ -533,8 +517,8 @@ Method setCollateralReturn of TransactionBody
 ```ts
 export declare const setCollateralReturn: (
   instance: CML.TransactionBody,
-  collateralReturn: CML.TransactionOutput,
-) => Effect.Effect<void, TransactionBodyError>;
+  collateralReturn: CML.TransactionOutput
+) => Effect.Effect<void, TransactionBodyError>
 ```
 
 Added in v2.0.0
@@ -548,8 +532,8 @@ Method setCurrentTreasuryValue of TransactionBody
 ```ts
 export declare const setCurrentTreasuryValue: (
   instance: CML.TransactionBody,
-  currentTreasuryValue: bigint,
-) => Effect.Effect<void, TransactionBodyError>;
+  currentTreasuryValue: bigint
+) => Effect.Effect<void, TransactionBodyError>
 ```
 
 Added in v2.0.0
@@ -563,8 +547,8 @@ Method setDonation of TransactionBody
 ```ts
 export declare const setDonation: (
   instance: CML.TransactionBody,
-  donation: bigint,
-) => Effect.Effect<void, TransactionBodyError>;
+  donation: bigint
+) => Effect.Effect<void, TransactionBodyError>
 ```
 
 Added in v2.0.0
@@ -578,8 +562,8 @@ Method setMint of TransactionBody
 ```ts
 export declare const setMint: (
   instance: CML.TransactionBody,
-  mint: CML.Mint,
-) => Effect.Effect<void, TransactionBodyError>;
+  mint: CML.Mint
+) => Effect.Effect<void, TransactionBodyError>
 ```
 
 Added in v2.0.0
@@ -593,8 +577,8 @@ Method setNetworkId of TransactionBody
 ```ts
 export declare const setNetworkId: (
   instance: CML.TransactionBody,
-  networkId: CML.NetworkId,
-) => Effect.Effect<void, TransactionBodyError>;
+  networkId: CML.NetworkId
+) => Effect.Effect<void, TransactionBodyError>
 ```
 
 Added in v2.0.0
@@ -608,8 +592,8 @@ Method setProposalProcedures of TransactionBody
 ```ts
 export declare const setProposalProcedures: (
   instance: CML.TransactionBody,
-  proposalProcedures: CML.ProposalProcedureList,
-) => Effect.Effect<void, TransactionBodyError>;
+  proposalProcedures: CML.ProposalProcedureList
+) => Effect.Effect<void, TransactionBodyError>
 ```
 
 Added in v2.0.0
@@ -623,8 +607,8 @@ Method setReferenceInputs of TransactionBody
 ```ts
 export declare const setReferenceInputs: (
   instance: CML.TransactionBody,
-  referenceInputs: CML.TransactionInputList,
-) => Effect.Effect<void, TransactionBodyError>;
+  referenceInputs: CML.TransactionInputList
+) => Effect.Effect<void, TransactionBodyError>
 ```
 
 Added in v2.0.0
@@ -638,8 +622,8 @@ Method setRequiredSigners of TransactionBody
 ```ts
 export declare const setRequiredSigners: (
   instance: CML.TransactionBody,
-  requiredSigners: CML.Ed25519KeyHashList,
-) => Effect.Effect<void, TransactionBodyError>;
+  requiredSigners: CML.Ed25519KeyHashList
+) => Effect.Effect<void, TransactionBodyError>
 ```
 
 Added in v2.0.0
@@ -653,8 +637,8 @@ Method setScriptDataHash of TransactionBody
 ```ts
 export declare const setScriptDataHash: (
   instance: CML.TransactionBody,
-  scriptDataHash: CML.ScriptDataHash,
-) => Effect.Effect<void, TransactionBodyError>;
+  scriptDataHash: CML.ScriptDataHash
+) => Effect.Effect<void, TransactionBodyError>
 ```
 
 Added in v2.0.0
@@ -668,8 +652,8 @@ Method setTotalCollateral of TransactionBody
 ```ts
 export declare const setTotalCollateral: (
   instance: CML.TransactionBody,
-  totalCollateral: bigint,
-) => Effect.Effect<void, TransactionBodyError>;
+  totalCollateral: bigint
+) => Effect.Effect<void, TransactionBodyError>
 ```
 
 Added in v2.0.0
@@ -681,10 +665,7 @@ Method setTtl of TransactionBody
 **Signature**
 
 ```ts
-export declare const setTtl: (
-  instance: CML.TransactionBody,
-  ttl: bigint,
-) => Effect.Effect<void, TransactionBodyError>;
+export declare const setTtl: (instance: CML.TransactionBody, ttl: bigint) => Effect.Effect<void, TransactionBodyError>
 ```
 
 Added in v2.0.0
@@ -698,8 +679,8 @@ Method setValidityIntervalStart of TransactionBody
 ```ts
 export declare const setValidityIntervalStart: (
   instance: CML.TransactionBody,
-  validityIntervalStart: bigint,
-) => Effect.Effect<void, TransactionBodyError>;
+  validityIntervalStart: bigint
+) => Effect.Effect<void, TransactionBodyError>
 ```
 
 Added in v2.0.0
@@ -713,8 +694,8 @@ Method setVotingProcedures of TransactionBody
 ```ts
 export declare const setVotingProcedures: (
   instance: CML.TransactionBody,
-  votingProcedures: CML.VotingProcedures,
-) => Effect.Effect<void, TransactionBodyError>;
+  votingProcedures: CML.VotingProcedures
+) => Effect.Effect<void, TransactionBodyError>
 ```
 
 Added in v2.0.0
@@ -728,8 +709,8 @@ Method setWithdrawals of TransactionBody
 ```ts
 export declare const setWithdrawals: (
   instance: CML.TransactionBody,
-  withdrawals: CML.MapRewardAccountToCoin,
-) => Effect.Effect<void, TransactionBodyError>;
+  withdrawals: CML.MapRewardAccountToCoin
+) => Effect.Effect<void, TransactionBodyError>
 ```
 
 Added in v2.0.0
@@ -742,8 +723,8 @@ Method toCanonicalCborBytes of TransactionBody
 
 ```ts
 export declare const toCanonicalCborBytes: (
-  instance: CML.TransactionBody,
-) => Effect.Effect<Uint8Array, TransactionBodyError>;
+  instance: CML.TransactionBody
+) => Effect.Effect<Uint8Array, TransactionBodyError>
 ```
 
 Added in v2.0.0
@@ -755,9 +736,7 @@ Method toCanonicalCborHex of TransactionBody
 **Signature**
 
 ```ts
-export declare const toCanonicalCborHex: (
-  instance: CML.TransactionBody,
-) => Effect.Effect<string, TransactionBodyError>;
+export declare const toCanonicalCborHex: (instance: CML.TransactionBody) => Effect.Effect<string, TransactionBodyError>
 ```
 
 Added in v2.0.0
@@ -769,9 +748,7 @@ Method toCborBytes of TransactionBody
 **Signature**
 
 ```ts
-export declare const toCborBytes: (
-  instance: CML.TransactionBody,
-) => Effect.Effect<Uint8Array, TransactionBodyError>;
+export declare const toCborBytes: (instance: CML.TransactionBody) => Effect.Effect<Uint8Array, TransactionBodyError>
 ```
 
 Added in v2.0.0
@@ -783,9 +760,7 @@ Method toCborHex of TransactionBody
 **Signature**
 
 ```ts
-export declare const toCborHex: (
-  instance: CML.TransactionBody,
-) => Effect.Effect<string, TransactionBodyError>;
+export declare const toCborHex: (instance: CML.TransactionBody) => Effect.Effect<string, TransactionBodyError>
 ```
 
 Added in v2.0.0
@@ -797,9 +772,7 @@ Method toJsValue of TransactionBody
 **Signature**
 
 ```ts
-export declare const toJsValue: (
-  instance: CML.TransactionBody,
-) => Effect.Effect<any, TransactionBodyError>;
+export declare const toJsValue: (instance: CML.TransactionBody) => Effect.Effect<any, TransactionBodyError>
 ```
 
 Added in v2.0.0
@@ -811,9 +784,7 @@ Method toJson of TransactionBody
 **Signature**
 
 ```ts
-export declare const toJson: (
-  instance: CML.TransactionBody,
-) => Effect.Effect<string, TransactionBodyError>;
+export declare const toJson: (instance: CML.TransactionBody) => Effect.Effect<string, TransactionBodyError>
 ```
 
 Added in v2.0.0
@@ -826,8 +797,8 @@ Method totalCollateral of TransactionBody
 
 ```ts
 export declare const totalCollateral: (
-  instance: CML.TransactionBody,
-) => Effect.Effect<bigint | undefined, TransactionBodyError>;
+  instance: CML.TransactionBody
+) => Effect.Effect<bigint | undefined, TransactionBodyError>
 ```
 
 Added in v2.0.0
@@ -839,9 +810,7 @@ Method ttl of TransactionBody
 **Signature**
 
 ```ts
-export declare const ttl: (
-  instance: CML.TransactionBody,
-) => Effect.Effect<bigint | undefined, TransactionBodyError>;
+export declare const ttl: (instance: CML.TransactionBody) => Effect.Effect<bigint | undefined, TransactionBodyError>
 ```
 
 Added in v2.0.0
@@ -854,8 +823,8 @@ Method validityIntervalStart of TransactionBody
 
 ```ts
 export declare const validityIntervalStart: (
-  instance: CML.TransactionBody,
-) => Effect.Effect<bigint | undefined, TransactionBodyError>;
+  instance: CML.TransactionBody
+) => Effect.Effect<bigint | undefined, TransactionBodyError>
 ```
 
 Added in v2.0.0
@@ -868,8 +837,8 @@ Method votingProcedures of TransactionBody
 
 ```ts
 export declare const votingProcedures: (
-  instance: CML.TransactionBody,
-) => Effect.Effect<CML.VotingProcedures | undefined, TransactionBodyError>;
+  instance: CML.TransactionBody
+) => Effect.Effect<CML.VotingProcedures | undefined, TransactionBodyError>
 ```
 
 Added in v2.0.0
@@ -882,11 +851,8 @@ Method withdrawals of TransactionBody
 
 ```ts
 export declare const withdrawals: (
-  instance: CML.TransactionBody,
-) => Effect.Effect<
-  CML.MapRewardAccountToCoin | undefined,
-  TransactionBodyError
->;
+  instance: CML.TransactionBody
+) => Effect.Effect<CML.MapRewardAccountToCoin | undefined, TransactionBodyError>
 ```
 
 Added in v2.0.0
@@ -900,9 +866,7 @@ Unsafely calls instance.auxiliaryDataHash without Effect wrapper
 **Signature**
 
 ```ts
-export declare const auxiliaryDataHashUnsafe: (
-  instance: CML.TransactionBody,
-) => CML.AuxiliaryDataHash | undefined;
+export declare const auxiliaryDataHashUnsafe: (instance: CML.TransactionBody) => CML.AuxiliaryDataHash | undefined
 ```
 
 Added in v2.0.0
@@ -914,9 +878,7 @@ Unsafely calls instance.certs without Effect wrapper
 **Signature**
 
 ```ts
-export declare const certsUnsafe: (
-  instance: CML.TransactionBody,
-) => CML.CertificateList | undefined;
+export declare const certsUnsafe: (instance: CML.TransactionBody) => CML.CertificateList | undefined
 ```
 
 Added in v2.0.0
@@ -928,9 +890,7 @@ Unsafely calls instance.collateralInputs without Effect wrapper
 **Signature**
 
 ```ts
-export declare const collateralInputsUnsafe: (
-  instance: CML.TransactionBody,
-) => CML.TransactionInputList | undefined;
+export declare const collateralInputsUnsafe: (instance: CML.TransactionBody) => CML.TransactionInputList | undefined
 ```
 
 Added in v2.0.0
@@ -942,9 +902,7 @@ Unsafely calls instance.collateralReturn without Effect wrapper
 **Signature**
 
 ```ts
-export declare const collateralReturnUnsafe: (
-  instance: CML.TransactionBody,
-) => CML.TransactionOutput | undefined;
+export declare const collateralReturnUnsafe: (instance: CML.TransactionBody) => CML.TransactionOutput | undefined
 ```
 
 Added in v2.0.0
@@ -956,9 +914,7 @@ Unsafely calls instance.currentTreasuryValue without Effect wrapper
 **Signature**
 
 ```ts
-export declare const currentTreasuryValueUnsafe: (
-  instance: CML.TransactionBody,
-) => bigint | undefined;
+export declare const currentTreasuryValueUnsafe: (instance: CML.TransactionBody) => bigint | undefined
 ```
 
 Added in v2.0.0
@@ -970,9 +926,7 @@ Unsafely calls instance.donation without Effect wrapper
 **Signature**
 
 ```ts
-export declare const donationUnsafe: (
-  instance: CML.TransactionBody,
-) => bigint | undefined;
+export declare const donationUnsafe: (instance: CML.TransactionBody) => bigint | undefined
 ```
 
 Added in v2.0.0
@@ -984,7 +938,7 @@ Unsafely calls instance.fee without Effect wrapper
 **Signature**
 
 ```ts
-export declare const feeUnsafe: (instance: CML.TransactionBody) => bigint;
+export declare const feeUnsafe: (instance: CML.TransactionBody) => bigint
 ```
 
 Added in v2.0.0
@@ -996,7 +950,7 @@ Unsafely calls instance.free without Effect wrapper
 **Signature**
 
 ```ts
-export declare const freeUnsafe: (instance: CML.TransactionBody) => void;
+export declare const freeUnsafe: (instance: CML.TransactionBody) => void
 ```
 
 Added in v2.0.0
@@ -1008,9 +962,7 @@ Unsafely calls instance.inputs without Effect wrapper
 **Signature**
 
 ```ts
-export declare const inputsUnsafe: (
-  instance: CML.TransactionBody,
-) => CML.TransactionInputList;
+export declare const inputsUnsafe: (instance: CML.TransactionBody) => CML.TransactionInputList
 ```
 
 Added in v2.0.0
@@ -1022,9 +974,7 @@ Unsafely calls instance.mint without Effect wrapper
 **Signature**
 
 ```ts
-export declare const mintUnsafe: (
-  instance: CML.TransactionBody,
-) => CML.Mint | undefined;
+export declare const mintUnsafe: (instance: CML.TransactionBody) => CML.Mint | undefined
 ```
 
 Added in v2.0.0
@@ -1036,9 +986,7 @@ Unsafely calls instance.networkId without Effect wrapper
 **Signature**
 
 ```ts
-export declare const networkIdUnsafe: (
-  instance: CML.TransactionBody,
-) => CML.NetworkId | undefined;
+export declare const networkIdUnsafe: (instance: CML.TransactionBody) => CML.NetworkId | undefined
 ```
 
 Added in v2.0.0
@@ -1050,9 +998,7 @@ Unsafely calls instance.outputs without Effect wrapper
 **Signature**
 
 ```ts
-export declare const outputsUnsafe: (
-  instance: CML.TransactionBody,
-) => CML.TransactionOutputList;
+export declare const outputsUnsafe: (instance: CML.TransactionBody) => CML.TransactionOutputList
 ```
 
 Added in v2.0.0
@@ -1064,9 +1010,7 @@ Unsafely calls instance.proposalProcedures without Effect wrapper
 **Signature**
 
 ```ts
-export declare const proposalProceduresUnsafe: (
-  instance: CML.TransactionBody,
-) => CML.ProposalProcedureList | undefined;
+export declare const proposalProceduresUnsafe: (instance: CML.TransactionBody) => CML.ProposalProcedureList | undefined
 ```
 
 Added in v2.0.0
@@ -1078,9 +1022,7 @@ Unsafely calls instance.referenceInputs without Effect wrapper
 **Signature**
 
 ```ts
-export declare const referenceInputsUnsafe: (
-  instance: CML.TransactionBody,
-) => CML.TransactionInputList | undefined;
+export declare const referenceInputsUnsafe: (instance: CML.TransactionBody) => CML.TransactionInputList | undefined
 ```
 
 Added in v2.0.0
@@ -1092,9 +1034,7 @@ Unsafely calls instance.requiredSigners without Effect wrapper
 **Signature**
 
 ```ts
-export declare const requiredSignersUnsafe: (
-  instance: CML.TransactionBody,
-) => CML.Ed25519KeyHashList | undefined;
+export declare const requiredSignersUnsafe: (instance: CML.TransactionBody) => CML.Ed25519KeyHashList | undefined
 ```
 
 Added in v2.0.0
@@ -1106,9 +1046,7 @@ Unsafely calls instance.scriptDataHash without Effect wrapper
 **Signature**
 
 ```ts
-export declare const scriptDataHashUnsafe: (
-  instance: CML.TransactionBody,
-) => CML.ScriptDataHash | undefined;
+export declare const scriptDataHashUnsafe: (instance: CML.TransactionBody) => CML.ScriptDataHash | undefined
 ```
 
 Added in v2.0.0
@@ -1122,8 +1060,8 @@ Unsafely calls instance.setAuxiliaryDataHash without Effect wrapper
 ```ts
 export declare const setAuxiliaryDataHashUnsafe: (
   instance: CML.TransactionBody,
-  auxiliaryDataHash: CML.AuxiliaryDataHash,
-) => void;
+  auxiliaryDataHash: CML.AuxiliaryDataHash
+) => void
 ```
 
 Added in v2.0.0
@@ -1135,10 +1073,7 @@ Unsafely calls instance.setCerts without Effect wrapper
 **Signature**
 
 ```ts
-export declare const setCertsUnsafe: (
-  instance: CML.TransactionBody,
-  certs: CML.CertificateList,
-) => void;
+export declare const setCertsUnsafe: (instance: CML.TransactionBody, certs: CML.CertificateList) => void
 ```
 
 Added in v2.0.0
@@ -1152,8 +1087,8 @@ Unsafely calls instance.setCollateralInputs without Effect wrapper
 ```ts
 export declare const setCollateralInputsUnsafe: (
   instance: CML.TransactionBody,
-  collateralInputs: CML.TransactionInputList,
-) => void;
+  collateralInputs: CML.TransactionInputList
+) => void
 ```
 
 Added in v2.0.0
@@ -1167,8 +1102,8 @@ Unsafely calls instance.setCollateralReturn without Effect wrapper
 ```ts
 export declare const setCollateralReturnUnsafe: (
   instance: CML.TransactionBody,
-  collateralReturn: CML.TransactionOutput,
-) => void;
+  collateralReturn: CML.TransactionOutput
+) => void
 ```
 
 Added in v2.0.0
@@ -1182,8 +1117,8 @@ Unsafely calls instance.setCurrentTreasuryValue without Effect wrapper
 ```ts
 export declare const setCurrentTreasuryValueUnsafe: (
   instance: CML.TransactionBody,
-  currentTreasuryValue: bigint,
-) => void;
+  currentTreasuryValue: bigint
+) => void
 ```
 
 Added in v2.0.0
@@ -1195,10 +1130,7 @@ Unsafely calls instance.setDonation without Effect wrapper
 **Signature**
 
 ```ts
-export declare const setDonationUnsafe: (
-  instance: CML.TransactionBody,
-  donation: bigint,
-) => void;
+export declare const setDonationUnsafe: (instance: CML.TransactionBody, donation: bigint) => void
 ```
 
 Added in v2.0.0
@@ -1210,10 +1142,7 @@ Unsafely calls instance.setMint without Effect wrapper
 **Signature**
 
 ```ts
-export declare const setMintUnsafe: (
-  instance: CML.TransactionBody,
-  mint: CML.Mint,
-) => void;
+export declare const setMintUnsafe: (instance: CML.TransactionBody, mint: CML.Mint) => void
 ```
 
 Added in v2.0.0
@@ -1225,10 +1154,7 @@ Unsafely calls instance.setNetworkId without Effect wrapper
 **Signature**
 
 ```ts
-export declare const setNetworkIdUnsafe: (
-  instance: CML.TransactionBody,
-  networkId: CML.NetworkId,
-) => void;
+export declare const setNetworkIdUnsafe: (instance: CML.TransactionBody, networkId: CML.NetworkId) => void
 ```
 
 Added in v2.0.0
@@ -1242,8 +1168,8 @@ Unsafely calls instance.setProposalProcedures without Effect wrapper
 ```ts
 export declare const setProposalProceduresUnsafe: (
   instance: CML.TransactionBody,
-  proposalProcedures: CML.ProposalProcedureList,
-) => void;
+  proposalProcedures: CML.ProposalProcedureList
+) => void
 ```
 
 Added in v2.0.0
@@ -1257,8 +1183,8 @@ Unsafely calls instance.setReferenceInputs without Effect wrapper
 ```ts
 export declare const setReferenceInputsUnsafe: (
   instance: CML.TransactionBody,
-  referenceInputs: CML.TransactionInputList,
-) => void;
+  referenceInputs: CML.TransactionInputList
+) => void
 ```
 
 Added in v2.0.0
@@ -1272,8 +1198,8 @@ Unsafely calls instance.setRequiredSigners without Effect wrapper
 ```ts
 export declare const setRequiredSignersUnsafe: (
   instance: CML.TransactionBody,
-  requiredSigners: CML.Ed25519KeyHashList,
-) => void;
+  requiredSigners: CML.Ed25519KeyHashList
+) => void
 ```
 
 Added in v2.0.0
@@ -1287,8 +1213,8 @@ Unsafely calls instance.setScriptDataHash without Effect wrapper
 ```ts
 export declare const setScriptDataHashUnsafe: (
   instance: CML.TransactionBody,
-  scriptDataHash: CML.ScriptDataHash,
-) => void;
+  scriptDataHash: CML.ScriptDataHash
+) => void
 ```
 
 Added in v2.0.0
@@ -1300,10 +1226,7 @@ Unsafely calls instance.setTotalCollateral without Effect wrapper
 **Signature**
 
 ```ts
-export declare const setTotalCollateralUnsafe: (
-  instance: CML.TransactionBody,
-  totalCollateral: bigint,
-) => void;
+export declare const setTotalCollateralUnsafe: (instance: CML.TransactionBody, totalCollateral: bigint) => void
 ```
 
 Added in v2.0.0
@@ -1315,10 +1238,7 @@ Unsafely calls instance.setTtl without Effect wrapper
 **Signature**
 
 ```ts
-export declare const setTtlUnsafe: (
-  instance: CML.TransactionBody,
-  ttl: bigint,
-) => void;
+export declare const setTtlUnsafe: (instance: CML.TransactionBody, ttl: bigint) => void
 ```
 
 Added in v2.0.0
@@ -1332,8 +1252,8 @@ Unsafely calls instance.setValidityIntervalStart without Effect wrapper
 ```ts
 export declare const setValidityIntervalStartUnsafe: (
   instance: CML.TransactionBody,
-  validityIntervalStart: bigint,
-) => void;
+  validityIntervalStart: bigint
+) => void
 ```
 
 Added in v2.0.0
@@ -1347,8 +1267,8 @@ Unsafely calls instance.setVotingProcedures without Effect wrapper
 ```ts
 export declare const setVotingProceduresUnsafe: (
   instance: CML.TransactionBody,
-  votingProcedures: CML.VotingProcedures,
-) => void;
+  votingProcedures: CML.VotingProcedures
+) => void
 ```
 
 Added in v2.0.0
@@ -1362,8 +1282,8 @@ Unsafely calls instance.setWithdrawals without Effect wrapper
 ```ts
 export declare const setWithdrawalsUnsafe: (
   instance: CML.TransactionBody,
-  withdrawals: CML.MapRewardAccountToCoin,
-) => void;
+  withdrawals: CML.MapRewardAccountToCoin
+) => void
 ```
 
 Added in v2.0.0
@@ -1375,9 +1295,7 @@ Unsafely calls instance.toCanonicalCborBytes without Effect wrapper
 **Signature**
 
 ```ts
-export declare const toCanonicalCborBytesUnsafe: (
-  instance: CML.TransactionBody,
-) => Uint8Array;
+export declare const toCanonicalCborBytesUnsafe: (instance: CML.TransactionBody) => Uint8Array
 ```
 
 Added in v2.0.0
@@ -1389,9 +1307,7 @@ Unsafely calls instance.toCanonicalCborHex without Effect wrapper
 **Signature**
 
 ```ts
-export declare const toCanonicalCborHexUnsafe: (
-  instance: CML.TransactionBody,
-) => string;
+export declare const toCanonicalCborHexUnsafe: (instance: CML.TransactionBody) => string
 ```
 
 Added in v2.0.0
@@ -1403,9 +1319,7 @@ Unsafely calls instance.toCborBytes without Effect wrapper
 **Signature**
 
 ```ts
-export declare const toCborBytesUnsafe: (
-  instance: CML.TransactionBody,
-) => Uint8Array;
+export declare const toCborBytesUnsafe: (instance: CML.TransactionBody) => Uint8Array
 ```
 
 Added in v2.0.0
@@ -1417,7 +1331,7 @@ Unsafely calls instance.toCborHex without Effect wrapper
 **Signature**
 
 ```ts
-export declare const toCborHexUnsafe: (instance: CML.TransactionBody) => string;
+export declare const toCborHexUnsafe: (instance: CML.TransactionBody) => string
 ```
 
 Added in v2.0.0
@@ -1429,7 +1343,7 @@ Unsafely calls instance.toJsValue without Effect wrapper
 **Signature**
 
 ```ts
-export declare const toJsValueUnsafe: (instance: CML.TransactionBody) => any;
+export declare const toJsValueUnsafe: (instance: CML.TransactionBody) => any
 ```
 
 Added in v2.0.0
@@ -1441,7 +1355,7 @@ Unsafely calls instance.toJson without Effect wrapper
 **Signature**
 
 ```ts
-export declare const toJsonUnsafe: (instance: CML.TransactionBody) => string;
+export declare const toJsonUnsafe: (instance: CML.TransactionBody) => string
 ```
 
 Added in v2.0.0
@@ -1453,9 +1367,7 @@ Unsafely calls instance.totalCollateral without Effect wrapper
 **Signature**
 
 ```ts
-export declare const totalCollateralUnsafe: (
-  instance: CML.TransactionBody,
-) => bigint | undefined;
+export declare const totalCollateralUnsafe: (instance: CML.TransactionBody) => bigint | undefined
 ```
 
 Added in v2.0.0
@@ -1467,9 +1379,7 @@ Unsafely calls instance.ttl without Effect wrapper
 **Signature**
 
 ```ts
-export declare const ttlUnsafe: (
-  instance: CML.TransactionBody,
-) => bigint | undefined;
+export declare const ttlUnsafe: (instance: CML.TransactionBody) => bigint | undefined
 ```
 
 Added in v2.0.0
@@ -1481,9 +1391,7 @@ Unsafely calls instance.validityIntervalStart without Effect wrapper
 **Signature**
 
 ```ts
-export declare const validityIntervalStartUnsafe: (
-  instance: CML.TransactionBody,
-) => bigint | undefined;
+export declare const validityIntervalStartUnsafe: (instance: CML.TransactionBody) => bigint | undefined
 ```
 
 Added in v2.0.0
@@ -1495,9 +1403,7 @@ Unsafely calls instance.votingProcedures without Effect wrapper
 **Signature**
 
 ```ts
-export declare const votingProceduresUnsafe: (
-  instance: CML.TransactionBody,
-) => CML.VotingProcedures | undefined;
+export declare const votingProceduresUnsafe: (instance: CML.TransactionBody) => CML.VotingProcedures | undefined
 ```
 
 Added in v2.0.0
@@ -1509,9 +1415,7 @@ Unsafely calls instance.withdrawals without Effect wrapper
 **Signature**
 
 ```ts
-export declare const withdrawalsUnsafe: (
-  instance: CML.TransactionBody,
-) => CML.MapRewardAccountToCoin | undefined;
+export declare const withdrawalsUnsafe: (instance: CML.TransactionBody) => CML.MapRewardAccountToCoin | undefined
 ```
 
 Added in v2.0.0
@@ -1525,7 +1429,7 @@ Type alias for the CML TransactionBody class
 **Signature**
 
 ```ts
-export type TransactionBody = CML.TransactionBody;
+export type TransactionBody = CML.TransactionBody
 ```
 
 Added in v2.0.0

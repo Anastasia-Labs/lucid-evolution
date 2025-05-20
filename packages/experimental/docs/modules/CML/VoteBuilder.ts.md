@@ -46,10 +46,7 @@ Static method \_new of VoteBuilder
 **Signature**
 
 ```ts
-export declare const _new: () => Effect.Effect<
-  CML.VoteBuilder,
-  VoteBuilderError
->;
+export declare const _new: () => Effect.Effect<CML.VoteBuilder, VoteBuilderError>
 ```
 
 Added in v2.0.0
@@ -63,7 +60,7 @@ Unsafely calls VoteBuilder.\_new without Effect wrapper
 **Signature**
 
 ```ts
-export declare const _newUnsafe: () => CML.VoteBuilder;
+export declare const _newUnsafe: () => CML.VoteBuilder
 ```
 
 Added in v2.0.0
@@ -93,9 +90,7 @@ Method build of VoteBuilder
 **Signature**
 
 ```ts
-export declare const build: (
-  instance: CML.VoteBuilder,
-) => Effect.Effect<CML.VoteBuilderResult, VoteBuilderError>;
+export declare const build: (instance: CML.VoteBuilder) => Effect.Effect<CML.VoteBuilderResult, VoteBuilderError>
 ```
 
 Added in v2.0.0
@@ -107,9 +102,7 @@ Method free of VoteBuilder
 **Signature**
 
 ```ts
-export declare const free: (
-  instance: CML.VoteBuilder,
-) => Effect.Effect<void, VoteBuilderError>;
+export declare const free: (instance: CML.VoteBuilder) => Effect.Effect<void, VoteBuilderError>
 ```
 
 Added in v2.0.0
@@ -127,8 +120,8 @@ export declare const withNativeScriptVote: (
   govActionId: CML.GovActionId,
   procedure: CML.VotingProcedure,
   nativeScript: CML.NativeScript,
-  witnessInfo: CML.NativeScriptWitnessInfo,
-) => Effect.Effect<CML.VoteBuilder, VoteBuilderError>;
+  witnessInfo: CML.NativeScriptWitnessInfo
+) => Effect.Effect<CML.VoteBuilder, VoteBuilderError>
 ```
 
 Added in v2.0.0
@@ -147,8 +140,8 @@ export declare const withPlutusVote: (
   procedure: CML.VotingProcedure,
   partialWitness: CML.PartialPlutusWitness,
   requiredSigners: CML.Ed25519KeyHashList,
-  datum: CML.PlutusData,
-) => Effect.Effect<CML.VoteBuilder, VoteBuilderError>;
+  datum: CML.PlutusData
+) => Effect.Effect<CML.VoteBuilder, VoteBuilderError>
 ```
 
 Added in v2.0.0
@@ -166,8 +159,8 @@ export declare const withPlutusVoteInlineDatum: (
   govActionId: CML.GovActionId,
   procedure: CML.VotingProcedure,
   partialWitness: CML.PartialPlutusWitness,
-  requiredSigners: CML.Ed25519KeyHashList,
-) => Effect.Effect<CML.VoteBuilder, VoteBuilderError>;
+  requiredSigners: CML.Ed25519KeyHashList
+) => Effect.Effect<CML.VoteBuilder, VoteBuilderError>
 ```
 
 Added in v2.0.0
@@ -183,8 +176,8 @@ export declare const withVote: (
   instance: CML.VoteBuilder,
   voter: CML.Voter,
   govActionId: CML.GovActionId,
-  procedure: CML.VotingProcedure,
-) => Effect.Effect<CML.VoteBuilder, VoteBuilderError>;
+  procedure: CML.VotingProcedure
+) => Effect.Effect<CML.VoteBuilder, VoteBuilderError>
 ```
 
 Added in v2.0.0
@@ -198,9 +191,7 @@ Unsafely calls instance.build without Effect wrapper
 **Signature**
 
 ```ts
-export declare const buildUnsafe: (
-  instance: CML.VoteBuilder,
-) => CML.VoteBuilderResult;
+export declare const buildUnsafe: (instance: CML.VoteBuilder) => CML.VoteBuilderResult
 ```
 
 Added in v2.0.0
@@ -212,7 +203,7 @@ Unsafely calls instance.free without Effect wrapper
 **Signature**
 
 ```ts
-export declare const freeUnsafe: (instance: CML.VoteBuilder) => void;
+export declare const freeUnsafe: (instance: CML.VoteBuilder) => void
 ```
 
 Added in v2.0.0
@@ -230,8 +221,8 @@ export declare const withNativeScriptVoteUnsafe: (
   govActionId: CML.GovActionId,
   procedure: CML.VotingProcedure,
   nativeScript: CML.NativeScript,
-  witnessInfo: CML.NativeScriptWitnessInfo,
-) => CML.VoteBuilder;
+  witnessInfo: CML.NativeScriptWitnessInfo
+) => CML.VoteBuilder
 ```
 
 Added in v2.0.0
@@ -249,8 +240,8 @@ export declare const withPlutusVoteInlineDatumUnsafe: (
   govActionId: CML.GovActionId,
   procedure: CML.VotingProcedure,
   partialWitness: CML.PartialPlutusWitness,
-  requiredSigners: CML.Ed25519KeyHashList,
-) => CML.VoteBuilder;
+  requiredSigners: CML.Ed25519KeyHashList
+) => CML.VoteBuilder
 ```
 
 Added in v2.0.0
@@ -269,8 +260,8 @@ export declare const withPlutusVoteUnsafe: (
   procedure: CML.VotingProcedure,
   partialWitness: CML.PartialPlutusWitness,
   requiredSigners: CML.Ed25519KeyHashList,
-  datum: CML.PlutusData,
-) => CML.VoteBuilder;
+  datum: CML.PlutusData
+) => CML.VoteBuilder
 ```
 
 Added in v2.0.0
@@ -286,8 +277,8 @@ export declare const withVoteUnsafe: (
   instance: CML.VoteBuilder,
   voter: CML.Voter,
   govActionId: CML.GovActionId,
-  procedure: CML.VotingProcedure,
-) => CML.VoteBuilder;
+  procedure: CML.VotingProcedure
+) => CML.VoteBuilder
 ```
 
 Added in v2.0.0
@@ -301,7 +292,7 @@ Type alias for the CML VoteBuilder class
 **Signature**
 
 ```ts
-export type VoteBuilder = CML.VoteBuilder;
+export type VoteBuilder = CML.VoteBuilder
 ```
 
 Added in v2.0.0

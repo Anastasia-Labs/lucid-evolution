@@ -60,7 +60,7 @@ Static method \_new of PlutusMap
 **Signature**
 
 ```ts
-export declare const _new: () => Effect.Effect<CML.PlutusMap, PlutusMapError>;
+export declare const _new: () => Effect.Effect<CML.PlutusMap, PlutusMapError>
 ```
 
 Added in v2.0.0
@@ -72,9 +72,7 @@ Static method fromCborBytes of PlutusMap
 **Signature**
 
 ```ts
-export declare const fromCborBytes: (
-  cborBytes: Uint8Array,
-) => Effect.Effect<CML.PlutusMap, PlutusMapError>;
+export declare const fromCborBytes: (cborBytes: Uint8Array) => Effect.Effect<CML.PlutusMap, PlutusMapError>
 ```
 
 Added in v2.0.0
@@ -86,9 +84,7 @@ Static method fromCborHex of PlutusMap
 **Signature**
 
 ```ts
-export declare const fromCborHex: (
-  cborBytes: string,
-) => Effect.Effect<CML.PlutusMap, PlutusMapError>;
+export declare const fromCborHex: (cborBytes: string) => Effect.Effect<CML.PlutusMap, PlutusMapError>
 ```
 
 Added in v2.0.0
@@ -102,7 +98,7 @@ Unsafely calls PlutusMap.\_new without Effect wrapper
 **Signature**
 
 ```ts
-export declare const _newUnsafe: () => CML.PlutusMap;
+export declare const _newUnsafe: () => CML.PlutusMap
 ```
 
 Added in v2.0.0
@@ -114,9 +110,7 @@ Unsafely calls PlutusMap.fromCborBytes without Effect wrapper
 **Signature**
 
 ```ts
-export declare const fromCborBytesUnsafe: (
-  cborBytes: Uint8Array,
-) => CML.PlutusMap;
+export declare const fromCborBytesUnsafe: (cborBytes: Uint8Array) => CML.PlutusMap
 ```
 
 Added in v2.0.0
@@ -128,7 +122,7 @@ Unsafely calls PlutusMap.fromCborHex without Effect wrapper
 **Signature**
 
 ```ts
-export declare const fromCborHexUnsafe: (cborBytes: string) => CML.PlutusMap;
+export declare const fromCborHexUnsafe: (cborBytes: string) => CML.PlutusMap
 ```
 
 Added in v2.0.0
@@ -158,9 +152,7 @@ Method free of PlutusMap
 **Signature**
 
 ```ts
-export declare const free: (
-  instance: CML.PlutusMap,
-) => Effect.Effect<void, PlutusMapError>;
+export declare const free: (instance: CML.PlutusMap) => Effect.Effect<void, PlutusMapError>
 ```
 
 Added in v2.0.0
@@ -174,8 +166,8 @@ Method get of PlutusMap
 ```ts
 export declare const get: (
   instance: CML.PlutusMap,
-  key: CML.PlutusData,
-) => Effect.Effect<CML.PlutusData | undefined, PlutusMapError>;
+  key: CML.PlutusData
+) => Effect.Effect<CML.PlutusData | undefined, PlutusMapError>
 ```
 
 Added in v2.0.0
@@ -189,8 +181,8 @@ Method getAll of PlutusMap
 ```ts
 export declare const getAll: (
   instance: CML.PlutusMap,
-  key: CML.PlutusData,
-) => Effect.Effect<CML.PlutusDataList | undefined, PlutusMapError>;
+  key: CML.PlutusData
+) => Effect.Effect<CML.PlutusDataList | undefined, PlutusMapError>
 ```
 
 Added in v2.0.0
@@ -202,9 +194,7 @@ Method isEmpty of PlutusMap
 **Signature**
 
 ```ts
-export declare const isEmpty: (
-  instance: CML.PlutusMap,
-) => Effect.Effect<boolean, PlutusMapError>;
+export declare const isEmpty: (instance: CML.PlutusMap) => Effect.Effect<boolean, PlutusMapError>
 ```
 
 Added in v2.0.0
@@ -216,9 +206,7 @@ Method keys of PlutusMap
 **Signature**
 
 ```ts
-export declare const keys: (
-  instance: CML.PlutusMap,
-) => Effect.Effect<CML.PlutusDataList, PlutusMapError>;
+export declare const keys: (instance: CML.PlutusMap) => Effect.Effect<CML.PlutusDataList, PlutusMapError>
 ```
 
 Added in v2.0.0
@@ -230,9 +218,7 @@ Method len of PlutusMap
 **Signature**
 
 ```ts
-export declare const len: (
-  instance: CML.PlutusMap,
-) => Effect.Effect<number, PlutusMapError>;
+export declare const len: (instance: CML.PlutusMap) => Effect.Effect<number, PlutusMapError>
 ```
 
 Added in v2.0.0
@@ -247,8 +233,8 @@ Method set of PlutusMap
 export declare const set: (
   instance: CML.PlutusMap,
   key: CML.PlutusData,
-  value: CML.PlutusData,
-) => Effect.Effect<void, PlutusMapError>;
+  value: CML.PlutusData
+) => Effect.Effect<void, PlutusMapError>
 ```
 
 Added in v2.0.0
@@ -260,9 +246,7 @@ Method toCanonicalCborBytes of PlutusMap
 **Signature**
 
 ```ts
-export declare const toCanonicalCborBytes: (
-  instance: CML.PlutusMap,
-) => Effect.Effect<Uint8Array, PlutusMapError>;
+export declare const toCanonicalCborBytes: (instance: CML.PlutusMap) => Effect.Effect<Uint8Array, PlutusMapError>
 ```
 
 Added in v2.0.0
@@ -274,9 +258,7 @@ Method toCanonicalCborHex of PlutusMap
 **Signature**
 
 ```ts
-export declare const toCanonicalCborHex: (
-  instance: CML.PlutusMap,
-) => Effect.Effect<string, PlutusMapError>;
+export declare const toCanonicalCborHex: (instance: CML.PlutusMap) => Effect.Effect<string, PlutusMapError>
 ```
 
 Added in v2.0.0
@@ -288,9 +270,7 @@ Method toCborBytes of PlutusMap
 **Signature**
 
 ```ts
-export declare const toCborBytes: (
-  instance: CML.PlutusMap,
-) => Effect.Effect<Uint8Array, PlutusMapError>;
+export declare const toCborBytes: (instance: CML.PlutusMap) => Effect.Effect<Uint8Array, PlutusMapError>
 ```
 
 Added in v2.0.0
@@ -302,9 +282,7 @@ Method toCborHex of PlutusMap
 **Signature**
 
 ```ts
-export declare const toCborHex: (
-  instance: CML.PlutusMap,
-) => Effect.Effect<string, PlutusMapError>;
+export declare const toCborHex: (instance: CML.PlutusMap) => Effect.Effect<string, PlutusMapError>
 ```
 
 Added in v2.0.0
@@ -318,7 +296,7 @@ Unsafely calls instance.free without Effect wrapper
 **Signature**
 
 ```ts
-export declare const freeUnsafe: (instance: CML.PlutusMap) => void;
+export declare const freeUnsafe: (instance: CML.PlutusMap) => void
 ```
 
 Added in v2.0.0
@@ -330,10 +308,7 @@ Unsafely calls instance.getAll without Effect wrapper
 **Signature**
 
 ```ts
-export declare const getAllUnsafe: (
-  instance: CML.PlutusMap,
-  key: CML.PlutusData,
-) => CML.PlutusDataList | undefined;
+export declare const getAllUnsafe: (instance: CML.PlutusMap, key: CML.PlutusData) => CML.PlutusDataList | undefined
 ```
 
 Added in v2.0.0
@@ -345,10 +320,7 @@ Unsafely calls instance.get without Effect wrapper
 **Signature**
 
 ```ts
-export declare const getUnsafe: (
-  instance: CML.PlutusMap,
-  key: CML.PlutusData,
-) => CML.PlutusData | undefined;
+export declare const getUnsafe: (instance: CML.PlutusMap, key: CML.PlutusData) => CML.PlutusData | undefined
 ```
 
 Added in v2.0.0
@@ -360,7 +332,7 @@ Unsafely calls instance.isEmpty without Effect wrapper
 **Signature**
 
 ```ts
-export declare const isEmptyUnsafe: (instance: CML.PlutusMap) => boolean;
+export declare const isEmptyUnsafe: (instance: CML.PlutusMap) => boolean
 ```
 
 Added in v2.0.0
@@ -372,9 +344,7 @@ Unsafely calls instance.keys without Effect wrapper
 **Signature**
 
 ```ts
-export declare const keysUnsafe: (
-  instance: CML.PlutusMap,
-) => CML.PlutusDataList;
+export declare const keysUnsafe: (instance: CML.PlutusMap) => CML.PlutusDataList
 ```
 
 Added in v2.0.0
@@ -386,7 +356,7 @@ Unsafely calls instance.len without Effect wrapper
 **Signature**
 
 ```ts
-export declare const lenUnsafe: (instance: CML.PlutusMap) => number;
+export declare const lenUnsafe: (instance: CML.PlutusMap) => number
 ```
 
 Added in v2.0.0
@@ -398,11 +368,7 @@ Unsafely calls instance.set without Effect wrapper
 **Signature**
 
 ```ts
-export declare const setUnsafe: (
-  instance: CML.PlutusMap,
-  key: CML.PlutusData,
-  value: CML.PlutusData,
-) => void;
+export declare const setUnsafe: (instance: CML.PlutusMap, key: CML.PlutusData, value: CML.PlutusData) => void
 ```
 
 Added in v2.0.0
@@ -414,9 +380,7 @@ Unsafely calls instance.toCanonicalCborBytes without Effect wrapper
 **Signature**
 
 ```ts
-export declare const toCanonicalCborBytesUnsafe: (
-  instance: CML.PlutusMap,
-) => Uint8Array;
+export declare const toCanonicalCborBytesUnsafe: (instance: CML.PlutusMap) => Uint8Array
 ```
 
 Added in v2.0.0
@@ -428,9 +392,7 @@ Unsafely calls instance.toCanonicalCborHex without Effect wrapper
 **Signature**
 
 ```ts
-export declare const toCanonicalCborHexUnsafe: (
-  instance: CML.PlutusMap,
-) => string;
+export declare const toCanonicalCborHexUnsafe: (instance: CML.PlutusMap) => string
 ```
 
 Added in v2.0.0
@@ -442,7 +404,7 @@ Unsafely calls instance.toCborBytes without Effect wrapper
 **Signature**
 
 ```ts
-export declare const toCborBytesUnsafe: (instance: CML.PlutusMap) => Uint8Array;
+export declare const toCborBytesUnsafe: (instance: CML.PlutusMap) => Uint8Array
 ```
 
 Added in v2.0.0
@@ -454,7 +416,7 @@ Unsafely calls instance.toCborHex without Effect wrapper
 **Signature**
 
 ```ts
-export declare const toCborHexUnsafe: (instance: CML.PlutusMap) => string;
+export declare const toCborHexUnsafe: (instance: CML.PlutusMap) => string
 ```
 
 Added in v2.0.0
@@ -468,7 +430,7 @@ Type alias for the CML PlutusMap class
 **Signature**
 
 ```ts
-export type PlutusMap = CML.PlutusMap;
+export type PlutusMap = CML.PlutusMap
 ```
 
 Added in v2.0.0

@@ -48,11 +48,8 @@ Wrapper for the calc_script_data_hash_from_witness function
 ```ts
 export declare const calcScriptDataHashFromWitness: (
   witnesses: CML.TransactionWitnessSet,
-  costModels: CML.CostModels,
-) => Effect.Effect<
-  CML.ScriptDataHash | undefined,
-  CalcScriptDataHashFromWitnessError
->;
+  costModels: CML.CostModels
+) => Effect.Effect<CML.ScriptDataHash | undefined, CalcScriptDataHashFromWitnessError>
 ```
 
 Added in v2.0.0
@@ -68,8 +65,8 @@ Unsafely calls calc_script_data_hash_from_witness function without Effect wrappe
 ```ts
 export declare const calcScriptDataHashFromWitnessUnsafe: (
   witnesses: CML.TransactionWitnessSet,
-  costModels: CML.CostModels,
-) => CML.ScriptDataHash | undefined;
+  costModels: CML.CostModels
+) => CML.ScriptDataHash | undefined
 ```
 
 Added in v2.0.0

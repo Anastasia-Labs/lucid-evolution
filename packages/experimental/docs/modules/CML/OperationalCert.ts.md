@@ -66,8 +66,8 @@ export declare const _new: (
   hotVkey: CML.KESVkey,
   sequenceNumber: bigint,
   kesPeriod: bigint,
-  sigma: CML.Ed25519Signature,
-) => Effect.Effect<CML.OperationalCert, OperationalCertError>;
+  sigma: CML.Ed25519Signature
+) => Effect.Effect<CML.OperationalCert, OperationalCertError>
 ```
 
 Added in v2.0.0
@@ -79,9 +79,7 @@ Static method fromCborBytes of OperationalCert
 **Signature**
 
 ```ts
-export declare const fromCborBytes: (
-  cborBytes: Uint8Array,
-) => Effect.Effect<CML.OperationalCert, OperationalCertError>;
+export declare const fromCborBytes: (cborBytes: Uint8Array) => Effect.Effect<CML.OperationalCert, OperationalCertError>
 ```
 
 Added in v2.0.0
@@ -93,9 +91,7 @@ Static method fromCborHex of OperationalCert
 **Signature**
 
 ```ts
-export declare const fromCborHex: (
-  cborBytes: string,
-) => Effect.Effect<CML.OperationalCert, OperationalCertError>;
+export declare const fromCborHex: (cborBytes: string) => Effect.Effect<CML.OperationalCert, OperationalCertError>
 ```
 
 Added in v2.0.0
@@ -107,9 +103,7 @@ Static method fromJson of OperationalCert
 **Signature**
 
 ```ts
-export declare const fromJson: (
-  json: string,
-) => Effect.Effect<CML.OperationalCert, OperationalCertError>;
+export declare const fromJson: (json: string) => Effect.Effect<CML.OperationalCert, OperationalCertError>
 ```
 
 Added in v2.0.0
@@ -127,8 +121,8 @@ export declare const _newUnsafe: (
   hotVkey: CML.KESVkey,
   sequenceNumber: bigint,
   kesPeriod: bigint,
-  sigma: CML.Ed25519Signature,
-) => CML.OperationalCert;
+  sigma: CML.Ed25519Signature
+) => CML.OperationalCert
 ```
 
 Added in v2.0.0
@@ -140,9 +134,7 @@ Unsafely calls OperationalCert.fromCborBytes without Effect wrapper
 **Signature**
 
 ```ts
-export declare const fromCborBytesUnsafe: (
-  cborBytes: Uint8Array,
-) => CML.OperationalCert;
+export declare const fromCborBytesUnsafe: (cborBytes: Uint8Array) => CML.OperationalCert
 ```
 
 Added in v2.0.0
@@ -154,9 +146,7 @@ Unsafely calls OperationalCert.fromCborHex without Effect wrapper
 **Signature**
 
 ```ts
-export declare const fromCborHexUnsafe: (
-  cborBytes: string,
-) => CML.OperationalCert;
+export declare const fromCborHexUnsafe: (cborBytes: string) => CML.OperationalCert
 ```
 
 Added in v2.0.0
@@ -168,7 +158,7 @@ Unsafely calls OperationalCert.fromJson without Effect wrapper
 **Signature**
 
 ```ts
-export declare const fromJsonUnsafe: (json: string) => CML.OperationalCert;
+export declare const fromJsonUnsafe: (json: string) => CML.OperationalCert
 ```
 
 Added in v2.0.0
@@ -198,9 +188,7 @@ Method free of OperationalCert
 **Signature**
 
 ```ts
-export declare const free: (
-  instance: CML.OperationalCert,
-) => Effect.Effect<void, OperationalCertError>;
+export declare const free: (instance: CML.OperationalCert) => Effect.Effect<void, OperationalCertError>
 ```
 
 Added in v2.0.0
@@ -212,9 +200,7 @@ Method hotVkey of OperationalCert
 **Signature**
 
 ```ts
-export declare const hotVkey: (
-  instance: CML.OperationalCert,
-) => Effect.Effect<CML.KESVkey, OperationalCertError>;
+export declare const hotVkey: (instance: CML.OperationalCert) => Effect.Effect<CML.KESVkey, OperationalCertError>
 ```
 
 Added in v2.0.0
@@ -226,9 +212,7 @@ Method kesPeriod of OperationalCert
 **Signature**
 
 ```ts
-export declare const kesPeriod: (
-  instance: CML.OperationalCert,
-) => Effect.Effect<bigint, OperationalCertError>;
+export declare const kesPeriod: (instance: CML.OperationalCert) => Effect.Effect<bigint, OperationalCertError>
 ```
 
 Added in v2.0.0
@@ -240,9 +224,7 @@ Method sequenceNumber of OperationalCert
 **Signature**
 
 ```ts
-export declare const sequenceNumber: (
-  instance: CML.OperationalCert,
-) => Effect.Effect<bigint, OperationalCertError>;
+export declare const sequenceNumber: (instance: CML.OperationalCert) => Effect.Effect<bigint, OperationalCertError>
 ```
 
 Added in v2.0.0
@@ -254,9 +236,7 @@ Method sigma of OperationalCert
 **Signature**
 
 ```ts
-export declare const sigma: (
-  instance: CML.OperationalCert,
-) => Effect.Effect<CML.Ed25519Signature, OperationalCertError>;
+export declare const sigma: (instance: CML.OperationalCert) => Effect.Effect<CML.Ed25519Signature, OperationalCertError>
 ```
 
 Added in v2.0.0
@@ -269,8 +249,8 @@ Method toCanonicalCborBytes of OperationalCert
 
 ```ts
 export declare const toCanonicalCborBytes: (
-  instance: CML.OperationalCert,
-) => Effect.Effect<Uint8Array, OperationalCertError>;
+  instance: CML.OperationalCert
+) => Effect.Effect<Uint8Array, OperationalCertError>
 ```
 
 Added in v2.0.0
@@ -282,9 +262,7 @@ Method toCanonicalCborHex of OperationalCert
 **Signature**
 
 ```ts
-export declare const toCanonicalCborHex: (
-  instance: CML.OperationalCert,
-) => Effect.Effect<string, OperationalCertError>;
+export declare const toCanonicalCborHex: (instance: CML.OperationalCert) => Effect.Effect<string, OperationalCertError>
 ```
 
 Added in v2.0.0
@@ -296,9 +274,7 @@ Method toCborBytes of OperationalCert
 **Signature**
 
 ```ts
-export declare const toCborBytes: (
-  instance: CML.OperationalCert,
-) => Effect.Effect<Uint8Array, OperationalCertError>;
+export declare const toCborBytes: (instance: CML.OperationalCert) => Effect.Effect<Uint8Array, OperationalCertError>
 ```
 
 Added in v2.0.0
@@ -310,9 +286,7 @@ Method toCborHex of OperationalCert
 **Signature**
 
 ```ts
-export declare const toCborHex: (
-  instance: CML.OperationalCert,
-) => Effect.Effect<string, OperationalCertError>;
+export declare const toCborHex: (instance: CML.OperationalCert) => Effect.Effect<string, OperationalCertError>
 ```
 
 Added in v2.0.0
@@ -324,9 +298,7 @@ Method toJsValue of OperationalCert
 **Signature**
 
 ```ts
-export declare const toJsValue: (
-  instance: CML.OperationalCert,
-) => Effect.Effect<any, OperationalCertError>;
+export declare const toJsValue: (instance: CML.OperationalCert) => Effect.Effect<any, OperationalCertError>
 ```
 
 Added in v2.0.0
@@ -338,9 +310,7 @@ Method toJson of OperationalCert
 **Signature**
 
 ```ts
-export declare const toJson: (
-  instance: CML.OperationalCert,
-) => Effect.Effect<string, OperationalCertError>;
+export declare const toJson: (instance: CML.OperationalCert) => Effect.Effect<string, OperationalCertError>
 ```
 
 Added in v2.0.0
@@ -354,7 +324,7 @@ Unsafely calls instance.free without Effect wrapper
 **Signature**
 
 ```ts
-export declare const freeUnsafe: (instance: CML.OperationalCert) => void;
+export declare const freeUnsafe: (instance: CML.OperationalCert) => void
 ```
 
 Added in v2.0.0
@@ -366,9 +336,7 @@ Unsafely calls instance.hotVkey without Effect wrapper
 **Signature**
 
 ```ts
-export declare const hotVkeyUnsafe: (
-  instance: CML.OperationalCert,
-) => CML.KESVkey;
+export declare const hotVkeyUnsafe: (instance: CML.OperationalCert) => CML.KESVkey
 ```
 
 Added in v2.0.0
@@ -380,7 +348,7 @@ Unsafely calls instance.kesPeriod without Effect wrapper
 **Signature**
 
 ```ts
-export declare const kesPeriodUnsafe: (instance: CML.OperationalCert) => bigint;
+export declare const kesPeriodUnsafe: (instance: CML.OperationalCert) => bigint
 ```
 
 Added in v2.0.0
@@ -392,9 +360,7 @@ Unsafely calls instance.sequenceNumber without Effect wrapper
 **Signature**
 
 ```ts
-export declare const sequenceNumberUnsafe: (
-  instance: CML.OperationalCert,
-) => bigint;
+export declare const sequenceNumberUnsafe: (instance: CML.OperationalCert) => bigint
 ```
 
 Added in v2.0.0
@@ -406,9 +372,7 @@ Unsafely calls instance.sigma without Effect wrapper
 **Signature**
 
 ```ts
-export declare const sigmaUnsafe: (
-  instance: CML.OperationalCert,
-) => CML.Ed25519Signature;
+export declare const sigmaUnsafe: (instance: CML.OperationalCert) => CML.Ed25519Signature
 ```
 
 Added in v2.0.0
@@ -420,9 +384,7 @@ Unsafely calls instance.toCanonicalCborBytes without Effect wrapper
 **Signature**
 
 ```ts
-export declare const toCanonicalCborBytesUnsafe: (
-  instance: CML.OperationalCert,
-) => Uint8Array;
+export declare const toCanonicalCborBytesUnsafe: (instance: CML.OperationalCert) => Uint8Array
 ```
 
 Added in v2.0.0
@@ -434,9 +396,7 @@ Unsafely calls instance.toCanonicalCborHex without Effect wrapper
 **Signature**
 
 ```ts
-export declare const toCanonicalCborHexUnsafe: (
-  instance: CML.OperationalCert,
-) => string;
+export declare const toCanonicalCborHexUnsafe: (instance: CML.OperationalCert) => string
 ```
 
 Added in v2.0.0
@@ -448,9 +408,7 @@ Unsafely calls instance.toCborBytes without Effect wrapper
 **Signature**
 
 ```ts
-export declare const toCborBytesUnsafe: (
-  instance: CML.OperationalCert,
-) => Uint8Array;
+export declare const toCborBytesUnsafe: (instance: CML.OperationalCert) => Uint8Array
 ```
 
 Added in v2.0.0
@@ -462,7 +420,7 @@ Unsafely calls instance.toCborHex without Effect wrapper
 **Signature**
 
 ```ts
-export declare const toCborHexUnsafe: (instance: CML.OperationalCert) => string;
+export declare const toCborHexUnsafe: (instance: CML.OperationalCert) => string
 ```
 
 Added in v2.0.0
@@ -474,7 +432,7 @@ Unsafely calls instance.toJsValue without Effect wrapper
 **Signature**
 
 ```ts
-export declare const toJsValueUnsafe: (instance: CML.OperationalCert) => any;
+export declare const toJsValueUnsafe: (instance: CML.OperationalCert) => any
 ```
 
 Added in v2.0.0
@@ -486,7 +444,7 @@ Unsafely calls instance.toJson without Effect wrapper
 **Signature**
 
 ```ts
-export declare const toJsonUnsafe: (instance: CML.OperationalCert) => string;
+export declare const toJsonUnsafe: (instance: CML.OperationalCert) => string
 ```
 
 Added in v2.0.0
@@ -500,7 +458,7 @@ Type alias for the CML OperationalCert class
 **Signature**
 
 ```ts
-export type OperationalCert = CML.OperationalCert;
+export type OperationalCert = CML.OperationalCert
 ```
 
 Added in v2.0.0

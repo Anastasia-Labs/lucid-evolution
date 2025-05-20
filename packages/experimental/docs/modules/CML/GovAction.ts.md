@@ -82,9 +82,7 @@ Static method fromCborBytes of GovAction
 **Signature**
 
 ```ts
-export declare const fromCborBytes: (
-  cborBytes: Uint8Array,
-) => Effect.Effect<CML.GovAction, GovActionError>;
+export declare const fromCborBytes: (cborBytes: Uint8Array) => Effect.Effect<CML.GovAction, GovActionError>
 ```
 
 Added in v2.0.0
@@ -96,9 +94,7 @@ Static method fromCborHex of GovAction
 **Signature**
 
 ```ts
-export declare const fromCborHex: (
-  cborBytes: string,
-) => Effect.Effect<CML.GovAction, GovActionError>;
+export declare const fromCborHex: (cborBytes: string) => Effect.Effect<CML.GovAction, GovActionError>
 ```
 
 Added in v2.0.0
@@ -110,9 +106,7 @@ Static method fromJson of GovAction
 **Signature**
 
 ```ts
-export declare const fromJson: (
-  json: string,
-) => Effect.Effect<CML.GovAction, GovActionError>;
+export declare const fromJson: (json: string) => Effect.Effect<CML.GovAction, GovActionError>
 ```
 
 Added in v2.0.0
@@ -126,8 +120,8 @@ Static method newHardForkInitiationAction of GovAction
 ```ts
 export declare const newHardForkInitiationAction: (
   actionId: CML.GovActionId | undefined,
-  version: CML.ProtocolVersion,
-) => Effect.Effect<CML.GovAction, GovActionError>;
+  version: CML.ProtocolVersion
+) => Effect.Effect<CML.GovAction, GovActionError>
 ```
 
 Added in v2.0.0
@@ -139,10 +133,7 @@ Static method newInfoAction of GovAction
 **Signature**
 
 ```ts
-export declare const newInfoAction: () => Effect.Effect<
-  CML.GovAction,
-  GovActionError
->;
+export declare const newInfoAction: () => Effect.Effect<CML.GovAction, GovActionError>
 ```
 
 Added in v2.0.0
@@ -156,8 +147,8 @@ Static method newNewConstitution of GovAction
 ```ts
 export declare const newNewConstitution: (
   actionId: CML.GovActionId | undefined,
-  constitution: CML.Constitution,
-) => Effect.Effect<CML.GovAction, GovActionError>;
+  constitution: CML.Constitution
+) => Effect.Effect<CML.GovAction, GovActionError>
 ```
 
 Added in v2.0.0
@@ -169,9 +160,7 @@ Static method newNoConfidence of GovAction
 **Signature**
 
 ```ts
-export declare const newNoConfidence: (
-  actionId: CML.GovActionId,
-) => Effect.Effect<CML.GovAction, GovActionError>;
+export declare const newNoConfidence: (actionId: CML.GovActionId) => Effect.Effect<CML.GovAction, GovActionError>
 ```
 
 Added in v2.0.0
@@ -186,8 +175,8 @@ Static method newParameterChangeAction of GovAction
 export declare const newParameterChangeAction: (
   actionId: CML.GovActionId | undefined,
   update: CML.ProtocolParamUpdate,
-  policyHash: CML.ScriptHash,
-) => Effect.Effect<CML.GovAction, GovActionError>;
+  policyHash: CML.ScriptHash
+) => Effect.Effect<CML.GovAction, GovActionError>
 ```
 
 Added in v2.0.0
@@ -201,8 +190,8 @@ Static method newTreasuryWithdrawalsAction of GovAction
 ```ts
 export declare const newTreasuryWithdrawalsAction: (
   withdrawal: CML.MapRewardAccountToCoin,
-  policyHash: CML.ScriptHash,
-) => Effect.Effect<CML.GovAction, GovActionError>;
+  policyHash: CML.ScriptHash
+) => Effect.Effect<CML.GovAction, GovActionError>
 ```
 
 Added in v2.0.0
@@ -218,8 +207,8 @@ export declare const newUpdateCommittee: (
   actionId: CML.GovActionId | undefined,
   coldCredentials: CML.CommitteeColdCredentialList,
   credentials: CML.MapCommitteeColdCredentialToEpoch,
-  unitInterval: CML.UnitInterval,
-) => Effect.Effect<CML.GovAction, GovActionError>;
+  unitInterval: CML.UnitInterval
+) => Effect.Effect<CML.GovAction, GovActionError>
 ```
 
 Added in v2.0.0
@@ -233,9 +222,7 @@ Unsafely calls GovAction.fromCborBytes without Effect wrapper
 **Signature**
 
 ```ts
-export declare const fromCborBytesUnsafe: (
-  cborBytes: Uint8Array,
-) => CML.GovAction;
+export declare const fromCborBytesUnsafe: (cborBytes: Uint8Array) => CML.GovAction
 ```
 
 Added in v2.0.0
@@ -247,7 +234,7 @@ Unsafely calls GovAction.fromCborHex without Effect wrapper
 **Signature**
 
 ```ts
-export declare const fromCborHexUnsafe: (cborBytes: string) => CML.GovAction;
+export declare const fromCborHexUnsafe: (cborBytes: string) => CML.GovAction
 ```
 
 Added in v2.0.0
@@ -259,7 +246,7 @@ Unsafely calls GovAction.fromJson without Effect wrapper
 **Signature**
 
 ```ts
-export declare const fromJsonUnsafe: (json: string) => CML.GovAction;
+export declare const fromJsonUnsafe: (json: string) => CML.GovAction
 ```
 
 Added in v2.0.0
@@ -273,8 +260,8 @@ Unsafely calls GovAction.newHardForkInitiationAction without Effect wrapper
 ```ts
 export declare const newHardForkInitiationActionUnsafe: (
   actionId: CML.GovActionId | undefined,
-  version: CML.ProtocolVersion,
-) => CML.GovAction;
+  version: CML.ProtocolVersion
+) => CML.GovAction
 ```
 
 Added in v2.0.0
@@ -286,7 +273,7 @@ Unsafely calls GovAction.newInfoAction without Effect wrapper
 **Signature**
 
 ```ts
-export declare const newInfoActionUnsafe: () => CML.GovAction;
+export declare const newInfoActionUnsafe: () => CML.GovAction
 ```
 
 Added in v2.0.0
@@ -300,8 +287,8 @@ Unsafely calls GovAction.newNewConstitution without Effect wrapper
 ```ts
 export declare const newNewConstitutionUnsafe: (
   actionId: CML.GovActionId | undefined,
-  constitution: CML.Constitution,
-) => CML.GovAction;
+  constitution: CML.Constitution
+) => CML.GovAction
 ```
 
 Added in v2.0.0
@@ -313,9 +300,7 @@ Unsafely calls GovAction.newNoConfidence without Effect wrapper
 **Signature**
 
 ```ts
-export declare const newNoConfidenceUnsafe: (
-  actionId: CML.GovActionId,
-) => CML.GovAction;
+export declare const newNoConfidenceUnsafe: (actionId: CML.GovActionId) => CML.GovAction
 ```
 
 Added in v2.0.0
@@ -330,8 +315,8 @@ Unsafely calls GovAction.newParameterChangeAction without Effect wrapper
 export declare const newParameterChangeActionUnsafe: (
   actionId: CML.GovActionId | undefined,
   update: CML.ProtocolParamUpdate,
-  policyHash: CML.ScriptHash,
-) => CML.GovAction;
+  policyHash: CML.ScriptHash
+) => CML.GovAction
 ```
 
 Added in v2.0.0
@@ -345,8 +330,8 @@ Unsafely calls GovAction.newTreasuryWithdrawalsAction without Effect wrapper
 ```ts
 export declare const newTreasuryWithdrawalsActionUnsafe: (
   withdrawal: CML.MapRewardAccountToCoin,
-  policyHash: CML.ScriptHash,
-) => CML.GovAction;
+  policyHash: CML.ScriptHash
+) => CML.GovAction
 ```
 
 Added in v2.0.0
@@ -362,8 +347,8 @@ export declare const newUpdateCommitteeUnsafe: (
   actionId: CML.GovActionId | undefined,
   coldCredentials: CML.CommitteeColdCredentialList,
   credentials: CML.MapCommitteeColdCredentialToEpoch,
-  unitInterval: CML.UnitInterval,
-) => CML.GovAction;
+  unitInterval: CML.UnitInterval
+) => CML.GovAction
 ```
 
 Added in v2.0.0
@@ -394,8 +379,8 @@ Method asHardForkInitiationAction of GovAction
 
 ```ts
 export declare const asHardForkInitiationAction: (
-  instance: CML.GovAction,
-) => Effect.Effect<CML.HardForkInitiationAction | undefined, GovActionError>;
+  instance: CML.GovAction
+) => Effect.Effect<CML.HardForkInitiationAction | undefined, GovActionError>
 ```
 
 Added in v2.0.0
@@ -408,8 +393,8 @@ Method asNewConstitution of GovAction
 
 ```ts
 export declare const asNewConstitution: (
-  instance: CML.GovAction,
-) => Effect.Effect<CML.NewConstitution | undefined, GovActionError>;
+  instance: CML.GovAction
+) => Effect.Effect<CML.NewConstitution | undefined, GovActionError>
 ```
 
 Added in v2.0.0
@@ -422,8 +407,8 @@ Method asNoConfidence of GovAction
 
 ```ts
 export declare const asNoConfidence: (
-  instance: CML.GovAction,
-) => Effect.Effect<CML.NoConfidence | undefined, GovActionError>;
+  instance: CML.GovAction
+) => Effect.Effect<CML.NoConfidence | undefined, GovActionError>
 ```
 
 Added in v2.0.0
@@ -436,8 +421,8 @@ Method asParameterChangeAction of GovAction
 
 ```ts
 export declare const asParameterChangeAction: (
-  instance: CML.GovAction,
-) => Effect.Effect<CML.ParameterChangeAction | undefined, GovActionError>;
+  instance: CML.GovAction
+) => Effect.Effect<CML.ParameterChangeAction | undefined, GovActionError>
 ```
 
 Added in v2.0.0
@@ -450,8 +435,8 @@ Method asTreasuryWithdrawalsAction of GovAction
 
 ```ts
 export declare const asTreasuryWithdrawalsAction: (
-  instance: CML.GovAction,
-) => Effect.Effect<CML.TreasuryWithdrawalsAction | undefined, GovActionError>;
+  instance: CML.GovAction
+) => Effect.Effect<CML.TreasuryWithdrawalsAction | undefined, GovActionError>
 ```
 
 Added in v2.0.0
@@ -464,8 +449,8 @@ Method asUpdateCommittee of GovAction
 
 ```ts
 export declare const asUpdateCommittee: (
-  instance: CML.GovAction,
-) => Effect.Effect<CML.UpdateCommittee | undefined, GovActionError>;
+  instance: CML.GovAction
+) => Effect.Effect<CML.UpdateCommittee | undefined, GovActionError>
 ```
 
 Added in v2.0.0
@@ -477,9 +462,7 @@ Method free of GovAction
 **Signature**
 
 ```ts
-export declare const free: (
-  instance: CML.GovAction,
-) => Effect.Effect<void, GovActionError>;
+export declare const free: (instance: CML.GovAction) => Effect.Effect<void, GovActionError>
 ```
 
 Added in v2.0.0
@@ -491,9 +474,7 @@ Method kind of GovAction
 **Signature**
 
 ```ts
-export declare const kind: (
-  instance: CML.GovAction,
-) => Effect.Effect<CML.GovActionKind, GovActionError>;
+export declare const kind: (instance: CML.GovAction) => Effect.Effect<CML.GovActionKind, GovActionError>
 ```
 
 Added in v2.0.0
@@ -505,9 +486,7 @@ Method scriptHash of GovAction
 **Signature**
 
 ```ts
-export declare const scriptHash: (
-  instance: CML.GovAction,
-) => Effect.Effect<CML.ScriptHash | undefined, GovActionError>;
+export declare const scriptHash: (instance: CML.GovAction) => Effect.Effect<CML.ScriptHash | undefined, GovActionError>
 ```
 
 Added in v2.0.0
@@ -519,9 +498,7 @@ Method toCanonicalCborBytes of GovAction
 **Signature**
 
 ```ts
-export declare const toCanonicalCborBytes: (
-  instance: CML.GovAction,
-) => Effect.Effect<Uint8Array, GovActionError>;
+export declare const toCanonicalCborBytes: (instance: CML.GovAction) => Effect.Effect<Uint8Array, GovActionError>
 ```
 
 Added in v2.0.0
@@ -533,9 +510,7 @@ Method toCanonicalCborHex of GovAction
 **Signature**
 
 ```ts
-export declare const toCanonicalCborHex: (
-  instance: CML.GovAction,
-) => Effect.Effect<string, GovActionError>;
+export declare const toCanonicalCborHex: (instance: CML.GovAction) => Effect.Effect<string, GovActionError>
 ```
 
 Added in v2.0.0
@@ -547,9 +522,7 @@ Method toCborBytes of GovAction
 **Signature**
 
 ```ts
-export declare const toCborBytes: (
-  instance: CML.GovAction,
-) => Effect.Effect<Uint8Array, GovActionError>;
+export declare const toCborBytes: (instance: CML.GovAction) => Effect.Effect<Uint8Array, GovActionError>
 ```
 
 Added in v2.0.0
@@ -561,9 +534,7 @@ Method toCborHex of GovAction
 **Signature**
 
 ```ts
-export declare const toCborHex: (
-  instance: CML.GovAction,
-) => Effect.Effect<string, GovActionError>;
+export declare const toCborHex: (instance: CML.GovAction) => Effect.Effect<string, GovActionError>
 ```
 
 Added in v2.0.0
@@ -575,9 +546,7 @@ Method toJsValue of GovAction
 **Signature**
 
 ```ts
-export declare const toJsValue: (
-  instance: CML.GovAction,
-) => Effect.Effect<any, GovActionError>;
+export declare const toJsValue: (instance: CML.GovAction) => Effect.Effect<any, GovActionError>
 ```
 
 Added in v2.0.0
@@ -589,9 +558,7 @@ Method toJson of GovAction
 **Signature**
 
 ```ts
-export declare const toJson: (
-  instance: CML.GovAction,
-) => Effect.Effect<string, GovActionError>;
+export declare const toJson: (instance: CML.GovAction) => Effect.Effect<string, GovActionError>
 ```
 
 Added in v2.0.0
@@ -606,8 +573,8 @@ Unsafely calls instance.asHardForkInitiationAction without Effect wrapper
 
 ```ts
 export declare const asHardForkInitiationActionUnsafe: (
-  instance: CML.GovAction,
-) => CML.HardForkInitiationAction | undefined;
+  instance: CML.GovAction
+) => CML.HardForkInitiationAction | undefined
 ```
 
 Added in v2.0.0
@@ -619,9 +586,7 @@ Unsafely calls instance.asNewConstitution without Effect wrapper
 **Signature**
 
 ```ts
-export declare const asNewConstitutionUnsafe: (
-  instance: CML.GovAction,
-) => CML.NewConstitution | undefined;
+export declare const asNewConstitutionUnsafe: (instance: CML.GovAction) => CML.NewConstitution | undefined
 ```
 
 Added in v2.0.0
@@ -633,9 +598,7 @@ Unsafely calls instance.asNoConfidence without Effect wrapper
 **Signature**
 
 ```ts
-export declare const asNoConfidenceUnsafe: (
-  instance: CML.GovAction,
-) => CML.NoConfidence | undefined;
+export declare const asNoConfidenceUnsafe: (instance: CML.GovAction) => CML.NoConfidence | undefined
 ```
 
 Added in v2.0.0
@@ -647,9 +610,7 @@ Unsafely calls instance.asParameterChangeAction without Effect wrapper
 **Signature**
 
 ```ts
-export declare const asParameterChangeActionUnsafe: (
-  instance: CML.GovAction,
-) => CML.ParameterChangeAction | undefined;
+export declare const asParameterChangeActionUnsafe: (instance: CML.GovAction) => CML.ParameterChangeAction | undefined
 ```
 
 Added in v2.0.0
@@ -662,8 +623,8 @@ Unsafely calls instance.asTreasuryWithdrawalsAction without Effect wrapper
 
 ```ts
 export declare const asTreasuryWithdrawalsActionUnsafe: (
-  instance: CML.GovAction,
-) => CML.TreasuryWithdrawalsAction | undefined;
+  instance: CML.GovAction
+) => CML.TreasuryWithdrawalsAction | undefined
 ```
 
 Added in v2.0.0
@@ -675,9 +636,7 @@ Unsafely calls instance.asUpdateCommittee without Effect wrapper
 **Signature**
 
 ```ts
-export declare const asUpdateCommitteeUnsafe: (
-  instance: CML.GovAction,
-) => CML.UpdateCommittee | undefined;
+export declare const asUpdateCommitteeUnsafe: (instance: CML.GovAction) => CML.UpdateCommittee | undefined
 ```
 
 Added in v2.0.0
@@ -689,7 +648,7 @@ Unsafely calls instance.free without Effect wrapper
 **Signature**
 
 ```ts
-export declare const freeUnsafe: (instance: CML.GovAction) => void;
+export declare const freeUnsafe: (instance: CML.GovAction) => void
 ```
 
 Added in v2.0.0
@@ -701,7 +660,7 @@ Unsafely calls instance.kind without Effect wrapper
 **Signature**
 
 ```ts
-export declare const kindUnsafe: (instance: CML.GovAction) => CML.GovActionKind;
+export declare const kindUnsafe: (instance: CML.GovAction) => CML.GovActionKind
 ```
 
 Added in v2.0.0
@@ -713,9 +672,7 @@ Unsafely calls instance.scriptHash without Effect wrapper
 **Signature**
 
 ```ts
-export declare const scriptHashUnsafe: (
-  instance: CML.GovAction,
-) => CML.ScriptHash | undefined;
+export declare const scriptHashUnsafe: (instance: CML.GovAction) => CML.ScriptHash | undefined
 ```
 
 Added in v2.0.0
@@ -727,9 +684,7 @@ Unsafely calls instance.toCanonicalCborBytes without Effect wrapper
 **Signature**
 
 ```ts
-export declare const toCanonicalCborBytesUnsafe: (
-  instance: CML.GovAction,
-) => Uint8Array;
+export declare const toCanonicalCborBytesUnsafe: (instance: CML.GovAction) => Uint8Array
 ```
 
 Added in v2.0.0
@@ -741,9 +696,7 @@ Unsafely calls instance.toCanonicalCborHex without Effect wrapper
 **Signature**
 
 ```ts
-export declare const toCanonicalCborHexUnsafe: (
-  instance: CML.GovAction,
-) => string;
+export declare const toCanonicalCborHexUnsafe: (instance: CML.GovAction) => string
 ```
 
 Added in v2.0.0
@@ -755,7 +708,7 @@ Unsafely calls instance.toCborBytes without Effect wrapper
 **Signature**
 
 ```ts
-export declare const toCborBytesUnsafe: (instance: CML.GovAction) => Uint8Array;
+export declare const toCborBytesUnsafe: (instance: CML.GovAction) => Uint8Array
 ```
 
 Added in v2.0.0
@@ -767,7 +720,7 @@ Unsafely calls instance.toCborHex without Effect wrapper
 **Signature**
 
 ```ts
-export declare const toCborHexUnsafe: (instance: CML.GovAction) => string;
+export declare const toCborHexUnsafe: (instance: CML.GovAction) => string
 ```
 
 Added in v2.0.0
@@ -779,7 +732,7 @@ Unsafely calls instance.toJsValue without Effect wrapper
 **Signature**
 
 ```ts
-export declare const toJsValueUnsafe: (instance: CML.GovAction) => any;
+export declare const toJsValueUnsafe: (instance: CML.GovAction) => any
 ```
 
 Added in v2.0.0
@@ -791,7 +744,7 @@ Unsafely calls instance.toJson without Effect wrapper
 **Signature**
 
 ```ts
-export declare const toJsonUnsafe: (instance: CML.GovAction) => string;
+export declare const toJsonUnsafe: (instance: CML.GovAction) => string
 ```
 
 Added in v2.0.0
@@ -805,7 +758,7 @@ Type alias for the CML GovAction class
 **Signature**
 
 ```ts
-export type GovAction = CML.GovAction;
+export type GovAction = CML.GovAction
 ```
 
 Added in v2.0.0

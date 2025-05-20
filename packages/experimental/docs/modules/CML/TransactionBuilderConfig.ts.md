@@ -49,8 +49,8 @@ Method free of TransactionBuilderConfig
 
 ```ts
 export declare const free: (
-  instance: CML.TransactionBuilderConfig,
-) => Effect.Effect<void, TransactionBuilderConfigError>;
+  instance: CML.TransactionBuilderConfig
+) => Effect.Effect<void, TransactionBuilderConfigError>
 ```
 
 Added in v2.0.0
@@ -64,9 +64,7 @@ Unsafely calls instance.free without Effect wrapper
 **Signature**
 
 ```ts
-export declare const freeUnsafe: (
-  instance: CML.TransactionBuilderConfig,
-) => void;
+export declare const freeUnsafe: (instance: CML.TransactionBuilderConfig) => void
 ```
 
 Added in v2.0.0
@@ -80,7 +78,7 @@ Type alias for the CML TransactionBuilderConfig class
 **Signature**
 
 ```ts
-export type TransactionBuilderConfig = CML.TransactionBuilderConfig;
+export type TransactionBuilderConfig = CML.TransactionBuilderConfig
 ```
 
 Added in v2.0.0

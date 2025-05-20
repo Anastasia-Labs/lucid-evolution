@@ -42,10 +42,7 @@ Static method \_new of CertificateList
 **Signature**
 
 ```ts
-export declare const _new: () => Effect.Effect<
-  CML.CertificateList,
-  CertificateListError
->;
+export declare const _new: () => Effect.Effect<CML.CertificateList, CertificateListError>
 ```
 
 Added in v2.0.0
@@ -59,7 +56,7 @@ Unsafely calls CertificateList.\_new without Effect wrapper
 **Signature**
 
 ```ts
-export declare const _newUnsafe: () => CML.CertificateList;
+export declare const _newUnsafe: () => CML.CertificateList
 ```
 
 Added in v2.0.0
@@ -91,8 +88,8 @@ Method add of CertificateList
 ```ts
 export declare const add: (
   instance: CML.CertificateList,
-  elem: CML.Certificate,
-) => Effect.Effect<void, CertificateListError>;
+  elem: CML.Certificate
+) => Effect.Effect<void, CertificateListError>
 ```
 
 Added in v2.0.0
@@ -104,9 +101,7 @@ Method free of CertificateList
 **Signature**
 
 ```ts
-export declare const free: (
-  instance: CML.CertificateList,
-) => Effect.Effect<void, CertificateListError>;
+export declare const free: (instance: CML.CertificateList) => Effect.Effect<void, CertificateListError>
 ```
 
 Added in v2.0.0
@@ -120,8 +115,8 @@ Method get of CertificateList
 ```ts
 export declare const get: (
   instance: CML.CertificateList,
-  index: number,
-) => Effect.Effect<CML.Certificate, CertificateListError>;
+  index: number
+) => Effect.Effect<CML.Certificate, CertificateListError>
 ```
 
 Added in v2.0.0
@@ -133,9 +128,7 @@ Method len of CertificateList
 **Signature**
 
 ```ts
-export declare const len: (
-  instance: CML.CertificateList,
-) => Effect.Effect<number, CertificateListError>;
+export declare const len: (instance: CML.CertificateList) => Effect.Effect<number, CertificateListError>
 ```
 
 Added in v2.0.0
@@ -149,10 +142,7 @@ Unsafely calls instance.add without Effect wrapper
 **Signature**
 
 ```ts
-export declare const addUnsafe: (
-  instance: CML.CertificateList,
-  elem: CML.Certificate,
-) => void;
+export declare const addUnsafe: (instance: CML.CertificateList, elem: CML.Certificate) => void
 ```
 
 Added in v2.0.0
@@ -164,7 +154,7 @@ Unsafely calls instance.free without Effect wrapper
 **Signature**
 
 ```ts
-export declare const freeUnsafe: (instance: CML.CertificateList) => void;
+export declare const freeUnsafe: (instance: CML.CertificateList) => void
 ```
 
 Added in v2.0.0
@@ -176,10 +166,7 @@ Unsafely calls instance.get without Effect wrapper
 **Signature**
 
 ```ts
-export declare const getUnsafe: (
-  instance: CML.CertificateList,
-  index: number,
-) => CML.Certificate;
+export declare const getUnsafe: (instance: CML.CertificateList, index: number) => CML.Certificate
 ```
 
 Added in v2.0.0
@@ -191,7 +178,7 @@ Unsafely calls instance.len without Effect wrapper
 **Signature**
 
 ```ts
-export declare const lenUnsafe: (instance: CML.CertificateList) => number;
+export declare const lenUnsafe: (instance: CML.CertificateList) => number
 ```
 
 Added in v2.0.0
@@ -205,7 +192,7 @@ Type alias for the CML CertificateList class
 **Signature**
 
 ```ts
-export type CertificateList = CML.CertificateList;
+export type CertificateList = CML.CertificateList
 ```
 
 Added in v2.0.0

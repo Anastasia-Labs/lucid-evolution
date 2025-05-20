@@ -124,13 +124,13 @@ export const fromCborBytes: (
     try: () => CML.Credential.from_cbor_bytes(cborBytes),
     catch: () =>
       new CredentialError({
-        message: `Credential.fromCborBytes failed with parameters: ${cborBytes}. Hint: Check byte length and encoding.`,
+        message: `Credential.decodeCBORBytes failed with parameters: ${cborBytes}. Hint: Check byte length and encoding.`,
       }),
   });
 });
 
 /**
- * Unsafely calls Credential.fromCborBytes without Effect wrapper
+ * Unsafely calls Credential.decodeCBORBytes without Effect wrapper
  *
  * @since 2.0.0
  * @category ConstructorsUnsafe

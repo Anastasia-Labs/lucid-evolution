@@ -49,8 +49,8 @@ Method free of CertificateBuilderResult
 
 ```ts
 export declare const free: (
-  instance: CML.CertificateBuilderResult,
-) => Effect.Effect<void, CertificateBuilderResultError>;
+  instance: CML.CertificateBuilderResult
+) => Effect.Effect<void, CertificateBuilderResultError>
 ```
 
 Added in v2.0.0
@@ -64,9 +64,7 @@ Unsafely calls instance.free without Effect wrapper
 **Signature**
 
 ```ts
-export declare const freeUnsafe: (
-  instance: CML.CertificateBuilderResult,
-) => void;
+export declare const freeUnsafe: (instance: CML.CertificateBuilderResult) => void
 ```
 
 Added in v2.0.0
@@ -80,7 +78,7 @@ Type alias for the CML CertificateBuilderResult class
 **Signature**
 
 ```ts
-export type CertificateBuilderResult = CML.CertificateBuilderResult;
+export type CertificateBuilderResult = CML.CertificateBuilderResult
 ```
 
 Added in v2.0.0

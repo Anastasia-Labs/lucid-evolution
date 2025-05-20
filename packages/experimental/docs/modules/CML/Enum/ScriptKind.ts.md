@@ -35,7 +35,7 @@ Type alias for the CML ScriptKind enum
 **Signature**
 
 ```ts
-export type ScriptKind = CML.ScriptKind;
+export type ScriptKind = CML.ScriptKind
 ```
 
 Added in v2.0.0
@@ -49,7 +49,7 @@ Convert string to ScriptKind enum value
 **Signature**
 
 ```ts
-export declare const fromString: (str: string) => CML.ScriptKind | undefined;
+export declare const fromString: (str: string) => CML.ScriptKind | undefined
 ```
 
 Added in v2.0.0
@@ -61,7 +61,7 @@ Convert ScriptKind enum value to string
 **Signature**
 
 ```ts
-export declare const toString: (value: CML.ScriptKind) => string;
+export declare const toString: (value: CML.ScriptKind) => string
 ```
 
 Added in v2.0.0
@@ -73,7 +73,7 @@ Get all values of the ScriptKind enum
 **Signature**
 
 ```ts
-export declare const values: () => Array<CML.ScriptKind>;
+export declare const values: () => Array<CML.ScriptKind>
 ```
 
 Added in v2.0.0
@@ -87,7 +87,7 @@ Native variant of the ScriptKind enum
 **Signature**
 
 ```ts
-export declare const Native: CML.ScriptKind.Native;
+export declare const Native: CML.ScriptKind.Native
 ```
 
 Added in v2.0.0
@@ -99,7 +99,7 @@ PlutusV1 variant of the ScriptKind enum
 **Signature**
 
 ```ts
-export declare const PlutusV1: CML.ScriptKind.PlutusV1;
+export declare const PlutusV1: CML.ScriptKind.PlutusV1
 ```
 
 Added in v2.0.0
@@ -111,7 +111,7 @@ PlutusV2 variant of the ScriptKind enum
 **Signature**
 
 ```ts
-export declare const PlutusV2: CML.ScriptKind.PlutusV2;
+export declare const PlutusV2: CML.ScriptKind.PlutusV2
 ```
 
 Added in v2.0.0
@@ -123,7 +123,7 @@ PlutusV3 variant of the ScriptKind enum
 **Signature**
 
 ```ts
-export declare const PlutusV3: CML.ScriptKind.PlutusV3;
+export declare const PlutusV3: CML.ScriptKind.PlutusV3
 ```
 
 Added in v2.0.0

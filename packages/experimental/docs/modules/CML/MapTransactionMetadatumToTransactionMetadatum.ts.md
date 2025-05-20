@@ -47,7 +47,7 @@ Static method \_new of MapTransactionMetadatumToTransactionMetadatum
 export declare const _new: () => Effect.Effect<
   CML.MapTransactionMetadatumToTransactionMetadatum,
   MapTransactionMetadatumToTransactionMetadatumError
->;
+>
 ```
 
 Added in v2.0.0
@@ -61,7 +61,7 @@ Unsafely calls MapTransactionMetadatumToTransactionMetadatum.\_new without Effec
 **Signature**
 
 ```ts
-export declare const _newUnsafe: () => CML.MapTransactionMetadatumToTransactionMetadatum;
+export declare const _newUnsafe: () => CML.MapTransactionMetadatumToTransactionMetadatum
 ```
 
 Added in v2.0.0
@@ -92,8 +92,8 @@ Method free of MapTransactionMetadatumToTransactionMetadatum
 
 ```ts
 export declare const free: (
-  instance: CML.MapTransactionMetadatumToTransactionMetadatum,
-) => Effect.Effect<void, MapTransactionMetadatumToTransactionMetadatumError>;
+  instance: CML.MapTransactionMetadatumToTransactionMetadatum
+) => Effect.Effect<void, MapTransactionMetadatumToTransactionMetadatumError>
 ```
 
 Added in v2.0.0
@@ -107,11 +107,8 @@ Method get of MapTransactionMetadatumToTransactionMetadatum
 ```ts
 export declare const get: (
   instance: CML.MapTransactionMetadatumToTransactionMetadatum,
-  key: CML.TransactionMetadatum,
-) => Effect.Effect<
-  CML.TransactionMetadatum | undefined,
-  MapTransactionMetadatumToTransactionMetadatumError
->;
+  key: CML.TransactionMetadatum
+) => Effect.Effect<CML.TransactionMetadatum | undefined, MapTransactionMetadatumToTransactionMetadatumError>
 ```
 
 Added in v2.0.0
@@ -126,11 +123,8 @@ Method insert of MapTransactionMetadatumToTransactionMetadatum
 export declare const insert: (
   instance: CML.MapTransactionMetadatumToTransactionMetadatum,
   key: CML.TransactionMetadatum,
-  value: CML.TransactionMetadatum,
-) => Effect.Effect<
-  CML.TransactionMetadatum | undefined,
-  MapTransactionMetadatumToTransactionMetadatumError
->;
+  value: CML.TransactionMetadatum
+) => Effect.Effect<CML.TransactionMetadatum | undefined, MapTransactionMetadatumToTransactionMetadatumError>
 ```
 
 Added in v2.0.0
@@ -143,11 +137,8 @@ Method keys of MapTransactionMetadatumToTransactionMetadatum
 
 ```ts
 export declare const keys: (
-  instance: CML.MapTransactionMetadatumToTransactionMetadatum,
-) => Effect.Effect<
-  CML.TransactionMetadatumList,
-  MapTransactionMetadatumToTransactionMetadatumError
->;
+  instance: CML.MapTransactionMetadatumToTransactionMetadatum
+) => Effect.Effect<CML.TransactionMetadatumList, MapTransactionMetadatumToTransactionMetadatumError>
 ```
 
 Added in v2.0.0
@@ -160,8 +151,8 @@ Method len of MapTransactionMetadatumToTransactionMetadatum
 
 ```ts
 export declare const len: (
-  instance: CML.MapTransactionMetadatumToTransactionMetadatum,
-) => Effect.Effect<number, MapTransactionMetadatumToTransactionMetadatumError>;
+  instance: CML.MapTransactionMetadatumToTransactionMetadatum
+) => Effect.Effect<number, MapTransactionMetadatumToTransactionMetadatumError>
 ```
 
 Added in v2.0.0
@@ -175,9 +166,7 @@ Unsafely calls instance.free without Effect wrapper
 **Signature**
 
 ```ts
-export declare const freeUnsafe: (
-  instance: CML.MapTransactionMetadatumToTransactionMetadatum,
-) => void;
+export declare const freeUnsafe: (instance: CML.MapTransactionMetadatumToTransactionMetadatum) => void
 ```
 
 Added in v2.0.0
@@ -191,8 +180,8 @@ Unsafely calls instance.get without Effect wrapper
 ```ts
 export declare const getUnsafe: (
   instance: CML.MapTransactionMetadatumToTransactionMetadatum,
-  key: CML.TransactionMetadatum,
-) => CML.TransactionMetadatum | undefined;
+  key: CML.TransactionMetadatum
+) => CML.TransactionMetadatum | undefined
 ```
 
 Added in v2.0.0
@@ -207,8 +196,8 @@ Unsafely calls instance.insert without Effect wrapper
 export declare const insertUnsafe: (
   instance: CML.MapTransactionMetadatumToTransactionMetadatum,
   key: CML.TransactionMetadatum,
-  value: CML.TransactionMetadatum,
-) => CML.TransactionMetadatum | undefined;
+  value: CML.TransactionMetadatum
+) => CML.TransactionMetadatum | undefined
 ```
 
 Added in v2.0.0
@@ -221,8 +210,8 @@ Unsafely calls instance.keys without Effect wrapper
 
 ```ts
 export declare const keysUnsafe: (
-  instance: CML.MapTransactionMetadatumToTransactionMetadatum,
-) => CML.TransactionMetadatumList;
+  instance: CML.MapTransactionMetadatumToTransactionMetadatum
+) => CML.TransactionMetadatumList
 ```
 
 Added in v2.0.0
@@ -234,9 +223,7 @@ Unsafely calls instance.len without Effect wrapper
 **Signature**
 
 ```ts
-export declare const lenUnsafe: (
-  instance: CML.MapTransactionMetadatumToTransactionMetadatum,
-) => number;
+export declare const lenUnsafe: (instance: CML.MapTransactionMetadatumToTransactionMetadatum) => number
 ```
 
 Added in v2.0.0
@@ -250,8 +237,7 @@ Type alias for the CML MapTransactionMetadatumToTransactionMetadatum class
 **Signature**
 
 ```ts
-export type MapTransactionMetadatumToTransactionMetadatum =
-  CML.MapTransactionMetadatumToTransactionMetadatum;
+export type MapTransactionMetadatumToTransactionMetadatum = CML.MapTransactionMetadatumToTransactionMetadatum
 ```
 
 Added in v2.0.0

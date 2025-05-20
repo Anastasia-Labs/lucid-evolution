@@ -48,7 +48,7 @@ Type alias for the CML CertificateKind enum
 **Signature**
 
 ```ts
-export type CertificateKind = CML.CertificateKind;
+export type CertificateKind = CML.CertificateKind
 ```
 
 Added in v2.0.0
@@ -62,9 +62,7 @@ Convert string to CertificateKind enum value
 **Signature**
 
 ```ts
-export declare const fromString: (
-  str: string,
-) => CML.CertificateKind | undefined;
+export declare const fromString: (str: string) => CML.CertificateKind | undefined
 ```
 
 Added in v2.0.0
@@ -76,7 +74,7 @@ Convert CertificateKind enum value to string
 **Signature**
 
 ```ts
-export declare const toString: (value: CML.CertificateKind) => string;
+export declare const toString: (value: CML.CertificateKind) => string
 ```
 
 Added in v2.0.0
@@ -88,7 +86,7 @@ Get all values of the CertificateKind enum
 **Signature**
 
 ```ts
-export declare const values: () => Array<CML.CertificateKind>;
+export declare const values: () => Array<CML.CertificateKind>
 ```
 
 Added in v2.0.0
@@ -102,7 +100,7 @@ AuthCommitteeHotCert variant of the CertificateKind enum
 **Signature**
 
 ```ts
-export declare const AuthCommitteeHotCert: CML.CertificateKind.AuthCommitteeHotCert;
+export declare const AuthCommitteeHotCert: CML.CertificateKind.AuthCommitteeHotCert
 ```
 
 Added in v2.0.0
@@ -114,7 +112,7 @@ PoolRegistration variant of the CertificateKind enum
 **Signature**
 
 ```ts
-export declare const PoolRegistration: CML.CertificateKind.PoolRegistration;
+export declare const PoolRegistration: CML.CertificateKind.PoolRegistration
 ```
 
 Added in v2.0.0
@@ -126,7 +124,7 @@ PoolRetirement variant of the CertificateKind enum
 **Signature**
 
 ```ts
-export declare const PoolRetirement: CML.CertificateKind.PoolRetirement;
+export declare const PoolRetirement: CML.CertificateKind.PoolRetirement
 ```
 
 Added in v2.0.0
@@ -138,7 +136,7 @@ RegCert variant of the CertificateKind enum
 **Signature**
 
 ```ts
-export declare const RegCert: CML.CertificateKind.RegCert;
+export declare const RegCert: CML.CertificateKind.RegCert
 ```
 
 Added in v2.0.0
@@ -150,7 +148,7 @@ RegDrepCert variant of the CertificateKind enum
 **Signature**
 
 ```ts
-export declare const RegDrepCert: CML.CertificateKind.RegDrepCert;
+export declare const RegDrepCert: CML.CertificateKind.RegDrepCert
 ```
 
 Added in v2.0.0
@@ -162,7 +160,7 @@ ResignCommitteeColdCert variant of the CertificateKind enum
 **Signature**
 
 ```ts
-export declare const ResignCommitteeColdCert: CML.CertificateKind.ResignCommitteeColdCert;
+export declare const ResignCommitteeColdCert: CML.CertificateKind.ResignCommitteeColdCert
 ```
 
 Added in v2.0.0
@@ -174,7 +172,7 @@ StakeDelegation variant of the CertificateKind enum
 **Signature**
 
 ```ts
-export declare const StakeDelegation: CML.CertificateKind.StakeDelegation;
+export declare const StakeDelegation: CML.CertificateKind.StakeDelegation
 ```
 
 Added in v2.0.0
@@ -186,7 +184,7 @@ StakeDeregistration variant of the CertificateKind enum
 **Signature**
 
 ```ts
-export declare const StakeDeregistration: CML.CertificateKind.StakeDeregistration;
+export declare const StakeDeregistration: CML.CertificateKind.StakeDeregistration
 ```
 
 Added in v2.0.0
@@ -198,7 +196,7 @@ StakeRegDelegCert variant of the CertificateKind enum
 **Signature**
 
 ```ts
-export declare const StakeRegDelegCert: CML.CertificateKind.StakeRegDelegCert;
+export declare const StakeRegDelegCert: CML.CertificateKind.StakeRegDelegCert
 ```
 
 Added in v2.0.0
@@ -210,7 +208,7 @@ StakeRegistration variant of the CertificateKind enum
 **Signature**
 
 ```ts
-export declare const StakeRegistration: CML.CertificateKind.StakeRegistration;
+export declare const StakeRegistration: CML.CertificateKind.StakeRegistration
 ```
 
 Added in v2.0.0
@@ -222,7 +220,7 @@ StakeVoteDelegCert variant of the CertificateKind enum
 **Signature**
 
 ```ts
-export declare const StakeVoteDelegCert: CML.CertificateKind.StakeVoteDelegCert;
+export declare const StakeVoteDelegCert: CML.CertificateKind.StakeVoteDelegCert
 ```
 
 Added in v2.0.0
@@ -234,7 +232,7 @@ StakeVoteRegDelegCert variant of the CertificateKind enum
 **Signature**
 
 ```ts
-export declare const StakeVoteRegDelegCert: CML.CertificateKind.StakeVoteRegDelegCert;
+export declare const StakeVoteRegDelegCert: CML.CertificateKind.StakeVoteRegDelegCert
 ```
 
 Added in v2.0.0
@@ -246,7 +244,7 @@ UnregCert variant of the CertificateKind enum
 **Signature**
 
 ```ts
-export declare const UnregCert: CML.CertificateKind.UnregCert;
+export declare const UnregCert: CML.CertificateKind.UnregCert
 ```
 
 Added in v2.0.0
@@ -258,7 +256,7 @@ UnregDrepCert variant of the CertificateKind enum
 **Signature**
 
 ```ts
-export declare const UnregDrepCert: CML.CertificateKind.UnregDrepCert;
+export declare const UnregDrepCert: CML.CertificateKind.UnregDrepCert
 ```
 
 Added in v2.0.0
@@ -270,7 +268,7 @@ UpdateDrepCert variant of the CertificateKind enum
 **Signature**
 
 ```ts
-export declare const UpdateDrepCert: CML.CertificateKind.UpdateDrepCert;
+export declare const UpdateDrepCert: CML.CertificateKind.UpdateDrepCert
 ```
 
 Added in v2.0.0
@@ -282,7 +280,7 @@ VoteDelegCert variant of the CertificateKind enum
 **Signature**
 
 ```ts
-export declare const VoteDelegCert: CML.CertificateKind.VoteDelegCert;
+export declare const VoteDelegCert: CML.CertificateKind.VoteDelegCert
 ```
 
 Added in v2.0.0
@@ -294,7 +292,7 @@ VoteRegDelegCert variant of the CertificateKind enum
 **Signature**
 
 ```ts
-export declare const VoteRegDelegCert: CML.CertificateKind.VoteRegDelegCert;
+export declare const VoteRegDelegCert: CML.CertificateKind.VoteRegDelegCert
 ```
 
 Added in v2.0.0

@@ -46,9 +46,7 @@ Static method fromBech32 of VRFVkey
 **Signature**
 
 ```ts
-export declare const fromBech32: (
-  bech32Str: string,
-) => Effect.Effect<CML.VRFVkey, VRFVkeyError>;
+export declare const fromBech32: (bech32Str: string) => Effect.Effect<CML.VRFVkey, VRFVkeyError>
 ```
 
 Added in v2.0.0
@@ -60,9 +58,7 @@ Static method fromHex of VRFVkey
 **Signature**
 
 ```ts
-export declare const fromHex: (
-  input: string,
-) => Effect.Effect<CML.VRFVkey, VRFVkeyError>;
+export declare const fromHex: (input: string) => Effect.Effect<CML.VRFVkey, VRFVkeyError>
 ```
 
 Added in v2.0.0
@@ -74,9 +70,7 @@ Static method fromRawBytes of VRFVkey
 **Signature**
 
 ```ts
-export declare const fromRawBytes: (
-  bytes: Uint8Array,
-) => Effect.Effect<CML.VRFVkey, VRFVkeyError>;
+export declare const fromRawBytes: (bytes: Uint8Array) => Effect.Effect<CML.VRFVkey, VRFVkeyError>
 ```
 
 Added in v2.0.0
@@ -90,7 +84,7 @@ Unsafely calls VRFVkey.fromBech32 without Effect wrapper
 **Signature**
 
 ```ts
-export declare const fromBech32Unsafe: (bech32Str: string) => CML.VRFVkey;
+export declare const fromBech32Unsafe: (bech32Str: string) => CML.VRFVkey
 ```
 
 Added in v2.0.0
@@ -102,7 +96,7 @@ Unsafely calls VRFVkey.fromHex without Effect wrapper
 **Signature**
 
 ```ts
-export declare const fromHexUnsafe: (input: string) => CML.VRFVkey;
+export declare const fromHexUnsafe: (input: string) => CML.VRFVkey
 ```
 
 Added in v2.0.0
@@ -114,7 +108,7 @@ Unsafely calls VRFVkey.fromRawBytes without Effect wrapper
 **Signature**
 
 ```ts
-export declare const fromRawBytesUnsafe: (bytes: Uint8Array) => CML.VRFVkey;
+export declare const fromRawBytesUnsafe: (bytes: Uint8Array) => CML.VRFVkey
 ```
 
 Added in v2.0.0
@@ -144,9 +138,7 @@ Method free of VRFVkey
 **Signature**
 
 ```ts
-export declare const free: (
-  instance: CML.VRFVkey,
-) => Effect.Effect<void, VRFVkeyError>;
+export declare const free: (instance: CML.VRFVkey) => Effect.Effect<void, VRFVkeyError>
 ```
 
 Added in v2.0.0
@@ -158,10 +150,7 @@ Method toBech32 of VRFVkey
 **Signature**
 
 ```ts
-export declare const toBech32: (
-  instance: CML.VRFVkey,
-  prefix: string,
-) => Effect.Effect<string, VRFVkeyError>;
+export declare const toBech32: (instance: CML.VRFVkey, prefix: string) => Effect.Effect<string, VRFVkeyError>
 ```
 
 Added in v2.0.0
@@ -173,9 +162,7 @@ Method toHex of VRFVkey
 **Signature**
 
 ```ts
-export declare const toHex: (
-  instance: CML.VRFVkey,
-) => Effect.Effect<string, VRFVkeyError>;
+export declare const toHex: (instance: CML.VRFVkey) => Effect.Effect<string, VRFVkeyError>
 ```
 
 Added in v2.0.0
@@ -187,9 +174,7 @@ Method toRawBytes of VRFVkey
 **Signature**
 
 ```ts
-export declare const toRawBytes: (
-  instance: CML.VRFVkey,
-) => Effect.Effect<Uint8Array, VRFVkeyError>;
+export declare const toRawBytes: (instance: CML.VRFVkey) => Effect.Effect<Uint8Array, VRFVkeyError>
 ```
 
 Added in v2.0.0
@@ -203,7 +188,7 @@ Unsafely calls instance.free without Effect wrapper
 **Signature**
 
 ```ts
-export declare const freeUnsafe: (instance: CML.VRFVkey) => void;
+export declare const freeUnsafe: (instance: CML.VRFVkey) => void
 ```
 
 Added in v2.0.0
@@ -215,10 +200,7 @@ Unsafely calls instance.toBech32 without Effect wrapper
 **Signature**
 
 ```ts
-export declare const toBech32Unsafe: (
-  instance: CML.VRFVkey,
-  prefix: string,
-) => string;
+export declare const toBech32Unsafe: (instance: CML.VRFVkey, prefix: string) => string
 ```
 
 Added in v2.0.0
@@ -230,7 +212,7 @@ Unsafely calls instance.toHex without Effect wrapper
 **Signature**
 
 ```ts
-export declare const toHexUnsafe: (instance: CML.VRFVkey) => string;
+export declare const toHexUnsafe: (instance: CML.VRFVkey) => string
 ```
 
 Added in v2.0.0
@@ -242,7 +224,7 @@ Unsafely calls instance.toRawBytes without Effect wrapper
 **Signature**
 
 ```ts
-export declare const toRawBytesUnsafe: (instance: CML.VRFVkey) => Uint8Array;
+export declare const toRawBytesUnsafe: (instance: CML.VRFVkey) => Uint8Array
 ```
 
 Added in v2.0.0
@@ -256,7 +238,7 @@ Type alias for the CML VRFVkey class
 **Signature**
 
 ```ts
-export type VRFVkey = CML.VRFVkey;
+export type VRFVkey = CML.VRFVkey
 ```
 
 Added in v2.0.0

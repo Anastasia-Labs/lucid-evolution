@@ -36,7 +36,7 @@ Type alias for the CML PlutusDataKind enum
 **Signature**
 
 ```ts
-export type PlutusDataKind = CML.PlutusDataKind;
+export type PlutusDataKind = CML.PlutusDataKind
 ```
 
 Added in v2.0.0
@@ -50,9 +50,7 @@ Convert string to PlutusDataKind enum value
 **Signature**
 
 ```ts
-export declare const fromString: (
-  str: string,
-) => CML.PlutusDataKind | undefined;
+export declare const fromString: (str: string) => CML.PlutusDataKind | undefined
 ```
 
 Added in v2.0.0
@@ -64,7 +62,7 @@ Convert PlutusDataKind enum value to string
 **Signature**
 
 ```ts
-export declare const toString: (value: CML.PlutusDataKind) => string;
+export declare const toString: (value: CML.PlutusDataKind) => string
 ```
 
 Added in v2.0.0
@@ -76,7 +74,7 @@ Get all values of the PlutusDataKind enum
 **Signature**
 
 ```ts
-export declare const values: () => Array<CML.PlutusDataKind>;
+export declare const values: () => Array<CML.PlutusDataKind>
 ```
 
 Added in v2.0.0
@@ -90,7 +88,7 @@ Bytes variant of the PlutusDataKind enum
 **Signature**
 
 ```ts
-export declare const Bytes: CML.PlutusDataKind.Bytes;
+export declare const Bytes: CML.PlutusDataKind.Bytes
 ```
 
 Added in v2.0.0
@@ -102,7 +100,7 @@ ConstrPlutusData variant of the PlutusDataKind enum
 **Signature**
 
 ```ts
-export declare const ConstrPlutusData: CML.PlutusDataKind.ConstrPlutusData;
+export declare const ConstrPlutusData: CML.PlutusDataKind.ConstrPlutusData
 ```
 
 Added in v2.0.0
@@ -114,7 +112,7 @@ Integer variant of the PlutusDataKind enum
 **Signature**
 
 ```ts
-export declare const Integer: CML.PlutusDataKind.Integer;
+export declare const Integer: CML.PlutusDataKind.Integer
 ```
 
 Added in v2.0.0
@@ -126,7 +124,7 @@ List variant of the PlutusDataKind enum
 **Signature**
 
 ```ts
-export declare const List: CML.PlutusDataKind.List;
+export declare const List: CML.PlutusDataKind.List
 ```
 
 Added in v2.0.0
@@ -138,7 +136,7 @@ Map variant of the PlutusDataKind enum
 **Signature**
 
 ```ts
-export declare const Map: CML.PlutusDataKind.Map;
+export declare const Map: CML.PlutusDataKind.Map
 ```
 
 Added in v2.0.0

@@ -12,7 +12,7 @@ parent: Modules
 
 - [constructors](#constructors)
   - [fromBytes](#frombytes)
-  - [makeOrThrow](#makeorthrow)
+  - [make](#make)
 - [encoding/decoding](#encodingdecoding)
   - [decodeVariableLength](#decodevariablelength)
   - [encodeVariableLength](#encodevariablelength)
@@ -42,144 +42,94 @@ Create a PointerAddress from bytes.
 
 ```ts
 export declare const fromBytes: (
-  bytes: Uint8Array,
+  bytes: Uint8Array
 ) => Effect.Effect<
   PointerAddress,
   [
     | YieldWrap<Effect.Effect<KeyHash.KeyHash, KeyHash.KeyHashError, never>>
-    | YieldWrap<
-        Effect.Effect<ScriptHash.ScriptHash, ScriptHash.ScriptHashError, never>
-      >
-    | YieldWrap<
-        Effect.Effect<
-          [Natural.Natural, number],
-          PointerAddressError | ParseError,
-          never
-        >
-      >,
+    | YieldWrap<Effect.Effect<ScriptHash.ScriptHash, ScriptHash.ScriptHashError, never>>
+    | YieldWrap<Effect.Effect<[number & Brand<"Natural">, number], PointerAddressError | ParseError, never>>
   ] extends [never]
     ? never
     : [
-          | YieldWrap<
-              Effect.Effect<KeyHash.KeyHash, KeyHash.KeyHashError, never>
-            >
-          | YieldWrap<
-              Effect.Effect<
-                ScriptHash.ScriptHash,
-                ScriptHash.ScriptHashError,
-                never
-              >
-            >
-          | YieldWrap<
-              Effect.Effect<
-                [Natural.Natural, number],
-                PointerAddressError | ParseError,
-                never
-              >
-            >,
+          | YieldWrap<Effect.Effect<KeyHash.KeyHash, KeyHash.KeyHashError, never>>
+          | YieldWrap<Effect.Effect<ScriptHash.ScriptHash, ScriptHash.ScriptHashError, never>>
+          | YieldWrap<Effect.Effect<[number & Brand<"Natural">, number], PointerAddressError | ParseError, never>>
         ] extends [YieldWrap<Effect.Effect<infer _A, infer E, infer _R>>]
       ? E
       : never,
   [
     | YieldWrap<Effect.Effect<KeyHash.KeyHash, KeyHash.KeyHashError, never>>
-    | YieldWrap<
-        Effect.Effect<ScriptHash.ScriptHash, ScriptHash.ScriptHashError, never>
-      >
-    | YieldWrap<
-        Effect.Effect<
-          [Natural.Natural, number],
-          PointerAddressError | ParseError,
-          never
-        >
-      >,
+    | YieldWrap<Effect.Effect<ScriptHash.ScriptHash, ScriptHash.ScriptHashError, never>>
+    | YieldWrap<Effect.Effect<[number & Brand<"Natural">, number], PointerAddressError | ParseError, never>>
   ] extends [never]
     ? never
     : [
-          | YieldWrap<
-              Effect.Effect<KeyHash.KeyHash, KeyHash.KeyHashError, never>
-            >
-          | YieldWrap<
-              Effect.Effect<
-                ScriptHash.ScriptHash,
-                ScriptHash.ScriptHashError,
-                never
-              >
-            >
-          | YieldWrap<
-              Effect.Effect<
-                [Natural.Natural, number],
-                PointerAddressError | ParseError,
-                never
-              >
-            >,
+          | YieldWrap<Effect.Effect<KeyHash.KeyHash, KeyHash.KeyHashError, never>>
+          | YieldWrap<Effect.Effect<ScriptHash.ScriptHash, ScriptHash.ScriptHashError, never>>
+          | YieldWrap<Effect.Effect<[number & Brand<"Natural">, number], PointerAddressError | ParseError, never>>
         ] extends [YieldWrap<Effect.Effect<infer _A, infer _E, infer R>>]
       ? R
       : never
->;
+>
 ```
 
 **Example**
 
 ```ts
-import { PointerAddress, Bytes } from "@lucid-evolution/experimental";
-import { Effect } from "effect";
-import assert from "assert";
+import { PointerAddress, Bytes } from "@lucid-evolution/experimental"
+import { Effect } from "effect"
+import assert from "assert"
 
 // Sample pointer address bytes - this is a placeholder example
 const bytes = Bytes.fromHexOrThrow(
-  "4059f801786707f961faf991fd73036405431a3f5d3a97fc03eefcad05a6a685bbcb848908a2f1be9397eabf0998d2c0cde9c1e206",
-);
-const addressEffect = PointerAddress.fromBytes(bytes);
-const address = Effect.runSync(addressEffect);
-assert(address._tag === "PointerAddress");
+  "4059f801786707f961faf991fd73036405431a3f5d3a97fc03eefcad05a6a685bbcb848908a2f1be9397eabf0998d2c0cde9c1e206"
+)
+const addressEffect = PointerAddress.fromBytes(bytes)
+const address = Effect.runSync(addressEffect)
+assert(address._tag === "PointerAddress")
 ```
 
 Added in v2.0.0
 
-## makeOrThrow
+## make
 
 Create a PointerAddress from components, throws on error.
 
 **Signature**
 
 ```ts
-export declare const makeOrThrow: (
-  networkId: number,
+export declare const make: (
+  networkId: NetworkId.NetworkId,
   paymentCredential: Credential.Credential,
   slot: Natural.Natural,
   txIndex: Natural.Natural,
-  certIndex: Natural.Natural,
-) => PointerAddress;
+  certIndex: Natural.Natural
+) => PointerAddress
 ```
 
 **Example**
 
 ```ts
-import {
-  PointerAddress,
-  KeyHash,
-  Natural,
-} from "@lucid-evolution/experimental";
-import assert from "assert";
+import { PointerAddress, KeyHash, Natural, NetworkId } from "@lucid-evolution/experimental"
+import assert from "assert"
 
 // Create payment credential
-const paymentKeyHash = KeyHash.makeOrThrow(
-  "c37b1b5dc0669f1d3c61a6fddb2e8fde96be87b881c60bce8e8d542f",
-);
+const paymentKeyHash = KeyHash.makeOrThrow("c37b1b5dc0669f1d3c61a6fddb2e8fde96be87b881c60bce8e8d542f")
 
 // Create pointer address
-const address = PointerAddress.makeOrThrow(
-  0,
+const address = PointerAddress.make(
+  NetworkId.makeOrThrow(0),
   paymentKeyHash,
   Natural.makeOrThrow(1),
   Natural.makeOrThrow(2),
-  Natural.makeOrThrow(3),
-);
-assert(address._tag === "PointerAddress");
-assert(address.networkId === 0);
-assert(address.pointer.slot.number === 1);
-assert(address.pointer.txIndex.number === 2);
-assert(address.pointer.certIndex.number === 3);
+  Natural.makeOrThrow(3)
+)
+assert(address._tag === "PointerAddress")
+assert(address.networkId === 0)
+assert(address.pointer.slot === 1)
+assert(address.pointer.txIndex === 2)
+assert(address.pointer.certIndex === 3)
 ```
 
 Added in v2.0.0
@@ -196,24 +146,24 @@ Following the Cardano ledger implementation for variable-length integers
 ```ts
 export declare const decodeVariableLength: (
   bytes: Uint8Array,
-  offset?: number | undefined,
-) => Effect.Effect<[Natural.Natural, number], PointerAddressError | ParseError>;
+  offset?: number | undefined
+) => Effect.Effect<[Natural.Natural, number], PointerAddressError | ParseError>
 ```
 
 **Example**
 
 ```ts
-import { PointerAddress } from "@lucid-evolution/experimental";
-import { Effect } from "effect";
-import assert from "assert";
+import { PointerAddress } from "@lucid-evolution/experimental"
+import { Effect } from "effect"
+import assert from "assert"
 
 // Create a buffer that encodes the value 128
-const buffer = new Uint8Array([0x80, 0x01]);
+const buffer = new Uint8Array([0x80, 0x01])
 
-const effect = PointerAddress.decodeVariableLength(buffer, 0);
-const [natural, bytesRead] = Effect.runSync(effect);
-assert(natural.number === 128);
-assert(bytesRead === 2);
+const effect = PointerAddress.decodeVariableLength(buffer, 0)
+const [natural, bytesRead] = Effect.runSync(effect)
+assert(natural === 128)
+assert(bytesRead === 2)
 ```
 
 Added in v2.0.0
@@ -225,28 +175,26 @@ Encode a number as a variable length integer following the Cardano ledger specif
 **Signature**
 
 ```ts
-export declare const encodeVariableLength: (
-  natural: Natural.Natural,
-) => Uint8Array;
+export declare const encodeVariableLength: (natural: Natural.Natural) => Uint8Array
 ```
 
 **Example**
 
 ```ts
-import { PointerAddress, Natural } from "@lucid-evolution/experimental";
-import { Effect } from "effect";
-import assert from "assert";
+import { PointerAddress, Natural } from "@lucid-evolution/experimental"
+import { Effect } from "effect"
+import assert from "assert"
 
-const bytes = PointerAddress.encodeVariableLength(Natural.makeOrThrow(128));
-assert(bytes instanceof Uint8Array);
-assert(bytes.length === 2);
-assert(bytes[0] === 0x80);
-assert(bytes[1] === 0x01);
+const bytes = PointerAddress.encodeVariableLength(Natural.makeOrThrow(128))
+assert(bytes instanceof Uint8Array)
+assert(bytes.length === 2)
+assert(bytes[0] === 0x80)
+assert(bytes[1] === 0x01)
 
-const smallBytes = PointerAddress.encodeVariableLength(Natural.makeOrThrow(42));
-assert(smallBytes instanceof Uint8Array);
-assert(smallBytes.length === 1);
-assert(smallBytes[0] === 42);
+const smallBytes = PointerAddress.encodeVariableLength(Natural.makeOrThrow(42))
+assert(smallBytes instanceof Uint8Array)
+assert(smallBytes.length === 1)
+assert(smallBytes[0] === 42)
 ```
 
 Added in v2.0.0
@@ -260,49 +208,43 @@ Check if two PointerAddress instances are equal.
 **Signature**
 
 ```ts
-export declare const equals: (a: PointerAddress, b: PointerAddress) => boolean;
+export declare const equals: (a: PointerAddress, b: PointerAddress) => boolean
 ```
 
 **Example**
 
 ```ts
-import {
-  PointerAddress,
-  KeyHash,
-  Natural,
-} from "@lucid-evolution/experimental";
-import assert from "assert";
+import { PointerAddress, KeyHash, Natural, NetworkId } from "@lucid-evolution/experimental"
+import assert from "assert"
 
 // Create credential
-const paymentKeyHash = KeyHash.makeOrThrow(
-  "c37b1b5dc0669f1d3c61a6fddb2e8fde96be87b881c60bce8e8d542f",
-);
+const paymentKeyHash = KeyHash.makeOrThrow("c37b1b5dc0669f1d3c61a6fddb2e8fde96be87b881c60bce8e8d542f")
 
 // Create two identical addresses
-const address1 = PointerAddress.makeOrThrow(
-  0,
+const address1 = PointerAddress.make(
+  NetworkId.makeOrThrow(0),
   paymentKeyHash,
   Natural.makeOrThrow(1),
   Natural.makeOrThrow(2),
-  Natural.makeOrThrow(3),
-);
-const address2 = PointerAddress.makeOrThrow(
-  0,
+  Natural.makeOrThrow(3)
+)
+const address2 = PointerAddress.make(
+  NetworkId.makeOrThrow(0),
   paymentKeyHash,
   Natural.makeOrThrow(1),
   Natural.makeOrThrow(2),
-  Natural.makeOrThrow(3),
-);
-const address3 = PointerAddress.makeOrThrow(
-  1,
+  Natural.makeOrThrow(3)
+)
+const address3 = PointerAddress.make(
+  NetworkId.makeOrThrow(1),
   paymentKeyHash,
   Natural.makeOrThrow(1),
   Natural.makeOrThrow(2),
-  Natural.makeOrThrow(3),
-);
+  Natural.makeOrThrow(3)
+)
 
-assert(PointerAddress.equals(address1, address2) === true);
-assert(PointerAddress.equals(address1, address3) === false);
+assert(PointerAddress.equals(address1, address2) === true)
+assert(PointerAddress.equals(address1, address3) === false)
 ```
 
 Added in v2.0.0
@@ -316,24 +258,24 @@ Generate a random PointerAddress.
 **Signature**
 
 ```ts
-export declare const generator: FastCheck.Arbitrary<PointerAddress>;
+export declare const generator: FastCheck.Arbitrary<PointerAddress>
 ```
 
 **Example**
 
 ```ts
-import { PointerAddress } from "@lucid-evolution/experimental";
-import { FastCheck } from "effect";
-import assert from "assert";
+import { PointerAddress } from "@lucid-evolution/experimental"
+import { FastCheck } from "effect"
+import assert from "assert"
 
-const randomSamples = FastCheck.sample(PointerAddress.generator, 20);
+const randomSamples = FastCheck.sample(PointerAddress.generator, 20)
 randomSamples.forEach((address) => {
-  assert(address._tag === "PointerAddress");
-  assert(typeof address.networkId === "number");
-  assert(address.pointer.slot.number > 0);
-  assert(address.pointer.txIndex.number > 0);
-  assert(address.pointer.certIndex.number > 0);
-});
+  assert(address._tag === "PointerAddress")
+  assert(typeof address.networkId === "number")
+  assert(address.pointer.slot > 0)
+  assert(address.pointer.txIndex > 0)
+  assert(address.pointer.certIndex > 0)
+})
 ```
 
 Added in v2.0.0
@@ -371,7 +313,7 @@ Added in v2.0.0
 **Signature**
 
 ```ts
-[Inspectable.NodeInspectSymbol]();
+;[Inspectable.NodeInspectSymbol]()
 ```
 
 # transformation
@@ -383,34 +325,28 @@ Convert a PointerAddress to bytes.
 **Signature**
 
 ```ts
-export declare const toBytes: (address: PointerAddress) => Uint8Array;
+export declare const toBytes: (address: PointerAddress) => Uint8Array
 ```
 
 **Example**
 
 ```ts
-import {
-  PointerAddress,
-  KeyHash,
-  Natural,
-} from "@lucid-evolution/experimental";
-import assert from "assert";
+import { PointerAddress, KeyHash, Natural, NetworkId } from "@lucid-evolution/experimental"
+import assert from "assert"
 
 // Create payment credential
-const paymentKeyHash = KeyHash.makeOrThrow(
-  "c37b1b5dc0669f1d3c61a6fddb2e8fde96be87b881c60bce8e8d542f",
-);
+const paymentKeyHash = KeyHash.makeOrThrow("c37b1b5dc0669f1d3c61a6fddb2e8fde96be87b881c60bce8e8d542f")
 
 // Create pointer address
-const address = PointerAddress.makeOrThrow(
-  0,
+const address = PointerAddress.make(
+  NetworkId.makeOrThrow(0),
   paymentKeyHash,
   Natural.makeOrThrow(1),
   Natural.makeOrThrow(2),
-  Natural.makeOrThrow(3),
-);
-const bytes = PointerAddress.toBytes(address);
-assert(bytes instanceof Uint8Array);
+  Natural.makeOrThrow(3)
+)
+const bytes = PointerAddress.toBytes(address)
+assert(bytes instanceof Uint8Array)
 ```
 
 Added in v2.0.0
@@ -423,6 +359,6 @@ Added in v2.0.0
 
 ```ts
 export interface PointerAddress {
-  readonly [NominalType]: unique symbol;
+  readonly [NominalType]: unique symbol
 }
 ```

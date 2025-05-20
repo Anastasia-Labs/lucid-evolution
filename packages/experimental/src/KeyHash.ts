@@ -68,19 +68,17 @@ export class KeyHash extends Schema.TaggedClass<KeyHash>()("KeyHash", {
  *
  * @example
  * import { KeyHash, Bytes } from "@lucid-evolution/experimental";
- * import { Effect } from "effect";
  * import assert from "assert";
  *
  * const bytes = Bytes.fromHexOrThrow("c37b1b5dc0669f1d3c61a6fddb2e8fde96be87b881c60bce8e8d542f");
- * const keyHashEffect = KeyHash.fromBytes(bytes);
- * const keyHash = Effect.runSync(keyHashEffect);
+ * const keyHash = KeyHash.decodeBytesOrThrow(bytes);
  * assert(keyHash._tag === "KeyHash");
  * assert(keyHash.hash === "c37b1b5dc0669f1d3c61a6fddb2e8fde96be87b881c60bce8e8d542f");
  *
  * @since 2.0.0
  * @category constructors
  */
-export const fromBytes: Serialization.FromBytes<KeyHash, KeyHashError> = (
+export const decodeBytes: Serialization.FromBytes<KeyHash, KeyHashError> = (
   bytes: Uint8Array,
 ) =>
   pipe(
@@ -111,15 +109,15 @@ export const fromBytes: Serialization.FromBytes<KeyHash, KeyHashError> = (
  *
  * const bytes = Bytes.fromHexOrThrow("c37b1b5dc0669f1d3c61a6fddb2e8fde96be87b881c60bce8e8d542f");
  * assert(bytes.length === 28);
- * const keyHash = KeyHash.fromBytesOrThrow(bytes);
+ * const keyHash = KeyHash.decodeBytesOrThrow(bytes);
  * assert(keyHash._tag === "KeyHash");
  * assert(keyHash.hash === "c37b1b5dc0669f1d3c61a6fddb2e8fde96be87b881c60bce8e8d542f");
  *
  * @since 2.0.0
  * @category constructors
  */
-export const fromBytesOrThrow = (bytes: Uint8Array) =>
-  Effect.runSync(fromBytes(bytes));
+export const decodeBytesOrThrow = (bytes: Uint8Array) =>
+  Effect.runSync(decodeBytes(bytes));
 
 /**
  * Convert a KeyHash to bytes.
@@ -145,12 +143,10 @@ export const toBytes: Serialization.ToBytes<KeyHash> = (keyHash: KeyHash) =>
  *
  * @example
  * import { KeyHash } from "@lucid-evolution/experimental";
- * import { Effect } from "effect";
  * import assert from "assert";
  *
  * const hash = "c37b1b5dc0669f1d3c61a6fddb2e8fde96be87b881c60bce8e8d542f";
- * const keyHashEffect = KeyHash.make(hash);
- * const keyHash = Effect.runSync(keyHashEffect);
+ * const keyHash = KeyHash.makeOrThrow(hash);
  * assert(keyHash._tag === "KeyHash");
  * assert(keyHash.hash === hash);
  *
@@ -158,14 +154,14 @@ export const toBytes: Serialization.ToBytes<KeyHash> = (keyHash: KeyHash) =>
  * @category constructors
  */
 export const make: Serialization.Make<KeyHash, KeyHashError> = (
-  input: string,
+  maybeHex: string,
 ) =>
   pipe(
-    Hex.make(input),
+    Hex.decode(maybeHex),
     Effect.mapError(
       () =>
         new KeyHashError({
-          message: `KeyHash hex string must be a valid hex string. Got ${input}.`,
+          message: `KeyHash hex string must be a valid hex string. Got ${maybeHex}.`,
           reason: "InvalidHexFormat",
         }),
     ),
@@ -239,4 +235,4 @@ export const equals = (a: KeyHash, b: KeyHash): boolean => a.hash === b.hash;
 export const generator = FastCheck.uint8Array({
   minLength: KEYHASH_BYTES_LENGTH,
   maxLength: KEYHASH_BYTES_LENGTH,
-}).map((bytes) => fromBytesOrThrow(bytes));
+}).map((bytes) => decodeBytesOrThrow(bytes));
