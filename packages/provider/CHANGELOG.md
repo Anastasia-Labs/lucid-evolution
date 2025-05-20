@@ -1,5 +1,11 @@
 # @lucid-evolution/provider
 
+## 0.1.89
+
+### Patch Changes
+
+- [#576](https://github.com/Anastasia-Labs/lucid-evolution/pull/576) [`dc6ab2e`](https://github.com/Anastasia-Labs/lucid-evolution/commit/dc6ab2e2be80f4774f621a2cc5f7b99e4b4d46de) Thanks [@hadelive](https://github.com/hadelive)! - update awaitTx
+
 ## 0.1.88
 
 ### Patch Changes

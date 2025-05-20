@@ -43,8 +43,8 @@ Decode a CBOR hex string to a Credential
 export declare const fromCBOR: SerdeImpl.FromCBOR<
   ScriptHash.ScriptHash | KeyHash.KeyHash,
   | CBOR.CBORError
-  | ScriptHash.ScriptHashError
   | Bytes.BytesError
+  | ScriptHash.ScriptHashError
   | KeyHash.KeyHashError
   | CredentialError
 >;
