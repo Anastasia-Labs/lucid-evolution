@@ -2,8 +2,8 @@ import { Effect, Schema, Data, FastCheck } from "effect";
 import * as KeyHash from "./KeyHash.js";
 import * as ScriptHash from "./ScriptHash.js";
 import * as CBOR from "./CBOR.js";
-import * as Bytes from "./Bytes.js";
-import * as SerdeImpl from "./SerdeImpl.js";
+import * as Serialization from "./Serialization.js";
+import * as Hex from "./Hex.js";
 
 /**
  * Extends TaggedError for better error handling and categorization
@@ -70,12 +70,14 @@ export const isCredential = Schema.is(Credential);
  * @since 2.0.0
  * @category encoding/decoding
  */
-const toCBORBytes: SerdeImpl.ToCBORBytes<Credential> = (credential) => {
+export const toCBORBytes: Serialization.ToCBORBytes<Credential> = (
+  credential,
+) => {
   switch (credential._tag) {
     case "KeyHash":
-      return CBOR.encodeOrThrow([0, Bytes.fromHexOrThrow(credential.hash)]);
+      return CBOR.encodeAsBytesOrThrow([0, Hex.toBytes(credential.hash)]);
     case "ScriptHash":
-      return CBOR.encodeOrThrow([1, Bytes.fromHexOrThrow(credential.hash)]);
+      return CBOR.encodeAsBytesOrThrow([1, Hex.toBytes(credential.hash)]);
   }
 };
 
@@ -103,8 +105,8 @@ const toCBORBytes: SerdeImpl.ToCBORBytes<Credential> = (credential) => {
  * @since 2.0.0
  * @category encoding/decoding
  */
-export const toCBOR: SerdeImpl.ToCBOR<Credential> = (credential) =>
-  Bytes.toHexOrThrow(toCBORBytes(credential));
+export const toCBOR: Serialization.ToCBOR<Credential> = (credential) =>
+  Hex.fromBytes(toCBORBytes(credential));
 
 /**
  * Decode CBOR bytes to a Credential
@@ -124,25 +126,26 @@ export const toCBOR: SerdeImpl.ToCBOR<Credential> = (credential) =>
  * @since 2.0.0
  * @category encoding/decoding
  */
-export const fromCBORBytes: SerdeImpl.FromCBORBytes<
+export const fromCBORBytes: Serialization.FromCBORBytes<
   Credential,
-  | CBOR.CBORError
-  | ScriptHash.ScriptHashError
-  | KeyHash.KeyHashError
-  | CredentialError
-> = Effect.fnUntraced(function* (bytes) {
-  const [tag, bytesDecoded]: [number, Uint8Array] = yield* CBOR.decode(bytes);
-  switch (tag) {
-    case 0:
-      return yield* KeyHash.fromBytes(bytesDecoded);
-    case 1:
-      return yield* ScriptHash.fromBytes(bytesDecoded);
-    default:
-      return yield* new CredentialError({
-        message: `Invalid credential tag: ${tag}`,
-      });
-  }
-});
+  CredentialError
+> = (bytes: Uint8Array) =>
+  Effect.gen(function* () {
+    const [tag, bytesDecoded]: [number, Uint8Array] =
+      yield* CBOR.decodeBytes(bytes);
+    switch (tag) {
+      case 0:
+        return yield* KeyHash.fromBytes(bytesDecoded);
+      case 1:
+        return yield* ScriptHash.fromBytes(bytesDecoded);
+      default:
+        return yield* new CredentialError({
+          message: `Invalid credential tag: ${tag}`,
+        });
+    }
+  }).pipe(
+    Effect.catchAll((error) => new CredentialError({ message: error.message })),
+  );
 
 /**
  * Decode a CBOR hex string to a Credential
@@ -161,17 +164,9 @@ export const fromCBORBytes: SerdeImpl.FromCBORBytes<
  * @since 2.0.0
  * @category encoding/decoding
  */
-export const fromCBOR: SerdeImpl.FromCBOR<
-  Credential,
-  | CBOR.CBORError
-  | ScriptHash.ScriptHashError
-  | KeyHash.KeyHashError
-  | CredentialError
-  | Bytes.BytesError
-> = Effect.fn(function* (cborHex) {
-  const bytes = yield* Bytes.fromHex(cborHex);
-  return yield* fromCBORBytes(bytes);
-});
+export const fromCBOR: Serialization.FromCBOR<Credential, CredentialError> = (
+  hex,
+) => fromCBORBytes(Hex.toBytes(hex));
 
 /**
  * Decode a CBOR hex string to a Credential, throws on error.
@@ -188,12 +183,10 @@ export const fromCBOR: SerdeImpl.FromCBOR<
  * @since 2.0.0
  * @category encoding/decoding
  */
-export const fromCBOROrThrow: SerdeImpl.FromCBOROrThrow<Credential> = (
-  cborHex: string,
-) => {
-  const bytes = Bytes.fromHexOrThrow(cborHex);
-  return fromCBORBytesOrThrow(bytes);
-};
+export const fromCBOROrThrow: Serialization.FromCBOROrThrow<
+  Hex.HexString,
+  Credential
+> = (cborHex) => Effect.runSync(fromCBOR(cborHex));
 
 /**
  * Decode CBOR bytes to a Credential, throws on error.
@@ -210,7 +203,7 @@ export const fromCBOROrThrow: SerdeImpl.FromCBOROrThrow<Credential> = (
  * @since 2.0.0
  * @category encoding/decoding
  */
-export const fromCBORBytesOrThrow: SerdeImpl.FromCBORBytesOrThrow<
+export const fromCBORBytesOrThrow: Serialization.FromCBORBytesOrThrow<
   Credential
 > = (bytes) => Effect.runSync(fromCBORBytes(bytes));
 

@@ -4,12 +4,13 @@ import * as Bytes from "./Bytes.js";
 import * as CBOR from "./CBOR.js";
 import * as KeyHash from "./KeyHash.js";
 import * as ScriptHash from "./ScriptHash.js";
-import * as SerdeImpl from "./SerdeImpl.js";
+import * as Serialization from "./Serialization.js";
 import * as PointerAddress from "./PointerAddress.js";
 import * as BaseAddress from "./BaseAddress.js";
 import * as EnterpriseAddress from "./EnterpriseAddress.js";
 import * as RewardAccount from "./RewardAccount.js";
 import * as ByronAddress from "./ByronAddress.js";
+import * as Hex from "./Hex.js";
 import * as Bech32 from "./Bech32.js";
 import { ParseError } from "effect/ParseResult";
 
@@ -88,7 +89,7 @@ export type Address =
  * @since 2.0.0
  * @category encoding/decoding
  */
-export const fromBytes: SerdeImpl.FromBytes<
+export const fromBytes: Serialization.FromBytes<
   Address,
   | AddressError
   | KeyHash.KeyHashError
@@ -157,7 +158,7 @@ export const fromBytes: SerdeImpl.FromBytes<
  * @since 2.0.0
  * @category encoding/decoding
  */
-export const fromBech32: SerdeImpl.FromBech32<
+export const fromBech32: Serialization.FromBech32<
   Address,
   | KeyHash.KeyHashError
   | ScriptHash.ScriptHashError
@@ -308,7 +309,7 @@ export const toBech32 = (address: Address): string => {
  * @category encoding/decoding
  */
 export const toCBOR = (address: Address) =>
-  Bytes.toHexOrThrow(CBOR.encodeOrThrow(toBytes(address)));
+  Hex.fromBytes(CBOR.encodeAsBytesOrThrow(toBytes(address)));
 
 export const equals = (a: Address, b: Address): boolean => {
   if (a._tag !== b._tag) {

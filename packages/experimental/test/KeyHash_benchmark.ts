@@ -3,11 +3,18 @@ import * as CML from "@anastasia-labs/cardano-multiplatform-lib-nodejs";
 import * as KeyHash from "../src/KeyHash.js";
 import { Effect, pipe } from "effect";
 
+function formatOpsPerSec(n: number): string {
+  if (n >= 1_000_000_000) return `~${(n / 1_000_000_000).toFixed(1)}B ops/sec`;
+  if (n >= 1_000_000) return `~${(n / 1_000_000).toFixed(1)}M ops/sec`;
+  if (n >= 1_000) return `~${(n / 1_000).toFixed(1)}K ops/sec`;
+  return `${n.toFixed(0)} ops/sec`;
+}
+
 const bench = new Bench({ time: 1000 });
 
 bench.add("Evolution 2.0 - KeyHash", () => {
-  const cborHex = "c37b1b5dc0669f1d3c61a6fddb2e8fde96be87b881c60bce8e8d542f";
-  const a = KeyHash.makeOrThrow(cborHex);
+  const maybeHex = "c37b1b5dc0669f1d3c61a6fddb2e8fde96be87b881c60bce8e8d542f";
+  const a = KeyHash.makeOrThrow(maybeHex);
   const b = KeyHash.toBytes(a);
   const c = KeyHash.fromBytesOrThrow(b);
   const d = c.hash;
@@ -22,26 +29,17 @@ bench.add("CML - Ed25519KeyHash", () => {
 });
 
 bench.add("Evolution 2.0 - KeyHash Effect ", () => {
-  const cborHex = "c37b1b5dc0669f1d3c61a6fddb2e8fde96be87b881c60bce8e8d542f";
+  const hex = "c37b1b5dc0669f1d3c61a6fddb2e8fde96be87b881c60bce8e8d542f";
   pipe(
-    KeyHash.make(cborHex),
+    KeyHash.make(hex),
     Effect.map((a) => KeyHash.toBytes(a)),
-    Effect.flatMap((b) => KeyHash.fromBytes(b)),
+    Effect.map((b) => KeyHash.fromBytes(b)),
     Effect.runSync,
   );
 });
 
 await bench.run();
-
 console.table(bench.table());
-
-function formatOpsPerSec(n: number): string {
-  if (n >= 1_000_000_000) return `~${(n / 1_000_000_000).toFixed(1)}B ops/sec`;
-  if (n >= 1_000_000) return `~${(n / 1_000_000).toFixed(1)}M ops/sec`;
-  if (n >= 1_000) return `~${(n / 1_000).toFixed(1)}K ops/sec`;
-  return `${n.toFixed(0)} ops/sec`;
-}
-
 for (const task of bench.tasks) {
   const throughput = task.result?.hz ?? 0;
   console.log(
@@ -60,38 +58,23 @@ for (const task of bench.tasks) {
 //   0x54, 0x2f,
 // ]);
 
-// try {
-//   // console.log(Effect.runSync(KeyHash.fromBytes(new Uint8Array([1, 2, 3]))));
-//   // console.log(Effect.runSync(KeyHash.fromBytes("aa2f")));
-//   // console.log(
-//   //   "KeyHash toCBOR",
-//   //   KeyHash.toCBORBytes(
-//   //     KeyHash.makeOrThrow(
-//   //       "c37b1b5dc0669f1d3c61a6fddb2e8fde96be87b881c60bce8e8d542f"
-//   //     )
-//   //   )
-//   // );
-//   // console.log(
-//   //   "KeyHash fromCBOROrThrow",
-//   //   KeyHash.fromCBOROrThrow(
-//   //     "581ac37b1b5dc0669f1d3c61a6fddb2e8fde96be87b881c60bce8e8d54"
-//   //   )
-//   // );
-//   console.log(
-//     KeyHash.fromCBORBytesOrThrow(
-//       // new Uint8Array([
-//       //   195, 123, 27, 93, 192, 102, 159, 29, 60, 97, 166, 253, 219, 46, 143,
-//       //   222, 150, 190, 135, 184, 129, 198, 11, 206, 142, 141, 84, 47,
-//       // ])
-//       new Uint8Array([
-//         88, 28, 195, 123, 27, 93, 192, 102, 159, 29, 60, 97, 166, 253, 219, 46,
-//         143, 222, 150, 190, 135, 184, 129, 198, 11, 206, 142, 141, 84, 47,
-//       ])
-//     )
-//   );
-// } catch (error) {
-//   console.log((error as Error).message);
-// }
+try {
+  // console.log(KeyHash.fromBytes(new Uint8Array([10, 2, 3])));
+  // const hash = Hex.makeOrThrow(
+  //   "c37b1b5dc0669f1d3c61a6fddb2e8fde96be87b881c60bce8e8d542f"
+  // );
+  // console.log(hash);
+  // console.log(KeyHash.makeOrThrow(hash));
+  // console.log(
+  //   KeyHash.toBytes(
+  //     KeyHash.makeOrThrow(
+  //       "c37b1b5dc0669f1d3c61a6fddb2e8fde96be87b881c60bce8e8d542f"
+  //     )
+  //   )
+  // );
+} catch (error) {
+  console.log(error as Error);
+}
 
 // // try {
 // //   const a = Ed25519KeyHash.fromRawBytesUnsafe(new Uint8Array([1, 2, 3]));

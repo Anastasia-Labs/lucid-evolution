@@ -5,9 +5,10 @@ import * as KeyHash from "./KeyHash.js";
 import * as Pointer from "./Pointer.js";
 import * as ScriptHash from "./ScriptHash.js";
 import * as Network from "./Network.js";
-import * as SerdeImpl from "./SerdeImpl.js";
+import * as SerdeImpl from "./Serialization.js";
 import { ParseError } from "effect/ParseResult";
 import * as Bytes from "./Bytes.js";
+import * as NetworkId from "./NetworkId.js";
 
 /**
  * Error thrown when address operations fail
@@ -51,7 +52,7 @@ export interface PointerAddress {
 export class PointerAddress extends Schema.TaggedClass<PointerAddress>(
   "PointerAddress",
 )("PointerAddress", {
-  networkId: Schema.Number,
+  networkId: NetworkId.NetworkId,
   paymentCredential: Credential.Credential,
   pointer: Pointer.Pointer,
 }) {
@@ -85,7 +86,7 @@ export class PointerAddress extends Schema.TaggedClass<PointerAddress>(
 export const fromBytes = Effect.fn(function* (bytes: Uint8Array) {
   const header = bytes[0];
   // Extract network ID from the lower 4 bits
-  const networkId = header & 0b00001111;
+  const networkId = NetworkId.makeOrThrow(header & 0b00001111);
   // Extract address type from the upper 4 bits (bits 4-7)
   const addressType = header >> 4;
 
@@ -111,7 +112,7 @@ export const fromBytes = Effect.fn(function* (bytes: Uint8Array) {
 
   const [certIndex, _] = yield* decodeVariableLength(bytes, offset);
 
-  const pointerAddress = makeOrThrow(
+  const pointerAddress = make(
     networkId,
     paymentCredential,
     slot,
@@ -147,13 +148,13 @@ export const fromBytes = Effect.fn(function* (bytes: Uint8Array) {
 export const encodeVariableLength = (natural: Natural.Natural) => {
   // Handle the simple case: values less than 128 (0x80, binary 10000000) fit in a single byte
   // with no continuation bit needed
-  if (natural.number < 128) {
-    return new Uint8Array([natural.number]);
+  if (natural < 128) {
+    return new Uint8Array([natural]);
   }
 
   // For larger values, we need to split the number into 7-bit chunks
   const result: number[] = [];
-  let remaining = natural.number;
+  let remaining = natural;
 
   // Loop until all bits of the number have been processed
   while (remaining >= 128) {
@@ -162,7 +163,7 @@ export const encodeVariableLength = (natural: Natural.Natural) => {
     result.push((remaining & 0x7f) | 0x80);
 
     // Shift right by 7 bits (divide by 128) to process the next chunk
-    remaining = Math.floor(remaining / 128);
+    remaining = Natural.makeOrThrow(Math.floor(remaining / 128));
   }
 
   // Push the final byte (the most significant bits)
@@ -233,7 +234,8 @@ export const decodeVariableLength: (
     // If the high bit is 0, we've reached the end of the encoded integer
     if ((b & 0x80) === 0) {
       // Return the decoded value and the count of bytes read
-      const value = yield* Schema.decode(Natural.Natural)({ number });
+      // const value = yield* Schema.decode(Natural.Natural)({ number });
+      const value = Natural.makeOrThrow(number);
       return [value, bytesRead] as const;
     }
 
@@ -334,8 +336,8 @@ export const toBytes = (address: PointerAddress) => {
  * @since 2.0.0
  * @category constructors
  */
-export const makeOrThrow = (
-  networkId: number,
+export const make = (
+  networkId: NetworkId.NetworkId,
   paymentCredential: Credential.Credential,
   slot: Natural.Natural,
   txIndex: Natural.Natural,
@@ -345,16 +347,7 @@ export const makeOrThrow = (
     {
       networkId,
       paymentCredential,
-      pointer: Pointer.Pointer.make(
-        {
-          slot: slot,
-          txIndex: txIndex,
-          certIndex: certIndex,
-        },
-        {
-          disableValidation: true,
-        },
-      ),
+      pointer: Pointer.make(slot, txIndex, certIndex),
     },
     {
       disableValidation: true,
@@ -404,9 +397,9 @@ export const equals = (a: PointerAddress, b: PointerAddress): boolean => {
   return (
     a.networkId === b.networkId &&
     a.paymentCredential._tag === b.paymentCredential._tag &&
-    a.pointer.slot.number === b.pointer.slot.number &&
-    a.pointer.txIndex.number === b.pointer.txIndex.number &&
-    a.pointer.certIndex.number === b.pointer.certIndex.number &&
+    a.pointer.slot === b.pointer.slot &&
+    a.pointer.txIndex === b.pointer.txIndex &&
+    a.pointer.certIndex === b.pointer.certIndex &&
     a.paymentCredential.hash === b.paymentCredential.hash
   );
 };
@@ -432,11 +425,11 @@ export const equals = (a: PointerAddress, b: PointerAddress): boolean => {
  * @category generators
  */
 export const generator = FastCheck.tuple(
-  Network.generator,
+  NetworkId.generator,
   Credential.generator,
   Natural.generator,
   Natural.generator,
   Natural.generator,
 ).map(([networkId, paymentCredential, slot, txIndex, certIndex]) =>
-  makeOrThrow(networkId, paymentCredential, slot, txIndex, certIndex),
+  make(networkId, paymentCredential, slot, txIndex, certIndex),
 );

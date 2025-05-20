@@ -6,6 +6,7 @@ import * as Bytes from "./Bytes.js";
 import * as Network from "./Network.js";
 
 export declare const NominalType: unique symbol;
+
 export interface BaseAddress {
   readonly [NominalType]: unique symbol;
 }
