@@ -62,11 +62,11 @@ const CredentialFromCBORBytes = Schema.transformOrFail(
       switch (toA._tag) {
         case "KeyHash":
           return ParseResult.succeed(
-            CBOR.encodeAsBytesOrThrow([0, Hex.toBytes(toA.hash)]),
+            CBOR.encodeAsBytesOrThrow([0, Hex.toBytes(toA.hash)])
           );
         case "ScriptHash":
           return ParseResult.succeed(
-            CBOR.encodeAsBytesOrThrow([1, Hex.toBytes(toA.hash)]),
+            CBOR.encodeAsBytesOrThrow([1, Hex.toBytes(toA.hash)])
           );
       }
     },
@@ -76,25 +76,27 @@ const CredentialFromCBORBytes = Schema.transformOrFail(
         Effect.mapError((e) => new ParseResult.Type(ast, fromA, e.message)),
         Effect.flatMap((a) =>
           ParseResult.decode(
-            Schema.Tuple(Schema.Literal(0, 1), Schema.Uint8ArrayFromSelf),
-          )(a),
+            Schema.Tuple(Schema.Literal(0, 1), Schema.Uint8ArrayFromSelf).annotations({
+              identifier: "CredentialTuple",
+            })
+          )(a)
         ),
         Effect.flatMap(([tag, bytesDecoded]) =>
           Effect.gen(function* () {
             switch (tag) {
               case 0:
                 return yield* ParseResult.decode(KeyHash.KeyHashFromUint8Array)(
-                  bytesDecoded,
+                  bytesDecoded
                 );
               case 1:
                 return yield* ParseResult.decode(
-                  ScriptHash.ScriptHashFromUint8Array,
+                  ScriptHash.ScriptHashFromUint8Array
                 )(bytesDecoded);
             }
-          }),
-        ),
+          })
+        )
       ),
-  },
+  }
 );
 
 const CredentialFromCBORHex = Schema.transformOrFail(
@@ -107,11 +109,11 @@ const CredentialFromCBORHex = Schema.transformOrFail(
     encode: (toI, options, ast, toA) =>
       pipe(
         ParseResult.encode(CredentialFromCBORBytes)(toA),
-        Effect.map(Hex.fromBytes),
+        Effect.map(Hex.fromBytes)
       ),
     decode: (fromA, options, ast) =>
       pipe(Hex.toBytes(fromA), ParseResult.decode(CredentialFromCBORBytes)),
-  },
+  }
 );
 
 /**
