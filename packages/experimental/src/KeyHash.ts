@@ -72,12 +72,13 @@ const KeyHashBytes = pipe(
   identifier: "KeyHashBytes",
 });
 
-const KeyHashFromUint8Array = Schema.transform(KeyHashBytes, KeyHash, {
+const Bytes = Schema.transform(KeyHashBytes, KeyHash, {
   strict: true,
   encode: (_toI, toA) => Hex.toBytes(toA.hash),
   decode: (_fromI, fromA) => new KeyHash({ hash: Hex.fromBytes(fromA) }),
 });
 
+// tarnsformation KeyHash => Hex
 const KeyHashFromHex = Schema.transform(Hex.HexString, KeyHash, {
   strict: true,
   encode: (_toI, toA) => toA.hash,
@@ -128,8 +129,8 @@ export {
   KeyHash,
   KeyHashError,
   KeyHashBytes,
-  KeyHashFromUint8Array,
-  KeyHashFromHex,
+  Bytes,
+  KeyHashFromHex as Hash,
   equals,
   generator,
   KEYHASH_BYTES_LENGTH,

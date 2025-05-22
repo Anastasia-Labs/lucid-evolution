@@ -83,9 +83,7 @@ export const TransactionInputFromCBORBytes = Schema.transformOrFail(
     strict: true,
     encode: (toI, options, ast, toA) =>
       pipe(
-        ParseResult.encode(TransactionHash.TransactionHashFromCBORBytes)(
-          toA.transactionId,
-        ),
+        ParseResult.encode(TransactionHash.CBORBytes)(toA.transactionId),
         Effect.map((hash) => CBOR.encodeAsBytesOrThrow([toA.index, hash])),
       ),
     decode: (fromA, options, ast, fromI) =>
@@ -96,9 +94,7 @@ export const TransactionInputFromCBORBytes = Schema.transformOrFail(
         ),
         Effect.flatMap(([index, txHashBytes]) =>
           pipe(
-            ParseResult.decodeUnknown(
-              TransactionHash.TransactionHashFromCBORBytes,
-            )(txHashBytes),
+            ParseResult.decodeUnknown(TransactionHash.CBORBytes)(txHashBytes),
             Effect.flatMap((transactionId) =>
               ParseResult.decodeUnknown(TransactionInput)({
                 transactionId,
@@ -117,7 +113,7 @@ export const TransactionInputFromCBORBytes = Schema.transformOrFail(
  * @since 2.0.0
  * @category encoding/decoding
  */
-export const TransactionInputFromCBORHex = Schema.transformOrFail(
+export const CBORHex = Schema.transformOrFail(
   Hex.HexString.pipe(Schema.typeSchema).annotations({
     identifier: "CBORHex",
   }),

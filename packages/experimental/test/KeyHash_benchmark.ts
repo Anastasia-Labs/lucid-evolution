@@ -14,9 +14,9 @@ const bench = new Bench({ time: 1000 });
 
 bench.add("Evolution 2.0 - KeyHash", () => {
   const maybeHex = "c37b1b5dc0669f1d3c61a6fddb2e8fde96be87b881c60bce8e8d542f";
-  const a = Schema.decodeSync(KeyHash.KeyHashFromHex)(maybeHex);
-  const b = Schema.encodeSync(KeyHash.KeyHashFromUint8Array)(a);
-  const c = Schema.decodeSync(KeyHash.KeyHashFromUint8Array)(b);
+  const a = Schema.decodeUnknownSync(KeyHash.Hash)(maybeHex);
+  const b = Schema.encodeSync(KeyHash.Uint8Array)(a);
+  const c = Schema.decodeSync(KeyHash.Uint8Array)(b);
   const d = c.hash;
 });
 
@@ -31,9 +31,9 @@ bench.add("CML - Ed25519KeyHash", () => {
 bench.add("Evolution 2.0 - KeyHash Effect ", () => {
   const hex = "c37b1b5dc0669f1d3c61a6fddb2e8fde96be87b881c60bce8e8d542f";
   pipe(
-    Schema.decode(KeyHash.KeyHashFromHex)(hex),
-    Effect.flatMap((a) => Schema.encode(KeyHash.KeyHashFromUint8Array)(a)),
-    Effect.flatMap((b) => Schema.decode(KeyHash.KeyHashFromUint8Array)(b)),
+    Schema.decodeUnknown(KeyHash.Hash)(hex),
+    Effect.flatMap((a) => Schema.encode(KeyHash.Uint8Array)(a)),
+    Effect.flatMap((b) => Schema.decode(KeyHash.Uint8Array)(b)),
     Effect.runSync,
   );
 });

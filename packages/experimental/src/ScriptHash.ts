@@ -72,7 +72,7 @@ const ScriptHashBytes = pipe(
   identifier: "ScriptHashBytes",
 });
 
-const ScriptHashFromUint8Array = Schema.transform(ScriptHashBytes, ScriptHash, {
+const Bytes = Schema.transform(ScriptHashBytes, ScriptHash, {
   strict: true,
   encode: (_toI, toA) => Hex.toBytes(toA.hash),
   decode: (_fromI, fromA) => new ScriptHash({ hash: Hex.fromBytes(fromA) }),
@@ -127,8 +127,7 @@ const generator = FastCheck.uint8Array({
 export {
   ScriptHash,
   ScriptHashError,
-  ScriptHashBytes,
-  ScriptHashFromUint8Array,
+  Bytes,
   ScriptHashFromHex,
   equals,
   generator,

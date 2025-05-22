@@ -2,7 +2,6 @@ import { Effect, Schema, Data, FastCheck, pipe, ParseResult } from "effect";
 import * as KeyHash from "./KeyHash.js";
 import * as ScriptHash from "./ScriptHash.js";
 import * as CBOR from "./CBOR.js";
-import * as Serialization from "./Serialization.js";
 import * as Hex from "./Hex.js";
 
 /**
@@ -62,11 +61,11 @@ const CredentialFromCBORBytes = Schema.transformOrFail(
       switch (toA._tag) {
         case "KeyHash":
           return ParseResult.succeed(
-            CBOR.encodeAsBytesOrThrow([0, Hex.toBytes(toA.hash)])
+            CBOR.encodeAsBytesOrThrow([0, Hex.toBytes(toA.hash)]),
           );
         case "ScriptHash":
           return ParseResult.succeed(
-            CBOR.encodeAsBytesOrThrow([1, Hex.toBytes(toA.hash)])
+            CBOR.encodeAsBytesOrThrow([1, Hex.toBytes(toA.hash)]),
           );
       }
     },
@@ -76,27 +75,28 @@ const CredentialFromCBORBytes = Schema.transformOrFail(
         Effect.mapError((e) => new ParseResult.Type(ast, fromA, e.message)),
         Effect.flatMap((a) =>
           ParseResult.decode(
-            Schema.Tuple(Schema.Literal(0, 1), Schema.Uint8ArrayFromSelf).annotations({
+            Schema.Tuple(
+              Schema.Literal(0, 1),
+              Schema.Uint8ArrayFromSelf,
+            ).annotations({
               identifier: "CredentialTuple",
-            })
-          )(a)
+            }),
+          )(a),
         ),
         Effect.flatMap(([tag, bytesDecoded]) =>
           Effect.gen(function* () {
             switch (tag) {
               case 0:
-                return yield* ParseResult.decode(KeyHash.KeyHashFromUint8Array)(
-                  bytesDecoded
-                );
+                return yield* ParseResult.decode(KeyHash.Bytes)(bytesDecoded);
               case 1:
-                return yield* ParseResult.decode(
-                  ScriptHash.ScriptHashFromUint8Array
-                )(bytesDecoded);
+                return yield* ParseResult.decode(ScriptHash.Bytes)(
+                  bytesDecoded,
+                );
             }
-          })
-        )
+          }),
+        ),
       ),
-  }
+  },
 );
 
 const CredentialFromCBORHex = Schema.transformOrFail(
@@ -109,11 +109,11 @@ const CredentialFromCBORHex = Schema.transformOrFail(
     encode: (toI, options, ast, toA) =>
       pipe(
         ParseResult.encode(CredentialFromCBORBytes)(toA),
-        Effect.map(Hex.fromBytes)
+        Effect.map(Hex.fromBytes),
       ),
     decode: (fromA, options, ast) =>
       pipe(Hex.toBytes(fromA), ParseResult.decode(CredentialFromCBORBytes)),
-  }
+  },
 );
 
 /**
@@ -160,8 +160,8 @@ const generator = FastCheck.oneof(KeyHash.generator, ScriptHash.generator);
 export {
   Credential,
   CredentialError,
-  CredentialFromCBORBytes,
-  CredentialFromCBORHex,
+  CredentialFromCBORBytes as CBORBytes,
+  CredentialFromCBORHex as CBORHex,
   isCredential,
   equals,
   generator,

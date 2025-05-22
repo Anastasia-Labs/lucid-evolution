@@ -1,9 +1,10 @@
 import { Inspectable, Schema } from "effect";
 import { HexStringFilter } from "./Combinator.js";
-import * as Bytes from "./Bytes.js";
+import { Hex } from "./index.js";
+import { HexString } from "./Hex.js";
 
-export declare const NominalType: unique symbol;
-export interface ByronAddress {
+declare const NominalType: unique symbol;
+interface ByronAddress {
   readonly [NominalType]: unique symbol;
 }
 
@@ -13,11 +14,12 @@ export interface ByronAddress {
  * @since 2.0.0
  * @category schemas
  */
-export class ByronAddress extends Schema.TaggedClass<ByronAddress>(
+class ByronAddress extends Schema.TaggedClass<ByronAddress>("ByronAddress")(
   "ByronAddress",
-)("ByronAddress", {
-  bytes: Schema.String.pipe(HexStringFilter),
-}) {
+  {
+    bytes: HexString,
+  },
+) {
   [Inspectable.NodeInspectSymbol]() {
     return {
       _tag: "ByronAddress",
@@ -26,16 +28,14 @@ export class ByronAddress extends Schema.TaggedClass<ByronAddress>(
   }
 }
 
-/**
- * Byron legacy address has limited support
- * @since 2.0.0
- */
-export const fromBytes = (bytes: Uint8Array) =>
-  ByronAddress.make(
-    {
-      bytes: Bytes.toHexOrThrow(bytes),
-    },
-    {
-      disableValidation: true,
-    },
-  );
+// /**
+//  * Byron legacy address has limited support
+//  * @since 2.0.0
+//  */
+const Bytes = Schema.transform(Schema.Uint8ArrayFromSelf, ByronAddress, {
+  strict: true,
+  encode: (toI, toA) => Hex.toBytes(toA.bytes),
+  decode: (fromI, fromA) => new ByronAddress({ bytes: Hex.fromBytes(fromA) }),
+});
+
+export { Bytes, ByronAddress };

@@ -116,7 +116,7 @@ export const TransactionHashFromUint8Array = Schema.transform(
  * @since 2.0.0
  * @category encoding/decoding
  */
-export const TransactionHashFromHex = Schema.transform(Hash, TransactionHash, {
+export const HexString = Schema.transform(Hash, TransactionHash, {
   strict: true,
   encode: (_, hash) => hash.hash,
   decode: (hash) => new TransactionHash({ hash }),
@@ -128,7 +128,7 @@ export const TransactionHashFromHex = Schema.transform(Hash, TransactionHash, {
  * @since 2.0.0
  * @category encoding/decoding
  */
-export const TransactionHashFromCBORBytes = Schema.transformOrFail(
+export const CBORBytes = Schema.transformOrFail(
   Schema.Uint8ArrayFromSelf.annotations({
     identifier: "CBORBytes",
   }),

@@ -23,9 +23,9 @@ export type Natural = typeof Natural.Type;
  * @since 2.0.0
  * @category predicates
  */
-export const makeOrThrow = (number: number): Natural => Natural.make(number);
+// export const makeOrThrow = (number: number): Natural => Natural.make(number);
 
 export const generator = FastCheck.integer({
-  min: 0,
+  min: 1,
   max: Number.MAX_SAFE_INTEGER,
-}).map((number) => makeOrThrow(number));
+}).map((number) => Natural.make(number));

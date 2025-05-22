@@ -9,5 +9,5 @@ export const makeOrThrow = (number: number): NetworkId =>
 
 export const generator = FastCheck.integer({
   min: 0,
-  max: Number.MAX_SAFE_INTEGER,
+  max: 2,
 }).map((number) => makeOrThrow(number));

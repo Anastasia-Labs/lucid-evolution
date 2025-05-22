@@ -1,14 +1,19 @@
-import { Data, Effect, FastCheck, Inspectable, Schema } from "effect";
+import {
+  Data,
+  Effect,
+  FastCheck,
+  Inspectable,
+  ParseResult,
+  pipe,
+  Schema,
+} from "effect";
 import * as Natural from "./Natural.js";
 import * as Credential from "./Credential.js";
 import * as KeyHash from "./KeyHash.js";
 import * as Pointer from "./Pointer.js";
 import * as ScriptHash from "./ScriptHash.js";
-import * as Network from "./Network.js";
-import * as SerdeImpl from "./Serialization.js";
-import { ParseError } from "effect/ParseResult";
-import * as Bytes from "./Bytes.js";
 import * as NetworkId from "./NetworkId.js";
+import { Hex } from "./index.js";
 
 /**
  * Error thrown when address operations fail
@@ -16,30 +21,13 @@ import * as NetworkId from "./NetworkId.js";
  * @since 2.0.0
  * @category model
  */
-export class PointerAddressError extends Data.TaggedError(
-  "PointerAddressError",
-)<{
+class PointerAddressError extends Data.TaggedError("PointerAddressError")<{
   message: string;
   cause?: unknown;
 }> {}
 
-// /**
-//  * Phantom symbol for nominal type
-//  *
-//  * @since 2.0.0
-//  * @category model
-//  */
-// export const NominalType: unique symbol = Symbol.for(
-//   "@lucid-evolution/experimental/PointerAddress"
-// );
-
-// /**
-//  * @since 2.0.0
-//  */
-// export type NominalType = typeof NominalType;
-
-export declare const NominalType: unique symbol;
-export interface PointerAddress {
+declare const NominalType: unique symbol;
+interface PointerAddress {
   readonly [NominalType]: unique symbol;
 }
 
@@ -49,7 +37,7 @@ export interface PointerAddress {
  * @since 2.0.0
  * @category schemas
  */
-export class PointerAddress extends Schema.TaggedClass<PointerAddress>(
+class PointerAddress extends Schema.TaggedClass<PointerAddress>(
   "PointerAddress",
 )("PointerAddress", {
   networkId: NetworkId.NetworkId,
@@ -66,61 +54,89 @@ export class PointerAddress extends Schema.TaggedClass<PointerAddress>(
   }
 }
 
-/**
- * Create a PointerAddress from bytes.
- *
- * @example
- * import { PointerAddress, Bytes } from "@lucid-evolution/experimental";
- * import { Effect } from "effect";
- * import assert from "assert";
- *
- * // Sample pointer address bytes - this is a placeholder example
- * const bytes = Bytes.fromHexOrThrow("4059f801786707f961faf991fd73036405431a3f5d3a97fc03eefcad05a6a685bbcb848908a2f1be9397eabf0998d2c0cde9c1e206");
- * const addressEffect = PointerAddress.fromBytes(bytes);
- * const address = Effect.runSync(addressEffect);
- * assert(address._tag === "PointerAddress");
- *
- * @since 2.0.0
- * @category constructors
- */
-export const fromBytes = Effect.fn(function* (bytes: Uint8Array) {
-  const header = bytes[0];
-  // Extract network ID from the lower 4 bits
-  const networkId = NetworkId.makeOrThrow(header & 0b00001111);
-  // Extract address type from the upper 4 bits (bits 4-7)
-  const addressType = header >> 4;
+const Bytes = Schema.transformOrFail(
+  Schema.Uint8ArrayFromSelf,
+  PointerAddress,
+  {
+    strict: true,
+    encode: (toI, options, ast, toA) =>
+      Effect.gen(function* () {
+        const paymentBit = toA.paymentCredential._tag === "KeyHash" ? 0 : 1;
+        const header =
+          (0b01 << 6) |
+          (0b0 << 5) |
+          (paymentBit << 4) |
+          (toA.networkId & 0b00001111);
+        const result = new Uint8Array(29);
+        result[0] = header;
+        const paymentCredentialBytes = Hex.toBytes(toA.paymentCredential.hash);
+        result.set(paymentCredentialBytes, 1);
+        const slotBytes = yield* encodeVariableLength(toA.pointer.slot);
+        const txIndexBytes = yield* encodeVariableLength(toA.pointer.txIndex);
+        const certIndexBytes = yield* encodeVariableLength(
+          toA.pointer.certIndex,
+        );
+        let offset = 29;
+        result.set(slotBytes, offset);
+        offset += slotBytes.length;
+        result.set(txIndexBytes, offset);
+        offset += txIndexBytes.length;
+        result.set(certIndexBytes, offset);
+        return result;
+      }),
+    decode: (fromI, options, ast, fromA) =>
+      Effect.gen(function* () {
+        const header = fromA[0];
+        // Extract network ID from the lower 4 bits
+        const networkId = header & 0b00001111;
+        // Extract address type from the upper 4 bits (bits 4-7)
+        const addressType = header >> 4;
 
-  // Script payment with pointer
-  // Check if the address is a pointer address
-  const isPaymentKey = (addressType & 0b0001) === 0;
-  const paymentCredential: Credential.Credential = isPaymentKey
-    ? yield* KeyHash.decodeBytes(bytes.slice(1, 29))
-    : yield* ScriptHash.decodeBytes(bytes.slice(1, 29));
+        // Script payment with pointer
+        // Check if the address is a pointer address
+        const isPaymentKey = (addressType & 0b0001) === 0;
+        const paymentCredential: Credential.Credential = isPaymentKey
+          ? yield* ParseResult.decode(KeyHash.Bytes)(fromA.slice(1, 29))
+          : yield* ParseResult.decode(ScriptHash.Bytes)(fromA.slice(1, 29));
 
-  // After the credential, we have 3 variable-length integers
-  let offset = 29;
+        // After the credential, we have 3 variable-length integers
+        let offset = 29;
 
-  // Decode the slot, txIndex, and certIndex as variable length integers
-  const [slot, slotBytesRead] = yield* decodeVariableLength(bytes, offset);
-  offset += slotBytesRead;
+        // Decode the slot, txIndex, and certIndex as variable length integers
+        const [slot, slotBytesRead] = yield* decodeVariableLength(
+          fromA,
+          offset,
+        );
+        offset += slotBytesRead;
 
-  const [txIndex, txIndexBytesRead] = yield* decodeVariableLength(
-    bytes,
-    offset,
-  );
-  offset += txIndexBytesRead;
+        const [txIndex, txIndexBytesRead] = yield* decodeVariableLength(
+          fromA,
+          offset,
+        );
+        offset += txIndexBytesRead;
 
-  const [certIndex, _] = yield* decodeVariableLength(bytes, offset);
+        const [certIndex, _] = yield* decodeVariableLength(fromA, offset);
 
-  const pointerAddress = make(
-    networkId,
-    paymentCredential,
-    slot,
-    txIndex,
-    certIndex,
-  );
+        return yield* ParseResult.decode(PointerAddress)({
+          _tag: "PointerAddress",
+          networkId,
+          paymentCredential,
+          pointer: Pointer.make(slot, txIndex, certIndex),
+        });
+      }).pipe(
+        Effect.catchTag("PointerAddressError", (e) =>
+          Effect.fail(new ParseResult.Type(ast, fromA, e.message)),
+        ),
+      ),
+  },
+);
 
-  return pointerAddress;
+const HexString = Schema.transformOrFail(Hex.HexString, PointerAddress, {
+  strict: true,
+  encode: (toI, options, ast, toA) =>
+    pipe(ParseResult.encode(Bytes)(toA), Effect.map(Hex.fromBytes)),
+  decode: (fromI, options, ast) =>
+    pipe(Hex.toBytes(fromI), ParseResult.decode(Bytes)),
 });
 
 /**
@@ -145,35 +161,33 @@ export const fromBytes = Effect.fn(function* (bytes: Uint8Array) {
  * @since 2.0.0
  * @category encoding/decoding
  */
-export const encodeVariableLength = (natural: Natural.Natural) => {
-  // Handle the simple case: values less than 128 (0x80, binary 10000000) fit in a single byte
-  // with no continuation bit needed
-  if (natural < 128) {
-    return new Uint8Array([natural]);
-  }
-
-  // For larger values, we need to split the number into 7-bit chunks
-  const result: number[] = [];
-  let remaining = natural;
-
-  // Loop until all bits of the number have been processed
-  while (remaining >= 128) {
-    // Take the least significant 7 bits (value & 0x7F, binary 01111111)
-    // and set the high bit (| 0x80, binary 10000000) to indicate more bytes follow
-    result.push((remaining & 0x7f) | 0x80);
-
-    // Shift right by 7 bits (divide by 128) to process the next chunk
-    remaining = Natural.makeOrThrow(Math.floor(remaining / 128));
-  }
-
-  // Push the final byte (the most significant bits)
-  // without setting the high bit, indicating this is the last byte
-  result.push(remaining & 0x7f); // Binary: 0xxxxxxx where x are bits from the value
-
-  // Convert the array of bytes to a Uint8Array
-  // The bytes are already in little-endian order (least significant byte first)
-  return new Uint8Array(result);
-};
+const encodeVariableLength = (natural: Natural.Natural) =>
+  Effect.gen(function* () {
+    // Handle the simple case: values less than 128 (0x80, binary 10000000) fit in a single byte
+    // with no continuation bit needed
+    if (natural < 128) {
+      return new Uint8Array([natural]);
+    }
+    // For larger values, we need to split the number into 7-bit chunks
+    const result: number[] = [];
+    let remaining = natural;
+    // Loop until all bits of the number have been processed
+    while (remaining >= 128) {
+      // Take the least significant 7 bits (value & 0x7F, binary 01111111)
+      // and set the high bit (| 0x80, binary 10000000) to indicate more bytes follow
+      result.push((remaining & 0x7f) | 0x80);
+      // Shift right by 7 bits (divide by 128) to process the next chunk
+      remaining = yield* ParseResult.decode(Natural.Natural)(
+        Math.floor(remaining / 128),
+      );
+    }
+    // Push the final byte (the most significant bits)
+    // without setting the high bit, indicating this is the last byte
+    result.push(remaining & 0x7f); // Binary: 0xxxxxxx where x are bits from the value
+    // Convert the array of bytes to a Uint8Array
+    // The bytes are already in little-endian order (least significant byte first)
+    return new Uint8Array(result);
+  });
 
 /**
  * Decode a variable length integer from a Uint8Array
@@ -195,12 +209,12 @@ export const encodeVariableLength = (natural: Natural.Natural) => {
  * @since 2.0.0
  * @category encoding/decoding
  */
-export const decodeVariableLength: (
+const decodeVariableLength: (
   bytes: Uint8Array,
   offset?: number | undefined,
 ) => Effect.Effect<
   [Natural.Natural, number],
-  PointerAddressError | ParseError
+  PointerAddressError | ParseResult.ParseIssue
 > = Effect.fnUntraced(function* (bytes, offset = 0) {
   // The accumulated decoded value
   let number = 0;
@@ -235,7 +249,7 @@ export const decodeVariableLength: (
     if ((b & 0x80) === 0) {
       // Return the decoded value and the count of bytes read
       // const value = yield* Schema.decode(Natural.Natural)({ number });
-      const value = Natural.makeOrThrow(number);
+      const value = yield* ParseResult.decode(Natural.Natural)(number);
       return [value, bytesRead] as const;
     }
 
@@ -247,112 +261,6 @@ export const decodeVariableLength: (
     // Continue reading bytes until we find one with the high bit set to 0
   }
 });
-
-/**
- * Convert a PointerAddress to bytes.
- *
- * @example
- * import { PointerAddress, KeyHash, Natural, NetworkId } from "@lucid-evolution/experimental";
- * import assert from "assert";
- *
- * // Create payment credential
- * const paymentKeyHash = KeyHash.makeOrThrow("c37b1b5dc0669f1d3c61a6fddb2e8fde96be87b881c60bce8e8d542f");
- *
- * // Create pointer address
- * const address = PointerAddress.make(
- *   NetworkId.makeOrThrow(0),
- *   paymentKeyHash,
- *   Natural.makeOrThrow(1),
- *   Natural.makeOrThrow(2),
- *   Natural.makeOrThrow(3)
- * );
- * const bytes = PointerAddress.toBytes(address);
- * assert(bytes instanceof Uint8Array);
- *
- * @since 2.0.0
- * @category transformation
- */
-export const toBytes = (address: PointerAddress) => {
-  const paymentBit = address.paymentCredential._tag === "KeyHash" ? 0 : 1;
-  const header =
-    (0b01 << 6) |
-    (0b0 << 5) |
-    (paymentBit << 4) |
-    (address.networkId & 0b00001111);
-
-  const slotBytes = encodeVariableLength(address.pointer.slot);
-  const txIndexBytes = encodeVariableLength(address.pointer.txIndex);
-  const certIndexBytes = encodeVariableLength(address.pointer.certIndex);
-
-  // Combine everything
-  const totalSize =
-    1 + // header
-    28 + // payment credential
-    slotBytes.length +
-    txIndexBytes.length +
-    certIndexBytes.length;
-
-  const result = new Uint8Array(totalSize);
-
-  result[0] = header;
-  result.set(Bytes.fromHexOrThrow(address.paymentCredential.hash), 1);
-
-  let offset = 29;
-  result.set(slotBytes, offset);
-  offset += slotBytes.length;
-
-  result.set(txIndexBytes, offset);
-  offset += txIndexBytes.length;
-
-  result.set(certIndexBytes, offset);
-
-  return result;
-};
-
-/**
- * Create a PointerAddress from components, throws on error.
- *
- * @example
- * import { PointerAddress, KeyHash, Natural, NetworkId } from "@lucid-evolution/experimental";
- * import assert from "assert";
- *
- * // Create payment credential
- * const paymentKeyHash = KeyHash.makeOrThrow("c37b1b5dc0669f1d3c61a6fddb2e8fde96be87b881c60bce8e8d542f");
- *
- * // Create pointer address
- * const address = PointerAddress.make(
- *   NetworkId.makeOrThrow(0),
- *   paymentKeyHash,
- *   Natural.makeOrThrow(1),
- *   Natural.makeOrThrow(2),
- *   Natural.makeOrThrow(3)
- * );
- * assert(address._tag === "PointerAddress");
- * assert(address.networkId === 0);
- * assert(address.pointer.slot === 1);
- * assert(address.pointer.txIndex === 2);
- * assert(address.pointer.certIndex === 3);
- *
- * @since 2.0.0
- * @category constructors
- */
-export const make = (
-  networkId: NetworkId.NetworkId,
-  paymentCredential: Credential.Credential,
-  slot: Natural.Natural,
-  txIndex: Natural.Natural,
-  certIndex: Natural.Natural,
-): PointerAddress =>
-  PointerAddress.make(
-    {
-      networkId,
-      paymentCredential,
-      pointer: Pointer.make(slot, txIndex, certIndex),
-    },
-    {
-      disableValidation: true,
-    },
-  );
 
 /**
  * Check if two PointerAddress instances are equal.
@@ -393,7 +301,7 @@ export const make = (
  * @since 2.0.0
  * @category equality
  */
-export const equals = (a: PointerAddress, b: PointerAddress): boolean => {
+const equals = (a: PointerAddress, b: PointerAddress): boolean => {
   return (
     a.networkId === b.networkId &&
     a.paymentCredential._tag === b.paymentCredential._tag &&
@@ -424,12 +332,19 @@ export const equals = (a: PointerAddress, b: PointerAddress): boolean => {
  * @since 2.0.0
  * @category generators
  */
-export const generator = FastCheck.tuple(
+const generator = FastCheck.tuple(
   NetworkId.generator,
   Credential.generator,
   Natural.generator,
   Natural.generator,
   Natural.generator,
-).map(([networkId, paymentCredential, slot, txIndex, certIndex]) =>
-  make(networkId, paymentCredential, slot, txIndex, certIndex),
+).map(
+  ([networkId, paymentCredential, slot, txIndex, certIndex]) =>
+    new PointerAddress({
+      networkId,
+      paymentCredential,
+      pointer: Pointer.make(slot, txIndex, certIndex),
+    }),
 );
+
+export { PointerAddress, Bytes, HexString, equals, generator };

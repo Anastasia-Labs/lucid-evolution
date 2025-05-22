@@ -1,5 +1,9 @@
-import { Effect, Schema } from "effect";
+import { Data, Effect, ParseResult, Schema } from "effect";
 import * as Hex from "./Hex.js";
+
+export class SerializationError extends Data.TaggedError("SerializationError")<{
+  message?: ParseResult.ParseError;
+}> {}
 
 /**
  * Serialization function interfaces for encoding and decoding data
@@ -174,9 +178,56 @@ export interface TypePredicate<T> {
   (value: unknown): value is T;
 }
 
-export const encode = Schema.encode;
-export const decode = Schema.decode;
-export const encodeEither = Schema.encodeEither;
-export const decodeEither = Schema.decodeEither;
-export const encodeOrThrow = Schema.encodeSync;
-export const decodeOrThrow = Schema.decodeUnknownSync;
+export const encode =
+  <A, I, R>(schema: Schema.Schema<A, I, R>) =>
+  (value: A) =>
+    Schema.encode(schema)(value).pipe(
+      Effect.mapError((e) => new SerializationError({ message: e })),
+    );
+export const decode =
+  <A, I, R>(schema: Schema.Schema<A, I, R>) =>
+  (value: I) =>
+    Schema.decode(schema)(value).pipe(
+      Effect.mapError((e) => new SerializationError({ message: e })),
+    );
+
+export const encodeEither =
+  <A, I>(schema: Schema.Schema<A, I>) =>
+  (value: A) =>
+    Schema.encodeEither(schema)(value).pipe(
+      Effect.mapError((e) => new SerializationError({ message: e })),
+    );
+
+export const decodeEither =
+  <A, I>(schema: Schema.Schema<A, I>) =>
+  (value: I) =>
+    Schema.decodeEither(schema)(value).pipe(
+      Effect.mapError((e) => new SerializationError({ message: e })),
+    );
+
+export const encodeOrThrow =
+  <A, I>(schema: Schema.Schema<A, I>) =>
+  (value: A): I => {
+    try {
+      return Schema.encodeSync(schema)(value);
+    } catch (error) {
+      throw new SerializationError({
+        message: error as ParseResult.ParseError,
+      });
+    }
+  };
+
+export const decodeOrThrow =
+  <A, I>(schema: Schema.Schema<A, I>) =>
+  (value: unknown) => {
+    try {
+      return Schema.decodeUnknownSync(schema)(value);
+    } catch (error) {
+      throw new SerializationError({
+        message: error as ParseResult.ParseError,
+      });
+    }
+  };
+
+const formatError = (parseError: ParseResult.ParseError) =>
+  JSON.stringify(ParseResult.ArrayFormatter.formatErrorSync(parseError));
