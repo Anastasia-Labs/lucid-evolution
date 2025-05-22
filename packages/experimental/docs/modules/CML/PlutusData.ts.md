@@ -76,7 +76,9 @@ Static method fromCborBytes of PlutusData
 **Signature**
 
 ```ts
-export declare const fromCborBytes: (cborBytes: Uint8Array) => Effect.Effect<CML.PlutusData, PlutusDataError>
+export declare const fromCborBytes: (
+  cborBytes: Uint8Array,
+) => Effect.Effect<CML.PlutusData, PlutusDataError>;
 ```
 
 Added in v2.0.0
@@ -88,7 +90,9 @@ Static method fromCborHex of PlutusData
 **Signature**
 
 ```ts
-export declare const fromCborHex: (cborBytes: string) => Effect.Effect<CML.PlutusData, PlutusDataError>
+export declare const fromCborHex: (
+  cborBytes: string,
+) => Effect.Effect<CML.PlutusData, PlutusDataError>;
 ```
 
 Added in v2.0.0
@@ -100,7 +104,9 @@ Static method fromJson of PlutusData
 **Signature**
 
 ```ts
-export declare const fromJson: (json: string) => Effect.Effect<CML.PlutusData, PlutusDataError>
+export declare const fromJson: (
+  json: string,
+) => Effect.Effect<CML.PlutusData, PlutusDataError>;
 ```
 
 Added in v2.0.0
@@ -112,7 +118,9 @@ Static method newBytes of PlutusData
 **Signature**
 
 ```ts
-export declare const newBytes: (bytes: Uint8Array) => Effect.Effect<CML.PlutusData, PlutusDataError>
+export declare const newBytes: (
+  bytes: Uint8Array,
+) => Effect.Effect<CML.PlutusData, PlutusDataError>;
 ```
 
 Added in v2.0.0
@@ -125,8 +133,8 @@ Static method newConstrPlutusData of PlutusData
 
 ```ts
 export declare const newConstrPlutusData: (
-  constrPlutusData: CML.ConstrPlutusData
-) => Effect.Effect<CML.PlutusData, PlutusDataError>
+  constrPlutusData: CML.ConstrPlutusData,
+) => Effect.Effect<CML.PlutusData, PlutusDataError>;
 ```
 
 Added in v2.0.0
@@ -138,7 +146,9 @@ Static method newInteger of PlutusData
 **Signature**
 
 ```ts
-export declare const newInteger: (bigInt: CML.BigInteger) => Effect.Effect<CML.PlutusData, PlutusDataError>
+export declare const newInteger: (
+  bigInt: CML.BigInteger,
+) => Effect.Effect<CML.PlutusData, PlutusDataError>;
 ```
 
 Added in v2.0.0
@@ -150,7 +160,9 @@ Static method newList of PlutusData
 **Signature**
 
 ```ts
-export declare const newList: (list: CML.PlutusDataList) => Effect.Effect<CML.PlutusData, PlutusDataError>
+export declare const newList: (
+  list: CML.PlutusDataList,
+) => Effect.Effect<CML.PlutusData, PlutusDataError>;
 ```
 
 Added in v2.0.0
@@ -162,7 +174,9 @@ Static method newMap of PlutusData
 **Signature**
 
 ```ts
-export declare const newMap: (map: CML.PlutusMap) => Effect.Effect<CML.PlutusData, PlutusDataError>
+export declare const newMap: (
+  map: CML.PlutusMap,
+) => Effect.Effect<CML.PlutusData, PlutusDataError>;
 ```
 
 Added in v2.0.0
@@ -176,7 +190,9 @@ Unsafely calls PlutusData.fromCborBytes without Effect wrapper
 **Signature**
 
 ```ts
-export declare const fromCborBytesUnsafe: (cborBytes: Uint8Array) => CML.PlutusData
+export declare const fromCborBytesUnsafe: (
+  cborBytes: Uint8Array,
+) => CML.PlutusData;
 ```
 
 Added in v2.0.0
@@ -188,7 +204,7 @@ Unsafely calls PlutusData.fromCborHex without Effect wrapper
 **Signature**
 
 ```ts
-export declare const fromCborHexUnsafe: (cborBytes: string) => CML.PlutusData
+export declare const fromCborHexUnsafe: (cborBytes: string) => CML.PlutusData;
 ```
 
 Added in v2.0.0
@@ -200,7 +216,7 @@ Unsafely calls PlutusData.fromJson without Effect wrapper
 **Signature**
 
 ```ts
-export declare const fromJsonUnsafe: (json: string) => CML.PlutusData
+export declare const fromJsonUnsafe: (json: string) => CML.PlutusData;
 ```
 
 Added in v2.0.0
@@ -212,7 +228,7 @@ Unsafely calls PlutusData.newBytes without Effect wrapper
 **Signature**
 
 ```ts
-export declare const newBytesUnsafe: (bytes: Uint8Array) => CML.PlutusData
+export declare const newBytesUnsafe: (bytes: Uint8Array) => CML.PlutusData;
 ```
 
 Added in v2.0.0
@@ -224,7 +240,9 @@ Unsafely calls PlutusData.newConstrPlutusData without Effect wrapper
 **Signature**
 
 ```ts
-export declare const newConstrPlutusDataUnsafe: (constrPlutusData: CML.ConstrPlutusData) => CML.PlutusData
+export declare const newConstrPlutusDataUnsafe: (
+  constrPlutusData: CML.ConstrPlutusData,
+) => CML.PlutusData;
 ```
 
 Added in v2.0.0
@@ -236,7 +254,9 @@ Unsafely calls PlutusData.newInteger without Effect wrapper
 **Signature**
 
 ```ts
-export declare const newIntegerUnsafe: (bigInt: CML.BigInteger) => CML.PlutusData
+export declare const newIntegerUnsafe: (
+  bigInt: CML.BigInteger,
+) => CML.PlutusData;
 ```
 
 Added in v2.0.0
@@ -248,7 +268,9 @@ Unsafely calls PlutusData.newList without Effect wrapper
 **Signature**
 
 ```ts
-export declare const newListUnsafe: (list: CML.PlutusDataList) => CML.PlutusData
+export declare const newListUnsafe: (
+  list: CML.PlutusDataList,
+) => CML.PlutusData;
 ```
 
 Added in v2.0.0
@@ -260,7 +282,7 @@ Unsafely calls PlutusData.newMap without Effect wrapper
 **Signature**
 
 ```ts
-export declare const newMapUnsafe: (map: CML.PlutusMap) => CML.PlutusData
+export declare const newMapUnsafe: (map: CML.PlutusMap) => CML.PlutusData;
 ```
 
 Added in v2.0.0
@@ -290,7 +312,9 @@ Method asBytes of PlutusData
 **Signature**
 
 ```ts
-export declare const asBytes: (instance: CML.PlutusData) => Effect.Effect<Uint8Array | undefined, PlutusDataError>
+export declare const asBytes: (
+  instance: CML.PlutusData,
+) => Effect.Effect<Uint8Array | undefined, PlutusDataError>;
 ```
 
 Added in v2.0.0
@@ -303,8 +327,8 @@ Method asConstrPlutusData of PlutusData
 
 ```ts
 export declare const asConstrPlutusData: (
-  instance: CML.PlutusData
-) => Effect.Effect<CML.ConstrPlutusData | undefined, PlutusDataError>
+  instance: CML.PlutusData,
+) => Effect.Effect<CML.ConstrPlutusData | undefined, PlutusDataError>;
 ```
 
 Added in v2.0.0
@@ -316,7 +340,9 @@ Method asInteger of PlutusData
 **Signature**
 
 ```ts
-export declare const asInteger: (instance: CML.PlutusData) => Effect.Effect<CML.BigInteger | undefined, PlutusDataError>
+export declare const asInteger: (
+  instance: CML.PlutusData,
+) => Effect.Effect<CML.BigInteger | undefined, PlutusDataError>;
 ```
 
 Added in v2.0.0
@@ -329,8 +355,8 @@ Method asList of PlutusData
 
 ```ts
 export declare const asList: (
-  instance: CML.PlutusData
-) => Effect.Effect<CML.PlutusDataList | undefined, PlutusDataError>
+  instance: CML.PlutusData,
+) => Effect.Effect<CML.PlutusDataList | undefined, PlutusDataError>;
 ```
 
 Added in v2.0.0
@@ -342,7 +368,9 @@ Method asMap of PlutusData
 **Signature**
 
 ```ts
-export declare const asMap: (instance: CML.PlutusData) => Effect.Effect<CML.PlutusMap | undefined, PlutusDataError>
+export declare const asMap: (
+  instance: CML.PlutusData,
+) => Effect.Effect<CML.PlutusMap | undefined, PlutusDataError>;
 ```
 
 Added in v2.0.0
@@ -354,7 +382,9 @@ Method free of PlutusData
 **Signature**
 
 ```ts
-export declare const free: (instance: CML.PlutusData) => Effect.Effect<void, PlutusDataError>
+export declare const free: (
+  instance: CML.PlutusData,
+) => Effect.Effect<void, PlutusDataError>;
 ```
 
 Added in v2.0.0
@@ -366,7 +396,9 @@ Method kind of PlutusData
 **Signature**
 
 ```ts
-export declare const kind: (instance: CML.PlutusData) => Effect.Effect<CML.PlutusDataKind, PlutusDataError>
+export declare const kind: (
+  instance: CML.PlutusData,
+) => Effect.Effect<CML.PlutusDataKind, PlutusDataError>;
 ```
 
 Added in v2.0.0
@@ -378,7 +410,9 @@ Method toCanonicalCborBytes of PlutusData
 **Signature**
 
 ```ts
-export declare const toCanonicalCborBytes: (instance: CML.PlutusData) => Effect.Effect<Uint8Array, PlutusDataError>
+export declare const toCanonicalCborBytes: (
+  instance: CML.PlutusData,
+) => Effect.Effect<Uint8Array, PlutusDataError>;
 ```
 
 Added in v2.0.0
@@ -390,7 +424,9 @@ Method toCanonicalCborHex of PlutusData
 **Signature**
 
 ```ts
-export declare const toCanonicalCborHex: (instance: CML.PlutusData) => Effect.Effect<string, PlutusDataError>
+export declare const toCanonicalCborHex: (
+  instance: CML.PlutusData,
+) => Effect.Effect<string, PlutusDataError>;
 ```
 
 Added in v2.0.0
@@ -402,7 +438,9 @@ Method toCardanoNodeFormat of PlutusData
 **Signature**
 
 ```ts
-export declare const toCardanoNodeFormat: (instance: CML.PlutusData) => Effect.Effect<CML.PlutusData, PlutusDataError>
+export declare const toCardanoNodeFormat: (
+  instance: CML.PlutusData,
+) => Effect.Effect<CML.PlutusData, PlutusDataError>;
 ```
 
 Added in v2.0.0
@@ -414,7 +452,9 @@ Method toCborBytes of PlutusData
 **Signature**
 
 ```ts
-export declare const toCborBytes: (instance: CML.PlutusData) => Effect.Effect<Uint8Array, PlutusDataError>
+export declare const toCborBytes: (
+  instance: CML.PlutusData,
+) => Effect.Effect<Uint8Array, PlutusDataError>;
 ```
 
 Added in v2.0.0
@@ -426,7 +466,9 @@ Method toCborHex of PlutusData
 **Signature**
 
 ```ts
-export declare const toCborHex: (instance: CML.PlutusData) => Effect.Effect<string, PlutusDataError>
+export declare const toCborHex: (
+  instance: CML.PlutusData,
+) => Effect.Effect<string, PlutusDataError>;
 ```
 
 Added in v2.0.0
@@ -438,7 +480,9 @@ Method toJsValue of PlutusData
 **Signature**
 
 ```ts
-export declare const toJsValue: (instance: CML.PlutusData) => Effect.Effect<any, PlutusDataError>
+export declare const toJsValue: (
+  instance: CML.PlutusData,
+) => Effect.Effect<any, PlutusDataError>;
 ```
 
 Added in v2.0.0
@@ -450,7 +494,9 @@ Method toJson of PlutusData
 **Signature**
 
 ```ts
-export declare const toJson: (instance: CML.PlutusData) => Effect.Effect<string, PlutusDataError>
+export declare const toJson: (
+  instance: CML.PlutusData,
+) => Effect.Effect<string, PlutusDataError>;
 ```
 
 Added in v2.0.0
@@ -464,7 +510,9 @@ Unsafely calls instance.asBytes without Effect wrapper
 **Signature**
 
 ```ts
-export declare const asBytesUnsafe: (instance: CML.PlutusData) => Uint8Array | undefined
+export declare const asBytesUnsafe: (
+  instance: CML.PlutusData,
+) => Uint8Array | undefined;
 ```
 
 Added in v2.0.0
@@ -476,7 +524,9 @@ Unsafely calls instance.asConstrPlutusData without Effect wrapper
 **Signature**
 
 ```ts
-export declare const asConstrPlutusDataUnsafe: (instance: CML.PlutusData) => CML.ConstrPlutusData | undefined
+export declare const asConstrPlutusDataUnsafe: (
+  instance: CML.PlutusData,
+) => CML.ConstrPlutusData | undefined;
 ```
 
 Added in v2.0.0
@@ -488,7 +538,9 @@ Unsafely calls instance.asInteger without Effect wrapper
 **Signature**
 
 ```ts
-export declare const asIntegerUnsafe: (instance: CML.PlutusData) => CML.BigInteger | undefined
+export declare const asIntegerUnsafe: (
+  instance: CML.PlutusData,
+) => CML.BigInteger | undefined;
 ```
 
 Added in v2.0.0
@@ -500,7 +552,9 @@ Unsafely calls instance.asList without Effect wrapper
 **Signature**
 
 ```ts
-export declare const asListUnsafe: (instance: CML.PlutusData) => CML.PlutusDataList | undefined
+export declare const asListUnsafe: (
+  instance: CML.PlutusData,
+) => CML.PlutusDataList | undefined;
 ```
 
 Added in v2.0.0
@@ -512,7 +566,9 @@ Unsafely calls instance.asMap without Effect wrapper
 **Signature**
 
 ```ts
-export declare const asMapUnsafe: (instance: CML.PlutusData) => CML.PlutusMap | undefined
+export declare const asMapUnsafe: (
+  instance: CML.PlutusData,
+) => CML.PlutusMap | undefined;
 ```
 
 Added in v2.0.0
@@ -524,7 +580,7 @@ Unsafely calls instance.free without Effect wrapper
 **Signature**
 
 ```ts
-export declare const freeUnsafe: (instance: CML.PlutusData) => void
+export declare const freeUnsafe: (instance: CML.PlutusData) => void;
 ```
 
 Added in v2.0.0
@@ -536,7 +592,9 @@ Unsafely calls instance.kind without Effect wrapper
 **Signature**
 
 ```ts
-export declare const kindUnsafe: (instance: CML.PlutusData) => CML.PlutusDataKind
+export declare const kindUnsafe: (
+  instance: CML.PlutusData,
+) => CML.PlutusDataKind;
 ```
 
 Added in v2.0.0
@@ -548,7 +606,9 @@ Unsafely calls instance.toCanonicalCborBytes without Effect wrapper
 **Signature**
 
 ```ts
-export declare const toCanonicalCborBytesUnsafe: (instance: CML.PlutusData) => Uint8Array
+export declare const toCanonicalCborBytesUnsafe: (
+  instance: CML.PlutusData,
+) => Uint8Array;
 ```
 
 Added in v2.0.0
@@ -560,7 +620,9 @@ Unsafely calls instance.toCanonicalCborHex without Effect wrapper
 **Signature**
 
 ```ts
-export declare const toCanonicalCborHexUnsafe: (instance: CML.PlutusData) => string
+export declare const toCanonicalCborHexUnsafe: (
+  instance: CML.PlutusData,
+) => string;
 ```
 
 Added in v2.0.0
@@ -572,7 +634,9 @@ Unsafely calls instance.toCardanoNodeFormat without Effect wrapper
 **Signature**
 
 ```ts
-export declare const toCardanoNodeFormatUnsafe: (instance: CML.PlutusData) => CML.PlutusData
+export declare const toCardanoNodeFormatUnsafe: (
+  instance: CML.PlutusData,
+) => CML.PlutusData;
 ```
 
 Added in v2.0.0
@@ -584,7 +648,9 @@ Unsafely calls instance.toCborBytes without Effect wrapper
 **Signature**
 
 ```ts
-export declare const toCborBytesUnsafe: (instance: CML.PlutusData) => Uint8Array
+export declare const toCborBytesUnsafe: (
+  instance: CML.PlutusData,
+) => Uint8Array;
 ```
 
 Added in v2.0.0
@@ -596,7 +662,7 @@ Unsafely calls instance.toCborHex without Effect wrapper
 **Signature**
 
 ```ts
-export declare const toCborHexUnsafe: (instance: CML.PlutusData) => string
+export declare const toCborHexUnsafe: (instance: CML.PlutusData) => string;
 ```
 
 Added in v2.0.0
@@ -608,7 +674,7 @@ Unsafely calls instance.toJsValue without Effect wrapper
 **Signature**
 
 ```ts
-export declare const toJsValueUnsafe: (instance: CML.PlutusData) => any
+export declare const toJsValueUnsafe: (instance: CML.PlutusData) => any;
 ```
 
 Added in v2.0.0
@@ -620,7 +686,7 @@ Unsafely calls instance.toJson without Effect wrapper
 **Signature**
 
 ```ts
-export declare const toJsonUnsafe: (instance: CML.PlutusData) => string
+export declare const toJsonUnsafe: (instance: CML.PlutusData) => string;
 ```
 
 Added in v2.0.0
@@ -634,7 +700,7 @@ Type alias for the CML PlutusData class
 **Signature**
 
 ```ts
-export type PlutusData = CML.PlutusData
+export type PlutusData = CML.PlutusData;
 ```
 
 Added in v2.0.0

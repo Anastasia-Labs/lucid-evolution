@@ -46,7 +46,10 @@ Static method \_new of TransactionOutputBuilder
 **Signature**
 
 ```ts
-export declare const _new: () => Effect.Effect<CML.TransactionOutputBuilder, TransactionOutputBuilderError>
+export declare const _new: () => Effect.Effect<
+  CML.TransactionOutputBuilder,
+  TransactionOutputBuilderError
+>;
 ```
 
 Added in v2.0.0
@@ -60,7 +63,7 @@ Unsafely calls TransactionOutputBuilder.\_new without Effect wrapper
 **Signature**
 
 ```ts
-export declare const _newUnsafe: () => CML.TransactionOutputBuilder
+export declare const _newUnsafe: () => CML.TransactionOutputBuilder;
 ```
 
 Added in v2.0.0
@@ -91,8 +94,8 @@ Method free of TransactionOutputBuilder
 
 ```ts
 export declare const free: (
-  instance: CML.TransactionOutputBuilder
-) => Effect.Effect<void, TransactionOutputBuilderError>
+  instance: CML.TransactionOutputBuilder,
+) => Effect.Effect<void, TransactionOutputBuilderError>;
 ```
 
 Added in v2.0.0
@@ -105,8 +108,11 @@ Method next of TransactionOutputBuilder
 
 ```ts
 export declare const next: (
-  instance: CML.TransactionOutputBuilder
-) => Effect.Effect<CML.TransactionOutputAmountBuilder, TransactionOutputBuilderError>
+  instance: CML.TransactionOutputBuilder,
+) => Effect.Effect<
+  CML.TransactionOutputAmountBuilder,
+  TransactionOutputBuilderError
+>;
 ```
 
 Added in v2.0.0
@@ -120,8 +126,8 @@ Method withAddress of TransactionOutputBuilder
 ```ts
 export declare const withAddress: (
   instance: CML.TransactionOutputBuilder,
-  address: CML.Address
-) => Effect.Effect<CML.TransactionOutputBuilder, TransactionOutputBuilderError>
+  address: CML.Address,
+) => Effect.Effect<CML.TransactionOutputBuilder, TransactionOutputBuilderError>;
 ```
 
 Added in v2.0.0
@@ -135,8 +141,8 @@ Method withCommunicationData of TransactionOutputBuilder
 ```ts
 export declare const withCommunicationData: (
   instance: CML.TransactionOutputBuilder,
-  datum: CML.PlutusData
-) => Effect.Effect<CML.TransactionOutputBuilder, TransactionOutputBuilderError>
+  datum: CML.PlutusData,
+) => Effect.Effect<CML.TransactionOutputBuilder, TransactionOutputBuilderError>;
 ```
 
 Added in v2.0.0
@@ -150,8 +156,8 @@ Method withData of TransactionOutputBuilder
 ```ts
 export declare const withData: (
   instance: CML.TransactionOutputBuilder,
-  datum: CML.DatumOption
-) => Effect.Effect<CML.TransactionOutputBuilder, TransactionOutputBuilderError>
+  datum: CML.DatumOption,
+) => Effect.Effect<CML.TransactionOutputBuilder, TransactionOutputBuilderError>;
 ```
 
 Added in v2.0.0
@@ -165,8 +171,8 @@ Method withReferenceScript of TransactionOutputBuilder
 ```ts
 export declare const withReferenceScript: (
   instance: CML.TransactionOutputBuilder,
-  scriptRef: CML.Script
-) => Effect.Effect<CML.TransactionOutputBuilder, TransactionOutputBuilderError>
+  scriptRef: CML.Script,
+) => Effect.Effect<CML.TransactionOutputBuilder, TransactionOutputBuilderError>;
 ```
 
 Added in v2.0.0
@@ -180,7 +186,9 @@ Unsafely calls instance.free without Effect wrapper
 **Signature**
 
 ```ts
-export declare const freeUnsafe: (instance: CML.TransactionOutputBuilder) => void
+export declare const freeUnsafe: (
+  instance: CML.TransactionOutputBuilder,
+) => void;
 ```
 
 Added in v2.0.0
@@ -192,7 +200,9 @@ Unsafely calls instance.next without Effect wrapper
 **Signature**
 
 ```ts
-export declare const nextUnsafe: (instance: CML.TransactionOutputBuilder) => CML.TransactionOutputAmountBuilder
+export declare const nextUnsafe: (
+  instance: CML.TransactionOutputBuilder,
+) => CML.TransactionOutputAmountBuilder;
 ```
 
 Added in v2.0.0
@@ -206,8 +216,8 @@ Unsafely calls instance.withAddress without Effect wrapper
 ```ts
 export declare const withAddressUnsafe: (
   instance: CML.TransactionOutputBuilder,
-  address: CML.Address
-) => CML.TransactionOutputBuilder
+  address: CML.Address,
+) => CML.TransactionOutputBuilder;
 ```
 
 Added in v2.0.0
@@ -221,8 +231,8 @@ Unsafely calls instance.withCommunicationData without Effect wrapper
 ```ts
 export declare const withCommunicationDataUnsafe: (
   instance: CML.TransactionOutputBuilder,
-  datum: CML.PlutusData
-) => CML.TransactionOutputBuilder
+  datum: CML.PlutusData,
+) => CML.TransactionOutputBuilder;
 ```
 
 Added in v2.0.0
@@ -236,8 +246,8 @@ Unsafely calls instance.withData without Effect wrapper
 ```ts
 export declare const withDataUnsafe: (
   instance: CML.TransactionOutputBuilder,
-  datum: CML.DatumOption
-) => CML.TransactionOutputBuilder
+  datum: CML.DatumOption,
+) => CML.TransactionOutputBuilder;
 ```
 
 Added in v2.0.0
@@ -251,8 +261,8 @@ Unsafely calls instance.withReferenceScript without Effect wrapper
 ```ts
 export declare const withReferenceScriptUnsafe: (
   instance: CML.TransactionOutputBuilder,
-  scriptRef: CML.Script
-) => CML.TransactionOutputBuilder
+  scriptRef: CML.Script,
+) => CML.TransactionOutputBuilder;
 ```
 
 Added in v2.0.0
@@ -266,7 +276,7 @@ Type alias for the CML TransactionOutputBuilder class
 **Signature**
 
 ```ts
-export type TransactionOutputBuilder = CML.TransactionOutputBuilder
+export type TransactionOutputBuilder = CML.TransactionOutputBuilder;
 ```
 
 Added in v2.0.0

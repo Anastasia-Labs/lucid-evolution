@@ -46,7 +46,9 @@ Static method fromBech32 of DatumHash
 **Signature**
 
 ```ts
-export declare const fromBech32: (bech32Str: string) => Effect.Effect<CML.DatumHash, DatumHashError>
+export declare const fromBech32: (
+  bech32Str: string,
+) => Effect.Effect<CML.DatumHash, DatumHashError>;
 ```
 
 Added in v2.0.0
@@ -58,7 +60,9 @@ Static method fromHex of DatumHash
 **Signature**
 
 ```ts
-export declare const fromHex: (input: string) => Effect.Effect<CML.DatumHash, DatumHashError>
+export declare const fromHex: (
+  input: string,
+) => Effect.Effect<CML.DatumHash, DatumHashError>;
 ```
 
 Added in v2.0.0
@@ -70,7 +74,9 @@ Static method fromRawBytes of DatumHash
 **Signature**
 
 ```ts
-export declare const fromRawBytes: (bytes: Uint8Array) => Effect.Effect<CML.DatumHash, DatumHashError>
+export declare const fromRawBytes: (
+  bytes: Uint8Array,
+) => Effect.Effect<CML.DatumHash, DatumHashError>;
 ```
 
 Added in v2.0.0
@@ -84,7 +90,7 @@ Unsafely calls DatumHash.fromBech32 without Effect wrapper
 **Signature**
 
 ```ts
-export declare const fromBech32Unsafe: (bech32Str: string) => CML.DatumHash
+export declare const fromBech32Unsafe: (bech32Str: string) => CML.DatumHash;
 ```
 
 Added in v2.0.0
@@ -96,7 +102,7 @@ Unsafely calls DatumHash.fromHex without Effect wrapper
 **Signature**
 
 ```ts
-export declare const fromHexUnsafe: (input: string) => CML.DatumHash
+export declare const fromHexUnsafe: (input: string) => CML.DatumHash;
 ```
 
 Added in v2.0.0
@@ -108,7 +114,7 @@ Unsafely calls DatumHash.fromRawBytes without Effect wrapper
 **Signature**
 
 ```ts
-export declare const fromRawBytesUnsafe: (bytes: Uint8Array) => CML.DatumHash
+export declare const fromRawBytesUnsafe: (bytes: Uint8Array) => CML.DatumHash;
 ```
 
 Added in v2.0.0
@@ -138,7 +144,9 @@ Method free of DatumHash
 **Signature**
 
 ```ts
-export declare const free: (instance: CML.DatumHash) => Effect.Effect<void, DatumHashError>
+export declare const free: (
+  instance: CML.DatumHash,
+) => Effect.Effect<void, DatumHashError>;
 ```
 
 Added in v2.0.0
@@ -150,7 +158,10 @@ Method toBech32 of DatumHash
 **Signature**
 
 ```ts
-export declare const toBech32: (instance: CML.DatumHash, prefix: string) => Effect.Effect<string, DatumHashError>
+export declare const toBech32: (
+  instance: CML.DatumHash,
+  prefix: string,
+) => Effect.Effect<string, DatumHashError>;
 ```
 
 Added in v2.0.0
@@ -162,7 +173,9 @@ Method toHex of DatumHash
 **Signature**
 
 ```ts
-export declare const toHex: (instance: CML.DatumHash) => Effect.Effect<string, DatumHashError>
+export declare const toHex: (
+  instance: CML.DatumHash,
+) => Effect.Effect<string, DatumHashError>;
 ```
 
 Added in v2.0.0
@@ -174,7 +187,9 @@ Method toRawBytes of DatumHash
 **Signature**
 
 ```ts
-export declare const toRawBytes: (instance: CML.DatumHash) => Effect.Effect<Uint8Array, DatumHashError>
+export declare const toRawBytes: (
+  instance: CML.DatumHash,
+) => Effect.Effect<Uint8Array, DatumHashError>;
 ```
 
 Added in v2.0.0
@@ -188,7 +203,7 @@ Unsafely calls instance.free without Effect wrapper
 **Signature**
 
 ```ts
-export declare const freeUnsafe: (instance: CML.DatumHash) => void
+export declare const freeUnsafe: (instance: CML.DatumHash) => void;
 ```
 
 Added in v2.0.0
@@ -200,7 +215,10 @@ Unsafely calls instance.toBech32 without Effect wrapper
 **Signature**
 
 ```ts
-export declare const toBech32Unsafe: (instance: CML.DatumHash, prefix: string) => string
+export declare const toBech32Unsafe: (
+  instance: CML.DatumHash,
+  prefix: string,
+) => string;
 ```
 
 Added in v2.0.0
@@ -212,7 +230,7 @@ Unsafely calls instance.toHex without Effect wrapper
 **Signature**
 
 ```ts
-export declare const toHexUnsafe: (instance: CML.DatumHash) => string
+export declare const toHexUnsafe: (instance: CML.DatumHash) => string;
 ```
 
 Added in v2.0.0
@@ -224,7 +242,7 @@ Unsafely calls instance.toRawBytes without Effect wrapper
 **Signature**
 
 ```ts
-export declare const toRawBytesUnsafe: (instance: CML.DatumHash) => Uint8Array
+export declare const toRawBytesUnsafe: (instance: CML.DatumHash) => Uint8Array;
 ```
 
 Added in v2.0.0
@@ -238,7 +256,7 @@ Type alias for the CML DatumHash class
 **Signature**
 
 ```ts
-export type DatumHash = CML.DatumHash
+export type DatumHash = CML.DatumHash;
 ```
 
 Added in v2.0.0

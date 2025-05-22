@@ -48,7 +48,9 @@ Method free of VoteBuilderResult
 **Signature**
 
 ```ts
-export declare const free: (instance: CML.VoteBuilderResult) => Effect.Effect<void, VoteBuilderResultError>
+export declare const free: (
+  instance: CML.VoteBuilderResult,
+) => Effect.Effect<void, VoteBuilderResultError>;
 ```
 
 Added in v2.0.0
@@ -62,7 +64,7 @@ Unsafely calls instance.free without Effect wrapper
 **Signature**
 
 ```ts
-export declare const freeUnsafe: (instance: CML.VoteBuilderResult) => void
+export declare const freeUnsafe: (instance: CML.VoteBuilderResult) => void;
 ```
 
 Added in v2.0.0
@@ -76,7 +78,7 @@ Type alias for the CML VoteBuilderResult class
 **Signature**
 
 ```ts
-export type VoteBuilderResult = CML.VoteBuilderResult
+export type VoteBuilderResult = CML.VoteBuilderResult;
 ```
 
 Added in v2.0.0

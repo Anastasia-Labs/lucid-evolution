@@ -60,7 +60,10 @@ Static method \_new of ExUnits
 **Signature**
 
 ```ts
-export declare const _new: (mem: bigint, steps: bigint) => Effect.Effect<CML.ExUnits, ExUnitsError>
+export declare const _new: (
+  mem: bigint,
+  steps: bigint,
+) => Effect.Effect<CML.ExUnits, ExUnitsError>;
 ```
 
 Added in v2.0.0
@@ -72,7 +75,9 @@ Static method fromCborBytes of ExUnits
 **Signature**
 
 ```ts
-export declare const fromCborBytes: (cborBytes: Uint8Array) => Effect.Effect<CML.ExUnits, ExUnitsError>
+export declare const fromCborBytes: (
+  cborBytes: Uint8Array,
+) => Effect.Effect<CML.ExUnits, ExUnitsError>;
 ```
 
 Added in v2.0.0
@@ -84,7 +89,9 @@ Static method fromCborHex of ExUnits
 **Signature**
 
 ```ts
-export declare const fromCborHex: (cborBytes: string) => Effect.Effect<CML.ExUnits, ExUnitsError>
+export declare const fromCborHex: (
+  cborBytes: string,
+) => Effect.Effect<CML.ExUnits, ExUnitsError>;
 ```
 
 Added in v2.0.0
@@ -96,7 +103,9 @@ Static method fromJson of ExUnits
 **Signature**
 
 ```ts
-export declare const fromJson: (json: string) => Effect.Effect<CML.ExUnits, ExUnitsError>
+export declare const fromJson: (
+  json: string,
+) => Effect.Effect<CML.ExUnits, ExUnitsError>;
 ```
 
 Added in v2.0.0
@@ -110,7 +119,7 @@ Unsafely calls ExUnits.\_new without Effect wrapper
 **Signature**
 
 ```ts
-export declare const _newUnsafe: (mem: bigint, steps: bigint) => CML.ExUnits
+export declare const _newUnsafe: (mem: bigint, steps: bigint) => CML.ExUnits;
 ```
 
 Added in v2.0.0
@@ -122,7 +131,9 @@ Unsafely calls ExUnits.fromCborBytes without Effect wrapper
 **Signature**
 
 ```ts
-export declare const fromCborBytesUnsafe: (cborBytes: Uint8Array) => CML.ExUnits
+export declare const fromCborBytesUnsafe: (
+  cborBytes: Uint8Array,
+) => CML.ExUnits;
 ```
 
 Added in v2.0.0
@@ -134,7 +145,7 @@ Unsafely calls ExUnits.fromCborHex without Effect wrapper
 **Signature**
 
 ```ts
-export declare const fromCborHexUnsafe: (cborBytes: string) => CML.ExUnits
+export declare const fromCborHexUnsafe: (cborBytes: string) => CML.ExUnits;
 ```
 
 Added in v2.0.0
@@ -146,7 +157,7 @@ Unsafely calls ExUnits.fromJson without Effect wrapper
 **Signature**
 
 ```ts
-export declare const fromJsonUnsafe: (json: string) => CML.ExUnits
+export declare const fromJsonUnsafe: (json: string) => CML.ExUnits;
 ```
 
 Added in v2.0.0
@@ -176,7 +187,10 @@ Method checkedAdd of ExUnits
 **Signature**
 
 ```ts
-export declare const checkedAdd: (instance: CML.ExUnits, other: CML.ExUnits) => Effect.Effect<CML.ExUnits, ExUnitsError>
+export declare const checkedAdd: (
+  instance: CML.ExUnits,
+  other: CML.ExUnits,
+) => Effect.Effect<CML.ExUnits, ExUnitsError>;
 ```
 
 Added in v2.0.0
@@ -188,7 +202,9 @@ Method free of ExUnits
 **Signature**
 
 ```ts
-export declare const free: (instance: CML.ExUnits) => Effect.Effect<void, ExUnitsError>
+export declare const free: (
+  instance: CML.ExUnits,
+) => Effect.Effect<void, ExUnitsError>;
 ```
 
 Added in v2.0.0
@@ -200,7 +216,9 @@ Method mem of ExUnits
 **Signature**
 
 ```ts
-export declare const mem: (instance: CML.ExUnits) => Effect.Effect<bigint, ExUnitsError>
+export declare const mem: (
+  instance: CML.ExUnits,
+) => Effect.Effect<bigint, ExUnitsError>;
 ```
 
 Added in v2.0.0
@@ -212,7 +230,9 @@ Method steps of ExUnits
 **Signature**
 
 ```ts
-export declare const steps: (instance: CML.ExUnits) => Effect.Effect<bigint, ExUnitsError>
+export declare const steps: (
+  instance: CML.ExUnits,
+) => Effect.Effect<bigint, ExUnitsError>;
 ```
 
 Added in v2.0.0
@@ -224,7 +244,9 @@ Method toCanonicalCborBytes of ExUnits
 **Signature**
 
 ```ts
-export declare const toCanonicalCborBytes: (instance: CML.ExUnits) => Effect.Effect<Uint8Array, ExUnitsError>
+export declare const toCanonicalCborBytes: (
+  instance: CML.ExUnits,
+) => Effect.Effect<Uint8Array, ExUnitsError>;
 ```
 
 Added in v2.0.0
@@ -236,7 +258,9 @@ Method toCanonicalCborHex of ExUnits
 **Signature**
 
 ```ts
-export declare const toCanonicalCborHex: (instance: CML.ExUnits) => Effect.Effect<string, ExUnitsError>
+export declare const toCanonicalCborHex: (
+  instance: CML.ExUnits,
+) => Effect.Effect<string, ExUnitsError>;
 ```
 
 Added in v2.0.0
@@ -248,7 +272,9 @@ Method toCborBytes of ExUnits
 **Signature**
 
 ```ts
-export declare const toCborBytes: (instance: CML.ExUnits) => Effect.Effect<Uint8Array, ExUnitsError>
+export declare const toCborBytes: (
+  instance: CML.ExUnits,
+) => Effect.Effect<Uint8Array, ExUnitsError>;
 ```
 
 Added in v2.0.0
@@ -260,7 +286,9 @@ Method toCborHex of ExUnits
 **Signature**
 
 ```ts
-export declare const toCborHex: (instance: CML.ExUnits) => Effect.Effect<string, ExUnitsError>
+export declare const toCborHex: (
+  instance: CML.ExUnits,
+) => Effect.Effect<string, ExUnitsError>;
 ```
 
 Added in v2.0.0
@@ -272,7 +300,9 @@ Method toJsValue of ExUnits
 **Signature**
 
 ```ts
-export declare const toJsValue: (instance: CML.ExUnits) => Effect.Effect<any, ExUnitsError>
+export declare const toJsValue: (
+  instance: CML.ExUnits,
+) => Effect.Effect<any, ExUnitsError>;
 ```
 
 Added in v2.0.0
@@ -284,7 +314,9 @@ Method toJson of ExUnits
 **Signature**
 
 ```ts
-export declare const toJson: (instance: CML.ExUnits) => Effect.Effect<string, ExUnitsError>
+export declare const toJson: (
+  instance: CML.ExUnits,
+) => Effect.Effect<string, ExUnitsError>;
 ```
 
 Added in v2.0.0
@@ -298,7 +330,10 @@ Unsafely calls instance.checkedAdd without Effect wrapper
 **Signature**
 
 ```ts
-export declare const checkedAddUnsafe: (instance: CML.ExUnits, other: CML.ExUnits) => CML.ExUnits
+export declare const checkedAddUnsafe: (
+  instance: CML.ExUnits,
+  other: CML.ExUnits,
+) => CML.ExUnits;
 ```
 
 Added in v2.0.0
@@ -310,7 +345,7 @@ Unsafely calls instance.free without Effect wrapper
 **Signature**
 
 ```ts
-export declare const freeUnsafe: (instance: CML.ExUnits) => void
+export declare const freeUnsafe: (instance: CML.ExUnits) => void;
 ```
 
 Added in v2.0.0
@@ -322,7 +357,7 @@ Unsafely calls instance.mem without Effect wrapper
 **Signature**
 
 ```ts
-export declare const memUnsafe: (instance: CML.ExUnits) => bigint
+export declare const memUnsafe: (instance: CML.ExUnits) => bigint;
 ```
 
 Added in v2.0.0
@@ -334,7 +369,7 @@ Unsafely calls instance.steps without Effect wrapper
 **Signature**
 
 ```ts
-export declare const stepsUnsafe: (instance: CML.ExUnits) => bigint
+export declare const stepsUnsafe: (instance: CML.ExUnits) => bigint;
 ```
 
 Added in v2.0.0
@@ -346,7 +381,9 @@ Unsafely calls instance.toCanonicalCborBytes without Effect wrapper
 **Signature**
 
 ```ts
-export declare const toCanonicalCborBytesUnsafe: (instance: CML.ExUnits) => Uint8Array
+export declare const toCanonicalCborBytesUnsafe: (
+  instance: CML.ExUnits,
+) => Uint8Array;
 ```
 
 Added in v2.0.0
@@ -358,7 +395,9 @@ Unsafely calls instance.toCanonicalCborHex without Effect wrapper
 **Signature**
 
 ```ts
-export declare const toCanonicalCborHexUnsafe: (instance: CML.ExUnits) => string
+export declare const toCanonicalCborHexUnsafe: (
+  instance: CML.ExUnits,
+) => string;
 ```
 
 Added in v2.0.0
@@ -370,7 +409,7 @@ Unsafely calls instance.toCborBytes without Effect wrapper
 **Signature**
 
 ```ts
-export declare const toCborBytesUnsafe: (instance: CML.ExUnits) => Uint8Array
+export declare const toCborBytesUnsafe: (instance: CML.ExUnits) => Uint8Array;
 ```
 
 Added in v2.0.0
@@ -382,7 +421,7 @@ Unsafely calls instance.toCborHex without Effect wrapper
 **Signature**
 
 ```ts
-export declare const toCborHexUnsafe: (instance: CML.ExUnits) => string
+export declare const toCborHexUnsafe: (instance: CML.ExUnits) => string;
 ```
 
 Added in v2.0.0
@@ -394,7 +433,7 @@ Unsafely calls instance.toJsValue without Effect wrapper
 **Signature**
 
 ```ts
-export declare const toJsValueUnsafe: (instance: CML.ExUnits) => any
+export declare const toJsValueUnsafe: (instance: CML.ExUnits) => any;
 ```
 
 Added in v2.0.0
@@ -406,7 +445,7 @@ Unsafely calls instance.toJson without Effect wrapper
 **Signature**
 
 ```ts
-export declare const toJsonUnsafe: (instance: CML.ExUnits) => string
+export declare const toJsonUnsafe: (instance: CML.ExUnits) => string;
 ```
 
 Added in v2.0.0
@@ -420,7 +459,7 @@ Type alias for the CML ExUnits class
 **Signature**
 
 ```ts
-export type ExUnits = CML.ExUnits
+export type ExUnits = CML.ExUnits;
 ```
 
 Added in v2.0.0

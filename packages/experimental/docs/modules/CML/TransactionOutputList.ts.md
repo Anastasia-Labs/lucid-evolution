@@ -42,7 +42,10 @@ Static method \_new of TransactionOutputList
 **Signature**
 
 ```ts
-export declare const _new: () => Effect.Effect<CML.TransactionOutputList, TransactionOutputListError>
+export declare const _new: () => Effect.Effect<
+  CML.TransactionOutputList,
+  TransactionOutputListError
+>;
 ```
 
 Added in v2.0.0
@@ -56,7 +59,7 @@ Unsafely calls TransactionOutputList.\_new without Effect wrapper
 **Signature**
 
 ```ts
-export declare const _newUnsafe: () => CML.TransactionOutputList
+export declare const _newUnsafe: () => CML.TransactionOutputList;
 ```
 
 Added in v2.0.0
@@ -88,8 +91,8 @@ Method add of TransactionOutputList
 ```ts
 export declare const add: (
   instance: CML.TransactionOutputList,
-  elem: CML.TransactionOutput
-) => Effect.Effect<void, TransactionOutputListError>
+  elem: CML.TransactionOutput,
+) => Effect.Effect<void, TransactionOutputListError>;
 ```
 
 Added in v2.0.0
@@ -101,7 +104,9 @@ Method free of TransactionOutputList
 **Signature**
 
 ```ts
-export declare const free: (instance: CML.TransactionOutputList) => Effect.Effect<void, TransactionOutputListError>
+export declare const free: (
+  instance: CML.TransactionOutputList,
+) => Effect.Effect<void, TransactionOutputListError>;
 ```
 
 Added in v2.0.0
@@ -115,8 +120,8 @@ Method get of TransactionOutputList
 ```ts
 export declare const get: (
   instance: CML.TransactionOutputList,
-  index: number
-) => Effect.Effect<CML.TransactionOutput, TransactionOutputListError>
+  index: number,
+) => Effect.Effect<CML.TransactionOutput, TransactionOutputListError>;
 ```
 
 Added in v2.0.0
@@ -128,7 +133,9 @@ Method len of TransactionOutputList
 **Signature**
 
 ```ts
-export declare const len: (instance: CML.TransactionOutputList) => Effect.Effect<number, TransactionOutputListError>
+export declare const len: (
+  instance: CML.TransactionOutputList,
+) => Effect.Effect<number, TransactionOutputListError>;
 ```
 
 Added in v2.0.0
@@ -142,7 +149,10 @@ Unsafely calls instance.add without Effect wrapper
 **Signature**
 
 ```ts
-export declare const addUnsafe: (instance: CML.TransactionOutputList, elem: CML.TransactionOutput) => void
+export declare const addUnsafe: (
+  instance: CML.TransactionOutputList,
+  elem: CML.TransactionOutput,
+) => void;
 ```
 
 Added in v2.0.0
@@ -154,7 +164,7 @@ Unsafely calls instance.free without Effect wrapper
 **Signature**
 
 ```ts
-export declare const freeUnsafe: (instance: CML.TransactionOutputList) => void
+export declare const freeUnsafe: (instance: CML.TransactionOutputList) => void;
 ```
 
 Added in v2.0.0
@@ -166,7 +176,10 @@ Unsafely calls instance.get without Effect wrapper
 **Signature**
 
 ```ts
-export declare const getUnsafe: (instance: CML.TransactionOutputList, index: number) => CML.TransactionOutput
+export declare const getUnsafe: (
+  instance: CML.TransactionOutputList,
+  index: number,
+) => CML.TransactionOutput;
 ```
 
 Added in v2.0.0
@@ -178,7 +191,7 @@ Unsafely calls instance.len without Effect wrapper
 **Signature**
 
 ```ts
-export declare const lenUnsafe: (instance: CML.TransactionOutputList) => number
+export declare const lenUnsafe: (instance: CML.TransactionOutputList) => number;
 ```
 
 Added in v2.0.0
@@ -192,7 +205,7 @@ Type alias for the CML TransactionOutputList class
 **Signature**
 
 ```ts
-export type TransactionOutputList = CML.TransactionOutputList
+export type TransactionOutputList = CML.TransactionOutputList;
 ```
 
 Added in v2.0.0

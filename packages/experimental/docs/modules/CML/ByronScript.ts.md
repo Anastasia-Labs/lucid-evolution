@@ -46,7 +46,9 @@ Static method fromBech32 of ByronScript
 **Signature**
 
 ```ts
-export declare const fromBech32: (bech32Str: string) => Effect.Effect<CML.ByronScript, ByronScriptError>
+export declare const fromBech32: (
+  bech32Str: string,
+) => Effect.Effect<CML.ByronScript, ByronScriptError>;
 ```
 
 Added in v2.0.0
@@ -58,7 +60,9 @@ Static method fromHex of ByronScript
 **Signature**
 
 ```ts
-export declare const fromHex: (input: string) => Effect.Effect<CML.ByronScript, ByronScriptError>
+export declare const fromHex: (
+  input: string,
+) => Effect.Effect<CML.ByronScript, ByronScriptError>;
 ```
 
 Added in v2.0.0
@@ -70,7 +74,9 @@ Static method fromRawBytes of ByronScript
 **Signature**
 
 ```ts
-export declare const fromRawBytes: (bytes: Uint8Array) => Effect.Effect<CML.ByronScript, ByronScriptError>
+export declare const fromRawBytes: (
+  bytes: Uint8Array,
+) => Effect.Effect<CML.ByronScript, ByronScriptError>;
 ```
 
 Added in v2.0.0
@@ -84,7 +90,7 @@ Unsafely calls ByronScript.fromBech32 without Effect wrapper
 **Signature**
 
 ```ts
-export declare const fromBech32Unsafe: (bech32Str: string) => CML.ByronScript
+export declare const fromBech32Unsafe: (bech32Str: string) => CML.ByronScript;
 ```
 
 Added in v2.0.0
@@ -96,7 +102,7 @@ Unsafely calls ByronScript.fromHex without Effect wrapper
 **Signature**
 
 ```ts
-export declare const fromHexUnsafe: (input: string) => CML.ByronScript
+export declare const fromHexUnsafe: (input: string) => CML.ByronScript;
 ```
 
 Added in v2.0.0
@@ -108,7 +114,7 @@ Unsafely calls ByronScript.fromRawBytes without Effect wrapper
 **Signature**
 
 ```ts
-export declare const fromRawBytesUnsafe: (bytes: Uint8Array) => CML.ByronScript
+export declare const fromRawBytesUnsafe: (bytes: Uint8Array) => CML.ByronScript;
 ```
 
 Added in v2.0.0
@@ -138,7 +144,9 @@ Method free of ByronScript
 **Signature**
 
 ```ts
-export declare const free: (instance: CML.ByronScript) => Effect.Effect<void, ByronScriptError>
+export declare const free: (
+  instance: CML.ByronScript,
+) => Effect.Effect<void, ByronScriptError>;
 ```
 
 Added in v2.0.0
@@ -150,7 +158,10 @@ Method toBech32 of ByronScript
 **Signature**
 
 ```ts
-export declare const toBech32: (instance: CML.ByronScript, prefix: string) => Effect.Effect<string, ByronScriptError>
+export declare const toBech32: (
+  instance: CML.ByronScript,
+  prefix: string,
+) => Effect.Effect<string, ByronScriptError>;
 ```
 
 Added in v2.0.0
@@ -162,7 +173,9 @@ Method toHex of ByronScript
 **Signature**
 
 ```ts
-export declare const toHex: (instance: CML.ByronScript) => Effect.Effect<string, ByronScriptError>
+export declare const toHex: (
+  instance: CML.ByronScript,
+) => Effect.Effect<string, ByronScriptError>;
 ```
 
 Added in v2.0.0
@@ -174,7 +187,9 @@ Method toRawBytes of ByronScript
 **Signature**
 
 ```ts
-export declare const toRawBytes: (instance: CML.ByronScript) => Effect.Effect<Uint8Array, ByronScriptError>
+export declare const toRawBytes: (
+  instance: CML.ByronScript,
+) => Effect.Effect<Uint8Array, ByronScriptError>;
 ```
 
 Added in v2.0.0
@@ -188,7 +203,7 @@ Unsafely calls instance.free without Effect wrapper
 **Signature**
 
 ```ts
-export declare const freeUnsafe: (instance: CML.ByronScript) => void
+export declare const freeUnsafe: (instance: CML.ByronScript) => void;
 ```
 
 Added in v2.0.0
@@ -200,7 +215,10 @@ Unsafely calls instance.toBech32 without Effect wrapper
 **Signature**
 
 ```ts
-export declare const toBech32Unsafe: (instance: CML.ByronScript, prefix: string) => string
+export declare const toBech32Unsafe: (
+  instance: CML.ByronScript,
+  prefix: string,
+) => string;
 ```
 
 Added in v2.0.0
@@ -212,7 +230,7 @@ Unsafely calls instance.toHex without Effect wrapper
 **Signature**
 
 ```ts
-export declare const toHexUnsafe: (instance: CML.ByronScript) => string
+export declare const toHexUnsafe: (instance: CML.ByronScript) => string;
 ```
 
 Added in v2.0.0
@@ -224,7 +242,9 @@ Unsafely calls instance.toRawBytes without Effect wrapper
 **Signature**
 
 ```ts
-export declare const toRawBytesUnsafe: (instance: CML.ByronScript) => Uint8Array
+export declare const toRawBytesUnsafe: (
+  instance: CML.ByronScript,
+) => Uint8Array;
 ```
 
 Added in v2.0.0
@@ -238,7 +258,7 @@ Type alias for the CML ByronScript class
 **Signature**
 
 ```ts
-export type ByronScript = CML.ByronScript
+export type ByronScript = CML.ByronScript;
 ```
 
 Added in v2.0.0

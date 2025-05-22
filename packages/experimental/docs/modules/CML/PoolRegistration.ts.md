@@ -56,7 +56,9 @@ Static method \_new of PoolRegistration
 **Signature**
 
 ```ts
-export declare const _new: (poolParams: CML.PoolParams) => Effect.Effect<CML.PoolRegistration, PoolRegistrationError>
+export declare const _new: (
+  poolParams: CML.PoolParams,
+) => Effect.Effect<CML.PoolRegistration, PoolRegistrationError>;
 ```
 
 Added in v2.0.0
@@ -69,8 +71,8 @@ Static method fromCborBytes of PoolRegistration
 
 ```ts
 export declare const fromCborBytes: (
-  cborBytes: Uint8Array
-) => Effect.Effect<CML.PoolRegistration, PoolRegistrationError>
+  cborBytes: Uint8Array,
+) => Effect.Effect<CML.PoolRegistration, PoolRegistrationError>;
 ```
 
 Added in v2.0.0
@@ -82,7 +84,9 @@ Static method fromCborHex of PoolRegistration
 **Signature**
 
 ```ts
-export declare const fromCborHex: (cborBytes: string) => Effect.Effect<CML.PoolRegistration, PoolRegistrationError>
+export declare const fromCborHex: (
+  cborBytes: string,
+) => Effect.Effect<CML.PoolRegistration, PoolRegistrationError>;
 ```
 
 Added in v2.0.0
@@ -94,7 +98,9 @@ Static method fromJson of PoolRegistration
 **Signature**
 
 ```ts
-export declare const fromJson: (json: string) => Effect.Effect<CML.PoolRegistration, PoolRegistrationError>
+export declare const fromJson: (
+  json: string,
+) => Effect.Effect<CML.PoolRegistration, PoolRegistrationError>;
 ```
 
 Added in v2.0.0
@@ -108,7 +114,9 @@ Unsafely calls PoolRegistration.\_new without Effect wrapper
 **Signature**
 
 ```ts
-export declare const _newUnsafe: (poolParams: CML.PoolParams) => CML.PoolRegistration
+export declare const _newUnsafe: (
+  poolParams: CML.PoolParams,
+) => CML.PoolRegistration;
 ```
 
 Added in v2.0.0
@@ -120,7 +128,9 @@ Unsafely calls PoolRegistration.fromCborBytes without Effect wrapper
 **Signature**
 
 ```ts
-export declare const fromCborBytesUnsafe: (cborBytes: Uint8Array) => CML.PoolRegistration
+export declare const fromCborBytesUnsafe: (
+  cborBytes: Uint8Array,
+) => CML.PoolRegistration;
 ```
 
 Added in v2.0.0
@@ -132,7 +142,9 @@ Unsafely calls PoolRegistration.fromCborHex without Effect wrapper
 **Signature**
 
 ```ts
-export declare const fromCborHexUnsafe: (cborBytes: string) => CML.PoolRegistration
+export declare const fromCborHexUnsafe: (
+  cborBytes: string,
+) => CML.PoolRegistration;
 ```
 
 Added in v2.0.0
@@ -144,7 +156,7 @@ Unsafely calls PoolRegistration.fromJson without Effect wrapper
 **Signature**
 
 ```ts
-export declare const fromJsonUnsafe: (json: string) => CML.PoolRegistration
+export declare const fromJsonUnsafe: (json: string) => CML.PoolRegistration;
 ```
 
 Added in v2.0.0
@@ -174,7 +186,9 @@ Method free of PoolRegistration
 **Signature**
 
 ```ts
-export declare const free: (instance: CML.PoolRegistration) => Effect.Effect<void, PoolRegistrationError>
+export declare const free: (
+  instance: CML.PoolRegistration,
+) => Effect.Effect<void, PoolRegistrationError>;
 ```
 
 Added in v2.0.0
@@ -187,8 +201,8 @@ Method poolParams of PoolRegistration
 
 ```ts
 export declare const poolParams: (
-  instance: CML.PoolRegistration
-) => Effect.Effect<CML.PoolParams, PoolRegistrationError>
+  instance: CML.PoolRegistration,
+) => Effect.Effect<CML.PoolParams, PoolRegistrationError>;
 ```
 
 Added in v2.0.0
@@ -201,8 +215,8 @@ Method toCanonicalCborBytes of PoolRegistration
 
 ```ts
 export declare const toCanonicalCborBytes: (
-  instance: CML.PoolRegistration
-) => Effect.Effect<Uint8Array, PoolRegistrationError>
+  instance: CML.PoolRegistration,
+) => Effect.Effect<Uint8Array, PoolRegistrationError>;
 ```
 
 Added in v2.0.0
@@ -215,8 +229,8 @@ Method toCanonicalCborHex of PoolRegistration
 
 ```ts
 export declare const toCanonicalCborHex: (
-  instance: CML.PoolRegistration
-) => Effect.Effect<string, PoolRegistrationError>
+  instance: CML.PoolRegistration,
+) => Effect.Effect<string, PoolRegistrationError>;
 ```
 
 Added in v2.0.0
@@ -228,7 +242,9 @@ Method toCborBytes of PoolRegistration
 **Signature**
 
 ```ts
-export declare const toCborBytes: (instance: CML.PoolRegistration) => Effect.Effect<Uint8Array, PoolRegistrationError>
+export declare const toCborBytes: (
+  instance: CML.PoolRegistration,
+) => Effect.Effect<Uint8Array, PoolRegistrationError>;
 ```
 
 Added in v2.0.0
@@ -240,7 +256,9 @@ Method toCborHex of PoolRegistration
 **Signature**
 
 ```ts
-export declare const toCborHex: (instance: CML.PoolRegistration) => Effect.Effect<string, PoolRegistrationError>
+export declare const toCborHex: (
+  instance: CML.PoolRegistration,
+) => Effect.Effect<string, PoolRegistrationError>;
 ```
 
 Added in v2.0.0
@@ -252,7 +270,9 @@ Method toJsValue of PoolRegistration
 **Signature**
 
 ```ts
-export declare const toJsValue: (instance: CML.PoolRegistration) => Effect.Effect<any, PoolRegistrationError>
+export declare const toJsValue: (
+  instance: CML.PoolRegistration,
+) => Effect.Effect<any, PoolRegistrationError>;
 ```
 
 Added in v2.0.0
@@ -264,7 +284,9 @@ Method toJson of PoolRegistration
 **Signature**
 
 ```ts
-export declare const toJson: (instance: CML.PoolRegistration) => Effect.Effect<string, PoolRegistrationError>
+export declare const toJson: (
+  instance: CML.PoolRegistration,
+) => Effect.Effect<string, PoolRegistrationError>;
 ```
 
 Added in v2.0.0
@@ -278,7 +300,7 @@ Unsafely calls instance.free without Effect wrapper
 **Signature**
 
 ```ts
-export declare const freeUnsafe: (instance: CML.PoolRegistration) => void
+export declare const freeUnsafe: (instance: CML.PoolRegistration) => void;
 ```
 
 Added in v2.0.0
@@ -290,7 +312,9 @@ Unsafely calls instance.poolParams without Effect wrapper
 **Signature**
 
 ```ts
-export declare const poolParamsUnsafe: (instance: CML.PoolRegistration) => CML.PoolParams
+export declare const poolParamsUnsafe: (
+  instance: CML.PoolRegistration,
+) => CML.PoolParams;
 ```
 
 Added in v2.0.0
@@ -302,7 +326,9 @@ Unsafely calls instance.toCanonicalCborBytes without Effect wrapper
 **Signature**
 
 ```ts
-export declare const toCanonicalCborBytesUnsafe: (instance: CML.PoolRegistration) => Uint8Array
+export declare const toCanonicalCborBytesUnsafe: (
+  instance: CML.PoolRegistration,
+) => Uint8Array;
 ```
 
 Added in v2.0.0
@@ -314,7 +340,9 @@ Unsafely calls instance.toCanonicalCborHex without Effect wrapper
 **Signature**
 
 ```ts
-export declare const toCanonicalCborHexUnsafe: (instance: CML.PoolRegistration) => string
+export declare const toCanonicalCborHexUnsafe: (
+  instance: CML.PoolRegistration,
+) => string;
 ```
 
 Added in v2.0.0
@@ -326,7 +354,9 @@ Unsafely calls instance.toCborBytes without Effect wrapper
 **Signature**
 
 ```ts
-export declare const toCborBytesUnsafe: (instance: CML.PoolRegistration) => Uint8Array
+export declare const toCborBytesUnsafe: (
+  instance: CML.PoolRegistration,
+) => Uint8Array;
 ```
 
 Added in v2.0.0
@@ -338,7 +368,9 @@ Unsafely calls instance.toCborHex without Effect wrapper
 **Signature**
 
 ```ts
-export declare const toCborHexUnsafe: (instance: CML.PoolRegistration) => string
+export declare const toCborHexUnsafe: (
+  instance: CML.PoolRegistration,
+) => string;
 ```
 
 Added in v2.0.0
@@ -350,7 +382,7 @@ Unsafely calls instance.toJsValue without Effect wrapper
 **Signature**
 
 ```ts
-export declare const toJsValueUnsafe: (instance: CML.PoolRegistration) => any
+export declare const toJsValueUnsafe: (instance: CML.PoolRegistration) => any;
 ```
 
 Added in v2.0.0
@@ -362,7 +394,7 @@ Unsafely calls instance.toJson without Effect wrapper
 **Signature**
 
 ```ts
-export declare const toJsonUnsafe: (instance: CML.PoolRegistration) => string
+export declare const toJsonUnsafe: (instance: CML.PoolRegistration) => string;
 ```
 
 Added in v2.0.0
@@ -376,7 +408,7 @@ Type alias for the CML PoolRegistration class
 **Signature**
 
 ```ts
-export type PoolRegistration = CML.PoolRegistration
+export type PoolRegistration = CML.PoolRegistration;
 ```
 
 Added in v2.0.0

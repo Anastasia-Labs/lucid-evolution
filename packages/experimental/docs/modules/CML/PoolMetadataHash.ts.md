@@ -46,7 +46,9 @@ Static method fromBech32 of PoolMetadataHash
 **Signature**
 
 ```ts
-export declare const fromBech32: (bech32Str: string) => Effect.Effect<CML.PoolMetadataHash, PoolMetadataHashError>
+export declare const fromBech32: (
+  bech32Str: string,
+) => Effect.Effect<CML.PoolMetadataHash, PoolMetadataHashError>;
 ```
 
 Added in v2.0.0
@@ -58,7 +60,9 @@ Static method fromHex of PoolMetadataHash
 **Signature**
 
 ```ts
-export declare const fromHex: (input: string) => Effect.Effect<CML.PoolMetadataHash, PoolMetadataHashError>
+export declare const fromHex: (
+  input: string,
+) => Effect.Effect<CML.PoolMetadataHash, PoolMetadataHashError>;
 ```
 
 Added in v2.0.0
@@ -70,7 +74,9 @@ Static method fromRawBytes of PoolMetadataHash
 **Signature**
 
 ```ts
-export declare const fromRawBytes: (bytes: Uint8Array) => Effect.Effect<CML.PoolMetadataHash, PoolMetadataHashError>
+export declare const fromRawBytes: (
+  bytes: Uint8Array,
+) => Effect.Effect<CML.PoolMetadataHash, PoolMetadataHashError>;
 ```
 
 Added in v2.0.0
@@ -84,7 +90,9 @@ Unsafely calls PoolMetadataHash.fromBech32 without Effect wrapper
 **Signature**
 
 ```ts
-export declare const fromBech32Unsafe: (bech32Str: string) => CML.PoolMetadataHash
+export declare const fromBech32Unsafe: (
+  bech32Str: string,
+) => CML.PoolMetadataHash;
 ```
 
 Added in v2.0.0
@@ -96,7 +104,7 @@ Unsafely calls PoolMetadataHash.fromHex without Effect wrapper
 **Signature**
 
 ```ts
-export declare const fromHexUnsafe: (input: string) => CML.PoolMetadataHash
+export declare const fromHexUnsafe: (input: string) => CML.PoolMetadataHash;
 ```
 
 Added in v2.0.0
@@ -108,7 +116,9 @@ Unsafely calls PoolMetadataHash.fromRawBytes without Effect wrapper
 **Signature**
 
 ```ts
-export declare const fromRawBytesUnsafe: (bytes: Uint8Array) => CML.PoolMetadataHash
+export declare const fromRawBytesUnsafe: (
+  bytes: Uint8Array,
+) => CML.PoolMetadataHash;
 ```
 
 Added in v2.0.0
@@ -138,7 +148,9 @@ Method free of PoolMetadataHash
 **Signature**
 
 ```ts
-export declare const free: (instance: CML.PoolMetadataHash) => Effect.Effect<void, PoolMetadataHashError>
+export declare const free: (
+  instance: CML.PoolMetadataHash,
+) => Effect.Effect<void, PoolMetadataHashError>;
 ```
 
 Added in v2.0.0
@@ -152,8 +164,8 @@ Method toBech32 of PoolMetadataHash
 ```ts
 export declare const toBech32: (
   instance: CML.PoolMetadataHash,
-  prefix: string
-) => Effect.Effect<string, PoolMetadataHashError>
+  prefix: string,
+) => Effect.Effect<string, PoolMetadataHashError>;
 ```
 
 Added in v2.0.0
@@ -165,7 +177,9 @@ Method toHex of PoolMetadataHash
 **Signature**
 
 ```ts
-export declare const toHex: (instance: CML.PoolMetadataHash) => Effect.Effect<string, PoolMetadataHashError>
+export declare const toHex: (
+  instance: CML.PoolMetadataHash,
+) => Effect.Effect<string, PoolMetadataHashError>;
 ```
 
 Added in v2.0.0
@@ -177,7 +191,9 @@ Method toRawBytes of PoolMetadataHash
 **Signature**
 
 ```ts
-export declare const toRawBytes: (instance: CML.PoolMetadataHash) => Effect.Effect<Uint8Array, PoolMetadataHashError>
+export declare const toRawBytes: (
+  instance: CML.PoolMetadataHash,
+) => Effect.Effect<Uint8Array, PoolMetadataHashError>;
 ```
 
 Added in v2.0.0
@@ -191,7 +207,7 @@ Unsafely calls instance.free without Effect wrapper
 **Signature**
 
 ```ts
-export declare const freeUnsafe: (instance: CML.PoolMetadataHash) => void
+export declare const freeUnsafe: (instance: CML.PoolMetadataHash) => void;
 ```
 
 Added in v2.0.0
@@ -203,7 +219,10 @@ Unsafely calls instance.toBech32 without Effect wrapper
 **Signature**
 
 ```ts
-export declare const toBech32Unsafe: (instance: CML.PoolMetadataHash, prefix: string) => string
+export declare const toBech32Unsafe: (
+  instance: CML.PoolMetadataHash,
+  prefix: string,
+) => string;
 ```
 
 Added in v2.0.0
@@ -215,7 +234,7 @@ Unsafely calls instance.toHex without Effect wrapper
 **Signature**
 
 ```ts
-export declare const toHexUnsafe: (instance: CML.PoolMetadataHash) => string
+export declare const toHexUnsafe: (instance: CML.PoolMetadataHash) => string;
 ```
 
 Added in v2.0.0
@@ -227,7 +246,9 @@ Unsafely calls instance.toRawBytes without Effect wrapper
 **Signature**
 
 ```ts
-export declare const toRawBytesUnsafe: (instance: CML.PoolMetadataHash) => Uint8Array
+export declare const toRawBytesUnsafe: (
+  instance: CML.PoolMetadataHash,
+) => Uint8Array;
 ```
 
 Added in v2.0.0
@@ -241,7 +262,7 @@ Type alias for the CML PoolMetadataHash class
 **Signature**
 
 ```ts
-export type PoolMetadataHash = CML.PoolMetadataHash
+export type PoolMetadataHash = CML.PoolMetadataHash;
 ```
 
 Added in v2.0.0

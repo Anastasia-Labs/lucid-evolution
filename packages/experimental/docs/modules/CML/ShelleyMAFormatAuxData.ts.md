@@ -60,8 +60,8 @@ Static method \_new of ShelleyMAFormatAuxData
 ```ts
 export declare const _new: (
   transactionMetadata: CML.Metadata,
-  auxiliaryScripts: CML.NativeScriptList
-) => Effect.Effect<CML.ShelleyMAFormatAuxData, ShelleyMAFormatAuxDataError>
+  auxiliaryScripts: CML.NativeScriptList,
+) => Effect.Effect<CML.ShelleyMAFormatAuxData, ShelleyMAFormatAuxDataError>;
 ```
 
 Added in v2.0.0
@@ -74,8 +74,8 @@ Static method fromCborBytes of ShelleyMAFormatAuxData
 
 ```ts
 export declare const fromCborBytes: (
-  cborBytes: Uint8Array
-) => Effect.Effect<CML.ShelleyMAFormatAuxData, ShelleyMAFormatAuxDataError>
+  cborBytes: Uint8Array,
+) => Effect.Effect<CML.ShelleyMAFormatAuxData, ShelleyMAFormatAuxDataError>;
 ```
 
 Added in v2.0.0
@@ -88,8 +88,8 @@ Static method fromCborHex of ShelleyMAFormatAuxData
 
 ```ts
 export declare const fromCborHex: (
-  cborBytes: string
-) => Effect.Effect<CML.ShelleyMAFormatAuxData, ShelleyMAFormatAuxDataError>
+  cborBytes: string,
+) => Effect.Effect<CML.ShelleyMAFormatAuxData, ShelleyMAFormatAuxDataError>;
 ```
 
 Added in v2.0.0
@@ -101,7 +101,9 @@ Static method fromJson of ShelleyMAFormatAuxData
 **Signature**
 
 ```ts
-export declare const fromJson: (json: string) => Effect.Effect<CML.ShelleyMAFormatAuxData, ShelleyMAFormatAuxDataError>
+export declare const fromJson: (
+  json: string,
+) => Effect.Effect<CML.ShelleyMAFormatAuxData, ShelleyMAFormatAuxDataError>;
 ```
 
 Added in v2.0.0
@@ -117,8 +119,8 @@ Unsafely calls ShelleyMAFormatAuxData.\_new without Effect wrapper
 ```ts
 export declare const _newUnsafe: (
   transactionMetadata: CML.Metadata,
-  auxiliaryScripts: CML.NativeScriptList
-) => CML.ShelleyMAFormatAuxData
+  auxiliaryScripts: CML.NativeScriptList,
+) => CML.ShelleyMAFormatAuxData;
 ```
 
 Added in v2.0.0
@@ -130,7 +132,9 @@ Unsafely calls ShelleyMAFormatAuxData.fromCborBytes without Effect wrapper
 **Signature**
 
 ```ts
-export declare const fromCborBytesUnsafe: (cborBytes: Uint8Array) => CML.ShelleyMAFormatAuxData
+export declare const fromCborBytesUnsafe: (
+  cborBytes: Uint8Array,
+) => CML.ShelleyMAFormatAuxData;
 ```
 
 Added in v2.0.0
@@ -142,7 +146,9 @@ Unsafely calls ShelleyMAFormatAuxData.fromCborHex without Effect wrapper
 **Signature**
 
 ```ts
-export declare const fromCborHexUnsafe: (cborBytes: string) => CML.ShelleyMAFormatAuxData
+export declare const fromCborHexUnsafe: (
+  cborBytes: string,
+) => CML.ShelleyMAFormatAuxData;
 ```
 
 Added in v2.0.0
@@ -154,7 +160,9 @@ Unsafely calls ShelleyMAFormatAuxData.fromJson without Effect wrapper
 **Signature**
 
 ```ts
-export declare const fromJsonUnsafe: (json: string) => CML.ShelleyMAFormatAuxData
+export declare const fromJsonUnsafe: (
+  json: string,
+) => CML.ShelleyMAFormatAuxData;
 ```
 
 Added in v2.0.0
@@ -185,8 +193,8 @@ Method auxiliaryScripts of ShelleyMAFormatAuxData
 
 ```ts
 export declare const auxiliaryScripts: (
-  instance: CML.ShelleyMAFormatAuxData
-) => Effect.Effect<CML.NativeScriptList, ShelleyMAFormatAuxDataError>
+  instance: CML.ShelleyMAFormatAuxData,
+) => Effect.Effect<CML.NativeScriptList, ShelleyMAFormatAuxDataError>;
 ```
 
 Added in v2.0.0
@@ -198,7 +206,9 @@ Method free of ShelleyMAFormatAuxData
 **Signature**
 
 ```ts
-export declare const free: (instance: CML.ShelleyMAFormatAuxData) => Effect.Effect<void, ShelleyMAFormatAuxDataError>
+export declare const free: (
+  instance: CML.ShelleyMAFormatAuxData,
+) => Effect.Effect<void, ShelleyMAFormatAuxDataError>;
 ```
 
 Added in v2.0.0
@@ -211,8 +221,8 @@ Method toCanonicalCborBytes of ShelleyMAFormatAuxData
 
 ```ts
 export declare const toCanonicalCborBytes: (
-  instance: CML.ShelleyMAFormatAuxData
-) => Effect.Effect<Uint8Array, ShelleyMAFormatAuxDataError>
+  instance: CML.ShelleyMAFormatAuxData,
+) => Effect.Effect<Uint8Array, ShelleyMAFormatAuxDataError>;
 ```
 
 Added in v2.0.0
@@ -225,8 +235,8 @@ Method toCanonicalCborHex of ShelleyMAFormatAuxData
 
 ```ts
 export declare const toCanonicalCborHex: (
-  instance: CML.ShelleyMAFormatAuxData
-) => Effect.Effect<string, ShelleyMAFormatAuxDataError>
+  instance: CML.ShelleyMAFormatAuxData,
+) => Effect.Effect<string, ShelleyMAFormatAuxDataError>;
 ```
 
 Added in v2.0.0
@@ -239,8 +249,8 @@ Method toCborBytes of ShelleyMAFormatAuxData
 
 ```ts
 export declare const toCborBytes: (
-  instance: CML.ShelleyMAFormatAuxData
-) => Effect.Effect<Uint8Array, ShelleyMAFormatAuxDataError>
+  instance: CML.ShelleyMAFormatAuxData,
+) => Effect.Effect<Uint8Array, ShelleyMAFormatAuxDataError>;
 ```
 
 Added in v2.0.0
@@ -253,8 +263,8 @@ Method toCborHex of ShelleyMAFormatAuxData
 
 ```ts
 export declare const toCborHex: (
-  instance: CML.ShelleyMAFormatAuxData
-) => Effect.Effect<string, ShelleyMAFormatAuxDataError>
+  instance: CML.ShelleyMAFormatAuxData,
+) => Effect.Effect<string, ShelleyMAFormatAuxDataError>;
 ```
 
 Added in v2.0.0
@@ -267,8 +277,8 @@ Method toJsValue of ShelleyMAFormatAuxData
 
 ```ts
 export declare const toJsValue: (
-  instance: CML.ShelleyMAFormatAuxData
-) => Effect.Effect<any, ShelleyMAFormatAuxDataError>
+  instance: CML.ShelleyMAFormatAuxData,
+) => Effect.Effect<any, ShelleyMAFormatAuxDataError>;
 ```
 
 Added in v2.0.0
@@ -281,8 +291,8 @@ Method toJson of ShelleyMAFormatAuxData
 
 ```ts
 export declare const toJson: (
-  instance: CML.ShelleyMAFormatAuxData
-) => Effect.Effect<string, ShelleyMAFormatAuxDataError>
+  instance: CML.ShelleyMAFormatAuxData,
+) => Effect.Effect<string, ShelleyMAFormatAuxDataError>;
 ```
 
 Added in v2.0.0
@@ -295,8 +305,8 @@ Method transactionMetadata of ShelleyMAFormatAuxData
 
 ```ts
 export declare const transactionMetadata: (
-  instance: CML.ShelleyMAFormatAuxData
-) => Effect.Effect<CML.Metadata, ShelleyMAFormatAuxDataError>
+  instance: CML.ShelleyMAFormatAuxData,
+) => Effect.Effect<CML.Metadata, ShelleyMAFormatAuxDataError>;
 ```
 
 Added in v2.0.0
@@ -310,7 +320,9 @@ Unsafely calls instance.auxiliaryScripts without Effect wrapper
 **Signature**
 
 ```ts
-export declare const auxiliaryScriptsUnsafe: (instance: CML.ShelleyMAFormatAuxData) => CML.NativeScriptList
+export declare const auxiliaryScriptsUnsafe: (
+  instance: CML.ShelleyMAFormatAuxData,
+) => CML.NativeScriptList;
 ```
 
 Added in v2.0.0
@@ -322,7 +334,7 @@ Unsafely calls instance.free without Effect wrapper
 **Signature**
 
 ```ts
-export declare const freeUnsafe: (instance: CML.ShelleyMAFormatAuxData) => void
+export declare const freeUnsafe: (instance: CML.ShelleyMAFormatAuxData) => void;
 ```
 
 Added in v2.0.0
@@ -334,7 +346,9 @@ Unsafely calls instance.toCanonicalCborBytes without Effect wrapper
 **Signature**
 
 ```ts
-export declare const toCanonicalCborBytesUnsafe: (instance: CML.ShelleyMAFormatAuxData) => Uint8Array
+export declare const toCanonicalCborBytesUnsafe: (
+  instance: CML.ShelleyMAFormatAuxData,
+) => Uint8Array;
 ```
 
 Added in v2.0.0
@@ -346,7 +360,9 @@ Unsafely calls instance.toCanonicalCborHex without Effect wrapper
 **Signature**
 
 ```ts
-export declare const toCanonicalCborHexUnsafe: (instance: CML.ShelleyMAFormatAuxData) => string
+export declare const toCanonicalCborHexUnsafe: (
+  instance: CML.ShelleyMAFormatAuxData,
+) => string;
 ```
 
 Added in v2.0.0
@@ -358,7 +374,9 @@ Unsafely calls instance.toCborBytes without Effect wrapper
 **Signature**
 
 ```ts
-export declare const toCborBytesUnsafe: (instance: CML.ShelleyMAFormatAuxData) => Uint8Array
+export declare const toCborBytesUnsafe: (
+  instance: CML.ShelleyMAFormatAuxData,
+) => Uint8Array;
 ```
 
 Added in v2.0.0
@@ -370,7 +388,9 @@ Unsafely calls instance.toCborHex without Effect wrapper
 **Signature**
 
 ```ts
-export declare const toCborHexUnsafe: (instance: CML.ShelleyMAFormatAuxData) => string
+export declare const toCborHexUnsafe: (
+  instance: CML.ShelleyMAFormatAuxData,
+) => string;
 ```
 
 Added in v2.0.0
@@ -382,7 +402,9 @@ Unsafely calls instance.toJsValue without Effect wrapper
 **Signature**
 
 ```ts
-export declare const toJsValueUnsafe: (instance: CML.ShelleyMAFormatAuxData) => any
+export declare const toJsValueUnsafe: (
+  instance: CML.ShelleyMAFormatAuxData,
+) => any;
 ```
 
 Added in v2.0.0
@@ -394,7 +416,9 @@ Unsafely calls instance.toJson without Effect wrapper
 **Signature**
 
 ```ts
-export declare const toJsonUnsafe: (instance: CML.ShelleyMAFormatAuxData) => string
+export declare const toJsonUnsafe: (
+  instance: CML.ShelleyMAFormatAuxData,
+) => string;
 ```
 
 Added in v2.0.0
@@ -406,7 +430,9 @@ Unsafely calls instance.transactionMetadata without Effect wrapper
 **Signature**
 
 ```ts
-export declare const transactionMetadataUnsafe: (instance: CML.ShelleyMAFormatAuxData) => CML.Metadata
+export declare const transactionMetadataUnsafe: (
+  instance: CML.ShelleyMAFormatAuxData,
+) => CML.Metadata;
 ```
 
 Added in v2.0.0
@@ -420,7 +446,7 @@ Type alias for the CML ShelleyMAFormatAuxData class
 **Signature**
 
 ```ts
-export type ShelleyMAFormatAuxData = CML.ShelleyMAFormatAuxData
+export type ShelleyMAFormatAuxData = CML.ShelleyMAFormatAuxData;
 ```
 
 Added in v2.0.0

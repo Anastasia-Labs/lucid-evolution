@@ -60,8 +60,8 @@ Static method \_new of UpdateDrepCert
 ```ts
 export declare const _new: (
   drepCredential: CML.Credential,
-  anchor: CML.Anchor
-) => Effect.Effect<CML.UpdateDrepCert, UpdateDrepCertError>
+  anchor: CML.Anchor,
+) => Effect.Effect<CML.UpdateDrepCert, UpdateDrepCertError>;
 ```
 
 Added in v2.0.0
@@ -73,7 +73,9 @@ Static method fromCborBytes of UpdateDrepCert
 **Signature**
 
 ```ts
-export declare const fromCborBytes: (cborBytes: Uint8Array) => Effect.Effect<CML.UpdateDrepCert, UpdateDrepCertError>
+export declare const fromCborBytes: (
+  cborBytes: Uint8Array,
+) => Effect.Effect<CML.UpdateDrepCert, UpdateDrepCertError>;
 ```
 
 Added in v2.0.0
@@ -85,7 +87,9 @@ Static method fromCborHex of UpdateDrepCert
 **Signature**
 
 ```ts
-export declare const fromCborHex: (cborBytes: string) => Effect.Effect<CML.UpdateDrepCert, UpdateDrepCertError>
+export declare const fromCborHex: (
+  cborBytes: string,
+) => Effect.Effect<CML.UpdateDrepCert, UpdateDrepCertError>;
 ```
 
 Added in v2.0.0
@@ -97,7 +101,9 @@ Static method fromJson of UpdateDrepCert
 **Signature**
 
 ```ts
-export declare const fromJson: (json: string) => Effect.Effect<CML.UpdateDrepCert, UpdateDrepCertError>
+export declare const fromJson: (
+  json: string,
+) => Effect.Effect<CML.UpdateDrepCert, UpdateDrepCertError>;
 ```
 
 Added in v2.0.0
@@ -111,7 +117,10 @@ Unsafely calls UpdateDrepCert.\_new without Effect wrapper
 **Signature**
 
 ```ts
-export declare const _newUnsafe: (drepCredential: CML.Credential, anchor: CML.Anchor) => CML.UpdateDrepCert
+export declare const _newUnsafe: (
+  drepCredential: CML.Credential,
+  anchor: CML.Anchor,
+) => CML.UpdateDrepCert;
 ```
 
 Added in v2.0.0
@@ -123,7 +132,9 @@ Unsafely calls UpdateDrepCert.fromCborBytes without Effect wrapper
 **Signature**
 
 ```ts
-export declare const fromCborBytesUnsafe: (cborBytes: Uint8Array) => CML.UpdateDrepCert
+export declare const fromCborBytesUnsafe: (
+  cborBytes: Uint8Array,
+) => CML.UpdateDrepCert;
 ```
 
 Added in v2.0.0
@@ -135,7 +146,9 @@ Unsafely calls UpdateDrepCert.fromCborHex without Effect wrapper
 **Signature**
 
 ```ts
-export declare const fromCborHexUnsafe: (cborBytes: string) => CML.UpdateDrepCert
+export declare const fromCborHexUnsafe: (
+  cborBytes: string,
+) => CML.UpdateDrepCert;
 ```
 
 Added in v2.0.0
@@ -147,7 +160,7 @@ Unsafely calls UpdateDrepCert.fromJson without Effect wrapper
 **Signature**
 
 ```ts
-export declare const fromJsonUnsafe: (json: string) => CML.UpdateDrepCert
+export declare const fromJsonUnsafe: (json: string) => CML.UpdateDrepCert;
 ```
 
 Added in v2.0.0
@@ -178,8 +191,8 @@ Method anchor of UpdateDrepCert
 
 ```ts
 export declare const anchor: (
-  instance: CML.UpdateDrepCert
-) => Effect.Effect<CML.Anchor | undefined, UpdateDrepCertError>
+  instance: CML.UpdateDrepCert,
+) => Effect.Effect<CML.Anchor | undefined, UpdateDrepCertError>;
 ```
 
 Added in v2.0.0
@@ -192,8 +205,8 @@ Method drepCredential of UpdateDrepCert
 
 ```ts
 export declare const drepCredential: (
-  instance: CML.UpdateDrepCert
-) => Effect.Effect<CML.Credential, UpdateDrepCertError>
+  instance: CML.UpdateDrepCert,
+) => Effect.Effect<CML.Credential, UpdateDrepCertError>;
 ```
 
 Added in v2.0.0
@@ -205,7 +218,9 @@ Method free of UpdateDrepCert
 **Signature**
 
 ```ts
-export declare const free: (instance: CML.UpdateDrepCert) => Effect.Effect<void, UpdateDrepCertError>
+export declare const free: (
+  instance: CML.UpdateDrepCert,
+) => Effect.Effect<void, UpdateDrepCertError>;
 ```
 
 Added in v2.0.0
@@ -218,8 +233,8 @@ Method toCanonicalCborBytes of UpdateDrepCert
 
 ```ts
 export declare const toCanonicalCborBytes: (
-  instance: CML.UpdateDrepCert
-) => Effect.Effect<Uint8Array, UpdateDrepCertError>
+  instance: CML.UpdateDrepCert,
+) => Effect.Effect<Uint8Array, UpdateDrepCertError>;
 ```
 
 Added in v2.0.0
@@ -231,7 +246,9 @@ Method toCanonicalCborHex of UpdateDrepCert
 **Signature**
 
 ```ts
-export declare const toCanonicalCborHex: (instance: CML.UpdateDrepCert) => Effect.Effect<string, UpdateDrepCertError>
+export declare const toCanonicalCborHex: (
+  instance: CML.UpdateDrepCert,
+) => Effect.Effect<string, UpdateDrepCertError>;
 ```
 
 Added in v2.0.0
@@ -243,7 +260,9 @@ Method toCborBytes of UpdateDrepCert
 **Signature**
 
 ```ts
-export declare const toCborBytes: (instance: CML.UpdateDrepCert) => Effect.Effect<Uint8Array, UpdateDrepCertError>
+export declare const toCborBytes: (
+  instance: CML.UpdateDrepCert,
+) => Effect.Effect<Uint8Array, UpdateDrepCertError>;
 ```
 
 Added in v2.0.0
@@ -255,7 +274,9 @@ Method toCborHex of UpdateDrepCert
 **Signature**
 
 ```ts
-export declare const toCborHex: (instance: CML.UpdateDrepCert) => Effect.Effect<string, UpdateDrepCertError>
+export declare const toCborHex: (
+  instance: CML.UpdateDrepCert,
+) => Effect.Effect<string, UpdateDrepCertError>;
 ```
 
 Added in v2.0.0
@@ -267,7 +288,9 @@ Method toJsValue of UpdateDrepCert
 **Signature**
 
 ```ts
-export declare const toJsValue: (instance: CML.UpdateDrepCert) => Effect.Effect<any, UpdateDrepCertError>
+export declare const toJsValue: (
+  instance: CML.UpdateDrepCert,
+) => Effect.Effect<any, UpdateDrepCertError>;
 ```
 
 Added in v2.0.0
@@ -279,7 +302,9 @@ Method toJson of UpdateDrepCert
 **Signature**
 
 ```ts
-export declare const toJson: (instance: CML.UpdateDrepCert) => Effect.Effect<string, UpdateDrepCertError>
+export declare const toJson: (
+  instance: CML.UpdateDrepCert,
+) => Effect.Effect<string, UpdateDrepCertError>;
 ```
 
 Added in v2.0.0
@@ -293,7 +318,9 @@ Unsafely calls instance.anchor without Effect wrapper
 **Signature**
 
 ```ts
-export declare const anchorUnsafe: (instance: CML.UpdateDrepCert) => CML.Anchor | undefined
+export declare const anchorUnsafe: (
+  instance: CML.UpdateDrepCert,
+) => CML.Anchor | undefined;
 ```
 
 Added in v2.0.0
@@ -305,7 +332,9 @@ Unsafely calls instance.drepCredential without Effect wrapper
 **Signature**
 
 ```ts
-export declare const drepCredentialUnsafe: (instance: CML.UpdateDrepCert) => CML.Credential
+export declare const drepCredentialUnsafe: (
+  instance: CML.UpdateDrepCert,
+) => CML.Credential;
 ```
 
 Added in v2.0.0
@@ -317,7 +346,7 @@ Unsafely calls instance.free without Effect wrapper
 **Signature**
 
 ```ts
-export declare const freeUnsafe: (instance: CML.UpdateDrepCert) => void
+export declare const freeUnsafe: (instance: CML.UpdateDrepCert) => void;
 ```
 
 Added in v2.0.0
@@ -329,7 +358,9 @@ Unsafely calls instance.toCanonicalCborBytes without Effect wrapper
 **Signature**
 
 ```ts
-export declare const toCanonicalCborBytesUnsafe: (instance: CML.UpdateDrepCert) => Uint8Array
+export declare const toCanonicalCborBytesUnsafe: (
+  instance: CML.UpdateDrepCert,
+) => Uint8Array;
 ```
 
 Added in v2.0.0
@@ -341,7 +372,9 @@ Unsafely calls instance.toCanonicalCborHex without Effect wrapper
 **Signature**
 
 ```ts
-export declare const toCanonicalCborHexUnsafe: (instance: CML.UpdateDrepCert) => string
+export declare const toCanonicalCborHexUnsafe: (
+  instance: CML.UpdateDrepCert,
+) => string;
 ```
 
 Added in v2.0.0
@@ -353,7 +386,9 @@ Unsafely calls instance.toCborBytes without Effect wrapper
 **Signature**
 
 ```ts
-export declare const toCborBytesUnsafe: (instance: CML.UpdateDrepCert) => Uint8Array
+export declare const toCborBytesUnsafe: (
+  instance: CML.UpdateDrepCert,
+) => Uint8Array;
 ```
 
 Added in v2.0.0
@@ -365,7 +400,7 @@ Unsafely calls instance.toCborHex without Effect wrapper
 **Signature**
 
 ```ts
-export declare const toCborHexUnsafe: (instance: CML.UpdateDrepCert) => string
+export declare const toCborHexUnsafe: (instance: CML.UpdateDrepCert) => string;
 ```
 
 Added in v2.0.0
@@ -377,7 +412,7 @@ Unsafely calls instance.toJsValue without Effect wrapper
 **Signature**
 
 ```ts
-export declare const toJsValueUnsafe: (instance: CML.UpdateDrepCert) => any
+export declare const toJsValueUnsafe: (instance: CML.UpdateDrepCert) => any;
 ```
 
 Added in v2.0.0
@@ -389,7 +424,7 @@ Unsafely calls instance.toJson without Effect wrapper
 **Signature**
 
 ```ts
-export declare const toJsonUnsafe: (instance: CML.UpdateDrepCert) => string
+export declare const toJsonUnsafe: (instance: CML.UpdateDrepCert) => string;
 ```
 
 Added in v2.0.0
@@ -403,7 +438,7 @@ Type alias for the CML UpdateDrepCert class
 **Signature**
 
 ```ts
-export type UpdateDrepCert = CML.UpdateDrepCert
+export type UpdateDrepCert = CML.UpdateDrepCert;
 ```
 
 Added in v2.0.0

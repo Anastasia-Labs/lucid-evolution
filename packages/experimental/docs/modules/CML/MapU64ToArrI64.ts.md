@@ -46,7 +46,10 @@ Static method \_new of MapU64ToArrI64
 **Signature**
 
 ```ts
-export declare const _new: () => Effect.Effect<CML.MapU64ToArrI64, MapU64ToArrI64Error>
+export declare const _new: () => Effect.Effect<
+  CML.MapU64ToArrI64,
+  MapU64ToArrI64Error
+>;
 ```
 
 Added in v2.0.0
@@ -60,7 +63,7 @@ Unsafely calls MapU64ToArrI64.\_new without Effect wrapper
 **Signature**
 
 ```ts
-export declare const _newUnsafe: () => CML.MapU64ToArrI64
+export declare const _newUnsafe: () => CML.MapU64ToArrI64;
 ```
 
 Added in v2.0.0
@@ -90,7 +93,9 @@ Method free of MapU64ToArrI64
 **Signature**
 
 ```ts
-export declare const free: (instance: CML.MapU64ToArrI64) => Effect.Effect<void, MapU64ToArrI64Error>
+export declare const free: (
+  instance: CML.MapU64ToArrI64,
+) => Effect.Effect<void, MapU64ToArrI64Error>;
 ```
 
 Added in v2.0.0
@@ -104,8 +109,8 @@ Method get of MapU64ToArrI64
 ```ts
 export declare const get: (
   instance: CML.MapU64ToArrI64,
-  key: bigint
-) => Effect.Effect<BigInt64Array | undefined, MapU64ToArrI64Error>
+  key: bigint,
+) => Effect.Effect<BigInt64Array | undefined, MapU64ToArrI64Error>;
 ```
 
 Added in v2.0.0
@@ -120,8 +125,8 @@ Method insert of MapU64ToArrI64
 export declare const insert: (
   instance: CML.MapU64ToArrI64,
   key: bigint,
-  value: BigInt64Array
-) => Effect.Effect<BigInt64Array | undefined, MapU64ToArrI64Error>
+  value: BigInt64Array,
+) => Effect.Effect<BigInt64Array | undefined, MapU64ToArrI64Error>;
 ```
 
 Added in v2.0.0
@@ -133,7 +138,9 @@ Method isEmpty of MapU64ToArrI64
 **Signature**
 
 ```ts
-export declare const isEmpty: (instance: CML.MapU64ToArrI64) => Effect.Effect<boolean, MapU64ToArrI64Error>
+export declare const isEmpty: (
+  instance: CML.MapU64ToArrI64,
+) => Effect.Effect<boolean, MapU64ToArrI64Error>;
 ```
 
 Added in v2.0.0
@@ -145,7 +152,9 @@ Method keys of MapU64ToArrI64
 **Signature**
 
 ```ts
-export declare const keys: (instance: CML.MapU64ToArrI64) => Effect.Effect<BigUint64Array, MapU64ToArrI64Error>
+export declare const keys: (
+  instance: CML.MapU64ToArrI64,
+) => Effect.Effect<BigUint64Array, MapU64ToArrI64Error>;
 ```
 
 Added in v2.0.0
@@ -157,7 +166,9 @@ Method len of MapU64ToArrI64
 **Signature**
 
 ```ts
-export declare const len: (instance: CML.MapU64ToArrI64) => Effect.Effect<number, MapU64ToArrI64Error>
+export declare const len: (
+  instance: CML.MapU64ToArrI64,
+) => Effect.Effect<number, MapU64ToArrI64Error>;
 ```
 
 Added in v2.0.0
@@ -171,7 +182,7 @@ Unsafely calls instance.free without Effect wrapper
 **Signature**
 
 ```ts
-export declare const freeUnsafe: (instance: CML.MapU64ToArrI64) => void
+export declare const freeUnsafe: (instance: CML.MapU64ToArrI64) => void;
 ```
 
 Added in v2.0.0
@@ -183,7 +194,10 @@ Unsafely calls instance.get without Effect wrapper
 **Signature**
 
 ```ts
-export declare const getUnsafe: (instance: CML.MapU64ToArrI64, key: bigint) => BigInt64Array | undefined
+export declare const getUnsafe: (
+  instance: CML.MapU64ToArrI64,
+  key: bigint,
+) => BigInt64Array | undefined;
 ```
 
 Added in v2.0.0
@@ -198,8 +212,8 @@ Unsafely calls instance.insert without Effect wrapper
 export declare const insertUnsafe: (
   instance: CML.MapU64ToArrI64,
   key: bigint,
-  value: BigInt64Array
-) => BigInt64Array | undefined
+  value: BigInt64Array,
+) => BigInt64Array | undefined;
 ```
 
 Added in v2.0.0
@@ -211,7 +225,7 @@ Unsafely calls instance.isEmpty without Effect wrapper
 **Signature**
 
 ```ts
-export declare const isEmptyUnsafe: (instance: CML.MapU64ToArrI64) => boolean
+export declare const isEmptyUnsafe: (instance: CML.MapU64ToArrI64) => boolean;
 ```
 
 Added in v2.0.0
@@ -223,7 +237,9 @@ Unsafely calls instance.keys without Effect wrapper
 **Signature**
 
 ```ts
-export declare const keysUnsafe: (instance: CML.MapU64ToArrI64) => BigUint64Array
+export declare const keysUnsafe: (
+  instance: CML.MapU64ToArrI64,
+) => BigUint64Array;
 ```
 
 Added in v2.0.0
@@ -235,7 +251,7 @@ Unsafely calls instance.len without Effect wrapper
 **Signature**
 
 ```ts
-export declare const lenUnsafe: (instance: CML.MapU64ToArrI64) => number
+export declare const lenUnsafe: (instance: CML.MapU64ToArrI64) => number;
 ```
 
 Added in v2.0.0
@@ -249,7 +265,7 @@ Type alias for the CML MapU64ToArrI64 class
 **Signature**
 
 ```ts
-export type MapU64ToArrI64 = CML.MapU64ToArrI64
+export type MapU64ToArrI64 = CML.MapU64ToArrI64;
 ```
 
 Added in v2.0.0

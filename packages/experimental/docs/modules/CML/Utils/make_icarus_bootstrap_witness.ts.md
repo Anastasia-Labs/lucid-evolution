@@ -49,8 +49,8 @@ Wrapper for the make_icarus_bootstrap_witness function
 export declare const makeIcarusBootstrapWitness: (
   txBodyHash: CML.TransactionHash,
   addr: CML.ByronAddress,
-  key: CML.Bip32PrivateKey
-) => Effect.Effect<CML.BootstrapWitness, MakeIcarusBootstrapWitnessError>
+  key: CML.Bip32PrivateKey,
+) => Effect.Effect<CML.BootstrapWitness, MakeIcarusBootstrapWitnessError>;
 ```
 
 Added in v2.0.0
@@ -67,8 +67,8 @@ Unsafely calls make_icarus_bootstrap_witness function without Effect wrapper
 export declare const makeIcarusBootstrapWitnessUnsafe: (
   txBodyHash: CML.TransactionHash,
   addr: CML.ByronAddress,
-  key: CML.Bip32PrivateKey
-) => CML.BootstrapWitness
+  key: CML.Bip32PrivateKey,
+) => CML.BootstrapWitness;
 ```
 
 Added in v2.0.0

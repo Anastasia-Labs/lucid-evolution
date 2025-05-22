@@ -46,7 +46,9 @@ Static method fromBech32 of NonceHash
 **Signature**
 
 ```ts
-export declare const fromBech32: (bech32Str: string) => Effect.Effect<CML.NonceHash, NonceHashError>
+export declare const fromBech32: (
+  bech32Str: string,
+) => Effect.Effect<CML.NonceHash, NonceHashError>;
 ```
 
 Added in v2.0.0
@@ -58,7 +60,9 @@ Static method fromHex of NonceHash
 **Signature**
 
 ```ts
-export declare const fromHex: (input: string) => Effect.Effect<CML.NonceHash, NonceHashError>
+export declare const fromHex: (
+  input: string,
+) => Effect.Effect<CML.NonceHash, NonceHashError>;
 ```
 
 Added in v2.0.0
@@ -70,7 +74,9 @@ Static method fromRawBytes of NonceHash
 **Signature**
 
 ```ts
-export declare const fromRawBytes: (bytes: Uint8Array) => Effect.Effect<CML.NonceHash, NonceHashError>
+export declare const fromRawBytes: (
+  bytes: Uint8Array,
+) => Effect.Effect<CML.NonceHash, NonceHashError>;
 ```
 
 Added in v2.0.0
@@ -84,7 +90,7 @@ Unsafely calls NonceHash.fromBech32 without Effect wrapper
 **Signature**
 
 ```ts
-export declare const fromBech32Unsafe: (bech32Str: string) => CML.NonceHash
+export declare const fromBech32Unsafe: (bech32Str: string) => CML.NonceHash;
 ```
 
 Added in v2.0.0
@@ -96,7 +102,7 @@ Unsafely calls NonceHash.fromHex without Effect wrapper
 **Signature**
 
 ```ts
-export declare const fromHexUnsafe: (input: string) => CML.NonceHash
+export declare const fromHexUnsafe: (input: string) => CML.NonceHash;
 ```
 
 Added in v2.0.0
@@ -108,7 +114,7 @@ Unsafely calls NonceHash.fromRawBytes without Effect wrapper
 **Signature**
 
 ```ts
-export declare const fromRawBytesUnsafe: (bytes: Uint8Array) => CML.NonceHash
+export declare const fromRawBytesUnsafe: (bytes: Uint8Array) => CML.NonceHash;
 ```
 
 Added in v2.0.0
@@ -138,7 +144,9 @@ Method free of NonceHash
 **Signature**
 
 ```ts
-export declare const free: (instance: CML.NonceHash) => Effect.Effect<void, NonceHashError>
+export declare const free: (
+  instance: CML.NonceHash,
+) => Effect.Effect<void, NonceHashError>;
 ```
 
 Added in v2.0.0
@@ -150,7 +158,10 @@ Method toBech32 of NonceHash
 **Signature**
 
 ```ts
-export declare const toBech32: (instance: CML.NonceHash, prefix: string) => Effect.Effect<string, NonceHashError>
+export declare const toBech32: (
+  instance: CML.NonceHash,
+  prefix: string,
+) => Effect.Effect<string, NonceHashError>;
 ```
 
 Added in v2.0.0
@@ -162,7 +173,9 @@ Method toHex of NonceHash
 **Signature**
 
 ```ts
-export declare const toHex: (instance: CML.NonceHash) => Effect.Effect<string, NonceHashError>
+export declare const toHex: (
+  instance: CML.NonceHash,
+) => Effect.Effect<string, NonceHashError>;
 ```
 
 Added in v2.0.0
@@ -174,7 +187,9 @@ Method toRawBytes of NonceHash
 **Signature**
 
 ```ts
-export declare const toRawBytes: (instance: CML.NonceHash) => Effect.Effect<Uint8Array, NonceHashError>
+export declare const toRawBytes: (
+  instance: CML.NonceHash,
+) => Effect.Effect<Uint8Array, NonceHashError>;
 ```
 
 Added in v2.0.0
@@ -188,7 +203,7 @@ Unsafely calls instance.free without Effect wrapper
 **Signature**
 
 ```ts
-export declare const freeUnsafe: (instance: CML.NonceHash) => void
+export declare const freeUnsafe: (instance: CML.NonceHash) => void;
 ```
 
 Added in v2.0.0
@@ -200,7 +215,10 @@ Unsafely calls instance.toBech32 without Effect wrapper
 **Signature**
 
 ```ts
-export declare const toBech32Unsafe: (instance: CML.NonceHash, prefix: string) => string
+export declare const toBech32Unsafe: (
+  instance: CML.NonceHash,
+  prefix: string,
+) => string;
 ```
 
 Added in v2.0.0
@@ -212,7 +230,7 @@ Unsafely calls instance.toHex without Effect wrapper
 **Signature**
 
 ```ts
-export declare const toHexUnsafe: (instance: CML.NonceHash) => string
+export declare const toHexUnsafe: (instance: CML.NonceHash) => string;
 ```
 
 Added in v2.0.0
@@ -224,7 +242,7 @@ Unsafely calls instance.toRawBytes without Effect wrapper
 **Signature**
 
 ```ts
-export declare const toRawBytesUnsafe: (instance: CML.NonceHash) => Uint8Array
+export declare const toRawBytesUnsafe: (instance: CML.NonceHash) => Uint8Array;
 ```
 
 Added in v2.0.0
@@ -238,7 +256,7 @@ Type alias for the CML NonceHash class
 **Signature**
 
 ```ts
-export type NonceHash = CML.NonceHash
+export type NonceHash = CML.NonceHash;
 ```
 
 Added in v2.0.0

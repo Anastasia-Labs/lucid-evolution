@@ -38,7 +38,7 @@ Type alias for the CML GovActionKind enum
 **Signature**
 
 ```ts
-export type GovActionKind = CML.GovActionKind
+export type GovActionKind = CML.GovActionKind;
 ```
 
 Added in v2.0.0
@@ -52,7 +52,7 @@ Convert string to GovActionKind enum value
 **Signature**
 
 ```ts
-export declare const fromString: (str: string) => CML.GovActionKind | undefined
+export declare const fromString: (str: string) => CML.GovActionKind | undefined;
 ```
 
 Added in v2.0.0
@@ -64,7 +64,7 @@ Convert GovActionKind enum value to string
 **Signature**
 
 ```ts
-export declare const toString: (value: CML.GovActionKind) => string
+export declare const toString: (value: CML.GovActionKind) => string;
 ```
 
 Added in v2.0.0
@@ -76,7 +76,7 @@ Get all values of the GovActionKind enum
 **Signature**
 
 ```ts
-export declare const values: () => Array<CML.GovActionKind>
+export declare const values: () => Array<CML.GovActionKind>;
 ```
 
 Added in v2.0.0
@@ -90,7 +90,7 @@ HardForkInitiationAction variant of the GovActionKind enum
 **Signature**
 
 ```ts
-export declare const HardForkInitiationAction: CML.GovActionKind.HardForkInitiationAction
+export declare const HardForkInitiationAction: CML.GovActionKind.HardForkInitiationAction;
 ```
 
 Added in v2.0.0
@@ -102,7 +102,7 @@ InfoAction variant of the GovActionKind enum
 **Signature**
 
 ```ts
-export declare const InfoAction: CML.GovActionKind.InfoAction
+export declare const InfoAction: CML.GovActionKind.InfoAction;
 ```
 
 Added in v2.0.0
@@ -114,7 +114,7 @@ NewConstitution variant of the GovActionKind enum
 **Signature**
 
 ```ts
-export declare const NewConstitution: CML.GovActionKind.NewConstitution
+export declare const NewConstitution: CML.GovActionKind.NewConstitution;
 ```
 
 Added in v2.0.0
@@ -126,7 +126,7 @@ NoConfidence variant of the GovActionKind enum
 **Signature**
 
 ```ts
-export declare const NoConfidence: CML.GovActionKind.NoConfidence
+export declare const NoConfidence: CML.GovActionKind.NoConfidence;
 ```
 
 Added in v2.0.0
@@ -138,7 +138,7 @@ ParameterChangeAction variant of the GovActionKind enum
 **Signature**
 
 ```ts
-export declare const ParameterChangeAction: CML.GovActionKind.ParameterChangeAction
+export declare const ParameterChangeAction: CML.GovActionKind.ParameterChangeAction;
 ```
 
 Added in v2.0.0
@@ -150,7 +150,7 @@ TreasuryWithdrawalsAction variant of the GovActionKind enum
 **Signature**
 
 ```ts
-export declare const TreasuryWithdrawalsAction: CML.GovActionKind.TreasuryWithdrawalsAction
+export declare const TreasuryWithdrawalsAction: CML.GovActionKind.TreasuryWithdrawalsAction;
 ```
 
 Added in v2.0.0
@@ -162,7 +162,7 @@ UpdateCommittee variant of the GovActionKind enum
 **Signature**
 
 ```ts
-export declare const UpdateCommittee: CML.GovActionKind.UpdateCommittee
+export declare const UpdateCommittee: CML.GovActionKind.UpdateCommittee;
 ```
 
 Added in v2.0.0

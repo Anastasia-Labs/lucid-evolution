@@ -48,8 +48,8 @@ Wrapper for the emip3_decrypt_with_password function
 ```ts
 export declare const emip3DecryptWithPassword: (
   password: string,
-  data: string
-) => Effect.Effect<string, Emip3DecryptWithPasswordError>
+  data: string,
+) => Effect.Effect<string, Emip3DecryptWithPasswordError>;
 ```
 
 Added in v2.0.0
@@ -63,7 +63,10 @@ Unsafely calls emip3_decrypt_with_password function without Effect wrapper
 **Signature**
 
 ```ts
-export declare const emip3DecryptWithPasswordUnsafe: (password: string, data: string) => string
+export declare const emip3DecryptWithPasswordUnsafe: (
+  password: string,
+  data: string,
+) => string;
 ```
 
 Added in v2.0.0

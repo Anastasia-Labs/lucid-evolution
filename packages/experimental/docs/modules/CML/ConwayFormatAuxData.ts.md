@@ -74,7 +74,10 @@ Static method \_new of ConwayFormatAuxData
 **Signature**
 
 ```ts
-export declare const _new: () => Effect.Effect<CML.ConwayFormatAuxData, ConwayFormatAuxDataError>
+export declare const _new: () => Effect.Effect<
+  CML.ConwayFormatAuxData,
+  ConwayFormatAuxDataError
+>;
 ```
 
 Added in v2.0.0
@@ -87,8 +90,8 @@ Static method fromCborBytes of ConwayFormatAuxData
 
 ```ts
 export declare const fromCborBytes: (
-  cborBytes: Uint8Array
-) => Effect.Effect<CML.ConwayFormatAuxData, ConwayFormatAuxDataError>
+  cborBytes: Uint8Array,
+) => Effect.Effect<CML.ConwayFormatAuxData, ConwayFormatAuxDataError>;
 ```
 
 Added in v2.0.0
@@ -101,8 +104,8 @@ Static method fromCborHex of ConwayFormatAuxData
 
 ```ts
 export declare const fromCborHex: (
-  cborBytes: string
-) => Effect.Effect<CML.ConwayFormatAuxData, ConwayFormatAuxDataError>
+  cborBytes: string,
+) => Effect.Effect<CML.ConwayFormatAuxData, ConwayFormatAuxDataError>;
 ```
 
 Added in v2.0.0
@@ -114,7 +117,9 @@ Static method fromJson of ConwayFormatAuxData
 **Signature**
 
 ```ts
-export declare const fromJson: (json: string) => Effect.Effect<CML.ConwayFormatAuxData, ConwayFormatAuxDataError>
+export declare const fromJson: (
+  json: string,
+) => Effect.Effect<CML.ConwayFormatAuxData, ConwayFormatAuxDataError>;
 ```
 
 Added in v2.0.0
@@ -128,7 +133,7 @@ Unsafely calls ConwayFormatAuxData.\_new without Effect wrapper
 **Signature**
 
 ```ts
-export declare const _newUnsafe: () => CML.ConwayFormatAuxData
+export declare const _newUnsafe: () => CML.ConwayFormatAuxData;
 ```
 
 Added in v2.0.0
@@ -140,7 +145,9 @@ Unsafely calls ConwayFormatAuxData.fromCborBytes without Effect wrapper
 **Signature**
 
 ```ts
-export declare const fromCborBytesUnsafe: (cborBytes: Uint8Array) => CML.ConwayFormatAuxData
+export declare const fromCborBytesUnsafe: (
+  cborBytes: Uint8Array,
+) => CML.ConwayFormatAuxData;
 ```
 
 Added in v2.0.0
@@ -152,7 +159,9 @@ Unsafely calls ConwayFormatAuxData.fromCborHex without Effect wrapper
 **Signature**
 
 ```ts
-export declare const fromCborHexUnsafe: (cborBytes: string) => CML.ConwayFormatAuxData
+export declare const fromCborHexUnsafe: (
+  cborBytes: string,
+) => CML.ConwayFormatAuxData;
 ```
 
 Added in v2.0.0
@@ -164,7 +173,7 @@ Unsafely calls ConwayFormatAuxData.fromJson without Effect wrapper
 **Signature**
 
 ```ts
-export declare const fromJsonUnsafe: (json: string) => CML.ConwayFormatAuxData
+export declare const fromJsonUnsafe: (json: string) => CML.ConwayFormatAuxData;
 ```
 
 Added in v2.0.0
@@ -194,7 +203,9 @@ Method free of ConwayFormatAuxData
 **Signature**
 
 ```ts
-export declare const free: (instance: CML.ConwayFormatAuxData) => Effect.Effect<void, ConwayFormatAuxDataError>
+export declare const free: (
+  instance: CML.ConwayFormatAuxData,
+) => Effect.Effect<void, ConwayFormatAuxDataError>;
 ```
 
 Added in v2.0.0
@@ -207,8 +218,8 @@ Method metadata of ConwayFormatAuxData
 
 ```ts
 export declare const metadata: (
-  instance: CML.ConwayFormatAuxData
-) => Effect.Effect<CML.Metadata | undefined, ConwayFormatAuxDataError>
+  instance: CML.ConwayFormatAuxData,
+) => Effect.Effect<CML.Metadata | undefined, ConwayFormatAuxDataError>;
 ```
 
 Added in v2.0.0
@@ -221,8 +232,8 @@ Method nativeScripts of ConwayFormatAuxData
 
 ```ts
 export declare const nativeScripts: (
-  instance: CML.ConwayFormatAuxData
-) => Effect.Effect<CML.NativeScriptList | undefined, ConwayFormatAuxDataError>
+  instance: CML.ConwayFormatAuxData,
+) => Effect.Effect<CML.NativeScriptList | undefined, ConwayFormatAuxDataError>;
 ```
 
 Added in v2.0.0
@@ -235,8 +246,11 @@ Method plutusV1Scripts of ConwayFormatAuxData
 
 ```ts
 export declare const plutusV1Scripts: (
-  instance: CML.ConwayFormatAuxData
-) => Effect.Effect<CML.PlutusV1ScriptList | undefined, ConwayFormatAuxDataError>
+  instance: CML.ConwayFormatAuxData,
+) => Effect.Effect<
+  CML.PlutusV1ScriptList | undefined,
+  ConwayFormatAuxDataError
+>;
 ```
 
 Added in v2.0.0
@@ -249,8 +263,11 @@ Method plutusV2Scripts of ConwayFormatAuxData
 
 ```ts
 export declare const plutusV2Scripts: (
-  instance: CML.ConwayFormatAuxData
-) => Effect.Effect<CML.PlutusV2ScriptList | undefined, ConwayFormatAuxDataError>
+  instance: CML.ConwayFormatAuxData,
+) => Effect.Effect<
+  CML.PlutusV2ScriptList | undefined,
+  ConwayFormatAuxDataError
+>;
 ```
 
 Added in v2.0.0
@@ -263,8 +280,11 @@ Method plutusV3Scripts of ConwayFormatAuxData
 
 ```ts
 export declare const plutusV3Scripts: (
-  instance: CML.ConwayFormatAuxData
-) => Effect.Effect<CML.PlutusV3ScriptList | undefined, ConwayFormatAuxDataError>
+  instance: CML.ConwayFormatAuxData,
+) => Effect.Effect<
+  CML.PlutusV3ScriptList | undefined,
+  ConwayFormatAuxDataError
+>;
 ```
 
 Added in v2.0.0
@@ -278,8 +298,8 @@ Method setMetadata of ConwayFormatAuxData
 ```ts
 export declare const setMetadata: (
   instance: CML.ConwayFormatAuxData,
-  metadata: CML.Metadata
-) => Effect.Effect<void, ConwayFormatAuxDataError>
+  metadata: CML.Metadata,
+) => Effect.Effect<void, ConwayFormatAuxDataError>;
 ```
 
 Added in v2.0.0
@@ -293,8 +313,8 @@ Method setNativeScripts of ConwayFormatAuxData
 ```ts
 export declare const setNativeScripts: (
   instance: CML.ConwayFormatAuxData,
-  nativeScripts: CML.NativeScriptList
-) => Effect.Effect<void, ConwayFormatAuxDataError>
+  nativeScripts: CML.NativeScriptList,
+) => Effect.Effect<void, ConwayFormatAuxDataError>;
 ```
 
 Added in v2.0.0
@@ -308,8 +328,8 @@ Method setPlutusV1Scripts of ConwayFormatAuxData
 ```ts
 export declare const setPlutusV1Scripts: (
   instance: CML.ConwayFormatAuxData,
-  plutusV1Scripts: CML.PlutusV1ScriptList
-) => Effect.Effect<void, ConwayFormatAuxDataError>
+  plutusV1Scripts: CML.PlutusV1ScriptList,
+) => Effect.Effect<void, ConwayFormatAuxDataError>;
 ```
 
 Added in v2.0.0
@@ -323,8 +343,8 @@ Method setPlutusV2Scripts of ConwayFormatAuxData
 ```ts
 export declare const setPlutusV2Scripts: (
   instance: CML.ConwayFormatAuxData,
-  plutusV2Scripts: CML.PlutusV2ScriptList
-) => Effect.Effect<void, ConwayFormatAuxDataError>
+  plutusV2Scripts: CML.PlutusV2ScriptList,
+) => Effect.Effect<void, ConwayFormatAuxDataError>;
 ```
 
 Added in v2.0.0
@@ -338,8 +358,8 @@ Method setPlutusV3Scripts of ConwayFormatAuxData
 ```ts
 export declare const setPlutusV3Scripts: (
   instance: CML.ConwayFormatAuxData,
-  plutusV3Scripts: CML.PlutusV3ScriptList
-) => Effect.Effect<void, ConwayFormatAuxDataError>
+  plutusV3Scripts: CML.PlutusV3ScriptList,
+) => Effect.Effect<void, ConwayFormatAuxDataError>;
 ```
 
 Added in v2.0.0
@@ -352,8 +372,8 @@ Method toCanonicalCborBytes of ConwayFormatAuxData
 
 ```ts
 export declare const toCanonicalCborBytes: (
-  instance: CML.ConwayFormatAuxData
-) => Effect.Effect<Uint8Array, ConwayFormatAuxDataError>
+  instance: CML.ConwayFormatAuxData,
+) => Effect.Effect<Uint8Array, ConwayFormatAuxDataError>;
 ```
 
 Added in v2.0.0
@@ -366,8 +386,8 @@ Method toCanonicalCborHex of ConwayFormatAuxData
 
 ```ts
 export declare const toCanonicalCborHex: (
-  instance: CML.ConwayFormatAuxData
-) => Effect.Effect<string, ConwayFormatAuxDataError>
+  instance: CML.ConwayFormatAuxData,
+) => Effect.Effect<string, ConwayFormatAuxDataError>;
 ```
 
 Added in v2.0.0
@@ -380,8 +400,8 @@ Method toCborBytes of ConwayFormatAuxData
 
 ```ts
 export declare const toCborBytes: (
-  instance: CML.ConwayFormatAuxData
-) => Effect.Effect<Uint8Array, ConwayFormatAuxDataError>
+  instance: CML.ConwayFormatAuxData,
+) => Effect.Effect<Uint8Array, ConwayFormatAuxDataError>;
 ```
 
 Added in v2.0.0
@@ -393,7 +413,9 @@ Method toCborHex of ConwayFormatAuxData
 **Signature**
 
 ```ts
-export declare const toCborHex: (instance: CML.ConwayFormatAuxData) => Effect.Effect<string, ConwayFormatAuxDataError>
+export declare const toCborHex: (
+  instance: CML.ConwayFormatAuxData,
+) => Effect.Effect<string, ConwayFormatAuxDataError>;
 ```
 
 Added in v2.0.0
@@ -405,7 +427,9 @@ Method toJsValue of ConwayFormatAuxData
 **Signature**
 
 ```ts
-export declare const toJsValue: (instance: CML.ConwayFormatAuxData) => Effect.Effect<any, ConwayFormatAuxDataError>
+export declare const toJsValue: (
+  instance: CML.ConwayFormatAuxData,
+) => Effect.Effect<any, ConwayFormatAuxDataError>;
 ```
 
 Added in v2.0.0
@@ -417,7 +441,9 @@ Method toJson of ConwayFormatAuxData
 **Signature**
 
 ```ts
-export declare const toJson: (instance: CML.ConwayFormatAuxData) => Effect.Effect<string, ConwayFormatAuxDataError>
+export declare const toJson: (
+  instance: CML.ConwayFormatAuxData,
+) => Effect.Effect<string, ConwayFormatAuxDataError>;
 ```
 
 Added in v2.0.0
@@ -431,7 +457,7 @@ Unsafely calls instance.free without Effect wrapper
 **Signature**
 
 ```ts
-export declare const freeUnsafe: (instance: CML.ConwayFormatAuxData) => void
+export declare const freeUnsafe: (instance: CML.ConwayFormatAuxData) => void;
 ```
 
 Added in v2.0.0
@@ -443,7 +469,9 @@ Unsafely calls instance.metadata without Effect wrapper
 **Signature**
 
 ```ts
-export declare const metadataUnsafe: (instance: CML.ConwayFormatAuxData) => CML.Metadata | undefined
+export declare const metadataUnsafe: (
+  instance: CML.ConwayFormatAuxData,
+) => CML.Metadata | undefined;
 ```
 
 Added in v2.0.0
@@ -455,7 +483,9 @@ Unsafely calls instance.nativeScripts without Effect wrapper
 **Signature**
 
 ```ts
-export declare const nativeScriptsUnsafe: (instance: CML.ConwayFormatAuxData) => CML.NativeScriptList | undefined
+export declare const nativeScriptsUnsafe: (
+  instance: CML.ConwayFormatAuxData,
+) => CML.NativeScriptList | undefined;
 ```
 
 Added in v2.0.0
@@ -467,7 +497,9 @@ Unsafely calls instance.plutusV1Scripts without Effect wrapper
 **Signature**
 
 ```ts
-export declare const plutusV1ScriptsUnsafe: (instance: CML.ConwayFormatAuxData) => CML.PlutusV1ScriptList | undefined
+export declare const plutusV1ScriptsUnsafe: (
+  instance: CML.ConwayFormatAuxData,
+) => CML.PlutusV1ScriptList | undefined;
 ```
 
 Added in v2.0.0
@@ -479,7 +511,9 @@ Unsafely calls instance.plutusV2Scripts without Effect wrapper
 **Signature**
 
 ```ts
-export declare const plutusV2ScriptsUnsafe: (instance: CML.ConwayFormatAuxData) => CML.PlutusV2ScriptList | undefined
+export declare const plutusV2ScriptsUnsafe: (
+  instance: CML.ConwayFormatAuxData,
+) => CML.PlutusV2ScriptList | undefined;
 ```
 
 Added in v2.0.0
@@ -491,7 +525,9 @@ Unsafely calls instance.plutusV3Scripts without Effect wrapper
 **Signature**
 
 ```ts
-export declare const plutusV3ScriptsUnsafe: (instance: CML.ConwayFormatAuxData) => CML.PlutusV3ScriptList | undefined
+export declare const plutusV3ScriptsUnsafe: (
+  instance: CML.ConwayFormatAuxData,
+) => CML.PlutusV3ScriptList | undefined;
 ```
 
 Added in v2.0.0
@@ -503,7 +539,10 @@ Unsafely calls instance.setMetadata without Effect wrapper
 **Signature**
 
 ```ts
-export declare const setMetadataUnsafe: (instance: CML.ConwayFormatAuxData, metadata: CML.Metadata) => void
+export declare const setMetadataUnsafe: (
+  instance: CML.ConwayFormatAuxData,
+  metadata: CML.Metadata,
+) => void;
 ```
 
 Added in v2.0.0
@@ -517,8 +556,8 @@ Unsafely calls instance.setNativeScripts without Effect wrapper
 ```ts
 export declare const setNativeScriptsUnsafe: (
   instance: CML.ConwayFormatAuxData,
-  nativeScripts: CML.NativeScriptList
-) => void
+  nativeScripts: CML.NativeScriptList,
+) => void;
 ```
 
 Added in v2.0.0
@@ -532,8 +571,8 @@ Unsafely calls instance.setPlutusV1Scripts without Effect wrapper
 ```ts
 export declare const setPlutusV1ScriptsUnsafe: (
   instance: CML.ConwayFormatAuxData,
-  plutusV1Scripts: CML.PlutusV1ScriptList
-) => void
+  plutusV1Scripts: CML.PlutusV1ScriptList,
+) => void;
 ```
 
 Added in v2.0.0
@@ -547,8 +586,8 @@ Unsafely calls instance.setPlutusV2Scripts without Effect wrapper
 ```ts
 export declare const setPlutusV2ScriptsUnsafe: (
   instance: CML.ConwayFormatAuxData,
-  plutusV2Scripts: CML.PlutusV2ScriptList
-) => void
+  plutusV2Scripts: CML.PlutusV2ScriptList,
+) => void;
 ```
 
 Added in v2.0.0
@@ -562,8 +601,8 @@ Unsafely calls instance.setPlutusV3Scripts without Effect wrapper
 ```ts
 export declare const setPlutusV3ScriptsUnsafe: (
   instance: CML.ConwayFormatAuxData,
-  plutusV3Scripts: CML.PlutusV3ScriptList
-) => void
+  plutusV3Scripts: CML.PlutusV3ScriptList,
+) => void;
 ```
 
 Added in v2.0.0
@@ -575,7 +614,9 @@ Unsafely calls instance.toCanonicalCborBytes without Effect wrapper
 **Signature**
 
 ```ts
-export declare const toCanonicalCborBytesUnsafe: (instance: CML.ConwayFormatAuxData) => Uint8Array
+export declare const toCanonicalCborBytesUnsafe: (
+  instance: CML.ConwayFormatAuxData,
+) => Uint8Array;
 ```
 
 Added in v2.0.0
@@ -587,7 +628,9 @@ Unsafely calls instance.toCanonicalCborHex without Effect wrapper
 **Signature**
 
 ```ts
-export declare const toCanonicalCborHexUnsafe: (instance: CML.ConwayFormatAuxData) => string
+export declare const toCanonicalCborHexUnsafe: (
+  instance: CML.ConwayFormatAuxData,
+) => string;
 ```
 
 Added in v2.0.0
@@ -599,7 +642,9 @@ Unsafely calls instance.toCborBytes without Effect wrapper
 **Signature**
 
 ```ts
-export declare const toCborBytesUnsafe: (instance: CML.ConwayFormatAuxData) => Uint8Array
+export declare const toCborBytesUnsafe: (
+  instance: CML.ConwayFormatAuxData,
+) => Uint8Array;
 ```
 
 Added in v2.0.0
@@ -611,7 +656,9 @@ Unsafely calls instance.toCborHex without Effect wrapper
 **Signature**
 
 ```ts
-export declare const toCborHexUnsafe: (instance: CML.ConwayFormatAuxData) => string
+export declare const toCborHexUnsafe: (
+  instance: CML.ConwayFormatAuxData,
+) => string;
 ```
 
 Added in v2.0.0
@@ -623,7 +670,9 @@ Unsafely calls instance.toJsValue without Effect wrapper
 **Signature**
 
 ```ts
-export declare const toJsValueUnsafe: (instance: CML.ConwayFormatAuxData) => any
+export declare const toJsValueUnsafe: (
+  instance: CML.ConwayFormatAuxData,
+) => any;
 ```
 
 Added in v2.0.0
@@ -635,7 +684,9 @@ Unsafely calls instance.toJson without Effect wrapper
 **Signature**
 
 ```ts
-export declare const toJsonUnsafe: (instance: CML.ConwayFormatAuxData) => string
+export declare const toJsonUnsafe: (
+  instance: CML.ConwayFormatAuxData,
+) => string;
 ```
 
 Added in v2.0.0
@@ -649,7 +700,7 @@ Type alias for the CML ConwayFormatAuxData class
 **Signature**
 
 ```ts
-export type ConwayFormatAuxData = CML.ConwayFormatAuxData
+export type ConwayFormatAuxData = CML.ConwayFormatAuxData;
 ```
 
 Added in v2.0.0

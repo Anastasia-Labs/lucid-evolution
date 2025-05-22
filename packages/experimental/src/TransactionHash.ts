@@ -1,8 +1,14 @@
-import { Effect, Schema, Data, FastCheck, Inspectable, pipe } from "effect";
+import {
+  Effect,
+  Schema,
+  Data,
+  Inspectable,
+  pipe,
+  ParseResult,
+  FastCheck,
+} from "effect";
 import * as CBOR from "./CBOR.js";
-import * as Serialization from "./Serialization.js";
 import * as Hex from "./Hex.js";
-import * as Bytes from "./Bytes.js";
 
 /**
  * The length in bytes of a TransactionHash.
@@ -34,7 +40,7 @@ export const TRANSACTIONHASH_HEX_LENGTH = 64;
  * @category errors
  */
 export class TransactionHashError extends Data.TaggedError(
-  "TransactionHashError"
+  "TransactionHashError",
 )<{
   message?: string;
   reason?:
@@ -44,10 +50,13 @@ export class TransactionHashError extends Data.TaggedError(
     | "InvalidCBORFormat";
 }> {}
 
-export declare const NominalType: unique symbol;
-export interface TransactionHash {
-  readonly [NominalType]: unique symbol;
-}
+const Hash = Hex.HexString.pipe(
+  Schema.filter((hex) => hex.length === TRANSACTIONHASH_HEX_LENGTH),
+).annotations({
+  message: (issue) =>
+    `${issue.actual} must be a hex string of length ${TRANSACTIONHASH_HEX_LENGTH}`,
+  identifier: "Hash",
+});
 
 /**
  * Schema for TransactionHash.
@@ -58,8 +67,8 @@ export interface TransactionHash {
 export class TransactionHash extends Schema.TaggedClass<TransactionHash>()(
   "TransactionHash",
   {
-    hash: Hex.HexString,
-  }
+    hash: Hash,
+  },
 ) {
   [Inspectable.NodeInspectSymbol]() {
     return {
@@ -70,272 +79,103 @@ export class TransactionHash extends Schema.TaggedClass<TransactionHash>()(
 }
 
 /**
- * Create a TransactionHash directly from bytes.
- *
- * @example
- * import { TransactionHash, Bytes } from "@lucid-evolution/experimental";
- * import assert from "assert";
- *
- * const bytes = Bytes.fromHexOrThrow("cefd2fcf657e5e5d6c35975f4e052f427819391b153ebb16ad8aa107ba5a3819");
- * const transactionHash = TransactionHash.decodeBytesOrThrow(bytes);
- * assert(transactionHash._tag === "TransactionHash");
- * assert(transactionHash.hash === "cefd2fcf657e5e5d6c35975f4e052f427819391b153ebb16ad8aa107ba5a3819");
+ * Schema for TransactionHash bytes validation.
  *
  * @since 2.0.0
- * @category constructors
+ * @category schemas
  */
-export const decodeBytes: Serialization.FromBytes<
+const TransactionHashBytes = pipe(
+  Schema.Uint8ArrayFromSelf,
+  Schema.filter((bytes) => bytes.length === TRANSACTIONHASH_BYTES_LENGTH),
+  Schema.typeSchema,
+).annotations({
+  message: (issue) =>
+    `${issue.actual} must be a byte array of length ${TRANSACTIONHASH_BYTES_LENGTH}.`,
+  identifier: "TransactionHashBytes",
+});
+
+/**
+ * Schema for transforming between Uint8Array and TransactionHash.
+ *
+ * @since 2.0.0
+ * @category encoding/decoding
+ */
+export const TransactionHashFromUint8Array = Schema.transform(
+  TransactionHashBytes,
+  TransactionHash.pipe(Schema.asSchema),
+  {
+    strict: true,
+    encode: (_, hash) => Hex.toBytes(hash.hash),
+    decode: (bytes) => new TransactionHash({ hash: Hex.fromBytes(bytes) }),
+  },
+);
+
+/**
+ * Schema for transforming between hex string and TransactionHash.
+ *
+ * @since 2.0.0
+ * @category encoding/decoding
+ */
+export const TransactionHashFromHex = Schema.transform(Hash, TransactionHash, {
+  strict: true,
+  encode: (_, hash) => hash.hash,
+  decode: (hash) => new TransactionHash({ hash }),
+});
+
+/**
+ * Schema for transforming between CBOR bytes and TransactionHash.
+ *
+ * @since 2.0.0
+ * @category encoding/decoding
+ */
+export const TransactionHashFromCBORBytes = Schema.transformOrFail(
+  Schema.Uint8ArrayFromSelf.annotations({
+    identifier: "CBORBytes",
+  }),
   TransactionHash,
-  TransactionHashError
-> = (bytes: Uint8Array) =>
-  pipe(
-    Effect.succeed(bytes),
-    Effect.filterOrFail(
-      (b) => b.length === TRANSACTIONHASH_BYTES_LENGTH,
-      () =>
-        new TransactionHashError({
-          message: `TransactionHash raw bytes must be ${TRANSACTIONHASH_BYTES_LENGTH} bytes long. Got ${bytes.length}.`,
-          reason: "InvalidBytesLength",
-        })
-    ),
-    Effect.map(
-      (validLengthBytes) =>
-        new TransactionHash(
-          { hash: Hex.fromBytes(validLengthBytes) },
-          { disableValidation: true }
-        )
-    )
-  );
+  {
+    strict: true,
+    encode: (s, options, ast, transactionHash) =>
+      pipe(
+        CBOR.encodeAsBytes(Hex.toBytes(transactionHash.hash)),
+        Effect.mapError((e) => new ParseResult.Type(ast, s, e.message)),
+      ),
+    decode: (bytes, options, ast) =>
+      pipe(
+        CBOR.decodeBytes(bytes),
+        Effect.mapError(
+          (error) => new ParseResult.Type(ast, bytes, error.message),
+        ),
+        Effect.flatMap(ParseResult.decode(TransactionHashFromUint8Array)),
+      ),
+  },
+);
 
 /**
- * Create a TransactionHash directly from bytes, throws on error.
- *
- * @example
- * import { TransactionHash, Bytes } from "@lucid-evolution/experimental";
- * import assert from "assert";
- *
- * const bytes = Bytes.fromHexOrThrow("cefd2fcf657e5e5d6c35975f4e052f427819391b153ebb16ad8aa107ba5a3819");
- * const transactionHash = TransactionHash.decodeBytesOrThrow(bytes);
- * assert(transactionHash._tag === "TransactionHash");
- * assert(transactionHash.hash === "cefd2fcf657e5e5d6c35975f4e052f427819391b153ebb16ad8aa107ba5a3819");
- *
- * @since 2.0.0
- * @category constructors
- */
-export const decodeBytesOrThrow = (bytes: Uint8Array) =>
-  Effect.runSync(decodeBytes(bytes));
-
-/**
- * Convert a TransactionHash to bytes.
- *
- * @example
- * import { TransactionHash, Bytes } from "@lucid-evolution/experimental";
- * import assert from "assert";
- *
- * const transactionHash = TransactionHash.decodeHexOrThrow("cefd2fcf657e5e5d6c35975f4e052f427819391b153ebb16ad8aa107ba5a3819");
- * const bytes = TransactionHash.encodeBytes(transactionHash);
- * assert(bytes instanceof Uint8Array);
- * assert(bytes.length === 32);
- * assert(Bytes.toHexOrThrow(bytes) === "cefd2fcf657e5e5d6c35975f4e052f427819391b153ebb16ad8aa107ba5a3819");
- *
- * @since 2.0.0
- * @category transformation
- */
-export const encodeBytes: Serialization.ToBytes<TransactionHash> = (
-  transactionHash
-) => Hex.toBytes(transactionHash.hash);
-
-/**
- * Convert a TransactionHash to CBOR bytes.
- *
- * @example
- * import { TransactionHash, Bytes } from "@lucid-evolution/experimental";
- * import assert from "assert";
- *
- * const transactionHash = TransactionHash.decodeHexOrThrow("cefd2fcf657e5e5d6c35975f4e052f427819391b153ebb16ad8aa107ba5a3819");
- * const bytes = TransactionHash.encodeCBORBytes(transactionHash);
- * assert(bytes instanceof Uint8Array);
+ * Schema for transforming between CBOR hex and TransactionHash.
  *
  * @since 2.0.0
  * @category encoding/decoding
  */
-export const encodeCBORBytes: Serialization.ToCBORBytes<TransactionHash> = (
-  transactionHash
-) => CBOR.encodeAsBytesOrThrow(Hex.toBytes(transactionHash.hash));
-
-/**
- * Convert a TransactionHash to CBOR hex string.
- *
- * @example
- * import { TransactionHash } from "@lucid-evolution/experimental";
- * import assert from "assert";
- *
- * const transactionHash = TransactionHash.decodeHexOrThrow("cefd2fcf657e5e5d6c35975f4e052f427819391b153ebb16ad8aa107ba5a3819");
- * const hex = TransactionHash.encodeCBORHex(transactionHash);
- * assert(hex.startsWith("5820"));
- * assert(hex.includes("cefd2fcf657e5e5d6c35975f4e052f427819391b153ebb16ad8aa107ba5a3819"));
- *
- * @since 2.0.0
- * @category encoding/decoding
- */
-export const encodeCBORHex: Serialization.ToCBOR<TransactionHash> = (
-  transactionHash
-) => Hex.fromBytes(encodeCBORBytes(transactionHash));
-
-/**
- * Create a TransactionHash from a CBOR hex string.
- *
- * @example
- * import { TransactionHash } from "@lucid-evolution/experimental";
- * import assert from "assert";
- *
- * const cborHex = "5820cefd2fcf657e5e5d6c35975f4e052f427819391b153ebb16ad8aa107ba5a3819";
- * const transactionHash = TransactionHash.decodeCBORHexOrThrow(cborHex);
- * assert(transactionHash._tag === "TransactionHash");
- * assert(transactionHash.hash === "cefd2fcf657e5e5d6c35975f4e052f427819391b153ebb16ad8aa107ba5a3819");
- *
- * @since 2.0.0
- * @category encoding/decoding
- */
-export const decodeCBORHex: Serialization.FromCBOR<
-  string,
+export const TransactionHashFromCBORHex = Schema.transformOrFail(
+  Hex.HexString.pipe(Schema.typeSchema).annotations({
+    identifier: "CBORHex",
+  }),
   TransactionHash,
-  TransactionHashError
-> = (maybeHex) =>
-  pipe(
-    Hex.decode(maybeHex),
-    Effect.mapError((e) => new TransactionHashError({ message: e.message })),
-    Effect.map((hex) => Hex.toBytes(hex)),
-    Effect.flatMap((bytes) => decodeCBORBytes(bytes))
-  );
-
-/**
- * Create a TransactionHash from a CBOR hex string, throws on error.
- *
- * @example
- * import { TransactionHash } from "@lucid-evolution/experimental";
- * import assert from "assert";
- *
- * const cborHex = "5820cefd2fcf657e5e5d6c35975f4e052f427819391b153ebb16ad8aa107ba5a3819";
- * const transactionHash = TransactionHash.decodeCBORHexOrThrow(cborHex);
- * assert(transactionHash._tag === "TransactionHash");
- * assert(transactionHash.hash === "cefd2fcf657e5e5d6c35975f4e052f427819391b153ebb16ad8aa107ba5a3819");
- *
- * @since 2.0.0
- * @category encoding/decoding
- */
-export const decodeCBORHexOrThrow: Serialization.FromCBOROrThrow<
-  string,
-  TransactionHash
-> = (cborHex) => Effect.runSync(decodeCBORHex(cborHex));
-
-/**
- * Create a TransactionHash from CBOR bytes.
- *
- * @example
- * import { TransactionHash, Bytes } from "@lucid-evolution/experimental";
- * import assert from "assert";
- *
- * const bytes = Bytes.fromHexOrThrow("5820cefd2fcf657e5e5d6c35975f4e052f427819391b153ebb16ad8aa107ba5a3819");
- * const transactionHash = TransactionHash.decodeCBORBytesOrThrow(bytes);
- * assert(transactionHash._tag === "TransactionHash");
- * assert(transactionHash.hash === "cefd2fcf657e5e5d6c35975f4e052f427819391b153ebb16ad8aa107ba5a3819");
- *
- * @since 2.0.0
- * @category encoding/decoding
- */
-export const decodeCBORBytes: Serialization.FromCBORBytes<
-  TransactionHash,
-  TransactionHashError
-> = (cborBytes) =>
-  pipe(
-    CBOR.decodeBytes(cborBytes),
-    Effect.mapError(
-      () =>
-        new TransactionHashError({
-          message: `TransactionHash CBOR bytes must be a valid CBOR format. Got ${Bytes.toHexOrThrow(cborBytes)}.`,
-          reason: "InvalidCBORFormat",
-        })
-    ),
-    Effect.flatMap((hashBytes) => decodeBytes(hashBytes))
-  );
-
-/**
- * Create a TransactionHash from CBOR bytes, throws on error.
- *
- * @example
- * import { TransactionHash, Bytes } from "@lucid-evolution/experimental";
- * import assert from "assert";
- *
- * const bytes = Bytes.fromHexOrThrow("5820cefd2fcf657e5e5d6c35975f4e052f427819391b153ebb16ad8aa107ba5a3819");
- * const transactionHash = TransactionHash.decodeCBORBytesOrThrow(bytes);
- * assert(transactionHash._tag === "TransactionHash");
- * assert(transactionHash.hash === "cefd2fcf657e5e5d6c35975f4e052f427819391b153ebb16ad8aa107ba5a3819");
- *
- * @since 2.0.0
- * @category encoding/decoding
- */
-export const decodeCBORBytesOrThrow = (bytes: Uint8Array) =>
-  Effect.runSync(decodeCBORBytes(bytes));
-
-/**
- * Construct a TransactionHash from a hex string.
- *
- * @example
- * import { TransactionHash } from "@lucid-evolution/experimental";
- * import assert from "assert";
- *
- * const hash = "cefd2fcf657e5e5d6c35975f4e052f427819391b153ebb16ad8aa107ba5a3819";
- * const transactionHash = TransactionHash.decodeHexOrThrow(hash);
- * assert(transactionHash._tag === "TransactionHash");
- * assert(transactionHash.hash === hash);
- *
- * @since 2.0.0
- * @category constructors
- */
-export const decodeHex: Serialization.Make<TransactionHash, TransactionHashError> = (
-  input: string
-) =>
-  pipe(
-    Hex.decode(input),
-    Effect.mapError(
-      () =>
-        new TransactionHashError({
-          message: `TransactionHash hex string must be a valid hex string. Got ${input}.`,
-          reason: "InvalidHexFormat",
-        })
-    ),
-    Effect.filterOrFail(
-      (h) => h.length === TRANSACTIONHASH_HEX_LENGTH,
-      (actualHash) =>
-        new TransactionHashError({
-          message: `TransactionHash hex string must be ${TRANSACTIONHASH_HEX_LENGTH} characters long. Got ${actualHash.length}.`,
-          reason: "InvalidHexLength",
-        })
-    ),
-    Effect.map(
-      (hex) => new TransactionHash({ hash: hex }, { disableValidation: true })
-    )
-  );
-
-/**
- * Construct a TransactionHash from a hex string, throws on error.
- *
- * @example
- * import { TransactionHash } from "@lucid-evolution/experimental";
- * import assert from "assert";
- *
- * const hash = "cefd2fcf657e5e5d6c35975f4e052f427819391b153ebb16ad8aa107ba5a3819";
- * const transactionHash = TransactionHash.decodeHexOrThrow(hash);
- * assert(transactionHash._tag === "TransactionHash");
- * assert(transactionHash.hash === hash);
- *
- * @since 2.0.0
- * @category constructors
- */
-export const decodeHexOrThrow: Serialization.MakeOrThrow<string, TransactionHash> = (
-  input
-) => Effect.runSync(decodeHex(input));
+  {
+    strict: true,
+    encode: (_, options, ast, transactionHash) =>
+      ParseResult.succeed(CBOR.encodeAsCBORHexOrThrow(transactionHash.hash)),
+    decode: (hexString, options, ast) =>
+      pipe(
+        CBOR.decodeHex(hexString),
+        Effect.mapError(
+          (error) => new ParseResult.Type(ast, hexString, error.message),
+        ),
+        Effect.flatMap(ParseResult.decode(TransactionHashFromUint8Array)),
+      ),
+  },
+);
 
 /**
  * Check if two TransactionHash instances are equal.
@@ -376,4 +216,4 @@ export const equals = (a: TransactionHash, b: TransactionHash): boolean =>
 export const generator = FastCheck.uint8Array({
   minLength: TRANSACTIONHASH_BYTES_LENGTH,
   maxLength: TRANSACTIONHASH_BYTES_LENGTH,
-}).map((bytes) => decodeBytesOrThrow(bytes));
+}).map((bytes) => new TransactionHash({ hash: Hex.fromBytes(bytes) }));

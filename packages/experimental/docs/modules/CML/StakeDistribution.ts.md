@@ -51,8 +51,8 @@ Static method fromCborBytes of StakeDistribution
 
 ```ts
 export declare const fromCborBytes: (
-  cborBytes: Uint8Array
-) => Effect.Effect<CML.StakeDistribution, StakeDistributionError>
+  cborBytes: Uint8Array,
+) => Effect.Effect<CML.StakeDistribution, StakeDistributionError>;
 ```
 
 Added in v2.0.0
@@ -64,7 +64,9 @@ Static method fromCborHex of StakeDistribution
 **Signature**
 
 ```ts
-export declare const fromCborHex: (cborBytes: string) => Effect.Effect<CML.StakeDistribution, StakeDistributionError>
+export declare const fromCborHex: (
+  cborBytes: string,
+) => Effect.Effect<CML.StakeDistribution, StakeDistributionError>;
 ```
 
 Added in v2.0.0
@@ -76,7 +78,10 @@ Static method newBootstrapEra of StakeDistribution
 **Signature**
 
 ```ts
-export declare const newBootstrapEra: () => Effect.Effect<CML.StakeDistribution, StakeDistributionError>
+export declare const newBootstrapEra: () => Effect.Effect<
+  CML.StakeDistribution,
+  StakeDistributionError
+>;
 ```
 
 Added in v2.0.0
@@ -89,8 +94,8 @@ Static method newSingleKey of StakeDistribution
 
 ```ts
 export declare const newSingleKey: (
-  stakeholderId: CML.StakeholderId
-) => Effect.Effect<CML.StakeDistribution, StakeDistributionError>
+  stakeholderId: CML.StakeholderId,
+) => Effect.Effect<CML.StakeDistribution, StakeDistributionError>;
 ```
 
 Added in v2.0.0
@@ -104,7 +109,9 @@ Unsafely calls StakeDistribution.fromCborBytes without Effect wrapper
 **Signature**
 
 ```ts
-export declare const fromCborBytesUnsafe: (cborBytes: Uint8Array) => CML.StakeDistribution
+export declare const fromCborBytesUnsafe: (
+  cborBytes: Uint8Array,
+) => CML.StakeDistribution;
 ```
 
 Added in v2.0.0
@@ -116,7 +123,9 @@ Unsafely calls StakeDistribution.fromCborHex without Effect wrapper
 **Signature**
 
 ```ts
-export declare const fromCborHexUnsafe: (cborBytes: string) => CML.StakeDistribution
+export declare const fromCborHexUnsafe: (
+  cborBytes: string,
+) => CML.StakeDistribution;
 ```
 
 Added in v2.0.0
@@ -128,7 +137,7 @@ Unsafely calls StakeDistribution.newBootstrapEra without Effect wrapper
 **Signature**
 
 ```ts
-export declare const newBootstrapEraUnsafe: () => CML.StakeDistribution
+export declare const newBootstrapEraUnsafe: () => CML.StakeDistribution;
 ```
 
 Added in v2.0.0
@@ -140,7 +149,9 @@ Unsafely calls StakeDistribution.newSingleKey without Effect wrapper
 **Signature**
 
 ```ts
-export declare const newSingleKeyUnsafe: (stakeholderId: CML.StakeholderId) => CML.StakeDistribution
+export declare const newSingleKeyUnsafe: (
+  stakeholderId: CML.StakeholderId,
+) => CML.StakeDistribution;
 ```
 
 Added in v2.0.0
@@ -171,8 +182,8 @@ Method asSingleKey of StakeDistribution
 
 ```ts
 export declare const asSingleKey: (
-  instance: CML.StakeDistribution
-) => Effect.Effect<CML.StakeholderId | undefined, StakeDistributionError>
+  instance: CML.StakeDistribution,
+) => Effect.Effect<CML.StakeholderId | undefined, StakeDistributionError>;
 ```
 
 Added in v2.0.0
@@ -184,7 +195,9 @@ Method free of StakeDistribution
 **Signature**
 
 ```ts
-export declare const free: (instance: CML.StakeDistribution) => Effect.Effect<void, StakeDistributionError>
+export declare const free: (
+  instance: CML.StakeDistribution,
+) => Effect.Effect<void, StakeDistributionError>;
 ```
 
 Added in v2.0.0
@@ -197,8 +210,8 @@ Method kind of StakeDistribution
 
 ```ts
 export declare const kind: (
-  instance: CML.StakeDistribution
-) => Effect.Effect<CML.StakeDistributionKind, StakeDistributionError>
+  instance: CML.StakeDistribution,
+) => Effect.Effect<CML.StakeDistributionKind, StakeDistributionError>;
 ```
 
 Added in v2.0.0
@@ -210,7 +223,9 @@ Method toCborBytes of StakeDistribution
 **Signature**
 
 ```ts
-export declare const toCborBytes: (instance: CML.StakeDistribution) => Effect.Effect<Uint8Array, StakeDistributionError>
+export declare const toCborBytes: (
+  instance: CML.StakeDistribution,
+) => Effect.Effect<Uint8Array, StakeDistributionError>;
 ```
 
 Added in v2.0.0
@@ -222,7 +237,9 @@ Method toCborHex of StakeDistribution
 **Signature**
 
 ```ts
-export declare const toCborHex: (instance: CML.StakeDistribution) => Effect.Effect<string, StakeDistributionError>
+export declare const toCborHex: (
+  instance: CML.StakeDistribution,
+) => Effect.Effect<string, StakeDistributionError>;
 ```
 
 Added in v2.0.0
@@ -236,7 +253,9 @@ Unsafely calls instance.asSingleKey without Effect wrapper
 **Signature**
 
 ```ts
-export declare const asSingleKeyUnsafe: (instance: CML.StakeDistribution) => CML.StakeholderId | undefined
+export declare const asSingleKeyUnsafe: (
+  instance: CML.StakeDistribution,
+) => CML.StakeholderId | undefined;
 ```
 
 Added in v2.0.0
@@ -248,7 +267,7 @@ Unsafely calls instance.free without Effect wrapper
 **Signature**
 
 ```ts
-export declare const freeUnsafe: (instance: CML.StakeDistribution) => void
+export declare const freeUnsafe: (instance: CML.StakeDistribution) => void;
 ```
 
 Added in v2.0.0
@@ -260,7 +279,9 @@ Unsafely calls instance.kind without Effect wrapper
 **Signature**
 
 ```ts
-export declare const kindUnsafe: (instance: CML.StakeDistribution) => CML.StakeDistributionKind
+export declare const kindUnsafe: (
+  instance: CML.StakeDistribution,
+) => CML.StakeDistributionKind;
 ```
 
 Added in v2.0.0
@@ -272,7 +293,9 @@ Unsafely calls instance.toCborBytes without Effect wrapper
 **Signature**
 
 ```ts
-export declare const toCborBytesUnsafe: (instance: CML.StakeDistribution) => Uint8Array
+export declare const toCborBytesUnsafe: (
+  instance: CML.StakeDistribution,
+) => Uint8Array;
 ```
 
 Added in v2.0.0
@@ -284,7 +307,9 @@ Unsafely calls instance.toCborHex without Effect wrapper
 **Signature**
 
 ```ts
-export declare const toCborHexUnsafe: (instance: CML.StakeDistribution) => string
+export declare const toCborHexUnsafe: (
+  instance: CML.StakeDistribution,
+) => string;
 ```
 
 Added in v2.0.0
@@ -298,7 +323,7 @@ Type alias for the CML StakeDistribution class
 **Signature**
 
 ```ts
-export type StakeDistribution = CML.StakeDistribution
+export type StakeDistribution = CML.StakeDistribution;
 ```
 
 Added in v2.0.0

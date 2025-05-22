@@ -46,7 +46,9 @@ Static method fromBech32 of ScriptDataHash
 **Signature**
 
 ```ts
-export declare const fromBech32: (bech32Str: string) => Effect.Effect<CML.ScriptDataHash, ScriptDataHashError>
+export declare const fromBech32: (
+  bech32Str: string,
+) => Effect.Effect<CML.ScriptDataHash, ScriptDataHashError>;
 ```
 
 Added in v2.0.0
@@ -58,7 +60,9 @@ Static method fromHex of ScriptDataHash
 **Signature**
 
 ```ts
-export declare const fromHex: (input: string) => Effect.Effect<CML.ScriptDataHash, ScriptDataHashError>
+export declare const fromHex: (
+  input: string,
+) => Effect.Effect<CML.ScriptDataHash, ScriptDataHashError>;
 ```
 
 Added in v2.0.0
@@ -70,7 +74,9 @@ Static method fromRawBytes of ScriptDataHash
 **Signature**
 
 ```ts
-export declare const fromRawBytes: (bytes: Uint8Array) => Effect.Effect<CML.ScriptDataHash, ScriptDataHashError>
+export declare const fromRawBytes: (
+  bytes: Uint8Array,
+) => Effect.Effect<CML.ScriptDataHash, ScriptDataHashError>;
 ```
 
 Added in v2.0.0
@@ -84,7 +90,9 @@ Unsafely calls ScriptDataHash.fromBech32 without Effect wrapper
 **Signature**
 
 ```ts
-export declare const fromBech32Unsafe: (bech32Str: string) => CML.ScriptDataHash
+export declare const fromBech32Unsafe: (
+  bech32Str: string,
+) => CML.ScriptDataHash;
 ```
 
 Added in v2.0.0
@@ -96,7 +104,7 @@ Unsafely calls ScriptDataHash.fromHex without Effect wrapper
 **Signature**
 
 ```ts
-export declare const fromHexUnsafe: (input: string) => CML.ScriptDataHash
+export declare const fromHexUnsafe: (input: string) => CML.ScriptDataHash;
 ```
 
 Added in v2.0.0
@@ -108,7 +116,9 @@ Unsafely calls ScriptDataHash.fromRawBytes without Effect wrapper
 **Signature**
 
 ```ts
-export declare const fromRawBytesUnsafe: (bytes: Uint8Array) => CML.ScriptDataHash
+export declare const fromRawBytesUnsafe: (
+  bytes: Uint8Array,
+) => CML.ScriptDataHash;
 ```
 
 Added in v2.0.0
@@ -138,7 +148,9 @@ Method free of ScriptDataHash
 **Signature**
 
 ```ts
-export declare const free: (instance: CML.ScriptDataHash) => Effect.Effect<void, ScriptDataHashError>
+export declare const free: (
+  instance: CML.ScriptDataHash,
+) => Effect.Effect<void, ScriptDataHashError>;
 ```
 
 Added in v2.0.0
@@ -152,8 +164,8 @@ Method toBech32 of ScriptDataHash
 ```ts
 export declare const toBech32: (
   instance: CML.ScriptDataHash,
-  prefix: string
-) => Effect.Effect<string, ScriptDataHashError>
+  prefix: string,
+) => Effect.Effect<string, ScriptDataHashError>;
 ```
 
 Added in v2.0.0
@@ -165,7 +177,9 @@ Method toHex of ScriptDataHash
 **Signature**
 
 ```ts
-export declare const toHex: (instance: CML.ScriptDataHash) => Effect.Effect<string, ScriptDataHashError>
+export declare const toHex: (
+  instance: CML.ScriptDataHash,
+) => Effect.Effect<string, ScriptDataHashError>;
 ```
 
 Added in v2.0.0
@@ -177,7 +191,9 @@ Method toRawBytes of ScriptDataHash
 **Signature**
 
 ```ts
-export declare const toRawBytes: (instance: CML.ScriptDataHash) => Effect.Effect<Uint8Array, ScriptDataHashError>
+export declare const toRawBytes: (
+  instance: CML.ScriptDataHash,
+) => Effect.Effect<Uint8Array, ScriptDataHashError>;
 ```
 
 Added in v2.0.0
@@ -191,7 +207,7 @@ Unsafely calls instance.free without Effect wrapper
 **Signature**
 
 ```ts
-export declare const freeUnsafe: (instance: CML.ScriptDataHash) => void
+export declare const freeUnsafe: (instance: CML.ScriptDataHash) => void;
 ```
 
 Added in v2.0.0
@@ -203,7 +219,10 @@ Unsafely calls instance.toBech32 without Effect wrapper
 **Signature**
 
 ```ts
-export declare const toBech32Unsafe: (instance: CML.ScriptDataHash, prefix: string) => string
+export declare const toBech32Unsafe: (
+  instance: CML.ScriptDataHash,
+  prefix: string,
+) => string;
 ```
 
 Added in v2.0.0
@@ -215,7 +234,7 @@ Unsafely calls instance.toHex without Effect wrapper
 **Signature**
 
 ```ts
-export declare const toHexUnsafe: (instance: CML.ScriptDataHash) => string
+export declare const toHexUnsafe: (instance: CML.ScriptDataHash) => string;
 ```
 
 Added in v2.0.0
@@ -227,7 +246,9 @@ Unsafely calls instance.toRawBytes without Effect wrapper
 **Signature**
 
 ```ts
-export declare const toRawBytesUnsafe: (instance: CML.ScriptDataHash) => Uint8Array
+export declare const toRawBytesUnsafe: (
+  instance: CML.ScriptDataHash,
+) => Uint8Array;
 ```
 
 Added in v2.0.0
@@ -241,7 +262,7 @@ Type alias for the CML ScriptDataHash class
 **Signature**
 
 ```ts
-export type ScriptDataHash = CML.ScriptDataHash
+export type ScriptDataHash = CML.ScriptDataHash;
 ```
 
 Added in v2.0.0

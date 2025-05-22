@@ -35,22 +35,27 @@ Create an EnterpriseAddress from network ID and payment credential, throws on er
 **Signature**
 
 ```ts
-export declare const makeOrThrow: (networkId: number, paymentCredential: Credential.Credential) => EnterpriseAddress
+export declare const makeOrThrow: (
+  networkId: number,
+  paymentCredential: Credential.Credential,
+) => EnterpriseAddress;
 ```
 
 **Example**
 
 ```ts
-import { EnterpriseAddress, KeyHash } from "@lucid-evolution/experimental"
-import assert from "assert"
+import { EnterpriseAddress, KeyHash } from "@lucid-evolution/experimental";
+import assert from "assert";
 
 // Create payment credential
-const paymentKeyHash = KeyHash.makeOrThrow("c37b1b5dc0669f1d3c61a6fddb2e8fde96be87b881c60bce8e8d542f")
+const paymentKeyHash = KeyHash.makeOrThrow(
+  "c37b1b5dc0669f1d3c61a6fddb2e8fde96be87b881c60bce8e8d542f",
+);
 
 // Create enterprise address
-const address = EnterpriseAddress.makeOrThrow(0, paymentKeyHash)
-assert(address._tag === "EnterpriseAddress")
-assert(address.networkId === 0)
+const address = EnterpriseAddress.makeOrThrow(0, paymentKeyHash);
+assert(address._tag === "EnterpriseAddress");
+assert(address.networkId === 0);
 ```
 
 Added in v2.0.0
@@ -64,25 +69,30 @@ Check if two EnterpriseAddress instances are equal.
 **Signature**
 
 ```ts
-export declare const equals: (a: EnterpriseAddress, b: EnterpriseAddress) => boolean
+export declare const equals: (
+  a: EnterpriseAddress,
+  b: EnterpriseAddress,
+) => boolean;
 ```
 
 **Example**
 
 ```ts
-import { EnterpriseAddress, KeyHash } from "@lucid-evolution/experimental"
-import assert from "assert"
+import { EnterpriseAddress, KeyHash } from "@lucid-evolution/experimental";
+import assert from "assert";
 
 // Create credential
-const paymentKeyHash = KeyHash.makeOrThrow("c37b1b5dc0669f1d3c61a6fddb2e8fde96be87b881c60bce8e8d542f")
+const paymentKeyHash = KeyHash.makeOrThrow(
+  "c37b1b5dc0669f1d3c61a6fddb2e8fde96be87b881c60bce8e8d542f",
+);
 
 // Create two identical addresses
-const address1 = EnterpriseAddress.makeOrThrow(0, paymentKeyHash)
-const address2 = EnterpriseAddress.makeOrThrow(0, paymentKeyHash)
-const address3 = EnterpriseAddress.makeOrThrow(1, paymentKeyHash)
+const address1 = EnterpriseAddress.makeOrThrow(0, paymentKeyHash);
+const address2 = EnterpriseAddress.makeOrThrow(0, paymentKeyHash);
+const address3 = EnterpriseAddress.makeOrThrow(1, paymentKeyHash);
 
-assert(EnterpriseAddress.equals(address1, address2) === true)
-assert(EnterpriseAddress.equals(address1, address3) === false)
+assert(EnterpriseAddress.equals(address1, address2) === true);
+assert(EnterpriseAddress.equals(address1, address3) === false);
 ```
 
 Added in v2.0.0
@@ -96,21 +106,21 @@ Generate a random EnterpriseAddress.
 **Signature**
 
 ```ts
-export declare const generator: FastCheck.Arbitrary<EnterpriseAddress>
+export declare const generator: FastCheck.Arbitrary<EnterpriseAddress>;
 ```
 
 **Example**
 
 ```ts
-import { EnterpriseAddress } from "@lucid-evolution/experimental"
-import { FastCheck } from "effect"
-import assert from "assert"
+import { EnterpriseAddress } from "@lucid-evolution/experimental";
+import { FastCheck } from "effect";
+import assert from "assert";
 
-const randomSamples = FastCheck.sample(EnterpriseAddress.generator, 20)
+const randomSamples = FastCheck.sample(EnterpriseAddress.generator, 20);
 randomSamples.forEach((address) => {
-  assert(address._tag === "EnterpriseAddress")
-  assert(typeof address.networkId === "number")
-})
+  assert(address._tag === "EnterpriseAddress");
+  assert(typeof address.networkId === "number");
+});
 ```
 
 Added in v2.0.0
@@ -134,7 +144,7 @@ Added in v2.0.0
 **Signature**
 
 ```ts
-;[Inspectable.NodeInspectSymbol]()
+[Inspectable.NodeInspectSymbol]();
 ```
 
 # utils
@@ -145,7 +155,7 @@ Added in v2.0.0
 
 ```ts
 export interface EnterpriseAddress {
-  readonly [NominalType]: unique symbol
+  readonly [NominalType]: unique symbol;
 }
 ```
 
@@ -155,32 +165,52 @@ export interface EnterpriseAddress {
 
 ```ts
 export declare const fromBytes: (
-  bytes: Uint8Array
+  bytes: Uint8Array,
 ) => Effect.Effect<
   EnterpriseAddress,
   [
     | YieldWrap<Effect.Effect<KeyHash.KeyHash, KeyHash.KeyHashError, never>>
-    | YieldWrap<Effect.Effect<ScriptHash.ScriptHash, ScriptHash.ScriptHashError, never>>
+    | YieldWrap<
+        Effect.Effect<ScriptHash.ScriptHash, ScriptHash.ScriptHashError, never>
+      >,
   ] extends [never]
     ? never
     : [
-          | YieldWrap<Effect.Effect<KeyHash.KeyHash, KeyHash.KeyHashError, never>>
-          | YieldWrap<Effect.Effect<ScriptHash.ScriptHash, ScriptHash.ScriptHashError, never>>
+          | YieldWrap<
+              Effect.Effect<KeyHash.KeyHash, KeyHash.KeyHashError, never>
+            >
+          | YieldWrap<
+              Effect.Effect<
+                ScriptHash.ScriptHash,
+                ScriptHash.ScriptHashError,
+                never
+              >
+            >,
         ] extends [YieldWrap<Effect.Effect<infer _A, infer E, infer _R>>]
       ? E
       : never,
   [
     | YieldWrap<Effect.Effect<KeyHash.KeyHash, KeyHash.KeyHashError, never>>
-    | YieldWrap<Effect.Effect<ScriptHash.ScriptHash, ScriptHash.ScriptHashError, never>>
+    | YieldWrap<
+        Effect.Effect<ScriptHash.ScriptHash, ScriptHash.ScriptHashError, never>
+      >,
   ] extends [never]
     ? never
     : [
-          | YieldWrap<Effect.Effect<KeyHash.KeyHash, KeyHash.KeyHashError, never>>
-          | YieldWrap<Effect.Effect<ScriptHash.ScriptHash, ScriptHash.ScriptHashError, never>>
+          | YieldWrap<
+              Effect.Effect<KeyHash.KeyHash, KeyHash.KeyHashError, never>
+            >
+          | YieldWrap<
+              Effect.Effect<
+                ScriptHash.ScriptHash,
+                ScriptHash.ScriptHashError,
+                never
+              >
+            >,
         ] extends [YieldWrap<Effect.Effect<infer _A, infer _E, infer R>>]
       ? R
       : never
->
+>;
 ```
 
 ## toBytes
@@ -188,5 +218,5 @@ export declare const fromBytes: (
 **Signature**
 
 ```ts
-export declare const toBytes: (address: EnterpriseAddress) => Uint8Array
+export declare const toBytes: (address: EnterpriseAddress) => Uint8Array;
 ```

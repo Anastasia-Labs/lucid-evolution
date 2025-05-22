@@ -42,7 +42,10 @@ Static method \_new of TransactionWitnessSetList
 **Signature**
 
 ```ts
-export declare const _new: () => Effect.Effect<CML.TransactionWitnessSetList, TransactionWitnessSetListError>
+export declare const _new: () => Effect.Effect<
+  CML.TransactionWitnessSetList,
+  TransactionWitnessSetListError
+>;
 ```
 
 Added in v2.0.0
@@ -56,7 +59,7 @@ Unsafely calls TransactionWitnessSetList.\_new without Effect wrapper
 **Signature**
 
 ```ts
-export declare const _newUnsafe: () => CML.TransactionWitnessSetList
+export declare const _newUnsafe: () => CML.TransactionWitnessSetList;
 ```
 
 Added in v2.0.0
@@ -88,8 +91,8 @@ Method add of TransactionWitnessSetList
 ```ts
 export declare const add: (
   instance: CML.TransactionWitnessSetList,
-  elem: CML.TransactionWitnessSet
-) => Effect.Effect<void, TransactionWitnessSetListError>
+  elem: CML.TransactionWitnessSet,
+) => Effect.Effect<void, TransactionWitnessSetListError>;
 ```
 
 Added in v2.0.0
@@ -102,8 +105,8 @@ Method free of TransactionWitnessSetList
 
 ```ts
 export declare const free: (
-  instance: CML.TransactionWitnessSetList
-) => Effect.Effect<void, TransactionWitnessSetListError>
+  instance: CML.TransactionWitnessSetList,
+) => Effect.Effect<void, TransactionWitnessSetListError>;
 ```
 
 Added in v2.0.0
@@ -117,8 +120,8 @@ Method get of TransactionWitnessSetList
 ```ts
 export declare const get: (
   instance: CML.TransactionWitnessSetList,
-  index: number
-) => Effect.Effect<CML.TransactionWitnessSet, TransactionWitnessSetListError>
+  index: number,
+) => Effect.Effect<CML.TransactionWitnessSet, TransactionWitnessSetListError>;
 ```
 
 Added in v2.0.0
@@ -131,8 +134,8 @@ Method len of TransactionWitnessSetList
 
 ```ts
 export declare const len: (
-  instance: CML.TransactionWitnessSetList
-) => Effect.Effect<number, TransactionWitnessSetListError>
+  instance: CML.TransactionWitnessSetList,
+) => Effect.Effect<number, TransactionWitnessSetListError>;
 ```
 
 Added in v2.0.0
@@ -146,7 +149,10 @@ Unsafely calls instance.add without Effect wrapper
 **Signature**
 
 ```ts
-export declare const addUnsafe: (instance: CML.TransactionWitnessSetList, elem: CML.TransactionWitnessSet) => void
+export declare const addUnsafe: (
+  instance: CML.TransactionWitnessSetList,
+  elem: CML.TransactionWitnessSet,
+) => void;
 ```
 
 Added in v2.0.0
@@ -158,7 +164,9 @@ Unsafely calls instance.free without Effect wrapper
 **Signature**
 
 ```ts
-export declare const freeUnsafe: (instance: CML.TransactionWitnessSetList) => void
+export declare const freeUnsafe: (
+  instance: CML.TransactionWitnessSetList,
+) => void;
 ```
 
 Added in v2.0.0
@@ -170,7 +178,10 @@ Unsafely calls instance.get without Effect wrapper
 **Signature**
 
 ```ts
-export declare const getUnsafe: (instance: CML.TransactionWitnessSetList, index: number) => CML.TransactionWitnessSet
+export declare const getUnsafe: (
+  instance: CML.TransactionWitnessSetList,
+  index: number,
+) => CML.TransactionWitnessSet;
 ```
 
 Added in v2.0.0
@@ -182,7 +193,9 @@ Unsafely calls instance.len without Effect wrapper
 **Signature**
 
 ```ts
-export declare const lenUnsafe: (instance: CML.TransactionWitnessSetList) => number
+export declare const lenUnsafe: (
+  instance: CML.TransactionWitnessSetList,
+) => number;
 ```
 
 Added in v2.0.0
@@ -196,7 +209,7 @@ Type alias for the CML TransactionWitnessSetList class
 **Signature**
 
 ```ts
-export type TransactionWitnessSetList = CML.TransactionWitnessSetList
+export type TransactionWitnessSetList = CML.TransactionWitnessSetList;
 ```
 
 Added in v2.0.0

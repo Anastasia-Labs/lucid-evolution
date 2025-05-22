@@ -54,7 +54,9 @@ Static method fromCborBytes of DNSName
 **Signature**
 
 ```ts
-export declare const fromCborBytes: (cborBytes: Uint8Array) => Effect.Effect<CML.DNSName, DNSNameError>
+export declare const fromCborBytes: (
+  cborBytes: Uint8Array,
+) => Effect.Effect<CML.DNSName, DNSNameError>;
 ```
 
 Added in v2.0.0
@@ -66,7 +68,9 @@ Static method fromCborHex of DNSName
 **Signature**
 
 ```ts
-export declare const fromCborHex: (cborBytes: string) => Effect.Effect<CML.DNSName, DNSNameError>
+export declare const fromCborHex: (
+  cborBytes: string,
+) => Effect.Effect<CML.DNSName, DNSNameError>;
 ```
 
 Added in v2.0.0
@@ -78,7 +82,9 @@ Static method fromJson of DNSName
 **Signature**
 
 ```ts
-export declare const fromJson: (json: string) => Effect.Effect<CML.DNSName, DNSNameError>
+export declare const fromJson: (
+  json: string,
+) => Effect.Effect<CML.DNSName, DNSNameError>;
 ```
 
 Added in v2.0.0
@@ -92,7 +98,9 @@ Unsafely calls DNSName.fromCborBytes without Effect wrapper
 **Signature**
 
 ```ts
-export declare const fromCborBytesUnsafe: (cborBytes: Uint8Array) => CML.DNSName
+export declare const fromCborBytesUnsafe: (
+  cborBytes: Uint8Array,
+) => CML.DNSName;
 ```
 
 Added in v2.0.0
@@ -104,7 +112,7 @@ Unsafely calls DNSName.fromCborHex without Effect wrapper
 **Signature**
 
 ```ts
-export declare const fromCborHexUnsafe: (cborBytes: string) => CML.DNSName
+export declare const fromCborHexUnsafe: (cborBytes: string) => CML.DNSName;
 ```
 
 Added in v2.0.0
@@ -116,7 +124,7 @@ Unsafely calls DNSName.fromJson without Effect wrapper
 **Signature**
 
 ```ts
-export declare const fromJsonUnsafe: (json: string) => CML.DNSName
+export declare const fromJsonUnsafe: (json: string) => CML.DNSName;
 ```
 
 Added in v2.0.0
@@ -146,7 +154,9 @@ Method free of DNSName
 **Signature**
 
 ```ts
-export declare const free: (instance: CML.DNSName) => Effect.Effect<void, DNSNameError>
+export declare const free: (
+  instance: CML.DNSName,
+) => Effect.Effect<void, DNSNameError>;
 ```
 
 Added in v2.0.0
@@ -158,7 +168,9 @@ Method get of DNSName
 **Signature**
 
 ```ts
-export declare const get: (instance: CML.DNSName) => Effect.Effect<string, DNSNameError>
+export declare const get: (
+  instance: CML.DNSName,
+) => Effect.Effect<string, DNSNameError>;
 ```
 
 Added in v2.0.0
@@ -170,7 +182,9 @@ Method toCanonicalCborBytes of DNSName
 **Signature**
 
 ```ts
-export declare const toCanonicalCborBytes: (instance: CML.DNSName) => Effect.Effect<Uint8Array, DNSNameError>
+export declare const toCanonicalCborBytes: (
+  instance: CML.DNSName,
+) => Effect.Effect<Uint8Array, DNSNameError>;
 ```
 
 Added in v2.0.0
@@ -182,7 +196,9 @@ Method toCanonicalCborHex of DNSName
 **Signature**
 
 ```ts
-export declare const toCanonicalCborHex: (instance: CML.DNSName) => Effect.Effect<string, DNSNameError>
+export declare const toCanonicalCborHex: (
+  instance: CML.DNSName,
+) => Effect.Effect<string, DNSNameError>;
 ```
 
 Added in v2.0.0
@@ -194,7 +210,9 @@ Method toCborBytes of DNSName
 **Signature**
 
 ```ts
-export declare const toCborBytes: (instance: CML.DNSName) => Effect.Effect<Uint8Array, DNSNameError>
+export declare const toCborBytes: (
+  instance: CML.DNSName,
+) => Effect.Effect<Uint8Array, DNSNameError>;
 ```
 
 Added in v2.0.0
@@ -206,7 +224,9 @@ Method toCborHex of DNSName
 **Signature**
 
 ```ts
-export declare const toCborHex: (instance: CML.DNSName) => Effect.Effect<string, DNSNameError>
+export declare const toCborHex: (
+  instance: CML.DNSName,
+) => Effect.Effect<string, DNSNameError>;
 ```
 
 Added in v2.0.0
@@ -218,7 +238,9 @@ Method toJsValue of DNSName
 **Signature**
 
 ```ts
-export declare const toJsValue: (instance: CML.DNSName) => Effect.Effect<any, DNSNameError>
+export declare const toJsValue: (
+  instance: CML.DNSName,
+) => Effect.Effect<any, DNSNameError>;
 ```
 
 Added in v2.0.0
@@ -230,7 +252,9 @@ Method toJson of DNSName
 **Signature**
 
 ```ts
-export declare const toJson: (instance: CML.DNSName) => Effect.Effect<string, DNSNameError>
+export declare const toJson: (
+  instance: CML.DNSName,
+) => Effect.Effect<string, DNSNameError>;
 ```
 
 Added in v2.0.0
@@ -244,7 +268,7 @@ Unsafely calls instance.free without Effect wrapper
 **Signature**
 
 ```ts
-export declare const freeUnsafe: (instance: CML.DNSName) => void
+export declare const freeUnsafe: (instance: CML.DNSName) => void;
 ```
 
 Added in v2.0.0
@@ -256,7 +280,7 @@ Unsafely calls instance.get without Effect wrapper
 **Signature**
 
 ```ts
-export declare const getUnsafe: (instance: CML.DNSName) => string
+export declare const getUnsafe: (instance: CML.DNSName) => string;
 ```
 
 Added in v2.0.0
@@ -268,7 +292,9 @@ Unsafely calls instance.toCanonicalCborBytes without Effect wrapper
 **Signature**
 
 ```ts
-export declare const toCanonicalCborBytesUnsafe: (instance: CML.DNSName) => Uint8Array
+export declare const toCanonicalCborBytesUnsafe: (
+  instance: CML.DNSName,
+) => Uint8Array;
 ```
 
 Added in v2.0.0
@@ -280,7 +306,9 @@ Unsafely calls instance.toCanonicalCborHex without Effect wrapper
 **Signature**
 
 ```ts
-export declare const toCanonicalCborHexUnsafe: (instance: CML.DNSName) => string
+export declare const toCanonicalCborHexUnsafe: (
+  instance: CML.DNSName,
+) => string;
 ```
 
 Added in v2.0.0
@@ -292,7 +320,7 @@ Unsafely calls instance.toCborBytes without Effect wrapper
 **Signature**
 
 ```ts
-export declare const toCborBytesUnsafe: (instance: CML.DNSName) => Uint8Array
+export declare const toCborBytesUnsafe: (instance: CML.DNSName) => Uint8Array;
 ```
 
 Added in v2.0.0
@@ -304,7 +332,7 @@ Unsafely calls instance.toCborHex without Effect wrapper
 **Signature**
 
 ```ts
-export declare const toCborHexUnsafe: (instance: CML.DNSName) => string
+export declare const toCborHexUnsafe: (instance: CML.DNSName) => string;
 ```
 
 Added in v2.0.0
@@ -316,7 +344,7 @@ Unsafely calls instance.toJsValue without Effect wrapper
 **Signature**
 
 ```ts
-export declare const toJsValueUnsafe: (instance: CML.DNSName) => any
+export declare const toJsValueUnsafe: (instance: CML.DNSName) => any;
 ```
 
 Added in v2.0.0
@@ -328,7 +356,7 @@ Unsafely calls instance.toJson without Effect wrapper
 **Signature**
 
 ```ts
-export declare const toJsonUnsafe: (instance: CML.DNSName) => string
+export declare const toJsonUnsafe: (instance: CML.DNSName) => string;
 ```
 
 Added in v2.0.0
@@ -342,7 +370,7 @@ Type alias for the CML DNSName class
 **Signature**
 
 ```ts
-export type DNSName = CML.DNSName
+export type DNSName = CML.DNSName;
 ```
 
 Added in v2.0.0

@@ -165,18 +165,18 @@ export const makeOrThrow = (
  * // Create payment and stake key hashes with consistent test values
  * const paymentHash = "c37b1b5dc0669f1d3c61a6fddb2e8fde96be87b881c60bce8e8d542f";
  * const stakeHash = "530245ff0704032c031302cf01fb06010521a7fd024404010004f814";
- * 
+ *
  * // Create credentials from the key hashes
  * const paymentCredential = KeyHash.makeOrThrow(paymentHash);
  * const stakeCredential = KeyHash.makeOrThrow(stakeHash);
- * 
+ *
  * // Create identical addresses with same network ID
  * const address1 = BaseAddress.makeOrThrow(0, paymentCredential, stakeCredential);
  * const address2 = BaseAddress.makeOrThrow(0, paymentCredential, stakeCredential);
- * 
+ *
  * // Create a different address with different network ID
  * const address3 = BaseAddress.makeOrThrow(1, paymentCredential, stakeCredential);
- * 
+ *
  * // Compare addresses
  * assert(BaseAddress.equals(address1, address2) === true);
  * assert(BaseAddress.equals(address1, address3) === false);

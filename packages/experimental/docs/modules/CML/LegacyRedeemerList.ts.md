@@ -42,7 +42,10 @@ Static method \_new of LegacyRedeemerList
 **Signature**
 
 ```ts
-export declare const _new: () => Effect.Effect<CML.LegacyRedeemerList, LegacyRedeemerListError>
+export declare const _new: () => Effect.Effect<
+  CML.LegacyRedeemerList,
+  LegacyRedeemerListError
+>;
 ```
 
 Added in v2.0.0
@@ -56,7 +59,7 @@ Unsafely calls LegacyRedeemerList.\_new without Effect wrapper
 **Signature**
 
 ```ts
-export declare const _newUnsafe: () => CML.LegacyRedeemerList
+export declare const _newUnsafe: () => CML.LegacyRedeemerList;
 ```
 
 Added in v2.0.0
@@ -88,8 +91,8 @@ Method add of LegacyRedeemerList
 ```ts
 export declare const add: (
   instance: CML.LegacyRedeemerList,
-  elem: CML.LegacyRedeemer
-) => Effect.Effect<void, LegacyRedeemerListError>
+  elem: CML.LegacyRedeemer,
+) => Effect.Effect<void, LegacyRedeemerListError>;
 ```
 
 Added in v2.0.0
@@ -101,7 +104,9 @@ Method free of LegacyRedeemerList
 **Signature**
 
 ```ts
-export declare const free: (instance: CML.LegacyRedeemerList) => Effect.Effect<void, LegacyRedeemerListError>
+export declare const free: (
+  instance: CML.LegacyRedeemerList,
+) => Effect.Effect<void, LegacyRedeemerListError>;
 ```
 
 Added in v2.0.0
@@ -115,8 +120,8 @@ Method get of LegacyRedeemerList
 ```ts
 export declare const get: (
   instance: CML.LegacyRedeemerList,
-  index: number
-) => Effect.Effect<CML.LegacyRedeemer, LegacyRedeemerListError>
+  index: number,
+) => Effect.Effect<CML.LegacyRedeemer, LegacyRedeemerListError>;
 ```
 
 Added in v2.0.0
@@ -128,7 +133,9 @@ Method len of LegacyRedeemerList
 **Signature**
 
 ```ts
-export declare const len: (instance: CML.LegacyRedeemerList) => Effect.Effect<number, LegacyRedeemerListError>
+export declare const len: (
+  instance: CML.LegacyRedeemerList,
+) => Effect.Effect<number, LegacyRedeemerListError>;
 ```
 
 Added in v2.0.0
@@ -142,7 +149,10 @@ Unsafely calls instance.add without Effect wrapper
 **Signature**
 
 ```ts
-export declare const addUnsafe: (instance: CML.LegacyRedeemerList, elem: CML.LegacyRedeemer) => void
+export declare const addUnsafe: (
+  instance: CML.LegacyRedeemerList,
+  elem: CML.LegacyRedeemer,
+) => void;
 ```
 
 Added in v2.0.0
@@ -154,7 +164,7 @@ Unsafely calls instance.free without Effect wrapper
 **Signature**
 
 ```ts
-export declare const freeUnsafe: (instance: CML.LegacyRedeemerList) => void
+export declare const freeUnsafe: (instance: CML.LegacyRedeemerList) => void;
 ```
 
 Added in v2.0.0
@@ -166,7 +176,10 @@ Unsafely calls instance.get without Effect wrapper
 **Signature**
 
 ```ts
-export declare const getUnsafe: (instance: CML.LegacyRedeemerList, index: number) => CML.LegacyRedeemer
+export declare const getUnsafe: (
+  instance: CML.LegacyRedeemerList,
+  index: number,
+) => CML.LegacyRedeemer;
 ```
 
 Added in v2.0.0
@@ -178,7 +191,7 @@ Unsafely calls instance.len without Effect wrapper
 **Signature**
 
 ```ts
-export declare const lenUnsafe: (instance: CML.LegacyRedeemerList) => number
+export declare const lenUnsafe: (instance: CML.LegacyRedeemerList) => number;
 ```
 
 Added in v2.0.0
@@ -192,7 +205,7 @@ Type alias for the CML LegacyRedeemerList class
 **Signature**
 
 ```ts
-export type LegacyRedeemerList = CML.LegacyRedeemerList
+export type LegacyRedeemerList = CML.LegacyRedeemerList;
 ```
 
 Added in v2.0.0

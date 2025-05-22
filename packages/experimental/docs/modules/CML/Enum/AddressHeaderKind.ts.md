@@ -42,7 +42,7 @@ Type alias for the CML AddressHeaderKind enum
 **Signature**
 
 ```ts
-export type AddressHeaderKind = CML.AddressHeaderKind
+export type AddressHeaderKind = CML.AddressHeaderKind;
 ```
 
 Added in v2.0.0
@@ -56,7 +56,9 @@ Convert string to AddressHeaderKind enum value
 **Signature**
 
 ```ts
-export declare const fromString: (str: string) => CML.AddressHeaderKind | undefined
+export declare const fromString: (
+  str: string,
+) => CML.AddressHeaderKind | undefined;
 ```
 
 Added in v2.0.0
@@ -68,7 +70,7 @@ Convert AddressHeaderKind enum value to string
 **Signature**
 
 ```ts
-export declare const toString: (value: CML.AddressHeaderKind) => string
+export declare const toString: (value: CML.AddressHeaderKind) => string;
 ```
 
 Added in v2.0.0
@@ -80,7 +82,7 @@ Get all values of the AddressHeaderKind enum
 **Signature**
 
 ```ts
-export declare const values: () => Array<CML.AddressHeaderKind>
+export declare const values: () => Array<CML.AddressHeaderKind>;
 ```
 
 Added in v2.0.0
@@ -94,7 +96,7 @@ BasePaymentKeyStakeKey variant of the AddressHeaderKind enum
 **Signature**
 
 ```ts
-export declare const BasePaymentKeyStakeKey: CML.AddressHeaderKind.BasePaymentKeyStakeKey
+export declare const BasePaymentKeyStakeKey: CML.AddressHeaderKind.BasePaymentKeyStakeKey;
 ```
 
 Added in v2.0.0
@@ -106,7 +108,7 @@ BasePaymentKeyStakeScript variant of the AddressHeaderKind enum
 **Signature**
 
 ```ts
-export declare const BasePaymentKeyStakeScript: CML.AddressHeaderKind.BasePaymentKeyStakeScript
+export declare const BasePaymentKeyStakeScript: CML.AddressHeaderKind.BasePaymentKeyStakeScript;
 ```
 
 Added in v2.0.0
@@ -118,7 +120,7 @@ BasePaymentScriptStakeKey variant of the AddressHeaderKind enum
 **Signature**
 
 ```ts
-export declare const BasePaymentScriptStakeKey: CML.AddressHeaderKind.BasePaymentScriptStakeKey
+export declare const BasePaymentScriptStakeKey: CML.AddressHeaderKind.BasePaymentScriptStakeKey;
 ```
 
 Added in v2.0.0
@@ -130,7 +132,7 @@ BasePaymentScriptStakeScript variant of the AddressHeaderKind enum
 **Signature**
 
 ```ts
-export declare const BasePaymentScriptStakeScript: CML.AddressHeaderKind.BasePaymentScriptStakeScript
+export declare const BasePaymentScriptStakeScript: CML.AddressHeaderKind.BasePaymentScriptStakeScript;
 ```
 
 Added in v2.0.0
@@ -142,7 +144,7 @@ Byron variant of the AddressHeaderKind enum
 **Signature**
 
 ```ts
-export declare const Byron: CML.AddressHeaderKind.Byron
+export declare const Byron: CML.AddressHeaderKind.Byron;
 ```
 
 Added in v2.0.0
@@ -154,7 +156,7 @@ EnterpriseKey variant of the AddressHeaderKind enum
 **Signature**
 
 ```ts
-export declare const EnterpriseKey: CML.AddressHeaderKind.EnterpriseKey
+export declare const EnterpriseKey: CML.AddressHeaderKind.EnterpriseKey;
 ```
 
 Added in v2.0.0
@@ -166,7 +168,7 @@ EnterpriseScript variant of the AddressHeaderKind enum
 **Signature**
 
 ```ts
-export declare const EnterpriseScript: CML.AddressHeaderKind.EnterpriseScript
+export declare const EnterpriseScript: CML.AddressHeaderKind.EnterpriseScript;
 ```
 
 Added in v2.0.0
@@ -178,7 +180,7 @@ PointerKey variant of the AddressHeaderKind enum
 **Signature**
 
 ```ts
-export declare const PointerKey: CML.AddressHeaderKind.PointerKey
+export declare const PointerKey: CML.AddressHeaderKind.PointerKey;
 ```
 
 Added in v2.0.0
@@ -190,7 +192,7 @@ PointerScript variant of the AddressHeaderKind enum
 **Signature**
 
 ```ts
-export declare const PointerScript: CML.AddressHeaderKind.PointerScript
+export declare const PointerScript: CML.AddressHeaderKind.PointerScript;
 ```
 
 Added in v2.0.0
@@ -202,7 +204,7 @@ RewardKey variant of the AddressHeaderKind enum
 **Signature**
 
 ```ts
-export declare const RewardKey: CML.AddressHeaderKind.RewardKey
+export declare const RewardKey: CML.AddressHeaderKind.RewardKey;
 ```
 
 Added in v2.0.0
@@ -214,7 +216,7 @@ RewardScript variant of the AddressHeaderKind enum
 **Signature**
 
 ```ts
-export declare const RewardScript: CML.AddressHeaderKind.RewardScript
+export declare const RewardScript: CML.AddressHeaderKind.RewardScript;
 ```
 
 Added in v2.0.0

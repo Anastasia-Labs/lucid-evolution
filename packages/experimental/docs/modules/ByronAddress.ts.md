@@ -38,7 +38,7 @@ Added in v2.0.0
 **Signature**
 
 ```ts
-;[Inspectable.NodeInspectSymbol]()
+[Inspectable.NodeInspectSymbol]();
 ```
 
 # utils
@@ -49,7 +49,7 @@ Added in v2.0.0
 
 ```ts
 export interface ByronAddress {
-  readonly [NominalType]: unique symbol
+  readonly [NominalType]: unique symbol;
 }
 ```
 
@@ -60,7 +60,7 @@ Byron legacy address has limited support
 **Signature**
 
 ```ts
-export declare const fromBytes: (bytes: Uint8Array) => ByronAddress
+export declare const fromBytes: (bytes: Uint8Array) => ByronAddress;
 ```
 
 Added in v2.0.0

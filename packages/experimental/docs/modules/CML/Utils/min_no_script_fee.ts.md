@@ -48,8 +48,8 @@ Wrapper for the min_no_script_fee function
 ```ts
 export declare const minNoScriptFee: (
   tx: CML.Transaction,
-  linearFee: CML.LinearFee
-) => Effect.Effect<bigint, MinNoScriptFeeError>
+  linearFee: CML.LinearFee,
+) => Effect.Effect<bigint, MinNoScriptFeeError>;
 ```
 
 Added in v2.0.0
@@ -63,7 +63,10 @@ Unsafely calls min_no_script_fee function without Effect wrapper
 **Signature**
 
 ```ts
-export declare const minNoScriptFeeUnsafe: (tx: CML.Transaction, linearFee: CML.LinearFee) => bigint
+export declare const minNoScriptFeeUnsafe: (
+  tx: CML.Transaction,
+  linearFee: CML.LinearFee,
+) => bigint;
 ```
 
 Added in v2.0.0

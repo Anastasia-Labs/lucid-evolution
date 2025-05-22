@@ -1,7 +1,7 @@
 import { Bench } from "tinybench";
 import * as CML from "@anastasia-labs/cardano-multiplatform-lib-nodejs";
 import * as KeyHash from "../src/KeyHash.js";
-import { Effect, pipe } from "effect";
+import { Effect, pipe, Schema } from "effect";
 
 function formatOpsPerSec(n: number): string {
   if (n >= 1_000_000_000) return `~${(n / 1_000_000_000).toFixed(1)}B ops/sec`;
@@ -14,9 +14,9 @@ const bench = new Bench({ time: 1000 });
 
 bench.add("Evolution 2.0 - KeyHash", () => {
   const maybeHex = "c37b1b5dc0669f1d3c61a6fddb2e8fde96be87b881c60bce8e8d542f";
-  const a = KeyHash.decodeHexOrThrow(maybeHex);
-  const b = KeyHash.toBytes(a);
-  const c = KeyHash.decodeBytesOrThrow(b);
+  const a = Schema.decodeSync(KeyHash.KeyHashFromHex)(maybeHex);
+  const b = Schema.encodeSync(KeyHash.KeyHashFromUint8Array)(a);
+  const c = Schema.decodeSync(KeyHash.KeyHashFromUint8Array)(b);
   const d = c.hash;
 });
 
@@ -31,9 +31,9 @@ bench.add("CML - Ed25519KeyHash", () => {
 bench.add("Evolution 2.0 - KeyHash Effect ", () => {
   const hex = "c37b1b5dc0669f1d3c61a6fddb2e8fde96be87b881c60bce8e8d542f";
   pipe(
-    KeyHash.decodeHex(hex),
-    Effect.map((a) => KeyHash.toBytes(a)),
-    Effect.flatMap((b) => KeyHash.decodeBytes(b)),
+    Schema.decode(KeyHash.KeyHashFromHex)(hex),
+    Effect.flatMap((a) => Schema.encode(KeyHash.KeyHashFromUint8Array)(a)),
+    Effect.flatMap((b) => Schema.decode(KeyHash.KeyHashFromUint8Array)(b)),
     Effect.runSync,
   );
 });

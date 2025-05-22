@@ -44,8 +44,8 @@ Static method \_new of SingleWithdrawalBuilder
 ```ts
 export declare const _new: (
   address: CML.RewardAddress,
-  amount: bigint
-) => Effect.Effect<CML.SingleWithdrawalBuilder, SingleWithdrawalBuilderError>
+  amount: bigint,
+) => Effect.Effect<CML.SingleWithdrawalBuilder, SingleWithdrawalBuilderError>;
 ```
 
 Added in v2.0.0
@@ -59,7 +59,10 @@ Unsafely calls SingleWithdrawalBuilder.\_new without Effect wrapper
 **Signature**
 
 ```ts
-export declare const _newUnsafe: (address: CML.RewardAddress, amount: bigint) => CML.SingleWithdrawalBuilder
+export declare const _newUnsafe: (
+  address: CML.RewardAddress,
+  amount: bigint,
+) => CML.SingleWithdrawalBuilder;
 ```
 
 Added in v2.0.0
@@ -89,7 +92,9 @@ Method free of SingleWithdrawalBuilder
 **Signature**
 
 ```ts
-export declare const free: (instance: CML.SingleWithdrawalBuilder) => Effect.Effect<void, SingleWithdrawalBuilderError>
+export declare const free: (
+  instance: CML.SingleWithdrawalBuilder,
+) => Effect.Effect<void, SingleWithdrawalBuilderError>;
 ```
 
 Added in v2.0.0
@@ -104,8 +109,8 @@ Method nativeScript of SingleWithdrawalBuilder
 export declare const nativeScript: (
   instance: CML.SingleWithdrawalBuilder,
   _nativeScript: CML.NativeScript,
-  witnessInfo: CML.NativeScriptWitnessInfo
-) => Effect.Effect<CML.WithdrawalBuilderResult, SingleWithdrawalBuilderError>
+  witnessInfo: CML.NativeScriptWitnessInfo,
+) => Effect.Effect<CML.WithdrawalBuilderResult, SingleWithdrawalBuilderError>;
 ```
 
 Added in v2.0.0
@@ -118,8 +123,8 @@ Method paymentKey of SingleWithdrawalBuilder
 
 ```ts
 export declare const paymentKey: (
-  instance: CML.SingleWithdrawalBuilder
-) => Effect.Effect<CML.WithdrawalBuilderResult, SingleWithdrawalBuilderError>
+  instance: CML.SingleWithdrawalBuilder,
+) => Effect.Effect<CML.WithdrawalBuilderResult, SingleWithdrawalBuilderError>;
 ```
 
 Added in v2.0.0
@@ -134,8 +139,8 @@ Method plutusScript of SingleWithdrawalBuilder
 export declare const plutusScript: (
   instance: CML.SingleWithdrawalBuilder,
   partialWitness: CML.PartialPlutusWitness,
-  requiredSigners: CML.Ed25519KeyHashList
-) => Effect.Effect<CML.WithdrawalBuilderResult, SingleWithdrawalBuilderError>
+  requiredSigners: CML.Ed25519KeyHashList,
+) => Effect.Effect<CML.WithdrawalBuilderResult, SingleWithdrawalBuilderError>;
 ```
 
 Added in v2.0.0
@@ -149,7 +154,9 @@ Unsafely calls instance.free without Effect wrapper
 **Signature**
 
 ```ts
-export declare const freeUnsafe: (instance: CML.SingleWithdrawalBuilder) => void
+export declare const freeUnsafe: (
+  instance: CML.SingleWithdrawalBuilder,
+) => void;
 ```
 
 Added in v2.0.0
@@ -164,8 +171,8 @@ Unsafely calls instance.nativeScript without Effect wrapper
 export declare const nativeScriptUnsafe: (
   instance: CML.SingleWithdrawalBuilder,
   _nativeScript: CML.NativeScript,
-  witnessInfo: CML.NativeScriptWitnessInfo
-) => CML.WithdrawalBuilderResult
+  witnessInfo: CML.NativeScriptWitnessInfo,
+) => CML.WithdrawalBuilderResult;
 ```
 
 Added in v2.0.0
@@ -177,7 +184,9 @@ Unsafely calls instance.paymentKey without Effect wrapper
 **Signature**
 
 ```ts
-export declare const paymentKeyUnsafe: (instance: CML.SingleWithdrawalBuilder) => CML.WithdrawalBuilderResult
+export declare const paymentKeyUnsafe: (
+  instance: CML.SingleWithdrawalBuilder,
+) => CML.WithdrawalBuilderResult;
 ```
 
 Added in v2.0.0
@@ -192,8 +201,8 @@ Unsafely calls instance.plutusScript without Effect wrapper
 export declare const plutusScriptUnsafe: (
   instance: CML.SingleWithdrawalBuilder,
   partialWitness: CML.PartialPlutusWitness,
-  requiredSigners: CML.Ed25519KeyHashList
-) => CML.WithdrawalBuilderResult
+  requiredSigners: CML.Ed25519KeyHashList,
+) => CML.WithdrawalBuilderResult;
 ```
 
 Added in v2.0.0
@@ -207,7 +216,7 @@ Type alias for the CML SingleWithdrawalBuilder class
 **Signature**
 
 ```ts
-export type SingleWithdrawalBuilder = CML.SingleWithdrawalBuilder
+export type SingleWithdrawalBuilder = CML.SingleWithdrawalBuilder;
 ```
 
 Added in v2.0.0

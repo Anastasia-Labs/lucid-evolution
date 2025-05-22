@@ -43,7 +43,7 @@ Static method assumeSignatureCount of NativeScriptWitnessInfo
 export declare const assumeSignatureCount: () => Effect.Effect<
   CML.NativeScriptWitnessInfo,
   NativeScriptWitnessInfoError
->
+>;
 ```
 
 Added in v2.0.0
@@ -56,8 +56,8 @@ Static method numSignatures of NativeScriptWitnessInfo
 
 ```ts
 export declare const numSignatures: (
-  num: number
-) => Effect.Effect<CML.NativeScriptWitnessInfo, NativeScriptWitnessInfoError>
+  num: number,
+) => Effect.Effect<CML.NativeScriptWitnessInfo, NativeScriptWitnessInfoError>;
 ```
 
 Added in v2.0.0
@@ -70,8 +70,8 @@ Static method vkeys of NativeScriptWitnessInfo
 
 ```ts
 export declare const vkeys: (
-  _vkeys: CML.Ed25519KeyHashList
-) => Effect.Effect<CML.NativeScriptWitnessInfo, NativeScriptWitnessInfoError>
+  _vkeys: CML.Ed25519KeyHashList,
+) => Effect.Effect<CML.NativeScriptWitnessInfo, NativeScriptWitnessInfoError>;
 ```
 
 Added in v2.0.0
@@ -85,7 +85,7 @@ Unsafely calls NativeScriptWitnessInfo.assumeSignatureCount without Effect wrapp
 **Signature**
 
 ```ts
-export declare const assumeSignatureCountUnsafe: () => CML.NativeScriptWitnessInfo
+export declare const assumeSignatureCountUnsafe: () => CML.NativeScriptWitnessInfo;
 ```
 
 Added in v2.0.0
@@ -97,7 +97,9 @@ Unsafely calls NativeScriptWitnessInfo.numSignatures without Effect wrapper
 **Signature**
 
 ```ts
-export declare const numSignaturesUnsafe: (num: number) => CML.NativeScriptWitnessInfo
+export declare const numSignaturesUnsafe: (
+  num: number,
+) => CML.NativeScriptWitnessInfo;
 ```
 
 Added in v2.0.0
@@ -109,7 +111,9 @@ Unsafely calls NativeScriptWitnessInfo.vkeys without Effect wrapper
 **Signature**
 
 ```ts
-export declare const vkeysUnsafe: (_vkeys: CML.Ed25519KeyHashList) => CML.NativeScriptWitnessInfo
+export declare const vkeysUnsafe: (
+  _vkeys: CML.Ed25519KeyHashList,
+) => CML.NativeScriptWitnessInfo;
 ```
 
 Added in v2.0.0
@@ -139,7 +143,9 @@ Method free of NativeScriptWitnessInfo
 **Signature**
 
 ```ts
-export declare const free: (instance: CML.NativeScriptWitnessInfo) => Effect.Effect<void, NativeScriptWitnessInfoError>
+export declare const free: (
+  instance: CML.NativeScriptWitnessInfo,
+) => Effect.Effect<void, NativeScriptWitnessInfoError>;
 ```
 
 Added in v2.0.0
@@ -153,7 +159,9 @@ Unsafely calls instance.free without Effect wrapper
 **Signature**
 
 ```ts
-export declare const freeUnsafe: (instance: CML.NativeScriptWitnessInfo) => void
+export declare const freeUnsafe: (
+  instance: CML.NativeScriptWitnessInfo,
+) => void;
 ```
 
 Added in v2.0.0
@@ -167,7 +175,7 @@ Type alias for the CML NativeScriptWitnessInfo class
 **Signature**
 
 ```ts
-export type NativeScriptWitnessInfo = CML.NativeScriptWitnessInfo
+export type NativeScriptWitnessInfo = CML.NativeScriptWitnessInfo;
 ```
 
 Added in v2.0.0

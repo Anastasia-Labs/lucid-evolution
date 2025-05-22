@@ -66,8 +66,8 @@ export declare const _new: (
   deposit: bigint,
   rewardAccount: CML.RewardAddress,
   govAction: CML.GovAction,
-  anchor: CML.Anchor
-) => Effect.Effect<CML.ProposalProcedure, ProposalProcedureError>
+  anchor: CML.Anchor,
+) => Effect.Effect<CML.ProposalProcedure, ProposalProcedureError>;
 ```
 
 Added in v2.0.0
@@ -80,8 +80,8 @@ Static method fromCborBytes of ProposalProcedure
 
 ```ts
 export declare const fromCborBytes: (
-  cborBytes: Uint8Array
-) => Effect.Effect<CML.ProposalProcedure, ProposalProcedureError>
+  cborBytes: Uint8Array,
+) => Effect.Effect<CML.ProposalProcedure, ProposalProcedureError>;
 ```
 
 Added in v2.0.0
@@ -93,7 +93,9 @@ Static method fromCborHex of ProposalProcedure
 **Signature**
 
 ```ts
-export declare const fromCborHex: (cborBytes: string) => Effect.Effect<CML.ProposalProcedure, ProposalProcedureError>
+export declare const fromCborHex: (
+  cborBytes: string,
+) => Effect.Effect<CML.ProposalProcedure, ProposalProcedureError>;
 ```
 
 Added in v2.0.0
@@ -105,7 +107,9 @@ Static method fromJson of ProposalProcedure
 **Signature**
 
 ```ts
-export declare const fromJson: (json: string) => Effect.Effect<CML.ProposalProcedure, ProposalProcedureError>
+export declare const fromJson: (
+  json: string,
+) => Effect.Effect<CML.ProposalProcedure, ProposalProcedureError>;
 ```
 
 Added in v2.0.0
@@ -123,8 +127,8 @@ export declare const _newUnsafe: (
   deposit: bigint,
   rewardAccount: CML.RewardAddress,
   govAction: CML.GovAction,
-  anchor: CML.Anchor
-) => CML.ProposalProcedure
+  anchor: CML.Anchor,
+) => CML.ProposalProcedure;
 ```
 
 Added in v2.0.0
@@ -136,7 +140,9 @@ Unsafely calls ProposalProcedure.fromCborBytes without Effect wrapper
 **Signature**
 
 ```ts
-export declare const fromCborBytesUnsafe: (cborBytes: Uint8Array) => CML.ProposalProcedure
+export declare const fromCborBytesUnsafe: (
+  cborBytes: Uint8Array,
+) => CML.ProposalProcedure;
 ```
 
 Added in v2.0.0
@@ -148,7 +154,9 @@ Unsafely calls ProposalProcedure.fromCborHex without Effect wrapper
 **Signature**
 
 ```ts
-export declare const fromCborHexUnsafe: (cborBytes: string) => CML.ProposalProcedure
+export declare const fromCborHexUnsafe: (
+  cborBytes: string,
+) => CML.ProposalProcedure;
 ```
 
 Added in v2.0.0
@@ -160,7 +168,7 @@ Unsafely calls ProposalProcedure.fromJson without Effect wrapper
 **Signature**
 
 ```ts
-export declare const fromJsonUnsafe: (json: string) => CML.ProposalProcedure
+export declare const fromJsonUnsafe: (json: string) => CML.ProposalProcedure;
 ```
 
 Added in v2.0.0
@@ -190,7 +198,9 @@ Method anchor of ProposalProcedure
 **Signature**
 
 ```ts
-export declare const anchor: (instance: CML.ProposalProcedure) => Effect.Effect<CML.Anchor, ProposalProcedureError>
+export declare const anchor: (
+  instance: CML.ProposalProcedure,
+) => Effect.Effect<CML.Anchor, ProposalProcedureError>;
 ```
 
 Added in v2.0.0
@@ -202,7 +212,9 @@ Method deposit of ProposalProcedure
 **Signature**
 
 ```ts
-export declare const deposit: (instance: CML.ProposalProcedure) => Effect.Effect<bigint, ProposalProcedureError>
+export declare const deposit: (
+  instance: CML.ProposalProcedure,
+) => Effect.Effect<bigint, ProposalProcedureError>;
 ```
 
 Added in v2.0.0
@@ -214,7 +226,9 @@ Method free of ProposalProcedure
 **Signature**
 
 ```ts
-export declare const free: (instance: CML.ProposalProcedure) => Effect.Effect<void, ProposalProcedureError>
+export declare const free: (
+  instance: CML.ProposalProcedure,
+) => Effect.Effect<void, ProposalProcedureError>;
 ```
 
 Added in v2.0.0
@@ -227,8 +241,8 @@ Method govAction of ProposalProcedure
 
 ```ts
 export declare const govAction: (
-  instance: CML.ProposalProcedure
-) => Effect.Effect<CML.GovAction, ProposalProcedureError>
+  instance: CML.ProposalProcedure,
+) => Effect.Effect<CML.GovAction, ProposalProcedureError>;
 ```
 
 Added in v2.0.0
@@ -241,8 +255,8 @@ Method rewardAccount of ProposalProcedure
 
 ```ts
 export declare const rewardAccount: (
-  instance: CML.ProposalProcedure
-) => Effect.Effect<CML.RewardAddress, ProposalProcedureError>
+  instance: CML.ProposalProcedure,
+) => Effect.Effect<CML.RewardAddress, ProposalProcedureError>;
 ```
 
 Added in v2.0.0
@@ -255,8 +269,8 @@ Method toCanonicalCborBytes of ProposalProcedure
 
 ```ts
 export declare const toCanonicalCborBytes: (
-  instance: CML.ProposalProcedure
-) => Effect.Effect<Uint8Array, ProposalProcedureError>
+  instance: CML.ProposalProcedure,
+) => Effect.Effect<Uint8Array, ProposalProcedureError>;
 ```
 
 Added in v2.0.0
@@ -269,8 +283,8 @@ Method toCanonicalCborHex of ProposalProcedure
 
 ```ts
 export declare const toCanonicalCborHex: (
-  instance: CML.ProposalProcedure
-) => Effect.Effect<string, ProposalProcedureError>
+  instance: CML.ProposalProcedure,
+) => Effect.Effect<string, ProposalProcedureError>;
 ```
 
 Added in v2.0.0
@@ -282,7 +296,9 @@ Method toCborBytes of ProposalProcedure
 **Signature**
 
 ```ts
-export declare const toCborBytes: (instance: CML.ProposalProcedure) => Effect.Effect<Uint8Array, ProposalProcedureError>
+export declare const toCborBytes: (
+  instance: CML.ProposalProcedure,
+) => Effect.Effect<Uint8Array, ProposalProcedureError>;
 ```
 
 Added in v2.0.0
@@ -294,7 +310,9 @@ Method toCborHex of ProposalProcedure
 **Signature**
 
 ```ts
-export declare const toCborHex: (instance: CML.ProposalProcedure) => Effect.Effect<string, ProposalProcedureError>
+export declare const toCborHex: (
+  instance: CML.ProposalProcedure,
+) => Effect.Effect<string, ProposalProcedureError>;
 ```
 
 Added in v2.0.0
@@ -306,7 +324,9 @@ Method toJsValue of ProposalProcedure
 **Signature**
 
 ```ts
-export declare const toJsValue: (instance: CML.ProposalProcedure) => Effect.Effect<any, ProposalProcedureError>
+export declare const toJsValue: (
+  instance: CML.ProposalProcedure,
+) => Effect.Effect<any, ProposalProcedureError>;
 ```
 
 Added in v2.0.0
@@ -318,7 +338,9 @@ Method toJson of ProposalProcedure
 **Signature**
 
 ```ts
-export declare const toJson: (instance: CML.ProposalProcedure) => Effect.Effect<string, ProposalProcedureError>
+export declare const toJson: (
+  instance: CML.ProposalProcedure,
+) => Effect.Effect<string, ProposalProcedureError>;
 ```
 
 Added in v2.0.0
@@ -332,7 +354,9 @@ Unsafely calls instance.anchor without Effect wrapper
 **Signature**
 
 ```ts
-export declare const anchorUnsafe: (instance: CML.ProposalProcedure) => CML.Anchor
+export declare const anchorUnsafe: (
+  instance: CML.ProposalProcedure,
+) => CML.Anchor;
 ```
 
 Added in v2.0.0
@@ -344,7 +368,7 @@ Unsafely calls instance.deposit without Effect wrapper
 **Signature**
 
 ```ts
-export declare const depositUnsafe: (instance: CML.ProposalProcedure) => bigint
+export declare const depositUnsafe: (instance: CML.ProposalProcedure) => bigint;
 ```
 
 Added in v2.0.0
@@ -356,7 +380,7 @@ Unsafely calls instance.free without Effect wrapper
 **Signature**
 
 ```ts
-export declare const freeUnsafe: (instance: CML.ProposalProcedure) => void
+export declare const freeUnsafe: (instance: CML.ProposalProcedure) => void;
 ```
 
 Added in v2.0.0
@@ -368,7 +392,9 @@ Unsafely calls instance.govAction without Effect wrapper
 **Signature**
 
 ```ts
-export declare const govActionUnsafe: (instance: CML.ProposalProcedure) => CML.GovAction
+export declare const govActionUnsafe: (
+  instance: CML.ProposalProcedure,
+) => CML.GovAction;
 ```
 
 Added in v2.0.0
@@ -380,7 +406,9 @@ Unsafely calls instance.rewardAccount without Effect wrapper
 **Signature**
 
 ```ts
-export declare const rewardAccountUnsafe: (instance: CML.ProposalProcedure) => CML.RewardAddress
+export declare const rewardAccountUnsafe: (
+  instance: CML.ProposalProcedure,
+) => CML.RewardAddress;
 ```
 
 Added in v2.0.0
@@ -392,7 +420,9 @@ Unsafely calls instance.toCanonicalCborBytes without Effect wrapper
 **Signature**
 
 ```ts
-export declare const toCanonicalCborBytesUnsafe: (instance: CML.ProposalProcedure) => Uint8Array
+export declare const toCanonicalCborBytesUnsafe: (
+  instance: CML.ProposalProcedure,
+) => Uint8Array;
 ```
 
 Added in v2.0.0
@@ -404,7 +434,9 @@ Unsafely calls instance.toCanonicalCborHex without Effect wrapper
 **Signature**
 
 ```ts
-export declare const toCanonicalCborHexUnsafe: (instance: CML.ProposalProcedure) => string
+export declare const toCanonicalCborHexUnsafe: (
+  instance: CML.ProposalProcedure,
+) => string;
 ```
 
 Added in v2.0.0
@@ -416,7 +448,9 @@ Unsafely calls instance.toCborBytes without Effect wrapper
 **Signature**
 
 ```ts
-export declare const toCborBytesUnsafe: (instance: CML.ProposalProcedure) => Uint8Array
+export declare const toCborBytesUnsafe: (
+  instance: CML.ProposalProcedure,
+) => Uint8Array;
 ```
 
 Added in v2.0.0
@@ -428,7 +462,9 @@ Unsafely calls instance.toCborHex without Effect wrapper
 **Signature**
 
 ```ts
-export declare const toCborHexUnsafe: (instance: CML.ProposalProcedure) => string
+export declare const toCborHexUnsafe: (
+  instance: CML.ProposalProcedure,
+) => string;
 ```
 
 Added in v2.0.0
@@ -440,7 +476,7 @@ Unsafely calls instance.toJsValue without Effect wrapper
 **Signature**
 
 ```ts
-export declare const toJsValueUnsafe: (instance: CML.ProposalProcedure) => any
+export declare const toJsValueUnsafe: (instance: CML.ProposalProcedure) => any;
 ```
 
 Added in v2.0.0
@@ -452,7 +488,7 @@ Unsafely calls instance.toJson without Effect wrapper
 **Signature**
 
 ```ts
-export declare const toJsonUnsafe: (instance: CML.ProposalProcedure) => string
+export declare const toJsonUnsafe: (instance: CML.ProposalProcedure) => string;
 ```
 
 Added in v2.0.0
@@ -466,7 +502,7 @@ Type alias for the CML ProposalProcedure class
 **Signature**
 
 ```ts
-export type ProposalProcedure = CML.ProposalProcedure
+export type ProposalProcedure = CML.ProposalProcedure;
 ```
 
 Added in v2.0.0

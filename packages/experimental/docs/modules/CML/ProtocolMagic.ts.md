@@ -38,7 +38,9 @@ Static method \_new of ProtocolMagic
 **Signature**
 
 ```ts
-export declare const _new: (pm: number) => Effect.Effect<CML.ProtocolMagic, ProtocolMagicError>
+export declare const _new: (
+  pm: number,
+) => Effect.Effect<CML.ProtocolMagic, ProtocolMagicError>;
 ```
 
 Added in v2.0.0
@@ -52,7 +54,7 @@ Unsafely calls ProtocolMagic.\_new without Effect wrapper
 **Signature**
 
 ```ts
-export declare const _newUnsafe: (pm: number) => CML.ProtocolMagic
+export declare const _newUnsafe: (pm: number) => CML.ProtocolMagic;
 ```
 
 Added in v2.0.0
@@ -82,7 +84,9 @@ Method free of ProtocolMagic
 **Signature**
 
 ```ts
-export declare const free: (instance: CML.ProtocolMagic) => Effect.Effect<void, ProtocolMagicError>
+export declare const free: (
+  instance: CML.ProtocolMagic,
+) => Effect.Effect<void, ProtocolMagicError>;
 ```
 
 Added in v2.0.0
@@ -94,7 +98,9 @@ Method toInt of ProtocolMagic
 **Signature**
 
 ```ts
-export declare const toInt: (instance: CML.ProtocolMagic) => Effect.Effect<number, ProtocolMagicError>
+export declare const toInt: (
+  instance: CML.ProtocolMagic,
+) => Effect.Effect<number, ProtocolMagicError>;
 ```
 
 Added in v2.0.0
@@ -108,7 +114,7 @@ Unsafely calls instance.free without Effect wrapper
 **Signature**
 
 ```ts
-export declare const freeUnsafe: (instance: CML.ProtocolMagic) => void
+export declare const freeUnsafe: (instance: CML.ProtocolMagic) => void;
 ```
 
 Added in v2.0.0
@@ -120,7 +126,7 @@ Unsafely calls instance.toInt without Effect wrapper
 **Signature**
 
 ```ts
-export declare const toIntUnsafe: (instance: CML.ProtocolMagic) => number
+export declare const toIntUnsafe: (instance: CML.ProtocolMagic) => number;
 ```
 
 Added in v2.0.0
@@ -134,7 +140,7 @@ Type alias for the CML ProtocolMagic class
 **Signature**
 
 ```ts
-export type ProtocolMagic = CML.ProtocolMagic
+export type ProtocolMagic = CML.ProtocolMagic;
 ```
 
 Added in v2.0.0

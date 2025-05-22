@@ -52,7 +52,10 @@ Static method \_new of RequiredWitnessSet
 **Signature**
 
 ```ts
-export declare const _new: () => Effect.Effect<CML.RequiredWitnessSet, RequiredWitnessSetError>
+export declare const _new: () => Effect.Effect<
+  CML.RequiredWitnessSet,
+  RequiredWitnessSetError
+>;
 ```
 
 Added in v2.0.0
@@ -66,7 +69,7 @@ Unsafely calls RequiredWitnessSet.\_new without Effect wrapper
 **Signature**
 
 ```ts
-export declare const _newUnsafe: () => CML.RequiredWitnessSet
+export declare const _newUnsafe: () => CML.RequiredWitnessSet;
 ```
 
 Added in v2.0.0
@@ -98,8 +101,8 @@ Method addAll of RequiredWitnessSet
 ```ts
 export declare const addAll: (
   instance: CML.RequiredWitnessSet,
-  requirements: CML.RequiredWitnessSet
-) => Effect.Effect<void, RequiredWitnessSetError>
+  requirements: CML.RequiredWitnessSet,
+) => Effect.Effect<void, RequiredWitnessSetError>;
 ```
 
 Added in v2.0.0
@@ -113,8 +116,8 @@ Method addBootstrap of RequiredWitnessSet
 ```ts
 export declare const addBootstrap: (
   instance: CML.RequiredWitnessSet,
-  address: CML.ByronAddress
-) => Effect.Effect<void, RequiredWitnessSetError>
+  address: CML.ByronAddress,
+) => Effect.Effect<void, RequiredWitnessSetError>;
 ```
 
 Added in v2.0.0
@@ -128,8 +131,8 @@ Method addPlutusDatumHash of RequiredWitnessSet
 ```ts
 export declare const addPlutusDatumHash: (
   instance: CML.RequiredWitnessSet,
-  plutusDatum: CML.DatumHash
-) => Effect.Effect<void, RequiredWitnessSetError>
+  plutusDatum: CML.DatumHash,
+) => Effect.Effect<void, RequiredWitnessSetError>;
 ```
 
 Added in v2.0.0
@@ -143,8 +146,8 @@ Method addRedeemerTag of RequiredWitnessSet
 ```ts
 export declare const addRedeemerTag: (
   instance: CML.RequiredWitnessSet,
-  redeemer: CML.RedeemerWitnessKey
-) => Effect.Effect<void, RequiredWitnessSetError>
+  redeemer: CML.RedeemerWitnessKey,
+) => Effect.Effect<void, RequiredWitnessSetError>;
 ```
 
 Added in v2.0.0
@@ -158,8 +161,8 @@ Method addScriptHash of RequiredWitnessSet
 ```ts
 export declare const addScriptHash: (
   instance: CML.RequiredWitnessSet,
-  scriptHash: CML.ScriptHash
-) => Effect.Effect<void, RequiredWitnessSetError>
+  scriptHash: CML.ScriptHash,
+) => Effect.Effect<void, RequiredWitnessSetError>;
 ```
 
 Added in v2.0.0
@@ -173,8 +176,8 @@ Method addScriptRef of RequiredWitnessSet
 ```ts
 export declare const addScriptRef: (
   instance: CML.RequiredWitnessSet,
-  scriptHash: CML.ScriptHash
-) => Effect.Effect<void, RequiredWitnessSetError>
+  scriptHash: CML.ScriptHash,
+) => Effect.Effect<void, RequiredWitnessSetError>;
 ```
 
 Added in v2.0.0
@@ -188,8 +191,8 @@ Method addVkeyKeyHash of RequiredWitnessSet
 ```ts
 export declare const addVkeyKeyHash: (
   instance: CML.RequiredWitnessSet,
-  hash: CML.Ed25519KeyHash
-) => Effect.Effect<void, RequiredWitnessSetError>
+  hash: CML.Ed25519KeyHash,
+) => Effect.Effect<void, RequiredWitnessSetError>;
 ```
 
 Added in v2.0.0
@@ -201,7 +204,9 @@ Method free of RequiredWitnessSet
 **Signature**
 
 ```ts
-export declare const free: (instance: CML.RequiredWitnessSet) => Effect.Effect<void, RequiredWitnessSetError>
+export declare const free: (
+  instance: CML.RequiredWitnessSet,
+) => Effect.Effect<void, RequiredWitnessSetError>;
 ```
 
 Added in v2.0.0
@@ -215,8 +220,8 @@ Method withdrawalRequiredWits of RequiredWitnessSet
 ```ts
 export declare const withdrawalRequiredWits: (
   instance: CML.RequiredWitnessSet,
-  address: CML.RewardAddress
-) => Effect.Effect<void, RequiredWitnessSetError>
+  address: CML.RewardAddress,
+) => Effect.Effect<void, RequiredWitnessSetError>;
 ```
 
 Added in v2.0.0
@@ -230,7 +235,10 @@ Unsafely calls instance.addAll without Effect wrapper
 **Signature**
 
 ```ts
-export declare const addAllUnsafe: (instance: CML.RequiredWitnessSet, requirements: CML.RequiredWitnessSet) => void
+export declare const addAllUnsafe: (
+  instance: CML.RequiredWitnessSet,
+  requirements: CML.RequiredWitnessSet,
+) => void;
 ```
 
 Added in v2.0.0
@@ -242,7 +250,10 @@ Unsafely calls instance.addBootstrap without Effect wrapper
 **Signature**
 
 ```ts
-export declare const addBootstrapUnsafe: (instance: CML.RequiredWitnessSet, address: CML.ByronAddress) => void
+export declare const addBootstrapUnsafe: (
+  instance: CML.RequiredWitnessSet,
+  address: CML.ByronAddress,
+) => void;
 ```
 
 Added in v2.0.0
@@ -254,7 +265,10 @@ Unsafely calls instance.addPlutusDatumHash without Effect wrapper
 **Signature**
 
 ```ts
-export declare const addPlutusDatumHashUnsafe: (instance: CML.RequiredWitnessSet, plutusDatum: CML.DatumHash) => void
+export declare const addPlutusDatumHashUnsafe: (
+  instance: CML.RequiredWitnessSet,
+  plutusDatum: CML.DatumHash,
+) => void;
 ```
 
 Added in v2.0.0
@@ -266,7 +280,10 @@ Unsafely calls instance.addRedeemerTag without Effect wrapper
 **Signature**
 
 ```ts
-export declare const addRedeemerTagUnsafe: (instance: CML.RequiredWitnessSet, redeemer: CML.RedeemerWitnessKey) => void
+export declare const addRedeemerTagUnsafe: (
+  instance: CML.RequiredWitnessSet,
+  redeemer: CML.RedeemerWitnessKey,
+) => void;
 ```
 
 Added in v2.0.0
@@ -278,7 +295,10 @@ Unsafely calls instance.addScriptHash without Effect wrapper
 **Signature**
 
 ```ts
-export declare const addScriptHashUnsafe: (instance: CML.RequiredWitnessSet, scriptHash: CML.ScriptHash) => void
+export declare const addScriptHashUnsafe: (
+  instance: CML.RequiredWitnessSet,
+  scriptHash: CML.ScriptHash,
+) => void;
 ```
 
 Added in v2.0.0
@@ -290,7 +310,10 @@ Unsafely calls instance.addScriptRef without Effect wrapper
 **Signature**
 
 ```ts
-export declare const addScriptRefUnsafe: (instance: CML.RequiredWitnessSet, scriptHash: CML.ScriptHash) => void
+export declare const addScriptRefUnsafe: (
+  instance: CML.RequiredWitnessSet,
+  scriptHash: CML.ScriptHash,
+) => void;
 ```
 
 Added in v2.0.0
@@ -302,7 +325,10 @@ Unsafely calls instance.addVkeyKeyHash without Effect wrapper
 **Signature**
 
 ```ts
-export declare const addVkeyKeyHashUnsafe: (instance: CML.RequiredWitnessSet, hash: CML.Ed25519KeyHash) => void
+export declare const addVkeyKeyHashUnsafe: (
+  instance: CML.RequiredWitnessSet,
+  hash: CML.Ed25519KeyHash,
+) => void;
 ```
 
 Added in v2.0.0
@@ -314,7 +340,7 @@ Unsafely calls instance.free without Effect wrapper
 **Signature**
 
 ```ts
-export declare const freeUnsafe: (instance: CML.RequiredWitnessSet) => void
+export declare const freeUnsafe: (instance: CML.RequiredWitnessSet) => void;
 ```
 
 Added in v2.0.0
@@ -328,8 +354,8 @@ Unsafely calls instance.withdrawalRequiredWits without Effect wrapper
 ```ts
 export declare const withdrawalRequiredWitsUnsafe: (
   instance: CML.RequiredWitnessSet,
-  address: CML.RewardAddress
-) => void
+  address: CML.RewardAddress,
+) => void;
 ```
 
 Added in v2.0.0
@@ -343,7 +369,7 @@ Type alias for the CML RequiredWitnessSet class
 **Signature**
 
 ```ts
-export type RequiredWitnessSet = CML.RequiredWitnessSet
+export type RequiredWitnessSet = CML.RequiredWitnessSet;
 ```
 
 Added in v2.0.0

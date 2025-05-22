@@ -42,7 +42,10 @@ Static method \_new of NativeScriptList
 **Signature**
 
 ```ts
-export declare const _new: () => Effect.Effect<CML.NativeScriptList, NativeScriptListError>
+export declare const _new: () => Effect.Effect<
+  CML.NativeScriptList,
+  NativeScriptListError
+>;
 ```
 
 Added in v2.0.0
@@ -56,7 +59,7 @@ Unsafely calls NativeScriptList.\_new without Effect wrapper
 **Signature**
 
 ```ts
-export declare const _newUnsafe: () => CML.NativeScriptList
+export declare const _newUnsafe: () => CML.NativeScriptList;
 ```
 
 Added in v2.0.0
@@ -88,8 +91,8 @@ Method add of NativeScriptList
 ```ts
 export declare const add: (
   instance: CML.NativeScriptList,
-  elem: CML.NativeScript
-) => Effect.Effect<void, NativeScriptListError>
+  elem: CML.NativeScript,
+) => Effect.Effect<void, NativeScriptListError>;
 ```
 
 Added in v2.0.0
@@ -101,7 +104,9 @@ Method free of NativeScriptList
 **Signature**
 
 ```ts
-export declare const free: (instance: CML.NativeScriptList) => Effect.Effect<void, NativeScriptListError>
+export declare const free: (
+  instance: CML.NativeScriptList,
+) => Effect.Effect<void, NativeScriptListError>;
 ```
 
 Added in v2.0.0
@@ -115,8 +120,8 @@ Method get of NativeScriptList
 ```ts
 export declare const get: (
   instance: CML.NativeScriptList,
-  index: number
-) => Effect.Effect<CML.NativeScript, NativeScriptListError>
+  index: number,
+) => Effect.Effect<CML.NativeScript, NativeScriptListError>;
 ```
 
 Added in v2.0.0
@@ -128,7 +133,9 @@ Method len of NativeScriptList
 **Signature**
 
 ```ts
-export declare const len: (instance: CML.NativeScriptList) => Effect.Effect<number, NativeScriptListError>
+export declare const len: (
+  instance: CML.NativeScriptList,
+) => Effect.Effect<number, NativeScriptListError>;
 ```
 
 Added in v2.0.0
@@ -142,7 +149,10 @@ Unsafely calls instance.add without Effect wrapper
 **Signature**
 
 ```ts
-export declare const addUnsafe: (instance: CML.NativeScriptList, elem: CML.NativeScript) => void
+export declare const addUnsafe: (
+  instance: CML.NativeScriptList,
+  elem: CML.NativeScript,
+) => void;
 ```
 
 Added in v2.0.0
@@ -154,7 +164,7 @@ Unsafely calls instance.free without Effect wrapper
 **Signature**
 
 ```ts
-export declare const freeUnsafe: (instance: CML.NativeScriptList) => void
+export declare const freeUnsafe: (instance: CML.NativeScriptList) => void;
 ```
 
 Added in v2.0.0
@@ -166,7 +176,10 @@ Unsafely calls instance.get without Effect wrapper
 **Signature**
 
 ```ts
-export declare const getUnsafe: (instance: CML.NativeScriptList, index: number) => CML.NativeScript
+export declare const getUnsafe: (
+  instance: CML.NativeScriptList,
+  index: number,
+) => CML.NativeScript;
 ```
 
 Added in v2.0.0
@@ -178,7 +191,7 @@ Unsafely calls instance.len without Effect wrapper
 **Signature**
 
 ```ts
-export declare const lenUnsafe: (instance: CML.NativeScriptList) => number
+export declare const lenUnsafe: (instance: CML.NativeScriptList) => number;
 ```
 
 Added in v2.0.0
@@ -192,7 +205,7 @@ Type alias for the CML NativeScriptList class
 **Signature**
 
 ```ts
-export type NativeScriptList = CML.NativeScriptList
+export type NativeScriptList = CML.NativeScriptList;
 ```
 
 Added in v2.0.0

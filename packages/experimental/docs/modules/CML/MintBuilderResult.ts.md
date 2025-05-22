@@ -48,7 +48,9 @@ Method free of MintBuilderResult
 **Signature**
 
 ```ts
-export declare const free: (instance: CML.MintBuilderResult) => Effect.Effect<void, MintBuilderResultError>
+export declare const free: (
+  instance: CML.MintBuilderResult,
+) => Effect.Effect<void, MintBuilderResultError>;
 ```
 
 Added in v2.0.0
@@ -62,7 +64,7 @@ Unsafely calls instance.free without Effect wrapper
 **Signature**
 
 ```ts
-export declare const freeUnsafe: (instance: CML.MintBuilderResult) => void
+export declare const freeUnsafe: (instance: CML.MintBuilderResult) => void;
 ```
 
 Added in v2.0.0
@@ -76,7 +78,7 @@ Type alias for the CML MintBuilderResult class
 **Signature**
 
 ```ts
-export type MintBuilderResult = CML.MintBuilderResult
+export type MintBuilderResult = CML.MintBuilderResult;
 ```
 
 Added in v2.0.0

@@ -36,7 +36,7 @@ Type alias for the CML AddressKind enum
 **Signature**
 
 ```ts
-export type AddressKind = CML.AddressKind
+export type AddressKind = CML.AddressKind;
 ```
 
 Added in v2.0.0
@@ -50,7 +50,7 @@ Convert string to AddressKind enum value
 **Signature**
 
 ```ts
-export declare const fromString: (str: string) => CML.AddressKind | undefined
+export declare const fromString: (str: string) => CML.AddressKind | undefined;
 ```
 
 Added in v2.0.0
@@ -62,7 +62,7 @@ Convert AddressKind enum value to string
 **Signature**
 
 ```ts
-export declare const toString: (value: CML.AddressKind) => string
+export declare const toString: (value: CML.AddressKind) => string;
 ```
 
 Added in v2.0.0
@@ -74,7 +74,7 @@ Get all values of the AddressKind enum
 **Signature**
 
 ```ts
-export declare const values: () => Array<CML.AddressKind>
+export declare const values: () => Array<CML.AddressKind>;
 ```
 
 Added in v2.0.0
@@ -88,7 +88,7 @@ Base variant of the AddressKind enum
 **Signature**
 
 ```ts
-export declare const Base: CML.AddressKind.Base
+export declare const Base: CML.AddressKind.Base;
 ```
 
 Added in v2.0.0
@@ -100,7 +100,7 @@ Byron variant of the AddressKind enum
 **Signature**
 
 ```ts
-export declare const Byron: CML.AddressKind.Byron
+export declare const Byron: CML.AddressKind.Byron;
 ```
 
 Added in v2.0.0
@@ -112,7 +112,7 @@ Enterprise variant of the AddressKind enum
 **Signature**
 
 ```ts
-export declare const Enterprise: CML.AddressKind.Enterprise
+export declare const Enterprise: CML.AddressKind.Enterprise;
 ```
 
 Added in v2.0.0
@@ -124,7 +124,7 @@ Ptr variant of the AddressKind enum
 **Signature**
 
 ```ts
-export declare const Ptr: CML.AddressKind.Ptr
+export declare const Ptr: CML.AddressKind.Ptr;
 ```
 
 Added in v2.0.0
@@ -136,7 +136,7 @@ Reward variant of the AddressKind enum
 **Signature**
 
 ```ts
-export declare const Reward: CML.AddressKind.Reward
+export declare const Reward: CML.AddressKind.Reward;
 ```
 
 Added in v2.0.0

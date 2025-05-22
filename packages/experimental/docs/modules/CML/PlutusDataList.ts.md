@@ -42,7 +42,10 @@ Static method \_new of PlutusDataList
 **Signature**
 
 ```ts
-export declare const _new: () => Effect.Effect<CML.PlutusDataList, PlutusDataListError>
+export declare const _new: () => Effect.Effect<
+  CML.PlutusDataList,
+  PlutusDataListError
+>;
 ```
 
 Added in v2.0.0
@@ -56,7 +59,7 @@ Unsafely calls PlutusDataList.\_new without Effect wrapper
 **Signature**
 
 ```ts
-export declare const _newUnsafe: () => CML.PlutusDataList
+export declare const _newUnsafe: () => CML.PlutusDataList;
 ```
 
 Added in v2.0.0
@@ -88,8 +91,8 @@ Method add of PlutusDataList
 ```ts
 export declare const add: (
   instance: CML.PlutusDataList,
-  elem: CML.PlutusData
-) => Effect.Effect<void, PlutusDataListError>
+  elem: CML.PlutusData,
+) => Effect.Effect<void, PlutusDataListError>;
 ```
 
 Added in v2.0.0
@@ -101,7 +104,9 @@ Method free of PlutusDataList
 **Signature**
 
 ```ts
-export declare const free: (instance: CML.PlutusDataList) => Effect.Effect<void, PlutusDataListError>
+export declare const free: (
+  instance: CML.PlutusDataList,
+) => Effect.Effect<void, PlutusDataListError>;
 ```
 
 Added in v2.0.0
@@ -115,8 +120,8 @@ Method get of PlutusDataList
 ```ts
 export declare const get: (
   instance: CML.PlutusDataList,
-  index: number
-) => Effect.Effect<CML.PlutusData, PlutusDataListError>
+  index: number,
+) => Effect.Effect<CML.PlutusData, PlutusDataListError>;
 ```
 
 Added in v2.0.0
@@ -128,7 +133,9 @@ Method len of PlutusDataList
 **Signature**
 
 ```ts
-export declare const len: (instance: CML.PlutusDataList) => Effect.Effect<number, PlutusDataListError>
+export declare const len: (
+  instance: CML.PlutusDataList,
+) => Effect.Effect<number, PlutusDataListError>;
 ```
 
 Added in v2.0.0
@@ -142,7 +149,10 @@ Unsafely calls instance.add without Effect wrapper
 **Signature**
 
 ```ts
-export declare const addUnsafe: (instance: CML.PlutusDataList, elem: CML.PlutusData) => void
+export declare const addUnsafe: (
+  instance: CML.PlutusDataList,
+  elem: CML.PlutusData,
+) => void;
 ```
 
 Added in v2.0.0
@@ -154,7 +164,7 @@ Unsafely calls instance.free without Effect wrapper
 **Signature**
 
 ```ts
-export declare const freeUnsafe: (instance: CML.PlutusDataList) => void
+export declare const freeUnsafe: (instance: CML.PlutusDataList) => void;
 ```
 
 Added in v2.0.0
@@ -166,7 +176,10 @@ Unsafely calls instance.get without Effect wrapper
 **Signature**
 
 ```ts
-export declare const getUnsafe: (instance: CML.PlutusDataList, index: number) => CML.PlutusData
+export declare const getUnsafe: (
+  instance: CML.PlutusDataList,
+  index: number,
+) => CML.PlutusData;
 ```
 
 Added in v2.0.0
@@ -178,7 +191,7 @@ Unsafely calls instance.len without Effect wrapper
 **Signature**
 
 ```ts
-export declare const lenUnsafe: (instance: CML.PlutusDataList) => number
+export declare const lenUnsafe: (instance: CML.PlutusDataList) => number;
 ```
 
 Added in v2.0.0
@@ -192,7 +205,7 @@ Type alias for the CML PlutusDataList class
 **Signature**
 
 ```ts
-export type PlutusDataList = CML.PlutusDataList
+export type PlutusDataList = CML.PlutusDataList;
 ```
 
 Added in v2.0.0

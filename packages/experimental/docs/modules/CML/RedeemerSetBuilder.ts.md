@@ -54,7 +54,10 @@ Static method \_new of RedeemerSetBuilder
 **Signature**
 
 ```ts
-export declare const _new: () => Effect.Effect<CML.RedeemerSetBuilder, RedeemerSetBuilderError>
+export declare const _new: () => Effect.Effect<
+  CML.RedeemerSetBuilder,
+  RedeemerSetBuilderError
+>;
 ```
 
 Added in v2.0.0
@@ -68,7 +71,7 @@ Unsafely calls RedeemerSetBuilder.\_new without Effect wrapper
 **Signature**
 
 ```ts
-export declare const _newUnsafe: () => CML.RedeemerSetBuilder
+export declare const _newUnsafe: () => CML.RedeemerSetBuilder;
 ```
 
 Added in v2.0.0
@@ -100,8 +103,8 @@ Method addCert of RedeemerSetBuilder
 ```ts
 export declare const addCert: (
   instance: CML.RedeemerSetBuilder,
-  result: CML.CertificateBuilderResult
-) => Effect.Effect<void, RedeemerSetBuilderError>
+  result: CML.CertificateBuilderResult,
+) => Effect.Effect<void, RedeemerSetBuilderError>;
 ```
 
 Added in v2.0.0
@@ -115,8 +118,8 @@ Method addMint of RedeemerSetBuilder
 ```ts
 export declare const addMint: (
   instance: CML.RedeemerSetBuilder,
-  result: CML.MintBuilderResult
-) => Effect.Effect<void, RedeemerSetBuilderError>
+  result: CML.MintBuilderResult,
+) => Effect.Effect<void, RedeemerSetBuilderError>;
 ```
 
 Added in v2.0.0
@@ -130,8 +133,8 @@ Method addProposal of RedeemerSetBuilder
 ```ts
 export declare const addProposal: (
   instance: CML.RedeemerSetBuilder,
-  result: CML.ProposalBuilderResult
-) => Effect.Effect<void, RedeemerSetBuilderError>
+  result: CML.ProposalBuilderResult,
+) => Effect.Effect<void, RedeemerSetBuilderError>;
 ```
 
 Added in v2.0.0
@@ -145,8 +148,8 @@ Method addReward of RedeemerSetBuilder
 ```ts
 export declare const addReward: (
   instance: CML.RedeemerSetBuilder,
-  result: CML.WithdrawalBuilderResult
-) => Effect.Effect<void, RedeemerSetBuilderError>
+  result: CML.WithdrawalBuilderResult,
+) => Effect.Effect<void, RedeemerSetBuilderError>;
 ```
 
 Added in v2.0.0
@@ -160,8 +163,8 @@ Method addSpend of RedeemerSetBuilder
 ```ts
 export declare const addSpend: (
   instance: CML.RedeemerSetBuilder,
-  result: CML.InputBuilderResult
-) => Effect.Effect<void, RedeemerSetBuilderError>
+  result: CML.InputBuilderResult,
+) => Effect.Effect<void, RedeemerSetBuilderError>;
 ```
 
 Added in v2.0.0
@@ -175,8 +178,8 @@ Method addVote of RedeemerSetBuilder
 ```ts
 export declare const addVote: (
   instance: CML.RedeemerSetBuilder,
-  result: CML.VoteBuilderResult
-) => Effect.Effect<void, RedeemerSetBuilderError>
+  result: CML.VoteBuilderResult,
+) => Effect.Effect<void, RedeemerSetBuilderError>;
 ```
 
 Added in v2.0.0
@@ -190,8 +193,8 @@ Method build of RedeemerSetBuilder
 ```ts
 export declare const build: (
   instance: CML.RedeemerSetBuilder,
-  defaultToDummyExunits: boolean
-) => Effect.Effect<CML.Redeemers, RedeemerSetBuilderError>
+  defaultToDummyExunits: boolean,
+) => Effect.Effect<CML.Redeemers, RedeemerSetBuilderError>;
 ```
 
 Added in v2.0.0
@@ -203,7 +206,9 @@ Method free of RedeemerSetBuilder
 **Signature**
 
 ```ts
-export declare const free: (instance: CML.RedeemerSetBuilder) => Effect.Effect<void, RedeemerSetBuilderError>
+export declare const free: (
+  instance: CML.RedeemerSetBuilder,
+) => Effect.Effect<void, RedeemerSetBuilderError>;
 ```
 
 Added in v2.0.0
@@ -215,7 +220,9 @@ Method isEmpty of RedeemerSetBuilder
 **Signature**
 
 ```ts
-export declare const isEmpty: (instance: CML.RedeemerSetBuilder) => Effect.Effect<boolean, RedeemerSetBuilderError>
+export declare const isEmpty: (
+  instance: CML.RedeemerSetBuilder,
+) => Effect.Effect<boolean, RedeemerSetBuilderError>;
 ```
 
 Added in v2.0.0
@@ -230,8 +237,8 @@ Method updateExUnits of RedeemerSetBuilder
 export declare const updateExUnits: (
   instance: CML.RedeemerSetBuilder,
   key: CML.RedeemerWitnessKey,
-  exUnits: CML.ExUnits
-) => Effect.Effect<void, RedeemerSetBuilderError>
+  exUnits: CML.ExUnits,
+) => Effect.Effect<void, RedeemerSetBuilderError>;
 ```
 
 Added in v2.0.0
@@ -245,7 +252,10 @@ Unsafely calls instance.addCert without Effect wrapper
 **Signature**
 
 ```ts
-export declare const addCertUnsafe: (instance: CML.RedeemerSetBuilder, result: CML.CertificateBuilderResult) => void
+export declare const addCertUnsafe: (
+  instance: CML.RedeemerSetBuilder,
+  result: CML.CertificateBuilderResult,
+) => void;
 ```
 
 Added in v2.0.0
@@ -257,7 +267,10 @@ Unsafely calls instance.addMint without Effect wrapper
 **Signature**
 
 ```ts
-export declare const addMintUnsafe: (instance: CML.RedeemerSetBuilder, result: CML.MintBuilderResult) => void
+export declare const addMintUnsafe: (
+  instance: CML.RedeemerSetBuilder,
+  result: CML.MintBuilderResult,
+) => void;
 ```
 
 Added in v2.0.0
@@ -269,7 +282,10 @@ Unsafely calls instance.addProposal without Effect wrapper
 **Signature**
 
 ```ts
-export declare const addProposalUnsafe: (instance: CML.RedeemerSetBuilder, result: CML.ProposalBuilderResult) => void
+export declare const addProposalUnsafe: (
+  instance: CML.RedeemerSetBuilder,
+  result: CML.ProposalBuilderResult,
+) => void;
 ```
 
 Added in v2.0.0
@@ -281,7 +297,10 @@ Unsafely calls instance.addReward without Effect wrapper
 **Signature**
 
 ```ts
-export declare const addRewardUnsafe: (instance: CML.RedeemerSetBuilder, result: CML.WithdrawalBuilderResult) => void
+export declare const addRewardUnsafe: (
+  instance: CML.RedeemerSetBuilder,
+  result: CML.WithdrawalBuilderResult,
+) => void;
 ```
 
 Added in v2.0.0
@@ -293,7 +312,10 @@ Unsafely calls instance.addSpend without Effect wrapper
 **Signature**
 
 ```ts
-export declare const addSpendUnsafe: (instance: CML.RedeemerSetBuilder, result: CML.InputBuilderResult) => void
+export declare const addSpendUnsafe: (
+  instance: CML.RedeemerSetBuilder,
+  result: CML.InputBuilderResult,
+) => void;
 ```
 
 Added in v2.0.0
@@ -305,7 +327,10 @@ Unsafely calls instance.addVote without Effect wrapper
 **Signature**
 
 ```ts
-export declare const addVoteUnsafe: (instance: CML.RedeemerSetBuilder, result: CML.VoteBuilderResult) => void
+export declare const addVoteUnsafe: (
+  instance: CML.RedeemerSetBuilder,
+  result: CML.VoteBuilderResult,
+) => void;
 ```
 
 Added in v2.0.0
@@ -317,7 +342,10 @@ Unsafely calls instance.build without Effect wrapper
 **Signature**
 
 ```ts
-export declare const buildUnsafe: (instance: CML.RedeemerSetBuilder, defaultToDummyExunits: boolean) => CML.Redeemers
+export declare const buildUnsafe: (
+  instance: CML.RedeemerSetBuilder,
+  defaultToDummyExunits: boolean,
+) => CML.Redeemers;
 ```
 
 Added in v2.0.0
@@ -329,7 +357,7 @@ Unsafely calls instance.free without Effect wrapper
 **Signature**
 
 ```ts
-export declare const freeUnsafe: (instance: CML.RedeemerSetBuilder) => void
+export declare const freeUnsafe: (instance: CML.RedeemerSetBuilder) => void;
 ```
 
 Added in v2.0.0
@@ -341,7 +369,9 @@ Unsafely calls instance.isEmpty without Effect wrapper
 **Signature**
 
 ```ts
-export declare const isEmptyUnsafe: (instance: CML.RedeemerSetBuilder) => boolean
+export declare const isEmptyUnsafe: (
+  instance: CML.RedeemerSetBuilder,
+) => boolean;
 ```
 
 Added in v2.0.0
@@ -356,8 +386,8 @@ Unsafely calls instance.updateExUnits without Effect wrapper
 export declare const updateExUnitsUnsafe: (
   instance: CML.RedeemerSetBuilder,
   key: CML.RedeemerWitnessKey,
-  exUnits: CML.ExUnits
-) => void
+  exUnits: CML.ExUnits,
+) => void;
 ```
 
 Added in v2.0.0
@@ -371,7 +401,7 @@ Type alias for the CML RedeemerSetBuilder class
 **Signature**
 
 ```ts
-export type RedeemerSetBuilder = CML.RedeemerSetBuilder
+export type RedeemerSetBuilder = CML.RedeemerSetBuilder;
 ```
 
 Added in v2.0.0

@@ -42,7 +42,7 @@ Static method \_new of IntList
 **Signature**
 
 ```ts
-export declare const _new: () => Effect.Effect<CML.IntList, IntListError>
+export declare const _new: () => Effect.Effect<CML.IntList, IntListError>;
 ```
 
 Added in v2.0.0
@@ -56,7 +56,7 @@ Unsafely calls IntList.\_new without Effect wrapper
 **Signature**
 
 ```ts
-export declare const _newUnsafe: () => CML.IntList
+export declare const _newUnsafe: () => CML.IntList;
 ```
 
 Added in v2.0.0
@@ -86,7 +86,10 @@ Method add of IntList
 **Signature**
 
 ```ts
-export declare const add: (instance: CML.IntList, elem: CML.Int) => Effect.Effect<void, IntListError>
+export declare const add: (
+  instance: CML.IntList,
+  elem: CML.Int,
+) => Effect.Effect<void, IntListError>;
 ```
 
 Added in v2.0.0
@@ -98,7 +101,9 @@ Method free of IntList
 **Signature**
 
 ```ts
-export declare const free: (instance: CML.IntList) => Effect.Effect<void, IntListError>
+export declare const free: (
+  instance: CML.IntList,
+) => Effect.Effect<void, IntListError>;
 ```
 
 Added in v2.0.0
@@ -110,7 +115,10 @@ Method get of IntList
 **Signature**
 
 ```ts
-export declare const get: (instance: CML.IntList, index: number) => Effect.Effect<CML.Int, IntListError>
+export declare const get: (
+  instance: CML.IntList,
+  index: number,
+) => Effect.Effect<CML.Int, IntListError>;
 ```
 
 Added in v2.0.0
@@ -122,7 +130,9 @@ Method len of IntList
 **Signature**
 
 ```ts
-export declare const len: (instance: CML.IntList) => Effect.Effect<number, IntListError>
+export declare const len: (
+  instance: CML.IntList,
+) => Effect.Effect<number, IntListError>;
 ```
 
 Added in v2.0.0
@@ -136,7 +146,7 @@ Unsafely calls instance.add without Effect wrapper
 **Signature**
 
 ```ts
-export declare const addUnsafe: (instance: CML.IntList, elem: CML.Int) => void
+export declare const addUnsafe: (instance: CML.IntList, elem: CML.Int) => void;
 ```
 
 Added in v2.0.0
@@ -148,7 +158,7 @@ Unsafely calls instance.free without Effect wrapper
 **Signature**
 
 ```ts
-export declare const freeUnsafe: (instance: CML.IntList) => void
+export declare const freeUnsafe: (instance: CML.IntList) => void;
 ```
 
 Added in v2.0.0
@@ -160,7 +170,10 @@ Unsafely calls instance.get without Effect wrapper
 **Signature**
 
 ```ts
-export declare const getUnsafe: (instance: CML.IntList, index: number) => CML.Int
+export declare const getUnsafe: (
+  instance: CML.IntList,
+  index: number,
+) => CML.Int;
 ```
 
 Added in v2.0.0
@@ -172,7 +185,7 @@ Unsafely calls instance.len without Effect wrapper
 **Signature**
 
 ```ts
-export declare const lenUnsafe: (instance: CML.IntList) => number
+export declare const lenUnsafe: (instance: CML.IntList) => number;
 ```
 
 Added in v2.0.0
@@ -186,7 +199,7 @@ Type alias for the CML IntList class
 **Signature**
 
 ```ts
-export type IntList = CML.IntList
+export type IntList = CML.IntList;
 ```
 
 Added in v2.0.0

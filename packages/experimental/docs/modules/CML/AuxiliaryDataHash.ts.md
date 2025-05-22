@@ -46,7 +46,9 @@ Static method fromBech32 of AuxiliaryDataHash
 **Signature**
 
 ```ts
-export declare const fromBech32: (bech32Str: string) => Effect.Effect<CML.AuxiliaryDataHash, AuxiliaryDataHashError>
+export declare const fromBech32: (
+  bech32Str: string,
+) => Effect.Effect<CML.AuxiliaryDataHash, AuxiliaryDataHashError>;
 ```
 
 Added in v2.0.0
@@ -58,7 +60,9 @@ Static method fromHex of AuxiliaryDataHash
 **Signature**
 
 ```ts
-export declare const fromHex: (input: string) => Effect.Effect<CML.AuxiliaryDataHash, AuxiliaryDataHashError>
+export declare const fromHex: (
+  input: string,
+) => Effect.Effect<CML.AuxiliaryDataHash, AuxiliaryDataHashError>;
 ```
 
 Added in v2.0.0
@@ -70,7 +74,9 @@ Static method fromRawBytes of AuxiliaryDataHash
 **Signature**
 
 ```ts
-export declare const fromRawBytes: (bytes: Uint8Array) => Effect.Effect<CML.AuxiliaryDataHash, AuxiliaryDataHashError>
+export declare const fromRawBytes: (
+  bytes: Uint8Array,
+) => Effect.Effect<CML.AuxiliaryDataHash, AuxiliaryDataHashError>;
 ```
 
 Added in v2.0.0
@@ -84,7 +90,9 @@ Unsafely calls AuxiliaryDataHash.fromBech32 without Effect wrapper
 **Signature**
 
 ```ts
-export declare const fromBech32Unsafe: (bech32Str: string) => CML.AuxiliaryDataHash
+export declare const fromBech32Unsafe: (
+  bech32Str: string,
+) => CML.AuxiliaryDataHash;
 ```
 
 Added in v2.0.0
@@ -96,7 +104,7 @@ Unsafely calls AuxiliaryDataHash.fromHex without Effect wrapper
 **Signature**
 
 ```ts
-export declare const fromHexUnsafe: (input: string) => CML.AuxiliaryDataHash
+export declare const fromHexUnsafe: (input: string) => CML.AuxiliaryDataHash;
 ```
 
 Added in v2.0.0
@@ -108,7 +116,9 @@ Unsafely calls AuxiliaryDataHash.fromRawBytes without Effect wrapper
 **Signature**
 
 ```ts
-export declare const fromRawBytesUnsafe: (bytes: Uint8Array) => CML.AuxiliaryDataHash
+export declare const fromRawBytesUnsafe: (
+  bytes: Uint8Array,
+) => CML.AuxiliaryDataHash;
 ```
 
 Added in v2.0.0
@@ -138,7 +148,9 @@ Method free of AuxiliaryDataHash
 **Signature**
 
 ```ts
-export declare const free: (instance: CML.AuxiliaryDataHash) => Effect.Effect<void, AuxiliaryDataHashError>
+export declare const free: (
+  instance: CML.AuxiliaryDataHash,
+) => Effect.Effect<void, AuxiliaryDataHashError>;
 ```
 
 Added in v2.0.0
@@ -152,8 +164,8 @@ Method toBech32 of AuxiliaryDataHash
 ```ts
 export declare const toBech32: (
   instance: CML.AuxiliaryDataHash,
-  prefix: string
-) => Effect.Effect<string, AuxiliaryDataHashError>
+  prefix: string,
+) => Effect.Effect<string, AuxiliaryDataHashError>;
 ```
 
 Added in v2.0.0
@@ -165,7 +177,9 @@ Method toHex of AuxiliaryDataHash
 **Signature**
 
 ```ts
-export declare const toHex: (instance: CML.AuxiliaryDataHash) => Effect.Effect<string, AuxiliaryDataHashError>
+export declare const toHex: (
+  instance: CML.AuxiliaryDataHash,
+) => Effect.Effect<string, AuxiliaryDataHashError>;
 ```
 
 Added in v2.0.0
@@ -177,7 +191,9 @@ Method toRawBytes of AuxiliaryDataHash
 **Signature**
 
 ```ts
-export declare const toRawBytes: (instance: CML.AuxiliaryDataHash) => Effect.Effect<Uint8Array, AuxiliaryDataHashError>
+export declare const toRawBytes: (
+  instance: CML.AuxiliaryDataHash,
+) => Effect.Effect<Uint8Array, AuxiliaryDataHashError>;
 ```
 
 Added in v2.0.0
@@ -191,7 +207,7 @@ Unsafely calls instance.free without Effect wrapper
 **Signature**
 
 ```ts
-export declare const freeUnsafe: (instance: CML.AuxiliaryDataHash) => void
+export declare const freeUnsafe: (instance: CML.AuxiliaryDataHash) => void;
 ```
 
 Added in v2.0.0
@@ -203,7 +219,10 @@ Unsafely calls instance.toBech32 without Effect wrapper
 **Signature**
 
 ```ts
-export declare const toBech32Unsafe: (instance: CML.AuxiliaryDataHash, prefix: string) => string
+export declare const toBech32Unsafe: (
+  instance: CML.AuxiliaryDataHash,
+  prefix: string,
+) => string;
 ```
 
 Added in v2.0.0
@@ -215,7 +234,7 @@ Unsafely calls instance.toHex without Effect wrapper
 **Signature**
 
 ```ts
-export declare const toHexUnsafe: (instance: CML.AuxiliaryDataHash) => string
+export declare const toHexUnsafe: (instance: CML.AuxiliaryDataHash) => string;
 ```
 
 Added in v2.0.0
@@ -227,7 +246,9 @@ Unsafely calls instance.toRawBytes without Effect wrapper
 **Signature**
 
 ```ts
-export declare const toRawBytesUnsafe: (instance: CML.AuxiliaryDataHash) => Uint8Array
+export declare const toRawBytesUnsafe: (
+  instance: CML.AuxiliaryDataHash,
+) => Uint8Array;
 ```
 
 Added in v2.0.0
@@ -241,7 +262,7 @@ Type alias for the CML AuxiliaryDataHash class
 **Signature**
 
 ```ts
-export type AuxiliaryDataHash = CML.AuxiliaryDataHash
+export type AuxiliaryDataHash = CML.AuxiliaryDataHash;
 ```
 
 Added in v2.0.0

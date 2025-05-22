@@ -1,4 +1,4 @@
-import { Effect } from "effect";
+import { Effect, Schema } from "effect";
 import * as Hex from "./Hex.js";
 
 /**
@@ -44,7 +44,7 @@ export type ToCBORBytes<T> = SerializationFnSync<T, Uint8Array>;
  * @since 1.0.0
  * @category encoding/decoding
  */
-export type ToCBOR<T> = SerializationFnSync<T, Hex.HexString>
+export type ToCBOR<T> = SerializationFnSync<T, Hex.HexString>;
 
 /**
  * Creates a value from its CBOR hex string representation
@@ -52,7 +52,7 @@ export type ToCBOR<T> = SerializationFnSync<T, Hex.HexString>
  * @since 1.0.0
  * @category constructors
  */
-export type FromCBOR<Input,Output, Error = never> = SerializationFn<
+export type FromCBOR<Input, Output, Error = never> = SerializationFn<
   Input,
   Output,
   Error
@@ -173,3 +173,10 @@ export type MakeOrThrow<Input, Output> = SerializationFnSync<Input, Output>;
 export interface TypePredicate<T> {
   (value: unknown): value is T;
 }
+
+export const encode = Schema.encode;
+export const decode = Schema.decode;
+export const encodeEither = Schema.encodeEither;
+export const decodeEither = Schema.decodeEither;
+export const encodeOrThrow = Schema.encodeSync;
+export const decodeOrThrow = Schema.decodeUnknownSync;

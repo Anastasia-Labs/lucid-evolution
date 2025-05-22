@@ -1,6 +1,6 @@
 import * as CBORX from "cbor-x";
 import * as Hex from "./Hex.js";
-import { Data, Effect, pipe } from "effect";
+import { Data, Effect, Hash, pipe } from "effect";
 
 /**
  * Error type for CBOR-related operations
@@ -67,11 +67,17 @@ export const encodeAsBytesOrThrow = (value: unknown) =>
  * @since 2.0.0
  * @category encoding/decoding
  */
-export const encodeAsCBORHex = (value: unknown) =>
+export const encodeAsCBORHex = (value: Hex.HexString) =>
+  // encodeAsBytes(Hex.toBytes(value));
   pipe(
-    encodeAsBytes(value),
-    Effect.map((bytes) => Hex.fromBytes(bytes))
+    Hex.toBytes(value),
+    encodeAsBytes,
+    Effect.map((bytes) => Hex.fromBytes(bytes)),
   );
+// pipe(
+// encodeAsBytes(value),
+// Effect.map((bytes) => Hex.fromBytes(bytes))
+// );
 
 /**
  * Encodes a value to CBOR hex string, throws on error
@@ -85,7 +91,7 @@ export const encodeAsCBORHex = (value: unknown) =>
  * @since 2.0.0
  * @category encoding/decoding
  */
-export const encodeAsCBORHexOrThrow = (value: unknown) =>
+export const encodeAsCBORHexOrThrow = (value: Hex.HexString) =>
   Effect.runSync(encodeAsCBORHex(value));
 
 /**
@@ -109,8 +115,7 @@ export const decodeBytes = (bytes: Uint8Array) =>
     try: () => CBORX.decode(bytes),
     catch: () =>
       new CBORError({
-        message:
-          "Failed to decode CBOR. Verify that the input contains valid CBOR data.",
+        message: `${bytes} CBOR decoding failed. Check if the bytes are in valid CBOR format.`,
       }),
   });
 
@@ -146,7 +151,17 @@ export const decodeBytesOrThrow = (bytes: Uint8Array) =>
  * @since 2.0.0
  * @category encoding/decoding
  */
-export const decodeHex = <T>(hex: CBORHex<T>) => decodeBytes(Hex.toBytes(hex));
+export const decodeHex = <T>(hex: CBORHex<T>) =>
+  pipe(
+    Hex.toBytes(hex),
+    decodeBytes,
+    Effect.mapError(
+      (e) =>
+        new CBORError({
+          message: `${hex} CBOR decoding failed. Check if the hex string is valid CBOR format.`,
+        }),
+    ),
+  );
 
 /**
  * Decodes a CBOR hex string to a value, throws on error

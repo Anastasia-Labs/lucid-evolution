@@ -46,7 +46,10 @@ Static method \_new of ProposalBuilder
 **Signature**
 
 ```ts
-export declare const _new: () => Effect.Effect<CML.ProposalBuilder, ProposalBuilderError>
+export declare const _new: () => Effect.Effect<
+  CML.ProposalBuilder,
+  ProposalBuilderError
+>;
 ```
 
 Added in v2.0.0
@@ -60,7 +63,7 @@ Unsafely calls ProposalBuilder.\_new without Effect wrapper
 **Signature**
 
 ```ts
-export declare const _newUnsafe: () => CML.ProposalBuilder
+export declare const _newUnsafe: () => CML.ProposalBuilder;
 ```
 
 Added in v2.0.0
@@ -91,8 +94,8 @@ Method build of ProposalBuilder
 
 ```ts
 export declare const build: (
-  instance: CML.ProposalBuilder
-) => Effect.Effect<CML.ProposalBuilderResult, ProposalBuilderError>
+  instance: CML.ProposalBuilder,
+) => Effect.Effect<CML.ProposalBuilderResult, ProposalBuilderError>;
 ```
 
 Added in v2.0.0
@@ -104,7 +107,9 @@ Method free of ProposalBuilder
 **Signature**
 
 ```ts
-export declare const free: (instance: CML.ProposalBuilder) => Effect.Effect<void, ProposalBuilderError>
+export declare const free: (
+  instance: CML.ProposalBuilder,
+) => Effect.Effect<void, ProposalBuilderError>;
 ```
 
 Added in v2.0.0
@@ -120,8 +125,8 @@ export declare const withNativeScriptProposal: (
   instance: CML.ProposalBuilder,
   proposal: CML.ProposalProcedure,
   nativeScript: CML.NativeScript,
-  witnessInfo: CML.NativeScriptWitnessInfo
-) => Effect.Effect<CML.ProposalBuilder, ProposalBuilderError>
+  witnessInfo: CML.NativeScriptWitnessInfo,
+) => Effect.Effect<CML.ProposalBuilder, ProposalBuilderError>;
 ```
 
 Added in v2.0.0
@@ -138,8 +143,8 @@ export declare const withPlutusProposal: (
   proposal: CML.ProposalProcedure,
   partialWitness: CML.PartialPlutusWitness,
   requiredSigners: CML.Ed25519KeyHashList,
-  datum: CML.PlutusData
-) => Effect.Effect<CML.ProposalBuilder, ProposalBuilderError>
+  datum: CML.PlutusData,
+) => Effect.Effect<CML.ProposalBuilder, ProposalBuilderError>;
 ```
 
 Added in v2.0.0
@@ -155,8 +160,8 @@ export declare const withPlutusProposalInlineDatum: (
   instance: CML.ProposalBuilder,
   proposal: CML.ProposalProcedure,
   partialWitness: CML.PartialPlutusWitness,
-  requiredSigners: CML.Ed25519KeyHashList
-) => Effect.Effect<CML.ProposalBuilder, ProposalBuilderError>
+  requiredSigners: CML.Ed25519KeyHashList,
+) => Effect.Effect<CML.ProposalBuilder, ProposalBuilderError>;
 ```
 
 Added in v2.0.0
@@ -170,8 +175,8 @@ Method withProposal of ProposalBuilder
 ```ts
 export declare const withProposal: (
   instance: CML.ProposalBuilder,
-  proposal: CML.ProposalProcedure
-) => Effect.Effect<CML.ProposalBuilder, ProposalBuilderError>
+  proposal: CML.ProposalProcedure,
+) => Effect.Effect<CML.ProposalBuilder, ProposalBuilderError>;
 ```
 
 Added in v2.0.0
@@ -185,7 +190,9 @@ Unsafely calls instance.build without Effect wrapper
 **Signature**
 
 ```ts
-export declare const buildUnsafe: (instance: CML.ProposalBuilder) => CML.ProposalBuilderResult
+export declare const buildUnsafe: (
+  instance: CML.ProposalBuilder,
+) => CML.ProposalBuilderResult;
 ```
 
 Added in v2.0.0
@@ -197,7 +204,7 @@ Unsafely calls instance.free without Effect wrapper
 **Signature**
 
 ```ts
-export declare const freeUnsafe: (instance: CML.ProposalBuilder) => void
+export declare const freeUnsafe: (instance: CML.ProposalBuilder) => void;
 ```
 
 Added in v2.0.0
@@ -213,8 +220,8 @@ export declare const withNativeScriptProposalUnsafe: (
   instance: CML.ProposalBuilder,
   proposal: CML.ProposalProcedure,
   nativeScript: CML.NativeScript,
-  witnessInfo: CML.NativeScriptWitnessInfo
-) => CML.ProposalBuilder
+  witnessInfo: CML.NativeScriptWitnessInfo,
+) => CML.ProposalBuilder;
 ```
 
 Added in v2.0.0
@@ -230,8 +237,8 @@ export declare const withPlutusProposalInlineDatumUnsafe: (
   instance: CML.ProposalBuilder,
   proposal: CML.ProposalProcedure,
   partialWitness: CML.PartialPlutusWitness,
-  requiredSigners: CML.Ed25519KeyHashList
-) => CML.ProposalBuilder
+  requiredSigners: CML.Ed25519KeyHashList,
+) => CML.ProposalBuilder;
 ```
 
 Added in v2.0.0
@@ -248,8 +255,8 @@ export declare const withPlutusProposalUnsafe: (
   proposal: CML.ProposalProcedure,
   partialWitness: CML.PartialPlutusWitness,
   requiredSigners: CML.Ed25519KeyHashList,
-  datum: CML.PlutusData
-) => CML.ProposalBuilder
+  datum: CML.PlutusData,
+) => CML.ProposalBuilder;
 ```
 
 Added in v2.0.0
@@ -263,8 +270,8 @@ Unsafely calls instance.withProposal without Effect wrapper
 ```ts
 export declare const withProposalUnsafe: (
   instance: CML.ProposalBuilder,
-  proposal: CML.ProposalProcedure
-) => CML.ProposalBuilder
+  proposal: CML.ProposalProcedure,
+) => CML.ProposalBuilder;
 ```
 
 Added in v2.0.0
@@ -278,7 +285,7 @@ Type alias for the CML ProposalBuilder class
 **Signature**
 
 ```ts
-export type ProposalBuilder = CML.ProposalBuilder
+export type ProposalBuilder = CML.ProposalBuilder;
 ```
 
 Added in v2.0.0

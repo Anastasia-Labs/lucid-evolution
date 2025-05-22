@@ -46,7 +46,9 @@ Static method fromBech32 of BlockBodyHash
 **Signature**
 
 ```ts
-export declare const fromBech32: (bech32Str: string) => Effect.Effect<CML.BlockBodyHash, BlockBodyHashError>
+export declare const fromBech32: (
+  bech32Str: string,
+) => Effect.Effect<CML.BlockBodyHash, BlockBodyHashError>;
 ```
 
 Added in v2.0.0
@@ -58,7 +60,9 @@ Static method fromHex of BlockBodyHash
 **Signature**
 
 ```ts
-export declare const fromHex: (input: string) => Effect.Effect<CML.BlockBodyHash, BlockBodyHashError>
+export declare const fromHex: (
+  input: string,
+) => Effect.Effect<CML.BlockBodyHash, BlockBodyHashError>;
 ```
 
 Added in v2.0.0
@@ -70,7 +74,9 @@ Static method fromRawBytes of BlockBodyHash
 **Signature**
 
 ```ts
-export declare const fromRawBytes: (bytes: Uint8Array) => Effect.Effect<CML.BlockBodyHash, BlockBodyHashError>
+export declare const fromRawBytes: (
+  bytes: Uint8Array,
+) => Effect.Effect<CML.BlockBodyHash, BlockBodyHashError>;
 ```
 
 Added in v2.0.0
@@ -84,7 +90,7 @@ Unsafely calls BlockBodyHash.fromBech32 without Effect wrapper
 **Signature**
 
 ```ts
-export declare const fromBech32Unsafe: (bech32Str: string) => CML.BlockBodyHash
+export declare const fromBech32Unsafe: (bech32Str: string) => CML.BlockBodyHash;
 ```
 
 Added in v2.0.0
@@ -96,7 +102,7 @@ Unsafely calls BlockBodyHash.fromHex without Effect wrapper
 **Signature**
 
 ```ts
-export declare const fromHexUnsafe: (input: string) => CML.BlockBodyHash
+export declare const fromHexUnsafe: (input: string) => CML.BlockBodyHash;
 ```
 
 Added in v2.0.0
@@ -108,7 +114,9 @@ Unsafely calls BlockBodyHash.fromRawBytes without Effect wrapper
 **Signature**
 
 ```ts
-export declare const fromRawBytesUnsafe: (bytes: Uint8Array) => CML.BlockBodyHash
+export declare const fromRawBytesUnsafe: (
+  bytes: Uint8Array,
+) => CML.BlockBodyHash;
 ```
 
 Added in v2.0.0
@@ -138,7 +146,9 @@ Method free of BlockBodyHash
 **Signature**
 
 ```ts
-export declare const free: (instance: CML.BlockBodyHash) => Effect.Effect<void, BlockBodyHashError>
+export declare const free: (
+  instance: CML.BlockBodyHash,
+) => Effect.Effect<void, BlockBodyHashError>;
 ```
 
 Added in v2.0.0
@@ -152,8 +162,8 @@ Method toBech32 of BlockBodyHash
 ```ts
 export declare const toBech32: (
   instance: CML.BlockBodyHash,
-  prefix: string
-) => Effect.Effect<string, BlockBodyHashError>
+  prefix: string,
+) => Effect.Effect<string, BlockBodyHashError>;
 ```
 
 Added in v2.0.0
@@ -165,7 +175,9 @@ Method toHex of BlockBodyHash
 **Signature**
 
 ```ts
-export declare const toHex: (instance: CML.BlockBodyHash) => Effect.Effect<string, BlockBodyHashError>
+export declare const toHex: (
+  instance: CML.BlockBodyHash,
+) => Effect.Effect<string, BlockBodyHashError>;
 ```
 
 Added in v2.0.0
@@ -177,7 +189,9 @@ Method toRawBytes of BlockBodyHash
 **Signature**
 
 ```ts
-export declare const toRawBytes: (instance: CML.BlockBodyHash) => Effect.Effect<Uint8Array, BlockBodyHashError>
+export declare const toRawBytes: (
+  instance: CML.BlockBodyHash,
+) => Effect.Effect<Uint8Array, BlockBodyHashError>;
 ```
 
 Added in v2.0.0
@@ -191,7 +205,7 @@ Unsafely calls instance.free without Effect wrapper
 **Signature**
 
 ```ts
-export declare const freeUnsafe: (instance: CML.BlockBodyHash) => void
+export declare const freeUnsafe: (instance: CML.BlockBodyHash) => void;
 ```
 
 Added in v2.0.0
@@ -203,7 +217,10 @@ Unsafely calls instance.toBech32 without Effect wrapper
 **Signature**
 
 ```ts
-export declare const toBech32Unsafe: (instance: CML.BlockBodyHash, prefix: string) => string
+export declare const toBech32Unsafe: (
+  instance: CML.BlockBodyHash,
+  prefix: string,
+) => string;
 ```
 
 Added in v2.0.0
@@ -215,7 +232,7 @@ Unsafely calls instance.toHex without Effect wrapper
 **Signature**
 
 ```ts
-export declare const toHexUnsafe: (instance: CML.BlockBodyHash) => string
+export declare const toHexUnsafe: (instance: CML.BlockBodyHash) => string;
 ```
 
 Added in v2.0.0
@@ -227,7 +244,9 @@ Unsafely calls instance.toRawBytes without Effect wrapper
 **Signature**
 
 ```ts
-export declare const toRawBytesUnsafe: (instance: CML.BlockBodyHash) => Uint8Array
+export declare const toRawBytesUnsafe: (
+  instance: CML.BlockBodyHash,
+) => Uint8Array;
 ```
 
 Added in v2.0.0
@@ -241,7 +260,7 @@ Type alias for the CML BlockBodyHash class
 **Signature**
 
 ```ts
-export type BlockBodyHash = CML.BlockBodyHash
+export type BlockBodyHash = CML.BlockBodyHash;
 ```
 
 Added in v2.0.0

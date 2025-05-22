@@ -46,8 +46,8 @@ Static method \_new of EnterpriseAddress
 ```ts
 export declare const _new: (
   network: number,
-  payment: CML.Credential
-) => Effect.Effect<CML.EnterpriseAddress, EnterpriseAddressError>
+  payment: CML.Credential,
+) => Effect.Effect<CML.EnterpriseAddress, EnterpriseAddressError>;
 ```
 
 Added in v2.0.0
@@ -60,8 +60,8 @@ Static method fromAddress of EnterpriseAddress
 
 ```ts
 export declare const fromAddress: (
-  address: CML.Address
-) => Effect.Effect<CML.EnterpriseAddress | undefined, EnterpriseAddressError>
+  address: CML.Address,
+) => Effect.Effect<CML.EnterpriseAddress | undefined, EnterpriseAddressError>;
 ```
 
 Added in v2.0.0
@@ -75,7 +75,10 @@ Unsafely calls EnterpriseAddress.\_new without Effect wrapper
 **Signature**
 
 ```ts
-export declare const _newUnsafe: (network: number, payment: CML.Credential) => CML.EnterpriseAddress
+export declare const _newUnsafe: (
+  network: number,
+  payment: CML.Credential,
+) => CML.EnterpriseAddress;
 ```
 
 Added in v2.0.0
@@ -87,7 +90,9 @@ Unsafely calls EnterpriseAddress.fromAddress without Effect wrapper
 **Signature**
 
 ```ts
-export declare const fromAddressUnsafe: (address: CML.Address) => CML.EnterpriseAddress | undefined
+export declare const fromAddressUnsafe: (
+  address: CML.Address,
+) => CML.EnterpriseAddress | undefined;
 ```
 
 Added in v2.0.0
@@ -117,7 +122,9 @@ Method free of EnterpriseAddress
 **Signature**
 
 ```ts
-export declare const free: (instance: CML.EnterpriseAddress) => Effect.Effect<void, EnterpriseAddressError>
+export declare const free: (
+  instance: CML.EnterpriseAddress,
+) => Effect.Effect<void, EnterpriseAddressError>;
 ```
 
 Added in v2.0.0
@@ -129,7 +136,9 @@ Method networkId of EnterpriseAddress
 **Signature**
 
 ```ts
-export declare const networkId: (instance: CML.EnterpriseAddress) => Effect.Effect<number, EnterpriseAddressError>
+export declare const networkId: (
+  instance: CML.EnterpriseAddress,
+) => Effect.Effect<number, EnterpriseAddressError>;
 ```
 
 Added in v2.0.0
@@ -141,7 +150,9 @@ Method payment of EnterpriseAddress
 **Signature**
 
 ```ts
-export declare const payment: (instance: CML.EnterpriseAddress) => Effect.Effect<CML.Credential, EnterpriseAddressError>
+export declare const payment: (
+  instance: CML.EnterpriseAddress,
+) => Effect.Effect<CML.Credential, EnterpriseAddressError>;
 ```
 
 Added in v2.0.0
@@ -153,7 +164,9 @@ Method toAddress of EnterpriseAddress
 **Signature**
 
 ```ts
-export declare const toAddress: (instance: CML.EnterpriseAddress) => Effect.Effect<CML.Address, EnterpriseAddressError>
+export declare const toAddress: (
+  instance: CML.EnterpriseAddress,
+) => Effect.Effect<CML.Address, EnterpriseAddressError>;
 ```
 
 Added in v2.0.0
@@ -167,7 +180,7 @@ Unsafely calls instance.free without Effect wrapper
 **Signature**
 
 ```ts
-export declare const freeUnsafe: (instance: CML.EnterpriseAddress) => void
+export declare const freeUnsafe: (instance: CML.EnterpriseAddress) => void;
 ```
 
 Added in v2.0.0
@@ -179,7 +192,9 @@ Unsafely calls instance.networkId without Effect wrapper
 **Signature**
 
 ```ts
-export declare const networkIdUnsafe: (instance: CML.EnterpriseAddress) => number
+export declare const networkIdUnsafe: (
+  instance: CML.EnterpriseAddress,
+) => number;
 ```
 
 Added in v2.0.0
@@ -191,7 +206,9 @@ Unsafely calls instance.payment without Effect wrapper
 **Signature**
 
 ```ts
-export declare const paymentUnsafe: (instance: CML.EnterpriseAddress) => CML.Credential
+export declare const paymentUnsafe: (
+  instance: CML.EnterpriseAddress,
+) => CML.Credential;
 ```
 
 Added in v2.0.0
@@ -203,7 +220,9 @@ Unsafely calls instance.toAddress without Effect wrapper
 **Signature**
 
 ```ts
-export declare const toAddressUnsafe: (instance: CML.EnterpriseAddress) => CML.Address
+export declare const toAddressUnsafe: (
+  instance: CML.EnterpriseAddress,
+) => CML.Address;
 ```
 
 Added in v2.0.0
@@ -217,7 +236,7 @@ Type alias for the CML EnterpriseAddress class
 **Signature**
 
 ```ts
-export type EnterpriseAddress = CML.EnterpriseAddress
+export type EnterpriseAddress = CML.EnterpriseAddress;
 ```
 
 Added in v2.0.0

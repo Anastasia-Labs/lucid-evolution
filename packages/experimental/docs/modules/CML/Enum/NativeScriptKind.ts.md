@@ -37,7 +37,7 @@ Type alias for the CML NativeScriptKind enum
 **Signature**
 
 ```ts
-export type NativeScriptKind = CML.NativeScriptKind
+export type NativeScriptKind = CML.NativeScriptKind;
 ```
 
 Added in v2.0.0
@@ -51,7 +51,9 @@ Convert string to NativeScriptKind enum value
 **Signature**
 
 ```ts
-export declare const fromString: (str: string) => CML.NativeScriptKind | undefined
+export declare const fromString: (
+  str: string,
+) => CML.NativeScriptKind | undefined;
 ```
 
 Added in v2.0.0
@@ -63,7 +65,7 @@ Convert NativeScriptKind enum value to string
 **Signature**
 
 ```ts
-export declare const toString: (value: CML.NativeScriptKind) => string
+export declare const toString: (value: CML.NativeScriptKind) => string;
 ```
 
 Added in v2.0.0
@@ -75,7 +77,7 @@ Get all values of the NativeScriptKind enum
 **Signature**
 
 ```ts
-export declare const values: () => Array<CML.NativeScriptKind>
+export declare const values: () => Array<CML.NativeScriptKind>;
 ```
 
 Added in v2.0.0
@@ -89,7 +91,7 @@ ScriptAll variant of the NativeScriptKind enum
 **Signature**
 
 ```ts
-export declare const ScriptAll: CML.NativeScriptKind.ScriptAll
+export declare const ScriptAll: CML.NativeScriptKind.ScriptAll;
 ```
 
 Added in v2.0.0
@@ -101,7 +103,7 @@ ScriptAny variant of the NativeScriptKind enum
 **Signature**
 
 ```ts
-export declare const ScriptAny: CML.NativeScriptKind.ScriptAny
+export declare const ScriptAny: CML.NativeScriptKind.ScriptAny;
 ```
 
 Added in v2.0.0
@@ -113,7 +115,7 @@ ScriptInvalidBefore variant of the NativeScriptKind enum
 **Signature**
 
 ```ts
-export declare const ScriptInvalidBefore: CML.NativeScriptKind.ScriptInvalidBefore
+export declare const ScriptInvalidBefore: CML.NativeScriptKind.ScriptInvalidBefore;
 ```
 
 Added in v2.0.0
@@ -125,7 +127,7 @@ ScriptInvalidHereafter variant of the NativeScriptKind enum
 **Signature**
 
 ```ts
-export declare const ScriptInvalidHereafter: CML.NativeScriptKind.ScriptInvalidHereafter
+export declare const ScriptInvalidHereafter: CML.NativeScriptKind.ScriptInvalidHereafter;
 ```
 
 Added in v2.0.0
@@ -137,7 +139,7 @@ ScriptNOfK variant of the NativeScriptKind enum
 **Signature**
 
 ```ts
-export declare const ScriptNOfK: CML.NativeScriptKind.ScriptNOfK
+export declare const ScriptNOfK: CML.NativeScriptKind.ScriptNOfK;
 ```
 
 Added in v2.0.0
@@ -149,7 +151,7 @@ ScriptPubkey variant of the NativeScriptKind enum
 **Signature**
 
 ```ts
-export declare const ScriptPubkey: CML.NativeScriptKind.ScriptPubkey
+export declare const ScriptPubkey: CML.NativeScriptKind.ScriptPubkey;
 ```
 
 Added in v2.0.0

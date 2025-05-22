@@ -64,7 +64,9 @@ Static method fromCborBytes of Redeemers
 **Signature**
 
 ```ts
-export declare const fromCborBytes: (cborBytes: Uint8Array) => Effect.Effect<CML.Redeemers, RedeemersError>
+export declare const fromCborBytes: (
+  cborBytes: Uint8Array,
+) => Effect.Effect<CML.Redeemers, RedeemersError>;
 ```
 
 Added in v2.0.0
@@ -76,7 +78,9 @@ Static method fromCborHex of Redeemers
 **Signature**
 
 ```ts
-export declare const fromCborHex: (cborBytes: string) => Effect.Effect<CML.Redeemers, RedeemersError>
+export declare const fromCborHex: (
+  cborBytes: string,
+) => Effect.Effect<CML.Redeemers, RedeemersError>;
 ```
 
 Added in v2.0.0
@@ -88,7 +92,9 @@ Static method fromJson of Redeemers
 **Signature**
 
 ```ts
-export declare const fromJson: (json: string) => Effect.Effect<CML.Redeemers, RedeemersError>
+export declare const fromJson: (
+  json: string,
+) => Effect.Effect<CML.Redeemers, RedeemersError>;
 ```
 
 Added in v2.0.0
@@ -101,8 +107,8 @@ Static method newArrLegacyRedeemer of Redeemers
 
 ```ts
 export declare const newArrLegacyRedeemer: (
-  arrLegacyRedeemer: CML.LegacyRedeemerList
-) => Effect.Effect<CML.Redeemers, RedeemersError>
+  arrLegacyRedeemer: CML.LegacyRedeemerList,
+) => Effect.Effect<CML.Redeemers, RedeemersError>;
 ```
 
 Added in v2.0.0
@@ -115,8 +121,8 @@ Static method newMapRedeemerKeyToRedeemerVal of Redeemers
 
 ```ts
 export declare const newMapRedeemerKeyToRedeemerVal: (
-  mapRedeemerKeyToRedeemerVal: CML.MapRedeemerKeyToRedeemerVal
-) => Effect.Effect<CML.Redeemers, RedeemersError>
+  mapRedeemerKeyToRedeemerVal: CML.MapRedeemerKeyToRedeemerVal,
+) => Effect.Effect<CML.Redeemers, RedeemersError>;
 ```
 
 Added in v2.0.0
@@ -130,7 +136,9 @@ Unsafely calls Redeemers.fromCborBytes without Effect wrapper
 **Signature**
 
 ```ts
-export declare const fromCborBytesUnsafe: (cborBytes: Uint8Array) => CML.Redeemers
+export declare const fromCborBytesUnsafe: (
+  cborBytes: Uint8Array,
+) => CML.Redeemers;
 ```
 
 Added in v2.0.0
@@ -142,7 +150,7 @@ Unsafely calls Redeemers.fromCborHex without Effect wrapper
 **Signature**
 
 ```ts
-export declare const fromCborHexUnsafe: (cborBytes: string) => CML.Redeemers
+export declare const fromCborHexUnsafe: (cborBytes: string) => CML.Redeemers;
 ```
 
 Added in v2.0.0
@@ -154,7 +162,7 @@ Unsafely calls Redeemers.fromJson without Effect wrapper
 **Signature**
 
 ```ts
-export declare const fromJsonUnsafe: (json: string) => CML.Redeemers
+export declare const fromJsonUnsafe: (json: string) => CML.Redeemers;
 ```
 
 Added in v2.0.0
@@ -166,7 +174,9 @@ Unsafely calls Redeemers.newArrLegacyRedeemer without Effect wrapper
 **Signature**
 
 ```ts
-export declare const newArrLegacyRedeemerUnsafe: (arrLegacyRedeemer: CML.LegacyRedeemerList) => CML.Redeemers
+export declare const newArrLegacyRedeemerUnsafe: (
+  arrLegacyRedeemer: CML.LegacyRedeemerList,
+) => CML.Redeemers;
 ```
 
 Added in v2.0.0
@@ -179,8 +189,8 @@ Unsafely calls Redeemers.newMapRedeemerKeyToRedeemerVal without Effect wrapper
 
 ```ts
 export declare const newMapRedeemerKeyToRedeemerValUnsafe: (
-  mapRedeemerKeyToRedeemerVal: CML.MapRedeemerKeyToRedeemerVal
-) => CML.Redeemers
+  mapRedeemerKeyToRedeemerVal: CML.MapRedeemerKeyToRedeemerVal,
+) => CML.Redeemers;
 ```
 
 Added in v2.0.0
@@ -211,8 +221,8 @@ Method asArrLegacyRedeemer of Redeemers
 
 ```ts
 export declare const asArrLegacyRedeemer: (
-  instance: CML.Redeemers
-) => Effect.Effect<CML.LegacyRedeemerList | undefined, RedeemersError>
+  instance: CML.Redeemers,
+) => Effect.Effect<CML.LegacyRedeemerList | undefined, RedeemersError>;
 ```
 
 Added in v2.0.0
@@ -225,8 +235,8 @@ Method asMapRedeemerKeyToRedeemerVal of Redeemers
 
 ```ts
 export declare const asMapRedeemerKeyToRedeemerVal: (
-  instance: CML.Redeemers
-) => Effect.Effect<CML.MapRedeemerKeyToRedeemerVal | undefined, RedeemersError>
+  instance: CML.Redeemers,
+) => Effect.Effect<CML.MapRedeemerKeyToRedeemerVal | undefined, RedeemersError>;
 ```
 
 Added in v2.0.0
@@ -238,7 +248,9 @@ Method free of Redeemers
 **Signature**
 
 ```ts
-export declare const free: (instance: CML.Redeemers) => Effect.Effect<void, RedeemersError>
+export declare const free: (
+  instance: CML.Redeemers,
+) => Effect.Effect<void, RedeemersError>;
 ```
 
 Added in v2.0.0
@@ -250,7 +262,9 @@ Method kind of Redeemers
 **Signature**
 
 ```ts
-export declare const kind: (instance: CML.Redeemers) => Effect.Effect<CML.RedeemersKind, RedeemersError>
+export declare const kind: (
+  instance: CML.Redeemers,
+) => Effect.Effect<CML.RedeemersKind, RedeemersError>;
 ```
 
 Added in v2.0.0
@@ -262,7 +276,9 @@ Method toCanonicalCborBytes of Redeemers
 **Signature**
 
 ```ts
-export declare const toCanonicalCborBytes: (instance: CML.Redeemers) => Effect.Effect<Uint8Array, RedeemersError>
+export declare const toCanonicalCborBytes: (
+  instance: CML.Redeemers,
+) => Effect.Effect<Uint8Array, RedeemersError>;
 ```
 
 Added in v2.0.0
@@ -274,7 +290,9 @@ Method toCanonicalCborHex of Redeemers
 **Signature**
 
 ```ts
-export declare const toCanonicalCborHex: (instance: CML.Redeemers) => Effect.Effect<string, RedeemersError>
+export declare const toCanonicalCborHex: (
+  instance: CML.Redeemers,
+) => Effect.Effect<string, RedeemersError>;
 ```
 
 Added in v2.0.0
@@ -286,7 +304,9 @@ Method toCborBytes of Redeemers
 **Signature**
 
 ```ts
-export declare const toCborBytes: (instance: CML.Redeemers) => Effect.Effect<Uint8Array, RedeemersError>
+export declare const toCborBytes: (
+  instance: CML.Redeemers,
+) => Effect.Effect<Uint8Array, RedeemersError>;
 ```
 
 Added in v2.0.0
@@ -298,7 +318,9 @@ Method toCborHex of Redeemers
 **Signature**
 
 ```ts
-export declare const toCborHex: (instance: CML.Redeemers) => Effect.Effect<string, RedeemersError>
+export declare const toCborHex: (
+  instance: CML.Redeemers,
+) => Effect.Effect<string, RedeemersError>;
 ```
 
 Added in v2.0.0
@@ -310,7 +332,9 @@ Method toFlatFormat of Redeemers
 **Signature**
 
 ```ts
-export declare const toFlatFormat: (instance: CML.Redeemers) => Effect.Effect<CML.LegacyRedeemerList, RedeemersError>
+export declare const toFlatFormat: (
+  instance: CML.Redeemers,
+) => Effect.Effect<CML.LegacyRedeemerList, RedeemersError>;
 ```
 
 Added in v2.0.0
@@ -322,7 +346,9 @@ Method toJsValue of Redeemers
 **Signature**
 
 ```ts
-export declare const toJsValue: (instance: CML.Redeemers) => Effect.Effect<any, RedeemersError>
+export declare const toJsValue: (
+  instance: CML.Redeemers,
+) => Effect.Effect<any, RedeemersError>;
 ```
 
 Added in v2.0.0
@@ -334,7 +360,9 @@ Method toJson of Redeemers
 **Signature**
 
 ```ts
-export declare const toJson: (instance: CML.Redeemers) => Effect.Effect<string, RedeemersError>
+export declare const toJson: (
+  instance: CML.Redeemers,
+) => Effect.Effect<string, RedeemersError>;
 ```
 
 Added in v2.0.0
@@ -348,7 +376,9 @@ Unsafely calls instance.asArrLegacyRedeemer without Effect wrapper
 **Signature**
 
 ```ts
-export declare const asArrLegacyRedeemerUnsafe: (instance: CML.Redeemers) => CML.LegacyRedeemerList | undefined
+export declare const asArrLegacyRedeemerUnsafe: (
+  instance: CML.Redeemers,
+) => CML.LegacyRedeemerList | undefined;
 ```
 
 Added in v2.0.0
@@ -361,8 +391,8 @@ Unsafely calls instance.asMapRedeemerKeyToRedeemerVal without Effect wrapper
 
 ```ts
 export declare const asMapRedeemerKeyToRedeemerValUnsafe: (
-  instance: CML.Redeemers
-) => CML.MapRedeemerKeyToRedeemerVal | undefined
+  instance: CML.Redeemers,
+) => CML.MapRedeemerKeyToRedeemerVal | undefined;
 ```
 
 Added in v2.0.0
@@ -374,7 +404,7 @@ Unsafely calls instance.free without Effect wrapper
 **Signature**
 
 ```ts
-export declare const freeUnsafe: (instance: CML.Redeemers) => void
+export declare const freeUnsafe: (instance: CML.Redeemers) => void;
 ```
 
 Added in v2.0.0
@@ -386,7 +416,7 @@ Unsafely calls instance.kind without Effect wrapper
 **Signature**
 
 ```ts
-export declare const kindUnsafe: (instance: CML.Redeemers) => CML.RedeemersKind
+export declare const kindUnsafe: (instance: CML.Redeemers) => CML.RedeemersKind;
 ```
 
 Added in v2.0.0
@@ -398,7 +428,9 @@ Unsafely calls instance.toCanonicalCborBytes without Effect wrapper
 **Signature**
 
 ```ts
-export declare const toCanonicalCborBytesUnsafe: (instance: CML.Redeemers) => Uint8Array
+export declare const toCanonicalCborBytesUnsafe: (
+  instance: CML.Redeemers,
+) => Uint8Array;
 ```
 
 Added in v2.0.0
@@ -410,7 +442,9 @@ Unsafely calls instance.toCanonicalCborHex without Effect wrapper
 **Signature**
 
 ```ts
-export declare const toCanonicalCborHexUnsafe: (instance: CML.Redeemers) => string
+export declare const toCanonicalCborHexUnsafe: (
+  instance: CML.Redeemers,
+) => string;
 ```
 
 Added in v2.0.0
@@ -422,7 +456,7 @@ Unsafely calls instance.toCborBytes without Effect wrapper
 **Signature**
 
 ```ts
-export declare const toCborBytesUnsafe: (instance: CML.Redeemers) => Uint8Array
+export declare const toCborBytesUnsafe: (instance: CML.Redeemers) => Uint8Array;
 ```
 
 Added in v2.0.0
@@ -434,7 +468,7 @@ Unsafely calls instance.toCborHex without Effect wrapper
 **Signature**
 
 ```ts
-export declare const toCborHexUnsafe: (instance: CML.Redeemers) => string
+export declare const toCborHexUnsafe: (instance: CML.Redeemers) => string;
 ```
 
 Added in v2.0.0
@@ -446,7 +480,9 @@ Unsafely calls instance.toFlatFormat without Effect wrapper
 **Signature**
 
 ```ts
-export declare const toFlatFormatUnsafe: (instance: CML.Redeemers) => CML.LegacyRedeemerList
+export declare const toFlatFormatUnsafe: (
+  instance: CML.Redeemers,
+) => CML.LegacyRedeemerList;
 ```
 
 Added in v2.0.0
@@ -458,7 +494,7 @@ Unsafely calls instance.toJsValue without Effect wrapper
 **Signature**
 
 ```ts
-export declare const toJsValueUnsafe: (instance: CML.Redeemers) => any
+export declare const toJsValueUnsafe: (instance: CML.Redeemers) => any;
 ```
 
 Added in v2.0.0
@@ -470,7 +506,7 @@ Unsafely calls instance.toJson without Effect wrapper
 **Signature**
 
 ```ts
-export declare const toJsonUnsafe: (instance: CML.Redeemers) => string
+export declare const toJsonUnsafe: (instance: CML.Redeemers) => string;
 ```
 
 Added in v2.0.0
@@ -484,7 +520,7 @@ Type alias for the CML Redeemers class
 **Signature**
 
 ```ts
-export type Redeemers = CML.Redeemers
+export type Redeemers = CML.Redeemers;
 ```
 
 Added in v2.0.0

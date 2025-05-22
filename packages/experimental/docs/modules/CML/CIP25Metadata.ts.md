@@ -54,7 +54,9 @@ Static method \_new of CIP25Metadata
 **Signature**
 
 ```ts
-export declare const _new: (key_721: CML.CIP25LabelMetadata) => Effect.Effect<CML.CIP25Metadata, CIP25MetadataError>
+export declare const _new: (
+  key_721: CML.CIP25LabelMetadata,
+) => Effect.Effect<CML.CIP25Metadata, CIP25MetadataError>;
 ```
 
 Added in v2.0.0
@@ -66,7 +68,9 @@ Static method fromCborBytes of CIP25Metadata
 **Signature**
 
 ```ts
-export declare const fromCborBytes: (data: Uint8Array) => Effect.Effect<CML.CIP25Metadata, CIP25MetadataError>
+export declare const fromCborBytes: (
+  data: Uint8Array,
+) => Effect.Effect<CML.CIP25Metadata, CIP25MetadataError>;
 ```
 
 Added in v2.0.0
@@ -78,7 +82,9 @@ Static method fromJson of CIP25Metadata
 **Signature**
 
 ```ts
-export declare const fromJson: (json: string) => Effect.Effect<CML.CIP25Metadata, CIP25MetadataError>
+export declare const fromJson: (
+  json: string,
+) => Effect.Effect<CML.CIP25Metadata, CIP25MetadataError>;
 ```
 
 Added in v2.0.0
@@ -90,7 +96,9 @@ Static method fromMetadata of CIP25Metadata
 **Signature**
 
 ```ts
-export declare const fromMetadata: (metadata: CML.Metadata) => Effect.Effect<CML.CIP25Metadata, CIP25MetadataError>
+export declare const fromMetadata: (
+  metadata: CML.Metadata,
+) => Effect.Effect<CML.CIP25Metadata, CIP25MetadataError>;
 ```
 
 Added in v2.0.0
@@ -104,7 +112,9 @@ Unsafely calls CIP25Metadata.\_new without Effect wrapper
 **Signature**
 
 ```ts
-export declare const _newUnsafe: (key_721: CML.CIP25LabelMetadata) => CML.CIP25Metadata
+export declare const _newUnsafe: (
+  key_721: CML.CIP25LabelMetadata,
+) => CML.CIP25Metadata;
 ```
 
 Added in v2.0.0
@@ -116,7 +126,9 @@ Unsafely calls CIP25Metadata.fromCborBytes without Effect wrapper
 **Signature**
 
 ```ts
-export declare const fromCborBytesUnsafe: (data: Uint8Array) => CML.CIP25Metadata
+export declare const fromCborBytesUnsafe: (
+  data: Uint8Array,
+) => CML.CIP25Metadata;
 ```
 
 Added in v2.0.0
@@ -128,7 +140,7 @@ Unsafely calls CIP25Metadata.fromJson without Effect wrapper
 **Signature**
 
 ```ts
-export declare const fromJsonUnsafe: (json: string) => CML.CIP25Metadata
+export declare const fromJsonUnsafe: (json: string) => CML.CIP25Metadata;
 ```
 
 Added in v2.0.0
@@ -140,7 +152,9 @@ Unsafely calls CIP25Metadata.fromMetadata without Effect wrapper
 **Signature**
 
 ```ts
-export declare const fromMetadataUnsafe: (metadata: CML.Metadata) => CML.CIP25Metadata
+export declare const fromMetadataUnsafe: (
+  metadata: CML.Metadata,
+) => CML.CIP25Metadata;
 ```
 
 Added in v2.0.0
@@ -172,8 +186,8 @@ Method addToMetadata of CIP25Metadata
 ```ts
 export declare const addToMetadata: (
   instance: CML.CIP25Metadata,
-  metadata: CML.Metadata
-) => Effect.Effect<void, CIP25MetadataError>
+  metadata: CML.Metadata,
+) => Effect.Effect<void, CIP25MetadataError>;
 ```
 
 Added in v2.0.0
@@ -185,7 +199,9 @@ Method free of CIP25Metadata
 **Signature**
 
 ```ts
-export declare const free: (instance: CML.CIP25Metadata) => Effect.Effect<void, CIP25MetadataError>
+export declare const free: (
+  instance: CML.CIP25Metadata,
+) => Effect.Effect<void, CIP25MetadataError>;
 ```
 
 Added in v2.0.0
@@ -197,7 +213,9 @@ Method key_721 of CIP25Metadata
 **Signature**
 
 ```ts
-export declare const key_721: (instance: CML.CIP25Metadata) => Effect.Effect<CML.CIP25LabelMetadata, CIP25MetadataError>
+export declare const key_721: (
+  instance: CML.CIP25Metadata,
+) => Effect.Effect<CML.CIP25LabelMetadata, CIP25MetadataError>;
 ```
 
 Added in v2.0.0
@@ -209,7 +227,9 @@ Method toCborBytes of CIP25Metadata
 **Signature**
 
 ```ts
-export declare const toCborBytes: (instance: CML.CIP25Metadata) => Effect.Effect<Uint8Array, CIP25MetadataError>
+export declare const toCborBytes: (
+  instance: CML.CIP25Metadata,
+) => Effect.Effect<Uint8Array, CIP25MetadataError>;
 ```
 
 Added in v2.0.0
@@ -221,7 +241,9 @@ Method toJsValue of CIP25Metadata
 **Signature**
 
 ```ts
-export declare const toJsValue: (instance: CML.CIP25Metadata) => Effect.Effect<any, CIP25MetadataError>
+export declare const toJsValue: (
+  instance: CML.CIP25Metadata,
+) => Effect.Effect<any, CIP25MetadataError>;
 ```
 
 Added in v2.0.0
@@ -233,7 +255,9 @@ Method toJson of CIP25Metadata
 **Signature**
 
 ```ts
-export declare const toJson: (instance: CML.CIP25Metadata) => Effect.Effect<string, CIP25MetadataError>
+export declare const toJson: (
+  instance: CML.CIP25Metadata,
+) => Effect.Effect<string, CIP25MetadataError>;
 ```
 
 Added in v2.0.0
@@ -245,7 +269,9 @@ Method toMetadata of CIP25Metadata
 **Signature**
 
 ```ts
-export declare const toMetadata: (instance: CML.CIP25Metadata) => Effect.Effect<CML.Metadata, CIP25MetadataError>
+export declare const toMetadata: (
+  instance: CML.CIP25Metadata,
+) => Effect.Effect<CML.Metadata, CIP25MetadataError>;
 ```
 
 Added in v2.0.0
@@ -259,7 +285,10 @@ Unsafely calls instance.addToMetadata without Effect wrapper
 **Signature**
 
 ```ts
-export declare const addToMetadataUnsafe: (instance: CML.CIP25Metadata, metadata: CML.Metadata) => void
+export declare const addToMetadataUnsafe: (
+  instance: CML.CIP25Metadata,
+  metadata: CML.Metadata,
+) => void;
 ```
 
 Added in v2.0.0
@@ -271,7 +300,7 @@ Unsafely calls instance.free without Effect wrapper
 **Signature**
 
 ```ts
-export declare const freeUnsafe: (instance: CML.CIP25Metadata) => void
+export declare const freeUnsafe: (instance: CML.CIP25Metadata) => void;
 ```
 
 Added in v2.0.0
@@ -283,7 +312,9 @@ Unsafely calls instance.key_721 without Effect wrapper
 **Signature**
 
 ```ts
-export declare const key_721Unsafe: (instance: CML.CIP25Metadata) => CML.CIP25LabelMetadata
+export declare const key_721Unsafe: (
+  instance: CML.CIP25Metadata,
+) => CML.CIP25LabelMetadata;
 ```
 
 Added in v2.0.0
@@ -295,7 +326,9 @@ Unsafely calls instance.toCborBytes without Effect wrapper
 **Signature**
 
 ```ts
-export declare const toCborBytesUnsafe: (instance: CML.CIP25Metadata) => Uint8Array
+export declare const toCborBytesUnsafe: (
+  instance: CML.CIP25Metadata,
+) => Uint8Array;
 ```
 
 Added in v2.0.0
@@ -307,7 +340,7 @@ Unsafely calls instance.toJsValue without Effect wrapper
 **Signature**
 
 ```ts
-export declare const toJsValueUnsafe: (instance: CML.CIP25Metadata) => any
+export declare const toJsValueUnsafe: (instance: CML.CIP25Metadata) => any;
 ```
 
 Added in v2.0.0
@@ -319,7 +352,7 @@ Unsafely calls instance.toJson without Effect wrapper
 **Signature**
 
 ```ts
-export declare const toJsonUnsafe: (instance: CML.CIP25Metadata) => string
+export declare const toJsonUnsafe: (instance: CML.CIP25Metadata) => string;
 ```
 
 Added in v2.0.0
@@ -331,7 +364,9 @@ Unsafely calls instance.toMetadata without Effect wrapper
 **Signature**
 
 ```ts
-export declare const toMetadataUnsafe: (instance: CML.CIP25Metadata) => CML.Metadata
+export declare const toMetadataUnsafe: (
+  instance: CML.CIP25Metadata,
+) => CML.Metadata;
 ```
 
 Added in v2.0.0
@@ -345,7 +380,7 @@ Type alias for the CML CIP25Metadata class
 **Signature**
 
 ```ts
-export type CIP25Metadata = CML.CIP25Metadata
+export type CIP25Metadata = CML.CIP25Metadata;
 ```
 
 Added in v2.0.0

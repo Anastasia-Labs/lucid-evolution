@@ -52,8 +52,8 @@ Static method \_new of RewardAddress
 ```ts
 export declare const _new: (
   network: number,
-  payment: CML.Credential
-) => Effect.Effect<CML.RewardAddress, RewardAddressError>
+  payment: CML.Credential,
+) => Effect.Effect<CML.RewardAddress, RewardAddressError>;
 ```
 
 Added in v2.0.0
@@ -66,8 +66,8 @@ Static method fromAddress of RewardAddress
 
 ```ts
 export declare const fromAddress: (
-  address: CML.Address
-) => Effect.Effect<CML.RewardAddress | undefined, RewardAddressError>
+  address: CML.Address,
+) => Effect.Effect<CML.RewardAddress | undefined, RewardAddressError>;
 ```
 
 Added in v2.0.0
@@ -79,7 +79,9 @@ Static method fromJson of RewardAddress
 **Signature**
 
 ```ts
-export declare const fromJson: (json: string) => Effect.Effect<CML.RewardAddress, RewardAddressError>
+export declare const fromJson: (
+  json: string,
+) => Effect.Effect<CML.RewardAddress, RewardAddressError>;
 ```
 
 Added in v2.0.0
@@ -93,7 +95,10 @@ Unsafely calls RewardAddress.\_new without Effect wrapper
 **Signature**
 
 ```ts
-export declare const _newUnsafe: (network: number, payment: CML.Credential) => CML.RewardAddress
+export declare const _newUnsafe: (
+  network: number,
+  payment: CML.Credential,
+) => CML.RewardAddress;
 ```
 
 Added in v2.0.0
@@ -105,7 +110,9 @@ Unsafely calls RewardAddress.fromAddress without Effect wrapper
 **Signature**
 
 ```ts
-export declare const fromAddressUnsafe: (address: CML.Address) => CML.RewardAddress | undefined
+export declare const fromAddressUnsafe: (
+  address: CML.Address,
+) => CML.RewardAddress | undefined;
 ```
 
 Added in v2.0.0
@@ -117,7 +124,7 @@ Unsafely calls RewardAddress.fromJson without Effect wrapper
 **Signature**
 
 ```ts
-export declare const fromJsonUnsafe: (json: string) => CML.RewardAddress
+export declare const fromJsonUnsafe: (json: string) => CML.RewardAddress;
 ```
 
 Added in v2.0.0
@@ -147,7 +154,9 @@ Method free of RewardAddress
 **Signature**
 
 ```ts
-export declare const free: (instance: CML.RewardAddress) => Effect.Effect<void, RewardAddressError>
+export declare const free: (
+  instance: CML.RewardAddress,
+) => Effect.Effect<void, RewardAddressError>;
 ```
 
 Added in v2.0.0
@@ -159,7 +168,9 @@ Method networkId of RewardAddress
 **Signature**
 
 ```ts
-export declare const networkId: (instance: CML.RewardAddress) => Effect.Effect<number, RewardAddressError>
+export declare const networkId: (
+  instance: CML.RewardAddress,
+) => Effect.Effect<number, RewardAddressError>;
 ```
 
 Added in v2.0.0
@@ -171,7 +182,9 @@ Method payment of RewardAddress
 **Signature**
 
 ```ts
-export declare const payment: (instance: CML.RewardAddress) => Effect.Effect<CML.Credential, RewardAddressError>
+export declare const payment: (
+  instance: CML.RewardAddress,
+) => Effect.Effect<CML.Credential, RewardAddressError>;
 ```
 
 Added in v2.0.0
@@ -183,7 +196,9 @@ Method toAddress of RewardAddress
 **Signature**
 
 ```ts
-export declare const toAddress: (instance: CML.RewardAddress) => Effect.Effect<CML.Address, RewardAddressError>
+export declare const toAddress: (
+  instance: CML.RewardAddress,
+) => Effect.Effect<CML.Address, RewardAddressError>;
 ```
 
 Added in v2.0.0
@@ -195,7 +210,9 @@ Method toJsValue of RewardAddress
 **Signature**
 
 ```ts
-export declare const toJsValue: (instance: CML.RewardAddress) => Effect.Effect<any, RewardAddressError>
+export declare const toJsValue: (
+  instance: CML.RewardAddress,
+) => Effect.Effect<any, RewardAddressError>;
 ```
 
 Added in v2.0.0
@@ -207,7 +224,9 @@ Method toJson of RewardAddress
 **Signature**
 
 ```ts
-export declare const toJson: (instance: CML.RewardAddress) => Effect.Effect<string, RewardAddressError>
+export declare const toJson: (
+  instance: CML.RewardAddress,
+) => Effect.Effect<string, RewardAddressError>;
 ```
 
 Added in v2.0.0
@@ -221,7 +240,7 @@ Unsafely calls instance.free without Effect wrapper
 **Signature**
 
 ```ts
-export declare const freeUnsafe: (instance: CML.RewardAddress) => void
+export declare const freeUnsafe: (instance: CML.RewardAddress) => void;
 ```
 
 Added in v2.0.0
@@ -233,7 +252,7 @@ Unsafely calls instance.networkId without Effect wrapper
 **Signature**
 
 ```ts
-export declare const networkIdUnsafe: (instance: CML.RewardAddress) => number
+export declare const networkIdUnsafe: (instance: CML.RewardAddress) => number;
 ```
 
 Added in v2.0.0
@@ -245,7 +264,9 @@ Unsafely calls instance.payment without Effect wrapper
 **Signature**
 
 ```ts
-export declare const paymentUnsafe: (instance: CML.RewardAddress) => CML.Credential
+export declare const paymentUnsafe: (
+  instance: CML.RewardAddress,
+) => CML.Credential;
 ```
 
 Added in v2.0.0
@@ -257,7 +278,9 @@ Unsafely calls instance.toAddress without Effect wrapper
 **Signature**
 
 ```ts
-export declare const toAddressUnsafe: (instance: CML.RewardAddress) => CML.Address
+export declare const toAddressUnsafe: (
+  instance: CML.RewardAddress,
+) => CML.Address;
 ```
 
 Added in v2.0.0
@@ -269,7 +292,7 @@ Unsafely calls instance.toJsValue without Effect wrapper
 **Signature**
 
 ```ts
-export declare const toJsValueUnsafe: (instance: CML.RewardAddress) => any
+export declare const toJsValueUnsafe: (instance: CML.RewardAddress) => any;
 ```
 
 Added in v2.0.0
@@ -281,7 +304,7 @@ Unsafely calls instance.toJson without Effect wrapper
 **Signature**
 
 ```ts
-export declare const toJsonUnsafe: (instance: CML.RewardAddress) => string
+export declare const toJsonUnsafe: (instance: CML.RewardAddress) => string;
 ```
 
 Added in v2.0.0
@@ -295,7 +318,7 @@ Type alias for the CML RewardAddress class
 **Signature**
 
 ```ts
-export type RewardAddress = CML.RewardAddress
+export type RewardAddress = CML.RewardAddress;
 ```
 
 Added in v2.0.0

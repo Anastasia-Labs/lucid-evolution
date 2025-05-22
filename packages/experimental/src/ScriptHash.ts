@@ -1,6 +1,5 @@
-import { Schema, Data, FastCheck, pipe, Inspectable, Effect } from "effect";
+import { Schema, Data, FastCheck, pipe, Inspectable } from "effect";
 import * as Hex from "./Hex.js";
-import * as Serialization from "./Serialization.js";
 
 /**
  * The length in bytes of a ScriptHash.
@@ -8,7 +7,7 @@ import * as Serialization from "./Serialization.js";
  * @since 2.0.0
  * @category constants
  */
-export const SCRIPTHASH_BYTES_LENGTH = 28;
+const SCRIPTHASH_BYTES_LENGTH = 28;
 
 /**
  * The length in hex characters of a ScriptHash.
@@ -16,7 +15,7 @@ export const SCRIPTHASH_BYTES_LENGTH = 28;
  * @since 2.0.0
  * @category constants
  */
-export const SCRIPTHASH_HEX_LENGTH = 56;
+const SCRIPTHASH_HEX_LENGTH = 56;
 
 /**
  * Error class for ScriptHash related operations.
@@ -31,7 +30,7 @@ export const SCRIPTHASH_HEX_LENGTH = 56;
  * @since 2.0.0
  * @category errors
  */
-export class ScriptHashError extends Data.TaggedError("ScriptHashError")<{
+class ScriptHashError extends Data.TaggedError("ScriptHashError")<{
   message?: string;
   reason?:
     | "InvalidHexLength"
@@ -40,8 +39,8 @@ export class ScriptHashError extends Data.TaggedError("ScriptHashError")<{
     | "InvalidCBORFormat";
 }> {}
 
-export declare const NominalType: unique symbol;
-export interface ScriptHash {
+declare const NominalType: unique symbol;
+interface ScriptHash {
   readonly [NominalType]: unique symbol;
 }
 
@@ -52,7 +51,7 @@ export interface ScriptHash {
  * @since 2.0.0
  * @category schemas
  */
-export class ScriptHash extends Schema.TaggedClass<ScriptHash>()("ScriptHash", {
+class ScriptHash extends Schema.TaggedClass<ScriptHash>()("ScriptHash", {
   hash: Hex.HexString,
 }) {
   [Inspectable.NodeInspectSymbol]() {
@@ -63,140 +62,27 @@ export class ScriptHash extends Schema.TaggedClass<ScriptHash>()("ScriptHash", {
   }
 }
 
-/**
- * Create a ScriptHash directly from bytes.
- *
- * @example
- * import { ScriptHash, Bytes } from "@lucid-evolution/experimental";
- * import assert from "assert";
- *
- * const bytes = Bytes.fromHexOrThrow("c37b1b5dc0669f1d3c61a6fddb2e8fde96be87b881c60bce8e8d542f");
- * const scriptHash = ScriptHash.decodeBytesOrThrow(bytes);
- * assert(scriptHash._tag === "ScriptHash");
- * assert(scriptHash.hash === "c37b1b5dc0669f1d3c61a6fddb2e8fde96be87b881c60bce8e8d542f");
- *
- * @since 2.0.0
- * @category constructors
- */
-export const decodeBytes: Serialization.FromBytes<ScriptHash, ScriptHashError> = (
-  bytes: Uint8Array,
-) =>
-  pipe(
-    Effect.succeed(bytes),
-    Effect.filterOrFail(
-      (b) => b.length === SCRIPTHASH_BYTES_LENGTH,
-      () =>
-        new ScriptHashError({
-          message: `ScriptHash raw bytes must be ${SCRIPTHASH_BYTES_LENGTH} bytes long. Got ${bytes.length}.`,
-          reason: "InvalidBytesLength",
-        }),
-    ),
-    Effect.map(
-      (validLengthBytes) =>
-        new ScriptHash(
-          { hash: Hex.fromBytes(validLengthBytes) },
-          { disableValidation: true },
-        ),
-    ),
-  );
+const ScriptHashBytes = pipe(
+  Schema.Uint8Array,
+  Schema.filter((a) => a.length === SCRIPTHASH_BYTES_LENGTH),
+  Schema.typeSchema,
+).annotations({
+  message: (issue) =>
+    `${issue.actual} must be a byte array of length ${SCRIPTHASH_BYTES_LENGTH}`,
+  identifier: "ScriptHashBytes",
+});
 
-/**
- * Create a ScriptHash directly from bytes, throws on error.
- *
- * @example
- * import { ScriptHash, Bytes } from "@lucid-evolution/experimental";
- * import assert from "assert";
- *
- * const bytes = Bytes.fromHexOrThrow("c37b1b5dc0669f1d3c61a6fddb2e8fde96be87b881c60bce8e8d542f");
- * assert(bytes.length === 28);
- * const scriptHash = ScriptHash.decodeBytesOrThrow(bytes);
- * assert(scriptHash._tag === "ScriptHash");
- * assert(scriptHash.hash === "c37b1b5dc0669f1d3c61a6fddb2e8fde96be87b881c60bce8e8d542f");
- *
- * @since 2.0.0
- * @category constructors
- */
-export const decodeBytesOrThrow = (bytes: Uint8Array) =>
-  Effect.runSync(decodeBytes(bytes));
+const ScriptHashFromUint8Array = Schema.transform(ScriptHashBytes, ScriptHash, {
+  strict: true,
+  encode: (_toI, toA) => Hex.toBytes(toA.hash),
+  decode: (_fromI, fromA) => new ScriptHash({ hash: Hex.fromBytes(fromA) }),
+});
 
-/**
- * Convert a ScriptHash to bytes.
- *
- * @example
- * import { ScriptHash, Bytes } from "@lucid-evolution/experimental";
- * import assert from "assert";
- *
- * const scriptHash = ScriptHash.makeOrThrow("c37b1b5dc0669f1d3c61a6fddb2e8fde96be87b881c60bce8e8d542f");
- * const bytes = ScriptHash.toBytes(scriptHash);
- * assert(bytes instanceof Uint8Array);
- * assert(bytes.length === 28);
- * assert(Bytes.toHexOrThrow(bytes) === "c37b1b5dc0669f1d3c61a6fddb2e8fde96be87b881c60bce8e8d542f");
- *
- * @since 2.0.0
- * @category transformation
- */
-export const toBytes: Serialization.ToBytes<ScriptHash> = (
-  scriptHash: ScriptHash,
-) => Hex.toBytes(scriptHash.hash);
-
-/**
- * Construct a ScriptHash from a hex string.
- *
- * @example
- * import { ScriptHash } from "@lucid-evolution/experimental";
- * import assert from "assert";
- *
- * const hash = "c37b1b5dc0669f1d3c61a6fddb2e8fde96be87b881c60bce8e8d542f";
- * const scriptHash = ScriptHash.makeOrThrow(hash);
- * assert(scriptHash._tag === "ScriptHash");
- * assert(scriptHash.hash === hash);
- *
- * @since 2.0.0
- * @category constructors
- */
-export const make: Serialization.Make<ScriptHash, ScriptHashError> = (
-  maybeHex: string,
-) =>
-  pipe(
-    Hex.decode(maybeHex),
-    Effect.mapError(
-      () =>
-        new ScriptHashError({
-          message: `ScriptHash hex string must be a valid hex string. Got ${maybeHex}.`,
-          reason: "InvalidHexFormat",
-        }),
-    ),
-    Effect.filterOrFail(
-      (h) => h.length === SCRIPTHASH_HEX_LENGTH,
-      (actualHash) =>
-        new ScriptHashError({
-          message: `ScriptHash hex string must be ${SCRIPTHASH_HEX_LENGTH} characters long. Got ${actualHash.length}.`,
-          reason: "InvalidHexLength",
-        }),
-    ),
-    Effect.map(
-      (hex) => new ScriptHash({ hash: hex }, { disableValidation: true }),
-    ),
-  );
-
-/**
- * Construct a ScriptHash from a hex string, throws on error.
- *
- * @example
- * import { ScriptHash } from "@lucid-evolution/experimental";
- * import assert from "assert";
- *
- * const hash = "c37b1b5dc0669f1d3c61a6fddb2e8fde96be87b881c60bce8e8d542f";
- * const scriptHash = ScriptHash.makeOrThrow(hash);
- * assert(scriptHash._tag === "ScriptHash");
- * assert(scriptHash.hash === hash);
- *
- * @since 2.0.0
- * @category constructors
- */
-export const makeOrThrow: Serialization.MakeOrThrow<string, ScriptHash> = (
-  input,
-) => Effect.runSync(make(input));
+const ScriptHashFromHex = Schema.transform(Hex.HexString, ScriptHash, {
+  strict: true,
+  encode: (_toI, toA) => toA.hash,
+  decode: (fromI, _fromA) => new ScriptHash({ hash: fromI }),
+});
 
 /**
  * Check if two ScriptHash instances are equal.
@@ -215,8 +101,7 @@ export const makeOrThrow: Serialization.MakeOrThrow<string, ScriptHash> = (
  * @since 2.0.0
  * @category equality
  */
-export const equals = (a: ScriptHash, b: ScriptHash): boolean =>
-  a.hash === b.hash;
+const equals = (a: ScriptHash, b: ScriptHash): boolean => a.hash === b.hash;
 
 /**
  * Generate a random ScriptHash.
@@ -234,7 +119,19 @@ export const equals = (a: ScriptHash, b: ScriptHash): boolean =>
  * @since 2.0.0
  * @category generators
  */
-export const generator = FastCheck.uint8Array({
+const generator = FastCheck.uint8Array({
   minLength: SCRIPTHASH_BYTES_LENGTH,
   maxLength: SCRIPTHASH_BYTES_LENGTH,
-}).map((bytes) => decodeBytesOrThrow(bytes));
+}).map((bytes) => new ScriptHash({ hash: Hex.fromBytes(bytes) }));
+
+export {
+  ScriptHash,
+  ScriptHashError,
+  ScriptHashBytes,
+  ScriptHashFromUint8Array,
+  ScriptHashFromHex,
+  equals,
+  generator,
+  SCRIPTHASH_BYTES_LENGTH,
+  SCRIPTHASH_HEX_LENGTH,
+};
