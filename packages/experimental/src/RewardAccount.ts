@@ -10,7 +10,7 @@ import * as Credential from "./Credential.js";
 import * as KeyHash from "./KeyHash.js";
 import * as ScriptHash from "./ScriptHash.js";
 import * as NetworkId from "./NetworkId.js";
-import { Hex } from "./index.js";
+import * as Hex from "./Hex.js";
 
 declare const NominalType: unique symbol;
 interface RewardAccount {

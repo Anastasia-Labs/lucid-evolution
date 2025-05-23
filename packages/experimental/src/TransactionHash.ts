@@ -16,7 +16,7 @@ import * as Hex from "./Hex.js";
  * @since 2.0.0
  * @category constants
  */
-export const TRANSACTIONHASH_BYTES_LENGTH = 32;
+const TRANSACTIONHASH_BYTES_LENGTH = 32;
 
 /**
  * The length in hex characters of a TransactionHash.
@@ -24,7 +24,7 @@ export const TRANSACTIONHASH_BYTES_LENGTH = 32;
  * @since 2.0.0
  * @category constants
  */
-export const TRANSACTIONHASH_HEX_LENGTH = 64;
+const TRANSACTIONHASH_HEX_LENGTH = 64;
 
 /**
  * Error class for TransactionHash related operations.
@@ -39,9 +39,7 @@ export const TRANSACTIONHASH_HEX_LENGTH = 64;
  * @since 2.0.0
  * @category errors
  */
-export class TransactionHashError extends Data.TaggedError(
-  "TransactionHashError",
-)<{
+class TransactionHashError extends Data.TaggedError("TransactionHashError")<{
   message?: string;
   reason?:
     | "InvalidHexLength"
@@ -64,7 +62,7 @@ const Hash = Hex.HexString.pipe(
  * @since 2.0.0
  * @category schemas
  */
-export class TransactionHash extends Schema.TaggedClass<TransactionHash>()(
+class TransactionHash extends Schema.TaggedClass<TransactionHash>()(
   "TransactionHash",
   {
     hash: Hash,
@@ -100,7 +98,7 @@ const TransactionHashBytes = pipe(
  * @since 2.0.0
  * @category encoding/decoding
  */
-export const TransactionHashFromUint8Array = Schema.transform(
+const Bytes = Schema.transform(
   TransactionHashBytes,
   TransactionHash.pipe(Schema.asSchema),
   {
@@ -116,7 +114,7 @@ export const TransactionHashFromUint8Array = Schema.transform(
  * @since 2.0.0
  * @category encoding/decoding
  */
-export const HexString = Schema.transform(Hash, TransactionHash, {
+const HexString = Schema.transform(Hash, TransactionHash, {
   strict: true,
   encode: (_, hash) => hash.hash,
   decode: (hash) => new TransactionHash({ hash }),
@@ -128,7 +126,7 @@ export const HexString = Schema.transform(Hash, TransactionHash, {
  * @since 2.0.0
  * @category encoding/decoding
  */
-export const CBORBytes = Schema.transformOrFail(
+const CBORBytes = Schema.transformOrFail(
   Schema.Uint8ArrayFromSelf.annotations({
     identifier: "CBORBytes",
   }),
@@ -146,7 +144,7 @@ export const CBORBytes = Schema.transformOrFail(
         Effect.mapError(
           (error) => new ParseResult.Type(ast, bytes, error.message),
         ),
-        Effect.flatMap(ParseResult.decode(TransactionHashFromUint8Array)),
+        Effect.flatMap(ParseResult.decode(Bytes)),
       ),
   },
 );
@@ -157,7 +155,7 @@ export const CBORBytes = Schema.transformOrFail(
  * @since 2.0.0
  * @category encoding/decoding
  */
-export const TransactionHashFromCBORHex = Schema.transformOrFail(
+const CBORHex = Schema.transformOrFail(
   Hex.HexString.pipe(Schema.typeSchema).annotations({
     identifier: "CBORHex",
   }),
@@ -172,7 +170,7 @@ export const TransactionHashFromCBORHex = Schema.transformOrFail(
         Effect.mapError(
           (error) => new ParseResult.Type(ast, hexString, error.message),
         ),
-        Effect.flatMap(ParseResult.decode(TransactionHashFromUint8Array)),
+        Effect.flatMap(ParseResult.decode(Bytes)),
       ),
   },
 );
@@ -194,7 +192,7 @@ export const TransactionHashFromCBORHex = Schema.transformOrFail(
  * @since 2.0.0
  * @category equality
  */
-export const equals = (a: TransactionHash, b: TransactionHash): boolean =>
+const equals = (a: TransactionHash, b: TransactionHash): boolean =>
   a.hash === b.hash;
 
 /**
@@ -213,7 +211,18 @@ export const equals = (a: TransactionHash, b: TransactionHash): boolean =>
  * @since 2.0.0
  * @category generators
  */
-export const generator = FastCheck.uint8Array({
+const generator = FastCheck.uint8Array({
   minLength: TRANSACTIONHASH_BYTES_LENGTH,
   maxLength: TRANSACTIONHASH_BYTES_LENGTH,
 }).map((bytes) => new TransactionHash({ hash: Hex.fromBytes(bytes) }));
+
+export {
+  TransactionHash,
+  TransactionHashError,
+  CBORBytes,
+  CBORHex,
+  Bytes,
+  HexString,
+  equals,
+  generator,
+};

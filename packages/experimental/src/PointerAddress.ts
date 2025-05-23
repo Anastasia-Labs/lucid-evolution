@@ -13,7 +13,7 @@ import * as KeyHash from "./KeyHash.js";
 import * as Pointer from "./Pointer.js";
 import * as ScriptHash from "./ScriptHash.js";
 import * as NetworkId from "./NetworkId.js";
-import { Hex } from "./index.js";
+import * as Hex from "./Hex.js";
 
 /**
  * Error thrown when address operations fail

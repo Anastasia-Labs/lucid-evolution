@@ -1,4 +1,4 @@
-import { Arbitrary, FastCheck, Schema } from "effect";
+import { FastCheck, Schema } from "effect";
 
 export const Uint16 = Schema.Number.pipe(
   Schema.filter(

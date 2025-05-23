@@ -1,7 +1,5 @@
 import { Inspectable, Schema } from "effect";
-import { HexStringFilter } from "./Combinator.js";
-import { Hex } from "./index.js";
-import { HexString } from "./Hex.js";
+import * as Hex from "./Hex.js";
 
 declare const NominalType: unique symbol;
 interface ByronAddress {
@@ -17,7 +15,7 @@ interface ByronAddress {
 class ByronAddress extends Schema.TaggedClass<ByronAddress>("ByronAddress")(
   "ByronAddress",
   {
-    bytes: HexString,
+    bytes: Hex.HexString,
   },
 ) {
   [Inspectable.NodeInspectSymbol]() {

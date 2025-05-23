@@ -23,7 +23,7 @@ import * as Numeric from "./Numeric.js";
  * @since 2.0.0
  * @category schemas
  */
-export class TransactionInput extends Schema.TaggedClass<TransactionInput>(
+class TransactionInput extends Schema.TaggedClass<TransactionInput>(
   "TransactionInput",
 )("TransactionInput", {
   transactionId: TransactionHash.TransactionHash,
@@ -44,9 +44,7 @@ export class TransactionInput extends Schema.TaggedClass<TransactionInput>(
  * @since 2.0.0
  * @category errors
  */
-export class TransactionInputError extends Data.TaggedError(
-  "TransactionInputError",
-)<{
+class TransactionInputError extends Data.TaggedError("TransactionInputError")<{
   message: string;
   cause?: unknown;
 }> {}
@@ -66,7 +64,7 @@ export class TransactionInputError extends Data.TaggedError(
  * @since 2.0.0
  * @category predicates
  */
-export const isTransactionInput = Schema.is(TransactionInput);
+const isTransactionInput = Schema.is(TransactionInput);
 
 /**
  * Schema for transforming between CBOR bytes and TransactionInput
@@ -74,7 +72,7 @@ export const isTransactionInput = Schema.is(TransactionInput);
  * @since 2.0.0
  * @category encoding/decoding
  */
-export const TransactionInputFromCBORBytes = Schema.transformOrFail(
+const CBORBytes = Schema.transformOrFail(
   Schema.Uint8ArrayFromSelf.annotations({
     identifier: "CBORBytes",
   }),
@@ -96,7 +94,8 @@ export const TransactionInputFromCBORBytes = Schema.transformOrFail(
           pipe(
             ParseResult.decodeUnknown(TransactionHash.CBORBytes)(txHashBytes),
             Effect.flatMap((transactionId) =>
-              ParseResult.decodeUnknown(TransactionInput)({
+              ParseResult.decode(TransactionInput)({
+                _tag: "TransactionInput",
                 transactionId,
                 index,
               }),
@@ -113,7 +112,7 @@ export const TransactionInputFromCBORBytes = Schema.transformOrFail(
  * @since 2.0.0
  * @category encoding/decoding
  */
-export const CBORHex = Schema.transformOrFail(
+const CBORHex = Schema.transformOrFail(
   Hex.HexString.pipe(Schema.typeSchema).annotations({
     identifier: "CBORHex",
   }),
@@ -121,15 +120,9 @@ export const CBORHex = Schema.transformOrFail(
   {
     strict: true,
     encode: (toI, options, ast, toA) =>
-      pipe(
-        ParseResult.encode(TransactionInputFromCBORBytes)(toA),
-        Effect.map(Hex.fromBytes),
-      ),
+      pipe(ParseResult.encode(CBORBytes)(toA), Effect.map(Hex.fromBytes)),
     decode: (fromA, options, ast) =>
-      pipe(
-        Hex.toBytes(fromA),
-        ParseResult.decode(TransactionInputFromCBORBytes),
-      ),
+      pipe(Hex.toBytes(fromA), ParseResult.decode(CBORBytes)),
   },
 );
 
@@ -153,7 +146,28 @@ export const CBORHex = Schema.transformOrFail(
  * @since 2.0.0
  * @category equality
  */
-export const equals = (a: TransactionInput, b: TransactionInput): boolean =>
+const equals = (a: TransactionInput, b: TransactionInput): boolean =>
   a._tag === b._tag &&
   a.index === b.index &&
   a.transactionId.hash === b.transactionId.hash;
+
+const generator = FastCheck.tuple(
+  TransactionHash.generator,
+  Numeric.Uint16Generator,
+).map(
+  ([transactionId, index]) =>
+    new TransactionInput({
+      transactionId,
+      index,
+    }),
+);
+
+export {
+  TransactionInput,
+  TransactionInputError,
+  CBORBytes,
+  CBORHex,
+  isTransactionInput,
+  equals,
+  generator,
+};
