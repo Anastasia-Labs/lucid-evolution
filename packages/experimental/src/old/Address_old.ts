@@ -24,18 +24,19 @@ export type AddressDetails = {
   stakeCredential?: Credential.Credential;
 };
 
-export function validatorToRewardAddress(
-  network: Network.Network,
-  validator: Script.Certificate | Script.Withdrawal,
-): RewardAddress {
-  const validatorHash = Script.toScriptHash(validator);
-  return CML.RewardAddress._newUnsafe(
-    Network.toId(network),
-    CML.Credential.newScriptUnsafe(CML.ScriptHash.fromHexUnsafe(validatorHash)),
-  )
-    .to_address()
-    .to_bech32(undefined);
-}
+//FIX:
+// export function validatorToRewardAddress(
+//   network: Network.Network,
+//   validator: Script.Certificate | Script.Withdrawal,
+// ): RewardAddress {
+//   const validatorHash = Script.toScriptHash(validator);
+//   return CML.RewardAddress._newUnsafe(
+//     Network.toId(network),
+//     CML.Credential.newScriptUnsafe(CML.ScriptHash.fromHexUnsafe(validatorHash)),
+//   )
+//     .to_address()
+//     .to_bech32(undefined);
+// }
 
 /** Address can be in Bech32 or Hex. */
 export function getAddressDetails(address: string): AddressDetails {

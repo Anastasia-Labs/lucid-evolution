@@ -1,14 +1,8 @@
 import * as Address from "./Address.js";
-import * as SerdeImpl from "./Serialization.js";
-import * as Bytes from "./Bytes.js";
-import * as KeyHash from "./KeyHash.js";
-import * as ScriptHash from "./ScriptHash.js";
-import * as PointerAddress from "./PointerAddress.js";
-import * as Bech32 from "./Bech32.js";
-import * as PaymentAddress from "./PaymentAddress.js";
-import * as RewardAddress from "./RewardAddress.js";
-import { ParseError } from "effect/ParseResult";
-import { Effect } from "effect";
+import * as _Bech32 from "./Bech32.js";
+import { Effect, ParseResult, Schema } from "effect";
+import * as NetworkId from "./NetworkId.js";
+import * as Hex from "./Hex.js";
 
 /**
  * Extended address information with both structured data and serialized formats
@@ -17,119 +11,68 @@ import { Effect } from "effect";
  * @since 2.0.0
  * @category model
  */
-export type AddressDetails = Address.Address & {
-  address: {
-    bech32: string;
-    hex: string;
-  };
-};
+
+declare const NominalType: unique symbol;
+interface AddressDetails {
+  readonly [NominalType]: unique symbol;
+}
 
 /**
- * Extract detailed information from a bech32 address
- *
- * @example
- * import { AddressDetails } from "@lucid-evolution/experimental";
- * import { Effect } from "effect";
- * import assert from "assert";
- *
- * const effect = AddressDetails.fromBech32("addr1qx2fxv2umyhttkxyxp8x0dlpdt3k6cwng5pxj3jhsydzer3n0d3vllmyqwsx5wktcd8cc3sq835lu7drv2xwl2wywfgse35a3x");
- * const details = Effect.runSync(effect);
- * assert(details._tag === "BaseAddress");
- * assert(details.networkId === 1);
- * assert(details.address.bech32 === "addr1qx2fxv2umyhttkxyxp8x0dlpdt3k6cwng5pxj3jhsydzer3n0d3vllmyqwsx5wktcd8cc3sq835lu7drv2xwl2wywfgse35a3x");
- * assert(typeof details.address.hex === "string");
+ * Pointer address with payment credential and pointer to stake registration
  *
  * @since 2.0.0
- * @category constructors
+ * @category schemas
  */
-export const fromBech32: SerdeImpl.FromBech32<
+class AddressDetails extends Schema.TaggedClass<AddressDetails>(
+  "AddressDetails",
+)("AddressDetails", {
+  networkId: NetworkId.NetworkId,
+  type: Schema.Literal(Address.Address.Type._tag),
+  address: Address.Address,
+  bech32: _Bech32.Bech32,
+  hex: Hex.HexString,
+}) {}
+
+const Bech32 = Schema.transformOrFail(
+  Schema.typeSchema(_Bech32.Bech32),
   AddressDetails,
-  | Bytes.BytesError
-  | Address.AddressError
-  | KeyHash.KeyHashError
-  | ScriptHash.ScriptHashError
-  | PointerAddress.PointerAddressError
-  | Bech32.Bech32Error
-  | ParseError
-> = Effect.fnUntraced(function* (bech32Address) {
-  const decodedAddress = yield* Address.fromBech32(bech32Address);
-  const hex = Address.toHex(decodedAddress);
-  return {
-    ...decodedAddress,
-    address: {
-      bech32: bech32Address,
-      hex,
-    },
-  } as AddressDetails;
-});
+  {
+    strict: true,
+    encode: (toI, options, ast, toA) => ParseResult.succeed(toA.bech32),
+    decode: (fromI, options, ast, fromA) =>
+      Effect.gen(function* () {
+        const address = yield* ParseResult.decode(Address.Bech32)(fromA);
+        const hex = yield* ParseResult.encode(Address.HexString)(address);
+        return new AddressDetails({
+          networkId: address.networkId,
+          type: address._tag,
+          address,
+          bech32: fromA,
+          hex,
+        });
+      }),
+  },
+);
 
-/**
- * Extract detailed information from a hex-encoded address
- *
- * @example
- * import { AddressDetails } from "@lucid-evolution/experimental";
- * import { Effect } from "effect";
- * import assert from "assert";
- *
- * const effect = AddressDetails.fromHex("019493315cd92eb5d8c4304e67b7e16ae36d61d34502694657811a2c8e337b62cfff6403a06a3acbc34f8c46003c69fe79a3628cefa9c47251");
- * const details = Effect.runSync(effect);
- * assert(details._tag === "BaseAddress");
- * assert(details.networkId === 1);
- * assert(typeof details.address.bech32 === "string");
- * assert(details.address.hex === "019493315cd92eb5d8c4304e67b7e16ae36d61d34502694657811a2c8e337b62cfff6403a06a3acbc34f8c46003c69fe79a3628cefa9c47251");
- *
- * @since 2.0.0
- * @category constructors
- */
-export const fromHex: SerdeImpl.FromHex<
+const HexString = Schema.transformOrFail(
+  Schema.typeSchema(Hex.HexString),
   AddressDetails,
-  | Bytes.BytesError
-  | Address.AddressError
-  | KeyHash.KeyHashError
-  | ScriptHash.ScriptHashError
-  | PointerAddress.PointerAddressError
-  | ParseError
-> = Effect.fnUntraced(function* (hexAddress) {
-  const hex = yield* Bytes.fromHex(hexAddress);
-  const decodedAddress = yield* Address.fromBytes(hex);
-  const bech32 = Address.toBech32(decodedAddress);
-  return {
-    ...decodedAddress,
-    address: {
-      bech32,
-      hex: hexAddress,
-    },
-  } as AddressDetails;
-});
+  {
+    strict: true,
+    encode: (toI, options, ast, toA) => ParseResult.succeed(toA.hex),
+    decode: (fromI, options, ast, fromA) =>
+      Effect.gen(function* () {
+        const address = yield* ParseResult.decode(Address.HexString)(fromA);
+        const bech32 = yield* ParseResult.encode(Address.Bech32)(address);
+        return new AddressDetails({
+          networkId: address.networkId,
+          type: address._tag,
+          address,
+          bech32,
+          hex: fromA,
+        });
+      }),
+  },
+);
 
-/**
- * Extract address details from a string (auto-detects bech32 or hex format)
- *
- * @example
- * import { AddressDetails } from "@lucid-evolution/experimental";
- * import { Effect } from "effect";
- * import assert from "assert";
- *
- * // From bech32
- * const bech32Effect = AddressDetails.fromString("addr1qx2fxv2umyhttkxyxp8x0dlpdt3k6cwng5pxj3jhsydzer3n0d3vllmyqwsx5wktcd8cc3sq835lu7drv2xwl2wywfgse35a3x");
- * const bech32Details = Effect.runSync(bech32Effect);
- * assert(bech32Details._tag === "BaseAddress");
- *
- * // From hex
- * const hexEffect = AddressDetails.fromString("019493315cd92eb5d8c4304e67b7e16ae36d61d34502694657811a2c8e337b62cfff6403a06a3acbc34f8c46003c69fe79a3628cefa9c47251");
- * const hexDetails = Effect.runSync(hexEffect);
- * assert(hexDetails._tag === "BaseAddress");
- *
- * @since 2.0.0
- * @category constructors
- */
-export const fromString = Effect.fnUntraced(function* (stringAddress: string) {
-  const isBech32 =
-    PaymentAddress.isPaymentAddress(stringAddress) ||
-    RewardAddress.isRewardAddress(stringAddress);
-  if (isBech32) {
-    return yield* fromBech32(stringAddress);
-  } else {
-    return yield* fromHex(stringAddress);
-  }
-});
+export { AddressDetails, Bech32, HexString };

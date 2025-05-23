@@ -16,7 +16,8 @@ import { Effect } from "effect";
  * @since 2.0.0
  * @category transformation
  */
-export const fromBech32 = (
-  bech32Address: string,
-): Effect.Effect<number, Bech32.Bech32Error> =>
-  Effect.map(Bech32.toBytes(bech32Address), (bytes) => bytes[0]);
+//FIX:
+// export const fromBech32 = (
+//   bech32Address: string,
+// ): Effect.Effect<number, Bech32.Bech32Error> =>
+//   Effect.map(Bech32.toBytes(bech32Address), (bytes) => bytes[0]);

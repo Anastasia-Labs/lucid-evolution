@@ -9,20 +9,21 @@ export type Credential = {
   hash: KeyHash.KeyHash | ScriptHash.ScriptHash;
 };
 
-export function toRewardAddress(
-  network: Network.Network,
-  stakeCredential: Credential,
-): Address.RewardAddress {
-  return CML.RewardAddress.new(
-    Network.toId(network),
-    stakeCredential.type === "Key"
-      ? CML.Credential.new_pub_key(
-          CML.Ed25519KeyHash.from_hex(stakeCredential.hash),
-        )
-      : CML.Credential.new_script(
-          CML.ScriptHash.from_hex(stakeCredential.hash),
-        ),
-  )
-    .to_address()
-    .to_bech32(undefined);
-}
+//FIX:
+// export function toRewardAddress(
+//   network: Network.Network,
+//   stakeCredential: Credential,
+// ): Address.RewardAddress {
+//   return CML.RewardAddress.new(
+//     Network.toId(network),
+//     stakeCredential.type === "Key"
+//       ? CML.Credential.new_pub_key(
+//           CML.Ed25519KeyHash.from_hex(stakeCredential.hash),
+//         )
+//       : CML.Credential.new_script(
+//           CML.ScriptHash.from_hex(stakeCredential.hash),
+//         ),
+//   )
+//     .to_address()
+//     .to_bech32(undefined);
+// }

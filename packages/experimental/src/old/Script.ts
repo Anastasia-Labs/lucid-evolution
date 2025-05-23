@@ -176,35 +176,36 @@ export const CBOREncodingLevel = (script: string): "double" | "single" => {
   }
 };
 
-export function toAddress(
-  network: Network.Network,
-  validator: Spending,
-  stakeCredential?: Credential.Credential,
-): Address.Address {
-  const validatorHash = toScriptHash(validator);
-  if (stakeCredential) {
-    return CML.BaseAddress.new(
-      Network.toId(network),
-      CML.Credential.new_script(CML.ScriptHash.from_hex(validatorHash)),
-      stakeCredential.type === "Key"
-        ? CML.Credential.new_pub_key(
-            CML.Ed25519KeyHash.from_hex(stakeCredential.hash),
-          )
-        : CML.Credential.new_script(
-            CML.ScriptHash.from_hex(stakeCredential.hash),
-          ),
-    )
-      .to_address()
-      .to_bech32(undefined);
-  } else {
-    return CML.EnterpriseAddress.new(
-      Network.toId(network),
-      CML.Credential.new_script(CML.ScriptHash.from_hex(validatorHash)),
-    )
-      .to_address()
-      .to_bech32(undefined);
-  }
-}
+//FIX:
+// export function toAddress(
+//   network: Network.Network,
+//   validator: Spending,
+//   stakeCredential?: Credential.Credential,
+// ): Address.Address {
+//   const validatorHash = toScriptHash(validator);
+//   if (stakeCredential) {
+//     return CML.BaseAddress.new(
+//       Network.toId(network),
+//       CML.Credential.new_script(CML.ScriptHash.from_hex(validatorHash)),
+//       stakeCredential.type === "Key"
+//         ? CML.Credential.new_pub_key(
+//             CML.Ed25519KeyHash.from_hex(stakeCredential.hash),
+//           )
+//         : CML.Credential.new_script(
+//             CML.ScriptHash.from_hex(stakeCredential.hash),
+//           ),
+//     )
+//       .to_address()
+//       .to_bech32(undefined);
+//   } else {
+//     return CML.EnterpriseAddress.new(
+//       Network.toId(network),
+//       CML.Credential.new_script(CML.ScriptHash.from_hex(validatorHash)),
+//     )
+//       .to_address()
+//       .to_bech32(undefined);
+//   }
+// }
 
 export function toScriptHash(validator: Script): ScriptHash.ScriptHash {
   switch (validator.type) {
