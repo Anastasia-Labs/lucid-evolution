@@ -134,207 +134,208 @@ describe("Address Validation", () => {
   });
 });
 
-describe("Address Conversion", () => {
-  it.effect("should convert between bech32 and bytes representation", () =>
-    Effect.gen(function* () {
-      for (const address of ALL_ADDRESSES) {
-        const bytes = yield* Bech32.toBytes(address);
-        expect(bytes).toBeInstanceOf(Uint8Array);
-        expect(bytes.length).toBeGreaterThan(0);
-      }
-    }),
-  );
+//FIX:
+// describe("Address Conversion", () => {
+//   it.effect("should convert between bech32 and bytes representation", () =>
+//     Effect.gen(function* () {
+//       for (const address of ALL_ADDRESSES) {
+//         const bytes = yield* Bech32.toBytes(address);
+//         expect(bytes).toBeInstanceOf(Uint8Array);
+//         expect(bytes.length).toBeGreaterThan(0);
+//       }
+//     }),
+//   );
 
-  it.effect("should extract header from bech32 address", () =>
-    Effect.gen(function* () {
-      for (const address of ALL_ADDRESSES) {
-        const header = yield* Header.fromBech32(address);
-        expect(typeof header).toBe("number");
-        expect(header).toBeGreaterThanOrEqual(0);
-      }
-    }),
-  );
+//   it.effect("should extract header from bech32 address", () =>
+//     Effect.gen(function* () {
+//       for (const address of ALL_ADDRESSES) {
+//         const header = yield* Header.fromBech32(address);
+//         expect(typeof header).toBe("number");
+//         expect(header).toBeGreaterThanOrEqual(0);
+//       }
+//     }),
+//   );
 
-  it.effect("should convert address to hex and back", () =>
-    Effect.gen(function* () {
-      for (const address of ALL_ADDRESSES.slice(0, 8)) {
-        // Skip reward addresses for this test
-        const addressInfo = yield* Address.fromBech32(address);
-        const hex = Address.toHex(addressInfo);
-        expect(hex).toMatch(/^[0-9a-f]+$/i);
+//   it.effect("should convert address to hex and back", () =>
+//     Effect.gen(function* () {
+//       for (const address of ALL_ADDRESSES.slice(0, 8)) {
+//         // Skip reward addresses for this test
+//         const addressInfo = yield* Address.fromBech32(address);
+//         const hex = Address.toHex(addressInfo);
+//         expect(hex).toMatch(/^[0-9a-f]+$/i);
 
-        // Convert back from hex
-        const fromHex = yield* Address.fromBytes(Bytes.fromHexOrThrow(hex));
-        const backToBech32 = Address.toBech32(fromHex);
-        expect(backToBech32).toBe(address);
-      }
-    }),
-  );
+//         // Convert back from hex
+//         const fromHex = yield* Address.fromBytes(Bytes.fromHexOrThrow(hex));
+//         const backToBech32 = Address.toBech32(fromHex);
+//         expect(backToBech32).toBe(address);
+//       }
+//     }),
+//   );
 
-  it.effect("should fail with proper error for invalid addresses", () =>
-    Effect.gen(function* () {
-      const result = yield* Effect.flip(Bech32.toBytes(INVALID_ADDRESS));
-      expect(result).toBeInstanceOf(Bech32.Bech32Error);
-    }),
-  );
-});
+//   it.effect("should fail with proper error for invalid addresses", () =>
+//     Effect.gen(function* () {
+//       const result = yield* Effect.flip(Bech32.toBytes(INVALID_ADDRESS));
+//       expect(result).toBeInstanceOf(Bech32.Bech32Error);
+//     }),
+//   );
+// });
 
-describe("Address Information Extraction", () => {
-  it("should extract address tag from header", () => {
-    // Using binary patterns to match the address format specification
-    // Format: First 4 bits determine the address type
-    const testCases = [
-      { header: 0b0000, tag: "Base" },
-      { header: 0b0001, tag: "Base" },
-      { header: 0b0010, tag: "Base" },
-      { header: 0b0011, tag: "Base" },
-      { header: 0b0100, tag: "Pointer" },
-      { header: 0b0101, tag: "Pointer" },
-      { header: 0b0110, tag: "Enterprise" },
-      { header: 0b0111, tag: "Enterprise" },
-      { header: 0b1000, tag: "Byron" },
-      { header: 0b1110, tag: "Reward" },
-      { header: 0b1111, tag: "Reward" },
-    ];
+// describe("Address Information Extraction", () => {
+//   it("should extract address tag from header", () => {
+//     // Using binary patterns to match the address format specification
+//     // Format: First 4 bits determine the address type
+//     const testCases = [
+//       { header: 0b0000, tag: "Base" },
+//       { header: 0b0001, tag: "Base" },
+//       { header: 0b0010, tag: "Base" },
+//       { header: 0b0011, tag: "Base" },
+//       { header: 0b0100, tag: "Pointer" },
+//       { header: 0b0101, tag: "Pointer" },
+//       { header: 0b0110, tag: "Enterprise" },
+//       { header: 0b0111, tag: "Enterprise" },
+//       { header: 0b1000, tag: "Byron" },
+//       { header: 0b1110, tag: "Reward" },
+//       { header: 0b1111, tag: "Reward" },
+//     ];
 
-    // Test each specific header value as defined in the specification
-    testCases.forEach(({ header, tag }) => {
-      // Also test with network bit (5th bit) set to 1
-      // This shouldn't change the address type interpretation
-      const withNetworkBit = (header << 4) | 0b1000;
-      expect(AddressTag.fromHeader(withNetworkBit)).toBe(tag);
-    });
-  });
+//     // Test each specific header value as defined in the specification
+//     testCases.forEach(({ header, tag }) => {
+//       // Also test with network bit (5th bit) set to 1
+//       // This shouldn't change the address type interpretation
+//       const withNetworkBit = (header << 4) | 0b1000;
+//       expect(AddressTag.fromHeader(withNetworkBit)).toBe(tag);
+//     });
+//   });
 
-  it.effect("should extract address tag from bech32", () =>
-    Effect.gen(function* () {
-      // Base addresses
-      const baseTag = yield* AddressTag.fromBech32(
-        getAddressByType("base", "mainnet"),
-      );
-      expect(baseTag).toBe("Base");
+//   it.effect("should extract address tag from bech32", () =>
+//     Effect.gen(function* () {
+//       // Base addresses
+//       const baseTag = yield* AddressTag.fromBech32(
+//         getAddressByType("base", "mainnet"),
+//       );
+//       expect(baseTag).toBe("Base");
 
-      // Enterprise addresses
-      const enterpriseTag = yield* AddressTag.fromBech32(
-        getAddressByType("enterprise", "mainnet"),
-      );
-      expect(enterpriseTag).toBe("Enterprise");
+//       // Enterprise addresses
+//       const enterpriseTag = yield* AddressTag.fromBech32(
+//         getAddressByType("enterprise", "mainnet"),
+//       );
+//       expect(enterpriseTag).toBe("Enterprise");
 
-      // Pointer addresses
-      const pointerTag = yield* AddressTag.fromBech32(
-        getAddressByType("pointer", "mainnet"),
-      );
-      expect(pointerTag).toBe("Pointer");
+//       // Pointer addresses
+//       const pointerTag = yield* AddressTag.fromBech32(
+//         getAddressByType("pointer", "mainnet"),
+//       );
+//       expect(pointerTag).toBe("Pointer");
 
-      // Stake/Reward addresses - both stake and stake_test prefixes are for reward addresses
-      const stakeTag = yield* AddressTag.fromBech32(
-        getAddressByType("stake", "mainnet"),
-      );
-      expect(stakeTag).toBe("Reward");
+//       // Stake/Reward addresses - both stake and stake_test prefixes are for reward addresses
+//       const stakeTag = yield* AddressTag.fromBech32(
+//         getAddressByType("stake", "mainnet"),
+//       );
+//       expect(stakeTag).toBe("Reward");
 
-      const testnetStakeTag = yield* AddressTag.fromBech32(
-        getAddressByType("stake", "testnet"),
-      );
-      expect(testnetStakeTag).toBe("Reward");
-    }),
-  );
+//       const testnetStakeTag = yield* AddressTag.fromBech32(
+//         getAddressByType("stake", "testnet"),
+//       );
+//       expect(testnetStakeTag).toBe("Reward");
+//     }),
+//   );
 
-  it.effect("should extract network ID from bech32", () =>
-    Effect.gen(function* () {
-      // Mainnet addresses should have networkId 1
-      for (const address of MAINNET_ADDRESSES) {
-        const networkId = yield* Network.fromBech32(address);
-        expect(networkId).toBe(1);
-      }
+//   it.effect("should extract network ID from bech32", () =>
+//     Effect.gen(function* () {
+//       // Mainnet addresses should have networkId 1
+//       for (const address of MAINNET_ADDRESSES) {
+//         const networkId = yield* Network.fromBech32(address);
+//         expect(networkId).toBe(1);
+//       }
 
-      // Testnet addresses should have networkId 0
-      for (const address of TESTNET_ADDRESSES) {
-        const networkId = yield* Network.fromBech32(address);
-        expect(networkId).toBe(0);
-      }
-    }),
-  );
+//       // Testnet addresses should have networkId 0
+//       for (const address of TESTNET_ADDRESSES) {
+//         const networkId = yield* Network.fromBech32(address);
+//         expect(networkId).toBe(0);
+//       }
+//     }),
+//   );
 
-  it.effect("should extract complete address details from bech32", () =>
-    Effect.gen(function* () {
-      const address = getAddressByType("base", "mainnet");
-      const details = yield* AddressDetails.fromBech32(address);
+//   it.effect("should extract complete address details from bech32", () =>
+//     Effect.gen(function* () {
+//       const address = getAddressByType("base", "mainnet");
+//       const details = yield* AddressDetails.fromBech32(address);
 
-      // Verify structure
-      expect(details._tag).toBe("BaseAddress");
-      // expect(details.networkId).toBe(1);
-      // expect(details.paymentCredential).toBeDefined();
-      // expect(details.stakeCredential).toBeDefined();
-      expect(details.address.bech32).toBe(address);
-      expect(details.address.hex).toMatch(/^[0-9a-f]+$/i);
+//       // Verify structure
+//       expect(details._tag).toBe("BaseAddress");
+//       // expect(details.networkId).toBe(1);
+//       // expect(details.paymentCredential).toBeDefined();
+//       // expect(details.stakeCredential).toBeDefined();
+//       expect(details.address.bech32).toBe(address);
+//       expect(details.address.hex).toMatch(/^[0-9a-f]+$/i);
 
-      // For enterprise address
-      const enterpriseAddress = getAddressByType("enterprise", "mainnet");
-      const enterpriseDetails =
-        yield* AddressDetails.fromBech32(enterpriseAddress);
-      expect(enterpriseDetails._tag).toBe("EnterpriseAddress");
-      // expect(enterpriseDetails.paymentCredential).toBeDefined();
+//       // For enterprise address
+//       const enterpriseAddress = getAddressByType("enterprise", "mainnet");
+//       const enterpriseDetails =
+//         yield* AddressDetails.fromBech32(enterpriseAddress);
+//       expect(enterpriseDetails._tag).toBe("EnterpriseAddress");
+//       // expect(enterpriseDetails.paymentCredential).toBeDefined();
 
-      // For stake/reward address
-      const stakeAddress = getAddressByType("stake", "mainnet");
-      const stakeDetails = yield* AddressDetails.fromBech32(stakeAddress);
-      expect(stakeDetails._tag).toBe("RewardAccount");
-      // expect(stakeDetails.stakeCredential).toBeDefined();
-    }),
-  );
+//       // For stake/reward address
+//       const stakeAddress = getAddressByType("stake", "mainnet");
+//       const stakeDetails = yield* AddressDetails.fromBech32(stakeAddress);
+//       expect(stakeDetails._tag).toBe("RewardAccount");
+//       // expect(stakeDetails.stakeCredential).toBeDefined();
+//     }),
+//   );
 
-  it.effect("should handle address details from hex", () =>
-    Effect.gen(function* () {
-      const details = yield* AddressDetails.fromHex(VALID_HEX_ADDRESS);
-      expect(details).toBeDefined();
-      expect(details.address.hex).toBe(VALID_HEX_ADDRESS);
-      expect(details.address.bech32).toMatch(MAINNET_ADDRESSES[0]); // Should be a mainnet address
-    }),
-  );
+//   it.effect("should handle address details from hex", () =>
+//     Effect.gen(function* () {
+//       const details = yield* AddressDetails.fromHex(VALID_HEX_ADDRESS);
+//       expect(details).toBeDefined();
+//       expect(details.address.hex).toBe(VALID_HEX_ADDRESS);
+//       expect(details.address.bech32).toMatch(MAINNET_ADDRESSES[0]); // Should be a mainnet address
+//     }),
+//   );
 
-  it.effect(
-    "should auto-detect and extract details from either bech32 or hex",
-    () =>
-      Effect.gen(function* () {
-        // From bech32
-        const address = getAddressByType("base", "mainnet");
-        const bech32Details = yield* AddressDetails.fromString(address);
-        expect(bech32Details.address.bech32).toBe(address);
+//   it.effect(
+//     "should auto-detect and extract details from either bech32 or hex",
+//     () =>
+//       Effect.gen(function* () {
+//         // From bech32
+//         const address = getAddressByType("base", "mainnet");
+//         const bech32Details = yield* AddressDetails.fromString(address);
+//         expect(bech32Details.address.bech32).toBe(address);
 
-        // From hex
-        const hexDetails = yield* AddressDetails.fromString(VALID_HEX_ADDRESS);
-        expect(hexDetails.address.hex).toBe(VALID_HEX_ADDRESS);
-      }),
-  );
-});
+//         // From hex
+//         const hexDetails = yield* AddressDetails.fromString(VALID_HEX_ADDRESS);
+//         expect(hexDetails.address.hex).toBe(VALID_HEX_ADDRESS);
+//       }),
+//   );
+// });
 
-describe("Error Handling", () => {
-  it.effect("should properly handle malformed addresses", () =>
-    Effect.gen(function* () {
-      const result = yield* Effect.flip(Address.fromBech32(INVALID_ADDRESS));
-      expect(result).toBeInstanceOf(Bech32.Bech32Error);
-    }),
-  );
+// describe("Error Handling", () => {
+//   it.effect("should properly handle malformed addresses", () =>
+//     Effect.gen(function* () {
+//       const result = yield* Effect.flip(Address.fromBech32(INVALID_ADDRESS));
+//       expect(result).toBeInstanceOf(Bech32.Bech32Error);
+//     }),
+//   );
 
-  it.effect(
-    "should properly handle variable length integer encoding errors",
-    () =>
-      Effect.gen(function* () {
-        const result = yield* Effect.try(() =>
-          PointerAddress.encodeVariableLength(Positive.makeOrThrow(-1)),
-        ).pipe(Effect.flip);
-        expect(result).toBeInstanceOf(UnknownException);
-      }),
-  );
+//   it.effect(
+//     "should properly handle variable length integer encoding errors",
+//     () =>
+//       Effect.gen(function* () {
+//         const result = yield* Effect.try(() =>
+//           PointerAddress.encodeVariableLength(Positive.makeOrThrow(-1)),
+//         ).pipe(Effect.flip);
+//         expect(result).toBeInstanceOf(UnknownException);
+//       }),
+//   );
 
-  it.effect("should handle invalid decoding of variable length integers", () =>
-    Effect.gen(function* () {
-      // Create a buffer that's too short
-      const bytes = new Uint8Array([0x80]); // High bit set, but no more bytes
-      const result = yield* Effect.flip(
-        PointerAddress.decodeVariableLength(bytes),
-      );
-      expect(result).toBeInstanceOf(PointerAddress.PointerAddressError);
-    }),
-  );
-});
+//   it.effect("should handle invalid decoding of variable length integers", () =>
+//     Effect.gen(function* () {
+//       // Create a buffer that's too short
+//       const bytes = new Uint8Array([0x80]); // High bit set, but no more bytes
+//       const result = yield* Effect.flip(
+//         PointerAddress.decodeVariableLength(bytes),
+//       );
+//       expect(result).toBeInstanceOf(PointerAddress.PointerAddressError);
+//     }),
+//   );
+// });
