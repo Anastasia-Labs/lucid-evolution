@@ -20,7 +20,6 @@ export class Pointer extends Schema.TaggedClass<Pointer>("Pointer")("Pointer", {
       txIndex: this.txIndex,
       certIndex: this.certIndex,
     };
-    // return `Pointer(${this.slot}, ${this.txIndex}, ${this.certIndex})`;
   }
 }
 

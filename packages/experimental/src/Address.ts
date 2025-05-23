@@ -171,46 +171,6 @@ const Bech32 = Schema.transformOrFail(
   },
 );
 
-// /**
-//  * Serialize a PaymentAddress to JSON format
-//  *
-//  * @example
-//  * import { Address } from "@lucid-evolution/experimental";
-//  * import assert from "assert";
-//  *
-//  * const json = Address.paymentAddressToJson("addr1qx2fxv2umyhttkxyxp8x0dlpdt3k6cwng5pxj3jhsydzer3n0d3vllmyqwsx5wktcd8cc3sq835lu7drv2xwl2wywfgse35a3x");
-//  * assert(typeof json === "string");
-//  * assert(JSON.parse(json).address === "addr1qx2fxv2umyhttkxyxp8x0dlpdt3k6cwng5pxj3jhsydzer3n0d3vllmyqwsx5wktcd8cc3sq835lu7drv2xwl2wywfgse35a3x");
-//  *
-//  * @since 2.0.0
-//  * @category encoding/decoding
-//  */
-// export const paymentAddressToJson = (address: string): string =>
-//   JSON.stringify({
-//     address,
-//   });
-
-// /**
-//  * Encode a Cardano address to CBOR format
-//  *
-//  * @example
-//  * import { Address } from "@lucid-evolution/experimental";
-//  * import { Effect } from "effect";
-//  * import assert from "assert";
-//  *
-//  * const effect = Address.fromBech32("addr1qx2fxv2umyhttkxyxp8x0dlpdt3k6cwng5pxj3jhsydzer3n0d3vllmyqwsx5wktcd8cc3sq835lu7drv2xwl2wywfgse35a3x")
-//  *   .pipe(Effect.map(Address.toCBOR));
-//  *
-//  * const cborHex = Effect.runSync(effect);
-//  * assert(typeof cborHex === "string");
-//  * assert(cborHex.length > 0);
-//  *
-//  * @since 2.0.0
-//  * @category encoding/decoding
-//  */
-// export const toCBOR = (address: Address) =>
-//   Hex.fromBytes(CBOR.encodeAsBytesOrThrow(toBytes(address)));
-
 const equals = (a: Address, b: Address): boolean => {
   if (a._tag !== b._tag) {
     return false;

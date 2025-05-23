@@ -63,10 +63,11 @@ for (const type of addressTypes) {
   const mainnetAddr = getAddressByType(type, "mainnet");
   const testnetAddr = getAddressByType(type, "testnet");
 
-  bench.add(`addressDetailsFromBech32 - ${type} address`, () => {
-    Effect.runSync(AddressDetails.fromBech32(mainnetAddr));
-    Effect.runSync(AddressDetails.fromBech32(testnetAddr));
-  });
+  //FIX:
+  // bench.add(`addressDetailsFromBech32 - ${type} address`, () => {
+  //   Effect.runSync(AddressDetails.fromBech32(mainnetAddr));
+  //   Effect.runSync(AddressDetails.fromBech32(testnetAddr));
+  // });
 
   bench.add(`getAddressDetails - ${type} address`, () => {
     AddressOld.getAddressDetails(mainnetAddr);

@@ -78,8 +78,7 @@ const Bytes = Schema.transform(KeyHashBytes, KeyHash, {
   decode: (_fromI, fromA) => new KeyHash({ hash: Hex.fromBytes(fromA) }),
 });
 
-// tarnsformation KeyHash => Hex
-const KeyHashFromHex = Schema.transform(Hex.HexString, KeyHash, {
+const HexString = Schema.transform(Hex.HexString, KeyHash, {
   strict: true,
   encode: (_toI, toA) => toA.hash,
   decode: (fromI, _fromA) => new KeyHash({ hash: fromI }),
@@ -128,9 +127,8 @@ const generator = FastCheck.uint8Array({
 export {
   KeyHash,
   KeyHashError,
-  KeyHashBytes,
   Bytes,
-  KeyHashFromHex as Hash,
+  HexString,
   equals,
   generator,
   KEYHASH_BYTES_LENGTH,

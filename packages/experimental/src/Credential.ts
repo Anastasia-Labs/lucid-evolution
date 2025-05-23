@@ -50,7 +50,7 @@ type Credential = typeof Credential.Type;
  */
 const isCredential = Schema.is(Credential);
 
-const CredentialFromCBORBytes = Schema.transformOrFail(
+const CBORBytes = Schema.transformOrFail(
   Schema.Uint8ArrayFromSelf.annotations({
     identifier: "CBORBytes",
   }),
@@ -99,7 +99,7 @@ const CredentialFromCBORBytes = Schema.transformOrFail(
   },
 );
 
-const CredentialFromCBORHex = Schema.transformOrFail(
+const CBORHex = Schema.transformOrFail(
   Hex.HexString.pipe(Schema.typeSchema).annotations({
     identifier: "CBORHex",
   }),
@@ -107,12 +107,9 @@ const CredentialFromCBORHex = Schema.transformOrFail(
   {
     strict: true,
     encode: (toI, options, ast, toA) =>
-      pipe(
-        ParseResult.encode(CredentialFromCBORBytes)(toA),
-        Effect.map(Hex.fromBytes),
-      ),
+      pipe(ParseResult.encode(CBORBytes)(toA), Effect.map(Hex.fromBytes)),
     decode: (fromA, options, ast) =>
-      pipe(Hex.toBytes(fromA), ParseResult.decode(CredentialFromCBORBytes)),
+      pipe(Hex.toBytes(fromA), ParseResult.decode(CBORBytes)),
   },
 );
 
@@ -160,8 +157,8 @@ const generator = FastCheck.oneof(KeyHash.generator, ScriptHash.generator);
 export {
   Credential,
   CredentialError,
-  CredentialFromCBORBytes as CBORBytes,
-  CredentialFromCBORHex as CBORHex,
+  CBORBytes,
+  CBORHex,
   isCredential,
   equals,
   generator,
