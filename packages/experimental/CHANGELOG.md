@@ -1,5 +1,13 @@
 # @lucid-evolution/experimental
 
+## 0.0.6
+
+### Patch Changes
+
+- [#610](https://github.com/Anastasia-Labs/lucid-evolution/pull/610) [`b240094`](https://github.com/Anastasia-Labs/lucid-evolution/commit/b240094b8ebea14a66a54581c1a42965e4b231f2) Thanks [@Drop-Table-Users](https://github.com/Drop-Table-Users)! - Add TransactionInput and TransactionHash CML equivalent types to experimental
+
+- [#600](https://github.com/Anastasia-Labs/lucid-evolution/pull/600) [`9ffa264`](https://github.com/Anastasia-Labs/lucid-evolution/commit/9ffa264741e8964e3fa10f6e877618785cc4824f) Thanks [@solidsnakedev](https://github.com/solidsnakedev)! - add nominal types to all addresses
+
 ## 0.0.5
 
 ### Patch Changes
