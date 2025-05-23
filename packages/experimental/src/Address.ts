@@ -239,4 +239,49 @@ const generator = FastCheck.oneof(
   RewardAccount.generator,
 );
 
-export { Address, AddressError, Bytes, HexString, Bech32, equals, generator };
+const encodeBech32 = Schema.encode(Bech32);
+const decodeBech32 = Schema.decodeUnknown(Bech32);
+const encodeHexString = Schema.encode(HexString);
+const decodeHexString = Schema.decodeUnknown(HexString);
+const encodeBytes = Schema.encode(Bytes);
+const decodeBytes = Schema.decodeUnknown(Bytes);
+const encodeBech32OrThrow = Schema.encodeSync(Bech32);
+const decodeBech32OrThrow = Schema.decodeUnknownSync(Bech32);
+const encodeHexStringOrThrow = Schema.encodeSync(HexString);
+const decodeHexStringOrThrow = Schema.decodeUnknownSync(HexString);
+const decodeBytesOrThrow = Schema.decodeSync(Bytes);
+const encodeBytesOrThrow = Schema.encodeUnknownSync(Bytes);
+const encodeBech32Either = Schema.encodeEither(Bech32);
+const decodeBech32Either = Schema.decodeUnknownEither(Bech32);
+const encodeHexStringEither = Schema.encodeEither(HexString);
+const decodeHexStringEither = Schema.decodeUnknownEither(HexString);
+const encodeBytesEither = Schema.encodeEither(Bytes);
+const decodeBytesEither = Schema.decodeUnknownEither(Bytes);
+
+export {
+  Address,
+  AddressError,
+  Bytes,
+  HexString,
+  Bech32,
+  equals,
+  generator,
+  encodeBech32,
+  decodeBech32,
+  encodeHexString,
+  decodeHexString,
+  encodeBytes,
+  decodeBytes,
+  encodeBech32OrThrow,
+  decodeBech32OrThrow,
+  encodeHexStringOrThrow,
+  decodeHexStringOrThrow,
+  decodeBytesOrThrow,
+  encodeBytesOrThrow,
+  encodeBech32Either,
+  decodeBech32Either,
+  encodeHexStringEither,
+  decodeHexStringEither,
+  encodeBytesEither,
+  decodeBytesEither,
+};
