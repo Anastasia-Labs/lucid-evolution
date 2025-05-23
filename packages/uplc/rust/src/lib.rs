@@ -32,7 +32,7 @@ pub fn eval_phase_two_raw(
         false,
         |_| (),
     )
-    .map(|r| r.iter().map(|i| js_sys::Uint8Array::from(&i[..])).collect())
+    .map(|r| r.iter().map(|i| js_sys::Uint8Array::from(&i.0[..])).collect())
     .map_err(|e| e.to_string().into());
 }
 
