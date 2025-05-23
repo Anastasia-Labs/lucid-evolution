@@ -1,8 +1,5 @@
-import { Effect, Schema, Data, FastCheck, Inspectable } from "effect";
-import * as CBOR from "./CBOR.js";
-import * as Bytes from "./Bytes.js";
-import { HexStringSchema } from "./Combinator.js";
-import * as SerdeImpl from "./SerdeImpl.js";
+import { Schema, Data, FastCheck, pipe, Inspectable } from "effect";
+import * as Hex from "./Hex.js";
 
 /**
  * The length in bytes of a ScriptHash.
@@ -10,7 +7,7 @@ import * as SerdeImpl from "./SerdeImpl.js";
  * @since 2.0.0
  * @category constants
  */
-export const SCRIPTHASH_BYTES_LENGTH = 28;
+const SCRIPTHASH_BYTES_LENGTH = 28;
 
 /**
  * The length in hex characters of a ScriptHash.
@@ -18,11 +15,10 @@ export const SCRIPTHASH_BYTES_LENGTH = 28;
  * @since 2.0.0
  * @category constants
  */
-export const SCRIPTHASH_HEX_LENGTH = 56;
+const SCRIPTHASH_HEX_LENGTH = 56;
 
 /**
- * Error class for ScriptHash related operations
- * Extends TaggedError for better error handling and categorization
+ * Error class for ScriptHash related operations.
  *
  * @example
  * import { ScriptHash } from "@lucid-evolution/experimental";
@@ -34,26 +30,17 @@ export const SCRIPTHASH_HEX_LENGTH = 56;
  * @since 2.0.0
  * @category errors
  */
-export class ScriptHashError extends Data.TaggedError("ScriptHashError")<{
-  message: string;
-  cause?: unknown;
+class ScriptHashError extends Data.TaggedError("ScriptHashError")<{
+  message?: string;
+  reason?:
+    | "InvalidHexLength"
+    | "InvalidBytesLength"
+    | "InvalidHexFormat"
+    | "InvalidCBORFormat";
 }> {}
 
-/**
- * Schema for validating ScriptHash hex strings with proper length.
- *
- * @since 2.0.0
- * @category schemas
- */
-const ScriptHashHexString = HexStringSchema.pipe(
-  Schema.length(SCRIPTHASH_HEX_LENGTH),
-).annotations({
-  message: (issue) =>
-    `must be ${SCRIPTHASH_HEX_LENGTH} characters, got: ${issue.actual}.`,
-});
-
-export declare const NominalType: unique symbol;
-export interface ScriptHash {
+declare const NominalType: unique symbol;
+interface ScriptHash {
   readonly [NominalType]: unique symbol;
 }
 
@@ -64,8 +51,8 @@ export interface ScriptHash {
  * @since 2.0.0
  * @category schemas
  */
-export class ScriptHash extends Schema.TaggedClass<ScriptHash>()("ScriptHash", {
-  hash: ScriptHashHexString,
+class ScriptHash extends Schema.TaggedClass<ScriptHash>()("ScriptHash", {
+  hash: Hex.HexString,
 }) {
   [Inspectable.NodeInspectSymbol]() {
     return {
@@ -75,269 +62,30 @@ export class ScriptHash extends Schema.TaggedClass<ScriptHash>()("ScriptHash", {
   }
 }
 
-/**
- * Convert a ScriptHash to CBOR bytes.
- *
- * @example
- * import { ScriptHash, Bytes } from "@lucid-evolution/experimental";
- * import assert from "assert";
- *
- * const scriptHash = ScriptHash.makeOrThrow("c37b1b5dc0669f1d3c61a6fddb2e8fde96be87b881c60bce8e8d542f");
- * const bytes = ScriptHash.toCBORBytes(scriptHash);
- * assert(bytes instanceof Uint8Array);
- *
- * @since 2.0.0
- * @category encoding/decoding
- */
-export const toCBORBytes: SerdeImpl.ToCBORBytes<ScriptHash> = (scriptHash) => {
-  const hashBytes = Bytes.fromHexOrThrow(scriptHash.hash);
-  return CBOR.encodeOrThrow(hashBytes);
-};
+const ScriptHashBytes = pipe(
+  Schema.Uint8Array,
+  Schema.filter((a) => a.length === SCRIPTHASH_BYTES_LENGTH),
+  Schema.typeSchema,
+).annotations({
+  message: (issue) =>
+    `${issue.actual} must be a byte array of length ${SCRIPTHASH_BYTES_LENGTH}`,
+  identifier: "ScriptHashBytes",
+});
 
-/**
- * Convert a ScriptHash to CBOR hex string.
- *
- * @example
- * import { ScriptHash } from "@lucid-evolution/experimental";
- * import assert from "assert";
- *
- * const scriptHash = ScriptHash.makeOrThrow("c37b1b5dc0669f1d3c61a6fddb2e8fde96be87b881c60bce8e8d542f");
- * const hex = ScriptHash.toCBOR(scriptHash);
- * assert(hex.startsWith("581c"));
- * assert(hex.includes("c37b1b5dc0669f1d3c61a6fddb2e8fde96be87b881c60bce8e8d542f"));
- *
- * @since 2.0.0
- * @category encoding/decoding
- */
-export const toCBOR: SerdeImpl.ToCBOR<ScriptHash> = (scriptHash) => {
-  const bytes = toCBORBytes(scriptHash);
-  return Bytes.toHexOrThrow(bytes);
-};
+const Bytes = Schema.transform(ScriptHashBytes, ScriptHash, {
+  strict: true,
+  encode: (_toI, toA) => Hex.toBytes(toA.hash),
+  decode: (_fromI, fromA) => new ScriptHash({ hash: Hex.fromBytes(fromA) }),
+});
 
-/**
- * Create a ScriptHash from a CBOR hex string.
- *
- * @example
- * import { ScriptHash } from "@lucid-evolution/experimental";
- * import { Effect } from "effect";
- * import assert from "assert";
- *
- * const cborHex = "581cc37b1b5dc0669f1d3c61a6fddb2e8fde96be87b881c60bce8e8d542f";
- * const scriptHashEffect = ScriptHash.fromCBOR(cborHex);
- * const scriptHash = Effect.runSync(scriptHashEffect);
- * assert(scriptHash._tag === "ScriptHash");
- * assert(scriptHash.hash === "c37b1b5dc0669f1d3c61a6fddb2e8fde96be87b881c60bce8e8d542f");
- *
- * @since 2.0.0
- * @category encoding/decoding
- */
-export const fromCBOR: SerdeImpl.FromCBOR<
-  ScriptHash,
-  CBOR.CBORError | Bytes.BytesError | ScriptHashError
-> = Effect.fn(function* (cborHex) {
-  const scriptHash = yield* CBOR.decodeHex(cborHex);
-  return yield* fromBytes(scriptHash);
+const ScriptHashFromHex = Schema.transform(Hex.HexString, ScriptHash, {
+  strict: true,
+  encode: (_toI, toA) => toA.hash,
+  decode: (fromI, _fromA) => new ScriptHash({ hash: fromI }),
 });
 
 /**
- * Create a ScriptHash from a CBOR hex string, throws on error.
- *
- * @example
- * import { ScriptHash } from "@lucid-evolution/experimental";
- * import assert from "assert";
- *
- * const scriptHash = ScriptHash.fromCBOROrThrow("581cc37b1b5dc0669f1d3c61a6fddb2e8fde96be87b881c60bce8e8d542f");
- * assert(scriptHash._tag === "ScriptHash");
- * assert(scriptHash.hash === "c37b1b5dc0669f1d3c61a6fddb2e8fde96be87b881c60bce8e8d542f");
- *
- * @since 2.0.0
- * @category encoding/decoding
- */
-export const fromCBOROrThrow = (cborHex: string) => {
-  const bytes = CBOR.decodeHexOrThrow(cborHex);
-  return fromBytesOrThrow(bytes);
-};
-
-/**
- * Create a ScriptHash from CBOR bytes.
- *
- * @example
- * import { ScriptHash, Bytes } from "@lucid-evolution/experimental";
- * import { Effect } from "effect";
- * import assert from "assert";
- *
- * const bytes = Bytes.fromHexOrThrow("581cc37b1b5dc0669f1d3c61a6fddb2e8fde96be87b881c60bce8e8d542f");
- * const scriptHashEffect = ScriptHash.fromCBORBytes(bytes);
- * const scriptHash = Effect.runSync(scriptHashEffect);
- * assert(scriptHash._tag === "ScriptHash");
- * assert(scriptHash.hash === "c37b1b5dc0669f1d3c61a6fddb2e8fde96be87b881c60bce8e8d542f");
- *
- * @since 2.0.0
- * @category encoding/decoding
- */
-export const fromCBORBytes: SerdeImpl.FromCBORBytes<
-  ScriptHash,
-  CBOR.CBORError | ScriptHashError
-> = Effect.fn(function* (cborBytes) {
-  const hashBytes = yield* CBOR.decode(cborBytes);
-  return yield* fromBytes(hashBytes);
-});
-
-/**
- * Create a ScriptHash from CBOR bytes, throws on error.
- *
- * @example
- * import { ScriptHash, Bytes } from "@lucid-evolution/experimental";
- * import assert from "assert";
- *
- * const bytes = Bytes.fromHexOrThrow("581cc37b1b5dc0669f1d3c61a6fddb2e8fde96be87b881c60bce8e8d542f");
- * const scriptHash = ScriptHash.fromCBORBytesOrThrow(bytes);
- * assert(scriptHash._tag === "ScriptHash");
- * assert(scriptHash.hash === "c37b1b5dc0669f1d3c61a6fddb2e8fde96be87b881c60bce8e8d542f");
- *
- * @since 2.0.0
- * @category encoding/decoding
- */
-export const fromCBORBytesOrThrow = (bytes: Uint8Array) =>
-  Effect.runSync(fromCBORBytes(bytes));
-
-/**
- * Create a ScriptHash directly from bytes.
- *
- * @example
- * import { ScriptHash, Bytes } from "@lucid-evolution/experimental";
- * import { Effect } from "effect";
- * import assert from "assert";
- *
- * const bytes = Bytes.fromHexOrThrow("c37b1b5dc0669f1d3c61a6fddb2e8fde96be87b881c60bce8e8d542f");
- * const scriptHashEffect = ScriptHash.fromBytes(bytes);
- * const scriptHash = Effect.runSync(scriptHashEffect);
- * assert(scriptHash._tag === "ScriptHash");
- * assert(scriptHash.hash === "c37b1b5dc0669f1d3c61a6fddb2e8fde96be87b881c60bce8e8d542f");
- *
- * @since 2.0.0
- * @category constructors
- */
-export const fromBytes: SerdeImpl.FromBytes<ScriptHash, ScriptHashError> =
-  Effect.fnUntraced(function* (bytes) {
-    if (bytes.length !== SCRIPTHASH_BYTES_LENGTH) {
-      return yield* new ScriptHashError({
-        message: `ScriptHash must be ${SCRIPTHASH_BYTES_LENGTH} bytes long, got: ${bytes.length}.`,
-      });
-    }
-    const hash = Bytes.toHexOrThrow(bytes);
-    return new ScriptHash({ hash }, { disableValidation: true });
-  });
-
-/**
- * Create a ScriptHash directly from bytes, throws on error.
- *
- * @example
- * import { ScriptHash, Bytes } from "@lucid-evolution/experimental";
- * import assert from "assert";
- *
- * const bytes = Bytes.fromHexOrThrow("c37b1b5dc0669f1d3c61a6fddb2e8fde96be87b881c60bce8e8d542f");
- * const scriptHash = ScriptHash.fromBytesOrThrow(bytes);
- * assert(scriptHash._tag === "ScriptHash");
- * assert(scriptHash.hash === "c37b1b5dc0669f1d3c61a6fddb2e8fde96be87b881c60bce8e8d542f");
- *
- * @since 2.0.0
- * @category constructors
- */
-export const fromBytesOrThrow = (bytes: Uint8Array) => {
-  if (bytes.length !== SCRIPTHASH_BYTES_LENGTH) {
-    throw new ScriptHashError({
-      message: `ScriptHash must be ${SCRIPTHASH_BYTES_LENGTH} bytes long.`,
-    });
-  }
-  const hash = Bytes.toHexOrThrow(bytes);
-  return new ScriptHash({ hash }, { disableValidation: true });
-};
-
-/**
- * Convert a ScriptHash to bytes.
- *
- * @example
- * import { ScriptHash, Bytes } from "@lucid-evolution/experimental";
- * import assert from "assert";
- *
- * const scriptHash = ScriptHash.makeOrThrow("c37b1b5dc0669f1d3c61a6fddb2e8fde96be87b881c60bce8e8d542f");
- * const bytes = ScriptHash.toBytes(scriptHash);
- * assert(bytes instanceof Uint8Array);
- * assert(bytes.length === 28);
- * assert(Bytes.toHexOrThrow(bytes) === "c37b1b5dc0669f1d3c61a6fddb2e8fde96be87b881c60bce8e8d542f");
- *
- * @since 2.0.0
- * @category transformation
- */
-export const toBytes: SerdeImpl.ToBytes<ScriptHash> = (scriptHash) =>
-  Bytes.fromHexOrThrow(scriptHash.hash);
-
-/**
- * Construct a ScriptHash from a hex string.
- *
- * @example
- * import { ScriptHash } from "@lucid-evolution/experimental";
- * import { Effect } from "effect";
- * import assert from "assert";
- *
- * const hash = "c37b1b5dc0669f1d3c61a6fddb2e8fde96be87b881c60bce8e8d542f";
- * const scriptHashEffect = ScriptHash.make(hash);
- * const scriptHash = Effect.runSync(scriptHashEffect);
- * assert(scriptHash._tag === "ScriptHash");
- * assert(scriptHash.hash === hash);
- *
- * @since 2.0.0
- * @category constructors
- */
-export const make: SerdeImpl.Make<ScriptHash, ScriptHashError> =
-  Effect.fnUntraced(function* (hash) {
-    if (hash.length !== SCRIPTHASH_HEX_LENGTH) {
-      return yield* new ScriptHashError({
-        message: `ScriptHash must be ${SCRIPTHASH_HEX_LENGTH} characters long.`,
-      });
-    }
-    if (!Bytes.isHex(hash)) {
-      return yield* new ScriptHashError({
-        message: `ScriptHash must be a valid hex string.`,
-      });
-    }
-    return new ScriptHash({ hash }, { disableValidation: true });
-  });
-
-/**
- * Construct a ScriptHash from a hex string, throws on error.
- *
- * @example
- * import { ScriptHash } from "@lucid-evolution/experimental";
- * import assert from "assert";
- *
- * const hash = "c37b1b5dc0669f1d3c61a6fddb2e8fde96be87b881c60bce8e8d542f";
- * const scriptHash = ScriptHash.makeOrThrow(hash);
- * assert(scriptHash._tag === "ScriptHash");
- * assert(scriptHash.hash === hash);
- *
- * @since 2.0.0
- * @category constructors
- */
-export const makeOrThrow: SerdeImpl.MakeOrThrow<ScriptHash> = (
-  hash: string,
-) => {
-  if (!Bytes.isHex(hash)) {
-    throw new ScriptHashError({
-      message: `ScriptHash must be a valid hex string.`,
-    });
-  }
-  if (hash.length !== SCRIPTHASH_HEX_LENGTH) {
-    throw new ScriptHashError({
-      message: `ScriptHash must be ${SCRIPTHASH_HEX_LENGTH} characters long.`,
-    });
-  }
-  return new ScriptHash({ hash }, { disableValidation: true });
-};
-
-/**
- * Check if two ScriptHashes are equal.
+ * Check if two ScriptHash instances are equal.
  *
  * @example
  * import { ScriptHash } from "@lucid-evolution/experimental";
@@ -353,13 +101,10 @@ export const makeOrThrow: SerdeImpl.MakeOrThrow<ScriptHash> = (
  * @since 2.0.0
  * @category equality
  */
-export const equals = (a: ScriptHash, b: ScriptHash): boolean =>
-  a.hash === b.hash;
+const equals = (a: ScriptHash, b: ScriptHash): boolean => a.hash === b.hash;
 
 /**
- * Generate a random ScriptHash using FastCheck.
- *
- * This is useful for testing purposes.
+ * Generate a random ScriptHash.
  *
  * @example
  * import { ScriptHash } from "@lucid-evolution/experimental";
@@ -374,7 +119,18 @@ export const equals = (a: ScriptHash, b: ScriptHash): boolean =>
  * @since 2.0.0
  * @category generators
  */
-export const generator = FastCheck.uint8Array({
+const generator = FastCheck.uint8Array({
   minLength: SCRIPTHASH_BYTES_LENGTH,
   maxLength: SCRIPTHASH_BYTES_LENGTH,
-}).map((bytes) => fromBytesOrThrow(bytes));
+}).map((bytes) => new ScriptHash({ hash: Hex.fromBytes(bytes) }));
+
+export {
+  ScriptHash,
+  ScriptHashError,
+  Bytes,
+  ScriptHashFromHex,
+  equals,
+  generator,
+  SCRIPTHASH_BYTES_LENGTH,
+  SCRIPTHASH_HEX_LENGTH,
+};

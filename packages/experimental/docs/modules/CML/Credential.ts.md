@@ -129,7 +129,7 @@ Added in v2.0.0
 
 ## fromCborBytesUnsafe
 
-Unsafely calls Credential.fromCborBytes without Effect wrapper
+Unsafely calls Credential.decodeCBORBytes without Effect wrapper
 
 **Signature**
 

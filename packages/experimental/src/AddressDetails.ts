@@ -1,5 +1,5 @@
 import * as Address from "./Address.js";
-import * as SerdeImpl from "./SerdeImpl.js";
+import * as SerdeImpl from "./Serialization.js";
 import * as Bytes from "./Bytes.js";
 import * as KeyHash from "./KeyHash.js";
 import * as ScriptHash from "./ScriptHash.js";

@@ -1,8 +1,16 @@
-import { Data, Effect, Inspectable, Schema } from "effect";
-import { Bytes } from "./index.js";
+import {
+  Data,
+  Effect,
+  FastCheck,
+  Inspectable,
+  ParseResult,
+  pipe,
+  Schema,
+} from "effect";
 import * as CBOR from "./CBOR.js";
-import * as SerdeImpl from "./SerdeImpl.js";
+import * as Hex from "./Hex.js";
 import * as TransactionHash from "./TransactionHash.js";
+import * as Numeric from "./Numeric.js";
 
 /**
  * CDDL specs
@@ -15,11 +23,11 @@ import * as TransactionHash from "./TransactionHash.js";
  * @since 2.0.0
  * @category schemas
  */
-export class TransactionInput extends Schema.TaggedClass<TransactionInput>(
+class TransactionInput extends Schema.TaggedClass<TransactionInput>(
   "TransactionInput",
 )("TransactionInput", {
   transactionId: TransactionHash.TransactionHash,
-  index: Schema.Number,
+  index: Numeric.Uint16,
 }) {
   [Inspectable.NodeInspectSymbol]() {
     return {
@@ -34,11 +42,9 @@ export class TransactionInput extends Schema.TaggedClass<TransactionInput>(
  * Error thrown when transaction input operations fail
  *
  * @since 2.0.0
- * @category model
+ * @category errors
  */
-export class TransactionInputError extends Data.TaggedError(
-  "TransactionInputError",
-)<{
+class TransactionInputError extends Data.TaggedError("TransactionInputError")<{
   message: string;
   cause?: unknown;
 }> {}
@@ -50,7 +56,7 @@ export class TransactionInputError extends Data.TaggedError(
  * import { TransactionHash, TransactionInput } from "@lucid-evolution/experimental";
  * import assert from "assert";
  *
- * const transactionId = TransactionHash.makeOrThrow("cefd2fcf657e5e5d6c35975f4e052f427819391b153ebb16ad8aa107ba5a3819");
+ * const transactionId = TransactionHash.decodeHexOrThrow("cefd2fcf657e5e5d6c35975f4e052f427819391b153ebb16ad8aa107ba5a3819");
  * const transactionInput = TransactionInput.makeOrThrow(transactionId, 0)
  * const isValid = TransactionInput.isTransactionInput(transactionInput);
  * assert(isValid === true);
@@ -58,111 +64,67 @@ export class TransactionInputError extends Data.TaggedError(
  * @since 2.0.0
  * @category predicates
  */
-export const isTransactionInput = Schema.is(TransactionInput);
+const isTransactionInput = Schema.is(TransactionInput);
 
 /**
- * Decode CBOR bytes to a TransactionInput
- * Internal helper function used by fromCBOR
- *
- * @example
- * import { TransactionInput, Bytes } from "@lucid-evolution/experimental";
- * import { Effect } from "effect";
- * import assert from "assert";
- *
- * const bytes = Bytes.fromHexOrThrow("82005820cefd2fcf657e5e5d6c35975f4e052f427819391b153ebb16ad8aa107ba5a3819");
- * const transactionInputEffect = TransactionInput.fromCBORBytes(bytes);
- * const transactionInput = Effect.runSync(transactionInputEffect);
- * assert(transactionInput.transactionId.hash === "cefd2fcf657e5e5d6c35975f4e052f427819391b153ebb16ad8aa107ba5a3819");
- * assert(transactionInput.index === 0);
+ * Schema for transforming between CBOR bytes and TransactionInput
  *
  * @since 2.0.0
  * @category encoding/decoding
  */
-export const fromCBORBytes: SerdeImpl.FromCBORBytes<
+const CBORBytes = Schema.transformOrFail(
+  Schema.Uint8ArrayFromSelf.annotations({
+    identifier: "CBORBytes",
+  }),
   TransactionInput,
-  CBOR.CBORError | TransactionHash.TransactionHashError | TransactionInputError
-> = Effect.fnUntraced(function* (bytes) {
-  const [index, txHashBytes]: [number, Uint8Array] = yield* CBOR.decode(bytes);
-
-  const transactionId = yield* TransactionHash.fromBytes(txHashBytes);
-
-  return TransactionInput.make(
-    {
-      transactionId,
-      index,
-    },
-    { disableValidation: true },
-  );
-});
+  {
+    strict: true,
+    encode: (toI, options, ast, toA) =>
+      pipe(
+        ParseResult.encode(TransactionHash.CBORBytes)(toA.transactionId),
+        Effect.map((hash) => CBOR.encodeAsBytesOrThrow([toA.index, hash])),
+      ),
+    decode: (fromA, options, ast, fromI) =>
+      pipe(
+        CBOR.decodeBytes(fromA),
+        Effect.mapError(
+          (error) => new ParseResult.Type(ast, fromA, error.message),
+        ),
+        Effect.flatMap(([index, txHashBytes]) =>
+          pipe(
+            ParseResult.decodeUnknown(TransactionHash.CBORBytes)(txHashBytes),
+            Effect.flatMap((transactionId) =>
+              ParseResult.decode(TransactionInput)({
+                _tag: "TransactionInput",
+                transactionId,
+                index,
+              }),
+            ),
+          ),
+        ),
+      ),
+  },
+);
 
 /**
- * Decode a CBOR hex string to a TransactionInput
- *
- * @example
- * import { TransactionInput } from "@lucid-evolution/experimental";
- * import { Effect } from "effect";
- * import assert from "assert";
- *
- * const cborHex = "82005820cefd2fcf657e5e5d6c35975f4e052f427819391b153ebb16ad8aa107ba5a3819";
- * const transactionInputEffect = TransactionInput.fromCBOR(cborHex);
- * const transactionInput = Effect.runSync(transactionInputEffect);
- * assert(transactionInput.transactionId.hash === "cefd2fcf657e5e5d6c35975f4e052f427819391b153ebb16ad8aa107ba5a3819");
- * assert(transactionInput.index === 0);
+ * Schema for transforming between CBOR hex and TransactionInput
  *
  * @since 2.0.0
  * @category encoding/decoding
  */
-export const fromCBOR: SerdeImpl.FromCBOR<
+const CBORHex = Schema.transformOrFail(
+  Hex.HexString.pipe(Schema.typeSchema).annotations({
+    identifier: "CBORHex",
+  }),
   TransactionInput,
-  | CBOR.CBORError
-  | TransactionHash.TransactionHashError
-  | TransactionInputError
-  | Bytes.BytesError
-> = Effect.fn(function* (cborHex) {
-  const bytes = yield* Bytes.fromHex(cborHex);
-  return yield* fromCBORBytes(bytes);
-});
-
-/**
- * Decode CBOR bytes to a TransactionInput, throws on error.
- *
- * @example
- * import { TransactionInput, Bytes } from "@lucid-evolution/experimental";
- * import assert from "assert";
- *
- * const bytes = Bytes.fromHexOrThrow("82005820cefd2fcf657e5e5d6c35975f4e052f427819391b153ebb16ad8aa107ba5a3819");
- * const transactionInput = TransactionInput.fromCBORBytesOrThrow(bytes);
- * assert(transactionInput.transactionId.hash === "cefd2fcf657e5e5d6c35975f4e052f427819391b153ebb16ad8aa107ba5a3819");
- * assert(transactionInput.index === 0);
- *
- * @since 2.0.0
- * @category encoding/decoding
- */
-export const fromCBORBytesOrThrow: SerdeImpl.FromCBORBytesOrThrow<
-  TransactionInput
-> = (bytes) => Effect.runSync(fromCBORBytes(bytes));
-
-/**
- * Decode a CBOR hex string to a TransactionInput, throws on error.
- *
- * @example
- * import { TransactionInput } from "@lucid-evolution/experimental";
- * import assert from "assert";
- *
- * const cborHex = "82005820cefd2fcf657e5e5d6c35975f4e052f427819391b153ebb16ad8aa107ba5a3819";
- * const transactionInput = TransactionInput.fromCBOROrThrow(cborHex);
- * assert(transactionInput.transactionId.hash === "cefd2fcf657e5e5d6c35975f4e052f427819391b153ebb16ad8aa107ba5a3819");
- * assert(transactionInput.index === 0);
- *
- * @since 2.0.0
- * @category encoding/decoding
- */
-export const fromCBOROrThrow: SerdeImpl.FromCBOROrThrow<TransactionInput> = (
-  cborHex: string,
-) => {
-  const bytes = Bytes.fromHexOrThrow(cborHex);
-  return fromCBORBytesOrThrow(bytes);
-};
+  {
+    strict: true,
+    encode: (toI, options, ast, toA) =>
+      pipe(ParseResult.encode(CBORBytes)(toA), Effect.map(Hex.fromBytes)),
+    decode: (fromA, options, ast) =>
+      pipe(Hex.toBytes(fromA), ParseResult.decode(CBORBytes)),
+  },
+);
 
 /**
  * Check if two TransactionInput instances are equal.
@@ -171,8 +133,8 @@ export const fromCBOROrThrow: SerdeImpl.FromCBOROrThrow<TransactionInput> = (
  * import { TransactionHash, TransactionInput } from "@lucid-evolution/experimental";
  * import assert from "assert";
  *
- * const transactionId1 = TransactionHash.makeOrThrow("cefd2fcf657e5e5d6c35975f4e052f427819391b153ebb16ad8aa107ba5a3819");
- * const transactionId2 = TransactionHash.makeOrThrow("dddd2fcf657e5e5d6c35975f4e052f427819391b153ebb16ad8aa107ba5a3819");
+ * const transactionId1 = TransactionHash.decodeHexOrThrow("cefd2fcf657e5e5d6c35975f4e052f427819391b153ebb16ad8aa107ba5a3819");
+ * const transactionId2 = TransactionHash.decodeHexOrThrow("dddd2fcf657e5e5d6c35975f4e052f427819391b153ebb16ad8aa107ba5a3819");
  * const transactionInput = TransactionInput.makeOrThrow(transactionId1, 0);
  * const sameTransactionInput = TransactionInput.makeOrThrow(transactionId1, 0);
  * const differentTransactionInput1 = TransactionInput.makeOrThrow(transactionId1, 1);
@@ -184,102 +146,28 @@ export const fromCBOROrThrow: SerdeImpl.FromCBOROrThrow<TransactionInput> = (
  * @since 2.0.0
  * @category equality
  */
-export const equals = (a: TransactionInput, b: TransactionInput): boolean => {
-  return (
-    a._tag === b._tag &&
-    a.index === b.index &&
-    a.transactionId.hash === b.transactionId.hash
-  );
-};
+const equals = (a: TransactionInput, b: TransactionInput): boolean =>
+  a._tag === b._tag &&
+  a.index === b.index &&
+  a.transactionId.hash === b.transactionId.hash;
 
-/**
- * Convert TransactionInput to CBOR bytes
- * Internal helper function used by toCBOR
- *
- * @example
- * import { Bytes, TransactionHash, TransactionInput } from "@lucid-evolution/experimental";
- * import { Effect } from "effect";
- * import assert from "assert";
- *
-    const transactionId = TransactionHash.makeOrThrow("cefd2fcf657e5e5d6c35975f4e052f427819391b153ebb16ad8aa107ba5a3819");
-    const transactionInput = TransactionInput.makeOrThrow(transactionId, 0)
-    const cborBytes = TransactionInput.toCBORBytes(transactionInput);
-    // Verify the bytes are correct by converting back to hex
-    const hexString = Bytes.toHexOrThrow(cborBytes);
-    // 82005820cefd2fcf657e5e5d6c35975f4e052f427819391b153ebb16ad8aa107ba5a3819
-    assert(hexString.startsWith("82"));  // Array of 2 elements in CBOR
-    assert(hexString.includes("cefd2fcf657e5e5d6c35975f4e052f427819391b153ebb16ad8aa107ba5a3819"));
- *
- * @since 2.0.0
- * @category encoding/decoding
- */
-export const toCBORBytes: SerdeImpl.ToCBORBytes<TransactionInput> = (
-  transactionInput,
-) => {
-  return CBOR.encodeOrThrow([
-    transactionInput.index,
-    Bytes.fromHexOrThrow(transactionInput.transactionId.hash),
-  ]);
-};
+const generator = FastCheck.tuple(
+  TransactionHash.generator,
+  Numeric.Uint16Generator,
+).map(
+  ([transactionId, index]) =>
+    new TransactionInput({
+      transactionId,
+      index,
+    }),
+);
 
-/**
- * CBOR diagnostic notation for TransactionInput:
- * transactionInput = [index, transactionId]
- *
- * CBOR hex for TransactionInput:
- * [ 0, h'cefd2fcf657e5e5d6c35975f4e052f427819391b153ebb16ad8aa107ba5a3819' ]
- *
- * Convert TransactionInput to CBOR hex encoding
- * Uses a pre-configured CBOR encoder for better performance
- *
- * @example
- * import { TransactionHash, TransactionInput } from "@lucid-evolution/experimental";
- * import assert from "assert";
- *
- * const transactionId = TransactionHash.makeOrThrow("cefd2fcf657e5e5d6c35975f4e052f427819391b153ebb16ad8aa107ba5a3819");
- * const transactionInput = TransactionInput.makeOrThrow(transactionId, 0);
- * const cbor = TransactionInput.toCBOR(transactionInput);
- * assert(cbor === "82005820cefd2fcf657e5e5d6c35975f4e052f427819391b153ebb16ad8aa107ba5a3819");
- *
- * @since 2.0.0
- * @category encoding/decoding
- */
-export const toCBOR: SerdeImpl.ToCBOR<TransactionInput> = (transactionInput) =>
-  Bytes.toHexOrThrow(toCBORBytes(transactionInput));
-
-/**
- * Construct a TransactionInput, throws on error.
- *
- * @example
- * import { TransactionHash, TransactionInput } from "@lucid-evolution/experimental";
- * import assert from "assert";
- *
- * const transactionHash = "cefd2fcf657e5e5d6c35975f4e052f427819391b153ebb16ad8aa107ba5a3819"
- * const transactionId = TransactionHash.makeOrThrow(transactionHash);
- * const transactionInput = TransactionInput.makeOrThrow(transactionId, 0);
- * assert(transactionInput._tag === "TransactionInput");
- * assert(transactionInput.transactionId.hash === transactionHash);
- * assert(transactionInput.index === 0);
- *
- * @since 2.0.0
- * @category constructors
- */
-export const makeOrThrow = (
-  transactionId: TransactionHash.TransactionHash,
-  index: number,
-): TransactionInput => {
-  if (!Number.isInteger(index) || index < 0) {
-    throw new TransactionInputError({
-      message: `TransactionInput index must be a non-negative integer, got: ${index}`,
-    });
-  }
-  if (index > 65535) {
-    throw new TransactionInputError({
-      message: `TransactionInput index is not a 2 byte number, got: ${index}`,
-    });
-  }
-  return new TransactionInput(
-    { transactionId, index },
-    { disableValidation: true },
-  );
+export {
+  TransactionInput,
+  TransactionInputError,
+  CBORBytes,
+  CBORHex,
+  isTransactionInput,
+  equals,
+  generator,
 };

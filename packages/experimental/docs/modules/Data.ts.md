@@ -725,9 +725,9 @@ export declare const isConstr: (
   u: unknown,
   overrideOptions?: SchemaAST.ParseOptions | number,
 ) => u is {
+  readonly _tag: "Constr";
   readonly index: bigint;
   readonly fields: readonly Data[];
-  readonly _tag: "Constr";
 };
 ```
 
@@ -1094,9 +1094,9 @@ export declare const decodeCBOR: <Source, Target extends Data>(
       readonly entries: readonly { readonly k: Data; readonly v: Data }[];
     }
   | {
+      readonly _tag: "Constr";
       readonly index: bigint;
       readonly fields: readonly Data[];
-      readonly _tag: "Constr";
     }
   | Source,
   [
@@ -1113,9 +1113,9 @@ export declare const decodeCBOR: <Source, Target extends Data>(
               }[];
             }
           | {
+              readonly _tag: "Constr";
               readonly index: bigint;
               readonly fields: readonly Data[];
-              readonly _tag: "Constr";
             },
           CML.PlutusData.PlutusDataError,
           never
@@ -1138,9 +1138,9 @@ export declare const decodeCBOR: <Source, Target extends Data>(
                     }[];
                   }
                 | {
+                    readonly _tag: "Constr";
                     readonly index: bigint;
                     readonly fields: readonly Data[];
-                    readonly _tag: "Constr";
                   },
                 CML.PlutusData.PlutusDataError,
                 never
@@ -1164,9 +1164,9 @@ export declare const decodeCBOR: <Source, Target extends Data>(
               }[];
             }
           | {
+              readonly _tag: "Constr";
               readonly index: bigint;
               readonly fields: readonly Data[];
-              readonly _tag: "Constr";
             },
           CML.PlutusData.PlutusDataError,
           never
@@ -1189,9 +1189,9 @@ export declare const decodeCBOR: <Source, Target extends Data>(
                     }[];
                   }
                 | {
+                    readonly _tag: "Constr";
                     readonly index: bigint;
                     readonly fields: readonly Data[];
-                    readonly _tag: "Constr";
                   },
                 CML.PlutusData.PlutusDataError,
                 never
@@ -1304,9 +1304,9 @@ export declare const resolveCBOR: (input: string) => Effect.Effect<
       readonly entries: readonly { readonly k: Data; readonly v: Data }[];
     }
   | {
+      readonly _tag: "Constr";
       readonly index: bigint;
       readonly fields: readonly Data[];
-      readonly _tag: "Constr";
     },
   [
     YieldWrap<Effect.Effect<PlutusData, CML.PlutusData.PlutusDataError, never>>,

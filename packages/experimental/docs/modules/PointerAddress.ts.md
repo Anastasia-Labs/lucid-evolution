@@ -12,7 +12,7 @@ parent: Modules
 
 - [constructors](#constructors)
   - [fromBytes](#frombytes)
-  - [makeOrThrow](#makeorthrow)
+  - [make](#make)
 - [encoding/decoding](#encodingdecoding)
   - [decodeVariableLength](#decodevariablelength)
   - [encodeVariableLength](#encodevariablelength)
@@ -52,7 +52,7 @@ export declare const fromBytes: (
       >
     | YieldWrap<
         Effect.Effect<
-          [Natural.Natural, number],
+          [number & Brand<"Natural">, number],
           PointerAddressError | ParseError,
           never
         >
@@ -72,7 +72,7 @@ export declare const fromBytes: (
             >
           | YieldWrap<
               Effect.Effect<
-                [Natural.Natural, number],
+                [number & Brand<"Natural">, number],
                 PointerAddressError | ParseError,
                 never
               >
@@ -87,7 +87,7 @@ export declare const fromBytes: (
       >
     | YieldWrap<
         Effect.Effect<
-          [Natural.Natural, number],
+          [number & Brand<"Natural">, number],
           PointerAddressError | ParseError,
           never
         >
@@ -107,7 +107,7 @@ export declare const fromBytes: (
             >
           | YieldWrap<
               Effect.Effect<
-                [Natural.Natural, number],
+                [number & Brand<"Natural">, number],
                 PointerAddressError | ParseError,
                 never
               >
@@ -136,15 +136,15 @@ assert(address._tag === "PointerAddress");
 
 Added in v2.0.0
 
-## makeOrThrow
+## make
 
 Create a PointerAddress from components, throws on error.
 
 **Signature**
 
 ```ts
-export declare const makeOrThrow: (
-  networkId: number,
+export declare const make: (
+  networkId: NetworkId.NetworkId,
   paymentCredential: Credential.Credential,
   slot: Natural.Natural,
   txIndex: Natural.Natural,
@@ -159,6 +159,7 @@ import {
   PointerAddress,
   KeyHash,
   Natural,
+  NetworkId,
 } from "@lucid-evolution/experimental";
 import assert from "assert";
 
@@ -168,8 +169,8 @@ const paymentKeyHash = KeyHash.makeOrThrow(
 );
 
 // Create pointer address
-const address = PointerAddress.makeOrThrow(
-  0,
+const address = PointerAddress.make(
+  NetworkId.makeOrThrow(0),
   paymentKeyHash,
   Natural.makeOrThrow(1),
   Natural.makeOrThrow(2),
@@ -177,9 +178,9 @@ const address = PointerAddress.makeOrThrow(
 );
 assert(address._tag === "PointerAddress");
 assert(address.networkId === 0);
-assert(address.pointer.slot.number === 1);
-assert(address.pointer.txIndex.number === 2);
-assert(address.pointer.certIndex.number === 3);
+assert(address.pointer.slot === 1);
+assert(address.pointer.txIndex === 2);
+assert(address.pointer.certIndex === 3);
 ```
 
 Added in v2.0.0
@@ -212,7 +213,7 @@ const buffer = new Uint8Array([0x80, 0x01]);
 
 const effect = PointerAddress.decodeVariableLength(buffer, 0);
 const [natural, bytesRead] = Effect.runSync(effect);
-assert(natural.number === 128);
+assert(natural === 128);
 assert(bytesRead === 2);
 ```
 
@@ -270,6 +271,7 @@ import {
   PointerAddress,
   KeyHash,
   Natural,
+  NetworkId,
 } from "@lucid-evolution/experimental";
 import assert from "assert";
 
@@ -279,22 +281,22 @@ const paymentKeyHash = KeyHash.makeOrThrow(
 );
 
 // Create two identical addresses
-const address1 = PointerAddress.makeOrThrow(
-  0,
+const address1 = PointerAddress.make(
+  NetworkId.makeOrThrow(0),
   paymentKeyHash,
   Natural.makeOrThrow(1),
   Natural.makeOrThrow(2),
   Natural.makeOrThrow(3),
 );
-const address2 = PointerAddress.makeOrThrow(
-  0,
+const address2 = PointerAddress.make(
+  NetworkId.makeOrThrow(0),
   paymentKeyHash,
   Natural.makeOrThrow(1),
   Natural.makeOrThrow(2),
   Natural.makeOrThrow(3),
 );
-const address3 = PointerAddress.makeOrThrow(
-  1,
+const address3 = PointerAddress.make(
+  NetworkId.makeOrThrow(1),
   paymentKeyHash,
   Natural.makeOrThrow(1),
   Natural.makeOrThrow(2),
@@ -330,9 +332,9 @@ const randomSamples = FastCheck.sample(PointerAddress.generator, 20);
 randomSamples.forEach((address) => {
   assert(address._tag === "PointerAddress");
   assert(typeof address.networkId === "number");
-  assert(address.pointer.slot.number > 0);
-  assert(address.pointer.txIndex.number > 0);
-  assert(address.pointer.certIndex.number > 0);
+  assert(address.pointer.slot > 0);
+  assert(address.pointer.txIndex > 0);
+  assert(address.pointer.certIndex > 0);
 });
 ```
 
@@ -393,6 +395,7 @@ import {
   PointerAddress,
   KeyHash,
   Natural,
+  NetworkId,
 } from "@lucid-evolution/experimental";
 import assert from "assert";
 
@@ -402,8 +405,8 @@ const paymentKeyHash = KeyHash.makeOrThrow(
 );
 
 // Create pointer address
-const address = PointerAddress.makeOrThrow(
-  0,
+const address = PointerAddress.make(
+  NetworkId.makeOrThrow(0),
   paymentKeyHash,
   Natural.makeOrThrow(1),
   Natural.makeOrThrow(2),

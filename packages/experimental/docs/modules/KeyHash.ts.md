@@ -14,17 +14,10 @@ parent: Modules
   - [KEYHASH_BYTES_LENGTH](#keyhash_bytes_length)
   - [KEYHASH_HEX_LENGTH](#keyhash_hex_length)
 - [constructors](#constructors)
-  - [fromBytes](#frombytes)
-  - [fromBytesOrThrow](#frombytesorthrow)
+  - [decodeBytes](#decodebytes)
+  - [decodeBytesOrThrow](#decodebytesorthrow)
   - [make](#make)
   - [makeOrThrow](#makeorthrow)
-- [encoding/decoding](#encodingdecoding)
-  - [fromCBOR](#fromcbor)
-  - [fromCBORBytes](#fromcborbytes)
-  - [fromCBORBytesOrThrow](#fromcborbytesorthrow)
-  - [fromCBOROrThrow](#fromcbororthrow)
-  - [toCBOR](#tocbor)
-  - [toCBORBytes](#tocborbytes)
 - [equality](#equality)
   - [equals](#equals)
 - [errors](#errors)
@@ -69,28 +62,29 @@ Added in v2.0.0
 
 # constructors
 
-## fromBytes
+## decodeBytes
 
 Create a KeyHash directly from bytes.
 
 **Signature**
 
 ```ts
-export declare const fromBytes: SerdeImpl.FromBytes<KeyHash, KeyHashError>;
+export declare const decodeBytes: Serialization.FromBytes<
+  KeyHash,
+  KeyHashError
+>;
 ```
 
 **Example**
 
 ```ts
 import { KeyHash, Bytes } from "@lucid-evolution/experimental";
-import { Effect } from "effect";
 import assert from "assert";
 
 const bytes = Bytes.fromHexOrThrow(
   "c37b1b5dc0669f1d3c61a6fddb2e8fde96be87b881c60bce8e8d542f",
 );
-const keyHashEffect = KeyHash.fromBytes(bytes);
-const keyHash = Effect.runSync(keyHashEffect);
+const keyHash = KeyHash.decodeBytesOrThrow(bytes);
 assert(keyHash._tag === "KeyHash");
 assert(
   keyHash.hash === "c37b1b5dc0669f1d3c61a6fddb2e8fde96be87b881c60bce8e8d542f",
@@ -99,14 +93,14 @@ assert(
 
 Added in v2.0.0
 
-## fromBytesOrThrow
+## decodeBytesOrThrow
 
 Create a KeyHash directly from bytes, throws on error.
 
 **Signature**
 
 ```ts
-export declare const fromBytesOrThrow: (bytes: Uint8Array) => KeyHash;
+export declare const decodeBytesOrThrow: (bytes: Uint8Array) => KeyHash;
 ```
 
 **Example**
@@ -119,7 +113,7 @@ const bytes = Bytes.fromHexOrThrow(
   "c37b1b5dc0669f1d3c61a6fddb2e8fde96be87b881c60bce8e8d542f",
 );
 assert(bytes.length === 28);
-const keyHash = KeyHash.fromBytesOrThrow(bytes);
+const keyHash = KeyHash.decodeBytesOrThrow(bytes);
 assert(keyHash._tag === "KeyHash");
 assert(
   keyHash.hash === "c37b1b5dc0669f1d3c61a6fddb2e8fde96be87b881c60bce8e8d542f",
@@ -135,33 +129,7 @@ Construct a KeyHash from a hex string.
 **Signature**
 
 ```ts
-export declare const make: SerdeImpl.Make<KeyHash, KeyHashError>;
-```
-
-**Example**
-
-```ts
-import { KeyHash } from "@lucid-evolution/experimental";
-import { Effect } from "effect";
-import assert from "assert";
-
-const hash = "c37b1b5dc0669f1d3c61a6fddb2e8fde96be87b881c60bce8e8d542f";
-const keyHashEffect = KeyHash.make(hash);
-const keyHash = Effect.runSync(keyHashEffect);
-assert(keyHash._tag === "KeyHash");
-assert(keyHash.hash === hash);
-```
-
-Added in v2.0.0
-
-## makeOrThrow
-
-Construct a KeyHash from a hex string, throws on error.
-
-**Signature**
-
-```ts
-export declare const makeOrThrow: SerdeImpl.MakeOrThrow<KeyHash>;
+export declare const make: Serialization.Make<KeyHash, KeyHashError>;
 ```
 
 **Example**
@@ -178,108 +146,14 @@ assert(keyHash.hash === hash);
 
 Added in v2.0.0
 
-# encoding/decoding
+## makeOrThrow
 
-## fromCBOR
-
-Create a KeyHash from a CBOR hex string.
+Construct a KeyHash from a hex string, throws on error.
 
 **Signature**
 
 ```ts
-export declare const fromCBOR: SerdeImpl.FromCBOR<
-  KeyHash,
-  CBOR.CBORError | Bytes.BytesError | KeyHashError
->;
-```
-
-**Example**
-
-```ts
-import { KeyHash } from "@lucid-evolution/experimental";
-import { Effect } from "effect";
-import assert from "assert";
-
-const cborHex = "581cc37b1b5dc0669f1d3c61a6fddb2e8fde96be87b881c60bce8e8d542f";
-const keyHashEffect = KeyHash.fromCBOR(cborHex);
-const keyHash = Effect.runSync(keyHashEffect);
-assert(keyHash._tag === "KeyHash");
-assert(
-  keyHash.hash === "c37b1b5dc0669f1d3c61a6fddb2e8fde96be87b881c60bce8e8d542f",
-);
-```
-
-Added in v2.0.0
-
-## fromCBORBytes
-
-Create a KeyHash from CBOR bytes.
-
-**Signature**
-
-```ts
-export declare const fromCBORBytes: SerdeImpl.FromCBORBytes<
-  KeyHash,
-  CBOR.CBORError | KeyHashError
->;
-```
-
-**Example**
-
-```ts
-import { KeyHash, Bytes } from "@lucid-evolution/experimental";
-import { Effect } from "effect";
-import assert from "assert";
-
-const bytes = Bytes.fromHexOrThrow(
-  "581cc37b1b5dc0669f1d3c61a6fddb2e8fde96be87b881c60bce8e8d542f",
-);
-const keyHashEffect = KeyHash.fromCBORBytes(bytes);
-const keyHash = Effect.runSync(keyHashEffect);
-assert(keyHash._tag === "KeyHash");
-assert(
-  keyHash.hash === "c37b1b5dc0669f1d3c61a6fddb2e8fde96be87b881c60bce8e8d542f",
-);
-```
-
-Added in v2.0.0
-
-## fromCBORBytesOrThrow
-
-Create a KeyHash from CBOR bytes, throws on error.
-
-**Signature**
-
-```ts
-export declare const fromCBORBytesOrThrow: (bytes: Uint8Array) => KeyHash;
-```
-
-**Example**
-
-```ts
-import { KeyHash, Bytes } from "@lucid-evolution/experimental";
-import assert from "assert";
-
-const bytes = Bytes.fromHexOrThrow(
-  "581cc37b1b5dc0669f1d3c61a6fddb2e8fde96be87b881c60bce8e8d542f",
-);
-const keyHash = KeyHash.fromCBORBytesOrThrow(bytes);
-assert(keyHash._tag === "KeyHash");
-assert(
-  keyHash.hash === "c37b1b5dc0669f1d3c61a6fddb2e8fde96be87b881c60bce8e8d542f",
-);
-```
-
-Added in v2.0.0
-
-## fromCBOROrThrow
-
-Create a KeyHash from a CBOR hex string, throws on error.
-
-**Signature**
-
-```ts
-export declare const fromCBOROrThrow: (cborHex: string) => KeyHash;
+export declare const makeOrThrow: Serialization.MakeOrThrow<string, KeyHash>;
 ```
 
 **Example**
@@ -288,67 +162,10 @@ export declare const fromCBOROrThrow: (cborHex: string) => KeyHash;
 import { KeyHash } from "@lucid-evolution/experimental";
 import assert from "assert";
 
-const keyHash = KeyHash.fromCBOROrThrow(
-  "581cc37b1b5dc0669f1d3c61a6fddb2e8fde96be87b881c60bce8e8d542f",
-);
+const hash = "c37b1b5dc0669f1d3c61a6fddb2e8fde96be87b881c60bce8e8d542f";
+const keyHash = KeyHash.makeOrThrow(hash);
 assert(keyHash._tag === "KeyHash");
-assert(
-  keyHash.hash === "c37b1b5dc0669f1d3c61a6fddb2e8fde96be87b881c60bce8e8d542f",
-);
-```
-
-Added in v2.0.0
-
-## toCBOR
-
-Convert a KeyHash to CBOR hex string.
-
-**Signature**
-
-```ts
-export declare const toCBOR: SerdeImpl.ToCBOR<KeyHash>;
-```
-
-**Example**
-
-```ts
-import { KeyHash } from "@lucid-evolution/experimental";
-import assert from "assert";
-
-const keyHash = KeyHash.makeOrThrow(
-  "c37b1b5dc0669f1d3c61a6fddb2e8fde96be87b881c60bce8e8d542f",
-);
-const hex = KeyHash.toCBOR(keyHash);
-assert(hex.startsWith("581c"));
-assert(
-  hex.includes("c37b1b5dc0669f1d3c61a6fddb2e8fde96be87b881c60bce8e8d542f"),
-);
-```
-
-Added in v2.0.0
-
-## toCBORBytes
-
-Convert a KeyHash to CBOR bytes.
-
-**Signature**
-
-```ts
-export declare const toCBORBytes: SerdeImpl.ToCBORBytes<KeyHash>;
-```
-
-**Example**
-
-```ts
-import { KeyHash, Bytes } from "@lucid-evolution/experimental";
-import assert from "assert";
-
-const keyHash = KeyHash.makeOrThrow(
-  "c37b1b5dc0669f1d3c61a6fddb2e8fde96be87b881c60bce8e8d542f",
-);
-const bytes = KeyHash.toCBORBytes(keyHash);
-assert(bytes instanceof Uint8Array);
-assert(bytes.length > 0);
+assert(keyHash.hash === hash);
 ```
 
 Added in v2.0.0
@@ -470,7 +287,7 @@ Convert a KeyHash to bytes.
 **Signature**
 
 ```ts
-export declare const toBytes: SerdeImpl.ToBytes<KeyHash>;
+export declare const toBytes: Serialization.ToBytes<KeyHash>;
 ```
 
 **Example**

@@ -37,14 +37,14 @@ This decodes the address format according to CIP-0019 specification
 **Signature**
 
 ```ts
-export declare const fromBech32: SerdeImpl.FromBech32<
+export declare const fromBech32: Serialization.FromBech32<
   Address,
-  | Bytes.BytesError
   | ScriptHash.ScriptHashError
   | KeyHash.KeyHashError
   | PointerAddress.PointerAddressError
   | ParseError
   | Bech32.Bech32Error
+  | Bytes.BytesError
   | AddressError
 >;
 ```
@@ -79,13 +79,13 @@ Convert bytes to an address structure
 **Signature**
 
 ```ts
-export declare const fromBytes: SerdeImpl.FromBytes<
+export declare const fromBytes: Serialization.FromBytes<
   Address,
-  | Bytes.BytesError
   | ScriptHash.ScriptHashError
   | KeyHash.KeyHashError
   | PointerAddress.PointerAddressError
   | ParseError
+  | Bytes.BytesError
   | AddressError
 >;
 ```
@@ -208,7 +208,7 @@ Encode a Cardano address to CBOR format
 **Signature**
 
 ```ts
-export declare const toCBOR: (address: Address) => string;
+export declare const toCBOR: (address: Address) => unknown;
 ```
 
 **Example**

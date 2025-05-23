@@ -1,12 +1,19 @@
-import { Effect, FastCheck, Inspectable, Schema } from "effect";
+import {
+  Effect,
+  FastCheck,
+  Inspectable,
+  ParseResult,
+  pipe,
+  Schema,
+} from "effect";
 import * as Credential from "./Credential.js";
 import * as KeyHash from "./KeyHash.js";
 import * as ScriptHash from "./ScriptHash.js";
-import * as Bytes from "./Bytes.js";
-import * as Network from "./Network.js";
+import * as NetworkId from "./NetworkId.js";
+import * as Hex from "./Hex.js";
 
-export declare const NominalType: unique symbol;
-export interface EnterpriseAddress {
+declare const NominalType: unique symbol;
+interface EnterpriseAddress {
   readonly [NominalType]: unique symbol;
 }
 
@@ -16,10 +23,10 @@ export interface EnterpriseAddress {
  * @since 2.0.0
  * @category schemas
  */
-export class EnterpriseAddress extends Schema.TaggedClass<EnterpriseAddress>(
+class EnterpriseAddress extends Schema.TaggedClass<EnterpriseAddress>(
   "EnterpriseAddress",
 )("EnterpriseAddress", {
-  networkId: Schema.Number,
+  networkId: NetworkId.NetworkId,
   paymentCredential: Credential.Credential,
 }) {
   [Inspectable.NodeInspectSymbol]() {
@@ -31,76 +38,56 @@ export class EnterpriseAddress extends Schema.TaggedClass<EnterpriseAddress>(
   }
 }
 
-export const fromBytes = Effect.fn(function* (bytes: Uint8Array) {
-  const header = bytes[0];
-  // Extract network ID from the lower 4 bits
-  const networkId = header & 0b00001111;
-  // Extract address type from the upper 4 bits (bits 4-7)
-  const addressType = header >> 4;
+const Bytes = Schema.transformOrFail(
+  Schema.Uint8ArrayFromSelf,
+  EnterpriseAddress,
+  {
+    strict: true,
+    encode: (toI, options, ast, toA) => {
+      const paymentBit = toA.paymentCredential._tag === "KeyHash" ? 0 : 1;
+      const header =
+        (0b01 << 6) |
+        (0b1 << 5) |
+        (paymentBit << 4) |
+        (toA.networkId & 0b00001111);
 
-  // Script payment
-  const isPaymentKey = (addressType & 0b0001) === 0;
-  const paymentCredential: Credential.Credential = isPaymentKey
-    ? yield* KeyHash.fromBytes(bytes.slice(1, 29))
-    : yield* ScriptHash.fromBytes(bytes.slice(1, 29));
-  const enterpriseAddress: EnterpriseAddress = makeOrThrow(
-    networkId,
-    paymentCredential,
-  );
-  return enterpriseAddress;
+      const result = new Uint8Array(29);
+      result[0] = header;
+
+      const paymentCredentialBytes = Hex.toBytes(toA.paymentCredential.hash);
+      result.set(paymentCredentialBytes, 1);
+
+      return ParseResult.succeed(result);
+    },
+    decode: (fromI, options, ast, fromA) =>
+      Effect.gen(function* () {
+        const header = fromA[0];
+        // Extract network ID from the lower 4 bits
+        const networkId = header & 0b00001111;
+        // Extract address type from the upper 4 bits (bits 4-7)
+        const addressType = header >> 4;
+
+        // Script payment
+        const isPaymentKey = (addressType & 0b0001) === 0;
+        const paymentCredential: Credential.Credential = isPaymentKey
+          ? yield* ParseResult.decode(KeyHash.Bytes)(fromA.slice(1, 29))
+          : yield* ParseResult.decode(ScriptHash.Bytes)(fromA.slice(1, 29));
+        return yield* ParseResult.decode(EnterpriseAddress)({
+          _tag: "EnterpriseAddress",
+          networkId,
+          paymentCredential,
+        });
+      }),
+  },
+);
+
+const HexString = Schema.transformOrFail(Hex.HexString, EnterpriseAddress, {
+  strict: true,
+  encode: (toI, options, ast, toA) =>
+    pipe(ParseResult.encode(Bytes)(toA), Effect.map(Hex.fromBytes)),
+  decode: (fromI, options, ast) =>
+    pipe(Hex.toBytes(fromI), ParseResult.decode(Bytes)),
 });
-
-export const toBytes = (address: EnterpriseAddress): Uint8Array => {
-  // Prea-allocate array of exact size ( 1 byte header + 28 bytes payment credential )
-  const result = new Uint8Array(29);
-  const paymentBit = address.paymentCredential._tag === "KeyHash" ? 0 : 1;
-  const header =
-    (0b01 << 6) |
-    (0b1 << 5) |
-    (paymentBit << 4) |
-    (address.networkId & 0b00001111);
-
-  result[0] = header;
-
-  const paymentCredentialBytes = Bytes.fromHexOrThrow(
-    address.paymentCredential.hash,
-  );
-  result.set(paymentCredentialBytes, 1);
-
-  return result;
-};
-
-/**
- * Create an EnterpriseAddress from network ID and payment credential, throws on error.
- *
- * @example
- * import { EnterpriseAddress, KeyHash } from "@lucid-evolution/experimental";
- * import assert from "assert";
- *
- * // Create payment credential
- * const paymentKeyHash = KeyHash.makeOrThrow("c37b1b5dc0669f1d3c61a6fddb2e8fde96be87b881c60bce8e8d542f");
- *
- * // Create enterprise address
- * const address = EnterpriseAddress.makeOrThrow(0, paymentKeyHash);
- * assert(address._tag === "EnterpriseAddress");
- * assert(address.networkId === 0);
- *
- * @since 2.0.0
- * @category constructors
- */
-export const makeOrThrow = (
-  networkId: number,
-  paymentCredential: Credential.Credential,
-): EnterpriseAddress =>
-  EnterpriseAddress.make(
-    {
-      networkId,
-      paymentCredential,
-    },
-    {
-      disableValidation: true,
-    },
-  );
 
 /**
  * Check if two EnterpriseAddress instances are equal.
@@ -123,7 +110,7 @@ export const makeOrThrow = (
  * @since 2.0.0
  * @category equality
  */
-export const equals = (a: EnterpriseAddress, b: EnterpriseAddress): boolean => {
+const equals = (a: EnterpriseAddress, b: EnterpriseAddress): boolean => {
   return (
     a.networkId === b.networkId &&
     a.paymentCredential._tag === b.paymentCredential._tag &&
@@ -148,9 +135,15 @@ export const equals = (a: EnterpriseAddress, b: EnterpriseAddress): boolean => {
  * @since 2.0.0
  * @category generators
  */
-export const generator = FastCheck.tuple(
-  Network.generator,
+const generator = FastCheck.tuple(
+  NetworkId.generator,
   Credential.generator,
-).map(([networkId, paymentCredential]) => {
-  return makeOrThrow(networkId, paymentCredential);
-});
+).map(
+  ([networkId, paymentCredential]) =>
+    new EnterpriseAddress({
+      networkId,
+      paymentCredential,
+    }),
+);
+
+export { EnterpriseAddress, Bytes, HexString, equals, generator };

@@ -11,11 +11,12 @@ parent: Modules
 <h2 class="text-delta">Table of contents</h2>
 
 - [encoding/decoding](#encodingdecoding)
-  - [fromCBOR](#fromcbor)
-  - [fromCBORBytes](#fromcborbytes)
-  - [fromCBORBytesOrThrow](#fromcborbytesorthrow)
-  - [fromCBOROrThrow](#fromcbororthrow)
-  - [toCBOR](#tocbor)
+  - [decodeCBORBytes](#decodecborbytes)
+  - [decodeCBORBytesOrThrow](#decodecborbytesorthrow)
+  - [decodeCBORHex](#decodecborhex)
+  - [decodeCBORHexOrThrow](#decodecborhexorthrow)
+  - [encodeCBORBytes](#encodecborbytes)
+  - [encodeCBORHex](#encodecborhex)
 - [equality](#equality)
   - [equals](#equals)
 - [errors](#errors)
@@ -33,44 +34,7 @@ parent: Modules
 
 # encoding/decoding
 
-## fromCBOR
-
-Decode a CBOR hex string to a Credential
-
-**Signature**
-
-```ts
-export declare const fromCBOR: SerdeImpl.FromCBOR<
-  ScriptHash.ScriptHash | KeyHash.KeyHash,
-  | CBOR.CBORError
-  | Bytes.BytesError
-  | ScriptHash.ScriptHashError
-  | KeyHash.KeyHashError
-  | CredentialError
->;
-```
-
-**Example**
-
-```ts
-import { Credential } from "@lucid-evolution/experimental";
-import { Effect } from "effect";
-import assert from "assert";
-
-const cborHex =
-  "8200581cc37b1b5dc0669f1d3c61a6fddb2e8fde96be87b881c60bce8e8d542f";
-const credentialEffect = Credential.fromCBOR(cborHex);
-const credential = Effect.runSync(credentialEffect);
-assert(credential._tag === "KeyHash");
-assert(
-  credential.hash ===
-    "c37b1b5dc0669f1d3c61a6fddb2e8fde96be87b881c60bce8e8d542f",
-);
-```
-
-Added in v2.0.0
-
-## fromCBORBytes
+## decodeCBORBytes
 
 Decode CBOR bytes to a Credential
 Internal helper function used by fromCBOR
@@ -78,12 +42,9 @@ Internal helper function used by fromCBOR
 **Signature**
 
 ```ts
-export declare const fromCBORBytes: SerdeImpl.FromCBORBytes<
+export declare const decodeCBORBytes: Serialization.FromCBORBytes<
   ScriptHash.ScriptHash | KeyHash.KeyHash,
-  | CBOR.CBORError
-  | ScriptHash.ScriptHashError
-  | KeyHash.KeyHashError
-  | CredentialError
+  CredentialError
 >;
 ```
 
@@ -91,14 +52,12 @@ export declare const fromCBORBytes: SerdeImpl.FromCBORBytes<
 
 ```ts
 import { Credential, Bytes } from "@lucid-evolution/experimental";
-import { Effect } from "effect";
 import assert from "assert";
 
 const bytes = Bytes.fromHexOrThrow(
   "8201581cc37b1b5dc0669f1d3c61a6fddb2e8fde96be87b881c60bce8e8d542f",
 );
-const credentialEffect = Credential.fromCBORBytes(bytes);
-const credential = Effect.runSync(credentialEffect);
+const credential = Credential.decodeCBORBytesOrThrow(bytes);
 assert(credential._tag === "ScriptHash");
 assert(
   credential.hash ===
@@ -108,14 +67,14 @@ assert(
 
 Added in v2.0.0
 
-## fromCBORBytesOrThrow
+## decodeCBORBytesOrThrow
 
 Decode CBOR bytes to a Credential, throws on error.
 
 **Signature**
 
 ```ts
-export declare const fromCBORBytesOrThrow: SerdeImpl.FromCBORBytesOrThrow<
+export declare const decodeCBORBytesOrThrow: Serialization.FromCBORBytesOrThrow<
   ScriptHash.ScriptHash | KeyHash.KeyHash
 >;
 ```
@@ -129,7 +88,7 @@ import assert from "assert";
 const bytes = Bytes.fromHexOrThrow(
   "8201581cc37b1b5dc0669f1d3c61a6fddb2e8fde96be87b881c60bce8e8d542f",
 );
-const credential = Credential.fromCBORBytesOrThrow(bytes);
+const credential = Credential.decodeCBORBytesOrThrow(bytes);
 assert(credential._tag === "ScriptHash");
 assert(
   credential.hash ===
@@ -139,14 +98,47 @@ assert(
 
 Added in v2.0.0
 
-## fromCBOROrThrow
+## decodeCBORHex
+
+Decode a CBOR hex string to a Credential
+
+**Signature**
+
+```ts
+export declare const decodeCBORHex: Serialization.FromCBOR<
+  string,
+  ScriptHash.ScriptHash | KeyHash.KeyHash,
+  CredentialError
+>;
+```
+
+**Example**
+
+```ts
+import { Credential } from "@lucid-evolution/experimental";
+import assert from "assert";
+
+const cborHex =
+  "8200581cc37b1b5dc0669f1d3c61a6fddb2e8fde96be87b881c60bce8e8d542f";
+const credential = Credential.decodeCBORHexOrThrow(cborHex);
+assert(credential._tag === "KeyHash");
+assert(
+  credential.hash ===
+    "c37b1b5dc0669f1d3c61a6fddb2e8fde96be87b881c60bce8e8d542f",
+);
+```
+
+Added in v2.0.0
+
+## decodeCBORHexOrThrow
 
 Decode a CBOR hex string to a Credential, throws on error.
 
 **Signature**
 
 ```ts
-export declare const fromCBOROrThrow: SerdeImpl.FromCBOROrThrow<
+export declare const decodeCBORHexOrThrow: Serialization.FromCBOROrThrow<
+  string,
   ScriptHash.ScriptHash | KeyHash.KeyHash
 >;
 ```
@@ -159,7 +151,7 @@ import assert from "assert";
 
 const cborHex =
   "8200581cc37b1b5dc0669f1d3c61a6fddb2e8fde96be87b881c60bce8e8d542f";
-const credential = Credential.fromCBOROrThrow(cborHex);
+const credential = Credential.decodeCBORHexOrThrow(cborHex);
 assert(credential._tag === "KeyHash");
 assert(
   credential.hash ===
@@ -169,7 +161,42 @@ assert(
 
 Added in v2.0.0
 
-## toCBOR
+## encodeCBORBytes
+
+Convert credential to CBOR bytes
+Internal helper function used by toCBOR
+
+**Signature**
+
+```ts
+export declare const encodeCBORBytes: Serialization.ToCBORBytes<
+  ScriptHash.ScriptHash | KeyHash.KeyHash
+>;
+```
+
+**Example**
+
+```ts
+import { Credential, Bytes, KeyHash } from "@lucid-evolution/experimental";
+import assert from "assert";
+
+const keyHash = KeyHash.makeOrThrow(
+  "c37b1b5dc0669f1d3c61a6fddb2e8fde96be87b881c60bce8e8d542f",
+);
+const cborBytes = Credential.encodeCBORBytes(keyHash);
+// Verify the bytes are correct by converting back to hex
+const hexString = Bytes.toHexOrThrow(cborBytes);
+assert(hexString.startsWith("82")); // Array of 2 elements in CBOR
+assert(
+  hexString.includes(
+    "c37b1b5dc0669f1d3c61a6fddb2e8fde96be87b881c60bce8e8d542f",
+  ),
+);
+```
+
+Added in v2.0.0
+
+## encodeCBORHex
 
 CBOR diagnostic notation for Credential:
 credential = [0, addr_keyhash // 1, script_hash]
@@ -186,7 +213,7 @@ Uses a pre-configured CBOR encoder for better performance
 **Signature**
 
 ```ts
-export declare const toCBOR: SerdeImpl.ToCBOR<
+export declare const encodeCBORHex: Serialization.ToCBOR<
   ScriptHash.ScriptHash | KeyHash.KeyHash
 >;
 ```
@@ -200,7 +227,7 @@ import assert from "assert";
 const scriptHashCredential = ScriptHash.makeOrThrow(
   "c37b1b5dc0669f1d3c61a6fddb2e8fde96be87b881c60bce8e8d542f",
 );
-const cbor = Credential.toCBOR(scriptHashCredential);
+const cbor = Credential.encodeCBORHex(scriptHashCredential);
 assert(
   cbor === "8201581cc37b1b5dc0669f1d3c61a6fddb2e8fde96be87b881c60bce8e8d542f",
 );

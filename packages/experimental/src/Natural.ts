@@ -1,14 +1,14 @@
-import { FastCheck, Schema } from "effect";
+import { FastCheck, Inspectable, Schema } from "effect";
 
 /**
  * Natural number constructors
- * Used for validating positive integers
+ * Used for validating non negative integers
  *
  * @since 2.0.0
  */
-export class Natural extends Schema.Class<Natural>("Natural")({
-  number: Schema.NonNegative,
-}) {}
+export const Natural = Schema.Positive.pipe(Schema.brand("Natural"));
+
+export type Natural = typeof Natural.Type;
 
 /**
  * Check if the given value is a valid PositiveNumber
@@ -23,11 +23,9 @@ export class Natural extends Schema.Class<Natural>("Natural")({
  * @since 2.0.0
  * @category predicates
  */
-export const makeOrThrow = (number: number): Natural => {
-  return new Natural({ number });
-};
+// export const makeOrThrow = (number: number): Natural => Natural.make(number);
 
 export const generator = FastCheck.integer({
   min: 1,
   max: Number.MAX_SAFE_INTEGER,
-}).map((number) => makeOrThrow(number));
+}).map((number) => Natural.make(number));

@@ -30,12 +30,12 @@ Extract detailed information from a bech32 address
 ```ts
 export declare const fromBech32: SerdeImpl.FromBech32<
   AddressDetails,
-  | Bytes.BytesError
   | ScriptHash.ScriptHashError
   | KeyHash.KeyHashError
   | PointerAddress.PointerAddressError
   | ParseError
   | Bech32.Bech32Error
+  | Bytes.BytesError
   | Address.AddressError
 >;
 ```
@@ -71,11 +71,11 @@ Extract detailed information from a hex-encoded address
 ```ts
 export declare const fromHex: SerdeImpl.FromHex<
   AddressDetails,
-  | Bytes.BytesError
   | ScriptHash.ScriptHashError
   | KeyHash.KeyHashError
   | PointerAddress.PointerAddressError
   | ParseError
+  | Bytes.BytesError
   | Address.AddressError
 >;
 ```
@@ -117,12 +117,12 @@ export declare const fromString: (
     YieldWrap<
       Effect.Effect<
         AddressDetails,
-        | Bytes.BytesError
         | ScriptHash.ScriptHashError
         | KeyHash.KeyHashError
         | PointerAddress.PointerAddressError
         | ParseError
         | Bech32.Bech32Error
+        | Bytes.BytesError
         | Address.AddressError,
         never
       >
@@ -133,12 +133,12 @@ export declare const fromString: (
           YieldWrap<
             Effect.Effect<
               AddressDetails,
-              | Bytes.BytesError
               | ScriptHash.ScriptHashError
               | KeyHash.KeyHashError
               | PointerAddress.PointerAddressError
               | ParseError
               | Bech32.Bech32Error
+              | Bytes.BytesError
               | Address.AddressError,
               never
             >
@@ -150,12 +150,12 @@ export declare const fromString: (
     YieldWrap<
       Effect.Effect<
         AddressDetails,
-        | Bytes.BytesError
         | ScriptHash.ScriptHashError
         | KeyHash.KeyHashError
         | PointerAddress.PointerAddressError
         | ParseError
         | Bech32.Bech32Error
+        | Bytes.BytesError
         | Address.AddressError,
         never
       >
@@ -166,12 +166,12 @@ export declare const fromString: (
           YieldWrap<
             Effect.Effect<
               AddressDetails,
-              | Bytes.BytesError
               | ScriptHash.ScriptHashError
               | KeyHash.KeyHashError
               | PointerAddress.PointerAddressError
               | ParseError
               | Bech32.Bech32Error
+              | Bytes.BytesError
               | Address.AddressError,
               never
             >
