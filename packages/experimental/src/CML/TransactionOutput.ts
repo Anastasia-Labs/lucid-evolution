@@ -1,16 +1,81 @@
 /**
  * @since 2.0.0
  */
-import { Data, Effect } from "effect";
+import { Data, Effect, Inspectable, Schema } from "effect";
+import { Bytes } from "../index.js";
+import * as CBOR from "../CBOR.js";
 import * as CML from "@anastasia-labs/cardano-multiplatform-lib-nodejs";
 
 /**
- * Type alias for the CML TransactionOutput class
+ * CDDL specs (Shelley era)
+ * Shelley transaction output format: [address, amount, ?datum_hash]
  *
  * @since 2.0.0
- * @category Types
+ * @category schemas
  */
-export type TransactionOutput = CML.TransactionOutput;
+export class ShelleyTransactionOutput
+  extends Schema.TaggedClass<ShelleyTransactionOutput>(
+    "ShelleyTransactionOutput",
+  )("ShelleyTransactionOutput", {
+    address: Schema.Uint8Array,
+    amount: Schema.BigInt,
+    datumHash: Schema.optional(Schema.Uint8Array),
+  }) {
+  [Inspectable.NodeInspectSymbol]() {
+    return {
+      _tag: "ShelleyTransactionOutput",
+      address: this.address,
+      amount: this.amount,
+      datumHash: this.datumHash,
+    };
+  }
+}
+
+/**
+ * CDDL specs (Babbage era)
+ * Babbage format transaction output: {0: address, 1: value, ?2: datum_option, ?3: script_ref}
+ *
+ * @since 2.0.0
+ * @category schemas
+ */
+export class BabbageTransactionOutput
+  extends Schema.TaggedClass<BabbageTransactionOutput>(
+    "BabbageTransactionOutput",
+  )("BabbageTransactionOutput", {
+    address: Schema.Uint8Array,
+    value: Schema.BigInt,
+    datumOption: Schema.optional(Schema.Uint8Array),
+    scriptRef: Schema.optional(Schema.Uint8Array),
+  }) {
+  [Inspectable.NodeInspectSymbol]() {
+    return {
+      _tag: "BabbageTransactionOutput",
+      address: this.address,
+      value: this.value,
+      datumOption: this.datumOption,
+      scriptRef: this.scriptRef,
+    };
+  }
+}
+
+/**
+ * CDDL specs (Conway era)
+ * transaction_output = shelley_transaction_output / babbage_transaction_output
+ *
+ * value = coin / [coin, multiasset<positive_coin>]
+ * coin = uint
+ */
+
+/**
+ * Transaction output union type matching CDDL: shelley_transaction_output / babbage_transaction_output
+ *
+ * @since 2.0.0
+ * @category schemas
+ */
+export const TransactionOutput = Schema.Union(
+  ShelleyTransactionOutput,
+  BabbageTransactionOutput,
+);
 
 /**
  * Error class for TransactionOutput operations
@@ -24,666 +89,699 @@ export class TransactionOutputError extends Data.TaggedError(
   "TransactionOutputError",
 )<{
   message?: string;
+  cause?: unknown;
 }> {}
 
 /**
- * Method free of TransactionOutput
+ * Check if the given value is a valid TransactionOutput
+ *
+ * @example
+ * import { TransactionOutput, Address, Bytes } from "@lucid-evolution/experimental";
+ * import { Effect } from "effect";
+ * import assert from "assert";
+ *
+ * const addressBytes = Bytes.fromHexOrThrow("019493315cd92eb5d8c4304e67b7e16ae36d61d34502694657811a2c8e337b62cfff6403a06a3acbc34f8c46003c69fe79a3628cefa9c47251");
+ * const effect = Address.fromBytes(addressBytes);
+ * const address = Effect.runSync(effect);
+ * const transactionOutput = TransactionOutput.makeOrThrow(address, 1000000n);
+ * const isValid = TransactionOutput.isTransactionOutput(transactionOutput);
+ * assert(isValid === true);
  *
  * @since 2.0.0
- * @category Methods
+ * @category predicates
  */
-export const free: (
-  instance: CML.TransactionOutput,
-) => Effect.Effect<void, TransactionOutputError> = Effect.fn(
-  (instance: CML.TransactionOutput) =>
-    Effect.try({
-      try: () => instance.free(),
-      catch: () =>
-        new TransactionOutputError({
-          message: `TransactionOutput.free failed Hint: Check if you're calling free() more than once.`,
-        }),
-    }),
-);
+export const isTransactionOutput = Schema.is(TransactionOutput);
 
 /**
- * Unsafely calls instance.free without Effect wrapper
+ * Create a Babbage TransactionOutput
  *
- * @since 2.0.0
- * @category MethodsUnsafe
- */
-export const freeUnsafe = (instance: CML.TransactionOutput): void =>
-  Effect.runSync(free(instance));
-
-/**
- * Static method _new of TransactionOutput
+ * @example
+ * import { TransactionOutput, Bytes } from "@lucid-evolution/experimental";
  *
- * @since 2.0.0
- * @category Constructors
+ * const addressBytes = Bytes.fromHexOrThrow("019493315cd92eb5d8c4304e67b7e16ae36d61d34502694657811a2c8e337b62cfff6403a06a3acbc34f8c46003c69fe79a3628cefa9c47251");
+ * const effect = Address.fromBytes(addressBytes);
+ * const address = Effect.runSync(effect);
+ * const output = TransactionOutput.makeBabbageOrThrow(address, 2000000n);
+ *
+ * @category constructors
  */
-export const _new: (
-  address: CML.Address,
-  amount: CML.Value,
-  datumOption: CML.DatumOption,
-  scriptReference: CML.Script,
-) => Effect.Effect<CML.TransactionOutput, TransactionOutputError> = Effect.fn(
-  function* (
-    address: CML.Address,
-    amount: CML.Value,
-    datumOption: CML.DatumOption,
-    scriptReference: CML.Script,
-  ) {
-    return yield* Effect.try({
-      try: () =>
-        CML.TransactionOutput.new(
-          address,
-          amount,
-          datumOption,
-          scriptReference,
-        ),
-      catch: () =>
-        new TransactionOutputError({
-          message: `TransactionOutput._new failed with parameters: ${address} (Address), ${amount} (Value), ${datumOption} (DatumOption), ${scriptReference} (Script). `,
-        }),
+const makeBabbageOrThrow = (
+  address: Uint8Array,
+  value: bigint,
+  datumOption?: Uint8Array,
+  scriptRef?: Uint8Array,
+): BabbageTransactionOutput => {
+  if (value < 0n) {
+    throw new TransactionOutputError({
+      message: `TransactionOutput value must be non-negative, got: ${value}`,
     });
-  },
-);
-
-/**
- * Unsafely calls TransactionOutput._new without Effect wrapper
- *
- * @since 2.0.0
- * @category ConstructorsUnsafe
- */
-export const _newUnsafe = (
-  address: CML.Address,
-  amount: CML.Value,
-  datumOption: CML.DatumOption,
-  scriptReference: CML.Script,
-): CML.TransactionOutput =>
-  Effect.runSync(_new(address, amount, datumOption, scriptReference));
-
-/**
- * Method address of TransactionOutput
- *
- * @since 2.0.0
- * @category Methods
- */
-export const address: (
-  instance: CML.TransactionOutput,
-) => Effect.Effect<CML.Address, TransactionOutputError> = Effect.fn(
-  (instance: CML.TransactionOutput) =>
-    Effect.try({
-      try: () => instance.address(),
-      catch: () =>
-        new TransactionOutputError({
-          message: `TransactionOutput.address failed `,
-        }),
-    }),
-);
-
-/**
- * Unsafely calls instance.address without Effect wrapper
- *
- * @since 2.0.0
- * @category MethodsUnsafe
- */
-export const addressUnsafe = (instance: CML.TransactionOutput): CML.Address =>
-  Effect.runSync(address(instance));
-
-/**
- * Method amount of TransactionOutput
- *
- * @since 2.0.0
- * @category Methods
- */
-export const amount: (
-  instance: CML.TransactionOutput,
-) => Effect.Effect<CML.Value, TransactionOutputError> = Effect.fn(
-  (instance: CML.TransactionOutput) =>
-    Effect.try({
-      try: () => instance.amount(),
-      catch: () =>
-        new TransactionOutputError({
-          message: `TransactionOutput.amount failed `,
-        }),
-    }),
-);
-
-/**
- * Unsafely calls instance.amount without Effect wrapper
- *
- * @since 2.0.0
- * @category MethodsUnsafe
- */
-export const amountUnsafe = (instance: CML.TransactionOutput): CML.Value =>
-  Effect.runSync(amount(instance));
-
-/**
- * Method setAmount of TransactionOutput
- *
- * @since 2.0.0
- * @category Methods
- */
-export const setAmount: (
-  instance: CML.TransactionOutput,
-  amount: CML.Value,
-) => Effect.Effect<void, TransactionOutputError> = Effect.fn(
-  (instance: CML.TransactionOutput, amount: CML.Value) =>
-    Effect.try({
-      try: () => instance.set_amount(amount),
-      catch: () =>
-        new TransactionOutputError({
-          message: `TransactionOutput.setAmount failed with parameters: ${amount} (Value). `,
-        }),
-    }),
-);
-
-/**
- * Unsafely calls instance.setAmount without Effect wrapper
- *
- * @since 2.0.0
- * @category MethodsUnsafe
- */
-export const setAmountUnsafe = (
-  instance: CML.TransactionOutput,
-  amount: CML.Value,
-): void => Effect.runSync(setAmount(instance, amount));
-
-/**
- * Method datum of TransactionOutput
- *
- * @since 2.0.0
- * @category Methods
- */
-export const datum: (
-  instance: CML.TransactionOutput,
-) => Effect.Effect<CML.DatumOption | undefined, TransactionOutputError> =
-  Effect.fn((instance: CML.TransactionOutput) =>
-    Effect.try({
-      try: () => instance.datum(),
-      catch: () =>
-        new TransactionOutputError({
-          message: `TransactionOutput.datum failed `,
-        }),
-    }),
+  }
+  return new BabbageTransactionOutput(
+    { address, value, datumOption, scriptRef },
+    { disableValidation: true },
   );
+};
 
 /**
- * Unsafely calls instance.datum without Effect wrapper
+ * Create a Shelley TransactionOutput (most common use case)
  *
- * @since 2.0.0
- * @category MethodsUnsafe
- */
-export const datumUnsafe = (
-  instance: CML.TransactionOutput,
-): CML.DatumOption | undefined => Effect.runSync(datum(instance));
-
-/**
- * Method datumHash of TransactionOutput
+ * @example
+ * import { TransactionOutput, Address, Bytes } from "@lucid-evolution/experimental";
+ * import { Effect } from "effect";
  *
- * @since 2.0.0
- * @category Methods
+ * const addressBytes = Bytes.fromHexOrThrow("019493315cd92eb5d8c4304e67b7e16ae36d61d34502694657811a2c8e337b62cfff6403a06a3acbc34f8c46003c69fe79a3628cefa9c47251");
+ * const effect = Address.fromBytes(addressBytes);
+ * const address = Effect.runSync(effect);
+ * const output = TransactionOutput.makeShelleyOrThrow(address, 1000000n);
+ *
+ * @category constructors
  */
-export const datumHash: (
-  instance: CML.TransactionOutput,
-) => Effect.Effect<CML.DatumHash | undefined, TransactionOutputError> =
-  Effect.fn((instance: CML.TransactionOutput) =>
-    Effect.try({
-      try: () => instance.datum_hash(),
-      catch: () =>
-        new TransactionOutputError({
-          message: `TransactionOutput.datumHash failed `,
-        }),
-    }),
+export const makeShelleyOrThrow = (
+  address: Uint8Array,
+  amount: bigint,
+  datumHash?: Uint8Array,
+): ShelleyTransactionOutput => {
+  // validation logic
+  return new ShelleyTransactionOutput(
+    { address, amount, datumHash },
+    { disableValidation: true },
   );
+};
 
 /**
- * Unsafely calls instance.datumHash without Effect wrapper
+ * Smart constructor that creates the appropriate output type based on parameters
  *
- * @since 2.0.0
- * @category MethodsUnsafe
- */
-export const datumHashUnsafe = (
-  instance: CML.TransactionOutput,
-): CML.DatumHash | undefined => Effect.runSync(datumHash(instance));
-
-/**
- * Method scriptRef of TransactionOutput
+ * @example
+ * import { TransactionOutput, Bytes } from "@lucid-evolution/experimental";
  *
- * @since 2.0.0
- * @category Methods
- */
-export const scriptRef: (
-  instance: CML.TransactionOutput,
-) => Effect.Effect<CML.Script | undefined, TransactionOutputError> = Effect.fn(
-  (instance: CML.TransactionOutput) =>
-    Effect.try({
-      try: () => instance.script_ref(),
-      catch: () =>
-        new TransactionOutputError({
-          message: `TransactionOutput.scriptRef failed `,
-        }),
-    }),
-);
-
-/**
- * Unsafely calls instance.scriptRef without Effect wrapper
+ * const addressBytes = Bytes.fromHexOrThrow("019493315cd92eb5d8c4304e67b7e16ae36d61d34502694657811a2c8e337b62cfff6403a06a3acbc34f8c46003c69fe79a3628cefa9c47251");
+ * const effect = Address.fromBytes(addressBytes);
+ * const address = Effect.runSync(effect);
+ * const output = TransactionOutput.makeOrThrow(address, 1000000n);
  *
- * @since 2.0.0
- * @category MethodsUnsafe
+ * @category constructors
  */
-export const scriptRefUnsafe = (
-  instance: CML.TransactionOutput,
-): CML.Script | undefined => Effect.runSync(scriptRef(instance));
-
-/**
- * Method toCborBytes of TransactionOutput
- *
- * @since 2.0.0
- * @category Methods
- */
-export const toCborBytes: (
-  instance: CML.TransactionOutput,
-) => Effect.Effect<Uint8Array, TransactionOutputError> = Effect.fn(
-  (instance: CML.TransactionOutput) =>
-    Effect.try({
-      try: () => instance.to_cbor_bytes(),
-      catch: () =>
-        new TransactionOutputError({
-          message: `TransactionOutput.toCborBytes failed TransactionOutput is not valid for Uint8Array conversion. Hint: Check byte length and encoding.`,
-        }),
-    }),
-);
-
-/**
- * Unsafely calls instance.toCborBytes without Effect wrapper
- *
- * @since 2.0.0
- * @category MethodsUnsafe
- */
-export const toCborBytesUnsafe = (
-  instance: CML.TransactionOutput,
-): Uint8Array => Effect.runSync(toCborBytes(instance));
-
-/**
- * Method toCanonicalCborBytes of TransactionOutput
- *
- * @since 2.0.0
- * @category Methods
- */
-export const toCanonicalCborBytes: (
-  instance: CML.TransactionOutput,
-) => Effect.Effect<Uint8Array, TransactionOutputError> = Effect.fn(
-  (instance: CML.TransactionOutput) =>
-    Effect.try({
-      try: () => instance.to_canonical_cbor_bytes(),
-      catch: () =>
-        new TransactionOutputError({
-          message: `TransactionOutput.toCanonicalCborBytes failed TransactionOutput is not valid for Uint8Array conversion. Hint: Check byte length and encoding.`,
-        }),
-    }),
-);
-
-/**
- * Unsafely calls instance.toCanonicalCborBytes without Effect wrapper
- *
- * @since 2.0.0
- * @category MethodsUnsafe
- */
-export const toCanonicalCborBytesUnsafe = (
-  instance: CML.TransactionOutput,
-): Uint8Array => Effect.runSync(toCanonicalCborBytes(instance));
-
-/**
- * Static method fromCborBytes of TransactionOutput
- *
- * @since 2.0.0
- * @category Constructors
- */
-export const fromCborBytes: (
-  cborBytes: Uint8Array,
-) => Effect.Effect<CML.TransactionOutput, TransactionOutputError> = Effect.fn(
-  function* (cborBytes: Uint8Array) {
-    return yield* Effect.try({
-      try: () => CML.TransactionOutput.from_cbor_bytes(cborBytes),
-      catch: () =>
-        new TransactionOutputError({
-          message: `TransactionOutput.fromCborBytes failed with parameters: ${cborBytes}. Hint: Check byte length and encoding.`,
-        }),
-    });
+const makeOrThrow = (
+  address: Uint8Array,
+  amount: bigint,
+  options?: {
+    datumHash?: Uint8Array;
+    datumOption?: Uint8Array;
+    scriptRef?: Uint8Array;
   },
-);
+): Schema.Schema.Type<typeof TransactionOutput> => {
+  if (options?.datumOption || options?.scriptRef) {
+    return makeBabbageOrThrow(
+      address,
+      amount,
+      options.datumOption,
+      options.scriptRef,
+    );
+  } else {
+    return makeShelleyOrThrow(address, amount, options?.datumHash);
+  }
+};
 
-/**
- * Unsafely calls TransactionOutput.fromCborBytes without Effect wrapper
- *
- * @since 2.0.0
- * @category ConstructorsUnsafe
- */
-export const fromCborBytesUnsafe = (
-  cborBytes: Uint8Array,
-): CML.TransactionOutput => Effect.runSync(fromCborBytes(cborBytes));
+// /**
+//  * Method address of TransactionOutput
+//  *
+//  * @since 2.0.0
+//  * @category Methods
+//  */
+// export const address: (
+//   instance: CML.TransactionOutput,
+// ) => Effect.Effect<CML.Address, TransactionOutputError> = Effect.fn(
+//   (instance: CML.TransactionOutput) =>
+//     Effect.try({
+//       try: () => instance.address(),
+//       catch: () =>
+//         new TransactionOutputError({
+//           message: `TransactionOutput.address failed `,
+//         }),
+//     }),
+// );
 
-/**
- * Method toCborHex of TransactionOutput
- *
- * @since 2.0.0
- * @category Methods
- */
-export const toCborHex: (
-  instance: CML.TransactionOutput,
-) => Effect.Effect<string, TransactionOutputError> = Effect.fn(
-  (instance: CML.TransactionOutput) =>
-    Effect.try({
-      try: () => instance.to_cbor_hex(),
-      catch: () =>
-        new TransactionOutputError({
-          message: `TransactionOutput.toCborHex failed TransactionOutput is not valid for string conversion. Hint: Make sure it's a valid hex string representing CBOR data.`,
-        }),
-    }),
-);
+// /**
+//  * Unsafely calls instance.address without Effect wrapper
+//  *
+//  * @since 2.0.0
+//  * @category MethodsUnsafe
+//  */
+// export const addressUnsafe = (instance: CML.TransactionOutput): CML.Address =>
+//   Effect.runSync(address(instance));
 
-/**
- * Unsafely calls instance.toCborHex without Effect wrapper
- *
- * @since 2.0.0
- * @category MethodsUnsafe
- */
-export const toCborHexUnsafe = (instance: CML.TransactionOutput): string =>
-  Effect.runSync(toCborHex(instance));
+// /**
+//  * Method amount of TransactionOutput
+//  *
+//  * @since 2.0.0
+//  * @category Methods
+//  */
+// export const amount: (
+//   instance: CML.TransactionOutput,
+// ) => Effect.Effect<CML.Value, TransactionOutputError> = Effect.fn(
+//   (instance: CML.TransactionOutput) =>
+//     Effect.try({
+//       try: () => instance.amount(),
+//       catch: () =>
+//         new TransactionOutputError({
+//           message: `TransactionOutput.amount failed `,
+//         }),
+//     }),
+// );
 
-/**
- * Method toCanonicalCborHex of TransactionOutput
- *
- * @since 2.0.0
- * @category Methods
- */
-export const toCanonicalCborHex: (
-  instance: CML.TransactionOutput,
-) => Effect.Effect<string, TransactionOutputError> = Effect.fn(
-  (instance: CML.TransactionOutput) =>
-    Effect.try({
-      try: () => instance.to_canonical_cbor_hex(),
-      catch: () =>
-        new TransactionOutputError({
-          message: `TransactionOutput.toCanonicalCborHex failed TransactionOutput is not valid for string conversion. Hint: Make sure it's a valid hex string representing CBOR data.`,
-        }),
-    }),
-);
+// /**
+//  * Unsafely calls instance.amount without Effect wrapper
+//  *
+//  * @since 2.0.0
+//  * @category MethodsUnsafe
+//  */
+// export const amountUnsafe = (instance: CML.TransactionOutput): CML.Value =>
+//   Effect.runSync(amount(instance));
 
-/**
- * Unsafely calls instance.toCanonicalCborHex without Effect wrapper
- *
- * @since 2.0.0
- * @category MethodsUnsafe
- */
-export const toCanonicalCborHexUnsafe = (
-  instance: CML.TransactionOutput,
-): string => Effect.runSync(toCanonicalCborHex(instance));
+// /**
+//  * Update the amount in a transaction output
+//  *
+//  * @example
+//  * import { TransactionOutput, Address } from "@lucid-evolution/experimental";
+//  * import { Effect } from "effect";
+//  * import assert from "assert";
+//  *
+//  * const address = Address.fromBech32OrThrow("addr1...");
+//  * const output = TransactionOutput.makeOrThrow({ address, amount: 1000000n });
+//  *
+//  * const updatedOutputEffect = TransactionOutput.setAmount(output, 2000000n);
+//  * const updatedOutput = Effect.runSync(updatedOutputEffect);
+//  *
+//  * assert(updatedOutput.amount === 2000000n);
+//  *
+//  * @since 2.0.0
+//  * @category modifiers
+//  */
+// export const setAmount = (
+//   output: TransactionOutput,
+//   newAmount: bigint,
+// ): Effect.Effect<TransactionOutput, TransactionOutputError> => {
+//   return Effect.succeed(
+//     TransactionOutput.make(
+//       {
+//         address: output.address, // Keep the same address bytes
+//         amount: newAmount,
+//       },
+//       { disableValidation: false }, // Let schema validation handle the non-negative check
+//     ),
+//   );
+// };
 
-/**
- * Static method fromCborHex of TransactionOutput
- *
- * @since 2.0.0
- * @category Constructors
- */
-export const fromCborHex: (
-  cborBytes: string,
-) => Effect.Effect<CML.TransactionOutput, TransactionOutputError> = Effect.fn(
-  function* (cborBytes: string) {
-    return yield* Effect.try({
-      try: () => CML.TransactionOutput.from_cbor_hex(cborBytes),
-      catch: () =>
-        new TransactionOutputError({
-          message: `TransactionOutput.fromCborHex failed with parameters: ${cborBytes}. Hint: Make sure it's a valid hex string representing CBOR data.`,
-        }),
-    });
-  },
-);
+// /**
+//  * Update the amount in a transaction output, or throw if an error occurs
+//  *
+//  * @example
+//  * import { TransactionOutput, Address } from "@lucid-evolution/experimental";
+//  * import assert from "assert";
+//  *
+//  * const address = Address.fromBech32OrThrow("addr1...");
+//  * const output = TransactionOutput.makeOrThrow({ address, amount: 1000000n });
+//  *
+//  * const updatedOutput = TransactionOutput.setAmountOrThrow(output, 2000000n);
+//  *
+//  * assert(updatedOutput.amount === 2000000n);
+//  *
+//  * @since 2.0.0
+//  * @category modifiers
+//  */
+// export const setAmountOrThrow = (
+//   output: TransactionOutput,
+//   newAmount: bigint,
+// ): TransactionOutput => Effect.runSync(setAmount(output, newAmount));
 
-/**
- * Unsafely calls TransactionOutput.fromCborHex without Effect wrapper
- *
- * @since 2.0.0
- * @category ConstructorsUnsafe
- */
-export const fromCborHexUnsafe = (cborBytes: string): CML.TransactionOutput =>
-  Effect.runSync(fromCborHex(cborBytes));
+// /**
+//  * Create a new TransactionOutput with the specified address and amount
+//  *
+//  * @example
+//  * import { TransactionOutput, Address } from "@lucid-evolution/experimental";
+//  * import { Effect } from "effect";
+//  * import assert from "assert";
+//  *
+//  * const address = Address.fromBech32OrThrow("addr1...");
+//  * const outputEffect = TransactionOutput.make(address, 1000000n);
+//  * const output = Effect.runSync(outputEffect);
+//  *
+//  * assert(Address.equals(output.address, address));
+//  * assert(output.amount === 1000000n);
+//  *
+//  * @since 2.0.0
+//  * @category constructors
+//  */
+// export const make = (
+//   addressBytes: Uint8Array,
+//   amount: bigint,
+// ): Effect.Effect<TransactionOutput, TransactionOutputError> => {
+//   return Effect.succeed(
+//     TransactionOutput.make(
+//       { address: addressBytes, amount },
+//       { disableValidation: false }, // Let schema validation handle the non-negative check
+//     ),
+//   );
+// };
 
-/**
- * Method toJson of TransactionOutput
- *
- * @since 2.0.0
- * @category Methods
- */
-export const toJson: (
-  instance: CML.TransactionOutput,
-) => Effect.Effect<string, TransactionOutputError> = Effect.fn(
-  (instance: CML.TransactionOutput) =>
-    Effect.try({
-      try: () => instance.to_json(),
-      catch: () =>
-        new TransactionOutputError({
-          message: `TransactionOutput.toJson failed TransactionOutput is not valid for string conversion. Hint: Validate your JSON structure.`,
-        }),
-    }),
-);
+// /**
+//  * Method datum of TransactionOutput
+//  *
+//  * @since 2.0.0
+//  * @category Methods
+//  */
+// export const datum: (
+//   instance: CML.TransactionOutput,
+// ) => Effect.Effect<CML.DatumOption | undefined, TransactionOutputError> = Effect
+//   .fn((instance: CML.TransactionOutput) =>
+//     Effect.try({
+//       try: () => instance.datum(),
+//       catch: () =>
+//         new TransactionOutputError({
+//           message: `TransactionOutput.datum failed `,
+//         }),
+//     })
+//   );
 
-/**
- * Unsafely calls instance.toJson without Effect wrapper
- *
- * @since 2.0.0
- * @category MethodsUnsafe
- */
-export const toJsonUnsafe = (instance: CML.TransactionOutput): string =>
-  Effect.runSync(toJson(instance));
+// /**
+//  * Unsafely calls instance.datum without Effect wrapper
+//  *
+//  * @since 2.0.0
+//  * @category MethodsUnsafe
+//  */
+// export const datumUnsafe = (
+//   instance: CML.TransactionOutput,
+// ): CML.DatumOption | undefined => Effect.runSync(datum(instance));
 
-/**
- * Method toJsValue of TransactionOutput
- *
- * @since 2.0.0
- * @category Methods
- */
-export const toJsValue: (
-  instance: CML.TransactionOutput,
-) => Effect.Effect<any, TransactionOutputError> = Effect.fn(
-  (instance: CML.TransactionOutput) =>
-    Effect.try({
-      try: () => instance.to_js_value(),
-      catch: () =>
-        new TransactionOutputError({
-          message: `TransactionOutput.toJsValue failed TransactionOutput is not valid for any conversion. `,
-        }),
-    }),
-);
+// /**
+//  * Method datumHash of TransactionOutput
+//  *
+//  * @since 2.0.0
+//  * @category Methods
+//  */
+// export const datumHash: (
+//   instance: CML.TransactionOutput,
+// ) => Effect.Effect<CML.DatumHash | undefined, TransactionOutputError> = Effect
+//   .fn((instance: CML.TransactionOutput) =>
+//     Effect.try({
+//       try: () => instance.datum_hash(),
+//       catch: () =>
+//         new TransactionOutputError({
+//           message: `TransactionOutput.datumHash failed `,
+//         }),
+//     })
+//   );
 
-/**
- * Unsafely calls instance.toJsValue without Effect wrapper
- *
- * @since 2.0.0
- * @category MethodsUnsafe
- */
-export const toJsValueUnsafe = (instance: CML.TransactionOutput): any =>
-  Effect.runSync(toJsValue(instance));
+// /**
+//  * Unsafely calls instance.datumHash without Effect wrapper
+//  *
+//  * @since 2.0.0
+//  * @category MethodsUnsafe
+//  */
+// export const datumHashUnsafe = (
+//   instance: CML.TransactionOutput,
+// ): CML.DatumHash | undefined => Effect.runSync(datumHash(instance));
 
-/**
- * Static method fromJson of TransactionOutput
- *
- * @since 2.0.0
- * @category Constructors
- */
-export const fromJson: (
-  json: string,
-) => Effect.Effect<CML.TransactionOutput, TransactionOutputError> = Effect.fn(
-  function* (json: string) {
-    return yield* Effect.try({
-      try: () => CML.TransactionOutput.from_json(json),
-      catch: () =>
-        new TransactionOutputError({
-          message: `TransactionOutput.fromJson failed with parameters: ${json}. Hint: Validate your JSON structure.`,
-        }),
-    });
-  },
-);
+// /**
+//  * Method scriptRef of TransactionOutput
+//  *
+//  * @since 2.0.0
+//  * @category Methods
+//  */
+// export const scriptRef: (
+//   instance: CML.TransactionOutput,
+// ) => Effect.Effect<CML.Script | undefined, TransactionOutputError> = Effect.fn(
+//   (instance: CML.TransactionOutput) =>
+//     Effect.try({
+//       try: () => instance.script_ref(),
+//       catch: () =>
+//         new TransactionOutputError({
+//           message: `TransactionOutput.scriptRef failed `,
+//         }),
+//     }),
+// );
 
-/**
- * Unsafely calls TransactionOutput.fromJson without Effect wrapper
- *
- * @since 2.0.0
- * @category ConstructorsUnsafe
- */
-export const fromJsonUnsafe = (json: string): CML.TransactionOutput =>
-  Effect.runSync(fromJson(json));
+// /**
+//  * Unsafely calls instance.scriptRef without Effect wrapper
+//  *
+//  * @since 2.0.0
+//  * @category MethodsUnsafe
+//  */
+// export const scriptRefUnsafe = (
+//   instance: CML.TransactionOutput,
+// ): CML.Script | undefined => Effect.runSync(scriptRef(instance));
 
-/**
- * Static method newAlonzoFormatTxOut of TransactionOutput
- *
- * @since 2.0.0
- * @category Constructors
- */
-export const newAlonzoFormatTxOut: (
-  alonzoFormatTxOut: CML.AlonzoFormatTxOut,
-) => Effect.Effect<CML.TransactionOutput, TransactionOutputError> = Effect.fn(
-  function* (alonzoFormatTxOut: CML.AlonzoFormatTxOut) {
-    return yield* Effect.try({
-      try: () =>
-        CML.TransactionOutput.new_alonzo_format_tx_out(alonzoFormatTxOut),
-      catch: () =>
-        new TransactionOutputError({
-          message: `TransactionOutput.newAlonzoFormatTxOut failed with parameters: ${alonzoFormatTxOut} (AlonzoFormatTxOut). `,
-        }),
-    });
-  },
-);
+// /**
+//  * Convert TransactionOutput to CBOR bytes
+//  * Internal helper function used by toCBOR
+//  *
+//  * @example
+//  * import { TransactionOutput, Address, Bytes } from "@lucid-evolution/experimental";
+//  * import assert from "assert";
+//  *
+//  * const address = Address.fromBech32OrThrow("addr1...");
+//  * const transactionOutput = TransactionOutput.makeOrThrow({
+//  *   address,
+//  *   amount: 1000000n
+//  * });
+//  *
+//  * const cborBytes = TransactionOutput.toCBORBytes(transactionOutput);
+//  * // Verify the bytes are correct by converting back to hex
+//  * const hexString = Bytes.toHexOrThrow(cborBytes);
+//  * assert(hexString.startsWith("82"));  // Array of 2 elements in CBOR
+//  *
+//  * @since 2.0.0
+//  * @category encoding/decoding
+//  */
+// const toCBORBytes: SerdeImpl.ToCBORBytes<TransactionOutput> = (
+//   transactionOutput,
+// ) => {
+//   // According to CDDL: transaction_output = [address, amount : coin]
+//   // where coin = uint
+//   return CBOR.encodeOrThrow([
+//     transactionOutput.address, // Already raw bytes
+//     transactionOutput.amount,
+//   ]);
+// };
 
-/**
- * Unsafely calls TransactionOutput.newAlonzoFormatTxOut without Effect wrapper
- *
- * @since 2.0.0
- * @category ConstructorsUnsafe
- */
-export const newAlonzoFormatTxOutUnsafe = (
-  alonzoFormatTxOut: CML.AlonzoFormatTxOut,
-): CML.TransactionOutput =>
-  Effect.runSync(newAlonzoFormatTxOut(alonzoFormatTxOut));
+// /**
+//  * CBOR diagnostic notation for TransactionOutput (Shelley era):
+//  * transaction_output = [address, amount]
+//  *
+//  * CBOR hex for TransactionOutput:
+//  * [ h'address_bytes', amount_uint ]
+//  *
+//  * Convert TransactionOutput to CBOR hex encoding
+//  * Uses a pre-configured CBOR encoder for better performance
+//  *
+//  * @example
+//  * import { TransactionOutput, Address } from "@lucid-evolution/experimental";
+//  * import assert from "assert";
+//  *
+//  * const address = Address.fromBech32OrThrow("addr1...");
+//  * const transactionOutput = TransactionOutput.makeOrThrow({
+//  *   address,
+//  *   amount: 1000000n
+//  * });
+//  *
+//  * const cbor = TransactionOutput.toCBOR(transactionOutput);
+//  * assert(cbor.startsWith("82"));  // Array of 2 elements in CBOR
+//  *
+//  * @since 2.0.0
+//  * @category encoding/decoding
+//  */
+// export const toCBOR: SerdeImpl.ToCBOR<TransactionOutput> = (
+//   transactionOutput,
+// ) => Bytes.toHexOrThrow(toCBORBytes(transactionOutput));
 
-/**
- * Static method newConwayFormatTxOut of TransactionOutput
- *
- * @since 2.0.0
- * @category Constructors
- */
-export const newConwayFormatTxOut: (
-  conwayFormatTxOut: CML.ConwayFormatTxOut,
-) => Effect.Effect<CML.TransactionOutput, TransactionOutputError> = Effect.fn(
-  function* (conwayFormatTxOut: CML.ConwayFormatTxOut) {
-    return yield* Effect.try({
-      try: () =>
-        CML.TransactionOutput.new_conway_format_tx_out(conwayFormatTxOut),
-      catch: () =>
-        new TransactionOutputError({
-          message: `TransactionOutput.newConwayFormatTxOut failed with parameters: ${conwayFormatTxOut} (ConwayFormatTxOut). `,
-        }),
-    });
-  },
-);
+// /**
+//  * Decode CBOR bytes to a TransactionOutput
+//  * Internal helper function used by fromCBOR
+//  *
+//  * @example
+//  * import { TransactionOutput, Bytes } from "@lucid-evolution/experimental";
+//  * import { Effect } from "effect";
+//  * import assert from "assert";
+//  *
+//  * const bytes = Bytes.fromHexOrThrow("8258390001..."); // CBOR encoded [address, amount]
+//  * const transactionOutputEffect = TransactionOutput.fromCBORBytes(bytes);
+//  * const transactionOutput = Effect.runSync(transactionOutputEffect);
+//  * assert(transactionOutput.address instanceof Uint8Array);
+//  * assert(typeof transactionOutput.amount === "bigint");
+//  *
+//  * @since 2.0.0
+//  * @category encoding/decoding
+//  */
+// export const fromCBORBytes: SerdeImpl.FromCBORBytes<
+//   TransactionOutput,
+//   CBOR.CBORError | TransactionOutputError
+// > = Effect.fnUntraced(function* (bytes) {
+//   // CBOR decode should give us [addressBytes, amount] where amount is uint (coin)
+//   const decoded: [Uint8Array, bigint] = yield* CBOR.decode(bytes);
 
-/**
- * Unsafely calls TransactionOutput.newConwayFormatTxOut without Effect wrapper
- *
- * @since 2.0.0
- * @category ConstructorsUnsafe
- */
-export const newConwayFormatTxOutUnsafe = (
-  conwayFormatTxOut: CML.ConwayFormatTxOut,
-): CML.TransactionOutput =>
-  Effect.runSync(newConwayFormatTxOut(conwayFormatTxOut));
+//   if (!Array.isArray(decoded) || decoded.length !== 2) {
+//     return yield* Effect.fail(
+//       new TransactionOutputError({
+//         message: "Invalid TransactionOutput CBOR: expected array of length 2",
+//       }),
+//     );
+//   }
 
-/**
- * Method kind of TransactionOutput
- *
- * @since 2.0.0
- * @category Methods
- */
-export const kind: (
-  instance: CML.TransactionOutput,
-) => Effect.Effect<CML.TransactionOutputKind, TransactionOutputError> =
-  Effect.fn((instance: CML.TransactionOutput) =>
-    Effect.try({
-      try: () => instance.kind(),
-      catch: () =>
-        new TransactionOutputError({
-          message: `TransactionOutput.kind failed `,
-        }),
-    }),
-  );
+//   const [addressBytes, amount] = decoded;
 
-/**
- * Unsafely calls instance.kind without Effect wrapper
- *
- * @since 2.0.0
- * @category MethodsUnsafe
- */
-export const kindUnsafe = (
-  instance: CML.TransactionOutput,
-): CML.TransactionOutputKind => Effect.runSync(kind(instance));
+//   return TransactionOutput.make({
+//     address: addressBytes,
+//     amount,
+//   }, { disableValidation: true });
+// });
 
-/**
- * Method asAlonzoFormatTxOut of TransactionOutput
- *
- * @since 2.0.0
- * @category Methods
- */
-export const asAlonzoFormatTxOut: (
-  instance: CML.TransactionOutput,
-) => Effect.Effect<CML.AlonzoFormatTxOut | undefined, TransactionOutputError> =
-  Effect.fn((instance: CML.TransactionOutput) =>
-    Effect.try({
-      try: () => instance.as_alonzo_format_tx_out(),
-      catch: () =>
-        new TransactionOutputError({
-          message: `TransactionOutput.asAlonzoFormatTxOut failed `,
-        }),
-    }),
-  );
+// /**
+//  * Decode a CBOR hex string to a TransactionOutput
+//  *
+//  * @example
+//  * import { TransactionOutput } from "@lucid-evolution/experimental";
+//  * import { Effect } from "effect";
+//  * import assert from "assert";
+//  *
+//  * const cborHex = "8258390001..."; // CBOR hex for [address, amount]
+//  * const transactionOutputEffect = TransactionOutput.fromCBOR(cborHex);
+//  * const transactionOutput = Effect.runSync(transactionOutputEffect);
+//  * assert(Address.isAddress(transactionOutput.address));
+//  * assert(typeof transactionOutput.amount === "bigint");
+//  *
+//  * @since 2.0.0
+//  * @category encoding/decoding
+//  */
+// export const fromCBOR: SerdeImpl.FromCBOR<
+//   TransactionOutput,
+//   | CBOR.CBORError
+//   | TransactionOutputError
+//   | Bytes.BytesError
+// > = Effect.fn(function* (cborHex) {
+//   const bytes = yield* Bytes.fromHex(cborHex);
+//   return yield* fromCBORBytes(bytes);
+// });
 
-/**
- * Unsafely calls instance.asAlonzoFormatTxOut without Effect wrapper
- *
- * @since 2.0.0
- * @category MethodsUnsafe
- */
-export const asAlonzoFormatTxOutUnsafe = (
-  instance: CML.TransactionOutput,
-): CML.AlonzoFormatTxOut | undefined =>
-  Effect.runSync(asAlonzoFormatTxOut(instance));
+// /**
+//  * Decode CBOR bytes to a TransactionOutput, throws on error.
+//  *
+//  * @example
+//  * import { TransactionOutput, Bytes } from "@lucid-evolution/experimental";
+//  * import assert from "assert";
+//  *
+//  * const bytes = Bytes.fromHexOrThrow("8258390001..."); // CBOR for [address, amount]
+//  * const transactionOutput = TransactionOutput.fromCBORBytesOrThrow(bytes);
+//  * assert(Address.isAddress(transactionOutput.address));
+//  * assert(typeof transactionOutput.amount === "bigint");
+//  *
+//  * @since 2.0.0
+//  * @category encoding/decoding
+//  */
+// export const fromCBORBytesOrThrow: SerdeImpl.FromCBORBytesOrThrow<
+//   TransactionOutput
+// > = (bytes) => Effect.runSync(fromCBORBytes(bytes));
 
-/**
- * Method asConwayFormatTxOut of TransactionOutput
- *
- * @since 2.0.0
- * @category Methods
- */
-export const asConwayFormatTxOut: (
-  instance: CML.TransactionOutput,
-) => Effect.Effect<CML.ConwayFormatTxOut | undefined, TransactionOutputError> =
-  Effect.fn((instance: CML.TransactionOutput) =>
-    Effect.try({
-      try: () => instance.as_conway_format_tx_out(),
-      catch: () =>
-        new TransactionOutputError({
-          message: `TransactionOutput.asConwayFormatTxOut failed `,
-        }),
-    }),
-  );
+// /**
+//  * Decode a CBOR hex string to a TransactionOutput, throws on error.
+//  *
+//  * @example
+//  * import { TransactionOutput } from "@lucid-evolution/experimental";
+//  * import assert from "assert";
+//  *
+//  * const cborHex = "8258390001..."; // CBOR hex for [address, amount]
+//  * const transactionOutput = TransactionOutput.fromCBOROrThrow(cborHex);
+//  * assert(Address.isAddress(transactionOutput.address));
+//  * assert(typeof transactionOutput.amount === "bigint");
+//  *
+//  * @since 2.0.0
+//  * @category encoding/decoding
+//  */
+// export const fromCBOROrThrow: SerdeImpl.FromCBOROrThrow<TransactionOutput> = (
+//   cborHex: string,
+// ) => {
+//   const bytes = Bytes.fromHexOrThrow(cborHex);
+//   return fromCBORBytesOrThrow(bytes);
+// };
 
-/**
- * Unsafely calls instance.asConwayFormatTxOut without Effect wrapper
- *
- * @since 2.0.0
- * @category MethodsUnsafe
- */
-export const asConwayFormatTxOutUnsafe = (
-  instance: CML.TransactionOutput,
-): CML.ConwayFormatTxOut | undefined =>
-  Effect.runSync(asConwayFormatTxOut(instance));
+// /**
+//  * Check if two TransactionOutput instances are equal.
+//  *
+//  * @example
+//  * import { TransactionOutput, Address } from "@lucid-evolution/experimental";
+//  * import assert from "assert";
+//  *
+//  * const address = Address.fromBech32OrThrow("addr1...");
+//  *
+//  * const output1 = TransactionOutput.makeOrThrow({ address, amount: 1000000n });
+//  * const output2 = TransactionOutput.makeOrThrow({ address, amount: 1000000n });
+//  * const output3 = TransactionOutput.makeOrThrow({ address, amount: 2000000n });
+//  *
+//  * assert(TransactionOutput.equals(output1, output2) === true);
+//  * assert(TransactionOutput.equals(output1, output3) === false);
+//  *
+//  * @since 2.0.0
+//  * @category equality
+//  */
+// export const equals = (a: TransactionOutput, b: TransactionOutput): boolean => {
+//   return (
+//     a._tag === b._tag &&
+//     a.amount === b.amount &&
+//     a.address.length === b.address.length &&
+//     a.address.every((byte, i) => byte === b.address[i])
+//   );
+// };
+
+// /**
+//  * Static method newAlonzoFormatTxOut of TransactionOutput
+//  *
+//  * @since 2.0.0
+//  * @category Constructors
+//  */
+// export const newAlonzoFormatTxOut: (
+//   alonzoFormatTxOut: CML.AlonzoFormatTxOut,
+// ) => Effect.Effect<CML.TransactionOutput, TransactionOutputError> = Effect.fn(
+//   function* (alonzoFormatTxOut: CML.AlonzoFormatTxOut) {
+//     return yield* Effect.try({
+//       try: () =>
+//         CML.TransactionOutput.new_alonzo_format_tx_out(alonzoFormatTxOut),
+//       catch: () =>
+//         new TransactionOutputError({
+//           message:
+//             `TransactionOutput.newAlonzoFormatTxOut failed with parameters: ${alonzoFormatTxOut} (AlonzoFormatTxOut). `,
+//         }),
+//     });
+//   },
+// );
+
+// /**
+//  * Unsafely calls TransactionOutput.newAlonzoFormatTxOut without Effect wrapper
+//  *
+//  * @since 2.0.0
+//  * @category ConstructorsUnsafe
+//  */
+// export const newAlonzoFormatTxOutUnsafe = (
+//   alonzoFormatTxOut: CML.AlonzoFormatTxOut,
+// ): CML.TransactionOutput =>
+//   Effect.runSync(newAlonzoFormatTxOut(alonzoFormatTxOut));
+
+// /**
+//  * Static method newConwayFormatTxOut of TransactionOutput
+//  *
+//  * @since 2.0.0
+//  * @category Constructors
+//  */
+// export const newConwayFormatTxOut: (
+//   conwayFormatTxOut: CML.ConwayFormatTxOut,
+// ) => Effect.Effect<CML.TransactionOutput, TransactionOutputError> = Effect.fn(
+//   function* (conwayFormatTxOut: CML.ConwayFormatTxOut) {
+//     return yield* Effect.try({
+//       try: () =>
+//         CML.TransactionOutput.new_conway_format_tx_out(conwayFormatTxOut),
+//       catch: () =>
+//         new TransactionOutputError({
+//           message:
+//             `TransactionOutput.newConwayFormatTxOut failed with parameters: ${conwayFormatTxOut} (ConwayFormatTxOut). `,
+//         }),
+//     });
+//   },
+// );
+
+// /**
+//  * Unsafely calls TransactionOutput.newConwayFormatTxOut without Effect wrapper
+//  *
+//  * @since 2.0.0
+//  * @category ConstructorsUnsafe
+//  */
+// export const newConwayFormatTxOutUnsafe = (
+//   conwayFormatTxOut: CML.ConwayFormatTxOut,
+// ): CML.TransactionOutput =>
+//   Effect.runSync(newConwayFormatTxOut(conwayFormatTxOut));
+
+// /**
+//  * Method kind of TransactionOutput
+//  *
+//  * @since 2.0.0
+//  * @category Methods
+//  */
+// export const kind: (
+//   instance: CML.TransactionOutput,
+// ) => Effect.Effect<CML.TransactionOutputKind, TransactionOutputError> = Effect
+//   .fn((instance: CML.TransactionOutput) =>
+//     Effect.try({
+//       try: () => instance.kind(),
+//       catch: () =>
+//         new TransactionOutputError({
+//           message: `TransactionOutput.kind failed `,
+//         }),
+//     })
+//   );
+
+// /**
+//  * Unsafely calls instance.kind without Effect wrapper
+//  *
+//  * @since 2.0.0
+//  * @category MethodsUnsafe
+//  */
+// export const kindUnsafe = (
+//   instance: CML.TransactionOutput,
+// ): CML.TransactionOutputKind => Effect.runSync(kind(instance));
+
+// /**
+//  * Method asAlonzoFormatTxOut of TransactionOutput
+//  *
+//  * @since 2.0.0
+//  * @category Methods
+//  */
+// export const asAlonzoFormatTxOut: (
+//   instance: CML.TransactionOutput,
+// ) => Effect.Effect<CML.AlonzoFormatTxOut | undefined, TransactionOutputError> =
+//   Effect.fn((instance: CML.TransactionOutput) =>
+//     Effect.try({
+//       try: () => instance.as_alonzo_format_tx_out(),
+//       catch: () =>
+//         new TransactionOutputError({
+//           message: `TransactionOutput.asAlonzoFormatTxOut failed `,
+//         }),
+//     })
+//   );
+
+// /**
+//  * Unsafely calls instance.asAlonzoFormatTxOut without Effect wrapper
+//  *
+//  * @since 2.0.0
+//  * @category MethodsUnsafe
+//  */
+// export const asAlonzoFormatTxOutUnsafe = (
+//   instance: CML.TransactionOutput,
+// ): CML.AlonzoFormatTxOut | undefined =>
+//   Effect.runSync(asAlonzoFormatTxOut(instance));
+
+// /**
+//  * Method asConwayFormatTxOut of TransactionOutput
+//  *
+//  * @since 2.0.0
+//  * @category Methods
+//  */
+// export const asConwayFormatTxOut: (
+//   instance: CML.TransactionOutput,
+// ) => Effect.Effect<CML.ConwayFormatTxOut | undefined, TransactionOutputError> =
+//   Effect.fn((instance: CML.TransactionOutput) =>
+//     Effect.try({
+//       try: () => instance.as_conway_format_tx_out(),
+//       catch: () =>
+//         new TransactionOutputError({
+//           message: `TransactionOutput.asConwayFormatTxOut failed `,
+//         }),
+//     })
+//   );
+
+// /**
+//  * Unsafely calls instance.asConwayFormatTxOut without Effect wrapper
+//  *
+//  * @since 2.0.0
+//  * @category MethodsUnsafe
+//  */
+// export const asConwayFormatTxOutUnsafe = (
+//   instance: CML.TransactionOutput,
+// ): CML.ConwayFormatTxOut | undefined =>
+//   Effect.runSync(asConwayFormatTxOut(instance));
