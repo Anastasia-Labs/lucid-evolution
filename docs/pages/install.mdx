@@ -2,75 +2,45 @@ import { Callout, Steps, Cards, Tabs, FileTree } from "nextra/components";
 
 # Install Lucid Evolution
 
----
+Lucid Evolution is a powerful, modular framework for building Cardano applications off-chain. It provides developers with type-safe interfaces and utilities to interact with the Cardano blockchain, create transactions, and manage wallets without dealing with low-level complexities.
 
-Lucid Evolution is an off-chain framework for Cardano and this guide will help you install the necessary packages to start building with Lucid Evolution
+## Prerequisites
 
-<div style={{ marginBottom: "4rem" }}></div>
+Before installing Lucid Evolution, ensure your environment meets the prerequisites:
 
-# Package Managers
+- **Node.js**: Version 14 or higher
+- **Package Manager**: npm, yarn, pnpm, or bun
 
----
+## Installation
 
-<Tabs items={['Node.js', 'Bun']}>
+Choose your preferred package manager to install Lucid Evolution:
+
+<Tabs items={["pnpm", "npm", "yarn", "bun"]}>
   <Tabs.Tab>
-    <Tabs items={['pnpm', 'npm', 'yarn']}>
-      <Tabs.Tab>
-        ```bash
-        pnpm i @lucid-evolution/lucid 
-        ```
-      </Tabs.Tab>
-      <Tabs.Tab>
-        ```bash
-        npm i @lucid-evolution/lucid 
-        ```
-      </Tabs.Tab>
-      <Tabs.Tab>
-        ```bash
-        yarn add @lucid-evolution/lucid  
-        ```
-      </Tabs.Tab>
-    </Tabs>
+  ```bash 
+  pnpm i @lucid-evolution/lucid 
+  ```
   </Tabs.Tab>
   <Tabs.Tab>
-    ```bash
-    bun i @lucid-evolution/lucid
-    ```
+  ```bash 
+  npm i @lucid-evolution/lucid
+  ```
+  </Tabs.Tab>
+  <Tabs.Tab>
+  ```bash
+  yarn add @lucid-evolution/lucid 
+  ```
+  </Tabs.Tab>
+  <Tabs.Tab>
+  ```bash
+  bun i @lucid-evolution/lucid 
+  ```
   </Tabs.Tab>
 </Tabs>
 
-<Callout type="info">
-Ensure you have Node.js version 14 or higher installed on your system before trying to install Lucid Evolution
-</Callout>  
+## Package Structure
 
-<Callout type="info">
-Installing the `lucid` package will automatically export all other packages in the library as well
-</Callout>  
-
-<div style={{ marginBottom: "6rem" }}></div>
-
-# Compatibility
-
----
-
-Lucid Evolution works with `yarn`, `npm`, and `pnpm` on the following operating systems:
-
-- macOS darwin 64-bit (Intel), ARM 64-bit (Apple Silicon)
-- Linux 64-bit, ARM 64-bit
-- Windows 64-bit, ARM 64-bit
-
-<div style={{ marginBottom: "6rem" }}></div>
-
-# Why Compartmentalize?
-
----
-
-Lucid Evolution separates packages to allow users to import only what they need, providing several benefits to you:
-
-- Reduced bundle size
-- Faster installation, smaller packages install quicker
-- Modular structure allows for easier updates and bug fixes
-- Mix and match packages as needed for your project
+Lucid Evolution uses a modular architecture to allow importing only what you need:
 
 <FileTree>
   <FileTree.Folder name="lucid-evolution" defaultOpen>
@@ -89,28 +59,18 @@ Lucid Evolution separates packages to allow users to import only what they need,
   </FileTree.Folder>
 </FileTree>
 
-<Callout>
-If you only want to query utxos and don't need the rest of the library, you could install the `@lucid-evolution/utils` package
+<Callout type="info">
+  Installing the `lucid` package will automatically export all other packages in
+  the library.
 </Callout>
 
-<div style={{ marginBottom: "6rem" }}></div>
-
-# Next Steps
-
----
-
-Now that you've installed Lucid Evolution, you're ready to start building! Check out these resources to get started:
+## Next Steps
 
 <Cards>
-  <Cards.Card icon="⚡" title=" Quickstart" href="/" />
   <Cards.Card
     icon="📕"
-    title=" Documentation"
+    title="Documentation"
     href="/documentation/core-concepts/instantiate-evolution"
   />
-  <Cards.Card
-    icon="💡"
-    title=" Examples"
-    href="/documentation/examples/hello-world"
-  />
+  <Cards.Card icon="🔍" title="Under the hood" href="/documentation/under-the-hood" />
 </Cards>

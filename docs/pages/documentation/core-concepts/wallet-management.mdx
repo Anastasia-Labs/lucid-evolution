@@ -85,14 +85,13 @@ const utxos = await lucid.utxosAt(address);
 lucid.selectWallet.fromAddress(address, utxos);
 ```
 
-</Tabs.Tab>
-
-</Tabs>
-
 <Callout type="warning">
   Transactions built with an address-only wallet will need to be signed by a
   wallet with the actual private keys before they can be submitted.
 </Callout>
+
+</Tabs.Tab>
+</Tabs>
 
 ### Query
 
