@@ -67,21 +67,40 @@ const Bytes = Schema.transformOrFail(
           (0b0 << 5) |
           (paymentBit << 4) |
           (toA.networkId & 0b00001111);
-        const result = new Uint8Array(29);
-        result[0] = header;
-        const paymentCredentialBytes = Hex.toBytes(toA.paymentCredential.hash);
-        result.set(paymentCredentialBytes, 1);
+
+        // Get variable length encoded bytes first to determine total size
         const slotBytes = yield* encodeVariableLength(toA.pointer.slot);
         const txIndexBytes = yield* encodeVariableLength(toA.pointer.txIndex);
         const certIndexBytes = yield* encodeVariableLength(
           toA.pointer.certIndex,
         );
-        let offset = 29;
+
+        // Calculate total buffer size: 1 byte header + 28 bytes credential + variable parts
+        const totalSize =
+          1 +
+          28 +
+          slotBytes.length +
+          txIndexBytes.length +
+          certIndexBytes.length;
+
+        // Allocate a buffer with the correct total size
+        const result = new Uint8Array(totalSize);
+
+        // Set the header
+        result[0] = header;
+
+        // Set the payment credential bytes
+        const paymentCredentialBytes = Hex.toBytes(toA.paymentCredential.hash);
+        result.set(paymentCredentialBytes, 1);
+
+        // Set the pointer data bytes at the correct position
+        let offset = 29; // 1 byte header + 28 bytes credential
         result.set(slotBytes, offset);
         offset += slotBytes.length;
         result.set(txIndexBytes, offset);
         offset += txIndexBytes.length;
         result.set(certIndexBytes, offset);
+
         return result;
       }),
     decode: (fromI, options, ast, fromA) =>

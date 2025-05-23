@@ -5,6 +5,7 @@ import * as EnterpriseAddress from "./EnterpriseAddress.js";
 import * as RewardAccount from "./RewardAccount.js";
 import * as ByronAddress from "./ByronAddress.js";
 import * as Hex from "./Hex.js";
+import * as _Bech32 from "./Bech32.js";
 
 /**
  * CDDL specs
@@ -137,39 +138,38 @@ const HexString = Schema.transformOrFail(Hex.HexString, Address, {
     pipe(Hex.toBytes(fromA), ParseResult.decode(Bytes)),
 });
 
-// /**
-//  * Parse the complete address structure into a typed representation
-//  * This decodes the address format according to CIP-0019 specification
-//  *
-//  * @example
-//  * import { Address } from "@lucid-evolution/experimental";
-//  * import { Effect } from "effect";
-//  * import assert from "assert";
-//  *
-//  * const effect = Address.fromBech32("addr1qx2fxv2umyhttkxyxp8x0dlpdt3k6cwng5pxj3jhsydzer3n0d3vllmyqwsx5wktcd8cc3sq835lu7drv2xwl2wywfgse35a3x");
-//  * const address = Effect.runSync(effect);
-//  * assert(address._tag === "BaseAddress");
-//  * assert(address.networkId === 1);
-//  *
-//  * const stakeEffect = Address.fromBech32("stake1uyehkck0lajq8gr28t9uxnuvgcqrc6070x3k9r8048z8y5gh6ffgw");
-//  * const stakeAddress = Effect.runSync(stakeEffect);
-//  * assert(stakeAddress._tag === "RewardAccount");
-//  *
-//  * @since 2.0.0
-//  * @category encoding/decoding
-//  */
-// export const fromBech32: Serialization.FromBech32<
-//   Address,
-//   | KeyHash.KeyHashError
-//   | ScriptHash.ScriptHashError
-//   | Bytes.BytesError
-//   | AddressError
-//   | Bech32.Bech32Error
-//   | ParseError
-// > = Effect.fnUntraced(function* (bech32Address) {
-//   const bytes = yield* Bech32.toBytes(bech32Address);
-//   return yield* fromBytes(bytes);
-// });
+const Bech32 = Schema.transformOrFail(
+  Schema.typeSchema(_Bech32.Bech32),
+  Address,
+  {
+    strict: true,
+    encode: (toI, options, ast, toA) =>
+      Effect.gen(function* () {
+        const bytes = yield* ParseResult.encode(Bytes)(toA);
+        let prefix: string;
+        switch (toA._tag) {
+          case "BaseAddress":
+          case "EnterpriseAddress":
+          case "PointerAddress":
+            prefix = toA.networkId === 0 ? "addr_test" : "addr";
+            break;
+          case "RewardAccount":
+            prefix = toA.networkId === 0 ? "stake_test" : "stake";
+            break;
+          case "ByronAddress":
+            prefix = "";
+            break;
+        }
+        const b = yield* ParseResult.decode(_Bech32.Bytes(prefix))(bytes);
+        return b;
+      }),
+    decode: (fromI, options, ast, fromA) =>
+      pipe(
+        ParseResult.encode(_Bech32.Bytes())(fromI),
+        Effect.flatMap(ParseResult.decode(Bytes)),
+      ),
+  },
+);
 
 // /**
 //  * Serialize a PaymentAddress to JSON format
@@ -189,47 +189,6 @@ const HexString = Schema.transformOrFail(Hex.HexString, Address, {
 //   JSON.stringify({
 //     address,
 //   });
-
-// /**
-//  * Convert address to bech32 format
-//  *
-//  * @example
-//  * import { Address, Bytes } from "@lucid-evolution/experimental";
-//  * import { Effect, pipe } from "effect";
-//  * import assert from "assert";
-//  *
-//  * // First create an address from bytes
-//  * const bytesEffect = pipe(
-//  *   Address.fromBytes(Bytes.fromHexOrThrow("019493315cd92eb5d8c4304e67b7e16ae36d61d34502694657811a2c8e337b62cfff6403a06a3acbc34f8c46003c69fe79a3628cefa9c47251")),
-//  *   Effect.map(Address.toBech32)
-//  * );
-//  *
-//  * const bech32 = Effect.runSync(bytesEffect);
-//  * assert(typeof bech32 === "string");
-//  * assert(bech32.startsWith("addr1"));
-//  *
-//  * @since 2.0.0
-//  * @category encoding/decoding
-//  */
-// export const toBech32 = (address: Address): string => {
-//   const bytes = toBytes(address);
-//   let prefix: string;
-//   switch (address._tag) {
-//     case "BaseAddress":
-//     case "EnterpriseAddress":
-//     case "PointerAddress":
-//       prefix = address.networkId === 0 ? "addr_test" : "addr";
-//       break;
-//     case "RewardAccount":
-//       prefix = address.networkId === 0 ? "stake_test" : "stake";
-//       break;
-//     case "ByronAddress":
-//       prefix = "";
-//       break;
-//   }
-//   const words = bech32.toWords(bytes);
-//   return bech32.encode(prefix, words, false);
-// };
 
 // /**
 //  * Encode a Cardano address to CBOR format
@@ -280,4 +239,4 @@ const generator = FastCheck.oneof(
   RewardAccount.generator,
 );
 
-export { Address, AddressError, Bytes, HexString, equals, generator };
+export { Address, AddressError, Bytes, HexString, Bech32, equals, generator };
