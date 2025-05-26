@@ -195,4 +195,10 @@ describe("Emulator", () => {
       expect(isValid).toBe(true);
     }).pipe(Effect.provide(TestEnvironment)),
   );
+  it.effect("should successfully verify add signer key", () =>
+    Effect.gen(function* () {
+      const isValid = yield* SignExecutor.verifyAddSignerKey;
+      expect(isValid).toBe(true);
+    }).pipe(Effect.provide(TestEnvironment)),
+  );
 });
