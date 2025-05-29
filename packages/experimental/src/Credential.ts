@@ -11,7 +11,7 @@ import * as Hex from "./Hex.js";
  * @category errors
  */
 
-class CredentialError extends Data.TaggedError("CredentialError")<{
+export class CredentialError extends Data.TaggedError("CredentialError")<{
   message: string;
   cause?: unknown;
 }> {}
@@ -23,7 +23,7 @@ class CredentialError extends Data.TaggedError("CredentialError")<{
  * @since 2.0.0
  * @category schemas
  */
-const Credential = Schema.Union(KeyHash.KeyHash, ScriptHash.ScriptHash);
+export const Credential = Schema.Union(KeyHash.KeyHash, ScriptHash.ScriptHash);
 
 /**
  * Type representing a credential that can be either a key hash or script hash
@@ -32,25 +32,17 @@ const Credential = Schema.Union(KeyHash.KeyHash, ScriptHash.ScriptHash);
  * @since 2.0.0
  * @category model
  */
-type Credential = typeof Credential.Type;
+export type Credential = typeof Credential.Type;
 
 /**
  * Check if the given value is a valid Credential
  *
- * @example
- * import { Credential , KeyHash } from "@lucid-evolution/experimental";
- * import assert from "assert";
- *
- * const credential = KeyHash.makeOrThrow("c37b1b5dc0669f1d3c61a6fddb2e8fde96be87b881c60bce8e8d542f");
- * const isValid = Credential.isCredential(credential);
- * assert(isValid === true);
- *
  * @since 2.0.0
  * @category predicates
  */
-const isCredential = Schema.is(Credential);
+export const isCredential = Schema.is(Credential);
 
-const CBORBytes = Schema.transformOrFail(
+export const CBORBytes = Schema.transformOrFail(
   Schema.Uint8ArrayFromSelf.annotations({
     identifier: "CBORBytes",
   }),
@@ -99,7 +91,7 @@ const CBORBytes = Schema.transformOrFail(
   },
 );
 
-const CBORHex = Schema.transformOrFail(
+export const CBORHex = Schema.transformOrFail(
   Hex.HexString.pipe(Schema.typeSchema).annotations({
     identifier: "CBORHex",
   }),
@@ -116,21 +108,10 @@ const CBORHex = Schema.transformOrFail(
 /**
  * Check if two Credential instances are equal.
  *
- * @example
- * import { Credential, KeyHash, ScriptHash } from "@lucid-evolution/experimental";
- * import assert from "assert";
- *
- * const keyHash = KeyHash.makeOrThrow("c37b1b5dc0669f1d3c61a6fddb2e8fde96be87b881c60bce8e8d542f");
- * const sameKeyHash = KeyHash.makeOrThrow("c37b1b5dc0669f1d3c61a6fddb2e8fde96be87b881c60bce8e8d542f");
- * const scriptHash = ScriptHash.makeOrThrow("c37b1b5dc0669f1d3c61a6fddb2e8fde96be87b881c60bce8e8d542f");
- *
- * assert(Credential.equals(keyHash, sameKeyHash) === true);
- * assert(Credential.equals(keyHash, scriptHash) === false);
- *
  * @since 2.0.0
  * @category equality
  */
-const equals = (a: Credential, b: Credential): boolean => {
+export const equals = (a: Credential, b: Credential): boolean => {
   return a._tag === b._tag && a.hash === b.hash;
 };
 
@@ -152,14 +133,7 @@ const equals = (a: Credential, b: Credential): boolean => {
  * @since 2.0.0
  * @category generators
  */
-const generator = FastCheck.oneof(KeyHash.generator, ScriptHash.generator);
-
-export {
-  Credential,
-  CredentialError,
-  CBORBytes,
-  CBORHex,
-  isCredential,
-  equals,
-  generator,
-};
+export const generator = FastCheck.oneof(
+  KeyHash.generator,
+  ScriptHash.generator,
+);

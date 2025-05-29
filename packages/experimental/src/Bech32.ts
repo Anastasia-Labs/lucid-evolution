@@ -10,10 +10,10 @@ export class Bech32Error extends Data.TaggedError("Bech32Error")<{
   cause?: unknown;
 }> {}
 
-const Bech32 = Schema.String.pipe(Schema.brand("Bech32"));
-type Bech32 = typeof Bech32.Type;
+export const Bech32 = Schema.String.pipe(Schema.brand("Bech32"));
+export type Bech32 = typeof Bech32.Type;
 
-const Bytes = (prefix: string = "addr") =>
+export const Bytes = (prefix: string = "addr") =>
   Schema.transformOrFail(Schema.Uint8ArrayFromSelf, Bech32, {
     strict: true,
     encode: (toI, options, ast, toA) =>
@@ -33,5 +33,3 @@ const Bytes = (prefix: string = "addr") =>
       );
     },
   });
-
-export { Bech32, Bytes };

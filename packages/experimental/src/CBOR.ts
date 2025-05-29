@@ -137,17 +137,6 @@ export const decodeBytesOrThrow = (bytes: Uint8Array) =>
 /**
  * Decodes a CBOR hex string to a value
  *
- * @example
- * import { decodeHex } from "@lucid-evolution/experimental/CBOR";
- * import { makeOrThrow } from "@lucid-evolution/experimental/Hex";
- * import { Either } from "effect";
- *
- * const hex = makeOrThrow("a1656865656c6c6f65776f726c64");
- * const result = decodeHex(hex);
- * if (Either.isRight(result)) {
- *   console.log("Decoded value:", result.right);
- * }
- *
  * @since 2.0.0
  * @category encoding/decoding
  */

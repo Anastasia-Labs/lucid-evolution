@@ -13,11 +13,6 @@ parent: Modules
 - [constants](#constants)
   - [KEYHASH_BYTES_LENGTH](#keyhash_bytes_length)
   - [KEYHASH_HEX_LENGTH](#keyhash_hex_length)
-- [constructors](#constructors)
-  - [decodeBytes](#decodebytes)
-  - [decodeBytesOrThrow](#decodebytesorthrow)
-  - [make](#make)
-  - [makeOrThrow](#makeorthrow)
 - [equality](#equality)
   - [equals](#equals)
 - [errors](#errors)
@@ -27,10 +22,11 @@ parent: Modules
 - [schemas](#schemas)
   - [KeyHash (class)](#keyhash-class)
     - [[Inspectable.NodeInspectSymbol] (method)](#inspectablenodeinspectsymbol-method)
-- [transformation](#transformation)
-  - [toBytes](#tobytes)
 - [utils](#utils)
+  - [Bytes](#bytes)
+  - [HexString](#hexstring)
   - [KeyHash (interface)](#keyhash-interface)
+  - [KeyHashBytes](#keyhashbytes)
 
 ---
 
@@ -60,116 +56,6 @@ export declare const KEYHASH_HEX_LENGTH: 56;
 
 Added in v2.0.0
 
-# constructors
-
-## decodeBytes
-
-Create a KeyHash directly from bytes.
-
-**Signature**
-
-```ts
-export declare const decodeBytes: Serialization.FromBytes<
-  KeyHash,
-  KeyHashError
->;
-```
-
-**Example**
-
-```ts
-import { KeyHash, Bytes } from "@lucid-evolution/experimental";
-import assert from "assert";
-
-const bytes = Bytes.fromHexOrThrow(
-  "c37b1b5dc0669f1d3c61a6fddb2e8fde96be87b881c60bce8e8d542f",
-);
-const keyHash = KeyHash.decodeBytesOrThrow(bytes);
-assert(keyHash._tag === "KeyHash");
-assert(
-  keyHash.hash === "c37b1b5dc0669f1d3c61a6fddb2e8fde96be87b881c60bce8e8d542f",
-);
-```
-
-Added in v2.0.0
-
-## decodeBytesOrThrow
-
-Create a KeyHash directly from bytes, throws on error.
-
-**Signature**
-
-```ts
-export declare const decodeBytesOrThrow: (bytes: Uint8Array) => KeyHash;
-```
-
-**Example**
-
-```ts
-import { KeyHash, Bytes } from "@lucid-evolution/experimental";
-import assert from "assert";
-
-const bytes = Bytes.fromHexOrThrow(
-  "c37b1b5dc0669f1d3c61a6fddb2e8fde96be87b881c60bce8e8d542f",
-);
-assert(bytes.length === 28);
-const keyHash = KeyHash.decodeBytesOrThrow(bytes);
-assert(keyHash._tag === "KeyHash");
-assert(
-  keyHash.hash === "c37b1b5dc0669f1d3c61a6fddb2e8fde96be87b881c60bce8e8d542f",
-);
-```
-
-Added in v2.0.0
-
-## make
-
-Construct a KeyHash from a hex string.
-
-**Signature**
-
-```ts
-export declare const make: Serialization.Make<KeyHash, KeyHashError>;
-```
-
-**Example**
-
-```ts
-import { KeyHash } from "@lucid-evolution/experimental";
-import assert from "assert";
-
-const hash = "c37b1b5dc0669f1d3c61a6fddb2e8fde96be87b881c60bce8e8d542f";
-const keyHash = KeyHash.makeOrThrow(hash);
-assert(keyHash._tag === "KeyHash");
-assert(keyHash.hash === hash);
-```
-
-Added in v2.0.0
-
-## makeOrThrow
-
-Construct a KeyHash from a hex string, throws on error.
-
-**Signature**
-
-```ts
-export declare const makeOrThrow: Serialization.MakeOrThrow<string, KeyHash>;
-```
-
-**Example**
-
-```ts
-import { KeyHash } from "@lucid-evolution/experimental";
-import assert from "assert";
-
-const hash = "c37b1b5dc0669f1d3c61a6fddb2e8fde96be87b881c60bce8e8d542f";
-const keyHash = KeyHash.makeOrThrow(hash);
-assert(keyHash._tag === "KeyHash");
-assert(keyHash.hash === hash);
-```
-
-Added in v2.0.0
-
 # equality
 
 ## equals
@@ -187,19 +73,6 @@ export declare const equals: (a: KeyHash, b: KeyHash) => boolean;
 ```ts
 import { KeyHash } from "@lucid-evolution/experimental";
 import assert from "assert";
-
-const keyHash1 = KeyHash.makeOrThrow(
-  "c37b1b5dc0669f1d3c61a6fddb2e8fde96be87b881c60bce8e8d542f",
-);
-const keyHash2 = KeyHash.makeOrThrow(
-  "c37b1b5dc0669f1d3c61a6fddb2e8fde96be87b881c60bce8e8d542f",
-);
-const keyHash3 = KeyHash.makeOrThrow(
-  "530245ff0704032c031302cf01fb06010521a7fd024404010004f814",
-);
-
-assert(KeyHash.equals(keyHash1, keyHash2) === true);
-assert(KeyHash.equals(keyHash1, keyHash3) === false);
 ```
 
 Added in v2.0.0
@@ -278,39 +151,33 @@ Added in v2.0.0
 [Inspectable.NodeInspectSymbol]();
 ```
 
-# transformation
+# utils
 
-## toBytes
-
-Convert a KeyHash to bytes.
+## Bytes
 
 **Signature**
 
 ```ts
-export declare const toBytes: Serialization.ToBytes<KeyHash>;
+export declare const Bytes: Schema.transform<
+  Schema.SchemaClass<any, any, never>,
+  typeof KeyHash
+>;
 ```
 
-**Example**
+## HexString
+
+**Signature**
 
 ```ts
-import { KeyHash, Bytes } from "@lucid-evolution/experimental";
-import assert from "assert";
-
-const keyHash = KeyHash.makeOrThrow(
-  "c37b1b5dc0669f1d3c61a6fddb2e8fde96be87b881c60bce8e8d542f",
-);
-const bytes = KeyHash.toBytes(keyHash);
-assert(bytes instanceof Uint8Array);
-assert(bytes.length === 28);
-assert(
-  Bytes.toHexOrThrow(bytes) ===
-    "c37b1b5dc0669f1d3c61a6fddb2e8fde96be87b881c60bce8e8d542f",
-);
+export declare const HexString: Schema.transform<
+  Schema.SchemaClass<
+    string & Brand<"HexString">,
+    string & Brand<"HexString">,
+    never
+  >,
+  typeof KeyHash
+>;
 ```
-
-Added in v2.0.0
-
-# utils
 
 ## KeyHash (interface)
 
@@ -320,4 +187,12 @@ Added in v2.0.0
 export interface KeyHash {
   readonly [NominalType]: unique symbol;
 }
+```
+
+## KeyHashBytes
+
+**Signature**
+
+```ts
+export declare const KeyHashBytes: Schema.SchemaClass<any, any, never>;
 ```

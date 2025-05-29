@@ -16,7 +16,7 @@ import * as Hex from "./Hex.js";
  * @since 2.0.0
  * @category constants
  */
-const TRANSACTIONHASH_BYTES_LENGTH = 32;
+export const TRANSACTIONHASH_BYTES_LENGTH = 32;
 
 /**
  * The length in hex characters of a TransactionHash.
@@ -24,7 +24,7 @@ const TRANSACTIONHASH_BYTES_LENGTH = 32;
  * @since 2.0.0
  * @category constants
  */
-const TRANSACTIONHASH_HEX_LENGTH = 64;
+export const TRANSACTIONHASH_HEX_LENGTH = 64;
 
 /**
  * Error class for TransactionHash related operations.
@@ -39,7 +39,9 @@ const TRANSACTIONHASH_HEX_LENGTH = 64;
  * @since 2.0.0
  * @category errors
  */
-class TransactionHashError extends Data.TaggedError("TransactionHashError")<{
+export class TransactionHashError extends Data.TaggedError(
+  "TransactionHashError",
+)<{
   message?: string;
   reason?:
     | "InvalidHexLength"
@@ -48,7 +50,7 @@ class TransactionHashError extends Data.TaggedError("TransactionHashError")<{
     | "InvalidCBORFormat";
 }> {}
 
-const Hash = Hex.HexString.pipe(
+export const Hash = Hex.HexString.pipe(
   Schema.filter((hex) => hex.length === TRANSACTIONHASH_HEX_LENGTH),
 ).annotations({
   message: (issue) =>
@@ -62,7 +64,7 @@ const Hash = Hex.HexString.pipe(
  * @since 2.0.0
  * @category schemas
  */
-class TransactionHash extends Schema.TaggedClass<TransactionHash>()(
+export class TransactionHash extends Schema.TaggedClass<TransactionHash>()(
   "TransactionHash",
   {
     hash: Hash,
@@ -82,7 +84,7 @@ class TransactionHash extends Schema.TaggedClass<TransactionHash>()(
  * @since 2.0.0
  * @category schemas
  */
-const TransactionHashBytes = pipe(
+export const TransactionHashBytes = pipe(
   Schema.Uint8ArrayFromSelf,
   Schema.filter((bytes) => bytes.length === TRANSACTIONHASH_BYTES_LENGTH),
   Schema.typeSchema,
@@ -98,7 +100,7 @@ const TransactionHashBytes = pipe(
  * @since 2.0.0
  * @category encoding/decoding
  */
-const Bytes = Schema.transform(
+export const Bytes = Schema.transform(
   TransactionHashBytes,
   TransactionHash.pipe(Schema.asSchema),
   {
@@ -114,7 +116,7 @@ const Bytes = Schema.transform(
  * @since 2.0.0
  * @category encoding/decoding
  */
-const HexString = Schema.transform(Hash, TransactionHash, {
+export const HexString = Schema.transform(Hash, TransactionHash, {
   strict: true,
   encode: (_, hash) => hash.hash,
   decode: (hash) => new TransactionHash({ hash }),
@@ -126,7 +128,7 @@ const HexString = Schema.transform(Hash, TransactionHash, {
  * @since 2.0.0
  * @category encoding/decoding
  */
-const CBORBytes = Schema.transformOrFail(
+export const CBORBytes = Schema.transformOrFail(
   Schema.Uint8ArrayFromSelf.annotations({
     identifier: "CBORBytes",
   }),
@@ -155,7 +157,7 @@ const CBORBytes = Schema.transformOrFail(
  * @since 2.0.0
  * @category encoding/decoding
  */
-const CBORHex = Schema.transformOrFail(
+export const CBORHex = Schema.transformOrFail(
   Hex.HexString.pipe(Schema.typeSchema).annotations({
     identifier: "CBORHex",
   }),
@@ -182,17 +184,10 @@ const CBORHex = Schema.transformOrFail(
  * import { TransactionHash } from "@lucid-evolution/experimental";
  * import assert from "assert";
  *
- * const hash1 = TransactionHash.decodeHexOrThrow("cefd2fcf657e5e5d6c35975f4e052f427819391b153ebb16ad8aa107ba5a3819");
- * const hash2 = TransactionHash.decodeHexOrThrow("cefd2fcf657e5e5d6c35975f4e052f427819391b153ebb16ad8aa107ba5a3819");
- * const hash3 = TransactionHash.decodeHexOrThrow("dc97057e0949d9676e55b69f28fcb2dccb8002583a4ad761f1dbfb985f36085c");
- *
- * assert(TransactionHash.equals(hash1, hash2) === true);
- * assert(TransactionHash.equals(hash1, hash3) === false);
- *
  * @since 2.0.0
  * @category equality
  */
-const equals = (a: TransactionHash, b: TransactionHash): boolean =>
+export const equals = (a: TransactionHash, b: TransactionHash): boolean =>
   a.hash === b.hash;
 
 /**
@@ -211,18 +206,7 @@ const equals = (a: TransactionHash, b: TransactionHash): boolean =>
  * @since 2.0.0
  * @category generators
  */
-const generator = FastCheck.uint8Array({
+export const generator = FastCheck.uint8Array({
   minLength: TRANSACTIONHASH_BYTES_LENGTH,
   maxLength: TRANSACTIONHASH_BYTES_LENGTH,
 }).map((bytes) => new TransactionHash({ hash: Hex.fromBytes(bytes) }));
-
-export {
-  TransactionHash,
-  TransactionHashError,
-  CBORBytes,
-  CBORHex,
-  Bytes,
-  HexString,
-  equals,
-  generator,
-};

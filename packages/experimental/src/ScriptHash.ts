@@ -7,7 +7,7 @@ import * as Hex from "./Hex.js";
  * @since 2.0.0
  * @category constants
  */
-const SCRIPTHASH_BYTES_LENGTH = 28;
+export const SCRIPTHASH_BYTES_LENGTH = 28;
 
 /**
  * The length in hex characters of a ScriptHash.
@@ -15,7 +15,7 @@ const SCRIPTHASH_BYTES_LENGTH = 28;
  * @since 2.0.0
  * @category constants
  */
-const SCRIPTHASH_HEX_LENGTH = 56;
+export const SCRIPTHASH_HEX_LENGTH = 56;
 
 /**
  * Error class for ScriptHash related operations.
@@ -30,7 +30,7 @@ const SCRIPTHASH_HEX_LENGTH = 56;
  * @since 2.0.0
  * @category errors
  */
-class ScriptHashError extends Data.TaggedError("ScriptHashError")<{
+export class ScriptHashError extends Data.TaggedError("ScriptHashError")<{
   message?: string;
   reason?:
     | "InvalidHexLength"
@@ -40,7 +40,7 @@ class ScriptHashError extends Data.TaggedError("ScriptHashError")<{
 }> {}
 
 declare const NominalType: unique symbol;
-interface ScriptHash {
+export interface ScriptHash {
   readonly [NominalType]: unique symbol;
 }
 
@@ -51,7 +51,7 @@ interface ScriptHash {
  * @since 2.0.0
  * @category schemas
  */
-class ScriptHash extends Schema.TaggedClass<ScriptHash>()("ScriptHash", {
+export class ScriptHash extends Schema.TaggedClass<ScriptHash>()("ScriptHash", {
   hash: Hex.HexString,
 }) {
   [Inspectable.NodeInspectSymbol]() {
@@ -62,7 +62,7 @@ class ScriptHash extends Schema.TaggedClass<ScriptHash>()("ScriptHash", {
   }
 }
 
-const ScriptHashBytes = pipe(
+export const ScriptHashBytes = pipe(
   Schema.Uint8Array,
   Schema.filter((a) => a.length === SCRIPTHASH_BYTES_LENGTH),
   Schema.typeSchema,
@@ -72,13 +72,13 @@ const ScriptHashBytes = pipe(
   identifier: "ScriptHashBytes",
 });
 
-const Bytes = Schema.transform(ScriptHashBytes, ScriptHash, {
+export const Bytes = Schema.transform(ScriptHashBytes, ScriptHash, {
   strict: true,
   encode: (_toI, toA) => Hex.toBytes(toA.hash),
   decode: (_fromI, fromA) => new ScriptHash({ hash: Hex.fromBytes(fromA) }),
 });
 
-const ScriptHashFromHex = Schema.transform(Hex.HexString, ScriptHash, {
+export const ScriptHashFromHex = Schema.transform(Hex.HexString, ScriptHash, {
   strict: true,
   encode: (_toI, toA) => toA.hash,
   decode: (fromI, _fromA) => new ScriptHash({ hash: fromI }),
@@ -87,21 +87,11 @@ const ScriptHashFromHex = Schema.transform(Hex.HexString, ScriptHash, {
 /**
  * Check if two ScriptHash instances are equal.
  *
- * @example
- * import { ScriptHash } from "@lucid-evolution/experimental";
- * import assert from "assert";
- *
- * const hash1 = ScriptHash.makeOrThrow("c37b1b5dc0669f1d3c61a6fddb2e8fde96be87b881c60bce8e8d542f");
- * const hash2 = ScriptHash.makeOrThrow("c37b1b5dc0669f1d3c61a6fddb2e8fde96be87b881c60bce8e8d542f");
- * const hash3 = ScriptHash.makeOrThrow("2cc106ddd406fe57fd1ec4025f5a03a3fd0701bd0204fc3c00bef952");
- *
- * assert(ScriptHash.equals(hash1, hash2) === true);
- * assert(ScriptHash.equals(hash1, hash3) === false);
- *
  * @since 2.0.0
  * @category equality
  */
-const equals = (a: ScriptHash, b: ScriptHash): boolean => a.hash === b.hash;
+export const equals = (a: ScriptHash, b: ScriptHash): boolean =>
+  a.hash === b.hash;
 
 /**
  * Generate a random ScriptHash.
@@ -119,18 +109,7 @@ const equals = (a: ScriptHash, b: ScriptHash): boolean => a.hash === b.hash;
  * @since 2.0.0
  * @category generators
  */
-const generator = FastCheck.uint8Array({
+export const generator = FastCheck.uint8Array({
   minLength: SCRIPTHASH_BYTES_LENGTH,
   maxLength: SCRIPTHASH_BYTES_LENGTH,
 }).map((bytes) => new ScriptHash({ hash: Hex.fromBytes(bytes) }));
-
-export {
-  ScriptHash,
-  ScriptHashError,
-  Bytes,
-  ScriptHashFromHex,
-  equals,
-  generator,
-  SCRIPTHASH_BYTES_LENGTH,
-  SCRIPTHASH_HEX_LENGTH,
-};

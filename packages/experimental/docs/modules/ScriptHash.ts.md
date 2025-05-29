@@ -13,11 +13,6 @@ parent: Modules
 - [constants](#constants)
   - [SCRIPTHASH_BYTES_LENGTH](#scripthash_bytes_length)
   - [SCRIPTHASH_HEX_LENGTH](#scripthash_hex_length)
-- [constructors](#constructors)
-  - [decodeBytes](#decodebytes)
-  - [decodeBytesOrThrow](#decodebytesorthrow)
-  - [make](#make)
-  - [makeOrThrow](#makeorthrow)
 - [equality](#equality)
   - [equals](#equals)
 - [errors](#errors)
@@ -27,10 +22,11 @@ parent: Modules
 - [schemas](#schemas)
   - [ScriptHash (class)](#scripthash-class)
     - [[Inspectable.NodeInspectSymbol] (method)](#inspectablenodeinspectsymbol-method)
-- [transformation](#transformation)
-  - [toBytes](#tobytes)
 - [utils](#utils)
+  - [Bytes](#bytes)
   - [ScriptHash (interface)](#scripthash-interface)
+  - [ScriptHashBytes](#scripthashbytes)
+  - [ScriptHashFromHex](#scripthashfromhex)
 
 ---
 
@@ -60,118 +56,6 @@ export declare const SCRIPTHASH_HEX_LENGTH: 56;
 
 Added in v2.0.0
 
-# constructors
-
-## decodeBytes
-
-Create a ScriptHash directly from bytes.
-
-**Signature**
-
-```ts
-export declare const decodeBytes: Serialization.FromBytes<
-  ScriptHash,
-  ScriptHashError
->;
-```
-
-**Example**
-
-```ts
-import { ScriptHash, Bytes } from "@lucid-evolution/experimental";
-import assert from "assert";
-
-const bytes = Bytes.fromHexOrThrow(
-  "c37b1b5dc0669f1d3c61a6fddb2e8fde96be87b881c60bce8e8d542f",
-);
-const scriptHash = ScriptHash.decodeBytesOrThrow(bytes);
-assert(scriptHash._tag === "ScriptHash");
-assert(
-  scriptHash.hash ===
-    "c37b1b5dc0669f1d3c61a6fddb2e8fde96be87b881c60bce8e8d542f",
-);
-```
-
-Added in v2.0.0
-
-## decodeBytesOrThrow
-
-Create a ScriptHash directly from bytes, throws on error.
-
-**Signature**
-
-```ts
-export declare const decodeBytesOrThrow: (bytes: Uint8Array) => ScriptHash;
-```
-
-**Example**
-
-```ts
-import { ScriptHash, Bytes } from "@lucid-evolution/experimental";
-import assert from "assert";
-
-const bytes = Bytes.fromHexOrThrow(
-  "c37b1b5dc0669f1d3c61a6fddb2e8fde96be87b881c60bce8e8d542f",
-);
-assert(bytes.length === 28);
-const scriptHash = ScriptHash.decodeBytesOrThrow(bytes);
-assert(scriptHash._tag === "ScriptHash");
-assert(
-  scriptHash.hash ===
-    "c37b1b5dc0669f1d3c61a6fddb2e8fde96be87b881c60bce8e8d542f",
-);
-```
-
-Added in v2.0.0
-
-## make
-
-Construct a ScriptHash from a hex string.
-
-**Signature**
-
-```ts
-export declare const make: Serialization.Make<ScriptHash, ScriptHashError>;
-```
-
-**Example**
-
-```ts
-import { ScriptHash } from "@lucid-evolution/experimental";
-import assert from "assert";
-
-const hash = "c37b1b5dc0669f1d3c61a6fddb2e8fde96be87b881c60bce8e8d542f";
-const scriptHash = ScriptHash.makeOrThrow(hash);
-assert(scriptHash._tag === "ScriptHash");
-assert(scriptHash.hash === hash);
-```
-
-Added in v2.0.0
-
-## makeOrThrow
-
-Construct a ScriptHash from a hex string, throws on error.
-
-**Signature**
-
-```ts
-export declare const makeOrThrow: Serialization.MakeOrThrow<string, ScriptHash>;
-```
-
-**Example**
-
-```ts
-import { ScriptHash } from "@lucid-evolution/experimental";
-import assert from "assert";
-
-const hash = "c37b1b5dc0669f1d3c61a6fddb2e8fde96be87b881c60bce8e8d542f";
-const scriptHash = ScriptHash.makeOrThrow(hash);
-assert(scriptHash._tag === "ScriptHash");
-assert(scriptHash.hash === hash);
-```
-
-Added in v2.0.0
-
 # equality
 
 ## equals
@@ -182,26 +66,6 @@ Check if two ScriptHash instances are equal.
 
 ```ts
 export declare const equals: (a: ScriptHash, b: ScriptHash) => boolean;
-```
-
-**Example**
-
-```ts
-import { ScriptHash } from "@lucid-evolution/experimental";
-import assert from "assert";
-
-const hash1 = ScriptHash.makeOrThrow(
-  "c37b1b5dc0669f1d3c61a6fddb2e8fde96be87b881c60bce8e8d542f",
-);
-const hash2 = ScriptHash.makeOrThrow(
-  "c37b1b5dc0669f1d3c61a6fddb2e8fde96be87b881c60bce8e8d542f",
-);
-const hash3 = ScriptHash.makeOrThrow(
-  "2cc106ddd406fe57fd1ec4025f5a03a3fd0701bd0204fc3c00bef952",
-);
-
-assert(ScriptHash.equals(hash1, hash2) === true);
-assert(ScriptHash.equals(hash1, hash3) === false);
 ```
 
 Added in v2.0.0
@@ -282,39 +146,18 @@ Added in v2.0.0
 [Inspectable.NodeInspectSymbol]();
 ```
 
-# transformation
+# utils
 
-## toBytes
-
-Convert a ScriptHash to bytes.
+## Bytes
 
 **Signature**
 
 ```ts
-export declare const toBytes: Serialization.ToBytes<ScriptHash>;
+export declare const Bytes: Schema.transform<
+  Schema.SchemaClass<any, any, never>,
+  typeof ScriptHash
+>;
 ```
-
-**Example**
-
-```ts
-import { ScriptHash, Bytes } from "@lucid-evolution/experimental";
-import assert from "assert";
-
-const scriptHash = ScriptHash.makeOrThrow(
-  "c37b1b5dc0669f1d3c61a6fddb2e8fde96be87b881c60bce8e8d542f",
-);
-const bytes = ScriptHash.toBytes(scriptHash);
-assert(bytes instanceof Uint8Array);
-assert(bytes.length === 28);
-assert(
-  Bytes.toHexOrThrow(bytes) ===
-    "c37b1b5dc0669f1d3c61a6fddb2e8fde96be87b881c60bce8e8d542f",
-);
-```
-
-Added in v2.0.0
-
-# utils
 
 ## ScriptHash (interface)
 
@@ -324,4 +167,27 @@ Added in v2.0.0
 export interface ScriptHash {
   readonly [NominalType]: unique symbol;
 }
+```
+
+## ScriptHashBytes
+
+**Signature**
+
+```ts
+export declare const ScriptHashBytes: Schema.SchemaClass<any, any, never>;
+```
+
+## ScriptHashFromHex
+
+**Signature**
+
+```ts
+export declare const ScriptHashFromHex: Schema.transform<
+  Schema.SchemaClass<
+    string & Brand<"HexString">,
+    string & Brand<"HexString">,
+    never
+  >,
+  typeof ScriptHash
+>;
 ```

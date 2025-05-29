@@ -12,8 +12,8 @@ import * as ScriptHash from "./ScriptHash.js";
 import * as NetworkId from "./NetworkId.js";
 import * as Hex from "./Hex.js";
 
-declare const NominalType: unique symbol;
-interface EnterpriseAddress {
+export declare const NominalType: unique symbol;
+export interface EnterpriseAddress {
   readonly [NominalType]: unique symbol;
 }
 
@@ -23,7 +23,7 @@ interface EnterpriseAddress {
  * @since 2.0.0
  * @category schemas
  */
-class EnterpriseAddress extends Schema.TaggedClass<EnterpriseAddress>(
+export class EnterpriseAddress extends Schema.TaggedClass<EnterpriseAddress>(
   "EnterpriseAddress",
 )("EnterpriseAddress", {
   networkId: NetworkId.NetworkId,
@@ -38,7 +38,7 @@ class EnterpriseAddress extends Schema.TaggedClass<EnterpriseAddress>(
   }
 }
 
-const Bytes = Schema.transformOrFail(
+export const Bytes = Schema.transformOrFail(
   Schema.Uint8ArrayFromSelf,
   EnterpriseAddress,
   {
@@ -81,36 +81,25 @@ const Bytes = Schema.transformOrFail(
   },
 );
 
-const HexString = Schema.transformOrFail(Hex.HexString, EnterpriseAddress, {
-  strict: true,
-  encode: (toI, options, ast, toA) =>
-    pipe(ParseResult.encode(Bytes)(toA), Effect.map(Hex.fromBytes)),
-  decode: (fromI, options, ast) =>
-    pipe(Hex.toBytes(fromI), ParseResult.decode(Bytes)),
-});
+export const HexString = Schema.transformOrFail(
+  Hex.HexString,
+  EnterpriseAddress,
+  {
+    strict: true,
+    encode: (toI, options, ast, toA) =>
+      pipe(ParseResult.encode(Bytes)(toA), Effect.map(Hex.fromBytes)),
+    decode: (fromI, options, ast) =>
+      pipe(Hex.toBytes(fromI), ParseResult.decode(Bytes)),
+  },
+);
 
 /**
  * Check if two EnterpriseAddress instances are equal.
  *
- * @example
- * import { EnterpriseAddress, KeyHash } from "@lucid-evolution/experimental";
- * import assert from "assert";
- *
- * // Create credential
- * const paymentKeyHash = KeyHash.makeOrThrow("c37b1b5dc0669f1d3c61a6fddb2e8fde96be87b881c60bce8e8d542f");
- *
- * // Create two identical addresses
- * const address1 = EnterpriseAddress.makeOrThrow(0, paymentKeyHash);
- * const address2 = EnterpriseAddress.makeOrThrow(0, paymentKeyHash);
- * const address3 = EnterpriseAddress.makeOrThrow(1, paymentKeyHash);
- *
- * assert(EnterpriseAddress.equals(address1, address2) === true);
- * assert(EnterpriseAddress.equals(address1, address3) === false);
- *
  * @since 2.0.0
  * @category equality
  */
-const equals = (a: EnterpriseAddress, b: EnterpriseAddress): boolean => {
+export const equals = (a: EnterpriseAddress, b: EnterpriseAddress): boolean => {
   return (
     a.networkId === b.networkId &&
     a.paymentCredential._tag === b.paymentCredential._tag &&
@@ -135,7 +124,7 @@ const equals = (a: EnterpriseAddress, b: EnterpriseAddress): boolean => {
  * @since 2.0.0
  * @category generators
  */
-const generator = FastCheck.tuple(
+export const generator = FastCheck.tuple(
   NetworkId.generator,
   Credential.generator,
 ).map(
@@ -145,5 +134,3 @@ const generator = FastCheck.tuple(
       paymentCredential,
     }),
 );
-
-export { EnterpriseAddress, Bytes, HexString, equals, generator };
