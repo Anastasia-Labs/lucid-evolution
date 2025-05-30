@@ -10,272 +10,445 @@ parent: Modules
 
 <h2 class="text-delta">Table of contents</h2>
 
-- [encoding/decoding](#encodingdecoding)
-  - [fromBech32](#frombech32)
-  - [fromBytes](#frombytes)
-  - [paymentAddressToJson](#paymentaddresstojson)
-  - [toBech32](#tobech32)
-  - [toBytes](#tobytes)
-  - [toCBOR](#tocbor)
-  - [toHex](#tohex)
+- [decoding](#decoding)
+  - [decodeBech32](#decodebech32)
+  - [decodeBech32Either](#decodebech32either)
+  - [decodeBech32OrThrow](#decodebech32orthrow)
+  - [decodeBytes](#decodebytes)
+  - [decodeBytesEither](#decodebyteseither)
+  - [decodeBytesOrThrow](#decodebytesorthrow)
+  - [decodeHexString](#decodehexstring)
+  - [decodeHexStringEither](#decodehexstringeither)
+  - [decodeHexStringOrThrow](#decodehexstringorthrow)
+- [encoding](#encoding)
+  - [encodeBech32](#encodebech32)
+  - [encodeBech32Either](#encodebech32either)
+  - [encodeBech32OrThrow](#encodebech32orthrow)
+  - [encodeBytes](#encodebytes)
+  - [encodeBytesEither](#encodebyteseither)
+  - [encodeBytesOrThrow](#encodebytesorthrow)
+  - [encodeHexString](#encodehexstring)
+  - [encodeHexStringEither](#encodehexstringeither)
+  - [encodeHexStringOrThrow](#encodehexstringorthrow)
 - [model](#model)
+  - [Address](#address)
   - [Address (type alias)](#address-type-alias)
   - [AddressError (class)](#addresserror-class)
+- [schema](#schema)
+  - [Bech32](#bech32)
+  - [Bytes](#bytes)
+  - [HexString](#hexstring)
+- [testing](#testing)
+  - [generator](#generator)
 - [utils](#utils)
   - [equals](#equals)
-  - [generator](#generator)
 
 ---
 
-# encoding/decoding
+# decoding
 
-## fromBech32
+## decodeBech32
 
-Parse the complete address structure into a typed representation
-This decodes the address format according to CIP-0019 specification
+Decodes a Bech32 string to an address.
 
 **Signature**
 
 ```ts
-export declare const fromBech32: Serialization.FromBech32<
-  Address,
-  | ScriptHash.ScriptHashError
-  | KeyHash.KeyHashError
-  | PointerAddress.PointerAddressError
-  | ParseError
-  | Bech32.Bech32Error
-  | Bytes.BytesError
-  | AddressError
+export declare const decodeBech32: (
+  u: unknown,
+  overrideOptions?: ParseOptions,
+) => Effect.Effect<
+  | PointerAddress.PointerAddress
+  | EnterpriseAddress.EnterpriseAddress
+  | ByronAddress.ByronAddress
+  | BaseAddress.BaseAddress
+  | RewardAccount.RewardAccount,
+  ParseResult.ParseError,
+  never
 >;
 ```
 
-**Example**
-
-```ts
-import { Address } from "@lucid-evolution/experimental";
-import { Effect } from "effect";
-import assert from "assert";
-
-const effect = Address.fromBech32(
-  "addr1qx2fxv2umyhttkxyxp8x0dlpdt3k6cwng5pxj3jhsydzer3n0d3vllmyqwsx5wktcd8cc3sq835lu7drv2xwl2wywfgse35a3x",
-);
-const address = Effect.runSync(effect);
-assert(address._tag === "BaseAddress");
-assert(address.networkId === 1);
-
-const stakeEffect = Address.fromBech32(
-  "stake1uyehkck0lajq8gr28t9uxnuvgcqrc6070x3k9r8048z8y5gh6ffgw",
-);
-const stakeAddress = Effect.runSync(stakeEffect);
-assert(stakeAddress._tag === "RewardAccount");
-```
-
 Added in v2.0.0
 
-## fromBytes
+## decodeBech32Either
 
-Convert bytes to an address structure
+Decodes a Bech32 string to an address, returns Either.
 
 **Signature**
 
 ```ts
-export declare const fromBytes: Serialization.FromBytes<
-  Address,
-  | ScriptHash.ScriptHashError
-  | KeyHash.KeyHashError
-  | PointerAddress.PointerAddressError
-  | ParseError
-  | Bytes.BytesError
-  | AddressError
+export declare const decodeBech32Either: (
+  u: unknown,
+  overrideOptions?: ParseOptions,
+) => Either<
+  | PointerAddress.PointerAddress
+  | EnterpriseAddress.EnterpriseAddress
+  | ByronAddress.ByronAddress
+  | BaseAddress.BaseAddress
+  | RewardAccount.RewardAccount,
+  ParseResult.ParseError
 >;
 ```
 
-**Example**
-
-```ts
-import { Address, Bytes } from "@lucid-evolution/experimental";
-import { Effect } from "effect";
-import assert from "assert";
-
-const addressBytes = Bytes.fromHexOrThrow(
-  "019493315cd92eb5d8c4304e67b7e16ae36d61d34502694657811a2c8e337b62cfff6403a06a3acbc34f8c46003c69fe79a3628cefa9c47251",
-);
-const effect = Address.fromBytes(addressBytes);
-const address = Effect.runSync(effect);
-assert(address._tag === "BaseAddress");
-assert(address.networkId === 1);
-```
-
 Added in v2.0.0
 
-## paymentAddressToJson
+## decodeBech32OrThrow
 
-Serialize a PaymentAddress to JSON format
+Decodes a Bech32 string to an address, throws on error.
 
 **Signature**
 
 ```ts
-export declare const paymentAddressToJson: (address: string) => string;
-```
-
-**Example**
-
-```ts
-import { Address } from "@lucid-evolution/experimental";
-import assert from "assert";
-
-const json = Address.paymentAddressToJson(
-  "addr1qx2fxv2umyhttkxyxp8x0dlpdt3k6cwng5pxj3jhsydzer3n0d3vllmyqwsx5wktcd8cc3sq835lu7drv2xwl2wywfgse35a3x",
-);
-assert(typeof json === "string");
-assert(
-  JSON.parse(json).address ===
-    "addr1qx2fxv2umyhttkxyxp8x0dlpdt3k6cwng5pxj3jhsydzer3n0d3vllmyqwsx5wktcd8cc3sq835lu7drv2xwl2wywfgse35a3x",
-);
+export declare const decodeBech32OrThrow: (
+  u: unknown,
+  overrideOptions?: ParseOptions,
+) =>
+  | PointerAddress.PointerAddress
+  | EnterpriseAddress.EnterpriseAddress
+  | ByronAddress.ByronAddress
+  | BaseAddress.BaseAddress
+  | RewardAccount.RewardAccount;
 ```
 
 Added in v2.0.0
 
-## toBech32
+## decodeBytes
 
-Convert address to bech32 format
+Decodes bytes to an address.
 
 **Signature**
 
 ```ts
-export declare const toBech32: (address: Address) => string;
-```
-
-**Example**
-
-```ts
-import { Address, Bytes } from "@lucid-evolution/experimental";
-import { Effect, pipe } from "effect";
-import assert from "assert";
-
-// First create an address from bytes
-const bytesEffect = pipe(
-  Address.fromBytes(
-    Bytes.fromHexOrThrow(
-      "019493315cd92eb5d8c4304e67b7e16ae36d61d34502694657811a2c8e337b62cfff6403a06a3acbc34f8c46003c69fe79a3628cefa9c47251",
-    ),
-  ),
-  Effect.map(Address.toBech32),
-);
-
-const bech32 = Effect.runSync(bytesEffect);
-assert(typeof bech32 === "string");
-assert(bech32.startsWith("addr1"));
+export declare const decodeBytes: (
+  u: unknown,
+  overrideOptions?: ParseOptions,
+) => Effect.Effect<
+  | PointerAddress.PointerAddress
+  | EnterpriseAddress.EnterpriseAddress
+  | ByronAddress.ByronAddress
+  | BaseAddress.BaseAddress
+  | RewardAccount.RewardAccount,
+  ParseResult.ParseError,
+  never
+>;
 ```
 
 Added in v2.0.0
 
-## toBytes
+## decodeBytesEither
 
-Convert address to bytes
+Decodes bytes to an address, returns Either.
 
 **Signature**
 
 ```ts
-export declare const toBytes: (address: Address) => Uint8Array;
-```
-
-**Example**
-
-```ts
-import { Address } from "@lucid-evolution/experimental";
-import { Effect, pipe } from "effect";
-import assert from "assert";
-
-const addressEffect = pipe(
-  Address.fromBech32(
-    "addr1qx2fxv2umyhttkxyxp8x0dlpdt3k6cwng5pxj3jhsydzer3n0d3vllmyqwsx5wktcd8cc3sq835lu7drv2xwl2wywfgse35a3x",
-  ),
-  Effect.map(Address.toBytes),
-);
-
-const bytes = Effect.runSync(addressEffect);
-assert(bytes instanceof Uint8Array);
-assert(bytes.length > 0);
+export declare const decodeBytesEither: (
+  u: unknown,
+  overrideOptions?: ParseOptions,
+) => Either<
+  | PointerAddress.PointerAddress
+  | EnterpriseAddress.EnterpriseAddress
+  | ByronAddress.ByronAddress
+  | BaseAddress.BaseAddress
+  | RewardAccount.RewardAccount,
+  ParseResult.ParseError
+>;
 ```
 
 Added in v2.0.0
 
-## toCBOR
+## decodeBytesOrThrow
 
-Encode a Cardano address to CBOR format
+Decodes bytes to an address, throws on error.
 
 **Signature**
 
 ```ts
-export declare const toCBOR: (address: Address) => unknown;
-```
-
-**Example**
-
-```ts
-import { Address } from "@lucid-evolution/experimental";
-import { Effect } from "effect";
-import assert from "assert";
-
-const effect = Address.fromBech32(
-  "addr1qx2fxv2umyhttkxyxp8x0dlpdt3k6cwng5pxj3jhsydzer3n0d3vllmyqwsx5wktcd8cc3sq835lu7drv2xwl2wywfgse35a3x",
-).pipe(Effect.map(Address.toCBOR));
-
-const cborHex = Effect.runSync(effect);
-assert(typeof cborHex === "string");
-assert(cborHex.length > 0);
+export declare const decodeBytesOrThrow: (
+  i: any,
+  overrideOptions?: ParseOptions,
+) =>
+  | PointerAddress.PointerAddress
+  | EnterpriseAddress.EnterpriseAddress
+  | ByronAddress.ByronAddress
+  | BaseAddress.BaseAddress
+  | RewardAccount.RewardAccount;
 ```
 
 Added in v2.0.0
 
-## toHex
+## decodeHexString
 
-Convert address to hex string
+Decodes a hex string to an address.
 
 **Signature**
 
 ```ts
-export declare const toHex: (address: Address) => string;
+export declare const decodeHexString: (
+  u: unknown,
+  overrideOptions?: ParseOptions,
+) => Effect.Effect<
+  | PointerAddress.PointerAddress
+  | EnterpriseAddress.EnterpriseAddress
+  | ByronAddress.ByronAddress
+  | BaseAddress.BaseAddress
+  | RewardAccount.RewardAccount,
+  ParseResult.ParseError,
+  never
+>;
 ```
 
-**Example**
+Added in v2.0.0
+
+## decodeHexStringEither
+
+Decodes a hex string to an address, returns Either.
+
+**Signature**
 
 ```ts
-import { Address } from "@lucid-evolution/experimental";
-import { Effect, pipe } from "effect";
-import assert from "assert";
+export declare const decodeHexStringEither: (
+  u: unknown,
+  overrideOptions?: ParseOptions,
+) => Either<
+  | PointerAddress.PointerAddress
+  | EnterpriseAddress.EnterpriseAddress
+  | ByronAddress.ByronAddress
+  | BaseAddress.BaseAddress
+  | RewardAccount.RewardAccount,
+  ParseResult.ParseError
+>;
+```
 
-const effect = pipe(
-  Address.fromBech32(
-    "addr1qx2fxv2umyhttkxyxp8x0dlpdt3k6cwng5pxj3jhsydzer3n0d3vllmyqwsx5wktcd8cc3sq835lu7drv2xwl2wywfgse35a3x",
-  ),
-  Effect.map(Address.toHex),
-);
+Added in v2.0.0
 
-const hex = Effect.runSync(effect);
-assert(typeof hex === "string");
-assert(hex.length > 0);
-assert(/^[0-9a-f]+$/i.test(hex));
+## decodeHexStringOrThrow
+
+Decodes a hex string to an address, throws on error.
+
+**Signature**
+
+```ts
+export declare const decodeHexStringOrThrow: (
+  u: unknown,
+  overrideOptions?: ParseOptions,
+) =>
+  | PointerAddress.PointerAddress
+  | EnterpriseAddress.EnterpriseAddress
+  | ByronAddress.ByronAddress
+  | BaseAddress.BaseAddress
+  | RewardAccount.RewardAccount;
+```
+
+Added in v2.0.0
+
+# encoding
+
+## encodeBech32
+
+Encodes an address to Bech32 format.
+
+**Signature**
+
+```ts
+export declare const encodeBech32: (
+  a:
+    | PointerAddress.PointerAddress
+    | EnterpriseAddress.EnterpriseAddress
+    | ByronAddress.ByronAddress
+    | BaseAddress.BaseAddress
+    | RewardAccount.RewardAccount,
+  overrideOptions?: ParseOptions,
+) => Effect.Effect<string & Brand<"Bech32">, ParseResult.ParseError, never>;
+```
+
+Added in v2.0.0
+
+## encodeBech32Either
+
+Encodes an address to Bech32 format, returns Either.
+
+**Signature**
+
+```ts
+export declare const encodeBech32Either: (
+  a:
+    | PointerAddress.PointerAddress
+    | EnterpriseAddress.EnterpriseAddress
+    | ByronAddress.ByronAddress
+    | BaseAddress.BaseAddress
+    | RewardAccount.RewardAccount,
+  overrideOptions?: ParseOptions,
+) => Either<string & Brand<"Bech32">, ParseResult.ParseError>;
+```
+
+Added in v2.0.0
+
+## encodeBech32OrThrow
+
+Encodes an address to Bech32 format, throws on error.
+
+**Signature**
+
+```ts
+export declare const encodeBech32OrThrow: (
+  a:
+    | PointerAddress.PointerAddress
+    | EnterpriseAddress.EnterpriseAddress
+    | ByronAddress.ByronAddress
+    | BaseAddress.BaseAddress
+    | RewardAccount.RewardAccount,
+  overrideOptions?: ParseOptions,
+) => string & Brand<"Bech32">;
+```
+
+Added in v2.0.0
+
+## encodeBytes
+
+Encodes an address to bytes.
+
+**Signature**
+
+```ts
+export declare const encodeBytes: (
+  a:
+    | PointerAddress.PointerAddress
+    | EnterpriseAddress.EnterpriseAddress
+    | ByronAddress.ByronAddress
+    | BaseAddress.BaseAddress
+    | RewardAccount.RewardAccount,
+  overrideOptions?: ParseOptions,
+) => Effect.Effect<any, ParseResult.ParseError, never>;
+```
+
+Added in v2.0.0
+
+## encodeBytesEither
+
+Encodes an address to bytes, returns Either.
+
+**Signature**
+
+```ts
+export declare const encodeBytesEither: (
+  a:
+    | PointerAddress.PointerAddress
+    | EnterpriseAddress.EnterpriseAddress
+    | ByronAddress.ByronAddress
+    | BaseAddress.BaseAddress
+    | RewardAccount.RewardAccount,
+  overrideOptions?: ParseOptions,
+) => Either<any, ParseResult.ParseError>;
+```
+
+Added in v2.0.0
+
+## encodeBytesOrThrow
+
+Encodes an address to bytes, throws on error.
+
+**Signature**
+
+```ts
+export declare const encodeBytesOrThrow: (
+  u: unknown,
+  overrideOptions?: ParseOptions,
+) => any;
+```
+
+Added in v2.0.0
+
+## encodeHexString
+
+Encodes an address to a hex string.
+
+**Signature**
+
+```ts
+export declare const encodeHexString: (
+  a:
+    | PointerAddress.PointerAddress
+    | EnterpriseAddress.EnterpriseAddress
+    | ByronAddress.ByronAddress
+    | BaseAddress.BaseAddress
+    | RewardAccount.RewardAccount,
+  overrideOptions?: ParseOptions,
+) => Effect.Effect<string & Brand<"HexString">, ParseResult.ParseError, never>;
+```
+
+Added in v2.0.0
+
+## encodeHexStringEither
+
+Encodes an address to a hex string, returns Either.
+
+**Signature**
+
+```ts
+export declare const encodeHexStringEither: (
+  a:
+    | PointerAddress.PointerAddress
+    | EnterpriseAddress.EnterpriseAddress
+    | ByronAddress.ByronAddress
+    | BaseAddress.BaseAddress
+    | RewardAccount.RewardAccount,
+  overrideOptions?: ParseOptions,
+) => Either<string & Brand<"HexString">, ParseResult.ParseError>;
+```
+
+Added in v2.0.0
+
+## encodeHexStringOrThrow
+
+Encodes an address to a hex string, throws on error.
+
+**Signature**
+
+```ts
+export declare const encodeHexStringOrThrow: (
+  a:
+    | PointerAddress.PointerAddress
+    | EnterpriseAddress.EnterpriseAddress
+    | ByronAddress.ByronAddress
+    | BaseAddress.BaseAddress
+    | RewardAccount.RewardAccount,
+  overrideOptions?: ParseOptions,
+) => string & Brand<"HexString">;
 ```
 
 Added in v2.0.0
 
 # model
 
-## Address (type alias)
+## Address
 
-Union type representing all possible address types
+Union type representing all possible address types.
 
 **Signature**
 
 ```ts
-export type Address =
-  | BaseAddress.BaseAddress
-  | EnterpriseAddress.EnterpriseAddress
-  | PointerAddress.PointerAddress
-  | RewardAccount.RewardAccount
-  | ByronAddress.ByronAddress;
+export declare const Address: Schema.Union<
+  [
+    typeof BaseAddress.BaseAddress,
+    typeof EnterpriseAddress.EnterpriseAddress,
+    typeof PointerAddress.PointerAddress,
+    typeof RewardAccount.RewardAccount,
+    typeof ByronAddress.ByronAddress,
+  ]
+>;
+```
+
+Added in v2.0.0
+
+## Address (type alias)
+
+Type representing an address.
+
+**Signature**
+
+```ts
+export type Address = typeof Address.Type;
 ```
 
 Added in v2.0.0
@@ -292,17 +465,89 @@ export declare class AddressError
 
 Added in v2.0.0
 
-# utils
+# schema
 
-## equals
+## Bech32
+
+Schema for encoding/decoding addresses as Bech32 strings.
 
 **Signature**
 
 ```ts
-export declare const equals: (a: Address, b: Address) => boolean;
+export declare const Bech32: Schema.transformOrFail<
+  Schema.SchemaClass<string & Brand<"Bech32">, string & Brand<"Bech32">, never>,
+  Schema.Union<
+    [
+      typeof BaseAddress.BaseAddress,
+      typeof EnterpriseAddress.EnterpriseAddress,
+      typeof PointerAddress.PointerAddress,
+      typeof RewardAccount.RewardAccount,
+      typeof ByronAddress.ByronAddress,
+    ]
+  >,
+  never
+>;
 ```
 
+Added in v2.0.0
+
+## Bytes
+
+Schema for encoding/decoding addresses as bytes.
+
+**Signature**
+
+```ts
+export declare const Bytes: Schema.transformOrFail<
+  typeof Schema.Uint8ArrayFromSelf,
+  Schema.Union<
+    [
+      typeof BaseAddress.BaseAddress,
+      typeof EnterpriseAddress.EnterpriseAddress,
+      typeof PointerAddress.PointerAddress,
+      typeof RewardAccount.RewardAccount,
+      typeof ByronAddress.ByronAddress,
+    ]
+  >,
+  never
+>;
+```
+
+Added in v2.0.0
+
+## HexString
+
+Schema for encoding/decoding addresses as hex strings.
+
+**Signature**
+
+```ts
+export declare const HexString: Schema.transformOrFail<
+  Schema.SchemaClass<
+    string & Brand<"HexString">,
+    string & Brand<"HexString">,
+    never
+  >,
+  Schema.Union<
+    [
+      typeof BaseAddress.BaseAddress,
+      typeof EnterpriseAddress.EnterpriseAddress,
+      typeof PointerAddress.PointerAddress,
+      typeof RewardAccount.RewardAccount,
+      typeof ByronAddress.ByronAddress,
+    ]
+  >,
+  never
+>;
+```
+
+Added in v2.0.0
+
+# testing
+
 ## generator
+
+FastCheck generator for addresses.
 
 **Signature**
 
@@ -314,3 +559,19 @@ export declare const generator: FastCheck.Arbitrary<
   | RewardAccount.RewardAccount
 >;
 ```
+
+Added in v2.0.0
+
+# utils
+
+## equals
+
+Checks if two addresses are equal.
+
+**Signature**
+
+```ts
+export declare const equals: (a: Address, b: Address) => boolean;
+```
+
+Added in v2.0.0

@@ -10,8 +10,6 @@ parent: Modules
 
 <h2 class="text-delta">Table of contents</h2>
 
-- [constructors](#constructors)
-  - [makeOrThrow](#makeorthrow)
 - [equality](#equality)
   - [equals](#equals)
 - [generators](#generators)
@@ -20,45 +18,11 @@ parent: Modules
   - [EnterpriseAddress (class)](#enterpriseaddress-class)
     - [[Inspectable.NodeInspectSymbol] (method)](#inspectablenodeinspectsymbol-method)
 - [utils](#utils)
+  - [Bytes](#bytes)
   - [EnterpriseAddress (interface)](#enterpriseaddress-interface)
-  - [fromBytes](#frombytes)
-  - [toBytes](#tobytes)
+  - [HexString](#hexstring)
 
 ---
-
-# constructors
-
-## makeOrThrow
-
-Create an EnterpriseAddress from network ID and payment credential, throws on error.
-
-**Signature**
-
-```ts
-export declare const makeOrThrow: (
-  networkId: number,
-  paymentCredential: Credential.Credential,
-) => EnterpriseAddress;
-```
-
-**Example**
-
-```ts
-import { EnterpriseAddress, KeyHash } from "@lucid-evolution/experimental";
-import assert from "assert";
-
-// Create payment credential
-const paymentKeyHash = KeyHash.makeOrThrow(
-  "c37b1b5dc0669f1d3c61a6fddb2e8fde96be87b881c60bce8e8d542f",
-);
-
-// Create enterprise address
-const address = EnterpriseAddress.makeOrThrow(0, paymentKeyHash);
-assert(address._tag === "EnterpriseAddress");
-assert(address.networkId === 0);
-```
-
-Added in v2.0.0
 
 # equality
 
@@ -73,26 +37,6 @@ export declare const equals: (
   a: EnterpriseAddress,
   b: EnterpriseAddress,
 ) => boolean;
-```
-
-**Example**
-
-```ts
-import { EnterpriseAddress, KeyHash } from "@lucid-evolution/experimental";
-import assert from "assert";
-
-// Create credential
-const paymentKeyHash = KeyHash.makeOrThrow(
-  "c37b1b5dc0669f1d3c61a6fddb2e8fde96be87b881c60bce8e8d542f",
-);
-
-// Create two identical addresses
-const address1 = EnterpriseAddress.makeOrThrow(0, paymentKeyHash);
-const address2 = EnterpriseAddress.makeOrThrow(0, paymentKeyHash);
-const address3 = EnterpriseAddress.makeOrThrow(1, paymentKeyHash);
-
-assert(EnterpriseAddress.equals(address1, address2) === true);
-assert(EnterpriseAddress.equals(address1, address3) === false);
 ```
 
 Added in v2.0.0
@@ -149,6 +93,18 @@ Added in v2.0.0
 
 # utils
 
+## Bytes
+
+**Signature**
+
+```ts
+export declare const Bytes: Schema.transformOrFail<
+  typeof Schema.Uint8ArrayFromSelf,
+  typeof EnterpriseAddress,
+  never
+>;
+```
+
 ## EnterpriseAddress (interface)
 
 **Signature**
@@ -159,64 +115,18 @@ export interface EnterpriseAddress {
 }
 ```
 
-## fromBytes
+## HexString
 
 **Signature**
 
 ```ts
-export declare const fromBytes: (
-  bytes: Uint8Array,
-) => Effect.Effect<
-  EnterpriseAddress,
-  [
-    | YieldWrap<Effect.Effect<KeyHash.KeyHash, KeyHash.KeyHashError, never>>
-    | YieldWrap<
-        Effect.Effect<ScriptHash.ScriptHash, ScriptHash.ScriptHashError, never>
-      >,
-  ] extends [never]
-    ? never
-    : [
-          | YieldWrap<
-              Effect.Effect<KeyHash.KeyHash, KeyHash.KeyHashError, never>
-            >
-          | YieldWrap<
-              Effect.Effect<
-                ScriptHash.ScriptHash,
-                ScriptHash.ScriptHashError,
-                never
-              >
-            >,
-        ] extends [YieldWrap<Effect.Effect<infer _A, infer E, infer _R>>]
-      ? E
-      : never,
-  [
-    | YieldWrap<Effect.Effect<KeyHash.KeyHash, KeyHash.KeyHashError, never>>
-    | YieldWrap<
-        Effect.Effect<ScriptHash.ScriptHash, ScriptHash.ScriptHashError, never>
-      >,
-  ] extends [never]
-    ? never
-    : [
-          | YieldWrap<
-              Effect.Effect<KeyHash.KeyHash, KeyHash.KeyHashError, never>
-            >
-          | YieldWrap<
-              Effect.Effect<
-                ScriptHash.ScriptHash,
-                ScriptHash.ScriptHashError,
-                never
-              >
-            >,
-        ] extends [YieldWrap<Effect.Effect<infer _A, infer _E, infer R>>]
-      ? R
-      : never
+export declare const HexString: Schema.transformOrFail<
+  Schema.SchemaClass<
+    string & Brand<"HexString">,
+    string & Brand<"HexString">,
+    never
+  >,
+  typeof EnterpriseAddress,
+  never
 >;
-```
-
-## toBytes
-
-**Signature**
-
-```ts
-export declare const toBytes: (address: EnterpriseAddress) => Uint8Array;
 ```

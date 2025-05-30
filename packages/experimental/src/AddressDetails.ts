@@ -13,7 +13,7 @@ import * as Hex from "./Hex.js";
  */
 
 declare const NominalType: unique symbol;
-interface AddressDetails {
+export interface AddressDetails {
   readonly [NominalType]: unique symbol;
 }
 
@@ -23,17 +23,23 @@ interface AddressDetails {
  * @since 2.0.0
  * @category schemas
  */
-class AddressDetails extends Schema.TaggedClass<AddressDetails>(
+export class AddressDetails extends Schema.TaggedClass<AddressDetails>(
   "AddressDetails",
 )("AddressDetails", {
   networkId: NetworkId.NetworkId,
-  type: Schema.Literal(Address.Address.Type._tag),
+  type: Schema.Union(
+    Schema.Literal("BaseAddress"),
+    Schema.Literal("EnterpriseAddress"),
+    Schema.Literal("PointerAddress"),
+    Schema.Literal("RewardAccount"),
+    Schema.Literal("ByronAddress"),
+  ),
   address: Address.Address,
   bech32: _Bech32.Bech32,
   hex: Hex.HexString,
 }) {}
 
-const Bech32 = Schema.transformOrFail(
+export const Bech32 = Schema.transformOrFail(
   Schema.typeSchema(_Bech32.Bech32),
   AddressDetails,
   {
@@ -54,7 +60,7 @@ const Bech32 = Schema.transformOrFail(
   },
 );
 
-const HexString = Schema.transformOrFail(
+export const HexString = Schema.transformOrFail(
   Schema.typeSchema(Hex.HexString),
   AddressDetails,
   {
@@ -74,5 +80,3 @@ const HexString = Schema.transformOrFail(
       }),
   },
 );
-
-export { AddressDetails, Bech32, HexString };

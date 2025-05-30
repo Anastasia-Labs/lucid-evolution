@@ -229,5 +229,5 @@ export const decodeOrThrow =
     }
   };
 
-const formatError = (parseError: ParseResult.ParseError) =>
+export const formatError = (parseError: ParseResult.ParseError) =>
   JSON.stringify(ParseResult.ArrayFormatter.formatErrorSync(parseError));

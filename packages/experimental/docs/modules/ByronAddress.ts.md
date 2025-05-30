@@ -15,7 +15,7 @@ parent: Modules
     - [[Inspectable.NodeInspectSymbol] (method)](#inspectablenodeinspectsymbol-method)
 - [utils](#utils)
   - [ByronAddress (interface)](#byronaddress-interface)
-  - [fromBytes](#frombytes)
+  - [Bytes](#bytes)
 
 ---
 
@@ -53,14 +53,13 @@ export interface ByronAddress {
 }
 ```
 
-## fromBytes
-
-Byron legacy address has limited support
+## Bytes
 
 **Signature**
 
 ```ts
-export declare const fromBytes: (bytes: Uint8Array) => ByronAddress;
+export declare const Bytes: Schema.transform<
+  typeof Schema.Uint8ArrayFromSelf,
+  typeof ByronAddress
+>;
 ```
-
-Added in v2.0.0
