@@ -25,13 +25,14 @@ import * as Address from "../Address.js";
  * @since 2.0.0
  * @category schemas
  */
-export class ShelleyTransactionOutput extends Schema.TaggedClass<ShelleyTransactionOutput>(
-  "ShelleyTransactionOutput",
-)("ShelleyTransactionOutput", {
-  address: Address.Address,
-  value: Schema.BigIntFromSelf,
-  datumHash: Schema.optional(Schema.Uint8ArrayFromSelf),
-}) {
+export class ShelleyTransactionOutput
+  extends Schema.TaggedClass<ShelleyTransactionOutput>(
+    "ShelleyTransactionOutput",
+  )("ShelleyTransactionOutput", {
+    address: Address.Address,
+    value: Schema.BigIntFromSelf,
+    datumHash: Schema.optional(Schema.Uint8ArrayFromSelf),
+  }) {
   [Inspectable.NodeInspectSymbol]() {
     return {
       _tag: "ShelleyTransactionOutput",
