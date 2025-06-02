@@ -1,18 +1,9 @@
-import {
-  Data,
-  Effect,
-  FastCheck,
-  Inspectable,
-  ParseResult,
-  pipe,
-  Schema,
-} from "effect";
-import { Bytes } from "../index.js";
+import { Data, Effect, FastCheck, ParseResult, pipe, Schema } from "effect";
 import * as CBOR from "../CBOR.js";
 import * as Hex from "../Hex.js";
 
-import * as ShelleyTransactionOutput from "./ShelleyOutput.js";
-import * as BabbageTransactionOutput from "./BabbageOutput.js";
+import * as ShelleyTransactionOutput from "./ShelleyTransactionOutput.js";
+import * as BabbageTransactionOutput from "./BabbageTransactionOutput.js";
 
 /**
  * CDDL specs (Conway era)
@@ -28,7 +19,7 @@ import * as BabbageTransactionOutput from "./BabbageOutput.js";
  * @since 2.0.0
  * @category schemas
  */
-const TransactionOutput = Schema.Union(
+export const TransactionOutput = Schema.Union(
   ShelleyTransactionOutput.ShelleyTransactionOutput,
   BabbageTransactionOutput.BabbageTransactionOutput,
 );
@@ -39,77 +30,20 @@ const TransactionOutput = Schema.Union(
  * @since 2.0.0
  * @category errors
  */
-class TransactionOutputError
-  extends Data.TaggedError("TransactionOutputError")<{
-    message: string;
-    cause?: unknown;
-  }> {}
+export class TransactionOutputError extends Data.TaggedError(
+  "TransactionOutputError",
+)<{
+  message: string;
+  cause?: unknown;
+}> {}
 
 /**
  * Check if the given value is a valid TransactionOutput
  *
- * @example
- * import { TransactionOutput, Address, Bytes } from "@lucid-evolution/experimental";
- * import { Effect } from "effect";
- * import assert from "assert";
- *
- * const addressBytes = Bytes.fromHexOrThrow("019493315cd92eb5d8c4304e67b7e16ae36d61d34502694657811a2c8e337b62cfff6403a06a3acbc34f8c46003c69fe79a3628cefa9c47251");
- * const effect = Address.fromBytes(addressBytes);
- * const address = Effect.runSync(effect);
- * const transactionOutput = TransactionOutput.makeOrThrow(address, 1000000n);
- * const isValid = TransactionOutput.isTransactionOutput(transactionOutput);
- * assert(isValid === true);
- *
  * @since 2.0.0
  * @category predicates
  */
-const isTransactionOutput = Schema.is(TransactionOutput);
-
-// /**
-//  * Smart constructor that creates the appropriate output type based on parameters
-//  *
-//  * @example
-//  * import { TransactionOutput, Bytes } from "@lucid-evolution/experimental";
-//  *
-//  * const addressBytes = Bytes.fromHexOrThrow("019493315cd92eb5d8c4304e67b7e16ae36d61d34502694657811a2c8e337b62cfff6403a06a3acbc34f8c46003c69fe79a3628cefa9c47251");
-//  * const effect = Address.fromBytes(addressBytes);
-//  * const address = Effect.runSync(effect);
-//  *
-//  ** // Creates Shelley output
-//  * const shelleyOutput = TransactionOutput.makeOrThrow(address, 1000000n);
-//  * assert(shelleyOutput._tag === "ShelleyTransactionOutput");
-//  *
-//  * // Creates Babbage output
-//  * const scriptRefBytes = new Uint8Array(32);
-//  * const babbageOutput = TransactionOutput.makeOrThrow(address, 1000000n, {
-//  *   scriptRef: scriptRefBytes
-//  * });
-//  * assert(babbageOutput._tag === "BabbageTransactionOutput");
-//  *
-// //  * const output = TransactionOutput.makeOrThrow(address, 1000000n);
-//  *
-//  * @category constructors
-//  */
-// const makeOrThrow = (
-//   address: Uint8Array,
-//   amount: bigint,
-//   options?: {
-//     datumHash?: Uint8Array;
-//     datumOption?: Uint8Array;
-//     scriptRef?: Uint8Array;
-//   },
-// ): Schema.Schema.Type<typeof TransactionOutput> => {
-//   if (options?.datumOption || options?.scriptRef) {
-//     return makeBabbageOrThrow(
-//       address,
-//       amount,
-//       options.datumOption,
-//       options.scriptRef,
-//     );
-//   } else {
-//     return makeShelleyOrThrow(address, amount, options?.datumHash);
-//   }
-// };
+export const isTransactionOutput = Schema.is(TransactionOutput);
 
 /**
  * Schema for transforming between CBOR bytes and TransactionOutput
@@ -117,7 +51,7 @@ const isTransactionOutput = Schema.is(TransactionOutput);
  * @since 2.0.0
  * @category encoding/decoding
  */
-const CBORBytes = Schema.transformOrFail(
+export const CBORBytes = Schema.transformOrFail(
   Schema.Uint8ArrayFromSelf.annotations({
     identifier: "CBORBytes",
   }),
@@ -140,9 +74,7 @@ const CBORBytes = Schema.transformOrFail(
           ),
         );
 
-        // Determine format based on CBOR structure
         if (Array.isArray(decoded)) {
-          // Array format indicates Shelley transaction output
           return yield* ParseResult.decodeUnknown(
             ShelleyTransactionOutput.CBORBytes,
           )(fromA);
@@ -173,7 +105,7 @@ const CBORBytes = Schema.transformOrFail(
  * @since 2.0.0
  * @category encoding/decoding
  */
-const CBORHex = Schema.transformOrFail(
+export const CBORHex = Schema.transformOrFail(
   Hex.HexString.pipe(Schema.typeSchema).annotations({
     identifier: "CBORHex",
   }),
@@ -190,24 +122,10 @@ const CBORHex = Schema.transformOrFail(
 /**
  * Check if two TransactionOutput instances are equal.
  *
- * @example
- * import { TransactionOutput, Address } from "@lucid-evolution/experimental";
- * import assert from "assert";
- *
- * const addressBytes = Bytes.fromHexOrThrow("019493315cd92eb5d8c4304e67b7e16ae36d61d34502694657811a2c8e337b62cfff6403a06a3acbc34f8c46003c69fe79a3628cefa9c47251");
- * const effect = Address.fromBytes(addressBytes);
- * const address = Effect.runSync(effect);
- * const output1 = TransactionOutput.makeOrThrow({ address, amount: 1000000n });
- * const output2 = TransactionOutput.makeOrThrow({ address, amount: 1000000n });
- * const output3 = TransactionOutput.makeOrThrow({ address, amount: 2000000n });
- *
- * assert(TransactionOutput.equals(output1, output2) === true);
- * assert(TransactionOutput.equals(output1, output3) === false);
- *
  * @since 2.0.0
  * @category equality
  */
-const equals = (
+export const equals = (
   a: typeof TransactionOutput.Type,
   b: typeof TransactionOutput.Type,
 ): boolean => {
@@ -235,17 +153,7 @@ const equals = (
  * @since 2.0.0
  * @category generators
  */
-const generator = FastCheck.oneof(
+export const generator = FastCheck.oneof(
   ShelleyTransactionOutput.generator,
   BabbageTransactionOutput.generator,
 );
-
-export {
-  CBORBytes,
-  CBORHex,
-  equals,
-  generator,
-  isTransactionOutput,
-  TransactionOutput,
-  TransactionOutputError,
-};
