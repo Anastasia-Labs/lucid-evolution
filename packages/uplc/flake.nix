@@ -47,8 +47,8 @@
             rust-analyzer
             wasm-pack
             bun
-            corepack_20
-            nodejs_20
+            nodejs
+            pnpm
             # C/C++ Libraries
             clang-tools
             cmake

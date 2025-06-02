@@ -1,7 +1,7 @@
 /* tslint:disable */
 /* eslint-disable */
 export const memory: WebAssembly.Memory;
-export function eval_phase_two_raw(
+export const eval_phase_two_raw: (
   a: number,
   b: number,
   c: number,
@@ -10,20 +10,22 @@ export function eval_phase_two_raw(
   f: number,
   g: number,
   h: number,
-  i: number,
-  j: number,
-  k: number,
-  l: number,
+  i: bigint,
+  j: bigint,
+  k: bigint,
+  l: bigint,
   m: number,
-  n: number,
-): void;
-export function apply_params_to_script(
+) => [number, number, number, number];
+export const apply_params_to_script: (
   a: number,
   b: number,
   c: number,
   d: number,
-  e: number,
-): void;
-export function __wbindgen_add_to_stack_pointer(a: number): number;
-export function __wbindgen_malloc(a: number, b: number): number;
-export function __wbindgen_free(a: number, b: number, c: number): void;
+) => [number, number, number, number];
+export const __wbindgen_export_0: WebAssembly.Table;
+export const __wbindgen_malloc: (a: number, b: number) => number;
+export const __externref_table_alloc: () => number;
+export const __externref_table_dealloc: (a: number) => void;
+export const __externref_drop_slice: (a: number, b: number) => void;
+export const __wbindgen_free: (a: number, b: number, c: number) => void;
+export const __wbindgen_start: () => void;
