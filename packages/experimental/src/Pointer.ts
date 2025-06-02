@@ -26,17 +26,6 @@ export class Pointer extends Schema.TaggedClass<Pointer>("Pointer")("Pointer", {
 /**
  * Check if the given value is a valid Pointer
  *
- * @example
- * import { Pointer , Natural } from "@lucid-evolution/experimental";
- * import assert from "assert";
- *
- * const pointer = Pointer.make(
- *   Natural.makeOrThrow(1),
- *   Natural.makeOrThrow(2),
- *   Natural.makeOrThrow(3),
- * );
- * const isValid = Pointer.isPointer(pointer);
- * assert(isValid === true);
  *
  * @since 2.0.0
  * @category predicates
@@ -45,17 +34,6 @@ export const isPointer = Schema.is(Pointer);
 
 /**
  * Create a new Pointer instance
- *
- * @example
- * import { Pointer , Natural } from "@lucid-evolution/experimental";
- * import assert from "assert";
- *
- * const pointer = Pointer.make(
- *   Natural.makeOrThrow(1),
- *   Natural.makeOrThrow(2),
- *   Natural.makeOrThrow(3),
- * );
- * assert(pointer instanceof Pointer.Pointer);
  *
  * @since 2.0.0
  * @category constructors

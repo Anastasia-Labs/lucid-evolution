@@ -13,18 +13,11 @@ parent: Modules
 - [constants](#constants)
   - [TRANSACTIONHASH_BYTES_LENGTH](#transactionhash_bytes_length)
   - [TRANSACTIONHASH_HEX_LENGTH](#transactionhash_hex_length)
-- [constructors](#constructors)
-  - [decodeBytes](#decodebytes)
-  - [decodeBytesOrThrow](#decodebytesorthrow)
-  - [decodeHex](#decodehex)
-  - [decodeHexOrThrow](#decodehexorthrow)
 - [encoding/decoding](#encodingdecoding)
-  - [decodeCBORBytes](#decodecborbytes)
-  - [decodeCBORBytesOrThrow](#decodecborbytesorthrow)
-  - [decodeCBORHex](#decodecborhex)
-  - [decodeCBORHexOrThrow](#decodecborhexorthrow)
-  - [encodeCBORBytes](#encodecborbytes)
-  - [encodeCBORHex](#encodecborhex)
+  - [Bytes](#bytes)
+  - [CBORBytes](#cborbytes)
+  - [CBORHex](#cborhex)
+  - [HexString](#hexstring)
 - [equality](#equality)
   - [equals](#equals)
 - [errors](#errors)
@@ -34,10 +27,9 @@ parent: Modules
 - [schemas](#schemas)
   - [TransactionHash (class)](#transactionhash-class)
     - [[Inspectable.NodeInspectSymbol] (method)](#inspectablenodeinspectsymbol-method)
-- [transformation](#transformation)
-  - [encodeBytes](#encodebytes)
+  - [TransactionHashBytes](#transactionhashbytes)
 - [utils](#utils)
-  - [TransactionHash (interface)](#transactionhash-interface)
+  - [Hash](#hash)
 
 ---
 
@@ -67,302 +59,84 @@ export declare const TRANSACTIONHASH_HEX_LENGTH: 64;
 
 Added in v2.0.0
 
-# constructors
-
-## decodeBytes
-
-Create a TransactionHash directly from bytes.
-
-**Signature**
-
-```ts
-export declare const decodeBytes: Serialization.FromBytes<
-  TransactionHash,
-  TransactionHashError
->;
-```
-
-**Example**
-
-```ts
-import { TransactionHash, Bytes } from "@lucid-evolution/experimental";
-import assert from "assert";
-
-const bytes = Bytes.fromHexOrThrow(
-  "cefd2fcf657e5e5d6c35975f4e052f427819391b153ebb16ad8aa107ba5a3819",
-);
-const transactionHash = TransactionHash.decodeBytesOrThrow(bytes);
-assert(transactionHash._tag === "TransactionHash");
-assert(
-  transactionHash.hash ===
-    "cefd2fcf657e5e5d6c35975f4e052f427819391b153ebb16ad8aa107ba5a3819",
-);
-```
-
-Added in v2.0.0
-
-## decodeBytesOrThrow
-
-Create a TransactionHash directly from bytes, throws on error.
-
-**Signature**
-
-```ts
-export declare const decodeBytesOrThrow: (bytes: Uint8Array) => TransactionHash;
-```
-
-**Example**
-
-```ts
-import { TransactionHash, Bytes } from "@lucid-evolution/experimental";
-import assert from "assert";
-
-const bytes = Bytes.fromHexOrThrow(
-  "cefd2fcf657e5e5d6c35975f4e052f427819391b153ebb16ad8aa107ba5a3819",
-);
-const transactionHash = TransactionHash.decodeBytesOrThrow(bytes);
-assert(transactionHash._tag === "TransactionHash");
-assert(
-  transactionHash.hash ===
-    "cefd2fcf657e5e5d6c35975f4e052f427819391b153ebb16ad8aa107ba5a3819",
-);
-```
-
-Added in v2.0.0
-
-## decodeHex
-
-Construct a TransactionHash from a hex string.
-
-**Signature**
-
-```ts
-export declare const decodeHex: Serialization.Make<
-  TransactionHash,
-  TransactionHashError
->;
-```
-
-**Example**
-
-```ts
-import { TransactionHash } from "@lucid-evolution/experimental";
-import assert from "assert";
-
-const hash = "cefd2fcf657e5e5d6c35975f4e052f427819391b153ebb16ad8aa107ba5a3819";
-const transactionHash = TransactionHash.decodeHexOrThrow(hash);
-assert(transactionHash._tag === "TransactionHash");
-assert(transactionHash.hash === hash);
-```
-
-Added in v2.0.0
-
-## decodeHexOrThrow
-
-Construct a TransactionHash from a hex string, throws on error.
-
-**Signature**
-
-```ts
-export declare const decodeHexOrThrow: Serialization.MakeOrThrow<
-  string,
-  TransactionHash
->;
-```
-
-**Example**
-
-```ts
-import { TransactionHash } from "@lucid-evolution/experimental";
-import assert from "assert";
-
-const hash = "cefd2fcf657e5e5d6c35975f4e052f427819391b153ebb16ad8aa107ba5a3819";
-const transactionHash = TransactionHash.decodeHexOrThrow(hash);
-assert(transactionHash._tag === "TransactionHash");
-assert(transactionHash.hash === hash);
-```
-
-Added in v2.0.0
-
 # encoding/decoding
 
-## decodeCBORBytes
+## Bytes
 
-Create a TransactionHash from CBOR bytes.
+Schema for transforming between Uint8Array and TransactionHash.
 
 **Signature**
 
 ```ts
-export declare const decodeCBORBytes: Serialization.FromCBORBytes<
-  TransactionHash,
-  TransactionHashError
+export declare const Bytes: Schema.transform<
+  Schema.SchemaClass<any, any, never>,
+  Schema.Schema<
+    TransactionHash,
+    {
+      readonly hash: string & Brand<"HexString">;
+      readonly _tag: "TransactionHash";
+    },
+    never
+  >
 >;
 ```
 
-**Example**
-
-```ts
-import { TransactionHash, Bytes } from "@lucid-evolution/experimental";
-import assert from "assert";
-
-const bytes = Bytes.fromHexOrThrow(
-  "5820cefd2fcf657e5e5d6c35975f4e052f427819391b153ebb16ad8aa107ba5a3819",
-);
-const transactionHash = TransactionHash.decodeCBORBytesOrThrow(bytes);
-assert(transactionHash._tag === "TransactionHash");
-assert(
-  transactionHash.hash ===
-    "cefd2fcf657e5e5d6c35975f4e052f427819391b153ebb16ad8aa107ba5a3819",
-);
-```
-
 Added in v2.0.0
 
-## decodeCBORBytesOrThrow
+## CBORBytes
 
-Create a TransactionHash from CBOR bytes, throws on error.
+Schema for transforming between CBOR bytes and TransactionHash.
 
 **Signature**
 
 ```ts
-export declare const decodeCBORBytesOrThrow: (
-  bytes: Uint8Array,
-) => TransactionHash;
-```
-
-**Example**
-
-```ts
-import { TransactionHash, Bytes } from "@lucid-evolution/experimental";
-import assert from "assert";
-
-const bytes = Bytes.fromHexOrThrow(
-  "5820cefd2fcf657e5e5d6c35975f4e052f427819391b153ebb16ad8aa107ba5a3819",
-);
-const transactionHash = TransactionHash.decodeCBORBytesOrThrow(bytes);
-assert(transactionHash._tag === "TransactionHash");
-assert(
-  transactionHash.hash ===
-    "cefd2fcf657e5e5d6c35975f4e052f427819391b153ebb16ad8aa107ba5a3819",
-);
-```
-
-Added in v2.0.0
-
-## decodeCBORHex
-
-Create a TransactionHash from a CBOR hex string.
-
-**Signature**
-
-```ts
-export declare const decodeCBORHex: Serialization.FromCBOR<
-  string,
-  TransactionHash,
-  TransactionHashError
+export declare const CBORBytes: Schema.transformOrFail<
+  Schema.declare<any, any, readonly [], never>,
+  typeof TransactionHash,
+  never
 >;
 ```
 
-**Example**
-
-```ts
-import { TransactionHash } from "@lucid-evolution/experimental";
-import assert from "assert";
-
-const cborHex =
-  "5820cefd2fcf657e5e5d6c35975f4e052f427819391b153ebb16ad8aa107ba5a3819";
-const transactionHash = TransactionHash.decodeCBORHexOrThrow(cborHex);
-assert(transactionHash._tag === "TransactionHash");
-assert(
-  transactionHash.hash ===
-    "cefd2fcf657e5e5d6c35975f4e052f427819391b153ebb16ad8aa107ba5a3819",
-);
-```
-
 Added in v2.0.0
 
-## decodeCBORHexOrThrow
+## CBORHex
 
-Create a TransactionHash from a CBOR hex string, throws on error.
+Schema for transforming between CBOR hex and TransactionHash.
 
 **Signature**
 
 ```ts
-export declare const decodeCBORHexOrThrow: Serialization.FromCBOROrThrow<
-  string,
-  TransactionHash
+export declare const CBORHex: Schema.transformOrFail<
+  Schema.SchemaClass<
+    string & Brand<"HexString">,
+    string & Brand<"HexString">,
+    never
+  >,
+  typeof TransactionHash,
+  never
 >;
 ```
 
-**Example**
-
-```ts
-import { TransactionHash } from "@lucid-evolution/experimental";
-import assert from "assert";
-
-const cborHex =
-  "5820cefd2fcf657e5e5d6c35975f4e052f427819391b153ebb16ad8aa107ba5a3819";
-const transactionHash = TransactionHash.decodeCBORHexOrThrow(cborHex);
-assert(transactionHash._tag === "TransactionHash");
-assert(
-  transactionHash.hash ===
-    "cefd2fcf657e5e5d6c35975f4e052f427819391b153ebb16ad8aa107ba5a3819",
-);
-```
-
 Added in v2.0.0
 
-## encodeCBORBytes
+## HexString
 
-Convert a TransactionHash to CBOR bytes.
+Schema for transforming between hex string and TransactionHash.
 
 **Signature**
 
 ```ts
-export declare const encodeCBORBytes: Serialization.ToCBORBytes<TransactionHash>;
-```
-
-**Example**
-
-```ts
-import { TransactionHash, Bytes } from "@lucid-evolution/experimental";
-import assert from "assert";
-
-const transactionHash = TransactionHash.decodeHexOrThrow(
-  "cefd2fcf657e5e5d6c35975f4e052f427819391b153ebb16ad8aa107ba5a3819",
-);
-const bytes = TransactionHash.encodeCBORBytes(transactionHash);
-assert(bytes instanceof Uint8Array);
-```
-
-Added in v2.0.0
-
-## encodeCBORHex
-
-Convert a TransactionHash to CBOR hex string.
-
-**Signature**
-
-```ts
-export declare const encodeCBORHex: Serialization.ToCBOR<TransactionHash>;
-```
-
-**Example**
-
-```ts
-import { TransactionHash } from "@lucid-evolution/experimental";
-import assert from "assert";
-
-const transactionHash = TransactionHash.decodeHexOrThrow(
-  "cefd2fcf657e5e5d6c35975f4e052f427819391b153ebb16ad8aa107ba5a3819",
-);
-const hex = TransactionHash.encodeCBORHex(transactionHash);
-assert(hex.startsWith("5820"));
-assert(
-  hex.includes(
-    "cefd2fcf657e5e5d6c35975f4e052f427819391b153ebb16ad8aa107ba5a3819",
-  ),
-);
+export declare const HexString: Schema.transform<
+  Schema.refine<
+    string & Brand<"HexString">,
+    Schema.SchemaClass<
+      string & Brand<"HexString">,
+      string & Brand<"HexString">,
+      never
+    >
+  >,
+  typeof TransactionHash
+>;
 ```
 
 Added in v2.0.0
@@ -387,19 +161,6 @@ export declare const equals: (
 ```ts
 import { TransactionHash } from "@lucid-evolution/experimental";
 import assert from "assert";
-
-const hash1 = TransactionHash.decodeHexOrThrow(
-  "cefd2fcf657e5e5d6c35975f4e052f427819391b153ebb16ad8aa107ba5a3819",
-);
-const hash2 = TransactionHash.decodeHexOrThrow(
-  "cefd2fcf657e5e5d6c35975f4e052f427819391b153ebb16ad8aa107ba5a3819",
-);
-const hash3 = TransactionHash.decodeHexOrThrow(
-  "dc97057e0949d9676e55b69f28fcb2dccb8002583a4ad761f1dbfb985f36085c",
-);
-
-assert(TransactionHash.equals(hash1, hash2) === true);
-assert(TransactionHash.equals(hash1, hash3) === false);
 ```
 
 Added in v2.0.0
@@ -479,46 +240,31 @@ Added in v2.0.0
 [Inspectable.NodeInspectSymbol]();
 ```
 
-# transformation
+## TransactionHashBytes
 
-## encodeBytes
-
-Convert a TransactionHash to bytes.
+Schema for TransactionHash bytes validation.
 
 **Signature**
 
 ```ts
-export declare const encodeBytes: Serialization.ToBytes<TransactionHash>;
-```
-
-**Example**
-
-```ts
-import { TransactionHash, Bytes } from "@lucid-evolution/experimental";
-import assert from "assert";
-
-const transactionHash = TransactionHash.decodeHexOrThrow(
-  "cefd2fcf657e5e5d6c35975f4e052f427819391b153ebb16ad8aa107ba5a3819",
-);
-const bytes = TransactionHash.encodeBytes(transactionHash);
-assert(bytes instanceof Uint8Array);
-assert(bytes.length === 32);
-assert(
-  Bytes.toHexOrThrow(bytes) ===
-    "cefd2fcf657e5e5d6c35975f4e052f427819391b153ebb16ad8aa107ba5a3819",
-);
+export declare const TransactionHashBytes: Schema.SchemaClass<any, any, never>;
 ```
 
 Added in v2.0.0
 
 # utils
 
-## TransactionHash (interface)
+## Hash
 
 **Signature**
 
 ```ts
-export interface TransactionHash {
-  readonly [NominalType]: unique symbol;
-}
+export declare const Hash: Schema.refine<
+  string & Brand<"HexString">,
+  Schema.SchemaClass<
+    string & Brand<"HexString">,
+    string & Brand<"HexString">,
+    never
+  >
+>;
 ```

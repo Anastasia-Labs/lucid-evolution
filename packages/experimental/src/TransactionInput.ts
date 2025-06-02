@@ -23,7 +23,7 @@ import * as Numeric from "./Numeric.js";
  * @since 2.0.0
  * @category schemas
  */
-class TransactionInput extends Schema.TaggedClass<TransactionInput>(
+export class TransactionInput extends Schema.TaggedClass<TransactionInput>(
   "TransactionInput",
 )("TransactionInput", {
   transactionId: TransactionHash.TransactionHash,
@@ -44,7 +44,9 @@ class TransactionInput extends Schema.TaggedClass<TransactionInput>(
  * @since 2.0.0
  * @category errors
  */
-class TransactionInputError extends Data.TaggedError("TransactionInputError")<{
+export class TransactionInputError extends Data.TaggedError(
+  "TransactionInputError",
+)<{
   message: string;
   cause?: unknown;
 }> {}
@@ -52,19 +54,10 @@ class TransactionInputError extends Data.TaggedError("TransactionInputError")<{
 /**
  * Check if the given value is a valid TransactionInput
  *
- * @example
- * import { TransactionHash, TransactionInput } from "@lucid-evolution/experimental";
- * import assert from "assert";
- *
- * const transactionId = TransactionHash.decodeHexOrThrow("cefd2fcf657e5e5d6c35975f4e052f427819391b153ebb16ad8aa107ba5a3819");
- * const transactionInput = TransactionInput.makeOrThrow(transactionId, 0)
- * const isValid = TransactionInput.isTransactionInput(transactionInput);
- * assert(isValid === true);
- *
  * @since 2.0.0
  * @category predicates
  */
-const isTransactionInput = Schema.is(TransactionInput);
+export const isTransactionInput = Schema.is(TransactionInput);
 
 /**
  * Schema for transforming between CBOR bytes and TransactionInput
@@ -112,7 +105,7 @@ const CBORBytes = Schema.transformOrFail(
  * @since 2.0.0
  * @category encoding/decoding
  */
-const CBORHex = Schema.transformOrFail(
+export const CBORHex = Schema.transformOrFail(
   Hex.HexString.pipe(Schema.typeSchema).annotations({
     identifier: "CBORHex",
   }),
@@ -129,29 +122,15 @@ const CBORHex = Schema.transformOrFail(
 /**
  * Check if two TransactionInput instances are equal.
  *
- * @example
- * import { TransactionHash, TransactionInput } from "@lucid-evolution/experimental";
- * import assert from "assert";
- *
- * const transactionId1 = TransactionHash.decodeHexOrThrow("cefd2fcf657e5e5d6c35975f4e052f427819391b153ebb16ad8aa107ba5a3819");
- * const transactionId2 = TransactionHash.decodeHexOrThrow("dddd2fcf657e5e5d6c35975f4e052f427819391b153ebb16ad8aa107ba5a3819");
- * const transactionInput = TransactionInput.makeOrThrow(transactionId1, 0);
- * const sameTransactionInput = TransactionInput.makeOrThrow(transactionId1, 0);
- * const differentTransactionInput1 = TransactionInput.makeOrThrow(transactionId1, 1);
- * const differentTransactionInput2 = TransactionInput.makeOrThrow(transactionId2, 0);
- * assert(TransactionInput.equals(transactionInput, sameTransactionInput) === true);
- * assert(TransactionInput.equals(transactionInput, differentTransactionInput1) === false);
- * assert(TransactionInput.equals(transactionInput, differentTransactionInput2) === false);
- *
  * @since 2.0.0
  * @category equality
  */
-const equals = (a: TransactionInput, b: TransactionInput): boolean =>
+export const equals = (a: TransactionInput, b: TransactionInput): boolean =>
   a._tag === b._tag &&
   a.index === b.index &&
   a.transactionId.hash === b.transactionId.hash;
 
-const generator = FastCheck.tuple(
+export const generator = FastCheck.tuple(
   TransactionHash.generator,
   Numeric.Uint16Generator,
 ).map(
@@ -161,13 +140,3 @@ const generator = FastCheck.tuple(
       index,
     }),
 );
-
-export {
-  TransactionInput,
-  TransactionInputError,
-  CBORBytes,
-  CBORHex,
-  isTransactionInput,
-  equals,
-  generator,
-};

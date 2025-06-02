@@ -10,15 +10,9 @@ Lucid Evolution is a transaction building framework for Cardano which provides f
 
 ## Provider
 
-To interact with the Cardano blockchain (querying UTxOs, datums, or protocol parameters), you'll need to configure a provider. Providers are chain indexing services that offer API access to blockchain data. Lucid Evolution supports several providers:
+To interact with the Cardano blockchain (querying UTxOs, datums, or protocol parameters), you'll need to configure a provider. Providers are chain indexing services that offer API access to blockchain data. 
 
-<Callout type="info">
-  While a provider is required for blockchain queries, you can still use Lucid Evolution's transaction building features without one.
-</Callout>
-
-### Provider selection
-
-You can choose one of the following providers to use with Lucid Evolution
+Lucid Evolution supports several providers:
 
 <Tabs items={['Blockfrost', 'Kupmios', 'Maestro', 'Koios', 'YACI DevKit', 'UTxORPC']}>
   <Tabs.Tab>
@@ -111,27 +105,9 @@ const lucid = await Lucid(
 </Callout>
 
 </Tabs.Tab>
-
 <Tabs.Tab>
-
 YACI DevKit provides a local development environment with configurable block times and network parameters. For detailed setup instructions, visit the [YACI DevKit documentation](https://devkit.yaci.xyz/tutorials/lucid-evolution/overview).
-
-```typescript
-// Configure custom network slot settings for YACI DevKit
-SLOT_CONFIG_NETWORK["Custom"] = {
-  zeroTime: 1664060800000, // Unix timestamp in milliseconds
-  zeroSlot: 0,
-  slotLength: 1000,
-};
-
-const lucid = await Lucid(
-  new Kupmios("http://localhost:1442", "http://localhost:1337"),
-  "Custom" // Use custom network type for DevKit
-);
-```
-
 </Tabs.Tab>
-
 <Tabs.Tab>
 
 ```typescript
@@ -139,10 +115,13 @@ https://github.com/utxorpc/lucid-evolution-provider
 ```
 
 </Tabs.Tab>
-
 </Tabs>
 
-## Common Queries
+<Callout type="info">
+  While a provider is required for blockchain interaction, you can still use transaction building features of the Evolution library without one.
+</Callout>
+
+### Common Queries
 
 By abstracting away the provider calls, Evolution library provides different methods to query on-chain data:
 

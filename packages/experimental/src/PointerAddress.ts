@@ -21,13 +21,15 @@ import * as Hex from "./Hex.js";
  * @since 2.0.0
  * @category model
  */
-class PointerAddressError extends Data.TaggedError("PointerAddressError")<{
+export class PointerAddressError extends Data.TaggedError(
+  "PointerAddressError",
+)<{
   message: string;
   cause?: unknown;
 }> {}
 
 declare const NominalType: unique symbol;
-interface PointerAddress {
+export interface PointerAddress {
   readonly [NominalType]: unique symbol;
 }
 
@@ -37,7 +39,7 @@ interface PointerAddress {
  * @since 2.0.0
  * @category schemas
  */
-class PointerAddress extends Schema.TaggedClass<PointerAddress>(
+export class PointerAddress extends Schema.TaggedClass<PointerAddress>(
   "PointerAddress",
 )("PointerAddress", {
   networkId: NetworkId.NetworkId,
@@ -54,7 +56,7 @@ class PointerAddress extends Schema.TaggedClass<PointerAddress>(
   }
 }
 
-const Bytes = Schema.transformOrFail(
+export const Bytes = Schema.transformOrFail(
   Schema.Uint8ArrayFromSelf,
   PointerAddress,
   {
@@ -150,7 +152,7 @@ const Bytes = Schema.transformOrFail(
   },
 );
 
-const HexString = Schema.transformOrFail(Hex.HexString, PointerAddress, {
+export const HexString = Schema.transformOrFail(Hex.HexString, PointerAddress, {
   strict: true,
   encode: (toI, options, ast, toA) =>
     pipe(ParseResult.encode(Bytes)(toA), Effect.map(Hex.fromBytes)),
@@ -161,26 +163,10 @@ const HexString = Schema.transformOrFail(Hex.HexString, PointerAddress, {
 /**
  * Encode a number as a variable length integer following the Cardano ledger specification
  *
- * @example
- * import { PointerAddress , Natural } from "@lucid-evolution/experimental";
- * import { Effect } from "effect";
- * import assert from "assert";
- *
- * const bytes = PointerAddress.encodeVariableLength(Natural.makeOrThrow(128));
- * assert(bytes instanceof Uint8Array);
- * assert(bytes.length === 2);
- * assert(bytes[0] === 0x80);
- * assert(bytes[1] === 0x01);
- *
- * const smallBytes = PointerAddress.encodeVariableLength(Natural.makeOrThrow(42));
- * assert(smallBytes instanceof Uint8Array);
- * assert(smallBytes.length === 1);
- * assert(smallBytes[0] === 42);
- *
  * @since 2.0.0
  * @category encoding/decoding
  */
-const encodeVariableLength = (natural: Natural.Natural) =>
+export const encodeVariableLength = (natural: Natural.Natural) =>
   Effect.gen(function* () {
     // Handle the simple case: values less than 128 (0x80, binary 10000000) fit in a single byte
     // with no continuation bit needed
@@ -228,7 +214,7 @@ const encodeVariableLength = (natural: Natural.Natural) =>
  * @since 2.0.0
  * @category encoding/decoding
  */
-const decodeVariableLength: (
+export const decodeVariableLength: (
   bytes: Uint8Array,
   offset?: number | undefined,
 ) => Effect.Effect<
@@ -284,43 +270,11 @@ const decodeVariableLength: (
 /**
  * Check if two PointerAddress instances are equal.
  *
- * @example
- * import { PointerAddress, KeyHash, Natural , NetworkId } from "@lucid-evolution/experimental";
- * import assert from "assert";
- *
- * // Create credential
- * const paymentKeyHash = KeyHash.makeOrThrow("c37b1b5dc0669f1d3c61a6fddb2e8fde96be87b881c60bce8e8d542f");
- *
- * // Create two identical addresses
- * const address1 = PointerAddress.make(
- *   NetworkId.makeOrThrow(0),
- *   paymentKeyHash,
- *   Natural.makeOrThrow(1),
- *   Natural.makeOrThrow(2),
- *   Natural.makeOrThrow(3)
- * );
- * const address2 = PointerAddress.make(
- *   NetworkId.makeOrThrow(0),
- *   paymentKeyHash,
- *   Natural.makeOrThrow(1),
- *   Natural.makeOrThrow(2),
- *   Natural.makeOrThrow(3)
- * );
- * const address3 = PointerAddress.make(
- *   NetworkId.makeOrThrow(1),
- *   paymentKeyHash,
- *   Natural.makeOrThrow(1),
- *   Natural.makeOrThrow(2),
- *   Natural.makeOrThrow(3)
- * );
- *
- * assert(PointerAddress.equals(address1, address2) === true);
- * assert(PointerAddress.equals(address1, address3) === false);
  *
  * @since 2.0.0
  * @category equality
  */
-const equals = (a: PointerAddress, b: PointerAddress): boolean => {
+export const equals = (a: PointerAddress, b: PointerAddress): boolean => {
   return (
     a.networkId === b.networkId &&
     a.paymentCredential._tag === b.paymentCredential._tag &&
@@ -351,7 +305,7 @@ const equals = (a: PointerAddress, b: PointerAddress): boolean => {
  * @since 2.0.0
  * @category generators
  */
-const generator = FastCheck.tuple(
+export const generator = FastCheck.tuple(
   NetworkId.generator,
   Credential.generator,
   Natural.generator,
@@ -365,5 +319,3 @@ const generator = FastCheck.tuple(
       pointer: Pointer.make(slot, txIndex, certIndex),
     }),
 );
-
-export { PointerAddress, Bytes, HexString, equals, generator };

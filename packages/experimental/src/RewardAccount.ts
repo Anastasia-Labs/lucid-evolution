@@ -82,21 +82,6 @@ const HexString = Schema.transformOrFail(Hex.HexString, RewardAccount, {
 /**
  * Check if two RewardAccount instances are equal.
  *
- * @example
- * import { RewardAccount, KeyHash } from "@lucid-evolution/experimental";
- * import assert from "assert";
- *
- * // Create credential
- * const stakeKeyHash = KeyHash.decodeHexOrThrow("c37b1b5dc0669f1d3c61a6fddb2e8fde96be87b881c60bce8e8d542f");
- *
- * // Create two identical accounts
- * const account1 = RewardAccount.makeOrThrow(0, stakeKeyHash);
- * const account2 = RewardAccount.makeOrThrow(0, stakeKeyHash);
- * const account3 = RewardAccount.makeOrThrow(1, stakeKeyHash);
- *
- * assert(RewardAccount.equals(account1, account2) === true);
- * assert(RewardAccount.equals(account1, account3) === false);
- *
  * @since 2.0.0
  * @category equality
  */
