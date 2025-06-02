@@ -25,15 +25,14 @@ import * as Address from "../Address.js";
  * @since 2.0.0
  * @category schemas
  */
-export class BabbageTransactionOutput extends Schema.TaggedClass<BabbageTransactionOutput>()(
+export class BabbageTransactionOutput extends Schema.TaggedClass<BabbageTransactionOutput>(
   "BabbageTransactionOutput",
-  {
-    address: Address.Address,
-    value: Schema.BigIntFromSelf,
-    datumOption: Schema.optional(Schema.Uint8ArrayFromSelf),
-    scriptRef: Schema.optional(Schema.Uint8ArrayFromSelf),
-  },
-) {
+)("BabbageTransactionOutput", {
+  address: Address.Address,
+  value: Schema.BigIntFromSelf,
+  datumOption: Schema.optional(Schema.Uint8ArrayFromSelf),
+  scriptRef: Schema.optional(Schema.Uint8ArrayFromSelf),
+}) {
   [Inspectable.NodeInspectSymbol]() {
     return {
       _tag: "BabbageTransactionOutput",
