@@ -24,38 +24,9 @@ const INVALID_DATUM_HASHES = [
 
 const testHash = VALID_DATUM_HASHES[0];
 const testBytes = new Uint8Array([
-  0x51,
-  0x60,
-  0xf8,
-  0x8b,
-  0x92,
-  0x9b,
-  0xf8,
-  0xa6,
-  0xc5,
-  0x7c,
-  0x28,
-  0x5b,
-  0x88,
-  0x94,
-  0x88,
-  0xf9,
-  0x13,
-  0x7c,
-  0x0e,
-  0xf3,
-  0xcf,
-  0xd0,
-  0xbc,
-  0xf4,
-  0x08,
-  0xa1,
-  0x00,
-  0x20,
-  0xe6,
-  0x91,
-  0x46,
-  0xd5,
+  0x51, 0x60, 0xf8, 0x8b, 0x92, 0x9b, 0xf8, 0xa6, 0xc5, 0x7c, 0x28, 0x5b, 0x88,
+  0x94, 0x88, 0xf9, 0x13, 0x7c, 0x0e, 0xf3, 0xcf, 0xd0, 0xbc, 0xf4, 0x08, 0xa1,
+  0x00, 0x20, 0xe6, 0x91, 0x46, 0xd5,
 ]);
 
 /**
@@ -77,8 +48,9 @@ describe("DatumHash Tests", () => {
     it.each(INVALID_DATUM_HASHES)(
       "should throw on invalid hex string: %s",
       (input) => {
-        expect(() => Schema.decodeUnknownSync(DatumHash.HexString)(input))
-          .toThrow();
+        expect(() =>
+          Schema.decodeUnknownSync(DatumHash.HexString)(input),
+        ).toThrow();
       },
     );
 
@@ -120,8 +92,9 @@ describe("DatumHash Tests", () => {
       });
 
       it("should fail on invalid hex string length", () => {
-        expect(() => Schema.decodeUnknownSync(DatumHash.HexString)("deadbeef"))
-          .toThrow();
+        expect(() =>
+          Schema.decodeUnknownSync(DatumHash.HexString)("deadbeef"),
+        ).toThrow();
       });
 
       it("should handle round-trip conversion", () => {
@@ -151,8 +124,9 @@ describe("DatumHash Tests", () => {
 
       it("should fail on invalid bytes length", () => {
         const invalidBytes = new Uint8Array([0xde, 0xad, 0xbe, 0xef]); // Too short
-        expect(() => Schema.decodeUnknownSync(DatumHash.Bytes)(invalidBytes))
-          .toThrow();
+        expect(() =>
+          Schema.decodeUnknownSync(DatumHash.Bytes)(invalidBytes),
+        ).toThrow();
       });
 
       it("should handle round-trip conversion", () => {
