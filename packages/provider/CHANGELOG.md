@@ -1,5 +1,15 @@
 # @lucid-evolution/provider
 
+## 0.1.90
+
+### Patch Changes
+
+- [#631](https://github.com/Anastasia-Labs/lucid-evolution/pull/631) [`35e9a99`](https://github.com/Anastasia-Labs/lucid-evolution/commit/35e9a99550cda2a47b482c325aaa397dcb0e9b0f) Thanks [@hadelive](https://github.com/hadelive)! - blockfrost provider returns only unspent utxo by outref
+
+- Updated dependencies []:
+  - @lucid-evolution/utils@0.1.66
+  - @lucid-evolution/wallet@0.1.72
+
 ## 0.1.89
 
 ### Patch Changes

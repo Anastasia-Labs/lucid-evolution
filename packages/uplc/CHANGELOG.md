@@ -1,5 +1,11 @@
 # @lucid-evolution/uplc
 
+## 0.2.20
+
+### Patch Changes
+
+- [#627](https://github.com/Anastasia-Labs/lucid-evolution/pull/627) [`0afcc62`](https://github.com/Anastasia-Labs/lucid-evolution/commit/0afcc62228428beb3d47b66f63fa9d8becb07f10) Thanks [@solidsnakedev](https://github.com/solidsnakedev)! - upgrade uplc 1.1.17
+
 ## 0.2.19
 
 ### Patch Changes
