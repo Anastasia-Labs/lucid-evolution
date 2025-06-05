@@ -101,7 +101,7 @@ const _LABEL_DESCRIPTIONS = new Map<number, string>([
  * @since 2.0.0
  * @category utils
  */
-export const describe = (
+export const describeTransactionMetadatumLabel = (
   label: TransactionMetadatumLabel,
 ): string | undefined => {
   return _LABEL_DESCRIPTIONS.get(label);
