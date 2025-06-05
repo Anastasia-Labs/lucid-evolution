@@ -50,7 +50,9 @@
     "@harmoniclabs/plutus-data": "^1.2.4",
     "@harmoniclabs/uplc": "^1.2.4",
     "@scure/base": "^1.2.4",
+    "@types/dockerode": "^3.3.39",
     "cbor-x": "^1.6.0",
+    "dockerode": "^4.0.6",
     "effect": "^3.14.7",
     "tinybench": "^4.0.1"
   },
