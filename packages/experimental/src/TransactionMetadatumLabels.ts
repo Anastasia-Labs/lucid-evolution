@@ -72,40 +72,20 @@ export class TransactionMetadatumLabels extends Schema.TaggedClass<TransactionMe
  * @since 2.0.0 
  * @category utils
  */
+const labelDescriptions = new Map<number, string>([
+  [94, "CIP-0094 - On-chain governance polls"],
+  [674, "CIP-0020 - Transaction message/comment metadata"],
+  [721, "CIP-0025 - NFT Token Standard"],
+  [777, "CIP-0027 - Royalties Standard"],
+  [867, "CIP-0088 - Token Policy Registration Standard"],
+  [1667, "CIP-72: dApp registration & Discovery"],
+  [3692, "CIP-0149 - Optional DRep compensation"],
+  [61284, "CIP-0015 - Catalyst registration"],
+  [61285, "CIP-0015 - Catalyst witness"],
+  [61286, "CIP-0015 - Catalyst deregistration"],
+]);
+
 export const describe =
   (label: TransactionMetadatumLabel): string | undefined => {
-    switch (label) {
-      case 94:
-        return "CIP-0094 - On-chain governance polls";
-
-      case 674:
-        return "CIP-0020 - Transaction message/comment metadata";
-
-      case 721:
-        return "CIP-0025 - NFT Token Standard";
-
-      case 777:
-        return "CIP-0027 - Royalties Standard";
-
-      case 867:
-        return "CIP-0088 - Token Policy Registration Standard";
-
-      case 1667:
-        return "CIP-72: dApp registration & Discovery";
-
-      case 3692:
-        return "CIP-0149 - Optional DRep compensation";
-
-      case 61284:
-        return "CIP-0015 - Catalyst registration";
-
-      case 61285:
-        return "CIP-0015 - Catalyst witness";
-
-      case 61286:
-        return "CIP-0015 - Catalyst deregistration";
-
-      default:
-        return undefined;
-    }
+    return labelDescriptions.get(label);
   };
