@@ -31,7 +31,7 @@ const findContainer = (containerName: string) =>
       const docker = new Docker();
       return docker.listContainers({ all: true }).then((containers) => {
         const found = containers.find((c) =>
-          c.Names.includes(`/${containerName}`)
+          c.Names.includes(`/${containerName}`),
         );
         return found ? docker.getContainer(found.Id) : undefined;
       });
@@ -63,7 +63,7 @@ const writeConfigFiles = (config: Required<DevNetConfig.DevNetConfig>) =>
         try: () =>
           fs.promises.writeFile(
             path.join(tempDir, filename),
-            JSON.stringify(content, null, 2)
+            JSON.stringify(content, null, 2),
           ),
         catch: (cause) =>
           new CardanoDevNetError({
@@ -191,7 +191,7 @@ const createDockerContainer = (config: Required<DevNetConfig.DevNetConfig>) =>
  * @category constructors
  */
 export const make = (
-  config: DevNetConfig.DevNetConfig = {}
+  config: DevNetConfig.DevNetConfig = {},
 ): Effect.Effect<DevNetContainer, CardanoDevNetError> =>
   Effect.gen(function* () {
     const fullConfig: Required<DevNetConfig.DevNetConfig> = {
@@ -295,7 +295,7 @@ export const make = (
  * @category lifecycle
  */
 export const startContainer = (
-  container: DevNetContainer
+  container: DevNetContainer,
 ): Effect.Effect<void, CardanoDevNetError> =>
   Effect.tryPromise({
     try: () => new Docker().getContainer(container.id).start(),
@@ -321,7 +321,7 @@ export const startContainer = (
  * @category lifecycle
  */
 export const stopContainer = (
-  container: DevNetContainer
+  container: DevNetContainer,
 ): Effect.Effect<void, CardanoDevNetError> =>
   Effect.gen(function* () {
     const docker = new Docker();
@@ -364,7 +364,7 @@ export const stopContainer = (
  * @category lifecycle
  */
 export const removeContainer = (
-  container: DevNetContainer
+  container: DevNetContainer,
 ): Effect.Effect<void, CardanoDevNetError> =>
   Effect.gen(function* () {
     yield* stopContainer(container);
@@ -394,7 +394,7 @@ export const removeContainer = (
  * @category information
  */
 export const getContainerStatus = (
-  container: DevNetContainer
+  container: DevNetContainer,
 ): Effect.Effect<Docker.ContainerInspectInfo | undefined, CardanoDevNetError> =>
   Effect.tryPromise({
     try: () => new Docker().getContainer(container.id).inspect(),

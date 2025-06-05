@@ -145,22 +145,25 @@ export type ShelleyGenesis = {
   };
   readonly slotsPerKESPeriod: number;
   readonly staking: {
-    readonly pools: Record<string, {
-      readonly cost: number;
-      readonly margin: number;
-      readonly metadata: null;
-      readonly owners: ReadonlyArray<unknown>;
-      readonly pledge: number;
-      readonly publicKey: string;
-      readonly relays: ReadonlyArray<unknown>;
-      readonly rewardAccount: {
-        readonly credential: {
-          readonly "key hash": string;
+    readonly pools: Record<
+      string,
+      {
+        readonly cost: number;
+        readonly margin: number;
+        readonly metadata: null;
+        readonly owners: ReadonlyArray<unknown>;
+        readonly pledge: number;
+        readonly publicKey: string;
+        readonly relays: ReadonlyArray<unknown>;
+        readonly rewardAccount: {
+          readonly credential: {
+            readonly "key hash": string;
+          };
+          readonly network: string;
         };
-        readonly network: string;
-      };
-      readonly vrf: string;
-    }>;
+        readonly vrf: string;
+      }
+    >;
     readonly stake: Record<string, string>;
   };
   readonly systemStart: string;
@@ -286,7 +289,7 @@ export interface DevNetConfig {
  *
  * @example
  * import { DEFAULT_NODE_CONFIG } from "@lucid-evolution/experimental";
- * 
+ *
  * const customNodeConfig = {
  *   ...DEFAULT_NODE_CONFIG,
  *   TracingVerbosity: "MinimalVerbosity",
@@ -673,10 +676,10 @@ export const DEFAULT_VRF_SKEY = {
  *
  * @example
  * import { DEFAULT_DEVNET_CONFIG } from "@lucid-evolution/experimental";
- * 
+ *
  * // Use default configuration
  * const config = DEFAULT_DEVNET_CONFIG;
- * 
+ *
  * // Override specific settings
  * const customConfig = {
  *   ...DEFAULT_DEVNET_CONFIG,
@@ -707,5 +710,3 @@ export const DEFAULT_DEVNET_CONFIG: Required<DevNetConfig> = {
   opCert: DEFAULT_OPCERT,
   vrfSkey: DEFAULT_VRF_SKEY,
 } as const;
-
-
