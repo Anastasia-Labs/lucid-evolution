@@ -79,7 +79,7 @@ export class TransactionMetadatumLabels extends Schema.TaggedClass<TransactionMe
   }
 }
 
-const labelDescriptions = new Map<number, string>([
+const _LABEL_DESCRIPTIONS = new Map<number, string>([
   [94, "CIP-0094 - On-chain governance polls"],
   [674, "CIP-0020 - Transaction message/comment metadata"],
   [721, "CIP-0025 - NFT Token Standard"],
@@ -104,5 +104,5 @@ const labelDescriptions = new Map<number, string>([
 export const describe = (
   label: TransactionMetadatumLabel,
 ): string | undefined => {
-  return labelDescriptions.get(label);
+  return _LABEL_DESCRIPTIONS.get(label);
 };
