@@ -281,6 +281,9 @@ export const make = (
     };
   });
 
+export const makeOrThrow = (config: DevNetConfig.DevNetConfig = {}) =>
+  Effect.runPromise(make(config));
+
 /**
  * Start a specific devnet container.
  *
@@ -351,6 +354,9 @@ export const stopContainer = (
     }
   });
 
+export const startContainerOrThrow = (container: DevNetContainer) =>
+  Effect.runPromise(startContainer(container));
+
 /**
  * Remove a specific devnet container.
  *
@@ -380,19 +386,9 @@ export const removeContainer = (
     });
   });
 
-/**
- * Get the status of a specific devnet container.
- *
- * @example
- * import { getContainerStatus } from "@lucid-evolution/experimental/CardanoNode/DevNet";
- * import { Effect } from "effect";
- *
- * const status = yield* getContainerStatus(container);
- * console.log(status?.State.Status); // "running" | "exited" | etc.
- *
- * @since 2.0.0
- * @category information
- */
+export const removeContainerOrThrow = (container: DevNetContainer) =>
+  Effect.runPromise(removeContainer(container));
+
 export const getContainerStatus = (
   container: DevNetContainer,
 ): Effect.Effect<Docker.ContainerInspectInfo | undefined, CardanoDevNetError> =>

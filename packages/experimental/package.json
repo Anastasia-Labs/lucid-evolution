@@ -33,7 +33,7 @@
     "build": "rm -rf dist && tsc -p tsconfig.esm.json  && tsc -p tsconfig.cjs.json",
     "generate:cml-wrappers": "tsx tools/generate-cml-wrappers.ts",
     "test": "vitest run",
-    "lint": "tsc --noEmit",
+    "lint": "eslint . --max-warnings 0",
     "clean": "rm -rf .turbo && rm -rf node_modules && rm -rf dist",
     "docgen": "docgen"
   },
@@ -46,25 +46,27 @@
   "dependencies": {
     "@anastasia-labs/cardano-multiplatform-lib-browser": "6.0.2-3",
     "@anastasia-labs/cardano-multiplatform-lib-nodejs": "6.0.2-3",
-    "@effect/platform-node": "^0.76.12",
-    "@harmoniclabs/plutus-data": "^1.2.4",
-    "@harmoniclabs/uplc": "^1.2.4",
-    "@scure/base": "^1.2.4",
+    "@harmoniclabs/crypto": "^0.3.0",
+    "@harmoniclabs/plutus-data": "^1.2.6",
+    "@harmoniclabs/uplc": "^1.4.1",
+    "@scure/base": "^1.2.6",
     "@types/dockerode": "^3.3.39",
     "cbor-x": "^1.6.0",
     "dockerode": "^4.0.6",
-    "effect": "^3.14.7",
+    "effect": "^3.16.3",
     "tinybench": "^4.0.1"
   },
   "devDependencies": {
     "@effect/docgen": "^0.5.2",
-    "@effect/language-service": "^0.6.1",
-    "@effect/vitest": "^0.16.0",
-    "@microsoft/api-extractor": "^7.49.0",
-    "@types/node": "^22.13.11",
-    "tsup": "^8.0.2",
+    "@effect/language-service": "^0.19.0",
+    "@effect/vitest": "^0.23.3",
+    "@microsoft/api-extractor": "^7.52.8",
+    "@types/node": "^22.15.30",
+    "eslint": "^9.28.0",
+    "tsup": "^8.5.0",
     "tsx": "^4.19.4",
     "typescript": "^5.8.3",
-    "vitest": "^2.0.5"
+    "vitest": "^3.2.2",
+    "@lucid-evolution/eslint-config": "workspace:*"
   }
 }
