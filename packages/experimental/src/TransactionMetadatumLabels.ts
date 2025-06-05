@@ -5,7 +5,7 @@ import { Data, Inspectable, Schema } from "effect";
  * ```
  * transaction_metadatum_label = uint .size 8
  * ```
- * 
+ *
  * @since 2.0.0
  * @category model
  */
@@ -19,14 +19,15 @@ export const TransactionMetadatumLabel = Schema.Uint8;
  */
 export type TransactionMetadatumLabel = typeof TransactionMetadatumLabel.Type;
 
-
 /**
  * Error thrown when transaction metadatum labels operations fail
  *
  * @since 2.0.0
  * @category model
  */
-export class TransactionMetadatumLabelsError extends Data.TaggedError("TransactionMetadatumLabelsError")<{
+export class TransactionMetadatumLabelsError extends Data.TaggedError(
+  "TransactionMetadatumLabelsError",
+)<{
   message: string;
   cause?: unknown;
 }> {}
@@ -37,12 +38,11 @@ export class TransactionMetadatumLabelsError extends Data.TaggedError("Transacti
  * @since 2.0.0
  * @category schemas
  */
-export class TransactionMetadatumLabels extends Schema.TaggedClass<TransactionMetadatumLabels>("TransactionMetadatumLabels")(
+export class TransactionMetadatumLabels extends Schema.TaggedClass<TransactionMetadatumLabels>(
   "TransactionMetadatumLabels",
-  {
-    fromLabels: Schema.mutable(Schema.Array(TransactionMetadatumLabel)),
-  },
-) {
+)("TransactionMetadatumLabels", {
+  fromLabels: Schema.mutable(Schema.Array(TransactionMetadatumLabel)),
+}) {
   [Inspectable.NodeInspectSymbol]() {
     return {
       _tag: "TransactionMetadatumLabels",
@@ -50,28 +50,35 @@ export class TransactionMetadatumLabels extends Schema.TaggedClass<TransactionMe
     };
   }
 
-  len() {
+  /**
+   * Gets the size of the labels.
+   * @returns The length of `fromLabels`
+   */
+  size() {
     return this.fromLabels.length;
   }
 
+  /**
+   * Gets the label located at the specified index. If the index is out-of-bound,
+   * returns `undefined`
+   *
+   * @param index  The index of the label
+   * @returns Returns `TransactionMetadatumLabel` located at the specified index
+   */
   get(index: number) {
     return this.fromLabels.at(index);
   }
 
-  add(elem: TransactionMetadatumLabel) {
-    return this.fromLabels.push(elem);
+  /**
+   * Appends a new label to the **end**
+   * @param label The label to append
+   * @returns The size of the labels after appended. This is a number one higher than the previous labels count.
+   */
+  add(label: TransactionMetadatumLabel) {
+    return this.fromLabels.push(label);
   }
 }
 
-/**
- * Describe transaction metadatum label as per
- * [CIP-10](https://github.com/cardano-foundation/CIPs/blob/master/CIP-0010/registry.json) standard.
- * 
- * **NOTE**: Only labels associated with CIPs will be described.
- * 
- * @since 2.0.0 
- * @category utils
- */
 const labelDescriptions = new Map<number, string>([
   [94, "CIP-0094 - On-chain governance polls"],
   [674, "CIP-0020 - Transaction message/comment metadata"],
@@ -85,7 +92,17 @@ const labelDescriptions = new Map<number, string>([
   [61286, "CIP-0015 - Catalyst deregistration"],
 ]);
 
-export const describe =
-  (label: TransactionMetadatumLabel): string | undefined => {
-    return labelDescriptions.get(label);
-  };
+/**
+ * Describe transaction metadatum label as per
+ * [CIP-10](https://github.com/cardano-foundation/CIPs/blob/master/CIP-0010/registry.json) standard.
+ *
+ * **NOTE**: Only labels associated with CIPs will be described.
+ *
+ * @since 2.0.0
+ * @category utils
+ */
+export const describe = (
+  label: TransactionMetadatumLabel,
+): string | undefined => {
+  return labelDescriptions.get(label);
+};
