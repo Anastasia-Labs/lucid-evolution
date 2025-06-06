@@ -1,11 +1,11 @@
 import {
-    Data,
-    Effect,
-    FastCheck,
-    Inspectable,
-    ParseResult,
-    pipe,
-    Schema,
+  Data,
+  Effect,
+  FastCheck,
+  Inspectable,
+  ParseResult,
+  pipe,
+  Schema,
 } from "effect";
 import * as CBOR from "./CBOR.js";
 import * as Hex from "./Hex.js";
@@ -45,12 +45,12 @@ export const DATUM_HASH_HEX_LENGTH = 64;
  * @category errors
  */
 export class DatumHashError extends Data.TaggedError("DatumHashError")<{
-    message?: string;
-    reason?:
-        | "InvalidHexLength"
-        | "InvalidBytesLength"
-        | "InvalidHexFormat"
-        | "InvalidCBORFormat";
+  message?: string;
+  reason?:
+    | "InvalidHexLength"
+    | "InvalidBytesLength"
+    | "InvalidHexFormat"
+    | "InvalidCBORFormat";
 }> {}
 
 /**
@@ -60,11 +60,11 @@ export class DatumHashError extends Data.TaggedError("DatumHashError")<{
  * @category schemas
  */
 export const Hash = Hex.HexString.pipe(
-    Schema.filter((hex) => hex.length === DATUM_HASH_HEX_LENGTH),
+  Schema.filter((hex) => hex.length === DATUM_HASH_HEX_LENGTH),
 ).annotations({
-    message: (issue) =>
-        `${issue.actual} must be a hex string of length ${DATUM_HASH_HEX_LENGTH}`,
-    identifier: "Hash",
+  message: (issue) =>
+    `${issue.actual} must be a hex string of length ${DATUM_HASH_HEX_LENGTH}`,
+  identifier: "Hash",
 });
 
 /**
@@ -74,14 +74,14 @@ export const Hash = Hex.HexString.pipe(
  * @category schemas
  */
 export class DatumHash extends Schema.TaggedClass<DatumHash>()("DatumHash", {
-    hash: Hash,
+  hash: Hash,
 }) {
-    [Inspectable.NodeInspectSymbol]() {
-        return {
-            _tag: "DatumHash",
-            hash: this.hash,
-        };
-    }
+  [Inspectable.NodeInspectSymbol]() {
+    return {
+      _tag: "DatumHash",
+      hash: this.hash,
+    };
+  }
 }
 
 /**
@@ -99,13 +99,13 @@ export const isDatumHash = Schema.is(DatumHash);
  * @category schemas
  */
 export const DatumHashBytes = pipe(
-    Schema.Uint8ArrayFromSelf,
-    Schema.filter((bytes) => bytes.length === DATUM_HASH_BYTES_LENGTH),
-    Schema.typeSchema,
+  Schema.Uint8ArrayFromSelf,
+  Schema.filter((bytes) => bytes.length === DATUM_HASH_BYTES_LENGTH),
+  Schema.typeSchema,
 ).annotations({
-    message: (issue) =>
-        `${issue.actual} must be a byte array of length ${DATUM_HASH_BYTES_LENGTH}`,
-    identifier: "DatumHashBytes",
+  message: (issue) =>
+    `${issue.actual} must be a byte array of length ${DATUM_HASH_BYTES_LENGTH}`,
+  identifier: "DatumHashBytes",
 });
 
 /**
@@ -115,13 +115,13 @@ export const DatumHashBytes = pipe(
  * @category encoding/decoding
  */
 export const Bytes = Schema.transform(
-    DatumHashBytes,
-    DatumHash.pipe(Schema.asSchema),
-    {
-        strict: true,
-        encode: (_, hash) => Hex.toBytes(hash.hash),
-        decode: (bytes) => new DatumHash({ hash: Hex.fromBytes(bytes) }),
-    },
+  DatumHashBytes,
+  DatumHash.pipe(Schema.asSchema),
+  {
+    strict: true,
+    encode: (_, hash) => Hex.toBytes(hash.hash),
+    decode: (bytes) => new DatumHash({ hash: Hex.fromBytes(bytes) }),
+  },
 );
 
 /**
@@ -131,9 +131,9 @@ export const Bytes = Schema.transform(
  * @category encoding/decoding
  */
 export const HexString = Schema.transform(Hash, DatumHash, {
-    strict: true,
-    encode: (_, hash) => hash.hash,
-    decode: (hash) => new DatumHash({ hash }),
+  strict: true,
+  encode: (_, hash) => hash.hash,
+  decode: (hash) => new DatumHash({ hash }),
 });
 
 /**
@@ -161,7 +161,7 @@ export const HexString = Schema.transform(Hash, DatumHash, {
  * @category equality
  */
 export const equals = (a: DatumHash, b: DatumHash): boolean => {
-    return a.hash === b.hash;
+  return a.hash === b.hash;
 };
 
 /**
@@ -182,6 +182,6 @@ export const equals = (a: DatumHash, b: DatumHash): boolean => {
  * @category generators
  */
 export const generator = FastCheck.uint8Array({
-    minLength: DATUM_HASH_BYTES_LENGTH,
-    maxLength: DATUM_HASH_BYTES_LENGTH,
+  minLength: DATUM_HASH_BYTES_LENGTH,
+  maxLength: DATUM_HASH_BYTES_LENGTH,
 }).map((bytes) => new DatumHash({ hash: Hex.fromBytes(bytes) }));

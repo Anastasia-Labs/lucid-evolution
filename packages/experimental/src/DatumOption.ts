@@ -70,10 +70,7 @@ export const InlineDatumBytes = Schema.transform(
  * @since 2.0.0
  * @category model
  */
-export const DatumOption = Schema.Union(
-  DatumHash.DatumHash,
-  InlineDatum,
-);
+export const DatumOption = Schema.Union(DatumHash.DatumHash, InlineDatum);
 
 /**
  * Type representing a datum option.
@@ -111,16 +108,14 @@ export const CBORBytes = Schema.transformOrFail(
             CBOR.encodeAsBytesOrThrow([0, Hex.toBytes(toA.hash)]),
           );
         case "InlineDatum":
-          return ParseResult.succeed(
-            CBOR.encodeAsBytesOrThrow([1, toA.data]),
-          );
+          return ParseResult.succeed(CBOR.encodeAsBytesOrThrow([1, toA.data]));
       }
     },
     decode: (fromI, options, ast, fromA) =>
       pipe(
         CBOR.decodeBytes(fromA),
-        Effect.mapError((error) =>
-          new ParseResult.Type(ast, fromI, error.message)
+        Effect.mapError(
+          (error) => new ParseResult.Type(ast, fromI, error.message),
         ),
         Effect.flatMap((a) =>
           ParseResult.decode(
@@ -130,7 +125,7 @@ export const CBORBytes = Schema.transformOrFail(
             ).annotations({
               identifier: "DatumOptionTuple",
             }),
-          )(a)
+          )(a),
         ),
         Effect.flatMap(([tag, bytesDecoded]) =>
           Effect.gen(function* () {
@@ -142,7 +137,7 @@ export const CBORBytes = Schema.transformOrFail(
                   bytesDecoded,
                 );
             }
-          })
+          }),
         ),
       ),
   },
@@ -162,10 +157,7 @@ export const CBORHex = Schema.transformOrFail(
   {
     strict: true,
     encode: (toI, options, ast, toA) =>
-      pipe(
-        ParseResult.encode(CBORBytes)(toA),
-        Effect.map(Hex.fromBytes),
-      ),
+      pipe(ParseResult.encode(CBORBytes)(toA), Effect.map(Hex.fromBytes)),
     decode: (fromA, options, ast) =>
       pipe(Hex.toBytes(fromA), ParseResult.decode(CBORBytes)),
   },
