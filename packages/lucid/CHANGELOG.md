@@ -1,5 +1,11 @@
 # @lucid-evolution/lucid
 
+## 0.4.29
+
+### Patch Changes
+
+- [#636](https://github.com/Anastasia-Labs/lucid-evolution/pull/636) [`6e8779b`](https://github.com/Anastasia-Labs/lucid-evolution/commit/6e8779b75558f0036d9c780a27f208ea057156f0) Thanks [@hadelive](https://github.com/hadelive)! - fix consume utxo with datum hash
+
 ## 0.4.28
 
 ### Patch Changes
