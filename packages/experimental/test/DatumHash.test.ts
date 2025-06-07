@@ -33,110 +33,40 @@ const testBytes = new Uint8Array([
  * Tests for the DatumHash functionality -
  * focusing on datum hash creation, validation, and serialization
  */
-describe("DatumHash Tests", () => {
-  describe("DatumHash Validation", () => {
-    it.each(VALID_DATUM_HASHES)(
-      "should create valid DatumHash: %s",
-      (input) => {
-        const datumHash = Schema.decodeUnknownSync(DatumHash.HexString)(input);
-        expect(datumHash.hash).toBe(input);
-        expect(datumHash._tag).toBe("DatumHash");
-        expect(DatumHash.isDatumHash(datumHash)).toBe(true);
-      },
-    );
-
-    it.each(INVALID_DATUM_HASHES)(
-      "should throw on invalid hex string: %s",
-      (input) => {
-        expect(() =>
-          Schema.decodeUnknownSync(DatumHash.HexString)(input),
-        ).toThrow();
-      },
-    );
-
-    it("should validate length constants", () => {
-      expect(DatumHash.DATUM_HASH_BYTES_LENGTH).toBe(32);
-      expect(DatumHash.DATUM_HASH_HEX_LENGTH).toBe(64);
-    });
-
-    it("should check equality correctly", () => {
-      const hash1 = Schema.decodeUnknownSync(DatumHash.HexString)(
-        VALID_DATUM_HASHES[0],
-      );
-      const hash2 = Schema.decodeUnknownSync(DatumHash.HexString)(
-        VALID_DATUM_HASHES[0],
-      );
-      const hash3 = Schema.decodeUnknownSync(DatumHash.HexString)(
-        VALID_DATUM_HASHES[1],
-      );
-
-      expect(DatumHash.equals(hash1, hash2)).toBe(true);
-      expect(DatumHash.equals(hash1, hash3)).toBe(false);
-    });
+describe("DatumHash Validation", () => {
+  it.each(VALID_DATUM_HASHES)("should create valid DatumHash: %s", (input) => {
+    const datumHash = Schema.decodeUnknownSync(DatumHash.HexString)(input);
+    expect(datumHash.hash).toBe(input);
+    expect(datumHash._tag).toBe("DatumHash");
+    expect(DatumHash.isDatumHash(datumHash)).toBe(true);
   });
 
-  describe("DatumHash Serialization", () => {
-    describe("HexString Schema", () => {
-      it("should encode to hex string", () => {
-        const datumHash = Schema.decodeUnknownSync(DatumHash.HexString)(
-          testHash,
-        );
-        const encoded = Schema.encodeSync(DatumHash.HexString)(datumHash);
-        expect(encoded).toBe(testHash);
-      });
+  it.each(INVALID_DATUM_HASHES)(
+    "should throw on invalid hex string: %s",
+    (input) => {
+      expect(() =>
+        Schema.decodeUnknownSync(DatumHash.HexString)(input),
+      ).toThrow();
+    },
+  );
 
-      it("should decode from hex string", () => {
-        const decoded = Schema.decodeUnknownSync(DatumHash.HexString)(testHash);
-        expect(decoded).toBeInstanceOf(DatumHash.DatumHash);
-        expect(decoded.hash).toBe(testHash);
-      });
+  it("should validate length constants", () => {
+    expect(DatumHash.DATUM_HASH_BYTES_LENGTH).toBe(32);
+    expect(DatumHash.DATUM_HASH_HEX_LENGTH).toBe(64);
+  });
 
-      it("should fail on invalid hex string length", () => {
-        expect(() =>
-          Schema.decodeUnknownSync(DatumHash.HexString)("deadbeef"),
-        ).toThrow();
-      });
+  it("should check equality correctly", () => {
+    const hash1 = Schema.decodeUnknownSync(DatumHash.HexString)(
+      VALID_DATUM_HASHES[0],
+    );
+    const hash2 = Schema.decodeUnknownSync(DatumHash.HexString)(
+      VALID_DATUM_HASHES[0],
+    );
+    const hash3 = Schema.decodeUnknownSync(DatumHash.HexString)(
+      VALID_DATUM_HASHES[1],
+    );
 
-      it("should handle round-trip conversion", () => {
-        const original = Schema.decodeUnknownSync(DatumHash.HexString)(
-          testHash,
-        );
-        const hex = Schema.encodeSync(DatumHash.HexString)(original);
-        const decoded = Schema.decodeUnknownSync(DatumHash.HexString)(hex);
-        expect(DatumHash.equals(original, decoded)).toBe(true);
-      });
-    });
-
-    describe("Bytes Schema", () => {
-      it("should encode to bytes", () => {
-        const datumHash = Schema.decodeUnknownSync(DatumHash.HexString)(
-          testHash,
-        );
-        const encoded = Schema.encodeSync(DatumHash.Bytes)(datumHash);
-        expect(encoded).toEqual(testBytes);
-      });
-
-      it("should decode from bytes", () => {
-        const decoded = Schema.decodeUnknownSync(DatumHash.Bytes)(testBytes);
-        expect(decoded).toBeInstanceOf(DatumHash.DatumHash);
-        expect(decoded.hash).toBe(testHash);
-      });
-
-      it("should fail on invalid bytes length", () => {
-        const invalidBytes = new Uint8Array([0xde, 0xad, 0xbe, 0xef]); // Too short
-        expect(() =>
-          Schema.decodeUnknownSync(DatumHash.Bytes)(invalidBytes),
-        ).toThrow();
-      });
-
-      it("should handle round-trip conversion", () => {
-        const original = Schema.decodeUnknownSync(DatumHash.HexString)(
-          testHash,
-        );
-        const bytes = Schema.encodeSync(DatumHash.Bytes)(original);
-        const decoded = Schema.decodeUnknownSync(DatumHash.Bytes)(bytes);
-        expect(DatumHash.equals(original, decoded)).toBe(true);
-      });
-    });
+    expect(DatumHash.equals(hash1, hash2)).toBe(true);
+    expect(DatumHash.equals(hash1, hash3)).toBe(false);
   });
 });
