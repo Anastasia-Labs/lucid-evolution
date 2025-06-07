@@ -25,6 +25,7 @@ export const collectFromUTxO =
           utxo.datum,
           config.lucidConfig.provider,
         );
+        utxo.datum = resolvedDatum;
         // Skip adding UTxO to collectedInputs when building redeemers to prevent duplicate inputs
         // Store inputs for later use in the txBuilder
         if (collectInputs) config.collectedInputs.push(utxo);
