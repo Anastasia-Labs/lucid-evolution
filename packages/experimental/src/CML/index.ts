@@ -204,6 +204,8 @@ export * as TransactionMetadatum from "./TransactionMetadatum.js";
 export * as TransactionMetadatumLabels from "./TransactionMetadatumLabels.js";
 export * as TransactionMetadatumList from "./TransactionMetadatumList.js";
 export * as TransactionOutput from "./TransactionOutput.js";
+export * as BabbageTransactionOutput from "./BabbageTransactionOutput.js";
+export * as ShelleyTransactionOutput from "./BabbageTransactionOutput.js";
 export * as TransactionOutputAmountBuilder from "./TransactionOutputAmountBuilder.js";
 export * as TransactionOutputBuilder from "./TransactionOutputBuilder.js";
 export * as TransactionOutputList from "./TransactionOutputList.js";
