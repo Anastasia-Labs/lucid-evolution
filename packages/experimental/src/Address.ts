@@ -4,7 +4,7 @@ import * as BaseAddress from "./BaseAddress.js";
 import * as EnterpriseAddress from "./EnterpriseAddress.js";
 import * as RewardAccount from "./RewardAccount.js";
 import * as ByronAddress from "./ByronAddress.js";
-import * as Hex from "./Hex.js";
+import * as HexString from "./Hex.js";
 import * as _Bech32 from "./Bech32.js";
 
 /**
@@ -80,8 +80,8 @@ export type Address = typeof Address.Type;
  * @since 2.0.0
  * @category schema
  */
-export const Bytes = Schema.transformOrFail(
-  Schema.Uint8ArrayFromSelf,
+export const BytesSchema = Schema.transformOrFail(
+  Schema.typeSchema(Schema.Uint8ArrayFromSelf),
   Address,
   {
     strict: true,
@@ -152,13 +152,20 @@ export const Bytes = Schema.transformOrFail(
  * @since 2.0.0
  * @category schema
  */
-export const HexString = Schema.transformOrFail(Hex.HexString, Address, {
-  strict: true,
-  encode: (toI, options, ast, toA) =>
-    pipe(ParseResult.encode(Bytes)(toA), Effect.map(Hex.fromBytes)),
-  decode: (fromI, options, ast, fromA) =>
-    pipe(Hex.toBytes(fromA), ParseResult.decode(Bytes)),
-});
+export const HexStringSchema = Schema.transformOrFail(
+  HexString.HexString,
+  Address,
+  {
+    strict: true,
+    encode: (toI, options, ast, toA) =>
+      pipe(
+        ParseResult.encode(BytesSchema)(toA),
+        Effect.map(HexString.fromBytes),
+      ),
+    decode: (fromI, options, ast, fromA) =>
+      pipe(HexString.toBytes(fromA), ParseResult.decode(BytesSchema)),
+  },
+);
 
 /**
  * Schema for encoding/decoding addresses as Bech32 strings.
@@ -166,14 +173,14 @@ export const HexString = Schema.transformOrFail(Hex.HexString, Address, {
  * @since 2.0.0
  * @category schema
  */
-export const Bech32 = Schema.transformOrFail(
+export const Bech32Schema = Schema.transformOrFail(
   Schema.typeSchema(_Bech32.Bech32),
   Address,
   {
     strict: true,
     encode: (toI, options, ast, toA) =>
       Effect.gen(function* () {
-        const bytes = yield* ParseResult.encode(Bytes)(toA);
+        const bytes = yield* ParseResult.encode(BytesSchema)(toA);
         let prefix: string;
         switch (toA._tag) {
           case "BaseAddress":
@@ -194,7 +201,7 @@ export const Bech32 = Schema.transformOrFail(
     decode: (fromI, options, ast, fromA) =>
       pipe(
         ParseResult.encode(_Bech32.Bytes())(fromI),
-        Effect.flatMap(ParseResult.decode(Bytes)),
+        Effect.flatMap(ParseResult.decode(BytesSchema)),
       ),
   },
 );
@@ -240,145 +247,52 @@ export const generator = FastCheck.oneof(
 );
 
 /**
- * Encodes an address to Bech32 format.
+ * Synchronous encoder for Address to bech32, hex, and bytes formats.
  *
  * @since 2.0.0
  * @category encoding
  */
-export const encodeBech32 = Schema.encode(Bech32);
+export const Encode = {
+  /**
+   * Synchronous encoder for Address to bech32 format.
+   */
+  bech32: Schema.encodeSync(Bech32Schema),
+  hex: Schema.encodeSync(HexStringSchema),
+  bytes: Schema.encodeSync(BytesSchema),
+};
 
 /**
- * Decodes a Bech32 string to an address.
- *
- * @since 2.0.0
- * @category decoding
- */
-export const decodeBech32 = Schema.decodeUnknown(Bech32);
-
-/**
- * Encodes an address to a hex string.
- *
- * @since 2.0.0
- * @category encoding
- */
-export const encodeHexString = Schema.encode(HexString);
-
-/**
- * Decodes a hex string to an address.
- *
- * @since 2.0.0
- * @category decoding
- */
-export const decodeHexString = Schema.decodeUnknown(HexString);
-
-/**
- * Encodes an address to bytes.
+ * Either encoder for Address to bech32, hex, and bytes formats.
  *
  * @since 2.0.0
  * @category encoding
  */
-export const encodeBytes = Schema.encode(Bytes);
+export const EncodeEither = {
+  bech32: Schema.encodeEither(Bech32Schema),
+  hex: Schema.encodeEither(HexStringSchema),
+  bytes: Schema.encodeEither(BytesSchema),
+};
 
 /**
- * Decodes bytes to an address.
+ * Synchronous decoder for bech32, hex, and bytes formats to Address.
  *
  * @since 2.0.0
  * @category decoding
  */
-export const decodeBytes = Schema.decodeUnknown(Bytes);
+export const Decode = {
+  bech32: Schema.decodeUnknownSync(Bech32Schema),
+  hex: Schema.decodeUnknownSync(HexStringSchema),
+  bytes: Schema.decodeUnknownSync(BytesSchema),
+};
 
 /**
- * Encodes an address to Bech32 format, throws on error.
- *
- * @since 2.0.0
- * @category encoding
- */
-export const encodeBech32OrThrow = Schema.encodeSync(Bech32);
-
-/**
- * Decodes a Bech32 string to an address, throws on error.
+ * Either decoder for bech32, hex, and bytes formats to Address.
  *
  * @since 2.0.0
  * @category decoding
  */
-export const decodeBech32OrThrow = Schema.decodeUnknownSync(Bech32);
-
-/**
- * Encodes an address to a hex string, throws on error.
- *
- * @since 2.0.0
- * @category encoding
- */
-export const encodeHexStringOrThrow = Schema.encodeSync(HexString);
-
-/**
- * Decodes a hex string to an address, throws on error.
- *
- * @since 2.0.0
- * @category decoding
- */
-export const decodeHexStringOrThrow = Schema.decodeUnknownSync(HexString);
-
-/**
- * Decodes bytes to an address, throws on error.
- *
- * @since 2.0.0
- * @category decoding
- */
-export const decodeBytesOrThrow = Schema.decodeSync(Bytes);
-
-/**
- * Encodes an address to bytes, throws on error.
- *
- * @since 2.0.0
- * @category encoding
- */
-export const encodeBytesOrThrow = Schema.encodeUnknownSync(Bytes);
-
-/**
- * Encodes an address to Bech32 format, returns Either.
- *
- * @since 2.0.0
- * @category encoding
- */
-export const encodeBech32Either = Schema.encodeEither(Bech32);
-
-/**
- * Decodes a Bech32 string to an address, returns Either.
- *
- * @since 2.0.0
- * @category decoding
- */
-export const decodeBech32Either = Schema.decodeUnknownEither(Bech32);
-
-/**
- * Encodes an address to a hex string, returns Either.
- *
- * @since 2.0.0
- * @category encoding
- */
-export const encodeHexStringEither = Schema.encodeEither(HexString);
-
-/**
- * Decodes a hex string to an address, returns Either.
- *
- * @since 2.0.0
- * @category decoding
- */
-export const decodeHexStringEither = Schema.decodeUnknownEither(HexString);
-
-/**
- * Encodes an address to bytes, returns Either.
- *
- * @since 2.0.0
- * @category encoding
- */
-export const encodeBytesEither = Schema.encodeEither(Bytes);
-
-/**
- * Decodes bytes to an address, returns Either.
- *
- * @since 2.0.0
- * @category decoding
- */
-export const decodeBytesEither = Schema.decodeUnknownEither(Bytes);
+export const DecodeEither = {
+  bech32: Schema.decodeUnknownEither(Bech32Schema),
+  hex: Schema.decodeUnknownEither(HexStringSchema),
+  bytes: Schema.decodeUnknownEither(BytesSchema),
+};
