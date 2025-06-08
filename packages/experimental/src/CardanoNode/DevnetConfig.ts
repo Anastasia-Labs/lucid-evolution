@@ -258,6 +258,35 @@ export type VrfSkey = {
 };
 
 /**
+ * Configuration interface for Kupo - A fast, lightweight & configurable chain-index
+ *
+ * @since 2.0.0
+ * @category model
+ */
+export interface KupoConfig {
+  readonly enabled?: boolean;
+  readonly image?: string;
+  readonly port?: number;
+  readonly logLevel?: "Debug" | "Info" | "Notice" | "Warning" | "Error";
+  readonly match?: string;
+  readonly deferDbIndexes?: boolean;
+  readonly since?: string;
+}
+
+/**
+ * Configuration interface for Ogmios - A lightweight bridge interface for Cardano
+ *
+ * @since 2.0.0
+ * @category model
+ */
+export interface OgmiosConfig {
+  readonly enabled?: boolean;
+  readonly image?: string;
+  readonly port?: number;
+  readonly logLevel?: "debug" | "info" | "notice" | "warning" | "error";
+}
+
+/**
  * Configuration interface for Cardano DevNet setup.
  * All properties are optional, with sensible defaults provided.
  *
@@ -280,21 +309,14 @@ export interface DevNetConfig {
   readonly kesKey?: Partial<KesKey>;
   readonly opCert?: Partial<OpCert>;
   readonly vrfSkey?: Partial<VrfSkey>;
+  readonly kupo?: KupoConfig;
+  readonly ogmios?: OgmiosConfig;
 }
 
 /**
  * Default node configuration constants for Cardano DevNet.
  * These settings control the behavior of the Cardano node including
  * protocol parameters, logging, tracing, and hard fork schedules.
- *
- * @example
- * import { DEFAULT_NODE_CONFIG } from "@lucid-evolution/experimental";
- *
- * const customNodeConfig = {
- *   ...DEFAULT_NODE_CONFIG,
- *   TracingVerbosity: "MinimalVerbosity",
- *   TraceMempool: false
- * };
  *
  * @since 2.0.0
  * @category constants
@@ -671,24 +693,37 @@ export const DEFAULT_VRF_SKEY = {
 } as const;
 
 /**
+ * Default configuration for Kupo service
+ *
+ * @since 2.0.0
+ * @category constants
+ */
+export const DEFAULT_KUPO_CONFIG: Required<KupoConfig> = {
+  enabled: true,
+  image: "cardanosolutions/kupo:v2.10.0",
+  port: 1442,
+  logLevel: "Info",
+  match: "*",
+  deferDbIndexes: true,
+  since: "origin",
+} as const;
+
+/**
+ * Default configuration for Ogmios service
+ *
+ * @since 2.0.0
+ * @category constants
+ */
+export const DEFAULT_OGMIOS_CONFIG: Required<OgmiosConfig> = {
+  enabled: true,
+  image: "cardanosolutions/ogmios:v6.12.0",
+  port: 1337,
+  logLevel: "info",
+} as const;
+
+/**
  * Complete default configuration for Cardano DevNet.
  * Includes all required settings for running a local Cardano development network.
- *
- * @example
- * import { DEFAULT_DEVNET_CONFIG } from "@lucid-evolution/experimental";
- *
- * // Use default configuration
- * const config = DEFAULT_DEVNET_CONFIG;
- *
- * // Override specific settings
- * const customConfig = {
- *   ...DEFAULT_DEVNET_CONFIG,
- *   networkMagic: 123,
- *   nodeConfig: {
- *     ...DEFAULT_DEVNET_CONFIG.nodeConfig,
- *     TracingVerbosity: "MinimalVerbosity"
- *   }
- * };
  *
  * @since 2.0.0
  * @category constants
@@ -709,4 +744,6 @@ export const DEFAULT_DEVNET_CONFIG: Required<DevNetConfig> = {
   kesKey: DEFAULT_KES_KEY,
   opCert: DEFAULT_OPCERT,
   vrfSkey: DEFAULT_VRF_SKEY,
+  kupo: DEFAULT_KUPO_CONFIG,
+  ogmios: DEFAULT_OGMIOS_CONFIG,
 } as const;

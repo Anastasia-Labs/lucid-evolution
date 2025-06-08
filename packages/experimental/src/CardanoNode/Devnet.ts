@@ -15,7 +15,14 @@ export class CardanoDevNetError extends Data.TaggedError("CardanoDevNetError")<{
     | "container_inspection_failed"
     | "temp_directory_creation_failed"
     | "config_file_write_failed"
-    | "file_permissions_failed";
+    | "file_permissions_failed"
+    | "network_creation_failed"
+    | "kupo_container_creation_failed"
+    | "kupo_container_start_failed"
+    | "kupo_container_stop_failed"
+    | "ogmios_container_creation_failed"
+    | "ogmios_container_start_failed"
+    | "ogmios_container_stop_failed";
   message: string;
   cause?: unknown;
 }> {}
@@ -23,6 +30,13 @@ export class CardanoDevNetError extends Data.TaggedError("CardanoDevNetError")<{
 export interface DevNetContainer {
   readonly id: string;
   readonly name: string;
+}
+
+export interface DevNetCluster {
+  readonly cardanoNode: DevNetContainer;
+  readonly kupo?: DevNetContainer;
+  readonly ogmios?: DevNetContainer;
+  readonly networkName: string;
 }
 
 const findContainer = (containerName: string) =>
@@ -40,6 +54,43 @@ const findContainer = (containerName: string) =>
       new CardanoDevNetError({
         reason: "container_not_found",
         message: "Ensure Docker is running and accessible.",
+        cause,
+      }),
+  });
+
+const createOrGetNetwork = (networkName: string) =>
+  Effect.tryPromise({
+    try: async () => {
+      const docker = new Docker();
+      const networks = await docker.listNetworks({
+        filters: { name: [networkName] },
+      });
+
+      if (networks.length > 0) {
+        return networks[0];
+      }
+
+      return await docker.createNetwork({
+        Name: networkName,
+        Driver: "bridge",
+        Internal: false,
+        Attachable: true,
+        IPAM: {
+          Driver: "default",
+          Config: [
+            {
+              Subnet: "172.20.0.0/16",
+              Gateway: "172.20.0.1",
+            },
+          ],
+        },
+      });
+    },
+    catch: (cause) =>
+      new CardanoDevNetError({
+        reason: "network_creation_failed",
+        message:
+          "Failed to create or get Docker network. Check Docker permissions.",
         cause,
       }),
   });
@@ -106,93 +157,223 @@ const writeConfigFiles = (config: Required<DevNetConfig.DevNetConfig>) =>
     return tempDir;
   });
 
-const createDockerContainer = (config: Required<DevNetConfig.DevNetConfig>) =>
+const createDockerContainer = (
+  config: Required<DevNetConfig.DevNetConfig>,
+  networkName: string,
+  tempDir: string,
+) =>
+  Effect.tryPromise({
+    try: () => {
+      const docker = new Docker();
+      const volumeName = `${config.containerName}-ipc`;
+      return docker.createContainer({
+        Image: config.image,
+        name: config.containerName,
+        ExposedPorts: {
+          [`${config.ports.node}/tcp`]: {},
+          [`${config.ports.submit}/tcp`]: {},
+        },
+        HostConfig: {
+          PortBindings: {
+            [`${config.ports.node}/tcp`]: [
+              { HostPort: String(config.ports.node) },
+            ],
+            [`${config.ports.submit}/tcp`]: [
+              { HostPort: String(config.ports.submit) },
+            ],
+          },
+          Binds: [
+            `${tempDir}:/opt/cardano/config:ro`,
+            `${tempDir}:/opt/cardano/keys:ro`,
+            `${volumeName}:/opt/cardano/ipc`,
+          ],
+          // NetworkMode: networkName,
+        },
+        Env: [
+          `CARDANO_NODE_SOCKET_PATH=/opt/cardano/ipc/node.socket`,
+          `CARDANO_BLOCK_PRODUCER=true`,
+          `CARDANO_NETWORK_MAGIC=${config.networkMagic}`,
+        ],
+        Cmd: [
+          "run",
+          "--topology",
+          "/opt/cardano/config/topology.json",
+          "--database-path",
+          "/opt/cardano/data",
+          "--socket-path",
+          "/opt/cardano/ipc/node.socket",
+          "--host-addr",
+          "0.0.0.0",
+          "--port",
+          String(config.ports.node),
+          "--config",
+          "/opt/cardano/config/config.json",
+          "--shelley-kes-key",
+          "/opt/cardano/config/kes.skey",
+          "--shelley-vrf-key",
+          "/opt/cardano/config/vrf.skey",
+          "--shelley-operational-certificate",
+          "/opt/cardano/config/pool.cert",
+        ],
+      });
+    },
+    catch: (cause) =>
+      new CardanoDevNetError({
+        reason: "container_creation_failed",
+        message: "Verify Docker daemon is running and the image is accessible.",
+        cause,
+      }),
+  });
+
+const createKupoContainer = (
+  config: Required<DevNetConfig.DevNetConfig>,
+  networkName: string,
+  tempDir: string,
+) =>
   Effect.gen(function* () {
-    const tempDir = yield* writeConfigFiles(config);
+    if (!config.kupo.enabled) return undefined;
+
     const docker = new Docker();
+    const kupoName = `${config.containerName}-kupo`;
+    const volumeName = `${config.containerName}-ipc`;
+
+    // Build command arguments with proper type checking
+    const cmdArgs = [
+      "--node-socket",
+      "/ipc/node.socket",
+      "--host",
+      "0.0.0.0",
+      "--port",
+      String(config.kupo.port),
+      "--log-level",
+      config.kupo.logLevel || "Info",
+      "--node-config",
+      "/config/config.json",
+      "--match",
+      config.kupo.match || "*",
+      "--since",
+      config.kupo.since || "origin",
+      "--workdir",
+      "/db",
+    ];
+
+    // Add optional defer-db-indexes flag
+    if (config.kupo.deferDbIndexes) {
+      cmdArgs.push("--defer-db-indexes");
+    }
 
     return yield* Effect.tryPromise({
       try: () =>
         docker.createContainer({
-          Image: config.image,
-          name: config.containerName,
+          Image: config.kupo.image || DevNetConfig.DEFAULT_KUPO_CONFIG.image,
+          name: kupoName,
           ExposedPorts: {
-            [`${config.ports.node}/tcp`]: {},
-            [`${config.ports.submit}/tcp`]: {},
+            [`${config.kupo.port || DevNetConfig.DEFAULT_KUPO_CONFIG.port}/tcp`]:
+              {},
           },
           HostConfig: {
             PortBindings: {
-              [`${config.ports.node}/tcp`]: [
-                { HostPort: String(config.ports.node) },
-              ],
-              [`${config.ports.submit}/tcp`]: [
-                { HostPort: String(config.ports.submit) },
-              ],
+              [`${config.kupo.port || DevNetConfig.DEFAULT_KUPO_CONFIG.port}/tcp`]:
+                [
+                  {
+                    HostPort: String(
+                      config.kupo.port || DevNetConfig.DEFAULT_KUPO_CONFIG.port,
+                    ),
+                  },
+                ],
             },
-            Binds: [
-              `${tempDir}:/opt/cardano/config:ro`,
-              `${tempDir}:/opt/cardano/keys:ro`,
-            ],
+            // NetworkMode: networkName,
+            Binds: [`${tempDir}:/config:ro`, `${volumeName}:/ipc`],
           },
           Env: [
-            `CARDANO_NODE_SOCKET_PATH=/opt/cardano/ipc/node.socket`,
-            `CARDANO_BLOCK_PRODUCER=true`,
-            `CARDANO_NETWORK_MAGIC=${config.networkMagic}`,
+            `CARDANO_NETWORK=custom`,
+            `CARDANO_NODE_SOCKET_PATH=/ipc/node.socket`,
           ],
+          Cmd: cmdArgs,
+        }),
+      catch: (cause) =>
+        new CardanoDevNetError({
+          reason: "kupo_container_creation_failed",
+          message:
+            "Failed to create Kupo container. Check Docker permissions and image availability.",
+          cause,
+        }),
+    });
+  });
+
+const createOgmiosContainer = (
+  config: Required<DevNetConfig.DevNetConfig>,
+  networkName: string,
+  tempDir: string,
+) =>
+  Effect.gen(function* () {
+    if (!config.ogmios.enabled) return undefined;
+
+    const docker = new Docker();
+    const ogmiosName = `${config.containerName}-ogmios`;
+    const volumeName = `${config.containerName}-ipc`;
+
+    return yield* Effect.tryPromise({
+      try: () =>
+        docker.createContainer({
+          Image:
+            config.ogmios.image || DevNetConfig.DEFAULT_OGMIOS_CONFIG.image,
+          name: ogmiosName,
+          ExposedPorts: {
+            [`${config.ogmios.port || DevNetConfig.DEFAULT_OGMIOS_CONFIG.port}/tcp`]:
+              {},
+          },
+          HostConfig: {
+            PortBindings: {
+              [`${config.ogmios.port || DevNetConfig.DEFAULT_OGMIOS_CONFIG.port}/tcp`]:
+                [
+                  {
+                    HostPort: String(
+                      config.ogmios.port ||
+                        DevNetConfig.DEFAULT_OGMIOS_CONFIG.port,
+                    ),
+                  },
+                ],
+            },
+            // NetworkMode: networkName,
+            Binds: [`${tempDir}:/config:ro`, `${volumeName}:/ipc`],
+          },
+          Env: [`NETWORK=custom`, `CARDANO_NODE_SOCKET_PATH=/ipc/node.socket`],
           Cmd: [
-            "run",
-            "--topology",
-            "/opt/cardano/config/topology.json",
-            "--database-path",
-            "/opt/cardano/data",
-            "--socket-path",
-            "/opt/cardano/ipc/node.socket",
-            "--host-addr",
+            "--log-level",
+            config.ogmios.logLevel ||
+              DevNetConfig.DEFAULT_OGMIOS_CONFIG.logLevel,
+            "--host",
             "0.0.0.0",
             "--port",
-            String(config.ports.node),
-            "--config",
-            "/opt/cardano/config/config.json",
-            "--shelley-kes-key",
-            "/opt/cardano/config/kes.skey",
-            "--shelley-vrf-key",
-            "/opt/cardano/config/vrf.skey",
-            "--shelley-operational-certificate",
-            "/opt/cardano/config/pool.cert",
+            String(
+              config.ogmios.port || DevNetConfig.DEFAULT_OGMIOS_CONFIG.port,
+            ),
+            "--node-socket",
+            "/ipc/node.socket",
+            "--node-config",
+            "/config/config.json",
           ],
         }),
       catch: (cause) =>
         new CardanoDevNetError({
-          reason: "container_creation_failed",
+          reason: "ogmios_container_creation_failed",
           message:
-            "Verify Docker daemon is running and the image is accessible.",
+            "Failed to create Ogmios container. Check Docker permissions and image availability.",
           cause,
         }),
     });
   });
 
 /**
- * Create a new cardano devnet container without starting it.
- *
- * @example
- * import { make } from "@lucid-evolution/experimental/CardanoNode/DevNet";
- * import { Effect } from "effect";
- *
- * // Create a container with default config
- * const container1 = yield* make();
- *
- * // Create multiple containers with different configs
- * const container2 = yield* make({
- *   containerName: "devnet-test-2",
- *   ports: { node: 4002, submit: 8091 }
- * });
+ * Create a new cardano devnet cluster with optional Kupo and Ogmios containers.
  *
  * @since 2.0.0
  * @category constructors
  */
-export const make = (
+export const makeCluster = (
   config: DevNetConfig.DevNetConfig = {},
-): Effect.Effect<DevNetContainer, CardanoDevNetError> =>
+): Effect.Effect<DevNetCluster, CardanoDevNetError> =>
   Effect.gen(function* () {
     const fullConfig: Required<DevNetConfig.DevNetConfig> = {
       containerName:
@@ -234,65 +415,174 @@ export const make = (
         ...DevNetConfig.DEFAULT_DEVNET_CONFIG.vrfSkey,
         ...config.vrfSkey,
       },
+      kupo: {
+        ...DevNetConfig.DEFAULT_DEVNET_CONFIG.kupo,
+        ...config.kupo,
+      },
+      ogmios: {
+        ...DevNetConfig.DEFAULT_DEVNET_CONFIG.ogmios,
+        ...config.ogmios,
+      },
     };
 
-    // Remove existing container if it exists
-    const existingContainer = yield* findContainer(fullConfig.containerName);
-    if (existingContainer) {
-      const info = yield* Effect.tryPromise({
-        try: () => existingContainer.inspect(),
-        catch: (cause) =>
-          new CardanoDevNetError({
-            reason: "container_inspection_failed",
-            message: "The container may be in an invalid state.",
-            cause,
-          }),
-      });
+    const networkName = `${fullConfig.containerName}-network`;
 
-      if (info.State.Running) {
-        yield* Effect.tryPromise({
-          try: () => existingContainer.stop(),
+    // Create network
+    // yield* createOrGetNetwork(networkName);
+
+    // Write configuration files
+    const tempDir = yield* writeConfigFiles(fullConfig);
+
+    // Remove existing containers if they exist
+    const containerNames = [
+      fullConfig.containerName,
+      `${fullConfig.containerName}-kupo`,
+      `${fullConfig.containerName}-ogmios`,
+    ];
+
+    for (const containerName of containerNames) {
+      const existingContainer = yield* findContainer(containerName);
+      if (existingContainer) {
+        const info = yield* Effect.tryPromise({
+          try: () => existingContainer.inspect(),
           catch: (cause) =>
             new CardanoDevNetError({
-              reason: "container_stop_failed",
-              message:
-                "Try manually stopping the container or restarting Docker.",
+              reason: "container_inspection_failed",
+              message: "The container may be in an invalid state.",
+              cause,
+            }),
+        });
+
+        if (info.State.Running) {
+          yield* Effect.tryPromise({
+            try: () => existingContainer.stop(),
+            catch: (cause) =>
+              new CardanoDevNetError({
+                reason: "container_stop_failed",
+                message:
+                  "Try manually stopping the container or restarting Docker.",
+                cause,
+              }),
+          });
+        }
+
+        yield* Effect.tryPromise({
+          try: () => existingContainer.remove(),
+          catch: (cause) =>
+            new CardanoDevNetError({
+              reason: "container_removal_failed",
+              message: "Ensure no processes are using the container.",
               cause,
             }),
         });
       }
-
-      yield* Effect.tryPromise({
-        try: () => existingContainer.remove(),
-        catch: (cause) =>
-          new CardanoDevNetError({
-            reason: "container_removal_failed",
-            message: "Ensure no processes are using the container.",
-            cause,
-          }),
-      });
     }
 
-    const dockerContainer = yield* createDockerContainer(fullConfig);
+    // Create containers
+    const cardanoContainer = yield* createDockerContainer(
+      fullConfig,
+      networkName,
+      tempDir,
+    );
+    const kupoContainer = yield* createKupoContainer(
+      fullConfig,
+      networkName,
+      tempDir,
+    );
+    const ogmiosContainer = yield* createOgmiosContainer(
+      fullConfig,
+      networkName,
+      tempDir,
+    );
 
     return {
-      id: dockerContainer.id,
-      name: fullConfig.containerName,
+      cardanoNode: {
+        id: cardanoContainer.id,
+        name: fullConfig.containerName,
+      },
+      kupo: kupoContainer
+        ? {
+            id: kupoContainer.id,
+            name: `${fullConfig.containerName}-kupo`,
+          }
+        : undefined,
+      ogmios: ogmiosContainer
+        ? {
+            id: ogmiosContainer.id,
+            name: `${fullConfig.containerName}-ogmios`,
+          }
+        : undefined,
+      networkName,
     };
+  });
+
+/**
+ * Create a new cardano devnet container (legacy single container API).
+ *
+ * @since 2.0.0
+ * @category constructors
+ */
+export const make = (config: DevNetConfig.DevNetConfig = {}) =>
+  Effect.gen(function* () {
+    const cluster = yield* makeCluster(config);
+    return cluster;
   });
 
 export const makeOrThrow = (config: DevNetConfig.DevNetConfig = {}) =>
   Effect.runPromise(make(config));
 
+export const makeClusterOrThrow = (config: DevNetConfig.DevNetConfig = {}) =>
+  Effect.runPromise(makeCluster(config));
+
+/**
+ * Start a devnet cluster (all containers).
+ *
+ * @since 2.0.0
+ * @category lifecycle
+ */
+export const startCluster = (
+  cluster: DevNetCluster,
+): Effect.Effect<void, CardanoDevNetError> =>
+  Effect.gen(function* () {
+    // Start Cardano node first
+    yield* startContainer(cluster.cardanoNode);
+
+    // Wait a bit for the node to initialize
+    yield* Effect.sleep(2000);
+
+    // Start child containers
+    if (cluster.kupo) {
+      yield* startContainer(cluster.kupo);
+    }
+    if (cluster.ogmios) {
+      yield* startContainer(cluster.ogmios);
+    }
+  });
+
+/**
+ * Stop a devnet cluster (all containers).
+ *
+ * @since 2.0.0
+ * @category lifecycle
+ */
+export const stopCluster = (
+  cluster: DevNetCluster,
+): Effect.Effect<void, CardanoDevNetError> =>
+  Effect.gen(function* () {
+    // Stop child containers first
+    if (cluster.kupo) {
+      yield* stopContainer(cluster.kupo);
+    }
+    if (cluster.ogmios) {
+      yield* stopContainer(cluster.ogmios);
+    }
+
+    // Stop Cardano node last
+    yield* stopContainer(cluster.cardanoNode);
+  });
+
 /**
  * Start a specific devnet container.
- *
- * @example
- * import { make, startContainer } from "@lucid-evolution/experimental/CardanoNode/DevNet";
- * import { Effect } from "effect";
- *
- * const container = yield* make({ containerName: "my-devnet" });
- * yield* startContainer(container);
  *
  * @since 2.0.0
  * @category lifecycle
@@ -313,12 +603,6 @@ export const startContainer = (
 
 /**
  * Stop a specific devnet container.
- *
- * @example
- * import { stopContainer } from "@lucid-evolution/experimental/CardanoNode/DevNet";
- * import { Effect } from "effect";
- *
- * yield* stopContainer(container);
  *
  * @since 2.0.0
  * @category lifecycle
@@ -357,14 +641,14 @@ export const stopContainer = (
 export const startContainerOrThrow = (container: DevNetContainer) =>
   Effect.runPromise(startContainer(container));
 
+export const startClusterOrThrow = (cluster: DevNetCluster) =>
+  Effect.runPromise(startCluster(cluster));
+
+export const stopClusterOrThrow = (cluster: DevNetCluster) =>
+  Effect.runPromise(stopCluster(cluster));
+
 /**
  * Remove a specific devnet container.
- *
- * @example
- * import { removeContainer } from "@lucid-evolution/experimental/CardanoNode/DevNet";
- * import { Effect } from "effect";
- *
- * yield* removeContainer(container);
  *
  * @since 2.0.0
  * @category lifecycle
@@ -386,8 +670,49 @@ export const removeContainer = (
     });
   });
 
+/**
+ * Remove a devnet cluster (all containers and network).
+ *
+ * @since 2.0.0
+ * @category lifecycle
+ */
+export const removeCluster = (
+  cluster: DevNetCluster,
+): Effect.Effect<void, CardanoDevNetError> =>
+  Effect.gen(function* () {
+    // Stop cluster first
+    yield* stopCluster(cluster);
+
+    // Remove containers
+    yield* removeContainer(cluster.cardanoNode);
+    if (cluster.kupo) {
+      yield* removeContainer(cluster.kupo);
+    }
+    if (cluster.ogmios) {
+      yield* removeContainer(cluster.ogmios);
+    }
+
+    // Remove network
+    // yield* Effect.tryPromise({
+    //   try: () => {
+    //     const docker = new Docker();
+    //     const network = docker.getNetwork(cluster.networkName);
+    //     return network.remove();
+    //   },
+    //   catch: (cause) =>
+    //     new CardanoDevNetError({
+    //       reason: "network_creation_failed",
+    //       message: "Failed to remove Docker network.",
+    //       cause,
+    //     }),
+    // });
+  });
+
 export const removeContainerOrThrow = (container: DevNetContainer) =>
   Effect.runPromise(removeContainer(container));
+
+export const removeClusterOrThrow = (cluster: DevNetCluster) =>
+  Effect.runPromise(removeCluster(cluster));
 
 export const getContainerStatus = (
   container: DevNetContainer,
