@@ -109,6 +109,14 @@ export const CBORBytes = Schema.transformOrFail(
           );
         case "InlineDatum":
           return ParseResult.succeed(CBOR.encodeAsBytesOrThrow([1, toA.data]));
+        default:
+          return ParseResult.fail(
+            new ParseResult.Type(
+              ast,
+              toA,
+              `Unknown DatumOption tag: ${(toA as any)._tag}`,
+            ),
+          );
       }
     },
     decode: (fromI, options, ast, fromA) =>

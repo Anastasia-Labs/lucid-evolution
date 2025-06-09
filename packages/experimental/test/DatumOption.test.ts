@@ -39,11 +39,10 @@ describe("DatumOption Validation", () => {
     },
   );
 
-  it.each(VALID_INLINE_DATA.map((data, index) => [data, index]))(
-    "should validate InlineDatum as valid DatumOption: case %i",
+  it.each(VALID_INLINE_DATA.map((data) => [data]))(
+    "should validate InlineDatum as valid DatumOption",
     (data) => {
       const inlineDatum = new DatumOption.InlineDatum({ data }); // Fix: use the actual data
-      expect(inlineDatum.data).toEqual(data);
       expect(DatumOption.isDatumOption(inlineDatum)).toBe(true);
       expect(inlineDatum._tag).toBe("InlineDatum");
       expect(inlineDatum.data).toEqual(data);
