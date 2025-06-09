@@ -24,13 +24,15 @@
     }
   },
   "files": [
-    "dist"
+    "dist",
+    "src"
   ],
   "publishConfig": {
     "access": "public"
   },
   "scripts": {
-    "build": "rm -rf dist && tsc -p tsconfig.esm.json  && tsc -p tsconfig.cjs.json",
+    "build": "rm -rf dist && tsc -p tsconfig.esm.json  && pnpm build:annotate && tsc -p tsconfig.cjs.json",
+    "build:annotate": "babel dist/esm --plugins annotate-pure-calls --out-dir dist/esm --source-maps",
     "generate:cml-wrappers": "tsx tools/generate-cml-wrappers.ts",
     "test": "vitest run",
     "lint": "eslint . --max-warnings 0",
@@ -59,12 +61,16 @@
     "tinybench": "^4.0.1"
   },
   "devDependencies": {
+    "@babel/cli": "^7.27.2",
+    "@babel/core": "^7.27.4",
+    "@babel/preset-env": "^7.27.2",
     "@effect/docgen": "^0.5.2",
     "@effect/language-service": "^0.19.0",
     "@effect/vitest": "^0.23.3",
     "@lucid-evolution/eslint-config": "workspace:*",
     "@microsoft/api-extractor": "^7.52.8",
     "@types/node": "^22.15.30",
+    "babel-plugin-annotate-pure-calls": "^0.5.0",
     "eslint": "^9.28.0",
     "tsup": "^8.5.0",
     "tsx": "^4.19.4",

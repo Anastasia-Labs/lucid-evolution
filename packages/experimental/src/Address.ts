@@ -247,52 +247,97 @@ export const generator = FastCheck.oneof(
 );
 
 /**
- * Synchronous encoder for Address to bech32, hex, and bytes formats.
+ * Synchronously encode an Address to bech32 format.
  *
  * @since 2.0.0
  * @category encoding
  */
-export const Encode = {
-  /**
-   * Synchronous encoder for Address to bech32 format.
-   */
-  bech32: Schema.encodeSync(Bech32Schema),
-  hex: Schema.encodeSync(HexStringSchema),
-  bytes: Schema.encodeSync(BytesSchema),
-};
+export const encodeBech32 = Schema.encodeSync(Bech32Schema);
 
 /**
- * Either encoder for Address to bech32, hex, and bytes formats.
+ * Synchronously encode an Address to hex string format.
  *
  * @since 2.0.0
  * @category encoding
  */
-export const EncodeEither = {
-  bech32: Schema.encodeEither(Bech32Schema),
-  hex: Schema.encodeEither(HexStringSchema),
-  bytes: Schema.encodeEither(BytesSchema),
-};
+export const encodeHex = Schema.encodeSync(HexStringSchema);
 
 /**
- * Synchronous decoder for bech32, hex, and bytes formats to Address.
+ * Synchronously encode an Address to bytes format.
+ *
+ * @since 2.0.0
+ * @category encoding
+ */
+export const encodeBytes = Schema.encodeSync(BytesSchema);
+
+/**
+ * Synchronously decode a bech32 string to Address.
  *
  * @since 2.0.0
  * @category decoding
  */
-export const Decode = {
-  bech32: Schema.decodeUnknownSync(Bech32Schema),
-  hex: Schema.decodeUnknownSync(HexStringSchema),
-  bytes: Schema.decodeUnknownSync(BytesSchema),
-};
+export const decodeBech32 = Schema.decodeUnknownSync(Bech32Schema);
 
 /**
- * Either decoder for bech32, hex, and bytes formats to Address.
+ * Synchronously decode a hex string to Address.
  *
  * @since 2.0.0
  * @category decoding
  */
-export const DecodeEither = {
-  bech32: Schema.decodeUnknownEither(Bech32Schema),
-  hex: Schema.decodeUnknownEither(HexStringSchema),
-  bytes: Schema.decodeUnknownEither(BytesSchema),
-};
+export const decodeHex = Schema.decodeUnknownSync(HexStringSchema);
+
+/**
+ * Synchronously decode bytes to Address.
+ *
+ * @since 2.0.0
+ * @category decoding
+ */
+export const decodeBytes = Schema.decodeUnknownSync(BytesSchema);
+
+/**
+ * Decode a bech32 string to Address, returning Either.
+ *
+ * @since 2.0.0
+ * @category decoding
+ */
+export const decodeBech32Either = Schema.decodeUnknownEither(Bech32Schema);
+
+/**
+ * Decode a hex string to Address, returning Either.
+ *
+ * @since 2.0.0
+ * @category decoding
+ */
+export const decodeHexEither = Schema.decodeUnknownEither(HexStringSchema);
+
+/**
+ * Decode bytes to Address, returning Either.
+ *
+ * @since 2.0.0
+ * @category decoding
+ */
+export const decodeBytesEither = Schema.decodeUnknownEither(BytesSchema);
+
+/**
+ * Encode an Address to bech32 format, returning Either.
+ *
+ * @since 2.0.0
+ * @category encoding
+ */
+export const encodeBech32Either = Schema.encodeEither(Bech32Schema);
+
+/**
+ * Encode an Address to hex string format, returning Either.
+ *
+ * @since 2.0.0
+ * @category encoding
+ */
+export const encodeHexEither = Schema.encodeEither(HexStringSchema);
+
+/**
+ * Encode an Address to bytes format, returning Either.
+ *
+ * @since 2.0.0
+ * @category encoding
+ */
+export const encodeBytesEither = Schema.encodeEither(BytesSchema);
