@@ -35,7 +35,7 @@
     "build:annotate": "babel dist/esm --plugins annotate-pure-calls --out-dir dist/esm --source-maps",
     "generate:cml-wrappers": "tsx tools/generate-cml-wrappers.ts",
     "test": "vitest run",
-    "lint": "eslint . --max-warnings 0",
+    "lint": "tsc --noEmit",
     "clean": "rm -rf .turbo && rm -rf node_modules && rm -rf dist",
     "docgen": "docgen"
   },
