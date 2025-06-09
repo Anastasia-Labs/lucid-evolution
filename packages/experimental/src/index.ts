@@ -1,5 +1,3 @@
-import { NetworkId } from "./NetworkId.js";
-
 export * as EffectCML from "./CML/index.js";
 export * as Bytes from "./Bytes.js";
 export * as Network from "./Network.js";
