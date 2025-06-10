@@ -292,7 +292,7 @@ export interface OgmiosConfig {
  * @category model
  */
 export interface DevNetConfig {
-  readonly containerName?: string;
+  readonly clusterName?: string;
   readonly image?: string;
   readonly ports?: {
     readonly node: number;
@@ -727,7 +727,7 @@ export const DEFAULT_OGMIOS_CONFIG: Required<OgmiosConfig> = {
  * @category constants
  */
 export const DEFAULT_DEVNET_CONFIG: Required<DevNetConfig> = {
-  containerName: "cardano-devnet",
+  clusterName: "devnet",
   image: "ghcr.io/intersectmbo/cardano-node:10.4.1",
   ports: {
     node: 4001,
