@@ -70,12 +70,96 @@ export class TransactionMetadatumLabels extends Schema.TaggedClass<TransactionMe
   }
 
   /**
+   * Overrides the existing labels with the specified ones.
+   * @param overideLabels The new set of labels
+   */
+  set(overideLabels: TransactionMetadatumLabel[]) {
+    while (this.fromLabels.at(0) !== undefined) {
+      this.fromLabels.pop();
+    }
+
+    for (const label of overideLabels) {
+      this.add(label);
+    }
+  }
+
+  /**
    * Appends a new label to the **end**
+   * 
    * @param label The label to append
    * @returns The size of the labels after appended. This is a number one higher than the previous labels count.
    */
   add(label: TransactionMetadatumLabel) {
     return this.fromLabels.push(label);
+  }
+
+  /**
+   * Removes the first occurence of the specified label from the collection.
+   * @param label The label to remove from the collection
+   */
+  removeFirst(label: TransactionMetadatumLabel) {
+    const skip = this.fromLabels.indexOf(label);
+
+    const overideLabels: TransactionMetadatumLabel[] = [];
+    for (let i = 0; i < this.size(); i++) {
+      if (i === skip) continue;
+      overideLabels.push(this.fromLabels[i]);
+    }
+
+    this.set(overideLabels);
+  }
+
+  /**
+   * Removes the last occurence of the specified label from the collection.
+   * @param label The label to remove from the collection
+   */
+  removeLast(label: TransactionMetadatumLabel) {
+    const skip = this.fromLabels.lastIndexOf(label);
+
+    const overideLabels: TransactionMetadatumLabel[] = [];
+    for (let i = 0; i < this.size(); i++) {
+      if (i === skip) continue;
+      overideLabels.push(this.fromLabels[i]);
+    }
+
+    this.set(overideLabels);
+  }
+
+  /**
+   * Removes all occurences of the specified label from the collection.
+   * @param label The label to remove from the collection
+   */
+  removeAll(label: TransactionMetadatumLabel) {
+    this.set(
+      this.fromLabels.filter(
+        (fromLabel) =>
+          fromLabel !== label
+      )
+    );
+  }
+
+  /**
+   * Removes the label at the specified index from the collection.
+   * @param index The index of the label to remove from the collection
+   */
+  removeAt(index: number) {
+    const overideLabels: TransactionMetadatumLabel[] = [];
+    for (let i = 0; i < this.size(); i++) {
+      if (i === index) continue;
+      overideLabels.push(this.fromLabels[i]);
+    }
+
+    this.set(overideLabels);
+  }
+
+  /**
+   * Determines whether the collection contains the specified label.
+   * 
+   * @param label The label to look for
+   * @returns True or False as appropriate
+   */
+  has(label: TransactionMetadatumLabel) {
+    return this.fromLabels.includes(label);
   }
 }
 
