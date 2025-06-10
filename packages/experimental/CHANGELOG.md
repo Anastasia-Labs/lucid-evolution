@@ -1,5 +1,11 @@
 # @lucid-evolution/experimental
 
+## 0.0.9
+
+### Patch Changes
+
+- [#641](https://github.com/Anastasia-Labs/lucid-evolution/pull/641) [`f8db6c3`](https://github.com/Anastasia-Labs/lucid-evolution/commit/f8db6c3d1c9e5f33a5a7d9db1a821034159d84ed) Thanks [@solidsnakedev](https://github.com/solidsnakedev)! - update devnet struct; add devnet example
+
 ## 0.0.8
 
 ### Patch Changes
