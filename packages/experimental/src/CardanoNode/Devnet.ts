@@ -3,7 +3,7 @@ import Docker from "dockerode";
 import * as fs from "fs";
 import * as path from "path";
 import * as os from "os";
-import * as DevNetConfig from "./DevnetConfig.js";
+import * as DevnetDefault from "./DevnetDefault.js";
 
 export class CardanoDevNetError extends Data.TaggedError("CardanoDevNetError")<{
   reason:
@@ -58,44 +58,7 @@ const findContainer = (containerName: string) =>
       }),
   });
 
-const createOrGetNetwork = (networkName: string) =>
-  Effect.tryPromise({
-    try: async () => {
-      const docker = new Docker();
-      const networks = await docker.listNetworks({
-        filters: { name: [networkName] },
-      });
-
-      if (networks.length > 0) {
-        return networks[0];
-      }
-
-      return await docker.createNetwork({
-        Name: networkName,
-        Driver: "bridge",
-        Internal: false,
-        Attachable: true,
-        IPAM: {
-          Driver: "default",
-          Config: [
-            {
-              Subnet: "172.20.0.0/16",
-              Gateway: "172.20.0.1",
-            },
-          ],
-        },
-      });
-    },
-    catch: (cause) =>
-      new CardanoDevNetError({
-        reason: "network_creation_failed",
-        message:
-          "Failed to create or get Docker network. Check Docker permissions.",
-        cause,
-      }),
-  });
-
-const writeConfigFiles = (config: Required<DevNetConfig.DevNetConfig>) =>
+const writeConfigFiles = (config: Required<DevnetDefault.DevNetConfig>) =>
   Effect.gen(function* () {
     const tempDir = yield* Effect.tryPromise({
       try: () => fs.promises.mkdtemp(path.join(os.tmpdir(), "cardano-devnet-")),
@@ -157,8 +120,8 @@ const writeConfigFiles = (config: Required<DevNetConfig.DevNetConfig>) =>
     return tempDir;
   });
 
-const createDockerContainer = (
-  config: Required<DevNetConfig.DevNetConfig>,
+const createCardanoContainer = (
+  config: Required<DevnetDefault.DevNetConfig>,
   networkName: string,
   tempDir: string,
 ) =>
@@ -226,7 +189,7 @@ const createDockerContainer = (
   });
 
 const createKupoContainer = (
-  config: Required<DevNetConfig.DevNetConfig>,
+  config: Required<DevnetDefault.DevNetConfig>,
   networkName: string,
   tempDir: string,
 ) =>
@@ -265,19 +228,20 @@ const createKupoContainer = (
     return yield* Effect.tryPromise({
       try: () =>
         docker.createContainer({
-          Image: config.kupo.image || DevNetConfig.DEFAULT_KUPO_CONFIG.image,
+          Image: config.kupo.image || DevnetDefault.DEFAULT_KUPO_CONFIG.image,
           name: kupoName,
           ExposedPorts: {
-            [`${config.kupo.port || DevNetConfig.DEFAULT_KUPO_CONFIG.port}/tcp`]:
+            [`${config.kupo.port || DevnetDefault.DEFAULT_KUPO_CONFIG.port}/tcp`]:
               {},
           },
           HostConfig: {
             PortBindings: {
-              [`${config.kupo.port || DevNetConfig.DEFAULT_KUPO_CONFIG.port}/tcp`]:
+              [`${config.kupo.port || DevnetDefault.DEFAULT_KUPO_CONFIG.port}/tcp`]:
                 [
                   {
                     HostPort: String(
-                      config.kupo.port || DevNetConfig.DEFAULT_KUPO_CONFIG.port,
+                      config.kupo.port ||
+                        DevnetDefault.DEFAULT_KUPO_CONFIG.port,
                     ),
                   },
                 ],
@@ -302,7 +266,7 @@ const createKupoContainer = (
   });
 
 const createOgmiosContainer = (
-  config: Required<DevNetConfig.DevNetConfig>,
+  config: Required<DevnetDefault.DevNetConfig>,
   networkName: string,
   tempDir: string,
 ) =>
@@ -317,20 +281,20 @@ const createOgmiosContainer = (
       try: () =>
         docker.createContainer({
           Image:
-            config.ogmios.image || DevNetConfig.DEFAULT_OGMIOS_CONFIG.image,
+            config.ogmios.image || DevnetDefault.DEFAULT_OGMIOS_CONFIG.image,
           name: ogmiosName,
           ExposedPorts: {
-            [`${config.ogmios.port || DevNetConfig.DEFAULT_OGMIOS_CONFIG.port}/tcp`]:
+            [`${config.ogmios.port || DevnetDefault.DEFAULT_OGMIOS_CONFIG.port}/tcp`]:
               {},
           },
           HostConfig: {
             PortBindings: {
-              [`${config.ogmios.port || DevNetConfig.DEFAULT_OGMIOS_CONFIG.port}/tcp`]:
+              [`${config.ogmios.port || DevnetDefault.DEFAULT_OGMIOS_CONFIG.port}/tcp`]:
                 [
                   {
                     HostPort: String(
                       config.ogmios.port ||
-                        DevNetConfig.DEFAULT_OGMIOS_CONFIG.port,
+                        DevnetDefault.DEFAULT_OGMIOS_CONFIG.port,
                     ),
                   },
                 ],
@@ -342,12 +306,12 @@ const createOgmiosContainer = (
           Cmd: [
             "--log-level",
             config.ogmios.logLevel ||
-              DevNetConfig.DEFAULT_OGMIOS_CONFIG.logLevel,
+              DevnetDefault.DEFAULT_OGMIOS_CONFIG.logLevel,
             "--host",
             "0.0.0.0",
             "--port",
             String(
-              config.ogmios.port || DevNetConfig.DEFAULT_OGMIOS_CONFIG.port,
+              config.ogmios.port || DevnetDefault.DEFAULT_OGMIOS_CONFIG.port,
             ),
             "--node-socket",
             "/ipc/node.socket",
@@ -372,55 +336,55 @@ const createOgmiosContainer = (
  * @category constructors
  */
 export const makeCluster = (
-  config: DevNetConfig.DevNetConfig = {},
+  config: DevnetDefault.DevNetConfig = {},
 ): Effect.Effect<DevNetCluster, CardanoDevNetError> =>
   Effect.gen(function* () {
-    const fullConfig: Required<DevNetConfig.DevNetConfig> = {
+    const fullConfig: Required<DevnetDefault.DevNetConfig> = {
       containerName:
         config.containerName ??
-        DevNetConfig.DEFAULT_DEVNET_CONFIG.containerName,
-      image: config.image ?? DevNetConfig.DEFAULT_DEVNET_CONFIG.image,
-      ports: { ...DevNetConfig.DEFAULT_DEVNET_CONFIG.ports, ...config.ports },
+        DevnetDefault.DEFAULT_DEVNET_CONFIG.containerName,
+      image: config.image ?? DevnetDefault.DEFAULT_DEVNET_CONFIG.image,
+      ports: { ...DevnetDefault.DEFAULT_DEVNET_CONFIG.ports, ...config.ports },
       networkMagic:
-        config.networkMagic ?? DevNetConfig.DEFAULT_DEVNET_CONFIG.networkMagic,
+        config.networkMagic ?? DevnetDefault.DEFAULT_DEVNET_CONFIG.networkMagic,
       nodeConfig: {
-        ...DevNetConfig.DEFAULT_DEVNET_CONFIG.nodeConfig,
+        ...DevnetDefault.DEFAULT_DEVNET_CONFIG.nodeConfig,
         ...config.nodeConfig,
       },
       byronGenesis: {
-        ...DevNetConfig.DEFAULT_DEVNET_CONFIG.byronGenesis,
+        ...DevnetDefault.DEFAULT_DEVNET_CONFIG.byronGenesis,
         ...config.byronGenesis,
       },
       shelleyGenesis: {
-        ...DevNetConfig.DEFAULT_DEVNET_CONFIG.shelleyGenesis,
+        ...DevnetDefault.DEFAULT_DEVNET_CONFIG.shelleyGenesis,
         ...config.shelleyGenesis,
       },
       alonzoGenesis: {
-        ...DevNetConfig.DEFAULT_DEVNET_CONFIG.alonzoGenesis,
+        ...DevnetDefault.DEFAULT_DEVNET_CONFIG.alonzoGenesis,
         ...config.alonzoGenesis,
       },
       conwayGenesis: {
-        ...DevNetConfig.DEFAULT_DEVNET_CONFIG.conwayGenesis,
+        ...DevnetDefault.DEFAULT_DEVNET_CONFIG.conwayGenesis,
         ...config.conwayGenesis,
       },
       kesKey: {
-        ...DevNetConfig.DEFAULT_DEVNET_CONFIG.kesKey,
+        ...DevnetDefault.DEFAULT_DEVNET_CONFIG.kesKey,
         ...config.kesKey,
       },
       opCert: {
-        ...DevNetConfig.DEFAULT_DEVNET_CONFIG.opCert,
+        ...DevnetDefault.DEFAULT_DEVNET_CONFIG.opCert,
         ...config.opCert,
       },
       vrfSkey: {
-        ...DevNetConfig.DEFAULT_DEVNET_CONFIG.vrfSkey,
+        ...DevnetDefault.DEFAULT_DEVNET_CONFIG.vrfSkey,
         ...config.vrfSkey,
       },
       kupo: {
-        ...DevNetConfig.DEFAULT_DEVNET_CONFIG.kupo,
+        ...DevnetDefault.DEFAULT_DEVNET_CONFIG.kupo,
         ...config.kupo,
       },
       ogmios: {
-        ...DevNetConfig.DEFAULT_DEVNET_CONFIG.ogmios,
+        ...DevnetDefault.DEFAULT_DEVNET_CONFIG.ogmios,
         ...config.ogmios,
       },
     };
@@ -479,7 +443,7 @@ export const makeCluster = (
     }
 
     // Create containers
-    const cardanoContainer = yield* createDockerContainer(
+    const cardanoContainer = yield* createCardanoContainer(
       fullConfig,
       networkName,
       tempDir,
@@ -522,16 +486,16 @@ export const makeCluster = (
  * @since 2.0.0
  * @category constructors
  */
-export const make = (config: DevNetConfig.DevNetConfig = {}) =>
+export const make = (config: DevnetDefault.DevNetConfig = {}) =>
   Effect.gen(function* () {
     const cluster = yield* makeCluster(config);
     return cluster;
   });
 
-export const makeOrThrow = (config: DevNetConfig.DevNetConfig = {}) =>
+export const makeOrThrow = (config: DevnetDefault.DevNetConfig = {}) =>
   Effect.runPromise(make(config));
 
-export const makeClusterOrThrow = (config: DevNetConfig.DevNetConfig = {}) =>
+export const makeClusterOrThrow = (config: DevnetDefault.DevNetConfig = {}) =>
   Effect.runPromise(makeCluster(config));
 
 /**
@@ -680,10 +644,7 @@ export const removeCluster = (
   cluster: DevNetCluster,
 ): Effect.Effect<void, CardanoDevNetError> =>
   Effect.gen(function* () {
-    // Stop cluster first
-    yield* stopCluster(cluster);
-
-    // Remove containers
+    // Remove containers (removeContainer stops them first)
     yield* removeContainer(cluster.cardanoNode);
     if (cluster.kupo) {
       yield* removeContainer(cluster.kupo);
@@ -691,21 +652,6 @@ export const removeCluster = (
     if (cluster.ogmios) {
       yield* removeContainer(cluster.ogmios);
     }
-
-    // Remove network
-    // yield* Effect.tryPromise({
-    //   try: () => {
-    //     const docker = new Docker();
-    //     const network = docker.getNetwork(cluster.networkName);
-    //     return network.remove();
-    //   },
-    //   catch: (cause) =>
-    //     new CardanoDevNetError({
-    //       reason: "network_creation_failed",
-    //       message: "Failed to remove Docker network.",
-    //       cause,
-    //     }),
-    // });
   });
 
 export const removeContainerOrThrow = (container: DevNetContainer) =>
