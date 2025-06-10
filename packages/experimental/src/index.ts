@@ -25,3 +25,5 @@ export * as Bech32 from "./Bech32.js";
 export * as Natural from "./Natural.js";
 export * as Hex from "./Hex.js";
 export * as NetworkId from "./NetworkId.js";
+export * as Devnet from "./CardanoNode/Devnet.js";
+export * as DevnetDefault from "./CardanoNode/DevnetDefault.js";

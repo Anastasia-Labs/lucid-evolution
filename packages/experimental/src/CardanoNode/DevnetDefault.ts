@@ -1,5 +1,3 @@
-import { Effect } from "effect";
-
 /**
  * Type definitions for configuration objects to allow flexible values
  * while maintaining structure compatibility.
