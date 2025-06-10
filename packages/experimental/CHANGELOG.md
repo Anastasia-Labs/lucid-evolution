@@ -1,5 +1,11 @@
 # @lucid-evolution/experimental
 
+## 0.0.8
+
+### Patch Changes
+
+- [#639](https://github.com/Anastasia-Labs/lucid-evolution/pull/639) [`1a518d1`](https://github.com/Anastasia-Labs/lucid-evolution/commit/1a518d1590aaf308c9dbf595f0dc239435266e17) Thanks [@solidsnakedev](https://github.com/solidsnakedev)! - update devnet files; update address and keyhash structs
+
 ## 0.0.7
 
 ### Patch Changes
