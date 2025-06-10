@@ -90,7 +90,7 @@ export const BytesSchema = Schema.transformOrFail(
         case "BaseAddress":
           return ParseResult.encode(BaseAddress.Bytes)(toA);
         case "EnterpriseAddress":
-          return ParseResult.encode(EnterpriseAddress.Bytes)(toA);
+          return ParseResult.encode(EnterpriseAddress.BytesSchema)(toA);
         case "PointerAddress":
           return ParseResult.encode(PointerAddress.Bytes)(toA);
         case "RewardAccount":
@@ -118,7 +118,9 @@ export const BytesSchema = Schema.transformOrFail(
           // Format: [payment credential only]
           case 0b0110: // Key payment
           case 0b0111:
-            return yield* ParseResult.decode(EnterpriseAddress.Bytes)(fromA);
+            return yield* ParseResult.decode(EnterpriseAddress.BytesSchema)(
+              fromA,
+            );
 
           // Pointer address types (0100, 0101)
           // Format: [payment credential, variable length integers for slot, txIndex, certIndex]
