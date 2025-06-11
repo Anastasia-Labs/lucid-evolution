@@ -57,8 +57,8 @@ Static method \_new of StakeRegistration
 
 ```ts
 export declare const _new: (
-  stakeCredential: CML.Credential
-) => Effect.Effect<CML.StakeRegistration, StakeRegistrationError>
+  stakeCredential: CML.Credential,
+) => Effect.Effect<CML.StakeRegistration, StakeRegistrationError>;
 ```
 
 Added in v2.0.0
@@ -71,8 +71,8 @@ Static method fromCborBytes of StakeRegistration
 
 ```ts
 export declare const fromCborBytes: (
-  cborBytes: Uint8Array
-) => Effect.Effect<CML.StakeRegistration, StakeRegistrationError>
+  cborBytes: Uint8Array,
+) => Effect.Effect<CML.StakeRegistration, StakeRegistrationError>;
 ```
 
 Added in v2.0.0
@@ -84,7 +84,9 @@ Static method fromCborHex of StakeRegistration
 **Signature**
 
 ```ts
-export declare const fromCborHex: (cborBytes: string) => Effect.Effect<CML.StakeRegistration, StakeRegistrationError>
+export declare const fromCborHex: (
+  cborBytes: string,
+) => Effect.Effect<CML.StakeRegistration, StakeRegistrationError>;
 ```
 
 Added in v2.0.0
@@ -96,7 +98,9 @@ Static method fromJson of StakeRegistration
 **Signature**
 
 ```ts
-export declare const fromJson: (json: string) => Effect.Effect<CML.StakeRegistration, StakeRegistrationError>
+export declare const fromJson: (
+  json: string,
+) => Effect.Effect<CML.StakeRegistration, StakeRegistrationError>;
 ```
 
 Added in v2.0.0
@@ -110,7 +114,9 @@ Unsafely calls StakeRegistration.\_new without Effect wrapper
 **Signature**
 
 ```ts
-export declare const _newUnsafe: (stakeCredential: CML.Credential) => CML.StakeRegistration
+export declare const _newUnsafe: (
+  stakeCredential: CML.Credential,
+) => CML.StakeRegistration;
 ```
 
 Added in v2.0.0
@@ -122,7 +128,9 @@ Unsafely calls StakeRegistration.fromCborBytes without Effect wrapper
 **Signature**
 
 ```ts
-export declare const fromCborBytesUnsafe: (cborBytes: Uint8Array) => CML.StakeRegistration
+export declare const fromCborBytesUnsafe: (
+  cborBytes: Uint8Array,
+) => CML.StakeRegistration;
 ```
 
 Added in v2.0.0
@@ -134,7 +142,9 @@ Unsafely calls StakeRegistration.fromCborHex without Effect wrapper
 **Signature**
 
 ```ts
-export declare const fromCborHexUnsafe: (cborBytes: string) => CML.StakeRegistration
+export declare const fromCborHexUnsafe: (
+  cborBytes: string,
+) => CML.StakeRegistration;
 ```
 
 Added in v2.0.0
@@ -146,7 +156,7 @@ Unsafely calls StakeRegistration.fromJson without Effect wrapper
 **Signature**
 
 ```ts
-export declare const fromJsonUnsafe: (json: string) => CML.StakeRegistration
+export declare const fromJsonUnsafe: (json: string) => CML.StakeRegistration;
 ```
 
 Added in v2.0.0
@@ -176,7 +186,9 @@ Method free of StakeRegistration
 **Signature**
 
 ```ts
-export declare const free: (instance: CML.StakeRegistration) => Effect.Effect<void, StakeRegistrationError>
+export declare const free: (
+  instance: CML.StakeRegistration,
+) => Effect.Effect<void, StakeRegistrationError>;
 ```
 
 Added in v2.0.0
@@ -189,8 +201,8 @@ Method stakeCredential of StakeRegistration
 
 ```ts
 export declare const stakeCredential: (
-  instance: CML.StakeRegistration
-) => Effect.Effect<CML.Credential, StakeRegistrationError>
+  instance: CML.StakeRegistration,
+) => Effect.Effect<CML.Credential, StakeRegistrationError>;
 ```
 
 Added in v2.0.0
@@ -203,8 +215,8 @@ Method toCanonicalCborBytes of StakeRegistration
 
 ```ts
 export declare const toCanonicalCborBytes: (
-  instance: CML.StakeRegistration
-) => Effect.Effect<Uint8Array, StakeRegistrationError>
+  instance: CML.StakeRegistration,
+) => Effect.Effect<Uint8Array, StakeRegistrationError>;
 ```
 
 Added in v2.0.0
@@ -217,8 +229,8 @@ Method toCanonicalCborHex of StakeRegistration
 
 ```ts
 export declare const toCanonicalCborHex: (
-  instance: CML.StakeRegistration
-) => Effect.Effect<string, StakeRegistrationError>
+  instance: CML.StakeRegistration,
+) => Effect.Effect<string, StakeRegistrationError>;
 ```
 
 Added in v2.0.0
@@ -230,7 +242,9 @@ Method toCborBytes of StakeRegistration
 **Signature**
 
 ```ts
-export declare const toCborBytes: (instance: CML.StakeRegistration) => Effect.Effect<Uint8Array, StakeRegistrationError>
+export declare const toCborBytes: (
+  instance: CML.StakeRegistration,
+) => Effect.Effect<Uint8Array, StakeRegistrationError>;
 ```
 
 Added in v2.0.0
@@ -242,7 +256,9 @@ Method toCborHex of StakeRegistration
 **Signature**
 
 ```ts
-export declare const toCborHex: (instance: CML.StakeRegistration) => Effect.Effect<string, StakeRegistrationError>
+export declare const toCborHex: (
+  instance: CML.StakeRegistration,
+) => Effect.Effect<string, StakeRegistrationError>;
 ```
 
 Added in v2.0.0
@@ -254,7 +270,9 @@ Method toJsValue of StakeRegistration
 **Signature**
 
 ```ts
-export declare const toJsValue: (instance: CML.StakeRegistration) => Effect.Effect<any, StakeRegistrationError>
+export declare const toJsValue: (
+  instance: CML.StakeRegistration,
+) => Effect.Effect<any, StakeRegistrationError>;
 ```
 
 Added in v2.0.0
@@ -266,7 +284,9 @@ Method toJson of StakeRegistration
 **Signature**
 
 ```ts
-export declare const toJson: (instance: CML.StakeRegistration) => Effect.Effect<string, StakeRegistrationError>
+export declare const toJson: (
+  instance: CML.StakeRegistration,
+) => Effect.Effect<string, StakeRegistrationError>;
 ```
 
 Added in v2.0.0
@@ -280,7 +300,7 @@ Unsafely calls instance.free without Effect wrapper
 **Signature**
 
 ```ts
-export declare const freeUnsafe: (instance: CML.StakeRegistration) => void
+export declare const freeUnsafe: (instance: CML.StakeRegistration) => void;
 ```
 
 Added in v2.0.0
@@ -292,7 +312,9 @@ Unsafely calls instance.stakeCredential without Effect wrapper
 **Signature**
 
 ```ts
-export declare const stakeCredentialUnsafe: (instance: CML.StakeRegistration) => CML.Credential
+export declare const stakeCredentialUnsafe: (
+  instance: CML.StakeRegistration,
+) => CML.Credential;
 ```
 
 Added in v2.0.0
@@ -304,7 +326,9 @@ Unsafely calls instance.toCanonicalCborBytes without Effect wrapper
 **Signature**
 
 ```ts
-export declare const toCanonicalCborBytesUnsafe: (instance: CML.StakeRegistration) => Uint8Array
+export declare const toCanonicalCborBytesUnsafe: (
+  instance: CML.StakeRegistration,
+) => Uint8Array;
 ```
 
 Added in v2.0.0
@@ -316,7 +340,9 @@ Unsafely calls instance.toCanonicalCborHex without Effect wrapper
 **Signature**
 
 ```ts
-export declare const toCanonicalCborHexUnsafe: (instance: CML.StakeRegistration) => string
+export declare const toCanonicalCborHexUnsafe: (
+  instance: CML.StakeRegistration,
+) => string;
 ```
 
 Added in v2.0.0
@@ -328,7 +354,9 @@ Unsafely calls instance.toCborBytes without Effect wrapper
 **Signature**
 
 ```ts
-export declare const toCborBytesUnsafe: (instance: CML.StakeRegistration) => Uint8Array
+export declare const toCborBytesUnsafe: (
+  instance: CML.StakeRegistration,
+) => Uint8Array;
 ```
 
 Added in v2.0.0
@@ -340,7 +368,9 @@ Unsafely calls instance.toCborHex without Effect wrapper
 **Signature**
 
 ```ts
-export declare const toCborHexUnsafe: (instance: CML.StakeRegistration) => string
+export declare const toCborHexUnsafe: (
+  instance: CML.StakeRegistration,
+) => string;
 ```
 
 Added in v2.0.0
@@ -352,7 +382,7 @@ Unsafely calls instance.toJsValue without Effect wrapper
 **Signature**
 
 ```ts
-export declare const toJsValueUnsafe: (instance: CML.StakeRegistration) => any
+export declare const toJsValueUnsafe: (instance: CML.StakeRegistration) => any;
 ```
 
 Added in v2.0.0
@@ -364,7 +394,7 @@ Unsafely calls instance.toJson without Effect wrapper
 **Signature**
 
 ```ts
-export declare const toJsonUnsafe: (instance: CML.StakeRegistration) => string
+export declare const toJsonUnsafe: (instance: CML.StakeRegistration) => string;
 ```
 
 Added in v2.0.0
@@ -378,7 +408,7 @@ Type alias for the CML StakeRegistration class
 **Signature**
 
 ```ts
-export type StakeRegistration = CML.StakeRegistration
+export type StakeRegistration = CML.StakeRegistration;
 ```
 
 Added in v2.0.0

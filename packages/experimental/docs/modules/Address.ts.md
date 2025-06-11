@@ -42,32 +42,32 @@ Synchronous decoding utilities for addresses.
 export declare const Decode: {
   bech32: (
     u: unknown,
-    overrideOptions?: ParseOptions
+    overrideOptions?: ParseOptions,
   ) =>
     | BaseAddress.BaseAddress
     | EnterpriseAddress.EnterpriseAddress
     | PointerAddress.PointerAddress
     | RewardAccount.RewardAccount
-    | ByronAddress.ByronAddress
+    | ByronAddress.ByronAddress;
   hex: (
     u: unknown,
-    overrideOptions?: ParseOptions
+    overrideOptions?: ParseOptions,
   ) =>
     | BaseAddress.BaseAddress
     | EnterpriseAddress.EnterpriseAddress
     | PointerAddress.PointerAddress
     | RewardAccount.RewardAccount
-    | ByronAddress.ByronAddress
+    | ByronAddress.ByronAddress;
   bytes: (
     u: unknown,
-    overrideOptions?: ParseOptions
+    overrideOptions?: ParseOptions,
   ) =>
     | BaseAddress.BaseAddress
     | EnterpriseAddress.EnterpriseAddress
     | PointerAddress.PointerAddress
     | RewardAccount.RewardAccount
-    | ByronAddress.ByronAddress
-}
+    | ByronAddress.ByronAddress;
+};
 ```
 
 Added in v2.0.0
@@ -82,7 +82,7 @@ Either decoding utilities for addresses.
 export declare const DecodeEither: {
   bech32: (
     u: unknown,
-    overrideOptions?: ParseOptions
+    overrideOptions?: ParseOptions,
   ) => Either<
     | BaseAddress.BaseAddress
     | EnterpriseAddress.EnterpriseAddress
@@ -90,10 +90,10 @@ export declare const DecodeEither: {
     | RewardAccount.RewardAccount
     | ByronAddress.ByronAddress,
     ParseResult.ParseError
-  >
+  >;
   hex: (
     u: unknown,
-    overrideOptions?: ParseOptions
+    overrideOptions?: ParseOptions,
   ) => Either<
     | BaseAddress.BaseAddress
     | EnterpriseAddress.EnterpriseAddress
@@ -101,10 +101,10 @@ export declare const DecodeEither: {
     | RewardAccount.RewardAccount
     | ByronAddress.ByronAddress,
     ParseResult.ParseError
-  >
+  >;
   bytes: (
     u: unknown,
-    overrideOptions?: ParseOptions
+    overrideOptions?: ParseOptions,
   ) => Either<
     | BaseAddress.BaseAddress
     | EnterpriseAddress.EnterpriseAddress
@@ -112,8 +112,8 @@ export declare const DecodeEither: {
     | RewardAccount.RewardAccount
     | ByronAddress.ByronAddress,
     ParseResult.ParseError
-  >
-}
+  >;
+};
 ```
 
 Added in v2.0.0
@@ -133,8 +133,8 @@ export declare const Encode: {
       | PointerAddress.PointerAddress
       | RewardAccount.RewardAccount
       | ByronAddress.ByronAddress,
-    overrideOptions?: ParseOptions
-  ) => string & Brand<"Bech32">
+    overrideOptions?: ParseOptions,
+  ) => string & Brand<"Bech32">;
   hex: (
     a:
       | BaseAddress.BaseAddress
@@ -142,8 +142,8 @@ export declare const Encode: {
       | PointerAddress.PointerAddress
       | RewardAccount.RewardAccount
       | ByronAddress.ByronAddress,
-    overrideOptions?: ParseOptions
-  ) => string & Brand<"HexString">
+    overrideOptions?: ParseOptions,
+  ) => string & Brand<"HexString">;
   bytes: (
     a:
       | BaseAddress.BaseAddress
@@ -151,9 +151,9 @@ export declare const Encode: {
       | PointerAddress.PointerAddress
       | RewardAccount.RewardAccount
       | ByronAddress.ByronAddress,
-    overrideOptions?: ParseOptions
-  ) => any
-}
+    overrideOptions?: ParseOptions,
+  ) => any;
+};
 ```
 
 Added in v2.0.0
@@ -173,8 +173,8 @@ export declare const EncodeEither: {
       | PointerAddress.PointerAddress
       | RewardAccount.RewardAccount
       | ByronAddress.ByronAddress,
-    overrideOptions?: ParseOptions
-  ) => Either<string & Brand<"Bech32">, ParseResult.ParseError>
+    overrideOptions?: ParseOptions,
+  ) => Either<string & Brand<"Bech32">, ParseResult.ParseError>;
   hex: (
     a:
       | BaseAddress.BaseAddress
@@ -182,8 +182,8 @@ export declare const EncodeEither: {
       | PointerAddress.PointerAddress
       | RewardAccount.RewardAccount
       | ByronAddress.ByronAddress,
-    overrideOptions?: ParseOptions
-  ) => Either<string & Brand<"HexString">, ParseResult.ParseError>
+    overrideOptions?: ParseOptions,
+  ) => Either<string & Brand<"HexString">, ParseResult.ParseError>;
   bytes: (
     a:
       | BaseAddress.BaseAddress
@@ -191,9 +191,9 @@ export declare const EncodeEither: {
       | PointerAddress.PointerAddress
       | RewardAccount.RewardAccount
       | ByronAddress.ByronAddress,
-    overrideOptions?: ParseOptions
-  ) => Either<any, ParseResult.ParseError>
-}
+    overrideOptions?: ParseOptions,
+  ) => Either<any, ParseResult.ParseError>;
+};
 ```
 
 Added in v2.0.0
@@ -213,9 +213,9 @@ export declare const Address: Schema.Union<
     typeof EnterpriseAddress.EnterpriseAddress,
     typeof PointerAddress.PointerAddress,
     typeof RewardAccount.RewardAccount,
-    typeof ByronAddress.ByronAddress
+    typeof ByronAddress.ByronAddress,
   ]
->
+>;
 ```
 
 Added in v2.0.0
@@ -227,7 +227,7 @@ Type representing an address.
 **Signature**
 
 ```ts
-export type Address = typeof Address.Type
+export type Address = typeof Address.Type;
 ```
 
 Added in v2.0.0
@@ -261,11 +261,11 @@ export declare const Bech32Schema: Schema.transformOrFail<
       typeof EnterpriseAddress.EnterpriseAddress,
       typeof PointerAddress.PointerAddress,
       typeof RewardAccount.RewardAccount,
-      typeof ByronAddress.ByronAddress
+      typeof ByronAddress.ByronAddress,
     ]
   >,
   never
->
+>;
 ```
 
 Added in v2.0.0
@@ -285,11 +285,11 @@ export declare const BytesSchema: Schema.transformOrFail<
       typeof EnterpriseAddress.EnterpriseAddress,
       typeof PointerAddress.PointerAddress,
       typeof RewardAccount.RewardAccount,
-      typeof ByronAddress.ByronAddress
+      typeof ByronAddress.ByronAddress,
     ]
   >,
   never
->
+>;
 ```
 
 Added in v2.0.0
@@ -302,18 +302,22 @@ Schema for encoding/decoding addresses as hex strings.
 
 ```ts
 export declare const HexStringSchema: Schema.transformOrFail<
-  Schema.SchemaClass<string & Brand<"HexString">, string & Brand<"HexString">, never>,
+  Schema.SchemaClass<
+    string & Brand<"HexString">,
+    string & Brand<"HexString">,
+    never
+  >,
   Schema.Union<
     [
       typeof BaseAddress.BaseAddress,
       typeof EnterpriseAddress.EnterpriseAddress,
       typeof PointerAddress.PointerAddress,
       typeof RewardAccount.RewardAccount,
-      typeof ByronAddress.ByronAddress
+      typeof ByronAddress.ByronAddress,
     ]
   >,
   never
->
+>;
 ```
 
 Added in v2.0.0
@@ -332,7 +336,7 @@ export declare const generator: FastCheck.Arbitrary<
   | EnterpriseAddress.EnterpriseAddress
   | PointerAddress.PointerAddress
   | RewardAccount.RewardAccount
->
+>;
 ```
 
 Added in v2.0.0
@@ -346,7 +350,7 @@ Checks if two addresses are equal.
 **Signature**
 
 ```ts
-export declare const equals: (a: Address, b: Address) => boolean
+export declare const equals: (a: Address, b: Address) => boolean;
 ```
 
 Added in v2.0.0

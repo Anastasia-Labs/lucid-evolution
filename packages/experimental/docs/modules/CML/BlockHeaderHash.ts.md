@@ -46,7 +46,9 @@ Static method fromBech32 of BlockHeaderHash
 **Signature**
 
 ```ts
-export declare const fromBech32: (bech32Str: string) => Effect.Effect<CML.BlockHeaderHash, BlockHeaderHashError>
+export declare const fromBech32: (
+  bech32Str: string,
+) => Effect.Effect<CML.BlockHeaderHash, BlockHeaderHashError>;
 ```
 
 Added in v2.0.0
@@ -58,7 +60,9 @@ Static method fromHex of BlockHeaderHash
 **Signature**
 
 ```ts
-export declare const fromHex: (input: string) => Effect.Effect<CML.BlockHeaderHash, BlockHeaderHashError>
+export declare const fromHex: (
+  input: string,
+) => Effect.Effect<CML.BlockHeaderHash, BlockHeaderHashError>;
 ```
 
 Added in v2.0.0
@@ -70,7 +74,9 @@ Static method fromRawBytes of BlockHeaderHash
 **Signature**
 
 ```ts
-export declare const fromRawBytes: (bytes: Uint8Array) => Effect.Effect<CML.BlockHeaderHash, BlockHeaderHashError>
+export declare const fromRawBytes: (
+  bytes: Uint8Array,
+) => Effect.Effect<CML.BlockHeaderHash, BlockHeaderHashError>;
 ```
 
 Added in v2.0.0
@@ -84,7 +90,9 @@ Unsafely calls BlockHeaderHash.fromBech32 without Effect wrapper
 **Signature**
 
 ```ts
-export declare const fromBech32Unsafe: (bech32Str: string) => CML.BlockHeaderHash
+export declare const fromBech32Unsafe: (
+  bech32Str: string,
+) => CML.BlockHeaderHash;
 ```
 
 Added in v2.0.0
@@ -96,7 +104,7 @@ Unsafely calls BlockHeaderHash.fromHex without Effect wrapper
 **Signature**
 
 ```ts
-export declare const fromHexUnsafe: (input: string) => CML.BlockHeaderHash
+export declare const fromHexUnsafe: (input: string) => CML.BlockHeaderHash;
 ```
 
 Added in v2.0.0
@@ -108,7 +116,9 @@ Unsafely calls BlockHeaderHash.fromRawBytes without Effect wrapper
 **Signature**
 
 ```ts
-export declare const fromRawBytesUnsafe: (bytes: Uint8Array) => CML.BlockHeaderHash
+export declare const fromRawBytesUnsafe: (
+  bytes: Uint8Array,
+) => CML.BlockHeaderHash;
 ```
 
 Added in v2.0.0
@@ -138,7 +148,9 @@ Method free of BlockHeaderHash
 **Signature**
 
 ```ts
-export declare const free: (instance: CML.BlockHeaderHash) => Effect.Effect<void, BlockHeaderHashError>
+export declare const free: (
+  instance: CML.BlockHeaderHash,
+) => Effect.Effect<void, BlockHeaderHashError>;
 ```
 
 Added in v2.0.0
@@ -152,8 +164,8 @@ Method toBech32 of BlockHeaderHash
 ```ts
 export declare const toBech32: (
   instance: CML.BlockHeaderHash,
-  prefix: string
-) => Effect.Effect<string, BlockHeaderHashError>
+  prefix: string,
+) => Effect.Effect<string, BlockHeaderHashError>;
 ```
 
 Added in v2.0.0
@@ -165,7 +177,9 @@ Method toHex of BlockHeaderHash
 **Signature**
 
 ```ts
-export declare const toHex: (instance: CML.BlockHeaderHash) => Effect.Effect<string, BlockHeaderHashError>
+export declare const toHex: (
+  instance: CML.BlockHeaderHash,
+) => Effect.Effect<string, BlockHeaderHashError>;
 ```
 
 Added in v2.0.0
@@ -177,7 +191,9 @@ Method toRawBytes of BlockHeaderHash
 **Signature**
 
 ```ts
-export declare const toRawBytes: (instance: CML.BlockHeaderHash) => Effect.Effect<Uint8Array, BlockHeaderHashError>
+export declare const toRawBytes: (
+  instance: CML.BlockHeaderHash,
+) => Effect.Effect<Uint8Array, BlockHeaderHashError>;
 ```
 
 Added in v2.0.0
@@ -191,7 +207,7 @@ Unsafely calls instance.free without Effect wrapper
 **Signature**
 
 ```ts
-export declare const freeUnsafe: (instance: CML.BlockHeaderHash) => void
+export declare const freeUnsafe: (instance: CML.BlockHeaderHash) => void;
 ```
 
 Added in v2.0.0
@@ -203,7 +219,10 @@ Unsafely calls instance.toBech32 without Effect wrapper
 **Signature**
 
 ```ts
-export declare const toBech32Unsafe: (instance: CML.BlockHeaderHash, prefix: string) => string
+export declare const toBech32Unsafe: (
+  instance: CML.BlockHeaderHash,
+  prefix: string,
+) => string;
 ```
 
 Added in v2.0.0
@@ -215,7 +234,7 @@ Unsafely calls instance.toHex without Effect wrapper
 **Signature**
 
 ```ts
-export declare const toHexUnsafe: (instance: CML.BlockHeaderHash) => string
+export declare const toHexUnsafe: (instance: CML.BlockHeaderHash) => string;
 ```
 
 Added in v2.0.0
@@ -227,7 +246,9 @@ Unsafely calls instance.toRawBytes without Effect wrapper
 **Signature**
 
 ```ts
-export declare const toRawBytesUnsafe: (instance: CML.BlockHeaderHash) => Uint8Array
+export declare const toRawBytesUnsafe: (
+  instance: CML.BlockHeaderHash,
+) => Uint8Array;
 ```
 
 Added in v2.0.0
@@ -241,7 +262,7 @@ Type alias for the CML BlockHeaderHash class
 **Signature**
 
 ```ts
-export type BlockHeaderHash = CML.BlockHeaderHash
+export type BlockHeaderHash = CML.BlockHeaderHash;
 ```
 
 Added in v2.0.0

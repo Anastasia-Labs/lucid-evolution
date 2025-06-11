@@ -35,7 +35,7 @@ Type alias for the CML CoinSelectionStrategyCIP2 enum
 **Signature**
 
 ```ts
-export type CoinSelectionStrategyCIP2 = CML.CoinSelectionStrategyCIP2
+export type CoinSelectionStrategyCIP2 = CML.CoinSelectionStrategyCIP2;
 ```
 
 Added in v2.0.0
@@ -49,7 +49,9 @@ Convert string to CoinSelectionStrategyCIP2 enum value
 **Signature**
 
 ```ts
-export declare const fromString: (str: string) => CML.CoinSelectionStrategyCIP2 | undefined
+export declare const fromString: (
+  str: string,
+) => CML.CoinSelectionStrategyCIP2 | undefined;
 ```
 
 Added in v2.0.0
@@ -61,7 +63,7 @@ Convert CoinSelectionStrategyCIP2 enum value to string
 **Signature**
 
 ```ts
-export declare const toString: (value: CML.CoinSelectionStrategyCIP2) => string
+export declare const toString: (value: CML.CoinSelectionStrategyCIP2) => string;
 ```
 
 Added in v2.0.0
@@ -73,7 +75,7 @@ Get all values of the CoinSelectionStrategyCIP2 enum
 **Signature**
 
 ```ts
-export declare const values: () => Array<CML.CoinSelectionStrategyCIP2>
+export declare const values: () => Array<CML.CoinSelectionStrategyCIP2>;
 ```
 
 Added in v2.0.0
@@ -87,7 +89,7 @@ LargestFirst variant of the CoinSelectionStrategyCIP2 enum
 **Signature**
 
 ```ts
-export declare const LargestFirst: CML.CoinSelectionStrategyCIP2.LargestFirst
+export declare const LargestFirst: CML.CoinSelectionStrategyCIP2.LargestFirst;
 ```
 
 Added in v2.0.0
@@ -99,7 +101,7 @@ LargestFirstMultiAsset variant of the CoinSelectionStrategyCIP2 enum
 **Signature**
 
 ```ts
-export declare const LargestFirstMultiAsset: CML.CoinSelectionStrategyCIP2.LargestFirstMultiAsset
+export declare const LargestFirstMultiAsset: CML.CoinSelectionStrategyCIP2.LargestFirstMultiAsset;
 ```
 
 Added in v2.0.0
@@ -111,7 +113,7 @@ RandomImprove variant of the CoinSelectionStrategyCIP2 enum
 **Signature**
 
 ```ts
-export declare const RandomImprove: CML.CoinSelectionStrategyCIP2.RandomImprove
+export declare const RandomImprove: CML.CoinSelectionStrategyCIP2.RandomImprove;
 ```
 
 Added in v2.0.0
@@ -123,7 +125,7 @@ RandomImproveMultiAsset variant of the CoinSelectionStrategyCIP2 enum
 **Signature**
 
 ```ts
-export declare const RandomImproveMultiAsset: CML.CoinSelectionStrategyCIP2.RandomImproveMultiAsset
+export declare const RandomImproveMultiAsset: CML.CoinSelectionStrategyCIP2.RandomImproveMultiAsset;
 ```
 
 Added in v2.0.0

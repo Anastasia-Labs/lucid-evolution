@@ -48,7 +48,9 @@ Method free of ProposalBuilderResult
 **Signature**
 
 ```ts
-export declare const free: (instance: CML.ProposalBuilderResult) => Effect.Effect<void, ProposalBuilderResultError>
+export declare const free: (
+  instance: CML.ProposalBuilderResult,
+) => Effect.Effect<void, ProposalBuilderResultError>;
 ```
 
 Added in v2.0.0
@@ -62,7 +64,7 @@ Unsafely calls instance.free without Effect wrapper
 **Signature**
 
 ```ts
-export declare const freeUnsafe: (instance: CML.ProposalBuilderResult) => void
+export declare const freeUnsafe: (instance: CML.ProposalBuilderResult) => void;
 ```
 
 Added in v2.0.0
@@ -76,7 +78,7 @@ Type alias for the CML ProposalBuilderResult class
 **Signature**
 
 ```ts
-export type ProposalBuilderResult = CML.ProposalBuilderResult
+export type ProposalBuilderResult = CML.ProposalBuilderResult;
 ```
 
 Added in v2.0.0

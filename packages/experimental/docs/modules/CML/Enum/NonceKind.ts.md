@@ -33,7 +33,7 @@ Type alias for the CML NonceKind enum
 **Signature**
 
 ```ts
-export type NonceKind = CML.NonceKind
+export type NonceKind = CML.NonceKind;
 ```
 
 Added in v2.0.0
@@ -47,7 +47,7 @@ Convert string to NonceKind enum value
 **Signature**
 
 ```ts
-export declare const fromString: (str: string) => CML.NonceKind | undefined
+export declare const fromString: (str: string) => CML.NonceKind | undefined;
 ```
 
 Added in v2.0.0
@@ -59,7 +59,7 @@ Convert NonceKind enum value to string
 **Signature**
 
 ```ts
-export declare const toString: (value: CML.NonceKind) => string
+export declare const toString: (value: CML.NonceKind) => string;
 ```
 
 Added in v2.0.0
@@ -71,7 +71,7 @@ Get all values of the NonceKind enum
 **Signature**
 
 ```ts
-export declare const values: () => Array<CML.NonceKind>
+export declare const values: () => Array<CML.NonceKind>;
 ```
 
 Added in v2.0.0
@@ -85,7 +85,7 @@ Hash variant of the NonceKind enum
 **Signature**
 
 ```ts
-export declare const Hash: CML.NonceKind.Hash
+export declare const Hash: CML.NonceKind.Hash;
 ```
 
 Added in v2.0.0
@@ -97,7 +97,7 @@ Identity variant of the NonceKind enum
 **Signature**
 
 ```ts
-export declare const Identity: CML.NonceKind.Identity
+export declare const Identity: CML.NonceKind.Identity;
 ```
 
 Added in v2.0.0

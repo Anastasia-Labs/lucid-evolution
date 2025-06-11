@@ -42,7 +42,10 @@ Static method \_new of GovActionIdList
 **Signature**
 
 ```ts
-export declare const _new: () => Effect.Effect<CML.GovActionIdList, GovActionIdListError>
+export declare const _new: () => Effect.Effect<
+  CML.GovActionIdList,
+  GovActionIdListError
+>;
 ```
 
 Added in v2.0.0
@@ -56,7 +59,7 @@ Unsafely calls GovActionIdList.\_new without Effect wrapper
 **Signature**
 
 ```ts
-export declare const _newUnsafe: () => CML.GovActionIdList
+export declare const _newUnsafe: () => CML.GovActionIdList;
 ```
 
 Added in v2.0.0
@@ -88,8 +91,8 @@ Method add of GovActionIdList
 ```ts
 export declare const add: (
   instance: CML.GovActionIdList,
-  elem: CML.GovActionId
-) => Effect.Effect<void, GovActionIdListError>
+  elem: CML.GovActionId,
+) => Effect.Effect<void, GovActionIdListError>;
 ```
 
 Added in v2.0.0
@@ -101,7 +104,9 @@ Method free of GovActionIdList
 **Signature**
 
 ```ts
-export declare const free: (instance: CML.GovActionIdList) => Effect.Effect<void, GovActionIdListError>
+export declare const free: (
+  instance: CML.GovActionIdList,
+) => Effect.Effect<void, GovActionIdListError>;
 ```
 
 Added in v2.0.0
@@ -115,8 +120,8 @@ Method get of GovActionIdList
 ```ts
 export declare const get: (
   instance: CML.GovActionIdList,
-  index: number
-) => Effect.Effect<CML.GovActionId, GovActionIdListError>
+  index: number,
+) => Effect.Effect<CML.GovActionId, GovActionIdListError>;
 ```
 
 Added in v2.0.0
@@ -128,7 +133,9 @@ Method len of GovActionIdList
 **Signature**
 
 ```ts
-export declare const len: (instance: CML.GovActionIdList) => Effect.Effect<number, GovActionIdListError>
+export declare const len: (
+  instance: CML.GovActionIdList,
+) => Effect.Effect<number, GovActionIdListError>;
 ```
 
 Added in v2.0.0
@@ -142,7 +149,10 @@ Unsafely calls instance.add without Effect wrapper
 **Signature**
 
 ```ts
-export declare const addUnsafe: (instance: CML.GovActionIdList, elem: CML.GovActionId) => void
+export declare const addUnsafe: (
+  instance: CML.GovActionIdList,
+  elem: CML.GovActionId,
+) => void;
 ```
 
 Added in v2.0.0
@@ -154,7 +164,7 @@ Unsafely calls instance.free without Effect wrapper
 **Signature**
 
 ```ts
-export declare const freeUnsafe: (instance: CML.GovActionIdList) => void
+export declare const freeUnsafe: (instance: CML.GovActionIdList) => void;
 ```
 
 Added in v2.0.0
@@ -166,7 +176,10 @@ Unsafely calls instance.get without Effect wrapper
 **Signature**
 
 ```ts
-export declare const getUnsafe: (instance: CML.GovActionIdList, index: number) => CML.GovActionId
+export declare const getUnsafe: (
+  instance: CML.GovActionIdList,
+  index: number,
+) => CML.GovActionId;
 ```
 
 Added in v2.0.0
@@ -178,7 +191,7 @@ Unsafely calls instance.len without Effect wrapper
 **Signature**
 
 ```ts
-export declare const lenUnsafe: (instance: CML.GovActionIdList) => number
+export declare const lenUnsafe: (instance: CML.GovActionIdList) => number;
 ```
 
 Added in v2.0.0
@@ -192,7 +205,7 @@ Type alias for the CML GovActionIdList class
 **Signature**
 
 ```ts
-export type GovActionIdList = CML.GovActionIdList
+export type GovActionIdList = CML.GovActionIdList;
 ```
 
 Added in v2.0.0

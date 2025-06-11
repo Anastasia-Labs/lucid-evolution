@@ -38,7 +38,7 @@ Added in v2.0.0
 **Signature**
 
 ```ts
-;[Inspectable.NodeInspectSymbol]()
+[Inspectable.NodeInspectSymbol]();
 ```
 
 # utils
@@ -49,7 +49,7 @@ Added in v2.0.0
 
 ```ts
 export interface ByronAddress {
-  readonly [NominalType]: unique symbol
+  readonly [NominalType]: unique symbol;
 }
 ```
 
@@ -58,5 +58,8 @@ export interface ByronAddress {
 **Signature**
 
 ```ts
-export declare const Bytes: Schema.transform<typeof Schema.Uint8ArrayFromSelf, typeof ByronAddress>
+export declare const Bytes: Schema.transform<
+  typeof Schema.Uint8ArrayFromSelf,
+  typeof ByronAddress
+>;
 ```

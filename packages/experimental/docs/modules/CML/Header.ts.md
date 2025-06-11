@@ -60,8 +60,8 @@ Static method \_new of Header
 ```ts
 export declare const _new: (
   headerBody: CML.HeaderBody,
-  bodySignature: CML.KESSignature
-) => Effect.Effect<CML.Header, HeaderError>
+  bodySignature: CML.KESSignature,
+) => Effect.Effect<CML.Header, HeaderError>;
 ```
 
 Added in v2.0.0
@@ -73,7 +73,9 @@ Static method fromCborBytes of Header
 **Signature**
 
 ```ts
-export declare const fromCborBytes: (cborBytes: Uint8Array) => Effect.Effect<CML.Header, HeaderError>
+export declare const fromCborBytes: (
+  cborBytes: Uint8Array,
+) => Effect.Effect<CML.Header, HeaderError>;
 ```
 
 Added in v2.0.0
@@ -85,7 +87,9 @@ Static method fromCborHex of Header
 **Signature**
 
 ```ts
-export declare const fromCborHex: (cborBytes: string) => Effect.Effect<CML.Header, HeaderError>
+export declare const fromCborHex: (
+  cborBytes: string,
+) => Effect.Effect<CML.Header, HeaderError>;
 ```
 
 Added in v2.0.0
@@ -97,7 +101,9 @@ Static method fromJson of Header
 **Signature**
 
 ```ts
-export declare const fromJson: (json: string) => Effect.Effect<CML.Header, HeaderError>
+export declare const fromJson: (
+  json: string,
+) => Effect.Effect<CML.Header, HeaderError>;
 ```
 
 Added in v2.0.0
@@ -111,7 +117,10 @@ Unsafely calls Header.\_new without Effect wrapper
 **Signature**
 
 ```ts
-export declare const _newUnsafe: (headerBody: CML.HeaderBody, bodySignature: CML.KESSignature) => CML.Header
+export declare const _newUnsafe: (
+  headerBody: CML.HeaderBody,
+  bodySignature: CML.KESSignature,
+) => CML.Header;
 ```
 
 Added in v2.0.0
@@ -123,7 +132,7 @@ Unsafely calls Header.fromCborBytes without Effect wrapper
 **Signature**
 
 ```ts
-export declare const fromCborBytesUnsafe: (cborBytes: Uint8Array) => CML.Header
+export declare const fromCborBytesUnsafe: (cborBytes: Uint8Array) => CML.Header;
 ```
 
 Added in v2.0.0
@@ -135,7 +144,7 @@ Unsafely calls Header.fromCborHex without Effect wrapper
 **Signature**
 
 ```ts
-export declare const fromCborHexUnsafe: (cborBytes: string) => CML.Header
+export declare const fromCborHexUnsafe: (cborBytes: string) => CML.Header;
 ```
 
 Added in v2.0.0
@@ -147,7 +156,7 @@ Unsafely calls Header.fromJson without Effect wrapper
 **Signature**
 
 ```ts
-export declare const fromJsonUnsafe: (json: string) => CML.Header
+export declare const fromJsonUnsafe: (json: string) => CML.Header;
 ```
 
 Added in v2.0.0
@@ -177,7 +186,9 @@ Method bodySignature of Header
 **Signature**
 
 ```ts
-export declare const bodySignature: (instance: CML.Header) => Effect.Effect<CML.KESSignature, HeaderError>
+export declare const bodySignature: (
+  instance: CML.Header,
+) => Effect.Effect<CML.KESSignature, HeaderError>;
 ```
 
 Added in v2.0.0
@@ -189,7 +200,9 @@ Method free of Header
 **Signature**
 
 ```ts
-export declare const free: (instance: CML.Header) => Effect.Effect<void, HeaderError>
+export declare const free: (
+  instance: CML.Header,
+) => Effect.Effect<void, HeaderError>;
 ```
 
 Added in v2.0.0
@@ -201,7 +214,9 @@ Method headerBody of Header
 **Signature**
 
 ```ts
-export declare const headerBody: (instance: CML.Header) => Effect.Effect<CML.HeaderBody, HeaderError>
+export declare const headerBody: (
+  instance: CML.Header,
+) => Effect.Effect<CML.HeaderBody, HeaderError>;
 ```
 
 Added in v2.0.0
@@ -213,7 +228,9 @@ Method toCanonicalCborBytes of Header
 **Signature**
 
 ```ts
-export declare const toCanonicalCborBytes: (instance: CML.Header) => Effect.Effect<Uint8Array, HeaderError>
+export declare const toCanonicalCborBytes: (
+  instance: CML.Header,
+) => Effect.Effect<Uint8Array, HeaderError>;
 ```
 
 Added in v2.0.0
@@ -225,7 +242,9 @@ Method toCanonicalCborHex of Header
 **Signature**
 
 ```ts
-export declare const toCanonicalCborHex: (instance: CML.Header) => Effect.Effect<string, HeaderError>
+export declare const toCanonicalCborHex: (
+  instance: CML.Header,
+) => Effect.Effect<string, HeaderError>;
 ```
 
 Added in v2.0.0
@@ -237,7 +256,9 @@ Method toCborBytes of Header
 **Signature**
 
 ```ts
-export declare const toCborBytes: (instance: CML.Header) => Effect.Effect<Uint8Array, HeaderError>
+export declare const toCborBytes: (
+  instance: CML.Header,
+) => Effect.Effect<Uint8Array, HeaderError>;
 ```
 
 Added in v2.0.0
@@ -249,7 +270,9 @@ Method toCborHex of Header
 **Signature**
 
 ```ts
-export declare const toCborHex: (instance: CML.Header) => Effect.Effect<string, HeaderError>
+export declare const toCborHex: (
+  instance: CML.Header,
+) => Effect.Effect<string, HeaderError>;
 ```
 
 Added in v2.0.0
@@ -261,7 +284,9 @@ Method toJsValue of Header
 **Signature**
 
 ```ts
-export declare const toJsValue: (instance: CML.Header) => Effect.Effect<any, HeaderError>
+export declare const toJsValue: (
+  instance: CML.Header,
+) => Effect.Effect<any, HeaderError>;
 ```
 
 Added in v2.0.0
@@ -273,7 +298,9 @@ Method toJson of Header
 **Signature**
 
 ```ts
-export declare const toJson: (instance: CML.Header) => Effect.Effect<string, HeaderError>
+export declare const toJson: (
+  instance: CML.Header,
+) => Effect.Effect<string, HeaderError>;
 ```
 
 Added in v2.0.0
@@ -287,7 +314,9 @@ Unsafely calls instance.bodySignature without Effect wrapper
 **Signature**
 
 ```ts
-export declare const bodySignatureUnsafe: (instance: CML.Header) => CML.KESSignature
+export declare const bodySignatureUnsafe: (
+  instance: CML.Header,
+) => CML.KESSignature;
 ```
 
 Added in v2.0.0
@@ -299,7 +328,7 @@ Unsafely calls instance.free without Effect wrapper
 **Signature**
 
 ```ts
-export declare const freeUnsafe: (instance: CML.Header) => void
+export declare const freeUnsafe: (instance: CML.Header) => void;
 ```
 
 Added in v2.0.0
@@ -311,7 +340,7 @@ Unsafely calls instance.headerBody without Effect wrapper
 **Signature**
 
 ```ts
-export declare const headerBodyUnsafe: (instance: CML.Header) => CML.HeaderBody
+export declare const headerBodyUnsafe: (instance: CML.Header) => CML.HeaderBody;
 ```
 
 Added in v2.0.0
@@ -323,7 +352,9 @@ Unsafely calls instance.toCanonicalCborBytes without Effect wrapper
 **Signature**
 
 ```ts
-export declare const toCanonicalCborBytesUnsafe: (instance: CML.Header) => Uint8Array
+export declare const toCanonicalCborBytesUnsafe: (
+  instance: CML.Header,
+) => Uint8Array;
 ```
 
 Added in v2.0.0
@@ -335,7 +366,7 @@ Unsafely calls instance.toCanonicalCborHex without Effect wrapper
 **Signature**
 
 ```ts
-export declare const toCanonicalCborHexUnsafe: (instance: CML.Header) => string
+export declare const toCanonicalCborHexUnsafe: (instance: CML.Header) => string;
 ```
 
 Added in v2.0.0
@@ -347,7 +378,7 @@ Unsafely calls instance.toCborBytes without Effect wrapper
 **Signature**
 
 ```ts
-export declare const toCborBytesUnsafe: (instance: CML.Header) => Uint8Array
+export declare const toCborBytesUnsafe: (instance: CML.Header) => Uint8Array;
 ```
 
 Added in v2.0.0
@@ -359,7 +390,7 @@ Unsafely calls instance.toCborHex without Effect wrapper
 **Signature**
 
 ```ts
-export declare const toCborHexUnsafe: (instance: CML.Header) => string
+export declare const toCborHexUnsafe: (instance: CML.Header) => string;
 ```
 
 Added in v2.0.0
@@ -371,7 +402,7 @@ Unsafely calls instance.toJsValue without Effect wrapper
 **Signature**
 
 ```ts
-export declare const toJsValueUnsafe: (instance: CML.Header) => any
+export declare const toJsValueUnsafe: (instance: CML.Header) => any;
 ```
 
 Added in v2.0.0
@@ -383,7 +414,7 @@ Unsafely calls instance.toJson without Effect wrapper
 **Signature**
 
 ```ts
-export declare const toJsonUnsafe: (instance: CML.Header) => string
+export declare const toJsonUnsafe: (instance: CML.Header) => string;
 ```
 
 Added in v2.0.0
@@ -397,7 +428,7 @@ Type alias for the CML Header class
 **Signature**
 
 ```ts
-export type Header = CML.Header
+export type Header = CML.Header;
 ```
 
 Added in v2.0.0

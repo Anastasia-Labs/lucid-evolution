@@ -42,7 +42,7 @@ Static method \_new of VoterList
 **Signature**
 
 ```ts
-export declare const _new: () => Effect.Effect<CML.VoterList, VoterListError>
+export declare const _new: () => Effect.Effect<CML.VoterList, VoterListError>;
 ```
 
 Added in v2.0.0
@@ -56,7 +56,7 @@ Unsafely calls VoterList.\_new without Effect wrapper
 **Signature**
 
 ```ts
-export declare const _newUnsafe: () => CML.VoterList
+export declare const _newUnsafe: () => CML.VoterList;
 ```
 
 Added in v2.0.0
@@ -86,7 +86,10 @@ Method add of VoterList
 **Signature**
 
 ```ts
-export declare const add: (instance: CML.VoterList, elem: CML.Voter) => Effect.Effect<void, VoterListError>
+export declare const add: (
+  instance: CML.VoterList,
+  elem: CML.Voter,
+) => Effect.Effect<void, VoterListError>;
 ```
 
 Added in v2.0.0
@@ -98,7 +101,9 @@ Method free of VoterList
 **Signature**
 
 ```ts
-export declare const free: (instance: CML.VoterList) => Effect.Effect<void, VoterListError>
+export declare const free: (
+  instance: CML.VoterList,
+) => Effect.Effect<void, VoterListError>;
 ```
 
 Added in v2.0.0
@@ -110,7 +115,10 @@ Method get of VoterList
 **Signature**
 
 ```ts
-export declare const get: (instance: CML.VoterList, index: number) => Effect.Effect<CML.Voter, VoterListError>
+export declare const get: (
+  instance: CML.VoterList,
+  index: number,
+) => Effect.Effect<CML.Voter, VoterListError>;
 ```
 
 Added in v2.0.0
@@ -122,7 +130,9 @@ Method len of VoterList
 **Signature**
 
 ```ts
-export declare const len: (instance: CML.VoterList) => Effect.Effect<number, VoterListError>
+export declare const len: (
+  instance: CML.VoterList,
+) => Effect.Effect<number, VoterListError>;
 ```
 
 Added in v2.0.0
@@ -136,7 +146,10 @@ Unsafely calls instance.add without Effect wrapper
 **Signature**
 
 ```ts
-export declare const addUnsafe: (instance: CML.VoterList, elem: CML.Voter) => void
+export declare const addUnsafe: (
+  instance: CML.VoterList,
+  elem: CML.Voter,
+) => void;
 ```
 
 Added in v2.0.0
@@ -148,7 +161,7 @@ Unsafely calls instance.free without Effect wrapper
 **Signature**
 
 ```ts
-export declare const freeUnsafe: (instance: CML.VoterList) => void
+export declare const freeUnsafe: (instance: CML.VoterList) => void;
 ```
 
 Added in v2.0.0
@@ -160,7 +173,10 @@ Unsafely calls instance.get without Effect wrapper
 **Signature**
 
 ```ts
-export declare const getUnsafe: (instance: CML.VoterList, index: number) => CML.Voter
+export declare const getUnsafe: (
+  instance: CML.VoterList,
+  index: number,
+) => CML.Voter;
 ```
 
 Added in v2.0.0
@@ -172,7 +188,7 @@ Unsafely calls instance.len without Effect wrapper
 **Signature**
 
 ```ts
-export declare const lenUnsafe: (instance: CML.VoterList) => number
+export declare const lenUnsafe: (instance: CML.VoterList) => number;
 ```
 
 Added in v2.0.0
@@ -186,7 +202,7 @@ Type alias for the CML VoterList class
 **Signature**
 
 ```ts
-export type VoterList = CML.VoterList
+export type VoterList = CML.VoterList;
 ```
 
 Added in v2.0.0

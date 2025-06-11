@@ -60,8 +60,8 @@ Static method \_new of NewConstitution
 ```ts
 export declare const _new: (
   actionId: CML.GovActionId | undefined,
-  constitution: CML.Constitution
-) => Effect.Effect<CML.NewConstitution, NewConstitutionError>
+  constitution: CML.Constitution,
+) => Effect.Effect<CML.NewConstitution, NewConstitutionError>;
 ```
 
 Added in v2.0.0
@@ -73,7 +73,9 @@ Static method fromCborBytes of NewConstitution
 **Signature**
 
 ```ts
-export declare const fromCborBytes: (cborBytes: Uint8Array) => Effect.Effect<CML.NewConstitution, NewConstitutionError>
+export declare const fromCborBytes: (
+  cborBytes: Uint8Array,
+) => Effect.Effect<CML.NewConstitution, NewConstitutionError>;
 ```
 
 Added in v2.0.0
@@ -85,7 +87,9 @@ Static method fromCborHex of NewConstitution
 **Signature**
 
 ```ts
-export declare const fromCborHex: (cborBytes: string) => Effect.Effect<CML.NewConstitution, NewConstitutionError>
+export declare const fromCborHex: (
+  cborBytes: string,
+) => Effect.Effect<CML.NewConstitution, NewConstitutionError>;
 ```
 
 Added in v2.0.0
@@ -97,7 +101,9 @@ Static method fromJson of NewConstitution
 **Signature**
 
 ```ts
-export declare const fromJson: (json: string) => Effect.Effect<CML.NewConstitution, NewConstitutionError>
+export declare const fromJson: (
+  json: string,
+) => Effect.Effect<CML.NewConstitution, NewConstitutionError>;
 ```
 
 Added in v2.0.0
@@ -113,8 +119,8 @@ Unsafely calls NewConstitution.\_new without Effect wrapper
 ```ts
 export declare const _newUnsafe: (
   actionId: CML.GovActionId | undefined,
-  constitution: CML.Constitution
-) => CML.NewConstitution
+  constitution: CML.Constitution,
+) => CML.NewConstitution;
 ```
 
 Added in v2.0.0
@@ -126,7 +132,9 @@ Unsafely calls NewConstitution.fromCborBytes without Effect wrapper
 **Signature**
 
 ```ts
-export declare const fromCborBytesUnsafe: (cborBytes: Uint8Array) => CML.NewConstitution
+export declare const fromCborBytesUnsafe: (
+  cborBytes: Uint8Array,
+) => CML.NewConstitution;
 ```
 
 Added in v2.0.0
@@ -138,7 +146,9 @@ Unsafely calls NewConstitution.fromCborHex without Effect wrapper
 **Signature**
 
 ```ts
-export declare const fromCborHexUnsafe: (cborBytes: string) => CML.NewConstitution
+export declare const fromCborHexUnsafe: (
+  cborBytes: string,
+) => CML.NewConstitution;
 ```
 
 Added in v2.0.0
@@ -150,7 +160,7 @@ Unsafely calls NewConstitution.fromJson without Effect wrapper
 **Signature**
 
 ```ts
-export declare const fromJsonUnsafe: (json: string) => CML.NewConstitution
+export declare const fromJsonUnsafe: (json: string) => CML.NewConstitution;
 ```
 
 Added in v2.0.0
@@ -181,8 +191,8 @@ Method actionId of NewConstitution
 
 ```ts
 export declare const actionId: (
-  instance: CML.NewConstitution
-) => Effect.Effect<CML.GovActionId | undefined, NewConstitutionError>
+  instance: CML.NewConstitution,
+) => Effect.Effect<CML.GovActionId | undefined, NewConstitutionError>;
 ```
 
 Added in v2.0.0
@@ -195,8 +205,8 @@ Method constitution of NewConstitution
 
 ```ts
 export declare const constitution: (
-  instance: CML.NewConstitution
-) => Effect.Effect<CML.Constitution, NewConstitutionError>
+  instance: CML.NewConstitution,
+) => Effect.Effect<CML.Constitution, NewConstitutionError>;
 ```
 
 Added in v2.0.0
@@ -208,7 +218,9 @@ Method free of NewConstitution
 **Signature**
 
 ```ts
-export declare const free: (instance: CML.NewConstitution) => Effect.Effect<void, NewConstitutionError>
+export declare const free: (
+  instance: CML.NewConstitution,
+) => Effect.Effect<void, NewConstitutionError>;
 ```
 
 Added in v2.0.0
@@ -221,8 +233,8 @@ Method toCanonicalCborBytes of NewConstitution
 
 ```ts
 export declare const toCanonicalCborBytes: (
-  instance: CML.NewConstitution
-) => Effect.Effect<Uint8Array, NewConstitutionError>
+  instance: CML.NewConstitution,
+) => Effect.Effect<Uint8Array, NewConstitutionError>;
 ```
 
 Added in v2.0.0
@@ -234,7 +246,9 @@ Method toCanonicalCborHex of NewConstitution
 **Signature**
 
 ```ts
-export declare const toCanonicalCborHex: (instance: CML.NewConstitution) => Effect.Effect<string, NewConstitutionError>
+export declare const toCanonicalCborHex: (
+  instance: CML.NewConstitution,
+) => Effect.Effect<string, NewConstitutionError>;
 ```
 
 Added in v2.0.0
@@ -246,7 +260,9 @@ Method toCborBytes of NewConstitution
 **Signature**
 
 ```ts
-export declare const toCborBytes: (instance: CML.NewConstitution) => Effect.Effect<Uint8Array, NewConstitutionError>
+export declare const toCborBytes: (
+  instance: CML.NewConstitution,
+) => Effect.Effect<Uint8Array, NewConstitutionError>;
 ```
 
 Added in v2.0.0
@@ -258,7 +274,9 @@ Method toCborHex of NewConstitution
 **Signature**
 
 ```ts
-export declare const toCborHex: (instance: CML.NewConstitution) => Effect.Effect<string, NewConstitutionError>
+export declare const toCborHex: (
+  instance: CML.NewConstitution,
+) => Effect.Effect<string, NewConstitutionError>;
 ```
 
 Added in v2.0.0
@@ -270,7 +288,9 @@ Method toJsValue of NewConstitution
 **Signature**
 
 ```ts
-export declare const toJsValue: (instance: CML.NewConstitution) => Effect.Effect<any, NewConstitutionError>
+export declare const toJsValue: (
+  instance: CML.NewConstitution,
+) => Effect.Effect<any, NewConstitutionError>;
 ```
 
 Added in v2.0.0
@@ -282,7 +302,9 @@ Method toJson of NewConstitution
 **Signature**
 
 ```ts
-export declare const toJson: (instance: CML.NewConstitution) => Effect.Effect<string, NewConstitutionError>
+export declare const toJson: (
+  instance: CML.NewConstitution,
+) => Effect.Effect<string, NewConstitutionError>;
 ```
 
 Added in v2.0.0
@@ -296,7 +318,9 @@ Unsafely calls instance.actionId without Effect wrapper
 **Signature**
 
 ```ts
-export declare const actionIdUnsafe: (instance: CML.NewConstitution) => CML.GovActionId | undefined
+export declare const actionIdUnsafe: (
+  instance: CML.NewConstitution,
+) => CML.GovActionId | undefined;
 ```
 
 Added in v2.0.0
@@ -308,7 +332,9 @@ Unsafely calls instance.constitution without Effect wrapper
 **Signature**
 
 ```ts
-export declare const constitutionUnsafe: (instance: CML.NewConstitution) => CML.Constitution
+export declare const constitutionUnsafe: (
+  instance: CML.NewConstitution,
+) => CML.Constitution;
 ```
 
 Added in v2.0.0
@@ -320,7 +346,7 @@ Unsafely calls instance.free without Effect wrapper
 **Signature**
 
 ```ts
-export declare const freeUnsafe: (instance: CML.NewConstitution) => void
+export declare const freeUnsafe: (instance: CML.NewConstitution) => void;
 ```
 
 Added in v2.0.0
@@ -332,7 +358,9 @@ Unsafely calls instance.toCanonicalCborBytes without Effect wrapper
 **Signature**
 
 ```ts
-export declare const toCanonicalCborBytesUnsafe: (instance: CML.NewConstitution) => Uint8Array
+export declare const toCanonicalCborBytesUnsafe: (
+  instance: CML.NewConstitution,
+) => Uint8Array;
 ```
 
 Added in v2.0.0
@@ -344,7 +372,9 @@ Unsafely calls instance.toCanonicalCborHex without Effect wrapper
 **Signature**
 
 ```ts
-export declare const toCanonicalCborHexUnsafe: (instance: CML.NewConstitution) => string
+export declare const toCanonicalCborHexUnsafe: (
+  instance: CML.NewConstitution,
+) => string;
 ```
 
 Added in v2.0.0
@@ -356,7 +386,9 @@ Unsafely calls instance.toCborBytes without Effect wrapper
 **Signature**
 
 ```ts
-export declare const toCborBytesUnsafe: (instance: CML.NewConstitution) => Uint8Array
+export declare const toCborBytesUnsafe: (
+  instance: CML.NewConstitution,
+) => Uint8Array;
 ```
 
 Added in v2.0.0
@@ -368,7 +400,7 @@ Unsafely calls instance.toCborHex without Effect wrapper
 **Signature**
 
 ```ts
-export declare const toCborHexUnsafe: (instance: CML.NewConstitution) => string
+export declare const toCborHexUnsafe: (instance: CML.NewConstitution) => string;
 ```
 
 Added in v2.0.0
@@ -380,7 +412,7 @@ Unsafely calls instance.toJsValue without Effect wrapper
 **Signature**
 
 ```ts
-export declare const toJsValueUnsafe: (instance: CML.NewConstitution) => any
+export declare const toJsValueUnsafe: (instance: CML.NewConstitution) => any;
 ```
 
 Added in v2.0.0
@@ -392,7 +424,7 @@ Unsafely calls instance.toJson without Effect wrapper
 **Signature**
 
 ```ts
-export declare const toJsonUnsafe: (instance: CML.NewConstitution) => string
+export declare const toJsonUnsafe: (instance: CML.NewConstitution) => string;
 ```
 
 Added in v2.0.0
@@ -406,7 +438,7 @@ Type alias for the CML NewConstitution class
 **Signature**
 
 ```ts
-export type NewConstitution = CML.NewConstitution
+export type NewConstitution = CML.NewConstitution;
 ```
 
 Added in v2.0.0

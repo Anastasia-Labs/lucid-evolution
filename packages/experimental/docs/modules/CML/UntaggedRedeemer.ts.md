@@ -38,8 +38,8 @@ Static method \_new of UntaggedRedeemer
 ```ts
 export declare const _new: (
   data: CML.PlutusData,
-  exUnits: CML.ExUnits
-) => Effect.Effect<CML.UntaggedRedeemer, UntaggedRedeemerError>
+  exUnits: CML.ExUnits,
+) => Effect.Effect<CML.UntaggedRedeemer, UntaggedRedeemerError>;
 ```
 
 Added in v2.0.0
@@ -53,7 +53,10 @@ Unsafely calls UntaggedRedeemer.\_new without Effect wrapper
 **Signature**
 
 ```ts
-export declare const _newUnsafe: (data: CML.PlutusData, exUnits: CML.ExUnits) => CML.UntaggedRedeemer
+export declare const _newUnsafe: (
+  data: CML.PlutusData,
+  exUnits: CML.ExUnits,
+) => CML.UntaggedRedeemer;
 ```
 
 Added in v2.0.0
@@ -83,7 +86,9 @@ Method free of UntaggedRedeemer
 **Signature**
 
 ```ts
-export declare const free: (instance: CML.UntaggedRedeemer) => Effect.Effect<void, UntaggedRedeemerError>
+export declare const free: (
+  instance: CML.UntaggedRedeemer,
+) => Effect.Effect<void, UntaggedRedeemerError>;
 ```
 
 Added in v2.0.0
@@ -97,7 +102,7 @@ Unsafely calls instance.free without Effect wrapper
 **Signature**
 
 ```ts
-export declare const freeUnsafe: (instance: CML.UntaggedRedeemer) => void
+export declare const freeUnsafe: (instance: CML.UntaggedRedeemer) => void;
 ```
 
 Added in v2.0.0
@@ -111,7 +116,7 @@ Type alias for the CML UntaggedRedeemer class
 **Signature**
 
 ```ts
-export type UntaggedRedeemer = CML.UntaggedRedeemer
+export type UntaggedRedeemer = CML.UntaggedRedeemer;
 ```
 
 Added in v2.0.0

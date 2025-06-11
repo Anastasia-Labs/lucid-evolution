@@ -44,7 +44,10 @@ Static method \_new of MapRedeemerKeyToRedeemerVal
 **Signature**
 
 ```ts
-export declare const _new: () => Effect.Effect<CML.MapRedeemerKeyToRedeemerVal, MapRedeemerKeyToRedeemerValError>
+export declare const _new: () => Effect.Effect<
+  CML.MapRedeemerKeyToRedeemerVal,
+  MapRedeemerKeyToRedeemerValError
+>;
 ```
 
 Added in v2.0.0
@@ -58,7 +61,7 @@ Unsafely calls MapRedeemerKeyToRedeemerVal.\_new without Effect wrapper
 **Signature**
 
 ```ts
-export declare const _newUnsafe: () => CML.MapRedeemerKeyToRedeemerVal
+export declare const _newUnsafe: () => CML.MapRedeemerKeyToRedeemerVal;
 ```
 
 Added in v2.0.0
@@ -89,8 +92,8 @@ Method free of MapRedeemerKeyToRedeemerVal
 
 ```ts
 export declare const free: (
-  instance: CML.MapRedeemerKeyToRedeemerVal
-) => Effect.Effect<void, MapRedeemerKeyToRedeemerValError>
+  instance: CML.MapRedeemerKeyToRedeemerVal,
+) => Effect.Effect<void, MapRedeemerKeyToRedeemerValError>;
 ```
 
 Added in v2.0.0
@@ -104,8 +107,11 @@ Method get of MapRedeemerKeyToRedeemerVal
 ```ts
 export declare const get: (
   instance: CML.MapRedeemerKeyToRedeemerVal,
-  key: CML.RedeemerKey
-) => Effect.Effect<CML.RedeemerVal | undefined, MapRedeemerKeyToRedeemerValError>
+  key: CML.RedeemerKey,
+) => Effect.Effect<
+  CML.RedeemerVal | undefined,
+  MapRedeemerKeyToRedeemerValError
+>;
 ```
 
 Added in v2.0.0
@@ -120,8 +126,11 @@ Method insert of MapRedeemerKeyToRedeemerVal
 export declare const insert: (
   instance: CML.MapRedeemerKeyToRedeemerVal,
   key: CML.RedeemerKey,
-  value: CML.RedeemerVal
-) => Effect.Effect<CML.RedeemerVal | undefined, MapRedeemerKeyToRedeemerValError>
+  value: CML.RedeemerVal,
+) => Effect.Effect<
+  CML.RedeemerVal | undefined,
+  MapRedeemerKeyToRedeemerValError
+>;
 ```
 
 Added in v2.0.0
@@ -134,8 +143,8 @@ Method keys of MapRedeemerKeyToRedeemerVal
 
 ```ts
 export declare const keys: (
-  instance: CML.MapRedeemerKeyToRedeemerVal
-) => Effect.Effect<CML.RedeemerKeyList, MapRedeemerKeyToRedeemerValError>
+  instance: CML.MapRedeemerKeyToRedeemerVal,
+) => Effect.Effect<CML.RedeemerKeyList, MapRedeemerKeyToRedeemerValError>;
 ```
 
 Added in v2.0.0
@@ -148,8 +157,8 @@ Method len of MapRedeemerKeyToRedeemerVal
 
 ```ts
 export declare const len: (
-  instance: CML.MapRedeemerKeyToRedeemerVal
-) => Effect.Effect<number, MapRedeemerKeyToRedeemerValError>
+  instance: CML.MapRedeemerKeyToRedeemerVal,
+) => Effect.Effect<number, MapRedeemerKeyToRedeemerValError>;
 ```
 
 Added in v2.0.0
@@ -163,7 +172,9 @@ Unsafely calls instance.free without Effect wrapper
 **Signature**
 
 ```ts
-export declare const freeUnsafe: (instance: CML.MapRedeemerKeyToRedeemerVal) => void
+export declare const freeUnsafe: (
+  instance: CML.MapRedeemerKeyToRedeemerVal,
+) => void;
 ```
 
 Added in v2.0.0
@@ -177,8 +188,8 @@ Unsafely calls instance.get without Effect wrapper
 ```ts
 export declare const getUnsafe: (
   instance: CML.MapRedeemerKeyToRedeemerVal,
-  key: CML.RedeemerKey
-) => CML.RedeemerVal | undefined
+  key: CML.RedeemerKey,
+) => CML.RedeemerVal | undefined;
 ```
 
 Added in v2.0.0
@@ -193,8 +204,8 @@ Unsafely calls instance.insert without Effect wrapper
 export declare const insertUnsafe: (
   instance: CML.MapRedeemerKeyToRedeemerVal,
   key: CML.RedeemerKey,
-  value: CML.RedeemerVal
-) => CML.RedeemerVal | undefined
+  value: CML.RedeemerVal,
+) => CML.RedeemerVal | undefined;
 ```
 
 Added in v2.0.0
@@ -206,7 +217,9 @@ Unsafely calls instance.keys without Effect wrapper
 **Signature**
 
 ```ts
-export declare const keysUnsafe: (instance: CML.MapRedeemerKeyToRedeemerVal) => CML.RedeemerKeyList
+export declare const keysUnsafe: (
+  instance: CML.MapRedeemerKeyToRedeemerVal,
+) => CML.RedeemerKeyList;
 ```
 
 Added in v2.0.0
@@ -218,7 +231,9 @@ Unsafely calls instance.len without Effect wrapper
 **Signature**
 
 ```ts
-export declare const lenUnsafe: (instance: CML.MapRedeemerKeyToRedeemerVal) => number
+export declare const lenUnsafe: (
+  instance: CML.MapRedeemerKeyToRedeemerVal,
+) => number;
 ```
 
 Added in v2.0.0
@@ -232,7 +247,7 @@ Type alias for the CML MapRedeemerKeyToRedeemerVal class
 **Signature**
 
 ```ts
-export type MapRedeemerKeyToRedeemerVal = CML.MapRedeemerKeyToRedeemerVal
+export type MapRedeemerKeyToRedeemerVal = CML.MapRedeemerKeyToRedeemerVal;
 ```
 
 Added in v2.0.0

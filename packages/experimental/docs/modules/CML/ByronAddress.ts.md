@@ -62,8 +62,8 @@ Static method \_new of ByronAddress
 ```ts
 export declare const _new: (
   content: CML.AddressContent,
-  crc: CML.Crc32
-) => Effect.Effect<CML.ByronAddress, ByronAddressError>
+  crc: CML.Crc32,
+) => Effect.Effect<CML.ByronAddress, ByronAddressError>;
 ```
 
 Added in v2.0.0
@@ -75,7 +75,9 @@ Static method fromAddress of ByronAddress
 **Signature**
 
 ```ts
-export declare const fromAddress: (addr: CML.Address) => Effect.Effect<CML.ByronAddress | undefined, ByronAddressError>
+export declare const fromAddress: (
+  addr: CML.Address,
+) => Effect.Effect<CML.ByronAddress | undefined, ByronAddressError>;
 ```
 
 Added in v2.0.0
@@ -88,8 +90,8 @@ Static method fromAddressContent of ByronAddress
 
 ```ts
 export declare const fromAddressContent: (
-  addressContent: CML.AddressContent
-) => Effect.Effect<CML.ByronAddress, ByronAddressError>
+  addressContent: CML.AddressContent,
+) => Effect.Effect<CML.ByronAddress, ByronAddressError>;
 ```
 
 Added in v2.0.0
@@ -101,7 +103,9 @@ Static method fromBase58 of ByronAddress
 **Signature**
 
 ```ts
-export declare const fromBase58: (s: string) => Effect.Effect<CML.ByronAddress, ByronAddressError>
+export declare const fromBase58: (
+  s: string,
+) => Effect.Effect<CML.ByronAddress, ByronAddressError>;
 ```
 
 Added in v2.0.0
@@ -113,7 +117,9 @@ Static method fromCborBytes of ByronAddress
 **Signature**
 
 ```ts
-export declare const fromCborBytes: (cborBytes: Uint8Array) => Effect.Effect<CML.ByronAddress, ByronAddressError>
+export declare const fromCborBytes: (
+  cborBytes: Uint8Array,
+) => Effect.Effect<CML.ByronAddress, ByronAddressError>;
 ```
 
 Added in v2.0.0
@@ -125,7 +131,9 @@ Static method fromCborHex of ByronAddress
 **Signature**
 
 ```ts
-export declare const fromCborHex: (cborBytes: string) => Effect.Effect<CML.ByronAddress, ByronAddressError>
+export declare const fromCborHex: (
+  cborBytes: string,
+) => Effect.Effect<CML.ByronAddress, ByronAddressError>;
 ```
 
 Added in v2.0.0
@@ -137,7 +145,9 @@ Static method isValid of ByronAddress
 **Signature**
 
 ```ts
-export declare const isValid: (s: string) => Effect.Effect<boolean, ByronAddressError>
+export declare const isValid: (
+  s: string,
+) => Effect.Effect<boolean, ByronAddressError>;
 ```
 
 Added in v2.0.0
@@ -151,7 +161,10 @@ Unsafely calls ByronAddress.\_new without Effect wrapper
 **Signature**
 
 ```ts
-export declare const _newUnsafe: (content: CML.AddressContent, crc: CML.Crc32) => CML.ByronAddress
+export declare const _newUnsafe: (
+  content: CML.AddressContent,
+  crc: CML.Crc32,
+) => CML.ByronAddress;
 ```
 
 Added in v2.0.0
@@ -163,7 +176,9 @@ Unsafely calls ByronAddress.fromAddressContent without Effect wrapper
 **Signature**
 
 ```ts
-export declare const fromAddressContentUnsafe: (addressContent: CML.AddressContent) => CML.ByronAddress
+export declare const fromAddressContentUnsafe: (
+  addressContent: CML.AddressContent,
+) => CML.ByronAddress;
 ```
 
 Added in v2.0.0
@@ -175,7 +190,9 @@ Unsafely calls ByronAddress.fromAddress without Effect wrapper
 **Signature**
 
 ```ts
-export declare const fromAddressUnsafe: (addr: CML.Address) => CML.ByronAddress | undefined
+export declare const fromAddressUnsafe: (
+  addr: CML.Address,
+) => CML.ByronAddress | undefined;
 ```
 
 Added in v2.0.0
@@ -187,7 +204,7 @@ Unsafely calls ByronAddress.fromBase58 without Effect wrapper
 **Signature**
 
 ```ts
-export declare const fromBase58Unsafe: (s: string) => CML.ByronAddress
+export declare const fromBase58Unsafe: (s: string) => CML.ByronAddress;
 ```
 
 Added in v2.0.0
@@ -199,7 +216,9 @@ Unsafely calls ByronAddress.fromCborBytes without Effect wrapper
 **Signature**
 
 ```ts
-export declare const fromCborBytesUnsafe: (cborBytes: Uint8Array) => CML.ByronAddress
+export declare const fromCborBytesUnsafe: (
+  cborBytes: Uint8Array,
+) => CML.ByronAddress;
 ```
 
 Added in v2.0.0
@@ -211,7 +230,7 @@ Unsafely calls ByronAddress.fromCborHex without Effect wrapper
 **Signature**
 
 ```ts
-export declare const fromCborHexUnsafe: (cborBytes: string) => CML.ByronAddress
+export declare const fromCborHexUnsafe: (cborBytes: string) => CML.ByronAddress;
 ```
 
 Added in v2.0.0
@@ -223,7 +242,7 @@ Unsafely calls ByronAddress.isValid without Effect wrapper
 **Signature**
 
 ```ts
-export declare const isValidUnsafe: (s: string) => boolean
+export declare const isValidUnsafe: (s: string) => boolean;
 ```
 
 Added in v2.0.0
@@ -253,7 +272,9 @@ Method content of ByronAddress
 **Signature**
 
 ```ts
-export declare const content: (instance: CML.ByronAddress) => Effect.Effect<CML.AddressContent, ByronAddressError>
+export declare const content: (
+  instance: CML.ByronAddress,
+) => Effect.Effect<CML.AddressContent, ByronAddressError>;
 ```
 
 Added in v2.0.0
@@ -265,7 +286,9 @@ Method crc of ByronAddress
 **Signature**
 
 ```ts
-export declare const crc: (instance: CML.ByronAddress) => Effect.Effect<CML.Crc32, ByronAddressError>
+export declare const crc: (
+  instance: CML.ByronAddress,
+) => Effect.Effect<CML.Crc32, ByronAddressError>;
 ```
 
 Added in v2.0.0
@@ -277,7 +300,9 @@ Method free of ByronAddress
 **Signature**
 
 ```ts
-export declare const free: (instance: CML.ByronAddress) => Effect.Effect<void, ByronAddressError>
+export declare const free: (
+  instance: CML.ByronAddress,
+) => Effect.Effect<void, ByronAddressError>;
 ```
 
 Added in v2.0.0
@@ -289,7 +314,9 @@ Method toAddress of ByronAddress
 **Signature**
 
 ```ts
-export declare const toAddress: (instance: CML.ByronAddress) => Effect.Effect<CML.Address, ByronAddressError>
+export declare const toAddress: (
+  instance: CML.ByronAddress,
+) => Effect.Effect<CML.Address, ByronAddressError>;
 ```
 
 Added in v2.0.0
@@ -301,7 +328,9 @@ Method toBase58 of ByronAddress
 **Signature**
 
 ```ts
-export declare const toBase58: (instance: CML.ByronAddress) => Effect.Effect<string, ByronAddressError>
+export declare const toBase58: (
+  instance: CML.ByronAddress,
+) => Effect.Effect<string, ByronAddressError>;
 ```
 
 Added in v2.0.0
@@ -313,7 +342,9 @@ Method toCborBytes of ByronAddress
 **Signature**
 
 ```ts
-export declare const toCborBytes: (instance: CML.ByronAddress) => Effect.Effect<Uint8Array, ByronAddressError>
+export declare const toCborBytes: (
+  instance: CML.ByronAddress,
+) => Effect.Effect<Uint8Array, ByronAddressError>;
 ```
 
 Added in v2.0.0
@@ -325,7 +356,9 @@ Method toCborHex of ByronAddress
 **Signature**
 
 ```ts
-export declare const toCborHex: (instance: CML.ByronAddress) => Effect.Effect<string, ByronAddressError>
+export declare const toCborHex: (
+  instance: CML.ByronAddress,
+) => Effect.Effect<string, ByronAddressError>;
 ```
 
 Added in v2.0.0
@@ -339,7 +372,9 @@ Unsafely calls instance.content without Effect wrapper
 **Signature**
 
 ```ts
-export declare const contentUnsafe: (instance: CML.ByronAddress) => CML.AddressContent
+export declare const contentUnsafe: (
+  instance: CML.ByronAddress,
+) => CML.AddressContent;
 ```
 
 Added in v2.0.0
@@ -351,7 +386,7 @@ Unsafely calls instance.crc without Effect wrapper
 **Signature**
 
 ```ts
-export declare const crcUnsafe: (instance: CML.ByronAddress) => CML.Crc32
+export declare const crcUnsafe: (instance: CML.ByronAddress) => CML.Crc32;
 ```
 
 Added in v2.0.0
@@ -363,7 +398,7 @@ Unsafely calls instance.free without Effect wrapper
 **Signature**
 
 ```ts
-export declare const freeUnsafe: (instance: CML.ByronAddress) => void
+export declare const freeUnsafe: (instance: CML.ByronAddress) => void;
 ```
 
 Added in v2.0.0
@@ -375,7 +410,9 @@ Unsafely calls instance.toAddress without Effect wrapper
 **Signature**
 
 ```ts
-export declare const toAddressUnsafe: (instance: CML.ByronAddress) => CML.Address
+export declare const toAddressUnsafe: (
+  instance: CML.ByronAddress,
+) => CML.Address;
 ```
 
 Added in v2.0.0
@@ -387,7 +424,7 @@ Unsafely calls instance.toBase58 without Effect wrapper
 **Signature**
 
 ```ts
-export declare const toBase58Unsafe: (instance: CML.ByronAddress) => string
+export declare const toBase58Unsafe: (instance: CML.ByronAddress) => string;
 ```
 
 Added in v2.0.0
@@ -399,7 +436,9 @@ Unsafely calls instance.toCborBytes without Effect wrapper
 **Signature**
 
 ```ts
-export declare const toCborBytesUnsafe: (instance: CML.ByronAddress) => Uint8Array
+export declare const toCborBytesUnsafe: (
+  instance: CML.ByronAddress,
+) => Uint8Array;
 ```
 
 Added in v2.0.0
@@ -411,7 +450,7 @@ Unsafely calls instance.toCborHex without Effect wrapper
 **Signature**
 
 ```ts
-export declare const toCborHexUnsafe: (instance: CML.ByronAddress) => string
+export declare const toCborHexUnsafe: (instance: CML.ByronAddress) => string;
 ```
 
 Added in v2.0.0
@@ -425,7 +464,7 @@ Type alias for the CML ByronAddress class
 **Signature**
 
 ```ts
-export type ByronAddress = CML.ByronAddress
+export type ByronAddress = CML.ByronAddress;
 ```
 
 Added in v2.0.0

@@ -58,7 +58,10 @@ Static method \_new of Rational
 **Signature**
 
 ```ts
-export declare const _new: (numerator: bigint, denominator: bigint) => Effect.Effect<CML.Rational, RationalError>
+export declare const _new: (
+  numerator: bigint,
+  denominator: bigint,
+) => Effect.Effect<CML.Rational, RationalError>;
 ```
 
 Added in v2.0.0
@@ -70,7 +73,9 @@ Static method fromCborBytes of Rational
 **Signature**
 
 ```ts
-export declare const fromCborBytes: (cborBytes: Uint8Array) => Effect.Effect<CML.Rational, RationalError>
+export declare const fromCborBytes: (
+  cborBytes: Uint8Array,
+) => Effect.Effect<CML.Rational, RationalError>;
 ```
 
 Added in v2.0.0
@@ -82,7 +87,9 @@ Static method fromCborHex of Rational
 **Signature**
 
 ```ts
-export declare const fromCborHex: (cborBytes: string) => Effect.Effect<CML.Rational, RationalError>
+export declare const fromCborHex: (
+  cborBytes: string,
+) => Effect.Effect<CML.Rational, RationalError>;
 ```
 
 Added in v2.0.0
@@ -94,7 +101,9 @@ Static method fromJson of Rational
 **Signature**
 
 ```ts
-export declare const fromJson: (json: string) => Effect.Effect<CML.Rational, RationalError>
+export declare const fromJson: (
+  json: string,
+) => Effect.Effect<CML.Rational, RationalError>;
 ```
 
 Added in v2.0.0
@@ -108,7 +117,10 @@ Unsafely calls Rational.\_new without Effect wrapper
 **Signature**
 
 ```ts
-export declare const _newUnsafe: (numerator: bigint, denominator: bigint) => CML.Rational
+export declare const _newUnsafe: (
+  numerator: bigint,
+  denominator: bigint,
+) => CML.Rational;
 ```
 
 Added in v2.0.0
@@ -120,7 +132,9 @@ Unsafely calls Rational.fromCborBytes without Effect wrapper
 **Signature**
 
 ```ts
-export declare const fromCborBytesUnsafe: (cborBytes: Uint8Array) => CML.Rational
+export declare const fromCborBytesUnsafe: (
+  cborBytes: Uint8Array,
+) => CML.Rational;
 ```
 
 Added in v2.0.0
@@ -132,7 +146,7 @@ Unsafely calls Rational.fromCborHex without Effect wrapper
 **Signature**
 
 ```ts
-export declare const fromCborHexUnsafe: (cborBytes: string) => CML.Rational
+export declare const fromCborHexUnsafe: (cborBytes: string) => CML.Rational;
 ```
 
 Added in v2.0.0
@@ -144,7 +158,7 @@ Unsafely calls Rational.fromJson without Effect wrapper
 **Signature**
 
 ```ts
-export declare const fromJsonUnsafe: (json: string) => CML.Rational
+export declare const fromJsonUnsafe: (json: string) => CML.Rational;
 ```
 
 Added in v2.0.0
@@ -174,7 +188,9 @@ Method denominator of Rational
 **Signature**
 
 ```ts
-export declare const denominator: (instance: CML.Rational) => Effect.Effect<bigint, RationalError>
+export declare const denominator: (
+  instance: CML.Rational,
+) => Effect.Effect<bigint, RationalError>;
 ```
 
 Added in v2.0.0
@@ -186,7 +202,9 @@ Method free of Rational
 **Signature**
 
 ```ts
-export declare const free: (instance: CML.Rational) => Effect.Effect<void, RationalError>
+export declare const free: (
+  instance: CML.Rational,
+) => Effect.Effect<void, RationalError>;
 ```
 
 Added in v2.0.0
@@ -198,7 +216,9 @@ Method numerator of Rational
 **Signature**
 
 ```ts
-export declare const numerator: (instance: CML.Rational) => Effect.Effect<bigint, RationalError>
+export declare const numerator: (
+  instance: CML.Rational,
+) => Effect.Effect<bigint, RationalError>;
 ```
 
 Added in v2.0.0
@@ -210,7 +230,9 @@ Method toCanonicalCborBytes of Rational
 **Signature**
 
 ```ts
-export declare const toCanonicalCborBytes: (instance: CML.Rational) => Effect.Effect<Uint8Array, RationalError>
+export declare const toCanonicalCborBytes: (
+  instance: CML.Rational,
+) => Effect.Effect<Uint8Array, RationalError>;
 ```
 
 Added in v2.0.0
@@ -222,7 +244,9 @@ Method toCanonicalCborHex of Rational
 **Signature**
 
 ```ts
-export declare const toCanonicalCborHex: (instance: CML.Rational) => Effect.Effect<string, RationalError>
+export declare const toCanonicalCborHex: (
+  instance: CML.Rational,
+) => Effect.Effect<string, RationalError>;
 ```
 
 Added in v2.0.0
@@ -234,7 +258,9 @@ Method toCborBytes of Rational
 **Signature**
 
 ```ts
-export declare const toCborBytes: (instance: CML.Rational) => Effect.Effect<Uint8Array, RationalError>
+export declare const toCborBytes: (
+  instance: CML.Rational,
+) => Effect.Effect<Uint8Array, RationalError>;
 ```
 
 Added in v2.0.0
@@ -246,7 +272,9 @@ Method toCborHex of Rational
 **Signature**
 
 ```ts
-export declare const toCborHex: (instance: CML.Rational) => Effect.Effect<string, RationalError>
+export declare const toCborHex: (
+  instance: CML.Rational,
+) => Effect.Effect<string, RationalError>;
 ```
 
 Added in v2.0.0
@@ -258,7 +286,9 @@ Method toJsValue of Rational
 **Signature**
 
 ```ts
-export declare const toJsValue: (instance: CML.Rational) => Effect.Effect<any, RationalError>
+export declare const toJsValue: (
+  instance: CML.Rational,
+) => Effect.Effect<any, RationalError>;
 ```
 
 Added in v2.0.0
@@ -270,7 +300,9 @@ Method toJson of Rational
 **Signature**
 
 ```ts
-export declare const toJson: (instance: CML.Rational) => Effect.Effect<string, RationalError>
+export declare const toJson: (
+  instance: CML.Rational,
+) => Effect.Effect<string, RationalError>;
 ```
 
 Added in v2.0.0
@@ -284,7 +316,7 @@ Unsafely calls instance.denominator without Effect wrapper
 **Signature**
 
 ```ts
-export declare const denominatorUnsafe: (instance: CML.Rational) => bigint
+export declare const denominatorUnsafe: (instance: CML.Rational) => bigint;
 ```
 
 Added in v2.0.0
@@ -296,7 +328,7 @@ Unsafely calls instance.free without Effect wrapper
 **Signature**
 
 ```ts
-export declare const freeUnsafe: (instance: CML.Rational) => void
+export declare const freeUnsafe: (instance: CML.Rational) => void;
 ```
 
 Added in v2.0.0
@@ -308,7 +340,7 @@ Unsafely calls instance.numerator without Effect wrapper
 **Signature**
 
 ```ts
-export declare const numeratorUnsafe: (instance: CML.Rational) => bigint
+export declare const numeratorUnsafe: (instance: CML.Rational) => bigint;
 ```
 
 Added in v2.0.0
@@ -320,7 +352,9 @@ Unsafely calls instance.toCanonicalCborBytes without Effect wrapper
 **Signature**
 
 ```ts
-export declare const toCanonicalCborBytesUnsafe: (instance: CML.Rational) => Uint8Array
+export declare const toCanonicalCborBytesUnsafe: (
+  instance: CML.Rational,
+) => Uint8Array;
 ```
 
 Added in v2.0.0
@@ -332,7 +366,9 @@ Unsafely calls instance.toCanonicalCborHex without Effect wrapper
 **Signature**
 
 ```ts
-export declare const toCanonicalCborHexUnsafe: (instance: CML.Rational) => string
+export declare const toCanonicalCborHexUnsafe: (
+  instance: CML.Rational,
+) => string;
 ```
 
 Added in v2.0.0
@@ -344,7 +380,7 @@ Unsafely calls instance.toCborBytes without Effect wrapper
 **Signature**
 
 ```ts
-export declare const toCborBytesUnsafe: (instance: CML.Rational) => Uint8Array
+export declare const toCborBytesUnsafe: (instance: CML.Rational) => Uint8Array;
 ```
 
 Added in v2.0.0
@@ -356,7 +392,7 @@ Unsafely calls instance.toCborHex without Effect wrapper
 **Signature**
 
 ```ts
-export declare const toCborHexUnsafe: (instance: CML.Rational) => string
+export declare const toCborHexUnsafe: (instance: CML.Rational) => string;
 ```
 
 Added in v2.0.0
@@ -368,7 +404,7 @@ Unsafely calls instance.toJsValue without Effect wrapper
 **Signature**
 
 ```ts
-export declare const toJsValueUnsafe: (instance: CML.Rational) => any
+export declare const toJsValueUnsafe: (instance: CML.Rational) => any;
 ```
 
 Added in v2.0.0
@@ -380,7 +416,7 @@ Unsafely calls instance.toJson without Effect wrapper
 **Signature**
 
 ```ts
-export declare const toJsonUnsafe: (instance: CML.Rational) => string
+export declare const toJsonUnsafe: (instance: CML.Rational) => string;
 ```
 
 Added in v2.0.0
@@ -394,7 +430,7 @@ Type alias for the CML Rational class
 **Signature**
 
 ```ts
-export type Rational = CML.Rational
+export type Rational = CML.Rational;
 ```
 
 Added in v2.0.0

@@ -66,8 +66,8 @@ export declare const _new: (
   tag: CML.RedeemerTag,
   index: bigint,
   data: CML.PlutusData,
-  exUnits: CML.ExUnits
-) => Effect.Effect<CML.LegacyRedeemer, LegacyRedeemerError>
+  exUnits: CML.ExUnits,
+) => Effect.Effect<CML.LegacyRedeemer, LegacyRedeemerError>;
 ```
 
 Added in v2.0.0
@@ -79,7 +79,9 @@ Static method fromCborBytes of LegacyRedeemer
 **Signature**
 
 ```ts
-export declare const fromCborBytes: (cborBytes: Uint8Array) => Effect.Effect<CML.LegacyRedeemer, LegacyRedeemerError>
+export declare const fromCborBytes: (
+  cborBytes: Uint8Array,
+) => Effect.Effect<CML.LegacyRedeemer, LegacyRedeemerError>;
 ```
 
 Added in v2.0.0
@@ -91,7 +93,9 @@ Static method fromCborHex of LegacyRedeemer
 **Signature**
 
 ```ts
-export declare const fromCborHex: (cborBytes: string) => Effect.Effect<CML.LegacyRedeemer, LegacyRedeemerError>
+export declare const fromCborHex: (
+  cborBytes: string,
+) => Effect.Effect<CML.LegacyRedeemer, LegacyRedeemerError>;
 ```
 
 Added in v2.0.0
@@ -103,7 +107,9 @@ Static method fromJson of LegacyRedeemer
 **Signature**
 
 ```ts
-export declare const fromJson: (json: string) => Effect.Effect<CML.LegacyRedeemer, LegacyRedeemerError>
+export declare const fromJson: (
+  json: string,
+) => Effect.Effect<CML.LegacyRedeemer, LegacyRedeemerError>;
 ```
 
 Added in v2.0.0
@@ -121,8 +127,8 @@ export declare const _newUnsafe: (
   tag: CML.RedeemerTag,
   index: bigint,
   data: CML.PlutusData,
-  exUnits: CML.ExUnits
-) => CML.LegacyRedeemer
+  exUnits: CML.ExUnits,
+) => CML.LegacyRedeemer;
 ```
 
 Added in v2.0.0
@@ -134,7 +140,9 @@ Unsafely calls LegacyRedeemer.fromCborBytes without Effect wrapper
 **Signature**
 
 ```ts
-export declare const fromCborBytesUnsafe: (cborBytes: Uint8Array) => CML.LegacyRedeemer
+export declare const fromCborBytesUnsafe: (
+  cborBytes: Uint8Array,
+) => CML.LegacyRedeemer;
 ```
 
 Added in v2.0.0
@@ -146,7 +154,9 @@ Unsafely calls LegacyRedeemer.fromCborHex without Effect wrapper
 **Signature**
 
 ```ts
-export declare const fromCborHexUnsafe: (cborBytes: string) => CML.LegacyRedeemer
+export declare const fromCborHexUnsafe: (
+  cborBytes: string,
+) => CML.LegacyRedeemer;
 ```
 
 Added in v2.0.0
@@ -158,7 +168,7 @@ Unsafely calls LegacyRedeemer.fromJson without Effect wrapper
 **Signature**
 
 ```ts
-export declare const fromJsonUnsafe: (json: string) => CML.LegacyRedeemer
+export declare const fromJsonUnsafe: (json: string) => CML.LegacyRedeemer;
 ```
 
 Added in v2.0.0
@@ -188,7 +198,9 @@ Method data of LegacyRedeemer
 **Signature**
 
 ```ts
-export declare const data: (instance: CML.LegacyRedeemer) => Effect.Effect<CML.PlutusData, LegacyRedeemerError>
+export declare const data: (
+  instance: CML.LegacyRedeemer,
+) => Effect.Effect<CML.PlutusData, LegacyRedeemerError>;
 ```
 
 Added in v2.0.0
@@ -200,7 +212,9 @@ Method exUnits of LegacyRedeemer
 **Signature**
 
 ```ts
-export declare const exUnits: (instance: CML.LegacyRedeemer) => Effect.Effect<CML.ExUnits, LegacyRedeemerError>
+export declare const exUnits: (
+  instance: CML.LegacyRedeemer,
+) => Effect.Effect<CML.ExUnits, LegacyRedeemerError>;
 ```
 
 Added in v2.0.0
@@ -212,7 +226,9 @@ Method free of LegacyRedeemer
 **Signature**
 
 ```ts
-export declare const free: (instance: CML.LegacyRedeemer) => Effect.Effect<void, LegacyRedeemerError>
+export declare const free: (
+  instance: CML.LegacyRedeemer,
+) => Effect.Effect<void, LegacyRedeemerError>;
 ```
 
 Added in v2.0.0
@@ -224,7 +240,9 @@ Method index of LegacyRedeemer
 **Signature**
 
 ```ts
-export declare const index: (instance: CML.LegacyRedeemer) => Effect.Effect<bigint, LegacyRedeemerError>
+export declare const index: (
+  instance: CML.LegacyRedeemer,
+) => Effect.Effect<bigint, LegacyRedeemerError>;
 ```
 
 Added in v2.0.0
@@ -236,7 +254,9 @@ Method tag of LegacyRedeemer
 **Signature**
 
 ```ts
-export declare const tag: (instance: CML.LegacyRedeemer) => Effect.Effect<CML.RedeemerTag, LegacyRedeemerError>
+export declare const tag: (
+  instance: CML.LegacyRedeemer,
+) => Effect.Effect<CML.RedeemerTag, LegacyRedeemerError>;
 ```
 
 Added in v2.0.0
@@ -249,8 +269,8 @@ Method toCanonicalCborBytes of LegacyRedeemer
 
 ```ts
 export declare const toCanonicalCborBytes: (
-  instance: CML.LegacyRedeemer
-) => Effect.Effect<Uint8Array, LegacyRedeemerError>
+  instance: CML.LegacyRedeemer,
+) => Effect.Effect<Uint8Array, LegacyRedeemerError>;
 ```
 
 Added in v2.0.0
@@ -262,7 +282,9 @@ Method toCanonicalCborHex of LegacyRedeemer
 **Signature**
 
 ```ts
-export declare const toCanonicalCborHex: (instance: CML.LegacyRedeemer) => Effect.Effect<string, LegacyRedeemerError>
+export declare const toCanonicalCborHex: (
+  instance: CML.LegacyRedeemer,
+) => Effect.Effect<string, LegacyRedeemerError>;
 ```
 
 Added in v2.0.0
@@ -274,7 +296,9 @@ Method toCborBytes of LegacyRedeemer
 **Signature**
 
 ```ts
-export declare const toCborBytes: (instance: CML.LegacyRedeemer) => Effect.Effect<Uint8Array, LegacyRedeemerError>
+export declare const toCborBytes: (
+  instance: CML.LegacyRedeemer,
+) => Effect.Effect<Uint8Array, LegacyRedeemerError>;
 ```
 
 Added in v2.0.0
@@ -286,7 +310,9 @@ Method toCborHex of LegacyRedeemer
 **Signature**
 
 ```ts
-export declare const toCborHex: (instance: CML.LegacyRedeemer) => Effect.Effect<string, LegacyRedeemerError>
+export declare const toCborHex: (
+  instance: CML.LegacyRedeemer,
+) => Effect.Effect<string, LegacyRedeemerError>;
 ```
 
 Added in v2.0.0
@@ -298,7 +324,9 @@ Method toJsValue of LegacyRedeemer
 **Signature**
 
 ```ts
-export declare const toJsValue: (instance: CML.LegacyRedeemer) => Effect.Effect<any, LegacyRedeemerError>
+export declare const toJsValue: (
+  instance: CML.LegacyRedeemer,
+) => Effect.Effect<any, LegacyRedeemerError>;
 ```
 
 Added in v2.0.0
@@ -310,7 +338,9 @@ Method toJson of LegacyRedeemer
 **Signature**
 
 ```ts
-export declare const toJson: (instance: CML.LegacyRedeemer) => Effect.Effect<string, LegacyRedeemerError>
+export declare const toJson: (
+  instance: CML.LegacyRedeemer,
+) => Effect.Effect<string, LegacyRedeemerError>;
 ```
 
 Added in v2.0.0
@@ -324,7 +354,9 @@ Unsafely calls instance.data without Effect wrapper
 **Signature**
 
 ```ts
-export declare const dataUnsafe: (instance: CML.LegacyRedeemer) => CML.PlutusData
+export declare const dataUnsafe: (
+  instance: CML.LegacyRedeemer,
+) => CML.PlutusData;
 ```
 
 Added in v2.0.0
@@ -336,7 +368,9 @@ Unsafely calls instance.exUnits without Effect wrapper
 **Signature**
 
 ```ts
-export declare const exUnitsUnsafe: (instance: CML.LegacyRedeemer) => CML.ExUnits
+export declare const exUnitsUnsafe: (
+  instance: CML.LegacyRedeemer,
+) => CML.ExUnits;
 ```
 
 Added in v2.0.0
@@ -348,7 +382,7 @@ Unsafely calls instance.free without Effect wrapper
 **Signature**
 
 ```ts
-export declare const freeUnsafe: (instance: CML.LegacyRedeemer) => void
+export declare const freeUnsafe: (instance: CML.LegacyRedeemer) => void;
 ```
 
 Added in v2.0.0
@@ -360,7 +394,7 @@ Unsafely calls instance.index without Effect wrapper
 **Signature**
 
 ```ts
-export declare const indexUnsafe: (instance: CML.LegacyRedeemer) => bigint
+export declare const indexUnsafe: (instance: CML.LegacyRedeemer) => bigint;
 ```
 
 Added in v2.0.0
@@ -372,7 +406,9 @@ Unsafely calls instance.tag without Effect wrapper
 **Signature**
 
 ```ts
-export declare const tagUnsafe: (instance: CML.LegacyRedeemer) => CML.RedeemerTag
+export declare const tagUnsafe: (
+  instance: CML.LegacyRedeemer,
+) => CML.RedeemerTag;
 ```
 
 Added in v2.0.0
@@ -384,7 +420,9 @@ Unsafely calls instance.toCanonicalCborBytes without Effect wrapper
 **Signature**
 
 ```ts
-export declare const toCanonicalCborBytesUnsafe: (instance: CML.LegacyRedeemer) => Uint8Array
+export declare const toCanonicalCborBytesUnsafe: (
+  instance: CML.LegacyRedeemer,
+) => Uint8Array;
 ```
 
 Added in v2.0.0
@@ -396,7 +434,9 @@ Unsafely calls instance.toCanonicalCborHex without Effect wrapper
 **Signature**
 
 ```ts
-export declare const toCanonicalCborHexUnsafe: (instance: CML.LegacyRedeemer) => string
+export declare const toCanonicalCborHexUnsafe: (
+  instance: CML.LegacyRedeemer,
+) => string;
 ```
 
 Added in v2.0.0
@@ -408,7 +448,9 @@ Unsafely calls instance.toCborBytes without Effect wrapper
 **Signature**
 
 ```ts
-export declare const toCborBytesUnsafe: (instance: CML.LegacyRedeemer) => Uint8Array
+export declare const toCborBytesUnsafe: (
+  instance: CML.LegacyRedeemer,
+) => Uint8Array;
 ```
 
 Added in v2.0.0
@@ -420,7 +462,7 @@ Unsafely calls instance.toCborHex without Effect wrapper
 **Signature**
 
 ```ts
-export declare const toCborHexUnsafe: (instance: CML.LegacyRedeemer) => string
+export declare const toCborHexUnsafe: (instance: CML.LegacyRedeemer) => string;
 ```
 
 Added in v2.0.0
@@ -432,7 +474,7 @@ Unsafely calls instance.toJsValue without Effect wrapper
 **Signature**
 
 ```ts
-export declare const toJsValueUnsafe: (instance: CML.LegacyRedeemer) => any
+export declare const toJsValueUnsafe: (instance: CML.LegacyRedeemer) => any;
 ```
 
 Added in v2.0.0
@@ -444,7 +486,7 @@ Unsafely calls instance.toJson without Effect wrapper
 **Signature**
 
 ```ts
-export declare const toJsonUnsafe: (instance: CML.LegacyRedeemer) => string
+export declare const toJsonUnsafe: (instance: CML.LegacyRedeemer) => string;
 ```
 
 Added in v2.0.0
@@ -458,7 +500,7 @@ Type alias for the CML LegacyRedeemer class
 **Signature**
 
 ```ts
-export type LegacyRedeemer = CML.LegacyRedeemer
+export type LegacyRedeemer = CML.LegacyRedeemer;
 ```
 
 Added in v2.0.0

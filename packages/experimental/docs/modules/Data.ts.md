@@ -84,15 +84,17 @@ Creates a Plutus Data ByteArray type from a hex string
 **Signature**
 
 ```ts
-export declare const mkByte: <const T extends string>(bytearray: T) => ByteArray<T>
+export declare const mkByte: <const T extends string>(
+  bytearray: T,
+) => ByteArray<T>;
 ```
 
 **Example**
 
 ```ts
-import { Data } from "@lucid-evolution/experimental"
+import { Data } from "@lucid-evolution/experimental";
 
-const myByteArray = Data.mkByte("deadbeef")
+const myByteArray = Data.mkByte("deadbeef");
 ```
 
 Added in v2.0.0
@@ -104,22 +106,25 @@ Creates a Plutus Data Constr type (constructor) with the given index and fields
 **Signature**
 
 ```ts
-export declare const mkConstr: <const T extends bigint, const U extends readonly Data[]>(
+export declare const mkConstr: <
+  const T extends bigint,
+  const U extends readonly Data[],
+>(
   index: T,
-  fields: U
-) => Constr<T, U>
+  fields: U,
+) => Constr<T, U>;
 ```
 
 **Example**
 
 ```ts
-import { Data } from "@lucid-evolution/experimental"
+import { Data } from "@lucid-evolution/experimental";
 
 // Create a constructor for a custom data type (e.g., a "Mint" action with amount)
-const mint = Data.mkConstr(0n, [Data.mkInt(5n)])
+const mint = Data.mkConstr(0n, [Data.mkInt(5n)]);
 
 // Create a constructor with no fields (e.g., a "Burn" action)
-const burn = Data.mkConstr(1n, [])
+const burn = Data.mkConstr(1n, []);
 ```
 
 Added in v2.0.0
@@ -131,15 +136,17 @@ Creates a Plutus Data Integer type from a bigint value
 **Signature**
 
 ```ts
-export declare const mkInt: <const T extends bigint = bigint>(integer: T) => Integer<T>
+export declare const mkInt: <const T extends bigint = bigint>(
+  integer: T,
+) => Integer<T>;
 ```
 
 **Example**
 
 ```ts
-import { Data } from "@lucid-evolution/experimental"
+import { Data } from "@lucid-evolution/experimental";
 
-const myInteger = Data.mkInt(42n)
+const myInteger = Data.mkInt(42n);
 ```
 
 Added in v2.0.0
@@ -151,22 +158,24 @@ Creates a Plutus Data List type from an array of Data elements
 **Signature**
 
 ```ts
-export declare const mkList: <const T extends Data>(list: readonly T[]) => List<T>
+export declare const mkList: <const T extends Data>(
+  list: readonly T[],
+) => List<T>;
 ```
 
 **Example**
 
 ```ts
-import { Data } from "@lucid-evolution/experimental"
+import { Data } from "@lucid-evolution/experimental";
 
 // Create a list with multiple elements of the same type
-const integerList = Data.mkList([Data.mkInt(42n), Data.mkInt(100n)])
+const integerList = Data.mkList([Data.mkInt(42n), Data.mkInt(100n)]);
 
 // Create a list with a single element
-const singleList = Data.mkList([Data.mkInt(42n)])
+const singleList = Data.mkList([Data.mkInt(42n)]);
 
 // Create a mixed list with different element types
-const mixedList = Data.mkList([Data.mkInt(42n), Data.mkByte("deadbeef")])
+const mixedList = Data.mkList([Data.mkInt(42n), Data.mkByte("deadbeef")]);
 ```
 
 Added in v2.0.0
@@ -178,18 +187,22 @@ Creates a Plutus Data Map type from an array of key-value tuples
 **Signature**
 
 ```ts
-export declare const mkMap: <const Pairs extends ReadonlyArray<{ k: Data; v: Data }>>(value: Pairs) => Map<Pairs>
+export declare const mkMap: <
+  const Pairs extends ReadonlyArray<{ k: Data; v: Data }>,
+>(
+  value: Pairs,
+) => Map<Pairs>;
 ```
 
 **Example**
 
 ```ts
-import { Data } from "@lucid-evolution/experimental"
+import { Data } from "@lucid-evolution/experimental";
 
 const myMap = Data.mkMap([
   { k: Data.mkByte("cafe01"), v: Data.mkInt(42n) },
-  { k: Data.mkByte("deadbeef"), v: Data.mkByte("cafe01") }
-])
+  { k: Data.mkByte("deadbeef"), v: Data.mkByte("cafe01") },
+]);
 ```
 
 Added in v2.0.0
@@ -203,32 +216,32 @@ Decodes a CBOR hex string to a TypeScript type
 **Signature**
 
 ```ts
-export declare function decodeCBOROrThrow(input: string): Data
+export declare function decodeCBOROrThrow(input: string): Data;
 export declare function decodeCBOROrThrow<Source, Target extends Data>(
   input: string,
-  schema: Schema.Schema<Source, Target>
-): Source
+  schema: Schema.Schema<Source, Target>,
+): Source;
 ```
 
 **Example**
 
 ```ts
-import { TSchema, Data } from "@lucid-evolution/experimental"
+import { TSchema, Data } from "@lucid-evolution/experimental";
 
 const Token = TSchema.Struct({
   policyId: TSchema.ByteArray,
   assetName: TSchema.ByteArray,
-  amount: TSchema.Integer
-})
+  amount: TSchema.Integer,
+});
 
-const cbor = "d8799f44deadbeef42cafe1903e8ff"
+const cbor = "d8799f44deadbeef42cafe1903e8ff";
 
 // Decode from CBOR
-const token = Data.decodeCBOROrThrow(cbor, Token)
+const token = Data.decodeCBOROrThrow(cbor, Token);
 // { policyId: "deadbeef", assetName: "cafe", amount: 1000n }
 
 // Decode without schema
-const data = Data.decodeCBOROrThrow(cbor)
+const data = Data.decodeCBOROrThrow(cbor);
 // {
 //   _tag: 'Constr',
 //   index: 0n,
@@ -252,8 +265,8 @@ Safely decodes data using Either for error handling
 export declare const decodeDataEither: <Source, Target extends Data>(
   input: unknown,
   schema: Schema.Schema<Source, Target>,
-  options?: SchemaAST.ParseOptions
-) => Either.Either<Source, ParseError>
+  options?: SchemaAST.ParseOptions,
+) => Either.Either<Source, ParseError>;
 ```
 
 Added in v2.0.0
@@ -268,24 +281,28 @@ Decodes an unknown value from Plutus Data Constructor to a TypeScript type
 export declare const decodeDataOrThrow: <Source, Target extends Data>(
   input: unknown,
   schema: Schema.Schema<Source, Target>,
-  options?: SchemaAST.ParseOptions
-) => Source
+  options?: SchemaAST.ParseOptions,
+) => Source;
 ```
 
 **Example**
 
 ```ts
-import { Data, TSchema } from "@lucid-evolution/experimental"
+import { Data, TSchema } from "@lucid-evolution/experimental";
 
 const Token = TSchema.Struct({
   policyId: TSchema.ByteArray,
   assetName: TSchema.ByteArray,
-  amount: TSchema.Integer
-})
+  amount: TSchema.Integer,
+});
 
-const plutusData = Data.mkConstr(0n, [Data.mkByte("deadbeef"), Data.mkByte("cafe"), Data.mkInt(1000n)])
+const plutusData = Data.mkConstr(0n, [
+  Data.mkByte("deadbeef"),
+  Data.mkByte("cafe"),
+  Data.mkInt(1000n),
+]);
 
-const token = Data.decodeDataOrThrow(plutusData, Token)
+const token = Data.decodeDataOrThrow(plutusData, Token);
 // { policyId: "deadbeef", assetName: "cafe", amount: 1000n }
 ```
 
@@ -301,29 +318,29 @@ Converts TypeScript data into CBOR hex string
 export declare const encodeCBOROrThrow: <Source, Target extends Data>(
   input: unknown,
   schema?: Schema.Schema<Source, Target>,
-  options?: { canonical?: boolean; parseOptions?: SchemaAST.ParseOptions }
-) => string
+  options?: { canonical?: boolean; parseOptions?: SchemaAST.ParseOptions },
+) => string;
 ```
 
 **Example**
 
 ```ts
-import { Data, TSchema } from "@lucid-evolution/experimental"
+import { Data, TSchema } from "@lucid-evolution/experimental";
 
 const Token = TSchema.Struct({
   policyId: TSchema.ByteArray,
   assetName: TSchema.ByteArray,
-  amount: TSchema.Integer
-})
+  amount: TSchema.Integer,
+});
 
 const token = {
   policyId: "deadbeef",
   assetName: "cafe",
-  amount: 1000n
-}
+  amount: 1000n,
+};
 
 // Convert to canonical CBOR
-const cbor = Data.encodeCBOROrThrow(token, Token, { canonical: true })
+const cbor = Data.encodeCBOROrThrow(token, Token, { canonical: true });
 ```
 
 Added in v2.0.0
@@ -338,8 +355,8 @@ Safely encodes data using Either for error handling
 export declare const encodeDataEither: <Source, Target extends Data>(
   input: unknown,
   schema: Schema.Schema<Source, Target>,
-  options?: SchemaAST.ParseOptions
-) => Either.Either<Target, ParseError>
+  options?: SchemaAST.ParseOptions,
+) => Either.Either<Target, ParseError>;
 ```
 
 Added in v2.0.0
@@ -354,28 +371,28 @@ Encodes a TypeScript value to Plutus Data Constructor
 export declare const encodeDataOrThrow: <Source, Target extends Data>(
   input: unknown,
   schema: Schema.Schema<Source, Target>,
-  options?: SchemaAST.ParseOptions
-) => Target
+  options?: SchemaAST.ParseOptions,
+) => Target;
 ```
 
 **Example**
 
 ```ts
-import { Data, TSchema } from "@lucid-evolution/experimental"
+import { Data, TSchema } from "@lucid-evolution/experimental";
 
 const token: unknown = {
   policyId: "deadbeef",
   assetName: "cafe",
-  amount: 1000n
-}
+  amount: 1000n,
+};
 
 const Token = TSchema.Struct({
   policyId: TSchema.ByteArray,
   assetName: TSchema.ByteArray,
-  amount: TSchema.Integer
-})
+  amount: TSchema.Integer,
+});
 
-const data = Data.encodeDataOrThrow(token, Token)
+const data = Data.encodeDataOrThrow(token, Token);
 // { index: 0n, fields: ["deadbeef", "cafe", 1000n] }
 ```
 
@@ -390,30 +407,36 @@ Compares two Data values for equality
 **Signature**
 
 ```ts
-export declare const isEqual: (a: Data, b: Data) => boolean
+export declare const isEqual: (a: Data, b: Data) => boolean;
 ```
 
 **Example**
 
 ```ts
-import { Data } from "@lucid-evolution/experimental"
+import { Data } from "@lucid-evolution/experimental";
 
-Data.isEqual(Data.mkInt(1n), Data.mkInt(1n)) // true
-Data.isEqual(Data.mkInt(1n), Data.mkInt(2n)) // false
-Data.isEqual(Data.mkByte("01"), Data.mkByte("01")) // true
-Data.isEqual(Data.mkByte("cafe"), Data.mkByte("cafe01")) // false
-Data.isEqual(Data.mkList([Data.mkInt(1n)]), Data.mkList([Data.mkInt(1n)])) // true
-Data.isEqual(Data.mkList([Data.mkInt(1n)]), Data.mkList([Data.mkInt(2n)])) // false
+Data.isEqual(Data.mkInt(1n), Data.mkInt(1n)); // true
+Data.isEqual(Data.mkInt(1n), Data.mkInt(2n)); // false
+Data.isEqual(Data.mkByte("01"), Data.mkByte("01")); // true
+Data.isEqual(Data.mkByte("cafe"), Data.mkByte("cafe01")); // false
+Data.isEqual(Data.mkList([Data.mkInt(1n)]), Data.mkList([Data.mkInt(1n)])); // true
+Data.isEqual(Data.mkList([Data.mkInt(1n)]), Data.mkList([Data.mkInt(2n)])); // false
 Data.isEqual(
   Data.mkMap([{ k: Data.mkByte("deadbeef"), v: Data.mkInt(1n) }]),
-  Data.mkMap([{ k: Data.mkByte("deadbeef"), v: Data.mkInt(1n) }])
-) // true
+  Data.mkMap([{ k: Data.mkByte("deadbeef"), v: Data.mkInt(1n) }]),
+); // true
 Data.isEqual(
   Data.mkMap([{ k: Data.mkByte("cafe"), v: Data.mkInt(1n) }]),
-  Data.mkMap([{ k: Data.mkByte("deadbeef"), v: Data.mkInt(2n) }])
-) // false
-Data.isEqual(Data.mkConstr(0n, [Data.mkInt(1n)]), Data.mkConstr(0n, [Data.mkInt(1n)])) // true
-Data.isEqual(Data.mkConstr(0n, [Data.mkInt(1n)]), Data.mkConstr(1n, [Data.mkInt(2n)])) // false
+  Data.mkMap([{ k: Data.mkByte("deadbeef"), v: Data.mkInt(2n) }]),
+); // false
+Data.isEqual(
+  Data.mkConstr(0n, [Data.mkInt(1n)]),
+  Data.mkConstr(0n, [Data.mkInt(1n)]),
+); // true
+Data.isEqual(
+  Data.mkConstr(0n, [Data.mkInt(1n)]),
+  Data.mkConstr(1n, [Data.mkInt(2n)]),
+); // false
 ```
 
 Added in v2.0.0
@@ -427,7 +450,7 @@ Creates an arbitrary that generates Data.ByteArray values
 **Signature**
 
 ```ts
-export declare const genByteArray: () => FastCheck.Arbitrary<ByteArray>
+export declare const genByteArray: () => FastCheck.Arbitrary<ByteArray>;
 ```
 
 Added in v2.0.0
@@ -439,7 +462,7 @@ Creates an arbitrary that generates Data.Constr values
 **Signature**
 
 ```ts
-export declare const genConstr: (depth: number) => FastCheck.Arbitrary<Constr>
+export declare const genConstr: (depth: number) => FastCheck.Arbitrary<Constr>;
 ```
 
 Added in v2.0.0
@@ -451,17 +474,17 @@ Creates an arbitrary that generates Data.Data values with controlled depth
 **Signature**
 
 ```ts
-export declare const genData: (depth?: number) => FastCheck.Arbitrary<Data>
+export declare const genData: (depth?: number) => FastCheck.Arbitrary<Data>;
 ```
 
 **Example**
 
 ```ts
-import { Data } from "@lucid-evolution/experimental"
-import { FastCheck } from "effect"
+import { Data } from "@lucid-evolution/experimental";
+import { FastCheck } from "effect";
 
-const data = Data.genData(3)
-const sample = FastCheck.sample(data)
+const data = Data.genData(3);
+const sample = FastCheck.sample(data);
 ```
 
 Added in v2.0.0
@@ -473,7 +496,7 @@ Creates an arbitrary that generates Data.Integer values
 **Signature**
 
 ```ts
-export declare const genInteger: () => FastCheck.Arbitrary<Integer>
+export declare const genInteger: () => FastCheck.Arbitrary<Integer>;
 ```
 
 Added in v2.0.0
@@ -485,7 +508,7 @@ Creates an arbitrary that generates Data.List values
 **Signature**
 
 ```ts
-export declare const genList: (depth: number) => FastCheck.Arbitrary<List>
+export declare const genList: (depth: number) => FastCheck.Arbitrary<List>;
 ```
 
 Added in v2.0.0
@@ -502,17 +525,17 @@ Following the Plutus distribution of key types:
 **Signature**
 
 ```ts
-export declare const genMap: (depth: number) => FastCheck.Arbitrary<Map>
+export declare const genMap: (depth: number) => FastCheck.Arbitrary<Map>;
 ```
 
 **Example**
 
 ```ts
-import { Data } from "@lucid-evolution/experimental"
-import { FastCheck } from "effect"
+import { Data } from "@lucid-evolution/experimental";
+import { FastCheck } from "effect";
 
-const mapArb = Data.genMap(2)
-const sample = FastCheck.sample(mapArb)
+const mapArb = Data.genMap(2);
+const sample = FastCheck.sample(mapArb);
 ```
 
 Added in v2.0.0
@@ -527,8 +550,8 @@ ByteArray data type for Plutus Data
 
 ```ts
 export interface ByteArray<T extends string = string> {
-  readonly _tag: "ByteArray"
-  readonly bytearray: T
+  readonly _tag: "ByteArray";
+  readonly bytearray: T;
 }
 ```
 
@@ -541,10 +564,13 @@ Constructor data type for Plutus Data
 **Signature**
 
 ```ts
-export interface Constr<T extends bigint = bigint, U extends readonly Data[] = readonly Data[]> {
-  readonly _tag: "Constr"
-  readonly index: T
-  readonly fields: U
+export interface Constr<
+  T extends bigint = bigint,
+  U extends readonly Data[] = readonly Data[],
+> {
+  readonly _tag: "Constr";
+  readonly index: T;
+  readonly fields: U;
 }
 ```
 
@@ -557,7 +583,7 @@ Data type representing Plutus data for encoding/decoding
 **Signature**
 
 ```ts
-export type Data = Integer | ByteArray | List | Map | Constr
+export type Data = Integer | ByteArray | List | Map | Constr;
 ```
 
 Added in v2.0.0
@@ -570,8 +596,8 @@ Integer data type for Plutus Data
 
 ```ts
 export interface Integer<T extends bigint = bigint> {
-  readonly _tag: "Integer"
-  readonly integer: T
+  readonly _tag: "Integer";
+  readonly integer: T;
 }
 ```
 
@@ -585,8 +611,8 @@ List data type for Plutus Data
 
 ```ts
 export interface List<T extends Data = Data> {
-  readonly _tag: "List"
-  readonly list: readonly T[]
+  readonly _tag: "List";
+  readonly list: readonly T[];
 }
 ```
 
@@ -601,12 +627,12 @@ Map data type for Plutus Data
 ```ts
 export interface Map<
   Pairs extends ReadonlyArray<{ k: Data; v: Data }> = ReadonlyArray<{
-    k: Data
-    v: Data
-  }>
+    k: Data;
+    v: Data;
+  }>,
 > {
-  readonly _tag: "Map"
-  readonly entries: Pairs
+  readonly _tag: "Map";
+  readonly entries: Pairs;
 }
 ```
 
@@ -621,18 +647,18 @@ Compares two Data values according to CBOR canonical ordering rules
 **Signature**
 
 ```ts
-export declare const compare: (a: Data, b: Data) => number
+export declare const compare: (a: Data, b: Data) => number;
 ```
 
 **Example**
 
 ```ts
-import { Data } from "@lucid-evolution/experimental"
-import assert from "assert"
+import { Data } from "@lucid-evolution/experimental";
+import assert from "assert";
 
-Data.compare(Data.mkInt(1n), Data.mkInt(2n)) // -1
-Data.compare(Data.mkInt(2n), Data.mkInt(2n)) // 0
-assert(Data.compare(Data.mkByte("cafe"), Data.mkByte("deadbeef")) === -1) // -1
+Data.compare(Data.mkInt(1n), Data.mkInt(2n)); // -1
+Data.compare(Data.mkInt(2n), Data.mkInt(2n)); // 0
+assert(Data.compare(Data.mkByte("cafe"), Data.mkByte("deadbeef")) === -1); // -1
 ```
 
 Added in v2.0.0
@@ -644,20 +670,20 @@ Sorts a Data value in canonical order
 **Signature**
 
 ```ts
-export declare const sort: (data: Data) => Data
+export declare const sort: (data: Data) => Data;
 ```
 
 **Example**
 
 ```ts
-import { Data } from "@lucid-evolution/experimental"
+import { Data } from "@lucid-evolution/experimental";
 
 const data = Data.mkMap([
   { k: Data.mkByte("cafe"), v: Data.mkInt(2n) },
-  { k: Data.mkByte("deadbeef"), v: Data.mkInt(1n) }
-])
+  { k: Data.mkByte("deadbeef"), v: Data.mkInt(1n) },
+]);
 
-const sortedData = Data.sort(data)
+const sortedData = Data.sort(data);
 ```
 
 Added in v2.0.0
@@ -673,17 +699,17 @@ Type guard to check if a value is a Data.Integer
 ```ts
 export declare const isByteArray: (
   u: unknown,
-  overrideOptions?: SchemaAST.ParseOptions | number
-) => u is { readonly _tag: "ByteArray"; readonly bytearray: string }
+  overrideOptions?: SchemaAST.ParseOptions | number,
+) => u is { readonly _tag: "ByteArray"; readonly bytearray: string };
 ```
 
 **Example**
 
 ```ts
-import { Data } from "@lucid-evolution/experimental"
+import { Data } from "@lucid-evolution/experimental";
 
-const value = Data.mkByte("deadbeef")
-const isByte = Data.isByteArray(value) // true
+const value = Data.mkByte("deadbeef");
+const isByte = Data.isByteArray(value); // true
 ```
 
 Added in v2.0.0
@@ -697,17 +723,21 @@ Type guard to check if a value is a Data.Constr
 ```ts
 export declare const isConstr: (
   u: unknown,
-  overrideOptions?: SchemaAST.ParseOptions | number
-) => u is { readonly fields: readonly Data[]; readonly _tag: "Constr"; readonly index: bigint }
+  overrideOptions?: SchemaAST.ParseOptions | number,
+) => u is {
+  readonly fields: readonly Data[];
+  readonly _tag: "Constr";
+  readonly index: bigint;
+};
 ```
 
 **Example**
 
 ```ts
-import { Data } from "@lucid-evolution/experimental"
+import { Data } from "@lucid-evolution/experimental";
 
-const value = Data.mkConstr(0n, [Data.mkInt(1n), Data.mkInt(2n)])
-const isConstr = Data.isConstr(value) // true
+const value = Data.mkConstr(0n, [Data.mkInt(1n), Data.mkInt(2n)]);
+const isConstr = Data.isConstr(value); // true
 ```
 
 Added in v2.0.0
@@ -721,17 +751,17 @@ Type guard to check if a value is a Data.Integer
 ```ts
 export declare const isInteger: (
   u: unknown,
-  overrideOptions?: SchemaAST.ParseOptions | number
-) => u is { readonly _tag: "Integer"; readonly integer: bigint }
+  overrideOptions?: SchemaAST.ParseOptions | number,
+) => u is { readonly _tag: "Integer"; readonly integer: bigint };
 ```
 
 **Example**
 
 ```ts
-import { Data } from "@lucid-evolution/experimental"
+import { Data } from "@lucid-evolution/experimental";
 
-const value = Data.mkInt(42n)
-const isInteger = Data.isInteger(value) // true
+const value = Data.mkInt(42n);
+const isInteger = Data.isInteger(value); // true
 ```
 
 Added in v2.0.0
@@ -745,17 +775,17 @@ Type guard to check if a value is a Data.List
 ```ts
 export declare const isList: (
   u: unknown,
-  overrideOptions?: SchemaAST.ParseOptions | number
-) => u is { readonly _tag: "List"; readonly list: readonly Data[] }
+  overrideOptions?: SchemaAST.ParseOptions | number,
+) => u is { readonly _tag: "List"; readonly list: readonly Data[] };
 ```
 
 **Example**
 
 ```ts
-import { Data } from "@lucid-evolution/experimental"
+import { Data } from "@lucid-evolution/experimental";
 
-const value = Data.mkList([Data.mkInt(1n), Data.mkInt(2n)])
-const isList = Data.isList(value) // true
+const value = Data.mkList([Data.mkInt(1n), Data.mkInt(2n)]);
+const isList = Data.isList(value); // true
 ```
 
 Added in v2.0.0
@@ -769,20 +799,23 @@ Type guard to check if a value is a Data.Map
 ```ts
 export declare const isMap: (
   u: unknown,
-  overrideOptions?: SchemaAST.ParseOptions | number
-) => u is { readonly _tag: "Map"; readonly entries: readonly { readonly k: Data; readonly v: Data }[] }
+  overrideOptions?: SchemaAST.ParseOptions | number,
+) => u is {
+  readonly _tag: "Map";
+  readonly entries: readonly { readonly k: Data; readonly v: Data }[];
+};
 ```
 
 **Example**
 
 ```ts
-import { Data } from "@lucid-evolution/experimental"
+import { Data } from "@lucid-evolution/experimental";
 
 const value = Data.mkMap([
   { k: Data.mkByte("cafe01"), v: Data.mkInt(1n) },
-  { k: Data.mkByte("cafe02"), v: Data.mkInt(2n) }
-])
-const isMap = Data.isMap(value) // true
+  { k: Data.mkByte("cafe02"), v: Data.mkInt(2n) },
+]);
+const isMap = Data.isMap(value); // true
 ```
 
 Added in v2.0.0
@@ -796,7 +829,7 @@ Schema for the ByteArray data type
 **Signature**
 
 ```ts
-export declare const ByteArray: ByteArray$
+export declare const ByteArray: ByteArray$;
 ```
 
 Added in v2.0.0
@@ -811,9 +844,9 @@ Schema for ByteArray data type
 export interface ByteArray$
   extends Schema.Struct<
     {
-      _tag: Schema.tag<"ByteArray">
+      _tag: Schema.tag<"ByteArray">;
     } & {
-      bytearray: Schema.filter<Schema.Schema<string, string, never>>
+      bytearray: Schema.filter<Schema.Schema<string, string, never>>;
     }
   > {}
 ```
@@ -827,7 +860,7 @@ Schema for the Constr data type
 **Signature**
 
 ```ts
-export declare const Constr: Constr$
+export declare const Constr: Constr$;
 ```
 
 Added in v2.0.0
@@ -842,10 +875,10 @@ Schema for Constr data type
 export interface Constr$
   extends Schema.Struct<
     {
-      _tag: Schema.tag<"Constr">
+      _tag: Schema.tag<"Constr">;
     } & {
-      index: Schema.filter<typeof Schema.BigIntFromSelf>
-      fields: Schema.Array$<Schema.suspend<Data, Data, never>>
+      index: Schema.filter<typeof Schema.BigIntFromSelf>;
+      fields: Schema.Array$<Schema.suspend<Data, Data, never>>;
     }
   > {}
 ```
@@ -859,7 +892,7 @@ Combined schema for Data type
 **Signature**
 
 ```ts
-export declare const Data: Schema.Schema<Data, Data, never>
+export declare const Data: Schema.Schema<Data, Data, never>;
 ```
 
 Added in v2.0.0
@@ -871,7 +904,7 @@ Schema for the Integer data type
 **Signature**
 
 ```ts
-export declare const Integer: Integer$
+export declare const Integer: Integer$;
 ```
 
 Added in v2.0.0
@@ -886,9 +919,9 @@ Schema for Integer data type
 export interface Integer$
   extends Schema.Struct<
     {
-      _tag: Schema.tag<"Integer">
+      _tag: Schema.tag<"Integer">;
     } & {
-      integer: typeof Schema.BigIntFromSelf
+      integer: typeof Schema.BigIntFromSelf;
     }
   > {}
 ```
@@ -902,7 +935,7 @@ Schema for the List data type
 **Signature**
 
 ```ts
-export declare const List: List$
+export declare const List: List$;
 ```
 
 Added in v2.0.0
@@ -917,9 +950,9 @@ Schema for List data type
 export interface List$
   extends Schema.Struct<
     {
-      _tag: Schema.tag<"List">
+      _tag: Schema.tag<"List">;
     } & {
-      list: Schema.Array$<Schema.suspend<Data, Data, never>>
+      list: Schema.Array$<Schema.suspend<Data, Data, never>>;
     }
   > {}
 ```
@@ -933,7 +966,7 @@ Schema for the Map data type
 **Signature**
 
 ```ts
-export declare const Map: Map$
+export declare const Map: Map$;
 ```
 
 Added in v2.0.0
@@ -948,20 +981,20 @@ Schema for Map data type
 export interface Map$
   extends Schema.Struct<
     {
-      _tag: Schema.tag<"Map">
+      _tag: Schema.tag<"Map">;
     } & {
       entries: Schema.refine<
         readonly {
-          readonly k: Data
-          readonly v: Data
+          readonly k: Data;
+          readonly v: Data;
         }[],
         Schema.Array$<
           Schema.Struct<{
-            k: Schema.Schema<Data>
-            v: Schema.Schema<Data>
+            k: Schema.Schema<Data>;
+            v: Schema.Schema<Data>;
           }>
         >
-      >
+      >;
     }
   > {}
 ```
@@ -977,13 +1010,13 @@ Parses a JSON string to a Data value
 **Signature**
 
 ```ts
-export declare const fromJSONOrThrow: (json: string) => Data
+export declare const fromJSONOrThrow: (json: string) => Data;
 ```
 
 **Example**
 
 ```ts
-import { Data } from "@lucid-evolution/experimental"
+import { Data } from "@lucid-evolution/experimental";
 ```
 
 Added in v2.0.0
@@ -995,7 +1028,7 @@ Resolves a CBOR hex string to a Plutus Data structure
 **Signature**
 
 ```ts
-export declare const resolveCBOROrThrow: (input: string) => Data
+export declare const resolveCBOROrThrow: (input: string) => Data;
 ```
 
 Added in v2.0.0
@@ -1007,16 +1040,16 @@ Converts a Data value to a JSON string
 **Signature**
 
 ```ts
-export declare const toJSON: (data: Data) => string
+export declare const toJSON: (data: Data) => string;
 ```
 
 **Example**
 
 ```ts
-import { Data } from "@lucid-evolution/experimental"
+import { Data } from "@lucid-evolution/experimental";
 
-const data = Data.mkInt(42n)
-const json = Data.toJSON(data)
+const data = Data.mkInt(42n);
+const json = Data.toJSON(data);
 // '{"_tag":"Integer","integer":"42n"}'
 ```
 
@@ -1032,8 +1065,12 @@ Filter to ensure uniqueness by first item in entries
 
 ```ts
 export declare const uniqueByFirst: (
-  schema: Schema.Struct<{ k: Schema.Schema<Data>; v: Schema.Schema<Data> }>
-) => Schema.filter<Schema.Array$<Schema.Struct<{ k: Schema.Schema<Data>; v: Schema.Schema<Data> }>>>
+  schema: Schema.Struct<{ k: Schema.Schema<Data>; v: Schema.Schema<Data> }>,
+) => Schema.filter<
+  Schema.Array$<
+    Schema.Struct<{ k: Schema.Schema<Data>; v: Schema.Schema<Data> }>
+  >
+>;
 ```
 
 Added in v2.0.0
@@ -1047,13 +1084,20 @@ Added in v2.0.0
 ```ts
 export declare const decodeCBOR: <Source, Target extends Data>(
   input: string,
-  schema?: Schema.Schema<Source, Target, never> | undefined
+  schema?: Schema.Schema<Source, Target, never> | undefined,
 ) => Effect.Effect<
   | { readonly _tag: "List"; readonly list: readonly Data[] }
   | { readonly _tag: "Integer"; readonly integer: bigint }
   | { readonly _tag: "ByteArray"; readonly bytearray: string }
-  | { readonly _tag: "Map"; readonly entries: readonly { readonly k: Data; readonly v: Data }[] }
-  | { readonly fields: readonly Data[]; readonly _tag: "Constr"; readonly index: bigint }
+  | {
+      readonly _tag: "Map";
+      readonly entries: readonly { readonly k: Data; readonly v: Data }[];
+    }
+  | {
+      readonly fields: readonly Data[];
+      readonly _tag: "Constr";
+      readonly index: bigint;
+    }
   | Source,
   [
     | YieldWrap<
@@ -1061,13 +1105,23 @@ export declare const decodeCBOR: <Source, Target extends Data>(
           | { readonly _tag: "List"; readonly list: readonly Data[] }
           | { readonly _tag: "Integer"; readonly integer: bigint }
           | { readonly _tag: "ByteArray"; readonly bytearray: string }
-          | { readonly _tag: "Map"; readonly entries: readonly { readonly k: Data; readonly v: Data }[] }
-          | { readonly fields: readonly Data[]; readonly _tag: "Constr"; readonly index: bigint },
+          | {
+              readonly _tag: "Map";
+              readonly entries: readonly {
+                readonly k: Data;
+                readonly v: Data;
+              }[];
+            }
+          | {
+              readonly fields: readonly Data[];
+              readonly _tag: "Constr";
+              readonly index: bigint;
+            },
           CML.PlutusData.PlutusDataError,
           never
         >
       >
-    | YieldWrap<Effect.Effect<Source, ParseError, never>>
+    | YieldWrap<Effect.Effect<Source, ParseError, never>>,
   ] extends [never]
     ? never
     : [
@@ -1076,13 +1130,23 @@ export declare const decodeCBOR: <Source, Target extends Data>(
                 | { readonly _tag: "List"; readonly list: readonly Data[] }
                 | { readonly _tag: "Integer"; readonly integer: bigint }
                 | { readonly _tag: "ByteArray"; readonly bytearray: string }
-                | { readonly _tag: "Map"; readonly entries: readonly { readonly k: Data; readonly v: Data }[] }
-                | { readonly fields: readonly Data[]; readonly _tag: "Constr"; readonly index: bigint },
+                | {
+                    readonly _tag: "Map";
+                    readonly entries: readonly {
+                      readonly k: Data;
+                      readonly v: Data;
+                    }[];
+                  }
+                | {
+                    readonly fields: readonly Data[];
+                    readonly _tag: "Constr";
+                    readonly index: bigint;
+                  },
                 CML.PlutusData.PlutusDataError,
                 never
               >
             >
-          | YieldWrap<Effect.Effect<Source, ParseError, never>>
+          | YieldWrap<Effect.Effect<Source, ParseError, never>>,
         ] extends [YieldWrap<Effect.Effect<infer _A, infer E, infer _R>>]
       ? E
       : never,
@@ -1092,13 +1156,23 @@ export declare const decodeCBOR: <Source, Target extends Data>(
           | { readonly _tag: "List"; readonly list: readonly Data[] }
           | { readonly _tag: "Integer"; readonly integer: bigint }
           | { readonly _tag: "ByteArray"; readonly bytearray: string }
-          | { readonly _tag: "Map"; readonly entries: readonly { readonly k: Data; readonly v: Data }[] }
-          | { readonly fields: readonly Data[]; readonly _tag: "Constr"; readonly index: bigint },
+          | {
+              readonly _tag: "Map";
+              readonly entries: readonly {
+                readonly k: Data;
+                readonly v: Data;
+              }[];
+            }
+          | {
+              readonly fields: readonly Data[];
+              readonly _tag: "Constr";
+              readonly index: bigint;
+            },
           CML.PlutusData.PlutusDataError,
           never
         >
       >
-    | YieldWrap<Effect.Effect<Source, ParseError, never>>
+    | YieldWrap<Effect.Effect<Source, ParseError, never>>,
   ] extends [never]
     ? never
     : [
@@ -1107,17 +1181,27 @@ export declare const decodeCBOR: <Source, Target extends Data>(
                 | { readonly _tag: "List"; readonly list: readonly Data[] }
                 | { readonly _tag: "Integer"; readonly integer: bigint }
                 | { readonly _tag: "ByteArray"; readonly bytearray: string }
-                | { readonly _tag: "Map"; readonly entries: readonly { readonly k: Data; readonly v: Data }[] }
-                | { readonly fields: readonly Data[]; readonly _tag: "Constr"; readonly index: bigint },
+                | {
+                    readonly _tag: "Map";
+                    readonly entries: readonly {
+                      readonly k: Data;
+                      readonly v: Data;
+                    }[];
+                  }
+                | {
+                    readonly fields: readonly Data[];
+                    readonly _tag: "Constr";
+                    readonly index: bigint;
+                  },
                 CML.PlutusData.PlutusDataError,
                 never
               >
             >
-          | YieldWrap<Effect.Effect<Source, ParseError, never>>
+          | YieldWrap<Effect.Effect<Source, ParseError, never>>,
         ] extends [YieldWrap<Effect.Effect<infer _A, infer _E, infer R>>]
       ? R
       : never
->
+>;
 ```
 
 ## decodeData
@@ -1128,24 +1212,24 @@ export declare const decodeCBOR: <Source, Target extends Data>(
 export declare const decodeData: <Source, Target extends Data>(
   input: unknown,
   schema: Schema.Schema<Source, Target, never>,
-  options?: SchemaAST.ParseOptions | undefined
+  options?: SchemaAST.ParseOptions | undefined,
 ) => Effect.Effect<
   Source,
   [YieldWrap<Effect.Effect<Source, ParseError, never>>] extends [never]
     ? never
     : [YieldWrap<Effect.Effect<Source, ParseError, never>>] extends [
-          YieldWrap<Effect.Effect<infer _A, infer E, infer _R>>
+          YieldWrap<Effect.Effect<infer _A, infer E, infer _R>>,
         ]
       ? E
       : never,
   [YieldWrap<Effect.Effect<Source, ParseError, never>>] extends [never]
     ? never
     : [YieldWrap<Effect.Effect<Source, ParseError, never>>] extends [
-          YieldWrap<Effect.Effect<infer _A, infer _E, infer R>>
+          YieldWrap<Effect.Effect<infer _A, infer _E, infer R>>,
         ]
       ? R
       : never
->
+>;
 ```
 
 ## encodeCBOR
@@ -1156,24 +1240,26 @@ export declare const decodeData: <Source, Target extends Data>(
 export declare const encodeCBOR: <Source, Target extends Data>(
   input: unknown,
   schema?: Schema.Schema<Source, Target, never> | undefined,
-  options?: { canonical?: boolean; parseOptions?: SchemaAST.ParseOptions } | undefined
+  options?:
+    | { canonical?: boolean; parseOptions?: SchemaAST.ParseOptions }
+    | undefined,
 ) => Effect.Effect<
   string,
   [YieldWrap<Effect.Effect<Data, ParseError, never>>] extends [never]
     ? never
     : [YieldWrap<Effect.Effect<Data, ParseError, never>>] extends [
-          YieldWrap<Effect.Effect<infer _A, infer E, infer _R>>
+          YieldWrap<Effect.Effect<infer _A, infer E, infer _R>>,
         ]
       ? E
       : never,
   [YieldWrap<Effect.Effect<Data, ParseError, never>>] extends [never]
     ? never
     : [YieldWrap<Effect.Effect<Data, ParseError, never>>] extends [
-          YieldWrap<Effect.Effect<infer _A, infer _E, infer R>>
+          YieldWrap<Effect.Effect<infer _A, infer _E, infer R>>,
         ]
       ? R
       : never
->
+>;
 ```
 
 ## encodeData
@@ -1184,24 +1270,24 @@ export declare const encodeCBOR: <Source, Target extends Data>(
 export declare const encodeData: <Source, Target extends Data>(
   input: unknown,
   schema: Schema.Schema<Source, Target, never>,
-  options?: SchemaAST.ParseOptions | undefined
+  options?: SchemaAST.ParseOptions | undefined,
 ) => Effect.Effect<
   Target,
   [YieldWrap<Effect.Effect<Target, ParseError, never>>] extends [never]
     ? never
     : [YieldWrap<Effect.Effect<Target, ParseError, never>>] extends [
-          YieldWrap<Effect.Effect<infer _A, infer E, infer _R>>
+          YieldWrap<Effect.Effect<infer _A, infer E, infer _R>>,
         ]
       ? E
       : never,
   [YieldWrap<Effect.Effect<Target, ParseError, never>>] extends [never]
     ? never
     : [YieldWrap<Effect.Effect<Target, ParseError, never>>] extends [
-          YieldWrap<Effect.Effect<infer _A, infer _E, infer R>>
+          YieldWrap<Effect.Effect<infer _A, infer _E, infer R>>,
         ]
       ? R
       : never
->
+>;
 ```
 
 ## resolveCBOR
@@ -1209,27 +1295,40 @@ export declare const encodeData: <Source, Target extends Data>(
 **Signature**
 
 ```ts
-export declare const resolveCBOR: (
-  input: string
-) => Effect.Effect<
+export declare const resolveCBOR: (input: string) => Effect.Effect<
   | { readonly _tag: "List"; readonly list: readonly Data[] }
   | { readonly _tag: "Integer"; readonly integer: bigint }
   | { readonly _tag: "ByteArray"; readonly bytearray: string }
-  | { readonly _tag: "Map"; readonly entries: readonly { readonly k: Data; readonly v: Data }[] }
-  | { readonly fields: readonly Data[]; readonly _tag: "Constr"; readonly index: bigint },
-  [YieldWrap<Effect.Effect<PlutusData, CML.PlutusData.PlutusDataError, never>>] extends [never]
+  | {
+      readonly _tag: "Map";
+      readonly entries: readonly { readonly k: Data; readonly v: Data }[];
+    }
+  | {
+      readonly fields: readonly Data[];
+      readonly _tag: "Constr";
+      readonly index: bigint;
+    },
+  [
+    YieldWrap<Effect.Effect<PlutusData, CML.PlutusData.PlutusDataError, never>>,
+  ] extends [never]
     ? never
-    : [YieldWrap<Effect.Effect<PlutusData, CML.PlutusData.PlutusDataError, never>>] extends [
-          YieldWrap<Effect.Effect<infer _A, infer E, infer _R>>
-        ]
+    : [
+          YieldWrap<
+            Effect.Effect<PlutusData, CML.PlutusData.PlutusDataError, never>
+          >,
+        ] extends [YieldWrap<Effect.Effect<infer _A, infer E, infer _R>>]
       ? E
       : never,
-  [YieldWrap<Effect.Effect<PlutusData, CML.PlutusData.PlutusDataError, never>>] extends [never]
+  [
+    YieldWrap<Effect.Effect<PlutusData, CML.PlutusData.PlutusDataError, never>>,
+  ] extends [never]
     ? never
-    : [YieldWrap<Effect.Effect<PlutusData, CML.PlutusData.PlutusDataError, never>>] extends [
-          YieldWrap<Effect.Effect<infer _A, infer _E, infer R>>
-        ]
+    : [
+          YieldWrap<
+            Effect.Effect<PlutusData, CML.PlutusData.PlutusDataError, never>
+          >,
+        ] extends [YieldWrap<Effect.Effect<infer _A, infer _E, infer R>>]
       ? R
       : never
->
+>;
 ```

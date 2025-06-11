@@ -39,9 +39,9 @@ Synchronous decoding utilities for enterprise address.
 
 ```ts
 export declare const Decode: {
-  hex: (u: unknown, overrideOptions?: ParseOptions) => EnterpriseAddress
-  bytes: (u: unknown, overrideOptions?: ParseOptions) => EnterpriseAddress
-}
+  hex: (u: unknown, overrideOptions?: ParseOptions) => EnterpriseAddress;
+  bytes: (u: unknown, overrideOptions?: ParseOptions) => EnterpriseAddress;
+};
 ```
 
 Added in v2.0.0
@@ -54,9 +54,15 @@ Either decoding utilities for enterprise address.
 
 ```ts
 export declare const DecodeEither: {
-  hex: (u: unknown, overrideOptions?: ParseOptions) => Either<EnterpriseAddress, ParseResult.ParseError>
-  bytes: (u: unknown, overrideOptions?: ParseOptions) => Either<EnterpriseAddress, ParseResult.ParseError>
-}
+  hex: (
+    u: unknown,
+    overrideOptions?: ParseOptions,
+  ) => Either<EnterpriseAddress, ParseResult.ParseError>;
+  bytes: (
+    u: unknown,
+    overrideOptions?: ParseOptions,
+  ) => Either<EnterpriseAddress, ParseResult.ParseError>;
+};
 ```
 
 Added in v2.0.0
@@ -69,9 +75,12 @@ Synchronous encoding utilities for enterprise address.
 
 ```ts
 export declare const Encode: {
-  hex: (a: EnterpriseAddress, overrideOptions?: ParseOptions) => string & Brand<"HexString">
-  bytes: (a: EnterpriseAddress, overrideOptions?: ParseOptions) => any
-}
+  hex: (
+    a: EnterpriseAddress,
+    overrideOptions?: ParseOptions,
+  ) => string & Brand<"HexString">;
+  bytes: (a: EnterpriseAddress, overrideOptions?: ParseOptions) => any;
+};
 ```
 
 Added in v2.0.0
@@ -86,10 +95,13 @@ Either encoding utilities for enterprise address.
 export declare const EncodeEither: {
   hex: (
     a: EnterpriseAddress,
-    overrideOptions?: ParseOptions
-  ) => Either<string & Brand<"HexString">, ParseResult.ParseError>
-  bytes: (a: EnterpriseAddress, overrideOptions?: ParseOptions) => Either<any, ParseResult.ParseError>
-}
+    overrideOptions?: ParseOptions,
+  ) => Either<string & Brand<"HexString">, ParseResult.ParseError>;
+  bytes: (
+    a: EnterpriseAddress,
+    overrideOptions?: ParseOptions,
+  ) => Either<any, ParseResult.ParseError>;
+};
 ```
 
 Added in v2.0.0
@@ -103,7 +115,10 @@ Check if two EnterpriseAddress instances are equal.
 **Signature**
 
 ```ts
-export declare const equals: (a: EnterpriseAddress, b: EnterpriseAddress) => boolean
+export declare const equals: (
+  a: EnterpriseAddress,
+  b: EnterpriseAddress,
+) => boolean;
 ```
 
 Added in v2.0.0
@@ -117,21 +132,21 @@ Generate a random EnterpriseAddress.
 **Signature**
 
 ```ts
-export declare const generator: FastCheck.Arbitrary<EnterpriseAddress>
+export declare const generator: FastCheck.Arbitrary<EnterpriseAddress>;
 ```
 
 **Example**
 
 ```ts
-import { EnterpriseAddress } from "@lucid-evolution/experimental"
-import { FastCheck } from "effect"
-import assert from "assert"
+import { EnterpriseAddress } from "@lucid-evolution/experimental";
+import { FastCheck } from "effect";
+import assert from "assert";
 
-const randomSamples = FastCheck.sample(EnterpriseAddress.generator, 20)
+const randomSamples = FastCheck.sample(EnterpriseAddress.generator, 20);
 randomSamples.forEach((address) => {
-  assert(address._tag === "EnterpriseAddress")
-  assert(typeof address.networkId === "number")
-})
+  assert(address._tag === "EnterpriseAddress");
+  assert(typeof address.networkId === "number");
+});
 ```
 
 Added in v2.0.0
@@ -155,7 +170,7 @@ Added in v2.0.0
 **Signature**
 
 ```ts
-;[Inspectable.NodeInspectSymbol]()
+[Inspectable.NodeInspectSymbol]();
 ```
 
 # utils
@@ -169,7 +184,7 @@ export declare const BytesSchema: Schema.transformOrFail<
   typeof Schema.Uint8ArrayFromSelf,
   typeof EnterpriseAddress,
   never
->
+>;
 ```
 
 ## EnterpriseAddress (interface)
@@ -178,7 +193,7 @@ export declare const BytesSchema: Schema.transformOrFail<
 
 ```ts
 export interface EnterpriseAddress {
-  readonly [NominalType]: unique symbol
+  readonly [NominalType]: unique symbol;
 }
 ```
 
@@ -188,8 +203,12 @@ export interface EnterpriseAddress {
 
 ```ts
 export declare const HexStringSchema: Schema.transformOrFail<
-  Schema.SchemaClass<string & Brand<"HexString">, string & Brand<"HexString">, never>,
+  Schema.SchemaClass<
+    string & Brand<"HexString">,
+    string & Brand<"HexString">,
+    never
+  >,
   typeof EnterpriseAddress,
   never
->
+>;
 ```

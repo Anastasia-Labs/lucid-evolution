@@ -42,7 +42,10 @@ Static method \_new of TransactionBodyList
 **Signature**
 
 ```ts
-export declare const _new: () => Effect.Effect<CML.TransactionBodyList, TransactionBodyListError>
+export declare const _new: () => Effect.Effect<
+  CML.TransactionBodyList,
+  TransactionBodyListError
+>;
 ```
 
 Added in v2.0.0
@@ -56,7 +59,7 @@ Unsafely calls TransactionBodyList.\_new without Effect wrapper
 **Signature**
 
 ```ts
-export declare const _newUnsafe: () => CML.TransactionBodyList
+export declare const _newUnsafe: () => CML.TransactionBodyList;
 ```
 
 Added in v2.0.0
@@ -88,8 +91,8 @@ Method add of TransactionBodyList
 ```ts
 export declare const add: (
   instance: CML.TransactionBodyList,
-  elem: CML.TransactionBody
-) => Effect.Effect<void, TransactionBodyListError>
+  elem: CML.TransactionBody,
+) => Effect.Effect<void, TransactionBodyListError>;
 ```
 
 Added in v2.0.0
@@ -101,7 +104,9 @@ Method free of TransactionBodyList
 **Signature**
 
 ```ts
-export declare const free: (instance: CML.TransactionBodyList) => Effect.Effect<void, TransactionBodyListError>
+export declare const free: (
+  instance: CML.TransactionBodyList,
+) => Effect.Effect<void, TransactionBodyListError>;
 ```
 
 Added in v2.0.0
@@ -115,8 +120,8 @@ Method get of TransactionBodyList
 ```ts
 export declare const get: (
   instance: CML.TransactionBodyList,
-  index: number
-) => Effect.Effect<CML.TransactionBody, TransactionBodyListError>
+  index: number,
+) => Effect.Effect<CML.TransactionBody, TransactionBodyListError>;
 ```
 
 Added in v2.0.0
@@ -128,7 +133,9 @@ Method len of TransactionBodyList
 **Signature**
 
 ```ts
-export declare const len: (instance: CML.TransactionBodyList) => Effect.Effect<number, TransactionBodyListError>
+export declare const len: (
+  instance: CML.TransactionBodyList,
+) => Effect.Effect<number, TransactionBodyListError>;
 ```
 
 Added in v2.0.0
@@ -142,7 +149,10 @@ Unsafely calls instance.add without Effect wrapper
 **Signature**
 
 ```ts
-export declare const addUnsafe: (instance: CML.TransactionBodyList, elem: CML.TransactionBody) => void
+export declare const addUnsafe: (
+  instance: CML.TransactionBodyList,
+  elem: CML.TransactionBody,
+) => void;
 ```
 
 Added in v2.0.0
@@ -154,7 +164,7 @@ Unsafely calls instance.free without Effect wrapper
 **Signature**
 
 ```ts
-export declare const freeUnsafe: (instance: CML.TransactionBodyList) => void
+export declare const freeUnsafe: (instance: CML.TransactionBodyList) => void;
 ```
 
 Added in v2.0.0
@@ -166,7 +176,10 @@ Unsafely calls instance.get without Effect wrapper
 **Signature**
 
 ```ts
-export declare const getUnsafe: (instance: CML.TransactionBodyList, index: number) => CML.TransactionBody
+export declare const getUnsafe: (
+  instance: CML.TransactionBodyList,
+  index: number,
+) => CML.TransactionBody;
 ```
 
 Added in v2.0.0
@@ -178,7 +191,7 @@ Unsafely calls instance.len without Effect wrapper
 **Signature**
 
 ```ts
-export declare const lenUnsafe: (instance: CML.TransactionBodyList) => number
+export declare const lenUnsafe: (instance: CML.TransactionBodyList) => number;
 ```
 
 Added in v2.0.0
@@ -192,7 +205,7 @@ Type alias for the CML TransactionBodyList class
 **Signature**
 
 ```ts
-export type TransactionBodyList = CML.TransactionBodyList
+export type TransactionBodyList = CML.TransactionBodyList;
 ```
 
 Added in v2.0.0

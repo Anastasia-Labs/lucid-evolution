@@ -58,7 +58,10 @@ Static method \_new of ProtocolVersion
 **Signature**
 
 ```ts
-export declare const _new: (major: bigint, minor: bigint) => Effect.Effect<CML.ProtocolVersion, ProtocolVersionError>
+export declare const _new: (
+  major: bigint,
+  minor: bigint,
+) => Effect.Effect<CML.ProtocolVersion, ProtocolVersionError>;
 ```
 
 Added in v2.0.0
@@ -70,7 +73,9 @@ Static method fromCborBytes of ProtocolVersion
 **Signature**
 
 ```ts
-export declare const fromCborBytes: (cborBytes: Uint8Array) => Effect.Effect<CML.ProtocolVersion, ProtocolVersionError>
+export declare const fromCborBytes: (
+  cborBytes: Uint8Array,
+) => Effect.Effect<CML.ProtocolVersion, ProtocolVersionError>;
 ```
 
 Added in v2.0.0
@@ -82,7 +87,9 @@ Static method fromCborHex of ProtocolVersion
 **Signature**
 
 ```ts
-export declare const fromCborHex: (cborBytes: string) => Effect.Effect<CML.ProtocolVersion, ProtocolVersionError>
+export declare const fromCborHex: (
+  cborBytes: string,
+) => Effect.Effect<CML.ProtocolVersion, ProtocolVersionError>;
 ```
 
 Added in v2.0.0
@@ -94,7 +101,9 @@ Static method fromJson of ProtocolVersion
 **Signature**
 
 ```ts
-export declare const fromJson: (json: string) => Effect.Effect<CML.ProtocolVersion, ProtocolVersionError>
+export declare const fromJson: (
+  json: string,
+) => Effect.Effect<CML.ProtocolVersion, ProtocolVersionError>;
 ```
 
 Added in v2.0.0
@@ -108,7 +117,10 @@ Unsafely calls ProtocolVersion.\_new without Effect wrapper
 **Signature**
 
 ```ts
-export declare const _newUnsafe: (major: bigint, minor: bigint) => CML.ProtocolVersion
+export declare const _newUnsafe: (
+  major: bigint,
+  minor: bigint,
+) => CML.ProtocolVersion;
 ```
 
 Added in v2.0.0
@@ -120,7 +132,9 @@ Unsafely calls ProtocolVersion.fromCborBytes without Effect wrapper
 **Signature**
 
 ```ts
-export declare const fromCborBytesUnsafe: (cborBytes: Uint8Array) => CML.ProtocolVersion
+export declare const fromCborBytesUnsafe: (
+  cborBytes: Uint8Array,
+) => CML.ProtocolVersion;
 ```
 
 Added in v2.0.0
@@ -132,7 +146,9 @@ Unsafely calls ProtocolVersion.fromCborHex without Effect wrapper
 **Signature**
 
 ```ts
-export declare const fromCborHexUnsafe: (cborBytes: string) => CML.ProtocolVersion
+export declare const fromCborHexUnsafe: (
+  cborBytes: string,
+) => CML.ProtocolVersion;
 ```
 
 Added in v2.0.0
@@ -144,7 +160,7 @@ Unsafely calls ProtocolVersion.fromJson without Effect wrapper
 **Signature**
 
 ```ts
-export declare const fromJsonUnsafe: (json: string) => CML.ProtocolVersion
+export declare const fromJsonUnsafe: (json: string) => CML.ProtocolVersion;
 ```
 
 Added in v2.0.0
@@ -174,7 +190,9 @@ Method free of ProtocolVersion
 **Signature**
 
 ```ts
-export declare const free: (instance: CML.ProtocolVersion) => Effect.Effect<void, ProtocolVersionError>
+export declare const free: (
+  instance: CML.ProtocolVersion,
+) => Effect.Effect<void, ProtocolVersionError>;
 ```
 
 Added in v2.0.0
@@ -186,7 +204,9 @@ Method major of ProtocolVersion
 **Signature**
 
 ```ts
-export declare const major: (instance: CML.ProtocolVersion) => Effect.Effect<bigint, ProtocolVersionError>
+export declare const major: (
+  instance: CML.ProtocolVersion,
+) => Effect.Effect<bigint, ProtocolVersionError>;
 ```
 
 Added in v2.0.0
@@ -198,7 +218,9 @@ Method minor of ProtocolVersion
 **Signature**
 
 ```ts
-export declare const minor: (instance: CML.ProtocolVersion) => Effect.Effect<bigint, ProtocolVersionError>
+export declare const minor: (
+  instance: CML.ProtocolVersion,
+) => Effect.Effect<bigint, ProtocolVersionError>;
 ```
 
 Added in v2.0.0
@@ -211,8 +233,8 @@ Method toCanonicalCborBytes of ProtocolVersion
 
 ```ts
 export declare const toCanonicalCborBytes: (
-  instance: CML.ProtocolVersion
-) => Effect.Effect<Uint8Array, ProtocolVersionError>
+  instance: CML.ProtocolVersion,
+) => Effect.Effect<Uint8Array, ProtocolVersionError>;
 ```
 
 Added in v2.0.0
@@ -224,7 +246,9 @@ Method toCanonicalCborHex of ProtocolVersion
 **Signature**
 
 ```ts
-export declare const toCanonicalCborHex: (instance: CML.ProtocolVersion) => Effect.Effect<string, ProtocolVersionError>
+export declare const toCanonicalCborHex: (
+  instance: CML.ProtocolVersion,
+) => Effect.Effect<string, ProtocolVersionError>;
 ```
 
 Added in v2.0.0
@@ -236,7 +260,9 @@ Method toCborBytes of ProtocolVersion
 **Signature**
 
 ```ts
-export declare const toCborBytes: (instance: CML.ProtocolVersion) => Effect.Effect<Uint8Array, ProtocolVersionError>
+export declare const toCborBytes: (
+  instance: CML.ProtocolVersion,
+) => Effect.Effect<Uint8Array, ProtocolVersionError>;
 ```
 
 Added in v2.0.0
@@ -248,7 +274,9 @@ Method toCborHex of ProtocolVersion
 **Signature**
 
 ```ts
-export declare const toCborHex: (instance: CML.ProtocolVersion) => Effect.Effect<string, ProtocolVersionError>
+export declare const toCborHex: (
+  instance: CML.ProtocolVersion,
+) => Effect.Effect<string, ProtocolVersionError>;
 ```
 
 Added in v2.0.0
@@ -260,7 +288,9 @@ Method toJsValue of ProtocolVersion
 **Signature**
 
 ```ts
-export declare const toJsValue: (instance: CML.ProtocolVersion) => Effect.Effect<any, ProtocolVersionError>
+export declare const toJsValue: (
+  instance: CML.ProtocolVersion,
+) => Effect.Effect<any, ProtocolVersionError>;
 ```
 
 Added in v2.0.0
@@ -272,7 +302,9 @@ Method toJson of ProtocolVersion
 **Signature**
 
 ```ts
-export declare const toJson: (instance: CML.ProtocolVersion) => Effect.Effect<string, ProtocolVersionError>
+export declare const toJson: (
+  instance: CML.ProtocolVersion,
+) => Effect.Effect<string, ProtocolVersionError>;
 ```
 
 Added in v2.0.0
@@ -286,7 +318,7 @@ Unsafely calls instance.free without Effect wrapper
 **Signature**
 
 ```ts
-export declare const freeUnsafe: (instance: CML.ProtocolVersion) => void
+export declare const freeUnsafe: (instance: CML.ProtocolVersion) => void;
 ```
 
 Added in v2.0.0
@@ -298,7 +330,7 @@ Unsafely calls instance.major without Effect wrapper
 **Signature**
 
 ```ts
-export declare const majorUnsafe: (instance: CML.ProtocolVersion) => bigint
+export declare const majorUnsafe: (instance: CML.ProtocolVersion) => bigint;
 ```
 
 Added in v2.0.0
@@ -310,7 +342,7 @@ Unsafely calls instance.minor without Effect wrapper
 **Signature**
 
 ```ts
-export declare const minorUnsafe: (instance: CML.ProtocolVersion) => bigint
+export declare const minorUnsafe: (instance: CML.ProtocolVersion) => bigint;
 ```
 
 Added in v2.0.0
@@ -322,7 +354,9 @@ Unsafely calls instance.toCanonicalCborBytes without Effect wrapper
 **Signature**
 
 ```ts
-export declare const toCanonicalCborBytesUnsafe: (instance: CML.ProtocolVersion) => Uint8Array
+export declare const toCanonicalCborBytesUnsafe: (
+  instance: CML.ProtocolVersion,
+) => Uint8Array;
 ```
 
 Added in v2.0.0
@@ -334,7 +368,9 @@ Unsafely calls instance.toCanonicalCborHex without Effect wrapper
 **Signature**
 
 ```ts
-export declare const toCanonicalCborHexUnsafe: (instance: CML.ProtocolVersion) => string
+export declare const toCanonicalCborHexUnsafe: (
+  instance: CML.ProtocolVersion,
+) => string;
 ```
 
 Added in v2.0.0
@@ -346,7 +382,9 @@ Unsafely calls instance.toCborBytes without Effect wrapper
 **Signature**
 
 ```ts
-export declare const toCborBytesUnsafe: (instance: CML.ProtocolVersion) => Uint8Array
+export declare const toCborBytesUnsafe: (
+  instance: CML.ProtocolVersion,
+) => Uint8Array;
 ```
 
 Added in v2.0.0
@@ -358,7 +396,7 @@ Unsafely calls instance.toCborHex without Effect wrapper
 **Signature**
 
 ```ts
-export declare const toCborHexUnsafe: (instance: CML.ProtocolVersion) => string
+export declare const toCborHexUnsafe: (instance: CML.ProtocolVersion) => string;
 ```
 
 Added in v2.0.0
@@ -370,7 +408,7 @@ Unsafely calls instance.toJsValue without Effect wrapper
 **Signature**
 
 ```ts
-export declare const toJsValueUnsafe: (instance: CML.ProtocolVersion) => any
+export declare const toJsValueUnsafe: (instance: CML.ProtocolVersion) => any;
 ```
 
 Added in v2.0.0
@@ -382,7 +420,7 @@ Unsafely calls instance.toJson without Effect wrapper
 **Signature**
 
 ```ts
-export declare const toJsonUnsafe: (instance: CML.ProtocolVersion) => string
+export declare const toJsonUnsafe: (instance: CML.ProtocolVersion) => string;
 ```
 
 Added in v2.0.0
@@ -396,7 +434,7 @@ Type alias for the CML ProtocolVersion class
 **Signature**
 
 ```ts
-export type ProtocolVersion = CML.ProtocolVersion
+export type ProtocolVersion = CML.ProtocolVersion;
 ```
 
 Added in v2.0.0

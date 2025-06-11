@@ -33,7 +33,7 @@ Type alias for the CML StakeDistributionKind enum
 **Signature**
 
 ```ts
-export type StakeDistributionKind = CML.StakeDistributionKind
+export type StakeDistributionKind = CML.StakeDistributionKind;
 ```
 
 Added in v2.0.0
@@ -47,7 +47,9 @@ Convert string to StakeDistributionKind enum value
 **Signature**
 
 ```ts
-export declare const fromString: (str: string) => CML.StakeDistributionKind | undefined
+export declare const fromString: (
+  str: string,
+) => CML.StakeDistributionKind | undefined;
 ```
 
 Added in v2.0.0
@@ -59,7 +61,7 @@ Convert StakeDistributionKind enum value to string
 **Signature**
 
 ```ts
-export declare const toString: (value: CML.StakeDistributionKind) => string
+export declare const toString: (value: CML.StakeDistributionKind) => string;
 ```
 
 Added in v2.0.0
@@ -71,7 +73,7 @@ Get all values of the StakeDistributionKind enum
 **Signature**
 
 ```ts
-export declare const values: () => Array<CML.StakeDistributionKind>
+export declare const values: () => Array<CML.StakeDistributionKind>;
 ```
 
 Added in v2.0.0
@@ -85,7 +87,7 @@ BootstrapEra variant of the StakeDistributionKind enum
 **Signature**
 
 ```ts
-export declare const BootstrapEra: CML.StakeDistributionKind.BootstrapEra
+export declare const BootstrapEra: CML.StakeDistributionKind.BootstrapEra;
 ```
 
 Added in v2.0.0
@@ -97,7 +99,7 @@ SingleKey variant of the StakeDistributionKind enum
 **Signature**
 
 ```ts
-export declare const SingleKey: CML.StakeDistributionKind.SingleKey
+export declare const SingleKey: CML.StakeDistributionKind.SingleKey;
 ```
 
 Added in v2.0.0

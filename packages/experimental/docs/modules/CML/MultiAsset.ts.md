@@ -54,7 +54,7 @@ Static method \_new of MultiAsset
 **Signature**
 
 ```ts
-export declare const _new: () => Effect.Effect<CML.MultiAsset, MultiAssetError>
+export declare const _new: () => Effect.Effect<CML.MultiAsset, MultiAssetError>;
 ```
 
 Added in v2.0.0
@@ -68,7 +68,7 @@ Unsafely calls MultiAsset.\_new without Effect wrapper
 **Signature**
 
 ```ts
-export declare const _newUnsafe: () => CML.MultiAsset
+export declare const _newUnsafe: () => CML.MultiAsset;
 ```
 
 Added in v2.0.0
@@ -100,8 +100,8 @@ Method checkedAdd of MultiAsset
 ```ts
 export declare const checkedAdd: (
   instance: CML.MultiAsset,
-  rhs: CML.MultiAsset
-) => Effect.Effect<CML.MultiAsset, MultiAssetError>
+  rhs: CML.MultiAsset,
+) => Effect.Effect<CML.MultiAsset, MultiAssetError>;
 ```
 
 Added in v2.0.0
@@ -115,8 +115,8 @@ Method checkedSub of MultiAsset
 ```ts
 export declare const checkedSub: (
   instance: CML.MultiAsset,
-  rhs: CML.MultiAsset
-) => Effect.Effect<CML.MultiAsset, MultiAssetError>
+  rhs: CML.MultiAsset,
+) => Effect.Effect<CML.MultiAsset, MultiAssetError>;
 ```
 
 Added in v2.0.0
@@ -130,8 +130,8 @@ Method clampedSub of MultiAsset
 ```ts
 export declare const clampedSub: (
   instance: CML.MultiAsset,
-  rhs: CML.MultiAsset
-) => Effect.Effect<CML.MultiAsset, MultiAssetError>
+  rhs: CML.MultiAsset,
+) => Effect.Effect<CML.MultiAsset, MultiAssetError>;
 ```
 
 Added in v2.0.0
@@ -143,7 +143,9 @@ Method free of MultiAsset
 **Signature**
 
 ```ts
-export declare const free: (instance: CML.MultiAsset) => Effect.Effect<void, MultiAssetError>
+export declare const free: (
+  instance: CML.MultiAsset,
+) => Effect.Effect<void, MultiAssetError>;
 ```
 
 Added in v2.0.0
@@ -158,8 +160,8 @@ Method get of MultiAsset
 export declare const get: (
   instance: CML.MultiAsset,
   policyId: CML.ScriptHash,
-  asset: CML.AssetName
-) => Effect.Effect<bigint | undefined, MultiAssetError>
+  asset: CML.AssetName,
+) => Effect.Effect<bigint | undefined, MultiAssetError>;
 ```
 
 Added in v2.0.0
@@ -173,8 +175,8 @@ Method getAssets of MultiAsset
 ```ts
 export declare const getAssets: (
   instance: CML.MultiAsset,
-  key: CML.ScriptHash
-) => Effect.Effect<CML.MapAssetNameToCoin | undefined, MultiAssetError>
+  key: CML.ScriptHash,
+) => Effect.Effect<CML.MapAssetNameToCoin | undefined, MultiAssetError>;
 ```
 
 Added in v2.0.0
@@ -189,8 +191,8 @@ Method insertAssets of MultiAsset
 export declare const insertAssets: (
   instance: CML.MultiAsset,
   policyId: CML.ScriptHash,
-  assets: CML.MapAssetNameToCoin
-) => Effect.Effect<CML.MapAssetNameToCoin | undefined, MultiAssetError>
+  assets: CML.MapAssetNameToCoin,
+) => Effect.Effect<CML.MapAssetNameToCoin | undefined, MultiAssetError>;
 ```
 
 Added in v2.0.0
@@ -202,7 +204,9 @@ Method keys of MultiAsset
 **Signature**
 
 ```ts
-export declare const keys: (instance: CML.MultiAsset) => Effect.Effect<CML.PolicyIdList, MultiAssetError>
+export declare const keys: (
+  instance: CML.MultiAsset,
+) => Effect.Effect<CML.PolicyIdList, MultiAssetError>;
 ```
 
 Added in v2.0.0
@@ -214,7 +218,9 @@ Method policyCount of MultiAsset
 **Signature**
 
 ```ts
-export declare const policyCount: (instance: CML.MultiAsset) => Effect.Effect<number, MultiAssetError>
+export declare const policyCount: (
+  instance: CML.MultiAsset,
+) => Effect.Effect<number, MultiAssetError>;
 ```
 
 Added in v2.0.0
@@ -230,8 +236,8 @@ export declare const set: (
   instance: CML.MultiAsset,
   policyId: CML.ScriptHash,
   asset: CML.AssetName,
-  value: bigint
-) => Effect.Effect<bigint | undefined, MultiAssetError>
+  value: bigint,
+) => Effect.Effect<bigint | undefined, MultiAssetError>;
 ```
 
 Added in v2.0.0
@@ -245,7 +251,10 @@ Unsafely calls instance.checkedAdd without Effect wrapper
 **Signature**
 
 ```ts
-export declare const checkedAddUnsafe: (instance: CML.MultiAsset, rhs: CML.MultiAsset) => CML.MultiAsset
+export declare const checkedAddUnsafe: (
+  instance: CML.MultiAsset,
+  rhs: CML.MultiAsset,
+) => CML.MultiAsset;
 ```
 
 Added in v2.0.0
@@ -257,7 +266,10 @@ Unsafely calls instance.checkedSub without Effect wrapper
 **Signature**
 
 ```ts
-export declare const checkedSubUnsafe: (instance: CML.MultiAsset, rhs: CML.MultiAsset) => CML.MultiAsset
+export declare const checkedSubUnsafe: (
+  instance: CML.MultiAsset,
+  rhs: CML.MultiAsset,
+) => CML.MultiAsset;
 ```
 
 Added in v2.0.0
@@ -269,7 +281,10 @@ Unsafely calls instance.clampedSub without Effect wrapper
 **Signature**
 
 ```ts
-export declare const clampedSubUnsafe: (instance: CML.MultiAsset, rhs: CML.MultiAsset) => CML.MultiAsset
+export declare const clampedSubUnsafe: (
+  instance: CML.MultiAsset,
+  rhs: CML.MultiAsset,
+) => CML.MultiAsset;
 ```
 
 Added in v2.0.0
@@ -281,7 +296,7 @@ Unsafely calls instance.free without Effect wrapper
 **Signature**
 
 ```ts
-export declare const freeUnsafe: (instance: CML.MultiAsset) => void
+export declare const freeUnsafe: (instance: CML.MultiAsset) => void;
 ```
 
 Added in v2.0.0
@@ -295,8 +310,8 @@ Unsafely calls instance.getAssets without Effect wrapper
 ```ts
 export declare const getAssetsUnsafe: (
   instance: CML.MultiAsset,
-  key: CML.ScriptHash
-) => CML.MapAssetNameToCoin | undefined
+  key: CML.ScriptHash,
+) => CML.MapAssetNameToCoin | undefined;
 ```
 
 Added in v2.0.0
@@ -311,8 +326,8 @@ Unsafely calls instance.get without Effect wrapper
 export declare const getUnsafe: (
   instance: CML.MultiAsset,
   policyId: CML.ScriptHash,
-  asset: CML.AssetName
-) => bigint | undefined
+  asset: CML.AssetName,
+) => bigint | undefined;
 ```
 
 Added in v2.0.0
@@ -327,8 +342,8 @@ Unsafely calls instance.insertAssets without Effect wrapper
 export declare const insertAssetsUnsafe: (
   instance: CML.MultiAsset,
   policyId: CML.ScriptHash,
-  assets: CML.MapAssetNameToCoin
-) => CML.MapAssetNameToCoin | undefined
+  assets: CML.MapAssetNameToCoin,
+) => CML.MapAssetNameToCoin | undefined;
 ```
 
 Added in v2.0.0
@@ -340,7 +355,7 @@ Unsafely calls instance.keys without Effect wrapper
 **Signature**
 
 ```ts
-export declare const keysUnsafe: (instance: CML.MultiAsset) => CML.PolicyIdList
+export declare const keysUnsafe: (instance: CML.MultiAsset) => CML.PolicyIdList;
 ```
 
 Added in v2.0.0
@@ -352,7 +367,7 @@ Unsafely calls instance.policyCount without Effect wrapper
 **Signature**
 
 ```ts
-export declare const policyCountUnsafe: (instance: CML.MultiAsset) => number
+export declare const policyCountUnsafe: (instance: CML.MultiAsset) => number;
 ```
 
 Added in v2.0.0
@@ -368,8 +383,8 @@ export declare const setUnsafe: (
   instance: CML.MultiAsset,
   policyId: CML.ScriptHash,
   asset: CML.AssetName,
-  value: bigint
-) => bigint | undefined
+  value: bigint,
+) => bigint | undefined;
 ```
 
 Added in v2.0.0
@@ -383,7 +398,7 @@ Type alias for the CML MultiAsset class
 **Signature**
 
 ```ts
-export type MultiAsset = CML.MultiAsset
+export type MultiAsset = CML.MultiAsset;
 ```
 
 Added in v2.0.0

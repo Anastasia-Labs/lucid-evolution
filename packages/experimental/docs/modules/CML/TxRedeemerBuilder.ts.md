@@ -59,8 +59,8 @@ Method auxiliaryData of TxRedeemerBuilder
 
 ```ts
 export declare const auxiliaryData: (
-  instance: CML.TxRedeemerBuilder
-) => Effect.Effect<CML.AuxiliaryData | undefined, TxRedeemerBuilderError>
+  instance: CML.TxRedeemerBuilder,
+) => Effect.Effect<CML.AuxiliaryData | undefined, TxRedeemerBuilderError>;
 ```
 
 Added in v2.0.0
@@ -72,7 +72,9 @@ Method build of TxRedeemerBuilder
 **Signature**
 
 ```ts
-export declare const build: (instance: CML.TxRedeemerBuilder) => Effect.Effect<CML.Redeemers, TxRedeemerBuilderError>
+export declare const build: (
+  instance: CML.TxRedeemerBuilder,
+) => Effect.Effect<CML.Redeemers, TxRedeemerBuilderError>;
 ```
 
 Added in v2.0.0
@@ -85,8 +87,8 @@ Method draftBody of TxRedeemerBuilder
 
 ```ts
 export declare const draftBody: (
-  instance: CML.TxRedeemerBuilder
-) => Effect.Effect<CML.TransactionBody, TxRedeemerBuilderError>
+  instance: CML.TxRedeemerBuilder,
+) => Effect.Effect<CML.TransactionBody, TxRedeemerBuilderError>;
 ```
 
 Added in v2.0.0
@@ -99,8 +101,8 @@ Method draftTx of TxRedeemerBuilder
 
 ```ts
 export declare const draftTx: (
-  instance: CML.TxRedeemerBuilder
-) => Effect.Effect<CML.Transaction, TxRedeemerBuilderError>
+  instance: CML.TxRedeemerBuilder,
+) => Effect.Effect<CML.Transaction, TxRedeemerBuilderError>;
 ```
 
 Added in v2.0.0
@@ -112,7 +114,9 @@ Method free of TxRedeemerBuilder
 **Signature**
 
 ```ts
-export declare const free: (instance: CML.TxRedeemerBuilder) => Effect.Effect<void, TxRedeemerBuilderError>
+export declare const free: (
+  instance: CML.TxRedeemerBuilder,
+) => Effect.Effect<void, TxRedeemerBuilderError>;
 ```
 
 Added in v2.0.0
@@ -127,8 +131,8 @@ Method setExunits of TxRedeemerBuilder
 export declare const setExunits: (
   instance: CML.TxRedeemerBuilder,
   redeemer: CML.RedeemerWitnessKey,
-  exUnits: CML.ExUnits
-) => Effect.Effect<void, TxRedeemerBuilderError>
+  exUnits: CML.ExUnits,
+) => Effect.Effect<void, TxRedeemerBuilderError>;
 ```
 
 Added in v2.0.0
@@ -142,7 +146,9 @@ Unsafely calls instance.auxiliaryData without Effect wrapper
 **Signature**
 
 ```ts
-export declare const auxiliaryDataUnsafe: (instance: CML.TxRedeemerBuilder) => CML.AuxiliaryData | undefined
+export declare const auxiliaryDataUnsafe: (
+  instance: CML.TxRedeemerBuilder,
+) => CML.AuxiliaryData | undefined;
 ```
 
 Added in v2.0.0
@@ -154,7 +160,9 @@ Unsafely calls instance.build without Effect wrapper
 **Signature**
 
 ```ts
-export declare const buildUnsafe: (instance: CML.TxRedeemerBuilder) => CML.Redeemers
+export declare const buildUnsafe: (
+  instance: CML.TxRedeemerBuilder,
+) => CML.Redeemers;
 ```
 
 Added in v2.0.0
@@ -166,7 +174,9 @@ Unsafely calls instance.draftBody without Effect wrapper
 **Signature**
 
 ```ts
-export declare const draftBodyUnsafe: (instance: CML.TxRedeemerBuilder) => CML.TransactionBody
+export declare const draftBodyUnsafe: (
+  instance: CML.TxRedeemerBuilder,
+) => CML.TransactionBody;
 ```
 
 Added in v2.0.0
@@ -178,7 +188,9 @@ Unsafely calls instance.draftTx without Effect wrapper
 **Signature**
 
 ```ts
-export declare const draftTxUnsafe: (instance: CML.TxRedeemerBuilder) => CML.Transaction
+export declare const draftTxUnsafe: (
+  instance: CML.TxRedeemerBuilder,
+) => CML.Transaction;
 ```
 
 Added in v2.0.0
@@ -190,7 +202,7 @@ Unsafely calls instance.free without Effect wrapper
 **Signature**
 
 ```ts
-export declare const freeUnsafe: (instance: CML.TxRedeemerBuilder) => void
+export declare const freeUnsafe: (instance: CML.TxRedeemerBuilder) => void;
 ```
 
 Added in v2.0.0
@@ -205,8 +217,8 @@ Unsafely calls instance.setExunits without Effect wrapper
 export declare const setExunitsUnsafe: (
   instance: CML.TxRedeemerBuilder,
   redeemer: CML.RedeemerWitnessKey,
-  exUnits: CML.ExUnits
-) => void
+  exUnits: CML.ExUnits,
+) => void;
 ```
 
 Added in v2.0.0
@@ -220,7 +232,7 @@ Type alias for the CML TxRedeemerBuilder class
 **Signature**
 
 ```ts
-export type TxRedeemerBuilder = CML.TxRedeemerBuilder
+export type TxRedeemerBuilder = CML.TxRedeemerBuilder;
 ```
 
 Added in v2.0.0

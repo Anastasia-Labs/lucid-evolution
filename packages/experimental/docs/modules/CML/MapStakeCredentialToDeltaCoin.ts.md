@@ -44,7 +44,10 @@ Static method \_new of MapStakeCredentialToDeltaCoin
 **Signature**
 
 ```ts
-export declare const _new: () => Effect.Effect<CML.MapStakeCredentialToDeltaCoin, MapStakeCredentialToDeltaCoinError>
+export declare const _new: () => Effect.Effect<
+  CML.MapStakeCredentialToDeltaCoin,
+  MapStakeCredentialToDeltaCoinError
+>;
 ```
 
 Added in v2.0.0
@@ -58,7 +61,7 @@ Unsafely calls MapStakeCredentialToDeltaCoin.\_new without Effect wrapper
 **Signature**
 
 ```ts
-export declare const _newUnsafe: () => CML.MapStakeCredentialToDeltaCoin
+export declare const _newUnsafe: () => CML.MapStakeCredentialToDeltaCoin;
 ```
 
 Added in v2.0.0
@@ -89,8 +92,8 @@ Method free of MapStakeCredentialToDeltaCoin
 
 ```ts
 export declare const free: (
-  instance: CML.MapStakeCredentialToDeltaCoin
-) => Effect.Effect<void, MapStakeCredentialToDeltaCoinError>
+  instance: CML.MapStakeCredentialToDeltaCoin,
+) => Effect.Effect<void, MapStakeCredentialToDeltaCoinError>;
 ```
 
 Added in v2.0.0
@@ -104,8 +107,8 @@ Method get of MapStakeCredentialToDeltaCoin
 ```ts
 export declare const get: (
   instance: CML.MapStakeCredentialToDeltaCoin,
-  key: CML.Credential
-) => Effect.Effect<CML.Int | undefined, MapStakeCredentialToDeltaCoinError>
+  key: CML.Credential,
+) => Effect.Effect<CML.Int | undefined, MapStakeCredentialToDeltaCoinError>;
 ```
 
 Added in v2.0.0
@@ -120,8 +123,8 @@ Method insert of MapStakeCredentialToDeltaCoin
 export declare const insert: (
   instance: CML.MapStakeCredentialToDeltaCoin,
   key: CML.Credential,
-  value: CML.Int
-) => Effect.Effect<CML.Int | undefined, MapStakeCredentialToDeltaCoinError>
+  value: CML.Int,
+) => Effect.Effect<CML.Int | undefined, MapStakeCredentialToDeltaCoinError>;
 ```
 
 Added in v2.0.0
@@ -134,8 +137,8 @@ Method keys of MapStakeCredentialToDeltaCoin
 
 ```ts
 export declare const keys: (
-  instance: CML.MapStakeCredentialToDeltaCoin
-) => Effect.Effect<CML.StakeCredentialList, MapStakeCredentialToDeltaCoinError>
+  instance: CML.MapStakeCredentialToDeltaCoin,
+) => Effect.Effect<CML.StakeCredentialList, MapStakeCredentialToDeltaCoinError>;
 ```
 
 Added in v2.0.0
@@ -148,8 +151,8 @@ Method len of MapStakeCredentialToDeltaCoin
 
 ```ts
 export declare const len: (
-  instance: CML.MapStakeCredentialToDeltaCoin
-) => Effect.Effect<number, MapStakeCredentialToDeltaCoinError>
+  instance: CML.MapStakeCredentialToDeltaCoin,
+) => Effect.Effect<number, MapStakeCredentialToDeltaCoinError>;
 ```
 
 Added in v2.0.0
@@ -163,7 +166,9 @@ Unsafely calls instance.free without Effect wrapper
 **Signature**
 
 ```ts
-export declare const freeUnsafe: (instance: CML.MapStakeCredentialToDeltaCoin) => void
+export declare const freeUnsafe: (
+  instance: CML.MapStakeCredentialToDeltaCoin,
+) => void;
 ```
 
 Added in v2.0.0
@@ -177,8 +182,8 @@ Unsafely calls instance.get without Effect wrapper
 ```ts
 export declare const getUnsafe: (
   instance: CML.MapStakeCredentialToDeltaCoin,
-  key: CML.Credential
-) => CML.Int | undefined
+  key: CML.Credential,
+) => CML.Int | undefined;
 ```
 
 Added in v2.0.0
@@ -193,8 +198,8 @@ Unsafely calls instance.insert without Effect wrapper
 export declare const insertUnsafe: (
   instance: CML.MapStakeCredentialToDeltaCoin,
   key: CML.Credential,
-  value: CML.Int
-) => CML.Int | undefined
+  value: CML.Int,
+) => CML.Int | undefined;
 ```
 
 Added in v2.0.0
@@ -206,7 +211,9 @@ Unsafely calls instance.keys without Effect wrapper
 **Signature**
 
 ```ts
-export declare const keysUnsafe: (instance: CML.MapStakeCredentialToDeltaCoin) => CML.StakeCredentialList
+export declare const keysUnsafe: (
+  instance: CML.MapStakeCredentialToDeltaCoin,
+) => CML.StakeCredentialList;
 ```
 
 Added in v2.0.0
@@ -218,7 +225,9 @@ Unsafely calls instance.len without Effect wrapper
 **Signature**
 
 ```ts
-export declare const lenUnsafe: (instance: CML.MapStakeCredentialToDeltaCoin) => number
+export declare const lenUnsafe: (
+  instance: CML.MapStakeCredentialToDeltaCoin,
+) => number;
 ```
 
 Added in v2.0.0
@@ -232,7 +241,7 @@ Type alias for the CML MapStakeCredentialToDeltaCoin class
 **Signature**
 
 ```ts
-export type MapStakeCredentialToDeltaCoin = CML.MapStakeCredentialToDeltaCoin
+export type MapStakeCredentialToDeltaCoin = CML.MapStakeCredentialToDeltaCoin;
 ```
 
 Added in v2.0.0

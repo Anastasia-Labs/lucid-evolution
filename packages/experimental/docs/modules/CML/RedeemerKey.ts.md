@@ -58,7 +58,10 @@ Static method \_new of RedeemerKey
 **Signature**
 
 ```ts
-export declare const _new: (tag: CML.RedeemerTag, index: bigint) => Effect.Effect<CML.RedeemerKey, RedeemerKeyError>
+export declare const _new: (
+  tag: CML.RedeemerTag,
+  index: bigint,
+) => Effect.Effect<CML.RedeemerKey, RedeemerKeyError>;
 ```
 
 Added in v2.0.0
@@ -70,7 +73,9 @@ Static method fromCborBytes of RedeemerKey
 **Signature**
 
 ```ts
-export declare const fromCborBytes: (cborBytes: Uint8Array) => Effect.Effect<CML.RedeemerKey, RedeemerKeyError>
+export declare const fromCborBytes: (
+  cborBytes: Uint8Array,
+) => Effect.Effect<CML.RedeemerKey, RedeemerKeyError>;
 ```
 
 Added in v2.0.0
@@ -82,7 +87,9 @@ Static method fromCborHex of RedeemerKey
 **Signature**
 
 ```ts
-export declare const fromCborHex: (cborBytes: string) => Effect.Effect<CML.RedeemerKey, RedeemerKeyError>
+export declare const fromCborHex: (
+  cborBytes: string,
+) => Effect.Effect<CML.RedeemerKey, RedeemerKeyError>;
 ```
 
 Added in v2.0.0
@@ -94,7 +101,9 @@ Static method fromJson of RedeemerKey
 **Signature**
 
 ```ts
-export declare const fromJson: (json: string) => Effect.Effect<CML.RedeemerKey, RedeemerKeyError>
+export declare const fromJson: (
+  json: string,
+) => Effect.Effect<CML.RedeemerKey, RedeemerKeyError>;
 ```
 
 Added in v2.0.0
@@ -108,7 +117,10 @@ Unsafely calls RedeemerKey.\_new without Effect wrapper
 **Signature**
 
 ```ts
-export declare const _newUnsafe: (tag: CML.RedeemerTag, index: bigint) => CML.RedeemerKey
+export declare const _newUnsafe: (
+  tag: CML.RedeemerTag,
+  index: bigint,
+) => CML.RedeemerKey;
 ```
 
 Added in v2.0.0
@@ -120,7 +132,9 @@ Unsafely calls RedeemerKey.fromCborBytes without Effect wrapper
 **Signature**
 
 ```ts
-export declare const fromCborBytesUnsafe: (cborBytes: Uint8Array) => CML.RedeemerKey
+export declare const fromCborBytesUnsafe: (
+  cborBytes: Uint8Array,
+) => CML.RedeemerKey;
 ```
 
 Added in v2.0.0
@@ -132,7 +146,7 @@ Unsafely calls RedeemerKey.fromCborHex without Effect wrapper
 **Signature**
 
 ```ts
-export declare const fromCborHexUnsafe: (cborBytes: string) => CML.RedeemerKey
+export declare const fromCborHexUnsafe: (cborBytes: string) => CML.RedeemerKey;
 ```
 
 Added in v2.0.0
@@ -144,7 +158,7 @@ Unsafely calls RedeemerKey.fromJson without Effect wrapper
 **Signature**
 
 ```ts
-export declare const fromJsonUnsafe: (json: string) => CML.RedeemerKey
+export declare const fromJsonUnsafe: (json: string) => CML.RedeemerKey;
 ```
 
 Added in v2.0.0
@@ -174,7 +188,9 @@ Method free of RedeemerKey
 **Signature**
 
 ```ts
-export declare const free: (instance: CML.RedeemerKey) => Effect.Effect<void, RedeemerKeyError>
+export declare const free: (
+  instance: CML.RedeemerKey,
+) => Effect.Effect<void, RedeemerKeyError>;
 ```
 
 Added in v2.0.0
@@ -186,7 +202,9 @@ Method index of RedeemerKey
 **Signature**
 
 ```ts
-export declare const index: (instance: CML.RedeemerKey) => Effect.Effect<bigint, RedeemerKeyError>
+export declare const index: (
+  instance: CML.RedeemerKey,
+) => Effect.Effect<bigint, RedeemerKeyError>;
 ```
 
 Added in v2.0.0
@@ -198,7 +216,9 @@ Method tag of RedeemerKey
 **Signature**
 
 ```ts
-export declare const tag: (instance: CML.RedeemerKey) => Effect.Effect<CML.RedeemerTag, RedeemerKeyError>
+export declare const tag: (
+  instance: CML.RedeemerKey,
+) => Effect.Effect<CML.RedeemerTag, RedeemerKeyError>;
 ```
 
 Added in v2.0.0
@@ -210,7 +230,9 @@ Method toCanonicalCborBytes of RedeemerKey
 **Signature**
 
 ```ts
-export declare const toCanonicalCborBytes: (instance: CML.RedeemerKey) => Effect.Effect<Uint8Array, RedeemerKeyError>
+export declare const toCanonicalCborBytes: (
+  instance: CML.RedeemerKey,
+) => Effect.Effect<Uint8Array, RedeemerKeyError>;
 ```
 
 Added in v2.0.0
@@ -222,7 +244,9 @@ Method toCanonicalCborHex of RedeemerKey
 **Signature**
 
 ```ts
-export declare const toCanonicalCborHex: (instance: CML.RedeemerKey) => Effect.Effect<string, RedeemerKeyError>
+export declare const toCanonicalCborHex: (
+  instance: CML.RedeemerKey,
+) => Effect.Effect<string, RedeemerKeyError>;
 ```
 
 Added in v2.0.0
@@ -234,7 +258,9 @@ Method toCborBytes of RedeemerKey
 **Signature**
 
 ```ts
-export declare const toCborBytes: (instance: CML.RedeemerKey) => Effect.Effect<Uint8Array, RedeemerKeyError>
+export declare const toCborBytes: (
+  instance: CML.RedeemerKey,
+) => Effect.Effect<Uint8Array, RedeemerKeyError>;
 ```
 
 Added in v2.0.0
@@ -246,7 +272,9 @@ Method toCborHex of RedeemerKey
 **Signature**
 
 ```ts
-export declare const toCborHex: (instance: CML.RedeemerKey) => Effect.Effect<string, RedeemerKeyError>
+export declare const toCborHex: (
+  instance: CML.RedeemerKey,
+) => Effect.Effect<string, RedeemerKeyError>;
 ```
 
 Added in v2.0.0
@@ -258,7 +286,9 @@ Method toJsValue of RedeemerKey
 **Signature**
 
 ```ts
-export declare const toJsValue: (instance: CML.RedeemerKey) => Effect.Effect<any, RedeemerKeyError>
+export declare const toJsValue: (
+  instance: CML.RedeemerKey,
+) => Effect.Effect<any, RedeemerKeyError>;
 ```
 
 Added in v2.0.0
@@ -270,7 +300,9 @@ Method toJson of RedeemerKey
 **Signature**
 
 ```ts
-export declare const toJson: (instance: CML.RedeemerKey) => Effect.Effect<string, RedeemerKeyError>
+export declare const toJson: (
+  instance: CML.RedeemerKey,
+) => Effect.Effect<string, RedeemerKeyError>;
 ```
 
 Added in v2.0.0
@@ -284,7 +316,7 @@ Unsafely calls instance.free without Effect wrapper
 **Signature**
 
 ```ts
-export declare const freeUnsafe: (instance: CML.RedeemerKey) => void
+export declare const freeUnsafe: (instance: CML.RedeemerKey) => void;
 ```
 
 Added in v2.0.0
@@ -296,7 +328,7 @@ Unsafely calls instance.index without Effect wrapper
 **Signature**
 
 ```ts
-export declare const indexUnsafe: (instance: CML.RedeemerKey) => bigint
+export declare const indexUnsafe: (instance: CML.RedeemerKey) => bigint;
 ```
 
 Added in v2.0.0
@@ -308,7 +340,7 @@ Unsafely calls instance.tag without Effect wrapper
 **Signature**
 
 ```ts
-export declare const tagUnsafe: (instance: CML.RedeemerKey) => CML.RedeemerTag
+export declare const tagUnsafe: (instance: CML.RedeemerKey) => CML.RedeemerTag;
 ```
 
 Added in v2.0.0
@@ -320,7 +352,9 @@ Unsafely calls instance.toCanonicalCborBytes without Effect wrapper
 **Signature**
 
 ```ts
-export declare const toCanonicalCborBytesUnsafe: (instance: CML.RedeemerKey) => Uint8Array
+export declare const toCanonicalCborBytesUnsafe: (
+  instance: CML.RedeemerKey,
+) => Uint8Array;
 ```
 
 Added in v2.0.0
@@ -332,7 +366,9 @@ Unsafely calls instance.toCanonicalCborHex without Effect wrapper
 **Signature**
 
 ```ts
-export declare const toCanonicalCborHexUnsafe: (instance: CML.RedeemerKey) => string
+export declare const toCanonicalCborHexUnsafe: (
+  instance: CML.RedeemerKey,
+) => string;
 ```
 
 Added in v2.0.0
@@ -344,7 +380,9 @@ Unsafely calls instance.toCborBytes without Effect wrapper
 **Signature**
 
 ```ts
-export declare const toCborBytesUnsafe: (instance: CML.RedeemerKey) => Uint8Array
+export declare const toCborBytesUnsafe: (
+  instance: CML.RedeemerKey,
+) => Uint8Array;
 ```
 
 Added in v2.0.0
@@ -356,7 +394,7 @@ Unsafely calls instance.toCborHex without Effect wrapper
 **Signature**
 
 ```ts
-export declare const toCborHexUnsafe: (instance: CML.RedeemerKey) => string
+export declare const toCborHexUnsafe: (instance: CML.RedeemerKey) => string;
 ```
 
 Added in v2.0.0
@@ -368,7 +406,7 @@ Unsafely calls instance.toJsValue without Effect wrapper
 **Signature**
 
 ```ts
-export declare const toJsValueUnsafe: (instance: CML.RedeemerKey) => any
+export declare const toJsValueUnsafe: (instance: CML.RedeemerKey) => any;
 ```
 
 Added in v2.0.0
@@ -380,7 +418,7 @@ Unsafely calls instance.toJson without Effect wrapper
 **Signature**
 
 ```ts
-export declare const toJsonUnsafe: (instance: CML.RedeemerKey) => string
+export declare const toJsonUnsafe: (instance: CML.RedeemerKey) => string;
 ```
 
 Added in v2.0.0
@@ -394,7 +432,7 @@ Type alias for the CML RedeemerKey class
 **Signature**
 
 ```ts
-export type RedeemerKey = CML.RedeemerKey
+export type RedeemerKey = CML.RedeemerKey;
 ```
 
 Added in v2.0.0

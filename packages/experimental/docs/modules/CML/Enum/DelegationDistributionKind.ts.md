@@ -33,7 +33,7 @@ Type alias for the CML DelegationDistributionKind enum
 **Signature**
 
 ```ts
-export type DelegationDistributionKind = CML.DelegationDistributionKind
+export type DelegationDistributionKind = CML.DelegationDistributionKind;
 ```
 
 Added in v2.0.0
@@ -47,7 +47,9 @@ Convert string to DelegationDistributionKind enum value
 **Signature**
 
 ```ts
-export declare const fromString: (str: string) => CML.DelegationDistributionKind | undefined
+export declare const fromString: (
+  str: string,
+) => CML.DelegationDistributionKind | undefined;
 ```
 
 Added in v2.0.0
@@ -59,7 +61,9 @@ Convert DelegationDistributionKind enum value to string
 **Signature**
 
 ```ts
-export declare const toString: (value: CML.DelegationDistributionKind) => string
+export declare const toString: (
+  value: CML.DelegationDistributionKind,
+) => string;
 ```
 
 Added in v2.0.0
@@ -71,7 +75,7 @@ Get all values of the DelegationDistributionKind enum
 **Signature**
 
 ```ts
-export declare const values: () => Array<CML.DelegationDistributionKind>
+export declare const values: () => Array<CML.DelegationDistributionKind>;
 ```
 
 Added in v2.0.0
@@ -85,7 +89,7 @@ Legacy variant of the DelegationDistributionKind enum
 **Signature**
 
 ```ts
-export declare const Legacy: CML.DelegationDistributionKind.Legacy
+export declare const Legacy: CML.DelegationDistributionKind.Legacy;
 ```
 
 Added in v2.0.0
@@ -97,7 +101,7 @@ Weighted variant of the DelegationDistributionKind enum
 **Signature**
 
 ```ts
-export declare const Weighted: CML.DelegationDistributionKind.Weighted
+export declare const Weighted: CML.DelegationDistributionKind.Weighted;
 ```
 
 Added in v2.0.0

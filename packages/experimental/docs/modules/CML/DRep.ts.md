@@ -66,7 +66,9 @@ Static method fromCborBytes of DRep
 **Signature**
 
 ```ts
-export declare const fromCborBytes: (cborBytes: Uint8Array) => Effect.Effect<CML.DRep, DRepError>
+export declare const fromCborBytes: (
+  cborBytes: Uint8Array,
+) => Effect.Effect<CML.DRep, DRepError>;
 ```
 
 Added in v2.0.0
@@ -78,7 +80,9 @@ Static method fromCborHex of DRep
 **Signature**
 
 ```ts
-export declare const fromCborHex: (cborBytes: string) => Effect.Effect<CML.DRep, DRepError>
+export declare const fromCborHex: (
+  cborBytes: string,
+) => Effect.Effect<CML.DRep, DRepError>;
 ```
 
 Added in v2.0.0
@@ -90,7 +94,9 @@ Static method fromJson of DRep
 **Signature**
 
 ```ts
-export declare const fromJson: (json: string) => Effect.Effect<CML.DRep, DRepError>
+export declare const fromJson: (
+  json: string,
+) => Effect.Effect<CML.DRep, DRepError>;
 ```
 
 Added in v2.0.0
@@ -102,7 +108,7 @@ Static method newAlwaysAbstain of DRep
 **Signature**
 
 ```ts
-export declare const newAlwaysAbstain: () => Effect.Effect<CML.DRep, DRepError>
+export declare const newAlwaysAbstain: () => Effect.Effect<CML.DRep, DRepError>;
 ```
 
 Added in v2.0.0
@@ -114,7 +120,10 @@ Static method newAlwaysNoConfidence of DRep
 **Signature**
 
 ```ts
-export declare const newAlwaysNoConfidence: () => Effect.Effect<CML.DRep, DRepError>
+export declare const newAlwaysNoConfidence: () => Effect.Effect<
+  CML.DRep,
+  DRepError
+>;
 ```
 
 Added in v2.0.0
@@ -126,7 +135,9 @@ Static method newKey of DRep
 **Signature**
 
 ```ts
-export declare const newKey: (pool: CML.Ed25519KeyHash) => Effect.Effect<CML.DRep, DRepError>
+export declare const newKey: (
+  pool: CML.Ed25519KeyHash,
+) => Effect.Effect<CML.DRep, DRepError>;
 ```
 
 Added in v2.0.0
@@ -138,7 +149,9 @@ Static method newScript of DRep
 **Signature**
 
 ```ts
-export declare const newScript: (scriptHash: CML.ScriptHash) => Effect.Effect<CML.DRep, DRepError>
+export declare const newScript: (
+  scriptHash: CML.ScriptHash,
+) => Effect.Effect<CML.DRep, DRepError>;
 ```
 
 Added in v2.0.0
@@ -152,7 +165,7 @@ Unsafely calls DRep.fromCborBytes without Effect wrapper
 **Signature**
 
 ```ts
-export declare const fromCborBytesUnsafe: (cborBytes: Uint8Array) => CML.DRep
+export declare const fromCborBytesUnsafe: (cborBytes: Uint8Array) => CML.DRep;
 ```
 
 Added in v2.0.0
@@ -164,7 +177,7 @@ Unsafely calls DRep.fromCborHex without Effect wrapper
 **Signature**
 
 ```ts
-export declare const fromCborHexUnsafe: (cborBytes: string) => CML.DRep
+export declare const fromCborHexUnsafe: (cborBytes: string) => CML.DRep;
 ```
 
 Added in v2.0.0
@@ -176,7 +189,7 @@ Unsafely calls DRep.fromJson without Effect wrapper
 **Signature**
 
 ```ts
-export declare const fromJsonUnsafe: (json: string) => CML.DRep
+export declare const fromJsonUnsafe: (json: string) => CML.DRep;
 ```
 
 Added in v2.0.0
@@ -188,7 +201,7 @@ Unsafely calls DRep.newAlwaysAbstain without Effect wrapper
 **Signature**
 
 ```ts
-export declare const newAlwaysAbstainUnsafe: () => CML.DRep
+export declare const newAlwaysAbstainUnsafe: () => CML.DRep;
 ```
 
 Added in v2.0.0
@@ -200,7 +213,7 @@ Unsafely calls DRep.newAlwaysNoConfidence without Effect wrapper
 **Signature**
 
 ```ts
-export declare const newAlwaysNoConfidenceUnsafe: () => CML.DRep
+export declare const newAlwaysNoConfidenceUnsafe: () => CML.DRep;
 ```
 
 Added in v2.0.0
@@ -212,7 +225,7 @@ Unsafely calls DRep.newKey without Effect wrapper
 **Signature**
 
 ```ts
-export declare const newKeyUnsafe: (pool: CML.Ed25519KeyHash) => CML.DRep
+export declare const newKeyUnsafe: (pool: CML.Ed25519KeyHash) => CML.DRep;
 ```
 
 Added in v2.0.0
@@ -224,7 +237,7 @@ Unsafely calls DRep.newScript without Effect wrapper
 **Signature**
 
 ```ts
-export declare const newScriptUnsafe: (scriptHash: CML.ScriptHash) => CML.DRep
+export declare const newScriptUnsafe: (scriptHash: CML.ScriptHash) => CML.DRep;
 ```
 
 Added in v2.0.0
@@ -254,7 +267,9 @@ Method asKey of DRep
 **Signature**
 
 ```ts
-export declare const asKey: (instance: CML.DRep) => Effect.Effect<CML.Ed25519KeyHash | undefined, DRepError>
+export declare const asKey: (
+  instance: CML.DRep,
+) => Effect.Effect<CML.Ed25519KeyHash | undefined, DRepError>;
 ```
 
 Added in v2.0.0
@@ -266,7 +281,9 @@ Method asScript of DRep
 **Signature**
 
 ```ts
-export declare const asScript: (instance: CML.DRep) => Effect.Effect<CML.ScriptHash | undefined, DRepError>
+export declare const asScript: (
+  instance: CML.DRep,
+) => Effect.Effect<CML.ScriptHash | undefined, DRepError>;
 ```
 
 Added in v2.0.0
@@ -278,7 +295,9 @@ Method free of DRep
 **Signature**
 
 ```ts
-export declare const free: (instance: CML.DRep) => Effect.Effect<void, DRepError>
+export declare const free: (
+  instance: CML.DRep,
+) => Effect.Effect<void, DRepError>;
 ```
 
 Added in v2.0.0
@@ -290,7 +309,9 @@ Method kind of DRep
 **Signature**
 
 ```ts
-export declare const kind: (instance: CML.DRep) => Effect.Effect<CML.DRepKind, DRepError>
+export declare const kind: (
+  instance: CML.DRep,
+) => Effect.Effect<CML.DRepKind, DRepError>;
 ```
 
 Added in v2.0.0
@@ -302,7 +323,9 @@ Method toCanonicalCborBytes of DRep
 **Signature**
 
 ```ts
-export declare const toCanonicalCborBytes: (instance: CML.DRep) => Effect.Effect<Uint8Array, DRepError>
+export declare const toCanonicalCborBytes: (
+  instance: CML.DRep,
+) => Effect.Effect<Uint8Array, DRepError>;
 ```
 
 Added in v2.0.0
@@ -314,7 +337,9 @@ Method toCanonicalCborHex of DRep
 **Signature**
 
 ```ts
-export declare const toCanonicalCborHex: (instance: CML.DRep) => Effect.Effect<string, DRepError>
+export declare const toCanonicalCborHex: (
+  instance: CML.DRep,
+) => Effect.Effect<string, DRepError>;
 ```
 
 Added in v2.0.0
@@ -326,7 +351,9 @@ Method toCborBytes of DRep
 **Signature**
 
 ```ts
-export declare const toCborBytes: (instance: CML.DRep) => Effect.Effect<Uint8Array, DRepError>
+export declare const toCborBytes: (
+  instance: CML.DRep,
+) => Effect.Effect<Uint8Array, DRepError>;
 ```
 
 Added in v2.0.0
@@ -338,7 +365,9 @@ Method toCborHex of DRep
 **Signature**
 
 ```ts
-export declare const toCborHex: (instance: CML.DRep) => Effect.Effect<string, DRepError>
+export declare const toCborHex: (
+  instance: CML.DRep,
+) => Effect.Effect<string, DRepError>;
 ```
 
 Added in v2.0.0
@@ -350,7 +379,9 @@ Method toJsValue of DRep
 **Signature**
 
 ```ts
-export declare const toJsValue: (instance: CML.DRep) => Effect.Effect<any, DRepError>
+export declare const toJsValue: (
+  instance: CML.DRep,
+) => Effect.Effect<any, DRepError>;
 ```
 
 Added in v2.0.0
@@ -362,7 +393,9 @@ Method toJson of DRep
 **Signature**
 
 ```ts
-export declare const toJson: (instance: CML.DRep) => Effect.Effect<string, DRepError>
+export declare const toJson: (
+  instance: CML.DRep,
+) => Effect.Effect<string, DRepError>;
 ```
 
 Added in v2.0.0
@@ -376,7 +409,9 @@ Unsafely calls instance.asKey without Effect wrapper
 **Signature**
 
 ```ts
-export declare const asKeyUnsafe: (instance: CML.DRep) => CML.Ed25519KeyHash | undefined
+export declare const asKeyUnsafe: (
+  instance: CML.DRep,
+) => CML.Ed25519KeyHash | undefined;
 ```
 
 Added in v2.0.0
@@ -388,7 +423,9 @@ Unsafely calls instance.asScript without Effect wrapper
 **Signature**
 
 ```ts
-export declare const asScriptUnsafe: (instance: CML.DRep) => CML.ScriptHash | undefined
+export declare const asScriptUnsafe: (
+  instance: CML.DRep,
+) => CML.ScriptHash | undefined;
 ```
 
 Added in v2.0.0
@@ -400,7 +437,7 @@ Unsafely calls instance.free without Effect wrapper
 **Signature**
 
 ```ts
-export declare const freeUnsafe: (instance: CML.DRep) => void
+export declare const freeUnsafe: (instance: CML.DRep) => void;
 ```
 
 Added in v2.0.0
@@ -412,7 +449,7 @@ Unsafely calls instance.kind without Effect wrapper
 **Signature**
 
 ```ts
-export declare const kindUnsafe: (instance: CML.DRep) => CML.DRepKind
+export declare const kindUnsafe: (instance: CML.DRep) => CML.DRepKind;
 ```
 
 Added in v2.0.0
@@ -424,7 +461,9 @@ Unsafely calls instance.toCanonicalCborBytes without Effect wrapper
 **Signature**
 
 ```ts
-export declare const toCanonicalCborBytesUnsafe: (instance: CML.DRep) => Uint8Array
+export declare const toCanonicalCborBytesUnsafe: (
+  instance: CML.DRep,
+) => Uint8Array;
 ```
 
 Added in v2.0.0
@@ -436,7 +475,7 @@ Unsafely calls instance.toCanonicalCborHex without Effect wrapper
 **Signature**
 
 ```ts
-export declare const toCanonicalCborHexUnsafe: (instance: CML.DRep) => string
+export declare const toCanonicalCborHexUnsafe: (instance: CML.DRep) => string;
 ```
 
 Added in v2.0.0
@@ -448,7 +487,7 @@ Unsafely calls instance.toCborBytes without Effect wrapper
 **Signature**
 
 ```ts
-export declare const toCborBytesUnsafe: (instance: CML.DRep) => Uint8Array
+export declare const toCborBytesUnsafe: (instance: CML.DRep) => Uint8Array;
 ```
 
 Added in v2.0.0
@@ -460,7 +499,7 @@ Unsafely calls instance.toCborHex without Effect wrapper
 **Signature**
 
 ```ts
-export declare const toCborHexUnsafe: (instance: CML.DRep) => string
+export declare const toCborHexUnsafe: (instance: CML.DRep) => string;
 ```
 
 Added in v2.0.0
@@ -472,7 +511,7 @@ Unsafely calls instance.toJsValue without Effect wrapper
 **Signature**
 
 ```ts
-export declare const toJsValueUnsafe: (instance: CML.DRep) => any
+export declare const toJsValueUnsafe: (instance: CML.DRep) => any;
 ```
 
 Added in v2.0.0
@@ -484,7 +523,7 @@ Unsafely calls instance.toJson without Effect wrapper
 **Signature**
 
 ```ts
-export declare const toJsonUnsafe: (instance: CML.DRep) => string
+export declare const toJsonUnsafe: (instance: CML.DRep) => string;
 ```
 
 Added in v2.0.0
@@ -498,7 +537,7 @@ Type alias for the CML DRep class
 **Signature**
 
 ```ts
-export type DRep = CML.DRep
+export type DRep = CML.DRep;
 ```
 
 Added in v2.0.0

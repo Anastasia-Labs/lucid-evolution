@@ -44,7 +44,7 @@ export declare const CBORBytes: Schema.transformOrFail<
   Schema.declare<any, any, readonly [], never>,
   Schema.Union<[typeof DatumHash.DatumHash, typeof InlineDatum]>,
   never
->
+>;
 ```
 
 Added in v2.0.0
@@ -57,10 +57,14 @@ Schema for transforming between CBOR hex and DatumOption
 
 ```ts
 export declare const CBORHex: Schema.transformOrFail<
-  Schema.SchemaClass<string & Brand<"HexString">, string & Brand<"HexString">, never>,
+  Schema.SchemaClass<
+    string & Brand<"HexString">,
+    string & Brand<"HexString">,
+    never
+  >,
   Schema.Union<[typeof DatumHash.DatumHash, typeof InlineDatum]>,
   never
->
+>;
 ```
 
 Added in v2.0.0
@@ -74,8 +78,12 @@ Schema for transforming between Uint8Array and InlineDatum
 ```ts
 export declare const InlineDatumBytes: Schema.transform<
   typeof Schema.Uint8ArrayFromSelf,
-  Schema.Schema<InlineDatum, { readonly _tag: "InlineDatum"; readonly data: any }, never>
->
+  Schema.Schema<
+    InlineDatum,
+    { readonly _tag: "InlineDatum"; readonly data: any },
+    never
+  >
+>;
 ```
 
 Added in v2.0.0
@@ -103,7 +111,9 @@ Union type representing datum option types.
 **Signature**
 
 ```ts
-export declare const DatumOption: Schema.Union<[typeof DatumHash.DatumHash, typeof InlineDatum]>
+export declare const DatumOption: Schema.Union<
+  [typeof DatumHash.DatumHash, typeof InlineDatum]
+>;
 ```
 
 Added in v2.0.0
@@ -115,7 +125,7 @@ Type representing a datum option.
 **Signature**
 
 ```ts
-export type DatumOption = typeof DatumOption.Type
+export type DatumOption = typeof DatumOption.Type;
 ```
 
 Added in v2.0.0
@@ -131,8 +141,8 @@ Check if the given value is a valid DatumOption
 ```ts
 export declare const isDatumOption: (
   u: unknown,
-  overrideOptions?: ParseOptions | number
-) => u is DatumHash.DatumHash | InlineDatum
+  overrideOptions?: ParseOptions | number,
+) => u is DatumHash.DatumHash | InlineDatum;
 ```
 
 Added in v2.0.0
@@ -156,7 +166,7 @@ Added in v2.0.0
 **Signature**
 
 ```ts
-;[Inspectable.NodeInspectSymbol]()
+[Inspectable.NodeInspectSymbol]();
 ```
 
 # testing
@@ -168,7 +178,9 @@ FastCheck generator for datum options.
 **Signature**
 
 ```ts
-export declare const generator: FastCheck.Arbitrary<DatumHash.DatumHash | InlineDatum>
+export declare const generator: FastCheck.Arbitrary<
+  DatumHash.DatumHash | InlineDatum
+>;
 ```
 
 Added in v2.0.0
@@ -182,28 +194,28 @@ Checks if two datum options are equal.
 **Signature**
 
 ```ts
-export declare const equals: (a: DatumOption, b: DatumOption) => boolean
+export declare const equals: (a: DatumOption, b: DatumOption) => boolean;
 ```
 
 **Example**
 
 ```ts
-import { DatumOption, DatumHash } from "@lucid-evolution/experimental"
-import { Schema } from "effect"
-import assert from "assert"
+import { DatumOption, DatumHash } from "@lucid-evolution/experimental";
+import { Schema } from "effect";
+import assert from "assert";
 
 const hash1 = Schema.decodeUnknownSync(DatumHash.HexString)(
-  "5160f88b929bf8a6c57c285b889488f9137c0ef3cfd0bcf408a10020e69146d5"
-)
+  "5160f88b929bf8a6c57c285b889488f9137c0ef3cfd0bcf408a10020e69146d5",
+);
 const hash2 = Schema.decodeUnknownSync(DatumHash.HexString)(
-  "5160f88b929bf8a6c57c285b889488f9137c0ef3cfd0bcf408a10020e69146d5"
-)
+  "5160f88b929bf8a6c57c285b889488f9137c0ef3cfd0bcf408a10020e69146d5",
+);
 const inline1 = new DatumOption.InlineDatum({
-  data: new Uint8Array([1, 2, 3])
-})
+  data: new Uint8Array([1, 2, 3]),
+});
 
-assert(DatumOption.equals(hash1, hash2) === true)
-assert(DatumOption.equals(hash1, inline1) === false)
+assert(DatumOption.equals(hash1, hash2) === true);
+assert(DatumOption.equals(hash1, inline1) === false);
 ```
 
 Added in v2.0.0

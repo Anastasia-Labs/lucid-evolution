@@ -42,8 +42,8 @@ Static method \_new of PartialPlutusWitness
 ```ts
 export declare const _new: (
   script: CML.PlutusScriptWitness,
-  data: CML.PlutusData
-) => Effect.Effect<CML.PartialPlutusWitness, PartialPlutusWitnessError>
+  data: CML.PlutusData,
+) => Effect.Effect<CML.PartialPlutusWitness, PartialPlutusWitnessError>;
 ```
 
 Added in v2.0.0
@@ -57,7 +57,10 @@ Unsafely calls PartialPlutusWitness.\_new without Effect wrapper
 **Signature**
 
 ```ts
-export declare const _newUnsafe: (script: CML.PlutusScriptWitness, data: CML.PlutusData) => CML.PartialPlutusWitness
+export declare const _newUnsafe: (
+  script: CML.PlutusScriptWitness,
+  data: CML.PlutusData,
+) => CML.PartialPlutusWitness;
 ```
 
 Added in v2.0.0
@@ -88,8 +91,8 @@ Method data of PartialPlutusWitness
 
 ```ts
 export declare const data: (
-  instance: CML.PartialPlutusWitness
-) => Effect.Effect<CML.PlutusData, PartialPlutusWitnessError>
+  instance: CML.PartialPlutusWitness,
+) => Effect.Effect<CML.PlutusData, PartialPlutusWitnessError>;
 ```
 
 Added in v2.0.0
@@ -101,7 +104,9 @@ Method free of PartialPlutusWitness
 **Signature**
 
 ```ts
-export declare const free: (instance: CML.PartialPlutusWitness) => Effect.Effect<void, PartialPlutusWitnessError>
+export declare const free: (
+  instance: CML.PartialPlutusWitness,
+) => Effect.Effect<void, PartialPlutusWitnessError>;
 ```
 
 Added in v2.0.0
@@ -114,8 +119,8 @@ Method script of PartialPlutusWitness
 
 ```ts
 export declare const script: (
-  instance: CML.PartialPlutusWitness
-) => Effect.Effect<CML.PlutusScriptWitness, PartialPlutusWitnessError>
+  instance: CML.PartialPlutusWitness,
+) => Effect.Effect<CML.PlutusScriptWitness, PartialPlutusWitnessError>;
 ```
 
 Added in v2.0.0
@@ -129,7 +134,9 @@ Unsafely calls instance.data without Effect wrapper
 **Signature**
 
 ```ts
-export declare const dataUnsafe: (instance: CML.PartialPlutusWitness) => CML.PlutusData
+export declare const dataUnsafe: (
+  instance: CML.PartialPlutusWitness,
+) => CML.PlutusData;
 ```
 
 Added in v2.0.0
@@ -141,7 +148,7 @@ Unsafely calls instance.free without Effect wrapper
 **Signature**
 
 ```ts
-export declare const freeUnsafe: (instance: CML.PartialPlutusWitness) => void
+export declare const freeUnsafe: (instance: CML.PartialPlutusWitness) => void;
 ```
 
 Added in v2.0.0
@@ -153,7 +160,9 @@ Unsafely calls instance.script without Effect wrapper
 **Signature**
 
 ```ts
-export declare const scriptUnsafe: (instance: CML.PartialPlutusWitness) => CML.PlutusScriptWitness
+export declare const scriptUnsafe: (
+  instance: CML.PartialPlutusWitness,
+) => CML.PlutusScriptWitness;
 ```
 
 Added in v2.0.0
@@ -167,7 +176,7 @@ Type alias for the CML PartialPlutusWitness class
 **Signature**
 
 ```ts
-export type PartialPlutusWitness = CML.PartialPlutusWitness
+export type PartialPlutusWitness = CML.PartialPlutusWitness;
 ```
 
 Added in v2.0.0

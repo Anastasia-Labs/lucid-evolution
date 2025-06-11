@@ -56,7 +56,9 @@ Static method \_new of ScriptPubkey
 **Signature**
 
 ```ts
-export declare const _new: (ed25519KeyHash: CML.Ed25519KeyHash) => Effect.Effect<CML.ScriptPubkey, ScriptPubkeyError>
+export declare const _new: (
+  ed25519KeyHash: CML.Ed25519KeyHash,
+) => Effect.Effect<CML.ScriptPubkey, ScriptPubkeyError>;
 ```
 
 Added in v2.0.0
@@ -68,7 +70,9 @@ Static method fromCborBytes of ScriptPubkey
 **Signature**
 
 ```ts
-export declare const fromCborBytes: (cborBytes: Uint8Array) => Effect.Effect<CML.ScriptPubkey, ScriptPubkeyError>
+export declare const fromCborBytes: (
+  cborBytes: Uint8Array,
+) => Effect.Effect<CML.ScriptPubkey, ScriptPubkeyError>;
 ```
 
 Added in v2.0.0
@@ -80,7 +84,9 @@ Static method fromCborHex of ScriptPubkey
 **Signature**
 
 ```ts
-export declare const fromCborHex: (cborBytes: string) => Effect.Effect<CML.ScriptPubkey, ScriptPubkeyError>
+export declare const fromCborHex: (
+  cborBytes: string,
+) => Effect.Effect<CML.ScriptPubkey, ScriptPubkeyError>;
 ```
 
 Added in v2.0.0
@@ -92,7 +98,9 @@ Static method fromJson of ScriptPubkey
 **Signature**
 
 ```ts
-export declare const fromJson: (json: string) => Effect.Effect<CML.ScriptPubkey, ScriptPubkeyError>
+export declare const fromJson: (
+  json: string,
+) => Effect.Effect<CML.ScriptPubkey, ScriptPubkeyError>;
 ```
 
 Added in v2.0.0
@@ -106,7 +114,9 @@ Unsafely calls ScriptPubkey.\_new without Effect wrapper
 **Signature**
 
 ```ts
-export declare const _newUnsafe: (ed25519KeyHash: CML.Ed25519KeyHash) => CML.ScriptPubkey
+export declare const _newUnsafe: (
+  ed25519KeyHash: CML.Ed25519KeyHash,
+) => CML.ScriptPubkey;
 ```
 
 Added in v2.0.0
@@ -118,7 +128,9 @@ Unsafely calls ScriptPubkey.fromCborBytes without Effect wrapper
 **Signature**
 
 ```ts
-export declare const fromCborBytesUnsafe: (cborBytes: Uint8Array) => CML.ScriptPubkey
+export declare const fromCborBytesUnsafe: (
+  cborBytes: Uint8Array,
+) => CML.ScriptPubkey;
 ```
 
 Added in v2.0.0
@@ -130,7 +142,7 @@ Unsafely calls ScriptPubkey.fromCborHex without Effect wrapper
 **Signature**
 
 ```ts
-export declare const fromCborHexUnsafe: (cborBytes: string) => CML.ScriptPubkey
+export declare const fromCborHexUnsafe: (cborBytes: string) => CML.ScriptPubkey;
 ```
 
 Added in v2.0.0
@@ -142,7 +154,7 @@ Unsafely calls ScriptPubkey.fromJson without Effect wrapper
 **Signature**
 
 ```ts
-export declare const fromJsonUnsafe: (json: string) => CML.ScriptPubkey
+export declare const fromJsonUnsafe: (json: string) => CML.ScriptPubkey;
 ```
 
 Added in v2.0.0
@@ -173,8 +185,8 @@ Method ed25519KeyHash of ScriptPubkey
 
 ```ts
 export declare const ed25519KeyHash: (
-  instance: CML.ScriptPubkey
-) => Effect.Effect<CML.Ed25519KeyHash, ScriptPubkeyError>
+  instance: CML.ScriptPubkey,
+) => Effect.Effect<CML.Ed25519KeyHash, ScriptPubkeyError>;
 ```
 
 Added in v2.0.0
@@ -186,7 +198,9 @@ Method free of ScriptPubkey
 **Signature**
 
 ```ts
-export declare const free: (instance: CML.ScriptPubkey) => Effect.Effect<void, ScriptPubkeyError>
+export declare const free: (
+  instance: CML.ScriptPubkey,
+) => Effect.Effect<void, ScriptPubkeyError>;
 ```
 
 Added in v2.0.0
@@ -198,7 +212,9 @@ Method toCanonicalCborBytes of ScriptPubkey
 **Signature**
 
 ```ts
-export declare const toCanonicalCborBytes: (instance: CML.ScriptPubkey) => Effect.Effect<Uint8Array, ScriptPubkeyError>
+export declare const toCanonicalCborBytes: (
+  instance: CML.ScriptPubkey,
+) => Effect.Effect<Uint8Array, ScriptPubkeyError>;
 ```
 
 Added in v2.0.0
@@ -210,7 +226,9 @@ Method toCanonicalCborHex of ScriptPubkey
 **Signature**
 
 ```ts
-export declare const toCanonicalCborHex: (instance: CML.ScriptPubkey) => Effect.Effect<string, ScriptPubkeyError>
+export declare const toCanonicalCborHex: (
+  instance: CML.ScriptPubkey,
+) => Effect.Effect<string, ScriptPubkeyError>;
 ```
 
 Added in v2.0.0
@@ -222,7 +240,9 @@ Method toCborBytes of ScriptPubkey
 **Signature**
 
 ```ts
-export declare const toCborBytes: (instance: CML.ScriptPubkey) => Effect.Effect<Uint8Array, ScriptPubkeyError>
+export declare const toCborBytes: (
+  instance: CML.ScriptPubkey,
+) => Effect.Effect<Uint8Array, ScriptPubkeyError>;
 ```
 
 Added in v2.0.0
@@ -234,7 +254,9 @@ Method toCborHex of ScriptPubkey
 **Signature**
 
 ```ts
-export declare const toCborHex: (instance: CML.ScriptPubkey) => Effect.Effect<string, ScriptPubkeyError>
+export declare const toCborHex: (
+  instance: CML.ScriptPubkey,
+) => Effect.Effect<string, ScriptPubkeyError>;
 ```
 
 Added in v2.0.0
@@ -246,7 +268,9 @@ Method toJsValue of ScriptPubkey
 **Signature**
 
 ```ts
-export declare const toJsValue: (instance: CML.ScriptPubkey) => Effect.Effect<any, ScriptPubkeyError>
+export declare const toJsValue: (
+  instance: CML.ScriptPubkey,
+) => Effect.Effect<any, ScriptPubkeyError>;
 ```
 
 Added in v2.0.0
@@ -258,7 +282,9 @@ Method toJson of ScriptPubkey
 **Signature**
 
 ```ts
-export declare const toJson: (instance: CML.ScriptPubkey) => Effect.Effect<string, ScriptPubkeyError>
+export declare const toJson: (
+  instance: CML.ScriptPubkey,
+) => Effect.Effect<string, ScriptPubkeyError>;
 ```
 
 Added in v2.0.0
@@ -272,7 +298,9 @@ Unsafely calls instance.ed25519KeyHash without Effect wrapper
 **Signature**
 
 ```ts
-export declare const ed25519KeyHashUnsafe: (instance: CML.ScriptPubkey) => CML.Ed25519KeyHash
+export declare const ed25519KeyHashUnsafe: (
+  instance: CML.ScriptPubkey,
+) => CML.Ed25519KeyHash;
 ```
 
 Added in v2.0.0
@@ -284,7 +312,7 @@ Unsafely calls instance.free without Effect wrapper
 **Signature**
 
 ```ts
-export declare const freeUnsafe: (instance: CML.ScriptPubkey) => void
+export declare const freeUnsafe: (instance: CML.ScriptPubkey) => void;
 ```
 
 Added in v2.0.0
@@ -296,7 +324,9 @@ Unsafely calls instance.toCanonicalCborBytes without Effect wrapper
 **Signature**
 
 ```ts
-export declare const toCanonicalCborBytesUnsafe: (instance: CML.ScriptPubkey) => Uint8Array
+export declare const toCanonicalCborBytesUnsafe: (
+  instance: CML.ScriptPubkey,
+) => Uint8Array;
 ```
 
 Added in v2.0.0
@@ -308,7 +338,9 @@ Unsafely calls instance.toCanonicalCborHex without Effect wrapper
 **Signature**
 
 ```ts
-export declare const toCanonicalCborHexUnsafe: (instance: CML.ScriptPubkey) => string
+export declare const toCanonicalCborHexUnsafe: (
+  instance: CML.ScriptPubkey,
+) => string;
 ```
 
 Added in v2.0.0
@@ -320,7 +352,9 @@ Unsafely calls instance.toCborBytes without Effect wrapper
 **Signature**
 
 ```ts
-export declare const toCborBytesUnsafe: (instance: CML.ScriptPubkey) => Uint8Array
+export declare const toCborBytesUnsafe: (
+  instance: CML.ScriptPubkey,
+) => Uint8Array;
 ```
 
 Added in v2.0.0
@@ -332,7 +366,7 @@ Unsafely calls instance.toCborHex without Effect wrapper
 **Signature**
 
 ```ts
-export declare const toCborHexUnsafe: (instance: CML.ScriptPubkey) => string
+export declare const toCborHexUnsafe: (instance: CML.ScriptPubkey) => string;
 ```
 
 Added in v2.0.0
@@ -344,7 +378,7 @@ Unsafely calls instance.toJsValue without Effect wrapper
 **Signature**
 
 ```ts
-export declare const toJsValueUnsafe: (instance: CML.ScriptPubkey) => any
+export declare const toJsValueUnsafe: (instance: CML.ScriptPubkey) => any;
 ```
 
 Added in v2.0.0
@@ -356,7 +390,7 @@ Unsafely calls instance.toJson without Effect wrapper
 **Signature**
 
 ```ts
-export declare const toJsonUnsafe: (instance: CML.ScriptPubkey) => string
+export declare const toJsonUnsafe: (instance: CML.ScriptPubkey) => string;
 ```
 
 Added in v2.0.0
@@ -370,7 +404,7 @@ Type alias for the CML ScriptPubkey class
 **Signature**
 
 ```ts
-export type ScriptPubkey = CML.ScriptPubkey
+export type ScriptPubkey = CML.ScriptPubkey;
 ```
 
 Added in v2.0.0

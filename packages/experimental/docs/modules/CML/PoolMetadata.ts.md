@@ -60,8 +60,8 @@ Static method \_new of PoolMetadata
 ```ts
 export declare const _new: (
   url: CML.Url,
-  poolMetadataHash: CML.PoolMetadataHash
-) => Effect.Effect<CML.PoolMetadata, PoolMetadataError>
+  poolMetadataHash: CML.PoolMetadataHash,
+) => Effect.Effect<CML.PoolMetadata, PoolMetadataError>;
 ```
 
 Added in v2.0.0
@@ -73,7 +73,9 @@ Static method fromCborBytes of PoolMetadata
 **Signature**
 
 ```ts
-export declare const fromCborBytes: (cborBytes: Uint8Array) => Effect.Effect<CML.PoolMetadata, PoolMetadataError>
+export declare const fromCborBytes: (
+  cborBytes: Uint8Array,
+) => Effect.Effect<CML.PoolMetadata, PoolMetadataError>;
 ```
 
 Added in v2.0.0
@@ -85,7 +87,9 @@ Static method fromCborHex of PoolMetadata
 **Signature**
 
 ```ts
-export declare const fromCborHex: (cborBytes: string) => Effect.Effect<CML.PoolMetadata, PoolMetadataError>
+export declare const fromCborHex: (
+  cborBytes: string,
+) => Effect.Effect<CML.PoolMetadata, PoolMetadataError>;
 ```
 
 Added in v2.0.0
@@ -97,7 +101,9 @@ Static method fromJson of PoolMetadata
 **Signature**
 
 ```ts
-export declare const fromJson: (json: string) => Effect.Effect<CML.PoolMetadata, PoolMetadataError>
+export declare const fromJson: (
+  json: string,
+) => Effect.Effect<CML.PoolMetadata, PoolMetadataError>;
 ```
 
 Added in v2.0.0
@@ -111,7 +117,10 @@ Unsafely calls PoolMetadata.\_new without Effect wrapper
 **Signature**
 
 ```ts
-export declare const _newUnsafe: (url: CML.Url, poolMetadataHash: CML.PoolMetadataHash) => CML.PoolMetadata
+export declare const _newUnsafe: (
+  url: CML.Url,
+  poolMetadataHash: CML.PoolMetadataHash,
+) => CML.PoolMetadata;
 ```
 
 Added in v2.0.0
@@ -123,7 +132,9 @@ Unsafely calls PoolMetadata.fromCborBytes without Effect wrapper
 **Signature**
 
 ```ts
-export declare const fromCborBytesUnsafe: (cborBytes: Uint8Array) => CML.PoolMetadata
+export declare const fromCborBytesUnsafe: (
+  cborBytes: Uint8Array,
+) => CML.PoolMetadata;
 ```
 
 Added in v2.0.0
@@ -135,7 +146,7 @@ Unsafely calls PoolMetadata.fromCborHex without Effect wrapper
 **Signature**
 
 ```ts
-export declare const fromCborHexUnsafe: (cborBytes: string) => CML.PoolMetadata
+export declare const fromCborHexUnsafe: (cborBytes: string) => CML.PoolMetadata;
 ```
 
 Added in v2.0.0
@@ -147,7 +158,7 @@ Unsafely calls PoolMetadata.fromJson without Effect wrapper
 **Signature**
 
 ```ts
-export declare const fromJsonUnsafe: (json: string) => CML.PoolMetadata
+export declare const fromJsonUnsafe: (json: string) => CML.PoolMetadata;
 ```
 
 Added in v2.0.0
@@ -177,7 +188,9 @@ Method free of PoolMetadata
 **Signature**
 
 ```ts
-export declare const free: (instance: CML.PoolMetadata) => Effect.Effect<void, PoolMetadataError>
+export declare const free: (
+  instance: CML.PoolMetadata,
+) => Effect.Effect<void, PoolMetadataError>;
 ```
 
 Added in v2.0.0
@@ -190,8 +203,8 @@ Method poolMetadataHash of PoolMetadata
 
 ```ts
 export declare const poolMetadataHash: (
-  instance: CML.PoolMetadata
-) => Effect.Effect<CML.PoolMetadataHash, PoolMetadataError>
+  instance: CML.PoolMetadata,
+) => Effect.Effect<CML.PoolMetadataHash, PoolMetadataError>;
 ```
 
 Added in v2.0.0
@@ -203,7 +216,9 @@ Method toCanonicalCborBytes of PoolMetadata
 **Signature**
 
 ```ts
-export declare const toCanonicalCborBytes: (instance: CML.PoolMetadata) => Effect.Effect<Uint8Array, PoolMetadataError>
+export declare const toCanonicalCborBytes: (
+  instance: CML.PoolMetadata,
+) => Effect.Effect<Uint8Array, PoolMetadataError>;
 ```
 
 Added in v2.0.0
@@ -215,7 +230,9 @@ Method toCanonicalCborHex of PoolMetadata
 **Signature**
 
 ```ts
-export declare const toCanonicalCborHex: (instance: CML.PoolMetadata) => Effect.Effect<string, PoolMetadataError>
+export declare const toCanonicalCborHex: (
+  instance: CML.PoolMetadata,
+) => Effect.Effect<string, PoolMetadataError>;
 ```
 
 Added in v2.0.0
@@ -227,7 +244,9 @@ Method toCborBytes of PoolMetadata
 **Signature**
 
 ```ts
-export declare const toCborBytes: (instance: CML.PoolMetadata) => Effect.Effect<Uint8Array, PoolMetadataError>
+export declare const toCborBytes: (
+  instance: CML.PoolMetadata,
+) => Effect.Effect<Uint8Array, PoolMetadataError>;
 ```
 
 Added in v2.0.0
@@ -239,7 +258,9 @@ Method toCborHex of PoolMetadata
 **Signature**
 
 ```ts
-export declare const toCborHex: (instance: CML.PoolMetadata) => Effect.Effect<string, PoolMetadataError>
+export declare const toCborHex: (
+  instance: CML.PoolMetadata,
+) => Effect.Effect<string, PoolMetadataError>;
 ```
 
 Added in v2.0.0
@@ -251,7 +272,9 @@ Method toJsValue of PoolMetadata
 **Signature**
 
 ```ts
-export declare const toJsValue: (instance: CML.PoolMetadata) => Effect.Effect<any, PoolMetadataError>
+export declare const toJsValue: (
+  instance: CML.PoolMetadata,
+) => Effect.Effect<any, PoolMetadataError>;
 ```
 
 Added in v2.0.0
@@ -263,7 +286,9 @@ Method toJson of PoolMetadata
 **Signature**
 
 ```ts
-export declare const toJson: (instance: CML.PoolMetadata) => Effect.Effect<string, PoolMetadataError>
+export declare const toJson: (
+  instance: CML.PoolMetadata,
+) => Effect.Effect<string, PoolMetadataError>;
 ```
 
 Added in v2.0.0
@@ -275,7 +300,9 @@ Method url of PoolMetadata
 **Signature**
 
 ```ts
-export declare const url: (instance: CML.PoolMetadata) => Effect.Effect<CML.Url, PoolMetadataError>
+export declare const url: (
+  instance: CML.PoolMetadata,
+) => Effect.Effect<CML.Url, PoolMetadataError>;
 ```
 
 Added in v2.0.0
@@ -289,7 +316,7 @@ Unsafely calls instance.free without Effect wrapper
 **Signature**
 
 ```ts
-export declare const freeUnsafe: (instance: CML.PoolMetadata) => void
+export declare const freeUnsafe: (instance: CML.PoolMetadata) => void;
 ```
 
 Added in v2.0.0
@@ -301,7 +328,9 @@ Unsafely calls instance.poolMetadataHash without Effect wrapper
 **Signature**
 
 ```ts
-export declare const poolMetadataHashUnsafe: (instance: CML.PoolMetadata) => CML.PoolMetadataHash
+export declare const poolMetadataHashUnsafe: (
+  instance: CML.PoolMetadata,
+) => CML.PoolMetadataHash;
 ```
 
 Added in v2.0.0
@@ -313,7 +342,9 @@ Unsafely calls instance.toCanonicalCborBytes without Effect wrapper
 **Signature**
 
 ```ts
-export declare const toCanonicalCborBytesUnsafe: (instance: CML.PoolMetadata) => Uint8Array
+export declare const toCanonicalCborBytesUnsafe: (
+  instance: CML.PoolMetadata,
+) => Uint8Array;
 ```
 
 Added in v2.0.0
@@ -325,7 +356,9 @@ Unsafely calls instance.toCanonicalCborHex without Effect wrapper
 **Signature**
 
 ```ts
-export declare const toCanonicalCborHexUnsafe: (instance: CML.PoolMetadata) => string
+export declare const toCanonicalCborHexUnsafe: (
+  instance: CML.PoolMetadata,
+) => string;
 ```
 
 Added in v2.0.0
@@ -337,7 +370,9 @@ Unsafely calls instance.toCborBytes without Effect wrapper
 **Signature**
 
 ```ts
-export declare const toCborBytesUnsafe: (instance: CML.PoolMetadata) => Uint8Array
+export declare const toCborBytesUnsafe: (
+  instance: CML.PoolMetadata,
+) => Uint8Array;
 ```
 
 Added in v2.0.0
@@ -349,7 +384,7 @@ Unsafely calls instance.toCborHex without Effect wrapper
 **Signature**
 
 ```ts
-export declare const toCborHexUnsafe: (instance: CML.PoolMetadata) => string
+export declare const toCborHexUnsafe: (instance: CML.PoolMetadata) => string;
 ```
 
 Added in v2.0.0
@@ -361,7 +396,7 @@ Unsafely calls instance.toJsValue without Effect wrapper
 **Signature**
 
 ```ts
-export declare const toJsValueUnsafe: (instance: CML.PoolMetadata) => any
+export declare const toJsValueUnsafe: (instance: CML.PoolMetadata) => any;
 ```
 
 Added in v2.0.0
@@ -373,7 +408,7 @@ Unsafely calls instance.toJson without Effect wrapper
 **Signature**
 
 ```ts
-export declare const toJsonUnsafe: (instance: CML.PoolMetadata) => string
+export declare const toJsonUnsafe: (instance: CML.PoolMetadata) => string;
 ```
 
 Added in v2.0.0
@@ -385,7 +420,7 @@ Unsafely calls instance.url without Effect wrapper
 **Signature**
 
 ```ts
-export declare const urlUnsafe: (instance: CML.PoolMetadata) => CML.Url
+export declare const urlUnsafe: (instance: CML.PoolMetadata) => CML.Url;
 ```
 
 Added in v2.0.0
@@ -399,7 +434,7 @@ Type alias for the CML PoolMetadata class
 **Signature**
 
 ```ts
-export type PoolMetadata = CML.PoolMetadata
+export type PoolMetadata = CML.PoolMetadata;
 ```
 
 Added in v2.0.0

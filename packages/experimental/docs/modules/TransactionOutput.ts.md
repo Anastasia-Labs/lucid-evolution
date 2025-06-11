@@ -38,10 +38,13 @@ Schema for transforming between CBOR bytes and TransactionOutput
 export declare const CBORBytes: Schema.transformOrFail<
   Schema.declare<any, any, readonly [], never>,
   Schema.Union<
-    [typeof ShelleyTransactionOutput.ShelleyTransactionOutput, typeof BabbageTransactionOutput.BabbageTransactionOutput]
+    [
+      typeof ShelleyTransactionOutput.ShelleyTransactionOutput,
+      typeof BabbageTransactionOutput.BabbageTransactionOutput,
+    ]
   >,
   never
->
+>;
 ```
 
 Added in v2.0.0
@@ -54,12 +57,19 @@ Schema for transforming between CBOR hex and TransactionOutput
 
 ```ts
 export declare const CBORHex: Schema.transformOrFail<
-  Schema.SchemaClass<string & Brand<"HexString">, string & Brand<"HexString">, never>,
+  Schema.SchemaClass<
+    string & Brand<"HexString">,
+    string & Brand<"HexString">,
+    never
+  >,
   Schema.Union<
-    [typeof ShelleyTransactionOutput.ShelleyTransactionOutput, typeof BabbageTransactionOutput.BabbageTransactionOutput]
+    [
+      typeof ShelleyTransactionOutput.ShelleyTransactionOutput,
+      typeof BabbageTransactionOutput.BabbageTransactionOutput,
+    ]
   >,
   never
->
+>;
 ```
 
 Added in v2.0.0
@@ -73,7 +83,10 @@ Check if two TransactionOutput instances are equal.
 **Signature**
 
 ```ts
-export declare const equals: (a: typeof TransactionOutput.Type, b: typeof TransactionOutput.Type) => boolean
+export declare const equals: (
+  a: typeof TransactionOutput.Type,
+  b: typeof TransactionOutput.Type,
+) => boolean;
 ```
 
 Added in v2.0.0
@@ -102,8 +115,9 @@ Generator for creating random TransactionOutput instances for testing
 
 ```ts
 export declare const generator: FastCheck.Arbitrary<
-  ShelleyTransactionOutput.ShelleyTransactionOutput | BabbageTransactionOutput.BabbageTransactionOutput
->
+  | ShelleyTransactionOutput.ShelleyTransactionOutput
+  | BabbageTransactionOutput.BabbageTransactionOutput
+>;
 ```
 
 Added in v2.0.0
@@ -119,8 +133,10 @@ Check if the given value is a valid TransactionOutput
 ```ts
 export declare const isTransactionOutput: (
   u: unknown,
-  overrideOptions?: ParseOptions | number
-) => u is ShelleyTransactionOutput.ShelleyTransactionOutput | BabbageTransactionOutput.BabbageTransactionOutput
+  overrideOptions?: ParseOptions | number,
+) => u is
+  | ShelleyTransactionOutput.ShelleyTransactionOutput
+  | BabbageTransactionOutput.BabbageTransactionOutput;
 ```
 
 Added in v2.0.0
@@ -135,8 +151,11 @@ Transaction output union type matching CDDL: shelley_transaction_output / babbag
 
 ```ts
 export declare const TransactionOutput: Schema.Union<
-  [typeof ShelleyTransactionOutput.ShelleyTransactionOutput, typeof BabbageTransactionOutput.BabbageTransactionOutput]
->
+  [
+    typeof ShelleyTransactionOutput.ShelleyTransactionOutput,
+    typeof BabbageTransactionOutput.BabbageTransactionOutput,
+  ]
+>;
 ```
 
 Added in v2.0.0

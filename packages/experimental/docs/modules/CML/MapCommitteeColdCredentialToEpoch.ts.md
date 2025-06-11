@@ -47,7 +47,7 @@ Static method \_new of MapCommitteeColdCredentialToEpoch
 export declare const _new: () => Effect.Effect<
   CML.MapCommitteeColdCredentialToEpoch,
   MapCommitteeColdCredentialToEpochError
->
+>;
 ```
 
 Added in v2.0.0
@@ -61,7 +61,7 @@ Unsafely calls MapCommitteeColdCredentialToEpoch.\_new without Effect wrapper
 **Signature**
 
 ```ts
-export declare const _newUnsafe: () => CML.MapCommitteeColdCredentialToEpoch
+export declare const _newUnsafe: () => CML.MapCommitteeColdCredentialToEpoch;
 ```
 
 Added in v2.0.0
@@ -92,8 +92,8 @@ Method free of MapCommitteeColdCredentialToEpoch
 
 ```ts
 export declare const free: (
-  instance: CML.MapCommitteeColdCredentialToEpoch
-) => Effect.Effect<void, MapCommitteeColdCredentialToEpochError>
+  instance: CML.MapCommitteeColdCredentialToEpoch,
+) => Effect.Effect<void, MapCommitteeColdCredentialToEpochError>;
 ```
 
 Added in v2.0.0
@@ -107,8 +107,8 @@ Method get of MapCommitteeColdCredentialToEpoch
 ```ts
 export declare const get: (
   instance: CML.MapCommitteeColdCredentialToEpoch,
-  key: CML.Credential
-) => Effect.Effect<bigint | undefined, MapCommitteeColdCredentialToEpochError>
+  key: CML.Credential,
+) => Effect.Effect<bigint | undefined, MapCommitteeColdCredentialToEpochError>;
 ```
 
 Added in v2.0.0
@@ -123,8 +123,8 @@ Method insert of MapCommitteeColdCredentialToEpoch
 export declare const insert: (
   instance: CML.MapCommitteeColdCredentialToEpoch,
   key: CML.Credential,
-  value: bigint
-) => Effect.Effect<bigint | undefined, MapCommitteeColdCredentialToEpochError>
+  value: bigint,
+) => Effect.Effect<bigint | undefined, MapCommitteeColdCredentialToEpochError>;
 ```
 
 Added in v2.0.0
@@ -137,8 +137,11 @@ Method keys of MapCommitteeColdCredentialToEpoch
 
 ```ts
 export declare const keys: (
-  instance: CML.MapCommitteeColdCredentialToEpoch
-) => Effect.Effect<CML.CommitteeColdCredentialList, MapCommitteeColdCredentialToEpochError>
+  instance: CML.MapCommitteeColdCredentialToEpoch,
+) => Effect.Effect<
+  CML.CommitteeColdCredentialList,
+  MapCommitteeColdCredentialToEpochError
+>;
 ```
 
 Added in v2.0.0
@@ -151,8 +154,8 @@ Method len of MapCommitteeColdCredentialToEpoch
 
 ```ts
 export declare const len: (
-  instance: CML.MapCommitteeColdCredentialToEpoch
-) => Effect.Effect<number, MapCommitteeColdCredentialToEpochError>
+  instance: CML.MapCommitteeColdCredentialToEpoch,
+) => Effect.Effect<number, MapCommitteeColdCredentialToEpochError>;
 ```
 
 Added in v2.0.0
@@ -166,7 +169,9 @@ Unsafely calls instance.free without Effect wrapper
 **Signature**
 
 ```ts
-export declare const freeUnsafe: (instance: CML.MapCommitteeColdCredentialToEpoch) => void
+export declare const freeUnsafe: (
+  instance: CML.MapCommitteeColdCredentialToEpoch,
+) => void;
 ```
 
 Added in v2.0.0
@@ -180,8 +185,8 @@ Unsafely calls instance.get without Effect wrapper
 ```ts
 export declare const getUnsafe: (
   instance: CML.MapCommitteeColdCredentialToEpoch,
-  key: CML.Credential
-) => bigint | undefined
+  key: CML.Credential,
+) => bigint | undefined;
 ```
 
 Added in v2.0.0
@@ -196,8 +201,8 @@ Unsafely calls instance.insert without Effect wrapper
 export declare const insertUnsafe: (
   instance: CML.MapCommitteeColdCredentialToEpoch,
   key: CML.Credential,
-  value: bigint
-) => bigint | undefined
+  value: bigint,
+) => bigint | undefined;
 ```
 
 Added in v2.0.0
@@ -209,7 +214,9 @@ Unsafely calls instance.keys without Effect wrapper
 **Signature**
 
 ```ts
-export declare const keysUnsafe: (instance: CML.MapCommitteeColdCredentialToEpoch) => CML.CommitteeColdCredentialList
+export declare const keysUnsafe: (
+  instance: CML.MapCommitteeColdCredentialToEpoch,
+) => CML.CommitteeColdCredentialList;
 ```
 
 Added in v2.0.0
@@ -221,7 +228,9 @@ Unsafely calls instance.len without Effect wrapper
 **Signature**
 
 ```ts
-export declare const lenUnsafe: (instance: CML.MapCommitteeColdCredentialToEpoch) => number
+export declare const lenUnsafe: (
+  instance: CML.MapCommitteeColdCredentialToEpoch,
+) => number;
 ```
 
 Added in v2.0.0
@@ -235,7 +244,8 @@ Type alias for the CML MapCommitteeColdCredentialToEpoch class
 **Signature**
 
 ```ts
-export type MapCommitteeColdCredentialToEpoch = CML.MapCommitteeColdCredentialToEpoch
+export type MapCommitteeColdCredentialToEpoch =
+  CML.MapCommitteeColdCredentialToEpoch;
 ```
 
 Added in v2.0.0

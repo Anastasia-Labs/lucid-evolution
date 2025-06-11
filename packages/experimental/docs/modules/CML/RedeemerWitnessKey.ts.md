@@ -40,8 +40,8 @@ Static method \_new of RedeemerWitnessKey
 ```ts
 export declare const _new: (
   tag: CML.RedeemerTag,
-  index: bigint
-) => Effect.Effect<CML.RedeemerWitnessKey, RedeemerWitnessKeyError>
+  index: bigint,
+) => Effect.Effect<CML.RedeemerWitnessKey, RedeemerWitnessKeyError>;
 ```
 
 Added in v2.0.0
@@ -54,8 +54,8 @@ Static method fromRedeemer of RedeemerWitnessKey
 
 ```ts
 export declare const fromRedeemer: (
-  redeemer: CML.LegacyRedeemer
-) => Effect.Effect<CML.RedeemerWitnessKey, RedeemerWitnessKeyError>
+  redeemer: CML.LegacyRedeemer,
+) => Effect.Effect<CML.RedeemerWitnessKey, RedeemerWitnessKeyError>;
 ```
 
 Added in v2.0.0
@@ -69,7 +69,10 @@ Unsafely calls RedeemerWitnessKey.\_new without Effect wrapper
 **Signature**
 
 ```ts
-export declare const _newUnsafe: (tag: CML.RedeemerTag, index: bigint) => CML.RedeemerWitnessKey
+export declare const _newUnsafe: (
+  tag: CML.RedeemerTag,
+  index: bigint,
+) => CML.RedeemerWitnessKey;
 ```
 
 Added in v2.0.0
@@ -81,7 +84,9 @@ Unsafely calls RedeemerWitnessKey.fromRedeemer without Effect wrapper
 **Signature**
 
 ```ts
-export declare const fromRedeemerUnsafe: (redeemer: CML.LegacyRedeemer) => CML.RedeemerWitnessKey
+export declare const fromRedeemerUnsafe: (
+  redeemer: CML.LegacyRedeemer,
+) => CML.RedeemerWitnessKey;
 ```
 
 Added in v2.0.0
@@ -111,7 +116,9 @@ Method free of RedeemerWitnessKey
 **Signature**
 
 ```ts
-export declare const free: (instance: CML.RedeemerWitnessKey) => Effect.Effect<void, RedeemerWitnessKeyError>
+export declare const free: (
+  instance: CML.RedeemerWitnessKey,
+) => Effect.Effect<void, RedeemerWitnessKeyError>;
 ```
 
 Added in v2.0.0
@@ -125,7 +132,7 @@ Unsafely calls instance.free without Effect wrapper
 **Signature**
 
 ```ts
-export declare const freeUnsafe: (instance: CML.RedeemerWitnessKey) => void
+export declare const freeUnsafe: (instance: CML.RedeemerWitnessKey) => void;
 ```
 
 Added in v2.0.0
@@ -139,7 +146,7 @@ Type alias for the CML RedeemerWitnessKey class
 **Signature**
 
 ```ts
-export type RedeemerWitnessKey = CML.RedeemerWitnessKey
+export type RedeemerWitnessKey = CML.RedeemerWitnessKey;
 ```
 
 Added in v2.0.0

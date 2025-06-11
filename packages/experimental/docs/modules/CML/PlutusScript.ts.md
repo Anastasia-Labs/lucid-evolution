@@ -50,7 +50,9 @@ Static method fromV1 of PlutusScript
 **Signature**
 
 ```ts
-export declare const fromV1: (script: CML.PlutusV1Script) => Effect.Effect<CML.PlutusScript, PlutusScriptError>
+export declare const fromV1: (
+  script: CML.PlutusV1Script,
+) => Effect.Effect<CML.PlutusScript, PlutusScriptError>;
 ```
 
 Added in v2.0.0
@@ -62,7 +64,9 @@ Static method fromV2 of PlutusScript
 **Signature**
 
 ```ts
-export declare const fromV2: (script: CML.PlutusV2Script) => Effect.Effect<CML.PlutusScript, PlutusScriptError>
+export declare const fromV2: (
+  script: CML.PlutusV2Script,
+) => Effect.Effect<CML.PlutusScript, PlutusScriptError>;
 ```
 
 Added in v2.0.0
@@ -74,7 +78,9 @@ Static method fromV3 of PlutusScript
 **Signature**
 
 ```ts
-export declare const fromV3: (script: CML.PlutusV3Script) => Effect.Effect<CML.PlutusScript, PlutusScriptError>
+export declare const fromV3: (
+  script: CML.PlutusV3Script,
+) => Effect.Effect<CML.PlutusScript, PlutusScriptError>;
 ```
 
 Added in v2.0.0
@@ -88,7 +94,9 @@ Unsafely calls PlutusScript.fromV1 without Effect wrapper
 **Signature**
 
 ```ts
-export declare const fromV1Unsafe: (script: CML.PlutusV1Script) => CML.PlutusScript
+export declare const fromV1Unsafe: (
+  script: CML.PlutusV1Script,
+) => CML.PlutusScript;
 ```
 
 Added in v2.0.0
@@ -100,7 +108,9 @@ Unsafely calls PlutusScript.fromV2 without Effect wrapper
 **Signature**
 
 ```ts
-export declare const fromV2Unsafe: (script: CML.PlutusV2Script) => CML.PlutusScript
+export declare const fromV2Unsafe: (
+  script: CML.PlutusV2Script,
+) => CML.PlutusScript;
 ```
 
 Added in v2.0.0
@@ -112,7 +122,9 @@ Unsafely calls PlutusScript.fromV3 without Effect wrapper
 **Signature**
 
 ```ts
-export declare const fromV3Unsafe: (script: CML.PlutusV3Script) => CML.PlutusScript
+export declare const fromV3Unsafe: (
+  script: CML.PlutusV3Script,
+) => CML.PlutusScript;
 ```
 
 Added in v2.0.0
@@ -143,8 +155,8 @@ Method asV1 of PlutusScript
 
 ```ts
 export declare const asV1: (
-  instance: CML.PlutusScript
-) => Effect.Effect<CML.PlutusV1Script | undefined, PlutusScriptError>
+  instance: CML.PlutusScript,
+) => Effect.Effect<CML.PlutusV1Script | undefined, PlutusScriptError>;
 ```
 
 Added in v2.0.0
@@ -157,8 +169,8 @@ Method asV2 of PlutusScript
 
 ```ts
 export declare const asV2: (
-  instance: CML.PlutusScript
-) => Effect.Effect<CML.PlutusV2Script | undefined, PlutusScriptError>
+  instance: CML.PlutusScript,
+) => Effect.Effect<CML.PlutusV2Script | undefined, PlutusScriptError>;
 ```
 
 Added in v2.0.0
@@ -171,8 +183,8 @@ Method asV3 of PlutusScript
 
 ```ts
 export declare const asV3: (
-  instance: CML.PlutusScript
-) => Effect.Effect<CML.PlutusV3Script | undefined, PlutusScriptError>
+  instance: CML.PlutusScript,
+) => Effect.Effect<CML.PlutusV3Script | undefined, PlutusScriptError>;
 ```
 
 Added in v2.0.0
@@ -184,7 +196,9 @@ Method free of PlutusScript
 **Signature**
 
 ```ts
-export declare const free: (instance: CML.PlutusScript) => Effect.Effect<void, PlutusScriptError>
+export declare const free: (
+  instance: CML.PlutusScript,
+) => Effect.Effect<void, PlutusScriptError>;
 ```
 
 Added in v2.0.0
@@ -196,7 +210,9 @@ Method hash of PlutusScript
 **Signature**
 
 ```ts
-export declare const hash: (instance: CML.PlutusScript) => Effect.Effect<CML.ScriptHash, PlutusScriptError>
+export declare const hash: (
+  instance: CML.PlutusScript,
+) => Effect.Effect<CML.ScriptHash, PlutusScriptError>;
 ```
 
 Added in v2.0.0
@@ -208,7 +224,9 @@ Method version of PlutusScript
 **Signature**
 
 ```ts
-export declare const version: (instance: CML.PlutusScript) => Effect.Effect<CML.Language, PlutusScriptError>
+export declare const version: (
+  instance: CML.PlutusScript,
+) => Effect.Effect<CML.Language, PlutusScriptError>;
 ```
 
 Added in v2.0.0
@@ -222,7 +240,9 @@ Unsafely calls instance.asV1 without Effect wrapper
 **Signature**
 
 ```ts
-export declare const asV1Unsafe: (instance: CML.PlutusScript) => CML.PlutusV1Script | undefined
+export declare const asV1Unsafe: (
+  instance: CML.PlutusScript,
+) => CML.PlutusV1Script | undefined;
 ```
 
 Added in v2.0.0
@@ -234,7 +254,9 @@ Unsafely calls instance.asV2 without Effect wrapper
 **Signature**
 
 ```ts
-export declare const asV2Unsafe: (instance: CML.PlutusScript) => CML.PlutusV2Script | undefined
+export declare const asV2Unsafe: (
+  instance: CML.PlutusScript,
+) => CML.PlutusV2Script | undefined;
 ```
 
 Added in v2.0.0
@@ -246,7 +268,9 @@ Unsafely calls instance.asV3 without Effect wrapper
 **Signature**
 
 ```ts
-export declare const asV3Unsafe: (instance: CML.PlutusScript) => CML.PlutusV3Script | undefined
+export declare const asV3Unsafe: (
+  instance: CML.PlutusScript,
+) => CML.PlutusV3Script | undefined;
 ```
 
 Added in v2.0.0
@@ -258,7 +282,7 @@ Unsafely calls instance.free without Effect wrapper
 **Signature**
 
 ```ts
-export declare const freeUnsafe: (instance: CML.PlutusScript) => void
+export declare const freeUnsafe: (instance: CML.PlutusScript) => void;
 ```
 
 Added in v2.0.0
@@ -270,7 +294,7 @@ Unsafely calls instance.hash without Effect wrapper
 **Signature**
 
 ```ts
-export declare const hashUnsafe: (instance: CML.PlutusScript) => CML.ScriptHash
+export declare const hashUnsafe: (instance: CML.PlutusScript) => CML.ScriptHash;
 ```
 
 Added in v2.0.0
@@ -282,7 +306,9 @@ Unsafely calls instance.version without Effect wrapper
 **Signature**
 
 ```ts
-export declare const versionUnsafe: (instance: CML.PlutusScript) => CML.Language
+export declare const versionUnsafe: (
+  instance: CML.PlutusScript,
+) => CML.Language;
 ```
 
 Added in v2.0.0
@@ -296,7 +322,7 @@ Type alias for the CML PlutusScript class
 **Signature**
 
 ```ts
-export type PlutusScript = CML.PlutusScript
+export type PlutusScript = CML.PlutusScript;
 ```
 
 Added in v2.0.0

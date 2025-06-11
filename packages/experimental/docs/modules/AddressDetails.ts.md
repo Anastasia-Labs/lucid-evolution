@@ -41,7 +41,7 @@ Added in v2.0.0
 
 ```ts
 export interface AddressDetails {
-  readonly [NominalType]: unique symbol
+  readonly [NominalType]: unique symbol;
 }
 ```
 
@@ -54,7 +54,7 @@ export declare const Bech32: Schema.transformOrFail<
   Schema.SchemaClass<string & Brand<"Bech32">, string & Brand<"Bech32">, never>,
   typeof AddressDetails,
   never
->
+>;
 ```
 
 ## HexString
@@ -63,8 +63,12 @@ export declare const Bech32: Schema.transformOrFail<
 
 ```ts
 export declare const HexString: Schema.transformOrFail<
-  Schema.SchemaClass<string & Brand<"HexString">, string & Brand<"HexString">, never>,
+  Schema.SchemaClass<
+    string & Brand<"HexString">,
+    string & Brand<"HexString">,
+    never
+  >,
   typeof AddressDetails,
   never
->
+>;
 ```

@@ -46,7 +46,9 @@ Static method fromBech32 of Ed25519KeyHash
 **Signature**
 
 ```ts
-export declare const fromBech32: (bech32Str: string) => Effect.Effect<CML.Ed25519KeyHash, Ed25519KeyHashError>
+export declare const fromBech32: (
+  bech32Str: string,
+) => Effect.Effect<CML.Ed25519KeyHash, Ed25519KeyHashError>;
 ```
 
 Added in v2.0.0
@@ -58,7 +60,9 @@ Static method fromHex of Ed25519KeyHash
 **Signature**
 
 ```ts
-export declare const fromHex: (input: string) => Effect.Effect<CML.Ed25519KeyHash, Ed25519KeyHashError>
+export declare const fromHex: (
+  input: string,
+) => Effect.Effect<CML.Ed25519KeyHash, Ed25519KeyHashError>;
 ```
 
 Added in v2.0.0
@@ -70,7 +74,9 @@ Static method fromRawBytes of Ed25519KeyHash
 **Signature**
 
 ```ts
-export declare const fromRawBytes: (bytes: Uint8Array) => Effect.Effect<CML.Ed25519KeyHash, Ed25519KeyHashError>
+export declare const fromRawBytes: (
+  bytes: Uint8Array,
+) => Effect.Effect<CML.Ed25519KeyHash, Ed25519KeyHashError>;
 ```
 
 Added in v2.0.0
@@ -84,7 +90,9 @@ Unsafely calls Ed25519KeyHash.fromBech32 without Effect wrapper
 **Signature**
 
 ```ts
-export declare const fromBech32Unsafe: (bech32Str: string) => CML.Ed25519KeyHash
+export declare const fromBech32Unsafe: (
+  bech32Str: string,
+) => CML.Ed25519KeyHash;
 ```
 
 Added in v2.0.0
@@ -96,7 +104,7 @@ Unsafely calls Ed25519KeyHash.fromHex without Effect wrapper
 **Signature**
 
 ```ts
-export declare const fromHexUnsafe: (input: string) => CML.Ed25519KeyHash
+export declare const fromHexUnsafe: (input: string) => CML.Ed25519KeyHash;
 ```
 
 Added in v2.0.0
@@ -108,7 +116,9 @@ Unsafely calls Ed25519KeyHash.fromRawBytes without Effect wrapper
 **Signature**
 
 ```ts
-export declare const fromRawBytesUnsafe: (bytes: Uint8Array) => CML.Ed25519KeyHash
+export declare const fromRawBytesUnsafe: (
+  bytes: Uint8Array,
+) => CML.Ed25519KeyHash;
 ```
 
 Added in v2.0.0
@@ -138,7 +148,9 @@ Method free of Ed25519KeyHash
 **Signature**
 
 ```ts
-export declare const free: (instance: CML.Ed25519KeyHash) => Effect.Effect<void, Ed25519KeyHashError>
+export declare const free: (
+  instance: CML.Ed25519KeyHash,
+) => Effect.Effect<void, Ed25519KeyHashError>;
 ```
 
 Added in v2.0.0
@@ -152,8 +164,8 @@ Method toBech32 of Ed25519KeyHash
 ```ts
 export declare const toBech32: (
   instance: CML.Ed25519KeyHash,
-  prefix: string
-) => Effect.Effect<string, Ed25519KeyHashError>
+  prefix: string,
+) => Effect.Effect<string, Ed25519KeyHashError>;
 ```
 
 Added in v2.0.0
@@ -165,7 +177,9 @@ Method toHex of Ed25519KeyHash
 **Signature**
 
 ```ts
-export declare const toHex: (instance: CML.Ed25519KeyHash) => Effect.Effect<string, Ed25519KeyHashError>
+export declare const toHex: (
+  instance: CML.Ed25519KeyHash,
+) => Effect.Effect<string, Ed25519KeyHashError>;
 ```
 
 Added in v2.0.0
@@ -177,7 +191,9 @@ Method toRawBytes of Ed25519KeyHash
 **Signature**
 
 ```ts
-export declare const toRawBytes: (instance: CML.Ed25519KeyHash) => Effect.Effect<Uint8Array, Ed25519KeyHashError>
+export declare const toRawBytes: (
+  instance: CML.Ed25519KeyHash,
+) => Effect.Effect<Uint8Array, Ed25519KeyHashError>;
 ```
 
 Added in v2.0.0
@@ -191,7 +207,7 @@ Unsafely calls instance.free without Effect wrapper
 **Signature**
 
 ```ts
-export declare const freeUnsafe: (instance: CML.Ed25519KeyHash) => void
+export declare const freeUnsafe: (instance: CML.Ed25519KeyHash) => void;
 ```
 
 Added in v2.0.0
@@ -203,7 +219,10 @@ Unsafely calls instance.toBech32 without Effect wrapper
 **Signature**
 
 ```ts
-export declare const toBech32Unsafe: (instance: CML.Ed25519KeyHash, prefix: string) => string
+export declare const toBech32Unsafe: (
+  instance: CML.Ed25519KeyHash,
+  prefix: string,
+) => string;
 ```
 
 Added in v2.0.0
@@ -215,7 +234,7 @@ Unsafely calls instance.toHex without Effect wrapper
 **Signature**
 
 ```ts
-export declare const toHexUnsafe: (instance: CML.Ed25519KeyHash) => string
+export declare const toHexUnsafe: (instance: CML.Ed25519KeyHash) => string;
 ```
 
 Added in v2.0.0
@@ -227,7 +246,9 @@ Unsafely calls instance.toRawBytes without Effect wrapper
 **Signature**
 
 ```ts
-export declare const toRawBytesUnsafe: (instance: CML.Ed25519KeyHash) => Uint8Array
+export declare const toRawBytesUnsafe: (
+  instance: CML.Ed25519KeyHash,
+) => Uint8Array;
 ```
 
 Added in v2.0.0
@@ -241,7 +262,7 @@ Type alias for the CML Ed25519KeyHash class
 **Signature**
 
 ```ts
-export type Ed25519KeyHash = CML.Ed25519KeyHash
+export type Ed25519KeyHash = CML.Ed25519KeyHash;
 ```
 
 Added in v2.0.0

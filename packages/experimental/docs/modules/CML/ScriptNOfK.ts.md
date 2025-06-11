@@ -60,8 +60,8 @@ Static method \_new of ScriptNOfK
 ```ts
 export declare const _new: (
   n: bigint,
-  nativeScripts: CML.NativeScriptList
-) => Effect.Effect<CML.ScriptNOfK, ScriptNOfKError>
+  nativeScripts: CML.NativeScriptList,
+) => Effect.Effect<CML.ScriptNOfK, ScriptNOfKError>;
 ```
 
 Added in v2.0.0
@@ -73,7 +73,9 @@ Static method fromCborBytes of ScriptNOfK
 **Signature**
 
 ```ts
-export declare const fromCborBytes: (cborBytes: Uint8Array) => Effect.Effect<CML.ScriptNOfK, ScriptNOfKError>
+export declare const fromCborBytes: (
+  cborBytes: Uint8Array,
+) => Effect.Effect<CML.ScriptNOfK, ScriptNOfKError>;
 ```
 
 Added in v2.0.0
@@ -85,7 +87,9 @@ Static method fromCborHex of ScriptNOfK
 **Signature**
 
 ```ts
-export declare const fromCborHex: (cborBytes: string) => Effect.Effect<CML.ScriptNOfK, ScriptNOfKError>
+export declare const fromCborHex: (
+  cborBytes: string,
+) => Effect.Effect<CML.ScriptNOfK, ScriptNOfKError>;
 ```
 
 Added in v2.0.0
@@ -97,7 +101,9 @@ Static method fromJson of ScriptNOfK
 **Signature**
 
 ```ts
-export declare const fromJson: (json: string) => Effect.Effect<CML.ScriptNOfK, ScriptNOfKError>
+export declare const fromJson: (
+  json: string,
+) => Effect.Effect<CML.ScriptNOfK, ScriptNOfKError>;
 ```
 
 Added in v2.0.0
@@ -111,7 +117,10 @@ Unsafely calls ScriptNOfK.\_new without Effect wrapper
 **Signature**
 
 ```ts
-export declare const _newUnsafe: (n: bigint, nativeScripts: CML.NativeScriptList) => CML.ScriptNOfK
+export declare const _newUnsafe: (
+  n: bigint,
+  nativeScripts: CML.NativeScriptList,
+) => CML.ScriptNOfK;
 ```
 
 Added in v2.0.0
@@ -123,7 +132,9 @@ Unsafely calls ScriptNOfK.fromCborBytes without Effect wrapper
 **Signature**
 
 ```ts
-export declare const fromCborBytesUnsafe: (cborBytes: Uint8Array) => CML.ScriptNOfK
+export declare const fromCborBytesUnsafe: (
+  cborBytes: Uint8Array,
+) => CML.ScriptNOfK;
 ```
 
 Added in v2.0.0
@@ -135,7 +146,7 @@ Unsafely calls ScriptNOfK.fromCborHex without Effect wrapper
 **Signature**
 
 ```ts
-export declare const fromCborHexUnsafe: (cborBytes: string) => CML.ScriptNOfK
+export declare const fromCborHexUnsafe: (cborBytes: string) => CML.ScriptNOfK;
 ```
 
 Added in v2.0.0
@@ -147,7 +158,7 @@ Unsafely calls ScriptNOfK.fromJson without Effect wrapper
 **Signature**
 
 ```ts
-export declare const fromJsonUnsafe: (json: string) => CML.ScriptNOfK
+export declare const fromJsonUnsafe: (json: string) => CML.ScriptNOfK;
 ```
 
 Added in v2.0.0
@@ -177,7 +188,9 @@ Method free of ScriptNOfK
 **Signature**
 
 ```ts
-export declare const free: (instance: CML.ScriptNOfK) => Effect.Effect<void, ScriptNOfKError>
+export declare const free: (
+  instance: CML.ScriptNOfK,
+) => Effect.Effect<void, ScriptNOfKError>;
 ```
 
 Added in v2.0.0
@@ -189,7 +202,9 @@ Method n of ScriptNOfK
 **Signature**
 
 ```ts
-export declare const n: (instance: CML.ScriptNOfK) => Effect.Effect<bigint, ScriptNOfKError>
+export declare const n: (
+  instance: CML.ScriptNOfK,
+) => Effect.Effect<bigint, ScriptNOfKError>;
 ```
 
 Added in v2.0.0
@@ -201,7 +216,9 @@ Method nativeScripts of ScriptNOfK
 **Signature**
 
 ```ts
-export declare const nativeScripts: (instance: CML.ScriptNOfK) => Effect.Effect<CML.NativeScriptList, ScriptNOfKError>
+export declare const nativeScripts: (
+  instance: CML.ScriptNOfK,
+) => Effect.Effect<CML.NativeScriptList, ScriptNOfKError>;
 ```
 
 Added in v2.0.0
@@ -213,7 +230,9 @@ Method toCanonicalCborBytes of ScriptNOfK
 **Signature**
 
 ```ts
-export declare const toCanonicalCborBytes: (instance: CML.ScriptNOfK) => Effect.Effect<Uint8Array, ScriptNOfKError>
+export declare const toCanonicalCborBytes: (
+  instance: CML.ScriptNOfK,
+) => Effect.Effect<Uint8Array, ScriptNOfKError>;
 ```
 
 Added in v2.0.0
@@ -225,7 +244,9 @@ Method toCanonicalCborHex of ScriptNOfK
 **Signature**
 
 ```ts
-export declare const toCanonicalCborHex: (instance: CML.ScriptNOfK) => Effect.Effect<string, ScriptNOfKError>
+export declare const toCanonicalCborHex: (
+  instance: CML.ScriptNOfK,
+) => Effect.Effect<string, ScriptNOfKError>;
 ```
 
 Added in v2.0.0
@@ -237,7 +258,9 @@ Method toCborBytes of ScriptNOfK
 **Signature**
 
 ```ts
-export declare const toCborBytes: (instance: CML.ScriptNOfK) => Effect.Effect<Uint8Array, ScriptNOfKError>
+export declare const toCborBytes: (
+  instance: CML.ScriptNOfK,
+) => Effect.Effect<Uint8Array, ScriptNOfKError>;
 ```
 
 Added in v2.0.0
@@ -249,7 +272,9 @@ Method toCborHex of ScriptNOfK
 **Signature**
 
 ```ts
-export declare const toCborHex: (instance: CML.ScriptNOfK) => Effect.Effect<string, ScriptNOfKError>
+export declare const toCborHex: (
+  instance: CML.ScriptNOfK,
+) => Effect.Effect<string, ScriptNOfKError>;
 ```
 
 Added in v2.0.0
@@ -261,7 +286,9 @@ Method toJsValue of ScriptNOfK
 **Signature**
 
 ```ts
-export declare const toJsValue: (instance: CML.ScriptNOfK) => Effect.Effect<any, ScriptNOfKError>
+export declare const toJsValue: (
+  instance: CML.ScriptNOfK,
+) => Effect.Effect<any, ScriptNOfKError>;
 ```
 
 Added in v2.0.0
@@ -273,7 +300,9 @@ Method toJson of ScriptNOfK
 **Signature**
 
 ```ts
-export declare const toJson: (instance: CML.ScriptNOfK) => Effect.Effect<string, ScriptNOfKError>
+export declare const toJson: (
+  instance: CML.ScriptNOfK,
+) => Effect.Effect<string, ScriptNOfKError>;
 ```
 
 Added in v2.0.0
@@ -287,7 +316,7 @@ Unsafely calls instance.free without Effect wrapper
 **Signature**
 
 ```ts
-export declare const freeUnsafe: (instance: CML.ScriptNOfK) => void
+export declare const freeUnsafe: (instance: CML.ScriptNOfK) => void;
 ```
 
 Added in v2.0.0
@@ -299,7 +328,7 @@ Unsafely calls instance.n without Effect wrapper
 **Signature**
 
 ```ts
-export declare const nUnsafe: (instance: CML.ScriptNOfK) => bigint
+export declare const nUnsafe: (instance: CML.ScriptNOfK) => bigint;
 ```
 
 Added in v2.0.0
@@ -311,7 +340,9 @@ Unsafely calls instance.nativeScripts without Effect wrapper
 **Signature**
 
 ```ts
-export declare const nativeScriptsUnsafe: (instance: CML.ScriptNOfK) => CML.NativeScriptList
+export declare const nativeScriptsUnsafe: (
+  instance: CML.ScriptNOfK,
+) => CML.NativeScriptList;
 ```
 
 Added in v2.0.0
@@ -323,7 +354,9 @@ Unsafely calls instance.toCanonicalCborBytes without Effect wrapper
 **Signature**
 
 ```ts
-export declare const toCanonicalCborBytesUnsafe: (instance: CML.ScriptNOfK) => Uint8Array
+export declare const toCanonicalCborBytesUnsafe: (
+  instance: CML.ScriptNOfK,
+) => Uint8Array;
 ```
 
 Added in v2.0.0
@@ -335,7 +368,9 @@ Unsafely calls instance.toCanonicalCborHex without Effect wrapper
 **Signature**
 
 ```ts
-export declare const toCanonicalCborHexUnsafe: (instance: CML.ScriptNOfK) => string
+export declare const toCanonicalCborHexUnsafe: (
+  instance: CML.ScriptNOfK,
+) => string;
 ```
 
 Added in v2.0.0
@@ -347,7 +382,9 @@ Unsafely calls instance.toCborBytes without Effect wrapper
 **Signature**
 
 ```ts
-export declare const toCborBytesUnsafe: (instance: CML.ScriptNOfK) => Uint8Array
+export declare const toCborBytesUnsafe: (
+  instance: CML.ScriptNOfK,
+) => Uint8Array;
 ```
 
 Added in v2.0.0
@@ -359,7 +396,7 @@ Unsafely calls instance.toCborHex without Effect wrapper
 **Signature**
 
 ```ts
-export declare const toCborHexUnsafe: (instance: CML.ScriptNOfK) => string
+export declare const toCborHexUnsafe: (instance: CML.ScriptNOfK) => string;
 ```
 
 Added in v2.0.0
@@ -371,7 +408,7 @@ Unsafely calls instance.toJsValue without Effect wrapper
 **Signature**
 
 ```ts
-export declare const toJsValueUnsafe: (instance: CML.ScriptNOfK) => any
+export declare const toJsValueUnsafe: (instance: CML.ScriptNOfK) => any;
 ```
 
 Added in v2.0.0
@@ -383,7 +420,7 @@ Unsafely calls instance.toJson without Effect wrapper
 **Signature**
 
 ```ts
-export declare const toJsonUnsafe: (instance: CML.ScriptNOfK) => string
+export declare const toJsonUnsafe: (instance: CML.ScriptNOfK) => string;
 ```
 
 Added in v2.0.0
@@ -397,7 +434,7 @@ Type alias for the CML ScriptNOfK class
 **Signature**
 
 ```ts
-export type ScriptNOfK = CML.ScriptNOfK
+export type ScriptNOfK = CML.ScriptNOfK;
 ```
 
 Added in v2.0.0

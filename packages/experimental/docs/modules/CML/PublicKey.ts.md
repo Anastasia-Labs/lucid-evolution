@@ -46,7 +46,9 @@ Static method fromBech32 of PublicKey
 **Signature**
 
 ```ts
-export declare const fromBech32: (bech32Str: string) => Effect.Effect<CML.PublicKey, PublicKeyError>
+export declare const fromBech32: (
+  bech32Str: string,
+) => Effect.Effect<CML.PublicKey, PublicKeyError>;
 ```
 
 Added in v2.0.0
@@ -58,7 +60,9 @@ Static method fromBytes of PublicKey
 **Signature**
 
 ```ts
-export declare const fromBytes: (bytes: Uint8Array) => Effect.Effect<CML.PublicKey, PublicKeyError>
+export declare const fromBytes: (
+  bytes: Uint8Array,
+) => Effect.Effect<CML.PublicKey, PublicKeyError>;
 ```
 
 Added in v2.0.0
@@ -72,7 +76,7 @@ Unsafely calls PublicKey.fromBech32 without Effect wrapper
 **Signature**
 
 ```ts
-export declare const fromBech32Unsafe: (bech32Str: string) => CML.PublicKey
+export declare const fromBech32Unsafe: (bech32Str: string) => CML.PublicKey;
 ```
 
 Added in v2.0.0
@@ -84,7 +88,7 @@ Unsafely calls PublicKey.fromBytes without Effect wrapper
 **Signature**
 
 ```ts
-export declare const fromBytesUnsafe: (bytes: Uint8Array) => CML.PublicKey
+export declare const fromBytesUnsafe: (bytes: Uint8Array) => CML.PublicKey;
 ```
 
 Added in v2.0.0
@@ -114,7 +118,9 @@ Method free of PublicKey
 **Signature**
 
 ```ts
-export declare const free: (instance: CML.PublicKey) => Effect.Effect<void, PublicKeyError>
+export declare const free: (
+  instance: CML.PublicKey,
+) => Effect.Effect<void, PublicKeyError>;
 ```
 
 Added in v2.0.0
@@ -126,7 +132,9 @@ Method hash of PublicKey
 **Signature**
 
 ```ts
-export declare const hash: (instance: CML.PublicKey) => Effect.Effect<CML.Ed25519KeyHash, PublicKeyError>
+export declare const hash: (
+  instance: CML.PublicKey,
+) => Effect.Effect<CML.Ed25519KeyHash, PublicKeyError>;
 ```
 
 Added in v2.0.0
@@ -138,7 +146,9 @@ Method toBech32 of PublicKey
 **Signature**
 
 ```ts
-export declare const toBech32: (instance: CML.PublicKey) => Effect.Effect<string, PublicKeyError>
+export declare const toBech32: (
+  instance: CML.PublicKey,
+) => Effect.Effect<string, PublicKeyError>;
 ```
 
 Added in v2.0.0
@@ -150,7 +160,9 @@ Method toRawBytes of PublicKey
 **Signature**
 
 ```ts
-export declare const toRawBytes: (instance: CML.PublicKey) => Effect.Effect<Uint8Array, PublicKeyError>
+export declare const toRawBytes: (
+  instance: CML.PublicKey,
+) => Effect.Effect<Uint8Array, PublicKeyError>;
 ```
 
 Added in v2.0.0
@@ -165,8 +177,8 @@ Method verify of PublicKey
 export declare const verify: (
   instance: CML.PublicKey,
   data: Uint8Array,
-  signature: CML.Ed25519Signature
-) => Effect.Effect<boolean, PublicKeyError>
+  signature: CML.Ed25519Signature,
+) => Effect.Effect<boolean, PublicKeyError>;
 ```
 
 Added in v2.0.0
@@ -180,7 +192,7 @@ Unsafely calls instance.free without Effect wrapper
 **Signature**
 
 ```ts
-export declare const freeUnsafe: (instance: CML.PublicKey) => void
+export declare const freeUnsafe: (instance: CML.PublicKey) => void;
 ```
 
 Added in v2.0.0
@@ -192,7 +204,9 @@ Unsafely calls instance.hash without Effect wrapper
 **Signature**
 
 ```ts
-export declare const hashUnsafe: (instance: CML.PublicKey) => CML.Ed25519KeyHash
+export declare const hashUnsafe: (
+  instance: CML.PublicKey,
+) => CML.Ed25519KeyHash;
 ```
 
 Added in v2.0.0
@@ -204,7 +218,7 @@ Unsafely calls instance.toBech32 without Effect wrapper
 **Signature**
 
 ```ts
-export declare const toBech32Unsafe: (instance: CML.PublicKey) => string
+export declare const toBech32Unsafe: (instance: CML.PublicKey) => string;
 ```
 
 Added in v2.0.0
@@ -216,7 +230,7 @@ Unsafely calls instance.toRawBytes without Effect wrapper
 **Signature**
 
 ```ts
-export declare const toRawBytesUnsafe: (instance: CML.PublicKey) => Uint8Array
+export declare const toRawBytesUnsafe: (instance: CML.PublicKey) => Uint8Array;
 ```
 
 Added in v2.0.0
@@ -231,8 +245,8 @@ Unsafely calls instance.verify without Effect wrapper
 export declare const verifyUnsafe: (
   instance: CML.PublicKey,
   data: Uint8Array,
-  signature: CML.Ed25519Signature
-) => boolean
+  signature: CML.Ed25519Signature,
+) => boolean;
 ```
 
 Added in v2.0.0
@@ -246,7 +260,7 @@ Type alias for the CML PublicKey class
 **Signature**
 
 ```ts
-export type PublicKey = CML.PublicKey
+export type PublicKey = CML.PublicKey;
 ```
 
 Added in v2.0.0

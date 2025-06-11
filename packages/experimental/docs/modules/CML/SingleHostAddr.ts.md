@@ -63,8 +63,8 @@ Static method \_new of SingleHostAddr
 export declare const _new: (
   port: number,
   ipv4: CML.Ipv4,
-  ipv6: CML.Ipv6
-) => Effect.Effect<CML.SingleHostAddr, SingleHostAddrError>
+  ipv6: CML.Ipv6,
+) => Effect.Effect<CML.SingleHostAddr, SingleHostAddrError>;
 ```
 
 Added in v2.0.0
@@ -76,7 +76,9 @@ Static method fromCborBytes of SingleHostAddr
 **Signature**
 
 ```ts
-export declare const fromCborBytes: (cborBytes: Uint8Array) => Effect.Effect<CML.SingleHostAddr, SingleHostAddrError>
+export declare const fromCborBytes: (
+  cborBytes: Uint8Array,
+) => Effect.Effect<CML.SingleHostAddr, SingleHostAddrError>;
 ```
 
 Added in v2.0.0
@@ -88,7 +90,9 @@ Static method fromCborHex of SingleHostAddr
 **Signature**
 
 ```ts
-export declare const fromCborHex: (cborBytes: string) => Effect.Effect<CML.SingleHostAddr, SingleHostAddrError>
+export declare const fromCborHex: (
+  cborBytes: string,
+) => Effect.Effect<CML.SingleHostAddr, SingleHostAddrError>;
 ```
 
 Added in v2.0.0
@@ -100,7 +104,9 @@ Static method fromJson of SingleHostAddr
 **Signature**
 
 ```ts
-export declare const fromJson: (json: string) => Effect.Effect<CML.SingleHostAddr, SingleHostAddrError>
+export declare const fromJson: (
+  json: string,
+) => Effect.Effect<CML.SingleHostAddr, SingleHostAddrError>;
 ```
 
 Added in v2.0.0
@@ -114,7 +120,11 @@ Unsafely calls SingleHostAddr.\_new without Effect wrapper
 **Signature**
 
 ```ts
-export declare const _newUnsafe: (port: number, ipv4: CML.Ipv4, ipv6: CML.Ipv6) => CML.SingleHostAddr
+export declare const _newUnsafe: (
+  port: number,
+  ipv4: CML.Ipv4,
+  ipv6: CML.Ipv6,
+) => CML.SingleHostAddr;
 ```
 
 Added in v2.0.0
@@ -126,7 +136,9 @@ Unsafely calls SingleHostAddr.fromCborBytes without Effect wrapper
 **Signature**
 
 ```ts
-export declare const fromCborBytesUnsafe: (cborBytes: Uint8Array) => CML.SingleHostAddr
+export declare const fromCborBytesUnsafe: (
+  cborBytes: Uint8Array,
+) => CML.SingleHostAddr;
 ```
 
 Added in v2.0.0
@@ -138,7 +150,9 @@ Unsafely calls SingleHostAddr.fromCborHex without Effect wrapper
 **Signature**
 
 ```ts
-export declare const fromCborHexUnsafe: (cborBytes: string) => CML.SingleHostAddr
+export declare const fromCborHexUnsafe: (
+  cborBytes: string,
+) => CML.SingleHostAddr;
 ```
 
 Added in v2.0.0
@@ -150,7 +164,7 @@ Unsafely calls SingleHostAddr.fromJson without Effect wrapper
 **Signature**
 
 ```ts
-export declare const fromJsonUnsafe: (json: string) => CML.SingleHostAddr
+export declare const fromJsonUnsafe: (json: string) => CML.SingleHostAddr;
 ```
 
 Added in v2.0.0
@@ -180,7 +194,9 @@ Method free of SingleHostAddr
 **Signature**
 
 ```ts
-export declare const free: (instance: CML.SingleHostAddr) => Effect.Effect<void, SingleHostAddrError>
+export declare const free: (
+  instance: CML.SingleHostAddr,
+) => Effect.Effect<void, SingleHostAddrError>;
 ```
 
 Added in v2.0.0
@@ -192,7 +208,9 @@ Method ipv4 of SingleHostAddr
 **Signature**
 
 ```ts
-export declare const ipv4: (instance: CML.SingleHostAddr) => Effect.Effect<CML.Ipv4 | undefined, SingleHostAddrError>
+export declare const ipv4: (
+  instance: CML.SingleHostAddr,
+) => Effect.Effect<CML.Ipv4 | undefined, SingleHostAddrError>;
 ```
 
 Added in v2.0.0
@@ -204,7 +222,9 @@ Method ipv6 of SingleHostAddr
 **Signature**
 
 ```ts
-export declare const ipv6: (instance: CML.SingleHostAddr) => Effect.Effect<CML.Ipv6 | undefined, SingleHostAddrError>
+export declare const ipv6: (
+  instance: CML.SingleHostAddr,
+) => Effect.Effect<CML.Ipv6 | undefined, SingleHostAddrError>;
 ```
 
 Added in v2.0.0
@@ -216,7 +236,9 @@ Method port of SingleHostAddr
 **Signature**
 
 ```ts
-export declare const port: (instance: CML.SingleHostAddr) => Effect.Effect<number | undefined, SingleHostAddrError>
+export declare const port: (
+  instance: CML.SingleHostAddr,
+) => Effect.Effect<number | undefined, SingleHostAddrError>;
 ```
 
 Added in v2.0.0
@@ -229,8 +251,8 @@ Method toCanonicalCborBytes of SingleHostAddr
 
 ```ts
 export declare const toCanonicalCborBytes: (
-  instance: CML.SingleHostAddr
-) => Effect.Effect<Uint8Array, SingleHostAddrError>
+  instance: CML.SingleHostAddr,
+) => Effect.Effect<Uint8Array, SingleHostAddrError>;
 ```
 
 Added in v2.0.0
@@ -242,7 +264,9 @@ Method toCanonicalCborHex of SingleHostAddr
 **Signature**
 
 ```ts
-export declare const toCanonicalCborHex: (instance: CML.SingleHostAddr) => Effect.Effect<string, SingleHostAddrError>
+export declare const toCanonicalCborHex: (
+  instance: CML.SingleHostAddr,
+) => Effect.Effect<string, SingleHostAddrError>;
 ```
 
 Added in v2.0.0
@@ -254,7 +278,9 @@ Method toCborBytes of SingleHostAddr
 **Signature**
 
 ```ts
-export declare const toCborBytes: (instance: CML.SingleHostAddr) => Effect.Effect<Uint8Array, SingleHostAddrError>
+export declare const toCborBytes: (
+  instance: CML.SingleHostAddr,
+) => Effect.Effect<Uint8Array, SingleHostAddrError>;
 ```
 
 Added in v2.0.0
@@ -266,7 +292,9 @@ Method toCborHex of SingleHostAddr
 **Signature**
 
 ```ts
-export declare const toCborHex: (instance: CML.SingleHostAddr) => Effect.Effect<string, SingleHostAddrError>
+export declare const toCborHex: (
+  instance: CML.SingleHostAddr,
+) => Effect.Effect<string, SingleHostAddrError>;
 ```
 
 Added in v2.0.0
@@ -278,7 +306,9 @@ Method toJsValue of SingleHostAddr
 **Signature**
 
 ```ts
-export declare const toJsValue: (instance: CML.SingleHostAddr) => Effect.Effect<any, SingleHostAddrError>
+export declare const toJsValue: (
+  instance: CML.SingleHostAddr,
+) => Effect.Effect<any, SingleHostAddrError>;
 ```
 
 Added in v2.0.0
@@ -290,7 +320,9 @@ Method toJson of SingleHostAddr
 **Signature**
 
 ```ts
-export declare const toJson: (instance: CML.SingleHostAddr) => Effect.Effect<string, SingleHostAddrError>
+export declare const toJson: (
+  instance: CML.SingleHostAddr,
+) => Effect.Effect<string, SingleHostAddrError>;
 ```
 
 Added in v2.0.0
@@ -304,7 +336,7 @@ Unsafely calls instance.free without Effect wrapper
 **Signature**
 
 ```ts
-export declare const freeUnsafe: (instance: CML.SingleHostAddr) => void
+export declare const freeUnsafe: (instance: CML.SingleHostAddr) => void;
 ```
 
 Added in v2.0.0
@@ -316,7 +348,9 @@ Unsafely calls instance.ipv4 without Effect wrapper
 **Signature**
 
 ```ts
-export declare const ipv4Unsafe: (instance: CML.SingleHostAddr) => CML.Ipv4 | undefined
+export declare const ipv4Unsafe: (
+  instance: CML.SingleHostAddr,
+) => CML.Ipv4 | undefined;
 ```
 
 Added in v2.0.0
@@ -328,7 +362,9 @@ Unsafely calls instance.ipv6 without Effect wrapper
 **Signature**
 
 ```ts
-export declare const ipv6Unsafe: (instance: CML.SingleHostAddr) => CML.Ipv6 | undefined
+export declare const ipv6Unsafe: (
+  instance: CML.SingleHostAddr,
+) => CML.Ipv6 | undefined;
 ```
 
 Added in v2.0.0
@@ -340,7 +376,9 @@ Unsafely calls instance.port without Effect wrapper
 **Signature**
 
 ```ts
-export declare const portUnsafe: (instance: CML.SingleHostAddr) => number | undefined
+export declare const portUnsafe: (
+  instance: CML.SingleHostAddr,
+) => number | undefined;
 ```
 
 Added in v2.0.0
@@ -352,7 +390,9 @@ Unsafely calls instance.toCanonicalCborBytes without Effect wrapper
 **Signature**
 
 ```ts
-export declare const toCanonicalCborBytesUnsafe: (instance: CML.SingleHostAddr) => Uint8Array
+export declare const toCanonicalCborBytesUnsafe: (
+  instance: CML.SingleHostAddr,
+) => Uint8Array;
 ```
 
 Added in v2.0.0
@@ -364,7 +404,9 @@ Unsafely calls instance.toCanonicalCborHex without Effect wrapper
 **Signature**
 
 ```ts
-export declare const toCanonicalCborHexUnsafe: (instance: CML.SingleHostAddr) => string
+export declare const toCanonicalCborHexUnsafe: (
+  instance: CML.SingleHostAddr,
+) => string;
 ```
 
 Added in v2.0.0
@@ -376,7 +418,9 @@ Unsafely calls instance.toCborBytes without Effect wrapper
 **Signature**
 
 ```ts
-export declare const toCborBytesUnsafe: (instance: CML.SingleHostAddr) => Uint8Array
+export declare const toCborBytesUnsafe: (
+  instance: CML.SingleHostAddr,
+) => Uint8Array;
 ```
 
 Added in v2.0.0
@@ -388,7 +432,7 @@ Unsafely calls instance.toCborHex without Effect wrapper
 **Signature**
 
 ```ts
-export declare const toCborHexUnsafe: (instance: CML.SingleHostAddr) => string
+export declare const toCborHexUnsafe: (instance: CML.SingleHostAddr) => string;
 ```
 
 Added in v2.0.0
@@ -400,7 +444,7 @@ Unsafely calls instance.toJsValue without Effect wrapper
 **Signature**
 
 ```ts
-export declare const toJsValueUnsafe: (instance: CML.SingleHostAddr) => any
+export declare const toJsValueUnsafe: (instance: CML.SingleHostAddr) => any;
 ```
 
 Added in v2.0.0
@@ -412,7 +456,7 @@ Unsafely calls instance.toJson without Effect wrapper
 **Signature**
 
 ```ts
-export declare const toJsonUnsafe: (instance: CML.SingleHostAddr) => string
+export declare const toJsonUnsafe: (instance: CML.SingleHostAddr) => string;
 ```
 
 Added in v2.0.0
@@ -426,7 +470,7 @@ Type alias for the CML SingleHostAddr class
 **Signature**
 
 ```ts
-export type SingleHostAddr = CML.SingleHostAddr
+export type SingleHostAddr = CML.SingleHostAddr;
 ```
 
 Added in v2.0.0

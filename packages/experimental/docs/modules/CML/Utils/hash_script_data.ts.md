@@ -49,8 +49,8 @@ Wrapper for the hash_script_data function
 export declare const hashScriptData: (
   redeemers: CML.Redeemers,
   costModels: CML.CostModels,
-  datums: CML.PlutusDataList
-) => Effect.Effect<CML.ScriptDataHash, HashScriptDataError>
+  datums: CML.PlutusDataList,
+) => Effect.Effect<CML.ScriptDataHash, HashScriptDataError>;
 ```
 
 Added in v2.0.0
@@ -67,8 +67,8 @@ Unsafely calls hash_script_data function without Effect wrapper
 export declare const hashScriptDataUnsafe: (
   redeemers: CML.Redeemers,
   costModels: CML.CostModels,
-  datums: CML.PlutusDataList
-) => CML.ScriptDataHash
+  datums: CML.PlutusDataList,
+) => CML.ScriptDataHash;
 ```
 
 Added in v2.0.0

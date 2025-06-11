@@ -37,7 +37,7 @@ Check if two Credential instances are equal.
 **Signature**
 
 ```ts
-export declare const equals: (a: Credential, b: Credential) => boolean
+export declare const equals: (a: Credential, b: Credential) => boolean;
 ```
 
 Added in v2.0.0
@@ -66,21 +66,23 @@ Randomly selects between generating a KeyHash or ScriptHash credential.
 **Signature**
 
 ```ts
-export declare const generator: FastCheck.Arbitrary<KeyHash.KeyHash | ScriptHash.ScriptHash>
+export declare const generator: FastCheck.Arbitrary<
+  KeyHash.KeyHash | ScriptHash.ScriptHash
+>;
 ```
 
 **Example**
 
 ```ts
-import { Credential } from "@lucid-evolution/experimental"
-import { FastCheck } from "effect"
-import assert from "assert"
+import { Credential } from "@lucid-evolution/experimental";
+import { FastCheck } from "effect";
+import assert from "assert";
 
-const randomSamples = FastCheck.sample(Credential.generator, 20)
+const randomSamples = FastCheck.sample(Credential.generator, 20);
 randomSamples.forEach((credential) => {
-  assert(credential._tag === "KeyHash" || credential._tag === "ScriptHash")
-  assert(credential.hash.length === 56)
-})
+  assert(credential._tag === "KeyHash" || credential._tag === "ScriptHash");
+  assert(credential.hash.length === 56);
+});
 ```
 
 Added in v2.0.0
@@ -95,7 +97,7 @@ Used in various address formats to identify ownership
 **Signature**
 
 ```ts
-export type Credential = typeof Credential.Type
+export type Credential = typeof Credential.Type;
 ```
 
 Added in v2.0.0
@@ -111,8 +113,8 @@ Check if the given value is a valid Credential
 ```ts
 export declare const isCredential: (
   u: unknown,
-  overrideOptions?: ParseOptions | number
-) => u is KeyHash.KeyHash | ScriptHash.ScriptHash
+  overrideOptions?: ParseOptions | number,
+) => u is KeyHash.KeyHash | ScriptHash.ScriptHash;
 ```
 
 Added in v2.0.0
@@ -127,7 +129,9 @@ Used to identify ownership of addresses or stake rights
 **Signature**
 
 ```ts
-export declare const Credential: Schema.Union<[typeof KeyHash.KeyHash, typeof ScriptHash.ScriptHash]>
+export declare const Credential: Schema.Union<
+  [typeof KeyHash.KeyHash, typeof ScriptHash.ScriptHash]
+>;
 ```
 
 Added in v2.0.0
@@ -143,7 +147,7 @@ export declare const CBORBytes: Schema.transformOrFail<
   Schema.declare<any, any, readonly [], never>,
   Schema.Union<[typeof KeyHash.KeyHash, typeof ScriptHash.ScriptHash]>,
   never
->
+>;
 ```
 
 ## CBORHex
@@ -152,8 +156,12 @@ export declare const CBORBytes: Schema.transformOrFail<
 
 ```ts
 export declare const CBORHex: Schema.transformOrFail<
-  Schema.SchemaClass<string & Brand<"HexString">, string & Brand<"HexString">, never>,
+  Schema.SchemaClass<
+    string & Brand<"HexString">,
+    string & Brand<"HexString">,
+    never
+  >,
   Schema.Union<[typeof KeyHash.KeyHash, typeof ScriptHash.ScriptHash]>,
   never
->
+>;
 ```

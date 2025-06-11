@@ -60,8 +60,8 @@ Static method \_new of GovActionId
 ```ts
 export declare const _new: (
   transactionId: CML.TransactionHash,
-  govActionIndex: bigint
-) => Effect.Effect<CML.GovActionId, GovActionIdError>
+  govActionIndex: bigint,
+) => Effect.Effect<CML.GovActionId, GovActionIdError>;
 ```
 
 Added in v2.0.0
@@ -73,7 +73,9 @@ Static method fromCborBytes of GovActionId
 **Signature**
 
 ```ts
-export declare const fromCborBytes: (cborBytes: Uint8Array) => Effect.Effect<CML.GovActionId, GovActionIdError>
+export declare const fromCborBytes: (
+  cborBytes: Uint8Array,
+) => Effect.Effect<CML.GovActionId, GovActionIdError>;
 ```
 
 Added in v2.0.0
@@ -85,7 +87,9 @@ Static method fromCborHex of GovActionId
 **Signature**
 
 ```ts
-export declare const fromCborHex: (cborBytes: string) => Effect.Effect<CML.GovActionId, GovActionIdError>
+export declare const fromCborHex: (
+  cborBytes: string,
+) => Effect.Effect<CML.GovActionId, GovActionIdError>;
 ```
 
 Added in v2.0.0
@@ -97,7 +101,9 @@ Static method fromJson of GovActionId
 **Signature**
 
 ```ts
-export declare const fromJson: (json: string) => Effect.Effect<CML.GovActionId, GovActionIdError>
+export declare const fromJson: (
+  json: string,
+) => Effect.Effect<CML.GovActionId, GovActionIdError>;
 ```
 
 Added in v2.0.0
@@ -111,7 +117,10 @@ Unsafely calls GovActionId.\_new without Effect wrapper
 **Signature**
 
 ```ts
-export declare const _newUnsafe: (transactionId: CML.TransactionHash, govActionIndex: bigint) => CML.GovActionId
+export declare const _newUnsafe: (
+  transactionId: CML.TransactionHash,
+  govActionIndex: bigint,
+) => CML.GovActionId;
 ```
 
 Added in v2.0.0
@@ -123,7 +132,9 @@ Unsafely calls GovActionId.fromCborBytes without Effect wrapper
 **Signature**
 
 ```ts
-export declare const fromCborBytesUnsafe: (cborBytes: Uint8Array) => CML.GovActionId
+export declare const fromCborBytesUnsafe: (
+  cborBytes: Uint8Array,
+) => CML.GovActionId;
 ```
 
 Added in v2.0.0
@@ -135,7 +146,7 @@ Unsafely calls GovActionId.fromCborHex without Effect wrapper
 **Signature**
 
 ```ts
-export declare const fromCborHexUnsafe: (cborBytes: string) => CML.GovActionId
+export declare const fromCborHexUnsafe: (cborBytes: string) => CML.GovActionId;
 ```
 
 Added in v2.0.0
@@ -147,7 +158,7 @@ Unsafely calls GovActionId.fromJson without Effect wrapper
 **Signature**
 
 ```ts
-export declare const fromJsonUnsafe: (json: string) => CML.GovActionId
+export declare const fromJsonUnsafe: (json: string) => CML.GovActionId;
 ```
 
 Added in v2.0.0
@@ -177,7 +188,9 @@ Method free of GovActionId
 **Signature**
 
 ```ts
-export declare const free: (instance: CML.GovActionId) => Effect.Effect<void, GovActionIdError>
+export declare const free: (
+  instance: CML.GovActionId,
+) => Effect.Effect<void, GovActionIdError>;
 ```
 
 Added in v2.0.0
@@ -189,7 +202,9 @@ Method govActionIndex of GovActionId
 **Signature**
 
 ```ts
-export declare const govActionIndex: (instance: CML.GovActionId) => Effect.Effect<bigint, GovActionIdError>
+export declare const govActionIndex: (
+  instance: CML.GovActionId,
+) => Effect.Effect<bigint, GovActionIdError>;
 ```
 
 Added in v2.0.0
@@ -201,7 +216,9 @@ Method toCanonicalCborBytes of GovActionId
 **Signature**
 
 ```ts
-export declare const toCanonicalCborBytes: (instance: CML.GovActionId) => Effect.Effect<Uint8Array, GovActionIdError>
+export declare const toCanonicalCborBytes: (
+  instance: CML.GovActionId,
+) => Effect.Effect<Uint8Array, GovActionIdError>;
 ```
 
 Added in v2.0.0
@@ -213,7 +230,9 @@ Method toCanonicalCborHex of GovActionId
 **Signature**
 
 ```ts
-export declare const toCanonicalCborHex: (instance: CML.GovActionId) => Effect.Effect<string, GovActionIdError>
+export declare const toCanonicalCborHex: (
+  instance: CML.GovActionId,
+) => Effect.Effect<string, GovActionIdError>;
 ```
 
 Added in v2.0.0
@@ -225,7 +244,9 @@ Method toCborBytes of GovActionId
 **Signature**
 
 ```ts
-export declare const toCborBytes: (instance: CML.GovActionId) => Effect.Effect<Uint8Array, GovActionIdError>
+export declare const toCborBytes: (
+  instance: CML.GovActionId,
+) => Effect.Effect<Uint8Array, GovActionIdError>;
 ```
 
 Added in v2.0.0
@@ -237,7 +258,9 @@ Method toCborHex of GovActionId
 **Signature**
 
 ```ts
-export declare const toCborHex: (instance: CML.GovActionId) => Effect.Effect<string, GovActionIdError>
+export declare const toCborHex: (
+  instance: CML.GovActionId,
+) => Effect.Effect<string, GovActionIdError>;
 ```
 
 Added in v2.0.0
@@ -249,7 +272,9 @@ Method toJsValue of GovActionId
 **Signature**
 
 ```ts
-export declare const toJsValue: (instance: CML.GovActionId) => Effect.Effect<any, GovActionIdError>
+export declare const toJsValue: (
+  instance: CML.GovActionId,
+) => Effect.Effect<any, GovActionIdError>;
 ```
 
 Added in v2.0.0
@@ -261,7 +286,9 @@ Method toJson of GovActionId
 **Signature**
 
 ```ts
-export declare const toJson: (instance: CML.GovActionId) => Effect.Effect<string, GovActionIdError>
+export declare const toJson: (
+  instance: CML.GovActionId,
+) => Effect.Effect<string, GovActionIdError>;
 ```
 
 Added in v2.0.0
@@ -273,7 +300,9 @@ Method transactionId of GovActionId
 **Signature**
 
 ```ts
-export declare const transactionId: (instance: CML.GovActionId) => Effect.Effect<CML.TransactionHash, GovActionIdError>
+export declare const transactionId: (
+  instance: CML.GovActionId,
+) => Effect.Effect<CML.TransactionHash, GovActionIdError>;
 ```
 
 Added in v2.0.0
@@ -287,7 +316,7 @@ Unsafely calls instance.free without Effect wrapper
 **Signature**
 
 ```ts
-export declare const freeUnsafe: (instance: CML.GovActionId) => void
+export declare const freeUnsafe: (instance: CML.GovActionId) => void;
 ```
 
 Added in v2.0.0
@@ -299,7 +328,9 @@ Unsafely calls instance.govActionIndex without Effect wrapper
 **Signature**
 
 ```ts
-export declare const govActionIndexUnsafe: (instance: CML.GovActionId) => bigint
+export declare const govActionIndexUnsafe: (
+  instance: CML.GovActionId,
+) => bigint;
 ```
 
 Added in v2.0.0
@@ -311,7 +342,9 @@ Unsafely calls instance.toCanonicalCborBytes without Effect wrapper
 **Signature**
 
 ```ts
-export declare const toCanonicalCborBytesUnsafe: (instance: CML.GovActionId) => Uint8Array
+export declare const toCanonicalCborBytesUnsafe: (
+  instance: CML.GovActionId,
+) => Uint8Array;
 ```
 
 Added in v2.0.0
@@ -323,7 +356,9 @@ Unsafely calls instance.toCanonicalCborHex without Effect wrapper
 **Signature**
 
 ```ts
-export declare const toCanonicalCborHexUnsafe: (instance: CML.GovActionId) => string
+export declare const toCanonicalCborHexUnsafe: (
+  instance: CML.GovActionId,
+) => string;
 ```
 
 Added in v2.0.0
@@ -335,7 +370,9 @@ Unsafely calls instance.toCborBytes without Effect wrapper
 **Signature**
 
 ```ts
-export declare const toCborBytesUnsafe: (instance: CML.GovActionId) => Uint8Array
+export declare const toCborBytesUnsafe: (
+  instance: CML.GovActionId,
+) => Uint8Array;
 ```
 
 Added in v2.0.0
@@ -347,7 +384,7 @@ Unsafely calls instance.toCborHex without Effect wrapper
 **Signature**
 
 ```ts
-export declare const toCborHexUnsafe: (instance: CML.GovActionId) => string
+export declare const toCborHexUnsafe: (instance: CML.GovActionId) => string;
 ```
 
 Added in v2.0.0
@@ -359,7 +396,7 @@ Unsafely calls instance.toJsValue without Effect wrapper
 **Signature**
 
 ```ts
-export declare const toJsValueUnsafe: (instance: CML.GovActionId) => any
+export declare const toJsValueUnsafe: (instance: CML.GovActionId) => any;
 ```
 
 Added in v2.0.0
@@ -371,7 +408,7 @@ Unsafely calls instance.toJson without Effect wrapper
 **Signature**
 
 ```ts
-export declare const toJsonUnsafe: (instance: CML.GovActionId) => string
+export declare const toJsonUnsafe: (instance: CML.GovActionId) => string;
 ```
 
 Added in v2.0.0
@@ -383,7 +420,9 @@ Unsafely calls instance.transactionId without Effect wrapper
 **Signature**
 
 ```ts
-export declare const transactionIdUnsafe: (instance: CML.GovActionId) => CML.TransactionHash
+export declare const transactionIdUnsafe: (
+  instance: CML.GovActionId,
+) => CML.TransactionHash;
 ```
 
 Added in v2.0.0
@@ -397,7 +436,7 @@ Type alias for the CML GovActionId class
 **Signature**
 
 ```ts
-export type GovActionId = CML.GovActionId
+export type GovActionId = CML.GovActionId;
 ```
 
 Added in v2.0.0
