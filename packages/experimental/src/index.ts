@@ -27,3 +27,5 @@ export * as Hex from "./Hex.js";
 export * as NetworkId from "./NetworkId.js";
 export * as DatumHash from "./DatumHash.js";
 export * as DatumOption from "./DatumOption.js";
+export * as Devnet from "./Devnet/Devnet.js";
+export * as DevnetDefault from "./Devnet/DevnetDefault.js";

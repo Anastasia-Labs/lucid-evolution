@@ -214,11 +214,8 @@ export const resolveDatum = (
   Effect.gen(function* () {
     // Only fetch the datum if the datumHash is present and the datum is not present.
     if (!datumHash || datum) return datum;
-    return yield* pipe(
-      Effect.tryPromise({
-        try: () => provider.getDatum(datumHash),
-        catch: txBuilderError,
-      }),
-      Effect.map(Data.to),
-    );
+    return yield* Effect.tryPromise({
+      try: () => provider.getDatum(datumHash),
+      catch: txBuilderError,
+    });
   });

@@ -116,3 +116,47 @@ export const generator = FastCheck.uint8Array({
   minLength: KEYHASH_BYTES_LENGTH,
   maxLength: KEYHASH_BYTES_LENGTH,
 }).map((bytes) => new KeyHash({ hash: Hex.fromBytes(bytes) }));
+
+/**
+ * Synchronous encoding utilities for KeyHash.
+ *
+ * @since 2.0.0
+ * @category encoding/decoding
+ */
+export const Encode = {
+  hex: Schema.encodeSync(HexString),
+  bytes: Schema.encodeSync(Bytes),
+};
+
+/**
+ * Synchronous decoding utilities for KeyHash.
+ *
+ * @since 2.0.0
+ * @category encoding/decoding
+ */
+export const Decode = {
+  hex: Schema.decodeUnknownSync(HexString),
+  bytes: Schema.decodeUnknownSync(Bytes),
+};
+
+/**
+ * Either encoding utilities for KeyHash.
+ *
+ * @since 2.0.0
+ * @category encoding/decoding
+ */
+export const EncodeEither = {
+  hex: Schema.encodeEither(HexString),
+  bytes: Schema.encodeEither(Bytes),
+};
+
+/**
+ * Either decoding utilities for KeyHash.
+ *
+ * @since 2.0.0
+ * @category encoding/decoding
+ */
+export const DecodeEither = {
+  hex: Schema.decodeUnknownEither(HexString),
+  bytes: Schema.decodeUnknownEither(Bytes),
+};

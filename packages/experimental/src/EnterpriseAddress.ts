@@ -38,7 +38,7 @@ export class EnterpriseAddress extends Schema.TaggedClass<EnterpriseAddress>(
   }
 }
 
-export const Bytes = Schema.transformOrFail(
+export const BytesSchema = Schema.transformOrFail(
   Schema.Uint8ArrayFromSelf,
   EnterpriseAddress,
   {
@@ -81,15 +81,15 @@ export const Bytes = Schema.transformOrFail(
   },
 );
 
-export const HexString = Schema.transformOrFail(
+export const HexStringSchema = Schema.transformOrFail(
   Hex.HexString,
   EnterpriseAddress,
   {
     strict: true,
     encode: (toI, options, ast, toA) =>
-      pipe(ParseResult.encode(Bytes)(toA), Effect.map(Hex.fromBytes)),
+      pipe(ParseResult.encode(BytesSchema)(toA), Effect.map(Hex.fromBytes)),
     decode: (fromI, options, ast) =>
-      pipe(Hex.toBytes(fromI), ParseResult.decode(Bytes)),
+      pipe(Hex.toBytes(fromI), ParseResult.decode(BytesSchema)),
   },
 );
 
@@ -134,3 +134,47 @@ export const generator = FastCheck.tuple(
       paymentCredential,
     }),
 );
+
+/**
+ * Synchronous encoding utilities for enterprise address.
+ *
+ * @since 2.0.0
+ * @category encoding/decoding
+ */
+export const Encode = {
+  hex: Schema.encodeSync(HexStringSchema),
+  bytes: Schema.encodeSync(BytesSchema),
+};
+
+/**
+ * Synchronous decoding utilities for enterprise address.
+ *
+ @since 2.0.0
+ * @category encoding/decoding
+ */
+export const Decode = {
+  hex: Schema.decodeUnknownSync(HexStringSchema),
+  bytes: Schema.decodeUnknownSync(BytesSchema),
+};
+
+/**
+ * Either encoding utilities for enterprise address.
+ *
+ * @since 2.0.0
+ * @category encoding/decoding
+ */
+export const EncodeEither = {
+  hex: Schema.encodeEither(HexStringSchema),
+  bytes: Schema.encodeEither(BytesSchema),
+};
+
+/**
+ * Either decoding utilities for enterprise address.
+ *
+ * @since 2.0.0
+ * @category encoding/decoding
+ */
+export const DecodeEither = {
+  hex: Schema.decodeUnknownEither(HexStringSchema),
+  bytes: Schema.decodeUnknownEither(BytesSchema),
+};

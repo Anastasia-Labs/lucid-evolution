@@ -4,6 +4,7 @@
     "strict": true,
     "moduleResolution": "node",
     "sourceMap": true,
+    "allowSyntheticDefaultImports": true,
   },
   "files": ["src/index.ts"],
   "include": ["src/**/*"],

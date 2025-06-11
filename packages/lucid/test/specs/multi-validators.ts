@@ -194,7 +194,6 @@ export const registerStake = Effect.gen(function* ($) {
     .newTx()
     .registerStake(rewardAddress)
     .completeProgram();
-
   return signBuilder;
 }).pipe(
   Effect.flatMap(handleSignSubmit),
