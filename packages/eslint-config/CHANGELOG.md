@@ -1,5 +1,11 @@
 # @lucid-evolution/eslint-config
 
+## 0.2.4
+
+### Patch Changes
+
+- [#634](https://github.com/Anastasia-Labs/lucid-evolution/pull/634) [`3c97f3f`](https://github.com/Anastasia-Labs/lucid-evolution/commit/3c97f3f54313a6fb667ebf8905c2f3ff848579a1) Thanks [@solidsnakedev](https://github.com/solidsnakedev)! - update eslint; add devnet (wip)
+
 ## 0.2.3
 
 ### Patch Changes

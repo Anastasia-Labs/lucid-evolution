@@ -1,5 +1,31 @@
 # @lucid-evolution/experimental
 
+## 0.0.9
+
+### Patch Changes
+
+- [#641](https://github.com/Anastasia-Labs/lucid-evolution/pull/641) [`f8db6c3`](https://github.com/Anastasia-Labs/lucid-evolution/commit/f8db6c3d1c9e5f33a5a7d9db1a821034159d84ed) Thanks [@solidsnakedev](https://github.com/solidsnakedev)! - update devnet struct; add devnet example
+
+## 0.0.8
+
+### Patch Changes
+
+- [#639](https://github.com/Anastasia-Labs/lucid-evolution/pull/639) [`1a518d1`](https://github.com/Anastasia-Labs/lucid-evolution/commit/1a518d1590aaf308c9dbf595f0dc239435266e17) Thanks [@solidsnakedev](https://github.com/solidsnakedev)! - update devnet files; update address and keyhash structs
+
+## 0.0.7
+
+### Patch Changes
+
+- [#634](https://github.com/Anastasia-Labs/lucid-evolution/pull/634) [`3c97f3f`](https://github.com/Anastasia-Labs/lucid-evolution/commit/3c97f3f54313a6fb667ebf8905c2f3ff848579a1) Thanks [@solidsnakedev](https://github.com/solidsnakedev)! - update eslint; add devnet (wip)
+
+## 0.0.6
+
+### Patch Changes
+
+- [#610](https://github.com/Anastasia-Labs/lucid-evolution/pull/610) [`b240094`](https://github.com/Anastasia-Labs/lucid-evolution/commit/b240094b8ebea14a66a54581c1a42965e4b231f2) Thanks [@Drop-Table-Users](https://github.com/Drop-Table-Users)! - Add TransactionInput and TransactionHash CML equivalent types to experimental
+
+- [#600](https://github.com/Anastasia-Labs/lucid-evolution/pull/600) [`9ffa264`](https://github.com/Anastasia-Labs/lucid-evolution/commit/9ffa264741e8964e3fa10f6e877618785cc4824f) Thanks [@solidsnakedev](https://github.com/solidsnakedev)! - add nominal types to all addresses
+
 ## 0.0.5
 
 ### Patch Changes

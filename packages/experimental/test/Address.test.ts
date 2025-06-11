@@ -67,8 +67,10 @@ const ALL_ADDRESSES = [...MAINNET_ADDRESSES, ...TESTNET_ADDRESSES];
 
 // Other test constants
 const INVALID_ADDRESS = "not-an-address";
-const VALID_HEX_ADDRESS =
-  "019493315cd92eb5d8c4304e67b7e16ae36d61d34502694657811a2c8e337b62cfff6403a06a3acbc34f8c46003c69fe79a3628cefa9c47251";
+const VALID_HEX_ADDRESSES = [
+  "019493315cd92eb5d8c4304e67b7e16ae36d61d34502694657811a2c8e337b62cfff6403a06a3acbc34f8c46003c69fe79a3628cefa9c47251",
+  "60ba1d6b6283c219a0530e3682c316215d55819cf97bbf26552c6f8530",
+];
 
 // Helper function to get specific address types from the arrays
 const getAddressByType = (
@@ -131,6 +133,25 @@ describe("Address Validation", () => {
 
     // Invalid addresses
     expect(RewardAddress.isRewardAddress(INVALID_ADDRESS)).toBe(false);
+  });
+  it("should encode and decode hex addresses correctly", () => {
+    // Test encoding and decoding of valid hex addresses
+    VALID_HEX_ADDRESSES.forEach((hex) => {
+      const address = Address.Decode.hex(hex);
+      expect(address).toBeDefined();
+      expect(Address.Encode.hex(address)).toBe(hex);
+    });
+  });
+  it("should encode specific hex address to expected bech32 format", () => {
+    const hexAddress =
+      "60ba1d6b6283c219a0530e3682c316215d55819cf97bbf26552c6f8530";
+    const expectedBech32 =
+      "addr_test1vzap66mzs0ppngznpcmg9scky9w4tqvul9am7fj493hc2vq4ry02m";
+
+    const address = Address.Decode.hex(hexAddress);
+    const actualBech32 = Address.Encode.bech32(address);
+
+    expect(actualBech32).toBe(expectedBech32);
   });
 });
 
