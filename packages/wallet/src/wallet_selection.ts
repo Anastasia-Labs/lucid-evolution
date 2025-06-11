@@ -137,7 +137,7 @@ export const makeWalletFromSeed = (
 
 /**
  * Cardano Private key in bech32; not the BIP32 private key or any key that is not fully derived.
- * Only an Enteprise address (without stake credential) is derived.
+ * Only an Enterprise address (without stake credential) is derived.
  */
 export const makeWalletFromPrivateKey = (
   provider: Provider,
