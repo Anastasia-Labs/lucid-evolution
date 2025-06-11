@@ -1,5 +1,6 @@
 {
   "instantiate-evolution": "Instantiate Evolution",
-  "wallet-management": "Wallet Management",
+  "provider": "Provider",
+  "wallet": "Wallet",
   "first-transaction": "First Transaction"
 }
