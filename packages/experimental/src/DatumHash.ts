@@ -137,61 +137,6 @@ export const HexString = Schema.transform(Hash, DatumHash, {
 });
 
 /**
- * Schema for transforming between CBOR bytes and DatumHash
- *
- * @since 2.0.0
- * @category encoding/decoding
- */
-export const CBORBytes = Schema.transformOrFail(
-  Schema.Uint8ArrayFromSelf.annotations({
-    identifier: "CBORBytes",
-  }),
-  DatumHash,
-  {
-    strict: true,
-    encode: (s, options, ast, datumHash) =>
-      pipe(
-        CBOR.encodeAsBytes(Hex.toBytes(datumHash.hash)),
-        Effect.mapError((e) => new ParseResult.Type(ast, s, e.message)),
-      ),
-    decode: (bytes, options, ast) =>
-      pipe(
-        CBOR.decodeBytes(bytes),
-        Effect.mapError(
-          (error) => new ParseResult.Type(ast, bytes, error.message),
-        ),
-        Effect.flatMap(ParseResult.decode(Bytes)),
-      ),
-  },
-);
-
-/**
- * Schema for transforming between CBOR hex and DatumHash
- *
- * @since 2.0.0
- * @category encoding/decoding
- */
-export const CBORHex = Schema.transformOrFail(
-  Hex.HexString.pipe(Schema.typeSchema).annotations({
-    identifier: "CBORHex",
-  }),
-  DatumHash,
-  {
-    strict: true,
-    encode: (_, options, ast, datumHash) =>
-      ParseResult.succeed(CBOR.encodeAsCBORHexOrThrow(datumHash.hash)),
-    decode: (hexString, options, ast) =>
-      pipe(
-        CBOR.decodeHex(hexString),
-        Effect.mapError(
-          (error) => new ParseResult.Type(ast, hexString, error.message),
-        ),
-        Effect.flatMap(ParseResult.decode(Bytes)),
-      ),
-  },
-);
-
-/**
  * Check if two DatumHash instances are equal.
  *
  * @example
