@@ -85,7 +85,7 @@ export class TransactionMetadatumLabels extends Schema.TaggedClass<TransactionMe
 
   /**
    * Appends a new label to the **end**
-   * 
+   *
    * @param label The label to append
    * @returns The size of the labels after appended. This is a number one higher than the previous labels count.
    */
@@ -130,12 +130,7 @@ export class TransactionMetadatumLabels extends Schema.TaggedClass<TransactionMe
    * @param label The label to remove from the collection
    */
   removeAll(label: TransactionMetadatumLabel) {
-    this.set(
-      this.fromLabels.filter(
-        (fromLabel) =>
-          fromLabel !== label
-      )
-    );
+    this.set(this.fromLabels.filter((fromLabel) => fromLabel !== label));
   }
 
   /**
@@ -154,7 +149,7 @@ export class TransactionMetadatumLabels extends Schema.TaggedClass<TransactionMe
 
   /**
    * Determines whether the collection contains the specified label.
-   * 
+   *
    * @param label The label to look for
    * @returns True or False as appropriate
    */

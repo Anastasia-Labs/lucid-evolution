@@ -1,12 +1,15 @@
 import { describe, expect, it } from "vitest";
-import { describeTransactionMetadatumLabel, TransactionMetadatumLabel, TransactionMetadatumLabels } from "../src/TransactionMetadatumLabels.js";
+import {
+  describeTransactionMetadatumLabel,
+  TransactionMetadatumLabel,
+  TransactionMetadatumLabels,
+} from "../src/TransactionMetadatumLabels.js";
 
 describe("TransactionMetadatumLabels Validation", () => {
   it("should behave as expected", () => {
-    const labels: TransactionMetadatumLabels =
-      new TransactionMetadatumLabels({
-        fromLabels: [],
-      });
+    const labels: TransactionMetadatumLabels = new TransactionMetadatumLabels({
+      fromLabels: [],
+    });
     expect(labels.size()).toStrictEqual(0);
     expect(labels.get(0)).toStrictEqual(undefined);
 
@@ -61,8 +64,9 @@ describe("TransactionMetadatumLabels Validation", () => {
   });
 
   it("should describe correctly", () => {
-    const labels: TransactionMetadatumLabel[] =
-      [674, 721, 721, 61284, 61285, 61286, 61285];
+    const labels: TransactionMetadatumLabel[] = [
+      674, 721, 721, 61284, 61285, 61286, 61285,
+    ];
 
     const expectedDescriptions: string[] = [
       "CIP-0020 - Transaction message/comment metadata",
@@ -75,9 +79,9 @@ describe("TransactionMetadatumLabels Validation", () => {
     ];
 
     for (let i = 0; i < labels.length; i++) {
-      expect(
-        describeTransactionMetadatumLabel(labels[i])
-      ).toStrictEqual(expectedDescriptions[i]);
+      expect(describeTransactionMetadatumLabel(labels[i])).toStrictEqual(
+        expectedDescriptions[i],
+      );
     }
   });
 });
