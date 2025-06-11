@@ -8,9 +8,9 @@ import {
   pipe,
   Schema,
 } from "effect";
-import * as CBOR from "../CBOR.js";
-import * as Hex from "../Hex.js";
-import * as Address from "../Address.js";
+import * as CBOR from "./CBOR.js";
+import * as Hex from "./Hex.js";
+import * as Address from "./Address.js";
 /**
  * CDDL specs (Shelley era)
  * shelley_transaction_output = [address, amount : value, ? hash32]
@@ -78,7 +78,7 @@ export const CBORBytes = Schema.transformOrFail(
     strict: true,
     encode: (toI, options, ast, toA) =>
       pipe(
-        ParseResult.encode(Address.Bytes)(toA.address),
+        ParseResult.encode(Address.Address)(toA.address),
         Effect.map((addressBytes) => {
           const outputArray: unknown[] = [addressBytes, toA.value];
           if (toA.datumHash) {
@@ -111,7 +111,7 @@ export const CBORBytes = Schema.transformOrFail(
 
         const [addressBytes, value, datumHash] = decoded;
 
-        const address = yield* ParseResult.decodeUnknown(Address.Bytes)(
+        const address = yield* ParseResult.decodeUnknown(Address.Address)(
           addressBytes,
         );
 

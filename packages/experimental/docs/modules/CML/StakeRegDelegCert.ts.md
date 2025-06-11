@@ -1,6 +1,6 @@
 ---
 title: CML/StakeRegDelegCert.ts
-nav_order: 222
+nav_order: 221
 parent: Modules
 ---
 
@@ -63,8 +63,8 @@ Static method \_new of StakeRegDelegCert
 export declare const _new: (
   stakeCredential: CML.Credential,
   pool: CML.Ed25519KeyHash,
-  deposit: bigint,
-) => Effect.Effect<CML.StakeRegDelegCert, StakeRegDelegCertError>;
+  deposit: bigint
+) => Effect.Effect<CML.StakeRegDelegCert, StakeRegDelegCertError>
 ```
 
 Added in v2.0.0
@@ -77,8 +77,8 @@ Static method fromCborBytes of StakeRegDelegCert
 
 ```ts
 export declare const fromCborBytes: (
-  cborBytes: Uint8Array,
-) => Effect.Effect<CML.StakeRegDelegCert, StakeRegDelegCertError>;
+  cborBytes: Uint8Array
+) => Effect.Effect<CML.StakeRegDelegCert, StakeRegDelegCertError>
 ```
 
 Added in v2.0.0
@@ -90,9 +90,7 @@ Static method fromCborHex of StakeRegDelegCert
 **Signature**
 
 ```ts
-export declare const fromCborHex: (
-  cborBytes: string,
-) => Effect.Effect<CML.StakeRegDelegCert, StakeRegDelegCertError>;
+export declare const fromCborHex: (cborBytes: string) => Effect.Effect<CML.StakeRegDelegCert, StakeRegDelegCertError>
 ```
 
 Added in v2.0.0
@@ -104,9 +102,7 @@ Static method fromJson of StakeRegDelegCert
 **Signature**
 
 ```ts
-export declare const fromJson: (
-  json: string,
-) => Effect.Effect<CML.StakeRegDelegCert, StakeRegDelegCertError>;
+export declare const fromJson: (json: string) => Effect.Effect<CML.StakeRegDelegCert, StakeRegDelegCertError>
 ```
 
 Added in v2.0.0
@@ -123,8 +119,8 @@ Unsafely calls StakeRegDelegCert.\_new without Effect wrapper
 export declare const _newUnsafe: (
   stakeCredential: CML.Credential,
   pool: CML.Ed25519KeyHash,
-  deposit: bigint,
-) => CML.StakeRegDelegCert;
+  deposit: bigint
+) => CML.StakeRegDelegCert
 ```
 
 Added in v2.0.0
@@ -136,9 +132,7 @@ Unsafely calls StakeRegDelegCert.fromCborBytes without Effect wrapper
 **Signature**
 
 ```ts
-export declare const fromCborBytesUnsafe: (
-  cborBytes: Uint8Array,
-) => CML.StakeRegDelegCert;
+export declare const fromCborBytesUnsafe: (cborBytes: Uint8Array) => CML.StakeRegDelegCert
 ```
 
 Added in v2.0.0
@@ -150,9 +144,7 @@ Unsafely calls StakeRegDelegCert.fromCborHex without Effect wrapper
 **Signature**
 
 ```ts
-export declare const fromCborHexUnsafe: (
-  cborBytes: string,
-) => CML.StakeRegDelegCert;
+export declare const fromCborHexUnsafe: (cborBytes: string) => CML.StakeRegDelegCert
 ```
 
 Added in v2.0.0
@@ -164,7 +156,7 @@ Unsafely calls StakeRegDelegCert.fromJson without Effect wrapper
 **Signature**
 
 ```ts
-export declare const fromJsonUnsafe: (json: string) => CML.StakeRegDelegCert;
+export declare const fromJsonUnsafe: (json: string) => CML.StakeRegDelegCert
 ```
 
 Added in v2.0.0
@@ -194,9 +186,7 @@ Method deposit of StakeRegDelegCert
 **Signature**
 
 ```ts
-export declare const deposit: (
-  instance: CML.StakeRegDelegCert,
-) => Effect.Effect<bigint, StakeRegDelegCertError>;
+export declare const deposit: (instance: CML.StakeRegDelegCert) => Effect.Effect<bigint, StakeRegDelegCertError>
 ```
 
 Added in v2.0.0
@@ -208,9 +198,7 @@ Method free of StakeRegDelegCert
 **Signature**
 
 ```ts
-export declare const free: (
-  instance: CML.StakeRegDelegCert,
-) => Effect.Effect<void, StakeRegDelegCertError>;
+export declare const free: (instance: CML.StakeRegDelegCert) => Effect.Effect<void, StakeRegDelegCertError>
 ```
 
 Added in v2.0.0
@@ -223,8 +211,8 @@ Method pool of StakeRegDelegCert
 
 ```ts
 export declare const pool: (
-  instance: CML.StakeRegDelegCert,
-) => Effect.Effect<CML.Ed25519KeyHash, StakeRegDelegCertError>;
+  instance: CML.StakeRegDelegCert
+) => Effect.Effect<CML.Ed25519KeyHash, StakeRegDelegCertError>
 ```
 
 Added in v2.0.0
@@ -237,8 +225,8 @@ Method stakeCredential of StakeRegDelegCert
 
 ```ts
 export declare const stakeCredential: (
-  instance: CML.StakeRegDelegCert,
-) => Effect.Effect<CML.Credential, StakeRegDelegCertError>;
+  instance: CML.StakeRegDelegCert
+) => Effect.Effect<CML.Credential, StakeRegDelegCertError>
 ```
 
 Added in v2.0.0
@@ -251,8 +239,8 @@ Method toCanonicalCborBytes of StakeRegDelegCert
 
 ```ts
 export declare const toCanonicalCborBytes: (
-  instance: CML.StakeRegDelegCert,
-) => Effect.Effect<Uint8Array, StakeRegDelegCertError>;
+  instance: CML.StakeRegDelegCert
+) => Effect.Effect<Uint8Array, StakeRegDelegCertError>
 ```
 
 Added in v2.0.0
@@ -265,8 +253,8 @@ Method toCanonicalCborHex of StakeRegDelegCert
 
 ```ts
 export declare const toCanonicalCborHex: (
-  instance: CML.StakeRegDelegCert,
-) => Effect.Effect<string, StakeRegDelegCertError>;
+  instance: CML.StakeRegDelegCert
+) => Effect.Effect<string, StakeRegDelegCertError>
 ```
 
 Added in v2.0.0
@@ -278,9 +266,7 @@ Method toCborBytes of StakeRegDelegCert
 **Signature**
 
 ```ts
-export declare const toCborBytes: (
-  instance: CML.StakeRegDelegCert,
-) => Effect.Effect<Uint8Array, StakeRegDelegCertError>;
+export declare const toCborBytes: (instance: CML.StakeRegDelegCert) => Effect.Effect<Uint8Array, StakeRegDelegCertError>
 ```
 
 Added in v2.0.0
@@ -292,9 +278,7 @@ Method toCborHex of StakeRegDelegCert
 **Signature**
 
 ```ts
-export declare const toCborHex: (
-  instance: CML.StakeRegDelegCert,
-) => Effect.Effect<string, StakeRegDelegCertError>;
+export declare const toCborHex: (instance: CML.StakeRegDelegCert) => Effect.Effect<string, StakeRegDelegCertError>
 ```
 
 Added in v2.0.0
@@ -306,9 +290,7 @@ Method toJsValue of StakeRegDelegCert
 **Signature**
 
 ```ts
-export declare const toJsValue: (
-  instance: CML.StakeRegDelegCert,
-) => Effect.Effect<any, StakeRegDelegCertError>;
+export declare const toJsValue: (instance: CML.StakeRegDelegCert) => Effect.Effect<any, StakeRegDelegCertError>
 ```
 
 Added in v2.0.0
@@ -320,9 +302,7 @@ Method toJson of StakeRegDelegCert
 **Signature**
 
 ```ts
-export declare const toJson: (
-  instance: CML.StakeRegDelegCert,
-) => Effect.Effect<string, StakeRegDelegCertError>;
+export declare const toJson: (instance: CML.StakeRegDelegCert) => Effect.Effect<string, StakeRegDelegCertError>
 ```
 
 Added in v2.0.0
@@ -336,7 +316,7 @@ Unsafely calls instance.deposit without Effect wrapper
 **Signature**
 
 ```ts
-export declare const depositUnsafe: (instance: CML.StakeRegDelegCert) => bigint;
+export declare const depositUnsafe: (instance: CML.StakeRegDelegCert) => bigint
 ```
 
 Added in v2.0.0
@@ -348,7 +328,7 @@ Unsafely calls instance.free without Effect wrapper
 **Signature**
 
 ```ts
-export declare const freeUnsafe: (instance: CML.StakeRegDelegCert) => void;
+export declare const freeUnsafe: (instance: CML.StakeRegDelegCert) => void
 ```
 
 Added in v2.0.0
@@ -360,9 +340,7 @@ Unsafely calls instance.pool without Effect wrapper
 **Signature**
 
 ```ts
-export declare const poolUnsafe: (
-  instance: CML.StakeRegDelegCert,
-) => CML.Ed25519KeyHash;
+export declare const poolUnsafe: (instance: CML.StakeRegDelegCert) => CML.Ed25519KeyHash
 ```
 
 Added in v2.0.0
@@ -374,9 +352,7 @@ Unsafely calls instance.stakeCredential without Effect wrapper
 **Signature**
 
 ```ts
-export declare const stakeCredentialUnsafe: (
-  instance: CML.StakeRegDelegCert,
-) => CML.Credential;
+export declare const stakeCredentialUnsafe: (instance: CML.StakeRegDelegCert) => CML.Credential
 ```
 
 Added in v2.0.0
@@ -388,9 +364,7 @@ Unsafely calls instance.toCanonicalCborBytes without Effect wrapper
 **Signature**
 
 ```ts
-export declare const toCanonicalCborBytesUnsafe: (
-  instance: CML.StakeRegDelegCert,
-) => Uint8Array;
+export declare const toCanonicalCborBytesUnsafe: (instance: CML.StakeRegDelegCert) => Uint8Array
 ```
 
 Added in v2.0.0
@@ -402,9 +376,7 @@ Unsafely calls instance.toCanonicalCborHex without Effect wrapper
 **Signature**
 
 ```ts
-export declare const toCanonicalCborHexUnsafe: (
-  instance: CML.StakeRegDelegCert,
-) => string;
+export declare const toCanonicalCborHexUnsafe: (instance: CML.StakeRegDelegCert) => string
 ```
 
 Added in v2.0.0
@@ -416,9 +388,7 @@ Unsafely calls instance.toCborBytes without Effect wrapper
 **Signature**
 
 ```ts
-export declare const toCborBytesUnsafe: (
-  instance: CML.StakeRegDelegCert,
-) => Uint8Array;
+export declare const toCborBytesUnsafe: (instance: CML.StakeRegDelegCert) => Uint8Array
 ```
 
 Added in v2.0.0
@@ -430,9 +400,7 @@ Unsafely calls instance.toCborHex without Effect wrapper
 **Signature**
 
 ```ts
-export declare const toCborHexUnsafe: (
-  instance: CML.StakeRegDelegCert,
-) => string;
+export declare const toCborHexUnsafe: (instance: CML.StakeRegDelegCert) => string
 ```
 
 Added in v2.0.0
@@ -444,7 +412,7 @@ Unsafely calls instance.toJsValue without Effect wrapper
 **Signature**
 
 ```ts
-export declare const toJsValueUnsafe: (instance: CML.StakeRegDelegCert) => any;
+export declare const toJsValueUnsafe: (instance: CML.StakeRegDelegCert) => any
 ```
 
 Added in v2.0.0
@@ -456,7 +424,7 @@ Unsafely calls instance.toJson without Effect wrapper
 **Signature**
 
 ```ts
-export declare const toJsonUnsafe: (instance: CML.StakeRegDelegCert) => string;
+export declare const toJsonUnsafe: (instance: CML.StakeRegDelegCert) => string
 ```
 
 Added in v2.0.0
@@ -470,7 +438,7 @@ Type alias for the CML StakeRegDelegCert class
 **Signature**
 
 ```ts
-export type StakeRegDelegCert = CML.StakeRegDelegCert;
+export type StakeRegDelegCert = CML.StakeRegDelegCert
 ```
 
 Added in v2.0.0

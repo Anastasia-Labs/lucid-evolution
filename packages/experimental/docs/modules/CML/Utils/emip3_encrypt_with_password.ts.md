@@ -1,6 +1,6 @@
 ---
 title: CML/Utils/emip3_encrypt_with_password.ts
-nav_order: 262
+nav_order: 261
 parent: Modules
 ---
 
@@ -50,8 +50,8 @@ export declare const emip3EncryptWithPassword: (
   password: string,
   salt: string,
   nonce: string,
-  data: string,
-) => Effect.Effect<string, Emip3EncryptWithPasswordError>;
+  data: string
+) => Effect.Effect<string, Emip3EncryptWithPasswordError>
 ```
 
 Added in v2.0.0
@@ -69,8 +69,8 @@ export declare const emip3EncryptWithPasswordUnsafe: (
   password: string,
   salt: string,
   nonce: string,
-  data: string,
-) => string;
+  data: string
+) => string
 ```
 
 Added in v2.0.0

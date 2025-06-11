@@ -1,6 +1,6 @@
 ---
 title: CML/RelayList.ts
-nav_order: 193
+nav_order: 192
 parent: Modules
 ---
 
@@ -42,7 +42,7 @@ Static method \_new of RelayList
 **Signature**
 
 ```ts
-export declare const _new: () => Effect.Effect<CML.RelayList, RelayListError>;
+export declare const _new: () => Effect.Effect<CML.RelayList, RelayListError>
 ```
 
 Added in v2.0.0
@@ -56,7 +56,7 @@ Unsafely calls RelayList.\_new without Effect wrapper
 **Signature**
 
 ```ts
-export declare const _newUnsafe: () => CML.RelayList;
+export declare const _newUnsafe: () => CML.RelayList
 ```
 
 Added in v2.0.0
@@ -86,10 +86,7 @@ Method add of RelayList
 **Signature**
 
 ```ts
-export declare const add: (
-  instance: CML.RelayList,
-  elem: CML.Relay,
-) => Effect.Effect<void, RelayListError>;
+export declare const add: (instance: CML.RelayList, elem: CML.Relay) => Effect.Effect<void, RelayListError>
 ```
 
 Added in v2.0.0
@@ -101,9 +98,7 @@ Method free of RelayList
 **Signature**
 
 ```ts
-export declare const free: (
-  instance: CML.RelayList,
-) => Effect.Effect<void, RelayListError>;
+export declare const free: (instance: CML.RelayList) => Effect.Effect<void, RelayListError>
 ```
 
 Added in v2.0.0
@@ -115,10 +110,7 @@ Method get of RelayList
 **Signature**
 
 ```ts
-export declare const get: (
-  instance: CML.RelayList,
-  index: number,
-) => Effect.Effect<CML.Relay, RelayListError>;
+export declare const get: (instance: CML.RelayList, index: number) => Effect.Effect<CML.Relay, RelayListError>
 ```
 
 Added in v2.0.0
@@ -130,9 +122,7 @@ Method len of RelayList
 **Signature**
 
 ```ts
-export declare const len: (
-  instance: CML.RelayList,
-) => Effect.Effect<number, RelayListError>;
+export declare const len: (instance: CML.RelayList) => Effect.Effect<number, RelayListError>
 ```
 
 Added in v2.0.0
@@ -146,10 +136,7 @@ Unsafely calls instance.add without Effect wrapper
 **Signature**
 
 ```ts
-export declare const addUnsafe: (
-  instance: CML.RelayList,
-  elem: CML.Relay,
-) => void;
+export declare const addUnsafe: (instance: CML.RelayList, elem: CML.Relay) => void
 ```
 
 Added in v2.0.0
@@ -161,7 +148,7 @@ Unsafely calls instance.free without Effect wrapper
 **Signature**
 
 ```ts
-export declare const freeUnsafe: (instance: CML.RelayList) => void;
+export declare const freeUnsafe: (instance: CML.RelayList) => void
 ```
 
 Added in v2.0.0
@@ -173,10 +160,7 @@ Unsafely calls instance.get without Effect wrapper
 **Signature**
 
 ```ts
-export declare const getUnsafe: (
-  instance: CML.RelayList,
-  index: number,
-) => CML.Relay;
+export declare const getUnsafe: (instance: CML.RelayList, index: number) => CML.Relay
 ```
 
 Added in v2.0.0
@@ -188,7 +172,7 @@ Unsafely calls instance.len without Effect wrapper
 **Signature**
 
 ```ts
-export declare const lenUnsafe: (instance: CML.RelayList) => number;
+export declare const lenUnsafe: (instance: CML.RelayList) => number
 ```
 
 Added in v2.0.0
@@ -202,7 +186,7 @@ Type alias for the CML RelayList class
 **Signature**
 
 ```ts
-export type RelayList = CML.RelayList;
+export type RelayList = CML.RelayList
 ```
 
 Added in v2.0.0

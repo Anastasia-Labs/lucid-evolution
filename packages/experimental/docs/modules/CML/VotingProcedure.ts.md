@@ -1,6 +1,6 @@
 ---
 title: CML/VotingProcedure.ts
-nav_order: 288
+nav_order: 287
 parent: Modules
 ---
 
@@ -60,8 +60,8 @@ Static method \_new of VotingProcedure
 ```ts
 export declare const _new: (
   vote: CML.Vote,
-  anchor: CML.Anchor,
-) => Effect.Effect<CML.VotingProcedure, VotingProcedureError>;
+  anchor: CML.Anchor
+) => Effect.Effect<CML.VotingProcedure, VotingProcedureError>
 ```
 
 Added in v2.0.0
@@ -73,9 +73,7 @@ Static method fromCborBytes of VotingProcedure
 **Signature**
 
 ```ts
-export declare const fromCborBytes: (
-  cborBytes: Uint8Array,
-) => Effect.Effect<CML.VotingProcedure, VotingProcedureError>;
+export declare const fromCborBytes: (cborBytes: Uint8Array) => Effect.Effect<CML.VotingProcedure, VotingProcedureError>
 ```
 
 Added in v2.0.0
@@ -87,9 +85,7 @@ Static method fromCborHex of VotingProcedure
 **Signature**
 
 ```ts
-export declare const fromCborHex: (
-  cborBytes: string,
-) => Effect.Effect<CML.VotingProcedure, VotingProcedureError>;
+export declare const fromCborHex: (cborBytes: string) => Effect.Effect<CML.VotingProcedure, VotingProcedureError>
 ```
 
 Added in v2.0.0
@@ -101,9 +97,7 @@ Static method fromJson of VotingProcedure
 **Signature**
 
 ```ts
-export declare const fromJson: (
-  json: string,
-) => Effect.Effect<CML.VotingProcedure, VotingProcedureError>;
+export declare const fromJson: (json: string) => Effect.Effect<CML.VotingProcedure, VotingProcedureError>
 ```
 
 Added in v2.0.0
@@ -117,10 +111,7 @@ Unsafely calls VotingProcedure.\_new without Effect wrapper
 **Signature**
 
 ```ts
-export declare const _newUnsafe: (
-  vote: CML.Vote,
-  anchor: CML.Anchor,
-) => CML.VotingProcedure;
+export declare const _newUnsafe: (vote: CML.Vote, anchor: CML.Anchor) => CML.VotingProcedure
 ```
 
 Added in v2.0.0
@@ -132,9 +123,7 @@ Unsafely calls VotingProcedure.fromCborBytes without Effect wrapper
 **Signature**
 
 ```ts
-export declare const fromCborBytesUnsafe: (
-  cborBytes: Uint8Array,
-) => CML.VotingProcedure;
+export declare const fromCborBytesUnsafe: (cborBytes: Uint8Array) => CML.VotingProcedure
 ```
 
 Added in v2.0.0
@@ -146,9 +135,7 @@ Unsafely calls VotingProcedure.fromCborHex without Effect wrapper
 **Signature**
 
 ```ts
-export declare const fromCborHexUnsafe: (
-  cborBytes: string,
-) => CML.VotingProcedure;
+export declare const fromCborHexUnsafe: (cborBytes: string) => CML.VotingProcedure
 ```
 
 Added in v2.0.0
@@ -160,7 +147,7 @@ Unsafely calls VotingProcedure.fromJson without Effect wrapper
 **Signature**
 
 ```ts
-export declare const fromJsonUnsafe: (json: string) => CML.VotingProcedure;
+export declare const fromJsonUnsafe: (json: string) => CML.VotingProcedure
 ```
 
 Added in v2.0.0
@@ -191,8 +178,8 @@ Method anchor of VotingProcedure
 
 ```ts
 export declare const anchor: (
-  instance: CML.VotingProcedure,
-) => Effect.Effect<CML.Anchor | undefined, VotingProcedureError>;
+  instance: CML.VotingProcedure
+) => Effect.Effect<CML.Anchor | undefined, VotingProcedureError>
 ```
 
 Added in v2.0.0
@@ -204,9 +191,7 @@ Method free of VotingProcedure
 **Signature**
 
 ```ts
-export declare const free: (
-  instance: CML.VotingProcedure,
-) => Effect.Effect<void, VotingProcedureError>;
+export declare const free: (instance: CML.VotingProcedure) => Effect.Effect<void, VotingProcedureError>
 ```
 
 Added in v2.0.0
@@ -219,8 +204,8 @@ Method toCanonicalCborBytes of VotingProcedure
 
 ```ts
 export declare const toCanonicalCborBytes: (
-  instance: CML.VotingProcedure,
-) => Effect.Effect<Uint8Array, VotingProcedureError>;
+  instance: CML.VotingProcedure
+) => Effect.Effect<Uint8Array, VotingProcedureError>
 ```
 
 Added in v2.0.0
@@ -232,9 +217,7 @@ Method toCanonicalCborHex of VotingProcedure
 **Signature**
 
 ```ts
-export declare const toCanonicalCborHex: (
-  instance: CML.VotingProcedure,
-) => Effect.Effect<string, VotingProcedureError>;
+export declare const toCanonicalCborHex: (instance: CML.VotingProcedure) => Effect.Effect<string, VotingProcedureError>
 ```
 
 Added in v2.0.0
@@ -246,9 +229,7 @@ Method toCborBytes of VotingProcedure
 **Signature**
 
 ```ts
-export declare const toCborBytes: (
-  instance: CML.VotingProcedure,
-) => Effect.Effect<Uint8Array, VotingProcedureError>;
+export declare const toCborBytes: (instance: CML.VotingProcedure) => Effect.Effect<Uint8Array, VotingProcedureError>
 ```
 
 Added in v2.0.0
@@ -260,9 +241,7 @@ Method toCborHex of VotingProcedure
 **Signature**
 
 ```ts
-export declare const toCborHex: (
-  instance: CML.VotingProcedure,
-) => Effect.Effect<string, VotingProcedureError>;
+export declare const toCborHex: (instance: CML.VotingProcedure) => Effect.Effect<string, VotingProcedureError>
 ```
 
 Added in v2.0.0
@@ -274,9 +253,7 @@ Method toJsValue of VotingProcedure
 **Signature**
 
 ```ts
-export declare const toJsValue: (
-  instance: CML.VotingProcedure,
-) => Effect.Effect<any, VotingProcedureError>;
+export declare const toJsValue: (instance: CML.VotingProcedure) => Effect.Effect<any, VotingProcedureError>
 ```
 
 Added in v2.0.0
@@ -288,9 +265,7 @@ Method toJson of VotingProcedure
 **Signature**
 
 ```ts
-export declare const toJson: (
-  instance: CML.VotingProcedure,
-) => Effect.Effect<string, VotingProcedureError>;
+export declare const toJson: (instance: CML.VotingProcedure) => Effect.Effect<string, VotingProcedureError>
 ```
 
 Added in v2.0.0
@@ -302,9 +277,7 @@ Method vote of VotingProcedure
 **Signature**
 
 ```ts
-export declare const vote: (
-  instance: CML.VotingProcedure,
-) => Effect.Effect<CML.Vote, VotingProcedureError>;
+export declare const vote: (instance: CML.VotingProcedure) => Effect.Effect<CML.Vote, VotingProcedureError>
 ```
 
 Added in v2.0.0
@@ -318,9 +291,7 @@ Unsafely calls instance.anchor without Effect wrapper
 **Signature**
 
 ```ts
-export declare const anchorUnsafe: (
-  instance: CML.VotingProcedure,
-) => CML.Anchor | undefined;
+export declare const anchorUnsafe: (instance: CML.VotingProcedure) => CML.Anchor | undefined
 ```
 
 Added in v2.0.0
@@ -332,7 +303,7 @@ Unsafely calls instance.free without Effect wrapper
 **Signature**
 
 ```ts
-export declare const freeUnsafe: (instance: CML.VotingProcedure) => void;
+export declare const freeUnsafe: (instance: CML.VotingProcedure) => void
 ```
 
 Added in v2.0.0
@@ -344,9 +315,7 @@ Unsafely calls instance.toCanonicalCborBytes without Effect wrapper
 **Signature**
 
 ```ts
-export declare const toCanonicalCborBytesUnsafe: (
-  instance: CML.VotingProcedure,
-) => Uint8Array;
+export declare const toCanonicalCborBytesUnsafe: (instance: CML.VotingProcedure) => Uint8Array
 ```
 
 Added in v2.0.0
@@ -358,9 +327,7 @@ Unsafely calls instance.toCanonicalCborHex without Effect wrapper
 **Signature**
 
 ```ts
-export declare const toCanonicalCborHexUnsafe: (
-  instance: CML.VotingProcedure,
-) => string;
+export declare const toCanonicalCborHexUnsafe: (instance: CML.VotingProcedure) => string
 ```
 
 Added in v2.0.0
@@ -372,9 +339,7 @@ Unsafely calls instance.toCborBytes without Effect wrapper
 **Signature**
 
 ```ts
-export declare const toCborBytesUnsafe: (
-  instance: CML.VotingProcedure,
-) => Uint8Array;
+export declare const toCborBytesUnsafe: (instance: CML.VotingProcedure) => Uint8Array
 ```
 
 Added in v2.0.0
@@ -386,7 +351,7 @@ Unsafely calls instance.toCborHex without Effect wrapper
 **Signature**
 
 ```ts
-export declare const toCborHexUnsafe: (instance: CML.VotingProcedure) => string;
+export declare const toCborHexUnsafe: (instance: CML.VotingProcedure) => string
 ```
 
 Added in v2.0.0
@@ -398,7 +363,7 @@ Unsafely calls instance.toJsValue without Effect wrapper
 **Signature**
 
 ```ts
-export declare const toJsValueUnsafe: (instance: CML.VotingProcedure) => any;
+export declare const toJsValueUnsafe: (instance: CML.VotingProcedure) => any
 ```
 
 Added in v2.0.0
@@ -410,7 +375,7 @@ Unsafely calls instance.toJson without Effect wrapper
 **Signature**
 
 ```ts
-export declare const toJsonUnsafe: (instance: CML.VotingProcedure) => string;
+export declare const toJsonUnsafe: (instance: CML.VotingProcedure) => string
 ```
 
 Added in v2.0.0
@@ -422,7 +387,7 @@ Unsafely calls instance.vote without Effect wrapper
 **Signature**
 
 ```ts
-export declare const voteUnsafe: (instance: CML.VotingProcedure) => CML.Vote;
+export declare const voteUnsafe: (instance: CML.VotingProcedure) => CML.Vote
 ```
 
 Added in v2.0.0
@@ -436,7 +401,7 @@ Type alias for the CML VotingProcedure class
 **Signature**
 
 ```ts
-export type VotingProcedure = CML.VotingProcedure;
+export type VotingProcedure = CML.VotingProcedure
 ```
 
 Added in v2.0.0

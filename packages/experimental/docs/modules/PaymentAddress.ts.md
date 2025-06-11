@@ -1,6 +1,6 @@
 ---
 title: PaymentAddress.ts
-nav_order: 299
+nav_order: 302
 parent: Modules
 ---
 
@@ -28,7 +28,7 @@ Type representing a payment address string in bech32 format
 **Signature**
 
 ```ts
-export type PaymentAddress = Schema.Schema.Type<typeof PaymentAddress>;
+export type PaymentAddress = Schema.Schema.Type<typeof PaymentAddress>
 ```
 
 Added in v2.0.0
@@ -44,20 +44,20 @@ Check if the given value is a valid PaymentAddress
 ```ts
 export declare const isPaymentAddress: (
   u: unknown,
-  overrideOptions?: ParseOptions | number,
-) => u is string & Brand<"PaymentAddress">;
+  overrideOptions?: ParseOptions | number
+) => u is string & Brand<"PaymentAddress">
 ```
 
 **Example**
 
 ```ts
-import { PaymentAddress } from "@lucid-evolution/experimental";
-import assert from "assert";
+import { PaymentAddress } from "@lucid-evolution/experimental"
+import assert from "assert"
 
 const isValid = PaymentAddress.isPaymentAddress(
-  "addr1qx2fxv2umyhttkxyxp8x0dlpdt3k6cwng5pxj3jhsydzer3n0d3vllmyqwsx5wktcd8cc3sq835lu7drv2xwl2wywfgse35a3x",
-);
-assert(isValid === true);
+  "addr1qx2fxv2umyhttkxyxp8x0dlpdt3k6cwng5pxj3jhsydzer3n0d3vllmyqwsx5wktcd8cc3sq835lu7drv2xwl2wywfgse35a3x"
+)
+assert(isValid === true)
 ```
 
 Added in v2.0.0
@@ -72,10 +72,7 @@ Following CIP-0019 encoding requirements
 **Signature**
 
 ```ts
-export declare const PaymentAddress: Schema.brand<
-  Schema.filter<typeof Schema.String>,
-  "PaymentAddress"
->;
+export declare const PaymentAddress: Schema.brand<Schema.filter<typeof Schema.String>, "PaymentAddress">
 ```
 
 Added in v2.0.0

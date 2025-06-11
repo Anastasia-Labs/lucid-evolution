@@ -1,6 +1,6 @@
 ---
 title: EnterpriseAddress.ts
-nav_order: 296
+nav_order: 299
 parent: Modules
 ---
 
@@ -10,6 +10,11 @@ parent: Modules
 
 <h2 class="text-delta">Table of contents</h2>
 
+- [encoding/decoding](#encodingdecoding)
+  - [Decode](#decode)
+  - [DecodeEither](#decodeeither)
+  - [Encode](#encode)
+  - [EncodeEither](#encodeeither)
 - [equality](#equality)
   - [equals](#equals)
 - [generators](#generators)
@@ -18,11 +23,76 @@ parent: Modules
   - [EnterpriseAddress (class)](#enterpriseaddress-class)
     - [[Inspectable.NodeInspectSymbol] (method)](#inspectablenodeinspectsymbol-method)
 - [utils](#utils)
-  - [Bytes](#bytes)
+  - [BytesSchema](#bytesschema)
   - [EnterpriseAddress (interface)](#enterpriseaddress-interface)
-  - [HexString](#hexstring)
+  - [HexStringSchema](#hexstringschema)
 
 ---
+
+# encoding/decoding
+
+## Decode
+
+Synchronous decoding utilities for enterprise address.
+
+**Signature**
+
+```ts
+export declare const Decode: {
+  hex: (u: unknown, overrideOptions?: ParseOptions) => EnterpriseAddress
+  bytes: (u: unknown, overrideOptions?: ParseOptions) => EnterpriseAddress
+}
+```
+
+Added in v2.0.0
+
+## DecodeEither
+
+Either decoding utilities for enterprise address.
+
+**Signature**
+
+```ts
+export declare const DecodeEither: {
+  hex: (u: unknown, overrideOptions?: ParseOptions) => Either<EnterpriseAddress, ParseResult.ParseError>
+  bytes: (u: unknown, overrideOptions?: ParseOptions) => Either<EnterpriseAddress, ParseResult.ParseError>
+}
+```
+
+Added in v2.0.0
+
+## Encode
+
+Synchronous encoding utilities for enterprise address.
+
+**Signature**
+
+```ts
+export declare const Encode: {
+  hex: (a: EnterpriseAddress, overrideOptions?: ParseOptions) => string & Brand<"HexString">
+  bytes: (a: EnterpriseAddress, overrideOptions?: ParseOptions) => any
+}
+```
+
+Added in v2.0.0
+
+## EncodeEither
+
+Either encoding utilities for enterprise address.
+
+**Signature**
+
+```ts
+export declare const EncodeEither: {
+  hex: (
+    a: EnterpriseAddress,
+    overrideOptions?: ParseOptions
+  ) => Either<string & Brand<"HexString">, ParseResult.ParseError>
+  bytes: (a: EnterpriseAddress, overrideOptions?: ParseOptions) => Either<any, ParseResult.ParseError>
+}
+```
+
+Added in v2.0.0
 
 # equality
 
@@ -33,10 +103,7 @@ Check if two EnterpriseAddress instances are equal.
 **Signature**
 
 ```ts
-export declare const equals: (
-  a: EnterpriseAddress,
-  b: EnterpriseAddress,
-) => boolean;
+export declare const equals: (a: EnterpriseAddress, b: EnterpriseAddress) => boolean
 ```
 
 Added in v2.0.0
@@ -50,21 +117,21 @@ Generate a random EnterpriseAddress.
 **Signature**
 
 ```ts
-export declare const generator: FastCheck.Arbitrary<EnterpriseAddress>;
+export declare const generator: FastCheck.Arbitrary<EnterpriseAddress>
 ```
 
 **Example**
 
 ```ts
-import { EnterpriseAddress } from "@lucid-evolution/experimental";
-import { FastCheck } from "effect";
-import assert from "assert";
+import { EnterpriseAddress } from "@lucid-evolution/experimental"
+import { FastCheck } from "effect"
+import assert from "assert"
 
-const randomSamples = FastCheck.sample(EnterpriseAddress.generator, 20);
+const randomSamples = FastCheck.sample(EnterpriseAddress.generator, 20)
 randomSamples.forEach((address) => {
-  assert(address._tag === "EnterpriseAddress");
-  assert(typeof address.networkId === "number");
-});
+  assert(address._tag === "EnterpriseAddress")
+  assert(typeof address.networkId === "number")
+})
 ```
 
 Added in v2.0.0
@@ -88,21 +155,21 @@ Added in v2.0.0
 **Signature**
 
 ```ts
-[Inspectable.NodeInspectSymbol]();
+;[Inspectable.NodeInspectSymbol]()
 ```
 
 # utils
 
-## Bytes
+## BytesSchema
 
 **Signature**
 
 ```ts
-export declare const Bytes: Schema.transformOrFail<
+export declare const BytesSchema: Schema.transformOrFail<
   typeof Schema.Uint8ArrayFromSelf,
   typeof EnterpriseAddress,
   never
->;
+>
 ```
 
 ## EnterpriseAddress (interface)
@@ -111,22 +178,18 @@ export declare const Bytes: Schema.transformOrFail<
 
 ```ts
 export interface EnterpriseAddress {
-  readonly [NominalType]: unique symbol;
+  readonly [NominalType]: unique symbol
 }
 ```
 
-## HexString
+## HexStringSchema
 
 **Signature**
 
 ```ts
-export declare const HexString: Schema.transformOrFail<
-  Schema.SchemaClass<
-    string & Brand<"HexString">,
-    string & Brand<"HexString">,
-    never
-  >,
+export declare const HexStringSchema: Schema.transformOrFail<
+  Schema.SchemaClass<string & Brand<"HexString">, string & Brand<"HexString">, never>,
   typeof EnterpriseAddress,
   never
->;
+>
 ```

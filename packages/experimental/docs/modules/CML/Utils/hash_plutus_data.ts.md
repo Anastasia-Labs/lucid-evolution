@@ -1,6 +1,6 @@
 ---
 title: CML/Utils/hash_plutus_data.ts
-nav_order: 269
+nav_order: 268
 parent: Modules
 ---
 
@@ -46,9 +46,7 @@ Wrapper for the hash_plutus_data function
 **Signature**
 
 ```ts
-export declare const hashPlutusData: (
-  plutusData: CML.PlutusData,
-) => Effect.Effect<CML.DatumHash, HashPlutusDataError>;
+export declare const hashPlutusData: (plutusData: CML.PlutusData) => Effect.Effect<CML.DatumHash, HashPlutusDataError>
 ```
 
 Added in v2.0.0
@@ -62,9 +60,7 @@ Unsafely calls hash_plutus_data function without Effect wrapper
 **Signature**
 
 ```ts
-export declare const hashPlutusDataUnsafe: (
-  plutusData: CML.PlutusData,
-) => CML.DatumHash;
+export declare const hashPlutusDataUnsafe: (plutusData: CML.PlutusData) => CML.DatumHash
 ```
 
 Added in v2.0.0

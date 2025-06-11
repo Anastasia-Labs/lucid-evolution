@@ -1,6 +1,6 @@
 ---
 title: CML/Utils/min_script_fee.ts
-nav_order: 278
+nav_order: 277
 parent: Modules
 ---
 
@@ -48,8 +48,8 @@ Wrapper for the min_script_fee function
 ```ts
 export declare const minScriptFee: (
   tx: CML.Transaction,
-  exUnitPrices: CML.ExUnitPrices,
-) => Effect.Effect<bigint, MinScriptFeeError>;
+  exUnitPrices: CML.ExUnitPrices
+) => Effect.Effect<bigint, MinScriptFeeError>
 ```
 
 Added in v2.0.0
@@ -63,10 +63,7 @@ Unsafely calls min_script_fee function without Effect wrapper
 **Signature**
 
 ```ts
-export declare const minScriptFeeUnsafe: (
-  tx: CML.Transaction,
-  exUnitPrices: CML.ExUnitPrices,
-) => bigint;
+export declare const minScriptFeeUnsafe: (tx: CML.Transaction, exUnitPrices: CML.ExUnitPrices) => bigint
 ```
 
 Added in v2.0.0

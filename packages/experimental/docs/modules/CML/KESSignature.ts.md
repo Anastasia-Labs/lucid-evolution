@@ -1,6 +1,6 @@
 ---
 title: CML/KESSignature.ts
-nav_order: 116
+nav_order: 115
 parent: Modules
 ---
 
@@ -54,9 +54,7 @@ Static method fromCborBytes of KESSignature
 **Signature**
 
 ```ts
-export declare const fromCborBytes: (
-  cborBytes: Uint8Array,
-) => Effect.Effect<CML.KESSignature, KESSignatureError>;
+export declare const fromCborBytes: (cborBytes: Uint8Array) => Effect.Effect<CML.KESSignature, KESSignatureError>
 ```
 
 Added in v2.0.0
@@ -68,9 +66,7 @@ Static method fromCborHex of KESSignature
 **Signature**
 
 ```ts
-export declare const fromCborHex: (
-  cborBytes: string,
-) => Effect.Effect<CML.KESSignature, KESSignatureError>;
+export declare const fromCborHex: (cborBytes: string) => Effect.Effect<CML.KESSignature, KESSignatureError>
 ```
 
 Added in v2.0.0
@@ -82,9 +78,7 @@ Static method fromJson of KESSignature
 **Signature**
 
 ```ts
-export declare const fromJson: (
-  json: string,
-) => Effect.Effect<CML.KESSignature, KESSignatureError>;
+export declare const fromJson: (json: string) => Effect.Effect<CML.KESSignature, KESSignatureError>
 ```
 
 Added in v2.0.0
@@ -98,9 +92,7 @@ Unsafely calls KESSignature.fromCborBytes without Effect wrapper
 **Signature**
 
 ```ts
-export declare const fromCborBytesUnsafe: (
-  cborBytes: Uint8Array,
-) => CML.KESSignature;
+export declare const fromCborBytesUnsafe: (cborBytes: Uint8Array) => CML.KESSignature
 ```
 
 Added in v2.0.0
@@ -112,7 +104,7 @@ Unsafely calls KESSignature.fromCborHex without Effect wrapper
 **Signature**
 
 ```ts
-export declare const fromCborHexUnsafe: (cborBytes: string) => CML.KESSignature;
+export declare const fromCborHexUnsafe: (cborBytes: string) => CML.KESSignature
 ```
 
 Added in v2.0.0
@@ -124,7 +116,7 @@ Unsafely calls KESSignature.fromJson without Effect wrapper
 **Signature**
 
 ```ts
-export declare const fromJsonUnsafe: (json: string) => CML.KESSignature;
+export declare const fromJsonUnsafe: (json: string) => CML.KESSignature
 ```
 
 Added in v2.0.0
@@ -154,9 +146,7 @@ Method free of KESSignature
 **Signature**
 
 ```ts
-export declare const free: (
-  instance: CML.KESSignature,
-) => Effect.Effect<void, KESSignatureError>;
+export declare const free: (instance: CML.KESSignature) => Effect.Effect<void, KESSignatureError>
 ```
 
 Added in v2.0.0
@@ -168,9 +158,7 @@ Method get of KESSignature
 **Signature**
 
 ```ts
-export declare const get: (
-  instance: CML.KESSignature,
-) => Effect.Effect<Uint8Array, KESSignatureError>;
+export declare const get: (instance: CML.KESSignature) => Effect.Effect<Uint8Array, KESSignatureError>
 ```
 
 Added in v2.0.0
@@ -182,9 +170,7 @@ Method toCanonicalCborBytes of KESSignature
 **Signature**
 
 ```ts
-export declare const toCanonicalCborBytes: (
-  instance: CML.KESSignature,
-) => Effect.Effect<Uint8Array, KESSignatureError>;
+export declare const toCanonicalCborBytes: (instance: CML.KESSignature) => Effect.Effect<Uint8Array, KESSignatureError>
 ```
 
 Added in v2.0.0
@@ -196,9 +182,7 @@ Method toCanonicalCborHex of KESSignature
 **Signature**
 
 ```ts
-export declare const toCanonicalCborHex: (
-  instance: CML.KESSignature,
-) => Effect.Effect<string, KESSignatureError>;
+export declare const toCanonicalCborHex: (instance: CML.KESSignature) => Effect.Effect<string, KESSignatureError>
 ```
 
 Added in v2.0.0
@@ -210,9 +194,7 @@ Method toCborBytes of KESSignature
 **Signature**
 
 ```ts
-export declare const toCborBytes: (
-  instance: CML.KESSignature,
-) => Effect.Effect<Uint8Array, KESSignatureError>;
+export declare const toCborBytes: (instance: CML.KESSignature) => Effect.Effect<Uint8Array, KESSignatureError>
 ```
 
 Added in v2.0.0
@@ -224,9 +206,7 @@ Method toCborHex of KESSignature
 **Signature**
 
 ```ts
-export declare const toCborHex: (
-  instance: CML.KESSignature,
-) => Effect.Effect<string, KESSignatureError>;
+export declare const toCborHex: (instance: CML.KESSignature) => Effect.Effect<string, KESSignatureError>
 ```
 
 Added in v2.0.0
@@ -238,9 +218,7 @@ Method toJsValue of KESSignature
 **Signature**
 
 ```ts
-export declare const toJsValue: (
-  instance: CML.KESSignature,
-) => Effect.Effect<any, KESSignatureError>;
+export declare const toJsValue: (instance: CML.KESSignature) => Effect.Effect<any, KESSignatureError>
 ```
 
 Added in v2.0.0
@@ -252,9 +230,7 @@ Method toJson of KESSignature
 **Signature**
 
 ```ts
-export declare const toJson: (
-  instance: CML.KESSignature,
-) => Effect.Effect<string, KESSignatureError>;
+export declare const toJson: (instance: CML.KESSignature) => Effect.Effect<string, KESSignatureError>
 ```
 
 Added in v2.0.0
@@ -268,7 +244,7 @@ Unsafely calls instance.free without Effect wrapper
 **Signature**
 
 ```ts
-export declare const freeUnsafe: (instance: CML.KESSignature) => void;
+export declare const freeUnsafe: (instance: CML.KESSignature) => void
 ```
 
 Added in v2.0.0
@@ -280,7 +256,7 @@ Unsafely calls instance.get without Effect wrapper
 **Signature**
 
 ```ts
-export declare const getUnsafe: (instance: CML.KESSignature) => Uint8Array;
+export declare const getUnsafe: (instance: CML.KESSignature) => Uint8Array
 ```
 
 Added in v2.0.0
@@ -292,9 +268,7 @@ Unsafely calls instance.toCanonicalCborBytes without Effect wrapper
 **Signature**
 
 ```ts
-export declare const toCanonicalCborBytesUnsafe: (
-  instance: CML.KESSignature,
-) => Uint8Array;
+export declare const toCanonicalCborBytesUnsafe: (instance: CML.KESSignature) => Uint8Array
 ```
 
 Added in v2.0.0
@@ -306,9 +280,7 @@ Unsafely calls instance.toCanonicalCborHex without Effect wrapper
 **Signature**
 
 ```ts
-export declare const toCanonicalCborHexUnsafe: (
-  instance: CML.KESSignature,
-) => string;
+export declare const toCanonicalCborHexUnsafe: (instance: CML.KESSignature) => string
 ```
 
 Added in v2.0.0
@@ -320,9 +292,7 @@ Unsafely calls instance.toCborBytes without Effect wrapper
 **Signature**
 
 ```ts
-export declare const toCborBytesUnsafe: (
-  instance: CML.KESSignature,
-) => Uint8Array;
+export declare const toCborBytesUnsafe: (instance: CML.KESSignature) => Uint8Array
 ```
 
 Added in v2.0.0
@@ -334,7 +304,7 @@ Unsafely calls instance.toCborHex without Effect wrapper
 **Signature**
 
 ```ts
-export declare const toCborHexUnsafe: (instance: CML.KESSignature) => string;
+export declare const toCborHexUnsafe: (instance: CML.KESSignature) => string
 ```
 
 Added in v2.0.0
@@ -346,7 +316,7 @@ Unsafely calls instance.toJsValue without Effect wrapper
 **Signature**
 
 ```ts
-export declare const toJsValueUnsafe: (instance: CML.KESSignature) => any;
+export declare const toJsValueUnsafe: (instance: CML.KESSignature) => any
 ```
 
 Added in v2.0.0
@@ -358,7 +328,7 @@ Unsafely calls instance.toJson without Effect wrapper
 **Signature**
 
 ```ts
-export declare const toJsonUnsafe: (instance: CML.KESSignature) => string;
+export declare const toJsonUnsafe: (instance: CML.KESSignature) => string
 ```
 
 Added in v2.0.0
@@ -372,7 +342,7 @@ Type alias for the CML KESSignature class
 **Signature**
 
 ```ts
-export type KESSignature = CML.KESSignature;
+export type KESSignature = CML.KESSignature
 ```
 
 Added in v2.0.0

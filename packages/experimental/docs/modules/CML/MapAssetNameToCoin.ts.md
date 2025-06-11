@@ -1,6 +1,6 @@
 ---
 title: CML/MapAssetNameToCoin.ts
-nav_order: 123
+nav_order: 122
 parent: Modules
 ---
 
@@ -46,10 +46,7 @@ Static method \_new of MapAssetNameToCoin
 **Signature**
 
 ```ts
-export declare const _new: () => Effect.Effect<
-  CML.MapAssetNameToCoin,
-  MapAssetNameToCoinError
->;
+export declare const _new: () => Effect.Effect<CML.MapAssetNameToCoin, MapAssetNameToCoinError>
 ```
 
 Added in v2.0.0
@@ -63,7 +60,7 @@ Unsafely calls MapAssetNameToCoin.\_new without Effect wrapper
 **Signature**
 
 ```ts
-export declare const _newUnsafe: () => CML.MapAssetNameToCoin;
+export declare const _newUnsafe: () => CML.MapAssetNameToCoin
 ```
 
 Added in v2.0.0
@@ -93,9 +90,7 @@ Method free of MapAssetNameToCoin
 **Signature**
 
 ```ts
-export declare const free: (
-  instance: CML.MapAssetNameToCoin,
-) => Effect.Effect<void, MapAssetNameToCoinError>;
+export declare const free: (instance: CML.MapAssetNameToCoin) => Effect.Effect<void, MapAssetNameToCoinError>
 ```
 
 Added in v2.0.0
@@ -109,8 +104,8 @@ Method get of MapAssetNameToCoin
 ```ts
 export declare const get: (
   instance: CML.MapAssetNameToCoin,
-  key: CML.AssetName,
-) => Effect.Effect<bigint | undefined, MapAssetNameToCoinError>;
+  key: CML.AssetName
+) => Effect.Effect<bigint | undefined, MapAssetNameToCoinError>
 ```
 
 Added in v2.0.0
@@ -125,8 +120,8 @@ Method insert of MapAssetNameToCoin
 export declare const insert: (
   instance: CML.MapAssetNameToCoin,
   key: CML.AssetName,
-  value: bigint,
-) => Effect.Effect<bigint | undefined, MapAssetNameToCoinError>;
+  value: bigint
+) => Effect.Effect<bigint | undefined, MapAssetNameToCoinError>
 ```
 
 Added in v2.0.0
@@ -138,9 +133,7 @@ Method isEmpty of MapAssetNameToCoin
 **Signature**
 
 ```ts
-export declare const isEmpty: (
-  instance: CML.MapAssetNameToCoin,
-) => Effect.Effect<boolean, MapAssetNameToCoinError>;
+export declare const isEmpty: (instance: CML.MapAssetNameToCoin) => Effect.Effect<boolean, MapAssetNameToCoinError>
 ```
 
 Added in v2.0.0
@@ -153,8 +146,8 @@ Method keys of MapAssetNameToCoin
 
 ```ts
 export declare const keys: (
-  instance: CML.MapAssetNameToCoin,
-) => Effect.Effect<CML.AssetNameList, MapAssetNameToCoinError>;
+  instance: CML.MapAssetNameToCoin
+) => Effect.Effect<CML.AssetNameList, MapAssetNameToCoinError>
 ```
 
 Added in v2.0.0
@@ -166,9 +159,7 @@ Method len of MapAssetNameToCoin
 **Signature**
 
 ```ts
-export declare const len: (
-  instance: CML.MapAssetNameToCoin,
-) => Effect.Effect<number, MapAssetNameToCoinError>;
+export declare const len: (instance: CML.MapAssetNameToCoin) => Effect.Effect<number, MapAssetNameToCoinError>
 ```
 
 Added in v2.0.0
@@ -182,7 +173,7 @@ Unsafely calls instance.free without Effect wrapper
 **Signature**
 
 ```ts
-export declare const freeUnsafe: (instance: CML.MapAssetNameToCoin) => void;
+export declare const freeUnsafe: (instance: CML.MapAssetNameToCoin) => void
 ```
 
 Added in v2.0.0
@@ -194,10 +185,7 @@ Unsafely calls instance.get without Effect wrapper
 **Signature**
 
 ```ts
-export declare const getUnsafe: (
-  instance: CML.MapAssetNameToCoin,
-  key: CML.AssetName,
-) => bigint | undefined;
+export declare const getUnsafe: (instance: CML.MapAssetNameToCoin, key: CML.AssetName) => bigint | undefined
 ```
 
 Added in v2.0.0
@@ -212,8 +200,8 @@ Unsafely calls instance.insert without Effect wrapper
 export declare const insertUnsafe: (
   instance: CML.MapAssetNameToCoin,
   key: CML.AssetName,
-  value: bigint,
-) => bigint | undefined;
+  value: bigint
+) => bigint | undefined
 ```
 
 Added in v2.0.0
@@ -225,9 +213,7 @@ Unsafely calls instance.isEmpty without Effect wrapper
 **Signature**
 
 ```ts
-export declare const isEmptyUnsafe: (
-  instance: CML.MapAssetNameToCoin,
-) => boolean;
+export declare const isEmptyUnsafe: (instance: CML.MapAssetNameToCoin) => boolean
 ```
 
 Added in v2.0.0
@@ -239,9 +225,7 @@ Unsafely calls instance.keys without Effect wrapper
 **Signature**
 
 ```ts
-export declare const keysUnsafe: (
-  instance: CML.MapAssetNameToCoin,
-) => CML.AssetNameList;
+export declare const keysUnsafe: (instance: CML.MapAssetNameToCoin) => CML.AssetNameList
 ```
 
 Added in v2.0.0
@@ -253,7 +237,7 @@ Unsafely calls instance.len without Effect wrapper
 **Signature**
 
 ```ts
-export declare const lenUnsafe: (instance: CML.MapAssetNameToCoin) => number;
+export declare const lenUnsafe: (instance: CML.MapAssetNameToCoin) => number
 ```
 
 Added in v2.0.0
@@ -267,7 +251,7 @@ Type alias for the CML MapAssetNameToCoin class
 **Signature**
 
 ```ts
-export type MapAssetNameToCoin = CML.MapAssetNameToCoin;
+export type MapAssetNameToCoin = CML.MapAssetNameToCoin
 ```
 
 Added in v2.0.0

@@ -1,6 +1,6 @@
 ---
 title: CML/LanguageList.ts
-nav_order: 118
+nav_order: 117
 parent: Modules
 ---
 
@@ -42,10 +42,7 @@ Static method \_new of LanguageList
 **Signature**
 
 ```ts
-export declare const _new: () => Effect.Effect<
-  CML.LanguageList,
-  LanguageListError
->;
+export declare const _new: () => Effect.Effect<CML.LanguageList, LanguageListError>
 ```
 
 Added in v2.0.0
@@ -59,7 +56,7 @@ Unsafely calls LanguageList.\_new without Effect wrapper
 **Signature**
 
 ```ts
-export declare const _newUnsafe: () => CML.LanguageList;
+export declare const _newUnsafe: () => CML.LanguageList
 ```
 
 Added in v2.0.0
@@ -89,10 +86,7 @@ Method add of LanguageList
 **Signature**
 
 ```ts
-export declare const add: (
-  instance: CML.LanguageList,
-  elem: CML.Language,
-) => Effect.Effect<void, LanguageListError>;
+export declare const add: (instance: CML.LanguageList, elem: CML.Language) => Effect.Effect<void, LanguageListError>
 ```
 
 Added in v2.0.0
@@ -104,9 +98,7 @@ Method free of LanguageList
 **Signature**
 
 ```ts
-export declare const free: (
-  instance: CML.LanguageList,
-) => Effect.Effect<void, LanguageListError>;
+export declare const free: (instance: CML.LanguageList) => Effect.Effect<void, LanguageListError>
 ```
 
 Added in v2.0.0
@@ -118,10 +110,7 @@ Method get of LanguageList
 **Signature**
 
 ```ts
-export declare const get: (
-  instance: CML.LanguageList,
-  index: number,
-) => Effect.Effect<CML.Language, LanguageListError>;
+export declare const get: (instance: CML.LanguageList, index: number) => Effect.Effect<CML.Language, LanguageListError>
 ```
 
 Added in v2.0.0
@@ -133,9 +122,7 @@ Method len of LanguageList
 **Signature**
 
 ```ts
-export declare const len: (
-  instance: CML.LanguageList,
-) => Effect.Effect<number, LanguageListError>;
+export declare const len: (instance: CML.LanguageList) => Effect.Effect<number, LanguageListError>
 ```
 
 Added in v2.0.0
@@ -149,10 +136,7 @@ Unsafely calls instance.add without Effect wrapper
 **Signature**
 
 ```ts
-export declare const addUnsafe: (
-  instance: CML.LanguageList,
-  elem: CML.Language,
-) => void;
+export declare const addUnsafe: (instance: CML.LanguageList, elem: CML.Language) => void
 ```
 
 Added in v2.0.0
@@ -164,7 +148,7 @@ Unsafely calls instance.free without Effect wrapper
 **Signature**
 
 ```ts
-export declare const freeUnsafe: (instance: CML.LanguageList) => void;
+export declare const freeUnsafe: (instance: CML.LanguageList) => void
 ```
 
 Added in v2.0.0
@@ -176,10 +160,7 @@ Unsafely calls instance.get without Effect wrapper
 **Signature**
 
 ```ts
-export declare const getUnsafe: (
-  instance: CML.LanguageList,
-  index: number,
-) => CML.Language;
+export declare const getUnsafe: (instance: CML.LanguageList, index: number) => CML.Language
 ```
 
 Added in v2.0.0
@@ -191,7 +172,7 @@ Unsafely calls instance.len without Effect wrapper
 **Signature**
 
 ```ts
-export declare const lenUnsafe: (instance: CML.LanguageList) => number;
+export declare const lenUnsafe: (instance: CML.LanguageList) => number
 ```
 
 Added in v2.0.0
@@ -205,7 +186,7 @@ Type alias for the CML LanguageList class
 **Signature**
 
 ```ts
-export type LanguageList = CML.LanguageList;
+export type LanguageList = CML.LanguageList
 ```
 
 Added in v2.0.0

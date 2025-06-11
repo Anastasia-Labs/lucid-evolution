@@ -64,9 +64,7 @@ Static method fromCborBytes of AssetName
 **Signature**
 
 ```ts
-export declare const fromCborBytes: (
-  cborBytes: Uint8Array,
-) => Effect.Effect<CML.AssetName, AssetNameError>;
+export declare const fromCborBytes: (cborBytes: Uint8Array) => Effect.Effect<CML.AssetName, AssetNameError>
 ```
 
 Added in v2.0.0
@@ -78,9 +76,7 @@ Static method fromCborHex of AssetName
 **Signature**
 
 ```ts
-export declare const fromCborHex: (
-  cborBytes: string,
-) => Effect.Effect<CML.AssetName, AssetNameError>;
+export declare const fromCborHex: (cborBytes: string) => Effect.Effect<CML.AssetName, AssetNameError>
 ```
 
 Added in v2.0.0
@@ -92,9 +88,7 @@ Static method fromHex of AssetName
 **Signature**
 
 ```ts
-export declare const fromHex: (
-  input: string,
-) => Effect.Effect<CML.AssetName, AssetNameError>;
+export declare const fromHex: (input: string) => Effect.Effect<CML.AssetName, AssetNameError>
 ```
 
 Added in v2.0.0
@@ -106,9 +100,7 @@ Static method fromJson of AssetName
 **Signature**
 
 ```ts
-export declare const fromJson: (
-  json: string,
-) => Effect.Effect<CML.AssetName, AssetNameError>;
+export declare const fromJson: (json: string) => Effect.Effect<CML.AssetName, AssetNameError>
 ```
 
 Added in v2.0.0
@@ -120,9 +112,7 @@ Static method fromRawBytes of AssetName
 **Signature**
 
 ```ts
-export declare const fromRawBytes: (
-  bytes: Uint8Array,
-) => Effect.Effect<CML.AssetName, AssetNameError>;
+export declare const fromRawBytes: (bytes: Uint8Array) => Effect.Effect<CML.AssetName, AssetNameError>
 ```
 
 Added in v2.0.0
@@ -134,9 +124,7 @@ Static method fromStr of AssetName
 **Signature**
 
 ```ts
-export declare const fromStr: (
-  utf8Str: string,
-) => Effect.Effect<CML.AssetName, AssetNameError>;
+export declare const fromStr: (utf8Str: string) => Effect.Effect<CML.AssetName, AssetNameError>
 ```
 
 Added in v2.0.0
@@ -150,9 +138,7 @@ Unsafely calls AssetName.fromCborBytes without Effect wrapper
 **Signature**
 
 ```ts
-export declare const fromCborBytesUnsafe: (
-  cborBytes: Uint8Array,
-) => CML.AssetName;
+export declare const fromCborBytesUnsafe: (cborBytes: Uint8Array) => CML.AssetName
 ```
 
 Added in v2.0.0
@@ -164,7 +150,7 @@ Unsafely calls AssetName.fromCborHex without Effect wrapper
 **Signature**
 
 ```ts
-export declare const fromCborHexUnsafe: (cborBytes: string) => CML.AssetName;
+export declare const fromCborHexUnsafe: (cborBytes: string) => CML.AssetName
 ```
 
 Added in v2.0.0
@@ -176,7 +162,7 @@ Unsafely calls AssetName.fromHex without Effect wrapper
 **Signature**
 
 ```ts
-export declare const fromHexUnsafe: (input: string) => CML.AssetName;
+export declare const fromHexUnsafe: (input: string) => CML.AssetName
 ```
 
 Added in v2.0.0
@@ -188,7 +174,7 @@ Unsafely calls AssetName.fromJson without Effect wrapper
 **Signature**
 
 ```ts
-export declare const fromJsonUnsafe: (json: string) => CML.AssetName;
+export declare const fromJsonUnsafe: (json: string) => CML.AssetName
 ```
 
 Added in v2.0.0
@@ -200,7 +186,7 @@ Unsafely calls AssetName.fromRawBytes without Effect wrapper
 **Signature**
 
 ```ts
-export declare const fromRawBytesUnsafe: (bytes: Uint8Array) => CML.AssetName;
+export declare const fromRawBytesUnsafe: (bytes: Uint8Array) => CML.AssetName
 ```
 
 Added in v2.0.0
@@ -212,7 +198,7 @@ Unsafely calls AssetName.fromStr without Effect wrapper
 **Signature**
 
 ```ts
-export declare const fromStrUnsafe: (utf8Str: string) => CML.AssetName;
+export declare const fromStrUnsafe: (utf8Str: string) => CML.AssetName
 ```
 
 Added in v2.0.0
@@ -242,9 +228,7 @@ Method free of AssetName
 **Signature**
 
 ```ts
-export declare const free: (
-  instance: CML.AssetName,
-) => Effect.Effect<void, AssetNameError>;
+export declare const free: (instance: CML.AssetName) => Effect.Effect<void, AssetNameError>
 ```
 
 Added in v2.0.0
@@ -256,9 +240,7 @@ Method toCanonicalCborBytes of AssetName
 **Signature**
 
 ```ts
-export declare const toCanonicalCborBytes: (
-  instance: CML.AssetName,
-) => Effect.Effect<Uint8Array, AssetNameError>;
+export declare const toCanonicalCborBytes: (instance: CML.AssetName) => Effect.Effect<Uint8Array, AssetNameError>
 ```
 
 Added in v2.0.0
@@ -270,9 +252,7 @@ Method toCanonicalCborHex of AssetName
 **Signature**
 
 ```ts
-export declare const toCanonicalCborHex: (
-  instance: CML.AssetName,
-) => Effect.Effect<string, AssetNameError>;
+export declare const toCanonicalCborHex: (instance: CML.AssetName) => Effect.Effect<string, AssetNameError>
 ```
 
 Added in v2.0.0
@@ -284,9 +264,7 @@ Method toCborBytes of AssetName
 **Signature**
 
 ```ts
-export declare const toCborBytes: (
-  instance: CML.AssetName,
-) => Effect.Effect<Uint8Array, AssetNameError>;
+export declare const toCborBytes: (instance: CML.AssetName) => Effect.Effect<Uint8Array, AssetNameError>
 ```
 
 Added in v2.0.0
@@ -298,9 +276,7 @@ Method toCborHex of AssetName
 **Signature**
 
 ```ts
-export declare const toCborHex: (
-  instance: CML.AssetName,
-) => Effect.Effect<string, AssetNameError>;
+export declare const toCborHex: (instance: CML.AssetName) => Effect.Effect<string, AssetNameError>
 ```
 
 Added in v2.0.0
@@ -312,9 +288,7 @@ Method toHex of AssetName
 **Signature**
 
 ```ts
-export declare const toHex: (
-  instance: CML.AssetName,
-) => Effect.Effect<string, AssetNameError>;
+export declare const toHex: (instance: CML.AssetName) => Effect.Effect<string, AssetNameError>
 ```
 
 Added in v2.0.0
@@ -326,9 +300,7 @@ Method toJsValue of AssetName
 **Signature**
 
 ```ts
-export declare const toJsValue: (
-  instance: CML.AssetName,
-) => Effect.Effect<any, AssetNameError>;
+export declare const toJsValue: (instance: CML.AssetName) => Effect.Effect<any, AssetNameError>
 ```
 
 Added in v2.0.0
@@ -340,9 +312,7 @@ Method toJson of AssetName
 **Signature**
 
 ```ts
-export declare const toJson: (
-  instance: CML.AssetName,
-) => Effect.Effect<string, AssetNameError>;
+export declare const toJson: (instance: CML.AssetName) => Effect.Effect<string, AssetNameError>
 ```
 
 Added in v2.0.0
@@ -354,9 +324,7 @@ Method toRawBytes of AssetName
 **Signature**
 
 ```ts
-export declare const toRawBytes: (
-  instance: CML.AssetName,
-) => Effect.Effect<Uint8Array, AssetNameError>;
+export declare const toRawBytes: (instance: CML.AssetName) => Effect.Effect<Uint8Array, AssetNameError>
 ```
 
 Added in v2.0.0
@@ -368,9 +336,7 @@ Method toStr of AssetName
 **Signature**
 
 ```ts
-export declare const toStr: (
-  instance: CML.AssetName,
-) => Effect.Effect<string, AssetNameError>;
+export declare const toStr: (instance: CML.AssetName) => Effect.Effect<string, AssetNameError>
 ```
 
 Added in v2.0.0
@@ -384,7 +350,7 @@ Unsafely calls instance.free without Effect wrapper
 **Signature**
 
 ```ts
-export declare const freeUnsafe: (instance: CML.AssetName) => void;
+export declare const freeUnsafe: (instance: CML.AssetName) => void
 ```
 
 Added in v2.0.0
@@ -396,9 +362,7 @@ Unsafely calls instance.toCanonicalCborBytes without Effect wrapper
 **Signature**
 
 ```ts
-export declare const toCanonicalCborBytesUnsafe: (
-  instance: CML.AssetName,
-) => Uint8Array;
+export declare const toCanonicalCborBytesUnsafe: (instance: CML.AssetName) => Uint8Array
 ```
 
 Added in v2.0.0
@@ -410,9 +374,7 @@ Unsafely calls instance.toCanonicalCborHex without Effect wrapper
 **Signature**
 
 ```ts
-export declare const toCanonicalCborHexUnsafe: (
-  instance: CML.AssetName,
-) => string;
+export declare const toCanonicalCborHexUnsafe: (instance: CML.AssetName) => string
 ```
 
 Added in v2.0.0
@@ -424,7 +386,7 @@ Unsafely calls instance.toCborBytes without Effect wrapper
 **Signature**
 
 ```ts
-export declare const toCborBytesUnsafe: (instance: CML.AssetName) => Uint8Array;
+export declare const toCborBytesUnsafe: (instance: CML.AssetName) => Uint8Array
 ```
 
 Added in v2.0.0
@@ -436,7 +398,7 @@ Unsafely calls instance.toCborHex without Effect wrapper
 **Signature**
 
 ```ts
-export declare const toCborHexUnsafe: (instance: CML.AssetName) => string;
+export declare const toCborHexUnsafe: (instance: CML.AssetName) => string
 ```
 
 Added in v2.0.0
@@ -448,7 +410,7 @@ Unsafely calls instance.toHex without Effect wrapper
 **Signature**
 
 ```ts
-export declare const toHexUnsafe: (instance: CML.AssetName) => string;
+export declare const toHexUnsafe: (instance: CML.AssetName) => string
 ```
 
 Added in v2.0.0
@@ -460,7 +422,7 @@ Unsafely calls instance.toJsValue without Effect wrapper
 **Signature**
 
 ```ts
-export declare const toJsValueUnsafe: (instance: CML.AssetName) => any;
+export declare const toJsValueUnsafe: (instance: CML.AssetName) => any
 ```
 
 Added in v2.0.0
@@ -472,7 +434,7 @@ Unsafely calls instance.toJson without Effect wrapper
 **Signature**
 
 ```ts
-export declare const toJsonUnsafe: (instance: CML.AssetName) => string;
+export declare const toJsonUnsafe: (instance: CML.AssetName) => string
 ```
 
 Added in v2.0.0
@@ -484,7 +446,7 @@ Unsafely calls instance.toRawBytes without Effect wrapper
 **Signature**
 
 ```ts
-export declare const toRawBytesUnsafe: (instance: CML.AssetName) => Uint8Array;
+export declare const toRawBytesUnsafe: (instance: CML.AssetName) => Uint8Array
 ```
 
 Added in v2.0.0
@@ -496,7 +458,7 @@ Unsafely calls instance.toStr without Effect wrapper
 **Signature**
 
 ```ts
-export declare const toStrUnsafe: (instance: CML.AssetName) => string;
+export declare const toStrUnsafe: (instance: CML.AssetName) => string
 ```
 
 Added in v2.0.0
@@ -510,7 +472,7 @@ Type alias for the CML AssetName class
 **Signature**
 
 ```ts
-export type AssetName = CML.AssetName;
+export type AssetName = CML.AssetName
 ```
 
 Added in v2.0.0

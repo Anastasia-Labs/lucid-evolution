@@ -1,6 +1,6 @@
 ---
 title: CML/Enum/SpendingDataKind.ts
-nav_order: 92
+nav_order: 91
 parent: Modules
 ---
 
@@ -34,7 +34,7 @@ Type alias for the CML SpendingDataKind enum
 **Signature**
 
 ```ts
-export type SpendingDataKind = CML.SpendingDataKind;
+export type SpendingDataKind = CML.SpendingDataKind
 ```
 
 Added in v2.0.0
@@ -48,9 +48,7 @@ Convert string to SpendingDataKind enum value
 **Signature**
 
 ```ts
-export declare const fromString: (
-  str: string,
-) => CML.SpendingDataKind | undefined;
+export declare const fromString: (str: string) => CML.SpendingDataKind | undefined
 ```
 
 Added in v2.0.0
@@ -62,7 +60,7 @@ Convert SpendingDataKind enum value to string
 **Signature**
 
 ```ts
-export declare const toString: (value: CML.SpendingDataKind) => string;
+export declare const toString: (value: CML.SpendingDataKind) => string
 ```
 
 Added in v2.0.0
@@ -74,7 +72,7 @@ Get all values of the SpendingDataKind enum
 **Signature**
 
 ```ts
-export declare const values: () => Array<CML.SpendingDataKind>;
+export declare const values: () => Array<CML.SpendingDataKind>
 ```
 
 Added in v2.0.0
@@ -88,7 +86,7 @@ SpendingDataPubKey variant of the SpendingDataKind enum
 **Signature**
 
 ```ts
-export declare const SpendingDataPubKey: CML.SpendingDataKind.SpendingDataPubKey;
+export declare const SpendingDataPubKey: CML.SpendingDataKind.SpendingDataPubKey
 ```
 
 Added in v2.0.0
@@ -100,7 +98,7 @@ SpendingDataRedeem variant of the SpendingDataKind enum
 **Signature**
 
 ```ts
-export declare const SpendingDataRedeem: CML.SpendingDataKind.SpendingDataRedeem;
+export declare const SpendingDataRedeem: CML.SpendingDataKind.SpendingDataRedeem
 ```
 
 Added in v2.0.0
@@ -112,7 +110,7 @@ SpendingDataScript variant of the SpendingDataKind enum
 **Signature**
 
 ```ts
-export declare const SpendingDataScript: CML.SpendingDataKind.SpendingDataScript;
+export declare const SpendingDataScript: CML.SpendingDataKind.SpendingDataScript
 ```
 
 Added in v2.0.0

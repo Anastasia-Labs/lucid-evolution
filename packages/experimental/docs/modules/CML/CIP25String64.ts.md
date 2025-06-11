@@ -56,9 +56,7 @@ Static method \_new of CIP25String64
 **Signature**
 
 ```ts
-export declare const _new: (
-  s: string,
-) => Effect.Effect<CML.CIP25String64, CIP25String64Error>;
+export declare const _new: (s: string) => Effect.Effect<CML.CIP25String64, CIP25String64Error>
 ```
 
 Added in v2.0.0
@@ -70,9 +68,7 @@ Static method fromCborBytes of CIP25String64
 **Signature**
 
 ```ts
-export declare const fromCborBytes: (
-  cborBytes: Uint8Array,
-) => Effect.Effect<CML.CIP25String64, CIP25String64Error>;
+export declare const fromCborBytes: (cborBytes: Uint8Array) => Effect.Effect<CML.CIP25String64, CIP25String64Error>
 ```
 
 Added in v2.0.0
@@ -84,9 +80,7 @@ Static method fromCborHex of CIP25String64
 **Signature**
 
 ```ts
-export declare const fromCborHex: (
-  cborBytes: string,
-) => Effect.Effect<CML.CIP25String64, CIP25String64Error>;
+export declare const fromCborHex: (cborBytes: string) => Effect.Effect<CML.CIP25String64, CIP25String64Error>
 ```
 
 Added in v2.0.0
@@ -98,9 +92,7 @@ Static method fromJson of CIP25String64
 **Signature**
 
 ```ts
-export declare const fromJson: (
-  json: string,
-) => Effect.Effect<CML.CIP25String64, CIP25String64Error>;
+export declare const fromJson: (json: string) => Effect.Effect<CML.CIP25String64, CIP25String64Error>
 ```
 
 Added in v2.0.0
@@ -114,7 +106,7 @@ Unsafely calls CIP25String64.\_new without Effect wrapper
 **Signature**
 
 ```ts
-export declare const _newUnsafe: (s: string) => CML.CIP25String64;
+export declare const _newUnsafe: (s: string) => CML.CIP25String64
 ```
 
 Added in v2.0.0
@@ -126,9 +118,7 @@ Unsafely calls CIP25String64.fromCborBytes without Effect wrapper
 **Signature**
 
 ```ts
-export declare const fromCborBytesUnsafe: (
-  cborBytes: Uint8Array,
-) => CML.CIP25String64;
+export declare const fromCborBytesUnsafe: (cborBytes: Uint8Array) => CML.CIP25String64
 ```
 
 Added in v2.0.0
@@ -140,9 +130,7 @@ Unsafely calls CIP25String64.fromCborHex without Effect wrapper
 **Signature**
 
 ```ts
-export declare const fromCborHexUnsafe: (
-  cborBytes: string,
-) => CML.CIP25String64;
+export declare const fromCborHexUnsafe: (cborBytes: string) => CML.CIP25String64
 ```
 
 Added in v2.0.0
@@ -154,7 +142,7 @@ Unsafely calls CIP25String64.fromJson without Effect wrapper
 **Signature**
 
 ```ts
-export declare const fromJsonUnsafe: (json: string) => CML.CIP25String64;
+export declare const fromJsonUnsafe: (json: string) => CML.CIP25String64
 ```
 
 Added in v2.0.0
@@ -184,9 +172,7 @@ Method free of CIP25String64
 **Signature**
 
 ```ts
-export declare const free: (
-  instance: CML.CIP25String64,
-) => Effect.Effect<void, CIP25String64Error>;
+export declare const free: (instance: CML.CIP25String64) => Effect.Effect<void, CIP25String64Error>
 ```
 
 Added in v2.0.0
@@ -198,9 +184,7 @@ Method get of CIP25String64
 **Signature**
 
 ```ts
-export declare const get: (
-  instance: CML.CIP25String64,
-) => Effect.Effect<string, CIP25String64Error>;
+export declare const get: (instance: CML.CIP25String64) => Effect.Effect<string, CIP25String64Error>
 ```
 
 Added in v2.0.0
@@ -212,9 +196,7 @@ Method getStr of CIP25String64
 **Signature**
 
 ```ts
-export declare const getStr: (
-  instance: CML.CIP25String64,
-) => Effect.Effect<string, CIP25String64Error>;
+export declare const getStr: (instance: CML.CIP25String64) => Effect.Effect<string, CIP25String64Error>
 ```
 
 Added in v2.0.0
@@ -226,9 +208,7 @@ Method toCborBytes of CIP25String64
 **Signature**
 
 ```ts
-export declare const toCborBytes: (
-  instance: CML.CIP25String64,
-) => Effect.Effect<Uint8Array, CIP25String64Error>;
+export declare const toCborBytes: (instance: CML.CIP25String64) => Effect.Effect<Uint8Array, CIP25String64Error>
 ```
 
 Added in v2.0.0
@@ -240,9 +220,7 @@ Method toCborHex of CIP25String64
 **Signature**
 
 ```ts
-export declare const toCborHex: (
-  instance: CML.CIP25String64,
-) => Effect.Effect<string, CIP25String64Error>;
+export declare const toCborHex: (instance: CML.CIP25String64) => Effect.Effect<string, CIP25String64Error>
 ```
 
 Added in v2.0.0
@@ -254,9 +232,7 @@ Method toJsValue of CIP25String64
 **Signature**
 
 ```ts
-export declare const toJsValue: (
-  instance: CML.CIP25String64,
-) => Effect.Effect<any, CIP25String64Error>;
+export declare const toJsValue: (instance: CML.CIP25String64) => Effect.Effect<any, CIP25String64Error>
 ```
 
 Added in v2.0.0
@@ -268,9 +244,7 @@ Method toJson of CIP25String64
 **Signature**
 
 ```ts
-export declare const toJson: (
-  instance: CML.CIP25String64,
-) => Effect.Effect<string, CIP25String64Error>;
+export declare const toJson: (instance: CML.CIP25String64) => Effect.Effect<string, CIP25String64Error>
 ```
 
 Added in v2.0.0
@@ -282,9 +256,7 @@ Method toStr of CIP25String64
 **Signature**
 
 ```ts
-export declare const toStr: (
-  instance: CML.CIP25String64,
-) => Effect.Effect<string, CIP25String64Error>;
+export declare const toStr: (instance: CML.CIP25String64) => Effect.Effect<string, CIP25String64Error>
 ```
 
 Added in v2.0.0
@@ -298,7 +270,7 @@ Unsafely calls instance.free without Effect wrapper
 **Signature**
 
 ```ts
-export declare const freeUnsafe: (instance: CML.CIP25String64) => void;
+export declare const freeUnsafe: (instance: CML.CIP25String64) => void
 ```
 
 Added in v2.0.0
@@ -310,7 +282,7 @@ Unsafely calls instance.getStr without Effect wrapper
 **Signature**
 
 ```ts
-export declare const getStrUnsafe: (instance: CML.CIP25String64) => string;
+export declare const getStrUnsafe: (instance: CML.CIP25String64) => string
 ```
 
 Added in v2.0.0
@@ -322,7 +294,7 @@ Unsafely calls instance.get without Effect wrapper
 **Signature**
 
 ```ts
-export declare const getUnsafe: (instance: CML.CIP25String64) => string;
+export declare const getUnsafe: (instance: CML.CIP25String64) => string
 ```
 
 Added in v2.0.0
@@ -334,9 +306,7 @@ Unsafely calls instance.toCborBytes without Effect wrapper
 **Signature**
 
 ```ts
-export declare const toCborBytesUnsafe: (
-  instance: CML.CIP25String64,
-) => Uint8Array;
+export declare const toCborBytesUnsafe: (instance: CML.CIP25String64) => Uint8Array
 ```
 
 Added in v2.0.0
@@ -348,7 +318,7 @@ Unsafely calls instance.toCborHex without Effect wrapper
 **Signature**
 
 ```ts
-export declare const toCborHexUnsafe: (instance: CML.CIP25String64) => string;
+export declare const toCborHexUnsafe: (instance: CML.CIP25String64) => string
 ```
 
 Added in v2.0.0
@@ -360,7 +330,7 @@ Unsafely calls instance.toJsValue without Effect wrapper
 **Signature**
 
 ```ts
-export declare const toJsValueUnsafe: (instance: CML.CIP25String64) => any;
+export declare const toJsValueUnsafe: (instance: CML.CIP25String64) => any
 ```
 
 Added in v2.0.0
@@ -372,7 +342,7 @@ Unsafely calls instance.toJson without Effect wrapper
 **Signature**
 
 ```ts
-export declare const toJsonUnsafe: (instance: CML.CIP25String64) => string;
+export declare const toJsonUnsafe: (instance: CML.CIP25String64) => string
 ```
 
 Added in v2.0.0
@@ -384,7 +354,7 @@ Unsafely calls instance.toStr without Effect wrapper
 **Signature**
 
 ```ts
-export declare const toStrUnsafe: (instance: CML.CIP25String64) => string;
+export declare const toStrUnsafe: (instance: CML.CIP25String64) => string
 ```
 
 Added in v2.0.0
@@ -398,7 +368,7 @@ Type alias for the CML CIP25String64 class
 **Signature**
 
 ```ts
-export type CIP25String64 = CML.CIP25String64;
+export type CIP25String64 = CML.CIP25String64
 ```
 
 Added in v2.0.0

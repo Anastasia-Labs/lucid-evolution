@@ -1,6 +1,6 @@
 ---
 title: CML/ProposalProcedureList.ts
-nav_order: 178
+nav_order: 177
 parent: Modules
 ---
 
@@ -42,10 +42,7 @@ Static method \_new of ProposalProcedureList
 **Signature**
 
 ```ts
-export declare const _new: () => Effect.Effect<
-  CML.ProposalProcedureList,
-  ProposalProcedureListError
->;
+export declare const _new: () => Effect.Effect<CML.ProposalProcedureList, ProposalProcedureListError>
 ```
 
 Added in v2.0.0
@@ -59,7 +56,7 @@ Unsafely calls ProposalProcedureList.\_new without Effect wrapper
 **Signature**
 
 ```ts
-export declare const _newUnsafe: () => CML.ProposalProcedureList;
+export declare const _newUnsafe: () => CML.ProposalProcedureList
 ```
 
 Added in v2.0.0
@@ -91,8 +88,8 @@ Method add of ProposalProcedureList
 ```ts
 export declare const add: (
   instance: CML.ProposalProcedureList,
-  elem: CML.ProposalProcedure,
-) => Effect.Effect<void, ProposalProcedureListError>;
+  elem: CML.ProposalProcedure
+) => Effect.Effect<void, ProposalProcedureListError>
 ```
 
 Added in v2.0.0
@@ -104,9 +101,7 @@ Method free of ProposalProcedureList
 **Signature**
 
 ```ts
-export declare const free: (
-  instance: CML.ProposalProcedureList,
-) => Effect.Effect<void, ProposalProcedureListError>;
+export declare const free: (instance: CML.ProposalProcedureList) => Effect.Effect<void, ProposalProcedureListError>
 ```
 
 Added in v2.0.0
@@ -120,8 +115,8 @@ Method get of ProposalProcedureList
 ```ts
 export declare const get: (
   instance: CML.ProposalProcedureList,
-  index: number,
-) => Effect.Effect<CML.ProposalProcedure, ProposalProcedureListError>;
+  index: number
+) => Effect.Effect<CML.ProposalProcedure, ProposalProcedureListError>
 ```
 
 Added in v2.0.0
@@ -133,9 +128,7 @@ Method len of ProposalProcedureList
 **Signature**
 
 ```ts
-export declare const len: (
-  instance: CML.ProposalProcedureList,
-) => Effect.Effect<number, ProposalProcedureListError>;
+export declare const len: (instance: CML.ProposalProcedureList) => Effect.Effect<number, ProposalProcedureListError>
 ```
 
 Added in v2.0.0
@@ -149,10 +142,7 @@ Unsafely calls instance.add without Effect wrapper
 **Signature**
 
 ```ts
-export declare const addUnsafe: (
-  instance: CML.ProposalProcedureList,
-  elem: CML.ProposalProcedure,
-) => void;
+export declare const addUnsafe: (instance: CML.ProposalProcedureList, elem: CML.ProposalProcedure) => void
 ```
 
 Added in v2.0.0
@@ -164,7 +154,7 @@ Unsafely calls instance.free without Effect wrapper
 **Signature**
 
 ```ts
-export declare const freeUnsafe: (instance: CML.ProposalProcedureList) => void;
+export declare const freeUnsafe: (instance: CML.ProposalProcedureList) => void
 ```
 
 Added in v2.0.0
@@ -176,10 +166,7 @@ Unsafely calls instance.get without Effect wrapper
 **Signature**
 
 ```ts
-export declare const getUnsafe: (
-  instance: CML.ProposalProcedureList,
-  index: number,
-) => CML.ProposalProcedure;
+export declare const getUnsafe: (instance: CML.ProposalProcedureList, index: number) => CML.ProposalProcedure
 ```
 
 Added in v2.0.0
@@ -191,7 +178,7 @@ Unsafely calls instance.len without Effect wrapper
 **Signature**
 
 ```ts
-export declare const lenUnsafe: (instance: CML.ProposalProcedureList) => number;
+export declare const lenUnsafe: (instance: CML.ProposalProcedureList) => number
 ```
 
 Added in v2.0.0
@@ -205,7 +192,7 @@ Type alias for the CML ProposalProcedureList class
 **Signature**
 
 ```ts
-export type ProposalProcedureList = CML.ProposalProcedureList;
+export type ProposalProcedureList = CML.ProposalProcedureList
 ```
 
 Added in v2.0.0

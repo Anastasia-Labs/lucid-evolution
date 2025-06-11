@@ -1,6 +1,6 @@
 ---
 title: CML/Transaction.ts
-nav_order: 226
+nav_order: 225
 parent: Modules
 ---
 
@@ -66,8 +66,8 @@ export declare const _new: (
   body: CML.TransactionBody,
   witnessSet: CML.TransactionWitnessSet,
   isValid: boolean,
-  auxiliaryData: CML.AuxiliaryData,
-) => Effect.Effect<CML.Transaction, TransactionError>;
+  auxiliaryData: CML.AuxiliaryData
+) => Effect.Effect<CML.Transaction, TransactionError>
 ```
 
 Added in v2.0.0
@@ -79,9 +79,7 @@ Static method fromCborBytes of Transaction
 **Signature**
 
 ```ts
-export declare const fromCborBytes: (
-  cborBytes: Uint8Array,
-) => Effect.Effect<CML.Transaction, TransactionError>;
+export declare const fromCborBytes: (cborBytes: Uint8Array) => Effect.Effect<CML.Transaction, TransactionError>
 ```
 
 Added in v2.0.0
@@ -93,9 +91,7 @@ Static method fromCborHex of Transaction
 **Signature**
 
 ```ts
-export declare const fromCborHex: (
-  cborBytes: string,
-) => Effect.Effect<CML.Transaction, TransactionError>;
+export declare const fromCborHex: (cborBytes: string) => Effect.Effect<CML.Transaction, TransactionError>
 ```
 
 Added in v2.0.0
@@ -107,9 +103,7 @@ Static method fromJson of Transaction
 **Signature**
 
 ```ts
-export declare const fromJson: (
-  json: string,
-) => Effect.Effect<CML.Transaction, TransactionError>;
+export declare const fromJson: (json: string) => Effect.Effect<CML.Transaction, TransactionError>
 ```
 
 Added in v2.0.0
@@ -127,8 +121,8 @@ export declare const _newUnsafe: (
   body: CML.TransactionBody,
   witnessSet: CML.TransactionWitnessSet,
   isValid: boolean,
-  auxiliaryData: CML.AuxiliaryData,
-) => CML.Transaction;
+  auxiliaryData: CML.AuxiliaryData
+) => CML.Transaction
 ```
 
 Added in v2.0.0
@@ -140,9 +134,7 @@ Unsafely calls Transaction.fromCborBytes without Effect wrapper
 **Signature**
 
 ```ts
-export declare const fromCborBytesUnsafe: (
-  cborBytes: Uint8Array,
-) => CML.Transaction;
+export declare const fromCborBytesUnsafe: (cborBytes: Uint8Array) => CML.Transaction
 ```
 
 Added in v2.0.0
@@ -154,7 +146,7 @@ Unsafely calls Transaction.fromCborHex without Effect wrapper
 **Signature**
 
 ```ts
-export declare const fromCborHexUnsafe: (cborBytes: string) => CML.Transaction;
+export declare const fromCborHexUnsafe: (cborBytes: string) => CML.Transaction
 ```
 
 Added in v2.0.0
@@ -166,7 +158,7 @@ Unsafely calls Transaction.fromJson without Effect wrapper
 **Signature**
 
 ```ts
-export declare const fromJsonUnsafe: (json: string) => CML.Transaction;
+export declare const fromJsonUnsafe: (json: string) => CML.Transaction
 ```
 
 Added in v2.0.0
@@ -197,8 +189,8 @@ Method auxiliaryData of Transaction
 
 ```ts
 export declare const auxiliaryData: (
-  instance: CML.Transaction,
-) => Effect.Effect<CML.AuxiliaryData | undefined, TransactionError>;
+  instance: CML.Transaction
+) => Effect.Effect<CML.AuxiliaryData | undefined, TransactionError>
 ```
 
 Added in v2.0.0
@@ -210,9 +202,7 @@ Method body of Transaction
 **Signature**
 
 ```ts
-export declare const body: (
-  instance: CML.Transaction,
-) => Effect.Effect<CML.TransactionBody, TransactionError>;
+export declare const body: (instance: CML.Transaction) => Effect.Effect<CML.TransactionBody, TransactionError>
 ```
 
 Added in v2.0.0
@@ -224,9 +214,7 @@ Method free of Transaction
 **Signature**
 
 ```ts
-export declare const free: (
-  instance: CML.Transaction,
-) => Effect.Effect<void, TransactionError>;
+export declare const free: (instance: CML.Transaction) => Effect.Effect<void, TransactionError>
 ```
 
 Added in v2.0.0
@@ -238,9 +226,7 @@ Method isValid of Transaction
 **Signature**
 
 ```ts
-export declare const isValid: (
-  instance: CML.Transaction,
-) => Effect.Effect<boolean, TransactionError>;
+export declare const isValid: (instance: CML.Transaction) => Effect.Effect<boolean, TransactionError>
 ```
 
 Added in v2.0.0
@@ -252,9 +238,7 @@ Method toCanonicalCborBytes of Transaction
 **Signature**
 
 ```ts
-export declare const toCanonicalCborBytes: (
-  instance: CML.Transaction,
-) => Effect.Effect<Uint8Array, TransactionError>;
+export declare const toCanonicalCborBytes: (instance: CML.Transaction) => Effect.Effect<Uint8Array, TransactionError>
 ```
 
 Added in v2.0.0
@@ -266,9 +250,7 @@ Method toCanonicalCborHex of Transaction
 **Signature**
 
 ```ts
-export declare const toCanonicalCborHex: (
-  instance: CML.Transaction,
-) => Effect.Effect<string, TransactionError>;
+export declare const toCanonicalCborHex: (instance: CML.Transaction) => Effect.Effect<string, TransactionError>
 ```
 
 Added in v2.0.0
@@ -280,9 +262,7 @@ Method toCborBytes of Transaction
 **Signature**
 
 ```ts
-export declare const toCborBytes: (
-  instance: CML.Transaction,
-) => Effect.Effect<Uint8Array, TransactionError>;
+export declare const toCborBytes: (instance: CML.Transaction) => Effect.Effect<Uint8Array, TransactionError>
 ```
 
 Added in v2.0.0
@@ -294,9 +274,7 @@ Method toCborHex of Transaction
 **Signature**
 
 ```ts
-export declare const toCborHex: (
-  instance: CML.Transaction,
-) => Effect.Effect<string, TransactionError>;
+export declare const toCborHex: (instance: CML.Transaction) => Effect.Effect<string, TransactionError>
 ```
 
 Added in v2.0.0
@@ -308,9 +286,7 @@ Method toJsValue of Transaction
 **Signature**
 
 ```ts
-export declare const toJsValue: (
-  instance: CML.Transaction,
-) => Effect.Effect<any, TransactionError>;
+export declare const toJsValue: (instance: CML.Transaction) => Effect.Effect<any, TransactionError>
 ```
 
 Added in v2.0.0
@@ -322,9 +298,7 @@ Method toJson of Transaction
 **Signature**
 
 ```ts
-export declare const toJson: (
-  instance: CML.Transaction,
-) => Effect.Effect<string, TransactionError>;
+export declare const toJson: (instance: CML.Transaction) => Effect.Effect<string, TransactionError>
 ```
 
 Added in v2.0.0
@@ -337,8 +311,8 @@ Method witnessSet of Transaction
 
 ```ts
 export declare const witnessSet: (
-  instance: CML.Transaction,
-) => Effect.Effect<CML.TransactionWitnessSet, TransactionError>;
+  instance: CML.Transaction
+) => Effect.Effect<CML.TransactionWitnessSet, TransactionError>
 ```
 
 Added in v2.0.0
@@ -352,9 +326,7 @@ Unsafely calls instance.auxiliaryData without Effect wrapper
 **Signature**
 
 ```ts
-export declare const auxiliaryDataUnsafe: (
-  instance: CML.Transaction,
-) => CML.AuxiliaryData | undefined;
+export declare const auxiliaryDataUnsafe: (instance: CML.Transaction) => CML.AuxiliaryData | undefined
 ```
 
 Added in v2.0.0
@@ -366,9 +338,7 @@ Unsafely calls instance.body without Effect wrapper
 **Signature**
 
 ```ts
-export declare const bodyUnsafe: (
-  instance: CML.Transaction,
-) => CML.TransactionBody;
+export declare const bodyUnsafe: (instance: CML.Transaction) => CML.TransactionBody
 ```
 
 Added in v2.0.0
@@ -380,7 +350,7 @@ Unsafely calls instance.free without Effect wrapper
 **Signature**
 
 ```ts
-export declare const freeUnsafe: (instance: CML.Transaction) => void;
+export declare const freeUnsafe: (instance: CML.Transaction) => void
 ```
 
 Added in v2.0.0
@@ -392,7 +362,7 @@ Unsafely calls instance.isValid without Effect wrapper
 **Signature**
 
 ```ts
-export declare const isValidUnsafe: (instance: CML.Transaction) => boolean;
+export declare const isValidUnsafe: (instance: CML.Transaction) => boolean
 ```
 
 Added in v2.0.0
@@ -404,9 +374,7 @@ Unsafely calls instance.toCanonicalCborBytes without Effect wrapper
 **Signature**
 
 ```ts
-export declare const toCanonicalCborBytesUnsafe: (
-  instance: CML.Transaction,
-) => Uint8Array;
+export declare const toCanonicalCborBytesUnsafe: (instance: CML.Transaction) => Uint8Array
 ```
 
 Added in v2.0.0
@@ -418,9 +386,7 @@ Unsafely calls instance.toCanonicalCborHex without Effect wrapper
 **Signature**
 
 ```ts
-export declare const toCanonicalCborHexUnsafe: (
-  instance: CML.Transaction,
-) => string;
+export declare const toCanonicalCborHexUnsafe: (instance: CML.Transaction) => string
 ```
 
 Added in v2.0.0
@@ -432,9 +398,7 @@ Unsafely calls instance.toCborBytes without Effect wrapper
 **Signature**
 
 ```ts
-export declare const toCborBytesUnsafe: (
-  instance: CML.Transaction,
-) => Uint8Array;
+export declare const toCborBytesUnsafe: (instance: CML.Transaction) => Uint8Array
 ```
 
 Added in v2.0.0
@@ -446,7 +410,7 @@ Unsafely calls instance.toCborHex without Effect wrapper
 **Signature**
 
 ```ts
-export declare const toCborHexUnsafe: (instance: CML.Transaction) => string;
+export declare const toCborHexUnsafe: (instance: CML.Transaction) => string
 ```
 
 Added in v2.0.0
@@ -458,7 +422,7 @@ Unsafely calls instance.toJsValue without Effect wrapper
 **Signature**
 
 ```ts
-export declare const toJsValueUnsafe: (instance: CML.Transaction) => any;
+export declare const toJsValueUnsafe: (instance: CML.Transaction) => any
 ```
 
 Added in v2.0.0
@@ -470,7 +434,7 @@ Unsafely calls instance.toJson without Effect wrapper
 **Signature**
 
 ```ts
-export declare const toJsonUnsafe: (instance: CML.Transaction) => string;
+export declare const toJsonUnsafe: (instance: CML.Transaction) => string
 ```
 
 Added in v2.0.0
@@ -482,9 +446,7 @@ Unsafely calls instance.witnessSet without Effect wrapper
 **Signature**
 
 ```ts
-export declare const witnessSetUnsafe: (
-  instance: CML.Transaction,
-) => CML.TransactionWitnessSet;
+export declare const witnessSetUnsafe: (instance: CML.Transaction) => CML.TransactionWitnessSet
 ```
 
 Added in v2.0.0
@@ -498,7 +460,7 @@ Type alias for the CML Transaction class
 **Signature**
 
 ```ts
-export type Transaction = CML.Transaction;
+export type Transaction = CML.Transaction
 ```
 
 Added in v2.0.0

@@ -1,6 +1,6 @@
 ---
 title: TransactionHash.ts
-nav_order: 303
+nav_order: 306
 parent: Modules
 ---
 
@@ -42,7 +42,7 @@ The length in bytes of a TransactionHash.
 **Signature**
 
 ```ts
-export declare const TRANSACTIONHASH_BYTES_LENGTH: 32;
+export declare const TRANSACTIONHASH_BYTES_LENGTH: 32
 ```
 
 Added in v2.0.0
@@ -54,7 +54,7 @@ The length in hex characters of a TransactionHash.
 **Signature**
 
 ```ts
-export declare const TRANSACTIONHASH_HEX_LENGTH: 64;
+export declare const TRANSACTIONHASH_HEX_LENGTH: 64
 ```
 
 Added in v2.0.0
@@ -72,13 +72,10 @@ export declare const Bytes: Schema.transform<
   Schema.SchemaClass<any, any, never>,
   Schema.Schema<
     TransactionHash,
-    {
-      readonly hash: string & Brand<"HexString">;
-      readonly _tag: "TransactionHash";
-    },
+    { readonly hash: string & Brand<"HexString">; readonly _tag: "TransactionHash" },
     never
   >
->;
+>
 ```
 
 Added in v2.0.0
@@ -94,7 +91,7 @@ export declare const CBORBytes: Schema.transformOrFail<
   Schema.declare<any, any, readonly [], never>,
   typeof TransactionHash,
   never
->;
+>
 ```
 
 Added in v2.0.0
@@ -107,14 +104,10 @@ Schema for transforming between CBOR hex and TransactionHash.
 
 ```ts
 export declare const CBORHex: Schema.transformOrFail<
-  Schema.SchemaClass<
-    string & Brand<"HexString">,
-    string & Brand<"HexString">,
-    never
-  >,
+  Schema.SchemaClass<string & Brand<"HexString">, string & Brand<"HexString">, never>,
   typeof TransactionHash,
   never
->;
+>
 ```
 
 Added in v2.0.0
@@ -129,14 +122,10 @@ Schema for transforming between hex string and TransactionHash.
 export declare const HexString: Schema.transform<
   Schema.refine<
     string & Brand<"HexString">,
-    Schema.SchemaClass<
-      string & Brand<"HexString">,
-      string & Brand<"HexString">,
-      never
-    >
+    Schema.SchemaClass<string & Brand<"HexString">, string & Brand<"HexString">, never>
   >,
   typeof TransactionHash
->;
+>
 ```
 
 Added in v2.0.0
@@ -150,17 +139,14 @@ Check if two TransactionHash instances are equal.
 **Signature**
 
 ```ts
-export declare const equals: (
-  a: TransactionHash,
-  b: TransactionHash,
-) => boolean;
+export declare const equals: (a: TransactionHash, b: TransactionHash) => boolean
 ```
 
 **Example**
 
 ```ts
-import { TransactionHash } from "@lucid-evolution/experimental";
-import assert from "assert";
+import { TransactionHash } from "@lucid-evolution/experimental"
+import assert from "assert"
 ```
 
 Added in v2.0.0
@@ -180,13 +166,11 @@ export declare class TransactionHashError
 **Example**
 
 ```ts
-import { TransactionHash } from "@lucid-evolution/experimental";
-import assert from "assert";
+import { TransactionHash } from "@lucid-evolution/experimental"
+import assert from "assert"
 
-const error = new TransactionHash.TransactionHashError({
-  message: "Invalid transaction hash",
-});
-assert(error.message === "Invalid transaction hash");
+const error = new TransactionHash.TransactionHashError({ message: "Invalid transaction hash" })
+assert(error.message === "Invalid transaction hash")
 ```
 
 Added in v2.0.0
@@ -200,20 +184,20 @@ Generate a random TransactionHash.
 **Signature**
 
 ```ts
-export declare const generator: FastCheck.Arbitrary<TransactionHash>;
+export declare const generator: FastCheck.Arbitrary<TransactionHash>
 ```
 
 **Example**
 
 ```ts
-import { TransactionHash } from "@lucid-evolution/experimental";
-import { FastCheck } from "effect";
-import assert from "assert";
+import { TransactionHash } from "@lucid-evolution/experimental"
+import { FastCheck } from "effect"
+import assert from "assert"
 
-const randomSamples = FastCheck.sample(TransactionHash.generator, 20);
+const randomSamples = FastCheck.sample(TransactionHash.generator, 20)
 randomSamples.forEach((transactionHash) => {
-  assert(transactionHash.hash.length === 64);
-});
+  assert(transactionHash.hash.length === 64)
+})
 ```
 
 Added in v2.0.0
@@ -237,7 +221,7 @@ Added in v2.0.0
 **Signature**
 
 ```ts
-[Inspectable.NodeInspectSymbol]();
+;[Inspectable.NodeInspectSymbol]()
 ```
 
 ## TransactionHashBytes
@@ -247,7 +231,7 @@ Schema for TransactionHash bytes validation.
 **Signature**
 
 ```ts
-export declare const TransactionHashBytes: Schema.SchemaClass<any, any, never>;
+export declare const TransactionHashBytes: Schema.SchemaClass<any, any, never>
 ```
 
 Added in v2.0.0
@@ -261,10 +245,6 @@ Added in v2.0.0
 ```ts
 export declare const Hash: Schema.refine<
   string & Brand<"HexString">,
-  Schema.SchemaClass<
-    string & Brand<"HexString">,
-    string & Brand<"HexString">,
-    never
-  >
->;
+  Schema.SchemaClass<string & Brand<"HexString">, string & Brand<"HexString">, never>
+>
 ```

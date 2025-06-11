@@ -1,6 +1,6 @@
 ---
 title: PointerAddress.ts
-nav_order: 301
+nav_order: 304
 parent: Modules
 ---
 
@@ -41,27 +41,24 @@ Following the Cardano ledger implementation for variable-length integers
 ```ts
 export declare const decodeVariableLength: (
   bytes: Uint8Array,
-  offset?: number | undefined,
-) => Effect.Effect<
-  [Natural.Natural, number],
-  PointerAddressError | ParseResult.ParseIssue
->;
+  offset?: number | undefined
+) => Effect.Effect<[Natural.Natural, number], PointerAddressError | ParseResult.ParseIssue>
 ```
 
 **Example**
 
 ```ts
-import { PointerAddress } from "@lucid-evolution/experimental";
-import { Effect } from "effect";
-import assert from "assert";
+import { PointerAddress } from "@lucid-evolution/experimental"
+import { Effect } from "effect"
+import assert from "assert"
 
 // Create a buffer that encodes the value 128
-const buffer = new Uint8Array([0x80, 0x01]);
+const buffer = new Uint8Array([0x80, 0x01])
 
-const effect = PointerAddress.decodeVariableLength(buffer, 0);
-const [natural, bytesRead] = Effect.runSync(effect);
-assert(natural === 128);
-assert(bytesRead === 2);
+const effect = PointerAddress.decodeVariableLength(buffer, 0)
+const [natural, bytesRead] = Effect.runSync(effect)
+assert(natural === 128)
+assert(bytesRead === 2)
 ```
 
 Added in v2.0.0
@@ -74,8 +71,8 @@ Encode a number as a variable length integer following the Cardano ledger specif
 
 ```ts
 export declare const encodeVariableLength: (
-  natural: Natural.Natural,
-) => Effect.Effect<Uint8Array, ParseResult.ParseIssue, never>;
+  natural: Natural.Natural
+) => Effect.Effect<Uint8Array, ParseResult.ParseIssue, never>
 ```
 
 Added in v2.0.0
@@ -89,7 +86,7 @@ Check if two PointerAddress instances are equal.
 **Signature**
 
 ```ts
-export declare const equals: (a: PointerAddress, b: PointerAddress) => boolean;
+export declare const equals: (a: PointerAddress, b: PointerAddress) => boolean
 ```
 
 Added in v2.0.0
@@ -103,24 +100,24 @@ Generate a random PointerAddress.
 **Signature**
 
 ```ts
-export declare const generator: FastCheck.Arbitrary<PointerAddress>;
+export declare const generator: FastCheck.Arbitrary<PointerAddress>
 ```
 
 **Example**
 
 ```ts
-import { PointerAddress } from "@lucid-evolution/experimental";
-import { FastCheck } from "effect";
-import assert from "assert";
+import { PointerAddress } from "@lucid-evolution/experimental"
+import { FastCheck } from "effect"
+import assert from "assert"
 
-const randomSamples = FastCheck.sample(PointerAddress.generator, 20);
+const randomSamples = FastCheck.sample(PointerAddress.generator, 20)
 randomSamples.forEach((address) => {
-  assert(address._tag === "PointerAddress");
-  assert(typeof address.networkId === "number");
-  assert(address.pointer.slot > 0);
-  assert(address.pointer.txIndex > 0);
-  assert(address.pointer.certIndex > 0);
-});
+  assert(address._tag === "PointerAddress")
+  assert(typeof address.networkId === "number")
+  assert(address.pointer.slot > 0)
+  assert(address.pointer.txIndex > 0)
+  assert(address.pointer.certIndex > 0)
+})
 ```
 
 Added in v2.0.0
@@ -158,7 +155,7 @@ Added in v2.0.0
 **Signature**
 
 ```ts
-[Inspectable.NodeInspectSymbol]();
+;[Inspectable.NodeInspectSymbol]()
 ```
 
 # utils
@@ -168,11 +165,7 @@ Added in v2.0.0
 **Signature**
 
 ```ts
-export declare const Bytes: Schema.transformOrFail<
-  typeof Schema.Uint8ArrayFromSelf,
-  typeof PointerAddress,
-  never
->;
+export declare const Bytes: Schema.transformOrFail<typeof Schema.Uint8ArrayFromSelf, typeof PointerAddress, never>
 ```
 
 ## HexString
@@ -181,14 +174,10 @@ export declare const Bytes: Schema.transformOrFail<
 
 ```ts
 export declare const HexString: Schema.transformOrFail<
-  Schema.SchemaClass<
-    string & Brand<"HexString">,
-    string & Brand<"HexString">,
-    never
-  >,
+  Schema.SchemaClass<string & Brand<"HexString">, string & Brand<"HexString">, never>,
   typeof PointerAddress,
   never
->;
+>
 ```
 
 ## PointerAddress (interface)
@@ -197,6 +186,6 @@ export declare const HexString: Schema.transformOrFail<
 
 ```ts
 export interface PointerAddress {
-  readonly [NominalType]: unique symbol;
+  readonly [NominalType]: unique symbol
 }
 ```

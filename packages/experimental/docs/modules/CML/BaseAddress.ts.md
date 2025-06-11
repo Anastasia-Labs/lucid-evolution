@@ -49,8 +49,8 @@ Static method \_new of BaseAddress
 export declare const _new: (
   network: number,
   payment: CML.Credential,
-  stake: CML.Credential,
-) => Effect.Effect<CML.BaseAddress, BaseAddressError>;
+  stake: CML.Credential
+) => Effect.Effect<CML.BaseAddress, BaseAddressError>
 ```
 
 Added in v2.0.0
@@ -62,9 +62,7 @@ Static method fromAddress of BaseAddress
 **Signature**
 
 ```ts
-export declare const fromAddress: (
-  address: CML.Address,
-) => Effect.Effect<CML.BaseAddress | undefined, BaseAddressError>;
+export declare const fromAddress: (address: CML.Address) => Effect.Effect<CML.BaseAddress | undefined, BaseAddressError>
 ```
 
 Added in v2.0.0
@@ -78,11 +76,7 @@ Unsafely calls BaseAddress.\_new without Effect wrapper
 **Signature**
 
 ```ts
-export declare const _newUnsafe: (
-  network: number,
-  payment: CML.Credential,
-  stake: CML.Credential,
-) => CML.BaseAddress;
+export declare const _newUnsafe: (network: number, payment: CML.Credential, stake: CML.Credential) => CML.BaseAddress
 ```
 
 Added in v2.0.0
@@ -94,9 +88,7 @@ Unsafely calls BaseAddress.fromAddress without Effect wrapper
 **Signature**
 
 ```ts
-export declare const fromAddressUnsafe: (
-  address: CML.Address,
-) => CML.BaseAddress | undefined;
+export declare const fromAddressUnsafe: (address: CML.Address) => CML.BaseAddress | undefined
 ```
 
 Added in v2.0.0
@@ -126,9 +118,7 @@ Method free of BaseAddress
 **Signature**
 
 ```ts
-export declare const free: (
-  instance: CML.BaseAddress,
-) => Effect.Effect<void, BaseAddressError>;
+export declare const free: (instance: CML.BaseAddress) => Effect.Effect<void, BaseAddressError>
 ```
 
 Added in v2.0.0
@@ -140,9 +130,7 @@ Method networkId of BaseAddress
 **Signature**
 
 ```ts
-export declare const networkId: (
-  instance: CML.BaseAddress,
-) => Effect.Effect<number, BaseAddressError>;
+export declare const networkId: (instance: CML.BaseAddress) => Effect.Effect<number, BaseAddressError>
 ```
 
 Added in v2.0.0
@@ -154,9 +142,7 @@ Method payment of BaseAddress
 **Signature**
 
 ```ts
-export declare const payment: (
-  instance: CML.BaseAddress,
-) => Effect.Effect<CML.Credential, BaseAddressError>;
+export declare const payment: (instance: CML.BaseAddress) => Effect.Effect<CML.Credential, BaseAddressError>
 ```
 
 Added in v2.0.0
@@ -168,9 +154,7 @@ Method stake of BaseAddress
 **Signature**
 
 ```ts
-export declare const stake: (
-  instance: CML.BaseAddress,
-) => Effect.Effect<CML.Credential, BaseAddressError>;
+export declare const stake: (instance: CML.BaseAddress) => Effect.Effect<CML.Credential, BaseAddressError>
 ```
 
 Added in v2.0.0
@@ -182,9 +166,7 @@ Method toAddress of BaseAddress
 **Signature**
 
 ```ts
-export declare const toAddress: (
-  instance: CML.BaseAddress,
-) => Effect.Effect<CML.Address, BaseAddressError>;
+export declare const toAddress: (instance: CML.BaseAddress) => Effect.Effect<CML.Address, BaseAddressError>
 ```
 
 Added in v2.0.0
@@ -198,7 +180,7 @@ Unsafely calls instance.free without Effect wrapper
 **Signature**
 
 ```ts
-export declare const freeUnsafe: (instance: CML.BaseAddress) => void;
+export declare const freeUnsafe: (instance: CML.BaseAddress) => void
 ```
 
 Added in v2.0.0
@@ -210,7 +192,7 @@ Unsafely calls instance.networkId without Effect wrapper
 **Signature**
 
 ```ts
-export declare const networkIdUnsafe: (instance: CML.BaseAddress) => number;
+export declare const networkIdUnsafe: (instance: CML.BaseAddress) => number
 ```
 
 Added in v2.0.0
@@ -222,9 +204,7 @@ Unsafely calls instance.payment without Effect wrapper
 **Signature**
 
 ```ts
-export declare const paymentUnsafe: (
-  instance: CML.BaseAddress,
-) => CML.Credential;
+export declare const paymentUnsafe: (instance: CML.BaseAddress) => CML.Credential
 ```
 
 Added in v2.0.0
@@ -236,7 +216,7 @@ Unsafely calls instance.stake without Effect wrapper
 **Signature**
 
 ```ts
-export declare const stakeUnsafe: (instance: CML.BaseAddress) => CML.Credential;
+export declare const stakeUnsafe: (instance: CML.BaseAddress) => CML.Credential
 ```
 
 Added in v2.0.0
@@ -248,9 +228,7 @@ Unsafely calls instance.toAddress without Effect wrapper
 **Signature**
 
 ```ts
-export declare const toAddressUnsafe: (
-  instance: CML.BaseAddress,
-) => CML.Address;
+export declare const toAddressUnsafe: (instance: CML.BaseAddress) => CML.Address
 ```
 
 Added in v2.0.0
@@ -264,7 +242,7 @@ Type alias for the CML BaseAddress class
 **Signature**
 
 ```ts
-export type BaseAddress = CML.BaseAddress;
+export type BaseAddress = CML.BaseAddress
 ```
 
 Added in v2.0.0

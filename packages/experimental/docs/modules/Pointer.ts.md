@@ -1,6 +1,6 @@
 ---
 title: Pointer.ts
-nav_order: 300
+nav_order: 303
 parent: Modules
 ---
 
@@ -29,11 +29,7 @@ Create a new Pointer instance
 **Signature**
 
 ```ts
-export declare const make: (
-  slot: Natural.Natural,
-  txIndex: Natural.Natural,
-  certIndex: Natural.Natural,
-) => Pointer;
+export declare const make: (slot: Natural.Natural, txIndex: Natural.Natural, certIndex: Natural.Natural) => Pointer
 ```
 
 Added in v2.0.0
@@ -47,10 +43,7 @@ Check if the given value is a valid Pointer
 **Signature**
 
 ```ts
-export declare const isPointer: (
-  u: unknown,
-  overrideOptions?: ParseOptions | number,
-) => u is Pointer;
+export declare const isPointer: (u: unknown, overrideOptions?: ParseOptions | number) => u is Pointer
 ```
 
 Added in v2.0.0
@@ -75,5 +68,5 @@ Added in v2.0.0
 **Signature**
 
 ```ts
-[Inspectable.NodeInspectSymbol]();
+;[Inspectable.NodeInspectSymbol]()
 ```

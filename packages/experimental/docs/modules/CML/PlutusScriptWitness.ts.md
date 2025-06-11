@@ -1,6 +1,6 @@
 ---
 title: CML/PlutusScriptWitness.ts
-nav_order: 158
+nav_order: 157
 parent: Modules
 ---
 
@@ -40,9 +40,7 @@ Static method newRef of PlutusScriptWitness
 **Signature**
 
 ```ts
-export declare const newRef: (
-  hash: CML.ScriptHash,
-) => Effect.Effect<CML.PlutusScriptWitness, PlutusScriptWitnessError>;
+export declare const newRef: (hash: CML.ScriptHash) => Effect.Effect<CML.PlutusScriptWitness, PlutusScriptWitnessError>
 ```
 
 Added in v2.0.0
@@ -55,8 +53,8 @@ Static method newScript of PlutusScriptWitness
 
 ```ts
 export declare const newScript: (
-  script: CML.PlutusScript,
-) => Effect.Effect<CML.PlutusScriptWitness, PlutusScriptWitnessError>;
+  script: CML.PlutusScript
+) => Effect.Effect<CML.PlutusScriptWitness, PlutusScriptWitnessError>
 ```
 
 Added in v2.0.0
@@ -70,9 +68,7 @@ Unsafely calls PlutusScriptWitness.newRef without Effect wrapper
 **Signature**
 
 ```ts
-export declare const newRefUnsafe: (
-  hash: CML.ScriptHash,
-) => CML.PlutusScriptWitness;
+export declare const newRefUnsafe: (hash: CML.ScriptHash) => CML.PlutusScriptWitness
 ```
 
 Added in v2.0.0
@@ -84,9 +80,7 @@ Unsafely calls PlutusScriptWitness.newScript without Effect wrapper
 **Signature**
 
 ```ts
-export declare const newScriptUnsafe: (
-  script: CML.PlutusScript,
-) => CML.PlutusScriptWitness;
+export declare const newScriptUnsafe: (script: CML.PlutusScript) => CML.PlutusScriptWitness
 ```
 
 Added in v2.0.0
@@ -116,9 +110,7 @@ Method free of PlutusScriptWitness
 **Signature**
 
 ```ts
-export declare const free: (
-  instance: CML.PlutusScriptWitness,
-) => Effect.Effect<void, PlutusScriptWitnessError>;
+export declare const free: (instance: CML.PlutusScriptWitness) => Effect.Effect<void, PlutusScriptWitnessError>
 ```
 
 Added in v2.0.0
@@ -131,8 +123,8 @@ Method hash of PlutusScriptWitness
 
 ```ts
 export declare const hash: (
-  instance: CML.PlutusScriptWitness,
-) => Effect.Effect<CML.ScriptHash, PlutusScriptWitnessError>;
+  instance: CML.PlutusScriptWitness
+) => Effect.Effect<CML.ScriptHash, PlutusScriptWitnessError>
 ```
 
 Added in v2.0.0
@@ -146,7 +138,7 @@ Unsafely calls instance.free without Effect wrapper
 **Signature**
 
 ```ts
-export declare const freeUnsafe: (instance: CML.PlutusScriptWitness) => void;
+export declare const freeUnsafe: (instance: CML.PlutusScriptWitness) => void
 ```
 
 Added in v2.0.0
@@ -158,9 +150,7 @@ Unsafely calls instance.hash without Effect wrapper
 **Signature**
 
 ```ts
-export declare const hashUnsafe: (
-  instance: CML.PlutusScriptWitness,
-) => CML.ScriptHash;
+export declare const hashUnsafe: (instance: CML.PlutusScriptWitness) => CML.ScriptHash
 ```
 
 Added in v2.0.0
@@ -174,7 +164,7 @@ Type alias for the CML PlutusScriptWitness class
 **Signature**
 
 ```ts
-export type PlutusScriptWitness = CML.PlutusScriptWitness;
+export type PlutusScriptWitness = CML.PlutusScriptWitness
 ```
 
 Added in v2.0.0

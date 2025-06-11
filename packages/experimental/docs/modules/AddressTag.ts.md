@@ -26,7 +26,7 @@ Following CIP-0019 address types
 **Signature**
 
 ```ts
-export type AddressTag = "Base" | "Enterprise" | "Pointer" | "Reward" | "Byron";
+export type AddressTag = "Base" | "Enterprise" | "Pointer" | "Reward" | "Byron"
 ```
 
 Added in v2.0.0

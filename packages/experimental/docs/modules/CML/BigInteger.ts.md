@@ -62,9 +62,7 @@ Static method fromCborBytes of BigInteger
 **Signature**
 
 ```ts
-export declare const fromCborBytes: (
-  cborBytes: Uint8Array,
-) => Effect.Effect<CML.BigInteger, BigIntegerError>;
+export declare const fromCborBytes: (cborBytes: Uint8Array) => Effect.Effect<CML.BigInteger, BigIntegerError>
 ```
 
 Added in v2.0.0
@@ -76,9 +74,7 @@ Static method fromCborHex of BigInteger
 **Signature**
 
 ```ts
-export declare const fromCborHex: (
-  cborBytes: string,
-) => Effect.Effect<CML.BigInteger, BigIntegerError>;
+export declare const fromCborHex: (cborBytes: string) => Effect.Effect<CML.BigInteger, BigIntegerError>
 ```
 
 Added in v2.0.0
@@ -90,9 +86,7 @@ Static method fromInt of BigInteger
 **Signature**
 
 ```ts
-export declare const fromInt: (
-  x: CML.Int,
-) => Effect.Effect<CML.BigInteger, BigIntegerError>;
+export declare const fromInt: (x: CML.Int) => Effect.Effect<CML.BigInteger, BigIntegerError>
 ```
 
 Added in v2.0.0
@@ -104,9 +98,7 @@ Static method fromJson of BigInteger
 **Signature**
 
 ```ts
-export declare const fromJson: (
-  json: string,
-) => Effect.Effect<CML.BigInteger, BigIntegerError>;
+export declare const fromJson: (json: string) => Effect.Effect<CML.BigInteger, BigIntegerError>
 ```
 
 Added in v2.0.0
@@ -118,9 +110,7 @@ Static method fromStr of BigInteger
 **Signature**
 
 ```ts
-export declare const fromStr: (
-  s: string,
-) => Effect.Effect<CML.BigInteger, BigIntegerError>;
+export declare const fromStr: (s: string) => Effect.Effect<CML.BigInteger, BigIntegerError>
 ```
 
 Added in v2.0.0
@@ -134,9 +124,7 @@ Unsafely calls BigInteger.fromCborBytes without Effect wrapper
 **Signature**
 
 ```ts
-export declare const fromCborBytesUnsafe: (
-  cborBytes: Uint8Array,
-) => CML.BigInteger;
+export declare const fromCborBytesUnsafe: (cborBytes: Uint8Array) => CML.BigInteger
 ```
 
 Added in v2.0.0
@@ -148,7 +136,7 @@ Unsafely calls BigInteger.fromCborHex without Effect wrapper
 **Signature**
 
 ```ts
-export declare const fromCborHexUnsafe: (cborBytes: string) => CML.BigInteger;
+export declare const fromCborHexUnsafe: (cborBytes: string) => CML.BigInteger
 ```
 
 Added in v2.0.0
@@ -160,7 +148,7 @@ Unsafely calls BigInteger.fromInt without Effect wrapper
 **Signature**
 
 ```ts
-export declare const fromIntUnsafe: (x: CML.Int) => CML.BigInteger;
+export declare const fromIntUnsafe: (x: CML.Int) => CML.BigInteger
 ```
 
 Added in v2.0.0
@@ -172,7 +160,7 @@ Unsafely calls BigInteger.fromJson without Effect wrapper
 **Signature**
 
 ```ts
-export declare const fromJsonUnsafe: (json: string) => CML.BigInteger;
+export declare const fromJsonUnsafe: (json: string) => CML.BigInteger
 ```
 
 Added in v2.0.0
@@ -184,7 +172,7 @@ Unsafely calls BigInteger.fromStr without Effect wrapper
 **Signature**
 
 ```ts
-export declare const fromStrUnsafe: (s: string) => CML.BigInteger;
+export declare const fromStrUnsafe: (s: string) => CML.BigInteger
 ```
 
 Added in v2.0.0
@@ -214,9 +202,7 @@ Method asInt of BigInteger
 **Signature**
 
 ```ts
-export declare const asInt: (
-  instance: CML.BigInteger,
-) => Effect.Effect<CML.Int | undefined, BigIntegerError>;
+export declare const asInt: (instance: CML.BigInteger) => Effect.Effect<CML.Int | undefined, BigIntegerError>
 ```
 
 Added in v2.0.0
@@ -228,9 +214,7 @@ Method asU64 of BigInteger
 **Signature**
 
 ```ts
-export declare const asU64: (
-  instance: CML.BigInteger,
-) => Effect.Effect<bigint | undefined, BigIntegerError>;
+export declare const asU64: (instance: CML.BigInteger) => Effect.Effect<bigint | undefined, BigIntegerError>
 ```
 
 Added in v2.0.0
@@ -242,9 +226,7 @@ Method free of BigInteger
 **Signature**
 
 ```ts
-export declare const free: (
-  instance: CML.BigInteger,
-) => Effect.Effect<void, BigIntegerError>;
+export declare const free: (instance: CML.BigInteger) => Effect.Effect<void, BigIntegerError>
 ```
 
 Added in v2.0.0
@@ -256,9 +238,7 @@ Method toCanonicalCborBytes of BigInteger
 **Signature**
 
 ```ts
-export declare const toCanonicalCborBytes: (
-  instance: CML.BigInteger,
-) => Effect.Effect<Uint8Array, BigIntegerError>;
+export declare const toCanonicalCborBytes: (instance: CML.BigInteger) => Effect.Effect<Uint8Array, BigIntegerError>
 ```
 
 Added in v2.0.0
@@ -270,9 +250,7 @@ Method toCanonicalCborHex of BigInteger
 **Signature**
 
 ```ts
-export declare const toCanonicalCborHex: (
-  instance: CML.BigInteger,
-) => Effect.Effect<string, BigIntegerError>;
+export declare const toCanonicalCborHex: (instance: CML.BigInteger) => Effect.Effect<string, BigIntegerError>
 ```
 
 Added in v2.0.0
@@ -284,9 +262,7 @@ Method toCborBytes of BigInteger
 **Signature**
 
 ```ts
-export declare const toCborBytes: (
-  instance: CML.BigInteger,
-) => Effect.Effect<Uint8Array, BigIntegerError>;
+export declare const toCborBytes: (instance: CML.BigInteger) => Effect.Effect<Uint8Array, BigIntegerError>
 ```
 
 Added in v2.0.0
@@ -298,9 +274,7 @@ Method toCborHex of BigInteger
 **Signature**
 
 ```ts
-export declare const toCborHex: (
-  instance: CML.BigInteger,
-) => Effect.Effect<string, BigIntegerError>;
+export declare const toCborHex: (instance: CML.BigInteger) => Effect.Effect<string, BigIntegerError>
 ```
 
 Added in v2.0.0
@@ -312,9 +286,7 @@ Method toJsValue of BigInteger
 **Signature**
 
 ```ts
-export declare const toJsValue: (
-  instance: CML.BigInteger,
-) => Effect.Effect<any, BigIntegerError>;
+export declare const toJsValue: (instance: CML.BigInteger) => Effect.Effect<any, BigIntegerError>
 ```
 
 Added in v2.0.0
@@ -326,9 +298,7 @@ Method toJson of BigInteger
 **Signature**
 
 ```ts
-export declare const toJson: (
-  instance: CML.BigInteger,
-) => Effect.Effect<string, BigIntegerError>;
+export declare const toJson: (instance: CML.BigInteger) => Effect.Effect<string, BigIntegerError>
 ```
 
 Added in v2.0.0
@@ -340,9 +310,7 @@ Method toStr of BigInteger
 **Signature**
 
 ```ts
-export declare const toStr: (
-  instance: CML.BigInteger,
-) => Effect.Effect<string, BigIntegerError>;
+export declare const toStr: (instance: CML.BigInteger) => Effect.Effect<string, BigIntegerError>
 ```
 
 Added in v2.0.0
@@ -356,9 +324,7 @@ Unsafely calls instance.asInt without Effect wrapper
 **Signature**
 
 ```ts
-export declare const asIntUnsafe: (
-  instance: CML.BigInteger,
-) => CML.Int | undefined;
+export declare const asIntUnsafe: (instance: CML.BigInteger) => CML.Int | undefined
 ```
 
 Added in v2.0.0
@@ -370,9 +336,7 @@ Unsafely calls instance.asU64 without Effect wrapper
 **Signature**
 
 ```ts
-export declare const asU64Unsafe: (
-  instance: CML.BigInteger,
-) => bigint | undefined;
+export declare const asU64Unsafe: (instance: CML.BigInteger) => bigint | undefined
 ```
 
 Added in v2.0.0
@@ -384,7 +348,7 @@ Unsafely calls instance.free without Effect wrapper
 **Signature**
 
 ```ts
-export declare const freeUnsafe: (instance: CML.BigInteger) => void;
+export declare const freeUnsafe: (instance: CML.BigInteger) => void
 ```
 
 Added in v2.0.0
@@ -396,9 +360,7 @@ Unsafely calls instance.toCanonicalCborBytes without Effect wrapper
 **Signature**
 
 ```ts
-export declare const toCanonicalCborBytesUnsafe: (
-  instance: CML.BigInteger,
-) => Uint8Array;
+export declare const toCanonicalCborBytesUnsafe: (instance: CML.BigInteger) => Uint8Array
 ```
 
 Added in v2.0.0
@@ -410,9 +372,7 @@ Unsafely calls instance.toCanonicalCborHex without Effect wrapper
 **Signature**
 
 ```ts
-export declare const toCanonicalCborHexUnsafe: (
-  instance: CML.BigInteger,
-) => string;
+export declare const toCanonicalCborHexUnsafe: (instance: CML.BigInteger) => string
 ```
 
 Added in v2.0.0
@@ -424,9 +384,7 @@ Unsafely calls instance.toCborBytes without Effect wrapper
 **Signature**
 
 ```ts
-export declare const toCborBytesUnsafe: (
-  instance: CML.BigInteger,
-) => Uint8Array;
+export declare const toCborBytesUnsafe: (instance: CML.BigInteger) => Uint8Array
 ```
 
 Added in v2.0.0
@@ -438,7 +396,7 @@ Unsafely calls instance.toCborHex without Effect wrapper
 **Signature**
 
 ```ts
-export declare const toCborHexUnsafe: (instance: CML.BigInteger) => string;
+export declare const toCborHexUnsafe: (instance: CML.BigInteger) => string
 ```
 
 Added in v2.0.0
@@ -450,7 +408,7 @@ Unsafely calls instance.toJsValue without Effect wrapper
 **Signature**
 
 ```ts
-export declare const toJsValueUnsafe: (instance: CML.BigInteger) => any;
+export declare const toJsValueUnsafe: (instance: CML.BigInteger) => any
 ```
 
 Added in v2.0.0
@@ -462,7 +420,7 @@ Unsafely calls instance.toJson without Effect wrapper
 **Signature**
 
 ```ts
-export declare const toJsonUnsafe: (instance: CML.BigInteger) => string;
+export declare const toJsonUnsafe: (instance: CML.BigInteger) => string
 ```
 
 Added in v2.0.0
@@ -474,7 +432,7 @@ Unsafely calls instance.toStr without Effect wrapper
 **Signature**
 
 ```ts
-export declare const toStrUnsafe: (instance: CML.BigInteger) => string;
+export declare const toStrUnsafe: (instance: CML.BigInteger) => string
 ```
 
 Added in v2.0.0
@@ -488,7 +446,7 @@ Type alias for the CML BigInteger class
 **Signature**
 
 ```ts
-export type BigInteger = CML.BigInteger;
+export type BigInteger = CML.BigInteger
 ```
 
 Added in v2.0.0

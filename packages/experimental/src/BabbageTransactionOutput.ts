@@ -8,9 +8,9 @@ import {
   pipe,
   Schema,
 } from "effect";
-import * as CBOR from "../CBOR.js";
-import * as Hex from "../Hex.js";
-import * as Address from "../Address.js";
+import * as CBOR from "./CBOR.js";
+import * as Hex from "./Hex.js";
+import * as Address from "./Address.js";
 
 /**
  * CDDL specs
@@ -80,7 +80,7 @@ export const CBORBytes = Schema.transformOrFail(
     strict: true,
     encode: (toI, options, ast, toA) =>
       pipe(
-        ParseResult.encode(Address.Bytes)(toA.address),
+        ParseResult.encode(Address.Address)(toA.address),
         Effect.map((addressBytes) => {
           const map = new Map<number, unknown>([
             [0, addressBytes],
@@ -117,7 +117,7 @@ export const CBORBytes = Schema.transformOrFail(
         const datumOption = decoded.get(2) as Uint8Array | undefined;
         const scriptRef = decoded.get(3) as Uint8Array | undefined;
 
-        const address = yield* ParseResult.decodeUnknown(Address.Bytes)(
+        const address = yield* ParseResult.decodeUnknown(Address.Address)(
           addressBytes,
         );
 

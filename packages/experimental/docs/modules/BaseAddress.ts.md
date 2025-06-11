@@ -33,7 +33,7 @@ Check if two BaseAddress instances are equal.
 **Signature**
 
 ```ts
-export declare const equals: (a: BaseAddress, b: BaseAddress) => boolean;
+export declare const equals: (a: BaseAddress, b: BaseAddress) => boolean
 ```
 
 Added in v2.0.0
@@ -47,21 +47,21 @@ Generate a random BaseAddress.
 **Signature**
 
 ```ts
-export declare const generator: FastCheck.Arbitrary<BaseAddress>;
+export declare const generator: FastCheck.Arbitrary<BaseAddress>
 ```
 
 **Example**
 
 ```ts
-import { BaseAddress } from "@lucid-evolution/experimental";
-import { FastCheck } from "effect";
-import assert from "assert";
+import { BaseAddress } from "@lucid-evolution/experimental"
+import { FastCheck } from "effect"
+import assert from "assert"
 
-const randomSamples = FastCheck.sample(BaseAddress.generator, 20);
+const randomSamples = FastCheck.sample(BaseAddress.generator, 20)
 randomSamples.forEach((address) => {
-  assert(address._tag === "BaseAddress");
-  assert(typeof address.networkId === "number");
-});
+  assert(address._tag === "BaseAddress")
+  assert(typeof address.networkId === "number")
+})
 ```
 
 Added in v2.0.0
@@ -85,7 +85,7 @@ Added in v2.0.0
 **Signature**
 
 ```ts
-[Inspectable.NodeInspectSymbol]();
+;[Inspectable.NodeInspectSymbol]()
 ```
 
 # utils
@@ -96,7 +96,7 @@ Added in v2.0.0
 
 ```ts
 export interface BaseAddress {
-  readonly [NominalType]: unique symbol;
+  readonly [NominalType]: unique symbol
 }
 ```
 
@@ -105,11 +105,7 @@ export interface BaseAddress {
 **Signature**
 
 ```ts
-export declare const Bytes: Schema.transformOrFail<
-  typeof Schema.Uint8ArrayFromSelf,
-  typeof BaseAddress,
-  never
->;
+export declare const Bytes: Schema.transformOrFail<typeof Schema.Uint8ArrayFromSelf, typeof BaseAddress, never>
 ```
 
 ## HexString
@@ -118,12 +114,8 @@ export declare const Bytes: Schema.transformOrFail<
 
 ```ts
 export declare const HexString: Schema.transformOrFail<
-  Schema.SchemaClass<
-    string & Brand<"HexString">,
-    string & Brand<"HexString">,
-    never
-  >,
+  Schema.SchemaClass<string & Brand<"HexString">, string & Brand<"HexString">, never>,
   typeof BaseAddress,
   never
->;
+>
 ```

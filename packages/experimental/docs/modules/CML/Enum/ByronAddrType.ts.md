@@ -1,6 +1,6 @@
 ---
 title: CML/Enum/ByronAddrType.ts
-nav_order: 71
+nav_order: 70
 parent: Modules
 ---
 
@@ -34,7 +34,7 @@ Type alias for the CML ByronAddrType enum
 **Signature**
 
 ```ts
-export type ByronAddrType = CML.ByronAddrType;
+export type ByronAddrType = CML.ByronAddrType
 ```
 
 Added in v2.0.0
@@ -48,7 +48,7 @@ Convert string to ByronAddrType enum value
 **Signature**
 
 ```ts
-export declare const fromString: (str: string) => CML.ByronAddrType | undefined;
+export declare const fromString: (str: string) => CML.ByronAddrType | undefined
 ```
 
 Added in v2.0.0
@@ -60,7 +60,7 @@ Convert ByronAddrType enum value to string
 **Signature**
 
 ```ts
-export declare const toString: (value: CML.ByronAddrType) => string;
+export declare const toString: (value: CML.ByronAddrType) => string
 ```
 
 Added in v2.0.0
@@ -72,7 +72,7 @@ Get all values of the ByronAddrType enum
 **Signature**
 
 ```ts
-export declare const values: () => Array<CML.ByronAddrType>;
+export declare const values: () => Array<CML.ByronAddrType>
 ```
 
 Added in v2.0.0
@@ -86,7 +86,7 @@ PublicKey variant of the ByronAddrType enum
 **Signature**
 
 ```ts
-export declare const PublicKey: CML.ByronAddrType.PublicKey;
+export declare const PublicKey: CML.ByronAddrType.PublicKey
 ```
 
 Added in v2.0.0
@@ -98,7 +98,7 @@ Redeem variant of the ByronAddrType enum
 **Signature**
 
 ```ts
-export declare const Redeem: CML.ByronAddrType.Redeem;
+export declare const Redeem: CML.ByronAddrType.Redeem
 ```
 
 Added in v2.0.0
@@ -110,7 +110,7 @@ Script variant of the ByronAddrType enum
 **Signature**
 
 ```ts
-export declare const Script: CML.ByronAddrType.Script;
+export declare const Script: CML.ByronAddrType.Script
 ```
 
 Added in v2.0.0

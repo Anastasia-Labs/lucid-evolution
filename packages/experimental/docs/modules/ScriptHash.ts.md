@@ -1,6 +1,6 @@
 ---
 title: ScriptHash.ts
-nav_order: 302
+nav_order: 305
 parent: Modules
 ---
 
@@ -39,7 +39,7 @@ The length in bytes of a ScriptHash.
 **Signature**
 
 ```ts
-export declare const SCRIPTHASH_BYTES_LENGTH: 28;
+export declare const SCRIPTHASH_BYTES_LENGTH: 28
 ```
 
 Added in v2.0.0
@@ -51,7 +51,7 @@ The length in hex characters of a ScriptHash.
 **Signature**
 
 ```ts
-export declare const SCRIPTHASH_HEX_LENGTH: 56;
+export declare const SCRIPTHASH_HEX_LENGTH: 56
 ```
 
 Added in v2.0.0
@@ -65,7 +65,7 @@ Check if two ScriptHash instances are equal.
 **Signature**
 
 ```ts
-export declare const equals: (a: ScriptHash, b: ScriptHash) => boolean;
+export declare const equals: (a: ScriptHash, b: ScriptHash) => boolean
 ```
 
 Added in v2.0.0
@@ -85,13 +85,11 @@ export declare class ScriptHashError
 **Example**
 
 ```ts
-import { ScriptHash } from "@lucid-evolution/experimental";
-import assert from "assert";
+import { ScriptHash } from "@lucid-evolution/experimental"
+import assert from "assert"
 
-const error = new ScriptHash.ScriptHashError({
-  message: "Invalid script hash",
-});
-assert(error.message === "Invalid script hash");
+const error = new ScriptHash.ScriptHashError({ message: "Invalid script hash" })
+assert(error.message === "Invalid script hash")
 ```
 
 Added in v2.0.0
@@ -105,20 +103,20 @@ Generate a random ScriptHash.
 **Signature**
 
 ```ts
-export declare const generator: FastCheck.Arbitrary<ScriptHash>;
+export declare const generator: FastCheck.Arbitrary<ScriptHash>
 ```
 
 **Example**
 
 ```ts
-import { ScriptHash } from "@lucid-evolution/experimental";
-import { FastCheck } from "effect";
-import assert from "assert";
+import { ScriptHash } from "@lucid-evolution/experimental"
+import { FastCheck } from "effect"
+import assert from "assert"
 
-const randomSamples = FastCheck.sample(ScriptHash.generator, 20);
+const randomSamples = FastCheck.sample(ScriptHash.generator, 20)
 randomSamples.forEach((scriptHash) => {
-  assert(scriptHash.hash.length === 56);
-});
+  assert(scriptHash.hash.length === 56)
+})
 ```
 
 Added in v2.0.0
@@ -143,7 +141,7 @@ Added in v2.0.0
 **Signature**
 
 ```ts
-[Inspectable.NodeInspectSymbol]();
+;[Inspectable.NodeInspectSymbol]()
 ```
 
 # utils
@@ -153,10 +151,7 @@ Added in v2.0.0
 **Signature**
 
 ```ts
-export declare const Bytes: Schema.transform<
-  Schema.SchemaClass<any, any, never>,
-  typeof ScriptHash
->;
+export declare const Bytes: Schema.transform<Schema.SchemaClass<any, any, never>, typeof ScriptHash>
 ```
 
 ## ScriptHash (interface)
@@ -165,7 +160,7 @@ export declare const Bytes: Schema.transform<
 
 ```ts
 export interface ScriptHash {
-  readonly [NominalType]: unique symbol;
+  readonly [NominalType]: unique symbol
 }
 ```
 
@@ -174,7 +169,7 @@ export interface ScriptHash {
 **Signature**
 
 ```ts
-export declare const ScriptHashBytes: Schema.SchemaClass<any, any, never>;
+export declare const ScriptHashBytes: Schema.SchemaClass<any, any, never>
 ```
 
 ## ScriptHashFromHex
@@ -183,11 +178,7 @@ export declare const ScriptHashBytes: Schema.SchemaClass<any, any, never>;
 
 ```ts
 export declare const ScriptHashFromHex: Schema.transform<
-  Schema.SchemaClass<
-    string & Brand<"HexString">,
-    string & Brand<"HexString">,
-    never
-  >,
+  Schema.SchemaClass<string & Brand<"HexString">, string & Brand<"HexString">, never>,
   typeof ScriptHash
->;
+>
 ```

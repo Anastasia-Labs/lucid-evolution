@@ -1,6 +1,6 @@
 ---
 title: CML/VotingProcedures.ts
-nav_order: 289
+nav_order: 288
 parent: Modules
 ---
 
@@ -44,10 +44,7 @@ Static method \_new of VotingProcedures
 **Signature**
 
 ```ts
-export declare const _new: () => Effect.Effect<
-  CML.VotingProcedures,
-  VotingProceduresError
->;
+export declare const _new: () => Effect.Effect<CML.VotingProcedures, VotingProceduresError>
 ```
 
 Added in v2.0.0
@@ -61,7 +58,7 @@ Unsafely calls VotingProcedures.\_new without Effect wrapper
 **Signature**
 
 ```ts
-export declare const _newUnsafe: () => CML.VotingProcedures;
+export declare const _newUnsafe: () => CML.VotingProcedures
 ```
 
 Added in v2.0.0
@@ -91,9 +88,7 @@ Method free of VotingProcedures
 **Signature**
 
 ```ts
-export declare const free: (
-  instance: CML.VotingProcedures,
-) => Effect.Effect<void, VotingProceduresError>;
+export declare const free: (instance: CML.VotingProcedures) => Effect.Effect<void, VotingProceduresError>
 ```
 
 Added in v2.0.0
@@ -107,11 +102,8 @@ Method get of VotingProcedures
 ```ts
 export declare const get: (
   instance: CML.VotingProcedures,
-  key: CML.Voter,
-) => Effect.Effect<
-  CML.MapGovActionIdToVotingProcedure | undefined,
-  VotingProceduresError
->;
+  key: CML.Voter
+) => Effect.Effect<CML.MapGovActionIdToVotingProcedure | undefined, VotingProceduresError>
 ```
 
 Added in v2.0.0
@@ -126,11 +118,8 @@ Method insert of VotingProcedures
 export declare const insert: (
   instance: CML.VotingProcedures,
   key: CML.Voter,
-  value: CML.MapGovActionIdToVotingProcedure,
-) => Effect.Effect<
-  CML.MapGovActionIdToVotingProcedure | undefined,
-  VotingProceduresError
->;
+  value: CML.MapGovActionIdToVotingProcedure
+) => Effect.Effect<CML.MapGovActionIdToVotingProcedure | undefined, VotingProceduresError>
 ```
 
 Added in v2.0.0
@@ -142,9 +131,7 @@ Method keys of VotingProcedures
 **Signature**
 
 ```ts
-export declare const keys: (
-  instance: CML.VotingProcedures,
-) => Effect.Effect<CML.VoterList, VotingProceduresError>;
+export declare const keys: (instance: CML.VotingProcedures) => Effect.Effect<CML.VoterList, VotingProceduresError>
 ```
 
 Added in v2.0.0
@@ -156,9 +143,7 @@ Method len of VotingProcedures
 **Signature**
 
 ```ts
-export declare const len: (
-  instance: CML.VotingProcedures,
-) => Effect.Effect<number, VotingProceduresError>;
+export declare const len: (instance: CML.VotingProcedures) => Effect.Effect<number, VotingProceduresError>
 ```
 
 Added in v2.0.0
@@ -172,7 +157,7 @@ Unsafely calls instance.free without Effect wrapper
 **Signature**
 
 ```ts
-export declare const freeUnsafe: (instance: CML.VotingProcedures) => void;
+export declare const freeUnsafe: (instance: CML.VotingProcedures) => void
 ```
 
 Added in v2.0.0
@@ -186,8 +171,8 @@ Unsafely calls instance.get without Effect wrapper
 ```ts
 export declare const getUnsafe: (
   instance: CML.VotingProcedures,
-  key: CML.Voter,
-) => CML.MapGovActionIdToVotingProcedure | undefined;
+  key: CML.Voter
+) => CML.MapGovActionIdToVotingProcedure | undefined
 ```
 
 Added in v2.0.0
@@ -202,8 +187,8 @@ Unsafely calls instance.insert without Effect wrapper
 export declare const insertUnsafe: (
   instance: CML.VotingProcedures,
   key: CML.Voter,
-  value: CML.MapGovActionIdToVotingProcedure,
-) => CML.MapGovActionIdToVotingProcedure | undefined;
+  value: CML.MapGovActionIdToVotingProcedure
+) => CML.MapGovActionIdToVotingProcedure | undefined
 ```
 
 Added in v2.0.0
@@ -215,9 +200,7 @@ Unsafely calls instance.keys without Effect wrapper
 **Signature**
 
 ```ts
-export declare const keysUnsafe: (
-  instance: CML.VotingProcedures,
-) => CML.VoterList;
+export declare const keysUnsafe: (instance: CML.VotingProcedures) => CML.VoterList
 ```
 
 Added in v2.0.0
@@ -229,7 +212,7 @@ Unsafely calls instance.len without Effect wrapper
 **Signature**
 
 ```ts
-export declare const lenUnsafe: (instance: CML.VotingProcedures) => number;
+export declare const lenUnsafe: (instance: CML.VotingProcedures) => number
 ```
 
 Added in v2.0.0
@@ -243,7 +226,7 @@ Type alias for the CML VotingProcedures class
 **Signature**
 
 ```ts
-export type VotingProcedures = CML.VotingProcedures;
+export type VotingProcedures = CML.VotingProcedures
 ```
 
 Added in v2.0.0

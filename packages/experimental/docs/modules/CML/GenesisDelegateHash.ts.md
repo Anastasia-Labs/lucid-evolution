@@ -1,6 +1,6 @@
 ---
 title: CML/GenesisDelegateHash.ts
-nav_order: 101
+nav_order: 100
 parent: Modules
 ---
 
@@ -46,9 +46,7 @@ Static method fromBech32 of GenesisDelegateHash
 **Signature**
 
 ```ts
-export declare const fromBech32: (
-  bech32Str: string,
-) => Effect.Effect<CML.GenesisDelegateHash, GenesisDelegateHashError>;
+export declare const fromBech32: (bech32Str: string) => Effect.Effect<CML.GenesisDelegateHash, GenesisDelegateHashError>
 ```
 
 Added in v2.0.0
@@ -60,9 +58,7 @@ Static method fromHex of GenesisDelegateHash
 **Signature**
 
 ```ts
-export declare const fromHex: (
-  input: string,
-) => Effect.Effect<CML.GenesisDelegateHash, GenesisDelegateHashError>;
+export declare const fromHex: (input: string) => Effect.Effect<CML.GenesisDelegateHash, GenesisDelegateHashError>
 ```
 
 Added in v2.0.0
@@ -75,8 +71,8 @@ Static method fromRawBytes of GenesisDelegateHash
 
 ```ts
 export declare const fromRawBytes: (
-  bytes: Uint8Array,
-) => Effect.Effect<CML.GenesisDelegateHash, GenesisDelegateHashError>;
+  bytes: Uint8Array
+) => Effect.Effect<CML.GenesisDelegateHash, GenesisDelegateHashError>
 ```
 
 Added in v2.0.0
@@ -90,9 +86,7 @@ Unsafely calls GenesisDelegateHash.fromBech32 without Effect wrapper
 **Signature**
 
 ```ts
-export declare const fromBech32Unsafe: (
-  bech32Str: string,
-) => CML.GenesisDelegateHash;
+export declare const fromBech32Unsafe: (bech32Str: string) => CML.GenesisDelegateHash
 ```
 
 Added in v2.0.0
@@ -104,7 +98,7 @@ Unsafely calls GenesisDelegateHash.fromHex without Effect wrapper
 **Signature**
 
 ```ts
-export declare const fromHexUnsafe: (input: string) => CML.GenesisDelegateHash;
+export declare const fromHexUnsafe: (input: string) => CML.GenesisDelegateHash
 ```
 
 Added in v2.0.0
@@ -116,9 +110,7 @@ Unsafely calls GenesisDelegateHash.fromRawBytes without Effect wrapper
 **Signature**
 
 ```ts
-export declare const fromRawBytesUnsafe: (
-  bytes: Uint8Array,
-) => CML.GenesisDelegateHash;
+export declare const fromRawBytesUnsafe: (bytes: Uint8Array) => CML.GenesisDelegateHash
 ```
 
 Added in v2.0.0
@@ -148,9 +140,7 @@ Method free of GenesisDelegateHash
 **Signature**
 
 ```ts
-export declare const free: (
-  instance: CML.GenesisDelegateHash,
-) => Effect.Effect<void, GenesisDelegateHashError>;
+export declare const free: (instance: CML.GenesisDelegateHash) => Effect.Effect<void, GenesisDelegateHashError>
 ```
 
 Added in v2.0.0
@@ -164,8 +154,8 @@ Method toBech32 of GenesisDelegateHash
 ```ts
 export declare const toBech32: (
   instance: CML.GenesisDelegateHash,
-  prefix: string,
-) => Effect.Effect<string, GenesisDelegateHashError>;
+  prefix: string
+) => Effect.Effect<string, GenesisDelegateHashError>
 ```
 
 Added in v2.0.0
@@ -177,9 +167,7 @@ Method toHex of GenesisDelegateHash
 **Signature**
 
 ```ts
-export declare const toHex: (
-  instance: CML.GenesisDelegateHash,
-) => Effect.Effect<string, GenesisDelegateHashError>;
+export declare const toHex: (instance: CML.GenesisDelegateHash) => Effect.Effect<string, GenesisDelegateHashError>
 ```
 
 Added in v2.0.0
@@ -192,8 +180,8 @@ Method toRawBytes of GenesisDelegateHash
 
 ```ts
 export declare const toRawBytes: (
-  instance: CML.GenesisDelegateHash,
-) => Effect.Effect<Uint8Array, GenesisDelegateHashError>;
+  instance: CML.GenesisDelegateHash
+) => Effect.Effect<Uint8Array, GenesisDelegateHashError>
 ```
 
 Added in v2.0.0
@@ -207,7 +195,7 @@ Unsafely calls instance.free without Effect wrapper
 **Signature**
 
 ```ts
-export declare const freeUnsafe: (instance: CML.GenesisDelegateHash) => void;
+export declare const freeUnsafe: (instance: CML.GenesisDelegateHash) => void
 ```
 
 Added in v2.0.0
@@ -219,10 +207,7 @@ Unsafely calls instance.toBech32 without Effect wrapper
 **Signature**
 
 ```ts
-export declare const toBech32Unsafe: (
-  instance: CML.GenesisDelegateHash,
-  prefix: string,
-) => string;
+export declare const toBech32Unsafe: (instance: CML.GenesisDelegateHash, prefix: string) => string
 ```
 
 Added in v2.0.0
@@ -234,7 +219,7 @@ Unsafely calls instance.toHex without Effect wrapper
 **Signature**
 
 ```ts
-export declare const toHexUnsafe: (instance: CML.GenesisDelegateHash) => string;
+export declare const toHexUnsafe: (instance: CML.GenesisDelegateHash) => string
 ```
 
 Added in v2.0.0
@@ -246,9 +231,7 @@ Unsafely calls instance.toRawBytes without Effect wrapper
 **Signature**
 
 ```ts
-export declare const toRawBytesUnsafe: (
-  instance: CML.GenesisDelegateHash,
-) => Uint8Array;
+export declare const toRawBytesUnsafe: (instance: CML.GenesisDelegateHash) => Uint8Array
 ```
 
 Added in v2.0.0
@@ -262,7 +245,7 @@ Type alias for the CML GenesisDelegateHash class
 **Signature**
 
 ```ts
-export type GenesisDelegateHash = CML.GenesisDelegateHash;
+export type GenesisDelegateHash = CML.GenesisDelegateHash
 ```
 
 Added in v2.0.0

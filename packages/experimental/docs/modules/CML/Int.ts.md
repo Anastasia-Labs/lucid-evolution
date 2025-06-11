@@ -1,6 +1,6 @@
 ---
 title: CML/Int.ts
-nav_order: 112
+nav_order: 111
 parent: Modules
 ---
 
@@ -50,7 +50,7 @@ Static method \_new of Int
 **Signature**
 
 ```ts
-export declare const _new: (x: bigint) => Effect.Effect<CML.Int, IntError>;
+export declare const _new: (x: bigint) => Effect.Effect<CML.Int, IntError>
 ```
 
 Added in v2.0.0
@@ -62,9 +62,7 @@ Static method fromCborBytes of Int
 **Signature**
 
 ```ts
-export declare const fromCborBytes: (
-  cborBytes: Uint8Array,
-) => Effect.Effect<CML.Int, IntError>;
+export declare const fromCborBytes: (cborBytes: Uint8Array) => Effect.Effect<CML.Int, IntError>
 ```
 
 Added in v2.0.0
@@ -76,9 +74,7 @@ Static method fromJson of Int
 **Signature**
 
 ```ts
-export declare const fromJson: (
-  json: string,
-) => Effect.Effect<CML.Int, IntError>;
+export declare const fromJson: (json: string) => Effect.Effect<CML.Int, IntError>
 ```
 
 Added in v2.0.0
@@ -90,9 +86,7 @@ Static method fromStr of Int
 **Signature**
 
 ```ts
-export declare const fromStr: (
-  string: string,
-) => Effect.Effect<CML.Int, IntError>;
+export declare const fromStr: (string: string) => Effect.Effect<CML.Int, IntError>
 ```
 
 Added in v2.0.0
@@ -106,7 +100,7 @@ Unsafely calls Int.\_new without Effect wrapper
 **Signature**
 
 ```ts
-export declare const _newUnsafe: (x: bigint) => CML.Int;
+export declare const _newUnsafe: (x: bigint) => CML.Int
 ```
 
 Added in v2.0.0
@@ -118,7 +112,7 @@ Unsafely calls Int.fromCborBytes without Effect wrapper
 **Signature**
 
 ```ts
-export declare const fromCborBytesUnsafe: (cborBytes: Uint8Array) => CML.Int;
+export declare const fromCborBytesUnsafe: (cborBytes: Uint8Array) => CML.Int
 ```
 
 Added in v2.0.0
@@ -130,7 +124,7 @@ Unsafely calls Int.fromJson without Effect wrapper
 **Signature**
 
 ```ts
-export declare const fromJsonUnsafe: (json: string) => CML.Int;
+export declare const fromJsonUnsafe: (json: string) => CML.Int
 ```
 
 Added in v2.0.0
@@ -142,7 +136,7 @@ Unsafely calls Int.fromStr without Effect wrapper
 **Signature**
 
 ```ts
-export declare const fromStrUnsafe: (string: string) => CML.Int;
+export declare const fromStrUnsafe: (string: string) => CML.Int
 ```
 
 Added in v2.0.0
@@ -172,7 +166,7 @@ Method free of Int
 **Signature**
 
 ```ts
-export declare const free: (instance: CML.Int) => Effect.Effect<void, IntError>;
+export declare const free: (instance: CML.Int) => Effect.Effect<void, IntError>
 ```
 
 Added in v2.0.0
@@ -184,9 +178,7 @@ Method toCborBytes of Int
 **Signature**
 
 ```ts
-export declare const toCborBytes: (
-  instance: CML.Int,
-) => Effect.Effect<Uint8Array, IntError>;
+export declare const toCborBytes: (instance: CML.Int) => Effect.Effect<Uint8Array, IntError>
 ```
 
 Added in v2.0.0
@@ -198,9 +190,7 @@ Method toJson of Int
 **Signature**
 
 ```ts
-export declare const toJson: (
-  instance: CML.Int,
-) => Effect.Effect<string, IntError>;
+export declare const toJson: (instance: CML.Int) => Effect.Effect<string, IntError>
 ```
 
 Added in v2.0.0
@@ -212,9 +202,7 @@ Method toJsonValue of Int
 **Signature**
 
 ```ts
-export declare const toJsonValue: (
-  instance: CML.Int,
-) => Effect.Effect<any, IntError>;
+export declare const toJsonValue: (instance: CML.Int) => Effect.Effect<any, IntError>
 ```
 
 Added in v2.0.0
@@ -226,9 +214,7 @@ Method toStr of Int
 **Signature**
 
 ```ts
-export declare const toStr: (
-  instance: CML.Int,
-) => Effect.Effect<string, IntError>;
+export declare const toStr: (instance: CML.Int) => Effect.Effect<string, IntError>
 ```
 
 Added in v2.0.0
@@ -242,7 +228,7 @@ Unsafely calls instance.free without Effect wrapper
 **Signature**
 
 ```ts
-export declare const freeUnsafe: (instance: CML.Int) => void;
+export declare const freeUnsafe: (instance: CML.Int) => void
 ```
 
 Added in v2.0.0
@@ -254,7 +240,7 @@ Unsafely calls instance.toCborBytes without Effect wrapper
 **Signature**
 
 ```ts
-export declare const toCborBytesUnsafe: (instance: CML.Int) => Uint8Array;
+export declare const toCborBytesUnsafe: (instance: CML.Int) => Uint8Array
 ```
 
 Added in v2.0.0
@@ -266,7 +252,7 @@ Unsafely calls instance.toJson without Effect wrapper
 **Signature**
 
 ```ts
-export declare const toJsonUnsafe: (instance: CML.Int) => string;
+export declare const toJsonUnsafe: (instance: CML.Int) => string
 ```
 
 Added in v2.0.0
@@ -278,7 +264,7 @@ Unsafely calls instance.toJsonValue without Effect wrapper
 **Signature**
 
 ```ts
-export declare const toJsonValueUnsafe: (instance: CML.Int) => any;
+export declare const toJsonValueUnsafe: (instance: CML.Int) => any
 ```
 
 Added in v2.0.0
@@ -290,7 +276,7 @@ Unsafely calls instance.toStr without Effect wrapper
 **Signature**
 
 ```ts
-export declare const toStrUnsafe: (instance: CML.Int) => string;
+export declare const toStrUnsafe: (instance: CML.Int) => string
 ```
 
 Added in v2.0.0
@@ -304,7 +290,7 @@ Type alias for the CML Int class
 **Signature**
 
 ```ts
-export type Int = CML.Int;
+export type Int = CML.Int
 ```
 
 Added in v2.0.0

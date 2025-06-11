@@ -68,8 +68,8 @@ Static method \_new of ConwayFormatTxOut
 ```ts
 export declare const _new: (
   address: CML.Address,
-  amount: CML.Value,
-) => Effect.Effect<CML.ConwayFormatTxOut, ConwayFormatTxOutError>;
+  amount: CML.Value
+) => Effect.Effect<CML.ConwayFormatTxOut, ConwayFormatTxOutError>
 ```
 
 Added in v2.0.0
@@ -82,8 +82,8 @@ Static method fromCborBytes of ConwayFormatTxOut
 
 ```ts
 export declare const fromCborBytes: (
-  cborBytes: Uint8Array,
-) => Effect.Effect<CML.ConwayFormatTxOut, ConwayFormatTxOutError>;
+  cborBytes: Uint8Array
+) => Effect.Effect<CML.ConwayFormatTxOut, ConwayFormatTxOutError>
 ```
 
 Added in v2.0.0
@@ -95,9 +95,7 @@ Static method fromCborHex of ConwayFormatTxOut
 **Signature**
 
 ```ts
-export declare const fromCborHex: (
-  cborBytes: string,
-) => Effect.Effect<CML.ConwayFormatTxOut, ConwayFormatTxOutError>;
+export declare const fromCborHex: (cborBytes: string) => Effect.Effect<CML.ConwayFormatTxOut, ConwayFormatTxOutError>
 ```
 
 Added in v2.0.0
@@ -109,9 +107,7 @@ Static method fromJson of ConwayFormatTxOut
 **Signature**
 
 ```ts
-export declare const fromJson: (
-  json: string,
-) => Effect.Effect<CML.ConwayFormatTxOut, ConwayFormatTxOutError>;
+export declare const fromJson: (json: string) => Effect.Effect<CML.ConwayFormatTxOut, ConwayFormatTxOutError>
 ```
 
 Added in v2.0.0
@@ -125,10 +121,7 @@ Unsafely calls ConwayFormatTxOut.\_new without Effect wrapper
 **Signature**
 
 ```ts
-export declare const _newUnsafe: (
-  address: CML.Address,
-  amount: CML.Value,
-) => CML.ConwayFormatTxOut;
+export declare const _newUnsafe: (address: CML.Address, amount: CML.Value) => CML.ConwayFormatTxOut
 ```
 
 Added in v2.0.0
@@ -140,9 +133,7 @@ Unsafely calls ConwayFormatTxOut.fromCborBytes without Effect wrapper
 **Signature**
 
 ```ts
-export declare const fromCborBytesUnsafe: (
-  cborBytes: Uint8Array,
-) => CML.ConwayFormatTxOut;
+export declare const fromCborBytesUnsafe: (cborBytes: Uint8Array) => CML.ConwayFormatTxOut
 ```
 
 Added in v2.0.0
@@ -154,9 +145,7 @@ Unsafely calls ConwayFormatTxOut.fromCborHex without Effect wrapper
 **Signature**
 
 ```ts
-export declare const fromCborHexUnsafe: (
-  cborBytes: string,
-) => CML.ConwayFormatTxOut;
+export declare const fromCborHexUnsafe: (cborBytes: string) => CML.ConwayFormatTxOut
 ```
 
 Added in v2.0.0
@@ -168,7 +157,7 @@ Unsafely calls ConwayFormatTxOut.fromJson without Effect wrapper
 **Signature**
 
 ```ts
-export declare const fromJsonUnsafe: (json: string) => CML.ConwayFormatTxOut;
+export declare const fromJsonUnsafe: (json: string) => CML.ConwayFormatTxOut
 ```
 
 Added in v2.0.0
@@ -198,9 +187,7 @@ Method address of ConwayFormatTxOut
 **Signature**
 
 ```ts
-export declare const address: (
-  instance: CML.ConwayFormatTxOut,
-) => Effect.Effect<CML.Address, ConwayFormatTxOutError>;
+export declare const address: (instance: CML.ConwayFormatTxOut) => Effect.Effect<CML.Address, ConwayFormatTxOutError>
 ```
 
 Added in v2.0.0
@@ -212,9 +199,7 @@ Method amount of ConwayFormatTxOut
 **Signature**
 
 ```ts
-export declare const amount: (
-  instance: CML.ConwayFormatTxOut,
-) => Effect.Effect<CML.Value, ConwayFormatTxOutError>;
+export declare const amount: (instance: CML.ConwayFormatTxOut) => Effect.Effect<CML.Value, ConwayFormatTxOutError>
 ```
 
 Added in v2.0.0
@@ -227,8 +212,8 @@ Method datumOption of ConwayFormatTxOut
 
 ```ts
 export declare const datumOption: (
-  instance: CML.ConwayFormatTxOut,
-) => Effect.Effect<CML.DatumOption | undefined, ConwayFormatTxOutError>;
+  instance: CML.ConwayFormatTxOut
+) => Effect.Effect<CML.DatumOption | undefined, ConwayFormatTxOutError>
 ```
 
 Added in v2.0.0
@@ -240,9 +225,7 @@ Method free of ConwayFormatTxOut
 **Signature**
 
 ```ts
-export declare const free: (
-  instance: CML.ConwayFormatTxOut,
-) => Effect.Effect<void, ConwayFormatTxOutError>;
+export declare const free: (instance: CML.ConwayFormatTxOut) => Effect.Effect<void, ConwayFormatTxOutError>
 ```
 
 Added in v2.0.0
@@ -255,8 +238,8 @@ Method scriptReference of ConwayFormatTxOut
 
 ```ts
 export declare const scriptReference: (
-  instance: CML.ConwayFormatTxOut,
-) => Effect.Effect<CML.Script | undefined, ConwayFormatTxOutError>;
+  instance: CML.ConwayFormatTxOut
+) => Effect.Effect<CML.Script | undefined, ConwayFormatTxOutError>
 ```
 
 Added in v2.0.0
@@ -270,8 +253,8 @@ Method setDatumOption of ConwayFormatTxOut
 ```ts
 export declare const setDatumOption: (
   instance: CML.ConwayFormatTxOut,
-  datumOption: CML.DatumOption,
-) => Effect.Effect<void, ConwayFormatTxOutError>;
+  datumOption: CML.DatumOption
+) => Effect.Effect<void, ConwayFormatTxOutError>
 ```
 
 Added in v2.0.0
@@ -285,8 +268,8 @@ Method setScriptReference of ConwayFormatTxOut
 ```ts
 export declare const setScriptReference: (
   instance: CML.ConwayFormatTxOut,
-  scriptReference: CML.Script,
-) => Effect.Effect<void, ConwayFormatTxOutError>;
+  scriptReference: CML.Script
+) => Effect.Effect<void, ConwayFormatTxOutError>
 ```
 
 Added in v2.0.0
@@ -299,8 +282,8 @@ Method toCanonicalCborBytes of ConwayFormatTxOut
 
 ```ts
 export declare const toCanonicalCborBytes: (
-  instance: CML.ConwayFormatTxOut,
-) => Effect.Effect<Uint8Array, ConwayFormatTxOutError>;
+  instance: CML.ConwayFormatTxOut
+) => Effect.Effect<Uint8Array, ConwayFormatTxOutError>
 ```
 
 Added in v2.0.0
@@ -313,8 +296,8 @@ Method toCanonicalCborHex of ConwayFormatTxOut
 
 ```ts
 export declare const toCanonicalCborHex: (
-  instance: CML.ConwayFormatTxOut,
-) => Effect.Effect<string, ConwayFormatTxOutError>;
+  instance: CML.ConwayFormatTxOut
+) => Effect.Effect<string, ConwayFormatTxOutError>
 ```
 
 Added in v2.0.0
@@ -326,9 +309,7 @@ Method toCborBytes of ConwayFormatTxOut
 **Signature**
 
 ```ts
-export declare const toCborBytes: (
-  instance: CML.ConwayFormatTxOut,
-) => Effect.Effect<Uint8Array, ConwayFormatTxOutError>;
+export declare const toCborBytes: (instance: CML.ConwayFormatTxOut) => Effect.Effect<Uint8Array, ConwayFormatTxOutError>
 ```
 
 Added in v2.0.0
@@ -340,9 +321,7 @@ Method toCborHex of ConwayFormatTxOut
 **Signature**
 
 ```ts
-export declare const toCborHex: (
-  instance: CML.ConwayFormatTxOut,
-) => Effect.Effect<string, ConwayFormatTxOutError>;
+export declare const toCborHex: (instance: CML.ConwayFormatTxOut) => Effect.Effect<string, ConwayFormatTxOutError>
 ```
 
 Added in v2.0.0
@@ -354,9 +333,7 @@ Method toJsValue of ConwayFormatTxOut
 **Signature**
 
 ```ts
-export declare const toJsValue: (
-  instance: CML.ConwayFormatTxOut,
-) => Effect.Effect<any, ConwayFormatTxOutError>;
+export declare const toJsValue: (instance: CML.ConwayFormatTxOut) => Effect.Effect<any, ConwayFormatTxOutError>
 ```
 
 Added in v2.0.0
@@ -368,9 +345,7 @@ Method toJson of ConwayFormatTxOut
 **Signature**
 
 ```ts
-export declare const toJson: (
-  instance: CML.ConwayFormatTxOut,
-) => Effect.Effect<string, ConwayFormatTxOutError>;
+export declare const toJson: (instance: CML.ConwayFormatTxOut) => Effect.Effect<string, ConwayFormatTxOutError>
 ```
 
 Added in v2.0.0
@@ -384,9 +359,7 @@ Unsafely calls instance.address without Effect wrapper
 **Signature**
 
 ```ts
-export declare const addressUnsafe: (
-  instance: CML.ConwayFormatTxOut,
-) => CML.Address;
+export declare const addressUnsafe: (instance: CML.ConwayFormatTxOut) => CML.Address
 ```
 
 Added in v2.0.0
@@ -398,9 +371,7 @@ Unsafely calls instance.amount without Effect wrapper
 **Signature**
 
 ```ts
-export declare const amountUnsafe: (
-  instance: CML.ConwayFormatTxOut,
-) => CML.Value;
+export declare const amountUnsafe: (instance: CML.ConwayFormatTxOut) => CML.Value
 ```
 
 Added in v2.0.0
@@ -412,9 +383,7 @@ Unsafely calls instance.datumOption without Effect wrapper
 **Signature**
 
 ```ts
-export declare const datumOptionUnsafe: (
-  instance: CML.ConwayFormatTxOut,
-) => CML.DatumOption | undefined;
+export declare const datumOptionUnsafe: (instance: CML.ConwayFormatTxOut) => CML.DatumOption | undefined
 ```
 
 Added in v2.0.0
@@ -426,7 +395,7 @@ Unsafely calls instance.free without Effect wrapper
 **Signature**
 
 ```ts
-export declare const freeUnsafe: (instance: CML.ConwayFormatTxOut) => void;
+export declare const freeUnsafe: (instance: CML.ConwayFormatTxOut) => void
 ```
 
 Added in v2.0.0
@@ -438,9 +407,7 @@ Unsafely calls instance.scriptReference without Effect wrapper
 **Signature**
 
 ```ts
-export declare const scriptReferenceUnsafe: (
-  instance: CML.ConwayFormatTxOut,
-) => CML.Script | undefined;
+export declare const scriptReferenceUnsafe: (instance: CML.ConwayFormatTxOut) => CML.Script | undefined
 ```
 
 Added in v2.0.0
@@ -452,10 +419,7 @@ Unsafely calls instance.setDatumOption without Effect wrapper
 **Signature**
 
 ```ts
-export declare const setDatumOptionUnsafe: (
-  instance: CML.ConwayFormatTxOut,
-  datumOption: CML.DatumOption,
-) => void;
+export declare const setDatumOptionUnsafe: (instance: CML.ConwayFormatTxOut, datumOption: CML.DatumOption) => void
 ```
 
 Added in v2.0.0
@@ -467,10 +431,7 @@ Unsafely calls instance.setScriptReference without Effect wrapper
 **Signature**
 
 ```ts
-export declare const setScriptReferenceUnsafe: (
-  instance: CML.ConwayFormatTxOut,
-  scriptReference: CML.Script,
-) => void;
+export declare const setScriptReferenceUnsafe: (instance: CML.ConwayFormatTxOut, scriptReference: CML.Script) => void
 ```
 
 Added in v2.0.0
@@ -482,9 +443,7 @@ Unsafely calls instance.toCanonicalCborBytes without Effect wrapper
 **Signature**
 
 ```ts
-export declare const toCanonicalCborBytesUnsafe: (
-  instance: CML.ConwayFormatTxOut,
-) => Uint8Array;
+export declare const toCanonicalCborBytesUnsafe: (instance: CML.ConwayFormatTxOut) => Uint8Array
 ```
 
 Added in v2.0.0
@@ -496,9 +455,7 @@ Unsafely calls instance.toCanonicalCborHex without Effect wrapper
 **Signature**
 
 ```ts
-export declare const toCanonicalCborHexUnsafe: (
-  instance: CML.ConwayFormatTxOut,
-) => string;
+export declare const toCanonicalCborHexUnsafe: (instance: CML.ConwayFormatTxOut) => string
 ```
 
 Added in v2.0.0
@@ -510,9 +467,7 @@ Unsafely calls instance.toCborBytes without Effect wrapper
 **Signature**
 
 ```ts
-export declare const toCborBytesUnsafe: (
-  instance: CML.ConwayFormatTxOut,
-) => Uint8Array;
+export declare const toCborBytesUnsafe: (instance: CML.ConwayFormatTxOut) => Uint8Array
 ```
 
 Added in v2.0.0
@@ -524,9 +479,7 @@ Unsafely calls instance.toCborHex without Effect wrapper
 **Signature**
 
 ```ts
-export declare const toCborHexUnsafe: (
-  instance: CML.ConwayFormatTxOut,
-) => string;
+export declare const toCborHexUnsafe: (instance: CML.ConwayFormatTxOut) => string
 ```
 
 Added in v2.0.0
@@ -538,7 +491,7 @@ Unsafely calls instance.toJsValue without Effect wrapper
 **Signature**
 
 ```ts
-export declare const toJsValueUnsafe: (instance: CML.ConwayFormatTxOut) => any;
+export declare const toJsValueUnsafe: (instance: CML.ConwayFormatTxOut) => any
 ```
 
 Added in v2.0.0
@@ -550,7 +503,7 @@ Unsafely calls instance.toJson without Effect wrapper
 **Signature**
 
 ```ts
-export declare const toJsonUnsafe: (instance: CML.ConwayFormatTxOut) => string;
+export declare const toJsonUnsafe: (instance: CML.ConwayFormatTxOut) => string
 ```
 
 Added in v2.0.0
@@ -564,7 +517,7 @@ Type alias for the CML ConwayFormatTxOut class
 **Signature**
 
 ```ts
-export type ConwayFormatTxOut = CML.ConwayFormatTxOut;
+export type ConwayFormatTxOut = CML.ConwayFormatTxOut
 ```
 
 Added in v2.0.0

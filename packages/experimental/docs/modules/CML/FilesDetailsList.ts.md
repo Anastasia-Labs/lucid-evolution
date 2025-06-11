@@ -1,6 +1,6 @@
 ---
 title: CML/FilesDetailsList.ts
-nav_order: 100
+nav_order: 99
 parent: Modules
 ---
 
@@ -42,10 +42,7 @@ Static method \_new of FilesDetailsList
 **Signature**
 
 ```ts
-export declare const _new: () => Effect.Effect<
-  CML.FilesDetailsList,
-  FilesDetailsListError
->;
+export declare const _new: () => Effect.Effect<CML.FilesDetailsList, FilesDetailsListError>
 ```
 
 Added in v2.0.0
@@ -59,7 +56,7 @@ Unsafely calls FilesDetailsList.\_new without Effect wrapper
 **Signature**
 
 ```ts
-export declare const _newUnsafe: () => CML.FilesDetailsList;
+export declare const _newUnsafe: () => CML.FilesDetailsList
 ```
 
 Added in v2.0.0
@@ -91,8 +88,8 @@ Method add of FilesDetailsList
 ```ts
 export declare const add: (
   instance: CML.FilesDetailsList,
-  elem: CML.CIP25FilesDetails,
-) => Effect.Effect<void, FilesDetailsListError>;
+  elem: CML.CIP25FilesDetails
+) => Effect.Effect<void, FilesDetailsListError>
 ```
 
 Added in v2.0.0
@@ -104,9 +101,7 @@ Method free of FilesDetailsList
 **Signature**
 
 ```ts
-export declare const free: (
-  instance: CML.FilesDetailsList,
-) => Effect.Effect<void, FilesDetailsListError>;
+export declare const free: (instance: CML.FilesDetailsList) => Effect.Effect<void, FilesDetailsListError>
 ```
 
 Added in v2.0.0
@@ -120,8 +115,8 @@ Method get of FilesDetailsList
 ```ts
 export declare const get: (
   instance: CML.FilesDetailsList,
-  index: number,
-) => Effect.Effect<CML.CIP25FilesDetails, FilesDetailsListError>;
+  index: number
+) => Effect.Effect<CML.CIP25FilesDetails, FilesDetailsListError>
 ```
 
 Added in v2.0.0
@@ -133,9 +128,7 @@ Method len of FilesDetailsList
 **Signature**
 
 ```ts
-export declare const len: (
-  instance: CML.FilesDetailsList,
-) => Effect.Effect<number, FilesDetailsListError>;
+export declare const len: (instance: CML.FilesDetailsList) => Effect.Effect<number, FilesDetailsListError>
 ```
 
 Added in v2.0.0
@@ -149,10 +142,7 @@ Unsafely calls instance.add without Effect wrapper
 **Signature**
 
 ```ts
-export declare const addUnsafe: (
-  instance: CML.FilesDetailsList,
-  elem: CML.CIP25FilesDetails,
-) => void;
+export declare const addUnsafe: (instance: CML.FilesDetailsList, elem: CML.CIP25FilesDetails) => void
 ```
 
 Added in v2.0.0
@@ -164,7 +154,7 @@ Unsafely calls instance.free without Effect wrapper
 **Signature**
 
 ```ts
-export declare const freeUnsafe: (instance: CML.FilesDetailsList) => void;
+export declare const freeUnsafe: (instance: CML.FilesDetailsList) => void
 ```
 
 Added in v2.0.0
@@ -176,10 +166,7 @@ Unsafely calls instance.get without Effect wrapper
 **Signature**
 
 ```ts
-export declare const getUnsafe: (
-  instance: CML.FilesDetailsList,
-  index: number,
-) => CML.CIP25FilesDetails;
+export declare const getUnsafe: (instance: CML.FilesDetailsList, index: number) => CML.CIP25FilesDetails
 ```
 
 Added in v2.0.0
@@ -191,7 +178,7 @@ Unsafely calls instance.len without Effect wrapper
 **Signature**
 
 ```ts
-export declare const lenUnsafe: (instance: CML.FilesDetailsList) => number;
+export declare const lenUnsafe: (instance: CML.FilesDetailsList) => number
 ```
 
 Added in v2.0.0
@@ -205,7 +192,7 @@ Type alias for the CML FilesDetailsList class
 **Signature**
 
 ```ts
-export type FilesDetailsList = CML.FilesDetailsList;
+export type FilesDetailsList = CML.FilesDetailsList
 ```
 
 Added in v2.0.0

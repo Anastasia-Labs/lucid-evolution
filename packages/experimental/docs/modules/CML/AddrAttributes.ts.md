@@ -60,10 +60,7 @@ Static method \_new of AddrAttributes
 **Signature**
 
 ```ts
-export declare const _new: () => Effect.Effect<
-  CML.AddrAttributes,
-  AddrAttributesError
->;
+export declare const _new: () => Effect.Effect<CML.AddrAttributes, AddrAttributesError>
 ```
 
 Added in v2.0.0
@@ -75,9 +72,7 @@ Static method fromCborBytes of AddrAttributes
 **Signature**
 
 ```ts
-export declare const fromCborBytes: (
-  cborBytes: Uint8Array,
-) => Effect.Effect<CML.AddrAttributes, AddrAttributesError>;
+export declare const fromCborBytes: (cborBytes: Uint8Array) => Effect.Effect<CML.AddrAttributes, AddrAttributesError>
 ```
 
 Added in v2.0.0
@@ -89,9 +84,7 @@ Static method fromCborHex of AddrAttributes
 **Signature**
 
 ```ts
-export declare const fromCborHex: (
-  cborBytes: string,
-) => Effect.Effect<CML.AddrAttributes, AddrAttributesError>;
+export declare const fromCborHex: (cborBytes: string) => Effect.Effect<CML.AddrAttributes, AddrAttributesError>
 ```
 
 Added in v2.0.0
@@ -105,8 +98,8 @@ Static method newBootstrapEra of AddrAttributes
 ```ts
 export declare const newBootstrapEra: (
   hdap: CML.HDAddressPayload,
-  protocolMagic: CML.ProtocolMagic,
-) => Effect.Effect<CML.AddrAttributes, AddrAttributesError>;
+  protocolMagic: CML.ProtocolMagic
+) => Effect.Effect<CML.AddrAttributes, AddrAttributesError>
 ```
 
 Added in v2.0.0
@@ -121,8 +114,8 @@ Static method newSingleKey of AddrAttributes
 export declare const newSingleKey: (
   pubk: CML.Bip32PublicKey,
   hdap: CML.HDAddressPayload | undefined,
-  protocolMagic: CML.ProtocolMagic,
-) => Effect.Effect<CML.AddrAttributes, AddrAttributesError>;
+  protocolMagic: CML.ProtocolMagic
+) => Effect.Effect<CML.AddrAttributes, AddrAttributesError>
 ```
 
 Added in v2.0.0
@@ -136,7 +129,7 @@ Unsafely calls AddrAttributes.\_new without Effect wrapper
 **Signature**
 
 ```ts
-export declare const _newUnsafe: () => CML.AddrAttributes;
+export declare const _newUnsafe: () => CML.AddrAttributes
 ```
 
 Added in v2.0.0
@@ -148,9 +141,7 @@ Unsafely calls AddrAttributes.fromCborBytes without Effect wrapper
 **Signature**
 
 ```ts
-export declare const fromCborBytesUnsafe: (
-  cborBytes: Uint8Array,
-) => CML.AddrAttributes;
+export declare const fromCborBytesUnsafe: (cborBytes: Uint8Array) => CML.AddrAttributes
 ```
 
 Added in v2.0.0
@@ -162,9 +153,7 @@ Unsafely calls AddrAttributes.fromCborHex without Effect wrapper
 **Signature**
 
 ```ts
-export declare const fromCborHexUnsafe: (
-  cborBytes: string,
-) => CML.AddrAttributes;
+export declare const fromCborHexUnsafe: (cborBytes: string) => CML.AddrAttributes
 ```
 
 Added in v2.0.0
@@ -178,8 +167,8 @@ Unsafely calls AddrAttributes.newBootstrapEra without Effect wrapper
 ```ts
 export declare const newBootstrapEraUnsafe: (
   hdap: CML.HDAddressPayload,
-  protocolMagic: CML.ProtocolMagic,
-) => CML.AddrAttributes;
+  protocolMagic: CML.ProtocolMagic
+) => CML.AddrAttributes
 ```
 
 Added in v2.0.0
@@ -194,8 +183,8 @@ Unsafely calls AddrAttributes.newSingleKey without Effect wrapper
 export declare const newSingleKeyUnsafe: (
   pubk: CML.Bip32PublicKey,
   hdap: CML.HDAddressPayload | undefined,
-  protocolMagic: CML.ProtocolMagic,
-) => CML.AddrAttributes;
+  protocolMagic: CML.ProtocolMagic
+) => CML.AddrAttributes
 ```
 
 Added in v2.0.0
@@ -226,8 +215,8 @@ Method derivationPath of AddrAttributes
 
 ```ts
 export declare const derivationPath: (
-  instance: CML.AddrAttributes,
-) => Effect.Effect<CML.HDAddressPayload | undefined, AddrAttributesError>;
+  instance: CML.AddrAttributes
+) => Effect.Effect<CML.HDAddressPayload | undefined, AddrAttributesError>
 ```
 
 Added in v2.0.0
@@ -239,9 +228,7 @@ Method free of AddrAttributes
 **Signature**
 
 ```ts
-export declare const free: (
-  instance: CML.AddrAttributes,
-) => Effect.Effect<void, AddrAttributesError>;
+export declare const free: (instance: CML.AddrAttributes) => Effect.Effect<void, AddrAttributesError>
 ```
 
 Added in v2.0.0
@@ -254,8 +241,8 @@ Method protocolMagic of AddrAttributes
 
 ```ts
 export declare const protocolMagic: (
-  instance: CML.AddrAttributes,
-) => Effect.Effect<CML.ProtocolMagic | undefined, AddrAttributesError>;
+  instance: CML.AddrAttributes
+) => Effect.Effect<CML.ProtocolMagic | undefined, AddrAttributesError>
 ```
 
 Added in v2.0.0
@@ -269,8 +256,8 @@ Method setDerivationPath of AddrAttributes
 ```ts
 export declare const setDerivationPath: (
   instance: CML.AddrAttributes,
-  derivationPath: CML.HDAddressPayload,
-) => Effect.Effect<void, AddrAttributesError>;
+  derivationPath: CML.HDAddressPayload
+) => Effect.Effect<void, AddrAttributesError>
 ```
 
 Added in v2.0.0
@@ -284,8 +271,8 @@ Method setProtocolMagic of AddrAttributes
 ```ts
 export declare const setProtocolMagic: (
   instance: CML.AddrAttributes,
-  protocolMagic: CML.ProtocolMagic,
-) => Effect.Effect<void, AddrAttributesError>;
+  protocolMagic: CML.ProtocolMagic
+) => Effect.Effect<void, AddrAttributesError>
 ```
 
 Added in v2.0.0
@@ -299,8 +286,8 @@ Method setStakeDistribution of AddrAttributes
 ```ts
 export declare const setStakeDistribution: (
   instance: CML.AddrAttributes,
-  stakeDistribution: CML.StakeDistribution,
-) => Effect.Effect<void, AddrAttributesError>;
+  stakeDistribution: CML.StakeDistribution
+) => Effect.Effect<void, AddrAttributesError>
 ```
 
 Added in v2.0.0
@@ -313,8 +300,8 @@ Method stakeDistribution of AddrAttributes
 
 ```ts
 export declare const stakeDistribution: (
-  instance: CML.AddrAttributes,
-) => Effect.Effect<CML.StakeDistribution | undefined, AddrAttributesError>;
+  instance: CML.AddrAttributes
+) => Effect.Effect<CML.StakeDistribution | undefined, AddrAttributesError>
 ```
 
 Added in v2.0.0
@@ -326,9 +313,7 @@ Method toCborBytes of AddrAttributes
 **Signature**
 
 ```ts
-export declare const toCborBytes: (
-  instance: CML.AddrAttributes,
-) => Effect.Effect<Uint8Array, AddrAttributesError>;
+export declare const toCborBytes: (instance: CML.AddrAttributes) => Effect.Effect<Uint8Array, AddrAttributesError>
 ```
 
 Added in v2.0.0
@@ -340,9 +325,7 @@ Method toCborHex of AddrAttributes
 **Signature**
 
 ```ts
-export declare const toCborHex: (
-  instance: CML.AddrAttributes,
-) => Effect.Effect<string, AddrAttributesError>;
+export declare const toCborHex: (instance: CML.AddrAttributes) => Effect.Effect<string, AddrAttributesError>
 ```
 
 Added in v2.0.0
@@ -356,9 +339,7 @@ Unsafely calls instance.derivationPath without Effect wrapper
 **Signature**
 
 ```ts
-export declare const derivationPathUnsafe: (
-  instance: CML.AddrAttributes,
-) => CML.HDAddressPayload | undefined;
+export declare const derivationPathUnsafe: (instance: CML.AddrAttributes) => CML.HDAddressPayload | undefined
 ```
 
 Added in v2.0.0
@@ -370,7 +351,7 @@ Unsafely calls instance.free without Effect wrapper
 **Signature**
 
 ```ts
-export declare const freeUnsafe: (instance: CML.AddrAttributes) => void;
+export declare const freeUnsafe: (instance: CML.AddrAttributes) => void
 ```
 
 Added in v2.0.0
@@ -382,9 +363,7 @@ Unsafely calls instance.protocolMagic without Effect wrapper
 **Signature**
 
 ```ts
-export declare const protocolMagicUnsafe: (
-  instance: CML.AddrAttributes,
-) => CML.ProtocolMagic | undefined;
+export declare const protocolMagicUnsafe: (instance: CML.AddrAttributes) => CML.ProtocolMagic | undefined
 ```
 
 Added in v2.0.0
@@ -398,8 +377,8 @@ Unsafely calls instance.setDerivationPath without Effect wrapper
 ```ts
 export declare const setDerivationPathUnsafe: (
   instance: CML.AddrAttributes,
-  derivationPath: CML.HDAddressPayload,
-) => void;
+  derivationPath: CML.HDAddressPayload
+) => void
 ```
 
 Added in v2.0.0
@@ -411,10 +390,7 @@ Unsafely calls instance.setProtocolMagic without Effect wrapper
 **Signature**
 
 ```ts
-export declare const setProtocolMagicUnsafe: (
-  instance: CML.AddrAttributes,
-  protocolMagic: CML.ProtocolMagic,
-) => void;
+export declare const setProtocolMagicUnsafe: (instance: CML.AddrAttributes, protocolMagic: CML.ProtocolMagic) => void
 ```
 
 Added in v2.0.0
@@ -428,8 +404,8 @@ Unsafely calls instance.setStakeDistribution without Effect wrapper
 ```ts
 export declare const setStakeDistributionUnsafe: (
   instance: CML.AddrAttributes,
-  stakeDistribution: CML.StakeDistribution,
-) => void;
+  stakeDistribution: CML.StakeDistribution
+) => void
 ```
 
 Added in v2.0.0
@@ -441,9 +417,7 @@ Unsafely calls instance.stakeDistribution without Effect wrapper
 **Signature**
 
 ```ts
-export declare const stakeDistributionUnsafe: (
-  instance: CML.AddrAttributes,
-) => CML.StakeDistribution | undefined;
+export declare const stakeDistributionUnsafe: (instance: CML.AddrAttributes) => CML.StakeDistribution | undefined
 ```
 
 Added in v2.0.0
@@ -455,9 +429,7 @@ Unsafely calls instance.toCborBytes without Effect wrapper
 **Signature**
 
 ```ts
-export declare const toCborBytesUnsafe: (
-  instance: CML.AddrAttributes,
-) => Uint8Array;
+export declare const toCborBytesUnsafe: (instance: CML.AddrAttributes) => Uint8Array
 ```
 
 Added in v2.0.0
@@ -469,7 +441,7 @@ Unsafely calls instance.toCborHex without Effect wrapper
 **Signature**
 
 ```ts
-export declare const toCborHexUnsafe: (instance: CML.AddrAttributes) => string;
+export declare const toCborHexUnsafe: (instance: CML.AddrAttributes) => string
 ```
 
 Added in v2.0.0
@@ -483,7 +455,7 @@ Type alias for the CML AddrAttributes class
 **Signature**
 
 ```ts
-export type AddrAttributes = CML.AddrAttributes;
+export type AddrAttributes = CML.AddrAttributes
 ```
 
 Added in v2.0.0

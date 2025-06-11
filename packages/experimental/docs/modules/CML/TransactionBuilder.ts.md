@@ -1,6 +1,6 @@
 ---
 title: CML/TransactionBuilder.ts
-nav_order: 229
+nav_order: 228
 parent: Modules
 ---
 
@@ -115,8 +115,8 @@ Static method \_new of TransactionBuilder
 
 ```ts
 export declare const _new: (
-  cfg: CML.TransactionBuilderConfig,
-) => Effect.Effect<CML.TransactionBuilder, TransactionBuilderError>;
+  cfg: CML.TransactionBuilderConfig
+) => Effect.Effect<CML.TransactionBuilder, TransactionBuilderError>
 ```
 
 Added in v2.0.0
@@ -130,9 +130,7 @@ Unsafely calls TransactionBuilder.\_new without Effect wrapper
 **Signature**
 
 ```ts
-export declare const _newUnsafe: (
-  cfg: CML.TransactionBuilderConfig,
-) => CML.TransactionBuilder;
+export declare const _newUnsafe: (cfg: CML.TransactionBuilderConfig) => CML.TransactionBuilder
 ```
 
 Added in v2.0.0
@@ -164,8 +162,8 @@ Method addAuxiliaryData of TransactionBuilder
 ```ts
 export declare const addAuxiliaryData: (
   instance: CML.TransactionBuilder,
-  newAuxData: CML.AuxiliaryData,
-) => Effect.Effect<void, TransactionBuilderError>;
+  newAuxData: CML.AuxiliaryData
+) => Effect.Effect<void, TransactionBuilderError>
 ```
 
 Added in v2.0.0
@@ -179,8 +177,8 @@ Method addCert of TransactionBuilder
 ```ts
 export declare const addCert: (
   instance: CML.TransactionBuilder,
-  result: CML.CertificateBuilderResult,
-) => Effect.Effect<void, TransactionBuilderError>;
+  result: CML.CertificateBuilderResult
+) => Effect.Effect<void, TransactionBuilderError>
 ```
 
 Added in v2.0.0
@@ -195,8 +193,8 @@ Method addChangeIfNeeded of TransactionBuilder
 export declare const addChangeIfNeeded: (
   instance: CML.TransactionBuilder,
   address: CML.Address,
-  includeExunits: boolean,
-) => Effect.Effect<boolean, TransactionBuilderError>;
+  includeExunits: boolean
+) => Effect.Effect<boolean, TransactionBuilderError>
 ```
 
 Added in v2.0.0
@@ -210,8 +208,8 @@ Method addCollateral of TransactionBuilder
 ```ts
 export declare const addCollateral: (
   instance: CML.TransactionBuilder,
-  result: CML.InputBuilderResult,
-) => Effect.Effect<void, TransactionBuilderError>;
+  result: CML.InputBuilderResult
+) => Effect.Effect<void, TransactionBuilderError>
 ```
 
 Added in v2.0.0
@@ -225,8 +223,8 @@ Method addInput of TransactionBuilder
 ```ts
 export declare const addInput: (
   instance: CML.TransactionBuilder,
-  result: CML.InputBuilderResult,
-) => Effect.Effect<void, TransactionBuilderError>;
+  result: CML.InputBuilderResult
+) => Effect.Effect<void, TransactionBuilderError>
 ```
 
 Added in v2.0.0
@@ -240,8 +238,8 @@ Method addMint of TransactionBuilder
 ```ts
 export declare const addMint: (
   instance: CML.TransactionBuilder,
-  result: CML.MintBuilderResult,
-) => Effect.Effect<void, TransactionBuilderError>;
+  result: CML.MintBuilderResult
+) => Effect.Effect<void, TransactionBuilderError>
 ```
 
 Added in v2.0.0
@@ -255,8 +253,8 @@ Method addOutput of TransactionBuilder
 ```ts
 export declare const addOutput: (
   instance: CML.TransactionBuilder,
-  builderResult: CML.SingleOutputBuilderResult,
-) => Effect.Effect<void, TransactionBuilderError>;
+  builderResult: CML.SingleOutputBuilderResult
+) => Effect.Effect<void, TransactionBuilderError>
 ```
 
 Added in v2.0.0
@@ -270,8 +268,8 @@ Method addProposal of TransactionBuilder
 ```ts
 export declare const addProposal: (
   instance: CML.TransactionBuilder,
-  result: CML.ProposalBuilderResult,
-) => Effect.Effect<void, TransactionBuilderError>;
+  result: CML.ProposalBuilderResult
+) => Effect.Effect<void, TransactionBuilderError>
 ```
 
 Added in v2.0.0
@@ -285,8 +283,8 @@ Method addReferenceInput of TransactionBuilder
 ```ts
 export declare const addReferenceInput: (
   instance: CML.TransactionBuilder,
-  utxo: CML.TransactionUnspentOutput,
-) => Effect.Effect<void, TransactionBuilderError>;
+  utxo: CML.TransactionUnspentOutput
+) => Effect.Effect<void, TransactionBuilderError>
 ```
 
 Added in v2.0.0
@@ -300,8 +298,8 @@ Method addRequiredSigner of TransactionBuilder
 ```ts
 export declare const addRequiredSigner: (
   instance: CML.TransactionBuilder,
-  hash: CML.Ed25519KeyHash,
-) => Effect.Effect<void, TransactionBuilderError>;
+  hash: CML.Ed25519KeyHash
+) => Effect.Effect<void, TransactionBuilderError>
 ```
 
 Added in v2.0.0
@@ -315,8 +313,8 @@ Method addUtxo of TransactionBuilder
 ```ts
 export declare const addUtxo: (
   instance: CML.TransactionBuilder,
-  result: CML.InputBuilderResult,
-) => Effect.Effect<void, TransactionBuilderError>;
+  result: CML.InputBuilderResult
+) => Effect.Effect<void, TransactionBuilderError>
 ```
 
 Added in v2.0.0
@@ -330,8 +328,8 @@ Method addVote of TransactionBuilder
 ```ts
 export declare const addVote: (
   instance: CML.TransactionBuilder,
-  result: CML.VoteBuilderResult,
-) => Effect.Effect<void, TransactionBuilderError>;
+  result: CML.VoteBuilderResult
+) => Effect.Effect<void, TransactionBuilderError>
 ```
 
 Added in v2.0.0
@@ -345,8 +343,8 @@ Method addWithdrawal of TransactionBuilder
 ```ts
 export declare const addWithdrawal: (
   instance: CML.TransactionBuilder,
-  result: CML.WithdrawalBuilderResult,
-) => Effect.Effect<void, TransactionBuilderError>;
+  result: CML.WithdrawalBuilderResult
+) => Effect.Effect<void, TransactionBuilderError>
 ```
 
 Added in v2.0.0
@@ -361,8 +359,8 @@ Method build of TransactionBuilder
 export declare const build: (
   instance: CML.TransactionBuilder,
   algo: CML.ChangeSelectionAlgo,
-  changeAddress: CML.Address,
-) => Effect.Effect<CML.SignedTxBuilder, TransactionBuilderError>;
+  changeAddress: CML.Address
+) => Effect.Effect<CML.SignedTxBuilder, TransactionBuilderError>
 ```
 
 Added in v2.0.0
@@ -377,8 +375,8 @@ Method buildForEvaluation of TransactionBuilder
 export declare const buildForEvaluation: (
   instance: CML.TransactionBuilder,
   algo: CML.ChangeSelectionAlgo,
-  changeAddress: CML.Address,
-) => Effect.Effect<CML.TxRedeemerBuilder, TransactionBuilderError>;
+  changeAddress: CML.Address
+) => Effect.Effect<CML.TxRedeemerBuilder, TransactionBuilderError>
 ```
 
 Added in v2.0.0
@@ -392,8 +390,8 @@ Method feeForInput of TransactionBuilder
 ```ts
 export declare const feeForInput: (
   instance: CML.TransactionBuilder,
-  result: CML.InputBuilderResult,
-) => Effect.Effect<bigint, TransactionBuilderError>;
+  result: CML.InputBuilderResult
+) => Effect.Effect<bigint, TransactionBuilderError>
 ```
 
 Added in v2.0.0
@@ -407,8 +405,8 @@ Method feeForOutput of TransactionBuilder
 ```ts
 export declare const feeForOutput: (
   instance: CML.TransactionBuilder,
-  builder: CML.SingleOutputBuilderResult,
-) => Effect.Effect<bigint, TransactionBuilderError>;
+  builder: CML.SingleOutputBuilderResult
+) => Effect.Effect<bigint, TransactionBuilderError>
 ```
 
 Added in v2.0.0
@@ -420,9 +418,7 @@ Method free of TransactionBuilder
 **Signature**
 
 ```ts
-export declare const free: (
-  instance: CML.TransactionBuilder,
-) => Effect.Effect<void, TransactionBuilderError>;
+export declare const free: (instance: CML.TransactionBuilder) => Effect.Effect<void, TransactionBuilderError>
 ```
 
 Added in v2.0.0
@@ -434,9 +430,7 @@ Method fullSize of TransactionBuilder
 **Signature**
 
 ```ts
-export declare const fullSize: (
-  instance: CML.TransactionBuilder,
-) => Effect.Effect<number, TransactionBuilderError>;
+export declare const fullSize: (instance: CML.TransactionBuilder) => Effect.Effect<number, TransactionBuilderError>
 ```
 
 Added in v2.0.0
@@ -449,8 +443,8 @@ Method getAuxiliaryData of TransactionBuilder
 
 ```ts
 export declare const getAuxiliaryData: (
-  instance: CML.TransactionBuilder,
-) => Effect.Effect<CML.AuxiliaryData | undefined, TransactionBuilderError>;
+  instance: CML.TransactionBuilder
+) => Effect.Effect<CML.AuxiliaryData | undefined, TransactionBuilderError>
 ```
 
 Added in v2.0.0
@@ -462,9 +456,7 @@ Method getDeposit of TransactionBuilder
 **Signature**
 
 ```ts
-export declare const getDeposit: (
-  instance: CML.TransactionBuilder,
-) => Effect.Effect<bigint, TransactionBuilderError>;
+export declare const getDeposit: (instance: CML.TransactionBuilder) => Effect.Effect<bigint, TransactionBuilderError>
 ```
 
 Added in v2.0.0
@@ -477,8 +469,8 @@ Method getExplicitInput of TransactionBuilder
 
 ```ts
 export declare const getExplicitInput: (
-  instance: CML.TransactionBuilder,
-) => Effect.Effect<CML.Value, TransactionBuilderError>;
+  instance: CML.TransactionBuilder
+) => Effect.Effect<CML.Value, TransactionBuilderError>
 ```
 
 Added in v2.0.0
@@ -491,8 +483,8 @@ Method getExplicitOutput of TransactionBuilder
 
 ```ts
 export declare const getExplicitOutput: (
-  instance: CML.TransactionBuilder,
-) => Effect.Effect<CML.Value, TransactionBuilderError>;
+  instance: CML.TransactionBuilder
+) => Effect.Effect<CML.Value, TransactionBuilderError>
 ```
 
 Added in v2.0.0
@@ -505,8 +497,8 @@ Method getFeeIfSet of TransactionBuilder
 
 ```ts
 export declare const getFeeIfSet: (
-  instance: CML.TransactionBuilder,
-) => Effect.Effect<bigint | undefined, TransactionBuilderError>;
+  instance: CML.TransactionBuilder
+) => Effect.Effect<bigint | undefined, TransactionBuilderError>
 ```
 
 Added in v2.0.0
@@ -519,8 +511,8 @@ Method getImplicitInput of TransactionBuilder
 
 ```ts
 export declare const getImplicitInput: (
-  instance: CML.TransactionBuilder,
-) => Effect.Effect<CML.Value, TransactionBuilderError>;
+  instance: CML.TransactionBuilder
+) => Effect.Effect<CML.Value, TransactionBuilderError>
 ```
 
 Added in v2.0.0
@@ -533,8 +525,8 @@ Method getMint of TransactionBuilder
 
 ```ts
 export declare const getMint: (
-  instance: CML.TransactionBuilder,
-) => Effect.Effect<CML.Mint | undefined, TransactionBuilderError>;
+  instance: CML.TransactionBuilder
+) => Effect.Effect<CML.Mint | undefined, TransactionBuilderError>
 ```
 
 Added in v2.0.0
@@ -547,8 +539,8 @@ Method getTotalInput of TransactionBuilder
 
 ```ts
 export declare const getTotalInput: (
-  instance: CML.TransactionBuilder,
-) => Effect.Effect<CML.Value, TransactionBuilderError>;
+  instance: CML.TransactionBuilder
+) => Effect.Effect<CML.Value, TransactionBuilderError>
 ```
 
 Added in v2.0.0
@@ -561,8 +553,8 @@ Method getTotalOutput of TransactionBuilder
 
 ```ts
 export declare const getTotalOutput: (
-  instance: CML.TransactionBuilder,
-) => Effect.Effect<CML.Value, TransactionBuilderError>;
+  instance: CML.TransactionBuilder
+) => Effect.Effect<CML.Value, TransactionBuilderError>
 ```
 
 Added in v2.0.0
@@ -575,11 +567,8 @@ Method getWithdrawals of TransactionBuilder
 
 ```ts
 export declare const getWithdrawals: (
-  instance: CML.TransactionBuilder,
-) => Effect.Effect<
-  CML.MapRewardAccountToCoin | undefined,
-  TransactionBuilderError
->;
+  instance: CML.TransactionBuilder
+) => Effect.Effect<CML.MapRewardAccountToCoin | undefined, TransactionBuilderError>
 ```
 
 Added in v2.0.0
@@ -593,8 +582,8 @@ Method minFee of TransactionBuilder
 ```ts
 export declare const minFee: (
   instance: CML.TransactionBuilder,
-  scriptCalulation: boolean,
-) => Effect.Effect<bigint, TransactionBuilderError>;
+  scriptCalulation: boolean
+) => Effect.Effect<bigint, TransactionBuilderError>
 ```
 
 Added in v2.0.0
@@ -607,8 +596,8 @@ Method networkId of TransactionBuilder
 
 ```ts
 export declare const networkId: (
-  instance: CML.TransactionBuilder,
-) => Effect.Effect<CML.NetworkId | undefined, TransactionBuilderError>;
+  instance: CML.TransactionBuilder
+) => Effect.Effect<CML.NetworkId | undefined, TransactionBuilderError>
 ```
 
 Added in v2.0.0
@@ -621,8 +610,8 @@ Method outputSizes of TransactionBuilder
 
 ```ts
 export declare const outputSizes: (
-  instance: CML.TransactionBuilder,
-) => Effect.Effect<Uint32Array, TransactionBuilderError>;
+  instance: CML.TransactionBuilder
+) => Effect.Effect<Uint32Array, TransactionBuilderError>
 ```
 
 Added in v2.0.0
@@ -636,8 +625,8 @@ Method selectUtxos of TransactionBuilder
 ```ts
 export declare const selectUtxos: (
   instance: CML.TransactionBuilder,
-  strategy: CML.CoinSelectionStrategyCIP2,
-) => Effect.Effect<void, TransactionBuilderError>;
+  strategy: CML.CoinSelectionStrategyCIP2
+) => Effect.Effect<void, TransactionBuilderError>
 ```
 
 Added in v2.0.0
@@ -651,8 +640,8 @@ Method setAuxiliaryData of TransactionBuilder
 ```ts
 export declare const setAuxiliaryData: (
   instance: CML.TransactionBuilder,
-  newAuxData: CML.AuxiliaryData,
-) => Effect.Effect<void, TransactionBuilderError>;
+  newAuxData: CML.AuxiliaryData
+) => Effect.Effect<void, TransactionBuilderError>
 ```
 
 Added in v2.0.0
@@ -666,8 +655,8 @@ Method setCollateralReturn of TransactionBuilder
 ```ts
 export declare const setCollateralReturn: (
   instance: CML.TransactionBuilder,
-  output: CML.TransactionOutput,
-) => Effect.Effect<void, TransactionBuilderError>;
+  output: CML.TransactionOutput
+) => Effect.Effect<void, TransactionBuilderError>
 ```
 
 Added in v2.0.0
@@ -682,8 +671,8 @@ Method setExunits of TransactionBuilder
 export declare const setExunits: (
   instance: CML.TransactionBuilder,
   redeemer: CML.RedeemerWitnessKey,
-  exUnits: CML.ExUnits,
-) => Effect.Effect<void, TransactionBuilderError>;
+  exUnits: CML.ExUnits
+) => Effect.Effect<void, TransactionBuilderError>
 ```
 
 Added in v2.0.0
@@ -697,8 +686,8 @@ Method setFee of TransactionBuilder
 ```ts
 export declare const setFee: (
   instance: CML.TransactionBuilder,
-  fee: bigint,
-) => Effect.Effect<void, TransactionBuilderError>;
+  fee: bigint
+) => Effect.Effect<void, TransactionBuilderError>
 ```
 
 Added in v2.0.0
@@ -712,8 +701,8 @@ Method setNetworkId of TransactionBuilder
 ```ts
 export declare const setNetworkId: (
   instance: CML.TransactionBuilder,
-  networkId: CML.NetworkId,
-) => Effect.Effect<void, TransactionBuilderError>;
+  networkId: CML.NetworkId
+) => Effect.Effect<void, TransactionBuilderError>
 ```
 
 Added in v2.0.0
@@ -727,8 +716,8 @@ Method setTtl of TransactionBuilder
 ```ts
 export declare const setTtl: (
   instance: CML.TransactionBuilder,
-  ttl: bigint,
-) => Effect.Effect<void, TransactionBuilderError>;
+  ttl: bigint
+) => Effect.Effect<void, TransactionBuilderError>
 ```
 
 Added in v2.0.0
@@ -742,8 +731,8 @@ Method setValidityStartInterval of TransactionBuilder
 ```ts
 export declare const setValidityStartInterval: (
   instance: CML.TransactionBuilder,
-  validityStartInterval: bigint,
-) => Effect.Effect<void, TransactionBuilderError>;
+  validityStartInterval: bigint
+) => Effect.Effect<void, TransactionBuilderError>
 ```
 
 Added in v2.0.0
@@ -757,10 +746,7 @@ Unsafely calls instance.addAuxiliaryData without Effect wrapper
 **Signature**
 
 ```ts
-export declare const addAuxiliaryDataUnsafe: (
-  instance: CML.TransactionBuilder,
-  newAuxData: CML.AuxiliaryData,
-) => void;
+export declare const addAuxiliaryDataUnsafe: (instance: CML.TransactionBuilder, newAuxData: CML.AuxiliaryData) => void
 ```
 
 Added in v2.0.0
@@ -772,10 +758,7 @@ Unsafely calls instance.addCert without Effect wrapper
 **Signature**
 
 ```ts
-export declare const addCertUnsafe: (
-  instance: CML.TransactionBuilder,
-  result: CML.CertificateBuilderResult,
-) => void;
+export declare const addCertUnsafe: (instance: CML.TransactionBuilder, result: CML.CertificateBuilderResult) => void
 ```
 
 Added in v2.0.0
@@ -790,8 +773,8 @@ Unsafely calls instance.addChangeIfNeeded without Effect wrapper
 export declare const addChangeIfNeededUnsafe: (
   instance: CML.TransactionBuilder,
   address: CML.Address,
-  includeExunits: boolean,
-) => boolean;
+  includeExunits: boolean
+) => boolean
 ```
 
 Added in v2.0.0
@@ -803,10 +786,7 @@ Unsafely calls instance.addCollateral without Effect wrapper
 **Signature**
 
 ```ts
-export declare const addCollateralUnsafe: (
-  instance: CML.TransactionBuilder,
-  result: CML.InputBuilderResult,
-) => void;
+export declare const addCollateralUnsafe: (instance: CML.TransactionBuilder, result: CML.InputBuilderResult) => void
 ```
 
 Added in v2.0.0
@@ -818,10 +798,7 @@ Unsafely calls instance.addInput without Effect wrapper
 **Signature**
 
 ```ts
-export declare const addInputUnsafe: (
-  instance: CML.TransactionBuilder,
-  result: CML.InputBuilderResult,
-) => void;
+export declare const addInputUnsafe: (instance: CML.TransactionBuilder, result: CML.InputBuilderResult) => void
 ```
 
 Added in v2.0.0
@@ -833,10 +810,7 @@ Unsafely calls instance.addMint without Effect wrapper
 **Signature**
 
 ```ts
-export declare const addMintUnsafe: (
-  instance: CML.TransactionBuilder,
-  result: CML.MintBuilderResult,
-) => void;
+export declare const addMintUnsafe: (instance: CML.TransactionBuilder, result: CML.MintBuilderResult) => void
 ```
 
 Added in v2.0.0
@@ -850,8 +824,8 @@ Unsafely calls instance.addOutput without Effect wrapper
 ```ts
 export declare const addOutputUnsafe: (
   instance: CML.TransactionBuilder,
-  builderResult: CML.SingleOutputBuilderResult,
-) => void;
+  builderResult: CML.SingleOutputBuilderResult
+) => void
 ```
 
 Added in v2.0.0
@@ -863,10 +837,7 @@ Unsafely calls instance.addProposal without Effect wrapper
 **Signature**
 
 ```ts
-export declare const addProposalUnsafe: (
-  instance: CML.TransactionBuilder,
-  result: CML.ProposalBuilderResult,
-) => void;
+export declare const addProposalUnsafe: (instance: CML.TransactionBuilder, result: CML.ProposalBuilderResult) => void
 ```
 
 Added in v2.0.0
@@ -880,8 +851,8 @@ Unsafely calls instance.addReferenceInput without Effect wrapper
 ```ts
 export declare const addReferenceInputUnsafe: (
   instance: CML.TransactionBuilder,
-  utxo: CML.TransactionUnspentOutput,
-) => void;
+  utxo: CML.TransactionUnspentOutput
+) => void
 ```
 
 Added in v2.0.0
@@ -893,10 +864,7 @@ Unsafely calls instance.addRequiredSigner without Effect wrapper
 **Signature**
 
 ```ts
-export declare const addRequiredSignerUnsafe: (
-  instance: CML.TransactionBuilder,
-  hash: CML.Ed25519KeyHash,
-) => void;
+export declare const addRequiredSignerUnsafe: (instance: CML.TransactionBuilder, hash: CML.Ed25519KeyHash) => void
 ```
 
 Added in v2.0.0
@@ -908,10 +876,7 @@ Unsafely calls instance.addUtxo without Effect wrapper
 **Signature**
 
 ```ts
-export declare const addUtxoUnsafe: (
-  instance: CML.TransactionBuilder,
-  result: CML.InputBuilderResult,
-) => void;
+export declare const addUtxoUnsafe: (instance: CML.TransactionBuilder, result: CML.InputBuilderResult) => void
 ```
 
 Added in v2.0.0
@@ -923,10 +888,7 @@ Unsafely calls instance.addVote without Effect wrapper
 **Signature**
 
 ```ts
-export declare const addVoteUnsafe: (
-  instance: CML.TransactionBuilder,
-  result: CML.VoteBuilderResult,
-) => void;
+export declare const addVoteUnsafe: (instance: CML.TransactionBuilder, result: CML.VoteBuilderResult) => void
 ```
 
 Added in v2.0.0
@@ -940,8 +902,8 @@ Unsafely calls instance.addWithdrawal without Effect wrapper
 ```ts
 export declare const addWithdrawalUnsafe: (
   instance: CML.TransactionBuilder,
-  result: CML.WithdrawalBuilderResult,
-) => void;
+  result: CML.WithdrawalBuilderResult
+) => void
 ```
 
 Added in v2.0.0
@@ -956,8 +918,8 @@ Unsafely calls instance.buildForEvaluation without Effect wrapper
 export declare const buildForEvaluationUnsafe: (
   instance: CML.TransactionBuilder,
   algo: CML.ChangeSelectionAlgo,
-  changeAddress: CML.Address,
-) => CML.TxRedeemerBuilder;
+  changeAddress: CML.Address
+) => CML.TxRedeemerBuilder
 ```
 
 Added in v2.0.0
@@ -972,8 +934,8 @@ Unsafely calls instance.build without Effect wrapper
 export declare const buildUnsafe: (
   instance: CML.TransactionBuilder,
   algo: CML.ChangeSelectionAlgo,
-  changeAddress: CML.Address,
-) => CML.SignedTxBuilder;
+  changeAddress: CML.Address
+) => CML.SignedTxBuilder
 ```
 
 Added in v2.0.0
@@ -985,10 +947,7 @@ Unsafely calls instance.feeForInput without Effect wrapper
 **Signature**
 
 ```ts
-export declare const feeForInputUnsafe: (
-  instance: CML.TransactionBuilder,
-  result: CML.InputBuilderResult,
-) => bigint;
+export declare const feeForInputUnsafe: (instance: CML.TransactionBuilder, result: CML.InputBuilderResult) => bigint
 ```
 
 Added in v2.0.0
@@ -1002,8 +961,8 @@ Unsafely calls instance.feeForOutput without Effect wrapper
 ```ts
 export declare const feeForOutputUnsafe: (
   instance: CML.TransactionBuilder,
-  builder: CML.SingleOutputBuilderResult,
-) => bigint;
+  builder: CML.SingleOutputBuilderResult
+) => bigint
 ```
 
 Added in v2.0.0
@@ -1015,7 +974,7 @@ Unsafely calls instance.free without Effect wrapper
 **Signature**
 
 ```ts
-export declare const freeUnsafe: (instance: CML.TransactionBuilder) => void;
+export declare const freeUnsafe: (instance: CML.TransactionBuilder) => void
 ```
 
 Added in v2.0.0
@@ -1027,9 +986,7 @@ Unsafely calls instance.fullSize without Effect wrapper
 **Signature**
 
 ```ts
-export declare const fullSizeUnsafe: (
-  instance: CML.TransactionBuilder,
-) => number;
+export declare const fullSizeUnsafe: (instance: CML.TransactionBuilder) => number
 ```
 
 Added in v2.0.0
@@ -1041,9 +998,7 @@ Unsafely calls instance.getAuxiliaryData without Effect wrapper
 **Signature**
 
 ```ts
-export declare const getAuxiliaryDataUnsafe: (
-  instance: CML.TransactionBuilder,
-) => CML.AuxiliaryData | undefined;
+export declare const getAuxiliaryDataUnsafe: (instance: CML.TransactionBuilder) => CML.AuxiliaryData | undefined
 ```
 
 Added in v2.0.0
@@ -1055,9 +1010,7 @@ Unsafely calls instance.getDeposit without Effect wrapper
 **Signature**
 
 ```ts
-export declare const getDepositUnsafe: (
-  instance: CML.TransactionBuilder,
-) => bigint;
+export declare const getDepositUnsafe: (instance: CML.TransactionBuilder) => bigint
 ```
 
 Added in v2.0.0
@@ -1069,9 +1022,7 @@ Unsafely calls instance.getExplicitInput without Effect wrapper
 **Signature**
 
 ```ts
-export declare const getExplicitInputUnsafe: (
-  instance: CML.TransactionBuilder,
-) => CML.Value;
+export declare const getExplicitInputUnsafe: (instance: CML.TransactionBuilder) => CML.Value
 ```
 
 Added in v2.0.0
@@ -1083,9 +1034,7 @@ Unsafely calls instance.getExplicitOutput without Effect wrapper
 **Signature**
 
 ```ts
-export declare const getExplicitOutputUnsafe: (
-  instance: CML.TransactionBuilder,
-) => CML.Value;
+export declare const getExplicitOutputUnsafe: (instance: CML.TransactionBuilder) => CML.Value
 ```
 
 Added in v2.0.0
@@ -1097,9 +1046,7 @@ Unsafely calls instance.getFeeIfSet without Effect wrapper
 **Signature**
 
 ```ts
-export declare const getFeeIfSetUnsafe: (
-  instance: CML.TransactionBuilder,
-) => bigint | undefined;
+export declare const getFeeIfSetUnsafe: (instance: CML.TransactionBuilder) => bigint | undefined
 ```
 
 Added in v2.0.0
@@ -1111,9 +1058,7 @@ Unsafely calls instance.getImplicitInput without Effect wrapper
 **Signature**
 
 ```ts
-export declare const getImplicitInputUnsafe: (
-  instance: CML.TransactionBuilder,
-) => CML.Value;
+export declare const getImplicitInputUnsafe: (instance: CML.TransactionBuilder) => CML.Value
 ```
 
 Added in v2.0.0
@@ -1125,9 +1070,7 @@ Unsafely calls instance.getMint without Effect wrapper
 **Signature**
 
 ```ts
-export declare const getMintUnsafe: (
-  instance: CML.TransactionBuilder,
-) => CML.Mint | undefined;
+export declare const getMintUnsafe: (instance: CML.TransactionBuilder) => CML.Mint | undefined
 ```
 
 Added in v2.0.0
@@ -1139,9 +1082,7 @@ Unsafely calls instance.getTotalInput without Effect wrapper
 **Signature**
 
 ```ts
-export declare const getTotalInputUnsafe: (
-  instance: CML.TransactionBuilder,
-) => CML.Value;
+export declare const getTotalInputUnsafe: (instance: CML.TransactionBuilder) => CML.Value
 ```
 
 Added in v2.0.0
@@ -1153,9 +1094,7 @@ Unsafely calls instance.getTotalOutput without Effect wrapper
 **Signature**
 
 ```ts
-export declare const getTotalOutputUnsafe: (
-  instance: CML.TransactionBuilder,
-) => CML.Value;
+export declare const getTotalOutputUnsafe: (instance: CML.TransactionBuilder) => CML.Value
 ```
 
 Added in v2.0.0
@@ -1167,9 +1106,7 @@ Unsafely calls instance.getWithdrawals without Effect wrapper
 **Signature**
 
 ```ts
-export declare const getWithdrawalsUnsafe: (
-  instance: CML.TransactionBuilder,
-) => CML.MapRewardAccountToCoin | undefined;
+export declare const getWithdrawalsUnsafe: (instance: CML.TransactionBuilder) => CML.MapRewardAccountToCoin | undefined
 ```
 
 Added in v2.0.0
@@ -1181,10 +1118,7 @@ Unsafely calls instance.minFee without Effect wrapper
 **Signature**
 
 ```ts
-export declare const minFeeUnsafe: (
-  instance: CML.TransactionBuilder,
-  scriptCalulation: boolean,
-) => bigint;
+export declare const minFeeUnsafe: (instance: CML.TransactionBuilder, scriptCalulation: boolean) => bigint
 ```
 
 Added in v2.0.0
@@ -1196,9 +1130,7 @@ Unsafely calls instance.networkId without Effect wrapper
 **Signature**
 
 ```ts
-export declare const networkIdUnsafe: (
-  instance: CML.TransactionBuilder,
-) => CML.NetworkId | undefined;
+export declare const networkIdUnsafe: (instance: CML.TransactionBuilder) => CML.NetworkId | undefined
 ```
 
 Added in v2.0.0
@@ -1210,9 +1142,7 @@ Unsafely calls instance.outputSizes without Effect wrapper
 **Signature**
 
 ```ts
-export declare const outputSizesUnsafe: (
-  instance: CML.TransactionBuilder,
-) => Uint32Array;
+export declare const outputSizesUnsafe: (instance: CML.TransactionBuilder) => Uint32Array
 ```
 
 Added in v2.0.0
@@ -1226,8 +1156,8 @@ Unsafely calls instance.selectUtxos without Effect wrapper
 ```ts
 export declare const selectUtxosUnsafe: (
   instance: CML.TransactionBuilder,
-  strategy: CML.CoinSelectionStrategyCIP2,
-) => void;
+  strategy: CML.CoinSelectionStrategyCIP2
+) => void
 ```
 
 Added in v2.0.0
@@ -1239,10 +1169,7 @@ Unsafely calls instance.setAuxiliaryData without Effect wrapper
 **Signature**
 
 ```ts
-export declare const setAuxiliaryDataUnsafe: (
-  instance: CML.TransactionBuilder,
-  newAuxData: CML.AuxiliaryData,
-) => void;
+export declare const setAuxiliaryDataUnsafe: (instance: CML.TransactionBuilder, newAuxData: CML.AuxiliaryData) => void
 ```
 
 Added in v2.0.0
@@ -1256,8 +1183,8 @@ Unsafely calls instance.setCollateralReturn without Effect wrapper
 ```ts
 export declare const setCollateralReturnUnsafe: (
   instance: CML.TransactionBuilder,
-  output: CML.TransactionOutput,
-) => void;
+  output: CML.TransactionOutput
+) => void
 ```
 
 Added in v2.0.0
@@ -1272,8 +1199,8 @@ Unsafely calls instance.setExunits without Effect wrapper
 export declare const setExunitsUnsafe: (
   instance: CML.TransactionBuilder,
   redeemer: CML.RedeemerWitnessKey,
-  exUnits: CML.ExUnits,
-) => void;
+  exUnits: CML.ExUnits
+) => void
 ```
 
 Added in v2.0.0
@@ -1285,10 +1212,7 @@ Unsafely calls instance.setFee without Effect wrapper
 **Signature**
 
 ```ts
-export declare const setFeeUnsafe: (
-  instance: CML.TransactionBuilder,
-  fee: bigint,
-) => void;
+export declare const setFeeUnsafe: (instance: CML.TransactionBuilder, fee: bigint) => void
 ```
 
 Added in v2.0.0
@@ -1300,10 +1224,7 @@ Unsafely calls instance.setNetworkId without Effect wrapper
 **Signature**
 
 ```ts
-export declare const setNetworkIdUnsafe: (
-  instance: CML.TransactionBuilder,
-  networkId: CML.NetworkId,
-) => void;
+export declare const setNetworkIdUnsafe: (instance: CML.TransactionBuilder, networkId: CML.NetworkId) => void
 ```
 
 Added in v2.0.0
@@ -1315,10 +1236,7 @@ Unsafely calls instance.setTtl without Effect wrapper
 **Signature**
 
 ```ts
-export declare const setTtlUnsafe: (
-  instance: CML.TransactionBuilder,
-  ttl: bigint,
-) => void;
+export declare const setTtlUnsafe: (instance: CML.TransactionBuilder, ttl: bigint) => void
 ```
 
 Added in v2.0.0
@@ -1332,8 +1250,8 @@ Unsafely calls instance.setValidityStartInterval without Effect wrapper
 ```ts
 export declare const setValidityStartIntervalUnsafe: (
   instance: CML.TransactionBuilder,
-  validityStartInterval: bigint,
-) => void;
+  validityStartInterval: bigint
+) => void
 ```
 
 Added in v2.0.0
@@ -1347,7 +1265,7 @@ Type alias for the CML TransactionBuilder class
 **Signature**
 
 ```ts
-export type TransactionBuilder = CML.TransactionBuilder;
+export type TransactionBuilder = CML.TransactionBuilder
 ```
 
 Added in v2.0.0

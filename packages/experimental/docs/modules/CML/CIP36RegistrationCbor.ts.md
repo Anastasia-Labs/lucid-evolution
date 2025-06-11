@@ -48,8 +48,8 @@ Static method \_new of CIP36RegistrationCbor
 ```ts
 export declare const _new: (
   keyRegistration: CML.CIP36KeyRegistration,
-  registrationWitness: CML.CIP36RegistrationWitness,
-) => Effect.Effect<CML.CIP36RegistrationCbor, CIP36RegistrationCborError>;
+  registrationWitness: CML.CIP36RegistrationWitness
+) => Effect.Effect<CML.CIP36RegistrationCbor, CIP36RegistrationCborError>
 ```
 
 Added in v2.0.0
@@ -61,9 +61,7 @@ Static method fromJson of CIP36RegistrationCbor
 **Signature**
 
 ```ts
-export declare const fromJson: (
-  json: string,
-) => Effect.Effect<CML.CIP36RegistrationCbor, CIP36RegistrationCborError>;
+export declare const fromJson: (json: string) => Effect.Effect<CML.CIP36RegistrationCbor, CIP36RegistrationCborError>
 ```
 
 Added in v2.0.0
@@ -79,8 +77,8 @@ Unsafely calls CIP36RegistrationCbor.\_new without Effect wrapper
 ```ts
 export declare const _newUnsafe: (
   keyRegistration: CML.CIP36KeyRegistration,
-  registrationWitness: CML.CIP36RegistrationWitness,
-) => CML.CIP36RegistrationCbor;
+  registrationWitness: CML.CIP36RegistrationWitness
+) => CML.CIP36RegistrationCbor
 ```
 
 Added in v2.0.0
@@ -92,9 +90,7 @@ Unsafely calls CIP36RegistrationCbor.fromJson without Effect wrapper
 **Signature**
 
 ```ts
-export declare const fromJsonUnsafe: (
-  json: string,
-) => CML.CIP36RegistrationCbor;
+export declare const fromJsonUnsafe: (json: string) => CML.CIP36RegistrationCbor
 ```
 
 Added in v2.0.0
@@ -124,9 +120,7 @@ Method free of CIP36RegistrationCbor
 **Signature**
 
 ```ts
-export declare const free: (
-  instance: CML.CIP36RegistrationCbor,
-) => Effect.Effect<void, CIP36RegistrationCborError>;
+export declare const free: (instance: CML.CIP36RegistrationCbor) => Effect.Effect<void, CIP36RegistrationCborError>
 ```
 
 Added in v2.0.0
@@ -139,8 +133,8 @@ Method keyRegistration of CIP36RegistrationCbor
 
 ```ts
 export declare const keyRegistration: (
-  instance: CML.CIP36RegistrationCbor,
-) => Effect.Effect<CML.CIP36KeyRegistration, CIP36RegistrationCborError>;
+  instance: CML.CIP36RegistrationCbor
+) => Effect.Effect<CML.CIP36KeyRegistration, CIP36RegistrationCborError>
 ```
 
 Added in v2.0.0
@@ -153,8 +147,8 @@ Method registrationWitness of CIP36RegistrationCbor
 
 ```ts
 export declare const registrationWitness: (
-  instance: CML.CIP36RegistrationCbor,
-) => Effect.Effect<CML.CIP36RegistrationWitness, CIP36RegistrationCborError>;
+  instance: CML.CIP36RegistrationCbor
+) => Effect.Effect<CML.CIP36RegistrationWitness, CIP36RegistrationCborError>
 ```
 
 Added in v2.0.0
@@ -166,9 +160,7 @@ Method toJsValue of CIP36RegistrationCbor
 **Signature**
 
 ```ts
-export declare const toJsValue: (
-  instance: CML.CIP36RegistrationCbor,
-) => Effect.Effect<any, CIP36RegistrationCborError>;
+export declare const toJsValue: (instance: CML.CIP36RegistrationCbor) => Effect.Effect<any, CIP36RegistrationCborError>
 ```
 
 Added in v2.0.0
@@ -180,9 +172,7 @@ Method toJson of CIP36RegistrationCbor
 **Signature**
 
 ```ts
-export declare const toJson: (
-  instance: CML.CIP36RegistrationCbor,
-) => Effect.Effect<string, CIP36RegistrationCborError>;
+export declare const toJson: (instance: CML.CIP36RegistrationCbor) => Effect.Effect<string, CIP36RegistrationCborError>
 ```
 
 Added in v2.0.0
@@ -196,7 +186,7 @@ Unsafely calls instance.free without Effect wrapper
 **Signature**
 
 ```ts
-export declare const freeUnsafe: (instance: CML.CIP36RegistrationCbor) => void;
+export declare const freeUnsafe: (instance: CML.CIP36RegistrationCbor) => void
 ```
 
 Added in v2.0.0
@@ -208,9 +198,7 @@ Unsafely calls instance.keyRegistration without Effect wrapper
 **Signature**
 
 ```ts
-export declare const keyRegistrationUnsafe: (
-  instance: CML.CIP36RegistrationCbor,
-) => CML.CIP36KeyRegistration;
+export declare const keyRegistrationUnsafe: (instance: CML.CIP36RegistrationCbor) => CML.CIP36KeyRegistration
 ```
 
 Added in v2.0.0
@@ -222,9 +210,7 @@ Unsafely calls instance.registrationWitness without Effect wrapper
 **Signature**
 
 ```ts
-export declare const registrationWitnessUnsafe: (
-  instance: CML.CIP36RegistrationCbor,
-) => CML.CIP36RegistrationWitness;
+export declare const registrationWitnessUnsafe: (instance: CML.CIP36RegistrationCbor) => CML.CIP36RegistrationWitness
 ```
 
 Added in v2.0.0
@@ -236,9 +222,7 @@ Unsafely calls instance.toJsValue without Effect wrapper
 **Signature**
 
 ```ts
-export declare const toJsValueUnsafe: (
-  instance: CML.CIP36RegistrationCbor,
-) => any;
+export declare const toJsValueUnsafe: (instance: CML.CIP36RegistrationCbor) => any
 ```
 
 Added in v2.0.0
@@ -250,9 +234,7 @@ Unsafely calls instance.toJson without Effect wrapper
 **Signature**
 
 ```ts
-export declare const toJsonUnsafe: (
-  instance: CML.CIP36RegistrationCbor,
-) => string;
+export declare const toJsonUnsafe: (instance: CML.CIP36RegistrationCbor) => string
 ```
 
 Added in v2.0.0
@@ -266,7 +248,7 @@ Type alias for the CML CIP36RegistrationCbor class
 **Signature**
 
 ```ts
-export type CIP36RegistrationCbor = CML.CIP36RegistrationCbor;
+export type CIP36RegistrationCbor = CML.CIP36RegistrationCbor
 ```
 
 Added in v2.0.0

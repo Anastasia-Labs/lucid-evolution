@@ -1,6 +1,6 @@
 ---
 title: CML/SignedTxBuilder.ts
-nav_order: 208
+nav_order: 207
 parent: Modules
 ---
 
@@ -58,8 +58,8 @@ export declare const newWithData: (
   body: CML.TransactionBody,
   witnessSet: CML.TransactionWitnessSetBuilder,
   isValid: boolean,
-  auxiliaryData: CML.AuxiliaryData,
-) => Effect.Effect<CML.SignedTxBuilder, SignedTxBuilderError>;
+  auxiliaryData: CML.AuxiliaryData
+) => Effect.Effect<CML.SignedTxBuilder, SignedTxBuilderError>
 ```
 
 Added in v2.0.0
@@ -74,8 +74,8 @@ Static method newWithoutData of SignedTxBuilder
 export declare const newWithoutData: (
   body: CML.TransactionBody,
   witnessSet: CML.TransactionWitnessSetBuilder,
-  isValid: boolean,
-) => Effect.Effect<CML.SignedTxBuilder, SignedTxBuilderError>;
+  isValid: boolean
+) => Effect.Effect<CML.SignedTxBuilder, SignedTxBuilderError>
 ```
 
 Added in v2.0.0
@@ -93,8 +93,8 @@ export declare const newWithDataUnsafe: (
   body: CML.TransactionBody,
   witnessSet: CML.TransactionWitnessSetBuilder,
   isValid: boolean,
-  auxiliaryData: CML.AuxiliaryData,
-) => CML.SignedTxBuilder;
+  auxiliaryData: CML.AuxiliaryData
+) => CML.SignedTxBuilder
 ```
 
 Added in v2.0.0
@@ -109,8 +109,8 @@ Unsafely calls SignedTxBuilder.newWithoutData without Effect wrapper
 export declare const newWithoutDataUnsafe: (
   body: CML.TransactionBody,
   witnessSet: CML.TransactionWitnessSetBuilder,
-  isValid: boolean,
-) => CML.SignedTxBuilder;
+  isValid: boolean
+) => CML.SignedTxBuilder
 ```
 
 Added in v2.0.0
@@ -142,8 +142,8 @@ Method addBootstrap of SignedTxBuilder
 ```ts
 export declare const addBootstrap: (
   instance: CML.SignedTxBuilder,
-  bootstrap: CML.BootstrapWitness,
-) => Effect.Effect<void, SignedTxBuilderError>;
+  bootstrap: CML.BootstrapWitness
+) => Effect.Effect<void, SignedTxBuilderError>
 ```
 
 Added in v2.0.0
@@ -157,8 +157,8 @@ Method addVkey of SignedTxBuilder
 ```ts
 export declare const addVkey: (
   instance: CML.SignedTxBuilder,
-  vkey: CML.Vkeywitness,
-) => Effect.Effect<void, SignedTxBuilderError>;
+  vkey: CML.Vkeywitness
+) => Effect.Effect<void, SignedTxBuilderError>
 ```
 
 Added in v2.0.0
@@ -171,8 +171,8 @@ Method auxiliaryData of SignedTxBuilder
 
 ```ts
 export declare const auxiliaryData: (
-  instance: CML.SignedTxBuilder,
-) => Effect.Effect<CML.AuxiliaryData | undefined, SignedTxBuilderError>;
+  instance: CML.SignedTxBuilder
+) => Effect.Effect<CML.AuxiliaryData | undefined, SignedTxBuilderError>
 ```
 
 Added in v2.0.0
@@ -184,9 +184,7 @@ Method body of SignedTxBuilder
 **Signature**
 
 ```ts
-export declare const body: (
-  instance: CML.SignedTxBuilder,
-) => Effect.Effect<CML.TransactionBody, SignedTxBuilderError>;
+export declare const body: (instance: CML.SignedTxBuilder) => Effect.Effect<CML.TransactionBody, SignedTxBuilderError>
 ```
 
 Added in v2.0.0
@@ -199,8 +197,8 @@ Method buildChecked of SignedTxBuilder
 
 ```ts
 export declare const buildChecked: (
-  instance: CML.SignedTxBuilder,
-) => Effect.Effect<CML.Transaction, SignedTxBuilderError>;
+  instance: CML.SignedTxBuilder
+) => Effect.Effect<CML.Transaction, SignedTxBuilderError>
 ```
 
 Added in v2.0.0
@@ -213,8 +211,8 @@ Method buildUnchecked of SignedTxBuilder
 
 ```ts
 export declare const buildUnchecked: (
-  instance: CML.SignedTxBuilder,
-) => Effect.Effect<CML.Transaction, SignedTxBuilderError>;
+  instance: CML.SignedTxBuilder
+) => Effect.Effect<CML.Transaction, SignedTxBuilderError>
 ```
 
 Added in v2.0.0
@@ -226,9 +224,7 @@ Method free of SignedTxBuilder
 **Signature**
 
 ```ts
-export declare const free: (
-  instance: CML.SignedTxBuilder,
-) => Effect.Effect<void, SignedTxBuilderError>;
+export declare const free: (instance: CML.SignedTxBuilder) => Effect.Effect<void, SignedTxBuilderError>
 ```
 
 Added in v2.0.0
@@ -240,9 +236,7 @@ Method isValid of SignedTxBuilder
 **Signature**
 
 ```ts
-export declare const isValid: (
-  instance: CML.SignedTxBuilder,
-) => Effect.Effect<boolean, SignedTxBuilderError>;
+export declare const isValid: (instance: CML.SignedTxBuilder) => Effect.Effect<boolean, SignedTxBuilderError>
 ```
 
 Added in v2.0.0
@@ -255,8 +249,8 @@ Method witnessSet of SignedTxBuilder
 
 ```ts
 export declare const witnessSet: (
-  instance: CML.SignedTxBuilder,
-) => Effect.Effect<CML.TransactionWitnessSetBuilder, SignedTxBuilderError>;
+  instance: CML.SignedTxBuilder
+) => Effect.Effect<CML.TransactionWitnessSetBuilder, SignedTxBuilderError>
 ```
 
 Added in v2.0.0
@@ -270,10 +264,7 @@ Unsafely calls instance.addBootstrap without Effect wrapper
 **Signature**
 
 ```ts
-export declare const addBootstrapUnsafe: (
-  instance: CML.SignedTxBuilder,
-  bootstrap: CML.BootstrapWitness,
-) => void;
+export declare const addBootstrapUnsafe: (instance: CML.SignedTxBuilder, bootstrap: CML.BootstrapWitness) => void
 ```
 
 Added in v2.0.0
@@ -285,10 +276,7 @@ Unsafely calls instance.addVkey without Effect wrapper
 **Signature**
 
 ```ts
-export declare const addVkeyUnsafe: (
-  instance: CML.SignedTxBuilder,
-  vkey: CML.Vkeywitness,
-) => void;
+export declare const addVkeyUnsafe: (instance: CML.SignedTxBuilder, vkey: CML.Vkeywitness) => void
 ```
 
 Added in v2.0.0
@@ -300,9 +288,7 @@ Unsafely calls instance.auxiliaryData without Effect wrapper
 **Signature**
 
 ```ts
-export declare const auxiliaryDataUnsafe: (
-  instance: CML.SignedTxBuilder,
-) => CML.AuxiliaryData | undefined;
+export declare const auxiliaryDataUnsafe: (instance: CML.SignedTxBuilder) => CML.AuxiliaryData | undefined
 ```
 
 Added in v2.0.0
@@ -314,9 +300,7 @@ Unsafely calls instance.body without Effect wrapper
 **Signature**
 
 ```ts
-export declare const bodyUnsafe: (
-  instance: CML.SignedTxBuilder,
-) => CML.TransactionBody;
+export declare const bodyUnsafe: (instance: CML.SignedTxBuilder) => CML.TransactionBody
 ```
 
 Added in v2.0.0
@@ -328,9 +312,7 @@ Unsafely calls instance.buildChecked without Effect wrapper
 **Signature**
 
 ```ts
-export declare const buildCheckedUnsafe: (
-  instance: CML.SignedTxBuilder,
-) => CML.Transaction;
+export declare const buildCheckedUnsafe: (instance: CML.SignedTxBuilder) => CML.Transaction
 ```
 
 Added in v2.0.0
@@ -342,9 +324,7 @@ Unsafely calls instance.buildUnchecked without Effect wrapper
 **Signature**
 
 ```ts
-export declare const buildUncheckedUnsafe: (
-  instance: CML.SignedTxBuilder,
-) => CML.Transaction;
+export declare const buildUncheckedUnsafe: (instance: CML.SignedTxBuilder) => CML.Transaction
 ```
 
 Added in v2.0.0
@@ -356,7 +336,7 @@ Unsafely calls instance.free without Effect wrapper
 **Signature**
 
 ```ts
-export declare const freeUnsafe: (instance: CML.SignedTxBuilder) => void;
+export declare const freeUnsafe: (instance: CML.SignedTxBuilder) => void
 ```
 
 Added in v2.0.0
@@ -368,7 +348,7 @@ Unsafely calls instance.isValid without Effect wrapper
 **Signature**
 
 ```ts
-export declare const isValidUnsafe: (instance: CML.SignedTxBuilder) => boolean;
+export declare const isValidUnsafe: (instance: CML.SignedTxBuilder) => boolean
 ```
 
 Added in v2.0.0
@@ -380,9 +360,7 @@ Unsafely calls instance.witnessSet without Effect wrapper
 **Signature**
 
 ```ts
-export declare const witnessSetUnsafe: (
-  instance: CML.SignedTxBuilder,
-) => CML.TransactionWitnessSetBuilder;
+export declare const witnessSetUnsafe: (instance: CML.SignedTxBuilder) => CML.TransactionWitnessSetBuilder
 ```
 
 Added in v2.0.0
@@ -396,7 +374,7 @@ Type alias for the CML SignedTxBuilder class
 **Signature**
 
 ```ts
-export type SignedTxBuilder = CML.SignedTxBuilder;
+export type SignedTxBuilder = CML.SignedTxBuilder
 ```
 
 Added in v2.0.0

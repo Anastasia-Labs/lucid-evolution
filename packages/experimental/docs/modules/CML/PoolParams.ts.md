@@ -1,6 +1,6 @@
 ---
 title: CML/PoolParams.ts
-nav_order: 170
+nav_order: 169
 parent: Modules
 ---
 
@@ -81,8 +81,8 @@ export declare const _new: (
   rewardAccount: CML.RewardAddress,
   poolOwners: CML.Ed25519KeyHashList,
   relays: CML.RelayList,
-  poolMetadata: CML.PoolMetadata,
-) => Effect.Effect<CML.PoolParams, PoolParamsError>;
+  poolMetadata: CML.PoolMetadata
+) => Effect.Effect<CML.PoolParams, PoolParamsError>
 ```
 
 Added in v2.0.0
@@ -94,9 +94,7 @@ Static method fromCborBytes of PoolParams
 **Signature**
 
 ```ts
-export declare const fromCborBytes: (
-  cborBytes: Uint8Array,
-) => Effect.Effect<CML.PoolParams, PoolParamsError>;
+export declare const fromCborBytes: (cborBytes: Uint8Array) => Effect.Effect<CML.PoolParams, PoolParamsError>
 ```
 
 Added in v2.0.0
@@ -108,9 +106,7 @@ Static method fromCborHex of PoolParams
 **Signature**
 
 ```ts
-export declare const fromCborHex: (
-  cborBytes: string,
-) => Effect.Effect<CML.PoolParams, PoolParamsError>;
+export declare const fromCborHex: (cborBytes: string) => Effect.Effect<CML.PoolParams, PoolParamsError>
 ```
 
 Added in v2.0.0
@@ -122,9 +118,7 @@ Static method fromJson of PoolParams
 **Signature**
 
 ```ts
-export declare const fromJson: (
-  json: string,
-) => Effect.Effect<CML.PoolParams, PoolParamsError>;
+export declare const fromJson: (json: string) => Effect.Effect<CML.PoolParams, PoolParamsError>
 ```
 
 Added in v2.0.0
@@ -147,8 +141,8 @@ export declare const _newUnsafe: (
   rewardAccount: CML.RewardAddress,
   poolOwners: CML.Ed25519KeyHashList,
   relays: CML.RelayList,
-  poolMetadata: CML.PoolMetadata,
-) => CML.PoolParams;
+  poolMetadata: CML.PoolMetadata
+) => CML.PoolParams
 ```
 
 Added in v2.0.0
@@ -160,9 +154,7 @@ Unsafely calls PoolParams.fromCborBytes without Effect wrapper
 **Signature**
 
 ```ts
-export declare const fromCborBytesUnsafe: (
-  cborBytes: Uint8Array,
-) => CML.PoolParams;
+export declare const fromCborBytesUnsafe: (cborBytes: Uint8Array) => CML.PoolParams
 ```
 
 Added in v2.0.0
@@ -174,7 +166,7 @@ Unsafely calls PoolParams.fromCborHex without Effect wrapper
 **Signature**
 
 ```ts
-export declare const fromCborHexUnsafe: (cborBytes: string) => CML.PoolParams;
+export declare const fromCborHexUnsafe: (cborBytes: string) => CML.PoolParams
 ```
 
 Added in v2.0.0
@@ -186,7 +178,7 @@ Unsafely calls PoolParams.fromJson without Effect wrapper
 **Signature**
 
 ```ts
-export declare const fromJsonUnsafe: (json: string) => CML.PoolParams;
+export declare const fromJsonUnsafe: (json: string) => CML.PoolParams
 ```
 
 Added in v2.0.0
@@ -216,9 +208,7 @@ Method cost of PoolParams
 **Signature**
 
 ```ts
-export declare const cost: (
-  instance: CML.PoolParams,
-) => Effect.Effect<bigint, PoolParamsError>;
+export declare const cost: (instance: CML.PoolParams) => Effect.Effect<bigint, PoolParamsError>
 ```
 
 Added in v2.0.0
@@ -230,9 +220,7 @@ Method free of PoolParams
 **Signature**
 
 ```ts
-export declare const free: (
-  instance: CML.PoolParams,
-) => Effect.Effect<void, PoolParamsError>;
+export declare const free: (instance: CML.PoolParams) => Effect.Effect<void, PoolParamsError>
 ```
 
 Added in v2.0.0
@@ -244,9 +232,7 @@ Method margin of PoolParams
 **Signature**
 
 ```ts
-export declare const margin: (
-  instance: CML.PoolParams,
-) => Effect.Effect<CML.UnitInterval, PoolParamsError>;
+export declare const margin: (instance: CML.PoolParams) => Effect.Effect<CML.UnitInterval, PoolParamsError>
 ```
 
 Added in v2.0.0
@@ -258,9 +244,7 @@ Method operator of PoolParams
 **Signature**
 
 ```ts
-export declare const operator: (
-  instance: CML.PoolParams,
-) => Effect.Effect<CML.Ed25519KeyHash, PoolParamsError>;
+export declare const operator: (instance: CML.PoolParams) => Effect.Effect<CML.Ed25519KeyHash, PoolParamsError>
 ```
 
 Added in v2.0.0
@@ -272,9 +256,7 @@ Method pledge of PoolParams
 **Signature**
 
 ```ts
-export declare const pledge: (
-  instance: CML.PoolParams,
-) => Effect.Effect<bigint, PoolParamsError>;
+export declare const pledge: (instance: CML.PoolParams) => Effect.Effect<bigint, PoolParamsError>
 ```
 
 Added in v2.0.0
@@ -287,8 +269,8 @@ Method poolMetadata of PoolParams
 
 ```ts
 export declare const poolMetadata: (
-  instance: CML.PoolParams,
-) => Effect.Effect<CML.PoolMetadata | undefined, PoolParamsError>;
+  instance: CML.PoolParams
+) => Effect.Effect<CML.PoolMetadata | undefined, PoolParamsError>
 ```
 
 Added in v2.0.0
@@ -300,9 +282,7 @@ Method poolOwners of PoolParams
 **Signature**
 
 ```ts
-export declare const poolOwners: (
-  instance: CML.PoolParams,
-) => Effect.Effect<CML.Ed25519KeyHashList, PoolParamsError>;
+export declare const poolOwners: (instance: CML.PoolParams) => Effect.Effect<CML.Ed25519KeyHashList, PoolParamsError>
 ```
 
 Added in v2.0.0
@@ -314,9 +294,7 @@ Method relays of PoolParams
 **Signature**
 
 ```ts
-export declare const relays: (
-  instance: CML.PoolParams,
-) => Effect.Effect<CML.RelayList, PoolParamsError>;
+export declare const relays: (instance: CML.PoolParams) => Effect.Effect<CML.RelayList, PoolParamsError>
 ```
 
 Added in v2.0.0
@@ -328,9 +306,7 @@ Method rewardAccount of PoolParams
 **Signature**
 
 ```ts
-export declare const rewardAccount: (
-  instance: CML.PoolParams,
-) => Effect.Effect<CML.RewardAddress, PoolParamsError>;
+export declare const rewardAccount: (instance: CML.PoolParams) => Effect.Effect<CML.RewardAddress, PoolParamsError>
 ```
 
 Added in v2.0.0
@@ -342,9 +318,7 @@ Method toCanonicalCborBytes of PoolParams
 **Signature**
 
 ```ts
-export declare const toCanonicalCborBytes: (
-  instance: CML.PoolParams,
-) => Effect.Effect<Uint8Array, PoolParamsError>;
+export declare const toCanonicalCborBytes: (instance: CML.PoolParams) => Effect.Effect<Uint8Array, PoolParamsError>
 ```
 
 Added in v2.0.0
@@ -356,9 +330,7 @@ Method toCanonicalCborHex of PoolParams
 **Signature**
 
 ```ts
-export declare const toCanonicalCborHex: (
-  instance: CML.PoolParams,
-) => Effect.Effect<string, PoolParamsError>;
+export declare const toCanonicalCborHex: (instance: CML.PoolParams) => Effect.Effect<string, PoolParamsError>
 ```
 
 Added in v2.0.0
@@ -370,9 +342,7 @@ Method toCborBytes of PoolParams
 **Signature**
 
 ```ts
-export declare const toCborBytes: (
-  instance: CML.PoolParams,
-) => Effect.Effect<Uint8Array, PoolParamsError>;
+export declare const toCborBytes: (instance: CML.PoolParams) => Effect.Effect<Uint8Array, PoolParamsError>
 ```
 
 Added in v2.0.0
@@ -384,9 +354,7 @@ Method toCborHex of PoolParams
 **Signature**
 
 ```ts
-export declare const toCborHex: (
-  instance: CML.PoolParams,
-) => Effect.Effect<string, PoolParamsError>;
+export declare const toCborHex: (instance: CML.PoolParams) => Effect.Effect<string, PoolParamsError>
 ```
 
 Added in v2.0.0
@@ -398,9 +366,7 @@ Method toJsValue of PoolParams
 **Signature**
 
 ```ts
-export declare const toJsValue: (
-  instance: CML.PoolParams,
-) => Effect.Effect<any, PoolParamsError>;
+export declare const toJsValue: (instance: CML.PoolParams) => Effect.Effect<any, PoolParamsError>
 ```
 
 Added in v2.0.0
@@ -412,9 +378,7 @@ Method toJson of PoolParams
 **Signature**
 
 ```ts
-export declare const toJson: (
-  instance: CML.PoolParams,
-) => Effect.Effect<string, PoolParamsError>;
+export declare const toJson: (instance: CML.PoolParams) => Effect.Effect<string, PoolParamsError>
 ```
 
 Added in v2.0.0
@@ -426,9 +390,7 @@ Method vrfKeyhash of PoolParams
 **Signature**
 
 ```ts
-export declare const vrfKeyhash: (
-  instance: CML.PoolParams,
-) => Effect.Effect<CML.VRFKeyHash, PoolParamsError>;
+export declare const vrfKeyhash: (instance: CML.PoolParams) => Effect.Effect<CML.VRFKeyHash, PoolParamsError>
 ```
 
 Added in v2.0.0
@@ -442,7 +404,7 @@ Unsafely calls instance.cost without Effect wrapper
 **Signature**
 
 ```ts
-export declare const costUnsafe: (instance: CML.PoolParams) => bigint;
+export declare const costUnsafe: (instance: CML.PoolParams) => bigint
 ```
 
 Added in v2.0.0
@@ -454,7 +416,7 @@ Unsafely calls instance.free without Effect wrapper
 **Signature**
 
 ```ts
-export declare const freeUnsafe: (instance: CML.PoolParams) => void;
+export declare const freeUnsafe: (instance: CML.PoolParams) => void
 ```
 
 Added in v2.0.0
@@ -466,9 +428,7 @@ Unsafely calls instance.margin without Effect wrapper
 **Signature**
 
 ```ts
-export declare const marginUnsafe: (
-  instance: CML.PoolParams,
-) => CML.UnitInterval;
+export declare const marginUnsafe: (instance: CML.PoolParams) => CML.UnitInterval
 ```
 
 Added in v2.0.0
@@ -480,9 +440,7 @@ Unsafely calls instance.operator without Effect wrapper
 **Signature**
 
 ```ts
-export declare const operatorUnsafe: (
-  instance: CML.PoolParams,
-) => CML.Ed25519KeyHash;
+export declare const operatorUnsafe: (instance: CML.PoolParams) => CML.Ed25519KeyHash
 ```
 
 Added in v2.0.0
@@ -494,7 +452,7 @@ Unsafely calls instance.pledge without Effect wrapper
 **Signature**
 
 ```ts
-export declare const pledgeUnsafe: (instance: CML.PoolParams) => bigint;
+export declare const pledgeUnsafe: (instance: CML.PoolParams) => bigint
 ```
 
 Added in v2.0.0
@@ -506,9 +464,7 @@ Unsafely calls instance.poolMetadata without Effect wrapper
 **Signature**
 
 ```ts
-export declare const poolMetadataUnsafe: (
-  instance: CML.PoolParams,
-) => CML.PoolMetadata | undefined;
+export declare const poolMetadataUnsafe: (instance: CML.PoolParams) => CML.PoolMetadata | undefined
 ```
 
 Added in v2.0.0
@@ -520,9 +476,7 @@ Unsafely calls instance.poolOwners without Effect wrapper
 **Signature**
 
 ```ts
-export declare const poolOwnersUnsafe: (
-  instance: CML.PoolParams,
-) => CML.Ed25519KeyHashList;
+export declare const poolOwnersUnsafe: (instance: CML.PoolParams) => CML.Ed25519KeyHashList
 ```
 
 Added in v2.0.0
@@ -534,7 +488,7 @@ Unsafely calls instance.relays without Effect wrapper
 **Signature**
 
 ```ts
-export declare const relaysUnsafe: (instance: CML.PoolParams) => CML.RelayList;
+export declare const relaysUnsafe: (instance: CML.PoolParams) => CML.RelayList
 ```
 
 Added in v2.0.0
@@ -546,9 +500,7 @@ Unsafely calls instance.rewardAccount without Effect wrapper
 **Signature**
 
 ```ts
-export declare const rewardAccountUnsafe: (
-  instance: CML.PoolParams,
-) => CML.RewardAddress;
+export declare const rewardAccountUnsafe: (instance: CML.PoolParams) => CML.RewardAddress
 ```
 
 Added in v2.0.0
@@ -560,9 +512,7 @@ Unsafely calls instance.toCanonicalCborBytes without Effect wrapper
 **Signature**
 
 ```ts
-export declare const toCanonicalCborBytesUnsafe: (
-  instance: CML.PoolParams,
-) => Uint8Array;
+export declare const toCanonicalCborBytesUnsafe: (instance: CML.PoolParams) => Uint8Array
 ```
 
 Added in v2.0.0
@@ -574,9 +524,7 @@ Unsafely calls instance.toCanonicalCborHex without Effect wrapper
 **Signature**
 
 ```ts
-export declare const toCanonicalCborHexUnsafe: (
-  instance: CML.PoolParams,
-) => string;
+export declare const toCanonicalCborHexUnsafe: (instance: CML.PoolParams) => string
 ```
 
 Added in v2.0.0
@@ -588,9 +536,7 @@ Unsafely calls instance.toCborBytes without Effect wrapper
 **Signature**
 
 ```ts
-export declare const toCborBytesUnsafe: (
-  instance: CML.PoolParams,
-) => Uint8Array;
+export declare const toCborBytesUnsafe: (instance: CML.PoolParams) => Uint8Array
 ```
 
 Added in v2.0.0
@@ -602,7 +548,7 @@ Unsafely calls instance.toCborHex without Effect wrapper
 **Signature**
 
 ```ts
-export declare const toCborHexUnsafe: (instance: CML.PoolParams) => string;
+export declare const toCborHexUnsafe: (instance: CML.PoolParams) => string
 ```
 
 Added in v2.0.0
@@ -614,7 +560,7 @@ Unsafely calls instance.toJsValue without Effect wrapper
 **Signature**
 
 ```ts
-export declare const toJsValueUnsafe: (instance: CML.PoolParams) => any;
+export declare const toJsValueUnsafe: (instance: CML.PoolParams) => any
 ```
 
 Added in v2.0.0
@@ -626,7 +572,7 @@ Unsafely calls instance.toJson without Effect wrapper
 **Signature**
 
 ```ts
-export declare const toJsonUnsafe: (instance: CML.PoolParams) => string;
+export declare const toJsonUnsafe: (instance: CML.PoolParams) => string
 ```
 
 Added in v2.0.0
@@ -638,9 +584,7 @@ Unsafely calls instance.vrfKeyhash without Effect wrapper
 **Signature**
 
 ```ts
-export declare const vrfKeyhashUnsafe: (
-  instance: CML.PoolParams,
-) => CML.VRFKeyHash;
+export declare const vrfKeyhashUnsafe: (instance: CML.PoolParams) => CML.VRFKeyHash
 ```
 
 Added in v2.0.0
@@ -654,7 +598,7 @@ Type alias for the CML PoolParams class
 **Signature**
 
 ```ts
-export type PoolParams = CML.PoolParams;
+export type PoolParams = CML.PoolParams
 ```
 
 Added in v2.0.0

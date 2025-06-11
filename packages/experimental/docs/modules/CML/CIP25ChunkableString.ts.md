@@ -63,8 +63,8 @@ Static method fromCborBytes of CIP25ChunkableString
 
 ```ts
 export declare const fromCborBytes: (
-  cborBytes: Uint8Array,
-) => Effect.Effect<CML.CIP25ChunkableString, CIP25ChunkableStringError>;
+  cborBytes: Uint8Array
+) => Effect.Effect<CML.CIP25ChunkableString, CIP25ChunkableStringError>
 ```
 
 Added in v2.0.0
@@ -77,8 +77,8 @@ Static method fromCborHex of CIP25ChunkableString
 
 ```ts
 export declare const fromCborHex: (
-  cborBytes: string,
-) => Effect.Effect<CML.CIP25ChunkableString, CIP25ChunkableStringError>;
+  cborBytes: string
+) => Effect.Effect<CML.CIP25ChunkableString, CIP25ChunkableStringError>
 ```
 
 Added in v2.0.0
@@ -90,9 +90,7 @@ Static method fromJson of CIP25ChunkableString
 **Signature**
 
 ```ts
-export declare const fromJson: (
-  json: string,
-) => Effect.Effect<CML.CIP25ChunkableString, CIP25ChunkableStringError>;
+export declare const fromJson: (json: string) => Effect.Effect<CML.CIP25ChunkableString, CIP25ChunkableStringError>
 ```
 
 Added in v2.0.0
@@ -104,9 +102,7 @@ Static method fromString of CIP25ChunkableString
 **Signature**
 
 ```ts
-export declare const fromString: (
-  str: string,
-) => Effect.Effect<CML.CIP25ChunkableString, CIP25ChunkableStringError>;
+export declare const fromString: (str: string) => Effect.Effect<CML.CIP25ChunkableString, CIP25ChunkableStringError>
 ```
 
 Added in v2.0.0
@@ -119,8 +115,8 @@ Static method newChunked of CIP25ChunkableString
 
 ```ts
 export declare const newChunked: (
-  chunked: CML.CIP25String64List,
-) => Effect.Effect<CML.CIP25ChunkableString, CIP25ChunkableStringError>;
+  chunked: CML.CIP25String64List
+) => Effect.Effect<CML.CIP25ChunkableString, CIP25ChunkableStringError>
 ```
 
 Added in v2.0.0
@@ -133,8 +129,8 @@ Static method newSingle of CIP25ChunkableString
 
 ```ts
 export declare const newSingle: (
-  single: CML.CIP25String64,
-) => Effect.Effect<CML.CIP25ChunkableString, CIP25ChunkableStringError>;
+  single: CML.CIP25String64
+) => Effect.Effect<CML.CIP25ChunkableString, CIP25ChunkableStringError>
 ```
 
 Added in v2.0.0
@@ -148,9 +144,7 @@ Unsafely calls CIP25ChunkableString.fromCborBytes without Effect wrapper
 **Signature**
 
 ```ts
-export declare const fromCborBytesUnsafe: (
-  cborBytes: Uint8Array,
-) => CML.CIP25ChunkableString;
+export declare const fromCborBytesUnsafe: (cborBytes: Uint8Array) => CML.CIP25ChunkableString
 ```
 
 Added in v2.0.0
@@ -162,9 +156,7 @@ Unsafely calls CIP25ChunkableString.fromCborHex without Effect wrapper
 **Signature**
 
 ```ts
-export declare const fromCborHexUnsafe: (
-  cborBytes: string,
-) => CML.CIP25ChunkableString;
+export declare const fromCborHexUnsafe: (cborBytes: string) => CML.CIP25ChunkableString
 ```
 
 Added in v2.0.0
@@ -176,7 +168,7 @@ Unsafely calls CIP25ChunkableString.fromJson without Effect wrapper
 **Signature**
 
 ```ts
-export declare const fromJsonUnsafe: (json: string) => CML.CIP25ChunkableString;
+export declare const fromJsonUnsafe: (json: string) => CML.CIP25ChunkableString
 ```
 
 Added in v2.0.0
@@ -188,9 +180,7 @@ Unsafely calls CIP25ChunkableString.fromString without Effect wrapper
 **Signature**
 
 ```ts
-export declare const fromStringUnsafe: (
-  str: string,
-) => CML.CIP25ChunkableString;
+export declare const fromStringUnsafe: (str: string) => CML.CIP25ChunkableString
 ```
 
 Added in v2.0.0
@@ -202,9 +192,7 @@ Unsafely calls CIP25ChunkableString.newChunked without Effect wrapper
 **Signature**
 
 ```ts
-export declare const newChunkedUnsafe: (
-  chunked: CML.CIP25String64List,
-) => CML.CIP25ChunkableString;
+export declare const newChunkedUnsafe: (chunked: CML.CIP25String64List) => CML.CIP25ChunkableString
 ```
 
 Added in v2.0.0
@@ -216,9 +204,7 @@ Unsafely calls CIP25ChunkableString.newSingle without Effect wrapper
 **Signature**
 
 ```ts
-export declare const newSingleUnsafe: (
-  single: CML.CIP25String64,
-) => CML.CIP25ChunkableString;
+export declare const newSingleUnsafe: (single: CML.CIP25String64) => CML.CIP25ChunkableString
 ```
 
 Added in v2.0.0
@@ -249,11 +235,8 @@ Method asChunked of CIP25ChunkableString
 
 ```ts
 export declare const asChunked: (
-  instance: CML.CIP25ChunkableString,
-) => Effect.Effect<
-  CML.CIP25String64List | undefined,
-  CIP25ChunkableStringError
->;
+  instance: CML.CIP25ChunkableString
+) => Effect.Effect<CML.CIP25String64List | undefined, CIP25ChunkableStringError>
 ```
 
 Added in v2.0.0
@@ -266,8 +249,8 @@ Method asSingle of CIP25ChunkableString
 
 ```ts
 export declare const asSingle: (
-  instance: CML.CIP25ChunkableString,
-) => Effect.Effect<CML.CIP25String64 | undefined, CIP25ChunkableStringError>;
+  instance: CML.CIP25ChunkableString
+) => Effect.Effect<CML.CIP25String64 | undefined, CIP25ChunkableStringError>
 ```
 
 Added in v2.0.0
@@ -279,9 +262,7 @@ Method free of CIP25ChunkableString
 **Signature**
 
 ```ts
-export declare const free: (
-  instance: CML.CIP25ChunkableString,
-) => Effect.Effect<void, CIP25ChunkableStringError>;
+export declare const free: (instance: CML.CIP25ChunkableString) => Effect.Effect<void, CIP25ChunkableStringError>
 ```
 
 Added in v2.0.0
@@ -294,8 +275,8 @@ Method kind of CIP25ChunkableString
 
 ```ts
 export declare const kind: (
-  instance: CML.CIP25ChunkableString,
-) => Effect.Effect<CML.ChunkableStringKind, CIP25ChunkableStringError>;
+  instance: CML.CIP25ChunkableString
+) => Effect.Effect<CML.ChunkableStringKind, CIP25ChunkableStringError>
 ```
 
 Added in v2.0.0
@@ -308,8 +289,8 @@ Method toCborBytes of CIP25ChunkableString
 
 ```ts
 export declare const toCborBytes: (
-  instance: CML.CIP25ChunkableString,
-) => Effect.Effect<Uint8Array, CIP25ChunkableStringError>;
+  instance: CML.CIP25ChunkableString
+) => Effect.Effect<Uint8Array, CIP25ChunkableStringError>
 ```
 
 Added in v2.0.0
@@ -321,9 +302,7 @@ Method toCborHex of CIP25ChunkableString
 **Signature**
 
 ```ts
-export declare const toCborHex: (
-  instance: CML.CIP25ChunkableString,
-) => Effect.Effect<string, CIP25ChunkableStringError>;
+export declare const toCborHex: (instance: CML.CIP25ChunkableString) => Effect.Effect<string, CIP25ChunkableStringError>
 ```
 
 Added in v2.0.0
@@ -335,9 +314,7 @@ Method toJsValue of CIP25ChunkableString
 **Signature**
 
 ```ts
-export declare const toJsValue: (
-  instance: CML.CIP25ChunkableString,
-) => Effect.Effect<any, CIP25ChunkableStringError>;
+export declare const toJsValue: (instance: CML.CIP25ChunkableString) => Effect.Effect<any, CIP25ChunkableStringError>
 ```
 
 Added in v2.0.0
@@ -349,9 +326,7 @@ Method toJson of CIP25ChunkableString
 **Signature**
 
 ```ts
-export declare const toJson: (
-  instance: CML.CIP25ChunkableString,
-) => Effect.Effect<string, CIP25ChunkableStringError>;
+export declare const toJson: (instance: CML.CIP25ChunkableString) => Effect.Effect<string, CIP25ChunkableStringError>
 ```
 
 Added in v2.0.0
@@ -363,9 +338,7 @@ Method toString of CIP25ChunkableString
 **Signature**
 
 ```ts
-export declare const toString: (
-  instance: CML.CIP25ChunkableString,
-) => Effect.Effect<string, CIP25ChunkableStringError>;
+export declare const toString: (instance: CML.CIP25ChunkableString) => Effect.Effect<string, CIP25ChunkableStringError>
 ```
 
 Added in v2.0.0
@@ -379,9 +352,7 @@ Unsafely calls instance.asChunked without Effect wrapper
 **Signature**
 
 ```ts
-export declare const asChunkedUnsafe: (
-  instance: CML.CIP25ChunkableString,
-) => CML.CIP25String64List | undefined;
+export declare const asChunkedUnsafe: (instance: CML.CIP25ChunkableString) => CML.CIP25String64List | undefined
 ```
 
 Added in v2.0.0
@@ -393,9 +364,7 @@ Unsafely calls instance.asSingle without Effect wrapper
 **Signature**
 
 ```ts
-export declare const asSingleUnsafe: (
-  instance: CML.CIP25ChunkableString,
-) => CML.CIP25String64 | undefined;
+export declare const asSingleUnsafe: (instance: CML.CIP25ChunkableString) => CML.CIP25String64 | undefined
 ```
 
 Added in v2.0.0
@@ -407,7 +376,7 @@ Unsafely calls instance.free without Effect wrapper
 **Signature**
 
 ```ts
-export declare const freeUnsafe: (instance: CML.CIP25ChunkableString) => void;
+export declare const freeUnsafe: (instance: CML.CIP25ChunkableString) => void
 ```
 
 Added in v2.0.0
@@ -419,9 +388,7 @@ Unsafely calls instance.kind without Effect wrapper
 **Signature**
 
 ```ts
-export declare const kindUnsafe: (
-  instance: CML.CIP25ChunkableString,
-) => CML.ChunkableStringKind;
+export declare const kindUnsafe: (instance: CML.CIP25ChunkableString) => CML.ChunkableStringKind
 ```
 
 Added in v2.0.0
@@ -433,9 +400,7 @@ Unsafely calls instance.toCborBytes without Effect wrapper
 **Signature**
 
 ```ts
-export declare const toCborBytesUnsafe: (
-  instance: CML.CIP25ChunkableString,
-) => Uint8Array;
+export declare const toCborBytesUnsafe: (instance: CML.CIP25ChunkableString) => Uint8Array
 ```
 
 Added in v2.0.0
@@ -447,9 +412,7 @@ Unsafely calls instance.toCborHex without Effect wrapper
 **Signature**
 
 ```ts
-export declare const toCborHexUnsafe: (
-  instance: CML.CIP25ChunkableString,
-) => string;
+export declare const toCborHexUnsafe: (instance: CML.CIP25ChunkableString) => string
 ```
 
 Added in v2.0.0
@@ -461,9 +424,7 @@ Unsafely calls instance.toJsValue without Effect wrapper
 **Signature**
 
 ```ts
-export declare const toJsValueUnsafe: (
-  instance: CML.CIP25ChunkableString,
-) => any;
+export declare const toJsValueUnsafe: (instance: CML.CIP25ChunkableString) => any
 ```
 
 Added in v2.0.0
@@ -475,9 +436,7 @@ Unsafely calls instance.toJson without Effect wrapper
 **Signature**
 
 ```ts
-export declare const toJsonUnsafe: (
-  instance: CML.CIP25ChunkableString,
-) => string;
+export declare const toJsonUnsafe: (instance: CML.CIP25ChunkableString) => string
 ```
 
 Added in v2.0.0
@@ -489,9 +448,7 @@ Unsafely calls instance.toString without Effect wrapper
 **Signature**
 
 ```ts
-export declare const toStringUnsafe: (
-  instance: CML.CIP25ChunkableString,
-) => string;
+export declare const toStringUnsafe: (instance: CML.CIP25ChunkableString) => string
 ```
 
 Added in v2.0.0
@@ -505,7 +462,7 @@ Type alias for the CML CIP25ChunkableString class
 **Signature**
 
 ```ts
-export type CIP25ChunkableString = CML.CIP25ChunkableString;
+export type CIP25ChunkableString = CML.CIP25ChunkableString
 ```
 
 Added in v2.0.0

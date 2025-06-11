@@ -42,10 +42,7 @@ Static method \_new of AssetNameList
 **Signature**
 
 ```ts
-export declare const _new: () => Effect.Effect<
-  CML.AssetNameList,
-  AssetNameListError
->;
+export declare const _new: () => Effect.Effect<CML.AssetNameList, AssetNameListError>
 ```
 
 Added in v2.0.0
@@ -59,7 +56,7 @@ Unsafely calls AssetNameList.\_new without Effect wrapper
 **Signature**
 
 ```ts
-export declare const _newUnsafe: () => CML.AssetNameList;
+export declare const _newUnsafe: () => CML.AssetNameList
 ```
 
 Added in v2.0.0
@@ -89,10 +86,7 @@ Method add of AssetNameList
 **Signature**
 
 ```ts
-export declare const add: (
-  instance: CML.AssetNameList,
-  elem: CML.AssetName,
-) => Effect.Effect<void, AssetNameListError>;
+export declare const add: (instance: CML.AssetNameList, elem: CML.AssetName) => Effect.Effect<void, AssetNameListError>
 ```
 
 Added in v2.0.0
@@ -104,9 +98,7 @@ Method free of AssetNameList
 **Signature**
 
 ```ts
-export declare const free: (
-  instance: CML.AssetNameList,
-) => Effect.Effect<void, AssetNameListError>;
+export declare const free: (instance: CML.AssetNameList) => Effect.Effect<void, AssetNameListError>
 ```
 
 Added in v2.0.0
@@ -120,8 +112,8 @@ Method get of AssetNameList
 ```ts
 export declare const get: (
   instance: CML.AssetNameList,
-  index: number,
-) => Effect.Effect<CML.AssetName, AssetNameListError>;
+  index: number
+) => Effect.Effect<CML.AssetName, AssetNameListError>
 ```
 
 Added in v2.0.0
@@ -133,9 +125,7 @@ Method len of AssetNameList
 **Signature**
 
 ```ts
-export declare const len: (
-  instance: CML.AssetNameList,
-) => Effect.Effect<number, AssetNameListError>;
+export declare const len: (instance: CML.AssetNameList) => Effect.Effect<number, AssetNameListError>
 ```
 
 Added in v2.0.0
@@ -149,10 +139,7 @@ Unsafely calls instance.add without Effect wrapper
 **Signature**
 
 ```ts
-export declare const addUnsafe: (
-  instance: CML.AssetNameList,
-  elem: CML.AssetName,
-) => void;
+export declare const addUnsafe: (instance: CML.AssetNameList, elem: CML.AssetName) => void
 ```
 
 Added in v2.0.0
@@ -164,7 +151,7 @@ Unsafely calls instance.free without Effect wrapper
 **Signature**
 
 ```ts
-export declare const freeUnsafe: (instance: CML.AssetNameList) => void;
+export declare const freeUnsafe: (instance: CML.AssetNameList) => void
 ```
 
 Added in v2.0.0
@@ -176,10 +163,7 @@ Unsafely calls instance.get without Effect wrapper
 **Signature**
 
 ```ts
-export declare const getUnsafe: (
-  instance: CML.AssetNameList,
-  index: number,
-) => CML.AssetName;
+export declare const getUnsafe: (instance: CML.AssetNameList, index: number) => CML.AssetName
 ```
 
 Added in v2.0.0
@@ -191,7 +175,7 @@ Unsafely calls instance.len without Effect wrapper
 **Signature**
 
 ```ts
-export declare const lenUnsafe: (instance: CML.AssetNameList) => number;
+export declare const lenUnsafe: (instance: CML.AssetNameList) => number
 ```
 
 Added in v2.0.0
@@ -205,7 +189,7 @@ Type alias for the CML AssetNameList class
 **Signature**
 
 ```ts
-export type AssetNameList = CML.AssetNameList;
+export type AssetNameList = CML.AssetNameList
 ```
 
 Added in v2.0.0

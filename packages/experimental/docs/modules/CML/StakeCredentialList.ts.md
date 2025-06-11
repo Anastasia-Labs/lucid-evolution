@@ -1,6 +1,6 @@
 ---
 title: CML/StakeCredentialList.ts
-nav_order: 217
+nav_order: 216
 parent: Modules
 ---
 
@@ -42,10 +42,7 @@ Static method \_new of StakeCredentialList
 **Signature**
 
 ```ts
-export declare const _new: () => Effect.Effect<
-  CML.StakeCredentialList,
-  StakeCredentialListError
->;
+export declare const _new: () => Effect.Effect<CML.StakeCredentialList, StakeCredentialListError>
 ```
 
 Added in v2.0.0
@@ -59,7 +56,7 @@ Unsafely calls StakeCredentialList.\_new without Effect wrapper
 **Signature**
 
 ```ts
-export declare const _newUnsafe: () => CML.StakeCredentialList;
+export declare const _newUnsafe: () => CML.StakeCredentialList
 ```
 
 Added in v2.0.0
@@ -91,8 +88,8 @@ Method add of StakeCredentialList
 ```ts
 export declare const add: (
   instance: CML.StakeCredentialList,
-  elem: CML.Credential,
-) => Effect.Effect<void, StakeCredentialListError>;
+  elem: CML.Credential
+) => Effect.Effect<void, StakeCredentialListError>
 ```
 
 Added in v2.0.0
@@ -104,9 +101,7 @@ Method free of StakeCredentialList
 **Signature**
 
 ```ts
-export declare const free: (
-  instance: CML.StakeCredentialList,
-) => Effect.Effect<void, StakeCredentialListError>;
+export declare const free: (instance: CML.StakeCredentialList) => Effect.Effect<void, StakeCredentialListError>
 ```
 
 Added in v2.0.0
@@ -120,8 +115,8 @@ Method get of StakeCredentialList
 ```ts
 export declare const get: (
   instance: CML.StakeCredentialList,
-  index: number,
-) => Effect.Effect<CML.Credential, StakeCredentialListError>;
+  index: number
+) => Effect.Effect<CML.Credential, StakeCredentialListError>
 ```
 
 Added in v2.0.0
@@ -133,9 +128,7 @@ Method len of StakeCredentialList
 **Signature**
 
 ```ts
-export declare const len: (
-  instance: CML.StakeCredentialList,
-) => Effect.Effect<number, StakeCredentialListError>;
+export declare const len: (instance: CML.StakeCredentialList) => Effect.Effect<number, StakeCredentialListError>
 ```
 
 Added in v2.0.0
@@ -149,10 +142,7 @@ Unsafely calls instance.add without Effect wrapper
 **Signature**
 
 ```ts
-export declare const addUnsafe: (
-  instance: CML.StakeCredentialList,
-  elem: CML.Credential,
-) => void;
+export declare const addUnsafe: (instance: CML.StakeCredentialList, elem: CML.Credential) => void
 ```
 
 Added in v2.0.0
@@ -164,7 +154,7 @@ Unsafely calls instance.free without Effect wrapper
 **Signature**
 
 ```ts
-export declare const freeUnsafe: (instance: CML.StakeCredentialList) => void;
+export declare const freeUnsafe: (instance: CML.StakeCredentialList) => void
 ```
 
 Added in v2.0.0
@@ -176,10 +166,7 @@ Unsafely calls instance.get without Effect wrapper
 **Signature**
 
 ```ts
-export declare const getUnsafe: (
-  instance: CML.StakeCredentialList,
-  index: number,
-) => CML.Credential;
+export declare const getUnsafe: (instance: CML.StakeCredentialList, index: number) => CML.Credential
 ```
 
 Added in v2.0.0
@@ -191,7 +178,7 @@ Unsafely calls instance.len without Effect wrapper
 **Signature**
 
 ```ts
-export declare const lenUnsafe: (instance: CML.StakeCredentialList) => number;
+export declare const lenUnsafe: (instance: CML.StakeCredentialList) => number
 ```
 
 Added in v2.0.0
@@ -205,7 +192,7 @@ Type alias for the CML StakeCredentialList class
 **Signature**
 
 ```ts
-export type StakeCredentialList = CML.StakeCredentialList;
+export type StakeCredentialList = CML.StakeCredentialList
 ```
 
 Added in v2.0.0

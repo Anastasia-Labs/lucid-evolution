@@ -1,6 +1,6 @@
 ---
 title: CML/Utils/decode_metadatum_to_json_str.ts
-nav_order: 259
+nav_order: 258
 parent: Modules
 ---
 
@@ -48,8 +48,8 @@ Wrapper for the decode_metadatum_to_json_str function
 ```ts
 export declare const decodeMetadatumToJsonStr: (
   metadatum: CML.TransactionMetadatum,
-  schema: CML.MetadataJsonSchema,
-) => Effect.Effect<string, DecodeMetadatumToJsonStrError>;
+  schema: CML.MetadataJsonSchema
+) => Effect.Effect<string, DecodeMetadatumToJsonStrError>
 ```
 
 Added in v2.0.0
@@ -65,8 +65,8 @@ Unsafely calls decode_metadatum_to_json_str function without Effect wrapper
 ```ts
 export declare const decodeMetadatumToJsonStrUnsafe: (
   metadatum: CML.TransactionMetadatum,
-  schema: CML.MetadataJsonSchema,
-) => string;
+  schema: CML.MetadataJsonSchema
+) => string
 ```
 
 Added in v2.0.0

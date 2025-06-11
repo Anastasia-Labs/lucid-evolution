@@ -1,6 +1,6 @@
 ---
 title: CML/DRepVotingThresholds.ts
-nav_order: 63
+nav_order: 62
 parent: Modules
 ---
 
@@ -84,8 +84,8 @@ export declare const _new: (
   ppEconomicGroup: CML.UnitInterval,
   ppTechnicalGroup: CML.UnitInterval,
   ppGovernanceGroup: CML.UnitInterval,
-  treasuryWithdrawal: CML.UnitInterval,
-) => Effect.Effect<CML.DRepVotingThresholds, DRepVotingThresholdsError>;
+  treasuryWithdrawal: CML.UnitInterval
+) => Effect.Effect<CML.DRepVotingThresholds, DRepVotingThresholdsError>
 ```
 
 Added in v2.0.0
@@ -98,8 +98,8 @@ Static method fromCborBytes of DRepVotingThresholds
 
 ```ts
 export declare const fromCborBytes: (
-  cborBytes: Uint8Array,
-) => Effect.Effect<CML.DRepVotingThresholds, DRepVotingThresholdsError>;
+  cborBytes: Uint8Array
+) => Effect.Effect<CML.DRepVotingThresholds, DRepVotingThresholdsError>
 ```
 
 Added in v2.0.0
@@ -112,8 +112,8 @@ Static method fromCborHex of DRepVotingThresholds
 
 ```ts
 export declare const fromCborHex: (
-  cborBytes: string,
-) => Effect.Effect<CML.DRepVotingThresholds, DRepVotingThresholdsError>;
+  cborBytes: string
+) => Effect.Effect<CML.DRepVotingThresholds, DRepVotingThresholdsError>
 ```
 
 Added in v2.0.0
@@ -125,9 +125,7 @@ Static method fromJson of DRepVotingThresholds
 **Signature**
 
 ```ts
-export declare const fromJson: (
-  json: string,
-) => Effect.Effect<CML.DRepVotingThresholds, DRepVotingThresholdsError>;
+export declare const fromJson: (json: string) => Effect.Effect<CML.DRepVotingThresholds, DRepVotingThresholdsError>
 ```
 
 Added in v2.0.0
@@ -151,8 +149,8 @@ export declare const _newUnsafe: (
   ppEconomicGroup: CML.UnitInterval,
   ppTechnicalGroup: CML.UnitInterval,
   ppGovernanceGroup: CML.UnitInterval,
-  treasuryWithdrawal: CML.UnitInterval,
-) => CML.DRepVotingThresholds;
+  treasuryWithdrawal: CML.UnitInterval
+) => CML.DRepVotingThresholds
 ```
 
 Added in v2.0.0
@@ -164,9 +162,7 @@ Unsafely calls DRepVotingThresholds.fromCborBytes without Effect wrapper
 **Signature**
 
 ```ts
-export declare const fromCborBytesUnsafe: (
-  cborBytes: Uint8Array,
-) => CML.DRepVotingThresholds;
+export declare const fromCborBytesUnsafe: (cborBytes: Uint8Array) => CML.DRepVotingThresholds
 ```
 
 Added in v2.0.0
@@ -178,9 +174,7 @@ Unsafely calls DRepVotingThresholds.fromCborHex without Effect wrapper
 **Signature**
 
 ```ts
-export declare const fromCborHexUnsafe: (
-  cborBytes: string,
-) => CML.DRepVotingThresholds;
+export declare const fromCborHexUnsafe: (cborBytes: string) => CML.DRepVotingThresholds
 ```
 
 Added in v2.0.0
@@ -192,7 +186,7 @@ Unsafely calls DRepVotingThresholds.fromJson without Effect wrapper
 **Signature**
 
 ```ts
-export declare const fromJsonUnsafe: (json: string) => CML.DRepVotingThresholds;
+export declare const fromJsonUnsafe: (json: string) => CML.DRepVotingThresholds
 ```
 
 Added in v2.0.0
@@ -223,8 +217,8 @@ Method committeeNoConfidence of DRepVotingThresholds
 
 ```ts
 export declare const committeeNoConfidence: (
-  instance: CML.DRepVotingThresholds,
-) => Effect.Effect<CML.UnitInterval, DRepVotingThresholdsError>;
+  instance: CML.DRepVotingThresholds
+) => Effect.Effect<CML.UnitInterval, DRepVotingThresholdsError>
 ```
 
 Added in v2.0.0
@@ -237,8 +231,8 @@ Method committeeNormal of DRepVotingThresholds
 
 ```ts
 export declare const committeeNormal: (
-  instance: CML.DRepVotingThresholds,
-) => Effect.Effect<CML.UnitInterval, DRepVotingThresholdsError>;
+  instance: CML.DRepVotingThresholds
+) => Effect.Effect<CML.UnitInterval, DRepVotingThresholdsError>
 ```
 
 Added in v2.0.0
@@ -250,9 +244,7 @@ Method free of DRepVotingThresholds
 **Signature**
 
 ```ts
-export declare const free: (
-  instance: CML.DRepVotingThresholds,
-) => Effect.Effect<void, DRepVotingThresholdsError>;
+export declare const free: (instance: CML.DRepVotingThresholds) => Effect.Effect<void, DRepVotingThresholdsError>
 ```
 
 Added in v2.0.0
@@ -265,8 +257,8 @@ Method hardForkInitiation of DRepVotingThresholds
 
 ```ts
 export declare const hardForkInitiation: (
-  instance: CML.DRepVotingThresholds,
-) => Effect.Effect<CML.UnitInterval, DRepVotingThresholdsError>;
+  instance: CML.DRepVotingThresholds
+) => Effect.Effect<CML.UnitInterval, DRepVotingThresholdsError>
 ```
 
 Added in v2.0.0
@@ -279,8 +271,8 @@ Method motionNoConfidence of DRepVotingThresholds
 
 ```ts
 export declare const motionNoConfidence: (
-  instance: CML.DRepVotingThresholds,
-) => Effect.Effect<CML.UnitInterval, DRepVotingThresholdsError>;
+  instance: CML.DRepVotingThresholds
+) => Effect.Effect<CML.UnitInterval, DRepVotingThresholdsError>
 ```
 
 Added in v2.0.0
@@ -293,8 +285,8 @@ Method ppEconomicGroup of DRepVotingThresholds
 
 ```ts
 export declare const ppEconomicGroup: (
-  instance: CML.DRepVotingThresholds,
-) => Effect.Effect<CML.UnitInterval, DRepVotingThresholdsError>;
+  instance: CML.DRepVotingThresholds
+) => Effect.Effect<CML.UnitInterval, DRepVotingThresholdsError>
 ```
 
 Added in v2.0.0
@@ -307,8 +299,8 @@ Method ppGovernanceGroup of DRepVotingThresholds
 
 ```ts
 export declare const ppGovernanceGroup: (
-  instance: CML.DRepVotingThresholds,
-) => Effect.Effect<CML.UnitInterval, DRepVotingThresholdsError>;
+  instance: CML.DRepVotingThresholds
+) => Effect.Effect<CML.UnitInterval, DRepVotingThresholdsError>
 ```
 
 Added in v2.0.0
@@ -321,8 +313,8 @@ Method ppNetworkGroup of DRepVotingThresholds
 
 ```ts
 export declare const ppNetworkGroup: (
-  instance: CML.DRepVotingThresholds,
-) => Effect.Effect<CML.UnitInterval, DRepVotingThresholdsError>;
+  instance: CML.DRepVotingThresholds
+) => Effect.Effect<CML.UnitInterval, DRepVotingThresholdsError>
 ```
 
 Added in v2.0.0
@@ -335,8 +327,8 @@ Method ppTechnicalGroup of DRepVotingThresholds
 
 ```ts
 export declare const ppTechnicalGroup: (
-  instance: CML.DRepVotingThresholds,
-) => Effect.Effect<CML.UnitInterval, DRepVotingThresholdsError>;
+  instance: CML.DRepVotingThresholds
+) => Effect.Effect<CML.UnitInterval, DRepVotingThresholdsError>
 ```
 
 Added in v2.0.0
@@ -349,8 +341,8 @@ Method toCanonicalCborBytes of DRepVotingThresholds
 
 ```ts
 export declare const toCanonicalCborBytes: (
-  instance: CML.DRepVotingThresholds,
-) => Effect.Effect<Uint8Array, DRepVotingThresholdsError>;
+  instance: CML.DRepVotingThresholds
+) => Effect.Effect<Uint8Array, DRepVotingThresholdsError>
 ```
 
 Added in v2.0.0
@@ -363,8 +355,8 @@ Method toCanonicalCborHex of DRepVotingThresholds
 
 ```ts
 export declare const toCanonicalCborHex: (
-  instance: CML.DRepVotingThresholds,
-) => Effect.Effect<string, DRepVotingThresholdsError>;
+  instance: CML.DRepVotingThresholds
+) => Effect.Effect<string, DRepVotingThresholdsError>
 ```
 
 Added in v2.0.0
@@ -377,8 +369,8 @@ Method toCborBytes of DRepVotingThresholds
 
 ```ts
 export declare const toCborBytes: (
-  instance: CML.DRepVotingThresholds,
-) => Effect.Effect<Uint8Array, DRepVotingThresholdsError>;
+  instance: CML.DRepVotingThresholds
+) => Effect.Effect<Uint8Array, DRepVotingThresholdsError>
 ```
 
 Added in v2.0.0
@@ -390,9 +382,7 @@ Method toCborHex of DRepVotingThresholds
 **Signature**
 
 ```ts
-export declare const toCborHex: (
-  instance: CML.DRepVotingThresholds,
-) => Effect.Effect<string, DRepVotingThresholdsError>;
+export declare const toCborHex: (instance: CML.DRepVotingThresholds) => Effect.Effect<string, DRepVotingThresholdsError>
 ```
 
 Added in v2.0.0
@@ -404,9 +394,7 @@ Method toJsValue of DRepVotingThresholds
 **Signature**
 
 ```ts
-export declare const toJsValue: (
-  instance: CML.DRepVotingThresholds,
-) => Effect.Effect<any, DRepVotingThresholdsError>;
+export declare const toJsValue: (instance: CML.DRepVotingThresholds) => Effect.Effect<any, DRepVotingThresholdsError>
 ```
 
 Added in v2.0.0
@@ -418,9 +406,7 @@ Method toJson of DRepVotingThresholds
 **Signature**
 
 ```ts
-export declare const toJson: (
-  instance: CML.DRepVotingThresholds,
-) => Effect.Effect<string, DRepVotingThresholdsError>;
+export declare const toJson: (instance: CML.DRepVotingThresholds) => Effect.Effect<string, DRepVotingThresholdsError>
 ```
 
 Added in v2.0.0
@@ -433,8 +419,8 @@ Method treasuryWithdrawal of DRepVotingThresholds
 
 ```ts
 export declare const treasuryWithdrawal: (
-  instance: CML.DRepVotingThresholds,
-) => Effect.Effect<CML.UnitInterval, DRepVotingThresholdsError>;
+  instance: CML.DRepVotingThresholds
+) => Effect.Effect<CML.UnitInterval, DRepVotingThresholdsError>
 ```
 
 Added in v2.0.0
@@ -447,8 +433,8 @@ Method updateConstitution of DRepVotingThresholds
 
 ```ts
 export declare const updateConstitution: (
-  instance: CML.DRepVotingThresholds,
-) => Effect.Effect<CML.UnitInterval, DRepVotingThresholdsError>;
+  instance: CML.DRepVotingThresholds
+) => Effect.Effect<CML.UnitInterval, DRepVotingThresholdsError>
 ```
 
 Added in v2.0.0
@@ -462,9 +448,7 @@ Unsafely calls instance.committeeNoConfidence without Effect wrapper
 **Signature**
 
 ```ts
-export declare const committeeNoConfidenceUnsafe: (
-  instance: CML.DRepVotingThresholds,
-) => CML.UnitInterval;
+export declare const committeeNoConfidenceUnsafe: (instance: CML.DRepVotingThresholds) => CML.UnitInterval
 ```
 
 Added in v2.0.0
@@ -476,9 +460,7 @@ Unsafely calls instance.committeeNormal without Effect wrapper
 **Signature**
 
 ```ts
-export declare const committeeNormalUnsafe: (
-  instance: CML.DRepVotingThresholds,
-) => CML.UnitInterval;
+export declare const committeeNormalUnsafe: (instance: CML.DRepVotingThresholds) => CML.UnitInterval
 ```
 
 Added in v2.0.0
@@ -490,7 +472,7 @@ Unsafely calls instance.free without Effect wrapper
 **Signature**
 
 ```ts
-export declare const freeUnsafe: (instance: CML.DRepVotingThresholds) => void;
+export declare const freeUnsafe: (instance: CML.DRepVotingThresholds) => void
 ```
 
 Added in v2.0.0
@@ -502,9 +484,7 @@ Unsafely calls instance.hardForkInitiation without Effect wrapper
 **Signature**
 
 ```ts
-export declare const hardForkInitiationUnsafe: (
-  instance: CML.DRepVotingThresholds,
-) => CML.UnitInterval;
+export declare const hardForkInitiationUnsafe: (instance: CML.DRepVotingThresholds) => CML.UnitInterval
 ```
 
 Added in v2.0.0
@@ -516,9 +496,7 @@ Unsafely calls instance.motionNoConfidence without Effect wrapper
 **Signature**
 
 ```ts
-export declare const motionNoConfidenceUnsafe: (
-  instance: CML.DRepVotingThresholds,
-) => CML.UnitInterval;
+export declare const motionNoConfidenceUnsafe: (instance: CML.DRepVotingThresholds) => CML.UnitInterval
 ```
 
 Added in v2.0.0
@@ -530,9 +508,7 @@ Unsafely calls instance.ppEconomicGroup without Effect wrapper
 **Signature**
 
 ```ts
-export declare const ppEconomicGroupUnsafe: (
-  instance: CML.DRepVotingThresholds,
-) => CML.UnitInterval;
+export declare const ppEconomicGroupUnsafe: (instance: CML.DRepVotingThresholds) => CML.UnitInterval
 ```
 
 Added in v2.0.0
@@ -544,9 +520,7 @@ Unsafely calls instance.ppGovernanceGroup without Effect wrapper
 **Signature**
 
 ```ts
-export declare const ppGovernanceGroupUnsafe: (
-  instance: CML.DRepVotingThresholds,
-) => CML.UnitInterval;
+export declare const ppGovernanceGroupUnsafe: (instance: CML.DRepVotingThresholds) => CML.UnitInterval
 ```
 
 Added in v2.0.0
@@ -558,9 +532,7 @@ Unsafely calls instance.ppNetworkGroup without Effect wrapper
 **Signature**
 
 ```ts
-export declare const ppNetworkGroupUnsafe: (
-  instance: CML.DRepVotingThresholds,
-) => CML.UnitInterval;
+export declare const ppNetworkGroupUnsafe: (instance: CML.DRepVotingThresholds) => CML.UnitInterval
 ```
 
 Added in v2.0.0
@@ -572,9 +544,7 @@ Unsafely calls instance.ppTechnicalGroup without Effect wrapper
 **Signature**
 
 ```ts
-export declare const ppTechnicalGroupUnsafe: (
-  instance: CML.DRepVotingThresholds,
-) => CML.UnitInterval;
+export declare const ppTechnicalGroupUnsafe: (instance: CML.DRepVotingThresholds) => CML.UnitInterval
 ```
 
 Added in v2.0.0
@@ -586,9 +556,7 @@ Unsafely calls instance.toCanonicalCborBytes without Effect wrapper
 **Signature**
 
 ```ts
-export declare const toCanonicalCborBytesUnsafe: (
-  instance: CML.DRepVotingThresholds,
-) => Uint8Array;
+export declare const toCanonicalCborBytesUnsafe: (instance: CML.DRepVotingThresholds) => Uint8Array
 ```
 
 Added in v2.0.0
@@ -600,9 +568,7 @@ Unsafely calls instance.toCanonicalCborHex without Effect wrapper
 **Signature**
 
 ```ts
-export declare const toCanonicalCborHexUnsafe: (
-  instance: CML.DRepVotingThresholds,
-) => string;
+export declare const toCanonicalCborHexUnsafe: (instance: CML.DRepVotingThresholds) => string
 ```
 
 Added in v2.0.0
@@ -614,9 +580,7 @@ Unsafely calls instance.toCborBytes without Effect wrapper
 **Signature**
 
 ```ts
-export declare const toCborBytesUnsafe: (
-  instance: CML.DRepVotingThresholds,
-) => Uint8Array;
+export declare const toCborBytesUnsafe: (instance: CML.DRepVotingThresholds) => Uint8Array
 ```
 
 Added in v2.0.0
@@ -628,9 +592,7 @@ Unsafely calls instance.toCborHex without Effect wrapper
 **Signature**
 
 ```ts
-export declare const toCborHexUnsafe: (
-  instance: CML.DRepVotingThresholds,
-) => string;
+export declare const toCborHexUnsafe: (instance: CML.DRepVotingThresholds) => string
 ```
 
 Added in v2.0.0
@@ -642,9 +604,7 @@ Unsafely calls instance.toJsValue without Effect wrapper
 **Signature**
 
 ```ts
-export declare const toJsValueUnsafe: (
-  instance: CML.DRepVotingThresholds,
-) => any;
+export declare const toJsValueUnsafe: (instance: CML.DRepVotingThresholds) => any
 ```
 
 Added in v2.0.0
@@ -656,9 +616,7 @@ Unsafely calls instance.toJson without Effect wrapper
 **Signature**
 
 ```ts
-export declare const toJsonUnsafe: (
-  instance: CML.DRepVotingThresholds,
-) => string;
+export declare const toJsonUnsafe: (instance: CML.DRepVotingThresholds) => string
 ```
 
 Added in v2.0.0
@@ -670,9 +628,7 @@ Unsafely calls instance.treasuryWithdrawal without Effect wrapper
 **Signature**
 
 ```ts
-export declare const treasuryWithdrawalUnsafe: (
-  instance: CML.DRepVotingThresholds,
-) => CML.UnitInterval;
+export declare const treasuryWithdrawalUnsafe: (instance: CML.DRepVotingThresholds) => CML.UnitInterval
 ```
 
 Added in v2.0.0
@@ -684,9 +640,7 @@ Unsafely calls instance.updateConstitution without Effect wrapper
 **Signature**
 
 ```ts
-export declare const updateConstitutionUnsafe: (
-  instance: CML.DRepVotingThresholds,
-) => CML.UnitInterval;
+export declare const updateConstitutionUnsafe: (instance: CML.DRepVotingThresholds) => CML.UnitInterval
 ```
 
 Added in v2.0.0
@@ -700,7 +654,7 @@ Type alias for the CML DRepVotingThresholds class
 **Signature**
 
 ```ts
-export type DRepVotingThresholds = CML.DRepVotingThresholds;
+export type DRepVotingThresholds = CML.DRepVotingThresholds
 ```
 
 Added in v2.0.0

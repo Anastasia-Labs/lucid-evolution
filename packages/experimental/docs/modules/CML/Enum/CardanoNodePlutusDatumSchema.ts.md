@@ -1,6 +1,6 @@
 ---
 title: CML/Enum/CardanoNodePlutusDatumSchema.ts
-nav_order: 72
+nav_order: 71
 parent: Modules
 ---
 
@@ -33,7 +33,7 @@ Type alias for the CML CardanoNodePlutusDatumSchema enum
 **Signature**
 
 ```ts
-export type CardanoNodePlutusDatumSchema = CML.CardanoNodePlutusDatumSchema;
+export type CardanoNodePlutusDatumSchema = CML.CardanoNodePlutusDatumSchema
 ```
 
 Added in v2.0.0
@@ -47,9 +47,7 @@ Convert string to CardanoNodePlutusDatumSchema enum value
 **Signature**
 
 ```ts
-export declare const fromString: (
-  str: string,
-) => CML.CardanoNodePlutusDatumSchema | undefined;
+export declare const fromString: (str: string) => CML.CardanoNodePlutusDatumSchema | undefined
 ```
 
 Added in v2.0.0
@@ -61,9 +59,7 @@ Convert CardanoNodePlutusDatumSchema enum value to string
 **Signature**
 
 ```ts
-export declare const toString: (
-  value: CML.CardanoNodePlutusDatumSchema,
-) => string;
+export declare const toString: (value: CML.CardanoNodePlutusDatumSchema) => string
 ```
 
 Added in v2.0.0
@@ -75,7 +71,7 @@ Get all values of the CardanoNodePlutusDatumSchema enum
 **Signature**
 
 ```ts
-export declare const values: () => Array<CML.CardanoNodePlutusDatumSchema>;
+export declare const values: () => Array<CML.CardanoNodePlutusDatumSchema>
 ```
 
 Added in v2.0.0
@@ -89,7 +85,7 @@ BasicConversions variant of the CardanoNodePlutusDatumSchema enum
 **Signature**
 
 ```ts
-export declare const BasicConversions: CML.CardanoNodePlutusDatumSchema.BasicConversions;
+export declare const BasicConversions: CML.CardanoNodePlutusDatumSchema.BasicConversions
 ```
 
 Added in v2.0.0
@@ -101,7 +97,7 @@ DetailedSchema variant of the CardanoNodePlutusDatumSchema enum
 **Signature**
 
 ```ts
-export declare const DetailedSchema: CML.CardanoNodePlutusDatumSchema.DetailedSchema;
+export declare const DetailedSchema: CML.CardanoNodePlutusDatumSchema.DetailedSchema
 ```
 
 Added in v2.0.0

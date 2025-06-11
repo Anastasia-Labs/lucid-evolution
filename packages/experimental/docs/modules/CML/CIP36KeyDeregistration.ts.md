@@ -61,8 +61,8 @@ Static method fromCborBytes of CIP36KeyDeregistration
 
 ```ts
 export declare const fromCborBytes: (
-  cborBytes: Uint8Array,
-) => Effect.Effect<CML.CIP36KeyDeregistration, CIP36KeyDeregistrationError>;
+  cborBytes: Uint8Array
+) => Effect.Effect<CML.CIP36KeyDeregistration, CIP36KeyDeregistrationError>
 ```
 
 Added in v2.0.0
@@ -75,8 +75,8 @@ Static method fromCborHex of CIP36KeyDeregistration
 
 ```ts
 export declare const fromCborHex: (
-  cborBytes: string,
-) => Effect.Effect<CML.CIP36KeyDeregistration, CIP36KeyDeregistrationError>;
+  cborBytes: string
+) => Effect.Effect<CML.CIP36KeyDeregistration, CIP36KeyDeregistrationError>
 ```
 
 Added in v2.0.0
@@ -88,9 +88,7 @@ Static method fromJson of CIP36KeyDeregistration
 **Signature**
 
 ```ts
-export declare const fromJson: (
-  json: string,
-) => Effect.Effect<CML.CIP36KeyDeregistration, CIP36KeyDeregistrationError>;
+export declare const fromJson: (json: string) => Effect.Effect<CML.CIP36KeyDeregistration, CIP36KeyDeregistrationError>
 ```
 
 Added in v2.0.0
@@ -104,9 +102,7 @@ Unsafely calls CIP36KeyDeregistration.fromCborBytes without Effect wrapper
 **Signature**
 
 ```ts
-export declare const fromCborBytesUnsafe: (
-  cborBytes: Uint8Array,
-) => CML.CIP36KeyDeregistration;
+export declare const fromCborBytesUnsafe: (cborBytes: Uint8Array) => CML.CIP36KeyDeregistration
 ```
 
 Added in v2.0.0
@@ -118,9 +114,7 @@ Unsafely calls CIP36KeyDeregistration.fromCborHex without Effect wrapper
 **Signature**
 
 ```ts
-export declare const fromCborHexUnsafe: (
-  cborBytes: string,
-) => CML.CIP36KeyDeregistration;
+export declare const fromCborHexUnsafe: (cborBytes: string) => CML.CIP36KeyDeregistration
 ```
 
 Added in v2.0.0
@@ -132,9 +126,7 @@ Unsafely calls CIP36KeyDeregistration.fromJson without Effect wrapper
 **Signature**
 
 ```ts
-export declare const fromJsonUnsafe: (
-  json: string,
-) => CML.CIP36KeyDeregistration;
+export declare const fromJsonUnsafe: (json: string) => CML.CIP36KeyDeregistration
 ```
 
 Added in v2.0.0
@@ -164,9 +156,7 @@ Method free of CIP36KeyDeregistration
 **Signature**
 
 ```ts
-export declare const free: (
-  instance: CML.CIP36KeyDeregistration,
-) => Effect.Effect<void, CIP36KeyDeregistrationError>;
+export declare const free: (instance: CML.CIP36KeyDeregistration) => Effect.Effect<void, CIP36KeyDeregistrationError>
 ```
 
 Added in v2.0.0
@@ -178,9 +168,7 @@ Method nonce of CIP36KeyDeregistration
 **Signature**
 
 ```ts
-export declare const nonce: (
-  instance: CML.CIP36KeyDeregistration,
-) => Effect.Effect<bigint, CIP36KeyDeregistrationError>;
+export declare const nonce: (instance: CML.CIP36KeyDeregistration) => Effect.Effect<bigint, CIP36KeyDeregistrationError>
 ```
 
 Added in v2.0.0
@@ -194,8 +182,8 @@ Method setVotingPurpose of CIP36KeyDeregistration
 ```ts
 export declare const setVotingPurpose: (
   instance: CML.CIP36KeyDeregistration,
-  votingPurpose: bigint,
-) => Effect.Effect<void, CIP36KeyDeregistrationError>;
+  votingPurpose: bigint
+) => Effect.Effect<void, CIP36KeyDeregistrationError>
 ```
 
 Added in v2.0.0
@@ -208,8 +196,8 @@ Method stakeCredential of CIP36KeyDeregistration
 
 ```ts
 export declare const stakeCredential: (
-  instance: CML.CIP36KeyDeregistration,
-) => Effect.Effect<CML.PublicKey, CIP36KeyDeregistrationError>;
+  instance: CML.CIP36KeyDeregistration
+) => Effect.Effect<CML.PublicKey, CIP36KeyDeregistrationError>
 ```
 
 Added in v2.0.0
@@ -222,8 +210,8 @@ Method toCanonicalCborBytes of CIP36KeyDeregistration
 
 ```ts
 export declare const toCanonicalCborBytes: (
-  instance: CML.CIP36KeyDeregistration,
-) => Effect.Effect<Uint8Array, CIP36KeyDeregistrationError>;
+  instance: CML.CIP36KeyDeregistration
+) => Effect.Effect<Uint8Array, CIP36KeyDeregistrationError>
 ```
 
 Added in v2.0.0
@@ -236,8 +224,8 @@ Method toCanonicalCborHex of CIP36KeyDeregistration
 
 ```ts
 export declare const toCanonicalCborHex: (
-  instance: CML.CIP36KeyDeregistration,
-) => Effect.Effect<string, CIP36KeyDeregistrationError>;
+  instance: CML.CIP36KeyDeregistration
+) => Effect.Effect<string, CIP36KeyDeregistrationError>
 ```
 
 Added in v2.0.0
@@ -250,8 +238,8 @@ Method toCborBytes of CIP36KeyDeregistration
 
 ```ts
 export declare const toCborBytes: (
-  instance: CML.CIP36KeyDeregistration,
-) => Effect.Effect<Uint8Array, CIP36KeyDeregistrationError>;
+  instance: CML.CIP36KeyDeregistration
+) => Effect.Effect<Uint8Array, CIP36KeyDeregistrationError>
 ```
 
 Added in v2.0.0
@@ -264,8 +252,8 @@ Method toCborHex of CIP36KeyDeregistration
 
 ```ts
 export declare const toCborHex: (
-  instance: CML.CIP36KeyDeregistration,
-) => Effect.Effect<string, CIP36KeyDeregistrationError>;
+  instance: CML.CIP36KeyDeregistration
+) => Effect.Effect<string, CIP36KeyDeregistrationError>
 ```
 
 Added in v2.0.0
@@ -278,8 +266,8 @@ Method toJsValue of CIP36KeyDeregistration
 
 ```ts
 export declare const toJsValue: (
-  instance: CML.CIP36KeyDeregistration,
-) => Effect.Effect<any, CIP36KeyDeregistrationError>;
+  instance: CML.CIP36KeyDeregistration
+) => Effect.Effect<any, CIP36KeyDeregistrationError>
 ```
 
 Added in v2.0.0
@@ -292,8 +280,8 @@ Method toJson of CIP36KeyDeregistration
 
 ```ts
 export declare const toJson: (
-  instance: CML.CIP36KeyDeregistration,
-) => Effect.Effect<string, CIP36KeyDeregistrationError>;
+  instance: CML.CIP36KeyDeregistration
+) => Effect.Effect<string, CIP36KeyDeregistrationError>
 ```
 
 Added in v2.0.0
@@ -306,8 +294,8 @@ Method votingPurpose of CIP36KeyDeregistration
 
 ```ts
 export declare const votingPurpose: (
-  instance: CML.CIP36KeyDeregistration,
-) => Effect.Effect<bigint, CIP36KeyDeregistrationError>;
+  instance: CML.CIP36KeyDeregistration
+) => Effect.Effect<bigint, CIP36KeyDeregistrationError>
 ```
 
 Added in v2.0.0
@@ -321,7 +309,7 @@ Unsafely calls instance.free without Effect wrapper
 **Signature**
 
 ```ts
-export declare const freeUnsafe: (instance: CML.CIP36KeyDeregistration) => void;
+export declare const freeUnsafe: (instance: CML.CIP36KeyDeregistration) => void
 ```
 
 Added in v2.0.0
@@ -333,9 +321,7 @@ Unsafely calls instance.nonce without Effect wrapper
 **Signature**
 
 ```ts
-export declare const nonceUnsafe: (
-  instance: CML.CIP36KeyDeregistration,
-) => bigint;
+export declare const nonceUnsafe: (instance: CML.CIP36KeyDeregistration) => bigint
 ```
 
 Added in v2.0.0
@@ -347,10 +333,7 @@ Unsafely calls instance.setVotingPurpose without Effect wrapper
 **Signature**
 
 ```ts
-export declare const setVotingPurposeUnsafe: (
-  instance: CML.CIP36KeyDeregistration,
-  votingPurpose: bigint,
-) => void;
+export declare const setVotingPurposeUnsafe: (instance: CML.CIP36KeyDeregistration, votingPurpose: bigint) => void
 ```
 
 Added in v2.0.0
@@ -362,9 +345,7 @@ Unsafely calls instance.stakeCredential without Effect wrapper
 **Signature**
 
 ```ts
-export declare const stakeCredentialUnsafe: (
-  instance: CML.CIP36KeyDeregistration,
-) => CML.PublicKey;
+export declare const stakeCredentialUnsafe: (instance: CML.CIP36KeyDeregistration) => CML.PublicKey
 ```
 
 Added in v2.0.0
@@ -376,9 +357,7 @@ Unsafely calls instance.toCanonicalCborBytes without Effect wrapper
 **Signature**
 
 ```ts
-export declare const toCanonicalCborBytesUnsafe: (
-  instance: CML.CIP36KeyDeregistration,
-) => Uint8Array;
+export declare const toCanonicalCborBytesUnsafe: (instance: CML.CIP36KeyDeregistration) => Uint8Array
 ```
 
 Added in v2.0.0
@@ -390,9 +369,7 @@ Unsafely calls instance.toCanonicalCborHex without Effect wrapper
 **Signature**
 
 ```ts
-export declare const toCanonicalCborHexUnsafe: (
-  instance: CML.CIP36KeyDeregistration,
-) => string;
+export declare const toCanonicalCborHexUnsafe: (instance: CML.CIP36KeyDeregistration) => string
 ```
 
 Added in v2.0.0
@@ -404,9 +381,7 @@ Unsafely calls instance.toCborBytes without Effect wrapper
 **Signature**
 
 ```ts
-export declare const toCborBytesUnsafe: (
-  instance: CML.CIP36KeyDeregistration,
-) => Uint8Array;
+export declare const toCborBytesUnsafe: (instance: CML.CIP36KeyDeregistration) => Uint8Array
 ```
 
 Added in v2.0.0
@@ -418,9 +393,7 @@ Unsafely calls instance.toCborHex without Effect wrapper
 **Signature**
 
 ```ts
-export declare const toCborHexUnsafe: (
-  instance: CML.CIP36KeyDeregistration,
-) => string;
+export declare const toCborHexUnsafe: (instance: CML.CIP36KeyDeregistration) => string
 ```
 
 Added in v2.0.0
@@ -432,9 +405,7 @@ Unsafely calls instance.toJsValue without Effect wrapper
 **Signature**
 
 ```ts
-export declare const toJsValueUnsafe: (
-  instance: CML.CIP36KeyDeregistration,
-) => any;
+export declare const toJsValueUnsafe: (instance: CML.CIP36KeyDeregistration) => any
 ```
 
 Added in v2.0.0
@@ -446,9 +417,7 @@ Unsafely calls instance.toJson without Effect wrapper
 **Signature**
 
 ```ts
-export declare const toJsonUnsafe: (
-  instance: CML.CIP36KeyDeregistration,
-) => string;
+export declare const toJsonUnsafe: (instance: CML.CIP36KeyDeregistration) => string
 ```
 
 Added in v2.0.0
@@ -460,9 +429,7 @@ Unsafely calls instance.votingPurpose without Effect wrapper
 **Signature**
 
 ```ts
-export declare const votingPurposeUnsafe: (
-  instance: CML.CIP36KeyDeregistration,
-) => bigint;
+export declare const votingPurposeUnsafe: (instance: CML.CIP36KeyDeregistration) => bigint
 ```
 
 Added in v2.0.0
@@ -476,7 +443,7 @@ Type alias for the CML CIP36KeyDeregistration class
 **Signature**
 
 ```ts
-export type CIP36KeyDeregistration = CML.CIP36KeyDeregistration;
+export type CIP36KeyDeregistration = CML.CIP36KeyDeregistration
 ```
 
 Added in v2.0.0

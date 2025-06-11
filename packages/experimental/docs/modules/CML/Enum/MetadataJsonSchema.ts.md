@@ -1,6 +1,6 @@
 ---
 title: CML/Enum/MetadataJsonSchema.ts
-nav_order: 84
+nav_order: 83
 parent: Modules
 ---
 
@@ -34,7 +34,7 @@ Type alias for the CML MetadataJsonSchema enum
 **Signature**
 
 ```ts
-export type MetadataJsonSchema = CML.MetadataJsonSchema;
+export type MetadataJsonSchema = CML.MetadataJsonSchema
 ```
 
 Added in v2.0.0
@@ -48,9 +48,7 @@ Convert string to MetadataJsonSchema enum value
 **Signature**
 
 ```ts
-export declare const fromString: (
-  str: string,
-) => CML.MetadataJsonSchema | undefined;
+export declare const fromString: (str: string) => CML.MetadataJsonSchema | undefined
 ```
 
 Added in v2.0.0
@@ -62,7 +60,7 @@ Convert MetadataJsonSchema enum value to string
 **Signature**
 
 ```ts
-export declare const toString: (value: CML.MetadataJsonSchema) => string;
+export declare const toString: (value: CML.MetadataJsonSchema) => string
 ```
 
 Added in v2.0.0
@@ -74,7 +72,7 @@ Get all values of the MetadataJsonSchema enum
 **Signature**
 
 ```ts
-export declare const values: () => Array<CML.MetadataJsonSchema>;
+export declare const values: () => Array<CML.MetadataJsonSchema>
 ```
 
 Added in v2.0.0
@@ -88,7 +86,7 @@ BasicConversions variant of the MetadataJsonSchema enum
 **Signature**
 
 ```ts
-export declare const BasicConversions: CML.MetadataJsonSchema.BasicConversions;
+export declare const BasicConversions: CML.MetadataJsonSchema.BasicConversions
 ```
 
 Added in v2.0.0
@@ -100,7 +98,7 @@ DetailedSchema variant of the MetadataJsonSchema enum
 **Signature**
 
 ```ts
-export declare const DetailedSchema: CML.MetadataJsonSchema.DetailedSchema;
+export declare const DetailedSchema: CML.MetadataJsonSchema.DetailedSchema
 ```
 
 Added in v2.0.0
@@ -112,7 +110,7 @@ NoConversions variant of the MetadataJsonSchema enum
 **Signature**
 
 ```ts
-export declare const NoConversions: CML.MetadataJsonSchema.NoConversions;
+export declare const NoConversions: CML.MetadataJsonSchema.NoConversions
 ```
 
 Added in v2.0.0

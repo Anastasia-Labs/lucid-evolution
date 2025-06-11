@@ -1,6 +1,6 @@
 ---
 title: CML/MapAssetNameToU64.ts
-nav_order: 125
+nav_order: 124
 parent: Modules
 ---
 
@@ -44,10 +44,7 @@ Static method \_new of MapAssetNameToU64
 **Signature**
 
 ```ts
-export declare const _new: () => Effect.Effect<
-  CML.MapAssetNameToU64,
-  MapAssetNameToU64Error
->;
+export declare const _new: () => Effect.Effect<CML.MapAssetNameToU64, MapAssetNameToU64Error>
 ```
 
 Added in v2.0.0
@@ -61,7 +58,7 @@ Unsafely calls MapAssetNameToU64.\_new without Effect wrapper
 **Signature**
 
 ```ts
-export declare const _newUnsafe: () => CML.MapAssetNameToU64;
+export declare const _newUnsafe: () => CML.MapAssetNameToU64
 ```
 
 Added in v2.0.0
@@ -91,9 +88,7 @@ Method free of MapAssetNameToU64
 **Signature**
 
 ```ts
-export declare const free: (
-  instance: CML.MapAssetNameToU64,
-) => Effect.Effect<void, MapAssetNameToU64Error>;
+export declare const free: (instance: CML.MapAssetNameToU64) => Effect.Effect<void, MapAssetNameToU64Error>
 ```
 
 Added in v2.0.0
@@ -107,8 +102,8 @@ Method get of MapAssetNameToU64
 ```ts
 export declare const get: (
   instance: CML.MapAssetNameToU64,
-  key: CML.AssetName,
-) => Effect.Effect<bigint | undefined, MapAssetNameToU64Error>;
+  key: CML.AssetName
+) => Effect.Effect<bigint | undefined, MapAssetNameToU64Error>
 ```
 
 Added in v2.0.0
@@ -123,8 +118,8 @@ Method insert of MapAssetNameToU64
 export declare const insert: (
   instance: CML.MapAssetNameToU64,
   key: CML.AssetName,
-  value: bigint,
-) => Effect.Effect<bigint | undefined, MapAssetNameToU64Error>;
+  value: bigint
+) => Effect.Effect<bigint | undefined, MapAssetNameToU64Error>
 ```
 
 Added in v2.0.0
@@ -136,9 +131,7 @@ Method keys of MapAssetNameToU64
 **Signature**
 
 ```ts
-export declare const keys: (
-  instance: CML.MapAssetNameToU64,
-) => Effect.Effect<CML.AssetNameList, MapAssetNameToU64Error>;
+export declare const keys: (instance: CML.MapAssetNameToU64) => Effect.Effect<CML.AssetNameList, MapAssetNameToU64Error>
 ```
 
 Added in v2.0.0
@@ -150,9 +143,7 @@ Method len of MapAssetNameToU64
 **Signature**
 
 ```ts
-export declare const len: (
-  instance: CML.MapAssetNameToU64,
-) => Effect.Effect<number, MapAssetNameToU64Error>;
+export declare const len: (instance: CML.MapAssetNameToU64) => Effect.Effect<number, MapAssetNameToU64Error>
 ```
 
 Added in v2.0.0
@@ -166,7 +157,7 @@ Unsafely calls instance.free without Effect wrapper
 **Signature**
 
 ```ts
-export declare const freeUnsafe: (instance: CML.MapAssetNameToU64) => void;
+export declare const freeUnsafe: (instance: CML.MapAssetNameToU64) => void
 ```
 
 Added in v2.0.0
@@ -178,10 +169,7 @@ Unsafely calls instance.get without Effect wrapper
 **Signature**
 
 ```ts
-export declare const getUnsafe: (
-  instance: CML.MapAssetNameToU64,
-  key: CML.AssetName,
-) => bigint | undefined;
+export declare const getUnsafe: (instance: CML.MapAssetNameToU64, key: CML.AssetName) => bigint | undefined
 ```
 
 Added in v2.0.0
@@ -196,8 +184,8 @@ Unsafely calls instance.insert without Effect wrapper
 export declare const insertUnsafe: (
   instance: CML.MapAssetNameToU64,
   key: CML.AssetName,
-  value: bigint,
-) => bigint | undefined;
+  value: bigint
+) => bigint | undefined
 ```
 
 Added in v2.0.0
@@ -209,9 +197,7 @@ Unsafely calls instance.keys without Effect wrapper
 **Signature**
 
 ```ts
-export declare const keysUnsafe: (
-  instance: CML.MapAssetNameToU64,
-) => CML.AssetNameList;
+export declare const keysUnsafe: (instance: CML.MapAssetNameToU64) => CML.AssetNameList
 ```
 
 Added in v2.0.0
@@ -223,7 +209,7 @@ Unsafely calls instance.len without Effect wrapper
 **Signature**
 
 ```ts
-export declare const lenUnsafe: (instance: CML.MapAssetNameToU64) => number;
+export declare const lenUnsafe: (instance: CML.MapAssetNameToU64) => number
 ```
 
 Added in v2.0.0
@@ -237,7 +223,7 @@ Type alias for the CML MapAssetNameToU64 class
 **Signature**
 
 ```ts
-export type MapAssetNameToU64 = CML.MapAssetNameToU64;
+export type MapAssetNameToU64 = CML.MapAssetNameToU64
 ```
 
 Added in v2.0.0

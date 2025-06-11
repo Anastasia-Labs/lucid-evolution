@@ -1,6 +1,6 @@
 ---
 title: CML/TransactionHash.ts
-nav_order: 232
+nav_order: 231
 parent: Modules
 ---
 
@@ -46,9 +46,7 @@ Static method fromBech32 of TransactionHash
 **Signature**
 
 ```ts
-export declare const fromBech32: (
-  bech32Str: string,
-) => Effect.Effect<CML.TransactionHash, TransactionHashError>;
+export declare const fromBech32: (bech32Str: string) => Effect.Effect<CML.TransactionHash, TransactionHashError>
 ```
 
 Added in v2.0.0
@@ -60,9 +58,7 @@ Static method fromHex of TransactionHash
 **Signature**
 
 ```ts
-export declare const fromHex: (
-  input: string,
-) => Effect.Effect<CML.TransactionHash, TransactionHashError>;
+export declare const fromHex: (input: string) => Effect.Effect<CML.TransactionHash, TransactionHashError>
 ```
 
 Added in v2.0.0
@@ -74,9 +70,7 @@ Static method fromRawBytes of TransactionHash
 **Signature**
 
 ```ts
-export declare const fromRawBytes: (
-  bytes: Uint8Array,
-) => Effect.Effect<CML.TransactionHash, TransactionHashError>;
+export declare const fromRawBytes: (bytes: Uint8Array) => Effect.Effect<CML.TransactionHash, TransactionHashError>
 ```
 
 Added in v2.0.0
@@ -90,9 +84,7 @@ Unsafely calls TransactionHash.fromBech32 without Effect wrapper
 **Signature**
 
 ```ts
-export declare const fromBech32Unsafe: (
-  bech32Str: string,
-) => CML.TransactionHash;
+export declare const fromBech32Unsafe: (bech32Str: string) => CML.TransactionHash
 ```
 
 Added in v2.0.0
@@ -104,7 +96,7 @@ Unsafely calls TransactionHash.fromHex without Effect wrapper
 **Signature**
 
 ```ts
-export declare const fromHexUnsafe: (input: string) => CML.TransactionHash;
+export declare const fromHexUnsafe: (input: string) => CML.TransactionHash
 ```
 
 Added in v2.0.0
@@ -116,9 +108,7 @@ Unsafely calls TransactionHash.fromRawBytes without Effect wrapper
 **Signature**
 
 ```ts
-export declare const fromRawBytesUnsafe: (
-  bytes: Uint8Array,
-) => CML.TransactionHash;
+export declare const fromRawBytesUnsafe: (bytes: Uint8Array) => CML.TransactionHash
 ```
 
 Added in v2.0.0
@@ -148,9 +138,7 @@ Method free of TransactionHash
 **Signature**
 
 ```ts
-export declare const free: (
-  instance: CML.TransactionHash,
-) => Effect.Effect<void, TransactionHashError>;
+export declare const free: (instance: CML.TransactionHash) => Effect.Effect<void, TransactionHashError>
 ```
 
 Added in v2.0.0
@@ -164,8 +152,8 @@ Method toBech32 of TransactionHash
 ```ts
 export declare const toBech32: (
   instance: CML.TransactionHash,
-  prefix: string,
-) => Effect.Effect<string, TransactionHashError>;
+  prefix: string
+) => Effect.Effect<string, TransactionHashError>
 ```
 
 Added in v2.0.0
@@ -177,9 +165,7 @@ Method toHex of TransactionHash
 **Signature**
 
 ```ts
-export declare const toHex: (
-  instance: CML.TransactionHash,
-) => Effect.Effect<string, TransactionHashError>;
+export declare const toHex: (instance: CML.TransactionHash) => Effect.Effect<string, TransactionHashError>
 ```
 
 Added in v2.0.0
@@ -191,9 +177,7 @@ Method toRawBytes of TransactionHash
 **Signature**
 
 ```ts
-export declare const toRawBytes: (
-  instance: CML.TransactionHash,
-) => Effect.Effect<Uint8Array, TransactionHashError>;
+export declare const toRawBytes: (instance: CML.TransactionHash) => Effect.Effect<Uint8Array, TransactionHashError>
 ```
 
 Added in v2.0.0
@@ -207,7 +191,7 @@ Unsafely calls instance.free without Effect wrapper
 **Signature**
 
 ```ts
-export declare const freeUnsafe: (instance: CML.TransactionHash) => void;
+export declare const freeUnsafe: (instance: CML.TransactionHash) => void
 ```
 
 Added in v2.0.0
@@ -219,10 +203,7 @@ Unsafely calls instance.toBech32 without Effect wrapper
 **Signature**
 
 ```ts
-export declare const toBech32Unsafe: (
-  instance: CML.TransactionHash,
-  prefix: string,
-) => string;
+export declare const toBech32Unsafe: (instance: CML.TransactionHash, prefix: string) => string
 ```
 
 Added in v2.0.0
@@ -234,7 +215,7 @@ Unsafely calls instance.toHex without Effect wrapper
 **Signature**
 
 ```ts
-export declare const toHexUnsafe: (instance: CML.TransactionHash) => string;
+export declare const toHexUnsafe: (instance: CML.TransactionHash) => string
 ```
 
 Added in v2.0.0
@@ -246,9 +227,7 @@ Unsafely calls instance.toRawBytes without Effect wrapper
 **Signature**
 
 ```ts
-export declare const toRawBytesUnsafe: (
-  instance: CML.TransactionHash,
-) => Uint8Array;
+export declare const toRawBytesUnsafe: (instance: CML.TransactionHash) => Uint8Array
 ```
 
 Added in v2.0.0
@@ -262,7 +241,7 @@ Type alias for the CML TransactionHash class
 **Signature**
 
 ```ts
-export type TransactionHash = CML.TransactionHash;
+export type TransactionHash = CML.TransactionHash
 ```
 
 Added in v2.0.0

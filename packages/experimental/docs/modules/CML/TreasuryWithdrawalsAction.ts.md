@@ -1,6 +1,6 @@
 ---
 title: CML/TreasuryWithdrawalsAction.ts
-nav_order: 246
+nav_order: 245
 parent: Modules
 ---
 
@@ -60,11 +60,8 @@ Static method \_new of TreasuryWithdrawalsAction
 ```ts
 export declare const _new: (
   withdrawal: CML.MapRewardAccountToCoin,
-  policyHash: CML.ScriptHash,
-) => Effect.Effect<
-  CML.TreasuryWithdrawalsAction,
-  TreasuryWithdrawalsActionError
->;
+  policyHash: CML.ScriptHash
+) => Effect.Effect<CML.TreasuryWithdrawalsAction, TreasuryWithdrawalsActionError>
 ```
 
 Added in v2.0.0
@@ -77,11 +74,8 @@ Static method fromCborBytes of TreasuryWithdrawalsAction
 
 ```ts
 export declare const fromCborBytes: (
-  cborBytes: Uint8Array,
-) => Effect.Effect<
-  CML.TreasuryWithdrawalsAction,
-  TreasuryWithdrawalsActionError
->;
+  cborBytes: Uint8Array
+) => Effect.Effect<CML.TreasuryWithdrawalsAction, TreasuryWithdrawalsActionError>
 ```
 
 Added in v2.0.0
@@ -94,11 +88,8 @@ Static method fromCborHex of TreasuryWithdrawalsAction
 
 ```ts
 export declare const fromCborHex: (
-  cborBytes: string,
-) => Effect.Effect<
-  CML.TreasuryWithdrawalsAction,
-  TreasuryWithdrawalsActionError
->;
+  cborBytes: string
+) => Effect.Effect<CML.TreasuryWithdrawalsAction, TreasuryWithdrawalsActionError>
 ```
 
 Added in v2.0.0
@@ -111,11 +102,8 @@ Static method fromJson of TreasuryWithdrawalsAction
 
 ```ts
 export declare const fromJson: (
-  json: string,
-) => Effect.Effect<
-  CML.TreasuryWithdrawalsAction,
-  TreasuryWithdrawalsActionError
->;
+  json: string
+) => Effect.Effect<CML.TreasuryWithdrawalsAction, TreasuryWithdrawalsActionError>
 ```
 
 Added in v2.0.0
@@ -131,8 +119,8 @@ Unsafely calls TreasuryWithdrawalsAction.\_new without Effect wrapper
 ```ts
 export declare const _newUnsafe: (
   withdrawal: CML.MapRewardAccountToCoin,
-  policyHash: CML.ScriptHash,
-) => CML.TreasuryWithdrawalsAction;
+  policyHash: CML.ScriptHash
+) => CML.TreasuryWithdrawalsAction
 ```
 
 Added in v2.0.0
@@ -144,9 +132,7 @@ Unsafely calls TreasuryWithdrawalsAction.fromCborBytes without Effect wrapper
 **Signature**
 
 ```ts
-export declare const fromCborBytesUnsafe: (
-  cborBytes: Uint8Array,
-) => CML.TreasuryWithdrawalsAction;
+export declare const fromCborBytesUnsafe: (cborBytes: Uint8Array) => CML.TreasuryWithdrawalsAction
 ```
 
 Added in v2.0.0
@@ -158,9 +144,7 @@ Unsafely calls TreasuryWithdrawalsAction.fromCborHex without Effect wrapper
 **Signature**
 
 ```ts
-export declare const fromCborHexUnsafe: (
-  cborBytes: string,
-) => CML.TreasuryWithdrawalsAction;
+export declare const fromCborHexUnsafe: (cborBytes: string) => CML.TreasuryWithdrawalsAction
 ```
 
 Added in v2.0.0
@@ -172,9 +156,7 @@ Unsafely calls TreasuryWithdrawalsAction.fromJson without Effect wrapper
 **Signature**
 
 ```ts
-export declare const fromJsonUnsafe: (
-  json: string,
-) => CML.TreasuryWithdrawalsAction;
+export declare const fromJsonUnsafe: (json: string) => CML.TreasuryWithdrawalsAction
 ```
 
 Added in v2.0.0
@@ -205,8 +187,8 @@ Method free of TreasuryWithdrawalsAction
 
 ```ts
 export declare const free: (
-  instance: CML.TreasuryWithdrawalsAction,
-) => Effect.Effect<void, TreasuryWithdrawalsActionError>;
+  instance: CML.TreasuryWithdrawalsAction
+) => Effect.Effect<void, TreasuryWithdrawalsActionError>
 ```
 
 Added in v2.0.0
@@ -219,8 +201,8 @@ Method policyHash of TreasuryWithdrawalsAction
 
 ```ts
 export declare const policyHash: (
-  instance: CML.TreasuryWithdrawalsAction,
-) => Effect.Effect<CML.ScriptHash | undefined, TreasuryWithdrawalsActionError>;
+  instance: CML.TreasuryWithdrawalsAction
+) => Effect.Effect<CML.ScriptHash | undefined, TreasuryWithdrawalsActionError>
 ```
 
 Added in v2.0.0
@@ -233,8 +215,8 @@ Method toCanonicalCborBytes of TreasuryWithdrawalsAction
 
 ```ts
 export declare const toCanonicalCborBytes: (
-  instance: CML.TreasuryWithdrawalsAction,
-) => Effect.Effect<Uint8Array, TreasuryWithdrawalsActionError>;
+  instance: CML.TreasuryWithdrawalsAction
+) => Effect.Effect<Uint8Array, TreasuryWithdrawalsActionError>
 ```
 
 Added in v2.0.0
@@ -247,8 +229,8 @@ Method toCanonicalCborHex of TreasuryWithdrawalsAction
 
 ```ts
 export declare const toCanonicalCborHex: (
-  instance: CML.TreasuryWithdrawalsAction,
-) => Effect.Effect<string, TreasuryWithdrawalsActionError>;
+  instance: CML.TreasuryWithdrawalsAction
+) => Effect.Effect<string, TreasuryWithdrawalsActionError>
 ```
 
 Added in v2.0.0
@@ -261,8 +243,8 @@ Method toCborBytes of TreasuryWithdrawalsAction
 
 ```ts
 export declare const toCborBytes: (
-  instance: CML.TreasuryWithdrawalsAction,
-) => Effect.Effect<Uint8Array, TreasuryWithdrawalsActionError>;
+  instance: CML.TreasuryWithdrawalsAction
+) => Effect.Effect<Uint8Array, TreasuryWithdrawalsActionError>
 ```
 
 Added in v2.0.0
@@ -275,8 +257,8 @@ Method toCborHex of TreasuryWithdrawalsAction
 
 ```ts
 export declare const toCborHex: (
-  instance: CML.TreasuryWithdrawalsAction,
-) => Effect.Effect<string, TreasuryWithdrawalsActionError>;
+  instance: CML.TreasuryWithdrawalsAction
+) => Effect.Effect<string, TreasuryWithdrawalsActionError>
 ```
 
 Added in v2.0.0
@@ -289,8 +271,8 @@ Method toJsValue of TreasuryWithdrawalsAction
 
 ```ts
 export declare const toJsValue: (
-  instance: CML.TreasuryWithdrawalsAction,
-) => Effect.Effect<any, TreasuryWithdrawalsActionError>;
+  instance: CML.TreasuryWithdrawalsAction
+) => Effect.Effect<any, TreasuryWithdrawalsActionError>
 ```
 
 Added in v2.0.0
@@ -303,8 +285,8 @@ Method toJson of TreasuryWithdrawalsAction
 
 ```ts
 export declare const toJson: (
-  instance: CML.TreasuryWithdrawalsAction,
-) => Effect.Effect<string, TreasuryWithdrawalsActionError>;
+  instance: CML.TreasuryWithdrawalsAction
+) => Effect.Effect<string, TreasuryWithdrawalsActionError>
 ```
 
 Added in v2.0.0
@@ -317,8 +299,8 @@ Method withdrawal of TreasuryWithdrawalsAction
 
 ```ts
 export declare const withdrawal: (
-  instance: CML.TreasuryWithdrawalsAction,
-) => Effect.Effect<CML.MapRewardAccountToCoin, TreasuryWithdrawalsActionError>;
+  instance: CML.TreasuryWithdrawalsAction
+) => Effect.Effect<CML.MapRewardAccountToCoin, TreasuryWithdrawalsActionError>
 ```
 
 Added in v2.0.0
@@ -332,9 +314,7 @@ Unsafely calls instance.free without Effect wrapper
 **Signature**
 
 ```ts
-export declare const freeUnsafe: (
-  instance: CML.TreasuryWithdrawalsAction,
-) => void;
+export declare const freeUnsafe: (instance: CML.TreasuryWithdrawalsAction) => void
 ```
 
 Added in v2.0.0
@@ -346,9 +326,7 @@ Unsafely calls instance.policyHash without Effect wrapper
 **Signature**
 
 ```ts
-export declare const policyHashUnsafe: (
-  instance: CML.TreasuryWithdrawalsAction,
-) => CML.ScriptHash | undefined;
+export declare const policyHashUnsafe: (instance: CML.TreasuryWithdrawalsAction) => CML.ScriptHash | undefined
 ```
 
 Added in v2.0.0
@@ -360,9 +338,7 @@ Unsafely calls instance.toCanonicalCborBytes without Effect wrapper
 **Signature**
 
 ```ts
-export declare const toCanonicalCborBytesUnsafe: (
-  instance: CML.TreasuryWithdrawalsAction,
-) => Uint8Array;
+export declare const toCanonicalCborBytesUnsafe: (instance: CML.TreasuryWithdrawalsAction) => Uint8Array
 ```
 
 Added in v2.0.0
@@ -374,9 +350,7 @@ Unsafely calls instance.toCanonicalCborHex without Effect wrapper
 **Signature**
 
 ```ts
-export declare const toCanonicalCborHexUnsafe: (
-  instance: CML.TreasuryWithdrawalsAction,
-) => string;
+export declare const toCanonicalCborHexUnsafe: (instance: CML.TreasuryWithdrawalsAction) => string
 ```
 
 Added in v2.0.0
@@ -388,9 +362,7 @@ Unsafely calls instance.toCborBytes without Effect wrapper
 **Signature**
 
 ```ts
-export declare const toCborBytesUnsafe: (
-  instance: CML.TreasuryWithdrawalsAction,
-) => Uint8Array;
+export declare const toCborBytesUnsafe: (instance: CML.TreasuryWithdrawalsAction) => Uint8Array
 ```
 
 Added in v2.0.0
@@ -402,9 +374,7 @@ Unsafely calls instance.toCborHex without Effect wrapper
 **Signature**
 
 ```ts
-export declare const toCborHexUnsafe: (
-  instance: CML.TreasuryWithdrawalsAction,
-) => string;
+export declare const toCborHexUnsafe: (instance: CML.TreasuryWithdrawalsAction) => string
 ```
 
 Added in v2.0.0
@@ -416,9 +386,7 @@ Unsafely calls instance.toJsValue without Effect wrapper
 **Signature**
 
 ```ts
-export declare const toJsValueUnsafe: (
-  instance: CML.TreasuryWithdrawalsAction,
-) => any;
+export declare const toJsValueUnsafe: (instance: CML.TreasuryWithdrawalsAction) => any
 ```
 
 Added in v2.0.0
@@ -430,9 +398,7 @@ Unsafely calls instance.toJson without Effect wrapper
 **Signature**
 
 ```ts
-export declare const toJsonUnsafe: (
-  instance: CML.TreasuryWithdrawalsAction,
-) => string;
+export declare const toJsonUnsafe: (instance: CML.TreasuryWithdrawalsAction) => string
 ```
 
 Added in v2.0.0
@@ -444,9 +410,7 @@ Unsafely calls instance.withdrawal without Effect wrapper
 **Signature**
 
 ```ts
-export declare const withdrawalUnsafe: (
-  instance: CML.TreasuryWithdrawalsAction,
-) => CML.MapRewardAccountToCoin;
+export declare const withdrawalUnsafe: (instance: CML.TreasuryWithdrawalsAction) => CML.MapRewardAccountToCoin
 ```
 
 Added in v2.0.0
@@ -460,7 +424,7 @@ Type alias for the CML TreasuryWithdrawalsAction class
 **Signature**
 
 ```ts
-export type TreasuryWithdrawalsAction = CML.TreasuryWithdrawalsAction;
+export type TreasuryWithdrawalsAction = CML.TreasuryWithdrawalsAction
 ```
 
 Added in v2.0.0

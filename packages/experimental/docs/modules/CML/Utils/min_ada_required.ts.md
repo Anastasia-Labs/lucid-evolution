@@ -1,6 +1,6 @@
 ---
 title: CML/Utils/min_ada_required.ts
-nav_order: 275
+nav_order: 274
 parent: Modules
 ---
 
@@ -48,8 +48,8 @@ Wrapper for the min_ada_required function
 ```ts
 export declare const minAdaRequired: (
   output: CML.TransactionOutput,
-  coinsPerUtxoByte: bigint,
-) => Effect.Effect<bigint, MinAdaRequiredError>;
+  coinsPerUtxoByte: bigint
+) => Effect.Effect<bigint, MinAdaRequiredError>
 ```
 
 Added in v2.0.0
@@ -63,10 +63,7 @@ Unsafely calls min_ada_required function without Effect wrapper
 **Signature**
 
 ```ts
-export declare const minAdaRequiredUnsafe: (
-  output: CML.TransactionOutput,
-  coinsPerUtxoByte: bigint,
-) => bigint;
+export declare const minAdaRequiredUnsafe: (output: CML.TransactionOutput, coinsPerUtxoByte: bigint) => bigint
 ```
 
 Added in v2.0.0

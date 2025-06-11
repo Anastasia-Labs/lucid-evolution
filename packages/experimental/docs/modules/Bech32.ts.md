@@ -38,7 +38,7 @@ Added in v2.0.0
 **Signature**
 
 ```ts
-export declare const Bech32: Schema.brand<typeof Schema.String, "Bech32">;
+export declare const Bech32: Schema.brand<typeof Schema.String, "Bech32">
 ```
 
 ## Bech32 (type alias)
@@ -46,7 +46,7 @@ export declare const Bech32: Schema.brand<typeof Schema.String, "Bech32">;
 **Signature**
 
 ```ts
-export type Bech32 = typeof Bech32.Type;
+export type Bech32 = typeof Bech32.Type
 ```
 
 ## Bytes
@@ -55,10 +55,6 @@ export type Bech32 = typeof Bech32.Type;
 
 ```ts
 export declare const Bytes: (
-  prefix?: string,
-) => Schema.transformOrFail<
-  typeof Schema.Uint8ArrayFromSelf,
-  Schema.brand<typeof Schema.String, "Bech32">,
-  never
->;
+  prefix?: string
+) => Schema.transformOrFail<typeof Schema.Uint8ArrayFromSelf, Schema.brand<typeof Schema.String, "Bech32">, never>
 ```

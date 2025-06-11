@@ -1,6 +1,6 @@
 ---
 title: CML/MapPlutusDataToPlutusData.ts
-nav_order: 128
+nav_order: 127
 parent: Modules
 ---
 
@@ -44,10 +44,7 @@ Static method \_new of MapPlutusDataToPlutusData
 **Signature**
 
 ```ts
-export declare const _new: () => Effect.Effect<
-  CML.MapPlutusDataToPlutusData,
-  MapPlutusDataToPlutusDataError
->;
+export declare const _new: () => Effect.Effect<CML.MapPlutusDataToPlutusData, MapPlutusDataToPlutusDataError>
 ```
 
 Added in v2.0.0
@@ -61,7 +58,7 @@ Unsafely calls MapPlutusDataToPlutusData.\_new without Effect wrapper
 **Signature**
 
 ```ts
-export declare const _newUnsafe: () => CML.MapPlutusDataToPlutusData;
+export declare const _newUnsafe: () => CML.MapPlutusDataToPlutusData
 ```
 
 Added in v2.0.0
@@ -92,8 +89,8 @@ Method free of MapPlutusDataToPlutusData
 
 ```ts
 export declare const free: (
-  instance: CML.MapPlutusDataToPlutusData,
-) => Effect.Effect<void, MapPlutusDataToPlutusDataError>;
+  instance: CML.MapPlutusDataToPlutusData
+) => Effect.Effect<void, MapPlutusDataToPlutusDataError>
 ```
 
 Added in v2.0.0
@@ -107,8 +104,8 @@ Method get of MapPlutusDataToPlutusData
 ```ts
 export declare const get: (
   instance: CML.MapPlutusDataToPlutusData,
-  key: CML.PlutusData,
-) => Effect.Effect<CML.PlutusData | undefined, MapPlutusDataToPlutusDataError>;
+  key: CML.PlutusData
+) => Effect.Effect<CML.PlutusData | undefined, MapPlutusDataToPlutusDataError>
 ```
 
 Added in v2.0.0
@@ -123,8 +120,8 @@ Method insert of MapPlutusDataToPlutusData
 export declare const insert: (
   instance: CML.MapPlutusDataToPlutusData,
   key: CML.PlutusData,
-  value: CML.PlutusData,
-) => Effect.Effect<CML.PlutusData | undefined, MapPlutusDataToPlutusDataError>;
+  value: CML.PlutusData
+) => Effect.Effect<CML.PlutusData | undefined, MapPlutusDataToPlutusDataError>
 ```
 
 Added in v2.0.0
@@ -137,8 +134,8 @@ Method keys of MapPlutusDataToPlutusData
 
 ```ts
 export declare const keys: (
-  instance: CML.MapPlutusDataToPlutusData,
-) => Effect.Effect<CML.PlutusDataList, MapPlutusDataToPlutusDataError>;
+  instance: CML.MapPlutusDataToPlutusData
+) => Effect.Effect<CML.PlutusDataList, MapPlutusDataToPlutusDataError>
 ```
 
 Added in v2.0.0
@@ -151,8 +148,8 @@ Method len of MapPlutusDataToPlutusData
 
 ```ts
 export declare const len: (
-  instance: CML.MapPlutusDataToPlutusData,
-) => Effect.Effect<number, MapPlutusDataToPlutusDataError>;
+  instance: CML.MapPlutusDataToPlutusData
+) => Effect.Effect<number, MapPlutusDataToPlutusDataError>
 ```
 
 Added in v2.0.0
@@ -166,9 +163,7 @@ Unsafely calls instance.free without Effect wrapper
 **Signature**
 
 ```ts
-export declare const freeUnsafe: (
-  instance: CML.MapPlutusDataToPlutusData,
-) => void;
+export declare const freeUnsafe: (instance: CML.MapPlutusDataToPlutusData) => void
 ```
 
 Added in v2.0.0
@@ -182,8 +177,8 @@ Unsafely calls instance.get without Effect wrapper
 ```ts
 export declare const getUnsafe: (
   instance: CML.MapPlutusDataToPlutusData,
-  key: CML.PlutusData,
-) => CML.PlutusData | undefined;
+  key: CML.PlutusData
+) => CML.PlutusData | undefined
 ```
 
 Added in v2.0.0
@@ -198,8 +193,8 @@ Unsafely calls instance.insert without Effect wrapper
 export declare const insertUnsafe: (
   instance: CML.MapPlutusDataToPlutusData,
   key: CML.PlutusData,
-  value: CML.PlutusData,
-) => CML.PlutusData | undefined;
+  value: CML.PlutusData
+) => CML.PlutusData | undefined
 ```
 
 Added in v2.0.0
@@ -211,9 +206,7 @@ Unsafely calls instance.keys without Effect wrapper
 **Signature**
 
 ```ts
-export declare const keysUnsafe: (
-  instance: CML.MapPlutusDataToPlutusData,
-) => CML.PlutusDataList;
+export declare const keysUnsafe: (instance: CML.MapPlutusDataToPlutusData) => CML.PlutusDataList
 ```
 
 Added in v2.0.0
@@ -225,9 +218,7 @@ Unsafely calls instance.len without Effect wrapper
 **Signature**
 
 ```ts
-export declare const lenUnsafe: (
-  instance: CML.MapPlutusDataToPlutusData,
-) => number;
+export declare const lenUnsafe: (instance: CML.MapPlutusDataToPlutusData) => number
 ```
 
 Added in v2.0.0
@@ -241,7 +232,7 @@ Type alias for the CML MapPlutusDataToPlutusData class
 **Signature**
 
 ```ts
-export type MapPlutusDataToPlutusData = CML.MapPlutusDataToPlutusData;
+export type MapPlutusDataToPlutusData = CML.MapPlutusDataToPlutusData
 ```
 
 Added in v2.0.0

@@ -1,6 +1,6 @@
 ---
 title: CML/Utils/encode_arbitrary_bytes_as_metadatum.ts
-nav_order: 263
+nav_order: 262
 parent: Modules
 ---
 
@@ -47,11 +47,8 @@ Wrapper for the encode_arbitrary_bytes_as_metadatum function
 
 ```ts
 export declare const encodeArbitraryBytesAsMetadatum: (
-  bytes: Uint8Array,
-) => Effect.Effect<
-  CML.TransactionMetadatum,
-  EncodeArbitraryBytesAsMetadatumError
->;
+  bytes: Uint8Array
+) => Effect.Effect<CML.TransactionMetadatum, EncodeArbitraryBytesAsMetadatumError>
 ```
 
 Added in v2.0.0
@@ -65,9 +62,7 @@ Unsafely calls encode_arbitrary_bytes_as_metadatum function without Effect wrapp
 **Signature**
 
 ```ts
-export declare const encodeArbitraryBytesAsMetadatumUnsafe: (
-  bytes: Uint8Array,
-) => CML.TransactionMetadatum;
+export declare const encodeArbitraryBytesAsMetadatumUnsafe: (bytes: Uint8Array) => CML.TransactionMetadatum
 ```
 
 Added in v2.0.0

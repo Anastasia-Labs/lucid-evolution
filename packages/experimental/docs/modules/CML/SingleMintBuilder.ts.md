@@ -1,6 +1,6 @@
 ---
 title: CML/SingleMintBuilder.ts
-nav_order: 213
+nav_order: 212
 parent: Modules
 ---
 
@@ -43,8 +43,8 @@ Static method \_new of SingleMintBuilder
 
 ```ts
 export declare const _new: (
-  assets: CML.MapAssetNameToNonZeroInt64,
-) => Effect.Effect<CML.SingleMintBuilder, SingleMintBuilderError>;
+  assets: CML.MapAssetNameToNonZeroInt64
+) => Effect.Effect<CML.SingleMintBuilder, SingleMintBuilderError>
 ```
 
 Added in v2.0.0
@@ -58,8 +58,8 @@ Static method newSingleAsset of SingleMintBuilder
 ```ts
 export declare const newSingleAsset: (
   asset: CML.AssetName,
-  amount: bigint,
-) => Effect.Effect<CML.SingleMintBuilder, SingleMintBuilderError>;
+  amount: bigint
+) => Effect.Effect<CML.SingleMintBuilder, SingleMintBuilderError>
 ```
 
 Added in v2.0.0
@@ -73,9 +73,7 @@ Unsafely calls SingleMintBuilder.\_new without Effect wrapper
 **Signature**
 
 ```ts
-export declare const _newUnsafe: (
-  assets: CML.MapAssetNameToNonZeroInt64,
-) => CML.SingleMintBuilder;
+export declare const _newUnsafe: (assets: CML.MapAssetNameToNonZeroInt64) => CML.SingleMintBuilder
 ```
 
 Added in v2.0.0
@@ -87,10 +85,7 @@ Unsafely calls SingleMintBuilder.newSingleAsset without Effect wrapper
 **Signature**
 
 ```ts
-export declare const newSingleAssetUnsafe: (
-  asset: CML.AssetName,
-  amount: bigint,
-) => CML.SingleMintBuilder;
+export declare const newSingleAssetUnsafe: (asset: CML.AssetName, amount: bigint) => CML.SingleMintBuilder
 ```
 
 Added in v2.0.0
@@ -120,9 +115,7 @@ Method free of SingleMintBuilder
 **Signature**
 
 ```ts
-export declare const free: (
-  instance: CML.SingleMintBuilder,
-) => Effect.Effect<void, SingleMintBuilderError>;
+export declare const free: (instance: CML.SingleMintBuilder) => Effect.Effect<void, SingleMintBuilderError>
 ```
 
 Added in v2.0.0
@@ -137,8 +130,8 @@ Method nativeScript of SingleMintBuilder
 export declare const nativeScript: (
   instance: CML.SingleMintBuilder,
   _nativeScript: CML.NativeScript,
-  witnessInfo: CML.NativeScriptWitnessInfo,
-) => Effect.Effect<CML.MintBuilderResult, SingleMintBuilderError>;
+  witnessInfo: CML.NativeScriptWitnessInfo
+) => Effect.Effect<CML.MintBuilderResult, SingleMintBuilderError>
 ```
 
 Added in v2.0.0
@@ -153,8 +146,8 @@ Method plutusScript of SingleMintBuilder
 export declare const plutusScript: (
   instance: CML.SingleMintBuilder,
   partialWitness: CML.PartialPlutusWitness,
-  requiredSigners: CML.Ed25519KeyHashList,
-) => Effect.Effect<CML.MintBuilderResult, SingleMintBuilderError>;
+  requiredSigners: CML.Ed25519KeyHashList
+) => Effect.Effect<CML.MintBuilderResult, SingleMintBuilderError>
 ```
 
 Added in v2.0.0
@@ -168,7 +161,7 @@ Unsafely calls instance.free without Effect wrapper
 **Signature**
 
 ```ts
-export declare const freeUnsafe: (instance: CML.SingleMintBuilder) => void;
+export declare const freeUnsafe: (instance: CML.SingleMintBuilder) => void
 ```
 
 Added in v2.0.0
@@ -183,8 +176,8 @@ Unsafely calls instance.nativeScript without Effect wrapper
 export declare const nativeScriptUnsafe: (
   instance: CML.SingleMintBuilder,
   _nativeScript: CML.NativeScript,
-  witnessInfo: CML.NativeScriptWitnessInfo,
-) => CML.MintBuilderResult;
+  witnessInfo: CML.NativeScriptWitnessInfo
+) => CML.MintBuilderResult
 ```
 
 Added in v2.0.0
@@ -199,8 +192,8 @@ Unsafely calls instance.plutusScript without Effect wrapper
 export declare const plutusScriptUnsafe: (
   instance: CML.SingleMintBuilder,
   partialWitness: CML.PartialPlutusWitness,
-  requiredSigners: CML.Ed25519KeyHashList,
-) => CML.MintBuilderResult;
+  requiredSigners: CML.Ed25519KeyHashList
+) => CML.MintBuilderResult
 ```
 
 Added in v2.0.0
@@ -214,7 +207,7 @@ Type alias for the CML SingleMintBuilder class
 **Signature**
 
 ```ts
-export type SingleMintBuilder = CML.SingleMintBuilder;
+export type SingleMintBuilder = CML.SingleMintBuilder
 ```
 
 Added in v2.0.0

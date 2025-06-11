@@ -1,6 +1,6 @@
 ---
 title: CML/VRFKeyHash.ts
-nav_order: 291
+nav_order: 290
 parent: Modules
 ---
 
@@ -46,9 +46,7 @@ Static method fromBech32 of VRFKeyHash
 **Signature**
 
 ```ts
-export declare const fromBech32: (
-  bech32Str: string,
-) => Effect.Effect<CML.VRFKeyHash, VRFKeyHashError>;
+export declare const fromBech32: (bech32Str: string) => Effect.Effect<CML.VRFKeyHash, VRFKeyHashError>
 ```
 
 Added in v2.0.0
@@ -60,9 +58,7 @@ Static method fromHex of VRFKeyHash
 **Signature**
 
 ```ts
-export declare const fromHex: (
-  input: string,
-) => Effect.Effect<CML.VRFKeyHash, VRFKeyHashError>;
+export declare const fromHex: (input: string) => Effect.Effect<CML.VRFKeyHash, VRFKeyHashError>
 ```
 
 Added in v2.0.0
@@ -74,9 +70,7 @@ Static method fromRawBytes of VRFKeyHash
 **Signature**
 
 ```ts
-export declare const fromRawBytes: (
-  bytes: Uint8Array,
-) => Effect.Effect<CML.VRFKeyHash, VRFKeyHashError>;
+export declare const fromRawBytes: (bytes: Uint8Array) => Effect.Effect<CML.VRFKeyHash, VRFKeyHashError>
 ```
 
 Added in v2.0.0
@@ -90,7 +84,7 @@ Unsafely calls VRFKeyHash.fromBech32 without Effect wrapper
 **Signature**
 
 ```ts
-export declare const fromBech32Unsafe: (bech32Str: string) => CML.VRFKeyHash;
+export declare const fromBech32Unsafe: (bech32Str: string) => CML.VRFKeyHash
 ```
 
 Added in v2.0.0
@@ -102,7 +96,7 @@ Unsafely calls VRFKeyHash.fromHex without Effect wrapper
 **Signature**
 
 ```ts
-export declare const fromHexUnsafe: (input: string) => CML.VRFKeyHash;
+export declare const fromHexUnsafe: (input: string) => CML.VRFKeyHash
 ```
 
 Added in v2.0.0
@@ -114,7 +108,7 @@ Unsafely calls VRFKeyHash.fromRawBytes without Effect wrapper
 **Signature**
 
 ```ts
-export declare const fromRawBytesUnsafe: (bytes: Uint8Array) => CML.VRFKeyHash;
+export declare const fromRawBytesUnsafe: (bytes: Uint8Array) => CML.VRFKeyHash
 ```
 
 Added in v2.0.0
@@ -144,9 +138,7 @@ Method free of VRFKeyHash
 **Signature**
 
 ```ts
-export declare const free: (
-  instance: CML.VRFKeyHash,
-) => Effect.Effect<void, VRFKeyHashError>;
+export declare const free: (instance: CML.VRFKeyHash) => Effect.Effect<void, VRFKeyHashError>
 ```
 
 Added in v2.0.0
@@ -158,10 +150,7 @@ Method toBech32 of VRFKeyHash
 **Signature**
 
 ```ts
-export declare const toBech32: (
-  instance: CML.VRFKeyHash,
-  prefix: string,
-) => Effect.Effect<string, VRFKeyHashError>;
+export declare const toBech32: (instance: CML.VRFKeyHash, prefix: string) => Effect.Effect<string, VRFKeyHashError>
 ```
 
 Added in v2.0.0
@@ -173,9 +162,7 @@ Method toHex of VRFKeyHash
 **Signature**
 
 ```ts
-export declare const toHex: (
-  instance: CML.VRFKeyHash,
-) => Effect.Effect<string, VRFKeyHashError>;
+export declare const toHex: (instance: CML.VRFKeyHash) => Effect.Effect<string, VRFKeyHashError>
 ```
 
 Added in v2.0.0
@@ -187,9 +174,7 @@ Method toRawBytes of VRFKeyHash
 **Signature**
 
 ```ts
-export declare const toRawBytes: (
-  instance: CML.VRFKeyHash,
-) => Effect.Effect<Uint8Array, VRFKeyHashError>;
+export declare const toRawBytes: (instance: CML.VRFKeyHash) => Effect.Effect<Uint8Array, VRFKeyHashError>
 ```
 
 Added in v2.0.0
@@ -203,7 +188,7 @@ Unsafely calls instance.free without Effect wrapper
 **Signature**
 
 ```ts
-export declare const freeUnsafe: (instance: CML.VRFKeyHash) => void;
+export declare const freeUnsafe: (instance: CML.VRFKeyHash) => void
 ```
 
 Added in v2.0.0
@@ -215,10 +200,7 @@ Unsafely calls instance.toBech32 without Effect wrapper
 **Signature**
 
 ```ts
-export declare const toBech32Unsafe: (
-  instance: CML.VRFKeyHash,
-  prefix: string,
-) => string;
+export declare const toBech32Unsafe: (instance: CML.VRFKeyHash, prefix: string) => string
 ```
 
 Added in v2.0.0
@@ -230,7 +212,7 @@ Unsafely calls instance.toHex without Effect wrapper
 **Signature**
 
 ```ts
-export declare const toHexUnsafe: (instance: CML.VRFKeyHash) => string;
+export declare const toHexUnsafe: (instance: CML.VRFKeyHash) => string
 ```
 
 Added in v2.0.0
@@ -242,7 +224,7 @@ Unsafely calls instance.toRawBytes without Effect wrapper
 **Signature**
 
 ```ts
-export declare const toRawBytesUnsafe: (instance: CML.VRFKeyHash) => Uint8Array;
+export declare const toRawBytesUnsafe: (instance: CML.VRFKeyHash) => Uint8Array
 ```
 
 Added in v2.0.0
@@ -256,7 +238,7 @@ Type alias for the CML VRFKeyHash class
 **Signature**
 
 ```ts
-export type VRFKeyHash = CML.VRFKeyHash;
+export type VRFKeyHash = CML.VRFKeyHash
 ```
 
 Added in v2.0.0

@@ -1,6 +1,6 @@
 ---
 title: CML/GenesisHash.ts
-nav_order: 102
+nav_order: 101
 parent: Modules
 ---
 
@@ -46,9 +46,7 @@ Static method fromBech32 of GenesisHash
 **Signature**
 
 ```ts
-export declare const fromBech32: (
-  bech32Str: string,
-) => Effect.Effect<CML.GenesisHash, GenesisHashError>;
+export declare const fromBech32: (bech32Str: string) => Effect.Effect<CML.GenesisHash, GenesisHashError>
 ```
 
 Added in v2.0.0
@@ -60,9 +58,7 @@ Static method fromHex of GenesisHash
 **Signature**
 
 ```ts
-export declare const fromHex: (
-  input: string,
-) => Effect.Effect<CML.GenesisHash, GenesisHashError>;
+export declare const fromHex: (input: string) => Effect.Effect<CML.GenesisHash, GenesisHashError>
 ```
 
 Added in v2.0.0
@@ -74,9 +70,7 @@ Static method fromRawBytes of GenesisHash
 **Signature**
 
 ```ts
-export declare const fromRawBytes: (
-  bytes: Uint8Array,
-) => Effect.Effect<CML.GenesisHash, GenesisHashError>;
+export declare const fromRawBytes: (bytes: Uint8Array) => Effect.Effect<CML.GenesisHash, GenesisHashError>
 ```
 
 Added in v2.0.0
@@ -90,7 +84,7 @@ Unsafely calls GenesisHash.fromBech32 without Effect wrapper
 **Signature**
 
 ```ts
-export declare const fromBech32Unsafe: (bech32Str: string) => CML.GenesisHash;
+export declare const fromBech32Unsafe: (bech32Str: string) => CML.GenesisHash
 ```
 
 Added in v2.0.0
@@ -102,7 +96,7 @@ Unsafely calls GenesisHash.fromHex without Effect wrapper
 **Signature**
 
 ```ts
-export declare const fromHexUnsafe: (input: string) => CML.GenesisHash;
+export declare const fromHexUnsafe: (input: string) => CML.GenesisHash
 ```
 
 Added in v2.0.0
@@ -114,7 +108,7 @@ Unsafely calls GenesisHash.fromRawBytes without Effect wrapper
 **Signature**
 
 ```ts
-export declare const fromRawBytesUnsafe: (bytes: Uint8Array) => CML.GenesisHash;
+export declare const fromRawBytesUnsafe: (bytes: Uint8Array) => CML.GenesisHash
 ```
 
 Added in v2.0.0
@@ -144,9 +138,7 @@ Method free of GenesisHash
 **Signature**
 
 ```ts
-export declare const free: (
-  instance: CML.GenesisHash,
-) => Effect.Effect<void, GenesisHashError>;
+export declare const free: (instance: CML.GenesisHash) => Effect.Effect<void, GenesisHashError>
 ```
 
 Added in v2.0.0
@@ -158,10 +150,7 @@ Method toBech32 of GenesisHash
 **Signature**
 
 ```ts
-export declare const toBech32: (
-  instance: CML.GenesisHash,
-  prefix: string,
-) => Effect.Effect<string, GenesisHashError>;
+export declare const toBech32: (instance: CML.GenesisHash, prefix: string) => Effect.Effect<string, GenesisHashError>
 ```
 
 Added in v2.0.0
@@ -173,9 +162,7 @@ Method toHex of GenesisHash
 **Signature**
 
 ```ts
-export declare const toHex: (
-  instance: CML.GenesisHash,
-) => Effect.Effect<string, GenesisHashError>;
+export declare const toHex: (instance: CML.GenesisHash) => Effect.Effect<string, GenesisHashError>
 ```
 
 Added in v2.0.0
@@ -187,9 +174,7 @@ Method toRawBytes of GenesisHash
 **Signature**
 
 ```ts
-export declare const toRawBytes: (
-  instance: CML.GenesisHash,
-) => Effect.Effect<Uint8Array, GenesisHashError>;
+export declare const toRawBytes: (instance: CML.GenesisHash) => Effect.Effect<Uint8Array, GenesisHashError>
 ```
 
 Added in v2.0.0
@@ -203,7 +188,7 @@ Unsafely calls instance.free without Effect wrapper
 **Signature**
 
 ```ts
-export declare const freeUnsafe: (instance: CML.GenesisHash) => void;
+export declare const freeUnsafe: (instance: CML.GenesisHash) => void
 ```
 
 Added in v2.0.0
@@ -215,10 +200,7 @@ Unsafely calls instance.toBech32 without Effect wrapper
 **Signature**
 
 ```ts
-export declare const toBech32Unsafe: (
-  instance: CML.GenesisHash,
-  prefix: string,
-) => string;
+export declare const toBech32Unsafe: (instance: CML.GenesisHash, prefix: string) => string
 ```
 
 Added in v2.0.0
@@ -230,7 +212,7 @@ Unsafely calls instance.toHex without Effect wrapper
 **Signature**
 
 ```ts
-export declare const toHexUnsafe: (instance: CML.GenesisHash) => string;
+export declare const toHexUnsafe: (instance: CML.GenesisHash) => string
 ```
 
 Added in v2.0.0
@@ -242,9 +224,7 @@ Unsafely calls instance.toRawBytes without Effect wrapper
 **Signature**
 
 ```ts
-export declare const toRawBytesUnsafe: (
-  instance: CML.GenesisHash,
-) => Uint8Array;
+export declare const toRawBytesUnsafe: (instance: CML.GenesisHash) => Uint8Array
 ```
 
 Added in v2.0.0
@@ -258,7 +238,7 @@ Type alias for the CML GenesisHash class
 **Signature**
 
 ```ts
-export type GenesisHash = CML.GenesisHash;
+export type GenesisHash = CML.GenesisHash
 ```
 
 Added in v2.0.0

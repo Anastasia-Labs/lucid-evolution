@@ -1,6 +1,6 @@
 ---
 title: CML/ExUnitPrices.ts
-nav_order: 98
+nav_order: 97
 parent: Modules
 ---
 
@@ -60,8 +60,8 @@ Static method \_new of ExUnitPrices
 ```ts
 export declare const _new: (
   memPrice: CML.Rational,
-  stepPrice: CML.Rational,
-) => Effect.Effect<CML.ExUnitPrices, ExUnitPricesError>;
+  stepPrice: CML.Rational
+) => Effect.Effect<CML.ExUnitPrices, ExUnitPricesError>
 ```
 
 Added in v2.0.0
@@ -73,9 +73,7 @@ Static method fromCborBytes of ExUnitPrices
 **Signature**
 
 ```ts
-export declare const fromCborBytes: (
-  cborBytes: Uint8Array,
-) => Effect.Effect<CML.ExUnitPrices, ExUnitPricesError>;
+export declare const fromCborBytes: (cborBytes: Uint8Array) => Effect.Effect<CML.ExUnitPrices, ExUnitPricesError>
 ```
 
 Added in v2.0.0
@@ -87,9 +85,7 @@ Static method fromCborHex of ExUnitPrices
 **Signature**
 
 ```ts
-export declare const fromCborHex: (
-  cborBytes: string,
-) => Effect.Effect<CML.ExUnitPrices, ExUnitPricesError>;
+export declare const fromCborHex: (cborBytes: string) => Effect.Effect<CML.ExUnitPrices, ExUnitPricesError>
 ```
 
 Added in v2.0.0
@@ -101,9 +97,7 @@ Static method fromJson of ExUnitPrices
 **Signature**
 
 ```ts
-export declare const fromJson: (
-  json: string,
-) => Effect.Effect<CML.ExUnitPrices, ExUnitPricesError>;
+export declare const fromJson: (json: string) => Effect.Effect<CML.ExUnitPrices, ExUnitPricesError>
 ```
 
 Added in v2.0.0
@@ -117,10 +111,7 @@ Unsafely calls ExUnitPrices.\_new without Effect wrapper
 **Signature**
 
 ```ts
-export declare const _newUnsafe: (
-  memPrice: CML.Rational,
-  stepPrice: CML.Rational,
-) => CML.ExUnitPrices;
+export declare const _newUnsafe: (memPrice: CML.Rational, stepPrice: CML.Rational) => CML.ExUnitPrices
 ```
 
 Added in v2.0.0
@@ -132,9 +123,7 @@ Unsafely calls ExUnitPrices.fromCborBytes without Effect wrapper
 **Signature**
 
 ```ts
-export declare const fromCborBytesUnsafe: (
-  cborBytes: Uint8Array,
-) => CML.ExUnitPrices;
+export declare const fromCborBytesUnsafe: (cborBytes: Uint8Array) => CML.ExUnitPrices
 ```
 
 Added in v2.0.0
@@ -146,7 +135,7 @@ Unsafely calls ExUnitPrices.fromCborHex without Effect wrapper
 **Signature**
 
 ```ts
-export declare const fromCborHexUnsafe: (cborBytes: string) => CML.ExUnitPrices;
+export declare const fromCborHexUnsafe: (cborBytes: string) => CML.ExUnitPrices
 ```
 
 Added in v2.0.0
@@ -158,7 +147,7 @@ Unsafely calls ExUnitPrices.fromJson without Effect wrapper
 **Signature**
 
 ```ts
-export declare const fromJsonUnsafe: (json: string) => CML.ExUnitPrices;
+export declare const fromJsonUnsafe: (json: string) => CML.ExUnitPrices
 ```
 
 Added in v2.0.0
@@ -188,9 +177,7 @@ Method free of ExUnitPrices
 **Signature**
 
 ```ts
-export declare const free: (
-  instance: CML.ExUnitPrices,
-) => Effect.Effect<void, ExUnitPricesError>;
+export declare const free: (instance: CML.ExUnitPrices) => Effect.Effect<void, ExUnitPricesError>
 ```
 
 Added in v2.0.0
@@ -202,9 +189,7 @@ Method memPrice of ExUnitPrices
 **Signature**
 
 ```ts
-export declare const memPrice: (
-  instance: CML.ExUnitPrices,
-) => Effect.Effect<CML.Rational, ExUnitPricesError>;
+export declare const memPrice: (instance: CML.ExUnitPrices) => Effect.Effect<CML.Rational, ExUnitPricesError>
 ```
 
 Added in v2.0.0
@@ -216,9 +201,7 @@ Method stepPrice of ExUnitPrices
 **Signature**
 
 ```ts
-export declare const stepPrice: (
-  instance: CML.ExUnitPrices,
-) => Effect.Effect<CML.Rational, ExUnitPricesError>;
+export declare const stepPrice: (instance: CML.ExUnitPrices) => Effect.Effect<CML.Rational, ExUnitPricesError>
 ```
 
 Added in v2.0.0
@@ -230,9 +213,7 @@ Method toCanonicalCborBytes of ExUnitPrices
 **Signature**
 
 ```ts
-export declare const toCanonicalCborBytes: (
-  instance: CML.ExUnitPrices,
-) => Effect.Effect<Uint8Array, ExUnitPricesError>;
+export declare const toCanonicalCborBytes: (instance: CML.ExUnitPrices) => Effect.Effect<Uint8Array, ExUnitPricesError>
 ```
 
 Added in v2.0.0
@@ -244,9 +225,7 @@ Method toCanonicalCborHex of ExUnitPrices
 **Signature**
 
 ```ts
-export declare const toCanonicalCborHex: (
-  instance: CML.ExUnitPrices,
-) => Effect.Effect<string, ExUnitPricesError>;
+export declare const toCanonicalCborHex: (instance: CML.ExUnitPrices) => Effect.Effect<string, ExUnitPricesError>
 ```
 
 Added in v2.0.0
@@ -258,9 +237,7 @@ Method toCborBytes of ExUnitPrices
 **Signature**
 
 ```ts
-export declare const toCborBytes: (
-  instance: CML.ExUnitPrices,
-) => Effect.Effect<Uint8Array, ExUnitPricesError>;
+export declare const toCborBytes: (instance: CML.ExUnitPrices) => Effect.Effect<Uint8Array, ExUnitPricesError>
 ```
 
 Added in v2.0.0
@@ -272,9 +249,7 @@ Method toCborHex of ExUnitPrices
 **Signature**
 
 ```ts
-export declare const toCborHex: (
-  instance: CML.ExUnitPrices,
-) => Effect.Effect<string, ExUnitPricesError>;
+export declare const toCborHex: (instance: CML.ExUnitPrices) => Effect.Effect<string, ExUnitPricesError>
 ```
 
 Added in v2.0.0
@@ -286,9 +261,7 @@ Method toJsValue of ExUnitPrices
 **Signature**
 
 ```ts
-export declare const toJsValue: (
-  instance: CML.ExUnitPrices,
-) => Effect.Effect<any, ExUnitPricesError>;
+export declare const toJsValue: (instance: CML.ExUnitPrices) => Effect.Effect<any, ExUnitPricesError>
 ```
 
 Added in v2.0.0
@@ -300,9 +273,7 @@ Method toJson of ExUnitPrices
 **Signature**
 
 ```ts
-export declare const toJson: (
-  instance: CML.ExUnitPrices,
-) => Effect.Effect<string, ExUnitPricesError>;
+export declare const toJson: (instance: CML.ExUnitPrices) => Effect.Effect<string, ExUnitPricesError>
 ```
 
 Added in v2.0.0
@@ -316,7 +287,7 @@ Unsafely calls instance.free without Effect wrapper
 **Signature**
 
 ```ts
-export declare const freeUnsafe: (instance: CML.ExUnitPrices) => void;
+export declare const freeUnsafe: (instance: CML.ExUnitPrices) => void
 ```
 
 Added in v2.0.0
@@ -328,9 +299,7 @@ Unsafely calls instance.memPrice without Effect wrapper
 **Signature**
 
 ```ts
-export declare const memPriceUnsafe: (
-  instance: CML.ExUnitPrices,
-) => CML.Rational;
+export declare const memPriceUnsafe: (instance: CML.ExUnitPrices) => CML.Rational
 ```
 
 Added in v2.0.0
@@ -342,9 +311,7 @@ Unsafely calls instance.stepPrice without Effect wrapper
 **Signature**
 
 ```ts
-export declare const stepPriceUnsafe: (
-  instance: CML.ExUnitPrices,
-) => CML.Rational;
+export declare const stepPriceUnsafe: (instance: CML.ExUnitPrices) => CML.Rational
 ```
 
 Added in v2.0.0
@@ -356,9 +323,7 @@ Unsafely calls instance.toCanonicalCborBytes without Effect wrapper
 **Signature**
 
 ```ts
-export declare const toCanonicalCborBytesUnsafe: (
-  instance: CML.ExUnitPrices,
-) => Uint8Array;
+export declare const toCanonicalCborBytesUnsafe: (instance: CML.ExUnitPrices) => Uint8Array
 ```
 
 Added in v2.0.0
@@ -370,9 +335,7 @@ Unsafely calls instance.toCanonicalCborHex without Effect wrapper
 **Signature**
 
 ```ts
-export declare const toCanonicalCborHexUnsafe: (
-  instance: CML.ExUnitPrices,
-) => string;
+export declare const toCanonicalCborHexUnsafe: (instance: CML.ExUnitPrices) => string
 ```
 
 Added in v2.0.0
@@ -384,9 +347,7 @@ Unsafely calls instance.toCborBytes without Effect wrapper
 **Signature**
 
 ```ts
-export declare const toCborBytesUnsafe: (
-  instance: CML.ExUnitPrices,
-) => Uint8Array;
+export declare const toCborBytesUnsafe: (instance: CML.ExUnitPrices) => Uint8Array
 ```
 
 Added in v2.0.0
@@ -398,7 +359,7 @@ Unsafely calls instance.toCborHex without Effect wrapper
 **Signature**
 
 ```ts
-export declare const toCborHexUnsafe: (instance: CML.ExUnitPrices) => string;
+export declare const toCborHexUnsafe: (instance: CML.ExUnitPrices) => string
 ```
 
 Added in v2.0.0
@@ -410,7 +371,7 @@ Unsafely calls instance.toJsValue without Effect wrapper
 **Signature**
 
 ```ts
-export declare const toJsValueUnsafe: (instance: CML.ExUnitPrices) => any;
+export declare const toJsValueUnsafe: (instance: CML.ExUnitPrices) => any
 ```
 
 Added in v2.0.0
@@ -422,7 +383,7 @@ Unsafely calls instance.toJson without Effect wrapper
 **Signature**
 
 ```ts
-export declare const toJsonUnsafe: (instance: CML.ExUnitPrices) => string;
+export declare const toJsonUnsafe: (instance: CML.ExUnitPrices) => string
 ```
 
 Added in v2.0.0
@@ -436,7 +397,7 @@ Type alias for the CML ExUnitPrices class
 **Signature**
 
 ```ts
-export type ExUnitPrices = CML.ExUnitPrices;
+export type ExUnitPrices = CML.ExUnitPrices
 ```
 
 Added in v2.0.0

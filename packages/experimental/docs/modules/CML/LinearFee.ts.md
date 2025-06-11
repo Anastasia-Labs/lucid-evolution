@@ -1,6 +1,6 @@
 ---
 title: CML/LinearFee.ts
-nav_order: 122
+nav_order: 121
 parent: Modules
 ---
 
@@ -45,8 +45,8 @@ Static method \_new of LinearFee
 export declare const _new: (
   coefficient: bigint,
   constant: bigint,
-  refScriptCostPerByte: bigint,
-) => Effect.Effect<CML.LinearFee, LinearFeeError>;
+  refScriptCostPerByte: bigint
+) => Effect.Effect<CML.LinearFee, LinearFeeError>
 ```
 
 Added in v2.0.0
@@ -60,11 +60,7 @@ Unsafely calls LinearFee.\_new without Effect wrapper
 **Signature**
 
 ```ts
-export declare const _newUnsafe: (
-  coefficient: bigint,
-  constant: bigint,
-  refScriptCostPerByte: bigint,
-) => CML.LinearFee;
+export declare const _newUnsafe: (coefficient: bigint, constant: bigint, refScriptCostPerByte: bigint) => CML.LinearFee
 ```
 
 Added in v2.0.0
@@ -94,9 +90,7 @@ Method coefficient of LinearFee
 **Signature**
 
 ```ts
-export declare const coefficient: (
-  instance: CML.LinearFee,
-) => Effect.Effect<bigint, LinearFeeError>;
+export declare const coefficient: (instance: CML.LinearFee) => Effect.Effect<bigint, LinearFeeError>
 ```
 
 Added in v2.0.0
@@ -108,9 +102,7 @@ Method constant of LinearFee
 **Signature**
 
 ```ts
-export declare const constant: (
-  instance: CML.LinearFee,
-) => Effect.Effect<bigint, LinearFeeError>;
+export declare const constant: (instance: CML.LinearFee) => Effect.Effect<bigint, LinearFeeError>
 ```
 
 Added in v2.0.0
@@ -122,9 +114,7 @@ Method free of LinearFee
 **Signature**
 
 ```ts
-export declare const free: (
-  instance: CML.LinearFee,
-) => Effect.Effect<void, LinearFeeError>;
+export declare const free: (instance: CML.LinearFee) => Effect.Effect<void, LinearFeeError>
 ```
 
 Added in v2.0.0
@@ -136,9 +126,7 @@ Method refScriptCostPerByte of LinearFee
 **Signature**
 
 ```ts
-export declare const refScriptCostPerByte: (
-  instance: CML.LinearFee,
-) => Effect.Effect<bigint, LinearFeeError>;
+export declare const refScriptCostPerByte: (instance: CML.LinearFee) => Effect.Effect<bigint, LinearFeeError>
 ```
 
 Added in v2.0.0
@@ -152,7 +140,7 @@ Unsafely calls instance.coefficient without Effect wrapper
 **Signature**
 
 ```ts
-export declare const coefficientUnsafe: (instance: CML.LinearFee) => bigint;
+export declare const coefficientUnsafe: (instance: CML.LinearFee) => bigint
 ```
 
 Added in v2.0.0
@@ -164,7 +152,7 @@ Unsafely calls instance.constant without Effect wrapper
 **Signature**
 
 ```ts
-export declare const constantUnsafe: (instance: CML.LinearFee) => bigint;
+export declare const constantUnsafe: (instance: CML.LinearFee) => bigint
 ```
 
 Added in v2.0.0
@@ -176,7 +164,7 @@ Unsafely calls instance.free without Effect wrapper
 **Signature**
 
 ```ts
-export declare const freeUnsafe: (instance: CML.LinearFee) => void;
+export declare const freeUnsafe: (instance: CML.LinearFee) => void
 ```
 
 Added in v2.0.0
@@ -188,9 +176,7 @@ Unsafely calls instance.refScriptCostPerByte without Effect wrapper
 **Signature**
 
 ```ts
-export declare const refScriptCostPerByteUnsafe: (
-  instance: CML.LinearFee,
-) => bigint;
+export declare const refScriptCostPerByteUnsafe: (instance: CML.LinearFee) => bigint
 ```
 
 Added in v2.0.0
@@ -204,7 +190,7 @@ Type alias for the CML LinearFee class
 **Signature**
 
 ```ts
-export type LinearFee = CML.LinearFee;
+export type LinearFee = CML.LinearFee
 ```
 
 Added in v2.0.0

@@ -1,6 +1,6 @@
 ---
 title: CML/Enum/RedeemerTag.ts
-nav_order: 89
+nav_order: 88
 parent: Modules
 ---
 
@@ -37,7 +37,7 @@ Type alias for the CML RedeemerTag enum
 **Signature**
 
 ```ts
-export type RedeemerTag = CML.RedeemerTag;
+export type RedeemerTag = CML.RedeemerTag
 ```
 
 Added in v2.0.0
@@ -51,7 +51,7 @@ Convert string to RedeemerTag enum value
 **Signature**
 
 ```ts
-export declare const fromString: (str: string) => CML.RedeemerTag | undefined;
+export declare const fromString: (str: string) => CML.RedeemerTag | undefined
 ```
 
 Added in v2.0.0
@@ -63,7 +63,7 @@ Convert RedeemerTag enum value to string
 **Signature**
 
 ```ts
-export declare const toString: (value: CML.RedeemerTag) => string;
+export declare const toString: (value: CML.RedeemerTag) => string
 ```
 
 Added in v2.0.0
@@ -75,7 +75,7 @@ Get all values of the RedeemerTag enum
 **Signature**
 
 ```ts
-export declare const values: () => Array<CML.RedeemerTag>;
+export declare const values: () => Array<CML.RedeemerTag>
 ```
 
 Added in v2.0.0
@@ -89,7 +89,7 @@ Cert variant of the RedeemerTag enum
 **Signature**
 
 ```ts
-export declare const Cert: CML.RedeemerTag.Cert;
+export declare const Cert: CML.RedeemerTag.Cert
 ```
 
 Added in v2.0.0
@@ -101,7 +101,7 @@ Mint variant of the RedeemerTag enum
 **Signature**
 
 ```ts
-export declare const Mint: CML.RedeemerTag.Mint;
+export declare const Mint: CML.RedeemerTag.Mint
 ```
 
 Added in v2.0.0
@@ -113,7 +113,7 @@ Proposing variant of the RedeemerTag enum
 **Signature**
 
 ```ts
-export declare const Proposing: CML.RedeemerTag.Proposing;
+export declare const Proposing: CML.RedeemerTag.Proposing
 ```
 
 Added in v2.0.0
@@ -125,7 +125,7 @@ Reward variant of the RedeemerTag enum
 **Signature**
 
 ```ts
-export declare const Reward: CML.RedeemerTag.Reward;
+export declare const Reward: CML.RedeemerTag.Reward
 ```
 
 Added in v2.0.0
@@ -137,7 +137,7 @@ Spend variant of the RedeemerTag enum
 **Signature**
 
 ```ts
-export declare const Spend: CML.RedeemerTag.Spend;
+export declare const Spend: CML.RedeemerTag.Spend
 ```
 
 Added in v2.0.0
@@ -149,7 +149,7 @@ Voting variant of the RedeemerTag enum
 **Signature**
 
 ```ts
-export declare const Voting: CML.RedeemerTag.Voting;
+export declare const Voting: CML.RedeemerTag.Voting
 ```
 
 Added in v2.0.0

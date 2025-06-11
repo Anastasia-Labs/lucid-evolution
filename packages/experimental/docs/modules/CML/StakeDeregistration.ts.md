@@ -1,6 +1,6 @@
 ---
 title: CML/StakeDeregistration.ts
-nav_order: 219
+nav_order: 218
 parent: Modules
 ---
 
@@ -57,8 +57,8 @@ Static method \_new of StakeDeregistration
 
 ```ts
 export declare const _new: (
-  stakeCredential: CML.Credential,
-) => Effect.Effect<CML.StakeDeregistration, StakeDeregistrationError>;
+  stakeCredential: CML.Credential
+) => Effect.Effect<CML.StakeDeregistration, StakeDeregistrationError>
 ```
 
 Added in v2.0.0
@@ -71,8 +71,8 @@ Static method fromCborBytes of StakeDeregistration
 
 ```ts
 export declare const fromCborBytes: (
-  cborBytes: Uint8Array,
-) => Effect.Effect<CML.StakeDeregistration, StakeDeregistrationError>;
+  cborBytes: Uint8Array
+) => Effect.Effect<CML.StakeDeregistration, StakeDeregistrationError>
 ```
 
 Added in v2.0.0
@@ -85,8 +85,8 @@ Static method fromCborHex of StakeDeregistration
 
 ```ts
 export declare const fromCborHex: (
-  cborBytes: string,
-) => Effect.Effect<CML.StakeDeregistration, StakeDeregistrationError>;
+  cborBytes: string
+) => Effect.Effect<CML.StakeDeregistration, StakeDeregistrationError>
 ```
 
 Added in v2.0.0
@@ -98,9 +98,7 @@ Static method fromJson of StakeDeregistration
 **Signature**
 
 ```ts
-export declare const fromJson: (
-  json: string,
-) => Effect.Effect<CML.StakeDeregistration, StakeDeregistrationError>;
+export declare const fromJson: (json: string) => Effect.Effect<CML.StakeDeregistration, StakeDeregistrationError>
 ```
 
 Added in v2.0.0
@@ -114,9 +112,7 @@ Unsafely calls StakeDeregistration.\_new without Effect wrapper
 **Signature**
 
 ```ts
-export declare const _newUnsafe: (
-  stakeCredential: CML.Credential,
-) => CML.StakeDeregistration;
+export declare const _newUnsafe: (stakeCredential: CML.Credential) => CML.StakeDeregistration
 ```
 
 Added in v2.0.0
@@ -128,9 +124,7 @@ Unsafely calls StakeDeregistration.fromCborBytes without Effect wrapper
 **Signature**
 
 ```ts
-export declare const fromCborBytesUnsafe: (
-  cborBytes: Uint8Array,
-) => CML.StakeDeregistration;
+export declare const fromCborBytesUnsafe: (cborBytes: Uint8Array) => CML.StakeDeregistration
 ```
 
 Added in v2.0.0
@@ -142,9 +136,7 @@ Unsafely calls StakeDeregistration.fromCborHex without Effect wrapper
 **Signature**
 
 ```ts
-export declare const fromCborHexUnsafe: (
-  cborBytes: string,
-) => CML.StakeDeregistration;
+export declare const fromCborHexUnsafe: (cborBytes: string) => CML.StakeDeregistration
 ```
 
 Added in v2.0.0
@@ -156,7 +148,7 @@ Unsafely calls StakeDeregistration.fromJson without Effect wrapper
 **Signature**
 
 ```ts
-export declare const fromJsonUnsafe: (json: string) => CML.StakeDeregistration;
+export declare const fromJsonUnsafe: (json: string) => CML.StakeDeregistration
 ```
 
 Added in v2.0.0
@@ -186,9 +178,7 @@ Method free of StakeDeregistration
 **Signature**
 
 ```ts
-export declare const free: (
-  instance: CML.StakeDeregistration,
-) => Effect.Effect<void, StakeDeregistrationError>;
+export declare const free: (instance: CML.StakeDeregistration) => Effect.Effect<void, StakeDeregistrationError>
 ```
 
 Added in v2.0.0
@@ -201,8 +191,8 @@ Method stakeCredential of StakeDeregistration
 
 ```ts
 export declare const stakeCredential: (
-  instance: CML.StakeDeregistration,
-) => Effect.Effect<CML.Credential, StakeDeregistrationError>;
+  instance: CML.StakeDeregistration
+) => Effect.Effect<CML.Credential, StakeDeregistrationError>
 ```
 
 Added in v2.0.0
@@ -215,8 +205,8 @@ Method toCanonicalCborBytes of StakeDeregistration
 
 ```ts
 export declare const toCanonicalCborBytes: (
-  instance: CML.StakeDeregistration,
-) => Effect.Effect<Uint8Array, StakeDeregistrationError>;
+  instance: CML.StakeDeregistration
+) => Effect.Effect<Uint8Array, StakeDeregistrationError>
 ```
 
 Added in v2.0.0
@@ -229,8 +219,8 @@ Method toCanonicalCborHex of StakeDeregistration
 
 ```ts
 export declare const toCanonicalCborHex: (
-  instance: CML.StakeDeregistration,
-) => Effect.Effect<string, StakeDeregistrationError>;
+  instance: CML.StakeDeregistration
+) => Effect.Effect<string, StakeDeregistrationError>
 ```
 
 Added in v2.0.0
@@ -243,8 +233,8 @@ Method toCborBytes of StakeDeregistration
 
 ```ts
 export declare const toCborBytes: (
-  instance: CML.StakeDeregistration,
-) => Effect.Effect<Uint8Array, StakeDeregistrationError>;
+  instance: CML.StakeDeregistration
+) => Effect.Effect<Uint8Array, StakeDeregistrationError>
 ```
 
 Added in v2.0.0
@@ -256,9 +246,7 @@ Method toCborHex of StakeDeregistration
 **Signature**
 
 ```ts
-export declare const toCborHex: (
-  instance: CML.StakeDeregistration,
-) => Effect.Effect<string, StakeDeregistrationError>;
+export declare const toCborHex: (instance: CML.StakeDeregistration) => Effect.Effect<string, StakeDeregistrationError>
 ```
 
 Added in v2.0.0
@@ -270,9 +258,7 @@ Method toJsValue of StakeDeregistration
 **Signature**
 
 ```ts
-export declare const toJsValue: (
-  instance: CML.StakeDeregistration,
-) => Effect.Effect<any, StakeDeregistrationError>;
+export declare const toJsValue: (instance: CML.StakeDeregistration) => Effect.Effect<any, StakeDeregistrationError>
 ```
 
 Added in v2.0.0
@@ -284,9 +270,7 @@ Method toJson of StakeDeregistration
 **Signature**
 
 ```ts
-export declare const toJson: (
-  instance: CML.StakeDeregistration,
-) => Effect.Effect<string, StakeDeregistrationError>;
+export declare const toJson: (instance: CML.StakeDeregistration) => Effect.Effect<string, StakeDeregistrationError>
 ```
 
 Added in v2.0.0
@@ -300,7 +284,7 @@ Unsafely calls instance.free without Effect wrapper
 **Signature**
 
 ```ts
-export declare const freeUnsafe: (instance: CML.StakeDeregistration) => void;
+export declare const freeUnsafe: (instance: CML.StakeDeregistration) => void
 ```
 
 Added in v2.0.0
@@ -312,9 +296,7 @@ Unsafely calls instance.stakeCredential without Effect wrapper
 **Signature**
 
 ```ts
-export declare const stakeCredentialUnsafe: (
-  instance: CML.StakeDeregistration,
-) => CML.Credential;
+export declare const stakeCredentialUnsafe: (instance: CML.StakeDeregistration) => CML.Credential
 ```
 
 Added in v2.0.0
@@ -326,9 +308,7 @@ Unsafely calls instance.toCanonicalCborBytes without Effect wrapper
 **Signature**
 
 ```ts
-export declare const toCanonicalCborBytesUnsafe: (
-  instance: CML.StakeDeregistration,
-) => Uint8Array;
+export declare const toCanonicalCborBytesUnsafe: (instance: CML.StakeDeregistration) => Uint8Array
 ```
 
 Added in v2.0.0
@@ -340,9 +320,7 @@ Unsafely calls instance.toCanonicalCborHex without Effect wrapper
 **Signature**
 
 ```ts
-export declare const toCanonicalCborHexUnsafe: (
-  instance: CML.StakeDeregistration,
-) => string;
+export declare const toCanonicalCborHexUnsafe: (instance: CML.StakeDeregistration) => string
 ```
 
 Added in v2.0.0
@@ -354,9 +332,7 @@ Unsafely calls instance.toCborBytes without Effect wrapper
 **Signature**
 
 ```ts
-export declare const toCborBytesUnsafe: (
-  instance: CML.StakeDeregistration,
-) => Uint8Array;
+export declare const toCborBytesUnsafe: (instance: CML.StakeDeregistration) => Uint8Array
 ```
 
 Added in v2.0.0
@@ -368,9 +344,7 @@ Unsafely calls instance.toCborHex without Effect wrapper
 **Signature**
 
 ```ts
-export declare const toCborHexUnsafe: (
-  instance: CML.StakeDeregistration,
-) => string;
+export declare const toCborHexUnsafe: (instance: CML.StakeDeregistration) => string
 ```
 
 Added in v2.0.0
@@ -382,9 +356,7 @@ Unsafely calls instance.toJsValue without Effect wrapper
 **Signature**
 
 ```ts
-export declare const toJsValueUnsafe: (
-  instance: CML.StakeDeregistration,
-) => any;
+export declare const toJsValueUnsafe: (instance: CML.StakeDeregistration) => any
 ```
 
 Added in v2.0.0
@@ -396,9 +368,7 @@ Unsafely calls instance.toJson without Effect wrapper
 **Signature**
 
 ```ts
-export declare const toJsonUnsafe: (
-  instance: CML.StakeDeregistration,
-) => string;
+export declare const toJsonUnsafe: (instance: CML.StakeDeregistration) => string
 ```
 
 Added in v2.0.0
@@ -412,7 +382,7 @@ Type alias for the CML StakeDeregistration class
 **Signature**
 
 ```ts
-export type StakeDeregistration = CML.StakeDeregistration;
+export type StakeDeregistration = CML.StakeDeregistration
 ```
 
 Added in v2.0.0

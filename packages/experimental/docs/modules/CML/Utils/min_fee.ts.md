@@ -1,6 +1,6 @@
 ---
 title: CML/Utils/min_fee.ts
-nav_order: 276
+nav_order: 275
 parent: Modules
 ---
 
@@ -50,8 +50,8 @@ export declare const minFee: (
   tx: CML.Transaction,
   linearFee: CML.LinearFee,
   exUnitPrices: CML.ExUnitPrices,
-  totalRefScriptSize: bigint,
-) => Effect.Effect<bigint, MinFeeError>;
+  totalRefScriptSize: bigint
+) => Effect.Effect<bigint, MinFeeError>
 ```
 
 Added in v2.0.0
@@ -69,8 +69,8 @@ export declare const minFeeUnsafe: (
   tx: CML.Transaction,
   linearFee: CML.LinearFee,
   exUnitPrices: CML.ExUnitPrices,
-  totalRefScriptSize: bigint,
-) => bigint;
+  totalRefScriptSize: bigint
+) => bigint
 ```
 
 Added in v2.0.0

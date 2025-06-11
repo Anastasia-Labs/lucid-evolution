@@ -1,6 +1,6 @@
 ---
 title: CML/InputAggregateWitnessData.ts
-nav_order: 110
+nav_order: 109
 parent: Modules
 ---
 
@@ -51,8 +51,8 @@ Method free of InputAggregateWitnessData
 
 ```ts
 export declare const free: (
-  instance: CML.InputAggregateWitnessData,
-) => Effect.Effect<void, InputAggregateWitnessDataError>;
+  instance: CML.InputAggregateWitnessData
+) => Effect.Effect<void, InputAggregateWitnessDataError>
 ```
 
 Added in v2.0.0
@@ -65,8 +65,8 @@ Method plutusData of InputAggregateWitnessData
 
 ```ts
 export declare const plutusData: (
-  instance: CML.InputAggregateWitnessData,
-) => Effect.Effect<CML.PlutusData | undefined, InputAggregateWitnessDataError>;
+  instance: CML.InputAggregateWitnessData
+) => Effect.Effect<CML.PlutusData | undefined, InputAggregateWitnessDataError>
 ```
 
 Added in v2.0.0
@@ -80,9 +80,7 @@ Unsafely calls instance.free without Effect wrapper
 **Signature**
 
 ```ts
-export declare const freeUnsafe: (
-  instance: CML.InputAggregateWitnessData,
-) => void;
+export declare const freeUnsafe: (instance: CML.InputAggregateWitnessData) => void
 ```
 
 Added in v2.0.0
@@ -94,9 +92,7 @@ Unsafely calls instance.plutusData without Effect wrapper
 **Signature**
 
 ```ts
-export declare const plutusDataUnsafe: (
-  instance: CML.InputAggregateWitnessData,
-) => CML.PlutusData | undefined;
+export declare const plutusDataUnsafe: (instance: CML.InputAggregateWitnessData) => CML.PlutusData | undefined
 ```
 
 Added in v2.0.0
@@ -110,7 +106,7 @@ Type alias for the CML InputAggregateWitnessData class
 **Signature**
 
 ```ts
-export type InputAggregateWitnessData = CML.InputAggregateWitnessData;
+export type InputAggregateWitnessData = CML.InputAggregateWitnessData
 ```
 
 Added in v2.0.0

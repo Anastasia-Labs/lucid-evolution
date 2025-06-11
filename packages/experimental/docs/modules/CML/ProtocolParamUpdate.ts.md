@@ -1,6 +1,6 @@
 ---
 title: CML/ProtocolParamUpdate.ts
-nav_order: 180
+nav_order: 179
 parent: Modules
 ---
 
@@ -174,10 +174,7 @@ Static method \_new of ProtocolParamUpdate
 **Signature**
 
 ```ts
-export declare const _new: () => Effect.Effect<
-  CML.ProtocolParamUpdate,
-  ProtocolParamUpdateError
->;
+export declare const _new: () => Effect.Effect<CML.ProtocolParamUpdate, ProtocolParamUpdateError>
 ```
 
 Added in v2.0.0
@@ -190,8 +187,8 @@ Static method fromCborBytes of ProtocolParamUpdate
 
 ```ts
 export declare const fromCborBytes: (
-  cborBytes: Uint8Array,
-) => Effect.Effect<CML.ProtocolParamUpdate, ProtocolParamUpdateError>;
+  cborBytes: Uint8Array
+) => Effect.Effect<CML.ProtocolParamUpdate, ProtocolParamUpdateError>
 ```
 
 Added in v2.0.0
@@ -204,8 +201,8 @@ Static method fromCborHex of ProtocolParamUpdate
 
 ```ts
 export declare const fromCborHex: (
-  cborBytes: string,
-) => Effect.Effect<CML.ProtocolParamUpdate, ProtocolParamUpdateError>;
+  cborBytes: string
+) => Effect.Effect<CML.ProtocolParamUpdate, ProtocolParamUpdateError>
 ```
 
 Added in v2.0.0
@@ -217,9 +214,7 @@ Static method fromJson of ProtocolParamUpdate
 **Signature**
 
 ```ts
-export declare const fromJson: (
-  json: string,
-) => Effect.Effect<CML.ProtocolParamUpdate, ProtocolParamUpdateError>;
+export declare const fromJson: (json: string) => Effect.Effect<CML.ProtocolParamUpdate, ProtocolParamUpdateError>
 ```
 
 Added in v2.0.0
@@ -233,7 +228,7 @@ Unsafely calls ProtocolParamUpdate.\_new without Effect wrapper
 **Signature**
 
 ```ts
-export declare const _newUnsafe: () => CML.ProtocolParamUpdate;
+export declare const _newUnsafe: () => CML.ProtocolParamUpdate
 ```
 
 Added in v2.0.0
@@ -245,9 +240,7 @@ Unsafely calls ProtocolParamUpdate.fromCborBytes without Effect wrapper
 **Signature**
 
 ```ts
-export declare const fromCborBytesUnsafe: (
-  cborBytes: Uint8Array,
-) => CML.ProtocolParamUpdate;
+export declare const fromCborBytesUnsafe: (cborBytes: Uint8Array) => CML.ProtocolParamUpdate
 ```
 
 Added in v2.0.0
@@ -259,9 +252,7 @@ Unsafely calls ProtocolParamUpdate.fromCborHex without Effect wrapper
 **Signature**
 
 ```ts
-export declare const fromCborHexUnsafe: (
-  cborBytes: string,
-) => CML.ProtocolParamUpdate;
+export declare const fromCborHexUnsafe: (cborBytes: string) => CML.ProtocolParamUpdate
 ```
 
 Added in v2.0.0
@@ -273,7 +264,7 @@ Unsafely calls ProtocolParamUpdate.fromJson without Effect wrapper
 **Signature**
 
 ```ts
-export declare const fromJsonUnsafe: (json: string) => CML.ProtocolParamUpdate;
+export declare const fromJsonUnsafe: (json: string) => CML.ProtocolParamUpdate
 ```
 
 Added in v2.0.0
@@ -304,8 +295,8 @@ Method adaPerUtxoByte of ProtocolParamUpdate
 
 ```ts
 export declare const adaPerUtxoByte: (
-  instance: CML.ProtocolParamUpdate,
-) => Effect.Effect<bigint | undefined, ProtocolParamUpdateError>;
+  instance: CML.ProtocolParamUpdate
+) => Effect.Effect<bigint | undefined, ProtocolParamUpdateError>
 ```
 
 Added in v2.0.0
@@ -318,8 +309,8 @@ Method collateralPercentage of ProtocolParamUpdate
 
 ```ts
 export declare const collateralPercentage: (
-  instance: CML.ProtocolParamUpdate,
-) => Effect.Effect<bigint | undefined, ProtocolParamUpdateError>;
+  instance: CML.ProtocolParamUpdate
+) => Effect.Effect<bigint | undefined, ProtocolParamUpdateError>
 ```
 
 Added in v2.0.0
@@ -332,8 +323,8 @@ Method committeeTermLimit of ProtocolParamUpdate
 
 ```ts
 export declare const committeeTermLimit: (
-  instance: CML.ProtocolParamUpdate,
-) => Effect.Effect<bigint | undefined, ProtocolParamUpdateError>;
+  instance: CML.ProtocolParamUpdate
+) => Effect.Effect<bigint | undefined, ProtocolParamUpdateError>
 ```
 
 Added in v2.0.0
@@ -346,8 +337,8 @@ Method costModelsForScriptLanguages of ProtocolParamUpdate
 
 ```ts
 export declare const costModelsForScriptLanguages: (
-  instance: CML.ProtocolParamUpdate,
-) => Effect.Effect<CML.CostModels | undefined, ProtocolParamUpdateError>;
+  instance: CML.ProtocolParamUpdate
+) => Effect.Effect<CML.CostModels | undefined, ProtocolParamUpdateError>
 ```
 
 Added in v2.0.0
@@ -360,8 +351,8 @@ Method dRepDeposit of ProtocolParamUpdate
 
 ```ts
 export declare const dRepDeposit: (
-  instance: CML.ProtocolParamUpdate,
-) => Effect.Effect<bigint | undefined, ProtocolParamUpdateError>;
+  instance: CML.ProtocolParamUpdate
+) => Effect.Effect<bigint | undefined, ProtocolParamUpdateError>
 ```
 
 Added in v2.0.0
@@ -374,8 +365,8 @@ Method dRepInactivityPeriod of ProtocolParamUpdate
 
 ```ts
 export declare const dRepInactivityPeriod: (
-  instance: CML.ProtocolParamUpdate,
-) => Effect.Effect<bigint | undefined, ProtocolParamUpdateError>;
+  instance: CML.ProtocolParamUpdate
+) => Effect.Effect<bigint | undefined, ProtocolParamUpdateError>
 ```
 
 Added in v2.0.0
@@ -388,11 +379,8 @@ Method dRepVotingThresholds of ProtocolParamUpdate
 
 ```ts
 export declare const dRepVotingThresholds: (
-  instance: CML.ProtocolParamUpdate,
-) => Effect.Effect<
-  CML.DRepVotingThresholds | undefined,
-  ProtocolParamUpdateError
->;
+  instance: CML.ProtocolParamUpdate
+) => Effect.Effect<CML.DRepVotingThresholds | undefined, ProtocolParamUpdateError>
 ```
 
 Added in v2.0.0
@@ -405,8 +393,8 @@ Method executionCosts of ProtocolParamUpdate
 
 ```ts
 export declare const executionCosts: (
-  instance: CML.ProtocolParamUpdate,
-) => Effect.Effect<CML.ExUnitPrices | undefined, ProtocolParamUpdateError>;
+  instance: CML.ProtocolParamUpdate
+) => Effect.Effect<CML.ExUnitPrices | undefined, ProtocolParamUpdateError>
 ```
 
 Added in v2.0.0
@@ -419,8 +407,8 @@ Method expansionRate of ProtocolParamUpdate
 
 ```ts
 export declare const expansionRate: (
-  instance: CML.ProtocolParamUpdate,
-) => Effect.Effect<CML.UnitInterval | undefined, ProtocolParamUpdateError>;
+  instance: CML.ProtocolParamUpdate
+) => Effect.Effect<CML.UnitInterval | undefined, ProtocolParamUpdateError>
 ```
 
 Added in v2.0.0
@@ -432,9 +420,7 @@ Method free of ProtocolParamUpdate
 **Signature**
 
 ```ts
-export declare const free: (
-  instance: CML.ProtocolParamUpdate,
-) => Effect.Effect<void, ProtocolParamUpdateError>;
+export declare const free: (instance: CML.ProtocolParamUpdate) => Effect.Effect<void, ProtocolParamUpdateError>
 ```
 
 Added in v2.0.0
@@ -447,8 +433,8 @@ Method governanceActionDeposit of ProtocolParamUpdate
 
 ```ts
 export declare const governanceActionDeposit: (
-  instance: CML.ProtocolParamUpdate,
-) => Effect.Effect<bigint | undefined, ProtocolParamUpdateError>;
+  instance: CML.ProtocolParamUpdate
+) => Effect.Effect<bigint | undefined, ProtocolParamUpdateError>
 ```
 
 Added in v2.0.0
@@ -461,8 +447,8 @@ Method governanceActionValidityPeriod of ProtocolParamUpdate
 
 ```ts
 export declare const governanceActionValidityPeriod: (
-  instance: CML.ProtocolParamUpdate,
-) => Effect.Effect<bigint | undefined, ProtocolParamUpdateError>;
+  instance: CML.ProtocolParamUpdate
+) => Effect.Effect<bigint | undefined, ProtocolParamUpdateError>
 ```
 
 Added in v2.0.0
@@ -475,8 +461,8 @@ Method keyDeposit of ProtocolParamUpdate
 
 ```ts
 export declare const keyDeposit: (
-  instance: CML.ProtocolParamUpdate,
-) => Effect.Effect<bigint | undefined, ProtocolParamUpdateError>;
+  instance: CML.ProtocolParamUpdate
+) => Effect.Effect<bigint | undefined, ProtocolParamUpdateError>
 ```
 
 Added in v2.0.0
@@ -489,8 +475,8 @@ Method maxBlockBodySize of ProtocolParamUpdate
 
 ```ts
 export declare const maxBlockBodySize: (
-  instance: CML.ProtocolParamUpdate,
-) => Effect.Effect<bigint | undefined, ProtocolParamUpdateError>;
+  instance: CML.ProtocolParamUpdate
+) => Effect.Effect<bigint | undefined, ProtocolParamUpdateError>
 ```
 
 Added in v2.0.0
@@ -503,8 +489,8 @@ Method maxBlockExUnits of ProtocolParamUpdate
 
 ```ts
 export declare const maxBlockExUnits: (
-  instance: CML.ProtocolParamUpdate,
-) => Effect.Effect<CML.ExUnits | undefined, ProtocolParamUpdateError>;
+  instance: CML.ProtocolParamUpdate
+) => Effect.Effect<CML.ExUnits | undefined, ProtocolParamUpdateError>
 ```
 
 Added in v2.0.0
@@ -517,8 +503,8 @@ Method maxBlockHeaderSize of ProtocolParamUpdate
 
 ```ts
 export declare const maxBlockHeaderSize: (
-  instance: CML.ProtocolParamUpdate,
-) => Effect.Effect<bigint | undefined, ProtocolParamUpdateError>;
+  instance: CML.ProtocolParamUpdate
+) => Effect.Effect<bigint | undefined, ProtocolParamUpdateError>
 ```
 
 Added in v2.0.0
@@ -531,8 +517,8 @@ Method maxCollateralInputs of ProtocolParamUpdate
 
 ```ts
 export declare const maxCollateralInputs: (
-  instance: CML.ProtocolParamUpdate,
-) => Effect.Effect<bigint | undefined, ProtocolParamUpdateError>;
+  instance: CML.ProtocolParamUpdate
+) => Effect.Effect<bigint | undefined, ProtocolParamUpdateError>
 ```
 
 Added in v2.0.0
@@ -545,8 +531,8 @@ Method maxTransactionSize of ProtocolParamUpdate
 
 ```ts
 export declare const maxTransactionSize: (
-  instance: CML.ProtocolParamUpdate,
-) => Effect.Effect<bigint | undefined, ProtocolParamUpdateError>;
+  instance: CML.ProtocolParamUpdate
+) => Effect.Effect<bigint | undefined, ProtocolParamUpdateError>
 ```
 
 Added in v2.0.0
@@ -559,8 +545,8 @@ Method maxTxExUnits of ProtocolParamUpdate
 
 ```ts
 export declare const maxTxExUnits: (
-  instance: CML.ProtocolParamUpdate,
-) => Effect.Effect<CML.ExUnits | undefined, ProtocolParamUpdateError>;
+  instance: CML.ProtocolParamUpdate
+) => Effect.Effect<CML.ExUnits | undefined, ProtocolParamUpdateError>
 ```
 
 Added in v2.0.0
@@ -573,8 +559,8 @@ Method maxValueSize of ProtocolParamUpdate
 
 ```ts
 export declare const maxValueSize: (
-  instance: CML.ProtocolParamUpdate,
-) => Effect.Effect<bigint | undefined, ProtocolParamUpdateError>;
+  instance: CML.ProtocolParamUpdate
+) => Effect.Effect<bigint | undefined, ProtocolParamUpdateError>
 ```
 
 Added in v2.0.0
@@ -587,8 +573,8 @@ Method maximumEpoch of ProtocolParamUpdate
 
 ```ts
 export declare const maximumEpoch: (
-  instance: CML.ProtocolParamUpdate,
-) => Effect.Effect<bigint | undefined, ProtocolParamUpdateError>;
+  instance: CML.ProtocolParamUpdate
+) => Effect.Effect<bigint | undefined, ProtocolParamUpdateError>
 ```
 
 Added in v2.0.0
@@ -601,8 +587,8 @@ Method minCommitteeSize of ProtocolParamUpdate
 
 ```ts
 export declare const minCommitteeSize: (
-  instance: CML.ProtocolParamUpdate,
-) => Effect.Effect<bigint | undefined, ProtocolParamUpdateError>;
+  instance: CML.ProtocolParamUpdate
+) => Effect.Effect<bigint | undefined, ProtocolParamUpdateError>
 ```
 
 Added in v2.0.0
@@ -615,8 +601,8 @@ Method minFeeRefScriptCostPerByte of ProtocolParamUpdate
 
 ```ts
 export declare const minFeeRefScriptCostPerByte: (
-  instance: CML.ProtocolParamUpdate,
-) => Effect.Effect<CML.Rational | undefined, ProtocolParamUpdateError>;
+  instance: CML.ProtocolParamUpdate
+) => Effect.Effect<CML.Rational | undefined, ProtocolParamUpdateError>
 ```
 
 Added in v2.0.0
@@ -629,8 +615,8 @@ Method minPoolCost of ProtocolParamUpdate
 
 ```ts
 export declare const minPoolCost: (
-  instance: CML.ProtocolParamUpdate,
-) => Effect.Effect<bigint | undefined, ProtocolParamUpdateError>;
+  instance: CML.ProtocolParamUpdate
+) => Effect.Effect<bigint | undefined, ProtocolParamUpdateError>
 ```
 
 Added in v2.0.0
@@ -643,8 +629,8 @@ Method minfeeA of ProtocolParamUpdate
 
 ```ts
 export declare const minfeeA: (
-  instance: CML.ProtocolParamUpdate,
-) => Effect.Effect<bigint | undefined, ProtocolParamUpdateError>;
+  instance: CML.ProtocolParamUpdate
+) => Effect.Effect<bigint | undefined, ProtocolParamUpdateError>
 ```
 
 Added in v2.0.0
@@ -657,8 +643,8 @@ Method minfeeB of ProtocolParamUpdate
 
 ```ts
 export declare const minfeeB: (
-  instance: CML.ProtocolParamUpdate,
-) => Effect.Effect<bigint | undefined, ProtocolParamUpdateError>;
+  instance: CML.ProtocolParamUpdate
+) => Effect.Effect<bigint | undefined, ProtocolParamUpdateError>
 ```
 
 Added in v2.0.0
@@ -671,8 +657,8 @@ Method nOpt of ProtocolParamUpdate
 
 ```ts
 export declare const nOpt: (
-  instance: CML.ProtocolParamUpdate,
-) => Effect.Effect<bigint | undefined, ProtocolParamUpdateError>;
+  instance: CML.ProtocolParamUpdate
+) => Effect.Effect<bigint | undefined, ProtocolParamUpdateError>
 ```
 
 Added in v2.0.0
@@ -685,8 +671,8 @@ Method poolDeposit of ProtocolParamUpdate
 
 ```ts
 export declare const poolDeposit: (
-  instance: CML.ProtocolParamUpdate,
-) => Effect.Effect<bigint | undefined, ProtocolParamUpdateError>;
+  instance: CML.ProtocolParamUpdate
+) => Effect.Effect<bigint | undefined, ProtocolParamUpdateError>
 ```
 
 Added in v2.0.0
@@ -699,8 +685,8 @@ Method poolPledgeInfluence of ProtocolParamUpdate
 
 ```ts
 export declare const poolPledgeInfluence: (
-  instance: CML.ProtocolParamUpdate,
-) => Effect.Effect<CML.Rational | undefined, ProtocolParamUpdateError>;
+  instance: CML.ProtocolParamUpdate
+) => Effect.Effect<CML.Rational | undefined, ProtocolParamUpdateError>
 ```
 
 Added in v2.0.0
@@ -713,11 +699,8 @@ Method poolVotingThresholds of ProtocolParamUpdate
 
 ```ts
 export declare const poolVotingThresholds: (
-  instance: CML.ProtocolParamUpdate,
-) => Effect.Effect<
-  CML.PoolVotingThresholds | undefined,
-  ProtocolParamUpdateError
->;
+  instance: CML.ProtocolParamUpdate
+) => Effect.Effect<CML.PoolVotingThresholds | undefined, ProtocolParamUpdateError>
 ```
 
 Added in v2.0.0
@@ -731,8 +714,8 @@ Method setAdaPerUtxoByte of ProtocolParamUpdate
 ```ts
 export declare const setAdaPerUtxoByte: (
   instance: CML.ProtocolParamUpdate,
-  adaPerUtxoByte: bigint,
-) => Effect.Effect<void, ProtocolParamUpdateError>;
+  adaPerUtxoByte: bigint
+) => Effect.Effect<void, ProtocolParamUpdateError>
 ```
 
 Added in v2.0.0
@@ -746,8 +729,8 @@ Method setCollateralPercentage of ProtocolParamUpdate
 ```ts
 export declare const setCollateralPercentage: (
   instance: CML.ProtocolParamUpdate,
-  collateralPercentage: bigint,
-) => Effect.Effect<void, ProtocolParamUpdateError>;
+  collateralPercentage: bigint
+) => Effect.Effect<void, ProtocolParamUpdateError>
 ```
 
 Added in v2.0.0
@@ -761,8 +744,8 @@ Method setCommitteeTermLimit of ProtocolParamUpdate
 ```ts
 export declare const setCommitteeTermLimit: (
   instance: CML.ProtocolParamUpdate,
-  committeeTermLimit: bigint,
-) => Effect.Effect<void, ProtocolParamUpdateError>;
+  committeeTermLimit: bigint
+) => Effect.Effect<void, ProtocolParamUpdateError>
 ```
 
 Added in v2.0.0
@@ -776,8 +759,8 @@ Method setCostModelsForScriptLanguages of ProtocolParamUpdate
 ```ts
 export declare const setCostModelsForScriptLanguages: (
   instance: CML.ProtocolParamUpdate,
-  costModelsForScriptLanguages: CML.CostModels,
-) => Effect.Effect<void, ProtocolParamUpdateError>;
+  costModelsForScriptLanguages: CML.CostModels
+) => Effect.Effect<void, ProtocolParamUpdateError>
 ```
 
 Added in v2.0.0
@@ -791,8 +774,8 @@ Method setDRepDeposit of ProtocolParamUpdate
 ```ts
 export declare const setDRepDeposit: (
   instance: CML.ProtocolParamUpdate,
-  dRepDeposit: bigint,
-) => Effect.Effect<void, ProtocolParamUpdateError>;
+  dRepDeposit: bigint
+) => Effect.Effect<void, ProtocolParamUpdateError>
 ```
 
 Added in v2.0.0
@@ -806,8 +789,8 @@ Method setDRepInactivityPeriod of ProtocolParamUpdate
 ```ts
 export declare const setDRepInactivityPeriod: (
   instance: CML.ProtocolParamUpdate,
-  dRepInactivityPeriod: bigint,
-) => Effect.Effect<void, ProtocolParamUpdateError>;
+  dRepInactivityPeriod: bigint
+) => Effect.Effect<void, ProtocolParamUpdateError>
 ```
 
 Added in v2.0.0
@@ -821,8 +804,8 @@ Method setDRepVotingThresholds of ProtocolParamUpdate
 ```ts
 export declare const setDRepVotingThresholds: (
   instance: CML.ProtocolParamUpdate,
-  dRepVotingThresholds: CML.DRepVotingThresholds,
-) => Effect.Effect<void, ProtocolParamUpdateError>;
+  dRepVotingThresholds: CML.DRepVotingThresholds
+) => Effect.Effect<void, ProtocolParamUpdateError>
 ```
 
 Added in v2.0.0
@@ -836,8 +819,8 @@ Method setExecutionCosts of ProtocolParamUpdate
 ```ts
 export declare const setExecutionCosts: (
   instance: CML.ProtocolParamUpdate,
-  executionCosts: CML.ExUnitPrices,
-) => Effect.Effect<void, ProtocolParamUpdateError>;
+  executionCosts: CML.ExUnitPrices
+) => Effect.Effect<void, ProtocolParamUpdateError>
 ```
 
 Added in v2.0.0
@@ -851,8 +834,8 @@ Method setExpansionRate of ProtocolParamUpdate
 ```ts
 export declare const setExpansionRate: (
   instance: CML.ProtocolParamUpdate,
-  expansionRate: CML.UnitInterval,
-) => Effect.Effect<void, ProtocolParamUpdateError>;
+  expansionRate: CML.UnitInterval
+) => Effect.Effect<void, ProtocolParamUpdateError>
 ```
 
 Added in v2.0.0
@@ -866,8 +849,8 @@ Method setGovernanceActionDeposit of ProtocolParamUpdate
 ```ts
 export declare const setGovernanceActionDeposit: (
   instance: CML.ProtocolParamUpdate,
-  governanceActionDeposit: bigint,
-) => Effect.Effect<void, ProtocolParamUpdateError>;
+  governanceActionDeposit: bigint
+) => Effect.Effect<void, ProtocolParamUpdateError>
 ```
 
 Added in v2.0.0
@@ -881,8 +864,8 @@ Method setGovernanceActionValidityPeriod of ProtocolParamUpdate
 ```ts
 export declare const setGovernanceActionValidityPeriod: (
   instance: CML.ProtocolParamUpdate,
-  governanceActionValidityPeriod: bigint,
-) => Effect.Effect<void, ProtocolParamUpdateError>;
+  governanceActionValidityPeriod: bigint
+) => Effect.Effect<void, ProtocolParamUpdateError>
 ```
 
 Added in v2.0.0
@@ -896,8 +879,8 @@ Method setKeyDeposit of ProtocolParamUpdate
 ```ts
 export declare const setKeyDeposit: (
   instance: CML.ProtocolParamUpdate,
-  keyDeposit: bigint,
-) => Effect.Effect<void, ProtocolParamUpdateError>;
+  keyDeposit: bigint
+) => Effect.Effect<void, ProtocolParamUpdateError>
 ```
 
 Added in v2.0.0
@@ -911,8 +894,8 @@ Method setMaxBlockBodySize of ProtocolParamUpdate
 ```ts
 export declare const setMaxBlockBodySize: (
   instance: CML.ProtocolParamUpdate,
-  maxBlockBodySize: bigint,
-) => Effect.Effect<void, ProtocolParamUpdateError>;
+  maxBlockBodySize: bigint
+) => Effect.Effect<void, ProtocolParamUpdateError>
 ```
 
 Added in v2.0.0
@@ -926,8 +909,8 @@ Method setMaxBlockExUnits of ProtocolParamUpdate
 ```ts
 export declare const setMaxBlockExUnits: (
   instance: CML.ProtocolParamUpdate,
-  maxBlockExUnits: CML.ExUnits,
-) => Effect.Effect<void, ProtocolParamUpdateError>;
+  maxBlockExUnits: CML.ExUnits
+) => Effect.Effect<void, ProtocolParamUpdateError>
 ```
 
 Added in v2.0.0
@@ -941,8 +924,8 @@ Method setMaxBlockHeaderSize of ProtocolParamUpdate
 ```ts
 export declare const setMaxBlockHeaderSize: (
   instance: CML.ProtocolParamUpdate,
-  maxBlockHeaderSize: bigint,
-) => Effect.Effect<void, ProtocolParamUpdateError>;
+  maxBlockHeaderSize: bigint
+) => Effect.Effect<void, ProtocolParamUpdateError>
 ```
 
 Added in v2.0.0
@@ -956,8 +939,8 @@ Method setMaxCollateralInputs of ProtocolParamUpdate
 ```ts
 export declare const setMaxCollateralInputs: (
   instance: CML.ProtocolParamUpdate,
-  maxCollateralInputs: bigint,
-) => Effect.Effect<void, ProtocolParamUpdateError>;
+  maxCollateralInputs: bigint
+) => Effect.Effect<void, ProtocolParamUpdateError>
 ```
 
 Added in v2.0.0
@@ -971,8 +954,8 @@ Method setMaxTransactionSize of ProtocolParamUpdate
 ```ts
 export declare const setMaxTransactionSize: (
   instance: CML.ProtocolParamUpdate,
-  maxTransactionSize: bigint,
-) => Effect.Effect<void, ProtocolParamUpdateError>;
+  maxTransactionSize: bigint
+) => Effect.Effect<void, ProtocolParamUpdateError>
 ```
 
 Added in v2.0.0
@@ -986,8 +969,8 @@ Method setMaxTxExUnits of ProtocolParamUpdate
 ```ts
 export declare const setMaxTxExUnits: (
   instance: CML.ProtocolParamUpdate,
-  maxTxExUnits: CML.ExUnits,
-) => Effect.Effect<void, ProtocolParamUpdateError>;
+  maxTxExUnits: CML.ExUnits
+) => Effect.Effect<void, ProtocolParamUpdateError>
 ```
 
 Added in v2.0.0
@@ -1001,8 +984,8 @@ Method setMaxValueSize of ProtocolParamUpdate
 ```ts
 export declare const setMaxValueSize: (
   instance: CML.ProtocolParamUpdate,
-  maxValueSize: bigint,
-) => Effect.Effect<void, ProtocolParamUpdateError>;
+  maxValueSize: bigint
+) => Effect.Effect<void, ProtocolParamUpdateError>
 ```
 
 Added in v2.0.0
@@ -1016,8 +999,8 @@ Method setMaximumEpoch of ProtocolParamUpdate
 ```ts
 export declare const setMaximumEpoch: (
   instance: CML.ProtocolParamUpdate,
-  maximumEpoch: bigint,
-) => Effect.Effect<void, ProtocolParamUpdateError>;
+  maximumEpoch: bigint
+) => Effect.Effect<void, ProtocolParamUpdateError>
 ```
 
 Added in v2.0.0
@@ -1031,8 +1014,8 @@ Method setMinCommitteeSize of ProtocolParamUpdate
 ```ts
 export declare const setMinCommitteeSize: (
   instance: CML.ProtocolParamUpdate,
-  minCommitteeSize: bigint,
-) => Effect.Effect<void, ProtocolParamUpdateError>;
+  minCommitteeSize: bigint
+) => Effect.Effect<void, ProtocolParamUpdateError>
 ```
 
 Added in v2.0.0
@@ -1046,8 +1029,8 @@ Method setMinFeeRefScriptCostPerByte of ProtocolParamUpdate
 ```ts
 export declare const setMinFeeRefScriptCostPerByte: (
   instance: CML.ProtocolParamUpdate,
-  minFeeRefScriptCostPerByte: CML.Rational,
-) => Effect.Effect<void, ProtocolParamUpdateError>;
+  minFeeRefScriptCostPerByte: CML.Rational
+) => Effect.Effect<void, ProtocolParamUpdateError>
 ```
 
 Added in v2.0.0
@@ -1061,8 +1044,8 @@ Method setMinPoolCost of ProtocolParamUpdate
 ```ts
 export declare const setMinPoolCost: (
   instance: CML.ProtocolParamUpdate,
-  minPoolCost: bigint,
-) => Effect.Effect<void, ProtocolParamUpdateError>;
+  minPoolCost: bigint
+) => Effect.Effect<void, ProtocolParamUpdateError>
 ```
 
 Added in v2.0.0
@@ -1076,8 +1059,8 @@ Method setMinfeeA of ProtocolParamUpdate
 ```ts
 export declare const setMinfeeA: (
   instance: CML.ProtocolParamUpdate,
-  minfeeA: bigint,
-) => Effect.Effect<void, ProtocolParamUpdateError>;
+  minfeeA: bigint
+) => Effect.Effect<void, ProtocolParamUpdateError>
 ```
 
 Added in v2.0.0
@@ -1091,8 +1074,8 @@ Method setMinfeeB of ProtocolParamUpdate
 ```ts
 export declare const setMinfeeB: (
   instance: CML.ProtocolParamUpdate,
-  minfeeB: bigint,
-) => Effect.Effect<void, ProtocolParamUpdateError>;
+  minfeeB: bigint
+) => Effect.Effect<void, ProtocolParamUpdateError>
 ```
 
 Added in v2.0.0
@@ -1106,8 +1089,8 @@ Method setNOpt of ProtocolParamUpdate
 ```ts
 export declare const setNOpt: (
   instance: CML.ProtocolParamUpdate,
-  nOpt: bigint,
-) => Effect.Effect<void, ProtocolParamUpdateError>;
+  nOpt: bigint
+) => Effect.Effect<void, ProtocolParamUpdateError>
 ```
 
 Added in v2.0.0
@@ -1121,8 +1104,8 @@ Method setPoolDeposit of ProtocolParamUpdate
 ```ts
 export declare const setPoolDeposit: (
   instance: CML.ProtocolParamUpdate,
-  poolDeposit: bigint,
-) => Effect.Effect<void, ProtocolParamUpdateError>;
+  poolDeposit: bigint
+) => Effect.Effect<void, ProtocolParamUpdateError>
 ```
 
 Added in v2.0.0
@@ -1136,8 +1119,8 @@ Method setPoolPledgeInfluence of ProtocolParamUpdate
 ```ts
 export declare const setPoolPledgeInfluence: (
   instance: CML.ProtocolParamUpdate,
-  poolPledgeInfluence: CML.Rational,
-) => Effect.Effect<void, ProtocolParamUpdateError>;
+  poolPledgeInfluence: CML.Rational
+) => Effect.Effect<void, ProtocolParamUpdateError>
 ```
 
 Added in v2.0.0
@@ -1151,8 +1134,8 @@ Method setPoolVotingThresholds of ProtocolParamUpdate
 ```ts
 export declare const setPoolVotingThresholds: (
   instance: CML.ProtocolParamUpdate,
-  poolVotingThresholds: CML.PoolVotingThresholds,
-) => Effect.Effect<void, ProtocolParamUpdateError>;
+  poolVotingThresholds: CML.PoolVotingThresholds
+) => Effect.Effect<void, ProtocolParamUpdateError>
 ```
 
 Added in v2.0.0
@@ -1166,8 +1149,8 @@ Method setTreasuryGrowthRate of ProtocolParamUpdate
 ```ts
 export declare const setTreasuryGrowthRate: (
   instance: CML.ProtocolParamUpdate,
-  treasuryGrowthRate: CML.UnitInterval,
-) => Effect.Effect<void, ProtocolParamUpdateError>;
+  treasuryGrowthRate: CML.UnitInterval
+) => Effect.Effect<void, ProtocolParamUpdateError>
 ```
 
 Added in v2.0.0
@@ -1180,8 +1163,8 @@ Method toCanonicalCborBytes of ProtocolParamUpdate
 
 ```ts
 export declare const toCanonicalCborBytes: (
-  instance: CML.ProtocolParamUpdate,
-) => Effect.Effect<Uint8Array, ProtocolParamUpdateError>;
+  instance: CML.ProtocolParamUpdate
+) => Effect.Effect<Uint8Array, ProtocolParamUpdateError>
 ```
 
 Added in v2.0.0
@@ -1194,8 +1177,8 @@ Method toCanonicalCborHex of ProtocolParamUpdate
 
 ```ts
 export declare const toCanonicalCborHex: (
-  instance: CML.ProtocolParamUpdate,
-) => Effect.Effect<string, ProtocolParamUpdateError>;
+  instance: CML.ProtocolParamUpdate
+) => Effect.Effect<string, ProtocolParamUpdateError>
 ```
 
 Added in v2.0.0
@@ -1208,8 +1191,8 @@ Method toCborBytes of ProtocolParamUpdate
 
 ```ts
 export declare const toCborBytes: (
-  instance: CML.ProtocolParamUpdate,
-) => Effect.Effect<Uint8Array, ProtocolParamUpdateError>;
+  instance: CML.ProtocolParamUpdate
+) => Effect.Effect<Uint8Array, ProtocolParamUpdateError>
 ```
 
 Added in v2.0.0
@@ -1221,9 +1204,7 @@ Method toCborHex of ProtocolParamUpdate
 **Signature**
 
 ```ts
-export declare const toCborHex: (
-  instance: CML.ProtocolParamUpdate,
-) => Effect.Effect<string, ProtocolParamUpdateError>;
+export declare const toCborHex: (instance: CML.ProtocolParamUpdate) => Effect.Effect<string, ProtocolParamUpdateError>
 ```
 
 Added in v2.0.0
@@ -1235,9 +1216,7 @@ Method toJsValue of ProtocolParamUpdate
 **Signature**
 
 ```ts
-export declare const toJsValue: (
-  instance: CML.ProtocolParamUpdate,
-) => Effect.Effect<any, ProtocolParamUpdateError>;
+export declare const toJsValue: (instance: CML.ProtocolParamUpdate) => Effect.Effect<any, ProtocolParamUpdateError>
 ```
 
 Added in v2.0.0
@@ -1249,9 +1228,7 @@ Method toJson of ProtocolParamUpdate
 **Signature**
 
 ```ts
-export declare const toJson: (
-  instance: CML.ProtocolParamUpdate,
-) => Effect.Effect<string, ProtocolParamUpdateError>;
+export declare const toJson: (instance: CML.ProtocolParamUpdate) => Effect.Effect<string, ProtocolParamUpdateError>
 ```
 
 Added in v2.0.0
@@ -1264,8 +1241,8 @@ Method treasuryGrowthRate of ProtocolParamUpdate
 
 ```ts
 export declare const treasuryGrowthRate: (
-  instance: CML.ProtocolParamUpdate,
-) => Effect.Effect<CML.UnitInterval | undefined, ProtocolParamUpdateError>;
+  instance: CML.ProtocolParamUpdate
+) => Effect.Effect<CML.UnitInterval | undefined, ProtocolParamUpdateError>
 ```
 
 Added in v2.0.0
@@ -1279,9 +1256,7 @@ Unsafely calls instance.adaPerUtxoByte without Effect wrapper
 **Signature**
 
 ```ts
-export declare const adaPerUtxoByteUnsafe: (
-  instance: CML.ProtocolParamUpdate,
-) => bigint | undefined;
+export declare const adaPerUtxoByteUnsafe: (instance: CML.ProtocolParamUpdate) => bigint | undefined
 ```
 
 Added in v2.0.0
@@ -1293,9 +1268,7 @@ Unsafely calls instance.collateralPercentage without Effect wrapper
 **Signature**
 
 ```ts
-export declare const collateralPercentageUnsafe: (
-  instance: CML.ProtocolParamUpdate,
-) => bigint | undefined;
+export declare const collateralPercentageUnsafe: (instance: CML.ProtocolParamUpdate) => bigint | undefined
 ```
 
 Added in v2.0.0
@@ -1307,9 +1280,7 @@ Unsafely calls instance.committeeTermLimit without Effect wrapper
 **Signature**
 
 ```ts
-export declare const committeeTermLimitUnsafe: (
-  instance: CML.ProtocolParamUpdate,
-) => bigint | undefined;
+export declare const committeeTermLimitUnsafe: (instance: CML.ProtocolParamUpdate) => bigint | undefined
 ```
 
 Added in v2.0.0
@@ -1322,8 +1293,8 @@ Unsafely calls instance.costModelsForScriptLanguages without Effect wrapper
 
 ```ts
 export declare const costModelsForScriptLanguagesUnsafe: (
-  instance: CML.ProtocolParamUpdate,
-) => CML.CostModels | undefined;
+  instance: CML.ProtocolParamUpdate
+) => CML.CostModels | undefined
 ```
 
 Added in v2.0.0
@@ -1335,9 +1306,7 @@ Unsafely calls instance.dRepDeposit without Effect wrapper
 **Signature**
 
 ```ts
-export declare const dRepDepositUnsafe: (
-  instance: CML.ProtocolParamUpdate,
-) => bigint | undefined;
+export declare const dRepDepositUnsafe: (instance: CML.ProtocolParamUpdate) => bigint | undefined
 ```
 
 Added in v2.0.0
@@ -1349,9 +1318,7 @@ Unsafely calls instance.dRepInactivityPeriod without Effect wrapper
 **Signature**
 
 ```ts
-export declare const dRepInactivityPeriodUnsafe: (
-  instance: CML.ProtocolParamUpdate,
-) => bigint | undefined;
+export declare const dRepInactivityPeriodUnsafe: (instance: CML.ProtocolParamUpdate) => bigint | undefined
 ```
 
 Added in v2.0.0
@@ -1364,8 +1331,8 @@ Unsafely calls instance.dRepVotingThresholds without Effect wrapper
 
 ```ts
 export declare const dRepVotingThresholdsUnsafe: (
-  instance: CML.ProtocolParamUpdate,
-) => CML.DRepVotingThresholds | undefined;
+  instance: CML.ProtocolParamUpdate
+) => CML.DRepVotingThresholds | undefined
 ```
 
 Added in v2.0.0
@@ -1377,9 +1344,7 @@ Unsafely calls instance.executionCosts without Effect wrapper
 **Signature**
 
 ```ts
-export declare const executionCostsUnsafe: (
-  instance: CML.ProtocolParamUpdate,
-) => CML.ExUnitPrices | undefined;
+export declare const executionCostsUnsafe: (instance: CML.ProtocolParamUpdate) => CML.ExUnitPrices | undefined
 ```
 
 Added in v2.0.0
@@ -1391,9 +1356,7 @@ Unsafely calls instance.expansionRate without Effect wrapper
 **Signature**
 
 ```ts
-export declare const expansionRateUnsafe: (
-  instance: CML.ProtocolParamUpdate,
-) => CML.UnitInterval | undefined;
+export declare const expansionRateUnsafe: (instance: CML.ProtocolParamUpdate) => CML.UnitInterval | undefined
 ```
 
 Added in v2.0.0
@@ -1405,7 +1368,7 @@ Unsafely calls instance.free without Effect wrapper
 **Signature**
 
 ```ts
-export declare const freeUnsafe: (instance: CML.ProtocolParamUpdate) => void;
+export declare const freeUnsafe: (instance: CML.ProtocolParamUpdate) => void
 ```
 
 Added in v2.0.0
@@ -1417,9 +1380,7 @@ Unsafely calls instance.governanceActionDeposit without Effect wrapper
 **Signature**
 
 ```ts
-export declare const governanceActionDepositUnsafe: (
-  instance: CML.ProtocolParamUpdate,
-) => bigint | undefined;
+export declare const governanceActionDepositUnsafe: (instance: CML.ProtocolParamUpdate) => bigint | undefined
 ```
 
 Added in v2.0.0
@@ -1431,9 +1392,7 @@ Unsafely calls instance.governanceActionValidityPeriod without Effect wrapper
 **Signature**
 
 ```ts
-export declare const governanceActionValidityPeriodUnsafe: (
-  instance: CML.ProtocolParamUpdate,
-) => bigint | undefined;
+export declare const governanceActionValidityPeriodUnsafe: (instance: CML.ProtocolParamUpdate) => bigint | undefined
 ```
 
 Added in v2.0.0
@@ -1445,9 +1404,7 @@ Unsafely calls instance.keyDeposit without Effect wrapper
 **Signature**
 
 ```ts
-export declare const keyDepositUnsafe: (
-  instance: CML.ProtocolParamUpdate,
-) => bigint | undefined;
+export declare const keyDepositUnsafe: (instance: CML.ProtocolParamUpdate) => bigint | undefined
 ```
 
 Added in v2.0.0
@@ -1459,9 +1416,7 @@ Unsafely calls instance.maxBlockBodySize without Effect wrapper
 **Signature**
 
 ```ts
-export declare const maxBlockBodySizeUnsafe: (
-  instance: CML.ProtocolParamUpdate,
-) => bigint | undefined;
+export declare const maxBlockBodySizeUnsafe: (instance: CML.ProtocolParamUpdate) => bigint | undefined
 ```
 
 Added in v2.0.0
@@ -1473,9 +1428,7 @@ Unsafely calls instance.maxBlockExUnits without Effect wrapper
 **Signature**
 
 ```ts
-export declare const maxBlockExUnitsUnsafe: (
-  instance: CML.ProtocolParamUpdate,
-) => CML.ExUnits | undefined;
+export declare const maxBlockExUnitsUnsafe: (instance: CML.ProtocolParamUpdate) => CML.ExUnits | undefined
 ```
 
 Added in v2.0.0
@@ -1487,9 +1440,7 @@ Unsafely calls instance.maxBlockHeaderSize without Effect wrapper
 **Signature**
 
 ```ts
-export declare const maxBlockHeaderSizeUnsafe: (
-  instance: CML.ProtocolParamUpdate,
-) => bigint | undefined;
+export declare const maxBlockHeaderSizeUnsafe: (instance: CML.ProtocolParamUpdate) => bigint | undefined
 ```
 
 Added in v2.0.0
@@ -1501,9 +1452,7 @@ Unsafely calls instance.maxCollateralInputs without Effect wrapper
 **Signature**
 
 ```ts
-export declare const maxCollateralInputsUnsafe: (
-  instance: CML.ProtocolParamUpdate,
-) => bigint | undefined;
+export declare const maxCollateralInputsUnsafe: (instance: CML.ProtocolParamUpdate) => bigint | undefined
 ```
 
 Added in v2.0.0
@@ -1515,9 +1464,7 @@ Unsafely calls instance.maxTransactionSize without Effect wrapper
 **Signature**
 
 ```ts
-export declare const maxTransactionSizeUnsafe: (
-  instance: CML.ProtocolParamUpdate,
-) => bigint | undefined;
+export declare const maxTransactionSizeUnsafe: (instance: CML.ProtocolParamUpdate) => bigint | undefined
 ```
 
 Added in v2.0.0
@@ -1529,9 +1476,7 @@ Unsafely calls instance.maxTxExUnits without Effect wrapper
 **Signature**
 
 ```ts
-export declare const maxTxExUnitsUnsafe: (
-  instance: CML.ProtocolParamUpdate,
-) => CML.ExUnits | undefined;
+export declare const maxTxExUnitsUnsafe: (instance: CML.ProtocolParamUpdate) => CML.ExUnits | undefined
 ```
 
 Added in v2.0.0
@@ -1543,9 +1488,7 @@ Unsafely calls instance.maxValueSize without Effect wrapper
 **Signature**
 
 ```ts
-export declare const maxValueSizeUnsafe: (
-  instance: CML.ProtocolParamUpdate,
-) => bigint | undefined;
+export declare const maxValueSizeUnsafe: (instance: CML.ProtocolParamUpdate) => bigint | undefined
 ```
 
 Added in v2.0.0
@@ -1557,9 +1500,7 @@ Unsafely calls instance.maximumEpoch without Effect wrapper
 **Signature**
 
 ```ts
-export declare const maximumEpochUnsafe: (
-  instance: CML.ProtocolParamUpdate,
-) => bigint | undefined;
+export declare const maximumEpochUnsafe: (instance: CML.ProtocolParamUpdate) => bigint | undefined
 ```
 
 Added in v2.0.0
@@ -1571,9 +1512,7 @@ Unsafely calls instance.minCommitteeSize without Effect wrapper
 **Signature**
 
 ```ts
-export declare const minCommitteeSizeUnsafe: (
-  instance: CML.ProtocolParamUpdate,
-) => bigint | undefined;
+export declare const minCommitteeSizeUnsafe: (instance: CML.ProtocolParamUpdate) => bigint | undefined
 ```
 
 Added in v2.0.0
@@ -1585,9 +1524,7 @@ Unsafely calls instance.minFeeRefScriptCostPerByte without Effect wrapper
 **Signature**
 
 ```ts
-export declare const minFeeRefScriptCostPerByteUnsafe: (
-  instance: CML.ProtocolParamUpdate,
-) => CML.Rational | undefined;
+export declare const minFeeRefScriptCostPerByteUnsafe: (instance: CML.ProtocolParamUpdate) => CML.Rational | undefined
 ```
 
 Added in v2.0.0
@@ -1599,9 +1536,7 @@ Unsafely calls instance.minPoolCost without Effect wrapper
 **Signature**
 
 ```ts
-export declare const minPoolCostUnsafe: (
-  instance: CML.ProtocolParamUpdate,
-) => bigint | undefined;
+export declare const minPoolCostUnsafe: (instance: CML.ProtocolParamUpdate) => bigint | undefined
 ```
 
 Added in v2.0.0
@@ -1613,9 +1548,7 @@ Unsafely calls instance.minfeeA without Effect wrapper
 **Signature**
 
 ```ts
-export declare const minfeeAUnsafe: (
-  instance: CML.ProtocolParamUpdate,
-) => bigint | undefined;
+export declare const minfeeAUnsafe: (instance: CML.ProtocolParamUpdate) => bigint | undefined
 ```
 
 Added in v2.0.0
@@ -1627,9 +1560,7 @@ Unsafely calls instance.minfeeB without Effect wrapper
 **Signature**
 
 ```ts
-export declare const minfeeBUnsafe: (
-  instance: CML.ProtocolParamUpdate,
-) => bigint | undefined;
+export declare const minfeeBUnsafe: (instance: CML.ProtocolParamUpdate) => bigint | undefined
 ```
 
 Added in v2.0.0
@@ -1641,9 +1572,7 @@ Unsafely calls instance.nOpt without Effect wrapper
 **Signature**
 
 ```ts
-export declare const nOptUnsafe: (
-  instance: CML.ProtocolParamUpdate,
-) => bigint | undefined;
+export declare const nOptUnsafe: (instance: CML.ProtocolParamUpdate) => bigint | undefined
 ```
 
 Added in v2.0.0
@@ -1655,9 +1584,7 @@ Unsafely calls instance.poolDeposit without Effect wrapper
 **Signature**
 
 ```ts
-export declare const poolDepositUnsafe: (
-  instance: CML.ProtocolParamUpdate,
-) => bigint | undefined;
+export declare const poolDepositUnsafe: (instance: CML.ProtocolParamUpdate) => bigint | undefined
 ```
 
 Added in v2.0.0
@@ -1669,9 +1596,7 @@ Unsafely calls instance.poolPledgeInfluence without Effect wrapper
 **Signature**
 
 ```ts
-export declare const poolPledgeInfluenceUnsafe: (
-  instance: CML.ProtocolParamUpdate,
-) => CML.Rational | undefined;
+export declare const poolPledgeInfluenceUnsafe: (instance: CML.ProtocolParamUpdate) => CML.Rational | undefined
 ```
 
 Added in v2.0.0
@@ -1684,8 +1609,8 @@ Unsafely calls instance.poolVotingThresholds without Effect wrapper
 
 ```ts
 export declare const poolVotingThresholdsUnsafe: (
-  instance: CML.ProtocolParamUpdate,
-) => CML.PoolVotingThresholds | undefined;
+  instance: CML.ProtocolParamUpdate
+) => CML.PoolVotingThresholds | undefined
 ```
 
 Added in v2.0.0
@@ -1697,10 +1622,7 @@ Unsafely calls instance.setAdaPerUtxoByte without Effect wrapper
 **Signature**
 
 ```ts
-export declare const setAdaPerUtxoByteUnsafe: (
-  instance: CML.ProtocolParamUpdate,
-  adaPerUtxoByte: bigint,
-) => void;
+export declare const setAdaPerUtxoByteUnsafe: (instance: CML.ProtocolParamUpdate, adaPerUtxoByte: bigint) => void
 ```
 
 Added in v2.0.0
@@ -1714,8 +1636,8 @@ Unsafely calls instance.setCollateralPercentage without Effect wrapper
 ```ts
 export declare const setCollateralPercentageUnsafe: (
   instance: CML.ProtocolParamUpdate,
-  collateralPercentage: bigint,
-) => void;
+  collateralPercentage: bigint
+) => void
 ```
 
 Added in v2.0.0
@@ -1729,8 +1651,8 @@ Unsafely calls instance.setCommitteeTermLimit without Effect wrapper
 ```ts
 export declare const setCommitteeTermLimitUnsafe: (
   instance: CML.ProtocolParamUpdate,
-  committeeTermLimit: bigint,
-) => void;
+  committeeTermLimit: bigint
+) => void
 ```
 
 Added in v2.0.0
@@ -1744,8 +1666,8 @@ Unsafely calls instance.setCostModelsForScriptLanguages without Effect wrapper
 ```ts
 export declare const setCostModelsForScriptLanguagesUnsafe: (
   instance: CML.ProtocolParamUpdate,
-  costModelsForScriptLanguages: CML.CostModels,
-) => void;
+  costModelsForScriptLanguages: CML.CostModels
+) => void
 ```
 
 Added in v2.0.0
@@ -1757,10 +1679,7 @@ Unsafely calls instance.setDRepDeposit without Effect wrapper
 **Signature**
 
 ```ts
-export declare const setDRepDepositUnsafe: (
-  instance: CML.ProtocolParamUpdate,
-  dRepDeposit: bigint,
-) => void;
+export declare const setDRepDepositUnsafe: (instance: CML.ProtocolParamUpdate, dRepDeposit: bigint) => void
 ```
 
 Added in v2.0.0
@@ -1774,8 +1693,8 @@ Unsafely calls instance.setDRepInactivityPeriod without Effect wrapper
 ```ts
 export declare const setDRepInactivityPeriodUnsafe: (
   instance: CML.ProtocolParamUpdate,
-  dRepInactivityPeriod: bigint,
-) => void;
+  dRepInactivityPeriod: bigint
+) => void
 ```
 
 Added in v2.0.0
@@ -1789,8 +1708,8 @@ Unsafely calls instance.setDRepVotingThresholds without Effect wrapper
 ```ts
 export declare const setDRepVotingThresholdsUnsafe: (
   instance: CML.ProtocolParamUpdate,
-  dRepVotingThresholds: CML.DRepVotingThresholds,
-) => void;
+  dRepVotingThresholds: CML.DRepVotingThresholds
+) => void
 ```
 
 Added in v2.0.0
@@ -1804,8 +1723,8 @@ Unsafely calls instance.setExecutionCosts without Effect wrapper
 ```ts
 export declare const setExecutionCostsUnsafe: (
   instance: CML.ProtocolParamUpdate,
-  executionCosts: CML.ExUnitPrices,
-) => void;
+  executionCosts: CML.ExUnitPrices
+) => void
 ```
 
 Added in v2.0.0
@@ -1819,8 +1738,8 @@ Unsafely calls instance.setExpansionRate without Effect wrapper
 ```ts
 export declare const setExpansionRateUnsafe: (
   instance: CML.ProtocolParamUpdate,
-  expansionRate: CML.UnitInterval,
-) => void;
+  expansionRate: CML.UnitInterval
+) => void
 ```
 
 Added in v2.0.0
@@ -1834,8 +1753,8 @@ Unsafely calls instance.setGovernanceActionDeposit without Effect wrapper
 ```ts
 export declare const setGovernanceActionDepositUnsafe: (
   instance: CML.ProtocolParamUpdate,
-  governanceActionDeposit: bigint,
-) => void;
+  governanceActionDeposit: bigint
+) => void
 ```
 
 Added in v2.0.0
@@ -1849,8 +1768,8 @@ Unsafely calls instance.setGovernanceActionValidityPeriod without Effect wrapper
 ```ts
 export declare const setGovernanceActionValidityPeriodUnsafe: (
   instance: CML.ProtocolParamUpdate,
-  governanceActionValidityPeriod: bigint,
-) => void;
+  governanceActionValidityPeriod: bigint
+) => void
 ```
 
 Added in v2.0.0
@@ -1862,10 +1781,7 @@ Unsafely calls instance.setKeyDeposit without Effect wrapper
 **Signature**
 
 ```ts
-export declare const setKeyDepositUnsafe: (
-  instance: CML.ProtocolParamUpdate,
-  keyDeposit: bigint,
-) => void;
+export declare const setKeyDepositUnsafe: (instance: CML.ProtocolParamUpdate, keyDeposit: bigint) => void
 ```
 
 Added in v2.0.0
@@ -1877,10 +1793,7 @@ Unsafely calls instance.setMaxBlockBodySize without Effect wrapper
 **Signature**
 
 ```ts
-export declare const setMaxBlockBodySizeUnsafe: (
-  instance: CML.ProtocolParamUpdate,
-  maxBlockBodySize: bigint,
-) => void;
+export declare const setMaxBlockBodySizeUnsafe: (instance: CML.ProtocolParamUpdate, maxBlockBodySize: bigint) => void
 ```
 
 Added in v2.0.0
@@ -1892,10 +1805,7 @@ Unsafely calls instance.setMaxBlockExUnits without Effect wrapper
 **Signature**
 
 ```ts
-export declare const setMaxBlockExUnitsUnsafe: (
-  instance: CML.ProtocolParamUpdate,
-  maxBlockExUnits: CML.ExUnits,
-) => void;
+export declare const setMaxBlockExUnitsUnsafe: (instance: CML.ProtocolParamUpdate, maxBlockExUnits: CML.ExUnits) => void
 ```
 
 Added in v2.0.0
@@ -1909,8 +1819,8 @@ Unsafely calls instance.setMaxBlockHeaderSize without Effect wrapper
 ```ts
 export declare const setMaxBlockHeaderSizeUnsafe: (
   instance: CML.ProtocolParamUpdate,
-  maxBlockHeaderSize: bigint,
-) => void;
+  maxBlockHeaderSize: bigint
+) => void
 ```
 
 Added in v2.0.0
@@ -1924,8 +1834,8 @@ Unsafely calls instance.setMaxCollateralInputs without Effect wrapper
 ```ts
 export declare const setMaxCollateralInputsUnsafe: (
   instance: CML.ProtocolParamUpdate,
-  maxCollateralInputs: bigint,
-) => void;
+  maxCollateralInputs: bigint
+) => void
 ```
 
 Added in v2.0.0
@@ -1939,8 +1849,8 @@ Unsafely calls instance.setMaxTransactionSize without Effect wrapper
 ```ts
 export declare const setMaxTransactionSizeUnsafe: (
   instance: CML.ProtocolParamUpdate,
-  maxTransactionSize: bigint,
-) => void;
+  maxTransactionSize: bigint
+) => void
 ```
 
 Added in v2.0.0
@@ -1952,10 +1862,7 @@ Unsafely calls instance.setMaxTxExUnits without Effect wrapper
 **Signature**
 
 ```ts
-export declare const setMaxTxExUnitsUnsafe: (
-  instance: CML.ProtocolParamUpdate,
-  maxTxExUnits: CML.ExUnits,
-) => void;
+export declare const setMaxTxExUnitsUnsafe: (instance: CML.ProtocolParamUpdate, maxTxExUnits: CML.ExUnits) => void
 ```
 
 Added in v2.0.0
@@ -1967,10 +1874,7 @@ Unsafely calls instance.setMaxValueSize without Effect wrapper
 **Signature**
 
 ```ts
-export declare const setMaxValueSizeUnsafe: (
-  instance: CML.ProtocolParamUpdate,
-  maxValueSize: bigint,
-) => void;
+export declare const setMaxValueSizeUnsafe: (instance: CML.ProtocolParamUpdate, maxValueSize: bigint) => void
 ```
 
 Added in v2.0.0
@@ -1982,10 +1886,7 @@ Unsafely calls instance.setMaximumEpoch without Effect wrapper
 **Signature**
 
 ```ts
-export declare const setMaximumEpochUnsafe: (
-  instance: CML.ProtocolParamUpdate,
-  maximumEpoch: bigint,
-) => void;
+export declare const setMaximumEpochUnsafe: (instance: CML.ProtocolParamUpdate, maximumEpoch: bigint) => void
 ```
 
 Added in v2.0.0
@@ -1997,10 +1898,7 @@ Unsafely calls instance.setMinCommitteeSize without Effect wrapper
 **Signature**
 
 ```ts
-export declare const setMinCommitteeSizeUnsafe: (
-  instance: CML.ProtocolParamUpdate,
-  minCommitteeSize: bigint,
-) => void;
+export declare const setMinCommitteeSizeUnsafe: (instance: CML.ProtocolParamUpdate, minCommitteeSize: bigint) => void
 ```
 
 Added in v2.0.0
@@ -2014,8 +1912,8 @@ Unsafely calls instance.setMinFeeRefScriptCostPerByte without Effect wrapper
 ```ts
 export declare const setMinFeeRefScriptCostPerByteUnsafe: (
   instance: CML.ProtocolParamUpdate,
-  minFeeRefScriptCostPerByte: CML.Rational,
-) => void;
+  minFeeRefScriptCostPerByte: CML.Rational
+) => void
 ```
 
 Added in v2.0.0
@@ -2027,10 +1925,7 @@ Unsafely calls instance.setMinPoolCost without Effect wrapper
 **Signature**
 
 ```ts
-export declare const setMinPoolCostUnsafe: (
-  instance: CML.ProtocolParamUpdate,
-  minPoolCost: bigint,
-) => void;
+export declare const setMinPoolCostUnsafe: (instance: CML.ProtocolParamUpdate, minPoolCost: bigint) => void
 ```
 
 Added in v2.0.0
@@ -2042,10 +1937,7 @@ Unsafely calls instance.setMinfeeA without Effect wrapper
 **Signature**
 
 ```ts
-export declare const setMinfeeAUnsafe: (
-  instance: CML.ProtocolParamUpdate,
-  minfeeA: bigint,
-) => void;
+export declare const setMinfeeAUnsafe: (instance: CML.ProtocolParamUpdate, minfeeA: bigint) => void
 ```
 
 Added in v2.0.0
@@ -2057,10 +1949,7 @@ Unsafely calls instance.setMinfeeB without Effect wrapper
 **Signature**
 
 ```ts
-export declare const setMinfeeBUnsafe: (
-  instance: CML.ProtocolParamUpdate,
-  minfeeB: bigint,
-) => void;
+export declare const setMinfeeBUnsafe: (instance: CML.ProtocolParamUpdate, minfeeB: bigint) => void
 ```
 
 Added in v2.0.0
@@ -2072,10 +1961,7 @@ Unsafely calls instance.setNOpt without Effect wrapper
 **Signature**
 
 ```ts
-export declare const setNOptUnsafe: (
-  instance: CML.ProtocolParamUpdate,
-  nOpt: bigint,
-) => void;
+export declare const setNOptUnsafe: (instance: CML.ProtocolParamUpdate, nOpt: bigint) => void
 ```
 
 Added in v2.0.0
@@ -2087,10 +1973,7 @@ Unsafely calls instance.setPoolDeposit without Effect wrapper
 **Signature**
 
 ```ts
-export declare const setPoolDepositUnsafe: (
-  instance: CML.ProtocolParamUpdate,
-  poolDeposit: bigint,
-) => void;
+export declare const setPoolDepositUnsafe: (instance: CML.ProtocolParamUpdate, poolDeposit: bigint) => void
 ```
 
 Added in v2.0.0
@@ -2104,8 +1987,8 @@ Unsafely calls instance.setPoolPledgeInfluence without Effect wrapper
 ```ts
 export declare const setPoolPledgeInfluenceUnsafe: (
   instance: CML.ProtocolParamUpdate,
-  poolPledgeInfluence: CML.Rational,
-) => void;
+  poolPledgeInfluence: CML.Rational
+) => void
 ```
 
 Added in v2.0.0
@@ -2119,8 +2002,8 @@ Unsafely calls instance.setPoolVotingThresholds without Effect wrapper
 ```ts
 export declare const setPoolVotingThresholdsUnsafe: (
   instance: CML.ProtocolParamUpdate,
-  poolVotingThresholds: CML.PoolVotingThresholds,
-) => void;
+  poolVotingThresholds: CML.PoolVotingThresholds
+) => void
 ```
 
 Added in v2.0.0
@@ -2134,8 +2017,8 @@ Unsafely calls instance.setTreasuryGrowthRate without Effect wrapper
 ```ts
 export declare const setTreasuryGrowthRateUnsafe: (
   instance: CML.ProtocolParamUpdate,
-  treasuryGrowthRate: CML.UnitInterval,
-) => void;
+  treasuryGrowthRate: CML.UnitInterval
+) => void
 ```
 
 Added in v2.0.0
@@ -2147,9 +2030,7 @@ Unsafely calls instance.toCanonicalCborBytes without Effect wrapper
 **Signature**
 
 ```ts
-export declare const toCanonicalCborBytesUnsafe: (
-  instance: CML.ProtocolParamUpdate,
-) => Uint8Array;
+export declare const toCanonicalCborBytesUnsafe: (instance: CML.ProtocolParamUpdate) => Uint8Array
 ```
 
 Added in v2.0.0
@@ -2161,9 +2042,7 @@ Unsafely calls instance.toCanonicalCborHex without Effect wrapper
 **Signature**
 
 ```ts
-export declare const toCanonicalCborHexUnsafe: (
-  instance: CML.ProtocolParamUpdate,
-) => string;
+export declare const toCanonicalCborHexUnsafe: (instance: CML.ProtocolParamUpdate) => string
 ```
 
 Added in v2.0.0
@@ -2175,9 +2054,7 @@ Unsafely calls instance.toCborBytes without Effect wrapper
 **Signature**
 
 ```ts
-export declare const toCborBytesUnsafe: (
-  instance: CML.ProtocolParamUpdate,
-) => Uint8Array;
+export declare const toCborBytesUnsafe: (instance: CML.ProtocolParamUpdate) => Uint8Array
 ```
 
 Added in v2.0.0
@@ -2189,9 +2066,7 @@ Unsafely calls instance.toCborHex without Effect wrapper
 **Signature**
 
 ```ts
-export declare const toCborHexUnsafe: (
-  instance: CML.ProtocolParamUpdate,
-) => string;
+export declare const toCborHexUnsafe: (instance: CML.ProtocolParamUpdate) => string
 ```
 
 Added in v2.0.0
@@ -2203,9 +2078,7 @@ Unsafely calls instance.toJsValue without Effect wrapper
 **Signature**
 
 ```ts
-export declare const toJsValueUnsafe: (
-  instance: CML.ProtocolParamUpdate,
-) => any;
+export declare const toJsValueUnsafe: (instance: CML.ProtocolParamUpdate) => any
 ```
 
 Added in v2.0.0
@@ -2217,9 +2090,7 @@ Unsafely calls instance.toJson without Effect wrapper
 **Signature**
 
 ```ts
-export declare const toJsonUnsafe: (
-  instance: CML.ProtocolParamUpdate,
-) => string;
+export declare const toJsonUnsafe: (instance: CML.ProtocolParamUpdate) => string
 ```
 
 Added in v2.0.0
@@ -2231,9 +2102,7 @@ Unsafely calls instance.treasuryGrowthRate without Effect wrapper
 **Signature**
 
 ```ts
-export declare const treasuryGrowthRateUnsafe: (
-  instance: CML.ProtocolParamUpdate,
-) => CML.UnitInterval | undefined;
+export declare const treasuryGrowthRateUnsafe: (instance: CML.ProtocolParamUpdate) => CML.UnitInterval | undefined
 ```
 
 Added in v2.0.0
@@ -2247,7 +2116,7 @@ Type alias for the CML ProtocolParamUpdate class
 **Signature**
 
 ```ts
-export type ProtocolParamUpdate = CML.ProtocolParamUpdate;
+export type ProtocolParamUpdate = CML.ProtocolParamUpdate
 ```
 
 Added in v2.0.0

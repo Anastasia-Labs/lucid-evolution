@@ -1,6 +1,6 @@
 ---
 title: CML/Value.ts
-nav_order: 279
+nav_order: 278
 parent: Modules
 ---
 
@@ -72,10 +72,7 @@ Static method \_new of Value
 **Signature**
 
 ```ts
-export declare const _new: (
-  coin: bigint,
-  multiasset: CML.MultiAsset,
-) => Effect.Effect<CML.Value, ValueError>;
+export declare const _new: (coin: bigint, multiasset: CML.MultiAsset) => Effect.Effect<CML.Value, ValueError>
 ```
 
 Added in v2.0.0
@@ -87,9 +84,7 @@ Static method fromCborBytes of Value
 **Signature**
 
 ```ts
-export declare const fromCborBytes: (
-  cborBytes: Uint8Array,
-) => Effect.Effect<CML.Value, ValueError>;
+export declare const fromCborBytes: (cborBytes: Uint8Array) => Effect.Effect<CML.Value, ValueError>
 ```
 
 Added in v2.0.0
@@ -101,9 +96,7 @@ Static method fromCborHex of Value
 **Signature**
 
 ```ts
-export declare const fromCborHex: (
-  cborBytes: string,
-) => Effect.Effect<CML.Value, ValueError>;
+export declare const fromCborHex: (cborBytes: string) => Effect.Effect<CML.Value, ValueError>
 ```
 
 Added in v2.0.0
@@ -115,9 +108,7 @@ Static method fromCoin of Value
 **Signature**
 
 ```ts
-export declare const fromCoin: (
-  coin: bigint,
-) => Effect.Effect<CML.Value, ValueError>;
+export declare const fromCoin: (coin: bigint) => Effect.Effect<CML.Value, ValueError>
 ```
 
 Added in v2.0.0
@@ -129,9 +120,7 @@ Static method fromJson of Value
 **Signature**
 
 ```ts
-export declare const fromJson: (
-  json: string,
-) => Effect.Effect<CML.Value, ValueError>;
+export declare const fromJson: (json: string) => Effect.Effect<CML.Value, ValueError>
 ```
 
 Added in v2.0.0
@@ -143,7 +132,7 @@ Static method zero of Value
 **Signature**
 
 ```ts
-export declare const zero: () => Effect.Effect<CML.Value, ValueError>;
+export declare const zero: () => Effect.Effect<CML.Value, ValueError>
 ```
 
 Added in v2.0.0
@@ -157,10 +146,7 @@ Unsafely calls Value.\_new without Effect wrapper
 **Signature**
 
 ```ts
-export declare const _newUnsafe: (
-  coin: bigint,
-  multiasset: CML.MultiAsset,
-) => CML.Value;
+export declare const _newUnsafe: (coin: bigint, multiasset: CML.MultiAsset) => CML.Value
 ```
 
 Added in v2.0.0
@@ -172,7 +158,7 @@ Unsafely calls Value.fromCborBytes without Effect wrapper
 **Signature**
 
 ```ts
-export declare const fromCborBytesUnsafe: (cborBytes: Uint8Array) => CML.Value;
+export declare const fromCborBytesUnsafe: (cborBytes: Uint8Array) => CML.Value
 ```
 
 Added in v2.0.0
@@ -184,7 +170,7 @@ Unsafely calls Value.fromCborHex without Effect wrapper
 **Signature**
 
 ```ts
-export declare const fromCborHexUnsafe: (cborBytes: string) => CML.Value;
+export declare const fromCborHexUnsafe: (cborBytes: string) => CML.Value
 ```
 
 Added in v2.0.0
@@ -196,7 +182,7 @@ Unsafely calls Value.fromCoin without Effect wrapper
 **Signature**
 
 ```ts
-export declare const fromCoinUnsafe: (coin: bigint) => CML.Value;
+export declare const fromCoinUnsafe: (coin: bigint) => CML.Value
 ```
 
 Added in v2.0.0
@@ -208,7 +194,7 @@ Unsafely calls Value.fromJson without Effect wrapper
 **Signature**
 
 ```ts
-export declare const fromJsonUnsafe: (json: string) => CML.Value;
+export declare const fromJsonUnsafe: (json: string) => CML.Value
 ```
 
 Added in v2.0.0
@@ -220,7 +206,7 @@ Unsafely calls Value.zero without Effect wrapper
 **Signature**
 
 ```ts
-export declare const zeroUnsafe: () => CML.Value;
+export declare const zeroUnsafe: () => CML.Value
 ```
 
 Added in v2.0.0
@@ -250,10 +236,7 @@ Method checkedAdd of Value
 **Signature**
 
 ```ts
-export declare const checkedAdd: (
-  instance: CML.Value,
-  rhs: CML.Value,
-) => Effect.Effect<CML.Value, ValueError>;
+export declare const checkedAdd: (instance: CML.Value, rhs: CML.Value) => Effect.Effect<CML.Value, ValueError>
 ```
 
 Added in v2.0.0
@@ -265,10 +248,7 @@ Method checkedSub of Value
 **Signature**
 
 ```ts
-export declare const checkedSub: (
-  instance: CML.Value,
-  rhs: CML.Value,
-) => Effect.Effect<CML.Value, ValueError>;
+export declare const checkedSub: (instance: CML.Value, rhs: CML.Value) => Effect.Effect<CML.Value, ValueError>
 ```
 
 Added in v2.0.0
@@ -280,10 +260,7 @@ Method clampedSub of Value
 **Signature**
 
 ```ts
-export declare const clampedSub: (
-  instance: CML.Value,
-  rhs: CML.Value,
-) => Effect.Effect<CML.Value, ValueError>;
+export declare const clampedSub: (instance: CML.Value, rhs: CML.Value) => Effect.Effect<CML.Value, ValueError>
 ```
 
 Added in v2.0.0
@@ -295,9 +272,7 @@ Method coin of Value
 **Signature**
 
 ```ts
-export declare const coin: (
-  instance: CML.Value,
-) => Effect.Effect<bigint, ValueError>;
+export declare const coin: (instance: CML.Value) => Effect.Effect<bigint, ValueError>
 ```
 
 Added in v2.0.0
@@ -309,9 +284,7 @@ Method free of Value
 **Signature**
 
 ```ts
-export declare const free: (
-  instance: CML.Value,
-) => Effect.Effect<void, ValueError>;
+export declare const free: (instance: CML.Value) => Effect.Effect<void, ValueError>
 ```
 
 Added in v2.0.0
@@ -323,9 +296,7 @@ Method hasMultiassets of Value
 **Signature**
 
 ```ts
-export declare const hasMultiassets: (
-  instance: CML.Value,
-) => Effect.Effect<boolean, ValueError>;
+export declare const hasMultiassets: (instance: CML.Value) => Effect.Effect<boolean, ValueError>
 ```
 
 Added in v2.0.0
@@ -337,9 +308,7 @@ Method isZero of Value
 **Signature**
 
 ```ts
-export declare const isZero: (
-  instance: CML.Value,
-) => Effect.Effect<boolean, ValueError>;
+export declare const isZero: (instance: CML.Value) => Effect.Effect<boolean, ValueError>
 ```
 
 Added in v2.0.0
@@ -351,9 +320,7 @@ Method multiAsset of Value
 **Signature**
 
 ```ts
-export declare const multiAsset: (
-  instance: CML.Value,
-) => Effect.Effect<CML.MultiAsset, ValueError>;
+export declare const multiAsset: (instance: CML.Value) => Effect.Effect<CML.MultiAsset, ValueError>
 ```
 
 Added in v2.0.0
@@ -365,9 +332,7 @@ Method toCanonicalCborBytes of Value
 **Signature**
 
 ```ts
-export declare const toCanonicalCborBytes: (
-  instance: CML.Value,
-) => Effect.Effect<Uint8Array, ValueError>;
+export declare const toCanonicalCborBytes: (instance: CML.Value) => Effect.Effect<Uint8Array, ValueError>
 ```
 
 Added in v2.0.0
@@ -379,9 +344,7 @@ Method toCanonicalCborHex of Value
 **Signature**
 
 ```ts
-export declare const toCanonicalCborHex: (
-  instance: CML.Value,
-) => Effect.Effect<string, ValueError>;
+export declare const toCanonicalCborHex: (instance: CML.Value) => Effect.Effect<string, ValueError>
 ```
 
 Added in v2.0.0
@@ -393,9 +356,7 @@ Method toCborBytes of Value
 **Signature**
 
 ```ts
-export declare const toCborBytes: (
-  instance: CML.Value,
-) => Effect.Effect<Uint8Array, ValueError>;
+export declare const toCborBytes: (instance: CML.Value) => Effect.Effect<Uint8Array, ValueError>
 ```
 
 Added in v2.0.0
@@ -407,9 +368,7 @@ Method toCborHex of Value
 **Signature**
 
 ```ts
-export declare const toCborHex: (
-  instance: CML.Value,
-) => Effect.Effect<string, ValueError>;
+export declare const toCborHex: (instance: CML.Value) => Effect.Effect<string, ValueError>
 ```
 
 Added in v2.0.0
@@ -421,9 +380,7 @@ Method toJsValue of Value
 **Signature**
 
 ```ts
-export declare const toJsValue: (
-  instance: CML.Value,
-) => Effect.Effect<any, ValueError>;
+export declare const toJsValue: (instance: CML.Value) => Effect.Effect<any, ValueError>
 ```
 
 Added in v2.0.0
@@ -435,9 +392,7 @@ Method toJson of Value
 **Signature**
 
 ```ts
-export declare const toJson: (
-  instance: CML.Value,
-) => Effect.Effect<string, ValueError>;
+export declare const toJson: (instance: CML.Value) => Effect.Effect<string, ValueError>
 ```
 
 Added in v2.0.0
@@ -451,10 +406,7 @@ Unsafely calls instance.checkedAdd without Effect wrapper
 **Signature**
 
 ```ts
-export declare const checkedAddUnsafe: (
-  instance: CML.Value,
-  rhs: CML.Value,
-) => CML.Value;
+export declare const checkedAddUnsafe: (instance: CML.Value, rhs: CML.Value) => CML.Value
 ```
 
 Added in v2.0.0
@@ -466,10 +418,7 @@ Unsafely calls instance.checkedSub without Effect wrapper
 **Signature**
 
 ```ts
-export declare const checkedSubUnsafe: (
-  instance: CML.Value,
-  rhs: CML.Value,
-) => CML.Value;
+export declare const checkedSubUnsafe: (instance: CML.Value, rhs: CML.Value) => CML.Value
 ```
 
 Added in v2.0.0
@@ -481,10 +430,7 @@ Unsafely calls instance.clampedSub without Effect wrapper
 **Signature**
 
 ```ts
-export declare const clampedSubUnsafe: (
-  instance: CML.Value,
-  rhs: CML.Value,
-) => CML.Value;
+export declare const clampedSubUnsafe: (instance: CML.Value, rhs: CML.Value) => CML.Value
 ```
 
 Added in v2.0.0
@@ -496,7 +442,7 @@ Unsafely calls instance.coin without Effect wrapper
 **Signature**
 
 ```ts
-export declare const coinUnsafe: (instance: CML.Value) => bigint;
+export declare const coinUnsafe: (instance: CML.Value) => bigint
 ```
 
 Added in v2.0.0
@@ -508,7 +454,7 @@ Unsafely calls instance.free without Effect wrapper
 **Signature**
 
 ```ts
-export declare const freeUnsafe: (instance: CML.Value) => void;
+export declare const freeUnsafe: (instance: CML.Value) => void
 ```
 
 Added in v2.0.0
@@ -520,7 +466,7 @@ Unsafely calls instance.hasMultiassets without Effect wrapper
 **Signature**
 
 ```ts
-export declare const hasMultiassetsUnsafe: (instance: CML.Value) => boolean;
+export declare const hasMultiassetsUnsafe: (instance: CML.Value) => boolean
 ```
 
 Added in v2.0.0
@@ -532,7 +478,7 @@ Unsafely calls instance.isZero without Effect wrapper
 **Signature**
 
 ```ts
-export declare const isZeroUnsafe: (instance: CML.Value) => boolean;
+export declare const isZeroUnsafe: (instance: CML.Value) => boolean
 ```
 
 Added in v2.0.0
@@ -544,7 +490,7 @@ Unsafely calls instance.multiAsset without Effect wrapper
 **Signature**
 
 ```ts
-export declare const multiAssetUnsafe: (instance: CML.Value) => CML.MultiAsset;
+export declare const multiAssetUnsafe: (instance: CML.Value) => CML.MultiAsset
 ```
 
 Added in v2.0.0
@@ -556,9 +502,7 @@ Unsafely calls instance.toCanonicalCborBytes without Effect wrapper
 **Signature**
 
 ```ts
-export declare const toCanonicalCborBytesUnsafe: (
-  instance: CML.Value,
-) => Uint8Array;
+export declare const toCanonicalCborBytesUnsafe: (instance: CML.Value) => Uint8Array
 ```
 
 Added in v2.0.0
@@ -570,7 +514,7 @@ Unsafely calls instance.toCanonicalCborHex without Effect wrapper
 **Signature**
 
 ```ts
-export declare const toCanonicalCborHexUnsafe: (instance: CML.Value) => string;
+export declare const toCanonicalCborHexUnsafe: (instance: CML.Value) => string
 ```
 
 Added in v2.0.0
@@ -582,7 +526,7 @@ Unsafely calls instance.toCborBytes without Effect wrapper
 **Signature**
 
 ```ts
-export declare const toCborBytesUnsafe: (instance: CML.Value) => Uint8Array;
+export declare const toCborBytesUnsafe: (instance: CML.Value) => Uint8Array
 ```
 
 Added in v2.0.0
@@ -594,7 +538,7 @@ Unsafely calls instance.toCborHex without Effect wrapper
 **Signature**
 
 ```ts
-export declare const toCborHexUnsafe: (instance: CML.Value) => string;
+export declare const toCborHexUnsafe: (instance: CML.Value) => string
 ```
 
 Added in v2.0.0
@@ -606,7 +550,7 @@ Unsafely calls instance.toJsValue without Effect wrapper
 **Signature**
 
 ```ts
-export declare const toJsValueUnsafe: (instance: CML.Value) => any;
+export declare const toJsValueUnsafe: (instance: CML.Value) => any
 ```
 
 Added in v2.0.0
@@ -618,7 +562,7 @@ Unsafely calls instance.toJson without Effect wrapper
 **Signature**
 
 ```ts
-export declare const toJsonUnsafe: (instance: CML.Value) => string;
+export declare const toJsonUnsafe: (instance: CML.Value) => string
 ```
 
 Added in v2.0.0
@@ -632,7 +576,7 @@ Type alias for the CML Value class
 **Signature**
 
 ```ts
-export type Value = CML.Value;
+export type Value = CML.Value
 ```
 
 Added in v2.0.0

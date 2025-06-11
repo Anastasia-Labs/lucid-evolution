@@ -1,6 +1,6 @@
 ---
 title: CML/Enum/DatumOptionKind.ts
-nav_order: 79
+nav_order: 78
 parent: Modules
 ---
 
@@ -33,7 +33,7 @@ Type alias for the CML DatumOptionKind enum
 **Signature**
 
 ```ts
-export type DatumOptionKind = CML.DatumOptionKind;
+export type DatumOptionKind = CML.DatumOptionKind
 ```
 
 Added in v2.0.0
@@ -47,9 +47,7 @@ Convert string to DatumOptionKind enum value
 **Signature**
 
 ```ts
-export declare const fromString: (
-  str: string,
-) => CML.DatumOptionKind | undefined;
+export declare const fromString: (str: string) => CML.DatumOptionKind | undefined
 ```
 
 Added in v2.0.0
@@ -61,7 +59,7 @@ Convert DatumOptionKind enum value to string
 **Signature**
 
 ```ts
-export declare const toString: (value: CML.DatumOptionKind) => string;
+export declare const toString: (value: CML.DatumOptionKind) => string
 ```
 
 Added in v2.0.0
@@ -73,7 +71,7 @@ Get all values of the DatumOptionKind enum
 **Signature**
 
 ```ts
-export declare const values: () => Array<CML.DatumOptionKind>;
+export declare const values: () => Array<CML.DatumOptionKind>
 ```
 
 Added in v2.0.0
@@ -87,7 +85,7 @@ Datum variant of the DatumOptionKind enum
 **Signature**
 
 ```ts
-export declare const Datum: CML.DatumOptionKind.Datum;
+export declare const Datum: CML.DatumOptionKind.Datum
 ```
 
 Added in v2.0.0
@@ -99,7 +97,7 @@ Hash variant of the DatumOptionKind enum
 **Signature**
 
 ```ts
-export declare const Hash: CML.DatumOptionKind.Hash;
+export declare const Hash: CML.DatumOptionKind.Hash
 ```
 
 Added in v2.0.0

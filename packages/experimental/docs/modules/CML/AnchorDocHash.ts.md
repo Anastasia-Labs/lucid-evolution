@@ -46,9 +46,7 @@ Static method fromBech32 of AnchorDocHash
 **Signature**
 
 ```ts
-export declare const fromBech32: (
-  bech32Str: string,
-) => Effect.Effect<CML.AnchorDocHash, AnchorDocHashError>;
+export declare const fromBech32: (bech32Str: string) => Effect.Effect<CML.AnchorDocHash, AnchorDocHashError>
 ```
 
 Added in v2.0.0
@@ -60,9 +58,7 @@ Static method fromHex of AnchorDocHash
 **Signature**
 
 ```ts
-export declare const fromHex: (
-  input: string,
-) => Effect.Effect<CML.AnchorDocHash, AnchorDocHashError>;
+export declare const fromHex: (input: string) => Effect.Effect<CML.AnchorDocHash, AnchorDocHashError>
 ```
 
 Added in v2.0.0
@@ -74,9 +70,7 @@ Static method fromRawBytes of AnchorDocHash
 **Signature**
 
 ```ts
-export declare const fromRawBytes: (
-  bytes: Uint8Array,
-) => Effect.Effect<CML.AnchorDocHash, AnchorDocHashError>;
+export declare const fromRawBytes: (bytes: Uint8Array) => Effect.Effect<CML.AnchorDocHash, AnchorDocHashError>
 ```
 
 Added in v2.0.0
@@ -90,7 +84,7 @@ Unsafely calls AnchorDocHash.fromBech32 without Effect wrapper
 **Signature**
 
 ```ts
-export declare const fromBech32Unsafe: (bech32Str: string) => CML.AnchorDocHash;
+export declare const fromBech32Unsafe: (bech32Str: string) => CML.AnchorDocHash
 ```
 
 Added in v2.0.0
@@ -102,7 +96,7 @@ Unsafely calls AnchorDocHash.fromHex without Effect wrapper
 **Signature**
 
 ```ts
-export declare const fromHexUnsafe: (input: string) => CML.AnchorDocHash;
+export declare const fromHexUnsafe: (input: string) => CML.AnchorDocHash
 ```
 
 Added in v2.0.0
@@ -114,9 +108,7 @@ Unsafely calls AnchorDocHash.fromRawBytes without Effect wrapper
 **Signature**
 
 ```ts
-export declare const fromRawBytesUnsafe: (
-  bytes: Uint8Array,
-) => CML.AnchorDocHash;
+export declare const fromRawBytesUnsafe: (bytes: Uint8Array) => CML.AnchorDocHash
 ```
 
 Added in v2.0.0
@@ -146,9 +138,7 @@ Method free of AnchorDocHash
 **Signature**
 
 ```ts
-export declare const free: (
-  instance: CML.AnchorDocHash,
-) => Effect.Effect<void, AnchorDocHashError>;
+export declare const free: (instance: CML.AnchorDocHash) => Effect.Effect<void, AnchorDocHashError>
 ```
 
 Added in v2.0.0
@@ -162,8 +152,8 @@ Method toBech32 of AnchorDocHash
 ```ts
 export declare const toBech32: (
   instance: CML.AnchorDocHash,
-  prefix: string,
-) => Effect.Effect<string, AnchorDocHashError>;
+  prefix: string
+) => Effect.Effect<string, AnchorDocHashError>
 ```
 
 Added in v2.0.0
@@ -175,9 +165,7 @@ Method toHex of AnchorDocHash
 **Signature**
 
 ```ts
-export declare const toHex: (
-  instance: CML.AnchorDocHash,
-) => Effect.Effect<string, AnchorDocHashError>;
+export declare const toHex: (instance: CML.AnchorDocHash) => Effect.Effect<string, AnchorDocHashError>
 ```
 
 Added in v2.0.0
@@ -189,9 +177,7 @@ Method toRawBytes of AnchorDocHash
 **Signature**
 
 ```ts
-export declare const toRawBytes: (
-  instance: CML.AnchorDocHash,
-) => Effect.Effect<Uint8Array, AnchorDocHashError>;
+export declare const toRawBytes: (instance: CML.AnchorDocHash) => Effect.Effect<Uint8Array, AnchorDocHashError>
 ```
 
 Added in v2.0.0
@@ -205,7 +191,7 @@ Unsafely calls instance.free without Effect wrapper
 **Signature**
 
 ```ts
-export declare const freeUnsafe: (instance: CML.AnchorDocHash) => void;
+export declare const freeUnsafe: (instance: CML.AnchorDocHash) => void
 ```
 
 Added in v2.0.0
@@ -217,10 +203,7 @@ Unsafely calls instance.toBech32 without Effect wrapper
 **Signature**
 
 ```ts
-export declare const toBech32Unsafe: (
-  instance: CML.AnchorDocHash,
-  prefix: string,
-) => string;
+export declare const toBech32Unsafe: (instance: CML.AnchorDocHash, prefix: string) => string
 ```
 
 Added in v2.0.0
@@ -232,7 +215,7 @@ Unsafely calls instance.toHex without Effect wrapper
 **Signature**
 
 ```ts
-export declare const toHexUnsafe: (instance: CML.AnchorDocHash) => string;
+export declare const toHexUnsafe: (instance: CML.AnchorDocHash) => string
 ```
 
 Added in v2.0.0
@@ -244,9 +227,7 @@ Unsafely calls instance.toRawBytes without Effect wrapper
 **Signature**
 
 ```ts
-export declare const toRawBytesUnsafe: (
-  instance: CML.AnchorDocHash,
-) => Uint8Array;
+export declare const toRawBytesUnsafe: (instance: CML.AnchorDocHash) => Uint8Array
 ```
 
 Added in v2.0.0
@@ -260,7 +241,7 @@ Type alias for the CML AnchorDocHash class
 **Signature**
 
 ```ts
-export type AnchorDocHash = CML.AnchorDocHash;
+export type AnchorDocHash = CML.AnchorDocHash
 ```
 
 Added in v2.0.0

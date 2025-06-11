@@ -1,6 +1,6 @@
 ---
 title: CML/UnitInterval.ts
-nav_order: 248
+nav_order: 247
 parent: Modules
 ---
 
@@ -58,10 +58,7 @@ Static method \_new of UnitInterval
 **Signature**
 
 ```ts
-export declare const _new: (
-  start: bigint,
-  end: bigint,
-) => Effect.Effect<CML.UnitInterval, UnitIntervalError>;
+export declare const _new: (start: bigint, end: bigint) => Effect.Effect<CML.UnitInterval, UnitIntervalError>
 ```
 
 Added in v2.0.0
@@ -73,9 +70,7 @@ Static method fromCborBytes of UnitInterval
 **Signature**
 
 ```ts
-export declare const fromCborBytes: (
-  cborBytes: Uint8Array,
-) => Effect.Effect<CML.UnitInterval, UnitIntervalError>;
+export declare const fromCborBytes: (cborBytes: Uint8Array) => Effect.Effect<CML.UnitInterval, UnitIntervalError>
 ```
 
 Added in v2.0.0
@@ -87,9 +82,7 @@ Static method fromCborHex of UnitInterval
 **Signature**
 
 ```ts
-export declare const fromCborHex: (
-  cborBytes: string,
-) => Effect.Effect<CML.UnitInterval, UnitIntervalError>;
+export declare const fromCborHex: (cborBytes: string) => Effect.Effect<CML.UnitInterval, UnitIntervalError>
 ```
 
 Added in v2.0.0
@@ -101,9 +94,7 @@ Static method fromJson of UnitInterval
 **Signature**
 
 ```ts
-export declare const fromJson: (
-  json: string,
-) => Effect.Effect<CML.UnitInterval, UnitIntervalError>;
+export declare const fromJson: (json: string) => Effect.Effect<CML.UnitInterval, UnitIntervalError>
 ```
 
 Added in v2.0.0
@@ -117,10 +108,7 @@ Unsafely calls UnitInterval.\_new without Effect wrapper
 **Signature**
 
 ```ts
-export declare const _newUnsafe: (
-  start: bigint,
-  end: bigint,
-) => CML.UnitInterval;
+export declare const _newUnsafe: (start: bigint, end: bigint) => CML.UnitInterval
 ```
 
 Added in v2.0.0
@@ -132,9 +120,7 @@ Unsafely calls UnitInterval.fromCborBytes without Effect wrapper
 **Signature**
 
 ```ts
-export declare const fromCborBytesUnsafe: (
-  cborBytes: Uint8Array,
-) => CML.UnitInterval;
+export declare const fromCborBytesUnsafe: (cborBytes: Uint8Array) => CML.UnitInterval
 ```
 
 Added in v2.0.0
@@ -146,7 +132,7 @@ Unsafely calls UnitInterval.fromCborHex without Effect wrapper
 **Signature**
 
 ```ts
-export declare const fromCborHexUnsafe: (cborBytes: string) => CML.UnitInterval;
+export declare const fromCborHexUnsafe: (cborBytes: string) => CML.UnitInterval
 ```
 
 Added in v2.0.0
@@ -158,7 +144,7 @@ Unsafely calls UnitInterval.fromJson without Effect wrapper
 **Signature**
 
 ```ts
-export declare const fromJsonUnsafe: (json: string) => CML.UnitInterval;
+export declare const fromJsonUnsafe: (json: string) => CML.UnitInterval
 ```
 
 Added in v2.0.0
@@ -188,9 +174,7 @@ Method end of UnitInterval
 **Signature**
 
 ```ts
-export declare const end: (
-  instance: CML.UnitInterval,
-) => Effect.Effect<bigint, UnitIntervalError>;
+export declare const end: (instance: CML.UnitInterval) => Effect.Effect<bigint, UnitIntervalError>
 ```
 
 Added in v2.0.0
@@ -202,9 +186,7 @@ Method free of UnitInterval
 **Signature**
 
 ```ts
-export declare const free: (
-  instance: CML.UnitInterval,
-) => Effect.Effect<void, UnitIntervalError>;
+export declare const free: (instance: CML.UnitInterval) => Effect.Effect<void, UnitIntervalError>
 ```
 
 Added in v2.0.0
@@ -216,9 +198,7 @@ Method start of UnitInterval
 **Signature**
 
 ```ts
-export declare const start: (
-  instance: CML.UnitInterval,
-) => Effect.Effect<bigint, UnitIntervalError>;
+export declare const start: (instance: CML.UnitInterval) => Effect.Effect<bigint, UnitIntervalError>
 ```
 
 Added in v2.0.0
@@ -230,9 +210,7 @@ Method toCanonicalCborBytes of UnitInterval
 **Signature**
 
 ```ts
-export declare const toCanonicalCborBytes: (
-  instance: CML.UnitInterval,
-) => Effect.Effect<Uint8Array, UnitIntervalError>;
+export declare const toCanonicalCborBytes: (instance: CML.UnitInterval) => Effect.Effect<Uint8Array, UnitIntervalError>
 ```
 
 Added in v2.0.0
@@ -244,9 +222,7 @@ Method toCanonicalCborHex of UnitInterval
 **Signature**
 
 ```ts
-export declare const toCanonicalCborHex: (
-  instance: CML.UnitInterval,
-) => Effect.Effect<string, UnitIntervalError>;
+export declare const toCanonicalCborHex: (instance: CML.UnitInterval) => Effect.Effect<string, UnitIntervalError>
 ```
 
 Added in v2.0.0
@@ -258,9 +234,7 @@ Method toCborBytes of UnitInterval
 **Signature**
 
 ```ts
-export declare const toCborBytes: (
-  instance: CML.UnitInterval,
-) => Effect.Effect<Uint8Array, UnitIntervalError>;
+export declare const toCborBytes: (instance: CML.UnitInterval) => Effect.Effect<Uint8Array, UnitIntervalError>
 ```
 
 Added in v2.0.0
@@ -272,9 +246,7 @@ Method toCborHex of UnitInterval
 **Signature**
 
 ```ts
-export declare const toCborHex: (
-  instance: CML.UnitInterval,
-) => Effect.Effect<string, UnitIntervalError>;
+export declare const toCborHex: (instance: CML.UnitInterval) => Effect.Effect<string, UnitIntervalError>
 ```
 
 Added in v2.0.0
@@ -286,9 +258,7 @@ Method toJsValue of UnitInterval
 **Signature**
 
 ```ts
-export declare const toJsValue: (
-  instance: CML.UnitInterval,
-) => Effect.Effect<any, UnitIntervalError>;
+export declare const toJsValue: (instance: CML.UnitInterval) => Effect.Effect<any, UnitIntervalError>
 ```
 
 Added in v2.0.0
@@ -300,9 +270,7 @@ Method toJson of UnitInterval
 **Signature**
 
 ```ts
-export declare const toJson: (
-  instance: CML.UnitInterval,
-) => Effect.Effect<string, UnitIntervalError>;
+export declare const toJson: (instance: CML.UnitInterval) => Effect.Effect<string, UnitIntervalError>
 ```
 
 Added in v2.0.0
@@ -316,7 +284,7 @@ Unsafely calls instance.end without Effect wrapper
 **Signature**
 
 ```ts
-export declare const endUnsafe: (instance: CML.UnitInterval) => bigint;
+export declare const endUnsafe: (instance: CML.UnitInterval) => bigint
 ```
 
 Added in v2.0.0
@@ -328,7 +296,7 @@ Unsafely calls instance.free without Effect wrapper
 **Signature**
 
 ```ts
-export declare const freeUnsafe: (instance: CML.UnitInterval) => void;
+export declare const freeUnsafe: (instance: CML.UnitInterval) => void
 ```
 
 Added in v2.0.0
@@ -340,7 +308,7 @@ Unsafely calls instance.start without Effect wrapper
 **Signature**
 
 ```ts
-export declare const startUnsafe: (instance: CML.UnitInterval) => bigint;
+export declare const startUnsafe: (instance: CML.UnitInterval) => bigint
 ```
 
 Added in v2.0.0
@@ -352,9 +320,7 @@ Unsafely calls instance.toCanonicalCborBytes without Effect wrapper
 **Signature**
 
 ```ts
-export declare const toCanonicalCborBytesUnsafe: (
-  instance: CML.UnitInterval,
-) => Uint8Array;
+export declare const toCanonicalCborBytesUnsafe: (instance: CML.UnitInterval) => Uint8Array
 ```
 
 Added in v2.0.0
@@ -366,9 +332,7 @@ Unsafely calls instance.toCanonicalCborHex without Effect wrapper
 **Signature**
 
 ```ts
-export declare const toCanonicalCborHexUnsafe: (
-  instance: CML.UnitInterval,
-) => string;
+export declare const toCanonicalCborHexUnsafe: (instance: CML.UnitInterval) => string
 ```
 
 Added in v2.0.0
@@ -380,9 +344,7 @@ Unsafely calls instance.toCborBytes without Effect wrapper
 **Signature**
 
 ```ts
-export declare const toCborBytesUnsafe: (
-  instance: CML.UnitInterval,
-) => Uint8Array;
+export declare const toCborBytesUnsafe: (instance: CML.UnitInterval) => Uint8Array
 ```
 
 Added in v2.0.0
@@ -394,7 +356,7 @@ Unsafely calls instance.toCborHex without Effect wrapper
 **Signature**
 
 ```ts
-export declare const toCborHexUnsafe: (instance: CML.UnitInterval) => string;
+export declare const toCborHexUnsafe: (instance: CML.UnitInterval) => string
 ```
 
 Added in v2.0.0
@@ -406,7 +368,7 @@ Unsafely calls instance.toJsValue without Effect wrapper
 **Signature**
 
 ```ts
-export declare const toJsValueUnsafe: (instance: CML.UnitInterval) => any;
+export declare const toJsValueUnsafe: (instance: CML.UnitInterval) => any
 ```
 
 Added in v2.0.0
@@ -418,7 +380,7 @@ Unsafely calls instance.toJson without Effect wrapper
 **Signature**
 
 ```ts
-export declare const toJsonUnsafe: (instance: CML.UnitInterval) => string;
+export declare const toJsonUnsafe: (instance: CML.UnitInterval) => string
 ```
 
 Added in v2.0.0
@@ -432,7 +394,7 @@ Type alias for the CML UnitInterval class
 **Signature**
 
 ```ts
-export type UnitInterval = CML.UnitInterval;
+export type UnitInterval = CML.UnitInterval
 ```
 
 Added in v2.0.0

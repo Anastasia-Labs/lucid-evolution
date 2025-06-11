@@ -1,6 +1,6 @@
 ---
 title: CML/MapAssetNameToNonZeroInt64.ts
-nav_order: 124
+nav_order: 123
 parent: Modules
 ---
 
@@ -44,10 +44,7 @@ Static method \_new of MapAssetNameToNonZeroInt64
 **Signature**
 
 ```ts
-export declare const _new: () => Effect.Effect<
-  CML.MapAssetNameToNonZeroInt64,
-  MapAssetNameToNonZeroInt64Error
->;
+export declare const _new: () => Effect.Effect<CML.MapAssetNameToNonZeroInt64, MapAssetNameToNonZeroInt64Error>
 ```
 
 Added in v2.0.0
@@ -61,7 +58,7 @@ Unsafely calls MapAssetNameToNonZeroInt64.\_new without Effect wrapper
 **Signature**
 
 ```ts
-export declare const _newUnsafe: () => CML.MapAssetNameToNonZeroInt64;
+export declare const _newUnsafe: () => CML.MapAssetNameToNonZeroInt64
 ```
 
 Added in v2.0.0
@@ -92,8 +89,8 @@ Method free of MapAssetNameToNonZeroInt64
 
 ```ts
 export declare const free: (
-  instance: CML.MapAssetNameToNonZeroInt64,
-) => Effect.Effect<void, MapAssetNameToNonZeroInt64Error>;
+  instance: CML.MapAssetNameToNonZeroInt64
+) => Effect.Effect<void, MapAssetNameToNonZeroInt64Error>
 ```
 
 Added in v2.0.0
@@ -107,8 +104,8 @@ Method get of MapAssetNameToNonZeroInt64
 ```ts
 export declare const get: (
   instance: CML.MapAssetNameToNonZeroInt64,
-  key: CML.AssetName,
-) => Effect.Effect<bigint | undefined, MapAssetNameToNonZeroInt64Error>;
+  key: CML.AssetName
+) => Effect.Effect<bigint | undefined, MapAssetNameToNonZeroInt64Error>
 ```
 
 Added in v2.0.0
@@ -123,8 +120,8 @@ Method insert of MapAssetNameToNonZeroInt64
 export declare const insert: (
   instance: CML.MapAssetNameToNonZeroInt64,
   key: CML.AssetName,
-  value: bigint,
-) => Effect.Effect<bigint | undefined, MapAssetNameToNonZeroInt64Error>;
+  value: bigint
+) => Effect.Effect<bigint | undefined, MapAssetNameToNonZeroInt64Error>
 ```
 
 Added in v2.0.0
@@ -137,8 +134,8 @@ Method keys of MapAssetNameToNonZeroInt64
 
 ```ts
 export declare const keys: (
-  instance: CML.MapAssetNameToNonZeroInt64,
-) => Effect.Effect<CML.AssetNameList, MapAssetNameToNonZeroInt64Error>;
+  instance: CML.MapAssetNameToNonZeroInt64
+) => Effect.Effect<CML.AssetNameList, MapAssetNameToNonZeroInt64Error>
 ```
 
 Added in v2.0.0
@@ -151,8 +148,8 @@ Method len of MapAssetNameToNonZeroInt64
 
 ```ts
 export declare const len: (
-  instance: CML.MapAssetNameToNonZeroInt64,
-) => Effect.Effect<number, MapAssetNameToNonZeroInt64Error>;
+  instance: CML.MapAssetNameToNonZeroInt64
+) => Effect.Effect<number, MapAssetNameToNonZeroInt64Error>
 ```
 
 Added in v2.0.0
@@ -166,9 +163,7 @@ Unsafely calls instance.free without Effect wrapper
 **Signature**
 
 ```ts
-export declare const freeUnsafe: (
-  instance: CML.MapAssetNameToNonZeroInt64,
-) => void;
+export declare const freeUnsafe: (instance: CML.MapAssetNameToNonZeroInt64) => void
 ```
 
 Added in v2.0.0
@@ -180,10 +175,7 @@ Unsafely calls instance.get without Effect wrapper
 **Signature**
 
 ```ts
-export declare const getUnsafe: (
-  instance: CML.MapAssetNameToNonZeroInt64,
-  key: CML.AssetName,
-) => bigint | undefined;
+export declare const getUnsafe: (instance: CML.MapAssetNameToNonZeroInt64, key: CML.AssetName) => bigint | undefined
 ```
 
 Added in v2.0.0
@@ -198,8 +190,8 @@ Unsafely calls instance.insert without Effect wrapper
 export declare const insertUnsafe: (
   instance: CML.MapAssetNameToNonZeroInt64,
   key: CML.AssetName,
-  value: bigint,
-) => bigint | undefined;
+  value: bigint
+) => bigint | undefined
 ```
 
 Added in v2.0.0
@@ -211,9 +203,7 @@ Unsafely calls instance.keys without Effect wrapper
 **Signature**
 
 ```ts
-export declare const keysUnsafe: (
-  instance: CML.MapAssetNameToNonZeroInt64,
-) => CML.AssetNameList;
+export declare const keysUnsafe: (instance: CML.MapAssetNameToNonZeroInt64) => CML.AssetNameList
 ```
 
 Added in v2.0.0
@@ -225,9 +215,7 @@ Unsafely calls instance.len without Effect wrapper
 **Signature**
 
 ```ts
-export declare const lenUnsafe: (
-  instance: CML.MapAssetNameToNonZeroInt64,
-) => number;
+export declare const lenUnsafe: (instance: CML.MapAssetNameToNonZeroInt64) => number
 ```
 
 Added in v2.0.0
@@ -241,7 +229,7 @@ Type alias for the CML MapAssetNameToNonZeroInt64 class
 **Signature**
 
 ```ts
-export type MapAssetNameToNonZeroInt64 = CML.MapAssetNameToNonZeroInt64;
+export type MapAssetNameToNonZeroInt64 = CML.MapAssetNameToNonZeroInt64
 ```
 
 Added in v2.0.0

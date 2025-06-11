@@ -1,6 +1,6 @@
 ---
 title: CML/Enum/RelayKind.ts
-nav_order: 90
+nav_order: 89
 parent: Modules
 ---
 
@@ -34,7 +34,7 @@ Type alias for the CML RelayKind enum
 **Signature**
 
 ```ts
-export type RelayKind = CML.RelayKind;
+export type RelayKind = CML.RelayKind
 ```
 
 Added in v2.0.0
@@ -48,7 +48,7 @@ Convert string to RelayKind enum value
 **Signature**
 
 ```ts
-export declare const fromString: (str: string) => CML.RelayKind | undefined;
+export declare const fromString: (str: string) => CML.RelayKind | undefined
 ```
 
 Added in v2.0.0
@@ -60,7 +60,7 @@ Convert RelayKind enum value to string
 **Signature**
 
 ```ts
-export declare const toString: (value: CML.RelayKind) => string;
+export declare const toString: (value: CML.RelayKind) => string
 ```
 
 Added in v2.0.0
@@ -72,7 +72,7 @@ Get all values of the RelayKind enum
 **Signature**
 
 ```ts
-export declare const values: () => Array<CML.RelayKind>;
+export declare const values: () => Array<CML.RelayKind>
 ```
 
 Added in v2.0.0
@@ -86,7 +86,7 @@ MultiHostName variant of the RelayKind enum
 **Signature**
 
 ```ts
-export declare const MultiHostName: CML.RelayKind.MultiHostName;
+export declare const MultiHostName: CML.RelayKind.MultiHostName
 ```
 
 Added in v2.0.0
@@ -98,7 +98,7 @@ SingleHostAddr variant of the RelayKind enum
 **Signature**
 
 ```ts
-export declare const SingleHostAddr: CML.RelayKind.SingleHostAddr;
+export declare const SingleHostAddr: CML.RelayKind.SingleHostAddr
 ```
 
 Added in v2.0.0
@@ -110,7 +110,7 @@ SingleHostName variant of the RelayKind enum
 **Signature**
 
 ```ts
-export declare const SingleHostName: CML.RelayKind.SingleHostName;
+export declare const SingleHostName: CML.RelayKind.SingleHostName
 ```
 
 Added in v2.0.0

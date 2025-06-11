@@ -1,6 +1,6 @@
 ---
 title: TransactionInput.ts
-nav_order: 304
+nav_order: 307
 parent: Modules
 ---
 
@@ -36,14 +36,10 @@ Schema for transforming between CBOR hex and TransactionInput
 
 ```ts
 export declare const CBORHex: Schema.transformOrFail<
-  Schema.SchemaClass<
-    string & Brand<"HexString">,
-    string & Brand<"HexString">,
-    never
-  >,
+  Schema.SchemaClass<string & Brand<"HexString">, string & Brand<"HexString">, never>,
   typeof TransactionInput,
   never
->;
+>
 ```
 
 Added in v2.0.0
@@ -57,10 +53,7 @@ Check if two TransactionInput instances are equal.
 **Signature**
 
 ```ts
-export declare const equals: (
-  a: TransactionInput,
-  b: TransactionInput,
-) => boolean;
+export declare const equals: (a: TransactionInput, b: TransactionInput) => boolean
 ```
 
 Added in v2.0.0
@@ -88,10 +81,7 @@ Check if the given value is a valid TransactionInput
 **Signature**
 
 ```ts
-export declare const isTransactionInput: (
-  u: unknown,
-  overrideOptions?: ParseOptions | number,
-) => u is TransactionInput;
+export declare const isTransactionInput: (u: unknown, overrideOptions?: ParseOptions | number) => u is TransactionInput
 ```
 
 Added in v2.0.0
@@ -115,7 +105,7 @@ Added in v2.0.0
 **Signature**
 
 ```ts
-[Inspectable.NodeInspectSymbol]();
+;[Inspectable.NodeInspectSymbol]()
 ```
 
 # utils
@@ -125,5 +115,5 @@ Added in v2.0.0
 **Signature**
 
 ```ts
-export declare const generator: FastCheck.Arbitrary<TransactionInput>;
+export declare const generator: FastCheck.Arbitrary<TransactionInput>
 ```

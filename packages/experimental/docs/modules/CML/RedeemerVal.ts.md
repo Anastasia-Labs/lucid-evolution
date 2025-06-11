@@ -1,6 +1,6 @@
 ---
 title: CML/RedeemerVal.ts
-nav_order: 188
+nav_order: 187
 parent: Modules
 ---
 
@@ -60,8 +60,8 @@ Static method \_new of RedeemerVal
 ```ts
 export declare const _new: (
   data: CML.PlutusData,
-  exUnits: CML.ExUnits,
-) => Effect.Effect<CML.RedeemerVal, RedeemerValError>;
+  exUnits: CML.ExUnits
+) => Effect.Effect<CML.RedeemerVal, RedeemerValError>
 ```
 
 Added in v2.0.0
@@ -73,9 +73,7 @@ Static method fromCborBytes of RedeemerVal
 **Signature**
 
 ```ts
-export declare const fromCborBytes: (
-  cborBytes: Uint8Array,
-) => Effect.Effect<CML.RedeemerVal, RedeemerValError>;
+export declare const fromCborBytes: (cborBytes: Uint8Array) => Effect.Effect<CML.RedeemerVal, RedeemerValError>
 ```
 
 Added in v2.0.0
@@ -87,9 +85,7 @@ Static method fromCborHex of RedeemerVal
 **Signature**
 
 ```ts
-export declare const fromCborHex: (
-  cborBytes: string,
-) => Effect.Effect<CML.RedeemerVal, RedeemerValError>;
+export declare const fromCborHex: (cborBytes: string) => Effect.Effect<CML.RedeemerVal, RedeemerValError>
 ```
 
 Added in v2.0.0
@@ -101,9 +97,7 @@ Static method fromJson of RedeemerVal
 **Signature**
 
 ```ts
-export declare const fromJson: (
-  json: string,
-) => Effect.Effect<CML.RedeemerVal, RedeemerValError>;
+export declare const fromJson: (json: string) => Effect.Effect<CML.RedeemerVal, RedeemerValError>
 ```
 
 Added in v2.0.0
@@ -117,10 +111,7 @@ Unsafely calls RedeemerVal.\_new without Effect wrapper
 **Signature**
 
 ```ts
-export declare const _newUnsafe: (
-  data: CML.PlutusData,
-  exUnits: CML.ExUnits,
-) => CML.RedeemerVal;
+export declare const _newUnsafe: (data: CML.PlutusData, exUnits: CML.ExUnits) => CML.RedeemerVal
 ```
 
 Added in v2.0.0
@@ -132,9 +123,7 @@ Unsafely calls RedeemerVal.fromCborBytes without Effect wrapper
 **Signature**
 
 ```ts
-export declare const fromCborBytesUnsafe: (
-  cborBytes: Uint8Array,
-) => CML.RedeemerVal;
+export declare const fromCborBytesUnsafe: (cborBytes: Uint8Array) => CML.RedeemerVal
 ```
 
 Added in v2.0.0
@@ -146,7 +135,7 @@ Unsafely calls RedeemerVal.fromCborHex without Effect wrapper
 **Signature**
 
 ```ts
-export declare const fromCborHexUnsafe: (cborBytes: string) => CML.RedeemerVal;
+export declare const fromCborHexUnsafe: (cborBytes: string) => CML.RedeemerVal
 ```
 
 Added in v2.0.0
@@ -158,7 +147,7 @@ Unsafely calls RedeemerVal.fromJson without Effect wrapper
 **Signature**
 
 ```ts
-export declare const fromJsonUnsafe: (json: string) => CML.RedeemerVal;
+export declare const fromJsonUnsafe: (json: string) => CML.RedeemerVal
 ```
 
 Added in v2.0.0
@@ -188,9 +177,7 @@ Method data of RedeemerVal
 **Signature**
 
 ```ts
-export declare const data: (
-  instance: CML.RedeemerVal,
-) => Effect.Effect<CML.PlutusData, RedeemerValError>;
+export declare const data: (instance: CML.RedeemerVal) => Effect.Effect<CML.PlutusData, RedeemerValError>
 ```
 
 Added in v2.0.0
@@ -202,9 +189,7 @@ Method exUnits of RedeemerVal
 **Signature**
 
 ```ts
-export declare const exUnits: (
-  instance: CML.RedeemerVal,
-) => Effect.Effect<CML.ExUnits, RedeemerValError>;
+export declare const exUnits: (instance: CML.RedeemerVal) => Effect.Effect<CML.ExUnits, RedeemerValError>
 ```
 
 Added in v2.0.0
@@ -216,9 +201,7 @@ Method free of RedeemerVal
 **Signature**
 
 ```ts
-export declare const free: (
-  instance: CML.RedeemerVal,
-) => Effect.Effect<void, RedeemerValError>;
+export declare const free: (instance: CML.RedeemerVal) => Effect.Effect<void, RedeemerValError>
 ```
 
 Added in v2.0.0
@@ -230,9 +213,7 @@ Method toCanonicalCborBytes of RedeemerVal
 **Signature**
 
 ```ts
-export declare const toCanonicalCborBytes: (
-  instance: CML.RedeemerVal,
-) => Effect.Effect<Uint8Array, RedeemerValError>;
+export declare const toCanonicalCborBytes: (instance: CML.RedeemerVal) => Effect.Effect<Uint8Array, RedeemerValError>
 ```
 
 Added in v2.0.0
@@ -244,9 +225,7 @@ Method toCanonicalCborHex of RedeemerVal
 **Signature**
 
 ```ts
-export declare const toCanonicalCborHex: (
-  instance: CML.RedeemerVal,
-) => Effect.Effect<string, RedeemerValError>;
+export declare const toCanonicalCborHex: (instance: CML.RedeemerVal) => Effect.Effect<string, RedeemerValError>
 ```
 
 Added in v2.0.0
@@ -258,9 +237,7 @@ Method toCborBytes of RedeemerVal
 **Signature**
 
 ```ts
-export declare const toCborBytes: (
-  instance: CML.RedeemerVal,
-) => Effect.Effect<Uint8Array, RedeemerValError>;
+export declare const toCborBytes: (instance: CML.RedeemerVal) => Effect.Effect<Uint8Array, RedeemerValError>
 ```
 
 Added in v2.0.0
@@ -272,9 +249,7 @@ Method toCborHex of RedeemerVal
 **Signature**
 
 ```ts
-export declare const toCborHex: (
-  instance: CML.RedeemerVal,
-) => Effect.Effect<string, RedeemerValError>;
+export declare const toCborHex: (instance: CML.RedeemerVal) => Effect.Effect<string, RedeemerValError>
 ```
 
 Added in v2.0.0
@@ -286,9 +261,7 @@ Method toJsValue of RedeemerVal
 **Signature**
 
 ```ts
-export declare const toJsValue: (
-  instance: CML.RedeemerVal,
-) => Effect.Effect<any, RedeemerValError>;
+export declare const toJsValue: (instance: CML.RedeemerVal) => Effect.Effect<any, RedeemerValError>
 ```
 
 Added in v2.0.0
@@ -300,9 +273,7 @@ Method toJson of RedeemerVal
 **Signature**
 
 ```ts
-export declare const toJson: (
-  instance: CML.RedeemerVal,
-) => Effect.Effect<string, RedeemerValError>;
+export declare const toJson: (instance: CML.RedeemerVal) => Effect.Effect<string, RedeemerValError>
 ```
 
 Added in v2.0.0
@@ -316,7 +287,7 @@ Unsafely calls instance.data without Effect wrapper
 **Signature**
 
 ```ts
-export declare const dataUnsafe: (instance: CML.RedeemerVal) => CML.PlutusData;
+export declare const dataUnsafe: (instance: CML.RedeemerVal) => CML.PlutusData
 ```
 
 Added in v2.0.0
@@ -328,7 +299,7 @@ Unsafely calls instance.exUnits without Effect wrapper
 **Signature**
 
 ```ts
-export declare const exUnitsUnsafe: (instance: CML.RedeemerVal) => CML.ExUnits;
+export declare const exUnitsUnsafe: (instance: CML.RedeemerVal) => CML.ExUnits
 ```
 
 Added in v2.0.0
@@ -340,7 +311,7 @@ Unsafely calls instance.free without Effect wrapper
 **Signature**
 
 ```ts
-export declare const freeUnsafe: (instance: CML.RedeemerVal) => void;
+export declare const freeUnsafe: (instance: CML.RedeemerVal) => void
 ```
 
 Added in v2.0.0
@@ -352,9 +323,7 @@ Unsafely calls instance.toCanonicalCborBytes without Effect wrapper
 **Signature**
 
 ```ts
-export declare const toCanonicalCborBytesUnsafe: (
-  instance: CML.RedeemerVal,
-) => Uint8Array;
+export declare const toCanonicalCborBytesUnsafe: (instance: CML.RedeemerVal) => Uint8Array
 ```
 
 Added in v2.0.0
@@ -366,9 +335,7 @@ Unsafely calls instance.toCanonicalCborHex without Effect wrapper
 **Signature**
 
 ```ts
-export declare const toCanonicalCborHexUnsafe: (
-  instance: CML.RedeemerVal,
-) => string;
+export declare const toCanonicalCborHexUnsafe: (instance: CML.RedeemerVal) => string
 ```
 
 Added in v2.0.0
@@ -380,9 +347,7 @@ Unsafely calls instance.toCborBytes without Effect wrapper
 **Signature**
 
 ```ts
-export declare const toCborBytesUnsafe: (
-  instance: CML.RedeemerVal,
-) => Uint8Array;
+export declare const toCborBytesUnsafe: (instance: CML.RedeemerVal) => Uint8Array
 ```
 
 Added in v2.0.0
@@ -394,7 +359,7 @@ Unsafely calls instance.toCborHex without Effect wrapper
 **Signature**
 
 ```ts
-export declare const toCborHexUnsafe: (instance: CML.RedeemerVal) => string;
+export declare const toCborHexUnsafe: (instance: CML.RedeemerVal) => string
 ```
 
 Added in v2.0.0
@@ -406,7 +371,7 @@ Unsafely calls instance.toJsValue without Effect wrapper
 **Signature**
 
 ```ts
-export declare const toJsValueUnsafe: (instance: CML.RedeemerVal) => any;
+export declare const toJsValueUnsafe: (instance: CML.RedeemerVal) => any
 ```
 
 Added in v2.0.0
@@ -418,7 +383,7 @@ Unsafely calls instance.toJson without Effect wrapper
 **Signature**
 
 ```ts
-export declare const toJsonUnsafe: (instance: CML.RedeemerVal) => string;
+export declare const toJsonUnsafe: (instance: CML.RedeemerVal) => string
 ```
 
 Added in v2.0.0
@@ -432,7 +397,7 @@ Type alias for the CML RedeemerVal class
 **Signature**
 
 ```ts
-export type RedeemerVal = CML.RedeemerVal;
+export type RedeemerVal = CML.RedeemerVal
 ```
 
 Added in v2.0.0

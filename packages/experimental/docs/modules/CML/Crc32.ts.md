@@ -40,7 +40,7 @@ Static method \_new of Crc32
 **Signature**
 
 ```ts
-export declare const _new: () => Effect.Effect<CML.Crc32, Crc32Error>;
+export declare const _new: () => Effect.Effect<CML.Crc32, Crc32Error>
 ```
 
 Added in v2.0.0
@@ -54,7 +54,7 @@ Unsafely calls Crc32.\_new without Effect wrapper
 **Signature**
 
 ```ts
-export declare const _newUnsafe: () => CML.Crc32;
+export declare const _newUnsafe: () => CML.Crc32
 ```
 
 Added in v2.0.0
@@ -84,9 +84,7 @@ Method finalize of Crc32
 **Signature**
 
 ```ts
-export declare const finalize: (
-  instance: CML.Crc32,
-) => Effect.Effect<number, Crc32Error>;
+export declare const finalize: (instance: CML.Crc32) => Effect.Effect<number, Crc32Error>
 ```
 
 Added in v2.0.0
@@ -98,9 +96,7 @@ Method free of Crc32
 **Signature**
 
 ```ts
-export declare const free: (
-  instance: CML.Crc32,
-) => Effect.Effect<void, Crc32Error>;
+export declare const free: (instance: CML.Crc32) => Effect.Effect<void, Crc32Error>
 ```
 
 Added in v2.0.0
@@ -112,10 +108,7 @@ Method update of Crc32
 **Signature**
 
 ```ts
-export declare const update: (
-  instance: CML.Crc32,
-  bytes: Uint8Array,
-) => Effect.Effect<void, Crc32Error>;
+export declare const update: (instance: CML.Crc32, bytes: Uint8Array) => Effect.Effect<void, Crc32Error>
 ```
 
 Added in v2.0.0
@@ -129,7 +122,7 @@ Unsafely calls instance.finalize without Effect wrapper
 **Signature**
 
 ```ts
-export declare const finalizeUnsafe: (instance: CML.Crc32) => number;
+export declare const finalizeUnsafe: (instance: CML.Crc32) => number
 ```
 
 Added in v2.0.0
@@ -141,7 +134,7 @@ Unsafely calls instance.free without Effect wrapper
 **Signature**
 
 ```ts
-export declare const freeUnsafe: (instance: CML.Crc32) => void;
+export declare const freeUnsafe: (instance: CML.Crc32) => void
 ```
 
 Added in v2.0.0
@@ -153,10 +146,7 @@ Unsafely calls instance.update without Effect wrapper
 **Signature**
 
 ```ts
-export declare const updateUnsafe: (
-  instance: CML.Crc32,
-  bytes: Uint8Array,
-) => void;
+export declare const updateUnsafe: (instance: CML.Crc32, bytes: Uint8Array) => void
 ```
 
 Added in v2.0.0
@@ -170,7 +160,7 @@ Type alias for the CML Crc32 class
 **Signature**
 
 ```ts
-export type Crc32 = CML.Crc32;
+export type Crc32 = CML.Crc32
 ```
 
 Added in v2.0.0

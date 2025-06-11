@@ -1,6 +1,6 @@
 ---
 title: CML/PoolRetirement.ts
-nav_order: 172
+nav_order: 171
 parent: Modules
 ---
 
@@ -60,8 +60,8 @@ Static method \_new of PoolRetirement
 ```ts
 export declare const _new: (
   pool: CML.Ed25519KeyHash,
-  epoch: bigint,
-) => Effect.Effect<CML.PoolRetirement, PoolRetirementError>;
+  epoch: bigint
+) => Effect.Effect<CML.PoolRetirement, PoolRetirementError>
 ```
 
 Added in v2.0.0
@@ -73,9 +73,7 @@ Static method fromCborBytes of PoolRetirement
 **Signature**
 
 ```ts
-export declare const fromCborBytes: (
-  cborBytes: Uint8Array,
-) => Effect.Effect<CML.PoolRetirement, PoolRetirementError>;
+export declare const fromCborBytes: (cborBytes: Uint8Array) => Effect.Effect<CML.PoolRetirement, PoolRetirementError>
 ```
 
 Added in v2.0.0
@@ -87,9 +85,7 @@ Static method fromCborHex of PoolRetirement
 **Signature**
 
 ```ts
-export declare const fromCborHex: (
-  cborBytes: string,
-) => Effect.Effect<CML.PoolRetirement, PoolRetirementError>;
+export declare const fromCborHex: (cborBytes: string) => Effect.Effect<CML.PoolRetirement, PoolRetirementError>
 ```
 
 Added in v2.0.0
@@ -101,9 +97,7 @@ Static method fromJson of PoolRetirement
 **Signature**
 
 ```ts
-export declare const fromJson: (
-  json: string,
-) => Effect.Effect<CML.PoolRetirement, PoolRetirementError>;
+export declare const fromJson: (json: string) => Effect.Effect<CML.PoolRetirement, PoolRetirementError>
 ```
 
 Added in v2.0.0
@@ -117,10 +111,7 @@ Unsafely calls PoolRetirement.\_new without Effect wrapper
 **Signature**
 
 ```ts
-export declare const _newUnsafe: (
-  pool: CML.Ed25519KeyHash,
-  epoch: bigint,
-) => CML.PoolRetirement;
+export declare const _newUnsafe: (pool: CML.Ed25519KeyHash, epoch: bigint) => CML.PoolRetirement
 ```
 
 Added in v2.0.0
@@ -132,9 +123,7 @@ Unsafely calls PoolRetirement.fromCborBytes without Effect wrapper
 **Signature**
 
 ```ts
-export declare const fromCborBytesUnsafe: (
-  cborBytes: Uint8Array,
-) => CML.PoolRetirement;
+export declare const fromCborBytesUnsafe: (cborBytes: Uint8Array) => CML.PoolRetirement
 ```
 
 Added in v2.0.0
@@ -146,9 +135,7 @@ Unsafely calls PoolRetirement.fromCborHex without Effect wrapper
 **Signature**
 
 ```ts
-export declare const fromCborHexUnsafe: (
-  cborBytes: string,
-) => CML.PoolRetirement;
+export declare const fromCborHexUnsafe: (cborBytes: string) => CML.PoolRetirement
 ```
 
 Added in v2.0.0
@@ -160,7 +147,7 @@ Unsafely calls PoolRetirement.fromJson without Effect wrapper
 **Signature**
 
 ```ts
-export declare const fromJsonUnsafe: (json: string) => CML.PoolRetirement;
+export declare const fromJsonUnsafe: (json: string) => CML.PoolRetirement
 ```
 
 Added in v2.0.0
@@ -190,9 +177,7 @@ Method epoch of PoolRetirement
 **Signature**
 
 ```ts
-export declare const epoch: (
-  instance: CML.PoolRetirement,
-) => Effect.Effect<bigint, PoolRetirementError>;
+export declare const epoch: (instance: CML.PoolRetirement) => Effect.Effect<bigint, PoolRetirementError>
 ```
 
 Added in v2.0.0
@@ -204,9 +189,7 @@ Method free of PoolRetirement
 **Signature**
 
 ```ts
-export declare const free: (
-  instance: CML.PoolRetirement,
-) => Effect.Effect<void, PoolRetirementError>;
+export declare const free: (instance: CML.PoolRetirement) => Effect.Effect<void, PoolRetirementError>
 ```
 
 Added in v2.0.0
@@ -218,9 +201,7 @@ Method pool of PoolRetirement
 **Signature**
 
 ```ts
-export declare const pool: (
-  instance: CML.PoolRetirement,
-) => Effect.Effect<CML.Ed25519KeyHash, PoolRetirementError>;
+export declare const pool: (instance: CML.PoolRetirement) => Effect.Effect<CML.Ed25519KeyHash, PoolRetirementError>
 ```
 
 Added in v2.0.0
@@ -233,8 +214,8 @@ Method toCanonicalCborBytes of PoolRetirement
 
 ```ts
 export declare const toCanonicalCborBytes: (
-  instance: CML.PoolRetirement,
-) => Effect.Effect<Uint8Array, PoolRetirementError>;
+  instance: CML.PoolRetirement
+) => Effect.Effect<Uint8Array, PoolRetirementError>
 ```
 
 Added in v2.0.0
@@ -246,9 +227,7 @@ Method toCanonicalCborHex of PoolRetirement
 **Signature**
 
 ```ts
-export declare const toCanonicalCborHex: (
-  instance: CML.PoolRetirement,
-) => Effect.Effect<string, PoolRetirementError>;
+export declare const toCanonicalCborHex: (instance: CML.PoolRetirement) => Effect.Effect<string, PoolRetirementError>
 ```
 
 Added in v2.0.0
@@ -260,9 +239,7 @@ Method toCborBytes of PoolRetirement
 **Signature**
 
 ```ts
-export declare const toCborBytes: (
-  instance: CML.PoolRetirement,
-) => Effect.Effect<Uint8Array, PoolRetirementError>;
+export declare const toCborBytes: (instance: CML.PoolRetirement) => Effect.Effect<Uint8Array, PoolRetirementError>
 ```
 
 Added in v2.0.0
@@ -274,9 +251,7 @@ Method toCborHex of PoolRetirement
 **Signature**
 
 ```ts
-export declare const toCborHex: (
-  instance: CML.PoolRetirement,
-) => Effect.Effect<string, PoolRetirementError>;
+export declare const toCborHex: (instance: CML.PoolRetirement) => Effect.Effect<string, PoolRetirementError>
 ```
 
 Added in v2.0.0
@@ -288,9 +263,7 @@ Method toJsValue of PoolRetirement
 **Signature**
 
 ```ts
-export declare const toJsValue: (
-  instance: CML.PoolRetirement,
-) => Effect.Effect<any, PoolRetirementError>;
+export declare const toJsValue: (instance: CML.PoolRetirement) => Effect.Effect<any, PoolRetirementError>
 ```
 
 Added in v2.0.0
@@ -302,9 +275,7 @@ Method toJson of PoolRetirement
 **Signature**
 
 ```ts
-export declare const toJson: (
-  instance: CML.PoolRetirement,
-) => Effect.Effect<string, PoolRetirementError>;
+export declare const toJson: (instance: CML.PoolRetirement) => Effect.Effect<string, PoolRetirementError>
 ```
 
 Added in v2.0.0
@@ -318,7 +289,7 @@ Unsafely calls instance.epoch without Effect wrapper
 **Signature**
 
 ```ts
-export declare const epochUnsafe: (instance: CML.PoolRetirement) => bigint;
+export declare const epochUnsafe: (instance: CML.PoolRetirement) => bigint
 ```
 
 Added in v2.0.0
@@ -330,7 +301,7 @@ Unsafely calls instance.free without Effect wrapper
 **Signature**
 
 ```ts
-export declare const freeUnsafe: (instance: CML.PoolRetirement) => void;
+export declare const freeUnsafe: (instance: CML.PoolRetirement) => void
 ```
 
 Added in v2.0.0
@@ -342,9 +313,7 @@ Unsafely calls instance.pool without Effect wrapper
 **Signature**
 
 ```ts
-export declare const poolUnsafe: (
-  instance: CML.PoolRetirement,
-) => CML.Ed25519KeyHash;
+export declare const poolUnsafe: (instance: CML.PoolRetirement) => CML.Ed25519KeyHash
 ```
 
 Added in v2.0.0
@@ -356,9 +325,7 @@ Unsafely calls instance.toCanonicalCborBytes without Effect wrapper
 **Signature**
 
 ```ts
-export declare const toCanonicalCborBytesUnsafe: (
-  instance: CML.PoolRetirement,
-) => Uint8Array;
+export declare const toCanonicalCborBytesUnsafe: (instance: CML.PoolRetirement) => Uint8Array
 ```
 
 Added in v2.0.0
@@ -370,9 +337,7 @@ Unsafely calls instance.toCanonicalCborHex without Effect wrapper
 **Signature**
 
 ```ts
-export declare const toCanonicalCborHexUnsafe: (
-  instance: CML.PoolRetirement,
-) => string;
+export declare const toCanonicalCborHexUnsafe: (instance: CML.PoolRetirement) => string
 ```
 
 Added in v2.0.0
@@ -384,9 +349,7 @@ Unsafely calls instance.toCborBytes without Effect wrapper
 **Signature**
 
 ```ts
-export declare const toCborBytesUnsafe: (
-  instance: CML.PoolRetirement,
-) => Uint8Array;
+export declare const toCborBytesUnsafe: (instance: CML.PoolRetirement) => Uint8Array
 ```
 
 Added in v2.0.0
@@ -398,7 +361,7 @@ Unsafely calls instance.toCborHex without Effect wrapper
 **Signature**
 
 ```ts
-export declare const toCborHexUnsafe: (instance: CML.PoolRetirement) => string;
+export declare const toCborHexUnsafe: (instance: CML.PoolRetirement) => string
 ```
 
 Added in v2.0.0
@@ -410,7 +373,7 @@ Unsafely calls instance.toJsValue without Effect wrapper
 **Signature**
 
 ```ts
-export declare const toJsValueUnsafe: (instance: CML.PoolRetirement) => any;
+export declare const toJsValueUnsafe: (instance: CML.PoolRetirement) => any
 ```
 
 Added in v2.0.0
@@ -422,7 +385,7 @@ Unsafely calls instance.toJson without Effect wrapper
 **Signature**
 
 ```ts
-export declare const toJsonUnsafe: (instance: CML.PoolRetirement) => string;
+export declare const toJsonUnsafe: (instance: CML.PoolRetirement) => string
 ```
 
 Added in v2.0.0
@@ -436,7 +399,7 @@ Type alias for the CML PoolRetirement class
 **Signature**
 
 ```ts
-export type PoolRetirement = CML.PoolRetirement;
+export type PoolRetirement = CML.PoolRetirement
 ```
 
 Added in v2.0.0
