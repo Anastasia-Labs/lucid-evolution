@@ -1,3 +1,5 @@
+import { Shelley } from "./CML/Enum/AuxiliaryDataKind.js";
+
 export * as EffectCML from "./CML/index.js";
 export * as Bytes from "./Bytes.js";
 export * as Network from "./Network.js";
@@ -29,3 +31,5 @@ export * as DatumHash from "./DatumHash.js";
 export * as DatumOption from "./DatumOption.js";
 export * as Devnet from "./Devnet/Devnet.js";
 export * as DevnetDefault from "./Devnet/DevnetDefault.js";
+export * as ShelleyTransactionOutput from "./ShelleyTransactionOutput.js";
+export * as BabbageTransactionOutput from "./BabbageTransactionOutput.js";

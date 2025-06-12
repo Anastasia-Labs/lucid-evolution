@@ -1,6 +1,6 @@
 ---
 title: CML/StakeVoteRegDelegCert.ts
-nav_order: 225
+nav_order: 224
 parent: Modules
 ---
 
