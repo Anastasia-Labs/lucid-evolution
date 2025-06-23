@@ -1,0 +1,129 @@
+import { Callout } from "nextra/components";
+
+# Applying Parameters
+
+Many validators are parameterized, you can apply parameters dynamically using the `applyParamsToScript(){:js}` function. It handles CBOR encoding automatically.
+
+<Callout type="info">
+  **If you need to check the encoding level of a script:**
+  
+  ```js showLineNumbers
+  const encodingLevel = CBOREncodingLevel(script); // "double" | "single"
+  ```
+</Callout>
+
+## Single Parameter
+
+For validators that are expecting exactly 1 parameter, for example the following Aiken code:
+
+```aiken showLineNumbers
+validator minting_policy(first_param: Int) { .. }
+```
+
+You can provide the argument from the off-chain like the following:
+
+```js showLineNumbers
+const mintingPolicy = {
+  type: "PlutusV3",
+  script: applyParamsToScript(
+    "5907945907910100...", // CBOR hex of the compiled script
+    [10n] // Parameter
+  ),
+};
+```
+
+## Multi Parameters
+
+For validators that are expecting more than 1 parameters, for example the following Aiken code:
+
+```aiken showLineNumbers
+validator spending_validator(pkh: VerificationKeyHash, yes_no: Bool) { .. }
+```
+
+It's a validator that _waits_ for 2 parameters, a `VerificationKeyHash` (`Data.Bytes(){:js}` or `string{:js}`) and a `Bool` (note that on-chain boolean is like an "enum" rather a TypeScript boolean).
+
+You can provide the arguments from the off-chain like the following:
+
+```js showLineNumbers
+const pkh = paymentCredentialOf(address).hash; // string
+const yes = new Constr(1, []); // Constr(0, []) is False | Constr(1, []) is True
+
+const spendingValidator = {
+  type: "PlutusV3",
+  script: applyParamsToScript(
+    "5907945907910101...", // CBOR hex of the compiled script
+    [pkh, yes] // Parameters
+  ),
+};
+```
+
+## Complex Types
+
+### Single Constructor
+
+For validators that are expecting non-primitive types, you can construct the arguments using `Constr{:js}`. For example the following Aiken type and validator:
+
+```aiken showLineNumbers
+pub type OutputReference {   // single-constructor
+  transaction_id: ByteArray, // hex-string
+  output_index: Int,         // bigint
+}
+
+validator your_validator(o_ref: OutputReference) { .. }
+```
+
+You can provide the argument for that particular validator like the following:
+
+```js showLineNumbers
+const oRef = new Constr(0, [ // single-constructor
+  String(utxo.txHash),       // hex-string
+  BigInt(utxo.outputIndex),  // bigint
+]);
+
+const yourValidator = {
+  type: "PlutusV3",
+  script: applyParamsToScript(
+    "5907945907910102...", // CBOR hex of the compiled script
+    [oRef] // Parameter
+  ),
+};
+```
+
+### Nested Type
+
+Another example, with nested on-chain type. For example, the following Aiken code:
+
+```aiken showLineNumbers
+pub type SubType {
+  field_1: ByteArray,
+}
+
+pub type CustomType {
+  field_1: SubType,
+  field_2: Int,
+}
+
+validator your_validator(args: CustomType) { .. }
+```
+
+You can provide the argument like the following:
+
+```js showLineNumbers
+const subType = new Constr(0, [
+  fromText("Hello, World!"), // SubType.field_1
+]);
+
+const customType = new Constr(0, [
+  subType, // CustomType.field_1: SubType
+  2n,      // CustomType.field_2: arbitrary bigint depending on your sc logic
+]);
+
+const yourValidator = {
+  type: "PlutusV3",
+  script: applyParamsToScript(
+    "5907945907910103...",
+    [customType] // Parameter
+  ),
+};
+```
+

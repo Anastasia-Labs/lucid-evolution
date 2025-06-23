@@ -1,0 +1,28 @@
+import { Callout } from "nextra/components";
+
+# Koios
+
+[Koios](https://koios.rest) is a Decentralized and Elastic RESTful query layer for exploring data on Cardano blockchain to consume within applications/wallets/explorers/etc.
+
+Usage example to initialize Lucid with Koios:
+
+```js showLineNumbers /Koios/
+import { Lucid, Koios } from "@lucid-evolution/lucid";
+
+const lucid = await Lucid(
+  new Koios("https://preprod.koios.rest/api/v1"),
+  "Preprod",
+);
+```
+
+<Callout type="info">
+  **If you have a bearer token**
+  
+  ```js showLineNumbers {2}
+  const lucid = await Lucid(
+    new Koios("<koios-api-url>", "<koios-bearer-token>"),
+    "Preprod",
+  );
+  ```
+</Callout>
+

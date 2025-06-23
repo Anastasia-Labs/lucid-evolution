@@ -1,0 +1,155 @@
+import { Callout } from "nextra/components";
+
+# Redeemer Indexing
+
+Redeemer Indexing [design pattern](https://github.com/Anastasia-Labs/design-patterns/blob/main/utxo-indexers/UTXO-INDEXERS.md) leverages the deterministic script evaluation property of the Cardano ledger to achieve substantial performance gains in onchain code.
+
+In scenarios where the protocol necessitates spending from the script back to a specific output—such as returning funds from the script to the same script, directing them to another script, or transferring assets to a wallet, it is imperative to ensure that each script input is uniquely associated with an output.
+
+This preventive measure is essential for mitigating the risk of [Double Satisfaction Attack](https://github.com/Anastasia-Labs/design-patterns/blob/main/stake-validator/STAKE-VALIDATOR.md#protect-against-double-satisfaction-exploit).
+
+You can use a redeemer containing one-to-one correlation between script input UTxOs and output UTxOs. This is provided via ordered lists of input/output indices of required inputs/outputs present in the Script Context.
+
+For example:
+
+```
+Inputs     : [scriptInputA, scriptInputB, randomInput1, scriptInputC, randomInput2, randomInput3]  // random inputs are not the concerned script inputs
+Outputs    : [outputA, outputB, outputC, randomOutput1, randomOutput2, randomOutput3]
+InputIdxs  : [0, 1, 3]
+OutputIdxs : [0, 1, 2]
+where type Redeemer = List<(inputIdx, outputIdx)>
+```
+
+While it is pretty straightforward to determine output indices (the order in which ouputs are created during transaction building), obtaining input indices is more involved. Currently, all inputs in a transaction need to be sorted lexicographically (ascending order of transaction id and transaction index).
+
+So even if a user obtains the required input indicies beforehand, coin selection (post calculating the required fees and transaction balancing) performed by a transaction builder could introduce new inputs thereby changing the indices.
+
+## Redeemer Builder
+
+Lucid-Evolution provides a high-level interface called `RedeemerBuilder{:js}` that abstracts away the complexity of constructing a redeemer with the redeemer-indexing pattern.
+
+<Callout type="warning">
+  You cannot reuse the same `RedeemerBuilder{:js}` variable for multiple `.collectFrom(){:js}` or `.mintAssets(){:js}` instances. Please refer to [here](https://github.com/no-witness-labs/lucid-evolution/issues/625) for any updates.
+</Callout>
+
+### Selected Kind
+
+Suppose we have the following on-chain redeemer type:
+
+```aiken showLineNumbers
+pub type Redeemer = List<(Int, Int)> // a list of tuples of input-output indices 
+```
+
+Then we can construct the appropriate redeemer like the following:
+
+```js showLineNumbers
+const redeemer: RedeemerBuilder = {
+  kind: "selected",
+  inputs: scriptInputs, // the UTxOs that we need to index
+  makeRedeemer: (inputIdxs: bigint[]) => { // inputIdxs are the inputs order received by the validator
+    const tupleList = inputIdxs.map((inputIdx, i) => [inputIdx, BigInt(i)]); // List<(inputIdx, outputIdx)>
+    return Data.to(tupleList);
+  },
+};
+```
+
+This kind of redeemer builder takes in a list of _selected_ inputs and provides `makeRedeemer` with their indices in the same order. The user supplied `makeRedeemer` function after having received the indices, builds the redeemer as per validator requirements which would typically involve mapping them to their corresponding output indices. Being a general purpose redeemer builder it can be used to create redeemers for `Spend`, `Mint`, `Withdraw`, etc.
+
+Below is the full off-chain code example of how to utilize the `redeemer: RedeemerBuilder{:js}` with the scenario described [above](./redeemer-indexing):
+
+```js showLineNumbers /redeemer/ {44}
+const scriptInputs: UTxO[] = [
+  {
+    txHash: "a",
+    outputIndex: 1,
+    address: "scriptAddress",
+    assets: { lovelace: 10_000000n },
+  },
+  {
+    txHash: "b",
+    outputIndex: 2,
+    address: "scriptAddress",
+    assets: { lovelace: 20_000000n },
+  },
+  {
+    txHash: "d",
+    outputIndex: 4,
+    address: "scriptAddress",
+    assets: { lovelace: 40_000000n },
+  },
+];
+const randomInputs: UTxO[] = [
+  {
+    txHash: "c",
+    outputIndex: 3,
+    address: "randomAddress",
+    assets: { lovelace: 30_000000n },
+  },
+  {
+    txHash: "e",
+    outputIndex: 5,
+    address: "randomAddress",
+    assets: { lovelace: 50_000000n },
+  },
+  {
+    txHash: "f",
+    outputIndex: 6,
+    address: "randomAddress",
+    assets: { lovelace: 60_000000n },
+  },
+];    
+
+const tx = await lucid
+  .newTx()
+  .collectFrom(scriptInputs, redeemer) // it's coming from the RedeemerBuilder
+  .attach.SpendingValidator(script)
+  .collectFrom(randomInputs)
+  .pay.ToContract("scriptAddress", datum, { lovelace: 10_000000n })
+  .pay.ToContract("scriptAddress", datum, { lovelace: 20_000000n })
+  .pay.ToContract("scriptAddress", datum, { lovelace: 40_000000n })
+  .pay.ToAddress("randomAddress", { lovelace: 30_000000n })
+  .pay.ToAddress("randomAddress", { lovelace: 50_000000n })
+  .pay.ToAddress("randomAddress", { lovelace: 60_000000n })
+  .addSigner("randomAddress")
+  .complete();
+```
+
+### Selected Self
+
+Other than selected kind, `RedeemerBuilder{:js}` also supports the selected self mode.
+
+```js showLineNumbers
+const redeemer: RedeemerBuilder = {
+  kind: "self",
+  // notice that we don't have to provide the `inputs` field
+  makeRedeemer: (inputIdx: bigint) => {
+    return Data.to(inputIdx);
+  },
+};
+```
+
+This is a specialized redeemer-builder which can only be used with `.collectFrom(){:js}` endpoint i.e. `Spend` script purpose. It provides Spending Validators _index_ of their spent input to find them more efficiently.
+
+It's suitable for the following kind of on-chain validator:
+
+```aiken showLineNumbers
+validator simple_spend() {
+  spend(_d: Option<Datum>, redeemer: Int, o_ref: OutputReference, tx: Transaction) {
+    // Usual way of fetching input:
+    expect Some(input1) = transaction.find_input(tx.inputs, out_ref)
+
+    // Optimized way:
+    expect Some(input2) = list.at(tx.inputs, redeemer)
+    expect input2.output_reference == o_ref
+
+    // ...
+  }
+}
+```
+
+The usual way involves every input's output reference to be checked for equality against the provided one until a match is found. By using input index and equating the output reference only once, multiple equality checks are avoided, making it a more efficient approach.
+
+<Callout type="info">
+  You may notice that no input is specified to this redeemer builder as one can be easily determined. There is an optional `inputs: UTxO[]{:js}` field present which is used internally by the library, its value overriden should it be set by a user.
+</Callout>
+

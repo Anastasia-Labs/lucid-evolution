@@ -1,0 +1,128 @@
+import { Callout, Tabs } from "nextra/components";
+
+# Wallet Management
+
+This section covers everything you need to know about creating, selecting, and querying wallets using Lucid-Evolution.
+
+## Create
+
+You are provided with different methods to create a wallet. Please refer to [wallet creation](./wallet-creation).
+
+<Tabs items={['Seed Phrase', 'Private Key']}>
+  <Tabs.Tab>
+    <div className="text-sm">
+      Generate a new seed phrase (mnemonic).
+    </div>
+  
+    ```js showLineNumbers /generateSeedPhrase/
+    import { generateSeedPhrase } from "@lucid-evolution/lucid";
+    
+    const seedPhrase = generateSeedPhrase(); // BIP-39
+    console.log(seedPhrase);
+    ```
+  </Tabs.Tab>
+  
+  <Tabs.Tab>
+    <div className="text-sm">
+      Generate a new private key.
+    </div>
+  
+    ```js showLineNumbers /generatePrivateKey/
+    import { generatePrivateKey } from "@lucid-evolution/lucid";
+    
+    const privateKey = generatePrivateKey(); // Bech32 encoded private key
+    console.log(privateKey);
+    ```
+  </Tabs.Tab>
+</Tabs>
+
+## Select
+
+Use any suitable method to select a wallet and interact with the blockchain through it.
+
+<Tabs items={['Seed Phrase', 'Private Key', 'Address', 'API']}>
+  <Tabs.Tab>
+    <div className="text-sm">
+      Select a wallet using a seed phrase (mnemonic).
+    </div>
+  
+    ```js showLineNumbers /fromSeed/
+    const seedPhrase = "your seed phrase here ...";
+    lucid.selectWallet.fromSeed(seedPhrase);
+    ```
+  </Tabs.Tab>
+  
+  <Tabs.Tab>
+    <div className="text-sm">
+      Select a wallet using a private key.
+    </div>
+  
+    ```js showLineNumbers /fromPrivateKey/
+    lucid.selectWallet.fromPrivateKey(privateKey);
+    ```
+  </Tabs.Tab>
+  
+  <Tabs.Tab>
+    <div className="text-sm">
+      This method will create a limited wallet that can still query the address and its UTxOs. You can use it to build transactions that **others will sign**, as it cannot sign transactions (no private key).
+    </div>
+  
+    ```js showLineNumbers /fromAddress/
+    const address = "addr_test...";
+    const utxos = await lucid.utxosAt(address);
+    lucid.selectWallet.fromAddress(address, utxos);
+    ```
+    
+    <Callout type="warning">
+      Transactions built with an address-only wallet will need to be signed by a wallet with the actual private keys before they can be submitted.
+    </Callout>
+  </Tabs.Tab>
+  
+  <Tabs.Tab>
+    <div className="text-sm">
+      If you're integrating with a wallet provider that exposes an API conforming to the `WalletApi` interface. This works for any [CIP-30](https://github.com/cardano-foundation/CIPs/tree/master/CIP-0030) compliant wallet.
+    </div>
+  
+    ```js showLineNumbers /fromAPI/
+    const walletApi: WalletApi = externalWalletApi;
+    lucid.selectWallet.fromAPI(walletApi);
+    ```
+  </Tabs.Tab>
+</Tabs>
+
+## Query
+
+You can fetch data associated with the selected wallet using the following methods.
+
+<Tabs items={['Address', 'UTxOs', 'Delegation']}>
+  <Tabs.Tab>
+    <div className="text-sm">
+      Get the wallet address. Typically this is the change address.
+    </div>
+  
+    ```js showLineNumbers
+    const address: string = await lucid.wallet().address(); // Bech32 address
+    ```
+  </Tabs.Tab>
+  
+  <Tabs.Tab>
+    <div className="text-sm">
+      Get UTxO associated with the wallet address.
+    </div>
+  
+    ```js showLineNumbers
+    const utxos = await lucid.wallet().getUtxos(); // UTxO[]
+    ```
+  </Tabs.Tab>
+  
+  <Tabs.Tab>
+    <div className="text-sm">
+      Query the wallet's stake delegation status.
+    </div>
+  
+    ```js showLineNumbers
+    const delegation = await lucid.wallet().getDelegation();
+    ```
+  </Tabs.Tab>
+</Tabs>
+

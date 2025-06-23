@@ -1,0 +1,108 @@
+import { Steps } from "nextra/components";
+
+# About
+
+Lucid-Evolution is the next generation transaction builder for users and an off-chain framework for highly scalable dApps on Cardano. The library is designed with modularity in mind, allowing you to:
+
+- Build and simulate transactions
+- Work with different Cardano networks (Mainnet, Preprod, Preview, or Custom networks)
+- Choose from multiple provider options for blockchain interaction
+
+## Quickstart
+
+<Steps>
+### Install Dependency
+
+Install Lucid-Evolution for your project by following the [installation](../install) guide.
+
+### Specify Provider
+
+To instantiate a Lucid object, you need to specify the [provider](./provider) you want to use.
+
+For example, using [Blockfrost](https://blockfrost.io):
+
+```js showLineNumbers
+import { Lucid, Blockfrost } from "@lucid-evolution/lucid";
+
+const lucid = await Lucid(
+  new Blockfrost(
+    "https://cardano-preview.blockfrost.io/api/v0",
+    "<blockfrost-api-key>", // obtain key from blockfrost.io
+  ),
+  "Preview", // "Mainnet" | "Preprod" | "Preview" | "Custom"
+);
+```
+
+### Select Wallet
+
+Next, you select a wallet to be used (or connected if it's a [CIP-30](https://github.com/cardano-foundation/CIPs/tree/master/CIP-0030) wallet).
+
+```js showLineNumbers
+import { WalletApi } from "@lucid-evolution/lucid";
+
+const walletApi: WalletApi = externalWalletApi;
+lucid.selectWallet.fromAPI(walletApi);
+```
+
+### Build Transaction
+
+Let's build a dummy transaction, it's just sending some ADA to another address and attaching some metadata.
+
+```js showLineNumbers
+const tx = await lucid
+  .newTx()
+  .pay.ToAddress("addr_test1...", { lovelace: 20_000_000n }) // 20 ADA
+  .attachMetadata(674, {
+    msg: ["Hello, Lucid-Evolution!"]
+  })
+  .complete();
+```
+
+### Sign and Submit
+
+Lastly, to submit the transaction, it must be signed.
+
+```js showLineNumbers
+const signedTx = await tx.sign.withWallet().complete();
+const txHash = await signedTx.submit();
+```
+
+</Steps>
+
+## Putting it all Together
+
+```js showLineNumbers
+import { Lucid, Blockfrost, WalletAPI } from "@lucid-evolution/lucid";
+
+async function helloLucid() {
+  // instantiate a Lucid object by providing Blockfrost as the provider
+  const lucid = await Lucid(
+    new Blockfrost(
+      "https://cardano-preview.blockfrost.io/api/v0",
+      "<blockfrost-api-key>", // obtain key from blockfrost.io
+    ),
+    "Preview", // "Mainnet" | "Preprod" | "Preview" | "Custom"
+  );
+  
+  // select wallet from API
+  const walletApi: WalletApi = externalWalletApi;
+  lucid.selectWallet.fromAPI(walletApi);
+  
+  // contruct the transaction builder
+  const tx = await lucid
+    .newTx()
+    .pay.ToAddress("addr_test1...", { lovelace: 20_000_000n }) // 20 ADA
+    .attachMetadata(674, {
+      msg: ["Hello, Lucid-Evolution!"]
+    })
+    .complete();
+  
+  // sign and submit the transaction
+  const signedTx = await tx.sign.withWallet().complete();
+  const txHash = await signedTx.submit();
+  
+  console.log({ txHash });
+}
+```
+
+For more detailed information of building and submitting your first transaction, visit [this page](./first-transaction).

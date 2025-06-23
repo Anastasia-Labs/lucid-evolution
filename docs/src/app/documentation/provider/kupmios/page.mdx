@@ -1,0 +1,40 @@
+import { Callout } from "nextra/components";
+
+# Kupmios
+
+Usage example to initialize Lucid with Kupmios:
+
+```js showLineNumbers /Kupmios/
+import { Lucid, Kupmios } from "@lucid-evolution/lucid";
+
+const lucid = await Lucid(
+  new Kupmios(
+    "http://localhost:1442", // Kupo endpoint
+    "http://localhost:1337", // Ogmios endpoint
+  ),
+  "Preview",
+);
+```
+
+<Callout type="info">
+  **If you have API keys**
+  
+  ```js showLineNumbers {5-8}
+  const lucid = await Lucid(
+    new Kupmios(
+      "http://localhost:1442",
+      "http://localhost:1337",
+      {
+        kupoHeader: { "priv-api-key": "<kupo-api-key>" }, // for example: "dmtr-api-key": "<kupo-api-key>"
+        ogmiosHeader: { "priv-api-key": "<ogmios-api-key>" },
+      },
+    ),
+    "Preview",
+  );
+  ```
+</Callout>
+
+<Callout type="info">
+  Kupmios is a mix of [Kupo](https://cardanosolutions.github.io/kupo/) and [Ogmios](https://ogmios.dev/).
+</Callout>
+

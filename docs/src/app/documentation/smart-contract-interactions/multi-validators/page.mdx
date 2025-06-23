@@ -1,0 +1,17 @@
+# Multi Validators
+
+You can interact with multiple validators in a single transaction, limited only by transaction size and execution unit caps specified in the Cardano blockchain protocol parameters.
+
+```js showLineNumbers {7-9}
+const tx = await lucid
+  .newTx()
+  .collectFrom([scriptUtxoA, scriptUtxoB], redeemerSpendingScript1)
+  .collectFrom([scriptUtxoC], redeemerSpendingScript2)
+  .collectFrom([scriptUtxoD]) // spending from the connected wallet, no redeemer
+  .mintAssets({ [plutusPolicyId]: 10n }, redeemerMintingPolicy)
+  .attach.SpendingValidator(spendingScript1)
+  .attach.SpendingValidator(spendingScript2)
+  .attach.MintingPolicy(mintingPolicy)
+  .complete();
+```
+
