@@ -1,0 +1,15 @@
+# Blockfrost
+
+[Blockfrost.io](https://blockfrost.io) is a service that serves as an access to the Cardano blockchain and related networks without the need for running and maintaining additional infrastructure and tooling yourself.
+
+Usage example to initialize Lucid with Blockfrost:
+
+```js showLineNumbers /Blockfrost/
+import { Lucid, Blockfrost } from "@lucid-evolution/lucid";
+
+const lucid = await Lucid(
+  new Blockfrost("https://cardano-preprod.blockfrost.io/api/v0", "<blockfrost-api-key>"),
+  "Preprod",
+);
+```
+

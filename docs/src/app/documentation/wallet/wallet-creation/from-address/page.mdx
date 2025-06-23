@@ -1,0 +1,46 @@
+import { Callout, Steps } from "nextra/components";
+
+# Make Wallet From Address
+
+You can instantiate a wallet from a specified [Bech32](https://github.com/cardano-foundation/CIPs/tree/master/CIP-0005) Address to get a wallet object by calling the `makeWalletFromAddress(){:js}` function.
+
+## Steps to Create a Wallet Object
+
+<Steps>
+### Specify the Provider
+
+It can be [Blockfrost](https://blockfrost.io/), [Koios](https://koios.rest/), [Maestro](https://gomaestro.org/), etc. Even a custom provider, as long as it implements the [`Provider`](../../provider) interface.
+
+For example, here's how to instantiate a Blockfrost provider:
+
+```js showLineNumbers
+import { Blockfrost, Provider } from "@lucid-evolution/lucid";
+
+const blockfrostURL: string = process.env.BF_URL!;
+const blockfrostPID: string = process.env.BF_PID!;
+
+const blockfrost: Provider = new Blockfrost(
+  blockfrostURL, // The endpoint based on the Cardano network, please refer to Blockfrost documentation
+  blockfrostPID, // Your secret Blockfrost Project ID
+);
+```
+
+<Callout>
+  Other providers follow a similar pattern.
+</Callout>
+
+### Create the Wallet Object
+
+```js showLineNumbers /makeWalletFromAddress/ {6-7,9}
+import { makeWalletFromAddress, Network } from "@lucid-evolution/lucid";
+
+const provider = blockfrost;
+const network: Network = "Mainnet"; // "Mainnet" | "Preview" | "Preprod" | "Custom"
+
+const address = "addr1_... your address here"; // Bech32
+const utxos = await provider.getUtxos(address); // UTxO[]
+
+const wallet = makeWalletFromAddress(provider, network, address, utxos); // CIP-30
+```
+</Steps>
+

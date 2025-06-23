@@ -1,0 +1,97 @@
+import { Callout } from "nextra/components";
+
+# Pay Methods
+
+Lucid-Evolution provides several `.pay{:js}` methods to create transaction outputs on the Cardano blockchain. These methods allow you to send ADA, native tokens, attach datums, deploy reference scripts, and interact with smart contracts. This guide covers all the available pay methods and their use cases.
+
+## Transfer ADA
+
+Straightforward pay function to a public key or script address:
+
+```js showLineNumbers {3}
+const tx = await lucid
+  .newTx()
+  .pay.ToAddress("addr_test...", { lovelace: 5_000_000n })
+  .complete();
+
+const signedTx = await tx.sign.withWallet().complete();
+const txHash = await signedTx.submit();
+```
+
+## Multiple Recipients
+
+Chain multiple `.pay.ToAddress(){:js}` calls to pay multiple recipients:
+
+```js showLineNumbers {3-5}
+const tx = await lucid
+  .newTx()
+  .pay.ToAddress("addr_test1...", { lovelace: 5_000_000n })
+  .pay.ToAddress("addr_test2...", { lovelace: 10_000_000n })
+  .pay.ToAddress("addr_test3...", { lovelace: 200_000_000n })
+  .complete();
+
+const signedTx = await tx.sign.withWallet().complete();
+const txHash = await signedTx.submit();
+```
+
+<Callout type="info">
+  Each `.pay.ToAddress(){:js}` call creates a new UTxO, even for the same address. All UTxO outputs in the same transaction will have the same transaction hash/ID, just with different index. Lucid-Evolution respects the order of outputs.
+</Callout>
+
+## Cardano Native Tokens
+
+Minimum ADA requirement for native tokens is automatically handled by the library:
+
+```js showLineNumbers {10}
+const policyID = "00...";
+
+const tokenName = "MyToken";
+const assetName = fromText(tokenName);
+
+const assetUnit = toUnit(policyID, assetName);
+
+const tx = await lucid
+  .newTx()
+  .pay.ToAddress("addr_test...", { [assetUnit]: 10n })
+  .complete();
+
+const signedTx = await tx.sign.withWallet().complete();
+const txHash = await signedTx.submit();
+```
+
+## Metadata
+
+Here's how you can attach metadata to a transaction:
+
+```js showLineNumbers /attachMetadata/ {4-7}
+const tx = await lucid
+  .newTx()
+  // you can chain with any number of .pay calls
+  .attachMetadata(
+    674, // see CIP-10 for more information
+    { msg: ["Wen Midgard?"] },
+  )
+  .complete();
+
+const signedTx = await tx.sign.withWallet().complete();
+const txHash = await signedTx.submit();
+```
+
+<Callout type="info">
+  For more information about transaction metadata label, see [CIP-10](https://github.com/cardano-foundation/CIPs/tree/master/CIP-0010).
+</Callout>
+
+## Datums
+
+Here's how you can include a datum to a transaction output:
+
+```js showLineNumbers {5}
+const tx = await lucid
+  .newTx()
+  .pay.ToAddressWithData(
+    "addr_test...",
+    { kind: "inline", value: Data.to("31313131") },
+  )
+  .complete();
+```
+

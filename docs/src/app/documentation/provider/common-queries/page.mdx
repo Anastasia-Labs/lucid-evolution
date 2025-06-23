@@ -1,0 +1,81 @@
+import { Callout, Tabs } from "nextra/components";
+
+# Common Queries
+
+By abstracting away the provider calls, Lucid-Evolution library provides different methods to query on-chain data.
+
+## UTxOs
+
+UTxOs (Unspent Transaction Outputs) are building blocks of Cardano's eUTxO model. A nuance from account-based models is that your wallet's balance is the sum of all UTxOs at your address.
+
+<Tabs items={['Convenient method', 'Provider call']}>
+  <Tabs.Tab>
+    <div className="text-sm">
+      UTxOs can be queried conveniently through a Lucid object:
+    </div>
+  
+    ```js showLineNumbers
+    const utxos = await lucid.utxosAt("addr_test...");
+    ```
+  </Tabs.Tab>
+
+  <Tabs.Tab>
+    <div className="text-sm">
+      Alternatively, all provider functionalities are accessible under `provider`:
+    </div>
+  
+    ```js showLineNumbers
+    const utxos = await lucid.provider.getUtxos("addr_test...");
+    ```
+  </Tabs.Tab>
+</Tabs>
+
+## Datums
+
+Datums are pieces of data attached to UTxOs.
+
+<Tabs items={['Convenient method', 'Provider call', 'Script UTxOs']}>
+  <Tabs.Tab>
+    <div className="text-sm">
+      Datum can be queried conveniently through a Lucid object by providing its hash:
+    </div>
+  
+    ```js showLineNumbers
+    const datum = await lucid.datumOf("<datum_hash>");
+    ```
+  </Tabs.Tab>
+
+  <Tabs.Tab>
+    <div className="text-sm">
+      Alternatively, all provider functionalities are accessible under `provider`:
+    </div>
+  
+    ```js showLineNumbers
+    const datum = await lucid.provider.getDatum("<datum_hash>");
+    ```
+  </Tabs.Tab>
+
+  <Tabs.Tab>
+    <div className="text-sm">
+      You can also provide a UTxO to retrieve the datum:
+    </div>
+  
+    ```js showLineNumbers
+    const [scriptUtxo] = await lucid.utxosAt("addr_test...");
+    const datum = await lucid.datumOf(scriptUtxo);
+    ```
+  </Tabs.Tab>
+</Tabs>
+
+## Protocol Parameters
+
+Protocol parameters define the rules and constraints of the Cardano network like transaction fees, maximum block size, maximum transaction size, Plutus execution costs, minimum UTxO ADA value, etc.
+
+```js showLineNumbers
+const protocolParameters = await lucid.provider.getProtocolParameters();
+```
+
+<Callout type="info">
+  Remember that you can switch providers using the `switchProvider` method if needed.
+</Callout>
+

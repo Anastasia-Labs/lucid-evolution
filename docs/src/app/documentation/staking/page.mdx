@@ -1,0 +1,105 @@
+import { Callout } from "nextra/components";
+
+# Staking
+
+This section covers the operations for staking your wallet on the Cardano network.
+
+## Register Stake Key
+
+The first step before you can delegate stake to a pool, you must register the stake key first. When registering a stake key with the Cardano network, a deposit of **2 ADA** is required. This deposit acts as a pledge and is temporarily deducted from the wallet balance. The amount will be refunded upon [stake deregistration](#deregister-stake-key).
+
+The following is the minimal transaction construction:
+
+```js showLineNumbers /registerStake/ {2,7}
+// you can query the reward address of the connected wallet
+const rewardAddress = await lucid.wallet().rewardAddress();
+
+// transaction construction
+const tx = await lucid
+  .newTx()
+  .registerStake(rewardAddress)
+  .complete();
+
+// proceed with sign and submit tx...
+```
+
+## Delegate to a Pool
+
+Delegating to a stake pool involves associating a stake key with a pool identified by its unique Pool ID.
+
+The following is the minimal transaction construction:
+
+```js showLineNumbers /delegateTo/ {2,7}
+// you can query the reward address of the connected wallet
+const rewardAddress = await lucid.wallet().rewardAddress();
+
+// transaction construction
+const tx = await lucid
+  .newTx()
+  .delegateTo(rewardAddress, "pool1_...")
+  .complete();
+
+// proceed with sign and submit tx...
+```
+
+<Callout>
+  **You can combine both `registration` and `delegation` into a single transaction:**
+  
+  ```js showLineNumbers {4}
+  // transaction construction
+  const tx = await lucid
+    .newTx()
+    .registerAndDelegate.ToPool(rewardAddress, "pool1_...")
+    .complete();
+  ```
+</Callout>
+
+## Withdraw Rewards
+
+This action allows the wallet holder to claim any rewards accumulated through staking. The rewards are withdrawn to the wallets balance.
+
+The following is the minimal transaction construction:
+
+```js showLineNumbers /withdraw/ {2,5,10}
+// you can query the reward address of the connected wallet
+const rewardAddress = await lucid.wallet().rewardAddress();
+
+// you can also query the available stake rewards
+const { rewards } = await lucid.wallet().getDelegation();
+
+// transaction construction
+const tx = await lucid
+  .newTx()
+  .withdraw(rewardAddress, rewards)
+  .complete();
+
+// proceed with sign and submit tx...
+```
+
+<Callout type="warning">
+  After Vasil hardfork, stake rewards must be withdrawn fully. It cannot be withdrawn partially.
+</Callout>
+
+<Callout type="warning">
+  After Chang hardfork, staking rewards are only withdrawable if the stake key is delegated to a DRep (Delegated Representative). For more information about DReps and governance delegation, see the [Governance documentation](/documentation/governance).
+</Callout>
+
+## Deregister Stake Key
+
+Deregistering a stake key will reclaim the `2 ADA` depositted initially during [stake registration](#register-stake-key).
+
+The following is the minimal transaction construction:
+
+```js showLineNumbers /deRegisterStake/ {2,7}
+// you can query the reward address of the connected wallet
+const rewardAddress = await lucid.wallet().rewardAddress();
+
+// transaction construction
+const tx = await lucid
+  .newTx()
+  .deRegisterStake(rewardAddress)
+  .complete();
+
+// proceed with sign and submit tx...
+```
+

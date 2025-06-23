@@ -1,0 +1,43 @@
+import { Callout, Steps } from "nextra/components";
+
+# Make Wallet From Private Key
+
+You can instantiate a wallet from a [Bech32](https://github.com/cardano-foundation/CIPs/tree/master/CIP-0005) Private Key to get a wallet object by calling the `makeWalletFromPrivateKey(){:js}` function. Please note that, only an Enterprise Address (without stake credential) can be derived.
+
+## Steps to Create a CIP-30 Wallet
+
+<Steps>
+### Specify the Provider
+
+It can be [Blockfrost](https://blockfrost.io/), [Koios](https://koios.rest/), [Maestro](https://gomaestro.org/), etc. Even a custom provider, as long as it implements the [`Provider`](../../provider) interface.
+
+For example, here's how to instantiate a Blockfrost provider:
+
+```js showLineNumbers
+import { Blockfrost, Provider } from "@lucid-evolution/lucid";
+
+const blockfrostURL: string = process.env.BF_URL!;
+const blockfrostPID: string = process.env.BF_PID!;
+
+const blockfrost: Provider = new Blockfrost(
+  blockfrostURL, // The endpoint based on the Cardano network, please refer to Blockfrost documentation
+  blockfrostPID, // Your secret Blockfrost Project ID
+);
+```
+
+<Callout>
+  Other providers follow a similar pattern.
+</Callout>
+
+### Create the Wallet Object
+
+```js showLineNumbers /makeWalletFromPrivateKey/ {5-6}
+import { makeWalletFromPrivateKey, Network } from "@lucid-evolution/lucid";
+
+const provider = blockfrost;
+const network: Network = "Mainnet"; // "Mainnet" | "Preview" | "Preprod" | "Custom"
+const privateKey = "bech32 private key here ...";
+const wallet = makeWalletFromPrivateKey(provider, network, privateKey); // CIP-30
+```
+</Steps>
+

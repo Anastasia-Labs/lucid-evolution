@@ -1,5 +1,11 @@
 # docs
 
+## 4.0.0
+
+### Major Changes
+
+- [#557](https://github.com/Anastasia-Labs/lucid-evolution/issues/557) - Upgrade to Nextra v4
+
 ## 2.0.0
 
 ### Major Changes

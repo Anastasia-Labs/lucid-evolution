@@ -1,0 +1,149 @@
+---
+title: Smart Contract Interactions
+sidebarTitle: Smart Contract Interactions
+asIndexPage: true
+---
+
+import { Callout, Steps } from "nextra/components";
+
+# Smart Contract Interactions
+
+It is important to understand that on the Cardano blockchain, you don't directly interact with "smart contracts", at least not in the traditional sense.
+
+Instead, you work with validators. These validators are responsible for verifying the actions taken in a given transaction, rather than executing or calling any actions themselves. Validators are pure functions that return true or false.
+
+A validator checks whether the transaction meets its requirements, and if it does, the transaction is processed successfully. If the requirements are not met, the transaction fails (is not allowed to execute).
+
+## Concepts
+
+### Datums
+
+Datums are data attached to UTxOs which are accessible on-chain (like state variables).
+
+```js showLineNumbers
+const datum = Data.to(new Constr(0, [pubKeyHash]));
+```
+
+<Callout type="info">
+  **You can define datum schemas for type safety:**
+
+  ```js showLineNumbers
+  const DatumSchema = Data.Object({
+    owner: Data.Bytes(),
+  });
+  type DatumType = Data.Static<typeof DatumSchema>;
+  const DatumType = DatumSchema as unknown as DatumType;
+  ```
+</Callout>
+
+### Redeemers
+
+Redeemers are arguments provided from the off-chain when spending UTxOs associated with a script address.
+
+```js showLineNumbers
+const redeemer = Data.to(new Constr(0, [fromText("Hello, World!")]));
+```
+
+<Callout type="warning">
+  **When working with `string{:js}`, a greater care is needed:**
+  
+  You must provide the hex value in order for it to be serializable into CBOR, that's why `"Hello, World!"{:js}` is converted using `fromText(){:js}`. But if the underlying string is already in hex, then you do **NOT** call `fromText(){:js}` as it will treat the input string as a regular string and the result would be doubly hex.
+  
+  See [**`Datums`**](#datums) example: `pubKeyHash{:js}` is a hex string, so calling `fromText(pubKeyHash){:js}` would be incorrect.
+</Callout>
+
+## Workflow
+
+<Steps>
+### Create a Validator Instance
+
+Lucid-Evolution consumes compiled validators from languages like PlutusTx, Aiken, or Plutarch:
+
+```js showLineNumbers
+import { SpendingValidator } from "@lucid-evolution/lucid";
+
+const spendingValidator: SpendingValidator = {
+  type: "PlutusV3",
+  script: "59099a590997010000...", // CBOR format from plutus.json
+};
+
+const scriptAddress = lucid.utils.validatorToAddress(spendingValidator);
+```
+
+### Lock Funds at Script Address
+
+```js showLineNumbers
+const tx = await lucid
+  .newTx()
+  .pay.ToContract(
+    scriptAddress,
+    { kind: "inline", value: datum },
+    { lovelace: 10_000_000n },
+  )
+  .complete();
+```
+
+<Callout type="info">
+  `.pay.ToContract(){:js}` and `.pay.ToAddressWithData(){:js}` are functionally identical. `.pay.ToContract(){:js}` is just an alias that better expresses the intent when working with smart contracts.
+</Callout>
+
+### Spend (redeem) from Script Address
+
+```js showLineNumbers
+// Find the UTxO we want to spend
+const allUTxOs = await lucid.utxosAt(scriptAddress);
+const ownerUTxO = allUTxOs.find((utxo) => {
+  if (utxo.datum) {
+    const datum = Data.from(utxo.datum, DatumType);
+    return datum.owner === publicKeyHash;
+  }
+});
+
+// Spend script UTxO
+const tx = await lucid
+  .newTx()
+  .collectFrom([ownerUTxO], redeemer) // Provide the redeemer argument
+  .attach.SpendingValidator(spend_val) // Attach validator
+  .complete();
+```
+</Steps>
+
+## Validator Types
+
+Lucid-Evolution supports various validator types, each serving a specific purpose.
+
+```js showLineNumbers
+// Attaching different validator types
+.attach.SpendingValidator(validator)    // For spending UTxOs
+.attach.MintingPolicy(validator)        // For minting tokens
+.attach.CertificateValidator(validator) // For stake operations
+.attach.WithdrawalValidator(validator)  // For reward withdrawals
+.attach.VoteValidator(validator)        // For governance votes
+.attach.ProposeValidator(validator)     // For governance proposals
+```
+
+The corresponding transaction operations:
+
+```js showLineNumbers
+.collectFrom(utxos, redeemer) // Spending UTxOs
+.mintAssets(assets, redeemer) // Minting tokens
+.delegateTo(stakeAddress, poolId, redeemer)     // Stake delegation
+.deRegisterStake(stakeAddress, redeemer)        // Stake deregistration
+.withdraw(stakeAddress, rewardAmount, redeemer) // Reward withdrawal
+```
+
+## Troubleshooting
+
+| Common Issue              | Best Practice                                                                |
+| ------------------------- | ---------------------------------------------------------------------------- |
+| **Datum/Redeemer Format** | Ensure they match validator expectations precisely                           |
+| **Minimum ADA**           | Have enough ADA as inputs for all outputs                                    |
+| **Collateral**            | Include appropriate amount of collateral when spending from script addresses |
+| **Signatories**           | Include all required signers for the validators that require/check them      |
+| **Tx Size and Ex Units**  | Monitor the limits when working with multiple validators                     |
+| **Reference Scripts**     | Use reference scripts whenever possible to reduce transaction size and costs |
+
+<Callout type="info">
+  For a comprehensive documentation of validators, see the official [Aiken documentation](https://aiken-lang.org/language-tour/validators).
+</Callout>
+

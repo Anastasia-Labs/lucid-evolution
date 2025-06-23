@@ -1,0 +1,58 @@
+---
+title: Wallet
+sidebarTitle: Wallet
+asIndexPage: true
+---
+
+import { Steps } from "nextra/components";
+
+# Wallet
+
+You can instantiate a wallet object from seed without binding it with a Lucid object by calling the `walletFromSeed(){:js}` function. For example, to use it with an emulator or to run test scenarios.
+
+## Steps to Create a Wallet
+
+<Steps>
+### Generate Seed Phrase
+
+```js showLineNumbers /generateSeedPhrase/ {3}
+import { generateSeedPhrase } from "@lucid-evolution/lucid";
+
+const seedPhrase = generateSeedPhrase(); // BIP-39
+console.log(seedPhrase);
+```
+
+### Create Wallet
+```js showLineNumbers /walletFromSeed/ {4}
+import { walletFromSeed } from "@lucid-evolution/lucid";
+
+const seedPhrase = "your seed phrase here ...";
+const wallet = walletFromSeed(seedPhrase);
+console.log(wallet); // { address, rewardAddress, paymentKey, stakeKey }
+```
+</Steps>
+
+## Utility Functions
+
+### Discover Used Key Hashes
+
+To discover which key hashes are used in a transaction, limited by the specified UTxOs, you can use the `discoverOwnUsedTxKeyHashes(){:js}` function:
+
+```js showLineNumbers /discoverOwnUsedTxKeyHashes/ {10-14}
+import { discoverOwnUsedTxKeyHashes } from "@lucid-evolution/lucid";
+
+const tx: TxSignBuilder = await lucid
+  .newTx()
+  // ... build your transaction
+  .complete();
+const ownKeyHashes: Array<KeyHash> = ["KeyHash1", "KeyHash2", "OtherKeyHash"];
+const ownUtxos: Array<UTxO> = utxos;
+
+const usedKeyHashes: Array<KeyHash> = discoverOwnUsedTxKeyHashes(
+  tx.toTransaction(),
+  ownKeyHashes,
+  ownUtxos,
+);
+console.log(usedKeyHashes); // ["KeyHash1", "KeyHash2"]
+```
+
