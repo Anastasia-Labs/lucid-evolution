@@ -1,21 +1,6 @@
-import { Schema, Data, FastCheck, pipe, Inspectable } from "effect";
+import { Schema, Data, FastCheck, Inspectable } from "effect";
 import * as Hex from "./Hex.js";
-
-/**
- * The length in bytes of a ScriptHash.
- *
- * @since 2.0.0
- * @category constants
- */
-export const SCRIPTHASH_BYTES_LENGTH = 28;
-
-/**
- * The length in hex characters of a ScriptHash.
- *
- * @since 2.0.0
- * @category constants
- */
-export const SCRIPTHASH_HEX_LENGTH = 56;
+import * as Hash28 from "./Hash28.js";
 
 /**
  * Error class for ScriptHash related operations.
@@ -52,7 +37,7 @@ export interface ScriptHash {
  * @category schemas
  */
 export class ScriptHash extends Schema.TaggedClass<ScriptHash>()("ScriptHash", {
-  hash: Hex.HexString,
+  hash: Hash28.HexString,
 }) {
   [Inspectable.NodeInspectSymbol]() {
     return {
@@ -62,26 +47,16 @@ export class ScriptHash extends Schema.TaggedClass<ScriptHash>()("ScriptHash", {
   }
 }
 
-export const ScriptHashBytes = pipe(
-  Schema.Uint8Array,
-  Schema.filter((a) => a.length === SCRIPTHASH_BYTES_LENGTH),
-  Schema.typeSchema,
-).annotations({
-  message: (issue) =>
-    `${issue.actual} must be a byte array of length ${SCRIPTHASH_BYTES_LENGTH}`,
-  identifier: "ScriptHashBytes",
-});
-
-export const Bytes = Schema.transform(ScriptHashBytes, ScriptHash, {
+export const Bytes = Schema.transform(Hash28.Bytes, ScriptHash, {
   strict: true,
   encode: (_toI, toA) => Hex.toBytes(toA.hash),
   decode: (_fromI, fromA) => new ScriptHash({ hash: Hex.fromBytes(fromA) }),
 });
 
-export const ScriptHashFromHex = Schema.transform(Hex.HexString, ScriptHash, {
+export const HexString = Schema.transform(Hash28.HexString, ScriptHash, {
   strict: true,
   encode: (_toI, toA) => toA.hash,
-  decode: (fromI, _fromA) => new ScriptHash({ hash: fromI }),
+  decode: (fromI) => new ScriptHash({ hash: fromI }),
 });
 
 /**
@@ -110,6 +85,52 @@ export const equals = (a: ScriptHash, b: ScriptHash): boolean =>
  * @category generators
  */
 export const generator = FastCheck.uint8Array({
-  minLength: SCRIPTHASH_BYTES_LENGTH,
-  maxLength: SCRIPTHASH_BYTES_LENGTH,
+  minLength: Hash28.HASH28_BYTES_LENGTH,
+  maxLength: Hash28.HASH28_BYTES_LENGTH,
 }).map((bytes) => new ScriptHash({ hash: Hex.fromBytes(bytes) }));
+
+
+/**
+ * Synchronous encoding utilities.
+ *
+ * @since 2.0.0
+ * @category encoding/decoding
+ */
+export const Encode = {
+  hex: Schema.encodeSync(HexString),
+  bytes: Schema.encodeSync(Bytes),
+};
+
+/**
+ * Synchronous decoding utilities.
+ *
+ * @since 2.0.0
+ * @category encoding/decoding
+ */
+export const Decode = {
+  hex: Schema.decodeUnknownSync(HexString),
+  bytes: Schema.decodeUnknownSync(Bytes),
+};
+
+/**
+ * Either encoding utilities.
+ *
+ * @since 2.0.0
+ * @category encoding/decoding
+ */
+export const EncodeEither = {
+  hex: Schema.encodeEither(HexString),
+  bytes: Schema.encodeEither(Bytes),
+};
+
+/**
+ * Either decoding utilities.
+ *
+ * @since 2.0.0
+ * @category encoding/decoding
+ */
+export const DecodeEither = {
+  hex: Schema.decodeUnknownEither(HexString),
+  bytes: Schema.decodeUnknownEither(Bytes),
+};
+

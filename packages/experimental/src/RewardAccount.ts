@@ -11,9 +11,10 @@ import * as KeyHash from "./KeyHash.js";
 import * as ScriptHash from "./ScriptHash.js";
 import * as NetworkId from "./NetworkId.js";
 import * as Hex from "./Hex.js";
+import * as Bytes29 from "./Bytes29.js";
 
-declare const NominalType: unique symbol;
-interface RewardAccount {
+export declare const NominalType: unique symbol;
+export interface RewardAccount {
   readonly [NominalType]: unique symbol;
 }
 
@@ -23,13 +24,12 @@ interface RewardAccount {
  * @since 2.0.0
  * @category schemas
  */
-class RewardAccount extends Schema.TaggedClass<RewardAccount>("RewardAccount")(
-  "RewardAccount",
-  {
-    networkId: NetworkId.NetworkId,
-    stakeCredential: Credential.Credential,
-  },
-) {
+export class RewardAccount extends Schema.TaggedClass<RewardAccount>(
+  "RewardAccount"
+)("RewardAccount", {
+  networkId: NetworkId.NetworkId,
+  stakeCredential: Credential.Credential,
+}) {
   [Inspectable.NodeInspectSymbol]() {
     return {
       _tag: "RewardAccount",
@@ -39,7 +39,8 @@ class RewardAccount extends Schema.TaggedClass<RewardAccount>("RewardAccount")(
   }
 }
 
-const Bytes = Schema.transformOrFail(Schema.Uint8ArrayFromSelf, RewardAccount, {
+
+export const Bytes = Schema.transformOrFail(Bytes29.Bytes, RewardAccount, {
   strict: true,
   encode: (toI, options, ast, toA) => {
     const stakingBit = toA.stakeCredential._tag === "KeyHash" ? 0 : 1;
@@ -71,7 +72,8 @@ const Bytes = Schema.transformOrFail(Schema.Uint8ArrayFromSelf, RewardAccount, {
     }),
 });
 
-const HexString = Schema.transformOrFail(Hex.HexString, RewardAccount, {
+
+export const HexString = Schema.transformOrFail(Bytes29.HexString, RewardAccount, {
   strict: true,
   encode: (toI, options, ast, toA) =>
     pipe(ParseResult.encode(Bytes)(toA), Effect.map(Hex.fromBytes)),
@@ -85,7 +87,7 @@ const HexString = Schema.transformOrFail(Hex.HexString, RewardAccount, {
  * @since 2.0.0
  * @category equality
  */
-const equals = (a: RewardAccount, b: RewardAccount): boolean => {
+export const equals = (a: RewardAccount, b: RewardAccount): boolean => {
   return (
     a.networkId === b.networkId &&
     a.stakeCredential._tag === b.stakeCredential._tag &&
@@ -110,15 +112,58 @@ const equals = (a: RewardAccount, b: RewardAccount): boolean => {
  * @since 2.0.0
  * @category generators
  */
-const generator = FastCheck.tuple(
+export const generator = FastCheck.tuple(
   NetworkId.generator,
-  Credential.generator,
+  Credential.generator
 ).map(
   ([networkId, stakeCredential]) =>
     new RewardAccount({
       networkId,
       stakeCredential,
-    }),
+    })
 );
 
-export { RewardAccount, Bytes, HexString, equals, generator };
+/**
+ * Synchronous encoding utilities.
+ *
+ * @since 2.0.0
+ * @category encoding/decoding
+ */
+export const Encode = {
+  hex: Schema.encodeSync(HexString),
+  bytes: Schema.encodeSync(Bytes),
+};
+
+/**
+ * Synchronous decoding utilities.
+ *
+ * @since 2.0.0
+ * @category encoding/decoding
+ */
+export const Decode = {
+  hex: Schema.decodeUnknownSync(HexString),
+  bytes: Schema.decodeUnknownSync(Bytes),
+};
+
+/**
+ * Either encoding utilities.
+ *
+ * @since 2.0.0
+ * @category encoding/decoding
+ */
+export const EncodeEither = {
+  hex: Schema.encodeEither(HexString),
+  bytes: Schema.encodeEither(Bytes),
+};
+
+/**
+ * Either decoding utilities.
+ *
+ * @since 2.0.0
+ * @category encoding/decoding
+ */
+export const DecodeEither = {
+  hex: Schema.decodeUnknownEither(HexString),
+  bytes: Schema.decodeUnknownEither(Bytes),
+};
+

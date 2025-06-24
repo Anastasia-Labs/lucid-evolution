@@ -11,6 +11,7 @@ import * as KeyHash from "./KeyHash.js";
 import * as ScriptHash from "./ScriptHash.js";
 import * as NetworkId from "./NetworkId.js";
 import * as Hex from "./Hex.js";
+import * as Bytes29 from "./Bytes29.js";
 
 export declare const NominalType: unique symbol;
 export interface EnterpriseAddress {
@@ -39,7 +40,7 @@ export class EnterpriseAddress extends Schema.TaggedClass<EnterpriseAddress>(
 }
 
 export const BytesSchema = Schema.transformOrFail(
-  Schema.Uint8ArrayFromSelf,
+  Bytes29.Bytes,
   EnterpriseAddress,
   {
     strict: true,
@@ -82,7 +83,7 @@ export const BytesSchema = Schema.transformOrFail(
 );
 
 export const HexStringSchema = Schema.transformOrFail(
-  Hex.HexString,
+  Bytes29.HexString,
   EnterpriseAddress,
   {
     strict: true,

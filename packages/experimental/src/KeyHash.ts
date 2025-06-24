@@ -1,21 +1,6 @@
-import { Schema, Data, FastCheck, pipe, Inspectable } from "effect";
+import { Schema, Data, FastCheck, Inspectable } from "effect";
 import * as Hex from "./Hex.js";
-
-/**
- * The length in bytes of a KeyHash.
- *
- * @since 2.0.0
- * @category constants
- */
-export const KEYHASH_BYTES_LENGTH = 28;
-
-/**
- * The length in hex characters of a KeyHash.
- *
- * @since 2.0.0
- * @category constants
- */
-export const KEYHASH_HEX_LENGTH = 56;
+import * as Hash28 from "./Hash28.js";
 
 /**
  * Error class for KeyHash related operations.
@@ -62,26 +47,16 @@ export class KeyHash extends Schema.TaggedClass<KeyHash>()("KeyHash", {
   }
 }
 
-export const KeyHashBytes = pipe(
-  Schema.Uint8Array,
-  Schema.filter((a) => a.length === KEYHASH_BYTES_LENGTH),
-  Schema.typeSchema,
-).annotations({
-  message: (issue) =>
-    `${issue.actual} must be a byte array of length ${KEYHASH_BYTES_LENGTH}`,
-  identifier: "KeyHashBytes",
-});
-
-export const Bytes = Schema.transform(KeyHashBytes, KeyHash, {
+export const Bytes = Schema.transform(Hash28.Bytes, KeyHash, {
   strict: true,
   encode: (_toI, toA) => Hex.toBytes(toA.hash),
   decode: (_fromI, fromA) => new KeyHash({ hash: Hex.fromBytes(fromA) }),
 });
 
-export const HexString = Schema.transform(Hex.HexString, KeyHash, {
+export const HexString = Schema.transform(Hash28.HexString, KeyHash, {
   strict: true,
   encode: (_toI, toA) => toA.hash,
-  decode: (fromI, _fromA) => new KeyHash({ hash: fromI }),
+  decode: (fromI) => new KeyHash({ hash: fromI }),
 });
 
 /**
@@ -113,12 +88,12 @@ export const equals = (a: KeyHash, b: KeyHash): boolean => a.hash === b.hash;
  * @category generators
  */
 export const generator = FastCheck.uint8Array({
-  minLength: KEYHASH_BYTES_LENGTH,
-  maxLength: KEYHASH_BYTES_LENGTH,
+  minLength: Hash28.HASH28_BYTES_LENGTH,
+  maxLength: Hash28.HASH28_BYTES_LENGTH,
 }).map((bytes) => new KeyHash({ hash: Hex.fromBytes(bytes) }));
 
 /**
- * Synchronous encoding utilities for KeyHash.
+ * Synchronous encoding utilities.
  *
  * @since 2.0.0
  * @category encoding/decoding
@@ -129,7 +104,7 @@ export const Encode = {
 };
 
 /**
- * Synchronous decoding utilities for KeyHash.
+ * Synchronous decoding utilities.
  *
  * @since 2.0.0
  * @category encoding/decoding
@@ -140,7 +115,7 @@ export const Decode = {
 };
 
 /**
- * Either encoding utilities for KeyHash.
+ * Either encoding utilities.
  *
  * @since 2.0.0
  * @category encoding/decoding
@@ -151,7 +126,7 @@ export const EncodeEither = {
 };
 
 /**
- * Either decoding utilities for KeyHash.
+ * Either decoding utilities.
  *
  * @since 2.0.0
  * @category encoding/decoding
