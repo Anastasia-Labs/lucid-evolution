@@ -1,9 +1,10 @@
-import { Data, Effect } from "effect";
+import { Data, Effect, Stream } from "effect";
 import Docker from "dockerode";
 import * as fs from "fs";
 import * as path from "path";
 import * as os from "os";
 import * as DevnetDefault from "./DevnetDefault.js";
+import { NodeStream } from "@effect/platform-node";
 
 export class CardanoDevNetError extends Data.TaggedError("CardanoDevNetError")<{
   reason:
@@ -77,8 +78,6 @@ const Utils = {
             cause,
           }),
       });
-
-      yield* Effect.logInfo(`Writing config files to: ${tempDir}`);
 
       const writeFile = (filename: string, content: unknown) =>
         Effect.tryPromise({
@@ -519,9 +518,34 @@ export const Cluster = {
     Effect.gen(function* () {
       // Start Cardano node first
       yield* Container.start(cluster.cardanoNode);
-
-      // Wait a bit for the node to initialize
-      yield* Effect.sleep(2000);
+      const docker = new Docker().getContainer(cluster.cardanoNode.id);
+      const awaitForBlockProduction = Effect.promise(() =>
+        docker.logs({
+          stdout: true,
+          stderr: true,
+          follow: true,
+        }),
+      ).pipe(
+        Stream.fromEffect,
+        Stream.flatMap((stream) =>
+          NodeStream.fromReadable(
+            () => stream,
+            (error) =>
+              new CardanoDevNetError({
+                reason: "container_inspection_failed",
+                message: "Failed to read container logs",
+                cause: error,
+              }),
+          ),
+        ),
+        Stream.takeUntil(
+          (line) =>
+            line.toString().includes("Forge.Loop.AdoptedBlock") ||
+            line.toString().includes("Forge.Loop.NodeIsLeader"),
+        ),
+        Stream.runDrain,
+      );
+      yield* awaitForBlockProduction;
 
       // Start child containers
       if (cluster.kupo) {
@@ -741,4 +765,39 @@ export const Container = {
    */
   getStatusOrThrow: (container: DevNetContainer) =>
     Effect.runPromise(Container.getStatus(container)),
+
+  isImageAvailable: (
+    imageName: string,
+  ): Effect.Effect<boolean, CardanoDevNetError> =>
+    Effect.tryPromise({
+      try: () => {
+        const docker = new Docker();
+        return docker
+          .listImages({ filters: { reference: [imageName] } })
+          .then((images) => images.length > 0);
+      },
+      catch: (cause) =>
+        new CardanoDevNetError({
+          reason: "container_inspection_failed",
+          message: "Failed to check image availability.",
+          cause,
+        }),
+    }),
+
+  isImageAvailableOrThrow: (imageName: string) =>
+    Effect.runPromise(Container.isImageAvailable(imageName)),
+
+  downloadImage: (imageName: string): Effect.Effect<void, CardanoDevNetError> =>
+    Effect.tryPromise({
+      try: () => {
+        const docker = new Docker();
+        return docker.pull(imageName);
+      },
+      catch: (cause) =>
+        new CardanoDevNetError({
+          reason: "container_inspection_failed",
+          message: "Failed to download the Docker image.",
+          cause,
+        }),
+    }),
 } as const;

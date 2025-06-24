@@ -83,7 +83,36 @@ export const ProtocolParametersSchema = S.Struct({
   minUtxoDepositCoefficient: S.Number,
   plutusCostModels: S.Struct({
     "plutus:v1": S.Array(S.Number),
-    "plutus:v2": S.Array(S.Number),
+    /**
+     * There is a known bug in the Cardano node that causes the Plutus V2 cost model
+     * to return an incorrect number of elements when setting up a devnet with
+     * TestConwayHardForkAtEpoch: 0.
+     *
+     * Expected behavior: Plutus V2 cost model should contain exactly 174 elements
+     * Actual behavior: Returns 185 elements (174 + 11 extra elements)
+     *
+     * The extra elements have the value 9223372036854776000:
+     * - "175": 9223372036854776000
+     * - "176": 9223372036854776000
+     * - "177": 9223372036854776000
+     * - "178": 9223372036854776000
+     * - "179": 9223372036854776000
+     * - "180": 9223372036854776000
+     * - "181": 9223372036854776000
+     * - "182": 9223372036854776000
+     * - "183": 9223372036854776000
+     * - "184": 9223372036854776000
+     *
+     * Workaround: Trim the cost model array to the first 174 elements before use.
+     * This issue only affects devnet environments with early Conway hard fork activation.
+     */
+    "plutus:v2": S.Array(S.Number).pipe(
+      S.transform(S.Array(S.Number), {
+        strict: true,
+        decode: (array) => array.slice(0, 174),
+        encode: (array) => array,
+      }),
+    ),
     "plutus:v3": S.Array(S.Number),
   }),
   scriptExecutionPrices: S.Struct({
