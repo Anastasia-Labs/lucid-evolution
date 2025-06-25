@@ -10,34 +10,19 @@ parent: Modules
 
 <h2 class="text-delta">Table of contents</h2>
 
-- [decoding](#decoding)
-  - [decodeBech32](#decodebech32)
-  - [decodeBech32Either](#decodebech32either)
-  - [decodeBech32OrThrow](#decodebech32orthrow)
-  - [decodeBytes](#decodebytes)
-  - [decodeBytesEither](#decodebyteseither)
-  - [decodeBytesOrThrow](#decodebytesorthrow)
-  - [decodeHexString](#decodehexstring)
-  - [decodeHexStringEither](#decodehexstringeither)
-  - [decodeHexStringOrThrow](#decodehexstringorthrow)
-- [encoding](#encoding)
-  - [encodeBech32](#encodebech32)
-  - [encodeBech32Either](#encodebech32either)
-  - [encodeBech32OrThrow](#encodebech32orthrow)
-  - [encodeBytes](#encodebytes)
-  - [encodeBytesEither](#encodebyteseither)
-  - [encodeBytesOrThrow](#encodebytesorthrow)
-  - [encodeHexString](#encodehexstring)
-  - [encodeHexStringEither](#encodehexstringeither)
-  - [encodeHexStringOrThrow](#encodehexstringorthrow)
+- [encoding/decoding](#encodingdecoding)
+  - [Decode](#decode)
+  - [DecodeEither](#decodeeither)
+  - [Encode](#encode)
+  - [EncodeEither](#encodeeither)
 - [model](#model)
   - [Address](#address)
   - [Address (type alias)](#address-type-alias)
   - [AddressError (class)](#addresserror-class)
 - [schema](#schema)
-  - [Bech32](#bech32)
-  - [Bytes](#bytes)
-  - [HexString](#hexstring)
+  - [Bech32Schema](#bech32schema)
+  - [BytesSchema](#bytesschema)
+  - [HexStringSchema](#hexstringschema)
 - [testing](#testing)
   - [generator](#generator)
 - [utils](#utils)
@@ -45,376 +30,170 @@ parent: Modules
 
 ---
 
-# decoding
+# encoding/decoding
 
-## decodeBech32
+## Decode
 
-Decodes a Bech32 string to an address.
+Synchronous decoding utilities for addresses.
 
 **Signature**
 
 ```ts
-export declare const decodeBech32: (
-  u: unknown,
-  overrideOptions?: ParseOptions,
-) => Effect.Effect<
-  | PointerAddress.PointerAddress
-  | EnterpriseAddress.EnterpriseAddress
-  | ByronAddress.ByronAddress
-  | BaseAddress.BaseAddress
-  | RewardAccount.RewardAccount,
-  ParseResult.ParseError,
-  never
->;
+export declare const Decode: {
+  bech32: (
+    u: unknown,
+    overrideOptions?: ParseOptions,
+  ) =>
+    | PointerAddress.PointerAddress
+    | EnterpriseAddress.EnterpriseAddress
+    | ByronAddress.ByronAddress
+    | BaseAddress.BaseAddress
+    | RewardAccount.RewardAccount;
+  hex: (
+    u: unknown,
+    overrideOptions?: ParseOptions,
+  ) =>
+    | PointerAddress.PointerAddress
+    | EnterpriseAddress.EnterpriseAddress
+    | ByronAddress.ByronAddress
+    | BaseAddress.BaseAddress
+    | RewardAccount.RewardAccount;
+  bytes: (
+    u: unknown,
+    overrideOptions?: ParseOptions,
+  ) =>
+    | PointerAddress.PointerAddress
+    | EnterpriseAddress.EnterpriseAddress
+    | ByronAddress.ByronAddress
+    | BaseAddress.BaseAddress
+    | RewardAccount.RewardAccount;
+};
 ```
 
 Added in v2.0.0
 
-## decodeBech32Either
+## DecodeEither
 
-Decodes a Bech32 string to an address, returns Either.
-
-**Signature**
-
-```ts
-export declare const decodeBech32Either: (
-  u: unknown,
-  overrideOptions?: ParseOptions,
-) => Either<
-  | PointerAddress.PointerAddress
-  | EnterpriseAddress.EnterpriseAddress
-  | ByronAddress.ByronAddress
-  | BaseAddress.BaseAddress
-  | RewardAccount.RewardAccount,
-  ParseResult.ParseError
->;
-```
-
-Added in v2.0.0
-
-## decodeBech32OrThrow
-
-Decodes a Bech32 string to an address, throws on error.
+Either decoding utilities for addresses.
 
 **Signature**
 
 ```ts
-export declare const decodeBech32OrThrow: (
-  u: unknown,
-  overrideOptions?: ParseOptions,
-) =>
-  | PointerAddress.PointerAddress
-  | EnterpriseAddress.EnterpriseAddress
-  | ByronAddress.ByronAddress
-  | BaseAddress.BaseAddress
-  | RewardAccount.RewardAccount;
-```
-
-Added in v2.0.0
-
-## decodeBytes
-
-Decodes bytes to an address.
-
-**Signature**
-
-```ts
-export declare const decodeBytes: (
-  u: unknown,
-  overrideOptions?: ParseOptions,
-) => Effect.Effect<
-  | PointerAddress.PointerAddress
-  | EnterpriseAddress.EnterpriseAddress
-  | ByronAddress.ByronAddress
-  | BaseAddress.BaseAddress
-  | RewardAccount.RewardAccount,
-  ParseResult.ParseError,
-  never
->;
-```
-
-Added in v2.0.0
-
-## decodeBytesEither
-
-Decodes bytes to an address, returns Either.
-
-**Signature**
-
-```ts
-export declare const decodeBytesEither: (
-  u: unknown,
-  overrideOptions?: ParseOptions,
-) => Either<
-  | PointerAddress.PointerAddress
-  | EnterpriseAddress.EnterpriseAddress
-  | ByronAddress.ByronAddress
-  | BaseAddress.BaseAddress
-  | RewardAccount.RewardAccount,
-  ParseResult.ParseError
->;
-```
-
-Added in v2.0.0
-
-## decodeBytesOrThrow
-
-Decodes bytes to an address, throws on error.
-
-**Signature**
-
-```ts
-export declare const decodeBytesOrThrow: (
-  i: any,
-  overrideOptions?: ParseOptions,
-) =>
-  | PointerAddress.PointerAddress
-  | EnterpriseAddress.EnterpriseAddress
-  | ByronAddress.ByronAddress
-  | BaseAddress.BaseAddress
-  | RewardAccount.RewardAccount;
-```
-
-Added in v2.0.0
-
-## decodeHexString
-
-Decodes a hex string to an address.
-
-**Signature**
-
-```ts
-export declare const decodeHexString: (
-  u: unknown,
-  overrideOptions?: ParseOptions,
-) => Effect.Effect<
-  | PointerAddress.PointerAddress
-  | EnterpriseAddress.EnterpriseAddress
-  | ByronAddress.ByronAddress
-  | BaseAddress.BaseAddress
-  | RewardAccount.RewardAccount,
-  ParseResult.ParseError,
-  never
->;
-```
-
-Added in v2.0.0
-
-## decodeHexStringEither
-
-Decodes a hex string to an address, returns Either.
-
-**Signature**
-
-```ts
-export declare const decodeHexStringEither: (
-  u: unknown,
-  overrideOptions?: ParseOptions,
-) => Either<
-  | PointerAddress.PointerAddress
-  | EnterpriseAddress.EnterpriseAddress
-  | ByronAddress.ByronAddress
-  | BaseAddress.BaseAddress
-  | RewardAccount.RewardAccount,
-  ParseResult.ParseError
->;
-```
-
-Added in v2.0.0
-
-## decodeHexStringOrThrow
-
-Decodes a hex string to an address, throws on error.
-
-**Signature**
-
-```ts
-export declare const decodeHexStringOrThrow: (
-  u: unknown,
-  overrideOptions?: ParseOptions,
-) =>
-  | PointerAddress.PointerAddress
-  | EnterpriseAddress.EnterpriseAddress
-  | ByronAddress.ByronAddress
-  | BaseAddress.BaseAddress
-  | RewardAccount.RewardAccount;
-```
-
-Added in v2.0.0
-
-# encoding
-
-## encodeBech32
-
-Encodes an address to Bech32 format.
-
-**Signature**
-
-```ts
-export declare const encodeBech32: (
-  a:
+export declare const DecodeEither: {
+  bech32: (
+    u: unknown,
+    overrideOptions?: ParseOptions,
+  ) => Either<
     | PointerAddress.PointerAddress
     | EnterpriseAddress.EnterpriseAddress
     | ByronAddress.ByronAddress
     | BaseAddress.BaseAddress
     | RewardAccount.RewardAccount,
-  overrideOptions?: ParseOptions,
-) => Effect.Effect<string & Brand<"Bech32">, ParseResult.ParseError, never>;
-```
-
-Added in v2.0.0
-
-## encodeBech32Either
-
-Encodes an address to Bech32 format, returns Either.
-
-**Signature**
-
-```ts
-export declare const encodeBech32Either: (
-  a:
+    ParseResult.ParseError
+  >;
+  hex: (
+    u: unknown,
+    overrideOptions?: ParseOptions,
+  ) => Either<
     | PointerAddress.PointerAddress
     | EnterpriseAddress.EnterpriseAddress
     | ByronAddress.ByronAddress
     | BaseAddress.BaseAddress
     | RewardAccount.RewardAccount,
-  overrideOptions?: ParseOptions,
-) => Either<string & Brand<"Bech32">, ParseResult.ParseError>;
-```
-
-Added in v2.0.0
-
-## encodeBech32OrThrow
-
-Encodes an address to Bech32 format, throws on error.
-
-**Signature**
-
-```ts
-export declare const encodeBech32OrThrow: (
-  a:
+    ParseResult.ParseError
+  >;
+  bytes: (
+    u: unknown,
+    overrideOptions?: ParseOptions,
+  ) => Either<
     | PointerAddress.PointerAddress
     | EnterpriseAddress.EnterpriseAddress
     | ByronAddress.ByronAddress
     | BaseAddress.BaseAddress
     | RewardAccount.RewardAccount,
-  overrideOptions?: ParseOptions,
-) => string & Brand<"Bech32">;
+    ParseResult.ParseError
+  >;
+};
 ```
 
 Added in v2.0.0
 
-## encodeBytes
+## Encode
 
-Encodes an address to bytes.
+Synchronous encoding utilities for addresses.
 
 **Signature**
 
 ```ts
-export declare const encodeBytes: (
-  a:
-    | PointerAddress.PointerAddress
-    | EnterpriseAddress.EnterpriseAddress
-    | ByronAddress.ByronAddress
-    | BaseAddress.BaseAddress
-    | RewardAccount.RewardAccount,
-  overrideOptions?: ParseOptions,
-) => Effect.Effect<any, ParseResult.ParseError, never>;
+export declare const Encode: {
+  bech32: (
+    a:
+      | PointerAddress.PointerAddress
+      | EnterpriseAddress.EnterpriseAddress
+      | ByronAddress.ByronAddress
+      | BaseAddress.BaseAddress
+      | RewardAccount.RewardAccount,
+    overrideOptions?: ParseOptions,
+  ) => string & Brand<"Bech32">;
+  hex: (
+    a:
+      | PointerAddress.PointerAddress
+      | EnterpriseAddress.EnterpriseAddress
+      | ByronAddress.ByronAddress
+      | BaseAddress.BaseAddress
+      | RewardAccount.RewardAccount,
+    overrideOptions?: ParseOptions,
+  ) => string & Brand<"HexString">;
+  bytes: (
+    a:
+      | PointerAddress.PointerAddress
+      | EnterpriseAddress.EnterpriseAddress
+      | ByronAddress.ByronAddress
+      | BaseAddress.BaseAddress
+      | RewardAccount.RewardAccount,
+    overrideOptions?: ParseOptions,
+  ) => any;
+};
 ```
 
 Added in v2.0.0
 
-## encodeBytesEither
+## EncodeEither
 
-Encodes an address to bytes, returns Either.
-
-**Signature**
-
-```ts
-export declare const encodeBytesEither: (
-  a:
-    | PointerAddress.PointerAddress
-    | EnterpriseAddress.EnterpriseAddress
-    | ByronAddress.ByronAddress
-    | BaseAddress.BaseAddress
-    | RewardAccount.RewardAccount,
-  overrideOptions?: ParseOptions,
-) => Either<any, ParseResult.ParseError>;
-```
-
-Added in v2.0.0
-
-## encodeBytesOrThrow
-
-Encodes an address to bytes, throws on error.
+Either encoding utilities for addresses.
 
 **Signature**
 
 ```ts
-export declare const encodeBytesOrThrow: (
-  u: unknown,
-  overrideOptions?: ParseOptions,
-) => any;
-```
-
-Added in v2.0.0
-
-## encodeHexString
-
-Encodes an address to a hex string.
-
-**Signature**
-
-```ts
-export declare const encodeHexString: (
-  a:
-    | PointerAddress.PointerAddress
-    | EnterpriseAddress.EnterpriseAddress
-    | ByronAddress.ByronAddress
-    | BaseAddress.BaseAddress
-    | RewardAccount.RewardAccount,
-  overrideOptions?: ParseOptions,
-) => Effect.Effect<string & Brand<"HexString">, ParseResult.ParseError, never>;
-```
-
-Added in v2.0.0
-
-## encodeHexStringEither
-
-Encodes an address to a hex string, returns Either.
-
-**Signature**
-
-```ts
-export declare const encodeHexStringEither: (
-  a:
-    | PointerAddress.PointerAddress
-    | EnterpriseAddress.EnterpriseAddress
-    | ByronAddress.ByronAddress
-    | BaseAddress.BaseAddress
-    | RewardAccount.RewardAccount,
-  overrideOptions?: ParseOptions,
-) => Either<string & Brand<"HexString">, ParseResult.ParseError>;
-```
-
-Added in v2.0.0
-
-## encodeHexStringOrThrow
-
-Encodes an address to a hex string, throws on error.
-
-**Signature**
-
-```ts
-export declare const encodeHexStringOrThrow: (
-  a:
-    | PointerAddress.PointerAddress
-    | EnterpriseAddress.EnterpriseAddress
-    | ByronAddress.ByronAddress
-    | BaseAddress.BaseAddress
-    | RewardAccount.RewardAccount,
-  overrideOptions?: ParseOptions,
-) => string & Brand<"HexString">;
+export declare const EncodeEither: {
+  bech32: (
+    a:
+      | PointerAddress.PointerAddress
+      | EnterpriseAddress.EnterpriseAddress
+      | ByronAddress.ByronAddress
+      | BaseAddress.BaseAddress
+      | RewardAccount.RewardAccount,
+    overrideOptions?: ParseOptions,
+  ) => Either<string & Brand<"Bech32">, ParseResult.ParseError>;
+  hex: (
+    a:
+      | PointerAddress.PointerAddress
+      | EnterpriseAddress.EnterpriseAddress
+      | ByronAddress.ByronAddress
+      | BaseAddress.BaseAddress
+      | RewardAccount.RewardAccount,
+    overrideOptions?: ParseOptions,
+  ) => Either<string & Brand<"HexString">, ParseResult.ParseError>;
+  bytes: (
+    a:
+      | PointerAddress.PointerAddress
+      | EnterpriseAddress.EnterpriseAddress
+      | ByronAddress.ByronAddress
+      | BaseAddress.BaseAddress
+      | RewardAccount.RewardAccount,
+    overrideOptions?: ParseOptions,
+  ) => Either<any, ParseResult.ParseError>;
+};
 ```
 
 Added in v2.0.0
@@ -467,14 +246,14 @@ Added in v2.0.0
 
 # schema
 
-## Bech32
+## Bech32Schema
 
 Schema for encoding/decoding addresses as Bech32 strings.
 
 **Signature**
 
 ```ts
-export declare const Bech32: Schema.transformOrFail<
+export declare const Bech32Schema: Schema.transformOrFail<
   Schema.SchemaClass<string & Brand<"Bech32">, string & Brand<"Bech32">, never>,
   Schema.Union<
     [
@@ -491,15 +270,15 @@ export declare const Bech32: Schema.transformOrFail<
 
 Added in v2.0.0
 
-## Bytes
+## BytesSchema
 
 Schema for encoding/decoding addresses as bytes.
 
 **Signature**
 
 ```ts
-export declare const Bytes: Schema.transformOrFail<
-  typeof Schema.Uint8ArrayFromSelf,
+export declare const BytesSchema: Schema.transformOrFail<
+  Schema.SchemaClass<any, any, never>,
   Schema.Union<
     [
       typeof BaseAddress.BaseAddress,
@@ -515,14 +294,14 @@ export declare const Bytes: Schema.transformOrFail<
 
 Added in v2.0.0
 
-## HexString
+## HexStringSchema
 
 Schema for encoding/decoding addresses as hex strings.
 
 **Signature**
 
 ```ts
-export declare const HexString: Schema.transformOrFail<
+export declare const HexStringSchema: Schema.transformOrFail<
   Schema.SchemaClass<
     string & Brand<"HexString">,
     string & Brand<"HexString">,
