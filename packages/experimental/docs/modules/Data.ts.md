@@ -1295,7 +1295,9 @@ export declare const encodeData: <Source, Target extends Data>(
 **Signature**
 
 ```ts
-export declare const resolveCBOR: (input: string) => Effect.Effect<
+export declare const resolveCBOR: (
+  input: string,
+) => Effect.Effect<
   | { readonly _tag: "List"; readonly list: readonly Data[] }
   | { readonly _tag: "Integer"; readonly integer: bigint }
   | { readonly _tag: "ByteArray"; readonly bytearray: string }

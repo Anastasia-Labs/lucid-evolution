@@ -1,6 +1,6 @@
 ---
 title: KeyHash.ts
-nav_order: 298
+nav_order: 300
 parent: Modules
 ---
 
@@ -13,6 +13,11 @@ parent: Modules
 - [constants](#constants)
   - [KEYHASH_BYTES_LENGTH](#keyhash_bytes_length)
   - [KEYHASH_HEX_LENGTH](#keyhash_hex_length)
+- [encoding/decoding](#encodingdecoding)
+  - [Decode](#decode)
+  - [DecodeEither](#decodeeither)
+  - [Encode](#encode)
+  - [EncodeEither](#encodeeither)
 - [equality](#equality)
   - [equals](#equals)
 - [errors](#errors)
@@ -52,6 +57,83 @@ The length in hex characters of a KeyHash.
 
 ```ts
 export declare const KEYHASH_HEX_LENGTH: 56;
+```
+
+Added in v2.0.0
+
+# encoding/decoding
+
+## Decode
+
+Synchronous decoding utilities for KeyHash.
+
+**Signature**
+
+```ts
+export declare const Decode: {
+  hex: (u: unknown, overrideOptions?: ParseOptions) => KeyHash;
+  bytes: (u: unknown, overrideOptions?: ParseOptions) => KeyHash;
+};
+```
+
+Added in v2.0.0
+
+## DecodeEither
+
+Either decoding utilities for KeyHash.
+
+**Signature**
+
+```ts
+export declare const DecodeEither: {
+  hex: (
+    u: unknown,
+    overrideOptions?: ParseOptions,
+  ) => Either<KeyHash, ParseError>;
+  bytes: (
+    u: unknown,
+    overrideOptions?: ParseOptions,
+  ) => Either<KeyHash, ParseError>;
+};
+```
+
+Added in v2.0.0
+
+## Encode
+
+Synchronous encoding utilities for KeyHash.
+
+**Signature**
+
+```ts
+export declare const Encode: {
+  hex: (
+    a: KeyHash,
+    overrideOptions?: ParseOptions,
+  ) => string & Brand<"HexString">;
+  bytes: (a: KeyHash, overrideOptions?: ParseOptions) => any;
+};
+```
+
+Added in v2.0.0
+
+## EncodeEither
+
+Either encoding utilities for KeyHash.
+
+**Signature**
+
+```ts
+export declare const EncodeEither: {
+  hex: (
+    a: KeyHash,
+    overrideOptions?: ParseOptions,
+  ) => Either<string & Brand<"HexString">, ParseError>;
+  bytes: (
+    a: KeyHash,
+    overrideOptions?: ParseOptions,
+  ) => Either<any, ParseError>;
+};
 ```
 
 Added in v2.0.0
