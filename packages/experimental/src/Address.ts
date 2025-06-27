@@ -85,21 +85,21 @@ export const BytesSchema = Schema.transformOrFail(
   Address,
   {
     strict: true,
-    encode: (toI, options, ast, toA) => {
+    encode: (_, __, ___, toA) => {
       switch (toA._tag) {
         case "BaseAddress":
           return ParseResult.encode(BaseAddress.Bytes)(toA);
         case "EnterpriseAddress":
           return ParseResult.encode(EnterpriseAddress.BytesSchema)(toA);
         case "PointerAddress":
-          return ParseResult.encode(PointerAddress.Bytes)(toA);
+          return ParseResult.encode(PointerAddress.BytesSchema)(toA);
         case "RewardAccount":
-          return ParseResult.encode(RewardAccount.Bytes)(toA);
+          return ParseResult.encode(RewardAccount.BytesSchema)(toA);
         case "ByronAddress":
           return ParseResult.encode(ByronAddress.Bytes)(toA);
       }
     },
-    decode: (fromI, options, ast, fromA) =>
+    decode: (_, __, ast, fromA) =>
       Effect.gen(function* () {
         const header = fromA[0];
         // Extract address type from the upper 4 bits (bits 4-7)
@@ -126,11 +126,11 @@ export const BytesSchema = Schema.transformOrFail(
           // Format: [payment credential, variable length integers for slot, txIndex, certIndex]
           case 0b0100: // Key payment with pointer
           case 0b0101:
-            return yield* ParseResult.decode(PointerAddress.Bytes)(fromA);
+            return yield* ParseResult.decode(PointerAddress.BytesSchema)(fromA);
 
           case 0b1110:
           case 0b1111:
-            return yield* ParseResult.decode(RewardAccount.Bytes)(fromA);
+            return yield* ParseResult.decode(RewardAccount.BytesSchema)(fromA);
 
           case 0b1000:
             return yield* ParseResult.decode(ByronAddress.Bytes)(fromA);
@@ -155,17 +155,17 @@ export const BytesSchema = Schema.transformOrFail(
  * @category schema
  */
 export const HexStringSchema = Schema.transformOrFail(
-  HexString.HexString,
+  HexString.HexSchema,
   Address,
   {
     strict: true,
-    encode: (toI, options, ast, toA) =>
+    encode: (_, __, ___, toA) =>
       pipe(
         ParseResult.encode(BytesSchema)(toA),
-        Effect.map(HexString.fromBytes),
+        Effect.map(HexString.Encode.hex),
       ),
-    decode: (fromI, options, ast, fromA) =>
-      pipe(HexString.toBytes(fromA), ParseResult.decode(BytesSchema)),
+    decode: (_, __, ___, fromA) =>
+      pipe(HexString.Decode.hex(fromA), ParseResult.decode(BytesSchema)),
   },
 );
 
@@ -180,7 +180,7 @@ export const Bech32Schema = Schema.transformOrFail(
   Address,
   {
     strict: true,
-    encode: (toI, options, ast, toA) =>
+    encode: (_, __, ___, toA) =>
       Effect.gen(function* () {
         const bytes = yield* ParseResult.encode(BytesSchema)(toA);
         let prefix: string;
@@ -200,7 +200,7 @@ export const Bech32Schema = Schema.transformOrFail(
         const b = yield* ParseResult.decode(_Bech32.Bytes(prefix))(bytes);
         return b;
       }),
-    decode: (fromI, options, ast, fromA) =>
+    decode: (fromI) =>
       pipe(
         ParseResult.encode(_Bech32.Bytes())(fromI),
         Effect.flatMap(ParseResult.decode(BytesSchema)),
@@ -294,4 +294,28 @@ export const DecodeEither = {
   bech32: Schema.decodeUnknownEither(Bech32Schema),
   hex: Schema.decodeUnknownEither(HexStringSchema),
   bytes: Schema.decodeUnknownEither(BytesSchema),
+};
+
+/**
+ * Effectful encoding utilities for addresses.
+ *
+ * @since 2.0.0
+ * @category encoding/decoding
+ */
+export const EncodeEffect = {
+  bech32: Schema.encode(Bech32Schema),
+  hex: Schema.encode(HexStringSchema),
+  bytes: Schema.encode(BytesSchema),
+};
+
+/**
+ * Effectful decoding utilities for addresses.
+ *
+ * @since 2.0.0
+ * @category encoding/decoding
+ */
+export const DecodeEffect = {
+  bech32: Schema.decodeUnknown(Bech32Schema),
+  hex: Schema.decodeUnknown(HexStringSchema),
+  bytes: Schema.decodeUnknown(BytesSchema),
 };

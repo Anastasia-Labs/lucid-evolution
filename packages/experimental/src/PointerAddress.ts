@@ -56,7 +56,7 @@ export class PointerAddress extends Schema.TaggedClass<PointerAddress>(
   }
 }
 
-export const Bytes = Schema.transformOrFail(
+export const BytesSchema = Schema.transformOrFail(
   Schema.Uint8ArrayFromSelf,
   PointerAddress,
   {
@@ -105,7 +105,7 @@ export const Bytes = Schema.transformOrFail(
 
         return result;
       }),
-    decode: (fromI, options, ast, fromA) =>
+    decode: (_, __, ast, fromA) =>
       Effect.gen(function* () {
         const header = fromA[0];
         // Extract network ID from the lower 4 bits
@@ -117,8 +117,10 @@ export const Bytes = Schema.transformOrFail(
         // Check if the address is a pointer address
         const isPaymentKey = (addressType & 0b0001) === 0;
         const paymentCredential: Credential.Credential = isPaymentKey
-          ? yield* ParseResult.decode(KeyHash.Bytes)(fromA.slice(1, 29))
-          : yield* ParseResult.decode(ScriptHash.Bytes)(fromA.slice(1, 29));
+          ? yield* ParseResult.decode(KeyHash.BytesSchema)(fromA.slice(1, 29))
+          : yield* ParseResult.decode(ScriptHash.BytesSchema)(
+              fromA.slice(1, 29),
+            );
 
         // After the credential, we have 3 variable-length integers
         let offset = 29;
@@ -136,7 +138,7 @@ export const Bytes = Schema.transformOrFail(
         );
         offset += txIndexBytesRead;
 
-        const [certIndex, _] = yield* decodeVariableLength(fromA, offset);
+        const [certIndex] = yield* decodeVariableLength(fromA, offset);
 
         return yield* ParseResult.decode(PointerAddress)({
           _tag: "PointerAddress",
@@ -152,12 +154,11 @@ export const Bytes = Schema.transformOrFail(
   },
 );
 
-export const HexString = Schema.transformOrFail(Hex.HexString, PointerAddress, {
+export const HexSchema = Schema.transformOrFail(Hex.HexSchema, PointerAddress, {
   strict: true,
-  encode: (toI, options, ast, toA) =>
-    pipe(ParseResult.encode(Bytes)(toA), Effect.map(Hex.fromBytes)),
-  decode: (fromI, options, ast) =>
-    pipe(Hex.toBytes(fromI), ParseResult.decode(Bytes)),
+  encode: (_, __, ___, toA) =>
+    pipe(ParseResult.encode(BytesSchema)(toA), Effect.map(Hex.Encode.hex)),
+  decode: (fromI) => pipe(Hex.toBytes(fromI), ParseResult.decode(BytesSchema)),
 });
 
 /**
@@ -319,3 +320,47 @@ export const generator = FastCheck.tuple(
       pointer: Pointer.make(slot, txIndex, certIndex),
     }),
 );
+
+/**
+ * Synchronous encoding utilities.
+ *
+ * @since 2.0.0
+ * @category encoding/decoding
+ */
+export const Encode = {
+  hex: Schema.encodeSync(HexSchema),
+  bytes: Schema.encodeSync(BytesSchema),
+};
+
+/**
+ * Synchronous decoding utilities.
+ *
+ * @since 2.0.0
+ * @category encoding/decoding
+ */
+export const Decode = {
+  hex: Schema.decodeUnknownSync(HexSchema),
+  bytes: Schema.decodeUnknownSync(BytesSchema),
+};
+
+/**
+ * Either encoding utilities.
+ *
+ * @since 2.0.0
+ * @category encoding/decoding
+ */
+export const EncodeEither = {
+  hex: Schema.encodeEither(HexSchema),
+  bytes: Schema.encodeEither(BytesSchema),
+};
+
+/**
+ * Either decoding utilities.
+ *
+ * @since 2.0.0
+ * @category encoding/decoding
+ */
+export const DecodeEither = {
+  hex: Schema.decodeUnknownEither(HexSchema),
+  bytes: Schema.decodeUnknownEither(BytesSchema),
+};

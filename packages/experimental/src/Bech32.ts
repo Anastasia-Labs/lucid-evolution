@@ -16,10 +16,10 @@ export type Bech32 = typeof Bech32.Type;
 export const Bytes = (prefix: string = "addr") =>
   Schema.transformOrFail(Schema.Uint8ArrayFromSelf, Bech32, {
     strict: true,
-    encode: (toI, options, ast, toA) =>
+    encode: (_, __, ast, toA) =>
       Effect.try({
         try: () => bech32.decodeToBytes(toA).bytes,
-        catch: (cause) =>
+        catch: () =>
           new ParseResult.Type(
             ast,
             toA,

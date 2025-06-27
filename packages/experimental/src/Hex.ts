@@ -1,4 +1,4 @@
-import { Data, Effect, pipe, Schema } from "effect";
+import { Data, Schema } from "effect";
 
 export class HexError extends Data.TaggedError("HexError")<{
   message?: string;
@@ -26,22 +26,11 @@ export const isHex = (input: string): boolean => {
   return true;
 };
 
-export const HexStringFilter = Schema.String.pipe(
-  Schema.filter((a) => isHex(a)),
-).annotations({ message: (issue) => `${issue.actual} must be a hex string` });
-
-export const HexString = HexStringFilter.pipe(
-  Schema.brand("HexString"),
-  Schema.typeSchema,
-);
-
-export type HexString = typeof HexString.Type;
-
 const hexes = /* @__PURE__ */ Array.from({ length: 256 }, (_, i) =>
   i.toString(16).padStart(2, "0"),
 );
 
-export const fromBytes = <T extends HexString>(bytes: Uint8Array) => {
+export const fromBytes = <T extends Hex>(bytes: Uint8Array) => {
   // pre-caching improves the speed 6x
   let hex = "";
   for (let i = 0; i < bytes.length; i++) {
@@ -69,15 +58,10 @@ const asciiToBase16 = (char: number): number => {
 /**
  * Converts a branded Hex string to a Uint8Array.
  *
- * @example
- * import { makeOrThrow, toBytes } from "@lucid-evolution/experimental/Hex";
- * const hex = makeOrThrow("deadbeef");
- * const bytes = toBytes(hex); // Uint8Array [222, 173, 190, 239]
- *
  * @since 1.0.0
  * @category encoding/decoding
  */
-export const toBytes = (hex: HexString): Uint8Array => {
+export const toBytes = (hex: Hex): Uint8Array => {
   const array = new Uint8Array(hex.length / 2);
   for (let ai = 0, hi = 0; ai < array.length; ai++, hi += 2) {
     const n1 = asciiToBase16(hex.charCodeAt(hi));
@@ -87,10 +71,61 @@ export const toBytes = (hex: HexString): Uint8Array => {
   return array;
 };
 
-export const decode = (maybeHex: string) =>
-  pipe(
-    Schema.validate(HexString)(maybeHex),
-    Effect.mapError((e) => new HexError({ message: `${e.message}` })),
-  );
+export const HexStringFilter = Schema.String.pipe(
+  Schema.filter((a) => isHex(a)),
+).annotations({ message: (issue) => `${issue.actual} must be a hex string` });
 
-export const decodeOrThrow = (rawHex: string) => Effect.runSync(decode(rawHex));
+export const HexSchema = HexStringFilter.pipe(
+  Schema.brand("Hex"),
+  Schema.typeSchema,
+);
+
+export type Hex = typeof HexSchema.Type;
+
+export const BytesSchema = Schema.transform(
+  HexSchema,
+  Schema.Uint8ArrayFromSelf,
+  {
+    strict: true,
+    encode: (toA) => {
+      let hex = "";
+      for (let i = 0; i < toA.length; i++) {
+        hex += hexes[toA[i]];
+      }
+      return hex as Hex;
+    },
+    decode: (fromA) => {
+      const array = new Uint8Array(fromA.length / 2);
+      for (let ai = 0, hi = 0; ai < array.length; ai++, hi += 2) {
+        const n1 = asciiToBase16(fromA.charCodeAt(hi));
+        const n2 = asciiToBase16(fromA.charCodeAt(hi + 1));
+        array[ai] = n1 * 16 + n2;
+      }
+      return array;
+    },
+  },
+);
+
+export const Encode = {
+  hex: Schema.encodeSync(BytesSchema),
+};
+
+export const Decode = {
+  hex: Schema.decodeUnknownSync(BytesSchema),
+};
+
+export const EncodeEither = {
+  hex: Schema.encodeEither(BytesSchema),
+};
+
+export const DecodeEither = {
+  hex: Schema.decodeUnknownEither(BytesSchema),
+};
+
+export const EncodeEffect = {
+  hex: Schema.encode(BytesSchema),
+};
+
+export const DecodeEffect = {
+  hex: Schema.decodeUnknown(BytesSchema),
+};

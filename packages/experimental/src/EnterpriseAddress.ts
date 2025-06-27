@@ -40,11 +40,11 @@ export class EnterpriseAddress extends Schema.TaggedClass<EnterpriseAddress>(
 }
 
 export const BytesSchema = Schema.transformOrFail(
-  Bytes29.Bytes,
+  Bytes29.BytesSchema,
   EnterpriseAddress,
   {
     strict: true,
-    encode: (toI, options, ast, toA) => {
+    encode: (_, __, ___, toA) => {
       const paymentBit = toA.paymentCredential._tag === "KeyHash" ? 0 : 1;
       const header =
         (0b01 << 6) |
@@ -60,7 +60,7 @@ export const BytesSchema = Schema.transformOrFail(
 
       return ParseResult.succeed(result);
     },
-    decode: (fromI, options, ast, fromA) =>
+    decode: (_, __, ___, fromA) =>
       Effect.gen(function* () {
         const header = fromA[0];
         // Extract network ID from the lower 4 bits
@@ -71,8 +71,10 @@ export const BytesSchema = Schema.transformOrFail(
         // Script payment
         const isPaymentKey = (addressType & 0b0001) === 0;
         const paymentCredential: Credential.Credential = isPaymentKey
-          ? yield* ParseResult.decode(KeyHash.Bytes)(fromA.slice(1, 29))
-          : yield* ParseResult.decode(ScriptHash.Bytes)(fromA.slice(1, 29));
+          ? yield* ParseResult.decode(KeyHash.BytesSchema)(fromA.slice(1, 29))
+          : yield* ParseResult.decode(ScriptHash.BytesSchema)(
+              fromA.slice(1, 29),
+            );
         return yield* ParseResult.decode(EnterpriseAddress)({
           _tag: "EnterpriseAddress",
           networkId,
@@ -82,14 +84,14 @@ export const BytesSchema = Schema.transformOrFail(
   },
 );
 
-export const HexStringSchema = Schema.transformOrFail(
-  Bytes29.HexString,
+export const HexSchema = Schema.transformOrFail(
+  Bytes29.HexSchema,
   EnterpriseAddress,
   {
     strict: true,
-    encode: (toI, options, ast, toA) =>
+    encode: (_, __, ___, toA) =>
       pipe(ParseResult.encode(BytesSchema)(toA), Effect.map(Hex.fromBytes)),
-    decode: (fromI, options, ast) =>
+    decode: (fromI) =>
       pipe(Hex.toBytes(fromI), ParseResult.decode(BytesSchema)),
   },
 );
@@ -143,7 +145,7 @@ export const generator = FastCheck.tuple(
  * @category encoding/decoding
  */
 export const Encode = {
-  hex: Schema.encodeSync(HexStringSchema),
+  hex: Schema.encodeSync(HexSchema),
   bytes: Schema.encodeSync(BytesSchema),
 };
 
@@ -154,7 +156,7 @@ export const Encode = {
  * @category encoding/decoding
  */
 export const Decode = {
-  hex: Schema.decodeUnknownSync(HexStringSchema),
+  hex: Schema.decodeUnknownSync(HexSchema),
   bytes: Schema.decodeUnknownSync(BytesSchema),
 };
 
@@ -165,7 +167,7 @@ export const Decode = {
  * @category encoding/decoding
  */
 export const EncodeEither = {
-  hex: Schema.encodeEither(HexStringSchema),
+  hex: Schema.encodeEither(HexSchema),
   bytes: Schema.encodeEither(BytesSchema),
 };
 
@@ -176,6 +178,6 @@ export const EncodeEither = {
  * @category encoding/decoding
  */
 export const DecodeEither = {
-  hex: Schema.decodeUnknownEither(HexStringSchema),
+  hex: Schema.decodeUnknownEither(HexSchema),
   bytes: Schema.decodeUnknownEither(BytesSchema),
 };

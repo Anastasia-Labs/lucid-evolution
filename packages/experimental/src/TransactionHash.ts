@@ -1,9 +1,4 @@
-import {
-  Schema,
-  Data,
-  Inspectable,
-  FastCheck,
-} from "effect";
+import { Schema, Data, Inspectable, FastCheck } from "effect";
 import * as Hex from "./Hex.js";
 import * as Hash32 from "./Hash32.js";
 
@@ -21,7 +16,7 @@ import * as Hash32 from "./Hash32.js";
  * @category errors
  */
 export class TransactionHashError extends Data.TaggedError(
-  "TransactionHashError"
+  "TransactionHashError",
 )<{
   message?: string;
   reason?:
@@ -40,8 +35,8 @@ export class TransactionHashError extends Data.TaggedError(
 export class TransactionHash extends Schema.TaggedClass<TransactionHash>()(
   "TransactionHash",
   {
-    hash: Hash32.HexString,
-  }
+    hash: Hash32.HexSchema,
+  },
 ) {
   [Inspectable.NodeInspectSymbol]() {
     return {
@@ -57,11 +52,15 @@ export class TransactionHash extends Schema.TaggedClass<TransactionHash>()(
  * @since 2.0.0
  * @category encoding/decoding
  */
-export const Bytes = Schema.transform(Hash32.Bytes, TransactionHash, {
-  strict: true,
-  encode: (_, hash) => Hex.toBytes(hash.hash),
-  decode: (bytes) => new TransactionHash({ hash: Hex.fromBytes(bytes) }),
-});
+export const BytesSchema = Schema.transform(
+  Hash32.BytesSchema,
+  TransactionHash,
+  {
+    strict: true,
+    encode: (_, hash) => Hex.Decode.hex(hash.hash),
+    decode: (bytes) => new TransactionHash({ hash: Hex.Encode.hex(bytes) }),
+  },
+);
 
 /**
  * Schema for transforming between hex string and TransactionHash.
@@ -69,7 +68,7 @@ export const Bytes = Schema.transform(Hash32.Bytes, TransactionHash, {
  * @since 2.0.0
  * @category encoding/decoding
  */
-export const HexString = Schema.transform(Hash32.HexString, TransactionHash, {
+export const HexSchema = Schema.transform(Hash32.HexSchema, TransactionHash, {
   strict: true,
   encode: (_, hash) => hash.hash,
   decode: (hash) => new TransactionHash({ hash }),
@@ -112,8 +111,8 @@ export const generator = FastCheck.uint8Array({
  * @category encoding/decoding
  */
 export const Encode = {
-  hex: Schema.encodeSync(HexString),
-  bytes: Schema.encodeSync(Bytes),
+  hex: Schema.encodeSync(HexSchema),
+  bytes: Schema.encodeSync(BytesSchema),
 };
 
 /**
@@ -123,8 +122,8 @@ export const Encode = {
  * @category encoding/decoding
  */
 export const Decode = {
-  hex: Schema.decodeUnknownSync(HexString),
-  bytes: Schema.decodeUnknownSync(Bytes),
+  hex: Schema.decodeUnknownSync(HexSchema),
+  bytes: Schema.decodeUnknownSync(BytesSchema),
 };
 
 /**
@@ -134,8 +133,8 @@ export const Decode = {
  * @category encoding/decoding
  */
 export const EncodeEither = {
-  hex: Schema.encodeEither(HexString),
-  bytes: Schema.encodeEither(Bytes),
+  hex: Schema.encodeEither(HexSchema),
+  bytes: Schema.encodeEither(BytesSchema),
 };
 
 /**
@@ -145,6 +144,6 @@ export const EncodeEither = {
  * @category encoding/decoding
  */
 export const DecodeEither = {
-  hex: Schema.decodeUnknownEither(HexString),
-  bytes: Schema.decodeUnknownEither(Bytes),
+  hex: Schema.decodeUnknownEither(HexSchema),
+  bytes: Schema.decodeUnknownEither(BytesSchema),
 };

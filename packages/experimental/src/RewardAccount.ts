@@ -25,7 +25,7 @@ export interface RewardAccount {
  * @category schemas
  */
 export class RewardAccount extends Schema.TaggedClass<RewardAccount>(
-  "RewardAccount"
+  "RewardAccount",
 )("RewardAccount", {
   networkId: NetworkId.NetworkId,
   stakeCredential: Credential.Credential,
@@ -39,47 +39,55 @@ export class RewardAccount extends Schema.TaggedClass<RewardAccount>(
   }
 }
 
+export const BytesSchema = Schema.transformOrFail(
+  Bytes29.BytesSchema,
+  RewardAccount,
+  {
+    strict: true,
+    encode: (_, __, ___, toA) => {
+      const stakingBit = toA.stakeCredential._tag === "KeyHash" ? 0 : 1;
+      const header =
+        (0b111 << 5) | (stakingBit << 4) | (toA.networkId & 0b00001111);
+      const result = new Uint8Array(29);
+      result[0] = header;
+      const stakeCredentialBytes = Hex.toBytes(toA.stakeCredential.hash);
+      result.set(stakeCredentialBytes, 1);
+      return ParseResult.succeed(result);
+    },
+    decode: (_, __, ___, fromA) =>
+      Effect.gen(function* () {
+        const header = fromA[0];
+        // Extract network ID from the lower 4 bits
+        const networkId = header & 0b00001111;
+        // Extract address type from the upper 4 bits (bits 4-7)
+        const addressType = header >> 4;
 
-export const Bytes = Schema.transformOrFail(Bytes29.Bytes, RewardAccount, {
-  strict: true,
-  encode: (toI, options, ast, toA) => {
-    const stakingBit = toA.stakeCredential._tag === "KeyHash" ? 0 : 1;
-    const header =
-      (0b111 << 5) | (stakingBit << 4) | (toA.networkId & 0b00001111);
-    const result = new Uint8Array(29);
-    result[0] = header;
-    const stakeCredentialBytes = Hex.toBytes(toA.stakeCredential.hash);
-    result.set(stakeCredentialBytes, 1);
-    return ParseResult.succeed(result);
+        const isStakeKey = (addressType & 0b0001) === 0;
+        const stakeCredential: Credential.Credential = isStakeKey
+          ? yield* ParseResult.decode(KeyHash.BytesSchema)(fromA.slice(1, 29))
+          : yield* ParseResult.decode(ScriptHash.BytesSchema)(
+              fromA.slice(1, 29),
+            );
+        return yield* ParseResult.decode(RewardAccount)({
+          _tag: "RewardAccount",
+          networkId,
+          stakeCredential,
+        });
+      }),
   },
-  decode: (fromI, options, ast, fromA) =>
-    Effect.gen(function* () {
-      const header = fromA[0];
-      // Extract network ID from the lower 4 bits
-      const networkId = header & 0b00001111;
-      // Extract address type from the upper 4 bits (bits 4-7)
-      const addressType = header >> 4;
+);
 
-      const isStakeKey = (addressType & 0b0001) === 0;
-      const stakeCredential: Credential.Credential = isStakeKey
-        ? yield* ParseResult.decode(KeyHash.Bytes)(fromA.slice(1, 29))
-        : yield* ParseResult.decode(ScriptHash.Bytes)(fromA.slice(1, 29));
-      return yield* ParseResult.decode(RewardAccount)({
-        _tag: "RewardAccount",
-        networkId,
-        stakeCredential,
-      });
-    }),
-});
-
-
-export const HexString = Schema.transformOrFail(Bytes29.HexString, RewardAccount, {
-  strict: true,
-  encode: (toI, options, ast, toA) =>
-    pipe(ParseResult.encode(Bytes)(toA), Effect.map(Hex.fromBytes)),
-  decode: (fromI, options, ast) =>
-    pipe(Hex.toBytes(fromI), ParseResult.decode(Bytes)),
-});
+export const HexSchema = Schema.transformOrFail(
+  Bytes29.HexSchema,
+  RewardAccount,
+  {
+    strict: true,
+    encode: (_, __, ___, toA) =>
+      pipe(ParseResult.encode(BytesSchema)(toA), Effect.map(Hex.Encode.hex)),
+    decode: (fromI) =>
+      pipe(Hex.Decode.hex(fromI), ParseResult.decode(BytesSchema)),
+  },
+);
 
 /**
  * Check if two RewardAccount instances are equal.
@@ -114,13 +122,13 @@ export const equals = (a: RewardAccount, b: RewardAccount): boolean => {
  */
 export const generator = FastCheck.tuple(
   NetworkId.generator,
-  Credential.generator
+  Credential.generator,
 ).map(
   ([networkId, stakeCredential]) =>
     new RewardAccount({
       networkId,
       stakeCredential,
-    })
+    }),
 );
 
 /**
@@ -130,8 +138,8 @@ export const generator = FastCheck.tuple(
  * @category encoding/decoding
  */
 export const Encode = {
-  hex: Schema.encodeSync(HexString),
-  bytes: Schema.encodeSync(Bytes),
+  hex: Schema.encodeSync(HexSchema),
+  bytes: Schema.encodeSync(BytesSchema),
 };
 
 /**
@@ -141,8 +149,8 @@ export const Encode = {
  * @category encoding/decoding
  */
 export const Decode = {
-  hex: Schema.decodeUnknownSync(HexString),
-  bytes: Schema.decodeUnknownSync(Bytes),
+  hex: Schema.decodeUnknownSync(HexSchema),
+  bytes: Schema.decodeUnknownSync(BytesSchema),
 };
 
 /**
@@ -152,8 +160,8 @@ export const Decode = {
  * @category encoding/decoding
  */
 export const EncodeEither = {
-  hex: Schema.encodeEither(HexString),
-  bytes: Schema.encodeEither(Bytes),
+  hex: Schema.encodeEither(HexSchema),
+  bytes: Schema.encodeEither(BytesSchema),
 };
 
 /**
@@ -163,7 +171,6 @@ export const EncodeEither = {
  * @category encoding/decoding
  */
 export const DecodeEither = {
-  hex: Schema.decodeUnknownEither(HexString),
-  bytes: Schema.decodeUnknownEither(Bytes),
+  hex: Schema.decodeUnknownEither(HexSchema),
+  bytes: Schema.decodeUnknownEither(BytesSchema),
 };
-

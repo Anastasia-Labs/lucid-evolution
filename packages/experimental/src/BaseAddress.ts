@@ -31,7 +31,7 @@ export class BaseAddress extends Schema.TaggedClass<BaseAddress>("BaseAddress")(
     networkId: NetworkId.NetworkId,
     paymentCredential: Credential.Credential,
     stakeCredential: Credential.Credential,
-  }
+  },
 ) {
   [Inspectable.NodeInspectSymbol]() {
     return {
@@ -45,7 +45,7 @@ export class BaseAddress extends Schema.TaggedClass<BaseAddress>("BaseAddress")(
 
 export const Bytes = Schema.transformOrFail(Bytes57.Bytes, BaseAddress, {
   strict: true,
-  encode: (toI, options, ast, toA) => {
+  encode: (_, __, ___, toA) => {
     const paymentBit = toA.paymentCredential._tag === "KeyHash" ? 0 : 1;
     const stakeBit = toA.stakeCredential._tag === "KeyHash" ? 0 : 1;
     const header =
@@ -71,12 +71,14 @@ export const Bytes = Schema.transformOrFail(Bytes57.Bytes, BaseAddress, {
       // Script payment, Script stake
       const isPaymentKey = (addressType & 0b0001) === 0;
       const paymentCredential: Credential.Credential = isPaymentKey
-        ? yield* ParseResult.decode(KeyHash.Bytes)(fromA.slice(1, 29))
-        : yield* ParseResult.decode(ScriptHash.Bytes)(fromA.slice(1, 29));
+        ? yield* ParseResult.decode(KeyHash.BytesSchema)(fromA.slice(1, 29))
+        : yield* ParseResult.decode(ScriptHash.BytesSchema)(fromA.slice(1, 29));
       const isStakeKey = (addressType & 0b0010) === 0;
       const stakeCredential: Credential.Credential = isStakeKey
-        ? yield* ParseResult.decode(KeyHash.Bytes)(fromA.slice(29, 57))
-        : yield* ParseResult.decode(ScriptHash.Bytes)(fromA.slice(29, 57));
+        ? yield* ParseResult.decode(KeyHash.BytesSchema)(fromA.slice(29, 57))
+        : yield* ParseResult.decode(ScriptHash.BytesSchema)(
+            fromA.slice(29, 57),
+          );
       return yield* ParseResult.decode(BaseAddress)({
         _tag: "BaseAddress",
         networkId,
@@ -91,11 +93,10 @@ export const HexString = Schema.transformOrFail(
   BaseAddress,
   {
     strict: true,
-    encode: (toI, options, ast, toA) =>
-      pipe(ParseResult.encode(Bytes)(toA), Effect.map(Hex.fromBytes)),
-    decode: (fromI, options, ast) =>
-      pipe(Hex.toBytes(fromI), ParseResult.decode(Bytes)),
-  }
+    encode: (_, __, ___, toA) =>
+      pipe(ParseResult.encode(Bytes)(toA), Effect.map(Hex.Encode.hex)),
+    decode: (fromI) => pipe(Hex.Decode.hex(fromI), ParseResult.decode(Bytes)),
+  },
 );
 
 /**
@@ -132,12 +133,12 @@ export const equals = (a: BaseAddress, b: BaseAddress): boolean => {
 export const generator = FastCheck.tuple(
   NetworkId.generator,
   Credential.generator,
-  Credential.generator
+  Credential.generator,
 ).map(
   ([networkId, paymentCredential, stakeCredential]) =>
     new BaseAddress({
       networkId,
       paymentCredential,
       stakeCredential,
-    })
+    }),
 );

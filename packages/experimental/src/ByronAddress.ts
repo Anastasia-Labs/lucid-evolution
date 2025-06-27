@@ -17,7 +17,7 @@ export class ByronAddress extends Schema.TaggedClass<ByronAddress>(
   "ByronAddress",
 )("ByronAddress", {
   networkId: NetworkId.NetworkId,
-  bytes: Hex.HexString,
+  bytes: Hex.HexSchema,
 }) {
   [Inspectable.NodeInspectSymbol]() {
     return {
@@ -34,8 +34,8 @@ export class ByronAddress extends Schema.TaggedClass<ByronAddress>(
 //  */
 export const Bytes = Schema.transform(Schema.Uint8ArrayFromSelf, ByronAddress, {
   strict: true,
-  encode: (toI, toA) => Hex.toBytes(toA.bytes),
-  decode: (fromI, fromA) =>
+  encode: (_, toA) => Hex.Decode.hex(toA.bytes),
+  decode: (_, fromA) =>
     new ByronAddress({
       networkId: NetworkId.NetworkId.make(0),
       bytes: Hex.fromBytes(fromA),

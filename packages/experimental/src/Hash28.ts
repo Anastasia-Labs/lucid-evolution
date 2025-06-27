@@ -5,20 +5,20 @@ import * as Hex from "./Hex.js";
 export const HASH28_BYTES_LENGTH = 28;
 export const HASH28_HEX_LENGTH = 56;
 
-export const Bytes = pipe(
+export const BytesSchema = pipe(
   Schema.Uint8ArrayFromSelf,
-  Schema.filter((a) => a.length === HASH28_BYTES_LENGTH)
+  Schema.filter((a) => a.length === HASH28_BYTES_LENGTH),
 ).annotations({
   message: (issue) =>
-    `${issue.actual} must be a byte array of length ${HASH28_BYTES_LENGTH}, but got ${issue.actual.length}`,
+    `${issue.actual} must be a byte array of length ${HASH28_BYTES_LENGTH}, but got ${issue.actual}`,
   identifier: "Hash28Bytes",
 });
 
-export const HexString = pipe(
-  Hex.HexString,
-  Schema.filter((a) => a.length === HASH28_HEX_LENGTH)
+export const HexSchema = pipe(
+  Hex.HexSchema,
+  Schema.filter((a) => a.length === HASH28_HEX_LENGTH),
 ).annotations({
   message: (issue) =>
-    `${issue.actual} must be a hex string of length ${HASH28_HEX_LENGTH}, but got ${issue.actual.length}`,
-  identifier: "Hash28HexString",
+    `${issue.actual} must be a hex string of length ${HASH28_HEX_LENGTH}, but got ${issue.actual}`,
+  identifier: "Hash28Hex",
 });

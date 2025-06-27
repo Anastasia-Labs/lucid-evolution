@@ -111,7 +111,7 @@ try {
 
   console.log(
     "🚀 Shelley Genesis => set initialFunds: ",
-    account.addressBech32
+    account.addressBech32,
   );
   await Devnet.Cluster.startOrThrow(cluster);
 
@@ -123,7 +123,7 @@ try {
 
   const provider = new Kupmios(
     `http://localhost:${1442}`,
-    `http://localhost:${1337}`
+    `http://localhost:${1337}`,
   );
 
   /**

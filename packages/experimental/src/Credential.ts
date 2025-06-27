@@ -42,48 +42,39 @@ export type Credential = typeof Credential.Type;
  */
 export const isCredential = Schema.is(Credential);
 
-export const CBORBytes = Schema.transformOrFail(
+export const CBORBytesSchema = Schema.transformOrFail(
   Schema.Uint8ArrayFromSelf.annotations({
     identifier: "CBORBytes",
   }),
   Credential,
   {
     strict: true,
-    encode: (toI, options, ast, toA) => {
+    encode: (_, __, ___, toA) => {
       switch (toA._tag) {
         case "KeyHash":
           return ParseResult.succeed(
-            CBOR.encodeAsBytesOrThrow([0, Hex.toBytes(toA.hash)]),
+            CBOR.Encode.bytes([0, Hex.toBytes(toA.hash)]),
           );
         case "ScriptHash":
           return ParseResult.succeed(
-            CBOR.encodeAsBytesOrThrow([1, Hex.toBytes(toA.hash)]),
+            CBOR.Encode.bytes([1, Hex.toBytes(toA.hash)]),
           );
       }
     },
-    decode: (fromI, options, ast, fromA) =>
+    decode: (_, __, ___, fromA) =>
       pipe(
-        CBOR.decodeBytes(fromA),
-        Effect.mapError((e) => new ParseResult.Type(ast, fromA, e.message)),
-        Effect.flatMap((a) =>
-          ParseResult.decode(
-            Schema.Tuple(
-              Schema.Literal(0, 1),
-              Schema.Uint8ArrayFromSelf,
-            ).annotations({
-              identifier: "CredentialTuple",
-            }),
-          )(a),
-        ),
-        Effect.flatMap(([tag, bytesDecoded]) =>
+        ParseResult.decode(
+          CBOR.makeCBORBytesSchema(
+            Schema.Tuple(Schema.Literal(0, 1), Schema.Uint8ArrayFromSelf),
+          ),
+        )(fromA),
+        Effect.flatMap(([tag, bytes]) =>
           Effect.gen(function* () {
             switch (tag) {
               case 0:
-                return yield* ParseResult.decode(KeyHash.Bytes)(bytesDecoded);
+                return yield* ParseResult.decode(KeyHash.BytesSchema)(bytes);
               case 1:
-                return yield* ParseResult.decode(ScriptHash.Bytes)(
-                  bytesDecoded,
-                );
+                return yield* ParseResult.decode(ScriptHash.BytesSchema)(bytes);
             }
           }),
         ),
@@ -91,19 +82,13 @@ export const CBORBytes = Schema.transformOrFail(
   },
 );
 
-export const CBORHex = Schema.transformOrFail(
-  Hex.HexString.pipe(Schema.typeSchema).annotations({
-    identifier: "CBORHex",
-  }),
-  Credential,
-  {
-    strict: true,
-    encode: (toI, options, ast, toA) =>
-      pipe(ParseResult.encode(CBORBytes)(toA), Effect.map(Hex.fromBytes)),
-    decode: (fromA, options, ast) =>
-      pipe(Hex.toBytes(fromA), ParseResult.decode(CBORBytes)),
-  },
-);
+export const CBORHexSchema = Schema.transformOrFail(Hex.HexSchema, Credential, {
+  strict: true,
+  encode: (_, __, ___, toA) =>
+    pipe(ParseResult.encode(CBORBytesSchema)(toA), Effect.map(Hex.Encode.hex)),
+  decode: (fromA) =>
+    pipe(Hex.Decode.hex(fromA), ParseResult.decode(CBORBytesSchema)),
+});
 
 /**
  * Check if two Credential instances are equal.
@@ -137,3 +122,47 @@ export const generator = FastCheck.oneof(
   KeyHash.generator,
   ScriptHash.generator,
 );
+
+/**
+ * Synchronous encoding utilities for enterprise address.
+ *
+ * @since 2.0.0
+ * @category encoding/decoding
+ */
+export const Encode = {
+  cborHex: Schema.encodeSync(CBORHexSchema),
+  cborBytes: Schema.encodeSync(CBORBytesSchema),
+};
+
+/**
+ * Synchronous decoding utilities for enterprise address.
+ *
+ @since 2.0.0
+ * @category encoding/decoding
+ */
+export const Decode = {
+  cborHex: Schema.decodeUnknownSync(CBORHexSchema),
+  cborBytes: Schema.decodeUnknownSync(CBORBytesSchema),
+};
+
+/**
+ * Either encoding utilities for enterprise address.
+ *
+ * @since 2.0.0
+ * @category encoding/decoding
+ */
+export const EncodeEither = {
+  cborHex: Schema.encodeEither(CBORHexSchema),
+  cborBytes: Schema.encodeEither(CBORBytesSchema),
+};
+
+/**
+ * Either decoding utilities for enterprise address.
+ *
+ * @since 2.0.0
+ * @category encoding/decoding
+ */
+export const DecodeEither = {
+  cborHex: Schema.decodeUnknownEither(CBORHexSchema),
+  cborBytes: Schema.decodeUnknownEither(CBORBytesSchema),
+};

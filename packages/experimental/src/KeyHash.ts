@@ -37,7 +37,7 @@ export interface KeyHash {
  * @category schemas
  */
 export class KeyHash extends Schema.TaggedClass<KeyHash>()("KeyHash", {
-  hash: Hex.HexString,
+  hash: Hash28.HexSchema,
 }) {
   [Inspectable.NodeInspectSymbol]() {
     return {
@@ -47,15 +47,15 @@ export class KeyHash extends Schema.TaggedClass<KeyHash>()("KeyHash", {
   }
 }
 
-export const Bytes = Schema.transform(Hash28.Bytes, KeyHash, {
+export const BytesSchema = Schema.transform(Hash28.BytesSchema, KeyHash, {
   strict: true,
-  encode: (_toI, toA) => Hex.toBytes(toA.hash),
-  decode: (_fromI, fromA) => new KeyHash({ hash: Hex.fromBytes(fromA) }),
+  encode: (_, toA) => Hex.Decode.hex(toA.hash),
+  decode: (_, fromA) => new KeyHash({ hash: Hex.Encode.hex(fromA) }),
 });
 
-export const HexString = Schema.transform(Hash28.HexString, KeyHash, {
+export const HexSchema = Schema.transform(Hash28.HexSchema, KeyHash, {
   strict: true,
-  encode: (_toI, toA) => toA.hash,
+  encode: (_, toA) => toA.hash,
   decode: (fromI) => new KeyHash({ hash: fromI }),
 });
 
@@ -99,8 +99,8 @@ export const generator = FastCheck.uint8Array({
  * @category encoding/decoding
  */
 export const Encode = {
-  hex: Schema.encodeSync(HexString),
-  bytes: Schema.encodeSync(Bytes),
+  hex: Schema.encodeSync(HexSchema),
+  bytes: Schema.encodeSync(BytesSchema),
 };
 
 /**
@@ -110,8 +110,8 @@ export const Encode = {
  * @category encoding/decoding
  */
 export const Decode = {
-  hex: Schema.decodeUnknownSync(HexString),
-  bytes: Schema.decodeUnknownSync(Bytes),
+  hex: Schema.decodeUnknownSync(HexSchema),
+  bytes: Schema.decodeUnknownSync(BytesSchema),
 };
 
 /**
@@ -121,8 +121,8 @@ export const Decode = {
  * @category encoding/decoding
  */
 export const EncodeEither = {
-  hex: Schema.encodeEither(HexString),
-  bytes: Schema.encodeEither(Bytes),
+  hex: Schema.encodeEither(HexSchema),
+  bytes: Schema.encodeEither(BytesSchema),
 };
 
 /**
@@ -132,6 +132,6 @@ export const EncodeEither = {
  * @category encoding/decoding
  */
 export const DecodeEither = {
-  hex: Schema.decodeUnknownEither(HexString),
-  bytes: Schema.decodeUnknownEither(Bytes),
+  hex: Schema.decodeUnknownEither(HexSchema),
+  bytes: Schema.decodeUnknownEither(BytesSchema),
 };

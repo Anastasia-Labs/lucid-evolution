@@ -1,6 +1,6 @@
 import * as CBORX from "cbor-x";
 import * as Hex from "./Hex.js";
-import { Data, Effect, Hash, pipe } from "effect";
+import { Data, Effect, ParseResult, pipe, Schema } from "effect";
 
 /**
  * Error type for CBOR-related operations
@@ -13,8 +13,6 @@ export class CBORError extends Data.TaggedError("CBORError")<{
   cause?: unknown;
 }> {}
 
-export type CBORHex<T> = Hex.HexString & T;
-
 // Create a singleton encoder with the correct options for Cardano CBOR encoding
 const encoder = new CBORX.Encoder({
   tagUint8Array: false,
@@ -23,147 +21,124 @@ const encoder = new CBORX.Encoder({
 });
 
 /**
- * Encodes a value to CBOR bytes
- *
- * @example
- * import { encodeCBORBytes } from "@lucid-evolution/experimental/CBOR";
- * import { Either } from "effect";
- *
- * const value = { hello: "world" };
- * const result = encodeCBORBytes(value);
- * if (Either.isRight(result)) {
- *   console.log("Encoded to CBOR bytes successfully");
- * }
+ * Creates a schema transformation from CBOR bytes to a given schema
  *
  * @since 2.0.0
- * @category encoding/decoding
+ * @category schemas
  */
-export const encodeAsBytes = (value: unknown) =>
-  Effect.try({
-    try: () => new Uint8Array(encoder.encode(value)),
-    catch: () =>
-      new CBORError({
-        message:
-          "CBOR encoding failed. Check if the value can be serialized to CBOR format.",
-      }),
-  });
-
-export const encodeAsBytesOrThrow = (value: unknown) =>
-  Effect.runSync(encodeAsBytes(value));
-
-/**
- * Encodes a value to CBOR hex string
- *
- * @example
- * import { encodeCBOR } from "@lucid-evolution/experimental/CBOR";
- * import { Either } from "effect";
- *
- * const value = { hello: "world" };
- * const result = encodeCBOR(value);
- * if (Either.isRight(result)) {
- *   console.log("Encoded to CBOR hex successfully");
- * }
- *
- * @since 2.0.0
- * @category encoding/decoding
- */
-export const encodeAsCBORHex = (value: Hex.HexString) =>
-  // encodeAsBytes(Hex.toBytes(value));
-  pipe(
-    Hex.toBytes(value),
-    encodeAsBytes,
-    Effect.map((bytes) => Hex.fromBytes(bytes)),
-  );
-// pipe(
-// encodeAsBytes(value),
-// Effect.map((bytes) => Hex.fromBytes(bytes))
-// );
-
-/**
- * Encodes a value to CBOR hex string, throws on error
- *
- * @example
- * import { encodeCBOROrThrow } from "@lucid-evolution/experimental/CBOR";
- *
- * const value = { hello: "world" };
- * const cborHex = encodeCBOROrThrow(value);
- *
- * @since 2.0.0
- * @category encoding/decoding
- */
-export const encodeAsCBORHexOrThrow = (value: Hex.HexString) =>
-  Effect.runSync(encodeAsCBORHex(value));
-
-/**
- * Decodes CBOR bytes to a value
- *
- * @example
- * import { decode } from "@lucid-evolution/experimental/CBOR";
- * import { Either } from "effect";
- *
- * const buffer = new Uint8Array([...]);
- * const result = decode(buffer);
- * if (Either.isRight(result)) {
- *   console.log("Decoded value:", result.right);
- * }
- *
- * @since 2.0.0
- * @category encoding/decoding
- */
-export const decodeBytes = (bytes: Uint8Array) =>
-  Effect.try({
-    try: () => CBORX.decode(bytes),
-    catch: () =>
-      new CBORError({
-        message: `${bytes} CBOR decoding failed. Check if the bytes are in valid CBOR format.`,
-      }),
-  });
-
-/**
- * Decodes CBOR bytes to a value, throws on error
- *
- * @example
- * import { decodeOrThrow } from "@lucid-evolution/experimental/CBOR";
- *
- * const buffer = new Uint8Array([...]);
- * const value = decodeOrThrow(buffer);
- *
- * @since 2.0.0
- * @category encoding/decoding
- */
-export const decodeBytesOrThrow = (bytes: Uint8Array) =>
-  Effect.runSync(decodeBytes(bytes));
-
-/**
- * Decodes a CBOR hex string to a value
- *
- * @since 2.0.0
- * @category encoding/decoding
- */
-export const decodeHex = <T>(hex: CBORHex<T>) =>
-  pipe(
-    Hex.toBytes(hex),
-    decodeBytes,
-    Effect.mapError(
-      (e) =>
-        new CBORError({
-          message: `${hex} CBOR decoding failed. Check if the hex string is valid CBOR format.`,
+export const makeCBORBytesSchema = <A, B>(schema: Schema.Schema<A, B, never>) =>
+  Schema.transformOrFail(
+    Schema.Uint8ArrayFromSelf.annotations({ identifier: "CBORBytes" }),
+    schema,
+    {
+      strict: false,
+      encode: (toI, _, ast) =>
+        ParseResult.try({
+          try: () => new Uint8Array(encoder.encode(toI)),
+          catch: (e) =>
+            new ParseResult.Type(
+              ast,
+              toI,
+              `CBOR encoding failed: ${String(e)}`,
+            ),
         }),
-    ),
+      decode: (fromA, _, ast) =>
+        ParseResult.try({
+          try: () => CBORX.decode(fromA),
+          catch: (e) =>
+            new ParseResult.Type(
+              ast,
+              fromA,
+              `CBOR decoding failed: ${String(e)}`,
+            ),
+        }).pipe(
+          Effect.flatMap((decoded) => ParseResult.decode(schema)(decoded)),
+        ),
+    },
   );
 
 /**
- * Decodes a CBOR hex string to a value, throws on error
+ * Creates a schema transformation from CBOR hex to a given schema
  *
- * @example
- * import { decodeHexOrThrow } from "@lucid-evolution/experimental/CBOR";
- * import { makeOrThrow } from "@lucid-evolution/experimental/Hex";
- *
- * const hex = makeOrThrow("a1656865656c6c6f65776f726c64");
- * const value = decodeHexOrThrow(hex);
+ * @since 2.0.0
+ * @category schemas
+ */
+export const makeCBORHexSchema = <A, B>(schema: Schema.Schema<A, B, never>) =>
+  Schema.transformOrFail(Hex.HexSchema, schema, {
+    strict: false,
+    encode: (value, _, ast) =>
+      ParseResult.try({
+        try: () => {
+          const encoded = new Uint8Array(encoder.encode(value));
+          return Hex.fromBytes(encoded);
+        },
+        catch: (e) =>
+          new ParseResult.Type(
+            ast,
+            value,
+            `CBOR encoding failed: ${String(e)}`,
+          ),
+      }),
+    decode: (hex, _, ast) =>
+      pipe(
+        ParseResult.try({
+          try: () => Hex.toBytes(hex),
+          catch: (e) =>
+            new ParseResult.Type(ast, hex, `Hex decoding failed: ${String(e)}`),
+        }),
+        Effect.flatMap((bytes) =>
+          ParseResult.try({
+            try: () => CBORX.decode(bytes),
+            catch: (e) =>
+              new ParseResult.Type(
+                ast,
+                hex,
+                `CBOR decoding failed: ${String(e)}`,
+              ),
+          }),
+        ),
+        Effect.flatMap((decoded) => ParseResult.decode(schema)(decoded)),
+      ),
+  });
+
+/**
+ * Creates encoding functions for a schema
  *
  * @since 2.0.0
  * @category encoding/decoding
  */
-export const decodeHexOrThrow = <T>(hex: CBORHex<T>) =>
-  Effect.runSync(decodeHex(hex));
+export const EncodeWithSchema = <A, B>(schema: Schema.Schema<A, B, never>) => {
+  const hexSchema = makeCBORHexSchema(schema);
+  const bytesSchema = makeCBORBytesSchema(schema);
+
+  return {
+    hex: Schema.encodeSync(hexSchema),
+    bytes: Schema.encodeSync(bytesSchema),
+  };
+};
+
+/**
+ * Creates decoding functions for a schema
+ *
+ * @since 2.0.0
+ * @category encoding/decoding
+ */
+export const DecodeWithSchema = <A, B>(schema: Schema.Schema<A, B, never>) => {
+  const hexSchema = makeCBORHexSchema(schema);
+  const bytesSchema = makeCBORBytesSchema(schema);
+
+  return {
+    hex: Schema.decodeUnknownSync(hexSchema),
+    bytes: Schema.decodeUnknownSync(bytesSchema),
+  };
+};
+
+export const Encode = {
+  hex: Schema.encodeSync(makeCBORHexSchema(Schema.Unknown)),
+  bytes: Schema.encodeSync(makeCBORBytesSchema(Schema.Unknown)),
+};
+
+export const Decode = {
+  hex: Schema.decodeUnknownSync(makeCBORHexSchema(Schema.Unknown)),
+  bytes: Schema.decodeUnknownSync(makeCBORBytesSchema(Schema.Unknown)),
+};

@@ -36,7 +36,7 @@ export class AddressDetails extends Schema.TaggedClass<AddressDetails>(
   ),
   address: Address.Address,
   bech32: _Bech32.Bech32,
-  hex: Hex.HexString,
+  hex: Hex.HexSchema,
 }) {}
 
 export const Bech32 = Schema.transformOrFail(
@@ -44,8 +44,8 @@ export const Bech32 = Schema.transformOrFail(
   AddressDetails,
   {
     strict: true,
-    encode: (toI, options, ast, toA) => ParseResult.succeed(toA.bech32),
-    decode: (fromI, options, ast, fromA) =>
+    encode: (_, __, ___, toA) => ParseResult.succeed(toA.bech32),
+    decode: (_, __, ___, fromA) =>
       Effect.gen(function* () {
         const address = yield* ParseResult.decode(Address.Bech32Schema)(fromA);
         const hex = yield* ParseResult.encode(Address.HexStringSchema)(address);
@@ -60,25 +60,19 @@ export const Bech32 = Schema.transformOrFail(
   },
 );
 
-export const HexString = Schema.transformOrFail(
-  Schema.typeSchema(Hex.HexString),
-  AddressDetails,
-  {
-    strict: true,
-    encode: (toI, options, ast, toA) => ParseResult.succeed(toA.hex),
-    decode: (fromI, options, ast, fromA) =>
-      Effect.gen(function* () {
-        const address = yield* ParseResult.decode(Address.HexStringSchema)(
-          fromA,
-        );
-        const bech32 = yield* ParseResult.encode(Address.Bech32Schema)(address);
-        return new AddressDetails({
-          networkId: address.networkId,
-          type: address._tag,
-          address,
-          bech32,
-          hex: fromA,
-        });
-      }),
-  },
-);
+export const HexString = Schema.transformOrFail(Hex.HexSchema, AddressDetails, {
+  strict: true,
+  encode: (_, __, ___, toA) => ParseResult.succeed(toA.hex),
+  decode: (_, __, ___, fromA) =>
+    Effect.gen(function* () {
+      const address = yield* ParseResult.decode(Address.HexStringSchema)(fromA);
+      const bech32 = yield* ParseResult.encode(Address.Bech32Schema)(address);
+      return new AddressDetails({
+        networkId: address.networkId,
+        type: address._tag,
+        address,
+        bech32,
+        hex: fromA,
+      });
+    }),
+});

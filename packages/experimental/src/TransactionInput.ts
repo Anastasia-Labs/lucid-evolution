@@ -65,33 +65,34 @@ export const isTransactionInput = Schema.is(TransactionInput);
  * @since 2.0.0
  * @category encoding/decoding
  */
-const CBORBytes = Schema.transformOrFail(
+export const CBORBytesSchema = Schema.transformOrFail(
   Schema.Uint8ArrayFromSelf.annotations({
     identifier: "CBORBytes",
   }),
-  TransactionInput,
+  Schema.typeSchema(TransactionInput),
   {
     strict: true,
-    encode: (toI, options, ast, toA) =>
+    encode: (_, __, ___, toA) =>
       pipe(
-        ParseResult.encode(TransactionHash.CBORBytes)(toA.transactionId),
-        Effect.map((hash) => CBOR.encodeAsBytesOrThrow([toA.index, hash])),
+        ParseResult.encode(TransactionHash.BytesSchema)(toA.transactionId),
+        Effect.map((hash) => CBOR.Encode.bytes([toA.index, hash])),
       ),
-    decode: (fromA, options, ast, fromI) =>
+    decode: (fromA) =>
       pipe(
-        CBOR.decodeBytes(fromA),
-        Effect.mapError(
-          (error) => new ParseResult.Type(ast, fromA, error.message),
-        ),
+        ParseResult.decode(
+          CBOR.makeCBORBytesSchema(
+            Schema.Tuple(Numeric.Uint16, Schema.Uint8ArrayFromSelf),
+          ),
+        )(fromA),
         Effect.flatMap(([index, txHashBytes]) =>
           pipe(
-            ParseResult.decodeUnknown(TransactionHash.CBORBytes)(txHashBytes),
-            Effect.flatMap((transactionId) =>
-              ParseResult.decode(TransactionInput)({
-                _tag: "TransactionInput",
-                transactionId,
-                index,
-              }),
+            ParseResult.decode(TransactionHash.BytesSchema)(txHashBytes),
+            Effect.map(
+              (transactionId) =>
+                new TransactionInput({
+                  transactionId,
+                  index,
+                }),
             ),
           ),
         ),
@@ -105,17 +106,17 @@ const CBORBytes = Schema.transformOrFail(
  * @since 2.0.0
  * @category encoding/decoding
  */
-export const CBORHex = Schema.transformOrFail(
-  Hex.HexString.pipe(Schema.typeSchema).annotations({
+export const CBORHexSchema = Schema.transformOrFail(
+  Hex.HexSchema.annotations({
     identifier: "CBORHex",
   }),
   TransactionInput,
   {
-    strict: true,
-    encode: (toI, options, ast, toA) =>
-      pipe(ParseResult.encode(CBORBytes)(toA), Effect.map(Hex.fromBytes)),
-    decode: (fromA, options, ast) =>
-      pipe(Hex.toBytes(fromA), ParseResult.decode(CBORBytes)),
+    strict: false,
+    encode: (_, __, ___, toA) =>
+      pipe(ParseResult.encode(CBORBytesSchema)(toA), Effect.map(Hex.fromBytes)),
+    decode: (fromA) =>
+      pipe(ParseResult.decode(CBORBytesSchema)(Hex.Decode.hex(fromA))),
   },
 );
 
@@ -140,3 +141,63 @@ export const generator = FastCheck.tuple(
       index,
     }),
 );
+
+/**
+ * Synchronous encoding utilities for enterprise address.
+ *
+ * @since 2.0.0
+ * @category encoding/decoding
+ */
+export const Encode = {
+  cborHex: Schema.encodeSync(CBORHexSchema),
+  cborBytes: Schema.encodeSync(CBORBytesSchema),
+};
+
+/**
+ * Synchronous decoding utilities for enterprise address.
+ *
+ @since 2.0.0
+ * @category encoding/decoding
+ */
+export const Decode = {
+  cborHex: Schema.decodeUnknownSync(CBORHexSchema),
+  cborBytes: Schema.decodeUnknownSync(CBORBytesSchema),
+};
+
+/**
+ * Either encoding utilities for enterprise address.
+ *
+ * @since 2.0.0
+ * @category encoding/decoding
+ */
+export const EncodeEither = {
+  cborHex: Schema.encodeEither(CBORHexSchema),
+  cborBytes: Schema.encodeEither(CBORBytesSchema),
+};
+
+/**
+ * Either decoding utilities for enterprise address.
+ *
+ * @since 2.0.0
+ * @category encoding/decoding
+ */
+export const DecodeEither = {
+  cborHex: Schema.decodeUnknownEither(CBORHexSchema),
+  cborBytes: Schema.decodeUnknownEither(CBORBytesSchema),
+};
+
+/**
+ * Effectful encoding utilities for transaction input.
+ */
+export const EncodeEffect = {
+  cborHex: Schema.encode(CBORHexSchema),
+  cborBytes: Schema.encode(CBORBytesSchema),
+};
+
+/**
+ * Effectful decoding utilities for transaction input.
+ */
+export const DecodeEffect = {
+  cborHex: Schema.decodeUnknown(CBORHexSchema),
+  cborBytes: Schema.decodeUnknown(CBORBytesSchema),
+};
