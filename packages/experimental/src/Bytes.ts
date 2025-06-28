@@ -49,7 +49,8 @@ const asciiToBase16 = (char: number): number => {
 export const HexStringFilter = Schema.String.pipe(
   Schema.filter((a) => isHex(a)),
   Schema.annotations({
-    message: (issue) => `${issue.actual} must be a hex string (0-9, A-F, a-f)`,
+    message: (issue) =>
+      `${issue.actual} must be a valid hex string (0-9, A-F, a-f)`,
   }),
 );
 

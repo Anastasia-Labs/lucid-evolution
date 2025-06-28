@@ -35,21 +35,21 @@ export const makeCBORBytesSchema = <A, B>(schema: Schema.Schema<A, B, never>) =>
       encode: (toI, _, ast) =>
         ParseResult.try({
           try: () => new Uint8Array(encoder.encode(toI)),
-          catch: (e) =>
+          catch: () =>
             new ParseResult.Type(
               ast,
               toI,
-              `CBOR encoding failed: ${String(e)}`,
+              `${String(toI)} must be a valid CBOR value.`,
             ),
         }),
       decode: (fromA, _, ast) =>
         ParseResult.try({
           try: () => CBORX.decode(fromA),
-          catch: (e) =>
+          catch: () =>
             new ParseResult.Type(
               ast,
               fromA,
-              `CBOR decoding failed: ${String(e)}`,
+              `${fromA} must be a valid CBOR bytes array.`,
             ),
         }).pipe(
           Effect.flatMap((decoded) => ParseResult.decode(schema)(decoded)),
@@ -70,11 +70,11 @@ export const makeCBORHexSchema = <A, B>(schema: Schema.Schema<A, B, never>) =>
       pipe(
         ParseResult.try({
           try: () => new Uint8Array(encoder.encode(toI)),
-          catch: (e) =>
+          catch: () =>
             new ParseResult.Type(
               ast,
               toI,
-              `CBOR encoding failed: ${String(e)}`,
+              `${String(toI)} must be a valid CBOR value.`,
             ),
         }),
         Effect.flatMap((bytes) => ParseResult.encode(Bytes.BytesSchema)(bytes)),
@@ -85,11 +85,11 @@ export const makeCBORHexSchema = <A, B>(schema: Schema.Schema<A, B, never>) =>
         Effect.flatMap((bytes) =>
           ParseResult.try({
             try: () => CBORX.decode(bytes),
-            catch: (e) =>
+            catch: () =>
               new ParseResult.Type(
                 ast,
                 fromA,
-                `CBOR decoding failed: ${String(e)}`,
+                `${Bytes.Encode.hex(bytes)} must be a valid CBOR hex string.`,
               ),
           }),
         ),
