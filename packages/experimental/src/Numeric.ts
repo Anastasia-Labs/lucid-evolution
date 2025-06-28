@@ -131,3 +131,22 @@ export const Int32Generator = FastCheck.integer({
   min: INT32_MIN,
   max: INT32_MAX,
 }).map((number) => Int32.make(number));
+
+export const INT64_MIN = -9223372036854775808n;
+export const INT64_MAX = 9223372036854775807n;
+
+export const Int64 = Schema.BigIntFromSelf.pipe(
+  Schema.filter((bigint) => bigint >= INT64_MIN && bigint <= INT64_MAX),
+  Schema.brand("Int64"),
+  Schema.annotations({
+    identifier: "Int64",
+    description: `A 64-bit signed integer (${INT64_MIN} to ${INT64_MAX})`,
+  }),
+);
+
+export type Int64 = typeof Int64.Type;
+
+export const Int64Generator = FastCheck.bigInt({
+  min: INT64_MIN,
+  max: INT64_MAX,
+}).map((bigint) => Int64.make(bigint));

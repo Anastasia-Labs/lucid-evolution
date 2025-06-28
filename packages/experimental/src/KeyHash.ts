@@ -24,11 +24,6 @@ export class KeyHashError extends Data.TaggedError("KeyHashError")<{
     | "InvalidCBORFormat";
 }> {}
 
-export declare const NominalType: unique symbol;
-export interface KeyHash {
-  readonly [NominalType]: unique symbol;
-}
-
 /**
  * Schema for KeyHash representing a verification key hash.
  * Follows CIP-0019 binary representation.
@@ -38,14 +33,7 @@ export interface KeyHash {
  */
 export class KeyHash extends Schema.TaggedClass<KeyHash>()("KeyHash", {
   hash: Hash28.HexSchema,
-}) {
-  [Inspectable.NodeInspectSymbol]() {
-    return {
-      _tag: "KeyHash",
-      hash: this.hash,
-    };
-  }
-}
+}) {}
 
 export const BytesSchema = Schema.transform(Hash28.BytesSchema, KeyHash, {
   strict: true,
