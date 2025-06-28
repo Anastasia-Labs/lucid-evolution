@@ -2,7 +2,7 @@ import { Effect, Schema, Data, FastCheck, pipe, ParseResult } from "effect";
 import * as KeyHash from "./KeyHash.js";
 import * as ScriptHash from "./ScriptHash.js";
 import * as CBOR from "./CBOR.js";
-import * as Hex from "./Hex.js";
+import * as Bytes from "./Bytes.js";
 
 /**
  * Extends TaggedError for better error handling and categorization
@@ -53,11 +53,11 @@ export const CBORBytesSchema = Schema.transformOrFail(
       switch (toA._tag) {
         case "KeyHash":
           return ParseResult.succeed(
-            CBOR.Encode.bytes([0, Hex.toBytes(toA.hash)]),
+            CBOR.Encode.bytes([0, Bytes.Decode.hex(toA.hash)]),
           );
         case "ScriptHash":
           return ParseResult.succeed(
-            CBOR.Encode.bytes([1, Hex.toBytes(toA.hash)]),
+            CBOR.Encode.bytes([1, Bytes.Decode.hex(toA.hash)]),
           );
       }
     },
@@ -82,13 +82,20 @@ export const CBORBytesSchema = Schema.transformOrFail(
   },
 );
 
-export const CBORHexSchema = Schema.transformOrFail(Hex.HexSchema, Credential, {
-  strict: true,
-  encode: (_, __, ___, toA) =>
-    pipe(ParseResult.encode(CBORBytesSchema)(toA), Effect.map(Hex.Encode.hex)),
-  decode: (fromA) =>
-    pipe(Hex.Decode.hex(fromA), ParseResult.decode(CBORBytesSchema)),
-});
+export const CBORHexSchema = Schema.transformOrFail(
+  Bytes.HexSchema,
+  Credential,
+  {
+    strict: true,
+    encode: (_, __, ___, toA) =>
+      pipe(
+        ParseResult.encode(CBORBytesSchema)(toA),
+        Effect.map(Bytes.Encode.hex),
+      ),
+    decode: (fromA) =>
+      pipe(Bytes.Decode.hex(fromA), ParseResult.decode(CBORBytesSchema)),
+  },
+);
 
 /**
  * Check if two Credential instances are equal.

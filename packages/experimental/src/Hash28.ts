@@ -1,5 +1,5 @@
 import { pipe, Schema } from "effect";
-import * as Hex from "./Hex.js";
+import * as Bytes from "./Bytes.js";
 
 // Add constants following the style guide
 export const HASH28_BYTES_LENGTH = 28;
@@ -15,7 +15,7 @@ export const BytesSchema = pipe(
 });
 
 export const HexSchema = pipe(
-  Hex.HexSchema,
+  Bytes.HexSchema,
   Schema.filter((a) => a.length === HASH28_HEX_LENGTH),
 ).annotations({
   message: (issue) =>

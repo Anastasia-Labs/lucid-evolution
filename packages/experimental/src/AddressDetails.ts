@@ -2,7 +2,7 @@ import * as Address from "./Address.js";
 import * as _Bech32 from "./Bech32.js";
 import { Effect, ParseResult, Schema } from "effect";
 import * as NetworkId from "./NetworkId.js";
-import * as Hex from "./Hex.js";
+import * as Bytes from "./Bytes.js";
 
 /**
  * Extended address information with both structured data and serialized formats
@@ -36,7 +36,7 @@ export class AddressDetails extends Schema.TaggedClass<AddressDetails>(
   ),
   address: Address.Address,
   bech32: _Bech32.Bech32,
-  hex: Hex.HexSchema,
+  hex: Bytes.HexSchema,
 }) {}
 
 export const Bech32 = Schema.transformOrFail(
@@ -60,19 +60,25 @@ export const Bech32 = Schema.transformOrFail(
   },
 );
 
-export const HexString = Schema.transformOrFail(Hex.HexSchema, AddressDetails, {
-  strict: true,
-  encode: (_, __, ___, toA) => ParseResult.succeed(toA.hex),
-  decode: (_, __, ___, fromA) =>
-    Effect.gen(function* () {
-      const address = yield* ParseResult.decode(Address.HexStringSchema)(fromA);
-      const bech32 = yield* ParseResult.encode(Address.Bech32Schema)(address);
-      return new AddressDetails({
-        networkId: address.networkId,
-        type: address._tag,
-        address,
-        bech32,
-        hex: fromA,
-      });
-    }),
-});
+export const HexSchema = Schema.transformOrFail(
+  Bytes.HexSchema,
+  AddressDetails,
+  {
+    strict: true,
+    encode: (_, __, ___, toA) => ParseResult.succeed(toA.hex),
+    decode: (_, __, ___, fromA) =>
+      Effect.gen(function* () {
+        const address = yield* ParseResult.decode(Address.HexStringSchema)(
+          fromA,
+        );
+        const bech32 = yield* ParseResult.encode(Address.Bech32Schema)(address);
+        return new AddressDetails({
+          networkId: address.networkId,
+          type: address._tag,
+          address,
+          bech32,
+          hex: fromA,
+        });
+      }),
+  },
+);

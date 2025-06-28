@@ -1,5 +1,5 @@
 import { Inspectable, Schema } from "effect";
-import * as Hex from "./Hex.js";
+import * as Bytes from "./Bytes.js";
 import * as NetworkId from "./NetworkId.js";
 
 export declare const NominalType: unique symbol;
@@ -17,7 +17,7 @@ export class ByronAddress extends Schema.TaggedClass<ByronAddress>(
   "ByronAddress",
 )("ByronAddress", {
   networkId: NetworkId.NetworkId,
-  bytes: Hex.HexSchema,
+  bytes: Bytes.HexSchema,
 }) {
   [Inspectable.NodeInspectSymbol]() {
     return {
@@ -32,12 +32,16 @@ export class ByronAddress extends Schema.TaggedClass<ByronAddress>(
 //  * Byron legacy address has limited support
 //  * @since 2.0.0
 //  */
-export const Bytes = Schema.transform(Schema.Uint8ArrayFromSelf, ByronAddress, {
-  strict: true,
-  encode: (_, toA) => Hex.Decode.hex(toA.bytes),
-  decode: (_, fromA) =>
-    new ByronAddress({
-      networkId: NetworkId.NetworkId.make(0),
-      bytes: Hex.fromBytes(fromA),
-    }),
-});
+export const BytesSchema = Schema.transform(
+  Schema.Uint8ArrayFromSelf,
+  ByronAddress,
+  {
+    strict: true,
+    encode: (_, toA) => Bytes.Decode.hex(toA.bytes),
+    decode: (_, fromA) =>
+      new ByronAddress({
+        networkId: NetworkId.NetworkId.make(0),
+        bytes: Bytes.Encode.hex(fromA),
+      }),
+  },
+);

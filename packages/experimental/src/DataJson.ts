@@ -182,7 +182,7 @@ export const toCBOR = <Source, Target extends Data>(
         CML.BigInteger.from_str(data.int.toString()),
       );
     } else if (isByteArray(data)) {
-      return CML.PlutusData.new_bytes(Bytes.fromHexOrThrow(data.bytes));
+      return CML.PlutusData.new_bytes(Bytes.Decode.hex(data.bytes));
     } else if (isList(data)) {
       const list = CML.PlutusDataList.new();
       data.forEach((item) => list.add(toCMLPlutusData(item)));
@@ -190,7 +190,7 @@ export const toCBOR = <Source, Target extends Data>(
     } else if (isMap(data)) {
       const map = CML.PlutusMap.new();
       Object.entries(data).forEach(([key, value]) => {
-        const plutusKey = CML.PlutusData.new_bytes(Bytes.fromHexOrThrow(key));
+        const plutusKey = CML.PlutusData.new_bytes(Bytes.Decode.hex(key));
         map.set(plutusKey, toCMLPlutusData(value));
       });
       return CML.PlutusData.new_map(map);
@@ -201,7 +201,7 @@ export const toCBOR = <Source, Target extends Data>(
         CML.ConstrPlutusData.new(BigInt(data.constructor), fields),
       );
     } else {
-      throw new Error(`Unsupported data type: ${(data as any)._tag}`);
+      throw new Error(`Unsupported data type: ${data}`);
     }
   };
 
@@ -240,14 +240,14 @@ export const resolveCBOR = (input: string): Data => {
   let data: CML.PlutusData;
   try {
     data = CML.PlutusData.from_cbor_hex(input);
-  } catch (error) {
+  } catch {
     throw new Error(`Failed to resolve CBOR input: ${input}`);
   }
   switch (data.kind()) {
     case CML.PlutusDataKind.Integer:
       return Integer.make({ int: Number(data.as_integer()!.to_str()) });
     case CML.PlutusDataKind.Bytes:
-      return ByteArray.make({ bytes: Bytes.toHexOrThrow(data.as_bytes()!) });
+      return ByteArray.make({ bytes: Bytes.Encode.hex(data.as_bytes()!) });
     case CML.PlutusDataKind.List: {
       const list = data.as_list()!;
       const array = [];

@@ -1,5 +1,5 @@
 import { Schema, Data, FastCheck, Inspectable } from "effect";
-import * as Hex from "./Hex.js";
+import * as Bytes from "./Bytes.js";
 import * as Hash28 from "./Hash28.js";
 
 /**
@@ -49,8 +49,8 @@ export class KeyHash extends Schema.TaggedClass<KeyHash>()("KeyHash", {
 
 export const BytesSchema = Schema.transform(Hash28.BytesSchema, KeyHash, {
   strict: true,
-  encode: (_, toA) => Hex.Decode.hex(toA.hash),
-  decode: (_, fromA) => new KeyHash({ hash: Hex.Encode.hex(fromA) }),
+  encode: (_, toA) => Bytes.Decode.hex(toA.hash),
+  decode: (_, fromA) => new KeyHash({ hash: Bytes.Encode.hex(fromA) }),
 });
 
 export const HexSchema = Schema.transform(Hash28.HexSchema, KeyHash, {
@@ -90,7 +90,7 @@ export const equals = (a: KeyHash, b: KeyHash): boolean => a.hash === b.hash;
 export const generator = FastCheck.uint8Array({
   minLength: Hash28.HASH28_BYTES_LENGTH,
   maxLength: Hash28.HASH28_BYTES_LENGTH,
-}).map((bytes) => new KeyHash({ hash: Hex.fromBytes(bytes) }));
+}).map((bytes) => new KeyHash({ hash: Bytes.Encode.hex(bytes) }));
 
 /**
  * Synchronous encoding utilities.

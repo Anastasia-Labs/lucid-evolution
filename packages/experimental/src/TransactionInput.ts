@@ -8,7 +8,7 @@ import {
   Schema,
 } from "effect";
 import * as CBOR from "./CBOR.js";
-import * as Hex from "./Hex.js";
+import * as Bytes from "./Bytes.js";
 import * as TransactionHash from "./TransactionHash.js";
 import * as Numeric from "./Numeric.js";
 
@@ -107,16 +107,19 @@ export const CBORBytesSchema = Schema.transformOrFail(
  * @category encoding/decoding
  */
 export const CBORHexSchema = Schema.transformOrFail(
-  Hex.HexSchema.annotations({
+  Bytes.HexSchema.annotations({
     identifier: "CBORHex",
   }),
   TransactionInput,
   {
-    strict: false,
+    strict: true,
     encode: (_, __, ___, toA) =>
-      pipe(ParseResult.encode(CBORBytesSchema)(toA), Effect.map(Hex.fromBytes)),
+      pipe(
+        ParseResult.encode(CBORBytesSchema)(toA),
+        Effect.map(Bytes.Encode.hex),
+      ),
     decode: (fromA) =>
-      pipe(ParseResult.decode(CBORBytesSchema)(Hex.Decode.hex(fromA))),
+      pipe(ParseResult.decode(CBORBytesSchema)(Bytes.Decode.hex(fromA))),
   },
 );
 

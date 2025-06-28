@@ -10,7 +10,7 @@ import * as Credential from "./Credential.js";
 import * as KeyHash from "./KeyHash.js";
 import * as ScriptHash from "./ScriptHash.js";
 import * as NetworkId from "./NetworkId.js";
-import * as Hex from "./Hex.js";
+import * as Bytes from "./Bytes.js";
 import * as Bytes29 from "./Bytes29.js";
 
 export declare const NominalType: unique symbol;
@@ -55,7 +55,9 @@ export const BytesSchema = Schema.transformOrFail(
       const result = new Uint8Array(29);
       result[0] = header;
 
-      const paymentCredentialBytes = Hex.toBytes(toA.paymentCredential.hash);
+      const paymentCredentialBytes = Bytes.Decode.hex(
+        toA.paymentCredential.hash,
+      );
       result.set(paymentCredentialBytes, 1);
 
       return ParseResult.succeed(result);
@@ -90,9 +92,9 @@ export const HexSchema = Schema.transformOrFail(
   {
     strict: true,
     encode: (_, __, ___, toA) =>
-      pipe(ParseResult.encode(BytesSchema)(toA), Effect.map(Hex.fromBytes)),
+      pipe(ParseResult.encode(BytesSchema)(toA), Effect.map(Bytes.Encode.hex)),
     decode: (fromI) =>
-      pipe(Hex.toBytes(fromI), ParseResult.decode(BytesSchema)),
+      pipe(Bytes.Decode.hex(fromI), ParseResult.decode(BytesSchema)),
   },
 );
 

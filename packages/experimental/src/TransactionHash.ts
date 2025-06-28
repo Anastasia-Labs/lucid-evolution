@@ -1,5 +1,5 @@
 import { Schema, Data, Inspectable, FastCheck } from "effect";
-import * as Hex from "./Hex.js";
+import * as Bytes from "./Bytes.js";
 import * as Hash32 from "./Hash32.js";
 
 /**
@@ -57,8 +57,8 @@ export const BytesSchema = Schema.transform(
   TransactionHash,
   {
     strict: true,
-    encode: (_, hash) => Hex.Decode.hex(hash.hash),
-    decode: (bytes) => new TransactionHash({ hash: Hex.Encode.hex(bytes) }),
+    encode: (_, hash) => Bytes.Decode.hex(hash.hash),
+    decode: (bytes) => new TransactionHash({ hash: Bytes.Encode.hex(bytes) }),
   },
 );
 
@@ -102,7 +102,7 @@ export const equals = (a: TransactionHash, b: TransactionHash): boolean =>
 export const generator = FastCheck.uint8Array({
   minLength: Hash32.HASH32_BYTES_LENGTH,
   maxLength: Hash32.HASH32_BYTES_LENGTH,
-}).map((bytes) => new TransactionHash({ hash: Hex.fromBytes(bytes) }));
+}).map((bytes) => new TransactionHash({ hash: Bytes.Encode.hex(bytes) }));
 
 /**
  * Synchronous encoding utilities.

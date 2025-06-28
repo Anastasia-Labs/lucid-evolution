@@ -446,9 +446,7 @@ const toCMLPlutusData = (data: Data): CML.PlutusData.PlutusData => {
         CML.BigInteger.fromStrUnsafe(data.integer.toString()),
       );
     case "ByteArray":
-      return CML.PlutusData.newBytesUnsafe(
-        Bytes.fromHexOrThrow(data.bytearray),
-      );
+      return CML.PlutusData.newBytesUnsafe(Bytes.Decode.hex(data.bytearray));
     case "List": {
       const list = CML.PlutusDataList._newUnsafe();
       data.list.forEach((item) => list.add(toCMLPlutusData(item)));
@@ -470,7 +468,7 @@ const toCMLPlutusData = (data: Data): CML.PlutusData.PlutusData => {
       );
     }
     default:
-      throw new Error(`Unsupported data type: ${(data as any)._tag}`);
+      throw new Error(`Unsupported data type: ${data}`);
   }
 };
 
@@ -548,7 +546,7 @@ export const resolveCBOROrThrow = (input: string): Data => {
       return Integer.make({ integer: BigInt(data.as_integer()!.to_str()) });
     case CML.PlutusDataKind.Bytes:
       return ByteArray.make({
-        bytearray: Bytes.toHexOrThrow!(data.as_bytes()!),
+        bytearray: Bytes.Encode.hex!(data.as_bytes()!),
       });
     case CML.PlutusDataKind.List: {
       const list = data.as_list()!;
@@ -598,7 +596,7 @@ export const resolveCBOR = Effect.fn(function* (input: string) {
     case CML.PlutusDataKind.Bytes:
       return ByteArray.make(
         {
-          bytearray: Bytes.toHexOrThrow!(data.as_bytes()!),
+          bytearray: Bytes.Encode.hex!(data.as_bytes()!),
         },
         { disableValidation: true },
       );
@@ -1122,10 +1120,10 @@ export const genData = (depth: number = 3): FastCheck.Arbitrary<Data> => {
  * @since 2.0.0
  */
 export const genByteArray = (): FastCheck.Arbitrary<ByteArray> =>
-  FastCheck.string({
+  FastCheck.uint8Array({
     minLength: 0,
-    maxLength: 64,
-  }).map((value) => mkByte(Bytes.fromTextUnsafe(value)));
+    maxLength: 32,
+  }).map((value) => mkByte(Bytes.Encode.hex(value)));
 
 /**
  * Creates an arbitrary that generates Data.Integer values

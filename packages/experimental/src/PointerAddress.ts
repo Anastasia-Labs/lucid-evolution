@@ -13,7 +13,7 @@ import * as KeyHash from "./KeyHash.js";
 import * as Pointer from "./Pointer.js";
 import * as ScriptHash from "./ScriptHash.js";
 import * as NetworkId from "./NetworkId.js";
-import * as Hex from "./Hex.js";
+import * as Bytes from "./Bytes.js";
 
 /**
  * Error thrown when address operations fail
@@ -92,7 +92,9 @@ export const BytesSchema = Schema.transformOrFail(
         result[0] = header;
 
         // Set the payment credential bytes
-        const paymentCredentialBytes = Hex.toBytes(toA.paymentCredential.hash);
+        const paymentCredentialBytes = Bytes.Decode.hex(
+          toA.paymentCredential.hash,
+        );
         result.set(paymentCredentialBytes, 1);
 
         // Set the pointer data bytes at the correct position
@@ -154,12 +156,17 @@ export const BytesSchema = Schema.transformOrFail(
   },
 );
 
-export const HexSchema = Schema.transformOrFail(Hex.HexSchema, PointerAddress, {
-  strict: true,
-  encode: (_, __, ___, toA) =>
-    pipe(ParseResult.encode(BytesSchema)(toA), Effect.map(Hex.Encode.hex)),
-  decode: (fromI) => pipe(Hex.toBytes(fromI), ParseResult.decode(BytesSchema)),
-});
+export const HexSchema = Schema.transformOrFail(
+  Bytes.HexSchema,
+  PointerAddress,
+  {
+    strict: true,
+    encode: (_, __, ___, toA) =>
+      pipe(ParseResult.encode(BytesSchema)(toA), Effect.map(Bytes.Encode.hex)),
+    decode: (fromI) =>
+      pipe(Bytes.Decode.hex(fromI), ParseResult.decode(BytesSchema)),
+  },
+);
 
 /**
  * Encode a number as a variable length integer following the Cardano ledger specification

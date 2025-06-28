@@ -4,7 +4,7 @@ import * as BaseAddress from "./BaseAddress.js";
 import * as EnterpriseAddress from "./EnterpriseAddress.js";
 import * as RewardAccount from "./RewardAccount.js";
 import * as ByronAddress from "./ByronAddress.js";
-import * as HexString from "./Hex.js";
+import * as Bytes from "./Bytes.js";
 import * as _Bech32 from "./Bech32.js";
 
 /**
@@ -88,7 +88,7 @@ export const BytesSchema = Schema.transformOrFail(
     encode: (_, __, ___, toA) => {
       switch (toA._tag) {
         case "BaseAddress":
-          return ParseResult.encode(BaseAddress.Bytes)(toA);
+          return ParseResult.encode(BaseAddress.BytesSchema)(toA);
         case "EnterpriseAddress":
           return ParseResult.encode(EnterpriseAddress.BytesSchema)(toA);
         case "PointerAddress":
@@ -96,7 +96,7 @@ export const BytesSchema = Schema.transformOrFail(
         case "RewardAccount":
           return ParseResult.encode(RewardAccount.BytesSchema)(toA);
         case "ByronAddress":
-          return ParseResult.encode(ByronAddress.Bytes)(toA);
+          return ParseResult.encode(ByronAddress.BytesSchema)(toA);
       }
     },
     decode: (_, __, ast, fromA) =>
@@ -112,7 +112,7 @@ export const BytesSchema = Schema.transformOrFail(
           case 0b0001: // Script payment, Key stake
           case 0b0010: // Key payment, Script stake
           case 0b0011:
-            return yield* ParseResult.decode(BaseAddress.Bytes)(fromA);
+            return yield* ParseResult.decode(BaseAddress.BytesSchema)(fromA);
 
           // Enterprise address types (0110, 0111)
           // Format: [payment credential only]
@@ -133,7 +133,7 @@ export const BytesSchema = Schema.transformOrFail(
             return yield* ParseResult.decode(RewardAccount.BytesSchema)(fromA);
 
           case 0b1000:
-            return yield* ParseResult.decode(ByronAddress.Bytes)(fromA);
+            return yield* ParseResult.decode(ByronAddress.BytesSchema)(fromA);
 
           default:
             return yield* ParseResult.fail(
@@ -155,17 +155,14 @@ export const BytesSchema = Schema.transformOrFail(
  * @category schema
  */
 export const HexStringSchema = Schema.transformOrFail(
-  HexString.HexSchema,
+  Bytes.HexSchema,
   Address,
   {
     strict: true,
     encode: (_, __, ___, toA) =>
-      pipe(
-        ParseResult.encode(BytesSchema)(toA),
-        Effect.map(HexString.Encode.hex),
-      ),
+      pipe(ParseResult.encode(BytesSchema)(toA), Effect.map(Bytes.Encode.hex)),
     decode: (_, __, ___, fromA) =>
-      pipe(HexString.Decode.hex(fromA), ParseResult.decode(BytesSchema)),
+      pipe(Bytes.Decode.hex(fromA), ParseResult.decode(BytesSchema)),
   },
 );
 

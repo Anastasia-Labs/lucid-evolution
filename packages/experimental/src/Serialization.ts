@@ -1,5 +1,5 @@
 import { Data, Effect, ParseResult, Schema } from "effect";
-import * as Hex from "./Hex.js";
+import * as Bytes from "./Bytes.js";
 
 export class SerializationError extends Data.TaggedError("SerializationError")<{
   message?: ParseResult.ParseError;
@@ -48,7 +48,7 @@ export type ToCBORBytes<T> = SerializationFnSync<T, Uint8Array>;
  * @since 1.0.0
  * @category encoding/decoding
  */
-export type ToCBOR<T> = SerializationFnSync<T, Hex.Hex>;
+export type ToCBOR<T> = SerializationFnSync<T, Bytes.Hex>;
 
 /**
  * Creates a value from its CBOR hex string representation

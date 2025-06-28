@@ -1,5 +1,5 @@
 import { pipe, Schema } from "effect";
-import * as Hex from "./Hex.js";
+import * as Bytes from "./Bytes.js";
 
 export const BytesSchema = pipe(
   Schema.Uint8ArrayFromSelf,
@@ -11,7 +11,7 @@ export const BytesSchema = pipe(
 );
 
 export const HexSchema = pipe(
-  Hex.HexSchema,
+  Bytes.HexSchema,
   Schema.filter((a) => a.length === 58, {
     message: (issue) =>
       `${issue.actual} must be a hex string of length 58, but got ${issue.actual}`,

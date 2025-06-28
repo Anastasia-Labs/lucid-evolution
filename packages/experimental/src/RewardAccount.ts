@@ -10,7 +10,7 @@ import * as Credential from "./Credential.js";
 import * as KeyHash from "./KeyHash.js";
 import * as ScriptHash from "./ScriptHash.js";
 import * as NetworkId from "./NetworkId.js";
-import * as Hex from "./Hex.js";
+import * as Bytes from "./Bytes.js";
 import * as Bytes29 from "./Bytes29.js";
 
 export declare const NominalType: unique symbol;
@@ -50,7 +50,7 @@ export const BytesSchema = Schema.transformOrFail(
         (0b111 << 5) | (stakingBit << 4) | (toA.networkId & 0b00001111);
       const result = new Uint8Array(29);
       result[0] = header;
-      const stakeCredentialBytes = Hex.toBytes(toA.stakeCredential.hash);
+      const stakeCredentialBytes = Bytes.Decode.hex(toA.stakeCredential.hash);
       result.set(stakeCredentialBytes, 1);
       return ParseResult.succeed(result);
     },
@@ -83,9 +83,9 @@ export const HexSchema = Schema.transformOrFail(
   {
     strict: true,
     encode: (_, __, ___, toA) =>
-      pipe(ParseResult.encode(BytesSchema)(toA), Effect.map(Hex.Encode.hex)),
+      pipe(ParseResult.encode(BytesSchema)(toA), Effect.map(Bytes.Encode.hex)),
     decode: (fromI) =>
-      pipe(Hex.Decode.hex(fromI), ParseResult.decode(BytesSchema)),
+      pipe(Bytes.Decode.hex(fromI), ParseResult.decode(BytesSchema)),
   },
 );
 

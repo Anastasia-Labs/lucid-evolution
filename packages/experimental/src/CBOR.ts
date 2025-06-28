@@ -1,5 +1,5 @@
 import * as CBORX from "cbor-x";
-import * as Hex from "./Hex.js";
+import * as Bytes from "./Bytes.js";
 import { Data, Effect, ParseResult, pipe, Schema } from "effect";
 
 /**
@@ -64,35 +64,31 @@ export const makeCBORBytesSchema = <A, B>(schema: Schema.Schema<A, B, never>) =>
  * @category schemas
  */
 export const makeCBORHexSchema = <A, B>(schema: Schema.Schema<A, B, never>) =>
-  Schema.transformOrFail(Hex.HexSchema, schema, {
+  Schema.transformOrFail(Bytes.HexSchema, schema, {
     strict: false,
-    encode: (value, _, ast) =>
-      ParseResult.try({
-        try: () => {
-          const encoded = new Uint8Array(encoder.encode(value));
-          return Hex.fromBytes(encoded);
-        },
-        catch: (e) =>
-          new ParseResult.Type(
-            ast,
-            value,
-            `CBOR encoding failed: ${String(e)}`,
-          ),
-      }),
-    decode: (hex, _, ast) =>
+    encode: (toI, _, ast) =>
       pipe(
         ParseResult.try({
-          try: () => Hex.toBytes(hex),
+          try: () => new Uint8Array(encoder.encode(toI)),
           catch: (e) =>
-            new ParseResult.Type(ast, hex, `Hex decoding failed: ${String(e)}`),
+            new ParseResult.Type(
+              ast,
+              toI,
+              `CBOR encoding failed: ${String(e)}`,
+            ),
         }),
+        Effect.flatMap((bytes) => ParseResult.encode(Bytes.BytesSchema)(bytes)),
+      ),
+    decode: (fromA, _, ast) =>
+      pipe(
+        ParseResult.decode(Bytes.BytesSchema)(fromA),
         Effect.flatMap((bytes) =>
           ParseResult.try({
             try: () => CBORX.decode(bytes),
             catch: (e) =>
               new ParseResult.Type(
                 ast,
-                hex,
+                fromA,
                 `CBOR decoding failed: ${String(e)}`,
               ),
           }),
@@ -108,12 +104,12 @@ export const makeCBORHexSchema = <A, B>(schema: Schema.Schema<A, B, never>) =>
  * @category encoding/decoding
  */
 export const EncodeWithSchema = <A, B>(schema: Schema.Schema<A, B, never>) => {
-  const hexSchema = makeCBORHexSchema(schema);
-  const bytesSchema = makeCBORBytesSchema(schema);
+  const HexSchema = makeCBORHexSchema(schema);
+  const BytesSchema = makeCBORBytesSchema(schema);
 
   return {
-    hex: Schema.encodeSync(hexSchema),
-    bytes: Schema.encodeSync(bytesSchema),
+    hex: Schema.encodeSync(HexSchema),
+    bytes: Schema.encodeSync(BytesSchema),
   };
 };
 
@@ -124,12 +120,12 @@ export const EncodeWithSchema = <A, B>(schema: Schema.Schema<A, B, never>) => {
  * @category encoding/decoding
  */
 export const DecodeWithSchema = <A, B>(schema: Schema.Schema<A, B, never>) => {
-  const hexSchema = makeCBORHexSchema(schema);
-  const bytesSchema = makeCBORBytesSchema(schema);
+  const HexSchema = makeCBORHexSchema(schema);
+  const BytesSchema = makeCBORBytesSchema(schema);
 
   return {
-    hex: Schema.decodeUnknownSync(hexSchema),
-    bytes: Schema.decodeUnknownSync(bytesSchema),
+    hex: Schema.decodeUnknownSync(HexSchema),
+    bytes: Schema.decodeUnknownSync(BytesSchema),
   };
 };
 

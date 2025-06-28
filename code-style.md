@@ -519,7 +519,6 @@ export class KeyHash extends Schema.TaggedClass<KeyHash>()("KeyHash", {
 Follow these patterns for constructors:
 
 1. **Effect-based factory functions** - Named with `make` or `from*` prefix:
-
    - Return `Effect.Effect<T, E>` for error handling
    - Use descriptive error types
    - Add comprehensive JSDoc with examples
@@ -741,7 +740,6 @@ When designing your error handling strategy, choose between these complementary 
 #### Guidelines for Choosing Error Types
 
 - Use generic module-level errors when:
-
   - A single error type is sufficient for most user needs
   - The specific error reason can be determined from the error message
   - The error handling strategy is typically the same for all error cases
@@ -766,7 +764,6 @@ When designing your error handling strategy, choose between these complementary 
   ```
 
 - Use domain-specific errors when:
-
   - Different errors require different handling strategies
   - The calling code needs to distinguish between error cases
   - You need to provide specific recovery paths for different error types
