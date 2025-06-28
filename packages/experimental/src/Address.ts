@@ -5,7 +5,7 @@ import * as EnterpriseAddress from "./EnterpriseAddress.js";
 import * as RewardAccount from "./RewardAccount.js";
 import * as ByronAddress from "./ByronAddress.js";
 import * as Bytes from "./Bytes.js";
-import * as _Bech32 from "./Bech32.js";
+import * as Bech32 from "./Bech32.js";
 
 /**
  * CDDL specs
@@ -173,7 +173,7 @@ export const HexStringSchema = Schema.transformOrFail(
  * @category schema
  */
 export const Bech32Schema = Schema.transformOrFail(
-  Schema.typeSchema(_Bech32.Bech32),
+  Schema.typeSchema(Bech32.Bech32Schema),
   Address,
   {
     strict: true,
@@ -194,12 +194,14 @@ export const Bech32Schema = Schema.transformOrFail(
             prefix = "";
             break;
         }
-        const b = yield* ParseResult.decode(_Bech32.Bytes(prefix))(bytes);
+        const b = yield* ParseResult.decode(Bech32.makeBytesSchema(prefix))(
+          bytes,
+        );
         return b;
       }),
     decode: (fromI) =>
       pipe(
-        ParseResult.encode(_Bech32.Bytes())(fromI),
+        ParseResult.encode(Bech32.makeBytesSchema())(fromI),
         Effect.flatMap(ParseResult.decode(BytesSchema)),
       ),
   },

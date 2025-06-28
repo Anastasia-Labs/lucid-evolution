@@ -120,12 +120,12 @@ export const EncodeWithSchema = <A, B>(schema: Schema.Schema<A, B, never>) => {
  * @category encoding/decoding
  */
 export const DecodeWithSchema = <A, B>(schema: Schema.Schema<A, B, never>) => {
-  const HexSchema = makeCBORHexSchema(schema);
-  const BytesSchema = makeCBORBytesSchema(schema);
+  const CBORHexSchema = makeCBORHexSchema(schema);
+  const CBORBytesSchema = makeCBORBytesSchema(schema);
 
   return {
-    hex: Schema.decodeUnknownSync(HexSchema),
-    bytes: Schema.decodeUnknownSync(BytesSchema),
+    hex: Schema.decodeUnknownSync(CBORHexSchema),
+    bytes: Schema.decodeUnknownSync(CBORBytesSchema),
   };
 };
 

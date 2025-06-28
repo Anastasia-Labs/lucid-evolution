@@ -35,12 +35,12 @@ export class AddressDetails extends Schema.TaggedClass<AddressDetails>(
     Schema.Literal("ByronAddress"),
   ),
   address: Address.Address,
-  bech32: _Bech32.Bech32,
+  bech32: _Bech32.Bech32Schema,
   hex: Bytes.HexSchema,
 }) {}
 
 export const Bech32 = Schema.transformOrFail(
-  Schema.typeSchema(_Bech32.Bech32),
+  Schema.typeSchema(_Bech32.Bech32Schema),
   AddressDetails,
   {
     strict: true,

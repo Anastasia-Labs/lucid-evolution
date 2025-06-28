@@ -1,18 +1,133 @@
 import { FastCheck, Schema } from "effect";
 
-export const Uint16 = Schema.Number.pipe(
+export const UINT8_MIN = 0;
+export const UINT8_MAX = 255;
+
+export const Uint8Schema = Schema.Number.pipe(
   Schema.filter(
-    (number) => Number.isInteger(number) && number >= 0 && number <= 65535,
+    (number) =>
+      Number.isInteger(number) && number >= UINT8_MIN && number <= UINT8_MAX,
+  ),
+  Schema.brand("Uint8"),
+  Schema.annotations({
+    identifier: "Uint8",
+    description: `An 8-bit unsigned integer (${UINT8_MIN} to ${UINT8_MAX})`,
+  }),
+);
+
+export type Uint8 = typeof Uint8Schema.Type;
+
+export const Uint8Generator = FastCheck.integer({
+  min: UINT8_MIN,
+  max: UINT8_MAX,
+}).map((number) => Uint8Schema.make(number));
+
+export const UINT16_MIN = 0;
+export const UINT16_MAX = 65535;
+
+export const Uint16Schema = Schema.Number.pipe(
+  Schema.filter(
+    (number) =>
+      Number.isInteger(number) && number >= UINT16_MIN && number <= UINT16_MAX,
   ),
   Schema.brand("Uint16"),
-).annotations({
-  message: (issue) =>
-    `Expected a Uint16 (between 0 and 65535 inclusive), but got ${issue.actual}`,
-});
+  Schema.annotations({
+    identifier: "Uint16",
+    description: `A 16-bit unsigned integer (${UINT16_MIN} to ${UINT16_MAX})`,
+  }),
+);
 
-export type Uint16 = typeof Uint16.Type;
+export type Uint16 = typeof Uint16Schema.Type;
 
 export const Uint16Generator = FastCheck.integer({
-  min: 0,
-  max: 65535,
-}).map((number) => Uint16.make(number));
+  min: UINT16_MIN,
+  max: UINT16_MAX,
+}).map((number) => Uint16Schema.make(number));
+
+export const UINT32_MIN = 0;
+export const UINT32_MAX = 4294967295;
+
+export const Uint32Schema = Schema.Number.pipe(
+  Schema.filter(
+    (number) =>
+      Number.isInteger(number) && number >= UINT32_MIN && number <= UINT32_MAX,
+  ),
+  Schema.brand("Uint32"),
+  Schema.annotations({
+    identifier: "Uint32",
+    description: `A 32-bit unsigned integer (${UINT32_MIN} to ${UINT32_MAX})`,
+  }),
+);
+
+export type Uint32 = typeof Uint32Schema.Type;
+
+export const Uint32Generator = FastCheck.integer({
+  min: UINT32_MIN,
+  max: UINT32_MAX,
+}).map((number) => Uint32Schema.make(number));
+
+export const INT8_MIN = -128;
+export const INT8_MAX = 127;
+
+export const Int8 = Schema.Number.pipe(
+  Schema.filter(
+    (number) =>
+      Number.isInteger(number) && number >= INT8_MIN && number <= INT8_MAX,
+  ),
+  Schema.brand("Int8"),
+  Schema.annotations({
+    identifier: "Int8",
+    description: `An 8-bit signed integer (${INT8_MIN} to ${INT8_MAX})`,
+  }),
+);
+
+export type Int8 = typeof Int8.Type;
+
+export const Int8Generator = FastCheck.integer({
+  min: INT8_MIN,
+  max: INT8_MAX,
+}).map((number) => Int8.make(number));
+
+export const INT16_MIN = -32768;
+export const INT16_MAX = 32767;
+
+export const Int16 = Schema.Number.pipe(
+  Schema.filter(
+    (number) =>
+      Number.isInteger(number) && number >= INT16_MIN && number <= INT16_MAX,
+  ),
+  Schema.brand("Int16"),
+  Schema.annotations({
+    identifier: "Int16",
+    description: `A 16-bit signed integer (${INT16_MIN} to ${INT16_MAX})`,
+  }),
+);
+
+export type Int16 = typeof Int16.Type;
+
+export const Int16Generator = FastCheck.integer({
+  min: INT16_MIN,
+  max: INT16_MAX,
+}).map((number) => Int16.make(number));
+
+export const INT32_MIN = -2147483648;
+export const INT32_MAX = 2147483647;
+
+export const Int32 = Schema.Number.pipe(
+  Schema.filter(
+    (number) =>
+      Number.isInteger(number) && number >= INT32_MIN && number <= INT32_MAX,
+  ),
+  Schema.brand("Int32"),
+  Schema.annotations({
+    identifier: "Int32",
+    description: `A 32-bit signed integer (${INT32_MIN} to ${INT32_MAX})`,
+  }),
+);
+
+export type Int32 = typeof Int32.Type;
+
+export const Int32Generator = FastCheck.integer({
+  min: INT32_MIN,
+  max: INT32_MAX,
+}).map((number) => Int32.make(number));

@@ -27,7 +27,7 @@ export class TransactionInput extends Schema.TaggedClass<TransactionInput>(
   "TransactionInput",
 )("TransactionInput", {
   transactionId: TransactionHash.TransactionHash,
-  index: Numeric.Uint16,
+  index: Numeric.Uint16Schema,
 }) {
   [Inspectable.NodeInspectSymbol]() {
     return {
@@ -81,7 +81,7 @@ export const CBORBytesSchema = Schema.transformOrFail(
       pipe(
         ParseResult.decode(
           CBOR.makeCBORBytesSchema(
-            Schema.Tuple(Numeric.Uint16, Schema.Uint8ArrayFromSelf),
+            Schema.Tuple(Numeric.Uint16Schema, Schema.Uint8ArrayFromSelf),
           ),
         )(fromA),
         Effect.flatMap(([index, txHashBytes]) =>
