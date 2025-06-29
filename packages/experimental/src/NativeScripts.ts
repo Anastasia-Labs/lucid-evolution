@@ -3,6 +3,7 @@ import * as KeyHash from "./KeyHash.js";
 import * as Numeric from "./Numeric.js";
 import * as CBOR from "./CBOR.js";
 import { Hex } from "./index.js";
+import { NodeInspectSymbol } from "effect/Inspectable";
 
 // CDDL specs for native scripts
 // native_script =
@@ -45,37 +46,6 @@ export type NativeScript =
   | InvalidBefore
   | InvalidHereafter;
 
-export interface ScriptPubKey {
-  readonly _tag: "ScriptPubKey";
-  readonly keyHash: KeyHash.KeyHash;
-}
-
-export interface ScriptAll {
-  readonly _tag: "ScriptAll";
-  readonly scripts: readonly NativeScript[];
-}
-
-export interface ScriptAny {
-  readonly _tag: "ScriptAny";
-  readonly scripts: readonly NativeScript[];
-}
-
-export interface ScriptNOfK {
-  readonly _tag: "ScriptNOfK";
-  readonly n: Numeric.Int64;
-  readonly scripts: readonly NativeScript[];
-}
-
-export interface InvalidBefore {
-  readonly _tag: "InvalidBefore";
-  readonly slot: SlotNumber;
-}
-
-export interface InvalidHereafter {
-  readonly _tag: "InvalidHereafter";
-  readonly slot: SlotNumber;
-}
-
 export type NativeScriptEncoded =
   | ScriptPubKeyEncoded
   | ScriptAllEncoded
@@ -112,42 +82,106 @@ export interface InvalidHereafterEncoded {
   readonly slot: number;
 }
 
-export const ScriptPubKey = Schema.TaggedStruct("ScriptPubKey", {
+export class ScriptPubKey extends Schema.TaggedClass<ScriptPubKey>(
+  "ScriptPubKey",
+)("ScriptPubKey", {
   keyHash: KeyHash.KeyHash,
-});
+}) {
+  // Inspectable
+  [Symbol.for("nodejs.util.inspect.custom")]() {
+    return {
+      _tag: this._tag,
+      keyHash: this.keyHash,
+    };
+  }
+}
 
-export const ScriptAll = Schema.TaggedStruct("ScriptAll", {
-  scripts: Schema.Array(
-    Schema.suspend(
-      (): Schema.Schema<NativeScript, NativeScriptEncoded> => NativeScript,
+export class ScriptAll extends Schema.TaggedClass<ScriptAll>("ScriptAll")(
+  "ScriptAll",
+  {
+    scripts: Schema.Array(
+      Schema.suspend(
+        (): Schema.Schema<NativeScript, NativeScriptEncoded> => NativeScript,
+      ),
     ),
-  ),
-});
+  },
+) {
+  // Inspectable
+  [Symbol.for("nodejs.util.inspect.custom")]() {
+    return {
+      _tag: this._tag,
+      scripts: this.scripts.map((script) => script),
+    };
+  }
+}
 
-export const ScriptAny = Schema.TaggedStruct("ScriptAny", {
-  scripts: Schema.Array(
-    Schema.suspend(
-      (): Schema.Schema<NativeScript, NativeScriptEncoded> => NativeScript,
+export class ScriptAny extends Schema.TaggedClass<ScriptAny>("ScriptAny")(
+  "ScriptAny",
+  {
+    scripts: Schema.Array(
+      Schema.suspend(
+        (): Schema.Schema<NativeScript, NativeScriptEncoded> => NativeScript,
+      ),
     ),
-  ),
-});
+  },
+) {
+  // Inspectable
+  [Symbol.for("nodejs.util.inspect.custom")]() {
+    return {
+      _tag: this._tag,
+      scripts: this.scripts.map((script) => script),
+    };
+  }
+}
 
-export const ScriptNOfK = Schema.TaggedStruct("ScriptNOfK", {
-  n: Numeric.Int64,
-  scripts: Schema.Array(
-    Schema.suspend(
-      (): Schema.Schema<NativeScript, NativeScriptEncoded> => NativeScript,
+export class ScriptNOfK extends Schema.TaggedClass<ScriptNOfK>("ScriptNOfK")(
+  "ScriptNOfK",
+  {
+    n: Numeric.Int64,
+    scripts: Schema.Array(
+      Schema.suspend(
+        (): Schema.Schema<NativeScript, NativeScriptEncoded> => NativeScript,
+      ),
     ),
-  ),
-});
+  },
+) {
+  // Inspectable
+  [Symbol.for("nodejs.util.inspect.custom")]() {
+    return {
+      _tag: this._tag,
+      n: this.n,
+      scripts: this.scripts.map((script) => script),
+    };
+  }
+}
 
-export const InvalidBefore = Schema.TaggedStruct("InvalidBefore", {
+export class InvalidBefore extends Schema.TaggedClass<InvalidBefore>(
+  "InvalidBefore",
+)("InvalidBefore", {
   slot: SlotNumber,
-});
+}) {
+  // Inspectable
+  [Symbol.for("nodejs.util.inspect.custom")]() {
+    return {
+      _tag: this._tag,
+      slot: this.slot,
+    };
+  }
+}
 
-export const InvalidHereafter = Schema.TaggedStruct("InvalidHereafter", {
+export class InvalidHereafter extends Schema.TaggedClass<InvalidHereafter>(
+  "InvalidHereafter",
+)("InvalidHereafter", {
   slot: SlotNumber,
-});
+}) {
+  // Inspectable
+  [Symbol.for("nodejs.util.inspect.custom")]() {
+    return {
+      _tag: this._tag,
+      slot: this.slot,
+    };
+  }
+}
 
 export const NativeScript = Schema.Union(
   ScriptPubKey,
@@ -157,40 +191,6 @@ export const NativeScript = Schema.Union(
   InvalidBefore,
   InvalidHereafter,
 );
-
-const toCBORBytes = (nativeScript: NativeScript): Uint8Array => {
-  switch (nativeScript._tag) {
-    case "ScriptPubKey": {
-      return CBOR.Encode.bytes([0, KeyHash.Encode.bytes(nativeScript.keyHash)]);
-    }
-    case "ScriptAll": {
-      return CBOR.Encode.bytes([
-        1,
-        nativeScript.scripts.map((script) => toCBORBytes(script)),
-      ]);
-    }
-
-    case "ScriptAny": {
-      return CBOR.Encode.bytes([
-        2,
-        nativeScript.scripts.map((script) => toCBORBytes(script)),
-      ]);
-    }
-    case "ScriptNOfK": {
-      return CBOR.Encode.bytes([
-        3,
-        nativeScript.n,
-        nativeScript.scripts.map((script) => toCBORBytes(script)),
-      ]);
-    }
-    case "InvalidBefore": {
-      return CBOR.Encode.bytes([4, nativeScript.slot]);
-    }
-    case "InvalidHereafter": {
-      return CBOR.Encode.bytes([5, nativeScript.slot]);
-    }
-  }
-};
 
 // script_pubkey = (0, addr_keyhash)
 // addr_keyhash = hash28
@@ -256,6 +256,33 @@ export const NativeScriptCBOR = Schema.Union(
 );
 
 const NativeScriptCBORDecoder = CBOR.DecodeWithSchema(NativeScriptCBOR);
+
+const toCBORTuple = (nativeScript: NativeScript): NativeScriptCBOR => {
+  switch (nativeScript._tag) {
+    case "ScriptPubKey": {
+      return [0, KeyHash.Encode.bytes(nativeScript.keyHash)];
+    }
+    case "ScriptAll": {
+      return [1, nativeScript.scripts.map((script) => toCBORTuple(script))];
+    }
+    case "ScriptAny": {
+      return [2, nativeScript.scripts.map((script) => toCBORTuple(script))];
+    }
+    case "ScriptNOfK": {
+      return [
+        3,
+        nativeScript.n,
+        nativeScript.scripts.map((script) => toCBORTuple(script)),
+      ];
+    }
+    case "InvalidBefore": {
+      return [4, BigInt(nativeScript.slot)];
+    }
+    case "InvalidHereafter": {
+      return [5, BigInt(nativeScript.slot)];
+    }
+  }
+};
 
 // Helper function to decode nested CBOR scripts
 const fromCBORTuple = (
@@ -327,7 +354,8 @@ export const CBORBytesSchema = Schema.transformOrFail(
   NativeScript,
   {
     strict: true,
-    encode: (_, __, ___, toI) => ParseResult.succeed(toCBORBytes(toI)),
+    encode: (_, __, ___, toI) =>
+      ParseResult.succeed(CBOR.Encode.bytes(toCBORTuple(toI))),
     decode: (fromA) =>
       pipe(NativeScriptCBORDecoder.bytes(fromA), fromCBORTuple),
   },
@@ -339,38 +367,37 @@ export const CBORHexSchema = Schema.transformOrFail(
   {
     strict: true,
     encode: (_, __, ___, toA) =>
-      ParseResult.succeed(Hex.Encode.hex(toCBORBytes(toA))),
-    decode: (fromI) =>
-      pipe(Hex.Decode.hex(fromI), NativeScriptCBORDecoder.bytes, fromCBORTuple),
+      ParseResult.succeed(CBOR.Encode.hex(toCBORTuple(toA))),
+    decode: (fromI) => pipe(NativeScriptCBORDecoder.hex(fromI), fromCBORTuple),
   },
 );
 
 export const Encode = {
-  bytes: Schema.encodeSync(CBORBytesSchema),
-  hex: Schema.encodeSync(CBORHexSchema),
+  cborBytes: Schema.encodeSync(CBORBytesSchema),
+  cborHex: Schema.encodeSync(CBORHexSchema),
 };
 
 export const Decode = {
-  bytes: Schema.decodeUnknownSync(CBORBytesSchema),
-  hex: Schema.decodeUnknownSync(CBORHexSchema),
+  cborBytes: Schema.decodeUnknownSync(CBORBytesSchema),
+  cborHex: Schema.decodeUnknownSync(CBORHexSchema),
 };
 
 export const EncodeEither = {
-  bytes: Schema.encodeEither(CBORBytesSchema),
-  hex: Schema.encodeEither(CBORHexSchema),
+  cborBytes: Schema.encodeEither(CBORBytesSchema),
+  cborHex: Schema.encodeEither(CBORHexSchema),
 };
 
 export const DecodeEither = {
-  bytes: Schema.decodeUnknownEither(CBORBytesSchema),
-  hex: Schema.decodeUnknownEither(CBORHexSchema),
+  cborBytes: Schema.decodeUnknownEither(CBORBytesSchema),
+  cborHex: Schema.decodeUnknownEither(CBORHexSchema),
 };
 
 export const EncodeEffect = {
-  bytes: Schema.encode(CBORBytesSchema),
-  hex: Schema.encode(CBORHexSchema),
+  cborBytes: Schema.encode(CBORBytesSchema),
+  cborHex: Schema.encode(CBORHexSchema),
 };
 
 export const DecodeEffect = {
-  bytes: Schema.decodeUnknown(CBORBytesSchema),
-  hex: Schema.decodeUnknown(CBORHexSchema),
+  cborBytes: Schema.decodeUnknown(CBORBytesSchema),
+  cborHex: Schema.decodeUnknown(CBORHexSchema),
 };

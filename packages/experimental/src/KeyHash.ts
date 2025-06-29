@@ -1,4 +1,4 @@
-import { Schema, Data, FastCheck, Inspectable } from "effect";
+import { Schema, Data, FastCheck } from "effect";
 import * as Bytes from "./Bytes.js";
 import * as Hash28 from "./Hash28.js";
 
@@ -33,7 +33,14 @@ export class KeyHashError extends Data.TaggedError("KeyHashError")<{
  */
 export class KeyHash extends Schema.TaggedClass<KeyHash>()("KeyHash", {
   hash: Hash28.HexSchema,
-}) {}
+}) {
+  [Symbol.for("nodejs.util.inspect.custom")]() {
+    return {
+      _tag: this._tag,
+      hash: this.hash,
+    };
+  }
+}
 
 export const BytesSchema = Schema.transform(Hash28.BytesSchema, KeyHash, {
   strict: true,
