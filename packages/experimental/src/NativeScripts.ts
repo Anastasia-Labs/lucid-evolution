@@ -201,78 +201,84 @@ export const NativeScript = Schema.Union(
 // invalid_hereafter = (5, slot_no)
 // slot_no = uint .size 8
 
-const ScriptPubKeyCBOR = Schema.Tuple(
+const ScriptPubKeyCDDL = Schema.Tuple(
   Schema.Literal(0),
   Schema.Uint8ArrayFromSelf,
 );
 
-const ScriptAllCBOR = Schema.Tuple(
+const ScriptAllCDDL = Schema.Tuple(
   Schema.Literal(1),
   Schema.Array(
-    Schema.suspend((): Schema.Schema<NativeScriptCBOR> => NativeScriptCBOR),
+    Schema.suspend((): Schema.Schema<NativeScriptCDDL> => NativeScriptCDDL),
   ),
 );
 
-const ScriptAnyCBOR = Schema.Tuple(
+const ScriptAnyCDDL = Schema.Tuple(
   Schema.Literal(2),
   Schema.Array(
-    Schema.suspend((): Schema.Schema<NativeScriptCBOR> => NativeScriptCBOR),
+    Schema.suspend((): Schema.Schema<NativeScriptCDDL> => NativeScriptCDDL),
   ),
 );
 
-const ScriptNOfKCBOR = Schema.Tuple(
+const ScriptNOfKCDDL = Schema.Tuple(
   Schema.Literal(3),
   Schema.BigIntFromSelf,
   Schema.Array(
-    Schema.suspend((): Schema.Schema<NativeScriptCBOR> => NativeScriptCBOR),
+    Schema.suspend((): Schema.Schema<NativeScriptCDDL> => NativeScriptCDDL),
   ),
 );
 
-const InvalidBeforeCBOR = Schema.Tuple(
+const InvalidBeforeCDDL = Schema.Tuple(
   Schema.Literal(4),
   Schema.BigIntFromSelf,
 );
 
-const InvalidHereafterCBOR = Schema.Tuple(
+const InvalidHereafterCDDL = Schema.Tuple(
   Schema.Literal(5),
   Schema.BigIntFromSelf,
 );
 
-export type NativeScriptCBOR =
+export type NativeScriptCDDL =
   | readonly [0, Uint8Array]
-  | readonly [1, readonly NativeScriptCBOR[]]
-  | readonly [2, readonly NativeScriptCBOR[]]
-  | readonly [3, bigint, readonly NativeScriptCBOR[]]
+  | readonly [1, readonly NativeScriptCDDL[]]
+  | readonly [2, readonly NativeScriptCDDL[]]
+  | readonly [3, bigint, readonly NativeScriptCDDL[]]
   | readonly [4, bigint]
   | readonly [5, bigint];
 
-export const NativeScriptCBOR = Schema.Union(
-  ScriptPubKeyCBOR,
-  ScriptAllCBOR,
-  ScriptAnyCBOR,
-  ScriptNOfKCBOR,
-  InvalidBeforeCBOR,
-  InvalidHereafterCBOR,
+export const NativeScriptCDDL = Schema.Union(
+  ScriptPubKeyCDDL,
+  ScriptAllCDDL,
+  ScriptAnyCDDL,
+  ScriptNOfKCDDL,
+  InvalidBeforeCDDL,
+  InvalidHereafterCDDL,
 );
 
-const NativeScriptCBORDecoder = CBOR.DecodeWithSchema(NativeScriptCBOR);
+const NativeScriptCDDLDecoder = CBOR.DecodeWithSchema(NativeScriptCDDL);
 
-const toCBORTuple = (nativeScript: NativeScript): NativeScriptCBOR => {
+const toNativeScriptCDDL = (nativeScript: NativeScript): NativeScriptCDDL => {
   switch (nativeScript._tag) {
     case "ScriptPubKey": {
       return [0, KeyHash.Encode.bytes(nativeScript.keyHash)];
     }
     case "ScriptAll": {
-      return [1, nativeScript.scripts.map((script) => toCBORTuple(script))];
+      return [
+        1,
+        nativeScript.scripts.map((script) => toNativeScriptCDDL(script)),
+      ];
     }
     case "ScriptAny": {
-      return [2, nativeScript.scripts.map((script) => toCBORTuple(script))];
+      return [
+        2,
+        nativeScript.scripts.map((script) => toNativeScriptCDDL(script)),
+      ];
     }
     case "ScriptNOfK": {
       return [
         3,
         nativeScript.n,
-        nativeScript.scripts.map((script) => toCBORTuple(script)),
+        nativeScript.scripts.map((script) => toNativeScriptCDDL(script)),
       ];
     }
     case "InvalidBefore": {
@@ -285,8 +291,8 @@ const toCBORTuple = (nativeScript: NativeScript): NativeScriptCBOR => {
 };
 
 // Helper function to decode nested CBOR scripts
-const fromCBORTuple = (
-  cborTuple: NativeScriptCBOR,
+const fromNativeScriptCDDL = (
+  cborTuple: NativeScriptCDDL,
 ): Effect.Effect<NativeScript, never> =>
   Effect.gen(function* () {
     switch (cborTuple[0]) {
@@ -301,7 +307,7 @@ const fromCBORTuple = (
         const [, scriptCBORs] = cborTuple;
         const scripts: NativeScript[] = [];
         for (const scriptCBOR of scriptCBORs) {
-          const script = yield* fromCBORTuple(scriptCBOR);
+          const script = yield* fromNativeScriptCDDL(scriptCBOR);
           scripts.push(script);
         }
         return ScriptAll.make({ scripts });
@@ -311,7 +317,7 @@ const fromCBORTuple = (
         const [, scriptCBORs] = cborTuple;
         const scripts: NativeScript[] = [];
         for (const scriptCBOR of scriptCBORs) {
-          const script = yield* fromCBORTuple(scriptCBOR);
+          const script = yield* fromNativeScriptCDDL(scriptCBOR);
           scripts.push(script);
         }
         return ScriptAny.make({ scripts });
@@ -321,7 +327,7 @@ const fromCBORTuple = (
         const [, n, scriptCBORs] = cborTuple;
         const scripts: NativeScript[] = [];
         for (const scriptCBOR of scriptCBORs) {
-          const script = yield* fromCBORTuple(scriptCBOR);
+          const script = yield* fromNativeScriptCDDL(scriptCBOR);
           scripts.push(script);
         }
         return ScriptNOfK.make({
@@ -355,9 +361,9 @@ export const CBORBytesSchema = Schema.transformOrFail(
   {
     strict: true,
     encode: (_, __, ___, toI) =>
-      ParseResult.succeed(CBOR.Encode.bytes(toCBORTuple(toI))),
+      ParseResult.succeed(CBOR.Encode.bytes(toNativeScriptCDDL(toI))),
     decode: (fromA) =>
-      pipe(NativeScriptCBORDecoder.bytes(fromA), fromCBORTuple),
+      pipe(NativeScriptCDDLDecoder.bytes(fromA), fromNativeScriptCDDL),
   },
 );
 
@@ -367,8 +373,9 @@ export const CBORHexSchema = Schema.transformOrFail(
   {
     strict: true,
     encode: (_, __, ___, toA) =>
-      ParseResult.succeed(CBOR.Encode.hex(toCBORTuple(toA))),
-    decode: (fromI) => pipe(NativeScriptCBORDecoder.hex(fromI), fromCBORTuple),
+      ParseResult.succeed(CBOR.Encode.hex(toNativeScriptCDDL(toA))),
+    decode: (fromI) =>
+      pipe(NativeScriptCDDLDecoder.hex(fromI), fromNativeScriptCDDL),
   },
 );
 
