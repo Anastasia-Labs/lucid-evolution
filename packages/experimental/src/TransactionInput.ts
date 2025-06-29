@@ -75,7 +75,7 @@ export const CBORBytesSchema = Schema.transformOrFail(
     encode: (_, __, ___, toA) =>
       pipe(
         ParseResult.encode(TransactionHash.BytesSchema)(toA.transactionId),
-        Effect.map((hash) => CBOR.Encode.bytes([toA.index, hash])),
+        Effect.map((hash) => CBOR.Encode().bytes([toA.index, hash])),
       ),
     decode: (fromA) =>
       pipe(

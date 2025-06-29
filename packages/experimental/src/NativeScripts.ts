@@ -3,7 +3,8 @@ import * as KeyHash from "./KeyHash.js";
 import * as Numeric from "./Numeric.js";
 import * as CBOR from "./CBOR.js";
 import { Hex } from "./index.js";
-import { NodeInspectSymbol } from "effect/Inspectable";
+import * as NativeScriptCDDL from "./NativeScriptCDDL.js";
+import * as NativeScriptJSON from "./NativeScriptJSON.js";
 
 // CDDL specs for native scripts
 // native_script =
@@ -192,72 +193,23 @@ export const NativeScript = Schema.Union(
   InvalidHereafter,
 );
 
-// script_pubkey = (0, addr_keyhash)
-// addr_keyhash = hash28
-// script_all = (1, [* native_script])
-// script_any = (2, [* native_script])
-// script_n_of_k = (3, n : int64, [* native_script])
-// invalid_before = (4, slot_no)
-// invalid_hereafter = (5, slot_no)
-// slot_no = uint .size 8
-
-const ScriptPubKeyCDDL = Schema.Tuple(
-  Schema.Literal(0),
-  Schema.Uint8ArrayFromSelf,
-);
-
-const ScriptAllCDDL = Schema.Tuple(
-  Schema.Literal(1),
-  Schema.Array(
-    Schema.suspend((): Schema.Schema<NativeScriptCDDL> => NativeScriptCDDL),
-  ),
-);
-
-const ScriptAnyCDDL = Schema.Tuple(
-  Schema.Literal(2),
-  Schema.Array(
-    Schema.suspend((): Schema.Schema<NativeScriptCDDL> => NativeScriptCDDL),
-  ),
-);
-
-const ScriptNOfKCDDL = Schema.Tuple(
-  Schema.Literal(3),
-  Schema.BigIntFromSelf,
-  Schema.Array(
-    Schema.suspend((): Schema.Schema<NativeScriptCDDL> => NativeScriptCDDL),
-  ),
-);
-
-const InvalidBeforeCDDL = Schema.Tuple(
-  Schema.Literal(4),
-  Schema.BigIntFromSelf,
-);
-
-const InvalidHereafterCDDL = Schema.Tuple(
-  Schema.Literal(5),
-  Schema.BigIntFromSelf,
-);
-
-export type NativeScriptCDDL =
-  | readonly [0, Uint8Array]
-  | readonly [1, readonly NativeScriptCDDL[]]
-  | readonly [2, readonly NativeScriptCDDL[]]
-  | readonly [3, bigint, readonly NativeScriptCDDL[]]
-  | readonly [4, bigint]
-  | readonly [5, bigint];
-
-export const NativeScriptCDDL = Schema.Union(
-  ScriptPubKeyCDDL,
-  ScriptAllCDDL,
-  ScriptAnyCDDL,
-  ScriptNOfKCDDL,
-  InvalidBeforeCDDL,
-  InvalidHereafterCDDL,
-);
-
-const NativeScriptCDDLDecoder = CBOR.DecodeWithSchema(NativeScriptCDDL);
-
-const toNativeScriptCDDL = (nativeScript: NativeScript): NativeScriptCDDL => {
+/**
+ * Convert a NativeScript to its CDDL representation.
+ *
+ * @example
+ * import { toNativeScriptCDDL } from "@lucid-evolution/experimental";
+ * import { ScriptPubKey, KeyHash } from "@lucid-evolution/experimental";
+ *
+ * const keyHash = KeyHash.makeOrThrow("c37b1b5dc0669f1d3c61a6fddb2e8fde96be87b881c60bce8e8d542f");
+ * const script = new ScriptPubKey({ keyHash });
+ * const cddl = toNativeScriptCDDL(script);
+ *
+ * @since 2.0.0
+ * @category encoding
+ */
+export const toNativeScriptCDDL = (
+  nativeScript: NativeScript,
+): NativeScriptCDDL.NativeScriptCDDL => {
   switch (nativeScript._tag) {
     case "ScriptPubKey": {
       return [0, KeyHash.Encode.bytes(nativeScript.keyHash)];
@@ -265,20 +217,26 @@ const toNativeScriptCDDL = (nativeScript: NativeScript): NativeScriptCDDL => {
     case "ScriptAll": {
       return [
         1,
-        nativeScript.scripts.map((script) => toNativeScriptCDDL(script)),
+        nativeScript.scripts.map((script: NativeScript) =>
+          toNativeScriptCDDL(script),
+        ),
       ];
     }
     case "ScriptAny": {
       return [
         2,
-        nativeScript.scripts.map((script) => toNativeScriptCDDL(script)),
+        nativeScript.scripts.map((script: NativeScript) =>
+          toNativeScriptCDDL(script),
+        ),
       ];
     }
     case "ScriptNOfK": {
       return [
         3,
         nativeScript.n,
-        nativeScript.scripts.map((script) => toNativeScriptCDDL(script)),
+        nativeScript.scripts.map((script: NativeScript) =>
+          toNativeScriptCDDL(script),
+        ),
       ];
     }
     case "InvalidBefore": {
@@ -287,12 +245,32 @@ const toNativeScriptCDDL = (nativeScript: NativeScript): NativeScriptCDDL => {
     case "InvalidHereafter": {
       return [5, BigInt(nativeScript.slot)];
     }
+    default:
+      throw new Error(
+        `Exhaustive check failed: Unhandled case '${(nativeScript as unknown as { _tag: string })._tag}' encountered.`,
+      );
   }
 };
 
-// Helper function to decode nested CBOR scripts
-const fromNativeScriptCDDL = (
-  cborTuple: NativeScriptCDDL,
+/**
+ * Convert a CDDL representation back to a NativeScript.
+ *
+ * This function recursively decodes nested CBOR scripts and constructs
+ * the appropriate NativeScript instances.
+ *
+ * @example
+ * import { fromNativeScriptCDDL } from "@lucid-evolution/experimental";
+ * import { Effect } from "effect";
+ *
+ * const cddl: NativeScriptCDDL.NativeScriptCDDL = [0, keyHashBytes];
+ * const scriptEffect = fromNativeScriptCDDL(cddl);
+ * const script = Effect.runSync(scriptEffect);
+ *
+ * @since 2.0.0
+ * @category decoding
+ */
+export const fromNativeScriptCDDL = (
+  cborTuple: NativeScriptCDDL.NativeScriptCDDL,
 ): Effect.Effect<NativeScript, never> =>
   Effect.gen(function* () {
     switch (cborTuple[0]) {
@@ -300,7 +278,7 @@ const fromNativeScriptCDDL = (
         // ScriptPubKey: [0, keyHash_bytes]
         const [, keyHashBytes] = cborTuple;
         const keyHash = KeyHash.Decode.bytes(keyHashBytes);
-        return ScriptPubKey.make({ keyHash });
+        return new ScriptPubKey({ keyHash });
       }
       case 1: {
         // ScriptAll: [1, [native_script, ...]]
@@ -310,7 +288,7 @@ const fromNativeScriptCDDL = (
           const script = yield* fromNativeScriptCDDL(scriptCBOR);
           scripts.push(script);
         }
-        return ScriptAll.make({ scripts });
+        return new ScriptAll({ scripts });
       }
       case 2: {
         // ScriptAny: [2, [native_script, ...]]
@@ -320,7 +298,7 @@ const fromNativeScriptCDDL = (
           const script = yield* fromNativeScriptCDDL(scriptCBOR);
           scripts.push(script);
         }
-        return ScriptAny.make({ scripts });
+        return new ScriptAny({ scripts });
       }
       case 3: {
         // ScriptNOfK: [3, n, [native_script, ...]]
@@ -330,7 +308,7 @@ const fromNativeScriptCDDL = (
           const script = yield* fromNativeScriptCDDL(scriptCBOR);
           scripts.push(script);
         }
-        return ScriptNOfK.make({
+        return new ScriptNOfK({
           n: Numeric.Int64.make(n),
           scripts,
         });
@@ -338,15 +316,15 @@ const fromNativeScriptCDDL = (
       case 4: {
         // InvalidBefore: [4, slot]
         const [, slot] = cborTuple;
-        return InvalidBefore.make({
-          slot: Numeric.Uint8Schema.make(Number(slot)),
+        return new InvalidBefore({
+          slot: Number(slot),
         });
       }
       case 5: {
         // InvalidHereafter: [5, slot]
         const [, slot] = cborTuple;
-        return InvalidHereafter.make({
-          slot: Numeric.Uint8Schema.make(Number(slot)),
+        return new InvalidHereafter({
+          slot: Number(slot),
         });
       }
       default:
@@ -361,9 +339,9 @@ export const CBORBytesSchema = Schema.transformOrFail(
   {
     strict: true,
     encode: (_, __, ___, toI) =>
-      ParseResult.succeed(CBOR.Encode.bytes(toNativeScriptCDDL(toI))),
+      ParseResult.succeed(CBOR.Encode().bytes(toNativeScriptCDDL(toI))),
     decode: (fromA) =>
-      pipe(NativeScriptCDDLDecoder.bytes(fromA), fromNativeScriptCDDL),
+      pipe(NativeScriptCDDL.CDDLDecoder.bytes(fromA), fromNativeScriptCDDL),
   },
 );
 
@@ -373,38 +351,193 @@ export const CBORHexSchema = Schema.transformOrFail(
   {
     strict: true,
     encode: (_, __, ___, toA) =>
-      ParseResult.succeed(CBOR.Encode.hex(toNativeScriptCDDL(toA))),
+      ParseResult.succeed(CBOR.Encode().hex(toNativeScriptCDDL(toA))),
     decode: (fromI) =>
-      pipe(NativeScriptCDDLDecoder.hex(fromI), fromNativeScriptCDDL),
+      pipe(NativeScriptCDDL.CDDLDecoder.hex(fromI), fromNativeScriptCDDL),
+  },
+);
+
+/**
+ * Schema transformer for converting between NativeJSON and NativeScript.
+ *
+ * @since 2.0.0
+ * @category schemas
+ */
+const NativeJSON = Schema.transformOrFail(
+  NativeScriptJSON.NativeJSONSchema,
+  NativeScript,
+  {
+    strict: true,
+    encode: (_, __, ___, toI) => nativeScriptToNativeJSON(toI),
+    decode: (fromA) => nativeJSONToNativeScript(fromA),
   },
 );
 
 export const Encode = {
   cborBytes: Schema.encodeSync(CBORBytesSchema),
   cborHex: Schema.encodeSync(CBORHexSchema),
+  json: Schema.encodeSync(NativeJSON),
 };
 
 export const Decode = {
   cborBytes: Schema.decodeUnknownSync(CBORBytesSchema),
   cborHex: Schema.decodeUnknownSync(CBORHexSchema),
+  json: Schema.decodeUnknownSync(NativeJSON),
 };
 
 export const EncodeEither = {
   cborBytes: Schema.encodeEither(CBORBytesSchema),
   cborHex: Schema.encodeEither(CBORHexSchema),
+  json: Schema.encodeEither(NativeJSON),
 };
 
 export const DecodeEither = {
   cborBytes: Schema.decodeUnknownEither(CBORBytesSchema),
   cborHex: Schema.decodeUnknownEither(CBORHexSchema),
+  json: Schema.decodeUnknownEither(NativeJSON),
 };
 
 export const EncodeEffect = {
   cborBytes: Schema.encode(CBORBytesSchema),
   cborHex: Schema.encode(CBORHexSchema),
+  json: Schema.encode(NativeJSON),
 };
 
 export const DecodeEffect = {
   cborBytes: Schema.decodeUnknown(CBORBytesSchema),
   cborHex: Schema.decodeUnknown(CBORHexSchema),
+  json: Schema.decodeUnknown(NativeJSON),
 };
+
+/**
+ * Convert a NativeJSON to a NativeScript.
+ *
+ * @example
+ * import { nativeJSONToNativeScript } from "@lucid-evolution/experimental";
+ * import { Effect } from "effect";
+ *
+ * const json = { type: "sig", keyHash: "c37b1b5dc0669f1d3c61a6fddb2e8fde96be87b881c60bce8e8d542f" };
+ * const scriptEffect = nativeJSONToNativeScript(json);
+ * const script = Effect.runSync(scriptEffect);
+ *
+ * @since 2.0.0
+ * @category conversion
+ */
+export const nativeJSONToNativeScript = (
+  nativeJSON: NativeScriptJSON.NativeJSON,
+): Effect.Effect<NativeScript, never> =>
+  Effect.gen(function* () {
+    switch (nativeJSON.type) {
+      case "sig": {
+        const keyHash = KeyHash.Decode.hex(nativeJSON.keyHash);
+        return new ScriptPubKey({ keyHash });
+      }
+      case "before": {
+        return new InvalidBefore({ slot: nativeJSON.slot });
+      }
+      case "after": {
+        return new InvalidHereafter({ slot: nativeJSON.slot });
+      }
+      case "all": {
+        const scripts = yield* Effect.forEach(
+          nativeJSON.scripts,
+          nativeJSONToNativeScript,
+        );
+        return new ScriptAll({ scripts });
+      }
+      case "any": {
+        const scripts = yield* Effect.forEach(
+          nativeJSON.scripts,
+          nativeJSONToNativeScript,
+        );
+        return new ScriptAny({ scripts });
+      }
+      case "atLeast": {
+        const scripts = yield* Effect.forEach(
+          nativeJSON.scripts,
+          nativeJSONToNativeScript,
+        );
+        return new ScriptNOfK({
+          n: Numeric.Int64.make(BigInt(nativeJSON.required)),
+          scripts,
+        });
+      }
+    }
+  });
+
+/**
+ * Convert a NativeScript to a NativeJSON.
+ *
+ * @example
+ * import { nativeScriptToNativeJSON } from "@lucid-evolution/experimental";
+ * import { ScriptPubKey, KeyHash } from "@lucid-evolution/experimental";
+ * import { Effect } from "effect";
+ *
+ * const keyHash = KeyHash.makeOrThrow("c37b1b5dc0669f1d3c61a6fddb2e8fde96be87b881c60bce8e8d542f");
+ * const script = new ScriptPubKey({ keyHash });
+ * const jsonEffect = nativeScriptToNativeJSON(script);
+ * const json = Effect.runSync(jsonEffect);
+ *
+ * @since 2.0.0
+ * @category conversion
+ */
+export const nativeScriptToNativeJSON = (
+  nativeScript: NativeScript,
+): Effect.Effect<NativeScriptJSON.NativeJSON, never> =>
+  Effect.gen(function* () {
+    switch (nativeScript._tag) {
+      case "ScriptPubKey": {
+        return {
+          type: "sig" as const,
+          keyHash: KeyHash.Encode.hex(nativeScript.keyHash),
+        };
+      }
+      case "ScriptAll": {
+        const scripts = yield* Effect.forEach(
+          nativeScript.scripts,
+          nativeScriptToNativeJSON,
+        );
+        return {
+          type: "all" as const,
+          scripts,
+        };
+      }
+      case "ScriptAny": {
+        const scripts = yield* Effect.forEach(
+          nativeScript.scripts,
+          nativeScriptToNativeJSON,
+        );
+        return {
+          type: "any" as const,
+          scripts,
+        };
+      }
+      case "ScriptNOfK": {
+        const scripts = yield* Effect.forEach(
+          nativeScript.scripts,
+          nativeScriptToNativeJSON,
+        );
+        return {
+          type: "atLeast" as const,
+          required: Number(nativeScript.n),
+          scripts,
+        };
+      }
+      case "InvalidBefore": {
+        return {
+          type: "before" as const,
+          slot: nativeScript.slot,
+        };
+      }
+      case "InvalidHereafter": {
+        return {
+          type: "after" as const,
+          slot: nativeScript.slot,
+        };
+      }
+      default:
+        throw new Error(
+          `Exhaustive check failed: Unhandled case '${(nativeScript as unknown as { _tag: string })._tag}' encountered.`,
+        );
+    }
+  });

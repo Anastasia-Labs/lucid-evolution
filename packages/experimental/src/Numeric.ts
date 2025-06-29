@@ -8,7 +8,6 @@ export const Uint8Schema = Schema.Number.pipe(
     (number) =>
       Number.isInteger(number) && number >= UINT8_MIN && number <= UINT8_MAX,
   ),
-  Schema.brand("Uint8"),
   Schema.annotations({
     identifier: "Uint8",
     description: `An 8-bit unsigned integer (${UINT8_MIN} to ${UINT8_MAX})`,
@@ -137,7 +136,6 @@ export const INT64_MAX = 9223372036854775807n;
 
 export const Int64 = Schema.BigIntFromSelf.pipe(
   Schema.filter((bigint) => bigint >= INT64_MIN && bigint <= INT64_MAX),
-  Schema.brand("Int64"),
   Schema.annotations({
     identifier: "Int64",
     description: `A 64-bit signed integer (${INT64_MIN} to ${INT64_MAX})`,
