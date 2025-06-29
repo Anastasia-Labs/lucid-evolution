@@ -33,7 +33,7 @@
       - [Constructor Safety Guidelines](#constructor-safety-guidelines)
     - [Union Types](#union-types)
   - [Function Structure](#function-structure)
-    - [Safe and Unsafe Variants](#safe-and-unsafe-variants)
+    - [Effect-based Functions](#effect-based-functions)
   - [Error Handling](#error-handling)
     - [Error Messages](#error-messages)
     - [Error Typing Approaches](#error-typing-approaches)
@@ -46,6 +46,7 @@
     - [Function Comments](#function-comments)
     - [Documentation Categories](#documentation-categories)
   - [Implementation Patterns](#implementation-patterns)
+    - [Bidirectional Transformations](#bidirectional-transformations)
     - [Example](#example-2)
   - [Dependencies](#dependencies)
     - [Peer Dependency Usage](#peer-dependency-usage)
@@ -206,7 +207,7 @@ packages/
 
 ### Example Code
 
-Inside `Calculator.ts`, you define Effect-based functions and functions known to be unsafe:
+Inside `Calculator.ts`, you define Effect-based functions:
 
 ```ts
 import { Effect, Data } from "effect";
@@ -228,12 +229,7 @@ export const divide = (
         new CalculatorError({ message: `Cannot divide ${self} by zero` }),
       )
     : Effect.succeed(self / that);
-
-export const divideOrThrow = (self: number, that: number): number =>
-  Effect.runSync(divide(self, that));
 ```
-
-Inside the same file, you define unsafe functions adding the `unsafe` prefix:
 
 Usage patterns:
 
@@ -241,13 +237,9 @@ Usage patterns:
 // For Effect-based functions
 import { divide } from "my-package/Calculator";
 divide(1, 0);
-// For unsafe functions
-import { divideOrThrow } from "my-package/Calculator";
-divideOrThrow(1, 0);
 // For module import
 import { Calculator } from "my-package";
 Calculator.divide(1, 0);
-Calculator.divideOrThrow(1, 0);
 ```
 
 ## Naming Conventions
@@ -265,23 +257,7 @@ Calculator.divideOrThrow(1, 0);
 
 Functions should follow naming patterns for consistency:
 
-For example, serialization functions should be named as follows:
-
-- `is*` - Predicate functions that return boolean values (isValid, isEmpty)
-- `from*` - Constructors that create objects from other formats (fromBytes, fromHex, fromCBOR)
-- `to*` - Converters that transform objects to other formats (toBytes, toHex, toCBOR)
-- `make` - Constructors that create objects from basic inputs
-- `*OrThrow` - Versions that throw exceptions instead of returning Effect (makeOrThrow, fromBytesOrThrow)
-
-Example:
-
-```ts
-// Effect-based version
-export const fromBytes: SerdeImpl.FromBytes<KeyHash, KeyHashError> = /* ... */;
-
-// Throwing version
-export const fromBytesOrThrow = (bytes: Uint8Array) => /* ... */;
-```
+- `is*` - Predicate functions that return boolean values (isEmpty)
 
 ## Coding Practices
 
@@ -402,30 +378,11 @@ const calculate = (value: Array<number>, options: ModeOptions = {}) => {
 
 Use the Effect Schema library consistently for defining types:
 
-1. Create constants for validation constraints:
+1. Create constants for validation constraints
+2. Define schemas using these constants  
+3. Define classes using Schema.TaggedClass
 
-```ts
-export const KEY_LENGTH = 28;
-```
-
-2. Define schemas using these constants:
-
-```ts
-const KeyHashHexString = HexStringSchema.pipe(
-  Schema.length(KEYHASH_HEX_LENGTH),
-).annotations({
-  message: (issue) =>
-    `must be ${KEYHASH_HEX_LENGTH} characters, got: ${issue.actual}.`,
-});
-```
-
-3. Define classes using Schema.TaggedClass:
-
-```ts
-export class KeyHash extends Schema.TaggedClass<KeyHash>()("KeyHash", {
-  hash: KeyHashHexString,
-}) {}
-```
+See the detailed examples in the Class-based Constructors section below.
 
 ### Schema.TaggedClass as Smart Constructors
 
@@ -458,15 +415,7 @@ try {
 } catch (error) {
   // Schema validation error
 }
-
-// To bypass validation for pre-validated data:
-const keyHash = new KeyHash({ hash: validHash }, { disableValidation: true });
 ```
-
-The `disableValidation` option should be used with caution:
-
-- **Performance benefit**: Skipping validation improves performance for pre-validated data, which is especially important in hot paths or when creating many instances
-- **Usage guidance**: Only use when you have already validated the input data or received it from a trusted source
 
 ### Constructors
 
@@ -518,135 +467,18 @@ export class KeyHash extends Schema.TaggedClass<KeyHash>()("KeyHash", {
 
 Follow these patterns for constructors:
 
-1. **Effect-based factory functions** - Named with `make` or `from*` prefix:
-   - Return `Effect.Effect<T, E>` for error handling
-   - Use descriptive error types
-   - Add comprehensive JSDoc with examples
-
-2. **OrThrow variants** - Named with `*OrThrow` suffix:
-   - Throw exceptions instead of returning Effects
-   - Simplify usage in contexts where error handling is less critical
-   - Reuse logic from Effect-based version when possible
-
-```ts
-// Effect-based constructor
-/**
- * Construct a KeyHash from a hex string.
- *
- * @example
- * import { KeyHash } from "@lucid-evolution/experimental";
- * import { Effect } from "effect";
- * import assert from "assert";
- *
- * const hash = "c37b1b5dc0669f1d3c61a6fddb2e8fde96be87b881c60bce8e8d542f";
- * const keyHashEffect = KeyHash.make(hash);
- * const keyHash = Effect.runSync(keyHashEffect);
- * assert(keyHash._tag === "KeyHash");
- * assert(keyHash.hash === hash);
- *
- * @since 2.0.0
- * @category constructors
- */
-export const make: SerdeImpl.Make<KeyHash, KeyHashError> = Effect.fnUntraced(
-  function* (hash) {
-    if (hash.length !== KEYHASH_HEX_LENGTH) {
-      return yield* new KeyHashError({
-        message: `KeyHash must be ${KEYHASH_HEX_LENGTH} characters long.`,
-      });
-    }
-    if (!Bytes.isHex(hash)) {
-      return yield* new KeyHashError({
-        message: `KeyHash must be a valid hex string.`,
-      });
-    }
-    return new KeyHash({ hash }, { disableValidation: true });
-  },
-);
-
-// OrThrow variant
-/**
- * Construct a KeyHash from a hex string, throws on error.
- *
- * @example
- * import { KeyHash } from "@lucid-evolution/experimental";
- * import assert from "assert";
- *
- * const hash = "c37b1b5dc0669f1d3c61a6fddb2e8fde96be87b881c60bce8e8d542f";
- * const keyHash = KeyHash.makeOrThrow(hash);
- * assert(keyHash._tag === "KeyHash");
- * assert(keyHash.hash === hash);
- *
- * @since 2.0.0
- * @category constructors
- */
-export const makeOrThrow: SerdeImpl.MakeOrThrow<KeyHash> = (hash: string) => {
-  if (!Bytes.isHex(hash)) {
-    throw new KeyHashError({
-      message: `KeyHash must be a valid hex string.`,
-    });
-  }
-  if (hash.length !== KEYHASH_HEX_LENGTH) {
-    throw new KeyHashError({
-      message: `KeyHash must be ${KEYHASH_HEX_LENGTH} characters long.`,
-    });
-  }
-  return new KeyHash({ hash }, { disableValidation: true });
-};
-```
+1. **Effect-based factory functions** - For creating objects from different formats
 
 #### Multiple Constructor Methods
 
-For complex types, provide multiple constructor methods that create objects from different sources:
-
-```ts
-// From bytes constructor
-export const fromBytes: SerdeImpl.FromBytes<KeyHash, KeyHashError> =
-  Effect.fnUntraced(function* (bytes) {
-    if (bytes.length !== KEYHASH_BYTES_LENGTH) {
-      return yield* new KeyHashError({
-        message: `KeyHash must be ${KEYHASH_BYTES_LENGTH} bytes long, got: ${bytes.length}.`,
-      });
-    }
-    const hash = Bytes.toHexOrThrow(bytes);
-    return new KeyHash({ hash }, { disableValidation: true });
-  });
-
-// From CBOR constructor
-export const fromCBOR: SerdeImpl.FromCBOR<
-  KeyHash,
-  CBOR.CBORError | Bytes.BytesError | KeyHashError
-> = Effect.fn(function* (cborHex) {
-  const keyHash = yield* CBOR.decodeHex(cborHex);
-  return yield* fromBytes(keyHash);
-});
-```
+For complex types, provide multiple ways to create objects using Schema transformations and encoding/decoding utilities (see Implementation Patterns section for detailed examples).
 
 #### Constructor Safety Guidelines
 
-- Use the `disableValidation: true` option when creating an instance from pre-validated data
-- Create constructors for each common input format (string, bytes, CBOR) to support various use cases
-- Ensure consistent error handling across all constructors
-- Provide thorough validation with descriptive error messages
-- Implement comprehensive type safety using Effect interfaces:
-
-```ts
-// Define consistent interfaces for constructor functions in SerdeImpl.ts
-export interface Make<T, E = never> {
-  (input: string): Effect.Effect<T, E, never>;
-}
-
-export interface MakeOrThrow<T> {
-  (input: string): T;
-}
-
-export interface FromBytes<T, E = never> {
-  (bytes: Uint8Array): Effect.Effect<T, E, never>;
-}
-
-export interface ToBytes<T> {
-  (value: T): Uint8Array;
-}
-```
+- Create Schema transformations for each common input format (string, bytes, CBOR) to support various use cases
+- Provide synchronous encoding/decoding utilities for common operations
+- Use Either-based utilities for error handling without exceptions
+- Implement comprehensive type safety using Schema-based transformations (see Implementation Patterns section for detailed examples)
 
 ### Union Types
 
@@ -665,12 +497,12 @@ export const Address = Schema.Union(
 );
 
 // Switch on the discriminant field
-export const toBytes = (address: Address) => {
+export const getNetworkId = (address: Address): number => {
   switch (address._tag) {
     case "BaseAddress":
-      return BaseAddress.toBytes(address);
+      return BaseAddress.getNetworkId(address);
     case "EnterpriseAddress":
-      return EnterpriseAddress.toBytes(address);
+      return EnterpriseAddress.getNetworkId(address);
     // other cases
   }
 };
@@ -678,21 +510,16 @@ export const toBytes = (address: Address) => {
 
 ## Function Structure
 
-### Safe and Unsafe Variants
+### Effect-based Functions
 
-Provide both Effect-based and throwing versions of functions:
+Provide Effect-based functions for operations that may fail:
 
 ```ts
 // Effect-based version that returns errors in the Effect channel
-export const operation: SerdeImpl.Operation<Result, ErrorType> =
+export const operation = (input: InputType): Effect.Effect<Result, ErrorType> =>
   Effect.fnUntraced(function* (input) {
     // implementation that yields errors
   });
-
-// "OrThrow" version that throws errors directly
-export const operationOrThrow: SerdeImpl.OperationOrThrow<Result> = (input) => {
-  // implementation that throws errors
-};
 ```
 
 ## Error Handling
@@ -750,17 +577,6 @@ When designing your error handling strategy, choose between these complementary 
     message: string;
     cause?: unknown;
   }> {}
-
-  // Usage - different error scenarios use the same type with descriptive messages
-  export const fromBytes: SerdeImpl.FromBytes<KeyHash, KeyHashError> =
-    Effect.fnUntraced(function* (bytes) {
-      if (bytes.length !== KEYHASH_BYTES_LENGTH) {
-        return yield* new KeyHashError({
-          message: `KeyHash must be ${KEYHASH_BYTES_LENGTH} bytes long, got: ${bytes.length}.`,
-        });
-      }
-      // Other validations use the same error type...
-    });
   ```
 
 - Use domain-specific errors when:
@@ -933,49 +749,61 @@ Categories should be consistently used across the codebase and include:
 
 ## Implementation Patterns
 
-The implementation pattern defines interfaces for common operations that can be implemented by multiple types. This pattern is used when:
+The implementation pattern defines common operations using Schema-based transformations and encoding/decoding utilities. This pattern provides:
 
-- A consistent API is needed across different data structures
-- Operations should be standardized but implementations vary
+- A consistent API across different data structures
+- Standardized serialization and deserialization
+- Type-safe encoding/decoding operations
+- Bidirectional transformations that can be composed with encoding and decoding combinators
+
+### Bidirectional Transformations
+
+The key benefit of `Schema.transform` is that it defines bidirectional transformations between types. Once you define a transformation schema, you can compose it with various encoding and decoding combinators to create utilities for different use cases. This approach ensures consistency and reduces code duplication.
 
 ### Example
 
 ```ts
-// Interface definitions in SerdeImpl.ts
-export interface FromBytes<T, E = never> {
-  (bytes: Uint8Array): Effect.Effect<T, E, never>;
-}
+// Define transformation schemas for different input formats
+// These schemas establish bidirectional mappings between raw data and typed objects
+export const BytesSchema = Schema.transform(Hash28.BytesSchema, KeyHash, {
+  strict: true,
+  encode: (_, toA) => Bytes.Decode.hex(toA.hash),
+  decode: (_, fromA) => new KeyHash({ hash: Bytes.Encode.hex(fromA) }),
+});
 
-export interface ToBytes<T> {
-  (value: T): Uint8Array;
-}
+export const HexSchema = Schema.transform(
+  Schema.typeSchema(Hash28.HexSchema),
+  KeyHash,
+  {
+    strict: true,
+    encode: (_, toA) => toA.hash,
+    decode: (fromI) => new KeyHash({ hash: fromI }),
+  },
+);
 
-// Implementation for KeyHash
-export const fromBytes: SerdeImpl.FromBytes<KeyHash, KeyHashError> =
-  Effect.fnUntraced(function* (bytes) {
-    if (bytes.length !== KEYHASH_BYTES_LENGTH) {
-      return yield* new KeyHashError({
-        message: `KeyHash must be ${KEYHASH_BYTES_LENGTH} bytes long, got: ${bytes.length}.`,
-      });
-    }
-    const hash = Bytes.toHexOrThrow(bytes);
-    return new KeyHash({ hash }, { disableValidation: true });
-  });
+// Synchronous utilities built on schemas
+// These compose the transformation schemas with sync combinators
+export const Encode = {
+  hex: Schema.encodeSync(HexSchema),
+  bytes: Schema.encodeSync(BytesSchema),
+};
 
-export const toBytes: SerdeImpl.ToBytes<KeyHash> = (keyHash) =>
-  Bytes.fromHexOrThrow(keyHash.hash);
+export const Decode = {
+  hex: Schema.decodeUnknownSync(HexSchema),
+  bytes: Schema.decodeUnknownSync(BytesSchema),
+};
 
-// Implementation for PublicKey
-export const fromBytes: SerdeImpl.FromBytes<PublicKey, PublicKeyError> =
-  Effect.fnUntraced(function* (bytes) {
-    // PublicKey-specific implementation
-  });
+// Either-based utilities for error handling
+// These compose the same schemas with Either-based combinators for safe error handling
+export const EncodeEither = {
+  hex: Schema.encodeEither(HexSchema),
+  bytes: Schema.encodeEither(BytesSchema),
+};
 
-// Generic function using the interfaces
-const deserialize = <T, E>(
-  bytes: Uint8Array,
-  fromBytes: SerdeImpl.FromBytes<T, E>,
-): Effect.Effect<T, E> => fromBytes(bytes);
+export const DecodeEither = {
+  hex: Schema.decodeUnknownEither(HexSchema),
+  bytes: Schema.decodeUnknownEither(BytesSchema),
+};
 ```
 
 ## Dependencies
