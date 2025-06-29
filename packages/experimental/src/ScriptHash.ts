@@ -39,7 +39,7 @@ export interface ScriptHash {
 export class ScriptHash extends Schema.TaggedClass<ScriptHash>()("ScriptHash", {
   hash: Hash28.HexSchema,
 }) {
-  [Inspectable.NodeInspectSymbol]() {
+  [Symbol.for("nodejs.util.inspect.custom")]() {
     return {
       _tag: "ScriptHash",
       hash: this.hash,
@@ -53,11 +53,15 @@ export const BytesSchema = Schema.transform(Hash28.BytesSchema, ScriptHash, {
   decode: (_, fromA) => new ScriptHash({ hash: Bytes.Encode.hex(fromA) }),
 });
 
-export const HexSchema = Schema.transform(Hash28.HexSchema, ScriptHash, {
-  strict: true,
-  encode: (_, toA) => toA.hash,
-  decode: (fromI) => new ScriptHash({ hash: fromI }),
-});
+export const HexSchema = Schema.transform(
+  Schema.typeSchema(Hash28.HexSchema),
+  ScriptHash,
+  {
+    strict: true,
+    encode: (_, toA) => toA.hash,
+    decode: (fromI) => new ScriptHash({ hash: fromI }),
+  },
+);
 
 /**
  * Check if two ScriptHash instances are equal.

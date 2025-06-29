@@ -53,11 +53,11 @@ export const CBORBytesSchema = Schema.transformOrFail(
       switch (toA._tag) {
         case "KeyHash":
           return ParseResult.succeed(
-            CBOR.Encode.bytes([0, Bytes.Decode.hex(toA.hash)]),
+            CBOR.Encode().bytes([0, Bytes.Decode.hex(toA.hash)]),
           );
         case "ScriptHash":
           return ParseResult.succeed(
-            CBOR.Encode.bytes([1, Bytes.Decode.hex(toA.hash)]),
+            CBOR.Encode().bytes([1, Bytes.Decode.hex(toA.hash)]),
           );
       }
     },
@@ -83,7 +83,7 @@ export const CBORBytesSchema = Schema.transformOrFail(
 );
 
 export const CBORHexSchema = Schema.transformOrFail(
-  Bytes.HexSchema,
+  Schema.typeSchema(Bytes.HexSchema),
   Credential,
   {
     strict: true,

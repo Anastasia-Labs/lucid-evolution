@@ -16,7 +16,7 @@ parent: Modules
   - [isPointer](#ispointer)
 - [schemas](#schemas)
   - [Pointer (class)](#pointer-class)
-    - [[Inspectable.NodeInspectSymbol] (method)](#inspectablenodeinspectsymbol-method)
+    - [[Symbol.for("nodejs.util.inspect.custom")] (method)](#inspectablenodeinspectsymbol-method)
 
 ---
 
@@ -70,10 +70,10 @@ export declare class Pointer
 
 Added in v2.0.0
 
-### [Inspectable.NodeInspectSymbol] (method)
+### [Symbol.for("nodejs.util.inspect.custom")] (method)
 
 **Signature**
 
 ```ts
-[Inspectable.NodeInspectSymbol]();
+[Symbol.for("nodejs.util.inspect.custom")]();
 ```

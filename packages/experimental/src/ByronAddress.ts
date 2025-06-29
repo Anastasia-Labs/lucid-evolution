@@ -1,4 +1,4 @@
-import { Inspectable, Schema } from "effect";
+import { Schema } from "effect";
 import * as Bytes from "./Bytes.js";
 import * as NetworkId from "./NetworkId.js";
 
@@ -19,7 +19,7 @@ export class ByronAddress extends Schema.TaggedClass<ByronAddress>(
   networkId: NetworkId.NetworkId,
   bytes: Bytes.HexSchema,
 }) {
-  [Inspectable.NodeInspectSymbol]() {
+  [Symbol.for("nodejs.util.inspect.custom")]() {
     return {
       _tag: "ByronAddress",
       networkId: this.networkId,

@@ -1,11 +1,4 @@
-import {
-  Effect,
-  FastCheck,
-  Inspectable,
-  ParseResult,
-  pipe,
-  Schema,
-} from "effect";
+import { Effect, FastCheck, ParseResult, pipe, Schema } from "effect";
 import * as Credential from "./Credential.js";
 import * as KeyHash from "./KeyHash.js";
 import * as ScriptHash from "./ScriptHash.js";
@@ -30,7 +23,7 @@ export class EnterpriseAddress extends Schema.TaggedClass<EnterpriseAddress>(
   networkId: NetworkId.NetworkId,
   paymentCredential: Credential.Credential,
 }) {
-  [Inspectable.NodeInspectSymbol]() {
+  [Symbol.for("nodejs.util.inspect.custom")]() {
     return {
       _tag: "EnterpriseAddress",
       networkId: this.networkId,
@@ -87,7 +80,7 @@ export const BytesSchema = Schema.transformOrFail(
 );
 
 export const HexSchema = Schema.transformOrFail(
-  Bytes29.HexSchema,
+  Schema.typeSchema(Bytes29.HexSchema),
   EnterpriseAddress,
   {
     strict: true,

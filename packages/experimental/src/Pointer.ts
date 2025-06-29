@@ -1,4 +1,4 @@
-import { Inspectable, Schema } from "effect";
+import { Schema } from "effect";
 import * as Natural from "./Natural.js";
 
 /**
@@ -13,7 +13,7 @@ export class Pointer extends Schema.TaggedClass<Pointer>("Pointer")("Pointer", {
   txIndex: Natural.Natural,
   certIndex: Natural.Natural,
 }) {
-  [Inspectable.NodeInspectSymbol]() {
+  [Symbol.for("nodejs.util.inspect.custom")]() {
     return {
       _tag: "Pointer",
       slot: this.slot,

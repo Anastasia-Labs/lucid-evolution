@@ -48,7 +48,7 @@ export const Bech32 = Schema.transformOrFail(
     decode: (_, __, ___, fromA) =>
       Effect.gen(function* () {
         const address = yield* ParseResult.decode(Address.Bech32Schema)(fromA);
-        const hex = yield* ParseResult.encode(Address.HexStringSchema)(address);
+        const hex = yield* ParseResult.encode(Address.HexSchema)(address);
         return new AddressDetails({
           networkId: address.networkId,
           type: address._tag,
@@ -61,16 +61,14 @@ export const Bech32 = Schema.transformOrFail(
 );
 
 export const HexSchema = Schema.transformOrFail(
-  Bytes.HexSchema,
+  Schema.typeSchema(Bytes.HexSchema),
   AddressDetails,
   {
     strict: true,
     encode: (_, __, ___, toA) => ParseResult.succeed(toA.hex),
     decode: (_, __, ___, fromA) =>
       Effect.gen(function* () {
-        const address = yield* ParseResult.decode(Address.HexStringSchema)(
-          fromA,
-        );
+        const address = yield* ParseResult.decode(Address.HexSchema)(fromA);
         const bech32 = yield* ParseResult.encode(Address.Bech32Schema)(address);
         return new AddressDetails({
           networkId: address.networkId,

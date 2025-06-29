@@ -16,7 +16,6 @@ export const BytesSchema = pipe(
 
 export const HexSchema = pipe(
   Bytes.HexSchema,
-  Schema.typeSchema,
   Schema.filter((a) => a.length === HASH32_HEX_LENGTH),
 ).annotations({
   message: (issue) =>

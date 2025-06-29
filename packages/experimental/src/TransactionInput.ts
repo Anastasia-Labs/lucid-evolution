@@ -1,12 +1,4 @@
-import {
-  Data,
-  Effect,
-  FastCheck,
-  Inspectable,
-  ParseResult,
-  pipe,
-  Schema,
-} from "effect";
+import { Data, Effect, FastCheck, ParseResult, pipe, Schema } from "effect";
 import * as CBOR from "./CBOR.js";
 import * as Bytes from "./Bytes.js";
 import * as TransactionHash from "./TransactionHash.js";
@@ -29,7 +21,7 @@ export class TransactionInput extends Schema.TaggedClass<TransactionInput>(
   transactionId: TransactionHash.TransactionHash,
   index: Numeric.Uint16Schema,
 }) {
-  [Inspectable.NodeInspectSymbol]() {
+  [Symbol.for("nodejs.util.inspect.custom")]() {
     return {
       _tag: "TransactionInput",
       transactionId: this.transactionId,

@@ -16,7 +16,7 @@ parent: Modules
   - [generator](#generator)
 - [schemas](#schemas)
   - [BaseAddress (class)](#baseaddress-class)
-    - [[Inspectable.NodeInspectSymbol] (method)](#inspectablenodeinspectsymbol-method)
+    - [[Symbol.for("nodejs.util.inspect.custom")] (method)](#inspectablenodeinspectsymbol-method)
 - [utils](#utils)
   - [BaseAddress (interface)](#baseaddress-interface)
   - [Bytes](#bytes)
@@ -80,12 +80,12 @@ export declare class BaseAddress
 
 Added in v2.0.0
 
-### [Inspectable.NodeInspectSymbol] (method)
+### [Symbol.for("nodejs.util.inspect.custom")] (method)
 
 **Signature**
 
 ```ts
-[Inspectable.NodeInspectSymbol]();
+[Symbol.for("nodejs.util.inspect.custom")]();
 ```
 
 # utils

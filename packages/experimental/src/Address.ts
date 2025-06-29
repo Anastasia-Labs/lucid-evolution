@@ -154,8 +154,8 @@ export const BytesSchema = Schema.transformOrFail(
  * @since 2.0.0
  * @category schema
  */
-export const HexStringSchema = Schema.transformOrFail(
-  Bytes.HexSchema,
+export const HexSchema = Schema.transformOrFail(
+  Schema.typeSchema(Bytes.HexSchema),
   Address,
   {
     strict: true,
@@ -255,7 +255,7 @@ export const generator = FastCheck.oneof(
  */
 export const Encode = {
   bech32: Schema.encodeSync(Bech32Schema),
-  hex: Schema.encodeSync(HexStringSchema),
+  hex: Schema.encodeSync(HexSchema),
   bytes: Schema.encodeSync(BytesSchema),
 };
 
@@ -267,7 +267,7 @@ export const Encode = {
  */
 export const Decode = {
   bech32: Schema.decodeUnknownSync(Bech32Schema),
-  hex: Schema.decodeUnknownSync(HexStringSchema),
+  hex: Schema.decodeUnknownSync(HexSchema),
   bytes: Schema.decodeUnknownSync(BytesSchema),
 };
 
@@ -279,7 +279,7 @@ export const Decode = {
  */
 export const EncodeEither = {
   bech32: Schema.encodeEither(Bech32Schema),
-  hex: Schema.encodeEither(HexStringSchema),
+  hex: Schema.encodeEither(HexSchema),
   bytes: Schema.encodeEither(BytesSchema),
 };
 
@@ -291,7 +291,7 @@ export const EncodeEither = {
  */
 export const DecodeEither = {
   bech32: Schema.decodeUnknownEither(Bech32Schema),
-  hex: Schema.decodeUnknownEither(HexStringSchema),
+  hex: Schema.decodeUnknownEither(HexSchema),
   bytes: Schema.decodeUnknownEither(BytesSchema),
 };
 
@@ -303,7 +303,7 @@ export const DecodeEither = {
  */
 export const EncodeEffect = {
   bech32: Schema.encode(Bech32Schema),
-  hex: Schema.encode(HexStringSchema),
+  hex: Schema.encode(HexSchema),
   bytes: Schema.encode(BytesSchema),
 };
 
@@ -315,6 +315,6 @@ export const EncodeEffect = {
  */
 export const DecodeEffect = {
   bech32: Schema.decodeUnknown(Bech32Schema),
-  hex: Schema.decodeUnknown(HexStringSchema),
+  hex: Schema.decodeUnknown(HexSchema),
   bytes: Schema.decodeUnknown(BytesSchema),
 };

@@ -16,8 +16,8 @@ describe("Address property tests", () => {
     it("should be a valid HexString address", () => {
       FastCheck.assert(
         FastCheck.property(Address.generator, (address) => {
-          const hexString = Schema.encodeSync(Address.HexStringSchema)(address);
-          const decoded = Schema.decodeSync(Address.HexStringSchema)(hexString);
+          const hexString = Schema.encodeSync(Address.HexSchema)(address);
+          const decoded = Schema.decodeSync(Address.HexSchema)(hexString);
           expect(decoded).toEqual(address);
         }),
       );

@@ -1,12 +1,4 @@
-import {
-  Data,
-  Effect,
-  FastCheck,
-  Inspectable,
-  ParseResult,
-  pipe,
-  Schema,
-} from "effect";
+import { Data, Effect, FastCheck, ParseResult, pipe, Schema } from "effect";
 import * as Natural from "./Natural.js";
 import * as Credential from "./Credential.js";
 import * as KeyHash from "./KeyHash.js";
@@ -46,7 +38,7 @@ export class PointerAddress extends Schema.TaggedClass<PointerAddress>(
   paymentCredential: Credential.Credential,
   pointer: Pointer.Pointer,
 }) {
-  [Inspectable.NodeInspectSymbol]() {
+  [Symbol.for("nodejs.util.inspect.custom")]() {
     return {
       _tag: "PointerAddress",
       networkId: this.networkId,
@@ -157,7 +149,7 @@ export const BytesSchema = Schema.transformOrFail(
 );
 
 export const HexSchema = Schema.transformOrFail(
-  Bytes.HexSchema,
+  Schema.typeSchema(Bytes.HexSchema),
   PointerAddress,
   {
     strict: true,

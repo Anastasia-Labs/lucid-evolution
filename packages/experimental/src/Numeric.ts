@@ -29,7 +29,6 @@ export const Uint16Schema = Schema.Number.pipe(
     (number) =>
       Number.isInteger(number) && number >= UINT16_MIN && number <= UINT16_MAX,
   ),
-  Schema.brand("Uint16"),
   Schema.annotations({
     identifier: "Uint16",
     description: `A 16-bit unsigned integer (${UINT16_MIN} to ${UINT16_MAX})`,
@@ -51,7 +50,6 @@ export const Uint32Schema = Schema.Number.pipe(
     (number) =>
       Number.isInteger(number) && number >= UINT32_MIN && number <= UINT32_MAX,
   ),
-  Schema.brand("Uint32"),
   Schema.annotations({
     identifier: "Uint32",
     description: `A 32-bit unsigned integer (${UINT32_MIN} to ${UINT32_MAX})`,
@@ -73,7 +71,6 @@ export const Int8 = Schema.Number.pipe(
     (number) =>
       Number.isInteger(number) && number >= INT8_MIN && number <= INT8_MAX,
   ),
-  Schema.brand("Int8"),
   Schema.annotations({
     identifier: "Int8",
     description: `An 8-bit signed integer (${INT8_MIN} to ${INT8_MAX})`,
@@ -95,7 +92,6 @@ export const Int16 = Schema.Number.pipe(
     (number) =>
       Number.isInteger(number) && number >= INT16_MIN && number <= INT16_MAX,
   ),
-  Schema.brand("Int16"),
   Schema.annotations({
     identifier: "Int16",
     description: `A 16-bit signed integer (${INT16_MIN} to ${INT16_MAX})`,
@@ -117,7 +113,6 @@ export const Int32 = Schema.Number.pipe(
     (number) =>
       Number.isInteger(number) && number >= INT32_MIN && number <= INT32_MAX,
   ),
-  Schema.brand("Int32"),
   Schema.annotations({
     identifier: "Int32",
     description: `A 32-bit signed integer (${INT32_MIN} to ${INT32_MAX})`,

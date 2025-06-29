@@ -21,7 +21,7 @@ parent: Modules
   - [PointerAddressError (class)](#pointeraddresserror-class)
 - [schemas](#schemas)
   - [PointerAddress (class)](#pointeraddress-class)
-    - [[Inspectable.NodeInspectSymbol] (method)](#inspectablenodeinspectsymbol-method)
+    - [[Symbol.for("nodejs.util.inspect.custom")] (method)](#inspectablenodeinspectsymbol-method)
 - [utils](#utils)
   - [Bytes](#bytes)
   - [HexString](#hexstring)
@@ -153,12 +153,12 @@ export declare class PointerAddress
 
 Added in v2.0.0
 
-### [Inspectable.NodeInspectSymbol] (method)
+### [Symbol.for("nodejs.util.inspect.custom")] (method)
 
 **Signature**
 
 ```ts
-[Inspectable.NodeInspectSymbol]();
+[Symbol.for("nodejs.util.inspect.custom")]();
 ```
 
 # utils

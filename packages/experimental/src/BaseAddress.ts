@@ -1,11 +1,4 @@
-import {
-  Effect,
-  FastCheck,
-  Inspectable,
-  ParseResult,
-  pipe,
-  Schema,
-} from "effect";
+import { Effect, FastCheck, ParseResult, pipe, Schema } from "effect";
 import * as Credential from "./Credential.js";
 import * as KeyHash from "./KeyHash.js";
 import * as ScriptHash from "./ScriptHash.js";
@@ -33,7 +26,7 @@ export class BaseAddress extends Schema.TaggedClass<BaseAddress>("BaseAddress")(
     stakeCredential: Credential.Credential,
   },
 ) {
-  [Inspectable.NodeInspectSymbol]() {
+  [Symbol.for("nodejs.util.inspect.custom")]() {
     return {
       _tag: "BaseAddress",
       networkId: this.networkId,
@@ -97,7 +90,7 @@ export const BytesSchema = Schema.transformOrFail(
 );
 
 export const HexSchema = Schema.transformOrFail(
-  Bytes57.HexSchema,
+  Schema.typeSchema(Bytes57.HexSchema),
   BaseAddress,
   {
     strict: true,
@@ -151,3 +144,47 @@ export const generator = FastCheck.tuple(
       stakeCredential,
     }),
 );
+
+/**
+ * Synchronous encoding utilities.
+ *
+ * @since 2.0.0
+ * @category encoding/decoding
+ */
+export const Encode = {
+  hex: Schema.encodeSync(HexSchema),
+  bytes: Schema.encodeSync(BytesSchema),
+};
+
+/**
+ * Synchronous decoding utilities.
+ *
+ * @since 2.0.0
+ * @category encoding/decoding
+ */
+export const Decode = {
+  hex: Schema.decodeUnknownSync(HexSchema),
+  bytes: Schema.decodeUnknownSync(BytesSchema),
+};
+
+/**
+ * Either encoding utilities.
+ *
+ * @since 2.0.0
+ * @category encoding/decoding
+ */
+export const EncodeEither = {
+  hex: Schema.encodeEither(HexSchema),
+  bytes: Schema.encodeEither(BytesSchema),
+};
+
+/**
+ * Either decoding utilities.
+ *
+ * @since 2.0.0
+ * @category encoding/decoding
+ */
+export const DecodeEither = {
+  hex: Schema.decodeUnknownEither(HexSchema),
+  bytes: Schema.decodeUnknownEither(BytesSchema),
+};

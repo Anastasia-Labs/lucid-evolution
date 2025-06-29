@@ -54,15 +54,20 @@ export const HexStringFilter = Schema.String.pipe(
   }),
 );
 
-export const HexSchema = HexStringFilter.pipe(
+export const HexSchema = Schema.String.pipe(
+  Schema.filter((a) => isHex(a)),
   Schema.brand("Hex"),
-  Schema.typeSchema,
+  Schema.annotations({
+    message: (issue) =>
+      `${issue.actual} must be a valid hex string (0-9, A-F, a-f)`,
+    identifier: "HexString",
+  }),
 );
 
 export type Hex = typeof HexSchema.Type;
 
 export const BytesSchema = Schema.transform(
-  HexSchema,
+  Schema.typeSchema(HexSchema),
   Schema.Uint8ArrayFromSelf,
   {
     strict: true,

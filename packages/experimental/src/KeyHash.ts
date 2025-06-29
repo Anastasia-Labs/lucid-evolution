@@ -48,11 +48,15 @@ export const BytesSchema = Schema.transform(Hash28.BytesSchema, KeyHash, {
   decode: (_, fromA) => new KeyHash({ hash: Bytes.Encode.hex(fromA) }),
 });
 
-export const HexSchema = Schema.transform(Hash28.HexSchema, KeyHash, {
-  strict: true,
-  encode: (_, toA) => toA.hash,
-  decode: (fromI) => new KeyHash({ hash: fromI }),
-});
+export const HexSchema = Schema.transform(
+  Schema.typeSchema(Hash28.HexSchema),
+  KeyHash,
+  {
+    strict: true,
+    encode: (_, toA) => toA.hash,
+    decode: (fromI) => new KeyHash({ hash: fromI }),
+  },
+);
 
 /**
  * Check if two KeyHash instances are equal.

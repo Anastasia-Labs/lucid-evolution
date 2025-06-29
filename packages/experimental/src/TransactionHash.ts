@@ -1,4 +1,4 @@
-import { Schema, Data, Inspectable, FastCheck } from "effect";
+import { Schema, Data, FastCheck } from "effect";
 import * as Bytes from "./Bytes.js";
 import * as Hash32 from "./Hash32.js";
 
@@ -38,7 +38,7 @@ export class TransactionHash extends Schema.TaggedClass<TransactionHash>()(
     hash: Hash32.HexSchema,
   },
 ) {
-  [Inspectable.NodeInspectSymbol]() {
+  [Symbol.for("nodejs.util.inspect.custom")]() {
     return {
       _tag: "TransactionHash",
       hash: this.hash,
@@ -68,11 +68,15 @@ export const BytesSchema = Schema.transform(
  * @since 2.0.0
  * @category encoding/decoding
  */
-export const HexSchema = Schema.transform(Hash32.HexSchema, TransactionHash, {
-  strict: true,
-  encode: (_, hash) => hash.hash,
-  decode: (hash) => new TransactionHash({ hash }),
-});
+export const HexSchema = Schema.transform(
+  Schema.typeSchema(Hash32.HexSchema),
+  TransactionHash,
+  {
+    strict: true,
+    encode: (_, hash) => hash.hash,
+    decode: (hash) => new TransactionHash({ hash }),
+  },
+);
 
 /**
  * Check if two TransactionHash instances are equal.

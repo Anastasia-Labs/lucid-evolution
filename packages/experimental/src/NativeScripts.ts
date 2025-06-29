@@ -57,7 +57,7 @@ export type NativeScriptEncoded =
 
 export interface ScriptPubKeyEncoded {
   readonly _tag: "ScriptPubKey";
-  readonly keyHash: KeyHash.KeyHash;
+  readonly keyHash: typeof KeyHash.KeyHash.Encoded;
 }
 export interface ScriptAllEncoded {
   readonly _tag: "ScriptAll";
@@ -88,7 +88,6 @@ export class ScriptPubKey extends Schema.TaggedClass<ScriptPubKey>(
 )("ScriptPubKey", {
   keyHash: KeyHash.KeyHash,
 }) {
-  // Inspectable
   [Symbol.for("nodejs.util.inspect.custom")]() {
     return {
       _tag: this._tag,
@@ -107,7 +106,6 @@ export class ScriptAll extends Schema.TaggedClass<ScriptAll>("ScriptAll")(
     ),
   },
 ) {
-  // Inspectable
   [Symbol.for("nodejs.util.inspect.custom")]() {
     return {
       _tag: this._tag,
@@ -126,7 +124,6 @@ export class ScriptAny extends Schema.TaggedClass<ScriptAny>("ScriptAny")(
     ),
   },
 ) {
-  // Inspectable
   [Symbol.for("nodejs.util.inspect.custom")]() {
     return {
       _tag: this._tag,
@@ -146,7 +143,6 @@ export class ScriptNOfK extends Schema.TaggedClass<ScriptNOfK>("ScriptNOfK")(
     ),
   },
 ) {
-  // Inspectable
   [Symbol.for("nodejs.util.inspect.custom")]() {
     return {
       _tag: this._tag,
@@ -161,7 +157,6 @@ export class InvalidBefore extends Schema.TaggedClass<InvalidBefore>(
 )("InvalidBefore", {
   slot: SlotNumber,
 }) {
-  // Inspectable
   [Symbol.for("nodejs.util.inspect.custom")]() {
     return {
       _tag: this._tag,
@@ -175,7 +170,6 @@ export class InvalidHereafter extends Schema.TaggedClass<InvalidHereafter>(
 )("InvalidHereafter", {
   slot: SlotNumber,
 }) {
-  // Inspectable
   [Symbol.for("nodejs.util.inspect.custom")]() {
     return {
       _tag: this._tag,
@@ -346,7 +340,7 @@ export const CBORBytesSchema = Schema.transformOrFail(
 );
 
 export const CBORHexSchema = Schema.transformOrFail(
-  Hex.HexSchema,
+  Schema.typeSchema(Hex.HexSchema),
   NativeScript,
   {
     strict: true,

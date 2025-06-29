@@ -1,4 +1,4 @@
-import { FastCheck, Inspectable, Schema } from "effect";
+import { FastCheck, Schema } from "effect";
 
 /**
  * Natural number constructors
