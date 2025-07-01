@@ -31,21 +31,13 @@ export class KeyHashError extends Data.TaggedError("KeyHashError")<{
  * @since 2.0.0
  * @category schemas
  */
-export class KeyHash extends Schema.TaggedClass<KeyHash>()("KeyHash", {
-  hash: Hash28.HexSchema,
-}) {
-  [Symbol.for("nodejs.util.inspect.custom")]() {
-    return {
-      _tag: this._tag,
-      hash: this.hash,
-    };
-  }
-}
+export const KeyHash = Hash28.HexSchema.pipe(Schema.brand("KeyHash"));
+export type KeyHash = typeof KeyHash.Type;
 
-export const BytesSchema = Schema.transform(Hash28.BytesSchema, KeyHash, {
+export const BytesSchema = Schema.transform(Hash28.BytesSchema, Schema.typeSchema(KeyHash), {
   strict: true,
-  encode: (_, toA) => Bytes.Decode.hex(toA.hash),
-  decode: (_, fromA) => new KeyHash({ hash: Bytes.Encode.hex(fromA) }),
+  encode: (_, toA) => Bytes.Decode.hex(toA),
+  decode: (_, fromA) => KeyHash.make(Bytes.Encode.hex(fromA)),
 });
 
 export const HexSchema = Schema.transform(
@@ -53,9 +45,9 @@ export const HexSchema = Schema.transform(
   KeyHash,
   {
     strict: true,
-    encode: (_, toA) => toA.hash,
-    decode: (fromI) => new KeyHash({ hash: fromI }),
-  },
+    encode: (_, toA) => toA,
+    decode: (fromI) => KeyHash.make(fromI),
+  }
 );
 
 /**
@@ -68,7 +60,7 @@ export const HexSchema = Schema.transform(
  * @since 2.0.0
  * @category equality
  */
-export const equals = (a: KeyHash, b: KeyHash): boolean => a.hash === b.hash;
+export const equals = (a: KeyHash, b: KeyHash): boolean => a === b;
 
 /**
  * Generate a random KeyHash.
@@ -89,7 +81,7 @@ export const equals = (a: KeyHash, b: KeyHash): boolean => a.hash === b.hash;
 export const generator = FastCheck.uint8Array({
   minLength: Hash28.HASH28_BYTES_LENGTH,
   maxLength: Hash28.HASH28_BYTES_LENGTH,
-}).map((bytes) => new KeyHash({ hash: Bytes.Encode.hex(bytes) }));
+}).map((bytes) => KeyHash.make(Bytes.Encode.hex(bytes)));
 
 /**
  * Synchronous encoding utilities.

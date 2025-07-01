@@ -23,7 +23,16 @@ export class CredentialError extends Data.TaggedError("CredentialError")<{
  * @since 2.0.0
  * @category schemas
  */
-export const Credential = Schema.Union(KeyHash.KeyHash, ScriptHash.ScriptHash);
+// export const Credential = Schema.Union(
+//   KeyHash.KeyHash, ScriptHash.ScriptHash);
+export const Credential = Schema.Union(
+  Schema.TaggedStruct("KeyHash", {
+    hash: KeyHash.KeyHash,
+  }),
+  Schema.TaggedStruct("ScriptHash", {
+    hash: ScriptHash.ScriptHash,
+  })
+);
 
 /**
  * Type representing a credential that can be either a key hash or script hash
@@ -46,18 +55,18 @@ export const CBORBytesSchema = Schema.transformOrFail(
   Schema.Uint8ArrayFromSelf.annotations({
     identifier: "CBORBytes",
   }),
-  Credential,
+  Schema.typeSchema(Credential),
   {
     strict: true,
     encode: (_, __, ___, toA) => {
       switch (toA._tag) {
         case "KeyHash":
           return ParseResult.succeed(
-            CBOR.Encode().bytes([0, Bytes.Decode.hex(toA.hash)]),
+            CBOR.Encode().bytes([0, Bytes.Decode.hex(toA)])
           );
         case "ScriptHash":
           return ParseResult.succeed(
-            CBOR.Encode().bytes([1, Bytes.Decode.hex(toA.hash)]),
+            CBOR.Encode().bytes([1, Bytes.Decode.hex(toA.hash)])
           );
       }
     },
@@ -65,21 +74,27 @@ export const CBORBytesSchema = Schema.transformOrFail(
       pipe(
         ParseResult.decode(
           CBOR.makeCBORBytesSchema(
-            Schema.Tuple(Schema.Literal(0, 1), Schema.Uint8ArrayFromSelf),
-          ),
+            Schema.Tuple(Schema.Literal(0, 1), Schema.Uint8ArrayFromSelf)
+          )
         )(fromA),
         Effect.flatMap(([tag, bytes]) =>
           Effect.gen(function* () {
             switch (tag) {
               case 0:
-                return yield* ParseResult.decode(KeyHash.BytesSchema)(bytes);
+                return yield* ParseResult.succeed({
+                  _tag: "KeyHash" as const,
+                  hash: KeyHash.Decode.bytes(bytes),
+                });
               case 1:
-                return yield* ParseResult.decode(ScriptHash.BytesSchema)(bytes);
+                return yield* ParseResult.succeed({
+                  _tag: "ScriptHash" as const,
+                  hash: ScriptHash.Decode.bytes(bytes),
+                });
             }
-          }),
-        ),
+          })
+        )
       ),
-  },
+  }
 );
 
 export const CBORHexSchema = Schema.transformOrFail(
@@ -90,11 +105,11 @@ export const CBORHexSchema = Schema.transformOrFail(
     encode: (_, __, ___, toA) =>
       pipe(
         ParseResult.encode(CBORBytesSchema)(toA),
-        Effect.map(Bytes.Encode.hex),
+        Effect.map(Bytes.Encode.hex)
       ),
     decode: (fromA) =>
       pipe(Bytes.Decode.hex(fromA), ParseResult.decode(CBORBytesSchema)),
-  },
+  }
 );
 
 /**
@@ -126,9 +141,16 @@ export const equals = (a: Credential, b: Credential): boolean => {
  * @category generators
  */
 export const generator = FastCheck.oneof(
-  KeyHash.generator,
-  ScriptHash.generator,
+  FastCheck.record({
+    _tag: FastCheck.constant("KeyHash" as const),
+    hash: KeyHash.generator
+  }),
+  FastCheck.record({
+    _tag: FastCheck.constant("ScriptHash" as const),
+    hash: ScriptHash.generator
+  })
 );
+  
 
 /**
  * Synchronous encoding utilities for enterprise address.

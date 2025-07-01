@@ -18,7 +18,7 @@ export interface EnterpriseAddress {
  * @category schemas
  */
 export class EnterpriseAddress extends Schema.TaggedClass<EnterpriseAddress>(
-  "EnterpriseAddress",
+  "EnterpriseAddress"
 )("EnterpriseAddress", {
   networkId: NetworkId.NetworkId,
   paymentCredential: Credential.Credential,
@@ -49,7 +49,7 @@ export const BytesSchema = Schema.transformOrFail(
       result[0] = header;
 
       const paymentCredentialBytes = Bytes.Decode.hex(
-        toA.paymentCredential.hash,
+        toA.paymentCredential.hash
       );
       result.set(paymentCredentialBytes, 1);
 
@@ -66,17 +66,25 @@ export const BytesSchema = Schema.transformOrFail(
         // Script payment
         const isPaymentKey = (addressType & 0b0001) === 0;
         const paymentCredential: Credential.Credential = isPaymentKey
-          ? yield* ParseResult.decode(KeyHash.BytesSchema)(fromA.slice(1, 29))
-          : yield* ParseResult.decode(ScriptHash.BytesSchema)(
-              fromA.slice(1, 29),
-            );
+          ? {
+              _tag: "KeyHash",
+              hash: yield* ParseResult.decode(KeyHash.BytesSchema)(
+                fromA.slice(1, 29)
+              ),
+            }
+          : {
+              _tag: "ScriptHash",
+              hash: yield* ParseResult.decode(ScriptHash.BytesSchema)(
+                fromA.slice(1, 29)
+              ),
+            };
         return yield* ParseResult.decode(EnterpriseAddress)({
           _tag: "EnterpriseAddress",
           networkId,
           paymentCredential,
         });
       }),
-  },
+  }
 );
 
 export const HexSchema = Schema.transformOrFail(
@@ -88,7 +96,7 @@ export const HexSchema = Schema.transformOrFail(
       pipe(ParseResult.encode(BytesSchema)(toA), Effect.map(Bytes.Encode.hex)),
     decode: (fromI) =>
       pipe(Bytes.Decode.hex(fromI), ParseResult.decode(BytesSchema)),
-  },
+  }
 );
 
 /**
@@ -124,13 +132,13 @@ export const equals = (a: EnterpriseAddress, b: EnterpriseAddress): boolean => {
  */
 export const generator = FastCheck.tuple(
   NetworkId.generator,
-  Credential.generator,
+  Credential.generator
 ).map(
   ([networkId, paymentCredential]) =>
     new EnterpriseAddress({
       networkId,
       paymentCredential,
-    }),
+    })
 );
 
 /**

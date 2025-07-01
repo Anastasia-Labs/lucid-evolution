@@ -14,7 +14,7 @@ import * as Bytes from "./Bytes.js";
  * @category model
  */
 export class PointerAddressError extends Data.TaggedError(
-  "PointerAddressError",
+  "PointerAddressError"
 )<{
   message: string;
   cause?: unknown;
@@ -32,7 +32,7 @@ export interface PointerAddress {
  * @category schemas
  */
 export class PointerAddress extends Schema.TaggedClass<PointerAddress>(
-  "PointerAddress",
+  "PointerAddress"
 )("PointerAddress", {
   networkId: NetworkId.NetworkId,
   paymentCredential: Credential.Credential,
@@ -66,7 +66,7 @@ export const BytesSchema = Schema.transformOrFail(
         const slotBytes = yield* encodeVariableLength(toA.pointer.slot);
         const txIndexBytes = yield* encodeVariableLength(toA.pointer.txIndex);
         const certIndexBytes = yield* encodeVariableLength(
-          toA.pointer.certIndex,
+          toA.pointer.certIndex
         );
 
         // Calculate total buffer size: 1 byte header + 28 bytes credential + variable parts
@@ -85,7 +85,7 @@ export const BytesSchema = Schema.transformOrFail(
 
         // Set the payment credential bytes
         const paymentCredentialBytes = Bytes.Decode.hex(
-          toA.paymentCredential.hash,
+          toA.paymentCredential.hash
         );
         result.set(paymentCredentialBytes, 1);
 
@@ -111,10 +111,19 @@ export const BytesSchema = Schema.transformOrFail(
         // Check if the address is a pointer address
         const isPaymentKey = (addressType & 0b0001) === 0;
         const paymentCredential: Credential.Credential = isPaymentKey
-          ? yield* ParseResult.decode(KeyHash.BytesSchema)(fromA.slice(1, 29))
-          : yield* ParseResult.decode(ScriptHash.BytesSchema)(
-              fromA.slice(1, 29),
-            );
+          ? {
+              _tag: "KeyHash",
+              hash: yield* ParseResult.decode(KeyHash.BytesSchema)(
+                fromA.slice(1, 29)
+              ),
+            }
+          : {
+              _tag: "ScriptHash",
+
+              hash: yield* ParseResult.decode(ScriptHash.BytesSchema)(
+                fromA.slice(1, 29)
+              ),
+            };
 
         // After the credential, we have 3 variable-length integers
         let offset = 29;
@@ -122,13 +131,13 @@ export const BytesSchema = Schema.transformOrFail(
         // Decode the slot, txIndex, and certIndex as variable length integers
         const [slot, slotBytesRead] = yield* decodeVariableLength(
           fromA,
-          offset,
+          offset
         );
         offset += slotBytesRead;
 
         const [txIndex, txIndexBytesRead] = yield* decodeVariableLength(
           fromA,
-          offset,
+          offset
         );
         offset += txIndexBytesRead;
 
@@ -142,10 +151,10 @@ export const BytesSchema = Schema.transformOrFail(
         });
       }).pipe(
         Effect.catchTag("PointerAddressError", (e) =>
-          Effect.fail(new ParseResult.Type(ast, fromA, e.message)),
-        ),
+          Effect.fail(new ParseResult.Type(ast, fromA, e.message))
+        )
       ),
-  },
+  }
 );
 
 export const HexSchema = Schema.transformOrFail(
@@ -157,7 +166,7 @@ export const HexSchema = Schema.transformOrFail(
       pipe(ParseResult.encode(BytesSchema)(toA), Effect.map(Bytes.Encode.hex)),
     decode: (fromI) =>
       pipe(Bytes.Decode.hex(fromI), ParseResult.decode(BytesSchema)),
-  },
+  }
 );
 
 /**
@@ -183,7 +192,7 @@ export const encodeVariableLength = (natural: Natural.Natural) =>
       result.push((remaining & 0x7f) | 0x80);
       // Shift right by 7 bits (divide by 128) to process the next chunk
       remaining = yield* ParseResult.decode(Natural.Natural)(
-        Math.floor(remaining / 128),
+        Math.floor(remaining / 128)
       );
     }
     // Push the final byte (the most significant bits)
@@ -216,7 +225,7 @@ export const encodeVariableLength = (natural: Natural.Natural) =>
  */
 export const decodeVariableLength: (
   bytes: Uint8Array,
-  offset?: number | undefined,
+  offset?: number | undefined
 ) => Effect.Effect<
   [Natural.Natural, number],
   PointerAddressError | ParseResult.ParseIssue
@@ -310,14 +319,14 @@ export const generator = FastCheck.tuple(
   Credential.generator,
   Natural.generator,
   Natural.generator,
-  Natural.generator,
+  Natural.generator
 ).map(
   ([networkId, paymentCredential, slot, txIndex, certIndex]) =>
     new PointerAddress({
       networkId,
       paymentCredential,
       pointer: Pointer.make(slot, txIndex, certIndex),
-    }),
+    })
 );
 
 /**

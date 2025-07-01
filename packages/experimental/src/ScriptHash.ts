@@ -1,4 +1,4 @@
-import { Schema, Data, FastCheck, Inspectable } from "effect";
+import { Schema, Data, FastCheck } from "effect";
 import * as Bytes from "./Bytes.js";
 import * as Hash28 from "./Hash28.js";
 
@@ -24,33 +24,36 @@ export class ScriptHashError extends Data.TaggedError("ScriptHashError")<{
     | "InvalidCBORFormat";
 }> {}
 
-declare const NominalType: unique symbol;
-export interface ScriptHash {
-  readonly [NominalType]: unique symbol;
-}
+// declare const NominalType: unique symbol;
+// export interface ScriptHash {
+//   readonly [NominalType]: unique symbol;
+// }
 
-/**
- * Schema for ScriptHash representing a script hash credential.
- * Follows CIP-0019 binary representation.
- *
- * @since 2.0.0
- * @category schemas
- */
-export class ScriptHash extends Schema.TaggedClass<ScriptHash>()("ScriptHash", {
-  hash: Hash28.HexSchema,
-}) {
-  [Symbol.for("nodejs.util.inspect.custom")]() {
-    return {
-      _tag: "ScriptHash",
-      hash: this.hash,
-    };
-  }
-}
+// /**
+//  * Schema for ScriptHash representing a script hash credential.
+//  * Follows CIP-0019 binary representation.
+//  *
+//  * @since 2.0.0
+//  * @category schemas
+//  */
+// export class ScriptHash extends Schema.TaggedClass<ScriptHash>()("ScriptHash", {
+//   hash: Hash28.HexSchema,
+// }) {
+//   [Symbol.for("nodejs.util.inspect.custom")]() {
+//     return {
+//       _tag: "ScriptHash",
+//       hash: this.hash,
+//     };
+//   }
+// }
+
+export const ScriptHash = Hash28.HexSchema.pipe(Schema.brand("ScriptHash"));
+export type ScriptHash = typeof ScriptHash.Type;
 
 export const BytesSchema = Schema.transform(Hash28.BytesSchema, ScriptHash, {
   strict: true,
-  encode: (_, toA) => Bytes.Decode.hex(toA.hash),
-  decode: (_, fromA) => new ScriptHash({ hash: Bytes.Encode.hex(fromA) }),
+  encode: (_, toA) => Bytes.Decode.hex(toA),
+  decode: (_, fromA) => ScriptHash.make(Bytes.Encode.hex(fromA)),
 });
 
 export const HexSchema = Schema.transform(
@@ -58,9 +61,9 @@ export const HexSchema = Schema.transform(
   ScriptHash,
   {
     strict: true,
-    encode: (_, toA) => toA.hash,
-    decode: (fromI) => new ScriptHash({ hash: fromI }),
-  },
+    encode: (_, toA) => toA,
+    decode: (fromI) => ScriptHash.make(fromI),
+  }
 );
 
 /**
@@ -69,8 +72,7 @@ export const HexSchema = Schema.transform(
  * @since 2.0.0
  * @category equality
  */
-export const equals = (a: ScriptHash, b: ScriptHash): boolean =>
-  a.hash === b.hash;
+export const equals = (a: ScriptHash, b: ScriptHash): boolean => a === b;
 
 /**
  * Generate a random ScriptHash.
@@ -91,7 +93,7 @@ export const equals = (a: ScriptHash, b: ScriptHash): boolean =>
 export const generator = FastCheck.uint8Array({
   minLength: Hash28.HASH28_BYTES_LENGTH,
   maxLength: Hash28.HASH28_BYTES_LENGTH,
-}).map((bytes) => new ScriptHash({ hash: Bytes.Encode.hex(bytes) }));
+}).map((bytes) => ScriptHash.make(Bytes.Encode.hex(bytes)));
 
 /**
  * Synchronous encoding utilities.
