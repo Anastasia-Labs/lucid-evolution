@@ -27,3 +27,10 @@ export * as Hex from "./Bytes.js";
 export * as NetworkId from "./NetworkId.js";
 export * as Devnet from "./Devnet/Devnet.js";
 export * as DevnetDefault from "./Devnet/DevnetDefault.js";
+// New modules based on CDDL specification
+export * as AssetName from "./AssetName.js";
+export * as PolicyId from "./PolicyId.js";
+export * as Coin from "./Coin.js";
+export * as PositiveCoin from "./PositiveCoin.js";
+export * as MultiAsset from "./MultiAsset.js";
+export * as Value from "./Value.js";

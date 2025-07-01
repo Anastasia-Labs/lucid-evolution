@@ -1,0 +1,69 @@
+/**
+ * Committee Hot Credential module - provides an alias for Credential specialized for committee hot key usage.
+ *
+ * In Cardano, committee_hot_credential = credential, representing the same credential structure
+ * but used specifically for committee hot keys in governance.
+ *
+ * @since 2.0.0
+ */
+
+import * as Credential from "./Credential.js";
+
+/**
+ * Error class for CommitteeHotCredential operations - re-exports CredentialError.
+ *
+ * @example
+ * import { CommitteeHotCredential } from "@lucid-evolution/experimental";
+ * import assert from "assert";
+ *
+ * const error = new CommitteeHotCredential.CommitteeHotCredentialError({ message: "Invalid committee hot credential" });
+ *
+ * @since 2.0.0
+ * @category errors
+ */
+export const CommitteeHotCredentialError = Credential.CredentialError;
+
+/**
+ * CommitteeHotCredential schema - alias for the Credential schema.
+ * committee_hot_credential = credential
+ *
+ * @since 2.0.0
+ * @category schemas
+ */
+export const CommitteeHotCredential = Credential.Credential;
+
+/**
+ * Type representing a committee hot credential - alias for Credential type.
+ *
+ * @example
+ * import { CommitteeHotCredential, KeyHash } from "@lucid-evolution/experimental";
+ *
+ * const keyHash = new KeyHash.KeyHash({ hash: "1234567890123456789012345678901234567890123456789012345678901234" });
+ * const committeeHotCredential: CommitteeHotCredential = keyHash;
+ *
+ * @since 2.0.0
+ * @category model
+ */
+export type CommitteeHotCredential = Credential.Credential;
+
+/**
+ * Re-exported utilities from Credential module.
+ *
+ * @since 2.0.0
+ */
+export const isCredential = Credential.isCredential;
+export const equals = Credential.equals;
+export const generator = Credential.generator;
+export const Encode = Credential.Encode;
+export const Decode = Credential.Decode;
+export const EncodeEither = Credential.EncodeEither;
+export const DecodeEither = Credential.DecodeEither;
+
+/**
+ * CBOR encoding/decoding schemas.
+ *
+ * @since 2.0.0
+ * @category schemas
+ */
+export const CBORBytesSchema = Credential.CBORBytesSchema;
+export const CBORHexSchema = Credential.CBORHexSchema;

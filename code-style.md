@@ -379,7 +379,7 @@ const calculate = (value: Array<number>, options: ModeOptions = {}) => {
 Use the Effect Schema library consistently for defining types:
 
 1. Create constants for validation constraints
-2. Define schemas using these constants  
+2. Define schemas using these constants
 3. Define classes using Schema.TaggedClass
 
 See the detailed examples in the Class-based Constructors section below.

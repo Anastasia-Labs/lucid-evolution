@@ -60,7 +60,7 @@ export const HexSchema = Schema.String.pipe(
   Schema.annotations({
     message: (issue) =>
       `${issue.actual} must be a valid hex string (0-9, A-F, a-f)`,
-    identifier: "HexString",
+    identifier: "Hex",
   }),
 );
 

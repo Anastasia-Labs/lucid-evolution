@@ -185,7 +185,14 @@ export const makeCBORBytesSchema = <A, B>(
         }),
       decode: (fromA, _, ast) =>
         ParseResult.try({
-          try: () => CBORX.decode(fromA),
+          try: () => {
+            // Use Map objects for CBOR maps to handle Uint8Array keys
+            const decoder = new CBORX.Decoder({
+              mapsAsObjects: false, // Keep as Map objects to handle binary keys
+              useRecords: false,
+            });
+            return decoder.decode(fromA);
+          },
           catch: () =>
             new ParseResult.Type(
               ast,
@@ -228,12 +235,20 @@ export const makeCBORHexSchema = <A, B>(
         ParseResult.decode(Bytes.BytesSchema)(fromA),
         Effect.flatMap((bytes) =>
           ParseResult.try({
-            try: () => CBORX.decode(bytes),
-            catch: () =>
+            try: () => {
+              // Use Map objects for CBOR maps to handle Uint8Array keys
+              const decoder = new CBORX.Decoder({
+                mapsAsObjects: false, // Keep as Map objects to handle binary keys
+                useRecords: false,
+              });
+              return decoder.decode(bytes);
+            },
+            catch: (cause) =>
               new ParseResult.Type(
                 ast,
                 fromA,
-                `${Bytes.Encode.hex(bytes)} must be a valid CBOR hex string.`,
+                // `${Bytes.Encode.hex(bytes)} must be a valid CBOR hex string.`
+                `${String(cause)}`,
               ),
           }),
         ),

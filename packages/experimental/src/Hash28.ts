@@ -20,5 +20,4 @@ export const HexSchema = pipe(
 ).annotations({
   message: (issue) =>
     `${issue.actual} must be a hex string of length ${HASH28_HEX_LENGTH}, but got ${(issue.actual as string).length}`,
-  identifier: "Hash28Hex",
 });
