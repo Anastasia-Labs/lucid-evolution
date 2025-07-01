@@ -16,7 +16,7 @@ import * as Hash32 from "./Hash32.js";
  * @category errors
  */
 export class TransactionHashError extends Data.TaggedError(
-  "TransactionHashError",
+  "TransactionHashError"
 )<{
   message?: string;
   reason?:
@@ -32,19 +32,23 @@ export class TransactionHashError extends Data.TaggedError(
  * @since 2.0.0
  * @category schemas
  */
-export class TransactionHash extends Schema.TaggedClass<TransactionHash>()(
-  "TransactionHash",
-  {
-    hash: Hash32.HexSchema,
-  },
-) {
-  [Symbol.for("nodejs.util.inspect.custom")]() {
-    return {
-      _tag: "TransactionHash",
-      hash: this.hash,
-    };
-  }
-}
+// export class TransactionHash extends Schema.TaggedClass<TransactionHash>()(
+//   "TransactionHash",
+//   {
+//     hash: Hash32.HexSchema,
+//   },
+// ) {
+//   [Symbol.for("nodejs.util.inspect.custom")]() {
+//     return {
+//       _tag: "TransactionHash",
+//       hash: this.hash,
+//     };
+//   }
+// }
+export const TransactionHash = Hash32.HexSchema.pipe(
+  Schema.brand("TransactionHash")
+);
+export type TransactionHash = typeof TransactionHash.Type;
 
 /**
  * Schema for transforming between Uint8Array and TransactionHash.
@@ -57,9 +61,9 @@ export const BytesSchema = Schema.transform(
   TransactionHash,
   {
     strict: true,
-    encode: (_, hash) => Bytes.Decode.hex(hash.hash),
-    decode: (bytes) => new TransactionHash({ hash: Bytes.Encode.hex(bytes) }),
-  },
+    encode: (_, hash) => Bytes.Decode.hex(hash),
+    decode: (bytes) => TransactionHash.make(Bytes.Encode.hex(bytes)),
+  }
 );
 
 /**
@@ -73,9 +77,9 @@ export const HexSchema = Schema.transform(
   TransactionHash,
   {
     strict: true,
-    encode: (_, hash) => hash.hash,
-    decode: (hash) => new TransactionHash({ hash }),
-  },
+    encode: (_, hash) => hash,
+    decode: (hash) => TransactionHash.make(hash),
+  }
 );
 
 /**
@@ -85,7 +89,7 @@ export const HexSchema = Schema.transform(
  * @category equality
  */
 export const equals = (a: TransactionHash, b: TransactionHash): boolean =>
-  a.hash === b.hash;
+  a === b;
 
 /**
  * Generate a random TransactionHash.
@@ -106,7 +110,7 @@ export const equals = (a: TransactionHash, b: TransactionHash): boolean =>
 export const generator = FastCheck.uint8Array({
   minLength: Hash32.HASH32_BYTES_LENGTH,
   maxLength: Hash32.HASH32_BYTES_LENGTH,
-}).map((bytes) => new TransactionHash({ hash: Bytes.Encode.hex(bytes) }));
+}).map((bytes) => TransactionHash.make(Bytes.Encode.hex(bytes)));
 
 /**
  * Synchronous encoding utilities.
