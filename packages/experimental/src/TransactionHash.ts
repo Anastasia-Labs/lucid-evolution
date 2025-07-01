@@ -32,19 +32,6 @@ export class TransactionHashError extends Data.TaggedError(
  * @since 2.0.0
  * @category schemas
  */
-// export class TransactionHash extends Schema.TaggedClass<TransactionHash>()(
-//   "TransactionHash",
-//   {
-//     hash: Hash32.HexSchema,
-//   },
-// ) {
-//   [Symbol.for("nodejs.util.inspect.custom")]() {
-//     return {
-//       _tag: "TransactionHash",
-//       hash: this.hash,
-//     };
-//   }
-// }
 export const TransactionHash = Hash32.HexSchema.pipe(
   Schema.brand("TransactionHash")
 );

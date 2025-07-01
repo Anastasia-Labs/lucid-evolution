@@ -34,3 +34,7 @@ export * as Coin from "./Coin.js";
 export * as PositiveCoin from "./PositiveCoin.js";
 export * as MultiAsset from "./MultiAsset.js";
 export * as Value from "./Value.js";
+export * as UnitInterval from "./UnitInterval.js";
+export * as VrfKeyHash from "./VrfKeyHash.js";
+export * as PoolKeyHash from "./PoolKeyHash.js";
+export * as PoolParams from "./PoolParams.js";
