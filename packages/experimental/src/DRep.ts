@@ -123,11 +123,11 @@ export const CBORBytesSchema = Schema.transformOrFail(
       switch (toA._tag) {
         case "KeyHashDRep":
           return ParseResult.succeed(
-            CBOR.Encode().bytes([0, Bytes.Decode.hex(toA.keyHash.hash)]),
+            CBOR.Encode().bytes([0, Bytes.Decode.hex(toA.keyHash)]),
           );
         case "ScriptHashDRep":
           return ParseResult.succeed(
-            CBOR.Encode().bytes([1, Bytes.Decode.hex(toA.scriptHash.hash)]),
+            CBOR.Encode().bytes([1, Bytes.Decode.hex(toA.scriptHash)]),
           );
         case "AlwaysAbstainDRep":
           return ParseResult.succeed(CBOR.Encode().bytes([2]));
@@ -207,11 +207,11 @@ export const CBORHexSchema = Schema.transformOrFail(
       switch (toA._tag) {
         case "KeyHashDRep":
           return ParseResult.succeed(
-            CBOR.Encode().hex([0, Bytes.Decode.hex(toA.keyHash.hash)]),
+            CBOR.Encode().hex([0, Bytes.Decode.hex(toA.keyHash)]),
           );
         case "ScriptHashDRep":
           return ParseResult.succeed(
-            CBOR.Encode().hex([1, Bytes.Decode.hex(toA.scriptHash.hash)]),
+            CBOR.Encode().hex([1, Bytes.Decode.hex(toA.scriptHash)]),
           );
         case "AlwaysAbstainDRep":
           return ParseResult.succeed(CBOR.Encode().hex([2]));

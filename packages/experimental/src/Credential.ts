@@ -23,8 +23,7 @@ export class CredentialError extends Data.TaggedError("CredentialError")<{
  * @since 2.0.0
  * @category schemas
  */
-// export const Credential = Schema.Union(
-//   KeyHash.KeyHash, ScriptHash.ScriptHash);
+//TODO: make it Schema.TaggedClass
 export const Credential = Schema.Union(
   Schema.TaggedStruct("KeyHash", {
     hash: KeyHash.KeyHash,
