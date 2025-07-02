@@ -16,7 +16,7 @@ import * as Numeric from "./Numeric.js";
  * @category schemas
  */
 export class TransactionInput extends Schema.TaggedClass<TransactionInput>(
-  "TransactionInput"
+  "TransactionInput",
 )("TransactionInput", {
   transactionId: TransactionHash.TransactionHash,
   index: Numeric.Uint16Schema,
@@ -37,7 +37,7 @@ export class TransactionInput extends Schema.TaggedClass<TransactionInput>(
  * @category errors
  */
 export class TransactionInputError extends Data.TaggedError(
-  "TransactionInputError"
+  "TransactionInputError",
 )<{
   message: string;
   cause?: unknown;
@@ -67,14 +67,14 @@ export const CBORBytesSchema = Schema.transformOrFail(
     encode: (_, __, ___, toA) =>
       pipe(
         ParseResult.encode(TransactionHash.BytesSchema)(toA.transactionId),
-        Effect.map((hash) => CBOR.Encode().bytes([toA.index, hash]))
+        Effect.map((hash) => CBOR.Encode().bytes([toA.index, hash])),
       ),
     decode: (fromA) =>
       pipe(
         ParseResult.decode(
           CBOR.makeCBORBytesSchema(
-            Schema.Tuple(Numeric.Uint16Schema, Schema.Uint8ArrayFromSelf)
-          )
+            Schema.Tuple(Numeric.Uint16Schema, Schema.Uint8ArrayFromSelf),
+          ),
         )(fromA),
         Effect.flatMap(([index, txHashBytes]) =>
           pipe(
@@ -84,12 +84,12 @@ export const CBORBytesSchema = Schema.transformOrFail(
                 new TransactionInput({
                   transactionId,
                   index,
-                })
-            )
-          )
-        )
+                }),
+            ),
+          ),
+        ),
       ),
-  }
+  },
 );
 
 /**
@@ -108,11 +108,11 @@ export const CBORHexSchema = Schema.transformOrFail(
     encode: (_, __, ___, toA) =>
       pipe(
         ParseResult.encode(CBORBytesSchema)(toA),
-        Effect.map(Bytes.Encode.hex)
+        Effect.map(Bytes.Encode.hex),
       ),
     decode: (fromA) =>
       pipe(ParseResult.decode(CBORBytesSchema)(Bytes.Decode.hex(fromA))),
-  }
+  },
 );
 
 /**
@@ -128,13 +128,13 @@ export const equals = (a: TransactionInput, b: TransactionInput): boolean =>
 
 export const generator = FastCheck.tuple(
   TransactionHash.generator,
-  Numeric.Uint16Generator
+  Numeric.Uint16Generator,
 ).map(
   ([transactionId, index]) =>
     new TransactionInput({
       transactionId,
       index,
-    })
+    }),
 );
 
 /**

@@ -56,7 +56,7 @@ export const HexStringFilter = Schema.String.pipe(
 
 export const HexSchema = Schema.String.pipe(
   Schema.filter((a) => isHex(a)),
-  Schema.brand("Hex"),
+  // Schema.brand("Hex"),
   Schema.annotations({
     message: (issue) =>
       `${issue.actual} must be a valid hex string (0-9, A-F, a-f)`,

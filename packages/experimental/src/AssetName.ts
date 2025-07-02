@@ -1,6 +1,7 @@
 import { Schema, Data, FastCheck } from "effect";
 import * as Bytes from "./Bytes.js";
 import * as Hash32 from "./Hash32.js";
+import { Brand } from "effect/Brand";
 
 /**
  * Constants for AssetName validation.
@@ -108,15 +109,11 @@ export const BytesSchema = Schema.transform(Hash32.BytesSchema, AssetName, {
  * @since 2.0.0
  * @category encoding/decoding
  */
-export const HexSchema = Schema.transform(
-  Schema.typeSchema(Hash32.VariableHexSchema),
-  AssetName,
-  {
-    strict: true,
-    encode: (_, assetName) => assetName,
-    decode: (name) => Schema.decodeSync(AssetName)(name),
-  },
-);
+export const HexSchema = Schema.transform(Hash32.VariableHexSchema, AssetName, {
+  strict: true,
+  encode: (_, assetName) => assetName,
+  decode: (name) => Schema.decodeSync(AssetName)(name),
+});
 
 /**
  * Check if two AssetName instances are equal.
@@ -174,7 +171,7 @@ export const Encode = {
  * @category encoding/decoding
  */
 export const Decode = {
-  hex: Schema.decodeUnknownSync(HexSchema),
+  string: Schema.decodeSync(HexSchema),
   bytes: Schema.decodeUnknownSync(BytesSchema),
 };
 

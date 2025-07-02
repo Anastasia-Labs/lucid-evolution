@@ -34,11 +34,15 @@ export class KeyHashError extends Data.TaggedError("KeyHashError")<{
 export const KeyHash = Hash28.HexSchema.pipe(Schema.brand("KeyHash"));
 export type KeyHash = typeof KeyHash.Type;
 
-export const BytesSchema = Schema.transform(Hash28.BytesSchema, Schema.typeSchema(KeyHash), {
-  strict: true,
-  encode: (_, toA) => Bytes.Decode.hex(toA),
-  decode: (_, fromA) => KeyHash.make(Bytes.Encode.hex(fromA)),
-});
+export const BytesSchema = Schema.transform(
+  Hash28.BytesSchema,
+  Schema.typeSchema(KeyHash),
+  {
+    strict: true,
+    encode: (_, toA) => Bytes.Decode.hex(toA),
+    decode: (_, fromA) => KeyHash.make(Bytes.Encode.hex(fromA)),
+  },
+);
 
 export const HexSchema = Schema.transform(
   Schema.typeSchema(Hash28.HexSchema),
@@ -47,7 +51,7 @@ export const HexSchema = Schema.transform(
     strict: true,
     encode: (_, toA) => toA,
     decode: (fromI) => KeyHash.make(fromI),
-  }
+  },
 );
 
 /**

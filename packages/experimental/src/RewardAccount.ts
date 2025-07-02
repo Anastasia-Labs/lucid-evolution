@@ -18,7 +18,7 @@ export interface RewardAccount {
  * @category schemas
  */
 export class RewardAccount extends Schema.TaggedClass<RewardAccount>(
-  "RewardAccount"
+  "RewardAccount",
 )("RewardAccount", {
   networkId: NetworkId.NetworkId,
   stakeCredential: Credential.Credential,
@@ -60,13 +60,13 @@ export const BytesSchema = Schema.transformOrFail(
           ? {
               _tag: "KeyHash",
               hash: yield* ParseResult.decode(KeyHash.BytesSchema)(
-                fromA.slice(1, 29)
+                fromA.slice(1, 29),
               ),
             }
           : {
               _tag: "ScriptHash",
               hash: yield* ParseResult.decode(ScriptHash.BytesSchema)(
-                fromA.slice(1, 29)
+                fromA.slice(1, 29),
               ),
             };
         return yield* ParseResult.decode(RewardAccount)({
@@ -75,7 +75,7 @@ export const BytesSchema = Schema.transformOrFail(
           stakeCredential,
         });
       }),
-  }
+  },
 );
 
 export const HexSchema = Schema.transformOrFail(
@@ -87,7 +87,7 @@ export const HexSchema = Schema.transformOrFail(
       pipe(ParseResult.encode(BytesSchema)(toA), Effect.map(Bytes.Encode.hex)),
     decode: (fromI) =>
       pipe(Bytes.Decode.hex(fromI), ParseResult.decode(BytesSchema)),
-  }
+  },
 );
 
 /**
@@ -123,13 +123,13 @@ export const equals = (a: RewardAccount, b: RewardAccount): boolean => {
  */
 export const generator = FastCheck.tuple(
   NetworkId.generator,
-  Credential.generator
+  Credential.generator,
 ).map(
   ([networkId, stakeCredential]) =>
     new RewardAccount({
       networkId,
       stakeCredential,
-    })
+    }),
 );
 
 /**

@@ -69,7 +69,12 @@ export const PosInt64Schema = pipe(
  * @since 2.0.0
  * @category schemas
  */
-export const NonZeroInt64Schema = Schema.Union(NegInt64Schema, PosInt64Schema);
+export const NonZeroInt64Schema = Schema.Union(
+  NegInt64Schema,
+  PosInt64Schema,
+).annotations({
+  identifier: "NonZeroInt64",
+});
 
 /**
  * Type alias for NonZeroInt64 representing non-zero signed 64-bit integers.

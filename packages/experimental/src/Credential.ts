@@ -30,7 +30,7 @@ export const Credential = Schema.Union(
   }),
   Schema.TaggedStruct("ScriptHash", {
     hash: ScriptHash.ScriptHash,
-  })
+  }),
 );
 
 /**
@@ -61,11 +61,11 @@ export const CBORBytesSchema = Schema.transformOrFail(
       switch (toA._tag) {
         case "KeyHash":
           return ParseResult.succeed(
-            CBOR.Encode().bytes([0, Bytes.Decode.hex(toA)])
+            CBOR.Encode().bytes([0, Bytes.Decode.hex(toA)]),
           );
         case "ScriptHash":
           return ParseResult.succeed(
-            CBOR.Encode().bytes([1, Bytes.Decode.hex(toA.hash)])
+            CBOR.Encode().bytes([1, Bytes.Decode.hex(toA.hash)]),
           );
       }
     },
@@ -73,8 +73,8 @@ export const CBORBytesSchema = Schema.transformOrFail(
       pipe(
         ParseResult.decode(
           CBOR.makeCBORBytesSchema(
-            Schema.Tuple(Schema.Literal(0, 1), Schema.Uint8ArrayFromSelf)
-          )
+            Schema.Tuple(Schema.Literal(0, 1), Schema.Uint8ArrayFromSelf),
+          ),
         )(fromA),
         Effect.flatMap(([tag, bytes]) =>
           Effect.gen(function* () {
@@ -90,10 +90,10 @@ export const CBORBytesSchema = Schema.transformOrFail(
                   hash: ScriptHash.Decode.bytes(bytes),
                 });
             }
-          })
-        )
+          }),
+        ),
       ),
-  }
+  },
 );
 
 export const CBORHexSchema = Schema.transformOrFail(
@@ -104,11 +104,11 @@ export const CBORHexSchema = Schema.transformOrFail(
     encode: (_, __, ___, toA) =>
       pipe(
         ParseResult.encode(CBORBytesSchema)(toA),
-        Effect.map(Bytes.Encode.hex)
+        Effect.map(Bytes.Encode.hex),
       ),
     decode: (fromA) =>
       pipe(Bytes.Decode.hex(fromA), ParseResult.decode(CBORBytesSchema)),
-  }
+  },
 );
 
 /**
@@ -142,14 +142,13 @@ export const equals = (a: Credential, b: Credential): boolean => {
 export const generator = FastCheck.oneof(
   FastCheck.record({
     _tag: FastCheck.constant("KeyHash" as const),
-    hash: KeyHash.generator
+    hash: KeyHash.generator,
   }),
   FastCheck.record({
     _tag: FastCheck.constant("ScriptHash" as const),
-    hash: ScriptHash.generator
-  })
+    hash: ScriptHash.generator,
+  }),
 );
-  
 
 /**
  * Synchronous encoding utilities for enterprise address.

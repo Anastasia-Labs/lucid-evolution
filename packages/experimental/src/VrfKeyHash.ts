@@ -32,9 +32,7 @@ export class VrfKeyHashError extends Data.TaggedError("VrfKeyHashError")<{
  * @since 2.0.0
  * @category schemas
  */
-export const VrfKeyHash = Hash32.HexSchema.pipe(
-  Schema.brand("VrfKeyHash")
-);
+export const VrfKeyHash = Hash32.HexSchema.pipe(Schema.brand("VrfKeyHash"));
 export type VrfKeyHash = typeof VrfKeyHash.Type;
 
 /**
@@ -43,15 +41,11 @@ export type VrfKeyHash = typeof VrfKeyHash.Type;
  * @since 2.0.0
  * @category encoding/decoding
  */
-export const BytesSchema = Schema.transform(
-  Hash32.BytesSchema,
-  VrfKeyHash,
-  {
-    strict: true,
-    encode: (_, hash) => Bytes.Decode.hex(hash),
-    decode: (bytes) => VrfKeyHash.make(Bytes.Encode.hex(bytes)),
-  }
-);
+export const BytesSchema = Schema.transform(Hash32.BytesSchema, VrfKeyHash, {
+  strict: true,
+  encode: (_, hash) => Bytes.Decode.hex(hash),
+  decode: (bytes) => VrfKeyHash.make(Bytes.Encode.hex(bytes)),
+});
 
 /**
  * Schema for transforming between hex string and VrfKeyHash.
@@ -66,7 +60,7 @@ export const HexSchema = Schema.transform(
     strict: true,
     encode: (_, hash) => hash,
     decode: (hash) => VrfKeyHash.make(hash),
-  }
+  },
 );
 
 /**
@@ -91,8 +85,7 @@ export const CBORHexSchema = CBOR.makeCBORHexSchema(VrfKeyHash);
  * @since 2.0.0
  * @category equality
  */
-export const equals = (a: VrfKeyHash, b: VrfKeyHash): boolean =>
-  a === b;
+export const equals = (a: VrfKeyHash, b: VrfKeyHash): boolean => a === b;
 
 /**
  * Generate a random VrfKeyHash.

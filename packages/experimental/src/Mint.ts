@@ -1,4 +1,14 @@
-import { Schema, Data, FastCheck, HashMap, ParseResult, Effect } from "effect";
+import {
+  Schema,
+  Data,
+  FastCheck,
+  ParseResult,
+  Effect,
+  HashMap,
+  Option,
+  Equal,
+  Pretty,
+} from "effect";
 import * as PolicyId from "./PolicyId.js";
 import * as AssetName from "./AssetName.js";
 import * as NonZeroInt64 from "./NonZeroInt64.js";
@@ -36,12 +46,11 @@ export class MintError extends Data.TaggedError("MintError")<{
 export const AssetMap = Schema.HashMap({
   key: AssetName.AssetName,
   value: NonZeroInt64.NonZeroInt64Schema,
-})
-  .pipe(Schema.filter((map) => HashMap.size(map) > 0))
-  .annotations({
-    message: () => "Asset map cannot be empty",
-    identifier: "MintAssetMap",
-  });
+}).annotations({
+  identifier: "AssetMap",
+});
+
+export type AssetMap = typeof AssetMap.Type;
 
 /**
  * Schema for Mint representing token minting/burning operations.
@@ -51,44 +60,31 @@ export const AssetMap = Schema.HashMap({
  * - Positive values represent minting
  * - Negative values represent burning
  *
- * @example
- * import { Mint, PolicyId, AssetName, NonZeroInt64 } from "@lucid-evolution/experimental";
- * import { HashMap } from "effect";
- *
- * const mint = new Mint({
- *   assets: HashMap.make([
- *     new PolicyId.PolicyId({ hash: "..." }),
- *     HashMap.make([
- *       [new AssetName.AssetName({ name: "token1" }), NonZeroInt64.make(1000n)]
- *     ])
- *   ])
- * });
- *
  * @since 2.0.0
  * @category model
  */
-export class Mint extends Schema.TaggedClass<Mint>()("Mint", {
-  assets: Schema.HashMap({
-    key: PolicyId.PolicyId,
-    value: AssetMap,
-  }),
-}) {
-  [Symbol.for("nodejs.util.inspect.custom")]() {
-    const assetEntries = HashMap.toEntries(this.assets).map(
-      ([policyId, assetMap]) => [
-        policyId,
-        HashMap.toEntries(assetMap).map(([assetName, amount]) => [
-          assetName,
-          amount.toString(),
-        ]),
-      ],
-    );
-    return {
-      _tag: "Mint",
-      assets: assetEntries,
-    };
-  }
-}
+export const Mint = Schema.HashMap({
+  key: PolicyId.PolicyId,
+  value: AssetMap,
+}).annotations({
+  identifier: "Mint",
+  pretty: () => (value) =>
+    `HashMap(${HashMap.size(value)}) {${Array.from(HashMap.entries(value))
+      .map(
+        ([policyId, assetMap]) =>
+          `\n  ${policyId} => HashMap(${HashMap.size(assetMap)}) {${Array.from(
+            HashMap.entries(assetMap)
+          )
+            .map(([assetName, amount]) => `\n    ${assetName} => ${amount}`)
+            .join(",")}\n  }`
+      )
+      .join(",")}\n}`,
+});
+
+export type Mint = typeof Mint.Type;
+
+type PrettyPrint = (self: Mint) => string;
+export const prettyPrint: PrettyPrint = Pretty.make(Mint);
 
 /**
  * Create empty Mint.
@@ -101,10 +97,7 @@ export class Mint extends Schema.TaggedClass<Mint>()("Mint", {
  * @since 2.0.0
  * @category constructors
  */
-export const empty = (): Mint =>
-  new Mint({
-    assets: HashMap.empty(),
-  });
+export const empty = (): Mint => HashMap.empty<PolicyId.PolicyId, AssetMap>();
 
 /**
  * Create Mint from a single policy and asset entry.
@@ -122,12 +115,9 @@ export const empty = (): Mint =>
 export const singleton = (
   policyId: PolicyId.PolicyId,
   assetName: AssetName.AssetName,
-  amount: NonZeroInt64.NonZeroInt64,
+  amount: NonZeroInt64.NonZeroInt64
 ): Mint => {
-  const assetMap = HashMap.make([assetName, amount]);
-  return new Mint({
-    assets: HashMap.make([policyId, assetMap]),
-  });
+  return Schema.decodeSync(Mint)([[policyId, [[assetName, amount]]]]);
 };
 
 /**
@@ -144,29 +134,50 @@ export const singleton = (
  * @since 2.0.0
  * @category transformation
  */
+/**
+ * Helper function to convert Mint to entries array for manipulation
+ */
+const toEntries = (
+  mint: Mint
+): Array<
+  [PolicyId.PolicyId, Array<[AssetName.AssetName, NonZeroInt64.NonZeroInt64]>]
+> => {
+  return Array.from(HashMap.entries(mint)).map(([policyId, assetMap]) => [
+    policyId,
+    Array.from(HashMap.entries(assetMap)),
+  ]);
+};
+
+/**
+ * Helper function to create Mint from entries array
+ */
+const fromEntries = (
+  entries: Array<
+    [PolicyId.PolicyId, Array<[AssetName.AssetName, NonZeroInt64.NonZeroInt64]>]
+  >
+): Mint => {
+  return HashMap.fromIterable(
+    entries.map(([policyId, assetEntries]) => [
+      policyId,
+      HashMap.fromIterable(assetEntries),
+    ])
+  );
+};
+
 export const insert = (
   mint: Mint,
   policyId: PolicyId.PolicyId,
   assetName: AssetName.AssetName,
-  amount: NonZeroInt64.NonZeroInt64,
+  amount: NonZeroInt64.NonZeroInt64
 ): Mint => {
-  const existingAssetMap = HashMap.get(mint.assets, policyId);
+  // Get existing asset map or create empty one
+  const existingAssetMap = HashMap.get(mint, policyId);
+  const assetMap =
+    existingAssetMap._tag === "Some"
+      ? HashMap.set(existingAssetMap.value, assetName, amount)
+      : HashMap.fromIterable([[assetName, amount]]);
 
-  if (existingAssetMap._tag === "Some") {
-    const updatedAssetMap = HashMap.set(
-      existingAssetMap.value,
-      assetName,
-      amount,
-    );
-    return new Mint({
-      assets: HashMap.set(mint.assets, policyId, updatedAssetMap),
-    });
-  } else {
-    const newAssetMap = HashMap.make([assetName, amount]);
-    return new Mint({
-      assets: HashMap.set(mint.assets, policyId, newAssetMap),
-    });
-  }
+  return HashMap.set(mint, policyId, assetMap);
 };
 
 /**
@@ -181,29 +192,24 @@ export const insert = (
  * @since 2.0.0
  * @category transformation
  */
-export const remove = (
+export const removePolicy = (mint: Mint, policyId: PolicyId.PolicyId): Mint =>
+  HashMap.remove(mint, policyId);
+
+export const removeAsset = (
   mint: Mint,
   policyId: PolicyId.PolicyId,
-  assetName: AssetName.AssetName,
+  assetName: AssetName.AssetName
 ): Mint => {
-  const existingAssetMap = HashMap.get(mint.assets, policyId);
-
-  if (existingAssetMap._tag === "Some") {
-    const updatedAssetMap = HashMap.remove(existingAssetMap.value, assetName);
-
-    if (HashMap.size(updatedAssetMap) === 0) {
-      // Remove the entire policy if no assets remain
-      return new Mint({
-        assets: HashMap.remove(mint.assets, policyId),
-      });
-    } else {
-      return new Mint({
-        assets: HashMap.set(mint.assets, policyId, updatedAssetMap),
-      });
-    }
+  const assets = HashMap.get(mint, policyId);
+  if (assets._tag === "None") {
+    return mint; // No assets for this policy, nothing to remove
   }
-
-  return mint; // Asset not found, return unchanged
+  const updatedAssets = HashMap.remove(assets.value, assetName);
+  if (HashMap.isEmpty(updatedAssets)) {
+    // If no assets left, remove the policyId entry
+    return HashMap.remove(mint, policyId);
+  }
+  return HashMap.set(mint, policyId, updatedAssets);
 };
 
 /**
@@ -222,14 +228,17 @@ export const remove = (
 export const get = (
   mint: Mint,
   policyId: PolicyId.PolicyId,
-  assetName: AssetName.AssetName,
-): NonZeroInt64.NonZeroInt64 | undefined => {
-  const assetMap = HashMap.get(mint.assets, policyId);
-  if (assetMap._tag === "Some") {
-    const amount = HashMap.get(assetMap.value, assetName);
-    return amount._tag === "Some" ? amount.value : undefined;
+  assetName: AssetName.AssetName
+): Option.Option<bigint> => {
+  const assets = HashMap.get(mint, policyId);
+  if (assets._tag === "None") {
+    return Option.none();
   }
-  return undefined;
+  const amount = HashMap.get(assets.value, assetName);
+  if (amount._tag === "None") {
+    return Option.none();
+  }
+  return Option.some(amount.value);
 };
 
 /**
@@ -247,8 +256,8 @@ export const get = (
 export const has = (
   mint: Mint,
   policyId: PolicyId.PolicyId,
-  assetName: AssetName.AssetName,
-): boolean => get(mint, policyId, assetName) !== undefined;
+  assetName: AssetName.AssetName
+): boolean => get(mint, policyId, assetName) !== Option.none();
 
 /**
  * Check if Mint is empty.
@@ -262,7 +271,7 @@ export const has = (
  * @since 2.0.0
  * @category predicates
  */
-export const isEmpty = (mint: Mint): boolean => HashMap.size(mint.assets) === 0;
+export const isEmpty = (mint: Mint): boolean => HashMap.size(mint) === 0;
 
 /**
  * Get the number of policies in the Mint.
@@ -276,53 +285,7 @@ export const isEmpty = (mint: Mint): boolean => HashMap.size(mint.assets) === 0;
  * @since 2.0.0
  * @category transformation
  */
-export const policyCount = (mint: Mint): number => HashMap.size(mint.assets);
-
-export const fromEntries = (
-  entries: Array<
-    [PolicyId.PolicyId, [AssetName.AssetName, NonZeroInt64.NonZeroInt64][]]
-  >,
-): Mint => {
-  const assets = HashMap.fromIterable(
-    entries.map(([policyId, assetEntries]) => [
-      policyId,
-      HashMap.fromIterable(
-        assetEntries.map(([assetName, amount]) => [assetName, amount]),
-      ),
-    ]),
-  );
-  return new Mint({ assets });
-};
-
-/**
- * Get all entries as an array of [policy, asset, amount] tuples.
- *
- * @example
- * import { Mint } from "@lucid-evolution/experimental";
- *
- * const mint = Mint.singleton(policyId, assetName, NonZeroInt64.make(1000n));
- * const entries = Mint.entries(mint);
- *
- * @since 2.0.0
- * @category transformation
- */
-export const entries = (
-  mint: Mint,
-): Array<
-  [PolicyId.PolicyId, AssetName.AssetName, NonZeroInt64.NonZeroInt64]
-> => {
-  const result: Array<
-    [PolicyId.PolicyId, AssetName.AssetName, NonZeroInt64.NonZeroInt64]
-  > = [];
-
-  for (const [policyId, assetMap] of HashMap.toEntries(mint.assets)) {
-    for (const [assetName, amount] of HashMap.toEntries(assetMap)) {
-      result.push([policyId, assetName, amount]);
-    }
-  }
-
-  return result;
-};
+export const policyCount = (mint: Mint): number => HashMap.size(mint);
 
 /**
  * Check if two Mint instances are equal.
@@ -338,23 +301,7 @@ export const entries = (
  * @category equality
  */
 export const equals = (self: Mint, that: Mint): boolean => {
-  if (HashMap.size(self.assets) !== HashMap.size(that.assets)) return false;
-
-  for (const [policyId, assetMap] of HashMap.toEntries(self.assets)) {
-    const otherAssetMap = HashMap.get(that.assets, policyId);
-    if (otherAssetMap._tag === "None") return false;
-
-    if (HashMap.size(assetMap) !== HashMap.size(otherAssetMap.value))
-      return false;
-
-    for (const [assetName, amount] of HashMap.toEntries(assetMap)) {
-      const otherAmount = HashMap.get(otherAssetMap.value, assetName);
-      if (otherAmount._tag === "None" || otherAmount.value !== amount)
-        return false;
-    }
-  }
-
-  return true;
+  return Equal.equals(self, that);
 };
 
 /**
@@ -368,19 +315,11 @@ export const generator = FastCheck.array(
     PolicyId.generator,
     FastCheck.array(
       FastCheck.tuple(AssetName.generator, NonZeroInt64.generator),
-      { minLength: 1, maxLength: 5 },
-    ),
+      { minLength: 1, maxLength: 5 }
+    )
   ),
-  { minLength: 0, maxLength: 5 },
-).map((entries) => {
-  const assets = HashMap.fromIterable(
-    entries.map(([policyId, assetEntries]) => [
-      policyId,
-      HashMap.fromIterable(assetEntries),
-    ]),
-  );
-  return new Mint({ assets });
-});
+  { minLength: 0, maxLength: 5 }
+).map((entries) => fromEntries(entries));
 
 /**
  * CDDL schema for Mint as map structure.
@@ -423,31 +362,31 @@ export const CBORBytesSchema = Schema.transformOrFail(
   {
     strict: true,
     encode: (_, __, ___, toA) =>
-      // Convert HashMap to Map and then encode to CBOR bytes
+      // Convert Map to Map and then encode to CBOR bytes
       ParseResult.succeed(
         CBOR.Encode().bytes(
           new Map(
-            HashMap.toEntries(toA.assets).map(([policyId, assetMap]) => [
+            toEntries(toA).map(([policyId, assetEntries]) => [
               policyId, // Convert PolicyId to Uint8Array
               new Map(
-                HashMap.toEntries(assetMap).map(([assetName, amount]) => [
+                assetEntries.map(([assetName, amount]) => [
                   assetName, // Convert AssetName to Uint8Array
                   amount, // Convert NonZeroInt64 to BigInt
-                ]),
+                ])
               ),
-            ]),
-          ),
-        ),
+            ])
+          )
+        )
       ),
     decode: (_, __, ___, fromI) =>
       Effect.gen(function* () {
         const map = yield* ParseResult.decode(
-          CBOR.makeCBORBytesSchema(MintCDDLSchema),
+          CBOR.makeCBORBytesSchema(MintCDDLSchema)
         )(fromI);
-        const m = fromRaw(map);
+        const m = fromCDDL(map);
         return m;
       }),
-  },
+  }
 );
 
 /**
@@ -480,14 +419,14 @@ export const DecodeRaw = CBOR.DecodeWithSchema(MintCDDLSchema);
  * @since 2.0.0
  * @category transformation
  */
-export const toRaw = (mint: Mint): MintCDDL => {
+export const toCDDL = (mint: Mint): MintCDDL => {
   const outerMap = new Map<Uint8Array, Map<Uint8Array, number>>();
 
-  for (const [policyId, assetMap] of HashMap.toEntries(mint.assets)) {
+  for (const [policyId, assetMap] of HashMap.entries(mint)) {
     const policyIdBytes = Bytes.Decode.hex(policyId);
     const innerMap = new Map<Uint8Array, number>();
 
-    for (const [assetName, amount] of HashMap.toEntries(assetMap)) {
+    for (const [assetName, amount] of HashMap.entries(assetMap)) {
       const assetNameBytes = Bytes.Decode.hex(assetName);
       innerMap.set(assetNameBytes, Number(amount));
     }
@@ -504,27 +443,30 @@ export const toRaw = (mint: Mint): MintCDDL => {
  * @since 2.0.0
  * @category constructors
  */
-export const fromRaw = (raw: MintCDDL): Mint => {
-  const assets = HashMap.fromIterable(
-    Array.from(raw.entries()).map(([policyIdBytes, assetMap]) => {
-      const policyId = PolicyId.PolicyId.make(Bytes.Encode.hex(policyIdBytes));
-      const assets = HashMap.fromIterable(
-        Array.from(assetMap.entries()).map(([assetNameBytes, amount]) => {
-          const assetName = AssetName.AssetName.make(
-            Bytes.Encode.hex(assetNameBytes),
-          );
-          // const nonZeroAmount = NonZeroInt64.NonZeroInt64Schema.make(amount);
-          const nonZeroAmount = Schema.decodeUnknownSync(
-            NonZeroInt64.NonZeroInt64Schema,
-          )(amount);
-          return [assetName, nonZeroAmount] as const;
-        }),
-      );
-      return [policyId, assets] as const;
-    }),
-  );
+export const fromCDDL = (raw: MintCDDL): Mint => {
+  const entries = Array.from(raw.entries()).map(([policyIdBytes, assetMap]) => {
+    const policyId = PolicyId.PolicyId.make(Bytes.Encode.hex(policyIdBytes));
+    const assetEntries = Array.from(assetMap.entries()).map(
+      ([assetNameBytes, amount]) => {
+        const assetName = AssetName.AssetName.make(
+          Bytes.Encode.hex(assetNameBytes)
+        );
+        const nonZeroAmount = Schema.decodeUnknownSync(
+          NonZeroInt64.NonZeroInt64Schema
+        )(amount);
+        return [assetName, nonZeroAmount] as [
+          AssetName.AssetName,
+          NonZeroInt64.NonZeroInt64,
+        ];
+      }
+    );
+    return [policyId, assetEntries] as [
+      PolicyId.PolicyId,
+      Array<[AssetName.AssetName, NonZeroInt64.NonZeroInt64]>,
+    ];
+  });
 
-  return new Mint({ assets });
+  return fromEntries(entries);
 };
 
 /**
@@ -534,8 +476,8 @@ export const fromRaw = (raw: MintCDDL): Mint => {
  * @category encoding/decoding
  */
 export const Encode = {
-  cborHex: (mint: Mint): string => EncodeRaw.hex(toRaw(mint)),
-  cborBytes: (mint: Mint): Uint8Array => EncodeRaw.bytes(toRaw(mint)),
+  cborHex: (mint: Mint): string => EncodeRaw.hex(toCDDL(mint)),
+  cborBytes: (mint: Mint): Uint8Array => EncodeRaw.bytes(toCDDL(mint)),
 };
 
 /**
@@ -544,9 +486,14 @@ export const Encode = {
  * @since 2.0.0
  * @category encoding/decoding
  */
-export const Decode = {
-  cborHex: (hex: string): Mint => fromRaw(DecodeRaw.hex(hex)),
-  cborBytes: (bytes: Uint8Array): Mint => fromRaw(DecodeRaw.bytes(bytes)),
+export const Decode: {
+  cborHex: (hex: string) => Mint;
+  cborBytes: (bytes: Uint8Array) => Mint;
+  entries: (entries: Array<[string, Array<[string, bigint]>]>) => Mint;
+} = {
+  cborHex: (hex: string): Mint => fromCDDL(DecodeRaw.hex(hex)),
+  cborBytes: (bytes: Uint8Array): Mint => fromCDDL(DecodeRaw.bytes(bytes)),
+  entries: Schema.decodeSync(Mint),
 };
 
 /**

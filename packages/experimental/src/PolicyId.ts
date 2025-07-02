@@ -81,15 +81,11 @@ export const BytesSchema = Schema.transform(Hash28.BytesSchema, PolicyId, {
  * @since 2.0.0
  * @category encoding/decoding
  */
-export const HexSchema = Schema.transform(
-  Schema.typeSchema(Hash28.HexSchema),
-  PolicyId,
-  {
-    strict: true,
-    encode: (_, policyId) => policyId,
-    decode: (hash) => PolicyId.make(hash),
-  },
-);
+export const HexSchema = Schema.transform(Schema.String, PolicyId, {
+  strict: true,
+  encode: (_, policyId) => policyId,
+  decode: (hash) => PolicyId.make(hash),
+});
 
 /**
  * Check if two PolicyId instances are equal.
@@ -145,7 +141,7 @@ export const Encode = {
  * @category encoding/decoding
  */
 export const Decode = {
-  hex: Schema.decodeUnknownSync(HexSchema),
+  string: Schema.decodeSync(HexSchema),
   bytes: Schema.decodeUnknownSync(BytesSchema),
 };
 

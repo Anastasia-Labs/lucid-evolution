@@ -16,7 +16,7 @@ import * as Hash32 from "./Hash32.js";
  * @category errors
  */
 export class TransactionHashError extends Data.TaggedError(
-  "TransactionHashError"
+  "TransactionHashError",
 )<{
   message?: string;
   reason?:
@@ -33,7 +33,7 @@ export class TransactionHashError extends Data.TaggedError(
  * @category schemas
  */
 export const TransactionHash = Hash32.HexSchema.pipe(
-  Schema.brand("TransactionHash")
+  Schema.brand("TransactionHash"),
 );
 export type TransactionHash = typeof TransactionHash.Type;
 
@@ -50,7 +50,7 @@ export const BytesSchema = Schema.transform(
     strict: true,
     encode: (_, hash) => Bytes.Decode.hex(hash),
     decode: (bytes) => TransactionHash.make(Bytes.Encode.hex(bytes)),
-  }
+  },
 );
 
 /**
@@ -66,7 +66,7 @@ export const HexSchema = Schema.transform(
     strict: true,
     encode: (_, hash) => hash,
     decode: (hash) => TransactionHash.make(hash),
-  }
+  },
 );
 
 /**

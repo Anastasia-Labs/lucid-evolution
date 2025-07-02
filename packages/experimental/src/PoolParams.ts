@@ -129,7 +129,7 @@ export const equals = (a: PoolParams, b: PoolParams): boolean =>
     b.rewardAccount.stakeCredential._tag &&
   a.poolOwners.length === b.poolOwners.length &&
   a.poolOwners.every((owner, index) =>
-    KeyHash.equals(owner, b.poolOwners[index])
+    KeyHash.equals(owner, b.poolOwners[index]),
   ) &&
   a.relays.length === b.relays.length &&
   // Note: Relay equality comparison would need to be implemented
@@ -176,7 +176,7 @@ export const make = (params: {
  */
 export const getEffectiveStake = (
   params: PoolParams,
-  totalStake: Coin.Coin
+  totalStake: Coin.Coin,
 ): Coin.Coin => {
   // Effective stake is min(totalStake, pledge) for calculation purposes
   return totalStake < params.pledge ? totalStake : params.pledge;
@@ -190,7 +190,7 @@ export const getEffectiveStake = (
  */
 export const calculatePoolRewards = (
   params: PoolParams,
-  totalRewards: Coin.Coin
+  totalRewards: Coin.Coin,
 ): { operatorRewards: Coin.Coin; delegatorRewards: Coin.Coin } => {
   const fixedCost = params.cost;
   const marginDecimal = UnitInterval.toDecimal(params.margin);
@@ -204,7 +204,7 @@ export const calculatePoolRewards = (
 
   const rewardsAfterCost = totalRewards - fixedCost;
   const operatorShare = BigInt(
-    Math.floor(Number(rewardsAfterCost) * marginDecimal)
+    Math.floor(Number(rewardsAfterCost) * marginDecimal),
   );
 
   return {
@@ -221,7 +221,7 @@ export const calculatePoolRewards = (
  */
 export const hasMinimumCost = (
   params: PoolParams,
-  minPoolCost: Coin.Coin
+  minPoolCost: Coin.Coin,
 ): boolean => params.cost >= minPoolCost;
 
 /**
@@ -264,7 +264,7 @@ export const generator = FastCheck.record({
         _tag: "KeyHash",
         hash: KeyHash.KeyHash.make("a".repeat(56)),
       },
-    })
+    }),
   ),
   poolOwners: FastCheck.array(KeyHash.generator, {
     minLength: 1,

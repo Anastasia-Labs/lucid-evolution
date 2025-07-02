@@ -32,9 +32,7 @@ export class PoolKeyHashError extends Data.TaggedError("PoolKeyHashError")<{
  * @since 2.0.0
  * @category schemas
  */
-export const PoolKeyHash = Hash28.HexSchema.pipe(
-  Schema.brand("PoolKeyHash")
-);
+export const PoolKeyHash = Hash28.HexSchema.pipe(Schema.brand("PoolKeyHash"));
 export type PoolKeyHash = typeof PoolKeyHash.Type;
 
 /**
@@ -43,15 +41,11 @@ export type PoolKeyHash = typeof PoolKeyHash.Type;
  * @since 2.0.0
  * @category encoding/decoding
  */
-export const BytesSchema = Schema.transform(
-  Hash28.BytesSchema,
-  PoolKeyHash,
-  {
-    strict: true,
-    encode: (_, hash) => Bytes.Decode.hex(hash),
-    decode: (bytes) => PoolKeyHash.make(Bytes.Encode.hex(bytes)),
-  }
-);
+export const BytesSchema = Schema.transform(Hash28.BytesSchema, PoolKeyHash, {
+  strict: true,
+  encode: (_, hash) => Bytes.Decode.hex(hash),
+  decode: (bytes) => PoolKeyHash.make(Bytes.Encode.hex(bytes)),
+});
 
 /**
  * Schema for transforming between hex string and PoolKeyHash.
@@ -66,7 +60,7 @@ export const HexSchema = Schema.transform(
     strict: true,
     encode: (_, hash) => hash,
     decode: (hash) => PoolKeyHash.make(hash),
-  }
+  },
 );
 
 /**
@@ -91,8 +85,7 @@ export const CBORHexSchema = CBOR.makeCBORHexSchema(PoolKeyHash);
  * @since 2.0.0
  * @category equality
  */
-export const equals = (a: PoolKeyHash, b: PoolKeyHash): boolean =>
-  a === b;
+export const equals = (a: PoolKeyHash, b: PoolKeyHash): boolean => a === b;
 
 /**
  * Generate a random PoolKeyHash.

@@ -24,7 +24,7 @@ export class BaseAddress extends Schema.TaggedClass<BaseAddress>("BaseAddress")(
     networkId: NetworkId.NetworkId,
     paymentCredential: Credential.Credential,
     stakeCredential: Credential.Credential,
-  }
+  },
 ) {
   [Symbol.for("nodejs.util.inspect.custom")]() {
     return {
@@ -52,7 +52,7 @@ export const BytesSchema = Schema.transformOrFail(
       const result = new Uint8Array(57);
       result[0] = header;
       const paymentCredentialBytes = Bytes.Decode.hex(
-        toA.paymentCredential.hash
+        toA.paymentCredential.hash,
       );
       result.set(paymentCredentialBytes, 1);
       const stakeCredentialBytes = Bytes.Decode.hex(toA.stakeCredential.hash);
@@ -72,13 +72,13 @@ export const BytesSchema = Schema.transformOrFail(
           ? {
               _tag: "KeyHash",
               hash: yield* ParseResult.decode(KeyHash.BytesSchema)(
-                fromA.slice(1, 29)
+                fromA.slice(1, 29),
               ),
             }
           : {
               _tag: "ScriptHash",
               hash: yield* ParseResult.decode(ScriptHash.BytesSchema)(
-                fromA.slice(1, 29)
+                fromA.slice(1, 29),
               ),
             };
         const isStakeKey = (addressType & 0b0010) === 0;
@@ -86,13 +86,13 @@ export const BytesSchema = Schema.transformOrFail(
           ? {
               _tag: "KeyHash",
               hash: yield* ParseResult.decode(KeyHash.BytesSchema)(
-                fromA.slice(29, 57)
+                fromA.slice(29, 57),
               ),
             }
           : {
               _tag: "ScriptHash",
               hash: yield* ParseResult.decode(ScriptHash.BytesSchema)(
-                fromA.slice(29, 57)
+                fromA.slice(29, 57),
               ),
             };
         return yield* ParseResult.decode(BaseAddress)({
@@ -102,7 +102,7 @@ export const BytesSchema = Schema.transformOrFail(
           stakeCredential,
         });
       }),
-  }
+  },
 );
 
 export const HexSchema = Schema.transformOrFail(
@@ -114,7 +114,7 @@ export const HexSchema = Schema.transformOrFail(
       pipe(ParseResult.encode(BytesSchema)(toA), Effect.map(Bytes.Encode.hex)),
     decode: (fromI) =>
       pipe(Bytes.Decode.hex(fromI), ParseResult.decode(BytesSchema)),
-  }
+  },
 );
 
 /**
@@ -151,14 +151,14 @@ export const equals = (a: BaseAddress, b: BaseAddress): boolean => {
 export const generator = FastCheck.tuple(
   NetworkId.generator,
   Credential.generator,
-  Credential.generator
+  Credential.generator,
 ).map(
   ([networkId, paymentCredential, stakeCredential]) =>
     new BaseAddress({
       networkId,
       paymentCredential,
       stakeCredential,
-    })
+    }),
 );
 
 /**

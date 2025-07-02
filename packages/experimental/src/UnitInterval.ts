@@ -16,7 +16,11 @@ import * as CBOR from "./CBOR.js";
  */
 export class UnitIntervalError extends Data.TaggedError("UnitIntervalError")<{
   message?: string;
-  reason?: "InvalidNumerator" | "InvalidDenominator" | "DenominatorZero" | "InvalidRange";
+  reason?:
+    | "InvalidNumerator"
+    | "InvalidDenominator"
+    | "DenominatorZero"
+    | "InvalidRange";
 }> {}
 
 /**
@@ -159,7 +163,7 @@ export const fromDecimal = (value: number): UnitInterval => {
       reason: "InvalidRange",
     });
   }
-  
+
   // Convert to fraction with reasonable precision
   const precision = 1000000n; // 6 decimal places
   const numerator = BigInt(Math.round(value * Number(precision)));
@@ -183,12 +187,12 @@ export const fromDecimal = (value: number): UnitInterval => {
  * @since 2.0.0
  * @category generators
  */
-export const generator = FastCheck.bigInt({ min: 1n, max: 1000000n })
-  .chain((denominator) =>
-    FastCheck.bigInt({ min: 0n, max: denominator }).map((numerator) =>
-      new UnitInterval({ numerator, denominator })
-    )
-  );
+export const generator = FastCheck.bigInt({ min: 1n, max: 1000000n }).chain(
+  (denominator) =>
+    FastCheck.bigInt({ min: 0n, max: denominator }).map(
+      (numerator) => new UnitInterval({ numerator, denominator }),
+    ),
+);
 
 /**
  * Synchronous encoding utilities.

@@ -63,7 +63,7 @@ export const HexSchema = Schema.transform(
     strict: true,
     encode: (_, toA) => toA,
     decode: (fromI) => ScriptHash.make(fromI),
-  }
+  },
 );
 
 /**
