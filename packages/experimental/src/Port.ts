@@ -1,14 +1,15 @@
-import { pipe, Schema, Data, FastCheck } from "effect";
+import { Schema, Data } from "effect";
+import * as Numeric from "./Numeric.js";
 
 /**
- * Constants for Port validation.
+ * CDDL specification:
  * port = uint .le 65535
  *
  * @since 2.0.0
  * @category constants
  */
-export const PORT_MIN_VALUE = 0;
-export const PORT_MAX_VALUE = 65535;
+export const PORT_MIN_VALUE = Numeric.UINT16_MIN;
+export const PORT_MAX_VALUE = Numeric.UINT16_MAX;
 
 /**
  * Error class for Port related operations.
@@ -34,14 +35,9 @@ export class PortError extends Data.TaggedError("PortError")<{
  * @since 2.0.0
  * @category schemas
  */
-export const PortSchema = pipe(
-  Schema.Number,
-  Schema.int(),
-  Schema.filter((port) => port >= PORT_MIN_VALUE && port <= PORT_MAX_VALUE),
-).annotations({
-  message: (issue) =>
-    `Port must be between ${PORT_MIN_VALUE} and ${PORT_MAX_VALUE}, but got ${issue.actual}`,
+export const PortSchema = Numeric.Uint16Schema.annotations({
   identifier: "Port",
+  description: "Network port number (16-bit unsigned integer)",
 });
 
 /**
@@ -167,10 +163,7 @@ export const isDynamic = (port: Port): boolean =>
  * @since 2.0.0
  * @category generators
  */
-export const generator = FastCheck.integer({
-  min: PORT_MIN_VALUE,
-  max: PORT_MAX_VALUE,
-});
+export const generator = Numeric.Uint16Generator;
 
 /**
  * Synchronous encoding/decoding utilities.

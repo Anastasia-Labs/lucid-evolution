@@ -1,6 +1,8 @@
-import { Schema, Data, FastCheck, Option } from "effect";
+import { Schema, Data, FastCheck, Option, ParseResult, Effect } from "effect";
 import * as Coin from "./Coin.js";
 import * as MultiAsset from "./MultiAsset.js";
+import * as CBOR from "./CBOR.js";
+import { Bytes } from "./index.js";
 
 /**
  * Error class for Value related operations.
@@ -195,8 +197,6 @@ export const add = (a: Value, b: Value): Value => {
     return onlyAda(totalAda);
   }
 
-  // Merge assets - this is a simplified version
-  // In practice, you'd need a proper merge function for MultiAssets
   if (Option.isSome(assetsA) && Option.isNone(assetsB)) {
     return withAssets(totalAda, assetsA.value);
   }
@@ -205,10 +205,10 @@ export const add = (a: Value, b: Value): Value => {
     return withAssets(totalAda, assetsB.value);
   }
 
-  // Both have assets - would need MultiAsset.merge function
+  // Both have assets - merge them properly
   if (Option.isSome(assetsA) && Option.isSome(assetsB)) {
-    // For now, just use the first one - proper implementation would merge
-    return withAssets(totalAda, assetsA.value);
+    const mergedAssets = MultiAsset.merge(assetsA.value, assetsB.value);
+    return withAssets(totalAda, mergedAssets);
   }
 
   return onlyAda(totalAda);
@@ -216,7 +216,7 @@ export const add = (a: Value, b: Value): Value => {
 
 /**
  * Subtract Value b from Value a.
- * Note: This is a simplified implementation.
+ * Subtracts ADA amounts and MultiAssets properly.
  *
  * @example
  * import { Value, Coin } from "@lucid-evolution/experimental";
@@ -234,15 +234,39 @@ export const subtract = (a: Value, b: Value): Value => {
   const adaB = getAda(b);
   const resultAda = Coin.subtract(adaA, adaB);
 
-  // Simplified: for ADA-only values
-  if (isAdaOnly(a) && isAdaOnly(b)) {
+  const assetsA = getAssets(a);
+  const assetsB = getAssets(b);
+
+  // Both are ADA-only
+  if (Option.isNone(assetsA) && Option.isNone(assetsB)) {
     return onlyAda(resultAda);
   }
 
-  // For mixed values, would need proper MultiAsset subtraction
-  const assetsA = getAssets(a);
-  if (Option.isSome(assetsA)) {
+  // a has assets, b doesn't - keep a's assets
+  if (Option.isSome(assetsA) && Option.isNone(assetsB)) {
     return withAssets(resultAda, assetsA.value);
+  }
+
+  // a doesn't have assets, b does - this would result in negative assets, throw error
+  if (Option.isNone(assetsA) && Option.isSome(assetsB)) {
+    throw new ValueError({
+      message: "Cannot subtract assets from Value with no assets",
+      reason: "InvalidCombination",
+    });
+  }
+
+  // Both have assets - subtract them properly
+  if (Option.isSome(assetsA) && Option.isSome(assetsB)) {
+    try {
+      const subtractedAssets = MultiAsset.subtract(
+        assetsA.value,
+        assetsB.value,
+      );
+      return withAssets(resultAda, subtractedAssets);
+    } catch {
+      // If subtraction results in empty MultiAsset, return ADA-only value
+      return onlyAda(resultAda);
+    }
   }
 
   return onlyAda(resultAda);
@@ -301,29 +325,155 @@ export const generator = FastCheck.oneof(
 );
 
 /**
- * Synchronous encoding/decoding utilities.
+ * CDDL schema for Value as union structure.
+ * value = coin / [coin, multiasset<positive_coin>]
+ *
+ * This represents either:
+ * - A single coin amount (for ADA-only values)
+ * - An array with [coin, multiasset] (for values with native assets)
+ *
+ * @since 2.0.0
+ * @category schemas
+ */
+export const ValueCDDLSchema = Schema.Union(
+  Schema.Number, // Just coin amount as number
+  Schema.Tuple(
+    Schema.Number, // Coin amount as number
+    MultiAsset.MultiAssetCDDLSchema, // MultiAsset as Map structure
+  ),
+);
+
+/**
+ * TypeScript type for the raw CDDL representation.
+ * This is what gets encoded/decoded to/from CBOR.
+ *
+ * @since 2.0.0
+ * @category model
+ */
+export type ValueCDDL = typeof ValueCDDLSchema.Type;
+
+/**
+ * CBOR bytes transformation schema for Value.
+ *
+ * @since 2.0.0
+ * @category schemas
+ */
+export const CBORBytesSchema = Schema.transformOrFail(
+  Schema.typeSchema(Bytes.BytesSchema),
+  Schema.typeSchema(ValueSchema),
+  {
+    strict: true,
+    encode: (_, __, ___, toA) =>
+      ParseResult.succeed(CBOR.Encode().bytes(toCDDL(toA))),
+    decode: (_, __, ___, fromI) =>
+      Effect.gen(function* () {
+        const cddlValue = yield* ParseResult.decode(
+          CBOR.makeCBORBytesSchema(ValueCDDLSchema),
+        )(fromI);
+        return fromCDDL(cddlValue);
+      }),
+  },
+);
+
+/**
+ * CBOR hex transformation schema for Value.
+ *
+ * @since 2.0.0
+ * @category schemas
+ */
+export const CBORHexSchema = Schema.transformOrFail(
+  Schema.typeSchema(Bytes.HexSchema),
+  Schema.typeSchema(ValueSchema),
+  {
+    strict: true,
+    encode: (_, __, ___, toA) =>
+      ParseResult.succeed(CBOR.Encode().hex(toCDDL(toA))),
+    decode: (_, __, ___, fromI) =>
+      Effect.gen(function* () {
+        const cddlValue = yield* ParseResult.decode(
+          CBOR.makeCBORHexSchema(ValueCDDLSchema),
+        )(fromI);
+        return fromCDDL(cddlValue);
+      }),
+  },
+);
+
+/**
+ * Convert Value to raw CDDL data for CBOR encoding.
+ *
+ * @since 2.0.0
+ * @category transformation
+ */
+export const toCDDL = (value: Value): ValueCDDL => {
+  if (typeof value === "bigint") {
+    // ADA-only value
+    return Number(value);
+  } else {
+    // ADA + MultiAsset value
+    const [ada, multiAsset] = value;
+    return [Number(ada), MultiAsset.toCDDL(multiAsset)];
+  }
+};
+
+/**
+ * Create Value from raw CDDL data after CBOR decoding.
+ *
+ * @since 2.0.0
+ * @category constructors
+ */
+export const fromCDDL = (raw: ValueCDDL): Value => {
+  if (typeof raw === "number") {
+    // ADA-only value
+    return Coin.make(BigInt(raw));
+  } else {
+    // ADA + MultiAsset value
+    const [adaAmount, multiAssetCDDL] = raw;
+    const ada = Coin.make(BigInt(adaAmount));
+    const multiAsset = MultiAsset.fromCDDL(multiAssetCDDL);
+    return withAssets(ada, multiAsset);
+  }
+};
+
+/**
+ * Synchronous encoding utilities.
  *
  * @since 2.0.0
  * @category encoding/decoding
  */
 export const Encode = {
-  sync: Schema.encodeSync(ValueSchema),
-};
-
-export const Decode = {
-  sync: Schema.decodeUnknownSync(ValueSchema),
+  cborHex: Schema.encodeSync(CBORHexSchema),
+  cborBytes: Schema.encodeSync(CBORBytesSchema),
 };
 
 /**
- * Either encoding/decoding utilities.
+ * Synchronous decoding utilities.
+ *
+ * @since 2.0.0
+ * @category encoding/decoding
+ */
+export const Decode = {
+  cborHex: Schema.decodeUnknownSync(CBORHexSchema),
+  cborBytes: Schema.decodeUnknownSync(CBORBytesSchema),
+};
+
+/**
+ * Either encoding utilities.
  *
  * @since 2.0.0
  * @category encoding/decoding
  */
 export const EncodeEither = {
-  either: Schema.encodeEither(ValueSchema),
+  cborHex: Schema.encodeEither(CBORHexSchema),
+  cborBytes: Schema.encodeEither(CBORBytesSchema),
 };
 
+/**
+ * Either decoding utilities.
+ *
+ * @since 2.0.0
+ * @category encoding/decoding
+ */
 export const DecodeEither = {
-  either: Schema.decodeUnknownEither(ValueSchema),
+  cborHex: Schema.decodeUnknownEither(CBORHexSchema),
+  cborBytes: Schema.decodeUnknownEither(CBORBytesSchema),
 };

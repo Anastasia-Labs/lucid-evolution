@@ -1,21 +1,23 @@
 import { Schema, Data, FastCheck } from "effect";
 import * as Bytes from "./Bytes.js";
-import * as Hash28 from "./Hash28.js";
+import * as Bytes64 from "./Bytes64.js";
 
 /**
- * Error class for KeyHash related operations.
+ * Error class for Ed25519Signature related operations.
  *
  * @example
- * import { KeyHash } from "@lucid-evolution/experimental";
+ * import { Ed25519Signature } from "@lucid-evolution/experimental";
  * import assert from "assert";
  *
- * const error = new KeyHash.KeyHashError({ message: "Invalid key hash" });
- * assert(error.message === "Invalid key hash");
+ * const error = new Ed25519Signature.Ed25519SignatureError({ message: "Invalid Ed25519 signature" });
+ * assert(error.message === "Invalid Ed25519 signature");
  *
  * @since 2.0.0
  * @category errors
  */
-export class KeyHashError extends Data.TaggedError("KeyHashError")<{
+export class Ed25519SignatureError extends Data.TaggedError(
+  "Ed25519SignatureError",
+)<{
   message?: string;
   reason?:
     | "InvalidHexLength"
@@ -25,68 +27,72 @@ export class KeyHashError extends Data.TaggedError("KeyHashError")<{
 }> {}
 
 /**
- * Schema for KeyHash representing a verification key hash.
- * addr_keyhash = hash28
- * Follows CIP-0019 binary representation.
+ * Schema for Ed25519Signature representing an Ed25519 signature.
+ * ed25519_signature = bytes .size 64
+ * Follows the Conway-era CDDL specification.
  *
  * @since 2.0.0
  * @category schemas
  */
-export const KeyHash = Hash28.HexSchema.pipe(Schema.brand("KeyHash"));
-export type KeyHash = typeof KeyHash.Type;
+export const Ed25519Signature = Bytes64.HexSchema.pipe(
+  Schema.brand("Ed25519Signature"),
+);
+export type Ed25519Signature = typeof Ed25519Signature.Type;
 
 export const BytesSchema = Schema.transform(
-  Hash28.BytesSchema,
-  Schema.typeSchema(KeyHash),
+  Bytes64.BytesSchema,
+  Schema.typeSchema(Ed25519Signature),
   {
     strict: true,
     encode: (_, toA) => Bytes.Decode.hex(toA),
-    decode: (_, fromA) => Schema.decodeSync(KeyHash)(Bytes.Encode.hex(fromA)),
+    decode: (_, fromA) =>
+      Schema.decodeSync(Ed25519Signature)(Bytes.Encode.hex(fromA)),
   },
 );
 
 export const HexSchema = Schema.transform(
-  Schema.typeSchema(Hash28.HexSchema),
-  KeyHash,
+  Schema.typeSchema(Bytes64.HexSchema),
+  Ed25519Signature,
   {
     strict: true,
     encode: (_, toA) => toA,
-    decode: (fromI) => Schema.decodeSync(KeyHash)(fromI),
+    decode: (fromI) => Schema.decodeSync(Ed25519Signature)(fromI),
   },
 );
 
 /**
- * Check if two KeyHash instances are equal.
+ * Check if two Ed25519Signature instances are equal.
  *
  * @example
- * import { KeyHash } from "@lucid-evolution/experimental";
+ * import { Ed25519Signature } from "@lucid-evolution/experimental";
  * import assert from "assert";
  *
  * @since 2.0.0
  * @category equality
  */
-export const equals = (a: KeyHash, b: KeyHash): boolean => a === b;
+export const equals = (a: Ed25519Signature, b: Ed25519Signature): boolean =>
+  a === b;
 
 /**
- * Generate a random KeyHash.
+ * Generate a random Ed25519Signature.
  *
  * @example
- * import { KeyHash } from "@lucid-evolution/experimental";
+ * import { Ed25519Signature } from "@lucid-evolution/experimental";
  * import { FastCheck } from "effect";
  * import assert from "assert";
  *
- * const randomSamples = FastCheck.sample(KeyHash.generator, 20);
- * randomSamples.forEach((keyHash) => {
- *  assert(keyHash.length === 56);
+ * const randomSamples = FastCheck.sample(Ed25519Signature.generator, 20);
+ * randomSamples.forEach((signature) => {
+ *  assert(signature.length === 128);
  * });
  *
  * @since 2.0.0
  * @category generators
  */
 export const generator = FastCheck.uint8Array({
-  minLength: Hash28.HASH28_BYTES_LENGTH,
-  maxLength: Hash28.HASH28_BYTES_LENGTH,
-}).map((bytes) => KeyHash.make(Bytes.Encode.hex(bytes)));
+  minLength: 64,
+  maxLength: 64,
+}).map((bytes) => Ed25519Signature.make(Bytes.Encode.hex(bytes)));
 
 /**
  * Synchronous encoding utilities.

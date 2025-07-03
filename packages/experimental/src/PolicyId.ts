@@ -43,16 +43,6 @@ export class PolicyIdError extends Data.TaggedError("PolicyIdError")<{
  * @since 2.0.0
  * @category model
  */
-// export class PolicyId extends Schema.TaggedClass<PolicyId>()("PolicyId", {
-//   hash: Hash28.HexSchema,
-// }) {
-//   [Symbol.for("nodejs.util.inspect.custom")]() {
-//     return {
-//       _tag: "PolicyId",
-//       hash: this.hash,
-//     };
-//   }
-// }
 export const PolicyId = Hash28.HexSchema.pipe(
   Schema.brand("PolicyId"),
   Schema.annotations({

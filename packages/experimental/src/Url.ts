@@ -2,6 +2,15 @@ import { Schema, Data } from "effect";
 import * as Text128 from "./Text128.js";
 
 /**
+ * CDDL specification:
+ * url = text .size (0..128)
+ *
+ * @since 2.0.0
+ * @category constants
+ */
+export const URL_MAX_LENGTH = 128;
+
+/**
  * Error class for Url related operations.
  *
  * @example
@@ -20,30 +29,27 @@ export class UrlError extends Data.TaggedError("UrlError")<{
 }> {}
 
 /**
- * Schema for Url representing URLs.
- * url = text .size (0 .. 128)
- *
- * Url extends Text128 for URL-specific validation.
+ * Schema for Url representing URLs as branded text.
+ * url = text .size (0..128)
  *
  * @example
  * import { Url } from "@lucid-evolution/experimental";
  *
- * const url = new Url({ value: "https://example.com/metadata.json" });
- * console.log(url.value); // "https://example.com/metadata.json"
+ * const url = Url.make("https://example.com/metadata.json");
+ * console.log(url); // "https://example.com/metadata.json"
  *
  * @since 2.0.0
  * @category model
  */
-export class Url extends Schema.TaggedClass<Url>()("Url", {
-  value: Text128.TextSchema,
-}) {
-  [Symbol.for("nodejs.util.inspect.custom")]() {
-    return {
-      _tag: "Url",
-      value: this.value,
-    };
-  }
-}
+export const Url = Text128.VariableTextSchema.pipe(Schema.brand("Url"));
+
+/**
+ * Type alias for Url.
+ *
+ * @since 2.0.0
+ * @category model
+ */
+export type Url = typeof Url.Type;
 
 /**
  * Schema for transforming between Text128 and Url.
@@ -56,8 +62,8 @@ export const UrlTextSchema = Schema.transform(
   Url,
   {
     strict: true,
-    encode: (_, url) => url.value,
-    decode: (value) => new Url({ value }),
+    encode: (_, url) => url,
+    decode: (value) => Url.make(value),
   },
 );
 
@@ -67,14 +73,14 @@ export const UrlTextSchema = Schema.transform(
  * @example
  * import { Url } from "@lucid-evolution/experimental";
  *
- * const url1 = new Url({ value: "https://example.com" });
- * const url2 = new Url({ value: "https://example.com" });
+ * const url1 = Url.make("https://example.com");
+ * const url2 = Url.make("https://example.com");
  * console.log(Url.equals(url1, url2)); // true
  *
  * @since 2.0.0
  * @category equality
  */
-export const equals = (a: Url, b: Url): boolean => a.value === b.value;
+export const equals = (a: Url, b: Url): boolean => a === b;
 
 /**
  * Check if a URL is empty.
@@ -82,13 +88,13 @@ export const equals = (a: Url, b: Url): boolean => a.value === b.value;
  * @example
  * import { Url } from "@lucid-evolution/experimental";
  *
- * const emptyUrl = new Url({ value: "" });
+ * const emptyUrl = Url.make("");
  * console.log(Url.isEmpty(emptyUrl)); // true
  *
  * @since 2.0.0
  * @category predicates
  */
-export const isEmpty = (url: Url): boolean => url.value.length === 0;
+export const isEmpty = (url: Url): boolean => url.length === 0;
 
 /**
  * Get the length of a URL.
@@ -96,13 +102,13 @@ export const isEmpty = (url: Url): boolean => url.value.length === 0;
  * @example
  * import { Url } from "@lucid-evolution/experimental";
  *
- * const url = new Url({ value: "https://example.com" });
+ * const url = Url.make("https://example.com");
  * console.log(Url.length(url)); // 19
  *
  * @since 2.0.0
  * @category transformation
  */
-export const length = (url: Url): number => url.value.length;
+export const length = (url: Url): number => url.length;
 
 /**
  * Generate a random Url.
@@ -114,16 +120,14 @@ export const length = (url: Url): number => url.value.length;
  *
  * const randomSamples = FastCheck.sample(Url.generator, 10);
  * randomSamples.forEach((url) => {
- *   assert(url.value.length >= 0);
- *   assert(url.value.length <= 128);
+ *   assert(url.length >= 0);
+ *   assert(url.length <= 128);
  * });
  *
  * @since 2.0.0
  * @category generators
  */
-export const generator = Text128.generator.map(
-  (text) => new Url({ value: text }),
-);
+export const generator = Text128.generator.map((text) => Url.make(text));
 
 /**
  * Synchronous encoding utilities.
@@ -132,23 +136,57 @@ export const generator = Text128.generator.map(
  * @category encoding/decoding
  */
 export const Encode = {
-  hex: Schema.encodeSync(UrlTextSchema),
-};
-
-export const Decode = {
-  hex: Schema.decodeUnknownSync(UrlTextSchema),
+  text: Schema.encodeSync(UrlTextSchema),
 };
 
 /**
- * Effect-based encoding/decoding utilities.
+ * Synchronous decoding utilities.
  *
  * @since 2.0.0
  * @category encoding/decoding
  */
-export const EncodeEffect = {
-  hex: Schema.encode(UrlTextSchema),
+export const Decode = {
+  text: Schema.decodeUnknownSync(UrlTextSchema),
 };
 
-export const DecodeEffect = {
-  hex: Schema.decodeUnknown(UrlTextSchema),
+/**
+ * Either-based encoding utilities.
+ *
+ * @since 2.0.0
+ * @category encoding/decoding
+ */
+export const EncodeEither = {
+  text: Schema.encodeEither(UrlTextSchema),
 };
+
+/**
+ * Either-based decoding utilities.
+ *
+ * @since 2.0.0
+ * @category encoding/decoding
+ */
+export const DecodeEither = {
+  text: Schema.decodeUnknownEither(UrlTextSchema),
+};
+
+/**
+ * Create a Url from a text string.
+ *
+ * @example
+ * import { Url } from "@lucid-evolution/experimental";
+ *
+ * const url = Url.make("https://example.com/metadata.json");
+ * console.log(url); // "https://example.com/metadata.json"
+ *
+ * @since 2.0.0
+ * @category constructors
+ */
+export const make = (value: string): Url => Url.make(value);
+
+/**
+ * Check if the given value is a valid Url
+ *
+ * @since 2.0.0
+ * @category predicates
+ */
+export const isUrl = Schema.is(Url);

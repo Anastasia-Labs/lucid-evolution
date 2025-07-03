@@ -23,65 +23,22 @@ export class DRepError extends Data.TaggedError("DRepError")<{
 }> {}
 
 /**
- * Schema for KeyHashDRep representing a key hash-based DRep.
- *
- * @since 2.0.0
- * @category model
- */
-export class KeyHashDRep extends Schema.TaggedClass<KeyHashDRep>()(
-  "KeyHashDRep",
-  {
-    keyHash: KeyHash.KeyHash,
-  },
-) {}
-
-/**
- * Schema for ScriptHashDRep representing a script hash-based DRep.
- *
- * @since 2.0.0
- * @category model
- */
-export class ScriptHashDRep extends Schema.TaggedClass<ScriptHashDRep>()(
-  "ScriptHashDRep",
-  {
-    scriptHash: ScriptHash.ScriptHash,
-  },
-) {}
-
-/**
- * Schema for AlwaysAbstainDRep representing an always abstain DRep.
- *
- * @since 2.0.0
- * @category model
- */
-export class AlwaysAbstainDRep extends Schema.TaggedClass<AlwaysAbstainDRep>()(
-  "AlwaysAbstainDRep",
-  {},
-) {}
-
-/**
- * Schema for AlwaysNoConfidenceDRep representing an always no confidence DRep.
- *
- * @since 2.0.0
- * @category model
- */
-export class AlwaysNoConfidenceDRep extends Schema.TaggedClass<AlwaysNoConfidenceDRep>()(
-  "AlwaysNoConfidenceDRep",
-  {},
-) {}
-
-/**
  * Union schema for DRep representing different DRep types.
- * drep = [0, addr_keyhash // 1, script_hash // 2 // 3]
+ *
+ * drep = [0, addr_keyhash] / [1, script_hash] / [2] / [3]
  *
  * @since 2.0.0
  * @category schemas
  */
 export const DRep = Schema.Union(
-  KeyHashDRep,
-  ScriptHashDRep,
-  AlwaysAbstainDRep,
-  AlwaysNoConfidenceDRep,
+  Schema.TaggedStruct("KeyHashDRep", {
+    keyHash: KeyHash.KeyHash,
+  }),
+  Schema.TaggedStruct("ScriptHashDRep", {
+    scriptHash: ScriptHash.ScriptHash,
+  }),
+  Schema.TaggedStruct("AlwaysAbstainDRep", {}),
+  Schema.TaggedStruct("AlwaysNoConfidenceDRep", {}),
 );
 
 /**
@@ -91,6 +48,41 @@ export const DRep = Schema.Union(
  * @category model
  */
 export type DRep = typeof DRep.Type;
+
+/**
+ * Type alias for KeyHashDRep.
+ *
+ * @since 2.0.0
+ * @category model
+ */
+export type KeyHashDRep = Extract<DRep, { _tag: "KeyHashDRep" }>;
+
+/**
+ * Type alias for ScriptHashDRep.
+ *
+ * @since 2.0.0
+ * @category model
+ */
+export type ScriptHashDRep = Extract<DRep, { _tag: "ScriptHashDRep" }>;
+
+/**
+ * Type alias for AlwaysAbstainDRep.
+ *
+ * @since 2.0.0
+ * @category model
+ */
+export type AlwaysAbstainDRep = Extract<DRep, { _tag: "AlwaysAbstainDRep" }>;
+
+/**
+ * Type alias for AlwaysNoConfidenceDRep.
+ *
+ * @since 2.0.0
+ * @category model
+ */
+export type AlwaysNoConfidenceDRep = Extract<
+  DRep,
+  { _tag: "AlwaysNoConfidenceDRep" }
+>;
 
 /**
  * CDDL schema for DRep as tuple structure.
@@ -144,9 +136,9 @@ export const CBORBytesSchema = Schema.transformOrFail(
               // [2] or [3]
               const [tag] = decoded;
               if (tag === 2) {
-                return new AlwaysAbstainDRep({});
+                return { _tag: "AlwaysAbstainDRep" as const };
               } else if (tag === 3) {
-                return new AlwaysNoConfidenceDRep({});
+                return { _tag: "AlwaysNoConfidenceDRep" as const };
               }
               return yield* ParseResult.fail(
                 new ParseResult.Type(
@@ -162,12 +154,12 @@ export const CBORBytesSchema = Schema.transformOrFail(
                 const keyHash = yield* ParseResult.decode(KeyHash.BytesSchema)(
                   hashBytes,
                 );
-                return new KeyHashDRep({ keyHash });
+                return { _tag: "KeyHashDRep" as const, keyHash };
               } else if (tag === 1) {
                 const scriptHash = yield* ParseResult.decode(
                   ScriptHash.BytesSchema,
                 )(hashBytes);
-                return new ScriptHashDRep({ scriptHash });
+                return { _tag: "ScriptHashDRep" as const, scriptHash };
               }
               return yield* ParseResult.fail(
                 new ParseResult.Type(
@@ -228,9 +220,9 @@ export const CBORHexSchema = Schema.transformOrFail(
               // [2] or [3]
               const [tag] = decoded;
               if (tag === 2) {
-                return new AlwaysAbstainDRep({});
+                return { _tag: "AlwaysAbstainDRep" as const };
               } else if (tag === 3) {
-                return new AlwaysNoConfidenceDRep({});
+                return { _tag: "AlwaysNoConfidenceDRep" as const };
               }
               return yield* ParseResult.fail(
                 new ParseResult.Type(
@@ -246,12 +238,12 @@ export const CBORHexSchema = Schema.transformOrFail(
                 const keyHash = yield* ParseResult.decode(KeyHash.BytesSchema)(
                   hashBytes,
                 );
-                return new KeyHashDRep({ keyHash });
+                return { _tag: "KeyHashDRep" as const, keyHash };
               } else if (tag === 1) {
                 const scriptHash = yield* ParseResult.decode(
                   ScriptHash.BytesSchema,
                 )(hashBytes);
-                return new ScriptHashDRep({ scriptHash });
+                return { _tag: "ScriptHashDRep" as const, scriptHash };
               }
               return yield* ParseResult.fail(
                 new ParseResult.Type(
@@ -426,6 +418,14 @@ export const isAlwaysNoConfidenceDRep = (
 ): drep is AlwaysNoConfidenceDRep => drep._tag === "AlwaysNoConfidenceDRep";
 
 /**
+ * Check if the given value is a valid DRep
+ *
+ * @since 2.0.0
+ * @category predicates
+ */
+export const isDRep = Schema.is(DRep);
+
+/**
  * FastCheck generator for DRep instances.
  *
  * @since 2.0.0
@@ -434,12 +434,12 @@ export const isAlwaysNoConfidenceDRep = (
 export const generator = FastCheck.oneof(
   FastCheck.record({
     keyHash: KeyHash.generator,
-  }).map((props) => new KeyHashDRep(props)),
+  }).map((props) => ({ _tag: "KeyHashDRep" as const, ...props })),
   FastCheck.record({
     scriptHash: ScriptHash.generator,
-  }).map((props) => new ScriptHashDRep(props)),
-  FastCheck.record({}).map(() => new AlwaysAbstainDRep({})),
-  FastCheck.record({}).map(() => new AlwaysNoConfidenceDRep({})),
+  }).map((props) => ({ _tag: "ScriptHashDRep" as const, ...props })),
+  FastCheck.record({}).map(() => ({ _tag: "AlwaysAbstainDRep" as const })),
+  FastCheck.record({}).map(() => ({ _tag: "AlwaysNoConfidenceDRep" as const })),
 );
 
 /**
@@ -474,3 +474,69 @@ export const equals = (self: DRep, that: DRep): boolean => {
       return false;
   }
 };
+
+/**
+ * Create a KeyHashDRep from a KeyHash.
+ *
+ * @example
+ * import { DRep, KeyHash } from "@lucid-evolution/experimental";
+ *
+ * const keyHash = new KeyHash.KeyHash({ hash: "1234567890123456789012345678901234567890123456789012345678901234" });
+ * const drep = DRep.fromKeyHash(keyHash);
+ *
+ * @since 2.0.0
+ * @category constructors
+ */
+export const fromKeyHash = (keyHash: KeyHash.KeyHash): KeyHashDRep => ({
+  _tag: "KeyHashDRep",
+  keyHash,
+});
+
+/**
+ * Create a ScriptHashDRep from a ScriptHash.
+ *
+ * @example
+ * import { DRep, ScriptHash } from "@lucid-evolution/experimental";
+ *
+ * const scriptHash = new ScriptHash.ScriptHash({ hash: "1234567890123456789012345678901234567890123456789012345678901234" });
+ * const drep = DRep.fromScriptHash(scriptHash);
+ *
+ * @since 2.0.0
+ * @category constructors
+ */
+export const fromScriptHash = (
+  scriptHash: ScriptHash.ScriptHash,
+): ScriptHashDRep => ({
+  _tag: "ScriptHashDRep",
+  scriptHash,
+});
+
+/**
+ * Create an AlwaysAbstainDRep.
+ *
+ * @example
+ * import { DRep } from "@lucid-evolution/experimental";
+ *
+ * const drep = DRep.alwaysAbstain();
+ *
+ * @since 2.0.0
+ * @category constructors
+ */
+export const alwaysAbstain = (): AlwaysAbstainDRep => ({
+  _tag: "AlwaysAbstainDRep",
+});
+
+/**
+ * Create an AlwaysNoConfidenceDRep.
+ *
+ * @example
+ * import { DRep } from "@lucid-evolution/experimental";
+ *
+ * const drep = DRep.alwaysNoConfidence();
+ *
+ * @since 2.0.0
+ * @category constructors
+ */
+export const alwaysNoConfidence = (): AlwaysNoConfidenceDRep => ({
+  _tag: "AlwaysNoConfidenceDRep",
+});

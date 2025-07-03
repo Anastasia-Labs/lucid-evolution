@@ -1,8 +1,9 @@
-import { pipe, Schema, Data, FastCheck } from "effect";
+import { Schema, Data, FastCheck } from "effect";
 import * as Bytes from "./Bytes.js";
+import * as Bytes16 from "./Bytes16.js";
 
 /**
- * Constants for IPv6 validation.
+ * CDDL specification:
  * ipv6 = bytes .size 16
  *
  * @since 2.0.0
@@ -39,29 +40,7 @@ export class IPv6Error extends Data.TaggedError("IPv6Error")<{
  * @since 2.0.0
  * @category schemas
  */
-export const BytesSchema = pipe(
-  Schema.Uint8ArrayFromSelf,
-  Schema.filter((a) => a.length === IPV6_BYTES_LENGTH),
-).annotations({
-  message: (issue) =>
-    `IPv6 address must be exactly ${IPV6_BYTES_LENGTH} bytes, but got ${(issue.actual as Uint8Array).length}`,
-  identifier: "IPv6Bytes",
-});
-
-/**
- * Schema for validating IPv6 address hex string (exactly 32 hex characters).
- *
- * @since 2.0.0
- * @category schemas
- */
-export const HexSchema = pipe(
-  Bytes.HexSchema,
-  Schema.filter((a) => a.length === IPV6_HEX_LENGTH),
-).annotations({
-  message: (issue) =>
-    `IPv6 address must be exactly ${IPV6_HEX_LENGTH} hex characters, but got ${(issue.actual as string).length}`,
-  identifier: "IPv6Hex",
-});
+export const BytesSchema = Bytes16.BytesSchema;
 
 /**
  * Schema for IPv6 representing an IPv6 network address.
@@ -70,22 +49,21 @@ export const HexSchema = pipe(
  * @example
  * import { IPv6 } from "@lucid-evolution/experimental";
  *
- * const ipv6 = new IPv6({ address: "20010db885a3000000008a2e03707334" });
- * console.log(ipv6.address); // "20010db885a3000000008a2e03707334"
+ * const ipv6 = IPv6.make("20010db885a3000000008a2e03707334");
+ * console.log(ipv6); // "20010db885a3000000008a2e03707334"
  *
  * @since 2.0.0
  * @category model
  */
-export class IPv6 extends Schema.TaggedClass<IPv6>()("IPv6", {
-  address: HexSchema,
-}) {
-  [Symbol.for("nodejs.util.inspect.custom")]() {
-    return {
-      _tag: "IPv6",
-      address: this.address,
-    };
-  }
-}
+export const IPv6 = Bytes16.HexSchema.pipe(Schema.brand("IPv6"));
+
+/**
+ * Type alias for IPv6.
+ *
+ * @since 2.0.0
+ * @category model
+ */
+export type IPv6 = typeof IPv6.Type;
 
 /**
  * Schema for transforming between Uint8Array and IPv6.
@@ -95,8 +73,8 @@ export class IPv6 extends Schema.TaggedClass<IPv6>()("IPv6", {
  */
 export const IPv6BytesSchema = Schema.transform(BytesSchema, IPv6, {
   strict: true,
-  encode: (_, ipv6) => Bytes.Decode.hex(ipv6.address),
-  decode: (bytes) => new IPv6({ address: Bytes.Encode.hex(bytes) }),
+  encode: (_, ipv6) => Bytes.Decode.hex(ipv6),
+  decode: (bytes) => IPv6.make(Bytes.Encode.hex(bytes)),
 });
 
 /**
@@ -106,12 +84,12 @@ export const IPv6BytesSchema = Schema.transform(BytesSchema, IPv6, {
  * @category encoding/decoding
  */
 export const IPv6HexSchema = Schema.transform(
-  Schema.typeSchema(HexSchema),
+  Schema.typeSchema(Bytes16.HexSchema),
   IPv6,
   {
     strict: true,
-    encode: (_, ipv6) => ipv6.address,
-    decode: (address) => new IPv6({ address }),
+    encode: (_, ipv6) => ipv6,
+    decode: (address) => IPv6.make(address),
   },
 );
 
@@ -136,7 +114,7 @@ export const fromString = (ipv6String: string): IPv6 => {
       reason: "InvalidFormat",
     });
   }
-  return new IPv6({ address: hex as Bytes.Hex });
+  return IPv6.make(hex as Bytes.Hex);
 };
 
 /**
@@ -145,7 +123,7 @@ export const fromString = (ipv6String: string): IPv6 => {
  * @example
  * import { IPv6 } from "@lucid-evolution/experimental";
  *
- * const ipv6 = new IPv6({ address: "20010db885a3000000008a2e03707334" });
+ * const ipv6 = IPv6.make("20010db885a3000000008a2e03707334");
  * const string = IPv6.toString(ipv6);
  * console.log(string); // "2001:0db8:85a3:0000:0000:8a2e:0370:7334"
  *
@@ -153,7 +131,7 @@ export const fromString = (ipv6String: string): IPv6 => {
  * @category transformation
  */
 export const toString = (ipv6: IPv6): string => {
-  const hex = ipv6.address;
+  const hex = ipv6;
   const groups = [];
   for (let i = 0; i < hex.length; i += 4) {
     groups.push(hex.slice(i, i + 4));
@@ -167,14 +145,14 @@ export const toString = (ipv6: IPv6): string => {
  * @example
  * import { IPv6 } from "@lucid-evolution/experimental";
  *
- * const ipv6a = new IPv6({ address: "20010db885a3000000008a2e03707334" });
- * const ipv6b = new IPv6({ address: "20010db885a3000000008a2e03707334" });
+ * const ipv6a = IPv6.make("20010db885a3000000008a2e03707334");
+ * const ipv6b = IPv6.make("20010db885a3000000008a2e03707334");
  * console.log(IPv6.equals(ipv6a, ipv6b)); // true
  *
  * @since 2.0.0
  * @category equality
  */
-export const equals = (a: IPv6, b: IPv6): boolean => a.address === b.address;
+export const equals = (a: IPv6, b: IPv6): boolean => a === b;
 
 /**
  * Generate a random IPv6 address.
@@ -186,7 +164,7 @@ export const equals = (a: IPv6, b: IPv6): boolean => a.address === b.address;
  *
  * const randomSamples = FastCheck.sample(IPv6.generator, 10);
  * randomSamples.forEach((ipv6) => {
- *   assert(ipv6.address.length === 32);
+ *   assert(ipv6.length === 32);
  * });
  *
  * @since 2.0.0
@@ -195,7 +173,7 @@ export const equals = (a: IPv6, b: IPv6): boolean => a.address === b.address;
 export const generator = FastCheck.uint8Array({
   minLength: IPV6_BYTES_LENGTH,
   maxLength: IPV6_BYTES_LENGTH,
-}).map((bytes) => new IPv6({ address: Bytes.Encode.hex(bytes) }));
+}).map((bytes) => IPv6.make(Bytes.Encode.hex(bytes)));
 
 /**
  * Synchronous encoding utilities.

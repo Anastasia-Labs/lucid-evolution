@@ -1,23 +1,97 @@
-import * as Bech32 from "./Bech32.js";
-import { Effect } from "effect";
 /**
- * Parse header from address
+ * Header module based on Conway CDDL specification
  *
- * @example
- * import { Header } from "@lucid-evolution/experimental";
- * import { Effect } from "effect";
- * import assert from "assert";
- *
- * const effect = Header.fromBech32("addr1qx2fxv2umyhttkxyxp8x0dlpdt3k6cwng5pxj3jhsydzer3n0d3vllmyqwsx5wktcd8cc3sq835lu7drv2xwl2wywfgse35a3x");
- * const header = Effect.runSync(effect);
- * assert(typeof header === "number");
- * assert(header === 0 || header === 1); // typically 0 for testnet, 1 for mainnet
+ * CDDL: header = [header_body, body_signature : kes_signature]
  *
  * @since 2.0.0
- * @category transformation
  */
-//FIX:
-// export const fromBech32 = (
-//   bech32Address: string,
-// ): Effect.Effect<number, Bech32.Bech32Error> =>
-//   Effect.map(Bech32.toBytes(bech32Address), (bytes) => bytes[0]);
+import { Data, Schema } from "effect";
+import * as KesSignature from "./KesSignature.js";
+import * as HeaderBody from "./HeaderBody.js";
+
+/**
+ * Error class for Header operations
+ *
+ * @since 2.0.0
+ * @category errors
+ */
+export class HeaderError extends Data.TaggedError("HeaderError")<{
+  message?: string;
+  cause?: unknown;
+}> {}
+
+/**
+ * Header implementation using HeaderBody and KesSignature
+ *
+ * CDDL: header = [header_body, body_signature : kes_signature]
+ *
+ * @since 2.0.0
+ * @category model
+ */
+export class Header extends Schema.TaggedClass<Header>()("Header", {
+  headerBody: HeaderBody.HeaderBody,
+  bodySignature: KesSignature.KesSignature,
+}) {}
+
+/**
+ * TODO: Implement proper CBOR encoding/decoding
+ * Currently returns a placeholder error
+ *
+ * @since 2.0.0
+ * @category schemas
+ */
+export const BytesSchema = Schema.transform(Schema.Uint8ArrayFromSelf, Header, {
+  strict: true,
+  encode: () => {
+    throw new HeaderError({
+      message:
+        "Header CBOR encoding not implemented yet. Requires HeaderBody module and CBOR utilities.",
+    });
+  },
+  decode: () => {
+    throw new HeaderError({
+      message:
+        "Header CBOR decoding not implemented yet. Requires HeaderBody module and CBOR utilities.",
+    });
+  },
+});
+
+/**
+ * TODO: Implement when BytesSchema is complete
+ *
+ * @since 2.0.0
+ * @category encoding/decoding
+ */
+export const Encode = {
+  bytes: Schema.encodeSync(BytesSchema),
+};
+
+/**
+ * TODO: Implement when BytesSchema is complete
+ *
+ * @since 2.0.0
+ * @category encoding/decoding
+ */
+export const Decode = {
+  bytes: Schema.decodeUnknownSync(BytesSchema),
+};
+
+/**
+ * TODO: Implement when BytesSchema is complete
+ *
+ * @since 2.0.0
+ * @category encoding/decoding
+ */
+export const EncodeEither = {
+  bytes: Schema.encodeEither(BytesSchema),
+};
+
+/**
+ * TODO: Implement when BytesSchema is complete
+ *
+ * @since 2.0.0
+ * @category encoding/decoding
+ */
+export const DecodeEither = {
+  bytes: Schema.decodeUnknownEither(BytesSchema),
+};

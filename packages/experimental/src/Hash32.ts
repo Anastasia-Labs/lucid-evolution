@@ -5,6 +5,13 @@ import * as Bytes from "./Bytes.js";
 export const HASH32_BYTES_LENGTH = 32;
 export const HASH32_HEX_LENGTH = 64;
 
+/**
+ * Schema for validating Hash32 byte arrays.
+ * hash32 = bytes .size 32
+ *
+ * @since 2.0.0
+ * @category schemas
+ */
 export const BytesSchema = pipe(
   Schema.Uint8ArrayFromSelf,
   Schema.filter((a) => a.length === HASH32_BYTES_LENGTH),
@@ -14,6 +21,13 @@ export const BytesSchema = pipe(
   identifier: "Hash32Bytes",
 });
 
+/**
+ * Schema for validating Hash32 hex strings.
+ * hash32 = bytes .size 32 (represented as 64 hex characters)
+ *
+ * @since 2.0.0
+ * @category schemas
+ */
 export const HexSchema = pipe(
   Bytes.HexSchema,
   Schema.filter((a) => a.length === HASH32_HEX_LENGTH),

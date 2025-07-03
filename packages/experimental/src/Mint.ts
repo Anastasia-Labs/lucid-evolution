@@ -8,12 +8,14 @@ import {
   Option,
   Equal,
   Pretty,
+  Either,
 } from "effect";
 import * as PolicyId from "./PolicyId.js";
 import * as AssetName from "./AssetName.js";
 import * as NonZeroInt64 from "./NonZeroInt64.js";
 import * as CBOR from "./CBOR.js";
 import { Bytes } from "./index.js";
+import { ParseError } from "effect/ParseResult";
 
 /**
  * Error class for Mint related operations.
@@ -73,10 +75,10 @@ export const Mint = Schema.HashMap({
       .map(
         ([policyId, assetMap]) =>
           `\n  ${policyId} => HashMap(${HashMap.size(assetMap)}) {${Array.from(
-            HashMap.entries(assetMap)
+            HashMap.entries(assetMap),
           )
             .map(([assetName, amount]) => `\n    ${assetName} => ${amount}`)
-            .join(",")}\n  }`
+            .join(",")}\n  }`,
       )
       .join(",")}\n}`,
 });
@@ -115,9 +117,13 @@ export const empty = (): Mint => HashMap.empty<PolicyId.PolicyId, AssetMap>();
 export const singleton = (
   policyId: PolicyId.PolicyId,
   assetName: AssetName.AssetName,
-  amount: NonZeroInt64.NonZeroInt64
+  amount: NonZeroInt64.NonZeroInt64,
 ): Mint => {
-  return Schema.decodeSync(Mint)([[policyId, [[assetName, amount]]]]);
+  return HashMap.set(
+    empty(),
+    policyId,
+    HashMap.fromIterable([[assetName, amount]]),
+  );
 };
 
 /**
@@ -138,7 +144,7 @@ export const singleton = (
  * Helper function to convert Mint to entries array for manipulation
  */
 const toEntries = (
-  mint: Mint
+  mint: Mint,
 ): Array<
   [PolicyId.PolicyId, Array<[AssetName.AssetName, NonZeroInt64.NonZeroInt64]>]
 > => {
@@ -154,13 +160,13 @@ const toEntries = (
 const fromEntries = (
   entries: Array<
     [PolicyId.PolicyId, Array<[AssetName.AssetName, NonZeroInt64.NonZeroInt64]>]
-  >
+  >,
 ): Mint => {
   return HashMap.fromIterable(
     entries.map(([policyId, assetEntries]) => [
       policyId,
       HashMap.fromIterable(assetEntries),
-    ])
+    ]),
   );
 };
 
@@ -168,7 +174,7 @@ export const insert = (
   mint: Mint,
   policyId: PolicyId.PolicyId,
   assetName: AssetName.AssetName,
-  amount: NonZeroInt64.NonZeroInt64
+  amount: NonZeroInt64.NonZeroInt64,
 ): Mint => {
   // Get existing asset map or create empty one
   const existingAssetMap = HashMap.get(mint, policyId);
@@ -198,7 +204,7 @@ export const removePolicy = (mint: Mint, policyId: PolicyId.PolicyId): Mint =>
 export const removeAsset = (
   mint: Mint,
   policyId: PolicyId.PolicyId,
-  assetName: AssetName.AssetName
+  assetName: AssetName.AssetName,
 ): Mint => {
   const assets = HashMap.get(mint, policyId);
   if (assets._tag === "None") {
@@ -228,7 +234,7 @@ export const removeAsset = (
 export const get = (
   mint: Mint,
   policyId: PolicyId.PolicyId,
-  assetName: AssetName.AssetName
+  assetName: AssetName.AssetName,
 ): Option.Option<bigint> => {
   const assets = HashMap.get(mint, policyId);
   if (assets._tag === "None") {
@@ -256,7 +262,7 @@ export const get = (
 export const has = (
   mint: Mint,
   policyId: PolicyId.PolicyId,
-  assetName: AssetName.AssetName
+  assetName: AssetName.AssetName,
 ): boolean => get(mint, policyId, assetName) !== Option.none();
 
 /**
@@ -300,9 +306,8 @@ export const policyCount = (mint: Mint): number => HashMap.size(mint);
  * @since 2.0.0
  * @category equality
  */
-export const equals = (self: Mint, that: Mint): boolean => {
-  return Equal.equals(self, that);
-};
+export const equals = (self: Mint, that: Mint): boolean =>
+  Equal.equals(self, that);
 
 /**
  * FastCheck generator for Mint instances.
@@ -315,20 +320,20 @@ export const generator = FastCheck.array(
     PolicyId.generator,
     FastCheck.array(
       FastCheck.tuple(AssetName.generator, NonZeroInt64.generator),
-      { minLength: 1, maxLength: 5 }
-    )
+      { minLength: 1, maxLength: 5 },
+    ),
   ),
-  { minLength: 0, maxLength: 5 }
+  { minLength: 0, maxLength: 5 },
 ).map((entries) => fromEntries(entries));
 
 /**
  * CDDL schema for Mint as map structure.
- * mint = {* policy_id => {* asset_name => int64}}
+ * mint = {* policy_id => {* asset_name => nonZeroInt64}}
  *
  * Where:
  * - policy_id: 28-byte Uint8Array (from CBOR byte string)
  * - asset_name: variable-length Uint8Array (from CBOR byte string, can be empty)
- * - int64: signed 64-bit integer (positive = mint, negative = burn)
+ * - nonZeroInt64: signed 64-bit integer (positive = mint, negative = burn, cannot be zero)
  *
  * @since 2.0.0
  * @category schemas
@@ -372,21 +377,21 @@ export const CBORBytesSchema = Schema.transformOrFail(
                 assetEntries.map(([assetName, amount]) => [
                   assetName, // Convert AssetName to Uint8Array
                   amount, // Convert NonZeroInt64 to BigInt
-                ])
+                ]),
               ),
-            ])
-          )
-        )
+            ]),
+          ),
+        ),
       ),
     decode: (_, __, ___, fromI) =>
       Effect.gen(function* () {
         const map = yield* ParseResult.decode(
-          CBOR.makeCBORBytesSchema(MintCDDLSchema)
+          CBOR.makeCBORBytesSchema(MintCDDLSchema),
         )(fromI);
         const m = fromCDDL(map);
         return m;
       }),
-  }
+  },
 );
 
 /**
@@ -395,7 +400,38 @@ export const CBORBytesSchema = Schema.transformOrFail(
  * @since 2.0.0
  * @category schemas
  */
-export const CBORHexSchema = CBOR.makeCBORHexSchema(MintCDDLSchema);
+export const CBORHexSchema = Schema.transformOrFail(
+  Schema.typeSchema(Bytes.HexSchema),
+  Schema.typeSchema(Mint),
+  {
+    strict: true,
+    encode: (_, __, ___, toA) =>
+      // Convert Map to Map and then encode to CBOR hex
+      ParseResult.succeed(
+        CBOR.Encode().hex(
+          new Map(
+            toEntries(toA).map(([policyId, assetEntries]) => [
+              policyId, // Convert PolicyId to Uint8Array
+              new Map(
+                assetEntries.map(([assetName, amount]) => [
+                  assetName, // Convert AssetName to Uint8Array
+                  amount, // Convert NonZeroInt64 to BigInt
+                ]),
+              ),
+            ]),
+          ),
+        ),
+      ),
+    decode: (_, __, ___, fromI) =>
+      Effect.gen(function* () {
+        const map = yield* ParseResult.decode(
+          CBOR.makeCBORHexSchema(MintCDDLSchema),
+        )(fromI);
+        const m = fromCDDL(map);
+        return m;
+      }),
+  },
+);
 
 /**
  * Encoding utilities using CBOR.
@@ -449,16 +485,16 @@ export const fromCDDL = (raw: MintCDDL): Mint => {
     const assetEntries = Array.from(assetMap.entries()).map(
       ([assetNameBytes, amount]) => {
         const assetName = AssetName.AssetName.make(
-          Bytes.Encode.hex(assetNameBytes)
+          Bytes.Encode.hex(assetNameBytes),
         );
         const nonZeroAmount = Schema.decodeUnknownSync(
-          NonZeroInt64.NonZeroInt64Schema
+          NonZeroInt64.NonZeroInt64Schema,
         )(amount);
         return [assetName, nonZeroAmount] as [
           AssetName.AssetName,
           NonZeroInt64.NonZeroInt64,
         ];
-      }
+      },
     );
     return [policyId, assetEntries] as [
       PolicyId.PolicyId,
@@ -476,8 +512,8 @@ export const fromCDDL = (raw: MintCDDL): Mint => {
  * @category encoding/decoding
  */
 export const Encode = {
-  cborHex: (mint: Mint): string => EncodeRaw.hex(toCDDL(mint)),
-  cborBytes: (mint: Mint): Uint8Array => EncodeRaw.bytes(toCDDL(mint)),
+  cborHex: Schema.encodeSync(CBORHexSchema),
+  cborBytes: Schema.encodeSync(CBORBytesSchema),
 };
 
 /**
@@ -486,14 +522,11 @@ export const Encode = {
  * @since 2.0.0
  * @category encoding/decoding
  */
-export const Decode: {
-  cborHex: (hex: string) => Mint;
-  cborBytes: (bytes: Uint8Array) => Mint;
-  entries: (entries: Array<[string, Array<[string, bigint]>]>) => Mint;
-} = {
-  cborHex: (hex: string): Mint => fromCDDL(DecodeRaw.hex(hex)),
-  cborBytes: (bytes: Uint8Array): Mint => fromCDDL(DecodeRaw.bytes(bytes)),
-  entries: Schema.decodeSync(Mint),
+export const Decode = {
+  cborHex: Schema.decodeUnknownSync(CBORHexSchema),
+  cborBytes: Schema.decodeUnknownSync(CBORBytesSchema),
+  entries: (entries: Array<[string, Array<[string, bigint]>]>): Mint =>
+    Schema.decodeSync(Mint)(entries),
 };
 
 /**
@@ -505,6 +538,7 @@ export const Decode: {
 export const EncodeEither = {
   cborHex: Schema.encodeEither(CBORHexSchema),
   cborBytes: Schema.encodeEither(CBORBytesSchema),
+  entries: Schema.encodeEither(Mint),
 };
 
 /**
@@ -516,4 +550,7 @@ export const EncodeEither = {
 export const DecodeEither = {
   cborHex: Schema.decodeUnknownEither(CBORHexSchema),
   cborBytes: Schema.decodeUnknownEither(CBORBytesSchema),
+  entries: (
+    entries: Array<[string, Array<[string, bigint]>]>,
+  ): Either.Either<Mint, ParseError> => Schema.decodeEither(Mint)(entries),
 };

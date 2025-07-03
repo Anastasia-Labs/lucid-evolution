@@ -18,6 +18,7 @@ export class CredentialError extends Data.TaggedError("CredentialError")<{
 
 /**
  * Credential schema representing either a key hash or script hash
+ * credential = [0, addr_keyhash // 1, script_hash]
  * Used to identify ownership of addresses or stake rights
  *
  * @since 2.0.0

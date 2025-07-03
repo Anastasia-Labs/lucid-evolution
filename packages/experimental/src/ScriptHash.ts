@@ -24,36 +24,21 @@ export class ScriptHashError extends Data.TaggedError("ScriptHashError")<{
     | "InvalidCBORFormat";
 }> {}
 
-// declare const NominalType: unique symbol;
-// export interface ScriptHash {
-//   readonly [NominalType]: unique symbol;
-// }
-
-// /**
-//  * Schema for ScriptHash representing a script hash credential.
-//  * Follows CIP-0019 binary representation.
-//  *
-//  * @since 2.0.0
-//  * @category schemas
-//  */
-// export class ScriptHash extends Schema.TaggedClass<ScriptHash>()("ScriptHash", {
-//   hash: Hash28.HexSchema,
-// }) {
-//   [Symbol.for("nodejs.util.inspect.custom")]() {
-//     return {
-//       _tag: "ScriptHash",
-//       hash: this.hash,
-//     };
-//   }
-// }
-
+/**
+ * Schema for ScriptHash representing a script hash credential.
+ * script_hash = hash28
+ * Follows CIP-0019 binary representation.
+ *
+ * @since 2.0.0
+ * @category schemas
+ */
 export const ScriptHash = Hash28.HexSchema.pipe(Schema.brand("ScriptHash"));
 export type ScriptHash = typeof ScriptHash.Type;
 
 export const BytesSchema = Schema.transform(Hash28.BytesSchema, ScriptHash, {
   strict: true,
   encode: (_, toA) => Bytes.Decode.hex(toA),
-  decode: (_, fromA) => ScriptHash.make(Bytes.Encode.hex(fromA)),
+  decode: (_, fromA) => Schema.decodeSync(ScriptHash)(Bytes.Encode.hex(fromA)),
 });
 
 export const HexSchema = Schema.transform(
@@ -62,7 +47,7 @@ export const HexSchema = Schema.transform(
   {
     strict: true,
     encode: (_, toA) => toA,
-    decode: (fromI) => ScriptHash.make(fromI),
+    decode: (fromI) => Schema.decodeSync(ScriptHash)(fromI),
   },
 );
 
@@ -84,7 +69,7 @@ export const equals = (a: ScriptHash, b: ScriptHash): boolean => a === b;
  *
  * const randomSamples = FastCheck.sample(ScriptHash.generator, 20);
  * randomSamples.forEach((scriptHash) => {
- *  assert(scriptHash.hash.length === 56);
+ *  assert(scriptHash.length === 56);
  * });
  *
  * @since 2.0.0

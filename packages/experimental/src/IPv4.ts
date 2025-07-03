@@ -1,8 +1,10 @@
-import { pipe, Schema, Data, FastCheck } from "effect";
+import { Schema, Data, FastCheck } from "effect";
 import * as Bytes from "./Bytes.js";
+import * as Bytes4 from "./Bytes4.js";
+import * as Numeric from "./Numeric.js";
 
 /**
- * Constants for IPv4 validation.
+ * CDDL specification:
  * ipv4 = bytes .size 4
  *
  * @since 2.0.0
@@ -39,29 +41,7 @@ export class IPv4Error extends Data.TaggedError("IPv4Error")<{
  * @since 2.0.0
  * @category schemas
  */
-export const BytesSchema = pipe(
-  Schema.Uint8ArrayFromSelf,
-  Schema.filter((a) => a.length === IPV4_BYTES_LENGTH),
-).annotations({
-  message: (issue) =>
-    `IPv4 address must be exactly ${IPV4_BYTES_LENGTH} bytes, but got ${(issue.actual as Uint8Array).length}`,
-  identifier: "IPv4Bytes",
-});
-
-/**
- * Schema for validating IPv4 address hex string (exactly 8 hex characters).
- *
- * @since 2.0.0
- * @category schemas
- */
-export const HexSchema = pipe(
-  Bytes.HexSchema,
-  Schema.filter((a) => a.length === IPV4_HEX_LENGTH),
-).annotations({
-  message: (issue) =>
-    `IPv4 address must be exactly ${IPV4_HEX_LENGTH} hex characters, but got ${(issue.actual as string).length}`,
-  identifier: "IPv4Hex",
-});
+export const BytesSchema = Bytes4.BytesSchema;
 
 /**
  * Schema for IPv4 representing an IPv4 network address.
@@ -70,22 +50,21 @@ export const HexSchema = pipe(
  * @example
  * import { IPv4 } from "@lucid-evolution/experimental";
  *
- * const ipv4 = new IPv4({ address: "c0a80001" }); // 192.168.0.1 in hex
- * console.log(ipv4.address); // "c0a80001"
+ * const ipv4 = IPv4.make("c0a80001"); // 192.168.0.1 in hex
+ * console.log(ipv4); // "c0a80001"
  *
  * @since 2.0.0
  * @category model
  */
-export class IPv4 extends Schema.TaggedClass<IPv4>()("IPv4", {
-  address: HexSchema,
-}) {
-  [Symbol.for("nodejs.util.inspect.custom")]() {
-    return {
-      _tag: "IPv4",
-      address: this.address,
-    };
-  }
-}
+export const IPv4 = Bytes4.HexSchema.pipe(Schema.brand("IPv4"));
+
+/**
+ * Type alias for IPv4.
+ *
+ * @since 2.0.0
+ * @category model
+ */
+export type IPv4 = typeof IPv4.Type;
 
 /**
  * Schema for transforming between Uint8Array and IPv4.
@@ -95,8 +74,8 @@ export class IPv4 extends Schema.TaggedClass<IPv4>()("IPv4", {
  */
 export const IPv4BytesSchema = Schema.transform(BytesSchema, IPv4, {
   strict: true,
-  encode: (_, ipv4) => Bytes.Decode.hex(ipv4.address),
-  decode: (bytes) => new IPv4({ address: Bytes.Encode.hex(bytes) }),
+  encode: (_, ipv4) => Bytes.Decode.hex(ipv4),
+  decode: (bytes) => IPv4.make(Bytes.Encode.hex(bytes)),
 });
 
 /**
@@ -106,12 +85,12 @@ export const IPv4BytesSchema = Schema.transform(BytesSchema, IPv4, {
  * @category encoding/decoding
  */
 export const IPv4HexSchema = Schema.transform(
-  Schema.typeSchema(HexSchema),
+  Schema.typeSchema(Bytes4.HexSchema),
   IPv4,
   {
     strict: true,
-    encode: (_, ipv4) => ipv4.address,
-    decode: (address) => new IPv4({ address }),
+    encode: (_, ipv4) => ipv4,
+    decode: (address) => IPv4.make(address),
   },
 );
 
@@ -122,7 +101,7 @@ export const IPv4HexSchema = Schema.transform(
  * import { IPv4 } from "@lucid-evolution/experimental";
  *
  * const ipv4 = IPv4.fromString("192.168.0.1");
- * console.log(ipv4.address); // "c0a80001"
+ * console.log(ipv4); // "c0a80001"
  *
  * @since 2.0.0
  * @category constructors
@@ -139,16 +118,16 @@ export const fromString = (dotted: string): IPv4 => {
   const bytes = new Uint8Array(4);
   for (let i = 0; i < 4; i++) {
     const octet = parseInt(parts[i], 10);
-    if (isNaN(octet) || octet < 0 || octet > 255) {
+    if (isNaN(octet) || !Schema.is(Numeric.Uint8Schema)(octet)) {
       throw new IPv4Error({
-        message: `Invalid octet: ${parts[i]}. Must be 0-255.`,
+        message: `Invalid octet: ${parts[i]}. Must be a valid 8-bit unsigned integer (${Numeric.UINT8_MIN}-${Numeric.UINT8_MAX}).`,
         reason: "InvalidOctet",
       });
     }
     bytes[i] = octet;
   }
 
-  return new IPv4({ address: Bytes.Encode.hex(bytes) });
+  return IPv4.make(Bytes.Encode.hex(bytes));
 };
 
 /**
@@ -157,14 +136,14 @@ export const fromString = (dotted: string): IPv4 => {
  * @example
  * import { IPv4 } from "@lucid-evolution/experimental";
  *
- * const ipv4 = new IPv4({ address: "c0a80001" });
+ * const ipv4 = IPv4.fromString("192.168.0.1");
  * console.log(IPv4.toString(ipv4)); // "192.168.0.1"
  *
  * @since 2.0.0
  * @category transformation
  */
 export const toString = (ipv4: IPv4): string => {
-  const bytes = Bytes.Decode.hex(ipv4.address);
+  const bytes = Bytes.Decode.hex(ipv4);
   return Array.from(bytes).join(".");
 };
 
@@ -181,7 +160,7 @@ export const toString = (ipv4: IPv4): string => {
  * @since 2.0.0
  * @category equality
  */
-export const equals = (a: IPv4, b: IPv4): boolean => a.address === b.address;
+export const equals = (a: IPv4, b: IPv4): boolean => a === b;
 
 /**
  * Generate a random IPv4.
@@ -193,7 +172,7 @@ export const equals = (a: IPv4, b: IPv4): boolean => a.address === b.address;
  *
  * const randomSamples = FastCheck.sample(IPv4.generator, 10);
  * randomSamples.forEach((ipv4) => {
- *   assert(ipv4.address.length === 8);
+ *   assert(ipv4.length === 8);
  * });
  *
  * @since 2.0.0
@@ -202,7 +181,7 @@ export const equals = (a: IPv4, b: IPv4): boolean => a.address === b.address;
 export const generator = FastCheck.uint8Array({
   minLength: IPV4_BYTES_LENGTH,
   maxLength: IPV4_BYTES_LENGTH,
-}).map((bytes) => new IPv4({ address: Bytes.Encode.hex(bytes) }));
+}).map((bytes) => IPv4.make(Bytes.Encode.hex(bytes)));
 
 /**
  * Synchronous encoding utilities.

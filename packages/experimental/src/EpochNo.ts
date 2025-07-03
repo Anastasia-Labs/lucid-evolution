@@ -1,14 +1,15 @@
-import { pipe, Schema, Data, FastCheck } from "effect";
+import { Schema, Data } from "effect";
+import * as Numeric from "./Numeric.js";
 
 /**
- * Constants for EpochNo validation.
+ * CDDL specification:
  * epoch_no = uint .size 8
  *
  * @since 2.0.0
  * @category constants
  */
-export const EPOCH_NO_MIN_VALUE = 0;
-export const EPOCH_NO_MAX_VALUE = 255; // uint .size 8 means 8-bit unsigned integer
+export const EPOCH_NO_MIN_VALUE = Numeric.UINT8_MIN;
+export const EPOCH_NO_MAX_VALUE = Numeric.UINT8_MAX;
 
 /**
  * Error class for EpochNo related operations.
@@ -34,16 +35,9 @@ export class EpochNoError extends Data.TaggedError("EpochNoError")<{
  * @since 2.0.0
  * @category schemas
  */
-export const EpochNoSchema = pipe(
-  Schema.Number,
-  Schema.int(),
-  Schema.filter(
-    (epoch) => epoch >= EPOCH_NO_MIN_VALUE && epoch <= EPOCH_NO_MAX_VALUE,
-  ),
-).annotations({
-  message: (issue) =>
-    `EpochNo must be between ${EPOCH_NO_MIN_VALUE} and ${EPOCH_NO_MAX_VALUE}, but got ${issue.actual}`,
+export const EpochNoSchema = Numeric.Uint8Schema.annotations({
   identifier: "EpochNo",
+  description: "Epoch number (8-bit unsigned integer)",
 });
 
 /**
@@ -141,10 +135,7 @@ export const compare = (a: EpochNo, b: EpochNo): -1 | 0 | 1 => {
  * @since 2.0.0
  * @category generators
  */
-export const generator = FastCheck.integer({
-  min: EPOCH_NO_MIN_VALUE,
-  max: EPOCH_NO_MAX_VALUE,
-});
+export const generator = Numeric.Uint8Generator;
 
 /**
  * Synchronous encoding/decoding utilities.

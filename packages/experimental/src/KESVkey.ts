@@ -1,21 +1,21 @@
 import { Schema, Data, FastCheck } from "effect";
 import * as Bytes from "./Bytes.js";
-import * as Hash28 from "./Hash28.js";
+import * as Hash32 from "./Hash32.js";
 
 /**
- * Error class for KeyHash related operations.
+ * Error class for KESVkey related operations.
  *
  * @example
- * import { KeyHash } from "@lucid-evolution/experimental";
+ * import { KESVkey } from "@lucid-evolution/experimental";
  * import assert from "assert";
  *
- * const error = new KeyHash.KeyHashError({ message: "Invalid key hash" });
- * assert(error.message === "Invalid key hash");
+ * const error = new KESVkey.KESVkeyError({ message: "Invalid KES verification key" });
+ * assert(error.message === "Invalid KES verification key");
  *
  * @since 2.0.0
  * @category errors
  */
-export class KeyHashError extends Data.TaggedError("KeyHashError")<{
+export class KESVkeyError extends Data.TaggedError("KESVkeyError")<{
   message?: string;
   reason?:
     | "InvalidHexLength"
@@ -25,68 +25,68 @@ export class KeyHashError extends Data.TaggedError("KeyHashError")<{
 }> {}
 
 /**
- * Schema for KeyHash representing a verification key hash.
- * addr_keyhash = hash28
- * Follows CIP-0019 binary representation.
+ * Schema for KESVkey representing a KES verification key.
+ * kes_vkey = bytes .size 32
+ * Follows the Conway-era CDDL specification.
  *
  * @since 2.0.0
  * @category schemas
  */
-export const KeyHash = Hash28.HexSchema.pipe(Schema.brand("KeyHash"));
-export type KeyHash = typeof KeyHash.Type;
+export const KESVkey = Hash32.HexSchema.pipe(Schema.brand("KESVkey"));
+export type KESVkey = typeof KESVkey.Type;
 
 export const BytesSchema = Schema.transform(
-  Hash28.BytesSchema,
-  Schema.typeSchema(KeyHash),
+  Hash32.BytesSchema,
+  Schema.typeSchema(KESVkey),
   {
     strict: true,
     encode: (_, toA) => Bytes.Decode.hex(toA),
-    decode: (_, fromA) => Schema.decodeSync(KeyHash)(Bytes.Encode.hex(fromA)),
+    decode: (_, fromA) => Schema.decodeSync(KESVkey)(Bytes.Encode.hex(fromA)),
   },
 );
 
 export const HexSchema = Schema.transform(
-  Schema.typeSchema(Hash28.HexSchema),
-  KeyHash,
+  Schema.typeSchema(Hash32.HexSchema),
+  KESVkey,
   {
     strict: true,
     encode: (_, toA) => toA,
-    decode: (fromI) => Schema.decodeSync(KeyHash)(fromI),
+    decode: (fromI) => Schema.decodeSync(KESVkey)(fromI),
   },
 );
 
 /**
- * Check if two KeyHash instances are equal.
+ * Check if two KESVkey instances are equal.
  *
  * @example
- * import { KeyHash } from "@lucid-evolution/experimental";
+ * import { KESVkey } from "@lucid-evolution/experimental";
  * import assert from "assert";
  *
  * @since 2.0.0
  * @category equality
  */
-export const equals = (a: KeyHash, b: KeyHash): boolean => a === b;
+export const equals = (a: KESVkey, b: KESVkey): boolean => a === b;
 
 /**
- * Generate a random KeyHash.
+ * Generate a random KESVkey.
  *
  * @example
- * import { KeyHash } from "@lucid-evolution/experimental";
+ * import { KESVkey } from "@lucid-evolution/experimental";
  * import { FastCheck } from "effect";
  * import assert from "assert";
  *
- * const randomSamples = FastCheck.sample(KeyHash.generator, 20);
- * randomSamples.forEach((keyHash) => {
- *  assert(keyHash.length === 56);
+ * const randomSamples = FastCheck.sample(KESVkey.generator, 20);
+ * randomSamples.forEach((kesvkey) => {
+ *  assert(kesvkey.length === 64);
  * });
  *
  * @since 2.0.0
  * @category generators
  */
 export const generator = FastCheck.uint8Array({
-  minLength: Hash28.HASH28_BYTES_LENGTH,
-  maxLength: Hash28.HASH28_BYTES_LENGTH,
-}).map((bytes) => KeyHash.make(Bytes.Encode.hex(bytes)));
+  minLength: 32,
+  maxLength: 32,
+}).map((bytes) => KESVkey.make(Bytes.Encode.hex(bytes)));
 
 /**
  * Synchronous encoding utilities.

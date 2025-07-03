@@ -1,4 +1,4 @@
-import { Schema, Data, FastCheck, Effect, ParseResult, pipe } from "effect";
+import { Schema, Data, FastCheck, ParseResult, pipe } from "effect";
 import * as Url from "./Url.js";
 import * as Hash32 from "./Hash32.js";
 import * as CBOR from "./CBOR.js";
@@ -27,11 +27,11 @@ export class AnchorError extends Data.TaggedError("AnchorError")<{
  * anchor = [anchor_url: url, anchor_data_hash: hash32]
  *
  * @example
- * import { Anchor, Url } from "@lucid-evolution/experimental";
+ * import { Anchor, Url, Hash32 } from "@lucid-evolution/experimental";
  *
  * const anchor = new Anchor({
- *   anchorUrl: new Url.Url({ value: "https://example.com/anchor.json" }),
- *   anchorDataHash: new Uint8Array(32)
+ *   anchorUrl: Url.make("https://example.com/anchor.json"),
+ *   anchorDataHash: Hash32.Decode.bytes(new Uint8Array(32))
  * });
  *
  * @since 2.0.0
@@ -40,17 +40,7 @@ export class AnchorError extends Data.TaggedError("AnchorError")<{
 export class Anchor extends Schema.TaggedClass<Anchor>()("Anchor", {
   anchorUrl: Url.Url,
   anchorDataHash: Hash32.BytesSchema,
-}) {
-  [Symbol.for("nodejs.util.inspect.custom")]() {
-    return {
-      _tag: "Anchor",
-      anchorUrl: this.anchorUrl.value,
-      anchorDataHash: Array.from(this.anchorDataHash)
-        .map((b) => b.toString(16).padStart(2, "0"))
-        .join(""),
-    };
-  }
-}
+}) {}
 
 /**
  * CDDL schema for Anchor as tuple structure.
@@ -74,14 +64,14 @@ export const CBORBytesSchema = Schema.transformOrFail(
   Anchor,
   {
     strict: true,
-    encode: (_, __, ___, toA) =>
+    encode: (toA) =>
       ParseResult.succeed(
         CBOR.Encode().bytes([toA.anchorUrl, toA.anchorDataHash]),
       ),
-    decode: (_, __, ___, fromA) =>
+    decode: (fromA) =>
       pipe(
         ParseResult.decode(CBOR.makeCBORBytesSchema(AnchorCDDLSchema))(fromA),
-        Effect.flatMap(([anchorUrl, anchorDataHash]) =>
+        ParseResult.flatMap(([anchorUrl, anchorDataHash]) =>
           ParseResult.succeed(new Anchor({ anchorUrl, anchorDataHash })),
         ),
       ),
@@ -101,14 +91,14 @@ export const CBORHexSchema = Schema.transformOrFail(
   Anchor,
   {
     strict: true,
-    encode: (_, __, ___, toA) =>
+    encode: (toA) =>
       ParseResult.succeed(
         CBOR.Encode().hex([toA.anchorUrl, toA.anchorDataHash]),
       ),
-    decode: (_, __, ___, fromA) =>
+    decode: (fromA) =>
       pipe(
         ParseResult.decode(CBOR.makeCBORHexSchema(AnchorCDDLSchema))(fromA),
-        Effect.flatMap(([anchorUrl, anchorDataHash]) =>
+        ParseResult.flatMap(([anchorUrl, anchorDataHash]) =>
           ParseResult.succeed(new Anchor({ anchorUrl, anchorDataHash })),
         ),
       ),
@@ -119,7 +109,7 @@ export const CBORHexSchema = Schema.transformOrFail(
  * Create an Anchor from a URL string and hash bytes.
  *
  * @example
- * import { Anchor } from "@lucid-evolution/experimental";
+ * import { Anchor, Url } from "@lucid-evolution/experimental";
  *
  * const anchor = Anchor.make(
  *   "https://example.com/anchor.json",
@@ -129,9 +119,9 @@ export const CBORHexSchema = Schema.transformOrFail(
  * @since 2.0.0
  * @category constructors
  */
-export const make = (anchorUrl: string, anchorDataHash: Uint8Array) =>
+export const make = (anchorUrl: string, anchorDataHash: Uint8Array): Anchor =>
   new Anchor({
-    anchorUrl: new Url.Url({ value: anchorUrl }),
+    anchorUrl: Url.make(anchorUrl),
     anchorDataHash,
   });
 
@@ -149,9 +139,9 @@ export const make = (anchorUrl: string, anchorDataHash: Uint8Array) =>
  * @since 2.0.0
  * @category constructors
  */
-export const fromHex = (anchorUrl: string, anchorDataHashHex: string) =>
+export const fromHex = (anchorUrl: string, anchorDataHashHex: string): Anchor =>
   new Anchor({
-    anchorUrl: new Url.Url({ value: anchorUrl }),
+    anchorUrl: Url.make(anchorUrl),
     anchorDataHash: Bytes.Decode.hex(anchorDataHashHex),
   });
 
@@ -168,7 +158,7 @@ export const fromHex = (anchorUrl: string, anchorDataHashHex: string) =>
  * @since 2.0.0
  * @category transformation
  */
-export const getAnchorUrl = (anchor: Anchor): string => anchor.anchorUrl.value;
+export const getAnchorUrl = (anchor: Anchor): string => anchor.anchorUrl;
 
 /**
  * Get the anchor data hash as bytes from an Anchor.
@@ -214,7 +204,7 @@ export const getAnchorDataHashHex = (anchor: Anchor): string =>
  * @category equality
  */
 export const equals = (self: Anchor, that: Anchor): boolean => {
-  if (!Url.equals(self.anchorUrl, that.anchorUrl)) return false;
+  if (self.anchorUrl !== that.anchorUrl) return false;
   if (self.anchorDataHash.length !== that.anchorDataHash.length) return false;
   for (let i = 0; i < self.anchorDataHash.length; i++) {
     if (self.anchorDataHash[i] !== that.anchorDataHash[i]) return false;

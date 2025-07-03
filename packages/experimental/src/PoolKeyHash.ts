@@ -44,7 +44,7 @@ export type PoolKeyHash = typeof PoolKeyHash.Type;
 export const BytesSchema = Schema.transform(Hash28.BytesSchema, PoolKeyHash, {
   strict: true,
   encode: (_, hash) => Bytes.Decode.hex(hash),
-  decode: (bytes) => PoolKeyHash.make(Bytes.Encode.hex(bytes)),
+  decode: (bytes) => Schema.decodeSync(PoolKeyHash)(Bytes.Encode.hex(bytes)),
 });
 
 /**
@@ -59,7 +59,7 @@ export const HexSchema = Schema.transform(
   {
     strict: true,
     encode: (_, hash) => hash,
-    decode: (hash) => PoolKeyHash.make(hash),
+    decode: (hash) => Schema.decodeSync(PoolKeyHash)(hash),
   },
 );
 
