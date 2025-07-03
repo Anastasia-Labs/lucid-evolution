@@ -1,0 +1,3906 @@
+[
+  {
+    "index": 0,
+    "sample": {
+      "_tag": "Integer",
+      "integer": {
+        "__type": "bigint",
+        "value": "25"
+      }
+    },
+    "cborHex": "1819",
+    "cborBytes": [
+      24,
+      25
+    ],
+    "roundTripSuccess": true,
+    "metadata": {
+      "type": "integer",
+      "seed": 12345
+    }
+  },
+  {
+    "index": 1,
+    "sample": {
+      "_tag": "Integer",
+      "integer": {
+        "__type": "bigint",
+        "value": "1"
+      }
+    },
+    "cborHex": "01",
+    "cborBytes": [
+      1
+    ],
+    "roundTripSuccess": true,
+    "metadata": {
+      "type": "integer",
+      "seed": 12345
+    }
+  },
+  {
+    "index": 2,
+    "sample": {
+      "_tag": "Integer",
+      "integer": {
+        "__type": "bigint",
+        "value": "37"
+      }
+    },
+    "cborHex": "1825",
+    "cborBytes": [
+      24,
+      37
+    ],
+    "roundTripSuccess": true,
+    "metadata": {
+      "type": "integer",
+      "seed": 12345
+    }
+  },
+  {
+    "index": 3,
+    "sample": {
+      "_tag": "Integer",
+      "integer": {
+        "__type": "bigint",
+        "value": "0"
+      }
+    },
+    "cborHex": "00",
+    "cborBytes": [
+      0
+    ],
+    "roundTripSuccess": true,
+    "metadata": {
+      "type": "integer",
+      "seed": 12345
+    }
+  },
+  {
+    "index": 4,
+    "sample": {
+      "_tag": "Integer",
+      "integer": {
+        "__type": "bigint",
+        "value": "1"
+      }
+    },
+    "cborHex": "01",
+    "cborBytes": [
+      1
+    ],
+    "roundTripSuccess": true,
+    "metadata": {
+      "type": "integer",
+      "seed": 12345
+    }
+  },
+  {
+    "index": 5,
+    "sample": {
+      "_tag": "Integer",
+      "integer": {
+        "__type": "bigint",
+        "value": "2"
+      }
+    },
+    "cborHex": "02",
+    "cborBytes": [
+      2
+    ],
+    "roundTripSuccess": true,
+    "metadata": {
+      "type": "integer",
+      "seed": 12345
+    }
+  },
+  {
+    "index": 6,
+    "sample": {
+      "_tag": "Integer",
+      "integer": {
+        "__type": "bigint",
+        "value": "63"
+      }
+    },
+    "cborHex": "183f",
+    "cborBytes": [
+      24,
+      63
+    ],
+    "roundTripSuccess": true,
+    "metadata": {
+      "type": "integer",
+      "seed": 12345
+    }
+  },
+  {
+    "index": 7,
+    "sample": {
+      "_tag": "Integer",
+      "integer": {
+        "__type": "bigint",
+        "value": "57"
+      }
+    },
+    "cborHex": "1839",
+    "cborBytes": [
+      24,
+      57
+    ],
+    "roundTripSuccess": true,
+    "metadata": {
+      "type": "integer",
+      "seed": 12345
+    }
+  },
+  {
+    "index": 8,
+    "sample": {
+      "_tag": "Integer",
+      "integer": {
+        "__type": "bigint",
+        "value": "6"
+      }
+    },
+    "cborHex": "06",
+    "cborBytes": [
+      6
+    ],
+    "roundTripSuccess": true,
+    "metadata": {
+      "type": "integer",
+      "seed": 12345
+    }
+  },
+  {
+    "index": 9,
+    "sample": {
+      "_tag": "Integer",
+      "integer": {
+        "__type": "bigint",
+        "value": "18"
+      }
+    },
+    "cborHex": "12",
+    "cborBytes": [
+      18
+    ],
+    "roundTripSuccess": true,
+    "metadata": {
+      "type": "integer",
+      "seed": 12345
+    }
+  },
+  {
+    "index": 10,
+    "sample": {
+      "_tag": "Integer",
+      "integer": {
+        "__type": "bigint",
+        "value": "9"
+      }
+    },
+    "cborHex": "09",
+    "cborBytes": [
+      9
+    ],
+    "roundTripSuccess": true,
+    "metadata": {
+      "type": "integer",
+      "seed": 12345
+    }
+  },
+  {
+    "index": 11,
+    "sample": {
+      "_tag": "Integer",
+      "integer": {
+        "__type": "bigint",
+        "value": "14"
+      }
+    },
+    "cborHex": "0e",
+    "cborBytes": [
+      14
+    ],
+    "roundTripSuccess": true,
+    "metadata": {
+      "type": "integer",
+      "seed": 12345
+    }
+  },
+  {
+    "index": 12,
+    "sample": {
+      "_tag": "Integer",
+      "integer": {
+        "__type": "bigint",
+        "value": "44"
+      }
+    },
+    "cborHex": "182c",
+    "cborBytes": [
+      24,
+      44
+    ],
+    "roundTripSuccess": true,
+    "metadata": {
+      "type": "integer",
+      "seed": 12345
+    }
+  },
+  {
+    "index": 13,
+    "sample": {
+      "_tag": "Integer",
+      "integer": {
+        "__type": "bigint",
+        "value": "1"
+      }
+    },
+    "cborHex": "01",
+    "cborBytes": [
+      1
+    ],
+    "roundTripSuccess": true,
+    "metadata": {
+      "type": "integer",
+      "seed": 12345
+    }
+  },
+  {
+    "index": 14,
+    "sample": {
+      "_tag": "Integer",
+      "integer": {
+        "__type": "bigint",
+        "value": "61"
+      }
+    },
+    "cborHex": "183d",
+    "cborBytes": [
+      24,
+      61
+    ],
+    "roundTripSuccess": true,
+    "metadata": {
+      "type": "integer",
+      "seed": 12345
+    }
+  },
+  {
+    "index": 15,
+    "sample": {
+      "_tag": "Integer",
+      "integer": {
+        "__type": "bigint",
+        "value": "63"
+      }
+    },
+    "cborHex": "183f",
+    "cborBytes": [
+      24,
+      63
+    ],
+    "roundTripSuccess": true,
+    "metadata": {
+      "type": "integer",
+      "seed": 12345
+    }
+  },
+  {
+    "index": 16,
+    "sample": {
+      "_tag": "Integer",
+      "integer": {
+        "__type": "bigint",
+        "value": "30"
+      }
+    },
+    "cborHex": "181e",
+    "cborBytes": [
+      24,
+      30
+    ],
+    "roundTripSuccess": true,
+    "metadata": {
+      "type": "integer",
+      "seed": 12345
+    }
+  },
+  {
+    "index": 17,
+    "sample": {
+      "_tag": "Integer",
+      "integer": {
+        "__type": "bigint",
+        "value": "9"
+      }
+    },
+    "cborHex": "09",
+    "cborBytes": [
+      9
+    ],
+    "roundTripSuccess": true,
+    "metadata": {
+      "type": "integer",
+      "seed": 12345
+    }
+  },
+  {
+    "index": 18,
+    "sample": {
+      "_tag": "Integer",
+      "integer": {
+        "__type": "bigint",
+        "value": "46"
+      }
+    },
+    "cborHex": "182e",
+    "cborBytes": [
+      24,
+      46
+    ],
+    "roundTripSuccess": true,
+    "metadata": {
+      "type": "integer",
+      "seed": 12345
+    }
+  },
+  {
+    "index": 19,
+    "sample": {
+      "_tag": "Integer",
+      "integer": {
+        "__type": "bigint",
+        "value": "27"
+      }
+    },
+    "cborHex": "181b",
+    "cborBytes": [
+      24,
+      27
+    ],
+    "roundTripSuccess": true,
+    "metadata": {
+      "type": "integer",
+      "seed": 12345
+    }
+  },
+  {
+    "index": 20,
+    "sample": {
+      "_tag": "Integer",
+      "integer": {
+        "__type": "bigint",
+        "value": "0"
+      }
+    },
+    "cborHex": "00",
+    "cborBytes": [
+      0
+    ],
+    "roundTripSuccess": true,
+    "metadata": {
+      "type": "integer",
+      "seed": 12345
+    }
+  },
+  {
+    "index": 21,
+    "sample": {
+      "_tag": "Integer",
+      "integer": {
+        "__type": "bigint",
+        "value": "4"
+      }
+    },
+    "cborHex": "04",
+    "cborBytes": [
+      4
+    ],
+    "roundTripSuccess": true,
+    "metadata": {
+      "type": "integer",
+      "seed": 12345
+    }
+  },
+  {
+    "index": 22,
+    "sample": {
+      "_tag": "Integer",
+      "integer": {
+        "__type": "bigint",
+        "value": "9"
+      }
+    },
+    "cborHex": "09",
+    "cborBytes": [
+      9
+    ],
+    "roundTripSuccess": true,
+    "metadata": {
+      "type": "integer",
+      "seed": 12345
+    }
+  },
+  {
+    "index": 23,
+    "sample": {
+      "_tag": "Integer",
+      "integer": {
+        "__type": "bigint",
+        "value": "55"
+      }
+    },
+    "cborHex": "1837",
+    "cborBytes": [
+      24,
+      55
+    ],
+    "roundTripSuccess": true,
+    "metadata": {
+      "type": "integer",
+      "seed": 12345
+    }
+  },
+  {
+    "index": 24,
+    "sample": {
+      "_tag": "Integer",
+      "integer": {
+        "__type": "bigint",
+        "value": "27"
+      }
+    },
+    "cborHex": "181b",
+    "cborBytes": [
+      24,
+      27
+    ],
+    "roundTripSuccess": true,
+    "metadata": {
+      "type": "integer",
+      "seed": 12345
+    }
+  },
+  {
+    "index": 25,
+    "sample": {
+      "_tag": "Integer",
+      "integer": {
+        "__type": "bigint",
+        "value": "1"
+      }
+    },
+    "cborHex": "01",
+    "cborBytes": [
+      1
+    ],
+    "roundTripSuccess": true,
+    "metadata": {
+      "type": "integer",
+      "seed": 12345
+    }
+  },
+  {
+    "index": 26,
+    "sample": {
+      "_tag": "Integer",
+      "integer": {
+        "__type": "bigint",
+        "value": "50"
+      }
+    },
+    "cborHex": "1832",
+    "cborBytes": [
+      24,
+      50
+    ],
+    "roundTripSuccess": true,
+    "metadata": {
+      "type": "integer",
+      "seed": 12345
+    }
+  },
+  {
+    "index": 27,
+    "sample": {
+      "_tag": "Integer",
+      "integer": {
+        "__type": "bigint",
+        "value": "11"
+      }
+    },
+    "cborHex": "0b",
+    "cborBytes": [
+      11
+    ],
+    "roundTripSuccess": true,
+    "metadata": {
+      "type": "integer",
+      "seed": 12345
+    }
+  },
+  {
+    "index": 28,
+    "sample": {
+      "_tag": "Integer",
+      "integer": {
+        "__type": "bigint",
+        "value": "1"
+      }
+    },
+    "cborHex": "01",
+    "cborBytes": [
+      1
+    ],
+    "roundTripSuccess": true,
+    "metadata": {
+      "type": "integer",
+      "seed": 12345
+    }
+  },
+  {
+    "index": 29,
+    "sample": {
+      "_tag": "Integer",
+      "integer": {
+        "__type": "bigint",
+        "value": "41"
+      }
+    },
+    "cborHex": "1829",
+    "cborBytes": [
+      24,
+      41
+    ],
+    "roundTripSuccess": true,
+    "metadata": {
+      "type": "integer",
+      "seed": 12345
+    }
+  },
+  {
+    "index": 30,
+    "sample": {
+      "_tag": "Integer",
+      "integer": {
+        "__type": "bigint",
+        "value": "34"
+      }
+    },
+    "cborHex": "1822",
+    "cborBytes": [
+      24,
+      34
+    ],
+    "roundTripSuccess": true,
+    "metadata": {
+      "type": "integer",
+      "seed": 12345
+    }
+  },
+  {
+    "index": 31,
+    "sample": {
+      "_tag": "Integer",
+      "integer": {
+        "__type": "bigint",
+        "value": "63"
+      }
+    },
+    "cborHex": "183f",
+    "cborBytes": [
+      24,
+      63
+    ],
+    "roundTripSuccess": true,
+    "metadata": {
+      "type": "integer",
+      "seed": 12345
+    }
+  },
+  {
+    "index": 32,
+    "sample": {
+      "_tag": "Integer",
+      "integer": {
+        "__type": "bigint",
+        "value": "2"
+      }
+    },
+    "cborHex": "02",
+    "cborBytes": [
+      2
+    ],
+    "roundTripSuccess": true,
+    "metadata": {
+      "type": "integer",
+      "seed": 12345
+    }
+  },
+  {
+    "index": 33,
+    "sample": {
+      "_tag": "Integer",
+      "integer": {
+        "__type": "bigint",
+        "value": "20"
+      }
+    },
+    "cborHex": "14",
+    "cborBytes": [
+      20
+    ],
+    "roundTripSuccess": true,
+    "metadata": {
+      "type": "integer",
+      "seed": 12345
+    }
+  },
+  {
+    "index": 34,
+    "sample": {
+      "_tag": "Integer",
+      "integer": {
+        "__type": "bigint",
+        "value": "61"
+      }
+    },
+    "cborHex": "183d",
+    "cborBytes": [
+      24,
+      61
+    ],
+    "roundTripSuccess": true,
+    "metadata": {
+      "type": "integer",
+      "seed": 12345
+    }
+  },
+  {
+    "index": 35,
+    "sample": {
+      "_tag": "Integer",
+      "integer": {
+        "__type": "bigint",
+        "value": "1"
+      }
+    },
+    "cborHex": "01",
+    "cborBytes": [
+      1
+    ],
+    "roundTripSuccess": true,
+    "metadata": {
+      "type": "integer",
+      "seed": 12345
+    }
+  },
+  {
+    "index": 36,
+    "sample": {
+      "_tag": "Integer",
+      "integer": {
+        "__type": "bigint",
+        "value": "31"
+      }
+    },
+    "cborHex": "181f",
+    "cborBytes": [
+      24,
+      31
+    ],
+    "roundTripSuccess": true,
+    "metadata": {
+      "type": "integer",
+      "seed": 12345
+    }
+  },
+  {
+    "index": 37,
+    "sample": {
+      "_tag": "Integer",
+      "integer": {
+        "__type": "bigint",
+        "value": "15"
+      }
+    },
+    "cborHex": "0f",
+    "cborBytes": [
+      15
+    ],
+    "roundTripSuccess": true,
+    "metadata": {
+      "type": "integer",
+      "seed": 12345
+    }
+  },
+  {
+    "index": 38,
+    "sample": {
+      "_tag": "Integer",
+      "integer": {
+        "__type": "bigint",
+        "value": "1"
+      }
+    },
+    "cborHex": "01",
+    "cborBytes": [
+      1
+    ],
+    "roundTripSuccess": true,
+    "metadata": {
+      "type": "integer",
+      "seed": 12345
+    }
+  },
+  {
+    "index": 39,
+    "sample": {
+      "_tag": "Integer",
+      "integer": {
+        "__type": "bigint",
+        "value": "25"
+      }
+    },
+    "cborHex": "1819",
+    "cborBytes": [
+      24,
+      25
+    ],
+    "roundTripSuccess": true,
+    "metadata": {
+      "type": "integer",
+      "seed": 12345
+    }
+  },
+  {
+    "index": 40,
+    "sample": {
+      "_tag": "Integer",
+      "integer": {
+        "__type": "bigint",
+        "value": "38"
+      }
+    },
+    "cborHex": "1826",
+    "cborBytes": [
+      24,
+      38
+    ],
+    "roundTripSuccess": true,
+    "metadata": {
+      "type": "integer",
+      "seed": 12345
+    }
+  },
+  {
+    "index": 41,
+    "sample": {
+      "_tag": "Integer",
+      "integer": {
+        "__type": "bigint",
+        "value": "1"
+      }
+    },
+    "cborHex": "01",
+    "cborBytes": [
+      1
+    ],
+    "roundTripSuccess": true,
+    "metadata": {
+      "type": "integer",
+      "seed": 12345
+    }
+  },
+  {
+    "index": 42,
+    "sample": {
+      "_tag": "Integer",
+      "integer": {
+        "__type": "bigint",
+        "value": "63"
+      }
+    },
+    "cborHex": "183f",
+    "cborBytes": [
+      24,
+      63
+    ],
+    "roundTripSuccess": true,
+    "metadata": {
+      "type": "integer",
+      "seed": 12345
+    }
+  },
+  {
+    "index": 43,
+    "sample": {
+      "_tag": "Integer",
+      "integer": {
+        "__type": "bigint",
+        "value": "32"
+      }
+    },
+    "cborHex": "1820",
+    "cborBytes": [
+      24,
+      32
+    ],
+    "roundTripSuccess": true,
+    "metadata": {
+      "type": "integer",
+      "seed": 12345
+    }
+  },
+  {
+    "index": 44,
+    "sample": {
+      "_tag": "Integer",
+      "integer": {
+        "__type": "bigint",
+        "value": "20"
+      }
+    },
+    "cborHex": "14",
+    "cborBytes": [
+      20
+    ],
+    "roundTripSuccess": true,
+    "metadata": {
+      "type": "integer",
+      "seed": 12345
+    }
+  },
+  {
+    "index": 45,
+    "sample": {
+      "_tag": "Integer",
+      "integer": {
+        "__type": "bigint",
+        "value": "26"
+      }
+    },
+    "cborHex": "181a",
+    "cborBytes": [
+      24,
+      26
+    ],
+    "roundTripSuccess": true,
+    "metadata": {
+      "type": "integer",
+      "seed": 12345
+    }
+  },
+  {
+    "index": 46,
+    "sample": {
+      "_tag": "Integer",
+      "integer": {
+        "__type": "bigint",
+        "value": "60"
+      }
+    },
+    "cborHex": "183c",
+    "cborBytes": [
+      24,
+      60
+    ],
+    "roundTripSuccess": true,
+    "metadata": {
+      "type": "integer",
+      "seed": 12345
+    }
+  },
+  {
+    "index": 47,
+    "sample": {
+      "_tag": "Integer",
+      "integer": {
+        "__type": "bigint",
+        "value": "8"
+      }
+    },
+    "cborHex": "08",
+    "cborBytes": [
+      8
+    ],
+    "roundTripSuccess": true,
+    "metadata": {
+      "type": "integer",
+      "seed": 12345
+    }
+  },
+  {
+    "index": 48,
+    "sample": {
+      "_tag": "Integer",
+      "integer": {
+        "__type": "bigint",
+        "value": "2"
+      }
+    },
+    "cborHex": "02",
+    "cborBytes": [
+      2
+    ],
+    "roundTripSuccess": true,
+    "metadata": {
+      "type": "integer",
+      "seed": 12345
+    }
+  },
+  {
+    "index": 49,
+    "sample": {
+      "_tag": "Integer",
+      "integer": {
+        "__type": "bigint",
+        "value": "43"
+      }
+    },
+    "cborHex": "182b",
+    "cborBytes": [
+      24,
+      43
+    ],
+    "roundTripSuccess": true,
+    "metadata": {
+      "type": "integer",
+      "seed": 12345
+    }
+  },
+  {
+    "index": 50,
+    "sample": {
+      "_tag": "Integer",
+      "integer": {
+        "__type": "bigint",
+        "value": "0"
+      }
+    },
+    "cborHex": "00",
+    "cborBytes": [
+      0
+    ],
+    "roundTripSuccess": true,
+    "metadata": {
+      "type": "integer",
+      "seed": 12345
+    }
+  },
+  {
+    "index": 51,
+    "sample": {
+      "_tag": "Integer",
+      "integer": {
+        "__type": "bigint",
+        "value": "61"
+      }
+    },
+    "cborHex": "183d",
+    "cborBytes": [
+      24,
+      61
+    ],
+    "roundTripSuccess": true,
+    "metadata": {
+      "type": "integer",
+      "seed": 12345
+    }
+  },
+  {
+    "index": 52,
+    "sample": {
+      "_tag": "Integer",
+      "integer": {
+        "__type": "bigint",
+        "value": "8"
+      }
+    },
+    "cborHex": "08",
+    "cborBytes": [
+      8
+    ],
+    "roundTripSuccess": true,
+    "metadata": {
+      "type": "integer",
+      "seed": 12345
+    }
+  },
+  {
+    "index": 53,
+    "sample": {
+      "_tag": "Integer",
+      "integer": {
+        "__type": "bigint",
+        "value": "51"
+      }
+    },
+    "cborHex": "1833",
+    "cborBytes": [
+      24,
+      51
+    ],
+    "roundTripSuccess": true,
+    "metadata": {
+      "type": "integer",
+      "seed": 12345
+    }
+  },
+  {
+    "index": 54,
+    "sample": {
+      "_tag": "Integer",
+      "integer": {
+        "__type": "bigint",
+        "value": "29"
+      }
+    },
+    "cborHex": "181d",
+    "cborBytes": [
+      24,
+      29
+    ],
+    "roundTripSuccess": true,
+    "metadata": {
+      "type": "integer",
+      "seed": 12345
+    }
+  },
+  {
+    "index": 55,
+    "sample": {
+      "_tag": "Integer",
+      "integer": {
+        "__type": "bigint",
+        "value": "50"
+      }
+    },
+    "cborHex": "1832",
+    "cborBytes": [
+      24,
+      50
+    ],
+    "roundTripSuccess": true,
+    "metadata": {
+      "type": "integer",
+      "seed": 12345
+    }
+  },
+  {
+    "index": 56,
+    "sample": {
+      "_tag": "Integer",
+      "integer": {
+        "__type": "bigint",
+        "value": "61"
+      }
+    },
+    "cborHex": "183d",
+    "cborBytes": [
+      24,
+      61
+    ],
+    "roundTripSuccess": true,
+    "metadata": {
+      "type": "integer",
+      "seed": 12345
+    }
+  },
+  {
+    "index": 57,
+    "sample": {
+      "_tag": "Integer",
+      "integer": {
+        "__type": "bigint",
+        "value": "62"
+      }
+    },
+    "cborHex": "183e",
+    "cborBytes": [
+      24,
+      62
+    ],
+    "roundTripSuccess": true,
+    "metadata": {
+      "type": "integer",
+      "seed": 12345
+    }
+  },
+  {
+    "index": 58,
+    "sample": {
+      "_tag": "Integer",
+      "integer": {
+        "__type": "bigint",
+        "value": "0"
+      }
+    },
+    "cborHex": "00",
+    "cborBytes": [
+      0
+    ],
+    "roundTripSuccess": true,
+    "metadata": {
+      "type": "integer",
+      "seed": 12345
+    }
+  },
+  {
+    "index": 59,
+    "sample": {
+      "_tag": "Integer",
+      "integer": {
+        "__type": "bigint",
+        "value": "2"
+      }
+    },
+    "cborHex": "02",
+    "cborBytes": [
+      2
+    ],
+    "roundTripSuccess": true,
+    "metadata": {
+      "type": "integer",
+      "seed": 12345
+    }
+  },
+  {
+    "index": 60,
+    "sample": {
+      "_tag": "Integer",
+      "integer": {
+        "__type": "bigint",
+        "value": "52"
+      }
+    },
+    "cborHex": "1834",
+    "cborBytes": [
+      24,
+      52
+    ],
+    "roundTripSuccess": true,
+    "metadata": {
+      "type": "integer",
+      "seed": 12345
+    }
+  },
+  {
+    "index": 61,
+    "sample": {
+      "_tag": "Integer",
+      "integer": {
+        "__type": "bigint",
+        "value": "62"
+      }
+    },
+    "cborHex": "183e",
+    "cborBytes": [
+      24,
+      62
+    ],
+    "roundTripSuccess": true,
+    "metadata": {
+      "type": "integer",
+      "seed": 12345
+    }
+  },
+  {
+    "index": 62,
+    "sample": {
+      "_tag": "Integer",
+      "integer": {
+        "__type": "bigint",
+        "value": "38"
+      }
+    },
+    "cborHex": "1826",
+    "cborBytes": [
+      24,
+      38
+    ],
+    "roundTripSuccess": true,
+    "metadata": {
+      "type": "integer",
+      "seed": 12345
+    }
+  },
+  {
+    "index": 63,
+    "sample": {
+      "_tag": "Integer",
+      "integer": {
+        "__type": "bigint",
+        "value": "30"
+      }
+    },
+    "cborHex": "181e",
+    "cborBytes": [
+      24,
+      30
+    ],
+    "roundTripSuccess": true,
+    "metadata": {
+      "type": "integer",
+      "seed": 12345
+    }
+  },
+  {
+    "index": 64,
+    "sample": {
+      "_tag": "Integer",
+      "integer": {
+        "__type": "bigint",
+        "value": "38"
+      }
+    },
+    "cborHex": "1826",
+    "cborBytes": [
+      24,
+      38
+    ],
+    "roundTripSuccess": true,
+    "metadata": {
+      "type": "integer",
+      "seed": 12345
+    }
+  },
+  {
+    "index": 65,
+    "sample": {
+      "_tag": "Integer",
+      "integer": {
+        "__type": "bigint",
+        "value": "53"
+      }
+    },
+    "cborHex": "1835",
+    "cborBytes": [
+      24,
+      53
+    ],
+    "roundTripSuccess": true,
+    "metadata": {
+      "type": "integer",
+      "seed": 12345
+    }
+  },
+  {
+    "index": 66,
+    "sample": {
+      "_tag": "Integer",
+      "integer": {
+        "__type": "bigint",
+        "value": "0"
+      }
+    },
+    "cborHex": "00",
+    "cborBytes": [
+      0
+    ],
+    "roundTripSuccess": true,
+    "metadata": {
+      "type": "integer",
+      "seed": 12345
+    }
+  },
+  {
+    "index": 67,
+    "sample": {
+      "_tag": "Integer",
+      "integer": {
+        "__type": "bigint",
+        "value": "22"
+      }
+    },
+    "cborHex": "16",
+    "cborBytes": [
+      22
+    ],
+    "roundTripSuccess": true,
+    "metadata": {
+      "type": "integer",
+      "seed": 12345
+    }
+  },
+  {
+    "index": 68,
+    "sample": {
+      "_tag": "Integer",
+      "integer": {
+        "__type": "bigint",
+        "value": "24"
+      }
+    },
+    "cborHex": "1818",
+    "cborBytes": [
+      24,
+      24
+    ],
+    "roundTripSuccess": true,
+    "metadata": {
+      "type": "integer",
+      "seed": 12345
+    }
+  },
+  {
+    "index": 69,
+    "sample": {
+      "_tag": "Integer",
+      "integer": {
+        "__type": "bigint",
+        "value": "61"
+      }
+    },
+    "cborHex": "183d",
+    "cborBytes": [
+      24,
+      61
+    ],
+    "roundTripSuccess": true,
+    "metadata": {
+      "type": "integer",
+      "seed": 12345
+    }
+  },
+  {
+    "index": 70,
+    "sample": {
+      "_tag": "Integer",
+      "integer": {
+        "__type": "bigint",
+        "value": "1"
+      }
+    },
+    "cborHex": "01",
+    "cborBytes": [
+      1
+    ],
+    "roundTripSuccess": true,
+    "metadata": {
+      "type": "integer",
+      "seed": 12345
+    }
+  },
+  {
+    "index": 71,
+    "sample": {
+      "_tag": "Integer",
+      "integer": {
+        "__type": "bigint",
+        "value": "37"
+      }
+    },
+    "cborHex": "1825",
+    "cborBytes": [
+      24,
+      37
+    ],
+    "roundTripSuccess": true,
+    "metadata": {
+      "type": "integer",
+      "seed": 12345
+    }
+  },
+  {
+    "index": 72,
+    "sample": {
+      "_tag": "Integer",
+      "integer": {
+        "__type": "bigint",
+        "value": "56"
+      }
+    },
+    "cborHex": "1838",
+    "cborBytes": [
+      24,
+      56
+    ],
+    "roundTripSuccess": true,
+    "metadata": {
+      "type": "integer",
+      "seed": 12345
+    }
+  },
+  {
+    "index": 73,
+    "sample": {
+      "_tag": "Integer",
+      "integer": {
+        "__type": "bigint",
+        "value": "21"
+      }
+    },
+    "cborHex": "15",
+    "cborBytes": [
+      21
+    ],
+    "roundTripSuccess": true,
+    "metadata": {
+      "type": "integer",
+      "seed": 12345
+    }
+  },
+  {
+    "index": 74,
+    "sample": {
+      "_tag": "Integer",
+      "integer": {
+        "__type": "bigint",
+        "value": "46"
+      }
+    },
+    "cborHex": "182e",
+    "cborBytes": [
+      24,
+      46
+    ],
+    "roundTripSuccess": true,
+    "metadata": {
+      "type": "integer",
+      "seed": 12345
+    }
+  },
+  {
+    "index": 75,
+    "sample": {
+      "_tag": "Integer",
+      "integer": {
+        "__type": "bigint",
+        "value": "2"
+      }
+    },
+    "cborHex": "02",
+    "cborBytes": [
+      2
+    ],
+    "roundTripSuccess": true,
+    "metadata": {
+      "type": "integer",
+      "seed": 12345
+    }
+  },
+  {
+    "index": 76,
+    "sample": {
+      "_tag": "Integer",
+      "integer": {
+        "__type": "bigint",
+        "value": "57"
+      }
+    },
+    "cborHex": "1839",
+    "cborBytes": [
+      24,
+      57
+    ],
+    "roundTripSuccess": true,
+    "metadata": {
+      "type": "integer",
+      "seed": 12345
+    }
+  },
+  {
+    "index": 77,
+    "sample": {
+      "_tag": "Integer",
+      "integer": {
+        "__type": "bigint",
+        "value": "27"
+      }
+    },
+    "cborHex": "181b",
+    "cborBytes": [
+      24,
+      27
+    ],
+    "roundTripSuccess": true,
+    "metadata": {
+      "type": "integer",
+      "seed": 12345
+    }
+  },
+  {
+    "index": 78,
+    "sample": {
+      "_tag": "Integer",
+      "integer": {
+        "__type": "bigint",
+        "value": "29"
+      }
+    },
+    "cborHex": "181d",
+    "cborBytes": [
+      24,
+      29
+    ],
+    "roundTripSuccess": true,
+    "metadata": {
+      "type": "integer",
+      "seed": 12345
+    }
+  },
+  {
+    "index": 79,
+    "sample": {
+      "_tag": "Integer",
+      "integer": {
+        "__type": "bigint",
+        "value": "10"
+      }
+    },
+    "cborHex": "0a",
+    "cborBytes": [
+      10
+    ],
+    "roundTripSuccess": true,
+    "metadata": {
+      "type": "integer",
+      "seed": 12345
+    }
+  },
+  {
+    "index": 80,
+    "sample": {
+      "_tag": "Integer",
+      "integer": {
+        "__type": "bigint",
+        "value": "22"
+      }
+    },
+    "cborHex": "16",
+    "cborBytes": [
+      22
+    ],
+    "roundTripSuccess": true,
+    "metadata": {
+      "type": "integer",
+      "seed": 12345
+    }
+  },
+  {
+    "index": 81,
+    "sample": {
+      "_tag": "Integer",
+      "integer": {
+        "__type": "bigint",
+        "value": "5"
+      }
+    },
+    "cborHex": "05",
+    "cborBytes": [
+      5
+    ],
+    "roundTripSuccess": true,
+    "metadata": {
+      "type": "integer",
+      "seed": 12345
+    }
+  },
+  {
+    "index": 82,
+    "sample": {
+      "_tag": "Integer",
+      "integer": {
+        "__type": "bigint",
+        "value": "2"
+      }
+    },
+    "cborHex": "02",
+    "cborBytes": [
+      2
+    ],
+    "roundTripSuccess": true,
+    "metadata": {
+      "type": "integer",
+      "seed": 12345
+    }
+  },
+  {
+    "index": 83,
+    "sample": {
+      "_tag": "Integer",
+      "integer": {
+        "__type": "bigint",
+        "value": "23"
+      }
+    },
+    "cborHex": "17",
+    "cborBytes": [
+      23
+    ],
+    "roundTripSuccess": true,
+    "metadata": {
+      "type": "integer",
+      "seed": 12345
+    }
+  },
+  {
+    "index": 84,
+    "sample": {
+      "_tag": "Integer",
+      "integer": {
+        "__type": "bigint",
+        "value": "40"
+      }
+    },
+    "cborHex": "1828",
+    "cborBytes": [
+      24,
+      40
+    ],
+    "roundTripSuccess": true,
+    "metadata": {
+      "type": "integer",
+      "seed": 12345
+    }
+  },
+  {
+    "index": 85,
+    "sample": {
+      "_tag": "Integer",
+      "integer": {
+        "__type": "bigint",
+        "value": "45"
+      }
+    },
+    "cborHex": "182d",
+    "cborBytes": [
+      24,
+      45
+    ],
+    "roundTripSuccess": true,
+    "metadata": {
+      "type": "integer",
+      "seed": 12345
+    }
+  },
+  {
+    "index": 86,
+    "sample": {
+      "_tag": "Integer",
+      "integer": {
+        "__type": "bigint",
+        "value": "63"
+      }
+    },
+    "cborHex": "183f",
+    "cborBytes": [
+      24,
+      63
+    ],
+    "roundTripSuccess": true,
+    "metadata": {
+      "type": "integer",
+      "seed": 12345
+    }
+  },
+  {
+    "index": 87,
+    "sample": {
+      "_tag": "Integer",
+      "integer": {
+        "__type": "bigint",
+        "value": "2"
+      }
+    },
+    "cborHex": "02",
+    "cborBytes": [
+      2
+    ],
+    "roundTripSuccess": true,
+    "metadata": {
+      "type": "integer",
+      "seed": 12345
+    }
+  },
+  {
+    "index": 88,
+    "sample": {
+      "_tag": "Integer",
+      "integer": {
+        "__type": "bigint",
+        "value": "33"
+      }
+    },
+    "cborHex": "1821",
+    "cborBytes": [
+      24,
+      33
+    ],
+    "roundTripSuccess": true,
+    "metadata": {
+      "type": "integer",
+      "seed": 12345
+    }
+  },
+  {
+    "index": 89,
+    "sample": {
+      "_tag": "Integer",
+      "integer": {
+        "__type": "bigint",
+        "value": "17"
+      }
+    },
+    "cborHex": "11",
+    "cborBytes": [
+      17
+    ],
+    "roundTripSuccess": true,
+    "metadata": {
+      "type": "integer",
+      "seed": 12345
+    }
+  },
+  {
+    "index": 90,
+    "sample": {
+      "_tag": "Integer",
+      "integer": {
+        "__type": "bigint",
+        "value": "2"
+      }
+    },
+    "cborHex": "02",
+    "cborBytes": [
+      2
+    ],
+    "roundTripSuccess": true,
+    "metadata": {
+      "type": "integer",
+      "seed": 12345
+    }
+  },
+  {
+    "index": 91,
+    "sample": {
+      "_tag": "Integer",
+      "integer": {
+        "__type": "bigint",
+        "value": "62"
+      }
+    },
+    "cborHex": "183e",
+    "cborBytes": [
+      24,
+      62
+    ],
+    "roundTripSuccess": true,
+    "metadata": {
+      "type": "integer",
+      "seed": 12345
+    }
+  },
+  {
+    "index": 92,
+    "sample": {
+      "_tag": "Integer",
+      "integer": {
+        "__type": "bigint",
+        "value": "2"
+      }
+    },
+    "cborHex": "02",
+    "cborBytes": [
+      2
+    ],
+    "roundTripSuccess": true,
+    "metadata": {
+      "type": "integer",
+      "seed": 12345
+    }
+  },
+  {
+    "index": 93,
+    "sample": {
+      "_tag": "Integer",
+      "integer": {
+        "__type": "bigint",
+        "value": "34"
+      }
+    },
+    "cborHex": "1822",
+    "cborBytes": [
+      24,
+      34
+    ],
+    "roundTripSuccess": true,
+    "metadata": {
+      "type": "integer",
+      "seed": 12345
+    }
+  },
+  {
+    "index": 94,
+    "sample": {
+      "_tag": "Integer",
+      "integer": {
+        "__type": "bigint",
+        "value": "47"
+      }
+    },
+    "cborHex": "182f",
+    "cborBytes": [
+      24,
+      47
+    ],
+    "roundTripSuccess": true,
+    "metadata": {
+      "type": "integer",
+      "seed": 12345
+    }
+  },
+  {
+    "index": 95,
+    "sample": {
+      "_tag": "Integer",
+      "integer": {
+        "__type": "bigint",
+        "value": "2"
+      }
+    },
+    "cborHex": "02",
+    "cborBytes": [
+      2
+    ],
+    "roundTripSuccess": true,
+    "metadata": {
+      "type": "integer",
+      "seed": 12345
+    }
+  },
+  {
+    "index": 96,
+    "sample": {
+      "_tag": "Integer",
+      "integer": {
+        "__type": "bigint",
+        "value": "17"
+      }
+    },
+    "cborHex": "11",
+    "cborBytes": [
+      17
+    ],
+    "roundTripSuccess": true,
+    "metadata": {
+      "type": "integer",
+      "seed": 12345
+    }
+  },
+  {
+    "index": 97,
+    "sample": {
+      "_tag": "Integer",
+      "integer": {
+        "__type": "bigint",
+        "value": "52"
+      }
+    },
+    "cborHex": "1834",
+    "cborBytes": [
+      24,
+      52
+    ],
+    "roundTripSuccess": true,
+    "metadata": {
+      "type": "integer",
+      "seed": 12345
+    }
+  },
+  {
+    "index": 98,
+    "sample": {
+      "_tag": "Integer",
+      "integer": {
+        "__type": "bigint",
+        "value": "41"
+      }
+    },
+    "cborHex": "1829",
+    "cborBytes": [
+      24,
+      41
+    ],
+    "roundTripSuccess": true,
+    "metadata": {
+      "type": "integer",
+      "seed": 12345
+    }
+  },
+  {
+    "index": 99,
+    "sample": {
+      "_tag": "Integer",
+      "integer": {
+        "__type": "bigint",
+        "value": "57"
+      }
+    },
+    "cborHex": "1839",
+    "cborBytes": [
+      24,
+      57
+    ],
+    "roundTripSuccess": true,
+    "metadata": {
+      "type": "integer",
+      "seed": 12345
+    }
+  },
+  {
+    "index": 100,
+    "sample": {
+      "_tag": "Integer",
+      "integer": {
+        "__type": "bigint",
+        "value": "63"
+      }
+    },
+    "cborHex": "183f",
+    "cborBytes": [
+      24,
+      63
+    ],
+    "roundTripSuccess": true,
+    "metadata": {
+      "type": "integer",
+      "seed": 12345
+    }
+  },
+  {
+    "index": 101,
+    "sample": {
+      "_tag": "Integer",
+      "integer": {
+        "__type": "bigint",
+        "value": "33"
+      }
+    },
+    "cborHex": "1821",
+    "cborBytes": [
+      24,
+      33
+    ],
+    "roundTripSuccess": true,
+    "metadata": {
+      "type": "integer",
+      "seed": 12345
+    }
+  },
+  {
+    "index": 102,
+    "sample": {
+      "_tag": "Integer",
+      "integer": {
+        "__type": "bigint",
+        "value": "59"
+      }
+    },
+    "cborHex": "183b",
+    "cborBytes": [
+      24,
+      59
+    ],
+    "roundTripSuccess": true,
+    "metadata": {
+      "type": "integer",
+      "seed": 12345
+    }
+  },
+  {
+    "index": 103,
+    "sample": {
+      "_tag": "Integer",
+      "integer": {
+        "__type": "bigint",
+        "value": "0"
+      }
+    },
+    "cborHex": "00",
+    "cborBytes": [
+      0
+    ],
+    "roundTripSuccess": true,
+    "metadata": {
+      "type": "integer",
+      "seed": 12345
+    }
+  },
+  {
+    "index": 104,
+    "sample": {
+      "_tag": "Integer",
+      "integer": {
+        "__type": "bigint",
+        "value": "8"
+      }
+    },
+    "cborHex": "08",
+    "cborBytes": [
+      8
+    ],
+    "roundTripSuccess": true,
+    "metadata": {
+      "type": "integer",
+      "seed": 12345
+    }
+  },
+  {
+    "index": 105,
+    "sample": {
+      "_tag": "Integer",
+      "integer": {
+        "__type": "bigint",
+        "value": "41"
+      }
+    },
+    "cborHex": "1829",
+    "cborBytes": [
+      24,
+      41
+    ],
+    "roundTripSuccess": true,
+    "metadata": {
+      "type": "integer",
+      "seed": 12345
+    }
+  },
+  {
+    "index": 106,
+    "sample": {
+      "_tag": "Integer",
+      "integer": {
+        "__type": "bigint",
+        "value": "2"
+      }
+    },
+    "cborHex": "02",
+    "cborBytes": [
+      2
+    ],
+    "roundTripSuccess": true,
+    "metadata": {
+      "type": "integer",
+      "seed": 12345
+    }
+  },
+  {
+    "index": 107,
+    "sample": {
+      "_tag": "Integer",
+      "integer": {
+        "__type": "bigint",
+        "value": "0"
+      }
+    },
+    "cborHex": "00",
+    "cborBytes": [
+      0
+    ],
+    "roundTripSuccess": true,
+    "metadata": {
+      "type": "integer",
+      "seed": 12345
+    }
+  },
+  {
+    "index": 108,
+    "sample": {
+      "_tag": "Integer",
+      "integer": {
+        "__type": "bigint",
+        "value": "31"
+      }
+    },
+    "cborHex": "181f",
+    "cborBytes": [
+      24,
+      31
+    ],
+    "roundTripSuccess": true,
+    "metadata": {
+      "type": "integer",
+      "seed": 12345
+    }
+  },
+  {
+    "index": 109,
+    "sample": {
+      "_tag": "Integer",
+      "integer": {
+        "__type": "bigint",
+        "value": "2"
+      }
+    },
+    "cborHex": "02",
+    "cborBytes": [
+      2
+    ],
+    "roundTripSuccess": true,
+    "metadata": {
+      "type": "integer",
+      "seed": 12345
+    }
+  },
+  {
+    "index": 110,
+    "sample": {
+      "_tag": "Integer",
+      "integer": {
+        "__type": "bigint",
+        "value": "42"
+      }
+    },
+    "cborHex": "182a",
+    "cborBytes": [
+      24,
+      42
+    ],
+    "roundTripSuccess": true,
+    "metadata": {
+      "type": "integer",
+      "seed": 12345
+    }
+  },
+  {
+    "index": 111,
+    "sample": {
+      "_tag": "Integer",
+      "integer": {
+        "__type": "bigint",
+        "value": "48"
+      }
+    },
+    "cborHex": "1830",
+    "cborBytes": [
+      24,
+      48
+    ],
+    "roundTripSuccess": true,
+    "metadata": {
+      "type": "integer",
+      "seed": 12345
+    }
+  },
+  {
+    "index": 112,
+    "sample": {
+      "_tag": "Integer",
+      "integer": {
+        "__type": "bigint",
+        "value": "37"
+      }
+    },
+    "cborHex": "1825",
+    "cborBytes": [
+      24,
+      37
+    ],
+    "roundTripSuccess": true,
+    "metadata": {
+      "type": "integer",
+      "seed": 12345
+    }
+  },
+  {
+    "index": 113,
+    "sample": {
+      "_tag": "Integer",
+      "integer": {
+        "__type": "bigint",
+        "value": "49"
+      }
+    },
+    "cborHex": "1831",
+    "cborBytes": [
+      24,
+      49
+    ],
+    "roundTripSuccess": true,
+    "metadata": {
+      "type": "integer",
+      "seed": 12345
+    }
+  },
+  {
+    "index": 114,
+    "sample": {
+      "_tag": "Integer",
+      "integer": {
+        "__type": "bigint",
+        "value": "2"
+      }
+    },
+    "cborHex": "02",
+    "cborBytes": [
+      2
+    ],
+    "roundTripSuccess": true,
+    "metadata": {
+      "type": "integer",
+      "seed": 12345
+    }
+  },
+  {
+    "index": 115,
+    "sample": {
+      "_tag": "Integer",
+      "integer": {
+        "__type": "bigint",
+        "value": "0"
+      }
+    },
+    "cborHex": "00",
+    "cborBytes": [
+      0
+    ],
+    "roundTripSuccess": true,
+    "metadata": {
+      "type": "integer",
+      "seed": 12345
+    }
+  },
+  {
+    "index": 116,
+    "sample": {
+      "_tag": "Integer",
+      "integer": {
+        "__type": "bigint",
+        "value": "20"
+      }
+    },
+    "cborHex": "14",
+    "cborBytes": [
+      20
+    ],
+    "roundTripSuccess": true,
+    "metadata": {
+      "type": "integer",
+      "seed": 12345
+    }
+  },
+  {
+    "index": 117,
+    "sample": {
+      "_tag": "Integer",
+      "integer": {
+        "__type": "bigint",
+        "value": "55"
+      }
+    },
+    "cborHex": "1837",
+    "cborBytes": [
+      24,
+      55
+    ],
+    "roundTripSuccess": true,
+    "metadata": {
+      "type": "integer",
+      "seed": 12345
+    }
+  },
+  {
+    "index": 118,
+    "sample": {
+      "_tag": "Integer",
+      "integer": {
+        "__type": "bigint",
+        "value": "61"
+      }
+    },
+    "cborHex": "183d",
+    "cborBytes": [
+      24,
+      61
+    ],
+    "roundTripSuccess": true,
+    "metadata": {
+      "type": "integer",
+      "seed": 12345
+    }
+  },
+  {
+    "index": 119,
+    "sample": {
+      "_tag": "Integer",
+      "integer": {
+        "__type": "bigint",
+        "value": "49"
+      }
+    },
+    "cborHex": "1831",
+    "cborBytes": [
+      24,
+      49
+    ],
+    "roundTripSuccess": true,
+    "metadata": {
+      "type": "integer",
+      "seed": 12345
+    }
+  },
+  {
+    "index": 120,
+    "sample": {
+      "_tag": "Integer",
+      "integer": {
+        "__type": "bigint",
+        "value": "2"
+      }
+    },
+    "cborHex": "02",
+    "cborBytes": [
+      2
+    ],
+    "roundTripSuccess": true,
+    "metadata": {
+      "type": "integer",
+      "seed": 12345
+    }
+  },
+  {
+    "index": 121,
+    "sample": {
+      "_tag": "Integer",
+      "integer": {
+        "__type": "bigint",
+        "value": "19"
+      }
+    },
+    "cborHex": "13",
+    "cborBytes": [
+      19
+    ],
+    "roundTripSuccess": true,
+    "metadata": {
+      "type": "integer",
+      "seed": 12345
+    }
+  },
+  {
+    "index": 122,
+    "sample": {
+      "_tag": "Integer",
+      "integer": {
+        "__type": "bigint",
+        "value": "23"
+      }
+    },
+    "cborHex": "17",
+    "cborBytes": [
+      23
+    ],
+    "roundTripSuccess": true,
+    "metadata": {
+      "type": "integer",
+      "seed": 12345
+    }
+  },
+  {
+    "index": 123,
+    "sample": {
+      "_tag": "Integer",
+      "integer": {
+        "__type": "bigint",
+        "value": "53"
+      }
+    },
+    "cborHex": "1835",
+    "cborBytes": [
+      24,
+      53
+    ],
+    "roundTripSuccess": true,
+    "metadata": {
+      "type": "integer",
+      "seed": 12345
+    }
+  },
+  {
+    "index": 124,
+    "sample": {
+      "_tag": "Integer",
+      "integer": {
+        "__type": "bigint",
+        "value": "2"
+      }
+    },
+    "cborHex": "02",
+    "cborBytes": [
+      2
+    ],
+    "roundTripSuccess": true,
+    "metadata": {
+      "type": "integer",
+      "seed": 12345
+    }
+  },
+  {
+    "index": 125,
+    "sample": {
+      "_tag": "Integer",
+      "integer": {
+        "__type": "bigint",
+        "value": "28"
+      }
+    },
+    "cborHex": "181c",
+    "cborBytes": [
+      24,
+      28
+    ],
+    "roundTripSuccess": true,
+    "metadata": {
+      "type": "integer",
+      "seed": 12345
+    }
+  },
+  {
+    "index": 126,
+    "sample": {
+      "_tag": "Integer",
+      "integer": {
+        "__type": "bigint",
+        "value": "31"
+      }
+    },
+    "cborHex": "181f",
+    "cborBytes": [
+      24,
+      31
+    ],
+    "roundTripSuccess": true,
+    "metadata": {
+      "type": "integer",
+      "seed": 12345
+    }
+  },
+  {
+    "index": 127,
+    "sample": {
+      "_tag": "Integer",
+      "integer": {
+        "__type": "bigint",
+        "value": "52"
+      }
+    },
+    "cborHex": "1834",
+    "cborBytes": [
+      24,
+      52
+    ],
+    "roundTripSuccess": true,
+    "metadata": {
+      "type": "integer",
+      "seed": 12345
+    }
+  },
+  {
+    "index": 128,
+    "sample": {
+      "_tag": "Integer",
+      "integer": {
+        "__type": "bigint",
+        "value": "63"
+      }
+    },
+    "cborHex": "183f",
+    "cborBytes": [
+      24,
+      63
+    ],
+    "roundTripSuccess": true,
+    "metadata": {
+      "type": "integer",
+      "seed": 12345
+    }
+  },
+  {
+    "index": 129,
+    "sample": {
+      "_tag": "Integer",
+      "integer": {
+        "__type": "bigint",
+        "value": "10"
+      }
+    },
+    "cborHex": "0a",
+    "cborBytes": [
+      10
+    ],
+    "roundTripSuccess": true,
+    "metadata": {
+      "type": "integer",
+      "seed": 12345
+    }
+  },
+  {
+    "index": 130,
+    "sample": {
+      "_tag": "Integer",
+      "integer": {
+        "__type": "bigint",
+        "value": "61"
+      }
+    },
+    "cborHex": "183d",
+    "cborBytes": [
+      24,
+      61
+    ],
+    "roundTripSuccess": true,
+    "metadata": {
+      "type": "integer",
+      "seed": 12345
+    }
+  },
+  {
+    "index": 131,
+    "sample": {
+      "_tag": "Integer",
+      "integer": {
+        "__type": "bigint",
+        "value": "26"
+      }
+    },
+    "cborHex": "181a",
+    "cborBytes": [
+      24,
+      26
+    ],
+    "roundTripSuccess": true,
+    "metadata": {
+      "type": "integer",
+      "seed": 12345
+    }
+  },
+  {
+    "index": 132,
+    "sample": {
+      "_tag": "Integer",
+      "integer": {
+        "__type": "bigint",
+        "value": "9"
+      }
+    },
+    "cborHex": "09",
+    "cborBytes": [
+      9
+    ],
+    "roundTripSuccess": true,
+    "metadata": {
+      "type": "integer",
+      "seed": 12345
+    }
+  },
+  {
+    "index": 133,
+    "sample": {
+      "_tag": "Integer",
+      "integer": {
+        "__type": "bigint",
+        "value": "25"
+      }
+    },
+    "cborHex": "1819",
+    "cborBytes": [
+      24,
+      25
+    ],
+    "roundTripSuccess": true,
+    "metadata": {
+      "type": "integer",
+      "seed": 12345
+    }
+  },
+  {
+    "index": 134,
+    "sample": {
+      "_tag": "Integer",
+      "integer": {
+        "__type": "bigint",
+        "value": "11"
+      }
+    },
+    "cborHex": "0b",
+    "cborBytes": [
+      11
+    ],
+    "roundTripSuccess": true,
+    "metadata": {
+      "type": "integer",
+      "seed": 12345
+    }
+  },
+  {
+    "index": 135,
+    "sample": {
+      "_tag": "Integer",
+      "integer": {
+        "__type": "bigint",
+        "value": "7"
+      }
+    },
+    "cborHex": "07",
+    "cborBytes": [
+      7
+    ],
+    "roundTripSuccess": true,
+    "metadata": {
+      "type": "integer",
+      "seed": 12345
+    }
+  },
+  {
+    "index": 136,
+    "sample": {
+      "_tag": "Integer",
+      "integer": {
+        "__type": "bigint",
+        "value": "41"
+      }
+    },
+    "cborHex": "1829",
+    "cborBytes": [
+      24,
+      41
+    ],
+    "roundTripSuccess": true,
+    "metadata": {
+      "type": "integer",
+      "seed": 12345
+    }
+  },
+  {
+    "index": 137,
+    "sample": {
+      "_tag": "Integer",
+      "integer": {
+        "__type": "bigint",
+        "value": "15"
+      }
+    },
+    "cborHex": "0f",
+    "cborBytes": [
+      15
+    ],
+    "roundTripSuccess": true,
+    "metadata": {
+      "type": "integer",
+      "seed": 12345
+    }
+  },
+  {
+    "index": 138,
+    "sample": {
+      "_tag": "Integer",
+      "integer": {
+        "__type": "bigint",
+        "value": "29"
+      }
+    },
+    "cborHex": "181d",
+    "cborBytes": [
+      24,
+      29
+    ],
+    "roundTripSuccess": true,
+    "metadata": {
+      "type": "integer",
+      "seed": 12345
+    }
+  },
+  {
+    "index": 139,
+    "sample": {
+      "_tag": "Integer",
+      "integer": {
+        "__type": "bigint",
+        "value": "63"
+      }
+    },
+    "cborHex": "183f",
+    "cborBytes": [
+      24,
+      63
+    ],
+    "roundTripSuccess": true,
+    "metadata": {
+      "type": "integer",
+      "seed": 12345
+    }
+  },
+  {
+    "index": 140,
+    "sample": {
+      "_tag": "Integer",
+      "integer": {
+        "__type": "bigint",
+        "value": "0"
+      }
+    },
+    "cborHex": "00",
+    "cborBytes": [
+      0
+    ],
+    "roundTripSuccess": true,
+    "metadata": {
+      "type": "integer",
+      "seed": 12345
+    }
+  },
+  {
+    "index": 141,
+    "sample": {
+      "_tag": "Integer",
+      "integer": {
+        "__type": "bigint",
+        "value": "1"
+      }
+    },
+    "cborHex": "01",
+    "cborBytes": [
+      1
+    ],
+    "roundTripSuccess": true,
+    "metadata": {
+      "type": "integer",
+      "seed": 12345
+    }
+  },
+  {
+    "index": 142,
+    "sample": {
+      "_tag": "Integer",
+      "integer": {
+        "__type": "bigint",
+        "value": "11"
+      }
+    },
+    "cborHex": "0b",
+    "cborBytes": [
+      11
+    ],
+    "roundTripSuccess": true,
+    "metadata": {
+      "type": "integer",
+      "seed": 12345
+    }
+  },
+  {
+    "index": 143,
+    "sample": {
+      "_tag": "Integer",
+      "integer": {
+        "__type": "bigint",
+        "value": "1"
+      }
+    },
+    "cborHex": "01",
+    "cborBytes": [
+      1
+    ],
+    "roundTripSuccess": true,
+    "metadata": {
+      "type": "integer",
+      "seed": 12345
+    }
+  },
+  {
+    "index": 144,
+    "sample": {
+      "_tag": "Integer",
+      "integer": {
+        "__type": "bigint",
+        "value": "12"
+      }
+    },
+    "cborHex": "0c",
+    "cborBytes": [
+      12
+    ],
+    "roundTripSuccess": true,
+    "metadata": {
+      "type": "integer",
+      "seed": 12345
+    }
+  },
+  {
+    "index": 145,
+    "sample": {
+      "_tag": "Integer",
+      "integer": {
+        "__type": "bigint",
+        "value": "2"
+      }
+    },
+    "cborHex": "02",
+    "cborBytes": [
+      2
+    ],
+    "roundTripSuccess": true,
+    "metadata": {
+      "type": "integer",
+      "seed": 12345
+    }
+  },
+  {
+    "index": 146,
+    "sample": {
+      "_tag": "Integer",
+      "integer": {
+        "__type": "bigint",
+        "value": "44"
+      }
+    },
+    "cborHex": "182c",
+    "cborBytes": [
+      24,
+      44
+    ],
+    "roundTripSuccess": true,
+    "metadata": {
+      "type": "integer",
+      "seed": 12345
+    }
+  },
+  {
+    "index": 147,
+    "sample": {
+      "_tag": "Integer",
+      "integer": {
+        "__type": "bigint",
+        "value": "30"
+      }
+    },
+    "cborHex": "181e",
+    "cborBytes": [
+      24,
+      30
+    ],
+    "roundTripSuccess": true,
+    "metadata": {
+      "type": "integer",
+      "seed": 12345
+    }
+  },
+  {
+    "index": 148,
+    "sample": {
+      "_tag": "Integer",
+      "integer": {
+        "__type": "bigint",
+        "value": "2"
+      }
+    },
+    "cborHex": "02",
+    "cborBytes": [
+      2
+    ],
+    "roundTripSuccess": true,
+    "metadata": {
+      "type": "integer",
+      "seed": 12345
+    }
+  },
+  {
+    "index": 149,
+    "sample": {
+      "_tag": "Integer",
+      "integer": {
+        "__type": "bigint",
+        "value": "33"
+      }
+    },
+    "cborHex": "1821",
+    "cborBytes": [
+      24,
+      33
+    ],
+    "roundTripSuccess": true,
+    "metadata": {
+      "type": "integer",
+      "seed": 12345
+    }
+  },
+  {
+    "index": 150,
+    "sample": {
+      "_tag": "Integer",
+      "integer": {
+        "__type": "bigint",
+        "value": "29"
+      }
+    },
+    "cborHex": "181d",
+    "cborBytes": [
+      24,
+      29
+    ],
+    "roundTripSuccess": true,
+    "metadata": {
+      "type": "integer",
+      "seed": 12345
+    }
+  },
+  {
+    "index": 151,
+    "sample": {
+      "_tag": "Integer",
+      "integer": {
+        "__type": "bigint",
+        "value": "52"
+      }
+    },
+    "cborHex": "1834",
+    "cborBytes": [
+      24,
+      52
+    ],
+    "roundTripSuccess": true,
+    "metadata": {
+      "type": "integer",
+      "seed": 12345
+    }
+  },
+  {
+    "index": 152,
+    "sample": {
+      "_tag": "Integer",
+      "integer": {
+        "__type": "bigint",
+        "value": "61"
+      }
+    },
+    "cborHex": "183d",
+    "cborBytes": [
+      24,
+      61
+    ],
+    "roundTripSuccess": true,
+    "metadata": {
+      "type": "integer",
+      "seed": 12345
+    }
+  },
+  {
+    "index": 153,
+    "sample": {
+      "_tag": "Integer",
+      "integer": {
+        "__type": "bigint",
+        "value": "59"
+      }
+    },
+    "cborHex": "183b",
+    "cborBytes": [
+      24,
+      59
+    ],
+    "roundTripSuccess": true,
+    "metadata": {
+      "type": "integer",
+      "seed": 12345
+    }
+  },
+  {
+    "index": 154,
+    "sample": {
+      "_tag": "Integer",
+      "integer": {
+        "__type": "bigint",
+        "value": "23"
+      }
+    },
+    "cborHex": "17",
+    "cborBytes": [
+      23
+    ],
+    "roundTripSuccess": true,
+    "metadata": {
+      "type": "integer",
+      "seed": 12345
+    }
+  },
+  {
+    "index": 155,
+    "sample": {
+      "_tag": "Integer",
+      "integer": {
+        "__type": "bigint",
+        "value": "16"
+      }
+    },
+    "cborHex": "10",
+    "cborBytes": [
+      16
+    ],
+    "roundTripSuccess": true,
+    "metadata": {
+      "type": "integer",
+      "seed": 12345
+    }
+  },
+  {
+    "index": 156,
+    "sample": {
+      "_tag": "Integer",
+      "integer": {
+        "__type": "bigint",
+        "value": "57"
+      }
+    },
+    "cborHex": "1839",
+    "cborBytes": [
+      24,
+      57
+    ],
+    "roundTripSuccess": true,
+    "metadata": {
+      "type": "integer",
+      "seed": 12345
+    }
+  },
+  {
+    "index": 157,
+    "sample": {
+      "_tag": "Integer",
+      "integer": {
+        "__type": "bigint",
+        "value": "59"
+      }
+    },
+    "cborHex": "183b",
+    "cborBytes": [
+      24,
+      59
+    ],
+    "roundTripSuccess": true,
+    "metadata": {
+      "type": "integer",
+      "seed": 12345
+    }
+  },
+  {
+    "index": 158,
+    "sample": {
+      "_tag": "Integer",
+      "integer": {
+        "__type": "bigint",
+        "value": "59"
+      }
+    },
+    "cborHex": "183b",
+    "cborBytes": [
+      24,
+      59
+    ],
+    "roundTripSuccess": true,
+    "metadata": {
+      "type": "integer",
+      "seed": 12345
+    }
+  },
+  {
+    "index": 159,
+    "sample": {
+      "_tag": "Integer",
+      "integer": {
+        "__type": "bigint",
+        "value": "36"
+      }
+    },
+    "cborHex": "1824",
+    "cborBytes": [
+      24,
+      36
+    ],
+    "roundTripSuccess": true,
+    "metadata": {
+      "type": "integer",
+      "seed": 12345
+    }
+  },
+  {
+    "index": 160,
+    "sample": {
+      "_tag": "Integer",
+      "integer": {
+        "__type": "bigint",
+        "value": "33"
+      }
+    },
+    "cborHex": "1821",
+    "cborBytes": [
+      24,
+      33
+    ],
+    "roundTripSuccess": true,
+    "metadata": {
+      "type": "integer",
+      "seed": 12345
+    }
+  },
+  {
+    "index": 161,
+    "sample": {
+      "_tag": "Integer",
+      "integer": {
+        "__type": "bigint",
+        "value": "35"
+      }
+    },
+    "cborHex": "1823",
+    "cborBytes": [
+      24,
+      35
+    ],
+    "roundTripSuccess": true,
+    "metadata": {
+      "type": "integer",
+      "seed": 12345
+    }
+  },
+  {
+    "index": 162,
+    "sample": {
+      "_tag": "Integer",
+      "integer": {
+        "__type": "bigint",
+        "value": "35"
+      }
+    },
+    "cborHex": "1823",
+    "cborBytes": [
+      24,
+      35
+    ],
+    "roundTripSuccess": true,
+    "metadata": {
+      "type": "integer",
+      "seed": 12345
+    }
+  },
+  {
+    "index": 163,
+    "sample": {
+      "_tag": "Integer",
+      "integer": {
+        "__type": "bigint",
+        "value": "9"
+      }
+    },
+    "cborHex": "09",
+    "cborBytes": [
+      9
+    ],
+    "roundTripSuccess": true,
+    "metadata": {
+      "type": "integer",
+      "seed": 12345
+    }
+  },
+  {
+    "index": 164,
+    "sample": {
+      "_tag": "Integer",
+      "integer": {
+        "__type": "bigint",
+        "value": "62"
+      }
+    },
+    "cborHex": "183e",
+    "cborBytes": [
+      24,
+      62
+    ],
+    "roundTripSuccess": true,
+    "metadata": {
+      "type": "integer",
+      "seed": 12345
+    }
+  },
+  {
+    "index": 165,
+    "sample": {
+      "_tag": "Integer",
+      "integer": {
+        "__type": "bigint",
+        "value": "43"
+      }
+    },
+    "cborHex": "182b",
+    "cborBytes": [
+      24,
+      43
+    ],
+    "roundTripSuccess": true,
+    "metadata": {
+      "type": "integer",
+      "seed": 12345
+    }
+  },
+  {
+    "index": 166,
+    "sample": {
+      "_tag": "Integer",
+      "integer": {
+        "__type": "bigint",
+        "value": "1"
+      }
+    },
+    "cborHex": "01",
+    "cborBytes": [
+      1
+    ],
+    "roundTripSuccess": true,
+    "metadata": {
+      "type": "integer",
+      "seed": 12345
+    }
+  },
+  {
+    "index": 167,
+    "sample": {
+      "_tag": "Integer",
+      "integer": {
+        "__type": "bigint",
+        "value": "38"
+      }
+    },
+    "cborHex": "1826",
+    "cborBytes": [
+      24,
+      38
+    ],
+    "roundTripSuccess": true,
+    "metadata": {
+      "type": "integer",
+      "seed": 12345
+    }
+  },
+  {
+    "index": 168,
+    "sample": {
+      "_tag": "Integer",
+      "integer": {
+        "__type": "bigint",
+        "value": "28"
+      }
+    },
+    "cborHex": "181c",
+    "cborBytes": [
+      24,
+      28
+    ],
+    "roundTripSuccess": true,
+    "metadata": {
+      "type": "integer",
+      "seed": 12345
+    }
+  },
+  {
+    "index": 169,
+    "sample": {
+      "_tag": "Integer",
+      "integer": {
+        "__type": "bigint",
+        "value": "7"
+      }
+    },
+    "cborHex": "07",
+    "cborBytes": [
+      7
+    ],
+    "roundTripSuccess": true,
+    "metadata": {
+      "type": "integer",
+      "seed": 12345
+    }
+  },
+  {
+    "index": 170,
+    "sample": {
+      "_tag": "Integer",
+      "integer": {
+        "__type": "bigint",
+        "value": "0"
+      }
+    },
+    "cborHex": "00",
+    "cborBytes": [
+      0
+    ],
+    "roundTripSuccess": true,
+    "metadata": {
+      "type": "integer",
+      "seed": 12345
+    }
+  },
+  {
+    "index": 171,
+    "sample": {
+      "_tag": "Integer",
+      "integer": {
+        "__type": "bigint",
+        "value": "21"
+      }
+    },
+    "cborHex": "15",
+    "cborBytes": [
+      21
+    ],
+    "roundTripSuccess": true,
+    "metadata": {
+      "type": "integer",
+      "seed": 12345
+    }
+  },
+  {
+    "index": 172,
+    "sample": {
+      "_tag": "Integer",
+      "integer": {
+        "__type": "bigint",
+        "value": "56"
+      }
+    },
+    "cborHex": "1838",
+    "cborBytes": [
+      24,
+      56
+    ],
+    "roundTripSuccess": true,
+    "metadata": {
+      "type": "integer",
+      "seed": 12345
+    }
+  },
+  {
+    "index": 173,
+    "sample": {
+      "_tag": "Integer",
+      "integer": {
+        "__type": "bigint",
+        "value": "40"
+      }
+    },
+    "cborHex": "1828",
+    "cborBytes": [
+      24,
+      40
+    ],
+    "roundTripSuccess": true,
+    "metadata": {
+      "type": "integer",
+      "seed": 12345
+    }
+  },
+  {
+    "index": 174,
+    "sample": {
+      "_tag": "Integer",
+      "integer": {
+        "__type": "bigint",
+        "value": "7"
+      }
+    },
+    "cborHex": "07",
+    "cborBytes": [
+      7
+    ],
+    "roundTripSuccess": true,
+    "metadata": {
+      "type": "integer",
+      "seed": 12345
+    }
+  },
+  {
+    "index": 175,
+    "sample": {
+      "_tag": "Integer",
+      "integer": {
+        "__type": "bigint",
+        "value": "62"
+      }
+    },
+    "cborHex": "183e",
+    "cborBytes": [
+      24,
+      62
+    ],
+    "roundTripSuccess": true,
+    "metadata": {
+      "type": "integer",
+      "seed": 12345
+    }
+  },
+  {
+    "index": 176,
+    "sample": {
+      "_tag": "Integer",
+      "integer": {
+        "__type": "bigint",
+        "value": "52"
+      }
+    },
+    "cborHex": "1834",
+    "cborBytes": [
+      24,
+      52
+    ],
+    "roundTripSuccess": true,
+    "metadata": {
+      "type": "integer",
+      "seed": 12345
+    }
+  },
+  {
+    "index": 177,
+    "sample": {
+      "_tag": "Integer",
+      "integer": {
+        "__type": "bigint",
+        "value": "62"
+      }
+    },
+    "cborHex": "183e",
+    "cborBytes": [
+      24,
+      62
+    ],
+    "roundTripSuccess": true,
+    "metadata": {
+      "type": "integer",
+      "seed": 12345
+    }
+  },
+  {
+    "index": 178,
+    "sample": {
+      "_tag": "Integer",
+      "integer": {
+        "__type": "bigint",
+        "value": "47"
+      }
+    },
+    "cborHex": "182f",
+    "cborBytes": [
+      24,
+      47
+    ],
+    "roundTripSuccess": true,
+    "metadata": {
+      "type": "integer",
+      "seed": 12345
+    }
+  },
+  {
+    "index": 179,
+    "sample": {
+      "_tag": "Integer",
+      "integer": {
+        "__type": "bigint",
+        "value": "5"
+      }
+    },
+    "cborHex": "05",
+    "cborBytes": [
+      5
+    ],
+    "roundTripSuccess": true,
+    "metadata": {
+      "type": "integer",
+      "seed": 12345
+    }
+  },
+  {
+    "index": 180,
+    "sample": {
+      "_tag": "Integer",
+      "integer": {
+        "__type": "bigint",
+        "value": "3"
+      }
+    },
+    "cborHex": "03",
+    "cborBytes": [
+      3
+    ],
+    "roundTripSuccess": true,
+    "metadata": {
+      "type": "integer",
+      "seed": 12345
+    }
+  },
+  {
+    "index": 181,
+    "sample": {
+      "_tag": "Integer",
+      "integer": {
+        "__type": "bigint",
+        "value": "15"
+      }
+    },
+    "cborHex": "0f",
+    "cborBytes": [
+      15
+    ],
+    "roundTripSuccess": true,
+    "metadata": {
+      "type": "integer",
+      "seed": 12345
+    }
+  },
+  {
+    "index": 182,
+    "sample": {
+      "_tag": "Integer",
+      "integer": {
+        "__type": "bigint",
+        "value": "1"
+      }
+    },
+    "cborHex": "01",
+    "cborBytes": [
+      1
+    ],
+    "roundTripSuccess": true,
+    "metadata": {
+      "type": "integer",
+      "seed": 12345
+    }
+  },
+  {
+    "index": 183,
+    "sample": {
+      "_tag": "Integer",
+      "integer": {
+        "__type": "bigint",
+        "value": "21"
+      }
+    },
+    "cborHex": "15",
+    "cborBytes": [
+      21
+    ],
+    "roundTripSuccess": true,
+    "metadata": {
+      "type": "integer",
+      "seed": 12345
+    }
+  },
+  {
+    "index": 184,
+    "sample": {
+      "_tag": "Integer",
+      "integer": {
+        "__type": "bigint",
+        "value": "2"
+      }
+    },
+    "cborHex": "02",
+    "cborBytes": [
+      2
+    ],
+    "roundTripSuccess": true,
+    "metadata": {
+      "type": "integer",
+      "seed": 12345
+    }
+  },
+  {
+    "index": 185,
+    "sample": {
+      "_tag": "Integer",
+      "integer": {
+        "__type": "bigint",
+        "value": "1"
+      }
+    },
+    "cborHex": "01",
+    "cborBytes": [
+      1
+    ],
+    "roundTripSuccess": true,
+    "metadata": {
+      "type": "integer",
+      "seed": 12345
+    }
+  },
+  {
+    "index": 186,
+    "sample": {
+      "_tag": "Integer",
+      "integer": {
+        "__type": "bigint",
+        "value": "3"
+      }
+    },
+    "cborHex": "03",
+    "cborBytes": [
+      3
+    ],
+    "roundTripSuccess": true,
+    "metadata": {
+      "type": "integer",
+      "seed": 12345
+    }
+  },
+  {
+    "index": 187,
+    "sample": {
+      "_tag": "Integer",
+      "integer": {
+        "__type": "bigint",
+        "value": "13"
+      }
+    },
+    "cborHex": "0d",
+    "cborBytes": [
+      13
+    ],
+    "roundTripSuccess": true,
+    "metadata": {
+      "type": "integer",
+      "seed": 12345
+    }
+  },
+  {
+    "index": 188,
+    "sample": {
+      "_tag": "Integer",
+      "integer": {
+        "__type": "bigint",
+        "value": "1"
+      }
+    },
+    "cborHex": "01",
+    "cborBytes": [
+      1
+    ],
+    "roundTripSuccess": true,
+    "metadata": {
+      "type": "integer",
+      "seed": 12345
+    }
+  },
+  {
+    "index": 189,
+    "sample": {
+      "_tag": "Integer",
+      "integer": {
+        "__type": "bigint",
+        "value": "6"
+      }
+    },
+    "cborHex": "06",
+    "cborBytes": [
+      6
+    ],
+    "roundTripSuccess": true,
+    "metadata": {
+      "type": "integer",
+      "seed": 12345
+    }
+  },
+  {
+    "index": 190,
+    "sample": {
+      "_tag": "Integer",
+      "integer": {
+        "__type": "bigint",
+        "value": "23"
+      }
+    },
+    "cborHex": "17",
+    "cborBytes": [
+      23
+    ],
+    "roundTripSuccess": true,
+    "metadata": {
+      "type": "integer",
+      "seed": 12345
+    }
+  },
+  {
+    "index": 191,
+    "sample": {
+      "_tag": "Integer",
+      "integer": {
+        "__type": "bigint",
+        "value": "5"
+      }
+    },
+    "cborHex": "05",
+    "cborBytes": [
+      5
+    ],
+    "roundTripSuccess": true,
+    "metadata": {
+      "type": "integer",
+      "seed": 12345
+    }
+  },
+  {
+    "index": 192,
+    "sample": {
+      "_tag": "Integer",
+      "integer": {
+        "__type": "bigint",
+        "value": "1"
+      }
+    },
+    "cborHex": "01",
+    "cborBytes": [
+      1
+    ],
+    "roundTripSuccess": true,
+    "metadata": {
+      "type": "integer",
+      "seed": 12345
+    }
+  },
+  {
+    "index": 193,
+    "sample": {
+      "_tag": "Integer",
+      "integer": {
+        "__type": "bigint",
+        "value": "18"
+      }
+    },
+    "cborHex": "12",
+    "cborBytes": [
+      18
+    ],
+    "roundTripSuccess": true,
+    "metadata": {
+      "type": "integer",
+      "seed": 12345
+    }
+  },
+  {
+    "index": 194,
+    "sample": {
+      "_tag": "Integer",
+      "integer": {
+        "__type": "bigint",
+        "value": "39"
+      }
+    },
+    "cborHex": "1827",
+    "cborBytes": [
+      24,
+      39
+    ],
+    "roundTripSuccess": true,
+    "metadata": {
+      "type": "integer",
+      "seed": 12345
+    }
+  },
+  {
+    "index": 195,
+    "sample": {
+      "_tag": "Integer",
+      "integer": {
+        "__type": "bigint",
+        "value": "1"
+      }
+    },
+    "cborHex": "01",
+    "cborBytes": [
+      1
+    ],
+    "roundTripSuccess": true,
+    "metadata": {
+      "type": "integer",
+      "seed": 12345
+    }
+  },
+  {
+    "index": 196,
+    "sample": {
+      "_tag": "Integer",
+      "integer": {
+        "__type": "bigint",
+        "value": "61"
+      }
+    },
+    "cborHex": "183d",
+    "cborBytes": [
+      24,
+      61
+    ],
+    "roundTripSuccess": true,
+    "metadata": {
+      "type": "integer",
+      "seed": 12345
+    }
+  },
+  {
+    "index": 197,
+    "sample": {
+      "_tag": "Integer",
+      "integer": {
+        "__type": "bigint",
+        "value": "7"
+      }
+    },
+    "cborHex": "07",
+    "cborBytes": [
+      7
+    ],
+    "roundTripSuccess": true,
+    "metadata": {
+      "type": "integer",
+      "seed": 12345
+    }
+  },
+  {
+    "index": 198,
+    "sample": {
+      "_tag": "Integer",
+      "integer": {
+        "__type": "bigint",
+        "value": "2"
+      }
+    },
+    "cborHex": "02",
+    "cborBytes": [
+      2
+    ],
+    "roundTripSuccess": true,
+    "metadata": {
+      "type": "integer",
+      "seed": 12345
+    }
+  },
+  {
+    "index": 199,
+    "sample": {
+      "_tag": "Integer",
+      "integer": {
+        "__type": "bigint",
+        "value": "4"
+      }
+    },
+    "cborHex": "04",
+    "cborBytes": [
+      4
+    ],
+    "roundTripSuccess": true,
+    "metadata": {
+      "type": "integer",
+      "seed": 12345
+    }
+  }
+]

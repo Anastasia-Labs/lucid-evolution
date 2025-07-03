@@ -1,0 +1,13 @@
+{
+  "seed": 12345,
+  "samplesPerType": 200,
+  "types": [
+    "integer",
+    "byteArray",
+    "list",
+    "map",
+    "constr",
+    "data"
+  ],
+  "totalSamples": 1200
+}

@@ -1,5 +1,5 @@
 import * as CML from "@anastasia-labs/cardano-multiplatform-lib-nodejs";
-import * as Data from "../Data.js";
+import * as Data from "../Data_old.js";
 import * as UPLC from "@harmoniclabs/uplc";
 import * as Bytes from "../Bytes.js";
 import * as CBORX from "cbor-x";

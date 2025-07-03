@@ -15,14 +15,14 @@ This section maps the TypeScript modules to their corresponding CDDL definitions
 | `UnregCert`                 | `unreg_cert` ✅ Implemented                           |
 | `VoteDelegCert`             | `vote_deleg_cert` ✅ Implemented                      |
 | `StakeVoteDelegCert`        | `stake_vote_deleg_cert` ✅ Implemented                |
-| `StakeRegDelegCert`         | `stake_reg_deleg_cert`                                |
-| `VoteRegDelegCert`          | `vote_reg_deleg_cert`                                 |
-| `StakeVoteRegDelegCert`     | `stake_vote_reg_deleg_cert`                           |
-| `AuthCommitteeHotCert`      | `auth_committee_hot_cert`                             |
-| `ResignCommitteeColdCert`   | `resign_committee_cold_cert`                          |
-| `RegDRepCert`               | `reg_drep_cert`                                       |
-| `UnregDRepCert`             | `unreg_drep_cert`                                     |
-| `UpdateDRepCert`            | `update_drep_cert`                                    |
+| `StakeRegDelegCert`         | `stake_reg_deleg_cert` ✅ Implemented                 |
+| `VoteRegDelegCert`          | `vote_reg_deleg_cert` ✅ Implemented                  |
+| `StakeVoteRegDelegCert`     | `stake_vote_reg_deleg_cert` ✅ Implemented            |
+| `AuthCommitteeHotCert`      | `auth_committee_hot_cert` ✅ Implemented              |
+| `ResignCommitteeColdCert`   | `resign_committee_cold_cert` ✅ Implemented           |
+| `RegDrepCert`               | `reg_drep_cert` ✅ Implemented                        |
+| `UnregDrepCert`             | `unreg_drep_cert` ✅ Implemented                      |
+| `UpdateDrepCert`            | `update_drep_cert` ✅ Implemented                     |
 | `Header`                    | `header` ✅ Implemented                               |
 | `HeaderBody`                | `header_body` ✅ Implemented                          |
 | `TransactionBody`           | `transaction_body` ✅ Implemented                     |
@@ -116,7 +116,36 @@ This section maps the TypeScript modules to their corresponding CDDL definitions
 | `PlutusData`                | `plutus_data`                                         |
 | `ScriptDataHash`            | `script_data_hash` ✅ Implemented                     |
 | `RequiredSigners`           | `required_signers`                                    |
+| `VrfKeyHash`                | `vrf_keyhash`                                         |
+| `Language`                  | `language`                                            |
+| `PotentialLanguages`        | `potential_languages`                                 |
+| `KesSignature`              | `kes_signature`                                       |
+| `SignkeyKES`                | `signkeyKES`                                          |
+| `BlockNo`                   | `block_no`                                            |
+| `SlotNo`                    | `slot_no`                                             |
+| `KesVkey`                   | `kes_vkey`                                            |
+| `Signature`                 | `signature`                                           |
+| `MajorProtocolVersion`      | `major_protocol_version`                              |
+| `Port`                      | `port`                                                |
+| `Vote`                      | `vote`                                                |
+| `PolicyHash`                | `policy_hash`                                         |
+| `TransactionMetadatumLabel` | `transaction_metadatum_label`                         |
+| `TransactionMetadatum`      | `transaction_metadatum`                               |
+| `MaxWord64`                 | `maxWord64`                                           |
+| `Voter`                     | `voter`                                               |
+| `VotingProcedure`           | `voting_procedure`                                    |
+| `Constitution`              | `constitution`                                        |
+| `InfoAction`                | `info_action`                                         |
+| `DistinctVBytes`            | `distinct_VBytes`                                     |
+| `Constr`                    | `constr`                                              |
+| `ShelleyAuxiliaryData`      | `shelley_auxiliary_data`                              |
+| `ShelleyMaAuxiliaryData`    | `shelley_ma_auxiliary_data`                           |
+| `AlonzoAuxiliaryData`       | `alonzo_auxiliary_data`                               |
+| `Set`                       | `set`                                                 |
+| `NonemptySet`               | `nonempty_set`                                        |
 | `NetworkId`                 | `network_id`                                          |
+
+## CDDL specification
 
 ```
 ; This file was auto-generated from huddle. Please do not modify it directly!

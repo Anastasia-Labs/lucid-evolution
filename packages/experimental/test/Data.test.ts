@@ -1,15 +1,14 @@
-import { describe, expect, it } from "vitest";
+import { describe, expect, it } from "@effect/vitest";
+import { Effect, Schema } from "effect";
 import * as Data from "../src/Data.js";
-import * as TSchema from "../src/TSchema.js";
-import { Schema } from "effect";
 
 /**
- * Tests for the core Data module functionality -
- * focusing on basic data types, their construction and validation
+ * Tests for the Data module functionality -
+ * focusing on PlutusData types, their construction, validation, and CBOR encoding/decoding
  */
 describe("Data Module Tests", () => {
   describe("Basic Types", () => {
-    describe("ByteArray", () => {
+    describe("PlutusBytes", () => {
       const validHexCases = [
         "deadbeef",
         "cafe0123",
@@ -18,10 +17,10 @@ describe("Data Module Tests", () => {
         "ff",
       ];
 
-      it.each(validHexCases)("should create valid ByteArray: %s", (input) => {
-        const byteArray = Data.mkByte(input);
-        expect(byteArray.bytearray).toBe(input);
-        expect(Data.isByteArray(byteArray)).toBe(true);
+      it.each(validHexCases)("should create valid PlutusBytes: %s", (input) => {
+        const bytes = Data.bytearray(input);
+        expect(bytes.bytes).toBe(input);
+        expect(Data.isPlutusBytes(bytes)).toBe(true);
       });
 
       const invalidHexCases = [
@@ -31,632 +30,390 @@ describe("Data Module Tests", () => {
         "deadbeef ",
         " deadbeef",
         "0x123456",
-        // "",
       ];
 
       it.each(invalidHexCases)(
-        "should throw on invalid hex string: %s",
+        "should fail schema validation on invalid hex string: %s",
         (input) => {
-          expect(() => Data.mkByte(input)).toThrow();
+          const invalidBytes = { _tag: "Bytes", bytes: input } as any;
+          expect(Data.isPlutusBytes(invalidBytes)).toBe(false);
         },
       );
 
-      it("should validate bytearray with schema", () => {
-        const byteArray = Data.mkByte("deadbeef");
-        expect(Schema.is(Data.ByteArray)(byteArray)).toBe(true);
+      it("should validate PlutusBytes with schema", () => {
+        const bytes = Data.bytearray("deadbeef");
+        expect(Schema.is(Data.PlutusBytesSchema)(bytes)).toBe(true);
       });
     });
 
-    describe("Integer", () => {
-      const validIntegerCases = [
+    describe("PlutusBigInt", () => {
+      const integerCases = [
         0n,
         1n,
         -1n,
         42n,
         -42n,
-        9007199254740991n,
-        -9007199254740991n,
+        2n ** 63n - 1n,
+        -(2n ** 63n),
         2n ** 64n,
         -(2n ** 64n),
+        123456789123456789n,
+        -123456789123456789n,
       ];
 
-      it.each(validIntegerCases)("should create valid Integer: %s", (input) => {
-        const integer = Data.mkInt(input);
-        expect(integer.integer).toBe(input);
-        expect(Data.isInteger(integer)).toBe(true);
+      it.each(integerCases)("should create valid PlutusBigInt: %s", (input) => {
+        const integer = Data.int(input);
+        expect(integer.value).toBe(input);
+        expect(Data.isPlutusBigInt(integer)).toBe(true);
       });
 
-      it("should reject regular numbers", () => {
-        // @ts-expect-error - Testing runtime validation
-        expect(() => Data.mkInt(42)).toThrow();
+      it("should fail validation with non-bigint value", () => {
+        const invalidInt = { _tag: "Int", value: "not-a-bigint" } as any;
+        expect(Data.isPlutusBigInt(invalidInt)).toBe(false);
       });
 
-      it("should validate integer with schema", () => {
-        const integer = Data.mkInt(42n);
-        expect(Schema.is(Data.Integer)(integer)).toBe(true);
-      });
-    });
-
-    describe("List", () => {
-      it("should create empty list", () => {
-        const list = Data.mkList([]);
-        expect(list.list).toEqual([]);
-        expect(Data.isList(list)).toBe(true);
-      });
-
-      it("should create homogeneous list of integers", () => {
-        const integers = [Data.mkInt(1n), Data.mkInt(2n), Data.mkInt(3n)];
-        const list = Data.mkList(integers);
-        expect(list.list).toEqual(integers);
-        expect(Data.isList(list)).toBe(true);
-      });
-
-      it("should create list of mixed types", () => {
-        const items = [
-          Data.mkInt(1n),
-          Data.mkByte("deadbeef"),
-          Data.mkList([Data.mkInt(2n)]),
-        ];
-        const list = Data.mkList(items);
-        expect(list.list).toEqual(items);
-        expect(Data.isList(list)).toBe(true);
-      });
-
-      it("should validate list with schema", () => {
-        const list = Data.mkList([Data.mkInt(1n)]);
-        expect(Schema.is(Data.List)(list)).toBe(true);
+      it("should validate PlutusBigInt with schema", () => {
+        const integer = Data.int(42n);
+        expect(Schema.is(Data.PlutusBigIntSchema)(integer)).toBe(true);
       });
     });
 
-    describe("Map", () => {
-      it("should create empty map", () => {
-        const map = Data.mkMap([]);
+    describe("PlutusList", () => {
+      it("should create a valid empty list", () => {
+        const list = Data.list([]);
+        expect(list.items).toEqual([]);
+        expect(Data.isPlutusList(list)).toBe(true);
+      });
+
+      it("should create a valid list with elements", () => {
+        const list = Data.list([Data.int(42n), Data.bytearray("deadbeef")]);
+        expect(list.items).toHaveLength(2);
+        expect(Data.isPlutusList(list)).toBe(true);
+      });
+
+      it("should validate PlutusList with schema", () => {
+        const list = Data.list([Data.int(42n), Data.bytearray("cafe")]);
+        expect(Schema.is(Data.PlutusListSchema)(list)).toBe(true);
+      });
+    });
+
+    describe("PlutusMap", () => {
+      it("should create a valid empty map", () => {
+        const map = Data.map([]);
         expect(map.entries).toEqual([]);
-        expect(Data.isMap(map)).toBe(true);
+        expect(Data.isPlutusMap(map)).toBe(true);
       });
 
-      it("should create map with entries", () => {
-        const entries = [{ k: Data.mkByte("deadbeef"), v: Data.mkInt(42n) }];
-        const map = Data.mkMap(entries);
-        expect(map.entries).toEqual(entries);
-        expect(Data.isMap(map)).toBe(true);
+      it("should create a valid map with entries", () => {
+        const map = Data.map([
+          {
+            key: Data.bytearray("cafe"),
+            value: Data.int(42n),
+          },
+          {
+            key: Data.int(99n),
+            value: Data.bytearray("deadbeef"),
+          },
+        ]);
+        expect(map.entries).toHaveLength(2);
+        expect(Data.isPlutusMap(map)).toBe(true);
       });
 
-      it("should handle nested maps", () => {
-        const nestedMap = Data.mkMap([
-          { k: Data.mkByte("cafe"), v: Data.mkInt(43n) },
+      it("should validate PlutusMap with schema", () => {
+        const map = Data.map([
+          {
+            key: Data.int(1n),
+            value: Data.int(2n),
+          },
         ]);
-
-        const map = Data.mkMap([
-          { k: Data.mkByte("deadbeef"), v: nestedMap },
-          { k: Data.mkInt(1n), v: Data.mkInt(2n) },
-        ]);
-
-        expect(Data.isMap(map)).toBe(true);
-      });
-
-      it("should validate map with schema", () => {
-        const map = Data.mkMap([
-          { k: Data.mkByte("deadbeef"), v: Data.mkInt(42n) },
-        ]);
-        expect(Schema.is(Data.Map)(map)).toBe(true);
+        expect(Schema.is(Data.PlutusMapSchema)(map)).toBe(true);
       });
     });
 
     describe("Constr", () => {
-      it("should create empty constructor", () => {
-        const constr = Data.mkConstr(0n, []);
+      it("should create a valid constructor with no fields", () => {
+        const constr = Data.constr(0n, []);
         expect(constr.index).toBe(0n);
-        expect(constr.fields).toEqual([]);
+        expect(constr.data).toEqual([]);
         expect(Data.isConstr(constr)).toBe(true);
       });
 
-      it("should create constructor with fields", () => {
-        const fields = [Data.mkInt(42n), Data.mkByte("deadbeef")];
-        const constr = Data.mkConstr(1n, fields);
-        expect(constr.index).toBe(1n);
-        expect(constr.fields).toEqual(fields);
+      it("should create a valid constructor with fields", () => {
+        const constr = Data.constr(2n, [
+          Data.int(42n),
+          Data.bytearray("deadbeef"),
+          Data.list([Data.int(99n)]),
+        ]);
+        expect(constr.index).toBe(2n);
+        expect(constr.data).toHaveLength(3);
         expect(Data.isConstr(constr)).toBe(true);
       });
 
-      it("should handle nested constructors", () => {
-        const nestedConstr = Data.mkConstr(1n, [Data.mkByte("deadbeef")]);
+      it("should validate Constr with schema", () => {
+        const constr = Data.constr(5n, [Data.int(42n), Data.bytearray("cafe")]);
+        expect(Schema.is(Data.ConstrSchema)(constr)).toBe(true);
+      });
 
-        const constr = Data.mkConstr(0n, [nestedConstr]);
-
-        expect(constr.fields[0]).toEqual(nestedConstr);
+      it("should handle large constructor indices", () => {
+        const largeIndex = 2n ** 32n + 1n; // Well beyond the direct tag range
+        const constr = Data.constr(largeIndex, [Data.int(1n)]);
+        expect(constr.index).toBe(largeIndex);
         expect(Data.isConstr(constr)).toBe(true);
       });
-
-      it("should reject non-bigint index", () => {
-        expect(() =>
-          // @ts-ignore
-          Data.mkConstr({ index: 0, fields: [] }),
-        ).toThrow();
-      });
-
-      it("should validate constructor with schema", () => {
-        const constr = Data.mkConstr(0n, [Data.mkInt(42n)]);
-        expect(Schema.is(Data.Constr)(constr)).toBe(true);
-      });
     });
   });
 
-  describe("CBOR Serialization", () => {
-    it("should serialize and deserialize ByteArray", () => {
-      const byteArray = Data.mkByte("deadbeef");
-      const cbor = Data.encodeCBOROrThrow(byteArray);
-      const deserialized = Data.decodeCBOROrThrow(cbor);
-      expect(deserialized).toEqual(byteArray);
-    });
-
-    it("should serialize and deserialize Integer", () => {
-      const integer = Data.mkInt(42n);
-      const cbor = Data.encodeCBOROrThrow(integer);
-      const deserialized = Data.decodeCBOROrThrow(cbor);
-      expect(deserialized).toEqual(integer);
-    });
-
-    it("should serialize and deserialize nested structures", () => {
-      const nested = Data.mkConstr(0n, [
-        Data.mkInt(42n),
-        Data.mkList([Data.mkByte("deadbeef")]),
-        Data.mkMap([
-          { k: Data.mkByte("cafe"), v: Data.mkInt(123n) },
-          { k: Data.mkByte("deadbeef"), v: Data.mkInt(123n) },
+  describe("CBOR Encoding/Decoding", () => {
+    const testCases = [
+      {
+        name: "empty constructor",
+        value: Data.constr(0n, []),
+      },
+      {
+        name: "constructor with fields",
+        value: Data.constr(1n, [Data.int(42n), Data.bytearray("cafe")]),
+      },
+      {
+        name: "large constructor index",
+        value: Data.constr(999999n, [Data.int(42n)]),
+      },
+      {
+        name: "empty list",
+        value: Data.list([]),
+      },
+      {
+        name: "list with mixed elements",
+        value: Data.list([
+          Data.int(1n),
+          Data.bytearray("deadbeef"),
+          Data.list([]),
         ]),
-      ]);
-
-      const cbor = Data.encodeCBOROrThrow(nested);
-      const deserialized = Data.decodeCBOROrThrow(cbor);
-
-      // Deep equality check
-      expect(Data.isEqual(nested, deserialized)).toBe(true);
-    });
-
-    it("should handle edge cases", () => {
-      // Empty structures
-      const emptyList = Data.mkList([]);
-      expect(Data.decodeCBOROrThrow(Data.encodeCBOROrThrow(emptyList))).toEqual(
-        emptyList,
-      );
-
-      const emptyMap = Data.mkMap([]);
-      expect(Data.decodeCBOROrThrow(Data.encodeCBOROrThrow(emptyMap))).toEqual(
-        emptyMap,
-      );
-
-      // Very large numbers
-      const largeNumber = Data.mkInt(2n ** 100n);
-      expect(
-        Data.decodeCBOROrThrow(Data.encodeCBOROrThrow(largeNumber)),
-      ).toEqual(largeNumber);
-    });
-  });
-
-  describe("Error Handling", () => {
-    it("should handle invalid CBOR data", () => {
-      expect(() => Data.decodeCBOROrThrow("invalid-cbor")).toThrow();
-    });
-  });
-});
-
-describe("TypeTaggedSchema", () => {
-  describe("ByteArray Schema", () => {
-    it("should encode/decode ByteArray", () => {
-      const input = "deadbeef";
-      const encoded = Data.encodeDataOrThrow(input, TSchema.ByteArray);
-      const decoded = Data.decodeDataOrThrow(encoded, TSchema.ByteArray);
-
-      expect(encoded).toEqual(Data.mkByte("deadbeef"));
-      expect(decoded).toEqual("deadbeef");
-    });
-
-    it("should fail on invalid hex string", () => {
-      expect(() =>
-        Data.encodeDataOrThrow("not-hex", TSchema.ByteArray),
-      ).toThrow();
-    });
-  });
-
-  describe("Integer Schema", () => {
-    it("should encode/decode Integer", () => {
-      const input = 42n;
-      const encoded = Data.encodeDataOrThrow(input, TSchema.Integer);
-      const decoded = Data.decodeDataOrThrow(encoded, TSchema.Integer);
-
-      expect(encoded).toEqual(Data.mkInt(42n));
-      expect(decoded).toEqual(42n);
-    });
-
-    it("should fail on non-bigint", () => {
-      expect(() =>
-        //@ts-ignore
-        Data.encodeDataOrThrow(42, TSchema.Integer),
-      ).toThrow();
-    });
-  });
-
-  describe("Boolean Schema", () => {
-    it("should encode/decode true", () => {
-      const input = true;
-      const encoded = Data.encodeDataOrThrow(input, TSchema.Boolean);
-      const decoded = Data.decodeDataOrThrow(encoded, TSchema.Boolean);
-
-      expect(encoded).toEqual(Data.mkConstr(1n, []));
-      expect(decoded).toEqual(true);
-    });
-
-    it("should encode/decode false", () => {
-      const input = false;
-      const encoded = Data.encodeDataOrThrow(input, TSchema.Boolean);
-      const decoded = Data.decodeDataOrThrow(encoded, TSchema.Boolean);
-
-      expect(encoded).toEqual(Data.mkConstr(0n, []));
-      expect(decoded).toEqual(false);
-    });
-
-    it("should fail on invalid format", () => {
-      const invalidInput = Data.mkConstr(0n, [Data.mkInt(1n)]);
-      expect(() =>
-        Data.decodeDataOrThrow(invalidInput, TSchema.Boolean),
-      ).toThrow();
-    });
-  });
-
-  describe("Literal Schema", () => {
-    it("should encode/decode literals", () => {
-      const Action = TSchema.Literal("mint", "burn", "transfer");
-
-      const input = "mint";
-      const encoded = Data.encodeDataOrThrow(input, Action);
-      const decoded = Data.decodeDataOrThrow(encoded, Action);
-
-      expect(encoded).toEqual(Data.mkConstr(0n, []));
-      expect(decoded).toEqual("mint");
-
-      const input2 = "burn";
-      const encoded2 = Data.encodeDataOrThrow(input2, Action);
-      const decoded2 = Data.decodeDataOrThrow(encoded2, Action);
-
-      expect(encoded2).toEqual(Data.mkConstr(1n, []));
-      expect(decoded2).toEqual("burn");
-    });
-
-    it("should fail on invalid literal", () => {
-      const Action = TSchema.Literal("mint", "burn");
-      expect(() =>
-        //@ts-ignore
-        Data.encodeDataOrThrow("invalid", Action),
-      ).toThrow();
-    });
-  });
-
-  describe("Array Schema", () => {
-    it("should encode/decode arrays", () => {
-      const IntArray = TSchema.Array(TSchema.Integer);
-
-      const input = [1n, 2n, 3n];
-      const encoded = Data.encodeDataOrThrow(input, IntArray);
-      const decoded = Data.decodeDataOrThrow(encoded, IntArray);
-
-      expect(encoded).toEqual(
-        Data.mkList([Data.mkInt(1n), Data.mkInt(2n), Data.mkInt(3n)]),
-      );
-      expect(decoded).toEqual([1n, 2n, 3n]);
-    });
-
-    it("should handle empty arrays", () => {
-      const IntArray = TSchema.Array(TSchema.Integer);
-
-      const input: bigint[] = [];
-      const encoded = Data.encodeDataOrThrow(input, IntArray);
-      const decoded = Data.decodeDataOrThrow(encoded, IntArray);
-
-      expect(encoded).toEqual(Data.mkList([]));
-      expect(decoded).toEqual([]);
-    });
-  });
-
-  describe("Map Schema", () => {
-    it("should encode/decode maps", () => {
-      const TokenMap = TSchema.Map(TSchema.ByteArray, TSchema.Integer);
-
-      const input = new Map([
-        ["deadbeef", 1n],
-        ["cafe", 2n],
-      ]);
-
-      const encoded = Data.encodeDataOrThrow(input, TokenMap);
-      const decoded = Data.decodeDataOrThrow(encoded, TokenMap);
-
-      expect(encoded).toEqual(
-        Data.mkMap([
-          { k: Data.mkByte("deadbeef"), v: Data.mkInt(1n) },
-          { k: Data.mkByte("cafe"), v: Data.mkInt(2n) },
+      },
+      {
+        name: "empty map",
+        value: Data.map([]),
+      },
+      {
+        name: "map with entries",
+        value: Data.map([
+          {
+            key: Data.int(1n),
+            value: Data.bytearray("cafe"),
+          },
         ]),
-      );
-      expect(decoded).toEqual(input);
-    });
+      },
+      {
+        name: "small int",
+        value: Data.int(42n),
+      },
+      {
+        name: "negative int",
+        value: Data.int(-42n),
+      },
+      {
+        name: "large positive int",
+        value: Data.int(2n ** 64n),
+      },
+      {
+        name: "large negative int",
+        value: Data.int(-(2n ** 64n)),
+      },
+      {
+        name: "bytes",
+        value: Data.bytearray("deadbeef"),
+      },
+      {
+        name: "empty bytes",
+        value: Data.bytearray(""),
+      },
+    ];
 
-    it("should handle empty maps", () => {
-      const TokenMap = TSchema.Map(TSchema.ByteArray, TSchema.Integer);
-
-      const input = new Map();
-      const encoded = Data.encodeDataOrThrow(input, TokenMap);
-      const decoded = Data.decodeDataOrThrow(encoded, TokenMap);
-
-      expect(encoded).toEqual(Data.mkMap([]));
-      expect(decoded).toEqual(input);
-    });
-  });
-
-  describe("Nullable Schema", () => {
-    it("should encode/decode non-null values", () => {
-      const MaybeInt = TSchema.NullOr(TSchema.Integer);
-
-      const input = 42n;
-      const encoded = Data.encodeDataOrThrow(input, MaybeInt);
-      const decoded = Data.decodeDataOrThrow(encoded, MaybeInt);
-
-      expect(encoded).toEqual(Data.mkConstr(0n, [Data.mkInt(42n)]));
-      expect(decoded).toEqual(42n);
-    });
-
-    it("should encode/decode null values", () => {
-      const MaybeInt = TSchema.NullOr(TSchema.Integer);
-
-      const input = null;
-      const encoded = Data.encodeDataOrThrow(input, MaybeInt);
-      const decoded = Data.decodeDataOrThrow(encoded, MaybeInt);
-
-      expect(encoded).toEqual(Data.mkConstr(1n, []));
-      expect(decoded).toBeNull();
-    });
-  });
-
-  describe("Struct Schema", () => {
-    it("should encode/decode structs", () => {
-      const Token = TSchema.Struct({
-        policyId: TSchema.ByteArray,
-        assetName: TSchema.ByteArray,
-        amount: TSchema.Integer,
-      });
-
-      const input = {
-        policyId: "deadbeef",
-        assetName: "cafe",
-        amount: 1000n,
-      };
-
-      const encoded = Data.encodeDataOrThrow(input, Token);
-      const decoded = Data.decodeDataOrThrow(encoded, Token);
-      const cbor = Data.encodeCBOROrThrow(encoded);
-
-      expect(encoded).toEqual(
-        Data.mkConstr(0n, [
-          Data.mkByte("deadbeef"),
-          Data.mkByte("cafe"),
-          Data.mkInt(1000n),
-        ]),
-      );
-      expect(decoded).toEqual(input);
-      expect(cbor).toEqual("d8799f44deadbeef42cafe1903e8ff");
-    });
-
-    it("should handle nested structs", () => {
-      const Asset = TSchema.Struct({
-        policyId: TSchema.ByteArray,
-        assetName: TSchema.ByteArray,
-      });
-
-      const Token = TSchema.Struct({
-        asset: Asset,
-        amount: TSchema.Integer,
-      });
-
-      const input = {
-        asset: {
-          policyId: "deadbeef",
-          assetName: "cafe",
+    describe("Hex Encoding/Decoding", () => {
+      it.each(testCases)(
+        "should round-trip $name via hex encoding",
+        ({ value }) => {
+          const encoded = Data.Encode.cborHex(value);
+          const decoded = Data.Decode.cborHex(encoded);
+          expect(decoded).toEqual(value);
         },
-        amount: 1000n,
-      };
-
-      const encoded = Data.encodeDataOrThrow(input, Token);
-      const decoded = Data.decodeDataOrThrow(encoded, Token);
-
-      const assetEncoded = Data.mkConstr(0n, [
-        Data.mkByte("deadbeef"),
-        Data.mkByte("cafe"),
-      ]);
-
-      expect(encoded).toEqual(
-        Data.mkConstr(0n, [assetEncoded, Data.mkInt(1000n)]),
       );
-      expect(decoded).toEqual(input);
+    });
+
+    describe("Bytes Encoding/Decoding", () => {
+      it.each(testCases)(
+        "should round-trip $name via bytes encoding",
+        ({ value }) => {
+          const encoded = Data.Encode.cborBytes(value);
+          const decoded = Data.Decode.cborBytes(encoded);
+          expect(decoded).toEqual(value);
+        },
+      );
+    });
+
+    describe("Either-based encoding/decoding", () => {
+      it("should handle encoding with Either", () => {
+        const data = Data.constr(0n, [Data.int(42n)]);
+        const result = Data.EncodeEither.cborHex(data);
+        expect(result._tag).toBe("Right");
+      });
+
+      it("should handle decoding with Either", () => {
+        const data = Data.constr(0n, [Data.int(42n)]);
+        const hex = Data.Encode.cborHex(data);
+        const result = Data.DecodeEither.cborHex(hex);
+        expect(result._tag).toBe("Right");
+      });
+
+      it("should return Left for invalid hex in decoding", () => {
+        const result = Data.DecodeEither.cborHex("not-hex");
+        expect(result._tag).toBe("Left");
+      });
+    });
+
+    describe("Effect-based encoding/decoding", () => {
+      it.effect("should handle encoding with Effect", () =>
+        Effect.gen(function* (_) {
+          const data = Data.constr(0n, [Data.int(42n)]);
+          const hex = yield* Data.EncodeEffect.cborHex(data);
+          expect(typeof hex).toBe("string");
+        }),
+      );
+
+      it.effect("should handle decoding with Effect", () =>
+        Effect.gen(function* (_) {
+          const data = Data.constr(0n, [Data.int(42n)]);
+          const hex = Data.Encode.cborHex(data);
+          const decoded = yield* Data.DecodeEffect.cborHex(hex);
+          expect(decoded).toEqual(data);
+        }),
+      );
+
+      it.effect("should fail for invalid hex in decoding", () =>
+        Effect.gen(function* (_) {
+          const result = yield* Effect.either(
+            Data.DecodeEffect.cborHex("not-hex"),
+          );
+          expect(result._tag).toBe("Left");
+        }),
+      );
     });
   });
 
-  describe("Union Schema", () => {
-    it("should encode/decode union types", () => {
-      const MintRedeem = TSchema.Struct({
-        policyId: TSchema.ByteArray,
-        assetName: TSchema.ByteArray,
-        amount: TSchema.Integer,
+  describe("Utility Functions", () => {
+    describe("matchConstr", () => {
+      it("should match specific constructor indices", () => {
+        const constr = Data.constr(1n, [Data.int(42n)]);
+        const result = Data.matchConstr(constr, {
+          1: (fields) => `Found index 1 with ${fields.length} fields`,
+          2: (fields) => `Found index 2 with ${fields.length} fields`,
+          _: (index, fields) =>
+            `Default case: index ${index} with ${fields.length} fields`,
+        });
+        expect(result).toBe("Found index 1 with 1 fields");
       });
 
-      const SpendRedeem = TSchema.Struct({
-        address: TSchema.ByteArray,
-        amount: TSchema.Integer,
+      it("should use default case for non-matched indices", () => {
+        const constr = Data.constr(99n, [Data.int(42n)]);
+        const result = Data.matchConstr(constr, {
+          1: (fields) => `Found index 1 with ${fields.length} fields`,
+          2: (fields) => `Found index 2 with ${fields.length} fields`,
+          _: (index, fields) =>
+            `Default case: index ${index} with ${fields.length} fields`,
+        });
+        expect(result).toBe("Default case: index 99 with 1 fields");
+      });
+    });
+
+    describe("matchPlutusData", () => {
+      it("should match PlutusMap type", () => {
+        const map = Data.map([]);
+        const result = Data.matchPlutusData(map, {
+          PlutusMap: (entries) => `Map with ${entries.length} entries`,
+          PlutusList: (items) => `List with ${items.length} items`,
+          PlutusBigInt: (value) => `BigInt: ${value}`,
+          PlutusBytes: (bytes) => `Bytes: ${bytes}`,
+          Constr: (constr) =>
+            `Constructor ${constr.index} with ${constr.data.length} fields`,
+        });
+        expect(result).toBe("Map with 0 entries");
       });
 
-      const RedeemAction = TSchema.Union(
-        MintRedeem,
-        SpendRedeem,
-        TSchema.Integer,
-      );
+      it("should match PlutusList type", () => {
+        const list = Data.list([Data.int(1n)]);
+        const result = Data.matchPlutusData(list, {
+          PlutusMap: (entries) => `Map with ${entries.length} entries`,
+          PlutusList: (items) => `List with ${items.length} items`,
+          PlutusBigInt: (value) => `BigInt: ${value}`,
+          PlutusBytes: (bytes) => `Bytes: ${bytes}`,
+          Constr: (constr) =>
+            `Constructor ${constr.index} with ${constr.data.length} fields`,
+        });
+        expect(result).toBe("List with 1 items");
+      });
 
-      // Test MintRedeem
-      const mintInput = {
-        policyId: "deadbeef",
-        assetName: "cafe",
-        amount: 1000n,
-      };
+      it("should match PlutusBigInt type", () => {
+        const int = Data.int(42n);
+        const result = Data.matchPlutusData(int, {
+          PlutusMap: (entries) => `Map with ${entries.length} entries`,
+          PlutusList: (items) => `List with ${items.length} items`,
+          PlutusBigInt: (value) => `BigInt: ${value}`,
+          PlutusBytes: (bytes) => `Bytes: ${bytes}`,
+          Constr: (constr) =>
+            `Constructor ${constr.index} with ${constr.data.length} fields`,
+        });
+        expect(result).toBe("BigInt: 42");
+      });
 
-      const mintEncoded = Data.encodeDataOrThrow(mintInput, RedeemAction);
-      const mintDecoded = Data.decodeDataOrThrow(mintEncoded, RedeemAction);
+      it("should match PlutusBytes type", () => {
+        const bytes = Data.bytearray("cafe");
+        const result = Data.matchPlutusData(bytes, {
+          PlutusMap: (entries) => `Map with ${entries.length} entries`,
+          PlutusList: (items) => `List with ${items.length} items`,
+          PlutusBigInt: (value) => `BigInt: ${value}`,
+          PlutusBytes: (bytes) => `Bytes: ${bytes}`,
+          Constr: (constr) =>
+            `Constructor ${constr.index} with ${constr.data.length} fields`,
+        });
+        expect(result).toBe("Bytes: cafe");
+      });
 
-      expect(mintEncoded.index).toBe(0n);
-      expect(mintDecoded).toEqual(mintInput);
-
-      // // Test SpendRedeem
-      const spendInput = {
-        address: "deadbeef",
-        amount: 500n,
-      };
-
-      const spendEncoded = Data.encodeDataOrThrow(spendInput, RedeemAction);
-      const spendDecoded = Data.decodeDataOrThrow(spendEncoded, RedeemAction);
-
-      expect(spendEncoded.index).toBe(1n);
-      expect(spendDecoded).toEqual(spendInput);
-
-      // Test Integer
-      const intInput = 42n;
-      const intEncoded = Data.encodeDataOrThrow(intInput, RedeemAction);
-      const intDecoded = Data.decodeDataOrThrow(intEncoded, RedeemAction);
-
-      expect(intEncoded.index).toBe(2n);
-      expect(intDecoded).toEqual(intInput);
+      it("should match Constr type", () => {
+        const constr = Data.constr(3n, []);
+        const result = Data.matchPlutusData(constr, {
+          PlutusMap: (entries) => `Map with ${entries.length} entries`,
+          PlutusList: (items) => `List with ${items.length} items`,
+          PlutusBigInt: (value) => `BigInt: ${value}`,
+          PlutusBytes: (bytes) => `Bytes: ${bytes}`,
+          Constr: (constr) =>
+            `Constructor ${constr.index} with ${constr.data.length} fields`,
+        });
+        expect(result).toBe("Constructor 3 with 0 fields");
+      });
     });
   });
 
-  describe("Complex Schema Combinations", () => {
-    it("should handle complex nested schemas", () => {
-      const Asset = TSchema.Struct({
-        policyId: TSchema.ByteArray,
-        assetName: TSchema.ByteArray,
-      });
-
-      const TokenList = TSchema.Array(Asset);
-
-      const Wallet = TSchema.Struct({
-        owner: TSchema.ByteArray,
-        tokens: TokenList,
-        active: TSchema.Boolean,
-        metadata: TSchema.NullOr(
-          TSchema.Map(TSchema.ByteArray, TSchema.ByteArray),
-        ),
-      });
-
-      const input = {
-        owner: "deadbeef",
-        tokens: [
-          { policyId: "cafe01", assetName: "deadbeef01" },
-          { policyId: "cafe02", assetName: "deadbeef02" },
-        ],
-        active: true,
-        metadata: new Map([
-          ["cafe01", "deadbeef"],
-          ["cafe02", "deadbeef"],
+  describe("Complex Structures", () => {
+    it("should handle nested structures", () => {
+      // Create a complex nested structure
+      const complex = Data.constr(0n, [
+        Data.list([Data.int(1n), Data.int(2n), Data.bytearray("cafe")]),
+        Data.map([
+          {
+            key: Data.int(42n),
+            value: Data.list([Data.bytearray("deadbeef")]),
+          },
+          {
+            key: Data.bytearray("deadbeef"),
+            value: Data.constr(1n, [Data.int(-999n)]),
+          },
         ]),
-      };
-
-      const encoded = Data.encodeDataOrThrow(input, Wallet);
-      const decoded = Data.decodeDataOrThrow(encoded, Wallet);
-
-      expect(decoded).toEqual(input);
-    });
-  });
-
-  describe("Tuple Schema", () => {
-    it("should encode/decode tuples", () => {
-      const AssetPair = TSchema.Tuple([TSchema.ByteArray, TSchema.Integer]);
-
-      const input = ["deadbeef", 1000n] as const;
-      const encoded = Data.encodeDataOrThrow(input, AssetPair);
-      const decoded = Data.decodeDataOrThrow(encoded, AssetPair);
-
-      expect(encoded).toEqual(
-        Data.mkList([Data.mkByte("deadbeef"), Data.mkInt(1000n)]),
-      );
-      expect(decoded).toEqual(input);
-    });
-
-    it("should handle heterogeneous tuples", () => {
-      const Mixed = TSchema.Tuple([
-        TSchema.ByteArray,
-        TSchema.Integer,
-        TSchema.Boolean,
+        Data.constr(7n, [Data.list([]), Data.map([])]),
       ]);
 
-      const input = ["deadbeef", 1000n, true] as const;
-      const encoded = Data.encodeDataOrThrow(input, Mixed);
-      const decoded = Data.decodeDataOrThrow(encoded, Mixed);
-
-      expect(decoded).toEqual(input);
-    });
-  });
-
-  describe("Union Edge Cases", () => {
-    it("should throw when decoding invalid constructor index", () => {
-      const TestUnion = TSchema.Union(TSchema.Integer, TSchema.ByteArray);
-
-      // Create a constructor with out-of-bounds index
-      const invalidConstr = Data.mkConstr(
-        10n, // This is beyond the union size
-        [Data.mkInt(42n)],
-      );
-
-      expect(() =>
-        Data.decodeDataOrThrow(invalidConstr, TestUnion),
-      ).toThrowError();
-    });
-  });
-
-  // Removed Transformations section here
-
-  describe("Error Handling", () => {
-    it("should provide helpful error messages for decoding failures", () => {
-      const TestStruct = TSchema.Struct({
-        field1: TSchema.Integer,
-        field2: TSchema.ByteArray,
-      });
-
-      // Create invalid data where we expect a ByteArray but provide an Integer
-      const invalidData = Data.mkConstr(0n, [
-        Data.mkInt(42n),
-        Data.mkInt(42n), // Should be ByteArray
-      ]);
-
-      // Using more idiomatic toThrow with error message pattern
-      expect(() => Data.decodeDataOrThrow(invalidData, TestStruct)).toThrow(
-        /field2/,
-      );
-    });
-
-    it("should throw comprehensible errors for schema mismatches", () => {
-      const StringSchema = TSchema.ByteArray;
-      const IntegerData = Data.mkInt(42n);
-
-      // Cleaner approach with specific error assertions
-      expect(() => Data.decodeDataOrThrow(IntegerData, StringSchema)).toThrow();
-
-      // Additional test for a different schema mismatch
-      const BooleanData = Data.mkConstr(0n, []);
-      expect(() =>
-        Data.decodeDataOrThrow(BooleanData, TSchema.Integer),
-      ).toThrow();
-    });
-
-    it("should provide specific error information for invalid data formats", () => {
-      // Testing with invalid constructor indices
-      const invalidConstr = Data.mkConstr(10n, []);
-
-      expect(() =>
-        Data.decodeDataOrThrow(invalidConstr, TSchema.Boolean),
-      ).toThrow();
+      // Test round-trip encoding/decoding
+      const encoded = Data.Encode.cborHex(complex);
+      const decoded = Data.Decode.cborHex(encoded);
+      expect(decoded).toEqual(complex);
     });
   });
 });

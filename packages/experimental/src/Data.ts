@@ -1,254 +1,135 @@
-import {
-  Array as _Array,
-  Arbitrary,
-  Effect,
-  Either,
-  FastCheck,
-  Schema,
-  SchemaAST,
-} from "effect";
+import { Data, Effect, ParseResult, Schema, FastCheck } from "effect";
+import * as CBOR from "./CBOR.js";
 import * as Bytes from "./Bytes.js";
-import * as CML from "./CML/index.js";
-import { ParseError } from "effect/ParseResult";
-import * as Combinator from "./Combinator.js";
+import * as Numeric from "./Numeric.js";
 
 /**
- * Data type representing Plutus data for encoding/decoding
+ * Error class for Data related operations.
  *
- * @category model
+ * @example
+ * import { Data } from "@lucid-evolution/experimental";
+ * import assert from "assert";
+ *
+ * const error = new Data.DataError({ message: "Invalid data" });
+ * assert(error.message === "Invalid data");
  *
  * @since 2.0.0
+ * @category errors
  */
-export type Data = Integer | ByteArray | List | Map | Constr;
+export class DataError extends Data.TaggedError("DataError")<{
+  message?: string;
+  reason?: "InvalidFormat" | "EncodingError" | "DecodingError";
+}> {}
 
 /**
- * List data type for Plutus Data
+ * PlutusData type definition based on Conway CDDL specification
  *
- * @category model
+ * CDDL: plutus_data =
+ *   constr<plutus_data>
+ *   / {* plutus_data => plutus_data}
+ *   / [* plutus_data]
+ *   / big_int
+ *   / bounded_bytes
+ *
+ * constr<a0> =
+ *   #6.121([* a0])
+ *   / #6.122([* a0])
+ *   / #6.123([* a0])
+ *   / #6.124([* a0])
+ *   / #6.125([* a0])
+ *   / #6.126([* a0])
+ *   / #6.127([* a0])
+ *   / #6.102([uint, [* a0]])
+ *
+ * Constructor Index Limits:
+ * - Tags 121-127: Direct encoding for constructor indices 0-6
+ * - Tag 102: General constructor encoding for any uint value
+ * - Maximum constructor index: 2^64 - 1 (18,446,744,073,709,551,615)
+ *   as per CBOR RFC 8949 specification for unsigned integers
  *
  * @since 2.0.0
+ * @category model
  */
-export interface List<T extends Data = Data> {
-  readonly _tag: "List";
-  readonly list: readonly T[];
-}
+export type PlutusData =
+  | Constr<PlutusData>
+  | PlutusMap
+  | PlutusList
+  | PlutusBigInt
+  | PlutusBytes;
 
 /**
- * Map data type for Plutus Data
+ * Constr type for constructor alternatives based on Conway CDDL specification
  *
- * @category model
+ * CDDL: constr<a0> =
+ *   #6.121([* a0])    // index 0
+ *   / #6.122([* a0])  // index 1
+ *   / #6.123([* a0])  // index 2
+ *   / #6.124([* a0])  // index 3
+ *   / #6.125([* a0])  // index 4
+ *   / #6.126([* a0])  // index 5
+ *   / #6.127([* a0])  // index 6
+ *   / #6.102([uint, [* a0]])  // general constructor with custom index
  *
- * @since 2.0.0
- */
-export interface Map<
-  Pairs extends ReadonlyArray<{ k: Data; v: Data }> = ReadonlyArray<{
-    k: Data;
-    v: Data;
-  }>,
-> {
-  readonly _tag: "Map";
-  readonly entries: Pairs;
-}
-
-/**
- * Constructor data type for Plutus Data
- *
- * @category model
+ * Constructor Index Range:
+ * - Minimum: 0
+ * - Maximum: 2^64 - 1 (18,446,744,073,709,551,615)
+ *   as per CBOR RFC 8949 specification for unsigned integers
  *
  * @since 2.0.0
+ * @category model
  */
-export interface Constr<
-  T extends bigint = bigint,
-  U extends readonly Data[] = readonly Data[],
-> {
+export interface Constr<T> {
   readonly _tag: "Constr";
-  readonly index: T;
-  readonly fields: U;
+  readonly index: bigint;
+  readonly data: readonly T[];
 }
 
 /**
- * Integer data type for Plutus Data
+ * PlutusMap type for plutus data maps
  *
+ * @since 2.0.0
  * @category model
- *
- * @since 2.0.0
  */
-export interface Integer<T extends bigint = bigint> {
-  readonly _tag: "Integer";
-  readonly integer: T;
+export interface PlutusMap {
+  readonly _tag: "Map";
+  readonly entries: ReadonlyArray<{
+    readonly key: PlutusData;
+    readonly value: PlutusData;
+  }>;
 }
 
 /**
- * ByteArray data type for Plutus Data
+ * PlutusList type for plutus data lists
  *
+ * @since 2.0.0
  * @category model
- *
- * @since 2.0.0
  */
-export interface ByteArray<T extends string = string> {
-  readonly _tag: "ByteArray";
-  readonly bytearray: T;
+export interface PlutusList {
+  readonly _tag: "List";
+  readonly items: readonly PlutusData[];
 }
 
 /**
- * Schema for Integer data type
- *
- * @category schemas
+ * PlutusBigInt type for plutus big integers
  *
  * @since 2.0.0
+ * @category model
  */
-export interface Integer$
-  extends Schema.Struct<
-    {
-      _tag: Schema.tag<"Integer">;
-    } & {
-      integer: typeof Schema.BigIntFromSelf;
-    }
-  > {}
+export interface PlutusBigInt {
+  readonly _tag: "Int";
+  readonly value: bigint;
+}
 
 /**
- * Schema for the Integer data type
- *
- * @category schemas
+ * PlutusBytes type for plutus bounded bytes
  *
  * @since 2.0.0
+ * @category model
  */
-export const Integer: Integer$ = Schema.TaggedStruct("Integer", {
-  integer: Schema.BigIntFromSelf,
-}).annotations({
-  identifier: "Integer",
-});
-
-/**
- * Schema for ByteArray data type
- *
- * @category schemas
- *
- * @since 2.0.0
- */
-export interface ByteArray$
-  extends Schema.Struct<
-    {
-      _tag: Schema.tag<"ByteArray">;
-    } & {
-      bytearray: Schema.filter<Schema.Schema<string, string, never>>;
-    }
-  > {}
-
-/**
- * Schema for the ByteArray data type
- *
- * @category schemas
- *
- * @since 2.0.0
- */
-export const ByteArray: ByteArray$ = Schema.TaggedStruct("ByteArray", {
-  bytearray: Combinator.HexStringSchema,
-}).annotations({
-  identifier: "ByteArray",
-});
-
-/**
- * Schema for List data type
- *
- * @category schemas
- *
- * @since 2.0.0
- */
-export interface List$
-  extends Schema.Struct<
-    {
-      _tag: Schema.tag<"List">;
-    } & {
-      list: Schema.Array$<Schema.suspend<Data, Data, never>>;
-    }
-  > {}
-
-/**
- * Schema for the List data type
- *
- * @category schemas
- *
- * @since 2.0.0
- */
-export const List: List$ = Schema.TaggedStruct("List", {
-  list: Schema.Array(
-    Schema.suspend((): Schema.Schema<Data> => Data),
-  ).annotations({
-    arbitrary: () => (fc) => fc.array(Arbitrary.make(Data), { maxLength: 3 }),
-  }),
-}).annotations({
-  identifier: "List",
-});
-
-/**
- * Filter to ensure uniqueness by first item in entries
- *
- * @category utilities
- *
- * @since 2.0.0
- */
-export const uniqueByFirst = (
-  schema: Schema.Struct<{
-    k: Schema.Schema<Data>;
-    v: Schema.Schema<Data>;
-  }>,
-) => {
-  return Schema.Array(schema).pipe(
-    Schema.filter(
-      (tuples) =>
-        tuples.length ===
-        _Array.dedupeWith(tuples, (a, b) => isEqual(a.k, b.k)).length,
-    ),
-  );
-};
-
-/**
- * Schema for Map data type
- *
- * @category schemas
- *
- * @since 2.0.0
- */
-export interface Map$
-  extends Schema.Struct<
-    {
-      _tag: Schema.tag<"Map">;
-    } & {
-      entries: Schema.refine<
-        readonly {
-          readonly k: Data;
-          readonly v: Data;
-        }[],
-        Schema.Array$<
-          Schema.Struct<{
-            k: Schema.Schema<Data>;
-            v: Schema.Schema<Data>;
-          }>
-        >
-      >;
-    }
-  > {}
-
-/**
- * Schema for the Map data type
- *
- * @category schemas
- *
- * @since 2.0.0
- */
-export const Map: Map$ = Schema.TaggedStruct("Map", {
-  entries: uniqueByFirst(
-    Schema.Struct({
-      k: Schema.suspend((): Schema.Schema<Data> => Data),
-      v: Schema.suspend((): Schema.Schema<Data> => Data),
-    }),
-  ).annotations({
-    identifier: "Unique Entries",
-  }),
-}).annotations({
-  identifier: "Map",
-});
+export interface PlutusBytes {
+  readonly _tag: "BytesArray";
+  readonly bytes: string; // HexSchema
+}
 
 /**
  * Schema for Constr data type
@@ -257,833 +138,649 @@ export const Map: Map$ = Schema.TaggedStruct("Map", {
  *
  * @since 2.0.0
  */
-export interface Constr$
-  extends Schema.Struct<
-    {
-      _tag: Schema.tag<"Constr">;
-    } & {
-      index: Schema.filter<typeof Schema.BigIntFromSelf>;
-      fields: Schema.Array$<Schema.suspend<Data, Data, never>>;
-    }
-  > {}
-
-/**
- * Schema for the Constr data type
- *
- * @category schemas
- *
- * @since 2.0.0
- */
-export const Constr: Constr$ = Schema.TaggedStruct("Constr", {
-  index: Schema.BigIntFromSelf.pipe(Schema.betweenBigInt(0n, 2n ** 64n - 1n)),
-  fields: Schema.Array(
-    Schema.suspend((): Schema.Schema<Data> => Data),
-  ).annotations({
-    arbitrary: () => (fc) => fc.array(Arbitrary.make(Data), { maxLength: 3 }),
-  }),
-}).annotations({
-  identifier: "Constr",
+export const ConstrSchema = Schema.TaggedStruct("Constr", {
+  index: Numeric.Uint64Schema,
+  data: Schema.Array(
+    Schema.suspend((): Schema.Schema<PlutusData> => PlutusDataSchema),
+  ),
 });
 
 /**
- * Combined schema for Data type
+ * Schema for PlutusMap data type
  *
  * @category schemas
  *
  * @since 2.0.0
  */
-export const Data: Schema.Schema<Data> = Schema.Union(
-  Integer,
-  ByteArray,
-  List,
-  Map,
-  Constr,
+export const PlutusMapSchema = Schema.TaggedStruct("Map", {
+  entries: Schema.Array(
+    Schema.Struct({
+      key: Schema.suspend((): Schema.Schema<PlutusData> => PlutusDataSchema),
+      value: Schema.suspend((): Schema.Schema<PlutusData> => PlutusDataSchema),
+    }),
+  ),
+});
+
+/**
+ * Schema for PlutusList data type
+ *
+ * @category schemas
+ *
+ * @since 2.0.0
+ */
+export const PlutusListSchema = Schema.TaggedStruct("List", {
+  items: Schema.Array(
+    Schema.suspend((): Schema.Schema<PlutusData> => PlutusDataSchema),
+  ),
+});
+
+/**
+ * Schema for PlutusBigInt data type
+ *
+ * Matches the CDDL specification for big_int:
+ * ```
+ * big_int = int / big_uint / big_nint
+ * big_uint = #6.2(bounded_bytes)
+ * big_nint = #6.3(bounded_bytes)
+ * ```
+ *
+ * Where:
+ * - `int` covers integers that fit in CBOR major types 0 and 1 (±2^63)
+ * - `big_uint` (tag 2) covers large positive integers that don't fit in 64 bits
+ * - `big_nint` (tag 3) covers large negative integers that don't fit in 64 bits
+ *
+ * @category schemas
+ *
+ * @since 2.0.0
+ */
+export const PlutusBigIntSchema = Schema.TaggedStruct("Int", {
+  value: Schema.BigIntFromSelf,
+});
+
+/**
+ * Schema for PlutusBytes data type
+ *
+ * @category schemas
+ *
+ * @since 2.0.0
+ */
+export const PlutusBytesSchema = Schema.TaggedStruct("BytesArray", {
+  bytes: Bytes.HexSchemaLenient,
+});
+
+/**
+ * Combined schema for PlutusData type
+ *
+ * @category schemas
+ *
+ * @since 2.0.0
+ */
+export const PlutusDataSchema: Schema.Schema<PlutusData> = Schema.Union(
+  ConstrSchema,
+  PlutusMapSchema,
+  PlutusListSchema,
+  PlutusBigIntSchema,
+  PlutusBytesSchema,
 );
 
 /**
- * Type guard to check if a value is a Data.Integer
+ * Type guard to check if a value is a Constr
  *
  * @category predicates
  *
  * @example
  * import { Data } from "@lucid-evolution/experimental";
  *
- * const value = Data.mkByte("deadbeef");
- * const isByte = Data.isByteArray(value); // true
- *
- * @since 2.0.0
- */
-export const isByteArray = Schema.is(ByteArray);
-
-/**
- * Type guard to check if a value is a Data.Integer
- *
- * @category predicates
- *
- * @example
- * import { Data } from "@lucid-evolution/experimental";
- *
- * const value = Data.mkInt(42n);
- * const isInteger = Data.isInteger(value); // true
- *
- * @since 2.0.0
- */
-export const isInteger = Schema.is(Integer);
-
-/**
- * Type guard to check if a value is a Data.List
- *
- * @category predicates
- *
- * @example
- * import { Data } from "@lucid-evolution/experimental";
- *
- * const value = Data.mkList([Data.mkInt(1n), Data.mkInt(2n)]);
- * const isList = Data.isList(value); // true
- *
- * @since 2.0.0
- */
-export const isList = Schema.is(List);
-
-/**
- * Type guard to check if a value is a Data.Map
- *
- * @category predicates
- *
- * @example
- * import { Data } from "@lucid-evolution/experimental";
- *
- * const value = Data.mkMap([
- *   { k: Data.mkByte("cafe01"), v: Data.mkInt(1n) },
- *   { k: Data.mkByte("cafe02"), v: Data.mkInt(2n) }
- * ]);
- * const isMap = Data.isMap(value); // true
- *
- * @since 2.0.0
- */
-export const isMap = Schema.is(Map);
-
-/**
- * Type guard to check if a value is a Data.Constr
- *
- * @category predicates
- *
- * @example
- * import { Data } from "@lucid-evolution/experimental";
- *
- * const value = Data.mkConstr(0n, [Data.mkInt(1n), Data.mkInt(2n)]);
+ * const value = Data.constr(0, []);
  * const isConstr = Data.isConstr(value); // true
  *
  * @since 2.0.0
  */
-export const isConstr = Schema.is(Constr);
+export const isConstr = Schema.is(ConstrSchema);
 
 /**
- * Converts TypeScript data into CBOR hex string
+ * Type guard to check if a value is a PlutusMap
  *
- * @category encoding/decoding
+ * @category predicates
  *
  * @example
- * import { Data, TSchema } from "@lucid-evolution/experimental"
+ * import { Data } from "@lucid-evolution/experimental";
  *
- * const Token = TSchema.Struct({
- *  policyId: TSchema.ByteArray,
- *  assetName: TSchema.ByteArray,
- *  amount: TSchema.Integer
- * })
- *
- * const token = {
- *   policyId: "deadbeef",
- *   assetName: "cafe",
- *   amount: 1000n
- * }
- *
- * // Convert to canonical CBOR
- * const cbor = Data.encodeCBOROrThrow(token, Token, { canonical: true })
+ * const value = Data.plutusMap([]);
+ * const isPlutusMap = Data.isPlutusMap(value); // true
  *
  * @since 2.0.0
  */
-export const encodeCBOROrThrow = <Source, Target extends Data>(
-  input: unknown,
-  schema?: Schema.Schema<Source, Target>,
-  options: {
-    canonical?: boolean;
-    parseOptions?: SchemaAST.ParseOptions;
-  } = {},
-): string => {
-  const { canonical = false } = options;
-  const data: Data = schema
-    ? encodeDataOrThrow(input, schema, options.parseOptions)
-    : encodeDataOrThrow(input, Data);
-  const cmlPlutusData = toCMLPlutusData(data);
-  return canonical
-    ? cmlPlutusData.to_canonical_cbor_hex()
-    : cmlPlutusData.to_cardano_node_format().to_cbor_hex();
-};
+export const isPlutusMap = Schema.is(PlutusMapSchema);
 
-export const encodeCBOR = Effect.fn(function* <Source, Target extends Data>(
-  input: unknown,
-  schema?: Schema.Schema<Source, Target>,
-  options: {
-    canonical?: boolean;
-    parseOptions?: SchemaAST.ParseOptions;
-  } = {},
-) {
-  const { canonical = false } = options;
-  const data: Data = schema
-    ? yield* encodeData(input, schema, options.parseOptions)
-    : yield* encodeData(input, Data);
-  const cmlPlutusData = toCMLPlutusData(data);
-  return canonical
-    ? cmlPlutusData.to_canonical_cbor_hex()
-    : cmlPlutusData.to_cardano_node_format().to_cbor_hex();
-});
+/**
+ * Type guard to check if a value is a PlutusList
+ *
+ * @category predicates
+ *
+ * @example
+ * import { Data } from "@lucid-evolution/experimental";
+ *
+ * const value = Data.plutusList([]);
+ * const isPlutusList = Data.isPlutusList(value); // true
+ *
+ * @since 2.0.0
+ */
+export const isPlutusList = Schema.is(PlutusListSchema);
 
-const toCMLPlutusData = (data: Data): CML.PlutusData.PlutusData => {
+/**
+ * Type guard to check if a value is a PlutusBigInt
+ *
+ * @category predicates
+ *
+ * @example
+ * import { Data } from "@lucid-evolution/experimental";
+ *
+ * const value = Data.plutusBigInt(42n);
+ * const isPlutusBigInt = Data.isPlutusBigInt(value); // true
+ *
+ * @since 2.0.0
+ */
+export const isPlutusBigInt = Schema.is(PlutusBigIntSchema);
+
+/**
+ * Type guard to check if a value is a PlutusBytes
+ *
+ * @category predicates
+ *
+ * @example
+ * import { Data } from "@lucid-evolution/experimental";
+ *
+ * const value = Data.plutusBytes("deadbeef");
+ * const isPlutusBytes = Data.isPlutusBytes(value); // true
+ *
+ * @since 2.0.0
+ */
+export const isPlutusBytes = Schema.is(PlutusBytesSchema);
+
+/**
+ * Creates a constructor with the specified index and data
+ *
+ * @example
+ * import { Data } from "@lucid-evolution/experimental";
+ *
+ * const constr0 = Data.constr(0, []); // CBOR tag #6.121
+ * const constr1 = Data.constr(1, []); // CBOR tag #6.122
+ * const constr7 = Data.constr(7, []); // CBOR tag #6.102([7, []])
+ *
+ * @since 2.0.0
+ * @category constructors
+ */
+export const constr = (index: bigint, data: PlutusData[]): Constr<PlutusData> =>
+  ConstrSchema.make({
+    index,
+    data,
+  });
+
+/**
+ * Creates a Plutus map from key-value pairs
+ *
+ * @example
+ * import { Data } from "@lucid-evolution/experimental";
+ *
+ * const map = Data.plutusMap([]);
+ *
+ * @since 2.0.0
+ * @category constructors
+ */
+export const map = (
+  entries: Array<{ key: PlutusData; value: PlutusData }>,
+): PlutusMap =>
+  PlutusMapSchema.make({
+    entries,
+  });
+
+/**
+ * Creates a Plutus list from items
+ *
+ * @example
+ * import { Data } from "@lucid-evolution/experimental";
+ *
+ * const list = Data.plutusList([]);
+ *
+ * @since 2.0.0
+ * @category constructors
+ */
+export const list = (items: PlutusData[]): PlutusList =>
+  PlutusListSchema.make({
+    items,
+  });
+
+/**
+ * Creates Plutus big integer
+ *
+ * @example
+ * import { Data } from "@lucid-evolution/experimental";
+ *
+ * const plutusBigInt = Data.plutusBigInt(12345n);
+ *
+ * @since 2.0.0
+ * @category constructors
+ */
+export const int = (value: bigint): PlutusBigInt =>
+  PlutusBigIntSchema.make({
+    value,
+  });
+
+/**
+ * Creates Plutus bounded bytes from hex string
+ *
+ * @example
+ * import { Data } from "@lucid-evolution/experimental";
+ *
+ * const plutusBytes = Data.plutusBytes("deadbeef");
+ *
+ * @since 2.0.0
+ * @category constructors
+ */
+export const bytearray = (bytes: string): PlutusBytes =>
+  PlutusBytesSchema.make({
+    bytes,
+  });
+
+/**
+ * Recursively converts PlutusData to its CBOR byte representation.
+ *
+ * @example
+ * import { Data } from "@lucid-evolution/experimental";
+ *
+ * const constr = Data.constr(0, []);
+ * const cborBytes = Data.toCborBytes(constr);
+ * // cborBytes is now a Uint8Array
+ *
+ * @since 2.0.0
+ * @category encoding
+ */
+export const toCborBytes = (data: PlutusData): Uint8Array => {
+  const encodeTag = (tag: number, value: Uint8Array): Uint8Array => {
+    const chunks: Uint8Array[] = [];
+
+    // Encode tag number using CBOR tag format
+    if (tag < 24) {
+      chunks.push(new Uint8Array([0xc0 + tag])); // Major type 6, additional info tag
+    } else if (tag < 256) {
+      chunks.push(new Uint8Array([0xd8, tag])); // Major type 6, 1-byte tag
+    } else if (tag < 65536) {
+      chunks.push(new Uint8Array([0xd9, tag >> 8, tag & 0xff])); // Major type 6, 2-byte tag
+    } else {
+      throw new DataError({ message: `Tag ${tag} too large` });
+    }
+
+    chunks.push(value);
+
+    // Combine chunks
+    const totalLength = chunks.reduce((sum, chunk) => sum + chunk.length, 0);
+    const result = new Uint8Array(totalLength);
+    let offset = 0;
+    for (const chunk of chunks) {
+      result.set(chunk, offset);
+      offset += chunk.length;
+    }
+
+    return result;
+  };
+
+  const encodeIndefiniteMap = (
+    entries: readonly {
+      readonly key: PlutusData;
+      readonly value: PlutusData;
+    }[],
+  ): Uint8Array => {
+    const chunks: Uint8Array[] = [];
+
+    // Indefinite map start
+    chunks.push(new Uint8Array([0xbf])); // 0b101_11111
+
+    // Encode each key-value pair
+    for (const { key, value } of entries) {
+      chunks.push(toCborBytes(key));
+      chunks.push(toCborBytes(value));
+    }
+
+    // Indefinite map end
+    chunks.push(new Uint8Array([0xff]));
+
+    // Combine chunks
+    const totalLength = chunks.reduce((sum, chunk) => sum + chunk.length, 0);
+    const result = new Uint8Array(totalLength);
+    let offset = 0;
+    for (const chunk of chunks) {
+      result.set(chunk, offset);
+      offset += chunk.length;
+    }
+
+    return result;
+  };
+
+  // Handle each PlutusData type directly
   switch (data._tag) {
-    case "Integer":
-      return CML.PlutusData.newIntegerUnsafe(
-        CML.BigInteger.fromStrUnsafe(data.integer.toString()),
-      );
-    case "ByteArray":
-      return CML.PlutusData.newBytesUnsafe(Bytes.Decode.hex(data.bytearray));
-    case "List": {
-      const list = CML.PlutusDataList._newUnsafe();
-      data.list.forEach((item) => list.add(toCMLPlutusData(item)));
-      return CML.PlutusData.newListUnsafe(list);
-    }
-    case "Map": {
-      const map = CML.PlutusMap._newUnsafe();
-      data.entries.forEach(({ k, v }) => {
-        const plutusKey = toCMLPlutusData(k);
-        map.set(plutusKey, toCMLPlutusData(v));
-      });
-      return CML.PlutusData.newMapUnsafe(map);
-    }
     case "Constr": {
-      const fields = CML.PlutusDataList._newUnsafe();
-      data.fields.forEach((item) => fields.add(toCMLPlutusData(item)));
-      return CML.PlutusData.newConstrPlutusDataUnsafe(
-        CML.ConstrPlutusData._newUnsafe(data.index, fields),
-      );
+      // Encode all fields recursively
+      const encodedFields = data.data.map(toCborBytes);
+
+      // Create indefinite array with encoded fields
+      const chunks: Uint8Array[] = [];
+      chunks.push(new Uint8Array([0x9f])); // Indefinite array start
+      encodedFields.forEach((field) => chunks.push(field));
+      chunks.push(new Uint8Array([0xff])); // Indefinite array end
+
+      // Combine chunks
+      const totalLength = chunks.reduce((sum, chunk) => sum + chunk.length, 0);
+      const arrayBytes = new Uint8Array(totalLength);
+      let offset = 0;
+      for (const chunk of chunks) {
+        arrayBytes.set(chunk, offset);
+        offset += chunk.length;
+      }
+
+      if (data.index >= 0 && data.index < 7) {
+        // Use CBOR tags 121-127 for constructor indices 0-6
+        const tagValue = 121 + Number(data.index);
+        return encodeTag(tagValue, arrayBytes);
+      } else {
+        // Use CBOR tag 102 for general constructor with [index, fields]
+        const generalArray: Uint8Array[] = [];
+        generalArray.push(new Uint8Array([0x9f])); // Indefinite array start
+        generalArray.push(CBOR.Encode().bytes(data.index)); // Index
+        encodedFields.forEach((field) => generalArray.push(field)); // Fields
+        generalArray.push(new Uint8Array([0xff])); // Indefinite array end
+
+        const totalLen = generalArray.reduce(
+          (sum, chunk) => sum + chunk.length,
+          0,
+        );
+        const generalBytes = new Uint8Array(totalLen);
+        let off = 0;
+        for (const chunk of generalArray) {
+          generalBytes.set(chunk, off);
+          off += chunk.length;
+        }
+
+        return encodeTag(102, generalBytes);
+      }
     }
+    case "Map":
+      // Use indefinite map encoding for PlutusMap
+      return encodeIndefiniteMap(data.entries);
+    case "List": {
+      // Encode all items recursively and create indefinite array
+      const encodedItems = data.items.map(toCborBytes);
+      const chunks: Uint8Array[] = [];
+      chunks.push(new Uint8Array([0x9f])); // Indefinite array start
+      encodedItems.forEach((item) => chunks.push(item));
+      chunks.push(new Uint8Array([0xff])); // Indefinite array end
+
+      // Combine chunks
+      const totalLength = chunks.reduce((sum, chunk) => sum + chunk.length, 0);
+      const result = new Uint8Array(totalLength);
+      let offset = 0;
+      for (const chunk of chunks) {
+        result.set(chunk, offset);
+        offset += chunk.length;
+      }
+      return result;
+    }
+    case "Int":
+      if (
+        data.value >= Number.MIN_SAFE_INTEGER &&
+        data.value <= Number.MAX_SAFE_INTEGER
+      ) {
+        return CBOR.Encode().bytes(Number(data.value));
+      }
+      return CBOR.Encode().bytes(data.value);
+    case "BytesArray":
+      // Convert hex string to Uint8Array and encode as CBOR bytes
+      return CBOR.Encode().bytes(Bytes.DecodeLenient.hex(data.bytes));
     default:
-      throw new Error(`Unsupported data type: ${data}`);
+      throw new DataError({
+        message: `Exhaustive check failed: Unhandled PlutusData case`,
+      });
   }
 };
 
-/**
- * Decodes a CBOR hex string to a TypeScript type
- *
- * @category encoding/decoding
- *
- * @example
- * import { TSchema , Data } from "@lucid-evolution/experimental";
- *
- * const Token = TSchema.Struct({
- *  policyId: TSchema.ByteArray,
- *  assetName: TSchema.ByteArray,
- *  amount: TSchema.Integer
- * })
- *
- * const cbor = "d8799f44deadbeef42cafe1903e8ff"
- *
- * // Decode from CBOR
- * const token = Data.decodeCBOROrThrow(cbor, Token)
- * // { policyId: "deadbeef", assetName: "cafe", amount: 1000n }
- *
- * // Decode without schema
- * const data = Data.decodeCBOROrThrow(cbor)
- * // {
- * //   _tag: 'Constr',
- * //   index: 0n,
- * //   fields: [
- * //     { _tag: 'ByteArray', bytearray: 'deadbeef' },
- * //     { _tag: 'ByteArray', bytearray: 'cafe' },
- * //     { _tag: 'Integer', integer: 1000n }
- * //   ]
- * // }
- *
- * @since 2.0.0
- */
-export function decodeCBOROrThrow(input: string): Data;
-export function decodeCBOROrThrow<Source, Target extends Data>(
-  input: string,
-  schema: Schema.Schema<Source, Target>,
-): Source;
-export function decodeCBOROrThrow<Source, Target extends Data>(
-  input: string,
-  schema?: Schema.Schema<Source, Target>,
-): Source | Data {
-  const data = resolveCBOROrThrow(input);
-  return schema ? decodeDataOrThrow(data, schema) : data;
-}
+type PlutusDataCDDL =
+  | {
+      readonly tag: 121 | 122 | 123 | 124 | 125 | 126 | 127;
+      readonly value: readonly PlutusDataCDDL[];
+    }
+  | { readonly value: readonly [bigint, ...(readonly PlutusDataCDDL[])] }
+  | readonly PlutusDataCDDL[]
+  | ReadonlyMap<PlutusDataCDDL, PlutusDataCDDL>
+  | number
+  | bigint
+  | Uint8Array;
 
-export const decodeCBOR = Effect.fn(function* <Source, Target extends Data>(
-  input: string,
-  schema?: Schema.Schema<Source, Target>,
-) {
-  const data = yield* resolveCBOR(input);
-  return schema ? yield* decodeData(data, schema) : data;
+const Constr121To127CDDL = Schema.Struct({
+  tag: Schema.Literal(121, 122, 123, 124, 125, 126, 127),
+  value: Schema.Array(
+    Schema.suspend((): Schema.Schema<PlutusDataCDDL> => PlutusDataCDDL),
+  ),
+}).annotations({
+  identifier: "Constr121To127CDDL",
 });
 
-/**
- * Resolves a CBOR hex string to a Plutus Data structure
- *
- * @category transformation
- *
- * @since 2.0.0
- */
-export const resolveCBOROrThrow = (input: string): Data => {
-  let data: CML.PlutusData.PlutusData;
-  try {
-    data = CML.PlutusData.fromCborHexUnsafe(input);
-  } catch (error) {
-    throw new Error(`Failed to resolve CBOR input: ${input}`);
+const Constr102CDDL = Schema.Struct({
+  value: Schema.Tuple(
+    [Schema.BigIntFromSelf],
+    Schema.suspend((): Schema.Schema<PlutusDataCDDL> => PlutusDataCDDL),
+  ),
+}).annotations({
+  identifier: "Constr102CDDL",
+});
+
+const ListCDDL = Schema.Array(
+  Schema.suspend((): Schema.Schema<PlutusDataCDDL> => PlutusDataCDDL),
+).annotations({
+  identifier: "ListCDDL",
+});
+
+const MapCDDL = Schema.ReadonlyMapFromSelf({
+  key: Schema.suspend((): Schema.Schema<PlutusDataCDDL> => PlutusDataCDDL),
+  value: Schema.suspend((): Schema.Schema<PlutusDataCDDL> => PlutusDataCDDL),
+}).annotations({
+  identifier: "MapCDDL",
+});
+
+const PlutusDataCDDL = Schema.Union(
+  Schema.Union(Constr121To127CDDL, Constr102CDDL),
+  ListCDDL,
+  MapCDDL,
+  Schema.Number,
+  Schema.BigIntFromSelf,
+  Schema.Uint8ArrayFromSelf,
+);
+
+const parsePlutusData = (decoded: PlutusDataCDDL): PlutusData => {
+  if (Schema.is(Constr121To127CDDL)(decoded)) {
+    const { tag, value } = decoded;
+    const fields = value.map(parsePlutusData);
+    return constr(globalThis.BigInt(tag - 121), fields);
   }
-  switch (data.kind()) {
-    case CML.PlutusDataKind.Integer:
-      return Integer.make({ integer: BigInt(data.as_integer()!.to_str()) });
-    case CML.PlutusDataKind.Bytes:
-      return ByteArray.make({
-        bytearray: Bytes.Encode.hex!(data.as_bytes()!),
-      });
-    case CML.PlutusDataKind.List: {
-      const list = data.as_list()!;
-      const array = [];
-      for (let i = 0; i < list.len(); i++) {
-        array.push(resolveCBOROrThrow(list.get(i).to_cbor_hex()));
-      }
-      return List.make({ list: array });
-    }
-    case CML.PlutusDataKind.Map: {
-      const plutusMap = data.as_map()!;
-      const tuples: { k: Data; v: Data }[] = [];
-      const keys = plutusMap.keys();
-      for (let i = 0; i < keys.len(); i++) {
-        const k = resolveCBOROrThrow(keys.get(i).to_cbor_hex());
-        const v = resolveCBOROrThrow(plutusMap.get(keys.get(i))!.to_cbor_hex());
-        tuples.push({ k, v });
-      }
-      return Map.make({ entries: tuples });
-    }
-    case CML.PlutusDataKind.ConstrPlutusData: {
-      const constrData = data.as_constr_plutus_data()!;
-      const fields = [];
-      const list = constrData.fields();
-      for (let i = 0; i < list.len(); i++) {
-        fields.push(resolveCBOROrThrow(list.get(i).to_cbor_hex()));
-      }
-      return Constr.make({
-        index: BigInt(constrData.alternative()),
-        fields,
-      });
-    }
-    default:
-      throw new Error(`Unsupported type: ${data.kind()}`);
+  if (Schema.is(Constr102CDDL)(decoded)) {
+    const [index, ...fields] = decoded.value;
+    return constr(index, fields.map(parsePlutusData));
   }
+  if (Schema.is(ListCDDL)(decoded)) {
+    return list(decoded.map(parsePlutusData));
+  }
+
+  if (Schema.is(MapCDDL)(decoded)) {
+    const entries = Array.from(decoded.entries()).map(([key, value]) => ({
+      key: parsePlutusData(key),
+      value: parsePlutusData(value),
+    }));
+    return map(entries);
+  }
+  if (typeof decoded === "number") {
+    return {
+      _tag: "Int",
+      value: globalThis.BigInt(decoded),
+    };
+  }
+  if (typeof decoded === "bigint") {
+    return {
+      _tag: "Int",
+      value: decoded,
+    };
+  }
+  if (decoded instanceof Uint8Array) {
+    return bytearray(Bytes.EncodeLenient.hex(decoded));
+  }
+
+  throw new DataError({
+    message: `Unexpected decoded type: ${typeof decoded}`,
+  });
 };
 
-export const resolveCBOR = Effect.fn(function* (input: string) {
-  let data: CML.PlutusData.PlutusData;
-  data = yield* CML.PlutusData.fromCborHex(input);
-  switch (data.kind()) {
-    case CML.PlutusDataKind.Integer:
-      return Integer.make(
-        { integer: BigInt(data.as_integer()!.to_str()) },
-        { disableValidation: true },
-      );
-    case CML.PlutusDataKind.Bytes:
-      return ByteArray.make(
-        {
-          bytearray: Bytes.Encode.hex!(data.as_bytes()!),
-        },
-        { disableValidation: true },
-      );
-    case CML.PlutusDataKind.List: {
-      const list = data.as_list()!;
-      const array = [];
-      for (let i = 0; i < list.len(); i++) {
-        array.push(resolveCBOROrThrow(list.get(i).to_cbor_hex()));
-      }
-      return List.make({ list: array }, { disableValidation: true });
-    }
-    case CML.PlutusDataKind.Map: {
-      const plutusMap = data.as_map()!;
-      const tuples: { k: Data; v: Data }[] = [];
-      const keys = plutusMap.keys();
-      for (let i = 0; i < keys.len(); i++) {
-        const k = resolveCBOROrThrow(keys.get(i).to_cbor_hex());
-        const v = resolveCBOROrThrow(plutusMap.get(keys.get(i))!.to_cbor_hex());
-        tuples.push({ k, v });
-      }
-      return Map.make({ entries: tuples }, { disableValidation: true });
-    }
-    case CML.PlutusDataKind.ConstrPlutusData: {
-      const constrData = data.as_constr_plutus_data()!;
-      const fields = [];
-      const list = constrData.fields();
-      for (let i = 0; i < list.len(); i++) {
-        fields.push(resolveCBOROrThrow(list.get(i).to_cbor_hex()));
-      }
-      return Constr.make(
-        {
-          index: BigInt(constrData.alternative()),
-          fields,
-        },
-        { disableValidation: true },
-      );
-    }
-  }
-});
-
 /**
- * Decodes an unknown value from Plutus Data Constructor to a TypeScript type
- *
- * @throws {ParseError} If the input value does not match the schema
- *
- * @category encoding/decoding
+ * Pattern matching helper for Constr types
  *
  * @example
- * import { Data, TSchema } from "@lucid-evolution/experimental";
+ * import { Data } from "@lucid-evolution/experimental";
  *
- * const Token = TSchema.Struct({
- *   policyId: TSchema.ByteArray,
- *   assetName: TSchema.ByteArray,
- *   amount: TSchema.Integer
+ * const result = Data.matchConstr(constr, {
+ *   0: (fields) => "Alternative 0",
+ *   1: (fields) => "Alternative 1",
+ *   _: (index, fields) => `Alternative ${index}`
  * });
  *
- * const plutusData = Data.mkConstr(0n, [
- *   Data.mkByte("deadbeef"),
- *   Data.mkByte("cafe"),
- *   Data.mkInt(1000n)
- * ]);
- *
- * const token = Data.decodeDataOrThrow(plutusData, Token);
- * // { policyId: "deadbeef", assetName: "cafe", amount: 1000n }
- *
  * @since 2.0.0
+ * @category utilities
  */
-export const decodeDataOrThrow = <Source, Target extends Data>(
-  input: unknown,
-  schema: Schema.Schema<Source, Target>,
-  options: SchemaAST.ParseOptions = {},
-): Source => Schema.decodeUnknownSync(schema, options)(input);
-
-export const decodeData = Effect.fn(function* <Source, Target extends Data>(
-  input: unknown,
-  schema: Schema.Schema<Source, Target>,
-  options: SchemaAST.ParseOptions = {},
-) {
-  return yield* Schema.decodeUnknown(schema, options)(input);
-});
+export const matchConstr = <T>(
+  constr: Constr<PlutusData>,
+  cases: {
+    [key: number]: (fields: readonly PlutusData[]) => T;
+    _: (index: number, fields: readonly PlutusData[]) => T;
+  },
+): T => {
+  const specificCase = cases[Number(constr.index)];
+  if (specificCase) {
+    return specificCase(constr.data);
+  }
+  return cases._(Number(constr.index), constr.data);
+};
 
 /**
- * Safely decodes data using Either for error handling
- *
- * @category encoding/decoding
- *
- * @since 2.0.0
- */
-export const decodeDataEither = <Source, Target extends Data>(
-  input: unknown,
-  schema: Schema.Schema<Source, Target>,
-  options: SchemaAST.ParseOptions = {},
-): Either.Either<Source, ParseError> =>
-  Schema.decodeUnknownEither(schema, options)(input);
-
-/**
- * Encodes a TypeScript value to Plutus Data Constructor
- *
- * @throws {ParseError} If the input value does not match the schema
- *
- * @category encoding/decoding
+ * Pattern matching helper for PlutusData types
  *
  * @example
- * import { Data , TSchema } from "@lucid-evolution/experimental";
+ * import { Data } from "@lucid-evolution/experimental";
  *
- * const token : unknown = {
- *   policyId: "deadbeef",
- *   assetName: "cafe",
- *   amount: 1000n
- * };
- *
- * const Token = TSchema.Struct({
- *   policyId: TSchema.ByteArray,
- *   assetName: TSchema.ByteArray,
- *   amount: TSchema.Integer
+ * const result = Data.matchPlutusData(data, {
+ *   PlutusMap: (entries) => "Map",
+ *   PlutusList: (items) => "List",
+ *   PlutusBigInt: (value) => "BigInt",
+ *   PlutusBytes: (bytes) => "Bytes",
+ *   Constr: (constr) => "Constructor"
  * });
  *
- * const data = Data.encodeDataOrThrow(token, Token);
- * // { index: 0n, fields: ["deadbeef", "cafe", 1000n] }
- *
  * @since 2.0.0
- */
-export const encodeDataOrThrow = <Source, Target extends Data>(
-  input: unknown,
-  schema: Schema.Schema<Source, Target>,
-  options?: SchemaAST.ParseOptions,
-): Target => Schema.encodeUnknownSync(schema, options)(input);
-
-export const encodeData = Effect.fn(function* <Source, Target extends Data>(
-  input: unknown,
-  schema: Schema.Schema<Source, Target>,
-  options?: SchemaAST.ParseOptions,
-) {
-  return yield* Schema.encodeUnknown(schema, options)(input);
-});
-
-/**
- * Safely encodes data using Either for error handling
- *
- * @category encoding/decoding
- *
- * @since 2.0.0
- */
-export const encodeDataEither = <Source, Target extends Data>(
-  input: unknown,
-  schema: Schema.Schema<Source, Target>,
-  options?: SchemaAST.ParseOptions,
-): Either.Either<Target, ParseError> =>
-  Schema.encodeUnknownEither(schema, options)(input);
-
-/**
- * Creates a Plutus Data List type from an array of Data elements
- *
- * @category constructors
- *
- * @example
- * import { Data } from "@lucid-evolution/experimental";
- *
- * // Create a list with multiple elements of the same type
- * const integerList = Data.mkList([
- *   Data.mkInt(42n),
- *   Data.mkInt(100n)
- * ]);
- *
- * // Create a list with a single element
- * const singleList = Data.mkList([Data.mkInt(42n)]);
- *
- * // Create a mixed list with different element types
- * const mixedList = Data.mkList([
- *   Data.mkInt(42n),
- *   Data.mkByte("deadbeef")
- * ]);
- *
- * @since 2.0.0
- */
-export const mkList = <const T extends Data>(list: readonly T[]) =>
-  List.make({ list }) as List<T>;
-
-/**
- * Creates a Plutus Data Integer type from a bigint value
- *
- * @category constructors
- *
- * @example
- * import { Data } from "@lucid-evolution/experimental";
- *
- * const myInteger = Data.mkInt(42n);
- *
- * @since 2.0.0
- */
-export const mkInt = <const T extends bigint = bigint>(integer: T) =>
-  Integer.make({ integer }) as Integer<T>;
-
-/**
- * Creates a Plutus Data ByteArray type from a hex string
- *
- * @category constructors
- *
- * @example
- * import { Data } from "@lucid-evolution/experimental";
- *
- * const myByteArray = Data.mkByte("deadbeef");
- *
- * @since 2.0.0
- */
-export const mkByte = <const T extends string>(bytearray: T) =>
-  ByteArray.make({ bytearray }) as ByteArray<T>;
-
-/**
- * Creates a Plutus Data Map type from an array of key-value tuples
- *
- * @category constructors
- *
- * @example
- * import { Data } from "@lucid-evolution/experimental";
- *
- * const myMap = Data.mkMap([
- *   { k: Data.mkByte("cafe01"), v: Data.mkInt(42n) },
- *   { k: Data.mkByte("deadbeef"), v: Data.mkByte("cafe01") }
- * ]);
- *
- * @since 2.0.0
- */
-export const mkMap = <const Pairs extends ReadonlyArray<{ k: Data; v: Data }>>(
-  value: Pairs,
-) => Map.make({ entries: value }) as Map<Pairs>;
-
-/**
- * Creates a Plutus Data Constr type (constructor) with the given index and fields
- *
- * @category constructors
- *
- * @example
- * import { Data } from "@lucid-evolution/experimental";
- *
- * // Create a constructor for a custom data type (e.g., a "Mint" action with amount)
- * const mint = Data.mkConstr(0n, [Data.mkInt(5n)]);
- *
- * // Create a constructor with no fields (e.g., a "Burn" action)
- * const burn = Data.mkConstr(1n, []);
- *
- * @since 2.0.0
- */
-export const mkConstr = <
-  const T extends bigint,
-  const U extends readonly Data[],
->(
-  index: T,
-  fields: U,
-) => Constr.make({ index, fields }) as Constr<T, U>;
-
-/**
- * JSON replacer function for handling BigInt serialization
- *
  * @category utilities
- *
- * @since 2.0.0
  */
-const replacer = (key: string, value: any) => {
-  if (typeof value === "bigint") {
-    return value.toString() + "n";
+export const matchPlutusData = <T>(
+  data: PlutusData,
+  cases: {
+    PlutusMap: (
+      entries: ReadonlyArray<{
+        readonly key: PlutusData;
+        readonly value: PlutusData;
+      }>,
+    ) => T;
+    PlutusList: (items: readonly PlutusData[]) => T;
+    PlutusBigInt: (value: bigint) => T;
+    PlutusBytes: (bytes: string) => T;
+    Constr: (constr: Constr<PlutusData>) => T;
+  },
+): T => {
+  switch (data._tag) {
+    case "Map":
+      return cases.PlutusMap(data.entries);
+    case "List":
+      return cases.PlutusList(data.items);
+    case "Int":
+      return cases.PlutusBigInt(data.value);
+    case "BytesArray":
+      return cases.PlutusBytes(data.bytes);
+    case "Constr":
+      return cases.Constr(data);
+    default:
+      throw new DataError({
+        message: `Exhaustive check failed: Unhandled PlutusData case`,
+      });
   }
-  return value;
+};
+
+export const CBORBytesSchema = Schema.transformOrFail(
+  Schema.typeSchema(Bytes.BytesSchema),
+  PlutusDataSchema,
+  {
+    strict: true,
+    encode: (toI) => ParseResult.succeed(toCborBytes(toI)),
+    decode: (fromA) =>
+      Effect.gen(function* () {
+        const cborDecoded = CBOR.Decode.bytes(fromA);
+        const plutusDataCDDL =
+          yield* ParseResult.decodeUnknown(PlutusDataCDDL)(cborDecoded);
+        return yield* ParseResult.succeed(parsePlutusData(plutusDataCDDL));
+      }),
+  },
+);
+
+export const CBORHexSchema = Schema.transformOrFail(
+  Bytes.HexSchema,
+  PlutusDataSchema,
+  {
+    strict: true,
+    encode: (toI) => ParseResult.succeed(Bytes.Encode.hex(toCborBytes(toI))),
+    decode: (fromA) =>
+      Effect.gen(function* () {
+        const bytes = Bytes.Decode.hex(fromA);
+        const cborDecoded = CBOR.Decode.bytes(bytes);
+        const plutusDataCDDL =
+          yield* ParseResult.decodeUnknown(PlutusDataCDDL)(cborDecoded);
+        return yield* ParseResult.succeed(parsePlutusData(plutusDataCDDL));
+      }),
+  },
+);
+
+export const Encode = {
+  cborHex: Schema.encodeSync(CBORHexSchema),
+  cborBytes: Schema.encodeSync(CBORBytesSchema),
+};
+
+export const Decode = {
+  cborHex: Schema.decodeSync(CBORHexSchema),
+  cborBytes: Schema.decodeSync(CBORBytesSchema),
+};
+
+export const EncodeEither = {
+  cborHex: Schema.encodeEither(CBORHexSchema),
+  cborBytes: Schema.encodeEither(CBORBytesSchema),
+};
+
+export const DecodeEither = {
+  cborHex: Schema.decodeEither(CBORHexSchema),
+  cborBytes: Schema.decodeEither(CBORBytesSchema),
+};
+
+export const EncodeEffect = {
+  cborHex: Schema.encode(CBORHexSchema),
+  cborBytes: Schema.encode(CBORBytesSchema),
+};
+
+export const DecodeEffect = {
+  cborHex: Schema.decode(CBORHexSchema),
+  cborBytes: Schema.decode(CBORBytesSchema),
 };
 
 /**
- * JSON reviver function for parsing BigInt values
- *
- * @category utilities
- *
- * @since 2.0.0
- */
-const reviver = (key: string, value: any) => {
-  if (typeof value === "string" && value.endsWith("n")) {
-    return BigInt(value.slice(0, -1));
-  }
-  return value;
-};
-
-/**
- * Converts a Data value to a JSON string
- *
- * @category transformation
- *
- * @example
- * import { Data } from "@lucid-evolution/experimental";
- *
- * const data = Data.mkInt(42n);
- * const json = Data.toJSON(data);
- * // '{"_tag":"Integer","integer":"42n"}'
- *
- * @since 2.0.0
- */
-export const toJSON = (data: Data): string => {
-  return JSON.stringify(data, replacer, 2);
-};
-
-/**
- * Parses a JSON string to a Data value
- *
- * @category transformation
- *
- * @example
- * import { Data } from "@lucid-evolution/experimental";
- *
- * @throws {Error} If the JSON string is invalid or does not match the expected format
- *
- * const json = '{"_tag":"Integer","integer":"42n"}';
- * const data = Data.fromJSON(json);
- * // { _tag: 'Integer', integer: 42n }
- *
- * @since 2.0.0
- */
-export const fromJSONOrThrow = (json: string): Data => {
-  const parsed = JSON.parse(json, reviver);
-  if (parsed._tag === undefined) {
-    throw new Error("Invalid data format");
-  }
-  return parsed;
-};
-
-/**
- * Compares two Data values for equality
- *
- * @category equality
- *
- * @example
- * import { Data } from "@lucid-evolution/experimental";
- *
- * Data.isEqual(Data.mkInt(1n), Data.mkInt(1n)); // true
- * Data.isEqual(Data.mkInt(1n), Data.mkInt(2n)); // false
- * Data.isEqual(Data.mkByte("01"), Data.mkByte("01")); // true
- * Data.isEqual(Data.mkByte("cafe"), Data.mkByte("cafe01")); // false
- * Data.isEqual(Data.mkList([Data.mkInt(1n)]), Data.mkList([Data.mkInt(1n)])); // true
- * Data.isEqual(Data.mkList([Data.mkInt(1n)]), Data.mkList([Data.mkInt(2n)])); // false
- * Data.isEqual(Data.mkMap([{ k: Data.mkByte("deadbeef"), v: Data.mkInt(1n) }]), Data.mkMap([{ k: Data.mkByte("deadbeef"), v: Data.mkInt(1n) }])); // true
- * Data.isEqual(Data.mkMap([{ k: Data.mkByte("cafe"), v: Data.mkInt(1n) }]), Data.mkMap([{ k: Data.mkByte("deadbeef"), v: Data.mkInt(2n) }])); // false
- * Data.isEqual(Data.mkConstr(0n, [Data.mkInt(1n)]), Data.mkConstr(0n, [Data.mkInt(1n)])); // true
- * Data.isEqual(Data.mkConstr(0n, [Data.mkInt(1n)]), Data.mkConstr(1n, [Data.mkInt(2n)])); // false
- *
- * @since 2.0.0
- */
-export const isEqual = (a: Data, b: Data): boolean => {
-  if (a._tag !== b._tag) {
-    return false;
-  }
-
-  if (a._tag === "Integer" && b._tag === "Integer") {
-    return a.integer === b.integer;
-  }
-
-  if (a._tag === "ByteArray" && b._tag === "ByteArray") {
-    return a.bytearray === b.bytearray;
-  }
-  if (a._tag === "List" && b._tag === "List") {
-    return (
-      a.list.length === b.list.length &&
-      a.list.every((item, index) => isEqual(item, b.list[index]))
-    );
-  }
-  if (a._tag === "Map" && b._tag === "Map") {
-    return (
-      a.entries.length === b.entries.length &&
-      a.entries.every((a, index) => {
-        const { k, v } = b.entries[index];
-        return isEqual(k, a.k) && isEqual(v, a.v);
-      })
-    );
-  }
-  if (a._tag === "Constr" && b._tag === "Constr") {
-    return (
-      a.index === b.index &&
-      a.fields.length === b.fields.length &&
-      a.fields.every((field, index) => isEqual(field, b.fields[index]))
-    );
-  }
-  return false;
-};
-
-/**
- * Compares two Data values according to CBOR canonical ordering rules
- *
- * @category ordering
- *
- * @example
- * import { Data } from "@lucid-evolution/experimental";
- * import assert from "assert"
- *
- * Data.compare(Data.mkInt(1n), Data.mkInt(2n)); // -1
- * Data.compare(Data.mkInt(2n), Data.mkInt(2n)); // 0
- * assert(Data.compare(Data.mkByte("cafe"), Data.mkByte("deadbeef")) === -1); // -1
- *
- * @since 2.0.0
- */
-export const compare = (a: Data, b: Data): number => {
-  // Compare by type first
-  const typeOrder = {
-    Integer: 3,
-    ByteArray: 4,
-    List: 2,
-    Map: 1,
-    Constr: 0,
-  } as const;
-
-  if (a._tag !== b._tag) {
-    return typeOrder[a._tag] - typeOrder[b._tag];
-  }
-
-  // Then compare by value for same types
-  if (a._tag === "Integer" && b._tag === "Integer") {
-    return a.integer < b.integer ? -1 : a.integer > b.integer ? 1 : 0;
-  }
-
-  if (a._tag === "ByteArray" && b._tag === "ByteArray") {
-    return a.bytearray < b.bytearray ? -1 : a.bytearray > b.bytearray ? 1 : 0;
-  }
-
-  if (a._tag === "List" && b._tag === "List") {
-    // Compare list lengths first
-    const lengthDiff = a.list.length - b.list.length;
-    if (lengthDiff !== 0) {
-      return lengthDiff;
-    }
-
-    // Compare elements one by one
-    for (let i = 0; i < a.list.length; i++) {
-      const comparison = compare(a.list[i], b.list[i]);
-      if (comparison !== 0) {
-        return comparison;
-      }
-    }
-    return 0;
-  }
-
-  if (a._tag === "Map" && b._tag === "Map") {
-    // Compare map sizes first
-    const lengthDiff = a.entries.length - b.entries.length;
-    if (lengthDiff !== 0) {
-      return lengthDiff;
-    }
-
-    // Maps should already be sorted by key, so compare entries in order
-    for (let i = 0; i < a.entries.length; i++) {
-      // Compare keys first
-      const keyComparison = compare(a.entries[i].k, b.entries[i].k);
-      if (keyComparison !== 0) {
-        return keyComparison;
-      }
-
-      // If keys are equal, compare values
-      const valueComparison = compare(a.entries[i].v, b.entries[i].v);
-      if (valueComparison !== 0) {
-        return valueComparison;
-      }
-    }
-    return 0;
-  }
-
-  if (a._tag === "Constr" && b._tag === "Constr") {
-    // Compare constructor index first
-    if (a.index !== b.index) {
-      // Safely compare bigint values
-      return a.index < b.index ? -1 : 1;
-    }
-
-    // Compare field lengths
-    const lengthDiff = a.fields.length - b.fields.length;
-    if (lengthDiff !== 0) {
-      return lengthDiff;
-    }
-
-    // Then compare fields one by one
-    for (let i = 0; i < a.fields.length; i++) {
-      const comparison = compare(a.fields[i], b.fields[i]);
-      if (comparison !== 0) {
-        return comparison;
-      }
-    }
-    return 0;
-  }
-
-  // This should never happen due to exhaustive tag checking above
-  return 0;
-};
-
-/**
- * Creates an arbitrary that generates Data.Data values with controlled depth
+ * Creates an arbitrary that generates PlutusData values with controlled depth
  *
  * @category generators
  *
@@ -1091,84 +788,88 @@ export const compare = (a: Data, b: Data): number => {
  * import { Data } from "@lucid-evolution/experimental";
  * import { FastCheck } from "effect"
  *
- * const data = Data.genData(3);
+ * const data = Data.genPlutusData(3);
  * const sample = FastCheck.sample(data);
  *
  * @since 2.0.0
  */
-export const genData = (depth: number = 3): FastCheck.Arbitrary<Data> => {
+export const genPlutusData = (
+  depth: number = 3,
+): FastCheck.Arbitrary<PlutusData> => {
   if (depth <= 0) {
-    // Base cases: Integer or ByteArray
-    return FastCheck.oneof(genInteger(), genByteArray());
+    // Base cases: PlutusBigInt or PlutusBytes
+    return FastCheck.oneof(genPlutusBigInt(), genPlutusBytes());
   }
 
   // Recursive cases with decreasing depth
   return FastCheck.oneof(
-    genInteger(),
-    genByteArray(),
+    genPlutusBigInt(),
+    genPlutusBytes(),
     genConstr(depth - 1),
-    genList(depth - 1),
-    genMap(depth - 1),
+    genPlutusList(depth - 1),
+    genPlutusMap(depth - 1),
   );
 };
 
 /**
- * Creates an arbitrary that generates Data.ByteArray values
+ * Creates an arbitrary that generates PlutusBytes values
  *
  * @category generators
  *
  * @since 2.0.0
  */
-export const genByteArray = (): FastCheck.Arbitrary<ByteArray> =>
+export const genPlutusBytes = (): FastCheck.Arbitrary<PlutusBytes> =>
   FastCheck.uint8Array({
-    minLength: 0,
-    maxLength: 32,
-  }).map((value) => mkByte(Bytes.Encode.hex(value)));
+    minLength: 0, // Allow empty arrays (valid for PlutusBytes)
+    maxLength: 32, // Max 32 bytes
+  }).map((bytes) => bytearray(Bytes.EncodeLenient.hex(bytes)));
 
 /**
- * Creates an arbitrary that generates Data.Integer values
+ * Creates an arbitrary that generates PlutusBigInt values
  *
  * @category generators
  *
  * @since 2.0.0
  */
-export const genInteger = (): FastCheck.Arbitrary<Integer> =>
-  FastCheck.bigInt({ min: 0n, max: 64n - 1n }).map((value) => mkInt(value));
+export const genPlutusBigInt = (): FastCheck.Arbitrary<PlutusBigInt> =>
+  FastCheck.bigInt().map((value) => int(value));
 
 /**
- * Creates an arbitrary that generates Data.List values
+ * Creates an arbitrary that generates PlutusList values
  *
  * @category generators
  *
  * @since 2.0.0
  */
-export const genList = (depth: number): FastCheck.Arbitrary<List> =>
-  FastCheck.array(genData(depth), {
+export const genPlutusList = (depth: number): FastCheck.Arbitrary<PlutusList> =>
+  FastCheck.array(genPlutusData(depth), {
     minLength: 0,
     maxLength: 5,
-  }).map((value) => mkList(value));
+  }).map((value) => list(value));
 
 /**
- * Creates an arbitrary that generates Data.Constr values
+ * Creates an arbitrary that generates Constr values
  *
  * @category generators
  *
  * @since 2.0.0
  */
-export const genConstr = (depth: number): FastCheck.Arbitrary<Constr> =>
+export const genConstr = (
+  depth: number,
+): FastCheck.Arbitrary<Constr<PlutusData>> =>
   FastCheck.tuple(
-    FastCheck.bigInt(0n, 2n ** 64n - 1n),
-    FastCheck.array(genData(depth), {
+    FastCheck.bigInt({ min: 0n, max: 2n ** 64n - 1n }),
+    FastCheck.array(genPlutusData(depth), {
       minLength: 0,
       maxLength: 5,
     }),
-  ).map(([index, fields]) => mkConstr(index, fields));
+  ).map(([index, data]) => constr(index, data));
 
 /**
- * Creates an arbitrary that generates Data.Map values with unique keys
- * Following the Plutus distribution of key types:
- * - 60% ByteArray keys
- * - 30% Integer keys
+ * Creates an arbitrary that generates PlutusMap values with unique keys
+ * Following a similar distribution pattern:
+ * - 60% PlutusBigInt keys
+ * - 30% PlutusBytes keys
  * - 10% Complex keys
  *
  * @category generators
@@ -1177,91 +878,51 @@ export const genConstr = (depth: number): FastCheck.Arbitrary<Constr> =>
  * import { Data } from "@lucid-evolution/experimental";
  * import { FastCheck } from "effect"
  *
- * const mapArb = Data.genMap(2);
+ * const mapArb = Data.genPlutusMap(2);
  * const sample = FastCheck.sample(mapArb);
  *
  * @since 2.0.0
  */
-export const genMap = (depth: number): FastCheck.Arbitrary<Map> => {
+export const genPlutusMap = (depth: number): FastCheck.Arbitrary<PlutusMap> => {
   // Helper to create key-value pairs with unique keys
-  const uniqueKeyValuePairs = <T extends Data>(
+  const uniqueKeyValuePairs = <T extends PlutusData>(
     keyGen: FastCheck.Arbitrary<T>,
     maxSize: number,
   ) =>
     FastCheck.uniqueArray(
-      FastCheck.tuple(keyGen, genData(depth > 0 ? depth - 1 : 0)),
+      FastCheck.tuple(keyGen, genPlutusData(depth > 0 ? depth - 1 : 0)),
       {
         minLength: 0,
         maxLength: maxSize * 2, // Generate more than needed to increase chance of unique keys
         selector: (pair) => {
-          const keyStr = toJSON(pair[0]);
-          return keyStr;
+          // Use CBOR encoding for unique key identification
+          const keyHex = Encode.cborHex(pair[0]);
+          return keyHex;
         },
       },
-    ).map((pairs) =>
-      pairs.map(([k, v]) => ({ k, v })).sort((a, b) => compare(a.k, b.k)),
-    );
+    ).map((pairs) => pairs.map(([key, value]) => ({ key, value })));
 
-  // ByteArray keys (more frequent)
-  const byteArrayPairs = uniqueKeyValuePairs(genByteArray(), 3);
+  // PlutusBigInt keys (more frequent)
+  const bigIntPairs = uniqueKeyValuePairs(genPlutusBigInt(), 3);
 
-  // Integer keys (medium frequency)
-  const integerPairs = uniqueKeyValuePairs(genInteger(), 3);
+  // PlutusBytes keys (medium frequency)
+  const bytesPairs = uniqueKeyValuePairs(genPlutusBytes(), 3);
 
   // Complex keys (less frequent)
   const complexPairs = uniqueKeyValuePairs(
-    genData(depth > 1 ? depth - 2 : 0),
+    genPlutusData(depth > 1 ? depth - 2 : 0),
     2,
   );
 
-  return FastCheck.oneof(byteArrayPairs, integerPairs, complexPairs).map(
-    (pairs) => mkMap(pairs),
+  return FastCheck.oneof(bigIntPairs, bytesPairs, complexPairs).map((pairs) =>
+    map(pairs),
   );
 };
 
 /**
- * Sorts a Data value in canonical order
- *
- * @category ordering
- *
- * @example
- * import { Data } from "@lucid-evolution/experimental";
- *
- * const data = Data.mkMap([
- *   { k: Data.mkByte("cafe"), v: Data.mkInt(2n) },
- *   { k: Data.mkByte("deadbeef"), v: Data.mkInt(1n) }
- * ]);
- *
- * const sortedData = Data.sort(data);
+ * FastCheck generators for PlutusData types
  *
  * @since 2.0.0
+ * @category generators
  */
-export const sort = (data: Data): Data => {
-  switch (data._tag) {
-    case "Map": {
-      // First recursively sort any nested Data in both keys and values
-      const sortedPairs = data.entries.map(({ k, v }) => ({
-        k: sort(k),
-        v: sort(v),
-      }));
-
-      // Then sort the pairs by key
-      const sortedMap = [...sortedPairs].sort((a, b) => compare(a.k, b.k));
-
-      return mkMap(sortedMap);
-    }
-    case "List": {
-      // Recursively sort elements in the list
-      const sortedElements = data.list.map((item) => sort(item));
-      return mkList(sortedElements);
-    }
-    case "Constr": {
-      // Recursively sort fields in the constructor
-      const sortedFields = data.fields.map((field) => sort(field));
-      return mkConstr(data.index, sortedFields);
-    }
-    // Integers and ByteArrays don't need sorting
-    default:
-      return data;
-  }
-};
+export const generator = genPlutusData(3);

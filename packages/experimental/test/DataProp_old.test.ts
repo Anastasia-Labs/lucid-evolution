@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import * as Data from "../src/Data.js";
+import * as Data from "../src/Data_old.js";
 import * as TSchema from "../src/TSchema.js";
 import { Arbitrary, FastCheck } from "effect";
 

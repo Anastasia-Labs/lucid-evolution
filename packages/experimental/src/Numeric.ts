@@ -63,6 +63,21 @@ export const Uint32Generator = FastCheck.integer({
   max: UINT32_MAX,
 }).map((number) => Uint32Schema.make(number));
 
+export const UINT64_MIN = 0n;
+export const UINT64_MAX = 18446744073709551615n;
+export const Uint64Schema = Schema.BigIntFromSelf.pipe(
+  Schema.filter((bigint) => bigint >= UINT64_MIN && bigint <= UINT64_MAX),
+  Schema.annotations({
+    identifier: "Uint64",
+    description: `A 64-bit unsigned integer (${UINT64_MIN} to ${UINT64_MAX})`,
+  }),
+);
+export type Uint64 = typeof Uint64Schema.Type;
+export const Uint64Generator = FastCheck.bigInt({
+  min: UINT64_MIN,
+  max: UINT64_MAX,
+}).map((bigint) => Uint64Schema.make(bigint));
+
 export const INT8_MIN = -128;
 export const INT8_MAX = 127;
 

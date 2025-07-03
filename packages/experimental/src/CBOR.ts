@@ -55,7 +55,7 @@ export const DEFAULT_ENCODING_OPTIONS: CBOREncodingOptions = {
  * @since 2.0.0
  * @category encoding/decoding
  */
-const encodeIndefiniteArray = (
+export const encodeIndefiniteArray = (
   array: unknown[],
   options: CBOREncodingOptions,
 ): Uint8Array => {
@@ -91,7 +91,7 @@ const encodeIndefiniteArray = (
  * @since 2.0.0
  * @category encoding/decoding
  */
-const encodeIndefiniteMap = (
+export const encodeIndefiniteMap = (
   obj: Record<string, unknown>,
   options: CBOREncodingOptions,
 ): Uint8Array => {
@@ -129,7 +129,7 @@ const encodeIndefiniteMap = (
  * @since 2.0.0
  * @category encoding/decoding
  */
-const encodeWithOptions = (
+export const encodeWithOptions = (
   data: unknown,
   options: CBOREncodingOptions = DEFAULT_ENCODING_OPTIONS,
 ): Uint8Array => {

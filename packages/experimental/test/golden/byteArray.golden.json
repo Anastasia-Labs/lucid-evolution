@@ -1,0 +1,4377 @@
+[
+  {
+    "index": 0,
+    "sample": {
+      "_tag": "ByteArray",
+      "bytearray": "e1e6"
+    },
+    "cborHex": "42e1e6",
+    "cborBytes": [
+      66,
+      225,
+      230
+    ],
+    "roundTripSuccess": true,
+    "metadata": {
+      "type": "byteArray",
+      "seed": 12345
+    }
+  },
+  {
+    "index": 1,
+    "sample": {
+      "_tag": "ByteArray",
+      "bytearray": "d87705"
+    },
+    "cborHex": "43d87705",
+    "cborBytes": [
+      67,
+      216,
+      119,
+      5
+    ],
+    "roundTripSuccess": true,
+    "metadata": {
+      "type": "byteArray",
+      "seed": 12345
+    }
+  },
+  {
+    "index": 2,
+    "sample": {
+      "_tag": "ByteArray",
+      "bytearray": "c79fd65fa4343bf27d90"
+    },
+    "cborHex": "4ac79fd65fa4343bf27d90",
+    "cborBytes": [
+      74,
+      199,
+      159,
+      214,
+      95,
+      164,
+      52,
+      59,
+      242,
+      125,
+      144
+    ],
+    "roundTripSuccess": true,
+    "metadata": {
+      "type": "byteArray",
+      "seed": 12345
+    }
+  },
+  {
+    "index": 3,
+    "sample": {
+      "_tag": "ByteArray",
+      "bytearray": "01ff00"
+    },
+    "cborHex": "4301ff00",
+    "cborBytes": [
+      67,
+      1,
+      255,
+      0
+    ],
+    "roundTripSuccess": true,
+    "metadata": {
+      "type": "byteArray",
+      "seed": 12345
+    }
+  },
+  {
+    "index": 4,
+    "sample": {
+      "_tag": "ByteArray",
+      "bytearray": "1904b7b8fd"
+    },
+    "cborHex": "451904b7b8fd",
+    "cborBytes": [
+      69,
+      25,
+      4,
+      183,
+      184,
+      253
+    ],
+    "roundTripSuccess": true,
+    "metadata": {
+      "type": "byteArray",
+      "seed": 12345
+    }
+  },
+  {
+    "index": 5,
+    "sample": {
+      "_tag": "ByteArray",
+      "bytearray": "17"
+    },
+    "cborHex": "4117",
+    "cborBytes": [
+      65,
+      23
+    ],
+    "roundTripSuccess": true,
+    "metadata": {
+      "type": "byteArray",
+      "seed": 12345
+    }
+  },
+  {
+    "index": 6,
+    "sample": {
+      "_tag": "ByteArray",
+      "bytearray": "c1fe6546"
+    },
+    "cborHex": "44c1fe6546",
+    "cborBytes": [
+      68,
+      193,
+      254,
+      101,
+      70
+    ],
+    "roundTripSuccess": true,
+    "metadata": {
+      "type": "byteArray",
+      "seed": 12345
+    }
+  },
+  {
+    "index": 7,
+    "sample": {
+      "_tag": "ByteArray",
+      "bytearray": "2d5c"
+    },
+    "cborHex": "422d5c",
+    "cborBytes": [
+      66,
+      45,
+      92
+    ],
+    "roundTripSuccess": true,
+    "metadata": {
+      "type": "byteArray",
+      "seed": 12345
+    }
+  },
+  {
+    "index": 8,
+    "sample": {
+      "_tag": "ByteArray",
+      "bytearray": "9c6e23c527c6f3"
+    },
+    "cborHex": "479c6e23c527c6f3",
+    "cborBytes": [
+      71,
+      156,
+      110,
+      35,
+      197,
+      39,
+      198,
+      243
+    ],
+    "roundTripSuccess": true,
+    "metadata": {
+      "type": "byteArray",
+      "seed": 12345
+    }
+  },
+  {
+    "index": 9,
+    "sample": {
+      "_tag": "ByteArray",
+      "bytearray": "fbb03031e8aaa68b06bb39"
+    },
+    "cborHex": "4bfbb03031e8aaa68b06bb39",
+    "cborBytes": [
+      75,
+      251,
+      176,
+      48,
+      49,
+      232,
+      170,
+      166,
+      139,
+      6,
+      187,
+      57
+    ],
+    "roundTripSuccess": true,
+    "metadata": {
+      "type": "byteArray",
+      "seed": 12345
+    }
+  },
+  {
+    "index": 10,
+    "sample": {
+      "_tag": "ByteArray",
+      "bytearray": "f4c8bf346bc0"
+    },
+    "cborHex": "46f4c8bf346bc0",
+    "cborBytes": [
+      70,
+      244,
+      200,
+      191,
+      52,
+      107,
+      192
+    ],
+    "roundTripSuccess": true,
+    "metadata": {
+      "type": "byteArray",
+      "seed": 12345
+    }
+  },
+  {
+    "index": 11,
+    "sample": {
+      "_tag": "ByteArray",
+      "bytearray": "a39dbe609c711f823b01c7"
+    },
+    "cborHex": "4ba39dbe609c711f823b01c7",
+    "cborBytes": [
+      75,
+      163,
+      157,
+      190,
+      96,
+      156,
+      113,
+      31,
+      130,
+      59,
+      1,
+      199
+    ],
+    "roundTripSuccess": true,
+    "metadata": {
+      "type": "byteArray",
+      "seed": 12345
+    }
+  },
+  {
+    "index": 12,
+    "sample": {
+      "_tag": "ByteArray",
+      "bytearray": "71"
+    },
+    "cborHex": "4171",
+    "cborBytes": [
+      65,
+      113
+    ],
+    "roundTripSuccess": true,
+    "metadata": {
+      "type": "byteArray",
+      "seed": 12345
+    }
+  },
+  {
+    "index": 13,
+    "sample": {
+      "_tag": "ByteArray",
+      "bytearray": "003303df0600057a0d1cbd"
+    },
+    "cborHex": "4b003303df0600057a0d1cbd",
+    "cborBytes": [
+      75,
+      0,
+      51,
+      3,
+      223,
+      6,
+      0,
+      5,
+      122,
+      13,
+      28,
+      189
+    ],
+    "roundTripSuccess": true,
+    "metadata": {
+      "type": "byteArray",
+      "seed": 12345
+    }
+  },
+  {
+    "index": 14,
+    "sample": {
+      "_tag": "ByteArray",
+      "bytearray": "d7"
+    },
+    "cborHex": "41d7",
+    "cborBytes": [
+      65,
+      215
+    ],
+    "roundTripSuccess": true,
+    "metadata": {
+      "type": "byteArray",
+      "seed": 12345
+    }
+  },
+  {
+    "index": 15,
+    "sample": {
+      "_tag": "ByteArray",
+      "bytearray": "1c0af1"
+    },
+    "cborHex": "431c0af1",
+    "cborBytes": [
+      67,
+      28,
+      10,
+      241
+    ],
+    "roundTripSuccess": true,
+    "metadata": {
+      "type": "byteArray",
+      "seed": 12345
+    }
+  },
+  {
+    "index": 16,
+    "sample": {
+      "_tag": "ByteArray",
+      "bytearray": "06351cf36301e9"
+    },
+    "cborHex": "4706351cf36301e9",
+    "cborBytes": [
+      71,
+      6,
+      53,
+      28,
+      243,
+      99,
+      1,
+      233
+    ],
+    "roundTripSuccess": true,
+    "metadata": {
+      "type": "byteArray",
+      "seed": 12345
+    }
+  },
+  {
+    "index": 17,
+    "sample": {
+      "_tag": "ByteArray",
+      "bytearray": "1f343fb70788dc92c877"
+    },
+    "cborHex": "4a1f343fb70788dc92c877",
+    "cborBytes": [
+      74,
+      31,
+      52,
+      63,
+      183,
+      7,
+      136,
+      220,
+      146,
+      200,
+      119
+    ],
+    "roundTripSuccess": true,
+    "metadata": {
+      "type": "byteArray",
+      "seed": 12345
+    }
+  },
+  {
+    "index": 18,
+    "sample": {
+      "_tag": "ByteArray",
+      "bytearray": "8d36d37896d8c9"
+    },
+    "cborHex": "478d36d37896d8c9",
+    "cborBytes": [
+      71,
+      141,
+      54,
+      211,
+      120,
+      150,
+      216,
+      201
+    ],
+    "roundTripSuccess": true,
+    "metadata": {
+      "type": "byteArray",
+      "seed": 12345
+    }
+  },
+  {
+    "index": 19,
+    "sample": {
+      "_tag": "ByteArray",
+      "bytearray": "3f78ccfcbc01ffb5"
+    },
+    "cborHex": "483f78ccfcbc01ffb5",
+    "cborBytes": [
+      72,
+      63,
+      120,
+      204,
+      252,
+      188,
+      1,
+      255,
+      181
+    ],
+    "roundTripSuccess": true,
+    "metadata": {
+      "type": "byteArray",
+      "seed": 12345
+    }
+  },
+  {
+    "index": 20,
+    "sample": {
+      "_tag": "ByteArray",
+      "bytearray": "b5011776"
+    },
+    "cborHex": "44b5011776",
+    "cborBytes": [
+      68,
+      181,
+      1,
+      23,
+      118
+    ],
+    "roundTripSuccess": true,
+    "metadata": {
+      "type": "byteArray",
+      "seed": 12345
+    }
+  },
+  {
+    "index": 21,
+    "sample": {
+      "_tag": "ByteArray",
+      "bytearray": "0ed78b24d9"
+    },
+    "cborHex": "450ed78b24d9",
+    "cborBytes": [
+      69,
+      14,
+      215,
+      139,
+      36,
+      217
+    ],
+    "roundTripSuccess": true,
+    "metadata": {
+      "type": "byteArray",
+      "seed": 12345
+    }
+  },
+  {
+    "index": 22,
+    "sample": {
+      "_tag": "ByteArray",
+      "bytearray": "9b22"
+    },
+    "cborHex": "429b22",
+    "cborBytes": [
+      66,
+      155,
+      34
+    ],
+    "roundTripSuccess": true,
+    "metadata": {
+      "type": "byteArray",
+      "seed": 12345
+    }
+  },
+  {
+    "index": 23,
+    "sample": {
+      "_tag": "ByteArray",
+      "bytearray": "25876664de25ef4c"
+    },
+    "cborHex": "4825876664de25ef4c",
+    "cborBytes": [
+      72,
+      37,
+      135,
+      102,
+      100,
+      222,
+      37,
+      239,
+      76
+    ],
+    "roundTripSuccess": true,
+    "metadata": {
+      "type": "byteArray",
+      "seed": 12345
+    }
+  },
+  {
+    "index": 24,
+    "sample": {
+      "_tag": "ByteArray",
+      "bytearray": "c7c402ee"
+    },
+    "cborHex": "44c7c402ee",
+    "cborBytes": [
+      68,
+      199,
+      196,
+      2,
+      238
+    ],
+    "roundTripSuccess": true,
+    "metadata": {
+      "type": "byteArray",
+      "seed": 12345
+    }
+  },
+  {
+    "index": 25,
+    "sample": {
+      "_tag": "ByteArray",
+      "bytearray": "e6d4550196940df8fbd2d3"
+    },
+    "cborHex": "4be6d4550196940df8fbd2d3",
+    "cborBytes": [
+      75,
+      230,
+      212,
+      85,
+      1,
+      150,
+      148,
+      13,
+      248,
+      251,
+      210,
+      211
+    ],
+    "roundTripSuccess": true,
+    "metadata": {
+      "type": "byteArray",
+      "seed": 12345
+    }
+  },
+  {
+    "index": 26,
+    "sample": {
+      "_tag": "ByteArray",
+      "bytearray": "83b724"
+    },
+    "cborHex": "4383b724",
+    "cborBytes": [
+      67,
+      131,
+      183,
+      36
+    ],
+    "roundTripSuccess": true,
+    "metadata": {
+      "type": "byteArray",
+      "seed": 12345
+    }
+  },
+  {
+    "index": 27,
+    "sample": {
+      "_tag": "ByteArray",
+      "bytearray": "166622225057d049"
+    },
+    "cborHex": "48166622225057d049",
+    "cborBytes": [
+      72,
+      22,
+      102,
+      34,
+      34,
+      80,
+      87,
+      208,
+      73
+    ],
+    "roundTripSuccess": true,
+    "metadata": {
+      "type": "byteArray",
+      "seed": 12345
+    }
+  },
+  {
+    "index": 28,
+    "sample": {
+      "_tag": "ByteArray",
+      "bytearray": "f8fdfc"
+    },
+    "cborHex": "43f8fdfc",
+    "cborBytes": [
+      67,
+      248,
+      253,
+      252
+    ],
+    "roundTripSuccess": true,
+    "metadata": {
+      "type": "byteArray",
+      "seed": 12345
+    }
+  },
+  {
+    "index": 29,
+    "sample": {
+      "_tag": "ByteArray",
+      "bytearray": "21f9"
+    },
+    "cborHex": "4221f9",
+    "cborBytes": [
+      66,
+      33,
+      249
+    ],
+    "roundTripSuccess": true,
+    "metadata": {
+      "type": "byteArray",
+      "seed": 12345
+    }
+  },
+  {
+    "index": 30,
+    "sample": {
+      "_tag": "ByteArray",
+      "bytearray": "43cf153b96ee83e4701852"
+    },
+    "cborHex": "4b43cf153b96ee83e4701852",
+    "cborBytes": [
+      75,
+      67,
+      207,
+      21,
+      59,
+      150,
+      238,
+      131,
+      228,
+      112,
+      24,
+      82
+    ],
+    "roundTripSuccess": true,
+    "metadata": {
+      "type": "byteArray",
+      "seed": 12345
+    }
+  },
+  {
+    "index": 31,
+    "sample": {
+      "_tag": "ByteArray",
+      "bytearray": "b60b5c24"
+    },
+    "cborHex": "44b60b5c24",
+    "cborBytes": [
+      68,
+      182,
+      11,
+      92,
+      36
+    ],
+    "roundTripSuccess": true,
+    "metadata": {
+      "type": "byteArray",
+      "seed": 12345
+    }
+  },
+  {
+    "index": 32,
+    "sample": {
+      "_tag": "ByteArray",
+      "bytearray": "01134876fffb67025c"
+    },
+    "cborHex": "4901134876fffb67025c",
+    "cborBytes": [
+      73,
+      1,
+      19,
+      72,
+      118,
+      255,
+      251,
+      103,
+      2,
+      92
+    ],
+    "roundTripSuccess": true,
+    "metadata": {
+      "type": "byteArray",
+      "seed": 12345
+    }
+  },
+  {
+    "index": 33,
+    "sample": {
+      "_tag": "ByteArray",
+      "bytearray": "3480e473e5"
+    },
+    "cborHex": "453480e473e5",
+    "cborBytes": [
+      69,
+      52,
+      128,
+      228,
+      115,
+      229
+    ],
+    "roundTripSuccess": true,
+    "metadata": {
+      "type": "byteArray",
+      "seed": 12345
+    }
+  },
+  {
+    "index": 34,
+    "sample": {
+      "_tag": "ByteArray",
+      "bytearray": "8364aca73a36"
+    },
+    "cborHex": "468364aca73a36",
+    "cborBytes": [
+      70,
+      131,
+      100,
+      172,
+      167,
+      58,
+      54
+    ],
+    "roundTripSuccess": true,
+    "metadata": {
+      "type": "byteArray",
+      "seed": 12345
+    }
+  },
+  {
+    "index": 35,
+    "sample": {
+      "_tag": "ByteArray",
+      "bytearray": "f4038843ffb47fff"
+    },
+    "cborHex": "48f4038843ffb47fff",
+    "cborBytes": [
+      72,
+      244,
+      3,
+      136,
+      67,
+      255,
+      180,
+      127,
+      255
+    ],
+    "roundTripSuccess": true,
+    "metadata": {
+      "type": "byteArray",
+      "seed": 12345
+    }
+  },
+  {
+    "index": 36,
+    "sample": {
+      "_tag": "ByteArray",
+      "bytearray": "d0183b3db1a5a9e8"
+    },
+    "cborHex": "48d0183b3db1a5a9e8",
+    "cborBytes": [
+      72,
+      208,
+      24,
+      59,
+      61,
+      177,
+      165,
+      169,
+      232
+    ],
+    "roundTripSuccess": true,
+    "metadata": {
+      "type": "byteArray",
+      "seed": 12345
+    }
+  },
+  {
+    "index": 37,
+    "sample": {
+      "_tag": "ByteArray",
+      "bytearray": "838eec05"
+    },
+    "cborHex": "44838eec05",
+    "cborBytes": [
+      68,
+      131,
+      142,
+      236,
+      5
+    ],
+    "roundTripSuccess": true,
+    "metadata": {
+      "type": "byteArray",
+      "seed": 12345
+    }
+  },
+  {
+    "index": 38,
+    "sample": {
+      "_tag": "ByteArray",
+      "bytearray": "7b61"
+    },
+    "cborHex": "427b61",
+    "cborBytes": [
+      66,
+      123,
+      97
+    ],
+    "roundTripSuccess": true,
+    "metadata": {
+      "type": "byteArray",
+      "seed": 12345
+    }
+  },
+  {
+    "index": 39,
+    "sample": {
+      "_tag": "ByteArray",
+      "bytearray": "74ce6cee6012"
+    },
+    "cborHex": "4674ce6cee6012",
+    "cborBytes": [
+      70,
+      116,
+      206,
+      108,
+      238,
+      96,
+      18
+    ],
+    "roundTripSuccess": true,
+    "metadata": {
+      "type": "byteArray",
+      "seed": 12345
+    }
+  },
+  {
+    "index": 40,
+    "sample": {
+      "_tag": "ByteArray",
+      "bytearray": "f831a4f73486a1933dc916"
+    },
+    "cborHex": "4bf831a4f73486a1933dc916",
+    "cborBytes": [
+      75,
+      248,
+      49,
+      164,
+      247,
+      52,
+      134,
+      161,
+      147,
+      61,
+      201,
+      22
+    ],
+    "roundTripSuccess": true,
+    "metadata": {
+      "type": "byteArray",
+      "seed": 12345
+    }
+  },
+  {
+    "index": 41,
+    "sample": {
+      "_tag": "ByteArray",
+      "bytearray": "0e00"
+    },
+    "cborHex": "420e00",
+    "cborBytes": [
+      66,
+      14,
+      0
+    ],
+    "roundTripSuccess": true,
+    "metadata": {
+      "type": "byteArray",
+      "seed": 12345
+    }
+  },
+  {
+    "index": 42,
+    "sample": {
+      "_tag": "ByteArray",
+      "bytearray": "c5213d5c"
+    },
+    "cborHex": "44c5213d5c",
+    "cborBytes": [
+      68,
+      197,
+      33,
+      61,
+      92
+    ],
+    "roundTripSuccess": true,
+    "metadata": {
+      "type": "byteArray",
+      "seed": 12345
+    }
+  },
+  {
+    "index": 43,
+    "sample": {
+      "_tag": "ByteArray",
+      "bytearray": "df"
+    },
+    "cborHex": "41df",
+    "cborBytes": [
+      65,
+      223
+    ],
+    "roundTripSuccess": true,
+    "metadata": {
+      "type": "byteArray",
+      "seed": 12345
+    }
+  },
+  {
+    "index": 44,
+    "sample": {
+      "_tag": "ByteArray",
+      "bytearray": "02342e8ac84188dcc4"
+    },
+    "cborHex": "4902342e8ac84188dcc4",
+    "cborBytes": [
+      73,
+      2,
+      52,
+      46,
+      138,
+      200,
+      65,
+      136,
+      220,
+      196
+    ],
+    "roundTripSuccess": true,
+    "metadata": {
+      "type": "byteArray",
+      "seed": 12345
+    }
+  },
+  {
+    "index": 45,
+    "sample": {
+      "_tag": "ByteArray",
+      "bytearray": "c465a6"
+    },
+    "cborHex": "43c465a6",
+    "cborBytes": [
+      67,
+      196,
+      101,
+      166
+    ],
+    "roundTripSuccess": true,
+    "metadata": {
+      "type": "byteArray",
+      "seed": 12345
+    }
+  },
+  {
+    "index": 46,
+    "sample": {
+      "_tag": "ByteArray",
+      "bytearray": "f8"
+    },
+    "cborHex": "41f8",
+    "cborBytes": [
+      65,
+      248
+    ],
+    "roundTripSuccess": true,
+    "metadata": {
+      "type": "byteArray",
+      "seed": 12345
+    }
+  },
+  {
+    "index": 47,
+    "sample": {
+      "_tag": "ByteArray",
+      "bytearray": "1a"
+    },
+    "cborHex": "411a",
+    "cborBytes": [
+      65,
+      26
+    ],
+    "roundTripSuccess": true,
+    "metadata": {
+      "type": "byteArray",
+      "seed": 12345
+    }
+  },
+  {
+    "index": 48,
+    "sample": {
+      "_tag": "ByteArray",
+      "bytearray": "54d7d74f"
+    },
+    "cborHex": "4454d7d74f",
+    "cborBytes": [
+      68,
+      84,
+      215,
+      215,
+      79
+    ],
+    "roundTripSuccess": true,
+    "metadata": {
+      "type": "byteArray",
+      "seed": 12345
+    }
+  },
+  {
+    "index": 49,
+    "sample": {
+      "_tag": "ByteArray",
+      "bytearray": "009a1ba0"
+    },
+    "cborHex": "44009a1ba0",
+    "cborBytes": [
+      68,
+      0,
+      154,
+      27,
+      160
+    ],
+    "roundTripSuccess": true,
+    "metadata": {
+      "type": "byteArray",
+      "seed": 12345
+    }
+  },
+  {
+    "index": 50,
+    "sample": {
+      "_tag": "ByteArray",
+      "bytearray": "fbad"
+    },
+    "cborHex": "42fbad",
+    "cborBytes": [
+      66,
+      251,
+      173
+    ],
+    "roundTripSuccess": true,
+    "metadata": {
+      "type": "byteArray",
+      "seed": 12345
+    }
+  },
+  {
+    "index": 51,
+    "sample": {
+      "_tag": "ByteArray",
+      "bytearray": "ef040385c407ba"
+    },
+    "cborHex": "47ef040385c407ba",
+    "cborBytes": [
+      71,
+      239,
+      4,
+      3,
+      133,
+      196,
+      7,
+      186
+    ],
+    "roundTripSuccess": true,
+    "metadata": {
+      "type": "byteArray",
+      "seed": 12345
+    }
+  },
+  {
+    "index": 52,
+    "sample": {
+      "_tag": "ByteArray",
+      "bytearray": "85"
+    },
+    "cborHex": "4185",
+    "cborBytes": [
+      65,
+      133
+    ],
+    "roundTripSuccess": true,
+    "metadata": {
+      "type": "byteArray",
+      "seed": 12345
+    }
+  },
+  {
+    "index": 53,
+    "sample": {
+      "_tag": "ByteArray",
+      "bytearray": "d0ff838b667769c6fb855a60"
+    },
+    "cborHex": "4cd0ff838b667769c6fb855a60",
+    "cborBytes": [
+      76,
+      208,
+      255,
+      131,
+      139,
+      102,
+      119,
+      105,
+      198,
+      251,
+      133,
+      90,
+      96
+    ],
+    "roundTripSuccess": true,
+    "metadata": {
+      "type": "byteArray",
+      "seed": 12345
+    }
+  },
+  {
+    "index": 54,
+    "sample": {
+      "_tag": "ByteArray",
+      "bytearray": "8792799e4455632050ee"
+    },
+    "cborHex": "4a8792799e4455632050ee",
+    "cborBytes": [
+      74,
+      135,
+      146,
+      121,
+      158,
+      68,
+      85,
+      99,
+      32,
+      80,
+      238
+    ],
+    "roundTripSuccess": true,
+    "metadata": {
+      "type": "byteArray",
+      "seed": 12345
+    }
+  },
+  {
+    "index": 55,
+    "sample": {
+      "_tag": "ByteArray",
+      "bytearray": "e5291b55eaaa46"
+    },
+    "cborHex": "47e5291b55eaaa46",
+    "cborBytes": [
+      71,
+      229,
+      41,
+      27,
+      85,
+      234,
+      170,
+      70
+    ],
+    "roundTripSuccess": true,
+    "metadata": {
+      "type": "byteArray",
+      "seed": 12345
+    }
+  },
+  {
+    "index": 56,
+    "sample": {
+      "_tag": "ByteArray",
+      "bytearray": "f32ddf6f041d35"
+    },
+    "cborHex": "47f32ddf6f041d35",
+    "cborBytes": [
+      71,
+      243,
+      45,
+      223,
+      111,
+      4,
+      29,
+      53
+    ],
+    "roundTripSuccess": true,
+    "metadata": {
+      "type": "byteArray",
+      "seed": 12345
+    }
+  },
+  {
+    "index": 57,
+    "sample": {
+      "_tag": "ByteArray",
+      "bytearray": "028189d630"
+    },
+    "cborHex": "45028189d630",
+    "cborBytes": [
+      69,
+      2,
+      129,
+      137,
+      214,
+      48
+    ],
+    "roundTripSuccess": true,
+    "metadata": {
+      "type": "byteArray",
+      "seed": 12345
+    }
+  },
+  {
+    "index": 58,
+    "sample": {
+      "_tag": "ByteArray",
+      "bytearray": "62"
+    },
+    "cborHex": "4162",
+    "cborBytes": [
+      65,
+      98
+    ],
+    "roundTripSuccess": true,
+    "metadata": {
+      "type": "byteArray",
+      "seed": 12345
+    }
+  },
+  {
+    "index": 59,
+    "sample": {
+      "_tag": "ByteArray",
+      "bytearray": "a67500"
+    },
+    "cborHex": "43a67500",
+    "cborBytes": [
+      67,
+      166,
+      117,
+      0
+    ],
+    "roundTripSuccess": true,
+    "metadata": {
+      "type": "byteArray",
+      "seed": 12345
+    }
+  },
+  {
+    "index": 60,
+    "sample": {
+      "_tag": "ByteArray",
+      "bytearray": "d4a414d9c0"
+    },
+    "cborHex": "45d4a414d9c0",
+    "cborBytes": [
+      69,
+      212,
+      164,
+      20,
+      217,
+      192
+    ],
+    "roundTripSuccess": true,
+    "metadata": {
+      "type": "byteArray",
+      "seed": 12345
+    }
+  },
+  {
+    "index": 61,
+    "sample": {
+      "_tag": "ByteArray",
+      "bytearray": "0105ddd5fa"
+    },
+    "cborHex": "450105ddd5fa",
+    "cborBytes": [
+      69,
+      1,
+      5,
+      221,
+      213,
+      250
+    ],
+    "roundTripSuccess": true,
+    "metadata": {
+      "type": "byteArray",
+      "seed": 12345
+    }
+  },
+  {
+    "index": 62,
+    "sample": {
+      "_tag": "ByteArray",
+      "bytearray": "8776185790987e5a2dd944"
+    },
+    "cborHex": "4b8776185790987e5a2dd944",
+    "cborBytes": [
+      75,
+      135,
+      118,
+      24,
+      87,
+      144,
+      152,
+      126,
+      90,
+      45,
+      217,
+      68
+    ],
+    "roundTripSuccess": true,
+    "metadata": {
+      "type": "byteArray",
+      "seed": 12345
+    }
+  },
+  {
+    "index": 63,
+    "sample": {
+      "_tag": "ByteArray",
+      "bytearray": "be0cc7"
+    },
+    "cborHex": "43be0cc7",
+    "cborBytes": [
+      67,
+      190,
+      12,
+      199
+    ],
+    "roundTripSuccess": true,
+    "metadata": {
+      "type": "byteArray",
+      "seed": 12345
+    }
+  },
+  {
+    "index": 64,
+    "sample": {
+      "_tag": "ByteArray",
+      "bytearray": "fd0de9"
+    },
+    "cborHex": "43fd0de9",
+    "cborBytes": [
+      67,
+      253,
+      13,
+      233
+    ],
+    "roundTripSuccess": true,
+    "metadata": {
+      "type": "byteArray",
+      "seed": 12345
+    }
+  },
+  {
+    "index": 65,
+    "sample": {
+      "_tag": "ByteArray",
+      "bytearray": "6bd1c875492b9ab0a3da"
+    },
+    "cborHex": "4a6bd1c875492b9ab0a3da",
+    "cborBytes": [
+      74,
+      107,
+      209,
+      200,
+      117,
+      73,
+      43,
+      154,
+      176,
+      163,
+      218
+    ],
+    "roundTripSuccess": true,
+    "metadata": {
+      "type": "byteArray",
+      "seed": 12345
+    }
+  },
+  {
+    "index": 66,
+    "sample": {
+      "_tag": "ByteArray",
+      "bytearray": "aa"
+    },
+    "cborHex": "41aa",
+    "cborBytes": [
+      65,
+      170
+    ],
+    "roundTripSuccess": true,
+    "metadata": {
+      "type": "byteArray",
+      "seed": 12345
+    }
+  },
+  {
+    "index": 67,
+    "sample": {
+      "_tag": "ByteArray",
+      "bytearray": "57b77d"
+    },
+    "cborHex": "4357b77d",
+    "cborBytes": [
+      67,
+      87,
+      183,
+      125
+    ],
+    "roundTripSuccess": true,
+    "metadata": {
+      "type": "byteArray",
+      "seed": 12345
+    }
+  },
+  {
+    "index": 68,
+    "sample": {
+      "_tag": "ByteArray",
+      "bytearray": "02a851919155de9a43"
+    },
+    "cborHex": "4902a851919155de9a43",
+    "cborBytes": [
+      73,
+      2,
+      168,
+      81,
+      145,
+      145,
+      85,
+      222,
+      154,
+      67
+    ],
+    "roundTripSuccess": true,
+    "metadata": {
+      "type": "byteArray",
+      "seed": 12345
+    }
+  },
+  {
+    "index": 69,
+    "sample": {
+      "_tag": "ByteArray",
+      "bytearray": "14"
+    },
+    "cborHex": "4114",
+    "cborBytes": [
+      65,
+      20
+    ],
+    "roundTripSuccess": true,
+    "metadata": {
+      "type": "byteArray",
+      "seed": 12345
+    }
+  },
+  {
+    "index": 70,
+    "sample": {
+      "_tag": "ByteArray",
+      "bytearray": "dacf05b9ac0205f8"
+    },
+    "cborHex": "48dacf05b9ac0205f8",
+    "cborBytes": [
+      72,
+      218,
+      207,
+      5,
+      185,
+      172,
+      2,
+      5,
+      248
+    ],
+    "roundTripSuccess": true,
+    "metadata": {
+      "type": "byteArray",
+      "seed": 12345
+    }
+  },
+  {
+    "index": 71,
+    "sample": {
+      "_tag": "ByteArray",
+      "bytearray": "801a"
+    },
+    "cborHex": "42801a",
+    "cborBytes": [
+      66,
+      128,
+      26
+    ],
+    "roundTripSuccess": true,
+    "metadata": {
+      "type": "byteArray",
+      "seed": 12345
+    }
+  },
+  {
+    "index": 72,
+    "sample": {
+      "_tag": "ByteArray",
+      "bytearray": "bca84bb806"
+    },
+    "cborHex": "45bca84bb806",
+    "cborBytes": [
+      69,
+      188,
+      168,
+      75,
+      184,
+      6
+    ],
+    "roundTripSuccess": true,
+    "metadata": {
+      "type": "byteArray",
+      "seed": 12345
+    }
+  },
+  {
+    "index": 73,
+    "sample": {
+      "_tag": "ByteArray",
+      "bytearray": "07ca040c898e"
+    },
+    "cborHex": "4607ca040c898e",
+    "cborBytes": [
+      70,
+      7,
+      202,
+      4,
+      12,
+      137,
+      142
+    ],
+    "roundTripSuccess": true,
+    "metadata": {
+      "type": "byteArray",
+      "seed": 12345
+    }
+  },
+  {
+    "index": 74,
+    "sample": {
+      "_tag": "ByteArray",
+      "bytearray": "caad5586a2c397d8d2a005"
+    },
+    "cborHex": "4bcaad5586a2c397d8d2a005",
+    "cborBytes": [
+      75,
+      202,
+      173,
+      85,
+      134,
+      162,
+      195,
+      151,
+      216,
+      210,
+      160,
+      5
+    ],
+    "roundTripSuccess": true,
+    "metadata": {
+      "type": "byteArray",
+      "seed": 12345
+    }
+  },
+  {
+    "index": 75,
+    "sample": {
+      "_tag": "ByteArray",
+      "bytearray": "efa0e46807f2d1ad9f"
+    },
+    "cborHex": "49efa0e46807f2d1ad9f",
+    "cborBytes": [
+      73,
+      239,
+      160,
+      228,
+      104,
+      7,
+      242,
+      209,
+      173,
+      159
+    ],
+    "roundTripSuccess": true,
+    "metadata": {
+      "type": "byteArray",
+      "seed": 12345
+    }
+  },
+  {
+    "index": 76,
+    "sample": {
+      "_tag": "ByteArray",
+      "bytearray": "35dd"
+    },
+    "cborHex": "4235dd",
+    "cborBytes": [
+      66,
+      53,
+      221
+    ],
+    "roundTripSuccess": true,
+    "metadata": {
+      "type": "byteArray",
+      "seed": 12345
+    }
+  },
+  {
+    "index": 77,
+    "sample": {
+      "_tag": "ByteArray",
+      "bytearray": "7bf0dba6"
+    },
+    "cborHex": "447bf0dba6",
+    "cborBytes": [
+      68,
+      123,
+      240,
+      219,
+      166
+    ],
+    "roundTripSuccess": true,
+    "metadata": {
+      "type": "byteArray",
+      "seed": 12345
+    }
+  },
+  {
+    "index": 78,
+    "sample": {
+      "_tag": "ByteArray",
+      "bytearray": "7517a3ff1ac866855001"
+    },
+    "cborHex": "4a7517a3ff1ac866855001",
+    "cborBytes": [
+      74,
+      117,
+      23,
+      163,
+      255,
+      26,
+      200,
+      102,
+      133,
+      80,
+      1
+    ],
+    "roundTripSuccess": true,
+    "metadata": {
+      "type": "byteArray",
+      "seed": 12345
+    }
+  },
+  {
+    "index": 79,
+    "sample": {
+      "_tag": "ByteArray",
+      "bytearray": "4522a4"
+    },
+    "cborHex": "434522a4",
+    "cborBytes": [
+      67,
+      69,
+      34,
+      164
+    ],
+    "roundTripSuccess": true,
+    "metadata": {
+      "type": "byteArray",
+      "seed": 12345
+    }
+  },
+  {
+    "index": 80,
+    "sample": {
+      "_tag": "ByteArray",
+      "bytearray": "5ce419"
+    },
+    "cborHex": "435ce419",
+    "cborBytes": [
+      67,
+      92,
+      228,
+      25
+    ],
+    "roundTripSuccess": true,
+    "metadata": {
+      "type": "byteArray",
+      "seed": 12345
+    }
+  },
+  {
+    "index": 81,
+    "sample": {
+      "_tag": "ByteArray",
+      "bytearray": "a456"
+    },
+    "cborHex": "42a456",
+    "cborBytes": [
+      66,
+      164,
+      86
+    ],
+    "roundTripSuccess": true,
+    "metadata": {
+      "type": "byteArray",
+      "seed": 12345
+    }
+  },
+  {
+    "index": 82,
+    "sample": {
+      "_tag": "ByteArray",
+      "bytearray": "98ee631ac2fa"
+    },
+    "cborHex": "4698ee631ac2fa",
+    "cborBytes": [
+      70,
+      152,
+      238,
+      99,
+      26,
+      194,
+      250
+    ],
+    "roundTripSuccess": true,
+    "metadata": {
+      "type": "byteArray",
+      "seed": 12345
+    }
+  },
+  {
+    "index": 83,
+    "sample": {
+      "_tag": "ByteArray",
+      "bytearray": "3dd8cab88b2789ad"
+    },
+    "cborHex": "483dd8cab88b2789ad",
+    "cborBytes": [
+      72,
+      61,
+      216,
+      202,
+      184,
+      139,
+      39,
+      137,
+      173
+    ],
+    "roundTripSuccess": true,
+    "metadata": {
+      "type": "byteArray",
+      "seed": 12345
+    }
+  },
+  {
+    "index": 84,
+    "sample": {
+      "_tag": "ByteArray",
+      "bytearray": "425ef7c065dbf30009"
+    },
+    "cborHex": "49425ef7c065dbf30009",
+    "cborBytes": [
+      73,
+      66,
+      94,
+      247,
+      192,
+      101,
+      219,
+      243,
+      0,
+      9
+    ],
+    "roundTripSuccess": true,
+    "metadata": {
+      "type": "byteArray",
+      "seed": 12345
+    }
+  },
+  {
+    "index": 85,
+    "sample": {
+      "_tag": "ByteArray",
+      "bytearray": "ddd6"
+    },
+    "cborHex": "42ddd6",
+    "cborBytes": [
+      66,
+      221,
+      214
+    ],
+    "roundTripSuccess": true,
+    "metadata": {
+      "type": "byteArray",
+      "seed": 12345
+    }
+  },
+  {
+    "index": 86,
+    "sample": {
+      "_tag": "ByteArray",
+      "bytearray": "be8e5f59e9fc4b08"
+    },
+    "cborHex": "48be8e5f59e9fc4b08",
+    "cborBytes": [
+      72,
+      190,
+      142,
+      95,
+      89,
+      233,
+      252,
+      75,
+      8
+    ],
+    "roundTripSuccess": true,
+    "metadata": {
+      "type": "byteArray",
+      "seed": 12345
+    }
+  },
+  {
+    "index": 87,
+    "sample": {
+      "_tag": "ByteArray",
+      "bytearray": "d8a701032707"
+    },
+    "cborHex": "46d8a701032707",
+    "cborBytes": [
+      70,
+      216,
+      167,
+      1,
+      3,
+      39,
+      7
+    ],
+    "roundTripSuccess": true,
+    "metadata": {
+      "type": "byteArray",
+      "seed": 12345
+    }
+  },
+  {
+    "index": 88,
+    "sample": {
+      "_tag": "ByteArray",
+      "bytearray": "966a"
+    },
+    "cborHex": "42966a",
+    "cborBytes": [
+      66,
+      150,
+      106
+    ],
+    "roundTripSuccess": true,
+    "metadata": {
+      "type": "byteArray",
+      "seed": 12345
+    }
+  },
+  {
+    "index": 89,
+    "sample": {
+      "_tag": "ByteArray",
+      "bytearray": "04af"
+    },
+    "cborHex": "4204af",
+    "cborBytes": [
+      66,
+      4,
+      175
+    ],
+    "roundTripSuccess": true,
+    "metadata": {
+      "type": "byteArray",
+      "seed": 12345
+    }
+  },
+  {
+    "index": 90,
+    "sample": {
+      "_tag": "ByteArray",
+      "bytearray": "505e40"
+    },
+    "cborHex": "43505e40",
+    "cborBytes": [
+      67,
+      80,
+      94,
+      64
+    ],
+    "roundTripSuccess": true,
+    "metadata": {
+      "type": "byteArray",
+      "seed": 12345
+    }
+  },
+  {
+    "index": 91,
+    "sample": {
+      "_tag": "ByteArray",
+      "bytearray": "14121bfc00"
+    },
+    "cborHex": "4514121bfc00",
+    "cborBytes": [
+      69,
+      20,
+      18,
+      27,
+      252,
+      0
+    ],
+    "roundTripSuccess": true,
+    "metadata": {
+      "type": "byteArray",
+      "seed": 12345
+    }
+  },
+  {
+    "index": 92,
+    "sample": {
+      "_tag": "ByteArray",
+      "bytearray": "611ac3d82704"
+    },
+    "cborHex": "46611ac3d82704",
+    "cborBytes": [
+      70,
+      97,
+      26,
+      195,
+      216,
+      39,
+      4
+    ],
+    "roundTripSuccess": true,
+    "metadata": {
+      "type": "byteArray",
+      "seed": 12345
+    }
+  },
+  {
+    "index": 93,
+    "sample": {
+      "_tag": "ByteArray",
+      "bytearray": "cec9a6"
+    },
+    "cborHex": "43cec9a6",
+    "cborBytes": [
+      67,
+      206,
+      201,
+      166
+    ],
+    "roundTripSuccess": true,
+    "metadata": {
+      "type": "byteArray",
+      "seed": 12345
+    }
+  },
+  {
+    "index": 94,
+    "sample": {
+      "_tag": "ByteArray",
+      "bytearray": "0c78d5570a78e0c0"
+    },
+    "cborHex": "480c78d5570a78e0c0",
+    "cborBytes": [
+      72,
+      12,
+      120,
+      213,
+      87,
+      10,
+      120,
+      224,
+      192
+    ],
+    "roundTripSuccess": true,
+    "metadata": {
+      "type": "byteArray",
+      "seed": 12345
+    }
+  },
+  {
+    "index": 95,
+    "sample": {
+      "_tag": "ByteArray",
+      "bytearray": "020403"
+    },
+    "cborHex": "43020403",
+    "cborBytes": [
+      67,
+      2,
+      4,
+      3
+    ],
+    "roundTripSuccess": true,
+    "metadata": {
+      "type": "byteArray",
+      "seed": 12345
+    }
+  },
+  {
+    "index": 96,
+    "sample": {
+      "_tag": "ByteArray",
+      "bytearray": "e8d7c8162b202ae684d7"
+    },
+    "cborHex": "4ae8d7c8162b202ae684d7",
+    "cborBytes": [
+      74,
+      232,
+      215,
+      200,
+      22,
+      43,
+      32,
+      42,
+      230,
+      132,
+      215
+    ],
+    "roundTripSuccess": true,
+    "metadata": {
+      "type": "byteArray",
+      "seed": 12345
+    }
+  },
+  {
+    "index": 97,
+    "sample": {
+      "_tag": "ByteArray",
+      "bytearray": "5c"
+    },
+    "cborHex": "415c",
+    "cborBytes": [
+      65,
+      92
+    ],
+    "roundTripSuccess": true,
+    "metadata": {
+      "type": "byteArray",
+      "seed": 12345
+    }
+  },
+  {
+    "index": 98,
+    "sample": {
+      "_tag": "ByteArray",
+      "bytearray": "7d0afc7aefce93270ef5"
+    },
+    "cborHex": "4a7d0afc7aefce93270ef5",
+    "cborBytes": [
+      74,
+      125,
+      10,
+      252,
+      122,
+      239,
+      206,
+      147,
+      39,
+      14,
+      245
+    ],
+    "roundTripSuccess": true,
+    "metadata": {
+      "type": "byteArray",
+      "seed": 12345
+    }
+  },
+  {
+    "index": 99,
+    "sample": {
+      "_tag": "ByteArray",
+      "bytearray": "f29872bb47b841b3aae7"
+    },
+    "cborHex": "4af29872bb47b841b3aae7",
+    "cborBytes": [
+      74,
+      242,
+      152,
+      114,
+      187,
+      71,
+      184,
+      65,
+      179,
+      170,
+      231
+    ],
+    "roundTripSuccess": true,
+    "metadata": {
+      "type": "byteArray",
+      "seed": 12345
+    }
+  },
+  {
+    "index": 100,
+    "sample": {
+      "_tag": "ByteArray",
+      "bytearray": "f80f25"
+    },
+    "cborHex": "43f80f25",
+    "cborBytes": [
+      67,
+      248,
+      15,
+      37
+    ],
+    "roundTripSuccess": true,
+    "metadata": {
+      "type": "byteArray",
+      "seed": 12345
+    }
+  },
+  {
+    "index": 101,
+    "sample": {
+      "_tag": "ByteArray",
+      "bytearray": "7e01dd21c82f"
+    },
+    "cborHex": "467e01dd21c82f",
+    "cborBytes": [
+      70,
+      126,
+      1,
+      221,
+      33,
+      200,
+      47
+    ],
+    "roundTripSuccess": true,
+    "metadata": {
+      "type": "byteArray",
+      "seed": 12345
+    }
+  },
+  {
+    "index": 102,
+    "sample": {
+      "_tag": "ByteArray",
+      "bytearray": "7a82e6bd9b0bc68dce5528e6"
+    },
+    "cborHex": "4c7a82e6bd9b0bc68dce5528e6",
+    "cborBytes": [
+      76,
+      122,
+      130,
+      230,
+      189,
+      155,
+      11,
+      198,
+      141,
+      206,
+      85,
+      40,
+      230
+    ],
+    "roundTripSuccess": true,
+    "metadata": {
+      "type": "byteArray",
+      "seed": 12345
+    }
+  },
+  {
+    "index": 103,
+    "sample": {
+      "_tag": "ByteArray",
+      "bytearray": "e3d4"
+    },
+    "cborHex": "42e3d4",
+    "cborBytes": [
+      66,
+      227,
+      212
+    ],
+    "roundTripSuccess": true,
+    "metadata": {
+      "type": "byteArray",
+      "seed": 12345
+    }
+  },
+  {
+    "index": 104,
+    "sample": {
+      "_tag": "ByteArray",
+      "bytearray": "fb388b7472"
+    },
+    "cborHex": "45fb388b7472",
+    "cborBytes": [
+      69,
+      251,
+      56,
+      139,
+      116,
+      114
+    ],
+    "roundTripSuccess": true,
+    "metadata": {
+      "type": "byteArray",
+      "seed": 12345
+    }
+  },
+  {
+    "index": 105,
+    "sample": {
+      "_tag": "ByteArray",
+      "bytearray": "9b163d3db584cf2efe65"
+    },
+    "cborHex": "4a9b163d3db584cf2efe65",
+    "cborBytes": [
+      74,
+      155,
+      22,
+      61,
+      61,
+      181,
+      132,
+      207,
+      46,
+      254,
+      101
+    ],
+    "roundTripSuccess": true,
+    "metadata": {
+      "type": "byteArray",
+      "seed": 12345
+    }
+  },
+  {
+    "index": 106,
+    "sample": {
+      "_tag": "ByteArray",
+      "bytearray": "4012819fa8629d350f1428"
+    },
+    "cborHex": "4b4012819fa8629d350f1428",
+    "cborBytes": [
+      75,
+      64,
+      18,
+      129,
+      159,
+      168,
+      98,
+      157,
+      53,
+      15,
+      20,
+      40
+    ],
+    "roundTripSuccess": true,
+    "metadata": {
+      "type": "byteArray",
+      "seed": 12345
+    }
+  },
+  {
+    "index": 107,
+    "sample": {
+      "_tag": "ByteArray",
+      "bytearray": "366604"
+    },
+    "cborHex": "43366604",
+    "cborBytes": [
+      67,
+      54,
+      102,
+      4
+    ],
+    "roundTripSuccess": true,
+    "metadata": {
+      "type": "byteArray",
+      "seed": 12345
+    }
+  },
+  {
+    "index": 108,
+    "sample": {
+      "_tag": "ByteArray",
+      "bytearray": "abfe5efa"
+    },
+    "cborHex": "44abfe5efa",
+    "cborBytes": [
+      68,
+      171,
+      254,
+      94,
+      250
+    ],
+    "roundTripSuccess": true,
+    "metadata": {
+      "type": "byteArray",
+      "seed": 12345
+    }
+  },
+  {
+    "index": 109,
+    "sample": {
+      "_tag": "ByteArray",
+      "bytearray": "e454070203bf"
+    },
+    "cborHex": "46e454070203bf",
+    "cborBytes": [
+      70,
+      228,
+      84,
+      7,
+      2,
+      3,
+      191
+    ],
+    "roundTripSuccess": true,
+    "metadata": {
+      "type": "byteArray",
+      "seed": 12345
+    }
+  },
+  {
+    "index": 110,
+    "sample": {
+      "_tag": "ByteArray",
+      "bytearray": "0b53d27fc873f8"
+    },
+    "cborHex": "470b53d27fc873f8",
+    "cborBytes": [
+      71,
+      11,
+      83,
+      210,
+      127,
+      200,
+      115,
+      248
+    ],
+    "roundTripSuccess": true,
+    "metadata": {
+      "type": "byteArray",
+      "seed": 12345
+    }
+  },
+  {
+    "index": 111,
+    "sample": {
+      "_tag": "ByteArray",
+      "bytearray": "ba"
+    },
+    "cborHex": "41ba",
+    "cborBytes": [
+      65,
+      186
+    ],
+    "roundTripSuccess": true,
+    "metadata": {
+      "type": "byteArray",
+      "seed": 12345
+    }
+  },
+  {
+    "index": 112,
+    "sample": {
+      "_tag": "ByteArray",
+      "bytearray": "c476"
+    },
+    "cborHex": "42c476",
+    "cborBytes": [
+      66,
+      196,
+      118
+    ],
+    "roundTripSuccess": true,
+    "metadata": {
+      "type": "byteArray",
+      "seed": 12345
+    }
+  },
+  {
+    "index": 113,
+    "sample": {
+      "_tag": "ByteArray",
+      "bytearray": "22be"
+    },
+    "cborHex": "4222be",
+    "cborBytes": [
+      66,
+      34,
+      190
+    ],
+    "roundTripSuccess": true,
+    "metadata": {
+      "type": "byteArray",
+      "seed": 12345
+    }
+  },
+  {
+    "index": 114,
+    "sample": {
+      "_tag": "ByteArray",
+      "bytearray": "0e02"
+    },
+    "cborHex": "420e02",
+    "cborBytes": [
+      66,
+      14,
+      2
+    ],
+    "roundTripSuccess": true,
+    "metadata": {
+      "type": "byteArray",
+      "seed": 12345
+    }
+  },
+  {
+    "index": 115,
+    "sample": {
+      "_tag": "ByteArray",
+      "bytearray": "24"
+    },
+    "cborHex": "4124",
+    "cborBytes": [
+      65,
+      36
+    ],
+    "roundTripSuccess": true,
+    "metadata": {
+      "type": "byteArray",
+      "seed": 12345
+    }
+  },
+  {
+    "index": 116,
+    "sample": {
+      "_tag": "ByteArray",
+      "bytearray": "e367aca08d88662456"
+    },
+    "cborHex": "49e367aca08d88662456",
+    "cborBytes": [
+      73,
+      227,
+      103,
+      172,
+      160,
+      141,
+      136,
+      102,
+      36,
+      86
+    ],
+    "roundTripSuccess": true,
+    "metadata": {
+      "type": "byteArray",
+      "seed": 12345
+    }
+  },
+  {
+    "index": 117,
+    "sample": {
+      "_tag": "ByteArray",
+      "bytearray": "ccc905ed"
+    },
+    "cborHex": "44ccc905ed",
+    "cborBytes": [
+      68,
+      204,
+      201,
+      5,
+      237
+    ],
+    "roundTripSuccess": true,
+    "metadata": {
+      "type": "byteArray",
+      "seed": 12345
+    }
+  },
+  {
+    "index": 118,
+    "sample": {
+      "_tag": "ByteArray",
+      "bytearray": "03076666abfe0e38fb04"
+    },
+    "cborHex": "4a03076666abfe0e38fb04",
+    "cborBytes": [
+      74,
+      3,
+      7,
+      102,
+      102,
+      171,
+      254,
+      14,
+      56,
+      251,
+      4
+    ],
+    "roundTripSuccess": true,
+    "metadata": {
+      "type": "byteArray",
+      "seed": 12345
+    }
+  },
+  {
+    "index": 119,
+    "sample": {
+      "_tag": "ByteArray",
+      "bytearray": "94b9eba2132fda505a81"
+    },
+    "cborHex": "4a94b9eba2132fda505a81",
+    "cborBytes": [
+      74,
+      148,
+      185,
+      235,
+      162,
+      19,
+      47,
+      218,
+      80,
+      90,
+      129
+    ],
+    "roundTripSuccess": true,
+    "metadata": {
+      "type": "byteArray",
+      "seed": 12345
+    }
+  },
+  {
+    "index": 120,
+    "sample": {
+      "_tag": "ByteArray",
+      "bytearray": "c0fa3c"
+    },
+    "cborHex": "43c0fa3c",
+    "cborBytes": [
+      67,
+      192,
+      250,
+      60
+    ],
+    "roundTripSuccess": true,
+    "metadata": {
+      "type": "byteArray",
+      "seed": 12345
+    }
+  },
+  {
+    "index": 121,
+    "sample": {
+      "_tag": "ByteArray",
+      "bytearray": "ced83ae9002d452c"
+    },
+    "cborHex": "48ced83ae9002d452c",
+    "cborBytes": [
+      72,
+      206,
+      216,
+      58,
+      233,
+      0,
+      45,
+      69,
+      44
+    ],
+    "roundTripSuccess": true,
+    "metadata": {
+      "type": "byteArray",
+      "seed": 12345
+    }
+  },
+  {
+    "index": 122,
+    "sample": {
+      "_tag": "ByteArray",
+      "bytearray": "9ae49db6be7d616c22b2b2cf"
+    },
+    "cborHex": "4c9ae49db6be7d616c22b2b2cf",
+    "cborBytes": [
+      76,
+      154,
+      228,
+      157,
+      182,
+      190,
+      125,
+      97,
+      108,
+      34,
+      178,
+      178,
+      207
+    ],
+    "roundTripSuccess": true,
+    "metadata": {
+      "type": "byteArray",
+      "seed": 12345
+    }
+  },
+  {
+    "index": 123,
+    "sample": {
+      "_tag": "ByteArray",
+      "bytearray": "ada1fdd58f04"
+    },
+    "cborHex": "46ada1fdd58f04",
+    "cborBytes": [
+      70,
+      173,
+      161,
+      253,
+      213,
+      143,
+      4
+    ],
+    "roundTripSuccess": true,
+    "metadata": {
+      "type": "byteArray",
+      "seed": 12345
+    }
+  },
+  {
+    "index": 124,
+    "sample": {
+      "_tag": "ByteArray",
+      "bytearray": "a1a0fabb"
+    },
+    "cborHex": "44a1a0fabb",
+    "cborBytes": [
+      68,
+      161,
+      160,
+      250,
+      187
+    ],
+    "roundTripSuccess": true,
+    "metadata": {
+      "type": "byteArray",
+      "seed": 12345
+    }
+  },
+  {
+    "index": 125,
+    "sample": {
+      "_tag": "ByteArray",
+      "bytearray": "8b"
+    },
+    "cborHex": "418b",
+    "cborBytes": [
+      65,
+      139
+    ],
+    "roundTripSuccess": true,
+    "metadata": {
+      "type": "byteArray",
+      "seed": 12345
+    }
+  },
+  {
+    "index": 126,
+    "sample": {
+      "_tag": "ByteArray",
+      "bytearray": "676326a7d25c22465e10d057"
+    },
+    "cborHex": "4c676326a7d25c22465e10d057",
+    "cborBytes": [
+      76,
+      103,
+      99,
+      38,
+      167,
+      210,
+      92,
+      34,
+      70,
+      94,
+      16,
+      208,
+      87
+    ],
+    "roundTripSuccess": true,
+    "metadata": {
+      "type": "byteArray",
+      "seed": 12345
+    }
+  },
+  {
+    "index": 127,
+    "sample": {
+      "_tag": "ByteArray",
+      "bytearray": "44"
+    },
+    "cborHex": "4144",
+    "cborBytes": [
+      65,
+      68
+    ],
+    "roundTripSuccess": true,
+    "metadata": {
+      "type": "byteArray",
+      "seed": 12345
+    }
+  },
+  {
+    "index": 128,
+    "sample": {
+      "_tag": "ByteArray",
+      "bytearray": "df5f00fc4a74"
+    },
+    "cborHex": "46df5f00fc4a74",
+    "cborBytes": [
+      70,
+      223,
+      95,
+      0,
+      252,
+      74,
+      116
+    ],
+    "roundTripSuccess": true,
+    "metadata": {
+      "type": "byteArray",
+      "seed": 12345
+    }
+  },
+  {
+    "index": 129,
+    "sample": {
+      "_tag": "ByteArray",
+      "bytearray": "476d9c20af3e7da52ae5aa"
+    },
+    "cborHex": "4b476d9c20af3e7da52ae5aa",
+    "cborBytes": [
+      75,
+      71,
+      109,
+      156,
+      32,
+      175,
+      62,
+      125,
+      165,
+      42,
+      229,
+      170
+    ],
+    "roundTripSuccess": true,
+    "metadata": {
+      "type": "byteArray",
+      "seed": 12345
+    }
+  },
+  {
+    "index": 130,
+    "sample": {
+      "_tag": "ByteArray",
+      "bytearray": "2d6e"
+    },
+    "cborHex": "422d6e",
+    "cborBytes": [
+      66,
+      45,
+      110
+    ],
+    "roundTripSuccess": true,
+    "metadata": {
+      "type": "byteArray",
+      "seed": 12345
+    }
+  },
+  {
+    "index": 131,
+    "sample": {
+      "_tag": "ByteArray",
+      "bytearray": "33ea50609cbf7e"
+    },
+    "cborHex": "4733ea50609cbf7e",
+    "cborBytes": [
+      71,
+      51,
+      234,
+      80,
+      96,
+      156,
+      191,
+      126
+    ],
+    "roundTripSuccess": true,
+    "metadata": {
+      "type": "byteArray",
+      "seed": 12345
+    }
+  },
+  {
+    "index": 132,
+    "sample": {
+      "_tag": "ByteArray",
+      "bytearray": "09ec42c3f70e00addebb"
+    },
+    "cborHex": "4a09ec42c3f70e00addebb",
+    "cborBytes": [
+      74,
+      9,
+      236,
+      66,
+      195,
+      247,
+      14,
+      0,
+      173,
+      222,
+      187
+    ],
+    "roundTripSuccess": true,
+    "metadata": {
+      "type": "byteArray",
+      "seed": 12345
+    }
+  },
+  {
+    "index": 133,
+    "sample": {
+      "_tag": "ByteArray",
+      "bytearray": "73bb"
+    },
+    "cborHex": "4273bb",
+    "cborBytes": [
+      66,
+      115,
+      187
+    ],
+    "roundTripSuccess": true,
+    "metadata": {
+      "type": "byteArray",
+      "seed": 12345
+    }
+  },
+  {
+    "index": 134,
+    "sample": {
+      "_tag": "ByteArray",
+      "bytearray": "0d9c993519f3dd67a31aaa46"
+    },
+    "cborHex": "4c0d9c993519f3dd67a31aaa46",
+    "cborBytes": [
+      76,
+      13,
+      156,
+      153,
+      53,
+      25,
+      243,
+      221,
+      103,
+      163,
+      26,
+      170,
+      70
+    ],
+    "roundTripSuccess": true,
+    "metadata": {
+      "type": "byteArray",
+      "seed": 12345
+    }
+  },
+  {
+    "index": 135,
+    "sample": {
+      "_tag": "ByteArray",
+      "bytearray": "dd2cb12d"
+    },
+    "cborHex": "44dd2cb12d",
+    "cborBytes": [
+      68,
+      221,
+      44,
+      177,
+      45
+    ],
+    "roundTripSuccess": true,
+    "metadata": {
+      "type": "byteArray",
+      "seed": 12345
+    }
+  },
+  {
+    "index": 136,
+    "sample": {
+      "_tag": "ByteArray",
+      "bytearray": "98eeb476bf99"
+    },
+    "cborHex": "4698eeb476bf99",
+    "cborBytes": [
+      70,
+      152,
+      238,
+      180,
+      118,
+      191,
+      153
+    ],
+    "roundTripSuccess": true,
+    "metadata": {
+      "type": "byteArray",
+      "seed": 12345
+    }
+  },
+  {
+    "index": 137,
+    "sample": {
+      "_tag": "ByteArray",
+      "bytearray": "a68894cb027a47f8a1398311"
+    },
+    "cborHex": "4ca68894cb027a47f8a1398311",
+    "cborBytes": [
+      76,
+      166,
+      136,
+      148,
+      203,
+      2,
+      122,
+      71,
+      248,
+      161,
+      57,
+      131,
+      17
+    ],
+    "roundTripSuccess": true,
+    "metadata": {
+      "type": "byteArray",
+      "seed": 12345
+    }
+  },
+  {
+    "index": 138,
+    "sample": {
+      "_tag": "ByteArray",
+      "bytearray": "1762"
+    },
+    "cborHex": "421762",
+    "cborBytes": [
+      66,
+      23,
+      98
+    ],
+    "roundTripSuccess": true,
+    "metadata": {
+      "type": "byteArray",
+      "seed": 12345
+    }
+  },
+  {
+    "index": 139,
+    "sample": {
+      "_tag": "ByteArray",
+      "bytearray": "50"
+    },
+    "cborHex": "4150",
+    "cborBytes": [
+      65,
+      80
+    ],
+    "roundTripSuccess": true,
+    "metadata": {
+      "type": "byteArray",
+      "seed": 12345
+    }
+  },
+  {
+    "index": 140,
+    "sample": {
+      "_tag": "ByteArray",
+      "bytearray": "5d075bf761b1fca801f3"
+    },
+    "cborHex": "4a5d075bf761b1fca801f3",
+    "cborBytes": [
+      74,
+      93,
+      7,
+      91,
+      247,
+      97,
+      177,
+      252,
+      168,
+      1,
+      243
+    ],
+    "roundTripSuccess": true,
+    "metadata": {
+      "type": "byteArray",
+      "seed": 12345
+    }
+  },
+  {
+    "index": 141,
+    "sample": {
+      "_tag": "ByteArray",
+      "bytearray": "c2b9a400f87e020a04a37b"
+    },
+    "cborHex": "4bc2b9a400f87e020a04a37b",
+    "cborBytes": [
+      75,
+      194,
+      185,
+      164,
+      0,
+      248,
+      126,
+      2,
+      10,
+      4,
+      163,
+      123
+    ],
+    "roundTripSuccess": true,
+    "metadata": {
+      "type": "byteArray",
+      "seed": 12345
+    }
+  },
+  {
+    "index": 142,
+    "sample": {
+      "_tag": "ByteArray",
+      "bytearray": "bbd979ae"
+    },
+    "cborHex": "44bbd979ae",
+    "cborBytes": [
+      68,
+      187,
+      217,
+      121,
+      174
+    ],
+    "roundTripSuccess": true,
+    "metadata": {
+      "type": "byteArray",
+      "seed": 12345
+    }
+  },
+  {
+    "index": 143,
+    "sample": {
+      "_tag": "ByteArray",
+      "bytearray": "ea007c784cce4cfa4fd8fa"
+    },
+    "cborHex": "4bea007c784cce4cfa4fd8fa",
+    "cborBytes": [
+      75,
+      234,
+      0,
+      124,
+      120,
+      76,
+      206,
+      76,
+      250,
+      79,
+      216,
+      250
+    ],
+    "roundTripSuccess": true,
+    "metadata": {
+      "type": "byteArray",
+      "seed": 12345
+    }
+  },
+  {
+    "index": 144,
+    "sample": {
+      "_tag": "ByteArray",
+      "bytearray": "1e"
+    },
+    "cborHex": "411e",
+    "cborBytes": [
+      65,
+      30
+    ],
+    "roundTripSuccess": true,
+    "metadata": {
+      "type": "byteArray",
+      "seed": 12345
+    }
+  },
+  {
+    "index": 145,
+    "sample": {
+      "_tag": "ByteArray",
+      "bytearray": "06fcfb05020513c907"
+    },
+    "cborHex": "4906fcfb05020513c907",
+    "cborBytes": [
+      73,
+      6,
+      252,
+      251,
+      5,
+      2,
+      5,
+      19,
+      201,
+      7
+    ],
+    "roundTripSuccess": true,
+    "metadata": {
+      "type": "byteArray",
+      "seed": 12345
+    }
+  },
+  {
+    "index": 146,
+    "sample": {
+      "_tag": "ByteArray",
+      "bytearray": "3b"
+    },
+    "cborHex": "413b",
+    "cborBytes": [
+      65,
+      59
+    ],
+    "roundTripSuccess": true,
+    "metadata": {
+      "type": "byteArray",
+      "seed": 12345
+    }
+  },
+  {
+    "index": 147,
+    "sample": {
+      "_tag": "ByteArray",
+      "bytearray": "68df69"
+    },
+    "cborHex": "4368df69",
+    "cborBytes": [
+      67,
+      104,
+      223,
+      105
+    ],
+    "roundTripSuccess": true,
+    "metadata": {
+      "type": "byteArray",
+      "seed": 12345
+    }
+  },
+  {
+    "index": 148,
+    "sample": {
+      "_tag": "ByteArray",
+      "bytearray": "aefe1596a0ef"
+    },
+    "cborHex": "46aefe1596a0ef",
+    "cborBytes": [
+      70,
+      174,
+      254,
+      21,
+      150,
+      160,
+      239
+    ],
+    "roundTripSuccess": true,
+    "metadata": {
+      "type": "byteArray",
+      "seed": 12345
+    }
+  },
+  {
+    "index": 149,
+    "sample": {
+      "_tag": "ByteArray",
+      "bytearray": "6cda"
+    },
+    "cborHex": "426cda",
+    "cborBytes": [
+      66,
+      108,
+      218
+    ],
+    "roundTripSuccess": true,
+    "metadata": {
+      "type": "byteArray",
+      "seed": 12345
+    }
+  },
+  {
+    "index": 150,
+    "sample": {
+      "_tag": "ByteArray",
+      "bytearray": "c818c68b0e641629066d"
+    },
+    "cborHex": "4ac818c68b0e641629066d",
+    "cborBytes": [
+      74,
+      200,
+      24,
+      198,
+      139,
+      14,
+      100,
+      22,
+      41,
+      6,
+      109
+    ],
+    "roundTripSuccess": true,
+    "metadata": {
+      "type": "byteArray",
+      "seed": 12345
+    }
+  },
+  {
+    "index": 151,
+    "sample": {
+      "_tag": "ByteArray",
+      "bytearray": "d0b5086735dc6d96df"
+    },
+    "cborHex": "49d0b5086735dc6d96df",
+    "cborBytes": [
+      73,
+      208,
+      181,
+      8,
+      103,
+      53,
+      220,
+      109,
+      150,
+      223
+    ],
+    "roundTripSuccess": true,
+    "metadata": {
+      "type": "byteArray",
+      "seed": 12345
+    }
+  },
+  {
+    "index": 152,
+    "sample": {
+      "_tag": "ByteArray",
+      "bytearray": "0103e507602b8d"
+    },
+    "cborHex": "470103e507602b8d",
+    "cborBytes": [
+      71,
+      1,
+      3,
+      229,
+      7,
+      96,
+      43,
+      141
+    ],
+    "roundTripSuccess": true,
+    "metadata": {
+      "type": "byteArray",
+      "seed": 12345
+    }
+  },
+  {
+    "index": 153,
+    "sample": {
+      "_tag": "ByteArray",
+      "bytearray": "626ae5662444668a"
+    },
+    "cborHex": "48626ae5662444668a",
+    "cborBytes": [
+      72,
+      98,
+      106,
+      229,
+      102,
+      36,
+      68,
+      102,
+      138
+    ],
+    "roundTripSuccess": true,
+    "metadata": {
+      "type": "byteArray",
+      "seed": 12345
+    }
+  },
+  {
+    "index": 154,
+    "sample": {
+      "_tag": "ByteArray",
+      "bytearray": "43f091ea6d7a6cdfdd78402f"
+    },
+    "cborHex": "4c43f091ea6d7a6cdfdd78402f",
+    "cborBytes": [
+      76,
+      67,
+      240,
+      145,
+      234,
+      109,
+      122,
+      108,
+      223,
+      221,
+      120,
+      64,
+      47
+    ],
+    "roundTripSuccess": true,
+    "metadata": {
+      "type": "byteArray",
+      "seed": 12345
+    }
+  },
+  {
+    "index": 155,
+    "sample": {
+      "_tag": "ByteArray",
+      "bytearray": "b0c74df19d"
+    },
+    "cborHex": "45b0c74df19d",
+    "cborBytes": [
+      69,
+      176,
+      199,
+      77,
+      241,
+      157
+    ],
+    "roundTripSuccess": true,
+    "metadata": {
+      "type": "byteArray",
+      "seed": 12345
+    }
+  },
+  {
+    "index": 156,
+    "sample": {
+      "_tag": "ByteArray",
+      "bytearray": "cfda4e2a85cf2b867139"
+    },
+    "cborHex": "4acfda4e2a85cf2b867139",
+    "cborBytes": [
+      74,
+      207,
+      218,
+      78,
+      42,
+      133,
+      207,
+      43,
+      134,
+      113,
+      57
+    ],
+    "roundTripSuccess": true,
+    "metadata": {
+      "type": "byteArray",
+      "seed": 12345
+    }
+  },
+  {
+    "index": 157,
+    "sample": {
+      "_tag": "ByteArray",
+      "bytearray": "afbdc2da"
+    },
+    "cborHex": "44afbdc2da",
+    "cborBytes": [
+      68,
+      175,
+      189,
+      194,
+      218
+    ],
+    "roundTripSuccess": true,
+    "metadata": {
+      "type": "byteArray",
+      "seed": 12345
+    }
+  },
+  {
+    "index": 158,
+    "sample": {
+      "_tag": "ByteArray",
+      "bytearray": "f5e9f314"
+    },
+    "cborHex": "44f5e9f314",
+    "cborBytes": [
+      68,
+      245,
+      233,
+      243,
+      20
+    ],
+    "roundTripSuccess": true,
+    "metadata": {
+      "type": "byteArray",
+      "seed": 12345
+    }
+  },
+  {
+    "index": 159,
+    "sample": {
+      "_tag": "ByteArray",
+      "bytearray": "53126a62ee195083a0"
+    },
+    "cborHex": "4953126a62ee195083a0",
+    "cborBytes": [
+      73,
+      83,
+      18,
+      106,
+      98,
+      238,
+      25,
+      80,
+      131,
+      160
+    ],
+    "roundTripSuccess": true,
+    "metadata": {
+      "type": "byteArray",
+      "seed": 12345
+    }
+  },
+  {
+    "index": 160,
+    "sample": {
+      "_tag": "ByteArray",
+      "bytearray": "0f371034edc5419d4b68"
+    },
+    "cborHex": "4a0f371034edc5419d4b68",
+    "cborBytes": [
+      74,
+      15,
+      55,
+      16,
+      52,
+      237,
+      197,
+      65,
+      157,
+      75,
+      104
+    ],
+    "roundTripSuccess": true,
+    "metadata": {
+      "type": "byteArray",
+      "seed": 12345
+    }
+  },
+  {
+    "index": 161,
+    "sample": {
+      "_tag": "ByteArray",
+      "bytearray": "0e8ba4c6"
+    },
+    "cborHex": "440e8ba4c6",
+    "cborBytes": [
+      68,
+      14,
+      139,
+      164,
+      198
+    ],
+    "roundTripSuccess": true,
+    "metadata": {
+      "type": "byteArray",
+      "seed": 12345
+    }
+  },
+  {
+    "index": 162,
+    "sample": {
+      "_tag": "ByteArray",
+      "bytearray": "b81039deae54d222"
+    },
+    "cborHex": "48b81039deae54d222",
+    "cborBytes": [
+      72,
+      184,
+      16,
+      57,
+      222,
+      174,
+      84,
+      210,
+      34
+    ],
+    "roundTripSuccess": true,
+    "metadata": {
+      "type": "byteArray",
+      "seed": 12345
+    }
+  },
+  {
+    "index": 163,
+    "sample": {
+      "_tag": "ByteArray",
+      "bytearray": "977c"
+    },
+    "cborHex": "42977c",
+    "cborBytes": [
+      66,
+      151,
+      124
+    ],
+    "roundTripSuccess": true,
+    "metadata": {
+      "type": "byteArray",
+      "seed": 12345
+    }
+  },
+  {
+    "index": 164,
+    "sample": {
+      "_tag": "ByteArray",
+      "bytearray": "fb0702707bb3044204b96d"
+    },
+    "cborHex": "4bfb0702707bb3044204b96d",
+    "cborBytes": [
+      75,
+      251,
+      7,
+      2,
+      112,
+      123,
+      179,
+      4,
+      66,
+      4,
+      185,
+      109
+    ],
+    "roundTripSuccess": true,
+    "metadata": {
+      "type": "byteArray",
+      "seed": 12345
+    }
+  },
+  {
+    "index": 165,
+    "sample": {
+      "_tag": "ByteArray",
+      "bytearray": "cf2fdafc02f6a8d7"
+    },
+    "cborHex": "48cf2fdafc02f6a8d7",
+    "cborBytes": [
+      72,
+      207,
+      47,
+      218,
+      252,
+      2,
+      246,
+      168,
+      215
+    ],
+    "roundTripSuccess": true,
+    "metadata": {
+      "type": "byteArray",
+      "seed": 12345
+    }
+  },
+  {
+    "index": 166,
+    "sample": {
+      "_tag": "ByteArray",
+      "bytearray": "026c"
+    },
+    "cborHex": "42026c",
+    "cborBytes": [
+      66,
+      2,
+      108
+    ],
+    "roundTripSuccess": true,
+    "metadata": {
+      "type": "byteArray",
+      "seed": 12345
+    }
+  },
+  {
+    "index": 167,
+    "sample": {
+      "_tag": "ByteArray",
+      "bytearray": "7a9748fb00eee6d8f197fc"
+    },
+    "cborHex": "4b7a9748fb00eee6d8f197fc",
+    "cborBytes": [
+      75,
+      122,
+      151,
+      72,
+      251,
+      0,
+      238,
+      230,
+      216,
+      241,
+      151,
+      252
+    ],
+    "roundTripSuccess": true,
+    "metadata": {
+      "type": "byteArray",
+      "seed": 12345
+    }
+  },
+  {
+    "index": 168,
+    "sample": {
+      "_tag": "ByteArray",
+      "bytearray": "24bb2c05eb"
+    },
+    "cborHex": "4524bb2c05eb",
+    "cborBytes": [
+      69,
+      36,
+      187,
+      44,
+      5,
+      235
+    ],
+    "roundTripSuccess": true,
+    "metadata": {
+      "type": "byteArray",
+      "seed": 12345
+    }
+  },
+  {
+    "index": 169,
+    "sample": {
+      "_tag": "ByteArray",
+      "bytearray": "ca19a297"
+    },
+    "cborHex": "44ca19a297",
+    "cborBytes": [
+      68,
+      202,
+      25,
+      162,
+      151
+    ],
+    "roundTripSuccess": true,
+    "metadata": {
+      "type": "byteArray",
+      "seed": 12345
+    }
+  },
+  {
+    "index": 170,
+    "sample": {
+      "_tag": "ByteArray",
+      "bytearray": "3914f7d37a"
+    },
+    "cborHex": "453914f7d37a",
+    "cborBytes": [
+      69,
+      57,
+      20,
+      247,
+      211,
+      122
+    ],
+    "roundTripSuccess": true,
+    "metadata": {
+      "type": "byteArray",
+      "seed": 12345
+    }
+  },
+  {
+    "index": 171,
+    "sample": {
+      "_tag": "ByteArray",
+      "bytearray": "feeab7655cac59b6fc76"
+    },
+    "cborHex": "4afeeab7655cac59b6fc76",
+    "cborBytes": [
+      74,
+      254,
+      234,
+      183,
+      101,
+      92,
+      172,
+      89,
+      182,
+      252,
+      118
+    ],
+    "roundTripSuccess": true,
+    "metadata": {
+      "type": "byteArray",
+      "seed": 12345
+    }
+  },
+  {
+    "index": 172,
+    "sample": {
+      "_tag": "ByteArray",
+      "bytearray": "fe"
+    },
+    "cborHex": "41fe",
+    "cborBytes": [
+      65,
+      254
+    ],
+    "roundTripSuccess": true,
+    "metadata": {
+      "type": "byteArray",
+      "seed": 12345
+    }
+  },
+  {
+    "index": 173,
+    "sample": {
+      "_tag": "ByteArray",
+      "bytearray": "186384ae60"
+    },
+    "cborHex": "45186384ae60",
+    "cborBytes": [
+      69,
+      24,
+      99,
+      132,
+      174,
+      96
+    ],
+    "roundTripSuccess": true,
+    "metadata": {
+      "type": "byteArray",
+      "seed": 12345
+    }
+  },
+  {
+    "index": 174,
+    "sample": {
+      "_tag": "ByteArray",
+      "bytearray": "d64a6b846a2a34f5"
+    },
+    "cborHex": "48d64a6b846a2a34f5",
+    "cborBytes": [
+      72,
+      214,
+      74,
+      107,
+      132,
+      106,
+      42,
+      52,
+      245
+    ],
+    "roundTripSuccess": true,
+    "metadata": {
+      "type": "byteArray",
+      "seed": 12345
+    }
+  },
+  {
+    "index": 175,
+    "sample": {
+      "_tag": "ByteArray",
+      "bytearray": "06d59b8169"
+    },
+    "cborHex": "4506d59b8169",
+    "cborBytes": [
+      69,
+      6,
+      213,
+      155,
+      129,
+      105
+    ],
+    "roundTripSuccess": true,
+    "metadata": {
+      "type": "byteArray",
+      "seed": 12345
+    }
+  },
+  {
+    "index": 176,
+    "sample": {
+      "_tag": "ByteArray",
+      "bytearray": "03"
+    },
+    "cborHex": "4103",
+    "cborBytes": [
+      65,
+      3
+    ],
+    "roundTripSuccess": true,
+    "metadata": {
+      "type": "byteArray",
+      "seed": 12345
+    }
+  },
+  {
+    "index": 177,
+    "sample": {
+      "_tag": "ByteArray",
+      "bytearray": "7dfc1e4e292f07e3"
+    },
+    "cborHex": "487dfc1e4e292f07e3",
+    "cborBytes": [
+      72,
+      125,
+      252,
+      30,
+      78,
+      41,
+      47,
+      7,
+      227
+    ],
+    "roundTripSuccess": true,
+    "metadata": {
+      "type": "byteArray",
+      "seed": 12345
+    }
+  },
+  {
+    "index": 178,
+    "sample": {
+      "_tag": "ByteArray",
+      "bytearray": "41f33c389983439941a06627"
+    },
+    "cborHex": "4c41f33c389983439941a06627",
+    "cborBytes": [
+      76,
+      65,
+      243,
+      60,
+      56,
+      153,
+      131,
+      67,
+      153,
+      65,
+      160,
+      102,
+      39
+    ],
+    "roundTripSuccess": true,
+    "metadata": {
+      "type": "byteArray",
+      "seed": 12345
+    }
+  },
+  {
+    "index": 179,
+    "sample": {
+      "_tag": "ByteArray",
+      "bytearray": "bbcc44525ddb"
+    },
+    "cborHex": "46bbcc44525ddb",
+    "cborBytes": [
+      70,
+      187,
+      204,
+      68,
+      82,
+      93,
+      219
+    ],
+    "roundTripSuccess": true,
+    "metadata": {
+      "type": "byteArray",
+      "seed": 12345
+    }
+  },
+  {
+    "index": 180,
+    "sample": {
+      "_tag": "ByteArray",
+      "bytearray": "45dde0206f13c619dcfb4c5c"
+    },
+    "cborHex": "4c45dde0206f13c619dcfb4c5c",
+    "cborBytes": [
+      76,
+      69,
+      221,
+      224,
+      32,
+      111,
+      19,
+      198,
+      25,
+      220,
+      251,
+      76,
+      92
+    ],
+    "roundTripSuccess": true,
+    "metadata": {
+      "type": "byteArray",
+      "seed": 12345
+    }
+  },
+  {
+    "index": 181,
+    "sample": {
+      "_tag": "ByteArray",
+      "bytearray": "09d6f5261ba1c43fd491c05d"
+    },
+    "cborHex": "4c09d6f5261ba1c43fd491c05d",
+    "cborBytes": [
+      76,
+      9,
+      214,
+      245,
+      38,
+      27,
+      161,
+      196,
+      63,
+      212,
+      145,
+      192,
+      93
+    ],
+    "roundTripSuccess": true,
+    "metadata": {
+      "type": "byteArray",
+      "seed": 12345
+    }
+  },
+  {
+    "index": 182,
+    "sample": {
+      "_tag": "ByteArray",
+      "bytearray": "2e56cd3a04"
+    },
+    "cborHex": "452e56cd3a04",
+    "cborBytes": [
+      69,
+      46,
+      86,
+      205,
+      58,
+      4
+    ],
+    "roundTripSuccess": true,
+    "metadata": {
+      "type": "byteArray",
+      "seed": 12345
+    }
+  },
+  {
+    "index": 183,
+    "sample": {
+      "_tag": "ByteArray",
+      "bytearray": "8f9bb6c83d42"
+    },
+    "cborHex": "468f9bb6c83d42",
+    "cborBytes": [
+      70,
+      143,
+      155,
+      182,
+      200,
+      61,
+      66
+    ],
+    "roundTripSuccess": true,
+    "metadata": {
+      "type": "byteArray",
+      "seed": 12345
+    }
+  },
+  {
+    "index": 184,
+    "sample": {
+      "_tag": "ByteArray",
+      "bytearray": "f6e9f739"
+    },
+    "cborHex": "44f6e9f739",
+    "cborBytes": [
+      68,
+      246,
+      233,
+      247,
+      57
+    ],
+    "roundTripSuccess": true,
+    "metadata": {
+      "type": "byteArray",
+      "seed": 12345
+    }
+  },
+  {
+    "index": 185,
+    "sample": {
+      "_tag": "ByteArray",
+      "bytearray": "9b01cc"
+    },
+    "cborHex": "439b01cc",
+    "cborBytes": [
+      67,
+      155,
+      1,
+      204
+    ],
+    "roundTripSuccess": true,
+    "metadata": {
+      "type": "byteArray",
+      "seed": 12345
+    }
+  },
+  {
+    "index": 186,
+    "sample": {
+      "_tag": "ByteArray",
+      "bytearray": "9da8a547"
+    },
+    "cborHex": "449da8a547",
+    "cborBytes": [
+      68,
+      157,
+      168,
+      165,
+      71
+    ],
+    "roundTripSuccess": true,
+    "metadata": {
+      "type": "byteArray",
+      "seed": 12345
+    }
+  },
+  {
+    "index": 187,
+    "sample": {
+      "_tag": "ByteArray",
+      "bytearray": "2470"
+    },
+    "cborHex": "422470",
+    "cborBytes": [
+      66,
+      36,
+      112
+    ],
+    "roundTripSuccess": true,
+    "metadata": {
+      "type": "byteArray",
+      "seed": 12345
+    }
+  },
+  {
+    "index": 188,
+    "sample": {
+      "_tag": "ByteArray",
+      "bytearray": "fb8a907802f8010988fe39"
+    },
+    "cborHex": "4bfb8a907802f8010988fe39",
+    "cborBytes": [
+      75,
+      251,
+      138,
+      144,
+      120,
+      2,
+      248,
+      1,
+      9,
+      136,
+      254,
+      57
+    ],
+    "roundTripSuccess": true,
+    "metadata": {
+      "type": "byteArray",
+      "seed": 12345
+    }
+  },
+  {
+    "index": 189,
+    "sample": {
+      "_tag": "ByteArray",
+      "bytearray": "486e8f63d13e3c"
+    },
+    "cborHex": "47486e8f63d13e3c",
+    "cborBytes": [
+      71,
+      72,
+      110,
+      143,
+      99,
+      209,
+      62,
+      60
+    ],
+    "roundTripSuccess": true,
+    "metadata": {
+      "type": "byteArray",
+      "seed": 12345
+    }
+  },
+  {
+    "index": 190,
+    "sample": {
+      "_tag": "ByteArray",
+      "bytearray": "339461e1af5fb7f0549f141e"
+    },
+    "cborHex": "4c339461e1af5fb7f0549f141e",
+    "cborBytes": [
+      76,
+      51,
+      148,
+      97,
+      225,
+      175,
+      95,
+      183,
+      240,
+      84,
+      159,
+      20,
+      30
+    ],
+    "roundTripSuccess": true,
+    "metadata": {
+      "type": "byteArray",
+      "seed": 12345
+    }
+  },
+  {
+    "index": 191,
+    "sample": {
+      "_tag": "ByteArray",
+      "bytearray": "53fb6cf31894"
+    },
+    "cborHex": "4653fb6cf31894",
+    "cborBytes": [
+      70,
+      83,
+      251,
+      108,
+      243,
+      24,
+      148
+    ],
+    "roundTripSuccess": true,
+    "metadata": {
+      "type": "byteArray",
+      "seed": 12345
+    }
+  },
+  {
+    "index": 192,
+    "sample": {
+      "_tag": "ByteArray",
+      "bytearray": "030012075737722956ef"
+    },
+    "cborHex": "4a030012075737722956ef",
+    "cborBytes": [
+      74,
+      3,
+      0,
+      18,
+      7,
+      87,
+      55,
+      114,
+      41,
+      86,
+      239
+    ],
+    "roundTripSuccess": true,
+    "metadata": {
+      "type": "byteArray",
+      "seed": 12345
+    }
+  },
+  {
+    "index": 193,
+    "sample": {
+      "_tag": "ByteArray",
+      "bytearray": "03fc6a8245be11dab7f4d4"
+    },
+    "cborHex": "4b03fc6a8245be11dab7f4d4",
+    "cborBytes": [
+      75,
+      3,
+      252,
+      106,
+      130,
+      69,
+      190,
+      17,
+      218,
+      183,
+      244,
+      212
+    ],
+    "roundTripSuccess": true,
+    "metadata": {
+      "type": "byteArray",
+      "seed": 12345
+    }
+  },
+  {
+    "index": 194,
+    "sample": {
+      "_tag": "ByteArray",
+      "bytearray": "65224b40c124b1e77dde1ec2"
+    },
+    "cborHex": "4c65224b40c124b1e77dde1ec2",
+    "cborBytes": [
+      76,
+      101,
+      34,
+      75,
+      64,
+      193,
+      36,
+      177,
+      231,
+      125,
+      222,
+      30,
+      194
+    ],
+    "roundTripSuccess": true,
+    "metadata": {
+      "type": "byteArray",
+      "seed": 12345
+    }
+  },
+  {
+    "index": 195,
+    "sample": {
+      "_tag": "ByteArray",
+      "bytearray": "02731df851fc09a8787d74"
+    },
+    "cborHex": "4b02731df851fc09a8787d74",
+    "cborBytes": [
+      75,
+      2,
+      115,
+      29,
+      248,
+      81,
+      252,
+      9,
+      168,
+      120,
+      125,
+      116
+    ],
+    "roundTripSuccess": true,
+    "metadata": {
+      "type": "byteArray",
+      "seed": 12345
+    }
+  },
+  {
+    "index": 196,
+    "sample": {
+      "_tag": "ByteArray",
+      "bytearray": "7907a8e6"
+    },
+    "cborHex": "447907a8e6",
+    "cborBytes": [
+      68,
+      121,
+      7,
+      168,
+      230
+    ],
+    "roundTripSuccess": true,
+    "metadata": {
+      "type": "byteArray",
+      "seed": 12345
+    }
+  },
+  {
+    "index": 197,
+    "sample": {
+      "_tag": "ByteArray",
+      "bytearray": "e0a545cb1907441e"
+    },
+    "cborHex": "48e0a545cb1907441e",
+    "cborBytes": [
+      72,
+      224,
+      165,
+      69,
+      203,
+      25,
+      7,
+      68,
+      30
+    ],
+    "roundTripSuccess": true,
+    "metadata": {
+      "type": "byteArray",
+      "seed": 12345
+    }
+  },
+  {
+    "index": 198,
+    "sample": {
+      "_tag": "ByteArray",
+      "bytearray": "07"
+    },
+    "cborHex": "4107",
+    "cborBytes": [
+      65,
+      7
+    ],
+    "roundTripSuccess": true,
+    "metadata": {
+      "type": "byteArray",
+      "seed": 12345
+    }
+  },
+  {
+    "index": 199,
+    "sample": {
+      "_tag": "ByteArray",
+      "bytearray": "9f"
+    },
+    "cborHex": "419f",
+    "cborBytes": [
+      65,
+      159
+    ],
+    "roundTripSuccess": true,
+    "metadata": {
+      "type": "byteArray",
+      "seed": 12345
+    }
+  }
+]
