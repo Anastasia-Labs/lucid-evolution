@@ -136,7 +136,7 @@ export const equals = (a: PoolParams, b: PoolParams): boolean =>
   ((a.poolMetadata === undefined && b.poolMetadata === undefined) ||
     (a.poolMetadata !== undefined &&
       b.poolMetadata !== undefined &&
-      a.poolMetadata.url.value === b.poolMetadata.url.value));
+      a.poolMetadata.url === b.poolMetadata.url));
 
 /**
  * Create a PoolParams instance with validation.
