@@ -1,6 +1,6 @@
 {
   "$schema": "https://unpkg.com/@changesets/config@3.0.0/schema.json",
-  "changelog": ["@changesets/changelog-github", { "repo": "Anastasia-Labs/lucid-evolution" }],
+  "changelog": ["@changesets/changelog-github", { "repo": "no-witness-labs/lucid-evolution" }],
   "commit": false,
   "fixed": [],
   "linked": [],
