@@ -35,7 +35,7 @@ export const metadata: Metadata = {
     "msapplication-TileColor": "#a04040",
   },
   twitter: {
-    site: "https://x.com/AnastasiaLabs",
+    site: "https://x.com/nowitnesslabs",
   },
   alternates: {
     // https://github.com/vercel/next.js/discussions/50189#discussioncomment-10826632

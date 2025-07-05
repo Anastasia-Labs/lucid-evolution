@@ -317,4 +317,4 @@ Lucid Evolution is licensed under the [MIT License](./LICENSE).
 
 <div style="margin: 20px 0;"></div>
 
-<p align="center">Maintained with ❤️ by <a href="https://anastasialabs.com/">Anastasia Labs</a></p>
+<p align="center">Maintained with ❤️ by <a href="https://no-witness-labs.github.io/lucid-evolution/">No Witness Labs</a></p>

@@ -228,8 +228,8 @@ console.log("Transaction Submitted:", txHash);`}
             <FaqBox title="How can I get help?">
               <div className="space-y-2">
                 <p>
-                  You can join the Anastasia-Labs{" "}
-                  <Link href="https://discord.gg/s89P9gpEff">
+                  You can join the No-Witness-Labs{" "}
+                  <Link href="https://discord.gg/eqZDvHvW6k">
                     Discord channel
                   </Link>
                   to get help from the community and our team.

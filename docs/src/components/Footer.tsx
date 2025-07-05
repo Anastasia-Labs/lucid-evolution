@@ -17,7 +17,10 @@ export default function Footer() {
     <NextraFooter className="flex-col items-center">
       <div className="footer-content flex min-w-[75%]">
         <div className="footer-section logo-section flex justify-center w-full md:max-w-fit">
-          <Link href="https://anastasialabs.com" className="hover:opacity-75">
+          <Link
+            href="https://no-witness-labs.github.io/lucid-evolution/"
+            className="hover:opacity-75"
+          >
             <Image
               src={
                 !mounted
@@ -30,7 +33,7 @@ export default function Footer() {
                         ? "/lucid-evolution/al-logo-dark.png"
                         : "/lucid-evolution/al-logo.png"
               }
-              alt="Anastasia Labs Logo"
+              alt="No Witness Labs Logo"
               className="footer-logo brightness-0 invert-75 not-dark:invert-50"
               width={180}
               height={42}
@@ -48,7 +51,9 @@ export default function Footer() {
                 </Link>
               </li>
               <li>
-                <Link href="https://anastasialabs.com">Anastasia Labs</Link>
+                <Link href="https://no-witness-labs.github.io/lucid-evolution/">
+                  No Witness Labs
+                </Link>
               </li>
             </ul>
           </div>
@@ -59,7 +64,7 @@ export default function Footer() {
                 <Link href="https://discord.gg/s89P9gpEff">Discord</Link>
               </li>
               <li>
-                <Link href="https://x.com/AnastasiaLabs">
+                <Link href="https://x.com/nowitnesslabs">
                   X (formerly Twitter)
                 </Link>
               </li>
@@ -72,12 +77,12 @@ export default function Footer() {
         <p className="items-center font-bold cursor-default">
           MIT {new Date().getFullYear()} ©{" "}
           <a
-            href="https://anastasialabs.com"
+            href="https://no-witness-labs.github.io/lucid-evolution/"
             className="text-gray-[450] no-underline hover:underline"
             target="_blank"
             rel="noopener noreferrer"
           >
-            Anastasia Labs
+            No Witness Labs
           </a>
         </p>
       </div>

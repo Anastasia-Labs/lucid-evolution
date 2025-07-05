@@ -26,7 +26,7 @@ export default function Logo() {
                 ? "/lucid-evolution/al-logo-dark.png"
                 : "/lucid-evolution/al-logo.png"
       }
-      alt="Anastasia Labs Logo"
+      alt="No Witness Labs Logo"
       className="mr-4"
       width="200"
       height="46"
