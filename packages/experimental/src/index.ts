@@ -23,6 +23,7 @@ export * as TransactionInput from "./TransactionInput.js";
 export * as CBOR from "./CBOR.js";
 export * as Bech32 from "./Bech32.js";
 export * as Natural from "./Natural.js";
+export * as AssetName from "./AssetName.js";
 export * as Hex from "./Hex.js";
 export * as NetworkId from "./NetworkId.js";
 export * as DatumHash from "./DatumHash.js";
