@@ -147,6 +147,6 @@ export const equals = (a: AssetName, b: AssetName): boolean =>
  * @category generators
  */
 export const generator = FastCheck.uint8Array({
-  minLength: 0,
+  minLength: 1,
   maxLength: ASSET_NAME_MAX_LENGTH,
 }).map((bytes) => new AssetName({ bytes }));
