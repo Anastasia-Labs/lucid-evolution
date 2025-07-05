@@ -4,14 +4,14 @@
   "license": "MIT",
   "author": "",
   "description": "Next-generation transaction builder for highly scalable dApps on Cardano",
-  "homepage": "https://anastasia-labs.github.io/lucid-evolution",
+  "homepage": "https://no-witness-labs.github.io/lucid-evolution",
   "repository": {
     "type": "git",
-    "url": "https://github.com/Anastasia-Labs/lucid-evolution.git",
+    "url": "https://github.com/no-witness-labs/lucid-evolution.git",
     "directory": "packages/lucid"
   },
   "bugs": {
-    "url": "https://github.com/Anastasia-Labs/lucid-evolution/issues"
+    "url": "https://github.com/no-witness-labs/lucid-evolution/issues"
   },
   "tags": [
     "typescript",
