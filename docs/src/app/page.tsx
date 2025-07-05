@@ -20,8 +20,8 @@ const IndexPage: FC = () => {
         <Image
           src="/lucid-evolution/lucid-evolution-no-witness-labs.png"
           alt="Lucid-Evolution Logo"
-          width={500}
-          height={100}
+          width={450}
+          height={120}
         />
 
         <div className="fade-in">
