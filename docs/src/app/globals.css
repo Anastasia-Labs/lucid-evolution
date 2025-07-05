@@ -20,7 +20,7 @@ body {
 }
 
 svg:hover {
-  color: red;
+  color: #DD7722;
   opacity: .5;
   scale: 1.25;
   transition-property: all;
@@ -57,7 +57,7 @@ code.text-\[\.9em\] {
 
 .footer-section h3 {
   margin-bottom: 0.75rem;
-  color: #a04040;
+  color: #DD7722;
   font-size: 1rem;
   font-weight: bold;
 }

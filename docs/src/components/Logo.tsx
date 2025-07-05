@@ -17,18 +17,18 @@ export default function Logo() {
     <Image
       src={
         !mounted
-          ? "/lucid-evolution/al-logo.png"
+          ? "/lucid-evolution/no-witness-labs-logo.png"
           : resolvedTheme === "light"
-            ? "/lucid-evolution/al-logo-dark.png"
+            ? "/lucid-evolution/no-witness-labs-logo-dark.png"
             : resolvedTheme === "dark"
-              ? "/lucid-evolution/al-logo.png"
+              ? "/lucid-evolution/no-witness-labs-logo.png"
               : systemTheme === "light"
-                ? "/lucid-evolution/al-logo-dark.png"
-                : "/lucid-evolution/al-logo.png"
+                ? "/lucid-evolution/no-witness-labs-logo-dark.png"
+                : "/lucid-evolution/no-witness-labs-logo.png"
       }
       alt="No Witness Labs Logo"
       className="mr-4"
-      width="200"
+      width="50"
       height="46"
     />
   );

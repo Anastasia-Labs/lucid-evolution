@@ -176,7 +176,7 @@ export default function AnimatedCode({ code, style }) {
           width: "16px",
           height: "16px",
           border: "2px solid #2d2d2d",
-          borderTop: "2px solid #ff6b6b",
+          borderTop: "2px solid #DD7722",
           borderRadius: "50%",
           transform: `rotate(${spinnerAngle}deg)`,
         }}
@@ -193,10 +193,10 @@ export default function AnimatedCode({ code, style }) {
       xmlns="http://www.w3.org/2000/svg"
       style={{ marginRight: "6px" }}
     >
-      <circle cx="10" cy="10" r="8" stroke="#2ecc71" strokeWidth="2" />
+      <circle cx="10" cy="10" r="8" stroke="#DD7722" strokeWidth="2" />
       <path
         d="M6 10L9 13L14 8"
-        stroke="#2ecc71"
+        stroke="#DD7722"
         strokeWidth="2"
         strokeLinecap="round"
         strokeLinejoin="round"
@@ -228,7 +228,7 @@ export default function AnimatedCode({ code, style }) {
           borderTopRightRadius: "8px",
           display: "flex",
           alignItems: "center",
-          borderBottom: "1px solid #444",
+          borderBottom: "1px solid #DD7722",
         }}
       >
         <span
@@ -304,7 +304,7 @@ export default function AnimatedCode({ code, style }) {
                       if (grayKeywords.includes(part)) {
                         style.color = "gray";
                       } else if (highlightedKeywords.includes(part)) {
-                        style.color = "#ff6b6b";
+                        style.color = "#DD7722";
                       }
                       return (
                         <span
@@ -359,7 +359,7 @@ export default function AnimatedCode({ code, style }) {
               paddingTop: isMobile ? "0px" : "6px",
             }}
           >
-            <span style={{ color: "#ff6b6b", marginRight: "4px" }}>λ</span>
+            <span style={{ color: "#DD7722", marginRight: "4px" }}>λ</span>
             <span
               style={{ color: "rgba(255, 255, 255, 0.4)", marginRight: "8px" }}
             >
@@ -378,7 +378,7 @@ export default function AnimatedCode({ code, style }) {
                   <>
                     <span
                       style={{
-                        color: startColorTransition ? "#ff6b6b" : "#b3b3b3",
+                        color: startColorTransition ? "#DD7722" : "#b3b3b3",
                         transition: "color 0.5s ease-in-out",
                       }}
                     >
@@ -418,7 +418,7 @@ export default function AnimatedCode({ code, style }) {
                 </span>
                 <span
                   style={{
-                    color: "#ff6b6b",
+                    color: "#DD7722",
                     background: "rgba(255, 107, 107, 0.1)",
                     padding: "2px 4px",
                     borderRadius: "2px",
