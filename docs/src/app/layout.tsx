@@ -13,12 +13,7 @@ import "./globals.css";
 export const metadata: Metadata = {
   description: "A highly scalable transaction building framework for Cardano",
   metadataBase: new URL("https://no-witness-labs.github.io/lucid-evolution"),
-  keywords: [
-    "Lucid",
-    "Evolution",
-    "Cardano",
-    "blockchain",
-  ],
+  keywords: ["Lucid", "Evolution", "Cardano", "blockchain"],
   generator: "Next.js",
   applicationName: "Lucid-Evolution",
   appleWebApp: {
@@ -49,40 +44,41 @@ export const metadata: Metadata = {
   icons: "https://avatars.githubusercontent.com/u/125997902?s=200&v=4",
 };
 
-const RootLayout: FC<{ children: ReactNode; }> =
-  async ({ children }) => {
-    const pageMap = await getPageMap();
-    return (
-      <html lang="en" dir="ltr" suppressHydrationWarning>
-        <Head />
-        <body>
-          <Layout
-            // banner={<Banner dismissible={false}>
-            //   🎉 Lucid-Evolution 2.0 is released. Visit{' '}
-            //   <Link href="https://github.com/no-witness-labs/lucid-evolution" className="text-current!">
-            //     github.com/no-witness-labs/lucid-evolution
-            //   </Link>
-            //   for more information.
-            // </Banner>}
-            navbar={<Navbar
+const RootLayout: FC<{ children: ReactNode }> = async ({ children }) => {
+  const pageMap = await getPageMap();
+  return (
+    <html lang="en" dir="ltr" suppressHydrationWarning>
+      <Head />
+      <body>
+        <Layout
+          // banner={<Banner dismissible={false}>
+          //   🎉 Lucid-Evolution 2.0 is released. Visit{' '}
+          //   <Link href="https://github.com/no-witness-labs/lucid-evolution" className="text-current!">
+          //     github.com/no-witness-labs/lucid-evolution
+          //   </Link>
+          //   for more information.
+          // </Banner>}
+          navbar={
+            <Navbar
               logo={<Logo />}
               projectLink="https://github.com/no-witness-labs/lucid-evolution"
               chatLink="https://discord.gg/s89P9gpEff"
-            />}
-            pageMap={pageMap}
-            docsRepositoryBase="https://github.com/no-witness-labs/lucid-evolution"
-            editLink="Edit this page on GitHub"
-            sidebar={{
-              autoCollapse: false,
-              defaultMenuCollapseLevel: 1,
-              defaultOpen: true,
-              toggleButton: false,
-            }}
-            footer={<Footer />}
-            toc={{
-              extraContent: (
-                <>
-                  {/* <b className="mt-2 text-xs">Sponsored by:</b>
+            />
+          }
+          pageMap={pageMap}
+          docsRepositoryBase="https://github.com/no-witness-labs/lucid-evolution"
+          editLink="Edit this page on GitHub"
+          sidebar={{
+            autoCollapse: false,
+            defaultMenuCollapseLevel: 1,
+            defaultOpen: true,
+            toggleButton: false,
+          }}
+          footer={<Footer />}
+          toc={{
+            extraContent: (
+              <>
+                {/* <b className="mt-2 text-xs">Sponsored by:</b>
                   <Anchor href="https://xyflow.com?utm_source=nextra.site&utm_campaign=nextra&utm_content=sidebarLink">
                     <Image
                       src={xyflow}
@@ -90,18 +86,18 @@ const RootLayout: FC<{ children: ReactNode; }> =
                       className="nextra-border rounded-sm border"
                     />
                   </Anchor> */}
-                </>
-              )
-            }}
-            nextThemes={{
-              defaultTheme: "dark",
-            }}
-          >
-            {children}
-          </Layout>
-        </body>
-      </html>
-    );
-  };
+              </>
+            ),
+          }}
+          nextThemes={{
+            defaultTheme: "dark",
+          }}
+        >
+          {children}
+        </Layout>
+      </body>
+    </html>
+  );
+};
 
 export default RootLayout;

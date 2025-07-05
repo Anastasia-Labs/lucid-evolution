@@ -48,8 +48,8 @@ export default function AnimatedCode({ code, style }) {
       setIsMobile(window.innerWidth <= 768);
     };
     checkMobile();
-    window.addEventListener('resize', checkMobile);
-    return () => window.removeEventListener('resize', checkMobile);
+    window.addEventListener("resize", checkMobile);
+    return () => window.removeEventListener("resize", checkMobile);
   }, []);
 
   useEffect(() => {
@@ -146,7 +146,6 @@ export default function AnimatedCode({ code, style }) {
       isMounted = false;
       clearInterval(cursorInterval);
     };
-
   }, [code, fastForwardSection, normalTypingSection]);
 
   useEffect(() => {
@@ -165,7 +164,6 @@ export default function AnimatedCode({ code, style }) {
         cancelAnimationFrame(animationFrameId);
       }
     };
-
   }, [isSubmitting]);
 
   const allKeywords = [...grayKeywords, ...highlightedKeywords];
@@ -206,259 +204,276 @@ export default function AnimatedCode({ code, style }) {
     </svg>
   );
 
-  return <div
-    className="w-[calc(100dvw-32px)] md:w-[44dvw]"
-    style={{
-      position: "relative",
-      height: componentHeight,
-      overflow: "hidden",
-      borderRadius: "8px",
-      fontFamily: 'Consolas, Monaco, "Andale Mono", "Ubuntu Mono", monospace',
-      boxShadow: "0 4px 6px rgba(0, 0, 0, 0.1)",
-      fontSize: isMobile ? "11px" : "14px",
-      ...style,
-    }}
-  >
-    {/* IDE-like header with gradient */}
+  return (
     <div
-      style={{
-        background: "linear-gradient(to right, #2a2a2a, #3a3a3a)",
-        padding: "8px 16px",
-        height: headerHeight,
-        borderTopLeftRadius: "8px",
-        borderTopRightRadius: "8px",
-        display: "flex",
-        alignItems: "center",
-        borderBottom: "1px solid #444",
-      }}
-    >
-      <span
-        style={{
-          color: "rgba(255, 255, 255, 0.6)",
-          fontSize: isMobile ? "11px" : "14px",
-          display: "flex",
-          alignItems: "center",
-          fontWeight: "400",
-        }} >
-        <svg
-          width="16"
-          height="16"
-          viewBox="0 0 24 24"
-          fill="none"
-          xmlns="http://www.w3.org/2000/svg"
-          style={{ marginRight: "8px", opacity: 0.6 }} >
-          <path
-            d="M13 9V3.5L18.5 9M6 2C4.89 2 4 2.89 4 4V20C4 21.11 4.89 22 6 22H18C19.11 22 20 21.11 20 20V8L14 2H6Z"
-            fill="currentColor"
-          />
-        </svg>
-        makePayment.ts
-      </span>
-    </div>
-
-    {/* Code content */}
-    <div
+      className="w-[calc(100dvw-32px)] md:w-[44dvw]"
       style={{
         position: "relative",
-        backgroundColor: "#1e1e1e",
-        height: `calc(100% - ${headerHeight})`,
-        display: "flex",
-        flexDirection: "column",
+        height: componentHeight,
+        overflow: "hidden",
+        borderRadius: "8px",
+        fontFamily: 'Consolas, Monaco, "Andale Mono", "Ubuntu Mono", monospace',
+        boxShadow: "0 4px 6px rgba(0, 0, 0, 0.1)",
+        fontSize: isMobile ? "11px" : "14px",
+        ...style,
       }}
     >
-      <pre
-        style={{
-          backgroundColor: "transparent",
-          height: codeHeight,
-          overflow: "auto",
-          margin: 0,
-          padding: isMobile ? "12px" : "16px",
-          flexGrow: 1,
-        }}
-      >
-        <code
-          style={{
-            fontSize: isMobile ? "11px" : "14px",
-            whiteSpace: "pre-wrap",
-            wordBreak: "break-all",
-            overflowWrap: "break-word",
-            display: "block",
-            lineHeight: `${lineHeight}em`,
-            fontFamily:
-              'SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace',
-          }}
-        >
-          {displayedCode.split("\n").map((line, lineIndex) => (
-            <div
-              key={lineIndex}
-              style={{
-                minHeight: "1.3em",
-                display: "flex",
-                flexWrap: "wrap",
-              }}
-            >
-              {line
-                ? line.split(keywordRegex).map((part, partIndex) => {
-                  let style: CSSProperties = {};
-                  if (grayKeywords.includes(part)) {
-                    style.color = "gray";
-                  } else if (highlightedKeywords.includes(part)) {
-                    style.color = "#ff6b6b";
-                  }
-                  return (
-                    <span key={partIndex} style={style} className="text-white">
-                      {part}
-                    </span>
-                  );
-                })
-                : null}
-              {lineIndex === displayedCode.split("\n").length - 1 &&
-                isCursorBlinking && (
-                  <span
-                    style={{
-                      borderLeft: showCursor ? "2px solid #fff" : "none",
-                      marginLeft: "2px",
-                      animation: "blink 0.7s infinite",
-                    }}
-                  >
-                    &nbsp;
-                  </span>
-                )}
-            </div>
-          ))}
-        </code>
-      </pre>
+      {/* IDE-like header with gradient */}
       <div
-        className="overflow-hidden"
         style={{
-          padding: "12px 16px",
-          backgroundColor: "#2d2d2d",
-          borderBottomLeftRadius: "8px",
-          borderBottomRightRadius: "8px",
-          fontFamily: 'Consolas, Monaco, "Andale Mono", "Ubuntu Mono", monospace',
-          fontSize: isMobile ? "11px" : "14px",
-          height: terminalHeight,
-          // overflowY: "auto",
+          background: "linear-gradient(to right, #2a2a2a, #3a3a3a)",
+          padding: "8px 16px",
+          height: headerHeight,
+          borderTopLeftRadius: "8px",
+          borderTopRightRadius: "8px",
           display: "flex",
-          flexDirection: "column",
-          justifyContent: "flex-start",
+          alignItems: "center",
+          borderBottom: "1px solid #444",
         }}
       >
-        <div
+        <span
           style={{
-            color: "#b3b3b3",
-            marginBottom: "8px",
+            color: "rgba(255, 255, 255, 0.6)",
+            fontSize: isMobile ? "11px" : "14px",
             display: "flex",
             alignItems: "center",
-            paddingTop: isMobile ? "0px" : "6px",
+            fontWeight: "400",
           }}
         >
-          <span style={{ color: "#ff6b6b", marginRight: "4px" }}>λ</span>
-          <span style={{ color: "rgba(255, 255, 255, 0.4)", marginRight: "8px" }}>{">"}</span>
-          {(typedCommand || isCommandFullyTyped) && (
-            <span
-              style={{
-                transition: "text-shadow 0.3s ease-in-out",
-                textShadow: isGlowing
-                  ? "0 0 5px rgba(86, 156, 214, 0.60)"
-                  : "none",
-              }}
-            >
-              {isCommandFullyTyped ? (
-                <>
-                  <span
-                    style={{
-                      color: startColorTransition ? "#ff6b6b" : "#b3b3b3",
-                      transition: "color 0.5s ease-in-out",
-                    }}
-                  >
-                    run
-                  </span>
-                  <span style={{ color: "#b3b3b3" }}>{" "}makePayment.ts</span>
-                </>
-              ) : (
-                <span style={{ color: "#b3b3b3" }}>{typedCommand}</span>
-              )}
-            </span>
-          )}
-          {isSubmitting && <LoadingSpinner />}
-        </div>
-        {showConfirmation && (
-          <div style={{ animation: "fadeIn 0.5s ease-in-out" }}>
-            <div
-              className="items-center"
-              style={{
-                maxWidth: isMobile ? "100%" : "49%",
-                // margin: isMobile ? "4px 0" : "0 0px",
-                padding: "8px",
-                borderRadius: "4px",
-                backgroundColor: "rgba(255, 255, 255, 0.05)",
-                color: "#b3b3b3",
-                display: "flex",
-                // flexDirection: isMobile ? "column" : "row",
-                alignItems: "flex-start",
-                fontSize: isMobile ? "10px" : "inherit",
-              }}
-            >
-              <span className="my-auto" style={{ marginRight: "5px", whiteSpace: "nowrap" }}>
-                Tx Hash:
-              </span>
-              <span
-                style={{
-                  color: "#ff6b6b",
-                  background: "rgba(255, 107, 107, 0.1)",
-                  padding: "2px 4px",
-                  borderRadius: "2px",
-                  wordBreak: "break-all",
-                }}
-              >
-                your_tx_hash
-              </span>
-            </div>
-            <div
-              style={{
-                maxWidth: isMobile ? "100%" : "49%",
-                margin: "4px 0",
-                padding: "8px",
-                borderRadius: "4px",
-                backgroundColor: "rgba(46, 204, 113, 0.1)",
-                display: "flex",
-                alignItems: "center",
-              }}
-            >
-              <SuccessIcon />
-              <span
-                className="whitespace-pre"
-                style={{
-                  color: "#2ecc71",
-                  fontFamily: '"Segoe UI", Tahoma, Geneva, Verdana, sans-serif',
-                  fontSize: isMobile ? "11px" : "14px",
-                  fontWeight: "600",
-                }}
-              >
-                Transaction submitted successfully!
-              </span>
-            </div>
-          </div>
-        )}
+          <svg
+            width="16"
+            height="16"
+            viewBox="0 0 24 24"
+            fill="none"
+            xmlns="http://www.w3.org/2000/svg"
+            style={{ marginRight: "8px", opacity: 0.6 }}
+          >
+            <path
+              d="M13 9V3.5L18.5 9M6 2C4.89 2 4 2.89 4 4V20C4 21.11 4.89 22 6 22H18C19.11 22 20 21.11 20 20V8L14 2H6Z"
+              fill="currentColor"
+            />
+          </svg>
+          makePayment.ts
+        </span>
       </div>
 
-      {/* Progress bar */}
-      {(isSubmitting || progress > 0) && (
-        <div
+      {/* Code content */}
+      <div
+        style={{
+          position: "relative",
+          backgroundColor: "#1e1e1e",
+          height: `calc(100% - ${headerHeight})`,
+          display: "flex",
+          flexDirection: "column",
+        }}
+      >
+        <pre
           style={{
-            position: "absolute",
-            top: 0,
-            left: 0,
-            right: 0,
-            height: "2px",
-            background: "linear-gradient(to right, #c0392b, #e74c3c)",
-            width: `${progress}%`,
-            transition: "width 0.1s linear",
-            zIndex: 10,
+            backgroundColor: "transparent",
+            height: codeHeight,
+            overflow: "auto",
+            margin: 0,
+            padding: isMobile ? "12px" : "16px",
+            flexGrow: 1,
           }}
-        />
-      )}
+        >
+          <code
+            style={{
+              fontSize: isMobile ? "11px" : "14px",
+              whiteSpace: "pre-wrap",
+              wordBreak: "break-all",
+              overflowWrap: "break-word",
+              display: "block",
+              lineHeight: `${lineHeight}em`,
+              fontFamily:
+                'SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace',
+            }}
+          >
+            {displayedCode.split("\n").map((line, lineIndex) => (
+              <div
+                key={lineIndex}
+                style={{
+                  minHeight: "1.3em",
+                  display: "flex",
+                  flexWrap: "wrap",
+                }}
+              >
+                {line
+                  ? line.split(keywordRegex).map((part, partIndex) => {
+                      let style: CSSProperties = {};
+                      if (grayKeywords.includes(part)) {
+                        style.color = "gray";
+                      } else if (highlightedKeywords.includes(part)) {
+                        style.color = "#ff6b6b";
+                      }
+                      return (
+                        <span
+                          key={partIndex}
+                          style={style}
+                          className="text-white"
+                        >
+                          {part}
+                        </span>
+                      );
+                    })
+                  : null}
+                {lineIndex === displayedCode.split("\n").length - 1 &&
+                  isCursorBlinking && (
+                    <span
+                      style={{
+                        borderLeft: showCursor ? "2px solid #fff" : "none",
+                        marginLeft: "2px",
+                        animation: "blink 0.7s infinite",
+                      }}
+                    >
+                      &nbsp;
+                    </span>
+                  )}
+              </div>
+            ))}
+          </code>
+        </pre>
+        <div
+          className="overflow-hidden"
+          style={{
+            padding: "12px 16px",
+            backgroundColor: "#2d2d2d",
+            borderBottomLeftRadius: "8px",
+            borderBottomRightRadius: "8px",
+            fontFamily:
+              'Consolas, Monaco, "Andale Mono", "Ubuntu Mono", monospace',
+            fontSize: isMobile ? "11px" : "14px",
+            height: terminalHeight,
+            // overflowY: "auto",
+            display: "flex",
+            flexDirection: "column",
+            justifyContent: "flex-start",
+          }}
+        >
+          <div
+            style={{
+              color: "#b3b3b3",
+              marginBottom: "8px",
+              display: "flex",
+              alignItems: "center",
+              paddingTop: isMobile ? "0px" : "6px",
+            }}
+          >
+            <span style={{ color: "#ff6b6b", marginRight: "4px" }}>λ</span>
+            <span
+              style={{ color: "rgba(255, 255, 255, 0.4)", marginRight: "8px" }}
+            >
+              {">"}
+            </span>
+            {(typedCommand || isCommandFullyTyped) && (
+              <span
+                style={{
+                  transition: "text-shadow 0.3s ease-in-out",
+                  textShadow: isGlowing
+                    ? "0 0 5px rgba(86, 156, 214, 0.60)"
+                    : "none",
+                }}
+              >
+                {isCommandFullyTyped ? (
+                  <>
+                    <span
+                      style={{
+                        color: startColorTransition ? "#ff6b6b" : "#b3b3b3",
+                        transition: "color 0.5s ease-in-out",
+                      }}
+                    >
+                      run
+                    </span>
+                    <span style={{ color: "#b3b3b3" }}> makePayment.ts</span>
+                  </>
+                ) : (
+                  <span style={{ color: "#b3b3b3" }}>{typedCommand}</span>
+                )}
+              </span>
+            )}
+            {isSubmitting && <LoadingSpinner />}
+          </div>
+          {showConfirmation && (
+            <div style={{ animation: "fadeIn 0.5s ease-in-out" }}>
+              <div
+                className="items-center"
+                style={{
+                  maxWidth: isMobile ? "100%" : "49%",
+                  // margin: isMobile ? "4px 0" : "0 0px",
+                  padding: "8px",
+                  borderRadius: "4px",
+                  backgroundColor: "rgba(255, 255, 255, 0.05)",
+                  color: "#b3b3b3",
+                  display: "flex",
+                  // flexDirection: isMobile ? "column" : "row",
+                  alignItems: "flex-start",
+                  fontSize: isMobile ? "10px" : "inherit",
+                }}
+              >
+                <span
+                  className="my-auto"
+                  style={{ marginRight: "5px", whiteSpace: "nowrap" }}
+                >
+                  Tx Hash:
+                </span>
+                <span
+                  style={{
+                    color: "#ff6b6b",
+                    background: "rgba(255, 107, 107, 0.1)",
+                    padding: "2px 4px",
+                    borderRadius: "2px",
+                    wordBreak: "break-all",
+                  }}
+                >
+                  your_tx_hash
+                </span>
+              </div>
+              <div
+                style={{
+                  maxWidth: isMobile ? "100%" : "49%",
+                  margin: "4px 0",
+                  padding: "8px",
+                  borderRadius: "4px",
+                  backgroundColor: "rgba(46, 204, 113, 0.1)",
+                  display: "flex",
+                  alignItems: "center",
+                }}
+              >
+                <SuccessIcon />
+                <span
+                  className="whitespace-pre"
+                  style={{
+                    color: "#2ecc71",
+                    fontFamily:
+                      '"Segoe UI", Tahoma, Geneva, Verdana, sans-serif',
+                    fontSize: isMobile ? "11px" : "14px",
+                    fontWeight: "600",
+                  }}
+                >
+                  Transaction submitted successfully!
+                </span>
+              </div>
+            </div>
+          )}
+        </div>
+
+        {/* Progress bar */}
+        {(isSubmitting || progress > 0) && (
+          <div
+            style={{
+              position: "absolute",
+              top: 0,
+              left: 0,
+              right: 0,
+              height: "2px",
+              background: "linear-gradient(to right, #c0392b, #e74c3c)",
+              width: `${progress}%`,
+              transition: "width 0.1s linear",
+              zIndex: 10,
+            }}
+          />
+        )}
+      </div>
     </div>
-  </div>;
-};
+  );
+}

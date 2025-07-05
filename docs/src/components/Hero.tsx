@@ -69,45 +69,42 @@ export default function Hero({
       isMounted = false;
       clearInterval(cursorInterval);
     };
-
   }, []);
 
-  const buttonStyle =
-    (isHovered, isPrimary): CSSProperties => ({
-      padding: "0.6rem 1.2rem",
-      backgroundColor: isPrimary
-        ? isHovered
-          ? "#a50000"
-          : "#8b0000"
-        : "transparent",
-      color: isPrimary ? "white" : "#8b0000",
-      textDecoration: "none",
-      borderRadius: "6px",
-      transition: "all 0.3s ease",
-      border: isPrimary ? "none" : "2px solid #8b0000",
-      boxShadow: isHovered
-        ? "0 4px 6px rgba(0, 0, 0, 0.1)"
-        : "0 2px 4px rgba(0, 0, 0, 0.05)",
-      transform: isHovered ? "translateY(-1px)" : "translateY(0)",
-      fontWeight: "600",
-      fontSize: "0.8rem",
-      letterSpacing: "0.5px",
-      display: "inline-flex",
-      alignItems: "center",
-      justifyContent: "center",
-      textAlign: "center",
-      margin: "0 0.5rem",
-      fontFamily:
-        "'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif",
-      textTransform: "uppercase",
-      minWidth: "10px",
-      gap: "8px",
-    });
+  const buttonStyle = (isHovered, isPrimary): CSSProperties => ({
+    padding: "0.6rem 1.2rem",
+    backgroundColor: isPrimary
+      ? isHovered
+        ? "#a50000"
+        : "#8b0000"
+      : "transparent",
+    color: isPrimary ? "white" : "#8b0000",
+    textDecoration: "none",
+    borderRadius: "6px",
+    transition: "all 0.3s ease",
+    border: isPrimary ? "none" : "2px solid #8b0000",
+    boxShadow: isHovered
+      ? "0 4px 6px rgba(0, 0, 0, 0.1)"
+      : "0 2px 4px rgba(0, 0, 0, 0.05)",
+    transform: isHovered ? "translateY(-1px)" : "translateY(0)",
+    fontWeight: "600",
+    fontSize: "0.8rem",
+    letterSpacing: "0.5px",
+    display: "inline-flex",
+    alignItems: "center",
+    justifyContent: "center",
+    textAlign: "center",
+    margin: "0 0.5rem",
+    fontFamily:
+      "'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif",
+    textTransform: "uppercase",
+    minWidth: "10px",
+    gap: "8px",
+  });
 
   const [firstPart, secondPart] = title.split(" ");
 
   return (
-
     <div style={{ textAlign: "center" }}>
       <h1
         style={{
@@ -117,7 +114,8 @@ export default function Hero({
           // color: "white",
         }}
       >
-        {firstPart}{displayText.length ? "-" : " "}
+        {firstPart}
+        {displayText.length ? "-" : " "}
         <span
           style={{
             color: textColor,
@@ -155,7 +153,8 @@ export default function Hero({
           onMouseEnter={() => setIsHovered1(true)}
           onMouseLeave={() => setIsHovered1(false)}
         >
-          <span style={{ fontSize: "1em" }}>&#x21b3;</span> {/* Arrow (Unicode) */}
+          <span style={{ fontSize: "1em" }}>&#x21b3;</span>{" "}
+          {/* Arrow (Unicode) */}
           {ctaText}
         </a>
         <a

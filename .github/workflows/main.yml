@@ -49,7 +49,7 @@ jobs:
           node-version: 20
           cache: "pnpm"
 
-      - run: pnpm i --no-frozen-lockfile
+      - run: pnpm i
       - run: pnpm run build
       - run: pnpm run lint
       - run: pnpm run format-check

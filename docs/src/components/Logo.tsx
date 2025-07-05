@@ -13,16 +13,23 @@ export default function Logo() {
     setMounted(() => true);
   }, []);
 
-  return <Image
-    src={
-      !mounted ? "/lucid-evolution/al-logo.png" :
-        resolvedTheme === "light" ? "/lucid-evolution/al-logo-dark.png" :
-          resolvedTheme === "dark" ? "/lucid-evolution/al-logo.png" :
-            systemTheme === "light" ? "/lucid-evolution/al-logo-dark.png" :
-              "/lucid-evolution/al-logo.png"}
-    alt="Anastasia Labs Logo"
-    className="mr-4"
-    width="200"
-    height="46"
-  />;
+  return (
+    <Image
+      src={
+        !mounted
+          ? "/lucid-evolution/al-logo.png"
+          : resolvedTheme === "light"
+            ? "/lucid-evolution/al-logo-dark.png"
+            : resolvedTheme === "dark"
+              ? "/lucid-evolution/al-logo.png"
+              : systemTheme === "light"
+                ? "/lucid-evolution/al-logo-dark.png"
+                : "/lucid-evolution/al-logo.png"
+      }
+      alt="Anastasia Labs Logo"
+      className="mr-4"
+      width="200"
+      height="46"
+    />
+  );
 }
