@@ -9,6 +9,9 @@
 @theme {}
 
 :root,
+:root {
+  --nextra-primary: #DD7722 !important;
+}
 :host {
   --nextra-primary-hue: 0 !important;
 }
@@ -126,9 +129,9 @@ code.text-\[\.9em\] {
 
 /* adds labels to the sidebar links */
 .badge-new {
-  @apply dark:after:border-red-200/30 dark:after:bg-red-900/30 dark:after:text-red-200;
+  @apply dark:after:border-orange-200/30 dark:after:bg-orange-900/30 dark:after:text-orange-200;
 
   &:after {
-    @apply ms-1.5 rounded-full border border-red-200 bg-red-100 px-1.5 text-xs font-bold text-red-900 content-["New"];
+    @apply ms-1.5 rounded-full border border-orange-200 bg-orange-100 px-1.5 text-xs font-bold text-orange-900 content-["New"];
   }
 }
