@@ -1,15 +1,15 @@
 blank_issues_enabled: false
 contact_links:
   - name: ❓Questions about using Lucid Evolution
-    url: https://github.com/Anastasia-Labs/lucid-evolution/discussions/categories/q-a
+    url: https://github.com/no-witness-labs/lucid-evolution/discussions/categories/q-a
     about: Please ask and answer questions in GitHub Discussions under Q&A category
     
   - name: 📚 Documentation
-    url: https://anastasia-labs.github.io/lucid-evolution/
+    url: https://no-witness-labs.github.io/lucid-evolution/
     about: Check the documentation first - your question might already be answered
 
   - name: 🧠 Ideas & Suggestions
-    url: https://github.com/Anastasia-Labs/lucid-evolution/discussions/categories/ideas
+    url: https://github.com/no-witness-labs/lucid-evolution/discussions/categories/ideas
     about: Share ideas and suggestions in GitHub Discussions under Ideas category
 
   - name: 🗨️ Community Chat

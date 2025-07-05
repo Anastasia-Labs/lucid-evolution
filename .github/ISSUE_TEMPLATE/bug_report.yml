@@ -73,9 +73,9 @@ body:
       label: Validations
       description: Before submitting the issue, please make sure you do the following
       options:
-        - label: Read the [documentation](https://anastasia-labs.github.io/lucid-evolution/)
+        - label: Read the [documentation](https://no-witness-labs.github.io/lucid-evolution/)
           required: true
-        - label: Check that there isn't already an [issue](https://github.com/Anastasia-Labs/lucid-evolution/issues) that reports the same bug to avoid creating a duplicate
+        - label: Check that there isn't already an [issue](https://github.com/no-witness-labs/lucid-evolution/issues) that reports the same bug to avoid creating a duplicate
           required: true
         - label: The provided reproduction is a [minimal reproducible](https://stackoverflow.com/help/minimal-reproducible-example) example of the bug
           required: true

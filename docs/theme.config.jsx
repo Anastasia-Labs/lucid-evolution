@@ -4,10 +4,10 @@ import Script from "next/script";
 
 export default {
   project: {
-    link: "https://github.com/Anastasia-Labs/lucid-evolution",
+    link: "https://github.com/no-witness-labs/lucid-evolution",
   },
   docsRepositoryBase:
-    "https://github.com/Anastasia-Labs/lucid-evolution/tree/main/docs",
+    "https://github.com/no-witness-labs/lucid-evolution/tree/main/docs",
 
   useNextSeoProps() {
     const { asPath } = useRouter();
