@@ -105,7 +105,7 @@ Many unit tests and emulator-based tests will run without external API keys. The
 
 ## Reporting Bugs
 
-We use GitHub issues to track bugs. Report a bug by [opening a new issue](https://github.com/Anastasia-Labs/lucid-evolution/issues/new).
+We use GitHub issues to track bugs. Report a bug by [opening a new issue](https://github.com/no-witness-labs/lucid-evolution/issues/new).
 
 ### Bug Report Guidelines
 

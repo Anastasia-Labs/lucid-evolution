@@ -5,8 +5,8 @@
 </p>
 
 <p align="center">
-  <a href="https://github.com/Anastasia-Labs/lucid-evolution/actions/workflows/main.yml">
-    <img src="https://github.com/Anastasia-Labs/lucid-evolution/actions/workflows/main.yml/badge.svg" alt="Build Status"/>
+  <a href="https://github.com/no-witness-labs/lucid-evolution/actions/workflows/main.yml">
+    <img src="https://github.com/no-witness-labs/lucid-evolution/actions/workflows/main.yml/badge.svg" alt="Build Status"/>
   </a>
   <img src="https://img.shields.io/npm/dy/%40lucid-evolution%2Flucid" alt="NPM Downloads"/>
   <a href="https://discord.gg/s89P9gpEff">
@@ -132,7 +132,7 @@ There are a growing number of projects that are built on top of `lucid-evolution
 
 ---
 
-## 📦 [Install](https://anastasia-labs.github.io/lucid-evolution/install)
+## 📦 [Install](https://no-witness-labs.github.io/lucid-evolution/install)
 
 ```bash
 pnpm i @lucid-evolution/lucid
@@ -175,16 +175,16 @@ console.log("Transaction Submitted:", txHash);
 
 ## 📚 Documentation
 
-For comprehensive documentation including API references, examples, and guides, visit our [official documentation site](https://anastasia-labs.github.io/lucid-evolution/).
+For comprehensive documentation including API references, examples, and guides, visit our [official documentation site](https://no-witness-labs.github.io/lucid-evolution/).
 
-- 🔍 [Core Concepts](https://anastasia-labs.github.io/lucid-evolution/documentation/core-concepts/instantiate-evolution)
-- 🧠 [Deep Dives](https://anastasia-labs.github.io/lucid-evolution/documentation/deep-dives/pay-methods)
-- ⚙️ [Under the Hood](https://anastasia-labs.github.io/lucid-evolution/documentation/under-the-hood)
+- 🔍 [Core Concepts](https://no-witness-labs.github.io/lucid-evolution/documentation/core-concepts/instantiate-evolution)
+- 🧠 [Deep Dives](https://no-witness-labs.github.io/lucid-evolution/documentation/deep-dives/pay-methods)
+- ⚙️ [Under the Hood](https://no-witness-labs.github.io/lucid-evolution/documentation/under-the-hood)
 
 ## 👥 Community and Support
 
 - [Discord Community](https://discord.gg/s89P9gpEff): Join for discussions, support, and updates
-- [GitHub Issues](https://github.com/Anastasia-Labs/lucid-evolution/issues): Report bugs or request features
+- [GitHub Issues](https://github.com/no-witness-labs/lucid-evolution/issues): Report bugs or request features
 
 ## 🤝 Contributing
 
@@ -193,7 +193,7 @@ We welcome contributions to Lucid Evolution! Please check our [CONTRIBUTING.md](
 ### Getting Started
 
 ```bash
-git clone https://github.com/Anastasia-Labs/lucid-evolution.git
+git clone https://github.com/no-witness-labs/lucid-evolution.git
 ```
 
 ```bash
