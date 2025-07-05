@@ -32,7 +32,7 @@ export const metadata: Metadata = {
     type: "website",
   },
   other: {
-    "msapplication-TileColor": "#a04040",
+    "msapplication-TileColor": "#DD7722",
   },
   twitter: {
     site: "https://x.com/nowitnesslabs",
@@ -41,7 +41,8 @@ export const metadata: Metadata = {
     // https://github.com/vercel/next.js/discussions/50189#discussioncomment-10826632
     canonical: "./",
   },
-  icons: "https://avatars.githubusercontent.com/u/125997902?s=200&v=4",
+  icons:
+    "https://pbs.twimg.com/profile_images/1935741005606645760/-PdnrSwl_400x400.jpg",
 };
 
 const RootLayout: FC<{ children: ReactNode }> = async ({ children }) => {

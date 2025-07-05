@@ -18,10 +18,10 @@ const IndexPage: FC = () => {
     <div className="flex flex-col items-center">
       <header className="flex flex-col justify-center h-dvh -mt-16">
         <Image
-          src="/lucid-evolution/lucid-evolution-al-red.png"
+          src="/lucid-evolution/lucid-evolution-no-witness-labs.png"
           alt="Lucid-Evolution Logo"
-          width={676}
-          height={113}
+          width={500}
+          height={100}
         />
 
         <div className="fade-in">
@@ -44,7 +44,7 @@ const IndexPage: FC = () => {
                 style={{
                   maxWidth: "100%",
                   overflowX: "auto",
-                  border: "1px solid #8b0000",
+                  border: "1px solid #DD7722",
                   borderRadius: "8px",
                   boxShadow: "0 20px 40px rgba(0,0,0,0.1)",
                   marginBottom: "2rem",
@@ -73,7 +73,7 @@ console.log("Transaction Submitted:", txHash);`}
 
               <div className="w-[calc(100dvw-32px)] md:w-[22dvw]">
                 <h2 className="font-bold text-[1.8rem] mb-4">
-                  Why <span className="text-[#ad1f1e]">Lucid-Evolution</span>?
+                  Why <span className="text-[#DD7722]">Lucid-Evolution</span>?
                 </h2>
 
                 <FaqBox title="Improved APIs" open>
@@ -134,7 +134,7 @@ console.log("Transaction Submitted:", txHash);`}
         </div>
 
         <div className="flex flex-col items-center w-full">
-          <h2 className="font-bold text-4xl text-[#ad1f1e] tracking-tight">
+          <h2 className="font-bold text-4xl text-[#DD7722] tracking-tight">
             Quickstart
           </h2>
 
@@ -170,28 +170,8 @@ console.log("Transaction Submitted:", txHash);`}
           </div>
         </div>
 
-        <div className="flex flex-col gap-6 items-center text-center w-[calc(100dvw-32px)] md:w-full">
-          <h2 className="font-bold text-4xl tracking-tight">
-            See <span className="text-[#ad1f1e]">Lucid-Evolution</span> in
-            Motion
-          </h2>
-
-          <div className="aspect-video w-[calc(100dvw-32px)] md:w-1/2">
-            <iframe
-              width="100%"
-              height="100%"
-              src="https://www.youtube-nocookie.com/embed/aCV7XzyMUNw"
-              title="Lucid-Evolution Introduction"
-              // frameBorder="0 // deprecated
-              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-              referrerPolicy="strict-origin-when-cross-origin"
-              allowFullScreen
-            />
-          </div>
-        </div>
-
         <div className="flex flex-col items-center w-full gap-3">
-          <h2 className="font-bold text-4xl text-[#ad1f1e] tracking-tight">
+          <h2 className="font-bold text-4xl text-[#DD7722] tracking-tight">
             F.A.Q.
           </h2>
 

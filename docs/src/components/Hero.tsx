@@ -38,7 +38,7 @@ export default function Hero({
         await new Promise((resolve) => setTimeout(resolve, 50));
       }
 
-      setTextColor("#8b0000");
+      setTextColor("#DD7722");
 
       for (let i = 0; i <= fullText.length; i++) {
         if (!isMounted) break;
@@ -75,14 +75,14 @@ export default function Hero({
     padding: "0.6rem 1.2rem",
     backgroundColor: isPrimary
       ? isHovered
-        ? "#a50000"
-        : "#8b0000"
+        ? "#DD7722"
+        : "#DD7722"
       : "transparent",
-    color: isPrimary ? "white" : "#8b0000",
+    color: isPrimary ? "white" : "#DD7722",
     textDecoration: "none",
     borderRadius: "6px",
     transition: "all 0.3s ease",
-    border: isPrimary ? "none" : "2px solid #8b0000",
+    border: isPrimary ? "none" : "2px solid #DD7722",
     boxShadow: isHovered
       ? "0 4px 6px rgba(0, 0, 0, 0.1)"
       : "0 2px 4px rgba(0, 0, 0, 0.05)",
