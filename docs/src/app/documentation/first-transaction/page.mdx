@@ -1,0 +1,67 @@
+import { Callout, Steps } from "nextra/components";
+
+# First Transaction
+
+A couple fundamentals to remember are that in Cardano's eUTxO model, a transaction can consume one or more UTxOs as inputs. Create one or more UTxOs as outputs and that a transaction must be balanced (sum of inputs = sum of outputs + fees).
+
+## Steps to Construct a Transaction
+
+<Steps>
+### Build
+
+Let's create a simple transaction where we send `5 ADA` to two recipients each:
+
+```js showLineNumbers
+const tx = await lucid
+  .newTx()
+  .pay.ToAddress("addr_test1...", { lovelace: 5_000_000n })
+  .pay.ToAddress("addr_test2...", { lovelace: 5_000_000n })
+  .complete();
+```
+
+### Sign
+
+```js showLineNumbers
+const signedTx = await tx.sign.withWallet().complete();
+```
+
+### Submit
+
+```js showLineNumbers
+const txHash = await signedTx.submit();
+```
+</Steps>
+
+<Callout type="warning">
+  Remember to select a [wallet](./wallet/) before attempting to build and submit transactions.
+</Callout>
+
+## Putting it all Together
+
+```js showLineNumbers
+import { Lucid, Koios, generateSeedPhrase } from "@lucid-evolution/lucid";
+
+async function firstTransaction() {
+  // Initialize Lucid with a provider
+  const lucid = await Lucid(
+    new Koios("https://preprod.koios.rest/api/v1"),
+    "Preprod",
+  );
+
+  const seedPhrase = generateSeedPhrase(); // BIP-39
+  lucid.selectWallet.fromSeed(seedPhrase); // Select a wallet for signing
+
+  // Build, sign and submit transaction
+  const tx = await lucid
+    .newTx()
+    .pay.ToAddress("addr_test1...", { lovelace: 5_000_000n }) // Pay 5 ADA to addr_test1...
+    .pay.ToAddress("addr_test2...", { lovelace: 5_000_000n }) // Pay 5 ADA to addr_test2...
+    .complete(); // Balance the transaction and initiate UTxO selection
+
+  const signedTx = await tx.sign.withWallet().complete();
+  const txHash = await signedTx.submit();
+
+  console.log("Transaction Submitted:", txHash);
+}
+```
+

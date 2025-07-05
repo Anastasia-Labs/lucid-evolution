@@ -1,0 +1,216 @@
+import { Callout } from "nextra/components";
+
+# Mint & Burn Assets
+
+Lucid-Evolution provides comprehensive tools for minting and burning tokens on the Cardano blockchain, supporting native scripts and Plutus-based minting policies.
+
+## Native Script
+
+The following is an example of how to mint tokens using a native script time-locking policy with the connected wallet as the required signer.
+
+```js showLineNumbers /mintAssets/ {12,15,33,51}
+import {
+  fromText,
+  mintingPolicyToId,
+  paymentCredentialOf,
+  scriptFromNative,
+  toUnit,
+  unixTimeToSlot,
+} from "@lucid-evolution/lucid";
+
+async function mintWithNativeScript() {
+  // `lucid` has been instantiated somewhere
+  const address = await lucid.wallet().address();
+  
+  // native script
+  const mintingPolicy = scriptFromNative({
+    type: "all",
+    scripts: [
+      {
+        type: "sig",
+        keyHash: paymentCredentialOf(address).hash, // the required signer
+      },
+      {
+        type: "before",
+        slot: unixTimeToSlot(
+          lucid.config().network, // "Mainnet" | "Preprod" | "Preview" | "Custom"
+          new Date.getTime() + 3_600_000, // 1 hour TTL
+        ),
+      },
+    ],
+  });
+  
+  // next, we derive the Policy ID
+  const policyId = mintingPolicyToId(mintingPolicy);
+  
+  // construct the transaction
+  const tx = await lucid
+    .newTx()
+    .mintAssets(
+      {
+        [toUnit(policyId, fromText("MyToken"))]: 1n,
+        [toUnit(policyId, fromText("MyOtherToken"))]: 1n,
+      }
+    )
+    .pay.ToAddress(
+      address,
+      {
+        [toUnit(policyId, fromText("MyToken"))]: 1n,
+      },
+    )
+    .validTo(new Date.getTime() + 1_800_000) // ~30 minutes
+    .attach.MintingPolicy(mintingPolicy)
+    .complete();
+  
+  // sign and submit the transaction
+  const signed = await tx.sign.withWallet().complete();
+  const txHash = await signed.submit();
+  
+  return txHash;
+}
+```
+
+## Plutus Script
+
+Plutus scripts offer more flexible validation logic for minting.
+
+```js showLineNumbers /mintAssets/ {11,14,20,25,29,36}
+import {
+  Constr,
+  Data,
+  fromText,
+  mintingPolicyToId,
+  toUnit,
+} from "@lucid-evolution/lucid";
+
+async function mintWithPlutusScript() {
+  // `lucid` has been instantiated somewhere
+  const address = await lucid.wallet().address();
+  
+  // Plutus script
+  const mintingPolicy: MintingPolicy = {
+    type: "PlutusV3",
+    script: "59099a590997010000...", // CBOR hex of compiled Plutus script
+  };
+  
+  // next, we derive the Policy ID
+  const policyId = mintingPolicyToId(mintingPolicy);
+  
+  // token asset name
+  const tokenName = "MyToken";
+  const assetName = fromText(tokenName);
+  const assetUnit = toUnit(policyId, assetName);
+  
+  // a redeemer must be provided when interacting with Plutus scripts
+  const redeemer = Data.to(
+    new Constr(0, [fromText("Some Redeemer")])
+  );
+  
+  // construct the transaction
+  const tx = await lucid
+    .newTx()
+    .mintAssets({ [assetUnit]: 1n }, redeemer)
+    .attach.MintingPolicy(mintingPolicy)
+    .complete();
+  
+  // sign and submit the transaction
+  const signed = await tx.sign.withWallet().complete();
+  const txHash = await signed.submit();
+  
+  return txHash;
+}
+```
+
+## CIP-68
+
+CIP-68 is a token standard that extends CIP-25 to provide richer metadata functionality.
+
+```js showLineNumbers /mintAssets/ {14,21,57}
+import {
+  Constr,
+  Data,
+  fromText,
+  MintingPolicy,
+  mintingPolicyToId,
+  SpendingValidator,
+  toUnit,
+  validatorToAddress,
+} from "@lucid-evolution/lucid";
+
+async function mintWithCIP68() {
+  // `lucid` has been instantiated somewhere
+  const address = await lucid.wallet().address();
+  
+  // token metadata fields
+  const tokenName = "Your Token Name";
+  const tokenImage = "ipfs://QmV0CID...";
+  
+  // CIP-68 metadata
+  const metadata = Data.fromJson({
+    name: tokenName,
+    image: tokenImage,
+    otherFields,
+  });
+  const version = BigInt(1);
+  const extra: Data[] = []; // Custom user defined plutus data
+  const cip68 = new Constr(0, [metadata, version, extra]);
+  
+  // CIP-68 utilizes datum to store the metadata
+  const datum = Data.to(cip68);
+  const redeemer = Data.void(); // Your CIP-0068 Script Redeemer
+  
+  // derive a contract address to put the metadatum UTxO
+  const spendingValidator: SpendingValidator = { type: "PlutusV3", script: YourCip0068Script };
+  const validatorAddress = validatorToAddress(network, spendingValidator);
+  
+  // derive the Policy ID
+  const mintingPolicy: MintingPolicy = { type: "PlutusV3", script: YourCip0068Script };
+  const policyID = mintingPolicyToId(mintingPolicy);
+  
+  // reference token and user token asset names pair
+  const assetName = fromText(tokenName);
+  const refUnit = toUnit(policyID, assetName, 100); // the reference token
+  const usrUnit = toUnit(policyID, assetName, label); // label: 222 | 333 | 444
+  
+  // construct the transaction
+  const tx = await lucid
+    .newTx()
+    .mintAssets(
+      {
+        [refUnit]: 1n,
+        [usrUnit]: BigInt(qty),
+      },
+      redeemer
+    )
+    .attach.MintingPolicy(mintingPolicy)
+    .pay.ToContract(
+      validatorAddress,
+      {
+        kind: "inline",
+        value: datum,
+      },
+      {
+        [refUnit]: 1n,
+      }
+    )
+    .complete();
+    
+  // sign and submit the transaction
+  const signed = await tx.sign.withWallet().complete();
+  const txHash = await signed.submit();
+  
+  return txHash;
+}
+```
+
+## Important Considerations
+
+There are several considerations when minting tokens:
+
+- Minting tokens creates them, but doesn't automatically send them to an address, use `.pay.ToAddress(){:js}` to send the newly minted tokens to a specific address. Otherwise, it will be sent to the `change address`
+- All assets minted in a single `.mintAssets(){:js}` call should be of the same Policy ID
+- You can chain multiple `.mintAssets(){:js}` calls if you need to mint assets with different Policy IDs
+- The minting policy must be attached to the transaction using `.attach.MintingPolicy(){:js}`
+- You can also refer to a UTxO holding the reference scripts
+- When using Plutus scripts, make sure to provide an appropriate redeemer
+

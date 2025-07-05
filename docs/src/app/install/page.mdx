@@ -1,0 +1,98 @@
+import { Callout, Cards, FileTree, Tabs } from "nextra/components";
+
+# Install Lucid-Evolution
+
+Lucid-Evolution is a powerful, modular framework for building Cardano applications off-chain. It provides developers with type-safe interfaces and utilities to interact with the Cardano blockchain, create transactions, and manage wallets without dealing with low-level complexities.
+
+## Prerequisites
+
+Before installing Lucid-Evolution, ensure your environment meets the prerequisites:
+
+- [**Node.js**](https://nodejs.org/): Version 18 or higher
+- **Package Manager**: [`pnpm`](https://pnpm.io/), [`npm`](https://www.npmjs.com/), [`yarn`](https://classic.yarnpkg.com/) or [`bun`](https://bun.sh/)
+
+## Installation
+
+Choose your preferred package manager to install Lucid-Evolution:
+
+<Tabs items={['pnpm', 'npm', 'yarn', 'bun']}>
+  <Tabs.Tab>
+    <div className="text-sm">
+      pnpm, or Performant Node Package Manager, is one of the main JavaScript package managers. It focuses on being a disk space-efficient alternative to npm. To install Lucid-Evolution, run:
+    </div>
+  
+    ```bash
+    pnpm i @lucid-evolution/lucid
+    ```
+  </Tabs.Tab>
+
+  <Tabs.Tab>
+    <div className="text-sm">
+      npm is a package manager for the JavaScript programming language. It is the default package manager for the JavaScript runtime environment Node.js. To install Lucid-Evolution, run:
+    </div>
+  
+    ```bash
+    npm i @lucid-evolution/lucid
+    ```
+  </Tabs.Tab>
+
+  <Tabs.Tab>
+    <div className="text-sm">
+      Yarn is one of the main JavaScript package managers. It is an alternative to the npm package manager aiming to solve consistency, security, and performance problems with large codebases. To install Lucid-Evolution, run:
+    </div>
+  
+    ```bash
+    yarn add @lucid-evolution/lucid
+    ```
+  </Tabs.Tab>
+
+  <Tabs.Tab>
+    <div className="text-sm">
+      Bun is a JavaScript runtime, package manager, test runner and bundler. It uses WebKit's JavaScriptCore as the JavaScript engine, unlike Node.js and Deno, which both use V8. To install Lucid-Evolution, run:
+    </div>
+  
+    ```bash
+    bun i @lucid-evolution/lucid
+    ```
+  </Tabs.Tab>
+</Tabs>
+
+## Package Structure
+
+Lucid Evolution uses a modular architecture to allow importing only what you need:
+
+<FileTree>
+  <FileTree.Folder name="lucid-evolution" defaultOpen>
+    <FileTree.Folder name="packages" defaultOpen>
+      <FileTree.File name="lucid-evolution/lucid ⇀ Main package for Lucid Evolution" />
+      <FileTree.File name="lucid-evolution/bip39 ⇀ Package for BIP-39 mnemonic code" />
+      <FileTree.File name="lucid-evolution/core-types ⇀ Core types used across Lucid Evolution packages" />
+      <FileTree.File name="lucid-evolution/core-utils ⇀ Core utilities used across Lucid Evolution packages" />
+      <FileTree.File name="lucid-evolution/crc8 ⇀ Package for CRC8 calculation" />
+      <FileTree.File name="lucid-evolution/plutus ⇀ Package for Plutus integration" />
+      <FileTree.File name="lucid-evolution/provider ⇀ Package for providing data " />
+      <FileTree.File name="lucid-evolution/sign_data ⇀ Package for signing data" />
+      <FileTree.File name="lucid-evolution/utils ⇀ Utility functions for Lucid Evolution" />
+      <FileTree.File name="lucid-evolution/wallet ⇀ Wallet package for Lucid Evolution" />
+    </FileTree.Folder>
+  </FileTree.Folder>
+</FileTree>
+
+<Callout type="info">
+  Installing the `lucid` package will automatically export all other packages in the library.
+</Callout>
+
+## Next Steps
+
+<Cards>
+  <Cards.Card
+    icon="📕"
+    title="Documentation"
+    href="/documentation/about"
+  />
+  <Cards.Card
+    icon="🔍"
+    title="Under the hood"
+    href="/documentation/under-the-hood"
+  />
+</Cards>

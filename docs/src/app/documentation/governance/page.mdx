@@ -1,0 +1,186 @@
+# Governance
+
+Conway era introduces significant on-chain governance features to the Cardano blockchain, as outlined in [CIP-1694](https://github.com/cardano-foundation/CIPs/tree/master/CIP-1694). These features enable ADA holders to participate in on-chain decisions through a system of delegation and direct voting.
+
+## ADA Holder
+
+An ADA holder can participate in on-chain governance by delegating the voting power to a Delegated Representative (DRep) or by becoming a DRep.
+
+### Delegating to a DRep
+
+The following is an example of how you can delegate voting power to a DRep:
+
+```js showLineNumbers {3,8}
+// you can convert a DRep ID to Credential
+const drepId = "drep1_...";
+const drepCredential = drepIDToCredential(drepId);
+
+// transaction construction
+await lucid
+  .newTx()
+  .delegate.VoteToDRep(rewardAddress, drepCredential)
+  .complete();
+
+// proceed with sign and submit tx...
+```
+
+### Becoming a DRep
+
+To become a Delegated Representative (DRep), you need a registered stake address. Here's how you can register the stake address:
+
+```js showLineNumbers {2,7}
+// you can query the reward address of the connected wallet
+const rewardAddress = await lucid.wallet().rewardAddress();
+
+// transaction construction
+await lucid
+  .newTx()
+  .register.DRep(rewardAddress)
+  .complete();
+
+// proceed with sign and submit tx...
+```
+
+## DRep
+
+A Delegated Representative (DRep) can accept voting delegation and participate directly in governance actions.
+
+### Update Info
+
+You can update DRep metadata like the following:
+
+```js showLineNumbers {2,7}
+// you can query the reward address of the connected wallet
+const rewardAddress = await lucid.wallet().rewardAddress();
+
+// transaction construction
+await lucid
+  .newTx()
+  .updateDRep(rewardAddress, anchor)
+  .complete();
+
+// proceed with sign and submit tx...
+```
+
+### Deregistration
+
+To deregister from a DRep, you can do the following:
+
+```js showLineNumbers {2,7}
+// you can query the reward address of the connected wallet
+const rewardAddress = await lucid.wallet().rewardAddress();
+
+// transaction construction
+await lucid
+  .newTx()
+  .deregister.DRep(rewardAddress)
+  .complete();
+
+// proceed with sign and submit tx...
+```
+
+### Script DRep
+
+For programmatic voting, you can create a script-based DRep:
+
+```js showLineNumbers {2,7,8}
+// you can query the reward address of the connected wallet
+const rewardAddress = await lucid.wallet().rewardAddress();
+
+// transaction construction
+await lucid
+  .newTx()
+  .register.DRep(rewardAddress)
+  .attach.Script(script)
+  .complete();
+
+// proceed with sign and submit tx...
+```
+
+**Use-cases**:
+
+- Voting according to predefined community policies
+- Implementing voting thresholds based on specific metrics
+- Creating specialized voting strategies for institutions
+
+## Utility Functions
+
+This sections covers convenience functions for common governance operations.
+
+### Register and Delegate to a DRep
+
+This allows you to register and delegate to a DRep as a single action:
+
+```js showLineNumbers {2,6,11}
+// you can query the reward address of the connected wallet
+const rewardAddress = await lucid.wallet().rewardAddress();
+
+// you can convert a DRep ID to Credential
+const drepId = "drep1_...";
+const drepCredential = drepIDToCredential(drepId);
+
+// transaction construction
+await lucid
+  .newTx()
+  .registerAndDelegate.ToDrep(rewardAddress, drepCredential)
+  .complete();
+
+// proceed with sign and submit tx...
+```
+
+### Register and Delegate to a Pool and DRep
+
+This allows you to register and delegate to a Pool and a DRep as a single action:
+
+```js showLineNumbers {2,5,9,14}
+// you can query the reward address of the connected wallet
+const rewardAddress = await lucid.wallet().rewardAddress();
+
+// you need to provide the Pool ID
+const poolId = "pool1_...";
+
+// you can convert a DRep ID to Credential
+const drepId = "drep1_...";
+const drepCredential = drepIDToCredential(drepId);
+
+// transaction construction
+await lucid
+  .newTx()
+  .registerAndDelegate.ToPoolAndDRep(rewardAddress, poolId, drepCredential)
+  .complete();
+
+// proceed with sign and submit tx...
+```
+
+### Delegate to a Pool and DRep
+
+This allows you to delegate to a Pool and a DRep as a single action:
+
+```js showLineNumbers {2,5,9,14}
+// you can query the reward address of the connected wallet
+const rewardAddress = await lucid.wallet().rewardAddress();
+
+// you need to provide the Pool ID
+const poolId = "pool1_...";
+
+// you can convert a DRep ID to Credential
+const drepId = "drep1_...";
+const drepCredential = drepIDToCredential(drepId);
+
+// transaction construction
+await lucid
+  .newTx()
+  .delegate.VoteToPoolAndDrep(rewardAddress, poolId, drepCredential)
+  .complete();
+
+// proceed with sign and submit tx...
+```
+
+## Understanding Delegation Certificates
+
+When you delegate your voting power, Lucid-Evolution creates a certificate that is included in the transaction. Behind the scenes, this is handled by the `Certificate.new_vote_deleg_cert(){:js}` method in CML. The certificate contains:
+
+- Stake credential derived from your reward address
+- DRep you're delegating to
+- Voting strategy (whether a specific DRep, `Always Abstain`, or `Always No Confidence`)
+

@@ -1,0 +1,119 @@
+import { Callout } from "nextra/components";
+
+# Under the Hood: How Lucid-Evolution Works
+
+## Fundamentals
+
+Lucid-Evolution library simplifies the process of building, signing and submitting Cardano transactions. This document explains the key components and processes that happen "under the hood".
+
+| Component   | Description |
+| ----------- | ----------- |
+| **Inputs**  | Existing UTxOs from the user wallet that the transaction will consume. Lucid-Evolution automatically selects these to cover the output amounts plus transaction fees. Don't forget that each UTxO can only be spent once. |
+| **Outputs** | Define the new UTxOs that the transaction will create. Each output will contain a minimum amount of ADA, which will be automatically set by Lucid-Evolution, determined by the current protocol parameters. |
+| **Fees**    | Calculated automatically based on the transaction's size and any execution units used (for smart contracts). Lucid-Evolution handles this calculation for you, and fees are -for now- always (looking at you [babel fees](https://iohk.io/en/blog/posts/2021/02/25/babel-fees) 👀) paid in ADA (lovelace). |
+| **Transaction Witnesses** | Cryptographic signatures that prove the user controls the input UTxOs. These are added when a user signs the transaction, either with their wallet or a private key. |
+
+<Callout type="info">
+  `lovelace` is the smallest unit of ADA (1 ADA = 1,000,000 lovelace)
+</Callout>
+
+Every UTxO on Cardano must hold a minimum amount of ADA (lovelace), which increases with UTxO size (in bytes). This is particularly relevant for native tokens, as their data adds to the UTxO size.
+
+```js showLineNumbers
+const minLovelace = calculateMinLovelaceFromUTxO(
+  coinsPerUtxoByte, // from protocol parameters
+  utxo,
+);
+```
+
+Minimum ADA requirement acts as "rent" for blockchain storage, ensuring UTxOs cover their storage costs and preventing spam from tiny UTxOs (dust), which could bloat the blockchain state and degrade performance.
+
+## Transaction Building
+
+### Coin Selection Algorithm
+
+When `.complete(){:js}` is called, Lucid-Evolution internally queries available UTxOs in the connected wallet and selects "optimal" UTxOs to cover certain criteria for successful transaction building.
+
+To be more specific, let's take look at a basic case where the wallet has these UTxOs:
+
+```js showLineNumbers
+[
+  { amount: 3_000_000n }, // 3 ADA
+  { amount: 10_000_000n }, // 10 ADA
+  { amount: 1_000_000n }, // 1 ADA
+];
+```
+
+<Callout>
+  **What happens when you send 5 ADA?**
+  
+  - 10 ADA UTxO will get selected (minimizing number of inputs)
+  - 5 ADA goes to the recipient
+  - ~0.18 ADA covers transaction fees
+  - ~4.82 ADA returns to your wallet as change
+</Callout>
+
+### Fee Calculation
+
+Fees are automatically calculated based on a few things. It can be about transaction size in bytes, number of inputs and outputs or execution units (if using smart contracts, more on that [here](../documentation/smart-contract-interactions)).
+
+| Component                     | Description                                                            |
+| ----------------------------- | ---------------------------------------------------------------------- |
+| **Base Fee Calculation**      | Uses protocol parameters `minFeeA` (per byte) and `minFeeB` (constant) |
+| **Script Execution Costs**    | Additional fees for Plutus script execution                            |
+| **Reference Script Handling** | Fees for including reference scripts                                   |
+
+- The base fee uses two protocol parameters, `minFeeA` (fee per byte of transaction size) and `minFeeB` (constant fee added to every transaction)
+- Additional fees are added for reference scripts based on their size
+
+<Callout>
+  **When you need precise fee handling (e.g., sending maximum amount from a wallet), you can:**
+  
+  ```js showLineNumbers
+  // Draft the transaction to calculate the fee
+  const draftTx = await lucid
+    .newTx()
+    .pay.ToAddress("addr_test...", { lovelace: amount })
+    .complete();
+  
+  const fee = draftTx.toTransaction().body().fee();
+  
+  // Build the final transaction using calculated fee
+  const finalTx = await lucid
+    .newTx()
+    .pay.ToAddress("addr_test...", { lovelace: amount - fee })
+    .complete();
+  ```
+</Callout>
+
+## Integrations
+
+### CML
+
+CML (Cardano Multiplatform Library) provides low-level primitives for Cardano blockchain interactions, and Lucid-Evolution heavily leverages CML for various core functionality.
+
+- **Fee Estimation**: Lucid-Evolution uses CML for base fee calculation, while handling specific cases like script execution fees (via local UPLC or providers) and reference script fees internally.
+- **Key Management**: For operations like deriving addresses from private keys, Lucid-Evolution provides high-level APIs (like `makeWalletFromPrivateKey`), but you can also use CML directly for more granular control:
+
+```js showLineNumbers
+const pubKeyHash = CML.PrivateKey.from_bech32(privateKey)
+  .to_public()
+  .hash()
+  .to_hex();
+```
+
+<Callout type="info">
+  While Evolution abstracts most CML complexity, understanding that CML powers the core operations can help when you need fine-grained control or are debugging transaction issues.
+</Callout>
+
+### Noble Hashes
+
+Lucid-Evolution doesn't expose hash functions directly. Instead, it recommends using the [noble-hashes](https://github.com/paulmillr/noble-hashes) library for cryptographic hashing needs, which is audited and secure.
+
+- Compatible with both Node.js and browser environments
+- Provides implementations of common hash functions including blake2b which is compatible with Aiken's on-chain hash functions
+
+<Callout type="info">
+  When working with smart contracts, ensure you're using the same hash function and parameters as your on-chain code. For example, if using Aiken's `blake2b_224`, configure noble-hashes accordingly.
+</Callout>
+

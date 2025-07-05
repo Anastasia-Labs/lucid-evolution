@@ -1,0 +1,42 @@
+import { Callout, Steps } from "nextra/components";
+
+# Make Wallet From API
+
+You can instantiate a wallet from API (it's typically a web wallet, a.k.a. browser extensions) to get a wallet object without binding it with a Lucid object by calling the `makeWalletFromAPI(){:js}` function.
+
+## Steps to Create a Wallet Object
+
+<Steps>
+### Specify the Provider
+
+It can be [Blockfrost](https://blockfrost.io/), [Koios](https://koios.rest/), [Maestro](https://gomaestro.org/), etc. Even a custom provider, as long as it implements the [`Provider`](../../provider) interface.
+
+For example, here's how to instantiate a Blockfrost provider:
+
+```js showLineNumbers
+import { Blockfrost, Provider } from "@lucid-evolution/lucid";
+
+const blockfrostURL: string = process.env.BF_URL!;
+const blockfrostPID: string = process.env.BF_PID!;
+
+const blockfrost: Provider = new Blockfrost(
+  blockfrostURL, // The endpoint based on the Cardano network, please refer to Blockfrost documentation
+  blockfrostPID, // Your secret Blockfrost Project ID
+);
+```
+
+<Callout>
+  Other providers follow a similar pattern.
+</Callout>
+
+### Create the Wallet Object
+
+```js showLineNumbers /makeWalletFromAPI/ {4-5}
+import { makeWalletFromAPI } from "@lucid-evolution/lucid";
+
+const provider = blockfrost;
+const api = await window.cardano["WalletName"].enable(); // eternl, lace, etc.
+const wallet = makeWalletFromAPI(provider, api); // CIP-30
+```
+</Steps>
+
