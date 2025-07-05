@@ -1,6 +1,6 @@
 ---
 title: CML/PoolVotingThresholds.ts
-nav_order: 173
+nav_order: 172
 parent: Modules
 ---
 

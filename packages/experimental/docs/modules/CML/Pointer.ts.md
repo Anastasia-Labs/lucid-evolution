@@ -1,6 +1,6 @@
 ---
 title: CML/Pointer.ts
-nav_order: 165
+nav_order: 164
 parent: Modules
 ---
 

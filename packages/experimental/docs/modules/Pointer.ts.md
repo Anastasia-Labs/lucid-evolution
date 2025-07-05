@@ -1,6 +1,6 @@
 ---
 title: Pointer.ts
-nav_order: 300
+nav_order: 303
 parent: Modules
 ---
 

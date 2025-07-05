@@ -1,6 +1,6 @@
 ---
 title: CML/ScriptPubkey.ts
-nav_order: 206
+nav_order: 205
 parent: Modules
 ---
 

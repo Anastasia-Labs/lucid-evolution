@@ -1,6 +1,6 @@
 ---
 title: CML/Utils/min_script_fee.ts
-nav_order: 278
+nav_order: 277
 parent: Modules
 ---
 

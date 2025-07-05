@@ -1,6 +1,6 @@
 ---
 title: CML/VoteBuilderResult.ts
-nav_order: 283
+nav_order: 282
 parent: Modules
 ---
 

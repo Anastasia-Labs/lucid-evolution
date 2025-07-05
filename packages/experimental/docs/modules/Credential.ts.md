@@ -1,6 +1,6 @@
 ---
 title: Credential.ts
-nav_order: 294
+nav_order: 293
 parent: Modules
 ---
 
@@ -67,7 +67,7 @@ Randomly selects between generating a KeyHash or ScriptHash credential.
 
 ```ts
 export declare const generator: FastCheck.Arbitrary<
-  ScriptHash.ScriptHash | KeyHash.KeyHash
+  KeyHash.KeyHash | ScriptHash.ScriptHash
 >;
 ```
 
@@ -114,7 +114,7 @@ Check if the given value is a valid Credential
 export declare const isCredential: (
   u: unknown,
   overrideOptions?: ParseOptions | number,
-) => u is ScriptHash.ScriptHash | KeyHash.KeyHash;
+) => u is KeyHash.KeyHash | ScriptHash.ScriptHash;
 ```
 
 Added in v2.0.0

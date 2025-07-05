@@ -1,6 +1,6 @@
 ---
 title: CML/SingleMintBuilder.ts
-nav_order: 213
+nav_order: 212
 parent: Modules
 ---
 
