@@ -9,11 +9,8 @@
 @theme {}
 
 :root,
-:root {
-  --nextra-primary: #DD7722 !important;
-}
 :host {
-  --nextra-primary-hue: 0 !important;
+  --nextra-primary-hue: 30 !important;
 }
 
 body {
