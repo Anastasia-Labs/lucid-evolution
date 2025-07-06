@@ -61,7 +61,7 @@ export default function Footer() {
             <h3 className="cursor-default">Community</h3>
             <ul>
               <li>
-                <Link href="https://discord.gg/s89P9gpEff">Discord</Link>
+                <Link href="https://discord.gg/eqZDvHvW6k">Discord</Link>
               </li>
               <li>
                 <Link href="https://x.com/nowitnesslabs">

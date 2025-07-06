@@ -123,7 +123,7 @@ console.log("Transaction Submitted:", txHash);`}
                     <p>
                       You can get support for your questions through our
                       dedicated{" "}
-                      <Link href="https://discord.gg/s89P9gpEff">Discord</Link>{" "}
+                      <Link href="https://discord.gg/eqZDvHvW6k">Discord</Link>{" "}
                       channel.
                     </p>
                   </div>
