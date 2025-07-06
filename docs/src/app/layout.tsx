@@ -63,7 +63,7 @@ const RootLayout: FC<{ children: ReactNode }> = async ({ children }) => {
             <Navbar
               logo={<Logo />}
               projectLink="https://github.com/no-witness-labs/lucid-evolution"
-              chatLink="https://discord.gg/s89P9gpEff"
+              chatLink="https://discord.gg/eqZDvHvW6k"
             />
           }
           pageMap={pageMap}

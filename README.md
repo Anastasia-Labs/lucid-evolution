@@ -9,13 +9,13 @@
     <img src="https://github.com/no-witness-labs/lucid-evolution/actions/workflows/main.yml/badge.svg" alt="Build Status"/>
   </a>
   <img src="https://img.shields.io/npm/dy/%40lucid-evolution%2Flucid" alt="NPM Downloads"/>
-  <a href="https://discord.gg/s89P9gpEff">
+  <a href="https://discord.gg/eqZDvHvW6k">
     <img alt="Discord" src="https://img.shields.io/discord/947985069111377951?logo=discord">
   </a>
   <img alt="NPM Version" src="https://img.shields.io/npm/v/%40lucid-evolution%2Flucid?color=%2350C62A">
 </p>
 
-There are a growing number of projects that are built on top of `lucid-evolution`! If you've built a library or a project on top of lucid-evolution, tell me about it [on X](https://twitter.com/solidsnakedev) or [on Discord](https://discord.gg/s89P9gpEff) . I'll add it below and tweet it out.
+There are a growing number of projects that are built on top of `lucid-evolution`! If you've built a library or a project on top of lucid-evolution, tell me about it [on X](https://x.com/nowitnesslabs) or [on Discord](https://discord.gg/eqZDvHvW6k) . I'll add it below and tweet it out.
 
 <h3 align="center">Powered by Lucid Evolution</span></h1>
 
@@ -183,7 +183,7 @@ For comprehensive documentation including API references, examples, and guides, 
 
 ## 👥 Community and Support
 
-- [Discord Community](https://discord.gg/s89P9gpEff): Join for discussions, support, and updates
+- [Discord Community](https://discord.gg/eqZDvHvW6k): Join for discussions, support, and updates
 - [GitHub Issues](https://github.com/no-witness-labs/lucid-evolution/issues): Report bugs or request features
 
 ## 🤝 Contributing
