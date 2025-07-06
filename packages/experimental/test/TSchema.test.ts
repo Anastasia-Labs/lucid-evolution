@@ -113,12 +113,12 @@ describe("TypeTaggedSchema Tests", () => {
         expect(encoded).toEqual(
           Data.mkMap([
             {
-              k: Data.mkByte("deadbeef"),
-              v: Data.mkInt(1n),
+              key: Data.mkByte("deadbeef"),
+              value: Data.mkInt(1n),
             },
             {
-              k: Data.mkByte("cafe"),
-              v: Data.mkInt(2n),
+              key: Data.mkByte("cafe"),
+              value: Data.mkInt(2n),
             },
           ]),
         );

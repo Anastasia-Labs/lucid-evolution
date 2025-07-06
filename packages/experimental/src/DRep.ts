@@ -1,4 +1,4 @@
-import { Schema, Data, FastCheck, Effect, ParseResult, pipe } from "effect";
+import { Schema, Data, FastCheck, Effect, ParseResult } from "effect";
 import * as KeyHash from "./KeyHash.js";
 import * as ScriptHash from "./ScriptHash.js";
 import * as CBOR from "./CBOR.js";
@@ -104,83 +104,83 @@ export const DRepCDDLSchema = Schema.Union(
  * @since 2.0.0
  * @category schemas
  */
-export const CBORBytesSchema = Schema.transformOrFail(
-  Schema.Uint8ArrayFromSelf.annotations({
-    identifier: "CBORBytes",
-  }),
-  DRep,
-  {
-    strict: true,
-    encode: (_, __, ___, toA) => {
-      switch (toA._tag) {
-        case "KeyHashDRep":
-          return ParseResult.succeed(
-            CBOR.Encode().bytes([0, Bytes.Decode.hex(toA.keyHash)]),
+export const CBORBytesSchema = (
+  options: CBOR.CBOREncodingOptions = CBOR.DEFAULT_ENCODING_OPTIONS
+) =>
+  Schema.transformOrFail(
+    Schema.typeSchema(Bytes.BytesSchema),
+    DRep,
+    {
+      strict: true,
+      encode: (toI) => {
+        switch (toI._tag) {
+          case "KeyHashDRep":
+            return ParseResult.succeed(
+              CBOR.encodeCBORValue([0, Bytes.Decode.hex(toI.keyHash)], options),
+            );
+          case "ScriptHashDRep":
+            return ParseResult.succeed(
+              CBOR.encodeCBORValue([1, Bytes.Decode.hex(toI.scriptHash)], options),
+            );
+          case "AlwaysAbstainDRep":
+            return ParseResult.succeed(CBOR.encodeCBORValue([2], options));
+          case "AlwaysNoConfidenceDRep":
+            return ParseResult.succeed(CBOR.encodeCBORValue([3], options));
+        }
+      },
+      decode: (fromA) =>
+        Effect.gen(function* () {
+          const decoded = yield* ParseResult.decode(CBOR.CBORBytesSchema(options))(
+            fromA
           );
-        case "ScriptHashDRep":
-          return ParseResult.succeed(
-            CBOR.Encode().bytes([1, Bytes.Decode.hex(toA.scriptHash)]),
-          );
-        case "AlwaysAbstainDRep":
-          return ParseResult.succeed(CBOR.Encode().bytes([2]));
-        case "AlwaysNoConfidenceDRep":
-          return ParseResult.succeed(CBOR.Encode().bytes([3]));
-      }
-    },
-    decode: (_, __, ___, fromA) =>
-      pipe(
-        ParseResult.decode(CBOR.makeCBORBytesSchema(DRepCDDLSchema))(fromA),
-        Effect.flatMap((decoded) =>
-          Effect.gen(function* () {
-            if (Array.isArray(decoded) && decoded.length === 1) {
-              // [2] or [3]
-              const [tag] = decoded;
-              if (tag === 2) {
-                return { _tag: "AlwaysAbstainDRep" as const };
-              } else if (tag === 3) {
-                return { _tag: "AlwaysNoConfidenceDRep" as const };
-              }
-              return yield* ParseResult.fail(
-                new ParseResult.Type(
-                  Schema.typeSchema(DRep).ast,
-                  decoded,
-                  `Invalid DRep tag: ${tag}`,
-                ),
-              );
-            } else if (Array.isArray(decoded) && decoded.length === 2) {
-              // [0, keyhash] or [1, scripthash]
-              const [tag, hashBytes] = decoded;
-              if (tag === 0) {
-                const keyHash = yield* ParseResult.decode(KeyHash.BytesSchema)(
-                  hashBytes,
-                );
-                return { _tag: "KeyHashDRep" as const, keyHash };
-              } else if (tag === 1) {
-                const scriptHash = yield* ParseResult.decode(
-                  ScriptHash.BytesSchema,
-                )(hashBytes);
-                return { _tag: "ScriptHashDRep" as const, scriptHash };
-              }
-              return yield* ParseResult.fail(
-                new ParseResult.Type(
-                  Schema.typeSchema(DRep).ast,
-                  decoded,
-                  `Invalid DRep tag: ${tag}`,
-                ),
-              );
+          
+          if (Array.isArray(decoded) && decoded.length === 1) {
+            // [2] or [3]
+            const [tag] = decoded;
+            if (tag === 2n) {
+              return { _tag: "AlwaysAbstainDRep" as const };
+            } else if (tag === 3n) {
+              return { _tag: "AlwaysNoConfidenceDRep" as const };
             }
             return yield* ParseResult.fail(
               new ParseResult.Type(
                 Schema.typeSchema(DRep).ast,
                 decoded,
-                `Invalid DRep structure`,
+                `Invalid DRep tag: ${tag}`,
               ),
             );
-          }),
-        ),
-      ),
-  },
-);
+          } else if (Array.isArray(decoded) && decoded.length === 2) {
+            // [0, keyhash] or [1, scripthash]
+            const [tag, hashBytes] = decoded;
+            if (tag === 0n && hashBytes instanceof Uint8Array) {
+              const keyHash = yield* ParseResult.decode(KeyHash.BytesSchema)(
+                hashBytes,
+              );
+              return { _tag: "KeyHashDRep" as const, keyHash };
+            } else if (tag === 1n && hashBytes instanceof Uint8Array) {
+              const scriptHash = yield* ParseResult.decode(
+                ScriptHash.BytesSchema,
+              )(hashBytes);
+              return { _tag: "ScriptHashDRep" as const, scriptHash };
+            }
+            return yield* ParseResult.fail(
+              new ParseResult.Type(
+                Schema.typeSchema(DRep).ast,
+                decoded,
+                `Invalid DRep tag: ${tag}`,
+              ),
+            );
+          }
+          return yield* ParseResult.fail(
+            new ParseResult.Type(
+              Schema.typeSchema(DRep).ast,
+              decoded,
+              `Invalid DRep structure`,
+            ),
+          );
+        }),
+    }
+  );
 
 /**
  * CBOR hex transformation schema for DRep.
@@ -188,83 +188,80 @@ export const CBORBytesSchema = Schema.transformOrFail(
  * @since 2.0.0
  * @category schemas
  */
-export const CBORHexSchema = Schema.transformOrFail(
-  Schema.String.annotations({
-    identifier: "CBORHex",
-  }),
-  DRep,
-  {
+export const CBORHexSchema = (
+  options: CBOR.CBOREncodingOptions = CBOR.DEFAULT_ENCODING_OPTIONS
+) =>
+  Schema.transformOrFail(Bytes.HexSchema, DRep, {
     strict: true,
-    encode: (_, __, ___, toA) => {
-      switch (toA._tag) {
+    encode: (toI) => {
+      switch (toI._tag) {
         case "KeyHashDRep":
           return ParseResult.succeed(
-            CBOR.Encode().hex([0, Bytes.Decode.hex(toA.keyHash)]),
+            CBOR.Encode.hex([0, Bytes.Decode.hex(toI.keyHash)], options),
           );
         case "ScriptHashDRep":
           return ParseResult.succeed(
-            CBOR.Encode().hex([1, Bytes.Decode.hex(toA.scriptHash)]),
+            CBOR.Encode.hex([1, Bytes.Decode.hex(toI.scriptHash)], options),
           );
         case "AlwaysAbstainDRep":
-          return ParseResult.succeed(CBOR.Encode().hex([2]));
+          return ParseResult.succeed(CBOR.Encode.hex([2], options));
         case "AlwaysNoConfidenceDRep":
-          return ParseResult.succeed(CBOR.Encode().hex([3]));
+          return ParseResult.succeed(CBOR.Encode.hex([3], options));
       }
     },
-    decode: (_, __, ___, fromA) =>
-      pipe(
-        ParseResult.decode(CBOR.makeCBORHexSchema(DRepCDDLSchema))(fromA),
-        Effect.flatMap((decoded) =>
-          Effect.gen(function* () {
-            if (Array.isArray(decoded) && decoded.length === 1) {
-              // [2] or [3]
-              const [tag] = decoded;
-              if (tag === 2) {
-                return { _tag: "AlwaysAbstainDRep" as const };
-              } else if (tag === 3) {
-                return { _tag: "AlwaysNoConfidenceDRep" as const };
-              }
-              return yield* ParseResult.fail(
-                new ParseResult.Type(
-                  Schema.typeSchema(DRep).ast,
-                  decoded,
-                  `Invalid DRep tag: ${tag}`,
-                ),
-              );
-            } else if (Array.isArray(decoded) && decoded.length === 2) {
-              // [0, keyhash] or [1, scripthash]
-              const [tag, hashBytes] = decoded;
-              if (tag === 0) {
-                const keyHash = yield* ParseResult.decode(KeyHash.BytesSchema)(
-                  hashBytes,
-                );
-                return { _tag: "KeyHashDRep" as const, keyHash };
-              } else if (tag === 1) {
-                const scriptHash = yield* ParseResult.decode(
-                  ScriptHash.BytesSchema,
-                )(hashBytes);
-                return { _tag: "ScriptHashDRep" as const, scriptHash };
-              }
-              return yield* ParseResult.fail(
-                new ParseResult.Type(
-                  Schema.typeSchema(DRep).ast,
-                  decoded,
-                  `Invalid DRep tag: ${tag}`,
-                ),
-              );
-            }
-            return yield* ParseResult.fail(
-              new ParseResult.Type(
-                Schema.typeSchema(DRep).ast,
-                decoded,
-                `Invalid DRep structure`,
-              ),
+    decode: (fromA) =>
+      Effect.gen(function* () {
+        const bytes = Bytes.Decode.hex(fromA);
+        const decoded = yield* ParseResult.decode(CBOR.CBORBytesSchema(options))(
+          bytes
+        );
+        
+        if (Array.isArray(decoded) && decoded.length === 1) {
+          // [2] or [3]
+          const [tag] = decoded;
+          if (tag === 2n) {
+            return { _tag: "AlwaysAbstainDRep" as const };
+          } else if (tag === 3n) {
+            return { _tag: "AlwaysNoConfidenceDRep" as const };
+          }
+          return yield* ParseResult.fail(
+            new ParseResult.Type(
+              Schema.typeSchema(DRep).ast,
+              decoded,
+              `Invalid DRep tag: ${tag}`,
+            ),
+          );
+        } else if (Array.isArray(decoded) && decoded.length === 2) {
+          // [0, keyhash] or [1, scripthash]
+          const [tag, hashBytes] = decoded;
+          if (tag === 0n && hashBytes instanceof Uint8Array) {
+            const keyHash = yield* ParseResult.decode(KeyHash.BytesSchema)(
+              hashBytes,
             );
-          }),
-        ),
-      ),
-  },
-);
+            return { _tag: "KeyHashDRep" as const, keyHash };
+          } else if (tag === 1n && hashBytes instanceof Uint8Array) {
+            const scriptHash = yield* ParseResult.decode(
+              ScriptHash.BytesSchema,
+            )(hashBytes);
+            return { _tag: "ScriptHashDRep" as const, scriptHash };
+          }
+          return yield* ParseResult.fail(
+            new ParseResult.Type(
+              Schema.typeSchema(DRep).ast,
+              decoded,
+              `Invalid DRep tag: ${tag}`,
+            ),
+          );
+        }
+        return yield* ParseResult.fail(
+          new ParseResult.Type(
+            Schema.typeSchema(DRep).ast,
+            decoded,
+            `Invalid DRep structure`,
+          ),
+        );
+      }),
+  });
 
 /**
  * Synchronous encoding utilities.
@@ -273,8 +270,14 @@ export const CBORHexSchema = Schema.transformOrFail(
  * @category encoding/decoding
  */
 export const Encode = {
-  cborBytes: Schema.encodeSync(CBORBytesSchema),
-  cborHex: Schema.encodeSync(CBORHexSchema),
+  cborBytes: (
+    data: DRep,
+    options: CBOR.CBOREncodingOptions = CBOR.DEFAULT_ENCODING_OPTIONS
+  ) => Schema.encodeSync(CBORBytesSchema(options))(data),
+  cborHex: (
+    data: DRep,
+    options: CBOR.CBOREncodingOptions = CBOR.DEFAULT_ENCODING_OPTIONS
+  ) => Schema.encodeSync(CBORHexSchema(options))(data),
 };
 
 /**
@@ -284,8 +287,14 @@ export const Encode = {
  * @category encoding/decoding
  */
 export const Decode = {
-  cborBytes: Schema.decodeUnknownSync(CBORBytesSchema),
-  cborHex: Schema.decodeUnknownSync(CBORHexSchema),
+  cborBytes: (
+    bytes: Uint8Array,
+    options: CBOR.CBOREncodingOptions = CBOR.DEFAULT_ENCODING_OPTIONS
+  ) => Schema.decodeUnknownSync(CBORBytesSchema(options))(bytes),
+  cborHex: (
+    hex: string,
+    options: CBOR.CBOREncodingOptions = CBOR.DEFAULT_ENCODING_OPTIONS
+  ) => Schema.decodeUnknownSync(CBORHexSchema(options))(hex),
 };
 
 /**
@@ -295,8 +304,14 @@ export const Decode = {
  * @category encoding/decoding
  */
 export const EncodeEither = {
-  cborBytes: Schema.encodeEither(CBORBytesSchema),
-  cborHex: Schema.encodeEither(CBORHexSchema),
+  cborBytes: (
+    data: DRep,
+    options: CBOR.CBOREncodingOptions = CBOR.DEFAULT_ENCODING_OPTIONS
+  ) => Schema.encodeEither(CBORBytesSchema(options))(data),
+  cborHex: (
+    data: DRep,
+    options: CBOR.CBOREncodingOptions = CBOR.DEFAULT_ENCODING_OPTIONS
+  ) => Schema.encodeEither(CBORHexSchema(options))(data),
 };
 
 /**
@@ -306,8 +321,14 @@ export const EncodeEither = {
  * @category encoding/decoding
  */
 export const DecodeEither = {
-  cborBytes: Schema.decodeUnknownEither(CBORBytesSchema),
-  cborHex: Schema.decodeUnknownEither(CBORHexSchema),
+  cborBytes: (
+    bytes: Uint8Array,
+    options: CBOR.CBOREncodingOptions = CBOR.DEFAULT_ENCODING_OPTIONS
+  ) => Schema.decodeUnknownEither(CBORBytesSchema(options))(bytes),
+  cborHex: (
+    hex: string,
+    options: CBOR.CBOREncodingOptions = CBOR.DEFAULT_ENCODING_OPTIONS
+  ) => Schema.decodeUnknownEither(CBORHexSchema(options))(hex),
 };
 
 /**

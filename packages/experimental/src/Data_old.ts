@@ -40,9 +40,9 @@ export interface List<T extends Data = Data> {
  * @since 2.0.0
  */
 export interface Map<
-  Pairs extends ReadonlyArray<{ k: Data; v: Data }> = ReadonlyArray<{
-    k: Data;
-    v: Data;
+  Pairs extends ReadonlyArray<{ key: Data; value: Data }> = ReadonlyArray<{
+    key: Data;
+    value: Data;
   }>,
 > {
   readonly _tag: "Map";
@@ -189,15 +189,15 @@ export const List: List$ = Schema.TaggedStruct("List", {
  */
 export const uniqueByFirst = (
   schema: Schema.Struct<{
-    k: Schema.Schema<Data>;
-    v: Schema.Schema<Data>;
+    key: Schema.Schema<Data>;
+    value: Schema.Schema<Data>;
   }>,
 ) => {
   return Schema.Array(schema).pipe(
     Schema.filter(
       (tuples) =>
         tuples.length ===
-        _Array.dedupeWith(tuples, (a, b) => isEqual(a.k, b.k)).length,
+        _Array.dedupeWith(tuples, (a, b) => isEqual(a.key, b.key)).length,
     ),
   );
 };
@@ -216,13 +216,13 @@ export interface Map$
     } & {
       entries: Schema.refine<
         readonly {
-          readonly k: Data;
-          readonly v: Data;
+          readonly key: Data;
+          readonly value: Data;
         }[],
         Schema.Array$<
           Schema.Struct<{
-            k: Schema.Schema<Data>;
-            v: Schema.Schema<Data>;
+            key: Schema.Schema<Data>;
+            value: Schema.Schema<Data>;
           }>
         >
       >;
@@ -236,11 +236,11 @@ export interface Map$
  *
  * @since 2.0.0
  */
-export const Map: Map$ = Schema.TaggedStruct("Map", {
+export const Map = Schema.TaggedStruct("Map", {
   entries: uniqueByFirst(
     Schema.Struct({
-      k: Schema.suspend((): Schema.Schema<Data> => Data),
-      v: Schema.suspend((): Schema.Schema<Data> => Data),
+      key: Schema.suspend((): Schema.Schema<Data> => Data),
+      value: Schema.suspend((): Schema.Schema<Data> => Data),
     }),
   ).annotations({
     identifier: "Unique Entries",
@@ -453,9 +453,9 @@ const toCMLPlutusData = (data: Data): CML.PlutusData.PlutusData => {
     }
     case "Map": {
       const map = CML.PlutusMap._newUnsafe();
-      data.entries.forEach(({ k, v }) => {
-        const plutusKey = toCMLPlutusData(k);
-        map.set(plutusKey, toCMLPlutusData(v));
+      data.entries.forEach(({ key, value }) => {
+        const plutusKey = toCMLPlutusData(key);
+        map.set(plutusKey, toCMLPlutusData(value));
       });
       return CML.PlutusData.newMapUnsafe(map);
     }
@@ -557,12 +557,14 @@ export const resolveCBOROrThrow = (input: string): Data => {
     }
     case CML.PlutusDataKind.Map: {
       const plutusMap = data.as_map()!;
-      const tuples: { k: Data; v: Data }[] = [];
+      const tuples: { key: Data; value: Data }[] = [];
       const keys = plutusMap.keys();
       for (let i = 0; i < keys.len(); i++) {
-        const k = resolveCBOROrThrow(keys.get(i).to_cbor_hex());
-        const v = resolveCBOROrThrow(plutusMap.get(keys.get(i))!.to_cbor_hex());
-        tuples.push({ k, v });
+        const key = resolveCBOROrThrow(keys.get(i).to_cbor_hex());
+        const value = resolveCBOROrThrow(
+          plutusMap.get(keys.get(i))!.to_cbor_hex(),
+        );
+        tuples.push({ key, value });
       }
       return Map.make({ entries: tuples });
     }
@@ -609,12 +611,12 @@ export const resolveCBOR = Effect.fn(function* (input: string) {
     }
     case CML.PlutusDataKind.Map: {
       const plutusMap = data.as_map()!;
-      const tuples: { k: Data; v: Data }[] = [];
+      const tuples: { key: Data; value: Data }[] = [];
       const keys = plutusMap.keys();
       for (let i = 0; i < keys.len(); i++) {
         const k = resolveCBOROrThrow(keys.get(i).to_cbor_hex());
         const v = resolveCBOROrThrow(plutusMap.get(keys.get(i))!.to_cbor_hex());
-        tuples.push({ k, v });
+        tuples.push({ key: k, value: v });
       }
       return Map.make({ entries: tuples }, { disableValidation: true });
     }
@@ -819,7 +821,9 @@ export const mkByte = <const T extends string>(bytearray: T) =>
  *
  * @since 2.0.0
  */
-export const mkMap = <const Pairs extends ReadonlyArray<{ k: Data; v: Data }>>(
+export const mkMap = <
+  const Pairs extends ReadonlyArray<{ key: Data; value: Data }>,
+>(
   value: Pairs,
 ) => Map.make({ entries: value }) as Map<Pairs>;
 
@@ -960,8 +964,8 @@ export const isEqual = (a: Data, b: Data): boolean => {
     return (
       a.entries.length === b.entries.length &&
       a.entries.every((a, index) => {
-        const { k, v } = b.entries[index];
-        return isEqual(k, a.k) && isEqual(v, a.v);
+        const { key, value } = b.entries[index];
+        return isEqual(key, a.key) && isEqual(value, a.value);
       })
     );
   }
@@ -1040,13 +1044,13 @@ export const compare = (a: Data, b: Data): number => {
     // Maps should already be sorted by key, so compare entries in order
     for (let i = 0; i < a.entries.length; i++) {
       // Compare keys first
-      const keyComparison = compare(a.entries[i].k, b.entries[i].k);
+      const keyComparison = compare(a.entries[i].key, b.entries[i].key);
       if (keyComparison !== 0) {
         return keyComparison;
       }
 
       // If keys are equal, compare values
-      const valueComparison = compare(a.entries[i].v, b.entries[i].v);
+      const valueComparison = compare(a.entries[i].value, b.entries[i].value);
       if (valueComparison !== 0) {
         return valueComparison;
       }
@@ -1135,7 +1139,10 @@ export const genByteArray = (): FastCheck.Arbitrary<ByteArray> =>
  * @since 2.0.0
  */
 export const genInteger = (): FastCheck.Arbitrary<Integer> =>
-  FastCheck.bigInt({ min: 0n, max: 64n - 1n }).map((value) => mkInt(value));
+  FastCheck.bigInt({
+    min: 0n,
+    max: 2n ** 64n - 1n, // Plutus integers are non-negative and fit in 64 bits
+  }).map((value) => mkInt(value));
 
 /**
  * Creates an arbitrary that generates Data.List values
@@ -1201,7 +1208,9 @@ export const genMap = (depth: number): FastCheck.Arbitrary<Map> => {
         },
       },
     ).map((pairs) =>
-      pairs.map(([k, v]) => ({ k, v })).sort((a, b) => compare(a.k, b.k)),
+      pairs
+        .map(([key, value]) => ({ key, value }))
+        .sort((a, b) => compare(a.key, b.key)),
     );
 
   // ByteArray keys (more frequent)
@@ -1242,13 +1251,13 @@ export const sort = (data: Data): Data => {
   switch (data._tag) {
     case "Map": {
       // First recursively sort any nested Data in both keys and values
-      const sortedPairs = data.entries.map(({ k, v }) => ({
-        k: sort(k),
-        v: sort(v),
+      const sortedPairs = data.entries.map(({ key, value }) => ({
+        key: sort(key),
+        value: sort(value),
       }));
 
       // Then sort the pairs by key
-      const sortedMap = [...sortedPairs].sort((a, b) => compare(a.k, b.k));
+      const sortedMap = [...sortedPairs].sort((a, b) => compare(a.key, b.key));
 
       return mkMap(sortedMap);
     }

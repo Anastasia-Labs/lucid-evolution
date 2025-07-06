@@ -191,9 +191,6 @@ importers:
       '@types/dockerode':
         specifier: ^3.3.39
         version: 3.3.41
-      cbor-x:
-        specifier: ^1.6.0
-        version: 1.6.0
       dockerode:
         specifier: ^4.0.6
         version: 4.0.7

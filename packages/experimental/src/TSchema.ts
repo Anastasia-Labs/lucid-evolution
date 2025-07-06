@@ -277,7 +277,7 @@ export const Map = <K extends Schema.Schema.Any, V extends Schema.Schema.Any>(
         return Data.mkMap(entries.map(([k, v]) => ({ k, v })));
       },
       decode: (value) => {
-        return value.entries.map((entry) => [entry.k, entry.v]) as [
+        return value.entries.map((entry) => [entry.key, entry.value]) as [
           Schema.Schema.Type<K>,
           Schema.Schema.Type<V>,
         ];

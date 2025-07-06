@@ -124,12 +124,12 @@ describe("Data Module Tests", () => {
 
       it("should handle nested maps", () => {
         const nestedMap = Data.mkMap([
-          { k: Data.mkByte("cafe"), v: Data.mkInt(43n) },
+          { k: Data.mkByte("cafe"), value: Data.mkInt(43n) },
         ]);
 
         const map = Data.mkMap([
-          { k: Data.mkByte("deadbeef"), v: nestedMap },
-          { k: Data.mkInt(1n), v: Data.mkInt(2n) },
+          { key: Data.mkByte("deadbeef"), value: nestedMap },
+          { key: Data.mkInt(1n), value: Data.mkInt(2n) },
         ]);
 
         expect(Data.isMap(map)).toBe(true);
@@ -137,7 +137,7 @@ describe("Data Module Tests", () => {
 
       it("should validate map with schema", () => {
         const map = Data.mkMap([
-          { k: Data.mkByte("deadbeef"), v: Data.mkInt(42n) },
+          { k: Data.mkByte("deadbeef"), value: Data.mkInt(42n) },
         ]);
         expect(Schema.is(Data.Map)(map)).toBe(true);
       });
@@ -202,8 +202,8 @@ describe("Data Module Tests", () => {
         Data.mkInt(42n),
         Data.mkList([Data.mkByte("deadbeef")]),
         Data.mkMap([
-          { k: Data.mkByte("cafe"), v: Data.mkInt(123n) },
-          { k: Data.mkByte("deadbeef"), v: Data.mkInt(123n) },
+          { k: Data.mkByte("cafe"), value: Data.mkInt(123n) },
+          { k: Data.mkByte("deadbeef"), value: Data.mkInt(123n) },
         ]),
       ]);
 
@@ -372,8 +372,8 @@ describe("TypeTaggedSchema", () => {
 
       expect(encoded).toEqual(
         Data.mkMap([
-          { k: Data.mkByte("deadbeef"), v: Data.mkInt(1n) },
-          { k: Data.mkByte("cafe"), v: Data.mkInt(2n) },
+          { k: Data.mkByte("deadbeef"), value: Data.mkInt(1n) },
+          { k: Data.mkByte("cafe"), value: Data.mkInt(2n) },
         ]),
       );
       expect(decoded).toEqual(input);

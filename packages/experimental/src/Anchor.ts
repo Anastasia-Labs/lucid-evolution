@@ -57,26 +57,31 @@ export const AnchorCDDLSchema = Schema.Tuple(Url.Url, Hash32.BytesSchema);
  * @since 2.0.0
  * @category schemas
  */
-export const CBORBytesSchema = Schema.transformOrFail(
-  Schema.Uint8ArrayFromSelf.annotations({
-    identifier: "CBORBytes",
-  }),
-  Anchor,
-  {
-    strict: true,
-    encode: (toA) =>
-      ParseResult.succeed(
-        CBOR.Encode().bytes([toA.anchorUrl, toA.anchorDataHash]),
-      ),
-    decode: (fromA) =>
-      pipe(
-        ParseResult.decode(CBOR.makeCBORBytesSchema(AnchorCDDLSchema))(fromA),
-        ParseResult.flatMap(([anchorUrl, anchorDataHash]) =>
-          ParseResult.succeed(new Anchor({ anchorUrl, anchorDataHash })),
+export const CBORBytesSchema = (
+  options: CBOR.CBOREncodingOptions = CBOR.DEFAULT_ENCODING_OPTIONS
+) =>
+  Schema.transformOrFail(
+    Schema.typeSchema(Bytes.BytesSchema),
+    Anchor,
+    {
+      strict: true,
+      encode: (toA) =>
+        ParseResult.succeed(
+          CBOR.Encode.bytes([toA.anchorUrl, toA.anchorDataHash], options),
         ),
-      ),
-  },
-);
+      decode: (fromA) =>
+        pipe(
+          ParseResult.decode(CBOR.CBORBytesSchema(options))(fromA),
+          ParseResult.flatMap((decoded) => {
+            const [anchorUrl, anchorDataHash] = decoded as [string, Uint8Array];
+            return ParseResult.succeed(new Anchor({ 
+              anchorUrl: Url.make(anchorUrl), 
+              anchorDataHash 
+            }));
+          }),
+        ),
+    }
+  );
 
 /**
  * CBOR hex transformation schema for Anchor.
@@ -84,26 +89,27 @@ export const CBORBytesSchema = Schema.transformOrFail(
  * @since 2.0.0
  * @category schemas
  */
-export const CBORHexSchema = Schema.transformOrFail(
-  Schema.String.annotations({
-    identifier: "CBORHex",
-  }),
-  Anchor,
-  {
+export const CBORHexSchema = (
+  options: CBOR.CBOREncodingOptions = CBOR.DEFAULT_ENCODING_OPTIONS
+) =>
+  Schema.transformOrFail(Bytes.HexSchema, Anchor, {
     strict: true,
     encode: (toA) =>
       ParseResult.succeed(
-        CBOR.Encode().hex([toA.anchorUrl, toA.anchorDataHash]),
+        CBOR.Encode.hex([toA.anchorUrl, toA.anchorDataHash], options),
       ),
     decode: (fromA) =>
       pipe(
-        ParseResult.decode(CBOR.makeCBORHexSchema(AnchorCDDLSchema))(fromA),
-        ParseResult.flatMap(([anchorUrl, anchorDataHash]) =>
-          ParseResult.succeed(new Anchor({ anchorUrl, anchorDataHash })),
-        ),
+        ParseResult.decode(CBOR.CBORHexSchema(options))(fromA),
+        ParseResult.flatMap((decoded) => {
+          const [anchorUrl, anchorDataHash] = decoded as [string, Uint8Array];
+          return ParseResult.succeed(new Anchor({ 
+            anchorUrl: Url.make(anchorUrl), 
+            anchorDataHash 
+          }));
+        }),
       ),
-  },
-);
+  });
 
 /**
  * Create an Anchor from a URL string and hash bytes.
@@ -232,8 +238,8 @@ export const generator = FastCheck.record({
  * @category encoding/decoding
  */
 export const Encode = {
-  cborBytes: Schema.encodeSync(CBORBytesSchema),
-  cborHex: Schema.encodeSync(CBORHexSchema),
+  cborBytes: Schema.encodeSync(CBORBytesSchema()),
+  cborHex: Schema.encodeSync(CBORHexSchema()),
 };
 
 /**
@@ -243,8 +249,8 @@ export const Encode = {
  * @category encoding/decoding
  */
 export const Decode = {
-  cborBytes: Schema.decodeUnknownSync(CBORBytesSchema),
-  cborHex: Schema.decodeUnknownSync(CBORHexSchema),
+  cborBytes: Schema.decodeUnknownSync(CBORBytesSchema()),
+  cborHex: Schema.decodeUnknownSync(CBORHexSchema()),
 };
 
 /**
@@ -254,8 +260,8 @@ export const Decode = {
  * @category encoding/decoding
  */
 export const EncodeEither = {
-  cborBytes: Schema.encodeEither(CBORBytesSchema),
-  cborHex: Schema.encodeEither(CBORHexSchema),
+  cborBytes: Schema.encodeEither(CBORBytesSchema()),
+  cborHex: Schema.encodeEither(CBORHexSchema()),
 };
 
 /**
@@ -265,6 +271,6 @@ export const EncodeEither = {
  * @category encoding/decoding
  */
 export const DecodeEither = {
-  cborBytes: Schema.decodeUnknownEither(CBORBytesSchema),
-  cborHex: Schema.decodeUnknownEither(CBORHexSchema),
+  cborBytes: Schema.decodeUnknownEither(CBORBytesSchema()),
+  cborHex: Schema.decodeUnknownEither(CBORHexSchema()),
 };

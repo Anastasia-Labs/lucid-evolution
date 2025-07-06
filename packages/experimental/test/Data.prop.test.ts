@@ -133,11 +133,11 @@ describe("Data Property Tests", () => {
           const decoded = Data.Decode.cborHex(cborHex);
 
           expect(decoded).toEqual(plutusBigInt);
-          expect(decoded._tag).toBe("Int");
+          expect(decoded._tag).toBe("Integer");
 
           // Type assertion to verify properties safely
           if (Data.isPlutusBigInt(decoded)) {
-            expect(decoded.value).toBe(value);
+            expect(decoded.integer).toBe(value);
           } else {
             expect.fail("Decoded value should be PlutusBigInt");
           }
@@ -167,7 +167,7 @@ describe("Data Property Tests", () => {
 
         // Type assertion to verify properties safely
         if (Data.isPlutusBigInt(decoded)) {
-          expect(decoded.value).toBe(value);
+          expect(decoded.integer).toBe(value);
         } else {
           expect.fail("Decoded value should be PlutusBigInt");
         }

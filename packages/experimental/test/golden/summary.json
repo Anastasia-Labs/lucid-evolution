@@ -1,6 +1,14 @@
 {
   "seed": 12345,
-  "samplesPerType": 200,
+  "targetSamplesPerType": 4000,
+  "actualSamplesPerType": {
+    "integer": 4000,
+    "byteArray": 4000,
+    "list": 4000,
+    "map": 4000,
+    "constr": 4000,
+    "data": 4000
+  },
   "types": [
     "integer",
     "byteArray",
@@ -9,5 +17,6 @@
     "constr",
     "data"
   ],
-  "totalSamples": 1200
+  "totalSamples": 24000,
+  "uniquenessGuaranteed": true
 }
