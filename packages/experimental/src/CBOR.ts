@@ -1,4 +1,3 @@
-import { Unknown } from "effect/Schema";
 import * as Bytes from "./Bytes.js";
 import { Data, Effect, ParseResult, pipe, Schema } from "effect";
 
@@ -266,10 +265,9 @@ export const encodeCBORValue = (
       );
     }
     if (Schema.is(CBORMapSchema)(value)) {
-      const entries = Array.from(value.entries()).map(([key, val]) => ({
-        key,
-        value: val,
-      }));
+      const entries: [CBORValue, CBORValue][] = Array.from(value.entries()).map(
+        ([key, val]) => [key, val],
+      );
       return yield* encodeMap(entries, options, (item) =>
         encodeCBORValue(item as CBORValue, options),
       );
@@ -331,10 +329,7 @@ export const encodeTag = (
  * @category encoding
  */
 export const encodeMap = (
-  entries: readonly {
-    readonly key: unknown;
-    readonly value: unknown;
-  }[],
+  entries: readonly [any, any][],
   options: CBOREncodingOptions,
   encodeFn: (data: unknown) => Effect.Effect<Uint8Array, CBORError>,
 ): Effect.Effect<Uint8Array, CBORError> =>
@@ -347,7 +342,7 @@ export const encodeMap = (
       chunks.push(new Uint8Array([0xbf])); // Indefinite map start
 
       // Encode each key-value pair
-      for (const { key, value } of entries) {
+      for (const [key, value] of entries) {
         const encodedKey = yield* encodeFn(key);
         const encodedValue = yield* encodeFn(value);
         chunks.push(encodedKey);
@@ -387,7 +382,7 @@ export const encodeMap = (
           value: unknown;
           encodedKey: Uint8Array;
         }[] = [];
-        for (const { key, value } of entries) {
+        for (const [key, value] of entries) {
           const encodedKey = yield* encodeFn(key);
           entriesWithEncodedKeys.push({ key, value, encodedKey });
         }
@@ -405,7 +400,7 @@ export const encodeMap = (
         }
       } else {
         // Normal encoding without sorting
-        for (const { key, value } of entries) {
+        for (const [key, value] of entries) {
           const encodedKey = yield* encodeFn(key);
           const encodedValue = yield* encodeFn(value);
           encodedPairs.push(encodedKey);
