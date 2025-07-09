@@ -128,19 +128,15 @@ export function applyParamsToScript<
 // Apply double bytestring enconding of type `major type 2`
 export const applyDoubleCborEncoding = (script: string): string => {
   try {
-    CBOR.Decode.bytes(CBOR.Encode().bytes(Bytes.Decode.hex(script)));
+    CBOR.Decode.bytes(CBOR.Encode.bytes(Bytes.Decode.hex(script)));
     return script;
   } catch (error) {
     try {
       CBOR.Decode.bytes(Bytes.Decode.hex(script));
-      return Bytes.Encode.hex(
-        CBOR.Encode().bytes(Bytes.Decode.hex(script).buffer),
-      );
+      return Bytes.Encode.hex(CBOR.Encode.bytes(Bytes.Decode.hex(script)));
     } catch (error) {
       return Bytes.Encode.hex(
-        CBOR.Encode().bytes(
-          CBOR.Encode().bytes(Bytes.Decode.hex(script).buffer),
-        ),
+        CBOR.Encode.bytes(CBOR.Encode.bytes(Bytes.Decode.hex(script))),
       );
     }
   }
@@ -148,7 +144,7 @@ export const applyDoubleCborEncoding = (script: string): string => {
 
 export const applySingleCborEncoding = (script: string): string => {
   try {
-    CBOR.Decode.bytes(CBOR.Encode().bytes(Bytes.Decode.hex(script)));
+    CBOR.Decode.bytes(CBOR.Encode.bytes(Bytes.Decode.hex(script)));
     return Bytes.Encode.hex(
       CBOR.Decode.bytes(Bytes.Decode.hex(script)) as Uint8Array,
     );
@@ -157,16 +153,14 @@ export const applySingleCborEncoding = (script: string): string => {
       CBOR.Decode.bytes(Bytes.Decode.hex(script));
       return script;
     } catch (error) {
-      return Bytes.Encode.hex(
-        CBOR.Encode().bytes(Bytes.Decode.hex(script).buffer),
-      );
+      return Bytes.Encode.hex(CBOR.Encode.bytes(Bytes.Decode.hex(script)));
     }
   }
 };
 
 export const CBOREncodingLevel = (script: string): "double" | "single" => {
   try {
-    CBOR.Decode.bytes(CBOR.Encode().bytes(Bytes.Decode.hex(script)));
+    CBOR.Decode.bytes(CBOR.Encode.bytes(Bytes.Decode.hex(script)));
     return "double" as const;
   } catch (error) {
     try {

@@ -88,11 +88,3 @@ export const NativeScriptCDDL = Schema.Union(
 ).annotations({
   identifier: "NativeScriptCDDL",
 });
-
-/**
- * CBOR decoder for NativeScriptCDDL.
- *
- * @since 2.0.0
- * @category decoders
- */
-export const CDDLDecoder = CBOR.DecodeWithSchema(NativeScriptCDDL);

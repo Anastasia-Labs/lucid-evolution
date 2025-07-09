@@ -333,9 +333,15 @@ export const CBORBytesSchema = Schema.transformOrFail(
   {
     strict: true,
     encode: (_, __, ___, toI) =>
-      ParseResult.succeed(CBOR.Encode().bytes(toNativeScriptCDDL(toI))),
+      ParseResult.succeed(CBOR.Encode.bytes(toNativeScriptCDDL(toI))),
     decode: (fromA) =>
-      pipe(NativeScriptCDDL.CDDLDecoder.bytes(fromA), fromNativeScriptCDDL),
+      Effect.gen(function* () {
+        const value = yield* ParseResult.decode(CBOR.CBORBytesSchema())(fromA);
+        const cddlValue = yield* ParseResult.decodeUnknown(
+          NativeScriptCDDL.NativeScriptCDDL,
+        )(value);
+        return yield* fromNativeScriptCDDL(cddlValue);
+      }),
   },
 );
 
@@ -345,9 +351,15 @@ export const CBORHexSchema = Schema.transformOrFail(
   {
     strict: true,
     encode: (_, __, ___, toA) =>
-      ParseResult.succeed(CBOR.Encode().hex(toNativeScriptCDDL(toA))),
+      ParseResult.succeed(CBOR.Encode.hex(toNativeScriptCDDL(toA))),
     decode: (fromI) =>
-      pipe(NativeScriptCDDL.CDDLDecoder.hex(fromI), fromNativeScriptCDDL),
+      Effect.gen(function* () {
+        const value = yield* ParseResult.decode(CBOR.CBORHexSchema())(fromI);
+        const cddlValue = yield* ParseResult.decodeUnknown(
+          NativeScriptCDDL.NativeScriptCDDL,
+        )(value);
+        return yield* fromNativeScriptCDDL(cddlValue);
+      }),
   },
 );
 

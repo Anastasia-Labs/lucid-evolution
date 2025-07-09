@@ -67,15 +67,16 @@ export const CBORBytesSchema = Schema.transformOrFail(
     encode: (_, __, ___, toA) =>
       pipe(
         ParseResult.encode(TransactionHash.BytesSchema)(toA.transactionId),
-        Effect.map((hash) => CBOR.Encode().bytes([toA.index, hash])),
+        Effect.map((hash) => CBOR.Encode.bytes([toA.index, hash])),
       ),
     decode: (fromA) =>
       pipe(
-        ParseResult.decode(
-          CBOR.makeCBORBytesSchema(
+        ParseResult.decode(CBOR.CBORBytesSchema())(fromA),
+        Effect.flatMap((a) =>
+          ParseResult.decodeUnknown(
             Schema.Tuple(Numeric.Uint16Schema, Schema.Uint8ArrayFromSelf),
-          ),
-        )(fromA),
+          )(a),
+        ),
         Effect.flatMap(([index, txHashBytes]) =>
           pipe(
             ParseResult.decode(TransactionHash.BytesSchema)(txHashBytes),

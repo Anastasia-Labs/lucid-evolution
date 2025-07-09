@@ -102,7 +102,7 @@ export class PoolParams extends Schema.Class<PoolParams>("PoolParams")({
  * @since 2.0.0
  * @category schemas
  */
-export const CBORBytesSchema = CBOR.makeCBORBytesSchema(PoolParams);
+export const CBORBytesSchema = undefined;
 
 /**
  * CBOR hex transformation schema for PoolParams.
@@ -110,7 +110,7 @@ export const CBORBytesSchema = CBOR.makeCBORBytesSchema(PoolParams);
  * @since 2.0.0
  * @category schemas
  */
-export const CBORHexSchema = CBOR.makeCBORHexSchema(PoolParams);
+export const CBORHexSchema = undefined;
 
 /**
  * Check if two PoolParams instances are equal.

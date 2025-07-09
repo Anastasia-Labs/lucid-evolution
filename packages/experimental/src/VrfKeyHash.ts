@@ -69,7 +69,7 @@ export const HexSchema = Schema.transform(
  * @since 2.0.0
  * @category schemas
  */
-export const CBORBytesSchema = CBOR.makeCBORBytesSchema(VrfKeyHash);
+export const CBORBytesSchema = undefined;
 
 /**
  * CBOR hex transformation schema for VrfKeyHash.
@@ -77,7 +77,7 @@ export const CBORBytesSchema = CBOR.makeCBORBytesSchema(VrfKeyHash);
  * @since 2.0.0
  * @category schemas
  */
-export const CBORHexSchema = CBOR.makeCBORHexSchema(VrfKeyHash);
+export const CBORHexSchema = undefined;
 
 /**
  * Check if two VrfKeyHash instances are equal.

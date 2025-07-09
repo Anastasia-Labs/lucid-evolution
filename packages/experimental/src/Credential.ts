@@ -62,33 +62,37 @@ export const CBORBytesSchema = Schema.transformOrFail(
       switch (toA._tag) {
         case "KeyHash":
           return ParseResult.succeed(
-            CBOR.Encode().bytes([0, Bytes.Decode.hex(toA)]),
+            CBOR.Encode.bytes([0, Bytes.Decode.hex(toA)]),
           );
         case "ScriptHash":
           return ParseResult.succeed(
-            CBOR.Encode().bytes([1, Bytes.Decode.hex(toA.hash)]),
+            CBOR.Encode.bytes([1, Bytes.Decode.hex(toA.hash)]),
           );
       }
     },
     decode: (_, __, ___, fromA) =>
       pipe(
-        ParseResult.decode(
-          CBOR.makeCBORBytesSchema(
-            Schema.Tuple(Schema.Literal(0, 1), Schema.Uint8ArrayFromSelf),
-          ),
-        )(fromA),
-        Effect.flatMap(([tag, bytes]) =>
+        ParseResult.decode(CBOR.CBORBytesSchema())(fromA),
+        Effect.flatMap((a) =>
+          ParseResult.decodeUnknown(
+            Schema.Struct({
+              tag: Schema.Literal(0, 1),
+              value: Schema.Uint8ArrayFromSelf,
+            }),
+          )(a),
+        ),
+        Effect.flatMap(({ tag, value }) =>
           Effect.gen(function* () {
             switch (tag) {
               case 0:
                 return yield* ParseResult.succeed({
                   _tag: "KeyHash" as const,
-                  hash: KeyHash.Decode.bytes(bytes),
+                  hash: KeyHash.Decode.bytes(value),
                 });
               case 1:
                 return yield* ParseResult.succeed({
                   _tag: "ScriptHash" as const,
-                  hash: ScriptHash.Decode.bytes(bytes),
+                  hash: ScriptHash.Decode.bytes(value),
                 });
             }
           }),

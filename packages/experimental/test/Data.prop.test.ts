@@ -30,7 +30,7 @@ describe("Data Property Tests", () => {
           FastCheck.property(genPlutusBigInt(), (value) => {
             const cborHex = Data.Encode.cborHex(value);
             const decoded = Data.Decode.cborHex(cborHex);
-            expect(Data.isPlutusBigInt(value)).toBe(true);
+            expect(Data.isInt(value)).toBe(true);
             expect(decoded).toEqual(value);
           }),
         );
@@ -41,7 +41,7 @@ describe("Data Property Tests", () => {
           FastCheck.property(genPlutusBytes(), (value) => {
             const cborHex = Data.Encode.cborHex(value);
             const decoded = Data.Decode.cborHex(cborHex);
-            expect(Data.isPlutusBytes(value)).toBe(true);
+            expect(Data.isBytes(value)).toBe(true);
             expect(decoded).toEqual(value);
           }),
         );
@@ -52,7 +52,7 @@ describe("Data Property Tests", () => {
           FastCheck.property(genPlutusList(1), (value) => {
             const cborHex = Data.Encode.cborHex(value);
             const decoded = Data.Decode.cborHex(cborHex);
-            expect(Data.isPlutusList(value)).toBe(true);
+            expect(Data.isList(value)).toBe(true);
             expect(decoded).toEqual(value);
           }),
         );
@@ -63,7 +63,7 @@ describe("Data Property Tests", () => {
           FastCheck.property(genPlutusMap(1), (value) => {
             const cborHex = Data.Encode.cborHex(value);
             const decoded = Data.Decode.cborHex(cborHex);
-            expect(Data.isPlutusMap(value)).toBe(true);
+            expect(Data.isMap(value)).toBe(true);
             expect(decoded).toEqual(value);
           }),
         );
@@ -129,14 +129,14 @@ describe("Data Property Tests", () => {
     it("should handle all CDDL int variants: int, big_uint, big_nint", () => {
       FastCheck.assert(
         FastCheck.property(FastCheck.bigInt(), (value) => {
-          const plutusBigInt = Data.int(value);
+          const plutusBigInt = value;
           const cborHex = Data.Encode.cborHex(plutusBigInt);
           const decoded = Data.Decode.cborHex(cborHex);
 
           expect(decoded).toEqual(plutusBigInt);
 
           // Type assertion to verify properties safely
-          if (Data.isPlutusBigInt(decoded)) {
+          if (Data.isInt(decoded)) {
             expect(decoded).toBe(value);
           } else {
             expect.fail("Decoded value should be PlutusBigInt");

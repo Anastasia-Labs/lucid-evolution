@@ -364,12 +364,12 @@ export const CBORBytesSchema = Schema.transformOrFail(
   {
     strict: true,
     encode: (_, __, ___, toA) =>
-      ParseResult.succeed(CBOR.Encode().bytes(toCDDL(toA))),
+      ParseResult.succeed(CBOR.Encode.bytes(toCDDL(toA))),
     decode: (_, __, ___, fromI) =>
       Effect.gen(function* () {
-        const cddlValue = yield* ParseResult.decode(
-          CBOR.makeCBORBytesSchema(ValueCDDLSchema),
-        )(fromI);
+        const value = yield* ParseResult.decode(CBOR.CBORBytesSchema())(fromI);
+        const cddlValue =
+          yield* ParseResult.decodeUnknown(ValueCDDLSchema)(value);
         return fromCDDL(cddlValue);
       }),
   },
@@ -387,12 +387,12 @@ export const CBORHexSchema = Schema.transformOrFail(
   {
     strict: true,
     encode: (_, __, ___, toA) =>
-      ParseResult.succeed(CBOR.Encode().hex(toCDDL(toA))),
+      ParseResult.succeed(CBOR.Encode.hex(toCDDL(toA))),
     decode: (_, __, ___, fromI) =>
       Effect.gen(function* () {
-        const cddlValue = yield* ParseResult.decode(
-          CBOR.makeCBORHexSchema(ValueCDDLSchema),
-        )(fromI);
+        const value = yield* ParseResult.decode(CBOR.CBORHexSchema())(fromI);
+        const cddlValue =
+          yield* ParseResult.decodeUnknown(ValueCDDLSchema)(value);
         return fromCDDL(cddlValue);
       }),
   },

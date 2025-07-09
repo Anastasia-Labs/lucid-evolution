@@ -58,7 +58,7 @@ export class PoolMetadata extends Schema.TaggedClass<PoolMetadata>()(
  * @since 2.0.0
  * @category schemas
  */
-export const CBORBytesSchema = CBOR.makeCBORBytesSchema(PoolMetadata);
+export const CBORBytesSchema = undefined;
 
 /**
  * CBOR hex transformation schema for PoolMetadata.
@@ -66,7 +66,7 @@ export const CBORBytesSchema = CBOR.makeCBORBytesSchema(PoolMetadata);
  * @since 2.0.0
  * @category schemas
  */
-export const CBORHexSchema = CBOR.makeCBORHexSchema(PoolMetadata);
+export const CBORHexSchema = undefined;
 
 /**
  * Synchronous encoding utilities.

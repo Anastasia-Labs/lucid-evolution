@@ -46,7 +46,7 @@ export class HeaderBody extends Schema.TaggedClass<HeaderBody>()("HeaderBody", {
   ),
   issuerVkey: VKey.HexSchema,
   vrfVkey: VrfVkey.HexSchema,
-  vrfResult: VrfCert.VrfCert,
+  vrfResult: VrfCert.VRFCert,
   blockBodySize: Natural.Natural,
   blockBodyHash: BlockBodyHash.BlockBodyHash,
   operationalCert: OperationalCert.OperationalCert,

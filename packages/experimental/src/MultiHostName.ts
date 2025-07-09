@@ -50,7 +50,7 @@ export class MultiHostName extends Schema.TaggedClass<MultiHostName>()(
  * @since 2.0.0
  * @category encoding/decoding
  */
-export const CBORBytesSchema = CBOR.makeCBORBytesSchema(MultiHostName);
+export const CBORBytesSchema = undefined;
 
 /**
  * Schema for transforming between CBOR hex and MultiHostName.
@@ -58,7 +58,7 @@ export const CBORBytesSchema = CBOR.makeCBORBytesSchema(MultiHostName);
  * @since 2.0.0
  * @category encoding/decoding
  */
-export const CBORHexSchema = CBOR.makeCBORHexSchema(MultiHostName);
+export const CBORHexSchema = undefined;
 
 /**
  * Synchronous encoding utilities.

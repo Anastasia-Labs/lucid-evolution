@@ -49,7 +49,7 @@ export type Relay = typeof Relay.Type;
  * @since 2.0.0
  * @category schemas
  */
-export const CBORBytesSchema = CBOR.makeCBORBytesSchema(Relay);
+export const CBORBytesSchema = undefined;
 
 /**
  * CBOR hex transformation schema for Relay.
@@ -57,7 +57,7 @@ export const CBORBytesSchema = CBOR.makeCBORBytesSchema(Relay);
  * @since 2.0.0
  * @category schemas
  */
-export const CBORHexSchema = CBOR.makeCBORHexSchema(Relay);
+export const CBORHexSchema = undefined;
 
 /**
  * Synchronous encoding utilities.

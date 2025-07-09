@@ -397,7 +397,7 @@ export const CBORBytesSchema = Schema.transformOrFail(
     strict: true,
     encode: (_, __, ___, toA) =>
       ParseResult.succeed(
-        CBOR.Encode().bytes(
+        CBOR.Encode.bytes(
           new Map(
             toEntries(toA).map(([policyId, assetEntries]) => [
               Bytes.Decode.hex(policyId),
@@ -413,11 +413,9 @@ export const CBORBytesSchema = Schema.transformOrFail(
       ),
     decode: (_, __, ___, fromI) =>
       Effect.gen(function* () {
-        const map = yield* ParseResult.decode(
-          CBOR.makeCBORBytesSchema(MultiAssetCDDLSchema),
-        )(fromI);
-        const m = fromCDDL(map);
-        return m;
+        const map = yield* ParseResult.decode(CBOR.CBORBytesSchema())(fromI);
+        const m = yield* ParseResult.decodeUnknown(MultiAssetCDDLSchema)(map);
+        return fromCDDL(m);
       }),
   },
 );
@@ -435,7 +433,7 @@ export const CBORHexSchema = Schema.transformOrFail(
     strict: true,
     encode: (_, __, ___, toA) =>
       ParseResult.succeed(
-        CBOR.Encode().hex(
+        CBOR.Encode.hex(
           new Map(
             toEntries(toA).map(([policyId, assetEntries]) => [
               Bytes.Decode.hex(policyId),
@@ -451,10 +449,10 @@ export const CBORHexSchema = Schema.transformOrFail(
       ),
     decode: (_, __, ___, fromI) =>
       Effect.gen(function* () {
-        const map = yield* ParseResult.decode(
-          CBOR.makeCBORHexSchema(MultiAssetCDDLSchema),
-        )(fromI);
-        const m = fromCDDL(map);
+        const map = yield* ParseResult.decode(CBOR.CBORHexSchema())(fromI);
+        const cddlMap =
+          yield* ParseResult.decodeUnknown(MultiAssetCDDLSchema)(map);
+        const m = fromCDDL(cddlMap);
         return m;
       }),
   },

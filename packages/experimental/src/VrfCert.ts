@@ -21,6 +21,11 @@ export class VrfCertError extends Data.TaggedError("VrfCertError")<{
   cause?: unknown;
 }> {}
 
+export const VRFOutput = Bytes.HexSchema.pipe(Schema.brand("VrfOutput"));
+export type VRFOutput = typeof VRFOutput.Type;
+export const VRFProof = Bytes80.HexSchema.pipe(Schema.brand("VrfProof"));
+export type VrfProof = typeof VRFProof.Type;
+
 /**
  * VrfCert class based on Conway CDDL specification
  *
@@ -31,9 +36,9 @@ export class VrfCertError extends Data.TaggedError("VrfCertError")<{
  * @since 2.0.0
  * @category model
  */
-export class VrfCert extends Schema.TaggedClass<VrfCert>()("VrfCert", {
-  output: Bytes.HexSchema.pipe(Schema.brand("VrfOutput")), // bytes
-  proof: Bytes80.HexSchema.pipe(Schema.brand("VrfProof")), // 80 bytes
+export class VRFCert extends Schema.TaggedClass<VRFCert>()("VrfCert", {
+  output: VRFOutput,
+  proof: VRFProof,
 }) {}
 
 /**
@@ -56,29 +61,25 @@ const VrfCertCDDLSchema = Schema.Tuple(Bytes.BytesSchema, Bytes80.BytesSchema);
  */
 export const BytesSchema = Schema.transformOrFail(
   Schema.Uint8ArrayFromSelf,
-  VrfCert,
+  VRFCert,
   {
     strict: true,
     encode: (_, __, ___, toA) =>
       ParseResult.succeed(
-        CBOR.Encode().bytes([
+        CBOR.Encode.bytes([
           Schema.decodeUnknownSync(Bytes.BytesSchema)(toA.output),
           Schema.decodeUnknownSync(Bytes80.BytesSchema)(toA.proof),
         ]),
       ),
     decode: (_, __, ___, fromA) =>
       Effect.gen(function* () {
-        const decoded = yield* ParseResult.decode(
-          CBOR.makeCBORBytesSchema(VrfCertCDDLSchema),
-        )(fromA);
+        const value = yield* ParseResult.decode(CBOR.CBORBytesSchema())(fromA);
+        const decoded =
+          yield* ParseResult.decodeUnknown(VrfCertCDDLSchema)(value);
         const [outputBytes, proofBytes] = decoded;
-        return new VrfCert({
-          output: Schema.decodeUnknownSync(
-            Bytes.HexSchema.pipe(Schema.brand("VrfOutput")),
-          )(Bytes.Encode.hex(outputBytes)),
-          proof: Schema.decodeUnknownSync(
-            Bytes80.HexSchema.pipe(Schema.brand("VrfProof")),
-          )(Bytes.Encode.hex(proofBytes)),
+        return new VRFCert({
+          output: VRFOutput.make(Bytes.Encode.hex(outputBytes)),
+          proof: VRFProof.make(Bytes.Encode.hex(proofBytes)),
         });
       }),
   },

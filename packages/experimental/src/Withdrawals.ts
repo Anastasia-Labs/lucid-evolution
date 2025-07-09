@@ -95,14 +95,22 @@ export const CBORBytesSchema = Schema.transformOrFail(
   {
     strict: true,
     encode: (_, __, ___, toA) =>
-      ParseResult.succeed(
-        CBOR.Encode().bytes(Array.from(toA.withdrawals.entries())),
-      ),
+      Effect.gen(function* () {
+        const withdrawalsCDDL = Array.from(toA.withdrawals.entries()).map(
+          ([key, value]) => [RewardAccount.Encode.bytes(key), value],
+        );
+        return yield* ParseResult.succeed(CBOR.Encode.bytes(withdrawalsCDDL));
+      }),
+
     decode: (_, __, ___, fromA) =>
       Effect.gen(function* () {
-        const withdrawalsCDDL = yield* ParseResult.decode(
-          CBOR.makeCBORBytesSchema(WithdrawalsCDDLSchema),
-        )(fromA);
+        // const withdrawalsCDDL = yield* ParseResult.decode(
+        //   CBOR.makeCBORBytesSchema(WithdrawalsCDDLSchema),
+        // )(fromA);
+        const value = yield* ParseResult.decode(CBOR.CBORBytesSchema())(fromA);
+        const withdrawalsCDDL = yield* ParseResult.decodeUnknown(
+          WithdrawalsCDDLSchema,
+        )(value);
         // decode keys and value to the appropriate types
         const decodedWithdrawals = new Map<
           RewardAccount.RewardAccount,

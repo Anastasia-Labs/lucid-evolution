@@ -559,7 +559,7 @@ describe("Data Golden Tests", () => {
 /**
  * Helper function to reconstruct PlutusData from JSON representation
  */
-const reconstructPlutusData = (sample: any): Data.PlutusData => {
+const reconstructPlutusData = (sample: any): Data.Data => {
   switch (sample._tag) {
     case "Integer":
       // Handle BigInt structure: { __type: "bigint", value: "123..." }

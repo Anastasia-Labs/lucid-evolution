@@ -1,11 +1,6 @@
 import { describe, expect, it } from "@effect/vitest";
-import { Schema } from "effect";
 import * as Data from "../src/Data.js";
 
-/**
- * Tests for the Data module functionality -
- * focusing on PlutusData types, their construction, validation, and CBOR encoding/decoding
- */
 describe("Data Module Tests", () => {
   describe("Basic Types", () => {
     describe("PlutusBytes", () => {
@@ -17,10 +12,8 @@ describe("Data Module Tests", () => {
         "ff",
       ];
 
-      it.each(validHexCases)("should create valid PlutusBytes: %s", (input) => {
-        const bytes = Data.bytearray(input);
-        expect(bytes).toBe(input);
-        expect(Data.isPlutusBytes(bytes)).toBe(true);
+      it.each(validHexCases)("should create valid Bytes: %s", (input) => {
+        expect(Data.isBytes(input)).toBe(true);
       });
 
       const invalidHexCases = [
@@ -35,18 +28,17 @@ describe("Data Module Tests", () => {
       it.each(invalidHexCases)(
         "should fail schema validation on invalid hex string: %s",
         (input) => {
-          const invalidBytes = { _tag: "Bytes", bytes: input } as any;
-          expect(Data.isPlutusBytes(invalidBytes)).toBe(false);
+          expect(Data.isBytes(input)).toBe(false);
         },
       );
 
       it("should validate PlutusBytes with schema", () => {
-        const bytes = Data.bytearray("deadbeef");
-        expect(Schema.is(Data.PlutusBytesSchema)(bytes)).toBe(true);
+        const bytes = "deadbeef";
+        expect(Data.isBytes(bytes)).toBe(true);
       });
     });
 
-    describe("PlutusBigInt", () => {
+    describe("Plutus Int", () => {
       const integerCases = [
         0n,
         1n,
@@ -61,72 +53,70 @@ describe("Data Module Tests", () => {
         -123456789123456789n,
       ];
 
-      it.each(integerCases)("should create valid PlutusBigInt: %s", (input) => {
-        const integer = Data.int(input);
-        expect(integer).toBe(input);
-        expect(Data.isPlutusBigInt(integer)).toBe(true);
+      it.each(integerCases)("should create valid Plutus Int: %s", (input) => {
+        expect(Data.isInt(input)).toBe(true);
       });
 
       it("should fail validation with non-bigint value", () => {
-        const invalidInt = { _tag: "Int", value: "not-a-bigint" } as any;
-        expect(Data.isPlutusBigInt(invalidInt)).toBe(false);
+        const invalidInt = "not-a-bigint";
+        expect(Data.isInt(invalidInt)).toBe(false);
       });
 
       it("should validate PlutusBigInt with schema", () => {
-        const integer = Data.int(42n);
-        expect(Schema.is(Data.PlutusBigIntSchema)(integer)).toBe(true);
+        const integer = 42n;
+        expect(Data.isInt(integer)).toBe(true);
       });
     });
 
-    describe("PlutusList", () => {
+    describe("Plutus List", () => {
       it("should create a valid empty list", () => {
-        const list = Data.list([]);
+        const list: Data.List = [];
         expect(list).toEqual([]);
-        expect(Data.isPlutusList(list)).toBe(true);
+        expect(Data.isList(list)).toBe(true);
       });
 
       it("should create a valid list with elements", () => {
-        const list = Data.list([Data.int(42n), Data.bytearray("deadbeef")]);
+        const list = [42n, "deadbeef"];
         expect(list).toHaveLength(2);
-        expect(Data.isPlutusList(list)).toBe(true);
+        expect(Data.isList(list)).toBe(true);
       });
 
-      it("should validate PlutusList with schema", () => {
-        const list = Data.list([Data.int(42n), Data.bytearray("cafe")]);
-        expect(Schema.is(Data.PlutusListSchema)(list)).toBe(true);
+      it("should validate Plutus List with schema", () => {
+        const list = [42n, "cafe"];
+        expect(Data.isList(list)).toBe(true);
       });
     });
 
-    describe("PlutusMap", () => {
+    describe("Plutus Map", () => {
       it("should create a valid empty map", () => {
         const map = Data.map([]);
-        expect((map as Data.PlutusMap).size).toBe(0);
-        expect(Data.isPlutusMap(map)).toBe(true);
+        expect((map as Data.MapList).size).toBe(0);
+        expect(Data.isMap(map)).toBe(true);
       });
 
       it("should create a valid map with entries", () => {
         const map = Data.map([
           {
-            key: Data.bytearray("cafe"),
-            value: Data.int(42n),
+            key: "cafe",
+            value: 42n,
           },
           {
-            key: Data.int(99n),
-            value: Data.bytearray("deadbeef"),
+            key: 99n,
+            value: "deadbeef",
           },
         ]);
-        expect((map as Data.PlutusMap).size).toBe(2);
-        expect(Data.isPlutusMap(map)).toBe(true);
+        expect((map as Data.MapList).size).toBe(2);
+        expect(Data.isMap(map)).toBe(true);
       });
 
-      it("should validate PlutusMap with schema", () => {
+      it("should validate Plutus Map with schema", () => {
         const map = Data.map([
           {
-            key: Data.int(1n),
-            value: Data.int(2n),
+            key: 1n,
+            value: 2n,
           },
         ]);
-        expect(Schema.is(Data.PlutusMapSchema)(map)).toBe(true);
+        expect(Data.isMap(map)).toBe(true);
       });
     });
 
@@ -139,24 +129,20 @@ describe("Data Module Tests", () => {
       });
 
       it("should create a valid constructor with fields", () => {
-        const constr = Data.constr(2n, [
-          Data.int(42n),
-          Data.bytearray("deadbeef"),
-          Data.list([Data.int(99n)]),
-        ]);
+        const constr = Data.constr(2n, [42n, "deadbeef", [99n]]);
         expect(constr.index).toBe(2n);
         expect(constr.fields).toHaveLength(3);
         expect(Data.isConstr(constr)).toBe(true);
       });
 
       it("should validate Constr with schema", () => {
-        const constr = Data.constr(5n, [Data.int(42n), Data.bytearray("cafe")]);
-        expect(Schema.is(Data.ConstrSchema)(constr)).toBe(true);
+        const constr = Data.constr(5n, [42n, "cafe"]);
+        expect(Data.isConstr(constr)).toBe(true);
       });
 
       it("should handle large constructor indices", () => {
         const largeIndex = 2n ** 32n + 1n; // Well beyond the direct tag range
-        const constr = Data.constr(largeIndex, [Data.int(1n)]);
+        const constr = Data.constr(largeIndex, [1n]);
         expect(constr.index).toBe(largeIndex);
         expect(Data.isConstr(constr)).toBe(true);
       });
@@ -172,26 +158,22 @@ describe("Data Module Tests", () => {
       },
       {
         name: "constructor with fields",
-        value: Data.constr(1n, [Data.int(42n), Data.bytearray("cafe")]),
+        value: Data.constr(1n, [42n, "cafe"]),
         expectedHex: "d87a9f182a42cafeff",
       },
       {
         name: "large constructor index",
-        value: Data.constr(999999n, [Data.int(42n)]),
+        value: Data.constr(999999n, [42n]),
         expectedHex: "d8669f1a000f423f9f182affff",
       },
       {
         name: "empty list",
-        value: Data.list([]),
+        value: [],
         expectedHex: "80",
       },
       {
         name: "list with mixed elements",
-        value: Data.list([
-          Data.int(1n),
-          Data.bytearray("deadbeef"),
-          Data.list([]),
-        ]),
+        value: [1n, "deadbeef", []],
         expectedHex: "9f0144deadbeef80ff",
       },
       {
@@ -203,35 +185,35 @@ describe("Data Module Tests", () => {
         name: "map with entries",
         value: Data.map([
           {
-            key: Data.int(1n),
-            value: Data.bytearray("cafe"),
+            key: 1n,
+            value: "cafe",
           },
         ]),
         expectedHex: "bf0142cafeff",
       },
       {
         name: "small int",
-        value: Data.int(42n),
+        value: 42n,
         expectedHex: "182a",
       },
       {
         name: "negative int",
-        value: Data.int(-42n),
+        value: -42n,
         expectedHex: "3829",
       },
       {
         name: "large positive int with value",
-        value: Data.int(11375342928504387279n),
+        value: 11375342928504387279n,
         expectedHex: "1b9ddd561fd3c176cf",
       },
       {
         name: "bytes",
-        value: Data.bytearray("deadbeef"),
+        value: "deadbeef",
         expectedHex: "44deadbeef",
       },
       {
         name: "empty bytes",
-        value: Data.bytearray(""),
+        value: "",
         expectedHex: "40",
       },
     ];
@@ -265,7 +247,7 @@ describe("Data Module Tests", () => {
   describe("Utility Functions", () => {
     describe("matchConstr", () => {
       it("should match specific constructor indices", () => {
-        const constr = Data.constr(1n, [Data.int(42n)]);
+        const constr = Data.constr(1n, [42n]);
         const result = Data.matchConstr(constr, {
           1: (fields) => `Found index 1 with ${fields.length} fields`,
           2: (fields) => `Found index 2 with ${fields.length} fields`,
@@ -276,7 +258,7 @@ describe("Data Module Tests", () => {
       });
 
       it("should use default case for non-matched indices", () => {
-        const constr = Data.constr(99n, [Data.int(42n)]);
+        const constr = Data.constr(99n, [42n]);
         const result = Data.matchConstr(constr, {
           1: (fields) => `Found index 1 with ${fields.length} fields`,
           2: (fields) => `Found index 2 with ${fields.length} fields`,
@@ -288,52 +270,52 @@ describe("Data Module Tests", () => {
     });
 
     describe("matchPlutusData", () => {
-      it("should match PlutusMap type", () => {
+      it("should match Plutus Map type", () => {
         const map = Data.map([]);
-        const result = Data.matchPlutusData(map, {
-          PlutusMap: (entries) => `Map with ${entries.length} entries`,
-          PlutusList: (items) => `List with ${items.length} items`,
-          PlutusBigInt: (value) => `BigInt: ${value}`,
-          PlutusBytes: (bytes) => `Bytes: ${bytes}`,
+        const result = Data.matchData(map, {
+          Map: (entries) => `Map with ${entries.length} entries`,
+          List: (items) => `List with ${items.length} items`,
+          Int: (value) => `BigInt: ${value}`,
+          Bytes: (bytes) => `Bytes: ${bytes}`,
           Constr: (constr) =>
             `Constructor ${constr.index} with ${constr.fields.length} fields`,
         });
         expect(result).toBe("Map with 0 entries");
       });
 
-      it("should match PlutusList type", () => {
-        const list = Data.list([Data.int(1n)]);
-        const result = Data.matchPlutusData(list, {
-          PlutusMap: (entries) => `Map with ${entries.length} entries`,
-          PlutusList: (items) => `List with ${items.length} items`,
-          PlutusBigInt: (value) => `BigInt: ${value}`,
-          PlutusBytes: (bytes) => `Bytes: ${bytes}`,
+      it("should match Plutus List type", () => {
+        const list = [1n];
+        const result = Data.matchData(list, {
+          Map: (entries) => `Map with ${entries.length} entries`,
+          List: (items) => `List with ${items.length} items`,
+          Int: (value) => `BigInt: ${value}`,
+          Bytes: (bytes) => `Bytes: ${bytes}`,
           Constr: (constr) =>
             `Constructor ${constr.index} with ${constr.fields.length} fields`,
         });
         expect(result).toBe("List with 1 items");
       });
 
-      it("should match PlutusBigInt type", () => {
-        const int = Data.int(42n);
-        const result = Data.matchPlutusData(int, {
-          PlutusMap: (entries) => `Map with ${entries.length} entries`,
-          PlutusList: (items) => `List with ${items.length} items`,
-          PlutusBigInt: (value) => `BigInt: ${value}`,
-          PlutusBytes: (bytes) => `Bytes: ${bytes}`,
+      it("should match Plutus Int type", () => {
+        const int = 42n;
+        const result = Data.matchData(int, {
+          Map: (entries) => `Map with ${entries.length} entries`,
+          List: (items) => `List with ${items.length} items`,
+          Int: (value) => `BigInt: ${value}`,
+          Bytes: (bytes) => `Bytes: ${bytes}`,
           Constr: (constr) =>
             `Constructor ${constr.index} with ${constr.fields.length} fields`,
         });
         expect(result).toBe("BigInt: 42");
       });
 
-      it("should match PlutusBytes type", () => {
-        const bytes = Data.bytearray("cafe");
-        const result = Data.matchPlutusData(bytes, {
-          PlutusMap: (entries) => `Map with ${entries.length} entries`,
-          PlutusList: (items) => `List with ${items.length} items`,
-          PlutusBigInt: (value) => `BigInt: ${value}`,
-          PlutusBytes: (bytes) => `Bytes: ${bytes}`,
+      it("should match Plutus Bytes type", () => {
+        const bytes = "cafe";
+        const result = Data.matchData(bytes, {
+          Map: (entries) => `Map with ${entries.length} entries`,
+          List: (items) => `List with ${items.length} items`,
+          Int: (value) => `BigInt: ${value}`,
+          Bytes: (bytes) => `Bytes: ${bytes}`,
           Constr: (constr) =>
             `Constructor ${constr.index} with ${constr.fields.length} fields`,
         });
@@ -342,11 +324,11 @@ describe("Data Module Tests", () => {
 
       it("should match Constr type", () => {
         const constr = Data.constr(3n, []);
-        const result = Data.matchPlutusData(constr, {
-          PlutusMap: (entries) => `Map with ${entries.length} entries`,
-          PlutusList: (items) => `List with ${items.length} items`,
-          PlutusBigInt: (value) => `BigInt: ${value}`,
-          PlutusBytes: (bytes) => `Bytes: ${bytes}`,
+        const result = Data.matchData(constr, {
+          Map: (entries) => `Map with ${entries.length} entries`,
+          List: (items) => `List with ${items.length} items`,
+          Int: (value) => `BigInt: ${value}`,
+          Bytes: (bytes) => `Bytes: ${bytes}`,
           Constr: (constr) =>
             `Constructor ${constr.index} with ${constr.fields.length} fields`,
         });
@@ -359,21 +341,20 @@ describe("Data Module Tests", () => {
     it("should handle nested structures", () => {
       // Create a complex nested structure
       const complex = Data.constr(0n, [
-        Data.list([Data.int(1n), Data.int(2n), Data.bytearray("cafe")]),
+        [1n, 2n, "cafe"],
         Data.map([
           {
-            key: Data.int(42n),
-            value: Data.list([Data.bytearray("deadbeef")]),
+            key: 42n,
+            value: ["deadbeef"],
           },
           {
-            key: Data.bytearray("deadbeef"),
-            value: Data.constr(1n, [Data.int(-999n)]),
+            key: "deadbeef",
+            value: Data.constr(1n, [-999n]),
           },
         ]),
-        Data.constr(7n, [Data.list([]), Data.map([])]),
+        Data.constr(7n, [[], Data.map([])]),
       ]);
 
-      // Test round-trip encoding/decoding
       const encoded = Data.Encode.cborHex(complex);
       const decoded = Data.Decode.cborHex(encoded);
       expect(decoded).toEqual(complex);
@@ -429,12 +410,12 @@ describe("Data Module Tests", () => {
     ];
 
     it.each(boundaryTestCases)("should handle $name correctly", ({ value }) => {
-      const plutusData = Data.int(value);
+      const plutusData = value;
       const encoded = Data.Encode.cborBytes(plutusData);
       const decoded = Data.Decode.cborBytes(encoded);
 
       expect(decoded).toEqual(plutusData);
-      expect(decoded as Data.PlutusBigInt).toBe(value);
+      expect(decoded as Data.Int).toBe(value);
     });
   });
 
@@ -475,7 +456,7 @@ describe("Data Module Tests", () => {
       ];
 
       testCases.forEach(({ value, expectedMajorType }) => {
-        const plutusData = Data.int(value);
+        const plutusData = value;
         const encoded = Data.Encode.cborBytes(plutusData);
         const firstByte = encoded[0];
         const majorType = firstByte >> 5;
@@ -495,7 +476,7 @@ describe("Data Module Tests", () => {
     });
 
     it("should handle empty collections correctly", () => {
-      const emptyList = Data.list([]);
+      const emptyList: Data.List = [];
       const emptyMap = Data.map([]);
       const emptyConstr = Data.constr(0n, []);
 
@@ -511,41 +492,37 @@ describe("Data Module Tests", () => {
   describe("Large Data Structure Edge Cases", () => {
     it("should handle large lists", () => {
       // Create a list with many elements
-      const largeList = Data.list(
-        Array.from({ length: 1000 }, (_, i) => Data.int(BigInt(i))),
-      );
+      const largeList = Array.from({ length: 1000 }, (_, i) => BigInt(i));
 
       const encoded = Data.Encode.cborBytes(largeList);
       const decoded = Data.Decode.cborBytes(encoded);
       expect(decoded).toEqual(largeList);
-      expect(decoded as Data.PlutusList).toHaveLength(1000);
+      expect(decoded as Data.List).toHaveLength(1000);
     });
 
     it("should handle large maps", () => {
       // Create a map with many entries
       const entries = Array.from({ length: 100 }, (_, i) => ({
-        key: Data.int(BigInt(i)),
-        value: Data.bytearray(`${i.toString(16).padStart(4, "0")}`),
+        key: BigInt(i),
+        value: `${i.toString(16).padStart(4, "0")}`,
       }));
       const largeMap = Data.map(entries);
 
       const encoded = Data.Encode.cborBytes(largeMap);
       const decoded = Data.Decode.cborBytes(encoded);
       expect(decoded).toEqual(largeMap);
-      expect((decoded as Data.PlutusMap).size).toBe(100);
+      expect((decoded as Data.MapList).size).toBe(100);
     });
 
     it("should handle constructors with many fields", () => {
       // Create a constructor with many fields
-      const manyFields = Array.from({ length: 50 }, (_, i) =>
-        Data.int(BigInt(i)),
-      );
+      const manyFields = Array.from({ length: 50 }, (_, i) => BigInt(i));
       const constr = Data.constr(42n, manyFields);
 
       const encoded = Data.Encode.cborBytes(constr);
       const decoded = Data.Decode.cborBytes(encoded);
       expect(decoded).toEqual(constr);
-      expect((decoded as Data.ConstrSchema).fields).toHaveLength(50);
+      expect((decoded as Data.Constr).fields).toHaveLength(50);
     });
   });
 
@@ -574,38 +551,20 @@ describe("Data Module Tests", () => {
     describe("Malformed PlutusData Objects", () => {
       it("should handle objects with wrong _tag values", () => {
         const malformedObjects = [
-          { _tag: "InvalidTag", data: "test" },
-          { _tag: "Integer", integer: "not-a-bigint" },
-          { _tag: "List", list: "not-an-array" },
-          { _tag: "Map", entries: "not-an-array" },
-          { _tag: "Constr", index: "not-a-bigint", fields: [] },
-          { _tag: "ByteArray", bytearray: "invalidhex!" },
-        ];
+          "test",
+          10,
+          [1, 2n, 3],
+          new Map([["key", "value"]]),
+          { index: -1n, fields: [] },
+          "invalidhex!",
+        ] as const;
 
         malformedObjects.forEach((obj) => {
-          expect(Data.isPlutusBigInt(obj as any)).toBe(false);
-          expect(Data.isPlutusList(obj as any)).toBe(false);
-          expect(Data.isPlutusMap(obj as any)).toBe(false);
-          expect(Data.isConstr(obj as any)).toBe(false);
-          expect(Data.isPlutusBytes(obj as any)).toBe(false);
-        });
-      });
-
-      it("should handle missing required fields", () => {
-        const incompleteObjects = [
-          { _tag: "Integer" }, // Missing integer field
-          { _tag: "List" }, // Missing list field
-          { _tag: "Map" }, // Missing entries field
-          { _tag: "Constr", index: 1n }, // Missing fields
-          { _tag: "ByteArray" }, // Missing bytearray field
-        ];
-
-        incompleteObjects.forEach((obj) => {
-          expect(Data.isPlutusBigInt(obj as any)).toBe(false);
-          expect(Data.isPlutusList(obj as any)).toBe(false);
-          expect(Data.isPlutusMap(obj as any)).toBe(false);
-          expect(Data.isConstr(obj as any)).toBe(false);
-          expect(Data.isPlutusBytes(obj as any)).toBe(false);
+          expect(Data.isInt(obj)).toBe(false);
+          expect(Data.isList(obj)).toBe(false);
+          expect(Data.isMap(obj)).toBe(false);
+          expect(Data.isConstr(obj)).toBe(false);
+          expect(Data.isBytes(obj)).toBe(false);
         });
       });
     });
@@ -620,13 +579,13 @@ describe("Data Module Tests", () => {
           { name: "uppercase hex", value: "DEADBEEF" },
         ];
 
-        edgeCases.forEach(({ name, value }) => {
+        edgeCases.forEach(({ value }) => {
           expect(() => {
             const bytes = Data.bytearray(value);
             const encoded = Data.Encode.cborBytes(bytes);
             const decoded = Data.Decode.cborBytes(encoded);
             // Note: hex strings are normalized to lowercase during processing
-            if (Data.isPlutusBytes(decoded)) {
+            if (Data.isBytes(decoded)) {
               expect(decoded).toBe(value.toLowerCase());
             }
           }).not.toThrow();
@@ -643,10 +602,7 @@ describe("Data Module Tests", () => {
         ];
 
         invalidCases.forEach((invalidHex) => {
-          // Should not throw during creation (lenient validation)
-          // but should fail type guard validation
-          const invalidBytes = { _tag: "ByteArray", bytearray: invalidHex };
-          expect(Data.isPlutusBytes(invalidBytes)).toBe(false);
+          expect(Data.isBytes(invalidHex)).toBe(false);
         });
       });
     });
@@ -656,9 +612,9 @@ describe("Data Module Tests", () => {
     describe("Type Guards", () => {
       it("should correctly identify PlutusData types", () => {
         const testCases = [
-          { data: Data.int(42n), expectedType: "PlutusBigInt" },
-          { data: Data.bytearray("deadbeef"), expectedType: "PlutusBytes" },
-          { data: Data.list([]), expectedType: "PlutusList" },
+          { data: 42n, expectedType: "PlutusBigInt" },
+          { data: "deadbeef", expectedType: "PlutusBytes" },
+          { data: [], expectedType: "PlutusList" },
           { data: Data.map([]), expectedType: "PlutusMap" },
           { data: Data.constr(0n, []), expectedType: "Constr" },
         ];
@@ -666,38 +622,38 @@ describe("Data Module Tests", () => {
         testCases.forEach(({ data, expectedType }) => {
           switch (expectedType) {
             case "PlutusBigInt":
-              expect(Data.isPlutusBigInt(data)).toBe(true);
-              expect(Data.isPlutusBytes(data)).toBe(false);
-              expect(Data.isPlutusList(data)).toBe(false);
-              expect(Data.isPlutusMap(data)).toBe(false);
+              expect(Data.isInt(data)).toBe(true);
+              expect(Data.isBytes(data)).toBe(false);
+              expect(Data.isList(data)).toBe(false);
+              expect(Data.isMap(data)).toBe(false);
               expect(Data.isConstr(data)).toBe(false);
               break;
             case "PlutusBytes":
-              expect(Data.isPlutusBigInt(data)).toBe(false);
-              expect(Data.isPlutusBytes(data)).toBe(true);
-              expect(Data.isPlutusList(data)).toBe(false);
-              expect(Data.isPlutusMap(data)).toBe(false);
+              expect(Data.isInt(data)).toBe(false);
+              expect(Data.isBytes(data)).toBe(true);
+              expect(Data.isList(data)).toBe(false);
+              expect(Data.isMap(data)).toBe(false);
               expect(Data.isConstr(data)).toBe(false);
               break;
             case "PlutusList":
-              expect(Data.isPlutusBigInt(data)).toBe(false);
-              expect(Data.isPlutusBytes(data)).toBe(false);
-              expect(Data.isPlutusList(data)).toBe(true);
-              expect(Data.isPlutusMap(data)).toBe(false);
+              expect(Data.isInt(data)).toBe(false);
+              expect(Data.isBytes(data)).toBe(false);
+              expect(Data.isList(data)).toBe(true);
+              expect(Data.isMap(data)).toBe(false);
               expect(Data.isConstr(data)).toBe(false);
               break;
             case "PlutusMap":
-              expect(Data.isPlutusBigInt(data)).toBe(false);
-              expect(Data.isPlutusBytes(data)).toBe(false);
-              expect(Data.isPlutusList(data)).toBe(false);
-              expect(Data.isPlutusMap(data)).toBe(true);
+              expect(Data.isInt(data)).toBe(false);
+              expect(Data.isBytes(data)).toBe(false);
+              expect(Data.isList(data)).toBe(false);
+              expect(Data.isMap(data)).toBe(true);
               expect(Data.isConstr(data)).toBe(false);
               break;
             case "Constr":
-              expect(Data.isPlutusBigInt(data)).toBe(false);
-              expect(Data.isPlutusBytes(data)).toBe(false);
-              expect(Data.isPlutusList(data)).toBe(false);
-              expect(Data.isPlutusMap(data)).toBe(false);
+              expect(Data.isInt(data)).toBe(false);
+              expect(Data.isBytes(data)).toBe(false);
+              expect(Data.isList(data)).toBe(false);
+              expect(Data.isMap(data)).toBe(false);
               expect(Data.isConstr(data)).toBe(true);
               break;
           }
@@ -707,21 +663,11 @@ describe("Data Module Tests", () => {
 
     describe("Schema Validation", () => {
       it("should validate all PlutusData types with their schemas", () => {
-        expect(Schema.is(Data.PlutusBigIntSchema)(Data.int(42n))).toBe(true);
-        expect(
-          Schema.is(Data.PlutusBytesSchema)(Data.bytearray("deadbeef")),
-        ).toBe(true);
-        expect(
-          Schema.is(Data.PlutusListSchema)(Data.list([Data.int(1n)])),
-        ).toBe(true);
-        expect(
-          Schema.is(Data.PlutusMapSchema)(
-            Data.map([{ key: Data.int(1n), value: Data.int(2n) }]),
-          ),
-        ).toBe(true);
-        expect(
-          Schema.is(Data.ConstrSchema)(Data.constr(0n, [Data.int(42n)])),
-        ).toBe(true);
+        expect(Data.isInt(42n)).toBe(true);
+        expect(Data.isBytes("deadbeef")).toBe(true);
+        expect(Data.isList([1n])).toBe(true);
+        expect(Data.isMap(Data.map([{ key: 1n, value: 2n }]))).toBe(true);
+        expect(Data.isConstr(Data.constr(0n, [42n]))).toBe(true);
       });
     });
   });
@@ -730,9 +676,9 @@ describe("Data Module Tests", () => {
     describe("Deeply Nested Structures", () => {
       it("should handle moderate nesting levels", () => {
         // Create a moderately nested structure (20 levels)
-        let nested: any = Data.int(42n);
+        let nested: any = 42n;
         for (let i = 0; i < 20; i++) {
-          nested = Data.list([nested]);
+          nested = [nested];
         }
 
         expect(() => {
@@ -745,17 +691,14 @@ describe("Data Module Tests", () => {
       it("should handle mixed nested structures", () => {
         // Create a complex mixed structure with valid hex strings
         const complex = Data.constr(0n, [
-          Data.list([
-            Data.map([{ key: Data.int(1n), value: Data.bytearray("cafe") }]),
-            Data.constr(1n, [Data.int(-999n)]),
-          ]),
+          [Data.map([{ key: 1n, value: "cafe" }]), Data.constr(1n, [-999n])],
           Data.map([
             {
-              key: Data.bytearray("deadbeef"), // Valid hex string
-              value: Data.list([Data.int(1n), Data.int(2n), Data.int(3n)]),
+              key: "deadbeef", // Valid hex string
+              value: [1n, 2n, 3n],
             },
             {
-              key: Data.int(42n),
+              key: 42n,
               value: Data.constr(2n, []),
             },
           ]),
@@ -770,14 +713,8 @@ describe("Data Module Tests", () => {
     describe("Data Structure Consistency", () => {
       it("should maintain referential integrity", () => {
         // Verify that separate instances with same data are equal
-        const data1 = Data.constr(42n, [
-          Data.int(123n),
-          Data.bytearray("cafe"),
-        ]);
-        const data2 = Data.constr(42n, [
-          Data.int(123n),
-          Data.bytearray("cafe"),
-        ]);
+        const data1 = Data.constr(42n, [123n, "cafe"]);
+        const data2 = Data.constr(42n, [123n, "cafe"]);
 
         expect(data1).toEqual(data2);
 
@@ -790,20 +727,20 @@ describe("Data Module Tests", () => {
       it("should detect data differences correctly", () => {
         const similar = [
           {
-            data1: Data.constr(42n, [Data.int(123n)]),
-            data2: Data.constr(43n, [Data.int(123n)]), // Different index
+            data1: Data.constr(42n, [123n]),
+            data2: Data.constr(43n, [123n]), // Different index
           },
           {
-            data1: Data.constr(42n, [Data.int(123n)]),
-            data2: Data.constr(42n, [Data.int(124n)]), // Different field
+            data1: Data.constr(42n, [123n]),
+            data2: Data.constr(42n, [124n]), // Different field
           },
           {
-            data1: Data.bytearray("deadbeef"),
-            data2: Data.bytearray("deadbeee"), // Different hex
+            data1: "deadbeef",
+            data2: "deadbeee", // Different hex
           },
           {
-            data1: Data.int(42n),
-            data2: Data.int(-42n), // Different sign
+            data1: 42n,
+            data2: -42n, // Different sign
           },
         ];
 
@@ -822,7 +759,7 @@ describe("Data Module Tests", () => {
   describe("Constructor Index Edge Cases", () => {
     it("should handle direct tag constructors (0-6)", () => {
       for (let i = 0; i <= 6; i++) {
-        const constr = Data.constr(BigInt(i), [Data.int(42n)]);
+        const constr = Data.constr(BigInt(i), [42n]);
         const encoded = Data.Encode.cborBytes(constr);
         const decoded = Data.Decode.cborBytes(encoded);
         expect(decoded).toEqual(constr);
@@ -839,11 +776,11 @@ describe("Data Module Tests", () => {
       const testIndices = [7n, 100n, 999999n, 2n ** 32n, 2n ** 64n - 1n];
 
       testIndices.forEach((index) => {
-        const constr = Data.constr(index, [Data.int(42n)]);
+        const constr = Data.constr(index, [42n]);
         const encoded = Data.Encode.cborBytes(constr);
         const decoded = Data.Decode.cborBytes(encoded);
         expect(decoded).toEqual(constr);
-        expect((decoded as Data.ConstrSchema).index).toBe(index);
+        expect((decoded as Data.Constr).index).toBe(index);
 
         const firstByte = encoded[0];
 
@@ -881,7 +818,7 @@ describe("Data Module Tests", () => {
   });
 
   it("should handle unsorted map and return sorted canonical format", () => {
-    const unsorted: Data.PlutusData = Data.constr(15n, [
+    const unsorted = Data.constr(15n, [
       Data.map([
         {
           key: 9358323691080620716n,

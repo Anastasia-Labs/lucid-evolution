@@ -113,19 +113,16 @@ export const CBORBytesSchema = (
       switch (toI._tag) {
         case "KeyHashDRep":
           return ParseResult.succeed(
-            CBOR.encodeCBORValue([0, Bytes.Decode.hex(toI.keyHash)], options),
+            CBOR.Encode.bytes([0, Bytes.Decode.hex(toI.keyHash)], options),
           );
         case "ScriptHashDRep":
           return ParseResult.succeed(
-            CBOR.encodeCBORValue(
-              [1, Bytes.Decode.hex(toI.scriptHash)],
-              options,
-            ),
+            CBOR.Encode.bytes([1, Bytes.Decode.hex(toI.scriptHash)], options),
           );
         case "AlwaysAbstainDRep":
-          return ParseResult.succeed(CBOR.encodeCBORValue([2], options));
+          return ParseResult.succeed(CBOR.Encode.bytes([2], options));
         case "AlwaysNoConfidenceDRep":
-          return ParseResult.succeed(CBOR.encodeCBORValue([3], options));
+          return ParseResult.succeed(CBOR.Encode.bytes([3], options));
       }
     },
     decode: (fromA) =>

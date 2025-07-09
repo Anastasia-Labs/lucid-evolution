@@ -369,7 +369,7 @@ export const CBORBytesSchema = Schema.transformOrFail(
     encode: (_, __, ___, toA) =>
       // Convert Map to Map and then encode to CBOR bytes
       ParseResult.succeed(
-        CBOR.Encode().bytes(
+        CBOR.Encode.bytes(
           new Map(
             toEntries(toA).map(([policyId, assetEntries]) => [
               policyId, // Convert PolicyId to Uint8Array
@@ -385,10 +385,9 @@ export const CBORBytesSchema = Schema.transformOrFail(
       ),
     decode: (_, __, ___, fromI) =>
       Effect.gen(function* () {
-        const map = yield* ParseResult.decode(
-          CBOR.makeCBORBytesSchema(MintCDDLSchema),
-        )(fromI);
-        const m = fromCDDL(map);
+        const map = yield* ParseResult.decode(CBOR.CBORBytesSchema())(fromI);
+        const cddlMap = yield* ParseResult.decodeUnknown(MintCDDLSchema)(map);
+        const m = fromCDDL(cddlMap);
         return m;
       }),
   },
@@ -408,7 +407,7 @@ export const CBORHexSchema = Schema.transformOrFail(
     encode: (_, __, ___, toA) =>
       // Convert Map to Map and then encode to CBOR hex
       ParseResult.succeed(
-        CBOR.Encode().hex(
+        CBOR.Encode.hex(
           new Map(
             toEntries(toA).map(([policyId, assetEntries]) => [
               policyId, // Convert PolicyId to Uint8Array
@@ -424,30 +423,13 @@ export const CBORHexSchema = Schema.transformOrFail(
       ),
     decode: (_, __, ___, fromI) =>
       Effect.gen(function* () {
-        const map = yield* ParseResult.decode(
-          CBOR.makeCBORHexSchema(MintCDDLSchema),
-        )(fromI);
-        const m = fromCDDL(map);
+        const map = yield* ParseResult.decode(CBOR.CBORHexSchema())(fromI);
+        const cddlMap = yield* ParseResult.decodeUnknown(MintCDDLSchema)(map);
+        const m = fromCDDL(cddlMap);
         return m;
       }),
   },
 );
-
-/**
- * Encoding utilities using CBOR.
- *
- * @since 2.0.0
- * @category encoding/decoding
- */
-export const EncodeRaw = CBOR.EncodeWithSchema(MintCDDLSchema);
-
-/**
- * Decoding utilities using CBOR.
- *
- * @since 2.0.0
- * @category encoding/decoding
- */
-export const DecodeRaw = CBOR.DecodeWithSchema(MintCDDLSchema);
 
 /**
  * Convert Mint to raw Map data for CBOR encoding.

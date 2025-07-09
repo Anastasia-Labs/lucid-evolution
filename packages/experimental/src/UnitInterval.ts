@@ -73,7 +73,7 @@ export class UnitInterval extends Schema.TaggedClass<UnitInterval>()(
  * @since 2.0.0
  * @category schemas
  */
-export const CBORBytesSchema = CBOR.makeCBORBytesSchema(UnitInterval);
+export const CBORBytesSchema = undefined;
 
 /**
  * CBOR hex transformation schema for UnitInterval.
@@ -81,7 +81,7 @@ export const CBORBytesSchema = CBOR.makeCBORBytesSchema(UnitInterval);
  * @since 2.0.0
  * @category schemas
  */
-export const CBORHexSchema = CBOR.makeCBORHexSchema(UnitInterval);
+export const CBORHexSchema = undefined;
 
 /**
  * Create a UnitInterval from numerator and denominator.

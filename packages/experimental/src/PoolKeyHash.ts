@@ -69,7 +69,7 @@ export const HexSchema = Schema.transform(
  * @since 2.0.0
  * @category schemas
  */
-export const CBORBytesSchema = CBOR.makeCBORBytesSchema(PoolKeyHash);
+export const CBORBytesSchema = undefined;
 
 /**
  * CBOR hex transformation schema for PoolKeyHash.
@@ -77,7 +77,7 @@ export const CBORBytesSchema = CBOR.makeCBORBytesSchema(PoolKeyHash);
  * @since 2.0.0
  * @category schemas
  */
-export const CBORHexSchema = CBOR.makeCBORHexSchema(PoolKeyHash);
+export const CBORHexSchema = undefined;
 
 /**
  * Check if two PoolKeyHash instances are equal.
