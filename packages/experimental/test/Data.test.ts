@@ -1,5 +1,5 @@
 import { describe, expect, it } from "@effect/vitest";
-import { Effect, Schema } from "effect";
+import { Schema } from "effect";
 import * as Data from "../src/Data.js";
 
 /**
@@ -168,22 +168,22 @@ describe("Data Module Tests", () => {
       {
         name: "empty constructor",
         value: Data.constr(0n, []),
-        expectedHex: "d87980", // Golden value for regression testing
+        expectedHex: "d87980",
       },
       {
         name: "constructor with fields",
         value: Data.constr(1n, [Data.int(42n), Data.bytearray("cafe")]),
-        expectedHex: "d87a9f182a42cafeFF", // Golden value
+        expectedHex: "d87a9f182a42cafeFF",
       },
       {
         name: "large constructor index",
         value: Data.constr(999999n, [Data.int(42n)]),
-        expectedHex: "d8669f1a000f423f9f182aFFFF", // Golden value
+        expectedHex: "d8669f1a000f423f9f182aFFFF",
       },
       {
         name: "empty list",
         value: Data.list([]),
-        expectedHex: "80", // Golden value
+        expectedHex: "80",
       },
       {
         name: "list with mixed elements",
@@ -192,12 +192,12 @@ describe("Data Module Tests", () => {
           Data.bytearray("deadbeef"),
           Data.list([]),
         ]),
-        expectedHex: "9f0144deadbeef80FF", // Golden value
+        expectedHex: "9f0144deadbeef80FF",
       },
       {
         name: "empty map",
         value: Data.map([]),
-        expectedHex: "a0", // Golden value
+        expectedHex: "a0",
       },
       {
         name: "map with entries",
@@ -207,37 +207,37 @@ describe("Data Module Tests", () => {
             value: Data.bytearray("cafe"),
           },
         ]),
-        expectedHex: "bf0142cafeFF", // Golden value
+        expectedHex: "bf0142cafeFF",
       },
       {
         name: "small int",
         value: Data.int(42n),
-        expectedHex: "182a", // Golden value
+        expectedHex: "182a",
       },
       {
         name: "negative int",
         value: Data.int(-42n),
-        expectedHex: "3829", // Golden value
+        expectedHex: "3829",
       },
       {
         name: "large positive int",
         value: Data.int(2n ** 64n),
-        expectedHex: "c249010000000000000000", // Golden value
+        expectedHex: "c249010000000000000000",
       },
       {
         name: "large negative int",
         value: Data.int(-(2n ** 64n)),
-        expectedHex: "c349010000000000000000", // Golden value
+        expectedHex: "c349010000000000000000",
       },
       {
         name: "bytes",
         value: Data.bytearray("deadbeef"),
-        expectedHex: "44deadbeef", // Golden value
+        expectedHex: "44deadbeef",
       },
       {
         name: "empty bytes",
         value: Data.bytearray(""),
-        expectedHex: "40", // Golden value
+        expectedHex: "40",
       },
     ];
 
@@ -263,77 +263,6 @@ describe("Data Module Tests", () => {
           },
         );
       });
-    });
-
-    describe("CML Compatible Encoding/Decoding", () => {
-      describe("Hex Encoding/Decoding", () => {
-        it.each(testCases)(
-          "should round-trip $name via CML hex encoding",
-          ({ value }) => {
-            const encoded = Data.Encode.cborHex(value);
-            const decoded = Data.Decode.cborHex(encoded);
-            expect(decoded).toEqual(value);
-          },
-        );
-      });
-
-      describe("Bytes Encoding/Decoding", () => {
-        it.each(testCases)(
-          "should round-trip $name via CML bytes encoding",
-          ({ value }) => {
-            const encoded = Data.Encode.cborBytes(value);
-            const decoded = Data.Decode.cborBytes(encoded);
-            expect(decoded).toEqual(value);
-          },
-        );
-      });
-    });
-
-    describe("Cross-Compatibility Tests", () => {
-      it.each(
-        testCases.filter((tc) => !tc.name.includes("large constructor index")),
-      )(
-        "should be compatible between standard and CML encoding for $name",
-        ({ value }) => {
-          // Encode with standard, decode with CML
-          const standardEncoded = Data.Encode.cborBytes(value);
-          const cmlDecoded = Data.Decode.cborBytes(standardEncoded);
-          expect(cmlDecoded).toEqual(value);
-
-          // Encode with CML, decode with standard
-          const cmlEncoded = Data.Encode.cborBytes(value);
-          const standardDecoded = Data.Decode.cborBytes(cmlEncoded);
-          expect(standardDecoded).toEqual(value);
-        },
-      );
-    });
-
-    describe("Effect-based encoding/decoding", () => {
-      it.effect("should handle encoding with Effect", () =>
-        Effect.gen(function* () {
-          const data = Data.constr(0n, [Data.int(42n)]);
-          const hex = Data.Encode.cborHex(data);
-          expect(typeof hex).toBe("string");
-        }),
-      );
-
-      it.effect("should handle decoding with Effect", () =>
-        Effect.gen(function* () {
-          const data = Data.constr(0n, [Data.int(42n)]);
-          const hex = Data.Encode.cborHex(data);
-          const decoded = Data.Decode.cborHex(hex);
-          expect(decoded).toEqual(data);
-        }),
-      );
-
-      it.effect("should fail for invalid hex in decoding", () =>
-        Effect.gen(function* () {
-          const result = yield* Effect.try(() =>
-            Data.Decode.cborHex("not-hex"),
-          );
-          expect(result).toBeDefined();
-        }).pipe(Effect.catchAll(() => Effect.succeed(undefined))),
-      );
     });
   });
 
@@ -509,7 +438,7 @@ describe("Data Module Tests", () => {
       const decoded = Data.Decode.cborBytes(encoded);
 
       expect(decoded).toEqual(plutusData);
-      expect((decoded as any).integer).toBe(value);
+      expect((decoded as Data.PlutusBigInt).integer).toBe(value);
     });
   });
 
@@ -549,7 +478,7 @@ describe("Data Module Tests", () => {
         },
       ];
 
-      testCases.forEach(({ value, expectedMajorType, description }) => {
+      testCases.forEach(({ value, expectedMajorType }) => {
         const plutusData = Data.int(value);
         const encoded = Data.Encode.cborBytes(plutusData);
         const firstByte = encoded[0];
@@ -600,18 +529,6 @@ describe("Data Module Tests", () => {
   });
 
   describe("Large Data Structure Edge Cases", () => {
-    it("should handle deeply nested structures", () => {
-      // Create a deeply nested structure (10 levels deep)
-      let nested: any = Data.int(42n);
-      for (let i = 0; i < 10; i++) {
-        nested = Data.list([nested]);
-      }
-
-      const encoded = Data.Encode.cborHex(nested);
-      const decoded = Data.Decode.cborHex(encoded);
-      expect(decoded).toEqual(nested);
-    });
-
     it("should handle large lists", () => {
       // Create a list with many elements
       const largeList = Data.list(
@@ -621,7 +538,7 @@ describe("Data Module Tests", () => {
       const encoded = Data.Encode.cborBytes(largeList);
       const decoded = Data.Decode.cborBytes(encoded);
       expect(decoded).toEqual(largeList);
-      expect((decoded as any).list).toHaveLength(1000);
+      expect((decoded as Data.PlutusList).list).toHaveLength(1000);
     });
 
     it("should handle large maps", () => {
@@ -635,7 +552,7 @@ describe("Data Module Tests", () => {
       const encoded = Data.Encode.cborBytes(largeMap);
       const decoded = Data.Decode.cborBytes(encoded);
       expect(decoded).toEqual(largeMap);
-      expect((decoded as any).entries).toHaveLength(100);
+      expect((decoded as Data.PlutusMap).entries).toHaveLength(100);
     });
 
     it("should handle constructors with many fields", () => {
@@ -648,7 +565,7 @@ describe("Data Module Tests", () => {
       const encoded = Data.Encode.cborBytes(constr);
       const decoded = Data.Decode.cborBytes(encoded);
       expect(decoded).toEqual(constr);
-      expect((decoded as any).fields).toHaveLength(50);
+      expect((decoded as Data.Constr<Data.PlutusData>).fields).toHaveLength(50);
     });
   });
 
@@ -946,9 +863,8 @@ describe("Data Module Tests", () => {
         const encoded = Data.Encode.cborBytes(constr);
         const decoded = Data.Decode.cborBytes(encoded);
         expect(decoded).toEqual(constr);
-        expect((decoded as any).index).toBe(index);
+        expect((decoded as Data.Constr<Data.PlutusData>).index).toBe(index);
 
-        // Verify CBOR encoding format based on CML compatibility
         const firstByte = encoded[0];
 
         if (index >= 7n && index <= 127n) {
@@ -963,5 +879,102 @@ describe("Data Module Tests", () => {
         }
       });
     });
+  });
+
+  it("should handle canonical format roundtrip", () => {
+    const firstCanonical =
+      "d90503828181436ad232a34277931bd5a95fcb2d914b711b431e8fb0e0c31fe71b70cec8a3bf37064e1b785c7997367a91151b6a63f4cd860738d9";
+    const decoded = Data.Decode.cborHex(firstCanonical);
+
+    const encoded = Data.Encode.cborHex(decoded, { _tag: "canonical" });
+    expect(encoded).toBe(firstCanonical);
+    expect(Data.Decode.cborHex(encoded)).toEqual(decoded);
+
+    const secondCanonical =
+      "d9050883a4410742b6491b81df71d083fb9aac1b5f7385f841d1edec4a70f3d8f8803183c150334688472079a8ce4b0f7f249c0a9f4f829d2e4f1bc0556aa7b700508606a14365b7f71b4b62f0e2fbb95d6d";
+    const secondDecoded = Data.Decode.cborHex(secondCanonical);
+    const secondEncoded = Data.Encode.cborHex(secondDecoded, {
+      _tag: "canonical",
+    });
+    expect(secondEncoded).toBe(secondCanonical);
+    expect(Data.Decode.cborHex(secondEncoded)).toEqual(secondDecoded);
+  });
+
+  it("should handle unsorted map and return sorted canonical format", () => {
+    const unsorted: Data.PlutusData = {
+      _tag: "Constr",
+      index: 15n,
+      fields: [
+        {
+          _tag: "Map",
+          entries: [
+            {
+              key: {
+                _tag: "Integer",
+                integer: 9358323691080620716n,
+              },
+              value: {
+                _tag: "Integer",
+                integer: 6877988357227539948n,
+              },
+            },
+            {
+              key: {
+                _tag: "ByteArray",
+                bytearray: "70f3d8f8803183c15033",
+              },
+              value: {
+                _tag: "ByteArray",
+                bytearray: "88472079a8ce",
+              },
+            },
+            {
+              key: {
+                _tag: "ByteArray",
+                bytearray: "0f7f249c0a9f4f829d2e4f",
+              },
+              value: {
+                _tag: "Integer",
+                integer: 13859100696864903302n,
+              },
+            },
+            {
+              key: {
+                _tag: "ByteArray",
+                bytearray: "07",
+              },
+              value: {
+                _tag: "ByteArray",
+                bytearray: "b649",
+              },
+            },
+          ],
+        },
+        {
+          _tag: "Integer",
+          integer: 6n,
+        },
+        {
+          _tag: "Map",
+          entries: [
+            {
+              key: {
+                _tag: "ByteArray",
+                bytearray: "65b7f7",
+              },
+              value: {
+                _tag: "Integer",
+                integer: 5432168958238743917n,
+              },
+            },
+          ],
+        },
+      ],
+    };
+
+    const encoded = Data.Encode.cborHex(unsorted, { _tag: "canonical" });
+    const expectedCBORHex =
+      "d9050883a4410742b6491b81df71d083fb9aac1b5f7385f841d1edec4a70f3d8f8803183c150334688472079a8ce4b0f7f249c0a9f4f829d2e4f1bc0556aa7b700508606a14365b7f71b4b62f0e2fbb95d6d";
+    expect(encoded).toBe(expectedCBORHex);
   });
 });

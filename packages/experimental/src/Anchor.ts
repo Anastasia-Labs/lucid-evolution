@@ -58,30 +58,28 @@ export const AnchorCDDLSchema = Schema.Tuple(Url.Url, Hash32.BytesSchema);
  * @category schemas
  */
 export const CBORBytesSchema = (
-  options: CBOR.CBOREncodingOptions = CBOR.DEFAULT_ENCODING_OPTIONS
+  options: CBOR.CBOREncodingOptions = CBOR.DEFAULT_ENCODING_OPTIONS,
 ) =>
-  Schema.transformOrFail(
-    Schema.typeSchema(Bytes.BytesSchema),
-    Anchor,
-    {
-      strict: true,
-      encode: (toA) =>
-        ParseResult.succeed(
-          CBOR.Encode.bytes([toA.anchorUrl, toA.anchorDataHash], options),
-        ),
-      decode: (fromA) =>
-        pipe(
-          ParseResult.decode(CBOR.CBORBytesSchema(options))(fromA),
-          ParseResult.flatMap((decoded) => {
-            const [anchorUrl, anchorDataHash] = decoded as [string, Uint8Array];
-            return ParseResult.succeed(new Anchor({ 
-              anchorUrl: Url.make(anchorUrl), 
-              anchorDataHash 
-            }));
-          }),
-        ),
-    }
-  );
+  Schema.transformOrFail(Schema.typeSchema(Bytes.BytesSchema), Anchor, {
+    strict: true,
+    encode: (toA) =>
+      ParseResult.succeed(
+        CBOR.Encode.bytes([toA.anchorUrl, toA.anchorDataHash], options),
+      ),
+    decode: (fromA) =>
+      pipe(
+        ParseResult.decode(CBOR.CBORBytesSchema(options))(fromA),
+        ParseResult.flatMap((decoded) => {
+          const [anchorUrl, anchorDataHash] = decoded as [string, Uint8Array];
+          return ParseResult.succeed(
+            new Anchor({
+              anchorUrl: Url.make(anchorUrl),
+              anchorDataHash,
+            }),
+          );
+        }),
+      ),
+  });
 
 /**
  * CBOR hex transformation schema for Anchor.
@@ -90,7 +88,7 @@ export const CBORBytesSchema = (
  * @category schemas
  */
 export const CBORHexSchema = (
-  options: CBOR.CBOREncodingOptions = CBOR.DEFAULT_ENCODING_OPTIONS
+  options: CBOR.CBOREncodingOptions = CBOR.DEFAULT_ENCODING_OPTIONS,
 ) =>
   Schema.transformOrFail(Bytes.HexSchema, Anchor, {
     strict: true,
@@ -103,10 +101,12 @@ export const CBORHexSchema = (
         ParseResult.decode(CBOR.CBORHexSchema(options))(fromA),
         ParseResult.flatMap((decoded) => {
           const [anchorUrl, anchorDataHash] = decoded as [string, Uint8Array];
-          return ParseResult.succeed(new Anchor({ 
-            anchorUrl: Url.make(anchorUrl), 
-            anchorDataHash 
-          }));
+          return ParseResult.succeed(
+            new Anchor({
+              anchorUrl: Url.make(anchorUrl),
+              anchorDataHash,
+            }),
+          );
         }),
       ),
   });

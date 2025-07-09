@@ -1,3 +1,4 @@
+import { Unknown } from "effect/Schema";
 import * as Bytes from "./Bytes.js";
 import { Data, Effect, ParseResult, pipe, Schema } from "effect";
 
@@ -30,47 +31,26 @@ export interface BaseCBOROptions {
 }
 
 /**
- * @deprecated Use BaseCBOROptions instead
- * @since 2.0.0
- * @category model
- */
-export type BaseCBOREncodingOptions = BaseCBOROptions;
-
-/**
- * Custom CBOR encoding mode with full control over encoding options
- *
- * @since 2.0.0
- * @category model
- */
-export interface CustomCBOREncodingOptions extends BaseCBOROptions {
-  readonly mode: "custom";
-  /** Use indefinite length encoding for arrays */
-  readonly useIndefiniteArrays?: boolean;
-  /** Use indefinite length encoding for maps */
-  readonly useIndefiniteMaps?: boolean;
-  /** Use definite length encoding for empty collections (CML compatibility) */
-  readonly useDefiniteForEmpty?: boolean;
-}
-
-/**
- * Canonical CBOR encoding mode for deterministic output
- *
- * @since 2.0.0
- * @category model
- */
-export interface CanonicalCBOREncodingOptions extends BaseCBOROptions {
-  readonly mode: "canonical";
-}
-
-/**
  * Configuration options for CBOR encoding/decoding
  *
  * @since 2.0.0
  * @category model
  */
 export type CBOREncodingOptions =
-  | CustomCBOREncodingOptions
-  | CanonicalCBOREncodingOptions;
+  | {
+      readonly _tag: "canonical";
+      readonly integersAsBigInt?: boolean;
+    }
+  | {
+      readonly _tag: "custom";
+      /** Use indefinite length encoding for arrays */
+      readonly useIndefiniteArrays: boolean;
+      /** Use indefinite length encoding for maps */
+      readonly useIndefiniteMaps: boolean;
+      /** Use definite length encoding for empty collections (CML compatibility) */
+      readonly useDefiniteForEmpty: boolean;
+      readonly integersAsBigInt: boolean;
+    };
 
 /**
  * Default CBOR encoding options for Cardano.
@@ -80,28 +60,11 @@ export type CBOREncodingOptions =
  * @category constants
  */
 export const DEFAULT_ENCODING_OPTIONS: CBOREncodingOptions = {
-  mode: "custom",
-  tagUint8Array: false,
-  useRecords: false,
-  mapsAsObjects: false,
+  _tag: "custom",
   integersAsBigInt: true, // Default to treating integers as bigint for better type safety
   useIndefiniteArrays: true,
   useIndefiniteMaps: true,
   useDefiniteForEmpty: true, // CML compatibility: definite for empty collections
-};
-
-/**
- * Canonical CBOR encoding options for deterministic output.
- *
- * @since 2.0.0
- * @category constants
- */
-export const CANONICAL_ENCODING_OPTIONS: CBOREncodingOptions = {
-  mode: "canonical",
-  tagUint8Array: false,
-  useRecords: false,
-  mapsAsObjects: false,
-  integersAsBigInt: true, // Default to treating integers as bigint for consistency
 };
 
 /**
@@ -112,9 +75,9 @@ export const CANONICAL_ENCODING_OPTIONS: CBOREncodingOptions = {
  */
 const shouldUseIndefiniteArrays = (
   options: CBOREncodingOptions,
-  arrayLength: number
+  arrayLength: number,
 ): boolean => {
-  switch (options.mode) {
+  switch (options._tag) {
     case "canonical":
       return false; // Canonical mode always uses definite length
     case "custom":
@@ -136,9 +99,9 @@ const shouldUseIndefiniteArrays = (
  */
 const shouldUseIndefiniteMaps = (
   options: CBOREncodingOptions,
-  mapSize: number
+  mapSize: number,
 ): boolean => {
-  switch (options.mode) {
+  switch (options._tag) {
     case "canonical":
       return false; // Canonical mode always uses definite length
     case "custom":
@@ -160,7 +123,7 @@ const shouldUseIndefiniteMaps = (
  */
 export const encodeIndefiniteArray = (
   array: unknown[],
-  options: CBOREncodingOptions
+  options: CBOREncodingOptions,
 ): Effect.Effect<Uint8Array, CBORError> =>
   Effect.gen(function* () {
     const chunks: Uint8Array[] = [];
@@ -197,7 +160,7 @@ export const encodeIndefiniteArray = (
  */
 export const encodeIndefiniteMap = (
   obj: Record<string, unknown>,
-  options: CBOREncodingOptions
+  options: CBOREncodingOptions,
 ): Effect.Effect<Uint8Array, CBORError> =>
   Effect.gen(function* () {
     const chunks: Uint8Array[] = [];
@@ -236,7 +199,7 @@ export const encodeIndefiniteMap = (
  */
 export const encodeCBORValue = (
   value: CBORValue,
-  options: CBOREncodingOptions = DEFAULT_ENCODING_OPTIONS
+  options: CBOREncodingOptions = DEFAULT_ENCODING_OPTIONS,
 ): Effect.Effect<Uint8Array, CBORError> =>
   Effect.gen(function* () {
     // Handle primitives using schema guards
@@ -248,12 +211,12 @@ export const encodeCBORValue = (
       return yield* encodeTextString(utf8Bytes);
     }
     if (Schema.is(Schema.Uint8ArrayFromSelf)(value)) {
-      if (options.tagUint8Array) {
-        const byteString = yield* encodeByteString(value);
-        return yield* encodeTag(64, byteString);
-      } else {
-        return yield* encodeByteString(value);
-      }
+      // if (options.tagUint8Array) {
+      //   const byteString = yield* encodeByteString(value);
+      //   return yield* encodeTag(64, byteString);
+      // } else {
+      return yield* encodeByteString(value);
+      // }
     }
     if (Schema.is(Schema.Boolean)(value)) {
       return new Uint8Array([value ? 0xf5 : 0xf4]);
@@ -299,7 +262,7 @@ export const encodeCBORValue = (
     // Handle complex types using schema guards
     if (Schema.is(CBORArraySchema)(value)) {
       return yield* encodeArray(value, options, (item) =>
-        encodeCBORValue(item as CBORValue, options)
+        encodeCBORValue(item as CBORValue, options),
       );
     }
     if (Schema.is(CBORMapSchema)(value)) {
@@ -308,7 +271,7 @@ export const encodeCBORValue = (
         value: val,
       }));
       return yield* encodeMap(entries, options, (item) =>
-        encodeCBORValue(item as CBORValue, options)
+        encodeCBORValue(item as CBORValue, options),
       );
     }
 
@@ -318,11 +281,9 @@ export const encodeCBORValue = (
       return yield* encodeTag(value.tag, encodedValue);
     }
 
-    return yield* Effect.fail(
-      new CBORError({
-        message: `Cannot encode CBORValue of type ${typeof value}`,
-      })
-    );
+    return yield* new CBORError({
+      message: `Cannot encode CBORValue of type ${typeof value}`,
+    });
   });
 
 /**
@@ -333,7 +294,7 @@ export const encodeCBORValue = (
  */
 export const encodeTag = (
   tag: number,
-  value: Uint8Array
+  value: Uint8Array,
 ): Effect.Effect<Uint8Array, CBORError> =>
   Effect.gen(function* () {
     const chunks: Uint8Array[] = [];
@@ -346,9 +307,7 @@ export const encodeTag = (
     } else if (tag < 65536) {
       chunks.push(new Uint8Array([0xd9, tag >> 8, tag & 0xff])); // Major type 6, 2-byte tag
     } else {
-      return yield* Effect.fail(
-        new CBORError({ message: `Tag ${tag} too large` })
-      );
+      return yield* new CBORError({ message: `Tag ${tag} too large` });
     }
 
     chunks.push(value);
@@ -377,7 +336,7 @@ export const encodeMap = (
     readonly value: unknown;
   }[],
   options: CBOREncodingOptions,
-  encodeFn: (data: unknown) => Effect.Effect<Uint8Array, CBORError>
+  encodeFn: (data: unknown) => Effect.Effect<Uint8Array, CBORError>,
 ): Effect.Effect<Uint8Array, CBORError> =>
   Effect.gen(function* () {
     const useIndefinite = shouldUseIndefiniteMaps(options, entries.length);
@@ -408,15 +367,50 @@ export const encodeMap = (
 
       return result;
     } else {
+      // // Definite map encoding
+      // const encodedPairs: Uint8Array[] = [];
+
+      // // Encode all key-value pairs
+      // for (const { key, value } of entries) {
+      //   const encodedKey = yield* encodeFn(key);
+      //   const encodedValue = yield* encodeFn(value);
+      //   encodedPairs.push(encodedKey);
+      //   encodedPairs.push(encodedValue);
+      // }
       // Definite map encoding
       const encodedPairs: Uint8Array[] = [];
 
-      // Encode all key-value pairs
-      for (const { key, value } of entries) {
-        const encodedKey = yield* encodeFn(key);
-        const encodedValue = yield* encodeFn(value);
-        encodedPairs.push(encodedKey);
-        encodedPairs.push(encodedValue);
+      // If canonical encoding is requested, sort by encoded keys
+      if (options._tag === "canonical") {
+        const entriesWithEncodedKeys: {
+          key: unknown;
+          value: unknown;
+          encodedKey: Uint8Array;
+        }[] = [];
+        for (const { key, value } of entries) {
+          const encodedKey = yield* encodeFn(key);
+          entriesWithEncodedKeys.push({ key, value, encodedKey });
+        }
+
+        // Sort by encoded key bytes (lexicographic order)
+        entriesWithEncodedKeys.sort((a, b) => {
+          return a.encodedKey.length - b.encodedKey.length;
+        });
+
+        // Add pre-encoded keys and encode values
+        for (const { encodedKey, value } of entriesWithEncodedKeys) {
+          const encodedValue = yield* encodeFn(value);
+          encodedPairs.push(encodedKey);
+          encodedPairs.push(encodedValue);
+        }
+      } else {
+        // Normal encoding without sorting
+        for (const { key, value } of entries) {
+          const encodedKey = yield* encodeFn(key);
+          const encodedValue = yield* encodeFn(value);
+          encodedPairs.push(encodedKey);
+          encodedPairs.push(encodedValue);
+        }
       }
 
       // Encode map length
@@ -438,7 +432,7 @@ export const encodeMap = (
           (mapLength >> 8) & 0xff,
           mapLength & 0xff,
         ]); // Major type 5, 4-byte length
-      } else if (mapLength < 18446744073709552000) {
+      } else if (mapLength < Number.MAX_SAFE_INTEGER) {
         // 8-byte length (27 = 0xbb) - using safe limit below Number.MAX_SAFE_INTEGER
         const mapLengthBig = BigInt(mapLength);
         mapHeader = new Uint8Array([
@@ -453,9 +447,7 @@ export const encodeMap = (
           Number(mapLengthBig & 0xffn),
         ]); // Major type 5, 8-byte length
       } else {
-        return yield* Effect.fail(
-          new CBORError({ message: `Map too large: ${mapLength}` })
-        );
+        return yield* new CBORError({ message: `Map too large: ${mapLength}` });
       }
 
       // Combine header and pairs
@@ -483,10 +475,10 @@ export const encodeMap = (
  * @since 2.0.0
  * @category encoding
  */
-export const encodeArray = (
-  items: readonly unknown[],
+export const encodeArray = <A>(
+  items: readonly A[],
   options: CBOREncodingOptions,
-  encodeFn: (data: unknown) => Effect.Effect<Uint8Array, CBORError>
+  encodeFn: (data: A) => Effect.Effect<Uint8Array, CBORError>,
 ): Effect.Effect<Uint8Array, CBORError> =>
   Effect.gen(function* () {
     const useIndefinite = shouldUseIndefiniteArrays(options, items.length);
@@ -545,7 +537,7 @@ export const encodeArray = (
           (arrayLength >> 8) & 0xff,
           arrayLength & 0xff,
         ]); // Major type 4, 4-byte length
-      } else if (arrayLength < 18446744073709552000) {
+      } else if (arrayLength < Number.MAX_SAFE_INTEGER) {
         // 8-byte length (27 = 0x9b) - using safe limit below Number.MAX_SAFE_INTEGER
         const arrayLengthBig = BigInt(arrayLength);
         arrayHeader = new Uint8Array([
@@ -560,9 +552,9 @@ export const encodeArray = (
           Number(arrayLengthBig & 0xffn),
         ]); // Major type 4, 8-byte length
       } else {
-        return yield* Effect.fail(
-          new CBORError({ message: `Array too large: ${arrayLength}` })
-        );
+        return yield* new CBORError({
+          message: `Array too large: ${arrayLength}`,
+        });
       }
 
       // Combine header and items
@@ -591,7 +583,7 @@ export const encodeArray = (
  * @category encoding
  */
 export const encodeCompactNumber = (
-  value: number | bigint
+  value: number | bigint,
 ): Effect.Effect<Uint8Array, CBORError> =>
   Effect.gen(function* () {
     // Convert to number if it's a safe integer
@@ -631,7 +623,7 @@ export const encodeCompactNumber = (
 
     // For larger numbers or negative numbers, use custom BigInt encoding
     return yield* encodeBigInt(
-      typeof value === "bigint" ? value : BigInt(value)
+      typeof value === "bigint" ? value : BigInt(value),
     );
   });
 
@@ -642,7 +634,7 @@ export const encodeCompactNumber = (
  * @category encoding
  */
 export const encodeBigInt = (
-  value: bigint
+  value: bigint,
 ): Effect.Effect<Uint8Array, CBORError> =>
   Effect.gen(function* () {
     const MAX_SAFE_UINT64 = 18446744073709551615n; // 2^64 - 1
@@ -759,7 +751,7 @@ const encodeNegativeInteger = (value: bigint): Uint8Array => {
  * @category encoding
  */
 const encodePositiveBignum = (
-  value: bigint
+  value: bigint,
 ): Effect.Effect<Uint8Array, CBORError> =>
   Effect.gen(function* () {
     // Convert BigInt to minimal byte representation
@@ -779,7 +771,7 @@ const encodePositiveBignum = (
  * @category encoding
  */
 const encodeNegativeBignum = (
-  value: bigint
+  value: bigint,
 ): Effect.Effect<Uint8Array, CBORError> =>
   Effect.gen(function* () {
     // For CBOR tag 3, the value should already be processed as -(original + 1)
@@ -822,7 +814,7 @@ const bigintToBytes = (value: bigint): Uint8Array => {
  * @category encoding
  */
 const encodeByteString = (
-  bytes: Uint8Array
+  bytes: Uint8Array,
 ): Effect.Effect<Uint8Array, CBORError> =>
   Effect.gen(function* () {
     const length = bytes.length;
@@ -847,9 +839,9 @@ const encodeByteString = (
         length & 0xff,
       ]);
     } else {
-      return yield* Effect.fail(
-        new CBORError({ message: `Byte string too long: ${length}` })
-      );
+      return yield* new CBORError({
+        message: `Byte string too long: ${length}`,
+      });
     }
 
     // Combine header and data
@@ -867,7 +859,7 @@ const encodeByteString = (
  * @category encoding
  */
 const encodeTextString = (
-  utf8Bytes: Uint8Array
+  utf8Bytes: Uint8Array,
 ): Effect.Effect<Uint8Array, CBORError> =>
   Effect.gen(function* () {
     const length = utf8Bytes.length;
@@ -892,9 +884,9 @@ const encodeTextString = (
         length & 0xff,
       ]);
     } else {
-      return yield* Effect.fail(
-        new CBORError({ message: `Text string too long: ${length}` })
-      );
+      return yield* new CBORError({
+        message: `Text string too long: ${length}`,
+      });
     }
 
     // Combine header and data
@@ -958,13 +950,11 @@ const decodeHalf = (value: number): number => {
  * @category decoding
  */
 const readByte = (
-  state: CBORDecoderState
+  state: CBORDecoderState,
 ): Effect.Effect<readonly [number, CBORDecoderState], CBORError> =>
   Effect.gen(function* () {
     if (state.pos >= state.bytes.length) {
-      return yield* Effect.fail(
-        new CBORError({ message: "Unexpected end of CBOR data" })
-      );
+      return yield* new CBORError({ message: "Unexpected end of CBOR data" });
     }
     const value = state.bytes[state.pos];
     const newState = { ...state, pos: state.pos + 1 };
@@ -978,13 +968,11 @@ const readByte = (
  * @category decoding
  */
 const readUint16 = (
-  state: CBORDecoderState
+  state: CBORDecoderState,
 ): Effect.Effect<readonly [number, CBORDecoderState], CBORError> =>
   Effect.gen(function* () {
     if (state.pos + 2 > state.bytes.length) {
-      return yield* Effect.fail(
-        new CBORError({ message: "Unexpected end of CBOR data" })
-      );
+      return yield* new CBORError({ message: "Unexpected end of CBOR data" });
     }
     const value = (state.bytes[state.pos] << 8) | state.bytes[state.pos + 1];
     const newState = { ...state, pos: state.pos + 2 };
@@ -998,13 +986,11 @@ const readUint16 = (
  * @category decoding
  */
 const readUint32 = (
-  state: CBORDecoderState
+  state: CBORDecoderState,
 ): Effect.Effect<readonly [number, CBORDecoderState], CBORError> =>
   Effect.gen(function* () {
     if (state.pos + 4 > state.bytes.length) {
-      return yield* Effect.fail(
-        new CBORError({ message: "Unexpected end of CBOR data" })
-      );
+      return yield* new CBORError({ message: "Unexpected end of CBOR data" });
     }
     const value =
       (state.bytes[state.pos] << 24) |
@@ -1022,13 +1008,11 @@ const readUint32 = (
  * @category decoding
  */
 const readUint64 = (
-  state: CBORDecoderState
+  state: CBORDecoderState,
 ): Effect.Effect<readonly [bigint, CBORDecoderState], CBORError> =>
   Effect.gen(function* () {
     if (state.pos + 8 > state.bytes.length) {
-      return yield* Effect.fail(
-        new CBORError({ message: "Unexpected end of CBOR data" })
-      );
+      return yield* new CBORError({ message: "Unexpected end of CBOR data" });
     }
 
     let result = 0n;
@@ -1047,7 +1031,7 @@ const readUint64 = (
  */
 const decodeUnsignedInt = (
   additionalInfo: number,
-  state: CBORDecoderState
+  state: CBORDecoderState,
 ): Effect.Effect<readonly [bigint, CBORDecoderState], CBORError> =>
   Effect.gen(function* () {
     if (additionalInfo < 24) {
@@ -1064,11 +1048,9 @@ const decodeUnsignedInt = (
     } else if (additionalInfo === 27) {
       return yield* readUint64(state);
     } else {
-      return yield* Effect.fail(
-        new CBORError({
-          message: `Invalid additional info for unsigned int: ${additionalInfo}`,
-        })
-      );
+      return yield* new CBORError({
+        message: `Invalid additional info for unsigned int: ${additionalInfo}`,
+      });
     }
   });
 
@@ -1080,7 +1062,7 @@ const decodeUnsignedInt = (
  */
 const decodeNegativeInt = (
   additionalInfo: number,
-  state: CBORDecoderState
+  state: CBORDecoderState,
 ): Effect.Effect<readonly [bigint, CBORDecoderState], CBORError> =>
   Effect.gen(function* () {
     const [value, newState] = yield* decodeUnsignedInt(additionalInfo, state);
@@ -1095,7 +1077,7 @@ const decodeNegativeInt = (
  */
 const decodeByteString = (
   additionalInfo: number,
-  state: CBORDecoderState
+  state: CBORDecoderState,
 ): Effect.Effect<readonly [Uint8Array, CBORDecoderState], CBORError> =>
   Effect.gen(function* () {
     if (additionalInfo === 31) {
@@ -1105,11 +1087,9 @@ const decodeByteString = (
 
       while (true) {
         if (currentState.pos >= currentState.bytes.length) {
-          return yield* Effect.fail(
-            new CBORError({
-              message: "Missing break (0xff) at end of indefinite byte string",
-            })
-          );
+          return yield* new CBORError({
+            message: "Missing break (0xff) at end of indefinite byte string",
+          });
         }
 
         const firstByte = currentState.bytes[currentState.pos];
@@ -1124,20 +1104,23 @@ const decodeByteString = (
 
         // Must be a byte string
         if (majorType !== 2) {
-          return yield* Effect.fail(
-            new CBORError({ message: "Invalid data in indefinite byte string" })
-          );
+          return yield* new CBORError({
+            message: "Invalid data in indefinite byte string",
+          });
         }
 
         const stateAfterByte = { ...currentState, pos: currentState.pos + 1 };
-        if (stateAfterByte.pos < stateAfterByte.bytes.length && stateAfterByte.bytes[stateAfterByte.pos] === 0xff) {
-          return yield* Effect.fail(
-            new CBORError({ message: "Unexpected break in byte string context" })
-          );
+        if (
+          stateAfterByte.pos < stateAfterByte.bytes.length &&
+          stateAfterByte.bytes[stateAfterByte.pos] === 0xff
+        ) {
+          return yield* new CBORError({
+            message: "Unexpected break in byte string context",
+          });
         }
         const [chunk, newState] = yield* decodeByteString(
           addInfo,
-          stateAfterByte
+          stateAfterByte,
         );
         chunks.push(chunk);
         currentState = newState;
@@ -1157,14 +1140,14 @@ const decodeByteString = (
       // Definite length byte string
       const [lengthBigInt, newState] = yield* decodeUnsignedInt(
         additionalInfo,
-        state
+        state,
       );
       const length = Number(lengthBigInt);
 
       if (newState.pos + length > newState.bytes.length) {
-        return yield* Effect.fail(
-          new CBORError({ message: "Insufficient bytes for byte string" })
-        );
+        return yield* new CBORError({
+          message: "Insufficient bytes for byte string",
+        });
       }
 
       const result = newState.bytes.slice(newState.pos, newState.pos + length);
@@ -1181,7 +1164,7 @@ const decodeByteString = (
  */
 const decodeTextString = (
   additionalInfo: number,
-  state: CBORDecoderState
+  state: CBORDecoderState,
 ): Effect.Effect<readonly [string, CBORDecoderState], CBORError> =>
   Effect.gen(function* () {
     if (additionalInfo === 31) {
@@ -1208,28 +1191,31 @@ const decodeTextString = (
 
         // Must be a text string
         if (majorType !== 3) {
-          return yield* Effect.fail(
-            new CBORError({ message: "Invalid data in indefinite text string" })
-          );
+          return yield* new CBORError({
+            message: "Invalid data in indefinite text string",
+          });
         }
 
         const stateAfterByte = { ...currentState, pos: currentState.pos + 1 };
-        if (stateAfterByte.pos < stateAfterByte.bytes.length && stateAfterByte.bytes[stateAfterByte.pos] === 0xff) {
-          return yield* Effect.fail(
-            new CBORError({ message: "Unexpected break in text string context" })
-          );
+        if (
+          stateAfterByte.pos < stateAfterByte.bytes.length &&
+          stateAfterByte.bytes[stateAfterByte.pos] === 0xff
+        ) {
+          return yield* new CBORError({
+            message: "Unexpected break in text string context",
+          });
         }
         const [chunk, newState] = yield* decodeTextString(
           addInfo,
-          stateAfterByte
+          stateAfterByte,
         );
         chunks.push(chunk);
         currentState = newState;
       }
       if (!foundBreak) {
-        return yield* Effect.fail(
-          new CBORError({ message: "Missing break (0xff) at end of indefinite text string" })
-        );
+        return yield* new CBORError({
+          message: "Missing break (0xff) at end of indefinite text string",
+        });
       }
       // Combine all chunks
       const result = chunks.join("");
@@ -1238,14 +1224,14 @@ const decodeTextString = (
       // Definite length text string - use byte string decoder and convert to text
       const [lengthBigInt, newState] = yield* decodeUnsignedInt(
         additionalInfo,
-        state
+        state,
       );
       const length = Number(lengthBigInt);
 
       if (newState.pos + length > newState.bytes.length) {
-        return yield* Effect.fail(
-          new CBORError({ message: "Insufficient bytes for text string" })
-        );
+        return yield* new CBORError({
+          message: "Insufficient bytes for text string",
+        });
       }
 
       const bytes = newState.bytes.slice(newState.pos, newState.pos + length);
@@ -1261,13 +1247,11 @@ const decodeTextString = (
  * @category decoding
  */
 const decodeCBORValue = (
-  state: CBORDecoderState
+  state: CBORDecoderState,
 ): Effect.Effect<readonly [CBORValue, CBORDecoderState], CBORError> =>
   Effect.gen(function* () {
     if (state.pos >= state.bytes.length) {
-      return yield* Effect.fail(
-        new CBORError({ message: "Unexpected end of CBOR data" })
-      );
+      return yield* new CBORError({ message: "Unexpected end of CBOR data" });
     }
 
     const firstByte = state.bytes[state.pos];
@@ -1293,9 +1277,9 @@ const decodeCBORValue = (
       case 7: // Float/simple/break
         return yield* decodeFloat(additionalInfo, stateAfterByte);
       default:
-        return yield* Effect.fail(
-          new CBORError({ message: `Unknown major type: ${majorType}` })
-        );
+        return yield* new CBORError({
+          message: `Unknown major type: ${majorType}`,
+        });
     }
   });
 
@@ -1307,7 +1291,7 @@ const decodeCBORValue = (
  */
 const decodeArray = (
   additionalInfo: number,
-  state: CBORDecoderState
+  state: CBORDecoderState,
 ): Effect.Effect<readonly [CBORValue[], CBORDecoderState], CBORError> =>
   Effect.gen(function* () {
     if (additionalInfo === 31) {
@@ -1323,25 +1307,28 @@ const decodeArray = (
           break;
         }
         const [item, newState] = yield* decodeCBORValue(currentState);
-        if (newState.pos === currentState.pos && currentState.bytes[currentState.pos] === 0xff) {
-          return yield* Effect.fail(
-            new CBORError({ message: "Unexpected break in array context" })
-          );
+        if (
+          newState.pos === currentState.pos &&
+          currentState.bytes[currentState.pos] === 0xff
+        ) {
+          return yield* new CBORError({
+            message: "Unexpected break in array context",
+          });
         }
         result.push(item);
         currentState = newState;
       }
       if (!foundBreak) {
-        return yield* Effect.fail(
-          new CBORError({ message: "Missing break (0xff) at end of indefinite array" })
-        );
+        return yield* new CBORError({
+          message: "Missing break (0xff) at end of indefinite array",
+        });
       }
       return [result, currentState] as const;
     } else {
       // Definite length array
       const [lengthBigInt, newState] = yield* decodeUnsignedInt(
         additionalInfo,
-        state
+        state,
       );
       const length = Number(lengthBigInt);
       const result: CBORValue[] = [];
@@ -1363,7 +1350,7 @@ const decodeArray = (
  */
 const decodeMap = (
   additionalInfo: number,
-  state: CBORDecoderState
+  state: CBORDecoderState,
 ): Effect.Effect<
   readonly [Map<CBORValue, CBORValue>, CBORDecoderState],
   CBORError
@@ -1385,32 +1372,35 @@ const decodeMap = (
         // decode key
         const [key, stateAfterKey] = yield* decodeCBORValue(currentState);
         // If we reach a break after a key, that's an error: missing value for map key
-        if (stateAfterKey.pos < stateAfterKey.bytes.length && stateAfterKey.bytes[stateAfterKey.pos] === 0xff) {
-          return yield* Effect.fail(
-            new CBORError({ message: `Unexpected break in map context: missing value for key ${typeof key === "string" ? '"' + key + '"' : String(key)}` })
-          );
+        if (
+          stateAfterKey.pos < stateAfterKey.bytes.length &&
+          stateAfterKey.bytes[stateAfterKey.pos] === 0xff
+        ) {
+          return yield* new CBORError({
+            message: `Unexpected break in map context: missing value for key ${typeof key === "string" ? '"' + key + '"' : String(key)}`,
+          });
         }
         // decode value
         if (stateAfterKey.pos >= stateAfterKey.bytes.length) {
-          return yield* Effect.fail(
-            new CBORError({ message: `Unexpected end of CBOR data in map context: missing value for key ${typeof key === "string" ? '"' + key + '"' : String(key)}` })
-          );
+          return yield* new CBORError({
+            message: `Unexpected end of CBOR data in map context: missing value for key ${typeof key === "string" ? '"' + key + '"' : String(key)}`,
+          });
         }
         const [value, stateAfterValue] = yield* decodeCBORValue(stateAfterKey);
         result.set(key, value);
         currentState = stateAfterValue;
       }
       if (!foundBreak) {
-        return yield* Effect.fail(
-          new CBORError({ message: "Missing break (0xff) at end of indefinite map" })
-        );
+        return yield* new CBORError({
+          message: "Missing break (0xff) at end of indefinite map",
+        });
       }
       return [result, currentState] as const;
     } else {
       // Definite length map
       const [lengthBigInt, newState] = yield* decodeUnsignedInt(
         additionalInfo,
-        state
+        state,
       );
       const length = Number(lengthBigInt);
       let currentState = newState;
@@ -1432,12 +1422,12 @@ const decodeMap = (
  */
 const decodeTag = (
   additionalInfo: number,
-  state: CBORDecoderState
+  state: CBORDecoderState,
 ): Effect.Effect<readonly [CBORValue, CBORDecoderState], CBORError> =>
   Effect.gen(function* () {
     const [tagBigInt, stateAfterTag] = yield* decodeUnsignedInt(
       additionalInfo,
-      state
+      state,
     );
     const tag = Number(tagBigInt);
     const [value, finalState] = yield* decodeCBORValue(stateAfterTag);
@@ -1448,17 +1438,13 @@ const decodeTag = (
       if (value instanceof Uint8Array) {
         return [bytesToBigInt(value), finalState] as const;
       }
-      return yield* Effect.fail(
-        new CBORError({ message: "Invalid positive bignum value" })
-      );
+      return yield* new CBORError({ message: "Invalid positive bignum value" });
     } else if (tag === 3) {
       // Negative bignum
       if (value instanceof Uint8Array) {
         return [-(bytesToBigInt(value) + 1n), finalState] as const;
       }
-      return yield* Effect.fail(
-        new CBORError({ message: "Invalid negative bignum value" })
-      );
+      return yield* new CBORError({ message: "Invalid negative bignum value" });
     }
 
     // For all other tags, return a tagged value object
@@ -1479,7 +1465,7 @@ const decodeTag = (
  */
 const decodeFloat = (
   additionalInfo: number,
-  state: CBORDecoderState
+  state: CBORDecoderState,
 ): Effect.Effect<readonly [CBORValue, CBORDecoderState], CBORError> =>
   Effect.gen(function* () {
     if (additionalInfo <= 19) {
@@ -1521,15 +1507,13 @@ const decodeFloat = (
       return [floatVal, newState] as const;
     } else if (additionalInfo === 31) {
       // Break - should only be encountered when parsing indefinite structures
-      return yield* Effect.fail(
-        new CBORError({ message: "Unexpected break in float context" })
-      );
+      return yield* new CBORError({
+        message: "Unexpected break in float context",
+      });
     } else {
-      return yield* Effect.fail(
-        new CBORError({
-          message: `Invalid additional info for float: ${additionalInfo}`,
-        })
-      );
+      return yield* new CBORError({
+        message: `Invalid additional info for float: ${additionalInfo}`,
+      });
     }
   });
 
@@ -1540,17 +1524,15 @@ const decodeFloat = (
  * @category decoding
  */
 const decodeCBORBytes = (
-  bytes: Uint8Array
+  bytes: Uint8Array,
 ): Effect.Effect<CBORValue, CBORError> =>
   Effect.gen(function* () {
     const initialState: CBORDecoderState = { bytes, pos: 0 };
     const [value, finalState] = yield* decodeCBORValue(initialState);
     if (finalState.pos !== bytes.length) {
-      return yield* Effect.fail(
-        new CBORError({
-          message: `Extra bytes found after valid CBOR value: pos ${finalState.pos} != length ${bytes.length}`,
-        })
-      );
+      return yield* new CBORError({
+        message: `Extra bytes found after valid CBOR value: pos ${finalState.pos} != length ${bytes.length}`,
+      });
     }
     return value;
   });
@@ -1564,7 +1546,7 @@ const decodeCBORBytes = (
  */
 const convertIntegersIfNeeded = (
   value: CBORValue,
-  options: CBOREncodingOptions
+  options: CBOREncodingOptions,
 ): CBORValue => {
   if (!options.integersAsBigInt) {
     return convertBigIntsToNumbers(value);
@@ -1701,7 +1683,7 @@ export const CBORTaggedValueSchema = Schema.Struct({
 });
 
 export const CBORArraySchema = Schema.Array(
-  Schema.suspend(() => CBORValueSchema)
+  Schema.suspend(() => CBORValueSchema),
 );
 
 export const CBORMapSchema = Schema.ReadonlyMapFromSelf({
@@ -1725,7 +1707,7 @@ export const CBORValueSchema: Schema.Schema<CBORValue> = Schema.Union(
   Schema.Number, // Float values
   CBORArraySchema,
   CBORMapSchema,
-  CBORTaggedValueSchema // Tagged values
+  CBORTaggedValueSchema, // Tagged values
 ).annotations({
   identifier: "CBORValue",
 });
@@ -1737,28 +1719,28 @@ export const CBORValueSchema: Schema.Schema<CBORValue> = Schema.Union(
  * @category schemas
  */
 export const CBORBytesSchema = (
-  options: CBOREncodingOptions = DEFAULT_ENCODING_OPTIONS
+  options: CBOREncodingOptions = DEFAULT_ENCODING_OPTIONS,
 ) =>
   Schema.transformOrFail(Schema.Uint8ArrayFromSelf, CBORValueSchema, {
     strict: true,
     encode: (_, __, ast, toA) =>
       Effect.flatMap(encodeCBORValue(toA, options), (result) =>
-        Effect.succeed(result)
+        Effect.succeed(result),
       ).pipe(
         Effect.mapError(
           (error) =>
             new ParseResult.Type(
               ast,
               toA,
-              `Failed to encode CBOR value: ${String(error)}`
-            )
-        )
+              `Failed to encode CBOR value: ${String(error)}`,
+            ),
+        ),
       ),
     decode: (_, __, ast, fromA) =>
       Effect.gen(function* () {
         if (fromA.length === 0) {
           return yield* ParseResult.fail(
-            new ParseResult.Type(ast, fromA, "Empty CBOR bytes")
+            new ParseResult.Type(ast, fromA, "Empty CBOR bytes"),
           );
         }
 
@@ -1768,9 +1750,9 @@ export const CBORBytesSchema = (
               new ParseResult.Type(
                 ast,
                 fromA,
-                `Failed to decode CBOR bytes: ${String(error)}`
-              )
-          )
+                `Failed to decode CBOR bytes: ${String(error)}`,
+              ),
+          ),
         );
 
         // Apply integer conversion based on options
@@ -1785,22 +1767,22 @@ export const CBORBytesSchema = (
  * @category schemas
  */
 export const CBORHexSchema = (
-  options: CBOREncodingOptions = DEFAULT_ENCODING_OPTIONS
+  options: CBOREncodingOptions = DEFAULT_ENCODING_OPTIONS,
 ) =>
   Schema.transformOrFail(Bytes.HexSchema, CBORValueSchema, {
     strict: true,
     encode: (_, __, ast, toA) =>
       Effect.flatMap(encodeCBORValue(toA, options), (bytes) =>
-        Effect.succeed(Bytes.Encode.hex(bytes))
+        Effect.succeed(Bytes.Encode.hex(bytes)),
       ).pipe(
         Effect.mapError(
           (error) =>
             new ParseResult.Type(
               ast,
               toA,
-              `Failed to encode CBOR value: ${String(error)}`
-            )
-        )
+              `Failed to encode CBOR value: ${String(error)}`,
+            ),
+        ),
       ),
     decode: (_, __, ast, fromA) =>
       pipe(
@@ -1810,12 +1792,12 @@ export const CBORHexSchema = (
             new ParseResult.Type(
               ast,
               fromA,
-              `Invalid hex string: ${String(error)}`
+              `Invalid hex string: ${String(error)}`,
             ),
         }),
         Effect.flatMap((bytes) =>
-          ParseResult.decode(CBORBytesSchema(options))(bytes)
-        )
+          ParseResult.decode(CBORBytesSchema(options))(bytes),
+        ),
       ),
   });
 
@@ -1828,11 +1810,11 @@ export const CBORHexSchema = (
 export const Encode = {
   bytes: (
     value: CBORValue,
-    options: CBOREncodingOptions = DEFAULT_ENCODING_OPTIONS
+    options: CBOREncodingOptions = DEFAULT_ENCODING_OPTIONS,
   ) => Schema.encodeSync(CBORBytesSchema(options))(value),
   hex: (
     value: CBORValue,
-    options: CBOREncodingOptions = DEFAULT_ENCODING_OPTIONS
+    options: CBOREncodingOptions = DEFAULT_ENCODING_OPTIONS,
   ) => Schema.encodeSync(CBORHexSchema(options))(value),
 };
 
@@ -1845,7 +1827,7 @@ export const Encode = {
 export const Decode = {
   bytes: (
     bytes: Uint8Array,
-    options: CBOREncodingOptions = DEFAULT_ENCODING_OPTIONS
+    options: CBOREncodingOptions = DEFAULT_ENCODING_OPTIONS,
   ) => Schema.decodeSync(CBORBytesSchema(options))(bytes),
   hex: (hex: string, options: CBOREncodingOptions = DEFAULT_ENCODING_OPTIONS) =>
     Schema.decodeSync(CBORHexSchema(options))(hex),
@@ -1854,18 +1836,18 @@ export const Decode = {
 export const EncodeEither = {
   bytes: (
     value: CBORValue,
-    options: CBOREncodingOptions = DEFAULT_ENCODING_OPTIONS
+    options: CBOREncodingOptions = DEFAULT_ENCODING_OPTIONS,
   ) => Schema.encodeEither(CBORBytesSchema(options))(value),
   hex: (
     value: CBORValue,
-    options: CBOREncodingOptions = DEFAULT_ENCODING_OPTIONS
+    options: CBOREncodingOptions = DEFAULT_ENCODING_OPTIONS,
   ) => Schema.encodeEither(CBORHexSchema(options))(value),
 };
 
 export const DecodeEither = {
   bytes: (
     bytes: Uint8Array,
-    options: CBOREncodingOptions = DEFAULT_ENCODING_OPTIONS
+    options: CBOREncodingOptions = DEFAULT_ENCODING_OPTIONS,
   ) => Schema.decodeEither(CBORBytesSchema(options))(bytes),
   hex: (hex: string, options: CBOREncodingOptions = DEFAULT_ENCODING_OPTIONS) =>
     Schema.decodeEither(CBORHexSchema(options))(hex),
@@ -1874,18 +1856,18 @@ export const DecodeEither = {
 export const EncodeEffect = {
   bytes: (
     value: CBORValue,
-    options: CBOREncodingOptions = DEFAULT_ENCODING_OPTIONS
+    options: CBOREncodingOptions = DEFAULT_ENCODING_OPTIONS,
   ) => Schema.encode(CBORBytesSchema(options))(value),
   hex: (
     value: CBORValue,
-    options: CBOREncodingOptions = DEFAULT_ENCODING_OPTIONS
+    options: CBOREncodingOptions = DEFAULT_ENCODING_OPTIONS,
   ) => Schema.encode(CBORHexSchema(options))(value),
 };
 
 export const DecodeEffect = {
   bytes: (
     bytes: Uint8Array,
-    options: CBOREncodingOptions = DEFAULT_ENCODING_OPTIONS
+    options: CBOREncodingOptions = DEFAULT_ENCODING_OPTIONS,
   ) => Schema.decode(CBORBytesSchema(options))(bytes),
   hex: (hex: string, options: CBOREncodingOptions = DEFAULT_ENCODING_OPTIONS) =>
     Schema.decode(CBORHexSchema(options))(hex),

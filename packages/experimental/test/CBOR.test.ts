@@ -132,7 +132,7 @@ describe("CBOR Implementation Tests", () => {
 
       it("should handle arrays with exactly 65536 elements (4-byte length threshold)", () => {
         const array65536 = Array.from({ length: 65536 }, (_, i) =>
-          BigInt(i % 1000)
+          BigInt(i % 1000),
         );
         const encoded = CBOR.Encode.bytes(array65536);
         const decoded = CBOR.Decode.bytes(encoded) as bigint[];
@@ -159,7 +159,7 @@ describe("CBOR Implementation Tests", () => {
           Array.from({ length: 24 }, (_, i) => [
             BigInt(i),
             `${i.toString(16).padStart(2, "0")}`,
-          ])
+          ]),
         );
         const encoded = CBOR.Encode.bytes(map24);
         const decoded = CBOR.Decode.bytes(encoded) as Map<bigint, string>;
@@ -172,7 +172,7 @@ describe("CBOR Implementation Tests", () => {
           Array.from({ length: 256 }, (_, i) => [
             BigInt(i),
             `${i.toString(16).padStart(2, "0")}`,
-          ])
+          ]),
         );
         const encoded = CBOR.Encode.bytes(map256);
         const decoded = CBOR.Decode.bytes(encoded) as Map<bigint, string>;
@@ -185,7 +185,7 @@ describe("CBOR Implementation Tests", () => {
           Array.from({ length: 65536 }, (_, i) => [
             BigInt(i),
             `${(i % 256).toString(16).padStart(2, "0")}`,
-          ])
+          ]),
         );
         const encoded = CBOR.Encode.bytes(map65536);
         const decoded = CBOR.Decode.bytes(encoded) as Map<bigint, string>;
@@ -436,7 +436,7 @@ describe("CBOR Implementation Tests", () => {
           const reencoded = CBOR.Encode.hex(decoded);
           const redecoded = CBOR.Decode.hex(reencoded);
           expect(redecoded).toBe(decoded);
-        }
+        },
       );
     });
 
@@ -456,7 +456,7 @@ describe("CBOR Implementation Tests", () => {
           const reencoded = CBOR.Encode.hex(decoded);
           const redecoded = CBOR.Decode.hex(reencoded);
           expect(redecoded).toBe(decoded);
-        }
+        },
       );
     });
 
@@ -500,7 +500,7 @@ describe("CBOR Implementation Tests", () => {
           const reencoded = CBOR.Encode.hex(decoded);
           const redecoded = CBOR.Decode.hex(reencoded);
           expect(redecoded).toBe(decoded);
-        }
+        },
       );
     });
 
@@ -559,7 +559,7 @@ describe("CBOR Implementation Tests", () => {
           const reencoded = CBOR.Encode.hex(decoded);
           const redecoded = CBOR.Decode.hex(reencoded);
           expect(redecoded).toEqual(decoded);
-        }
+        },
       );
     });
 
@@ -601,7 +601,7 @@ describe("CBOR Implementation Tests", () => {
           const reencoded = CBOR.Encode.hex(decoded);
           const redecoded = CBOR.Decode.hex(reencoded);
           expect(redecoded).toEqual(decoded);
-        }
+        },
       );
     });
 
@@ -628,7 +628,7 @@ describe("CBOR Implementation Tests", () => {
           const reencoded = CBOR.Encode.hex(decoded);
           const redecoded = CBOR.Decode.hex(reencoded);
           expect(redecoded).toEqual(decoded);
-        }
+        },
       );
     });
 
@@ -709,7 +709,7 @@ describe("CBOR Implementation Tests", () => {
             expect(Object.is(decodedValue, -0.0)).toBe(true);
           } else if (Object.is(decoded, 0.0)) {
             expect(
-              Object.is(decodedValue, 0.0) || Object.is(decodedValue, -0.0)
+              Object.is(decodedValue, 0.0) || Object.is(decodedValue, -0.0),
             ).toBe(true);
           } else {
             expect(decodedValue).toBeCloseTo(decoded, 10);
@@ -722,12 +722,12 @@ describe("CBOR Implementation Tests", () => {
             expect(Object.is(redecoded, -0.0)).toBe(true);
           } else if (Object.is(decoded, 0.0)) {
             expect(
-              Object.is(redecoded, 0.0) || Object.is(redecoded, -0.0)
+              Object.is(redecoded, 0.0) || Object.is(redecoded, -0.0),
             ).toBe(true);
           } else {
             expect(redecoded).toBeCloseTo(decoded, 10);
           }
-        }
+        },
       );
     });
 
@@ -762,7 +762,7 @@ describe("CBOR Implementation Tests", () => {
           } else if (description.includes("NaN")) {
             expect(Number.isNaN(decodedValue)).toBe(true);
           }
-        }
+        },
       );
     });
 
@@ -798,7 +798,7 @@ describe("CBOR Implementation Tests", () => {
             const decodedValue = CBOR.Decode.hex(hex);
             expect(decodedValue).toBeDefined();
           }).not.toThrow();
-        }
+        },
       );
     });
 
@@ -899,7 +899,7 @@ describe("CBOR Implementation Tests", () => {
             const redecoded = CBOR.Decode.hex(reencoded);
             expect(redecoded).toEqual(decoded);
           }
-        }
+        },
       );
     });
 
@@ -922,7 +922,7 @@ describe("CBOR Implementation Tests", () => {
               expect(decodedValue).toBeDefined();
             }
           }).not.toThrow();
-        }
+        },
       );
     });
   });
