@@ -13,7 +13,7 @@ import {
   Provider,
 } from "@evolution-sdk/core-types";
 import { ERROR_MESSAGE, TxBuilderError } from "../../Errors.js";
-import { LucidConfig } from "../../lucid-evolution/LucidEvolution.js";
+import { LucidConfig } from "../../evolution-sdk/LucidEvolution.js";
 import { TxBuilderConfig } from "../TxBuilder.js";
 
 import * as TxBuilder from "../TxBuilder.js";

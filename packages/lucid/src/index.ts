@@ -1,4 +1,4 @@
-export * from "./lucid-evolution/index.js";
+export * from "./evolution-sdk/index.js";
 export * from "./tx-builder/index.js";
 export * from "./tx-sign-builder/index.js";
 export * from "./tx-submit/TxSubmit.js";

@@ -12,7 +12,7 @@ import "./globals.css";
 
 export const metadata: Metadata = {
   description: "A highly scalable transaction building framework for Cardano",
-  metadataBase: new URL("https://no-witness-labs.github.io/lucid-evolution"),
+  metadataBase: new URL("https://no-witness-labs.github.io/evolution-sdk"),
   keywords: ["Lucid", "Evolution", "Cardano", "blockchain"],
   generator: "Next.js",
   applicationName: "Lucid-Evolution",
@@ -54,20 +54,20 @@ const RootLayout: FC<{ children: ReactNode }> = async ({ children }) => {
         <Layout
           // banner={<Banner dismissible={false}>
           //   🎉 Lucid-Evolution 2.0 is released. Visit{' '}
-          //   <Link href="https://github.com/no-witness-labs/lucid-evolution" className="text-current!">
-          //     github.com/no-witness-labs/lucid-evolution
+          //   <Link href="https://github.com/no-witness-labs/evolution-sdk" className="text-current!">
+          //     github.com/no-witness-labs/evolution-sdk
           //   </Link>
           //   for more information.
           // </Banner>}
           navbar={
             <Navbar
               logo={<Logo />}
-              projectLink="https://github.com/no-witness-labs/lucid-evolution"
+              projectLink="https://github.com/no-witness-labs/evolution-sdk"
               chatLink="https://discord.gg/eqZDvHvW6k"
             />
           }
           pageMap={pageMap}
-          docsRepositoryBase="https://github.com/no-witness-labs/lucid-evolution"
+          docsRepositoryBase="https://github.com/no-witness-labs/evolution-sdk"
           editLink="Edit this page on GitHub"
           sidebar={{
             autoCollapse: false,

@@ -1,12 +1,12 @@
 <p align="center">
-  <img width="50px" src="docs/public/lucid-evolution-no-witness-labs.svg" align="center"/>
+  <img width="50px" src="docs/public/evolution-sdk-no-witness-labs.svg" align="center"/>
   <h1 align="center">Lucid <span style="color: #DD7722;">Evolution</span></h1>
   <p align="center">A highly scalable, production-ready transaction builder and off-chain framework for dApps and devs on Cardano.</p>
 </p>
 
 <p align="center">
-  <a href="https://github.com/no-witness-labs/lucid-evolution/actions/workflows/main.yml">
-    <img src="https://github.com/no-witness-labs/lucid-evolution/actions/workflows/main.yml/badge.svg" alt="Build Status"/>
+  <a href="https://github.com/no-witness-labs/evolution-sdk/actions/workflows/main.yml">
+    <img src="https://github.com/no-witness-labs/evolution-sdk/actions/workflows/main.yml/badge.svg" alt="Build Status"/>
   </a>
   <img src="https://img.shields.io/npm/dy/%40lucid-evolution%2Flucid" alt="NPM Downloads"/>
   <a href="https://discord.gg/eqZDvHvW6k">
@@ -15,7 +15,7 @@
   <img alt="NPM Version" src="https://img.shields.io/npm/v/%40lucid-evolution%2Flucid?color=%2350C62A">
 </p>
 
-There are a growing number of projects that are built on top of `lucid-evolution`! If you've built a library or a project on top of lucid-evolution, tell me about it [on X](https://x.com/nowitnesslabs) or [on Discord](https://discord.gg/eqZDvHvW6k) . I'll add it below and tweet it out.
+There are a growing number of projects that are built on top of `evolution-sdk`! If you've built a library or a project on top of evolution-sdk, tell me about it [on X](https://x.com/nowitnesslabs) or [on Discord](https://discord.gg/eqZDvHvW6k) . I'll add it below and tweet it out.
 
 <h3 align="center">Powered by Lucid Evolution</span></h1>
 
@@ -132,7 +132,7 @@ There are a growing number of projects that are built on top of `lucid-evolution
 
 ---
 
-## 📦 [Install](https://no-witness-labs.github.io/lucid-evolution/install)
+## 📦 [Install](https://no-witness-labs.github.io/evolution-sdk/install)
 
 ```bash
 pnpm i @evolution-sdk/lucid
@@ -175,16 +175,16 @@ console.log("Transaction Submitted:", txHash);
 
 ## 📚 Documentation
 
-For comprehensive documentation including API references, examples, and guides, visit our [official documentation site](https://no-witness-labs.github.io/lucid-evolution/).
+For comprehensive documentation including API references, examples, and guides, visit our [official documentation site](https://no-witness-labs.github.io/evolution-sdk/).
 
-- 🔍 [Core Concepts](https://no-witness-labs.github.io/lucid-evolution/documentation/core-concepts/instantiate-evolution)
-- 🧠 [Deep Dives](https://no-witness-labs.github.io/lucid-evolution/documentation/deep-dives/pay-methods)
-- ⚙️ [Under the Hood](https://no-witness-labs.github.io/lucid-evolution/documentation/under-the-hood)
+- 🔍 [Core Concepts](https://no-witness-labs.github.io/evolution-sdk/documentation/core-concepts/instantiate-evolution)
+- 🧠 [Deep Dives](https://no-witness-labs.github.io/evolution-sdk/documentation/deep-dives/pay-methods)
+- ⚙️ [Under the Hood](https://no-witness-labs.github.io/evolution-sdk/documentation/under-the-hood)
 
 ## 👥 Community and Support
 
 - [Discord Community](https://discord.gg/eqZDvHvW6k): Join for discussions, support, and updates
-- [GitHub Issues](https://github.com/no-witness-labs/lucid-evolution/issues): Report bugs or request features
+- [GitHub Issues](https://github.com/no-witness-labs/evolution-sdk/issues): Report bugs or request features
 
 ## 🤝 Contributing
 
@@ -193,11 +193,11 @@ We welcome contributions to Lucid Evolution! Please check our [CONTRIBUTING.md](
 ### Getting Started
 
 ```bash
-git clone https://github.com/no-witness-labs/lucid-evolution.git
+git clone https://github.com/no-witness-labs/evolution-sdk.git
 ```
 
 ```bash
-cd lucid-evolution
+cd evolution-sdk
 pnpm install
 ```
 
@@ -305,7 +305,7 @@ pnpm --filter @evolution-sdk/lucid test
 pnpm dev
 ```
 
-> Visit http://localhost:3000/lucid-evolution.
+> Visit http://localhost:3000/evolution-sdk.
 
 ---
 
@@ -317,4 +317,4 @@ Lucid Evolution is licensed under the [MIT License](./LICENSE).
 
 <div style="margin: 20px 0;"></div>
 
-<p align="center">Maintained with ❤️ by <a href="https://no-witness-labs.github.io/lucid-evolution/">No Witness Labs</a></p>
+<p align="center">Maintained with ❤️ by <a href="https://no-witness-labs.github.io/evolution-sdk/">No Witness Labs</a></p>

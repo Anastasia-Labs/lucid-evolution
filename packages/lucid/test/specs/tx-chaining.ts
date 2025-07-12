@@ -9,7 +9,7 @@ import { getAddressDetails } from "@evolution-sdk/utils";
 import { Constr, Data } from "@evolution-sdk/plutus";
 import { fromText } from "@evolution-sdk/core-utils";
 import { PaymentKeyHash, UTxO } from "@evolution-sdk/core-types";
-import { LucidEvolution } from "../../src/lucid-evolution/index.js";
+import { LucidEvolution } from "../../src/evolution-sdk/index.js";
 import {
   RunTimeError,
   TxBuilderError,

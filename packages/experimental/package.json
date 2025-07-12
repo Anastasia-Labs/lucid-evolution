@@ -2,7 +2,7 @@
   "name": "@evolution-sdk/experimental",
   "version": "1.0.0",
   "description": "",
-  "homepage": "https://github.com/no-witness-labs/lucid-evolution",
+  "homepage": "https://github.com/no-witness-labs/evolution-sdk",
   "main": "./dist/esm/index.js",
   "types": "./dist/types/index.d.ts",
   "type": "module",

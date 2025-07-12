@@ -16,7 +16,7 @@ import {
   validateAddressDetails,
 } from "./TxUtils.js";
 import * as CML from "@anastasia-labs/cardano-multiplatform-lib-nodejs";
-import { LucidConfig } from "../../lucid-evolution/LucidEvolution.js";
+import { LucidConfig } from "../../evolution-sdk/LucidEvolution.js";
 import { fromText } from "@evolution-sdk/core-utils";
 import { TxConfig } from "./Service.js";
 

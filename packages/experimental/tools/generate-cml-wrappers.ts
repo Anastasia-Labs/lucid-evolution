@@ -1029,6 +1029,6 @@ generate({
   outputDir: "./src/CML",
   libraryImport: "@anastasia-labs/cardano-multiplatform-lib-nodejs",
   errorUtilPath: "../FormatError.js",
-  packageName: "lucid-evolution/experimental",
+  packageName: "evolution-sdk/experimental",
   version: "2.0.0",
 });

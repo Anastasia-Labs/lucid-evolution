@@ -1,7 +1,7 @@
 {
   "preamble": {
-    "title": "lucid-evolution/spec",
-    "description": "Aiken contracts for project 'lucid-evolution/spec'",
+    "title": "evolution-sdk/spec",
+    "description": "Aiken contracts for project 'evolution-sdk/spec'",
     "version": "0.0.0",
     "plutusVersion": "v3",
     "compiler": {

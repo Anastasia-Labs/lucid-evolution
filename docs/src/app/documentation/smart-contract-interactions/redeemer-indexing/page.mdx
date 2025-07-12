@@ -29,7 +29,7 @@ So even if a user obtains the required input indicies beforehand, coin selection
 Lucid-Evolution provides a high-level interface called `RedeemerBuilder{:js}` that abstracts away the complexity of constructing a redeemer with the redeemer-indexing pattern.
 
 <Callout type="warning">
-  You cannot reuse the same `RedeemerBuilder{:js}` variable for multiple `.collectFrom(){:js}` or `.mintAssets(){:js}` instances. Please refer to [here](https://github.com/no-witness-labs/lucid-evolution/issues/625) for any updates.
+  You cannot reuse the same `RedeemerBuilder{:js}` variable for multiple `.collectFrom(){:js}` or `.mintAssets(){:js}` instances. Please refer to [here](https://github.com/no-witness-labs/evolution-sdk/issues/625) for any updates.
 </Callout>
 
 ### Selected Kind
@@ -37,7 +37,7 @@ Lucid-Evolution provides a high-level interface called `RedeemerBuilder{:js}` th
 Suppose we have the following on-chain redeemer type:
 
 ```aiken showLineNumbers
-pub type Redeemer = List<(Int, Int)> // a list of tuples of input-output indices 
+pub type Redeemer = List<(Int, Int)> // a list of tuples of input-output indices
 ```
 
 Then we can construct the appropriate redeemer like the following:
@@ -97,7 +97,7 @@ const randomInputs: UTxO[] = [
     address: "randomAddress",
     assets: { lovelace: 60_000000n },
   },
-];    
+];
 
 const tx = await lucid
   .newTx()
@@ -152,4 +152,3 @@ The usual way involves every input's output reference to be checked for equality
 <Callout type="info">
   You may notice that no input is specified to this redeemer builder as one can be easily determined. There is an optional `inputs: UTxO[]{:js}` field present which is used internally by the library, its value overriden should it be set by a user.
 </Callout>
-
