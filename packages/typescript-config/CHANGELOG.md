@@ -1,5 +1,22 @@
 # @evolution-sdk/typescript-config
 
+## 2.0.0
+
+### Major Changes
+
+- [#667](https://github.com/no-witness-labs/evolution-sdk/pull/667) [`93b87f6`](https://github.com/no-witness-labs/evolution-sdk/commit/93b87f6105da464cb129b56a4029a9d8068311bc) Thanks [@hadelive](https://github.com/hadelive)! - Library ownership and entity transferred to No Witness Labs.
+
+  This major release reflects the transition of the Lucid Evolution library to No Witness Labs, including:
+
+  - Updated maintainer and organization details
+  - Revised package ownership and publishing rights
+  - Continued development under new entity management
+  - All packages updated to reflect the organizational change
+
+### Patch Changes
+
+- [#667](https://github.com/no-witness-labs/evolution-sdk/pull/667) [`93b87f6`](https://github.com/no-witness-labs/evolution-sdk/commit/93b87f6105da464cb129b56a4029a9d8068311bc) Thanks [@hadelive](https://github.com/hadelive)! - evolution-sdk
+
 ## 1.0.0
 
 ### Major Changes
