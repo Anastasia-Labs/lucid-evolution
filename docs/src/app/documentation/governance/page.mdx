@@ -33,10 +33,7 @@ To become a Delegated Representative (DRep), you need a registered stake address
 const rewardAddress = await lucid.wallet().rewardAddress();
 
 // transaction construction
-await lucid
-  .newTx()
-  .register.DRep(rewardAddress)
-  .complete();
+await lucid.newTx().register.DRep(rewardAddress).complete();
 
 // proceed with sign and submit tx...
 ```
@@ -54,10 +51,7 @@ You can update DRep metadata like the following:
 const rewardAddress = await lucid.wallet().rewardAddress();
 
 // transaction construction
-await lucid
-  .newTx()
-  .updateDRep(rewardAddress, anchor)
-  .complete();
+await lucid.newTx().updateDRep(rewardAddress, anchor).complete();
 
 // proceed with sign and submit tx...
 ```
@@ -71,10 +65,7 @@ To deregister from a DRep, you can do the following:
 const rewardAddress = await lucid.wallet().rewardAddress();
 
 // transaction construction
-await lucid
-  .newTx()
-  .deregister.DRep(rewardAddress)
-  .complete();
+await lucid.newTx().deregister.DRep(rewardAddress).complete();
 
 // proceed with sign and submit tx...
 ```
@@ -178,9 +169,8 @@ await lucid
 
 ## Understanding Delegation Certificates
 
-When you delegate your voting power, Lucid-Evolution creates a certificate that is included in the transaction. Behind the scenes, this is handled by the `Certificate.new_vote_deleg_cert(){:js}` method in CML. The certificate contains:
+When you delegate your voting power, Evolution-SDK creates a certificate that is included in the transaction. Behind the scenes, this is handled by the `Certificate.new_vote_deleg_cert(){:js}` method in CML. The certificate contains:
 
 - Stake credential derived from your reward address
 - DRep you're delegating to
 - Voting strategy (whether a specific DRep, `Always Abstain`, or `Always No Confidence`)
-

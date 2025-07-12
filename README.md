@@ -8,16 +8,16 @@
   <a href="https://github.com/no-witness-labs/evolution-sdk/actions/workflows/main.yml">
     <img src="https://github.com/no-witness-labs/evolution-sdk/actions/workflows/main.yml/badge.svg" alt="Build Status"/>
   </a>
-  <img src="https://img.shields.io/npm/dy/%40lucid-evolution%2Flucid" alt="NPM Downloads"/>
+  <img src="https://img.shields.io/npm/dy/%40evolution-sdk%2Flucid" alt="NPM Downloads"/>
   <a href="https://discord.gg/eqZDvHvW6k">
     <img alt="Discord" src="https://img.shields.io/discord/947985069111377951?logo=discord">
   </a>
-  <img alt="NPM Version" src="https://img.shields.io/npm/v/%40lucid-evolution%2Flucid?color=%2350C62A">
+  <img alt="NPM Version" src="https://img.shields.io/npm/v/%40evolution-sdk%2Flucid?color=%2350C62A">
 </p>
 
 There are a growing number of projects that are built on top of `evolution-sdk`! If you've built a library or a project on top of evolution-sdk, tell me about it [on X](https://x.com/nowitnesslabs) or [on Discord](https://discord.gg/eqZDvHvW6k) . I'll add it below and tweet it out.
 
-<h3 align="center">Powered by Lucid Evolution</span></h1>
+<h3 align="center">Powered by Evolution SDK</span></h1>
 
 <table align="center" style="justify-content: center;align-items: center;display: flex;">
   <tr>
@@ -188,7 +188,7 @@ For comprehensive documentation including API references, examples, and guides, 
 
 ## 🤝 Contributing
 
-We welcome contributions to Lucid Evolution! Please check our [CONTRIBUTING.md](./CONTRIBUTING.md) guide for more information.
+We welcome contributions to Evolution SDK! Please check our [CONTRIBUTING.md](./CONTRIBUTING.md) guide for more information.
 
 ### Getting Started
 
@@ -221,7 +221,7 @@ pnpm build
         <tbody>
           <tr>
             <td><code>@evolution-sdk/lucid</code></td>
-            <td>Core package for Lucid Evolution</td>
+            <td>Core package for Evolution SDK</td>
           </tr>
           <tr>
             <td><code>@evolution-sdk/bip39</code></td>
@@ -291,7 +291,7 @@ pnpm --filter @evolution-sdk/lucid test
   <details>
     <summary><strong>🧪 Testing Details</strong></summary>
     <div style="text-align: left; margin-top: 15px;">
-      <p>Lucid Evolution includes both unit tests and on-chain integration tests.</p>
+      <p>Evolution SDK includes both unit tests and on-chain integration tests.</p>
       <p>For detailed testing instructions, including environment setup and API keys, please refer to our <a href="./CONTRIBUTING.md#local-testing">CONTRIBUTING guide</a>.</p>
     </div>
   </details>
@@ -311,7 +311,7 @@ pnpm dev
 
 ## 📜 License
 
-Lucid Evolution is licensed under the [MIT License](./LICENSE).
+Evolution SDK is licensed under the [MIT License](./LICENSE).
 
 ---
 

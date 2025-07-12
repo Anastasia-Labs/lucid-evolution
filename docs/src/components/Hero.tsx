@@ -17,8 +17,8 @@ export default function Hero({
   const [showCursor, setShowCursor] = useState(true);
   const [textColor, setTextColor] = useState("gray");
 
-  const fullText = "Evolution";
-  const partialText = "Evolu";
+  const fullText = "SDK";
+  const partialText = "SD";
 
   useEffect(() => {
     let isMounted = true;

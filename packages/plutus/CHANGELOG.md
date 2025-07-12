@@ -6,7 +6,7 @@
 
 - [#667](https://github.com/no-witness-labs/evolution-sdk/pull/667) [`93b87f6`](https://github.com/no-witness-labs/evolution-sdk/commit/93b87f6105da464cb129b56a4029a9d8068311bc) Thanks [@hadelive](https://github.com/hadelive)! - Library ownership and entity transferred to No Witness Labs.
 
-  This major release reflects the transition of the Lucid Evolution library to No Witness Labs, including:
+  This major release reflects the transition of the Evolution SDK library to No Witness Labs, including:
 
   - Updated maintainer and organization details
   - Revised package ownership and publishing rights
@@ -27,7 +27,7 @@
 
 - [#663](https://github.com/no-witness-labs/evolution-sdk/pull/663) [`12aaf90`](https://github.com/no-witness-labs/evolution-sdk/commit/12aaf904d753d9765872c18ad141feee29418a9d) Thanks [@hadelive](https://github.com/hadelive)! - Library ownership and entity transferred to No Witness Labs.
 
-  This major release reflects the transition of the Lucid Evolution library to No Witness Labs, including:
+  This major release reflects the transition of the Evolution SDK library to No Witness Labs, including:
 
   - Updated maintainer and organization details
   - Revised package ownership and publishing rights

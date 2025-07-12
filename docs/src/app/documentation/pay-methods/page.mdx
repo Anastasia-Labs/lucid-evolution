@@ -2,7 +2,7 @@ import { Callout } from "nextra/components";
 
 # Pay Methods
 
-Lucid-Evolution provides several `.pay{:js}` methods to create transaction outputs on the Cardano blockchain. These methods allow you to send ADA, native tokens, attach datums, deploy reference scripts, and interact with smart contracts. This guide covers all the available pay methods and their use cases.
+Evolution-SDK provides several `.pay{:js}` methods to create transaction outputs on the Cardano blockchain. These methods allow you to send ADA, native tokens, attach datums, deploy reference scripts, and interact with smart contracts. This guide covers all the available pay methods and their use cases.
 
 ## Transfer ADA
 
@@ -35,7 +35,7 @@ const txHash = await signedTx.submit();
 ```
 
 <Callout type="info">
-  Each `.pay.ToAddress(){:js}` call creates a new UTxO, even for the same address. All UTxO outputs in the same transaction will have the same transaction hash/ID, just with different index. Lucid-Evolution respects the order of outputs.
+  Each `.pay.ToAddress(){:js}` call creates a new UTxO, even for the same address. All UTxO outputs in the same transaction will have the same transaction hash/ID, just with different index. Evolution-SDK respects the order of outputs.
 </Callout>
 
 ## Cardano Native Tokens
@@ -69,7 +69,7 @@ const tx = await lucid
   // you can chain with any number of .pay calls
   .attachMetadata(
     674, // see CIP-10 for more information
-    { msg: ["Wen Midgard?"] },
+    { msg: ["Wen Midgard?"] }
   )
   .complete();
 
@@ -78,7 +78,8 @@ const txHash = await signedTx.submit();
 ```
 
 <Callout type="info">
-  For more information about transaction metadata label, see [CIP-10](https://github.com/cardano-foundation/CIPs/tree/master/CIP-0010).
+  For more information about transaction metadata label, see
+  [CIP-10](https://github.com/cardano-foundation/CIPs/tree/master/CIP-0010).
 </Callout>
 
 ## Datums
@@ -88,10 +89,9 @@ Here's how you can include a datum to a transaction output:
 ```js showLineNumbers {5}
 const tx = await lucid
   .newTx()
-  .pay.ToAddressWithData(
-    "addr_test...",
-    { kind: "inline", value: Data.to("31313131") },
-  )
+  .pay.ToAddressWithData("addr_test...", {
+    kind: "inline",
+    value: Data.to("31313131"),
+  })
   .complete();
 ```
-

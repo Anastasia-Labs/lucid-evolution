@@ -10,7 +10,7 @@ import { Link } from "nextra-theme-docs";
 
 export const metadata: Metadata = {
   description:
-    "Lucid-Evolution is a transaction building framework for Cardano which provides flexible off-chain development patterns. It provides developers with type-safe interfaces and utilities to interact with the Cardano blockchain, create transactions, and manage wallets without dealing with low-level complexities.",
+    "Evolution-SDK is a transaction building framework for Cardano which provides flexible off-chain development patterns. It provides developers with type-safe interfaces and utilities to interact with the Cardano blockchain, create transactions, and manage wallets without dealing with low-level complexities.",
 };
 
 const IndexPage: FC = () => {
@@ -19,14 +19,14 @@ const IndexPage: FC = () => {
       <header className="flex flex-col justify-center h-dvh -mt-16">
         <Image
           src="/evolution-sdk/evolution-sdk-no-witness-labs.png"
-          alt="Lucid-Evolution Logo"
+          alt="Evolution-SDK Logo"
           width={450}
           height={120}
         />
 
         <div className="fade-in">
           <Hero
-            title="Lucid"
+            title="Evolution"
             subtitle="A highly scalable transaction building framework for Cardano"
             ctaText="Start here"
             ctaLink="install"
@@ -73,14 +73,14 @@ console.log("Transaction Submitted:", txHash);`}
 
               <div className="w-[calc(100dvw-32px)] md:w-[22dvw]">
                 <h2 className="font-bold text-[1.8rem] mb-4">
-                  Why <span className="text-[#DD7722]">Lucid-Evolution</span>?
+                  Why <span className="text-[#DD7722]">Evolution-SDK</span>?
                 </h2>
 
                 <FaqBox title="Improved APIs" open>
                   <p>
                     Our interfaces are enhanced for better developer experience
                     and function calls streamlined for common operations. With
-                    Lucid-Evolution, you take advantage of built-in support for
+                    Evolution-SDK, you take advantage of built-in support for
                     popular features, reducing the need for external
                     dependencies.
                   </p>
@@ -176,9 +176,9 @@ console.log("Transaction Submitted:", txHash);`}
           </h2>
 
           <div className="w-[calc(100dvw-32px)] md:min-w-2/5 md:max-w-2/5">
-            <FaqBox title="What is Lucid-Evolution?">
+            <FaqBox title="What is Evolution-SDK?">
               <p>
-                Lucid-Evolution is an off-chain framework library for Cardano,
+                Evolution-SDK is an off-chain framework library for Cardano,
                 designed to facilitate developers needs and the development of
                 decentralized applications. It includes various packages such as
                 utilities for signing data, Plutus integration, and wallet
@@ -187,7 +187,7 @@ console.log("Transaction Submitted:", txHash);`}
               </p>
             </FaqBox>
 
-            <FaqBox title="How does Lucid-Evolution ensure compatibility with Cardano's evolving scene?">
+            <FaqBox title="How does Evolution-SDK ensure compatibility with Cardano's evolving scene?">
               <p>
                 The library is actively maintained to ensure compatibility in
                 all areas, just like with Chang Hardfork. We have been involved
@@ -198,10 +198,10 @@ console.log("Transaction Submitted:", txHash);`}
 
             <FaqBox title="Can I contribute to the development?">
               <p>
-                Yes, of course! Contributions to Lucid-Evolution are welcome.
-                You have an idea? You can submit issues, feature requests, or
-                pull requests on our GitHub repository to help improve the
-                library and its documentation
+                Yes, of course! Contributions to Evolution-SDK are welcome. You
+                have an idea? You can submit issues, feature requests, or pull
+                requests on our GitHub repository to help improve the library
+                and its documentation
               </p>
             </FaqBox>
 
@@ -215,7 +215,7 @@ console.log("Transaction Submitted:", txHash);`}
                   to get help from the community and our team.
                 </p>
                 <p>
-                  We also have a dedicated channel for Lucid-Evolution where you
+                  We also have a dedicated channel for Evolution-SDK where you
                   can ask questions, share your ideas, and get help with your
                   projects
                 </p>

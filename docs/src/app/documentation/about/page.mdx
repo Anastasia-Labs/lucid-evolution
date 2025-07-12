@@ -2,7 +2,7 @@ import { Steps } from "nextra/components";
 
 # About
 
-Lucid-Evolution is the next generation transaction builder for users and an off-chain framework for highly scalable dApps on Cardano. The library is designed with modularity in mind, allowing you to:
+Evolution-SDK is the next generation transaction builder for users and an off-chain framework for highly scalable dApps on Cardano. The library is designed with modularity in mind, allowing you to:
 
 - Build and simulate transactions
 - Work with different Cardano networks (Mainnet, Preprod, Preview, or Custom networks)
@@ -13,7 +13,7 @@ Lucid-Evolution is the next generation transaction builder for users and an off-
 <Steps>
 ### Install Dependency
 
-Install Lucid-Evolution for your project by following the [installation](../install) guide.
+Install Evolution-SDK for your project by following the [installation](../install) guide.
 
 ### Specify Provider
 
@@ -53,7 +53,7 @@ const tx = await lucid
   .newTx()
   .pay.ToAddress("addr_test1...", { lovelace: 20_000_000n }) // 20 ADA
   .attachMetadata(674, {
-    msg: ["Hello, Lucid-Evolution!"],
+    msg: ["Hello, Evolution-SDK!"],
   })
   .complete();
 ```
@@ -93,7 +93,7 @@ async function helloLucid() {
     .newTx()
     .pay.ToAddress("addr_test1...", { lovelace: 20_000_000n }) // 20 ADA
     .attachMetadata(674, {
-      msg: ["Hello, Lucid-Evolution!"]
+      msg: ["Hello, Evolution-SDK!"]
     })
     .complete();
 

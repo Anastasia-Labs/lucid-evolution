@@ -1,12 +1,12 @@
 name: 🛠️ Bug Report
-description: Report an issue with Lucid Evolution
+description: Report an issue with Evolution SDK
 labels: ['bug']
 body:
   - type: markdown
     attributes:
       value: |
 
-        Thank you for helping us improve Lucid Evolution! Please fill out the details below to ensure we can address the issue efficiently.
+        Thank you for helping us improve Evolution SDK! Please fill out the details below to ensure we can address the issue efficiently.
         
          **Notes:**
         - ✅ Detailed reports help us resolve issues faster.
@@ -44,7 +44,7 @@ body:
       label: Error Details
       description: |
         Please provide:
-        - Lucid Evolution version (check your package.json)
+        - Evolution SDK version (check your package.json)
         - Terminal logs/error messages
       render: shell
       placeholder: Paste your error logs here

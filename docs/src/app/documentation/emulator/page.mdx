@@ -25,7 +25,7 @@ const lucid = await Lucid(emulator, "Custom");
 
 ### Create Test Accounts
 
-You can generate test accounts. Lucid-Evolution provides a couple of helper functions.
+You can generate test accounts. Evolution-SDK provides a couple of helper functions.
 
 ```js showLineNumbers {2,7,12,14}
 // Generate account with seed phrase (can access wallet features)
@@ -111,10 +111,7 @@ const currentTime = emulator.now();
 
 ```js showLineNumbers {22}
 // Register stake address
-const registerTx = await lucid
-  .newTx()
-  .registerStake(rewardAddress)
-  .complete();
+const registerTx = await lucid.newTx().registerStake(rewardAddress).complete();
 await registerTx.sign.withWallet().complete().submit();
 
 // Simulate the passage of time and block confirmations
@@ -131,7 +128,7 @@ await delegateTx.sign.withWallet().complete().submit();
 await emulator.awaitBlock(10);
 
 // Distribute rewards to all delegated stake addresses
-emulator.distributeRewards(100_000_000n);  // 100 ADA in rewards
+emulator.distributeRewards(100_000_000n); // 100 ADA in rewards
 
 // Query delegation status and rewards
 const delegation = await emulator.getDelegation(rewardAddress);
@@ -154,17 +151,19 @@ await emulator.awaitBlock(10);
 ```js showLineNumbers {2,16}
 // Customize protocol parameters for testing
 const customEmulator = new Emulator(
-  [/* accounts */],
+  [
+    /* accounts */
+  ],
   {
     ...PROTOCOL_PARAMETERS_DEFAULT,
-    minFeeA: 0,                   // per-byte fee
-    minFeeB: 0,                   // constant fee
-    priceMem: 0,                  // memory price
-    priceStep: 0,                 // execution price
-    coinsPerUtxoByte: 0n,         // min-ADA requirement
-    maxTxExMem: 14_000_000,       // max transaction execution memory
+    minFeeA: 0, // per-byte fee
+    minFeeB: 0, // constant fee
+    priceMem: 0, // memory price
+    priceStep: 0, // execution price
+    coinsPerUtxoByte: 0n, // min-ADA requirement
+    maxTxExMem: 14_000_000, // max transaction execution memory
     maxTxExSteps: 10_000_000_000, // max transaction execution steps
-  },
+  }
 );
 
 const lucid = await Lucid(customEmulator, "Custom");
@@ -181,10 +180,7 @@ const tx = await lucid
   .complete();
 
 // Evaluate transaction to get execution units
-const txEval = await emulator.evaluateTx(
-  tx.toCBOR(),
-  [scriptUtxo]
-);
+const txEval = await emulator.evaluateTx(tx.toCBOR(), [scriptUtxo]);
 console.log("Tx Evaluation:", txEval);
 ```
 
@@ -199,4 +195,3 @@ While the emulator is useful for testing, be aware of some limitations:
 <Callout type="warning">
   Always test critical applications on **testnet** before deploying to mainnet.
 </Callout>
-

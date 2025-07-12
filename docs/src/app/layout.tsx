@@ -15,19 +15,19 @@ export const metadata: Metadata = {
   metadataBase: new URL("https://no-witness-labs.github.io/evolution-sdk"),
   keywords: ["Lucid", "Evolution", "Cardano", "blockchain"],
   generator: "Next.js",
-  applicationName: "Lucid-Evolution",
+  applicationName: "Evolution-SDK",
   appleWebApp: {
-    title: "Lucid-Evolution",
+    title: "Evolution-SDK",
     statusBarStyle: "black-translucent",
   },
   title: {
-    default: "Lucid-Evolution",
-    template: "%s | Lucid-Evolution",
+    default: "Evolution-SDK",
+    template: "%s | Evolution-SDK",
   },
   openGraph: {
     // https://github.com/vercel/next.js/discussions/50189#discussioncomment-10826632
     url: "./",
-    siteName: "Lucid-Evolution",
+    siteName: "Evolution-SDK",
     locale: "en_US",
     type: "website",
   },
@@ -53,7 +53,7 @@ const RootLayout: FC<{ children: ReactNode }> = async ({ children }) => {
       <body>
         <Layout
           // banner={<Banner dismissible={false}>
-          //   🎉 Lucid-Evolution 2.0 is released. Visit{' '}
+          //   🎉 Evolution-SDK 2.0 is released. Visit{' '}
           //   <Link href="https://github.com/no-witness-labs/evolution-sdk" className="text-current!">
           //     github.com/no-witness-labs/evolution-sdk
           //   </Link>
