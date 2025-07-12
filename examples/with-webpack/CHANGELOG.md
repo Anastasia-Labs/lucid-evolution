@@ -1,5 +1,12 @@
 # with-webpack
 
+## 1.0.2
+
+### Patch Changes
+
+- Updated dependencies [[`93b87f6`](https://github.com/no-witness-labs/evolution-sdk/commit/93b87f6105da464cb129b56a4029a9d8068311bc), [`93b87f6`](https://github.com/no-witness-labs/evolution-sdk/commit/93b87f6105da464cb129b56a4029a9d8068311bc)]:
+  - @evolution-sdk/lucid@2.0.0
+
 ## 1.0.1
 
 ### Patch Changes
