@@ -1,6 +1,6 @@
 {
   "name": "@evolution-sdk/experimental",
-  "version": "0.0.9",
+  "version": "1.0.0",
   "description": "",
   "homepage": "https://github.com/no-witness-labs/lucid-evolution",
   "main": "./dist/esm/index.js",

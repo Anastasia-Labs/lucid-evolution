@@ -1,5 +1,28 @@
 # @evolution-sdk/wallet
 
+## 1.0.0
+
+### Major Changes
+
+- [#663](https://github.com/no-witness-labs/evolution-sdk/pull/663) [`12aaf90`](https://github.com/no-witness-labs/evolution-sdk/commit/12aaf904d753d9765872c18ad141feee29418a9d) Thanks [@hadelive](https://github.com/hadelive)! - Library ownership and entity transferred to No Witness Labs.
+
+  This major release reflects the transition of the Lucid Evolution library to No Witness Labs, including:
+
+  - Updated maintainer and organization details
+  - Revised package ownership and publishing rights
+  - Continued development under new entity management
+  - All packages updated to reflect the organizational change
+
+- [#664](https://github.com/no-witness-labs/evolution-sdk/pull/664) [`6231d0a`](https://github.com/no-witness-labs/evolution-sdk/commit/6231d0a0cd066e85d97da2ba44cca2c86b6e3b8a) Thanks [@hadelive](https://github.com/hadelive)! - Evolution-sdk
+
+### Patch Changes
+
+- Updated dependencies [[`12aaf90`](https://github.com/no-witness-labs/evolution-sdk/commit/12aaf904d753d9765872c18ad141feee29418a9d), [`6231d0a`](https://github.com/no-witness-labs/evolution-sdk/commit/6231d0a0cd066e85d97da2ba44cca2c86b6e3b8a)]:
+  - @evolution-sdk/core-types@1.0.0
+  - @evolution-sdk/core-utils@1.0.0
+  - @evolution-sdk/sign_data@1.0.0
+  - @evolution-sdk/utils@1.0.0
+
 ## 0.1.72
 
 ### Patch Changes
