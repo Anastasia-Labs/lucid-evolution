@@ -14,10 +14,10 @@ importers:
       '@changesets/cli':
         specifier: ^2.27.1
         version: 2.29.4
-      '@lucid-evolution/eslint-config':
+      '@evolution-sdk/eslint-config':
         specifier: workspace:*
         version: link:packages/eslint-config
-      '@lucid-evolution/typescript-config':
+      '@evolution-sdk/typescript-config':
         specifier: workspace:*
         version: link:packages/typescript-config
       prettier:
@@ -51,10 +51,10 @@ importers:
         specifier: 19.1.0
         version: 19.1.0(react@19.1.0)
     devDependencies:
-      '@lucid-evolution/eslint-config':
+      '@evolution-sdk/eslint-config':
         specifier: workspace:*
         version: link:../packages/eslint-config
-      '@lucid-evolution/typescript-config':
+      '@evolution-sdk/typescript-config':
         specifier: workspace:*
         version: link:../packages/typescript-config
       '@next/eslint-plugin-next':
@@ -96,7 +96,7 @@ importers:
 
   examples/with-webpack:
     dependencies:
-      '@lucid-evolution/lucid':
+      '@evolution-sdk/lucid':
         specifier: workspace:*
         version: link:../../packages/lucid
       buffer:
@@ -295,7 +295,7 @@ importers:
       '@effect/vitest':
         specifier: ^0.23.3
         version: 0.23.3(effect@3.16.4)(vitest@3.2.2(@types/debug@4.1.12)(@types/node@22.15.30)(lightningcss@1.29.2)(terser@5.43.1))
-      '@lucid-evolution/eslint-config':
+      '@evolution-sdk/eslint-config':
         specifier: workspace:*
         version: link:../eslint-config
       '@microsoft/api-extractor':
@@ -337,28 +337,28 @@ importers:
       '@emurgo/cardano-message-signing-nodejs':
         specifier: ^1.1.0
         version: 1.1.0
-      '@lucid-evolution/core-types':
+      '@evolution-sdk/core-types':
         specifier: workspace:*
         version: link:../core-types
-      '@lucid-evolution/core-utils':
+      '@evolution-sdk/core-utils':
         specifier: workspace:*
         version: link:../core-utils
-      '@lucid-evolution/plutus':
+      '@evolution-sdk/plutus':
         specifier: workspace:*
         version: link:../plutus
-      '@lucid-evolution/provider':
+      '@evolution-sdk/provider':
         specifier: workspace:*
         version: link:../provider
-      '@lucid-evolution/sign_data':
+      '@evolution-sdk/sign_data':
         specifier: workspace:*
         version: link:../sign_data
-      '@lucid-evolution/uplc':
+      '@evolution-sdk/uplc':
         specifier: workspace:*
         version: link:../uplc
-      '@lucid-evolution/utils':
+      '@evolution-sdk/utils':
         specifier: workspace:*
         version: link:../utils
-      '@lucid-evolution/wallet':
+      '@evolution-sdk/wallet':
         specifier: workspace:*
         version: link:../wallet
       effect:
@@ -398,10 +398,10 @@ importers:
       '@anastasia-labs/cardano-multiplatform-lib-nodejs':
         specifier: 6.0.2-3
         version: 6.0.2-3
-      '@lucid-evolution/core-types':
+      '@evolution-sdk/core-types':
         specifier: workspace:*
         version: link:../core-types
-      '@lucid-evolution/core-utils':
+      '@evolution-sdk/core-utils':
         specifier: workspace:*
         version: link:../core-utils
       '@sinclair/typebox':
@@ -435,16 +435,16 @@ importers:
       '@effect/schema':
         specifier: ^0.68.26
         version: 0.68.27(effect@3.16.3)
-      '@lucid-evolution/core-types':
+      '@evolution-sdk/core-types':
         specifier: workspace:*
         version: link:../core-types
-      '@lucid-evolution/core-utils':
+      '@evolution-sdk/core-utils':
         specifier: workspace:*
         version: link:../core-utils
-      '@lucid-evolution/utils':
+      '@evolution-sdk/utils':
         specifier: workspace:*
         version: link:../utils
-      '@lucid-evolution/wallet':
+      '@evolution-sdk/wallet':
         specifier: workspace:*
         version: link:../wallet
       effect:
@@ -478,10 +478,10 @@ importers:
       '@emurgo/cardano-message-signing-nodejs':
         specifier: ^1.0.1
         version: 1.1.0
-      '@lucid-evolution/core-types':
+      '@evolution-sdk/core-types':
         specifier: workspace:*
         version: link:../core-types
-      '@lucid-evolution/core-utils':
+      '@evolution-sdk/core-utils':
         specifier: workspace:*
         version: link:../core-utils
     devDependencies:
@@ -519,19 +519,19 @@ importers:
       '@harmoniclabs/uplc':
         specifier: ^1.2.4
         version: 1.4.1(@harmoniclabs/bytestring@1.0.0)(@harmoniclabs/cbor@1.5.0)(@harmoniclabs/crypto@0.3.0)(@harmoniclabs/pair@1.0.0)(@harmoniclabs/plutus-data@1.2.6(@harmoniclabs/bytestring@1.0.0)(@harmoniclabs/cbor@1.5.0))
-      '@lucid-evolution/core-types':
+      '@evolution-sdk/core-types':
         specifier: workspace:*
         version: link:../core-types
-      '@lucid-evolution/core-utils':
+      '@evolution-sdk/core-utils':
         specifier: workspace:*
         version: link:../core-utils
-      '@lucid-evolution/crc8':
+      '@evolution-sdk/crc8':
         specifier: workspace:*
         version: link:../crc8
-      '@lucid-evolution/plutus':
+      '@evolution-sdk/plutus':
         specifier: workspace:*
         version: link:../plutus
-      '@lucid-evolution/uplc':
+      '@evolution-sdk/uplc':
         specifier: workspace:*
         version: link:../uplc
       bip39:
@@ -565,16 +565,16 @@ importers:
       '@anastasia-labs/cardano-multiplatform-lib-nodejs':
         specifier: 6.0.2-3
         version: 6.0.2-3
-      '@lucid-evolution/core-types':
+      '@evolution-sdk/core-types':
         specifier: workspace:*
         version: link:../core-types
-      '@lucid-evolution/core-utils':
+      '@evolution-sdk/core-utils':
         specifier: workspace:*
         version: link:../core-utils
-      '@lucid-evolution/sign_data':
+      '@evolution-sdk/sign_data':
         specifier: workspace:*
         version: link:../sign_data
-      '@lucid-evolution/utils':
+      '@evolution-sdk/utils':
         specifier: workspace:*
         version: link:../utils
       bip39:

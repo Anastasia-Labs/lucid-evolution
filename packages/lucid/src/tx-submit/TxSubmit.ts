@@ -1,7 +1,7 @@
 import { Effect } from "effect";
 import * as S from "@effect/schema/Schema";
 import { CML, makeReturn } from "../core.js";
-import { Wallet } from "@lucid-evolution/core-types";
+import { Wallet } from "@evolution-sdk/core-types";
 import { Either } from "effect/Either";
 import { TxSubmitError } from "../Errors.js";
 import { CBORHex, Hash } from "../tx-builder/types.js";
@@ -87,7 +87,7 @@ export interface TxSigned {
 }
 export const makeSubmit = (
   wallet: Wallet,
-  txSigned: CML.Transaction,
+  txSigned: CML.Transaction
 ): TxSigned => {
   const submit = (options: { canonical: boolean }) =>
     Effect.tryPromise({
@@ -95,7 +95,7 @@ export const makeSubmit = (
         wallet.submitTx(
           options.canonical
             ? txSigned.to_canonical_cbor_hex()
-            : txSigned.to_cbor_hex(),
+            : txSigned.to_cbor_hex()
         ),
       catch: (cause) => new TxSubmitError({ cause }),
     });

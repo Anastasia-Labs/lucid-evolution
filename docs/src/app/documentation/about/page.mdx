@@ -22,14 +22,14 @@ To instantiate a Lucid object, you need to specify the [provider](./provider) yo
 For example, using [Blockfrost](https://blockfrost.io):
 
 ```js showLineNumbers
-import { Lucid, Blockfrost } from "@lucid-evolution/lucid";
+import { Lucid, Blockfrost } from "@evolution-sdk/lucid";
 
 const lucid = await Lucid(
   new Blockfrost(
     "https://cardano-preview.blockfrost.io/api/v0",
-    "<blockfrost-api-key>", // obtain key from blockfrost.io
+    "<blockfrost-api-key>" // obtain key from blockfrost.io
   ),
-  "Preview", // "Mainnet" | "Preprod" | "Preview" | "Custom"
+  "Preview" // "Mainnet" | "Preprod" | "Preview" | "Custom"
 );
 ```
 
@@ -38,7 +38,7 @@ const lucid = await Lucid(
 Next, you select a wallet to be used (or connected if it's a [CIP-30](https://github.com/cardano-foundation/CIPs/tree/master/CIP-0030) wallet).
 
 ```js showLineNumbers
-import { WalletApi } from "@lucid-evolution/lucid";
+import { WalletApi } from "@evolution-sdk/lucid";
 
 const walletApi: WalletApi = externalWalletApi;
 lucid.selectWallet.fromAPI(walletApi);
@@ -53,7 +53,7 @@ const tx = await lucid
   .newTx()
   .pay.ToAddress("addr_test1...", { lovelace: 20_000_000n }) // 20 ADA
   .attachMetadata(674, {
-    msg: ["Hello, Lucid-Evolution!"]
+    msg: ["Hello, Lucid-Evolution!"],
   })
   .complete();
 ```
@@ -72,7 +72,7 @@ const txHash = await signedTx.submit();
 ## Putting it all Together
 
 ```js showLineNumbers
-import { Lucid, Blockfrost, WalletAPI } from "@lucid-evolution/lucid";
+import { Lucid, Blockfrost, WalletAPI } from "@evolution-sdk/lucid";
 
 async function helloLucid() {
   // instantiate a Lucid object by providing Blockfrost as the provider
@@ -83,11 +83,11 @@ async function helloLucid() {
     ),
     "Preview", // "Mainnet" | "Preprod" | "Preview" | "Custom"
   );
-  
+
   // select wallet from API
   const walletApi: WalletApi = externalWalletApi;
   lucid.selectWallet.fromAPI(walletApi);
-  
+
   // contruct the transaction builder
   const tx = await lucid
     .newTx()
@@ -96,11 +96,11 @@ async function helloLucid() {
       msg: ["Hello, Lucid-Evolution!"]
     })
     .complete();
-  
+
   // sign and submit the transaction
   const signedTx = await tx.sign.withWallet().complete();
   const txHash = await signedTx.submit();
-  
+
   console.log({ txHash });
 }
 ```

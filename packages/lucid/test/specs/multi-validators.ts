@@ -7,7 +7,7 @@ import {
   SimpleMintContract,
   NetworkConfig,
 } from "./services";
-import { Constr, Data } from "@lucid-evolution/plutus";
+import { Constr, Data } from "@evolution-sdk/plutus";
 import { fromText, RedeemerBuilder, UTxO } from "../../src";
 import { handleSignSubmit, withLogRetry } from "./utils";
 
@@ -18,10 +18,10 @@ export const depositFunds = Effect.gen(function* () {
   const mintContract = yield* MintContract;
 
   const stakeUtxos = yield* Effect.tryPromise(() =>
-    user.utxosAt(stakeContract.contractAddress),
+    user.utxosAt(stakeContract.contractAddress)
   );
   const mintUtxos = yield* Effect.tryPromise(() =>
-    user.utxosAt(mintContract.contractAddress),
+    user.utxosAt(mintContract.contractAddress)
   );
   // To avoid increasing the number of utxos at contract
   if (stakeUtxos.length >= 10 && mintUtxos.length >= 3) return undefined;
@@ -38,7 +38,7 @@ export const depositFunds = Effect.gen(function* () {
         value: datum,
       },
       undefined,
-      stakeContract.stake,
+      stakeContract.stake
     );
   }
 
@@ -52,7 +52,7 @@ export const depositFunds = Effect.gen(function* () {
         value: datum,
       },
       undefined,
-      mintContract.mint,
+      mintContract.mint
     );
   }
 
@@ -63,10 +63,10 @@ export const depositFunds = Effect.gen(function* () {
   return signBuilder;
 }).pipe(
   Effect.flatMap((tx) =>
-    tx ? pipe(tx, handleSignSubmit, withLogRetry) : Effect.void,
+    tx ? pipe(tx, handleSignSubmit, withLogRetry) : Effect.void
   ),
   withLogRetry,
-  Effect.orDie,
+  Effect.orDie
 );
 
 export const collectFundsInternal = Effect.gen(function* ($) {
@@ -76,16 +76,16 @@ export const collectFundsInternal = Effect.gen(function* ($) {
   const address = yield* Effect.promise(() => user.wallet().address());
 
   const stakeUtxos = yield* Effect.tryPromise(() =>
-    user.utxosAt(stakeContract.contractAddress),
+    user.utxosAt(stakeContract.contractAddress)
   );
   const mintUtxos = yield* Effect.tryPromise(() =>
-    user.utxosAt(mintContract.contractAddress),
+    user.utxosAt(mintContract.contractAddress)
   );
   const stakeUtxoScriptRef = yield* Effect.fromNullable(
-    stakeUtxos.find((utxo) => utxo.scriptRef ?? null),
+    stakeUtxos.find((utxo) => utxo.scriptRef ?? null)
   );
   const mintUtxoScriptRef = yield* Effect.fromNullable(
-    mintUtxos.find((utxo) => utxo.scriptRef ?? null),
+    mintUtxos.find((utxo) => utxo.scriptRef ?? null)
   );
 
   const selectedStakeUTxOs = stakeUtxos
@@ -135,7 +135,7 @@ export const collectFundsInternal = Effect.gen(function* ($) {
         value: Data.void(),
       },
       { lovelace: 500_000n },
-      utxo.scriptRef ? utxo.scriptRef : undefined,
+      utxo.scriptRef ? utxo.scriptRef : undefined
     );
   });
 
@@ -147,7 +147,7 @@ export const collectFundsInternal = Effect.gen(function* ($) {
         value: Data.void(),
       },
       { lovelace: 7_000_000n },
-      utxo.scriptRef ? utxo.scriptRef : undefined,
+      utxo.scriptRef ? utxo.scriptRef : undefined
     );
   });
 
@@ -184,7 +184,7 @@ export const collectFunds = pipe(
   collectFundsInternal,
   Effect.flatMap(handleSignSubmit),
   withLogRetry,
-  Effect.orDie,
+  Effect.orDie
 );
 
 export const registerStake = Effect.gen(function* ($) {
@@ -201,10 +201,10 @@ export const registerStake = Effect.gen(function* ($) {
     error.message.includes("StakeKeyAlreadyRegisteredDELEG") ||
     error.message.includes("StakeKeyRegisteredDELEG")
       ? Effect.log("Stake Already registered")
-      : Effect.fail(error),
+      : Effect.fail(error)
   ),
   withLogRetry,
-  Effect.orDie,
+  Effect.orDie
 );
 
 export const registerStakeAndDelegateToPool = Effect.gen(function* ($) {
@@ -220,7 +220,7 @@ export const registerStakeAndDelegateToPool = Effect.gen(function* ($) {
     .registerAndDelegate.ToPool(
       rewardAddress,
       poolId,
-      Data.to(new Constr(0, [fromText("1")])),
+      Data.to(new Constr(0, [fromText("1")]))
     )
     .attach.WithdrawalValidator(stake)
     .completeProgram();
@@ -232,10 +232,10 @@ export const registerStakeAndDelegateToPool = Effect.gen(function* ($) {
     error.message.includes("StakeKeyAlreadyRegisteredDELEG") ||
     error.message.includes("StakeKeyRegisteredDELEG")
       ? Effect.log("Stake Already registered")
-      : Effect.fail(error),
+      : Effect.fail(error)
   ),
   withLogRetry,
-  Effect.orDie,
+  Effect.orDie
 );
 
 export const deRegisterStake = Effect.gen(function* ($) {
@@ -261,7 +261,7 @@ export const mintAndWithdraw = Effect.gen(function* () {
       {
         [policyId + fromText("MintWithdraw")]: 1n,
       },
-      Data.to(new Constr(0, [1n])),
+      Data.to(new Constr(0, [1n]))
     )
     .withdraw(rewardAddress, 0n, Data.to(new Constr(0, [fromText("1")])))
     .attach.WithdrawalValidator(stake)

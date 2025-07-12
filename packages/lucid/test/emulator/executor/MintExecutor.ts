@@ -2,8 +2,8 @@ import { Effect, pipe } from "effect";
 import { EmulatorInstance } from "../service/EmulatorInstance.js";
 import { User } from "../service/EmulatorUser.js";
 import * as MintBuilder from "../builder/MintBuilder.js";
-import { mintingPolicyToId } from "@lucid-evolution/utils";
-import { fromText } from "@lucid-evolution/core-utils";
+import { mintingPolicyToId } from "@evolution-sdk/utils";
+import { fromText } from "@evolution-sdk/core-utils";
 import { handleSignSubmitWithoutValidation } from "../../specs/utils.js";
 
 export const mintAndPay = ({ tokenName = "Wow", quantity = 123n } = {}) =>
@@ -25,7 +25,7 @@ export const mintAndPay = ({ tokenName = "Wow", quantity = 123n } = {}) =>
         quantity,
         currentTime,
       }),
-      Effect.flatMap(handleSignSubmitWithoutValidation),
+      Effect.flatMap(handleSignSubmitWithoutValidation)
     );
     emulator.awaitBlock(1);
 
@@ -54,7 +54,7 @@ export const mintAndStake = ({ tokenName = "Wow", quantity = 123n } = {}) =>
         quantity,
         currentTime,
       }),
-      Effect.flatMap(handleSignSubmitWithoutValidation),
+      Effect.flatMap(handleSignSubmitWithoutValidation)
     );
     emulator.awaitBlock(1);
     const userUTxOs = yield* User.getUtxos;
@@ -82,7 +82,7 @@ export const mintInSlotRange = ({ tokenName = "Wow", quantity = 123n } = {}) =>
         quantity,
         currentTime,
       }),
-      Effect.flatMap(handleSignSubmitWithoutValidation),
+      Effect.flatMap(handleSignSubmitWithoutValidation)
     );
     emulator.awaitBlock(1);
     const userUTxOs = yield* User.getUtxos;

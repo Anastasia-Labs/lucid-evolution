@@ -1,5 +1,5 @@
 {
-  "name": "@lucid-evolution/crc8",
+  "name": "@evolution-sdk/crc8",
   "version": "0.1.8",
   "description": "",
   "main": "./dist/index.js",

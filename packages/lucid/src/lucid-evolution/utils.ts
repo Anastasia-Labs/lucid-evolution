@@ -1,11 +1,11 @@
-import { Json, Provider, UTxO, Unit } from "@lucid-evolution/core-types";
-import { fromUnit, toUnit } from "@lucid-evolution/utils";
-import { Constr, Data } from "@lucid-evolution/plutus";
+import { Json, Provider, UTxO, Unit } from "@evolution-sdk/core-types";
+import { fromUnit, toUnit } from "@evolution-sdk/utils";
+import { Constr, Data } from "@evolution-sdk/plutus";
 
 export const datumOf = async <T = Data>(
   provider: Provider,
   utxo: UTxO,
-  type?: T,
+  type?: T
 ): Promise<T> => {
   if (!utxo.datum) {
     if (!utxo.datumHash) {
@@ -19,7 +19,7 @@ export const datumOf = async <T = Data>(
 /** Query CIP-0068 metadata for a specifc asset. */
 export const metadataOf = async <T = Json>(
   provider: Provider,
-  unit: Unit,
+  unit: Unit
 ): Promise<T> => {
   const { policyId, name, label } = fromUnit(unit);
   switch (label) {

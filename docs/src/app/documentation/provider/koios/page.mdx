@@ -7,11 +7,11 @@ import { Callout } from "nextra/components";
 Usage example to initialize Lucid with Koios:
 
 ```js showLineNumbers /Koios/
-import { Lucid, Koios } from "@lucid-evolution/lucid";
+import { Lucid, Koios } from "@evolution-sdk/lucid";
 
 const lucid = await Lucid(
   new Koios("https://preprod.koios.rest/api/v1"),
-  "Preprod",
+  "Preprod"
 );
 ```
 
@@ -25,4 +25,3 @@ const lucid = await Lucid(
   );
   ```
 </Callout>
-

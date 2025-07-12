@@ -2,13 +2,13 @@ import { Effect, pipe } from "effect";
 import { AlwaysYesDrepContract, NetworkConfig, User } from "./services";
 import { handleSignSubmit, withLogRetry } from "./utils";
 import { Data } from "../../src";
-import { drepIDToCredential } from "@lucid-evolution/utils";
+import { drepIDToCredential } from "@evolution-sdk/utils";
 
 export const registerDRep = Effect.gen(function* ($) {
   const { user } = yield* User;
   const rewardAddress = yield* pipe(
     Effect.promise(() => user.wallet().rewardAddress()),
-    Effect.andThen(Effect.fromNullable),
+    Effect.andThen(Effect.fromNullable)
   );
   const signBuilder = yield* user
     .newTx()
@@ -20,14 +20,14 @@ export const registerDRep = Effect.gen(function* ($) {
   Effect.flatMap(handleSignSubmit),
   Effect.catchTag("TxSubmitError", (error) => Effect.fail(error)),
   withLogRetry,
-  Effect.orDie,
+  Effect.orDie
 );
 
 export const deregisterDRep = Effect.gen(function* ($) {
   const { user } = yield* User;
   const rewardAddress = yield* pipe(
     Effect.promise(() => user.wallet().rewardAddress()),
-    Effect.andThen(Effect.fromNullable),
+    Effect.andThen(Effect.fromNullable)
   );
   const signBuilder = yield* user
     .newTx()
@@ -40,7 +40,7 @@ export const updateDRep = Effect.gen(function* ($) {
   const { user } = yield* User;
   const rewardAddress = yield* pipe(
     Effect.promise(() => user.wallet().rewardAddress()),
-    Effect.andThen(Effect.fromNullable),
+    Effect.andThen(Effect.fromNullable)
   );
   const signBuilder = yield* user
     .newTx()
@@ -53,7 +53,7 @@ export const voteDelegDRepAlwaysAbstain = Effect.gen(function* ($) {
   const { user } = yield* User;
   const rewardAddress = yield* pipe(
     Effect.promise(() => user.wallet().rewardAddress()),
-    Effect.andThen(Effect.fromNullable),
+    Effect.andThen(Effect.fromNullable)
   );
   const signBuilder = yield* user
     .newTx()
@@ -68,7 +68,7 @@ export const voteDelegDRepAlwaysNoConfidence = Effect.gen(function* ($) {
   const { user } = yield* User;
   const rewardAddress = yield* pipe(
     Effect.promise(() => user.wallet().rewardAddress()),
-    Effect.andThen(Effect.fromNullable),
+    Effect.andThen(Effect.fromNullable)
   );
   const signBuilder = yield* user
     .newTx()
@@ -84,7 +84,7 @@ export const voteDelegPoolAndDRepAlwaysAbstain = Effect.gen(function* ($) {
   const networkConfig = yield* NetworkConfig;
   const rewardAddress = yield* pipe(
     Effect.promise(() => user.wallet().rewardAddress()),
-    Effect.andThen(Effect.fromNullable),
+    Effect.andThen(Effect.fromNullable)
   );
   const poolId = getPoolId(networkConfig.NETWORK);
 
@@ -104,7 +104,7 @@ export const registerAndDelegateToPool = Effect.gen(function* ($) {
 
   const rewardAddress = yield* pipe(
     Effect.promise(() => user.wallet().rewardAddress()),
-    Effect.andThen(Effect.fromNullable),
+    Effect.andThen(Effect.fromNullable)
   );
   const signBuilder = yield* user
     .newTx()
@@ -117,7 +117,7 @@ export const registerAndDelegateToDRep = Effect.gen(function* ($) {
   const { user } = yield* User;
   const rewardAddress = yield* pipe(
     Effect.promise(() => user.wallet().rewardAddress()),
-    Effect.andThen(Effect.fromNullable),
+    Effect.andThen(Effect.fromNullable)
   );
   const signBuilder = yield* user
     .newTx()
@@ -132,7 +132,7 @@ export const registerAndDelegateToPoolAndDRep = Effect.gen(function* ($) {
   const { user } = yield* User;
   const rewardAddress = yield* pipe(
     Effect.promise(() => user.wallet().rewardAddress()),
-    Effect.andThen(Effect.fromNullable),
+    Effect.andThen(Effect.fromNullable)
   );
   const networkConfig = yield* NetworkConfig;
   const poolId = getPoolId(networkConfig.NETWORK);
@@ -158,7 +158,7 @@ export const registerScriptDRep = Effect.gen(function* ($) {
   Effect.flatMap(handleSignSubmit),
   Effect.catchTag("TxSubmitError", (error) => Effect.fail(error)),
   withLogRetry,
-  Effect.orDie,
+  Effect.orDie
 );
 
 export const deregisterScriptDRep = Effect.gen(function* ($) {
@@ -174,7 +174,7 @@ export const deregisterScriptDRep = Effect.gen(function* ($) {
   Effect.flatMap(handleSignSubmit),
   Effect.catchTag("TxSubmitError", (error) => Effect.fail(error)),
   withLogRetry,
-  Effect.orDie,
+  Effect.orDie
 );
 
 export const registerAndDelegateToPoolAndScriptDRep = Effect.gen(function* ($) {
@@ -190,7 +190,7 @@ export const registerAndDelegateToPoolAndScriptDRep = Effect.gen(function* ($) {
       {
         __typename: "AlwaysAbstain",
       },
-      Data.void(),
+      Data.void()
     )
     .attach.Script(script)
     .completeProgram();
@@ -210,7 +210,7 @@ export const deregisterStakeScriptDRep = Effect.gen(function* ($) {
   Effect.flatMap(handleSignSubmit),
   Effect.catchTag("TxSubmitError", (error) => Effect.fail(error)),
   withLogRetry,
-  Effect.orDie,
+  Effect.orDie
 );
 
 export const registerAndDelegateToPoolAndDRepKeyCred = Effect.gen(
@@ -227,12 +227,12 @@ export const registerAndDelegateToPoolAndDRepKeyCred = Effect.gen(
         rewardAddress,
         poolId,
         drepIDToCredential(drepId),
-        Data.void(),
+        Data.void()
       )
       .attach.Script(script)
       .completeProgram();
     return signBuilder;
-  },
+  }
 ).pipe(Effect.flatMap(handleSignSubmit), withLogRetry, Effect.orDie);
 
 function getPoolId(network: string): string {

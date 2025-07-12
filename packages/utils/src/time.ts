@@ -1,9 +1,9 @@
-import { Network, Slot, UnixTime } from "@lucid-evolution/core-types";
+import { Network, Slot, UnixTime } from "@evolution-sdk/core-types";
 import {
   SLOT_CONFIG_NETWORK,
   slotToBeginUnixTime,
   unixTimeToEnclosingSlot,
-} from "@lucid-evolution/plutus";
+} from "@evolution-sdk/plutus";
 
 /**
  * Converts unix time to slot based on the network. For "Custom" network

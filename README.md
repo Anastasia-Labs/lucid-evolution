@@ -135,7 +135,7 @@ There are a growing number of projects that are built on top of `lucid-evolution
 ## 📦 [Install](https://no-witness-labs.github.io/lucid-evolution/install)
 
 ```bash
-pnpm i @lucid-evolution/lucid
+pnpm i @evolution-sdk/lucid
 ```
 
 <div align="center">
@@ -147,7 +147,7 @@ pnpm i @lucid-evolution/lucid
 ## 🚀 Quick Start
 
 ```typescript
-import { Lucid, Koios, generateSeedPhrase } from "@lucid-evolution/lucid";
+import { Lucid, Koios, generateSeedPhrase } from "@evolution-sdk/lucid";
 
 // Initialize Lucid with a provider
 const lucid = await Lucid(
@@ -220,51 +220,51 @@ pnpm build
         </thead>
         <tbody>
           <tr>
-            <td><code>@lucid-evolution/lucid</code></td>
+            <td><code>@evolution-sdk/lucid</code></td>
             <td>Core package for Lucid Evolution</td>
           </tr>
           <tr>
-            <td><code>@lucid-evolution/bip39</code></td>
+            <td><code>@evolution-sdk/bip39</code></td>
             <td>BIP-39 mnemonic code implementation</td>
           </tr>
           <tr>
-            <td><code>@lucid-evolution/core-types</code></td>
+            <td><code>@evolution-sdk/core-types</code></td>
             <td>Shared type definitions</td>
           </tr>
           <tr>
-            <td><code>@lucid-evolution/core-utils</code></td>
+            <td><code>@evolution-sdk/core-utils</code></td>
             <td>Common utility functions</td>
           </tr>
           <tr>
-            <td><code>@lucid-evolution/crc8</code></td>
+            <td><code>@evolution-sdk/crc8</code></td>
             <td>CRC8 calculation utilities</td>
           </tr>
           <tr>
-            <td><code>@lucid-evolution/plutus</code></td>
+            <td><code>@evolution-sdk/plutus</code></td>
             <td>Plutus integration tools</td>
           </tr>
           <tr>
-            <td><code>@lucid-evolution/provider</code></td>
+            <td><code>@evolution-sdk/provider</code></td>
             <td>Data provider interfaces</td>
           </tr>
           <tr>
-            <td><code>@lucid-evolution/sign_data</code></td>
+            <td><code>@evolution-sdk/sign_data</code></td>
             <td>Data signing utilities</td>
           </tr>
           <tr>
-            <td><code>@lucid-evolution/utils</code></td>
+            <td><code>@evolution-sdk/utils</code></td>
             <td>General-purpose utility functions</td>
           </tr>
           <tr>
-            <td><code>@lucid-evolution/wallet</code></td>
+            <td><code>@evolution-sdk/wallet</code></td>
             <td>Wallet integration package</td>
           </tr>
           <tr>
-            <td><code>@lucid-evolution/typescript-config</code></td>
+            <td><code>@evolution-sdk/typescript-config</code></td>
             <td>Shared TypeScript configurations</td>
           </tr>
           <tr>
-            <td><code>@lucid-evolution/eslint-config</code></td>
+            <td><code>@evolution-sdk/eslint-config</code></td>
             <td>Shared ESLint configurations</td>
           </tr>
         </tbody>
@@ -282,7 +282,7 @@ pnpm build
 pnpm test
 
 # Run tests for a specific package
-pnpm --filter @lucid-evolution/lucid test
+pnpm --filter @evolution-sdk/lucid test
 ```
 
 <div style="margin: 20px 0;"></div>

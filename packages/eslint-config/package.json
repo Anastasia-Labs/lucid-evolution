@@ -1,5 +1,5 @@
 {
-  "name": "@lucid-evolution/eslint-config",
+  "name": "@evolution-sdk/eslint-config",
   "version": "0.2.4",
   "type": "module",
   "private": true,

@@ -159,7 +159,7 @@ export declare const equals: (
 **Example**
 
 ```ts
-import { TransactionHash } from "@lucid-evolution/experimental";
+import { TransactionHash } from "@evolution-sdk/experimental";
 import assert from "assert";
 ```
 
@@ -180,7 +180,7 @@ export declare class TransactionHashError
 **Example**
 
 ```ts
-import { TransactionHash } from "@lucid-evolution/experimental";
+import { TransactionHash } from "@evolution-sdk/experimental";
 import assert from "assert";
 
 const error = new TransactionHash.TransactionHashError({
@@ -206,7 +206,7 @@ export declare const generator: FastCheck.Arbitrary<TransactionHash>;
 **Example**
 
 ```ts
-import { TransactionHash } from "@lucid-evolution/experimental";
+import { TransactionHash } from "@evolution-sdk/experimental";
 import { FastCheck } from "effect";
 import assert from "assert";
 

@@ -1,5 +1,5 @@
 import { CML } from "./core.js";
-import { RedeemerTag } from "@lucid-evolution/core-types";
+import { RedeemerTag } from "@evolution-sdk/core-types";
 
 export const toCMLRedeemerTag = (tag: string): CML.RedeemerTag => {
   switch (tag) {

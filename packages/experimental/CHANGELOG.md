@@ -1,4 +1,4 @@
-# @lucid-evolution/experimental
+# @evolution-sdk/experimental
 
 ## 0.0.9
 

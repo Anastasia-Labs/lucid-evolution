@@ -92,7 +92,7 @@ export declare const mkByte: <const T extends string>(
 **Example**
 
 ```ts
-import { Data } from "@lucid-evolution/experimental";
+import { Data } from "@evolution-sdk/experimental";
 
 const myByteArray = Data.mkByte("deadbeef");
 ```
@@ -118,7 +118,7 @@ export declare const mkConstr: <
 **Example**
 
 ```ts
-import { Data } from "@lucid-evolution/experimental";
+import { Data } from "@evolution-sdk/experimental";
 
 // Create a constructor for a custom data type (e.g., a "Mint" action with amount)
 const mint = Data.mkConstr(0n, [Data.mkInt(5n)]);
@@ -144,7 +144,7 @@ export declare const mkInt: <const T extends bigint = bigint>(
 **Example**
 
 ```ts
-import { Data } from "@lucid-evolution/experimental";
+import { Data } from "@evolution-sdk/experimental";
 
 const myInteger = Data.mkInt(42n);
 ```
@@ -166,7 +166,7 @@ export declare const mkList: <const T extends Data>(
 **Example**
 
 ```ts
-import { Data } from "@lucid-evolution/experimental";
+import { Data } from "@evolution-sdk/experimental";
 
 // Create a list with multiple elements of the same type
 const integerList = Data.mkList([Data.mkInt(42n), Data.mkInt(100n)]);
@@ -197,7 +197,7 @@ export declare const mkMap: <
 **Example**
 
 ```ts
-import { Data } from "@lucid-evolution/experimental";
+import { Data } from "@evolution-sdk/experimental";
 
 const myMap = Data.mkMap([
   { k: Data.mkByte("cafe01"), v: Data.mkInt(42n) },
@@ -226,7 +226,7 @@ export declare function decodeCBOROrThrow<Source, Target extends Data>(
 **Example**
 
 ```ts
-import { TSchema, Data } from "@lucid-evolution/experimental";
+import { TSchema, Data } from "@evolution-sdk/experimental";
 
 const Token = TSchema.Struct({
   policyId: TSchema.ByteArray,
@@ -288,7 +288,7 @@ export declare const decodeDataOrThrow: <Source, Target extends Data>(
 **Example**
 
 ```ts
-import { Data, TSchema } from "@lucid-evolution/experimental";
+import { Data, TSchema } from "@evolution-sdk/experimental";
 
 const Token = TSchema.Struct({
   policyId: TSchema.ByteArray,
@@ -325,7 +325,7 @@ export declare const encodeCBOROrThrow: <Source, Target extends Data>(
 **Example**
 
 ```ts
-import { Data, TSchema } from "@lucid-evolution/experimental";
+import { Data, TSchema } from "@evolution-sdk/experimental";
 
 const Token = TSchema.Struct({
   policyId: TSchema.ByteArray,
@@ -378,7 +378,7 @@ export declare const encodeDataOrThrow: <Source, Target extends Data>(
 **Example**
 
 ```ts
-import { Data, TSchema } from "@lucid-evolution/experimental";
+import { Data, TSchema } from "@evolution-sdk/experimental";
 
 const token: unknown = {
   policyId: "deadbeef",
@@ -413,7 +413,7 @@ export declare const isEqual: (a: Data, b: Data) => boolean;
 **Example**
 
 ```ts
-import { Data } from "@lucid-evolution/experimental";
+import { Data } from "@evolution-sdk/experimental";
 
 Data.isEqual(Data.mkInt(1n), Data.mkInt(1n)); // true
 Data.isEqual(Data.mkInt(1n), Data.mkInt(2n)); // false
@@ -480,7 +480,7 @@ export declare const genData: (depth?: number) => FastCheck.Arbitrary<Data>;
 **Example**
 
 ```ts
-import { Data } from "@lucid-evolution/experimental";
+import { Data } from "@evolution-sdk/experimental";
 import { FastCheck } from "effect";
 
 const data = Data.genData(3);
@@ -531,7 +531,7 @@ export declare const genMap: (depth: number) => FastCheck.Arbitrary<Map>;
 **Example**
 
 ```ts
-import { Data } from "@lucid-evolution/experimental";
+import { Data } from "@evolution-sdk/experimental";
 import { FastCheck } from "effect";
 
 const mapArb = Data.genMap(2);
@@ -653,7 +653,7 @@ export declare const compare: (a: Data, b: Data) => number;
 **Example**
 
 ```ts
-import { Data } from "@lucid-evolution/experimental";
+import { Data } from "@evolution-sdk/experimental";
 import assert from "assert";
 
 Data.compare(Data.mkInt(1n), Data.mkInt(2n)); // -1
@@ -676,7 +676,7 @@ export declare const sort: (data: Data) => Data;
 **Example**
 
 ```ts
-import { Data } from "@lucid-evolution/experimental";
+import { Data } from "@evolution-sdk/experimental";
 
 const data = Data.mkMap([
   { k: Data.mkByte("cafe"), v: Data.mkInt(2n) },
@@ -706,7 +706,7 @@ export declare const isByteArray: (
 **Example**
 
 ```ts
-import { Data } from "@lucid-evolution/experimental";
+import { Data } from "@evolution-sdk/experimental";
 
 const value = Data.mkByte("deadbeef");
 const isByte = Data.isByteArray(value); // true
@@ -734,7 +734,7 @@ export declare const isConstr: (
 **Example**
 
 ```ts
-import { Data } from "@lucid-evolution/experimental";
+import { Data } from "@evolution-sdk/experimental";
 
 const value = Data.mkConstr(0n, [Data.mkInt(1n), Data.mkInt(2n)]);
 const isConstr = Data.isConstr(value); // true
@@ -758,7 +758,7 @@ export declare const isInteger: (
 **Example**
 
 ```ts
-import { Data } from "@lucid-evolution/experimental";
+import { Data } from "@evolution-sdk/experimental";
 
 const value = Data.mkInt(42n);
 const isInteger = Data.isInteger(value); // true
@@ -782,7 +782,7 @@ export declare const isList: (
 **Example**
 
 ```ts
-import { Data } from "@lucid-evolution/experimental";
+import { Data } from "@evolution-sdk/experimental";
 
 const value = Data.mkList([Data.mkInt(1n), Data.mkInt(2n)]);
 const isList = Data.isList(value); // true
@@ -809,7 +809,7 @@ export declare const isMap: (
 **Example**
 
 ```ts
-import { Data } from "@lucid-evolution/experimental";
+import { Data } from "@evolution-sdk/experimental";
 
 const value = Data.mkMap([
   { k: Data.mkByte("cafe01"), v: Data.mkInt(1n) },
@@ -1016,7 +1016,7 @@ export declare const fromJSONOrThrow: (json: string) => Data;
 **Example**
 
 ```ts
-import { Data } from "@lucid-evolution/experimental";
+import { Data } from "@evolution-sdk/experimental";
 ```
 
 Added in v2.0.0
@@ -1046,7 +1046,7 @@ export declare const toJSON: (data: Data) => string;
 **Example**
 
 ```ts
-import { Data } from "@lucid-evolution/experimental";
+import { Data } from "@evolution-sdk/experimental";
 
 const data = Data.mkInt(42n);
 const json = Data.toJSON(data);

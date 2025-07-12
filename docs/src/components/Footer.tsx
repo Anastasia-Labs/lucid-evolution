@@ -46,7 +46,7 @@ export default function Footer() {
             <h3 className="cursor-default">Quick Links</h3>
             <ul>
               <li>
-                <Link href="https://www.npmjs.com/package/@lucid-evolution/lucid">
+                <Link href="https://www.npmjs.com/package/@evolution-sdk/lucid">
                   NPM Package
                 </Link>
               </li>

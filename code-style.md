@@ -535,7 +535,7 @@ Follow these patterns for constructors:
  * Construct a KeyHash from a hex string.
  *
  * @example
- * import { KeyHash } from "@lucid-evolution/experimental";
+ * import { KeyHash } from "@evolution-sdk/experimental";
  * import { Effect } from "effect";
  * import assert from "assert";
  *
@@ -569,7 +569,7 @@ export const make: SerdeImpl.Make<KeyHash, KeyHashError> = Effect.fnUntraced(
  * Construct a KeyHash from a hex string, throws on error.
  *
  * @example
- * import { KeyHash } from "@lucid-evolution/experimental";
+ * import { KeyHash } from "@evolution-sdk/experimental";
  * import assert from "assert";
  *
  * const hash = "c37b1b5dc0669f1d3c61a6fddb2e8fde96be87b881c60bce8e8d542f";

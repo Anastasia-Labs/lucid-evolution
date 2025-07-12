@@ -9,11 +9,11 @@ import {
   MintingPolicy,
   PolicyId,
   Exact,
-} from "@lucid-evolution/core-types";
+} from "@evolution-sdk/core-types";
 import { CML } from "./core.js";
 import { networkToId } from "./network.js";
 import { applyDoubleCborEncoding } from "./cbor.js";
-import { Data } from "@lucid-evolution/plutus";
+import { Data } from "@evolution-sdk/plutus";
 import {
   Application,
   encodeUPLC,
@@ -21,14 +21,14 @@ import {
   UPLCConst,
   UPLCProgram,
 } from "@harmoniclabs/uplc";
-import { fromHex, toHex } from "@lucid-evolution/core-utils";
+import { fromHex, toHex } from "@evolution-sdk/core-utils";
 import { decode } from "cbor-x";
 import { dataFromCbor } from "@harmoniclabs/plutus-data";
 
 export function validatorToAddress(
   network: Network,
   validator: SpendingValidator,
-  stakeCredential?: Credential,
+  stakeCredential?: Credential
 ): Address {
   const validatorHash = validatorToScriptHash(validator);
   if (stakeCredential) {
@@ -37,18 +37,18 @@ export function validatorToAddress(
       CML.Credential.new_script(CML.ScriptHash.from_hex(validatorHash)),
       stakeCredential.type === "Key"
         ? CML.Credential.new_pub_key(
-            CML.Ed25519KeyHash.from_hex(stakeCredential.hash),
+            CML.Ed25519KeyHash.from_hex(stakeCredential.hash)
           )
         : CML.Credential.new_script(
-            CML.ScriptHash.from_hex(stakeCredential.hash),
-          ),
+            CML.ScriptHash.from_hex(stakeCredential.hash)
+          )
     )
       .to_address()
       .to_bech32(undefined);
   } else {
     return CML.EnterpriseAddress.new(
       networkToId(network),
-      CML.Credential.new_script(CML.ScriptHash.from_hex(validatorHash)),
+      CML.Credential.new_script(CML.ScriptHash.from_hex(validatorHash))
     )
       .to_address()
       .to_bech32(undefined);
@@ -62,24 +62,24 @@ export function validatorToScriptHash(validator: Validator): ScriptHash {
     case "PlutusV1":
       return CML.PlutusScript.from_v1(
         CML.PlutusV1Script.from_cbor_hex(
-          applyDoubleCborEncoding(validator.script),
-        ),
+          applyDoubleCborEncoding(validator.script)
+        )
       )
         .hash()
         .to_hex();
     case "PlutusV2":
       return CML.PlutusScript.from_v2(
         CML.PlutusV2Script.from_cbor_hex(
-          applyDoubleCborEncoding(validator.script),
-        ),
+          applyDoubleCborEncoding(validator.script)
+        )
       )
         .hash()
         .to_hex();
     case "PlutusV3":
       return CML.PlutusScript.from_v3(
         CML.PlutusV3Script.from_cbor_hex(
-          applyDoubleCborEncoding(validator.script),
-        ),
+          applyDoubleCborEncoding(validator.script)
+        )
       )
         .hash()
         .to_hex();
@@ -92,25 +92,19 @@ export function toScriptRef(script: Script): CML.Script {
   switch (script.type) {
     case "Native":
       return CML.Script.new_native(
-        CML.NativeScript.from_cbor_hex(script.script),
+        CML.NativeScript.from_cbor_hex(script.script)
       );
     case "PlutusV1":
       return CML.Script.new_plutus_v1(
-        CML.PlutusV1Script.from_cbor_hex(
-          applyDoubleCborEncoding(script.script),
-        ),
+        CML.PlutusV1Script.from_cbor_hex(applyDoubleCborEncoding(script.script))
       );
     case "PlutusV2":
       return CML.Script.new_plutus_v2(
-        CML.PlutusV2Script.from_cbor_hex(
-          applyDoubleCborEncoding(script.script),
-        ),
+        CML.PlutusV2Script.from_cbor_hex(applyDoubleCborEncoding(script.script))
       );
     case "PlutusV3":
       return CML.Script.new_plutus_v3(
-        CML.PlutusV3Script.from_cbor_hex(
-          applyDoubleCborEncoding(script.script),
-        ),
+        CML.PlutusV3Script.from_cbor_hex(applyDoubleCborEncoding(script.script))
       );
     default:
       throw new Error("No variant matched.");
@@ -157,11 +151,11 @@ export function mintingPolicyToId(mintingPolicy: MintingPolicy): PolicyId {
 export function applyParamsToScript<T extends unknown[] = Data[]>(
   plutusScript: string,
   params: Exact<[...T]>,
-  type?: T,
+  type?: T
 ): string {
   const program = parseUPLC(
     decode(decode(fromHex(applyDoubleCborEncoding(plutusScript)))),
-    "flat",
+    "flat"
   );
   const parameters = (type ? Data.castTo<T>(params, type) : params) as Data[];
   const appliedProgram = parameters.reduce((body, currentParameter) => {
@@ -173,7 +167,7 @@ export function applyParamsToScript<T extends unknown[] = Data[]>(
   return applyDoubleCborEncoding(
     toHex(
       encodeUPLC(new UPLCProgram(program.version, appliedProgram)).toBuffer()
-        .buffer,
-    ),
+        .buffer
+    )
   );
 }

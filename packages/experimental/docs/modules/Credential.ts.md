@@ -74,7 +74,7 @@ export declare const generator: FastCheck.Arbitrary<
 **Example**
 
 ```ts
-import { Credential } from "@lucid-evolution/experimental";
+import { Credential } from "@evolution-sdk/experimental";
 import { FastCheck } from "effect";
 import assert from "assert";
 

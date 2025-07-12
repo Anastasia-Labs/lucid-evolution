@@ -44,7 +44,7 @@ export declare const Array: <S extends Schema.Schema.Any>(items: S) => Array<S>;
 **Example**
 
 ```ts
-import { TSchema, Data } from "@lucid-evolution/experimental";
+import { TSchema, Data } from "@evolution-sdk/experimental";
 import assert from "assert";
 
 const TokenList = TSchema.Array(TSchema.ByteArray);
@@ -89,7 +89,7 @@ export declare const Boolean: Boolean;
 **Example**
 
 ```ts
-import { TSchema, Data } from "@lucid-evolution/experimental";
+import { TSchema, Data } from "@evolution-sdk/experimental";
 import assert from "assert";
 
 const BoolSchema = TSchema.Boolean;
@@ -139,7 +139,7 @@ export declare const ByteArray: ByteArray;
 **Example**
 
 ```ts
-import { TSchema, Data } from "@lucid-evolution/experimental";
+import { TSchema, Data } from "@evolution-sdk/experimental";
 import assert from "assert";
 
 const Token = TSchema.ByteArray;
@@ -176,7 +176,7 @@ export declare const Integer: Integer;
 **Example**
 
 ```ts
-import { TSchema, Data } from "@lucid-evolution/experimental";
+import { TSchema, Data } from "@evolution-sdk/experimental";
 import assert from "assert";
 
 const Token = TSchema.Integer;
@@ -218,7 +218,7 @@ export declare const Literal: <
 **Example**
 
 ```ts
-import { TSchema, Data } from "@lucid-evolution/experimental";
+import { TSchema, Data } from "@evolution-sdk/experimental";
 import assert from "assert";
 
 const RedeemAction = TSchema.Literal("spend", "mint", "withdraw");
@@ -261,7 +261,7 @@ export declare const Map: <
 **Example**
 
 ```ts
-import { TSchema, Data } from "@lucid-evolution/experimental";
+import { TSchema, Data } from "@evolution-sdk/experimental";
 import assert from "assert";
 
 const TokenMap = TSchema.Map(TSchema.ByteArray, TSchema.Integer);
@@ -317,7 +317,7 @@ export declare const NullOr: <S extends Schema.Schema.All>(
 **Example**
 
 ```ts
-import { TSchema, Data } from "@lucid-evolution/experimental";
+import { TSchema, Data } from "@evolution-sdk/experimental";
 import assert from "assert";
 
 const MaybeDeadline = TSchema.NullOr(TSchema.Integer);
@@ -382,7 +382,7 @@ export declare const Struct: <Fields extends Schema.Struct.Fields>(
 **Example**
 
 ```ts
-import { TSchema, Data } from "@lucid-evolution/experimental";
+import { TSchema, Data } from "@evolution-sdk/experimental";
 import assert from "assert";
 
 const Token = TSchema.Struct({
@@ -439,7 +439,7 @@ export declare const Tuple: <Elements extends Schema.TupleType.Elements>(
 **Example**
 
 ```ts
-import { TSchema, Data } from "@lucid-evolution/experimental";
+import { TSchema, Data } from "@evolution-sdk/experimental";
 import assert from "assert";
 
 const Token = TSchema.Tuple([
@@ -497,7 +497,7 @@ export declare const UndefinedOr: <S extends Schema.Schema.Any>(
 **Example**
 
 ```ts
-import { TSchema, Data } from "@lucid-evolution/experimental";
+import { TSchema, Data } from "@evolution-sdk/experimental";
 import assert from "assert";
 
 const MaybeDeadline = TSchema.UndefinedOr(TSchema.Integer);
@@ -550,7 +550,7 @@ export declare const Union: <Members extends ReadonlyArray<Schema.Schema.Any>>(
 **Example**
 
 ```ts
-import { TSchema, Data } from "@lucid-evolution/experimental";
+import { TSchema, Data } from "@evolution-sdk/experimental";
 import assert from "assert";
 
 const MintRedeem = TSchema.Struct({

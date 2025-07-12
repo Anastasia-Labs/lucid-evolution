@@ -1,4 +1,4 @@
-import { Datum, DatumHash } from "@lucid-evolution/core-types";
+import { Datum, DatumHash } from "@evolution-sdk/core-types";
 import { CML } from "./core.js";
 
 export function datumToHash(datum: Datum): DatumHash {

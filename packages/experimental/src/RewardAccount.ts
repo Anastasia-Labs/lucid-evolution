@@ -28,7 +28,7 @@ class RewardAccount extends Schema.TaggedClass<RewardAccount>("RewardAccount")(
   {
     networkId: NetworkId.NetworkId,
     stakeCredential: Credential.Credential,
-  },
+  }
 ) {
   [Inspectable.NodeInspectSymbol]() {
     return {
@@ -97,7 +97,7 @@ const equals = (a: RewardAccount, b: RewardAccount): boolean => {
  * Generate a random RewardAccount.
  *
  * @example
- * import { RewardAccount } from "@lucid-evolution/experimental";
+ * import { RewardAccount } from "@evolution-sdk/experimental";
  * import { FastCheck } from "effect";
  * import assert from "assert";
  *
@@ -112,13 +112,13 @@ const equals = (a: RewardAccount, b: RewardAccount): boolean => {
  */
 const generator = FastCheck.tuple(
   NetworkId.generator,
-  Credential.generator,
+  Credential.generator
 ).map(
   ([networkId, stakeCredential]) =>
     new RewardAccount({
       networkId,
       stakeCredential,
-    }),
+    })
 );
 
 export { RewardAccount, Bytes, HexString, equals, generator };

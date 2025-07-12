@@ -13,9 +13,9 @@ import {
   TxHash,
   Unit,
   UTxO,
-} from "@lucid-evolution/core-types";
-import { fromHex } from "@lucid-evolution/core-utils";
-import { fromUnit } from "@lucid-evolution/utils";
+} from "@evolution-sdk/core-types";
+import { fromHex } from "@evolution-sdk/core-utils";
+import { fromUnit } from "@evolution-sdk/utils";
 import * as _Koios from "./internal/koios.js";
 import * as _Ogmios from "./internal/ogmios.js";
 import { Data, Effect, pipe, Schedule, Schema as S } from "effect";
@@ -79,7 +79,7 @@ export class Koios implements Provider {
       Effect.provide(FetchHttpClient.layer),
       Effect.timeout(10_000),
       Effect.catchAllCause((cause) => new KoiosError({ cause })),
-      Effect.runPromise,
+      Effect.runPromise
     );
 
     return {
@@ -104,19 +104,19 @@ export class Koios implements Provider {
           result.cost_models.PlutusV1.map((value, index) => [
             index.toString(),
             value,
-          ]),
+          ])
         ),
         PlutusV2: Object.fromEntries(
           result.cost_models.PlutusV2.map((value, index) => [
             index.toString(),
             value,
-          ]),
+          ])
         ),
         PlutusV3: Object.fromEntries(
           result.cost_models.PlutusV3.map((value, index) => [
             index.toString(),
             value,
-          ]),
+          ])
         ),
       },
     };
@@ -131,14 +131,14 @@ export class Koios implements Provider {
       _Koios.getUtxosEffect(this.baseUrl, addressOrCredential, bearerToken),
       Effect.timeout(10_000),
       Effect.catchAllCause((cause) => new KoiosError({ cause })),
-      Effect.runPromise,
+      Effect.runPromise
     );
     return result;
   }
 
   async getUtxosWithUnit(
     addressOrCredential: Address | Credential,
-    unit: Unit,
+    unit: Unit
   ): Promise<UTxO[]> {
     const bearerToken = this.token
       ? { Authorization: `Bearer ${this.token}` }
@@ -149,11 +149,11 @@ export class Koios implements Provider {
         utxos.filter((utxo) => {
           const keys = Object.keys(utxo.assets);
           return keys.length > 0 && keys.includes(unit);
-        }),
+        })
       ),
       Effect.timeout(10_000),
       Effect.catchAllCause((cause) => new KoiosError({ cause })),
-      Effect.runPromise,
+      Effect.runPromise
     );
     return result;
   }
@@ -171,34 +171,34 @@ export class Koios implements Provider {
       Effect.flatMap((adresses) =>
         adresses.length === 0
           ? Effect.fail("Unit not found")
-          : Effect.succeed(adresses),
+          : Effect.succeed(adresses)
       ),
       Effect.flatMap((adresses) =>
         adresses.length > 1
           ? Effect.fail("Unit needs to be an NFT or only held by one address.")
-          : Effect.succeed(adresses[0]),
+          : Effect.succeed(adresses[0])
       ),
       Effect.flatMap((address) =>
         _Koios.getUtxosEffect(
           this.baseUrl,
           address.payment_address,
-          bearerToken,
-        ),
+          bearerToken
+        )
       ),
       Effect.map((utxos) =>
         utxos.filter((utxo) => {
           const keys = Object.keys(utxo.assets);
           return keys.length > 0 && keys.includes(unit);
-        }),
+        })
       ),
       Effect.flatMap((utxos) =>
         utxos.length > 1
           ? Effect.fail("Unit needs to be an NFT or only held by one address.")
-          : Effect.succeed(utxos[0]),
+          : Effect.succeed(utxos[0])
       ),
       Effect.timeout(10_000),
       Effect.catchAllCause((cause) => new KoiosError({ cause })),
-      Effect.runPromise,
+      Effect.runPromise
     );
     return result;
   }
@@ -220,7 +220,7 @@ export class Koios implements Provider {
       Effect.provide(FetchHttpClient.layer),
       Effect.timeout(10_000),
       Effect.catchAllCause((cause) => new KoiosError({ cause })),
-      Effect.runPromise,
+      Effect.runPromise
     );
 
     if (result) {
@@ -238,15 +238,15 @@ export class Koios implements Provider {
               reference_script: koiosInputOutput.reference_script,
               asset_list: koiosInputOutput.asset_list,
             } satisfies _Koios.UTxO,
-            koiosInputOutput.payment_addr.bech32,
-          ),
+            koiosInputOutput.payment_addr.bech32
+          )
       );
       return utxos.filter((utxo) =>
         outRefs.some(
           (outRef) =>
             utxo.txHash === outRef.txHash &&
-            utxo.outputIndex === outRef.outputIndex,
-        ),
+            utxo.outputIndex === outRef.outputIndex
+        )
       );
     } else {
       return [];
@@ -266,18 +266,18 @@ export class Koios implements Provider {
         url,
         body,
         S.Array(_Koios.AccountInfoSchema),
-        bearerToken,
+        bearerToken
       ),
       // Allows for dependency injection and easier testing
       Effect.provide(FetchHttpClient.layer),
       Effect.flatMap((result) =>
         result.length === 0
           ? Effect.fail("No Delegation Found by Reward Address")
-          : Effect.succeed(result[0]),
+          : Effect.succeed(result[0])
       ),
       Effect.timeout(10_000),
       Effect.catchAllCause((cause) => new KoiosError({ cause })),
-      Effect.runPromise,
+      Effect.runPromise
     );
 
     return {
@@ -299,18 +299,18 @@ export class Koios implements Provider {
         url,
         body,
         S.Array(_Koios.DatumInfo),
-        bearerToken,
+        bearerToken
       ),
       // Allows for dependency injection and easier testing
       Effect.provide(FetchHttpClient.layer),
       Effect.flatMap((result) =>
         result.length === 0
           ? Effect.fail("No Datum Found by Datum Hash")
-          : Effect.succeed(result[0]),
+          : Effect.succeed(result[0])
       ),
       Effect.timeout(10_000),
       Effect.catchAllCause((cause) => new KoiosError({ cause })),
-      Effect.runPromise,
+      Effect.runPromise
     );
     return result.bytes;
   }
@@ -335,7 +335,7 @@ export class Koios implements Provider {
       Effect.timeout(160_000),
       Effect.orDie,
       Effect.as(true),
-      Effect.runPromise,
+      Effect.runPromise
     );
 
     return result;
@@ -354,14 +354,14 @@ export class Koios implements Provider {
       Effect.provide(FetchHttpClient.layer),
       Effect.timeout(10_000),
       Effect.catchAllCause((cause) => new KoiosError({ cause })),
-      Effect.runPromise,
+      Effect.runPromise
     );
     return result;
   }
 
   async evaluateTx(
     tx: Transaction,
-    additionalUTxOs?: UTxO[],
+    additionalUTxOs?: UTxO[]
   ): Promise<EvalRedeemer[]> {
     // Prepare request data
     const url = `${this.baseUrl}/ogmios`;
@@ -385,7 +385,7 @@ export class Koios implements Provider {
       Effect.provide(FetchHttpClient.layer),
       Effect.timeout(10_000),
       Effect.catchAllCause((cause) => new KoiosError({ cause })),
-      Effect.runPromise,
+      Effect.runPromise
     );
 
     const evalRedeemers = result.map((item) => ({

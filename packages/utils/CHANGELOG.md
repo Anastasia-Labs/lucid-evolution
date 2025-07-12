@@ -1,11 +1,11 @@
-# @lucid-evolution/utils
+# @evolution-sdk/utils
 
 ## 0.1.66
 
 ### Patch Changes
 
 - Updated dependencies [[`0afcc62`](https://github.com/Anastasia-Labs/lucid-evolution/commit/0afcc62228428beb3d47b66f63fa9d8becb07f10)]:
-  - @lucid-evolution/uplc@0.2.20
+  - @evolution-sdk/uplc@0.2.20
 
 ## 0.1.65
 
@@ -18,9 +18,9 @@
 ### Patch Changes
 
 - Updated dependencies [[`2335ef1`](https://github.com/Anastasia-Labs/lucid-evolution/commit/2335ef101f8a5d2a92324c7fd8536d5d8927531e), [`09a41ae`](https://github.com/Anastasia-Labs/lucid-evolution/commit/09a41ae8b7030dd3f4e04d6721e1d9fa77e02b12)]:
-  - @lucid-evolution/core-types@0.1.22
-  - @lucid-evolution/uplc@0.2.19
-  - @lucid-evolution/plutus@0.1.29
+  - @evolution-sdk/core-types@0.1.22
+  - @evolution-sdk/uplc@0.2.19
+  - @evolution-sdk/plutus@0.1.29
 
 ## 0.1.63
 
@@ -48,7 +48,7 @@
 - [#443](https://github.com/Anastasia-Labs/lucid-evolution/pull/443) [`dd3bd77`](https://github.com/Anastasia-Labs/lucid-evolution/commit/dd3bd772f59fc774c32b140e1e06314df2c69e4b) Thanks [@nikhils9](https://github.com/nikhils9)! - Fix `unixTimeToSlot` for Custom network
 
 - Updated dependencies [[`a375179`](https://github.com/Anastasia-Labs/lucid-evolution/commit/a375179960e0d17a17d97474c53b9f285c9d5ad0)]:
-  - @lucid-evolution/uplc@0.2.18
+  - @evolution-sdk/uplc@0.2.18
 
 ## 0.1.59
 
@@ -105,21 +105,21 @@
 ### Patch Changes
 
 - Updated dependencies [[`974c5ef`](https://github.com/Anastasia-Labs/lucid-evolution/commit/974c5efb56db592ed4bc3c84ca3b5a4659182a51)]:
-  - @lucid-evolution/plutus@0.1.28
+  - @evolution-sdk/plutus@0.1.28
 
 ## 0.1.50
 
 ### Patch Changes
 
 - Updated dependencies [[`310559c`](https://github.com/Anastasia-Labs/lucid-evolution/commit/310559c2241c3fd4564b33db8f46fd2fc1d5e936)]:
-  - @lucid-evolution/uplc@0.2.17
+  - @evolution-sdk/uplc@0.2.17
 
 ## 0.1.49
 
 ### Patch Changes
 
 - Updated dependencies [[`33135ed`](https://github.com/Anastasia-Labs/lucid-evolution/commit/33135ed8532a3140025751cbc7e1b7efae74545d)]:
-  - @lucid-evolution/uplc@0.2.16
+  - @evolution-sdk/uplc@0.2.16
 
 ## 0.1.48
 
@@ -128,16 +128,16 @@
 - [#337](https://github.com/Anastasia-Labs/lucid-evolution/pull/337) [`ad4e56f`](https://github.com/Anastasia-Labs/lucid-evolution/commit/ad4e56f9556e99b6b534dd476ca5fc38f6fcd3d6) Thanks [@solidsnakedev](https://github.com/solidsnakedev)! - update aiken uplc to 1.1.3; add redeemer utils; update redeemer types
 
 - Updated dependencies [[`ad4e56f`](https://github.com/Anastasia-Labs/lucid-evolution/commit/ad4e56f9556e99b6b534dd476ca5fc38f6fcd3d6)]:
-  - @lucid-evolution/core-types@0.1.21
-  - @lucid-evolution/uplc@0.2.15
-  - @lucid-evolution/plutus@0.1.27
+  - @evolution-sdk/core-types@0.1.21
+  - @evolution-sdk/uplc@0.2.15
+  - @evolution-sdk/plutus@0.1.27
 
 ## 0.1.47
 
 ### Patch Changes
 
 - Updated dependencies [[`2e25677`](https://github.com/Anastasia-Labs/lucid-evolution/commit/2e256779181e0f79ccbf0f1eaaae432795d4315d)]:
-  - @lucid-evolution/uplc@0.2.14
+  - @evolution-sdk/uplc@0.2.14
 
 ## 0.1.46
 
@@ -150,7 +150,7 @@
 ### Patch Changes
 
 - Updated dependencies [[`95e9d98`](https://github.com/Anastasia-Labs/lucid-evolution/commit/95e9d983692e15ac114c2b4cf3496f6854d23bed)]:
-  - @lucid-evolution/uplc@0.2.13
+  - @evolution-sdk/uplc@0.2.13
 
 ## 0.1.44
 
@@ -159,17 +159,17 @@
 - [#321](https://github.com/Anastasia-Labs/lucid-evolution/pull/321) [`5869fe7`](https://github.com/Anastasia-Labs/lucid-evolution/commit/5869fe7e5f99892988f7f372beae004035e31179) Thanks [@hadelive](https://github.com/hadelive)! - fix register drep required wits
 
 - Updated dependencies [[`5869fe7`](https://github.com/Anastasia-Labs/lucid-evolution/commit/5869fe7e5f99892988f7f372beae004035e31179)]:
-  - @lucid-evolution/core-types@0.1.20
-  - @lucid-evolution/core-utils@0.1.16
-  - @lucid-evolution/plutus@0.1.26
+  - @evolution-sdk/core-types@0.1.20
+  - @evolution-sdk/core-utils@0.1.16
+  - @evolution-sdk/plutus@0.1.26
 
 ## 0.1.43
 
 ### Patch Changes
 
 - Updated dependencies [[`93e4784`](https://github.com/Anastasia-Labs/lucid-evolution/commit/93e4784b3397a13b197b04c4de897c455ae62088)]:
-  - @lucid-evolution/core-types@0.1.19
-  - @lucid-evolution/plutus@0.1.25
+  - @evolution-sdk/core-types@0.1.19
+  - @evolution-sdk/plutus@0.1.25
 
 ## 0.1.42
 
@@ -178,8 +178,8 @@
 - [#308](https://github.com/Anastasia-Labs/lucid-evolution/pull/308) [`2afc548`](https://github.com/Anastasia-Labs/lucid-evolution/commit/2afc5485d65c7811a66339daa4c90493026cf51e) Thanks [@solidsnakedev](https://github.com/solidsnakedev)! - add governance modules
 
 - Updated dependencies [[`2afc548`](https://github.com/Anastasia-Labs/lucid-evolution/commit/2afc5485d65c7811a66339daa4c90493026cf51e)]:
-  - @lucid-evolution/core-types@0.1.18
-  - @lucid-evolution/plutus@0.1.24
+  - @evolution-sdk/core-types@0.1.18
+  - @evolution-sdk/plutus@0.1.24
 
 ## 0.1.41
 
@@ -196,7 +196,7 @@
 - [#302](https://github.com/Anastasia-Labs/lucid-evolution/pull/302) [`156c054`](https://github.com/Anastasia-Labs/lucid-evolution/commit/156c0546b15c8ea8d8a8c7c3eb1ba5d78ed60fc1) Thanks [@hadelive](https://github.com/hadelive)! - enable plutusV3
 
 - Updated dependencies [[`156c054`](https://github.com/Anastasia-Labs/lucid-evolution/commit/156c0546b15c8ea8d8a8c7c3eb1ba5d78ed60fc1)]:
-  - @lucid-evolution/uplc@0.2.12
+  - @evolution-sdk/uplc@0.2.12
 
 ## 0.1.39
 
@@ -207,9 +207,9 @@
 - [#299](https://github.com/Anastasia-Labs/lucid-evolution/pull/299) [`083f991`](https://github.com/Anastasia-Labs/lucid-evolution/commit/083f991af49b1dcfe51267bf186db5100136de1d) Thanks [@solidsnakedev](https://github.com/solidsnakedev)! - fix validatorToScriptHash
 
 - Updated dependencies [[`22a9c9c`](https://github.com/Anastasia-Labs/lucid-evolution/commit/22a9c9ceda21cad992727e3f46ae5dea89a0fe7e)]:
-  - @lucid-evolution/core-types@0.1.17
-  - @lucid-evolution/core-utils@0.1.15
-  - @lucid-evolution/plutus@0.1.23
+  - @evolution-sdk/core-types@0.1.17
+  - @evolution-sdk/core-utils@0.1.15
+  - @evolution-sdk/plutus@0.1.23
 
 ## 0.1.38
 
@@ -218,9 +218,9 @@
 - [#285](https://github.com/Anastasia-Labs/lucid-evolution/pull/285) [`59a15c8`](https://github.com/Anastasia-Labs/lucid-evolution/commit/59a15c83e16c1bf22a44e1e05ff7480ef39cb631) Thanks [@hadelive](https://github.com/hadelive)! - bump cml to 6.0.1-2
 
 - Updated dependencies [[`59a15c8`](https://github.com/Anastasia-Labs/lucid-evolution/commit/59a15c83e16c1bf22a44e1e05ff7480ef39cb631)]:
-  - @lucid-evolution/core-types@0.1.16
-  - @lucid-evolution/core-utils@0.1.14
-  - @lucid-evolution/plutus@0.1.22
+  - @evolution-sdk/core-types@0.1.16
+  - @evolution-sdk/core-utils@0.1.14
+  - @evolution-sdk/plutus@0.1.22
 
 ## 0.1.37
 
@@ -229,8 +229,8 @@
 - [#268](https://github.com/Anastasia-Labs/lucid-evolution/pull/268) [`f8f905a`](https://github.com/Anastasia-Labs/lucid-evolution/commit/f8f905aeda20b30a03ba69e4b062a80a7a5be7de) Thanks [@solidsnakedev](https://github.com/solidsnakedev)! - update providers structure and improve side effects
 
 - Updated dependencies [[`f8f905a`](https://github.com/Anastasia-Labs/lucid-evolution/commit/f8f905aeda20b30a03ba69e4b062a80a7a5be7de)]:
-  - @lucid-evolution/core-types@0.1.15
-  - @lucid-evolution/plutus@0.1.21
+  - @evolution-sdk/core-types@0.1.15
+  - @evolution-sdk/plutus@0.1.21
 
 ## 0.1.36
 
@@ -239,8 +239,8 @@
 - [#258](https://github.com/Anastasia-Labs/lucid-evolution/pull/258) [`8372b50`](https://github.com/Anastasia-Labs/lucid-evolution/commit/8372b50972bd99d5cfe122ebb0bfb98908484e0d) Thanks [@hadelive](https://github.com/hadelive)! - fix emulator submitTx function
 
 - Updated dependencies [[`8372b50`](https://github.com/Anastasia-Labs/lucid-evolution/commit/8372b50972bd99d5cfe122ebb0bfb98908484e0d)]:
-  - @lucid-evolution/core-types@0.1.14
-  - @lucid-evolution/plutus@0.1.20
+  - @evolution-sdk/core-types@0.1.14
+  - @evolution-sdk/plutus@0.1.20
 
 ## 0.1.35
 
@@ -259,43 +259,43 @@
 ### Patch Changes
 
 - Updated dependencies [[`7c25501`](https://github.com/Anastasia-Labs/lucid-evolution/commit/7c25501e5f11af8d4a1b2e36d3430bf638cb1eed)]:
-  - @lucid-evolution/core-utils@0.1.13
-  - @lucid-evolution/plutus@0.1.19
+  - @evolution-sdk/core-utils@0.1.13
+  - @evolution-sdk/plutus@0.1.19
 
 ## 0.1.32
 
 ### Patch Changes
 
 - Updated dependencies [[`aec1ccd`](https://github.com/Anastasia-Labs/lucid-evolution/commit/aec1ccd7659e17c07b677f1649977590b830c6bc), [`18dea56`](https://github.com/Anastasia-Labs/lucid-evolution/commit/18dea561759ad569e02af252a89c774e53b74dd7)]:
-  - @lucid-evolution/core-types@0.1.13
-  - @lucid-evolution/core-utils@0.1.12
-  - @lucid-evolution/plutus@0.1.18
+  - @evolution-sdk/core-types@0.1.13
+  - @evolution-sdk/core-utils@0.1.12
+  - @evolution-sdk/plutus@0.1.18
 
 ## 0.1.31
 
 ### Patch Changes
 
 - Updated dependencies [[`c96eda2`](https://github.com/Anastasia-Labs/lucid-evolution/commit/c96eda240092a640f0884a8e3071fc5a31b89fcf)]:
-  - @lucid-evolution/uplc@0.2.11
+  - @evolution-sdk/uplc@0.2.11
 
 ## 0.1.30
 
 ### Patch Changes
 
 - Updated dependencies [[`f99d031`](https://github.com/Anastasia-Labs/lucid-evolution/commit/f99d031bd6ccbeffddd01e3ebf869a04978ba4e6)]:
-  - @lucid-evolution/core-utils@0.1.11
-  - @lucid-evolution/plutus@0.1.17
+  - @evolution-sdk/core-utils@0.1.11
+  - @evolution-sdk/plutus@0.1.17
 
 ## 0.1.29
 
 ### Patch Changes
 
-- [#208](https://github.com/Anastasia-Labs/lucid-evolution/pull/208) [`10d9f80`](https://github.com/Anastasia-Labs/lucid-evolution/commit/10d9f80695928675061fc15b9b18b1c93fb9bb4f) Thanks [@solidsnakedev](https://github.com/solidsnakedev)! - deprecate @lucid-evolution/bip39, use bip39 package instead (browser/node compatible)
+- [#208](https://github.com/Anastasia-Labs/lucid-evolution/pull/208) [`10d9f80`](https://github.com/Anastasia-Labs/lucid-evolution/commit/10d9f80695928675061fc15b9b18b1c93fb9bb4f) Thanks [@solidsnakedev](https://github.com/solidsnakedev)! - deprecate @evolution-sdk/bip39, use bip39 package instead (browser/node compatible)
 
 - Updated dependencies [[`bf2341f`](https://github.com/Anastasia-Labs/lucid-evolution/commit/bf2341f5a5d541fe2ca468fa512e009ab32a1346), [`dc8dc0c`](https://github.com/Anastasia-Labs/lucid-evolution/commit/dc8dc0c76cf2f9666f7e4c6a2452911f4ea6b007)]:
-  - @lucid-evolution/core-utils@0.1.10
-  - @lucid-evolution/uplc@0.2.10
-  - @lucid-evolution/plutus@0.1.16
+  - @evolution-sdk/core-utils@0.1.10
+  - @evolution-sdk/uplc@0.2.10
+  - @evolution-sdk/plutus@0.1.16
 
 ## 0.1.28
 
@@ -304,10 +304,10 @@
 - [#195](https://github.com/Anastasia-Labs/lucid-evolution/pull/195) [`e281b5b`](https://github.com/Anastasia-Labs/lucid-evolution/commit/e281b5bfe5da9a02e3cda35668c3a3eb18f20092) Thanks [@solidsnakedev](https://github.com/solidsnakedev)! - add refscript fee to preview
 
 - Updated dependencies [[`e281b5b`](https://github.com/Anastasia-Labs/lucid-evolution/commit/e281b5bfe5da9a02e3cda35668c3a3eb18f20092)]:
-  - @lucid-evolution/core-types@0.1.12
-  - @lucid-evolution/core-utils@0.1.9
-  - @lucid-evolution/plutus@0.1.15
-  - @lucid-evolution/bip39@0.2.11
+  - @evolution-sdk/core-types@0.1.12
+  - @evolution-sdk/core-utils@0.1.9
+  - @evolution-sdk/plutus@0.1.15
+  - @evolution-sdk/bip39@0.2.11
 
 ## 0.1.27
 
@@ -316,12 +316,12 @@
 - [#183](https://github.com/Anastasia-Labs/lucid-evolution/pull/183) [`8ab1875`](https://github.com/Anastasia-Labs/lucid-evolution/commit/8ab187531e496bd764651328088e99fc09304ca3) Thanks [@solidsnakedev](https://github.com/solidsnakedev)! - cleanup tsconfig.json files, use base.json from typescript-config package as extends property
 
 - Updated dependencies [[`8ab1875`](https://github.com/Anastasia-Labs/lucid-evolution/commit/8ab187531e496bd764651328088e99fc09304ca3)]:
-  - @lucid-evolution/core-types@0.1.11
-  - @lucid-evolution/core-utils@0.1.8
-  - @lucid-evolution/plutus@0.1.14
-  - @lucid-evolution/bip39@0.2.10
-  - @lucid-evolution/crc8@0.1.8
-  - @lucid-evolution/uplc@0.2.9
+  - @evolution-sdk/core-types@0.1.11
+  - @evolution-sdk/core-utils@0.1.8
+  - @evolution-sdk/plutus@0.1.14
+  - @evolution-sdk/bip39@0.2.10
+  - @evolution-sdk/crc8@0.1.8
+  - @evolution-sdk/uplc@0.2.9
 
 ## 0.1.26
 
@@ -330,15 +330,15 @@
 - [#169](https://github.com/Anastasia-Labs/lucid-evolution/pull/169) [`6282481`](https://github.com/Anastasia-Labs/lucid-evolution/commit/6282481a2183cfa1a3deec025552d7432cb35869) Thanks [@nikhils9](https://github.com/nikhils9)! - Auto populate input indices
 
 - Updated dependencies [[`6282481`](https://github.com/Anastasia-Labs/lucid-evolution/commit/6282481a2183cfa1a3deec025552d7432cb35869)]:
-  - @lucid-evolution/core-types@0.1.10
-  - @lucid-evolution/plutus@0.1.13
+  - @evolution-sdk/core-types@0.1.10
+  - @evolution-sdk/plutus@0.1.13
 
 ## 0.1.25
 
 ### Patch Changes
 
 - Updated dependencies [[`def34e8`](https://github.com/Anastasia-Labs/lucid-evolution/commit/def34e800af761abcd7b85ba4c6b7c65219d1891)]:
-  - @lucid-evolution/bip39@0.2.9
+  - @evolution-sdk/bip39@0.2.9
 
 ## 0.1.24
 
@@ -351,7 +351,7 @@
 ### Patch Changes
 
 - Updated dependencies [[`26dc344`](https://github.com/Anastasia-Labs/lucid-evolution/commit/26dc34466e74a8af6b6952dcd705d6f67f9660d0)]:
-  - @lucid-evolution/uplc@0.2.8
+  - @evolution-sdk/uplc@0.2.8
 
 ## 0.1.22
 
@@ -364,8 +364,8 @@
   - remove native.ts from lucid package
   - reallocate native.test.ts file to utils package
 - Updated dependencies [[`7a8956f`](https://github.com/Anastasia-Labs/lucid-evolution/commit/7a8956f95a4ae08e520a8a5f0b0ea4a3eabe869a)]:
-  - @lucid-evolution/core-types@0.1.9
-  - @lucid-evolution/plutus@0.1.12
+  - @evolution-sdk/core-types@0.1.9
+  - @evolution-sdk/plutus@0.1.12
 
 ## 0.1.21
 
@@ -380,12 +380,12 @@
 - [#144](https://github.com/Anastasia-Labs/lucid-evolution/pull/144) [`ed554c4`](https://github.com/Anastasia-Labs/lucid-evolution/commit/ed554c45ed4664568af31a6c1cecb2eb5464cab5) Thanks [@solidsnakedev](https://github.com/solidsnakedev)! - add metadata endpoint
 
 - Updated dependencies [[`ed554c4`](https://github.com/Anastasia-Labs/lucid-evolution/commit/ed554c45ed4664568af31a6c1cecb2eb5464cab5)]:
-  - @lucid-evolution/core-types@0.1.8
-  - @lucid-evolution/core-utils@0.1.7
-  - @lucid-evolution/plutus@0.1.11
-  - @lucid-evolution/bip39@0.2.8
-  - @lucid-evolution/crc8@0.1.7
-  - @lucid-evolution/uplc@0.2.7
+  - @evolution-sdk/core-types@0.1.8
+  - @evolution-sdk/core-utils@0.1.7
+  - @evolution-sdk/plutus@0.1.11
+  - @evolution-sdk/bip39@0.2.8
+  - @evolution-sdk/crc8@0.1.7
+  - @evolution-sdk/uplc@0.2.7
 
 ## 0.1.19
 
@@ -398,9 +398,9 @@
 ### Patch Changes
 
 - Updated dependencies [[`eef3d42`](https://github.com/Anastasia-Labs/lucid-evolution/commit/eef3d421b4cdf12638169ece49e4c00fce6e3356)]:
-  - @lucid-evolution/core-types@0.1.7
-  - @lucid-evolution/uplc@0.2.6
-  - @lucid-evolution/plutus@0.1.10
+  - @evolution-sdk/core-types@0.1.7
+  - @evolution-sdk/uplc@0.2.6
+  - @evolution-sdk/plutus@0.1.10
 
 ## 0.1.17
 
@@ -457,11 +457,11 @@
 - [#91](https://github.com/Anastasia-Labs/lucid-evolution/pull/91) [`05a492f`](https://github.com/Anastasia-Labs/lucid-evolution/commit/05a492ff90199758088bcc6536cc62f5f85040a8) Thanks [@solidsnakedev](https://github.com/solidsnakedev)! - add browser support
 
 - Updated dependencies [[`05a492f`](https://github.com/Anastasia-Labs/lucid-evolution/commit/05a492ff90199758088bcc6536cc62f5f85040a8)]:
-  - @lucid-evolution/core-types@0.1.6
-  - @lucid-evolution/core-utils@0.1.6
-  - @lucid-evolution/plutus@0.1.9
-  - @lucid-evolution/bip39@0.2.7
-  - @lucid-evolution/crc8@0.1.6
+  - @evolution-sdk/core-types@0.1.6
+  - @evolution-sdk/core-utils@0.1.6
+  - @evolution-sdk/plutus@0.1.9
+  - @evolution-sdk/bip39@0.2.7
+  - @evolution-sdk/crc8@0.1.6
 
 ## 0.1.8
 
@@ -486,11 +486,11 @@
   - refactor: set core file for CML lib
   - build(upgrade): bump packages version
 - Updated dependencies [[`2fb5635`](https://github.com/Anastasia-Labs/lucid-evolution/commit/2fb56356fbdfc41c5dc7328456559c8aaf8dbf15)]:
-  - @lucid-evolution/core-types@0.1.5
-  - @lucid-evolution/core-utils@0.1.5
-  - @lucid-evolution/plutus@0.1.8
-  - @lucid-evolution/bip39@0.2.6
-  - @lucid-evolution/crc8@0.1.5
+  - @evolution-sdk/core-types@0.1.5
+  - @evolution-sdk/core-utils@0.1.5
+  - @evolution-sdk/plutus@0.1.8
+  - @evolution-sdk/bip39@0.2.6
+  - @evolution-sdk/crc8@0.1.5
 
 ## 0.1.6
 
@@ -505,11 +505,11 @@
 - [#72](https://github.com/Anastasia-Labs/lucid-evolution/pull/72) [`459df3e`](https://github.com/Anastasia-Labs/lucid-evolution/commit/459df3e95fd55ccdf48fc9cd63e850c053d2f470) Thanks [@solidsnakedev](https://github.com/solidsnakedev)! - bump all packages
 
 - Updated dependencies [[`459df3e`](https://github.com/Anastasia-Labs/lucid-evolution/commit/459df3e95fd55ccdf48fc9cd63e850c053d2f470)]:
-  - @lucid-evolution/bip39@0.2.5
-  - @lucid-evolution/core-types@0.1.4
-  - @lucid-evolution/core-utils@0.1.4
-  - @lucid-evolution/crc8@0.1.4
-  - @lucid-evolution/plutus@0.1.7
+  - @evolution-sdk/bip39@0.2.5
+  - @evolution-sdk/core-types@0.1.4
+  - @evolution-sdk/core-utils@0.1.4
+  - @evolution-sdk/crc8@0.1.4
+  - @evolution-sdk/plutus@0.1.7
 
 ## 0.1.4
 
@@ -518,7 +518,7 @@
 - [#51](https://github.com/Anastasia-Labs/lucid-evolution/pull/51) [`bcda3fc`](https://github.com/Anastasia-Labs/lucid-evolution/commit/bcda3fc3ca9dc13e93ef95929af2fe6fd0937e60) Thanks [@solidsnakedev](https://github.com/solidsnakedev)! - Introduced a new function, applyDoubleCborEncoding, which offers double bytestring encoding capability to scripts.
   Notably, this function was previously dependent on `lucid-cardano`, but now our package is completely detached from it.
 - Updated dependencies [[`70a5b80`](https://github.com/Anastasia-Labs/lucid-evolution/commit/70a5b809903f1e0dbef96ff6e5d32d8507ed442d), [`8522fa7`](https://github.com/Anastasia-Labs/lucid-evolution/commit/8522fa7a09cdec0cdd240fd76230b3dd0ce1b2a6)]:
-  - @lucid-evolution/bip39@0.2.4
+  - @evolution-sdk/bip39@0.2.4
 
 ## 0.1.3
 
@@ -527,11 +527,11 @@
 - [#49](https://github.com/Anastasia-Labs/lucid-evolution/pull/49) [`484a3c6`](https://github.com/Anastasia-Labs/lucid-evolution/commit/484a3c6bf273cedc0aa914eccebb4d78d633bdf4) Thanks [@solidsnakedev](https://github.com/solidsnakedev)! - - bump CMl version 5.2
   - remove toCMLTransactionHash , use CML.hash_transaction which is the fixed function from CML 5.2
 - Updated dependencies [[`484a3c6`](https://github.com/Anastasia-Labs/lucid-evolution/commit/484a3c6bf273cedc0aa914eccebb4d78d633bdf4)]:
-  - @lucid-evolution/core-types@0.1.3
-  - @lucid-evolution/core-utils@0.1.3
-  - @lucid-evolution/plutus@0.1.6
-  - @lucid-evolution/bip39@0.2.3
-  - @lucid-evolution/crc8@0.1.3
+  - @evolution-sdk/core-types@0.1.3
+  - @evolution-sdk/core-utils@0.1.3
+  - @evolution-sdk/plutus@0.1.6
+  - @evolution-sdk/bip39@0.2.3
+  - @evolution-sdk/crc8@0.1.3
 
 ## 0.1.2
 
@@ -540,11 +540,11 @@
 - [#47](https://github.com/Anastasia-Labs/lucid-evolution/pull/47) [`67b178b`](https://github.com/Anastasia-Labs/lucid-evolution/commit/67b178be520f53fe6901cac2c8573170408f861a) Thanks [@solidsnakedev](https://github.com/solidsnakedev)! - move key packages to dependencies
 
 - Updated dependencies [[`67b178b`](https://github.com/Anastasia-Labs/lucid-evolution/commit/67b178be520f53fe6901cac2c8573170408f861a)]:
-  - @lucid-evolution/core-types@0.1.2
-  - @lucid-evolution/core-utils@0.1.2
-  - @lucid-evolution/plutus@0.1.5
-  - @lucid-evolution/bip39@0.2.2
-  - @lucid-evolution/crc8@0.1.2
+  - @evolution-sdk/core-types@0.1.2
+  - @evolution-sdk/core-utils@0.1.2
+  - @evolution-sdk/plutus@0.1.5
+  - @evolution-sdk/bip39@0.2.2
+  - @evolution-sdk/crc8@0.1.2
 
 ## 0.1.1
 

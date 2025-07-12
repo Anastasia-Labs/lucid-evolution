@@ -21,8 +21,8 @@
     "react-dom": "19.1.0"
   },
   "devDependencies": {
-    "@lucid-evolution/eslint-config": "workspace:*",
-    "@lucid-evolution/typescript-config": "workspace:*",
+    "@evolution-sdk/eslint-config": "workspace:*",
+    "@evolution-sdk/typescript-config": "workspace:*",
     "@next/eslint-plugin-next": "15.3.1",
     "@svgr/webpack": "^8.0.1",
     "@tailwindcss/postcss": "4.1.4",

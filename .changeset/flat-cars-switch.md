@@ -1,18 +1,18 @@
 ---
 "docs": major
-"@lucid-evolution/core-types": major
-"@lucid-evolution/core-utils": major
-"@lucid-evolution/crc8": major
-"@lucid-evolution/eslint-config": major
-"@lucid-evolution/experimental": major
-"@lucid-evolution/lucid": major
-"@lucid-evolution/plutus": major
-"@lucid-evolution/provider": major
-"@lucid-evolution/sign_data": major
-"@lucid-evolution/typescript-config": major
-"@lucid-evolution/uplc": major
-"@lucid-evolution/utils": major
-"@lucid-evolution/wallet": major
+"@evolution-sdk/core-types": major
+"@evolution-sdk/core-utils": major
+"@evolution-sdk/crc8": major
+"@evolution-sdk/eslint-config": major
+"@evolution-sdk/experimental": major
+"@evolution-sdk/lucid": major
+"@evolution-sdk/plutus": major
+"@evolution-sdk/provider": major
+"@evolution-sdk/sign_data": major
+"@evolution-sdk/typescript-config": major
+"@evolution-sdk/uplc": major
+"@evolution-sdk/utils": major
+"@evolution-sdk/wallet": major
 ---
 
 Library ownership and entity transferred to No Witness Labs.

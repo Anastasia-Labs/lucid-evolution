@@ -26,7 +26,7 @@ const encoder = new CBORX.Encoder({
  * Encodes a value to CBOR bytes
  *
  * @example
- * import { encodeCBORBytes } from "@lucid-evolution/experimental/CBOR";
+ * import { encodeCBORBytes } from "@evolution-sdk/experimental/CBOR";
  * import { Either } from "effect";
  *
  * const value = { hello: "world" };
@@ -55,7 +55,7 @@ export const encodeAsBytesOrThrow = (value: unknown) =>
  * Encodes a value to CBOR hex string
  *
  * @example
- * import { encodeCBOR } from "@lucid-evolution/experimental/CBOR";
+ * import { encodeCBOR } from "@evolution-sdk/experimental/CBOR";
  * import { Either } from "effect";
  *
  * const value = { hello: "world" };
@@ -72,7 +72,7 @@ export const encodeAsCBORHex = (value: Hex.HexString) =>
   pipe(
     Hex.toBytes(value),
     encodeAsBytes,
-    Effect.map((bytes) => Hex.fromBytes(bytes)),
+    Effect.map((bytes) => Hex.fromBytes(bytes))
   );
 // pipe(
 // encodeAsBytes(value),
@@ -83,7 +83,7 @@ export const encodeAsCBORHex = (value: Hex.HexString) =>
  * Encodes a value to CBOR hex string, throws on error
  *
  * @example
- * import { encodeCBOROrThrow } from "@lucid-evolution/experimental/CBOR";
+ * import { encodeCBOROrThrow } from "@evolution-sdk/experimental/CBOR";
  *
  * const value = { hello: "world" };
  * const cborHex = encodeCBOROrThrow(value);
@@ -98,7 +98,7 @@ export const encodeAsCBORHexOrThrow = (value: Hex.HexString) =>
  * Decodes CBOR bytes to a value
  *
  * @example
- * import { decode } from "@lucid-evolution/experimental/CBOR";
+ * import { decode } from "@evolution-sdk/experimental/CBOR";
  * import { Either } from "effect";
  *
  * const buffer = new Uint8Array([...]);
@@ -123,7 +123,7 @@ export const decodeBytes = (bytes: Uint8Array) =>
  * Decodes CBOR bytes to a value, throws on error
  *
  * @example
- * import { decodeOrThrow } from "@lucid-evolution/experimental/CBOR";
+ * import { decodeOrThrow } from "@evolution-sdk/experimental/CBOR";
  *
  * const buffer = new Uint8Array([...]);
  * const value = decodeOrThrow(buffer);
@@ -148,16 +148,16 @@ export const decodeHex = <T>(hex: CBORHex<T>) =>
       (e) =>
         new CBORError({
           message: `${hex} CBOR decoding failed. Check if the hex string is valid CBOR format.`,
-        }),
-    ),
+        })
+    )
   );
 
 /**
  * Decodes a CBOR hex string to a value, throws on error
  *
  * @example
- * import { decodeHexOrThrow } from "@lucid-evolution/experimental/CBOR";
- * import { makeOrThrow } from "@lucid-evolution/experimental/Hex";
+ * import { decodeHexOrThrow } from "@evolution-sdk/experimental/CBOR";
+ * import { makeOrThrow } from "@evolution-sdk/experimental/Hex";
  *
  * const hex = makeOrThrow("a1656865656c6c6f65776f726c64");
  * const value = decodeHexOrThrow(hex);

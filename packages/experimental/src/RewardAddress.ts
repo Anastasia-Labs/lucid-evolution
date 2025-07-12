@@ -8,7 +8,7 @@ import { Schema } from "effect";
  * @category schemas
  */
 export const RewardAddress = Schema.String.pipe(
-  Schema.pattern(/^(stake|stake_test)[1][a-z0-9]+$/i),
+  Schema.pattern(/^(stake|stake_test)[1][a-z0-9]+$/i)
 ).pipe(Schema.brand("RewardAddress"));
 
 /**
@@ -23,7 +23,7 @@ export type RewardAddress = Schema.Schema.Type<typeof RewardAddress>;
  * Check if the given value is a valid RewardAddress
  *
  * @example
- * import { Address } from "@lucid-evolution/experimental";
+ * import { Address } from "@evolution-sdk/experimental";
  * import assert from "assert";
  *
  * const isValid = Address.isRewardAddress("stake1uyehkck0lajq8gr28t9uxnuvgcqrc6070x3k9r8048z8y5gh6ffgw");

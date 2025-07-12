@@ -35,7 +35,7 @@ export const DATUM_HASH_HEX_LENGTH = 64;
  * Error class for DatumHash related operations.
  *
  * @example
- * import { DatumHash } from "@lucid-evolution/experimental";
+ * import { DatumHash } from "@evolution-sdk/experimental";
  * import assert from "assert";
  *
  * const error = new DatumHash.DatumHashError({ message: "Invalid datum hash" });
@@ -60,7 +60,7 @@ export class DatumHashError extends Data.TaggedError("DatumHashError")<{
  * @category schemas
  */
 export const Hash = Hex.HexString.pipe(
-  Schema.filter((hex) => hex.length === DATUM_HASH_HEX_LENGTH),
+  Schema.filter((hex) => hex.length === DATUM_HASH_HEX_LENGTH)
 ).annotations({
   message: (issue) =>
     `${issue.actual} must be a hex string of length ${DATUM_HASH_HEX_LENGTH}`,
@@ -101,7 +101,7 @@ export const isDatumHash = Schema.is(DatumHash);
 export const DatumHashBytes = pipe(
   Schema.Uint8ArrayFromSelf,
   Schema.filter((bytes) => bytes.length === DATUM_HASH_BYTES_LENGTH),
-  Schema.typeSchema,
+  Schema.typeSchema
 ).annotations({
   message: (issue) =>
     `${issue.actual} must be a byte array of length ${DATUM_HASH_BYTES_LENGTH}`,
@@ -121,7 +121,7 @@ export const Bytes = Schema.transform(
     strict: true,
     encode: (_, hash) => Hex.toBytes(hash.hash),
     decode: (bytes) => new DatumHash({ hash: Hex.fromBytes(bytes) }),
-  },
+  }
 );
 
 /**
@@ -140,7 +140,7 @@ export const HexString = Schema.transform(Hash, DatumHash, {
  * Check if two DatumHash instances are equal.
  *
  * @example
- * import { DatumHash } from "@lucid-evolution/experimental";
+ * import { DatumHash } from "@evolution-sdk/experimental";
  * import { Schema } from "effect";
  * import assert from "assert";
  *
@@ -168,7 +168,7 @@ export const equals = (a: DatumHash, b: DatumHash): boolean => {
  * Generator for creating random DatumHash instances for testing
  *
  * @example
- * import { DatumHash } from "@lucid-evolution/experimental";
+ * import { DatumHash } from "@evolution-sdk/experimental";
  * import { FastCheck } from "effect";
  * import assert from "assert";
  *

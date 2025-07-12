@@ -49,7 +49,7 @@ const IndexPage: FC = () => {
                   boxShadow: "0 20px 40px rgba(0,0,0,0.1)",
                   marginBottom: "2rem",
                 }}
-                code={`import { Lucid, Koios, generateSeedPhrase } from "@lucid-evolution/lucid";
+                code={`import { Lucid, Koios, generateSeedPhrase } from "@evolution-sdk/lucid";
 
 const lucid = await Lucid(
   new Koios("https://preview.koios.rest/api/v1"),

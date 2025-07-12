@@ -1,4 +1,4 @@
-import { Lovelace, Redeemer, RewardAddress } from "@lucid-evolution/core-types";
+import { Lovelace, Redeemer, RewardAddress } from "@evolution-sdk/core-types";
 import * as TxBuilder from "../TxBuilder.js";
 import { Effect, pipe } from "effect";
 import { ERROR_MESSAGE, TxBuilderError } from "../../Errors.js";
@@ -23,34 +23,34 @@ export const registerStake = (rewardAddress: RewardAddress) =>
       Effect.andThen((address) =>
         address.type !== "Reward"
           ? stakeError(ERROR_MESSAGE.MISSING_REWARD_TYPE)
-          : Effect.succeed(address),
-      ),
+          : Effect.succeed(address)
+      )
     );
 
     const stakeCredential = yield* pipe(
       Effect.fromNullable(addressDetails.stakeCredential),
       Effect.orElseFail(() =>
-        stakeError(ERROR_MESSAGE.MISSING_STAKE_CREDENTIAL),
-      ),
+        stakeError(ERROR_MESSAGE.MISSING_STAKE_CREDENTIAL)
+      )
     );
 
     const credential =
       stakeCredential.type === "Key"
         ? CML.Credential.new_pub_key(
-            CML.Ed25519KeyHash.from_hex(stakeCredential.hash),
+            CML.Ed25519KeyHash.from_hex(stakeCredential.hash)
           )
         : CML.Credential.new_script(
-            CML.ScriptHash.from_hex(stakeCredential.hash),
+            CML.ScriptHash.from_hex(stakeCredential.hash)
           );
     const certBuilder = CML.SingleCertificateBuilder.new(
-      CML.Certificate.new_stake_registration(credential),
+      CML.Certificate.new_stake_registration(credential)
     );
     config.txBuilder.add_cert(certBuilder.skip_witness());
   });
 
 export const deRegisterStake = (
   rewardAddress: RewardAddress,
-  redeemer?: Redeemer,
+  redeemer?: Redeemer
 ) =>
   Effect.gen(function* () {
     const { config } = yield* TxConfig;
@@ -59,33 +59,33 @@ export const deRegisterStake = (
       Effect.andThen((address) =>
         address.type !== "Reward"
           ? stakeError(ERROR_MESSAGE.MISSING_REWARD_TYPE)
-          : Effect.succeed(address),
-      ),
+          : Effect.succeed(address)
+      )
     );
 
     const stakeCredential = yield* pipe(
       Effect.fromNullable(addressDetails.stakeCredential),
       Effect.orElseFail(() =>
-        stakeError(ERROR_MESSAGE.MISSING_STAKE_CREDENTIAL),
-      ),
+        stakeError(ERROR_MESSAGE.MISSING_STAKE_CREDENTIAL)
+      )
     );
 
     const createCertBuilder = (
       credential: CML.Credential,
-      config: TxBuilder.TxBuilderConfig,
+      config: TxBuilder.TxBuilderConfig
     ): CML.SingleCertificateBuilder => {
       return CML.SingleCertificateBuilder.new(
         CML.Certificate.new_unreg_cert(
           credential,
-          config.lucidConfig.protocolParameters.keyDeposit,
-        ),
+          config.lucidConfig.protocolParameters.keyDeposit
+        )
       );
     };
 
     switch (stakeCredential.type) {
       case "Key": {
         const credential = CML.Credential.new_pub_key(
-          CML.Ed25519KeyHash.from_hex(stakeCredential.hash),
+          CML.Ed25519KeyHash.from_hex(stakeCredential.hash)
         );
         const certBuilder = createCertBuilder(credential, config);
         config.txBuilder.add_cert(certBuilder.payment_key());
@@ -94,19 +94,19 @@ export const deRegisterStake = (
 
       case "Script": {
         const credential = CML.Credential.new_script(
-          CML.ScriptHash.from_hex(stakeCredential.hash),
+          CML.ScriptHash.from_hex(stakeCredential.hash)
         );
         const certBuilder = createCertBuilder(credential, config);
         const script = yield* pipe(
           Effect.fromNullable(config.scripts.get(stakeCredential.hash)),
           Effect.orElseFail(() =>
-            stakeError(ERROR_MESSAGE.MISSING_SCRIPT(stakeCredential.hash)),
-          ),
+            stakeError(ERROR_MESSAGE.MISSING_SCRIPT(stakeCredential.hash))
+          )
         );
         const handleRedeemer = () =>
           pipe(
             Effect.fromNullable(redeemer),
-            Effect.orElseFail(() => stakeError(ERROR_MESSAGE.MISSING_REDEEMER)),
+            Effect.orElseFail(() => stakeError(ERROR_MESSAGE.MISSING_REDEEMER))
           );
         switch (script.type) {
           case "PlutusV1": {
@@ -114,8 +114,8 @@ export const deRegisterStake = (
             config.txBuilder.add_cert(
               certBuilder.plutus_script(
                 toPartial(toV1(script.script), red),
-                CML.Ed25519KeyHashList.new(),
-              ),
+                CML.Ed25519KeyHashList.new()
+              )
             );
             break;
           }
@@ -125,8 +125,8 @@ export const deRegisterStake = (
             config.txBuilder.add_cert(
               certBuilder.plutus_script(
                 toPartial(toV2(script.script), red),
-                CML.Ed25519KeyHashList.new(),
-              ),
+                CML.Ed25519KeyHashList.new()
+              )
             );
             break;
           }
@@ -135,8 +135,8 @@ export const deRegisterStake = (
             config.txBuilder.add_cert(
               certBuilder.plutus_script(
                 toPartial(toV3(script.script), red),
-                CML.Ed25519KeyHashList.new(),
-              ),
+                CML.Ed25519KeyHashList.new()
+              )
             );
             break;
           }
@@ -144,8 +144,8 @@ export const deRegisterStake = (
             config.txBuilder.add_cert(
               certBuilder.native_script(
                 CML.NativeScript.from_cbor_hex(script.script),
-                CML.NativeScriptWitnessInfo.assume_signature_count(),
-              ),
+                CML.NativeScriptWitnessInfo.assume_signature_count()
+              )
             );
             break;
           }
@@ -163,35 +163,33 @@ export const withdraw =
         Effect.andThen((address) =>
           address.type !== "Reward"
             ? stakeError(ERROR_MESSAGE.MISSING_REWARD_TYPE)
-            : Effect.succeed(address),
-        ),
+            : Effect.succeed(address)
+        )
       );
 
       const withdrawBuilder = yield* pipe(
         Effect.fromNullable(
-          CML.RewardAddress.from_address(
-            CML.Address.from_bech32(rewardAddress),
-          ),
+          CML.RewardAddress.from_address(CML.Address.from_bech32(rewardAddress))
         ),
         Effect.orElseFail(() =>
-          stakeError(ERROR_MESSAGE.MISSING_STAKE_CREDENTIAL),
+          stakeError(ERROR_MESSAGE.MISSING_STAKE_CREDENTIAL)
         ),
         Effect.andThen((address) =>
-          CML.SingleWithdrawalBuilder.new(address, amount),
-        ),
+          CML.SingleWithdrawalBuilder.new(address, amount)
+        )
       );
 
       const stakeCredential = yield* pipe(
         Effect.fromNullable(addressDetails.stakeCredential),
         Effect.orElseFail(() =>
-          stakeError(ERROR_MESSAGE.MISSING_STAKE_CREDENTIAL),
-        ),
+          stakeError(ERROR_MESSAGE.MISSING_STAKE_CREDENTIAL)
+        )
       );
 
       const handleRedeemer = () =>
         pipe(
           Effect.fromNullable(redeemer),
-          Effect.orElseFail(() => stakeError(ERROR_MESSAGE.MISSING_REDEEMER)),
+          Effect.orElseFail(() => stakeError(ERROR_MESSAGE.MISSING_REDEEMER))
         );
 
       switch (stakeCredential.type) {
@@ -204,8 +202,8 @@ export const withdraw =
           const script = yield* pipe(
             Effect.fromNullable(config.scripts.get(stakeCredential.hash)),
             Effect.orElseFail(() =>
-              stakeError(ERROR_MESSAGE.MISSING_SCRIPT(stakeCredential.hash)),
-            ),
+              stakeError(ERROR_MESSAGE.MISSING_SCRIPT(stakeCredential.hash))
+            )
           );
 
           switch (script.type) {
@@ -214,8 +212,8 @@ export const withdraw =
               config.txBuilder.add_withdrawal(
                 withdrawBuilder.plutus_script(
                   toPartial(toV1(script.script), red),
-                  CML.Ed25519KeyHashList.new(),
-                ),
+                  CML.Ed25519KeyHashList.new()
+                )
               );
               break;
             }
@@ -225,8 +223,8 @@ export const withdraw =
               config.txBuilder.add_withdrawal(
                 withdrawBuilder.plutus_script(
                   toPartial(toV2(script.script), red),
-                  CML.Ed25519KeyHashList.new(),
-                ),
+                  CML.Ed25519KeyHashList.new()
+                )
               );
               break;
             }
@@ -236,8 +234,8 @@ export const withdraw =
               config.txBuilder.add_withdrawal(
                 withdrawBuilder.plutus_script(
                   toPartial(toV3(script.script), red),
-                  CML.Ed25519KeyHashList.new(),
-                ),
+                  CML.Ed25519KeyHashList.new()
+                )
               );
               break;
             }
@@ -245,8 +243,8 @@ export const withdraw =
               config.txBuilder.add_withdrawal(
                 withdrawBuilder.native_script(
                   CML.NativeScript.from_cbor_hex(script.script),
-                  CML.NativeScriptWitnessInfo.assume_signature_count(),
-                ),
+                  CML.NativeScriptWitnessInfo.assume_signature_count()
+                )
               );
               break;
             }

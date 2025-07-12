@@ -1,4 +1,4 @@
-import { Network } from "@lucid-evolution/core-types";
+import { Network } from "@evolution-sdk/core-types";
 
 export function networkToId(network: Network): number {
   switch (network) {

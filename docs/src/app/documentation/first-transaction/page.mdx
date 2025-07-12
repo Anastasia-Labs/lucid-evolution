@@ -30,22 +30,24 @@ const signedTx = await tx.sign.withWallet().complete();
 ```js showLineNumbers
 const txHash = await signedTx.submit();
 ```
+
 </Steps>
 
 <Callout type="warning">
-  Remember to select a [wallet](./wallet/) before attempting to build and submit transactions.
+  Remember to select a [wallet](./wallet/) before attempting to build and submit
+  transactions.
 </Callout>
 
 ## Putting it all Together
 
 ```js showLineNumbers
-import { Lucid, Koios, generateSeedPhrase } from "@lucid-evolution/lucid";
+import { Lucid, Koios, generateSeedPhrase } from "@evolution-sdk/lucid";
 
 async function firstTransaction() {
   // Initialize Lucid with a provider
   const lucid = await Lucid(
     new Koios("https://preprod.koios.rest/api/v1"),
-    "Preprod",
+    "Preprod"
   );
 
   const seedPhrase = generateSeedPhrase(); // BIP-39
@@ -64,4 +66,3 @@ async function firstTransaction() {
   console.log("Transaction Submitted:", txHash);
 }
 ```
-

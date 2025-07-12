@@ -3,7 +3,7 @@ import {
   EmulatorAccount,
   generateEmulatorAccount,
   generateEmulatorAccountFromPrivateKey,
-} from "@lucid-evolution/provider";
+} from "@evolution-sdk/provider";
 import { Context, Effect, Layer } from "effect";
 import { PROTOCOL_PARAMETERS_DEFAULT } from "../../../src/index.js";
 
@@ -18,7 +18,7 @@ const make = Effect.gen(function* () {
   const ACCOUNTS = { SEED_ACCOUNTS, PRIVATE_KEY_ACCOUNTS };
   const emulator: Emulator = new Emulator(
     [...SEED_ACCOUNTS, ...PRIVATE_KEY_ACCOUNTS],
-    PROTOCOL_PARAMETERS_DEFAULT,
+    PROTOCOL_PARAMETERS_DEFAULT
   );
   return {
     emulator,

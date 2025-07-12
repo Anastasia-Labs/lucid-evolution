@@ -1,4 +1,4 @@
-import { config } from "@lucid-evolution/eslint-config/base";
+import { config } from "@evolution-sdk/eslint-config/base";
 
 export default [
   ...config,

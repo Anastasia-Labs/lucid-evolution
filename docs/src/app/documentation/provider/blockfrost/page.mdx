@@ -5,11 +5,13 @@
 Usage example to initialize Lucid with Blockfrost:
 
 ```js showLineNumbers /Blockfrost/
-import { Lucid, Blockfrost } from "@lucid-evolution/lucid";
+import { Lucid, Blockfrost } from "@evolution-sdk/lucid";
 
 const lucid = await Lucid(
-  new Blockfrost("https://cardano-preprod.blockfrost.io/api/v0", "<blockfrost-api-key>"),
-  "Preprod",
+  new Blockfrost(
+    "https://cardano-preprod.blockfrost.io/api/v0",
+    "<blockfrost-api-key>"
+  ),
+  "Preprod"
 );
 ```
-

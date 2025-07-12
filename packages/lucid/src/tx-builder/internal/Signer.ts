@@ -3,7 +3,7 @@ import {
   PaymentKeyHash,
   RewardAddress,
   StakeKeyHash,
-} from "@lucid-evolution/core-types";
+} from "@evolution-sdk/core-types";
 import * as TxBuilder from "../TxBuilder.js";
 import { Effect, pipe } from "effect";
 import * as CML from "@anastasia-labs/cardano-multiplatform-lib-nodejs";
@@ -19,7 +19,7 @@ export const addSigner = (address: Address | RewardAddress) =>
     const { config } = yield* TxConfig;
     const addressDetails = yield* validateAddressDetails(
       address,
-      config.lucidConfig,
+      config.lucidConfig
     );
 
     const credential =
@@ -27,14 +27,14 @@ export const addSigner = (address: Address | RewardAddress) =>
         ? yield* pipe(
             Effect.fromNullable(addressDetails.stakeCredential),
             Effect.orElseFail(() =>
-              addSignerError(ERROR_MESSAGE.MISSING_STAKE_CREDENTIAL),
-            ),
+              addSignerError(ERROR_MESSAGE.MISSING_STAKE_CREDENTIAL)
+            )
           )
         : yield* pipe(
             Effect.fromNullable(addressDetails.paymentCredential),
             Effect.orElseFail(() =>
-              addSignerError(ERROR_MESSAGE.MISSING_PAYMENT_CREDENTIAL),
-            ),
+              addSignerError(ERROR_MESSAGE.MISSING_PAYMENT_CREDENTIAL)
+            )
           );
 
     if (credential.type === "Script")

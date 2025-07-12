@@ -10,7 +10,7 @@ type Network = typeof Network.Type;
  *
  * @example
  * ```ts
- * import { Network } from "@lucid-evolution/..."
+ * import { Network } from "@evolution-sdk/..."
  *
  * Network.toId("Preprod"); // 0
  * Network.toId("Mainnet"); // 1

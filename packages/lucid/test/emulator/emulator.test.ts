@@ -9,12 +9,12 @@ import * as MintExecutor from "./executor/MintExecutor.js";
 import * as HelloExecutor from "./executor/HelloExecutor.js";
 import * as SignExecutor from "./executor/SignExecutor.js";
 import { HelloContract } from "../specs/services.js";
-import { Data } from "@lucid-evolution/plutus";
+import { Data } from "@evolution-sdk/plutus";
 import { CONSTANTS } from "./Constants.js";
 
 const TestEnvironment = pipe(
   Layer.provide(User.layer, EmulatorInstance.layer),
-  Layer.merge(EmulatorInstance.layer),
+  Layer.merge(EmulatorInstance.layer)
 );
 
 describe("Emulator", () => {
@@ -25,10 +25,10 @@ describe("Emulator", () => {
         (utxo) =>
           Record.has(utxo.assets, assetId) &&
           Record.get(utxo.assets, assetId).pipe(Option.getOrElse(() => 0n)) ===
-            quantity,
+            quantity
       );
       expect(hasAsset).toBe(true);
-    }).pipe(Effect.provide(TestEnvironment)),
+    }).pipe(Effect.provide(TestEnvironment))
   );
 
   it.effect(
@@ -41,15 +41,15 @@ describe("Emulator", () => {
           (utxo) =>
             Record.has(utxo.assets, assetId) &&
             Record.get(utxo.assets, assetId).pipe(
-              Option.getOrElse(() => 0n),
-            ) === quantity,
+              Option.getOrElse(() => 0n)
+            ) === quantity
         );
         const hasDatumZero = userUTxOs.some(
-          (utxo) => utxo.datum === Data.to(0n),
+          (utxo) => utxo.datum === Data.to(0n)
         );
         expect(hasDatumZero).toBe(true);
         expect(hasAsset).toBe(true);
-      }).pipe(Effect.provide(TestEnvironment)),
+      }).pipe(Effect.provide(TestEnvironment))
   );
 
   //NOTE: This test is failing because the stake address is not being deregistered
@@ -58,7 +58,7 @@ describe("Emulator", () => {
     Effect.gen(function* () {
       yield* StakeExecutor.registerStake;
       yield* StakeExecutor.deregisterStake;
-    }).pipe(Effect.provide(TestEnvironment)),
+    }).pipe(Effect.provide(TestEnvironment))
   );
 
   it.effect(
@@ -68,16 +68,16 @@ describe("Emulator", () => {
         const { alwaysSucceedUtxos } =
           yield* PayExecutor.withDatumHashAndInlineDatum;
         const hasDatum = alwaysSucceedUtxos.some(
-          (utxo) => utxo.datum === Data.to("31313131"),
+          (utxo) => utxo.datum === Data.to("31313131")
         );
         const hasDatumHash = alwaysSucceedUtxos.some(
           (utxo) =>
             utxo.datumHash ===
-            "33f1fa0beaeac56d9f7c73033333bffcf30c8a06ca7045e40ef6b70bcc1550e1",
+            "33f1fa0beaeac56d9f7c73033333bffcf30c8a06ca7045e40ef6b70bcc1550e1"
         );
         expect(hasDatum).toBe(true);
         expect(hasDatumHash).toBe(true);
-      }).pipe(Effect.provide(TestEnvironment)),
+      }).pipe(Effect.provide(TestEnvironment))
   );
 
   it.effect(
@@ -88,7 +88,7 @@ describe("Emulator", () => {
           yield* MintExecutor.mintInSlotRange();
         const [utxo] = userUTxOs;
         expect(Record.get(utxo.assets, assetId)).toEqual(Option.some(quantity));
-      }).pipe(Effect.provide(TestEnvironment)),
+      }).pipe(Effect.provide(TestEnvironment))
   );
 
   it.effect(
@@ -98,7 +98,7 @@ describe("Emulator", () => {
         const registerResult = yield* StakeExecutor.registerStake;
         const [utxo] = registerResult.userUTxOs;
         expect(utxo.assets["lovelace"]).toBeLessThan(75_000_000_000n);
-      }).pipe(Effect.provide(TestEnvironment)),
+      }).pipe(Effect.provide(TestEnvironment))
   );
 
   it.effect(
@@ -113,8 +113,8 @@ describe("Emulator", () => {
         expect(collectResult.userUTxOs.length).toBe(2);
       }).pipe(
         Effect.provide(TestEnvironment),
-        Effect.provide(HelloContract.layer),
-      ),
+        Effect.provide(HelloContract.layer)
+      )
   );
 
   it.effect("should successfully delegate to stake pool", () =>
@@ -130,7 +130,7 @@ describe("Emulator", () => {
           rewards: CONSTANTS.REWARD_AMOUNT,
         },
       });
-    }).pipe(Effect.provide(TestEnvironment)),
+    }).pipe(Effect.provide(TestEnvironment))
   );
 
   it.effect(
@@ -152,7 +152,7 @@ describe("Emulator", () => {
             rewards: 0n,
           },
         });
-      }).pipe(Effect.provide(TestEnvironment)),
+      }).pipe(Effect.provide(TestEnvironment))
   );
 
   //NOTE: This test is failing because the ledger is not allowing withdrawing 0 rewards
@@ -166,7 +166,7 @@ describe("Emulator", () => {
         yield* StakeExecutor.withdrawRewardAmount({
           rewardAmount: 0n,
         });
-      }).pipe(Effect.provide(TestEnvironment)),
+      }).pipe(Effect.provide(TestEnvironment))
   );
 
   it.effect("should successfully send all funds to Hello contract", () =>
@@ -175,30 +175,30 @@ describe("Emulator", () => {
       expect(contractUTxOs.length).toBe(1);
     }).pipe(
       Effect.provide(TestEnvironment),
-      Effect.provide(HelloContract.layer),
-    ),
+      Effect.provide(HelloContract.layer)
+    )
   );
   it.effect("should successfully compose multiple transactions", () =>
     Effect.gen(function* () {
       const userUTxOs = yield* PayExecutor.multiTxCompose;
       expect(userUTxOs.length).toBe(6);
-    }).pipe(Effect.provide(TestEnvironment)),
+    }).pipe(Effect.provide(TestEnvironment))
   );
   it.effect("should successfully compose mint and pay transactions", () =>
     Effect.gen(function* () {
       yield* PayExecutor.mintAndPayTxCompose;
-    }).pipe(Effect.provide(TestEnvironment)),
+    }).pipe(Effect.provide(TestEnvironment))
   );
   it.effect("should successfully verify message", () =>
     Effect.gen(function* () {
       const isValid = yield* SignExecutor.verifySignedMessage;
       expect(isValid).toBe(true);
-    }).pipe(Effect.provide(TestEnvironment)),
+    }).pipe(Effect.provide(TestEnvironment))
   );
   it.effect("should successfully verify add signer key", () =>
     Effect.gen(function* () {
       const isValid = yield* SignExecutor.verifyAddSignerKey;
       expect(isValid).toBe(true);
-    }).pipe(Effect.provide(TestEnvironment)),
+    }).pipe(Effect.provide(TestEnvironment))
   );
 });
