@@ -99,6 +99,9 @@ importers:
       '@lucid-evolution/lucid':
         specifier: workspace:*
         version: link:../../packages/lucid
+      buffer:
+        specifier: ^6.0.3
+        version: 6.0.3
       copy-webpack-plugin:
         specifier: ^12.0.2
         version: 12.0.2(webpack@5.100.1)

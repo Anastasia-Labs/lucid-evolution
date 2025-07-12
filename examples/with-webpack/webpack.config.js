@@ -1,6 +1,7 @@
 const path = require('path');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const CopyWebpackPlugin = require('copy-webpack-plugin');
+const webpack = require('webpack');
 
 module.exports = {
   entry: './src/index.ts',
@@ -42,7 +43,7 @@ module.exports = {
     extensions: ['.tsx', '.ts', '.js'],
     fallback: {
       "crypto": false,
-      "buffer": false,
+      "buffer": require.resolve("buffer"),
       "stream": false,
     },
   },
@@ -55,6 +56,9 @@ module.exports = {
     new HtmlWebpackPlugin({
       template: './src/index.html',
       filename: 'index.html',
+    }),
+    new webpack.ProvidePlugin({
+      Buffer: ['buffer', 'Buffer'],
     }),
   ],
   devServer: {
