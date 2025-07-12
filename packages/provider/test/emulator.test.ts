@@ -23,7 +23,7 @@ describe.sequential("Emulator", () => {
     const utxos = await emulator.getUtxos(EMULATOR_ACCOUNT.address);
     const lovelace = utxos.reduce(
       (amount: any, utxo: any) => amount + utxo.assets.lovelace,
-      0n
+      0n,
     );
     assert.equal(lovelace, EMULATOR_ACCOUNT.assets.lovelace);
   });
@@ -31,11 +31,11 @@ describe.sequential("Emulator", () => {
   test("evaluate tx", async () => {
     const redeemers = await emulator.evaluateTx(
       PreprodConstants.evalSample1.transaction,
-      PreprodConstants.evalSample1.utxos
+      PreprodConstants.evalSample1.utxos,
     );
     assert.deepStrictEqual(
       redeemers,
-      PreprodConstants.evalSample1.redeemersExUnits
+      PreprodConstants.evalSample1.redeemersExUnits,
     );
   });
 
@@ -75,7 +75,7 @@ describe.sequential("Emulator", () => {
     const txHash = await emulator.submitTx(PreprodConstants.submitCbor);
     assert.equal(
       txHash,
-      "edfc1d75074d741f5b7c97e8ddb81de956a43b6fca8664dff5722bb1d136ff3f"
+      "edfc1d75074d741f5b7c97e8ddb81de956a43b6fca8664dff5722bb1d136ff3f",
     );
   });
 });

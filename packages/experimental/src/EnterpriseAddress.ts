@@ -24,7 +24,7 @@ export interface EnterpriseAddress {
  * @category schemas
  */
 export class EnterpriseAddress extends Schema.TaggedClass<EnterpriseAddress>(
-  "EnterpriseAddress"
+  "EnterpriseAddress",
 )("EnterpriseAddress", {
   networkId: NetworkId.NetworkId,
   paymentCredential: Credential.Credential,
@@ -78,7 +78,7 @@ export const BytesSchema = Schema.transformOrFail(
           paymentCredential,
         });
       }),
-  }
+  },
 );
 
 export const HexStringSchema = Schema.transformOrFail(
@@ -90,7 +90,7 @@ export const HexStringSchema = Schema.transformOrFail(
       pipe(ParseResult.encode(BytesSchema)(toA), Effect.map(Hex.fromBytes)),
     decode: (fromI, options, ast) =>
       pipe(Hex.toBytes(fromI), ParseResult.decode(BytesSchema)),
-  }
+  },
 );
 
 /**
@@ -126,13 +126,13 @@ export const equals = (a: EnterpriseAddress, b: EnterpriseAddress): boolean => {
  */
 export const generator = FastCheck.tuple(
   NetworkId.generator,
-  Credential.generator
+  Credential.generator,
 ).map(
   ([networkId, paymentCredential]) =>
     new EnterpriseAddress({
       networkId,
       paymentCredential,
-    })
+    }),
 );
 
 /**

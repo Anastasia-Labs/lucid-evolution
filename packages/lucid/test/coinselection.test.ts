@@ -11,7 +11,7 @@ const sha256 = (input: string) =>
 const createDummyUTxO = (
   index: number,
   lovelaceAmount: bigint,
-  numAssets: number
+  numAssets: number,
 ): UTxO => ({
   txHash: sha256(index.toString()),
   outputIndex: index,
@@ -44,7 +44,7 @@ describe("coinSelection", () => {
     const program = recursive(
       sortUTxOs(inputs),
       { lovelace: 5_000_000n },
-      4310n
+      4310n,
     );
     const exit = await Effect.runPromiseExit(program);
     // TODO: try using only one exepect
@@ -65,7 +65,7 @@ describe("coinSelection", () => {
     const program = recursive(
       sortUTxOs(inputs),
       { lovelace: 5_900_000n },
-      4310n
+      4310n,
     );
     const exit = await Effect.runPromiseExit(program);
     // TODO: try using only one expect
@@ -86,7 +86,7 @@ describe("coinSelection", () => {
     const program = recursive(
       sortUTxOs(inputs),
       { lovelace: 5_200_000n },
-      4310n
+      4310n,
     );
     const exit = await Effect.runPromiseExit(program);
     // TODO: try using only one expect
@@ -106,7 +106,7 @@ describe("coinSelection", () => {
     const program = recursive(
       sortUTxOs(inputs),
       { lovelace: 5_200_000n },
-      4310n
+      4310n,
     );
     const exit = await Effect.runPromiseExit(program);
     expect(exit._tag).toStrictEqual("Failure");
@@ -128,7 +128,7 @@ describe("coinSelection", () => {
     const program = recursive(
       sortUTxOs(inputs),
       { lovelace: 5_200_000n },
-      4310n
+      4310n,
     );
     const expectedSelection = [
       inputs[1],

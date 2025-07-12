@@ -26,7 +26,7 @@ export const ERROR_MESSAGE = {
   INVALID_NETWORK: (
     address: string,
     actualNetworkId: number,
-    network: Network
+    network: Network,
   ) =>
     `Invalid address: ${address}, Expected address with network id ${actualNetworkId}, current network ${network}`,
   MISSING_SCRIPT: (hash: string) =>
@@ -40,7 +40,7 @@ export class NullableError extends Data.TaggedError("NullableError")<{
 }> {}
 
 export class UnauthorizedNetwork extends Data.TaggedError(
-  "UnauthorizedNetwork"
+  "UnauthorizedNetwork",
 )<{
   readonly message: string;
 }> {}

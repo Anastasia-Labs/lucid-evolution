@@ -16,13 +16,13 @@ export const verifySignedMessage = Effect.gen(function* () {
   const addr = yield* Effect.promise(() => user.wallet().address());
   const addrDetails = getAddressDetails(addr);
   const signedMessage = yield* Effect.promise(() =>
-    user.wallet().signMessage(addr, messageHex)
+    user.wallet().signMessage(addr, messageHex),
   );
   const signatureIsValid = verifyData(
     addrDetails.address.hex,
     addrDetails.paymentCredential!.hash,
     messageHex,
-    signedMessage
+    signedMessage,
   );
   return signatureIsValid;
 });

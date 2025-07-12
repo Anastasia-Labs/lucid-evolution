@@ -72,7 +72,7 @@ export const encodeAsCBORHex = (value: Hex.HexString) =>
   pipe(
     Hex.toBytes(value),
     encodeAsBytes,
-    Effect.map((bytes) => Hex.fromBytes(bytes))
+    Effect.map((bytes) => Hex.fromBytes(bytes)),
   );
 // pipe(
 // encodeAsBytes(value),
@@ -148,8 +148,8 @@ export const decodeHex = <T>(hex: CBORHex<T>) =>
       (e) =>
         new CBORError({
           message: `${hex} CBOR decoding failed. Check if the hex string is valid CBOR format.`,
-        })
-    )
+        }),
+    ),
   );
 
 /**

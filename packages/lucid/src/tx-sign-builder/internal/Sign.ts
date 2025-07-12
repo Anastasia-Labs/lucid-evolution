@@ -12,7 +12,7 @@ export const signError = (cause: unknown) => new TxSignerError({ cause });
 
 const mkWitnessFromWallet = (
   wallet: Wallet | undefined,
-  txComplete: CML.Transaction
+  txComplete: CML.Transaction,
 ): Effect.Effect<CML.TransactionWitnessSet, TxSignerError, never> =>
   pipe(
     Effect.fromNullable(wallet),
@@ -20,28 +20,28 @@ const mkWitnessFromWallet = (
     Effect.tryMapPromise({
       try: (wallet) => wallet.signTx(txComplete),
       catch: (cause) => signError(cause),
-    })
+    }),
   );
 
 export const withWallet = (
-  config: TxSignBuilder.TxSignBuilderConfig
+  config: TxSignBuilder.TxSignBuilderConfig,
 ): Effect.Effect<void, TxSignerError, never> =>
   pipe(
     mkWitnessFromWallet(config.wallet, config.txComplete),
-    Effect.map((witness) => config.witnessSetBuilder.add_existing(witness))
+    Effect.map((witness) => config.witnessSetBuilder.add_existing(witness)),
   );
 
 export const partialWithWallet = (
-  config: TxSignBuilder.TxSignBuilderConfig
+  config: TxSignBuilder.TxSignBuilderConfig,
 ): Effect.Effect<TransactionWitnesses, TxSignerError> =>
   pipe(
     mkWitnessFromWallet(config.wallet, config.txComplete),
-    Effect.map((witness) => witness.to_cbor_hex())
+    Effect.map((witness) => witness.to_cbor_hex()),
   );
 
 const mkWitnessFromPrivateKey = (
   privateKey: PrivateKey,
-  txComplete: CML.Transaction
+  txComplete: CML.Transaction,
 ) =>
   pipe(
     Effect.try({
@@ -49,22 +49,25 @@ const mkWitnessFromPrivateKey = (
       catch: signError,
     }),
     Effect.map((privateKey) =>
-      CML.make_vkey_witness(CML.hash_transaction(txComplete.body()), privateKey)
-    )
+      CML.make_vkey_witness(
+        CML.hash_transaction(txComplete.body()),
+        privateKey,
+      ),
+    ),
   );
 
 export const withPrivateKey = (
   config: TxSignBuilder.TxSignBuilderConfig,
-  privateKey: PrivateKey
+  privateKey: PrivateKey,
 ) =>
   pipe(
     mkWitnessFromPrivateKey(privateKey, config.txComplete),
-    Effect.map((witness) => config.witnessSetBuilder.add_vkey(witness))
+    Effect.map((witness) => config.witnessSetBuilder.add_vkey(witness)),
   );
 
 export const partialWithPrivateKey = (
   config: TxSignBuilder.TxSignBuilderConfig,
-  privateKey: PrivateKey
+  privateKey: PrivateKey,
 ) =>
   pipe(
     mkWitnessFromPrivateKey(privateKey, config.txComplete),
@@ -72,12 +75,12 @@ export const partialWithPrivateKey = (
       const witnessBuilder = CML.TransactionWitnessSetBuilder.new();
       witnessBuilder.add_vkey(witness);
       return witnessBuilder.build().to_cbor_hex();
-    })
+    }),
   );
 
 export const assemble = (
   config: TxSignBuilder.TxSignBuilderConfig,
-  witnesses: TransactionWitnesses[]
+  witnesses: TransactionWitnesses[],
 ) =>
   Effect.forEach(witnesses, (witness) =>
     pipe(
@@ -85,6 +88,6 @@ export const assemble = (
         try: () => CML.TransactionWitnessSet.from_cbor_hex(witness),
         catch: signError,
       }),
-      Effect.map((witness) => config.witnessSetBuilder.add_existing(witness))
-    )
+      Effect.map((witness) => config.witnessSetBuilder.add_existing(witness)),
+    ),
   );

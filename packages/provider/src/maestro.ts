@@ -68,7 +68,7 @@ export class Maestro implements Provider {
       drepDeposit: BigInt(result.delegate_representative_deposit.ada.lovelace),
       govActionDeposit: BigInt(result.governance_action_deposit.ada.lovelace),
       priceMem: decimalFromRationalString(
-        result.script_execution_prices.memory
+        result.script_execution_prices.memory,
       ),
       priceStep: decimalFromRationalString(result.script_execution_prices.cpu),
       maxTxExMem: BigInt(result.max_execution_units_per_transaction.memory),
@@ -77,23 +77,23 @@ export class Maestro implements Provider {
       collateralPercentage: parseInt(result.collateral_percentage),
       maxCollateralInputs: parseInt(result.max_collateral_inputs),
       minFeeRefScriptCostPerByte: parseInt(
-        result.min_fee_reference_scripts.base
+        result.min_fee_reference_scripts.base,
       ),
       costModels: {
         PlutusV1: Object.fromEntries(
           result.plutus_cost_models.plutus_v1.map(
-            (value: number, index: number) => [index.toString(), value]
-          )
+            (value: number, index: number) => [index.toString(), value],
+          ),
         ),
         PlutusV2: Object.fromEntries(
           result.plutus_cost_models.plutus_v2.map(
-            (value: number, index: number) => [index.toString(), value]
-          )
+            (value: number, index: number) => [index.toString(), value],
+          ),
         ),
         PlutusV3: Object.fromEntries(
           result.plutus_cost_models.plutus_v3.map(
-            (value: number, index: number) => [index.toString(), value]
-          )
+            (value: number, index: number) => [index.toString(), value],
+          ),
         ),
       },
     };
@@ -101,7 +101,7 @@ export class Maestro implements Provider {
 
   private async getUtxosInternal(
     addressOrCredential: Address | Credential,
-    unit?: Unit
+    unit?: Unit,
   ): Promise<UTxO[]> {
     const queryPredicate = (() => {
       if (typeof addressOrCredential === "string") {
@@ -111,10 +111,10 @@ export class Maestro implements Provider {
       credentialBech32Query +=
         addressOrCredential.type === "Key"
           ? CML.Ed25519KeyHash.from_hex(addressOrCredential.hash).to_bech32(
-              "addr_vkh"
+              "addr_vkh",
             )
           : CML.ScriptHash.from_hex(addressOrCredential.hash).to_bech32(
-              "addr_shared_vkh"
+              "addr_shared_vkh",
             );
       return credentialBech32Query;
     })();
@@ -129,7 +129,7 @@ export class Maestro implements Provider {
         }),
       `${this.url}${queryPredicate}/utxos`,
       qparams,
-      "Location: getUtxosInternal. Error: Could not fetch UTxOs from Maestro"
+      "Location: getUtxosInternal. Error: Could not fetch UTxOs from Maestro",
     );
     return result.map(this.maestroUtxoToUtxo);
   }
@@ -140,7 +140,7 @@ export class Maestro implements Provider {
 
   getUtxosWithUnit(
     addressOrCredential: Address | Credential,
-    unit: Unit
+    unit: Unit,
   ): Promise<UTxO[]> {
     return this.getUtxosInternal(addressOrCredential, unit);
   }
@@ -148,7 +148,7 @@ export class Maestro implements Provider {
   async getUtxoByUnit(unit: Unit): Promise<UTxO> {
     const timestampedAddressesResponse = await fetch(
       `${this.url}/assets/${unit}/addresses?count=2`,
-      { headers: this.commonHeaders() }
+      { headers: this.commonHeaders() },
     );
     const timestampedAddresses = await timestampedAddressesResponse.json();
     if (!timestampedAddressesResponse.ok) {
@@ -157,7 +157,7 @@ export class Maestro implements Provider {
       }
       throw new Error(
         "Location: getUtxoByUnit. Error: Couldn't perform query. Received status code: " +
-          timestampedAddressesResponse.status
+          timestampedAddressesResponse.status,
       );
     }
     const addressesWithAmount = timestampedAddresses.data;
@@ -166,7 +166,7 @@ export class Maestro implements Provider {
     }
     if (addressesWithAmount.length > 1) {
       throw new Error(
-        "Location: getUtxoByUnit. Error: Unit needs to be an NFT or only held by one address."
+        "Location: getUtxoByUnit. Error: Unit needs to be an NFT or only held by one address.",
       );
     }
 
@@ -176,7 +176,7 @@ export class Maestro implements Provider {
 
     if (utxos.length > 1) {
       throw new Error(
-        "Location: getUtxoByUnit. Error: Unit needs to be an NFT or only held by one address."
+        "Location: getUtxoByUnit. Error: Unit needs to be an NFT or only held by one address.",
       );
     }
 
@@ -186,7 +186,7 @@ export class Maestro implements Provider {
   async getUtxosByOutRef(outRefs: OutRef[]): Promise<UTxO[]> {
     const qry = `${this.url}/transactions/outputs`;
     const body = JSON.stringify(
-      outRefs.map(({ txHash, outputIndex }) => `${txHash}#${outputIndex}`)
+      outRefs.map(({ txHash, outputIndex }) => `${txHash}#${outputIndex}`),
     );
     const utxos = await this.getAllPagesData<MaestroUtxo>(
       async (qry: string) =>
@@ -200,7 +200,7 @@ export class Maestro implements Provider {
         }),
       qry,
       new URLSearchParams({}),
-      "Location: getUtxosByOutRef. Error: Could not fetch UTxOs by references from Maestro"
+      "Location: getUtxosByOutRef. Error: Could not fetch UTxOs by references from Maestro",
     );
     return utxos.map(this.maestroUtxoToUtxo);
   }
@@ -208,7 +208,7 @@ export class Maestro implements Provider {
   async getDelegation(rewardAddress: RewardAddress): Promise<Delegation> {
     const timestampedResultResponse = await fetch(
       `${this.url}/accounts/${rewardAddress}`,
-      { headers: this.commonHeaders() }
+      { headers: this.commonHeaders() },
     );
     if (!timestampedResultResponse.ok) {
       return { poolId: null, rewards: 0n };
@@ -226,7 +226,7 @@ export class Maestro implements Provider {
       `${this.url}/datums/${datumHash}`,
       {
         headers: this.commonHeaders(),
-      }
+      },
     );
     if (!timestampedResultResponse.ok) {
       if (timestampedResultResponse.status === 404) {
@@ -234,7 +234,7 @@ export class Maestro implements Provider {
       } else {
         throw new Error(
           "Location: getDatum. Error: Couldn't successfully perform query. Received status code: " +
-            timestampedResultResponse.status
+            timestampedResultResponse.status,
         );
       }
     }
@@ -249,7 +249,7 @@ export class Maestro implements Provider {
           `${this.url}/transactions/${txHash}/cbor`,
           {
             headers: this.commonHeaders(),
-          }
+          },
         );
         if (isConfirmedResponse.ok) {
           await isConfirmedResponse.json();
@@ -279,7 +279,7 @@ export class Maestro implements Provider {
       else {
         throw new Error(
           "Could not submit transaction. Received status code: " +
-            response.status
+            response.status,
         );
       }
     }
@@ -319,7 +319,7 @@ export class Maestro implements Provider {
     getResponse: (qry: string) => Promise<Response>,
     qry: string,
     paramsGiven: URLSearchParams,
-    errorMsg: string
+    errorMsg: string,
   ): Promise<Array<T>> {
     let nextCursor = null;
     let result: Array<T> = [];
@@ -331,7 +331,7 @@ export class Maestro implements Provider {
       const pageResult = await response.json();
       if (!response.ok) {
         throw new Error(
-          `${errorMsg}. Received status code: ${response.status}`
+          `${errorMsg}. Received status code: ${response.status}`,
         );
       }
       nextCursor = pageResult.next_cursor;
@@ -343,7 +343,7 @@ export class Maestro implements Provider {
 
   async evaluateTx(
     tx: Transaction,
-    additionalUTxOs?: UTxO[] // for tx chaining
+    additionalUTxOs?: UTxO[], // for tx chaining
   ): Promise<EvalRedeemer[]> {
     // Transform UTxOs to the Maestro format
     const additionalMaestroUTxOs = (additionalUTxOs || []).map((utxo) => ({

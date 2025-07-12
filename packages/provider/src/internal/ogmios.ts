@@ -17,7 +17,7 @@ const LovelaceAsset = S.Struct({
 
 const TupleNumberFromString = S.compose(
   S.split("/"),
-  S.Array(S.NumberFromString)
+  S.Array(S.NumberFromString),
 );
 
 export const ProtocolParametersSchema = S.Struct({
@@ -112,7 +112,7 @@ export const Delegation = S.NullOr(
       rewards: S.Struct({ ada: S.Struct({ lovelace: S.Number }) }),
       deposit: S.Struct({ ada: S.Struct({ lovelace: S.Number }) }),
     }),
-  })
+  }),
 );
 
 type Script = {
@@ -144,7 +144,7 @@ export const RedeemerSchema = S.Struct({
       "publish",
       "withdraw",
       "vote",
-      "propose"
+      "propose",
     ),
     index: S.Int,
   }),
@@ -160,7 +160,7 @@ export const toOgmiosUTxOs = (utxos: CoreType.UTxO[] | undefined): UTxO[] => {
   // "Invalid request: couldn't decode Plutus script."
   // TODO: Ensure the CBOR script is sent with single encoding.
   const toOgmiosScript = (
-    scriptRef: CoreType.UTxO["scriptRef"]
+    scriptRef: CoreType.UTxO["scriptRef"],
   ): UTxO["script"] | null => {
     if (scriptRef) {
       switch (scriptRef.type) {
@@ -212,6 +212,6 @@ export const toOgmiosUTxOs = (utxos: CoreType.UTxO[] | undefined): UTxO[] => {
       datumHash: utxo.datumHash,
       datum: utxo.datum,
       script: toOgmiosScript(utxo.scriptRef),
-    })
+    }),
   );
 };

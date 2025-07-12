@@ -8,7 +8,7 @@ import { Schema } from "effect";
  * @category schemas
  */
 export const PaymentAddress = Schema.String.pipe(
-  Schema.pattern(/^(addr|addr_test)[1][a-z0-9]+$/i)
+  Schema.pattern(/^(addr|addr_test)[1][a-z0-9]+$/i),
 ).pipe(Schema.brand("PaymentAddress"));
 
 /**

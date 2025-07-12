@@ -47,11 +47,11 @@ export interface TxSignBuilder {
     withPrivateKey: (privateKey: PrivateKey) => Promise<TransactionWitnesses>;
     /** Partially signs the transaction with a private key and returns an effect. */
     withPrivateKeyEffect: (
-      privateKey: PrivateKey
+      privateKey: PrivateKey,
     ) => Effect.Effect<TransactionWitnesses, TransactionSignError>;
     /** Safely partially signs the transaction with a private key. */
     withPrivateKeySafe: (
-      privateKey: PrivateKey
+      privateKey: PrivateKey,
     ) => Promise<Either<TransactionWitnesses, TransactionSignError>>;
   };
   /** Assembles the transaction with the given witnesses.  */
@@ -87,7 +87,7 @@ export interface TxSignBuilder {
 
 export const makeTxSignBuilder = (
   wallet: Wallet | undefined,
-  tx: CML.Transaction
+  tx: CML.Transaction,
 ): TxSignBuilder => {
   const redeemers = tx.witness_set().redeemers();
   const exUnits = { cpu: 0, mem: 0 };

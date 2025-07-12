@@ -14,7 +14,7 @@ export const SLOT_CONFIG_NETWORK: Record<Network, SlotConfig> = {
 
 export function slotToBeginUnixTime(
   slot: Slot,
-  slotConfig: SlotConfig
+  slotConfig: SlotConfig,
 ): UnixTime {
   const msAfterBegin = (slot - slotConfig.zeroSlot) * slotConfig.slotLength;
   return slotConfig.zeroTime + msAfterBegin;
@@ -27,7 +27,7 @@ export function slotToBeginUnixTime(
 
 export function unixTimeToEnclosingSlot(
   unixTime: UnixTime,
-  slotConfig: SlotConfig
+  slotConfig: SlotConfig,
 ): Slot {
   const timePassed = unixTime - slotConfig.zeroTime;
   const slotsPassed = Math.floor(timePassed / slotConfig.slotLength);

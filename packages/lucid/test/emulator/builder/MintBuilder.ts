@@ -108,7 +108,7 @@ export const composeMintAndStake = (config: {
       .attach.MintingPolicy(config.mintingPolicy);
     const rewardAddress = yield* pipe(
       Effect.promise(() => user.wallet().rewardAddress()),
-      Effect.andThen(Effect.fromNullable)
+      Effect.andThen(Effect.fromNullable),
     );
     const txCompC = user.newTx().registerStake(rewardAddress);
     const tx = user.newTx().compose(txCompA).compose(txCompB).compose(txCompC);

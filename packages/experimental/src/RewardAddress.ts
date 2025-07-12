@@ -8,7 +8,7 @@ import { Schema } from "effect";
  * @category schemas
  */
 export const RewardAddress = Schema.String.pipe(
-  Schema.pattern(/^(stake|stake_test)[1][a-z0-9]+$/i)
+  Schema.pattern(/^(stake|stake_test)[1][a-z0-9]+$/i),
 ).pipe(Schema.brand("RewardAddress"));
 
 /**

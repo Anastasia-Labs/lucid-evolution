@@ -24,15 +24,17 @@ export function addressFromHexOrBech32(address: string): CML.Address {
 
 export function credentialToRewardAddress(
   network: Network,
-  stakeCredential: Credential
+  stakeCredential: Credential,
 ): RewardAddress {
   return CML.RewardAddress.new(
     networkToId(network),
     stakeCredential.type === "Key"
       ? CML.Credential.new_pub_key(
-          CML.Ed25519KeyHash.from_hex(stakeCredential.hash)
+          CML.Ed25519KeyHash.from_hex(stakeCredential.hash),
         )
-      : CML.Credential.new_script(CML.ScriptHash.from_hex(stakeCredential.hash))
+      : CML.Credential.new_script(
+          CML.ScriptHash.from_hex(stakeCredential.hash),
+        ),
   )
     .to_address()
     .to_bech32(undefined);
@@ -40,12 +42,12 @@ export function credentialToRewardAddress(
 
 export function validatorToRewardAddress(
   network: Network,
-  validator: CertificateValidator | WithdrawalValidator
+  validator: CertificateValidator | WithdrawalValidator,
 ): RewardAddress {
   const validatorHash = validatorToScriptHash(validator);
   return CML.RewardAddress.new(
     networkToId(network),
-    CML.Credential.new_script(CML.ScriptHash.from_hex(validatorHash))
+    CML.Credential.new_script(CML.ScriptHash.from_hex(validatorHash)),
   )
     .to_address()
     .to_bech32(undefined);
@@ -56,7 +58,7 @@ export function getAddressDetails(address: string): AddressDetails {
   // Base Address
   try {
     const parsedAddress = CML.BaseAddress.from_address(
-      addressFromHexOrBech32(address)
+      addressFromHexOrBech32(address),
     )!;
     const paymentCredential: Credential =
       parsedAddress.payment().kind() === 0
@@ -95,7 +97,7 @@ export function getAddressDetails(address: string): AddressDetails {
   // Enterprise Address
   try {
     const parsedAddress = CML.EnterpriseAddress.from_address(
-      addressFromHexOrBech32(address)
+      addressFromHexOrBech32(address),
     )!;
     const paymentCredential: Credential =
       parsedAddress.payment().kind() === 0
@@ -123,7 +125,7 @@ export function getAddressDetails(address: string): AddressDetails {
   // Pointer Address
   try {
     const parsedAddress = CML.PointerAddress.from_address(
-      addressFromHexOrBech32(address)
+      addressFromHexOrBech32(address),
     )!;
     const paymentCredential: Credential =
       parsedAddress?.payment().kind() === 0
@@ -151,7 +153,7 @@ export function getAddressDetails(address: string): AddressDetails {
   // Reward Address
   try {
     const parsedAddress = CML.RewardAddress.from_address(
-      addressFromHexOrBech32(address)
+      addressFromHexOrBech32(address),
     )!;
     const stakeCredential: Credential =
       parsedAddress.payment().kind() === 0

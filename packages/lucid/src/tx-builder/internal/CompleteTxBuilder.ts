@@ -102,7 +102,7 @@ export const complete = (options: CompleteOptions = {}) =>
     const { config } = yield* TxConfig;
     const wallet: Wallet = yield* pipe(
       Effect.fromNullable(config.lucidConfig.wallet),
-      Effect.orElseFail(() => completeTxError(ERROR_MESSAGE.MISSING_WALLET))
+      Effect.orElseFail(() => completeTxError(ERROR_MESSAGE.MISSING_WALLET)),
     );
     const walletAddress: string = yield* Effect.promise(() => wallet.address());
 
@@ -128,7 +128,7 @@ export const complete = (options: CompleteOptions = {}) =>
     // Execute programs sequentially
     yield* Effect.all(config.programs);
     const hasPlutusScriptExecutions: boolean = Array.from(
-      config.scripts.values()
+      config.scripts.values(),
     ).some((value) => value.type !== "Native");
 
     // First round of coin selection and UPLC evaluation. The fee estimation is lacking
@@ -139,7 +139,7 @@ export const complete = (options: CompleteOptions = {}) =>
       coinSelection,
       localUPLCEval,
       includeLeftoverLovelaceAsFee,
-      false
+      false,
     );
     // Second round of coin selection by including script execution costs in fee estimation.
     // UPLC evaluation need to be performed again if new inputs are selected during coin selection.
@@ -156,14 +156,14 @@ export const complete = (options: CompleteOptions = {}) =>
             (config.lucidConfig.protocolParameters.collateralPercentage *
               Number(estimatedFee)) /
               100,
-            Number(setCollateral)
-          )
-        )
+            Number(setCollateral),
+          ),
+        ),
       );
       const collateralInput = yield* findCollateral(
         config.lucidConfig.protocolParameters.coinsPerUtxoByte,
         totalCollateral,
-        walletInputs
+        walletInputs,
       );
       yield* applyCollateral(totalCollateral, collateralInput, changeAddress);
       yield* selectionAndEvaluation(
@@ -172,19 +172,19 @@ export const complete = (options: CompleteOptions = {}) =>
         coinSelection,
         localUPLCEval,
         includeLeftoverLovelaceAsFee,
-        true
+        true,
       );
     }
     config.txBuilder.add_change_if_needed(
       CML.Address.from_bech32(changeAddress),
-      true
+      true,
     );
     const transaction = yield* Effect.try({
       try: () =>
         config.txBuilder
           .build(
             CML.ChangeSelectionAlgo.Default,
-            CML.Address.from_bech32(changeAddress)
+            CML.Address.from_bech32(changeAddress),
           )
           .build_unchecked(),
       catch: (error) => completeTxError(error),
@@ -193,14 +193,14 @@ export const complete = (options: CompleteOptions = {}) =>
     const derivedInputs = deriveInputsFromTransaction(transaction);
 
     const derivedWalletInputs = derivedInputs.filter(
-      (utxo) => utxo.address === walletAddress
+      (utxo) => utxo.address === walletAddress,
     );
     const updatedWalletInputs = pipe(
       _Array.differenceWith(isEqualUTxO)(walletInputs, config.consumedInputs),
       (availableWalletInputs) => [
         ...derivedWalletInputs,
         ...availableWalletInputs,
-      ]
+      ],
     );
     return Tuple.make(
       updatedWalletInputs,
@@ -209,10 +209,10 @@ export const complete = (options: CompleteOptions = {}) =>
         config.lucidConfig.wallet,
         canonical
           ? CML.Transaction.from_cbor_bytes(
-              transaction.to_canonical_cbor_bytes()
+              transaction.to_canonical_cbor_bytes(),
             )
-          : transaction
-      )
+          : transaction,
+      ),
     );
   }).pipe(Effect.catchAllDefect((cause) => new RunTimeError({ cause })));
 
@@ -222,12 +222,12 @@ export const selectionAndEvaluation = (
   coinSelection: boolean,
   localUPLCEval: boolean,
   includeLeftoverLovelaceAsFee: boolean,
-  script_calculation: boolean
+  script_calculation: boolean,
 ) =>
   Effect.gen(function* () {
     const { config } = yield* TxConfig;
     const refScriptInputs = config.readInputs.filter(
-      (input) => input.scriptRef
+      (input) => input.scriptRef,
     );
     const availableInputs = _Array.differenceWith(isEqualUTxO)(walletInputs, [
       ...config.collectedInputs,
@@ -240,7 +240,7 @@ export const selectionAndEvaluation = (
             config,
             availableInputs,
             script_calculation,
-            includeLeftoverLovelaceAsFee
+            includeLeftoverLovelaceAsFee,
           )
         : { selected: [], burnable: { lovelace: 0n } };
 
@@ -253,7 +253,7 @@ export const selectionAndEvaluation = (
     if (_Array.isNonEmptyArray(inputsToAdd)) {
       for (const utxo of inputsToAdd) {
         const input = CML.SingleInputBuilder.from_transaction_unspent_output(
-          utxoToCore(utxo)
+          utxoToCore(utxo),
         ).payment_key();
         config.txBuilder.add_input(input);
       }
@@ -272,7 +272,7 @@ export const selectionAndEvaluation = (
       // an existing input.
       if (script_calculation) {
         yield* completeTxError(
-          `RedeemerBuilder: Coin selection had to be updated after building redeemers, possibly leading to incorrect indices. Try setting a minimum fee of ${estimatedFee} lovelaces.`
+          `RedeemerBuilder: Coin selection had to be updated after building redeemers, possibly leading to incorrect indices. Try setting a minimum fee of ${estimatedFee} lovelaces.`,
         );
       } else yield* completePartialPrograms();
     }
@@ -282,7 +282,7 @@ export const selectionAndEvaluation = (
       try: () =>
         config.txBuilder.build_for_evaluation(
           0,
-          CML.Address.from_bech32(changeAddress)
+          CML.Address.from_bech32(changeAddress),
         ),
       catch: (error) => completeTxError(error),
     });
@@ -291,16 +291,16 @@ export const selectionAndEvaluation = (
       if (localUPLCEval !== false) {
         applyUPLCEval(
           yield* evalTransaction(config, txRedeemerBuilder, walletInputs),
-          config.txBuilder
+          config.txBuilder,
         );
       } else {
         applyUPLCEvalProvider(
           yield* evalTransactionProvider(
             config,
             txRedeemerBuilder,
-            walletInputs
+            walletInputs,
           ),
-          config.txBuilder
+          config.txBuilder,
         );
       }
     }
@@ -335,7 +335,7 @@ export const completePartialPrograms = () =>
           inputIndices.length !== redeemerBuilder.inputs.length
         )
           yield* completeTxError(
-            `RedeemerBuilder: Missing indices for inputs: ${stringify(redeemerBuilder.inputs)}`
+            `RedeemerBuilder: Missing indices for inputs: ${stringify(redeemerBuilder.inputs)}`,
           );
 
         const redeemer = redeemerBuilder.makeRedeemer(inputIndices);
@@ -348,19 +348,19 @@ export const completePartialPrograms = () =>
           Effect.fromNullable(redeemerBuilder.inputs),
           Effect.orElseFail(() =>
             completeTxError(
-              `RedeemerBuilder: Inputs for redeemer builder not founds: ${stringify(redeemerBuilder)}`
-            )
-          )
+              `RedeemerBuilder: Inputs for redeemer builder not founds: ${stringify(redeemerBuilder)}`,
+            ),
+          ),
         );
 
         for (const input of inputs) {
           const index = yield* pipe(
             Effect.fromNullable(
-              indicesMap.get(input.txHash + input.outputIndex)
+              indicesMap.get(input.txHash + input.outputIndex),
             ),
             Effect.orElseFail(() =>
-              completeTxError(`Index not found for input: ${input}`)
-            )
+              completeTxError(`Index not found for input: ${input}`),
+            ),
           );
 
           const redeemer = redeemerBuilder.makeRedeemer(index);
@@ -374,36 +374,36 @@ export const completePartialPrograms = () =>
 
 export const applyUPLCEval = (
   uplcEval: Uint8Array[],
-  txbuilder: CML.TransactionBuilder
+  txbuilder: CML.TransactionBuilder,
 ): void => {
   for (const bytes of uplcEval) {
     const redeemer = CML.LegacyRedeemer.from_cbor_bytes(bytes);
     const exUnits = CML.ExUnits.new(
       redeemer.ex_units().mem(),
-      redeemer.ex_units().steps()
+      redeemer.ex_units().steps(),
     );
     txbuilder.set_exunits(
       CML.RedeemerWitnessKey.new(redeemer.tag(), redeemer.index()),
-      exUnits
+      exUnits,
     );
   }
 };
 
 export const applyUPLCEvalProvider = (
   evalRedeemerList: EvalRedeemer[],
-  txbuilder: CML.TransactionBuilder
+  txbuilder: CML.TransactionBuilder,
 ): void => {
   for (const evalRedeemer of evalRedeemerList) {
     const exUnits = CML.ExUnits.new(
       BigInt(evalRedeemer.ex_units.mem),
-      BigInt(evalRedeemer.ex_units.steps)
+      BigInt(evalRedeemer.ex_units.steps),
     );
     txbuilder.set_exunits(
       CML.RedeemerWitnessKey.new(
         toCMLRedeemerTag(evalRedeemer.redeemer_tag),
-        BigInt(evalRedeemer.redeemer_index)
+        BigInt(evalRedeemer.redeemer_index),
       ),
-      exUnits
+      exUnits,
     );
   }
 };
@@ -420,20 +420,20 @@ export const setRedeemerstoZero = (tx: CML.Transaction): CML.Transaction => {
         redeemer.tag(),
         redeemer.index(),
         redeemer.data(),
-        CML.ExUnits.new(0n, 0n)
+        CML.ExUnits.new(0n, 0n),
       );
       redeemerList.add(dummyRedeemer);
     }
 
     const dummyWitnessSet = tx.witness_set();
     dummyWitnessSet.set_redeemers(
-      CML.Redeemers.new_arr_legacy_redeemer(redeemerList)
+      CML.Redeemers.new_arr_legacy_redeemer(redeemerList),
     );
     return CML.Transaction.new(
       tx.body(),
       dummyWitnessSet,
       true,
-      tx.auxiliary_data()
+      tx.auxiliary_data(),
     );
   }
   const mapRedeemerKeyToRedeemerVal =
@@ -442,14 +442,14 @@ export const setRedeemerstoZero = (tx: CML.Transaction): CML.Transaction => {
     const dummyWitnessSet = tx.witness_set();
     dummyWitnessSet.set_redeemers(
       CML.Redeemers.new_map_redeemer_key_to_redeemer_val(
-        mapRedeemerKeyToRedeemerVal
-      )
+        mapRedeemerKeyToRedeemerVal,
+      ),
     );
     return CML.Transaction.new(
       tx.body(),
       dummyWitnessSet,
       true,
-      tx.auxiliary_data()
+      tx.auxiliary_data(),
     );
   }
   return tx;
@@ -458,39 +458,39 @@ export const setRedeemerstoZero = (tx: CML.Transaction): CML.Transaction => {
 const applyCollateral = (
   setCollateral: bigint,
   collateralInputs: UTxO[],
-  changeAddress: string
+  changeAddress: string,
 ) =>
   Effect.gen(function* () {
     const { config } = yield* TxConfig;
     for (const utxo of collateralInputs) {
       const collateralInput =
         CML.SingleInputBuilder.from_transaction_unspent_output(
-          utxoToCore(utxo)
+          utxoToCore(utxo),
         ).payment_key();
       config.txBuilder.add_collateral(collateralInput);
     }
     const returnassets = pipe(
       sumAssetsFromInputs(collateralInputs),
-      Record.union({ lovelace: -setCollateral }, _BigInt.sum)
+      Record.union({ lovelace: -setCollateral }, _BigInt.sum),
     );
 
     const collateralOutputBuilder =
       CML.TransactionOutputBuilder.new().with_address(
-        CML.Address.from_bech32(changeAddress)
+        CML.Address.from_bech32(changeAddress),
       );
     config.txBuilder.set_collateral_return(
       collateralOutputBuilder
         .next()
         .with_value(assetsToValue(returnassets))
         .build()
-        .output()
+        .output(),
     );
   });
 
 const findCollateral = (
   coinsPerUtxoByte: bigint,
   setCollateral: bigint,
-  inputs: UTxO[]
+  inputs: UTxO[],
 ): Effect.Effect<UTxO[], TxBuilderError, never> =>
   Effect.gen(function* () {
     // NOTE: While the required collateral is 5 ADA, there may be instances where the UTXOs encountered do not contain enough ADA to be returned to the collateral return address.
@@ -499,7 +499,7 @@ const findCollateral = (
     const collateralLovelace: Assets = { lovelace: setCollateral };
     const error = completeTxError(
       `Your wallet does not have enough funds to cover the required ${setCollateral} Lovelace collateral. Or it contains UTxOs with reference scripts; which
-      are excluded from collateral selection.`
+      are excluded from collateral selection.`,
     );
     const { selected } = yield* recursive(
       sortUTxOs(inputs),
@@ -507,11 +507,11 @@ const findCollateral = (
       coinsPerUtxoByte,
       undefined,
       false,
-      error
+      error,
     );
     if (selected.length > 3)
       yield* completeTxError(
-        `Selected ${selected.length} inputs as collateral, but max collateral inputs is 3 to cover the ${setCollateral} Lovelace collateral ${stringify(selected)}`
+        `Selected ${selected.length} inputs as collateral, but max collateral inputs is 3 to cover the ${setCollateral} Lovelace collateral ${stringify(selected)}`,
       );
     return selected;
   });
@@ -520,7 +520,7 @@ const doCoinSelection = (
   config: TxBuilder.TxBuilderConfig,
   availableInputs: UTxO[],
   script_calculation: boolean,
-  includeLeftoverLovelaceAsFee: boolean
+  includeLeftoverLovelaceAsFee: boolean,
 ): Effect.Effect<{ selected: UTxO[]; burnable: Assets }, TxBuilderError> =>
   Effect.gen(function* () {
     // NOTE: This is a fee estimation. If the amount is not enough, it may require increasing the fee.
@@ -530,7 +530,7 @@ const doCoinSelection = (
 
     const negatedMintedAssets = negateAssets(config.mintedAssets);
     const negatedCollectedAssets = negateAssets(
-      sumAssetsFromInputs(config.collectedInputs)
+      sumAssetsFromInputs(config.collectedInputs),
     );
 
     // Calculate the net change in assets (delta)
@@ -538,19 +538,19 @@ const doCoinSelection = (
       config.totalOutputAssets,
       Record.union(estimatedFee, _BigInt.sum),
       Record.union(negatedCollectedAssets, _BigInt.sum),
-      Record.union(negatedMintedAssets, _BigInt.sum)
+      Record.union(negatedMintedAssets, _BigInt.sum),
     );
     // Filter and obtain only the required assets (those with a positive amount)
     let requiredAssets = pipe(
       assetsDelta,
-      Record.filter((amount) => amount > 0n)
+      Record.filter((amount) => amount > 0n),
     );
     // Filter and obtain assets that are present in the inputs and mints but are not required by the outputs
     // Negate these assets to get their positive amounts
     const notRequiredAssets = pipe(
       assetsDelta,
       Record.filter((amount) => amount < 0n),
-      negateAssets
+      negateAssets,
     );
 
     // Note: We are not done with coin selection even if "requiredAssets" is empty.
@@ -561,7 +561,7 @@ const doCoinSelection = (
       requiredAssets,
       config.lucidConfig.protocolParameters.coinsPerUtxoByte,
       notRequiredAssets,
-      includeLeftoverLovelaceAsFee
+      includeLeftoverLovelaceAsFee,
     );
   });
 
@@ -573,7 +573,7 @@ const doCoinSelection = (
  */
 const estimateFee = (
   config: TxBuilder.TxBuilderConfig,
-  script_calculation: boolean
+  script_calculation: boolean,
 ): Effect.Effect<bigint, TxBuilderError, never> =>
   Effect.gen(function* () {
     const minFee = config.txBuilder.min_fee(script_calculation);
@@ -599,7 +599,7 @@ const estimateFee = (
 const evalTransactionProvider = (
   config: TxBuilder.TxBuilderConfig,
   txRedeemerBuilder: CML.TxRedeemerBuilder,
-  walletInputs: UTxO[]
+  walletInputs: UTxO[],
 ): Effect.Effect<EvalRedeemer[], TxBuilderError> =>
   Effect.gen(function* () {
     const txEvaluation = setRedeemerstoZero(txRedeemerBuilder.draft_tx())!;
@@ -611,13 +611,13 @@ const evalTransactionProvider = (
         ...rest,
         datumHash,
         datum: datumHash ? undefined : datum,
-      })
+      }),
     );
     const uplc_eval = yield* Effect.tryPromise({
       try: () =>
         config.lucidConfig.provider.evaluateTx(
           txEvaluation.to_cbor_hex(),
-          txUtxos
+          txUtxos,
         ),
       catch: (error) => completeTxError(error),
     });
@@ -627,7 +627,7 @@ const evalTransactionProvider = (
 const evalTransaction = (
   config: TxBuilder.TxBuilderConfig,
   txRedeemerBuilder: CML.TxRedeemerBuilder,
-  walletInputs: UTxO[]
+  walletInputs: UTxO[],
 ): Effect.Effect<Uint8Array[], TxBuilderError> =>
   Effect.gen(function* () {
     const txEvaluation = setRedeemerstoZero(txRedeemerBuilder.draft_tx())!;
@@ -657,7 +657,7 @@ const evalTransaction = (
           config.lucidConfig.protocolParameters.maxTxExMem,
           BigInt(slotConfig.zeroTime),
           BigInt(slotConfig.zeroSlot),
-          slotConfig.slotLength
+          slotConfig.slotLength,
         ),
       catch: (error) =>
         completeTxError(
@@ -667,7 +667,7 @@ const evalTransaction = (
               : JSON.stringify(error)
                   .replace(/\\n\s*/g, " ")
                   .trim()
-          }`
+          }`,
         ),
     });
     return uplc_eval;
@@ -676,20 +676,20 @@ const evalTransaction = (
 const calculateMinLovelace = (
   coinsPerUtxoByte: bigint,
   multiAssets?: Assets,
-  changeAddress?: string
+  changeAddress?: string,
 ): bigint => {
   const dummyAddress =
     "addr_test1qrngfyc452vy4twdrepdjc50d4kvqutgt0hs9w6j2qhcdjfx0gpv7rsrjtxv97rplyz3ymyaqdwqa635zrcdena94ljs0xy950";
   return CML.TransactionOutputBuilder.new()
     .with_address(
-      CML.Address.from_bech32(changeAddress ? changeAddress : dummyAddress)
+      CML.Address.from_bech32(changeAddress ? changeAddress : dummyAddress),
     )
     .next()
     .with_asset_and_min_required_coin(
       multiAssets
         ? assetsToValue(multiAssets).multi_asset()
         : CML.MultiAsset.new(),
-      coinsPerUtxoByte
+      coinsPerUtxoByte,
     )
     .build()
     .output()
@@ -698,7 +698,7 @@ const calculateMinLovelace = (
 };
 
 const calculateMinRefScriptFee = (
-  config: TxBuilder.TxBuilderConfig
+  config: TxBuilder.TxBuilderConfig,
 ): Effect.Effect<bigint, TxBuilderError, never> =>
   Effect.gen(function* () {
     let fee = 0n;
@@ -722,7 +722,7 @@ const calculateMinRefScriptFee = (
     while (totalScriptSize > 0) {
       if (counter > fees.length - 1) {
         yield* completeTxError(
-          "Total reference script size in a transaction cannot exceed 200,000 bytes."
+          "Total reference script size in a transaction cannot exceed 200,000 bytes.",
         );
       }
 
@@ -773,7 +773,7 @@ const sumAssetsFromInputs = (inputs: UTxO[]) =>
 
 const calculateExtraLovelace = (
   leftoverAssets: Assets,
-  coinsPerUtxoByte: bigint
+  coinsPerUtxoByte: bigint,
 ): Option.Option<Assets> => {
   return pipe(leftoverAssets, (assets) => {
     const minLovelace = calculateMinLovelace(coinsPerUtxoByte, assets);
@@ -803,13 +803,13 @@ export const recursive = (
   coinsPerUtxoByte: bigint,
   externalAssets: Assets = {},
   includeLeftoverLovelaceAsFee?: boolean,
-  error?: TxBuilderError
+  error?: TxBuilderError,
 ): Effect.Effect<CoinSelectionResult, TxBuilderError> =>
   Effect.gen(function* () {
     let selected: UTxO[] = [];
     error ??= completeTxError(
       `Your wallet does not have enough funds to cover the required assets: ${stringify(requiredAssets)}
-      Or it contains UTxOs with reference scripts; which are excluded from coin selection.`
+      Or it contains UTxOs with reference scripts; which are excluded from coin selection.`,
     );
     if (!Record.isEmptyRecord(requiredAssets)) {
       selected = selectUTxOs(inputs, requiredAssets, true);
@@ -820,19 +820,19 @@ export const recursive = (
     let availableAssets: Assets = pipe(
       selectedAssets,
       Record.union(requiredAssets, (self, that) => self - that),
-      Record.union(externalAssets, _BigInt.sum)
+      Record.union(externalAssets, _BigInt.sum),
     );
 
     let extraLovelace: Assets | undefined = pipe(
       calculateExtraLovelace(availableAssets, coinsPerUtxoByte),
-      Option.getOrUndefined
+      Option.getOrUndefined,
     );
     let remainingInputs = inputs;
 
     while (extraLovelace) {
       remainingInputs = _Array.differenceWith(isEqualUTxO)(
         remainingInputs,
-        selected
+        selected,
       );
 
       const extraSelected = selectUTxOs(remainingInputs, extraLovelace, true);
@@ -841,7 +841,7 @@ export const recursive = (
           return { selected: [...selected], burnable: extraLovelace };
         yield* completeTxError(
           `Your wallet does not have enough funds to cover required minimum ADA for change output: ${stringify(extraLovelace)}
-          Or it contains UTxOs with reference scripts; which are excluded from coin selection.`
+          Or it contains UTxOs with reference scripts; which are excluded from coin selection.`,
         );
       }
       const extraSelectedAssets: Assets = sumAssetsFromInputs(extraSelected);
@@ -849,12 +849,12 @@ export const recursive = (
       availableAssets = Record.union(
         availableAssets,
         extraSelectedAssets,
-        _BigInt.sum
+        _BigInt.sum,
       );
 
       extraLovelace = pipe(
         calculateExtraLovelace(availableAssets, coinsPerUtxoByte),
-        Option.getOrUndefined
+        Option.getOrUndefined,
       );
     }
     return { selected, burnable: { lovelace: 0n } };

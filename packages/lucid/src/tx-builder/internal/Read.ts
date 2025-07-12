@@ -17,13 +17,14 @@ export const readFrom = (utxos: UTxO[]) =>
       const resolvedDatum = yield* resolveDatum(
         utxo.datumHash,
         utxo.datum,
-        config.lucidConfig.provider
+        config.lucidConfig.provider,
       );
 
       const coreUtxo = utxoToCore({ ...utxo, datum: resolvedDatum });
       const exists = config.readInputs.some(
         (input) =>
-          input.txHash === utxo.txHash && input.outputIndex === utxo.outputIndex
+          input.txHash === utxo.txHash &&
+          input.outputIndex === utxo.outputIndex,
       );
 
       if (!exists) {

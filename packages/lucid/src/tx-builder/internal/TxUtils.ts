@@ -26,7 +26,7 @@ export const txBuilderError = (cause: unknown) =>
 //TODO: improve error message, utils is used in different modules
 export const toCMLAddress = (
   address: Address | RewardAddress,
-  lucidConfig: LucidConfig
+  lucidConfig: LucidConfig,
 ): Effect.Effect<CML.Address, TxBuilderError, never> =>
   Effect.gen(function* ($) {
     const { type } = yield* validateAddressDetails(address, lucidConfig);
@@ -47,15 +47,15 @@ export const toV3 = (script: string) =>
 export const toPartial = (script: CML.PlutusScript, redeemer: CBORHex) =>
   CML.PartialPlutusWitness.new(
     CML.PlutusScriptWitness.new_script(script),
-    CML.PlutusData.from_cbor_hex(redeemer)
+    CML.PlutusData.from_cbor_hex(redeemer),
   );
 
 export const handleRedeemerBuilder = (
   config: TxBuilderConfig,
   partialProgram: (
-    redeemer?: string | undefined
+    redeemer?: string | undefined,
   ) => Effect.Effect<void, TxBuilderError, TxConfig>,
-  redeemer?: string | RedeemerBuilder
+  redeemer?: string | RedeemerBuilder,
 ) => {
   if (typeof redeemer === "object") {
     config.partialPrograms.set(redeemer, partialProgram);
@@ -82,7 +82,7 @@ export function isEqual(arr1: Uint8Array, arr2: Uint8Array): boolean {
 
 export const validateAddressDetails = (
   address: Address | RewardAddress,
-  lucidConfig: LucidConfig
+  lucidConfig: LucidConfig,
 ): Effect.Effect<AddressDetails, TxBuilderError, never> =>
   Effect.gen(function* ($) {
     const addressDetails = yield* $(
@@ -92,7 +92,7 @@ export const validateAddressDetails = (
           new TxBuilderError({
             cause,
           }),
-      })
+      }),
     );
     const actualNetworkId = networkToId(lucidConfig.network);
     if (addressDetails.networkId !== actualNetworkId)
@@ -100,7 +100,7 @@ export const validateAddressDetails = (
         cause: ERROR_MESSAGE.INVALID_NETWORK(
           address,
           actualNetworkId,
-          lucidConfig.network
+          lucidConfig.network,
         ),
       });
 
@@ -111,13 +111,13 @@ export const processCertificate = (
   stakeCredential: Credential,
   config: TxBuilder.TxBuilderConfig,
   buildCert: (credential: CML.Credential) => CML.SingleCertificateBuilder,
-  redeemer?: Redeemer
+  redeemer?: Redeemer,
 ): Effect.Effect<void, TxBuilderError> =>
   Effect.gen(function* () {
     switch (stakeCredential.type) {
       case "Key": {
         const credential = CML.Credential.new_pub_key(
-          CML.Ed25519KeyHash.from_hex(stakeCredential.hash)
+          CML.Ed25519KeyHash.from_hex(stakeCredential.hash),
         );
         const certBuilder = buildCert(credential);
         config.txBuilder.add_cert(certBuilder.payment_key());
@@ -126,32 +126,32 @@ export const processCertificate = (
 
       case "Script": {
         const credential = CML.Credential.new_script(
-          CML.ScriptHash.from_hex(stakeCredential.hash)
+          CML.ScriptHash.from_hex(stakeCredential.hash),
         );
         const certBuilder = buildCert(credential);
 
         const script = yield* pipe(
           Effect.fromNullable(config.scripts.get(stakeCredential.hash)),
           Effect.orElseFail(() =>
-            txBuilderError(ERROR_MESSAGE.MISSING_SCRIPT(stakeCredential.hash))
-          )
+            txBuilderError(ERROR_MESSAGE.MISSING_SCRIPT(stakeCredential.hash)),
+          ),
         );
 
         const addPlutusCertificate = (
-          scriptVersion: CML.PlutusScript
+          scriptVersion: CML.PlutusScript,
         ): Effect.Effect<void, TxBuilderError> => {
           return Effect.gen(function* () {
             const red = yield* pipe(
               Effect.fromNullable(redeemer),
               Effect.orElseFail(() =>
-                txBuilderError(ERROR_MESSAGE.MISSING_REDEEMER)
-              )
+                txBuilderError(ERROR_MESSAGE.MISSING_REDEEMER),
+              ),
             );
             config.txBuilder.add_cert(
               certBuilder.plutus_script(
                 toPartial(scriptVersion, red),
-                CML.Ed25519KeyHashList.new()
-              )
+                CML.Ed25519KeyHashList.new(),
+              ),
             );
           });
         };
@@ -172,8 +172,8 @@ export const processCertificate = (
             config.txBuilder.add_cert(
               certBuilder.native_script(
                 CML.NativeScript.from_cbor_hex(script.script),
-                CML.NativeScriptWitnessInfo.assume_signature_count()
-              )
+                CML.NativeScriptWitnessInfo.assume_signature_count(),
+              ),
             );
             break;
         }
@@ -184,7 +184,7 @@ export const processCertificate = (
 
 export const validateAndGetStakeCredential = (
   rewardAddress: RewardAddress,
-  config: TxBuilder.TxBuilderConfig
+  config: TxBuilder.TxBuilderConfig,
 ): Effect.Effect<Credential, TxBuilderError> =>
   Effect.gen(function* () {
     const addressDetails = yield* pipe(
@@ -192,15 +192,15 @@ export const validateAndGetStakeCredential = (
       Effect.andThen((address) =>
         address.type !== "Reward"
           ? txBuilderError(ERROR_MESSAGE.MISSING_REWARD_TYPE)
-          : Effect.succeed(address)
-      )
+          : Effect.succeed(address),
+      ),
     );
 
     const stakeCredential = yield* pipe(
       Effect.fromNullable(addressDetails.stakeCredential),
       Effect.orElseFail(() =>
-        txBuilderError(ERROR_MESSAGE.MISSING_STAKE_CREDENTIAL)
-      )
+        txBuilderError(ERROR_MESSAGE.MISSING_STAKE_CREDENTIAL),
+      ),
     );
 
     return stakeCredential;
@@ -209,7 +209,7 @@ export const validateAndGetStakeCredential = (
 export const resolveDatum = (
   datumHash: UTxO["datumHash"],
   datum: UTxO["datum"],
-  provider: Provider
+  provider: Provider,
 ) =>
   Effect.gen(function* () {
     // Only fetch the datum if the datumHash is present and the datum is not present.

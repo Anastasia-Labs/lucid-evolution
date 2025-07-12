@@ -21,14 +21,14 @@ export const composeWithDatumHashAndInlineDatum = (config: {
       .pay.ToContract(
         scriptAddress,
         { kind: "asHash", value: Data.to("31313131") },
-        { lovelace: 5000000n }
+        { lovelace: 5000000n },
       );
     const txCompB = user
       .newTx()
       .pay.ToContract(
         scriptAddress,
         { kind: "inline", value: Data.to("31313131") },
-        { lovelace: 5000000n }
+        { lovelace: 5000000n },
       );
     const signBuilder = yield* txCompA.compose(txCompB).completeProgram();
     return signBuilder;
@@ -57,7 +57,7 @@ export const sendAllFund = Effect.gen(function* () {
         value: datum,
       },
       { lovelace: totalFund - remaining },
-      hello
+      hello,
     )
     .completeProgram({ includeLeftoverLovelaceAsFee: true });
   return signBuilder;
@@ -82,9 +82,9 @@ export const multiTxCompose = Effect.gen(function* () {
             .pay.ToAddressWithData(
               addr,
               { kind: "inline", value: Data.to(2n) },
-              {}
-            )
-        )
+              {},
+            ),
+        ),
     );
   const tx = user
     .newTx()
@@ -103,7 +103,7 @@ export const mintAndPayTxCompose = Effect.gen(function* () {
   };
   const alwaysSucceedAddress = validatorToAddress(
     "Custom",
-    alwaysSucceedScript
+    alwaysSucceedScript,
   );
   const mintedAssetUnit = toUnit(mintingPolicyToId(alwaysSucceedScript), "");
   const mintedAsset = { [mintedAssetUnit]: 1n };
@@ -115,7 +115,7 @@ export const mintAndPayTxCompose = Effect.gen(function* () {
     .pay.ToContract(
       alwaysSucceedAddress,
       { kind: "inline", value: Data.void() },
-      mintedAsset
+      mintedAsset,
     );
   return yield* user.newTx().compose(baseTx).completeProgram();
 });
