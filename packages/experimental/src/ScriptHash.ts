@@ -65,7 +65,7 @@ export class ScriptHash extends Schema.TaggedClass<ScriptHash>()("ScriptHash", {
 export const ScriptHashBytes = pipe(
   Schema.Uint8Array,
   Schema.filter((a) => a.length === SCRIPTHASH_BYTES_LENGTH),
-  Schema.typeSchema
+  Schema.typeSchema,
 ).annotations({
   message: (issue) =>
     `${issue.actual} must be a byte array of length ${SCRIPTHASH_BYTES_LENGTH}`,

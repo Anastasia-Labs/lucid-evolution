@@ -25,7 +25,7 @@ export function walletFromSeed(
     addressType?: "Base" | "Enterprise";
     accountIndex?: number;
     network?: Network;
-  } = {}
+  } = {},
 ): FromSeed {
   //Set default options
   const {
@@ -44,7 +44,7 @@ export function walletFromSeed(
     fromHex(entropy),
     options?.password
       ? new TextEncoder().encode(options.password)
-      : new Uint8Array()
+      : new Uint8Array(),
   );
 
   const accountKey = rootKey
@@ -67,13 +67,13 @@ export function walletFromSeed(
       ? CML.BaseAddress.new(
           networkId,
           CML.Credential.new_pub_key(paymentKeyHash),
-          CML.Credential.new_pub_key(stakeKeyHash)
+          CML.Credential.new_pub_key(stakeKeyHash),
         )
           .to_address()
           .to_bech32(undefined)
       : CML.EnterpriseAddress.new(
           networkId,
-          CML.Credential.new_pub_key(paymentKeyHash)
+          CML.Credential.new_pub_key(paymentKeyHash),
         )
           .to_address()
           .to_bech32(undefined);
@@ -82,7 +82,7 @@ export function walletFromSeed(
     addressType === "Base"
       ? CML.RewardAddress.new(
           networkId,
-          CML.Credential.new_pub_key(stakeKeyHash)
+          CML.Credential.new_pub_key(stakeKeyHash),
         )
           .to_address()
           .to_bech32(undefined)
@@ -99,7 +99,7 @@ export function walletFromSeed(
 export function discoverOwnUsedTxKeyHashes(
   tx: CML.Transaction,
   ownKeyHashes: Array<KeyHash>,
-  ownUtxos: Array<UTxO>
+  ownUtxos: Array<UTxO>,
 ): Array<KeyHash> {
   const usedKeyHashes = [];
 
@@ -110,7 +110,7 @@ export function discoverOwnUsedTxKeyHashes(
     const txHash = input.transaction_id().to_hex();
     const outputIndex = Number(input.index());
     const utxo = ownUtxos.find(
-      (utxo) => utxo.txHash === txHash && utxo.outputIndex === outputIndex
+      (utxo) => utxo.txHash === txHash && utxo.outputIndex === outputIndex,
     );
     if (utxo) {
       const { paymentCredential } = getAddressDetails(utxo.address);
@@ -351,7 +351,7 @@ export function discoverOwnUsedTxKeyHashes(
       const txHash = input.transaction_id().to_hex();
       const outputIndex = Number(input.index());
       const utxo = ownUtxos.find(
-        (utxo) => utxo.txHash === txHash && utxo.outputIndex === outputIndex
+        (utxo) => utxo.txHash === txHash && utxo.outputIndex === outputIndex,
       );
       if (utxo) {
         const { paymentCredential } = getAddressDetails(utxo.address);

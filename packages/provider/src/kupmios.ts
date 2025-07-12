@@ -76,7 +76,7 @@ export class Kupmios implements Provider {
     headers?: {
       ogmiosHeader?: Record<string, string>;
       kupoHeader?: Record<string, string>;
-    }
+    },
   ) {
     this.kupoUrl = kupoUrl;
     this.ogmiosUrl = ogmiosUrl;
@@ -96,12 +96,12 @@ export class Kupmios implements Provider {
         this.ogmiosUrl,
         data,
         schema,
-        this.headers?.ogmiosHeader
+        this.headers?.ogmiosHeader,
       ),
       Effect.timeout(10_000),
       Effect.catchAll((cause) => new KupmiosError({ cause })),
       Effect.provide(FetchHttpClient.layer),
-      Effect.runPromise
+      Effect.runPromise,
     );
     return toProtocolParameters(result);
   }
@@ -119,14 +119,14 @@ export class Kupmios implements Provider {
       Effect.timeout(10_000),
       Effect.catchAll((cause) => new KupmiosError({ cause })),
       Effect.provide(FetchHttpClient.layer),
-      Effect.runPromise
+      Effect.runPromise,
     );
     return utxos;
   }
 
   async getUtxosWithUnit(
     addressOrCredential: Address | Credential,
-    unit: Unit
+    unit: Unit,
   ): Promise<UTxO[]> {
     const isAddress = typeof addressOrCredential === "string";
     const queryPredicate = isAddress
@@ -141,7 +141,7 @@ export class Kupmios implements Provider {
       Effect.timeout(10_000),
       Effect.catchAll((cause) => new KupmiosError({ cause })),
       Effect.provide(FetchHttpClient.layer),
-      Effect.runPromise
+      Effect.runPromise,
     );
     return utxos;
   }
@@ -156,7 +156,7 @@ export class Kupmios implements Provider {
       Effect.timeout(10_000),
       Effect.catchAll((cause) => new KupmiosError({ cause })),
       Effect.provide(FetchHttpClient.layer),
-      Effect.runPromise
+      Effect.runPromise,
     );
     if (utxos.length > 1) {
       throw new Error("Unit needs to be an NFT or only held by one address.");
@@ -177,11 +177,11 @@ export class Kupmios implements Provider {
         HttpUtils.makeGet(mkPattern(txHash), schema, this.headers?.kupoHeader),
         Effect.flatMap((u) => kupmiosUtxosToUtxos(this.kupoUrl, u)),
         Effect.timeout(10_000),
-        Effect.catchAll((cause) => new KupmiosError({ cause }))
-      )
+        Effect.catchAll((cause) => new KupmiosError({ cause })),
+      ),
     );
     const utxos: UTxO[][] = await Effect.runPromise(
-      pipe(program, Effect.provide(FetchHttpClient.layer))
+      pipe(program, Effect.provide(FetchHttpClient.layer)),
     );
 
     return _Array
@@ -190,8 +190,8 @@ export class Kupmios implements Provider {
         outRefs.some(
           (outRef) =>
             utxo.txHash === outRef.txHash &&
-            utxo.outputIndex === outRef.outputIndex
-        )
+            utxo.outputIndex === outRef.outputIndex,
+        ),
       );
   }
 
@@ -208,12 +208,12 @@ export class Kupmios implements Provider {
         this.ogmiosUrl,
         data,
         schema,
-        this.headers?.ogmiosHeader
+        this.headers?.ogmiosHeader,
       ),
       Effect.provide(FetchHttpClient.layer),
       Effect.timeout(10_000),
       Effect.catchAll((cause) => new KupmiosError({ cause })),
-      Effect.runPromise
+      Effect.runPromise,
     );
     const delegation = result ? Object.values(result)[0] : null;
 
@@ -232,7 +232,7 @@ export class Kupmios implements Provider {
       Effect.timeout(10_000),
       Effect.flatMap(Effect.fromNullable),
       Effect.catchAll((cause) => new KupmiosError({ cause })),
-      Effect.runPromise
+      Effect.runPromise,
     );
     return result.datum;
   }
@@ -253,7 +253,7 @@ export class Kupmios implements Provider {
       Effect.timeout(160_000),
       Effect.catchAll((cause) => new KupmiosError({ cause })),
       Effect.as(true),
-      Effect.runPromise
+      Effect.runPromise,
     );
     return result;
   }
@@ -272,26 +272,26 @@ export class Kupmios implements Provider {
         transaction: S.Struct({
           id: S.String,
         }),
-      })
+      }),
     );
     const { result } = await pipe(
       HttpUtils.makePostAsJson(
         this.ogmiosUrl,
         data,
         schema,
-        this.headers?.ogmiosHeader
+        this.headers?.ogmiosHeader,
       ),
       Effect.provide(FetchHttpClient.layer),
       Effect.timeout(10_000),
       Effect.catchAll((cause) => new KupmiosError({ cause })),
-      Effect.runPromise
+      Effect.runPromise,
     );
     return result.transaction.id;
   }
 
   async evaluateTx(
     tx: Transaction,
-    additionalUTxOs?: UTxO[]
+    additionalUTxOs?: UTxO[],
   ): Promise<EvalRedeemer[]> {
     // Prepare request data
     const data = {
@@ -313,12 +313,12 @@ export class Kupmios implements Provider {
         this.ogmiosUrl,
         data,
         schema,
-        this.headers?.ogmiosHeader
+        this.headers?.ogmiosHeader,
       ),
       Effect.provide(FetchHttpClient.layer),
       Effect.timeout(10_000),
       Effect.catchAll((cause) => new KupmiosError({ cause })),
-      Effect.runPromise
+      Effect.runPromise,
     );
 
     const evalRedeemers: EvalRedeemer[] = result.map((item) => ({
@@ -338,7 +338,7 @@ const getDatumEffect = (
   kupoUrl: string,
   datum_type: Kupo.UTxO["datum_type"],
   datum_hash: Kupo.UTxO["datum_hash"],
-  kupoHeader?: Record<string, string>
+  kupoHeader?: Record<string, string>,
 ) =>
   Effect.gen(function* () {
     if (datum_type === "inline" && datum_hash) {
@@ -349,9 +349,9 @@ const getDatumEffect = (
         Effect.flatMap(Effect.fromNullable),
         Effect.map((result) => result.datum),
         Effect.retry(
-          Schedule.compose(Schedule.exponential(50), Schedule.recurs(5))
+          Schedule.compose(Schedule.exponential(50), Schedule.recurs(5)),
         ),
-        Effect.timeout(5_000)
+        Effect.timeout(5_000),
       );
     } else return undefined;
   });
@@ -359,7 +359,7 @@ const getDatumEffect = (
 const getScriptEffect = (
   kupoUrl: string,
   script_hash: Kupo.UTxO["script_hash"],
-  kupoHeader?: Record<string, string>
+  kupoHeader?: Record<string, string>,
 ) =>
   Effect.gen(function* () {
     if (script_hash) {
@@ -369,7 +369,7 @@ const getScriptEffect = (
         HttpUtils.makeGet(pattern, schema, kupoHeader),
         Effect.flatMap(Effect.fromNullable),
         Effect.retry(
-          Schedule.compose(Schedule.exponential(50), Schedule.recurs(5))
+          Schedule.compose(Schedule.exponential(50), Schedule.recurs(5)),
         ),
         Effect.timeout(5_000),
         Effect.map(({ language, script }) => {
@@ -395,7 +395,7 @@ const getScriptEffect = (
                 script: applyDoubleCborEncoding(script),
               } satisfies Script;
           }
-        })
+        }),
       );
     } else return undefined;
   });
@@ -409,7 +409,7 @@ const toAssets = (value: Kupo.UTxO["value"]): Assets => {
 };
 
 const toProtocolParameters = (
-  result: Ogmios.ProtocolParameters
+  result: Ogmios.ProtocolParameters,
 ): ProtocolParameters => {
   return {
     minFeeA: result.minFeeCoefficient,
@@ -441,19 +441,19 @@ const toProtocolParameters = (
         result.plutusCostModels["plutus:v1"].map((value, index) => [
           index.toString(),
           value,
-        ])
+        ]),
       ),
       PlutusV2: Object.fromEntries(
         result.plutusCostModels["plutus:v2"].map((value, index) => [
           index.toString(),
           value,
-        ])
+        ]),
       ),
       PlutusV3: Object.fromEntries(
         result.plutusCostModels["plutus:v3"].map((value, index) => [
           index.toString(),
           value,
-        ])
+        ]),
       ),
     },
   };
@@ -462,7 +462,7 @@ const toProtocolParameters = (
 const kupmiosUtxosToUtxos = (
   kupoURL: string,
   utxos: ReadonlyArray<Kupo.UTxO>,
-  kupoHeader?: Record<string, string>
+  kupoHeader?: Record<string, string>,
 ) =>
   Effect.forEach(
     utxos,
@@ -481,11 +481,11 @@ const kupmiosUtxosToUtxos = (
             datumHash: utxo.datum_type === "hash" ? utxo.datum_hash : undefined,
             datum: datum,
             scriptRef: script,
-          })
-        )
+          }),
+        ),
       );
     },
-    { concurrency: "unbounded" }
+    { concurrency: "unbounded" },
   );
 
 const mkWebSocket = async (url: string, data: unknown): Promise<WebSocket> => {

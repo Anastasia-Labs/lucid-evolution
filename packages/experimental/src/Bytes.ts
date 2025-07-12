@@ -32,7 +32,7 @@ export class BytesError extends Data.TaggedError("BytesError")<{
  */
 export const assert_bytes_or_throw = (
   b: Uint8Array | undefined,
-  length?: number | [number, number] | { min?: number; max?: number }
+  length?: number | [number, number] | { min?: number; max?: number },
 ): void => {
   if (!isBytes(b)) throw new Error("Uint8Array expected");
   if (length !== undefined) {
@@ -40,13 +40,13 @@ export const assert_bytes_or_throw = (
     if (typeof length === "number") {
       if (len !== length)
         throw new Error(
-          `Uint8Array expected of length ${length}, not of length=${len}`
+          `Uint8Array expected of length ${length}, not of length=${len}`,
         );
     } else if (Array.isArray(length)) {
       const [min, max] = length;
       if (len < min || len > max)
         throw new Error(
-          `Uint8Array expected of length in [${min},${max}], not of length=${len}`
+          `Uint8Array expected of length in [${min},${max}], not of length=${len}`,
         );
     } else if (typeof length === "object") {
       if (
@@ -57,7 +57,7 @@ export const assert_bytes_or_throw = (
           `Uint8Array expected of length` +
             (length.min !== undefined ? ` >= ${length.min}` : "") +
             (length.max !== undefined ? ` <= ${length.max}` : "") +
-            `, not of length=${len}`
+            `, not of length=${len}`,
         );
       }
     }
@@ -84,7 +84,7 @@ export const assert_bytes_or_throw = (
  */
 export const assert_bytes = Effect.fn(function* (
   b: Uint8Array | undefined,
-  length?: number | [number, number] | { min?: number; max?: number }
+  length?: number | [number, number] | { min?: number; max?: number },
 ) {
   if (!isBytes(b)) {
     yield* new BytesError({ message: "Uint8Array expected" });
@@ -139,7 +139,7 @@ function asciiToBase16(char: number): number | undefined {
 
 // Array where index 0xf0 (240) is mapped to string 'f0'
 const hexes = /* @__PURE__ */ Array.from({ length: 256 }, (_, i) =>
-  i.toString(16).padStart(2, "0")
+  i.toString(16).padStart(2, "0"),
 );
 
 /**
@@ -152,7 +152,10 @@ export function fromHexOrThrow(hex: string): Uint8Array {
   const al = hl / 2;
   if (hl % 2)
     throw new Error(
-      "padded hex string expected, got unpadded hex of length " + hl + " " + hex
+      "padded hex string expected, got unpadded hex of length " +
+        hl +
+        " " +
+        hex,
     );
   const array = new Uint8Array(al);
   for (let ai = 0, hi = 0; ai < al; ai++, hi += 2) {
@@ -164,7 +167,7 @@ export function fromHexOrThrow(hex: string): Uint8Array {
         'hex string expected, got non-hex character "' +
           char +
           '" at index ' +
-          hi
+          hi,
       );
     }
     array[ai] = n1 * 16 + n2;

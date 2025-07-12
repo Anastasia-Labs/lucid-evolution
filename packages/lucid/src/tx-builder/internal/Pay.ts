@@ -21,7 +21,7 @@ export const payError = (cause: unknown) =>
 export const payToAddress = (
   // config: TxBuilder.TxBuilderConfig,
   address: Address,
-  assets: Assets
+  assets: Assets,
 ) =>
   Effect.gen(function* () {
     const { config } = yield* TxConfig;
@@ -36,7 +36,7 @@ export const payToAddress = (
     let outputResult = outputBuilder
       .with_asset_and_min_required_coin(
         value.multi_asset(),
-        config.lucidConfig.protocolParameters.coinsPerUtxoByte
+        config.lucidConfig.protocolParameters.coinsPerUtxoByte,
       )
       .build();
 
@@ -50,7 +50,7 @@ export const payToAddress = (
     // Keep track of actual total output value
     config.totalOutputAssets = addAssets(
       config.totalOutputAssets,
-      valueToAssets(outputResult.output().amount())
+      valueToAssets(outputResult.output().amount()),
     );
     config.payToOutputs = [
       ...config.payToOutputs,
@@ -64,7 +64,7 @@ export const ToAddressWithData = (
   address: Address,
   outputDatum?: OutputDatum,
   assets?: Assets,
-  scriptRef?: Script
+  scriptRef?: Script,
 ) =>
   Effect.gen(function* () {
     const { config } = yield* TxConfig;
@@ -76,7 +76,7 @@ export const ToAddressWithData = (
     let outputResult = outputBuilder
       .with_asset_and_min_required_coin(
         value.multi_asset(),
-        config.lucidConfig.protocolParameters.coinsPerUtxoByte
+        config.lucidConfig.protocolParameters.coinsPerUtxoByte,
       )
       .build();
 
@@ -90,7 +90,7 @@ export const ToAddressWithData = (
     // Keep track of actual total output value
     config.totalOutputAssets = addAssets(
       config.totalOutputAssets,
-      valueToAssets(outputResult.output().amount())
+      valueToAssets(outputResult.output().amount()),
     );
     config.payToOutputs = [
       ...config.payToOutputs,
@@ -104,28 +104,28 @@ export const ToContract = (
   address: Address,
   outputDatum?: OutputDatum,
   assets?: Assets,
-  scriptRef?: Script
+  scriptRef?: Script,
 ) => ToAddressWithData(address, outputDatum, assets, scriptRef);
 
 export const buildBaseOutput = (
   address: Address,
   outputDatum?: OutputDatum,
-  scriptRef?: Script
+  scriptRef?: Script,
 ) => {
   let baseBuilder: CML.TransactionOutputBuilder;
   const addressBuilder = CML.TransactionOutputBuilder.new().with_address(
-    CML.Address.from_bech32(address)
+    CML.Address.from_bech32(address),
   );
   if (outputDatum) {
     if (outputDatum.value.trim() === "") {
       throw new Error(
-        "datum value is missing. Please provide a non-empty cbor hex data."
+        "datum value is missing. Please provide a non-empty cbor hex data.",
       );
     }
     switch (outputDatum.kind) {
       case "hash": {
         const datumOption = CML.DatumOption.new_hash(
-          CML.DatumHash.from_hex(outputDatum.value)
+          CML.DatumHash.from_hex(outputDatum.value),
         );
         baseBuilder = addressBuilder.with_data(datumOption);
         break;

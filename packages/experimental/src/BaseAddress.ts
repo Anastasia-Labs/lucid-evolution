@@ -30,7 +30,7 @@ export class BaseAddress extends Schema.TaggedClass<BaseAddress>("BaseAddress")(
     networkId: NetworkId.NetworkId,
     paymentCredential: Credential.Credential,
     stakeCredential: Credential.Credential,
-  }
+  },
 ) {
   [Inspectable.NodeInspectSymbol]() {
     return {
@@ -86,7 +86,7 @@ export const Bytes = Schema.transformOrFail(
           stakeCredential,
         });
       }),
-  }
+  },
 );
 
 export const HexString = Schema.transformOrFail(Hex.HexString, BaseAddress, {
@@ -131,12 +131,12 @@ export const equals = (a: BaseAddress, b: BaseAddress): boolean => {
 export const generator = FastCheck.tuple(
   NetworkId.generator,
   Credential.generator,
-  Credential.generator
+  Credential.generator,
 ).map(
   ([networkId, paymentCredential, stakeCredential]) =>
     new BaseAddress({
       networkId,
       paymentCredential,
       stakeCredential,
-    })
+    }),
 );

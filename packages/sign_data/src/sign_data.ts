@@ -11,15 +11,15 @@ import * as M from "@emurgo/cardano-message-signing-nodejs";
 export function signData(
   addressHex: string,
   payload: Payload,
-  privateKey: PrivateKey
+  privateKey: PrivateKey,
 ): SignedMessage {
   const protectedHeaders = M.HeaderMap.new();
   protectedHeaders.set_algorithm_id(
-    M.Label.from_algorithm_id(M.AlgorithmId.EdDSA)
+    M.Label.from_algorithm_id(M.AlgorithmId.EdDSA),
   );
   protectedHeaders.set_header(
     M.Label.new_text("address"),
-    M.CBORValue.new_bytes(fromHex(addressHex))
+    M.CBORValue.new_bytes(fromHex(addressHex)),
   );
   const protectedSerialized = M.ProtectedHeaderMap.new(protectedHeaders);
   const unprotectedHeaders = M.HeaderMap.new();
@@ -33,18 +33,18 @@ export function signData(
   const coseSign1 = builder.build(signedSigStruc);
 
   const key = M.COSEKey.new(
-    M.Label.from_key_type(M.KeyType.OKP) //OKP
+    M.Label.from_key_type(M.KeyType.OKP), //OKP
   );
   key.set_algorithm_id(M.Label.from_algorithm_id(M.AlgorithmId.EdDSA));
   key.set_header(
     M.Label.new_int(M.Int.new_negative(M.BigNum.from_str("1"))),
     M.CBORValue.new_int(
-      M.Int.new_i32(6) //M.CurveType.Ed25519
-    )
+      M.Int.new_i32(6), //M.CurveType.Ed25519
+    ),
   ); // crv (-1) set to Ed25519 (6)
   key.set_header(
     M.Label.new_int(M.Int.new_negative(M.BigNum.from_str("2"))),
-    M.CBORValue.new_bytes(priv.to_public().to_raw_bytes())
+    M.CBORValue.new_bytes(priv.to_public().to_raw_bytes()),
   ); // x (-2) set to public key
 
   return {
@@ -57,7 +57,7 @@ export function verifyData(
   addressHex: string,
   keyHash: KeyHash,
   payload: Payload,
-  signedMessage: SignedMessage
+  signedMessage: SignedMessage,
 ): boolean {
   const cose1 = M.COSESign1.from_bytes(fromHex(signedMessage.signature));
   const key = M.COSEKey.from_bytes(fromHex(signedMessage.key));
@@ -67,7 +67,7 @@ export function verifyData(
   const cose1Address = (() => {
     try {
       return toHex(
-        protectedHeaders.header(M.Label.new_text("address"))?.as_bytes()!
+        protectedHeaders.header(M.Label.new_text("address"))?.as_bytes()!,
       );
     } catch (_e) {
       throw new Error("No address found in signature.");
@@ -121,7 +121,7 @@ export function verifyData(
       return CML.PublicKey.from_bytes(
         key
           .header(M.Label.new_int(M.Int.new_negative(M.BigNum.from_str("2"))))
-          ?.as_bytes()!
+          ?.as_bytes()!,
       );
     } catch (_e) {
       throw new Error("No public key found.");

@@ -26,19 +26,25 @@ export function toCMLScript(script: Script): CML.Script {
   switch (script.type) {
     case "Native":
       return CML.Script.new_native(
-        CML.NativeScript.from_cbor_hex(script.script)
+        CML.NativeScript.from_cbor_hex(script.script),
       );
     case "PlutusV1":
       return CML.Script.new_plutus_v1(
-        CML.PlutusV1Script.from_cbor_hex(applyDoubleCborEncoding(script.script))
+        CML.PlutusV1Script.from_cbor_hex(
+          applyDoubleCborEncoding(script.script),
+        ),
       );
     case "PlutusV2":
       return CML.Script.new_plutus_v2(
-        CML.PlutusV2Script.from_cbor_hex(applyDoubleCborEncoding(script.script))
+        CML.PlutusV2Script.from_cbor_hex(
+          applyDoubleCborEncoding(script.script),
+        ),
       );
     case "PlutusV3":
       return CML.Script.new_plutus_v3(
-        CML.PlutusV3Script.from_cbor_hex(applyDoubleCborEncoding(script.script))
+        CML.PlutusV3Script.from_cbor_hex(
+          applyDoubleCborEncoding(script.script),
+        ),
       );
     default:
       throw new Error("No variant matched.");
@@ -70,7 +76,7 @@ export function fromCMLScript(script: CML.Script): Script {
       };
     default:
       throw new Error(
-        `Exhaustive check failed: Unhandled case '${kind}' encountered.`
+        `Exhaustive check failed: Unhandled case '${kind}' encountered.`,
       );
   }
 }
@@ -87,20 +93,20 @@ export function applyParamsToScript<
 >(
   plutusScript: string,
   params: T,
-  type?: Schema.Schema<Source, Target>
+  type?: Schema.Schema<Source, Target>,
 ): string {
   const program = UPLC.parseUPLC(
     CBORX.decode(
-      CBORX.decode(Bytes.fromHexOrThrow(applyDoubleCborEncoding(plutusScript)))
+      CBORX.decode(Bytes.fromHexOrThrow(applyDoubleCborEncoding(plutusScript))),
     ),
-    "flat"
+    "flat",
   );
   const parameters = type
     ? params.map((param) => Data.encodeDataOrThrow(param, type))
     : params;
   const appliedProgram = parameters.reduce((body, currentParameter) => {
     const data = UPLC.UPLCConst.data(
-      dataFromCbor(Data.encodeCBOROrThrow(currentParameter))
+      dataFromCbor(Data.encodeCBOROrThrow(currentParameter)),
     );
     const appliedParameter = new UPLC.Application(body, data);
     return appliedParameter;
@@ -109,9 +115,9 @@ export function applyParamsToScript<
   return applyDoubleCborEncoding(
     Bytes.toHexOrThrow(
       UPLC.encodeUPLC(
-        new UPLC.UPLCProgram(program.version, appliedProgram)
-      ).toBuffer().buffer
-    )
+        new UPLC.UPLCProgram(program.version, appliedProgram),
+      ).toBuffer().buffer,
+    ),
   );
 }
 
@@ -128,13 +134,13 @@ export const applyDoubleCborEncoding = (script: string): string => {
     try {
       CBORX.decode(Bytes.fromHexOrThrow(script));
       return Bytes.toHexOrThrow(
-        Uint8Array.from(CBORX.encode(Bytes.fromHexOrThrow(script).buffer))
+        Uint8Array.from(CBORX.encode(Bytes.fromHexOrThrow(script).buffer)),
       );
     } catch (error) {
       return Bytes.toHexOrThrow(
         Uint8Array.from(
-          CBORX.encode(CBORX.encode(Bytes.fromHexOrThrow(script).buffer))
-        )
+          CBORX.encode(CBORX.encode(Bytes.fromHexOrThrow(script).buffer)),
+        ),
       );
     }
   }
@@ -150,7 +156,7 @@ export const applySingleCborEncoding = (script: string): string => {
       return script;
     } catch (error) {
       return Bytes.toHexOrThrow(
-        Uint8Array.from(CBORX.encode(Bytes.fromHexOrThrow(script).buffer))
+        Uint8Array.from(CBORX.encode(Bytes.fromHexOrThrow(script).buffer)),
       );
     }
   }
@@ -208,24 +214,24 @@ export function toScriptHash(validator: Script): ScriptHash.ScriptHash {
     case "PlutusV1":
       return CML.PlutusScript.from_v1(
         CML.PlutusV1Script.from_cbor_hex(
-          applyDoubleCborEncoding(validator.script)
-        )
+          applyDoubleCborEncoding(validator.script),
+        ),
       )
         .hash()
         .to_hex();
     case "PlutusV2":
       return CML.PlutusScript.from_v2(
         CML.PlutusV2Script.from_cbor_hex(
-          applyDoubleCborEncoding(validator.script)
-        )
+          applyDoubleCborEncoding(validator.script),
+        ),
       )
         .hash()
         .to_hex();
     case "PlutusV3":
       return CML.PlutusScript.from_v3(
         CML.PlutusV3Script.from_cbor_hex(
-          applyDoubleCborEncoding(validator.script)
-        )
+          applyDoubleCborEncoding(validator.script),
+        ),
       )
         .hash()
         .to_hex();

@@ -18,7 +18,7 @@ const make = Effect.gen(function* () {
   const ACCOUNTS = { SEED_ACCOUNTS, PRIVATE_KEY_ACCOUNTS };
   const emulator: Emulator = new Emulator(
     [...SEED_ACCOUNTS, ...PRIVATE_KEY_ACCOUNTS],
-    PROTOCOL_PARAMETERS_DEFAULT
+    PROTOCOL_PARAMETERS_DEFAULT,
   );
   return {
     emulator,

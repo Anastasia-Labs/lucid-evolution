@@ -24,7 +24,7 @@ export const isDRepAlwaysAbstain = (deleg: DRep): deleg is AlwaysAbstain =>
   !isDRepCredential(deleg) && deleg.__typename === "AlwaysAbstain";
 
 export const isDRepAlwaysNoConfidence = (
-  deleg: DRep
+  deleg: DRep,
 ): deleg is AlwaysNoConfidence =>
   !isDRepCredential(deleg) && deleg.__typename === "AlwaysNoConfidence";
 
@@ -52,18 +52,18 @@ export const governanceError = (cause: unknown) =>
 export const delegateVoteToDRep = (
   rewardAddress: RewardAddress,
   drep: DRep,
-  redeemer?: Redeemer
+  redeemer?: Redeemer,
 ) =>
   Effect.gen(function* () {
     const { config } = yield* TxConfig;
     const stakeCredential = yield* validateAndGetStakeCredential(
       rewardAddress,
-      config
+      config,
     );
     const cmlDRep: CML.DRep = toCMLDRep(drep);
     const buildCert = (credential: CML.Credential) =>
       CML.SingleCertificateBuilder.new(
-        CML.Certificate.new_vote_deleg_cert(credential, cmlDRep)
+        CML.Certificate.new_vote_deleg_cert(credential, cmlDRep),
       );
 
     yield* processCertificate(stakeCredential, config, buildCert, redeemer);
@@ -73,13 +73,13 @@ export const delegateVoteToPoolAndDRep = (
   rewardAddress: RewardAddress,
   poolId: PoolId,
   drep: DRep,
-  redeemer?: Redeemer
+  redeemer?: Redeemer,
 ) =>
   Effect.gen(function* () {
     const { config } = yield* TxConfig;
     const stakeCredential = yield* validateAndGetStakeCredential(
       rewardAddress,
-      config
+      config,
     );
     const cmlDRep = toCMLDRep(drep);
     const buildCert = (credential: CML.Credential) =>
@@ -87,8 +87,8 @@ export const delegateVoteToPoolAndDRep = (
         CML.Certificate.new_stake_vote_deleg_cert(
           credential,
           CML.Ed25519KeyHash.from_bech32(poolId),
-          cmlDRep
-        )
+          cmlDRep,
+        ),
       );
 
     yield* processCertificate(stakeCredential, config, buildCert, redeemer);
@@ -97,13 +97,13 @@ export const delegateVoteToPoolAndDRep = (
 export const registerAndDelegateToPool = (
   rewardAddress: RewardAddress,
   poolId: PoolId,
-  redeemer?: Redeemer
+  redeemer?: Redeemer,
 ) =>
   Effect.gen(function* () {
     const { config } = yield* TxConfig;
     const stakeCredential = yield* validateAndGetStakeCredential(
       rewardAddress,
-      config
+      config,
     );
 
     const buildCert = (credential: CML.Credential) =>
@@ -111,8 +111,8 @@ export const registerAndDelegateToPool = (
         CML.Certificate.new_stake_reg_deleg_cert(
           credential,
           CML.Ed25519KeyHash.from_bech32(poolId),
-          config.lucidConfig.protocolParameters.keyDeposit
-        )
+          config.lucidConfig.protocolParameters.keyDeposit,
+        ),
       );
 
     yield* processCertificate(stakeCredential, config, buildCert, redeemer);
@@ -121,13 +121,13 @@ export const registerAndDelegateToPool = (
 export const registerAndDelegateToDRep = (
   rewardAddress: RewardAddress,
   drep: DRep,
-  redeemer?: Redeemer
+  redeemer?: Redeemer,
 ) =>
   Effect.gen(function* () {
     const { config } = yield* TxConfig;
     const stakeCredential = yield* validateAndGetStakeCredential(
       rewardAddress,
-      config
+      config,
     );
     const cmlDRep = toCMLDRep(drep);
     const buildCert = (credential: CML.Credential) =>
@@ -135,8 +135,8 @@ export const registerAndDelegateToDRep = (
         CML.Certificate.new_vote_reg_deleg_cert(
           credential,
           cmlDRep,
-          config.lucidConfig.protocolParameters.keyDeposit
-        )
+          config.lucidConfig.protocolParameters.keyDeposit,
+        ),
       );
 
     yield* processCertificate(stakeCredential, config, buildCert, redeemer);
@@ -146,13 +146,13 @@ export const registerAndDelegateToPoolAndDRep = (
   rewardAddress: RewardAddress,
   poolId: PoolId,
   drep: DRep,
-  redeemer?: Redeemer
+  redeemer?: Redeemer,
 ) =>
   Effect.gen(function* () {
     const { config } = yield* TxConfig;
     const stakeCredential = yield* validateAndGetStakeCredential(
       rewardAddress,
-      config
+      config,
     );
     const cmlDRep = toCMLDRep(drep);
     const buildCert = (credential: CML.Credential) =>
@@ -161,8 +161,8 @@ export const registerAndDelegateToPoolAndDRep = (
           credential,
           CML.Ed25519KeyHash.from_bech32(poolId),
           cmlDRep,
-          config.lucidConfig.protocolParameters.keyDeposit
-        )
+          config.lucidConfig.protocolParameters.keyDeposit,
+        ),
       );
 
     yield* processCertificate(stakeCredential, config, buildCert, redeemer);
@@ -171,18 +171,18 @@ export const registerAndDelegateToPoolAndDRep = (
 export const registerDRep = (
   rewardAddress: RewardAddress,
   anchor?: Anchor,
-  redeemer?: Redeemer
+  redeemer?: Redeemer,
 ) =>
   Effect.gen(function* () {
     const { config } = yield* TxConfig;
     const stakeCredential = yield* validateAndGetStakeCredential(
       rewardAddress,
-      config
+      config,
     );
     const cmlAnchor = anchor
       ? CML.Anchor.new(
           CML.Url.from_json(anchor.url),
-          CML.AnchorDocHash.from_hex(anchor.dataHash)
+          CML.AnchorDocHash.from_hex(anchor.dataHash),
         )
       : undefined;
 
@@ -191,29 +191,29 @@ export const registerDRep = (
         CML.Certificate.new_reg_drep_cert(
           credential,
           config.lucidConfig.protocolParameters.drepDeposit,
-          cmlAnchor
-        )
+          cmlAnchor,
+        ),
       );
     yield* processCertificate(stakeCredential, config, buildCert, redeemer);
   });
 
 export const deregisterDRep = (
   rewardAddress: RewardAddress,
-  redeemer?: Redeemer
+  redeemer?: Redeemer,
 ) =>
   Effect.gen(function* () {
     const { config } = yield* TxConfig;
     const stakeCredential = yield* validateAndGetStakeCredential(
       rewardAddress,
-      config
+      config,
     );
 
     const buildCert = (credential: CML.Credential) =>
       CML.SingleCertificateBuilder.new(
         CML.Certificate.new_unreg_drep_cert(
           credential,
-          config.lucidConfig.protocolParameters.drepDeposit
-        )
+          config.lucidConfig.protocolParameters.drepDeposit,
+        ),
       );
 
     yield* processCertificate(stakeCredential, config, buildCert, redeemer);
@@ -222,23 +222,23 @@ export const deregisterDRep = (
 export const updateDRep = (
   rewardAddress: RewardAddress,
   anchor?: Anchor,
-  redeemer?: Redeemer
+  redeemer?: Redeemer,
 ) =>
   Effect.gen(function* () {
     const { config } = yield* TxConfig;
     const stakeCredential = yield* validateAndGetStakeCredential(
       rewardAddress,
-      config
+      config,
     );
     const cmlAnchor = anchor
       ? CML.Anchor.new(
           CML.Url.from_json(anchor.url),
-          CML.AnchorDocHash.from_hex(anchor.dataHash)
+          CML.AnchorDocHash.from_hex(anchor.dataHash),
         )
       : undefined;
     const buildCert = (credential: CML.Credential) =>
       CML.SingleCertificateBuilder.new(
-        CML.Certificate.new_update_drep_cert(credential, cmlAnchor)
+        CML.Certificate.new_update_drep_cert(credential, cmlAnchor),
       );
     yield* processCertificate(stakeCredential, config, buildCert, redeemer);
   });
@@ -246,7 +246,7 @@ export const updateDRep = (
 export const authCommitteeHot = (
   coldAddress: RewardAddress,
   hotAddress: RewardAddress,
-  redeemer?: Redeemer
+  redeemer?: Redeemer,
 ) =>
   Effect.gen(function* () {
     const { config } = yield* TxConfig;
@@ -258,7 +258,7 @@ export const authCommitteeHot = (
         : CML.Credential.new_script(CML.ScriptHash.from_hex(hotCred.hash));
     const buildCert = (credential: CML.Credential) =>
       CML.SingleCertificateBuilder.new(
-        CML.Certificate.new_auth_committee_hot_cert(credential, hotCredential)
+        CML.Certificate.new_auth_committee_hot_cert(credential, hotCredential),
       );
 
     yield* processCertificate(coldCred, config, buildCert, redeemer);
@@ -267,7 +267,7 @@ export const authCommitteeHot = (
 export const resignCommitteeHot = (
   coldAddress: RewardAddress,
   anchor?: Anchor,
-  redeemer?: Redeemer
+  redeemer?: Redeemer,
 ) =>
   Effect.gen(function* () {
     const { config } = yield* TxConfig;
@@ -275,13 +275,13 @@ export const resignCommitteeHot = (
     const cmlAnchor = anchor
       ? CML.Anchor.new(
           CML.Url.from_json(anchor.url),
-          CML.AnchorDocHash.from_hex(anchor.dataHash)
+          CML.AnchorDocHash.from_hex(anchor.dataHash),
         )
       : undefined;
 
     const buildCert = (credential: CML.Credential) =>
       CML.SingleCertificateBuilder.new(
-        CML.Certificate.new_resign_committee_cold_cert(credential, cmlAnchor)
+        CML.Certificate.new_resign_committee_cold_cert(credential, cmlAnchor),
       );
 
     yield* processCertificate(coldCred, config, buildCert, redeemer);

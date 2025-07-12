@@ -38,7 +38,7 @@ export class InlineDatum extends Schema.TaggedClass<InlineDatum>()(
   "InlineDatum",
   {
     data: Schema.Uint8ArrayFromSelf, // Raw CBOR data
-  }
+  },
 ) {
   [Inspectable.NodeInspectSymbol]() {
     return {
@@ -61,7 +61,7 @@ export const InlineDatumBytes = Schema.transform(
     strict: true,
     encode: (_, datum) => datum.data,
     decode: (data) => new InlineDatum({ data }),
-  }
+  },
 );
 
 /**
@@ -105,7 +105,7 @@ export const CBORBytes = Schema.transformOrFail(
       switch (toA._tag) {
         case "DatumHash":
           return ParseResult.succeed(
-            CBOR.encodeAsBytesOrThrow([0, Hex.toBytes(toA.hash)])
+            CBOR.encodeAsBytesOrThrow([0, Hex.toBytes(toA.hash)]),
           );
         case "InlineDatum":
           return ParseResult.succeed(CBOR.encodeAsBytesOrThrow([1, toA.data]));
@@ -114,8 +114,8 @@ export const CBORBytes = Schema.transformOrFail(
             new ParseResult.Type(
               ast,
               toA,
-              `Unknown DatumOption tag: ${(toA as any)._tag}`
-            )
+              `Unknown DatumOption tag: ${(toA as any)._tag}`,
+            ),
           );
       }
     },
@@ -123,17 +123,17 @@ export const CBORBytes = Schema.transformOrFail(
       pipe(
         CBOR.decodeBytes(fromA),
         Effect.mapError(
-          (error) => new ParseResult.Type(ast, fromI, error.message)
+          (error) => new ParseResult.Type(ast, fromI, error.message),
         ),
         Effect.flatMap((a) =>
           ParseResult.decode(
             Schema.Tuple(
               Schema.Literal(0, 1),
-              Schema.Uint8ArrayFromSelf
+              Schema.Uint8ArrayFromSelf,
             ).annotations({
               identifier: "DatumOptionTuple",
-            })
-          )(a)
+            }),
+          )(a),
         ),
         Effect.flatMap(([tag, bytesDecoded]) =>
           Effect.gen(function* () {
@@ -142,13 +142,13 @@ export const CBORBytes = Schema.transformOrFail(
                 return yield* ParseResult.decode(DatumHash.Bytes)(bytesDecoded);
               case 1:
                 return yield* ParseResult.decode(InlineDatumBytes)(
-                  bytesDecoded
+                  bytesDecoded,
                 );
             }
-          })
-        )
+          }),
+        ),
       ),
-  }
+  },
 );
 
 /**
@@ -168,7 +168,7 @@ export const CBORHex = Schema.transformOrFail(
       pipe(ParseResult.encode(CBORBytes)(toA), Effect.map(Hex.fromBytes)),
     decode: (fromA, options, ast) =>
       pipe(Hex.toBytes(fromA), ParseResult.decode(CBORBytes)),
-  }
+  },
 );
 
 /**
@@ -220,6 +220,6 @@ export const equals = (a: DatumOption, b: DatumOption): boolean => {
 export const generator = FastCheck.oneof(
   DatumHash.generator,
   FastCheck.uint8Array({ minLength: 1, maxLength: 100 }).map(
-    (data) => new InlineDatum({ data })
-  )
+    (data) => new InlineDatum({ data }),
+  ),
 );

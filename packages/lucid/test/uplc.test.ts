@@ -28,7 +28,7 @@ test("UPLC evaluation", () => {
     PROTOCOL_PARAMETERS_DEFAULT.maxTxExMem,
     BigInt(slotConfig.zeroTime),
     BigInt(slotConfig.zeroSlot),
-    slotConfig.slotLength
+    slotConfig.slotLength,
   );
 
   const evalRedeemers: EvalRedeemer[] = [];

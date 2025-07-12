@@ -40,7 +40,7 @@ export const TRANSACTIONHASH_HEX_LENGTH = 64;
  * @category errors
  */
 export class TransactionHashError extends Data.TaggedError(
-  "TransactionHashError"
+  "TransactionHashError",
 )<{
   message?: string;
   reason?:
@@ -51,7 +51,7 @@ export class TransactionHashError extends Data.TaggedError(
 }> {}
 
 export const Hash = Hex.HexString.pipe(
-  Schema.filter((hex) => hex.length === TRANSACTIONHASH_HEX_LENGTH)
+  Schema.filter((hex) => hex.length === TRANSACTIONHASH_HEX_LENGTH),
 ).annotations({
   message: (issue) =>
     `${issue.actual} must be a hex string of length ${TRANSACTIONHASH_HEX_LENGTH}`,
@@ -68,7 +68,7 @@ export class TransactionHash extends Schema.TaggedClass<TransactionHash>()(
   "TransactionHash",
   {
     hash: Hash,
-  }
+  },
 ) {
   [Inspectable.NodeInspectSymbol]() {
     return {
@@ -87,7 +87,7 @@ export class TransactionHash extends Schema.TaggedClass<TransactionHash>()(
 export const TransactionHashBytes = pipe(
   Schema.Uint8ArrayFromSelf,
   Schema.filter((bytes) => bytes.length === TRANSACTIONHASH_BYTES_LENGTH),
-  Schema.typeSchema
+  Schema.typeSchema,
 ).annotations({
   message: (issue) =>
     `${issue.actual} must be a byte array of length ${TRANSACTIONHASH_BYTES_LENGTH}.`,
@@ -107,7 +107,7 @@ export const Bytes = Schema.transform(
     strict: true,
     encode: (_, hash) => Hex.toBytes(hash.hash),
     decode: (bytes) => new TransactionHash({ hash: Hex.fromBytes(bytes) }),
-  }
+  },
 );
 
 /**
@@ -138,17 +138,17 @@ export const CBORBytes = Schema.transformOrFail(
     encode: (s, options, ast, transactionHash) =>
       pipe(
         CBOR.encodeAsBytes(Hex.toBytes(transactionHash.hash)),
-        Effect.mapError((e) => new ParseResult.Type(ast, s, e.message))
+        Effect.mapError((e) => new ParseResult.Type(ast, s, e.message)),
       ),
     decode: (bytes, options, ast) =>
       pipe(
         CBOR.decodeBytes(bytes),
         Effect.mapError(
-          (error) => new ParseResult.Type(ast, bytes, error.message)
+          (error) => new ParseResult.Type(ast, bytes, error.message),
         ),
-        Effect.flatMap(ParseResult.decode(Bytes))
+        Effect.flatMap(ParseResult.decode(Bytes)),
       ),
-  }
+  },
 );
 
 /**
@@ -170,11 +170,11 @@ export const CBORHex = Schema.transformOrFail(
       pipe(
         CBOR.decodeHex(hexString),
         Effect.mapError(
-          (error) => new ParseResult.Type(ast, hexString, error.message)
+          (error) => new ParseResult.Type(ast, hexString, error.message),
         ),
-        Effect.flatMap(ParseResult.decode(Bytes))
+        Effect.flatMap(ParseResult.decode(Bytes)),
       ),
-  }
+  },
 );
 
 /**

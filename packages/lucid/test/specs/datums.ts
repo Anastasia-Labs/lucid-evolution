@@ -18,7 +18,7 @@ export const payWithAsHashDatum = Effect.gen(function* ($) {
     .pay.ToContract(
       scriptAddress,
       { kind: "asHash", value: Data.to("31313131") },
-      { lovelace: 5000000n }
+      { lovelace: 5000000n },
     )
     .completeProgram();
   return signBuilder;

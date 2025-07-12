@@ -12,7 +12,7 @@ export const toCMLNativeScript = (native: Native): CML.NativeScript => {
   switch (native.type) {
     case "sig":
       return CML.NativeScript.new_script_pubkey(
-        CML.Ed25519KeyHash.from_hex(native.keyHash)
+        CML.Ed25519KeyHash.from_hex(native.keyHash),
       );
     case "before":
       return CML.NativeScript.new_script_invalid_hereafter(BigInt(native.slot));
@@ -33,7 +33,7 @@ export const toCMLNativeScript = (native: Native): CML.NativeScript => {
       native.scripts.map((script) => nativeList.add(toCMLNativeScript(script)));
       return CML.NativeScript.new_script_n_of_k(
         BigInt(native.required),
-        nativeList
+        nativeList,
       );
     }
   }
@@ -118,7 +118,7 @@ const CMLNativeSchema: S.Schema<CMLNative> = S.Union(
       n: S.Number,
       native_scripts: S.Array(S.suspend(() => CMLNativeSchema)),
     }),
-  })
+  }),
 );
 
 /**

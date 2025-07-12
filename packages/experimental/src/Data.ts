@@ -173,7 +173,7 @@ export interface List$
  */
 export const List: List$ = Schema.TaggedStruct("List", {
   list: Schema.Array(
-    Schema.suspend((): Schema.Schema<Data> => Data)
+    Schema.suspend((): Schema.Schema<Data> => Data),
   ).annotations({
     arbitrary: () => (fc) => fc.array(Arbitrary.make(Data), { maxLength: 3 }),
   }),
@@ -192,14 +192,14 @@ export const uniqueByFirst = (
   schema: Schema.Struct<{
     k: Schema.Schema<Data>;
     v: Schema.Schema<Data>;
-  }>
+  }>,
 ) => {
   return Schema.Array(schema).pipe(
     Schema.filter(
       (tuples) =>
         tuples.length ===
-        _Array.dedupeWith(tuples, (a, b) => isEqual(a.k, b.k)).length
-    )
+        _Array.dedupeWith(tuples, (a, b) => isEqual(a.k, b.k)).length,
+    ),
   );
 };
 
@@ -242,7 +242,7 @@ export const Map: Map$ = Schema.TaggedStruct("Map", {
     Schema.Struct({
       k: Schema.suspend((): Schema.Schema<Data> => Data),
       v: Schema.suspend((): Schema.Schema<Data> => Data),
-    })
+    }),
   ).annotations({
     identifier: "Unique Entries",
   }),
@@ -277,7 +277,7 @@ export interface Constr$
 export const Constr: Constr$ = Schema.TaggedStruct("Constr", {
   index: Schema.BigIntFromSelf.pipe(Schema.betweenBigInt(0n, 2n ** 64n - 1n)),
   fields: Schema.Array(
-    Schema.suspend((): Schema.Schema<Data> => Data)
+    Schema.suspend((): Schema.Schema<Data> => Data),
   ).annotations({
     arbitrary: () => (fc) => fc.array(Arbitrary.make(Data), { maxLength: 3 }),
   }),
@@ -297,7 +297,7 @@ export const Data: Schema.Schema<Data> = Schema.Union(
   ByteArray,
   List,
   Map,
-  Constr
+  Constr,
 );
 
 /**
@@ -409,7 +409,7 @@ export const encodeCBOROrThrow = <Source, Target extends Data>(
   options: {
     canonical?: boolean;
     parseOptions?: SchemaAST.ParseOptions;
-  } = {}
+  } = {},
 ): string => {
   const { canonical = false } = options;
   const data: Data = schema
@@ -427,7 +427,7 @@ export const encodeCBOR = Effect.fn(function* <Source, Target extends Data>(
   options: {
     canonical?: boolean;
     parseOptions?: SchemaAST.ParseOptions;
-  } = {}
+  } = {},
 ) {
   const { canonical = false } = options;
   const data: Data = schema
@@ -443,11 +443,11 @@ const toCMLPlutusData = (data: Data): CML.PlutusData.PlutusData => {
   switch (data._tag) {
     case "Integer":
       return CML.PlutusData.newIntegerUnsafe(
-        CML.BigInteger.fromStrUnsafe(data.integer.toString())
+        CML.BigInteger.fromStrUnsafe(data.integer.toString()),
       );
     case "ByteArray":
       return CML.PlutusData.newBytesUnsafe(
-        Bytes.fromHexOrThrow(data.bytearray)
+        Bytes.fromHexOrThrow(data.bytearray),
       );
     case "List": {
       const list = CML.PlutusDataList._newUnsafe();
@@ -466,7 +466,7 @@ const toCMLPlutusData = (data: Data): CML.PlutusData.PlutusData => {
       const fields = CML.PlutusDataList._newUnsafe();
       data.fields.forEach((item) => fields.add(toCMLPlutusData(item)));
       return CML.PlutusData.newConstrPlutusDataUnsafe(
-        CML.ConstrPlutusData._newUnsafe(data.index, fields)
+        CML.ConstrPlutusData._newUnsafe(data.index, fields),
       );
     }
     default:
@@ -511,11 +511,11 @@ const toCMLPlutusData = (data: Data): CML.PlutusData.PlutusData => {
 export function decodeCBOROrThrow(input: string): Data;
 export function decodeCBOROrThrow<Source, Target extends Data>(
   input: string,
-  schema: Schema.Schema<Source, Target>
+  schema: Schema.Schema<Source, Target>,
 ): Source;
 export function decodeCBOROrThrow<Source, Target extends Data>(
   input: string,
-  schema?: Schema.Schema<Source, Target>
+  schema?: Schema.Schema<Source, Target>,
 ): Source | Data {
   const data = resolveCBOROrThrow(input);
   return schema ? decodeDataOrThrow(data, schema) : data;
@@ -523,7 +523,7 @@ export function decodeCBOROrThrow<Source, Target extends Data>(
 
 export const decodeCBOR = Effect.fn(function* <Source, Target extends Data>(
   input: string,
-  schema?: Schema.Schema<Source, Target>
+  schema?: Schema.Schema<Source, Target>,
 ) {
   const data = yield* resolveCBOR(input);
   return schema ? yield* decodeData(data, schema) : data;
@@ -593,14 +593,14 @@ export const resolveCBOR = Effect.fn(function* (input: string) {
     case CML.PlutusDataKind.Integer:
       return Integer.make(
         { integer: BigInt(data.as_integer()!.to_str()) },
-        { disableValidation: true }
+        { disableValidation: true },
       );
     case CML.PlutusDataKind.Bytes:
       return ByteArray.make(
         {
           bytearray: Bytes.toHexOrThrow!(data.as_bytes()!),
         },
-        { disableValidation: true }
+        { disableValidation: true },
       );
     case CML.PlutusDataKind.List: {
       const list = data.as_list()!;
@@ -633,7 +633,7 @@ export const resolveCBOR = Effect.fn(function* (input: string) {
           index: BigInt(constrData.alternative()),
           fields,
         },
-        { disableValidation: true }
+        { disableValidation: true },
       );
     }
   }
@@ -669,13 +669,13 @@ export const resolveCBOR = Effect.fn(function* (input: string) {
 export const decodeDataOrThrow = <Source, Target extends Data>(
   input: unknown,
   schema: Schema.Schema<Source, Target>,
-  options: SchemaAST.ParseOptions = {}
+  options: SchemaAST.ParseOptions = {},
 ): Source => Schema.decodeUnknownSync(schema, options)(input);
 
 export const decodeData = Effect.fn(function* <Source, Target extends Data>(
   input: unknown,
   schema: Schema.Schema<Source, Target>,
-  options: SchemaAST.ParseOptions = {}
+  options: SchemaAST.ParseOptions = {},
 ) {
   return yield* Schema.decodeUnknown(schema, options)(input);
 });
@@ -690,7 +690,7 @@ export const decodeData = Effect.fn(function* <Source, Target extends Data>(
 export const decodeDataEither = <Source, Target extends Data>(
   input: unknown,
   schema: Schema.Schema<Source, Target>,
-  options: SchemaAST.ParseOptions = {}
+  options: SchemaAST.ParseOptions = {},
 ): Either.Either<Source, ParseError> =>
   Schema.decodeUnknownEither(schema, options)(input);
 
@@ -724,13 +724,13 @@ export const decodeDataEither = <Source, Target extends Data>(
 export const encodeDataOrThrow = <Source, Target extends Data>(
   input: unknown,
   schema: Schema.Schema<Source, Target>,
-  options?: SchemaAST.ParseOptions
+  options?: SchemaAST.ParseOptions,
 ): Target => Schema.encodeUnknownSync(schema, options)(input);
 
 export const encodeData = Effect.fn(function* <Source, Target extends Data>(
   input: unknown,
   schema: Schema.Schema<Source, Target>,
-  options?: SchemaAST.ParseOptions
+  options?: SchemaAST.ParseOptions,
 ) {
   return yield* Schema.encodeUnknown(schema, options)(input);
 });
@@ -745,7 +745,7 @@ export const encodeData = Effect.fn(function* <Source, Target extends Data>(
 export const encodeDataEither = <Source, Target extends Data>(
   input: unknown,
   schema: Schema.Schema<Source, Target>,
-  options?: SchemaAST.ParseOptions
+  options?: SchemaAST.ParseOptions,
 ): Either.Either<Target, ParseError> =>
   Schema.encodeUnknownEither(schema, options)(input);
 
@@ -823,7 +823,7 @@ export const mkByte = <const T extends string>(bytearray: T) =>
  * @since 2.0.0
  */
 export const mkMap = <const Pairs extends ReadonlyArray<{ k: Data; v: Data }>>(
-  value: Pairs
+  value: Pairs,
 ) => Map.make({ entries: value }) as Map<Pairs>;
 
 /**
@@ -847,7 +847,7 @@ export const mkConstr = <
   const U extends readonly Data[],
 >(
   index: T,
-  fields: U
+  fields: U,
 ) => Constr.make({ index, fields }) as Constr<T, U>;
 
 /**
@@ -1110,7 +1110,7 @@ export const genData = (depth: number = 3): FastCheck.Arbitrary<Data> => {
     genByteArray(),
     genConstr(depth - 1),
     genList(depth - 1),
-    genMap(depth - 1)
+    genMap(depth - 1),
   );
 };
 
@@ -1163,7 +1163,7 @@ export const genConstr = (depth: number): FastCheck.Arbitrary<Constr> =>
     FastCheck.array(genData(depth), {
       minLength: 0,
       maxLength: 5,
-    })
+    }),
   ).map(([index, fields]) => mkConstr(index, fields));
 
 /**
@@ -1188,7 +1188,7 @@ export const genMap = (depth: number): FastCheck.Arbitrary<Map> => {
   // Helper to create key-value pairs with unique keys
   const uniqueKeyValuePairs = <T extends Data>(
     keyGen: FastCheck.Arbitrary<T>,
-    maxSize: number
+    maxSize: number,
   ) =>
     FastCheck.uniqueArray(
       FastCheck.tuple(keyGen, genData(depth > 0 ? depth - 1 : 0)),
@@ -1199,9 +1199,9 @@ export const genMap = (depth: number): FastCheck.Arbitrary<Map> => {
           const keyStr = toJSON(pair[0]);
           return keyStr;
         },
-      }
+      },
     ).map((pairs) =>
-      pairs.map(([k, v]) => ({ k, v })).sort((a, b) => compare(a.k, b.k))
+      pairs.map(([k, v]) => ({ k, v })).sort((a, b) => compare(a.k, b.k)),
     );
 
   // ByteArray keys (more frequent)
@@ -1213,11 +1213,11 @@ export const genMap = (depth: number): FastCheck.Arbitrary<Map> => {
   // Complex keys (less frequent)
   const complexPairs = uniqueKeyValuePairs(
     genData(depth > 1 ? depth - 2 : 0),
-    2
+    2,
   );
 
   return FastCheck.oneof(byteArrayPairs, integerPairs, complexPairs).map(
-    (pairs) => mkMap(pairs)
+    (pairs) => mkMap(pairs),
   );
 };
 

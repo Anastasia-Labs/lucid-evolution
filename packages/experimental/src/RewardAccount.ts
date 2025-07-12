@@ -28,7 +28,7 @@ class RewardAccount extends Schema.TaggedClass<RewardAccount>("RewardAccount")(
   {
     networkId: NetworkId.NetworkId,
     stakeCredential: Credential.Credential,
-  }
+  },
 ) {
   [Inspectable.NodeInspectSymbol]() {
     return {
@@ -112,13 +112,13 @@ const equals = (a: RewardAccount, b: RewardAccount): boolean => {
  */
 const generator = FastCheck.tuple(
   NetworkId.generator,
-  Credential.generator
+  Credential.generator,
 ).map(
   ([networkId, stakeCredential]) =>
     new RewardAccount({
       networkId,
       stakeCredential,
-    })
+    }),
 );
 
 export { RewardAccount, Bytes, HexString, equals, generator };

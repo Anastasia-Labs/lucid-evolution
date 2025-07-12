@@ -23,7 +23,7 @@ export const collectFromUTxO =
         const resolvedDatum = yield* resolveDatum(
           utxo.datumHash,
           utxo.datum,
-          config.lucidConfig.provider
+          config.lucidConfig.provider,
         );
         utxo.datum = resolvedDatum;
         // Skip adding UTxO to collectedInputs when building redeemers to prevent duplicate inputs
@@ -31,7 +31,7 @@ export const collectFromUTxO =
         if (collectInputs) config.collectedInputs.push(utxo);
         //TODO: Add config.collectedAssets
         const input = CML.SingleInputBuilder.from_transaction_unspent_output(
-          utxoToCore({ ...utxo, datum: resolvedDatum })
+          utxoToCore({ ...utxo, datum: resolvedDatum }),
         );
         const credential = paymentCredentialOf(utxo.address);
 
@@ -40,32 +40,32 @@ export const collectFromUTxO =
             Effect.fromNullable(config.scripts.get(credential.hash)),
             Effect.orElseFail(() =>
               collectError(
-                collectError(ERROR_MESSAGE.MISSING_SCRIPT(credential.hash))
-              )
-            )
+                collectError(ERROR_MESSAGE.MISSING_SCRIPT(credential.hash)),
+              ),
+            ),
           );
           switch (script.type) {
             case "Native":
               config.txBuilder.add_input(
                 input.native_script(
                   CML.NativeScript.from_cbor_hex(script.script),
-                  CML.NativeScriptWitnessInfo.assume_signature_count()
-                )
+                  CML.NativeScriptWitnessInfo.assume_signature_count(),
+                ),
               );
               break;
             case "PlutusV1": {
               const red = yield* pipe(
                 Effect.fromNullable(redeemer),
                 Effect.orElseFail(() =>
-                  collectError(ERROR_MESSAGE.MISSING_REDEEMER)
-                )
+                  collectError(ERROR_MESSAGE.MISSING_REDEEMER),
+                ),
               );
               config.txBuilder.add_input(
                 input.plutus_script(
                   toPartial(toV1(script.script), red),
                   CML.Ed25519KeyHashList.new(),
-                  CML.PlutusData.from_cbor_hex(utxo.datum!)
-                )
+                  CML.PlutusData.from_cbor_hex(utxo.datum!),
+                ),
               );
               break;
             }
@@ -74,8 +74,8 @@ export const collectFromUTxO =
               const red = yield* pipe(
                 Effect.fromNullable(redeemer),
                 Effect.orElseFail(() =>
-                  collectError(ERROR_MESSAGE.MISSING_REDEEMER)
-                )
+                  collectError(ERROR_MESSAGE.MISSING_REDEEMER),
+                ),
               );
               const partial = toPartial(v2, red);
               config.txBuilder.add_input(
@@ -83,12 +83,12 @@ export const collectFromUTxO =
                   ? input.plutus_script(
                       partial,
                       CML.Ed25519KeyHashList.new(),
-                      CML.PlutusData.from_cbor_hex(utxo.datum)
+                      CML.PlutusData.from_cbor_hex(utxo.datum),
                     )
                   : input.plutus_script_inline_datum(
                       partial,
-                      CML.Ed25519KeyHashList.new()
-                    )
+                      CML.Ed25519KeyHashList.new(),
+                    ),
               );
               break;
             }
@@ -97,8 +97,8 @@ export const collectFromUTxO =
               const red = yield* pipe(
                 Effect.fromNullable(redeemer),
                 Effect.orElseFail(() =>
-                  collectError(ERROR_MESSAGE.MISSING_REDEEMER)
-                )
+                  collectError(ERROR_MESSAGE.MISSING_REDEEMER),
+                ),
               );
               const partial = toPartial(v3, red);
               config.txBuilder.add_input(
@@ -106,12 +106,12 @@ export const collectFromUTxO =
                   ? input.plutus_script(
                       partial,
                       CML.Ed25519KeyHashList.new(),
-                      CML.PlutusData.from_cbor_hex(utxo.datum)
+                      CML.PlutusData.from_cbor_hex(utxo.datum),
                     )
                   : input.plutus_script_inline_datum(
                       partial,
-                      CML.Ed25519KeyHashList.new()
-                    )
+                      CML.Ed25519KeyHashList.new(),
+                    ),
               );
               break;
             }
@@ -128,7 +128,7 @@ export const collectFromUTxO =
 */
 export const collectFromUTxOPartial = (
   utxos: UTxO[],
-  redeemerBuilder: RedeemerBuilder
+  redeemerBuilder: RedeemerBuilder,
 ) =>
   Effect.gen(function* () {
     const { config } = yield* TxConfig;

@@ -33,10 +33,10 @@ export const query = Effect.gen(function* () {
       utxos.filter(
         (utxo) =>
           utxo.txHash ==
-          "bdb072e8e201cf215853a1d45bf14fe88476561690848b8597772e6be91c6522"
-      )
+          "bdb072e8e201cf215853a1d45bf14fe88476561690848b8597772e6be91c6522",
+      ),
     ),
-    Effect.andThen((utxos) => Console.log(utxos))
+    Effect.andThen((utxos) => Console.log(utxos)),
   );
 });
 
@@ -44,7 +44,7 @@ export const depositFundsCollect = Effect.gen(function* () {
   const { user } = yield* User;
   const address = yield* Effect.promise(() => user.wallet().address());
   const publicKeyHash = yield* Effect.fromNullable(
-    getAddressDetails(address).paymentCredential?.hash
+    getAddressDetails(address).paymentCredential?.hash,
   );
   const datum = Data.to(new Constr(0, [publicKeyHash]));
   const { contractAddress, hello } = yield* HelloContract;
@@ -58,7 +58,7 @@ export const depositFundsCollect = Effect.gen(function* () {
           kind: "inline",
           value: datum,
         },
-        { lovelace: 10_000_000n }
+        { lovelace: 10_000_000n },
       )
       .pay.ToAddress(address, { lovelace: 5_000_000n })
       .chainProgram();
@@ -107,14 +107,14 @@ export const readRefInputTwice = Effect.gen(function* () {
     .pay.ToAddressWithData(
       scriptAddress,
       { kind: "inline", value: Data.void() },
-      { lovelace: 10_000_000n }
+      { lovelace: 10_000_000n },
     )
     .chainProgram();
 
   const tx = yield* refTx.sign.withWallet().completeProgram();
   yield* tx.submitProgram();
   const refInput = derivedOutputs.find(
-    (utxo) => utxo.address == scriptAddress
+    (utxo) => utxo.address == scriptAddress,
   )!;
 
   // Referencing the output twice (directly) in the same transaction doesn't

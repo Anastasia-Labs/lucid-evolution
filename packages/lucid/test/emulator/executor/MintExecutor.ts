@@ -25,7 +25,7 @@ export const mintAndPay = ({ tokenName = "Wow", quantity = 123n } = {}) =>
         quantity,
         currentTime,
       }),
-      Effect.flatMap(handleSignSubmitWithoutValidation)
+      Effect.flatMap(handleSignSubmitWithoutValidation),
     );
     emulator.awaitBlock(1);
 
@@ -54,7 +54,7 @@ export const mintAndStake = ({ tokenName = "Wow", quantity = 123n } = {}) =>
         quantity,
         currentTime,
       }),
-      Effect.flatMap(handleSignSubmitWithoutValidation)
+      Effect.flatMap(handleSignSubmitWithoutValidation),
     );
     emulator.awaitBlock(1);
     const userUTxOs = yield* User.getUtxos;
@@ -82,7 +82,7 @@ export const mintInSlotRange = ({ tokenName = "Wow", quantity = 123n } = {}) =>
         quantity,
         currentTime,
       }),
-      Effect.flatMap(handleSignSubmitWithoutValidation)
+      Effect.flatMap(handleSignSubmitWithoutValidation),
     );
     emulator.awaitBlock(1);
     const userUTxOs = yield* User.getUtxos;

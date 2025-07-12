@@ -22,17 +22,17 @@ export const depositFunds = Effect.gen(function* () {
   const { user } = yield* User;
   const networkConfig = yield* NetworkConfig;
   const publicKeyHash = getAddressDetails(
-    yield* Effect.promise(() => user.wallet().address())
+    yield* Effect.promise(() => user.wallet().address()),
   ).paymentCredential?.hash;
   const datum = Data.to(new Constr(0, [publicKeyHash!]));
   // const { contractAddress } = yield* HelloContractParams;
   const helloCBOR = yield* pipe(
     Effect.fromNullable(
       scripts.validators.find(
-        (v) => v.title === "hello_world_params.hello_world_params.spend"
-      )
+        (v) => v.title === "hello_world_params.hello_world_params.spend",
+      ),
     ),
-    Effect.andThen((script) => script.compiledCode)
+    Effect.andThen((script) => script.compiledCode),
   );
   const applied = applyParamsToScript(applyDoubleCborEncoding(helloCBOR), [
     publicKeyHash!,
@@ -54,7 +54,7 @@ export const depositFunds = Effect.gen(function* () {
         kind: "inline",
         value: datum,
       },
-      { lovelace: 10_000_000n }
+      { lovelace: 10_000_000n },
     )
     .completeProgram();
   return signBuilder;
@@ -66,13 +66,13 @@ export const collectFunds = Effect.gen(function* ($) {
   const helloCBOR = yield* pipe(
     Effect.fromNullable(
       scripts.validators.find(
-        (v) => v.title === "hello_world_params.hello_world_params.spend"
-      )
+        (v) => v.title === "hello_world_params.hello_world_params.spend",
+      ),
     ),
-    Effect.andThen((script) => script.compiledCode)
+    Effect.andThen((script) => script.compiledCode),
   );
   const publicKeyHash = getAddressDetails(
-    yield* Effect.promise(() => user.wallet().address())
+    yield* Effect.promise(() => user.wallet().address()),
   ).paymentCredential?.hash;
   const applied = applyParamsToScript(applyDoubleCborEncoding(helloCBOR), [
     publicKeyHash!,
@@ -84,7 +84,7 @@ export const collectFunds = Effect.gen(function* ($) {
   };
   const contractAddress = validatorToAddress(networkConfig.NETWORK, hello);
   const allUtxos = yield* Effect.tryPromise(() =>
-    user.utxosAt(contractAddress)
+    user.utxosAt(contractAddress),
   );
   const ownerUTxO = yield* Effect.fromNullable(
     allUtxos.find((utxo) => {
@@ -92,7 +92,7 @@ export const collectFunds = Effect.gen(function* ($) {
         const datum = Data.from(utxo.datum, DatumType);
         return datum.owner === publicKeyHash;
       }
-    })
+    }),
   );
 
   const addr = yield* Effect.promise(() => user.wallet().address());
@@ -110,17 +110,17 @@ export const depositFundsDatumHash = Effect.gen(function* () {
   const { user } = yield* User;
   const networkConfig = yield* NetworkConfig;
   const publicKeyHash = getAddressDetails(
-    yield* Effect.promise(() => user.wallet().address())
+    yield* Effect.promise(() => user.wallet().address()),
   ).paymentCredential?.hash;
   const datum = Data.to(new Constr(0, [publicKeyHash!]));
   // const { contractAddress } = yield* HelloContractParams;
   const helloCBOR = yield* pipe(
     Effect.fromNullable(
       scripts.validators.find(
-        (v) => v.title === "hello_world_params.hello_world_params.spend"
-      )
+        (v) => v.title === "hello_world_params.hello_world_params.spend",
+      ),
     ),
-    Effect.andThen((script) => script.compiledCode)
+    Effect.andThen((script) => script.compiledCode),
   );
   const applied = applyParamsToScript(applyDoubleCborEncoding(helloCBOR), [
     publicKeyHash!,
@@ -142,7 +142,7 @@ export const depositFundsDatumHash = Effect.gen(function* () {
         kind: "asHash",
         value: datum,
       },
-      { lovelace: 10_000_000n }
+      { lovelace: 10_000_000n },
     )
     .completeProgram();
   return signBuilder;
@@ -154,13 +154,13 @@ export const collectFundsDatumHash = Effect.gen(function* ($) {
   const helloCBOR = yield* pipe(
     Effect.fromNullable(
       scripts.validators.find(
-        (v) => v.title === "hello_world_params.hello_world_params.spend"
-      )
+        (v) => v.title === "hello_world_params.hello_world_params.spend",
+      ),
     ),
-    Effect.andThen((script) => script.compiledCode)
+    Effect.andThen((script) => script.compiledCode),
   );
   const publicKeyHash = getAddressDetails(
-    yield* Effect.promise(() => user.wallet().address())
+    yield* Effect.promise(() => user.wallet().address()),
   ).paymentCredential?.hash;
   const applied = applyParamsToScript(applyDoubleCborEncoding(helloCBOR), [
     publicKeyHash!,
@@ -172,10 +172,10 @@ export const collectFundsDatumHash = Effect.gen(function* ($) {
   };
   const contractAddress = validatorToAddress(networkConfig.NETWORK, hello);
   const allUtxos = yield* Effect.tryPromise(() =>
-    user.utxosAt(contractAddress)
+    user.utxosAt(contractAddress),
   );
   const ownerUTxO = yield* Effect.fromNullable(
-    allUtxos.find((utxo) => utxo.datumHash)
+    allUtxos.find((utxo) => utxo.datumHash),
   );
 
   const addr = yield* Effect.promise(() => user.wallet().address());

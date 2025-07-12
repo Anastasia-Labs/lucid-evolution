@@ -65,7 +65,7 @@ export class KeyHash extends Schema.TaggedClass<KeyHash>()("KeyHash", {
 export const KeyHashBytes = pipe(
   Schema.Uint8Array,
   Schema.filter((a) => a.length === KEYHASH_BYTES_LENGTH),
-  Schema.typeSchema
+  Schema.typeSchema,
 ).annotations({
   message: (issue) =>
     `${issue.actual} must be a byte array of length ${KEYHASH_BYTES_LENGTH}`,

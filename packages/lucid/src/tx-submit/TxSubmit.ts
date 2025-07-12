@@ -87,7 +87,7 @@ export interface TxSigned {
 }
 export const makeSubmit = (
   wallet: Wallet,
-  txSigned: CML.Transaction
+  txSigned: CML.Transaction,
 ): TxSigned => {
   const submit = (options: { canonical: boolean }) =>
     Effect.tryPromise({
@@ -95,7 +95,7 @@ export const makeSubmit = (
         wallet.submitTx(
           options.canonical
             ? txSigned.to_canonical_cbor_hex()
-            : txSigned.to_cbor_hex()
+            : txSigned.to_cbor_hex(),
         ),
       catch: (cause) => new TxSubmitError({ cause }),
     });

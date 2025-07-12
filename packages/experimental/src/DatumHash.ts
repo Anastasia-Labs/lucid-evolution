@@ -60,7 +60,7 @@ export class DatumHashError extends Data.TaggedError("DatumHashError")<{
  * @category schemas
  */
 export const Hash = Hex.HexString.pipe(
-  Schema.filter((hex) => hex.length === DATUM_HASH_HEX_LENGTH)
+  Schema.filter((hex) => hex.length === DATUM_HASH_HEX_LENGTH),
 ).annotations({
   message: (issue) =>
     `${issue.actual} must be a hex string of length ${DATUM_HASH_HEX_LENGTH}`,
@@ -101,7 +101,7 @@ export const isDatumHash = Schema.is(DatumHash);
 export const DatumHashBytes = pipe(
   Schema.Uint8ArrayFromSelf,
   Schema.filter((bytes) => bytes.length === DATUM_HASH_BYTES_LENGTH),
-  Schema.typeSchema
+  Schema.typeSchema,
 ).annotations({
   message: (issue) =>
     `${issue.actual} must be a byte array of length ${DATUM_HASH_BYTES_LENGTH}`,
@@ -121,7 +121,7 @@ export const Bytes = Schema.transform(
     strict: true,
     encode: (_, hash) => Hex.toBytes(hash.hash),
     decode: (bytes) => new DatumHash({ hash: Hex.fromBytes(bytes) }),
-  }
+  },
 );
 
 /**

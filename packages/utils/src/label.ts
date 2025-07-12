@@ -4,7 +4,7 @@ import { crc8 } from "@evolution-sdk/crc8";
 export function toLabel(num: number): string {
   if (num < 0 || num > 65535) {
     throw new Error(
-      `Label ${num} out of range: min label 1 - max label 65535.`
+      `Label ${num} out of range: min label 1 - max label 65535.`,
     );
   }
   const numHex = num.toString(16).padStart(4, "0");
