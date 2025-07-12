@@ -18,20 +18,20 @@ export default function Footer() {
       <div className="footer-content flex min-w-[75%]">
         <div className="footer-section logo-section flex justify-center w-full md:max-w-fit">
           <Link
-            href="https://no-witness-labs.github.io/lucid-evolution/"
+            href="https://no-witness-labs.github.io/evolution-sdk/"
             className="hover:opacity-75"
           >
             <Image
               src={
                 !mounted
-                  ? "/lucid-evolution/no-witness-labs-logo.png"
+                  ? "/evolution-sdk/no-witness-labs-logo.png"
                   : resolvedTheme === "light"
-                    ? "/lucid-evolution/no-witness-labs-logo-dark.png"
+                    ? "/evolution-sdk/no-witness-labs-logo-dark.png"
                     : resolvedTheme === "dark"
-                      ? "/lucid-evolution/no-witness-labs-logo.png"
+                      ? "/evolution-sdk/no-witness-labs-logo.png"
                       : systemTheme === "light"
-                        ? "/lucid-evolution/no-witness-labs-logo-dark.png"
-                        : "/lucid-evolution/no-witness-labs-logo.png"
+                        ? "/evolution-sdk/no-witness-labs-logo-dark.png"
+                        : "/evolution-sdk/no-witness-labs-logo.png"
               }
               alt="No Witness Labs Logo"
               className="footer-logo "
@@ -51,7 +51,7 @@ export default function Footer() {
                 </Link>
               </li>
               <li>
-                <Link href="https://no-witness-labs.github.io/lucid-evolution/">
+                <Link href="https://no-witness-labs.github.io/evolution-sdk/">
                   No Witness Labs
                 </Link>
               </li>
@@ -77,7 +77,7 @@ export default function Footer() {
         <p className="items-center font-bold cursor-default">
           MIT {new Date().getFullYear()} ©{" "}
           <a
-            href="https://no-witness-labs.github.io/lucid-evolution/"
+            href="https://no-witness-labs.github.io/evolution-sdk/"
             className="text-gray-[450] no-underline hover:underline"
             target="_blank"
             rel="noopener noreferrer"

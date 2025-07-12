@@ -1,10 +1,10 @@
-name = "lucid-evolution/spec"
+name = "evolution-sdk/spec"
 version = "0.0.0"
 license = "Apache-2.0"
-description = "Aiken contracts for project 'lucid-evolution/spec'"
+description = "Aiken contracts for project 'evolution-sdk/spec'"
 
 [repository]
-user = "lucid-evolution"
+user = "evolution-sdk"
 project = "spec"
 platform = "github"
 

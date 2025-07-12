@@ -10,7 +10,7 @@
 // module.exports = withNextra({
 //   output: 'export',
 //   images: { unoptimized: true },
-//   basePath: "/lucid-evolution",
+//   basePath: "/evolution-sdk",
 // })
 //#endregion
 
@@ -36,7 +36,7 @@ const withNextra = nextra({
 });
 
 export default withNextra({
-  basePath: "/lucid-evolution",
+  basePath: "/evolution-sdk",
   images: {
     unoptimized: true,
   },
