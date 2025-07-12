@@ -20,15 +20,15 @@ import {
   Unit,
   UnixTime,
   UTxO,
-} from "@lucid-evolution/core-types";
+} from "@evolution-sdk/core-types";
 import {
   fromCMLRedeemerTag,
   generateSeedPhrase,
   PROTOCOL_PARAMETERS_DEFAULT,
-} from "@lucid-evolution/utils";
-import { coreToUtxo, getAddressDetails } from "@lucid-evolution/utils";
-import { fromHex } from "@lucid-evolution/core-utils";
-import { walletFromSeed } from "@lucid-evolution/wallet";
+} from "@evolution-sdk/utils";
+import { coreToUtxo, getAddressDetails } from "@evolution-sdk/utils";
+import { fromHex } from "@evolution-sdk/core-utils";
+import { walletFromSeed } from "@evolution-sdk/wallet";
 
 /** Concatentation of txHash + outputIndex */
 type FlatOutRef = string;
@@ -42,14 +42,14 @@ export type EmulatorAccount = {
 };
 
 export function generateEmulatorAccountFromPrivateKey(
-  assets: Assets,
+  assets: Assets
 ): EmulatorAccount {
   const privateKey = CML.PrivateKey.generate_ed25519().to_bech32();
   const priv = CML.PrivateKey.from_bech32(privateKey);
   const pubKeyHash = priv.to_public().hash();
   const address = CML.EnterpriseAddress.new(
     0,
-    CML.Credential.new_pub_key(pubKeyHash),
+    CML.Credential.new_pub_key(pubKeyHash)
   )
     .to_address()
     .to_bech32(undefined);
@@ -94,7 +94,7 @@ export class Emulator implements Provider {
 
   constructor(
     accounts: EmulatorAccount[],
-    protocolParameters: ProtocolParameters = PROTOCOL_PARAMETERS_DEFAULT,
+    protocolParameters: ProtocolParameters = PROTOCOL_PARAMETERS_DEFAULT
   ) {
     const GENESIS_HASH = "00".repeat(32);
     this.blockHeight = 0;
@@ -104,11 +104,11 @@ export class Emulator implements Provider {
     accounts.forEach(({ address, assets, outputData }, index) => {
       if (
         [outputData?.hash, outputData?.asHash, outputData?.inline].filter(
-          (b) => b,
+          (b) => b
         ).length > 1
       ) {
         throw new Error(
-          "Not allowed to set hash, asHash and inline at the same time.",
+          "Not allowed to set hash, asHash and inline at the same time."
         );
       }
 
@@ -120,7 +120,7 @@ export class Emulator implements Provider {
           assets,
           datumHash: outputData?.asHash
             ? CML.hash_plutus_data(
-                CML.PlutusData.from_cbor_hex(outputData.asHash),
+                CML.PlutusData.from_cbor_hex(outputData.asHash)
               ).to_hex()
             : outputData?.hash,
           datum: outputData?.inline,
@@ -194,7 +194,7 @@ export class Emulator implements Provider {
 
   getUtxosWithUnit(
     addressOrCredential: Address | Credential,
-    unit: Unit,
+    unit: Unit
   ): Promise<UTxO[]> {
     const utxos: UTxO[] = Object.values(this.ledger).flatMap(({ utxo }) => {
       if (typeof addressOrCredential === "string") {
@@ -216,14 +216,14 @@ export class Emulator implements Provider {
   getUtxosByOutRef(outRefs: OutRef[]): Promise<UTxO[]> {
     return Promise.resolve(
       outRefs.flatMap(
-        (outRef) => this.ledger[outRef.txHash + outRef.outputIndex]?.utxo || [],
-      ),
+        (outRef) => this.ledger[outRef.txHash + outRef.outputIndex]?.utxo || []
+      )
     );
   }
 
   getUtxoByUnit(unit: string): Promise<UTxO> {
     const utxos: UTxO[] = Object.values(this.ledger).flatMap(({ utxo }) =>
-      utxo.assets[unit] > 0n ? utxo : [],
+      utxo.assets[unit] > 0n ? utxo : []
     );
 
     if (utxos.length > 1) {
@@ -306,13 +306,13 @@ export class Emulator implements Provider {
 
     if (Number.isInteger(lowerBound) && this.slot < lowerBound!) {
       throw new Error(
-        `Lower bound (${lowerBound}) not in slot range (${this.slot}).`,
+        `Lower bound (${lowerBound}) not in slot range (${this.slot}).`
       );
     }
 
     if (Number.isInteger(upperBound) && this.slot > upperBound!) {
       throw new Error(
-        `Upper bound (${upperBound}) not in slot range (${this.slot}).`,
+        `Upper bound (${upperBound}) not in slot range (${this.slot}).`
       );
     }
 
@@ -348,7 +348,7 @@ export class Emulator implements Provider {
     // We only need this to verify native scripts. The check happens in the CML.
     const edKeyHashes = CML.Ed25519KeyHashList.new();
     keyHashes.forEach((keyHash) =>
-      edKeyHashes.add(CML.Ed25519KeyHash.from_hex(keyHash)),
+      edKeyHashes.add(CML.Ed25519KeyHash.from_hex(keyHash))
     );
 
     const nativeHashes = (() => {
@@ -367,11 +367,11 @@ export class Emulator implements Provider {
             Number.isInteger(upperBound)
               ? CML.BigInteger.from_str(upperBound!.toString()).to_js_value()
               : undefined,
-            edKeyHashes,
+            edKeyHashes
           )
         ) {
           throw new Error(
-            `Invalid native script witness. Script hash: ${scriptHash}`,
+            `Invalid native script witness. Script hash: ${scriptHash}`
           );
         }
         for (let i = 0; i < witness.get_required_signers().len(); i++) {
@@ -436,7 +436,7 @@ export class Emulator implements Provider {
           `Could not spend UTxO: ${JSON.stringify({
             txHash: entry?.utxo.txHash,
             outputIndex: entry?.utxo.outputIndex,
-          })}\nIt does not exist or was already spent.`,
+          })}\nIt does not exist or was already spent.`
         );
       }
 
@@ -445,28 +445,28 @@ export class Emulator implements Provider {
         switch (scriptRef.type) {
           case "Native": {
             const script = CML.NativeScript.from_cbor_bytes(
-              fromHex(scriptRef.script),
+              fromHex(scriptRef.script)
             );
             nativeHashesOptional[script.hash().to_hex()] = script;
             break;
           }
           case "PlutusV1": {
             const script = CML.PlutusScript.from_v1(
-              CML.PlutusV1Script.from_cbor_bytes(fromHex(scriptRef.script)),
+              CML.PlutusV1Script.from_cbor_bytes(fromHex(scriptRef.script))
             );
             plutusHashesOptional.push(script.hash().to_hex());
             break;
           }
           case "PlutusV2": {
             const script = CML.PlutusScript.from_v2(
-              CML.PlutusV2Script.from_cbor_bytes(fromHex(scriptRef.script)),
+              CML.PlutusV2Script.from_cbor_bytes(fromHex(scriptRef.script))
             );
             plutusHashesOptional.push(script.hash().to_hex());
             break;
           }
           case "PlutusV3": {
             const script = CML.PlutusScript.from_v3(
-              CML.PlutusV3Script.from_cbor_bytes(fromHex(scriptRef.script)),
+              CML.PlutusV3Script.from_cbor_bytes(fromHex(scriptRef.script))
             );
             plutusHashesOptional.push(script.hash().to_hex());
             break;
@@ -492,7 +492,7 @@ export class Emulator implements Provider {
           `Could not read UTxO: ${JSON.stringify({
             txHash: entry?.utxo.txHash,
             outputIndex: entry?.utxo.outputIndex,
-          })}\nIt does not exist or was already spent.`,
+          })}\nIt does not exist or was already spent.`
         );
       }
 
@@ -501,28 +501,28 @@ export class Emulator implements Provider {
         switch (scriptRef.type) {
           case "Native": {
             const script = CML.NativeScript.from_cbor_bytes(
-              fromHex(scriptRef.script),
+              fromHex(scriptRef.script)
             );
             nativeHashesOptional[script.hash().to_hex()] = script;
             break;
           }
           case "PlutusV1": {
             const script = CML.PlutusScript.from_v1(
-              CML.PlutusV1Script.from_cbor_bytes(fromHex(scriptRef.script)),
+              CML.PlutusV1Script.from_cbor_bytes(fromHex(scriptRef.script))
             );
             plutusHashesOptional.push(script.hash().to_hex());
             break;
           }
           case "PlutusV2": {
             const script = CML.PlutusScript.from_v2(
-              CML.PlutusV2Script.from_cbor_bytes(fromHex(scriptRef.script)),
+              CML.PlutusV2Script.from_cbor_bytes(fromHex(scriptRef.script))
             );
             plutusHashesOptional.push(script.hash().to_hex());
             break;
           }
           case "PlutusV3": {
             const script = CML.PlutusScript.from_v3(
-              CML.PlutusV3Script.from_cbor_bytes(fromHex(scriptRef.script)),
+              CML.PlutusV3Script.from_cbor_bytes(fromHex(scriptRef.script))
             );
             plutusHashesOptional.push(script.hash().to_hex());
             break;
@@ -574,13 +574,13 @@ export class Emulator implements Provider {
     function checkAndConsumeHash(
       credential: Credential,
       tag: Tag | null,
-      index: number | null,
+      index: number | null
     ) {
       switch (credential.type) {
         case "Key": {
           if (!keyHashes.includes(credential.hash)) {
             throw new Error(
-              `Missing vkey witness. Key hash: ${credential.hash}`,
+              `Missing vkey witness. Key hash: ${credential.hash}`
             );
           }
           consumedHashes.add(credential.hash);
@@ -595,19 +595,19 @@ export class Emulator implements Provider {
               !nativeHashesOptional[credential.hash].verify(
                 Number.isInteger(lowerBound)
                   ? CML.BigInteger.from_str(
-                      lowerBound!.toString(),
+                      lowerBound!.toString()
                     ).to_js_value()
                   : undefined,
                 Number.isInteger(upperBound)
                   ? CML.BigInteger.from_str(
-                      upperBound!.toString(),
+                      upperBound!.toString()
                     ).to_js_value()
                   : undefined,
-                edKeyHashes,
+                edKeyHashes
               )
             ) {
               throw new Error(
-                `Invalid native script witness. Script hash: ${credential.hash}`,
+                `Invalid native script witness. Script hash: ${credential.hash}`
               );
             }
             break;
@@ -617,7 +617,7 @@ export class Emulator implements Provider {
           ) {
             if (
               redeemers.find(
-                (redeemer) => redeemer.tag === tag && redeemer.index === index,
+                (redeemer) => redeemer.tag === tag && redeemer.index === index
               )
             ) {
               consumedHashes.add(credential.hash);
@@ -625,7 +625,7 @@ export class Emulator implements Provider {
             }
           }
           throw new Error(
-            `Missing script witness. Script hash: ${credential.hash}`,
+            `Missing script witness. Script hash: ${credential.hash}`
           );
         }
       }
@@ -645,7 +645,7 @@ export class Emulator implements Provider {
           `Could not read UTxO: ${JSON.stringify({
             txHash: entry?.utxo.txHash,
             outputIndex: entry?.utxo.outputIndex,
-          })}\nIt does not exist or was already spent.`,
+          })}\nIt does not exist or was already spent.`
         );
       }
 
@@ -684,14 +684,14 @@ export class Emulator implements Provider {
     ) {
       const rawAddress = body.withdrawals()!.keys().get(index);
       const withdrawal: Lovelace = BigInt(
-        body.withdrawals()!.get(rawAddress)!.toString(),
+        body.withdrawals()!.get(rawAddress)!.toString()
       );
       const rewardAddress = rawAddress.to_address().to_bech32(undefined);
       const { stakeCredential } = getAddressDetails(rewardAddress);
       checkAndConsumeHash(stakeCredential!, "Reward", index);
       if (this.chain[rewardAddress]?.delegation.rewards !== withdrawal) {
         throw new Error(
-          "Withdrawal amount doesn't match actual reward balance.",
+          "Withdrawal amount doesn't match actual reward balance."
         );
       }
       withdrawalRequests.push({ rewardAddress, withdrawal });
@@ -720,13 +720,13 @@ export class Emulator implements Provider {
           const registration = cert.as_stake_registration()!;
           const rewardAddress = CML.RewardAddress.new(
             CML.NetworkInfo.testnet().network_id(),
-            registration.stake_credential(),
+            registration.stake_credential()
           )
             .to_address()
             .to_bech32(undefined);
           if (this.chain[rewardAddress]?.registeredStake) {
             throw new Error(
-              `Stake key is already registered. Reward address: ${rewardAddress}`,
+              `Stake key is already registered. Reward address: ${rewardAddress}`
             );
           }
           certRequests.push({ type: "Registration", rewardAddress });
@@ -736,7 +736,7 @@ export class Emulator implements Provider {
           const deregistration = cert.as_stake_deregistration()!;
           const rewardAddress = CML.RewardAddress.new(
             CML.NetworkInfo.testnet().network_id(),
-            deregistration.stake_credential(),
+            deregistration.stake_credential()
           )
             .to_address()
             .to_bech32(undefined);
@@ -746,7 +746,7 @@ export class Emulator implements Provider {
 
           if (!this.chain[rewardAddress]?.registeredStake) {
             throw new Error(
-              `Stake key is already deregistered. Reward address: ${rewardAddress}`,
+              `Stake key is already deregistered. Reward address: ${rewardAddress}`
             );
           }
           certRequests.push({ type: "Deregistration", rewardAddress });
@@ -756,7 +756,7 @@ export class Emulator implements Provider {
           const delegation = cert.as_stake_delegation()!;
           const rewardAddress = CML.RewardAddress.new(
             CML.NetworkInfo.testnet().network_id(),
-            delegation.stake_credential(),
+            delegation.stake_credential()
           )
             .to_address()
             .to_bech32(undefined);
@@ -770,11 +770,11 @@ export class Emulator implements Provider {
             !certRequests.find(
               (request) =>
                 request.type === "Registration" &&
-                request.rewardAddress === rewardAddress,
+                request.rewardAddress === rewardAddress
             )
           ) {
             throw new Error(
-              `Stake key is not registered. Reward address: ${rewardAddress}`,
+              `Stake key is not registered. Reward address: ${rewardAddress}`
             );
           }
           certRequests.push({ type: "Delegation", rewardAddress, poolId });
@@ -798,9 +798,9 @@ export class Emulator implements Provider {
         const unspentOutput = CML.TransactionUnspentOutput.new(
           CML.TransactionInput.new(
             CML.TransactionHash.from_hex(txHash),
-            CML.BigInteger.from_str(i.toString()).to_js_value(),
+            CML.BigInteger.from_str(i.toString()).to_js_value()
           ),
-          output,
+          output
         );
 
         const utxo = coreToUtxo(unspentOutput);
@@ -818,32 +818,32 @@ export class Emulator implements Provider {
     // Check consumed witnesses
 
     const [extraKeyHash] = keyHashes.filter(
-      (keyHash) => !consumedHashes.has(keyHash),
+      (keyHash) => !consumedHashes.has(keyHash)
     );
     if (extraKeyHash) {
       throw new Error(`Extraneous vkey witness. Key hash: ${extraKeyHash}`);
     }
 
     const [extraNativeHash] = nativeHashes.filter(
-      (scriptHash) => !consumedHashes.has(scriptHash),
+      (scriptHash) => !consumedHashes.has(scriptHash)
     );
     if (extraNativeHash) {
       throw new Error(
-        `Extraneous native script. Script hash: ${extraNativeHash}`,
+        `Extraneous native script. Script hash: ${extraNativeHash}`
       );
     }
 
     const [extraPlutusHash] = plutusHashes.filter(
-      (scriptHash) => !consumedHashes.has(scriptHash),
+      (scriptHash) => !consumedHashes.has(scriptHash)
     );
     if (extraPlutusHash) {
       throw new Error(
-        `Extraneous plutus script. Script hash: ${extraPlutusHash}`,
+        `Extraneous plutus script. Script hash: ${extraPlutusHash}`
       );
     }
 
     const [extraDatumHash] = Object.keys(datumTable).filter(
-      (datumHash) => !consumedHashes.has(datumHash),
+      (datumHash) => !consumedHashes.has(datumHash)
     );
     if (extraDatumHash) {
       throw new Error(`Extraneous plutus data. Datum hash: ${extraDatumHash}`);
@@ -903,7 +903,7 @@ export class Emulator implements Provider {
 
   async evaluateTx(
     tx: Transaction,
-    additionalUTxOs?: UTxO[],
+    additionalUTxOs?: UTxO[]
   ): Promise<EvalRedeemer[]> {
     const desTx = CML.Transaction.from_cbor_hex(tx);
     const redeemers = desTx.witness_set().redeemers();
@@ -1000,7 +1000,7 @@ export class Emulator implements Provider {
       "color:white",
       "color:yellow",
       "color:white",
-      "color:yellow",
+      "color:yellow"
     );
     console.log("\n");
     for (const [address, assets] of Object.entries(balances)) {
@@ -1008,7 +1008,7 @@ export class Emulator implements Provider {
       for (const [unit, quantity] of Object.entries(assets)) {
         const barLength = Math.max(
           Math.floor(60 * (Number(quantity) / Number(totalBalances[unit]))),
-          1,
+          1
         );
         console.log(
           `%c${"\u2586".repeat(barLength) + " ".repeat(60 - barLength)}`,
@@ -1016,7 +1016,7 @@ export class Emulator implements Provider {
           "",
           `${unit}:`,
           quantity,
-          "",
+          ""
         );
       }
       console.log(`\n${"\u2581".repeat(60)}\n`);

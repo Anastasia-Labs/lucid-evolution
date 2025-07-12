@@ -16,20 +16,22 @@ You can instantiate a wallet object from seed without binding it with a Lucid ob
 ### Generate Seed Phrase
 
 ```js showLineNumbers /generateSeedPhrase/ {3}
-import { generateSeedPhrase } from "@lucid-evolution/lucid";
+import { generateSeedPhrase } from "@evolution-sdk/lucid";
 
 const seedPhrase = generateSeedPhrase(); // BIP-39
 console.log(seedPhrase);
 ```
 
 ### Create Wallet
+
 ```js showLineNumbers /walletFromSeed/ {4}
-import { walletFromSeed } from "@lucid-evolution/lucid";
+import { walletFromSeed } from "@evolution-sdk/lucid";
 
 const seedPhrase = "your seed phrase here ...";
 const wallet = walletFromSeed(seedPhrase);
 console.log(wallet); // { address, rewardAddress, paymentKey, stakeKey }
 ```
+
 </Steps>
 
 ## Utility Functions
@@ -39,7 +41,7 @@ console.log(wallet); // { address, rewardAddress, paymentKey, stakeKey }
 To discover which key hashes are used in a transaction, limited by the specified UTxOs, you can use the `discoverOwnUsedTxKeyHashes(){:js}` function:
 
 ```js showLineNumbers /discoverOwnUsedTxKeyHashes/ {10-14}
-import { discoverOwnUsedTxKeyHashes } from "@lucid-evolution/lucid";
+import { discoverOwnUsedTxKeyHashes } from "@evolution-sdk/lucid";
 
 const tx: TxSignBuilder = await lucid
   .newTx()
@@ -55,4 +57,3 @@ const usedKeyHashes: Array<KeyHash> = discoverOwnUsedTxKeyHashes(
 );
 console.log(usedKeyHashes); // ["KeyHash1", "KeyHash2"]
 ```
-

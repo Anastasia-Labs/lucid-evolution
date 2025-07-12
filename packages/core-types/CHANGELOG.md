@@ -1,4 +1,4 @@
-# @lucid-evolution/core-types
+# @evolution-sdk/core-types
 
 ## 0.1.22
 

@@ -10,7 +10,7 @@ import {
   Script,
   sleep,
   validatorToAddress,
-} from "@lucid-evolution/lucid";
+} from "@evolution-sdk/lucid";
 import _ from "lodash";
 
 async function component() {
@@ -19,9 +19,9 @@ async function component() {
   const lucid = await Lucid(
     new Blockfrost(
       "https://cardano-preprod.blockfrost.io/api/v0",
-      "preprod...", // Replace with your Blockfrost API key
+      "preprod..." // Replace with your Blockfrost API key
     ),
-    network,
+    network
   );
   // const lucid = await Lucid(
   //   new Kupmios(
@@ -35,7 +35,7 @@ async function component() {
   const alwaysSucceedScript: Script = {
     type: "PlutusV3",
     script: applyDoubleCborEncoding(
-      "588e01010029800aba2aba1aab9eaab9dab9cab9a48888896600264653001300700198039804000cc01c0092225980099b8748008c020dd500144c8cc894cc0292410968656c6c6f203838380014a260160026016601800260126ea800a2c8030600e00260086ea801e293454cc00924011856616c696461746f722072657475726e65642066616c7365001365640041",
+      "588e01010029800aba2aba1aab9eaab9dab9cab9a48888896600264653001300700198039804000cc01c0092225980099b8748008c020dd500144c8cc894cc0292410968656c6c6f203838380014a260160026016601800260126ea800a2c8030600e00260086ea801e293454cc00924011856616c696461746f722072657475726e65642066616c7365001365640041"
     ),
   };
   const alwaysSucceedAddress = validatorToAddress(network, alwaysSucceedScript);
@@ -49,7 +49,7 @@ async function component() {
       { kind: "inline", value: Data.void() },
       {
         lovelace: 10_000_000n,
-      },
+      }
     )
     .complete();
   const signedTx = await depositTx.sign.withWallet().complete();

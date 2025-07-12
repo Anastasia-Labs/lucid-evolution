@@ -85,7 +85,7 @@ export declare class ScriptHashError
 **Example**
 
 ```ts
-import { ScriptHash } from "@lucid-evolution/experimental";
+import { ScriptHash } from "@evolution-sdk/experimental";
 import assert from "assert";
 
 const error = new ScriptHash.ScriptHashError({
@@ -111,7 +111,7 @@ export declare const generator: FastCheck.Arbitrary<ScriptHash>;
 **Example**
 
 ```ts
-import { ScriptHash } from "@lucid-evolution/experimental";
+import { ScriptHash } from "@evolution-sdk/experimental";
 import { FastCheck } from "effect";
 import assert from "assert";
 

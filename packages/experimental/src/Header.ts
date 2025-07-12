@@ -4,7 +4,7 @@ import { Effect } from "effect";
  * Parse header from address
  *
  * @example
- * import { Header } from "@lucid-evolution/experimental";
+ * import { Header } from "@evolution-sdk/experimental";
  * import { Effect } from "effect";
  * import assert from "assert";
  *

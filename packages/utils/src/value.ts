@@ -1,5 +1,5 @@
-import { Assets, PolicyId, UTxO, Unit } from "@lucid-evolution/core-types";
-import { fromHex, fromText, toHex, toText } from "@lucid-evolution/core-utils";
+import { Assets, PolicyId, UTxO, Unit } from "@evolution-sdk/core-types";
+import { fromHex, fromText, toHex, toText } from "@evolution-sdk/core-utils";
 import { CML } from "./core.js";
 import { fromLabel, toLabel } from "./label.js";
 import { pipe } from "effect";
@@ -35,8 +35,8 @@ export function assetsToValue(assets: Assets): CML.Value {
     new Set(
       units
         .filter((unit) => unit !== "lovelace")
-        .map((unit) => unit.slice(0, 56)),
-    ),
+        .map((unit) => unit.slice(0, 56))
+    )
   );
   for (const policy of policies) {
     const policyUnits = units.filter((unit) => unit.slice(0, 56) === policy);
@@ -44,7 +44,7 @@ export function assetsToValue(assets: Assets): CML.Value {
     for (const unit of policyUnits) {
       assetsValue.insert(
         CML.AssetName.from_hex(unit.slice(56)),
-        BigInt(assets[unit]),
+        BigInt(assets[unit])
       );
     }
     multiAsset.insert_assets(CML.ScriptHash.from_hex(policy), assetsValue);
@@ -78,7 +78,7 @@ export function fromUnit(unit: Unit): {
 export function toUnit(
   policyId: PolicyId,
   name?: string | null,
-  label?: number | null,
+  label?: number | null
 ): Unit {
   const hexLabel = Number.isInteger(label) ? toLabel(label!) : "";
   const n = name ? name : "";
@@ -146,5 +146,5 @@ export const sortCanonical = (assets: Assets): Assets =>
       // If policy IDs have same length but are different, compare them lexicographically
       return a.policyId.localeCompare(b.policyId);
     }),
-    Object.fromEntries,
+    Object.fromEntries
   );

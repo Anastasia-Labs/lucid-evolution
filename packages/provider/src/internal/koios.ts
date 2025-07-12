@@ -1,7 +1,7 @@
 import { FetchHttpClient, HttpBody, HttpClientError } from "@effect/platform";
 import { Effect, pipe, Schema as S } from "effect";
-import * as CoreType from "@lucid-evolution/core-types";
-import { applyDoubleCborEncoding } from "@lucid-evolution/utils";
+import * as CoreType from "@evolution-sdk/core-types";
+import { applyDoubleCborEncoding } from "@evolution-sdk/utils";
 import { ParseError } from "effect/ParseResult";
 import * as HttpUtils from "./HttpUtils.js";
 
@@ -100,7 +100,7 @@ export const UTxOSchema = S.Struct({
     S.Struct({
       bytes: S.String,
       value: S.Object,
-    }),
+    })
   ),
   reference_script: S.NullOr(ReferenceScriptSchema),
   asset_list: S.NullOr(S.Array(AssetSchema)),
@@ -116,8 +116,8 @@ export const AddressInfoSchema = S.Array(
       stake_address: S.NullOr(S.String),
       script_address: S.Boolean,
       utxo_set: S.Array(UTxOSchema),
-    }),
-  ),
+    })
+  )
 );
 
 export interface AddressInfo extends S.Schema.Type<typeof AddressInfoSchema> {}
@@ -136,7 +136,7 @@ export const InputOutputSchema = S.Struct({
     S.Struct({
       bytes: S.String,
       value: S.Object,
-    }),
+    })
   ),
   reference_script: S.NullOr(ReferenceScriptSchema),
   asset_list: S.Array(AssetSchema),
@@ -170,8 +170,8 @@ export const TxInfoSchema = S.Struct({
       S.Struct({
         amount: S.String,
         stake_addr: S.String,
-      }),
-    ),
+      })
+    )
   ),
   assets_minted: S.NullOr(S.Array(AssetSchema)),
   metadata: S.NullOr(S.Object),
@@ -181,16 +181,16 @@ export const TxInfoSchema = S.Struct({
         index: S.Number,
         type: S.String,
         info: S.NullOr(S.Object),
-      }),
-    ),
+      })
+    )
   ),
   native_scripts: S.NullOr(
     S.Array(
       S.Struct({
         script_hash: S.String,
         script_json: S.Object,
-      }),
-    ),
+      })
+    )
   ),
   plutus_contracts: S.NullOr(
     S.Array(
@@ -200,7 +200,7 @@ export const TxInfoSchema = S.Struct({
           S.Struct({
             tx_hash: S.String,
             tx_index: S.Number,
-          }),
+          })
         ),
         script_hash: S.String,
         bytecode: S.String,
@@ -224,8 +224,8 @@ export const TxInfoSchema = S.Struct({
             value: S.NullOr(S.Object),
           }),
         }),
-      }),
-    ),
+      })
+    )
   ),
   //TODO: add S.Struct
   // https://preprod.koios.rest/#post-/tx_info
@@ -263,7 +263,7 @@ export const DatumInfo = S.Struct({
 
 export const getHeadersWithToken = (
   token?: string,
-  headers: Record<string, string> = {},
+  headers: Record<string, string> = {}
 ): Record<string, string> => {
   if (token) {
     return {
@@ -296,7 +296,7 @@ export const toUTxO = (koiosUTxO: UTxO, address: string): CoreType.UTxO => ({
 });
 
 const toScriptRef = (
-  reference_script: ReferenceScript | null,
+  reference_script: ReferenceScript | null
 ): CoreType.Script | undefined => {
   if (reference_script && reference_script.bytes && reference_script.type) {
     switch (reference_script.type) {
@@ -324,7 +324,7 @@ const toScriptRef = (
 export const getUtxosEffect = (
   baseUrl: string,
   addressOrCredential: CoreType.Address | CoreType.Credential,
-  headers: Record<string, string> | undefined,
+  headers: Record<string, string> | undefined
 ): Effect.Effect<
   CoreType.UTxO[],
   | string
@@ -347,9 +347,9 @@ export const getUtxosEffect = (
     Effect.map(([result]) =>
       result
         ? result.utxo_set.map((koiosUtxo) => toUTxO(koiosUtxo, result.address))
-        : [],
+        : []
     ),
-    Effect.provide(FetchHttpClient.layer),
+    Effect.provide(FetchHttpClient.layer)
   );
   return result;
 };

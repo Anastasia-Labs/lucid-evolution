@@ -5,7 +5,7 @@ import {
   ScriptHash,
   KeyHash,
   RewardAddress,
-} from "@lucid-evolution/core-types";
+} from "@evolution-sdk/core-types";
 import { networkToId } from "./network.js";
 import { CML } from "./core.js";
 import { getAddressDetails } from "./address.js";
@@ -14,25 +14,25 @@ import { Cardano } from "@cardano-sdk/core";
 export function credentialToAddress(
   network: Network,
   paymentCredential: Credential,
-  stakeCredential?: Credential,
+  stakeCredential?: Credential
 ): Address {
   if (stakeCredential) {
     return CML.BaseAddress.new(
       networkToId(network),
       paymentCredential.type === "Key"
         ? CML.Credential.new_pub_key(
-            CML.Ed25519KeyHash.from_hex(paymentCredential.hash),
+            CML.Ed25519KeyHash.from_hex(paymentCredential.hash)
           )
         : CML.Credential.new_script(
-            CML.ScriptHash.from_hex(paymentCredential.hash),
+            CML.ScriptHash.from_hex(paymentCredential.hash)
           ),
       stakeCredential.type === "Key"
         ? CML.Credential.new_pub_key(
-            CML.Ed25519KeyHash.from_hex(stakeCredential.hash),
+            CML.Ed25519KeyHash.from_hex(stakeCredential.hash)
           )
         : CML.Credential.new_script(
-            CML.ScriptHash.from_hex(stakeCredential.hash),
-          ),
+            CML.ScriptHash.from_hex(stakeCredential.hash)
+          )
     )
       .to_address()
       .to_bech32(undefined);
@@ -41,11 +41,11 @@ export function credentialToAddress(
       networkToId(network),
       paymentCredential.type === "Key"
         ? CML.Credential.new_pub_key(
-            CML.Ed25519KeyHash.from_hex(paymentCredential.hash),
+            CML.Ed25519KeyHash.from_hex(paymentCredential.hash)
           )
         : CML.Credential.new_script(
-            CML.ScriptHash.from_hex(paymentCredential.hash),
-          ),
+            CML.ScriptHash.from_hex(paymentCredential.hash)
+          )
     )
       .to_address()
       .to_bech32(undefined);
@@ -70,7 +70,7 @@ export function paymentCredentialOf(address: Address): Credential {
   const { paymentCredential } = getAddressDetails(address);
   if (!paymentCredential) {
     throw new Error(
-      "The specified address does not contain a payment credential.",
+      "The specified address does not contain a payment credential."
     );
   }
   return paymentCredential;
@@ -80,7 +80,7 @@ export function stakeCredentialOf(rewardAddress: RewardAddress): Credential {
   const { stakeCredential } = getAddressDetails(rewardAddress);
   if (!stakeCredential) {
     throw new Error(
-      "The specified address does not contain a stake credential.",
+      "The specified address does not contain a stake credential."
     );
   }
   return stakeCredential;

@@ -1,13 +1,9 @@
 {
-  "extends": "@lucid-evolution/typescript-config/nextjs.json",
+  "extends": "@evolution-sdk/typescript-config/nextjs.json",
   "compilerOptions": {
     "baseUrl": ".",
     "target": "es2022",
-    "lib": [
-      "dom",
-      "dom.iterable",
-      "esnext"
-    ],
+    "lib": ["dom", "dom.iterable", "esnext"],
     "allowJs": true,
     "skipLibCheck": true,
     "strict": true,
@@ -44,12 +40,7 @@
     "**/docs/*.jsx",
     "**/docs/*.ts",
     "**/docs/*.tsx",
-    ".next/types/**/*.ts",
+    ".next/types/**/*.ts"
   ],
-  "exclude": [
-    "node_modules",
-    ".next",
-    ".backup",
-    "cache"
-  ]
+  "exclude": ["node_modules", ".next", ".backup", "cache"]
 }

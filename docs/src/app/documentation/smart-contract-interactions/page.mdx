@@ -27,13 +27,14 @@ const datum = Data.to(new Constr(0, [pubKeyHash]));
 <Callout type="info">
   **You can define datum schemas for type safety:**
 
-  ```js showLineNumbers
-  const DatumSchema = Data.Object({
-    owner: Data.Bytes(),
-  });
-  type DatumType = Data.Static<typeof DatumSchema>;
-  const DatumType = DatumSchema as unknown as DatumType;
-  ```
+```js showLineNumbers
+const DatumSchema = Data.Object({
+  owner: Data.Bytes(),
+});
+type DatumType = Data.Static<typeof DatumSchema>;
+const DatumType = DatumSchema as unknown as DatumType;
+```
+
 </Callout>
 
 ### Redeemers
@@ -60,7 +61,7 @@ const redeemer = Data.to(new Constr(0, [fromText("Hello, World!")]));
 Lucid-Evolution consumes compiled validators from languages like PlutusTx, Aiken, or Plutarch:
 
 ```js showLineNumbers
-import { SpendingValidator } from "@lucid-evolution/lucid";
+import { SpendingValidator } from "@evolution-sdk/lucid";
 
 const spendingValidator: SpendingValidator = {
   type: "PlutusV3",
@@ -78,7 +79,7 @@ const tx = await lucid
   .pay.ToContract(
     scriptAddress,
     { kind: "inline", value: datum },
-    { lovelace: 10_000_000n },
+    { lovelace: 10_000_000n }
   )
   .complete();
 ```
@@ -106,6 +107,7 @@ const tx = await lucid
   .attach.SpendingValidator(spend_val) // Attach validator
   .complete();
 ```
+
 </Steps>
 
 ## Validator Types
@@ -144,6 +146,6 @@ The corresponding transaction operations:
 | **Reference Scripts**     | Use reference scripts whenever possible to reduce transaction size and costs |
 
 <Callout type="info">
-  For a comprehensive documentation of validators, see the official [Aiken documentation](https://aiken-lang.org/language-tour/validators).
+  For a comprehensive documentation of validators, see the official [Aiken
+  documentation](https://aiken-lang.org/language-tour/validators).
 </Callout>
-

@@ -14,7 +14,7 @@ It can be [Blockfrost](https://blockfrost.io/), [Koios](https://koios.rest/), [M
 For example, here's how to instantiate a Blockfrost provider:
 
 ```js showLineNumbers
-import { Blockfrost, Provider } from "@lucid-evolution/lucid";
+import { Blockfrost, Provider } from "@evolution-sdk/lucid";
 
 const blockfrostURL: string = process.env.BF_URL!;
 const blockfrostPID: string = process.env.BF_PID!;
@@ -25,19 +25,17 @@ const blockfrost: Provider = new Blockfrost(
 );
 ```
 
-<Callout>
-  Other providers follow a similar pattern.
-</Callout>
+<Callout>Other providers follow a similar pattern.</Callout>
 
 ### Create the Wallet Object
 
 ```js showLineNumbers /makeWalletFromPrivateKey/ {5-6}
 import { makeWalletFromPrivateKey, Network } from "@lucid-evolution/lucid";
 
-const provider = blockfrost;
+const provider = blockfrost;@evolution-sdk
 const network: Network = "Mainnet"; // "Mainnet" | "Preview" | "Preprod" | "Custom"
 const privateKey = "bech32 private key here ...";
 const wallet = makeWalletFromPrivateKey(provider, network, privateKey); // CIP-30
 ```
-</Steps>
 
+</Steps>

@@ -53,11 +53,11 @@ export const CBORBytes = Schema.transformOrFail(
       switch (toA._tag) {
         case "KeyHash":
           return ParseResult.succeed(
-            CBOR.encodeAsBytesOrThrow([0, Hex.toBytes(toA.hash)]),
+            CBOR.encodeAsBytesOrThrow([0, Hex.toBytes(toA.hash)])
           );
         case "ScriptHash":
           return ParseResult.succeed(
-            CBOR.encodeAsBytesOrThrow([1, Hex.toBytes(toA.hash)]),
+            CBOR.encodeAsBytesOrThrow([1, Hex.toBytes(toA.hash)])
           );
       }
     },
@@ -69,11 +69,11 @@ export const CBORBytes = Schema.transformOrFail(
           ParseResult.decode(
             Schema.Tuple(
               Schema.Literal(0, 1),
-              Schema.Uint8ArrayFromSelf,
+              Schema.Uint8ArrayFromSelf
             ).annotations({
               identifier: "CredentialTuple",
-            }),
-          )(a),
+            })
+          )(a)
         ),
         Effect.flatMap(([tag, bytesDecoded]) =>
           Effect.gen(function* () {
@@ -82,13 +82,13 @@ export const CBORBytes = Schema.transformOrFail(
                 return yield* ParseResult.decode(KeyHash.Bytes)(bytesDecoded);
               case 1:
                 return yield* ParseResult.decode(ScriptHash.Bytes)(
-                  bytesDecoded,
+                  bytesDecoded
                 );
             }
-          }),
-        ),
+          })
+        )
       ),
-  },
+  }
 );
 
 export const CBORHex = Schema.transformOrFail(
@@ -102,7 +102,7 @@ export const CBORHex = Schema.transformOrFail(
       pipe(ParseResult.encode(CBORBytes)(toA), Effect.map(Hex.fromBytes)),
     decode: (fromA, options, ast) =>
       pipe(Hex.toBytes(fromA), ParseResult.decode(CBORBytes)),
-  },
+  }
 );
 
 /**
@@ -120,7 +120,7 @@ export const equals = (a: Credential, b: Credential): boolean => {
  * Randomly selects between generating a KeyHash or ScriptHash credential.
  *
  * @example
- * import { Credential } from "@lucid-evolution/experimental";
+ * import { Credential } from "@evolution-sdk/experimental";
  * import { FastCheck } from "effect";
  * import assert from "assert";
  *
@@ -135,5 +135,5 @@ export const equals = (a: Credential, b: Credential): boolean => {
  */
 export const generator = FastCheck.oneof(
   KeyHash.generator,
-  ScriptHash.generator,
+  ScriptHash.generator
 );

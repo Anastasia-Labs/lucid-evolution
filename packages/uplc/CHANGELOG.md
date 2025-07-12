@@ -1,4 +1,4 @@
-# @lucid-evolution/uplc
+# @evolution-sdk/uplc
 
 ## 0.2.20
 

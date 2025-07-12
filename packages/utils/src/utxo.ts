@@ -1,4 +1,4 @@
-import { Assets, OutRef, TxOutput, UTxO } from "@lucid-evolution/core-types";
+import { Assets, OutRef, TxOutput, UTxO } from "@evolution-sdk/core-types";
 import { CML } from "./core.js";
 import { fromScriptRef, toScriptRef } from "./scripts.js";
 import { assetsToValue, valueToAssets } from "./value.js";
@@ -13,7 +13,7 @@ export const utxoToTransactionOutput = (utxo: UTxO) => {
 export const utxoToTransactionInput = (utxo: UTxO) => {
   return CML.TransactionInput.new(
     CML.TransactionHash.from_hex(utxo.txHash),
-    BigInt(utxo.outputIndex),
+    BigInt(utxo.outputIndex)
   );
 };
 
@@ -21,7 +21,7 @@ export const utxoToCore = (utxo: UTxO): CML.TransactionUnspentOutput => {
   const out = utxoToTransactionOutput(utxo);
   const utxoCore = CML.TransactionUnspentOutput.new(
     utxoToTransactionInput(utxo),
-    out,
+    out
   );
   // out.free();
   return utxoCore;
@@ -112,7 +112,7 @@ export function coresToTxOutputs(outputs: CML.TransactionOutput[]): TxOutput[] {
 export const selectUTxOs = (
   utxos: UTxO[],
   totalAssets: Assets,
-  includeUTxOsWithScriptRef: boolean = false,
+  includeUTxOsWithScriptRef: boolean = false
 ) => {
   const selectedUtxos: UTxO[] = [];
   let isSelected = false;
@@ -170,7 +170,7 @@ export type SortOrder =
  */
 export const sortUTxOs = (
   utxos: UTxO[],
-  order: SortOrder = "LargestFirst",
+  order: SortOrder = "LargestFirst"
 ): UTxO[] => {
   switch (order) {
     case "LargestFirst":
@@ -231,7 +231,7 @@ export const isEqualUTxO = (self: UTxO, that: UTxO) =>
 export function getInputIndices(
   indexInputs: UTxO[],
   allInputs: UTxO[],
-  sorted: Boolean = false,
+  sorted: Boolean = false
 ): bigint[] {
   const sortedInputs = sorted ? allInputs : sortUTxOs(allInputs, "Canonical");
   const indicesMap = new Map<string, bigint>();
@@ -252,12 +252,12 @@ export function getInputIndices(
 
 export const calculateMinLovelaceFromUTxO = (
   coinsPerUtxoByte: bigint,
-  utxo: UTxO,
+  utxo: UTxO
 ): bigint =>
   buildOutput(utxo)
     .with_asset_and_min_required_coin(
       assetsToValue(utxo.assets).multi_asset(),
-      coinsPerUtxoByte,
+      coinsPerUtxoByte
     )
     .build()
     .output()
@@ -266,7 +266,7 @@ export const calculateMinLovelaceFromUTxO = (
 
 const buildOutput = (utxo: UTxO): CML.TransactionOutputAmountBuilder => {
   const builder = CML.TransactionOutputBuilder.new().with_address(
-    CML.Address.from_bech32(utxo.address),
+    CML.Address.from_bech32(utxo.address)
   );
   return utxo.scriptRef
     ? buildDatum(utxo, builder)
@@ -277,17 +277,17 @@ const buildOutput = (utxo: UTxO): CML.TransactionOutputAmountBuilder => {
 
 const buildDatum = (
   utxo: UTxO,
-  builder: CML.TransactionOutputBuilder,
+  builder: CML.TransactionOutputBuilder
 ): CML.TransactionOutputBuilder => {
   // with DatumHash
   if (utxo.datumHash && utxo.datum)
     return builder.with_communication_data(
-      CML.PlutusData.from_cbor_hex(utxo.datum),
+      CML.PlutusData.from_cbor_hex(utxo.datum)
     );
   // with InlineDatum
   if (utxo.datum)
     return builder.with_data(
-      CML.DatumOption.new_datum(CML.PlutusData.from_cbor_hex(utxo.datum)),
+      CML.DatumOption.new_datum(CML.PlutusData.from_cbor_hex(utxo.datum))
     );
   return builder;
 };

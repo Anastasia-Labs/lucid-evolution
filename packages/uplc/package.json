@@ -1,5 +1,5 @@
 {
-  "name": "@lucid-evolution/uplc",
+  "name": "@evolution-sdk/uplc",
   "version": "0.2.20",
   "main": "./dist/node/uplc_tx.js",
   "browser": "./dist/browser/uplc_tx.js",

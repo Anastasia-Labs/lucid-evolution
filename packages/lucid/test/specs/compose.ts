@@ -1,10 +1,10 @@
-import { fromText } from "@lucid-evolution/core-utils";
+import { fromText } from "@evolution-sdk/core-utils";
 import {
   getAddressDetails,
   scriptFromNative,
   unixTimeToSlot,
   mintingPolicyToId,
-} from "@lucid-evolution/utils";
+} from "@evolution-sdk/utils";
 import { Effect, pipe } from "effect";
 import { HelloContract, NetworkConfig, User } from "./services";
 import {
@@ -12,7 +12,7 @@ import {
   handleSignSubmitWithoutValidation,
   withLogRetry,
 } from "./utils";
-import { Constr, Data } from "@lucid-evolution/plutus";
+import { Constr, Data } from "@evolution-sdk/plutus";
 import { DatumType } from "./hello-params";
 
 export const composeMintTx = Effect.gen(function* ($) {
@@ -24,7 +24,7 @@ export const composeMintTx = Effect.gen(function* ($) {
     .pay.ToAddressWithData(addr, { kind: "inline", value: Data.to(0n) }, {});
 
   const { paymentCredential } = getAddressDetails(
-    yield* Effect.promise(() => user.wallet().address()),
+    yield* Effect.promise(() => user.wallet().address())
   );
   const mintingPolicy = scriptFromNative({
     type: "all",
@@ -69,9 +69,9 @@ export const multiTxCompose = Effect.gen(function* ($) {
             .pay.ToAddressWithData(
               addr,
               { kind: "inline", value: Data.to(2n) },
-              {},
-            ),
-        ),
+              {}
+            )
+        )
     );
   const tx = user
     .newTx()
@@ -88,7 +88,7 @@ export const composeMintAndRegisterStake = Effect.gen(function* ($) {
   const addr = yield* Effect.promise(() => user.wallet().address());
   const rewardAddress = yield* pipe(
     Effect.promise(() => user.wallet().rewardAddress()),
-    Effect.andThen(Effect.fromNullable),
+    Effect.andThen(Effect.fromNullable)
   );
   const txCompA = user
     .newTx()
@@ -125,14 +125,14 @@ export const composeDeregisterStake = Effect.gen(function* ($) {
   const addr = yield* Effect.promise(() => user.wallet().address());
   const rewardAddress = yield* pipe(
     Effect.promise(() => user.wallet().rewardAddress()),
-    Effect.andThen(Effect.fromNullable),
+    Effect.andThen(Effect.fromNullable)
   );
   const txCompA = user
     .newTx()
     .pay.ToAddressWithData(
       addr,
       { kind: "inline", value: Data.to(0n) },
-      { lovelace: 10_000_000n },
+      { lovelace: 10_000_000n }
     );
 
   const txCompC = user.newTx().deregister.Stake(rewardAddress);
@@ -146,14 +146,14 @@ export const composeDepositFundsLockRefScriptAndRegisterDrep = Effect.gen(
     const { user } = yield* User;
     const rewardAddress = yield* pipe(
       Effect.promise(() => user.wallet().rewardAddress()),
-      Effect.andThen(Effect.fromNullable),
+      Effect.andThen(Effect.fromNullable)
     );
     const txCompA = user
       .newTx()
       .register.DRep(rewardAddress)
       .setMinFee(200_000n);
     const publicKeyHash = getAddressDetails(
-      yield* Effect.promise(() => user.wallet().address()),
+      yield* Effect.promise(() => user.wallet().address())
     ).paymentCredential?.hash;
     const datum = Data.to(new Constr(0, [publicKeyHash!]));
 
@@ -167,12 +167,12 @@ export const composeDepositFundsLockRefScriptAndRegisterDrep = Effect.gen(
         value: datum,
       },
       { lovelace: 10_000_000n },
-      hello,
+      hello
     );
     const tx = user.newTx().compose(txCompA).compose(txCompB);
     const signBuilder = yield* tx.completeProgram();
     return signBuilder;
-  },
+  }
 ).pipe(Effect.flatMap(handleSignSubmit), withLogRetry, Effect.orDie);
 
 export const composeCollectFundsReadFromAndDeregisterDrep = Effect.gen(
@@ -182,10 +182,10 @@ export const composeCollectFundsReadFromAndDeregisterDrep = Effect.gen(
     const { contractAddress } = yield* HelloContract;
 
     const allUtxos = yield* Effect.tryPromise(() =>
-      user.utxosAt(contractAddress),
+      user.utxosAt(contractAddress)
     );
     const publicKeyHash = getAddressDetails(
-      yield* Effect.promise(() => user.wallet().address()),
+      yield* Effect.promise(() => user.wallet().address())
     ).paymentCredential?.hash;
 
     const readUtxo = allUtxos.filter((utxo) => utxo.scriptRef ?? null)[0];
@@ -218,11 +218,11 @@ export const composeCollectFundsReadFromAndDeregisterDrep = Effect.gen(
       .addSigner(addr);
     const rewardAddress = yield* pipe(
       Effect.promise(() => user.wallet().rewardAddress()),
-      Effect.andThen(Effect.fromNullable),
+      Effect.andThen(Effect.fromNullable)
     );
     const txCompB = user.newTx().deregister.DRep(rewardAddress);
     const tx = user.newTx().compose(txCompA).compose(txCompB);
     const signBuilder = yield* tx.completeProgram();
     return signBuilder;
-  },
+  }
 ).pipe(Effect.flatMap(handleSignSubmit), withLogRetry, Effect.orDie);

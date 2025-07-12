@@ -1,14 +1,14 @@
 import { Effect, pipe } from "effect";
 import { NetworkConfig, User } from "./services.js";
 import { handleSignSubmit, withLogRetry } from "./utils.js";
-import { Network } from "@lucid-evolution/core-types";
+import { Network } from "@evolution-sdk/core-types";
 import {
   scriptFromNative,
   unixTimeToSlot,
   paymentCredentialOf,
   validatorToRewardAddress,
-} from "@lucid-evolution/utils";
-import { Data } from "@lucid-evolution/plutus";
+} from "@evolution-sdk/utils";
+import { Data } from "@evolution-sdk/plutus";
 
 const mkSlotRangeStakePolicy = (address: string) => {
   return scriptFromNative({
@@ -26,7 +26,7 @@ export const registerStake = Effect.gen(function* ($) {
   const { user } = yield* User;
   const rewardAddress = yield* pipe(
     Effect.promise(() => user.wallet().rewardAddress()),
-    Effect.andThen(Effect.fromNullable),
+    Effect.andThen(Effect.fromNullable)
   );
   const signBuilder = yield* user
     .newTx()
@@ -39,10 +39,10 @@ export const registerStake = Effect.gen(function* ($) {
     error.message.includes("StakeKeyAlreadyRegisteredDELEG") ||
     error.message.includes("StakeKeyRegisteredDELEG")
       ? Effect.log("Stake Already registered")
-      : Effect.fail(error),
+      : Effect.fail(error)
   ),
   withLogRetry,
-  Effect.orDie,
+  Effect.orDie
 );
 
 export const delegateTo = Effect.gen(function* ($) {
@@ -55,7 +55,7 @@ export const delegateTo = Effect.gen(function* ($) {
 
   const rewardAddress = yield* pipe(
     Effect.promise(() => user.wallet().rewardAddress()),
-    Effect.andThen(Effect.fromNullable),
+    Effect.andThen(Effect.fromNullable)
   );
   const signBuilder = yield* user
     .newTx()
@@ -68,7 +68,7 @@ export const deRegisterStake = Effect.gen(function* ($) {
   const { user } = yield* User;
   const rewardAddress = yield* pipe(
     Effect.promise(() => user.wallet().rewardAddress()),
-    Effect.andThen(Effect.fromNullable),
+    Effect.andThen(Effect.fromNullable)
   );
   // TODO: Withdraw rewards if any, while de-registering stake address
   const signBuilder = yield* user
@@ -82,7 +82,7 @@ export const registerDeregisterStake = Effect.gen(function* ($) {
   const { user } = yield* User;
   const rewardAddress = yield* pipe(
     Effect.promise(() => user.wallet().rewardAddress()),
-    Effect.andThen(Effect.fromNullable),
+    Effect.andThen(Effect.fromNullable)
   );
   const signBuilder = yield* user
     .newTx()
@@ -96,17 +96,17 @@ export const registerDeregisterStake = Effect.gen(function* ($) {
     error.message.includes("StakeKeyAlreadyRegisteredDELEG") ||
     error.message.includes("StakeKeyRegisteredDELEG")
       ? Effect.void
-      : Effect.fail(error),
+      : Effect.fail(error)
   ),
   withLogRetry,
-  Effect.orDie,
+  Effect.orDie
 );
 
 export const withdrawZero = Effect.gen(function* ($) {
   const { user } = yield* User;
   const rewardAddress = yield* pipe(
     Effect.promise(() => user.wallet().rewardAddress()),
-    Effect.andThen(Effect.fromNullable),
+    Effect.andThen(Effect.fromNullable)
   );
   const signBuilder = yield* user
     .newTx()
@@ -119,10 +119,10 @@ export const withdrawAllReward = Effect.gen(function* ($) {
   const { user } = yield* User;
   const rewardAddress = yield* pipe(
     Effect.promise(() => user.wallet().rewardAddress()),
-    Effect.andThen(Effect.fromNullable),
+    Effect.andThen(Effect.fromNullable)
   );
   const { rewards } = yield* Effect.promise(() =>
-    user.wallet().getDelegation(),
+    user.wallet().getDelegation()
   );
   const signBuilder = yield* user
     .newTx()
@@ -148,10 +148,10 @@ export const registerNativeStake = Effect.gen(function* ($) {
     error.message.includes("StakeKeyAlreadyRegisteredDELEG") ||
     error.message.includes("StakeKeyRegisteredDELEG")
       ? Effect.log("Stake Already registered")
-      : Effect.fail(error),
+      : Effect.fail(error)
   ),
   withLogRetry,
-  Effect.orDie,
+  Effect.orDie
 );
 
 export const delegateNativeStakeTo = Effect.gen(function* ($) {
@@ -180,7 +180,7 @@ export const withdrawAllNativeStakeReward = Effect.gen(function* ($) {
   const rewardAddress = validatorToRewardAddress(networkConfig.NETWORK, stake);
 
   const { rewards } = yield* Effect.promise(() =>
-    user.wallet().getDelegation(),
+    user.wallet().getDelegation()
   );
   const signBuilder = yield* user
     .newTx()

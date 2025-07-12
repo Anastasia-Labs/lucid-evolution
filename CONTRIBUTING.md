@@ -86,13 +86,13 @@ VITE_OGMIOS_URL="your_ogmios_endpoint_url"
 pnpm test
 
 # Run tests for a specific package
-pnpm --filter @lucid-evolution/lucid test
+pnpm --filter @evolution-sdk/lucid test
 
 # Run a specific test file
-pnpm --filter @lucid-evolution/lucid test -- path/to/test/file.test.ts
+pnpm --filter @evolution-sdk/lucid test -- path/to/test/file.test.ts
 
 # Run tests in watch mode
-pnpm --filter @lucid-evolution/lucid test -- --watch
+pnpm --filter @evolution-sdk/lucid test -- --watch
 ```
 
 ### Testing Without API Keys

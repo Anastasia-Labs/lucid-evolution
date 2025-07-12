@@ -22,7 +22,7 @@ import * as Hex from "./Hex.js";
  * @category model
  */
 export class PointerAddressError extends Data.TaggedError(
-  "PointerAddressError",
+  "PointerAddressError"
 )<{
   message: string;
   cause?: unknown;
@@ -40,7 +40,7 @@ export interface PointerAddress {
  * @category schemas
  */
 export class PointerAddress extends Schema.TaggedClass<PointerAddress>(
-  "PointerAddress",
+  "PointerAddress"
 )("PointerAddress", {
   networkId: NetworkId.NetworkId,
   paymentCredential: Credential.Credential,
@@ -74,7 +74,7 @@ export const Bytes = Schema.transformOrFail(
         const slotBytes = yield* encodeVariableLength(toA.pointer.slot);
         const txIndexBytes = yield* encodeVariableLength(toA.pointer.txIndex);
         const certIndexBytes = yield* encodeVariableLength(
-          toA.pointer.certIndex,
+          toA.pointer.certIndex
         );
 
         // Calculate total buffer size: 1 byte header + 28 bytes credential + variable parts
@@ -126,13 +126,13 @@ export const Bytes = Schema.transformOrFail(
         // Decode the slot, txIndex, and certIndex as variable length integers
         const [slot, slotBytesRead] = yield* decodeVariableLength(
           fromA,
-          offset,
+          offset
         );
         offset += slotBytesRead;
 
         const [txIndex, txIndexBytesRead] = yield* decodeVariableLength(
           fromA,
-          offset,
+          offset
         );
         offset += txIndexBytesRead;
 
@@ -146,10 +146,10 @@ export const Bytes = Schema.transformOrFail(
         });
       }).pipe(
         Effect.catchTag("PointerAddressError", (e) =>
-          Effect.fail(new ParseResult.Type(ast, fromA, e.message)),
-        ),
+          Effect.fail(new ParseResult.Type(ast, fromA, e.message))
+        )
       ),
-  },
+  }
 );
 
 export const HexString = Schema.transformOrFail(Hex.HexString, PointerAddress, {
@@ -183,7 +183,7 @@ export const encodeVariableLength = (natural: Natural.Natural) =>
       result.push((remaining & 0x7f) | 0x80);
       // Shift right by 7 bits (divide by 128) to process the next chunk
       remaining = yield* ParseResult.decode(Natural.Natural)(
-        Math.floor(remaining / 128),
+        Math.floor(remaining / 128)
       );
     }
     // Push the final byte (the most significant bits)
@@ -199,7 +199,7 @@ export const encodeVariableLength = (natural: Natural.Natural) =>
  * Following the Cardano ledger implementation for variable-length integers
  *
  * @example
- * import { PointerAddress } from "@lucid-evolution/experimental";
+ * import { PointerAddress } from "@evolution-sdk/experimental";
  * import { Effect } from "effect";
  * import assert from "assert";
  *
@@ -216,7 +216,7 @@ export const encodeVariableLength = (natural: Natural.Natural) =>
  */
 export const decodeVariableLength: (
   bytes: Uint8Array,
-  offset?: number | undefined,
+  offset?: number | undefined
 ) => Effect.Effect<
   [Natural.Natural, number],
   PointerAddressError | ParseResult.ParseIssue
@@ -289,7 +289,7 @@ export const equals = (a: PointerAddress, b: PointerAddress): boolean => {
  * Generate a random PointerAddress.
  *
  * @example
- * import { PointerAddress } from "@lucid-evolution/experimental";
+ * import { PointerAddress } from "@evolution-sdk/experimental";
  * import { FastCheck } from "effect";
  * import assert from "assert";
  *
@@ -310,12 +310,12 @@ export const generator = FastCheck.tuple(
   Credential.generator,
   Natural.generator,
   Natural.generator,
-  Natural.generator,
+  Natural.generator
 ).map(
   ([networkId, paymentCredential, slot, txIndex, certIndex]) =>
     new PointerAddress({
       networkId,
       paymentCredential,
       pointer: Pointer.make(slot, txIndex, certIndex),
-    }),
+    })
 );

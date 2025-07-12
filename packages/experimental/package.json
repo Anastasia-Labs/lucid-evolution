@@ -1,5 +1,5 @@
 {
-  "name": "@lucid-evolution/experimental",
+  "name": "@evolution-sdk/experimental",
   "version": "0.0.9",
   "description": "",
   "homepage": "https://github.com/no-witness-labs/lucid-evolution",
@@ -67,7 +67,7 @@
     "@effect/docgen": "^0.5.2",
     "@effect/language-service": "^0.19.0",
     "@effect/vitest": "^0.23.3",
-    "@lucid-evolution/eslint-config": "workspace:*",
+    "@evolution-sdk/eslint-config": "workspace:*",
     "@microsoft/api-extractor": "^7.52.8",
     "@types/node": "^22.15.30",
     "babel-plugin-annotate-pure-calls": "^0.5.0",

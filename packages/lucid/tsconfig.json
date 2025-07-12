@@ -1,5 +1,5 @@
 {
-  "extends": "@lucid-evolution/typescript-config/base.json",
+  "extends": "@evolution-sdk/typescript-config/base.json",
   "include": ["."],
-  "exclude": ["dist","node_modules", "test", "temp"]
+  "exclude": ["dist", "node_modules", "test", "temp"]
 }

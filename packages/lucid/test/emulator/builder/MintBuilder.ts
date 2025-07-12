@@ -6,10 +6,10 @@ import {
   mintingPolicyToId,
   scriptFromNative,
   unixTimeToSlot,
-} from "@lucid-evolution/utils";
-import { fromText } from "@lucid-evolution/core-utils";
-import { Script } from "@lucid-evolution/core-types";
-import { Data } from "@lucid-evolution/plutus";
+} from "@evolution-sdk/utils";
+import { fromText } from "@evolution-sdk/core-utils";
+import { Script } from "@evolution-sdk/core-types";
+import { Data } from "@evolution-sdk/plutus";
 
 export const mintInSlotRange = (config: {
   mintingPolicy: Script;
@@ -108,7 +108,7 @@ export const composeMintAndStake = (config: {
       .attach.MintingPolicy(config.mintingPolicy);
     const rewardAddress = yield* pipe(
       Effect.promise(() => user.wallet().rewardAddress()),
-      Effect.andThen(Effect.fromNullable),
+      Effect.andThen(Effect.fromNullable)
     );
     const txCompC = user.newTx().registerStake(rewardAddress);
     const tx = user.newTx().compose(txCompA).compose(txCompB).compose(txCompC);

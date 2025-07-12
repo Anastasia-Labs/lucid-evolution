@@ -1,4 +1,4 @@
-# @lucid-evolution/typescript-config
+# @evolution-sdk/typescript-config
 
 ## 0.2.3
 

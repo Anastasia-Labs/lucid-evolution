@@ -21,9 +21,9 @@
       "cache": false,
       "persistent": true
     },
-    "@lucid-evolution/lucid#test": {
+    "@evolution-sdk/lucid#test": {
       "dependsOn": [
-        "@lucid-evolution/provider#test"
+        "@evolution-sdk/provider#test"
       ]
     }
   }

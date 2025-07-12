@@ -21,7 +21,7 @@ export const KEYHASH_HEX_LENGTH = 56;
  * Error class for KeyHash related operations.
  *
  * @example
- * import { KeyHash } from "@lucid-evolution/experimental";
+ * import { KeyHash } from "@evolution-sdk/experimental";
  * import assert from "assert";
  *
  * const error = new KeyHash.KeyHashError({ message: "Invalid key hash" });
@@ -65,7 +65,7 @@ export class KeyHash extends Schema.TaggedClass<KeyHash>()("KeyHash", {
 export const KeyHashBytes = pipe(
   Schema.Uint8Array,
   Schema.filter((a) => a.length === KEYHASH_BYTES_LENGTH),
-  Schema.typeSchema,
+  Schema.typeSchema
 ).annotations({
   message: (issue) =>
     `${issue.actual} must be a byte array of length ${KEYHASH_BYTES_LENGTH}`,
@@ -88,7 +88,7 @@ export const HexString = Schema.transform(Hex.HexString, KeyHash, {
  * Check if two KeyHash instances are equal.
  *
  * @example
- * import { KeyHash } from "@lucid-evolution/experimental";
+ * import { KeyHash } from "@evolution-sdk/experimental";
  * import assert from "assert";
  *
  * @since 2.0.0
@@ -100,7 +100,7 @@ export const equals = (a: KeyHash, b: KeyHash): boolean => a.hash === b.hash;
  * Generate a random KeyHash.
  *
  * @example
- * import { KeyHash } from "@lucid-evolution/experimental";
+ * import { KeyHash } from "@evolution-sdk/experimental";
  * import { FastCheck } from "effect";
  * import assert from "assert";
  *

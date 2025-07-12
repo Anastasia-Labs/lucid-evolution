@@ -1,7 +1,7 @@
-import { Constr } from "@lucid-evolution/plutus";
+import { Constr } from "@evolution-sdk/plutus";
 import { applyParamsToScript, validatorToScriptHash } from "../src/scripts.js";
 import { assert, test } from "vitest";
-import { WithdrawalValidator } from "@lucid-evolution/core-types";
+import { WithdrawalValidator } from "@evolution-sdk/core-types";
 import { applyDoubleCborEncoding } from "../src/cbor.js";
 
 // Parametrized Contract Spec
@@ -37,7 +37,7 @@ test("Apply Parameters", () => {
     [
       "e6849315a2984aadcd1e42d9628f6d6cc071685bef02bb52502f86c9",
       "48656c6c6f2c20576f726c6421",
-    ],
+    ]
   );
 
   assert.strictEqual(helloApplied, applyDoubleCborEncoding(helloAppliedValid));

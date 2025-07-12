@@ -1,5 +1,5 @@
 {
-  "name": "@lucid-evolution/core-types",
+  "name": "@evolution-sdk/core-types",
   "version": "0.1.22",
   "description": "",
   "main": "./dist/index.js",

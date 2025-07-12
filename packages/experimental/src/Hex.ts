@@ -27,18 +27,18 @@ export const isHex = (input: string): boolean => {
 };
 
 export const HexStringFilter = Schema.String.pipe(
-  Schema.filter((a) => isHex(a)),
+  Schema.filter((a) => isHex(a))
 ).annotations({ message: (issue) => `${issue.actual} must be a hex string` });
 
 export const HexString = HexStringFilter.pipe(
   Schema.brand("HexString"),
-  Schema.typeSchema,
+  Schema.typeSchema
 );
 
 export type HexString = typeof HexString.Type;
 
 const hexes = /* @__PURE__ */ Array.from({ length: 256 }, (_, i) =>
-  i.toString(16).padStart(2, "0"),
+  i.toString(16).padStart(2, "0")
 );
 
 export const fromBytes = <T extends HexString>(bytes: Uint8Array) => {
@@ -70,7 +70,7 @@ const asciiToBase16 = (char: number): number => {
  * Converts a branded Hex string to a Uint8Array.
  *
  * @example
- * import { makeOrThrow, toBytes } from "@lucid-evolution/experimental/Hex";
+ * import { makeOrThrow, toBytes } from "@evolution-sdk/experimental/Hex";
  * const hex = makeOrThrow("deadbeef");
  * const bytes = toBytes(hex); // Uint8Array [222, 173, 190, 239]
  *
@@ -90,7 +90,7 @@ export const toBytes = (hex: HexString): Uint8Array => {
 export const decode = (maybeHex: string) =>
   pipe(
     Schema.validate(HexString)(maybeHex),
-    Effect.mapError((e) => new HexError({ message: `${e.message}` })),
+    Effect.mapError((e) => new HexError({ message: `${e.message}` }))
   );
 
 export const decodeOrThrow = (rawHex: string) => Effect.runSync(decode(rawHex));

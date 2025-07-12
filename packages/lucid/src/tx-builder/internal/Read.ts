@@ -1,6 +1,6 @@
 import { Effect } from "effect";
-import { utxoToCore } from "@lucid-evolution/utils";
-import { UTxO } from "@lucid-evolution/core-types";
+import { utxoToCore } from "@evolution-sdk/utils";
+import { UTxO } from "@evolution-sdk/core-types";
 import { ERROR_MESSAGE, TxBuilderError } from "../../Errors.js";
 import { resolveDatum } from "./TxUtils.js";
 import { TxConfig } from "./Service.js";
@@ -17,14 +17,13 @@ export const readFrom = (utxos: UTxO[]) =>
       const resolvedDatum = yield* resolveDatum(
         utxo.datumHash,
         utxo.datum,
-        config.lucidConfig.provider,
+        config.lucidConfig.provider
       );
 
       const coreUtxo = utxoToCore({ ...utxo, datum: resolvedDatum });
       const exists = config.readInputs.some(
         (input) =>
-          input.txHash === utxo.txHash &&
-          input.outputIndex === utxo.outputIndex,
+          input.txHash === utxo.txHash && input.outputIndex === utxo.outputIndex
       );
 
       if (!exists) {

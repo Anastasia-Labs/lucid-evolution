@@ -6,7 +6,7 @@ import {
   toUnit,
   unixTimeToSlot,
   validatorToAddress,
-} from "@lucid-evolution/utils";
+} from "@evolution-sdk/utils";
 import { Effect, Context, Layer, pipe, Console } from "effect";
 import {
   Data,
@@ -22,7 +22,7 @@ import {
   handleSubmit,
   withLogRetry,
 } from "../specs/utils";
-import { Emulator, generateEmulatorAccount } from "@lucid-evolution/provider";
+import { Emulator, generateEmulatorAccount } from "@evolution-sdk/provider";
 import { generateEmulatorAccountFrommPrivateKey } from "../../../provider/src";
 import scripts from "../specs/contracts/plutus.json";
 
@@ -55,10 +55,10 @@ const makeEmulatorUser = Effect.gen(function* ($) {
   const user = yield* Effect.tryPromise(() => Lucid(emulator, "Custom"));
   user.selectWallet.fromSeed(EMULATOR_ACCOUNT.seedPhrase);
   const userFromPrivateKey = yield* Effect.tryPromise(() =>
-    Lucid(emulatorFromPrivateKey, "Custom"),
+    Lucid(emulatorFromPrivateKey, "Custom")
   );
   userFromPrivateKey.selectWallet.fromPrivateKey(
-    EMULATOR_ACCOUNT_FROM_PRIVATE_KEY.privateKey,
+    EMULATOR_ACCOUNT_FROM_PRIVATE_KEY.privateKey
   );
   return {
     user,
@@ -106,7 +106,7 @@ export const registerStake = Effect.gen(function* () {
   const { user } = yield* EmulatorUser;
   const rewardAddress = yield* pipe(
     Effect.promise(() => user.wallet().rewardAddress()),
-    Effect.andThen(Effect.fromNullable),
+    Effect.andThen(Effect.fromNullable)
   );
   const signBuilder = yield* user
     .newTx()
@@ -118,18 +118,18 @@ export const registerStake = Effect.gen(function* () {
   Effect.catchTag("TxSubmitError", (error) =>
     error.message.includes("StakeKeyAlreadyRegisteredDELEG")
       ? Effect.void
-      : Effect.fail(error),
+      : Effect.fail(error)
   ),
   withLogRetry,
   Effect.map(() => emulator.awaitBlock()),
-  Effect.orDie,
+  Effect.orDie
 );
 
 export const delegateTo = Effect.gen(function* ($) {
   const { user } = yield* EmulatorUser;
   const rewardAddress = yield* pipe(
     Effect.promise(() => user.wallet().rewardAddress()),
-    Effect.andThen(Effect.fromNullable),
+    Effect.andThen(Effect.fromNullable)
   );
   const signBuilder = yield* user
     .newTx()
@@ -142,7 +142,7 @@ export const deRegisterStake = Effect.gen(function* ($) {
   const { user } = yield* EmulatorUser;
   const rewardAddress = yield* pipe(
     Effect.promise(() => user.wallet().rewardAddress()),
-    Effect.andThen(Effect.fromNullable),
+    Effect.andThen(Effect.fromNullable)
   );
 
   const signBuilder = yield* user
@@ -156,7 +156,7 @@ export const registerDeregisterStake = Effect.gen(function* ($) {
   const { user } = yield* EmulatorUser;
   const rewardAddress = yield* pipe(
     Effect.promise(() => user.wallet().rewardAddress()),
-    Effect.andThen(Effect.fromNullable),
+    Effect.andThen(Effect.fromNullable)
   );
   const signBuilder = yield* user
     .newTx()
@@ -169,9 +169,9 @@ export const registerDeregisterStake = Effect.gen(function* ($) {
   Effect.catchTag("TxSubmitError", (error) =>
     error.message.includes("StakeKeyAlreadyRegisteredDELEG")
       ? Effect.void
-      : Effect.fail(error),
+      : Effect.fail(error)
   ),
-  withLogRetry,
+  withLogRetry
 );
 
 export const withdrawReward = (amount: bigint) =>
@@ -179,7 +179,7 @@ export const withdrawReward = (amount: bigint) =>
     const { user } = yield* EmulatorUser;
     const rewardAddress = yield* pipe(
       Effect.promise(() => user.wallet().rewardAddress()),
-      Effect.andThen(Effect.fromNullable),
+      Effect.andThen(Effect.fromNullable)
     );
     const signBuilder = yield* user
       .newTx()
@@ -196,7 +196,7 @@ export const evaluateAContract = Effect.gen(function* ($) {
     .pay.ToContract(
       scriptAddress,
       { kind: "inline", value: Data.void() },
-      { lovelace: 5000000n },
+      { lovelace: 5000000n }
     )
     .completeProgram();
   return signBuilder;
@@ -210,12 +210,12 @@ export const evaluateAContractWithDatum = Effect.gen(function* ($) {
     .pay.ToContract(
       scriptAddress,
       { kind: "asHash", value: Data.to("31313131") },
-      { lovelace: 5000000n },
+      { lovelace: 5000000n }
     )
     .pay.ToContract(
       scriptAddress,
       { kind: "inline", value: Data.to("313131") },
-      { lovelace: 5000000n },
+      { lovelace: 5000000n }
     )
     .completeProgram();
   return signBuilder;
@@ -229,14 +229,14 @@ export const compose = Effect.gen(function* ($) {
     .pay.ToContract(
       scriptAddress,
       { kind: "asHash", value: Data.to("31313131") },
-      { lovelace: 5000000n },
+      { lovelace: 5000000n }
     );
   const txCompB = user
     .newTx()
     .pay.ToContract(
       scriptAddress,
       { kind: "inline", value: Data.to("31313131") },
-      { lovelace: 5000000n },
+      { lovelace: 5000000n }
     );
   const signBuilder = yield* txCompA.compose(txCompB).completeProgram();
   return signBuilder;
@@ -261,9 +261,9 @@ export const multiTxCompose = Effect.gen(function* ($) {
             .pay.ToAddressWithData(
               addr,
               { kind: "inline", value: Data.to(2n) },
-              {},
-            ),
-        ),
+              {}
+            )
+        )
     );
   const tx = user
     .newTx()
@@ -335,7 +335,7 @@ export const composeMintAndStake = Effect.gen(function* ($) {
     .attach.MintingPolicy(mintingPolicy);
   const rewardAddress = yield* pipe(
     Effect.promise(() => user.wallet().rewardAddress()),
-    Effect.andThen(Effect.fromNullable),
+    Effect.andThen(Effect.fromNullable)
   );
   const txCompC = user.newTx().registerStake(rewardAddress);
   const tx = user.newTx().compose(txCompA).compose(txCompB).compose(txCompC);
@@ -347,7 +347,7 @@ export const composeDeregister = Effect.gen(function* ($) {
   const { user } = yield* EmulatorUser;
   const rewardAddress = yield* pipe(
     Effect.promise(() => user.wallet().rewardAddress()),
-    Effect.andThen(Effect.fromNullable),
+    Effect.andThen(Effect.fromNullable)
   );
 
   const signBuilder = yield* user
@@ -361,7 +361,7 @@ export const multiSigner = Effect.gen(function* ($) {
   const { user, emulator } = yield* EmulatorUser;
   const { paymentCredential } = getAddressDetails(EMULATOR_ACCOUNT.address);
   const { paymentCredential: paymentCredential1 } = getAddressDetails(
-    EMULATOR_ACCOUNT_1.address,
+    EMULATOR_ACCOUNT_1.address
   );
   const mintingPolicy = scriptFromNative({
     type: "all",
@@ -398,7 +398,7 @@ export const signByWalletFromPrivateKey = Effect.gen(function* ($) {
     .pay.ToContract(
       scriptAddress,
       { kind: "inline", value: Data.to("313131") },
-      { lovelace: 5000000n },
+      { lovelace: 5000000n }
     )
     .completeProgram();
   return signBuilder;
@@ -407,17 +407,17 @@ export const signByWalletFromPrivateKey = Effect.gen(function* ($) {
 export const depositFundsLockRefScript = Effect.gen(function* ($) {
   const { user } = yield* EmulatorUser;
   const publicKeyHash = getAddressDetails(
-    yield* Effect.promise(() => user.wallet().address()),
+    yield* Effect.promise(() => user.wallet().address())
   ).paymentCredential?.hash;
   const datum = Data.to(new Constr(0, [publicKeyHash!]));
 
   const helloCBOR = yield* pipe(
     Effect.fromNullable(
       scripts.validators.find(
-        (v) => v.title === "hello_world.hello_world.spend",
-      ),
+        (v) => v.title === "hello_world.hello_world.spend"
+      )
     ),
-    Effect.andThen((script) => script.compiledCode),
+    Effect.andThen((script) => script.compiledCode)
   );
   const hello: SpendingValidator = {
     type: "PlutusV3",
@@ -425,7 +425,7 @@ export const depositFundsLockRefScript = Effect.gen(function* ($) {
   };
   const contractAddress = validatorToAddress("Custom", hello);
   yield* pipe(
-    Effect.tryPromise(() => user.utxosAt(contractAddress)),
+    Effect.tryPromise(() => user.utxosAt(contractAddress))
     // Effect.andThen((utxos) => Console.log(utxos)),
   );
 
@@ -438,7 +438,7 @@ export const depositFundsLockRefScript = Effect.gen(function* ($) {
         value: datum,
       },
       { lovelace: 10_000_000n },
-      hello,
+      hello
     )
     .completeProgram();
   return signBuilder;
@@ -448,17 +448,17 @@ export const sendAllFund = Effect.gen(function* ($) {
   const { user } = yield* EmulatorUser;
   user.selectWallet.fromSeed(EMULATOR_ACCOUNT_1.seedPhrase);
   const publicKeyHash = getAddressDetails(
-    yield* Effect.promise(() => user.wallet().address()),
+    yield* Effect.promise(() => user.wallet().address())
   ).paymentCredential?.hash;
   const datum = Data.to(new Constr(0, [publicKeyHash!]));
 
   const helloCBOR = yield* pipe(
     Effect.fromNullable(
       scripts.validators.find(
-        (v) => v.title === "hello_world.hello_world.spend",
-      ),
+        (v) => v.title === "hello_world.hello_world.spend"
+      )
     ),
-    Effect.andThen((script) => script.compiledCode),
+    Effect.andThen((script) => script.compiledCode)
   );
   const hello: SpendingValidator = {
     type: "PlutusV3",
@@ -466,7 +466,7 @@ export const sendAllFund = Effect.gen(function* ($) {
   };
   const contractAddress = validatorToAddress("Custom", hello);
   yield* pipe(
-    Effect.tryPromise(() => user.utxosAt(contractAddress)),
+    Effect.tryPromise(() => user.utxosAt(contractAddress))
     // Effect.andThen((utxos) => Console.log(utxos)),
   );
 
@@ -486,7 +486,7 @@ export const sendAllFund = Effect.gen(function* ($) {
         value: datum,
       },
       { lovelace: totalFund - remaining },
-      hello,
+      hello
     )
     .completeProgram({ includeLeftoverLovelaceAsFee: true });
   return signBuilder;

@@ -1,4 +1,4 @@
-# @lucid-evolution/crc8
+# @evolution-sdk/crc8
 
 ## 0.1.8
 

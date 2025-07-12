@@ -5,14 +5,14 @@ import { Callout } from "nextra/components";
 Usage example to initialize Lucid with Kupmios:
 
 ```js showLineNumbers /Kupmios/
-import { Lucid, Kupmios } from "@lucid-evolution/lucid";
+import { Lucid, Kupmios } from "@evolution-sdk/lucid";
 
 const lucid = await Lucid(
   new Kupmios(
     "http://localhost:1442", // Kupo endpoint
-    "http://localhost:1337", // Ogmios endpoint
+    "http://localhost:1337" // Ogmios endpoint
   ),
-  "Preview",
+  "Preview"
 );
 ```
 
@@ -35,6 +35,6 @@ const lucid = await Lucid(
 </Callout>
 
 <Callout type="info">
-  Kupmios is a mix of [Kupo](https://cardanosolutions.github.io/kupo/) and [Ogmios](https://ogmios.dev/).
+  Kupmios is a mix of [Kupo](https://cardanosolutions.github.io/kupo/) and
+  [Ogmios](https://ogmios.dev/).
 </Callout>
-

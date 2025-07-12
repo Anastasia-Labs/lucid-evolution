@@ -1,4 +1,4 @@
-# @lucid-evolution/eslint-config
+# @evolution-sdk/eslint-config
 
 ## 0.2.4
 

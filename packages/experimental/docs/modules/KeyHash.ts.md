@@ -71,7 +71,7 @@ export declare const equals: (a: KeyHash, b: KeyHash) => boolean;
 **Example**
 
 ```ts
-import { KeyHash } from "@lucid-evolution/experimental";
+import { KeyHash } from "@evolution-sdk/experimental";
 import assert from "assert";
 ```
 
@@ -92,7 +92,7 @@ export declare class KeyHashError
 **Example**
 
 ```ts
-import { KeyHash } from "@lucid-evolution/experimental";
+import { KeyHash } from "@evolution-sdk/experimental";
 import assert from "assert";
 
 const error = new KeyHash.KeyHashError({ message: "Invalid key hash" });
@@ -116,7 +116,7 @@ export declare const generator: FastCheck.Arbitrary<KeyHash>;
 **Example**
 
 ```ts
-import { KeyHash } from "@lucid-evolution/experimental";
+import { KeyHash } from "@evolution-sdk/experimental";
 import { FastCheck } from "effect";
 import assert from "assert";
 

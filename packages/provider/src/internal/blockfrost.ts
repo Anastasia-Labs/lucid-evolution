@@ -1,6 +1,6 @@
 import { pipe, Record } from "effect";
-import * as CoreType from "@lucid-evolution/core-types";
-import { applySingleCborEncoding } from "@lucid-evolution/utils";
+import * as CoreType from "@evolution-sdk/core-types";
+import { applySingleCborEncoding } from "@evolution-sdk/utils";
 
 /**
  * Blockfrost only supports Ogmios 5.6
@@ -54,7 +54,7 @@ export interface TxOut {
 }
 
 export const toAditionalUTXOs = (
-  utxos: CoreType.UTxO[] | undefined,
+  utxos: CoreType.UTxO[] | undefined
 ): [TxIn, TxOut][] =>
   (utxos || []).map((utxo) => [
     {
@@ -74,7 +74,7 @@ export const toAditionalUTXOs = (
   ]);
 
 export const toTxOutScript = (
-  scriptRef: CoreType.UTxO["scriptRef"],
+  scriptRef: CoreType.UTxO["scriptRef"]
 ): TxOut["script"] => {
   if (scriptRef) {
     switch (scriptRef.type) {
@@ -99,13 +99,13 @@ export const fromAssets = (assets: CoreType.Assets) =>
         : unit.slice(0, 56) + "." + unit.slice(56),
       Number(amount),
     ]),
-    (r) => (Record.isEmptyRecord(r) ? undefined : r),
+    (r) => (Record.isEmptyRecord(r) ? undefined : r)
   );
 
 export type LegacyRedeemerTag = "spend" | "mint" | "certificate" | "withdrawal";
 
 export const fromLegacyRedeemerTag = (
-  redeemerTag: LegacyRedeemerTag,
+  redeemerTag: LegacyRedeemerTag
 ): CoreType.RedeemerTag => {
   switch (redeemerTag) {
     case "certificate":
