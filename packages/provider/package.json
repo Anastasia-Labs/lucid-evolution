@@ -1,6 +1,6 @@
 {
   "name": "@evolution-sdk/provider",
-  "version": "0.1.90",
+  "version": "1.0.0",
   "description": "",
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
