@@ -1,16 +1,16 @@
 name: 💡 New feature request
-description: Propose new feature to be added to Lucid Evolution
+description: Propose new feature to be added to Evolution SDK
 labels: ['feature-request']
 body:
   - type: markdown
     attributes:
       value: |
-        Thanks for taking the time to fill out this feature request for Lucid Evolution. What do you have in mind?
+        Thanks for taking the time to fill out this feature request for Evolution SDK. What do you have in mind?
   - type: textarea
     id: feature-description
     attributes:
       label: Clear and concise description of your idea
-      description: 'As a developer using Lucid Evolution I would like to [goal / wish] so that [benefit].'
+      description: 'As a developer using Evolution SDK I would like to [goal / wish] so that [benefit].'
     validations:
       required: true
   - type: textarea
