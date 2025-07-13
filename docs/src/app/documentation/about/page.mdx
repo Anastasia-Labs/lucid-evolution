@@ -40,8 +40,18 @@ Next, you select a wallet to be used (or connected if it's a [CIP-30](https://gi
 ```js showLineNumbers
 import { WalletApi } from "@evolution-sdk/lucid";
 
-const walletApi: WalletApi = externalWalletApi;
-lucid.selectWallet.fromAPI(walletApi);
+// Check if wallet is available in browser
+if (window.cardano?.eternl) {
+  // Connect to Eternl wallet
+  const walletApi: WalletApi = await window.cardano.eternl.enable();
+  lucid.selectWallet.fromAPI(walletApi);
+} else {
+  console.log("Eternl wallet is not installed");
+}
+
+// Alternative: check multiple wallets
+const availableWallets = Object.keys(window.cardano || {});
+console.log("Available wallets:", availableWallets);
 ```
 
 ### Build Transaction
@@ -84,9 +94,13 @@ async function helloLucid() {
     "Preview", // "Mainnet" | "Preprod" | "Preview" | "Custom"
   );
 
-  // select wallet from API
-  const walletApi: WalletApi = externalWalletApi;
-  lucid.selectWallet.fromAPI(walletApi);
+  // check if wallet is available and connect
+  if (window.cardano?.eternl) {
+    const walletApi = await window.cardano.eternl.enable();
+    lucid.selectWallet.fromAPI(walletApi);
+  } else {
+    throw new Error("Eternl wallet is not installed");
+  }
 
   // contruct the transaction builder
   const tx = await lucid
