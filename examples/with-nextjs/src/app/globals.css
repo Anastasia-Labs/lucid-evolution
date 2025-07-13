@@ -1,0 +1,118 @@
+@import "tailwindcss";
+
+:root {
+  --background: #ffffff;
+  --foreground: #171717;
+  --accent: #9f1239;
+  --accent-foreground: #fef2f2;
+  --card: #f9fafb;
+  --card-foreground: #111827;
+  --border: #e5e7eb;
+  --input: #e5e7eb;
+  --ring: #991b1b;
+}
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+  --font-sans: var(--font-geist-sans);
+  --font-mono: var(--font-geist-mono);
+}
+
+.dark {
+  --background: #09090b;
+  --foreground: #f2f2f2;
+  --accent: #9f1239;
+  --accent-foreground: #fef2f2;
+  --card: #18181b;
+  --card-foreground: #f2f2f2;
+  --border: #27272a;
+  --input: #27272a;
+  --ring: #991b1b;
+}
+
+body {
+  background: var(--background);
+  color: var(--foreground);
+  font-family: var(--font-sans);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* Custom text selection */
+::selection {
+  background-color: rgba(159, 18, 57, 0.15);
+  color: #f1f1f1;
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+
+  button {
+    @apply transition-all duration-200 ease-in-out;
+  }
+
+  @media (hover: hover) {
+    button:not(:disabled) {
+      @apply hover:shadow-sm;
+    }
+
+    a {
+      @apply transition-colors duration-200;
+    }
+  }
+
+  button:focus-visible {
+    @apply outline-none ring-2 ring-accent/20;
+  }
+
+  button:active:not(:disabled) {
+    @apply transform scale-[0.98] transition-transform;
+  }
+
+  /* Subtle animation for the gradient text */
+  .bg-gradient-to-r {
+    background-size: 200% auto;
+    animation: shimmer 5s linear infinite;
+  }
+
+  @keyframes shimmer {
+    0% {
+      background-position: 0% center;
+    }
+    50% {
+      background-position: 100% center;
+    }
+    100% {
+      background-position: 0% center;
+    }
+  }
+}
+
+/* Custom scrollbar */
+::-webkit-scrollbar {
+  width: 4px;
+  height: 4px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background: rgba(39, 39, 42, 0.5);
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--accent);
+}
