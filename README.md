@@ -1,6 +1,6 @@
 <p align="center">
   <img width="50px" src="docs/public/evolution-sdk-no-witness-labs.svg" align="center"/>
-  <h1 align="center">Lucid <span style="color: #DD7722;">Evolution</span></h1>
+  <h1 align="center">Evolution <span style="color: #DD7722;">SDK</span></h1>
   <p align="center">A highly scalable, production-ready transaction builder and off-chain framework for dApps and devs on Cardano.</p>
 </p>
 
