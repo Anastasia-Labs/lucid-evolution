@@ -28,7 +28,7 @@ export default function Logo() {
       }
       alt="No Witness Labs Logo"
       className="mr-4"
-      width="50"
+      width="100"
       height="46"
     />
   );
